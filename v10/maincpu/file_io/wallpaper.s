@@ -234,7 +234,7 @@ WPLoad_OpLoad:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -411,7 +411,7 @@ WPScan_Generic_Mark:
 
 WPScan_LimitReached:
 	stb_erp A, 0xf8
-	stb_d8 (0x89f8), a
+	ld (0x89f8:16), a
 
 WPScan_LoopContinue:
 	inc 1, iz
@@ -450,7 +450,7 @@ WPFind_SearchLoop:
 WPFind_CheckSlot:
 	and iy, bc
 	jr z, WPFind_NextSlot
-	stb_d8 (0x89f8), l
+	ld (0x89f8:16), l
 	ldb l, 0x1
 	jr WPFind_Return
 

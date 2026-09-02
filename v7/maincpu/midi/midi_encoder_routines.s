@@ -58,7 +58,7 @@ Encoder_ProcessModwheel:
 	ldw	hl, 65535
 	cpl	a
 	ld	c, a
-	stb_d8	(36398), c
+	ld	(36398:16), c
 	srl	a, 1
 	extz	wa
 	lda	xbc, (15573308:24)
@@ -67,7 +67,7 @@ Encoder_ProcessModwheel:
 	res	7, c
 	cp	c, a
 	ret	z
-	stb_d8	(36424), a
+	ld	(36424:16), a
 	ld	l, a
 	extz	hl
 	ret
@@ -79,7 +79,7 @@ Encoder_ProcessModwheel_End:
 Encoder_ProcessVolume:
 	pushw	iz
 	ldw	iz, 65535
-	stb_d8	(36400), a
+	ld	(36400:16), a
 	extz	wa
 	lda	xbc, (15573436:24)
 	ld_rrb	a, xbc, wa
@@ -87,7 +87,7 @@ Encoder_ProcessVolume:
 	ld	a, l
 	cpda8	xbc, (36440)
 	jr	z, 9	; -> 0xFC650B
-	stb_d8	(36440), a
+	ld	(36440:16), a
 	ldb_erp	a, 248
 	extz	iz
 Encoder_ProcessVolume_NoChange:
@@ -158,12 +158,12 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	srl	hl, 8
 	add	hl, hl
 	ld	a, l
-	stb_d8	(36428), a
+	ld	(36428:16), a
 	jr	14	; -> 0xFC65D3
 Encoder_ProcessBreath_SimplePassthrough:
 	cpdm8	(36428), a
 	ret	z
-	stb_d8	(36428), a
+	ld	(36428:16), a
 	ld	l, a
 	extz	hl
 Encoder_ProcessBreath_Return:
@@ -175,7 +175,7 @@ Encoder_ProcessBreath_End:
 ; Output: HL = processed MIDI CC value, or 0xffff if unchanged
 Encoder_ProcessFoot:
 	ldw	hl, 65535
-	stb_d8	(36410), a
+	ld	(36410:16), a
 	srl	a, 1
 	extz	wa
 	lda	xbc, (15574018:24)
@@ -184,7 +184,7 @@ Encoder_ProcessFoot:
 	res	7, c
 	cp	c, a
 	ret	z
-	stb_d8	(36430), a
+	ld	(36430:16), a
 	ld	l, a
 	extz	hl
 	ret
@@ -196,12 +196,12 @@ Encoder_ProcessFoot_End:
 Encoder_ProcessExpression:
 	cpl	a
 	ld	c, a
-	stb_d8	(36412), c
+	ld	(36412:16), c
 	srl	a, 1
 	extz	wa
 	lda	xbc, (15574146:24)
 	ld_rrb	a, xbc, wa
-	stb_d8	(36426), a
+	ld	(36426:16), a
 	extz	wa
 	ld	hl, wa
 	ret
@@ -238,7 +238,7 @@ Encoder_ApplySystemModeSettings:
 	ret	z
 	ld	a, (49122:16)
 	and	a, 15
-	stb_d8	(36414), a
+	ld	(36414:16), a
 	ret
 Encoder_ConfigureVolumeMode:
 	ld	a, (49123:16)
@@ -246,7 +246,7 @@ Encoder_ConfigureVolumeMode:
 	ret	z
 	ld	a, (49122:16)
 	and	a, 255
-	stb_d8	(36416), a
+	ld	(36416:16), a
 	ret
 Encoder_ConfigureRangeLimit:
 	; Disassembled from the committed romslice (no source of any kind existed):
@@ -260,5 +260,5 @@ Encoder_ConfigureRangeLimit:
 	ret	z
 	ld	a, (49122:16)
 	res	7, a
-	stb_d8	(36418), a
+	ld	(36418:16), a
 	ret

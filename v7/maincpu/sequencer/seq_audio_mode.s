@@ -8,7 +8,7 @@
 ; =============================================================================
 
 	ei 0
-	stb_d8 (0x31e3), a
+	ld (0x31e3:16), a
 	ret
 
 AudioMode_CheckAndUpdateStereo:
@@ -35,17 +35,17 @@ AudioMode_MergeOutputBits:
 	ld	w, (12893:16)
 	and	w, 7
 	or	a, w
-	stb_d8	(12916), a
+	ld	(12916:16), a
 	ret
 AudioMode_CopyChannelMode:
 	ld	a, (10418:16)
 	and	a, 3
-	stb_d8	(12953), a
+	ld	(12953:16), a
 	ret
 AudioMode_CopyAccentFlags:
 	ld	a, (13397:16)
 	and	a, 61
-	stb_d8	(12998), a
+	ld	(12998:16), a
 	ret
 AccPedal_BytecodeBlock1:
 	.byte 0x28, 0x3d, 0xc1, 0xc7, 0x32, 0x3c, 0xfe, 0x45
@@ -116,9 +116,9 @@ AccPedal_CheckAuxBit2:
 	.byte 0x00, 0x21, 0x00, 0x1e, 0x86, 0xfc
 AccPedal_ClearAllPedalFlags:
 	xor	a, a
-	stb_d8	(12895), a
-	stb_d8	(12897), a
-	stb_d8	(12899), a
+	ld	(12895:16), a
+	ld	(12897:16), a
+	ld	(12899:16), a
 AccPedal_ReadBankAndReturn:
 	calr AccVoice_ReadBankAssign
 	ret
@@ -130,7 +130,7 @@ AccVoice_ReadBankAssign:
 	.byte 0xc3, 0x07, 0xec, 0xe0, 0x21, 0xf1, 0xe7, 0x31
 	.byte 0xc8, 0x6e, 0x02, 0x21, 0x00
 AccVoice_StoreBankAssign:
-	stb_d8	(12774), a
+	ld	(12774:16), a
 	ret
 AccChannel_CompareAndMarkDirty:
 	ld a, (0x3278:16)
@@ -159,11 +159,11 @@ AccChannel_MarkDirtyAndSync:
 
 AccChannel_StoreCurrentState:
 	ld	a, (12889:16)
-	stb_d8	(12875), a
+	ld	(12875:16), a
 	ld	a, (12891:16)
 	and	a, 127
 	and	w, 7
-	stb_d8	(12876), a
+	ld	(12876:16), a
 	ret
 AccChannel_BytecodeBlock2:
 	.byte 0xc1, 0x59, 0x32, 0x21, 0xc1, 0x5a, 0x32, 0xf1
@@ -211,8 +211,8 @@ AccVoice_ProcessPedalChanges:
 	bitda 0, (0x3264)
 	jr nz, .Lc_f535a1
 	xor A,A
-	stb_d8 (0x326d), a
-	stb_d8 (0x326f), a
+	ld (0x326d:16), a
+	ld (0x326f:16), a
 	anddi8 (0x326e), 0xf3
 	anddi8 (0x328b), 0xc0
 	bitda 0, (0x3270)
@@ -230,8 +230,8 @@ AccVoice_Pedal0_Done:
 	bitda 1, (0x3264)
 	jr nz, .Lc_f535d7
 	xor A,A
-	stb_d8 (0x326d), a
-	stb_d8 (0x326f), a
+	ld (0x326d:16), a
+	ld (0x326f:16), a
 	anddi8 (0x326e), 0xf6
 	anddi8 (0x328b), 0xc0
 	bitda 0, (0x3270)
@@ -249,8 +249,8 @@ AccVoice_Pedal1_Done:
 	bitda 2, (0x3264)
 	jr nz, AccVoice_Pedal2_Done
 	xor A,A
-	stb_d8 (0x326d), a
-	stb_d8 (0x326f), a
+	ld (0x326d:16), a
+	ld (0x326f:16), a
 	anddi8 (0x326e), 0xfa
 	anddi8 (0x328b), 0xc0
 	bitda 0, (0x3270)
@@ -273,8 +273,8 @@ AccVoice_ProcessLeftPedalChanges:
 	bitda 0, (0x3260)
 	jr nz, .Lc_f53644
 	xor A,A
-	stb_d8 (0x326e), a
-	stb_d8 (0x326f), a
+	ld (0x326e:16), a
+	ld (0x326f:16), a
 	anddi8 (0x326d), 0xfd
 	anddi8 (0x328b), 0xc0
 	bitda 0, (0x3270)
@@ -292,8 +292,8 @@ AccVoice_LeftPedal0_Done:
 	bitda 1, (0x3260)
 	jr nz, AccVoice_LeftPedal1_Done
 	xor A,A
-	stb_d8 (0x326e), a
-	stb_d8 (0x326f), a
+	ld (0x326e:16), a
+	ld (0x326f:16), a
 	anddi8 (0x326d), 0xfe
 	anddi8 (0x328b), 0xc0
 	bitda 0, (0x3270)
@@ -359,8 +359,8 @@ AccChord_ProcessKeyChanges:
 	bitda 0, (0x3262)
 	jr nz, .Lc_f5370b
 	xor A,A
-	stb_d8 (0x326e), a
-	stb_d8 (0x326d), a
+	ld (0x326e:16), a
+	ld (0x326d:16), a
 	anddi8 (0x328b), 0xc0
 	anddi8 (0x326f), 0xfd
 	anddi8 (0x328a), 0xc0
@@ -373,8 +373,8 @@ AccChord_KeyChange0_Done:
 	bitda 1, (0x3262)
 	jr nz, AccChord_KeyChange1_Done
 	xor A,A
-	stb_d8 (0x326e), a
-	stb_d8 (0x326d), a
+	ld (0x326e:16), a
+	ld (0x326d:16), a
 	anddi8 (0x328b), 0xc0
 	anddi8 (0x326f), 0xfe
 	anddi8 (0x328a), 0xc0
@@ -509,7 +509,7 @@ AccentVoice_CheckModeChange:
 AccentVoice_UpdateParamIndex:
 	ld	a, (12905:16)
 	and	a, 3
-	stb_d8	(12958), a
+	ld	(12958:16), a
 	ret
 AccVoice_ResolveParamAddr:
 	push xwa
@@ -567,14 +567,14 @@ AccVoice_SelectAndApplyPatch:
 	jr nc, AccVoice_PatchFromDirect
 	ld xiy, (0x3232:16)
 	calr AccStyle_ReadVoiceParam
-	stb_d8 (0x3253), w
+	ld (0x3253:16), w
 	jr t, AccVoice_StorePatchAndLookup
 AccVoice_PatchFromDirect:
 	ld	a, (12873:16)
 	and	a, 127
 	calr	43
 AccVoice_StorePatchAndLookup:
-	stb_d8	(1075), a
+	ld	(1075:16), a
 	ld	xhl, 14969758
 	sla	a, 1
 	ld_rr8w	wa, xhl, a
@@ -984,7 +984,7 @@ RhythmAccent_CopyAndUpdateRingBuf:
 	pushw	de
 	pushw	wa
 	ld	a, (12880:16)
-	stb_d8	(13202), a
+	ld	(13202:16), a
 	calr	3
 	popw	wa
 	popw	de
@@ -995,13 +995,13 @@ RhythmAccent_UpdateRingBufPosition:
 	subda8 a, (0x0464)
 	jr ugt, RhythmAccent_StorePosition
 	ldb A, 0x01
-	stb_d8 (0x3392), a
+	ld (0x3392:16), a
 	cpdi8 (0x0462), 0x00
 	jr z, RhythmAccent_AddAndCompare
 	xor A,A
 	jr t, RhythmAccent_AddAndCompare
 RhythmAccent_StorePosition:
-	stb_d8	(13202), a
+	ld	(13202:16), a
 RhythmAccent_AddAndCompare:
 	ld	w, (1122:16)
 	add	a, w
@@ -1010,7 +1010,7 @@ RhythmAccent_AddAndCompare:
 	ld	w, (13018:16)
 	cp	a, w
 	jr	nc, 4
-	stb_d8	13018, a
+	ld	(13018:16), a
 RhythmAccent_UpdateDone:
 	ei 0
 	ret
@@ -1042,15 +1042,15 @@ RhythmPart2_LoadAndStore:
 	ld e, (0x31b1:16)
 	ld d, (0x31b2:16)
 	ld a, (0x31b3:16)
-	stb_d8 (0x3393), a
+	ld (0x3393:16), a
 	ld a, (0x31b4:16)
-	stb_d8 (0x3394), a
+	ld (0x3394:16), a
 	ld a, (0x31b5:16)
-	stb_d8 (0x3395), a
+	ld (0x3395:16), a
 	ld a, (0x31b6:16)
-	stb_d8 (0x3227), a
+	ld (0x3227:16), a
 	ld a, (0x31b7:16)
-	stb_d8 (0x322b), a
+	ld (0x322b:16), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x31e7)
 	jr nz, .Lc_f53cb2
@@ -1119,15 +1119,15 @@ RhythmPart3_LoadAndStore:
 	ld e, (0x31b8:16)
 	ld d, (0x31b9:16)
 	ld a, (0x31ba:16)
-	stb_d8 (0x3393), a
+	ld (0x3393:16), a
 	ld a, (0x31bb:16)
-	stb_d8 (0x3394), a
+	ld (0x3394:16), a
 	ld a, (0x31bc:16)
-	stb_d8 (0x3395), a
+	ld (0x3395:16), a
 	ld a, (0x31bd:16)
-	stb_d8 (0x3228), a
+	ld (0x3228:16), a
 	ld a, (0x31be:16)
-	stb_d8 (0x322c), a
+	ld (0x322c:16), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x31e7)
 	jr nz, .Lc_f53d8a
@@ -1177,15 +1177,15 @@ RhythmPart4_LoadAndStore:
 	ld e, (0x31bf:16)
 	ld d, (0x31c0:16)
 	ld a, (0x31c1:16)
-	stb_d8 (0x3393), a
+	ld (0x3393:16), a
 	ld a, (0x31c2:16)
-	stb_d8 (0x3394), a
+	ld (0x3394:16), a
 	ld a, (0x31c3:16)
-	stb_d8 (0x3395), a
+	ld (0x3395:16), a
 	ld a, (0x31c4:16)
-	stb_d8 (0x3229), a
+	ld (0x3229:16), a
 	ld a, (0x31c5:16)
-	stb_d8 (0x322d), a
+	ld (0x322d:16), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x31e7)
 	jr nz, .Lc_f53e3b
@@ -1235,15 +1235,15 @@ RhythmPart5_LoadAndStore:
 	ld e, (0x31c6:16)
 	ld d, (0x31c7:16)
 	ld a, (0x31c8:16)
-	stb_d8 (0x3393), a
+	ld (0x3393:16), a
 	ld a, (0x31c9:16)
-	stb_d8 (0x3394), a
+	ld (0x3394:16), a
 	ld a, (0x31ca:16)
-	stb_d8 (0x3395), a
+	ld (0x3395:16), a
 	ld a, (0x31cb:16)
-	stb_d8 (0x322a), a
+	ld (0x322a:16), a
 	ld a, (0x31cc:16)
-	stb_d8 (0x322e), a
+	ld (0x322e:16), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x31e7)
 	jr nz, .Lc_f53eec
@@ -1337,9 +1337,9 @@ Rhythm_SendNoteOnMax:
 	ret
 
 Rhythm_Send3ByteMsg:
-	stb_d8	(13126), a
-	stb_d8	(13127), w
-	stb_d8	(13128), e
+	ld	(13126:16), a
+	ld	(13127:16), w
+	ld	(13128:16), e
 	ld	a, (13126:16)
 	call	16076951
 	ld	a, (13127:16)
@@ -1353,10 +1353,10 @@ Rhythm_SendChanPressure:
 	ldb	e, 0
 	calr	65490
 	ldb	a, 0
-	stb_d8	(12947), a
-	stb_d8	(12948), a
-	stb_d8	(12949), a
-	stb_d8	(12950), a
+	ld	(12947:16), a
+	ld	(12948:16), a
+	ld	(12949:16), a
+	ld	(12950:16), a
 	ret
 AccBuf_ResetAndReload:
 	call AccBuf_ResetAllPositions
@@ -1439,7 +1439,7 @@ RhythmROM_InvalidIncrement:
 	cps	wa, 0
 	jr	nz, 11
 	ldb	a, 238
-	stb_d8	(58134), a
+	ld	(58134:16), a
 	stdi8	(58136), 64
 RhythmROM_CheckDone:
 	ret

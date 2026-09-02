@@ -2050,7 +2050,7 @@ PartSelect_UpdateDisplayState:
 	and	a, 1
 	cps	a, 0
 	scc8	z, e
-	stb_d8	(35998), e
+	ld	(35998:16), e
 	extz	de
 	pushw	255
 	ldw	wa, 144
@@ -2585,7 +2585,7 @@ MainPmanCtrl_HandleA0:
 	.byte 0x00, 0x00, 0x00, 0x66, 0x08, 0xea, 0xcf, 0x16
 	.byte 0x00, 0x00, 0x00, 0x6e, 0x06
 MainPmanCtrl_StorePartSelect:
-	stb_d8	(35998), e
+	ld	(35998:16), e
 	jr	31
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
@@ -2633,7 +2633,7 @@ MainTitleControl:
 	cp	xbc, 29360148
 	jrl	nz, 238
 	.byte 0xc1, 0x98, 0x8c, 0x19, 0x99, 0x8c
-	stb_d8	35992, l
+	ld	(35992:16), l
 	ldw	wa, 72
 	call	16544114
 	lds32	xwa, 0
@@ -2642,15 +2642,15 @@ MainTitleControl:
 	stl_da	160922, xwa
 	jrl	201
 SeqState_TransitionMode:
-	stb_d8	35995, a
+	ld	(35995:16), a
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
-	stb_d8	35994, l
-	stb_d8	35996, l
+	ld	(35994:16), l
+	ld	(35996:16), l
 	ldw	wa, 97
 	jr	13
 MainTitleCtrl_SaveAndTransition:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
-	stb_d8	35996, l
+	ld	(35996:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
 	call	16544114
@@ -2665,7 +2665,7 @@ SeqState_DemoModeHandler:
 	jrl	nz, 128
 	cpdm8	(35996), a
 	jr	nz, 4
-	stb_d8	(35995), a
+	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c, 0xc1, 0x98
 	.byte 0x8c, 0x19, 0x99, 0x8c, 0x68, 0x68

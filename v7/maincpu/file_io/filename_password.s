@@ -176,7 +176,7 @@ SelectMode_DetermineMode:
 	ldb a, 0x3
 
 SelectMode_SetBothMode:
-	stb_d8	(35184), a
+	ld	(35184:16), a
 	jr	25
 SelectMode_SingleMode:
 	lda	xbc, (35184:16)
@@ -338,7 +338,7 @@ FileName_OpSave:
 	ld	wa, hl
 	lds	bc, 1
 	calr	-6204
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-6769
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -418,7 +418,7 @@ FileName_OpLoad_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	59098
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -453,7 +453,7 @@ FileName_OpFormat:
 	ld	wa, hl
 	lds	bc, 5
 	calr	58975
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -506,7 +506,7 @@ FileName_OpDelete_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	58800
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	58235
 	call	16290139
 	call	16290094
@@ -531,7 +531,7 @@ FileName_OpFormatVariant:
 	ld	wa, hl
 	lds	bc, 5
 	calr	58715
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	58150
 	call	16290139
 	call	16290094
@@ -582,7 +582,7 @@ FileName_Navigate_CheckChanged:
 	ld	wa, hl
 	lds	bc, 5
 	calr	-6980
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-7545
 	call	16290928
 	stda16	33894, hl

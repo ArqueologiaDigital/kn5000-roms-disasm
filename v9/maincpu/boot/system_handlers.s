@@ -422,8 +422,8 @@ INTT1_NoOverflow:
 	call MIDI_SC0_TX_DISPATCH
 
 INTT1_StoreCounters:
-	stb_d8 (1062), w
-	stb_d8 (1063), a
+	ld (1062:16), w
+	ld (1063:16), a
 	pop	sr
 	ld a, (1066:16)
 	cp a, 0xf1
@@ -431,7 +431,7 @@ INTT1_StoreCounters:
 	inc 1, a
 
 INTT1_CheckScanFlag:
-	stb_d8 (1066), a
+	ld (1066:16), a
 	bitda 2, (0xfd50)
 	jrl nz, INTT1_UpdateAlternateTimers
 	incdi8 1, (1050)
@@ -501,9 +501,9 @@ INTT1_CheckAltSeqTimer:
 	jr z, INTT1_CheckMetroTimer
 	stdi8 (1057), 16
 	ld a, (1045:16)
-	stb_d8 (1078), a
+	ld (1078:16), a
 	ld a, (1046:16)
-	stb_d8 (1079), a
+	ld (1079:16), a
 
 INTT1_CheckMetroTimer:
 	bitda 3, (1056)
@@ -539,7 +539,7 @@ UIStateMachine_ClearBit3:
 ; Index: DRAM[1041] (0-2), entries: 3
 ; State 0: Idle, State 1: Process, State 2: Sub-state dispatch
 UIStateMachine_PrimaryDispatch:
-	stb_d8 (1041), a
+	ld (1041:16), a
 	sll a, 2
 	lda xhl, (UI_STATE_MACHINE_TABLE:24)
 	ld_sril3 XHL, 0x03, 0xec, 0xe0
@@ -662,14 +662,14 @@ INTTR4_CheckSyncEnable:
 	jr c, INTTR4_SyncCounter2_NoWrap
 	xor a, a
 	incdi16 1, (1128)
-	stb_d8 (1130), a
+	ld (1130:16), a
 	cpdi8 (0x7f0b), 0
 	jr z, INTTR4_SyncCounter2_Done
 	calr TempoRingBuf_Write
 	jr INTTR4_SyncCounter2_Done
 
 INTTR4_SyncCounter2_NoWrap:
-	stb_d8 (1130), a
+	ld (1130:16), a
 
 INTTR4_SyncCounter2_Done:
 	pop	sr
@@ -687,7 +687,7 @@ INTTR4_CheckMetroEnable:
 	incdi16 1, (1048)
 
 INTTR4_MetroCounter_Store:
-	stb_d8 (1047), a
+	ld (1047:16), a
 	pop	sr
 
 INTTR4_CheckSeqEnable:
@@ -759,8 +759,8 @@ INTTR4_SeqAutoStart:
 	cpdm8 1046, a
 	jr c, INTTR4_SeqAutoStart_Skip
 	ldb a, 0x1
-	stb_d8 (1056), a
-	stb_d8 (1057), a
+	ld (1056:16), a
+	ld (1057:16), a
 	cpdi8 (0x8d34), 19
 	jr z, INTTR4_SeqAutoStart_Skip
 	bitda 2, (0xfd52)
@@ -817,9 +817,9 @@ INTTR4_AltSeqBeat_Check:
 	jr z, INTTR4_MetroQuarter_Check
 	stdi8 (1057), 16
 	ld a, (1045:16)
-	stb_d8 (1078), a
+	ld (1078:16), a
 	ld a, (1046:16)
-	stb_d8 (1079), a
+	ld (1079:16), a
 
 INTTR4_MetroQuarter_Check:
 	bitda 2, (1056)
@@ -848,7 +848,7 @@ INTTR4_SeqAccum_Update:
 	add a, 0x60
 
 INTTR4_SeqAccum_PositiveDelta:
-	stb_d8 (1111), w
+	ld (1111:16), w
 	adddm8 1124, a
 	adddm8 1122, a
 	xor w, w
@@ -869,9 +869,9 @@ INTTR4_SeqAccum_Reset:
 	xor wa, wa
 	stda16 (1120), xwa
 	stda16 (0x3372), xwa
-	stb_d8 (1122), a
-	stb_d8 (0x3376), a
-	stb_d8 (1111), a
+	ld (1122:16), a
+	ld (0x3376:16), a
+	ld (1111:16), a
 
 INTTR4_AltSeqAccum_Update:
 	bitda 2, (1057)
@@ -918,7 +918,7 @@ INTTR4_SyncAccum_Update:
 	add a, 0x60
 
 INTTR4_SyncAccum_PositiveDelta:
-	stb_d8 (1138), w
+	ld (1138:16), w
 	adddm8 1131, a
 	adddm8 1133, a
 	xor w, w
@@ -939,9 +939,9 @@ INTTR4_SyncAccum_Reset:
 	xor wa, wa
 	stda16 (1136), xwa
 	stda16 (0x7dfe), xwa
-	stb_d8 (1133), a
-	stb_d8 (0x7dfc), a
-	stb_d8 (1138), a
+	ld (1133:16), a
+	ld (0x7dfc:16), a
+	ld (1138:16), a
 
 INTTR4_Return:
 	pop xiy
@@ -1716,7 +1716,7 @@ SeqEvt_CheckExpiry:
 	and a, a
 	jr z, SeqEvt_CheckExpiry_Return
 	dec 1, a
-	stb_d8 (0xe9bc), a
+	ld (0xe9bc:16), a
 	jr nz, SeqEvt_CheckExpiry_Return
 	call NoteMap_FindBestMatch
 	cp l, 0xff
@@ -1731,7 +1731,7 @@ SeqTiming_Snapshot:
 	ld wa, (1120:16)
 	ld l, (1122:16)
 	stda16 (1118), xwa
-	stb_d8 (1117), l
+	ld (1117:16), l
 	cpda16 xwa, 0x3372
 	jr c, SeqTiming_Snapshot_CheckFrac
 	stdi16 (1120), 0
@@ -1764,7 +1764,7 @@ SyncTiming_Snapshot:
 	ld wa, (1136:16)
 	ld l, (1133:16)
 	stda16 (1134), xwa
-	stb_d8 (1132), l
+	ld (1132:16), l
 	cpda16 xwa, 0x7dfe
 	jr c, SyncTiming_Snapshot_CheckFrac
 	stdi16 (1136), 0
@@ -1794,9 +1794,9 @@ SyncTiming_Snapshot_Return:
 
 Seq_FullInit:
 	ldb a, 0xff
-	stb_d8 (1043), a
-	stb_d8 (1058), a
-	stb_d8 (1139), a
+	ld (1043:16), a
+	ld (1058:16), a
+	ld (1139:16), a
 	call AudioMix_Init
 	call SeqBuf_Init
 	call TempoRingBuf_Init
@@ -2164,7 +2164,7 @@ TaskSched_FoundReadyTask:
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
-	stb_d8 (305), a
+	ld (305:16), a
 	ld xsp, (xhl + 4)
 
 TaskSched_ReturnToDispatch:
@@ -5883,7 +5883,7 @@ INT0_ReadLatch:
 				; MSTAT1 is lowered at 0xEF35C4, with neither gate
 				; re-checked and no DI in between -- see the
 				; RE-ENTRANCY HAZARD note above INT0_HANDLER.
-	stb_d8 (1508), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
+	ld (1508:16), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
 	cp a, 0xe1
 	jr nz, INT0_CheckE2Command
 	stdi8 (1506), 2
@@ -8393,7 +8393,7 @@ Flash_AccumWrite_Byte:
 	ld a, (1620:16)
 	ld e, a
 	inc 1, a
-	stb_d8 (1620), a
+	ld (1620:16), a
 	cps e, 3
 	jr nz, Flash_AccumWrite_ByteDone
 	ld xwa, (1606:16)
@@ -8419,7 +8419,7 @@ Flash_AccumWrite_Word:
 	ld a, (1620:16)
 	ld c, a
 	inc 1, a
-	stb_d8 (1620), a
+	ld (1620:16), a
 	cps c, 1
 	jr nz, Flash_AccumWrite_WordDone
 	ld xwa, (1622:16)

@@ -283,7 +283,7 @@ BitMapOut_ByteData_DiskCheck:
 	ld	l, (36002:16)
 	ret
 BitMapOut_StorePresetValue:
-	stb_d8	(36002), a
+	ld	(36002:16), a
 	ret
 BitMapOut_SetDefaultTimer:
 	stdi8	(36000), 64
@@ -296,7 +296,7 @@ BitMapOut_DecrementTimer:
 	cps	a, 0
 	ret	z
 	dec	1, a
-	stb_d8	(36000), a
+	ld	(36000:16), a
 	cps	a, 0
 	ret	nz
 	lds32	xwa, 3
@@ -1791,7 +1791,7 @@ BitMapOut_DeltaEncode_BufferFull:
 	ld	hl, (36930:16)
 	ld	a, (36010:16)
 	set	2, a
-	stb_d8	(36010), a
+	ld	(36010:16), a
 	jr	23
 BitMapOut_DeltaEncode_SlowTimeout:
 	cp hl, 0x1f4
@@ -1936,7 +1936,7 @@ BitMapOut_ApplyIOChange_Port0:
 	ld	b, (36016:16)
 	ld	a, (63941:16)
 	and	a, 255
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 255
 	ld	d, (36016:16)
@@ -1947,7 +1947,7 @@ BitMapOut_ApplyIOChange_Port0:
 	ld	b, (36016:16)
 	ld	a, (63940:16)
 	res	7, a
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 127
 	ld	d, (36016:16)
@@ -1968,7 +1968,7 @@ BitMapOut_ApplyIOChange_Port1:
 	ld	b, (36016:16)
 	ld	a, (63967:16)
 	and	a, 255
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 255
 	ld	d, (36016:16)
@@ -1979,7 +1979,7 @@ BitMapOut_ApplyIOChange_Port1:
 	ld	b, (36016:16)
 	ld	a, (63966:16)
 	res	7, a
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 127
 	ld	d, (36016:16)
@@ -2000,7 +2000,7 @@ BitMapOut_ApplyIOChange_Port2:
 	ld	b, (36016:16)
 	ld	a, (63993:16)
 	and	a, 255
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 255
 	ld	d, (36016:16)
@@ -2011,7 +2011,7 @@ BitMapOut_ApplyIOChange_Port2:
 	ld	b, (36016:16)
 	ld	a, (63992:16)
 	res	7, a
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 127
 	ld	d, (36016:16)
@@ -2032,7 +2032,7 @@ BitMapOut_ApplyIOChange_Port3:
 	ld	b, (36016:16)
 	ld	a, (63943:16)
 	res	7, a
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 127
 	ld	d, (36016:16)
@@ -2053,7 +2053,7 @@ BitMapOut_ApplyIOChange_Port4:
 	ld	b, (36016:16)
 	ld	a, (63969:16)
 	res	7, a
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 127
 	ld	d, (36016:16)
@@ -2074,7 +2074,7 @@ BitMapOut_ApplyIOChange_Port5:
 	ld	b, (36016:16)
 	ld	a, (63995:16)
 	res	7, a
-	stb_d8	(36016), a
+	ld	(36016:16), a
 	ld	e, (36016:16)
 	stdi8	(36016), 127
 	ld	d, (36016:16)
@@ -2487,7 +2487,7 @@ BitMapOut_DeltaEncode_Type90PartB:
 	bit	1, w
 	jrl	nz, 216	; -> 0xFB5620
 	set	1, b
-	stb_d8	(36010), b
+	ld	(36010:16), b
 	ld	iz, hl
 	inc	1, hl
 	extz	xiz
@@ -2543,7 +2543,7 @@ BitMapOut_DeltaEncode_Type90Loop:
 	bit	1, w
 	jr	nz, 102	; -> 0xFB5620
 	set	1, b
-	stb_d8	(36010), b
+	ld	(36010:16), b
 	ld	iz, hl
 	inc	1, hl
 	extz	xiz
@@ -2869,7 +2869,7 @@ BitMapOut_PrepareRender_CheckBit1:
 	ld	l, (36012:16)
 	ret
 BitMapOut_PrepareRender_CheckBit2:
-	stb_d8	(36012), a
+	ld	(36012:16), a
 	ret
 BitMapOut_GetRenderMode:
 	ld	l, (36014:16)

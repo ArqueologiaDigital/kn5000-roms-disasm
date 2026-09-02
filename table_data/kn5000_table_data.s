@@ -3843,7 +3843,7 @@ LZSS_OutputByte:
 	ld a, (3126:16); LD A, (0x0C36)
 	ld e, a	; LD E, A
 	inc 1, a	; INC 1, A
-	stb_d8 (3126), a; LD (0x0C36), A
+	ld (3126:16), a; LD (0x0C36), A
 	cps e, 3	; CP E, 3 - check if 4 bytes buffered
 	jr nz, LZSS_OutputByte__not_full	; JR NZ, .not_full
 	; Flush 4-byte buffer to destination
@@ -3874,7 +3874,7 @@ LZSS_OutputByte_Alt:
 	ld a, (3126:16); LD A, (0x0C36)
 	ld c, a	; LD C, A
 	inc 1, a	; INC 1, A
-	stb_d8 (3126), a; LD (0x0C36), A
+	ld (3126:16), a; LD (0x0C36), A
 	cps c, 1	; CP C, 1
 	jr nz, LZSS_OutputByte_Alt__not_full	; JR NZ, .not_full
 	ld xwa, (3128:16); LD XWA, (0x0C38)
@@ -4571,7 +4571,7 @@ FDC_WriteStatus:
 ; -----------------------------------------------------------------------------
 FDC_SaveCommand:
 	ldmm8 3406, 3408	; LD (0x0D4E), (0x0D50)
-	stb_d8 (3408), a; LD (0x0D50), A
+	ld (3408:16), a; LD (0x0D50), A
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------

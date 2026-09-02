@@ -7351,7 +7351,7 @@ SeMenu_Utility_FormatNumber_Loop:
 	ret
 SeMenu_Utility_FormatNumber_End:
 	ld a, (0x8c9a:16)
-	stb_d8 (0x0678), a
+	ld (0x0678:16), a
 	stib_da (0x03efa8), 0x02
 	ld XIY,0x00f1233a
 	cpdi8 (0x06ae), 0x01
@@ -7490,7 +7490,7 @@ SeMenu_Utility_End:
 SeMenu_NameEdit_DataBlock1:
 	ld	a, (1632:16)
 	and	a, 15
-	stb_d8	1648, a
+	ld	(1648:16), a
 	cp	a, 10
 	jr	nz, 7
 	ld	xiy, 15815607

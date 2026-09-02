@@ -116,7 +116,7 @@ VoiceChannel_LookupParams:
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ldb_sri A, 0x07, 0xec, 0xf4
-	stb_d8 (4234), a
+	ld (4234:16), a
 	call SoundGen_PrepareAndBuildVoice
 
 VoiceChannel_LookupReturn:
@@ -829,9 +829,9 @@ SysEx_ClearReturn:
 	ret
 
 SMF_LoadSoundBankAndPlay:
-	stb_d8 (4599), a
-	stb_d8 (6709), c
-	stb_d8 (6710), e
+	ld (4599:16), a
+	ld (6709:16), c
+	ld (6710:16), e
 	push xiz
 	push xix
 	push xde
@@ -928,9 +928,9 @@ SMF_InitPlaybackState:
 
 SMF_InitChannelState:
 	xor wa, wa
-	stb_d8 (4236), a
+	ld (4236:16), a
 	stda16 (4347), xwa
-	stb_d8 (4344), a
+	ld (4344:16), a
 	cpw_da (0xffec), 0
 	jr z, SMF_SetStatusAndJump
 	xor c, c
@@ -982,8 +982,8 @@ SMF_InitChannelScan:
 	call SMF_ClearWorkArea
 	xor wa, wa
 	stda16 (4347), xwa
-	stb_d8 (4236), a
-	stb_d8 (4344), a
+	ld (4236:16), a
+	ld (4344:16), a
 	xor hl, hl
 	xor bc, bc
 
@@ -1001,7 +1001,7 @@ SMF_FindFirstActiveChannel:
 	jrl SMF_Finalize_RestoreAndPlay
 
 SMF_SetupActiveChannel:
-	stb_d8 (0x2877), c
+	ld (0x2877:16), c
 	inc 1, hl
 	push xde
 	ld xde, 0xf250
@@ -1164,9 +1164,9 @@ SMF_WriteChannelNoteData:
 	ld b, (xiy + 3)
 	ld e, (xiy + 4)
 	ld a, (xiy + 5)
-	stb_d8 (4359), a
+	ld (4359:16), a
 	ld a, (xiy + 7)
-	stb_d8 (4332), a
+	ld (4332:16), a
 	anddi8 (0x2877), 15
 	ld l, (0x2877:16)
 	xor h, h
@@ -1180,10 +1180,10 @@ SMF_WriteChannelNoteData:
 	ld a, (6881:16)
 	or a, 0xc0
 	ld l, c
-	stb_d8 (6746), l
-	stb_d8 (6747), d
+	ld (6746:16), l
+	ld (6747:16), d
 	ld l, (xiy - 2)
-	stb_d8 (6748), l
+	ld (6748:16), l
 	pushw bc
 	pushw de
 	ld xwa, 0x1a57
@@ -1804,7 +1804,7 @@ SMF_FinishChannelAndGetNextEvent:
 	call SMF_GetNextEvent
 	popw_dd16 0x66, 0x26
 	popw_dd16 0xaf, 0x28
-	stb_d8 (3944), a
+	ld (3944:16), a
 
 SMF_ResetEventTimers:
 	stdi16 (3946), 0
@@ -2263,14 +2263,14 @@ SMF_ProgramChange_ProcessPatch:
 	rrc l
 	ld a, (4215:16)
 	or l, a
-	stb_d8 (6746), l
+	ld (6746:16), l
 	ld l, (4211:16)
 	and l, 0x2
 	rrc_i_8 l, 2
 	ld a, (4216:16)
 	and a, 0x7f
 	or a, l
-	stb_d8 (6747), a
+	ld (6747:16), a
 	push xix
 	xor hl, hl
 	ld l, (4213:16)
@@ -2278,7 +2278,7 @@ SMF_ProgramChange_ProcessPatch:
 	ldb_sri L, 0x07, 0xf0, 0xec
 	ld xix, SMF_HeaderConstants_0x52
 	ldb_sri L, 0x07, 0xf0, 0xec
-	stb_d8 (6748), l
+	ld (6748:16), l
 	pop xix
 	ld xwa, 0x1a57
 	call SndParam_InitBufferConverge
@@ -11057,11 +11057,11 @@ Seq_DispatcherTickReturn:
 
 SeqTick_ReadControlState:
 	ld a, (0xfc5a:16)
-	stb_d8 (0x32f5), a
+	ld (0x32f5:16), a
 	ld a, (0xfc5b:16)
 	and a, 0x7f
 	and a, 0x7
-	stb_d8 (0x32f7), a
+	ld (0x32f7:16), a
 	calr VoiceParam_ClampAndStore
 	nop
 	nop
@@ -11070,7 +11070,7 @@ SeqTick_ReadControlState:
 	ld a, (0xfc5d:16)
 	or a, 0xe0
 	srl a, 5
-	stb_d8 (0x32f9), a
+	ld (0x32f9:16), a
 	ld w, (0xfc5f:16)
 	xor a, a
 	bit 6, w
@@ -11083,7 +11083,7 @@ SeqCtl_CheckBit6:
 	or a, 0x2
 
 SeqCtl_CheckBit7:
-	stb_d8 (0x32fb), a
+	ld (0x32fb:16), a
 	xor a, a
 	bit 4, w
 	jr z, SeqCtl_CheckBit4
@@ -11095,7 +11095,7 @@ SeqCtl_CheckBit4:
 	or a, 0x2
 
 SeqCtl_CheckBit5:
-	stb_d8 (0x32fd), a
+	ld (0x32fd:16), a
 	xor a, a
 	bit 2, w
 	jr z, SeqCtl_CheckBit2
@@ -11113,36 +11113,36 @@ SeqCtl_CheckBit3:
 	or a, 0x4
 
 SeqCtl_StorePedalFlags:
-	stb_d8 (0x32ff), a
+	ld (0x32ff:16), a
 	ld a, (0xfd99:16)
 	and a, 0x1
-	stb_d8 (0x3301), a
+	ld (0x3301:16), a
 	ld a, (0xfc5e:16)
 	and a, 0x10
 	srl a, 4
 	ldb a, 0x0
-	stb_d8 (0x3303), a
+	ld (0x3303:16), a
 	ld a, (0xfc61:16)
 	and a, 0x30
 	srl a, 4
-	stb_d8 (0x3305), a
+	ld (0x3305:16), a
 	xor a, a
 	bitda 2, (0xfdad)
 	jr nz, SeqCtl_StoreKeyMask
 	or a, 0x3f
 
 SeqCtl_StoreKeyMask:
-	stb_d8 (0x3307), a
+	ld (0x3307:16), a
 	ret
 
 VoiceParam_ClampAndStore:
 	ld l, (0x32f5:16)
 	ld h, (0x32f7:16)
 	calr VoiceParam_ClampAndValidate
-	stb_d8 (0x32f5), l
+	ld (0x32f5:16), l
 	and h, 0x7f
 	and h, 0x7
-	stb_d8 (0x32f7), h
+	ld (0x32f7:16), h
 	ret
 
 VoiceParam_ClampAndValidate:
@@ -11208,7 +11208,7 @@ Seq_ProcessAllInputState:
 	or a, 0x1
 
 Seq_InputState_StoreFlag:
-	stb_d8 (0x3283), a
+	ld (0x3283:16), a
 	calr AccKey_ScanAndSetDirty
 	calr AccState_ReadAccompParams
 	calr AudioMode_CheckAndUpdateStereo
@@ -11285,29 +11285,29 @@ AccKey_ScanDone:
 
 AccChord_ReadAndStoreKeys:
 	ld a, (0xcee0:16)
-	stb_d8 (0x32d9), a
+	ld (0x32d9:16), a
 	ld a, (0xcedf:16)
-	stb_d8 (0x32d8), a
+	ld (0x32d8:16), a
 	ld a, (0xcee1:16)
-	stb_d8 (0x32da), a
+	ld (0x32da:16), a
 	ld a, (0xcede:16)
-	stb_d8 (0x32d7), a
+	ld (0x32d7:16), a
 	cpdi8 (8968), 0
 	jr z, AccChord_CheckKeyOverride
 	ld a, (8962:16)
-	stb_d8 (0x32d9), a
+	ld (0x32d9:16), a
 	ld a, (8960:16)
-	stb_d8 (0x32d8), a
+	ld (0x32d8:16), a
 	ld a, (8964:16)
-	stb_d8 (0x32da), a
+	ld (0x32da:16), a
 	ld a, (8966:16)
-	stb_d8 (0x32d7), a
+	ld (0x32d7:16), a
 
 AccChord_CheckKeyOverride:
 	bitda 1, (0x32d7)
 	jr nz, AccChord_CheckUIState
 	ld a, (0x32d9:16)
-	stb_d8 (0x32da), a
+	ld (0x32da:16), a
 
 AccChord_CheckUIState:
 	cpdi8 (0x8d34), 14
@@ -11335,9 +11335,9 @@ AccChord_ReadChannelKeys:
 	ld a, (0x34e9:16)
 	and a, 0xf
 	inc 1, a
-	stb_d8 (0x32d9), a
-	stb_d8 (0x8d40), a
-	stb_d8 (0x32da), a
+	ld (0x32d9:16), a
+	ld (0x8d40:16), a
+	ld (0x32da:16), a
 
 AccChord_CheckUIStateExit:
 	cpdi8 (0x8d34), 14
@@ -11345,9 +11345,9 @@ AccChord_CheckUIStateExit:
 	cpdi8 (0x32f1), 14
 	jr nz, AccChord_CheckModeAndUpdate
 	ld a, (0xcedf:16)
-	stb_d8 (0x8d42), a
+	ld (0x8d42:16), a
 	ld a, (0xcee0:16)
-	stb_d8 (0x8d40), a
+	ld (0x8d40:16), a
 	calr AccDisplay_RefreshIfDiskActive
 
 AccChord_CheckModeAndUpdate:
@@ -11361,29 +11361,29 @@ AccChord_CheckModeAndUpdate:
 	ld a, (0x32dc:16)
 	cpda8 a, 0x32d8
 	jr z, AccChord_ReadKeysRet
-	stb_d8 (0x32d8), a
-	stb_d8 (0xcedf), a
-	stb_d8 (0x8d42), a
-	stb_d8 (8960), a
+	ld (0x32d8:16), a
+	ld (0xcedf:16), a
+	ld (0x8d42:16), a
+	ld (8960:16), a
 	ld a, (0x32dd:16)
-	stb_d8 (0x32d9), a
-	stb_d8 (0xcee0), a
-	stb_d8 (0x8d40), a
-	stb_d8 (8962), a
+	ld (0x32d9:16), a
+	ld (0xcee0:16), a
+	ld (0x8d40:16), a
+	ld (8962:16), a
 	ld a, (0x32de:16)
-	stb_d8 (0x32da), a
-	stb_d8 (0xcee1), a
-	stb_d8 (0x8d44), a
-	stb_d8 (8964), a
+	ld (0x32da:16), a
+	ld (0xcee1:16), a
+	ld (0x8d44:16), a
+	ld (8964:16), a
 	cpda8 a, 0x32dd
 	jr nz, AccChord_CompareNoteC
 	stdi8 (0x8d44), 0
 
 AccChord_CompareNoteC:
 	ld a, (0x32db:16)
-	stb_d8 (0x32d7), a
-	stb_d8 (0xcede), a
-	stb_d8 (8966), a
+	ld (0x32d7:16), a
+	ld (0xcede:16), a
+	ld (8966:16), a
 	call Voice_InitSlotData
 	call Voice_FindAndAllocBestMatch
 	ld a, (0xfc5d:16)
@@ -11413,11 +11413,11 @@ AccDisplay_RefreshDone:
 AccState_ReadAccompParams:
 	ldb a, 0x0
 	ei 6
-	stb_d8 (1124), a
+	ld (1124:16), a
 	ld a, (1046:16)
-	stb_d8 (0x3280), a
+	ld (0x3280:16), a
 	ld a, (1076:16)
-	stb_d8 (0x32b4), a
+	ld (0x32b4:16), a
 	ld a, (1077:16)
-	stb_d8 (0x32b3), a
+	ld (0x32b3:16), a
 	ld a, (1045:16)

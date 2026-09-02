@@ -37,7 +37,7 @@ FDC_Send_Command:
 	ldb	b, 139
 	pop_f
 	ldb	w, 139
-	stb_d8	(0x8b22), a
+	ld	(0x8b22:16), a
 	ret
 
 FDC_Write_Data:
@@ -306,7 +306,7 @@ FDC_ErrorInvalidDrive:
 
 FDC_CheckDriveCount:
 	ld wa, (0x8a42:16)
-	stb_d8 (0x8a2a), a
+	ld (0x8a2a:16), a
 	cpdi8 (0x8a2a), 1
 	jr ule, FDC_ValidateCommand
 	ldw wa, 0xfe
@@ -338,8 +338,8 @@ FDC_Command5Handler:
 
 FDC_ValidateTrack:
 	ld wa, (0x8a46:16)
-	stb_d8 (0x8a2b), a
-	stb_d8 (0x8a36), a
+	ld (0x8a2b:16), a
+	ld (0x8a36:16), a
 	extz wa
 	cpda16 xwa, 0x8b08
 	jr c, FDC_HandleCmd2
@@ -361,7 +361,7 @@ FDC_CheckSectorCount:
 
 FDC_CheckSectorNum:
 	ld wa, (0x8a48:16)
-	stb_d8 (0x8a2d), a
+	ld (0x8a2d:16), a
 	cpdi8 (0x8a2d), 0
 	jr nz, FDC_CheckFormatType
 	ldw wa, 0xfe
@@ -420,7 +420,7 @@ FDC_ValidExecute:
 
 FDC_SetupFormatParams:
 	ld wa, (0x8a46:16)
-	stb_d8 (0x8a6e), a
+	ld (0x8a6e:16), a
 	and a, 0xf
 	cps a, 3
 	jrl z, FDC_Format1440K
@@ -480,7 +480,7 @@ FDC_InitStateVars:
 	ld a, (0x8a6e:16)
 	srl a, 4
 	and a, 0xf
-	stb_d8 (0x8a37), a
+	ld (0x8a37:16), a
 	stdi8 (0x8a31), 255
 	stdi8 (0x8a34), 0
 	stdi8 (0x8a38), 15
@@ -495,8 +495,8 @@ FDC_InitStateVars:
 
 FDC_CheckHead:
 	ld wa, (0x8a44:16)
-	stb_d8 (0x8a2c), a
-	stb_d8 (0x8a29), a
+	ld (0x8a2c:16), a
+	ld (0x8a29:16), a
 	cpdi8 (0x8a29), 0
 	ret z
 	cpdi8 (0x8a29), 1
@@ -802,7 +802,7 @@ FDC_ResultPhase_Read:
 	calr	65474
 	calr	65174
 	calr	63715
-	stb_d8	(0x8a61), l
+	ld	(0x8a61:16), l
 	inc	2, xsp
 	ret
 
@@ -932,7 +932,7 @@ FDC_HardwareSetup:
 	nop
 	jrl	nz, 214
 	ld	a, (xsp)
-	stb_d8	(0x8a28), a
+	ld	(0x8a28:16), a
 	calr	208
 	cps	l, 0
 	jrl	nz, 200
@@ -1237,7 +1237,7 @@ FDC_HardwareSetup:
 FDC_Set_Status:
 	cpdi8 (0x8a24), 0
 	jr nz, FDC_SetStatus_AlreadySet
-	stb_d8 (0x8a24), a
+	ld (0x8a24:16), a
 	cp a, 0x36
 	jr z, FDC_SetStatus_DataFieldErr
 	cp a, 0x35
@@ -1368,7 +1368,7 @@ FDC_CmdRecalibrate:
 	jr	z, 5
 	stdi8	(0x8b04), 255
 	stb_erp a, 251
-	stb_d8	(0x8a36), a
+	ld	(0x8a36:16), a
 	ldw	wa, 16
 	calr	65408
 	pop qiz
@@ -1550,8 +1550,8 @@ FDC_CMD_EXEC:
 	stdi8	(0x8a2d), 1
 	ld	a, (0x8a29:16)
 	xor	a, 1
-	stb_d8	(0x8a29), a
-	stb_d8	(0x8a2c), a
+	ld	(0x8a29:16), a
+	ld	(0x8a2c:16), a
 	.byte 0xc1
 	pushw	ix
 	.byte 0x8a
@@ -1561,7 +1561,7 @@ FDC_CMD_EXEC:
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
-	stb_d8	(0x8a36), a
+	ld	(0x8a36:16), a
 	.byte 0xd1
 	popw	de
 	.byte 0x8a
@@ -1696,8 +1696,8 @@ FDC_CMD_EXEC:
 	stdi8	(0x8a2d), 1
 	ld	a, (0x8a29:16)
 	xor	a, 1
-	stb_d8	(0x8a29), a
-	stb_d8	(0x8a2c), a
+	ld	(0x8a29:16), a
+	ld	(0x8a2c:16), a
 	.byte 0xc1
 	pushw	ix
 	.byte 0x8a
@@ -1707,7 +1707,7 @@ FDC_CMD_EXEC:
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
-	stb_d8	(0x8a36), a
+	ld	(0x8a36:16), a
 	.byte 0xd1
 	popw	de
 	.byte 0x8a
@@ -1782,15 +1782,15 @@ FDC_MODE_CONFIG:
 	jr	nz, 50
 	ld	a, (0x8a29:16)
 	xor	a, 1
-	stb_d8	(0x8a29), a
-	stb_d8	(0x8a2c), a
+	ld	(0x8a29:16), a
+	ld	(0x8a2c:16), a
 	cpdi8	(0x8a2c), 0
 	jr	nz, 16
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
-	stb_d8	(0x8a36), a
-	stb_d8	(0x8a12), a
+	ld	(0x8a36:16), a
+	ld	(0x8a12:16), a
 	ld	a, (0x8a36:16)
 	extz	wa
 	cpda16 xwa, (35592)

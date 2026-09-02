@@ -7850,7 +7850,7 @@ SeMenu_NameEditor_End:
 	ld	w, (1642:16)
 	and	w, 127
 	or	w, a
-	stb_d8	(1642), w
+	ld	(1642:16), w
 	call	SeMenu_NameEdit_CheckBit7
 	jr	35
 	.byte 0xc1
@@ -7862,7 +7862,7 @@ SeMenu_NameEditor_End:
 	ld	w, (1632:16)
 	and	w, 127
 	or	w, a
-	stb_d8	(1632), w
+	ld	(1632:16), w
 	stib_da	(0x03efa8), 0
 	ld	xiy, TuningSystem_Handler_Table_0x242C
 	call	SeMenu_NameEditor_HandleInput
@@ -9423,7 +9423,7 @@ SeMenu_Utility_FormatNumber_Loop:
 SeMenu_Utility_FormatNumber_End:
 	; --- Data setup: load A, store, set flag=2, language-conditional XIX (58 bytes) ---
 	ld	a, (0x8d36:16)
-	stb_d8	(1656), a
+	ld	(1656:16), a
 	stib_da	(0x03efa8), 2
 	ld xiy, 0x00f12364
 	cpdi8	(1710), 1
@@ -9564,7 +9564,7 @@ SeMenu_Utility_End:
 SeMenu_NameEdit_DataBlock1:
 	ld	a, (1632:16)
 	and	a, 15
-	stb_d8	(1648), a
+	ld	(1648:16), a
 	cp	a, 10
 	jr	nz, 7
 	ld	xiy, TuningSystem_Handler_Table_0x1F9A
@@ -9984,12 +9984,12 @@ Data_UnknownBlock:
 	ldb	l, 17
 	jr	2
 	ldb	l, 16
-	stb_d8	(0x90ea), l
+	ld	(0x90ea:16), l
 	ld	h, (1633:16)
 	dec	1, h
-	stb_d8	(0x90eb), h
+	ld	(0x90eb:16), h
 	ld	a, (0x8d3a:16)
-	stb_d8	(0x90ec), a
+	ld	(0x90ec:16), a
 	ld	xwa, 0x90ea
 	call	SndParam_ApplyProgramChange
 	ld	a, (0x90ed:16)

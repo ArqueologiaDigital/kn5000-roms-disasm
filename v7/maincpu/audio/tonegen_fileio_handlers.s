@@ -604,19 +604,19 @@ DSPCfg_SyncBitmapData:
 SndParam_SyncDisplayBitmap:
 	lds32 xwa, 0
 	call 0xfccc66
-	stb_d8 (0x8dd0), l
+	ld (0x8dd0:16), l
 	ld XWA,0x00000102
 	call 0xfccc66
-	stb_d8 (0x8dd2), l
+	ld (0x8dd2:16), l
 	ld XWA,0x00000103
 	call 0xfccc66
-	stb_d8 (0x8dd4), l
+	ld (0x8dd4:16), l
 	ld XWA,0x00000300
 	call 0xfccc66
-	stb_d8 (0x8dd6), l
+	ld (0x8dd6:16), l
 	ld XWA,0x00004006
 	call 0xfccc66
-	stb_d8 (0x8dd8), l
+	ld (0x8dd8:16), l
 	pushw 0x0620
 	pushw 0x0000
 	pushw 0xf9a0
@@ -1196,7 +1196,7 @@ Encoder_SyncLoop:
 	extz	wa
 	muls	wa, 3
 	ld_rrb	a, xhl, wa
-	stb_d8	(36340), a
+	ld	(36340:16), a
 	cp	a, 255
 	jr	nz, -34	; -> 0xFC4FA2
 	ld	a, (36338:16)

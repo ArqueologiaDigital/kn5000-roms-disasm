@@ -21,7 +21,7 @@ AudioInit_ConfigStereoVoice:
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	stb_d8 (0xc1ff), a
+	ld (0xc1ff:16), a
 	cp a, 0xff
 	jr z, AudioInit_VoiceNotConfigured
 	ordi16 0xc59c, 2
@@ -210,7 +210,7 @@ AudioInit_LoadGroupVoice:
 	extz bc
 	lda xde, (AudioInit_VoiceDispatch_Table_0x16A:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
-	stb_d8 (0xc1ff), c
+	ld (0xc1ff:16), c
 	cp c, 0xff
 	jr z, AudioInit_GroupFallbackStereo
 	ordi16 0xc59c, 2
@@ -263,7 +263,7 @@ AudioInit_CheckSoundGroup51:
 	extz bc
 	lda xde, (AudioInit_VoiceDispatch_Table_0x18A:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
-	stb_d8 (0xc1ff), c
+	ld (0xc1ff:16), c
 	cp c, 0xff
 	jr z, AudioInit_G51FallbackStereo
 	ordi16 0xc59c, 2
@@ -325,7 +325,7 @@ AudioInit_LoadAndConfigure:
 	extz bc
 	lda xde, (AudioInit_VoiceDispatch_Table_0x18A:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
-	stb_d8 (0xc1ff), c
+	ld (0xc1ff:16), c
 	cp c, 0xff
 	jr z, AudioInit_MixFallbackConfig
 	ordi16 0xc59c, 2
@@ -393,7 +393,7 @@ AudioInit_CheckBit2VoiceParam:
 AudioInit_CompareAndSendMIDI:
 	cpdm8 0xc5a8, c
 	jr z, AudioInit_VoiceParamDone
-	stb_d8 (0xc5a8), c
+	ld (0xc5a8:16), c
 	ld (xsp + 256), 0x4	; LD (XSP + 000h), 004h - explicit displacement encoding
 	ld (xsp + 1), 0xf0
 	ld (xsp + 2), 0x50

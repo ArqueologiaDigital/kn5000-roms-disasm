@@ -1104,7 +1104,7 @@ SndParam_Widget1_AppendType2:
 	call	15673316
 	cp	hl, 65535
 	jr	z, 4
-	stb_d8	(208), l
+	ld	(208:16), l
 	ld	a, (1065:16)
 	and	a, 31
 	jr	nz, 13
@@ -1147,7 +1147,7 @@ SndParam_Widget1_CallType3:
 	pop	xbc
 	pop	xwa
 	reti
-	stb_d8	(46915), a
+	ld	(46915:16), a
 	push	xwa
 	push	xbc
 	push	xde
@@ -1163,7 +1163,7 @@ SndParam_Widget1_CallType3:
 	jr	ule, 5
 	calr	84
 	jr	71
-	stb_d8	1059, a
+	ld	(1059:16), a
 	.byte 0xc1, 0x27, 0x04, 0x3c, 0xbd, 0xf1, 0x32, 0x04, 0xc8
 	jr	z, 56
 	.byte 0xf1, 0x32, 0x04, 0xc9
@@ -1302,7 +1302,7 @@ SndParam_Widget1_CallType3:
 	jr	z, 37
 	jr	ugt, 3
 	add	a, 96
-	stb_d8	1111, w
+	ld	(1111:16), w
 	adddm8	1124, a
 	adddm8	1122, a
 	xor	w, w
@@ -1364,9 +1364,9 @@ SndParam_Widget1_CallType3:
 	stdi8	1057, 16
 	pushw	wa
 	ld	a, (1045:16)
-	stb_d8	1078, a
+	ld	(1078:16), a
 	ld	a, (1046:16)
-	stb_d8	1079, a
+	ld	(1079:16), a
 	popw	wa
 	ret
 	.byte 0xf1, 0x52, 0xfd, 0xca
@@ -1391,7 +1391,7 @@ SndParam_Widget1_CallType3:
 	cpdi16	61854, 0
 	jr	nz, 80
 	xor	wa, wa
-	stb_d8	1047, a
+	ld	(1047:16), a
 	stda16	1048, wa
 	.byte 0xf1, 0x20, 0x04
 SndParam_HeapAllocOK:

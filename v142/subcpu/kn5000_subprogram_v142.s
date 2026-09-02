@@ -201,7 +201,7 @@ Timer_AudioTick_Handler:
 	ld a, (61460:16)
 	ld c, a
 	inc 1, a
-	stb_d8 61460, a
+	ld (61460:16), a
 	extz bc
 	cps bc, 0
 	jr mi, AudioTick_Done
@@ -245,7 +245,7 @@ AudioTick_Variant_6:
 	stdi8 61460, 0
 	ld a, (61462:16)
 	inc 1, a
-	stb_d8 61462, a
+	ld (61462:16), a
 	cp a, 0x8
 	jr c, AudioTick_Done
 	setda 5, 4158
@@ -772,7 +772,7 @@ TaskSched_Dispatch_SwitchTo:
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
-	stb_d8 305, a
+	ld (305:16), a
 	ld xsp, (xhl + 4)
 
 TaskSched_ContextRestore:
@@ -2730,7 +2730,7 @@ INT0_HANDLER:	; 20E86
 	bit_dd8 2, 0x34	; MSTAT0 - test if Main CPU is currently sending data
 	jr nz, INT0_Exit
 	ldb_da a, 0x120000
-	stb_d8 4332, a
+	ld (4332:16), a
 	cp a, 0xE1
 	jr nz, INT0_Check_E2
 	stdi8 4330, 2	; E1 command - state 2
@@ -2997,7 +2997,7 @@ MIDI_Backlog_Publish:
 	ret
 
 RingBuf_SetOffsetLo:
-	stb_d8 10214, a
+	ld (10214:16), a
 	ret
 
 RingBuf_CheckOffset_ClearFlags:
@@ -41378,44 +41378,44 @@ MIDI_Dispatch_ParseStatus:
 	jr c, MIDI_Status_Incomplete
 	bit 3, hl
 	jr nz, MIDI_Status_NoteOn_Extended
-	stb_d8 10984, l
+	ld (10984:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10985, l
+	ld (10985:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10986, l
+	ld (10986:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10987, l
+	ld (10987:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10988, l
+	ld (10988:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10989, l
+	ld (10989:16), l
 	lda xwa, (10984:16)
 	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
 ; Note-off variant taken when bit 3 of the status byte is set: 6-byte record staged at 0x2AEE.
 MIDI_Status_NoteOn_Extended:
-	stb_d8 10990, l
+	ld (10990:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10991, l
+	ld (10991:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10992, l
+	ld (10992:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10993, l
+	ld (10993:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10994, l
+	ld (10994:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10995, l
+	ld (10995:16), l
 	lda xwa, (10990:16)
 	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
@@ -41430,16 +41430,16 @@ MIDI_Status_Incomplete:
 MIDI_Status_NoteOn:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_NoteOn_Skip
-	stb_d8 10996, l
+	ld (10996:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10997, l
+	ld (10997:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10998, l
+	ld (10998:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 10999, l
+	ld (10999:16), l
 	ld a, (10997:16)
 	cp a, 0xF0
 	jr nc, MIDI_Status_NoteOn_Poly
@@ -41463,16 +41463,16 @@ MIDI_Status_NoteOn_Skip:
 MIDI_Status_CtrlChange:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_CtrlChange_Skip
-	stb_d8 11000, l
+	ld (11000:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11001, l
+	ld (11001:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11002, l
+	ld (11002:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11003, l
+	ld (11003:16), l
 	lda xwa, (11000:16)
 	call Voice_CtrlChange
 	jrl MIDI_Dispatch_Exit
@@ -41487,19 +41487,19 @@ MIDI_Status_CtrlChange_Skip:
 MIDI_Status_ProgChange:
 	cpw (xiz + 4), 0x4
 	jr c, MIDI_Status_ProgChange_Skip
-	stb_d8 11004, l
+	ld (11004:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11005, l
+	ld (11005:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11006, l
+	ld (11006:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11007, l
+	ld (11007:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11008, l
+	ld (11008:16), l
 	lda xwa, (11004:16)
 	call Voice_ProgChange
 	jrl MIDI_Dispatch_Exit
@@ -41514,16 +41514,16 @@ MIDI_Status_ProgChange_Skip:
 MIDI_Status_ChanPressure:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_ChanPressure_Skip
-	stb_d8 11009, l
+	ld (11009:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11010, l
+	ld (11010:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11011, l
+	ld (11011:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11012, l
+	ld (11012:16), l
 	lda xwa, (11009:16)
 	call Voice_ChanPressure
 	jrl MIDI_Dispatch_Exit
@@ -41538,16 +41538,16 @@ MIDI_Status_ChanPressure_Skip:
 MIDI_Status_PitchBend:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_PitchBend_Skip
-	stb_d8 11013, l
+	ld (11013:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11014, l
+	ld (11014:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11015, l
+	ld (11015:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11016, l
+	ld (11016:16), l
 	lda xwa, (11013:16)
 	call Voice_PitchBend
 	jr MIDI_Dispatch_Exit
@@ -41562,16 +41562,16 @@ MIDI_Status_PitchBend_Skip:
 MIDI_Status_System:
 	cpw (xiz + 4), 0x3
 	jr c, MIDI_Status_System_Skip
-	stb_d8 11017, l
+	ld (11017:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11018, l
+	ld (11018:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11019, l
+	ld (11019:16), l
 	ld xwa, xiz
 	calr RingBuf_ReadByte
-	stb_d8 11020, l
+	ld (11020:16), l
 	lda xwa, (11017:16)
 	call Voice_SystemMsg
 	jr MIDI_Dispatch_Exit
@@ -42487,7 +42487,7 @@ Voice_Poly_NoteOn_RoundRobin:
 	ld c, (15123:16)
 	inc 1, c
 	and c, 0x7
-	stb_d8 15123, c
+	ld (15123:16), c
 	ld c, (xwa + 3)
 	res 7, c
 	ldb_erp C, 0xF9
@@ -42924,25 +42924,25 @@ DSP_Cmd_DequeueHeader:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17257, l
+	ld (17257:16), l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17258, l
+	ld (17258:16), l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17259, l
+	ld (17259:16), l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17260, l
+	ld (17260:16), l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17261, l
+	ld (17261:16), l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17262, l
+	ld (17262:16), l
 	ld xwa, xiz
 	calr DSP_RingBuf_Read
-	stb_d8 17263, l
+	ld (17263:16), l
 	pop xiz
 	ret
 
@@ -43209,7 +43209,7 @@ Audio_Process_DSP_MsgSizeCheck:
 	ld xwa, (xsp + 4)
 	calr DSP_Cmd_DequeueHeader
 	ld wa, (xsp + 12)
-	stb_d8 17256, a
+	ld (17256:16), a
 	cp a, 0x2D
 	jrl z, DSP_CmdHandler_2D
 	cp a, 0x2C
@@ -57617,9 +57617,9 @@ ToneGen_Note_Loop:	; 03D02Eh
 	ld (xwa), 0xFF	; Mark slot as note-on
 	stdi8 19010, 144	; DMA command: note on
 	ld a, (xsp + 256)
-	stb_d8 19011, a	; Store note number
+	ld (19011:16), a	; Store note number
 	ld a, (xsp + 1)
-	stb_d8 19012, a	; Store velocity
+	ld (19012:16), a	; Store velocity
 	cpdi8 19018, 1	; Check if DMA enabled
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
@@ -57646,9 +57646,9 @@ ToneGen_Note_Off_Slot:	; 03D06Dh
 	ld (xwa), 0x0	; Clear slot
 	stdi8 19010, 144	; DMA command: note off
 	ld a, (xsp + 256)
-	stb_d8 19011, a
+	ld (19011:16), a
 	ld a, (xsp + 1)
-	stb_d8 19012, a
+	ld (19012:16), a
 	cpdi8 19018, 1
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42

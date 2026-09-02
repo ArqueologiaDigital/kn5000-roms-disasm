@@ -2228,7 +2228,7 @@ MainMpstFunc:
 	cp xbc, 0x1e30003
 	jr nz, MainMpst_ReturnZero
 	ld xwa, (xsp)
-	stb_d8 (0xb7ec), a
+	ld (0xb7ec:16), a
 	call SndParam_ApplyAndSync
 	stdi8 (0x7f42), 35
 	ld xwa, 0xffffffff

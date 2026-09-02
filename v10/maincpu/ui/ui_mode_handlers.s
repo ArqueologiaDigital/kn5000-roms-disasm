@@ -168,7 +168,7 @@ EffectMode_ByteData_Block3:
 	jr	z, 28
 	ld	xwa, 0x28002
 	call	SndParam_LookupReadOnly
-	stb_d8	(0x8d54), l
+	ld	(0x8d54:16), l
 	.byte 0xf1, 0xe2, 0xb7
 	ld	(xsp-15), de
 	.byte 0x8d, 0xbb
@@ -194,7 +194,7 @@ EffectMode_ByteData_Block3:
 	jr	z, 20
 	ld	xwa, 0x28002
 	call	SndParam_LookupReadOnly
-	stb_d8	(0x8d54), l
+	ld	(0x8d54:16), l
 	.byte 0xf1, 0xe2, 0xb7, 0xbf
 	calr	1551
 	.byte 0xc1, 0x52, 0x8d
@@ -224,7 +224,7 @@ EffectMode_ByteData_Block4:
 	jr	z, 20
 	ld	xwa, 0x28002
 	call	SndParam_LookupReadOnly
-	stb_d8	(0x8d54), l
+	ld	(0x8d54:16), l
 	.byte 0xf1, 0xe2, 0xb7, 0xbf
 	calr	1470
 	.byte 0xc1, 0x52, 0x8d
@@ -260,7 +260,7 @@ EffectMode_CheckTransposeAndLookup:
 SndParam_LoadTransposeValues:
 	ld xwa, 0x28000
 	call SndParam_LookupReadOnly
-	stb_d8 (0x90ea), l
+	ld (0x90ea:16), l
 	ld xwa, 0x28001
 	call SndParam_LookupReadOnly
 	lda xwa, (0x90ea:16)
@@ -290,7 +290,7 @@ EffectMode_TimerCountdown:
 	cps a, 0
 	ret z
 	dec 1, a
-	stb_d8 (0x8d4e), a
+	ld (0x8d4e:16), a
 	cps a, 0
 	ret nz
 	cpdi16 0x8d56, 0
@@ -561,7 +561,7 @@ EffectMode_UpdateDisplay:
 	bit 5, a
 	jr z, EffectMode_UpdateDisplay_NoPatch
 	res 5, a
-	stb_d8 (0x8d52), a
+	ld (0x8d52:16), a
 	ld xwa, xiz
 	calr BitMapOut_ByteData_PatchTable
 	jr EffectMode_UpdateDisplay_CopyVoice
@@ -868,7 +868,7 @@ EffectMode_CopyPresetBits:
 EffectMode_ReinitSoundOutput:
 	ld xwa, 0x302
 	call SndParam_LookupReadOnly
-	stb_d8 (0x8d50), l
+	ld (0x8d50:16), l
 	ld xwa, 0x302
 	lds bc, 1
 	lds de, 0
@@ -973,14 +973,14 @@ SndOutput_ReinitByMode_NotifyParam:
 	bit 5, a
 	jr z, SndOutput_ReinitByMode_CheckBit3
 	set 2, a
-	stb_d8 (0x8d52), a
+	ld (0x8d52:16), a
 
 SndOutput_ReinitByMode_CheckBit3:
 	ld a, (0x8d52:16)
 	bit 3, a
 	ret z
 	set 1, a
-	stb_d8 (0x8d52), a
+	ld (0x8d52:16), a
 	ret
 
 
@@ -1663,7 +1663,7 @@ SelfTest_SramAndRom_CheckROM:
 	push xix
 	push xiz
 	call CPanel_PanelDetection_Wrapper
-	stb_d8 (0x8d7c), a
+	ld (0x8d7c:16), a
 	pop xiz
 	pop xix
 	pop xhl
@@ -1671,7 +1671,7 @@ SelfTest_SramAndRom_CheckROM:
 	ld a, (0x8d7c:16)
 	cpl a
 	and a, 0x9
-	stb_d8 (0x8d7c), a
+	ld (0x8d7c:16), a
 	cps a, 0
 	jr z, EffectMode_PopRetFA
 	cpib_erp 0xfa, 0
@@ -1726,7 +1726,7 @@ EffectMode_CheckAndDispatch:
 	bit 4, a
 	jr nz, EffectMode_DispatchUpdate
 	set 4, a
-	stb_d8 (0x8d80), a
+	ld (0x8d80:16), a
 	ld a, (0x8d82:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
@@ -1739,7 +1739,7 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	bit 4, a
 	jr z, EffectMode_DispatchUpdate
 	res 4, a
-	stb_d8 (0x8d80), a
+	ld (0x8d80:16), a
 	ld a, (0x8d82:16)
 	cps a, 0
 	jr z, EffectMode_DispatchUpdate
@@ -1836,7 +1836,7 @@ EffectMode_HandleTimerEvents:
 	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 	ret
 
 EffectMode_TimerEvent_Step1E:
@@ -1847,7 +1847,7 @@ EffectMode_TimerEvent_Step1E:
 	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 	ret
 
 EffectMode_TimerEvent_Step3C:
@@ -1858,7 +1858,7 @@ EffectMode_TimerEvent_Step3C:
 	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 	ret
 
 EffectMode_TimerEvent_Step5A:
@@ -1869,7 +1869,7 @@ EffectMode_TimerEvent_Step5A:
 	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 	ret
 
 EffectMode_TimerEvent_Step78:
@@ -1880,7 +1880,7 @@ EffectMode_TimerEvent_Step78:
 	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 	ret
 
 EffectMode_TimerEvent_Step96:
@@ -1894,7 +1894,7 @@ EffectMode_TimerEvent_Step96:
 EffectMode_TimerEvent_Default:
 	inc 1, a
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 	ret
 
 EffectMode_RunDiagSequence:
@@ -1954,7 +1954,7 @@ EffectMode_DiagSeq_AnimFrame:
 
 EffectMode_DiagSeq_IncFrame:
 	inc 1, a
-	stb_d8 (0x8d7a), a
+	ld (0x8d7a:16), a
 
 EffectMode_DiagSeq_SetDelay:
 	stdi8 (0x8d78), 30
@@ -1962,7 +1962,7 @@ EffectMode_DiagSeq_SetDelay:
 
 EffectMode_DiagSeq_DecrementDelay:
 	dec 1, c
-	stb_d8 (0x8d78), c
+	ld (0x8d78:16), c
 	ret
 
 EffectMode_ByteData_DiagEvents:
@@ -1972,7 +1972,7 @@ EffectMode_ByteData_DiagEvents:
 	push	xix
 	push	xiz
 	call	CPanel_PanelDetection_Wrapper
-	stb_d8	(0x8d7c), a
+	ld	(0x8d7c:16), a
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2021,8 +2021,8 @@ EffectMode_ByteData_DiagEvents:
 Voice_EmitNoteWithVelocity:
 	cpdi8 (0x8d36), 246
 	ret nz
-	stb_d8 (0x8d84), a
-	stb_d8 (0x8d86), c
+	ld (0x8d84:16), a
+	ld (0x8d86:16), c
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e20017
 	lds32 xde, 0

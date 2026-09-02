@@ -1472,7 +1472,7 @@ InterCPU_RX_Handler:
 	bit_dd8 2, 0x34	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
 	ldb_da a, (0x120000); Read command from main CPU
-	stb_d8 (1306), a; Save received byte
+	ld (1306:16), a; Save received byte
 	cp a, 0xE1	; Command E1?
 	jr nz, InterCPU_RX_Handler__not_e1
 	; E1: Set up DMA for 6 bytes
@@ -1661,11 +1661,11 @@ INIT_MEMORY_TEST:
 
 	lds wa, 0
 	calr MEM_TEST_ROUTINE	; 0xFF89FC (3-byte relative call)
-	stb_d8 (1366), l
+	ld (1366:16), l
 	extz hl
 	ld wa, hl
 	calr ROM_CHECKSUM	; 0xFF8AB4 (3-byte relative call)
-	stb_d8 (1366), l
+	ld (1366:16), l
 	calr HARDWARE_CALIBRATION_SEQUENCE	; 0xFF8C80 (3-byte relative call)
 	cp hl, 0xFFFF
 	jr nz, INIT_MEMORY_TEST__no_error

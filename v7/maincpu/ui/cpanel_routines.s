@@ -552,7 +552,7 @@ SendByte1_InspectByte:
 	jr	c, 10
 	and	a, 15
 	add	a, 3
-	stb_d8	(36079), a
+	ld	(36079:16), a
 SendByte1_AdvanceState:
 	incdi8	4, (36078)
 	jrl	-323
@@ -642,7 +642,7 @@ RXByte1_InspectByte:
 	jr	c, 10
 	and	a, 15
 	add	a, 3
-	stb_d8	(36079), a
+	ld	(36079:16), a
 RXByte1_AdvanceState:
 	incdi8	4, (36078)
 	jrl	-635
@@ -823,12 +823,12 @@ CPanel_RX_ButtonPacket:
 	calr	635
 	st_rrb	w, xiz, ix
 	calr	649
-	stb_d8	(36088), w
+	ld	(36088:16), w
 	ld_rrb	a, xde, iy
 	calr	615
 	st_rrb	a, xiz, ix
 	calr	629
-	stb_d8	(36089), a
+	ld	(36089:16), a
 	and	w, 79
 	ld	xhl, 36270
 	bit	6, w
@@ -849,10 +849,10 @@ CPanel_RX_EncoderPacket:
 	calr	544
 	st_rrb	w, xiz, ix
 	calr	558
-	stb_d8	(36088), w
+	ld	(36088:16), w
 	ld_rrb	a, xde, iy
 	calr	524
-	stb_d8	(36089), a
+	ld	(36089:16), a
 	ld	c, w
 	calr	49
 	cp	hl, 65535
@@ -923,7 +923,7 @@ MBytePkt_LoopBody:
 	calr EncPkt_DispatchThunk
 	popw wa
 	cp HL,0xffff
-	stb_d8 (0x8cfa), l
+	ld (0x8cfa:16), l
 	popw hl
 	popw bc
 	jr nz, MBytePkt_EncWriteResult

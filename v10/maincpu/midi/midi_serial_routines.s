@@ -112,7 +112,7 @@ IntTx0_DequeueAndSend:
 	call SeqBuf_MidiOut_ReadByte
 	cp hl, 0xffff
 	jr z, IntTx0_CheckQueueEmpty
-	stb_d8 (208), l
+	ld (208:16), l
 
 IntTx0_CheckQueueEmpty:
 	ld a, (1065:16)
@@ -161,7 +161,7 @@ INTRX0_HANDLER:
 	reti
 
 MIDI_RX_BYTE_DISPATCHER:
-	stb_d8 (0xb7df), a
+	ld (0xb7df:16), a
 	push xwa
 	push xbc
 	push xde
@@ -179,7 +179,7 @@ MIDI_RX_BYTE_DISPATCHER:
 	jr RxDisp_SaveContextAndReturn
 
 RxDisp_StatusByte:
-	stb_d8 (1059), a
+	ld (1059:16), a
 	anddi8 (1063), 189
 	bitda 0, (1074)
 	jr z, RxDisp_SaveContextAndReturn
@@ -363,7 +363,7 @@ ClkTick_Src2ErrorDelta:
 	add a, 0x60
 
 ClkTick_Src2ErrorAccumulate:
-	stb_d8 (1111), w
+	ld (1111:16), w
 	adddm8 1124, a
 	adddm8 1122, a
 	xor w, w
@@ -439,9 +439,9 @@ Transport_StopSrc3Snapshot:
 	stdi8 (1057), 16
 	pushw wa
 	ld a, (1045:16)
-	stb_d8 (1078), a
+	ld (1078:16), a
 	ld a, (1046:16)
-	stb_d8 (1079), a
+	ld (1079:16), a
 	popw wa
 
 Transport_Return:
@@ -480,15 +480,15 @@ StartPlay_Body:
 
 MIDI_RESET_PLAYBACK_STATE:
 	xor wa, wa
-	stb_d8 (1047), a
+	ld (1047:16), a
 	stda16 (1048), xwa
 	stdi8 (1056), 1
 	bitda 1, (0x28a7)
 	jr z, ResetPlay_Src3Check
-	stb_d8 (1045), a
-	stb_d8 (1046), a
-	stb_d8 (1076), a
-	stb_d8 (1077), a
+	ld (1045:16), a
+	ld (1046:16), a
+	ld (1076:16), a
+	ld (1077:16), a
 	stdi8 (1054), 1
 	resda 0, 0x28a6
 	cpdi16 0x28aa, 0
@@ -500,7 +500,7 @@ ResetPlay_Src3Check:
 	bitda 0, (0x28a7)
 	jr z, ResetPlay_Return
 	xor wa, wa
-	stb_d8 (1051), a
+	ld (1051:16), a
 	stda16 (1052), xwa
 	stdi8 (1057), 1
 
@@ -590,9 +590,9 @@ AltClk_StopSrc3Snapshot:
 	stdi8 (1057), 12
 	pushw wa
 	ld a, (1045:16)
-	stb_d8 (1078), a
+	ld (1078:16), a
 	ld a, (1046:16)
-	stb_d8 (1079), a
+	ld (1079:16), a
 	popw wa
 
 AltClk_Return:
@@ -885,7 +885,7 @@ READ_COM_SELECT_SWITCH:
 	srl a, 4
 	ld xix, MidiSerial_OffsetTable
 	ldb_sri A, 0x03, 0xf0, 0xe0
-	stb_d8 (0xb7e0), a
+	ld (0xb7e0:16), a
 	ret
 
 ; Input: Active-low "COM_SELECT"
@@ -936,7 +936,7 @@ SC0Init_EnableRegisters:
 	stdi8 (210), 41
 	stdi8 (209), 0
 	ld a, (0xb7dc:16)
-	stb_d8 (211), a
+	ld (211:16), a
 	stdi8 (234), 93
 	stdi8 (208), 254
 	ei 0

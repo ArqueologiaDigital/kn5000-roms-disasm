@@ -225,11 +225,11 @@ BootSerial_FullInit:
 	ldw	(xhl - 2), 0x80
 	ldb	a, 0x03
 	and	a, 0xaf			; = 0x03
-	stb_d8	(0x0f67), a		; PFFC shadow
+	ld	(0x0f67:16), a		; PFFC shadow
 	st_dd8b	a, 0x3f			; PFFC = 0x03
 	ldb	a, 0x15
 	and	a, 0x8f			; = 0x05
-	stb_d8	(0x0f66), a		; PFCR shadow
+	ld	(0x0f66:16), a		; PFCR shadow
 	st_dd8b	a, 0x3e			; PFCR = 0x05
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
 	ldb	a, 0
@@ -653,9 +653,9 @@ BootSerial_WaitDeviceIdent__poll:
 	ldb	w, 0x0c
 BootSerial_WaitDeviceIdent__have:
 	cpdm8	0x1042, w		; same as previous poll?
-	stb_d8	(0x1042), w
+	ld	(0x1042:16), w
 	jr	nz, BootSerial_WaitDeviceIdent__poll
-	stb_d8	(0x1042), w		; stable: store (again) and clean up
+	ld	(0x1042:16), w		; stable: store (again) and clean up
 	ld	xhl, 0x988a
 	ldw	(xhl - 4), 0
 	ldw	(xhl - 8), 0

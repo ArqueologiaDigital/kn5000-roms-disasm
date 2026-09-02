@@ -8916,7 +8916,7 @@ SeqVoice_CheckAndRet_Prologue:
 	calr	934
 	calr	8156
 	ld	a, (xsp+6)
-	stb_d8	(59678), a
+	ld	(59678:16), a
 	call	16627073
 	ld	xwa, (xsp+2)
 	calr	7935
@@ -12222,7 +12222,7 @@ Param_SignExtendRetu_Return:
 	ld (XHL+0x06),E
 	ld c, (0xe0fb:16)
 	inc 1,C
-	stb_d8 (0xe0fb), c
+	ld (0xe0fb:16), c
 	res 0x07,C
 	ld (XHL+0x07),C
 	ld QBC,0

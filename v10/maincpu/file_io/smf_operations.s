@@ -790,7 +790,7 @@ SmfFN_Save_CallResult:
 	ld wa, (xsp + 6)
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
@@ -838,7 +838,7 @@ SmfFN_Open_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
@@ -880,7 +880,7 @@ SmfFN_HandleOpen2:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
@@ -928,7 +928,7 @@ SmfFN_Delete_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -964,7 +964,7 @@ SmfFN_HandleDelete2:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -1022,7 +1022,7 @@ SmfFN_HandleScrollFlag1:
 	cps a, 3
 	jr nc, SmfFN_LoadAs_Wrap
 	inc 1, c
-	stb_d8 (0x8946), c
+	ld (0x8946:16), c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1085,7 +1085,7 @@ SmfFN_HandleSeqSongNum:
 	cp a, 0xa
 	jr nc, SmfFN_SeqToSong_Wrap
 	inc 1, c
-	stb_d8 (0x8948), c
+	ld (0x8948:16), c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1112,7 +1112,7 @@ SmfFN_HandleSeqFromSong:
 	cp a, 0xa
 	jr nc, SmfFN_SeqFromSong_Wrap
 	inc 1, c
-	stb_d8 (0x8948), c
+	ld (0x8948:16), c
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0

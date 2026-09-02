@@ -18033,7 +18033,7 @@ PresBox_OK:
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 46)
-	stb_d8 (0x28a4), a
+	ld (0x28a4:16), a
 	call Demo_SelectEntry_ProcessSongList
 	ld xwa, 0x120000b
 	ld xbc, 0x1e000ad

@@ -216,9 +216,9 @@ SongBank_StoreCurrentSong:
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	stb_erp A, 0xf8
-	stb_d8 (7500), a
+	ld (7500:16), a
 	ld wa, (7120:16)
-	stb_d8 (7502), a
+	ld (7502:16), a
 	push xde
 	push xhl
 	push xix
@@ -885,7 +885,7 @@ VoiceSlot_AssignWrapper:
 VoiceSlot_AssignToChannel:
 	pushw bc
 	stda32 4353, xiy
-	stb_d8 (3822), a
+	ld (3822:16), a
 	ld c, w
 	call VoiceSlot_ComputeWordIndex
 	extz xiz

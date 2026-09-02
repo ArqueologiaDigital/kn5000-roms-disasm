@@ -337,7 +337,7 @@ FDC_Validate_HeadDrive:
 	calr FDC_ValidateDrive	; calr 0xffdcdf
 FDC_Validate_DriveTrackSector:
 	ld wa, (0x0c70:16)	; ld WA,(0x0c70)
-	stb_d8 (0x0c58), a	; ld (0x0c58),A
+	ld (0x0c58:16), a	; ld (0x0c58),A
 	cpdi8 (0x0c58), 1	; cp (0x0c58),0x01 - drive number must be 0 or 1
 	jr ule, FDC_Validate_DriveTrackSector__check_command	; jr ULE,0xffdace
 	ldw wa, 0xfe	; ld WA,0x00fe
@@ -365,8 +365,8 @@ FDC_Validate_DriveTrackSector__format_check:
 	ret	; ret
 FDC_Validate_DriveTrackSector__check_track:
 	ld wa, (0x0c74:16)	; ld WA,(0x0c74)
-	stb_d8 (0x0c59), a	; ld (0x0c59),A
-	stb_d8 (0x0c64), a	; ld (0x0c64),A
+	ld (0x0c59:16), a	; ld (0x0c59),A
+	ld (0x0c64:16), a	; ld (0x0c64),A
 	extz wa	; extz WA
 	cpda16 xwa, (0x0d36)	; cp WA,(0x0d36)
 	jr c, FDC_Validate_DriveTrackSector__track_ok	; jr C,0xffdb11
@@ -385,7 +385,7 @@ FDC_Validate_DriveTrackSector__check_count:
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__check_sector:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
-	stb_d8 (0x0c5b), a	; ld (0x0c5b),A
+	ld (0x0c5b:16), a	; ld (0x0c5b),A
 	cpdi8 (0x0c5b), 0	; cp (0x0c5b),0x00
 	jr nz, FDC_Validate_DriveTrackSector__sector_by_format	; jr NZ,0xffdb44
 	ldw wa, 0xfe	; ld WA,0x00fe
@@ -450,7 +450,7 @@ FDC_Validate_DriveTrackSector__check_head:
 ; -----------------------------------------------------------------------------
 FDC_SetGeometryForDiskType:
 	ld wa, (0x0c74:16)	; ld WA,(0x0c74)
-	stb_d8 (0x0c9c), a	; ld (0x0c9c),A
+	ld (0x0c9c:16), a	; ld (0x0c9c),A
 	and a, 0x0f	; and A,0x0f
 	cps a, 3	; cp A,3
 	jrl z, FDC_SetGeometryForDiskType__geom_2hd18	; jrl Z,0xffdc3e
@@ -505,7 +505,7 @@ FDC_SetGeometryForDiskType__common:
 	ld a, (0x0c9c:16)	; ld A,(0x0c9c)
 	srl a, 4	; srl 0x04,A
 	and a, 0x0f	; and A,0x0f
-	stb_d8 (0x0c65), a	; ld (0x0c65),A
+	ld (0x0c65:16), a	; ld (0x0c65),A
 	stdi8 (0x0c5f), 0xff	; ld (0x0c5f),0xff
 	stdi8 (0x0c62), 0	; ld (0x0c62),0x00
 	stdi8 (0x0c66), 0x0f	; ld (0x0c66),0x0f
@@ -525,8 +525,8 @@ FDC_SetGeometryForDiskType__common:
 ; -----------------------------------------------------------------------------
 FDC_ValidateHead:
 	ld wa, (0x0c72:16)	; ld WA,(0x0c72)
-	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
-	stb_d8 (0x0c57), a	; ld (0x0c57),A
+	ld (0x0c5a:16), a	; ld (0x0c5a),A
+	ld (0x0c57:16), a	; ld (0x0c57),A
 	cpdi8 (0x0c57), 0	; cp (0x0c57),0x00
 	ret z	; ret Z
 	cpdi8 (0x0c57), 1	; cp (0x0c57),0x01
@@ -902,7 +902,7 @@ FDC_SendAuxCmdReadResult:
 	calr FDC_WriteAuxCmdByte	; calr 0xffdecc
 	calr FDC_WaitRQM	; calr 0xffdda3
 	calr FDC_ReadData	; calr 0xffd7ee
-	stb_d8 (0x0c8f), l	; ld (0x0c8f),L
+	ld (0x0c8f:16), l	; ld (0x0c8f),L
 FDC_SendAuxCmdReadResult__done:
 	inc 2, xsp	; inc 2,XSP
 	ret	; ret
@@ -1032,7 +1032,7 @@ FDC_IssueCommand:
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jrl nz, FDC_IssueCommand__done	; jrl NZ,0xffe0a8
 	ld a, (xsp)	; ld A,(XSP)
-	stb_d8 (0x0c56), a	; ld (0x0c56),A
+	ld (0x0c56:16), a	; ld (0x0c56),A
 	calr FDC_ValidateOpcode	; calr 0xffe0ab
 	cps l, 0	; cp L,0
 	jrl nz, FDC_IssueCommand__done	; jrl NZ,0xffe0a8
@@ -1354,7 +1354,7 @@ FDC_FormatPrepareStub:
 FDC_Error:
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00 - error codes stick: only the FIRST error of a request is kept
 	jr nz, FDC_Error__already_set	; jr NZ,0xffe254
-	stb_d8 (0x0c52), a	; ld (0x0c52),A
+	ld (0x0c52:16), a	; ld (0x0c52),A
 	cp a, 0x36	; cp A,0x36
 	jr z, FDC_Error__hook_err36	; jr Z,0xffe251
 	cp a, 0x35	; cp A,0x35
@@ -1484,7 +1484,7 @@ FDC_CmdRecalibrate:
 	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
 FDC_CmdRecalibrate__restore:
 	stb_erp a, 0xfb	; ld A,QIZH
-	stb_d8 (0x0c64), a	; ld (0x0c64),A
+	ld (0x0c64:16), a	; ld (0x0c64),A
 	ldw wa, 0x10	; ld WA,0x0010
 	calr Boot_Delay	; calr 0xffe296
 	popw_erp 0xfa	; pop QIZ
@@ -1557,7 +1557,7 @@ FDC_CmdReadSectors__retry:
 	exts iz	; exts IZ
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
 	stb_erp a, 0xf8	; ld A,IZL
-	stb_d8 (0x0c52), a	; ld (0x0c52),A
+	ld (0x0c52:16), a	; ld (0x0c52),A
 	jrl FDC_CmdReadSectors__done	; jrl T,0xffe4a8
 FDC_CmdReadSectors__seek_ok:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
@@ -1631,14 +1631,14 @@ FDC_CmdReadSectors__advance:
 	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
-	stb_d8 (0x0c57), a	; ld (0x0c57),A
-	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
+	ld (0x0c57:16), a	; ld (0x0c57),A
+	ld (0x0c5a:16), a	; ld (0x0c5a),A
 	cpdi8 (0x0c5a), 0	; cp (0x0c5a),0x00
 	jr nz, FDC_CmdReadSectors__check_remaining	; jr NZ,0xffe49f
 	lda xwa, (0x0c59:16)	; lda XWA,0x0c59
 	incm8 1, (xwa)	; inc 1,(XWA)
 	ld a, (xwa)	; ld A,(XWA)
-	stb_d8 (0x0c64), a	; ld (0x0c64),A
+	ld (0x0c64:16), a	; ld (0x0c64),A
 FDC_CmdReadSectors__check_remaining:
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
 	jrl nz, FDC_CmdReadSectors__retry	; jrl NZ,0xffe380
@@ -1666,7 +1666,7 @@ FDC_CmdWriteSectors__retry:
 	exts iz	; exts IZ
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
 	stb_erp a, 0xf8	; ld A,IZL
-	stb_d8 (0x0c52), a	; ld (0x0c52),A
+	ld (0x0c52:16), a	; ld (0x0c52),A
 	jrl FDC_CmdWriteSectors__done	; jrl T,0xffe5e1
 FDC_CmdWriteSectors__seek_ok:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
@@ -1742,14 +1742,14 @@ FDC_CmdWriteSectors__advance:
 	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
-	stb_d8 (0x0c57), a	; ld (0x0c57),A
-	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
+	ld (0x0c57:16), a	; ld (0x0c57),A
+	ld (0x0c5a:16), a	; ld (0x0c5a),A
 	cpdi8 (0x0c5a), 0	; cp (0x0c5a),0x00
 	jr nz, FDC_CmdWriteSectors__check_remaining	; jr NZ,0xffe5d8
 	lda xwa, (0x0c59:16)	; lda XWA,0x0c59
 	incm8 1, (xwa)	; inc 1,(XWA)
 	ld a, (xwa)	; ld A,(XWA)
-	stb_d8 (0x0c64), a	; ld (0x0c64),A
+	ld (0x0c64:16), a	; ld (0x0c64),A
 FDC_CmdWriteSectors__check_remaining:
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
 	jrl nz, FDC_CmdWriteSectors__retry	; jrl NZ,0xffe4b3
@@ -1825,15 +1825,15 @@ FDC_CmdFormat__track_loop:
 	jr nz, FDC_CmdFormat__finish	; jr NZ,0xffe6b6
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
-	stb_d8 (0x0c57), a	; ld (0x0c57),A
-	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
+	ld (0x0c57:16), a	; ld (0x0c57),A
+	ld (0x0c5a:16), a	; ld (0x0c5a),A
 	cpdi8 (0x0c5a), 0	; cp (0x0c5a),0x00
 	jr nz, FDC_CmdFormat__check_more_tracks	; jr NZ,0xffe6aa
 	lda xwa, (0x0c59:16)	; lda XWA,0x0c59
 	incm8 1, (xwa)	; inc 1,(XWA)
 	ld a, (xwa)	; ld A,(XWA)
-	stb_d8 (0x0c64), a	; ld (0x0c64),A
-	stb_d8 (0x0c40), a	; ld (0x0c40),A
+	ld (0x0c64:16), a	; ld (0x0c64),A
+	ld (0x0c40:16), a	; ld (0x0c40),A
 FDC_CmdFormat__check_more_tracks:
 	ld a, (0x0c64:16)	; ld A,(0x0c64)
 	extz wa	; extz WA

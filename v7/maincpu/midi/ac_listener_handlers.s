@@ -2210,7 +2210,7 @@ MainMpstFunc:
 	cp	xbc, 31653891
 	jr	nz, 88
 	ld	xwa, (xsp)
-	stb_d8	(46928), a
+	ld	(46928:16), a
 	call	16600229
 	stdi8	(32422), 35
 	ld	xwa, 4294967295

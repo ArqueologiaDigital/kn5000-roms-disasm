@@ -123,7 +123,7 @@ SeqName_LoadAndPlay:
 	ld	wa, hl
 	lds	bc, 5
 	calr	39149
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -149,7 +149,7 @@ SeqName_HandleAction32:
 	ld	wa, hl
 	lds	bc, 5
 	calr	39061
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -1106,7 +1106,7 @@ DiskSel_SendFileInfo:
 	ld	wa, qiz
 	lds	bc, 1
 	calr	36421
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	ldw	wa, 238
 	jrl	1272
 DiskSel_PlayNext:
@@ -1213,7 +1213,7 @@ DiskSel_RepeatSendInfo:
 	ld	wa, qiz
 	lds	bc, 1
 	calr	36085
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	ldw	wa, 238
 	jrl	936
 DiskSel_RepeatPlayNext:
@@ -1553,7 +1553,7 @@ DiskSel_PlayFindLoop:
 	ld WA,QIZ
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	ldw WA, 0x00ee
 DiskSel_ShowErrorAndExit:
 	call SoundCtrl_SendCommand
@@ -1630,7 +1630,7 @@ GetPlayState2:
 SmfMedley_RawData:
 	cps a, 0
 	scc NZ,WA
-	stb_d8 (0x88a8), a
+	ld (0x88a8:16), a
 	ret
 NavigateSongList_Entry:
 NavigateSongList:
@@ -1822,7 +1822,7 @@ FmmSmfMedleyFunc:
 	lds	wa, 0
 	calr	33769
 	ld	a, (35995:16)
-	stb_d8	(33694), a
+	ld	(33694:16), a
 	cp	a, 111
 	jr	z, 5
 	cp	a, 114
@@ -2117,7 +2117,7 @@ SmfMed_RemoveFromOrder:
 	ld	(xwa), 255
 	ld	a, (34948:16)
 	dec	1, a
-	stb_d8	(34948), a
+	ld	(34948:16), a
 	lds	iy, 0
 	lds	iz, 0
 	extz	wa
@@ -2794,7 +2794,7 @@ PdMed_RemoveFromOrder:
 	ld	(xhl), 255
 	ld	a, (34948:16)
 	dec	1, a
-	stb_d8	(34948), a
+	ld	(34948:16), a
 	lds	iz, 0
 	lds	hl, 0
 	extz	wa
@@ -3522,7 +3522,7 @@ DocMed_RemoveFromOrder:
 	ld	(xhl), 255
 	ld	a, (34948:16)
 	dec	1, a
-	stb_d8	(34948), a
+	ld	(34948:16), a
 	lds	iz, 0
 	lds	hl, 0
 	extz	wa

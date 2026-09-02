@@ -282,7 +282,7 @@ SysEx_ApplyVoiceParam_49_SlotNext:
 	.byte 0x5b, 0x5a, 0x0e, 0x0e, 0x0e, 0x0e, 0xd8
 SysEx_ApplyVoiceParam_49_RestoreSlotId:
 	sbc	wa, wa
-	stb_d8	(38941), d
+	ld	(38941:16), d
 	swi	4
 	call	16532931
 	ret

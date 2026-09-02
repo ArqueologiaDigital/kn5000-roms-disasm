@@ -718,7 +718,7 @@ SmfFN_Save_CallResult:
 	ld	wa, (xsp+6)
 	lds	bc, 1
 	calr	53600
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	lds32	xde, 0
@@ -765,7 +765,7 @@ SmfFN_Open_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	53446
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16291947
@@ -806,7 +806,7 @@ SmfFN_HandleOpen2:
 	ld	wa, hl
 	lds	bc, 5
 	calr	53304
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16291947
@@ -852,7 +852,7 @@ SmfFN_Delete_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	-12395
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-12960
 	call	16290139
 	call	16290094
@@ -887,7 +887,7 @@ SmfFN_HandleDelete2:
 	ld WA,HL
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -937,7 +937,7 @@ SmfFN_HandleScrollFlag1:
 	cps	a, 3
 	jr	nc, 18
 	inc	1, c
-	stb_d8	(34986), c
+	ld	(34986:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -992,7 +992,7 @@ SmfFN_HandleSeqSongNum:
 	cp	a, 10
 	jr	nc, 31
 	inc	1, c
-	stb_d8	(34988), c
+	ld	(34988:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -1017,7 +1017,7 @@ SmfFN_HandleSeqFromSong:
 	cp	a, 10
 	jr	nc, 31
 	inc	1, c
-	stb_d8	(34988), c
+	ld	(34988:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0

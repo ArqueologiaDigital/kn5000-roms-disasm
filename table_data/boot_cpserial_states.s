@@ -148,7 +148,7 @@ BootSerial_State08_TxFirstByte__no_wrap:
 	jr	c, BootSerial_State08_TxFirstByte__count_set
 	and	a, 0x0f			; variable-length run:
 	add	a, 3			; count = (byte & 0x0f) + 3
-	stb_d8	(0x0f63), a
+	ld	(0x0f63:16), a
 BootSerial_State08_TxFirstByte__count_set:
 	incdi8	4, (0x0f62)		; state -> 0x0c
 	jrl	t, BootSerial_TxIsrEpilogue
@@ -283,7 +283,7 @@ BootSerial_State20_RxFirstByte__counted:
 	jr	c, BootSerial_State20_RxFirstByte__count_set
 	and	a, 0x0f			; variable-length run:
 	add	a, 3			; count = (byte & 0x0f) + 3
-	stb_d8	(0x0f63), a
+	ld	(0x0f63:16), a
 BootSerial_State20_RxFirstByte__count_set:
 	incdi8	4, (0x0f62)		; state -> 0x24
 	jrl	t, BootSerial_RxIsrEpilogue
@@ -550,12 +550,12 @@ BootSerial_RxPkt_TwoByteScrambled:
 	calr	BootSerial_RxRingAdvanceIY
 	stb_dri w, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W
 	calr	BootSerial_CtrlRingAdvanceIX
-	stb_d8	(0x0f6c), w
+	ld	(0x0f6c:16), w
 	ldb_sri	a, 0x07, 0xe8, 0xf4	; LD A, (XDE+IY) - second byte
 	calr	BootSerial_RxRingAdvanceIY
 	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
-	stb_d8	(0x0f6d), a
+	ld	(0x0f6d:16), a
 	and	w, 0x4f			; index bits of the first byte
 	ld	xhl, 0x1022		; scramble buffer
 	bit	6, w
@@ -570,7 +570,7 @@ BootSerial_RxPkt_TwoByteScrambled__no_carry:
 	xor	a, (xhl)		; A = old ^ new
 	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
-	stb_d8	(0x0f6e), a
+	ld	(0x0f6e:16), a
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	3, (xiz - 2)		; 3 slots consumed
 	stda16	(0x0f75), iy		; commit serial-ring tail
@@ -590,10 +590,10 @@ BootSerial_RxPkt_TwoByteDecode:
 	calr	BootSerial_RxRingAdvanceIY
 	stb_dri w, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), W
 	calr	BootSerial_CtrlRingAdvanceIX
-	stb_d8	(0x0f6c), w
+	ld	(0x0f6c:16), w
 	ldb_sri	a, 0x07, 0xe8, 0xf4	; LD A, (XDE+IY) - second byte
 	calr	BootSerial_RxRingAdvanceIY
-	stb_d8	(0x0f6d), a
+	ld	(0x0f6d:16), a
 	ld	c, w
 	calr	BootSerial_CallExternalDecode
 	cp	hl, 0xffff		; decode failed?
@@ -604,7 +604,7 @@ BootSerial_RxPkt_TwoByteDecode:
 BootSerial_RxPkt_TwoByteDecode__store:
 	stb_dri l, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), L - decoded byte
 	calr	BootSerial_CtrlRingAdvanceIX
-	stb_d8	(0x0f6e), l
+	ld	(0x0f6e:16), l
 	stib_ind 0x07, 0xf8, 0xf0, 0xff	; LD (XIZ+IX), 0xff - terminator
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(xiz - 4), ix		; commit control-ring head
@@ -691,7 +691,7 @@ BootSerial_RxPkt_VarLengthRun__store:
 	calr	BootSerial_CallExternalDecode
 	popw	wa
 	cp	hl, 0xffff
-	stb_d8	(0x0f6e), l
+	ld	(0x0f6e:16), l
 	popw	hl
 	popw	bc
 	jr	nz, BootSerial_RxPkt_VarLengthRun__decoded

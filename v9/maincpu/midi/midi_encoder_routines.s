@@ -58,7 +58,7 @@ Encoder_ProcessModwheel:
 	ldw hl, 0xffff	; Default return = no change
 	cpl a	; Invert input value
 	ld c, a
-	stb_d8 (0x8eca), c; Store raw value
+	ld (0x8eca:16), c; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
 	lda xbc, (ENCODER_LUT_MODWHEEL:24); Lookup table address
@@ -67,7 +67,7 @@ Encoder_ProcessModwheel:
 	res 7, c	; Clear change flag
 	cp c, a	; Compare with new value
 	ret z	; Return if unchanged
-	stb_d8 (0x8ee4), a; Store new value
+	ld (0x8ee4:16), a; Store new value
 	ld l, a
 	extz hl	; Return value in HL
 	ret
@@ -79,7 +79,7 @@ Encoder_ProcessModwheel_End:
 Encoder_ProcessVolume:
 	pushw iz
 	ldw iz, 0xffff	; Default return = no change
-	stb_d8 (0x8ecc), a; Store raw value
+	ld (0x8ecc:16), a; Store raw value
 	extz wa
 	lda xbc, (ENCODER_LUT_VOLUME:24); Lookup table address
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
@@ -87,7 +87,7 @@ Encoder_ProcessVolume:
 	ld a, l
 	cpda8 a, 0x8ef4	; Compare with current
 	jr z, Encoder_ProcessVolume_NoChange
-	stb_d8 (0x8ef4), a; Store new value
+	ld (0x8ef4:16), a; Store new value
 	ldb_erp A, 0xf8
 	extz iz	; IZ = new value
 
@@ -137,7 +137,7 @@ Encoder_ClampScaleAndNormalize_End:
 Encoder_ProcessBreath:
 	ldw hl, 0xffff	; Default return = no change
 	cpl a	; Invert input
-	stb_d8 (0x8ed4), a; Store raw value
+	ld (0x8ed4:16), a; Store raw value
 	extz wa
 	lda xbc, (ENCODER_LUT_BREATH_VALUE:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
@@ -167,13 +167,13 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	srl hl, 8	; Divide by 256
 	add hl, hl	; Double
 	ld a, l
-	stb_d8 (0x8ee8), a; Store result
+	ld (0x8ee8:16), a; Store result
 	jr Encoder_ProcessBreath_Return
 
 Encoder_ProcessBreath_SimplePassthrough:
 	cpdm8 0x8ee8, a	; Compare with current
 	ret z	; Return if unchanged
-	stb_d8 (0x8ee8), a; Store new value
+	ld (0x8ee8:16), a; Store new value
 	ld l, a
 	extz hl
 
@@ -186,7 +186,7 @@ Encoder_ProcessBreath_End:
 ; Output: HL = processed MIDI CC value, or 0xffff if unchanged
 Encoder_ProcessFoot:
 	ldw hl, 0xffff	; Default return = no change
-	stb_d8 (0x8ed6), a; Store raw value
+	ld (0x8ed6:16), a; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
 	lda xbc, (ENCODER_LUT_FOOT:24); Lookup table
@@ -195,7 +195,7 @@ Encoder_ProcessFoot:
 	res 7, c	; Clear change flag
 	cp c, a	; Compare
 	ret z	; Return if unchanged
-	stb_d8 (0x8eea), a; Store new value
+	ld (0x8eea:16), a; Store new value
 	ld l, a
 	extz hl	; Return value in HL
 	ret
@@ -207,12 +207,12 @@ Encoder_ProcessFoot_End:
 Encoder_ProcessExpression:
 	cpl a	; Invert input
 	ld c, a
-	stb_d8 (0x8ed8), c; Store raw value
+	ld (0x8ed8:16), c; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
 	lda xbc, (ENCODER_LUT_EXPRESSION:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
-	stb_d8 (0x8ee6), a; Store value
+	ld (0x8ee6:16), a; Store value
 	extz wa
 	ld hl, wa	; Return value in HL
 	ret
@@ -250,7 +250,7 @@ Encoder_ApplySystemModeSettings:
 	ret z	; Return if zero
 	ld a, (0xc07e:16)
 	and a, 0xf	; Mask low nibble
-	stb_d8 (0x8eda), a; Set breath mode
+	ld (0x8eda:16), a; Set breath mode
 	ret
 
 Encoder_ConfigureVolumeMode:
@@ -259,7 +259,7 @@ Encoder_ConfigureVolumeMode:
 	ret z	; Return if zero
 	ld a, (0xc07e:16)
 	and a, 0xff	; Full byte
-	stb_d8 (0x8edc), a; Set volume mode
+	ld (0x8edc:16), a; Set volume mode
 	ret
 
 Encoder_ConfigureRangeLimit:
@@ -269,7 +269,7 @@ Encoder_ConfigureRangeLimit:
 	ret z	; Return if zero
 	ld a, (0xc07e:16)
 	res 7, a	; Clear bit 7
-	stb_d8 (0x8ede), a; Set range limit
+	ld (0x8ede:16), a; Set range limit
 	ret
 
 ; End of MIDI encoder routines

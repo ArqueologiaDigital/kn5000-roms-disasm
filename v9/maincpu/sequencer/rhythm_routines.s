@@ -56,21 +56,21 @@ Rhythm_CompareNoteC:
 
 Rhythm_SaveCurrentNoteState:
 	ld a, (0x32d8:16)
-	stb_d8 (0x32df), a
+	ld (0x32df:16), a
 	ld a, (0x32d9:16)
-	stb_d8 (0x32e0), a
+	ld (0x32e0:16), a
 	ld a, (0x32da:16)
-	stb_d8 (0x32e1), a
+	ld (0x32e1:16), a
 
 Rhythm_SaveNoteState:
 	ld a, (0x32d8:16)
-	stb_d8 (0x32dc), a
+	ld (0x32dc:16), a
 	ld a, (0x32d9:16)
-	stb_d8 (0x32dd), a
+	ld (0x32dd:16), a
 	ld a, (0x32da:16)
-	stb_d8 (0x32de), a
+	ld (0x32de:16), a
 	ld a, (0x32d7:16)
-	stb_d8 (0x32db), a
+	ld (0x32db:16), a
 	ret
 
 Rhythm_NoteOnAfterSetup_A:
@@ -140,9 +140,9 @@ Rhythm_SetupAllChannels:
 Rhythm_SetupChannel_D7:
 	ld xhl, 0x2c94
 	ld a, (0x32c3:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32c7:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 251
 	ordi8 0x32f4, 8
 	stdi8 (0x33d4), 4
@@ -152,9 +152,9 @@ Rhythm_SetupChannel_D7:
 Rhythm_SetupChannel_D4:
 	ld xhl, 0x2d94
 	ld a, (0x32c4:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32c8:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 247
 	ordi8 0x32f4, 4
 	stdi8 (0x33d4), 8
@@ -164,9 +164,9 @@ Rhythm_SetupChannel_D4:
 Rhythm_SetupChannel_D5:
 	ld xhl, 0x2e94
 	ld a, (0x32c5:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32c9:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 243
 	stdi8 (0x33d4), 16
 	calr RhythmEvt_ProcessNote
@@ -175,9 +175,9 @@ Rhythm_SetupChannel_D5:
 Rhythm_SetupChannel_D6:
 	ld xhl, 0x2f94
 	ld a, (0x32c6:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32ca:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 243
 	stdi8 (0x33d4), 32
 	calr RhythmEvt_ProcessNote
@@ -196,12 +196,12 @@ RhythmEvt_ProcessNote:
 	andda8 a, 0x33d4
 	jr nz, RhythmEvt_AlternateProcess
 	ld a, (0x32df:16)
-	stb_d8 (0x3423), a
+	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
-	stb_d8 (0x3424), a
+	ld (0x3424:16), a
 	ld a, (0x32d8:16)
-	stb_d8 (0x3423), a
+	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
 	cpdm8 0x3424, a
@@ -315,13 +315,13 @@ RhythmEvt_Full91:
 	pushw iy
 	call RingBuf_AdvanceIndex
 	ldb_sri A, 0x07, 0xec, 0xf4
-	stb_d8 (0x3430), a
+	ld (0x3430:16), a
 	calr Rhythm_AdvancePosition
 	ldb_sri A, 0x07, 0xec, 0xf4
-	stb_d8 (0x3433), a
+	ld (0x3433:16), a
 	call RingBuf_AdvanceIndex
 	ldb_sri A, 0x07, 0xec, 0xf4
-	stb_d8 (0x3434), a
+	ld (0x3434:16), a
 	call RingBuf_AdvanceIndex
 	ldb_sri A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
@@ -405,7 +405,7 @@ Rhythm_CrossVoice_Apply:
 	addda8 w, 0x32cb
 	inc 1, w
 	sub w, 0xc
-	stb_d8 (0x332e), w
+	ld (0x332e:16), w
 	ordi8 0x332d, 1
 	ld xiy, Display_FontPalette_Table_0x12EA
 	ldb_sri W, 0x03, 0xf4, 0xe0
@@ -800,9 +800,9 @@ Rhythm_FourChannelDispatch:
 
 Rhythm_DispatchCh_D7:
 	ld a, (0x32c3:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32c7:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 251
 	ordi8 0x32f4, 8
 	ldb w, 0x97
@@ -818,9 +818,9 @@ Rhythm_DispatchCh_D7_Loop:
 
 Rhythm_DispatchCh_D4:
 	ld a, (0x32c4:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32c8:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 247
 	ordi8 0x32f4, 4
 	ldb w, 0x94
@@ -836,9 +836,9 @@ Rhythm_DispatchCh_D4_Loop:
 
 Rhythm_DispatchCh_D5:
 	ld a, (0x32c5:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32c9:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 243
 	ldb w, 0x95
 	ld xix, 0x3184
@@ -853,9 +853,9 @@ Rhythm_DispatchCh_D5_Loop:
 
 Rhythm_DispatchCh_D6:
 	ld a, (0x32c6:16)
-	stb_d8 (0x32cb), a
+	ld (0x32cb:16), a
 	ld a, (0x32ca:16)
-	stb_d8 (0x32cc), a
+	ld (0x32cc:16), a
 	anddi8 (0x32f4), 243
 	ldb w, 0x96
 	ld xix, 0x31cc
@@ -922,12 +922,12 @@ Rhythm_ValidateAndSend:
 	andda8 a, 0x33d4
 	jr nz, Rhythm_Validate_Mismatch
 	ld a, (0x32df:16)
-	stb_d8 (0x3423), a
+	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
-	stb_d8 (0x3424), a
+	ld (0x3424:16), a
 	ld a, (0x32d8:16)
-	stb_d8 (0x3423), a
+	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
 	cpdm8 0x3424, a
@@ -994,11 +994,11 @@ Rhythm_Mismatch90_Output:
 Rhythm_MismatchOther:
 	pushw wa
 	ld a, (xix + 3)
-	stb_d8 (0x3430), a
+	ld (0x3430:16), a
 	ld a, (xix + 6)
-	stb_d8 (0x3433), a
+	ld (0x3433:16), a
 	ld a, (xix + 7)
-	stb_d8 (0x3434), a
+	ld (0x3434:16), a
 	ld a, (xix + 8)
 	calr Rhythm_CheckVelocityThreshold
 	bitda 4, (0x32f4)
@@ -1210,10 +1210,10 @@ Rhythm_NoteOffMax_D6_Done:
 
 Rhythm_AdvanceTick:
 	ld wa, (0x32e3:16)
-	stb_d8 (0x3356), w
+	ld (0x3356:16), w
 	ld a, (0x327f:16)
 	ld w, (0x3280:16)
-	stb_d8 (0x3425), w
+	ld (0x3425:16), w
 	add a, 0x18
 	cp a, 0x60
 	jr c, Rhythm_AdvanceTick_Store
@@ -1229,33 +1229,33 @@ Rhythm_AdvanceTick_Store:
 
 Rhythm_SaveState:
 	ld a, (0x32f5:16)
-	stb_d8 (0x32f6), a
+	ld (0x32f6:16), a
 	ld a, (0x32f7:16)
-	stb_d8 (0x32f8), a
+	ld (0x32f8:16), a
 	ld a, (0x32f9:16)
-	stb_d8 (0x32fa), a
+	ld (0x32fa:16), a
 	ld a, (0x32fb:16)
-	stb_d8 (0x32fc), a
+	ld (0x32fc:16), a
 	ld a, (0x32ff:16)
-	stb_d8 (0x3300), a
+	ld (0x3300:16), a
 	ld a, (0x32fd:16)
-	stb_d8 (0x32fe), a
+	ld (0x32fe:16), a
 	ld a, (0x3301:16)
-	stb_d8 (0x3302), a
+	ld (0x3302:16), a
 	ld a, (0x3303:16)
-	stb_d8 (0x3304), a
+	ld (0x3304:16), a
 	ld a, (0x3305:16)
-	stb_d8 (0x3306), a
+	ld (0x3306:16), a
 	ld a, (0x3307:16)
-	stb_d8 (0x3308), a
+	ld (0x3308:16), a
 	ld a, (0x3470:16)
-	stb_d8 (0x3281), a
+	ld (0x3281:16), a
 	ld a, (0x8d34:16)
-	stb_d8 (0x32f1), a
+	ld (0x32f1:16), a
 	ld a, (0x3335:16)
-	stb_d8 (0x32f2), a
+	ld (0x32f2:16), a
 	ld a, (0x33e8:16)
-	stb_d8 (0x33e9), a
+	ld (0x33e9:16), a
 	ld a, (0x3283:16)
 	and a, 0xfd
 	bit 0, a
@@ -1263,7 +1263,7 @@ Rhythm_SaveState:
 	or a, 0x2
 
 Rhythm_SaveState_StoreBits:
-	stb_d8 (0x3283), a
+	ld (0x3283:16), a
 	ordi8 0x32f3, 1
 	cpdi8 (0x3280), 0
 	jr nz, Rhythm_SaveState_CheckFx
@@ -1480,23 +1480,23 @@ Rhythm_VoiceAssign_Perc2Detect:
 
 Rhythm_VoiceAssign_SaveShadow:
 	ld a, (0x3312:16)
-	stb_d8 (0x3319), a
+	ld (0x3319:16), a
 	ld a, (0x3313:16)
-	stb_d8 (0x331a), a
+	ld (0x331a:16), a
 	ld a, (0x3316:16)
-	stb_d8 (0x331d), a
+	ld (0x331d:16), a
 	ld a, (0x3317:16)
-	stb_d8 (0x331e), a
+	ld (0x331e:16), a
 	ld a, (0x3318:16)
-	stb_d8 (0x331f), a
+	ld (0x331f:16), a
 	ld a, (0x3314:16)
-	stb_d8 (0x331b), a
+	ld (0x331b:16), a
 	ld a, (0x3315:16)
-	stb_d8 (0x331c), a
+	ld (0x331c:16), a
 	ld a, (0x32e5:16)
-	stb_d8 (0x3370), a
+	ld (0x3370:16), a
 	ld a, (0x333c:16)
-	stb_d8 (0x333e), a
+	ld (0x333e:16), a
 	call AccTuning_SaveState
 	calr Rhythm_SeqResetCheck
 	ret
@@ -1526,7 +1526,7 @@ Rhythm_SeqReset_UpdateFlags:
 	or a, 0x10
 
 Rhythm_SeqReset_Store:
-	stb_d8 (0x34cf), a
+	ld (0x34cf:16), a
 	ret
 
 Rhythm_SeqResetTable:

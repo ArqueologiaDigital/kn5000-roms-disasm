@@ -53,7 +53,7 @@ SeqStep_NoteByteBlock:
 	ld	xwa, (0x2722:16)
 	stda16	(0x28af), wa
 	call	SeqData_ReadNextByte
-	stb_d8	(9686), l
+	ld	(9686:16), l
 	ldw	wa, 129
 	call	PartCtrl_WriteByte_Indexed
 	cpdi8	(9686), 129
@@ -63,7 +63,7 @@ SeqStep_NoteByteBlock:
 	jr	nz, 62
 	.byte 0xc1, 0xd6, 0x25, 0x19, 0xd8, 0x25
 	call	SeqData_ReadNextByte
-	stb_d8	(9686), l
+	ld	(9686:16), l
 	ld	a, (9688:16)
 	extz	wa
 	jr	-44
@@ -116,13 +116,13 @@ SeqStep_NoteCheckVel:
 	jr nz, SeqStep_NoteVelSave
 	ld wa, (0x273e:16)
 	ldb w, 0x0
-	stb_d8 (0x271c), a
+	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
 	stda32 0x2722, xwa
 	ld a, (9824:16)
 	set 0, a
-	stb_d8 (9824), a
+	ld (9824:16), a
 
 SeqStep_NoteVelSave:
 	call SeqData_ReadNextByte
@@ -364,13 +364,13 @@ SeqStep_EventStorePos:
 	bit 0, a
 	jr nz, SeqStep_EventSetState
 	ld wa, (0x273e:16)
-	stb_d8 (0x271c), a
+	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
 	stda32 0x2722, xwa
 	ld a, (9824:16)
 	set 0, a
-	stb_d8 (9824), a
+	ld (9824:16), a
 
 SeqStep_EventSetState:
 	ldb l, 0x0
@@ -479,13 +479,13 @@ SeqStep_DeleteConsumeAdvance:
 	jr nz, SeqStep_DeleteFinish
 	ld wa, (0x273e:16)
 	ldb w, 0x0
-	stb_d8 (0x271c), a
+	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
 	stda32 0x2722, xwa
 	ld a, (9824:16)
 	set 0, a
-	stb_d8 (9824), a
+	ld (9824:16), a
 
 SeqStep_DeleteFinish:
 	ldw wa, 0x5f
@@ -571,10 +571,10 @@ SeqStep_TrackChange:
 	ld a, (0x2878:16)
 	st_erpb_rr a, 0xfb
 	dec 1,C
-	stb_d8 (0x2878), c
+	ld (0x2878:16), c
 	call SeqVoice_InitAllChannelParams
 	ld_erpb_rr a, 0xfb
-	stb_d8 (0x2878), a
+	ld (0x2878:16), a
 	calr SeqStep_MultiTrackProcess
 	jrl t, SeqStep_TrackChangeExit
 SeqStep_TrackChangeCheck:
@@ -687,10 +687,10 @@ SeqStep_TrackChangeLoopBody:
 	jr z, SeqStep_TrackChangeNonDrum
 	ld a, (9994:16)
 	dec 1, a
-	stb_d8 (0x2710), a
+	ld (0x2710:16), a
 	stb_erp A, 0xfb
 	dec 1, a
-	stb_d8 (0x271a), a
+	ld (0x271a:16), a
 	calr SeqStep_BoundaryReturn
 	stb_erp A, 0xfa
 	extz wa
@@ -704,10 +704,10 @@ SeqStep_TrackChangeLoopBody:
 SeqStep_TrackChangeLoopDone:
 	ld a, (9994:16)
 	dec 1, a
-	stb_d8 (0x2710), a
+	ld (0x2710:16), a
 	ld a, (9998:16)
 	dec 1, a
-	stb_d8 (0x271a), a
+	ld (0x271a:16), a
 	calr SeqStep_BoundaryReturn
 	ld c, (9992:16)
 	ld a, c
@@ -740,7 +740,7 @@ SeqStep_TrackChangeLoopExit:
 	jrl z, SeqStep_TrackChangeRecoverDone
 	ld a, (9998:16)
 	dec 1, a
-	stb_d8 (0x2877), a
+	ld (0x2877:16), a
 	calr SeqStep_DeleteShiftExit
 	ld (xsp + 6), hl
 	ld wa, (xsp + 4)
@@ -774,10 +774,10 @@ SeqStep_TrackChangeComplete:
 SeqStep_TrackChangeValidate:
 	ld	a, (9994:16)
 	dec	1, a
-	stb_d8	(10000), a
+	ld	(10000:16), a
 	ld	a, (9998:16)
 	dec	1, a
-	stb_d8	(10010), a
+	ld	(10010:16), a
 	calr	2668
 	stdi8	(32422), 15
 	jrl	448
@@ -1039,13 +1039,13 @@ SeqStep_MultiTrackCleanup:
 
 	dec 1, a
 
-	stb_d8 (0x2878), a
+	ld (0x2878:16), a
 
 	call	15988897
 
 	stb_erp A, 0xfb
 
-	stb_d8 (0x2878), a
+	ld (0x2878:16), a
 
 	.byte 0xf1, 0xa6, 0x7e, 0x00, 0x0f	; stdi8 (0x7f42), 15 (v7 patched)
 
@@ -1162,7 +1162,7 @@ SeqStep_PartCopySetupDest:
 SeqStep_PartCopyComplete:
 	ld a, (0x2877:16)
 	inc 1, a
-	stb_d8 (0x2877), a
+	ld (0x2877:16), a
 	cp a, 0x10
 	jrl c, SeqStep_MultiTrackLoop
 	ldib_erp 0xfa, 1
@@ -1347,7 +1347,7 @@ SeqStep_MeasureRead:
 	cpdi8 (0x287a), 0
 	jrl nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
-	stb_d8 (9804), l
+	ld (9804:16), l
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	calr SeqStep_AdvanceHelper1
@@ -1436,7 +1436,7 @@ SeqStep_SkipDone:
 	cpdi8 (0x287a), 0
 	ret nz
 	call SeqData_ReadNextByte
-	stb_d8 (9804), l
+	ld (9804:16), l
 	ret
 
 SeqStep_AdvanceHelper1:
@@ -1470,7 +1470,7 @@ SeqStep_AdvanceHelper2Done:
 	cpdi8 (0x287a), 0
 	ret nz
 	call SeqData_ReadNextByte
-	stb_d8 (9806), l
+	ld (9806:16), l
 	ret
 
 SeqStep_DecrementPos:
@@ -1478,7 +1478,7 @@ SeqStep_DecrementPos:
 	cps wa, 5
 	jr z, SeqStep_DecrementCheck
 	dec 1, wa
-	stb_d8 (0x2720), a
+	ld (0x2720:16), a
 	ldmm16 0x2726, 0x273c
 	jr SeqStep_DecrementStore
 
@@ -2094,11 +2094,11 @@ SeqStep_ProcessB0:
 	ld a, (xsp + 6)
 	and a, 0x4
 	sll a, 5
-	stb_d8 (4340), a
+	ld (4340:16), a
 	ld a, (xsp + 6)
 	and a, 0x2
 	sll a, 6
-	stb_d8 (3310), a
+	ld (3310:16), a
 	ld wa, (0x288b:16)
 	ldw_erp WA, 0xfa
 	ld iz, (0x2889:16)
@@ -2186,12 +2186,12 @@ SeqStep_ParseRhythm:
 	res 7, l
 	ld a, (4340:16)
 	or a, l
-	stb_d8 (4340), a
+	ld (4340:16), a
 	cp a, 0x48
 	jr z, SeqStep_ParseRhythmError
 	ld c, (0x289d:16)
 	res 2, c
-	stb_d8 (0x289d), c
+	ld (0x289d:16), c
 	ld e, (0x2873:16)
 	extz de
 	lda xhl, (FontPalette_Gradient7_0x32:24)
@@ -2200,7 +2200,7 @@ SeqStep_ParseRhythm:
 	jr z, SeqStep_ParseRhythmLoop
 	res 0, c
 	res 2, c
-	stb_d8 (0x289d), c
+	ld (0x289d:16), c
 	jrl SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmLoop:
@@ -2225,7 +2225,7 @@ SeqStep_ParseRhythmAdvance:
 SeqStep_ParseRhythmProcess:
 	res 0, c
 	res 2, c
-	stb_d8 (0x289d), c
+	ld (0x289d:16), c
 	jrl SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmStore:
@@ -2242,7 +2242,7 @@ SeqStep_ParseRhythmReturn:
 	jr z, SeqStep_ParseRhythmDone
 	res 0, c
 	res 2, c
-	stb_d8 (0x289d), c
+	ld (0x289d:16), c
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmError:
@@ -2254,28 +2254,28 @@ SeqStep_ParseRhythmError:
 	jr z, SeqStep_ParseRhythmExit
 	ld a, (0x289d:16)
 	res 2, a
-	stb_d8 (0x289d), a
+	ld (0x289d:16), a
 	cpdi8 (0x2873), 12
 	jr z, SeqStep_ParseRhythmSkip
 	res 0, a
 	res 2, a
-	stb_d8 (0x289d), a
+	ld (0x289d:16), a
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmSkip:
 	cps l, 3
 	jr nz, SeqStep_ParseRhythmCleanup
 	set 0, a
-	stb_d8 (0x289d), a
+	ld (0x289d:16), a
 
 SeqStep_ParseRhythmValidate:
-	stb_d8 (3388), l
+	ld (3388:16), l
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmCleanup:
 	res 0, a
 	res 2, a
-	stb_d8 (0x289d), a
+	ld (0x289d:16), a
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmExit:
@@ -2382,11 +2382,11 @@ SeqStep_ProcessB0Ext:
 	ld a, (xsp + 6)
 	and a, 0x4
 	sll a, 5
-	stb_d8 (4340), a
+	ld (4340:16), a
 	ld a, (xsp + 6)
 	and a, 0x2
 	sll a, 6
-	stb_d8 (3310), a
+	ld (3310:16), a
 	bitda 1, (4393)
 	jr nz, SeqStep_ProcessB0ExtSkip
 	ld wa, (0x288b:16)
@@ -2515,7 +2515,7 @@ SeqStep_PlaybackStateMachine:
 	cps a, 0
 	jr z, SeqStep_PlaybackDecrCount
 	dec 1, a
-	stb_d8 (7518), a
+	ld (7518:16), a
 
 SeqStep_PlaybackDecrCount:
 	ei 6
@@ -2523,7 +2523,7 @@ SeqStep_PlaybackDecrCount:
 	ldb_erp A, 0xfb
 	res 1, a
 	res 4, a
-	stb_d8 (1057), a
+	ld (1057:16), a
 	ei 0
 	cpdi16 0x28a8, 0
 	jr nz, SeqStep_PlaybackCheck10408

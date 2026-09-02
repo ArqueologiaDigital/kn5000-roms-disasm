@@ -85,11 +85,11 @@ CPanel_InitHardware:
 
 	ldb a, 0x3	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
 	and a, 0xaf	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
-	stb_d8 (0x8d8f), a
+	ld (0x8d8f:16), a
 	st_dd8b A, 0x3f
 	ldb a, 0x15
 	and a, 0x8f
-	stb_d8 (0x8d8e), a
+	ld (0x8d8e:16), a
 	st_dd8b A, 0x3e
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
 	ldb a, 0x0
@@ -532,9 +532,9 @@ CPanel_ButtonPollLoop:
 
 CPanel_EncoderCheck:
 	cpdm8 0x8e6a, w
-	stb_d8 (0x8e6a), w
+	ld (0x8e6a:16), w
 	jr nz, CPanel_ButtonPollLoop
-	stb_d8 (0x8e6a), w
+	ld (0x8e6a:16), w
 	ld xhl, 0x200ad
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
@@ -863,7 +863,7 @@ SendByte1_InspectByte:
 	jr c, SendByte1_AdvanceState
 	and a, 0xf
 	add a, 0x3
-	stb_d8 (0x8d8b), a
+	ld (0x8d8b:16), a
 
 SendByte1_AdvanceState:
 	incdi8 4, (0x8d8a); next = ROUTINE_3
@@ -990,7 +990,7 @@ RXByte1_InspectByte:
 	jr c, RXByte1_AdvanceState
 	and a, 0xf
 	add a, 0x3
-	stb_d8 (0x8d8b), a
+	ld (0x8d8b:16), a
 
 RXByte1_AdvanceState:
 	incdi8 4, (0x8d8a); next routine
@@ -1232,13 +1232,13 @@ CPanel_RX_ButtonPacket:
 	calr CPanel_IncRXPtr
 	stb_dri W, 0x07, 0xf8, 0xf0
 	calr CPanel_IncEventPtr
-	stb_d8 (0x8d94), w
+	ld (0x8d94:16), w
 
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	calr CPanel_IncRXPtr
 	stb_dri A, 0x07, 0xf8, 0xf0
 	calr CPanel_IncEventPtr
-	stb_d8 (0x8d95), a
+	ld (0x8d95:16), a
 
 	and w, 0x4f
 	ld xhl, 0x8e4a
@@ -1258,7 +1258,7 @@ BtnPkt_XORLookup:
 	stb_dri A, 0x07, 0xf8, 0xf0
 	calr CPanel_IncEventPtr
 
-	stb_d8 (0x8d96), a
+	ld (0x8d96:16), a
 	ld (xiz - 4), ix
 	decm 3, (xiz - 2)
 	stda16 (0x8d9d), xiy
@@ -1269,10 +1269,10 @@ CPanel_RX_EncoderPacket:
 	calr CPanel_IncRXPtr
 	stb_dri W, 0x07, 0xf8, 0xf0
 	calr CPanel_IncEventPtr
-	stb_d8 (0x8d94), w
+	ld (0x8d94:16), w
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	calr CPanel_IncRXPtr
-	stb_d8 (0x8d95), a
+	ld (0x8d95:16), a
 	ld c, w
 	calr EncPkt_DispatchThunk
 	cp hl, 0xffff
@@ -1284,7 +1284,7 @@ CPanel_RX_EncoderPacket:
 EncPkt_WriteEvent:
 	stb_dri L, 0x07, 0xf8, 0xf0
 	calr CPanel_IncEventPtr
-	stb_d8 (0x8d96), l
+	ld (0x8d96:16), l
 	stib_ind 0x07, 0xf8, 0xf0, 0xff
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
@@ -1350,7 +1350,7 @@ MBytePkt_LoopBody:
 	calr EncPkt_DispatchThunk
 	popw wa
 	cp hl, 0xffff
-	stb_d8 (0x8d96), l
+	ld (0x8d96:16), l
 	popw hl
 	popw bc
 	jr nz, MBytePkt_EncWriteResult

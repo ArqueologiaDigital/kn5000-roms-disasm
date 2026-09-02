@@ -500,7 +500,7 @@ SysEx_InProgressReturn:
 	ldw	bc, 2968
 	ldb	d, 192
 	ld	a, (38299:16)
-	stb_d8	38316, a
+	ld	(38316:16), a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563580
@@ -522,7 +522,7 @@ SysEx_InProgressReturn:
 	ld	e, (38298:16)
 	ldb	d, 255
 	ld	a, (38299:16)
-	stb_d8	38316, a
+	ld	(38316:16), a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16565737
@@ -541,7 +541,7 @@ SysEx_InProgressReturn:
 	ld	d, (38298:16)
 	ldb	e, 255
 	ld	a, (38299:16)
-	stb_d8	38316, a
+	ld	(38316:16), a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16565737
@@ -560,7 +560,7 @@ SysEx_InProgressReturn:
 	ldw	bc, 840
 	ldb	d, 7
 	ld	a, (38299:16)
-	stb_d8	38316, a
+	ld	(38316:16), a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563640

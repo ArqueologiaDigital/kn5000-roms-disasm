@@ -2042,7 +2042,7 @@ PartSelect_UpdateDisplayState:
 	and a, 0x1
 	cps a, 0
 	scc8 z, e
-	stb_d8 (0x8d3a), e
+	ld (0x8d3a:16), e
 	extz de
 	pushw 0xff
 	ldw wa, 0x90
@@ -2640,7 +2640,7 @@ MainPmanCtrl_HandleA0:
 	jr nz, MainPmanCtrl_CheckSoundParam
 
 MainPmanCtrl_StorePartSelect:
-	stb_d8 (0x8d3a), e
+	ld (0x8d3a:16), e
 	jr MainPmanCtrl_LoadPartSelect
 
 MainPmanCtrl_CheckSoundParam:
@@ -2699,7 +2699,7 @@ MainTitleControl:
 	cp xbc, 0x1c00014
 	jrl nz, UIWidget_ReturnZero
 	ldmm8 0x8d35, 0x8d34
-	stb_d8 (0x8d34), l
+	ld (0x8d34:16), l
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
@@ -2723,16 +2723,16 @@ MainTitleControl:
 ;   0x0274a8-0x0274ae - Additional transition parameters
 ; =============================================================================
 SeqState_TransitionMode:
-	stb_d8 (0x8d37), a
+	ld (0x8d37:16), a
 	ldmm8 0x8d39, 0x8d38
-	stb_d8 (0x8d36), l
-	stb_d8 (0x8d38), l
+	ld (0x8d36:16), l
+	ld (0x8d38:16), l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
 	ldmm8 0x8d39, 0x8d38
-	stb_d8 (0x8d38), l
+	ld (0x8d38:16), l
 	ldw wa, 0x61
 
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2749,7 +2749,7 @@ SeqState_DemoModeHandler:
 	jrl nz, UIWidget_ReturnZero
 	cpdm8 0x8d38, a
 	jr nz, SeqDemo_SaveCurrentState
-	stb_d8 (0x8d37), a
+	ld (0x8d37:16), a
 
 SeqDemo_SaveCurrentState:
 	ldmm8 0x8d39, 0x8d38

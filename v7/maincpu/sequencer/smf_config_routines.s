@@ -222,7 +222,7 @@ SMF_ScanChannels_Loop:
 	pop xix
 	cp a, 0x10
 	jr z, SMF_ScanChannels_Inactive
-	stb_d8 (0x2877), c
+	ld (0x2877:16), c
 	push xhl
 	pushw bc
 	call SMF_DispatchEvent
@@ -231,7 +231,7 @@ SMF_ScanChannels_Loop:
 	jr SMF_ScanChannels_Next
 
 SMF_ScanChannels_Inactive:
-	stb_d8 (0x2877), c
+	ld (0x2877:16), c
 	incdi8 1, (0x2877)
 	push xhl
 	pushw bc
@@ -306,7 +306,7 @@ SMF_FindFree_CheckPart:
 	pop xix
 	jr z, SMF_FindFree_Next
 	inc 1, c
-	stb_d8 (0x2877), l
+	ld (0x2877:16), l
 	incdi8 1, (0x2877)
 
 SMF_AssignRemainingChannels:
@@ -322,10 +322,10 @@ SMF_AssignRemainingChannels:
 	cpib_sri 0x07, 0xf0, 0xf8, 0x10
 	pop xix
 	jr z, SMF_AssignRemaining_Next
-	stb_d8 (9858), c
+	ld (9858:16), c
 	incdi8 1, (9858)
 	ld a, (0x2877:16)
-	stb_d8 (9860), a
+	ld (9860:16), a
 	push xhl
 	pushw bc
 	call SetWall_ValidateAndApply
@@ -762,7 +762,7 @@ SMF_CalcTimeDelta:
 	pushw de
 	xor wa, wa
 	stda16 (4229), xwa
-	stb_d8 (4231), a
+	ld (4231:16), a
 	ld wa, (3938:16)
 	xor b, b
 	add wa, bc
@@ -880,7 +880,7 @@ SMF_CheckFlush_Return:
 	ret
 
 SMF_DispatchEvent:
-	stb_d8 (4008), c
+	ld (4008:16), c
 	xor b, b
 	ld iy, bc
 	anddi8 (4331), 254
@@ -944,7 +944,7 @@ SMF_Dispatch_DrumSearch:
 
 SMF_Dispatch_DrumFound:
 	ld wa, iy
-	stb_d8 (4008), a
+	ld (4008:16), a
 	jr SMF_HandleEventType
 
 SMF_Dispatch_NoDrumMode:
@@ -996,7 +996,7 @@ SMF_Dispatch_Ch15Search:
 
 SMF_Dispatch_Ch15Found:
 	ld wa, iy
-	stb_d8 (4008), a
+	ld (4008:16), a
 
 SMF_HandleEventType:
 	inc 1, hl
@@ -1156,7 +1156,7 @@ SMF_Event_ControlChange:
 	push xhl
 	calr SMF_GetNextEvent
 	pop xhl
-	stb_d8 (4340), a
+	ld (4340:16), a
 	cps a, 0
 	jr c, SMF_CtrlChg_NotFound
 	cp a, 0xf
@@ -1273,9 +1273,9 @@ SMF_Encode_ThreeBytes:
 	sla c, 2
 	or c, h
 	or c, 0x80
-	stb_d8 (4206), c
-	stb_d8 (4207), l
-	stb_d8 (4208), a
+	ld (4206:16), c
+	ld (4207:16), l
+	ld (4208:16), a
 	jr SMF_Encode_Return
 
 SMF_Encode_TwoBytes:
@@ -1290,8 +1290,8 @@ SMF_Encode_TwoBytes:
 	or l, w
 	or l, 0x80
 	xor c, c
-	stb_d8 (4206), l
-	stb_d8 (4207), a
+	ld (4206:16), l
+	ld (4207:16), a
 	jr SMF_Encode_Return
 
 SMF_Encode_OneByte:
@@ -1299,7 +1299,7 @@ SMF_Encode_OneByte:
 	and a, 0x7f
 	xor l, l
 	xor c, c
-	stb_d8 (4206), a
+	ld (4206:16), a
 
 SMF_Encode_Return:
 	ret
@@ -1610,10 +1610,10 @@ SMF_CalcFilePosition:
 	add xwa, xhl
 	sub xwa, 0x16
 	stw_erp DE, 0xe2
-	stb_d8 (4002), d
-	stb_d8 (4003), e
-	stb_d8 (4004), w
-	stb_d8 (4005), a
+	ld (4002:16), d
+	ld (4003:16), e
+	ld (4004:16), w
+	ld (4005:16), a
 	ret
 
 SMF_ClearFileBuffer:
@@ -1692,7 +1692,7 @@ SMF_GlobalCh_SearchLoop:
 
 SMF_GlobalCh_Found:
 	ld wa, iy
-	stb_d8 (6881), a
+	ld (6881:16), a
 
 SMF_GlobalCh_Return:
 	pop xde
@@ -1758,7 +1758,7 @@ SMF_ResetPlaybackState:
 	stdi8 (4419), 0
 	ordi8 4393, 2
 	xor a, a
-	stb_d8 (3301), a
+	ld (3301:16), a
 	calr SMF_DetectFormat
 	ld a, (4394:16)
 	cps a, 0
@@ -1778,7 +1778,7 @@ SMF_ParseEvents:
 	ld xix, 0xf1a0
 	add xix, xhl
 	ld l, (xix)
-	stb_d8 (0x2873), l
+	ld (0x2873:16), l
 	cp l, 0xf
 	jr nz, SMF_Parse_ClearAutoFlag
 	ordi8 4393, 1
@@ -1941,16 +1941,16 @@ SMF_ConfigSlot_Type80:
 
 SMF_ConfigSlot_StoreType:
 	pushw wa
-	stb_d8 (3310), a
+	ld (3310:16), a
 	anddi8 (3310), 2
 	ld a, (3310:16)
 	sla a, 6
-	stb_d8 (3310), a
-	stb_d8 (4395), a
+	ld (3310:16), a
+	ld (4395:16), a
 	anddi8 (4395), 1
 	ld a, (4395:16)
 	sla a, 7
-	stb_d8 (4395), a
+	ld (4395:16), a
 	popw wa
 	push xiy
 	pushw hl
@@ -2172,7 +2172,7 @@ SMF_Config_SaveAndRestore:
 	srl hl, 1
 	ld xde, 0xcbe
 	ldb_sri C, 0x07, 0xe8, 0xec
-	stb_d8 (4414), c
+	ld (4414:16), c
 	ld bc, ix
 	bitda 2, (4404)
 	jr z, SMF_Config_GetTableEntry
@@ -3187,7 +3187,7 @@ SMF_SlotParam_NRPNReturn:
 	ld w, (xiy)
 	and w, 0xc
 	or a, w
-	stb_d8 (4405), a
+	ld (4405:16), a
 	andmi8 (xiy), 0xf1
 	andmi8 (xiy + 3), 0x1f
 	ld a, (xiy + 2)
@@ -3202,7 +3202,7 @@ SMF_SlotParam_DataEntry:
 	ld a, (xiy + 4)
 	ld w, (4405:16)
 	ld (xiy + 4), w
-	stb_d8 (4405), a
+	ld (4405:16), a
 
 SMF_SlotParam_DataEntryReturn:
 	ret
@@ -3223,7 +3223,7 @@ SMF_SlotParam_TypeD2Impl:
 	sla a, 1
 
 SMF_SlotParam_TypeD2Done:
-	stb_d8 (4405), a
+	ld (4405:16), a
 
 SMF_SlotParam_TypeD2Return:
 	ret

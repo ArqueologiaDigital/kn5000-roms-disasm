@@ -226,7 +226,7 @@ CompLoad_HideButtons_Loop:
 	ld	wa, hl
 	lds	bc, 1
 	calr	-8097
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-8662
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -502,7 +502,7 @@ LoadFilter_OpLoad:
 	ld WA,HL
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	calr SignalProgressUpdate
 	ld XWA,0x00600026
 	ld XBC,0x01c00002
@@ -784,7 +784,7 @@ SaveFilter_Save_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	55914
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -820,7 +820,7 @@ SaveFilter_OpFormat:
 	ld	wa, hl
 	lds	bc, 5
 	calr	55789
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928

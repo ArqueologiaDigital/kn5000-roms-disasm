@@ -7850,7 +7850,7 @@ SeMenu_NameEditor_End:
 	ld	w, (1642:16)
 	and	w, 127
 	or	w, a
-	stb_d8	(1642), w
+	ld	(1642:16), w
 	call	SeMenu_NameEdit_CheckBit7
 	jr	35
 	.byte 0xc1
@@ -7862,7 +7862,7 @@ SeMenu_NameEditor_End:
 	ld	w, (1632:16)
 	and	w, 127
 	or	w, a
-	stb_d8	(1632), w
+	ld	(1632:16), w
 	stib_da	(0x03efa8), 0
 	ld	xiy, TuningSystem_Handler_Table_0x242C
 	call	SeMenu_NameEditor_HandleInput
@@ -9433,7 +9433,7 @@ SeMenu_Utility_FormatNumber_Loop:
 SeMenu_Utility_FormatNumber_End:
 	; --- Data setup: load A, store, set flag=2, language-conditional XIX (58 bytes) ---
 	ld	a, (0x8d36:16)
-	stb_d8	(1656), a
+	ld	(1656:16), a
 	stib_da	(0x03efa8), 2
 	ld xiy, 0x00f12364
 	cpdi8	(1710), 1
@@ -9574,7 +9574,7 @@ SeMenu_Utility_End:
 SeMenu_NameEdit_DataBlock1:
 	ld	a, (1632:16)
 	and	a, 15
-	stb_d8	(1648), a
+	ld	(1648:16), a
 	cp	a, 10
 	jr	nz, 7
 	ld	xiy, TuningSystem_Handler_Table_0x1F9A
@@ -9994,12 +9994,12 @@ Data_UnknownBlock:
 	ldb	l, 17
 	jr	2
 	ldb	l, 16
-	stb_d8	(0x90ea), l
+	ld	(0x90ea:16), l
 	ld	h, (1633:16)
 	dec	1, h
-	stb_d8	(0x90eb), h
+	ld	(0x90eb:16), h
 	ld	a, (0x8d3a:16)
-	stb_d8	(0x90ec), a
+	ld	(0x90ec:16), a
 	ld	xwa, 0x90ea
 	call	SndParam_ApplyProgramChange
 	ld	a, (0x90ed:16)
@@ -14629,7 +14629,7 @@ SeBitmap_EnvCurve5:
 	retd	1280
 	.byte 0x53
 	pushw	hl
-	stb_d8	(0x4100), b
+	ld	(0x4100:16), b
 	.byte 0x43
 	.ascii "DEFGHIJKLMNOPQRSUVWXYZLOW HIGHMONOPOLY"
 	xorcf_a_8 a
@@ -16007,21 +16007,21 @@ TuningSystem_Handler_Table:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_parameter_grid.c)
 	.incbin "includes/generated/se_parameter_grid.bin"
 	.byte 0x91, 0x45
-	stb_d8	(0xe700), d
-	stb_d8	(8960), e
-	stb_d8	(0x2d00), e
-	stb_d8	(0x3700), e
-	stb_d8	(0x4100), e
-	stb_d8	(0x9c00), e
-	stb_d8	(0xa600), e
-	stb_d8	(0xb000), e
-	stb_d8	(0xba00), e
-	stb_d8	(0x4b00), e
-	stb_d8	(0x5500), e
-	stb_d8	(0x9c00), e
-	stb_d8	(0xa600), e
-	stb_d8	(0xb000), e
-	stb_d8	(0xba00), e
+	ld	(0xe700:16), d
+	ld	(8960:16), e
+	ld	(0x2d00:16), e
+	ld	(0x3700:16), e
+	ld	(0x4100:16), e
+	ld	(0x9c00:16), e
+	ld	(0xa600:16), e
+	ld	(0xb000:16), e
+	ld	(0xba00:16), e
+	ld	(0x4b00:16), e
+	ld	(0x5500:16), e
+	ld	(0x9c00:16), e
+	ld	(0xa600:16), e
+	ld	(0xb000:16), e
+	ld	(0xba00:16), e
 	.byte 0xf1, 0x00, 0x02, 0x0f
 	jr	le, 6
 	.byte 0x80, 0x07
@@ -16047,11 +16047,11 @@ TuningSystem_Handler_Table:
 	ld	xiz, 0x0700f1
 	popw sp
 	call16	0x4604
-	stb_d8	(1024), h
-	stb_d8	(1024), h
-	stb_d8	(4864), h
-	stb_d8	(8704), h
-	stb_d8	(0x3100), h
+	ld	(1024:16), h
+	ld	(1024:16), h
+	ld	(4864:16), h
+	ld	(8704:16), h
+	ld	(0x3100:16), h
 	.byte 0xf1, 0x00
 	.ascii "CTRL  R  KEY ON KEY OFFLEGATO NON LEGCHORD  "
 	.byte 0x1b, 0x0a, 0x0d

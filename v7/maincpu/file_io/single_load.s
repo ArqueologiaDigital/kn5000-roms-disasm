@@ -306,7 +306,7 @@ SLSrcBankList_FuncBody:
 	ld	a, (35168:16)
 	extz	wa
 	.byte 0xc2, 0x52, 0x09, 0xea, 0x51
-	stb_d8	35168, w
+	ld	(35168:16), w
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-492
@@ -340,7 +340,7 @@ SLSrcBankList_FuncBody:
 	cpda8_24 xbc, (15337812)
 	jr	nc, 25
 	add	c, l
-	stb_d8	35168, c
+	ld	(35168:16), c
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-608
@@ -354,7 +354,7 @@ SLSrcBankList_FuncBody:
 	cp	e, c
 	jr	c, 36
 	sub	a, c
-	stb_d8	35168, a
+	ld	(35168:16), a
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-652
@@ -395,7 +395,7 @@ SLSrcBankList_FuncBody:
 	cp	a, e
 	jr	nc, 67
 	inc	1, c
-	stb_d8	35168, c
+	ld	(35168:16), c
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	jr	44
@@ -412,7 +412,7 @@ SLSrcBankList_FuncBody:
 	cps	a, 0
 	jr	z, 21
 	dec	1, c
-	stb_d8	35168, c
+	ld	(35168:16), c
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-644
@@ -703,7 +703,7 @@ SLSrcBankList_FuncBody:
 	cpda8_24 xbc, (15337846)
 	jr	nc, 25
 	add	c, e
-	stb_d8	35170, c
+	ld	(35170:16), c
 	ldb_da	c, (15337844)
 	ld	xwa, xiz
 	calr	-562
@@ -717,7 +717,7 @@ SLSrcBankList_FuncBody:
 	cp	l, c
 	jr	c, 31
 	sub	a, c
-	stb_d8	35170, a
+	ld	(35170:16), a
 	ldb_da	c, (15337844)
 	ld	xwa, xiz
 	calr	-606
@@ -757,7 +757,7 @@ SLSrcBankList_FuncBody:
 	cp	a, e
 	jr	nc, 67
 	inc	1, c
-	stb_d8	35170, c
+	ld	(35170:16), c
 	ldb_da	c, (15337844)
 	ld	xwa, xiz
 	jr	44
@@ -774,7 +774,7 @@ SLSrcBankList_FuncBody:
 	cps	a, 0
 	jr	z, 21
 	dec	1, c
-	stb_d8	35170, c
+	ld	(35170:16), c
 	ldb_da	c, (15337844)
 	ld	xwa, xiz
 	calr	-659
@@ -1062,9 +1062,9 @@ SLSrcBankList_FuncBody:
 	cp	a, c
 	jr	nc, 8
 	add	a, c
-	stb_d8	35172, a
+	ld	(35172:16), a
 	jr	4
-	stb_d8	35172, w
+	ld	(35172:16), w
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-653
@@ -1088,9 +1088,9 @@ SLSrcBankList_FuncBody:
 	cp	c, a
 	jr	nc, 8
 	sub	c, e
-	stb_d8	35172, c
+	ld	(35172:16), c
 	jr	4
-	stb_d8	35172, e
+	ld	(35172:16), e
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-733
@@ -1141,7 +1141,7 @@ SLSrcBankList_FuncBody:
 	cp	a, e
 	jrl	nc, 198
 	inc	1, c
-	stb_d8	35172, c
+	ld	(35172:16), c
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-700
@@ -1152,7 +1152,7 @@ SLSrcBankList_FuncBody:
 	ld	xde, 35172
 	jrl	152
 	inc	1, c
-	stb_d8	35172, c
+	ld	(35172:16), c
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-738
@@ -1179,7 +1179,7 @@ SLSrcBankList_FuncBody:
 	cps	a, 0
 	jr	z, 84
 	dec	1, c
-	stb_d8	35172, c
+	ld	(35172:16), c
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-814
@@ -1192,7 +1192,7 @@ SLSrcBankList_FuncBody:
 	cp	c, a
 	jr	ule, 43
 	dec	1, c
-	stb_d8	35172, c
+	ld	(35172:16), c
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-855
@@ -1588,7 +1588,7 @@ SLDstBankList_FuncBody:
 	cpda8_24 xbc, (15337930)
 	jr	nc, 25
 	add	c, e
-	stb_d8	35174, c
+	ld	(35174:16), c
 	ldb_da	c, (15337928)
 	ld	xwa, xiz
 	calr	-492
@@ -1602,7 +1602,7 @@ SLDstBankList_FuncBody:
 	cp	l, c
 	jr	c, 26
 	sub	a, c
-	stb_d8	35174, a
+	ld	(35174:16), a
 	ldb_da	c, (15337928)
 	ld	xwa, xiz
 	calr	-536
@@ -1645,7 +1645,7 @@ SLDstBankList_FuncBody:
 	cp	a, e
 	jr	nc, 62
 	inc	1, c
-	stb_d8	35174, c
+	ld	(35174:16), c
 	ldb_da	c, (15337928)
 	ld	xwa, xiz
 	jr	44
@@ -1662,7 +1662,7 @@ SLDstBankList_FuncBody:
 	cps	a, 0
 	jr	z, 16
 	dec	1, c
-	stb_d8	35174, c
+	ld	(35174:16), c
 	ldb_da	c, (15337928)
 	ld	xwa, xiz
 	calr	-553
@@ -1809,7 +1809,7 @@ SLDstBankList_FuncBody:
 	cpda8_24 xbc, (15337936)
 	jr	nc, 15
 	inc	1, c
-	stb_d8	35176, c
+	ld	(35176:16), c
 	ld	xwa, xiz
 	calr	-300
 	lds32	xhl, 0
@@ -1820,7 +1820,7 @@ SLDstBankList_FuncBody:
 	cps	w, 0
 	jr	z, 10
 	dec	1, a
-	stb_d8	35176, a
+	ld	(35176:16), a
 	ld	xwa, xiz
 	jr	-31
 	ld	xwa, xiz
@@ -1978,7 +1978,7 @@ SLDstBankList_FuncBody:
 	cpda8_24 xbc, (15337966)
 	jr	nc, 25
 	add	c, e
-	stb_d8	35178, c
+	ld	(35178:16), c
 	ldb_da	c, (15337964)
 	ld	xwa, xiz
 	calr	-441
@@ -1992,7 +1992,7 @@ SLDstBankList_FuncBody:
 	cp	l, c
 	jr	c, 26
 	sub	a, c
-	stb_d8	35178, a
+	ld	(35178:16), a
 	ldb_da	c, (15337964)
 	ld	xwa, xiz
 	calr	-485
@@ -2035,7 +2035,7 @@ SLDstBankList_FuncBody:
 	cp	a, e
 	jr	nc, 62
 	inc	1, c
-	stb_d8	35178, c
+	ld	(35178:16), c
 	ldb_da	c, (15337964)
 	ld	xwa, xiz
 	jr	44
@@ -2052,7 +2052,7 @@ SLDstBankList_FuncBody:
 	cps	a, 0
 	jr	z, 16
 	dec	1, c
-	stb_d8	35178, c
+	ld	(35178:16), c
 	ldb_da	c, (15337964)
 	ld	xwa, xiz
 	calr	-545
@@ -2295,9 +2295,9 @@ SLDstBankList_FuncBody:
 	cp	a, c
 	jr	nc, 8
 	add	a, c
-	stb_d8	35180, a
+	ld	(35180:16), a
 	jr	4
-	stb_d8	35180, w
+	ld	(35180:16), w
 	ldb_da	c, (15338002)
 	ld	xwa, xiz
 	calr	-612
@@ -2321,11 +2321,11 @@ SLDstBankList_FuncBody:
 	cp	c, a
 	jr	nc, 8
 	sub	c, e
-	stb_d8	35180, c
+	ld	(35180:16), c
 	jr	8
 	cp	c, a
 	jr	c, 4
-	stb_d8	35180, e
+	ld	(35180:16), e
 	ldb_da	c, (15338002)
 	ld	xwa, xiz
 	calr	-696
@@ -2378,7 +2378,7 @@ SLDstBankList_FuncBody:
 	cp	a, e
 	jrl	nc, 193
 	inc	1, c
-	stb_d8	35180, c
+	ld	(35180:16), c
 	ldb_da	c, (15338002)
 	ld	xwa, xiz
 	calr	-727
@@ -2389,7 +2389,7 @@ SLDstBankList_FuncBody:
 	ld	xde, 35172
 	jrl	152
 	inc	1, c
-	stb_d8	35180, c
+	ld	(35180:16), c
 	ldb_da	c, (15338002)
 	ld	xwa, xiz
 	calr	-765
@@ -2416,7 +2416,7 @@ SLDstBankList_FuncBody:
 	cps	a, 0
 	jr	z, 79
 	dec	1, c
-	stb_d8	35180, c
+	ld	(35180:16), c
 	ldb_da	c, (15338002)
 	ld	xwa, xiz
 	calr	-841
@@ -2429,7 +2429,7 @@ SLDstBankList_FuncBody:
 	cp	c, a
 	jr	ule, 38
 	dec	1, c
-	stb_d8	35180, c
+	ld	(35180:16), c
 	ldb_da	c, (15338002)
 	ld	xwa, xiz
 	calr	-882
@@ -2647,7 +2647,7 @@ SLDst_HandleScroll:
 	ld	xwa, (xsp+8)
 	cp	xwa, 29360151
 	scc	z, a
-	stb_d8	35166, a
+	ld	(35166:16), a
 	ld	xwa, xiz
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -2767,7 +2767,7 @@ SLDst_ScrollDispatch:
 	ld	wa, hl
 	lds	bc, 1
 	calr	-23603
-	stb_d8	32422, l
+	ld	(32422:16), l
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -3111,7 +3111,7 @@ CmpDst_HandleScroll:
 	ld XWA,(XSP+0x08)
 	cp XWA,0x01c00017
 	scc Z,A
-	stb_d8 (0x895e), a
+	ld (0x895e:16), a
 	ld XWA,XIZ
 	ld XBC,0x01c0000b
 	lds32 xde, 0
@@ -3169,7 +3169,7 @@ CmpDst_ScrollModeA:
 	ld WA,HL
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	ld XWA,0x00600026
 	ld XBC,0x01c00002
 	lds32 xde, 0

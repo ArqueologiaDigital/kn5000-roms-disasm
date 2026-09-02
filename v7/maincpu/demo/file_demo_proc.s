@@ -583,7 +583,7 @@ Demo_SelectEntry_TimerTick:
 	cps a, 0
 	ret z
 	dec 1, a
-	stb_d8 (3375), a
+	ld (3375:16), a
 	cp a, 0xa
 	jr nz, Demo_SelectEntry_CheckCountdown
 	ld a, (0x28a4:16)
@@ -612,7 +612,7 @@ Demo_SelectEntry_Debounce:
 	cps	a, 0
 	ret	z
 	dec	1, a
-	stb_d8	3379, a
+	ld	(3379:16), a
 	cps	a, 0
 	ret	nz
 	.byte 0xf1, 0xad, 0x28, 0xbb
@@ -890,7 +890,7 @@ Demo_ScanPartLoop:
 	jr z, Demo_ScanPartSkipToEnd
 	ld a, l
 	inc 1, a
-	stb_d8 (3414), a
+	ld (3414:16), a
 	setda 0, 3412
 	setda 2, 0x287b
 	jr Demo_ScanPartDone
@@ -8116,7 +8116,7 @@ CancelOperationCleanup:
 	bit 2, a
 	jr z, CancelOp_ClearSeq
 	res 2, a
-	stb_d8 (0x28a7), a
+	ld (0x28a7:16), a
 
 CancelOp_ClearSeq:
 	.byte 0xf1, 0xa7, 0x28, 0xb3, 0x1d, 0xd2, 0x93, 0xf3
@@ -8131,7 +8131,7 @@ SeqPhase_OperationStateCheck:
 	bit 0x07,A
 	jrl z, SeqPhase_PopIzRet
 	res 0x07,A
-	stb_d8 (0x042c), a
+	ld (0x042c:16), a
 	bitda 2, (0x0420)
 	jrl nz, SeqPhase_PopIzRet
 	bitda 2, (0x041f)

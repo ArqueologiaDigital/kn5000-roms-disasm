@@ -148,7 +148,7 @@ FCopy_CopyConfirm_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	63306
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62741
 	call	16290139
 	call	16290094
@@ -184,7 +184,7 @@ FCopy_CopyExecute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	63179
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62614
 	call	16290139
 	call	16290094
@@ -296,7 +296,7 @@ FRename_HandleApply:
 	ld	wa, hl
 	lds	bc, 5
 	calr	62879
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62314
 	call	16290928
 	stda16	(33894), hl
@@ -395,7 +395,7 @@ FRenameSmf_HandleApply:
 	ld	wa, hl
 	lds	bc, 5
 	calr	62612
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62047
 	call	16291947
 	stda16	(33896), hl
@@ -436,7 +436,7 @@ FmmFmt_InitPhase_CheckDrive:
 	cps	wa, 3
 	jr	nz, 27
 FmmFmt_InitPhase_DriveType23:
-	stb_d8	(32460), a
+	ld	(32460:16), a
 	ld	xwa, 8060982
 	ld	xbc, 29360129
 	lds32	xde, 0
@@ -505,7 +505,7 @@ FmmFmt_HandleProgress:
 	ld	wa, iz
 	ldw	bc, 8
 	calr	-3286
-	stb_d8	32422, l
+	ld	(32422:16), l
 	ldw	wa, 238
 	call	16355504
 	jrl	147

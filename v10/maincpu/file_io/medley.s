@@ -137,7 +137,7 @@ SeqName_LoadAndPlay:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -164,7 +164,7 @@ SeqName_HandleAction32:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -1194,7 +1194,7 @@ DiskSel_SendFileInfo:
 	stw_erp WA, 0xfa
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ldw wa, 0xee
 	jrl DiskSel_ShowErrorAndExit
 
@@ -1306,7 +1306,7 @@ DiskSel_RepeatSendInfo:
 	stw_erp WA, 0xfa
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ldw wa, 0xee
 	jrl DiskSel_ShowErrorAndExit
 
@@ -1678,7 +1678,7 @@ DiskSel_PlayFindLoop:
 	stw_erp WA, 0xfa
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ldw wa, 0xee
 
 DiskSel_ShowErrorAndExit:
@@ -1771,7 +1771,7 @@ GetPlayState2:
 SmfMedley_RawData:
 	cps	a, 0
 	scc	nz, wa
-	stb_d8	(35140), a
+	ld	(35140:16), a
 	ret
 
 NavigateSongList_Entry:
@@ -2000,7 +2000,7 @@ FmmSmfMedleyFunc:
 	lds wa, 0
 	calr InitializeOperationState
 	ld a, (0x8d37:16)
-	stb_d8 (0x843a), a
+	ld (0x843a:16), a
 	cp a, 0x6f
 	jr z, SmfMed_CheckNotPlaying
 	cp a, 0x72
@@ -2347,7 +2347,7 @@ SmfMed_RemoveFromOrder:
 	ld (xwa), 0xff
 	ld a, (0x8920:16)
 	dec 1, a
-	stb_d8 (0x8920), a
+	ld (0x8920:16), a
 	lds iy, 0
 	lds iz, 0
 	extz wa
@@ -3112,7 +3112,7 @@ PdMed_RemoveFromOrder:
 	ld (xhl), 0xff
 	ld a, (0x8920:16)
 	dec 1, a
-	stb_d8 (0x8920), a
+	ld (0x8920:16), a
 	lds iz, 0
 	lds hl, 0
 	extz wa
@@ -3924,7 +3924,7 @@ DocMed_RemoveFromOrder:
 	ld (xhl), 0xff
 	ld a, (0x8920:16)
 	dec 1, a
-	stb_d8 (0x8920), a
+	ld (0x8920:16), a
 	lds iz, 0
 	lds hl, 0
 	extz wa

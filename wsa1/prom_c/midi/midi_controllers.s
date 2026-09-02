@@ -1920,7 +1920,7 @@ sub_FADA7C__FADAA1:
 P7Mixer_SetGainIndex1:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAB1  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADAB5  ld C,(XIZ+0x08)
-	stb_d8	(0x1501), c                         ; FADAB8  ld (0x1501),C
+	ld	(0x1501:16), c                         ; FADAB8  ld (0x1501),C
 	pushw	0x7F                                 ; FADABC  push 0x007f
 	extz	bc                                    ; FADABF  extz BC
 	pushw	bc                                   ; FADAC1  push BC
@@ -1957,7 +1957,7 @@ P7Mixer_SetGainIndex1:
 P7Mixer_SetGainIndex2:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADACA  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADACE  ld C,(XIZ+0x08)
-	stb_d8	(0x1502), c                         ; FADAD1  ld (0x1502),C
+	ld	(0x1502:16), c                         ; FADAD1  ld (0x1502),C
 	extz	bc                                    ; FADAD5  extz BC
 	pushw	bc                                   ; FADAD7  push BC
 	ld	c, (0x1501:16)                         ; FADAD8  ld C,(0x1501)
@@ -2150,7 +2150,7 @@ sub_FADB0F__FADB6B:
 GlobalScale_StoreMode:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB70  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADB74  ld C,(XIZ+0x08)
-	stb_d8	(0x150A), c                         ; FADB77  ld (0x150a),C
+	ld	(0x150A:16), c                         ; FADB77  ld (0x150a),C
 	unlk32 xiz                                 ; FADB7B  unlk XIZ
 	ret                                        ; FADB7D  ret
 ; --------------------------------------------------------------------------
@@ -2262,7 +2262,7 @@ VoiceDefaults_StoreFromPackedByte__FADBD5:
 sub_FADBEE:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADBEE  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADBF2  ld C,(XIZ+0x08)
-	stb_d8	(0x1507), c                         ; FADBF5  ld (0x1507),C
+	ld	(0x1507:16), c                         ; FADBF5  ld (0x1507),C
 	unlk32 xiz                                 ; FADBF9  unlk XIZ
 	ret                                        ; FADBFB  ret
 ; --------------------------------------------------------------------------
@@ -2371,7 +2371,7 @@ GlobalScale_StorePitchClassDetune:
 sub_FADC3E:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC3E  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADC42  ld C,(XIZ+0x08)
-	stb_d8	(0x1508), c                         ; FADC45  ld (0x1508),C
+	ld	(0x1508:16), c                         ; FADC45  ld (0x1508),C
 	unlk32 xiz                                 ; FADC49  unlk XIZ
 	ret                                        ; FADC4B  ret
 ; --------------------------------------------------------------------------
@@ -2457,7 +2457,7 @@ Dev10C_SetReg0201_FromNibblePair:
 	pushw	de                                   ; FADC74  push DE
 	pushw	ix                                   ; FADC75  push IX
 	ld	d, (xiz+8)                              ; FADC76  ld D,(XIZ+0x08)
-	stb_d8	(0x1509), d                         ; FADC79  ld (0x1509),D
+	ld	(0x1509:16), d                         ; FADC79  ld (0x1509),D
 	ld	c, d                                    ; FADC7D  ld C,D
 	and	c, 15                                  ; FADC7F  and C,0x0f
 	extz	bc                                    ; FADC82  extz BC

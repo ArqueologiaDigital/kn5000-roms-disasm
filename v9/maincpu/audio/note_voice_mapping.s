@@ -9166,9 +9166,9 @@ MarkEntriesAboveThre_Block:
 
 MarkEntriesAboveThre_LoadIdx2:
 	stb_erp A, 0xfa
-	stb_d8 (0xcd2e), a
+	ld (0xcd2e:16), a
 	stb_erp A, 0xf9
-	stb_d8 (0xcd2f), a
+	ld (0xcd2f:16), a
 
 MarkEntriesAboveThre_AdvanceSlot:
 	incw 1, (xsp + 4)
@@ -14064,9 +14064,9 @@ NoteMap_GetVoiceData_Return:
 
 NoteMap_GetVoiceData_Entry:
 	ld c, (0xceaa:16)
-	stb_d8 (0xceac), c
+	ld (0xceac:16), c
 	ld c, (0xceab:16)
-	stb_d8 (0xcead), c
+	ld (0xcead:16), c
 	cpw (xwa), 0x0
 	jr z, GetVoiceData_Entry_Block2
 	ld l, (xwa + 5)
@@ -14106,8 +14106,8 @@ GetVoiceData_Entry_Compare:
 	jr ule, GetVoiceData_Entry_Block
 	cp l, 0x67
 	jr nc, GetVoiceData_Entry_Block
-	stb_d8 (0xceaa), l
-	stb_d8 (0xceab), h
+	ld (0xceaa:16), l
+	ld (0xceab:16), h
 	jr Voice_ReadSearchResult
 
 GetVoiceData_Entry_Block:
@@ -16710,15 +16710,15 @@ VoiceSlot_IterateAlloc_TestBit24:
 	jr z, VoiceSlot_CheckAndApply_Return
 
 VoiceSlot_IterateAlloc_StoreDRAM:
-	stb_d8 (0x8d42), a
-	stb_d8 (0x8d40), w
+	ld (0x8d42:16), a
+	ld (0x8d40:16), w
 	bitda_24 1, (0xcede)
 	jr nz, VoiceSlot_IterateAlloc_StoreDRAM2
 	stdi8 (0x8d44), 0
 	jr VoiceSlot_IterateAlloc_Block5
 
 VoiceSlot_IterateAlloc_StoreDRAM2:
-	stb_d8 (0x8d44), l
+	ld (0x8d44:16), l
 
 VoiceSlot_IterateAlloc_Block5:
 	jr VoiceSlot_CheckAndApply_DoCheckDis
@@ -17005,19 +17005,19 @@ VoiceSlot_CheckAndApply_Data2:
 	.byte 0x80
 	.ascii "89;:<=>Â"
 	or	iz, 8448
-	stb_d8	(0xcec0), a
+	ld	(0xcec0:16), a
 	ldb_da	a, (0xcedf)
-	stb_d8	(0xcec1), a
+	ld	(0xcec1:16), a
 	ldb_da	a, (0xcee0)
-	stb_d8	(0xcec2), a
+	ld	(0xcec2:16), a
 	ldb_da	a, (0xcee1)
-	stb_d8	(0xcec3), a
+	ld	(0xcec3:16), a
 	ldb_da	a, (0xcee2)
-	stb_d8	(0xcec4), a
+	ld	(0xcec4:16), a
 	ldb_da	a, (0xcee3)
-	stb_d8	(0xcec5), a
+	ld	(0xcec5:16), a
 	ldb_da	a, (0xcee4)
-	stb_d8	(0xcec6), a
+	ld	(0xcec6:16), a
 	ld	xiy, 0xcee5
 	ld	xix, 0xceca
 	ldw	bc, 10
@@ -17069,13 +17069,13 @@ VoiceSlot_CheckAndApply_Data2:
 	jr	3
 	calr	63823
 	ldb_da	a, (0xcedf)
-	stb_d8	(0xceb6), a
+	ld	(0xceb6:16), a
 	ldb_da	a, (0xcee0)
-	stb_d8	(0xceb7), a
+	ld	(0xceb7:16), a
 	ldb_da	a, (0xcee1)
-	stb_d8	(0xceb8), a
+	ld	(0xceb8:16), a
 	ldb_da	a, (0xcede)
-	stb_d8	(0xceb9), a
+	ld	(0xceb9:16), a
 	jr	10
 	stdi8	(0xceb6), 0
 	stdi8	(0xceb7), 0
@@ -18674,7 +18674,7 @@ SendEpilogue_Data:
 	ldw	bc, 22
 	call	MidiEvent_ConfigChannel
 	stb_erp a, 248
-	stb_d8	(0xe9c2), a
+	ld	(0xe9c2:16), a
 	jrl	1417
 	lds	wa, 1
 	cps	iz, 0
@@ -19955,7 +19955,7 @@ Acc_LoadAndStartPlayback:
 	calr PlayModeStateMachine_Block5
 	calr StoreAndReturn_Block
 	ld a, (xsp + 6)
-	stb_d8 (0xe9e4), a
+	ld (0xe9e4:16), a
 	call Audio_ConfigureDSP
 	ld xwa, (xsp + 2)
 	calr NotifyChangeComplete_Prologue
@@ -20384,7 +20384,7 @@ PlayModeStateMachine_DoPlayMode2:
 	ld xwa, (0xd0a4:16)
 	stda16 (1052), xwa
 	ld xwa, (0xd0a0:16)
-	stb_d8 (1051), a
+	ld (1051:16), a
 	ei 0
 	ret
 
@@ -20449,7 +20449,7 @@ PlayModeStateMachine_Prologue:
 	ld xbc, 0x60
 	call DivMod32
 	ld a, l
-	stb_d8 (1051), a
+	ld (1051:16), a
 	ldb w, 0x0
 	extz xwa
 	stda32 0xd0a0, xwa
@@ -21274,7 +21274,7 @@ SeekRecord_PopReturn_Prologue:
 	ldirw
 	bit 7, a
 	jr z, SeekRecord_PopReturn_Block
-	stb_d8 (0xd09c), a
+	ld (0xd09c:16), a
 	ld (xsp + 4), a
 	lds iz, 1
 	jr SeekRecord_PopReturn_LoadDRAM
@@ -23222,7 +23222,7 @@ ProcessMidiConverge_LoadDRAM:
 	extz xwa
 	div wa, 0x64
 	add wa, 0x20
-	stb_d8 (0xec05), a
+	ld (0xec05:16), a
 	cpdi8 (0xec05), 127
 	jr ule, ToneGen_ValidateRange_Loop
 	stdi8 (0xec05), 127
@@ -23252,7 +23252,7 @@ VoiceReset_Return_Prologue:
 	push xiz
 	bit 7, a
 	jr z, VoiceReset_Return_Block
-	stb_d8 (0xd09e), a
+	ld (0xd09e:16), a
 	ld (xsp + 4), a
 	lds iz, 1
 	jr VoiceReset_Return_LoadDRAM
@@ -24170,7 +24170,7 @@ CharMap_ActivePreamb_LoadDRAM:
 	stdi8	(0xe144), 1
 	ld	a, (0xc07e:16)
 	and	a, 15
-	stb_d8	(0xe145), a
+	ld	(0xe145:16), a
 	ld	xde, 0xe144
 	lds	wa, 5
 	lds	bc, 2
@@ -25900,7 +25900,7 @@ SendCOMM_VariableLengthPacket:
 	ld (xhl + 6), e
 	ld c, (0xe197:16)
 	inc 1, c
-	stb_d8 (0xe197), c
+	ld (0xe197:16), c
 	res 7, c
 	ld (xhl + 7), c
 	ldiw_erp 0xe6, 0
@@ -26162,7 +26162,7 @@ CommPort_StatusCheckAndSend:
 	ret z
 	ldcf_dd8 4, 0x38
 	scc8 c, a
-	stb_d8 (0xe35c), a
+	ld (0xe35c:16), a
 	ld xwa, 0xe35c
 	ldw bc, 0x8
 	lds de, 1
@@ -26243,7 +26243,7 @@ SendPartDataBlock_Block:
 	; --- Set-if-changed handlers for E351-E354 (4x24 = 96 bytes) ---
 	cpdm8	0xe351, a
 	ret z
-	stb_d8	(0xe351), a
+	ld	(0xe351:16), a
 	ld xwa, 0x0000e351
 	lds	bc, 1
 	lds	de, 1
@@ -26252,7 +26252,7 @@ SendPartDataBlock_Block:
 SendPartDataBlock_Block2:
 	cpdm8	0xe352, a
 	ret z
-	stb_d8	(0xe352), a
+	ld	(0xe352:16), a
 	ld xwa, 0x0000e352
 	lds	bc, 2
 	lds	de, 1
@@ -26261,7 +26261,7 @@ SendPartDataBlock_Block2:
 SendPartDataBlock_Block3:
 	cpdm8	0xe353, a
 	ret z
-	stb_d8	(0xe353), a
+	ld	(0xe353:16), a
 	ld xwa, 0x0000e353
 	lds	bc, 6
 	lds	de, 1
@@ -26270,7 +26270,7 @@ SendPartDataBlock_Block3:
 SendPartDataBlock_Block4:
 	cpdm8	0xe354, a
 	ret z
-	stb_d8	(0xe354), a
+	ld	(0xe354:16), a
 	ld xwa, 0x0000e354
 	lds	bc, 7
 	lds	de, 1
@@ -26287,7 +26287,7 @@ SendPartDataBlock_ClearByte:
 SendPartDataBlock_Block5:
 	cpdm8 0xe357, c
 	ret z
-	stb_d8 (0xe357), c
+	ld (0xe357:16), c
 	ld xwa, 0xe357
 	ldw bc, 0x21
 	lds de, 1
@@ -26303,7 +26303,7 @@ SendPartDataBlock_ClearByte2:
 SendPartDataBlock_Block6:
 	cpdm8 0xe358, c
 	ret z
-	stb_d8 (0xe358), c
+	ld (0xe358:16), c
 	ld xwa, 0xe358
 	ldw bc, 0x22
 	lds de, 1
@@ -26319,7 +26319,7 @@ SendPartDataBlock_Block7:
 	ldb c, 0x0
 
 SendPartDataBlock_StoreDRAM:
-	stb_d8 (0xe35b), c
+	ld (0xe35b:16), c
 	ld xwa, 0xe35b
 	ldw bc, 0x23
 	lds de, 1
@@ -26335,7 +26335,7 @@ SendPartDataBlock_ClearByte3:
 SendPartDataBlock_Block8:
 	cpdm8 0xe359, c
 	ret z
-	stb_d8 (0xe359), c
+	ld (0xe359:16), c
 	ld xwa, 0xe359
 	ldw bc, 0x24
 	lds de, 1
@@ -26349,7 +26349,7 @@ SendPartDataBlock_Block9:
 	ldb	c, 1
 	cpdm8	0xe35a, c
 	ret	z
-	stb_d8	(0xe35a), c
+	ld	(0xe35a:16), c
 	ld	xwa, 0xe35a
 	ldw	bc, 37
 	lds	de, 1

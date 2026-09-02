@@ -380,7 +380,7 @@ SysEx_ApplyVoiceParam_4B:
 	ld a, (xsp + 10)
 	extz wa
 	calr SysEx_ClampVoiceIndex8
-	stb_d8 (0xfc8e), l
+	ld (0xfc8e:16), l
 
 SysEx_ApplyVoiceParam_4B_ReadSubParams:
 	ld xwa, 0x4b04
@@ -538,7 +538,7 @@ SysEx_ApplyVoiceParam_49:
 	ld a, (xsp + 10)
 	extz wa
 	calr SysEx_ClampVoiceIndex8_49
-	stb_d8 (0xfc74), l
+	ld (0xfc74:16), l
 
 SysEx_ApplyVoiceParam_49_ReadSubParams:
 	ld xwa, 0x4904
@@ -890,7 +890,7 @@ SwbtWr_DispatchLoop:
 	ld xix, (0xc081:16)
 	xor hl, hl
 	ld l, (xiy)
-	stb_d8 (0xc080), l
+	ld (0xc080:16), l
 	cp l, 0xbf
 	jr ugt, SwbtWr_DispatchLoop_NextEvent
 	sla hl, 2
@@ -906,7 +906,7 @@ SwbtWr_DispatchLoop_ScanCallbacks:
 
 SwbtWr_DispatchLoop_ExecuteCallback:
 	stda16 (0xc07d), xwa
-	stb_d8 (0xc07f), c
+	ld (0xc07f:16), c
 	push_sd16w 0x7b, 0xc0
 	push_sd16w 0x81, 0xc0
 	push_sd16w 0x83, 0xc0
@@ -1718,7 +1718,7 @@ MidiOut_RealtimeDispatch_Data:
 	ret	z
 	ld	a, (0xc07e:16)
 	and	a, 3
-	stb_d8	(0xc1e4), a
+	ld	(0xc1e4:16), a
 	ret
 
 MidiOut_SerializeAndSend:
@@ -1928,7 +1928,7 @@ CompIface_RampControl:
 CompIface_RampUp_Clamp:
 	stda16 (0xc1ee), xbc
 	srl bc, 8
-	stb_d8 (0xc1ec), c
+	ld (0xc1ec:16), c
 	extz bc
 	ld xwa, 0x4005
 	lds de, 1
@@ -1959,7 +1959,7 @@ CompIface_RampDown_Apply:
 CompIface_RampDown_Clamp:
 	stda16 (0xc1ee), xbc
 	srl bc, 8
-	stb_d8 (0xc1ec), c
+	ld (0xc1ec:16), c
 	extz bc
 	ld xwa, 0x4005
 	lds de, 1
@@ -2033,7 +2033,7 @@ CompIface_WriteVolume:
 	ld c, (0xc1ec:16)
 	cp c, a
 	ret z
-	stb_d8 (0xc1ec), a
+	ld (0xc1ec:16), a
 	ld c, a
 	extz bc
 	sll bc, 8
@@ -2206,7 +2206,7 @@ DSPCfg_CompressorDispatch:
 	ret z
 	ld xwa, 0x2a00
 	call SndParam_LookupReadOnly
-	stb_d8 (0xc1f2), l
+	ld (0xc1f2:16), l
 	extz hl
 	ld bc, (0xc1f6:16)
 	ld wa, hl
@@ -2219,7 +2219,7 @@ DSPCfg_CompParam_SubType6:
 	ret z
 	ld xwa, 0x2a01
 	call SndParam_LookupReadOnly
-	stb_d8 (0xc1f4), l
+	ld (0xc1f4:16), l
 	extz hl
 	ld bc, (0xc1f6:16)
 	ld wa, hl
@@ -6164,7 +6164,7 @@ UIStateEvt_EffectSelect_Data:
 	jr	nz, 56
 	ld	a, (0xfd03:16)
 	res	7, a
-	stb_d8	(0xc5a2), a
+	ld	(0xc5a2:16), a
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6200,7 +6200,7 @@ UIStateEvt_EffectSelect_Data:
 	jr	nz, 11
 	ld	a, (0xc07e:16)
 	res	7, a
-	stb_d8	(0xc5a2), a
+	ld	(0xc5a2:16), a
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6249,7 +6249,7 @@ UIStateEvt_EffectSelect_Data:
 	ret	z
 	ld	a, (0xc07e:16)
 	and	a, 255
-	stb_d8	(0xe9c0), a
+	ld	(0xe9c0:16), a
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6260,7 +6260,7 @@ UIStateEvt_EffectSelect_Data:
 	ret	z
 	ld	a, (0xc07e:16)
 	and	a, 15
-	stb_d8	(0xe9be), a
+	ld	(0xe9be:16), a
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6460,13 +6460,13 @@ UIStateEvt_ChannelConfig_Data:
 	ret
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
-	stb_d8	(0xc362), l
+	ld	(0xc362:16), l
 	stdi8	(0xc363), 255
 	ret
 	stdi8	(0xc362), 0
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
-	stb_d8	(0xc363), l
+	ld	(0xc363:16), l
 	ret
 UIStateEvt_StubReturn:
 	ret

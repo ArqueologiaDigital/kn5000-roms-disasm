@@ -164,7 +164,7 @@ FCopy_CopyConfirm_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -201,7 +201,7 @@ FCopy_CopyExecute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -317,7 +317,7 @@ FRename_HandleApply:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
 	stda16 (0x8502), xhl
@@ -420,7 +420,7 @@ FRenameSmf_HandleApply:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetFileCountEncoded
 	stda16 (0x8504), xhl
@@ -465,7 +465,7 @@ FmmFmt_InitPhase_CheckDrive:
 	jr nz, FmmFmt_InitPhase_OtherDrive
 
 FmmFmt_InitPhase_DriveType23:
-	stb_d8 (0x7f68), a
+	ld (0x7f68:16), a
 	ld xwa, 0x7b0036
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -538,7 +538,7 @@ FmmFmt_HandleProgress:
 	ld wa, iz
 	ldw bc, 0x8
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl FmmFmt_NotifyComplete

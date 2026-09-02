@@ -2390,7 +2390,7 @@ TrAsGrid_ApplyScrollOffset:
 	and hl, ix
 	jr z, TrAsGrid_CheckScrollBoundary
 	res 0, c
-	stb_d8 (3296), c
+	ld (3296:16), c
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0009
@@ -2514,7 +2514,7 @@ TrAsGrid_ApplyScrollOffset2:
 	and hl, ix
 	jr z, TrAsGrid_CheckScrollBoundary2
 	set 0, c
-	stb_d8 (3296), c
+	ld (3296:16), c
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
@@ -2801,7 +2801,7 @@ TrAsGridChk_ByteData:
 	extz	wa
 	lds	bc, 0
 	calr	65318
-	stb_d8	(0x2873), l
+	ld	(0x2873:16), l
 	.byte 0xf2, 0x82
 	rcf
 	push	sr
@@ -2905,7 +2905,7 @@ TrAsGridChk_ByteData:
 	extz	wa
 	lds	bc, 1
 	calr	65002
-	stb_d8	(0x2873), l
+	ld	(0x2873:16), l
 	.byte 0xf2, 0x82
 	rcf
 	push	sr
@@ -14227,7 +14227,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	.byte 0xd1, 0xe7
-	stb_d8	(0x4004), d
+	ld	(0x4004:16), d
 	popw	ix
 	.byte 0xe3
 	nop

@@ -34,13 +34,13 @@ AccompSeq_CaptureTimerState:
 AccompSeq_ReadTimerRegisters:
 	xor a, a
 	ei 6
-	stb_d8 (1131), a
+	ld (1131:16), a
 	ld wa, (1128:16)
 	stda16 (0x7e1c), xwa
 	ld a, (1130:16)
-	stb_d8 (0x7e1e), a
+	ld (0x7e1e:16), a
 	ld a, (1055:16)
-	stb_d8 (0x7e1f), a
+	ld (0x7e1f:16), a
 	ei 0
 	ret
 
@@ -48,9 +48,9 @@ AccompSeq_SaveTimerSnapshot:
 	ld wa, (0x7e1c:16)
 	stda16 (0x7e20), xwa
 	ld a, (0x7e1e:16)
-	stb_d8 (0x7e22), a
+	ld (0x7e22:16), a
 	ld a, (0x7e1f:16)
-	stb_d8 (0x7e23), a
+	ld (0x7e23:16), a
 	ret
 
 AccompSeq_CheckChannelActive:
@@ -75,10 +75,10 @@ AccompSeq_SetupChannel1:
 	ld wa, (0x7e3c:16)
 	stda16 (0x7e46), xwa
 	ld a, (0x7e6e:16)
-	stb_d8 (0x7e6d), a
+	ld (0x7e6d:16), a
 	calr AccompSeq_InitEventDispatch
 	ld a, (0x7e6d:16)
-	stb_d8 (0x7e6e), a
+	ld (0x7e6e:16), a
 	ld wa, (0x7e46:16)
 	stda16 (0x7e3c), xwa
 	ld wa, (0x7e44:16)
@@ -103,10 +103,10 @@ AccompSeq_SetupChannel2:
 	ld wa, (0x7e3e:16)
 	stda16 (0x7e46), xwa
 	ld a, (0x7e6f:16)
-	stb_d8 (0x7e6d), a
+	ld (0x7e6d:16), a
 	calr AccompSeq_InitEventDispatch
 	ld a, (0x7e6d:16)
-	stb_d8 (0x7e6f), a
+	ld (0x7e6f:16), a
 	ld wa, (0x7e46:16)
 	stda16 (0x7e3e), xwa
 	ld wa, (0x7e44:16)
@@ -126,7 +126,7 @@ AccompSeq_IncrementTickCounter:
 	xor	a, a
 	inc	1, hl
 	stda16	(1128), hl
-	stb_d8	(1130), a
+	ld	(1130:16), a
 	incdi8	1, (1132)
 	call	SeqEvt_EntryPoint1
 	call	SeqEvt_EntryPoint2
@@ -465,9 +465,9 @@ AccompSeq_Parse_Done:
 
 AccompSeq_Parse_Type91_Impl:
 	calr AccompSeq_ReadParams
-	stb_d8 (0x7e5a), a
+	ld (0x7e5a:16), a
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e5b), a
+	ld (0x7e5b:16), a
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_CalcEventSize
 	cpdi16 0x7e50, 16
@@ -487,15 +487,15 @@ AccompSeq_Parse_Type91_Done:
 AccompSeq_Parse_Fallthrough:
 	ld d, a
 	and a, 0xf0
-	stb_d8 (0x7e54), a
+	ld (0x7e54:16), a
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e55), e
+	ld (0x7e55:16), e
 	calr AccompSeq_AdvancePosition
 	ld a, d
 	and a, 0xf
-	stb_d8 (0x7e56), a
+	ld (0x7e56:16), a
 	ld a, (xiy)
-	stb_d8 (0x7e57), a
+	ld (0x7e57:16), a
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_CalcEventSize
 	cpdi16 0x7e50, 16
@@ -533,17 +533,17 @@ AccompSeq_Ret:
 	ret
 
 AccompSeq_ReadParams:
-	stb_d8 (0x7e54), a
+	ld (0x7e54:16), a
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e55), e
+	ld (0x7e55:16), e
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e56), a
+	ld (0x7e56:16), a
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e57), a
+	ld (0x7e57:16), a
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e58), a
+	ld (0x7e58:16), a
 	calr AccompSeq_AdvancePosition
-	stb_d8 (0x7e59), a
+	ld (0x7e59:16), a
 	calr AccompSeq_AdvancePosition
 	ret
 
@@ -730,14 +730,14 @@ AccompSeq_ResolveChannel:
 	subda8 a, 1131
 	jr ugt, AccompSeq_ResolveCh_Store
 	ldb a, 0x1
-	stb_d8 (0x7e55), a
+	ld (0x7e55:16), a
 	cpdi8 (1133), 0
 	jr z, AccompSeq_ResolveCh_AddOffset
 	xor a, a
 	jr AccompSeq_ResolveCh_AddOffset
 
 AccompSeq_ResolveCh_Store:
-	stb_d8 (0x7e55), a
+	ld (0x7e55:16), a
 
 AccompSeq_ResolveCh_AddOffset:
 	ld w, (1133:16)
@@ -747,7 +747,7 @@ AccompSeq_ResolveCh_AddOffset:
 	ld w, (0x7dfc:16)
 	cp a, w
 	jr nc, AccompSeq_ResolveCh_Done
-	stb_d8 (0x7dfc), a
+	ld (0x7dfc:16), a
 
 AccompSeq_ResolveCh_Done:
 	ei 0
@@ -783,9 +783,9 @@ AccompSeq_CheckVelFlagsExtended:
 	ordi8 0x33e5, 2
 	pushw wa
 	ld a, (0x7e5a:16)
-	stb_d8 (0x33e6), a
+	ld (0x33e6:16), a
 	ld a, (0x7e5b:16)
-	stb_d8 (0x33e7), a
+	ld (0x33e7:16), a
 	popw wa
 	anddi8 (0x33e5), 251
 	cp a, 0x78
@@ -942,7 +942,7 @@ AccompSeq_ManualMidi_SetChannel:
 	pop xhl
 	call AccompSeq_ProcessAfterNote
 	pop xwa
-	stb_d8 (0xc07e), a
+	ld (0xc07e:16), a
 
 AccompSeq_ManualMidi_ClearFlags:
 	anddi8 (0x7f15), 253
@@ -996,13 +996,13 @@ AccompSeq_LargeCodeBlock1:
 	ret
 	lds	wa, 0
 	stda16	(1128), wa
-	stb_d8	(1130), a
+	ld	(1130:16), a
 	stda16	(0x7e1c), wa
-	stb_d8	(0x7e1e), a
+	ld	(0x7e1e:16), a
 	ret
 	ld	a, (0x7e62:16)
 	ld	w, (1076:16)
-	stb_d8	(0x7e62), w
+	ld	(0x7e62:16), w
 	cp	a, w
 	jr	z, 66
 	.byte 0xf1
@@ -1024,8 +1024,8 @@ AccompSeq_LargeCodeBlock1:
 	call	AccompSeq_ReinitPart
 	ei	6
 	ld	c, (1045:16)
-	stb_d8	(1130), c
-	stb_d8	(1138), c
+	ld	(1130:16), c
+	ld	(1138:16), c
 	lds	wa, 0
 	ld	a, (1046:16)
 	stda16	(1128), wa
@@ -1144,8 +1144,8 @@ AccompSeq_PostNote_Return:
 
 AccompSeq_InitPartFull:
 	calr AccompSeq_ResetMidiState
-	stb_d8 (0x7e25), l
-	stb_d8 (0x7e26), h
+	ld (0x7e25:16), l
+	ld (0x7e26:16), h
 	calr AccompSeq_LookupStyleData
 	calr AccompSeq_LoadParams
 	calr AccompSeq_InitMidiEvents
@@ -1191,7 +1191,7 @@ AccompSeq_LoadParams:
 	jr nc, AccompSeq_LoadParams_Alt
 	ld a, (xiy + 256)
 	and a, 0x1d
-	stb_d8 (0x7e27), a
+	ld (0x7e27:16), a
 	ld xwa, (xiy + 1)
 	add xwa, 0x6
 	stda16 (0x7e2e), xwa
@@ -1221,7 +1221,7 @@ AccompSeq_LoadParams_Bit0Set:
 AccompSeq_LoadParams_Alt:
 	ld a, (xiy + 256)
 	and a, 0x1d
-	stb_d8 (0x7e27), a
+	ld (0x7e27:16), a
 	ld wa, (xiy + 3)
 	stda16 (0x7e2c), xwa
 	lds wa, 6
@@ -1272,7 +1272,7 @@ AccompSeq_InitMidiEvents:
 	ld e, w
 	ld w, a
 	ldb a, 0xc1
-	stb_d8 (0x7e40), w
+	ld (0x7e40:16), w
 	and e, 0xf
 	bit 7, w
 	jr z, AccompSeq_InitMidi_Ch1Flags
@@ -1314,7 +1314,7 @@ AccompSeq_InitMidi_Ch2:
 	ld e, w
 	ld w, a
 	ldb a, 0xc2
-	stb_d8 (0x7e41), w
+	ld (0x7e41:16), w
 	and e, 0xf
 	bit 7, w
 	jr z, AccompSeq_InitMidi_Ch2Flags
@@ -1357,8 +1357,8 @@ AccompSeq_InitPlayState:
 	xor wa, wa
 	ei 6
 	stda16 (1128), xwa
-	stb_d8 (1130), a
-	stb_d8 (1138), a
+	ld (1130:16), a
+	ld (1138:16), a
 	bitda 2, (1055)
 	jr nz, AccompSeq_InitPlay_SetCounters
 	ordi8 1055, 1
@@ -1379,7 +1379,7 @@ AccompSeq_InitPlay_Ch2Flag:
 	or a, 0x2
 
 AccompSeq_InitPlay_Store:
-	stb_d8 (0x7e24), a
+	ld (0x7e24:16), a
 	ld w, (0xc07e:16)
 	ldb a, 0x1
 	bit 0, w
@@ -1396,12 +1396,12 @@ AccompSeq_ReinitPart:
 	pushw hl
 	ld a, (0x7e24:16)
 	and a, 0xfc
-	stb_d8 (0x7e24), a
+	ld (0x7e24:16), a
 	calr AccompSeq_SendAllOff
 	popw hl
 	calr AccompSeq_ResetMidiState
-	stb_d8 (0x7e25), l
-	stb_d8 (0x7e26), h
+	ld (0x7e25:16), l
+	ld (0x7e26:16), h
 	calr AccompSeq_LookupStyleData
 	calr AccompSeq_LoadParams
 	calr AccompSeq_InitMidiEvents
@@ -1415,7 +1415,7 @@ AccompSeq_HandleSpecialMode:
 	pushw	hl
 	ld	a, (0x7e24:16)
 	and	a, 252
-	stb_d8	(0x7e24), a
+	ld	(0x7e24:16), a
 	calr	417
 	popw	hl
 	ld	a, (0xfd12:16)
@@ -1426,7 +1426,7 @@ AccompSeq_HandleSpecialMode:
 	stdi8	(0x7f0b), 1
 	calr	64858
 	and	l, 15
-	stb_d8	(0x7f14), l
+	ld	(0x7f14:16), l
 	ld	w, (0xc07e:16)
 	ldb	a, 1
 	bit	0, w
@@ -1515,7 +1515,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	cps	a, 0
 	jr	z, 8
 	ldb	a, 0
-	stb_d8	(0x7f0b), a
+	ld	(0x7f0b:16), a
 	jr	39
 	ld	a, (0x7e24:16)
 	and	a, 3
@@ -1566,7 +1566,7 @@ AccompSeq_ClearPendingFlag:
 	cps	a, 0
 	jr z, AccompSeq_ClearPending_Return
 	ldb a, 0x00
-	stb_d8	(0x7f0b), a
+	ld	(0x7f0b:16), a
 AccompSeq_ClearPending_Return:
 	ret
 AccompSeq_GuardedNoteOff:
@@ -1613,7 +1613,7 @@ AccompSeq_CleanupSequence:
 	ordi8 1055, 8
 	ld a, (0x7e24:16)
 	and a, 0xfc
-	stb_d8 (0x7e24), a
+	ld (0x7e24:16), a
 	calr AccompSeq_SendAllOff
 
 AccompSeq_Cleanup_ClearFlags:
@@ -1686,7 +1686,7 @@ AccompSeq_MidiFilterCodeBlock:
 	cp	a, 255
 	jr	nz, 2
 	ldb	a, 0
-	stb_d8	(0xfd12), a
+	ld	(0xfd12:16), a
 	stdi8	(0x7e78), 0
 	.byte 0xc1, 0xe0, 0xe3
 	push	xiz
@@ -1696,7 +1696,7 @@ AccompSeq_MidiFilterCodeBlock:
 	jrl	16254
 	nop
 	jr	nz, 16
-	stb_d8	(0x7e79), a
+	ld	(0x7e79:16), a
 	stdi8	(0x7e78), 1
 	.byte 0xc1
 	or	hl, iz
@@ -1712,7 +1712,7 @@ AccompSeq_MidiFilterCodeBlock:
 	cp	a, e
 	jr	ule, 2
 	ld	a, e
-	stb_d8	(0xfd12), a
+	ld	(0xfd12:16), a
 	stdi8	(0x7e78), 0
 	.byte 0xc1
 	or	hl, iz
@@ -1851,8 +1851,8 @@ AccompSeq_CompareChord:
 	jr z, AccompSeq_CompareChord_Return
 	bitda 2, (0x28b2)
 	jr nz, AccompSeq_CompareChord_Return
-	stb_d8 (0x7e60), l
-	stb_d8 (0x7e61), h
+	ld (0x7e60:16), l
+	ld (0x7e61:16), h
 	ld wa, (0x7e2a:16)
 	pushw wa
 	ld wa, (0x7e28:16)
@@ -1889,12 +1889,12 @@ AccompSeq_CompareChord_Return:
 AccompSeq_SetupChannels:
 	ei 6
 	ld c, (1045:16)
-	stb_d8 (0x7e63), c
+	ld (0x7e63:16), c
 	lds wa, 0
 	ld a, (1046:16)
-	stb_d8 (0x7e64), a
-	stb_d8 (1130), c
-	stb_d8 (1138), c
+	ld (0x7e64:16), a
+	ld (1130:16), c
+	ld (1138:16), c
 	stda16 (1128), xwa
 	ei 0
 	bitda 0, (0x7e24)
@@ -1911,10 +1911,10 @@ AccompSeq_SetupChannels:
 	ld wa, (0x7e3c:16)
 	stda16 (0x7e46), xwa
 	ld a, (0x7e6e:16)
-	stb_d8 (0x7e6d), a
+	ld (0x7e6d:16), a
 	calr AccompSeq_ParseSequenceData
 	ld a, (0x7e6d:16)
-	stb_d8 (0x7e6e), a
+	ld (0x7e6e:16), a
 	ld wa, (0x7e46:16)
 	stda16 (0x7e3c), xwa
 	ld wa, (0x7e44:16)
@@ -1937,10 +1937,10 @@ AccompSeq_SetupCh2:
 	ld wa, (0x7e3e:16)
 	stda16 (0x7e46), xwa
 	ld a, (0x7e6f:16)
-	stb_d8 (0x7e6d), a
+	ld (0x7e6d:16), a
 	calr AccompSeq_ParseSequenceData
 	ld a, (0x7e6d:16)
-	stb_d8 (0x7e6f), a
+	ld (0x7e6f:16), a
 	ld wa, (0x7e46:16)
 	stda16 (0x7e3e), xwa
 	ld wa, (0x7e44:16)
@@ -2057,18 +2057,18 @@ AccompSeq_SeqParse_CheckProgChg:
 
 AccompSeq_SeqParse_ProgChg_SetCh:
 	or a, 0xc0
-	stb_d8 (0x7e54), a
+	ld (0x7e54:16), a
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_AdvancePosition
 	ld a, (xiy)
-	stb_d8 (0x7e55), a
+	ld (0x7e55:16), a
 	calr AccompSeq_AdvancePosition
 	ld a, (xiy)
-	stb_d8 (0x7e56), a
+	ld (0x7e56:16), a
 	calr AccompSeq_AdvancePosition
 	ld e, (xiy)
 	and e, 0xf
-	stb_d8 (0x7e57), e
+	ld (0x7e57:16), e
 	bitda 0, (0x7e56)
 	jr z, AccompSeq_SeqParse_ProgChg_Flags
 	or e, 0x10
@@ -2094,7 +2094,7 @@ AccompSeq_SeqParse_ProgChg_Store:
 
 AccompSeq_SeqParse_CtrlChg:
 	and a, 0xf
-	stb_d8 (0x7e55), a
+	ld (0x7e55:16), a
 	ldb a, 0x1
 	cpdi8 (0x7e52), 0
 	jr z, AccompSeq_SeqParse_CtrlChg_SetCh
@@ -2102,11 +2102,11 @@ AccompSeq_SeqParse_CtrlChg:
 
 AccompSeq_SeqParse_CtrlChg_SetCh:
 	or a, 0xd0
-	stb_d8 (0x7e54), a
+	ld (0x7e54:16), a
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_AdvancePosition
 	ld e, (xiy)
-	stb_d8 (0x7e56), e
+	ld (0x7e56:16), e
 	ld w, (0x7e55:16)
 	ld a, (0x7e54:16)
 	calr AccompSeq_WriteMidiToBuffer

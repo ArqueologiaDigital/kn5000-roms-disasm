@@ -34,7 +34,7 @@ FDC_Send_Command:
 	stb_da (0x110008), a
 	ret
 	ldmm8 0x8a84, 0x8a86
-	stb_d8 (0x8a86), a
+	ld (0x8a86:16), a
 	ret
 FDC_Write_Data:
 	stb_da (0x11000a), a
@@ -205,7 +205,7 @@ FDC_ErrorInvalidDrive:
 
 FDC_CheckDriveCount:
 	ld	wa, (35238:16)
-	stb_d8	35214, a
+	ld	(35214:16), a
 	cpdi8	35214, 1
 	jr	ule, 6
 	ldw	wa, 254
@@ -234,8 +234,8 @@ FDC_Command5Handler:
 	ret
 FDC_ValidateTrack:
 	ld	wa, (35242:16)
-	stb_d8	(35215), a
-	stb_d8	(35226), a
+	ld	(35215:16), a
+	ld	(35226:16), a
 	extz	wa
 	cpda16	xwa, (35436)
 	jr	c, 6	; -> 0xF96A2F
@@ -279,7 +279,7 @@ FDC_ValidExecute:
 	ret
 FDC_SetupFormatParams:
 	ld	wa, (35242:16)
-	stb_d8	(35282), a
+	ld	(35282:16), a
 	and	a, 15
 	cps	a, 3
 	jrl	z, 129
@@ -335,7 +335,7 @@ FDC_InitStateVars:
 	ld	a, (35282:16)
 	srl	a, 4
 	and	a, 15
-	stb_d8	(35227), a
+	ld	(35227:16), a
 	stdi8	(35221), 255
 	stdi8	(35224), 0
 	stdi8	(35228), 15
@@ -349,8 +349,8 @@ FDC_InitStateVars:
 	ret
 FDC_CheckHead:
 	ld wa, (0x89a8:16)
-	stb_d8 (0x8990), a
-	stb_d8 (0x898d), a
+	ld (0x8990:16), a
+	ld (0x898d:16), a
 	cpdi8 (0x898d), 0x00
 	ret Z
 	.byte 0xc1, 0x8d, 0x89, 0x3f, 0x01, 0xb0, 0xf6, 0x30
@@ -782,7 +782,7 @@ FDC_HardwareSetup:
 FDC_Set_Status:
 	cpdi8 (0x8988), 0x00
 	jr nz, FDC_SetStatus_AlreadySet
-	stb_d8 (0x8988), a
+	ld (0x8988:16), a
 	cp A,0x36
 	jr z, FDC_SetStatus_DataFieldErr
 	cp A,0x35

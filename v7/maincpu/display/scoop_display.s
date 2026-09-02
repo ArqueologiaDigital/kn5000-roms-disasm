@@ -555,11 +555,11 @@ ParamDigit_Div100Loop:
 	ordi8 4485, 2
 	cps wa, 0
 	jr nz, ParamDigit_Div100Loop
-	stb_d8 (4481), c
+	ld (4481:16), c
 	jr ParamUpdate_AddAndStore
 
 ParamDigit_Div100Done:
-	stb_d8 (4481), c
+	ld (4481:16), c
 	add wa, 0x64
 	xor c, c
 
@@ -570,13 +570,13 @@ ParamDigit_Div10Loop:
 	ordi8 4485, 1
 	cps wa, 0
 	jr nz, ParamDigit_Div10Loop
-	stb_d8 (4482), c
+	ld (4482:16), c
 	jr ParamUpdate_AddAndStore
 
 ParamDigit_Div10Done:
-	stb_d8 (4482), c
+	ld (4482:16), c
 	add wa, 0xa
-	stb_d8 (4483), a
+	ld (4483:16), a
 
 
 ; -----------------------------------------------------------------------------
@@ -836,7 +836,7 @@ SoundEvt_LongPacketHandler:
 	.byte 0xbe, 0x61, 0xef
 	nop
 	and	w, 3
-	stb_d8	3925, w
+	ld	(3925:16), w
 	ex8 a, w
 	exts	wa
 	sla	wa, 2
@@ -844,7 +844,7 @@ SoundEvt_LongPacketHandler:
 	ld	wa, (13950:16)
 	stda16	3816, wa
 	ld	a, (3420:16)
-	stb_d8	3821, a
+	ld	(3821:16), a
 	push	xhl
 	ld	xhl, 15687983
 	ld_rrl	xiy, xhl, iy
@@ -1149,7 +1149,7 @@ PerfMode_Evt03_FlagHandler_A_Code:
 	ldb	l, 1
 	ldb	h, 13
 	call	15689018
-	stb_d8	(13944), a
+	ld	(13944:16), a
 	call	15726319
 	call	15686621
 	ret	
@@ -1162,7 +1162,7 @@ PerfMode_Evt03_FlagHandler_B_Code:
 	nop	
 	ldb	h, 12
 	call	15689018
-	stb_d8	(13945), a
+	ld	(13945:16), a
 	call	15726319
 	call	15686621
 	ret	
@@ -1218,7 +1218,7 @@ UIDisp_DefaultInputHandler:
 	.byte 0xc1, 0x57
 	retd	318
 	stdi8	(3923), 1
-	stb_d8	(3385), w
+	ld	(3385:16), w
 	bit	7, w
 	jrl	z, 8
 	call	ToneParam_HandlerTable_BC_0x532
@@ -1573,7 +1573,7 @@ PerfMode_VolumeParam_Process:
 	.byte 0xec	; v10 does not spell this byte either
 	ldb	c, 92
 	ld	a, (xhl)
-	stb_d8	(3831), a
+	ld	(3831:16), a
 	call	15690347
 	jp	15690346
 	xor	wa, wa
@@ -1735,7 +1735,7 @@ VoiceParam_MultiDispatch:
 	ldb l, 0x34
 	ldb h, 0x4c
 	call PerfMode_VoiceAddressTable_0x50
-	stb_d8	(4339), a
+	ld	(4339:16), a
 	stdi8	(3571), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call StringData_PartNames_0xB3
@@ -1746,7 +1746,7 @@ VoiceParam_Case03:
 	ldb l, 0x00
 	ldb h, 0x7f
 	call PerfMode_VoiceAddressTable_0x50
-	stb_d8	(4339), a
+	ld	(4339:16), a
 	stdi8	(3571), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call StringData_KeyNames_0x341
@@ -1757,7 +1757,7 @@ VoiceParam_Case08:
 	ldb l, 0x00
 	ldb h, 0x7f
 	call PerfMode_VoiceAddressTable_0x50
-	stb_d8	(4339), a
+	ld	(4339:16), a
 	stdi8	(3571), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call StringData_PartNames_0x54
@@ -1768,7 +1768,7 @@ VoiceParam_Case0A:
 	ldb l, 0x00
 	ldb h, 0xff
 	call PerfMode_VoiceAddressTable_0x50
-	stb_d8	(4339), a
+	ld	(4339:16), a
 	stdi8	(3571), 4
 	call VoiceParam_BitManipHelper
 	call StringData_PartNames_0x120
@@ -1779,7 +1779,7 @@ VoiceParam_Case0B:
 	ldb l, 0x00
 	ldb h, 0x0c
 	call PerfMode_VoiceAddressTable_0x50
-	stb_d8	(4339), a
+	ld	(4339:16), a
 	stdi8	(3571), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call StringData_PartNames_0x1C9
@@ -1936,7 +1936,7 @@ Display_RedrawParams_StoreAndLoad:
 	call VoiceBank_BitsAndLoad
 	ld a, (3424:16)
 	call SetWall_SlotResolve
-	stb_d8 (3820), a
+	ld (3820:16), a
 	ld wa, (0x28af:16)
 	stda16 (0x28bf), xwa
 	stda16 (0x28c1), xiy
@@ -1952,7 +1952,7 @@ Display_RedrawParams_StoreAndLoad:
 	ldb a, 0x4
 
 Display_RedrawParams_StoreDigits:
-	stb_d8 (3666), a
+	ld (3666:16), a
 	cps l, 4
 	jrl ule, Display_RedrawParams_Ret
 	add l, 0x30
@@ -1985,7 +1985,7 @@ Display_RedrawValues_Store:
 	call	15691955
 	ld	a, (3424:16)
 	call	15858243
-	stb_d8	3820, a
+	ld	(3820:16), a
 	ld	l, (3822:16)
 	dec	1, l
 	xor	h, h
@@ -2011,7 +2011,7 @@ Display_RedrawValues_Store:
 	jrl	ule, 2
 	ldb	a, 4
 Display_RedrawValues_StoreDigits:
-	stb_d8 (3667), a
+	ld (3667:16), a
 	cps l, 4
 	jrl ule, Display_RedrawValues_Ret
 	add l, 0x30
@@ -2051,11 +2051,11 @@ Display_RedrawInd_Store:
 	cpdi8 (0x287a), 0
 	jrl z, Display_RedrawInd_LoadDirect
 	ld a, (3421:16)
-	stb_d8 (3820), a
+	ld (3820:16), a
 	jp Display_RedrawInd_CalcSlotCount
 
 Display_RedrawInd_LoadDirect:
-	stb_d8 (3820), a
+	ld (3820:16), a
 	ld wa, (0x28af:16)
 	stda16 (0x28bf), xwa
 	stda16 (0x28c1), xiy
@@ -2073,7 +2073,7 @@ Display_RedrawInd_CalcSlotCount:
 	ldb a, 0x4
 
 Display_RedrawInd_StoreDigits:
-	stb_d8 (3668), a
+	ld (3668:16), a
 	cps l, 4
 	jrl ule, Display_RedrawInd_Ret
 	add l, 0x30
@@ -2476,7 +2476,7 @@ PerfMode_Handler_EvtB:
 	jrl	nz, 62
 	push	xhl
 	ld	a, (49122:16)
-	stb_d8	3519, a
+	ld	(3519:16), a
 	call	15706801
 	stdi8	3519, 0
 	pop	xhl
@@ -2549,7 +2549,7 @@ PerfMode_Handler_EvtB:
 	stb_erp	a, 60
 	stb_erp	a, 61
 	andda8	a, 49123
-	stb_d8	3520, a
+	ld	(3520:16), a
 	push	xhl
 	call	15706801
 	pop	xhl
@@ -2567,7 +2567,7 @@ PerfMode_Handler_EvtB:
 	stib_da	132588, 255
 	stib_da	132586, 255
 	ld	a, (3822:16)
-	stb_d8	10359, a
+	ld	(10359:16), a
 	call	15734672
 	.byte 0xf1, 0x54, 0x0d, 0xb7
 	stdi8	3434, 0
@@ -2615,7 +2615,7 @@ ScoopDisp_DispatchTable_Extended:
 	.long VoiceCtrl_CheckAndReset
 	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_head.bin"
 	ld a, (0x0eee:16)
-	stb_d8 (0x2877), a
+	ld (0x2877:16), a
 	call Scoop_SpecialMode_ParamCheckBound
 	resda 7, (0x0d54)
 	stdi8 (0x0d6a), 0x00
@@ -2741,7 +2741,7 @@ Timer_ModeHandler_0:
 	call	15701869
 	ld	e, (3822:16)
 	call	15713280
-	stb_d8	3522, a
+	ld	(3522:16), a
 	call	15713280
 	cpda8	a, 3522
 	jrl	z, 2
@@ -2752,7 +2752,7 @@ Timer_ModeHandler_0:
 	call	15672285
 	inc	2, xsp
 	call	15713356
-	stb_d8	3522, a
+	ld	(3522:16), a
 	ldb	a, 0
 	ld	hl, wa
 	pushw	hl
@@ -2891,9 +2891,9 @@ Timer_ParamCompareAlt:
 	.byte 0xd1, 0x7e, 0x36, 0x04, 0xd1, 0x5c, 0x0d, 0x04
 	stdi8	3522, 0
 	call	15695078
-	stb_d8	3531, a
+	ld	(3531:16), a
 	ld	a, (3415:16)
-	stb_d8	3521, a
+	ld	(3521:16), a
 	cps	w, 0
 	jrl	nz, 4
 	jp	15694713
@@ -2979,7 +2979,7 @@ Timer_ParamCompareAlt:
 	push	xiy
 	push	xiz
 	call	15712700
-	stb_d8	3392, w
+	ld	(3392:16), w
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -3013,13 +3013,13 @@ Timer_ParamCompareAlt:
 	call	15695078
 	cps	a, 0
 	jrl	nz, 12
-	stb_d8	3415, a
+	ld	(3415:16), a
 	call	15699930
 	jp	15694952
 	stdi8	3415, 0
 	call	15699782
 	jp	15694952
-	stb_d8	3415, e
+	ld	(3415:16), e
 	add	xsp, 4
 	call	15699782
 	jp	15694952
@@ -3047,23 +3047,23 @@ Timer_ParamCompareAlt:
 	call	15695078
 	cp	e, a
 	jrl	ge, 22
-	stb_d8	3415, e
+	ld	(3415:16), e
 	add	xsp, 4
 	call	15699782
 	jp	15694952
 	jp	15694730
-	stb_d8	3415, a
+	ld	(3415:16), a
 	add	xsp, 4
 	call	15699930
 	ret
-	stb_d8	3415, e
+	ld	(3415:16), e
 	.byte 0xf1, 0x5c, 0x0d, 0x06, 0xf1, 0x7e, 0x36, 0x06
 	xor	a, a
 	call	15716577
 	call	15699782
 	ret
 	add	xsp, 4
-	stb_d8	3415, a
+	ld	(3415:16), a
 	call	15699930
 	ret
 	stdi8	3415, 0
@@ -3071,7 +3071,7 @@ Timer_ParamCompareAlt:
 	call	15699930
 	ret
 	add	xsp, 4
-	stb_d8	3415, e
+	ld	(3415:16), e
 	call	15699782
 	ret
 	pushw	wa
@@ -3171,7 +3171,7 @@ MemConfig_Handler_5:
 	call	15713087
 	ld	w, a
 	and	w, 240
-	stb_d8	3572, w
+	ld	(3572:16), w
 	cp	a, 129
 	jrl	z, 66
 	cp	a, 132
@@ -3234,9 +3234,9 @@ MemConfig_Handler_5:
 	lds	de, 4
 	call	15713447
 	call	15713087
-	stb_d8	3575, a
+	ld	(3575:16), a
 	call	15713141
-	stb_d8	3576, a
+	ld	(3576:16), a
 	xor	a, a
 	call	15716577
 	call	15695651
@@ -3284,7 +3284,7 @@ MemConfig_Handler_5:
 	add	xsp, 2
 	ret
 	call	15713141
-	stb_d8	3523, a
+	ld	(3523:16), a
 	call	15713141
 	cpda8	a, 3523
 	jrl	nz, 19
@@ -3434,7 +3434,7 @@ ToneParam_Evt09_BytecodeHandler:
 	cps a, 2
 	jrl z, .Lc_ef80a7
 	or B,0x10
-	stb_d8 (0x0dca), b
+	ld (0x0dca:16), b
 	ldb A, 0x01
 	call VoiceSlot_SaveState
 	call ToneParam_HandlerTable_BC_0x4DC
@@ -3484,10 +3484,10 @@ ToneParam_HandlerTable_BC:
 	jp ToneParam_HandlerTable_BC_0x9E
 .Lc_ef8192:
 	ld a, (0x0e3f:16)
-	stb_d8 (0x0e41), a
+	ld (0x0e41:16), a
 	call ToneParam_HandlerTable_BC_0x1A2
 	ld a, (0x0e3f:16)
-	stb_d8 (0x0e40), a
+	ld (0x0e40:16), a
 	cpda8 a, (0x0e41)
 	jrl nz, .Lc_ef81b1
 	jp ToneParam_HandlerTable_BC_0x18
@@ -3551,7 +3551,7 @@ ToneParam_HandlerTable_BC:
 	ldb A, 0x01
 	call VoiceSlot_SaveState
 	xor A,A
-	stb_d8 (0x0e43), a
+	ld (0x0e43:16), a
 .Lc_ef8453:
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
@@ -3598,7 +3598,7 @@ ToneParam_HandlerTable_BC:
 	ldb A, 0x01
 	call VoiceSlot_SaveState
 	xor A,A
-	stb_d8 (0x0e43), a
+	ld (0x0e43:16), a
 .Lc_ef84bf:
 	call VoiceSlot_FlagCheck
 	cp A,0x82
@@ -3754,7 +3754,7 @@ PeriphReg_CheckActiveSlot:
 	jp PeriphReg_Ret
 PeriphReg_StoreAndUpdate:
 	ld	a, (3471:16)
-	stb_d8	(3536), a
+	ld	(3536:16), a
 	cpda8	a, 3537
 	jrl nz, PeriphReg_LoadWordAndCall
 	call ToneParam_HandlerTable_BC_0x4DC
@@ -3769,7 +3769,7 @@ PeriphReg_Ret:
 Display_ModeHandler:
 	ordi8	3539, 1
 	xor	a, a
-	stb_d8	(3538), a
+	ld	(3538:16), a
 	stdi8	(3413), 255
 	call VoiceState_DataBlock2_0x10C
 	cps w, 0
@@ -3837,7 +3837,7 @@ DisplayMode_Handler_3:
 	cp	w, 128
 	jrl	z, 2
 	ld	a, w
-	stb_d8	3537, a
+	ld	(3537:16), a
 	call	15717147
 	ld	e, a
 	and	e, 240
@@ -3943,13 +3943,13 @@ DisplayMode_Handler_3:
 	jp	15698358
 	ld	w, (64316:16)
 	call	15687414
-	stb_d8	13948, a
+	ld	(13948:16), a
 	ldfr_lerp	xiy, 56
 	lda_rr	xiy, xiy, hl
 	ld	a, (xiy+8)
 	ldto_lerp	xiy, 56
 	ld	(xix+3), a
-	stb_d8	13947, a
+	ld	(13947:16), a
 	ld	a, (13201:16)
 	ld	(xix+4), a
 	ld	a, (13202:16)
@@ -3995,14 +3995,14 @@ DisplayMode_Handler_3:
 	ret
 	call	15672446
 	ld	wa, hl
-	stb_d8	3558, a
+	ld	(3558:16), a
 	call	15672446
 	call	15672446
 	ld	wa, hl
-	stb_d8	13201, a
+	ld	(13201:16), a
 	call	15672446
 	ld	wa, hl
-	stb_d8	13202, a
+	ld	(13202:16), a
 	call	15672446
 	ld	wa, hl
 	cpdi8	13202, 0
@@ -4024,10 +4024,10 @@ DisplayMode_Handler_3:
 	ld	(xiy+8), a
 	ldto_lerp	xiy, 56
 	inc	1, l
-	stb_d8	3540, l
+	ld	(3540:16), l
 	cpda8	l, 3541
 	jrl	ule, 4
-	stb_d8	3541, l
+	ld	(3541:16), l
 	pop	xiy
 	pop	xhl
 	jp	15698648
@@ -4035,7 +4035,7 @@ DisplayMode_Handler_3:
 	dec	1, a
 	cp	a, 255
 	jrl	z, 18
-	stb_d8	3540, a
+	ld	(3540:16), a
 	cps	a, 0
 	jrl	nz, 9
 	.byte 0xf1, 0x54, 0x0d, 0xb9, 0xc1, 0xd3, 0x0d, 0x3e, 0x01
@@ -4073,7 +4073,7 @@ DisplayMode_Handler_3:
 	call	15712720
 	call	15701395
 	pop	xhl
-	stb_d8	3415, l
+	ld	(3415:16), l
 	ret
 	bit	7, w
 	jrl	nz, 8
@@ -4111,7 +4111,7 @@ DisplayMode_Handler_3:
 	bit	7, a
 	jrl	z, 2
 	ld	a, w
-	stb_d8	13948, a
+	ld	(13948:16), a
 	pushw	hl
 	call	15698995
 	popw	hl
@@ -4126,7 +4126,7 @@ DisplayMode_Handler_3:
 	jrl	z, 13
 	cps	a, 0
 	jrl	nz, 8
-	stb_d8	13948, l
+	ld	(13948:16), l
 	jp	15698930
 	ld	w, a
 	call	15713395
@@ -4363,7 +4363,7 @@ VoiceSlot_TableSetup:
 	push XIX
 	ld XIX,0x00000cbe
 	ldb_dri a, 0x07, 0xf0, 0xec
-	stb_d8 (0x0dec), a
+	ld (0x0dec:16), a
 	sla HL, 0x01
 	ld XIX,0x00000c9e
 	ldw_dri wa, 0x07, 0xf0, 0xec
@@ -4380,7 +4380,7 @@ VoiceSlot_TableSetup:
 	push XIX
 	ld XIX,0x00000cbe
 	ldb_dri a, 0x07, 0xf0, 0xec
-	stb_d8 (0x0ded), a
+	ld (0x0ded:16), a
 	sla HL, 0x01
 	ld XIX,0x00000c9e
 	ldw_dri wa, 0x07, 0xf0, 0xec
@@ -4479,8 +4479,8 @@ AccPedal_CallEventSwitch:
 	cpdi8 (0x287a), 0x00
 	jrl nz, AccPedal_SendSysExAndReturn
 	stda16 (0x367e), de
-	stb_d8 (0x0d5c), c
-	stb_d8 (0x0d5d), a
+	ld (0x0d5c:16), c
+	ld (0x0d5d:16), a
 	jp AccPedal_Ret
 AccPedal_ClearFlagAndJump:
 	anddi8 (0x287b), 251
@@ -4577,7 +4577,7 @@ VoiceCtrl_BytecodeHandler:
 	jrl	nz, 107
 	call	VoiceSlot_FinalRetZ
 	and	a, 3
-	stb_d8	(3528), a
+	ld	(3528:16), a
 	call	VoiceSlot_FinalRetZ
 	call	VoiceSlot_FinalRetZ
 	cp	a, 72
@@ -4589,7 +4589,7 @@ VoiceCtrl_BytecodeHandler:
 	cps	a, 5
 	jrl	nz, 65
 	call	VoiceSlot_FinalRetZ
-	stb_d8	(3527), a
+	ld	(3527:16), a
 	.byte 0xf1, 0xc8
 	decf
 	scc8	z, w
@@ -4693,15 +4693,15 @@ VoiceCtrl_ParamSetupBytecode:
 	call	15717110
 	jp	15702183
 	xor	a, a
-	stb_d8	3569, a
-	stb_d8	13956, a
+	ld	(3569:16), a
+	ld	(13956:16), a
 	ld	xiy, 3471
 	call	15672446
 	ld	wa, hl
 	ld	(xiy), a
 	ld	w, a
 	and	w, 3
-	stb_d8	3529, w
+	ld	(3529:16), w
 	call	15672446
 	ld	wa, hl
 	ld	a, (3415:16)
@@ -4940,7 +4940,7 @@ VoiceCtrl_ParamSetupBytecode:
 	.byte 0xf1, 0xc9, 0x0d, 0xc8
 	jrl	z, 3
 	or	a, 128
-	stb_d8	3569, a
+	ld	(3569:16), a
 	ldb_erp	a, 60
 	and	a, 240
 	stb_erp	a, 60
@@ -4971,7 +4971,7 @@ VoiceCtrl_ParamSetupBytecode:
 	add	a, 8
 	ld	xhl, 15710292
 	ld_rr8b	a, xhl, a
-	stb_d8	13964, a
+	ld	(13964:16), a
 	push	xwa
 	push	xhl
 	push	xbc
@@ -4999,7 +4999,7 @@ VoiceCtrl_ParamSetupBytecode:
 	jrl	c, 7
 	sub	a, 96
 	incdi8	1, (3533)
-	stb_d8	3534, a
+	ld	(3534:16), a
 	.byte 0xd1, 0x8f, 0x0d, 0x04, 0xd1, 0x91, 0x0d, 0x04, 0xd1, 0x93, 0x0d, 0x04
 	stdi8	32422, 255
 	call	15698653
@@ -5031,7 +5031,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ld	e, a
 	and	e, 1
 	rrc	e
-	stb_d8	3828, a
+	ld	(3828:16), a
 	.byte 0xc1, 0xf4, 0x0e, 0x3c, 0x04
 	call	15672446
 	ld	wa, hl
@@ -5044,24 +5044,24 @@ VoiceCtrl_ParamSetupBytecode:
 	and	l, 4
 	rrc_i_8	l, 3
 	or	a, l
-	stb_d8	4539, a
-	stb_d8	36955, a
+	ld	(4539:16), a
+	ld	(36955:16), a
 	call	15672446
 	ld	wa, hl
 	ld	(xiy+3), a
-	stb_d8	13959, a
+	ld	(13959:16), a
 	call	15672446
 	ld	wa, hl
 	ld	(xiy+4), a
 	or	a, e
-	stb_d8	4541, a
-	stb_d8	13958, a
+	ld	(4541:16), a
+	ld	(13958:16), a
 	call	15672446
 	ld	wa, hl
 	ld	(xiy+5), a
-	stb_d8	3829, a
-	stb_d8	4542, a
-	stb_d8	3655, a
+	ld	(3829:16), a
+	ld	(4542:16), a
+	ld	(3655:16), a
 	call	16355597
 	cps	hl, 0
 	jrl	nz, 16
@@ -5074,8 +5074,8 @@ VoiceCtrl_ParamSetupBytecode:
 	ld	l, a
 	ld	h, (4542:16)
 	call	16554468
-	stb_d8	4542, h
-	stb_d8	13967, h
+	ld	(4542:16), h
+	ld	(13967:16), h
 	pop	xhl
 	call	15672446
 	push	xhl
@@ -5151,7 +5151,7 @@ VoiceCtrl_ParamSetupBytecode:
 	call	15672446
 	ld	wa, hl
 	ld	(xiy), a
-	stb_d8	3413, a
+	ld	(3413:16), a
 	call	15672446
 	ld	wa, hl
 	ld	a, (3415:16)
@@ -5272,7 +5272,7 @@ SerialPort_ModeHandler_0:
 	call	15672446
 	ld	wa, hl
 	ld	(xiy), a
-	stb_d8	3413, a
+	ld	(3413:16), a
 	call	15672446
 	ld	wa, hl
 	ld	a, (3415:16)
@@ -5280,7 +5280,7 @@ SerialPort_ModeHandler_0:
 	call	15672446
 	ld	wa, hl
 	ld	(xiy+2), a
-	stb_d8	13957, a
+	ld	(13957:16), a
 	call	15672446
 	ld	wa, hl
 	stdi8	3538, 3
@@ -5302,7 +5302,7 @@ SerialPort_ModeHandler_0:
 	call	15672446
 	ld	wa, hl
 	ld	(xiy), a
-	stb_d8	3413, a
+	ld	(3413:16), a
 	call	15672446
 	ld	wa, hl
 	ld	a, (3415:16)
@@ -5310,11 +5310,11 @@ SerialPort_ModeHandler_0:
 	call	15672446
 	ld	wa, hl
 	ld	(xiy+2), a
-	stb_d8	13957, a
+	ld	(13957:16), a
 	call	15672446
 	ld	wa, hl
 	ld	(xiy+3), a
-	stb_d8	4370, a
+	ld	(4370:16), a
 	call	15672446
 	ld	wa, hl
 	stdi8	3538, 4
@@ -5367,8 +5367,8 @@ SerialPort_ModeHandler_0:
 	ld	wa, de
 	ldb	l, 96
 	div8rr	a, l
-	stb_d8	13203, w
-	stb_d8	13204, a
+	ld	(13203:16), w
+	ld	(13204:16), a
 	ld	a, (13946:16)
 	cps	a, 1
 	jrl	nz, 21
@@ -5402,8 +5402,8 @@ SerialPort_ModeHandler_0:
 	ld	wa, de
 	ldb	l, 96
 	div8rr	a, l
-	stb_d8	13201, w
-	stb_d8	13202, a
+	ld	(13201:16), w
+	ld	(13202:16), a
 	ret
 ScoopParam_ValueTable:
 	.incbin "includes/romslices/v7_transplant_ScoopParam_ValueTable_head.bin"
@@ -5413,7 +5413,7 @@ ScoopParam_ValueTable:
 	call 0xefa749
 	call 0xefa6aa
 	ld a, (0x8c9e:16)
-	stb_d8 (0x0d66), a
+	ld (0x0d66:16), a
 	call 0xefa6ec
 	call 0xefa763
 	call 0xefa77d
@@ -5542,30 +5542,30 @@ Interrupt_StoreHWRegsAndInit:
 
 Interrupt_LoadAndStoreRegs:
 	ld	a, (36004:16)
-	stb_d8	(3437), a
+	ld	(3437:16), a
 	ld	a, (36006:16)
-	stb_d8	(3438), a
+	ld	(3438:16), a
 	ld	a, (36008:16)
-	stb_d8	(4391), a
+	ld	(4391:16), a
 	xor	a, a
-	stb_d8	(3425), a
+	ld	(3425:16), a
 	call	15725806
 	call	15686621
 	ret
 Interrupt_ClearRegsAndInit:
 	xor a, a
-	stb_d8 (3437), a
-	stb_d8 (3438), a
-	stb_d8 (3425), a
-	stb_d8 (4391), a
+	ld (3437:16), a
+	ld (3438:16), a
+	ld (3425:16), a
+	ld (4391:16), a
 	call SNS_Init_Startup
 	call Display_UpdateRegion3
 	ret
 
 Interrupt_FlagSetBytecode:
 	xor	a, a
-	stb_d8	(3432), a
-	stb_d8	(3425), a
+	ld	(3432:16), a
+	ld	(3425:16), a
 	call	15725806
 	call	15686621
 	ret
@@ -5610,8 +5610,8 @@ Interrupt_SendAllNotesOff:
 	ret
 Interrupt_ClearModeRegs:
 	xor	a, a
-	stb_d8	(3432), a
-	stb_d8	(3431), a
+	ld	(3432:16), a
+	ld	(3431:16), a
 	call	16635550
 	ret
 Interrupt_SetFlagBytecode:
@@ -5629,11 +5629,11 @@ Interrupt_ClearModeAndRet:
 
 Display_RegionUpdateFromHW:
 	ld	a, (36004:16)
-	stb_d8	(3437), a
+	ld	(3437:16), a
 	ld	a, (36006:16)
-	stb_d8	(3438), a
+	ld	(3438:16), a
 	ld	a, (36008:16)
-	stb_d8	(4391), a
+	ld	(4391:16), a
 	call	15725806
 	call	15686621
 	ret
@@ -5653,7 +5653,7 @@ PortConfig_SetupBytecode:
 	jrl	nz, 23
 	ld	a, (3822:16)
 	dec	1, a
-	stb_d8	(0x28be), a
+	ld	(0x28be:16), a
 	push	xix
 	ld	xix, 0xf1a0
 	.byte 0xf3
@@ -5728,8 +5728,8 @@ PortConfig_Handler_0:
 	sub	l, 4
 	stdi16	3664, 1
 	stdi8	3666, 0
-	stb_d8	3667, a
-	stb_d8	3668, l
+	ld	(3667:16), a
+	ld	(3668:16), l
 	pushw	wa
 	pushw	bc
 	push	xix
@@ -5814,7 +5814,7 @@ PortConfig_Handler_0:
 	pop	xde
 	ret
 	ld	a, (3424:16)
-	stb_d8	3822, a
+	ld	(3822:16), a
 	call	15713930
 	srl	xiz, 1
 	push	xix
@@ -5823,7 +5823,7 @@ PortConfig_Handler_0:
 	pop	xix
 	ld	xhl, 15705812
 	ld_rr8b	a, xhl, a
-	stb_d8	3429, a
+	ld	(3429:16), a
 	ret
 PortConfig_DataTable_A:
 	.incbin "includes/romslices/v7_transplant_PortConfig_DataTable_A_head.bin"
@@ -5845,7 +5845,7 @@ PortConfig_DataTable_A:
 	ldb_dri a, 0x03, 0xec, 0xe0
 	cp A,0xff
 	jrl z, .Lc_efa734
-	stb_d8 (0x8c9e), a
+	ld (0x8c9e:16), a
 	ld E,A
 	ldb D, 0xff
 	ldw WA, 0x1090
@@ -5879,7 +5879,7 @@ PortConfig_DataTable_B:
 	ld	a, (3429:16)
 	and	a, 3
 	ld_rr8b a, xhl, a
-	stb_d8 (3567), a
+	ld (3567:16), a
 	ret
 	nop
 	nop
@@ -6019,7 +6019,7 @@ SysEx_BytecodeDispatcher:
 	ld	xde, 15710502
 	ld_rrb	w, xde, hl
 	pop	xde
-	stb_d8	3425, w
+	ld	(3425:16), w
 	stdi8	3432, 1
 	call	15710358
 	push	xhl
@@ -6070,7 +6070,7 @@ SysEx_BytecodeDispatcher:
 	cpdi8	3415, 48
 	jrl	nz, 3
 	or	a, 128
-	stb_d8	13949, a
+	ld	(13949:16), a
 	call	15725762
 	call	15686621
 	ret
@@ -6231,9 +6231,9 @@ MemConfig_Handler_3:
 	ld	wa, (3416:16)
 	stda16	(3818), wa
 	ld	a, (3415:16)
-	stb_d8	(3820), a
+	ld	(3820:16), a
 	ld	a, (3420:16)
-	stb_d8	(3821), a
+	ld	(3821:16), a
 	popw	wa
 	ret
 	call	AccPedal_CheckBitAndUpdate
@@ -6273,7 +6273,7 @@ MemConfig_Handler_3:
 	ret
 	stdi8	(13964), 0
 	ld	a, (3415:16)
-	stb_d8	(3521), a
+	ld	(3521:16), a
 	call	15708938
 	xor	w, w
 	sla	wa, 2
@@ -6421,7 +6421,7 @@ SndDispatch_ProcessCommand:
 	call VoiceSlot_FlagCheck
 	bit 0x07,A
 	jrl nz, .Lc_efb309
-	stb_d8 (0x0d57), a
+	ld (0x0d57:16), a
 .Lc_efb309:
 	ret
 	call	15713087
@@ -6438,7 +6438,7 @@ SndDispatch_ProcessCommand:
 	push	xiy
 	pushw	wa
 	call	15713141
-	stb_d8	3526, a
+	ld	(3526:16), a
 	popw	wa
 	pop	xiy
 	and	a, 240
@@ -6486,7 +6486,7 @@ SndDispatch_ProcessCommand:
 	ldb	a, 1
 	jp	15709171
 	call	15713141
-	stb_d8	3526, a
+	ld	(3526:16), a
 	ld	xiy, 3526
 	ld	xix, 3580
 	xor	a, a
@@ -6505,15 +6505,15 @@ SndDispatch_ProcessCommand:
 	ldb	a, 3
 	ret
 	xor	a, a
-	stb_d8	3580, a
-	stb_d8	3581, a
-	stb_d8	3434, a
+	ld	(3580:16), a
+	ld	(3581:16), a
+	ld	(3434:16), a
 	.byte 0xc1, 0x53, 0x0d, 0x3c, 0x7f
 	call	15713141
 	cp	a, 130
 	jrl	z, 142
 	call	15713087
-	stb_d8	3581, a
+	ld	(3581:16), a
 	cp	a, 129
 	jrl	nz, 9
 	incdi16	1, (3416)
@@ -6564,7 +6564,7 @@ SndDispatch_ProcessCommand:
 	call	15709599
 	call	15709634
 	call	15713141
-	stb_d8	3526, a
+	ld	(3526:16), a
 	call	15712700
 	cp	w, 255
 	jrl	z, 137
@@ -6633,21 +6633,21 @@ SndDispatch_ProcessCommand:
 	lds	de, 4
 	call	15713447
 	call	15713263
-	stb_d8	3575, a
+	ld	(3575:16), a
 	call	15713087
-	stb_d8	3576, a
+	ld	(3576:16), a
 	xor	a, a
 	call	15716577
 	ret
 	ld	a, (3576:16)
-	stb_d8	3579, a
+	ld	(3579:16), a
 	ld	a, (3521:16)
 	addda8	a, 3575
 	cp	a, 96
 	jrl	c, 7
 	incdi8	1, (3579)
 	sub	a, 96
-	stb_d8	3415, a
+	ld	(3415:16), a
 	ret
 MemConfig_Handler_4:
 	ld	xhl, 4345
@@ -6670,7 +6670,7 @@ MemConfig_Handler_4:
 	cps	w, 0
 	jrl	z, 72
 	ld	a, (3415:16)
-	stb_d8	3659, a
+	ld	(3659:16), a
 	call	15709817
 	call	15709817
 	stdi8	3415, 0
@@ -6723,7 +6723,7 @@ MemConfig_Handler_4:
 	jrl	z, -89
 	jp	15710012
 	call	15713141
-	stb_d8	3522, a
+	ld	(3522:16), a
 	stdi8	13964, 0
 	call	15712713
 	cp	w, 255
@@ -6732,7 +6732,7 @@ MemConfig_Handler_4:
 	call	15706175
 	xor	wa, wa
 	stda16	3416, wa
-	stb_d8	3415, a
+	ld	(3415:16), a
 	jp	15710012
 	call	15713087
 	cp	a, 144
@@ -6748,7 +6748,7 @@ MemConfig_Handler_4:
 	incdi16	1, (3416)
 	jp	15709976
 	ldb	w, 255
-	stb_d8	3434, w
+	ld	(3434:16), w
 	jp	15710014
 	ldb	w, 0
 	ret
@@ -6875,20 +6875,20 @@ SystemInit_StepHandler_0:
 	ld_rrw	de, xix, hl
 	pop	xix
 	xor	a, a
-	stb_d8	3437, a
-	stb_d8	3438, a
-	stb_d8	4391, a
+	ld	(3437:16), a
+	ld	(3438:16), a
+	ld	(4391:16), a
 	ld	xiz, 3471
 	ld	xiy, 52822
 	ld	c, (52821:16)
 	cps	c, 0
 	jrl	z, 61
 	ld	a, (36004:16)
-	stb_d8	3437, a
+	ld	(3437:16), a
 	ld	a, (36006:16)
-	stb_d8	3438, a
+	ld	(3438:16), a
 	ld	a, (36008:16)
-	stb_d8	4391, a
+	ld	(4391:16), a
 	ld	(xiz+256), 144
 	ld	a, (3415:16)
 	ld	(xiz+1), a
@@ -7233,7 +7233,7 @@ VoiceSlot_CopyBlock:
 	pop xde
 	sla iz, 1
 	xor w, w
-	stb_d8 (3532), c
+	ld (3532:16), c
 	popw bc
 	jp VoiceSlot_SubrRetNZ
 
@@ -7298,7 +7298,7 @@ VoiceSlot_CallSubroutine:
 	pop xde
 	sla iz, 1
 	xor w, w
-	stb_d8 (3532), c
+	ld (3532:16), c
 	popw bc
 	jp VoiceSlot_SubrRetNZ
 
@@ -7457,7 +7457,7 @@ VoiceSlot_FinalRetZ:
 	push	xiy
 	push	xiz
 	call	15713087
-	stb_d8	3524, a
+	ld	(3524:16), a
 	ld	w, d
 	ld	a, e
 	lds	de, 1
@@ -7489,7 +7489,7 @@ VoiceSlot_FinalRetZ:
 	ret
 	ld	a, (3822:16)
 	dec	1, a
-	stb_d8	3566, a
+	ld	(3566:16), a
 	ld	l, a
 	xor	h, h
 	sla	a, 1
@@ -7668,7 +7668,7 @@ VoiceSlot_ComputeIndex:
 	ret
 VoiceSlot_IndexDone:
 	xor	wa, wa
-	stb_d8	3428, a
+	ld	(3428:16), a
 	stda16	3426, wa
 	call	15713087
 	cp	a, 129
@@ -7799,7 +7799,7 @@ VoiceSlot_RestoreState:
 VoiceState_DataBlock1:	.ascii "(;>="
 	call	VoiceState_RestoreEntry
 	ld	a, (xhl+3)
-	stb_d8	(3415), a
+	ld	(3415:16), a
 	call	VoiceState_RestoreDone
 	pop	xiy
 	pop	xiz
@@ -8262,10 +8262,10 @@ VoiceState_DataBlock2:
 	cps	w, 4
 	jrl	ule, 2
 	ldb	w, 4
-	stb_d8	13952, a
-	stb_d8	13941, w
-	stb_d8	3667, w
-	stb_d8	3559, w
+	ld	(13952:16), a
+	ld	(13941:16), w
+	ld	(3667:16), w
+	ld	(3559:16), w
 	ld	a, (3420:16)
 	sla	a, 3
 	ld	h, a
@@ -8278,7 +8278,7 @@ VoiceState_DataBlock2:
 	cp	h, 32
 	jrl	ule, 3
 	sub	h, 32
-	stb_d8	13939, h
+	ld	(13939:16), h
 	call	15724769
 	ret
 	ld	xix, 61856
@@ -8314,7 +8314,7 @@ VoiceState_DataBlock2:
 	jp	15718020
 	inc	1, a
 	ld	w, a
-	stb_d8	3414, w
+	ld	(3414:16), w
 	.byte 0xc1, 0x54, 0x0d, 0x3e, 0x01, 0xc1, 0x7b, 0x28, 0x3e, 0x04
 	jp	15718032
 	.byte 0xc1, 0x54, 0x0d, 0x3c, 0xfe, 0xc1, 0x7b, 0x28, 0x3c, 0xfb
@@ -8367,7 +8367,7 @@ VoiceState_DataBlock2:
 	cps	a, 1
 	jrl	z, 2
 	inc	1, a
-	stb_d8	3931, a
+	ld	(3931:16), a
 	stdi8	3930, 3
 	jp	15718209
 	cp	a, 132
@@ -8424,11 +8424,11 @@ VoiceState_DataBlock2:
 	call	15709574
 	ret
 	ld	a, (3822:16)
-	stb_d8	3654, a
+	ld	(3654:16), a
 	xor	wa, wa
 	stda16	3435, wa
 	ld	a, (3822:16)
-	stb_d8	3822, a
+	ld	(3822:16), a
 	xor	wa, wa
 	stda16	3652, wa
 	call	15717076
@@ -8467,7 +8467,7 @@ VoiceState_DataBlock2:
 	jp	15718467
 	stda16	3418, wa
 	ld	a, (3654:16)
-	stb_d8	3822, a
+	ld	(3822:16), a
 	ret
 	cpdi8	4486, 2
 	jrl	nz, 47
@@ -8642,7 +8642,7 @@ SubCPU_ToneParamDisplay:
 	ld XIX,SubCPU_ToneDispatch_0x50
 	ldb_dri a, 0x07, 0xf0, 0xe0
 	ldb_dri a, 0x07, 0xec, 0xe0
-	stb_d8 (0x111d), a
+	ld (0x111d:16), a
 .Lc_efda73:
 	pop XIX
 	ret
@@ -8772,7 +8772,7 @@ SubCPU_ToneDispatch:
 	xor	l, l
 	ldb	h, 3
 	call	SubCPU_ToneStoreDigits
-	stb_d8	(4380), a
+	ld	(4380:16), a
 	call	SubCPU_ToneParamDisplay_0x9F
 	call	SubCPU_ToneParamDisplay_0xE3
 	call	SubCPU_ToneParamDisplay_0x4E
@@ -8793,7 +8793,7 @@ SubCPU_ToneLoadAndStore:
 	ldb h, 0xff
 SubCPU_CallRoutine:
 	call PerfMode_VoiceAddressTable_0x50
-	stb_d8	(4381), a
+	ld	(4381:16), a
 	call SubCPU_ToneParamDisplay_0xE3
 	call SubCPU_ToneParamDisplay_0x4E
 	ret
@@ -9314,9 +9314,9 @@ DisplayStr_BytecodeBlock_A:
 	jrl	z, 9
 	ld	xwa, 3733
 	ld	e, (3668:16)
-	stb_d8	3777, e
+	ld	(3777:16), e
 	stda32	4372, xwa
-	stb_d8	3782, l
+	ld	(3782:16), l
 	xor	b, b
 	subdm16 (3780), xbc
 	ret
@@ -9376,9 +9376,9 @@ DisplayStr_BytecodeBlock_A:
 	jrl	z, 9
 	ld	xwa, 3733
 	ld	e, (3668:16)
-	stb_d8	3777, e
+	ld	(3777:16), e
 	stda32	4372, xwa
-	stb_d8	3782, l
+	ld	(3782:16), l
 	xor	b, b
 	subdm16 (3780), xbc
 	ret
@@ -9673,7 +9673,7 @@ Display_BytecodeBlock_F:
 	ld	wa, (xiy+2)
 	ld	(xix+2), wa
 	ld	w, (4539:16)
-	stb_d8	36955, w
+	ld	(36955:16), w
 	ld	l, (4541:16)
 	ld	h, (4540:16)
 	cp	w, 23
@@ -10623,8 +10623,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	div	a, 8
 	inc	1, a
 	inc	1, w
-	stb_d8	(4594), a
-	stb_d8	(4595), w
+	ld	(4594:16), a
+	ld	(4595:16), w
 	xor	wa, wa
 	ld	a, (4594:16)
 	push	xix
@@ -10767,7 +10767,7 @@ Scoop_SetupDisplayTables:
 
 Scoop_InitPartDisplay:
 	ld a, (3424:16)
-	stb_d8 (4494), a
+	ld (4494:16), a
 	ld xiy, StyleUI_ScreenData_Main_0x1EF
 	push xhl
 	call UIRender_ConditionalDrawInit
@@ -10802,7 +10802,7 @@ Scoop_SetPartIndexAndDisplay:
 	dec 1, a
 	ld xiy, 0xf1a0
 	ldb_sri A, 0x03, 0xf4, 0xe0
-	stb_d8 (4493), a
+	ld (4493:16), a
 	ld xiy, SOUND_DATA_DRUM_KITS_0x3A
 	call Scoop_ConditionalCurveUpdate
 
@@ -11010,14 +11010,14 @@ Scoop_InitDisplayFull:
 	ld xix, StyleUI_ParamBlockPtrTable
 	call UIRender_TwoTableGeneral
 	ld a, (3424:16)
-	stb_d8 (4494), a
+	ld (4494:16), a
 	ld xiy, StyleUI_ScreenData_Main_0x1EF
 	call UIRender_ConditionalDrawInit
 	ld a, (3424:16)
 	dec 1, a
 	ld xiy, 0xf1a0
 	ldb_sri A, 0x03, 0xf4, 0xe0
-	stb_d8 (4493), a
+	ld (4493:16), a
 	ld xiy, SOUND_DATA_DRUM_KITS_0x3A
 	call Scoop_ConditionalCurveUpdate
 	ret
@@ -11036,8 +11036,8 @@ Display_RedrawFooter:
 	jr nz, Scoop_RedrawFooter_End
 	stib_da (0x03efa8), 0x00
 	ld a, (0x0f52:16)
-	stb_d8 (0x1191), a
-	stb_d8 (0x1192), a
+	ld (0x1191:16), a
+	ld (0x1192:16), a
 	ld XIY,StyleUI_ScreenData_Main_0x21C
 	cpdi16 (0x0e50), 0x0000
 	jr nz, Scoop_FooterShowPartValue
@@ -11045,7 +11045,7 @@ Display_RedrawFooter:
 	jr t, Scoop_FooterCallDisplay
 Scoop_FooterShowPartValue:
 	ld a, (3922:16)
-	stb_d8 (4499), a
+	ld (4499:16), a
 	ld xix, StyleUI_ScreenData_Main_0x276
 
 Scoop_FooterCallDisplay:
@@ -11185,7 +11185,7 @@ Scoop_Selection_RedrawActive:
 	ld xix, StyleUI_ScreenData_Main_0x986
 	call UIRender_SingleTable
 	ld a, (3823:16)
-	stb_d8 (4497), a
+	ld (4497:16), a
 	popw wa
 	ld xiy, StyleUI_ScreenData_Main_0x9BB
 	call UIRender_TwoTableEvtCheck
@@ -11202,7 +11202,7 @@ Scoop_Selection_DrawMode1:
 	cpdi8	13939, 0
 	jr	z, 56
 	ld	a, (13939:16)
-	stb_d8	4495, a
+	ld	(4495:16), a
 	ld	xiy, 14730646
 	call	15686922
 	jr	37
@@ -11214,7 +11214,7 @@ Scoop_Selection_DrawMode2:
 	call UIRender_SingleTable
 	pushw wa
 	ld a, (3922:16)
-	stb_d8 (4500), a
+	ld (4500:16), a
 	popw wa
 	ld xiy, StyleUI_ScreenData_Main_0x990
 	call UIRender_TwoTableEvtCheck
@@ -11287,11 +11287,11 @@ Scoop_SidePanel_DrawValues:
 	ldb a, 0x0
 
 Scoop_SidePanel_StoreAndDraw:
-	stb_d8 (4507), a
+	ld (4507:16), a
 	ld a, (3667:16)
-	stb_d8 (4508), a
+	ld (4508:16), a
 	ld a, (3668:16)
-	stb_d8 (4509), a
+	ld (4509:16), a
 	ld xiy, StyleUI_ScreenData_Main_0xB19
 	ld xix, StyleUI_ScreenData_Main_0xB3A
 	call GraphicsRender_TwoTable_Alt
@@ -11572,7 +11572,7 @@ Scoop_ButtonLabels_DrawCategoryData:
 Scoop_EventHandler_PartSelect:
 	cps a, 2
 	jr nz, Scoop_EventHandler_Part1
-	stb_d8 (4531), a
+	ld (4531:16), a
 	jr Scoop_EventHandler_PartRedrawData
 
 Scoop_EventHandler_Part1:
@@ -11636,7 +11636,7 @@ Scoop_EventHandler_MenuSwitch:
 	jr Scoop_EventHandler_MenuSwitch_End
 
 Scoop_EventHandler_MenuSwitch_Mode1:
-	stb_d8 (0x288d), w
+	ld (0x288d:16), w
 	call SetWall_DualPassScanner
 	xor wa, wa
 	ld a, (0x288e:16)

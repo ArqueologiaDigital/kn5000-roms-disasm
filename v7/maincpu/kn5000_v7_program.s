@@ -584,7 +584,7 @@ BootInit_SeqAndPanel:
 	ldl_da xhl, (CPanel_InitDispatchTable)
 	call (xhl)
 	call CPanel_ScanButtons
-	stb_d8 (1026), l
+	ld (1026:16), l
 	call Get_Firmware_Version
 	cp l, 0xff
 	jr nz, User_didnt_request_flash_mem_update
@@ -1314,7 +1314,7 @@ GetAdr_rtmcfg:
 	ret
 
 SetGlobalError:
-	stb_d8	(32422), a
+	ld	(32422:16), a
 	ret
 malloc_X:
 	pushw	wa

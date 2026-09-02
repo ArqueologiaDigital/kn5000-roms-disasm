@@ -107,7 +107,7 @@ EffectMode_CheckTransposeAndLookup:
 SndParam_LoadTransposeValues:
 	ld	xwa, 163840
 	call	16567398
-	stb_d8	(36942), l
+	ld	(36942:16), l
 	ld	xwa, 163841
 	call	16567398
 	lda	xwa, (36942:16)
@@ -136,7 +136,7 @@ EffectMode_TimerCountdown:
 	cps a, 0
 	ret Z
 	dec	1, a
-	stb_d8	36018, a
+	ld	(36018:16), a
 	cps	a, 0
 	ret	nz
 	cpdi16	36026, 0
@@ -388,7 +388,7 @@ EffectMode_UpdateDisplay:
 	bit	5, a
 	jr	z, 14
 	res	5, a
-	stb_d8	(36022), a
+	ld	(36022:16), a
 	ld	xwa, xiz
 	calr	62718
 	jr	3
@@ -731,7 +731,7 @@ EffectMode_CopyPresetBits:
 EffectMode_ReinitSoundOutput:
 	ld	xwa, 770
 	call	16567398
-	stb_d8	36020, l
+	ld	(36020:16), l
 	ld	xwa, 770
 	lds	bc, 1
 	lds	de, 0
@@ -833,13 +833,13 @@ SndOutput_ReinitByMode_NotifyParam:
 	bit	5, a
 	jr	z, 7
 	set	2, a
-	stb_d8	(36022), a
+	ld	(36022:16), a
 SndOutput_ReinitByMode_CheckBit3:
 	ld	a, (36022:16)
 	bit	3, a
 	ret	z
 	set	1, a
-	stb_d8	(36022), a
+	ld	(36022:16), a
 	ret
 MainCPU_self_test_routines:
 	set_dd8 1, 0x30
@@ -1501,7 +1501,7 @@ SelfTest_SramAndRom_CheckROM:
 	push	xix
 	push	xiz
 	call	CPanel_PanelDetection_Wrapper
-	stb_d8	(36064), a
+	ld	(36064:16), a
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1509,7 +1509,7 @@ SelfTest_SramAndRom_CheckROM:
 	ld	a, (36064:16)
 	cpl	a
 	and	a, 9
-	stb_d8	(36064), a
+	ld	(36064:16), a
 	cps	a, 0
 	jr	z, 70	; -> 0xFB70CA
 	cpib_erp	250, 0
@@ -1562,7 +1562,7 @@ EffectMode_CheckAndDispatch:
 	bit 0x04,A
 	jr nz, EffectMode_DispatchUpdate
 	set 0x04,A
-	stb_d8 (0x8ce4), a
+	ld (0x8ce4:16), a
 	ld a, (0x8ce6:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
@@ -1574,7 +1574,7 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	bit	4, a
 	jr	z, 44
 	res	4, a
-	stb_d8	(36068), a
+	ld	(36068:16), a
 	ld	a, (36070:16)
 	cps	a, 0
 	jr	z, 29
@@ -1710,7 +1710,7 @@ EffectMode_HandleTimerEvents:
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step1E:
 	ld	xwa, 16252942
@@ -1720,7 +1720,7 @@ EffectMode_TimerEvent_Step1E:
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step3C:
 	ld	xwa, 16252944
@@ -1730,7 +1730,7 @@ EffectMode_TimerEvent_Step3C:
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step5A:
 	ld	xwa, 16252934
@@ -1740,7 +1740,7 @@ EffectMode_TimerEvent_Step5A:
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step78:
 	ld	xwa, 16252936
@@ -1750,7 +1750,7 @@ EffectMode_TimerEvent_Step78:
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step96:
 	ld	xwa, 16252938
@@ -1762,7 +1762,7 @@ EffectMode_TimerEvent_Step96:
 EffectMode_TimerEvent_Default:
 	inc	1, a
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 	ret
 EffectMode_RunDiagSequence:
 	ld	a, (36062:16)
@@ -1819,13 +1819,13 @@ EffectMode_DiagSeq_AnimFrame:
 	jr	6	; -> 0xFB737F
 EffectMode_DiagSeq_IncFrame:
 	inc	1, a
-	stb_d8	(36062), a
+	ld	(36062:16), a
 EffectMode_DiagSeq_SetDelay:
 	stdi8	(36060), 30
 	ret
 EffectMode_DiagSeq_DecrementDelay:
 	dec	1, c
-	stb_d8	(36060), c
+	ld	(36060:16), c
 	ret
 EffectMode_ByteData_DiagEvents:
 	push QIZ
@@ -1834,7 +1834,7 @@ EffectMode_ByteData_DiagEvents:
 	push XIX
 	push XIZ
 	call CPanel_PanelDetection_Wrapper
-	stb_d8 (0x8ce0), a
+	ld (0x8ce0:16), a
 	pop XIZ
 	pop XIX
 	pop XHL

@@ -17,7 +17,7 @@ ParaLoadOpt_AudioFlagCheck:
 	bit	0, a
 	jr	z, 23
 	res	0, a
-	stb_d8	(48282), a
+	ld	(48282:16), a
 	ld	xwa, 5701638
 	ld	xbc, 29360129
 	lds32	xde, 0
@@ -138,7 +138,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	bit	1, a
 	jr	z, 23
 	res	1, a
-	stb_d8	(48282), a
+	ld	(48282:16), a
 	ld	xwa, 5701649
 	ld	xbc, 29360129
 	lds32	xde, 0
@@ -148,7 +148,7 @@ ParaLoadOpt_CaseD:
 	bit	7, a
 	jr	z, 31
 	res	7, a
-	stb_d8	(48244), a
+	ld	(48244:16), a
 	ld	a, (xsp+2)
 	stb_da	(149340), a
 	ld	xwa, 5701659
@@ -160,7 +160,7 @@ ParaLoadOpt_CaseE:
 	bit	7, a
 	jr	z, 30
 	res	7, a
-	stb_d8	(48248), a
+	ld	(48248:16), a
 	ld	a, (xsp)
 	stb_da	(149342), a
 	ld	xwa, 5701659
@@ -172,7 +172,7 @@ ParaLoadOpt_CaseF:
 	bit	7, a
 	jrl	z, 296	; -> 0xF767F9
 	res	7, a
-	stb_d8	(48240), a
+	ld	(48240:16), a
 	ld	a, (xsp+4)
 	extz	wa
 	cps	wa, 0

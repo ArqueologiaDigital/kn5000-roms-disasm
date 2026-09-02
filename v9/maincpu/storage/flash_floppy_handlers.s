@@ -5423,8 +5423,8 @@ ToneParam_ExtendedOpsBlock:
 	lds32	xwa, 0
 	ld	(xsp), xwa
 	ld	xwa, (xsp)
-	stb_d8	(0x39ac), a
-	stb_d8	(0x39ad), a
+	ld	(0x39ac:16), a
+	ld	(0x39ad:16), a
 	calr	387
 	cps	hl, 0
 	jr	z, 3
@@ -5704,11 +5704,11 @@ ToneParam_ExtendedOpsBlock:
 	ld	wa, hl
 	calr	23
 	stb_erp c, 251
-	stb_d8 (13549), c
+	ld (13549:16), c
 	stb_erp c, 250
-	stb_d8 (13550), c
+	ld (13550:16), c
 	stb_erp c, 249
-	stb_d8 (13551), c
+	ld (13551:16), c
 	pop xiz
 	ret
 	pushw	iz

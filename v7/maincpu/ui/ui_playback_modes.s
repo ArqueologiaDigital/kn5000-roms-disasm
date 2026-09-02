@@ -92,7 +92,7 @@ UIStateEvt_VoiceParamHandler:
 	jr	20
 	inc	1, a
 	ld	w, a
-	stb_d8	3414, w
+	ld	(3414:16), w
 	.byte 0xc1, 0x54, 0x0d, 0x3e, 0x01, 0xc1, 0x7b, 0x28, 0x3e, 0x04
 	jr	12
 	.byte 0xc1, 0x54, 0x0d, 0x3c, 0xfe, 0xc1, 0x7b, 0x28, 0x3c, 0xfb
@@ -102,10 +102,10 @@ SeqPlay_RestoreVoiceState_Return:
 	ld a, (0x2878:16)
 	pushw wa
 	ldb_da a, (0x00ffe3)
-	stb_d8 (0x2878), a
+	ld (0x2878:16), a
 	call SeqVoice_InitEntry
 	popw wa
-	stb_d8 (0x2878), a
+	ld (0x2878:16), a
 	ret
 
 SeqTimer_PostTempoUpdate:
@@ -229,9 +229,9 @@ Part_LookupParam:
 	ld iy, bc
 	ld e, c
 	ld_rrb	a, xhl, iy
-	stb_d8	(3423), a
+	ld	(3423:16), a
 	inc 1, e
-	stb_d8	(3424), e
+	ld	(3424:16), e
 	ret
 Part_ValidateAndActivate:
 	; --- Validation: check range, optionally call ---
@@ -846,7 +846,7 @@ CDlikeTimer_InitResetState:
 	popw wa
 
 CDlikeSwTtl_StorePlaybackMode:
-	stb_d8 (4420), w
+	ld (4420:16), w
 
 CDlikeTimer_Return:
 	ret
@@ -855,9 +855,9 @@ CDlike_ResetPlaybackState:
 	ei 6
 	xor wa, wa
 	stda16 (1052), xwa
-	stb_d8 (1051), a
+	ld (1051:16), a
 	stda16 (1048), xwa
-	stb_d8 (1047), a
+	ld (1047:16), a
 	bitda 1, (0x28a7)
 	jr z, CDlikeReset_SetTimerFlags
 	stdi8 (1054), 1
@@ -875,7 +875,7 @@ CDlikeReset_SetTimerFlags:
 CDlike_InitModeAndLoadBank:
 	ordi8 (0xb746), 0x40
 	ld a, (0xfdad:16)
-	stb_d8 (0x0d42), a
+	ld (0x0d42:16), a
 	stdi8 (0x0d34), 0x00
 	stdi8 (0x1144), 0x00
 	call CDlike_LoadSongBankData
@@ -1547,7 +1547,7 @@ DkMdlyPly_HandleResult:
 	add	wa, wa
 	lda	xbc, (14811252:24)
 	ld_rrw	wa, xbc, wa
-	stb_d8	(35998), a
+	ld	(35998:16), a
 	ld	e, a
 	extz	de
 	pushw	255

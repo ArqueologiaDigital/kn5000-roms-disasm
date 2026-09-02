@@ -198,7 +198,7 @@ WPLoad_OpLoad:
 	ld	wa, hl
 	lds	bc, 1
 	calr	51406
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	50841
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -398,7 +398,7 @@ WPFind_SearchLoop:
 WPFind_CheckSlot:
 	and	iy, bc
 	jr	z, 8
-	stb_d8	(35164), l
+	ld	(35164:16), l
 	ldb	l, 1
 	jr	8
 WPFind_NextSlot:

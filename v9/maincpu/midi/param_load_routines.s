@@ -17,7 +17,7 @@ ParaLoadOpt_AudioFlagCheck:
 	bit 0, a
 	jr z, ParaLoadOpt_CaseA
 	res 0, a
-	stb_d8 (0xbd36), a
+	ld (0xbd36:16), a
 	ld xwa, 0x570006
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -140,7 +140,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	bit 1, a
 	jr z, ParaLoadOpt_CaseD
 	res 1, a
-	stb_d8 (0xbd36), a
+	ld (0xbd36:16), a
 	ld xwa, 0x570011
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -152,7 +152,7 @@ ParaLoadOpt_CaseD:
 	bit 7, a
 	jr z, ParaLoadOpt_CaseE
 	res 7, a
-	stb_d8 (0xbd10), a
+	ld (0xbd10:16), a
 	ld a, (xsp + 2)
 	stb_da (0x02475c), a
 	ld xwa, 0x57001b
@@ -166,7 +166,7 @@ ParaLoadOpt_CaseE:
 	bit 7, a
 	jr z, ParaLoadOpt_CaseF
 	res 7, a
-	stb_d8 (0xbd14), a
+	ld (0xbd14:16), a
 	ld a, (xsp)
 	stb_da (0x02475e), a
 	ld xwa, 0x57001b
@@ -180,7 +180,7 @@ ParaLoadOpt_CaseF:
 	bit 7, a
 	jrl z, MidiFunc_SendEventReturn
 	res 7, a
-	stb_d8 (0xbd0c), a
+	ld (0xbd0c:16), a
 	ld a, (xsp + 4)
 	extz wa
 	cps wa, 0

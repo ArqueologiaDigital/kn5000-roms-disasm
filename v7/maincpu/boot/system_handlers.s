@@ -402,8 +402,8 @@ INTT1_NoOverflow:
 	.byte 0x00, 0xc1, 0x29, 0x04, 0x3e, 0x10, 0x1d, 0xa1
 	.byte 0xf1, 0xfc
 INTT1_StoreCounters:
-	stb_d8 (1062), w
-	stb_d8 (1063), a
+	ld (1062:16), w
+	ld (1063:16), a
 	pop	sr
 	ld a, (1066:16)
 	cp a, 0xf1
@@ -411,7 +411,7 @@ INTT1_StoreCounters:
 	inc 1, a
 
 INTT1_CheckScanFlag:
-	stb_d8 (1066), a
+	ld (1066:16), a
 	bitda 2, (0xfd50)
 	jrl nz, INTT1_UpdateAlternateTimers
 	incdi8 1, (1050)
@@ -475,9 +475,9 @@ INTT1_CheckAltSeqTimer:
 	jr z, INTT1_CheckMetroTimer
 	stdi8 (1057), 16
 	ld a, (1045:16)
-	stb_d8 (1078), a
+	ld (1078:16), a
 	ld a, (1046:16)
-	stb_d8 (1079), a
+	ld (1079:16), a
 
 INTT1_CheckMetroTimer:
 	bitda 3, (1056)
@@ -513,7 +513,7 @@ UIStateMachine_ClearBit3:
 ; Index: DRAM[1041] (0-2), entries: 3
 ; State 0: Idle, State 1: Process, State 2: Sub-state dispatch
 UIStateMachine_PrimaryDispatch:
-	stb_d8 (1041), a
+	ld (1041:16), a
 	sll a, 2
 	lda xhl, (UI_STATE_MACHINE_TABLE:24)
 	ld_sril3 XHL, 0x03, 0xec, 0xe0
@@ -633,7 +633,7 @@ INTTR4_CheckSyncEnable:
 	.byte 0x7e, 0x3f, 0x00, 0x66, 0x09, 0x1e, 0xaa, 0x02
 	.byte 0x68, 0x04
 INTTR4_SyncCounter2_NoWrap:
-	stb_d8 (1130), a
+	ld (1130:16), a
 
 INTTR4_SyncCounter2_Done:
 	pop	sr
@@ -651,7 +651,7 @@ INTTR4_CheckMetroEnable:
 	incdi16 1, (1048)
 
 INTTR4_MetroCounter_Store:
-	stb_d8 (1047), a
+	ld (1047:16), a
 	pop	sr
 
 INTTR4_CheckSeqEnable:
@@ -743,9 +743,9 @@ INTTR4_AltSeqBeat_Check:
 	jr z, INTTR4_MetroQuarter_Check
 	stdi8 (1057), 16
 	ld a, (1045:16)
-	stb_d8 (1078), a
+	ld (1078:16), a
 	ld a, (1046:16)
-	stb_d8 (1079), a
+	ld (1079:16), a
 
 INTTR4_MetroQuarter_Check:
 	.byte 0xf1, 0x20, 0x04, 0xca, 0x66, 0x1d, 0xc1, 0x17
@@ -766,7 +766,7 @@ INTTR4_SeqAccum_Update:
 	add a, 0x60
 
 INTTR4_SeqAccum_PositiveDelta:
-	stb_d8 (1111), w
+	ld (1111:16), w
 	adddm8 1124, a
 	adddm8 1122, a
 	xor w, w
@@ -787,9 +787,9 @@ INTTR4_SeqAccum_Reset:
 	xor	wa, wa
 	stda16	(1120), wa
 	stda16	(13014), wa
-	stb_d8	(1122), a
-	stb_d8	(13018), a
-	stb_d8	(1111), a
+	ld	(1122:16), a
+	ld	(13018:16), a
+	ld	(1111:16), a
 INTTR4_AltSeqAccum_Update:
 	bitda 2, (1057)
 	jr z, INTTR4_FadeDelay_Check
@@ -835,7 +835,7 @@ INTTR4_SyncAccum_Update:
 	add a, 0x60
 
 INTTR4_SyncAccum_PositiveDelta:
-	stb_d8 (1138), w
+	ld (1138:16), w
 	adddm8 1131, a
 	adddm8 1133, a
 	xor w, w
@@ -856,9 +856,9 @@ INTTR4_SyncAccum_Reset:
 	xor	wa, wa
 	stda16	(1136), wa
 	stda16	(32098), wa
-	stb_d8	(1133), a
-	stb_d8	(32096), a
-	stb_d8	(1138), a
+	ld	(1133:16), a
+	ld	(32096:16), a
+	ld	(1138:16), a
 INTTR4_Return:
 	pop xiy
 	pop xhl
@@ -1594,7 +1594,7 @@ SeqEvt_CheckExpiry:
 	and A,A
 	jr z, SeqEvt_CheckExpiry_Return
 	dec 1,A
-	stb_d8 (0xe8f6), a
+	ld (0xe8f6:16), a
 	jr nz, SeqEvt_CheckExpiry_Return
 	call 0xfe832d
 	cp L,0xff
@@ -1608,7 +1608,7 @@ SeqTiming_Snapshot:
 	ld wa, (0x0460:16)
 	ld l, (0x0462:16)
 	stda16 (0x045e), wa
-	stb_d8 (0x045d), l
+	ld (0x045d:16), l
 	.byte 0xd1, 0xd6, 0x32, 0xf0, 0x67, 0x06, 0xf1, 0x60
 	.byte 0x04, 0x02, 0x00, 0x00
 SeqTiming_Snapshot_CheckFrac:
@@ -1634,7 +1634,7 @@ SyncTiming_Snapshot:
 	ld wa, (0x0470:16)
 	ld l, (0x046d:16)
 	stda16 (0x046e), wa
-	stb_d8 (0x046c), l
+	ld (0x046c:16), l
 	.byte 0xd1, 0x62, 0x7d, 0xf0, 0x67, 0x06, 0xf1, 0x70
 	.byte 0x04, 0x02, 0x00, 0x00
 SyncTiming_Snapshot_CheckFrac:
@@ -1657,9 +1657,9 @@ SyncTiming_Snapshot_Return:
 
 Seq_FullInit:
 	ldb	a, 255
-	stb_d8	(1043), a
-	stb_d8	(1058), a
-	stb_d8	(1139), a
+	ld	(1043:16), a
+	ld	(1058:16), a
+	ld	(1139:16), a
 	call	15669194
 	call	15672365
 	call	15672539
@@ -2013,7 +2013,7 @@ TaskSched_FoundReadyTask:
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
-	stb_d8 (305), a
+	ld (305:16), a
 	ld xsp, (xhl + 4)
 
 TaskSched_ReturnToDispatch:
@@ -5733,7 +5733,7 @@ INT0_ReadLatch:
 				; MSTAT1 is lowered at 0xEF359A, with neither gate
 				; re-checked and no DI in between -- see the
 				; RE-ENTRANCY HAZARD note above INT0_HANDLER.
-	stb_d8 (1508), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
+	ld (1508:16), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
 	cp a, 0xe1
 	jr nz, INT0_CheckE2Command
 	stdi8 (1506), 2
@@ -8118,7 +8118,7 @@ Flash_AccumWrite_Byte:
 	ld a, (1620:16)
 	ld e, a
 	inc 1, a
-	stb_d8 (1620), a
+	ld (1620:16), a
 	cps e, 3
 	jr nz, Flash_AccumWrite_ByteDone
 	ld xwa, (1606:16)
@@ -8144,7 +8144,7 @@ Flash_AccumWrite_Word:
 	ld a, (1620:16)
 	ld c, a
 	inc 1, a
-	stb_d8 (1620), a
+	ld (1620:16), a
 	cps c, 1
 	jr nz, Flash_AccumWrite_WordDone
 	ld xwa, (1622:16)

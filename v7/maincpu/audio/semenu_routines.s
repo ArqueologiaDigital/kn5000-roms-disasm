@@ -34,16 +34,16 @@ SeMenu_LoadRawAddr:
 
 
 SeMenu_TriggerNotification:
-	stb_d8 (0x7ea6), a
+	ld (0x7ea6:16), a
 	stdi8 (0xe316), 0xee
 	setda 6, (0xe318)
 	ret
 SeMenu_ClearNotification:
-	stb_d8 (0xe316), a
+	ld (0xe316:16), a
 	setda 1, (0xe318)
 	ret
 SeMenu_StoreEventId:
-	stb_d8 (1688), a
+	ld (1688:16), a
 	ret
 
 SeMenu_LoadObjectPtr_Data:
@@ -1007,7 +1007,7 @@ SeMenu_SetupMenuDisplay_Section3_Loop:
 SeMenu_SetupMenuDisplay_Section3_End:
 	cps	a, 0
 	scc8	nz, a
-	stb_d8	(1628), a
+	ld	(1628:16), a
 	ret
 
 SeMenu_SetupMenuDisplay_Finalize:
@@ -1019,7 +1019,7 @@ SeMenu_SetupMenuDisplay_Finalize_Data:
 	jr	c, 9
 	cps	a, 4
 	jr	ugt, 5
-	stb_d8	(1629), a
+	ld	(1629:16), a
 	ret
 	stdi8	(1629), 1
 	ret
@@ -1069,7 +1069,7 @@ SeMenu_ValidatePartNumber_NextPart:
 SeMenu_ValidatePartNumber_Store:
 	ld xwa, (xsp + 2)
 	ld (xwa), c
-	stb_d8 (1629), c
+	ld (1629:16), c
 
 SeMenu_ValidatePartNumber_End:
 	popw_erp 0xfa
@@ -1077,7 +1077,7 @@ SeMenu_ValidatePartNumber_End:
 	ret
 
 SeMenu_StorePartMask:
-	stb_d8 (1630), a
+	ld (1630:16), a
 	ret
 
 SeMenu_PartMask_Data:
@@ -1573,7 +1573,7 @@ SeMenu_TransferPartValues_EndData:
 	ldb	c, 1
 	ld	(xwa), c
 	ret
-	stb_d8	(1685), a
+	ld	(1685:16), a
 	ret
 	cps	a, 6
 	jr	z, 16
@@ -1920,7 +1920,7 @@ SeMenu_ReadObjData:
 	ret
 
 SeMenu_SetCurrentStep:
-	stb_d8 (1683), a
+	ld (1683:16), a
 	ret
 
 SeMenu_ResetSubIndex:
@@ -1930,11 +1930,11 @@ SeMenu_ResetSubIndex:
 SeMenu_AdvanceSubIndex:
 	ld l, (1684:16)
 	inc 1, l
-	stb_d8 (1684), l
+	ld (1684:16), l
 	ret
 
 SeMenu_ReadObjParam_Data:
-	stb_d8	(1684), a
+	ld	(1684:16), a
 	ret
 
 SeMenu_ReadObjParam:
@@ -4972,7 +4972,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ret
 	.byte 0xb0, 0x16, 0xaa, 0x06
 	ret
-	stb_d8	1708, a
+	ld	(1708:16), a
 	ret
 	.byte 0xb0, 0x14, 0xac, 0x06
 	ret
@@ -5281,7 +5281,7 @@ SeMenu_ApplySynthParam_Data:
 	ld	xbc, 0x0e62ef5e
 
 SeMenu_SetSelectedRow:
-	stb_d8 (1711), a
+	ld (1711:16), a
 	ret
 
 SeMenu_SetSelectedRow_Data:
@@ -5295,7 +5295,7 @@ SeMenu_LoadObjEntries:
 	ret
 
 SeMenu_SetMode:
-	stb_d8 (1710), a
+	ld (1710:16), a
 	ret
 
 SeMenu_SetMode_Data:
@@ -5317,7 +5317,7 @@ SeMenu_LoadSoundBankCfg:
 	ret
 
 SeMenu_SetSoundBank:
-	stb_d8 (1716), a
+	ld (1716:16), a
 	ret
 
 SeMenu_LoadFilterType:
@@ -5325,7 +5325,7 @@ SeMenu_LoadFilterType:
 	ret
 
 SeMenu_SetFilterParam1:
-	stb_d8 (1717), a
+	ld (1717:16), a
 	ret
 
 SeMenu_LoadFilterParam2:
@@ -5333,11 +5333,11 @@ SeMenu_LoadFilterParam2:
 	ret
 
 SeMenu_SetFilterMode:
-	stb_d8 (1718), a
+	ld (1718:16), a
 	ret
 
 SeMenu_SetFilterCoeff:
-	stb_d8 (1721), a
+	ld (1721:16), a
 	ret
 
 SeMenu_LoadEditParam:
@@ -5497,7 +5497,7 @@ SeMenu_HandleMenuChange_Data:
 	push_a
 	.byte 0xb7, 0x06
 	ret
-	stb_d8	(1719), a
+	ld	(1719:16), a
 	ret
 
 SeMenu_LoadPatchStatus:
@@ -5505,7 +5505,7 @@ SeMenu_LoadPatchStatus:
 	ret
 
 SeMenu_SetPatchBank:
-	stb_d8 (1720), a
+	ld (1720:16), a
 	ret
 
 SeMenu_PatchBank_Data:
@@ -5702,7 +5702,7 @@ SeMenu_LoadParamByte:
 	ret
 
 SeMenu_SetConfirmState:
-	stb_d8 (1732), a
+	ld (1732:16), a
 	ret
 
 SeMenu_LoadConfirmData:
@@ -5714,7 +5714,7 @@ SeMenu_ReturnZero:
 	ret
 
 SeMenu_SetDisplayState:
-	stb_d8 (1733), a
+	ld (1733:16), a
 	ret
 
 SeMenu_DisplayState_Data:
@@ -5722,7 +5722,7 @@ SeMenu_DisplayState_Data:
 	push_a
 	.byte 0xc5, 0x06
 	ret
-	stb_d8	(1626), a
+	ld	(1626:16), a
 	ret
 	.byte 0xb0
 	push_a

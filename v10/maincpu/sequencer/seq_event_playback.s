@@ -21,22 +21,22 @@ SeqEvt_InitAndProcess:
 	stdi8 (0x7e06), 16
 	stdi8 (0x7e07), 1
 	ld a, (0x7e08:16)
-	stb_d8 (0x7e0a), a
+	ld (0x7e0a:16), a
 	ld xhl, 0x7aec
 	ld xbc, 0x7d6c
 	calr SeqEvt_ProcessReadLoop
 	ld a, (0x7e0a:16)
-	stb_d8 (0x7e08), a
+	ld (0x7e08:16), a
 	stdi8 (0x7e07), 2
 	ld a, (0x7e09:16)
-	stb_d8 (0x7e0a), a
+	ld (0x7e0a:16), a
 	ld xhl, 0x7bec
 	ld xbc, 0x7db4
 	calr SeqEvt_ProcessReadLoop
 	ld a, (0x7e0a:16)
-	stb_d8 (0x7e09), a
+	ld (0x7e09:16), a
 	ld a, (0x7dfd:16)
-	stb_d8 (0x7dfc), a
+	ld (0x7dfc:16), a
 	ret
 
 SeqEvt_ProcessReadLoop:
@@ -382,7 +382,7 @@ SeqEvt_CalcTempoOffset:
 	subda8 a, 1132
 	cpda8 a, 0x7dfd
 	jr nc, SeqEvt_UpdateMinTempo
-	stb_d8 (0x7dfd), a
+	ld (0x7dfd:16), a
 
 SeqEvt_UpdateMinTempo:
 	ld iy, (0x7e11:16)
@@ -474,13 +474,13 @@ Voice_CheckSlotBit:
 Voice_ReadSlotParams:
 	ld ix, iy
 	ldb_sri A, 0x07, 0xec, 0xf0
-	stb_d8 (0x7e0b), a
+	ld (0x7e0b:16), a
 	inc 2, ix
 	ldb_sri A, 0x07, 0xec, 0xf0
-	stb_d8 (0x7e0c), a
+	ld (0x7e0c:16), a
 	inc 1, ix
 	ldb_sri A, 0x07, 0xec, 0xf0
-	stb_d8 (0x7e0d), a
+	ld (0x7e0d:16), a
 	inc 1, ix
 	ldw_sri WA, 0x07, 0xec, 0xf0
 	cpda16 xwa, 1134
@@ -1123,7 +1123,7 @@ AccPlay_ContinueMainLoop:
 
 AccPlay_UpdateStateFlags:
 	ld a, (0x7f0b:16)
-	stb_d8 (0x7f0c), a
+	ld (0x7f0c:16), a
 	bitda 2, (0x7f15)
 	jr z, AccPlay_DispatchRet
 	cpdi8 (0x8d36), 1
@@ -1164,7 +1164,7 @@ AccPlay_InitializeStart:
 	sla a, 1
 	and a, 0x1f
 	or a, 0x80
-	stb_d8 (0x7f16), a
+	ld (0x7f16:16), a
 	ld xhl, 0x1e880a
 	ormi8 (xhl), 0x1
 	ld xwa, 0x22
@@ -1272,8 +1272,8 @@ TempoEvt_ReadAndClassify:
 	ld a, l
 	ld w, a
 	and w, 0xf0
-	stb_d8 (0x7e54), a
-	stb_d8 (0x7e55), w
+	ld (0x7e54:16), a
+	ld (0x7e55:16), w
 	bitda 7, (0x7f16)
 	jr z, TempoEvt_DispatchEvent
 	cp a, 0x81
@@ -1290,7 +1290,7 @@ TempoEvt_ReadAndClassify:
 	calr AccPlay_UpdateBankParams
 
 TempoEvt_StoreBankParam:
-	stb_d8 (0x7f16), w
+	ld (0x7f16:16), w
 	jr TempoEvt_ContinueProcessing
 
 TempoEvt_CheckHighBit:
@@ -1460,7 +1460,7 @@ Voice_SlotTemplateData:
 
 AccPlay_SetupSoundParams:
 	ldb a, 0x17
-	stb_d8 (0x8d3a), a
+	ld (0x8d3a:16), a
 	ldb e, 0x90
 	ldb d, 0x10
 	ldb a, 0x17
@@ -1471,8 +1471,8 @@ AccPlay_SetupSoundParams:
 	cp wa, 0x1ff
 	jr nz, AccPlay_SetupJumpTarget
 	lds wa, 0
-	stb_d8 (0xfd62), a
-	stb_d8 (0xfd63), w
+	ld (0xfd62:16), a
+	ld (0xfd63:16), w
 	ldb e, 0x17
 	ldb d, 0x1
 	ldb a, 0x0
@@ -1643,13 +1643,13 @@ AccPlay_NoteAllocAndWrite:
 	ld hl, wa
 	ld xix, AccPlay_NoteParamTable
 	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x7e54), a
+	ld (0x7e54:16), a
 	inc 1, hl
 	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x7e55), a
+	ld (0x7e55:16), a
 	inc 1, hl
 	ldb_sri A, 0x07, 0xf0, 0xec
-	stb_d8 (0x7e56), a
+	ld (0x7e56:16), a
 	ldb a, 0x90
 	cpdi8 (0x7e54), 0
 	jr z, AccPlay_NoteSetType91
@@ -1991,7 +1991,7 @@ AccPlay_MeasureIncrement:
 	pop xwa
 
 AccPlay_MeasureNotifyDone:
-	stb_d8 (0x7f34), a
+	ld (0x7f34:16), a
 
 AccPlay_MeasureTrackRet:
 	ret
@@ -2057,7 +2057,7 @@ AccPlay_CompareAndSendProg:
 	ld e, w
 	ld w, a
 	ldb a, 0xc1
-	stb_d8 (0x7e40), w
+	ld (0x7e40:16), w
 	and e, 0xf
 	bit 7, w
 	jr z, AccPlay_SendProgChange
@@ -2113,7 +2113,7 @@ AccPlay_RestoreVoiceBank:
 	ld e, w
 	ld w, a
 	ldb a, 0xc1
-	stb_d8 (0x7e40), w
+	ld (0x7e40:16), w
 	and e, 0xf
 	bit 7, w
 	jr z, AccPlay_SendBankProgram
@@ -2123,8 +2123,8 @@ AccPlay_RestoreVoiceBank:
 AccPlay_SendBankProgram:
 	call AccompSeq_SendMidiEvent
 	ld wa, (xiy + 9)
-	stb_d8 (0xfd62), a
-	stb_d8 (0xfd63), w
+	ld (0xfd62:16), a
+	ld (0xfd63:16), w
 	ldb e, 0x17
 	ldb d, 0x1
 	ld a, w
@@ -2141,7 +2141,7 @@ AccPlay_SendBankProgram:
 	ldb a, 0xd1
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 12)
-	stb_d8 (0xfd6a), a
+	ld (0xfd6a:16), a
 	ldb e, 0x17
 	ldb d, 0x8
 	ldb w, 0x7f
@@ -2164,7 +2164,7 @@ AccPlay_RestoreReverbVal:
 	or w, 0x40
 
 AccPlay_WriteReverbFlag:
-	stb_d8 (0xfd66), w
+	ld (0xfd66:16), w
 	ldb e, 0x17
 	ldb d, 0x4
 	ld a, w
@@ -2188,7 +2188,7 @@ AccPlay_RestoreChorusVal:
 	or w, 0x8
 
 AccPlay_WriteChorusFlag:
-	stb_d8 (0xfd66), w
+	ld (0xfd66:16), w
 	ldb e, 0x17
 	ldb d, 0x4
 	ld a, w
@@ -2275,7 +2275,7 @@ AccPlay_SaveMuteStates:
 	ld a, (0xfd6f:16)
 	and a, 0x3f
 	and a, 0xf0
-	stb_d8 (0xfd6f), a
+	ld (0xfd6f:16), a
 	ldb e, 0x17
 	ldb d, 0xd
 	ldb w, 0xcf
@@ -2366,44 +2366,44 @@ AccompSeq_QueueMuteEvent:
 
 AccPlay_RestoreMuteStates:
 	ld wa, (0x7f1c:16)
-	stb_d8 (0xf9c3), a
-	stb_d8 (0xf9dd), w
+	ld (0xf9c3:16), a
+	ld (0xf9dd:16), w
 	ld wa, (0x7f1e:16)
-	stb_d8 (0xf9f7), a
-	stb_d8 (0xfa11), w
+	ld (0xf9f7:16), a
+	ld (0xfa11:16), w
 	ld wa, (0x7f20:16)
-	stb_d8 (0xfa2b), a
-	stb_d8 (0xfa45), w
+	ld (0xfa2b:16), a
+	ld (0xfa45:16), w
 	ld wa, (0x7f22:16)
-	stb_d8 (0xfa5f), a
-	stb_d8 (0xfa79), w
+	ld (0xfa5f:16), a
+	ld (0xfa79:16), w
 	ld wa, (0x7f24:16)
-	stb_d8 (0xfa93), a
-	stb_d8 (0xfaad), w
+	ld (0xfa93:16), a
+	ld (0xfaad:16), w
 	ld wa, (0x7f26:16)
-	stb_d8 (0xfac7), a
-	stb_d8 (0xfae1), w
+	ld (0xfac7:16), a
+	ld (0xfae1:16), w
 	ld wa, (0x7f28:16)
-	stb_d8 (0xfafb), a
-	stb_d8 (0xfb15), w
+	ld (0xfafb:16), a
+	ld (0xfb15:16), w
 	ld wa, (0x7f2a:16)
-	stb_d8 (0xfb2f), a
-	stb_d8 (0xfb49), w
+	ld (0xfb2f:16), a
+	ld (0xfb49:16), w
 	ld wa, (0x7f2c:16)
-	stb_d8 (0xfb63), a
-	stb_d8 (0xfb7d), w
+	ld (0xfb63:16), a
+	ld (0xfb7d:16), w
 	ld wa, (0x7f2e:16)
-	stb_d8 (0xfb97), a
-	stb_d8 (0xfbb1), w
+	ld (0xfb97:16), a
+	ld (0xfbb1:16), w
 	ld wa, (0x7f30:16)
-	stb_d8 (0xfbcb), a
-	stb_d8 (0xfbe5), w
+	ld (0xfbcb:16), a
+	ld (0xfbe5:16), w
 	ld wa, (0x7f32:16)
-	stb_d8 (0xfbff), a
-	stb_d8 (0xfc19), w
+	ld (0xfbff:16), a
+	ld (0xfc19:16), w
 	ld a, (0xfd6f:16)
 	or a, 0xc0
-	stb_d8 (0xfd6f), a
+	ld (0xfd6f:16), a
 	ldb e, 0x17
 	ldb d, 0xd
 	ldb w, 0x4f
@@ -2579,7 +2579,7 @@ AccPlay_CheckAndToggle:
 	call AccWrap_PlayModeStartAccPlay
 	lds wa, 0
 	ei 6
-	stb_d8 (1130), a
+	ld (1130:16), a
 	stda16 (1128), xwa
 	stdi8 (1055), 1
 	ei 0
@@ -2597,13 +2597,13 @@ AccPlay_StopAndReset:
 	bitda 2, (1056)
 	jr nz, AccPlay_StopResetRet
 	lds wa, 0
-	stb_d8 (1047), a
+	ld (1047:16), a
 	stda16 (1048), xwa
-	stb_d8 (1045), a
-	stb_d8 (1046), a
-	stb_d8 (1076), a
-	stb_d8 (1077), a
-	stb_d8 (1130), a
+	ld (1045:16), a
+	ld (1046:16), a
+	ld (1076:16), a
+	ld (1077:16), a
+	ld (1130:16), a
 	stda16 (1128), xwa
 	stdi8 (1056), 1
 	stdi8 (1054), 1
