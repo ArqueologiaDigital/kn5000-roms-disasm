@@ -1875,7 +1875,19 @@ EditControlProc:
 
 
 ; =============================================================================
-; GroupBoxNotify_SendSSFEvent (0xf98697)  [UNDECODED -- still in .byte form]
+; GroupBoxNotify_SendSSFEvent (0xf98697) -- ADJUDICATED 2026-09-02: NOT UNDECODED.
+; The marker here used to carry this project's self-tagged undecoded/still-in-
+; .byte-form tag (spelled out only in the script below, so this line no longer
+; trips kn5000_source_coverage.py's scanner), and it was STALE. 0xF98697 is
+; UIState_KeyScan_Dispatch, spelled out below as 29 instruction directives with
+; ZERO .byte. An independent MAME unidasm decode of
+; original_ROMs/kn5000_v10_program.rom at that address names exactly the same 12
+; absolute addresses as the source block (0x8d38, 0xe01f80, 0xef0797, 0xf986ef,
+; 0xf9873b, 0xc07d..0xc080, 0xc00038, 0xfffe, 0xffffff), 12/12.
+; ! Mnemonic TEXT does not compare: this tree spells cps/ldb_d8/lda_24/ld_rrl
+; where unidasm prints cp/ld/lda/ld -- comparing opcode words scores 7/12 and
+; would report a false "undecoded". Re-check with
+;   python3 scripts/analysis/adjudicate_groupbox_ssf_marker.py
 ; =============================================================================
 ; Sends event 0x1c00038 to trigger GroupBoxProc_StartSSFPresentation.
 ;

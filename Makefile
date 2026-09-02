@@ -110,12 +110,20 @@ SCREENDATA_BINS = $(patsubst %,v10/maincpu/includes/generated/style_ui_screendat
 ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
 ACCOMP_BINS = $(patsubst %,v10/maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
 
-SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit se_setup_ctrl_full se_setup_ctrl_list se_setup_env se_setup_labels se_setup_nav_full se_setup_params_full se_setup_rhythm se_setup_sel1 se_setup_sel2 se_setup_sel_rects se_setup_transport se_setup_waveform
+SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit se_setup_editor_full se_setup_sel4 se_setup_ctrl_full se_setup_ctrl_list se_setup_env se_setup_labels se_setup_nav_full se_setup_params_full se_setup_rhythm se_setup_sel1 se_setup_sel2 se_setup_sel_rects se_setup_transport se_setup_waveform
 # Every name in SE_NAMES is .incbin'd by assembly: se_apply_confirm from
 # storage/flash_floppy_handlers.s, the rest from audio/sound_editor_ui.s.
-# Still NOT built: se_setup_editor_full and se_setup_sel4 (276 B). Both compile
-# byte-exact against the ROM (scripts/lanes/v10se/se_c_descriptor_vs_rom.py) but
-# their spans live in storage/flash_floppy_handlers.s, another lane's file.
+# se_setup_editor_full and se_setup_sel4 (276 B) ARE now built: lane v10se
+# proved them byte-exact against the ROM
+# (scripts/lanes/v10se/se_c_descriptor_vs_rom.py) but could not integrate them
+# because their spans live in storage/flash_floppy_handlers.s; lane v10storage
+# owns that file and .incbin'd them there. Part of that span had been fake
+# code -- `ld xix, 0x4d414e59` is the ASCII "MANY".
+# ⚠ They are in SE_NAMES, not SE_V10_NAMES, because they are pre-existing
+# descriptors rather than v10-derived ones. SE_NAMES is patsubst'd into v7/ and
+# v9/, so the .bin is built for those images too; only v10's
+# flash_floppy_handlers.s references it, and the 13-image gate is the check
+# that this is harmless.
 # v10-ONLY screen descriptors, found by scripts/lanes/v10se/se_generate_new_screendata.py.
 # They are kept OUT of SE_NAMES because that list is patsubst'd into v7/ and v9/
 # as well, and these blocks were derived from the v10 ROM alone -- the same

@@ -312,7 +312,7 @@ WndEvt_EventCodeDispatch:
 	extz	xbc
 	sll	xbc, 2
 	ld	xwa, xbc
-	.byte 0xaf, 0x04, 0x80
+	add xwa, (xsp+0x04)	; F9B8CE (add xwa,(xsp+0x04))
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
@@ -2016,7 +2016,7 @@ EditSw_ByteData:
 	.byte 0x01
 	jr	nz, 16
 	ldw	de, 318
-	.byte 0x9f, 0x06, 0xa2
+	sub de, (xsp+0x06)	; F9CA23 (sub de,(xsp+0x06))
 	ld	(xix), de
 	ld	de, (xbc+2)
 	sub	de, wa

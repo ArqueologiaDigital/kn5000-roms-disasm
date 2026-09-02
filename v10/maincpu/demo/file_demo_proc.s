@@ -3221,7 +3221,7 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	call	BitMapOut_UpdateWidget_Done_0x98
 	lda_24	xwa, (0x1ed350)
-	.byte 0xaf, 0x04, 0x80
+	add xwa, (xsp+0x04)	; F882F7 (add xwa,(xsp+0x04))
 	ld	xbc, 16
 	call	FileIO_ReadBlock
 	ldw_da	wa, (0x1ed35d)
@@ -6650,7 +6650,7 @@ FileIO_ByteBlock_DemoProc2:
 	call	Math_MultiplyAccumulate
 	lda_24	xwa, (0x25f02)
 	add	xwa, xhl
-	.byte 0xb0, 0x9f
+	ldcf 7, (xwa)	; F8A106 (ldcf 7,(xwa))
 	scc8	c, l
 	extz	hl
 	popw	iz
