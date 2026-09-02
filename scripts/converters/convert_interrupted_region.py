@@ -82,6 +82,24 @@ BYTE_RE = re.compile(r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+)\s*$')
 WIDTH = {"byte": 1, "hword": 2, "word": 4, "long": 4, "dword": 8}
 ESCAPE = re.compile(r'\\(?:[0-7]{1,3}|x[0-9a-fA-F]{1,2}|.)')
 LABEL_RE = re.compile(r'^[A-Za-z_.$][A-Za-z0-9_.$]*:\s*$')
+# A raw undecoded `.byte`/`.word`/`.long`/... operand is always a NUMERIC
+# LITERAL (what a human or a prior converter wrote out from raw bytes). A
+# SYMBOLIC operand -- `.long SomeLabel` or `.long SomeLabel + 97` -- is
+# already-typed, already-named content (a pointer table entry), not debt.
+# 2026-09-02, lane V7CODE2: find_span() used to walk straight through such
+# a table because directive_size() only checked the directive NAME, not its
+# operand shape -- confirmed on two real v7 regions (0xEF97B6 and 0xEFAAB1,
+# both maincpu/display/scoop_display.s) where a raw `.byte` run is followed,
+# with NO intervening CODE byte, by an already-symbolic `.long Handler_N`
+# table right before real code resumes. Both are "DATA territory" by the
+# census's coarse byte-vs-code map, so the SAME region swept in a table
+# whose entries are legitimate labels. Disassembling those ROM bytes
+# in isolation prints plausible-looking garbage (`jr gt,-83`, `or (xbc-80),
+# xsp`, ...) that would have silently overwritten the symbolic `.long`
+# lines with wrong, meaningless instructions -- a clean decode that is
+# provably WRONG, not merely unproven. Numeric-literal-only enforcement
+# below makes directive_size() refuse at that exact line instead.
+LITERAL_OPERAND_RE = re.compile(r'^-?(0[xX][0-9a-fA-F]+|\d+)$')
 
 
 def ascii_len(op):
@@ -91,8 +109,12 @@ def ascii_len(op):
 
 def directive_size(line):
     """Return (bytes_emitted, is_data) for one source line, or (None, None)
-    if it is an encoding (instruction) line -- checked by the caller via
-    llvm-mc, this function only recognizes DATA directives and comments."""
+    if it is an encoding (instruction line) OR a data directive whose
+    operand is not a plain numeric literal (see LITERAL_OPERAND_RE above --
+    that shape is already-typed content, not raw debt, and must not be
+    swept into a span this module will overwrite from raw ROM bytes) --
+    checked by the caller via llvm-mc, this function only recognizes DATA
+    directives and comments."""
     s = line.strip()
     if s == "" or s.startswith(";") or s.startswith("#"):
         return 0, True
@@ -103,7 +125,10 @@ def directive_size(line):
         return None, None  # not a directive -- likely an instruction
     d, rest = mm.group(1), mm.group(2).strip()
     if d in WIDTH:
-        n = WIDTH[d] * (len([x for x in rest.split(",") if x.strip()]) or 1)
+        ops = [x.strip() for x in rest.split(",") if x.strip()]
+        if ops and not all(LITERAL_OPERAND_RE.match(x) for x in ops):
+            return None, None  # symbolic operand -- already-typed, not debt
+        n = WIDTH[d] * (len(ops) or 1)
         return n, True
     if d in ("ascii", "asciz"):
         return ascii_len(rest) + (1 if d == "asciz" else 0), True
