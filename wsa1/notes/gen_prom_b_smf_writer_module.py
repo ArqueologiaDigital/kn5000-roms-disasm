@@ -875,8 +875,86 @@ def splice():
     return 0
 
 
+# -------------------------------------------------------------------- debt
+DIRECTIVE = re.compile(r"^\s*\.(byte|short|word|long|ascii)\s+(.*?)(?:\t;|$)")
+
+
+def bytes_of(line):
+    """How many ROM bytes this source line emits, and which bucket it is in.
+
+    Buckets: `code` (an instruction), `fallback` (a `.byte` row standing in for
+    an instruction llvm-mc cannot encode -- real source, not debt), `data` (a
+    typed data directive) and `raw` (a bare `.byte` row with no typing, which
+    IS the debt this push measures)."""
+    m = DIRECTIVE.match(line)
+    if not m:
+        return (1 if line.strip() and not line.lstrip().startswith(";") else 0), "code"
+    kind, ops = m.group(1), m.group(2)
+    if kind == "ascii":
+        n = len(re.findall(r'"(.*)"', ops)[0].encode("latin-1")) if '"' in ops else 0
+    elif kind == "short":
+        n = 2 * len(ops.split(","))
+    elif kind in ("word", "long"):
+        n = 4 * len(ops.split(","))
+    else:
+        n = len(ops.split(","))
+    if "cannot encode this" in line:
+        return n, "fallback"
+    return n, "data"
+
+
+def debt(rev=None):
+    """Bytes of 0xF7669D-0xF779D4 by bucket, in HEAD or in an earlier revision.
+
+    ⚠ `code` is counted as ONE line = ONE instruction, not as bytes: this
+    function is measuring DEBT, so what matters is the `raw` figure, and the
+    range's total is a constant (4,920) the other buckets are subtracted from.
+    """
+    if rev:
+        sys.path.insert(0, os.path.join(ROOT, "notes"))
+        from asm_source import git_show
+        txt = git_show("prom_b/wsa1_prom_b.s", rev)
+    else:
+        txt = open(SRCB, encoding="utf-8").read()
+    lines = txt.split("\n")
+    heads = [i for i, l in enumerate(lines)
+             if l in ("Data_F7669D:", "sub_F7669D:")]
+    tails = [i for i, l in enumerate(lines) if l == "sub_F779D5:"]
+    if len(heads) != 1 or len(tails) != 1:
+        raise SystemExit("cannot bracket the range: %d heads, %d tails"
+                         % (len(heads), len(tails)))
+    tot = {"code": 0, "fallback": 0, "data": 0, "raw": 0}
+    owner = ""
+    for l in lines[heads[0]:tails[0]]:
+        if l.lstrip().startswith(";") or not l.strip():
+            continue
+        m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*):$", l)
+        if m:
+            owner = m.group(1)
+            continue
+        n, b = bytes_of(l)
+        # ★ DEBT IS DECIDED BY THE OWNING LABEL, not by the directive.  A
+        # `.byte` row under `ByteMap_F767FB` is a typed, named, documented
+        # object; a `.byte` row under `Data_F7681C` is the block splitter
+        # saying it could not frame the bytes.  Counting directives would
+        # have called 130 bytes of finished work debt, and 382 bytes of
+        # llvm-mc fallback debt as well.
+        if b == "data" and owner.startswith("Data_"):
+            b = "raw"
+        tot[b] += n
+    return tot
+
+
 def main():
     a = sys.argv[1:]
+    if "--debt" in a:
+        rev = a[a.index("--debt") + 1] if len(a) > a.index("--debt") + 1 else None
+        for r in ([rev] if rev else [None]):
+            t = debt(r)
+            print("  %-10s raw `.byte` debt %5d   typed data %4d   "
+                  "instruction-fallback `.byte` %3d   instruction lines %5d"
+                  % (r or "HEAD", t["raw"], t["data"], t["fallback"], t["code"]))
+        return 0
     if "--layout" in a:
         for k, s, n in layout():
             print("  %-7s 0x%06X-0x%06X  %6d" % (k, s, s + n - 1, n))
