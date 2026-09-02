@@ -103,7 +103,7 @@ WPLoad_HandleSelection:
 	jr	ge, 6
 	stdi16	(33048), 0
 WPLoad_Selection_Positive:
-	ldw_d16	wa, (33048)
+	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -112,7 +112,7 @@ WPLoad_Selection_Positive:
 	ld	xbc, 31784962
 	jrl	468
 WPLoad_HandleShow:
-	ldw_d16	bc, (33048)
+	ld	bc, (33048:16)
 	exts	xbc
 	divs	bc, 10
 	muls	bc, 10
@@ -122,7 +122,7 @@ WPLoad_HandleScroll:
 	ld	xbc, 29687809
 	lds32	xde, 1
 	call	ApPostEvent
-	ldw_d16	hl, (33048)
+	ld	hl, (33048:16)
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	or	xwa, xwa
@@ -159,7 +159,7 @@ WPLoad_PageDown:
 	jr	nz, 69
 	ld	wa, hl
 	add	wa, 10
-	ldw_d16	de, (33902)
+	ld	de, (33902:16)
 	cp	wa, de
 	jr	ge, 13
 	add	hl, 10
@@ -198,7 +198,7 @@ WPLoad_OpLoad:
 	ld	wa, hl
 	lds	bc, 1
 	calr	51406
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	50841
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -217,13 +217,13 @@ WPLoad_OpLoad:
 	ldw	wa, 238
 	call	16355504
 WPLoad_GetSelection:
-	ldw_d16	bc, (33048)
+	ld	bc, (33048:16)
 WPLoad_UpdateDisplay:
 	cp	(xsp+4), bc
 	jrl	z, 143
 	ld	wa, bc
 	call	16297188
-	ldw_d16	wa, (33048)
+	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -231,7 +231,7 @@ WPLoad_UpdateDisplay:
 	ld	xwa, (33044:16)
 	ld	xbc, 31784962
 	call	16423243
-	ldw_d16	bc, (33048)
+	ld	bc, (33048:16)
 	exts	xbc
 	divs	bc, 10
 	ld	de, (xsp+4)
@@ -245,18 +245,18 @@ WPLoad_UpdateDisplay:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	wa, (33048)
+	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -371,16 +371,16 @@ WPScan_LoopContinue:
 
 WP_FindNextSlot:
 	pushw	iz
-	ldb_d8	a, (35164)
+	ld	a, (35164:16)
 	cps	a, 4
 	jr	nc, 66
-	ldw_d16	bc, (35162)
+	ld	bc, (35162:16)
 	cps	bc, 0
 	jr	z, 58
 	lds	iz, 1
 	extz	wa
 	ld	qbc, wa
-	lda_24	xde, (15337386)
+	lda	xde, (15337386:24)
 WPFind_SearchLoop:
 	stw_erp HL, 0xe6
 	add hl, iz
@@ -398,7 +398,7 @@ WPFind_SearchLoop:
 WPFind_CheckSlot:
 	and	iy, bc
 	jr	z, 8
-	stb_d8	(35164), l
+	ld	(35164:16), l
 	ldb	l, 1
 	jr	8
 WPFind_NextSlot:
@@ -431,7 +431,7 @@ WPFind_Return:
 WP_GetConfigName:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (0x1ed350); Wallpaper config base address
+	lda xhl, (0x1ed350:24); Wallpaper config base address
 	extz xbc
 	sll xbc, 4	; index * 16
 	add xhl, xbc
@@ -453,7 +453,7 @@ WP_GetConfigName:
 WP_GetNameByOffset:
 	push xiz
 	ld xiz, xwa
-	lda_24 xwa, (0x1ed350)
+	lda xwa, (0x1ed350:24)
 	ld hl, (xwa + 13)	; Get entry size from config
 	ld xix, xwa
 	mul xhl, xbc	; Calculate offset
@@ -513,7 +513,7 @@ WP_GetBankMemName:
 	cps de, 4
 	jr nc, WP_GetBankMemName_FromROM
 	; From RAM at 0x0948a0
-	lda_24 xbc, (0x0948a0)
+	lda xbc, (0x0948a0:24)
 	sll hl, 2
 	add hl, de
 	mul hl, 0x60	; Entry size = 96 bytes
@@ -563,7 +563,7 @@ WP_GetPresetName3:
 WP_GetUserName1:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (0x1e0000)
+	lda xhl, (0x1e0000:24)
 	lda xhl, (xhl + 16)
 	mul bc, 0x1d6	; Entry stride
 	add xhl, xbc
@@ -585,7 +585,7 @@ WP_GetUserName2:
 	push xiz
 	ld de, bc
 	ld xiz, xwa
-	lda_24 xbc, (0x1e4980)
+	lda xbc, (0x1e4980:24)
 	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10
@@ -602,7 +602,7 @@ WP_GetUserName2:
 WP_GetUserName3:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (0x1e4aa7)
+	lda xhl, (0x1e4aa7:24)
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
 	lda_dpi XIY, 0xf8

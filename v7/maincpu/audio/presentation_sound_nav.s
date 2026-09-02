@@ -80,7 +80,7 @@ GroupBox_CancelBack:
 GroupBox_CancelBack_Loop:
 	ld ix, iz
 	extz xix
-	lda_24 xiy, (0x0274e8)
+	lda xiy, (0x0274e8:24)
 	ld xde, xix
 	sll xde, 3
 	sub xde, xix
@@ -454,7 +454,7 @@ EventParam_FetchPoint:
 	sub xhl, xwa
 	sll xhl, 2
 	add xhl, xbc
-	lda_24 xwa, (0x0274e9)
+	lda xwa, (0x0274e9:24)
 	add xwa, xhl
 	ld (xwa), 0x1
 	ld xwa, 0x1c00026
@@ -726,9 +726,9 @@ GetEditSwPoint:
 	cp hl, 0xc
 	jrl ugt, EditSwParam_Default
 	add hl, hl
-	lda_24 xix, (DiskWarning_ConfirmStrings_0xE70)
+	lda xix, (DiskWarning_ConfirmStrings_0xE70:24)
 	ldw_sri HL, 0x07, 0xf0, 0xec
-	lda_24 xix, (EditSwParam_Mode0)
+	lda xix, (EditSwParam_Mode0:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 
 ; GetEditSwPoint handler: mode 0 (value=0x2b)
@@ -807,9 +807,9 @@ SetWallPaper:
 	cps wa, 5
 	jr gt, SetWallPaper_Default
 	add wa, wa
-	lda_24 xix, (DiskWarning_ConfirmStrings_0xE8A)
+	lda xix, (DiskWarning_ConfirmStrings_0xE8A:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SetWallPaper_DispatchData)
+	lda xix, (SetWallPaper_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
@@ -1102,7 +1102,7 @@ IvDirmdScreenProc:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xE96
 	ld bc, (xbc)
-	lda_24 xix, (DirmdEmu_CaseB)
+	lda xix, (DirmdEmu_CaseB:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; DirmdEmulator dispatch case B
@@ -1243,7 +1243,7 @@ DirmdTitleFunc:
 	lda xsp, (xsp + 16)
 	ret
 DirmdEmu_CaseF:
-	ldb_d8	a, 35996
+	ld	a, (35996:16)
 	cpda8	a, 35997
 	jr	z, 25
 	ldw	wa, 255
@@ -1294,7 +1294,7 @@ DirmdEmulator:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xF12
 	ld bc, (xbc)
-	lda_24 xix, (DirmdEmulator_Dispatch)
+	lda xix, (DirmdEmulator_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 DirmdEmulator_Dispatch:
 	push	xde
@@ -1364,21 +1364,21 @@ DirmdEmulator_Dispatch:
 DirmdEmu_DefaultCase:
 	bitda 1, (0xe318)
 	jr z, .Lc_f9ab49
-	ldb_d8 a, (0xe316)
+	ld a, (0xe316:16)
 	extz WA
 	call UI_PostPartChangeEvent
 DirmdEmu_CheckModeChange:
 .Lc_f9ab49:
 	bitda 7, (0xe318)
 	jr z, .Lc_f9ab59
-	ldb_d8 a, (0xe316)
+	ld a, (0xe316:16)
 	extz WA
 	call UI_PostModeChangeEvent
 DirmdEmu_CheckSoundCtrl:
 .Lc_f9ab59:
 	bitda 6, (0xe318)
 	jr z, .Lc_f9ab69
-	ldb_d8 a, (0xe316)
+	ld a, (0xe316:16)
 	extz WA
 	call SoundCtrl_SendCommand
 DirmdEmu_CheckBit4:
@@ -1441,7 +1441,7 @@ WindowProc:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xF32
 	ld bc, (xbc)
-	lda_24 xix, (WindowProc_EventDispatch)
+	lda xix, (WindowProc_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; WindowProc event dispatch
 WindowProc_EventDispatch:

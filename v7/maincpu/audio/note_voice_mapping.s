@@ -71,7 +71,7 @@ NoteOn_MergeLayer1:
 	jr	50
 	ld	wa, iz
 	mul	wa, 5
-	lda_d16	xbc, (52102)
+	lda	xbc, (52102:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -80,7 +80,7 @@ NoteOn_MergeLayer1:
 	ld	wa, iz
 	mul	wa, 5
 	inc	4, wa
-	lda_d16	xbc, (52099)
+	lda	xbc, (52099:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -339,7 +339,7 @@ AccNoteOn_CheckSpecialChannel:
 	ld (XSP+0x15),A
 	ld_erpb_rr a, 0xfb
 	extz WA
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_dri a, 0x07, 0xe4, 0xe0
 	ldb_erp a, 0xfa
 	lda xwa, (xsp + 0x12)
@@ -624,7 +624,7 @@ VoiceInit_PartLoop:
 	lda xsp, (xsp+168)
 	ret
 	ret
-	lda_d16 xwa, (0xc162)
+	lda xwa, (0xc162:16)
 	lds bc, 0
 	call 0xfe37ea
 	.byte 0xf1
@@ -637,10 +637,10 @@ VoiceInit_ChannelLoop:
 	.byte 0x30, 0xd9, 0xa8, 0x1d, 0xd2, 0x36, 0xfe, 0xf1
 	.byte 0x62, 0xc1, 0x30, 0xd9, 0xa9, 0x1b, 0xd2, 0x36
 	.byte 0xfe
-	lda_d16 xwa, (0xc162)
+	lda xwa, (0xc162:16)
 	lds bc, 2
 	call 0xfe36d2
-	lda_d16 xwa, (0xc162)
+	lda xwa, (0xc162:16)
 	lds bc, 2
 	jp 0xfe355b
 	ret
@@ -1141,11 +1141,11 @@ VoiceClaimExt_Slot3_SetParam:
 VoiceClaimExt_Slot6_MarkLoop:
 	cp	l, 255
 	ret	z
-	lda_d16	xwa, (49506)
+	lda	xwa, (49506:16)
 	lds	bc, 2
 	call	16660458
 	ret
-	ldb_d8	a, (52809)
+	ld	a, (52809:16)
 	extz	wa
 VoiceClaimExt_Slot6_MarkCheck:
 	stda16	(52835), wa
@@ -1154,13 +1154,13 @@ VoiceClaimExt_Slot6_MarkCheck:
 	ld	wa, de
 	add	wa, wa
 	inc	4, wa
-	lda_d16	xbc, (52836)
+	lda	xbc, (52836:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
 	ld	wa, de
 	inc	1, wa
-	lda_d16	xbc, (52809)
+	lda	xbc, (52809:16)
 VoiceClaim_Extended_Return:
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xb3, 0x41, 0xda
 	.byte 0x88, 0xd8, 0x80, 0xf1, 0x67, 0xce, 0x31, 0xe8
@@ -3681,13 +3681,13 @@ AllocNewVoiceEntry_LoadParam4:
 	jrl	z, 138
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52310
+	lda	xde, (52310:16)
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), 144
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52311
+	lda	xde, (52311:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -3698,7 +3698,7 @@ SetChannelParam_LoadDRAM2:
 	ld	xbc, 148408537
 	halt
 	nop
-	lda_d16	xde, (52312)
+	lda	xde, (52312:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -3780,13 +3780,13 @@ SetChannelParam_LoadParam5:
 	jrl	z, 138
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52340
+	lda	xde, (52340:16)
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), 144
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52341
+	lda	xde, (52341:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -3794,7 +3794,7 @@ SetChannelParam_LoadParam5:
 	ld	(xhl), a
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52342
+	lda	xde, (52342:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -4786,7 +4786,7 @@ Rhythm_DispatchCCCommand:
 	ld	xhl, xwa
 	lda	xwa, (xsp+330)
 	ld	xbc, xwa
-	lda_d16	xwa, (49710)
+	lda	xwa, (49710:16)
 	ld	xde, xwa
 	ld	xwa, xhl
 	call	16667741
@@ -4995,7 +4995,7 @@ CollectEnabledVoices_WriteReg:
 	ldw	wa, 35816
 	lda	xwa, (xsp+330)
 	ld	xbc, xwa
-	lda_d16	xwa, (49714)
+	lda	xwa, (49714:16)
 	ld	xde, xwa
 	ld	xwa, xhl
 	call	16667741
@@ -5327,7 +5327,7 @@ ReallocEnabledVoices_DoFindEntr2:
 	jr	z, 60
 	lda	xwa, (xsp)
 	ld	xhl, xwa
-	lda_d16	xbc, (49506)
+	lda	xbc, (49506:16)
 	ld	a, (xsp+330)
 	ld	e, a
 	extz	de
@@ -5365,7 +5365,7 @@ ReallocVoices_Exit_WriteReg:
 	.byte 0xa6, 0x00, 0x21, 0xbf, 0x03, 0x41, 0xb7
 ReallocVoices_Exit_CheckEnd:
 	ldw	wa, 35816
-	lda_d16	xbc, (49864)
+	lda	xbc, (49864:16)
 	ld	a, (xsp+164)
 ReallocVoices_Exit_Compare:
 	.byte 0xc9, 0x8d, 0xda, 0x12, 0xeb, 0x88, 0x1d, 0xf8
@@ -5431,7 +5431,7 @@ ReallocVoices_Exit_WriteReg4:
 	ld	xde, xwa
 	ld	a, (xsp+330)
 	extz	wa
-	lda_d16	xbc, (49996)
+	lda	xbc, (49996:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -5503,7 +5503,7 @@ VoiceRealloc_LookupVoice:
 	jr	z, 63
 	lda	xwa, (xsp+2)
 	ld	xhl, xwa
-	lda_d16	xbc, (49506)
+	lda	xbc, (49506:16)
 	ld	a, (xsp+332)
 	ld	e, a
 	extz	de
@@ -5614,7 +5614,7 @@ ProcessLayeredNoteOn_WriteReg2:
 	jr nz, .Lc_fe7654
 	cp E,0xff
 	jr z, .Lc_fe7654
-	lda_d16 xde, (0xc2c8)
+	lda xde, (0xc2c8:16)
 	ld A,(XSP)
 	ld C,A
 	extz BC
@@ -5626,13 +5626,13 @@ ProcessLayeredNoteOn_WriteReg2:
 	jr z, .Lc_fe7680
 	cp E,0xff
 	jr z, .Lc_fe7680
-	lda_d16 xde, (0xc2c8)
+	lda xde, (0xc2c8:16)
 	ld A,(XSP)
 	ld C,A
 	extz BC
 	ld XWA,XDE
 	call 0xfe36d2
-	lda_d16 xde, (0xc162)
+	lda xde, (0xc162:16)
 	ld A,(XSP)
 	ld C,A
 	extz BC
@@ -6084,7 +6084,7 @@ SeqPart_MelodicNote_Layer1Done_Alt:
 	jrl	z, -713
 	ld	wa, (xsp+4)
 	and	wa, 15
-	lda_24	xbc, 15634330
+	lda	xbc, (15634330:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 SeqPart_EmitMelodicNote_Return:
@@ -6294,7 +6294,7 @@ ProcessEventDispatch_Prologue:
 SeqEvtBuf_NonNoteDispatchLoop:
 	retd 206
 	swi 7
-	ldb_d8 l, (52750)
+	ld l, (52750:16)
 	ret
 	stdi16 (0xcdca), 0x0000
 	stdi8 (0xce16), 0x00
@@ -6404,10 +6404,10 @@ VoiceMap_AllocateSlot:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 	ld	e, a
 	extz	de
-	ldb_d8	a, (52804)
+	ld	a, (52804:16)
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -6415,7 +6415,7 @@ VoiceMap_AllocateSlot:
 	ld	a, l
 	cp	a, 255
 	jr	z, 66
-	ldb_d8	a, (52750)
+	ld	a, (52750:16)
 	subda8	a, (52804)
 VoiceMap_AllocateSlo_SetByteFF:
 	add	a, l
@@ -6445,7 +6445,7 @@ NoteMap_FindBestMatch:
 	ld	a, l
 	cp	a, 255
 	jr	z, 116
-	ldb_d8	a, (52750)
+	ld	a, (52750:16)
 	subda8	a, (52804)
 	add	a, l
 	inc	1, a
@@ -6457,16 +6457,16 @@ NoteMap_FindBestMatch:
 	extz	wa
 	ld	de, wa
 	add	de, de
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 NoteMap_CheckVoiceReuse:
 	dec	1, a
 	extz	wa
 	muls	wa, 24
-	lda_24	xbc, 15634718
+	lda	xbc, (15634718:24)
 	exts	xwa
 	add	xwa, xbc
 	ld_rrb	c, xwa, de
-	ldb_d8	a, 52750
+	ld	a, (52750:16)
 	sub	a, c
 	ld	(xiz+5), a
 	ld	a, l
@@ -6475,7 +6475,7 @@ CheckVoiceReuse_SetByteFF:
 	ld	de, wa
 	add	de, de
 CheckVoiceReuse_SetByteFF2:
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 CheckVoiceReuse_Block:
 	.byte 0xc9, 0x69, 0xd8, 0x12, 0xd8, 0x09, 0x18, 0x00
 	.byte 0xf2, 0x1e, 0x91, 0xee, 0x31, 0xe8, 0x13, 0xe9
@@ -6503,7 +6503,7 @@ GetVoiceData_Entry_Compare:
 GetVoiceData_Entry_Block:
 	push	36
 	nop
-	lda_24	xbc, (15637070)
+	lda	xbc, (15637070:24)
 	exts	xwa
 	add	xwa, xbc
 GetVoiceData_Entry_Block2:
@@ -6526,11 +6526,11 @@ UIParam_CallbackDispatch:
 	ld	xbc, 316180943
 	muls	wa, 3
 	ld	de, wa
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 	dec	1, a
 	extz	wa
 	muls	wa, 36
-	lda_24	xbc, (15637070)
+	lda	xbc, (15637070:24)
 	exts	xwa
 	add	xwa, xbc
 UIParam_CallbackReturn:
@@ -6587,7 +6587,7 @@ SearchVoice_SetZero:
 SearchVoice_SortCheck:
 	ccf
 	muls	wa, 48
-	lda_24	xbc, (15635390)
+	lda	xbc, (15635390:24)
 	exts	xwa
 	add	xwa, xbc
 SearchVoice_BubbleSortOuter:
@@ -6754,7 +6754,7 @@ SoundFX_Handler_5:
 	decdi8 1, 0xce17
 	jr z, .Lc_fe8c84
 .Lc_fe8c84:
-	ldw_d16 de, (0xc4fa)
+	ld de, (0xc4fa:16)
 	and DE,0x2000
 	jr nz, .Lc_fe8c9b
 	call 0xfe8d01
@@ -6806,7 +6806,7 @@ SoundFX_Handler_6:
 SoundFX_Handler_6_ClearWord:
 	.byte 0x00, 0xcf, 0x66, 0x0a
 SoundFX_Handler_6_LoadReg:
-	ldw_d16	de, (50426)
+	ld	de, (50426:16)
 SoundFX_Handler_7:
 	.byte 0xda, 0xcc, 0x02, 0x00, 0x6e, 0x30, 0xf2, 0x42
 	.byte 0xce, 0x00, 0xcc, 0x66, 0x29, 0x68, 0x19, 0xd1
@@ -8208,7 +8208,7 @@ HdaeRom_AltProcessBlock:
 	jrl	nz, 340
 	ld	wa, (xsp+2)
 	add	wa, wa
-	lda_d16	xbc, (53044)
+	lda	xbc, (53044:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), iz
@@ -8407,7 +8407,7 @@ SndPart_SetDamperPed_LoadReg:
 	call	16567398
 	cp	hl, 128
 	jrl	nz, 802
-	ldb_d8	a, (64797)
+	ld	a, (64797:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -8447,7 +8447,7 @@ SndPart_SetCoarseTune:
 	sub	d, w
 	nop
 	ld	bc, wa
-	ldb_d8	a, (64800)
+	ld	a, (64800:16)
 SndPart_SetCoarseTun_LoadReg:
 	.byte 0xd8, 0x12, 0xd8, 0x8a, 0x30, 0x50, 0x00, 0x1e
 	.byte 0x7d, 0x05, 0x78, 0x6e, 0x02, 0x40, 0x81, 0x42
@@ -8458,7 +8458,7 @@ SndPart_SetPitchBendSens:
 SndPart_SetAllSoundOff:
 	pop	xiz
 	push	sr
-	ldb_d8	a, (64797)
+	ld	a, (64797:16)
 	and	a, 15
 	inc	3, a
 MIDI_SendEpilogue:
@@ -8759,7 +8759,7 @@ COMM_SendDataReturn:
 	inc	1, qiz
 	cpw	qiz, 15
 	jr	lt, -28
-	ldb_d8	a, (14079)
+	ld	a, (14079:16)
 	and	a, 15
 	jr	z, 40
 	ldw	qiz, 16
@@ -8818,7 +8818,7 @@ MIDI_SendPitchBend:
 	.byte 0x21, 0xd8, 0x12, 0x42, 0xf4, 0xcf, 0x00, 0x00
 	.byte 0xd8, 0x89, 0xd8, 0xa8, 0x1b, 0xca, 0x32, 0xef
 	.byte 0x0e
-	ldw_d16 hl, (0xe91f)
+	ld hl, (0xe91f:16)
 	ret
 MIDI_SendChannelPressure:
 	pushw	iz
@@ -8846,19 +8846,19 @@ MIDI_SendChannelPressure:
 	jr	nz, 5
 	lds	hl, 0
 	jrl	142
-	ldw_d16	wa, 59679
+	ld	wa, (59679:16)
 	and	wa, 2
 	cps	wa, 2
 	jr	nz, 13
-	ldw_d16	wa, 59679
+	ld	wa, (59679:16)
 	bit	2, wa
 	jr	nz, 4
 	lds	hl, 0
 	jr	117
 	lds	wa, 1
 	calr	828
-	ldw_d16	wa, 59679
-	ldw_d16	bc, 59689
+	ld	wa, (59679:16)
+	ld	bc, (59689:16)
 	calr	1054
 	ld	xiz, xhl
 	cpdi8	59678, 4
@@ -8873,7 +8873,7 @@ MIDI_SendChannelPressure:
 	jr	ge, 5
 	ldw	hl, 65535
 	jr	67
-	ldb_d8	a, 59678
+	ld	a, (59678:16)
 	cps	a, 4
 	jr	z, 42
 	cps	a, 3
@@ -8916,7 +8916,7 @@ SeqVoice_CheckAndRet_Prologue:
 	calr	934
 	calr	8156
 	ld	a, (xsp+6)
-	stb_d8	(59678), a
+	ld	(59678:16), a
 	call	16627073
 	ld	xwa, (xsp+2)
 	calr	7935
@@ -9727,7 +9727,7 @@ ConfigureBanks_Extend:
 ConfigureBanks_InitVal:
 	ldw	hl, 8938
 ConfigureBanks_WriteReg:
-	lda_d16	xwa, (59699)
+	lda	xwa, (59699:16)
 	ld	xbc, xwa
 	ld	wa, de
 	calr	5462
@@ -9881,7 +9881,7 @@ SeekRecord_Done_DoLookupRe:
 	ldw	(xsp+270), 0
 	ld	xwa, (59695:16)
 	ld	(xsp+6), xwa
-	ldw_d16	wa, 59679
+	ld	wa, (59679:16)
 	bit	4, wa
 FileIO_SeekRecord_Return:
 	jr	nz, 46
@@ -10865,9 +10865,9 @@ ToneGen_VoiceReset_Return:
 	jr	nz, 5
 	ldw	hl, 65535
 	jr	40
-	ldw_d16	bc, (53260)
+	ld	bc, (53260:16)
 VoiceReset_Return_RestoreReg:
-	lda_d16	xde, (53266)
+	lda	xde, (53266:16)
 VoiceReset_Return_Prologue:
 	.byte 0xe9, 0x12, 0xea, 0x81, 0xb1, 0x41, 0xd1, 0x10
 	.byte 0xd0, 0x69, 0xd1, 0x0c, 0xd0, 0x3f, 0xff, 0x07
@@ -10881,7 +10881,7 @@ VoiceReset_Return_LoadDRAM:
 	.byte 0x68
 VoiceReset_Return_Block2:
 	pushw	wa
-	ldw_d16	wa, (53262)
+	ld	wa, (53262:16)
 VoiceReset_Return_Block3:
 	.byte 0xf1, 0x12, 0xd0
 VoiceReset_Return_Block4:
@@ -10936,8 +10936,8 @@ SoundParam_InitDefaultBanks:
 	ldw HL, 0xffff
 	jr t, .Lc_feda3e
 .Lc_feda16:
-	ldw_d16 bc, (0xd812)
-	lda_d16 xde, (0xd818)
+	ld bc, (0xd812:16)
+	lda xde, (0xd818:16)
 	extz XBC
 	add XBC,XDE
 	ld (XBC),A
@@ -10952,14 +10952,14 @@ SoundParam_InitDefaultBanks:
 	lds hl, 0
 .Lc_feda3e:
 	ret
-	ldw_d16 wa, (0xd812)
+	ld wa, (0xd812:16)
 	cpda16 xwa, 0xd814
 	jr nz, .Lc_feda4e
 	ldw HL, 0xffff
 	jr t, .Lc_feda76
 .Lc_feda4e:
-	ldw_d16 wa, (0xd814)
-	lda_d16 xbc, (0xd818)
+	ld wa, (0xd814:16)
+	lda xbc, (0xd818:16)
 	extz XWA
 	add XWA,XBC
 	ld L,(XWA)
@@ -11952,7 +11952,7 @@ Param_SignExtendRetu_Return:
 	jrl	nz, 138
 	cp	xbc, 470
 	jr	ugt, 125
-	lda_d16	xde, 57596
+	lda	xde, (57596:16)
 	ld	(xde), 45
 	ld	xwa, (xsp+20)
 	lda	xhl, (xwa+6)
@@ -12079,7 +12079,7 @@ Param_SignExtendRetu_Return:
 	.byte 0x32, 0xef, 0xbf, 0x04, 0x02, 0x00, 0x00, 0x68
 	.byte 0x05, 0xbf, 0x04, 0x02, 0x01, 0x00, 0x9f, 0x04
 	.byte 0x23, 0x5e, 0xef, 0x64, 0x0e
-	lda_d16 xde, (0xe21c)
+	lda xde, (0xe21c:16)
 	ld (XDE),0x2b
 	ld (XDE+0x01),0x30
 	ld (XDE+0x02),0x7f
@@ -12088,7 +12088,7 @@ Param_SignExtendRetu_Return:
 	ld (XDE+0x05),0x00
 	ld (XDE+0x06),0x02
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12096,9 +12096,9 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57891
+	ld	l, (57891:16)
 	ret
-	lda_d16	xde, 57894
+	lda	xde, (57894:16)
 	ld	(xde), 43
 	ld	(xde+1), 48
 	ld	(xde+2), 127
@@ -12107,7 +12107,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+5), 0
 	ld	(xde+6), 2
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12115,9 +12115,9 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57901
+	ld	l, (57901:16)
 	ret
-	lda_d16	xde, 57904
+	lda	xde, (57904:16)
 	ld	(xde), 43
 	ld	(xde+1), 48
 	ld	(xde+2), 127
@@ -12126,7 +12126,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+5), 0
 	ld	(xde+6), 2
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12134,9 +12134,9 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57911
+	ld	l, (57911:16)
 	ret
-	lda_d16	xde, 57914
+	lda	xde, (57914:16)
 	ld	(xde), 43
 	ld	(xde+1), 48
 	ld	(xde+2), 127
@@ -12145,7 +12145,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+5), 0
 	ld	(xde+6), 2
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12153,11 +12153,11 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57921
+	ld	l, (57921:16)
 	ret
 	cps	wa, 4
 	jrl	ugt, 130
-	lda_d16	xde, 57924
+	lda	xde, (57924:16)
 	ld	(xde), 45
 	ld	(xde+1), 0
 	ld	(xde+3), 0
@@ -12208,11 +12208,11 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	call	15676106
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ret
 	push XIZ
-	lda_d16 xhl, (0xe284)
+	lda xhl, (0xe284:16)
 	ld (XHL),0x2c
 	ld (XHL+0x01),0x00
 	ld (XHL+0x02),0x08
@@ -12220,9 +12220,9 @@ Param_SignExtendRetu_Return:
 	ld (XHL+0x04),0x00
 	ld (XHL+0x05),0x00
 	ld (XHL+0x06),E
-	ldb_d8 c, (0xe0fb)
+	ld c, (0xe0fb:16)
 	inc 1,C
-	stb_d8 (0xe0fb), c
+	ld (0xe0fb:16), c
 	res 0x07,C
 	ld (XHL+0x07),C
 	ld QBC,0
@@ -12833,7 +12833,7 @@ SendPartDataBlock_Data:
 	ldb L, 0x00
 	ret
 	ldw DE, 0x24b8
-	lda_24 xbc, (0x1e0000)
+	lda xbc, (0x1e0000:24)
 	lda xwa, (xbc + 0x10)
 	lds hl, 0
 	.byte 0xd5, 0xe1, 0x83, 0xda, 0x1c, 0xfa, 0xdb, 0x06
@@ -13195,7 +13195,7 @@ TmFlashWrite_Block1_Entry:
 	ld XHL,(XSP+0x04)
 	lds iy, 0
 	lds ix, 0
-	lda_24 xbc, (CharMap_FullPermutation_0x660)
+	lda xbc, (CharMap_FullPermutation_0x660:24)
 	jr t, .Lc_ff01d3
 .Lc_ff01d1:
 	inc 1,XHL

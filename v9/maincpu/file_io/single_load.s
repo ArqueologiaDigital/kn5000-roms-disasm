@@ -26,10 +26,10 @@ SingleLoadModeFunc:
 	jr SLMode_Return
 
 SLMode_HandleShow:
-	ldb_d8 a, (0x89f8)
+	ld a, (0x89f8:16)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (StorageArea_NameTable)
+	lda xbc, (StorageArea_NameTable:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x81b6:16)
 	ld xbc, 0x1c0000f
@@ -48,10 +48,10 @@ SingleLoadDstBankFunc:
 	jr SLDstBank_Return
 
 SLDstBank_HandleShow:
-	ldb_d8 a, (0x89f8)
+	ld a, (0x89f8:16)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (StorageAreaName_PanelMemory_0xE)
+	lda xbc, (StorageAreaName_PanelMemory_0xE:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x81ba:16)
 	ld xbc, 0x1c0000f
@@ -71,7 +71,7 @@ SingleLoadDstMemFunc:
 
 SLDstMem_HandleShow:
 	ld xwa, (0x81be:16)
-	lda_24 xde, (BankStr_Bank3_0x6)
+	lda xde, (BankStr_Bank3_0x6:24)
 	cpdi8 (0x89fa), 0
 	jr z, SLDstMem_ShowFromBank
 	cpdi8 (0x89f8), 1
@@ -81,7 +81,7 @@ SLDstMem_HandleShow:
 	jr SLDstMem_DispatchShow
 
 SLDstMem_ShowFromBank:
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
@@ -104,8 +104,8 @@ SingleLoadSrcBankFunc:
 
 SLSrcBank_HandleShow:
 	ld xwa, (0x81c2:16)
-	lda_24 xde, (StorageAreaName_PanelMemory_0xE)
-	ldb_d8 c, (0x89f8)
+	lda xde, (StorageAreaName_PanelMemory_0xE:24)
+	ld c, (0x89f8:16)
 	cps c, 0
 	jr nz, SLSrcBank_ShowFromIndex
 	cpdi8 (0x8a0a), 0
@@ -137,8 +137,8 @@ SingleLoadSrcMemFunc:
 
 SLSrcMem_HandleShow:
 	ld xwa, (0x81c6:16)
-	lda_24 xde, (BankStr_Bank3_0x6)
-	ldb_d8 c, (0x89f8)
+	lda xde, (BankStr_Bank3_0x6:24)
+	ld c, (0x89f8:16)
 	cps c, 1
 	jr z, SLSrcMem_ShowDirect
 	cpdi8 (0x89fa), 0
@@ -167,12 +167,12 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	stib_dsp 224, 0
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (StorageAreaName_PanelMemory_0xE)
+	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -180,11 +180,11 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x894f)
+	lda	xwa, (0x894f:16)
 	ld	xbc, PtrTbl_DrumKitNames_0x60
 	call	FileIO_BuildFilePath
-	lda_d16	xiz, (0x894f)
-	ldb_d8	a, (0x89fc)
+	lda	xiz, (0x894f:16)
+	ld	a, (0x89fc:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	inc	1, a
@@ -194,7 +194,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x894f)
+	lda	xwa, (0x894f:16)
 	ldw	bc, 16
 	calr	61054
 	ld	xwa, (xsp+6)
@@ -207,10 +207,10 @@ SLSrcBankList_FuncBody:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
-	ldb_d8	a, (0x89fc)
+	ld	a, (0x89fc:16)
 	extz	wa
 	div8rr	a, c
 	extz	wa
@@ -218,10 +218,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x8964)
+	lda	xwa, (0x8964:16)
 	ldw	bc, 16
 	calr	60984
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -232,13 +232,13 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -246,7 +246,7 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ld	xbc, PtrTbl_DrumKitNames_0x64
 	call	FileIO_BuildFilePath
 	.byte 0xc1
@@ -255,8 +255,8 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	nz, 32
-	lda_d16	xiz, (0x8979)
-	ldb_d8	a, (0x89fc)
+	lda	xiz, (0x8979:16)
+	ld	a, (0x89fc:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -267,10 +267,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	60857
-	lda_d16	xde, (0x8978)
+	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -280,12 +280,12 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 36
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, PtrTbl_DrumKitNames_0x68
 	call	FileIO_CopyString
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -301,19 +301,19 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	nz, 55
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
-	ldb_d8	a, (0x89fc)
+	ld	a, (0x89fc:16)
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc2_0xA7
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x898e)
+	lda	xwa, (0x898e:16)
 	ldw	bc, 16
 	calr	60742
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -333,12 +333,12 @@ SLSrcBankList_FuncBody:
 	.byte 0xc1
 	ldwio	138, 63
 	jr	z, 15
-	ldb_d8	a, (0x89fc)
+	ld	a, (0x89fc:16)
 	extz	wa
 	.byte 0xc2, 0x52
 	push	234
 	.byte 0x51
-	stb_d8	(0x89fc), w
+	ld	(0x89fc:16), w
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	65044
@@ -356,7 +356,7 @@ SLSrcBankList_FuncBody:
 	stdi8	(0x81ce), 0
 	stdi8	(0x81d0), 0
 	jrl	453
-	ldb_d8	e, (0x89fc)
+	ld	e, (0x89fc:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
 	jrl	nz, 154
@@ -373,7 +373,7 @@ SLSrcBankList_FuncBody:
 	cpda8_24 xbc, (15337812)
 	jr	nc, 25
 	add	c, l
-	stb_d8	(0x89fc), c
+	ld	(0x89fc:16), c
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	64928
@@ -387,7 +387,7 @@ SLSrcBankList_FuncBody:
 	cp	e, c
 	jr	c, 36
 	sub	a, c
-	stb_d8	(0x89fc), a
+	ld	(0x89fc:16), a
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	64884
@@ -399,11 +399,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81ca:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 312
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	215
@@ -428,7 +428,7 @@ SLSrcBankList_FuncBody:
 	cp	a, e
 	jr	nc, 67
 	inc	1, c
-	stb_d8	(0x89fc), c
+	ld	(0x89fc:16), c
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	jr	44
@@ -445,7 +445,7 @@ SLSrcBankList_FuncBody:
 	cps	a, 0
 	jr	z, 21
 	dec	1, c
-	stb_d8	(0x89fc), c
+	ld	(0x89fc:16), c
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	64892
@@ -453,11 +453,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81ca:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 150
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jr	54
@@ -469,11 +469,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81ca:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 94
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -509,18 +509,18 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xwa
 	cp	xbc, 0x01c0000b
 	jrl	nz, 196
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	stib_dsp 224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	60117
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+21), 1
 	lda	xwa, (xwa+22)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -528,13 +528,13 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x8964)
+	lda	xwa, (0x8964:16)
 	ld	xbc, PtrTbl_DrumKitNames_0x80
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x8964)
+	lda	xwa, (0x8964:16)
 	ldw	bc, 16
 	calr	60058
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
 	lds	wa, 0
@@ -542,10 +542,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	60023
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	(xwa), 0
@@ -555,15 +555,15 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x894e
 	call	ApPostEvent
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x8978)
+	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -575,12 +575,12 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	xiz, xwa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	stib_dsp 224, 0
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (StorageAreaName_PanelMemory_0xE)
+	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -588,14 +588,14 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x894f)
+	lda	xwa, (0x894f:16)
 	ld	xbc, PtrTbl_DrumKitNames_0x82
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x894f)
+	lda	xwa, (0x894f:16)
 	ldw	bc, 16
 	calr	59868
-	lda_d16	xwa, (0x8963)
-	ldb_d8	c, (0x89fe)
+	lda	xwa, (0x8963:16)
+	ld	c, (0x89fe:16)
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
@@ -605,7 +605,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x894e
 	call	ApPostEvent
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -616,19 +616,19 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+6), c
 	ld	(xsp+8), xwa
-	ldb_d8	a, (0x89fe)
+	ld	a, (0x89fe:16)
 	extz	wa
 	.byte 0x8f, 0x06, 0x51
 	ld	a, w
 	extz	wa
 	ld	(xsp+4), wa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -636,7 +636,7 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ld	xbc, PtrTbl_DrumKitNames_0x86
 	call	FileIO_BuildFilePath
 	.byte 0xc1
@@ -645,20 +645,20 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	nz, 18
-	lda_d16	xiz, (0x8979)
+	lda	xiz, (0x8979:16)
 	ld	wa, (xsp+4)
 	calr	63498
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	59704
-	lda_d16	xde, (0x8978)
+	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xbc, (0x894e)
+	lda	xbc, (0x894e:16)
 	lda	xwa, (xbc+63)
 	.byte 0xc1
 	swi	2
@@ -670,7 +670,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xbc+64)
 	ld	xbc, PtrTbl_DrumKitNames_0x8A
 	call	FileIO_CopyString
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, 0x01c0000f
 	jr	39
@@ -679,14 +679,14 @@ SLSrcBankList_FuncBody:
 	max
 	nop
 	jr	c, 36
-	ldb_d8	c, (0x89fe)
+	ld	c, (0x89fe:16)
 	extz	bc
 	.byte 0x8f, 0x06, 0x53
 	extz	bc
 	pushw	3
 	ld	de, (xsp+6)
 	calr	63409
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -697,7 +697,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	e, c
 	ld	(xsp+4), xwa
-	ldb_d8	a, (0x89fe)
+	ld	a, (0x89fe:16)
 	extz	wa
 	div8rr	a, e
 	ld	c, w
@@ -710,10 +710,10 @@ SLSrcBankList_FuncBody:
 	jr	nz, 63
 	cps	bc, 4
 	jr	nc, 59
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
-	ldb_d8	a, (0x89fe)
+	ld	a, (0x89fe:16)
 	extz	wa
 	div8rr	a, e
 	extz	wa
@@ -721,10 +721,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x898e)
+	lda	xwa, (0x898e:16)
 	ldw	bc, 16
 	calr	59524
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -754,7 +754,7 @@ SLSrcBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	0x81d2, xwa
 	jrl	408
-	ldb_d8	l, (0x89fe)
+	ld	l, (0x89fe:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
 	jrl	nz, 142
@@ -768,7 +768,7 @@ SLSrcBankList_FuncBody:
 	cpda8_24 xbc, (15337846)
 	jr	nc, 25
 	add	c, e
-	stb_d8	(0x89fe), c
+	ld	(0x89fe:16), c
 	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
 	ld	xwa, xiz
 	calr	64974
@@ -782,7 +782,7 @@ SLSrcBankList_FuncBody:
 	cp	l, c
 	jr	c, 31
 	sub	a, c
-	stb_d8	(0x89fe), a
+	ld	(0x89fe:16), a
 	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
 	ld	xwa, xiz
 	calr	64930
@@ -793,11 +793,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81d2:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 284
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	214
@@ -822,7 +822,7 @@ SLSrcBankList_FuncBody:
 	cp	a, e
 	jr	nc, 67
 	inc	1, c
-	stb_d8	(0x89fe), c
+	ld	(0x89fe:16), c
 	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
 	ld	xwa, xiz
 	jr	44
@@ -839,7 +839,7 @@ SLSrcBankList_FuncBody:
 	cps	a, 0
 	jr	z, 21
 	dec	1, c
-	stb_d8	(0x89fe), c
+	ld	(0x89fe:16), c
 	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
 	ld	xwa, xiz
 	calr	64877
@@ -847,11 +847,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81d2:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 123
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jr	54
@@ -863,11 +863,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81d2:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 67
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -924,12 +924,12 @@ SLSrcBankList_FuncBody:
 	dec	6, xsp
 	ld	(xsp), c
 	ld	(xsp+2), xwa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	stib_dsp 224, 0
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (StorageAreaName_PanelMemory_0xE)
+	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -937,10 +937,10 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x894f)
+	lda	xwa, (0x894f:16)
 	ld	xbc, PtrTbl_DrumKitNames_0xA0
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x894f)
+	lda	xwa, (0x894f:16)
 	ldw	bc, 16
 	calr	58856
 	ld	xwa, (xsp+2)
@@ -949,16 +949,16 @@ SLSrcBankList_FuncBody:
 	call	ApPostEvent
 	ld	a, (xsp)
 	.byte 0x87, 0x81
-	ldb_d8	c, (0x8a00)
+	ld	c, (0x8a00:16)
 	cp	c, a
 	jr	nc, 31
-	lda_d16	xwa, (0x8963)
+	lda	xwa, (0x8963:16)
 	extz	bc
 	.byte 0x87, 0x53
 	extz	bc
 	lds	de, 1
 	calr	62683
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+2)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -971,17 +971,17 @@ SLSrcBankList_FuncBody:
 	add	a, c
 	cpdm8	0x8a00, a
 	jr	c, 49
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
 	call	FileIO_ByteBlock_DemoProc2_0x2B3
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x8964)
+	lda	xwa, (0x8964:16)
 	ldw	bc, 16
 	calr	58744
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -992,13 +992,13 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -1006,7 +1006,7 @@ SLSrcBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ld	xbc, PtrTbl_DrumKitNames_0xA4
 	call	FileIO_BuildFilePath
 	.byte 0xc1
@@ -1017,8 +1017,8 @@ SLSrcBankList_FuncBody:
 	jr	nz, 65
 	ld	e, (xsp+4)
 	.byte 0x8f, 0x04, 0x85
-	ldb_d8	c, (0x8a00)
-	lda_d16	xwa, (0x8979)
+	ld	c, (0x8a00:16)
+	lda	xwa, (0x8979:16)
 	cp	c, e
 	jr	c, 21
 	ld	xiz, xwa
@@ -1042,10 +1042,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x8979)
+	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	58584
-	lda_d16	xde, (0x8978)
+	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1055,13 +1055,13 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 36
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	.byte 0x41
 	.long Str_AllOption_EA0980
 	call	FileIO_CopyString
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1077,12 +1077,12 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	nz, 77
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	ld	e, c
 	add	e, c
 	lda	xiz, (xwa+64)
-	ldb_d8	a, (0x8a00)
+	ld	a, (0x8a00:16)
 	cp	a, e
 	jr	c, 14
 	sub	a, e
@@ -1096,10 +1096,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x898e)
+	lda	xwa, (0x898e:16)
 	ldw	bc, 16
 	calr	58447
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1134,7 +1134,7 @@ SLSrcBankList_FuncBody:
 	stdi8	(0x81dc), 0
 	stdi8	(0x81de), 0
 	jrl	648
-	ldb_d8	l, (0x8a00)
+	ld	l, (0x8a00:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
 	jrl	nz, 212
@@ -1150,9 +1150,9 @@ SLSrcBankList_FuncBody:
 	cp	a, c
 	jr	nc, 8
 	add	a, c
-	stb_d8	(0x8a00), a
+	ld	(0x8a00:16), a
 	jr	4
-	stb_d8	(0x8a00), w
+	ld	(0x8a00:16), w
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64883
@@ -1176,9 +1176,9 @@ SLSrcBankList_FuncBody:
 	cp	c, a
 	jr	nc, 8
 	sub	c, e
-	stb_d8	(0x8a00), c
+	ld	(0x8a00:16), c
 	jr	4
-	stb_d8	(0x8a00), e
+	ld	(0x8a00:16), e
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64803
@@ -1196,11 +1196,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81d8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 449
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	355
@@ -1229,7 +1229,7 @@ SLSrcBankList_FuncBody:
 	cp	a, e
 	jrl	nc, 198
 	inc	1, c
-	stb_d8	(0x8a00), c
+	ld	(0x8a00:16), c
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64836
@@ -1240,7 +1240,7 @@ SLSrcBankList_FuncBody:
 	ld	xde, 0x8a00
 	jrl	152
 	inc	1, c
-	stb_d8	(0x8a00), c
+	ld	(0x8a00:16), c
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64798
@@ -1267,7 +1267,7 @@ SLSrcBankList_FuncBody:
 	cps	a, 0
 	jr	z, 84
 	dec	1, c
-	stb_d8	(0x8a00), c
+	ld	(0x8a00:16), c
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64722
@@ -1280,7 +1280,7 @@ SLSrcBankList_FuncBody:
 	cp	c, a
 	jr	ule, 43
 	dec	1, c
-	stb_d8	(0x8a00), c
+	ld	(0x8a00:16), c
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64681
@@ -1294,11 +1294,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81d8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 147
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jr	54
@@ -1310,11 +1310,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (0x81d8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 91
-	lda_d16	xde, (0x8963)
+	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x898d)
+	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1354,7 +1354,7 @@ SLSrcBankList_FuncBody:
 	lds	iz, 0
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xbc, (0x894e)
+	lda	xbc, (0x894e:16)
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
@@ -1369,7 +1369,7 @@ SLSrcBankList_FuncBody:
 	calr	57625
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xwa, (0x894e)
+	lda	xwa, (0x894e:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+2)
@@ -1412,10 +1412,10 @@ SLSrc_HandleShow:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81e0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Str_AllOption_EA0980_0x16)
+	lda xde, (Str_AllOption_EA0980_0x16:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1442,10 +1442,10 @@ SLSrc_ScrollMode5_Prev:
 SLSrc_ScrollMode5_Dispatch:
 	call ApPostEvent
 	ld xwa, (0x81e0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Str_AllOption_EA0980_0x16)
+	lda xde, (Str_AllOption_EA0980_0x16:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1473,10 +1473,10 @@ SLSrc_ScrollMode6_NoStep:
 SLSrc_ScrollMode6_Dispatch:
 	call ApPostEvent
 	ld xwa, (0x81e0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Str_AllOption_EA0980_0x16)
+	lda xde, (Str_AllOption_EA0980_0x16:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1492,10 +1492,10 @@ SLSrc_ScrollMode7:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81e0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Str_AllOption_EA0980_0x16)
+	lda xde, (Str_AllOption_EA0980_0x16:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1510,10 +1510,10 @@ SLSrc_ScrollMode8:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81e0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Str_AllOption_EA0980_0x16)
+	lda xde, (Str_AllOption_EA0980_0x16:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1524,10 +1524,10 @@ SLSrc_ScrollMode8:
 SLSrc_ScrollMode40:
 	cp xiz, 0x28
 	jr nz, SLSrc_Return
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Str_AllOption_EA0980_0x16)
+	lda xde, (Str_AllOption_EA0980_0x16:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1551,12 +1551,12 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	stib_dsp 224, 0
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (StorageAreaName_PanelMemory_0xE)
+	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -1564,11 +1564,11 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89a3)
+	lda	xwa, (0x89a3:16)
 	ld	xbc, Str_AllOption_EA0980_0x2A
 	call	FileIO_BuildFilePath
-	lda_d16	xiz, (0x89a3)
-	ldb_d8	a, (0x8a02)
+	lda	xiz, (0x89a3:16)
+	ld	a, (0x8a02:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	inc	1, a
@@ -1578,24 +1578,24 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89a3)
+	lda	xwa, (0x89a3:16)
 	ldw	bc, 16
 	calr	57026
-	lda_d16	xwa, (0x89b7)
-	ldb_d8	c, (0x8a02)
+	lda	xwa, (0x89b7:16)
+	ld	c, (0x8a02:16)
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
 	lds	de, 1
 	calr	60650
-	lda_d16	xwa, (0x89b8)
+	lda	xwa, (0x89b8:16)
 	ldw	bc, 16
 	calr	56996
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x89a2
 	call	ApPostEvent
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1606,12 +1606,12 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xde, (0x89a2)
+	lda	xde, (0x89a2:16)
 	ld	(xde+42), 2
 	ld	(xde+63), 3
-	ldb_d8	a, (0x89f8)
+	ld	a, (0x89f8:16)
 	extz	wa
-	lda_24	xhl, (BankStr_Bank3_0x6)
+	lda	xhl, (BankStr_Bank3_0x6:24)
 	ld	bc, wa
 	sla	bc, 2
 	lda	xwa, (xde+43)
@@ -1626,23 +1626,23 @@ SLDstBankList_FuncBody:
 	nop
 	jr	z, 42
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ld	xbc, Str_AllOption_EA0980_0x2E
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	56878
-	lda_d16	xwa, (0x89e2)
+	lda	xwa, (0x89e2:16)
 	.byte 0x41
 	.long Str_AllOption_EA09B2
 	call	FileIO_CopyString
 	jr	74
 	call	FileIO_CopyString
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ld	xbc, Str_AllOption_EA09B2_0x12
 	call	FileIO_BuildFilePath
-	lda_d16	xiz, (0x89cd)
-	ldb_d8	a, (0x8a02)
+	lda	xiz, (0x89cd:16)
+	ld	a, (0x8a02:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -1653,19 +1653,19 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	56804
-	lda_d16	xwa, (0x89e1)
-	ldb_d8	c, (0x8a02)
+	lda	xwa, (0x89e1:16)
+	ld	c, (0x8a02:16)
 	extz	bc
 	lds	de, 3
 	calr	60479
-	lda_d16	xde, (0x89cc)
+	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1692,7 +1692,7 @@ SLDstBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	0x81e4, xwa
 	jrl	160
-	ldb_d8	l, (0x8a02)
+	ld	l, (0x8a02:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
 	jrl	nz, 149
@@ -1706,7 +1706,7 @@ SLDstBankList_FuncBody:
 	cpda8_24 xbc, (15337930)
 	jr	nc, 25
 	add	c, e
-	stb_d8	(0x8a02), c
+	ld	(0x8a02:16), c
 	ldb_da	c, (Str_AllOption_EA09B2_0x16)
 	ld	xwa, xiz
 	calr	65044
@@ -1720,7 +1720,7 @@ SLDstBankList_FuncBody:
 	cp	l, c
 	jr	c, 26
 	sub	a, c
-	stb_d8	(0x8a02), a
+	ld	(0x8a02:16), a
 	ldb_da	c, (Str_AllOption_EA09B2_0x16)
 	ld	xwa, xiz
 	calr	65000
@@ -1730,11 +1730,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81e4:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 37
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1763,7 +1763,7 @@ SLDstBankList_FuncBody:
 	cp	a, e
 	jr	nc, 62
 	inc	1, c
-	stb_d8	(0x8a02), c
+	ld	(0x8a02:16), c
 	ldb_da	c, (Str_AllOption_EA09B2_0x16)
 	ld	xwa, xiz
 	jr	44
@@ -1780,18 +1780,18 @@ SLDstBankList_FuncBody:
 	cps	a, 0
 	jr	z, 16
 	dec	1, c
-	stb_d8	(0x8a02), c
+	ld	(0x8a02:16), c
 	ldb_da	c, (Str_AllOption_EA09B2_0x16)
 	ld	xwa, xiz
 	calr	64983
 	ld	xwa, (0x81e4:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -133
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	-173
@@ -1803,11 +1803,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81e4:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -191
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	-231
@@ -1820,11 +1820,11 @@ SLDstBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 30
-	ldb_d8	a, (0x89fc)
+	ld	a, (0x89fc:16)
 	extz	wa
 	div8rr	a, c
 	extz	wa
-	ldb_d8	e, (0x8a02)
+	ld	e, (0x8a02:16)
 	extz	de
 	div8rr	e, c
 	extz	de
@@ -1832,9 +1832,9 @@ SLDstBankList_FuncBody:
 	call	FileIO_ByteBlock_DemoProc1_0xD8
 	exts	xhl
 	jr	18
-	ldb_d8	a, (0x89fc)
+	ld	a, (0x89fc:16)
 	extz	wa
-	ldb_d8	c, (0x8a02)
+	ld	c, (0x8a02:16)
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1
 	exts	xhl
@@ -1844,13 +1844,13 @@ SLDstBankList_FuncBody:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	ld	(xwa+21), 1
 	lda	xwa, (xwa+22)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -1858,11 +1858,11 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89b8)
+	lda	xwa, (0x89b8:16)
 	ld	xbc, Str_AllOption_EA09B2_0x1A
 	call	FileIO_BuildFilePath
-	lda_d16	xiz, (0x89b8)
-	ldb_d8	a, (0x8a04)
+	lda	xiz, (0x89b8:16)
+	ld	a, (0x8a04:16)
 	inc	1, a
 	extz	wa
 	lds	bc, 0
@@ -1870,11 +1870,11 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89b8)
+	lda	xwa, (0x89b8:16)
 	ldw	bc, 16
 	calr	56148
-	lda_d16	xiz, (0x89cc)
-	ldb_d8	a, (0x8a04)
+	lda	xiz, (0x89cc:16)
+	ld	a, (0x8a04:16)
 	extz	wa
 	lds	bc, 2
 	lds	de, 0
@@ -1882,11 +1882,11 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89cc)
+	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -1901,12 +1901,12 @@ SLDstBankList_FuncBody:
 	jr	z, 80
 	cp	xbc, 0x01c0000b
 	jr	nz, 122
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	stib_dsp 224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	56043
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	(xwa), 0
@@ -1916,14 +1916,14 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x89a2
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, xiz
 	jr	47
-	ldb_d8	w, (0x8a04)
-	lda_d16	xhl, (0x89cc)
+	ld	w, (0x8a04:16)
+	lda	xhl, (0x89cc:16)
 	cp	xde, 8
 	jr	nz, 73
 	ld	xde, xbc
@@ -1935,7 +1935,7 @@ SLDstBankList_FuncBody:
 	cpda8_24 xbc, (15337936)
 	jr	nc, 15
 	inc	1, c
-	stb_d8	(0x8a04), c
+	ld	(0x8a04:16), c
 	ld	xwa, xiz
 	calr	65236
 	lds32	xhl, 0
@@ -1946,7 +1946,7 @@ SLDstBankList_FuncBody:
 	cps	w, 0
 	jr	z, 10
 	dec	1, a
-	stb_d8	(0x8a04), a
+	ld	(0x8a04:16), a
 	ld	xwa, xiz
 	jr	-31
 	ld	xwa, xiz
@@ -1964,7 +1964,7 @@ SLDstBankList_FuncBody:
 	jr	-70
 	cp	xde, 10
 	jr	nz, -78
-	ldb_d8	a, (0x8a04)
+	ld	a, (0x8a04:16)
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc1_0x1F8
 	exts	xhl
@@ -1974,12 +1974,12 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	xiz, xwa
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	stib_dsp 224, 0
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (StorageAreaName_PanelMemory_0xE)
+	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -1987,14 +1987,14 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89a3)
+	lda	xwa, (0x89a3:16)
 	ld	xbc, Str_AllOption_EA09B2_0x20
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89a3)
+	lda	xwa, (0x89a3:16)
 	ldw	bc, 16
 	calr	55782
-	lda_d16	xwa, (0x89b7)
-	ldb_d8	c, (0x8a06)
+	lda	xwa, (0x89b7:16)
+	ld	c, (0x8a06:16)
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
@@ -2004,7 +2004,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x89a2
 	call	ApPostEvent
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -2015,13 +2015,13 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -2029,7 +2029,7 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ld	xbc, Str_AllOption_EA09B2_0x24
 	call	FileIO_BuildFilePath
 	.byte 0xc1
@@ -2038,8 +2038,8 @@ SLDstBankList_FuncBody:
 	push	xsp
 	nop
 	jr	nz, 28
-	lda_d16	xiz, (0x89cd)
-	ldb_d8	a, (0x8a06)
+	lda	xiz, (0x89cd:16)
+	ld	a, (0x8a06:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -2048,10 +2048,10 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	55624
-	lda_d16	xbc, (0x89a2)
+	lda	xbc, (0x89a2:16)
 	lda	xwa, (xbc+63)
 	.byte 0xc1
 	swi	2
@@ -2064,7 +2064,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, Str_AllOption_EA09B2_0x28
 	call	FileIO_CopyString
 	jr	28
-	ldb_d8	e, (0x8a06)
+	ld	e, (0x8a06:16)
 	ld	c, e
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
@@ -2075,11 +2075,11 @@ SLDstBankList_FuncBody:
 	extz	de
 	pushw	3
 	calr	59356
-	lda_d16	xde, (0x89cc)
+	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -2106,7 +2106,7 @@ SLDstBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	0x81e8, xwa
 	jrl	160
-	ldb_d8	l, (0x8a06)
+	ld	l, (0x8a06:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
 	jrl	nz, 149
@@ -2120,7 +2120,7 @@ SLDstBankList_FuncBody:
 	cpda8_24 xbc, (15337966)
 	jr	nc, 25
 	add	c, e
-	stb_d8	(0x8a06), c
+	ld	(0x8a06:16), c
 	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
 	ld	xwa, xiz
 	calr	65095
@@ -2134,7 +2134,7 @@ SLDstBankList_FuncBody:
 	cp	l, c
 	jr	c, 26
 	sub	a, c
-	stb_d8	(0x8a06), a
+	ld	(0x8a06:16), a
 	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
 	ld	xwa, xiz
 	calr	65051
@@ -2144,11 +2144,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81e8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 37
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -2177,7 +2177,7 @@ SLDstBankList_FuncBody:
 	cp	a, e
 	jr	nc, 62
 	inc	1, c
-	stb_d8	(0x8a06), c
+	ld	(0x8a06:16), c
 	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
 	ld	xwa, xiz
 	jr	44
@@ -2194,18 +2194,18 @@ SLDstBankList_FuncBody:
 	cps	a, 0
 	jr	z, 16
 	dec	1, c
-	stb_d8	(0x8a06), c
+	ld	(0x8a06:16), c
 	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
 	ld	xwa, xiz
 	calr	64991
 	ld	xwa, (0x81e8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -133
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	-173
@@ -2217,11 +2217,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81e8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -191
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	-231
@@ -2234,21 +2234,21 @@ SLDstBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 30
-	ldb_d8	a, (0x89fe)
+	ld	a, (0x89fe:16)
 	extz	wa
 	div8rr	a, c
 	add	a, 30
 	extz	wa
-	ldb_d8	e, (0x8a06)
+	ld	e, (0x8a06:16)
 	extz	de
 	div8rr	e, c
 	add	e, 30
 	extz	de
 	ld	bc, de
 	jr	12
-	ldb_d8	a, (0x89fe)
+	ld	a, (0x89fe:16)
 	extz	wa
-	ldb_d8	c, (0x8a06)
+	ld	c, (0x8a06:16)
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1_0x2DE
 	exts	xhl
@@ -2258,12 +2258,12 @@ SLDstBankList_FuncBody:
 	dec	6, xsp
 	ld	(xsp), c
 	ld	(xsp+2), xwa
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	stib_dsp 224, 0
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (StorageAreaName_PanelMemory_0xE)
+	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
 	.byte 0xe3
 	reti
 	or	xix, xwa
@@ -2271,17 +2271,17 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89a3)
+	lda	xwa, (0x89a3:16)
 	.byte 0x41
 	.long Data_SaveLoadMenuTable
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89a3)
+	lda	xwa, (0x89a3:16)
 	ldw	bc, 16
 	calr	54951
 	ld	e, (xsp)
 	.byte 0x87, 0x85
-	ldb_d8	c, (0x8a08)
-	lda_d16	xwa, (0x89b7)
+	ld	c, (0x8a08:16)
+	lda	xwa, (0x89b7:16)
 	cp	c, e
 	jr	nc, 13
 	extz	bc
@@ -2296,7 +2296,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x89a2
 	call	ApPostEvent
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, (xsp+2)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -2306,17 +2306,17 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_24	xde, (BankStr_Bank3_0x6)
+	lda	xde, (BankStr_Bank3_0x6:24)
 	.byte 0xc1
 	swi	2
 	.byte 0x89
 	push	xsp
 	nop
 	jr	z, 77
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
 	.byte 0xe3
@@ -2326,13 +2326,13 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ld	xbc, Data_SaveLoadMenuTable_0x4
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	54806
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, Data_SaveLoadMenuTable_0x8
@@ -2340,12 +2340,12 @@ SLDstBankList_FuncBody:
 	jrl	214
 	ld	l, (xsp+4)
 	.byte 0x8f, 0x04, 0x87
-	lda_d16	xbc, (0x89a2)
+	lda	xbc, (0x89a2:16)
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
 	cpdm8	0x8a08, l
 	jr	c, 101
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
 	.byte 0xe3
@@ -2355,13 +2355,13 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ld	xbc, Data_SaveLoadMenuTable_0x1A
 	call	FileIO_BuildFilePath
-	lda_d16	xiz, (0x89cd)
+	lda	xiz, (0x89cd:16)
 	ld	c, (xsp+4)
 	.byte 0x8f, 0x04, 0x83
-	ldb_d8	a, (0x8a08)
+	ld	a, (0x8a08:16)
 	sub	a, c
 	inc	1, a
 	extz	wa
@@ -2370,19 +2370,19 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	54684
-	lda_d16	xwa, (0x89e1)
+	lda	xwa, (0x89e1:16)
 	ld	e, (xsp+4)
 	.byte 0x8f, 0x04, 0x85
-	ldb_d8	c, (0x8a08)
+	ld	c, (0x8a08:16)
 	sub	c, e
 	extz	bc
 	lds	de, 3
 	calr	58651
 	jr	90
-	ldb_d8	c, (0x89f8)
+	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
 	.byte 0xe3
@@ -2392,11 +2392,11 @@ SLDstBankList_FuncBody:
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ld	xbc, Data_SaveLoadMenuTable_0x1E
 	call	FileIO_BuildFilePath
-	lda_d16	xiz, (0x89cd)
-	ldb_d8	a, (0x8a08)
+	lda	xiz, (0x89cd:16)
+	ld	a, (0x8a08:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -2407,19 +2407,19 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-	lda_d16	xwa, (0x89cd)
+	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	54584
-	lda_d16	xwa, (0x89e1)
-	ldb_d8	c, (0x8a08)
+	lda	xwa, (0x89e1:16)
+	ld	c, (0x8a08:16)
 	extz	bc
 	lds	de, 3
 	calr	58478
-	lda_d16	xde, (0x89cc)
+	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -2447,7 +2447,7 @@ SLDstBankList_FuncBody:
 	.byte 0xf1
 	add	xbc, xix
 	.long NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95
-	ldb_d8	l, (0x8a08)
+	ld	l, (0x8a08:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
 	jrl	nz, 218
@@ -2463,9 +2463,9 @@ SLDstBankList_FuncBody:
 	cp	a, c
 	jr	nc, 8
 	add	a, c
-	stb_d8	(0x8a08), a
+	ld	(0x8a08:16), a
 	jr	4
-	stb_d8	(0x8a08), w
+	ld	(0x8a08:16), w
 	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
 	ld	xwa, xiz
 	calr	64924
@@ -2489,11 +2489,11 @@ SLDstBankList_FuncBody:
 	cp	c, a
 	jr	nc, 8
 	sub	c, e
-	stb_d8	(0x8a08), c
+	ld	(0x8a08:16), c
 	jr	8
 	cp	c, a
 	jr	c, 4
-	stb_d8	(0x8a08), e
+	ld	(0x8a08:16), e
 	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
 	ld	xwa, xiz
 	calr	64840
@@ -2509,11 +2509,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81ec:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 37
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
@@ -2549,7 +2549,7 @@ SLDstBankList_FuncBody:
 	cp	a, e
 	jrl	nc, 193
 	inc	1, c
-	stb_d8	(0x8a08), c
+	ld	(0x8a08:16), c
 	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
 	ld	xwa, xiz
 	calr	64809
@@ -2560,7 +2560,7 @@ SLDstBankList_FuncBody:
 	ld	xde, 0x8a00
 	jrl	152
 	inc	1, c
-	stb_d8	(0x8a08), c
+	ld	(0x8a08:16), c
 	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
 	ld	xwa, xiz
 	calr	64771
@@ -2587,7 +2587,7 @@ SLDstBankList_FuncBody:
 	cps	a, 0
 	jr	z, 79
 	dec	1, c
-	stb_d8	(0x8a08), c
+	ld	(0x8a08:16), c
 	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
 	ld	xwa, xiz
 	calr	64695
@@ -2600,7 +2600,7 @@ SLDstBankList_FuncBody:
 	cp	c, a
 	jr	ule, 38
 	dec	1, c
-	stb_d8	(0x8a08), c
+	ld	(0x8a08:16), c
 	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
 	ld	xwa, xiz
 	calr	64654
@@ -2613,11 +2613,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81ec:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -273
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	-313
@@ -2629,11 +2629,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (0x81ec:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -331
-	lda_d16	xde, (0x89b7)
+	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
-	lda_d16	xde, (0x89e1)
+	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, 0x01c0000f
 	jrl	-371
@@ -2646,20 +2646,20 @@ SLDstBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 28
-	ldb_d8	a, (0x8a00)
+	ld	a, (0x8a00:16)
 	extz	wa
 	div8rr	a, e
 	extz	wa
-	ldb_d8	c, (0x8a08)
+	ld	c, (0x8a08:16)
 	extz	bc
 	div8rr	c, e
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1_0x4AC
 	exts	xhl
 	jr	18
-	ldb_d8	a, (0x8a00)
+	ld	a, (0x8a00:16)
 	extz	wa
-	ldb_d8	c, (0x8a08)
+	ld	c, (0x8a08:16)
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1_0x356
 	exts	xhl
@@ -2674,7 +2674,7 @@ SLDstBankList_FuncBody:
 	lds	iz, 0
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xbc, (0x89a2)
+	lda	xbc, (0x89a2:16)
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
@@ -2689,7 +2689,7 @@ SLDstBankList_FuncBody:
 	calr	53757
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xwa, (0x89a2)
+	lda	xwa, (0x89a2:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+2)
@@ -2792,10 +2792,10 @@ SLDst_HandleShow:
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -2809,10 +2809,10 @@ SLDst_HandleConfirm:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2829,7 +2829,7 @@ SLDst_HandleScroll:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1c00017
 	scc8 z, a
-	stb_d8 (0x89fa), a
+	ld (0x89fa:16), a
 	ld xwa, xiz
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2847,10 +2847,10 @@ SLDst_HandleScroll:
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2911,10 +2911,10 @@ SLDst_ScrollMode4_Dispatch:
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2941,10 +2941,10 @@ SLDst_ScrollDispatch:
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -2953,7 +2953,7 @@ SLDst_ScrollDispatch:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -2973,10 +2973,10 @@ SLDst_Scroll_ChildReturn:
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -2990,10 +2990,10 @@ SLDst_Scroll_SubMode:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3012,10 +3012,10 @@ SLDst_Scroll_SubMode2:
 	lds32 xde, 2
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3030,10 +3030,10 @@ SLDst_Scroll_SubMode3:
 	lds32 xde, 3
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3046,10 +3046,10 @@ SLDst_Scroll_SubMode4:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3065,10 +3065,10 @@ SLDst_Scroll_SubMode5:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3084,10 +3084,10 @@ SLDst_Scroll_SubMode6:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f0:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x26)
+	lda xde, (Data_SaveLoadMenuTable_0x26:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3131,10 +3131,10 @@ CmpSrc_HandleShow:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f4:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3151,10 +3151,10 @@ CmpSrc_HandleScroll:
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, (0x81f4:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3173,10 +3173,10 @@ CmpSrc_ScrollMode6:
 	lds32 xde, 3
 	call ApPostEvent
 	ld xwa, (0x81f4:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3190,10 +3190,10 @@ CmpSrc_ScrollMode6_NoStep:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f4:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3210,10 +3210,10 @@ CmpSrc_ScrollMode7:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f4:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3231,10 +3231,10 @@ CmpSrc_ScrollMode8:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f4:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3246,10 +3246,10 @@ CmpSrc_ScrollMode40:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x28
 	jr nz, CmpSrc_Return
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x3A)
+	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3318,10 +3318,10 @@ CmpDst_HandleShow:
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3336,7 +3336,7 @@ CmpDst_HandleScroll:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1c00017
 	scc8 z, a
-	stb_d8 (0x89fa), a
+	ld (0x89fa:16), a
 	ld xwa, xiz
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -3354,10 +3354,10 @@ CmpDst_HandleScroll:
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -3382,10 +3382,10 @@ CmpDst_ScrollModeA:
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3394,7 +3394,7 @@ CmpDst_ScrollModeA:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -3412,10 +3412,10 @@ CmpDst_ScrollMode7:
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3434,10 +3434,10 @@ CmpDst_ScrollMode8:
 	lds32 xde, 3
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3450,10 +3450,10 @@ CmpDst_ScrollMode8_NoStep:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3469,10 +3469,10 @@ CmpDst_ScrollMode5:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3490,10 +3490,10 @@ CmpDst_ScrollMode6:
 	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, (0x81f8:16)
-	ldb_d8 c, (0x89f8)
+	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Data_SaveLoadMenuTable_0x4E)
+	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3541,17 +3541,17 @@ CmpFile_HandleShow:
 	stdi8 (0x8870), 0
 	cpdi8 (0x89f8), 2
 	jr nz, CmpFile_ShowDefault
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	call GetFileEntryPtr
 	ld xiz, xhl
 	jr CmpFile_ShowDraw
 
 CmpFile_ShowDefault:
-	lda_24 xiz, (Data_SaveLoadMenuTable_0x62)
+	lda xiz, (Data_SaveLoadMenuTable_0x62:24)
 
 CmpFile_ShowDraw:
-	lda_d16 xwa, (0x8871)
-	ldw_d16 xde, (0x8200)
+	lda xwa, (0x8871:16)
+	ld de, (0x8200:16)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
@@ -3566,7 +3566,7 @@ CmpFile_ShowDispatch:
 	jrl CmpFile_Return
 
 CmpFile_HandleScroll:
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	ld hl, wa
 	or xde, xde
 	jr nz, CmpFile_ScrollDown
@@ -3588,12 +3588,12 @@ CmpFile_ScrollStore:
 	stda16 (0x8200), xwa
 
 CmpFile_ScrollRedraw:
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	cp wa, hl
 	jr z, CmpFile_Return
 	call NotifyUIOfSelectionChange
 	stdi8 (0x8870), 0
-	lda_24 xiz, (Data_SaveLoadMenuTable_0x62)
+	lda xiz, (Data_SaveLoadMenuTable_0x62:24)
 	stdi8 (0x89f8), 4
 	lds wa, 3
 	call FileIO_CheckRecordValid
@@ -3603,13 +3603,13 @@ CmpFile_ScrollRedraw:
 	cps hl, 0
 	jr z, CmpFile_RedrawDispatch
 	stdi8 (0x89f8), 2
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	call GetFileEntryPtr
 	ld xiz, xhl
 
 CmpFile_RedrawDispatch:
-	lda_d16 xwa, (0x8871)
-	ldw_d16 xde, (0x8200)
+	lda xwa, (0x8871:16)
+	ld de, (0x8200:16)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
@@ -3659,7 +3659,7 @@ FmmCmpSingleLoadFunc:
 	calr SignalProgressUpdate
 
 FmmCmpLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, FmmCmpLoad_HandleSuccess
 	cps wa, 0
@@ -3748,7 +3748,7 @@ BuildSlotLabel:
 	push xiz
 	ld hl, bc
 	ld (xsp + 4), wa
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	ld wa, (xsp + 4)
 	extz xwa
 	sll xwa, 11
@@ -3756,7 +3756,7 @@ BuildSlotLabel:
 	lda_dri XBC, 0xe5, 0x00, 0x01
 	ld wa, (xsp + 4)
 	mul wa, 0x15
-	lda_d16 xix, (0x8202)
+	lda xix, (0x8202:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xix
@@ -3786,7 +3786,7 @@ BuildSlotLabel_WriteContent:
 	ld (xiz + 16), 0x0
 	ld wa, (xsp + 4)
 	mul wa, 0x15
-	lda_d16 xbc, (0x8202)
+	lda xbc, (0x8202:16)
 	extz xwa
 	add xwa, xbc
 	ld xhl, xwa

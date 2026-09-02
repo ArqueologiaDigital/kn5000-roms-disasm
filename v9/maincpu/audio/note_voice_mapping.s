@@ -11,7 +11,7 @@
 NoteOn_EntryPoint:
 	lda_dri XSP, 0xfd, 0x08, 0xfe
 	pushw iz
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	call SeqMain_SaveWritePos
 	stib_ind 0xfd, 0xf4, 0x01, 0x00
@@ -209,7 +209,7 @@ NoteOn_CheckSpecialChannel:
 	ld xwa, (xsp + 2)
 	cp (xwa + 1), 0x15
 	jr nz, NoteOn_CheckLayer3Only
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0xa
 	jr z, NoteOn_SpecialChannelUpdate
 	lda_dri XWA, 0xfd, 0xac, 0x00
@@ -396,7 +396,7 @@ NoteOn_CC_CheckSpecialChannel:
 	ld xwa, (xsp + 2)
 	cp (xwa + 1), 0x15
 	jr nz, NoteOn_CC_CheckLayer3Only
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 1, wa
 	jr z, NoteOn_CC_SpecialUpdate
 	lda_dri XWA, 0xfd, 0xac, 0x00
@@ -471,7 +471,7 @@ NoteOn_Epilogue:
 AccNoteOn_ProcessVoiceSetup:
 	lda xsp, (xsp - 18)
 	pushw iz
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	lds iz, 0
 	ld xiy, CharMap_ValueData_B_0x10
@@ -500,14 +500,14 @@ AccNoteOn_AutoPlayLoop:
 	ld wa, iz
 	mul wa, 0x5
 	inc 4, wa
-	lda_d16 xbc, (0xcc1f)
+	lda xbc, (0xcc1f:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x0
 	jr z, AccNoteOn_AutoPlayNext
 	ld wa, iz
 	mul wa, 0x5
-	lda_d16 xbc, (0xcc22)
+	lda xbc, (0xcc22:16)
 	extz xwa
 	add xwa, xbc
 	ld e, (xwa)
@@ -521,7 +521,7 @@ AccNoteOn_AutoPlayNext:
 	inc 1, iz
 
 AccNoteOn_AutoPlayCheck:
-	ldb_d8 a, (0xcc1f)
+	ld a, (0xcc1f:16)
 	extz wa
 	cp iz, wa
 	jr c, AccNoteOn_AutoPlayLoop
@@ -536,14 +536,14 @@ AccNoteOn_FindMinVelocity_Loop:
 	ld wa, iz
 	mul wa, 0x5
 	inc 4, wa
-	lda_d16 xbc, (0xcc1f)
+	lda xbc, (0xcc1f:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x0
 	jr z, AccNoteOn_MinVelocity_Next
 	ld wa, iz
 	mul wa, 0x5
-	lda_d16 xbc, (0xcc22)
+	lda xbc, (0xcc22:16)
 	extz xwa
 	add xwa, xbc
 	cp e, (xwa)
@@ -554,7 +554,7 @@ AccNoteOn_FindMinVelocity_Loop:
 AccNoteOn_UseEntryVelocity:
 	ld wa, iz
 	mul wa, 0x5
-	lda_d16 xbc, (0xcc22)
+	lda xbc, (0xcc22:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -566,7 +566,7 @@ AccNoteOn_MinVelocity_Next:
 	inc 1, iz
 
 AccNoteOn_MinVelocity_Check:
-	ldb_d8 a, (0xcc1f)
+	ld a, (0xcc1f:16)
 	extz wa
 	cp iz, wa
 	jr c, AccNoteOn_FindMinVelocity_Loop
@@ -582,7 +582,7 @@ AccNoteOn_EmitVoiceLoop_Init:
 AccNoteOn_EmitVoiceLoop_Body:
 	ld wa, iz
 	mul wa, 0x5
-	lda_d16 xbc, (0xcc22)
+	lda xbc, (0xcc22:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -591,7 +591,7 @@ AccNoteOn_EmitVoiceLoop_Body:
 	ld wa, iz
 	mul wa, 0x5
 	inc 4, wa
-	lda_d16 xbc, (0xcc1f)
+	lda xbc, (0xcc1f:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -602,7 +602,7 @@ AccNoteOn_EmitVoiceLoop_Body:
 	inc 1, iz
 
 AccNoteOn_EmitVoiceLoop_Check:
-	ldb_d8 a, (0xcc1f)
+	ld a, (0xcc1f:16)
 	extz wa
 	cp iz, wa
 	jr c, AccNoteOn_EmitVoiceLoop_Body
@@ -685,7 +685,7 @@ AccNoteOn_CheckSpecialChannel:
 	ld xwa, (xsp + 2)
 	cp (xwa + 1), 0x15
 	jr nz, AccNoteOn_CheckLayer3Only
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0xa
 	jr z, AccNoteOn_SpecialDirectAdd
 	ld xhl, 0xcb7a
@@ -765,7 +765,7 @@ AccNoteOn_Return:
 AccNoteOn_ChannelDispatch:
 	lda_dri XSP, 0xfd, 0x52, 0xff
 	pushw_erp 0xfa
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	call SeqBuf_SaveReadPos
 	ld (xsp + 6), 0x0
@@ -903,7 +903,7 @@ AccMidi_Return:
 RhythmMidi_Dispatcher:
 	lda_dri XSP, 0xfd, 0x4c, 0xff
 	pushw_erp 0xfa
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	ld xiy, CharMap_ValueData_B_0x20
 	lda xix, (xsp + 6)
@@ -929,7 +929,7 @@ RhythmMidi_DispatchByStatus:
 	jrl nz, RhythmMidi_CC_UpdateOutput
 	ld a, (xsp + 21)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	sub a, 0x10
@@ -982,7 +982,7 @@ RhythmMidi_CC7F_PartLoop:
 	ld (xsp + 21), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	lda xwa, (xsp + 18)
@@ -1021,7 +1021,7 @@ RhythmMidi_CC7D_PartLoop:
 	ld (xsp + 21), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	lda xwa, (xsp + 18)
@@ -1050,7 +1050,7 @@ RhythmMidi_CC_Default:
 	submi8 (xsp + 21), 0x70
 	ld a, (xsp + 21)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	lda xwa, (xsp + 18)
@@ -1071,7 +1071,7 @@ RhythmMidi_CC_Default:
 RhythmMidi_CC_Standard:
 	ld a, (xsp + 21)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	sub a, 0x10
@@ -1104,7 +1104,7 @@ RhythmMidi_CC_PostLoop:
 	ld (xsp + 21), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	lda xwa, (xsp + 18)
@@ -1129,7 +1129,7 @@ RhythmMidi_CC_Return:
 RhythmMidi_SeqEvt:
 	lda_dri XSP, 0xfd, 0x52, 0xff
 	pushw_erp 0xfa
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	call SeqEvtBuf_SaveReadPos
 	ld (xsp + 6), 0x0
@@ -1150,7 +1150,7 @@ RhythmMidi_SeqEvt_Dispatch:
 	jrl nz, RhythmMidi_SeqEvt_ReadNext
 	ld a, (xsp + 15)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x26)
+	lda xbc, (CharMap_ValueData_B_0x26:24)
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld a, e
 	cp a, 0xff
@@ -1176,7 +1176,7 @@ RhythmMidi_SeqEvt_CC7F_Loop:
 	ld (xsp + 15), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x26)
+	lda xbc, (CharMap_ValueData_B_0x26:24)
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld a, e
 	cp a, 0xff
@@ -1202,7 +1202,7 @@ RhythmMidi_SeqEvt_CC7E_Loop:
 	ld (xsp + 15), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x26)
+	lda xbc, (CharMap_ValueData_B_0x26:24)
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld a, e
 	cp a, 0xff
@@ -1221,7 +1221,7 @@ RhythmMidi_SeqEvt_CC7E_Next:
 RhythmMidi_SeqEvt_CC_Default:
 	ld a, (xsp + 15)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x26)
+	lda xbc, (CharMap_ValueData_B_0x26:24)
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld a, e
 	cp a, 0xff
@@ -1257,7 +1257,7 @@ RhythmMidi_SeqEvt_Return:
 Voice_InitializeAll:
 	lda_dri XSP, 0xfd, 0x10, 0xfe
 	push xiz
-	lda_d16 xiz, (0xc1fe)
+	lda xiz, (0xc1fe:16)
 	stib_ind 0xfd, 0x50, 0x01, 0x90
 	stib_ind 0xfd, 0x52, 0x01, 0x01
 	ld (xsp + 4), 0x0
@@ -1390,7 +1390,7 @@ VoiceInit_MergeLayer3:
 VoiceInit_CheckSpecialChannel:
 	cp (xiz + 1), 0x15
 	jr nz, VoiceInit_CheckLayer3Only
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 1, wa
 	jr z, VoiceInit_SpecialChannelUpdate
 	lda_dri XWA, 0xfd, 0xac, 0x00
@@ -1457,7 +1457,7 @@ VoiceInit_Epilogue:
 NoteMap_ProcessAndMerge:
 	lda_dri XSP, 0xfd, 0xb8, 0xfe
 	push xiz
-	lda_d16 xiz, (0xc1fe)
+	lda xiz, (0xc1fe:16)
 	stib_ind 0xfd, 0xa8, 0x00, 0x90
 	stib_ind 0xfd, 0xaa, 0x00, 0x00
 	stib_ind 0xfd, 0xab, 0x00, 0x00
@@ -1567,7 +1567,7 @@ NoteMap_AddEntry_Return:
 NoteMap_SendAllNotesOff:
 	lda_dri XSP, 0xfd, 0x58, 0xff
 	pushw_erp 0xfa
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	ldib_erp 0xfb, 0
 	cp_erpb 0xfb, 0x10
@@ -1623,7 +1623,7 @@ NoteOff_Return:
 Voice_InitTableGroup:
 	lda_dri XSP, 0xfd, 0x58, 0xff
 	pushw_erp 0xfa
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	ld (xsp + 6), 0x90
 	ld (xsp + 8), 0x4
@@ -1636,7 +1636,7 @@ VoiceTableGroup_PartLoop:
 	ld (xsp + 9), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	lda xwa, (xsp + 6)
 	extz de
@@ -1654,7 +1654,7 @@ VoiceTableGroup_Return:
 Voice_InitTablePair:
 	lda_dri XSP, 0xfd, 0x58, 0xff
 	pushw_erp 0xfa
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	ld (xsp + 2), xwa
 	ld (xsp + 6), 0x90
 	ld (xsp + 8), 0x5
@@ -1667,7 +1667,7 @@ VoiceTablePair_PartLoop:
 	ld (xsp + 9), a
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x26)
+	lda xbc, (CharMap_ValueData_B_0x26:24)
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	lda xwa, (xsp + 6)
 	extz de
@@ -1686,10 +1686,10 @@ VoiceEvent_ResetAndInit:
 	ret
 
 VoiceEvent_AllocAllLayers:
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 0
 	call NoteMap_AllocateVoice
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 1
 	call NoteMap_AllocateVoice
 	cpdi16 0xce22, 0
@@ -1697,24 +1697,24 @@ VoiceEvent_AllocAllLayers:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	ret z
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_AllocateVoice
 	ret
 
 VoiceEvent_AllocTwoLayers:
-	lda_d16	xwa, (0xc1fe)
+	lda	xwa, (0xc1fe:16)
 	lds	bc, 0
 	call	NoteMap_AssignVoiceParams
-	lda_d16	xwa, (0xc1fe)
+	lda	xwa, (0xc1fe:16)
 	lds	bc, 1
 	jp	NoteMap_AssignVoiceParams
 
 VoiceEvent_DispatchTable:
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	jp NoteMap_InitVoiceSlots
 VoiceEvent_TableSeparator:
@@ -1730,25 +1730,25 @@ VoiceEvent_HandlerTable:
 VoiceEvent_TypeDispatch:
 	ld wa, iz
 	sll wa, 2
-	lda_d16 xbc, (0xc4cc)
+	lda xbc, (0xc4cc:16)
 	extz xwa
 	add xwa, xbc
 	ld h, (xwa)
 	ld wa, iz
 	sll wa, 2
-	lda_d16 xbc, (0xc4cd)
+	lda xbc, (0xc4cd:16)
 	extz xwa
 	add xwa, xbc
 	ld l, (xwa)
 	ld wa, iz
 	sll wa, 2
-	lda_d16 xbc, (0xc4ce)
+	lda xbc, (0xc4ce:16)
 	extz xwa
 	add xwa, xbc
 	ld c, (xwa)
 	ld wa, iz
 	sll wa, 2
-	lda_d16 xde, (0xc4cf)
+	lda xde, (0xc4cf:16)
 	extz xwa
 	add xwa, xde
 	ld e, (xwa)
@@ -1759,9 +1759,9 @@ VoiceEvent_TypeDispatch:
 	cp wa, 0xd
 	jrl gt, AudioInit_FlushQueue_LoopNext
 	add wa, wa
-	lda_24 xix, (CharMap_ValueData_B_0x2E)
+	lda xix, (CharMap_ValueData_B_0x2E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (VoiceEvent_Dispatch)
+	lda xix, (VoiceEvent_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Voice event handler dispatch (14-entry, table 0xee8f06)
@@ -1926,7 +1926,7 @@ VoiceClaim_Slot0_MarkCheck:
 	jr c, VoiceClaim_Slot0_MarkLoop
 	ldb_sri0 A, (xsp + 0x014e)
 	extz wa
-	lda_d16 xbc, (0xc202)
+	lda xbc, (0xc202:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xff
@@ -1987,7 +1987,7 @@ VoiceClaim_Slot0_Alt_MarkCheck:
 	jr c, VoiceClaim_Slot0_Alt_MarkLoop
 	ldb_sri0 A, (xsp + 0x014e)
 	extz wa
-	lda_d16 xbc, (0xc202)
+	lda xbc, (0xc202:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xff
@@ -2680,7 +2680,7 @@ MidiEvent_ConfigChannel:
 	call MIDI_PostSendStub
 	ldb_sri0 A, (xsp + 0x014e)
 	extz wa
-	lda_d16 xbc, (0xc202)
+	lda xbc, (0xc202:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xff
@@ -2721,7 +2721,7 @@ MidiConfig_Slot6Path:
 	call MIDI_PostSendStub
 	ldb_sri0 A, (xsp + 0x014e)
 	extz wa
-	lda_d16 xbc, (0xc202)
+	lda xbc, (0xc202:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xff
@@ -2744,13 +2744,13 @@ Voice_FindAndAllocBestMatch:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	ret z
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_AllocateVoice
 	ret
 
 Voice_InitSlotData:
-	ldb_d8 a, (0xcee5)
+	ld a, (0xcee5:16)
 	extz wa
 	stda16 (0xceff), xwa
 	lds de, 0
@@ -2760,33 +2760,33 @@ VoiceSlotInit_Loop:
 	ld wa, de
 	add wa, wa
 	inc 4, wa
-	lda_d16 xbc, (0xcf00)
+	lda xbc, (0xcf00:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xbc
 	ld wa, de
 	inc 1, wa
-	lda_d16 xbc, (0xcee5)
+	lda xbc, (0xcee5:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xhl), a
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xcf03)
+	lda xbc, (0xcf03:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x40
 	inc 1, de
 
 VoiceSlotInit_Check:
-	ldb_d8 a, (0xcee5)
+	ld a, (0xcee5:16)
 	extz wa
 	cp de, wa
 	jr lt, VoiceSlotInit_Loop
 	call Voice_InitPartAllocState
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 0
 	call NoteMap_AllocateVoice
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 1
 	call NoteMap_AllocateVoice
 	stdi16 (0xceff), 0
@@ -2799,7 +2799,7 @@ NoteMap_AssignAllVoiceLinks:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 3)
 	extz wa
-	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0x1BE)
+	lda xbc, (AudioInit_VoiceDispatch_Table_0x1BE:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), a
 	lds iz, 0
@@ -2815,17 +2815,17 @@ VoiceLinks_SlotLoop:
 	add xbc, (xsp + 6)
 	cp (xbc + 1), 0x0
 	jrl z, VoiceLinks_SkipEmpty
-	ldb_d8 a, (0xe829)
+	ld a, (0xe829:16)
 	ldb_erp A, 0xfb
 	cp a, 0x20
 	jrl z, MidiEvent_NoteLoopAdvance
-	lda_d16 xde, (0xe7e8)
+	lda xde, (0xe7e8:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
 	ld xwa, xde
 	call NoteMap_SwapVoiceLinks
-	lda_d16 xhl, (0xe7e8)
+	lda xhl, (0xe7e8:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
@@ -2838,7 +2838,7 @@ VoiceLinks_SlotLoop:
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	lda_d16 xhl, (0xc5cb)
+	lda xhl, (0xc5cb:16)
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -2852,7 +2852,7 @@ VoiceLinks_SlotLoop:
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	lda_d16 xhl, (0xc5cc)
+	lda xhl, (0xc5cc:16)
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -2875,13 +2875,13 @@ VoiceLinks_SkipEmpty:
 	stb_erp A, 0xfb
 	cp a, (xsp + 4)
 	jr z, VoiceLinks_SkipEmpty_LoadIter
-	lda_d16 xde, (0xe7e8)
+	lda xde, (0xe7e8:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
 	ld xwa, xde
 	call NoteMap_SwapVoiceLinks
-	lda_d16 xde, (0xe7e8)
+	lda xde, (0xe7e8:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
@@ -2891,12 +2891,12 @@ VoiceLinks_SkipEmpty:
 	stb_erp A, 0xfb
 	extz wa
 	muls wa, 0x3
-	lda_d16 xbc, (0xc5cb)
+	lda xbc, (0xc5cb:16)
 	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	stb_erp A, 0xfb
 	extz wa
 	muls wa, 0x3
-	lda_d16 xbc, (0xc5cc)
+	lda xbc, (0xc5cc:16)
 	stib_ind 0x07, 0xe4, 0xe0, 0xff
 	decdi16 1, 0xe9ba
 	jr MidiEvent_NoteLoopAdvance
@@ -3073,14 +3073,14 @@ ProcessNoteEntry_Compare:
 	jr z, MidiEvent_ProcessCC_Continue
 	cpdi8 (0xc363), 255
 	jr z, ProcessNoteEntry_CheckDRAM
-	ldb_d8 l, (0xc363)
+	ld l, (0xc363:16)
 	extz hl
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_CheckDRAM:
 	cpdi8 (0xc362), 0
 	jr le, ProcessNoteEntry_LoadDRAM2
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add wa, hl
 	cp a, 0x7f
@@ -3089,13 +3089,13 @@ ProcessNoteEntry_CheckDRAM:
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_LoadDRAM:
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add hl, wa
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_LoadDRAM2:
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add wa, hl
 	cps a, 0
@@ -3104,7 +3104,7 @@ ProcessNoteEntry_LoadDRAM2:
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_LoadDRAM3:
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add hl, wa
 
@@ -4167,7 +4167,7 @@ NoteMap_AddEntry:
 	calr NoteMap_AllocateVoice
 
 NoteMap_AltCheckEmit:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, AltCheckEmit_LoadParam
 	ldib_erp 0xfb, 0
@@ -4280,7 +4280,7 @@ AllocCheckChannel_LoadParam:
 	call Voice_ScanAndEmitMidiEvents
 
 AllocCheckChannel_LoadDRAM:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, AllocCheckChannel_LoadParam2
 	ldib_erp 0xfb, 0
@@ -4391,7 +4391,7 @@ AllocCheckNoteOn_Data:
 	ld	xwa, (xsp+4)
 	lds	bc, 2
 	calr	5049
-	ldw_d16	wa, (0xc598)
+	ld	wa, (0xc598:16)
 	bit	9, wa
 	jrl	z, 355
 	ldib_erp 251, 0
@@ -4477,7 +4477,7 @@ AllocCheckNoteOn_Data:
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_ScanAndEmitMidiEvents
-	ldw_d16	wa, (0xc598)
+	ld	wa, (0xc598:16)
 	bit	9, wa
 	jr	z, 53
 	ldib_erp 251, 0
@@ -4577,7 +4577,7 @@ NoteMap_CollectAndFindBestVoice:
 	calr NoteMap_AllocateVoice
 
 NoteMap_AltAllocEmit:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jrl z, NoteMap_PopRetFA_StoreAE
 	ldib_erp 0xfb, 0
@@ -4708,7 +4708,7 @@ CollectAllocVoice_CheckDuplicate:
 	call Voice_ScanAndEmitMidiEvents
 
 CollectAllocVoice_EmitCheck:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, CollectAllocVoice_Em_LoadFromStack
 	ldib_erp 0xfb, 0
@@ -4805,7 +4805,7 @@ NoteMap_CollectAndAllocVoice_NoTimerCheck:
 	calr NoteMap_AllocateVoice
 
 NoteMap_FallbackVoiceCheck:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, FallbackVoiceCheck_LoadParam
 	ldib_erp 0xfb, 0
@@ -4874,7 +4874,7 @@ NoteMap_LookupAllocEmit:
 	extz bc
 	ld xwa, (xsp + 8)
 	call NoteMap_SetChannelParam
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, LookupAllocEmit_LoadParam
 	ldib_erp 0xfb, 0
@@ -4984,7 +4984,7 @@ NoteMap_CollectAndAllocVoice_Indirect:
 	calr NoteMap_AllocateVoice
 
 NoteMap_IndirectCollectEmit:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jrl z, NoteMap_PopRetFA_StoreAE2
 	ldib_erp 0xfb, 0
@@ -5069,7 +5069,7 @@ NoteMap_LookupAllocAndSetChannel:
 	extz bc
 	ld xwa, xde
 	call NoteMap_SetChannelParam
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, LookupAllocAndSetCha_LoadFromStack
 	ldib_erp 0xfb, 0
@@ -5166,7 +5166,7 @@ NoteMap_UpdateEntry:
 	calr NoteMap_AllocateVoice
 
 NoteMap_FallbackAllocEmit:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, UpdateEntry_CheckLayerCount
 	ldib_erp 0xfb, 0
@@ -5235,7 +5235,7 @@ NoteMap_DirectLookupEmit:
 	extz bc
 	ld xwa, (xsp + 8)
 	call NoteMap_SetChannelParam
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, UpdateEntry_CheckSeqPartEmit
 	ldib_erp 0xfb, 0
@@ -5345,7 +5345,7 @@ NoteMap_FindAndAllocBestVoice:
 	calr NoteMap_AllocateVoice
 
 NoteMap_FindAllocEmit:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jrl z, NoteMap_PopRetFA_StoreAE3
 	ldib_erp 0xfb, 0
@@ -5430,7 +5430,7 @@ NoteMap_CollectAndAllocVoice_NoTimerReset:
 	extz bc
 	ld xwa, xde
 	call NoteMap_SetChannelParam
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jr z, CollectAndAllocVoice_LoadFromStack
 	ldib_erp 0xfb, 0
@@ -6092,7 +6092,7 @@ NoteMap_InitVoiceSlots:
 	ldb_sri0 A, (xsp + 0x00aa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (CharMap_ValueData_B_0x4A)
+	lda xbc, (CharMap_ValueData_B_0x4A:24)
 	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
 	cpw (xiz), 0x0
 	jrl z, NoteMap_PopIz_StoreAC
@@ -6248,7 +6248,7 @@ NoteMap_AssignVoiceParams:
 	ldb_sri0 A, (xsp + 0x00aa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (CharMap_ValueData_B_0x4A)
+	lda xbc, (CharMap_ValueData_B_0x4A:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 2), xwa
 	ld (xsp + 6), 0x90
@@ -6359,7 +6359,7 @@ NoteMap_AllocateVoice:
 	ldb_sri0 A, (xsp + 0x00aa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (CharMap_ValueData_B_0x4A)
+	lda xbc, (CharMap_ValueData_B_0x4A:24)
 	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
 	ld wa, (xiz)
 	ld (xsp + 7), a
@@ -6608,11 +6608,11 @@ LinkVoiceSlots_InitVal:
 	ret
 
 LinkVoiceSlots_Block:
-	lda_d16 xix, (0xc5ca)
-	lda_d16 xiy, (0xe7e8)
+	lda xix, (0xc5ca:16)
+	lda xiy, (0xe7e8:16)
 	ld e, (xwa + 3)
 	extz de
-	lda_24 xhl, (AudioInit_VoiceDispatch_Table_0x1BE)
+	lda xhl, (AudioInit_VoiceDispatch_Table_0x1BE:24)
 	ldb_sri E, 0x07, 0xec, 0xe8
 	extz bc
 	muls bc, 0x5
@@ -6646,14 +6646,14 @@ LinkVoiceSlots_LoadReg2:
 	ret
 
 NoteMap_LookupAndMergeVoice:
-	lda_d16 xhl, (0xc5ca)
-	lda_d16 xix, (0xe7e8)
+	lda xhl, (0xc5ca:16)
+	lda xix, (0xe7e8:16)
 	ldb c, 0x20
 	cp (xwa + 3), 0x2
 	jrl nc, LookupAndMergeVoice_Deref
 	ld c, (xwa + 3)
 	extz bc
-	lda_24 xde, (AudioInit_VoiceDispatch_Table_0x1BE)
+	lda xde, (AudioInit_VoiceDispatch_Table_0x1BE:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	ldb_erp C, 0xea
 	lds de, 0
@@ -6723,14 +6723,14 @@ LookupAndMergeVoice_Deref:
 	ret
 
 Voice_LookupTableEntries:
-	lda_d16 xhl, (0xc5ca)
-	lda_d16 xix, (0xe7e8)
+	lda xhl, (0xc5ca:16)
+	lda xix, (0xe7e8:16)
 	ldb c, 0x20
 	cp (xwa + 3), 0x2
 	jrl nc, LookupTableEntries_Deref
 	ld c, (xwa + 3)
 	extz bc
-	lda_24 xde, (AudioInit_VoiceDispatch_Table_0x1BE)
+	lda xde, (AudioInit_VoiceDispatch_Table_0x1BE:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	ldb_erp C, 0xea
 	lds de, 0
@@ -6798,16 +6798,16 @@ LookupTableEntries_Prologue:
 	ld l, c
 	extz hl
 	muls hl, 0xd
-	lda_24 xix, (CharMap_ValueData_B_0x56)
+	lda xix, (CharMap_ValueData_B_0x56:24)
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	ld l, c
 	extz hl
 	muls hl, 0xd
-	lda_24 xiy, (CharMap_ValueData_B_0x5A)
+	lda xiy, (CharMap_ValueData_B_0x5A:24)
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	extz bc
 	muls bc, 0xd
-	lda_24 xhl, (CharMap_ValueData_B_0x5E)
+	lda xhl, (CharMap_ValueData_B_0x5E:24)
 	extz de
 	ld_sril3 XBC, 0x07, 0xec, 0xe4
 	ldb_sri E, 0x07, 0xe4, 0xe8
@@ -6881,7 +6881,7 @@ ClaimVoiceSlot_LoadReg:
 	extz bc
 	muls bc, 0xd
 	ld ix, bc
-	lda_24 xiy, (CharMap_ValueData_B_0x5E)
+	lda xiy, (CharMap_ValueData_B_0x5E:24)
 	ld c, (xsp + 12)
 	ldb_erp C, 0xf8
 	extz iz
@@ -6890,11 +6890,11 @@ ClaimVoiceSlot_LoadReg:
 	ldb_erp L, 0xf0
 	extz ix
 	muls ix, 0xd
-	lda_24 xiy, (CharMap_ValueData_B_0x56)
+	lda xiy, (CharMap_ValueData_B_0x56:24)
 	ld_sril3 XIX, 0x07, 0xf4, 0xf0
 	extz hl
 	muls hl, 0xd
-	lda_24 xiy, (CharMap_ValueData_B_0x5A)
+	lda xiy, (CharMap_ValueData_B_0x5A:24)
 	ld_sril3 XHL, 0x07, 0xf4, 0xec
 	ld (xsp + 4), xhl
 	cp (xde + 3), 0xff
@@ -7166,7 +7166,7 @@ LookupVoice_StartLookup:
 	extz bc
 	muls bc, 0xd
 	ld hl, bc
-	lda_24 xiy, (CharMap_ValueData_B_0x5E)
+	lda xiy, (CharMap_ValueData_B_0x5E:24)
 	ld c, (xsp + 12)
 	ldb_erp C, 0xf8
 	extz iz
@@ -7175,12 +7175,12 @@ LookupVoice_StartLookup:
 	ld c, e
 	extz bc
 	muls bc, 0xd
-	lda_24 xhl, (CharMap_ValueData_B_0x56)
+	lda xhl, (CharMap_ValueData_B_0x56:24)
 	ld_sril3 XIY, 0x07, 0xec, 0xe4
 	ld c, e
 	extz bc
 	muls bc, 0xd
-	lda_24 xhl, (CharMap_ValueData_B_0x5A)
+	lda xhl, (CharMap_ValueData_B_0x5A:24)
 	ld_sril3 XBC, 0x07, 0xec, 0xe4
 	ld (xsp + 4), xbc
 	cp (xix + 3), 0xff
@@ -7413,7 +7413,7 @@ CollectMatchingEntri_LoadReg:
 	extz wa
 	muls wa, 0xd
 	ld bc, wa
-	lda_24 xde, (CharMap_ValueData_B_0x5E)
+	lda xde, (CharMap_ValueData_B_0x5E:24)
 	ldb_sri0 A, (xsp + 0x00b8)
 	ldb_erp A, 0xf0
 	extz ix
@@ -7423,12 +7423,12 @@ CollectMatchingEntri_LoadReg:
 	ld a, l
 	extz wa
 	muls wa, 0xd
-	lda_24 xbc, (CharMap_ValueData_B_0x56)
+	lda xbc, (CharMap_ValueData_B_0x56:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld a, l
 	extz wa
 	muls wa, 0xd
-	lda_24 xbc, (CharMap_ValueData_B_0x5A)
+	lda xbc, (CharMap_ValueData_B_0x5A:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), xwa
 	lds hl, 0
@@ -7674,13 +7674,13 @@ NoteMap_AllocNewVoiceEntry:
 	pushw_erp 0xfa
 	ld (xsp + 10), c
 	ld (xsp + 12), xwa
-	lda_d16 xwa, (0xe82e)
+	lda xwa, (0xe82e:16)
 	ld (xsp + 6), xwa
 	cp (xsp + 10), 0x20
 	jrl ugt, SlotLoop_Continue_RestoreReg
 	ld a, (xsp + 10)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_A)
+	lda xbc, (CharMap_ValueData_A:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), a
 	ldw (xsp + 2), 0x0
@@ -7705,7 +7705,7 @@ AllocNewVoiceEntry_LoadParam:
 	add xbc, (xsp + 12)
 	cp (xbc + 1), 0x0
 	jrl z, AllocNewVoiceEntry_LoadParam3
-	ldb_d8 a, (0xe92f)
+	ld a, (0xe92f:16)
 	ldb_erp A, 0xfb
 	cp a, 0x80
 	jrl z, AllocNewVoiceEntry_LoadParam2
@@ -7713,25 +7713,25 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld hl, wa
 	add hl, hl
-	lda_d16 xix, (0xc62a)
+	lda xix, (0xc62a:16)
 	ld a, (xsp + 10)
 	extz wa
 	ld bc, wa
 	add bc, bc
-	lda_d16 xde, (0xc62b)
+	lda xde, (0xc62b:16)
 	ldb_sri A, 0x07, 0xf0, 0xec
 	cpb_sri_rm A, 0x07, 0xe8, 0xe4
 	jrl ule, AllocNewVoiceEntry_LoadParam2
 	ld a, (xsp + 10)
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xc62b)
+	lda xbc, (0xc62b:16)
 	inc_srib 1, 0x07, 0xe4, 0xe0
 	stb_erp A, 0xfb
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xc671)
+	lda xhl, (0xc671:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -7745,7 +7745,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld bc, wa
 	sla bc, 3
-	lda_d16 xde, (0xc66a)
+	lda xde, (0xc66a:16)
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 2)
 	stb_dri A, 0x07, 0xe8, 0xe4
@@ -7753,7 +7753,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld bc, wa
 	sla bc, 3
-	lda_d16 xde, (0xc66b)
+	lda xde, (0xc66b:16)
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 3)
 	stb_dri A, 0x07, 0xe8, 0xe4
@@ -7761,7 +7761,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xc66c)
+	lda xhl, (0xc66c:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -7775,7 +7775,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xc66f)
+	lda xhl, (0xc66f:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -7790,7 +7790,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xc670)
+	lda xhl, (0xc670:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -7804,7 +7804,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xc66d)
+	lda xhl, (0xc66d:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -7818,7 +7818,7 @@ AllocNewVoiceEntry_LoadParam:
 	extz wa
 	ld bc, wa
 	sla bc, 3
-	lda_d16 xde, (0xc66e)
+	lda xde, (0xc66e:16)
 	ld a, (xsp + 10)
 	stb_dri A, 0x07, 0xe8, 0xe4
 	stb_erp A, 0xfb
@@ -7865,7 +7865,7 @@ AllocNewVoiceEntry_LoadParam3:
 	ld a, (xsp + 10)
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xc62b)
+	lda xbc, (0xc62b:16)
 	dec_srib 1, 0x07, 0xe4, 0xe0
 	ld wa, (xsp + 2)
 	extz xwa
@@ -7878,7 +7878,7 @@ AllocNewVoiceEntry_LoadParam3:
 	stb_erp A, 0xfb
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xc66f)
+	lda xbc, (0xc66f:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	res 7, a
 	ld (xde + 2), a
@@ -7893,23 +7893,23 @@ AllocNewVoiceEntry_LoadParam3:
 	stb_erp A, 0xfb
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xc670)
+	lda xbc, (0xc670:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xde + 3), a
-	lda_d16 xde, (0xe82e)
+	lda xde, (0xe82e:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
 	ld xwa, xde
 	calr NoteMap_SwapVoiceLinks
-	lda_d16 xde, (0xe82e)
+	lda xde, (0xe82e:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
 	ld xwa, xde
 	ldw de, 0x80
 	calr NoteMap_LinkVoiceSlots
-	lda_d16 xde, (0xe82e)
+	lda xde, (0xe82e:16)
 	ld a, (xsp + 4)
 	ld c, a
 	extz bc
@@ -7969,7 +7969,7 @@ NoteMap_SetChannelParam:
 	ld (xsp + 26), xwa
 	ld a, (xsp + 24)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_A)
+	lda xbc, (CharMap_ValueData_A:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld a, (xsp + 24)
 	extz wa
@@ -8001,7 +8001,7 @@ SetChannelParam_LoadParam:
 	jr z, SetChannelParam_LoadDRAM
 	cps a, 0
 	jr nz, SetChannelParam_LoadParam2
-	ldw_d16 xwa, (0xcf01)
+	ld wa, (0xcf01:16)
 	extz xwa
 	ld xbc, CharMap_ValueData_B_0x98
 	add xbc, xwa
@@ -8010,7 +8010,7 @@ SetChannelParam_LoadParam:
 	jrl Voice_EmitMidiNoteAndBankEvents
 
 SetChannelParam_LoadDRAM:
-	ldw_d16 xwa, (0xcf31)
+	ld wa, (0xcf31:16)
 	extz xwa
 	ld xbc, CharMap_ValueData_B_0x98
 	add xbc, xwa
@@ -8019,7 +8019,7 @@ SetChannelParam_LoadDRAM:
 	jr Voice_EmitMidiNoteAndBankEvents
 
 SetChannelParam_LoadDRAM2:
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	extz xwa
 	ld xbc, CharMap_ValueData_B_0x98
 	add xbc, xwa
@@ -8041,7 +8041,7 @@ SetChannelParam_LoadParam3:
 	ld xwa, (xsp + 26)
 	ld a, (xwa + 2)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x98)
+	lda xbc, (CharMap_ValueData_B_0x98:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	set 3, a
 	ld (xsp + 2), a
@@ -8051,7 +8051,7 @@ SetChannelParam_LoadParam4:
 	ld xwa, (xsp + 26)
 	ld a, (xwa + 2)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x98)
+	lda xbc, (CharMap_ValueData_B_0x98:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 2), a
 	jr Voice_EmitMidiNoteAndBankEvents
@@ -8060,7 +8060,7 @@ SetChannelParam_LoadParam5:
 	ld xwa, (xsp + 26)
 	ld a, (xwa + 2)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B_0x98)
+	lda xbc, (CharMap_ValueData_B_0x98:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 2), a
 
@@ -8319,20 +8319,20 @@ BuildNoteOn_VoiceLoop:
 	jrl z, BuildNoteOn_NextVoice
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccd4)
+	lda xde, (0xccd4:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 2)
 	extz wa
-	lda_24 xde, (CharMap_ValueData_B_0xA0)
+	lda xde, (CharMap_ValueData_B_0xA0:24)
 	ldb_sri A, 0x07, 0xe8, 0xe0
 	or a, 0x90
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccd5)
+	lda xde, (0xccd5:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8340,7 +8340,7 @@ BuildNoteOn_VoiceLoop:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccd6)
+	lda xde, (0xccd6:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8356,7 +8356,7 @@ BuildNoteOn_VoiceLoop:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccd7)
+	lda xde, (0xccd7:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8371,7 +8371,7 @@ BuildNoteOn_VoiceLoop:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccd8)
+	lda xde, (0xccd8:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8450,13 +8450,13 @@ EmitNoteOnMessages_LoadIter:
 	jrl z, EmitNoteOnMessages_Compare
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccf2)
+	lda xde, (0xccf2:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), 0x90
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccf3)
+	lda xde, (0xccf3:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8464,7 +8464,7 @@ EmitNoteOnMessages_LoadIter:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccf4)
+	lda xde, (0xccf4:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8480,7 +8480,7 @@ EmitNoteOnMessages_LoadIter:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccf5)
+	lda xde, (0xccf5:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8495,7 +8495,7 @@ EmitNoteOnMessages_LoadIter:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xccf6)
+	lda xde, (0xccf6:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8573,13 +8573,13 @@ EmitMidiNoteOnEvents_LoadIter:
 	jrl z, EmitMidiNoteOnEvents_Compare
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xcd10)
+	lda xde, (0xcd10:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), 0x90
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xcd11)
+	lda xde, (0xcd11:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8587,7 +8587,7 @@ EmitMidiNoteOnEvents_LoadIter:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xcd12)
+	lda xde, (0xcd12:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8603,7 +8603,7 @@ EmitMidiNoteOnEvents_LoadIter:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xcd13)
+	lda xde, (0xcd13:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8618,7 +8618,7 @@ EmitMidiNoteOnEvents_LoadIter:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x5
-	lda_d16 xde, (0xcd14)
+	lda xde, (0xcd14:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -8680,10 +8680,10 @@ NoteMap_FindEntry:
 	ld (xsp + 12), xwa
 	ld a, (xsp + 10)
 	extz wa
-	lda_24 xbc, (CharMap_ValueData_B)
+	lda xbc, (CharMap_ValueData_B:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), a
-	lda_d16 xwa, (0xe970)
+	lda xwa, (0xe970:16)
 	ld (xsp + 6), xwa
 	ldw (xsp + 2), 0x0
 	jrl LoopAdvance_Next_LoadParam
@@ -8707,7 +8707,7 @@ FindEntry_LoadParam:
 	add xbc, (xsp + 12)
 	cp (xbc + 1), 0x0
 	jrl z, FindEntry_LoadParam3
-	ldb_d8 a, (0xe9b1)
+	ld a, (0xe9b1:16)
 	ldb_erp A, 0xfb
 	cp a, 0x20
 	jrl z, FindEntry_LoadParam2
@@ -8715,25 +8715,25 @@ FindEntry_LoadParam:
 	extz wa
 	ld hl, wa
 	add hl, hl
-	lda_d16 xix, (0xca6a)
+	lda xix, (0xca6a:16)
 	ld a, (xsp + 10)
 	extz wa
 	ld bc, wa
 	add bc, bc
-	lda_d16 xde, (0xca6b)
+	lda xde, (0xca6b:16)
 	ldb_sri A, 0x07, 0xf0, 0xec
 	cpb_sri_rm A, 0x07, 0xe8, 0xe4
 	jrl ule, FindEntry_LoadParam2
 	ld a, (xsp + 10)
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xca6b)
+	lda xbc, (0xca6b:16)
 	inc_srib 1, 0x07, 0xe4, 0xe0
 	stb_erp A, 0xfb
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xca81)
+	lda xhl, (0xca81:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -8747,7 +8747,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld bc, wa
 	sla bc, 3
-	lda_d16 xde, (0xca7a)
+	lda xde, (0xca7a:16)
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 2)
 	stb_dri A, 0x07, 0xe8, 0xe4
@@ -8755,7 +8755,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld bc, wa
 	sla bc, 3
-	lda_d16 xde, (0xca7b)
+	lda xde, (0xca7b:16)
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 3)
 	stb_dri A, 0x07, 0xe8, 0xe4
@@ -8763,7 +8763,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xca7c)
+	lda xhl, (0xca7c:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -8777,7 +8777,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xca7f)
+	lda xhl, (0xca7f:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -8792,7 +8792,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xca80)
+	lda xhl, (0xca80:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -8806,7 +8806,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld de, wa
 	sla de, 3
-	lda_d16 xhl, (0xca7d)
+	lda xhl, (0xca7d:16)
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -8820,7 +8820,7 @@ FindEntry_LoadParam:
 	extz wa
 	ld bc, wa
 	sla bc, 3
-	lda_d16 xde, (0xca7e)
+	lda xde, (0xca7e:16)
 	ld a, (xsp + 10)
 	stb_dri A, 0x07, 0xe8, 0xe4
 	stb_erp A, 0xfb
@@ -8867,7 +8867,7 @@ FindEntry_LoadParam3:
 	ld a, (xsp + 10)
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xca6b)
+	lda xbc, (0xca6b:16)
 	dec_srib 1, 0x07, 0xe4, 0xe0
 	ld wa, (xsp + 2)
 	extz xwa
@@ -8880,7 +8880,7 @@ FindEntry_LoadParam3:
 	stb_erp A, 0xfb
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7f)
+	lda xbc, (0xca7f:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	res 7, a
 	ld (xde + 2), a
@@ -8895,16 +8895,16 @@ FindEntry_LoadParam3:
 	stb_erp A, 0xfb
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca80)
+	lda xbc, (0xca80:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xde + 3), a
-	lda_d16 xde, (0xe970)
+	lda xde, (0xe970:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
 	ld xwa, xde
 	calr NoteMap_SwapVoiceLinks
-	lda_d16 xde, (0xe970)
+	lda xde, (0xe970:16)
 	stb_erp A, 0xfb
 	ld c, a
 	extz bc
@@ -8947,7 +8947,7 @@ FindBestVoiceSlot_LoadReg:
 	ld c, d
 	extz bc
 	sla bc, 3
-	lda_d16 xix, (0xca7a)
+	lda xix, (0xca7a:16)
 	ldb_sri C, 0x07, 0xf0, 0xe4
 	cps c, 0
 	jr z, FindBestVoiceSlot_Compare3
@@ -8991,7 +8991,7 @@ NoteMap_FindEntry_AdvanceSlotD:
 	ld c, d
 	extz bc
 	add bc, bc
-	lda_d16 xix, (0xe971)
+	lda xix, (0xe971:16)
 	ldb_sri D, 0x07, 0xf0, 0xe4
 	ld c, d
 	cp c, 0x21
@@ -9005,33 +9005,33 @@ FindEntry_AdvanceSlo_LoadReg:
 	ld a, d
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7a)
+	lda xbc, (0xca7a:16)
 	cpb_sri_mr E, 0x07, 0xe4, 0xe0
 	jr nz, FindEntry_AdvanceSlo_LoadReg2
 	ld wa, hl
 	add wa, wa
 	inc 4, wa
-	lda_d16 xbc, (0xcf00)
+	lda xbc, (0xcf00:16)
 	ld ix, wa
 	extz xix
 	add xix, xbc
 	ld a, d
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7f)
+	lda xbc, (0xca7f:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	res 7, a
 	ld (xix), a
 	ld wa, hl
 	add wa, wa
-	lda_d16 xbc, (0xcf03)
+	lda xbc, (0xcf03:16)
 	ld ix, wa
 	extz xix
 	add xix, xbc
 	ld a, d
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7d)
+	lda xbc, (0xca7d:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xix), a
 	inc 1, hl
@@ -9040,7 +9040,7 @@ FindEntry_AdvanceSlo_LoadReg2:
 	ld a, d
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xe971)
+	lda xbc, (0xe971:16)
 	ldb_sri D, 0x07, 0xe4, 0xe0
 	ld a, d
 	cp a, 0x21
@@ -9055,7 +9055,7 @@ FindEntry_AdvanceSlo_StoreDRAM:
 	ld a, e
 	extz wa
 	stda16 (0xcf01), xwa
-	lda_d16 xwa, (0xceff)
+	lda xwa, (0xceff:16)
 	push xwa
 	call VoiceSlot_CheckAndApply_Prologue
 	inc 4, xsp
@@ -9107,7 +9107,7 @@ MarkEntriesAboveThre_LoadParam:
 	sub a, 0x54
 	extz wa
 	add wa, wa
-	lda_24 xbc, (CharMap_ValueData_B_0xA8)
+	lda xbc, (CharMap_ValueData_B_0xA8:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfa
 	ld wa, (xsp + 4)
@@ -9121,7 +9121,7 @@ MarkEntriesAboveThre_LoadParam:
 	sub a, 0x54
 	extz wa
 	add wa, wa
-	lda_24 xbc, (CharMap_ValueData_B_0xA9)
+	lda xbc, (CharMap_ValueData_B_0xA9:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xf9
 	jr MarkEntriesAboveThre_LoadIdx
@@ -9166,9 +9166,9 @@ MarkEntriesAboveThre_Block:
 
 MarkEntriesAboveThre_LoadIdx2:
 	stb_erp A, 0xfa
-	stb_d8 (0xcd2e), a
+	ld (0xcd2e:16), a
 	stb_erp A, 0xf9
-	stb_d8 (0xcd2f), a
+	ld (0xcd2f:16), a
 
 MarkEntriesAboveThre_AdvanceSlot:
 	incw 1, (xsp + 4)
@@ -9193,7 +9193,7 @@ FindBestFreeVoice_LoadReg:
 	ld c, h
 	extz bc
 	sla bc, 3
-	lda_d16 xix, (0xca7a)
+	lda xix, (0xca7a:16)
 	ldb_sri C, 0x07, 0xf0, 0xe4
 	cps c, 0
 	jr z, FindBestFreeVoice_Compare3
@@ -9233,7 +9233,7 @@ NoteMap_FindBestFreeVoice_AdvanceSlotH:
 	ld c, h
 	extz bc
 	add bc, bc
-	lda_d16 xix, (0xe971)
+	lda xix, (0xe971:16)
 	ldb_sri H, 0x07, 0xf0, 0xe4
 	ld c, h
 	cp c, 0x23
@@ -9247,33 +9247,33 @@ FindBestFreeVoice_Ad_LoadReg:
 	ld a, h
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7a)
+	lda xbc, (0xca7a:16)
 	cpb_sri_mr L, 0x07, 0xe4, 0xe0
 	jr nz, FindBestFreeVoice_Ad_LoadReg2
 	ld wa, de
 	add wa, wa
 	inc 4, wa
-	lda_d16 xbc, (0xce23)
+	lda xbc, (0xce23:16)
 	ld ix, wa
 	extz xix
 	add xix, xbc
 	ld a, h
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7f)
+	lda xbc, (0xca7f:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	res 7, a
 	ld (xix), a
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xce26)
+	lda xbc, (0xce26:16)
 	ld ix, wa
 	extz xix
 	add xix, xbc
 	ld a, h
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xca7d)
+	lda xbc, (0xca7d:16)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xix), a
 	inc 1, de
@@ -9282,7 +9282,7 @@ FindBestFreeVoice_Ad_LoadReg2:
 	ld a, h
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xe971)
+	lda xbc, (0xe971:16)
 	ldb_sri H, 0x07, 0xe4, 0xe0
 	ld a, h
 	cp a, 0x23
@@ -9340,7 +9340,7 @@ SynthVoice_WriteLoop:
 	jr z, Synth_WriteVoiceData_CheckSize
 	ld wa, bc
 	mul wa, 0x3
-	lda_d16 xde, (0xcd30)
+	lda xde, (0xcd30:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -9349,7 +9349,7 @@ SynthVoice_WriteLoop:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x3
-	lda_d16 xde, (0xcd31)
+	lda xde, (0xcd31:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -9365,7 +9365,7 @@ SynthVoice_WriteLoop:
 	ld (xhl), a
 	ld wa, bc
 	mul wa, 0x3
-	lda_d16 xde, (0xcd32)
+	lda xde, (0xcd32:16)
 	ld hl, wa
 	extz xhl
 	add xhl, xde
@@ -10558,22 +10558,22 @@ SndParam_UpdateChannelTuning:
 	cp a, 0xff
 	jr z, UpdateChannelTuning_LoadDRAM
 	extz wa
-	lda_24 xhl, (CharMap_ValueData_A)
+	lda xhl, (CharMap_ValueData_A:24)
 	ldmm_srib 0x07, 0xec, 0xe0, 0x44, 0xcd
-	ldb_d8 a, (0xcd44)
+	ld a, (0xcd44:16)
 	extz wa
 	add wa, wa
-	lda_d16 xhl, (0xe82e)
+	lda xhl, (0xe82e:16)
 	ldmm_srib 0x07, 0xec, 0xe0, 0x42, 0xcd
 
 UpdateChannelTuning_LoadDRAM:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	cpda8 a, 0xcd44
 	jr z, SelectTone_Continue_SetByteFF
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
-	lda_d16 xhl, (0xc66a)
+	lda xhl, (0xc66a:16)
 	cpb_sri_mr C, 0x07, 0xec, 0xe0
 	jr nz, SelectTone_Continue_SetByteFF
 	cps e, 2
@@ -10582,26 +10582,26 @@ UpdateChannelTuning_LoadDRAM:
 	jr z, UpdateChannelTuning_LoadDRAM2
 	cps e, 0
 	jr nz, UpdateChannelTuning_SetByteFF
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xc66c)
+	lda xbc, (0xc66c:16)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	jr Synth_SelectTone_Continue
 
 UpdateChannelTuning_LoadDRAM2:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xc66f)
+	lda xbc, (0xc66f:16)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	jr Synth_SelectTone_Continue
 
 UpdateChannelTuning_LoadDRAM3:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
-	lda_d16 xbc, (0xc670)
+	lda xbc, (0xc670:16)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	jr Synth_SelectTone_Continue
 
@@ -10609,10 +10609,10 @@ UpdateChannelTuning_SetByteFF:
 	ldb l, 0xff
 
 Synth_SelectTone_Continue:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (0xe82e)
+	lda xbc, (0xe82e:16)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x42, 0xcd
 	jr SelectTone_Continue_Return
 
@@ -10746,14 +10746,14 @@ CheckControlCode_Tes_LoopCheck:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc428)
+	lda xwa, (0xc428:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CheckControlCode_Tes_TestBit0
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 0
 	call NoteMap_AddEntry
 
@@ -10764,14 +10764,14 @@ CheckControlCode_Tes_TestBit0:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc42c)
+	lda xwa, (0xc42c:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CheckControlCode_Tes_TestBit02
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 1
 	call NoteMap_AddEntry
 
@@ -10782,14 +10782,14 @@ CheckControlCode_Tes_TestBit02:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc430)
+	lda xwa, (0xc430:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CheckControlCode_Tes_TestBit03
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 2
 	call NoteMap_AddEntry
 
@@ -10800,14 +10800,14 @@ CheckControlCode_Tes_TestBit03:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc434)
+	lda xwa, (0xc434:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, NoteMap_AddChangedVoices
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldw de, 0x15
 	call NoteMap_AddEntry
 	call AudioInit_RefreshToneBank
@@ -10825,14 +10825,14 @@ NoteMap_AddChangedVoices:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c2)
+	lda xwa, (0xc2c2:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, AddChangedVoices_TestBit0
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call NoteMap_AddEntry
 
@@ -10843,14 +10843,14 @@ AddChangedVoices_TestBit0:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c6)
+	lda xwa, (0xc2c6:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, AddChangedVoices_TestBit02
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 1
 	call NoteMap_AddEntry
 
@@ -10861,14 +10861,14 @@ AddChangedVoices_TestBit02:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ca)
+	lda xwa, (0xc2ca:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, AddChangedVoices_TestBit03
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 2
 	call NoteMap_AddEntry
 
@@ -10879,14 +10879,14 @@ AddChangedVoices_TestBit03:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ce)
+	lda xwa, (0xc2ce:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, NoteMap_CollectEnabledVoices
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldw de, 0x15
 	call NoteMap_AddEntry
 
@@ -10902,12 +10902,12 @@ NoteMap_CollectEnabledVoices:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c2)
+	lda xwa, (0xc2c2:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call NoteMap_CollectAndFindBestVoice
 
@@ -10918,12 +10918,12 @@ CollectEnabledVoices_TestBit0:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c6)
+	lda xwa, (0xc2c6:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 1
 	call NoteMap_CollectAndFindBestVoice
 
@@ -10934,12 +10934,12 @@ CollectEnabledVoices_TestBit02:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ca)
+	lda xwa, (0xc2ca:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 2
 	call NoteMap_CollectAndFindBestVoice
 
@@ -10950,12 +10950,12 @@ CollectEnabledVoices_TestBit03:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ce)
+	lda xwa, (0xc2ce:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldw de, 0x15
 	call NoteMap_CollectAndFindBestVoice
 	jrl NoteMap_VoiceAssign_Finalize
@@ -10967,7 +10967,7 @@ CollectEnabledVoices_CheckMem:
 	jr z, CollectEnabledVoices_CheckMem2
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x01ee)
 	ld e, a
 	extz de
@@ -10975,7 +10975,7 @@ CollectEnabledVoices_CheckMem:
 	call NoteMap_AddEntry
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x01f0)
 	ld e, a
 	extz de
@@ -10990,7 +10990,7 @@ CollectEnabledVoices_CheckMem2:
 	jrl z, CollectEnabledVoices_CheckMem3
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x01ee)
 	ld e, a
 	extz de
@@ -11002,14 +11002,14 @@ CollectEnabledVoices_CheckMem2:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c2)
+	lda xwa, (0xc2c2:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CollectEnabledVoices_TestBit1
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call NoteMap_AddEntry
 
@@ -11020,14 +11020,14 @@ CollectEnabledVoices_TestBit1:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c6)
+	lda xwa, (0xc2c6:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CollectEnabledVoices_TestBit2
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 1
 	call NoteMap_AddEntry
 
@@ -11038,14 +11038,14 @@ CollectEnabledVoices_TestBit2:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ca)
+	lda xwa, (0xc2ca:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, NoteMap_VoiceAssign_Finalize
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 2
 	call NoteMap_AddEntry
 	jrl NoteMap_VoiceAssign_Finalize
@@ -11061,14 +11061,14 @@ CollectEnabledVoices_CheckMem3:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc428)
+	lda xwa, (0xc428:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CollectEnabledVoices_TestBit12
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 0
 	call NoteMap_AddEntry
 
@@ -11079,14 +11079,14 @@ CollectEnabledVoices_TestBit12:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc42c)
+	lda xwa, (0xc42c:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CollectEnabledVoices_TestBit22
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 1
 	call NoteMap_AddEntry
 
@@ -11097,21 +11097,21 @@ CollectEnabledVoices_TestBit22:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc430)
+	lda xwa, (0xc430:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, CollectEnabledVoices_WriteReg
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 2
 	call NoteMap_AddEntry
 
 CollectEnabledVoices_WriteReg:
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x01f0)
 	ld e, a
 	extz de
@@ -11126,7 +11126,7 @@ VoiceAssign_CheckBothParts:
 	jrl z, VoiceAssign_CheckSinglePart
 	cpdi16 0xce68, 0
 	jr nz, VoiceAssign_LookupAndLoop_Part1
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -11169,7 +11169,7 @@ VoiceAssign_MergeAndCollect_Part1:
 	extz wa
 	sla wa, 2
 	add wa, 0xc4
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, xix
 	ld xbc, xhl
@@ -11188,7 +11188,7 @@ VoiceAssign_MergeAndCollect_Part1:
 	jrl z, NoteMap_VoiceAssign_Finalize
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x01f0)
 	ld e, a
 	extz de
@@ -11204,7 +11204,7 @@ VoiceAssign_MergeAndCollect_Part1:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jrl z, NoteMap_VoiceAssign_Finalize
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 	jrl NoteMap_VoiceAssign_Finalize
@@ -11216,7 +11216,7 @@ VoiceAssign_CheckSinglePart:
 	jr z, VoiceAssign_CheckOtherPart
 	cpdi16 0xce68, 0
 	jr nz, VoiceAssign_LookupAndLoop_Part2
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -11264,7 +11264,7 @@ VoiceAssign_CheckOtherPart:
 	extz wa
 	sla wa, 2
 	add wa, 0xc4
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, xix
 	ld xbc, xhl
@@ -11283,7 +11283,7 @@ VoiceAssign_CheckOtherPart:
 	jr z, NoteMap_VoiceAssign_Finalize
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x01f0)
 	ld e, a
 	extz de
@@ -11299,7 +11299,7 @@ VoiceAssign_CheckOtherPart:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_VoiceAssign_Finalize
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -11311,7 +11311,7 @@ NoteMap_VoiceAssign_Finalize:
 	cps l, 0
 	jrl z, NoteMap_ReallocVoices_Exit
 	lda_dri XWA, 0xfd, 0x4a, 0x01
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call Voice_ApplyTransposeWithEncode
 	lda_dri XIY, 0xfd, 0x4a, 0x01
@@ -11357,14 +11357,14 @@ VoiceAssign_Finalize_LoopCheck:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc428)
+	lda xwa, (0xc428:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, VoiceAssign_Finalize_TestBit0
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 0
 	call NoteMap_UpdateEntry
 
@@ -11375,14 +11375,14 @@ VoiceAssign_Finalize_TestBit0:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc42c)
+	lda xwa, (0xc42c:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, VoiceAssign_Finalize_TestBit02
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 1
 	call NoteMap_UpdateEntry
 
@@ -11393,14 +11393,14 @@ VoiceAssign_Finalize_TestBit02:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc430)
+	lda xwa, (0xc430:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, VoiceAssign_Finalize_TestBit03
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 2
 	call NoteMap_UpdateEntry
 
@@ -11411,14 +11411,14 @@ VoiceAssign_Finalize_TestBit03:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc434)
+	lda xwa, (0xc434:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, NoteMap_UpdateChangedVoices
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 	call AudioInit_RefreshToneBank
@@ -11436,14 +11436,14 @@ NoteMap_UpdateChangedVoices:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c2)
+	lda xwa, (0xc2c2:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, UpdateChangedVoices_TestBit0
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call NoteMap_UpdateEntry
 
@@ -11454,14 +11454,14 @@ UpdateChangedVoices_TestBit0:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c6)
+	lda xwa, (0xc2c6:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, UpdateChangedVoices_TestBit02
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 1
 	call NoteMap_UpdateEntry
 
@@ -11472,14 +11472,14 @@ UpdateChangedVoices_TestBit02:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ca)
+	lda xwa, (0xc2ca:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, UpdateChangedVoices_TestBit03
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 2
 	call NoteMap_UpdateEntry
 
@@ -11490,14 +11490,14 @@ UpdateChangedVoices_TestBit03:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ce)
+	lda xwa, (0xc2ce:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, NoteMap_ReallocEnabledVoices
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 
@@ -11513,12 +11513,12 @@ NoteMap_ReallocEnabledVoices:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c2)
+	lda xwa, (0xc2c2:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call NoteMap_FindAndAllocBestVoice
 
@@ -11529,12 +11529,12 @@ ReallocEnabledVoices_TestBit0:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c6)
+	lda xwa, (0xc2c6:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 1
 	call NoteMap_FindAndAllocBestVoice
 
@@ -11545,12 +11545,12 @@ ReallocEnabledVoices_TestBit02:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ca)
+	lda xwa, (0xc2ca:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 2
 	call NoteMap_FindAndAllocBestVoice
 
@@ -11561,12 +11561,12 @@ ReallocEnabledVoices_TestBit03:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ce)
+	lda xwa, (0xc2ce:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldw de, 0x15
 	call NoteMap_FindAndAllocBestVoice
 	jrl NoteMap_ReallocVoices_Exit
@@ -11578,7 +11578,7 @@ ReallocEnabledVoices_CheckMem:
 	jr z, ReallocEnabledVoices_CheckMem2
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x01ee)
 	ld e, a
 	extz de
@@ -11586,7 +11586,7 @@ ReallocEnabledVoices_CheckMem:
 	call NoteMap_UpdateEntry
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x01f0)
 	ld e, a
 	extz de
@@ -11601,7 +11601,7 @@ ReallocEnabledVoices_CheckMem2:
 	jrl z, ReallocEnabledVoices_CheckMem3
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x01ee)
 	ld e, a
 	extz de
@@ -11613,14 +11613,14 @@ ReallocEnabledVoices_CheckMem2:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c2)
+	lda xwa, (0xc2c2:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocEnabledVoices_TestBit1
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 0
 	call NoteMap_UpdateEntry
 
@@ -11631,14 +11631,14 @@ ReallocEnabledVoices_TestBit1:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2c6)
+	lda xwa, (0xc2c6:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocEnabledVoices_TestBit2
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 1
 	call NoteMap_UpdateEntry
 
@@ -11649,14 +11649,14 @@ ReallocEnabledVoices_TestBit2:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xbc, xwa
-	lda_d16 xwa, (0xc2ca)
+	lda xwa, (0xc2ca:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, ReallocEnabledVoices_Block
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lds de, 2
 	call NoteMap_UpdateEntry
 	jrl NoteMap_ReallocVoices_Exit
@@ -11672,14 +11672,14 @@ ReallocEnabledVoices_CheckMem3:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc428)
+	lda xwa, (0xc428:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocEnabledVoices_TestBit12
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 0
 	call NoteMap_UpdateEntry
 
@@ -11690,14 +11690,14 @@ ReallocEnabledVoices_TestBit12:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc42c)
+	lda xwa, (0xc42c:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocEnabledVoices_TestBit22
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 1
 	call NoteMap_UpdateEntry
 
@@ -11708,21 +11708,21 @@ ReallocEnabledVoices_TestBit22:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc430)
+	lda xwa, (0xc430:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocEnabledVoices_WriteReg
 	lda xwa, (xsp + 2)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 2
 	call NoteMap_UpdateEntry
 
 ReallocEnabledVoices_WriteReg:
 	lda_dri XWA, 0xfd, 0x4a, 0x01
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x01f0)
 	ld e, a
 	extz de
@@ -11739,7 +11739,7 @@ ReallocEnabledVoices_CheckMem4:
 	jrl z, ReallocEnabledVoices_CheckMem5
 	cpdi16 0xce68, 0
 	jr nz, ReallocEnabledVoices_LoadAddr
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -11782,7 +11782,7 @@ ReallocEnabledVoices_LoadAddr2:
 	extz wa
 	sla wa, 2
 	add wa, 0xc4
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 
 ReallocEnabledVoices_WriteReg2:	; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.  (was ReallocEnabledVoices_LoadAddr2_0x1D - off by 1 byte)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
@@ -11811,7 +11811,7 @@ ReallocEnabledVoices_WriteReg2:	; NOTE: nothing seems to call here, but I saw th
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jrl z, NoteMap_ReallocVoices_Exit
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 	jrl NoteMap_ReallocVoices_Exit
@@ -11823,7 +11823,7 @@ ReallocEnabledVoices_CheckMem5:
 	jr z, ReallocEnabledVoices_CheckMem6
 	cpdi16 0xce68, 0
 	jr nz, ReallocEnabledVoices_LoadAddr3
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -11871,7 +11871,7 @@ ReallocEnabledVoices_CheckMem6:
 	extz wa
 	sla wa, 2
 	add wa, 0xc4
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, xix
 	ld xbc, xhl
@@ -11898,7 +11898,7 @@ ReallocEnabledVoices_CheckMem6:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_ReallocVoices_Exit
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -11941,14 +11941,14 @@ ReallocVoices_Exit_Compare:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc428)
+	lda xwa, (0xc428:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocVoices_Exit_TestBit1
 	lda xwa, (xsp)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 0
 	call NoteMap_UpdateEntry
 
@@ -11959,14 +11959,14 @@ ReallocVoices_Exit_TestBit1:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc42c)
+	lda xwa, (0xc42c:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocVoices_Exit_TestBit2
 	lda xwa, (xsp)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 1
 	call NoteMap_UpdateEntry
 
@@ -11977,14 +11977,14 @@ ReallocVoices_Exit_TestBit2:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc430)
+	lda xwa, (0xc430:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocVoices_Exit_TestBit3
 	lda xwa, (xsp)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	lds de, 2
 	call NoteMap_UpdateEntry
 
@@ -11995,14 +11995,14 @@ ReallocVoices_Exit_TestBit3:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc434)
+	lda xwa, (0xc434:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jrl z, ReallocVoices_Exit_Block
 	lda xwa, (xsp)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 	call AudioInit_RefreshToneBank
@@ -12011,7 +12011,7 @@ ReallocVoices_Exit_TestBit3:
 ReallocVoices_Exit_CheckDRAM:
 	cpdi8 (0xc365), 21
 	jr nz, ReallocVoices_Exit_TestBit32
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 1, wa
 	jr z, ReallocVoices_Exit_WriteReg2
 	lda_dri XWA, 0xfd, 0xa4, 0x00
@@ -12019,7 +12019,7 @@ ReallocVoices_Exit_CheckDRAM:
 
 ReallocVoices_Exit_WriteReg2:
 	lda_dri XWA, 0xfd, 0xa4, 0x00
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 	jr NoteMap_StoreAndRet
@@ -12031,14 +12031,14 @@ ReallocVoices_Exit_TestBit32:
 	ld xhl, xwa
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xbc, xwa
-	lda_d16 xwa, (0xc434)
+	lda xwa, (0xc434:16)
 	ld xde, xwa
 	ld xwa, xhl
 	call NoteMap_MergeEntries
 	cps l, 0
 	jr z, ReallocVoices_Exit_WriteReg3
 	lda xwa, (xsp)
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldw de, 0x15
 	call NoteMap_UpdateEntry
 	call AudioInit_RefreshToneBank
@@ -12046,8 +12046,8 @@ ReallocVoices_Exit_TestBit32:
 ReallocVoices_Exit_WriteReg3:
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
-	ldb_d8 a, (0xc365)
+	lda xbc, (0xc364:16)
+	ld a, (0xc365:16)
 	ld e, a
 	extz de
 	ld xwa, xhl
@@ -12061,7 +12061,7 @@ ReallocVoices_Exit_WriteReg4:
 	stb_dri E, 0xfd, 0xa7, 0x00
 	lda_dri XBC, 0xfd, 0xa4, 0x00
 	ld xhl, xbc
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ld e, a
 	extz de
 	ld xwa, xhl
@@ -12081,7 +12081,7 @@ StoreAndRet_WriteReg:
 	jrl z, VoiceRealloc_CheckSingleLayer
 	cpdi16 0xce68, 1
 	jr nz, StoreAndRet_WriteReg2
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -12089,7 +12089,7 @@ StoreAndRet_WriteReg2:
 	stib_ind 0xfd, 0xa6, 0x00, 0x01
 	ldb_sri0 A, (xsp + 0x0148)
 	extz wa
-	lda_d16 xbc, (0xc388)
+	lda xbc, (0xc388:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12117,7 +12117,7 @@ StoreAndRet_WriteReg3:
 	stib_ind 0xfd, 0xa6, 0x00, 0x01
 	ldb_sri0 A, (xsp + 0x014a)
 	extz wa
-	lda_d16 xbc, (0xc222)
+	lda xbc, (0xc222:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12136,7 +12136,7 @@ StoreAndRet_WriteReg3:
 	jrl z, NoteMap_StoreVoiceResultAndReturn
 	lda xwa, (xsp)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x014a)
 	ld e, a
 	extz de
@@ -12152,7 +12152,7 @@ StoreAndRet_WriteReg3:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jrl z, NoteMap_StoreVoiceResultAndReturn
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 	jrl NoteMap_StoreVoiceResultAndReturn
@@ -12164,7 +12164,7 @@ VoiceRealloc_CheckSingleLayer:
 	jr z, VoiceRealloc_CheckAltLayer
 	cpdi16 0xce68, 1
 	jr nz, VoiceRealloc_LookupVoice
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -12172,7 +12172,7 @@ VoiceRealloc_LookupVoice:
 	stib_ind 0xfd, 0xa6, 0x00, 0x01
 	ldb_sri0 A, (xsp + 0x0148)
 	extz wa
-	lda_d16 xbc, (0xc388)
+	lda xbc, (0xc388:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12205,7 +12205,7 @@ VoiceRealloc_CheckAltLayer:
 	stib_ind 0xfd, 0xa6, 0x00, 0x01
 	ldb_sri0 A, (xsp + 0x014a)
 	extz wa
-	lda_d16 xbc, (0xc222)
+	lda xbc, (0xc222:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12224,7 +12224,7 @@ VoiceRealloc_CheckAltLayer:
 	jr z, NoteMap_StoreVoiceResultAndReturn
 	lda xwa, (xsp)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x014a)
 	ld e, a
 	extz de
@@ -12240,7 +12240,7 @@ VoiceRealloc_CheckAltLayer:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_StoreVoiceResultAndReturn
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -12261,7 +12261,7 @@ NoteMap_ProcessDualLayerNoteOff:
 	ld (xsp + 3), a
 	lda xwa, (xsp)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x00a4)
 	ld e, a
 	extz de
@@ -12272,7 +12272,7 @@ NoteMap_ProcessDualLayerNoteOff:
 	ld (xsp + 3), a
 	lda xwa, (xsp)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x00a4)
 	ld e, a
 	extz de
@@ -12290,7 +12290,7 @@ NoteMap_DualLayerNoteOff_SinglePath:
 	ld (xsp + 3), a
 	lda xwa, (xsp)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x00a4)
 	ld e, a
 	extz de
@@ -12301,7 +12301,7 @@ NoteMap_DualLayerNoteOff_SinglePath:
 	ld (xsp + 3), a
 	lda xwa, (xsp)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc364)
+	lda xbc, (0xc364:16)
 	ldb_sri0 A, (xsp + 0x00a4)
 	ld e, a
 	extz de
@@ -12329,7 +12329,7 @@ NoteMap_ProcessLayeredNoteOn:
 	ld xde, xwa
 	ldb_sri0 A, (xsp + 0x014a)
 	extz wa
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12359,7 +12359,7 @@ ProcessLayeredNoteOn_WriteReg:
 	ld xde, xwa
 	ldb_sri0 A, (xsp + 0x014a)
 	extz wa
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12394,7 +12394,7 @@ ProcessLayeredNoteOn_CheckEnd:
 	ld xde, xwa
 	ldb_sri0 A, (xsp + 0x014a)
 	extz wa
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12424,7 +12424,7 @@ ProcessLayeredNoteOn_WriteReg2:
 	ld xde, xwa
 	ldb_sri0 A, (xsp + 0x014a)
 	extz wa
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12461,7 +12461,7 @@ ProcessLayeredNoteOn_WriteReg4:
 	jr nz, ProcessLayeredNoteOn_InitVal
 	cpdi16 0xce68, 3
 	jr nz, ProcessLayeredNoteOn_InitVal
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -12472,7 +12472,7 @@ ProcessLayeredNoteOn_InitVal:
 
 ProcessLayeredNoteOn_LoadIter:
 	ld wa, iz
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12531,7 +12531,7 @@ ProcessLayeredNoteOn_InitVal2:
 
 ProcessLayeredNoteOn_LoadIter2:
 	ld wa, iz
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12554,7 +12554,7 @@ ProcessLayeredNoteOn_LoadIter2:
 	jr z, NoteMap_ClaimAndInitVoiceSlot_A
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x014c)
 	ld e, a
 	extz de
@@ -12570,7 +12570,7 @@ ProcessLayeredNoteOn_LoadIter2:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_ClaimAndInitVoiceSlot_A
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -12592,7 +12592,7 @@ NoteMap_ClaimAndInitVoiceSlot_A:
 	jr z, NoteMap_LoopAdvance_Next
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x014c)
 	ld e, a
 	extz de
@@ -12608,7 +12608,7 @@ NoteMap_ClaimAndInitVoiceSlot_A:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_LoopAdvance_Next
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -12627,7 +12627,7 @@ LoopAdvance_Next_CheckMem:
 	jr nz, LoopAdvance_Next_InitVal
 	cpdi16 0xce68, 3
 	jr nz, LoopAdvance_Next_InitVal
-	lda_d16 xwa, (0xc364)
+	lda xwa, (0xc364:16)
 	lds bc, 2
 	call NoteMap_AssignVoiceParams
 
@@ -12638,7 +12638,7 @@ LoopAdvance_Next_InitVal:
 
 LoopAdvance_Next_LoadIter:
 	ld wa, iz
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12702,7 +12702,7 @@ LoopAdvance_Next_CheckMem2:
 
 LoopAdvance_Next_LoadIter2:
 	ld wa, iz
-	lda_d16 xbc, (0xc3e8)
+	lda xbc, (0xc3e8:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -12725,7 +12725,7 @@ LoopAdvance_Next_LoadIter2:
 	jr z, NoteMap_ClaimAndInitVoiceSlot_B
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x014c)
 	ld e, a
 	extz de
@@ -12741,7 +12741,7 @@ LoopAdvance_Next_LoadIter2:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_ClaimAndInitVoiceSlot_B
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -12763,7 +12763,7 @@ NoteMap_ClaimAndInitVoiceSlot_B:
 	jr z, NoteMap_LoopAdvance_Next2
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ldb_sri0 A, (xsp + 0x014c)
 	ld e, a
 	extz de
@@ -12779,7 +12779,7 @@ NoteMap_ClaimAndInitVoiceSlot_B:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	jr z, NoteMap_LoopAdvance_Next2
-	lda_d16 xwa, (0xc1fe)
+	lda xwa, (0xc1fe:16)
 	lds bc, 2
 	call NoteMap_InitVoiceSlots
 
@@ -12800,7 +12800,7 @@ PopIzStoreRet_Prologue:
 	jr nz, PopIzStoreRet_CheckEnd
 	cp e, 0xff
 	jr z, PopIzStoreRet_CheckEnd
-	lda_d16 xde, (0xc364)
+	lda xde, (0xc364:16)
 	ld a, (xsp)
 	ld c, a
 	extz bc
@@ -12813,13 +12813,13 @@ PopIzStoreRet_CheckEnd:
 	jr z, PopIzStoreRet_Block
 	cp e, 0xff
 	jr z, PopIzStoreRet_Block
-	lda_d16 xde, (0xc364)
+	lda xde, (0xc364:16)
 	ld a, (xsp)
 	ld c, a
 	extz bc
 	ld xwa, xde
 	call NoteMap_AssignVoiceParams
-	lda_d16 xde, (0xc1fe)
+	lda xde, (0xc1fe:16)
 	ld a, (xsp)
 	ld c, a
 	extz bc
@@ -12828,7 +12828,7 @@ PopIzStoreRet_CheckEnd:
 	jr PopIzStoreRet_Increment
 
 PopIzStoreRet_Block:
-	lda_d16 xde, (0xc1fe)
+	lda xde, (0xc1fe:16)
 	ld a, (xsp)
 	ld c, a
 	extz bc
@@ -13012,7 +13012,7 @@ SetParam_Return_WriteReg3:
 	stib_ind 0xfd, 0xa7, 0x00, 0xff
 	cpib_sri 0xfd, 0x4a, 0x01, 0x19
 	jr nz, SetParam_Return_LoadAddr
-	ldb_d8 a, (0xc422)
+	ld a, (0xc422:16)
 	stb_dri A, 0xfd, 0x4a, 0x01
 
 SetParam_Return_LoadAddr:
@@ -13092,7 +13092,7 @@ SetParam_Return_WriteReg5:
 	stib_ind 0xfd, 0xa7, 0x00, 0xff
 	cpib_sri 0xfd, 0x4a, 0x01, 0x19
 	jr nz, SetParam_Return_LoadAddr2
-	ldb_d8 a, (0xc422)
+	ld a, (0xc422:16)
 	stb_dri A, 0xfd, 0x4a, 0x01
 
 SetParam_Return_LoadAddr2:
@@ -13365,9 +13365,9 @@ RhythmBuf_EventDispatchLoop:
 	cp wa, 0x8
 	jr gt, RhythmBuf_EventDispatchLoop
 	add wa, wa
-	lda_24 xix, (CharMap_ValueData_B_0xD6)
+	lda xix, (CharMap_ValueData_B_0xD6:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (Rhythm_ProcessEventDispatch)
+	lda xix, (Rhythm_ProcessEventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Rhythm_ProcessEventDispatch:
@@ -13398,7 +13398,7 @@ Rhythm_ProcessEventDispatch:
 	jrl z, RhythmBuf_EventDispatchLoop
 	ld wa, (xsp + 4)
 	and wa, 0xf
-	lda_24 xbc, (CharMap_ValueData_B_0xC2)
+	lda xbc, (CharMap_ValueData_B_0xC2:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	ld (xsp + 4), wa
@@ -13586,7 +13586,7 @@ ProcessEventDispatch_LoadIter:
 	jrl z, RhythmBuf_EventDispatchLoop
 	ld wa, (xsp + 4)
 	and wa, 0xf
-	lda_24 xbc, (CharMap_ValueData_B_0xC2)
+	lda xbc, (CharMap_ValueData_B_0xC2:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	ld (xsp + 4), wa
@@ -13737,7 +13737,7 @@ NonNoteDispatchLoop_ReadAlt:
 	jr z, SeqEvtBuf_NonNoteDispatchLoop
 	ld wa, (xsp + 4)
 	and wa, 0xf
-	lda_24 xbc, (CharMap_ValueData_B_0xCC)
+	lda xbc, (CharMap_ValueData_B_0xCC:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	ld (xsp + 4), wa
@@ -13852,7 +13852,7 @@ SeqEvtBuf_NoteDispatch:
 	jrl z, SeqEvtBuf_NonNoteDispatchLoop
 	ld wa, (xsp + 4)
 	and wa, 0xf
-	lda_24 xbc, (CharMap_ValueData_B_0xCC)
+	lda xbc, (CharMap_ValueData_B_0xCC:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	ld (xsp + 4), wa
@@ -13863,9 +13863,9 @@ SeqEvtBuf_NoteDispatch:
 	cps wa, 6
 	jrl gt, SeqPerformance_Event_Block
 	add wa, wa
-	lda_24 xix, (CharMap_ValueData_B_0xE8)
+	lda xix, (CharMap_ValueData_B_0xE8:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SeqPerformance_EventDispatch)
+	lda xix, (SeqPerformance_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Sequence performance event dispatch (6-entry, table 0xee8fc0)
@@ -13958,14 +13958,14 @@ VoiceMap_AllocateSlot:
 	ldb l, 0xff
 	cpdi16 0xce66, 0
 	jr nz, VoiceMap_AllocateSlo_Block
-	lda_d16 xwa, (0xce22)
+	lda xwa, (0xce22:16)
 	calr NoteMap_GetVoiceData_Entry
 	cp l, 0xff
 	jr z, VoiceMap_AllocateSlo_SetByteFF
 	calr UIParam_ScanAndCollect
 	ldmm8 0xceae, 0xcedf
 	ldmm8 0xceb0, 0xcee0
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	ld l, a
 	jr NoteMap_FindBestMatch_Return
 
@@ -13979,20 +13979,20 @@ VoiceMap_AllocateSlo_Block:
 	calr Voice_ResetSearchState
 	stdi8 (0xceae), 255
 	stdi8 (0xceb0), 255
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	ld l, a
 	jr NoteMap_FindBestMatch_Return
 
 VoiceMap_AllocateSlo_Block2:
-	lda_d16 xwa, (0xce22)
+	lda xwa, (0xce22:16)
 	calr NoteMap_GetVoiceData_Entry
 	cp l, 0xff
 	jr z, VoiceMap_AllocateSlo_SetByteFF2
 	stdi8 (0xe9bc), 10
-	ldb_d8 a, (0xceac)
+	ld a, (0xceac:16)
 	cpda8 a, 0xceaa
 	jr nz, VoiceMap_AllocateSlo_Block3
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	cpda16 xwa, 0xce68
 	jr z, VoiceMap_AllocateSlo_SetByteFF2
 
@@ -14020,27 +14020,27 @@ NoteMap_FindBestMatch:
 	stdi8 (0xe9bc), 0
 	cpdi16 0xce22, 0
 	jr z, CheckVoiceReuse_Block
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	cpda8 a, 0xceae
 	jr nz, NoteMap_CheckVoiceReuse
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	cpda8 a, 0xceb0
 	jr nz, NoteMap_CheckVoiceReuse
-	ldb_d8 a, (0xceac)
+	ld a, (0xceac:16)
 	cpda8 a, 0xceaa
 	jr nz, NoteMap_CheckVoiceReuse
 	cpdi8 (0xceb2), 0
 	jr z, CheckVoiceReuse_SetByteFF2
 
 NoteMap_CheckVoiceReuse:
-	lda_d16 xwa, (0xce22)
+	lda xwa, (0xce22:16)
 	calr NoteMap_GetVoiceData_Entry
 	cp l, 0xff
 	jr z, CheckVoiceReuse_SetByteFF
 	calr UIParam_ScanAndCollect
 	ldmm8 0xceae, 0xcedf
 	ldmm8 0xceb0, 0xcee0
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	ld l, a
 	jr NoteMap_GetVoiceData_Return
 
@@ -14056,17 +14056,17 @@ CheckVoiceReuse_Block:
 	calr Voice_ResetSearchState
 	stdi8 (0xceae), 255
 	stdi8 (0xceb0), 255
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	ld l, a
 
 NoteMap_GetVoiceData_Return:
 	ret
 
 NoteMap_GetVoiceData_Entry:
-	ldb_d8 c, (0xceaa)
-	stb_d8 (0xceac), c
-	ldb_d8 c, (0xceab)
-	stb_d8 (0xcead), c
+	ld c, (0xceaa:16)
+	ld (0xceac:16), c
+	ld c, (0xceab:16)
+	ld (0xcead:16), c
 	cpw (xwa), 0x0
 	jr z, GetVoiceData_Entry_Block2
 	ld l, (xwa + 5)
@@ -14106,8 +14106,8 @@ GetVoiceData_Entry_Compare:
 	jr ule, GetVoiceData_Entry_Block
 	cp l, 0x67
 	jr nc, GetVoiceData_Entry_Block
-	stb_d8 (0xceaa), l
-	stb_d8 (0xceab), h
+	ld (0xceaa:16), l
+	ld (0xceab:16), h
 	jr Voice_ReadSearchResult
 
 GetVoiceData_Entry_Block:
@@ -14120,7 +14120,7 @@ GetVoiceData_Entry_Block2:
 	stdi8 (0xceab), 255
 
 Voice_ReadSearchResult:
-	ldb_d8 l, (0xceaa)
+	ld l, (0xceaa:16)
 	ret
 
 Voice_ResetSearchState:
@@ -14134,7 +14134,7 @@ UIParam_ScanAndCollect:
 	stdi8 (0xceb2), 0
 	cpdi8 (0xceab), 15
 	jr ule, UIParam_SetDefaultCount
-	ldb_d8 a, (0xceab)
+	ld a, (0xceab:16)
 	sub a, 0xf
 	ldb_erp A, 0xfb
 	jr UIParam_CallbackDispatch
@@ -14145,10 +14145,10 @@ UIParam_SetDefaultCount:
 ; UIParam callback dispatch
 UIParam_CallbackDispatch:
 	lda xwa, (xsp + 2)
-	ldb_d8 c, (0xe9be)
+	ld c, (0xe9be:16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (CharMap_ValueData_B_0x1F2C)
+	lda xde, (CharMap_ValueData_B_0x1F2C:24)
 	exts xbc
 	add xbc, xde
 	ld xix, (xbc)
@@ -14170,7 +14170,7 @@ UIParam_CallbackReturn:
 	ld wa, hl
 	add wa, wa
 	inc 4, wa
-	lda_d16 xbc, (0xce67)
+	lda xbc, (0xce67:16)
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -14178,7 +14178,7 @@ UIParam_CallbackReturn:
 	ld (xde), a
 	ld wa, hl
 	add wa, wa
-	lda_d16 xbc, (0xce6a)
+	lda xbc, (0xce6a:16)
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -14191,7 +14191,7 @@ UIParam_CompareResult:
 	jr c, UIParam_CallbackReturn
 
 UIParam_StoreAndReturn:
-	ldw_d16 xwa, (0xce24)
+	ld wa, (0xce24:16)
 	stda16 (0xce68), xwa
 	ld wa, (xsp + 2)
 	stda16 (0xce66), xwa
@@ -14212,16 +14212,16 @@ SearchVoice_EntryLoop:
 	ld bc, hl
 	add bc, bc
 	inc 4, bc
-	lda_d16 xix, (0xcf60)
+	lda xix, (0xcf60:16)
 	extz xbc
 	add xbc, xix
 	ld c, (xbc)
 	ldb_erp C, 0xea
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	stb_erp B, 0xea
 	cp b, c
 	jr gt, SearchVoice_CheckHighBound
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, 0xc
 	ld b, c
 	stb_erp C, 0xea
@@ -14233,7 +14233,7 @@ SearchVoice_OctaveDown:
 	sub_erpb 0xea, 0x0c
 
 SearchVoice_CheckHighBound:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	stb_erp B, 0xea
 	cp b, c
 	jr gt, SearchVoice_OctaveDown
@@ -14243,7 +14243,7 @@ SearchVoice_OctaveUp:
 	add_erpb 0xea, 0x0c
 
 SearchVoice_CheckLowBound:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, 0xc
 	ld b, c
 	stb_erp C, 0xea
@@ -14251,7 +14251,7 @@ SearchVoice_CheckLowBound:
 	jr ule, SearchVoice_OctaveUp
 
 SearchVoice_CheckDistance:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	subb_erp C, 0xea
 	cps c, 2
 	jr ule, SearchVoice_NextEntry
@@ -14391,7 +14391,7 @@ SoundFX_Handler_1:
 	jr z, SoundFX_SetVolumeOffset_Return
 	cpw (xiz), 0x1
 	jr nz, SoundFX_Handler_1_Block
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, (xiz + 5)
 	cp a, 0x8
 	jr ugt, SoundFX_SetVolumeOffset_Return
@@ -14411,7 +14411,7 @@ SoundFX_Handler_1_LoadReg:
 	inc 4, xwa
 	ld xbc, xwa
 	add xbc, xiz
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, (xbc + 1)
 	cp a, 0x8
 	jr ugt, SoundFX_Handler_1_Block2
@@ -14434,10 +14434,10 @@ SoundFX_SetVolumeOffset_Return:
 SoundFX_Handler_2:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14445,7 +14445,7 @@ SoundFX_Handler_2:
 	ld a, l
 	cp a, 0xff
 	jr z, SoundFX_Handler_2_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14455,15 +14455,15 @@ SoundFX_Handler_2:
 	ld l, w
 	ld e, l
 	extz de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0xc
-	lda_24 xbc, (CharMap_ValueData_B_0xF6)
+	lda xbc, (CharMap_ValueData_B_0xF6:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ldw (xiz), 0x1
@@ -14480,10 +14480,10 @@ SoundFX_Handler_2_LoadReg:
 SoundFX_Handler_3:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14491,7 +14491,7 @@ SoundFX_Handler_3:
 	ld a, l
 	cp a, 0xff
 	jr z, SoundFX_Handler_3_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14501,15 +14501,15 @@ SoundFX_Handler_3:
 	ld l, w
 	ld e, l
 	extz de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0xc
-	lda_24 xbc, (CharMap_ValueData_B_0xA26)
+	lda xbc, (CharMap_ValueData_B_0xA26:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ldw (xiz), 0x1
@@ -14526,10 +14526,10 @@ SoundFX_Handler_3_LoadReg:
 SoundFX_Handler_4:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14537,7 +14537,7 @@ SoundFX_Handler_4:
 	ld a, l
 	cp a, 0xff
 	jr z, SoundFX_Handler_4_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14549,31 +14549,31 @@ SoundFX_Handler_4:
 	extz wa
 	ld de, wa
 	add de, de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x18
-	lda_24 xbc, (CharMap_ValueData_B_0x246)
+	lda xbc, (CharMap_ValueData_B_0x246:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	ld de, wa
 	add de, de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x18
-	lda_24 xbc, (CharMap_ValueData_B_0x246)
+	lda xbc, (CharMap_ValueData_B_0x246:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ldw (xiz), 0x2
@@ -14590,10 +14590,10 @@ SoundFX_Handler_4_LoadReg:
 SoundFX_Handler_5:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14601,7 +14601,7 @@ SoundFX_Handler_5:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_5_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14613,47 +14613,47 @@ SoundFX_Handler_5:
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
-	lda_24 xbc, (CharMap_ValueData_B_0xB76)
+	lda xbc, (CharMap_ValueData_B_0xB76:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
-	lda_24 xbc, (CharMap_ValueData_B_0xB76)
+	lda xbc, (CharMap_ValueData_B_0xB76:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
-	lda_24 xbc, (CharMap_ValueData_B_0xB76)
+	lda xbc, (CharMap_ValueData_B_0xB76:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ldw (xiz), 0x3
@@ -14670,10 +14670,10 @@ SoundFX_Handler_5_LoadReg:
 SoundFX_Handler_6:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14681,7 +14681,7 @@ SoundFX_Handler_6:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_6_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14693,63 +14693,63 @@ SoundFX_Handler_6:
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x4E6)
+	lda xbc, (CharMap_ValueData_B_0x4E6:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x4E6)
+	lda xbc, (CharMap_ValueData_B_0x4E6:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x4E6)
+	lda xbc, (CharMap_ValueData_B_0x4E6:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x4E6)
+	lda xbc, (CharMap_ValueData_B_0x4E6:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 3)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 11), a
 	ldw (xiz), 0x4
@@ -14766,10 +14766,10 @@ SoundFX_Handler_6_LoadReg:
 SoundFX_Handler_7:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14777,7 +14777,7 @@ SoundFX_Handler_7:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_7_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14789,47 +14789,47 @@ SoundFX_Handler_7:
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
-	lda_24 xbc, (CharMap_ValueData_B_0xF66)
+	lda xbc, (CharMap_ValueData_B_0xF66:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
-	lda_24 xbc, (CharMap_ValueData_B_0xF66)
+	lda xbc, (CharMap_ValueData_B_0xF66:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
-	lda_24 xbc, (CharMap_ValueData_B_0xF66)
+	lda xbc, (CharMap_ValueData_B_0xF66:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ldw (xiz), 0x3
@@ -14846,10 +14846,10 @@ SoundFX_Handler_7_LoadReg:
 SoundFX_Handler_8:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14857,7 +14857,7 @@ SoundFX_Handler_8:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_8_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14869,63 +14869,63 @@ SoundFX_Handler_8:
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x19E6)
+	lda xbc, (CharMap_ValueData_B_0x19E6:24)
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x19E6)
+	lda xbc, (CharMap_ValueData_B_0x19E6:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x19E6)
+	lda xbc, (CharMap_ValueData_B_0x19E6:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
-	lda_24 xbc, (CharMap_ValueData_B_0x19E6)
+	lda xbc, (CharMap_ValueData_B_0x19E6:24)
 	exts xwa
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 3)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 11), a
 	ldw (xiz), 0x4
@@ -14941,11 +14941,11 @@ SoundFX_Handler_8_LoadReg:
 
 SoundFX_Handler_9:
 	ldb_da e, (CharMap_ValueData_B_0x1F26)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
 	ldb_da e, (CharMap_ValueData_B_0x1F27)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
 	ldw (xwa), 0x2
@@ -14954,11 +14954,11 @@ SoundFX_Handler_9:
 
 SoundFX_Handler_10:
 	ldb_da e, (CharMap_ValueData_B_0x1F28)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
 	ldb_da e, (CharMap_ValueData_B_0x1F29)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
 	ldw (xwa), 0x2
@@ -14967,11 +14967,11 @@ SoundFX_Handler_10:
 
 SoundFX_Handler_11:
 	ldb_da e, (CharMap_ValueData_B_0x1F2A)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
 	ldb_da e, (CharMap_ValueData_B_0x1F2B)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
 	ldw (xwa), 0x2
@@ -15107,7 +15107,7 @@ UpdateNoteState_CheckDRAM2:
 	jr z, Voice_CheckAndUpdateMode
 
 Voice_CheckAndUpdateMode:
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x2000
 	jr nz, Voice_ProcessControllers_Return
 	call Voice_UpdatePlayModeState
@@ -15122,7 +15122,7 @@ ProcessControllers_R_Prologue:
 	push xix
 	push xiz
 	push xde
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x2000
 	jr nz, PlayMode_StoreResult
 	cpw_da (0xcf01), 2
@@ -15132,7 +15132,7 @@ ProcessControllers_R_Prologue:
 	jr PlayMode_ClearBit6
 
 ProcessControllers_R_LoadDRAM:
-	ldw_d16 xde, (0xc598)
+	ld de, (0xc598:16)
 	and de, 0x20
 	jr z, PlayMode_UpdateAndReturn
 	ordi8_24 (0xcede), 64
@@ -15174,7 +15174,7 @@ Voice_UpdatePlayModeState:
 	jr PlayMode_ClearBit6_Alt
 
 PlayMode_CheckModes23:
-	ldw_d16 xde, (0xc598)
+	ld de, (0xc598:16)
 	and de, 0x20
 	jr z, PlayMode_CheckSlotAndReturn
 	ordi8_24 (0xcede), 64
@@ -15253,7 +15253,7 @@ Voice_UpdateVelocity_Entry:
 	jr z, VelocityUpdate_CheckNoThreshold
 	bitda_24 7, (0xcede)
 	jr z, VelocityUpdate_CheckBit4
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x2
 	jr nz, Voice_CheckAndUpdateSlot
 
@@ -15263,7 +15263,7 @@ VelocityUpdate_CheckBit4:
 	jr VelocityUpdate_SetTimerValue
 
 VelocityUpdate_CheckNoThreshold:
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x2
 	jr z, Voice_CheckAndUpdateSlot
 	bitda_24 4, (0xcede)
@@ -15284,7 +15284,7 @@ VelocityUpdate_Return:
 	ret
 
 Voice_SetDecayTimer:
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x2
 	jr z, DecayTimer_SetShort
 	cps bc, 2
@@ -15337,27 +15337,27 @@ Voice_CheckAndResetSlotState:
 CheckAndResetSlotSta_Block:
 	ordi8_24 (0xcede), 128
 	stib_da (0x00cee4), 0x00
-	ldb_d8 e, (0xfc5f)
+	ld e, (0xfc5f:16)
 	and e, 0x30
 	jr nz, Voice_NullRet2
-	ldb_d8 e, (0xfc60)
+	ld e, (0xfc60:16)
 	and e, 0x30
 	jr nz, Voice_NullRet2
-	ldw_d16 xde, (0xc598)
+	ld de, (0xc598:16)
 	and de, 0x2
 	jr nz, CheckAndResetSlotSta_LoadDRAM
 	bitda_24 6, (0xcede)
 	jr nz, CheckAndResetSlotSta_Block2
 
 CheckAndResetSlotSta_LoadDRAM:
-	ldw_d16 xde, (0xc598)
+	ld de, (0xc598:16)
 	and de, 0x2
 	jr nz, CheckAndResetSlotSta_LoadDRAM2
 	bitda_24 6, (0xcede)
 	jr nz, CheckAndResetSlotSta_Block2
 
 CheckAndResetSlotSta_LoadDRAM2:
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x10
 	jr nz, Voice_NullRet2
 
@@ -15392,16 +15392,16 @@ NullRet2_Data:
 NullRet2_TestBit24:
 	bitda_24 6, (0xcede)
 	jr nz, EffectState_Dispatch
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x1
 	jr nz, NullRet2_Block2
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x2
 	jr nz, EffectState_Dispatch
-	ldw_d16 xde, (0xc598)
+	ld de, (0xc598:16)
 	and de, 0x2
 	jr nz, EffectState_Dispatch
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x4
 	jr nz, EffectState_Dispatch_Block
 	jr EffectState_Dispatch
@@ -15730,7 +15730,7 @@ VoiceSlot_CompareAndUpdate_TestBit24:
 	bitda_24 6, (0xcede)
 	jr nz, VoiceSlot_CompareAndUpdate_Block
 	ldw_erp DE, 0x3e
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x8
 	stw_erp DE, 0x3e
 	jr nz, VoiceSlot_CompareAndUpdate_Block4
@@ -15904,7 +15904,7 @@ VoiceSlot_LoadResult_Compare:
 
 VoiceSlot_LoadResult_Block5:
 	ldw_erp DE, 0x3e
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x8
 	stw_erp DE, 0x3e
 	jr nz, VoiceSlot_LoadResult_Block8
@@ -16002,7 +16002,7 @@ Voice_ProcessSlotEntry:
 	cps de, 3
 	jr c, ProcessSlotEntry_Block2
 	ldw_erp DE, 0x3e
-	ldw_d16 xde, (0xc596)
+	ld de, (0xc596:16)
 	and de, 0x200
 	stw_erp DE, 0x3e
 	jr z, ProcessSlotEntry_Block
@@ -16451,7 +16451,7 @@ InitPartAllocState_Block:
 	calr InitPartAllocState_TestBit242
 	calr InitPartAllocState_OrBits
 	ldw_erp DE, 0x3e
-	ldw_d16 xde, (0xc598)
+	ld de, (0xc598:16)
 	and de, 0x2
 	stw_erp DE, 0x3e
 	jr z, InitPartAllocState_TestBit24
@@ -16710,15 +16710,15 @@ VoiceSlot_IterateAlloc_TestBit24:
 	jr z, VoiceSlot_CheckAndApply_Return
 
 VoiceSlot_IterateAlloc_StoreDRAM:
-	stb_d8 (0x8d42), a
-	stb_d8 (0x8d40), w
+	ld (0x8d42:16), a
+	ld (0x8d40:16), w
 	bitda_24 1, (0xcede)
 	jr nz, VoiceSlot_IterateAlloc_StoreDRAM2
 	stdi8 (0x8d44), 0
 	jr VoiceSlot_IterateAlloc_Block5
 
 VoiceSlot_IterateAlloc_StoreDRAM2:
-	stb_d8 (0x8d44), l
+	ld (0x8d44:16), l
 
 VoiceSlot_IterateAlloc_Block5:
 	jr VoiceSlot_CheckAndApply_DoCheckDis
@@ -17005,19 +17005,19 @@ VoiceSlot_CheckAndApply_Data2:
 	.byte 0x80
 	.ascii "89;:<=>Â"
 	or	iz, 8448
-	stb_d8	(0xcec0), a
+	ld	(0xcec0:16), a
 	ldb_da	a, (0xcedf)
-	stb_d8	(0xcec1), a
+	ld	(0xcec1:16), a
 	ldb_da	a, (0xcee0)
-	stb_d8	(0xcec2), a
+	ld	(0xcec2:16), a
 	ldb_da	a, (0xcee1)
-	stb_d8	(0xcec3), a
+	ld	(0xcec3:16), a
 	ldb_da	a, (0xcee2)
-	stb_d8	(0xcec4), a
+	ld	(0xcec4:16), a
 	ldb_da	a, (0xcee3)
-	stb_d8	(0xcec5), a
+	ld	(0xcec5:16), a
 	ldb_da	a, (0xcee4)
-	stb_d8	(0xcec6), a
+	ld	(0xcec6:16), a
 	ld	xiy, 0xcee5
 	ld	xix, 0xceca
 	ldw	bc, 10
@@ -17050,7 +17050,7 @@ VoiceSlot_CheckAndApply_Data2:
 	.byte 0xd7
 	push	xiz
 	.byte 0x9a
-	ldw_d16	de, (0xc596)
+	ld	de, (0xc596:16)
 	and	de, 8
 	.byte 0xd7
 	push	xiz
@@ -17069,29 +17069,29 @@ VoiceSlot_CheckAndApply_Data2:
 	jr	3
 	calr	63823
 	ldb_da	a, (0xcedf)
-	stb_d8	(0xceb6), a
+	ld	(0xceb6:16), a
 	ldb_da	a, (0xcee0)
-	stb_d8	(0xceb7), a
+	ld	(0xceb7:16), a
 	ldb_da	a, (0xcee1)
-	stb_d8	(0xceb8), a
+	ld	(0xceb8:16), a
 	ldb_da	a, (0xcede)
-	stb_d8	(0xceb9), a
+	ld	(0xceb9:16), a
 	jr	10
 	stdi8	(0xceb6), 0
 	stdi8	(0xceb7), 0
-	ldb_d8	a, (0xcec0)
+	ld	a, (0xcec0:16)
 	stb_da	(0xcede), a
-	ldb_d8	a, (0xcec1)
+	ld	a, (0xcec1:16)
 	stb_da	(0xcedf), a
-	ldb_d8	a, (0xcec2)
+	ld	a, (0xcec2:16)
 	stb_da	(0xcee0), a
-	ldb_d8	a, (0xcec3)
+	ld	a, (0xcec3:16)
 	stb_da	(0xcee1), a
-	ldb_d8	a, (0xcec4)
+	ld	a, (0xcec4:16)
 	stb_da	(0xcee2), a
-	ldb_d8	a, (0xcec5)
+	ld	a, (0xcec5:16)
 	stb_da	(0xcee3), a
-	ldb_d8	a, (0xcec6)
+	ld	a, (0xcec6:16)
 	stb_da	(0xcee4), a
 	ld	xiy, 0xceca
 	ld	xix, 0xcee5
@@ -17200,13 +17200,13 @@ NoteDisplay_StoreAnd_LoadReg2:
 	jr NoteDisplay_StoreAnd_Block
 
 NoteDisplay_StoreAnd_LoadDRAM:
-	ldb_d8 a, (0xcee5)
+	ld a, (0xcee5:16)
 	dec 1, a
 	extz wa
-	lda_d16 xbc, (0xcee6)
+	lda xbc, (0xcee6:16)
 	extz xwa
 	add xwa, xbc
-	ldb_d8 c, (0xcee6)
+	ld c, (0xcee6:16)
 	sub c, (xwa)
 	ld a, c
 	cp a, 0xc
@@ -17297,9 +17297,9 @@ UIState_ProcessKeyEvent:
 	cp	wa, 12
 	jrl	gt, 476
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x123C)
+	lda	xix, (SoundEffect_Dispatch_Table_0x123C:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (UIState_ProcessKeyEvent_0x3D)
+	lda	xix, (UIState_ProcessKeyEvent_0x3D:24)
 	jp_rr	8, xix, wa
 	ld	a, (xsp+3)
 	and	a, 255
@@ -17756,9 +17756,9 @@ HdaeRom_TableEntry2:
 	cps	wa, 7
 	jrl	gt, 128
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x1256)
+	lda	xix, (SoundEffect_Dispatch_Table_0x1256:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16690196)
+	lda xix, (16690196:24)
 	jp_rr 8, xix, wa
 	ld	a, (xsp+3)
 	and	a, 255
@@ -18046,12 +18046,12 @@ HdaeRom_AltCheckResult:
 	ld	a, (xsp+1)
 	dec	4, a
 	extz	wa
-	lda_d16	xbc, (0xf1a0)
+	lda	xbc, (0xf1a0:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
-	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x1AA)
+	lda	xbc, (AudioInit_VoiceDispatch_Table_0x1AA:24)
 	ld_rrb e, xbc, wa
 	ld a, e
 	cps a, 1
@@ -18418,7 +18418,7 @@ SndPart_SetParam:
 	jrl nz, MIDI_SendEpilogue
 	ld wa, (xsp + 2)
 	add wa, wa
-	lda_d16 xbc, (0xcfd0)
+	lda xbc, (0xcfd0:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), iz
@@ -18427,7 +18427,7 @@ SndPart_SetParam:
 SndPart_SetProgramMSB:
 	ld wa, (xsp + 2)
 	add wa, wa
-	lda_d16 xbc, (0xd010)
+	lda xbc, (0xd010:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), iz
@@ -18517,7 +18517,7 @@ SndPart_SetChorusSend:
 SndPart_SetDelaySend:
 	ld wa, (xsp + 2)
 	add wa, wa
-	lda_d16 xbc, (0xd050)
+	lda xbc, (0xd050:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), iz
@@ -18657,11 +18657,11 @@ SendEpilogue_Data:
 	stb_erp a, 248
 	cpda8 xbc, (59842)
 	jrl z, 1479
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	and	wa, 128
 	cp	wa, 128
 	jr	nz, 18
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	bit	8, wa
 	jr	nz, 9
 	ldw	wa, 255
@@ -18674,7 +18674,7 @@ SendEpilogue_Data:
 	ldw	bc, 22
 	call	MidiEvent_ConfigChannel
 	stb_erp a, 248
-	stb_d8	(0xe9c2), a
+	ld	(0xe9c2:16), a
 	jrl	1417
 	lds	wa, 1
 	cps	iz, 0
@@ -18710,9 +18710,9 @@ SendEpilogue_Data:
 	cps	wa, 6
 	jrl	ugt, 1331
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x1284)
+	lda	xix, (SoundEffect_Dispatch_Table_0x1284:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16692237)
+	lda xix, (16692237:24)
 	jp_rr 8, xix, wa
 	stb_erp a, 248
 	extz	wa
@@ -18781,9 +18781,9 @@ SendEpilogue_Data:
 	cp	wa, 14
 	jrl	ugt, 1106
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x1266)
+	lda	xix, (SoundEffect_Dispatch_Table_0x1266:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16692462)
+	lda xix, (16692462:24)
 	jp_rr 8, xix, wa
 	ldw	wa, 127
 	cps	iz, 0
@@ -18816,7 +18816,7 @@ SendEpilogue_Data:
 	lds	iz, 0
 	cp	iz, 12
 	jrl	ge, 999
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -18856,7 +18856,7 @@ SendEpilogue_Data:
 	lds	iz, 0
 	cp	iz, 12
 	jrl	ge, 880
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -18882,7 +18882,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 802
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -18893,7 +18893,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd1e)
+	ld	a, (0xfd1e:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18903,7 +18903,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 738
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	1, a
 	ld	c, a
@@ -18915,7 +18915,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd1f)
+	ld	a, (0xfd1f:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18925,7 +18925,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 672
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	2, a
 	ld	c, a
@@ -18937,7 +18937,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd20)
+	ld	a, (0xfd20:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18947,7 +18947,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 606
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	3, a
 	ld	c, a
@@ -18959,7 +18959,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd21)
+	ld	a, (0xfd21:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18969,7 +18969,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 540
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	4, a
 	ld	c, a
@@ -18981,7 +18981,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd22)
+	ld	a, (0xfd22:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18991,7 +18991,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 474
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	5, a
 	ld	c, a
@@ -19003,7 +19003,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd23)
+	ld	a, (0xfd23:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19013,7 +19013,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 408
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	6, a
 	ld	c, a
@@ -19025,7 +19025,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd24)
+	ld	a, (0xfd24:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19035,7 +19035,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 342
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	7, a
 	ld	c, a
@@ -19047,7 +19047,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd25)
+	ld	a, (0xfd25:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19057,7 +19057,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 276
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	8, a
 	ld	c, a
@@ -19069,7 +19069,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd26)
+	ld	a, (0xfd26:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19079,7 +19079,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 210
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 9
 	ld	c, a
@@ -19091,7 +19091,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd27)
+	ld	a, (0xfd27:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19101,7 +19101,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 143
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 10
 	ld	c, a
@@ -19113,7 +19113,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd28)
+	ld	a, (0xfd28:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19123,7 +19123,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jr	nz, 78
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 11
 	ld	c, a
@@ -19135,7 +19135,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd29)
+	ld	a, (0xfd29:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19194,28 +19194,28 @@ SendPartDataBlocks_LoadDRAM4:
 SendPartDataBlocks_Block:
 	cpdi16 0xcfc8, 0xffff
 	jr z, SendPartDataBlocks_Block2
-	ldw_d16 xwa, (0xcfc8)
+	ld wa, (0xcfc8:16)
 	extz wa
 	call SendPartDataBlock_Block7
 
 SendPartDataBlocks_Block2:
 	cpdi16 0xcfca, 0xffff
 	jr z, SendPartDataBlocks_Block3
-	ldw_d16 xwa, (0xcfca)
+	ld wa, (0xcfca:16)
 	extz wa
 	call SendPartDataBlock_ClearByte
 
 SendPartDataBlocks_Block3:
 	cpdi16 0xcfcc, 0xffff
 	jr z, SendPartDataBlocks_Block4
-	ldw_d16 xwa, (0xcfcc)
+	ld wa, (0xcfcc:16)
 	extz wa
 	call SendPartDataBlock_ClearByte2
 
 SendPartDataBlocks_Block4:
 	cpdi16 0xcfce, 0xffff
 	jr z, SendPartDataBlocks_InitVal
-	ldw_d16 xwa, (0xcfce)
+	ld wa, (0xcfce:16)
 	extz wa
 	call SendPartDataBlock_ClearByte3
 
@@ -19227,21 +19227,21 @@ SendPartDataBlocks_InitVal:
 SendPartDataBlocks_LoadIter:
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xcfd0)
+	lda xbc, (0xcfd0:16)
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0xffff
 	jr z, SendPartDataBlocks_LoadIter3
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xd010)
+	lda xbc, (0xd010:16)
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0xffff
 	jr z, SendPartDataBlocks_LoadIter3
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xd050)
+	lda xbc, (0xd050:16)
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0xffff
@@ -19254,7 +19254,7 @@ SendPartDataBlocks_LoadIter:
 SendPartDataBlocks_LoadIter2:
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xd050)
+	lda xbc, (0xd050:16)
 	extz xwa
 	add xwa, xbc
 	ld hl, (xwa)
@@ -19263,13 +19263,13 @@ SendPartDataBlocks_LoadReg:
 	ld ix, iz
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xcfd0)
+	lda xbc, (0xcfd0:16)
 	extz xwa
 	add xwa, xbc
 	ld iy, (xwa)
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xd010)
+	lda xbc, (0xd010:16)
 	extz xwa
 	add xwa, xbc
 	ld de, (xwa)
@@ -19282,7 +19282,7 @@ SendPartDataBlocks_LoadReg:
 SendPartDataBlocks_LoadIter3:
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xd050)
+	lda xbc, (0xd050:16)
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0xffff
@@ -19290,7 +19290,7 @@ SendPartDataBlocks_LoadIter3:
 	ld hl, iz
 	ld wa, iz
 	add wa, wa
-	lda_d16 xbc, (0xd050)
+	lda xbc, (0xd050:16)
 	extz xwa
 	add xwa, xbc
 	ld de, (xwa)
@@ -19331,19 +19331,19 @@ COMM_SendDataReturn:
 SendDataReturn_LoadReg:
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xcfd0)
+	lda xbc, (0xcfd0:16)
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0xffff
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xd010)
+	lda xbc, (0xd010:16)
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0xffff
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xd050)
+	lda xbc, (0xd050:16)
 	extz xwa
 	add xwa, xbc
 	ldw (xwa), 0xffff
@@ -19446,11 +19446,11 @@ SendChannelPressure_LoadParam:
 	call MIDI_PostSendStub
 	cpw (xsp + 12), 0x2
 	jr nz, SeqVoice_CheckAndRetry
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x80
 	cp wa, 0x80
 	jr nz, SeqVoice_CheckAndRetry
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 8, wa
 	jr nz, SeqVoice_CheckAndRetry
 	ldw wa, 0xff
@@ -19513,41 +19513,41 @@ SeqVoice_CheckAndRet_Data:
 	cps	wa, 6
 	jr	gt, 126
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x1352)
+	lda	xix, (SoundEffect_Dispatch_Table_0x1352:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (SeqVoice_CheckAndRet_Data_0x4A)
+	lda	xix, (SeqVoice_CheckAndRet_Data_0x4A:24)
 	jp_rr	8, xix, wa
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x1292)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x1292:24)
 	jr	102
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x129E)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x129E:24)
 	jr	95
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x12AA)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x12AA:24)
 	jr	88
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x12B6)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x12B6:24)
 	jr	81
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x12DA)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x12DA:24)
 	jr	74
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x12E6)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x12E6:24)
 	jr	67
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x12F2)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x12F2:24)
 	jr	60
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x12FE)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x12FE:24)
 	jr	53
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x130A)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x130A:24)
 	jr	46
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x1316)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x1316:24)
 	jr	39
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x1322)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x1322:24)
 	jr	32
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x132E)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x132E:24)
 	jr	25
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x133A)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x133A:24)
 	jr	18
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x1346)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x1346:24)
 	jr	11
-	lda_d16	xhl, (0xfd1e)
+	lda	xhl, (0xfd1e:16)
 	jr	5
-	lda_24	xhl, (SoundEffect_Dispatch_Table_0x1292)
+	lda	xhl, (SoundEffect_Dispatch_Table_0x1292:24)
 	ret
 	cp	a, 128
 	jrl	z, 133
@@ -19572,9 +19572,9 @@ SeqVoice_CheckAndRet_Data:
 	cps	wa, 6
 	jr	gt, 93
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x1360)
+	lda	xix, (SoundEffect_Dispatch_Table_0x1360:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (SeqVoice_CheckAndRet_Data_0x101)
+	lda	xix, (SeqVoice_CheckAndRet_Data_0x101:24)
 	jp_rr	8, xix, wa
 	lds	hl, 0
 	.ascii "hE3@ÿh@3Aÿh;3Bÿh6Û«h2Û¬h.Û­h*"
@@ -19724,7 +19724,7 @@ PitchReset_ChannelLoop:
 	jr lt, PitchReset_ChannelLoop
 
 PitchReset_CheckExtChannels:
-	ldb_d8 a, (0x379b)
+	ld a, (0x379b:16)
 	and a, 0xf
 	jr z, PitchReset_Flush
 	ldi_erpw 0xfa, 0x10, 0x00
@@ -19784,9 +19784,9 @@ MIDI_WriteChannelData_Block:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (SoundEffect_Dispatch_Table_0x136E)
+	lda	xix, (SoundEffect_Dispatch_Table_0x136E:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16695109)
+	lda xix, (16695109:24)
 	jp_rr 8, xix, wa
 	ldb	l, 1
 	ret
@@ -19804,7 +19804,7 @@ MIDI_SendCmdPacket:
 	jr SendCmdPacket_CheckCount
 
 SendCmdPacket_Loop:
-	lda_d16 xde, (0xd090)
+	lda xde, (0xd090:16)
 	ld bc, hl
 	inc 1, bc
 	ldb_sri C, 0x07, 0xe0, 0xe4
@@ -19835,7 +19835,7 @@ MIDI_PostSendStub:
 ; sequencer engine to check playback state, loop mode, and recording status.
 ; ============================================================================
 SeqState_GetFlags:
-	ldw_d16 xhl, (0xe9e5)
+	ld hl, (0xe9e5:16)
 	ret
 
 MIDI_OutputFlush:
@@ -19872,11 +19872,11 @@ OutputFlush_Prologue:
 	jrl Acc_PopIzRet
 
 OutputFlush_LoadDRAM:
-	ldw_d16 xwa, (0xe9e5)
+	ld wa, (0xe9e5:16)
 	and wa, 0x2
 	cps wa, 2
 	jr nz, OutputFlush_InitVal
-	ldw_d16 xwa, (0xe9e5)
+	ld wa, (0xe9e5:16)
 	bit 2, wa
 	jr nz, OutputFlush_InitVal
 	lds hl, 0
@@ -19885,8 +19885,8 @@ OutputFlush_LoadDRAM:
 OutputFlush_InitVal:
 	lds wa, 1
 	calr AccWrap_PlayModeStateMachine
-	ldw_d16 xwa, (0xe9e5)
-	ldw_d16 xbc, (0xe9ef)
+	ld wa, (0xe9e5:16)
+	ld bc, (0xe9ef:16)
 	calr PlayModeStateMachine_Prologue
 	ld xiz, xhl
 	cpdi8 (0xe9e4), 4
@@ -19905,7 +19905,7 @@ AccSong_ProcessRecord_Loop:
 	jr Acc_PopIzRet
 
 AccSong_ProcessRecord_LoadDRAM:
-	ldb_d8 a, (0xe9e4)
+	ld a, (0xe9e4:16)
 	cps a, 4
 	jr z, AccSong_ProcessRecord_LoadReg2
 	cps a, 3
@@ -19955,7 +19955,7 @@ Acc_LoadAndStartPlayback:
 	calr PlayModeStateMachine_Block5
 	calr StoreAndReturn_Block
 	ld a, (xsp + 6)
-	stb_d8 (0xe9e4), a
+	ld (0xe9e4:16), a
 	call Audio_ConfigureDSP
 	ld xwa, (xsp + 2)
 	calr NotifyChangeComplete_Prologue
@@ -19992,7 +19992,7 @@ LoadAndStartPlayback_LoadParam2:
 LoadAndStartPlayback_LoadParam3:
 	ld xwa, (xsp + 2)
 	push xwa
-	lda_d16 xwa, (0xe9c4)
+	lda xwa, (0xe9c4:16)
 	push xwa
 	call Strcpy
 	inc 8, xsp
@@ -20146,7 +20146,7 @@ ReadChunk_RestoreReg:
 	ret
 
 Acc_TransitionPlayMode:
-	ldw_d16 xwa, (0xe9e5)
+	ld wa, (0xe9e5:16)
 	bit 0, wa
 	jr z, TransitionPlayMode_Block
 	lds wa, 4
@@ -20166,7 +20166,7 @@ Acc_StopPlayMode:
 	ret
 
 Acc_StartFillIn:
-	ldw_d16 xwa, (0xe9e5)
+	ld wa, (0xe9e5:16)
 	bit 2, wa
 	ret nz
 	ordi16 0xe9e5, 4
@@ -20384,17 +20384,17 @@ PlayModeStateMachine_DoPlayMode2:
 	ld xwa, (0xd0a4:16)
 	stda16 (1052), xwa
 	ld xwa, (0xd0a0:16)
-	stb_d8 (1051), a
+	ld (1051:16), a
 	ei 0
 	ret
 
 PlayModeStateMachine_Block4:
 	ei 6
-	ldw_d16 xwa, (1052)
+	ld wa, (1052:16)
 	extz xwa
 	stda32 0xd0a4, xwa
 	lds32 xwa, 0
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	stda32 0xd0a0, xwa
 	ei 0
 	call AccWrap_PlayModeDispatch
@@ -20420,10 +20420,10 @@ PlayModeStateMachine_Prologue:
 	ld (xsp + 4), bc
 	ld (xsp + 6), wa
 	ei 6
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	lds32 xbc, 0
 	ld c, a
-	ldw_d16 xwa, (1052)
+	ld wa, (1052:16)
 	mul wa, 0x60
 	ld xiz, xwa
 	add xiz, xbc
@@ -20431,7 +20431,7 @@ PlayModeStateMachine_Prologue:
 	ld wa, (xsp + 6)
 	bit 2, wa
 	jr z, PlayModeStateMachine_LoadParam
-	ldw_d16 xwa, (0xec0e)
+	ld wa, (0xec0e:16)
 	decdi16 1, 0xec0e
 	cps wa, 0
 	jr ge, PlayModeStateMachine_LoadParam
@@ -20442,14 +20442,14 @@ PlayModeStateMachine_Prologue:
 	ld xbc, 0x60
 	call Math_DivideU32
 	stda16 (1052), xhl
-	ldw_d16 xwa, (1052)
+	ld wa, (1052:16)
 	extz xwa
 	stda32 0xd0a4, xwa
 	ld xwa, xiz
 	ld xbc, 0x60
 	call DivMod32
 	ld a, l
-	stb_d8 (1051), a
+	ld (1051:16), a
 	ldb w, 0x0
 	extz xwa
 	stda32 0xd0a0, xwa
@@ -20545,7 +20545,7 @@ SendSinglePacket_LoadReg:
 	extz wa
 	add wa, wa
 	lda xbc, (xsp + 4)
-	ldw_d16 xde, (0xe9f3)
+	ld de, (0xe9f3:16)
 	and_sriw_rm DE, 0x07, 0xe4, 0xe0
 	jr nz, SendSinglePacket_DoGetPlayS
 	ei 6
@@ -20591,7 +20591,7 @@ SendSinglePacket_Data:	.asciz "¿Þ7>éŽ¿$PØ©E¨Áî"
 	extz	wa
 	add	wa, wa
 	lda	xbc, (xsp+4)
-	ldw_d16	de, (0xe9f3)
+	ld	de, (0xe9f3:16)
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0, 0xc2
@@ -21274,7 +21274,7 @@ SeekRecord_PopReturn_Prologue:
 	ldirw
 	bit 7, a
 	jr z, SeekRecord_PopReturn_Block
-	stb_d8 (0xd09c), a
+	ld (0xd09c:16), a
 	ld (xsp + 4), a
 	lds iz, 1
 	jr SeekRecord_PopReturn_LoadDRAM
@@ -21285,7 +21285,7 @@ SeekRecord_PopReturn_Block:
 	lds iz, 2
 
 SeekRecord_PopReturn_LoadDRAM:
-	ldb_d8 a, (0xd09c)
+	ld a, (0xd09c:16)
 	and a, 0xf0
 	cp a, 0xc0
 	jr z, SeekRecord_PopReturn_Block2
@@ -21460,8 +21460,8 @@ SongFile_DecodeMidiEvent:
 	ldw (xsp + 10), 0x0
 	cpdi16 0xebfb, 0
 	jr z, DecodeMidiEvent_Block2
-	ldw_d16 xde, (0xebfb)
-	lda_d16 xwa, (0xeafb)
+	ld de, (0xebfb:16)
+	lda xwa, (0xeafb:16)
 	ld xbc, xwa
 	ld wa, de
 	calr MidiRingBuf_WriteBytes
@@ -21476,8 +21476,8 @@ DecodeMidiEvent_Block:
 DecodeMidiEvent_Block2:
 	cpdi16 0xeaf9, 0
 	jr z, DecodeMidiEvent_LoadDRAM
-	ldw_d16 xde, (0xeaf9)
-	lda_d16 xwa, (0xe9f9)
+	ld de, (0xeaf9:16)
+	lda xwa, (0xe9f9:16)
 	ld xbc, xwa
 	ld wa, de
 	calr SysexRingBuf_WriteBytes
@@ -21491,7 +21491,7 @@ DecodeMidiEvent_Send:
 	stdi16 (0xeaf9), 0
 
 DecodeMidiEvent_LoadDRAM:
-	ldw_d16 xwa, (0xe9e5)
+	ld wa, (0xe9e5:16)
 	bit 4, wa
 	jr z, DecodeMidiEvent_DoReadNext
 	ldw hl, 0xfffd
@@ -21695,7 +21695,7 @@ SeqPlay_CopyRecordData:
 	incw 1, (xsp + 10)
 
 SeqPlay_CheckStatusByte:
-	ldb_d8 a, (0xec10)
+	ld a, (0xec10:16)
 	and a, 0xf0
 	cp a, 0xc0
 	jr z, SeqPlay_TwoByteMsg
@@ -21741,7 +21741,7 @@ SeqPlay_ReadRecord_Entry:
 	stiw_ind 0xfd, 0x0e, 0x01, 0x00, 0x00
 	ld xwa, (0xe9f5:16)
 	ld (xsp + 6), xwa
-	ldw_d16 xwa, (0xe9e5)
+	ld wa, (0xe9e5:16)
 	bit 4, wa
 	jr nz, SeqPlay_CheckSysExMarker
 	lda_dri XWA, 0xfd, 0x0e, 0x01
@@ -21773,7 +21773,7 @@ SeqPlay_CheckSysExMarker:
 	pushw wa
 	lda xwa, (xsp + 14)
 	push xwa
-	lda_d16 xwa, (0xe9f9)
+	lda xwa, (0xe9f9:16)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -21789,7 +21789,7 @@ SeqPlay_CopyToMidiBuffer:
 	pushw wa
 	lda xwa, (xsp + 14)
 	push xwa
-	lda_d16 xwa, (0xeafb)
+	lda xwa, (0xeafb:16)
 	push xwa
 	call Mem_Copy
 	ld wa, (xsp + 20)
@@ -21798,9 +21798,9 @@ SeqPlay_CopyToMidiBuffer:
 	pushw wa
 	lda_dri XWA, 0xfd, 0x1c, 0x01
 	push xwa
-	ldw_d16 xwa, (0xebfb)
+	ld wa, (0xebfb:16)
 	add wa, 0x137
-	lda_d16 xbc, (0xe9c4)
+	lda xbc, (0xe9c4:16)
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -21810,10 +21810,10 @@ SeqPlay_CopyToMidiBuffer:
 	adddm16 0xebfb, xwa
 	cpdi16 0xeaf9, 0
 	jr z, SeqPlay_CheckMidiBuffer
-	ldw_d16 xwa, (0xeaf9)
+	ld wa, (0xeaf9:16)
 	dec 2, wa
 	ld de, wa
-	lda_d16 xwa, (0xe9fb)
+	lda xwa, (0xe9fb:16)
 	ld xbc, xwa
 	ld wa, de
 	calr SysexRingBuf_WriteBytes
@@ -21829,8 +21829,8 @@ SeqPlay_SendEvent:
 SeqPlay_CheckMidiBuffer:
 	cpdi16 0xebfb, 0
 	jr z, SeqPlay_SetSuccess
-	ldw_d16 xde, (0xebfb)
-	lda_d16 xwa, (0xeafb)
+	ld de, (0xebfb:16)
+	lda xwa, (0xeafb:16)
 	ld xbc, xwa
 	ld wa, de
 	calr MidiRingBuf_WriteBytes
@@ -22167,7 +22167,7 @@ RecordReadOK_Block11:
 	jr FileIO_Epilogue
 
 RecordReadOK_Block12:
-	lda_d16 xde, (0xe9eb)
+	lda xde, (0xe9eb:16)
 	ld xbc, 0x28
 	ld xwa, (0xe9eb:16)
 	cp xwa, 0x28
@@ -22176,7 +22176,7 @@ RecordReadOK_Block12:
 
 RecordReadOK_LoadReg5:
 	ld (xde), xbc
-	lda_d16 xde, (0xe9eb)
+	lda xde, (0xe9eb:16)
 	ld xbc, 0x12c
 	ld xwa, (0xe9eb:16)
 	cp xwa, 0x12c
@@ -22251,7 +22251,7 @@ Epilogue_Prologue:
 
 Epilogue_LoadReg:
 	ld bc, iz
-	lda_d16 xwa, (0xfc8e)
+	lda xwa, (0xfc8e:16)
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	extz wa
 	pushw 0xff
@@ -22466,7 +22466,7 @@ Epilogue_Prologue2:
 
 Epilogue_LoadReg2:
 	ld bc, iz
-	lda_d16 xwa, (0xfc8e)
+	lda xwa, (0xfc8e:16)
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	extz wa
 	pushw 0xff
@@ -22512,9 +22512,9 @@ MidiSysMsg_Handler:
 	cp wa, 0xf
 	jrl gt, Dispatch_InitVal2
 	add wa, wa
-	lda_24 xix, (SoundEffect_Dispatch_Table_0x13E0)
+	lda xix, (SoundEffect_Dispatch_Table_0x13E0:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (MidiSysMsg_Dispatch)
+	lda xix, (MidiSysMsg_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MIDI system message dispatch (15-entry, table 0xeec1e8)
@@ -22957,7 +22957,7 @@ MidiRealtime_ReadAndProcess:
 	pushw iz
 	lds iz, 0
 	lds iz, 0
-	ldw_d16 xbc, (0xe9e5)
+	ld bc, (0xe9e5:16)
 	bit 4, bc
 	jr z, MidiRealtime_DispatchStatus
 	ldw hl, 0xfffd
@@ -23121,9 +23121,9 @@ ToneGen_ProcessMidiConverge:
 	jrl ugt, VoiceReset_Return_RestoreReg
 	cpdi16 0xec01, 0
 	jr z, ProcessMidiConverge_Block
-	lda_d16 xwa, (0xec03)
+	lda xwa, (0xec03:16)
 	ld xbc, xwa
-	ldw_d16 xwa, (0xec01)
+	ld wa, (0xec01:16)
 	calr MIDI_SendSinglePacket
 
 ProcessMidiConverge_Block:
@@ -23169,7 +23169,7 @@ ProcessMidiConverge_Block:
 	jrl lt, ToneGen_VoiceReset_Return
 	lds iz, 0
 	ld wa, iz
-	lda_d16 xbc, (0xec03)
+	lda xbc, (0xec03:16)
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -23199,7 +23199,7 @@ ProcessMidiConverge_LoopBody:
 	cps wa, 0
 	jr lt, ProcessMidiConverge_LoadDRAM
 	ld wa, iz
-	lda_d16 xbc, (0xec03)
+	lda xbc, (0xec03:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), l
@@ -23210,25 +23210,25 @@ ProcessMidiConverge_LoopCheck:
 	jr c, ProcessMidiConverge_LoopBody
 
 ProcessMidiConverge_LoadDRAM:
-	ldb_d8 a, (0xec03)
+	ld a, (0xec03:16)
 	and a, 0xf0
 	cp a, 0x90
 	jr nz, ToneGen_ValidateRange_Loop
 	cpdi8 (0xec05), 0
 	jr z, ToneGen_ValidateRange_Loop
-	ldb_d8 a, (0xec05)
+	ld a, (0xec05:16)
 	extz wa
 	mul wa, 0x4b
 	extz xwa
 	div wa, 0x64
 	add wa, 0x20
-	stb_d8 (0xec05), a
+	ld (0xec05:16), a
 	cpdi8 (0xec05), 127
 	jr ule, ToneGen_ValidateRange_Loop
 	stdi8 (0xec05), 127
 
 ToneGen_ValidateRange_Loop:
-	ldb_d8 a, (0xec03)
+	ld a, (0xec03:16)
 	and a, 0xf0
 	cp a, 0xb0
 	jrl nz, ToneGen_ProcessMidiConverge
@@ -23252,7 +23252,7 @@ VoiceReset_Return_Prologue:
 	push xiz
 	bit 7, a
 	jr z, VoiceReset_Return_Block
-	stb_d8 (0xd09e), a
+	ld (0xd09e:16), a
 	ld (xsp + 4), a
 	lds iz, 1
 	jr VoiceReset_Return_LoadDRAM
@@ -23263,7 +23263,7 @@ VoiceReset_Return_Block:
 	lds iz, 2
 
 VoiceReset_Return_LoadDRAM:
-	ldb_d8 a, (0xd09e)
+	ld a, (0xd09e:16)
 	and a, 0xf0
 	cp a, 0xc0
 	jr z, VoiceReset_Return_Block2
@@ -23329,8 +23329,8 @@ VoiceReset_Return_LoadIter:
 	jr c, VoiceReset_Return_LoadIter
 
 VoiceReset_Return_LoadDRAM2:
-	ldw_d16 xwa, (0xe9e5)
-	ldw_d16 xbc, (0xe9ef)
+	ld wa, (0xe9e5:16)
+	ld bc, (0xe9ef:16)
 	calr PlayModeStateMachine_Prologue
 	add xhl, 0x3a
 	ld xwa, xhl
@@ -23441,7 +23441,7 @@ SoundParam_InitDefau_LoadReg:
 	ld de, bc
 	ldw bc, 0x401
 	call SndParam_NotifyAndReturn
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 	lda xwa, (xsp + 66)
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -23482,7 +23482,7 @@ SoundParam_InitDefau_LoadReg2:
 	ld de, bc
 	ldw bc, 0x401
 	call SndParam_NotifyAndReturn
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 	lda xwa, (xsp + 34)
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -23523,7 +23523,7 @@ SoundParam_InitDefau_LoadReg3:
 	ld de, bc
 	ldw bc, 0x401
 	call SndParam_NotifyAndReturn
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 	lda xwa, (xsp + 2)
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -23552,7 +23552,7 @@ NotifyChangeComplete_Prologue:
 	ld xix, xsp
 	ldw bc, 0x10
 	ldirw
-	ldb_d8 c, (0xe9e4)
+	ld c, (0xe9e4:16)
 	cps c, 4
 	jr z, NotifyChangeComplete_DoGetCurre
 	cps c, 3
@@ -23596,7 +23596,7 @@ ToneGen_RestoreStackReturn:
 ; Used for sequential file record reading during disk operations.
 ; ============================================================================
 FileIO_ReadNextRecord:
-	ldb_d8 a, (0xe9e4)
+	ld a, (0xe9e4:16)
 	cps a, 4
 	jr z, ReadNextRecord_DoLookupB
 	cps a, 3
@@ -23642,7 +23642,7 @@ SndParam_DirectReturn:
 	ret
 
 DirectReturn_LoadDRAM:
-	ldb_d8 a, (0xe9e4)
+	ld a, (0xe9e4:16)
 	cps a, 4
 	jr z, DirectReturn_DoLookupC
 	cps a, 3
@@ -23696,7 +23696,7 @@ FileIO_InitTrackSlots:
 InitTrackSlots_LoopBody:
 	ld wa, de
 	inc 6, wa
-	lda_d16 xbc, (0xd0a8)
+	lda xbc, (0xd0a8:16)
 	stib_ind 0x07, 0xe4, 0xe0, 0x00
 	inc 1, de
 
@@ -23713,8 +23713,8 @@ InitTrackSlots_Block:
 	jr InitTrackSlots_Return
 
 InitTrackSlots_LoadDRAM:
-	ldw_d16 xbc, (0xd0a8)
-	lda_d16 xde, (0xd0ae)
+	ld bc, (0xd0a8:16)
+	lda xde, (0xd0ae:16)
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
@@ -23734,15 +23734,15 @@ InitTrackSlots_Return:
 	ret
 
 RingBuffer_ReadByte:
-	ldw_d16 xwa, (0xd0a8)
+	ld wa, (0xd0a8:16)
 	cpda16 xwa, 0xd0aa
 	jr nz, RingBuffer_ReadByte_LoadDRAM
 	ldw hl, 0xffff
 	jr RingBuffer_ReadByte_Return
 
 RingBuffer_ReadByte_LoadDRAM:
-	ldw_d16 xwa, (0xd0aa)
-	lda_d16 xbc, (0xd0ae)
+	ld wa, (0xd0aa:16)
+	lda xbc, (0xd0ae:16)
 	extz xwa
 	add xwa, xbc
 	ld l, (xwa)
@@ -23847,7 +23847,7 @@ SysexRingBuf_Init:
 SysexRingBuf_ClearLoop:
 	ld wa, de
 	inc 6, wa
-	lda_d16 xbc, (0xd8ae)
+	lda xbc, (0xd8ae:16)
 	stib_ind 0x07, 0xe4, 0xe0, 0x00
 	inc 1, de
 
@@ -23864,8 +23864,8 @@ SysexRingBuf_WriteByte:
 	jr SysexRingBuf_WriteReturn
 
 SysexRingBuf_StoreAndAdvance:
-	ldw_d16 xbc, (0xd8ae)
-	lda_d16 xde, (0xd8b4)
+	ld bc, (0xd8ae:16)
+	lda xde, (0xd8b4:16)
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
@@ -23885,15 +23885,15 @@ SysexRingBuf_WriteReturn:
 	ret
 
 SysexRingBuf_ReadByte:
-	ldw_d16 xwa, (0xd8ae)
+	ld wa, (0xd8ae:16)
 	cpda16 xwa, 0xd8b0
 	jr nz, SysexRingBuf_ReadAndAdvance
 	ldw hl, 0xffff
 	jr SysexRingBuf_ReadReturn
 
 SysexRingBuf_ReadAndAdvance:
-	ldw_d16 xwa, (0xd8b0)
-	lda_d16 xbc, (0xd8b4)
+	ld wa, (0xd8b0:16)
+	lda xbc, (0xd8b4:16)
 	extz xwa
 	add xwa, xbc
 	ld l, (xwa)
@@ -23996,7 +23996,7 @@ MidiRingBuf_Init:
 MidiRingBuf_ClearLoop:
 	ld wa, de
 	inc 6, wa
-	lda_d16 xbc, (0xe0b4)
+	lda xbc, (0xe0b4:16)
 	stib_ind 0x07, 0xe4, 0xe0, 0x00
 	inc 1, de
 
@@ -24013,8 +24013,8 @@ MidiRingBuf_WriteByte:
 	jr StoreAndAdvance_Return
 
 MidiRingBuf_StoreAndAdvance:
-	ldw_d16 xbc, (0xe0b4)
-	lda_d16 xde, (0xe0ba)
+	ld bc, (0xe0b4:16)
+	lda xde, (0xe0ba:16)
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
@@ -24034,15 +24034,15 @@ StoreAndAdvance_Return:
 	ret
 
 StoreAndAdvance_LoadDRAM:
-	ldw_d16 xwa, (0xe0b4)
+	ld wa, (0xe0b4:16)
 	cpda16 xwa, 0xe0b6
 	jr nz, StoreAndAdvance_LoadDRAM2
 	ldw hl, 0xffff
 	jr StoreAndAdvance_Return2
 
 StoreAndAdvance_LoadDRAM2:
-	ldw_d16 xwa, (0xe0b6)
-	lda_d16 xbc, (0xe0ba)
+	ld wa, (0xe0b6:16)
+	lda xbc, (0xe0ba:16)
 	extz xwa
 	add xwa, xbc
 	ld l, (xwa)
@@ -24161,16 +24161,16 @@ CharMap_ActivePreamble:
 	lds bc, 2
 	jp sendCOMM
 CharMap_ActivePreamb_LoadDRAM:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	cps	a, 0
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 15
 	ret	z
 	stdi8	(0xe144), 1
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 15
-	stb_d8	(0xe145), a
+	ld	(0xe145:16), a
 	ld	xde, 0xe144
 	lds	wa, 5
 	lds	bc, 2
@@ -24364,7 +24364,7 @@ StoreDRAMInit_ReadBuf2:
 
 StoreDRAMInit_ReadBuf3:
 	call SeqBuf_VoiceMap_ReadByte
-	ld_sril XWA, (xsp + 0x0136)
+	ld XWA, (xsp + 0x0136)
 	lda_dpi XSP, 0xe0
 	stl_dri XWA, 0xfd, 0x36, 0x01
 	inc 1, iz
@@ -24418,7 +24418,7 @@ StoreDRAMInit_Block3:
 	ret
 
 StoreDRAMInit_Block4:
-	lda_24 xwa, (CharMap_FullPermutation_0x180)
+	lda xwa, (CharMap_FullPermutation_0x180:24)
 	ld xde, xwa
 	lda xhl, (xwa + 16)
 
@@ -24457,7 +24457,7 @@ SndParam_ApplyProgramChangeAsync:
 	call TaskSched_SignalEvent
 	cpib_erp 0xfb, 0
 	jr z, ApplyProgramChangeAs_RestoreReg
-	lda_24 xwa, (CharMap_FullPermutation_0x190)
+	lda xwa, (CharMap_FullPermutation_0x190:24)
 	ld xbc, xwa
 	ld xde, (xsp + 2)
 	lda xhl, (xwa + 17)
@@ -24543,7 +24543,7 @@ ApplyProgramChangeAs_Prologue2:
 	call TaskSched_SignalEvent
 	cpib_erp 0xfb, 0
 	jr z, ApplyProgramChangeAs_RestoreReg2
-	lda_24 xwa, (CharMap_FullPermutation_0x1A1)
+	lda xwa, (CharMap_FullPermutation_0x1A1:24)
 	ld xbc, xwa
 	ld xde, (xsp + 2)
 	lda xhl, (xwa + 10)
@@ -24913,7 +24913,7 @@ SndParam_LookupByPartAndNote:
 
 SndParam_CompactLookupStub:
 	extz	wa
-	lda_24	xbc, (CharMap_FullPermutation_0x22E)
+	lda	xbc, (CharMap_FullPermutation_0x22E:24)
 	ld_rrb a, xbc, wa
 	extz wa
 	ld	l, a
@@ -25009,9 +25009,9 @@ SndParam_LookupByChannel:
 	cps wa, 5
 	jr gt, SndParam_LoadReturnByte
 	add wa, wa
-	lda_24 xix, (CharMap_FullPermutation_0x2AE)
+	lda xix, (CharMap_FullPermutation_0x2AE:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SndParam_TypeDispatch)
+	lda xix, (SndParam_TypeDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Sound parameter type dispatch (6-entry, table 0xeed3c6)
@@ -25038,7 +25038,7 @@ TypeDispatch_Entry1_Extend2:
 	add hl, 0xc
 
 SndParam_LoadTableConverge:
-	lda_d16 xde, (0xec11)
+	lda xde, (0xec11:16)
 	ld_sril3 XDE, 0x07, 0xe8, 0xec
 	ldb b, 0x0
 	extz xbc
@@ -25085,9 +25085,9 @@ SndParam_OffsetHandler:
 	cps de, 5
 	jr gt, LookupTableConverge_LoadParam
 	add de, de
-	lda_24 xix, (CharMap_FullPermutation_0x2BA)
+	lda xix, (CharMap_FullPermutation_0x2BA:24)
 	ldw_sri DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, (SndParam_OffsetDispatch)
+	lda xix, (SndParam_OffsetDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 
 ; Sound parameter offset dispatch (6-entry, table 0xeed3d2)
@@ -25110,7 +25110,7 @@ SndParam_LookupTableConverge:
 	extz hl
 	muls hl, 0x18
 	add hl, bc
-	lda_d16 xbc, (0xec11)
+	lda xbc, (0xec11:16)
 	ld_sril3 XBC, 0x07, 0xe4, 0xec
 	lds32 xwa, 0
 	ld a, (xsp)
@@ -25204,7 +25204,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, xhl
 	add	xhl, CharMap_FullPermutation_0x38C
 	ld	hl, (xhl)
-	lda_24	xix, (Param_SignExtendRetu_Data_0x69)
+	lda	xix, (Param_SignExtendRetu_Data_0x69:24)
 	jp_rr 8, xix, hl
 	ld	a, (xsp)
 	exts	wa
@@ -25227,7 +25227,7 @@ Param_SignExtendRetu_Data:
 	sll	hl, 1
 	ld	xix, CharMap_FullPermutation_0x37E
 	ld_rrw hl, xix, hl
-	lda_24 xix, (16706778)
+	lda xix, (16706778:24)
 	jp_rr 8, xix, hl
 	ld	a, (xsp)
 	exts	wa
@@ -25287,7 +25287,7 @@ Param_SignExtendRetu_Data:
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x323
 	ld_rrw bc, xix, bc
-	lda_24 xix, (16706961)
+	lda xix, (16706961:24)
 	jp_rr 8, xix, bc
 	ld	a, (xsp)
 	exts	wa
@@ -25375,7 +25375,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, xhl
 	add	xhl, CharMap_FullPermutation_0x3F4
 	ld	hl, (xhl)
-	lda_24	xix, (Param_SignExtendRetu_Data_0x264)
+	lda	xix, (Param_SignExtendRetu_Data_0x264:24)
 	jp_rr 8, xix, hl
 	pushw	127
 	pushw	0
@@ -25404,7 +25404,7 @@ Param_SignExtendRetu_Data:
 	sll	wa, 1
 	ld	xix, CharMap_FullPermutation_0x3E6
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16707307)
+	lda xix, (16707307:24)
 	jp_rr 8, xix, wa
 	pushw 127
 	pushw	32
@@ -25464,7 +25464,7 @@ Param_SignExtendRetu_Data:
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x3B7
 	ld_rrw bc, xix, bc
-	lda_24 xix, (16707498)
+	lda xix, (16707498:24)
 	jp_rr 8, xix, bc
 	pushw 127
 	pushw	32
@@ -25531,7 +25531,7 @@ Param_SignExtendRetu_Data:
 	jrl	nz, 138
 	cp	xbc, 470
 	jr	ugt, 125
-	lda_d16	xde, (0xe198)
+	lda	xde, (0xe198:16)
 	ld	(xde), 45
 	ld	xwa, (xsp+20)
 	lda	xhl, (xwa+6)
@@ -25733,7 +25733,7 @@ Param_SignExtendRetu_Data:
 	ret
 
 Param_SignExtendRetu_Block3:
-	lda_d16 xde, (0xe2b8)
+	lda xde, (0xe2b8:16)
 	ld (xde), 0x2b
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25742,7 +25742,7 @@ Param_SignExtendRetu_Block3:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25750,11 +25750,11 @@ Param_SignExtendRetu_Block3:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2bf)
+	ld l, (0xe2bf:16)
 	ret
 
 Param_SignExtendRetu_Block4:
-	lda_d16 xde, (0xe2c2)
+	lda xde, (0xe2c2:16)
 	ld (xde), 0x2b
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25763,7 +25763,7 @@ Param_SignExtendRetu_Block4:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25771,11 +25771,11 @@ Param_SignExtendRetu_Block4:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2c9)
+	ld l, (0xe2c9:16)
 	ret
 
 Param_SignExtendRetu_Block5:
-	lda_d16 xde, (0xe2cc)
+	lda xde, (0xe2cc:16)
 	ld (xde), 0x2b
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25784,7 +25784,7 @@ Param_SignExtendRetu_Block5:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25792,11 +25792,11 @@ Param_SignExtendRetu_Block5:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2d3)
+	ld l, (0xe2d3:16)
 	ret
 
 SndParam_LookupPartIndex:
-	lda_d16 xde, (0xe2d6)
+	lda xde, (0xe2d6:16)
 	ld (xde), 0x2b
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25805,7 +25805,7 @@ SndParam_LookupPartIndex:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25813,13 +25813,13 @@ SndParam_LookupPartIndex:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2dd)
+	ld l, (0xe2dd:16)
 	ret
 
 LookupPartIndex_Compare:
 	cps wa, 4
 	jrl ugt, CommPacket_WriteMeas_Block
-	lda_d16 xde, (0xe2e0)
+	lda xde, (0xe2e0:16)
 	ld (xde), 0x2d
 	ld (xde + 1), 0x0
 	ld (xde + 3), 0x0
@@ -25884,13 +25884,13 @@ CommPacket_WriteMeasureCount:
 
 CommPacket_WriteMeas_Block:
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ret
 
 SendCOMM_VariableLengthPacket:
 	push xiz
-	lda_d16 xhl, (0xe320)
+	lda xhl, (0xe320:16)
 	ld (xhl), 0x2c
 	ld (xhl + 1), 0x0
 	ld (xhl + 2), 0x8
@@ -25898,9 +25898,9 @@ SendCOMM_VariableLengthPacket:
 	ld (xhl + 4), 0x0
 	ld (xhl + 5), 0x0
 	ld (xhl + 6), e
-	ldb_d8 c, (0xe197)
+	ld c, (0xe197:16)
 	inc 1, c
-	stb_d8 (0xe197), c
+	ld (0xe197:16), c
 	res 7, c
 	ld (xhl + 7), c
 	ldiw_erp 0xe6, 0
@@ -25930,13 +25930,13 @@ SendCOMM_VariableLen_Increment:
 	ld bc, de
 	ld xde, xhl
 	call sendCOMM
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	pop xiz
 	ret
 
 COMM_BuildAndSendPacket:
-	lda_d16 xde, (0xe334)
+	lda xde, (0xe334:16)
 	ld (xde), 0x2c
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25945,7 +25945,7 @@ COMM_BuildAndSendPacket:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25955,7 +25955,7 @@ COMM_BuildAndSendPacket:
 	jp sendCOMM
 
 BuildAndSendPacket_Block:
-	lda_d16 xde, (0xe33e)
+	lda xde, (0xe33e:16)
 	ld (xde), 0x2c
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25964,7 +25964,7 @@ BuildAndSendPacket_Block:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25974,7 +25974,7 @@ BuildAndSendPacket_Block:
 	jp sendCOMM
 
 TmFlash_Return:
-	lda_d16 xde, (0xe348)
+	lda xde, (0xe348:16)
 	ld (xde), 0x2c
 	ld (xde + 1), 0x30
 	ld (xde + 2), 0x7f
@@ -25983,7 +25983,7 @@ TmFlash_Return:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x1
 	incdi8 1, (0xe197)
-	ldb_d8 a, (0xe197)
+	ld a, (0xe197:16)
 	res 7, a
 	ld (xde + 7), a
 	ld (xde + 8), 0x0
@@ -26099,31 +26099,31 @@ TmFlash_Return_LoadParam2:
 	jr z, TmFlash_Return_LoadDRAM
 	cpw (xsp + 8), 0x0
 	jr nz, CommParam_SetComplete_Return
-	ldb_d8 a, (0xe356)
+	ld a, (0xe356:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM:
-	ldb_d8 a, (0xe357)
+	ld a, (0xe357:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM2:
-	ldb_d8 a, (0xe358)
+	ld a, (0xe358:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM3:
-	ldb_d8 a, (0xe359)
+	ld a, (0xe359:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM4:
-	ldb_d8 a, (0xe35a)
+	ld a, (0xe35a:16)
 	extz wa
 	ld (xbc), wa
 
@@ -26162,7 +26162,7 @@ CommPort_StatusCheckAndSend:
 	ret z
 	ldcf_dd8 4, 0x38
 	scc8 c, a
-	stb_d8 (0xe35c), a
+	ld (0xe35c:16), a
 	ld xwa, 0xe35c
 	ldw bc, 0x8
 	lds de, 1
@@ -26172,7 +26172,7 @@ CommPort_StatusCheckAndSend:
 CommPort_StatusCheck_Compare:
 	cp a, c
 	jr nz, CheckValidityReturn_SetByteFF
-	ldw_d16 xwa, (0x8d38)
+	ld wa, (0x8d38:16)
 	cp a, 0xd6
 	jr z, Note_CheckValidityReturn
 	cp a, 0xe
@@ -26205,7 +26205,7 @@ COMM_SendPartDataBlock:
 	extz wa
 	muls wa, 0x38
 	inc 8, wa
-	lda_24 xbc, (0x03c0fa)
+	lda xbc, (0x03c0fa:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ldb_erp A, 0xfb
 	ld a, e
@@ -26217,13 +26217,13 @@ COMM_SendPartDataBlock:
 	extz bc
 	muls bc, 0x38
 	inc 8, bc
-	lda_24 xde, (0x03c0fa)
+	lda xde, (0x03c0fa:24)
 	ldw_sri BC, 0x07, 0xe8, 0xe4
 	extz bc
 	calr CommPort_StatusCheck_Compare
 	cp (xsp + 2), 0x3
 	jr nz, SendPartDataBlock_LoadParam
-	ldb_d8 a, (0xe354)
+	ld a, (0xe354:16)
 	extz wa
 	stw_da (0x03c1b6), xwa
 
@@ -26243,7 +26243,7 @@ SendPartDataBlock_Block:
 	; --- Set-if-changed handlers for E351-E354 (4x24 = 96 bytes) ---
 	cpdm8	0xe351, a
 	ret z
-	stb_d8	(0xe351), a
+	ld	(0xe351:16), a
 	ld xwa, 0x0000e351
 	lds	bc, 1
 	lds	de, 1
@@ -26252,7 +26252,7 @@ SendPartDataBlock_Block:
 SendPartDataBlock_Block2:
 	cpdm8	0xe352, a
 	ret z
-	stb_d8	(0xe352), a
+	ld	(0xe352:16), a
 	ld xwa, 0x0000e352
 	lds	bc, 2
 	lds	de, 1
@@ -26261,7 +26261,7 @@ SendPartDataBlock_Block2:
 SendPartDataBlock_Block3:
 	cpdm8	0xe353, a
 	ret z
-	stb_d8	(0xe353), a
+	ld	(0xe353:16), a
 	ld xwa, 0x0000e353
 	lds	bc, 6
 	lds	de, 1
@@ -26270,7 +26270,7 @@ SendPartDataBlock_Block3:
 SendPartDataBlock_Block4:
 	cpdm8	0xe354, a
 	ret z
-	stb_d8	(0xe354), a
+	ld	(0xe354:16), a
 	ld xwa, 0x0000e354
 	lds	bc, 7
 	lds	de, 1
@@ -26287,7 +26287,7 @@ SendPartDataBlock_ClearByte:
 SendPartDataBlock_Block5:
 	cpdm8 0xe357, c
 	ret z
-	stb_d8 (0xe357), c
+	ld (0xe357:16), c
 	ld xwa, 0xe357
 	ldw bc, 0x21
 	lds de, 1
@@ -26303,7 +26303,7 @@ SendPartDataBlock_ClearByte2:
 SendPartDataBlock_Block6:
 	cpdm8 0xe358, c
 	ret z
-	stb_d8 (0xe358), c
+	ld (0xe358:16), c
 	ld xwa, 0xe358
 	ldw bc, 0x22
 	lds de, 1
@@ -26319,7 +26319,7 @@ SendPartDataBlock_Block7:
 	ldb c, 0x0
 
 SendPartDataBlock_StoreDRAM:
-	stb_d8 (0xe35b), c
+	ld (0xe35b:16), c
 	ld xwa, 0xe35b
 	ldw bc, 0x23
 	lds de, 1
@@ -26335,7 +26335,7 @@ SendPartDataBlock_ClearByte3:
 SendPartDataBlock_Block8:
 	cpdm8 0xe359, c
 	ret z
-	stb_d8 (0xe359), c
+	ld (0xe359:16), c
 	ld xwa, 0xe359
 	ldw bc, 0x24
 	lds de, 1
@@ -26349,7 +26349,7 @@ SendPartDataBlock_Block9:
 	ldb	c, 1
 	cpdm8	0xe35a, c
 	ret	z
-	stb_d8	(0xe35a), c
+	ld	(0xe35a:16), c
 	ld	xwa, 0xe35a
 	ldw	bc, 37
 	lds	de, 1
@@ -26404,7 +26404,7 @@ SendPartDataBlock_Prologue:
 	sll xwa, 3
 	ld xiy, xwa
 	inc 8, xiy
-	lda_24 xix, (0x03c0fa)
+	lda xix, (0x03c0fa:24)
 	ld xiz, xix
 	add xiz, xiy
 	cp bc, (xiz + 44)
@@ -26433,7 +26433,7 @@ SendPartDataBlock_InitVal2:
 	sub xde, xwa
 	sll xde, 3
 	inc 8, xde
-	lda_24 xwa, (0x03c126)
+	lda xwa, (0x03c126:24)
 	add xwa, xde
 	ld (xwa), bc
 	jr SendPartDataBlock_Return2
@@ -26454,7 +26454,7 @@ SendPartDataBlock_InitVal3:
 	sub xde, xwa
 	sll xde, 3
 	inc 8, xde
-	lda_24 xwa, (0x03c120)
+	lda xwa, (0x03c120:24)
 	add xwa, xde
 	ld (xwa), bc
 	jr SendPartDataBlock_Return3
@@ -26467,7 +26467,7 @@ SendPartDataBlock_Return3:
 
 SendPartDataBlock_SetWord5:
 	ldw bc, 0x24b8
-	lda_24 xwa, (0x1e0010)
+	lda xwa, (0x1e0010:24)
 	lds de, 0
 
 SendPartDataBlock_Block10:
@@ -26479,8 +26479,8 @@ SendPartDataBlock_Block10:
 
 SendPartDataBlock_ClearByte4:
 	ldb w, 0x0
-	lda_24 xde, (0x1e0000)
-	lda_24 xhl, (CharMap_FullPermutation_0x454)
+	lda xde, (0x1e0000:24)
+	lda xhl, (CharMap_FullPermutation_0x454:24)
 
 SendPartDataBlock_LoadReg:
 	ld c, w
@@ -26496,7 +26496,7 @@ SendPartDataBlock_Compare:
 	cp w, 0x10
 	jr nz, SendPartDataBlock_SetWord6
 	calr SendPartDataBlock_SetWord5
-	lda_24 xwa, (0x1e0000)
+	lda xwa, (0x1e0000:24)
 	cpw_sri_mr HL, 0xe1, 0xa8, 0x72
 	jr nz, SendPartDataBlock_SetWord6
 	ldw bc, 0x72aa
@@ -26756,7 +26756,7 @@ SendPartDataBlock_Data:
 	ldb_erp c, 240
 	srl	c, 4
 	extz	bc
-	lda_24	xhl, (CharMap_FullPermutation_0x475)
+	lda	xhl, (CharMap_FullPermutation_0x475:24)
 	ld_rrb c, xhl, bc
 	ldb_erp c, 240
 	stb_erp d, 240
@@ -27252,7 +27252,7 @@ SendPartDataBlock_Data5:
 
 SendPartDataBlock_InitVal4:
 	lds de, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x454)
+	lda xhl, (CharMap_FullPermutation_0x454:24)
 
 SendPartDataBlock_LoadReg2:
 	ld bc, de
@@ -27276,7 +27276,7 @@ SendPartDataBlock_Compare2:
 
 SendPartDataBlock_InitVal5:
 	lds de, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x443)
+	lda xhl, (CharMap_FullPermutation_0x443:24)
 
 SendPartDataBlock_LoadReg3:
 	ld bc, de
@@ -27300,7 +27300,7 @@ SendPartDataBlock_Compare3:
 
 SendPartDataBlock_InitVal6:
 	lds de, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x432)
+	lda xhl, (CharMap_FullPermutation_0x432:24)
 
 SendPartDataBlock_LoadReg4:
 	ld bc, de
@@ -27324,7 +27324,7 @@ SendPartDataBlock_Compare4:
 
 SendPartDataBlock_InitVal7:
 	lds de, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x423)
+	lda xhl, (CharMap_FullPermutation_0x423:24)
 
 SendPartDataBlock_LoadReg5:
 	ld bc, de
@@ -27351,7 +27351,7 @@ SendPartDataBlock_Compare5:
 
 SendPartDataBlock_InitVal8:
 	lds de, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x42A)
+	lda xhl, (CharMap_FullPermutation_0x42A:24)
 
 SendPartDataBlock_LoadReg6:
 	ld bc, de
@@ -27378,7 +27378,7 @@ SendPartDataBlock_Compare6:
 
 SendPartDataBlock_InitVal9:
 	lds de, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x42E)
+	lda xhl, (CharMap_FullPermutation_0x42E:24)
 
 SendPartDataBlock_LoadReg7:
 	ld bc, de
@@ -27409,7 +27409,7 @@ SendPartDataBlock_ClearByte5:
 
 SendPartDataBlock_SetWord7:
 	ldw de, 0x24b8
-	lda_24 xbc, (0x1e0000)
+	lda xbc, (0x1e0000:24)
 	lda xwa, (xbc + 16)
 	lds hl, 0
 
@@ -27428,7 +27428,7 @@ HdaeRom_DataHandler:
 	stb_dri A, 0xfd, 0xba, 0x01
 	ld xwa, 0x1e0000
 	calr SendPartDataBlock_InitVal4
-	lda_24 xbc, (0x1e0000)
+	lda xbc, (0x1e0000:24)
 	extz hl
 	dec 1, hl
 	cps hl, 0
@@ -27436,9 +27436,9 @@ HdaeRom_DataHandler:
 	cps hl, 5
 	jrl gt, HdaeRom_DataDispatch_SetWord
 	add hl, hl
-	lda_24 xix, (HdaeRom_DispatchOffsetTable)
+	lda xix, (HdaeRom_DispatchOffsetTable:24)
 	ldw_sri HL, 0x07, 0xf0, 0xec
-	lda_24 xix, (HdaeRom_DataDispatch)
+	lda xix, (HdaeRom_DataDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 ; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
 HdaeRom_DataDispatch:
@@ -27570,8 +27570,8 @@ HdaeRom_DataDispatch_SetWord:
 	ret
 
 HdaeRom_DataDispatch_Block:
-	lda_24	xde, (0x1e0000)
-	lda_24	xwa, (CharMap_FullPermutation_0x454)
+	lda	xde, (0x1e0000:24)
+	lda	xwa, (CharMap_FullPermutation_0x454:24)
 	ld	xbc, xwa
 	lda	xhl, (xwa + 16)
 
@@ -27625,9 +27625,9 @@ HdaeRom_AltHandler:
 	cps hl, 5
 	jr gt, HdaeRom_AltDispatch_SetWord
 	add hl, hl
-	lda_24 xix, (HdaeRom_AltDispatchOffsetTable)
+	lda xix, (HdaeRom_AltDispatchOffsetTable:24)
 	ldw_sri HL, 0x07, 0xf0, 0xec
-	lda_24 xix, (HdaeRom_AltDispatch)
+	lda xix, (HdaeRom_AltDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 ; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRom_AltDispatchOffsetTable)
 HdaeRom_AltDispatch:
@@ -27638,8 +27638,8 @@ HdaeRom_AltDispatch:
 
 HdaeRom_AltDispatch_SetWord:
 	ldw iz, 0xff9a
-	lda_24 xde, (0x1e0000)
-	lda_24 xwa, (CharMap_FullPermutation_0x454)
+	lda xde, (0x1e0000:24)
+	lda xwa, (CharMap_FullPermutation_0x454:24)
 	ld xbc, xwa
 	lda xhl, (xwa + 16)
 
@@ -27836,7 +27836,7 @@ TmFlashWrite_ValidateParams:
 	cp	iz, 128
 	jr	c, -21
 	calr	HdaeRom_DataDispatch_Block
-	lda_24	xwa, (0x1e4aa7)
+	lda	xwa, (0x1e4aa7:24)
 	ldw	bc, 0x2800
 	.byte 0x42
 TmFlashWrite_Block2:
@@ -27860,7 +27860,7 @@ TmFlashWrite_Block3:
 	jr	le, 0x0e
 
 TmFlash_CopyToExtMem:
-	lda_24 xwa, (0x300000)
+	lda xwa, (0x300000:24)
 	add xwa, 0xb0400
 	ldw bc, 0xee1f
 	ld xde, 0xa0000
@@ -27881,7 +27881,7 @@ TmFlash_WriteRoutine:
 	add	xhl, 16
 	bitm	0, (xsp+20)
 	jr	z, 96
-	lda_24	xiz, (0x300000)
+	lda	xiz, (0x300000:24)
 	add	xiz, 0xb0400
 	ld	xde, xiz
 	bitm	1, (xsp+20)
@@ -27915,7 +27915,7 @@ TmFlash_WriteRoutine:
 	ld	(xwa), xhl
 	ldw	wa, 470
 	jr	49
-	lda_24	xbc, (0x1e0000)
+	lda	xbc, (0x1e0000:24)
 	.byte 0xbf
 	push_a
 	inc	6, a
@@ -27991,9 +27991,9 @@ TmFlash_BulkTransferToSubCPU:
 	cps	hl, 5
 	jr	gt, 72
 	add	hl, hl
-	lda_24	xix, (CharMap_FullPermutation_0x647)
+	lda	xix, (CharMap_FullPermutation_0x647:24)
 	ldw_sri	hl, 0x07, 0xf0, 0xec
-	lda_24	xix, (VoiceParam_DispatchTable1)
+	lda	xix, (VoiceParam_DispatchTable1:24)
 	.byte	0xf3, 0x07, 0xf0, 0xec, 0xd8	; jp (xix + hl) SRI dispatch
 VoiceParam_DispatchTable1:
 	ld	xbc, 470
@@ -28057,9 +28057,9 @@ VoiceParam_DispatchTable1:
 	cps	hl, 5
 	jrl	gt, 129
 	add	hl, hl
-	lda_24	xix, (CharMap_FullPermutation_0x653)
+	lda	xix, (CharMap_FullPermutation_0x653:24)
 	ld_rrw hl, xix, hl
-	lda_24 xix, (16713883)
+	lda xix, (16713883:24)
 	jp_rr 8, xix, hl
 	ld	xwa, xbc
 	ld	xbc, 470
@@ -28185,7 +28185,7 @@ ParseInt16:
 	ld xhl, (xsp + 4)
 	lds iy, 0
 	lds ix, 0
-	lda_24 xbc, (CharMap_FullPermutation_0x660)
+	lda xbc, (CharMap_FullPermutation_0x660:24)
 	jr ParseInt16_CheckWhitespace
 
 ParseInt16_SkipWhitespace:
@@ -28238,7 +28238,7 @@ ParseInt32:
 	ld xhl, (xsp + 4)
 	lds32 xiy, 0
 	lds ix, 0
-	lda_24 xbc, (CharMap_FullPermutation_0x660)
+	lda xbc, (CharMap_FullPermutation_0x660:24)
 	jr ParseInt32_CheckWhitespace
 
 ParseInt32_SkipWhitespace:

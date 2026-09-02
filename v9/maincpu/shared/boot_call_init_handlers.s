@@ -64,7 +64,7 @@ Boot_CallInitHandlers__handler_loop:
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
 	sla	bc, 2
 	; LDA XDE, 0xfffef0 (init handler table)
-	lda_24	xde, (System_TimestampPointers)
+	lda	xde, (System_TimestampPointers:24)
 	; LD XBC, (XDE+BC) - load handler address from table
 	ld_sril3 xbc, 0x07, 0xe8, 0xe4
 

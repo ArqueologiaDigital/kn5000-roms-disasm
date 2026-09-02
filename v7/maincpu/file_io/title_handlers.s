@@ -103,7 +103,7 @@ FmmUtilityTitleFunc:
 	stda16	33892, hl
 	calr	-1653
 FmmUtility_DispatchState:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 195
 	cps	wa, 0
@@ -145,7 +145,7 @@ FmmUtility_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32448)
+	ld	a, (32448:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -176,7 +176,7 @@ FmmUtility_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32448)
+	ld	a, (32448:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -228,7 +228,7 @@ FmmSmfUtilityTitleFunc:
 	stda16	33892, hl
 	calr	-2052
 FmmSmfUtility_DispatchState:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 195
 	cps	wa, 0
@@ -270,7 +270,7 @@ FmmSmfUtility_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32450)
+	ld	a, (32450:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -301,7 +301,7 @@ FmmSmfUtility_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32450)
+	ld	a, (32450:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295

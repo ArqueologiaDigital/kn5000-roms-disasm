@@ -34,7 +34,7 @@ ToneGen_Config_InitAllChannels:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
-	lda_24 xiz, (0x1ed400)
+	lda xiz, (0x1ed400:24)
 
 ToneGen_Config_InitChannelLoop:
 	ld xwa, xiz
@@ -55,7 +55,7 @@ ToneGen_LookupByVoiceIndex:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	calr	317
 	ret
@@ -65,7 +65,7 @@ ToneGen_Config_InitAndChannels:
 	jr ToneGen_Config_InitAllChannels
 
 ToneGen_ApplyMaskTable:
-	lda_24 xwa, (NakaInst_ExtDevice_Screens_0x2B0C)
+	lda xwa, (NakaInst_ExtDevice_Screens_0x2B0C:24)
 	lda xbc, (xwa + 4)
 	ld xde, xwa
 	lda xhl, (xwa + 25)
@@ -90,7 +90,7 @@ ToneGen_ApplyMaskLoop:
 ToneGen_DSPCfg_Initialize:
 	calr ToneGen_DSPCfg_ResetAll
 	jrl ToneGen_DSPCfg_ResetAllChannels
-	lda_d16 xwa, (0xf480)
+	lda xwa, (0xf480:16)
 	jrl DSPCfg_InitAllEntries
 
 ToneGen_InitAllChannelEntries_Skip:
@@ -162,7 +162,7 @@ ToneGen_DSPCfg_ResetAllChannels:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
-	lda_24 xiz, (0x1ed400)
+	lda xiz, (0x1ed400:24)
 
 ToneGen_DSPCfg_ResetChannelLoop:
 	ld xwa, xiz
@@ -285,9 +285,9 @@ DSPCfg_Init_BoundsCheck:
 	cp de, 0x8
 	jr gt, DSPCfg_Init_Finalize
 	add de, de
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2B3E)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2B3E:24)
 	ldw_sri DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, (DSPCfg_InitDispatch)
+	lda xix, (DSPCfg_InitDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DSPCfg_InitAllEntries dispatch
 DSPCfg_InitDispatch:
@@ -482,7 +482,7 @@ DSPCfg_InitDispatchData:
 	nop
 	lds	hl, 2
 	ret
-	lda_d16	xwa, (0xf480)
+	lda	xwa, (0xf480:16)
 	jrl	-718
 
 DSPCfg_ResetAuxEntries:
@@ -523,10 +523,10 @@ DSPCfg_SyncBitmapData:
 	push	xiz
 	ld	(xsp+18), xbc
 	ld	xiz, xwa
-	lda_d16	xwa, 48288
+	lda	xwa, (48288:16)
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
-	ldw_d16	bc, 36930
+	ld	bc, (36930:16)
 	jrl	136
 	ld	(xsp+6), 0
 	ldb_spi	a, 248
@@ -604,19 +604,19 @@ DSPCfg_SyncBitmapData:
 SndParam_SyncDisplayBitmap:
 	lds32 xwa, 0
 	call 0xfccc66
-	stb_d8 (0x8dd0), l
+	ld (0x8dd0:16), l
 	ld XWA,0x00000102
 	call 0xfccc66
-	stb_d8 (0x8dd2), l
+	ld (0x8dd2:16), l
 	ld XWA,0x00000103
 	call 0xfccc66
-	stb_d8 (0x8dd4), l
+	ld (0x8dd4:16), l
 	ld XWA,0x00000300
 	call 0xfccc66
-	stb_d8 (0x8dd6), l
+	ld (0x8dd6:16), l
 	ld XWA,0x00004006
 	call 0xfccc66
-	stb_d8 (0x8dd8), l
+	ld (0x8dd8:16), l
 	pushw 0x0620
 	pushw 0x0000
 	pushw 0xf9a0
@@ -624,10 +624,10 @@ SndParam_SyncDisplayBitmap:
 	pushw 0xc8e4
 	call 0xff05bc
 	lda xsp, (xsp + 0x0a)
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xf9b6)
+	lda xbc, (0xf9a0:16)
+	lda xwa, (0xf9b6:16)
 	sub XWA,XBC
-	lda_24 xde, (0x03c8e4)
+	lda xde, (0x03c8e4:24)
 	add XWA,XDE
 	.byte 0x80, 0x3d, 0x01, 0xf1, 0xd0, 0xf9, 0x30, 0xe9
 	.byte 0xa0, 0xea, 0x80, 0x80, 0x3d, 0x01, 0xf1, 0xea
@@ -635,17 +635,17 @@ SndParam_SyncDisplayBitmap:
 	.byte 0x01, 0xf1, 0x97, 0xfd, 0x30, 0xe9, 0xa0, 0xea
 	.byte 0x80, 0x80, 0x3e, 0x7f, 0x0e
 SoundParam_NotifyMultipleChanges:
-	ldb_d8	c, (36304)
+	ld	c, (36304:16)
 	extz	bc
 	lds32	xwa, 0
 	lds	de, 0
 	call	16566832
-	ldb_d8	c, (36306)
+	ld	c, (36306:16)
 	extz	bc
 	ld	xwa, 258
 	lds	de, 0
 	call	16566832
-	ldb_d8	c, (36308)
+	ld	c, (36308:16)
 	extz	bc
 	ld	xwa, 259
 	lds	de, 0
@@ -655,8 +655,8 @@ SoundParam_NotifyMultipleChanges:
 ToneGen_DiffScanAndUpdate:
 	lda	xsp, (xsp-14)
 	pushw	iz
-	ldw_d16	bc, (36930)
-	lda_d16	xwa, (48288)
+	ld	bc, (36930:16)
+	lda	xwa, (48288:16)
 	ld	(xsp+12), xwa
 	ld	(xsp+8), xwa
 	lds	iz, 0
@@ -679,13 +679,13 @@ ToneGen_DiffScanOuter:
 
 ToneGen_DiffScanInner:
 	inc 1, iz
-	lda_d16 xde, (0xfd60)
+	lda xde, (0xfd60:16)
 	ld xwa, xde
 	sub xwa, 0xf9a0
 	ld hl, iz
 	extz xhl
 	add xhl, xwa
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xhl, xwa
 	ld wa, iz
 	extz xwa
@@ -727,7 +727,7 @@ ToneGen_DiffRecordChange:
 	extz xwa
 	ld xix, xwa
 	add xix, (xsp + 8)
-	lda_d16 xhl, (0xfd60)
+	lda xhl, (0xfd60:16)
 	ld de, iz
 	extz xde
 	add xde, xhl
@@ -738,7 +738,7 @@ ToneGen_DiffRecordChange:
 	ld hl, iz
 	extz xhl
 	add xhl, xwa
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xhl, xwa
 	ld e, (xde)
 	xor e, (xhl)
@@ -757,9 +757,9 @@ ToneGen_DiffOuterNext:
 	inc 1, iz
 
 ToneGen_DiffScanCheckEnd:
-	lda_d16 xde, (0xfd60)
+	lda xde, (0xfd60:16)
 
-	lda_d16 xwa, (0xffbe)
+	lda xwa, (0xffbe:16)
 
 	sub xwa, xde
 
@@ -796,8 +796,8 @@ ToneGen_FileIO_SaveAndSync:
 	calr SndParam_SyncDisplayBitmap
 	lda xwa, (xsp + 0x04)
 	.byte 0xb0, 0x14, 0x50, 0xfd, 0xb8, 0x01, 0x14, 0x52, 0xfd, 0xb8, 0x02, 0x14, 0x54, 0xfd
-	lda_d16	xwa, 64930
-	lda_d16	xbc, 63904
+	lda	xwa, (64930:16)
+	lda	xbc, (63904:16)
 	sub	xwa, xbc
 	pushw	wa
 	push	xiz
@@ -830,7 +830,7 @@ ToneGen_FileIO_RestoreFromBackup:
 	resda 5, (0x8dda)
 	ret
 ToneGen_FlashVerify:
-	lda_24 xhl, (NakaInst_ExtDevice_Screens_0x2B6E)
+	lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)
 	ld xde, 0x3d3000
 	lds bc, 0
 
@@ -851,13 +851,13 @@ ToneGen_FlashWriteAll:
 	ld	xbc, 15569722
 	ldw	de, 250
 	call	15678482
-	lda_24	xbc, (15569972)
+	lda	xbc, (15569972:24)
 	ld	xwa, 4010256
 	push	xwa
 	lds	wa, 1
 	ldw	de, 234
 	call	15678482
-	lda_24	xbc, (15570206)
+	lda	xbc, (15570206:24)
 	ld	xwa, 4010512
 	push	xwa
 	lds	wa, 1
@@ -1016,9 +1016,9 @@ CtrlPanel_IndicatorJumpTable:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2E3C)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2E3C:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DSPCfg_Param_CaseC)
+	lda xix, (DSPCfg_Param_CaseC:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DSP config parameter handler C
@@ -1061,9 +1061,9 @@ Audio_DispatchCommand:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2E4E)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2E4E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DSPCfg_Param_CaseD)
+	lda xix, (DSPCfg_Param_CaseD:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DSP config parameter handler D
@@ -1106,14 +1106,14 @@ PanelDisplay_DispatchByMode:
 	cp wa, 0x8
 	jrl gt, DSPCfg_Param_Default
 	add wa, wa
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2E60)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2E60:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (PanelDisplay_DispatchData)
+	lda xix, (PanelDisplay_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PanelDisplay_DispatchData:
 	ld	xde, 0x3d3400
-	lda_24	xhl, (0x0340e4)
+	lda	xhl, (0x0340e4:24)
 	lds	bc, 0
 	ldb_spi	a, 236
 	cp_spib a, 232
@@ -1123,7 +1123,7 @@ PanelDisplay_DispatchData:
 	jr	c, -14
 	jr	115
 	ld	xde, 0x3d3410
-	lda_24	xhl, (0x0340e6)
+	lda	xhl, (0x0340e6:24)
 	lds	bc, 0
 	ldb_spi	a, 236
 	cp_spib a, 232
@@ -1132,7 +1132,7 @@ PanelDisplay_DispatchData:
 	cp	bc, 12
 	jr	c, -16
 	.asciz "hUB 4="
-	lda_24	xhl, (0x0340f2)
+	lda	xhl, (0x0340f2:24)
 	lds	bc, 0
 	ldb_spi a, 236
 	cp_spib a, 232
@@ -1141,7 +1141,7 @@ PanelDisplay_DispatchData:
 	cps	bc, 4
 	jr	c, -14
 	.asciz "h9B04="
-	lda_24	xhl, (0x0340f6)
+	lda	xhl, (0x0340f6:24)
 	lds	bc, 0
 	ldb_spi	a, 236
 	cp_spib a, 232
@@ -1151,7 +1151,7 @@ PanelDisplay_DispatchData:
 	jr	c, -14
 	jr	t, 0x1d
 	.asciz "B@4="
-	lda_24	xhl, (0x0340fa)
+	lda	xhl, (0x0340fa:24)
 	lds	bc, 0
 	ldb_spi a, 236
 	cp_spib a, 232
@@ -1192,17 +1192,17 @@ Encoder_ScanAndSync:
 
 Encoder_SyncLoop:
 	call	MidiCC_SyncForceResync
-	ldb_d8	a, (36336)
+	ld	a, (36336:16)
 	extz	wa
 	muls	wa, 3
 	ld_rrb	a, xhl, wa
-	stb_d8	(36340), a
+	ld	(36340:16), a
 	cp	a, 255
 	jr	nz, -34	; -> 0xFC4FA2
-	ldb_d8	a, (36338)
+	ld	a, (36338:16)
 	extz	wa
 	sll	wa, 2
-	lda_d16	xbc, (49053)
+	lda	xbc, (49053:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 255
@@ -1233,7 +1233,7 @@ Encoder_ReadNextEntry:
 
 Encoder_PrepareCallback:
 	push XIZ
-	ldb_d8 c, (0x8df4)
+	ld c, (0x8df4:16)
 	extz BC
 	sla BC, 0x02
 	ld XWA,NakaInst_ExtDevice_Screens_0x3452

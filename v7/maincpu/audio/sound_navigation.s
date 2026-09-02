@@ -389,7 +389,7 @@ MainGetRhythmName:
 	call	16713379
 	inc	2, xsp
 	ld	(xsp+2), xhl
-	lda_d16	xbc, (36942)
+	lda	xbc, (36942:16)
 	stb_erp	a, 250
 	ld	(xbc), a
 	stb_erp	a, 251
@@ -404,7 +404,7 @@ MainGetRhythmName:
 	pop	xix
 	pop	xhl
 	pop	xde
-	lda_d16	xbc, (36946)
+	lda	xbc, (36946:16)
 	ld	a, (xbc)
 	extz	wa
 	ld	c, (xbc+1)

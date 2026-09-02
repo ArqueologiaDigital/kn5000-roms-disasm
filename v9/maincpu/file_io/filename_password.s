@@ -16,7 +16,7 @@ FmmPasswordFunc:
 	ld wa, iz
 	cp xbc, 0x1e50010
 	jrl z, Password_HandleLoadEvent
-	lda_d16 xde, (0x8a0c)
+	lda xde, (0x8a0c:16)
 	cp xbc, 0x1e5000f
 	jrl z, Password_HandleSaveEvent
 	cp xbc, 0x1e5000e
@@ -41,7 +41,7 @@ Password_ClearAndSetSlot:
 	call ClearAllSongSlots
 	ld wa, iz
 	call SetCurrentSlotIndex
-	lda_d16 xwa, (0x8a0d)
+	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
 	setm 6, (xwa)
 	jrl Password_Return
@@ -56,7 +56,7 @@ Password_HandleDeleteEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_Delete_CheckLoadOnly
-	lda_d16 xwa, (0x8a0d)
+	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
@@ -108,7 +108,7 @@ Password_HandleSaveEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_Save_CheckLoadOnly
-	lda_d16 xwa, (0x8a0d)
+	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
@@ -215,11 +215,11 @@ SelectMode_DetermineMode:
 	ldb a, 0x3
 
 SelectMode_SetBothMode:
-	stb_d8 (0x8a0c), a
+	ld (0x8a0c:16), a
 	jr SelectMode_Return
 
 SelectMode_SingleMode:
-	lda_d16 xbc, (0x8a0c)
+	lda xbc, (0x8a0c:16)
 	cpib_erp 0xfa, 0
 	jr z, SelectMode_CheckSaveOnlyMode
 	ld (xbc), 0x1
@@ -235,7 +235,7 @@ SelectMode_StoreMode:
 	ld (xbc), a
 
 SelectMode_Return:
-	ldb_d8 l, (0x8a0c)
+	ld l, (0x8a0c:16)
 	extz hl
 	pop xiz
 	ret
@@ -287,7 +287,7 @@ FileName_DrawItemLoop:
 	ld wa, (xsp + 6)
 	ld hl, wa
 	sll hl, 5
-	lda_d16 xde, (0x850c)
+	lda xde, (0x850c:16)
 	extz xhl
 	add xhl, xde
 	ld bc, (xsp + 6)
@@ -299,7 +299,7 @@ FileName_DrawItemLoop:
 	sll wa, 5
 	lds hl, 1
 	add hl, wa
-	lda_d16 xix, (0x850c)
+	lda xix, (0x850c:16)
 	extz xhl
 	add xhl, xix
 	inc 1, de
@@ -309,7 +309,7 @@ FileName_DrawItemLoop:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, (xsp + 6)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
@@ -377,7 +377,7 @@ FileName_OpSave:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 	extz wa
 	calr FileIO_MidiOutSendByte
 	lds wa, 0
@@ -386,7 +386,7 @@ FileName_OpSave:
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -437,7 +437,7 @@ FileName_OpLoad:
 	cps hl, 0
 	jr z, FileName_OpLoad_NoPwd
 	lds32 xde, 0
-	ldb_d8 e, (0x8a0c)
+	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
 	jrl FileName_OpDispatch
@@ -468,7 +468,7 @@ FileName_OpLoad_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -504,7 +504,7 @@ FileName_OpFormat:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -558,7 +558,7 @@ FileName_OpDelete_Execute:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -584,7 +584,7 @@ FileName_OpFormatVariant:
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -604,7 +604,7 @@ FileName_OpNavigate:
 	cps hl, 0
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 	cp xbc, 0x1c00018
 	jr nz, FileName_Navigate_ScrollUp
 	ld bc, wa
@@ -633,12 +633,12 @@ FileName_Navigate_CheckChanged:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 	call ReadDualFileEx
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7f42), l
+	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
 	stda16 (0x8502), xhl
@@ -652,29 +652,29 @@ FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 FileName_GetSelection:
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 
 FileName_UpdateDisplay:
 	cp (xsp + 4), wa
 	jrl z, FileName_Return
 	call NotifyUIOfSelectionChange
 	stdi8 (0x89f8), 4
-	ldw_d16 xde, (0x7f7a)
+	ld de, (0x7f7a:16)
 	exts xde
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 4)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xde, (0x7f7a)
+	ld de, (0x7f7a:16)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)

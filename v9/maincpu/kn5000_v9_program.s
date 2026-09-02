@@ -561,7 +561,7 @@ Boot_InitPeripherals:
 	calr Detect_Region_Code
 	cpw_da (65482), 23205
 	jr z, Boot_FlashAndExtensions
-	lda_24 xde, (0x00066e)
+	lda xde, (0x00066e:24)
 	srl xde, 1
 	ld xwa, 0xf980
 	ld xbc, 0x1e8000
@@ -584,7 +584,7 @@ BootInit_SeqAndPanel:
 	ldl_da xhl, (CPanel_InitDispatchTable)
 	call (xhl)
 	call CPanel_ScanButtons
-	stb_d8 (1026), l
+	ld (1026:16), l
 	call Get_Firmware_Version
 	cp l, 0xff
 	jr nz, User_didnt_request_flash_mem_update
@@ -624,7 +624,7 @@ Boot_MainSequence_Trampoline:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
 User_didnt_request_flash_mem_update:
-	ldb_d8 a, (1026); Load boot combo code
+	ld a, (1026:16); Load boot combo code
 	extz wa
 	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
 	stiw_da (0x00ffca), 0x0000
@@ -654,7 +654,7 @@ Boot_DisplayScreen:
 	call ScreenGroup_Dispatch
 	stdi8 (1024), 128
 	stiw_da (0x00ffd4), 0x0000
-	ldb_d8 a, (1026); Load boot combo code
+	ld a, (1026:16); Load boot combo code
 	extz wa
 	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
 	lds wa, 4
@@ -663,7 +663,7 @@ Boot_DisplayScreen:
 	jp MainLoop
 
 Boot_GetButtonComboCode:
-	ldb_d8 l, (1026)
+	ld l, (1026:16)
 	ret
 
 Boot_ClearAllInterruptEnables:
@@ -803,7 +803,7 @@ Boot_HandleComboDisplay:
 	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
 	and l, 0xf
 	extz hl
-	lda_24 xbc, (LED_patterns_indicating_firmware_version); LED_patterns_indicating_firmware_version table
+	lda xbc, (LED_patterns_indicating_firmware_version:24); LED_patterns_indicating_firmware_version table
 	ldb_sri C, 0x07, 0xe4, 0xec	; Read LED pattern from table
 	extz bc
 	lds wa, 7
@@ -829,7 +829,7 @@ Boot_ParseTableDataTimestamp:
 	ret
 
 Boot_GetSystemPointer:
-	ldw_d16 xhl, (1028)
+	ld hl, (1028:16)
 	ret
 
 Boot_ParseSubCPUTimestamp:
@@ -877,7 +877,7 @@ FactoryReset_TrailingByte:
 	ret
 
 Boot_ReadFDCStatus:
-	ldb_d8 l, (36458)
+	ld l, (36458:16)
 	ret
 
 ; =============================================================================
@@ -922,48 +922,48 @@ GetResouceInfo:
 	cp wa, 0x9
 	ret ugt
 	add wa, wa
-	lda_24 xix, (RESOURCE_INFO_HANDLER_OFFSETS)
+	lda xix, (RESOURCE_INFO_HANDLER_OFFSETS:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (RESOURCE_INFO_HANDLERS)
+	lda xix, (RESOURCE_INFO_HANDLERS:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Resource info handlers - 10 handlers for different resource types
 RESOURCE_INFO_HANDLERS:
-	lda_d16 xwa, (63872)
+	lda xwa, (63872:16)
 	ld (xbc), xwa
-	lda_d16 xwa, (65470)
+	lda xwa, (65470:16)
 	ld xde, xwa
 	inc 2, xde
-	lda_d16 xwa, (63872)
+	lda xwa, (63872:16)
 	sub xde, xwa
 	ld (xbc + 4), xde
 	ret
 
 ResInfo_GetSRAMBankRange:
-	lda_24 xwa, (0x1e7800)
+	lda xwa, (0x1e7800:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1e7800)
+	lda xwa, (0x1e7800:24)
 	ld xde, xwa
-	lda_24 xwa, (0x1e8000)
+	lda xwa, (0x1e8000:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetUserAreaRange:
-	lda_24 xwa, (0x1ed350)
+	lda xwa, (0x1ed350:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1ed350)
+	lda xwa, (0x1ed350:24)
 	ld xde, xwa
-	lda_24 xwa, (0x200000)
+	lda xwa, (0x200000:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetFlashBankRange:
-	lda_24 xwa, (0x1e0000)
+	lda xwa, (0x1e0000:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1e0000)
+	lda xwa, (0x1e0000:24)
 	ld xde, xwa
-	lda_24 xwa, (0x1e7800)
+	lda xwa, (0x1e7800:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
@@ -976,44 +976,44 @@ ResInfo_GetTableDataInfo:
 	ret
 
 ResInfo_GetSndParamRange:
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	ld (xbc), xwa
 	ld xwa, 0x5000
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetVoiceBankRange:
-	lda_24 xwa, (0x0b0000)
+	lda xwa, (0x0b0000:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x0b0000)
+	lda xwa, (0x0b0000:24)
 	ld xde, xwa
-	lda_24 xwa, (0x0fd800)
+	lda xwa, (0x0fd800:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetToneGenRange:
-	lda_24 xwa, (0x094800)
+	lda xwa, (0x094800:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x094800)
+	lda xwa, (0x094800:24)
 	ld xde, xwa
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetMspSettingsRange:
-	lda_24 xwa, (0x1e8800)
+	lda xwa, (0x1e8800:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1e8800)
+	lda xwa, (0x1e8800:24)
 	ld xde, xwa
-	lda_24 xwa, (0x1ec400)
+	lda xwa, (0x1ec400:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetResourceListPtr:
-	lda_24 xwa, (0xe1ffcc)
+	lda xwa, (0xe1ffcc:24)
 	ld (xbc), xwa
 	lds32 xwa, 0
 	ld (xbc + 4), xwa
@@ -1323,23 +1323,23 @@ midi_out_en_X:
 	jp MIDI_SC0_TX_DISPATCH
 
 GetAdr_sqbtof:
-	lda_d16 xhl, (1052)
+	lda xhl, (1052:16)
 	ret
 
 GetAdr_sq_beadt:
-	lda_d16 xhl, (1051)
+	lda xhl, (1051:16)
 	ret
 
 GetAdr_sqsrtc:
-	lda_d16 xhl, (1057)
+	lda xhl, (1057:16)
 	ret
 
 GetAdr_rtmcfg:
-	lda_d16 xhl, (10407)
+	lda xhl, (10407:16)
 	ret
 
 SetGlobalError:
-	stb_d8 (32578), a
+	ld (32578:16), a
 	ret
 
 malloc_X:
@@ -1637,7 +1637,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xix, (277504)
+	lda	xix, (277504:24)
 	add	xix, xwa
 	cpw	(xsp+50), 245
 	jr	z, 30
@@ -1679,7 +1679,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xde, (277504)
+	lda	xde, (277504:24)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, 4
@@ -1690,7 +1690,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xde, (277504)
+	lda	xde, (277504:24)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, 4
@@ -1746,7 +1746,7 @@ Voice_FactoryPresetData:
 	ldw	wa, 16
 	calr	38654
 	ld	xwa, xhl
-	lda_24	xbc, (16452973)
+	lda	xbc, (16452973:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -1897,7 +1897,7 @@ DrawText_QueueDeferred:
 	ldw wa, 0x1e
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda_24 xwa, (0xfb0f31)
+	lda xwa, (0xfb0f31:24)
 	ld (xhl), xwa
 	ld xwa, (xsp + 16)
 	ld xiy, xwa
@@ -1960,10 +1960,10 @@ TextRender_BeginDraw:
 	push xiz
 	stl_dri XDE, 0xfd, 0x36, 0x01
 	stl_dri XWA, 0xfd, 0x3a, 0x01
-	ld_sril XWA, (xsp + 0x0136)
+	ld XWA, (xsp + 0x0136)
 	cp (xwa), 0x0
 	jrl z, TextRender_PopAndReturn
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	inc 2, xwa
 	ld (xsp + 34), xwa
 	cpw (xwa), 0x0
@@ -1972,20 +1972,20 @@ TextRender_BeginDraw:
 	ldw (xwa), 0x0
 
 TextRender_ClampYOrigin:
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cpw (xwa), 0x0
 	jr ge, TextRender_ClampXOrigin
 	ldw (xwa), 0x0
 
 TextRender_ClampXOrigin:
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	inc 4, xwa
 	cpw (xwa), 0x140
 	jr lt, TextRender_ClampXRight
 	ldw (xwa), 0x13f
 
 TextRender_ClampXRight:
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	lda xde, (xwa + 6)
 	cpw (xde), 0xf0
 	jr lt, TextRender_SetupColorAndFont
@@ -1996,7 +1996,7 @@ TextRender_SetupColorAndFont:
 	lda_dri XIX, 0xfd, 0x2a, 0x01
 	ldiw
 	ldiw
-	ld_sril XIX, (xsp + 0x0146)
+	ld XIX, (xsp + 0x0146)
 	or xix, xix
 	jr nz, TextRender_ClampNullXStart
 	dec_sriw 2, 0xfd, 0x2c, 0x01
@@ -2070,7 +2070,7 @@ TextRender_DefaultFontWidth:
 	ld (xbc), wa
 
 TextRender_CustomFontWidth:
-	ld_sril XWA, (xsp + 0x0136)
+	ld XWA, (xsp + 0x0136)
 	push xwa
 	lda xwa, (xsp + 42)
 	push xwa
@@ -2119,7 +2119,7 @@ TextRender_AddToDrawPos:
 	add_sriw_mr WA, 0xfd, 0x32, 0x01
 	lda_dri XWA, 0xfd, 0x2e, 0x01
 	lda xde, (xwa + 2)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	ld bc, (xbc + 2)
 	cp (xde), bc
 	jr ge, TextRender_ClampGlyphTop
@@ -2127,7 +2127,7 @@ TextRender_AddToDrawPos:
 
 TextRender_ClampGlyphTop:
 	ld de, (xwa)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	cp de, (xbc)
 	jr ge, TextRender_ClampGlyphLeft
 	ld bc, (xbc)
@@ -2135,7 +2135,7 @@ TextRender_ClampGlyphTop:
 
 TextRender_ClampGlyphLeft:
 	lda xde, (xwa + 4)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	ld bc, (xbc + 4)
 	cp (xde), bc
 	jr le, TextRender_ClampGlyphRight
@@ -2143,7 +2143,7 @@ TextRender_ClampGlyphLeft:
 
 TextRender_ClampGlyphRight:
 	lda xde, (xwa + 6)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	ld bc, (xbc + 6)
 	cp (xde), bc
 	jr le, TextRender_ClampGlyphBottom
@@ -2162,7 +2162,7 @@ TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
-	lda_24 xde, (0xeab1b4)
+	lda xde, (0xeab1b4:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	ld (xhl), c
 	ld xbc, (xsp + 4)
@@ -2239,7 +2239,7 @@ TextRender_BitMask4_DrawPixel:
 	add hl, (xsp + 28)
 	ld de, hl
 	ld (xbc + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp hl, (xwa + 2)
 	jrl lt, TextRender_BitMask5_ProcessCharacter
 	cp de, (xwa + 6)
@@ -2254,7 +2254,7 @@ TextRender_BitMask4_DrawPixel:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	lda_24 xix, (0x043c00)
+	lda xix, (0x043c00:24)
 	add xix, xwa
 	lds hl, 0
 	cpw (xsp + 24), 0x0
@@ -2265,7 +2265,7 @@ TextRender_BitMask4_PixelLoop:
 	ld de, (xwa)
 	add de, hl
 	ld (xbc), de
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp de, (xwa)
 	jr lt, TextRender_BitMask4_Return
 	ld de, (xbc)
@@ -2329,7 +2329,7 @@ TextRender_BitMask5_DrawPixel:
 	add hl, (xsp + 28)
 	ld bc, hl
 	ld (xix + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp hl, (xwa + 2)
 	jr lt, TextRender_BitMask5_AdvancePointer
 	cp bc, (xwa + 6)
@@ -2343,7 +2343,7 @@ TextRender_BitMask5_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	lda_24 xiz, (0x043c00)
+	lda xiz, (0x043c00:24)
 	add xiz, xwa
 	lds hl, 0
 	cpw (xsp + 24), 0x0
@@ -2353,7 +2353,7 @@ TextRender_BitMask5_PixelLoop:
 	ld bc, (xde)
 	add bc, hl
 	ld (xix), bc
-	ld_sril XIY, (xsp + 0x013a)
+	ld XIY, (xsp + 0x013a)
 	cp bc, (xiy)
 	jr lt, TextRender_BitMask5_Return
 	ld wa, (xix)
@@ -2412,7 +2412,7 @@ TextRender_XorMode_DrawPixel:
 	add hl, (xsp + 28)
 	ld bc, hl
 	ld (xix + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp hl, (xwa + 2)
 	jr lt, TextRender_AdvancePointerAndUpdateLine
 	cp bc, (xwa + 6)
@@ -2431,7 +2431,7 @@ TextRender_XorMode_DrawPixel:
 
 ChordProc_SendRefreshEvent:
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 
@@ -2459,13 +2459,13 @@ AcChordBoxProc:
 	jr z, AcChordBox_HandleInitOrSelect
 	cp xbc, 0x1c20000
 	jr z, AcChordBox_HandleInitOrSelect
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jr AcChordBox_PopAndReturn
 
 AcChordBox_HandleInitOrSelect:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, 0x1420007
@@ -2475,7 +2475,7 @@ AcChordBox_HandleInitOrSelect:
 	jr AcChordBox_ReturnZero
 
 AcChordBox_HandleChordUpdate:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	push xiz
@@ -2490,7 +2490,7 @@ AcChordBox_HandleChordUpdate:
 	cps hl, 0
 	jr nz, AcChordBox_ReturnZero
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 
@@ -2510,18 +2510,18 @@ MainChordPre:
 	call Malloc
 	ld xiz, xhl
 	ld (xiz), 0x0
-	ldb_d8 a, (36160)
+	ld a, (36160:16)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Naka_MemoryC_Screens)
+	lda xbc, (Naka_MemoryC_Screens:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xiz
 	call Strcat
-	ldb_d8 a, (36162)
+	ld a, (36162:16)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (0xecff6a)
+	lda xbc, (0xecff6a:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xiz
@@ -2541,16 +2541,16 @@ MainChordPre_AppendChordSuffix:
 	push xwa
 	push xiz
 	call Strcat
-	ldb_d8 a, (36162)
+	ld a, (36162:16)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (0x03f2f8)
+	lda xbc, (0x03f2f8:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36160)
+	ld a, (36160:16)
 	extz wa
 	sla wa, 2
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36164)
+	ld a, (36164:16)
 	extz wa
 	sla wa, 2
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
@@ -2673,7 +2673,7 @@ EmptyRoutine_02:
 
 
 CPanel_RX_ProcessOrInit:
-	ldb_d8 a, (36236)
+	ld a, (36236:16)
 	and a, 0xc0
 	jr z, CPanel_RX_SkipToProcess
 				; if CP_Flags_A.76 != 0:

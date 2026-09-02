@@ -71,7 +71,7 @@
 	jr nc, .Lc_fccd1f
 	extz WA
 	sla WA, 0x02
-	lda_24 xbc, (Naka_MainDispatch_Table_0xDC0)
+	lda xbc, (Naka_MainDispatch_Table_0xDC0:24)
 	lda_dri xbc, 0x07, 0xe4, 0xe0
 	ld XWA,(XSP+0x06)
 	ld XHL,(XBC)

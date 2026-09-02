@@ -216,19 +216,19 @@ Delay3000L_Done:
 
 
 DELAY_2_TICKS:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	stda16	(36095), wa
 DELAY_2_TICKS__loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xda, 0x61, 0xf4, 0x0e
 DELAY_6_TICKS:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	stda16	(36095), wa
 Delay6T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xde, 0x61, 0xf4, 0x0e
 DELAY_51_TICKS:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	stda16	(36095), wa
 Delay51T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
@@ -294,7 +294,7 @@ PanelDet_ProbeRight:
 	jr z, PanelDet_Return
 	ordi8 (0x8cf7), 0x08
 PanelDet_Return:
-	ldb_d8	a, (36087)
+	ld	a, (36087:16)
 	ret
 CPanel_ReadAllButtons:
 	.byte 0x43, 0xad, 0x00, 0x02, 0x00, 0xbb, 0xfc, 0x02
@@ -339,7 +339,7 @@ CPanel_ButtonPollLoop:
 	calr	298
 	calr	65177
 	calr	1650
-	ldb_d8	a, (36281)
+	ld	a, (36281:16)
 	ldb	w, 13
 	bit	7, a
 	jr	nz, 9
@@ -472,7 +472,7 @@ INTTX1_HANDLER:
 	push	xwa
 	push	xhl
 	push	xiy
-	ldb_d8	l, (36078)
+	ld	l, (36078:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, 16530622
@@ -492,7 +492,7 @@ INTRX1_HANDLER:
 	push	xwa
 	push	xhl
 	push	xiy
-	ldb_d8	l, (36078)
+	ld	l, (36078:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, 16530622
@@ -552,7 +552,7 @@ SendByte1_InspectByte:
 	jr	c, 10
 	and	a, 15
 	add	a, 3
-	stb_d8	(36079), a
+	ld	(36079:16), a
 SendByte1_AdvanceState:
 	incdi8	4, (36078)
 	jrl	-323
@@ -642,7 +642,7 @@ RXByte1_InspectByte:
 	jr	c, 10
 	and	a, 15
 	add	a, 3
-	stb_d8	(36079), a
+	ld	(36079:16), a
 RXByte1_AdvanceState:
 	incdi8	4, (36078)
 	jrl	-635
@@ -718,7 +718,7 @@ CPanel_InterruptPoll_MainLoop:
 	cpdi8 (0x8cfe), 0x2a
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
-	ldw_d16 wa, (0x8d63)
+	ld wa, (0x8d63:16)
 	.byte 0xd1, 0x61, 0x8d, 0xa0, 0x6f, 0x06, 0xd8, 0x07
 	.byte 0xd8, 0x8b, 0x68, 0x05
 PollLoop_TXForwardDist:
@@ -731,7 +731,7 @@ PollLoop_TXCheckThreshold:
 	stdi8	(36094), 0
 	ldb	w, 224
 	ldb	a, 19
-	ldw_d16	iy, (36195)
+	ld	iy, (36195:16)
 	ld	xde, 36197
 	st_rrb	w, xde, iy
 	calr	964
@@ -784,7 +784,7 @@ CPanel_RX_Process:
 
 CPanel_RX_DispatchLoop:
 	ld	xde, 36101
-	ldw_d16	iy, (36097)
+	ld	iy, (36097:16)
 	ld	xiz, 131245
 	ld	ix, (xiz-4)
 CPanel_RX_ParseNext:
@@ -823,12 +823,12 @@ CPanel_RX_ButtonPacket:
 	calr	635
 	st_rrb	w, xiz, ix
 	calr	649
-	stb_d8	(36088), w
+	ld	(36088:16), w
 	ld_rrb	a, xde, iy
 	calr	615
 	st_rrb	a, xiz, ix
 	calr	629
-	stb_d8	(36089), a
+	ld	(36089:16), a
 	and	w, 79
 	ld	xhl, 36270
 	bit	6, w
@@ -849,10 +849,10 @@ CPanel_RX_EncoderPacket:
 	calr	544
 	st_rrb	w, xiz, ix
 	calr	558
-	stb_d8	(36088), w
+	ld	(36088:16), w
 	ld_rrb	a, xde, iy
 	calr	524
-	stb_d8	(36089), a
+	ld	(36089:16), a
 	ld	c, w
 	calr	49
 	cp	hl, 65535
@@ -923,7 +923,7 @@ MBytePkt_LoopBody:
 	calr EncPkt_DispatchThunk
 	popw wa
 	cp HL,0xffff
-	stb_d8 (0x8cfa), l
+	ld (0x8cfa:16), l
 	popw hl
 	popw bc
 	jr nz, MBytePkt_EncWriteResult
@@ -933,7 +933,7 @@ MBytePkt_EncNoEvent:
 	stda16	(36097), iy
 	jrl	67
 MBytePkt_EncWriteResult:
-	ldb_d8	a, (36090)
+	ld	a, (36090:16)
 MBytePkt_WriteEventByte:
 
 c:
@@ -985,7 +985,7 @@ CPanel_RX_Done:
 
 
 CPanel_UpdateLEDs:
-	ldw_d16	iy, (36195)
+	ld	iy, (36195:16)
 	ld	xde, 36197
 	ld	xiz, 131383
 	ld	ix, (xiz-8)
@@ -997,7 +997,7 @@ CPanel_UpdateLEDs__check_next:
 	jrl nz, LEDs_Return
 
 LEDs_CheckTXSpace:
-	ldw_d16	wa, (36195)
+	ld	wa, (36195:16)
 	subda16	xwa, (36193)
 	jr	nc, 6	; -> 0xFC4393
 	neg	wa

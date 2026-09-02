@@ -260,7 +260,7 @@ Serial0_Init:
 ;          prom_c reaches 0xF991E9.  Naming it does not make it reached.
 ; --------------------------------------------------------------------------
 MIDI_Rx_FreeSlots:
-	lda_24	xbc, 0x00F2FB
+	lda	xbc, (0x00F2FB:24)
 	push	xbc
 	calr	(0xF994D7 - 0xF991F2)
 	pop	xiy
@@ -282,7 +282,7 @@ MIDI_Rx_FreeSlots:
 ; Unknown:  the layout of the descriptor at 0x00F2FB and the body of 0xF993D4.
 ; --------------------------------------------------------------------------
 MIDI_Rx_Dequeue:
-	lda_24	xbc, 0x00F2FB
+	lda	xbc, (0x00F2FB:24)
 	push	xbc
 	calr	(0xF993D4 - 0xF991FD)
 	pop	xiy
@@ -359,7 +359,7 @@ INTRX0_HANDLER__range_check:
 INTRX0_HANDLER__enqueue:
 	push 0x00
 	extpfx3 0x8e, 0xff, 0x04
-	lda_24 xbc, 0x00F2FB
+	lda xbc, (0x00F2FB:24)
 	push xbc
 	calr (0xF9932E - 0xF9925C)
 	inc 6, xsp
@@ -394,7 +394,7 @@ INTTX0_HANDLER:
 	link32 0xEE, 0x0C, 0xFE, 0xFF
 	pushw hl
 	push xwa
-	lda_24 xbc, 0x00F311
+	lda xbc, (0x00F311:24)
 	push xbc
 	calr (0xF9942F - 0xF99277)
 	ld hl, wa
@@ -578,7 +578,7 @@ MIDI_Tx_PutByte:
 MIDI_Tx_PutByte__F992F8:
 	push	0                                 ; F992F8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04               ; F992FA  push (XIZ+0x08)   [llvm-mc cannot encode this]
-	lda_24	xbc, (0xF311)                   ; F992FD  lda XBC,0x00f311
+	lda	xbc, (0xF311:24)                   ; F992FD  lda XBC,0x00f311
 	push	xbc                               ; F99302  push XBC
 	calr (0xF9932E - 0xF99306)             ; F99303  calr 0xf9932e
 	ld	(xiz-2), wa                         ; F99306  ld (XIZ+0xfe),WA
@@ -590,7 +590,7 @@ MIDI_Tx_PutByte__F9930B:
 MIDI_Tx_PutByte__F99313:
 	push	0                                 ; F99313  push 0x00
 	extpfx3 0x8E, 0x08, 0x04               ; F99315  push (XIZ+0x08)   [llvm-mc cannot encode this]
-	lda_24	xbc, (0xF311)                   ; F99318  lda XBC,0x00f311
+	lda	xbc, (0xF311:24)                   ; F99318  lda XBC,0x00f311
 	push	xbc                               ; F9931D  push XBC
 	calr (0xF9932E - 0xF99321)             ; F9931E  calr 0xf9932e
 	inc	6, xsp                             ; F99321  inc 6,XSP
@@ -974,7 +974,7 @@ MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	cp	xbc, 0xA5                           ; F99523  cp XBC,0x000000a5
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F99543                      ; F99529  jr ULE,0xf99543
 	stib_da	(0xF2F8), 0                    ; F9952B  ld (0x00f2f8),0x00
-	lda_24	xwa, (0xFCC5C2)                 ; F99531  lda XWA,0xfcc5c2
+	lda	xwa, (0xFCC5C2:24)                 ; F99531  lda XWA,0xfcc5c2
 	push	xwa                               ; F99536  push XWA
 	pushw	1                                ; F99537  push 0x0001
 	pushw	6                                ; F9953A  push 0x0006
@@ -989,7 +989,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 	jr nz, MIDI_Watchdogs_And_TransportSwitch__F99575                       ; F99551  jr NZ,0xf99575
 	cpib_da 0x00F328, 0x00                 ; F99553  cp (0x00f328),0x00   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99573                        ; F99559  jr Z,0xf99573
-	lda_24	xbc, (0xFCC5C4)                 ; F9955B  lda XBC,0xfcc5c4
+	lda	xbc, (0xFCC5C4:24)                 ; F9955B  lda XBC,0xfcc5c4
 	push	xbc                               ; F99560  push XBC
 	pushw	1                                ; F99561  push 0x0001
 	pushw	6                                ; F99564  push 0x0006
@@ -1001,7 +1001,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99573:
 MIDI_Watchdogs_And_TransportSwitch__F99575:
 	cpib_da 0x00F328, 0x01                 ; F99575  cp (0x00f328),0x01   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99595                        ; F9957B  jr Z,0xf99595
-	lda_24	xbc, (0xFCC5C3)                 ; F9957D  lda XBC,0xfcc5c3
+	lda	xbc, (0xFCC5C3:24)                 ; F9957D  lda XBC,0xfcc5c3
 	push	xbc                               ; F99582  push XBC
 	pushw	1                                ; F99583  push 0x0001
 	pushw	6                                ; F99586  push 0x0006

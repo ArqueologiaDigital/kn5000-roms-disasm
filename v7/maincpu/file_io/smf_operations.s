@@ -22,7 +22,7 @@ FmmSmfLoadTitleFunc:
 	stda16	33892, hl
 	calr	-10566
 SmfLoad_DispatchState:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 193
 	cps	wa, 0
@@ -76,7 +76,7 @@ SmfLoad_AbortPartial:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32750)
+	ld	a, (32750:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -104,7 +104,7 @@ SmfLoad_Success:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32750)
+	ld	a, (32750:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -191,7 +191,7 @@ RenderSmfFilename:
 	extz bc
 	stib_ind 0x07, 0xe0, 0xe4, 0x00
 	lds ix, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x660)
+	lda xhl, (CharMap_FullPermutation_0x660:24)
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:
@@ -227,7 +227,7 @@ SaveFileNameSmfFunc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
-	lda_d16	xwa, (34740)
+	lda	xwa, (34740:16)
 	cp	xbc, 31457414
 	jr	z, 121
 	cp	xbc, 31457338
@@ -246,7 +246,7 @@ SaveFN_HandleActivate:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, (34741)
+	lda	xwa, (34741:16)
 	call	16289424
 	ld	xwa, (32752:16)
 	ld	xbc, 29360143
@@ -295,12 +295,12 @@ SmfSeqToSongNumFunc:
 	stda32	(32756), xde
 	jr	60
 SeqToSong_BuildEntry:
-	lda_d16	xwa, (32760)
+	lda	xwa, (32760:16)
 	stib_dsp	224, 0
 	ld	xbc, 15337276
 	call	16288975
-	lda_d16	xiz, (32761)
-	ldb_d8	a, (34988)
+	lda	xiz, (32761:16)
+	ld	a, (34988:16)
 	inc	1, a
 	extz	wa
 	lds	bc, 2
@@ -326,12 +326,12 @@ SmfSeqFromSongNumFunc:
 	stda32	(32888), xde
 	jr	60
 SeqFromSong_BuildEntry:
-	lda_d16	xwa, (32892)
+	lda	xwa, (32892:16)
 	stib_dsp	224, 0
 	ld	xbc, 15337288
 	call	16288975
-	lda_d16	xiz, (32893)
-	ldb_d8	a, (34988)
+	lda	xiz, (32893:16)
+	ld	a, (34988:16)
 	inc	1, a
 	extz	wa
 	lds	bc, 2
@@ -356,7 +356,7 @@ SmfSeqSongNameFunc:
 	stda32	(33020), xde
 	jr	28
 SeqSongName_BuildEntry:
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	extz	wa
 	lds	bc, 0
 	lds	de, 0
@@ -377,10 +377,10 @@ SmfLoadAsFunc:
 	stda32	(33024), xde
 	jr	32
 SmfLoadAs_Apply:
-	ldb_d8	a, 34986
+	ld	a, (34986:16)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 15337300
+	lda	xbc, (15337300:24)
 	ld_rrl	xde, xbc, wa
 	ld	xwa, (33024:16)
 	ld	xbc, 29360143
@@ -446,7 +446,7 @@ DisplaySmfFileList:
 DispFileList_LoopBody:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -459,7 +459,7 @@ DispFileList_LoopBody:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, 33904
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -470,7 +470,7 @@ DispFileList_LoopBody:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
@@ -532,7 +532,7 @@ FmmSmfFileNameFunc:
 	add	xde, xde
 	add	xde, 15337374
 	ld	de, (xde)
-	lda_24	xix, 16309435
+	lda	xix, (16309435:24)
 SmfFN_JumpTable:
 	jp_rr 8, xix, de
 	stda32	33028, xbc
@@ -547,13 +547,13 @@ SmfFN_JumpTable:
 	jr	ge, 26
 	stdi16	33040, 0
 	jr	18
-	ldw_d16	wa, 33896
+	ld	wa, (33896:16)
 	stda16	33040, wa
 	cps	wa, 0
 	jr	le, 2
 	dec	1, wa
 	call	16291735
-	ldw_d16	wa, 33040
+	ld	wa, (33040:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -562,7 +562,7 @@ SmfFN_JumpTable:
 	ld	xbc, 31784962
 	jrl	1929
 SmfFN_HandleActivate:
-	ldw_d16	bc, (33040)
+	ld	bc, (33040:16)
 	exts	xbc
 	divs	bc, 10
 	muls	bc, 10
@@ -581,7 +581,7 @@ SmfFN_NavSetup:
 	.byte 0x6b, 0x66, 0x09, 0xd1, 0x68, 0x84, 0xf1, 0x61
 	.byte 0x0e, 0x78, 0xed, 0x05
 SmfFN_NavDown_WrapCheck:
-	ldw_d16	wa, (33896)
+	ld	wa, (33896:16)
 	inc	1, wa
 	cp	bc, wa
 	jrl	ge, 1506
@@ -649,16 +649,16 @@ SmfFN_HandleSave:
 	call	16423243
 	lds	wa, 0
 	calr	-12374
-	ldb_d8	a, 34988
+	ld	a, (34988:16)
 	extz	wa
-	ldb_d8	c, 34986
+	ld	c, (34986:16)
 	extz	bc
 	call	16284664
 	ld	(xsp+6), hl
 	calr	-12304
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00
 	jr	lt, 124
-	ldw_d16	wa, 33040
+	ld	wa, (33040:16)
 	call	16292978
 	ld	xbc, xhl
 	lda	xwa, (xsp+8)
@@ -669,7 +669,7 @@ SmfFN_HandleSave:
 	calr	-588
 	cps	l, 0
 	jr	z, 20
-	ldw_d16	wa, 33040
+	ld	wa, (33040:16)
 	call	16291811
 	ld	xbc, xhl
 	lda	xwa, (xsp+8)
@@ -679,9 +679,9 @@ SmfFN_Save_WriteSlot:
 	lda	xwa, (xsp+8)
 	ldw	bc, 16
 	calr	-799
-	lda_24	xwa, 700416
+	lda	xwa, (700416:24)
 	lds32	xbc, 0
-	ldb_d8	c, 34988
+	ld	c, (34988:16)
 	sll	xbc, 11
 	add	xwa, xbc
 	.byte 0xf3, 0xe1, 0x00, 0x01, 0x30
@@ -691,7 +691,7 @@ SmfFN_Save_WriteSlot:
 	ldb_da	a, (65507)
 	cpda8	a, 34988
 	jr	nz, 20
-	lda_24	xwa, 61824
+	lda	xwa, (61824:24)
 	.byte 0xf3, 0xe1, 0x00, 0x01, 0x30
 	lda	xbc, (xsp+8)
 	ldw	de, 16
@@ -718,7 +718,7 @@ SmfFN_Save_CallResult:
 	ld	wa, (xsp+6)
 	lds	bc, 1
 	calr	53600
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	lds32	xde, 0
@@ -755,17 +755,17 @@ SmfFN_HandleOpen:
 SmfFN_Open_Execute:
 	lds	wa, 0
 	calr	52825
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	extz	wa
-	ldb_d8	c, (34990)
+	ld	c, (34990:16)
 	extz	bc
-	ldb_d8	e, (34992)
+	ld	e, (34992:16)
 	extz	de
 	call	16284750
 	ld	wa, hl
 	lds	bc, 5
 	calr	53446
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16291947
@@ -796,17 +796,17 @@ SmfFN_HandleOpen2:
 	call	16423243
 	lds	wa, 0
 	calr	52683
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	extz	wa
-	ldb_d8	c, (34990)
+	ld	c, (34990:16)
 	extz	bc
-	ldb_d8	e, (34992)
+	ld	e, (34992:16)
 	extz	de
 	call	16284750
 	ld	wa, hl
 	lds	bc, 5
 	calr	53304
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16291947
@@ -852,7 +852,7 @@ SmfFN_Delete_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	-12395
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-12960
 	call	16290139
 	call	16290094
@@ -862,7 +862,7 @@ SmfFN_Delete_Execute:
 	ld	xbc, 29360130
 	lds32	xde, 0
 	call	16423243
-	ldw_d16	wa, 33040
+	ld	wa, (33040:16)
 	cpda16 xwa, (33896)
 	jr	lt, 13
 	cps	wa, 0
@@ -887,7 +887,7 @@ SmfFN_HandleDelete2:
 	ld WA,HL
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -897,7 +897,7 @@ SmfFN_HandleDelete2:
 	ld XBC,0x01c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw_d16 wa, (0x8110)
+	ld wa, (0x8110:16)
 	.byte 0xd1, 0x68, 0x84, 0xf0, 0x61, 0x0d, 0xd8, 0xd8
 	.byte 0x62, 0x09, 0xd8, 0x69, 0xf1, 0x10, 0x81, 0x50
 	.byte 0xbf, 0x04, 0x50
@@ -931,13 +931,13 @@ SmfFN_SetScrollDir0:
 SmfFN_HandleScrollFlag1:
 	cp	xiz, 21
 	jr	nz, 51
-	ldb_d8	c, (34986)
+	ld	c, (34986:16)
 	ld	a, c
 	inc	1, a
 	cps	a, 3
 	jr	nc, 18
 	inc	1, c
-	stb_d8	(34986), c
+	ld	(34986:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -984,7 +984,7 @@ SmfFN_SetFlag35140_0:
 	stdi8	(34984), 0
 	jrl	194
 SmfFN_HandleSeqSongNum:
-	ldb_d8	c, (34988)
+	ld	c, (34988:16)
 	ld	a, c
 	inc	1, a
 	cp	xiz, 30
@@ -992,7 +992,7 @@ SmfFN_HandleSeqSongNum:
 	cp	a, 10
 	jr	nc, 31
 	inc	1, c
-	stb_d8	(34988), c
+	ld	(34988:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -1017,7 +1017,7 @@ SmfFN_HandleSeqFromSong:
 	cp	a, 10
 	jr	nc, 31
 	inc	1, c
-	stb_d8	(34988), c
+	ld	(34988:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -1048,13 +1048,13 @@ SmfFN_DispatchEvent:
 	call ApPostEvent
 
 SmfFN_UpdateDisplay:
-	ldw_d16	hl, (33040)
+	ld	hl, (33040:16)
 SmfFN_RefreshIfChanged:
 	cp	(xsp+4), hl
 	jrl	z, 244
 	ld	wa, hl
 	call	16291735
-	ldw_d16	wa, (33040)
+	ld	wa, (33040:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -1062,7 +1062,7 @@ SmfFN_RefreshIfChanged:
 	ld	xwa, (33028:16)
 	ld	xbc, 31784962
 	call	16423243
-	ldw_d16	bc, (33040)
+	ld	bc, (33040:16)
 	exts	xbc
 	divs	bc, 10
 	ld	de, (xsp+4)
@@ -1076,18 +1076,18 @@ SmfFN_RefreshIfChanged:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	wa, (33040)
+	ld	wa, (33040:16)
 	exts	xwa
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -1107,8 +1107,8 @@ SmfFN_RedrawPage:
 SmfFN_UpdateFilenameField:
 	cpdi8	35994, 107
 	jr	nz, 74
-	lda_d16	xiz, 34740
-	ldw_d16	wa, 33040
+	lda	xiz, (34740:16)
+	ld	wa, (33040:16)
 	cpda16 xwa, (33896)
 	jr	lt, 17
 	cps	wa, 0
@@ -1147,7 +1147,7 @@ SmfFN_SendOkState:
 	ld WA,IZ
 	stda16 (0x8110), wa
 	call NavigateToFileIndex
-	ldw_d16 wa, (0x8110)
+	ld wa, (0x8110:16)
 	exts XWA
 	divs WA,0x000a
 	ld DE,QWA
@@ -1157,7 +1157,7 @@ SmfFN_SendOkState:
 SmfFN_DispatchFinalEvent:
 	call	16423243
 	jrl	-1919
-	ldw_d16	hl, (33040)
+	ld	hl, (33040:16)
 	exts	xhl
 SmfFN_Return:
 	pop xiz
@@ -1176,7 +1176,7 @@ DisplaySmfSequenceList:
 DispSeqList_LoopBody:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -1189,7 +1189,7 @@ DispSeqList_LoopBody:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -1201,7 +1201,7 @@ DispSeqList_LoopBody:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)

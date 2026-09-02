@@ -679,7 +679,7 @@ BOOT_INIT__clock_done2:
 	ldio 0xF6, 0x00
 
 	; Set up stack pointer
-	lda_24 xwa, (0x0005a2); lda XWA, 0x0005a2 (24-bit encoding)
+	lda xwa, (0x0005a2:24); lda XWA, 0x0005a2 (24-bit encoding)
 	ld xsp, xwa
 
 	; Copy interrupt vector trampolines to RAM at 0x0400
@@ -751,7 +751,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	stb_erp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
-	lda_24 xde, (0xfffef0); XDE = pointer to channel config table
+	lda xde, (0xfffef0:24); XDE = pointer to channel config table
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1b_erp 0xFB	; Increment loop counter
@@ -1045,11 +1045,11 @@ INIT_DMA_SERIAL:
 	ldio 0x8A, 0x0A
 
 	; Set up DMA for inter-CPU latch at 0x120000
-	lda_24 xwa, (0x120000)
+	lda xwa, (0x120000:24)
 	ldc_cr32 xwa, 0x28	; DMA channel 2 destination = 0x120000
 	ldb a, 0x8
 	ldc_cr8 a, 0x4A	; DMA channel 2 count = 8
-	lda_24 xwa, (0x120000)
+	lda xwa, (0x120000:24)
 	ldc_cr32 xwa, 0x00	; DMA channel 0 source = 0x120000
 	ldb a, 0x0	; TMP94C241 encoding (21 00)
 	ldc_cr8 a, 0x42	; DMA channel 0 mode = 0
@@ -1289,7 +1289,7 @@ SendParams_E2__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr nz, SendParams_E2__timeout2	; Not ready yet - check timeout
 	set_dd8 0, 0x34	; Set our ready flag
-	lda_d16 xhl, (1282); XHL = address of DMA parameter block
+	lda xhl, (1282:16); XHL = address of DMA parameter block
 	ld (xhl), xwa	; Store XWA parameter
 	ld (xhl + 4), xde	; Store XDE parameter
 	ld (xhl + 8), bc	; Store BC parameter
@@ -1365,9 +1365,9 @@ TwoPhase_Transfer__wait_ack:
 	jrl nz, TwoPhase_Transfer__timeout_ack	; Not acknowledged - timeout handler
 	set_dd8 0, 0x34	; Set our ready flag
 	; Phase 1: Set up first DMA transfer
-	lda_d16 xhl, (1342); XHL = 0x053E (second buffer)
+	lda xhl, (1342:16); XHL = 0x053E (second buffer)
 	ld (xhl), xwa	; Store XWA to buffer
-	lda_d16 xwa, (1292); XWA = 0x050C (first buffer)
+	lda xwa, (1292:16); XWA = 0x050C (first buffer)
 	ld (xwa), xde	; Store XDE to first buffer
 	ld (xhl + 4), bc	; Store BC to second buffer+4
 	ld (xwa + 4), bc	; Store BC to first buffer+4
@@ -1394,7 +1394,7 @@ TwoPhase_Transfer__delay1_loop:
 	jr c, TwoPhase_Transfer__delay1_loop	; Continue if < 200
 TwoPhase_Transfer__delay1_done:
 	; Phase 2: Set up second DMA transfer
-	lda_d16 xwa, (1342); XWA = 0x053E (second buffer)
+	lda xwa, (1342:16); XWA = 0x053E (second buffer)
 	ld xbc, (xwa)	; XBC = contents of second buffer
 	ldc_cr32 xbc, 0x08	; DMA source = XBC
 	ld wa, (xwa + 4)	; WA = count from buffer+4
@@ -1472,12 +1472,12 @@ InterCPU_RX_Handler:
 	bit_dd8 2, 0x34	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
 	ldb_da a, (0x120000); Read command from main CPU
-	stb_d8 (1306), a; Save received byte
+	ld (1306:16), a; Save received byte
 	cp a, 0xE1	; Command E1?
 	jr nz, InterCPU_RX_Handler__not_e1
 	; E1: Set up DMA for 6 bytes
 	stdi8 (1304), 2
-	lda_d16 xwa, (1348)
+	lda xwa, (1348:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	lds wa, 6
@@ -1488,7 +1488,7 @@ InterCPU_RX_Handler__not_e1:
 	jr nz, InterCPU_RX_Handler__not_e2
 	; E2: Set up DMA for 10 bytes
 	stdi8 (1304), 3
-	lda_d16 xwa, (1354)
+	lda xwa, (1354:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	ldw wa, 0xA
@@ -1503,10 +1503,10 @@ InterCPU_RX_Handler__not_e2:
 InterCPU_RX_Handler__default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
 	stdi8 (1304), 1
-	lda_d16 xwa, (1310)
+	lda xwa, (1310:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
-	ldb_d8 a, (1306)
+	ld a, (1306:16)
 	and a, 0x1F	; Low 5 bits = count - 1
 	inc 1, a
 	extz wa
@@ -1578,7 +1578,7 @@ CMD_Dispatch_Handler:
 	push xde
 	push xbc
 	push xwa
-	ldb_d8 a, (1304)
+	ld a, (1304:16)
 	cps a, 4	; State 4?
 	jr z, CMD_Dispatch_Handler__state4
 	cps a, 3	; State 3?
@@ -1590,7 +1590,7 @@ CMD_Dispatch_Handler:
 	; State 1: Process received data, call handler from table
 	pushw 0x0
 	pushw 0x51E
-	ldb_d8 c, (1306)
+	ld c, (1306:16)
 	ld a, c
 	and a, 0x1F	; Low 5 bits = count
 	inc 1, a
@@ -1600,7 +1600,7 @@ CMD_Dispatch_Handler:
 	ld a, c
 	extz wa
 	sla wa, 2	; index * 4
-	lda_24 xbc, (0xff8000); XBC = CmdHandler_Table
+	lda xbc, (0xff8000:24); XBC = CmdHandler_Table
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
@@ -1608,7 +1608,7 @@ CMD_Dispatch_Handler:
 	jr CMD_Dispatch_Handler__set_flag_exit
 CMD_Dispatch_Handler__state2:
 	; State 2: Set up secondary DMA transfer
-	lda_d16 xwa, (1348)
+	lda xwa, (1348:16)
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x20	; DMA channel 0 destination (from XBC)
 	ld wa, (xwa + 4)
@@ -1661,17 +1661,17 @@ INIT_MEMORY_TEST:
 
 	lds wa, 0
 	calr MEM_TEST_ROUTINE	; 0xFF89FC (3-byte relative call)
-	stb_d8 (1366), l
+	ld (1366:16), l
 	extz hl
 	ld wa, hl
 	calr ROM_CHECKSUM	; 0xFF8AB4 (3-byte relative call)
-	stb_d8 (1366), l
+	ld (1366:16), l
 	calr HARDWARE_CALIBRATION_SEQUENCE	; 0xFF8C80 (3-byte relative call)
 	cp hl, 0xFFFF
 	jr nz, INIT_MEMORY_TEST__no_error
 	setda 3, 1366
 INIT_MEMORY_TEST__no_error:
-	ldb_d8 a, (1366)
+	ld a, (1366:16)
 	extz wa
 	calr DELAY_ROUTINE	; 0xFF89A9 (3-byte relative call)
 
@@ -1681,7 +1681,7 @@ INIT_MEMORY_TEST__no_error:
 	; of 0x0003 is not recoverable from software.  INFERENCE: an enable/reset of the
 	; scanner and its event FIFO, issued once before the endless test loop below.
 	stiw_da (0x110002), 0x0003; 7-byte encoding: f2 02 00 11 02 03 00
-	lda_d16 xbc, (1368)
+	lda xbc, (1368:16)
 	ld xwa, xbc
 	inc 8, xbc	; XBC = 0x0560, the loop bound: INC #3,r encodes 8 as 0, so this is +8 not +1
 INIT_MEMORY_TEST__clear_loop:
@@ -1780,7 +1780,7 @@ MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
-	lda_24 xbc, (0xff8020); XBC = MemTest_RegionTable
+	lda xbc, (0xff8020:24); XBC = MemTest_RegionTable
 	lda_dri XDE, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
@@ -1931,7 +1931,7 @@ SERIAL_INIT:
 	pushw_erp 0xFA
 	ldib_erp 0xFB, 0	; Error accumulator
 	calr CONTROL_PANEL_BIT_SET_CLEAR	; Drain the keybed FIFO into the 0x0558 bitmap
-	lda_d16 xwa, (1368)
+	lda xwa, (1368:16)
 	ld xbc, xwa
 	lda xde, (xwa + 8)
 SERIAL_INIT__check_loop:
@@ -2000,7 +2000,7 @@ CONTROL_PANEL_BIT_SET_CLEAR__loop:
 	ld a, e	; A = bit position
 	ld e, l	; E = byte offset
 	extz de	; Zero-extend DE (byte offset in DE)
-	lda_d16 xix, (1368); XIX = buffer base address
+	lda xix, (1368:16); XIX = buffer base address
 	lds hl, 1	; HL = initial bit mask (1)
 	and a, 0xF	; Mask bit position to 0-15
 	jr z, CONTROL_PANEL_BIT_SET_CLEAR__skip_shift	; If A=0, skip shift (bit already = 1)
@@ -2195,12 +2195,12 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	; Calculate velocity from tables
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
-	lda_24 xde, (0xff804c); XDE = ToneGen_Velocity_Input_Curve
+	lda xde, (0xff804c:24); XDE = ToneGen_Velocity_Input_Curve
 	lds32 xhl, 0	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
 	ldw_da xbc, (0xff802a); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
-	lda_24 xde, (0xff8040); XDE = ToneGen_VelCurve_ModeParams_Mode6
+	lda xde, (0xff8040:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
@@ -2249,7 +2249,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
-	lda_24 xde, (0xff814c); XDE = ToneGen_Velocity_Output_Curve
+	lda xde, (0xff814c:24); XDE = ToneGen_Velocity_Output_Curve
 	ldb_sri C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret

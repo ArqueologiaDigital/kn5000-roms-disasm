@@ -50,7 +50,7 @@ DrawLine_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawLine_ParamBlock)
+	lda xbc, (DrawLine_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -158,7 +158,7 @@ DrawLine_Impl_CopyStartPos:
 	lda xix, (xsp + 56)
 	ldiw
 	ldiw
-	lda_24 xwa, (0x043c00)
+	lda xwa, (0x043c00:24)
 	ld (xsp + 36), xwa
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 4)
@@ -858,7 +858,7 @@ DrawLineEx_SteepLoop:
 	add xix, xwa
 	sll xix, 6
 	ld de, (xsp + 44)
-	lda_24 xhl, (0x043c00)
+	lda xhl, (0x043c00:24)
 	cpw (xsp + 58), 0x205
 	jr z, DrawLineEx_SteepXorPixel
 	cp iz, 0x201
@@ -922,7 +922,7 @@ DrawLineEx_ShallowLoop:
 	ld iz, (xsp + 58)
 	ld wa, (xsp + 44)
 	ldb_erp A, 0xf0
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	ld wa, (xde)
 	exts xwa
 	ld xhl, xwa
@@ -1018,7 +1018,7 @@ DrawBox_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBox_ParamBlock)
+	lda xbc, (DrawBox_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1186,7 +1186,7 @@ DrawFrame_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawFrame_ParamBlock)
+	lda xbc, (DrawFrame_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1350,7 +1350,7 @@ DrawFrame_Impl_SolidYStepPositive:
 	cp de, (xhl)
 	jr nz, DrawFrame_Impl_SolidTwoSideCheck
 	ld xiy, (xsp + 44)
-	lda_24 xix, (0x043c00)
+	lda xix, (0x043c00:24)
 	ld hl, (xsp + 42)
 	ld xwa, (xsp + 38)
 	ld xde, xwa
@@ -1386,7 +1386,7 @@ DrawFrame_Impl_SolidTwoSideLoop:
 	ld xwa, (xsp + 44)
 	ld wa, (xwa)
 	lda_dri XDE, 0x07, 0xec, 0xe0
-	lda_24 xwa, (0x043c00)
+	lda xwa, (0x043c00:24)
 	ld (xsp + 38), xwa
 	add xwa, xde
 	ld xix, xwa
@@ -1506,7 +1506,7 @@ DrawFrame_Impl_PatternYStepPositive:
 	exts xwa
 	ld (xsp + 30), xwa
 	ld xbc, xwa
-	lda_24 xwa, (0x043c00)
+	lda xwa, (0x043c00:24)
 	ld (xsp + 34), xwa
 	ld (xsp + 38), xbc
 	ld xwa, xbc
@@ -1717,7 +1717,7 @@ DrawFrameEx_TopBottomLoop:
 	jr z, DrawFrameEx_TopBottomXorPixel
 	cp iy, 0x201
 	jrl nz, DrawFrameEx_Return
-	lda_24 xix, (0x043c00)
+	lda xix, (0x043c00:24)
 	ld xiy, xix
 	add xiy, xbc
 	ld bc, (xsp + 16)
@@ -1770,7 +1770,7 @@ DrawFrameEx_SidesStepComputed:
 	jr DrawFrameEx_SingleColCheck
 
 DrawFrameEx_TopBottomXorPixel:
-	lda_24 xix, (0x043c00)
+	lda xix, (0x043c00:24)
 	ld xiy, xix
 	add xiy, xbc
 	ld bc, (xsp + 16)
@@ -1791,7 +1791,7 @@ DrawFrameEx_TopBottomXorPixel:
 
 DrawFrameEx_SingleColLoop:
 	ld bc, (xsp + 14)
-	lda_24 xde, (0x043c00)
+	lda xde, (0x043c00:24)
 	cpw (xsp + 14), 0x205
 	jr z, DrawFrameEx_SingleColXorPixel
 	cp bc, 0x201
@@ -1855,7 +1855,7 @@ DrawFrameEx_TwoColLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xix
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	ld xiz, xiy
 	add xiz, xbc
 	ld (xiz), e
@@ -1884,7 +1884,7 @@ DrawFrameEx_TwoColXorPixel:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xix
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	ld xiz, xiy
 	add xiz, xbc
 	xor (xiz), e
@@ -1935,7 +1935,7 @@ MovePixels_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (MovePixels_ParamBlock)
+	lda xbc, (MovePixels_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2011,7 +2011,7 @@ MovePixels_Impl_ColLoop:
 	ld bc, (xiy)
 	exts xbc
 	add xbc, xiz
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	ld xiz, xiy
 	add xiz, xbc
 	ld bc, (xde)
@@ -2091,7 +2091,7 @@ DrawWall_Deferred:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawWall_Deferred_0x11)
+	lda xbc, (DrawWall_Deferred_0x11:24)
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr DrawWall_DoCopy
@@ -2100,7 +2100,7 @@ DrawWall_DoCopy:
 	lda xsp, (xsp - 12)
 	push xiz
 	ldl_da xiz, (0x030452)
-	lda_24 xwa, (0x043c00)
+	lda xwa, (0x043c00:24)
 	ld (xsp + 4), xwa
 	pushw 0x9600
 	push xiz
@@ -2163,7 +2163,7 @@ DrawBitmap_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBitmap_ParamBlock)
+	lda xbc, (DrawBitmap_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2223,7 +2223,7 @@ DrawBitmap_Impl_RowLoop:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	lda_24 xiz, (0x043c00)
+	lda xiz, (0x043c00:24)
 	ld xde, xiz
 	add xde, xwa
 	ld (xsp + 6), xde
@@ -2389,7 +2389,7 @@ DrawBitmapFast_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBitmapFast_ParamBlock)
+	lda xbc, (DrawBitmapFast_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2528,7 +2528,7 @@ DrawIcons_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawIcons_ParamBlock)
+	lda xbc, (DrawIcons_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2609,7 +2609,7 @@ DrawIcons_Impl_ColLoop:
 	ld a, c
 	extz wa
 	add wa, wa
-	lda_24 xbc, (Str_No_0x8DC)
+	lda xbc, (Str_No_0x8DC:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld (xix), wa
 	inc 1, iy
@@ -2665,7 +2665,7 @@ DrawFrameSP_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawFrameSP_ParamBlock)
+	lda xbc, (DrawFrameSP_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2733,7 +2733,7 @@ DrawFrameSP_Impl_ColLoop:
 	ldb_erp A, 0xee
 	cp_erpb 0xee, 0xf7
 	jr z, DrawFrameSP_Impl_PixelAdvance
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	ld xwa, (xsp + 10)
 	ld wa, (xwa)
 	exts xwa
@@ -2838,7 +2838,7 @@ DrawBitmapSP_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBitmapSP_Return_0x6)
+	lda xbc, (DrawBitmapSP_Return_0x6:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2902,7 +2902,7 @@ DrawBitmapSP_Impl_RowLoop:
 	ld wa, (xix)
 	exts xwa
 	add xwa, xhl
-	lda_24 xhl, (0x043c00)
+	lda xhl, (0x043c00:24)
 	ld xiy, xhl
 	add xiy, xwa
 	lds ix, 0
@@ -3060,7 +3060,7 @@ DrawBitmapSPFast_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBitmapSPFast_Return_0x6)
+	lda xbc, (DrawBitmapSPFast_Return_0x6:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3189,7 +3189,7 @@ DrawBitmapSP2_DeferredPath:
 	ldw wa, 0x14
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBitmapSP2_Return_0x6)
+	lda xbc, (DrawBitmapSP2_Return_0x6:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3259,7 +3259,7 @@ DrawBitmapSP2_Impl_RowLoop:
 	ld wa, (xiy)
 	exts xwa
 	add xwa, xix
-	lda_24 xix, (0x043c00)
+	lda xix, (0x043c00:24)
 	add xix, xwa
 	ld xwa, (xsp + 16)
 	ld iy, (xwa)
@@ -3361,7 +3361,7 @@ DrawBitmapFile_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawBitmapFile_ParamBlock)
+	lda xbc, (DrawBitmapFile_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3389,13 +3389,13 @@ DrawBitmapFile_Impl:
 	pushw 0x2
 	pushw 0xea
 	pushw 0xadf2
-	ld_sril XWA, (xsp + 0x043a)
+	ld XWA, (xsp + 0x043a)
 	push xwa
 	call String_Compare
 	add xsp, 0xa
 	cps hl, 0
 	jrl nz, DrawBitmapFile_Impl_Return
-	ld_sril XWA, (xsp + 0x0434)
+	ld XWA, (xsp + 0x0434)
 	lda xwa, (xwa + 14)
 	ld (xsp + 36), xwa
 	ld (xsp + 4), xwa
@@ -3413,7 +3413,7 @@ DrawBitmapFile_Impl:
 	ld xwa, (xwa + 32)
 	cp xwa, 0x100
 	jrl ugt, DrawBitmapFile_Impl_Return
-	ld_sril XWA, (xsp + 0x0434)
+	ld XWA, (xsp + 0x0434)
 	ld xwa, (xwa + 10)
 	ld (xsp + 32), xwa
 	ld xwa, 0x36
@@ -3423,7 +3423,7 @@ DrawBitmapFile_Impl:
 	jrl ugt, DrawBitmapFile_Impl_Return
 	ld xwa, (xsp + 32)
 	pushw wa
-	ld_sril XWA, (xsp + 0x0436)
+	ld XWA, (xsp + 0x0436)
 	lda xwa, (xwa + 54)
 	push xwa
 	lda xwa, (xsp + 58)
@@ -3556,7 +3556,7 @@ DrawBitmapFile_Impl_ComputeStride:
 DrawBitmapFile_Impl_DecodeRowLoop:
 	ld xwa, (xsp + 20)
 	pushw wa
-	ld_sril XWA, (xsp + 0x0436)
+	ld XWA, (xsp + 0x0436)
 	push xwa
 	ld xwa, (xsp + 30)
 	push xwa
@@ -3665,7 +3665,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	call Free
 	inc 4, xsp
 	calr Gfx_DecodeImageToBuffer
-	ld_sril XWA, (xsp + 0x0438)
+	ld XWA, (xsp + 0x0438)
 	calr IsPointOnScreen
 	cps hl, 0
 	jrl z, DrawBitmapFile_Impl_Return
@@ -3674,7 +3674,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ld (xsp + 40), wa
 	ld xwa, (xbc + 8)
 	ld (xsp + 42), wa
-	ld_sril XHL, (xsp + 0x0438)
+	ld XHL, (xsp + 0x0438)
 	ld bc, (xhl + 2)
 	ld wa, bc
 	exts xwa
@@ -3717,7 +3717,7 @@ DrawBitmapFile_Impl_VRAMRowLoop:
 
 DrawBitmapFile_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 44)
-	ld_sril XHL, (xsp + 0x0438)
+	ld XHL, (xsp + 0x0438)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	ld (xwa + 2), bc
@@ -3797,7 +3797,7 @@ DrawString_DeferredPath:
 	ldw wa, 0x1c
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda_24 xwa, (DrawString_Return_0x7)
+	lda xwa, (DrawString_Return_0x7:24)
 	ld (xhl), xwa
 	ld xwa, (xsp + 16)
 	ld xiy, xwa
@@ -3855,30 +3855,30 @@ DrawString_Impl:
 	push xiz
 	stl_dri XDE, 0xfd, 0x38, 0x01
 	stl_dri XWA, 0xfd, 0x3c, 0x01
-	ld_sril XWA, (xsp + 0x0138)
+	ld XWA, (xsp + 0x0138)
 	cp (xwa), 0x0
 	jrl z, DrawString_Impl_Return
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	lda xde, (xwa + 2)
 	cpw (xde), 0x0
 	jr ge, DrawString_Impl_ClipYMin
 	ldw (xde), 0x0
 
 DrawString_Impl_ClipYMin:
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	cpw (xwa), 0x0
 	jr ge, DrawString_Impl_ClipXMin
 	ldw (xwa), 0x0
 
 DrawString_Impl_ClipXMin:
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	inc 4, xwa
 	cpw (xwa), 0x140
 	jr lt, DrawString_Impl_ClipXMax
 	ldw (xwa), 0x13f
 
 DrawString_Impl_ClipXMax:
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	lda xhl, (xwa + 6)
 	cpw (xhl), 0xf0
 	jr lt, DrawString_Impl_ClipYMax
@@ -3901,7 +3901,7 @@ DrawString_Impl_ClipCursorXMin:
 	ldw (xbc), 0x0
 
 DrawString_Impl_ClipCursorYMin:
-	ld_sril XWA, (xsp + 0x0148)
+	ld XWA, (xsp + 0x0148)
 	ld (xsp + 4), xwa
 	sll xwa, 4
 	ld (xsp + 4), xwa
@@ -3951,7 +3951,7 @@ DrawString_Impl_ClampDirtyTop:
 
 DrawString_Impl_ClampDirtyBottom:
 	lda xbc, (xsp + 40)
-	ld_sril XWA, (xsp + 0x0138)
+	ld XWA, (xsp + 0x0138)
 	call ConvertStrings
 	lda xwa, (xsp + 40)
 	ld (xsp + 24), xwa
@@ -3996,7 +3996,7 @@ DrawString_Impl_ComputeDirtyRect:
 	add_sriw_mr WA, 0xfd, 0x34, 0x01
 	lda_dri XWA, 0xfd, 0x30, 0x01
 	lda xde, (xwa + 2)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 2)
 	cp (xde), bc
 	jr ge, DrawString_Impl_ClampDirtyLeft
@@ -4004,7 +4004,7 @@ DrawString_Impl_ComputeDirtyRect:
 
 DrawString_Impl_ClampDirtyLeft:
 	ld de, (xwa)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	cp de, (xbc)
 	jr ge, DrawString_Impl_ClampDirtyRight
 	ld bc, (xbc)
@@ -4012,7 +4012,7 @@ DrawString_Impl_ClampDirtyLeft:
 
 DrawString_Impl_ClampDirtyRight:
 	lda xde, (xwa + 4)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 4)
 	cp (xde), bc
 	jr le, DrawString_Impl_ClampDirtyRight2
@@ -4020,7 +4020,7 @@ DrawString_Impl_ClampDirtyRight:
 
 DrawString_Impl_ClampDirtyRight2:
 	lda xde, (xwa + 6)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 6)
 	cp (xde), bc
 	jr le, DrawString_Impl_FillBackground
@@ -4099,7 +4099,7 @@ DrawString_Impl_ColumnSetup:
 	ld xwa, (xsp + 32)
 	ld wa, (xwa)
 	lda_dri XHL, 0x07, 0xec, 0xe0
-	lda_24 xwa, (0x043c00)
+	lda xwa, (0x043c00:24)
 	add xwa, xhl
 	ld (xsp + 28), xwa
 	ldw (xsp + 22), 0x0
@@ -4115,7 +4115,7 @@ DrawString_Impl_RowLoop:
 	ld ix, wa
 	ld iy, ix
 	ld (xhl + 2), ix
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	cp ix, (xwa + 2)
 	jr lt, DrawString_Impl_RowAdvance
 	ld xix, (xsp + 28)
@@ -4130,7 +4130,7 @@ DrawString_Impl_PixelLoop:
 	ld wa, (xwa)
 	add wa, iy
 	ld (xhl), wa
-	ld_sril XIZ, (xsp + 0x013c)
+	ld XIZ, (xsp + 0x013c)
 	cp wa, (xiz)
 	jr lt, DrawString_Impl_PixelAdvance
 	ld wa, (xhl)
@@ -4215,15 +4215,15 @@ DrawStringCentered:
 	ld xwa, xde
 	call ConvertStrings
 	lda xwa, (xsp + 4)
-	ld_sril XBC, (xsp + 0x0118)
+	ld XBC, (xsp + 0x0118)
 	call CalcTotalWidth
 	ld iz, hl
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetCharHeight
 	ld (xsp + 2), hl
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetCharDescent
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xiy, xwa
 	lda_dri XIX, 0xfd, 0x04, 0x01
 	ldiw
@@ -4238,16 +4238,16 @@ DrawStringCentered:
 	exts xwa
 	divs wa, 0x2
 	sub (xbc + 2), wa
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetCenteredDelta
 	lda_dri XBC, 0xfd, 0x04, 0x01
 	add (xbc + 2), hl
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	push xwa
 	push_sriw 0xfd, 0x1a, 0x01
 	push_sriw 0xfd, 0x1a, 0x01
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	calr DrawString
 	popw iz
 	lda_dri XSP, 0xfd, 0x0e, 0x01
@@ -4312,7 +4312,7 @@ DrawStringRightJustify:
 	ld xwa, xde
 	call ConvertStrings
 	lda xwa, (xsp + 8)
-	ld_sril XIZ, (xsp + 0x011c)
+	ld XIZ, (xsp + 0x011c)
 	ld xbc, xiz
 	call CalcTotalWidth
 	ld (xsp + 4), hl
@@ -4321,13 +4321,13 @@ DrawStringRightJustify:
 	ld (xsp + 6), hl
 	ld xwa, xiz
 	call GetCharDescent
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	ld xiy, xwa
 	lda_dri XIX, 0xfd, 0x08, 0x01
 	ldiw
 	ldiw
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	ld wa, (xwa + 4)
 	dec 4, wa
 	sub wa, (xsp + 4)
@@ -4345,7 +4345,7 @@ DrawStringRightJustify:
 	push xiz
 	push_sriw 0xfd, 0x1e, 0x01
 	push_sriw 0xfd, 0x1e, 0x01
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	calr DrawString
 	pop xiz
 	lda_dri XSP, 0xfd, 0x10, 0x01

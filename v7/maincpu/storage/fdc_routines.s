@@ -34,7 +34,7 @@ FDC_Send_Command:
 	stb_da (0x110008), a
 	ret
 	ldmm8 0x8a84, 0x8a86
-	stb_d8 (0x8a86), a
+	ld (0x8a86:16), a
 	ret
 FDC_Write_Data:
 	stb_da (0x11000a), a
@@ -50,7 +50,7 @@ FDC_Write_Data:
 ; Uses (R+d16) addressing extensively for FDC port and state variable access.
 FDC_WaitReady:
 	push XIZ
-	ldw_d16 iz, (0x0409)
+	ld iz, (0x0409:16)
 	ldw QIZ, 0x0080
 	cpw QIZ, 0x0080
 	jr nz, .Lc_f96763
@@ -63,7 +63,7 @@ FDC_WaitReady:
 	jr nz, .Lc_f9674b
 	ld QIZ,0
 .Lc_f9674b:
-	ldw_d16 wa, (0x0409)
+	ld wa, (0x0409:16)
 	sub WA,IZ
 	cp WA,0x01f4
 	jr ule, .Lc_f9675c
@@ -80,7 +80,7 @@ FDC_WaitReady:
 	pop XIZ
 	ret
 	push XIZ
-	ldw_d16 iz, (0x0409)
+	ld iz, (0x0409:16)
 	ldw QIZ, 0x0080
 	cpw QIZ, 0x0080
 	jr nz, .Lc_f967a6
@@ -91,7 +91,7 @@ FDC_WaitReady:
 	jr nz, .Lc_f9678e
 	ld QIZ,0
 .Lc_f9678e:
-	ldw_d16 wa, (0x0409)
+	ld wa, (0x0409:16)
 	sub WA,IZ
 	cp WA,0x01f4
 	jr ule, .Lc_f9679f
@@ -184,17 +184,17 @@ FDC_WaitReady:
 	ret
 FDC_COMMAND_DISPATCHER:
 	stdi8	(35214), 0
-	ldw_d16	wa, (35236)
+	ld	wa, (35236:16)
 	cp	wa, 11
 	jr	ugt, 36	; -> 0xF969D7
 	add	wa, wa
-	lda_24	xix, (15374514)
+	lda	xix, (15374514:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16345545)
+	lda	xix, (16345545:24)
 	jp_rr	8, xix, wa
 FDC_CMD_HANDLER_BASE:
 	calr	255
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_ReturnZero:
 	ldb l, 0x0
@@ -204,14 +204,14 @@ FDC_ErrorInvalidDrive:
 	calr FDC_Validate_Drive_Head
 
 FDC_CheckDriveCount:
-	ldw_d16	wa, 35238
-	stb_d8	35214, a
+	ld	wa, (35238:16)
+	ld	(35214:16), a
 	cpdi8	35214, 1
 	jr	ule, 6
 	ldw	wa, 254
 	jrl	1972
 FDC_ValidateCommand:
-	ldw_d16	wa, (35236)
+	ld	wa, (35236:16)
 	cps	wa, 4
 	jr	z, 33
 	cps	wa, 3
@@ -230,12 +230,12 @@ FDC_NoOpReturn:
 
 FDC_Command5Handler:
 	calr	492
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_ValidateTrack:
-	ldw_d16	wa, (35242)
-	stb_d8	(35215), a
-	stb_d8	(35226), a
+	ld	wa, (35242:16)
+	ld	(35215:16), a
+	ld	(35226:16), a
 	extz	wa
 	cpda16	xwa, (35436)
 	jr	c, 6	; -> 0xF96A2F
@@ -275,11 +275,11 @@ FDC_ErrorInvalid:
 
 FDC_ValidExecute:
 	calr	277
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_SetupFormatParams:
-	ldw_d16	wa, (35242)
-	stb_d8	(35282), a
+	ld	wa, (35242:16)
+	ld	(35282:16), a
 	and	a, 15
 	cps	a, 3
 	jrl	z, 129
@@ -332,10 +332,10 @@ FDC_FormatUnknown:
 	calr FDC_Set_Status
 
 FDC_InitStateVars:
-	ldb_d8	a, (35282)
+	ld	a, (35282:16)
 	srl	a, 4
 	and	a, 15
-	stb_d8	(35227), a
+	ld	(35227:16), a
 	stdi8	(35221), 255
 	stdi8	(35224), 0
 	stdi8	(35228), 15
@@ -348,9 +348,9 @@ FDC_InitStateVars:
 	stdi8	(35230), 0
 	ret
 FDC_CheckHead:
-	ldw_d16 wa, (0x89a8)
-	stb_d8 (0x8990), a
-	stb_d8 (0x898d), a
+	ld wa, (0x89a8:16)
+	ld (0x8990:16), a
+	ld (0x898d:16), a
 	cpdi8 (0x898d), 0x00
 	ret Z
 	.byte 0xc1, 0x8d, 0x89, 0x3f, 0x01, 0xb0, 0xf6, 0x30
@@ -450,7 +450,7 @@ FDC_Setup_DMA_Src_Ack:
 	.byte 0x89, 0x21, 0xd9, 0x2e, 0x4c, 0x0e
 FDC_Wait_Ready_Timeout:
 	push xiz
-	ldw_d16 xiz, (1033)
+	ld iz, (1033:16)
 	ldi_erpw 0xfa, 0x80, 0x00
 	cp_erpw 0xfa, 0x80, 0x00
 	jr nz, FDC_WaitReady_TimedOut
@@ -466,7 +466,7 @@ FDC_WaitReady_StatusLoop:
 	ldiw_erp 0xfa, 0
 
 FDC_WaitReady_TimeoutCheck:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	sub wa, iz
 	cp wa, 0x1f4
 	jr ule, FDC_WaitReady_LoopContinue
@@ -489,7 +489,7 @@ FDC_WaitReady_Complete:
 
 FDC_Wait_Status_Timeout:
 	push xiz
-	ldw_d16 xiz, (1033)
+	ld iz, (1033:16)
 	ldi_erpw 0xfa, 0x80, 0x00
 	cp_erpw 0xfa, 0x80, 0x00
 	jr nz, FDC_WaitStatus_TimedOut
@@ -504,7 +504,7 @@ FDC_WaitStatus_StatusLoop:
 	ldiw_erp 0xfa, 0
 
 FDC_WaitStatus_CheckTimeout:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	sub wa, iz
 	cp wa, 0x1f4
 	jr ule, FDC_WaitStatus_TimeoutCheck
@@ -583,7 +583,7 @@ FDC_ResultPhase_Read:
 	.byte 0x1e, 0xe3, 0xf8, 0xf1, 0xc5, 0x89, 0x47, 0xef
 	.byte 0x62, 0x0e
 FDC_Exception_Status_Decoder:
-	lda_d16	xde, (35268)
+	lda	xde, (35268:16)
 	ld	c, (xde+1)
 	ld	a, c
 	and	a, 192
@@ -782,7 +782,7 @@ FDC_HardwareSetup:
 FDC_Set_Status:
 	cpdi8 (0x8988), 0x00
 	jr nz, FDC_SetStatus_AlreadySet
-	stb_d8 (0x8988), a
+	ld (0x8988:16), a
 	cp A,0x36
 	jr z, FDC_SetStatus_DataFieldErr
 	cp A,0x35
@@ -803,7 +803,7 @@ FDC_SetStatus_AlreadySet:
 	nop
 
 FDC_SetStatus_Return:
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_ClearStatus_InitTimer:
 	stdi8 (0x8988), 0x00
@@ -812,14 +812,14 @@ FDC_ClearStatus_InitTimer:
 	ret
 	push XIZ
 	ldw QIZ, 0x01f4
-	ldw_d16 iz, (0x0409)
+	ld iz, (0x0409:16)
 	lds bc, 0
 .Lc_f971e1:
 	cpdi8 (0x89c4), 0xff
 	jr z, .Lc_f971eb
 	ldw BC, 0xffff
 .Lc_f971eb:
-	ldw_d16 wa, (0x0409)
+	ld wa, (0x0409:16)
 	sub WA,IZ
 	cp WA,QIZ
 	jr ule, .Lc_f971ff
@@ -833,13 +833,13 @@ FDC_ClearStatus_InitTimer:
 	ret
 SOME_DELAY:
 	srl wa, 1
-	ldw_d16 xde, (1033)
+	ld de, (1033:16)
 	lds hl, 0
 	cp hl, 0xffff
 	ret nc
 
 SOME_DELAY_Loop:
-	ldw_d16 xbc, (1033)
+	ld bc, (1033:16)
 	sub bc, de
 	cp bc, wa
 	ret ugt
@@ -863,7 +863,7 @@ FDC_InitSequence_Full:
 	jrl	-2690
 FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_head.bin"
-	ldb_d8 a, (0x899a)
+	ld a, (0x899a:16)
 	cpda8 a, (0x8a68)
 	ret Z
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_tail.bin"
@@ -982,7 +982,7 @@ FDC_STATUS_COPY:
 	.byte 0xc1, 0x8a, 0x89, 0x19, 0x88, 0x89
 FDC_STATUS_COPY_Code:
 	ret	
-	ldw_d16	wa, (35240)
+	ld	wa, (35240:16)
 	cps	wa, 1
 	jr	z, 13
 	cps	wa, 0
@@ -1127,7 +1127,7 @@ FDC_Handler_InvalidCommand:
 
 FDC_Handler_ExitStatus:
 	stdi8	(35194), 90
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	exts	hl
 FDC_Handler_Return:
 	pop xiz
@@ -1209,7 +1209,7 @@ INT4_SendSpecifyCmd:
 	calr FDC_Write_Data
 
 INT4_StoreResultBase:
-	lda_d16	xiz, (35268)
+	lda	xiz, (35268:16)
 	inc	1, xiz
 INT4_ReadResultLoop:
 	calr FDC_Wait_Status_Timeout
@@ -1261,7 +1261,7 @@ FDC_Reset_BuildParams:
 	stdi16	(35474), 0
 	lds32	xwa, 0
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64935
 	stdi16	(35464), 3
@@ -1270,9 +1270,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 0
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64883
 	stdi16	(35464), 3
@@ -1281,9 +1281,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 78
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64831
 	stdi16	(35464), 3
@@ -1292,9 +1292,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 10
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64779
 	stdi16	(35464), 3
@@ -1303,9 +1303,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 40
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64727
 	lda	xsp, (xsp+20)

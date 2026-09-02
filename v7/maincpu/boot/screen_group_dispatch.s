@@ -28,7 +28,7 @@ ScreenGroup_WidgetLoop:
 	.byte 0xc4, 0x3e, 0x04, 0x00, 0x1e, 0x47, 0xfe, 0x0e
 	bitda 1, (0xfc67)
 	jr z, .Lc_fdd7f0
-	ldw_d16 wa, (0xc4f8)
+	ld wa, (0xc4f8:16)
 	bit 0x04,WA
 	.byte 0x6e
 ScreenGroup_InitState:
@@ -78,7 +78,7 @@ ScreenGroup_InitVoiceLoop:
 	ret Z
 	ld A,L
 	extz WA
-	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
 	ldb_dri a, 0x07, 0xe4, 0xe0
 ScreenGroup_InitParams16:
 	extz WA

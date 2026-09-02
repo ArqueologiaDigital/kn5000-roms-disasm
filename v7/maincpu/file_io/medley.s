@@ -21,7 +21,7 @@ FmmSeqSongNameFunc:
 	pushw iz
 	cp XBC,0x01e50003
 	jrl z, SeqName_GetIndexReturn
-	ldw_d16 hl, (0x823c)
+	ld hl, (0x823c:16)
 	cp XBC,0x01e50002
 	jrl z, SeqName_SetIndexPlaying
 	cp XBC,0x01c00018
@@ -37,7 +37,7 @@ FmmSeqSongNameFunc:
 	jr nz, SeqName_SendCurrentIndex
 	stdi16 (0x823c), 0x0000
 SeqName_SendCurrentIndex:
-	ldw_d16	de, (33340)
+	ld	de, (33340:16)
 	extz	xde
 	ld	xwa, (33336:16)
 	ld	xbc, 31784962
@@ -118,12 +118,12 @@ SeqName_LoadAndPlay:
 	call	16423243
 	lds	wa, 0
 	calr	38514
-	ldw_d16	wa, (33340)
+	ld	wa, (33340:16)
 	call	16284832
 	ld	wa, hl
 	lds	bc, 5
 	calr	39149
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -144,12 +144,12 @@ SeqName_HandleAction32:
 	call	16423243
 	lds	wa, 0
 	calr	38426
-	ldw_d16	wa, (33340)
+	ld	wa, (33340:16)
 	call	16284832
 	ld	wa, hl
 	lds	bc, 5
 	calr	39061
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -164,7 +164,7 @@ SeqName_ShowAndExit:
 	call SoundCtrl_SendCommand
 
 SeqName_GetCurrentIndex:
-	ldw_d16	de, (33340)
+	ld	de, (33340:16)
 SeqName_UpdateDisplay:
 	cp	iz, de
 	jrl	z, -345
@@ -180,7 +180,7 @@ SeqName_UpdateDisplay:
 	ld	xwa, (33336:16)
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	bc, (33340)
+	ld	bc, (33340:16)
 	ld	wa, bc
 	lds	de, 1
 	calr	64897
@@ -205,7 +205,7 @@ SeqName_SetIndexPlaying:
 	ld xwa, (0x8238:16)
 	ld XBC,0x01c0000f
 	call ApPostEvent
-	ldw_d16 bc, (0x823c)
+	ld bc, (0x823c:16)
 	ld WA,BC
 	lds de, 1
 	calr BuildSlotLabel
@@ -217,7 +217,7 @@ SeqName_PostEventExit:
 	jrl SeqName_ReturnZero
 
 SeqName_GetIndexReturn:
-	ldw_d16	hl, (33340)
+	ld	hl, (33340:16)
 	extz	xhl
 SeqName_Exit:
 	popw iz
@@ -317,14 +317,14 @@ IntMed_CheckSlotLoop:
 	call SongBank_ScanActiveVoices
 	cps l, 0
 	jr z, IntMed_MarkSlotEmpty
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	ld BC,IZ
 	extz XBC
 	add XBC,XWA
 	.byte 0xb1, 0x14, 0xfe, 0x87, 0xc1, 0xfe, 0x87, 0x61
 	.byte 0x68, 0x0d
 IntMed_MarkSlotEmpty:
-	lda_d16	xwa, (34804)
+	lda	xwa, (34804:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -341,11 +341,11 @@ IntMed_CheckPlaying:
 	cps	l, 1
 	jrl	nz, 193
 	stdi8	33890, 1
-	ldb_d8	a, 34816
+	ld	a, (34816:16)
 	cpda8	a, 34814
 	jr	nc, 76
 	lds	iz, 0
-	lda_d16	xbc, 34804
+	lda	xbc, (34804:16)
 IntMed_FindCurrentSong:
 	ld	de, iz
 	extz	xde
@@ -377,7 +377,7 @@ IntMed_CheckRepeat:
 	jr	z, 87
 	stdi8	34816, 0
 	lds	iz, 0
-	lda_d16	xwa, 34804
+	lda	xwa, (34804:16)
 IntMed_PlayFromStart:
 	ld	bc, iz
 	extz	xbc
@@ -438,10 +438,10 @@ IntMed_InitSlotDisplay:
 IntMed_FormatSlotLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33350)
+	lda	xbc, (33350:16)
 	extz	xwa
 	add	xwa, xbc
-	lda_d16	xbc, (34804)
+	lda	xbc, (34804:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -451,7 +451,7 @@ IntMed_FormatSlotLoop:
 	calr	64956
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33350)
+	lda	xwa, (33350:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
@@ -462,7 +462,7 @@ IntMed_FormatSlotLoop:
 	jr	c, -66
 	jrl	661
 IntMed_HandleNavToggle:
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	cp XDE,0x0000000a
 	jrl nz, IntMed_HandleSelectToggle
 	cpdi8 (0x8462), 0x00
@@ -484,19 +484,19 @@ IntMed_CheckAllMarked:
 	lds iz, 0
 
 IntMed_AssignOrderLoop:
-	lda_d16	xwa, (34804)
+	lda	xwa, (34804:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
 	ld	a, (xbc)
 	cp	a, 254
 	jr	nz, 58
-	ldb_d8	a, (34814)
+	ld	a, (34814:16)
 	ld	(xbc), a
 	incdi8	1, (34814)
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xde, (33350)
+	lda	xde, (33350:16)
 	extz	xwa
 	add	xwa, xde
 	ld	c, (xbc)
@@ -505,7 +505,7 @@ IntMed_AssignOrderLoop:
 	calr	64820
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33350)
+	lda	xwa, (33350:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
@@ -521,7 +521,7 @@ IntMed_RemoveOrderLoop:
 	lds iz, 0
 
 IntMed_UnmarkSlotLoop:
-	lda_d16	xwa, (34804)
+	lda	xwa, (34804:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -532,7 +532,7 @@ IntMed_UnmarkSlotLoop:
 	decdi8	1, (34814)
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xde, (33350)
+	lda	xde, (33350:16)
 	extz	xwa
 	add	xwa, xde
 	ld	c, (xbc)
@@ -541,7 +541,7 @@ IntMed_UnmarkSlotLoop:
 	calr	64735
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33350)
+	lda	xwa, (33350:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
@@ -563,11 +563,11 @@ IntMed_HandleSelectToggle:
 	lds32 xde, 0
 	calr FmmSeqSongNameFunc
 	ld IZ,HL
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	ld DE,IZ
 	extz XDE
 	add XDE,XWA
-	lda_d16 xbc, (0x8246)
+	lda xbc, (0x8246:16)
 	ld WA,IZ
 	sll WA, 0x03
 	extz XWA
@@ -575,7 +575,7 @@ IntMed_HandleSelectToggle:
 	ld C,(XDE)
 	cp C,0xfe
 	jr nz, .Lc_f91c70
-	ldb_d8 c, (0x87fe)
+	ld c, (0x87fe:16)
 	ld (XDE),C
 	incdi8 1, 0x87fe
 	ld C,(XDE)
@@ -584,7 +584,7 @@ IntMed_HandleSelectToggle:
 	calr FormatMedleyNumber
 	ld DE,IZ
 	sll DE, 0x03
-	lda_d16 xbc, (0x8246)
+	lda xbc, (0x8246:16)
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
@@ -604,7 +604,7 @@ IntMed_RemoveFromOrder:
 	calr FormatMedleyNumber
 	ld DE,IZ
 	sll DE, 0x03
-	lda_d16 xbc, (0x8246)
+	lda xbc, (0x8246:16)
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
@@ -612,12 +612,12 @@ IntMed_RemoveFromOrder:
 	call ApPostEvent
 	ldw (XSP+0x02), 0x0000
 	lds iz, 0
-	ldb_d8 a, (0x87fe)
+	ld a, (0x87fe:16)
 	extz WA
 	cps wa, 0
 	jrl ule, IntMed_Exit
 IntMed_ReorderLoop:
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	ld DE,IZ
 	extz XDE
 	add XDE,XWA
@@ -634,7 +634,7 @@ IntMed_ReorderLoop:
 	.byte 0x99, 0xfa
 IntMed_NextReorder:
 	inc	1, iz
-	ldb_d8	a, (34814)
+	ld	a, (34814:16)
 	extz	wa
 	cp	(xsp+2), wa
 	jr	c, -88
@@ -717,10 +717,10 @@ DiskMed1_InitLoop:
 DiskMed1_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33434)
+	lda	xbc, (33434:16)
 	extz	xwa
 	add	xwa, xbc
-	lda_d16	xbc, (34954)
+	lda	xbc, (34954:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -730,7 +730,7 @@ DiskMed1_FormatLoop:
 	calr	64195
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33434)
+	lda	xwa, (33434:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33430:16)
@@ -758,10 +758,10 @@ DiskMed2_InitLoop:
 DiskMed2_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_24	xbc, (33438)
+	lda	xbc, (33438:24)
 	extz	xwa
 	add	xwa, xbc
-	lda_d16	xbc, (34954)
+	lda	xbc, (34954:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -772,7 +772,7 @@ DiskMed2_FormatLoop:
 	calr	64094
 	ld	wa, iz
 	sll	wa, 3
-	lda_24	xbc, (33438)
+	lda	xbc, (33438:24)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -801,11 +801,11 @@ DiskMed_PlayNextHelper:
 	jrl nz, DiskMed_ReturnZero
 	cpdi8 (0x8462), 0x00
 	jrl z, DiskMed_ReturnZero
-	ldb_d8 a, (0x8800)
+	ld a, (0x8800:16)
 	cpda8 a, (0x87fe)
 	jr nc, DiskMed_ReturnFinished
 	lds iz, 0
-	lda_d16 xbc, (0x87f4)
+	lda xbc, (0x87f4:16)
 DiskMed_FindSongLoop:
 	ld de, iz
 	extz xde
@@ -837,7 +837,7 @@ DiskMed_CheckSlotLoop:
 	stb_erp	a, 248
 	extz	wa
 	call	15861296
-	lda_d16	xbc, 34804
+	lda	xbc, (34804:16)
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xbc
@@ -1026,7 +1026,7 @@ DiskSel_CheckFinished:
 	ld	xbc, 29360138
 	lds32	xde, 0
 	call	ApPostEvent
-	ldb_d8	a, (34976)
+	ld	a, (34976:16)
 	cpda8	xbc, (34974)
 	jrl	nc, 324	; -> 0xF92288
 	lds	iz, 0
@@ -1040,14 +1040,14 @@ DiskSel_ClearSelections:
 	lds iz, 0
 
 DiskSel_FindSongLoop:
-	lda_d16 xwa, (0x888a)
+	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_NextSongLoop
 	stda16 (0x8342), iz
 	ld WA,IZ
 	call NotifyUIOfSelectionChange
-	ldw_d16 de, (0x8342)
+	ld de, (0x8342:16)
 	exts XDE
 	ld xwa, (0x833e:16)
 	ld XBC,0x01e50002
@@ -1056,7 +1056,7 @@ DiskSel_FindSongLoop:
 DiskSel_SendFileInfo:
 	ld	de, qiz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1106,7 +1106,7 @@ DiskSel_SendFileInfo:
 	ld	wa, qiz
 	lds	bc, 1
 	calr	36421
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	ldw	wa, 238
 	jrl	1272
 DiskSel_PlayNext:
@@ -1147,14 +1147,14 @@ DiskSel_RepeatClear:
 	lds iz, 0
 
 DiskSel_RepeatFindLoop:
-	lda_d16 xwa, (0x888a)
+	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_RepeatNext
 	stda16 (0x8342), iz
 	ld WA,IZ
 	call NotifyUIOfSelectionChange
-	ldw_d16 de, (0x8342)
+	ld de, (0x8342:16)
 	exts XDE
 	ld xwa, (0x833e:16)
 	ld XBC,0x01e50002
@@ -1163,7 +1163,7 @@ DiskSel_RepeatFindLoop:
 DiskSel_RepeatSendInfo:
 	ld	de, qiz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1213,7 +1213,7 @@ DiskSel_RepeatSendInfo:
 	ld	wa, qiz
 	lds	bc, 1
 	calr	36085
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	ldw	wa, 238
 	jrl	936
 DiskSel_RepeatPlayNext:
@@ -1298,7 +1298,7 @@ DiskSel_DisplayLoop:
 	ld	wa, iz
 	ld	hl, wa
 	sll	hl, 5
-	lda_d16	xde, 33904
+	lda	xde, (33904:16)
 	extz	xhl
 	add	xhl, xde
 	stb_erp	c, 248
@@ -1319,7 +1319,7 @@ DiskSel_GetFileName:
 	jr DiskSel_FormatEntry
 
 DiskSel_EmptyFileName:
-	lda_24 xbc, (Data_SaveLoadMenuTable_0x64)
+	lda xbc, (Data_SaveLoadMenuTable_0x64:24)
 
 DiskSel_FormatEntry:
 	ld	de, iz
@@ -1327,7 +1327,7 @@ DiskSel_FormatEntry:
 	sll	wa, 5
 	lds	hl, 1
 	add	hl, wa
-	lda_d16	xix, (33904)
+	lda	xix, (33904:16)
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
@@ -1337,7 +1337,7 @@ DiskSel_FormatEntry:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1348,7 +1348,7 @@ DiskSel_FormatEntry:
 	jr	lt, -125
 	jrl	768
 DiskSel_HandleNavigation:
-	ldw_d16 de, (0x8342)
+	ld de, (0x8342:16)
 	ld (XSP+0x04),DE
 	ld XBC,(XSP+0x0a)
 	ld XWA,(XSP+0x06)
@@ -1386,7 +1386,7 @@ DiskSel_SaveIndex:
 	stda16	(33602), de
 	jrl	547
 DiskSel_HandleToggle:
-	lda_d16	xhl, 34954
+	lda	xhl, (34954:16)
 	ld	xwa, (xsp+6)
 	cp	xwa, 10
 	jr	nz, 100
@@ -1518,14 +1518,14 @@ DiskSel_PlayClearLoop:
 	lds iz, 0
 
 DiskSel_PlayFindLoop:
-	lda_d16 xwa, (0x888a)
+	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_PlayNextLoop
 	stda16 (0x8342), iz
 	ld WA,IZ
 	call NotifyUIOfSelectionChange
-	ldw_d16 de, (0x8342)
+	ld de, (0x8342:16)
 	exts XDE
 	ld xwa, (0x833e:16)
 	ld XBC,0x01e50002
@@ -1553,7 +1553,7 @@ DiskSel_PlayFindLoop:
 	ld WA,QIZ
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	ldw WA, 0x00ee
 DiskSel_ShowErrorAndExit:
 	call SoundCtrl_SendCommand
@@ -1584,28 +1584,28 @@ DiskSel_HandleAllCheck:
 DiskSel_SetAllOff:
 	stdi8	(34980), 0
 DiskSel_GetCurrentIndex:
-	ldw_d16	de, (33602)
+	ld	de, (33602:16)
 DiskSel_UpdateDisplay:
 	cp	(xsp+4), de
 	jr	z, 80
 	ld	wa, de
 	call	16290296
-	ldw_d16	de, (33602)
+	ld	de, (33602:16)
 	exts	xde
 	ld	xwa, (33598:16)
 	ld	xbc, 31784962
 	call	16423243
 	ld	de, (xsp+4)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	de, (33602)
+	ld	de, (33602:16)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1621,16 +1621,16 @@ DiskSel_Exit:
 
 GetPlayState1_Entry:
 GetPlayState1:
-	ldb_d8	l, (34982)
+	ld	l, (34982:16)
 	ret
 GetPlayState2_Entry:
 GetPlayState2:
-	ldb_d8	l, (34984)
+	ld	l, (34984:16)
 	ret
 SmfMedley_RawData:
 	cps a, 0
 	scc NZ,WA
-	stb_d8 (0x88a8), a
+	ld (0x88a8:16), a
 	ret
 NavigateSongList_Entry:
 NavigateSongList:
@@ -1742,12 +1742,12 @@ SmfFmt_CalcVisible:
 SmfFmt_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, 33604
+	lda	xbc, (33604:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, qiz
 	add	bc, iz
-	lda_d16	xde, 34820
+	lda	xde, (34820:16)
 	extz	xbc
 	add	xbc, xde
 	ld	c, (xbc)
@@ -1756,7 +1756,7 @@ SmfFmt_FormatLoop:
 	calr	-4238
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, 33604
+	lda	xwa, (33604:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -1772,7 +1772,7 @@ SmfFmt_FillEmpty:
 SmfFmt_EmptyLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33604)
+	lda	xbc, (33604:16)
 	extz	xwa
 	add	xwa, xbc
 	ldw	bc, 255
@@ -1780,7 +1780,7 @@ SmfFmt_EmptyLoop:
 	calr	61239
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33604)
+	lda	xwa, (33604:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -1804,7 +1804,7 @@ FmmSmfMedleyFunc:
 	ld	xwa, xde
 	cp	xhl, 31784968
 	jrl	z, 1155
-	ldw_d16	bc, (33692)
+	ld	bc, (33692:16)
 	cp	xhl, 29360152
 	jrl	z, 685
 	cp	xhl, 29360151
@@ -1821,8 +1821,8 @@ FmmSmfMedleyFunc:
 	jrl	nz, 1127
 	lds	wa, 0
 	calr	33769
-	ldb_d8	a, (35995)
-	stb_d8	(33694), a
+	ld	a, (35995:16)
+	ld	(33694:16), a
 	cp	a, 111
 	jr	z, 5
 	cp	a, 114
@@ -1882,14 +1882,14 @@ SmfMed_ShowPlayError:
 	incdi8	1, (33696)
 SmfMed_SetPlaying:
 	stdi8	(33890), 1
-	ldb_d8	a, (34950)
+	ld	a, (34950:16)
 	cpda8	xbc, (34948)
 	jr	nc, 91	; -> 0xF92B0B
 	lds	iz, 0
-	ldw_d16	bc, (33692)
+	ld	bc, (33692:16)
 	cps	bc, 0
 	jrl	ule, 949	; -> 0xF92E70
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 SmfMed_FindSongLoop:
 	ld	hl, iz
 	extz	xhl
@@ -1902,7 +1902,7 @@ SmfMed_FindSongLoop:
 	ld	xbc, 31784962
 	calr	45445
 	ld	xwa, (33684:16)
-	ldw_d16	bc, (33692)
+	ld	bc, (33692:16)
 	calr	65016
 	incdi8	1, (34950)
 	ld	wa, iz
@@ -1926,10 +1926,10 @@ SmfMed_CheckRepeat:
 	stdi8	34950, 0
 	stdi8	33696, 0
 	lds	iz, 0
-	ldw_d16	wa, 33692
+	ld	wa, (33692:16)
 	cps	wa, 0
 	jrl	ule, 835
-	lda_d16	xbc, 34820
+	lda	xbc, (34820:16)
 SmfMed_RepeatFindLoop:
 	ld	de, iz
 	extz	xde
@@ -1942,7 +1942,7 @@ SmfMed_RepeatFindLoop:
 	ld	xbc, 31784962
 	calr	-20206
 	ld	xwa, (33684:16)
-	ldw_d16	bc, 33692
+	ld	bc, (33692:16)
 	calr	-635
 	incdi8	1, (34950)
 	ld	wa, iz
@@ -1975,7 +1975,7 @@ SmfMed_ClearPlaying:
 	jrl	725
 SmfMed_InitFromDisk:
 	lds32 xde, 0
-	ldb_d8 e, (0x88a8)
+	ld e, (0x88a8:16)
 	ld XWA,0x006c0018
 	ld XBC,0x01e0003b
 	call ApPostEvent
@@ -2003,7 +2003,7 @@ SmfMed_InitState:
 	stdi8	(34950), 0
 	stdi8	(34948), 0
 	ldw	bc, 128
-	ldw_d16	wa, (33896)
+	ld	wa, (33896:16)
 	cp	wa, 128
 	jr	ugt, 2
 	ld	bc, wa
@@ -2012,7 +2012,7 @@ SmfMed_ClampFileCount:
 	lds	iz, 0
 	cps	bc, 0
 	jr	ule, 21
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 SmfMed_ClearSlotsLoop:
 	ld	bc, iz
 	extz	xbc
@@ -2028,7 +2028,7 @@ SmfMed_FinishInit:
 	jrl	556
 SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 111
 	jrl	z, 546
 	cp	a, 114
@@ -2049,7 +2049,7 @@ SmfMed_RefreshDisplay:
 	calr	64606
 	jrl	496
 SmfMed_HandleNavToggle:
-	lda_d16 xwa, (0x8804)
+	lda xwa, (0x8804:16)
 	cp XDE,0x0000000a
 	jr nz, SmfMed_HandleSelectToggle
 	cpdi8 (0x8462), 0x00
@@ -2074,7 +2074,7 @@ SmfMed_CheckAllUnmarked:
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 73
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 SmfMed_AssignOrderLoop:
 	.byte 0xde, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
 	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x84
@@ -2086,7 +2086,7 @@ SmfMed_RemoveOrderLoop:
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 32
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 SmfMed_UnmarkLoop:
 	ld	bc, iz
 	extz	xbc
@@ -2100,7 +2100,7 @@ SmfMed_NextUnmark:
 	.byte 0xde, 0x61, 0xd1, 0x9c, 0x83, 0xf6, 0x67, 0xe4
 SmfMed_RefreshAfterToggle:
 	ld	xwa, (33684:16)
-	ldw_d16	bc, (33692)
+	ld	bc, (33692:16)
 	jr	124
 SmfMed_HandleSelectToggle:
 	.byte 0xea, 0xcf, 0x0b, 0x00, 0x00, 0x00, 0x6e, 0x7a
@@ -2115,9 +2115,9 @@ SmfMed_RemoveFromOrder:
 	cp	c, 253
 	jr	ugt, 54
 	ld	(xwa), 255
-	ldb_d8	a, (34948)
+	ld	a, (34948:16)
 	dec	1, a
-	stb_d8	(34948), a
+	ld	(34948:16), a
 	lds	iy, 0
 	lds	iz, 0
 	extz	wa
@@ -2144,7 +2144,7 @@ SmfMed_NextReorder:
 
 SmfMed_RefreshAfterSelect:
 	ld	xwa, (33684:16)
-	ldw_d16	bc, (33692)
+	ld	bc, (33692:16)
 SmfMed_CallFormatSlots:
 	calr SmfMed_FormatSlotList
 	jrl SmfMed_Exit
@@ -2167,7 +2167,7 @@ SmfMed_HandlePlay:
 	stdi8	34950, 0
 	stdi8	33696, 0
 	lds	iz, 0
-	ldw_d16	bc, 33692
+	ld	bc, (33692:16)
 	cps	bc, 0
 	jr	ule, 72
 SmfMed_PlayFindLoop:
@@ -2223,7 +2223,7 @@ SmfMed_CheckContinue:
 	ld XBC,0x01e0009a
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x839e)
+	ld a, (0x839e:16)
 	extz WA
 SmfMed_CallPauseMode:
 	call UI_PostModeChangeEvent
@@ -2244,7 +2244,7 @@ PdMed_FormatFileList:
 PdFmt_FormatLoop:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -2257,7 +2257,7 @@ PdFmt_FormatLoop:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, 33904
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -2268,7 +2268,7 @@ PdFmt_FormatLoop:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
@@ -2286,7 +2286,7 @@ FmmPdFileNameFunc:
 	ld	(xsp+2), xwa
 	cp	xbc, 31784963
 	jrl	z, 484
-	ldw_d16	wa, (33702)
+	ld	wa, (33702:16)
 	ld	iz, wa
 	cp	xbc, 31784962
 	jrl	z, 420
@@ -2308,7 +2308,7 @@ FmmPdFileNameFunc:
 	jr	ge, 6
 	stdi16	(33702), 0
 PdName_UpdateIndex:
-	ldw_d16	wa, (33702)
+	ld	wa, (33702:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -2368,12 +2368,12 @@ PdName_CheckEndBound:
 	jr	z, 4
 	stda16	(33702), bc
 PdName_GetCurrentIndex:
-	ldw_d16	wa, (33702)
+	ld	wa, (33702:16)
 PdName_UpdateDisplay:
 	cp	iz, wa
 	jrl	z, -162
 	call	16294296
-	ldw_d16	wa, (33702)
+	ld	wa, (33702:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -2381,7 +2381,7 @@ PdName_UpdateDisplay:
 	ld	xwa, (33698:16)
 	ld	xbc, 31784962
 	call	16423243
-	ldw_d16	bc, (33702)
+	ld	bc, (33702:16)
 	exts	xbc
 	divs	bc, 10
 	ld	de, iz
@@ -2395,18 +2395,18 @@ PdName_UpdateDisplay:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	wa, (33702)
+	ld	wa, (33702:16)
 	exts	xwa
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -2453,7 +2453,7 @@ PdName_PostEvent:
 	jrl PdName_ReturnZero
 
 PdName_GetIndexReturn:
-	ldw_d16	hl, (33702)
+	ld	hl, (33702:16)
 	exts	xhl
 PdName_Exit:
 	popw iz
@@ -2492,12 +2492,12 @@ PdFmtSlot_CalcVisible:
 PdFmtSlot_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, 33704
+	lda	xbc, (33704:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, qiz
 	add	bc, iz
-	lda_d16	xde, 34820
+	lda	xde, (34820:16)
 	extz	xbc
 	add	xbc, xde
 	ld	c, (xbc)
@@ -2506,7 +2506,7 @@ PdFmtSlot_FormatLoop:
 	calr	-6295
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, 33704
+	lda	xwa, (33704:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -2522,7 +2522,7 @@ PdFmtSlot_FillEmpty:
 PdFmtSlot_EmptyLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33704)
+	lda	xbc, (33704:16)
 	extz	xwa
 	add	xwa, xbc
 	ldw	bc, 255
@@ -2530,7 +2530,7 @@ PdFmtSlot_EmptyLoop:
 	calr	59182
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33704)
+	lda	xwa, (33704:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -2555,7 +2555,7 @@ FmmPdMedleyFunc:
 	ld	xwa, xhl
 	cp	xde, 31784968
 	jrl	z, 971
-	ldw_d16	bc, (33792)
+	ld	bc, (33792:16)
 	cp	xde, 29360152
 	jrl	z, 534
 	cp	xde, 29360151
@@ -2572,7 +2572,7 @@ FmmPdMedleyFunc:
 	jrl	nz, 940
 	lds	wa, 0
 	call	16297463
-	ldb_d8	a, (35995)
+	ld	a, (35995:16)
 	cp	a, 113
 	jr	nz, 25
 	stdi8	(33890), 0
@@ -2589,12 +2589,12 @@ PdMed_CheckPlayMode:
 	cps	l, 1
 	jrl	nz, 205	; -> 0xF93315
 	stdi8	(33890), 1
-	ldb_d8	c, (34950)
-	lda_d16	xwa, (34820)
+	ld	c, (34950:16)
+	lda	xwa, (34820:16)
 	cpda8	xhl, (34948)
 	jr	nc, 80	; -> 0xF932AB
 	lds	hl, 0
-	ldw_d16	de, (33792)
+	ld	de, (33792:16)
 	cps	de, 0
 	jrl	ule, 855	; -> 0xF935BD
 PdMed_FindSongLoop:
@@ -2609,7 +2609,7 @@ PdMed_FindSongLoop:
 	ld	xde, xhl
 	calr	64617
 	ld	xwa, (33784:16)
-	ldw_d16	bc, (33792)
+	ld	bc, (33792:16)
 	calr	65115
 	incdi8	1, (34950)
 	ld	xwa, (33788:16)
@@ -2677,7 +2677,7 @@ PdMed_InitState:
 	stdi8	(34950), 0
 	stdi8	(34948), 0
 	ldw	bc, 128
-	ldw_d16	wa, (33898)
+	ld	wa, (33898:16)
 	cp	wa, 128
 	jr	ugt, 2
 	ld	bc, wa
@@ -2686,7 +2686,7 @@ PdMed_ClampCount:
 	lds	hl, 0
 	cps	bc, 0
 	jr	ule, 21
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 PdMed_ClearSlotsLoop:
 	ld	bc, hl
 	extz	xbc
@@ -2701,7 +2701,7 @@ PdMed_FinishInit:
 	stda32	(33788), xwa
 	jrl	509
 PdMed_HandleStop:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 113
 	jrl	z, 499
 	cp	a, 117
@@ -2726,7 +2726,7 @@ PdMed_HandleNavToggle:
 	ld WA,BC
 	cps bc, 0
 	jr ule, PdMed_CheckAllUnmarked
-	lda_d16 xbc, (0x8804)
+	lda xbc, (0x8804:16)
 PdMed_FindUnmarkedLoop:
 	ld de, hl
 	extz xde
@@ -2743,7 +2743,7 @@ PdMed_CheckAllUnmarked:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 73
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 PdMed_AssignOrderLoop:
 	.byte 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
 	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x84
@@ -2755,7 +2755,7 @@ PdMed_RemoveOrderLoop:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 32
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 PdMed_UnmarkLoop:
 	ld	bc, hl
 	extz	xbc
@@ -2769,7 +2769,7 @@ PdMed_NextUnmark:
 	.byte 0xdb, 0x61, 0xd1, 0x00, 0x84, 0xf3, 0x67, 0xe4
 PdMed_RefreshAfterToggle:
 	ld	xwa, (33784:16)
-	ldw_d16	bc, (33792)
+	ld	bc, (33792:16)
 	jr	119
 PdMed_HandleSelectToggle:
 	cp XHL,0x0000000b
@@ -2780,7 +2780,7 @@ PdMed_HandleSelectToggle:
 	ld XBC,0x01e50003
 	lds32 xde, 0
 	calr FmmPdFileNameFunc
-	lda_d16 xix, (0x8804)
+	lda xix, (0x8804:16)
 	extz XHL
 	add XHL,XIX
 	ld C,(XHL)
@@ -2792,9 +2792,9 @@ PdMed_RemoveFromOrder:
 	cp	c, 253
 	jr	ugt, 54
 	ld	(xhl), 255
-	ldb_d8	a, (34948)
+	ld	a, (34948:16)
 	dec	1, a
-	stb_d8	(34948), a
+	ld	(34948:16), a
 	lds	iz, 0
 	lds	hl, 0
 	extz	wa
@@ -2821,7 +2821,7 @@ PdMed_NextReorder:
 
 PdMed_RefreshAfterSelect:
 	ld	xwa, (33784:16)
-	ldw_d16	bc, (33792)
+	ld	bc, (33792:16)
 PdMed_CallFormatSlots:
 	calr PdMed_FormatSlotList
 	jrl PdMed_Exit
@@ -2843,10 +2843,10 @@ PdMed_HandlePlay:
 	jrl	nz, 148
 	stdi8	34950, 0
 	lds	hl, 0
-	ldw_d16	wa, 33792
+	ld	wa, (33792:16)
 	cps	wa, 0
 	jr	ule, 69
-	lda_d16	xbc, 34820
+	lda	xbc, (34820:16)
 PdMed_PlayFindLoop:
 	ld	de, hl
 	extz	xde
@@ -2959,7 +2959,7 @@ DocMed_FormatFileList:
 DocFmt_FormatLoop:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -2972,7 +2972,7 @@ DocFmt_FormatLoop:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, 33904
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -2984,7 +2984,7 @@ DocFmt_FormatLoop:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
@@ -3002,7 +3002,7 @@ FmmDocFileNameFunc:
 	ld	(xsp+2), xwa
 	cp	xbc, 31784963
 	jrl	z, 484
-	ldw_d16	wa, (33798)
+	ld	wa, (33798:16)
 	ld	iz, wa
 	cp	xbc, 31784962
 	jrl	z, 420
@@ -3024,7 +3024,7 @@ FmmDocFileNameFunc:
 	jr	ge, 6
 	stdi16	(33798), 0
 DocName_UpdateIndex:
-	ldw_d16	wa, (33798)
+	ld	wa, (33798:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -3084,12 +3084,12 @@ DocName_CheckEndBound:
 	jr	z, 4
 	stda16	(33798), bc
 DocName_GetCurrentIndex:
-	ldw_d16	wa, (33798)
+	ld	wa, (33798:16)
 DocName_UpdateDisplay:
 	cp	iz, wa
 	jrl	z, -162
 	call	16295241
-	ldw_d16	wa, (33798)
+	ld	wa, (33798:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -3097,7 +3097,7 @@ DocName_UpdateDisplay:
 	ld	xwa, (33794:16)
 	ld	xbc, 31784962
 	call	16423243
-	ldw_d16	bc, (33798)
+	ld	bc, (33798:16)
 	exts	xbc
 	divs	bc, 10
 	ld	de, iz
@@ -3111,18 +3111,18 @@ DocName_UpdateDisplay:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	wa, (33798)
+	ld	wa, (33798:16)
 	exts	xwa
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -3169,7 +3169,7 @@ DocName_PostEvent:
 	jrl DocName_ReturnZero
 
 DocName_GetIndexReturn:
-	ldw_d16	hl, (33798)
+	ld	hl, (33798:16)
 	exts	xhl
 DocName_Exit:
 	popw iz
@@ -3209,12 +3209,12 @@ DocFmtSlot_CalcVisible:
 DocFmtSlot_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, 33800
+	lda	xbc, (33800:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, qiz
 	add	bc, iz
-	lda_d16	xde, 34820
+	lda	xde, (34820:16)
 	extz	xbc
 	add	xbc, xde
 	ld	c, (xbc)
@@ -3223,7 +3223,7 @@ DocFmtSlot_FormatLoop:
 	calr	-8258
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, 33800
+	lda	xwa, (33800:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -3239,7 +3239,7 @@ DocFmtSlot_FillEmpty:
 DocFmtSlot_EmptyLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33800)
+	lda	xbc, (33800:16)
 	extz	xwa
 	add	xwa, xbc
 	ldw	bc, 255
@@ -3247,7 +3247,7 @@ DocFmtSlot_EmptyLoop:
 	calr	57219
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33800)
+	lda	xwa, (33800:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -3271,7 +3271,7 @@ FmmDocMedleyFunc:
 	ld	xwa, xhl
 	cp	xde, 31784968
 	jrl	z, 997
-	ldw_d16	bc, (33888)
+	ld	bc, (33888:16)
 	cp	xde, 29360152
 	jrl	z, 548
 	cp	xde, 29360151
@@ -3288,7 +3288,7 @@ FmmDocMedleyFunc:
 	jrl	nz, 966
 	lds	wa, 0
 	call	16297463
-	ldb_d8	a, (35995)
+	ld	a, (35995:16)
 	cp	a, 112
 	jr	nz, 25
 	stdi8	(33890), 0
@@ -3305,12 +3305,12 @@ DocMed_CheckPlayMode:
 	cps	l, 1
 	jrl	nz, 205	; -> 0xF93AC0
 	stdi8	(33890), 1
-	ldb_d8	c, (34950)
-	lda_d16	xwa, (34820)
+	ld	c, (34950:16)
+	lda	xwa, (34820:16)
 	cpda8	xhl, (34948)
 	jr	nc, 80	; -> 0xF93A56
 	lds	hl, 0
-	ldw_d16	de, (33888)
+	ld	de, (33888:16)
 	cps	de, 0
 	jrl	ule, 881	; -> 0xF93D82
 DocMed_FindSongLoop:
@@ -3325,7 +3325,7 @@ DocMed_FindSongLoop:
 	ld	xde, xhl
 	calr	64617
 	ld	xwa, (33880:16)
-	ldw_d16	bc, (33888)
+	ld	bc, (33888:16)
 	calr	65115
 	incdi8	1, (34950)
 	ld	xwa, (33884:16)
@@ -3405,7 +3405,7 @@ DocMed_InitState:
 	stdi8	(34950), 0
 	stdi8	(34948), 0
 	ldw	bc, 128
-	ldw_d16	wa, (33900)
+	ld	wa, (33900:16)
 	cp	wa, 128
 	jr	ugt, 2
 	ld	bc, wa
@@ -3414,7 +3414,7 @@ DocMed_ClampCount:
 	lds	hl, 0
 	cps	bc, 0
 	jr	ule, 21
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 DocMed_ClearSlotsLoop:
 	ld	bc, hl
 	extz	xbc
@@ -3429,7 +3429,7 @@ DocMed_FinishInit:
 	stda32	(33884), xwa
 	jrl	521
 DocMed_HandleStop:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 112
 	jrl	z, 511
 	cp	a, 116
@@ -3454,7 +3454,7 @@ DocMed_HandleNavToggle:
 	ld WA,BC
 	cps bc, 0
 	jr ule, DocMed_CheckAllUnmarked
-	lda_d16 xbc, (0x8804)
+	lda xbc, (0x8804:16)
 DocMed_FindUnmarkedLoop:
 	ld de, hl
 	extz xde
@@ -3471,7 +3471,7 @@ DocMed_CheckAllUnmarked:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 73
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 DocMed_AssignOrderLoop:
 	.byte 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
 	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x84
@@ -3483,7 +3483,7 @@ DocMed_RemoveOrderLoop:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 32
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 DocMed_UnmarkLoop:
 	ld	bc, hl
 	extz	xbc
@@ -3497,7 +3497,7 @@ DocMed_NextUnmark:
 	.byte 0xdb, 0x61, 0xd1, 0x60, 0x84, 0xf3, 0x67, 0xe4
 DocMed_RefreshAfterToggle:
 	ld	xwa, (33880:16)
-	ldw_d16	bc, (33888)
+	ld	bc, (33888:16)
 	jr	119
 DocMed_HandleSelectToggle:
 	cp XHL,0x0000000b
@@ -3508,7 +3508,7 @@ DocMed_HandleSelectToggle:
 	ld XBC,0x01e50003
 	lds32 xde, 0
 	calr FmmDocFileNameFunc
-	lda_d16 xix, (0x8804)
+	lda xix, (0x8804:16)
 	extz XHL
 	add XHL,XIX
 	ld C,(XHL)
@@ -3520,9 +3520,9 @@ DocMed_RemoveFromOrder:
 	cp	c, 253
 	jr	ugt, 54
 	ld	(xhl), 255
-	ldb_d8	a, (34948)
+	ld	a, (34948:16)
 	dec	1, a
-	stb_d8	(34948), a
+	ld	(34948:16), a
 	lds	iz, 0
 	lds	hl, 0
 	extz	wa
@@ -3549,7 +3549,7 @@ DocMed_NextReorder:
 
 DocMed_RefreshAfterSelect:
 	ld	xwa, (33880:16)
-	ldw_d16	bc, (33888)
+	ld	bc, (33888:16)
 DocMed_CallFormatSlots:
 	calr DocMed_FormatSlotList
 	jrl DocMed_Exit
@@ -3571,10 +3571,10 @@ DocMed_HandlePlay:
 	jrl	nz, 160
 	stdi8	34950, 0
 	lds	hl, 0
-	ldw_d16	wa, 33888
+	ld	wa, (33888:16)
 	cps	wa, 0
 	jr	ule, 69
-	lda_d16	xbc, 34820
+	lda	xbc, (34820:16)
 DocMed_PlayFindLoop:
 	ld	de, hl
 	extz	xde
@@ -3638,7 +3638,7 @@ DocMed_Exit:
 SetSongSlotValue:
 	cp wa, 0xa
 	ret nc
-	lda_24 xhl, (0x0ab000)
+	lda xhl, (0x0ab000:24)
 	ld de, wa
 	sll de, 11
 	extz xde
@@ -3649,7 +3649,7 @@ SetSongSlotValue:
 	extz de
 	cp de, wa
 	ret nz
-	lda_24 xhl, (0x00f180)
+	lda xhl, (0x00f180:24)
 	add xhl, 0x1c
 	ld (xhl), bc
 	ret
@@ -3659,7 +3659,7 @@ GetSongSlotValue:
 	lds hl, 0
 	cp wa, 0xa
 	ret nc
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	sll wa, 11
 	extz xwa
 	add xbc, xwa
@@ -3776,493 +3776,493 @@ InitializeCheap:
 	lda XBC, (XSP)
 	ld XWA,0x01600004
 	ld (XBC),XWA
-	lda_24 xwa, (ClassProc)
+	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
 	ldw_da wa, (0xea1186)
 	ld (XBC+0x08),WA
-	lda_24 xwa, (0xea0f46)
+	lda xwa, (0xea0f46:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0165
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000c
 	ld (XBC),XWA
-	lda_24 xwa, (ResEventProc)
+	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
 	ldw_da wa, (0xea11f2)
 	ld (XBC+0x08),WA
-	lda_24 xwa, (PtrTbl_EventNames_EA1188)
+	lda xwa, (PtrTbl_EventNames_EA1188:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01c5
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000d
 	ld (XBC),XWA
-	lda_24 xwa, (ResMethodProc)
+	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
 	ldw_da wa, (0xea1358)
 	ld (XBC+0x08),WA
-	lda_24 xwa, (0xea11f4)
+	lda xwa, (0xea11f4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01e5
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600002
 	ld (XBC),XWA
-	lda_24 xwa, (ApFunctionProc)
+	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001d
-	lda_24 xwa, (0xea0a56)
+	lda xwa, (0xea0a56:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0125
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600002
 	ld (XBC),XWA
-	lda_24 xwa, (ApFunctionProc)
+	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001d
-	lda_24 xwa, (PtrTbl_DiskFuncNames)
+	lda xwa, (PtrTbl_DiskFuncNames:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0425
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600001
 	ld (XBC),XWA
-	lda_24 xwa, (FunctionProc)
+	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000d
-	lda_24 xwa, (0xea135a)
+	lda xwa, (0xea135a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0105
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600001
 	ld (XBC),XWA
-	lda_24 xwa, (FunctionProc)
+	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000d
-	lda_24 xwa, (PtrTbl_NakaModuleHandlers)
+	lda xwa, (PtrTbl_NakaModuleHandlers:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0405
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600003
 	ld (XBC),XWA
-	lda_24 xwa, (MainFunctionProc)
+	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0039
-	lda_24 xwa, (0xea7fce)
+	lda xwa, (0xea7fce:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0145
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600003
 	ld (XBC),XWA
-	lda_24 xwa, (MainFunctionProc)
+	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0039
-	lda_24 xwa, (0xea80b6)
+	lda xwa, (0xea80b6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0445
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x004a
-	lda_24 xwa, (0xea67b6)
+	lda xwa, (0xea67b6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0060
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x004a
-	lda_24 xwa, (0xea6fe2)
+	lda xwa, (0xea6fe2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0360
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0080
-	lda_24 xwa, (0xea68e2)
+	lda xwa, (0xea68e2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0061
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0080
-	lda_24 xwa, (0xea7228)
+	lda xwa, (0xea7228:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0361
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6ae6)
+	lda xwa, (0xea6ae6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0062
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea75c6)
+	lda xwa, (0xea75c6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0362
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6aea)
+	lda xwa, (0xea6aea:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0063
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea75cc)
+	lda xwa, (0xea75cc:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0363
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6aee)
+	lda xwa, (0xea6aee:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0064
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea75d2)
+	lda xwa, (0xea75d2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0364
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda_24 xwa, (0xea6af2)
+	lda xwa, (0xea6af2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0065
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda_24 xwa, (0xea75d8)
+	lda xwa, (0xea75d8:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0365
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6b02)
+	lda xwa, (0xea6b02:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0066
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea75fc)
+	lda xwa, (0xea75fc:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0366
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0047
-	lda_24 xwa, (0xea6b06)
+	lda xwa, (0xea6b06:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0067
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0047
-	lda_24 xwa, (0xea7602)
+	lda xwa, (0xea7602:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0367
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6c26)
+	lda xwa, (0xea6c26:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006a
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea77e4)
+	lda xwa, (0xea77e4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036a
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda_24 xwa, (0xea6c2a)
+	lda xwa, (0xea6c2a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006b
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda_24 xwa, (0xea77ea)
+	lda xwa, (0xea77ea:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036b
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0053
-	lda_24 xwa, (0xea6c82)
+	lda xwa, (0xea6c82:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006c
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0053
-	lda_24 xwa, (0xea7878)
+	lda xwa, (0xea7878:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036c
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6dd2)
+	lda xwa, (0xea6dd2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006d
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea7aca)
+	lda xwa, (0xea7aca:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036d
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6dd6)
+	lda xwa, (0xea6dd6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006e
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea7ad0)
+	lda xwa, (0xea7ad0:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036e
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda_24 xwa, (0xea6dda)
+	lda xwa, (0xea6dda:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0077
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda_24 xwa, (0xea7ad6)
+	lda xwa, (0xea7ad6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0377
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6e32)
+	lda xwa, (0xea6e32:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0079
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea7b8c)
+	lda xwa, (0xea7b8c:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0379
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x005e
-	lda_24 xwa, (0xea6e36)
+	lda xwa, (0xea6e36:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007b
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x005e
-	lda_24 xwa, (0xea7b92)
+	lda xwa, (0xea7b92:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037b
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6fb2)
+	lda xwa, (0xea6fb2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007c
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea7e98)
+	lda xwa, (0xea7e98:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037c
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6fb6)
+	lda xwa, (0xea6fb6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007d
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea7e9e)
+	lda xwa, (0xea7e9e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037d
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xea6fba)
+	lda xwa, (0xea6fba:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007e
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xea7ea4)
+	lda xwa, (0xea7ea4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037e
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea6fde)
+	lda xwa, (0xea6fde:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00bc
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda_24 xwa, (0xea7ee2)
+	lda xwa, (0xea7ee2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03bc
 	call RegisterObjectTable
@@ -4345,7 +4345,7 @@ InitializeCheap:
 PasswordText:
 	cp xbc, 0x1e0009f
 	jr nz, PasswordText_Exit
-	lda_24 xhl, (NakaInst_WaitWinCtlSmf_0x7C8)
+	lda xhl, (NakaInst_WaitWinCtlSmf_0x7C8:24)
 	ret
 
 PasswordText_Exit:
@@ -4567,7 +4567,7 @@ CheckOk_HandleConfirm:
 	ld xbc, 0x1e00056
 	lds32 xde, 0
 	call SendEvent
-	lda_24 xwa, (0x027424)
+	lda xwa, (0x027424:24)
 	cps hl, 1
 	jr nz, CheckOk_Type2
 	ld de, (xwa)
@@ -4646,7 +4646,7 @@ CheckNo_HandleConfirm:
 DiskAttention:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type1
-	lda_24 xhl, (NakaInst_WaitWinCtlSmf_0xDFE)
+	lda xhl, (NakaInst_WaitWinCtlSmf_0xDFE:24)
 	ret
 
 CheckNo_Type1:
@@ -4656,7 +4656,7 @@ CheckNo_Type1:
 DiskSure:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type2
-	lda_24 xhl, (NakaInst_WaitWinCtlSmf_0xE5C)
+	lda xhl, (NakaInst_WaitWinCtlSmf_0xE5C:24)
 	ret
 
 CheckNo_Type2:
@@ -4666,7 +4666,7 @@ CheckNo_Type2:
 FormatText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type3
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x30)
+	lda xhl, (DiskWarning_ConfirmStrings_0x30:24)
 	ret
 
 CheckNo_Type3:
@@ -4676,7 +4676,7 @@ CheckNo_Type3:
 DeleteText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_CallFunc
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x1C4)
+	lda xhl, (DiskWarning_ConfirmStrings_0x1C4:24)
 	ret
 
 CheckNo_CallFunc:
@@ -4730,7 +4730,7 @@ PwdChange_Type1:
 SaveText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdChange_CallFunc
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x47E)
+	lda xhl, (DiskWarning_ConfirmStrings_0x47E:24)
 	ret
 
 PwdChange_CallFunc:
@@ -4784,7 +4784,7 @@ PwdDel_Type1:
 InsertOptionText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdDel_Type2
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x790)
+	lda xhl, (DiskWarning_ConfirmStrings_0x790:24)
 	ret
 
 PwdDel_Type2:
@@ -4794,7 +4794,7 @@ PwdDel_Type2:
 TypePriorityText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdDel_CallFunc
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x8AC)
+	lda xhl, (DiskWarning_ConfirmStrings_0x8AC:24)
 	ret
 
 PwdDel_CallFunc:

@@ -34,16 +34,16 @@ SeMenu_LoadRawAddr:
 
 
 SeMenu_TriggerNotification:
-	stb_d8 (0x7ea6), a
+	ld (0x7ea6:16), a
 	stdi8 (0xe316), 0xee
 	setda 6, (0xe318)
 	ret
 SeMenu_ClearNotification:
-	stb_d8 (0xe316), a
+	ld (0xe316:16), a
 	setda 1, (0xe318)
 	ret
 SeMenu_StoreEventId:
-	stb_d8 (1688), a
+	ld (1688:16), a
 	ret
 
 SeMenu_LoadObjectPtr_Data:
@@ -59,7 +59,7 @@ SeMenu_LoadMasterPtr:
 SeMenu_FlushDisplayObj:
 	ld xde, xwa
 	ld xbc, xde
-	lda_d16 xhl, (1689)
+	lda xhl, (1689:16)
 	lda xix, (xde + 9)
 
 SeMenu_FlushDisplayObj_CopyLoop:
@@ -739,15 +739,15 @@ SeMenu_SetDisplayValue_Data:
 	ld	c, (xwa+4)
 	.byte 0x87, 0x3f, 0x01
 	jr	nz, 8
-	lda_d16	xwa, 63952
+	lda	xwa, (63952:16)
 	ld	(xwa), e
 	jr	19
 	.byte 0x87, 0x3f, 0x02
 	jr	nz, 8
-	lda_d16	xwa, 63978
+	lda	xwa, (63978:16)
 	ld	(xwa), e
 	jr	6
-	lda_d16	xwa, 63926
+	lda	xwa, (63926:16)
 	ld	(xwa), e
 	ld	(xwa+1), c
 	extz	bc
@@ -775,18 +775,18 @@ SeMenu_InitTrackInfo:
 	ld C,(XWA+0x04)
 	cp (XSP),0x01
 	jr nz, SeMenu_InitTrackInfo_Part1
-	lda_d16 xwa, (0xf9d0)
+	lda xwa, (0xf9d0:16)
 	ld (XWA),E
 	jr t, SeMenu_InitTrackInfo_Store
 SeMenu_InitTrackInfo_Part1:
 	cp (xsp), 0x2
 	jr nz, SeMenu_InitTrackInfo_Part2
-	lda_d16 xwa, (0xf9ea)
+	lda xwa, (0xf9ea:16)
 	ld (xwa), e
 	jr SeMenu_InitTrackInfo_Store
 
 SeMenu_InitTrackInfo_Part2:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	ld (xwa), e
 
 SeMenu_InitTrackInfo_Store:
@@ -1007,7 +1007,7 @@ SeMenu_SetupMenuDisplay_Section3_Loop:
 SeMenu_SetupMenuDisplay_Section3_End:
 	cps	a, 0
 	scc8	nz, a
-	stb_d8	(1628), a
+	ld	(1628:16), a
 	ret
 
 SeMenu_SetupMenuDisplay_Finalize:
@@ -1019,7 +1019,7 @@ SeMenu_SetupMenuDisplay_Finalize_Data:
 	jr	c, 9
 	cps	a, 4
 	jr	ugt, 5
-	stb_d8	(1629), a
+	ld	(1629:16), a
 	ret
 	stdi8	(1629), 1
 	ret
@@ -1028,7 +1028,7 @@ SeMenu_ValidatePartNumber:
 	dec 4, xsp
 	pushw_erp 0xfa
 	ld (xsp + 2), xwa
-	ldb_d8 c, (1629)
+	ld c, (1629:16)
 	cps c, 1
 	jr c, SeMenu_ValidatePartNumber_Default
 	cps c, 4
@@ -1069,7 +1069,7 @@ SeMenu_ValidatePartNumber_NextPart:
 SeMenu_ValidatePartNumber_Store:
 	ld xwa, (xsp + 2)
 	ld (xwa), c
-	stb_d8 (1629), c
+	ld (1629:16), c
 
 SeMenu_ValidatePartNumber_End:
 	popw_erp 0xfa
@@ -1077,7 +1077,7 @@ SeMenu_ValidatePartNumber_End:
 	ret
 
 SeMenu_StorePartMask:
-	stb_d8 (1630), a
+	ld (1630:16), a
 	ret
 
 SeMenu_PartMask_Data:
@@ -1156,7 +1156,7 @@ SeMenu_IsPartEnabled_CheckMask:
 	extz bc
 	lds wa, 1
 	calr SeMenu_BitShiftMask
-	ldb_d8 a, (1630)
+	ld a, (1630:16)
 	and a, l
 	cps a, 0
 	scc16 nz, hl
@@ -1164,7 +1164,7 @@ SeMenu_IsPartEnabled_CheckMask:
 
 SeMenu_StorePartParam:
 	extz wa
-	lda_d16 xde, (1632)
+	lda xde, (1632:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -1172,7 +1172,7 @@ SeMenu_StorePartParam:
 
 SeMenu_LoadPartParam:
 	extz wa
-	lda_d16 xde, (1632)
+	lda xde, (1632:16)
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
@@ -1507,51 +1507,51 @@ SeMenu_TransferPartValues_End2:
 SeMenu_TransferPartValues_EndData:
 	cps	a, 1
 	jr	nz, 23
-	ldb_d8	a, (1678)
+	ld	a, (1678:16)
 	cps	a, 1
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
 	stdi8	(1678), 1
-	ldb_d8	a, (1678)
+	ld	a, (1678:16)
 	jr	56
 	cps	a, 0
 	jr	nz, 23
-	ldb_d8	a, (1677)
+	ld	a, (1677:16)
 	cps	a, 1
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
 	stdi8	(1677), 1
-	ldb_d8	a, (1677)
+	ld	a, (1677:16)
 	jr	29
 	cps	a, 2
 	jr	nz, 23
-	ldb_d8	a, (1679)
+	ld	a, (1679:16)
 	cps	a, 1
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
 	stdi8	(1679), 1
-	ldb_d8	a, (1679)
+	ld	a, (1679:16)
 	jr	2
 	ldb	a, 1
 	ld	(xbc), a
 	ret
 	cps	a, 0
 	jr	nz, 12
-	lda_d16	xwa, (1677)
+	lda	xwa, (1677:16)
 	cps	c, 0
 	jr	z, 24
 	decm8	1, (xwa)
 	jr	22
 	cps	a, 1
 	jr	nz, 6
-	lda_d16	xwa, (1678)
+	lda	xwa, (1678:16)
 	jr	-18
 	cps	a, 2
 	ret	nz
-	lda_d16	xwa, (1679)
+	lda	xwa, (1679:16)
 	jr	-28
 	incm8	1, (xwa)
 	.byte 0x80
@@ -1565,7 +1565,7 @@ SeMenu_TransferPartValues_EndData:
 	ret	nz
 	ld	(xwa), 1
 	ret
-	ldb_d8	c, (1685)
+	ld	c, (1685:16)
 	cps	c, 1
 	jr	c, 4
 	cps	c, 6
@@ -1573,7 +1573,7 @@ SeMenu_TransferPartValues_EndData:
 	ldb	c, 1
 	ld	(xwa), c
 	ret
-	stb_d8	(1685), a
+	ld	(1685:16), a
 	ret
 	cps	a, 6
 	jr	z, 16
@@ -1920,7 +1920,7 @@ SeMenu_ReadObjData:
 	ret
 
 SeMenu_SetCurrentStep:
-	stb_d8 (1683), a
+	ld (1683:16), a
 	ret
 
 SeMenu_ResetSubIndex:
@@ -1928,13 +1928,13 @@ SeMenu_ResetSubIndex:
 	ret
 
 SeMenu_AdvanceSubIndex:
-	ldb_d8 l, (1684)
+	ld l, (1684:16)
 	inc 1, l
-	stb_d8 (1684), l
+	ld (1684:16), l
 	ret
 
 SeMenu_ReadObjParam_Data:
-	stb_d8	(1684), a
+	ld	(1684:16), a
 	ret
 
 SeMenu_ReadObjParam:
@@ -1956,7 +1956,7 @@ SeMenu_CheckObjValid:
 	ret
 
 SeMenu_FillEntryTable:
-	lda_24 xhl, (0x020c33)
+	lda xhl, (0x020c33:24)
 	ld c, (xhl + 3)
 	ldb_erp C, 0xe6
 	ldib_erp 0xea, 0
@@ -1980,7 +1980,7 @@ SeMenu_FillEntryTable_Loop:
 
 SeMenu_FillObjTable:
 	ld xhl, xwa
-	lda_24 xde, (0x020c39)
+	lda xde, (0x020c39:24)
 	ld xbc, xde
 	lda xde, (xde + 25)
 
@@ -1997,7 +1997,7 @@ SeMenu_SetupPartDisplay:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020bf3)
+	lda xix, (0x020bf3:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Loop:
@@ -2015,7 +2015,7 @@ SeMenu_SetupPartDisplay_Alt:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020c03)
+	lda xix, (0x020c03:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_AltLoop:
@@ -2033,7 +2033,7 @@ SeMenu_SetupPartDisplay_Mode2:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020c13)
+	lda xix, (0x020c13:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Mode2Loop:
@@ -2051,7 +2051,7 @@ SeMenu_SetupPartDisplay_Mode3:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020c23)
+	lda xix, (0x020c23:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Mode3Loop:
@@ -2069,7 +2069,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134131)
+	lda xix, (134131:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -2083,7 +2083,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134147)
+	lda xix, (134147:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -2097,7 +2097,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134163)
+	lda xix, (134163:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -2111,7 +2111,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134179)
+	lda xix, (134179:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -4222,7 +4222,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div A,0x0c
 	ld A,W
 	extz WA
-	lda_24 xde, (GUI_DisplayStructData_0x1110)
+	lda xde, (GUI_DisplayStructData_0x1110:24)
 	ldb_dri e, 0x07, 0xe8, 0xe0
 	mul L,0x1c
 	add L,E
@@ -4425,7 +4425,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+24)
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 14737659
+	lda	xbc, (14737659:24)
 	ld_rrw	wa, xbc, wa
 	ld	(xsp), wa
 	ldw	(xsp+2), 20
@@ -4958,13 +4958,13 @@ SeMenu_ApplyPartEdit_Data2:
 	dec	1, a
 	extz	wa
 	add	wa, wa
-	lda_d16	xde, 1698
+	lda	xde, (1698:16)
 	st_rrw	bc, xde, wa
 	ret
 	dec	1, a
 	extz	wa
 	add	wa, wa
-	lda_d16	xde, 1698
+	lda	xde, (1698:16)
 	ld_rrw	wa, xde, wa
 	ld	(xbc), wa
 	ret
@@ -4972,7 +4972,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ret
 	.byte 0xb0, 0x16, 0xaa, 0x06
 	ret
-	stb_d8	1708, a
+	ld	(1708:16), a
 	ret
 	.byte 0xb0, 0x14, 0xac, 0x06
 	ret
@@ -5145,7 +5145,7 @@ SeMenu_ApplyFilter_SetupDisplay:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (1698)
+	lda xbc, (1698:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp + 2)
 	ld c, (xhl + 15)
@@ -5199,7 +5199,7 @@ SeMenu_ApplySynthParam_Alt:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (1698)
+	lda xbc, (1698:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp)
 	ld c, (xhl + 15)
@@ -5281,7 +5281,7 @@ SeMenu_ApplySynthParam_Data:
 	ld	xbc, 0x0e62ef5e
 
 SeMenu_SetSelectedRow:
-	stb_d8 (1711), a
+	ld (1711:16), a
 	ret
 
 SeMenu_SetSelectedRow_Data:
@@ -5295,7 +5295,7 @@ SeMenu_LoadObjEntries:
 	ret
 
 SeMenu_SetMode:
-	stb_d8 (1710), a
+	ld (1710:16), a
 	ret
 
 SeMenu_SetMode_Data:
@@ -5317,7 +5317,7 @@ SeMenu_LoadSoundBankCfg:
 	ret
 
 SeMenu_SetSoundBank:
-	stb_d8 (1716), a
+	ld (1716:16), a
 	ret
 
 SeMenu_LoadFilterType:
@@ -5325,7 +5325,7 @@ SeMenu_LoadFilterType:
 	ret
 
 SeMenu_SetFilterParam1:
-	stb_d8 (1717), a
+	ld (1717:16), a
 	ret
 
 SeMenu_LoadFilterParam2:
@@ -5333,11 +5333,11 @@ SeMenu_LoadFilterParam2:
 	ret
 
 SeMenu_SetFilterMode:
-	stb_d8 (1718), a
+	ld (1718:16), a
 	ret
 
 SeMenu_SetFilterCoeff:
-	stb_d8 (1721), a
+	ld (1721:16), a
 	ret
 
 SeMenu_LoadEditParam:
@@ -5497,7 +5497,7 @@ SeMenu_HandleMenuChange_Data:
 	push_a
 	.byte 0xb7, 0x06
 	ret
-	stb_d8	(1719), a
+	ld	(1719:16), a
 	ret
 
 SeMenu_LoadPatchStatus:
@@ -5505,7 +5505,7 @@ SeMenu_LoadPatchStatus:
 	ret
 
 SeMenu_SetPatchBank:
-	stb_d8 (1720), a
+	ld (1720:16), a
 	ret
 
 SeMenu_PatchBank_Data:
@@ -5517,9 +5517,9 @@ SeMenu_PatchBank_Data:
 	calr	51762
 	ld	a, (xsp+6)
 	extz	wa
-	lda_d16	xix, (0xf9b6)
-	lda_d16	xhl, (0xf9d0)
-	lda_d16	xde, (0xf9ea)
+	lda	xix, (0xf9b6:16)
+	lda	xhl, (0xf9d0:16)
+	lda	xde, (0xf9ea:16)
 	ld	bc, wa
 	extz	xbc
 	add	xbc, xde
@@ -5685,7 +5685,7 @@ SeMenu_OrPartConfig_Data:
 SeMenu_StoreParamByte:
 	dec 1, a
 	extz wa
-	lda_d16 xde, (1722)
+	lda xde, (1722:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -5694,7 +5694,7 @@ SeMenu_StoreParamByte:
 SeMenu_LoadParamByte:
 	dec 1, a
 	extz wa
-	lda_d16 xde, (1722)
+	lda xde, (1722:16)
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
@@ -5702,7 +5702,7 @@ SeMenu_LoadParamByte:
 	ret
 
 SeMenu_SetConfirmState:
-	stb_d8 (1732), a
+	ld (1732:16), a
 	ret
 
 SeMenu_LoadConfirmData:
@@ -5714,7 +5714,7 @@ SeMenu_ReturnZero:
 	ret
 
 SeMenu_SetDisplayState:
-	stb_d8 (1733), a
+	ld (1733:16), a
 	ret
 
 SeMenu_DisplayState_Data:
@@ -5722,7 +5722,7 @@ SeMenu_DisplayState_Data:
 	push_a
 	.byte 0xc5, 0x06
 	ret
-	stb_d8	(1626), a
+	ld	(1626:16), a
 	ret
 	.byte 0xb0
 	push_a
@@ -5731,7 +5731,7 @@ SeMenu_DisplayState_Data:
 
 SeMenu_StoreEffectParam:
 	extz wa
-	lda_d16 xde, (1726)
+	lda xde, (1726:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -5739,7 +5739,7 @@ SeMenu_StoreEffectParam:
 
 SeMenu_StoreEffectParam_Data:
 	extz	wa
-	lda_d16	xde, (1726)
+	lda	xde, (1726:16)
 	extz	xwa
 	add	xwa, xde
 	ld	a, (xwa)
@@ -5748,7 +5748,7 @@ SeMenu_StoreEffectParam_Data:
 
 SeMenu_StoreEffectCoeff:
 	extz wa
-	lda_d16 xde, (1729)
+	lda xde, (1729:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -5756,7 +5756,7 @@ SeMenu_StoreEffectCoeff:
 
 SeMenu_StoreEffectCoeff_Data:
 	extz	wa
-	lda_d16	xde, (1729)
+	lda	xde, (1729:16)
 	extz	xwa
 	add	xwa, xde
 	ld	a, (xwa)
@@ -5885,7 +5885,7 @@ SeMenu_StoreEffectCoeff_Data:
 	ret
 
 SeMenu_RefreshPartDisplay:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	ld c, (xwa)
 	ld a, (xwa + 1)
 	extz wa
@@ -5894,7 +5894,7 @@ SeMenu_RefreshPartDisplay:
 	pushw bc
 	pushw 0x0
 	call SeMenu_DisplayPartValue
-	lda_d16 xwa, (0xf9d0)
+	lda xwa, (0xf9d0:16)
 	ld c, (xwa)
 	ld a, (xwa + 1)
 	extz wa
@@ -5903,7 +5903,7 @@ SeMenu_RefreshPartDisplay:
 	pushw bc
 	pushw 0x1
 	call SeMenu_DisplayPartValue
-	lda_d16 xwa, (0xf9ea)
+	lda xwa, (0xf9ea:16)
 	ld c, (xwa)
 	ld a, (xwa + 1)
 	extz wa
@@ -5939,7 +5939,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x1222)
+	lda xde, (GUI_DisplayStructData_0x1222:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5959,7 +5959,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x126A)
+	lda xde, (GUI_DisplayStructData_0x126A:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5979,7 +5979,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x12B2)
+	lda xde, (GUI_DisplayStructData_0x12B2:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5999,7 +5999,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x12FA)
+	lda xde, (GUI_DisplayStructData_0x12FA:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -6019,7 +6019,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda xbc, (xsp + 0x02)
 	ld A,(XSP+0x0e)
 	extz WA
-	lda_24 xde, (GUI_DisplayStructData_0x1342)
+	lda xde, (GUI_DisplayStructData_0x1342:24)
 	ldb_dri a, 0x07, 0xe8, 0xe0
 	ld (XBC),A
 	ld (XBC+0x06),0x1f
@@ -6036,7 +6036,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jr nz, .Lc_f09d35
 	ld A,(XSP+0x05)
 	extz WA
-	lda_24 xbc, (GUI_DisplayStructData_0x1362)
+	lda xbc, (GUI_DisplayStructData_0x1362:24)
 	ldb_dri c, 0x07, 0xe4, 0xe0
 	ld (XSP+0x0e),C
 	extz BC

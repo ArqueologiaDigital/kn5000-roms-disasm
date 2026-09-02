@@ -16,7 +16,7 @@ FmmPasswordFunc:
 	ld	wa, iz
 	cp	xbc, 31784976
 	jrl	z, 339
-	lda_d16	xde, (35184)
+	lda	xde, (35184:16)
 	cp	xbc, 31784975
 	jrl	z, 195
 	cp	xbc, 31784974
@@ -74,7 +74,7 @@ Password_HandleSaveEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, .Lc_f8c61d
-	lda_d16 xwa, (0x8971)
+	lda xwa, (0x8971:16)
 	set 7,(XWA)
 	set 6,(XWA)
 	ld XWA,(XSP+0x04)
@@ -176,10 +176,10 @@ SelectMode_DetermineMode:
 	ldb a, 0x3
 
 SelectMode_SetBothMode:
-	stb_d8	(35184), a
+	ld	(35184:16), a
 	jr	25
 SelectMode_SingleMode:
-	lda_d16	xbc, 35184
+	lda	xbc, (35184:16)
 	cpib_erp	250, 0
 	jr	z, 5
 	ld	(xbc), 1
@@ -194,7 +194,7 @@ SelectMode_StoreMode:
 	ld (xbc), a
 
 SelectMode_Return:
-	ldb_d8	l, (35184)
+	ld	l, (35184:16)
 	extz	hl
 	pop	xiz
 	ret
@@ -241,7 +241,7 @@ FileName_DrawItemLoop:
 	ld	wa, (xsp+6)
 	ld	hl, wa
 	sll	hl, 5
-	lda_d16	xde, 33904
+	lda	xde, (33904:16)
 	extz	xhl
 	add	xhl, xde
 	ld	bc, (xsp+6)
@@ -253,7 +253,7 @@ FileName_DrawItemLoop:
 	sll	wa, 5
 	lds	hl, 1
 	add	hl, wa
-	lda_d16	xix, 33904
+	lda	xix, (33904:16)
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
@@ -263,7 +263,7 @@ FileName_DrawItemLoop:
 	call	16289232
 	ld	de, (xsp+6)
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
@@ -329,7 +329,7 @@ FileName_OpSave:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	ldw_d16	wa, 32478
+	ld	wa, (32478:16)
 	extz	wa
 	calr	-6531
 	lds	wa, 0
@@ -338,7 +338,7 @@ FileName_OpSave:
 	ld	wa, hl
 	lds	bc, 1
 	calr	-6204
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-6769
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -388,7 +388,7 @@ FileName_OpLoad:
 	cps	hl, 0
 	jr	z, 19
 	lds32	xde, 0
-	ldb_d8	e, (35184)
+	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
 	jrl	338
@@ -418,7 +418,7 @@ FileName_OpLoad_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	59098
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -453,7 +453,7 @@ FileName_OpFormat:
 	ld	wa, hl
 	lds	bc, 5
 	calr	58975
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -506,7 +506,7 @@ FileName_OpDelete_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	58800
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	58235
 	call	16290139
 	call	16290094
@@ -531,7 +531,7 @@ FileName_OpFormatVariant:
 	ld	wa, hl
 	lds	bc, 5
 	calr	58715
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	58150
 	call	16290139
 	call	16290094
@@ -550,7 +550,7 @@ FileName_OpNavigate:
 	cps	hl, 0
 	jrl	z, 134
 	ld	xbc, (xsp+8)
-	ldw_d16	wa, (32478)
+	ld	wa, (32478:16)
 	cp	xbc, 29360152
 	jr	nz, 16
 	ld	bc, wa
@@ -577,12 +577,12 @@ FileName_Navigate_CheckChanged:
 	call	16423243
 	lds	wa, 0
 	calr	-7615
-	ldw_d16	wa, 32478
+	ld	wa, (32478:16)
 	call	16286763
 	ld	wa, hl
 	lds	bc, 5
 	calr	-6980
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-7545
 	call	16290928
 	stda16	33894, hl
@@ -595,28 +595,28 @@ FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 FileName_GetSelection:
-	ldw_d16	wa, (32478)
+	ld	wa, (32478:16)
 FileName_UpdateDisplay:
 	cp	(xsp+4), wa
 	jrl	z, 363	; -> 0xF8CD60
 	call	NotifyUIOfSelectionChange
 	stdi8	(35164), 4
-	ldw_d16	de, (32478)
+	ld	de, (32478:16)
 	exts	xde
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	call	ApPostEvent
 	ld	de, (xsp+4)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
 	ld	xbc, 29360143
 	call	ApPostEvent
-	ldw_d16	de, (32478)
+	ld	de, (32478:16)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)

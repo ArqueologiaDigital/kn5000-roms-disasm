@@ -20,7 +20,7 @@ MiddleFuncCall:
 	add xwa, xwa
 	add xwa, SepaOut_Config_0_0x202
 	ld wa, (xwa)
-	lda_24 xix, (MiddleFuncCall_DispatchData)
+	lda xix, (MiddleFuncCall_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
@@ -126,7 +126,7 @@ SongBank_ComputeTableOfs:
 	push xiz
 	ld hl, bc
 	ld (xsp + 4), wa
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	ld wa, (xsp + 4)
 	extz xwa
 	sll xwa, 11
@@ -134,7 +134,7 @@ SongBank_ComputeTableOfs:
 	lda_dri XBC, 0xe5, 0x00, 0x01
 	ld wa, (xsp + 4)
 	mul wa, 0x15
-	lda_d16 xix, (6906)
+	lda xix, (6906:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xix
@@ -164,7 +164,7 @@ SongBank_CopyNameAndFinish:
 	ld (xiz + 16), 0x0
 	ld wa, (xsp + 4)
 	mul wa, 0x15
-	lda_d16 xbc, (6906)
+	lda xbc, (6906:16)
 	extz xwa
 	add xwa, xbc
 	ld xhl, xwa
@@ -213,7 +213,7 @@ SeqSongName_RefreshLoop:
 	jrl SongBank_ReturnZero
 
 SongBank_HandleNextPrev:
-	ldw_d16 xwa, (7120)
+	ld wa, (7120:16)
 	ld iz, wa
 	cp xbc, 0x1c00018
 	jr nz, SeqSongName_CheckPrev
@@ -233,7 +233,7 @@ SeqSongName_StoreCurrent:
 	stda16 (7120), xwa
 
 SongBank_StoreCurrentSong:
-	ldw_d16 xde, (7120)
+	ld de, (7120:16)
 	cp iz, de
 	jr z, SongBank_ReturnZero
 	extz xde
@@ -248,7 +248,7 @@ SongBank_StoreCurrentSong:
 	ld xwa, (7116:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xbc, (7120)
+	ld bc, (7120:16)
 	ld wa, bc
 	lds de, 1
 	calr SongBank_ComputeTableOfs
@@ -257,9 +257,9 @@ SongBank_StoreCurrentSong:
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	stb_erp A, 0xf8
-	stb_d8 (7500), a
-	ldw_d16 xwa, (7120)
-	stb_d8 (7502), a
+	ld (7500:16), a
+	ld wa, (7120:16)
+	ld (7502:16), a
 	push xde
 	push xhl
 	push xix
@@ -279,13 +279,13 @@ SongBank_LookupTableEntry:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), wa
-	lda_d16 xix, (4421)
+	lda xix, (4421:16)
 	ld wa, (xsp + 4)
 	extz xwa
 	add xix, xwa
 	ld wa, (xsp + 4)
 	mul wa, 0x7
-	lda_d16 xhl, (7122)
+	lda xhl, (7122:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xhl
@@ -320,7 +320,7 @@ SongBankLookup_BuildAudioCmd:
 	ld	(xiz+4), 0
 	ld	wa, (xsp+4)
 	mul	wa, 7
-	lda_d16	xbc, (7122)
+	lda	xbc, (7122:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	xhl, xwa
@@ -367,7 +367,7 @@ SeqSongMem_RefreshLoop:
 	jr SongBank_EventHandler_Return
 
 SongBank_HandleNextPrevAlt:
-	ldw_d16 xwa, (7196)
+	ld wa, (7196:16)
 	ld iz, wa
 	cp xbc, 0x1c00018
 	jr nz, SeqSongMem_CheckPrev
@@ -387,7 +387,7 @@ SeqSongMem_StoreCurrent:
 	stda16 (7196), xwa
 
 SongBank_EventCompare:
-	ldw_d16 xde, (7196)
+	ld de, (7196:16)
 	cp iz, de
 	jr z, SongBank_EventHandler_Return
 	extz xde
@@ -402,7 +402,7 @@ SongBank_EventCompare:
 	ld xwa, (7192:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xbc, (7196)
+	ld bc, (7196:16)
 	ld wa, bc
 	lds de, 0
 	calr SongBank_LookupTableEntry
@@ -425,7 +425,7 @@ CDlikeSwTtl_DispatchData:
 	ret
 	bitda 0, (0x0ce0)
 	jr nz, .Lc_f22901
-	ldb_d8 a, (0x0cdf)
+	ld a, (0x0cdf:16)
 	inc 2,A
 	extz WA
 	ld DE,WA
@@ -435,7 +435,7 @@ CDlikeSwTtl_DispatchData:
 	ld XBC,0x01e0008d
 	jr t, .Lc_f2291d
 .Lc_f22901:
-	ldb_d8 a, (0x0cdf)
+	ld a, (0x0cdf:16)
 	dec 6,A
 	extz WA
 	ld DE,WA
@@ -518,12 +518,12 @@ SeqInit_PostEventSequence:
 SeqInit_LookupDispatchEntry:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SepaOut_Config_0_0x222)
+	lda xbc, (SepaOut_Config_0_0x222:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
 SeqInit_PostDispatchEvent:
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
@@ -604,7 +604,7 @@ PlayMode_SendStopEvent:
 
 ; SqTrSelTtl case G
 SqTrSel_CaseG:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	extz	wa
 	sub	wa, 111
 	cps	wa, 0
@@ -612,9 +612,9 @@ SqTrSel_CaseG:
 	cps	wa, 7
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (14811728)
+	lda	xix, (14811728:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (15870773)
+	lda	xix, (15870773:24)
 	jp_rr	8, xix, wa
 SqTrSel_CaseG_JumpTable:
 	; --- Jump table entries + 4 register-save call thunks ---
@@ -741,7 +741,7 @@ DispatchHandler_InitAllSlots:
 	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
-	ldw_d16 xbc, (0x286d)
+	ld bc, (0x286d:16)
 	stda16 (0xf231), xbc
 	dec 1, bc
 
@@ -803,7 +803,7 @@ DispatchHandler_ResolveSlot:
 	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
-	ldw_d16 xiy, (0xf22f)
+	ld iy, (0xf22f:16)
 	cp iy, 0xffff
 	jr z, DispatchResolve_ReturnFail
 	ld xde, (4349:16)
@@ -844,7 +844,7 @@ SeqNode_InsertAtPosition:
 	ld (xhl), xde
 	pop xde
 	stda16 (3302), xwa
-	ldw_d16 xbc, (0xf22f)
+	ld bc, (0xf22f:16)
 	stda16 (0xf22f), xiy
 	xor wa, wa
 	call SeqNode_ResolveSlotPtr
@@ -935,7 +935,7 @@ VoiceSlot_AssignWrapper:
 VoiceSlot_AssignToChannel:
 	pushw bc
 	stda32 4353, xiy
-	stb_d8 (3822), a
+	ld (3822:16), a
 	ld c, w
 	call VoiceSlot_ComputeWordIndex
 	extz xiz
@@ -1030,7 +1030,7 @@ VoiceSlot_Overflow:
 	ld iy, ix
 	ld xix, 0xf1f8
 	srl iz, 1
-	ldw_d16 xwa, (0x28b6)
+	ld wa, (0x28b6:16)
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
 	ld (xix + 32), a
@@ -1105,7 +1105,7 @@ VoiceSlot_AllocNewSlot:
 	pushw wa
 	pushw iz
 	push xix
-	ldb_d8 a, (3822)
+	ld a, (3822:16)
 	dec 1, a
 	ld w, a
 	sla a, 1

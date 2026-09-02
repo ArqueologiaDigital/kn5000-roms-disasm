@@ -7,10 +7,10 @@
 ; =============================================================================
 
 SMF_ProcessTimedEvent_Entry:
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 
 SMF_ProcessTimedEvent_Continue:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	pushw hl
 	call SMF_CalcTimeDelta
@@ -59,7 +59,7 @@ SMF_IncrementPosition:
 	push xwa
 	push xde
 	incdi16 1, (3946)
-	ldw_d16 xwa, (3946)
+	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, xde
 	stw_erp DE, 0xe2
@@ -128,7 +128,7 @@ SMF_Flush_BufferEmpty:
 SMF_FinalizeAndStartPlayback:
 	call SMF_CheckAndFlush
 	call Vga_RestoreMultiPlaneDisplay
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	stb_da (0x00ffe3), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
@@ -139,7 +139,7 @@ SMF_Finalize_PopReturn:
 
 SMF_Finalize_RestoreAndPlay:
 	call Vga_RestoreMultiPlaneDisplay
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	stb_da (0x00ffe3), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
@@ -159,7 +159,7 @@ SMF_FlushAndFinalize:
 	stda16 (6699), xhl
 	pop xhl
 	call Vga_RestoreMultiPlaneDisplay
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	stb_da (0x00ffe3), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
@@ -222,7 +222,7 @@ SMF_ScanChannels_Loop:
 	pop xix
 	cp a, 0x10
 	jr z, SMF_ScanChannels_Inactive
-	stb_d8 (0x2877), c
+	ld (0x2877:16), c
 	push xhl
 	pushw bc
 	call SMF_DispatchEvent
@@ -231,7 +231,7 @@ SMF_ScanChannels_Loop:
 	jr SMF_ScanChannels_Next
 
 SMF_ScanChannels_Inactive:
-	stb_d8 (0x2877), c
+	ld (0x2877:16), c
 	incdi8 1, (0x2877)
 	push xhl
 	pushw bc
@@ -306,7 +306,7 @@ SMF_FindFree_CheckPart:
 	pop xix
 	jr z, SMF_FindFree_Next
 	inc 1, c
-	stb_d8 (0x2877), l
+	ld (0x2877:16), l
 	incdi8 1, (0x2877)
 
 SMF_AssignRemainingChannels:
@@ -322,10 +322,10 @@ SMF_AssignRemainingChannels:
 	cpib_sri 0x07, 0xf0, 0xf8, 0x10
 	pop xix
 	jr z, SMF_AssignRemaining_Next
-	stb_d8 (9858), c
+	ld (9858:16), c
 	incdi8 1, (9858)
-	ldb_d8 a, (0x2877)
-	stb_d8 (9860), a
+	ld a, (0x2877:16)
+	ld (9860:16), a
 	push xhl
 	pushw bc
 	call SetWall_ValidateAndApply
@@ -462,7 +462,7 @@ SMF_OutputCmd_ErrorCheck4:
 
 SMF_OutputCmd_SendTempoH:
 	ld xix, (4376:16)
-	ldb_d8 a, (3950)
+	ld a, (3950:16)
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
@@ -482,7 +482,7 @@ SMF_OutputCmd_ErrorCheck5:
 
 SMF_OutputCmd_SendTempoM:
 	ld xix, (4376:16)
-	ldb_d8 a, (3949)
+	ld a, (3949:16)
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
@@ -502,7 +502,7 @@ SMF_OutputCmd_ErrorCheck6:
 
 SMF_OutputCmd_SendTempoL:
 	ld xix, (4376:16)
-	ldb_d8 a, (3948)
+	ld a, (3948:16)
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
@@ -571,7 +571,7 @@ SMF_WriteByte_NewSector:
 	push xhl
 	pushw bc
 	pushw de
-	ldw_d16 xwa, (4327)
+	ld wa, (4327:16)
 	xor de, de
 	lds hl, 4
 	ldw_erp DE, 0xe2
@@ -730,18 +730,18 @@ SMF_ChannelHelperReturn:
 	ret
 
 SMF_GetNextEvent:
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
-	ldw_d16 xiy, (9830)
+	ld iy, (9830:16)
 	ldb_sri A, 0x07, 0xec, 0xf4
 	ret
 
 SMF_AdvancePosition:
-	ldw_d16 xwa, (9830)
+	ld wa, (9830:16)
 	cp wa, 0xff
 	jr nz, SMF_AdvancePos_Inc
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
@@ -762,11 +762,11 @@ SMF_CalcTimeDelta:
 	pushw de
 	xor wa, wa
 	stda16 (4229), xwa
-	stb_d8 (4231), a
-	ldw_d16 xwa, (3938)
+	ld (4231:16), a
+	ld wa, (3938:16)
 	xor b, b
 	add wa, bc
-	ldw_d16 xde, (3942)
+	ld de, (3942:16)
 	cp wa, de
 	jr nc, SMF_TimeDelta_CheckFirst
 	ld wa, de
@@ -852,7 +852,7 @@ SMF_ProcessCh_Finalize:
 	ret
 
 SMF_SendChannelConfig:
-	ldb_d8 a, (4213)
+	ld a, (4213:16)
 	and a, 0xf
 	or a, 0xb0
 	call SMF_WriteByteLoop
@@ -880,7 +880,7 @@ SMF_CheckFlush_Return:
 	ret
 
 SMF_DispatchEvent:
-	stb_d8 (4008), c
+	ld (4008:16), c
 	xor b, b
 	ld iy, bc
 	anddi8 (4331), 254
@@ -944,7 +944,7 @@ SMF_Dispatch_DrumSearch:
 
 SMF_Dispatch_DrumFound:
 	ld wa, iy
-	stb_d8 (4008), a
+	ld (4008:16), a
 	jr SMF_HandleEventType
 
 SMF_Dispatch_NoDrumMode:
@@ -996,7 +996,7 @@ SMF_Dispatch_Ch15Search:
 
 SMF_Dispatch_Ch15Found:
 	ld wa, iy
-	stb_d8 (4008), a
+	ld (4008:16), a
 
 SMF_HandleEventType:
 	inc 1, hl
@@ -1090,7 +1090,7 @@ SMF_Event_ProgramChange:
 	push xhl
 	calr SMF_GetNextEvent
 	pop xhl
-	ldb_d8 e, (0x2877)
+	ld e, (0x2877:16)
 	xor d, d
 	ld iy, de
 	cps a, 0
@@ -1138,7 +1138,7 @@ SMF_ProgChg_Found:
 	jr SMF_ProgChg_Write
 
 SMF_ProgChg_UseDefault:
-	ldb_d8 a, (4008)
+	ld a, (4008:16)
 
 SMF_ProgChg_Write:
 	calr SMF_LookupSongBank
@@ -1156,7 +1156,7 @@ SMF_Event_ControlChange:
 	push xhl
 	calr SMF_GetNextEvent
 	pop xhl
-	stb_d8 (4340), a
+	ld (4340:16), a
 	cps a, 0
 	jr c, SMF_CtrlChg_NotFound
 	cp a, 0xf
@@ -1209,7 +1209,7 @@ SMF_CtrlChg_Found:
 	jr SMF_CtrlChg_Write
 
 SMF_CtrlChg_UseDefault:
-	ldb_d8 a, (4008)
+	ld a, (4008:16)
 
 SMF_CtrlChg_Write:
 	calr SMF_LookupSongBank
@@ -1256,12 +1256,12 @@ SMF_Encode_LargeValue:
 	stdi8 (4229), 255
 
 SMF_Encode_ThreeBytes:
-	ldb_d8 a, (4229)
+	ld a, (4229:16)
 	ld w, a
 	and w, 0x80
 	and a, 0x7f
 	rlc w
-	ldb_d8 l, (4230)
+	ld l, (4230:16)
 	ld h, l
 	and h, 0xc0
 	rlc_i_8 h, 2
@@ -1269,37 +1269,37 @@ SMF_Encode_ThreeBytes:
 	and l, 0x1
 	or l, w
 	or l, 0x80
-	ldb_d8 c, (4231)
+	ld c, (4231:16)
 	sla c, 2
 	or c, h
 	or c, 0x80
-	stb_d8 (4206), c
-	stb_d8 (4207), l
-	stb_d8 (4208), a
+	ld (4206:16), c
+	ld (4207:16), l
+	ld (4208:16), a
 	jr SMF_Encode_Return
 
 SMF_Encode_TwoBytes:
-	ldb_d8 a, (4229)
+	ld a, (4229:16)
 	ld w, a
 	and a, 0x7f
 	and w, 0x80
 	rlc w
-	ldb_d8 l, (4230)
+	ld l, (4230:16)
 	ld h, l
 	sla l, 1
 	or l, w
 	or l, 0x80
 	xor c, c
-	stb_d8 (4206), l
-	stb_d8 (4207), a
+	ld (4206:16), l
+	ld (4207:16), a
 	jr SMF_Encode_Return
 
 SMF_Encode_OneByte:
-	ldb_d8 a, (4229)
+	ld a, (4229:16)
 	and a, 0x7f
 	xor l, l
 	xor c, c
-	stb_d8 (4206), a
+	ld (4206:16), a
 
 SMF_Encode_Return:
 	ret
@@ -1394,12 +1394,12 @@ SMF_FileWriteAndClear:
 	ret
 
 SMF_LookupSongBank:
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	extz xhl
 	dec 1, xhl
 	sla xhl, 8
 	addda32 xhl, 7514
-	ldw_d16 xiy, (9830)
+	ld iy, (9830:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	ret
 
@@ -1520,7 +1520,7 @@ SMF_Resolve_Return:
 	ret
 
 SMF_UpdateTempo:
-	ldw_d16 xbc, (3942)
+	ld bc, (3942:16)
 	ld xiy, 0xfae
 	xor hl, hl
 
@@ -1588,7 +1588,7 @@ SMF_UpdateTempo_Encode:
 	jr SMF_UpdateTempo_Loop
 
 SMF_UpdateTempo_Finalize:
-	ldw_d16 xwa, (3942)
+	ld wa, (3942:16)
 	addda16 xwa, 3952
 	stda16 (3942), xbc
 	addda16 xbc, 3938
@@ -1603,17 +1603,17 @@ SMF_CalcFilePosition:
 	xor wa, wa
 	stda16 (4002), xwa
 	stda16 (4004), xwa
-	ldw_d16 xwa, (4347)
+	ld wa, (4347:16)
 	mul wa, 0x400
 	ld xhl, (4376:16)
 	sub xhl, 0x13fa
 	add xwa, xhl
 	sub xwa, 0x16
 	stw_erp DE, 0xe2
-	stb_d8 (4002), d
-	stb_d8 (4003), e
-	stb_d8 (4004), w
-	stb_d8 (4005), a
+	ld (4002:16), d
+	ld (4003:16), e
+	ld (4004:16), w
+	ld (4005:16), a
 	ret
 
 SMF_ClearFileBuffer:
@@ -1636,7 +1636,7 @@ SMF_ResolveGlobalChannel:
 	push xbc
 	push xde
 	xor iy, iy
-	ldw_d16 xiy, (0x2877)
+	ld iy, (0x2877:16)
 	ld xix, 0xf1a0
 	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
 	jr nz, SMF_GlobalCh_NoDrum
@@ -1692,7 +1692,7 @@ SMF_GlobalCh_SearchLoop:
 
 SMF_GlobalCh_Found:
 	ld wa, iy
-	stb_d8 (6881), a
+	ld (6881:16), a
 
 SMF_GlobalCh_Return:
 	pop xde
@@ -1704,7 +1704,7 @@ SMF_GlobalCh_Return:
 
 SMF_LoadSongBank:
 	call SMF_DetectFormat
-	ldb_d8 a, (4394)
+	ld a, (4394:16)
 	cps a, 0
 	jr z, SMF_LoadBank_Return
 	ld xde, 0xab000
@@ -1742,9 +1742,9 @@ SMF_LoadBank_Return:
 	ret
 
 SMF_SetupReadPointers:
-	ldw_d16 xwa, (0xf22f)
+	ld wa, (0xf22f:16)
 	stda16 (0x286f), xwa
-	ldw_d16 xwa, (0xf231)
+	ld wa, (0xf231:16)
 	stda16 (0x2871), xwa
 	call SongBank_LoadToWorkArea
 	ret
@@ -1758,27 +1758,27 @@ SMF_ResetPlaybackState:
 	stdi8 (4419), 0
 	ordi8 4393, 2
 	xor a, a
-	stb_d8 (3301), a
+	ld (3301:16), a
 	calr SMF_DetectFormat
-	ldb_d8 a, (4394)
+	ld a, (4394:16)
 	cps a, 0
 	jr z, SMF_Parse_Complete
 
 SMF_ParseEvents:
 	call SetWall_ParserInit
-	ldb_d8 a, (3301)
+	ld a, (3301:16)
 	cp a, 0xf
 	jr ugt, SMF_Parse_Complete
-	ldb_d8 c, (3301)
-	ldw_d16 xwa, (0xf19e)
+	ld c, (3301:16)
+	ld wa, (0xf19e:16)
 	stdi8 (0x287a), 0
 	anddi8 (0x287b), 191
 	xor xhl, xhl
-	ldb_d8 l, (3301)
+	ld l, (3301:16)
 	ld xix, 0xf1a0
 	add xix, xhl
 	ld l, (xix)
-	stb_d8 (0x2873), l
+	ld (0x2873:16), l
 	cp l, 0xf
 	jr nz, SMF_Parse_ClearAutoFlag
 	ordi8 4393, 1
@@ -1789,7 +1789,7 @@ SMF_Parse_ClearAutoFlag:
 	xor h, h
 
 SMF_Parse_NextChannel:
-	ldb_d8 a, (3301)
+	ld a, (3301:16)
 	inc 1, a
 	calr SMF_ConfigSlot
 	anddi8 (4393), 254
@@ -1868,12 +1868,12 @@ SMF_ConfigSlot_Setup:
 	stda32 0x2881, xhl
 	pop xhl
 	stda16 (0x2885), xiy
-	ldw_d16 xwa, (0x28af)
+	ld wa, (0x28af:16)
 	stda16 (0x2887), xwa
 	stda16 (0x2889), xiy
 	stda16 (0x288b), xwa
 	ld ix, iy
-	ldw_d16 xhl, (3376)
+	ld hl, (3376:16)
 
 SMF_ConfigSlot_EventLoop:
 	push xde
@@ -1941,16 +1941,16 @@ SMF_ConfigSlot_Type80:
 
 SMF_ConfigSlot_StoreType:
 	pushw wa
-	stb_d8 (3310), a
+	ld (3310:16), a
 	anddi8 (3310), 2
-	ldb_d8 a, (3310)
+	ld a, (3310:16)
 	sla a, 6
-	stb_d8 (3310), a
-	stb_d8 (4395), a
+	ld (3310:16), a
+	ld (4395:16), a
 	anddi8 (4395), 1
-	ldb_d8 a, (4395)
+	ld a, (4395:16)
 	sla a, 7
-	stb_d8 (4395), a
+	ld (4395:16), a
 	popw wa
 	push xiy
 	pushw hl
@@ -1981,7 +1981,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	anddi8 (4404), 253
 	anddi8 (4411), 254
 	anddi8 (4411), 253
-	ldb_d8 a, (4394)
+	ld a, (4394:16)
 	cps a, 1
 	jr z, SMF_Config_Format1
 	cps a, 2
@@ -2143,13 +2143,13 @@ SMF_Config_HandleBit1:
 	jrl SMF_ConfigSlot_AdvanceEvent
 
 SMF_Config_OutputOverride1:
-	ldb_d8 a, (3301)
+	ld a, (3301:16)
 	inc 1, a
 	ldb w, 0x1
 	jr SMF_Config_SaveAndRestore
 
 SMF_Config_OutputOverride6:
-	ldb_d8 a, (3301)
+	ld a, (3301:16)
 	inc 1, a
 	ldb w, 0x6
 
@@ -2161,18 +2161,18 @@ SMF_Config_SaveAndRestore:
 	xor xbc, xbc
 	ld xiy, 0x1135
 	xor hl, hl
-	ldb_d8 l, (3301)
+	ld l, (3301:16)
 	sll hl, 1
 	push xde
 	ld xde, 0xc9e
 	ldw_sri BC, 0x07, 0xe8, 0xec
 	stda16 (4412), xbc
-	ldw_d16 xbc, (0x288b)
+	ld bc, (0x288b:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
 	ld xde, 0xcbe
 	ldb_sri C, 0x07, 0xe8, 0xec
-	stb_d8 (4414), c
+	ld (4414:16), c
 	ld bc, ix
 	bitda 2, (4404)
 	jr z, SMF_Config_GetTableEntry
@@ -2193,15 +2193,15 @@ SMF_Config_GetTableEntry:
 SMF_Config_CallHandler:
 	call VoiceSlot_AssignWrapper
 	xor hl, hl
-	ldb_d8 l, (3301)
+	ld l, (3301:16)
 	sll hl, 1
 	push xde
 	ld xde, 0xc9e
-	ldw_d16 xbc, (4412)
+	ld bc, (4412:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
 	ld xde, 0xcbe
-	ldb_d8 c, (4414)
+	ld c, (4414:16)
 	stb_dri C, 0x07, 0xe8, 0xec
 	pop xde
 	pop xbc
@@ -2233,7 +2233,7 @@ SMF_ConfigSlot_EndOfTrack:
 	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
-	ldw_d16 xwa, (0x2887)
+	ld wa, (0x2887:16)
 	stda16 (0x289f), xwa
 	call SetWall_EventOutput
 	call SetWall_EventAdvanceCheck
@@ -2245,7 +2245,7 @@ SMF_ConfigSlot_CodeBlock:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 24 of 26 slots byte-identical
 	push	xhl
 	push	xwa
-	ldw_d16	wa, (10375)
+	ld	wa, (10375:16)
 	stda16	(4415), wa
 	stda16	(4417), iy
 	incdi16	1, (4417)
@@ -2304,7 +2304,7 @@ SMF_AdvanceReadPtr:
 	inc 1, ix
 	cp ix, 0xff
 	jr ule, SMF_AdvanceRead_Return
-	ldw_d16 xhl, (0x288b)
+	ld hl, (0x288b:16)
 	calr SMF_CalcPageAddress
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
@@ -2465,7 +2465,7 @@ SMF_SlotChain_ExtVoiceReturn:
 	ret
 
 SMF_SlotChain_Fmt3Voice:
-	ldb_d8 a, (4394)
+	ld a, (4394:16)
 	cps a, 3
 	jr nz, SMF_SlotChain_Fmt3Return
 	cpdi8 (0x2873), 15
@@ -2532,7 +2532,7 @@ SMF_SlotParam_VolumeImpl:
 SMF_SlotParam_VolumeCalc:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x7
-	ldb_d8 a, (4395)
+	ld a, (4395:16)
 	andda8 a, 3310
 	bit 7, a
 	jr nz, SMF_SlotParam_VolumeScale
@@ -3187,7 +3187,7 @@ SMF_SlotParam_NRPNReturn:
 	ld w, (xiy)
 	and w, 0xc
 	or a, w
-	stb_d8 (4405), a
+	ld (4405:16), a
 	andmi8 (xiy), 0xf1
 	andmi8 (xiy + 3), 0x1f
 	ld a, (xiy + 2)
@@ -3200,9 +3200,9 @@ SMF_SlotParam_NRPNReturn:
 
 SMF_SlotParam_DataEntry:
 	ld a, (xiy + 4)
-	ldb_d8 w, (4405)
+	ld w, (4405:16)
 	ld (xiy + 4), w
-	stb_d8 (4405), a
+	ld (4405:16), a
 
 SMF_SlotParam_DataEntryReturn:
 	ret
@@ -3223,7 +3223,7 @@ SMF_SlotParam_TypeD2Impl:
 	sla a, 1
 
 SMF_SlotParam_TypeD2Done:
-	stb_d8 (4405), a
+	ld (4405:16), a
 
 SMF_SlotParam_TypeD2Return:
 	ret
@@ -3250,7 +3250,7 @@ SMF_SetupSongBankRead:
 	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	pop xhl
-	ldw_d16 xwa, (0x28af)
+	ld wa, (0x28af:16)
 	stda16 (0x2887), xwa
 
 SMF_SetupRead_Adjust:
@@ -3265,11 +3265,11 @@ SMF_SetupRead_Adjust:
 
 SMF_SetupRead_Finalize:
 	xor hl, hl
-	ldb_d8 l, (3301)
+	ld l, (3301:16)
 	sll hl, 1
 	push xde
 	ld xde, 0xf1f8
-	ldw_d16 xbc, (0x2887)
+	ld bc, (0x2887:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
 	ld xde, 0xf218

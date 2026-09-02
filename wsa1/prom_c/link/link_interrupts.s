@@ -55,7 +55,7 @@ INT0_HANDLER:
 	push xiy
 	pushw hl
 	push xix
-	lda_24 xix, 0x00F9A01F
+	lda xix, (0x00F9A01F:24)
 	bit_dd8 2, PA
 	jrl nz, (0x00F99CF8 - 0x00F99BCE)
 	ld xbc, 0x00100000
@@ -171,9 +171,9 @@ INT0_HANDLER__jumptable:
 INT0_HANDLER__cmd_E1:
 	stib_da 0x00F32D, 0x02                     ; F99C12  f2 2d f3 00 00 02   transfer state := 2
 	pushw 0x0006                               ; F99C18  0b 06 00   arg2: DMAC3 := 6 transfers
-	lda_24 xbc, 0x008568                       ; F99C1B  f2 68 85 00 31
+	lda xbc, (0x008568:24)                       ; F99C1B  f2 68 85 00 31
 	push xbc                                   ; F99C20  39   arg1: DMAD3 := 0x008568
-	lda_24 xiy, 0x00F99C29                     ; F99C21  f2 29 9c f9 35
+	lda xiy, (0x00F99C29:24)                     ; F99C21  f2 29 9c f9 35
 	push xiy                                   ; F99C26  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C27  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E1_armed:
@@ -184,9 +184,9 @@ INT0_HANDLER__cmd_E1_armed:
 INT0_HANDLER__cmd_E2:
 	stib_da 0x00F32D, 0x03                     ; F99C32  f2 2d f3 00 00 03   transfer state := 3
 	pushw 0x000A                               ; F99C38  0b 0a 00   arg2: DMAC3 := 10 transfers
-	lda_24 xbc, 0x008520                       ; F99C3B  f2 20 85 00 31
+	lda xbc, (0x008520:24)                       ; F99C3B  f2 20 85 00 31
 	push xbc                                   ; F99C40  39   arg1: DMAD3 := 0x008520
-	lda_24 xiy, 0x00F99C49                     ; F99C41  f2 49 9c f9 35
+	lda xiy, (0x00F99C49:24)                     ; F99C41  f2 49 9c f9 35
 	push xiy                                   ; F99C46  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C47  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E2_armed:
@@ -197,9 +197,9 @@ INT0_HANDLER__cmd_E2_armed:
 INT0_HANDLER__cmd_E3:
 	stib_da 0x00F32D, 0x05                     ; F99C52  f2 2d f3 00 00 05   transfer state := 5
 	pushw 0x0004                               ; F99C58  0b 04 00   arg2: DMAC3 := 4 transfers
-	lda_24 xbc, 0x00852D                       ; F99C5B  f2 2d 85 00 31
+	lda xbc, (0x00852D:24)                       ; F99C5B  f2 2d 85 00 31
 	push xbc                                   ; F99C60  39   arg1: DMAD3 := 0x00852D
-	lda_24 xiy, 0x00F99C69                     ; F99C61  f2 69 9c f9 35
+	lda xiy, (0x00F99C69:24)                     ; F99C61  f2 69 9c f9 35
 	push xiy                                   ; F99C66  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C67  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E3_armed:
@@ -210,9 +210,9 @@ INT0_HANDLER__cmd_E3_armed:
 INT0_HANDLER__cmd_E4:
 	stib_da 0x00F32D, 0x06                     ; F99C72  f2 2d f3 00 00 06   transfer state := 6
 	pushw 0x0006                               ; F99C78  0b 06 00   arg2: DMAC3 := 6 transfers
-	lda_24 xbc, 0x008568                       ; F99C7B  f2 68 85 00 31
+	lda xbc, (0x008568:24)                       ; F99C7B  f2 68 85 00 31
 	push xbc                                   ; F99C80  39   arg1: DMAD3 := 0x008568
-	lda_24 xiy, 0x00F99C89                     ; F99C81  f2 89 9c f9 35
+	lda xiy, (0x00F99C89:24)                     ; F99C81  f2 89 9c f9 35
 	push xiy                                   ; F99C86  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C87  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E4_armed:
@@ -223,9 +223,9 @@ INT0_HANDLER__cmd_E4_armed:
 INT0_HANDLER__cmd_E5:
 	stib_da 0x00F32D, 0x07                     ; F99C91  f2 2d f3 00 00 07   transfer state := 7
 	pushw 0x0004                               ; F99C97  0b 04 00   arg2: DMAC3 := 4 transfers
-	lda_24 xbc, 0x008531                       ; F99C9A  f2 31 85 00 31
+	lda xbc, (0x008531:24)                       ; F99C9A  f2 31 85 00 31
 	push xbc                                   ; F99C9F  39   arg1: DMAD3 := 0x008531
-	lda_24 xiy, 0x00F99CA8                     ; F99CA0  f2 a8 9c f9 35
+	lda xiy, (0x00F99CA8:24)                     ; F99CA0  f2 a8 9c f9 35
 	push xiy                                   ; F99CA5  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99CA6  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E5_armed:
@@ -236,9 +236,9 @@ INT0_HANDLER__cmd_E5_armed:
 INT0_HANDLER__cmd_E7:
 	stib_da 0x00F32D, 0x08                     ; F99CB0  f2 2d f3 00 00 08   transfer state := 8
 	pushw 0x0006                               ; F99CB6  0b 06 00   arg2: DMAC3 := 6 transfers
-	lda_24 xbc, 0x008568                       ; F99CB9  f2 68 85 00 31
+	lda xbc, (0x008568:24)                       ; F99CB9  f2 68 85 00 31
 	push xbc                                   ; F99CBE  39   arg1: DMAD3 := 0x008568
-	lda_24 xiy, 0x00F99CC7                     ; F99CBF  f2 c7 9c f9 35
+	lda xiy, (0x00F99CC7:24)                     ; F99CBF  f2 c7 9c f9 35
 	push xiy                                   ; F99CC4  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99CC5  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E7_armed:
@@ -253,9 +253,9 @@ INT0_HANDLER__cmd_E6_or_other:
 	extz bc                                    ; F99CDD  d9 12
 	inc 1, bc                                  ; F99CDF  d9 61   ... + 1 = the payload length
 	pushw bc                                   ; F99CE1  29   arg2: DMAC3 := that many transfers
-	lda_24 xbc, 0x008548                       ; F99CE2  f2 48 85 00 31
+	lda xbc, (0x008548:24)                       ; F99CE2  f2 48 85 00 31
 	push xbc                                   ; F99CE7  39   arg1: DMAD3 := 0x008548
-	lda_24 xiy, 0x00F99CF0                     ; F99CE8  f2 f0 9c f9 35
+	lda xiy, (0x00F99CF0:24)                     ; F99CE8  f2 f0 9c f9 35
 	push xiy                                   ; F99CED  3d
 	jp (xix)                                   ; F99CEE  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E6_armed:
@@ -323,7 +323,7 @@ INTTC3_HANDLER:
 	pushw wa
 	push xiy
 	push xix
-	lda_24 xix, 0x008568
+	lda xix, (0x008568:24)
 	pushw_erp 0xE2
 	ldw_da bc, 0x00F32D
 	extz bc
@@ -440,7 +440,7 @@ INTTC3_HANDLER__jumptable:
 ; --------------------------------------------------------------------------
 ; ---- state 1: a generic length-prefixed message; dispatch on the top 3 bits ----
 INTTC3_HANDLER__state1_generic:
-	lda_24 xbc, 0x008548                       ; F99D6F  f2 48 85 00 31
+	lda xbc, (0x008548:24)                       ; F99D6F  f2 48 85 00 31
 	push xbc                                   ; F99D74  39   arg2 (XSP+6): the buffer the payload landed in
 	ldb_da a, 0x008518                         ; F99D75  c2 18 85 00 21   the command byte INT0_HANDLER saved
 	and a, 0x1f                                ; F99D7A  c9 cc 1f
@@ -454,7 +454,7 @@ INTTC3_HANDLER__state1_generic:
 	extz xbc                                   ; F99D8F  e9 12
 	add xbc, 0x0000F334                        ; F99D91  e9 c8 34 f3 00 00   the RAM copy of Link_ClassHandlerTable
 	ld xbc, (xbc)                              ; F99D97  a1 21
-	lda_24 xiy, 0x00F99DA1                     ; F99D99  f2 a1 9d f9 35
+	lda xiy, (0x00F99DA1:24)                     ; F99D99  f2 a1 9d f9 35
 	push xiy                                   ; F99D9E  3d   return address for the tail-jump call
 	jp (xbc)                                   ; F99D9F  b1 d8   call the class handler
 INTTC3_HANDLER__state1_done:

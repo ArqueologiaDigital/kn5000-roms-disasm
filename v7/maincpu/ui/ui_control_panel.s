@@ -535,7 +535,7 @@ AcFileSfx_HandleSfxEvent:
 	ldw (xsp + 4), 0x1
 
 AcFileSfx_DrawLoop:
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0xB46)
+	lda xhl, (DiskWarning_ConfirmStrings_0xB46:24)
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
 	lda xwa, (xsp + 16)
@@ -1975,13 +1975,13 @@ KeyScan_CheckEmptyMarker:
 
 	; --- Normal scan: search array for matching (chain<<8)|param ---
 
-	ldb_d8 a, (49121)
+	ld a, (49121:16)
 
 	ld l, a
 
 	extz hl
 
-	ldb_d8 e, (49124)
+	ld e, (49124:16)
 
 	ld c, e
 
@@ -2002,11 +2002,11 @@ KeyScan_ScanLoop:
 	add	xde, xwa
 	sll	xde, 8
 	lds32	xwa, 0
-	ldb_d8	a, (49122)
+	ld	a, (49122:16)
 	add	xde, xwa
 	sll	xde, 8
 	lds32	xwa, 0
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	add	xde, xwa
 	ld	xwa, 4294967295
 	ld	xbc, 29360184
@@ -2025,32 +2025,32 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ldb_d8	a, (49121)
+	ld	a, (49121:16)
 	cp	a, 16
 	jr	z, 24
 	cps	a, 0
 	ret	nz
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 3
 	ret	z
-	ldb_d8	a, (9954)
+	ld	a, (9954:16)
 	and	a, 3
 	ret	nz
 	jr	25
 CtrlPanel_HandleKey10:
 	call	16635862
 	lds32	xde, 0
-	ldb_d8	e, (35998)
+	ld	e, (35998:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29360175
 	call	16423243
 	ret
 PartSelect_UpdateDisplayState:
-	ldb_d8	a, (64614)
+	ld	a, (64614:16)
 	and	a, 1
 	cps	a, 0
 	scc8	z, e
-	stb_d8	(35998), e
+	ld	(35998:16), e
 	extz	de
 	pushw	255
 	ldw	wa, 144
@@ -2574,7 +2574,7 @@ MainPmanControl:
 	add xwa, xwa
 	add xwa, DiskWarning_ConfirmStrings_0xD4C
 	ld wa, (xwa)
-	lda_24 xix, (MainPmanCtrl_DispatchTable)
+	lda xix, (MainPmanCtrl_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MainPmanCtrl_DispatchTable:
@@ -2585,7 +2585,7 @@ MainPmanCtrl_HandleA0:
 	.byte 0x00, 0x00, 0x00, 0x66, 0x08, 0xea, 0xcf, 0x16
 	.byte 0x00, 0x00, 0x00, 0x6e, 0x06
 MainPmanCtrl_StorePartSelect:
-	stb_d8	(35998), e
+	ld	(35998:16), e
 	jr	31
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
@@ -2601,7 +2601,7 @@ MainPmanCtrl_SetPartSelectOne:
 MainPmanCtrl_SetPartSelectZero:
 	stdi8	(35998), 0
 MainPmanCtrl_LoadPartSelect:
-	ldb_d8	e, (35998)
+	ld	e, (35998:16)
 MainPmanCtrl_CompareAndUpdate:
 	.byte 0x8f, 0x06, 0xf5, 0x66, 0x0f, 0xda, 0x12, 0x0b
 	.byte 0xff, 0x00, 0x30, 0x90, 0x00, 0x31, 0x10, 0x00
@@ -2621,7 +2621,7 @@ MainTitleControl:
 	jrl	z, 203
 	cp	xbc, 31457451
 	jrl	z, 180
-	ldb_d8	a, 35994
+	ld	a, (35994:16)
 	cp	xbc, 29360147
 	jrl	z, 134
 	cp	xbc, 29360168
@@ -2633,7 +2633,7 @@ MainTitleControl:
 	cp	xbc, 29360148
 	jrl	nz, 238
 	.byte 0xc1, 0x98, 0x8c, 0x19, 0x99, 0x8c
-	stb_d8	35992, l
+	ld	(35992:16), l
 	ldw	wa, 72
 	call	16544114
 	lds32	xwa, 0
@@ -2642,15 +2642,15 @@ MainTitleControl:
 	stl_da	160922, xwa
 	jrl	201
 SeqState_TransitionMode:
-	stb_d8	35995, a
+	ld	(35995:16), a
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
-	stb_d8	35994, l
-	stb_d8	35996, l
+	ld	(35994:16), l
+	ld	(35996:16), l
 	ldw	wa, 97
 	jr	13
 MainTitleCtrl_SaveAndTransition:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
-	stb_d8	35996, l
+	ld	(35996:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
 	call	16544114
@@ -2665,7 +2665,7 @@ SeqState_DemoModeHandler:
 	jrl	nz, 128
 	cpdm8	(35996), a
 	jr	nz, 4
-	stb_d8	(35995), a
+	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c, 0xc1, 0x98
 	.byte 0x8c, 0x19, 0x99, 0x8c, 0x68, 0x68
@@ -2729,11 +2729,11 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldb_d8	l, (35998)
+	ld	l, (35998:16)
 	extz	hl
 	ret
 GetCurrentPartSelect:
-	ldb_d8	l, (35998)
+	ld	l, (35998:16)
 	ret
 UI_PostPartChangeEvent:
 	dec 2, xsp
@@ -2806,7 +2806,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldb_d8 a, (35994)
+	ld a, (35994:16)
 
 	cpda8 xbc, (35996)
 
@@ -2943,9 +2943,9 @@ GetClientBox2:
 
 CtrlPanel_DispatchByIndex:
 	add wa, wa
-	lda_24 xix, (DiskWarning_ConfirmStrings_0xD58)
+	lda xix, (DiskWarning_ConfirmStrings_0xD58:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (CtrlPanel_FrameDispatchTable)
+	lda xix, (CtrlPanel_FrameDispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CtrlPanel_FrameDispatchTable:
@@ -3263,7 +3263,7 @@ CtrlPanel_FuncDispatch:
 	sll wa, 1
 	ld xix, DiskWarning_ConfirmStrings_0xE56
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (GroupBox_HandlePartChange)
+	lda xix, (GroupBox_HandlePartChange:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GroupBox_HandlePartChange:
@@ -3686,7 +3686,7 @@ GroupBox_HandleStateCompare:
 	ldiw_erp 0xee, 0
 	extz xhl
 	sll xhl, 2
-	lda_24 xwa, (DiskWarning_ConfirmStrings_0xDAE)
+	lda xwa, (DiskWarning_ConfirmStrings_0xDAE:24)
 	ld xde, xwa
 	add xde, xhl
 	ld xbc, (xsp + 30)
@@ -3744,7 +3744,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	calr SetDialEnable
 	ld xwa, 0xffffffff
 	stl_da (0x03ef6a), xwa
-	lda_24 xde, (0x0274e8)
+	lda xde, (0x0274e8:24)
 	lda xbc, (xde + 15)
 	ld xwa, xbc
 	inc 1, xde
@@ -3972,7 +3972,7 @@ GroupBox_HandleKeyRepeatTimer:
 	sub xde, xwa
 	sll xde, 2
 	add xde, xbc
-	lda_24 xwa, (0x0274e9)
+	lda xwa, (0x0274e9:24)
 	add xwa, xde
 	cp (xwa), 0x0
 	jrl z, GroupBox_ReturnZero

@@ -2239,7 +2239,7 @@ MsgQueue_Send__common:
 	m_ld_rm MWD+r5, 0x00, r4                     ; F85B38/F9869D  9d 00 24   ld IX,(XIY+0x00)
 	cp IX,IY                                     ; F85B3B/F986A0  dd f4   cp IX,IY
 	jr nz, MsgQueue_Send__wake                   ; F85B3D/F986A2  6e 4f   jr NZ,0xf986f3
-	ldw_d16 ix, (KERNEL_FREE_LIST)               ; F85B3F/F986A4  a=d1 c4 03 24 c=d1 70 01 24   c: ld IX,(0x0170)
+	ld ix, (KERNEL_FREE_LIST:16)               ; F85B3F/F986A4  a=d1 c4 03 24 c=d1 70 01 24   c: ld IX,(0x0170)
 	extz XIX                                     ; F85B43/F986A8  ec 12   extz XIX
 	m_ld_rm MWD+r4, 0x00, r5                     ; F85B45/F986AA  9c 00 25   ld IY,(XIX+0x00)
 	cp IY,IX                                     ; F85B48/F986AD  dc f5   cp IY,IX
@@ -2341,7 +2341,7 @@ sub_F85BD4:   ; <- prom_a's name for this address.  entry: prom_b routine direct
 	m_ld_rm MWD+r5, 0x00, r4                     ; F85BEB/F98750  9d 00 24   ld IX,(XIY+0x00)
 	cp IX,IY                                     ; F85BEE/F98753  dd f4   cp IX,IY
 	jr nz, MsgQueue_Send_NoDispatch__wake        ; F85BF0/F98755  6e 52   jr NZ,0xf987a9
-	ldw_d16 ix, (KERNEL_FREE_LIST)               ; F85BF2/F98757  a=d1 c4 03 24 c=d1 70 01 24   c: ld IX,(0x0170)
+	ld ix, (KERNEL_FREE_LIST:16)               ; F85BF2/F98757  a=d1 c4 03 24 c=d1 70 01 24   c: ld IX,(0x0170)
 	extz XIX                                     ; F85BF6/F9875B  ec 12   extz XIX
 	m_ld_rm MWD+r4, 0x00, r5                     ; F85BF8/F9875D  9c 00 25   ld IY,(XIX+0x00)
 	cp IY,IX                                     ; F85BFB/F98760  dc f5   cp IY,IX

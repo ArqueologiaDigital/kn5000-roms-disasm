@@ -169,7 +169,7 @@ MidiPkt_BuildControl:
 	ld	a, (xwa+14)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (WidgetParam_SelfRef_Table_0x4)
+	lda	xbc, (WidgetParam_SelfRef_Table_0x4:24)
 	ld_rrl	xiz, xbc, wa
 	ld	a, (xsp+4)
 	extz	wa
@@ -231,7 +231,7 @@ MidiPkt_BuildControl:
 	jr	nc, 76
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (WidgetParam_SelfRef_Table_0xA)
+	lda	xbc, (WidgetParam_SelfRef_Table_0xA:24)
 	ld_rrl	xiz, xbc, wa
 	ld	a, (xsp+4)
 	extz	wa
@@ -292,7 +292,7 @@ MidiPkt_BuildFromConstant:
 	ld (xde), c
 	ld c, (xwa + 7)
 	ld (xde + 1), c
-	ldb_d8 c, (0x8ee4)
+	ld c, (0x8ee4:16)
 	ld (xde + 2), c
 	ld c, (xwa + 8)
 	ld (xde + 3), c
@@ -330,8 +330,8 @@ MidiPkt_ProcessEventQueue:
 	jr z, MidiPkt_ProcessEventQueue_Done
 	bitda 0, (0xb7e7)
 	jr nz, MidiPkt_ProcessEventQueue_Done
-	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xwa, (0x90e0)
+	lda xbc, (0xbd3c:16)
+	ld wa, (0x90e0:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xbc
@@ -341,7 +341,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	call SeqVoice_StoreEntry
 	inc 4, xsp
 	stda32 0xbd22, xhl
-	lda_d16 xwa, (0xbd22)
+	lda xwa, (0xbd22:16)
 	cp (xwa), 0xff
 	jr z, MidiPkt_ProcessEventQueue_Done
 	cp (xwa), 0xc0
@@ -349,7 +349,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	ld c, (xwa)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (MidiPkt_EventType_Table)
+	lda xde, (MidiPkt_EventType_Table:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -381,7 +381,7 @@ MidiPkt_DispatchViaTable_4D6A:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -405,7 +405,7 @@ MidiPkt_DispatchViaTable_4D82:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -429,7 +429,7 @@ MidiPkt_DispatchViaTable_4D8E:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -453,7 +453,7 @@ MidiPkt_DispatchViaTable_4D9A:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -477,7 +477,7 @@ MidiPkt_DispatchViaTable_4DA6:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -501,7 +501,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -528,7 +528,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -577,7 +577,7 @@ MidiPkt_DispatchSpecialType_Default:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -590,7 +590,7 @@ MidiPkt_DispatchSpecialType_Return:
 
 MidiPkt_MatchParamInTable:
 	ld xde, xbc
-	lda_24 xix, (WidgetParam_Entry_018_0xCE)
+	lda xix, (WidgetParam_Entry_018_0xCE:24)
 
 MidiPkt_MatchParamInTable_Loop:
 	ld_spil XHL, 0xea
@@ -619,7 +619,7 @@ MidiPkt_EnqueueControl_3354:
 	calr MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_3354_Return
-	lda_24 xbc, (WidgetParam_Entry_018_0xCE)
+	lda xbc, (WidgetParam_Entry_018_0xCE:24)
 	ld xwa, (xiz + 4)
 	cp xbc, xwa
 	jr z, MidiPkt_EnqueueControl_3354_Return
@@ -676,7 +676,7 @@ MidiPkt_EnqueueExtended_Data:
 	calr	1118
 	cp	hl, 0xffff
 	jr	z, 102
-	lda_24	xwa, (WidgetParam_Entry_018_0xCE)
+	lda	xwa, (WidgetParam_Entry_018_0xCE:24)
 	.byte 0xae, 0x04, 0xf0
 	jr	z, 92
 	ld	xwa, (xiz)
@@ -696,7 +696,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	bc, (xbc+4)
 	.byte 0x98
 	push	sr
-	ldb_d8	w, (1198)
+	ld	w, (1198:16)
 	ld	a, (xwa+11)
 	and	a, 15
 	jr	z, 2
@@ -731,7 +731,7 @@ MidiPkt_EnqueueControl_335C:
 	calr MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_335C_Return
-	lda_24 xbc, (WidgetParam_Entry_018_0xCE)
+	lda xbc, (WidgetParam_Entry_018_0xCE:24)
 	ld xwa, (xiz + 4)
 	cp xbc, xwa
 	jr z, MidiPkt_EnqueueControl_335C_Return
@@ -786,7 +786,7 @@ MidiPkt_EnqueueControl_3358:
 	calr MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jrl z, MidiPkt_EnqueueControl_3358_Return
-	lda_24 xbc, (WidgetParam_Entry_018_0xCE)
+	lda xbc, (WidgetParam_Entry_018_0xCE:24)
 	ld xwa, (xiz + 4)
 	cp xbc, xwa
 	jrl z, MidiPkt_EnqueueControl_3358_Return
@@ -870,7 +870,7 @@ MidiPkt_EnqueueControl_335E:
 	ldi85
 	lda xbc, (xsp + 10)
 	ld (xbc), xiz
-	lda_24 xwa, (ToneKit_FrequencyTable_0xDA)
+	lda xwa, (ToneKit_FrequencyTable_0xDA:24)
 	ld (xbc + 4), xwa
 	calr MidiPkt_CheckGateCondition
 	cp hl, 0xffff
@@ -950,7 +950,7 @@ MidiPkt_EnqueueControl_3364:
 	and a, (xbc + 2)
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3364_FormatData
-	ldb_d8 c, (0xfc61)
+	ld c, (0xfc61:16)
 	and c, 0x30
 	ld a, (xde + 11)
 	and a, 0xf
@@ -1001,7 +1001,7 @@ MidiPkt_EnqueueControl_3368:
 	ld xwa, MidiPkt_EventType_Table_0x590
 	lds bc, 6
 	call ArpQueue_Enqueue
-	ldb_d8 a, (0xfd99)
+	ld a, (0xfd99:16)
 	and a, 0x1
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
@@ -1071,7 +1071,7 @@ MidiPkt_EnqueueExtended2_Data:
 	calr	145
 	cp	hl, 0xffff
 	jrl	z, 133
-	lda_24	xbc, (WidgetParam_Entry_018_0xCE)
+	lda	xbc, (WidgetParam_Entry_018_0xCE:24)
 	ld	xwa, (xiz+4)
 	cp	xbc, xwa
 	jr	z, 121
@@ -1130,7 +1130,7 @@ MidiPkt_CheckGateCondition:
 	jr z, MidiPkt_CheckGateCondition_Second
 	extz bc
 	muls bc, 0x6
-	lda_24 xde, (ToneKit_FrequencyTable_0x3E2)
+	lda xde, (ToneKit_FrequencyTable_0x3E2:24)
 	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld xhl, (xde)
 	ld c, (xde + 4)
@@ -1144,7 +1144,7 @@ MidiPkt_CheckGateCondition_Second:
 	jr z, MidiPkt_CheckGateCondition_Pass
 	extz wa
 	muls wa, 0x6
-	lda_24 xbc, (ToneKit_FrequencyTable_0x3F4)
+	lda xbc, (ToneKit_FrequencyTable_0x3F4:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xde, (xbc)
 	ld a, (xbc + 4)
@@ -1175,7 +1175,7 @@ MidiPkt_DispatchViaTable_4DCE:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda_24 xde, (WidgetParam_SelfRef_Table_0x136)
+	lda xde, (WidgetParam_SelfRef_Table_0x136:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -1211,10 +1211,10 @@ MidiPkt_DispatchData_Chan6:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldb_d8	a, (0xbcfc)
+	ld	a, (0xbcfc:16)
 	extz	wa
 	jp	SysEx_InitiateSend
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 87
 	jr	z, 11
 	cpdi8	(0x8d34), 1
@@ -1251,7 +1251,7 @@ MidiPkt_SendBankSelect_Send:
 	ret
 
 MidiPkt_SysExValidator_Data:
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 108
 	jr	c, 5
 	cp	a, 118
@@ -1267,7 +1267,7 @@ MidiPkt_SysExValidator_Data:
 	.byte 0xf1
 	swi	1
 	.byte 0x90, 0xbf
-	lda_d16	xbc, (0xfdad)
+	lda	xbc, (0xfdad:16)
 	ld	e, (xbc)
 	set	2, e
 	ld	(xbc), e
@@ -1281,7 +1281,7 @@ MidiPkt_SysExValidator_Data:
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 108
 	jr	c, 5
 	cp	a, 118
@@ -1294,7 +1294,7 @@ MidiPkt_SysExProcessor_Data:
 	jr	ugt, 5
 	cp	a, 148
 	ret	nc
-	lda_d16	xbc, (0xfdad)
+	lda	xbc, (0xfdad:16)
 	ld	a, (xbc)
 	bit	2, a
 	ret	z
@@ -1324,9 +1324,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	cps	hl, 5
 	ret	gt
 	add	hl, hl
-	lda_24	xix, (MidiPkt_EventType_Table_0x324)
+	lda	xix, (MidiPkt_EventType_Table_0x324:24)
 	ld_rrw hl, xix, hl
-	lda_24 xix, (16623949)
+	lda xix, (16623949:24)
 	jp_rr 8, xix, hl
 	jr	98
 	jrl	377
@@ -1335,7 +1335,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jrl	641
 	calr	776
 	ret
-	lda_d16	xde, (0x9644)
+	lda	xde, (0x9644:16)
 	ld	c, (xwa)
 	ld	(xde), c
 	ld	c, (xwa+1)
@@ -1354,7 +1354,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pop	xhl
 	pop	xde
 	ret
-	lda_d16	xde, (0x9644)
+	lda	xde, (0x9644:16)
 	ld	c, (xwa)
 	ld	(xde), c
 	ld	c, (xwa+1)
@@ -1387,7 +1387,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jrl	nc, 244
 	stb_erp a, 251
 	extz	wa
-	lda_24	xbc, (MidiPkt_EventType_Table_0x330)
+	lda	xbc, (MidiPkt_EventType_Table_0x330:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0

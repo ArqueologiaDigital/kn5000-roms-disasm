@@ -352,7 +352,7 @@ ToneGen_VelocityFromTouch__no_clip_hi:
 	sub	xwa, xwa
 	ld	(xiz-6), xwa
 ToneGen_VelocityFromTouch__no_clip_lo:
-	lda_24	xbc, 0x00FCC71A
+	lda	xbc, (0x00FCC71A:24)
 	extpfx3	0xAE, 0xFA, 0x81
 	ld	a, (xbc)
 	ld	xbc, (xiz+16)

@@ -13,11 +13,11 @@ ParaLoadOpt_AudioFlagCheck:
 	ld	(xsp), e
 	ld	(xsp+2), c
 	ld	(xsp+4), a
-	ldb_d8	a, (48282)
+	ld	a, (48282:16)
 	bit	0, a
 	jr	z, 23
 	res	0, a
-	stb_d8	(48282), a
+	ld	(48282:16), a
 	ld	xwa, 5701638
 	ld	xbc, 29360129
 	lds32	xde, 0
@@ -59,9 +59,9 @@ ParaLoadOpt_CaseC:
 	cp wa, 0xc
 	jrl gt, MidiFunc_SendEvtReturnAlt
 	add wa, wa
-	lda_24 xix, (FileTransfer_BlankStatus_0x6E)
+	lda xix, (FileTransfer_BlankStatus_0x6E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (ParaLoadOpt_DispatchTable_A)
+	lda xix, (ParaLoadOpt_DispatchTable_A:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_A:
@@ -134,21 +134,21 @@ ParaLoadOpt_AudioFlagCheck_B:
 	ld	(xsp), e
 	ld	(xsp+2), c
 	ld	(xsp+4), a
-	ldb_d8	a, (48282)
+	ld	a, (48282:16)
 	bit	1, a
 	jr	z, 23
 	res	1, a
-	stb_d8	(48282), a
+	ld	(48282:16), a
 	ld	xwa, 5701649
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseD:
-	ldb_d8	a, (48244)
+	ld	a, (48244:16)
 	bit	7, a
 	jr	z, 31
 	res	7, a
-	stb_d8	(48244), a
+	ld	(48244:16), a
 	ld	a, (xsp+2)
 	stb_da	(149340), a
 	ld	xwa, 5701659
@@ -156,11 +156,11 @@ ParaLoadOpt_CaseD:
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseE:
-	ldb_d8	a, (48248)
+	ld	a, (48248:16)
 	bit	7, a
 	jr	z, 30
 	res	7, a
-	stb_d8	(48248), a
+	ld	(48248:16), a
 	ld	a, (xsp)
 	stb_da	(149342), a
 	ld	xwa, 5701659
@@ -168,11 +168,11 @@ ParaLoadOpt_CaseE:
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseF:
-	ldb_d8	a, (48240)
+	ld	a, (48240:16)
 	bit	7, a
 	jrl	z, 296	; -> 0xF767F9
 	res	7, a
-	stb_d8	(48240), a
+	ld	(48240:16), a
 	ld	a, (xsp+4)
 	extz	wa
 	cps	wa, 0
@@ -180,9 +180,9 @@ ParaLoadOpt_CaseF:
 	cp	wa, 12
 	jrl	gt, 272	; -> 0xF767F9
 	add	wa, wa
-	lda_24	xix, (15203924)
+	lda	xix, (15203924:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16213759)
+	lda	xix, (16213759:24)
 	jp_rr	8, xix, wa
 ParaLoadOpt_DispatchTable_B:
 	stib_da	(0x024760), 0
@@ -307,7 +307,7 @@ AcParaLoadOptGridBoxProc:
 	add xbc, xbc
 	add xbc, FileTransfer_BlankStatus_0xC6
 	ld bc, (xbc)
-	lda_24 xix, (ParaLoadOpt_GridHandler)
+	lda xix, (ParaLoadOpt_GridHandler:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; ParaLoadOpt grid handler
@@ -396,7 +396,7 @@ ParaLoadOpt_GridReturn:
 	call SendEvent
 	ld WA,HL
 	add WA,WA
-	lda_24 xbc, (FileTransfer_BlankStatus_0xA2)
+	lda xbc, (FileTransfer_BlankStatus_0xA2:24)
 	ldw_dri wa, 0x07, 0xe4, 0xe0
 	sub HL,WA
 	extz XHL
@@ -453,7 +453,7 @@ ParaLoadOpt_GridDelegateProc:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, (FileTransfer_BlankStatus_0xB4)
+	lda xbc, (FileTransfer_BlankStatus_0xB4:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -567,13 +567,13 @@ ParaLoadOptGridCheck:
 	lds bc, 4
 	ldirw
 	ld (xsp + 16), xde
-	lda_24 xwa, (UserMemory_Config_Table)
+	lda xwa, (UserMemory_Config_Table:24)
 	ld (xsp + 4), xwa
 	lda xbc, (xsp + 28)
 	lda xiy, (xsp + 20)
-	lda_24 xwa, (UserMemory_ConfirmData_0x16)
+	lda xwa, (UserMemory_ConfirmData_0x16:24)
 	ld (xsp + 8), xwa
-	lda_24 xiz, (0x0340f6)
+	lda xiz, (0x0340f6:24)
 	lda xwa, (xiy + 2)
 	lda xix, (xiy + 4)
 	ld (xsp + 12), xix
@@ -588,7 +588,7 @@ ParaLoadOptGridCheck:
 	add xde, xde
 	add xde, NakaInst_INITIAL_0x1A
 	ld de, (xde)
-	lda_24 xix, (ParaLoadOpt_GridDispatch)
+	lda xix, (ParaLoadOpt_GridDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ParaLoadOpt_GridDispatch:
 	call	16400579
@@ -617,7 +617,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213238
+	lda	xbc, (213238:24)
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
@@ -627,7 +627,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213239
+	lda	xbc, (213239:24)
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
@@ -637,7 +637,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213240
+	lda	xbc, (213240:24)
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
@@ -647,7 +647,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213241
+	lda	xbc, (213241:24)
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
@@ -678,7 +678,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213238
+	lda	xbc, (213238:24)
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
@@ -690,7 +690,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213239
+	lda	xbc, (213239:24)
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
@@ -702,7 +702,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213240
+	lda	xbc, (213240:24)
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
@@ -714,7 +714,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 213241
+	lda	xbc, (213241:24)
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc

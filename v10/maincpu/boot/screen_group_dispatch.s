@@ -80,7 +80,7 @@ ScreenGroup_WidgetLoop:
 	ret
 
 ScreenGroup_InitState:
-	lda_d16 xbc, (0xc1fe)
+	lda xbc, (0xc1fe:16)
 	ld (xbc), 0x1
 	ld (xbc + 1), 0xff
 	ld (xbc + 2), 0xff
@@ -248,13 +248,13 @@ ScreenGroup_FinalInit:
 ScreenGroup_InitWordPairsLoop:
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xc62a)
+	lda xbc, (0xc62a:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x10
 	ld wa, de
 	add wa, wa
-	lda_d16 xbc, (0xc62b)
+	lda xbc, (0xc62b:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0

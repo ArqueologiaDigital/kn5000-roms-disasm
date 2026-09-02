@@ -524,7 +524,7 @@ AcFileSfx_HandleSfxEvent:
 	ldw (xsp + 4), 0x1
 
 AcFileSfx_DrawLoop:
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0xB46)
+	lda xhl, (DiskWarning_ConfirmStrings_0xB46:24)
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
 	lda xwa, (xsp + 16)
@@ -1941,10 +1941,10 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
 	cps hl, 0				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
-	ldb_d8 a, (0x8d38); Load current UI state ID
+	ld a, (0x8d38:16); Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
-	lda_24 xbc, (SSF_PresentationGateTable); Base of state->key-map pointer table
+	lda xbc, (SSF_PresentationGateTable:24); Base of state->key-map pointer table
 	ld_rrl	xix, xbc, wa
 	or xix, xix				; Test if pointer is null
 	ret z					; Return if no key map for this state
@@ -1953,18 +1953,18 @@ UIState_KeyScan_Dispatch:
 	; --- Pass-through path: broadcast any key press ---
 	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
 	lds32	xde, 0
-	ldb_d8 e, (0xc080); chain byte
+	ld e, (0xc080:16); chain byte
 	sll xde, 8				; shift up
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07d); param byte
+	ld a, (0xc07d:16); param byte
 	add xde, xwa				; merge into XDE
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07e); additional key data
+	ld a, (0xc07e:16); additional key data
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07f); additional key data
+	ld a, (0xc07f:16); additional key data
 	add xde, xwa
 	ld xwa, 0xffffffff			; broadcast target (all handlers)
 	ld xbc, 0x01c00038			; key press event code
@@ -1973,10 +1973,10 @@ KeyScan_CheckEmptyMarker:
 	cpw (xix), 0xffff			; Check for EMPTY marker
 	ret z					; Return if no keys for this state
 	; --- Normal scan: search array for matching (chain<<8)|param ---
-	ldb_d8 a, (0xc07d); param byte
+	ld a, (0xc07d:16); param byte
 	ld l, a
 	extz hl
-	ldb_d8 e, (0xc080); chain byte
+	ld e, (0xc080:16); chain byte
 	ld c, e
 	extz bc
 	sll bc, 8				; BC = chain << 8
@@ -1993,11 +1993,11 @@ KeyScan_ScanLoop:
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07e)
+	ld a, (0xc07e:16)
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	add xde, xwa
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, 0x01c00038			; key press event code
@@ -2016,33 +2016,33 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ldb_d8 a, (0xc07d); param byte (key code low)
+	ld a, (0xc07d:16); param byte (key code low)
 	cp a, 0x10				; Check for special key 0x10
 	jr z, CtrlPanel_HandleKey10			; Handle key 0x10
 	cps a, 0				; Check for key 0x00
 	ret nz					; Other keys: return
-	ldb_d8 a, (0xc07f); additional key data
+	ld a, (0xc07f:16); additional key data
 	and a, 0x03				; check bits 1:0
 	ret z					; return if both clear
-	ldb_d8 a, (0x26e2); load activation state
+	ld a, (0x26e2:16); load activation state
 	and a, 0x03				; check bits 1:0
 	ret nz					; return if already active
 	jr PartSelect_UpdateDisplayState				; activate
 CtrlPanel_HandleKey10:
 	call AudioMode_ResetVoiceState				; handler for key 0x10
 	lds32	xde, 0
-	ldb_d8 e, (0x8d3a); load current state
+	ld e, (0x8d3a:16); load current state
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, 0x01c0002f			; key event code (different from main handler)
 	call ApPostEvent				; dispatch event
 	ret
 
 PartSelect_UpdateDisplayState:
-	ldb_d8 a, (0xfc66)
+	ld a, (0xfc66:16)
 	and a, 0x1
 	cps a, 0
 	scc8 z, e
-	stb_d8 (0x8d3a), e
+	ld (0x8d3a:16), e
 	extz de
 	pushw 0xff
 	ldw wa, 0x90
@@ -2592,7 +2592,7 @@ MainPmanControl:
 	add xwa, xwa
 	add xwa, DiskWarning_ConfirmStrings_0xD4C
 	ld wa, (xwa)
-	lda_24 xix, (MainPmanCtrl_DispatchTable)
+	lda xix, (MainPmanCtrl_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MainPmanCtrl_DispatchTable:
@@ -2640,7 +2640,7 @@ MainPmanCtrl_HandleA0:
 	jr nz, MainPmanCtrl_CheckSoundParam
 
 MainPmanCtrl_StorePartSelect:
-	stb_d8 (0x8d3a), e
+	ld (0x8d3a:16), e
 	jr MainPmanCtrl_LoadPartSelect
 
 MainPmanCtrl_CheckSoundParam:
@@ -2660,7 +2660,7 @@ MainPmanCtrl_SetPartSelectZero:
 	stdi8 (0x8d3a), 0
 
 MainPmanCtrl_LoadPartSelect:
-	ldb_d8 e, (0x8d3a)
+	ld e, (0x8d3a:16)
 
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp + 6)
@@ -2687,7 +2687,7 @@ MainTitleControl:
 	jrl z, MainTitleCtrl_HandleBA
 	cp xbc, 0x1e000ab
 	jrl z, MainTitleCtrl_HandleAB
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp xbc, 0x1c00013
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, 0x1c00028
@@ -2699,7 +2699,7 @@ MainTitleControl:
 	cp xbc, 0x1c00014
 	jrl nz, UIWidget_ReturnZero
 	ldmm8 0x8d35, 0x8d34
-	stb_d8 (0x8d34), l
+	ld (0x8d34:16), l
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
@@ -2723,16 +2723,16 @@ MainTitleControl:
 ;   0x0274a8-0x0274ae - Additional transition parameters
 ; =============================================================================
 SeqState_TransitionMode:
-	stb_d8 (0x8d37), a
+	ld (0x8d37:16), a
 	ldmm8 0x8d39, 0x8d38
-	stb_d8 (0x8d36), l
-	stb_d8 (0x8d38), l
+	ld (0x8d36:16), l
+	ld (0x8d38:16), l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
 	ldmm8 0x8d39, 0x8d38
-	stb_d8 (0x8d38), l
+	ld (0x8d38:16), l
 	ldw wa, 0x61
 
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2749,7 +2749,7 @@ SeqState_DemoModeHandler:
 	jrl nz, UIWidget_ReturnZero
 	cpdm8 0x8d38, a
 	jr nz, SeqDemo_SaveCurrentState
-	stb_d8 (0x8d37), a
+	ld (0x8d37:16), a
 
 SeqDemo_SaveCurrentState:
 	ldmm8 0x8d39, 0x8d38
@@ -2821,12 +2821,12 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldb_d8 l, (0x8d3a)
+	ld l, (0x8d3a:16)
 	extz hl
 	ret
 
 GetCurrentPartSelect:
-	ldb_d8 l, (0x8d3a)
+	ld l, (0x8d3a:16)
 	ret
 
 UI_PostPartChangeEvent:
@@ -2900,7 +2900,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cpda8 a, 0x8d38
 	scc16 nz, hl
 	ret
@@ -3032,9 +3032,9 @@ GetClientBox2:
 
 CtrlPanel_DispatchByIndex:
 	add wa, wa
-	lda_24 xix, (DiskWarning_ConfirmStrings_0xD58)
+	lda xix, (DiskWarning_ConfirmStrings_0xD58:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (CtrlPanel_FrameDispatchTable)
+	lda xix, (CtrlPanel_FrameDispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CtrlPanel_FrameDispatchTable:
@@ -3352,7 +3352,7 @@ CtrlPanel_FuncDispatch:
 	sll wa, 1
 	ld xix, DiskWarning_ConfirmStrings_0xE56
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (GroupBox_HandlePartChange)
+	lda xix, (GroupBox_HandlePartChange:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GroupBox_HandlePartChange:
@@ -3775,7 +3775,7 @@ GroupBox_HandleStateCompare:
 	ldiw_erp 0xee, 0
 	extz xhl
 	sll xhl, 2
-	lda_24 xwa, (DiskWarning_ConfirmStrings_0xDAE)
+	lda xwa, (DiskWarning_ConfirmStrings_0xDAE:24)
 	ld xde, xwa
 	add xde, xhl
 	ld xbc, (xsp + 30)
@@ -3833,7 +3833,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	calr SetDialEnable
 	ld xwa, 0xffffffff
 	stl_da (0x03ef6a), xwa
-	lda_24 xde, (0x0274e8)
+	lda xde, (0x0274e8:24)
 	lda xbc, (xde + 15)
 	ld xwa, xbc
 	inc 1, xde
@@ -4061,7 +4061,7 @@ GroupBox_HandleKeyRepeatTimer:
 	sub xde, xwa
 	sll xde, 2
 	add xde, xbc
-	lda_24 xwa, (0x0274e9)
+	lda xwa, (0x0274e9:24)
 	add xwa, xde
 	cp (xwa), 0x0
 	jrl z, GroupBox_ReturnZero

@@ -378,13 +378,13 @@ EEPROM_LoadCalibration__word:
 	calr (0xFC8ADA - 0xFC8B26)                 ; FC8B23  calr 0xfc8ada
 	ld	(xiz-6), wa                             ; FC8B26  ld (XIZ+0xfa),WA
 	ld	(xiz-4), xix                            ; FC8B29  ld (XIZ+0xfc),XIX
-	lda_24	xbc, (0xE2A1)                       ; FC8B2C  lda XBC,0x00e2a1
+	lda	xbc, (0xE2A1:24)                       ; FC8B2C  lda XBC,0x00e2a1
 	extpfx3 0xAE, 0xFC, 0x81                   ; FC8B31  add XBC,(XIZ+0xfc)
 	ld	(xbc), wa                               ; FC8B34  ld (XBC),WA
 	popw	bc                                    ; FC8B36  pop BC
 	ei	0                                       ; FC8B37  ei 0x00
 	ld	(xiz-8), xix                            ; FC8B39  ld (XIZ+0xf8),XIX
-	lda_24	xbc, (0xE2A1)                       ; FC8B3C  lda XBC,0x00e2a1
+	lda	xbc, (0xE2A1:24)                       ; FC8B3C  lda XBC,0x00e2a1
 	extpfx3 0xAE, 0xFC, 0x81                   ; FC8B41  add XBC,(XIZ+0xfc)
 	ld	wa, (xbc)                               ; FC8B44  ld WA,(XBC)
 	add	de, wa                                 ; FC8B46  add DE,WA
@@ -411,7 +411,7 @@ EEPROM_LoadCalibration__invalid:
 	ld	xiy, xbc                                ; FC8B73  ld XIY,XBC
 	jr EEPROM_LoadCalibration__ret             ; FC8B75  jr T,0xfc8b7c
 EEPROM_LoadCalibration__valid:
-	lda_24	xiy, (0xE2A1)                       ; FC8B77  lda XIY,0x00e2a1
+	lda	xiy, (0xE2A1:24)                       ; FC8B77  lda XIY,0x00e2a1
 EEPROM_LoadCalibration__ret:
 	pop	xix                                    ; FC8B7C  pop XIX
 	popw	de                                    ; FC8B7D  pop DE

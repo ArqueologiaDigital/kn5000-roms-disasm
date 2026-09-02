@@ -45,7 +45,7 @@ RVari_Select_CheckTypeE:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
@@ -244,7 +244,7 @@ RVari_Select_OtherItem:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
@@ -441,7 +441,7 @@ RVari_Select_TypeNotE:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
@@ -534,7 +534,7 @@ RVari_SelNE_FirstItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
@@ -549,7 +549,7 @@ RVari_SelNE_FirstItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
@@ -610,7 +610,7 @@ RVari_SelNE_SecondItem:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
@@ -702,7 +702,7 @@ RVari_SelNE_SecondItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	extz wa
@@ -717,7 +717,7 @@ RVari_SelNE_SecondItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	extz wa
@@ -770,11 +770,11 @@ RVari_Select_ReturnZero:
 	jrl RVari_Epilogue
 
 RVari_Confirm:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xhl + 56)
@@ -818,13 +818,13 @@ RVari_Confirm_TypeF_Loop:
 RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	lda_dri XBC, 0xfd, 0x14, 0x02
@@ -855,7 +855,7 @@ RVari_ConfirmF_Item_Draw:
 	ld a, (xsp + 8)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_04)
+	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -922,13 +922,13 @@ RVari_ConfirmF_Btn_Draw:
 RVari_Confirm_TypeF_SubItems:
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x28)
+	lda xbc, (NakaInst_Rock_Pop_0x28:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x28)
+	lda xbc, (NakaInst_Rock_Pop_0x28:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	lda_dri XBC, 0xfd, 0x14, 0x02
@@ -947,7 +947,7 @@ RVari_Confirm_TypeF_SubItems:
 	ld c, (xsp + 8)
 	extz bc
 	sla bc, 2
-	lda_24 xhl, (SeqChan_Map_2ch_0x2)
+	lda xhl, (SeqChan_Map_2ch_0x2:24)
 	ld_sril3 XHL, 0x07, 0xec, 0xe4
 	lds32 xbc, 1
 	push xbc
@@ -1098,7 +1098,7 @@ RVari_ConfirmE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1109,7 +1109,7 @@ RVari_ConfirmE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1263,7 +1263,7 @@ RVari_ConfirmNE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1274,7 +1274,7 @@ RVari_ConfirmNE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1327,10 +1327,10 @@ RVari_Confirm_ReturnZero:
 	jrl RVari_Epilogue
 
 RVari_EnumNotify:
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0220)
 	ld (xsp + 6), xwa
 	ld xwa, (xhl + 56)
 	cpw (xwa), 0xf
@@ -1354,14 +1354,14 @@ RVari_EnumNotifyF_CheckSelected:
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	lda_dri XBC, 0xfd, 0x14, 0x02
@@ -1393,7 +1393,7 @@ RVari_EnumNotifyF_Item_Draw:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_04)
+	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -1480,7 +1480,7 @@ RVari_EnumNotify_SetupDisplay:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
@@ -1492,7 +1492,7 @@ RVari_EnumNotify_SetupDisplay:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
@@ -1694,17 +1694,17 @@ RVari_EnumNotify_ReturnZero:
 	jrl RVari_Epilogue
 
 RVari_OK:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xhl + 56)
 	cpw (xwa), 0xf
 	jrl nz, RVari_OK_TypeE_CalcVisible
-	ld_sril XBC, (xsp + 0x0220)
+	ld XBC, (xsp + 0x0220)
 	ld xwa, xbc
 	cp xwa, 0xc
 	jrl z, RVari_OK_TypeF_InputC
@@ -1731,13 +1731,13 @@ RVari_OK:
 	divs wa, 0x4
 	stw_erp WA, 0xe2
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -1757,13 +1757,13 @@ RVari_OK_TypeF_Input8A:
 	stw_erp WA, 0xe2
 	inc 4, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -1783,13 +1783,13 @@ RVari_OK_TypeF_Input8B:
 	stw_erp WA, 0xe2
 	inc 8, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -1808,11 +1808,11 @@ RVari_OK_TypeF_Input9:
 	divs wa, 0x4
 	sla wa, 2
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	lds32 xhl, 0
 	jrl RVari_Epilogue
@@ -1830,11 +1830,11 @@ RVari_OK_TypeF_InputA:
 	sla wa, 2
 	inc 1, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	lds32 xhl, 0
 	jrl RVari_Epilogue
@@ -1852,11 +1852,11 @@ RVari_OK_TypeF_InputB:
 	sla wa, 2
 	inc 2, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	lds32 xhl, 0
 	jrl RVari_Epilogue
@@ -1874,11 +1874,11 @@ RVari_OK_TypeF_InputC:
 	sla wa, 2
 	inc 3, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	lds32 xhl, 0
 	jrl RVari_Epilogue
@@ -1907,7 +1907,7 @@ RVari_OK_TypeE_DispatchInput:
 	ld xwa, (xiz + 56)
 	cpw (xwa), 0xe
 	jrl nz, RVari_OK_TypeNE_DispatchInput
-	ld_sril XBC, (xsp + 0x0220)
+	ld XBC, (xsp + 0x0220)
 	ld xwa, xbc
 	cp xwa, 0xc
 	jrl z, RVari_OK_TypeE_InputC
@@ -1952,11 +1952,11 @@ RVari_OK_TypeE_DispatchInput:
 	sub wa, 0x28
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input88_Done:
@@ -1987,11 +1987,11 @@ RVari_OK_TypeE_Input89:
 	sub wa, 0x24
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input89_Done:
@@ -2022,11 +2022,11 @@ RVari_OK_TypeE_Input8A:
 	sub wa, 0x20
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input8A_Done:
@@ -2057,11 +2057,11 @@ RVari_OK_TypeE_Input8B:
 	sub wa, 0x1c
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input8B_Done:
@@ -2092,11 +2092,11 @@ RVari_OK_TypeE_Input8C:
 	sub wa, 0x18
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input8C_Done:
@@ -2134,11 +2134,11 @@ RVari_OK_TypeE_Input8:
 	stw_erp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input8_Done:
@@ -2176,11 +2176,11 @@ RVari_OK_TypeE_Input9:
 	stw_erp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_Input9_Done:
@@ -2218,11 +2218,11 @@ RVari_OK_TypeE_InputA:
 	stw_erp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_InputA_Done:
@@ -2260,11 +2260,11 @@ RVari_OK_TypeE_InputB:
 	stw_erp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_InputB_Done:
@@ -2302,11 +2302,11 @@ RVari_OK_TypeE_InputC:
 	stw_erp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeE_InputC_Done:
@@ -2314,7 +2314,7 @@ RVari_OK_TypeE_InputC_Done:
 	jrl RVari_Epilogue
 
 RVari_OK_TypeNE_DispatchInput:
-	ld_sril XBC, (xsp + 0x0220)
+	ld XBC, (xsp + 0x0220)
 	ld xwa, xbc
 	cp xwa, 0xc
 	jrl z, RVari_OK_TypeNE_InputC
@@ -2353,11 +2353,11 @@ RVari_OK_TypeNE_DispatchInput:
 	muls wa, 0xa
 	sub wa, 0xa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input88_Done:
@@ -2382,11 +2382,11 @@ RVari_OK_TypeNE_Input89:
 	muls wa, 0xa
 	sub wa, 0x9
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input89_Done:
@@ -2411,11 +2411,11 @@ RVari_OK_TypeNE_Input8A:
 	muls wa, 0xa
 	dec 8, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input8A_Done:
@@ -2440,11 +2440,11 @@ RVari_OK_TypeNE_Input8B:
 	muls wa, 0xa
 	dec 7, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input8B_Done:
@@ -2469,11 +2469,11 @@ RVari_OK_TypeNE_Input8C:
 	muls wa, 0xa
 	dec 6, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input8C_Done:
@@ -2503,11 +2503,11 @@ RVari_OK_TypeNE_Input8:
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input8_Done:
@@ -2537,11 +2537,11 @@ RVari_OK_TypeNE_Input9:
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_Input9_Done:
@@ -2571,11 +2571,11 @@ RVari_OK_TypeNE_InputA:
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_InputA_Done:
@@ -2605,11 +2605,11 @@ RVari_OK_TypeNE_InputB:
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_InputB_Done:
@@ -2639,11 +2639,11 @@ RVari_OK_TypeNE_InputC:
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 
 RVari_OK_TypeNE_InputC_Done:
@@ -2657,7 +2657,7 @@ RVari_OK_PageScroll:
 	divs wa, 0xa
 	inc 1, wa
 	stw_da (0x0340bc), xwa
-	ld_sril XWA, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0220)
 	cp xwa, 0x10
 	jr nz, RVari_OK_CheckPageDown
 	ld xwa, (xiz + 44)
@@ -2666,7 +2666,7 @@ RVari_OK_PageScroll:
 	jr ge, RVari_OK_PageUp_AtMax
 	ld xwa, (xiz + 44)
 	incw 1, (xwa)
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
@@ -2677,13 +2677,13 @@ RVari_OK_PageUp_AtMax:
 	jr le, RVari_OK_CheckPageDown
 	ld xwa, (xiz + 44)
 	ldw (xwa), 0x1
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 
 RVari_OK_CheckPageDown:
-	ld_sril XWA, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0220)
 	cp xwa, 0x90
 	jr nz, RVari_OK_ForwardDefault
 	ld xwa, (xiz + 44)
@@ -2691,7 +2691,7 @@ RVari_OK_CheckPageDown:
 	jr le, RVari_OK_PageDown_AtMin
 	ld xwa, (xiz + 44)
 	decm 1, (xwa)
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
@@ -2703,22 +2703,22 @@ RVari_OK_PageDown_AtMin:
 	ld xbc, (xiz + 44)
 	ldw_da xwa, (0x0340bc)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 
 RVari_OK_ForwardDefault:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
 	jr RVari_Epilogue
 
 RVari_Default:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
 
 RVari_Epilogue:

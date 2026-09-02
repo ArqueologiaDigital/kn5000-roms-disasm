@@ -63,7 +63,7 @@ Handler_INTA:
 	cpdi8	(0x0f63), 0
 	jr	nz, Handler_INTA__rx_pacing
 	anddi8	(0x0f66), 0x9f		; PFCR shadow: SC1 pins to RX mode
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
@@ -118,7 +118,7 @@ Handler_INTTX1:
 	push	xwa
 	push	xhl
 	push	xiy
-	ldb_d8	l, (0x0f62)
+	ld	l, (0x0f62:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, BootSerial_StateDispatchTable + 0x600000	; boot-time alias
@@ -143,7 +143,7 @@ Handler_INTRX1:
 	push	xwa
 	push	xhl
 	push	xiy
-	ldb_d8	l, (0x0f62)
+	ld	l, (0x0f62:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, BootSerial_StateDispatchTable + 0x600000	; boot-time alias

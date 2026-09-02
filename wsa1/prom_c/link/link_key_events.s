@@ -414,7 +414,7 @@ Link_Ch1_WriteParamBlock__F98E93:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E93  jrl T,0xf98fd1
 	stib_da	(0x7EB1), 1                    ; F98E96  ld (0x007eb1),0x01
 	setda_24 2, 0x007ECC                   ; F98E9C  set 2,(0x007ecc)   [llvm-mc cannot encode this]
-	lda_24	xix, (0x7E98)                   ; F98EA1  lda XIX,0x007e98
+	lda	xix, (0x7E98:24)                   ; F98EA1  lda XIX,0x007e98
 	ld	bc, (xiz-2)                         ; F98EA6  ld BC,(XIZ+0xfe)
 	extz	bc                                ; F98EA9  extz BC
 	extz	xbc                               ; F98EAB  extz XBC
@@ -445,7 +445,7 @@ Link_Ch1_WriteParamBlock__F98EE0:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98EE0  jrl T,0xf98fd1
 	stib_da	(0x7ECB), 1                    ; F98EE3  ld (0x007ecb),0x01
 	setda_24 3, 0x007ECC                   ; F98EE9  set 3,(0x007ecc)   [llvm-mc cannot encode this]
-	lda_24	xix, (0x7EB2)                   ; F98EEE  lda XIX,0x007eb2
+	lda	xix, (0x7EB2:24)                   ; F98EEE  lda XIX,0x007eb2
 	ld	bc, (xiz-2)                         ; F98EF3  ld BC,(XIZ+0xfe)
 	extz	bc                                ; F98EF6  extz BC
 	extz	xbc                               ; F98EF8  extz XBC

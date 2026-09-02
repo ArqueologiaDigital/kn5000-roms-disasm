@@ -158,7 +158,7 @@ SysEx_ApplyVoiceParam_4B:
 	ret
 	ld XIY,0x0000be9d
 	ld XIX,0x0000bca0
-	ldw_d16 bc, (0x9046)
+	ld bc, (0x9046:16)
 	srl BC, 0x01
 	cps bc, 0
 	jr z, .Lc_fdaae1
@@ -282,7 +282,7 @@ SysEx_ApplyVoiceParam_49_SlotNext:
 	.byte 0x5b, 0x5a, 0x0e, 0x0e, 0x0e, 0x0e, 0xd8
 SysEx_ApplyVoiceParam_49_RestoreSlotId:
 	sbc	wa, wa
-	stb_d8	(38941), d
+	ld	(38941:16), d
 	swi	4
 	call	16532931
 	ret
@@ -310,7 +310,7 @@ SysEx_ApplyVoiceParam_49_128_SkipRestore:
 	dec	4, xsp
 SysEx_ApplyVoiceParam_49_128_IterateSlots:
 	push	qiz
-	lda_d16	xwa, (49138)
+	lda	xwa, (49138:16)
 SysEx_ApplyVoiceParam_49_128_SlotLoop:
 	.byte 0xbf, 0x02, 0x60, 0xc7, 0xfb, 0xa8, 0xc7, 0xfb
 	.byte 0x89, 0xd8, 0x12, 0x1d, 0x29, 0x96, 0xfc, 0xbb
@@ -368,7 +368,7 @@ SysEx_ApplyAndReloadPreset_Type63:
 SysEx_ApplyAndReloadPreset_Type63_Loop:
 	cp	(xwa), a
 	ldw	bc, 35817
-	lda_d16	xwa, (64862)
+	lda	xwa, (64862:16)
 	sub	xwa, xbc
 	ld	de, wa
 	srl	de, 1
@@ -489,7 +489,7 @@ SwbtWr_QueueMainEvent:
 	call	15673229
 	ld	iz, hl
 	jr	54
-	ldb_d8	a, (49480)
+	ld	a, (49480:16)
 	cps	a, 2
 	jr	z, 16
 	cps	a, 1
@@ -511,7 +511,7 @@ SwbtWr_TrailingBytecode:
 	.byte 0x1d, 0x8d, 0x27, 0xef, 0xbf, 0x02, 0x53, 0x78
 	.byte 0x8e, 0x00
 PreLswLoad:
-	ldb_d8	a, (49480)
+	ld	a, (49480:16)
 	ld	iz, (xsp+8)
 PostLswLoad:
 	.byte 0xc9, 0xd9, 0x66, 0x4c, 0xc9, 0xda, 0x66, 0x04
@@ -634,7 +634,7 @@ BitMapOut_MergeOutputFields:
 	cp IZ,0x0108
 	jrl nc, .Lc_fdb347
 	resda 4, (0x0429)
-	ldb_d8 a, (0x0429)
+	ld a, (0x0429:16)
 	and A,0x1f
 	jr z, .Lc_fdb329
 	bitda 0, (0x0429)
@@ -644,13 +644,13 @@ BitMapOut_MergeOutputFields:
 	jr nz, .Lc_fdb297
 	ld WA,IZ
 	inc 1,IZ
-	lda_d16 xbc, (0xc036)
+	lda xbc, (0xc036:16)
 	extz XWA
 	add XWA,XBC
 	ld (XWA),0xf8
 	jr t, .Lc_fdb297
 .Lc_fdb2cc:
-	lda_d16 xwa, (0xc036)
+	lda xwa, (0xc036:16)
 	bitda 1, (0x0429)
 	jr z, .Lc_fdb2ed
 	resda 1, (0x0429)
@@ -692,7 +692,7 @@ BitMapOut_MergeOutputFields:
 	jr z, .Lc_fdb347
 	ld WA,IZ
 	inc 1,IZ
-	lda_d16 xbc, (0xc036)
+	lda xbc, (0xc036:16)
 	extz XWA
 	add XWA,XBC
 	ld (XWA),L
@@ -749,9 +749,9 @@ MidiSeq_ReceiveAndForward:
 	.byte 0x66, 0x56, 0xd9, 0xcf, 0x0f, 0x00, 0xb0, 0xf7
 MidiSeq_ReceiveAndForward_CompIface:
 	stda16	(49486), wa
-	ldw_d16	bc, (49490)
+	ld	bc, (49490:16)
 	extz	xbc
-	ldw_d16	wa, (49500)
+	ld	wa, (49500:16)
 	extz	xwa
 MidiSeq_ReceiveAndForward_SerialTiming:
 	add	xbc, xwa
@@ -828,7 +828,7 @@ MidiSysEx_BuildAndSend:
 	call	16712763
 	pop	xiz
 	ret
-	ldb_d8 c, (0xc150)
+	ld c, (0xc150:16)
 	cp C,A
 	ret Z
 	.byte 0xf1, 0x50, 0xc1, 0x41, 0xc9, 0x8b, 0xd9, 0x12
@@ -914,7 +914,7 @@ MidiOut_ReadSysExByte:
 	or (xwa+30), b
 	swi 5
 	stda16 (49502), hl
-	ldw_d16 bc, (49498)
+	ld bc, (49498:16)
 	lds wa, 1
 	jrl 151
 	bit 0x00,C
@@ -2495,7 +2495,7 @@ DSPCfg_EventType50:
 	.byte 0xf1, 0xd1, 0xc9, 0x00, 0x00, 0xf1, 0xd2, 0xc9
 	.byte 0x00, 0x10, 0xf1, 0xd3, 0xc9, 0x00, 0x00, 0x1b
 	.byte 0xc2, 0xb2, 0xfe
-	ldw_d16 wa, (0xc4f8)
+	ld wa, (0xc4f8:16)
 	bit 0x02,WA
 	ret Z
 	.byte 0x1d, 0x87, 0xe8, 0xfd, 0xd1, 0xf8, 0xc4, 0x3c
@@ -2536,7 +2536,7 @@ DSPCfg_EventType51:
 	jp AudioInit_RefreshToneBank
 	cps a, 0
 	jr z, .Lc_fdd741
-	ldw_d16 wa, (0xc4fc)
+	ld wa, (0xc4fc:16)
 	bit 0x02,WA
 	jr z, .Lc_fdd756
 	bitda 0, (0x28b2)
@@ -2575,14 +2575,14 @@ AudioModeChange_Handler:
 	jr z, .Lc_fddab0
 	ld A,L
 	extz WA
-	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
 	ldb_dri a, 0x07, 0xe4, 0xe0
 	extz WA
 	add WA,WA
 	ld BC,WA
 	add BC,0x00e4
-	lda_d16 xde, (0xc163)
-	ldb_d8 a, (0xfc6a)
+	lda xde, (0xc163:16)
+	ld a, (0xfc6a:16)
 	and A,0xff
 	sub A,0x40
 	stb_dri a, 0x07, 0xe8, 0xe4

@@ -99,19 +99,19 @@ FP_DP_CmpZero64:
 	ld xiy, (xwa)
 	cp xiy, xde
 	jr nz, FP_DP_CmpZero64_Greater
-	lda_24 xde, 0x03d978
+	lda xde, (0x03d978:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x < 0: return LessRow[BC].
 FP_DP_CmpZero64_Less:
-	lda_24 xde, 0x03d97e
+	lda xde, (0x03d97e:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x > 0 (and the "high words differ" shortcut): return GreaterRow[BC].
 FP_DP_CmpZero64_Greater:
-	lda_24 xde, 0x03d984
+	lda xde, (0x03d984:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -124,19 +124,19 @@ FP_SP_CmpZero32:
 	cp xde, 0x0
 	jr lt, FP_SP_CmpZero32_Less
 	jr gt, FP_SP_CmpZero32_Greater
-	lda_24 xde, 0x03d978
+	lda xde, (0x03d978:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x < 0 arm.
 FP_SP_CmpZero32_Less:
-	lda_24 xde, 0x03d97e
+	lda xde, (0x03d97e:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x > 0 arm.
 FP_SP_CmpZero32_Greater:
-	lda_24 xde, 0x03d984
+	lda xde, (0x03d984:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -158,7 +158,7 @@ VoiceFloat_MulAddDispatch:
 	jr c, VoiceFloat_MulAddDispatch_InRange
 	stiw_da 0x040c22, 0x0022
 	ld xwa, xiz
-	lda_24 xbc, 0x01f63e
+	lda xbc, (0x01f63e:24)
 	call FP_DP_Raw8Copy
 	jr VoiceFloat_MulAddDispatch_Epilog
 
@@ -214,13 +214,13 @@ VoiceFloat_CompareAndConvert:
 	lda xsp, (xsp - 56)
 	pushw iz
 	lda xwa, (xsp + 74)
-	lda_24 xbc, 0x01f646
+	lda xbc, (0x01f646:24)
 	lds de, 1
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
 	lda xwa, (xsp + 74)
-	lda_24 xbc, 0x01f64e
+	lda xbc, (0x01f64e:24)
 	lds de, 3
 	call ToneGen_Compare_Voice
 	cps hl, 0
@@ -253,7 +253,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
 	stiw_da 0x040c22, 0x0021
 	ld xwa, (xsp + 62)
-	lda_24 xbc, 0x01f656
+	lda xbc, (0x01f656:24)
 	call FP_DP_Raw8Copy
 	jrl VoiceFloat_CompareAndConvert_Epilog
 
@@ -271,7 +271,7 @@ VoiceFloat_CompareAndConvert_AltPath:
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
 	stiw_da 0x040c22, 0x0021
 	ld xwa, (xsp + 62)
-	lda_24 xbc, 0x01f65e
+	lda xbc, (0x01f65e:24)
 	call FP_DP_Raw8Copy
 	jrl VoiceFloat_CompareAndConvert_Epilog
 
@@ -298,7 +298,7 @@ VoiceFloat_CompareAndConvert_AltPath2:
 
 ; pow(): n was already >= 0; seed the accumulator with 1.0 and enter the loop test.
 VoiceFloat_SignedDelta_Positive:
-	lda_24 xbc, 0x01f666
+	lda xbc, (0x01f666:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 	jrl VoiceFloat_IterationLoop_CheckContinue
@@ -336,7 +336,7 @@ VoiceFloat_IterationLoop:
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	cps hl, 0
 	jr nz, VoiceFloat_IterationLoop_GreaterPath
 	lda xwa, (xsp + 46)
@@ -351,7 +351,7 @@ VoiceFloat_IterationLoop_GreaterPath:
 
 ; Underflow: result = 0.0 (0x01F66E).
 VoiceFloat_IterationLoop_LessPath:
-	lda_24 xbc, 0x01f66e
+	lda xbc, (0x01f66e:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 
@@ -373,14 +373,14 @@ VoiceFloat_IterationLoop_LargeStep:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceFloat_IterationLoop_LargeStep_NegPath
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_CopyOrNegate8
 	jr VoiceFloat_IterationLoop_LargeStep_Copy
 
 ; Overflow with a negative base: result = -DBL_MAX.
 VoiceFloat_IterationLoop_LargeStep_NegPath:
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 
@@ -429,7 +429,7 @@ VoiceFloat_IterationLoop_CheckContinue:
 ; Negative integer exponent: result = 1.0 (0x01F676) / accumulator.
 VoiceFloat_IterationLoop_DifferentPath:
 	ld xwa, (xsp + 62)
-	lda_24 xbc, 0x01f676
+	lda xbc, (0x01f676:24)
 	lda xde, (xsp + 46)
 	call VoiceFloat_SubDP
 	jrl VoiceFloat_CompareAndConvert_Epilog
@@ -457,7 +457,7 @@ VoiceFloat_ConvergenceLoop:
 	cpw_da 265250, 33
 	jr nz, VoiceFloat_ConvergenceLoop_Body
 	ld xwa, (xsp + 62)
-	lda_24 xbc, 0x01f67e
+	lda xbc, (0x01f67e:24)
 	call FP_DP_Raw8Copy
 	jrl VoiceFloat_CompareAndConvert_Epilog
 
@@ -515,7 +515,7 @@ VoiceFloat_ConvergenceLoop_RangeCheck:
 	lds bc, 2
 	call FP_DP_CmpZero64
 	lda xwa, (xsp + 46)
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	cps hl, 0
 	jr nz, VoiceFloat_ConvergenceLoop_NegResult
 	call FP_DP_CopyOrNegate8
@@ -538,7 +538,7 @@ VoiceFloat_ConvergenceLoop_Clamp:
 	jr ge, VoiceFloat_ConvergenceLoop_CrossZero
 	stiw_da 0x040c22, 0x0022
 	ld xwa, (xsp + 62)
-	lda_24 xbc, 0x01f686
+	lda xbc, (0x01f686:24)
 	call FP_DP_Raw8Copy
 	jr VoiceFloat_CompareAndConvert_Epilog
 
@@ -784,7 +784,7 @@ VoiceFloat_BlendAndMerge:
 	jr c, VoiceFloat_BlendAndMerge_InRange
 	stiw_da 0x040c22, 0x0022
 	ld_sril XWA, (xsp + 0x0088)
-	lda_24 xbc, 0x01f68e
+	lda xbc, (0x01f68e:24)
 	call FP_DP_Raw8Copy
 	jrl VoiceFloat_BlendAndMerge_Epilog
 
@@ -792,7 +792,7 @@ VoiceFloat_BlendAndMerge:
 VoiceFloat_BlendAndMerge_InRange:
 	lda xwa, (xsp + 116)
 	push xwa
-	lda_24 xde, 0x00f396
+	lda xde, (0x00f396:24)
 	lda_dri XBC, 0xFD, 0x98, 0x00
 	lda xwa, (xsp + 72)
 	call FP_DP_Add_Outer
@@ -806,14 +806,14 @@ VoiceFloat_BlendAndMerge_InRange:
 	call DSP_VoiceBlend
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 100)
-	lda_24 xbc, 0x01f696
+	lda xbc, (0x01f696:24)
 	lds de, 1
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_BlendAndMerge_Phase2
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	lda_24 xde, 0x01f69e
+	lda xde, (0x01f69e:24)
 	call FP_DP_Mul
 
 ; Convert the (rounded) quadrant count to int32 and test its parity.
@@ -847,7 +847,7 @@ VoiceFloat_BlendAndMerge_Phase3:
 	jr nz, VoiceFloat_BlendAndMerge_Phase4
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	lda_24 xde, 0x01f6a6
+	lda xde, (0x01f6a6:24)
 	call FP_DP_Sub
 
 ; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
@@ -872,7 +872,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	lda xwa, (xsp + 120)
 	push xwa
 	call DSP_VoiceBlend
-	lda_24 xde, 0x00f39e
+	lda xde, (0x00f39e:24)
 	lda_dri XBC, 0xFD, 0x84, 0x00
 	lda xwa, (xsp + 84)
 	call FP_DP_Add_Outer
@@ -884,7 +884,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 124)
 	call FP_DP_Mul
-	lda_24 xbc, 0x00f38e
+	lda xbc, (0x00f38e:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_CopyOrNegate8
 	lda xwa, (xsp + 72)
@@ -904,7 +904,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	push xwa
 	call FP_DP_CmpAndCopy
 	lda xsp, (xsp + 28)
-	lda_24 xbc, 0x00f3a6
+	lda xbc, (0x00f3a6:24)
 	lda xwa, (xsp + 76)
 	lds de, 0
 	call ToneGen_Compare_Voice
@@ -914,7 +914,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xde
 	lda xwa, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xwa, 0x00f34e
+	lda xwa, (0x00f34e:24)
 	lda xiz, (xwa + 48)
 	lda xbc, (xwa + 56)
 	lda xde, (xsp + 108)
@@ -928,7 +928,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xbc, 0x00f376
+	lda xbc, (0x00f376:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call FP_DP_Mul
@@ -936,7 +936,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xde, 0x00f36e
+	lda xde, (0x00f36e:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
@@ -944,7 +944,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xbc, 0x00f366
+	lda xbc, (0x00f366:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call FP_DP_Mul
@@ -952,7 +952,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xde, 0x00f35e
+	lda xde, (0x00f35e:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
@@ -960,7 +960,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xbc, 0x00f356
+	lda xbc, (0x00f356:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call FP_DP_Mul
@@ -968,7 +968,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_DP_Add_Outer
-	lda_24 xde, 0x00f34e
+	lda xde, (0x00f34e:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
@@ -1958,7 +1958,7 @@ FP_SP_Mul_Encode:
 DSP_VoiceBlend:
 	lda xsp, (xsp - 24)
 	push xiz
-	lda_24 xbc, 0x01f6ae
+	lda xbc, (0x01f6ae:24)
 	lda xwa, (xsp + 20)
 	call FP_DP_Raw8Copy
 	lda xiy, (xsp + 36)
@@ -2645,7 +2645,7 @@ FP_SP_SubMantissa_Zero:
 VoicePitch_SlideEngine:
 	lda xsp, (xsp - 48)
 	pushw iz
-	lda_24 xbc, 0x01f6b6
+	lda xbc, (0x01f6b6:24)
 	lda xwa, (xsp + 34)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
@@ -2660,31 +2660,31 @@ VoicePitch_SlideEngine:
 
 ; x != 0: load the term seed and test the overflow threshold.
 VoicePitch_SlideEngine_NonZero:
-	lda_24 xbc, 0x01f6be
+	lda xbc, (0x01f6be:24)
 	lda xwa, (xsp + 42)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
-	lda_24 xbc, 0x01f6c6
+	lda xbc, (0x01f6c6:24)
 	lds de, 0
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoicePitch_SlideEngine_LessPath
 	stiw_da 0x040c22, 0x0022
 	ld xwa, (xsp + 54)
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	call FP_DP_Raw8Copy
 	jrl VoicePitch_SlideEngine_Epilog
 
 ; x <= log(DBL_MAX): test the underflow threshold.
 VoicePitch_SlideEngine_LessPath:
 	lda xwa, (xsp + 58)
-	lda_24 xbc, 0x01f6ce
+	lda xbc, (0x01f6ce:24)
 	lds de, 2
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoicePitch_SlideEngine_StartIter
 	ld xwa, (xsp + 54)
-	lda_24 xbc, 0x01f6d6
+	lda xbc, (0x01f6d6:24)
 	call FP_DP_Raw8Copy
 	jr VoicePitch_SlideEngine_Epilog
 
@@ -2764,7 +2764,7 @@ VoiceAmp_ConvergeEngine:
 	jr nz, VoiceAmp_ConvergeEngine_InRange
 	stiw_da 0x040c22, 0x0021
 	ld xwa, (xsp + 110)
-	lda_24 xbc, 0x01f6de
+	lda xbc, (0x01f6de:24)
 	call FP_DP_Raw8Copy
 	jrl VoiceAmp_ConvergeEngine_Epilog
 
@@ -2773,7 +2773,7 @@ VoiceAmp_ConvergeEngine:
 VoiceAmp_ConvergeEngine_InRange:
 	lda xwa, (xsp + 104)
 	push xwa
-	lda_24 xde, 0x00f42c
+	lda xde, (0x00f42c:24)
 	lda xbc, (xsp + 118)
 	lda xwa, (xsp + 52)
 	call VoiceFloat_SubDP
@@ -2786,7 +2786,7 @@ VoiceAmp_ConvergeEngine_InRange:
 	push xwa
 	call FP_DP_FreqAdjust
 	pushm (xsp + 120)
-	lda_24 xiy, 0x01f6e6
+	lda xiy, (0x01f6e6:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -2800,11 +2800,11 @@ VoiceAmp_ConvergeEngine_InRange:
 	lda xde, (xsp + 56)
 	call VoiceFloat_SubDP
 	lda xbc, (xsp + 114)
-	lda_24 xde, 0x01f6ee
+	lda xde, (0x01f6ee:24)
 	lda xwa, (xsp + 48)
 	call FP_DP_Mul
 	lda xbc, (xsp + 114)
-	lda_24 xde, 0x01f6f6
+	lda xde, (0x01f6f6:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -2851,7 +2851,7 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceAmp_ConvergeEngine_IterLoop
-	lda_24 xiz, 0x00f3d2
+	lda xiz, (0x00f3d2:24)
 	ld wa, (xsp + 104)
 	exts xwa
 	ld (xsp + 44), xwa
@@ -2863,7 +2863,7 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	ld xde, xiz
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 88)
-	lda_24 xde, 0x01f6fe
+	lda xde, (0x01f6fe:24)
 	lda xwa, (xsp + 48)
 	call FP_DP_Add_Outer
 	lda xbc, (xsp + 48)
@@ -2933,7 +2933,7 @@ DSP_VoiceRegUpdate:
 ; Biased exponent 0 or 0x7FF: return 0.0.
 DSP_VoiceRegUpdate_ZeroOrMax:
 	ld xwa, (xsp + 36)
-	lda_24 xbc, 0x01f70e
+	lda xbc, (0x01f70e:24)
 	call FP_DP_Raw8Copy
 	jrl DSP_VoiceRegUpdate_Return
 
@@ -2969,7 +2969,7 @@ DSP_VoiceRegUpdate_NegOffset:
 	cps wa, 0
 	jr ge, DSP_VoiceRegUpdate_LargeOffset
 	ld xwa, (xsp + 36)
-	lda_24 xbc, 0x01f716
+	lda xbc, (0x01f716:24)
 	call FP_DP_Raw8Copy
 	jrl DSP_VoiceRegUpdate_Return
 
@@ -3226,7 +3226,7 @@ VoiceFreq_EnvelopeStep:
 	ld xde, (xsp + 22)
 	cps hl, 0
 	jr nz, VoiceFreq_EnvelopeStep_InRange
-	lda_24 xbc, 0x01f71e
+	lda xbc, (0x01f71e:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
 	jrl VoiceFreq_EnvelopeStep_Epilog
@@ -3239,7 +3239,7 @@ VoiceFreq_EnvelopeStep_InRange:
 	cp bc, 0x7FF
 	jr le, VoiceFreq_EnvelopeStep_ClampLow
 	stiw_da 0x040c22, 0x0022
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	bitm 7, (xhl)
 	jr z, VoiceFreq_EnvelopeStep_ClampHigh
 	ld xwa, xde
@@ -3256,7 +3256,7 @@ VoiceFreq_EnvelopeStep_ClampHigh:
 VoiceFreq_EnvelopeStep_ClampLow:
 	cp bc, 0xF801
 	jr ge, VoiceFreq_EnvelopeStep_NibbleAdjust
-	lda_24 xbc, 0x01f726
+	lda xbc, (0x01f726:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
 	jrl VoiceFreq_EnvelopeStep_Epilog
@@ -3294,7 +3294,7 @@ VoiceFreq_EnvelopeStep_IncLoop:
 	cp wa, 0x7FF
 	jr c, VoiceFreq_EnvelopeStep_IncStep
 	stiw_da 0x040c22, 0x0022
-	lda_24 xbc, 0x00f420
+	lda xbc, (0x00f420:24)
 	ld a, (xix)
 	bit 7, a
 	jr z, VoiceFreq_EnvelopeStep_IncClamp_Copy
@@ -3327,7 +3327,7 @@ VoiceFreq_EnvelopeStep_DecLoop:
 	sub wa, 0x1
 	jr nz, VoiceFreq_EnvelopeStep_DecStep
 	stiw_da 0x040c22, 0x0022
-	lda_24 xbc, 0x01f72e
+	lda xbc, (0x01f72e:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
 	jr VoiceFreq_EnvelopeStep_Epilog

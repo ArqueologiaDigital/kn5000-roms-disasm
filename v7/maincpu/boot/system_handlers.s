@@ -70,7 +70,7 @@ NMI_StorePayloadChecksums_Entry:
 	adddi16_24 (0xffd4), 1000
 
 NMI_CopyPayloadToSRAM:
-	lda_24 xde, (0x00066e)
+	lda xde, (0x00066e:24)
 	srl xde, 1
 	ld xwa, 0x1e8000
 	ld xbc, 0xf980
@@ -99,7 +99,7 @@ SubCPU_Payload_Verify_Entry:
 	ld xwa, 0xf180	; Start of payload region 1
 	ldw bc, 0x800	; Size: 0x800 words
 	call Checksum_ComputeComplement	; Compute checksum -> HL
-	lda_24 xwa, (0x00f980)
+	lda xwa, (0x00f980:24)
 	cpda16_24 xhl, (0xffd4); Compare with expected checksum
 	jr nz, SubCPU_Payload_Verify_Fail	; First region checksum failed
 	stib_da (0x01e53e), 0x00; Mark as success (so far)
@@ -202,21 +202,21 @@ Vga_SetupMultiPlaneDisplay:
 	call Copy_DE_words_from_XBC_to_XWA
 	lds wa, 1
 	calr Vga_SelectWritePlane
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, 0xb800
 	ld xwa, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	lds wa, 2
 	calr Vga_SelectWritePlane
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, 0x2b800
 	ld xwa, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	lds wa, 3
 	calr Vga_SelectWritePlane
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, 0x4b800
 	ld xwa, 0x1a0000
 	ldw de, 0x4c00
@@ -237,21 +237,21 @@ Vga_RestoreMultiPlaneDisplay:
 	call Copy_DE_words_from_XBC_to_XWA
 	lds wa, 1
 	calr Vga_SelectWritePlane
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	add xwa, 0xb800
 	ld xbc, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	lds wa, 2
 	calr Vga_SelectWritePlane
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	add xwa, 0x2b800
 	ld xbc, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	lds wa, 3
 	calr Vga_SelectWritePlane
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	add xwa, 0x4b800
 	ld xbc, 0x1a0000
 	ldw de, 0x4c00
@@ -387,8 +387,8 @@ INTT1_HANDLER:
 	incdi16 1, (1037)
 	push	sr
 	ei 6
-	ldb_d8 a, (1063)
-	ldb_d8 w, (1062)
+	ld a, (1063:16)
+	ld w, (1062:16)
 	bit 7, a
 	jr z, INTT1_NoOverflow
 	incdi8 1, (1061)
@@ -402,16 +402,16 @@ INTT1_NoOverflow:
 	.byte 0x00, 0xc1, 0x29, 0x04, 0x3e, 0x10, 0x1d, 0xa1
 	.byte 0xf1, 0xfc
 INTT1_StoreCounters:
-	stb_d8 (1062), w
-	stb_d8 (1063), a
+	ld (1062:16), w
+	ld (1063:16), a
 	pop	sr
-	ldb_d8 a, (1066)
+	ld a, (1066:16)
 	cp a, 0xf1
 	jr ugt, INTT1_CheckScanFlag
 	inc 1, a
 
 INTT1_CheckScanFlag:
-	stb_d8 (1066), a
+	ld (1066:16), a
 	bitda 2, (0xfd50)
 	jrl nz, INTT1_UpdateAlternateTimers
 	incdi8 1, (1050)
@@ -474,10 +474,10 @@ INTT1_CheckAltSeqTimer:
 	bitda 3, (1057)
 	jr z, INTT1_CheckMetroTimer
 	stdi8 (1057), 16
-	ldb_d8 a, (1045)
-	stb_d8 (1078), a
-	ldb_d8 a, (1046)
-	stb_d8 (1079), a
+	ld a, (1045:16)
+	ld (1078:16), a
+	ld a, (1046:16)
+	ld (1079:16), a
 
 INTT1_CheckMetroTimer:
 	bitda 3, (1056)
@@ -486,7 +486,7 @@ INTT1_CheckMetroTimer:
 	jrl INTT1_CheckMidiSync
 
 UIStateMachine_DispatchEntry:
-	lda_d16 xhl, (1055)
+	lda xhl, (1055:16)
 	ld a, (xhl)
 	bitda 2, (0xfd50)
 	jr nz, UIStateMachine_CheckPending
@@ -502,7 +502,7 @@ UIStateMachine_CheckPending:
 
 UIStateMachine_ClearBit3:
 	resda 2, 1043
-	ldb_d8 a, (1041)
+	ld a, (1041:16)
 	inc 1, a
 	cps a, 2
 	jr ule, UIStateMachine_PrimaryDispatch
@@ -513,9 +513,9 @@ UIStateMachine_ClearBit3:
 ; Index: DRAM[1041] (0-2), entries: 3
 ; State 0: Idle, State 1: Process, State 2: Sub-state dispatch
 UIStateMachine_PrimaryDispatch:
-	stb_d8 (1041), a
+	ld (1041:16), a
 	sll a, 2
-	lda_24 xhl, (UI_STATE_MACHINE_TABLE)
+	lda xhl, (UI_STATE_MACHINE_TABLE:24)
 	ld_sril3 XHL, 0x03, 0xec, 0xe0
 	jp (xhl)
 
@@ -533,7 +533,7 @@ UI_STATE_1_PROCESS:
 	anddi8 (1058), 110
 	bitda 0, (1042)
 	jr nz, UIState1_AlternateExit
-	lda_d16 xhl, (1116)
+	lda xhl, (1116:16)
 	cp (xhl), 0x0
 	jr z, UIState1_SkipToExit
 	decm8 1, (xhl)
@@ -545,10 +545,10 @@ UIState1_AlternateExit:
 	jrl UIStateMachine_ExitToScheduler
 
 UI_STATE_2_SUBSTATE:
-	ldb_d8 a, (1042)
+	ld a, (1042:16)
 	and a, 0xf
 	sll a, 2
-	lda_24 xhl, (UI_SUBSTATE_TABLE)
+	lda xhl, (UI_SUBSTATE_TABLE:24)
 	ld_sril3 XHL, 0x03, 0xec, 0xe0
 	jp (xhl)
 
@@ -613,8 +613,8 @@ INTTR4_HANDLER:
 	pushw wa
 	push xhl
 	push xiy
-	lda_24 xiy, (0x01e753)
-	lda_d16 xhl, (1039)
+	lda xiy, (0x01e753:24)
+	lda xhl, (1039:16)
 	incm8 1, (xhl)
 	cp (xhl), 0x60
 	jr c, INTTR4_TickWrapped
@@ -633,7 +633,7 @@ INTTR4_CheckSyncEnable:
 	.byte 0x7e, 0x3f, 0x00, 0x66, 0x09, 0x1e, 0xaa, 0x02
 	.byte 0x68, 0x04
 INTTR4_SyncCounter2_NoWrap:
-	stb_d8 (1130), a
+	ld (1130:16), a
 
 INTTR4_SyncCounter2_Done:
 	pop	sr
@@ -643,7 +643,7 @@ INTTR4_CheckMetroEnable:
 	jr z, INTTR4_CheckSeqEnable
 	push	sr
 	ei 6
-	ldb_d8 a, (1047)
+	ld a, (1047:16)
 	inc 1, a
 	cp a, 0x60
 	jr lt, INTTR4_MetroCounter_Store
@@ -651,7 +651,7 @@ INTTR4_CheckMetroEnable:
 	incdi16 1, (1048)
 
 INTTR4_MetroCounter_Store:
-	stb_d8 (1047), a
+	ld (1047:16), a
 	pop	sr
 
 INTTR4_CheckSeqEnable:
@@ -716,7 +716,7 @@ INTTR4_SeqInit_SetEnable:
 INTTR4_MetroBeat_Check:
 	bitda 3, (1056)
 	jr z, INTTR4_SeqBeat_Check
-	ldb_d8 a, (1047)
+	ld a, (1047:16)
 	cps a, 0
 	jr z, INTTR4_MetroBeat_OnBeat
 	cp a, 0x18
@@ -742,10 +742,10 @@ INTTR4_AltSeqBeat_Check:
 	bitda 3, (1057)
 	jr z, INTTR4_MetroQuarter_Check
 	stdi8 (1057), 16
-	ldb_d8 a, (1045)
-	stb_d8 (1078), a
-	ldb_d8 a, (1046)
-	stb_d8 (1079), a
+	ld a, (1045:16)
+	ld (1078:16), a
+	ld a, (1046:16)
+	ld (1079:16), a
 
 INTTR4_MetroQuarter_Check:
 	.byte 0xf1, 0x20, 0x04, 0xca, 0x66, 0x1d, 0xc1, 0x17
@@ -758,7 +758,7 @@ INTTR4_SeqAccum_Update:
 	jr z, INTTR4_SeqAccum_Reset
 	push	sr
 	ei 6
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	ld w, a
 	subda8 a, 1111
 	jr z, INTTR4_SeqAccum_Done
@@ -766,7 +766,7 @@ INTTR4_SeqAccum_Update:
 	add a, 0x60
 
 INTTR4_SeqAccum_PositiveDelta:
-	stb_d8 (1111), w
+	ld (1111:16), w
 	adddm8 1124, a
 	adddm8 1122, a
 	xor w, w
@@ -787,13 +787,13 @@ INTTR4_SeqAccum_Reset:
 	xor	wa, wa
 	stda16	(1120), wa
 	stda16	(13014), wa
-	stb_d8	(1122), a
-	stb_d8	(13018), a
-	stb_d8	(1111), a
+	ld	(1122:16), a
+	ld	(13018:16), a
+	ld	(1111:16), a
 INTTR4_AltSeqAccum_Update:
 	bitda 2, (1057)
 	jr z, INTTR4_FadeDelay_Check
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	bitda 3, (1073)
 	jr z, INTTR4_AltSeqSync_Check
 	cpdm8 1072, a
@@ -827,7 +827,7 @@ INTTR4_SyncAccum_Update:
 	jr z, INTTR4_SyncAccum_Reset
 	push	sr
 	ei 6
-	ldb_d8 a, (1130)
+	ld a, (1130:16)
 	ld w, a
 	subda8 a, 1138
 	jr z, INTTR4_SyncAccum_Done
@@ -835,7 +835,7 @@ INTTR4_SyncAccum_Update:
 	add a, 0x60
 
 INTTR4_SyncAccum_PositiveDelta:
-	stb_d8 (1138), w
+	ld (1138:16), w
 	adddm8 1131, a
 	adddm8 1133, a
 	xor w, w
@@ -856,9 +856,9 @@ INTTR4_SyncAccum_Reset:
 	xor	wa, wa
 	stda16	(1136), wa
 	stda16	(32098), wa
-	stb_d8	(1133), a
-	stb_d8	(32096), a
-	stb_d8	(1138), a
+	ld	(1133:16), a
+	ld	(32096:16), a
+	ld	(1138:16), a
 INTTR4_Return:
 	pop xiy
 	pop xhl
@@ -886,8 +886,8 @@ TempoRingBuf_Write_Dequeue:
 
 TempoRingBuf_Write_Enqueue:
 	pushw ix
-	lda_d16 xhl, (1143)
-	ldw_d16 xix, (1141)
+	lda xhl, (1143:16)
+	ld ix, (1141:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x81
 	inc 1, ix
 	stda16 (1141), xix
@@ -904,12 +904,12 @@ TempoRingBuf_WritePair:
 	push	sr
 	ei 6
 	push xiy
-	lda_24 xiy, (0x01e753)
+	lda xiy, (0x01e753:24)
 	ld hl, (xiy - 4)
 	stb_dri A, 0x07, 0xf4, 0xec
 	decm 1, (xiy - 2)
 	minc1_16 hl, 0x7ff
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	stb_dri A, 0x07, 0xf4, 0xec
 	minc1_16 hl, 0x7ff
 	decm 1, (xiy - 2)
@@ -923,13 +923,13 @@ TempoRingBuf_WritePair_ClearPending:
 
 TempoRingBuf_WritePair_Enqueue:
 	pushw ix
-	lda_d16 xhl, (1143)
-	ldw_d16 xix, (1141)
+	lda xhl, (1143:16)
+	ld ix, (1141:16)
 	stb_dri A, 0x07, 0xec, 0xf0
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	inc 1, ix
 	stb_dri A, 0x07, 0xec, 0xf0
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	inc 1, ix
 	stda16 (1141), xix
 	popw ix
@@ -938,7 +938,7 @@ TempoRingBuf_WritePair_Enqueue:
 INTTR4_SubTick_Mode:
 	bitda 2, (1057)
 	jr z, INTTR4_SubTick_MetroInc
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_MetroInc
@@ -947,7 +947,7 @@ INTTR4_SubTick_Mode:
 INTTR4_SubTick_MetroInc:
 	bitda 2, (1056)
 	jr z, INTTR4_SubTick_SeqInc
-	ldb_d8 a, (1047)
+	ld a, (1047:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_SeqInc
@@ -956,7 +956,7 @@ INTTR4_SubTick_MetroInc:
 INTTR4_SubTick_SeqInc:
 	bitda 2, (1054)
 	jr z, INTTR4_SubTick_PhaseSync
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_PhaseSync
@@ -1081,10 +1081,10 @@ MainLoop_AfterBit3Check:
 	jr	z, 4
 	call	16625940
 MainLoop_AfterSeqBuf_DspSysEx:
-	ldb_d8	a, (13265)
+	ld	a, (13265:16)
 	and	a, 3
 	jr	z, 13
-	ldb_d8	a, (12775)
+	ld	a, (12775:16)
 	and	a, 3
 	jr	nz, 4
 	call	16094890
@@ -1106,7 +1106,7 @@ MainLoop_AfterSwbtWr:
 	call SeMenu_ListSelector_Select
 
 MainLoop_AfterSeqBuf_NoteEvent:
-	lda_d16 xiy, (1058)
+	lda xiy, (1058:16)
 	mri_d2 0xb5, 0xae
 	jr nz, MainLoop_AfterDialCheck
 	calr MainLoop_AudioPeriodicCheck
@@ -1151,7 +1151,7 @@ MainLoop_SequencerPhase:
 	jrl MainLoop
 
 Seq_TickWrapper:
-	lda_d16 xiy, (0x045b)
+	lda xiy, (0x045b:16)
 	cp (XIY),0x01
 	jr nz, SeqTick_CheckActive
 	cpdi8 (0xce43), 0x00
@@ -1182,7 +1182,7 @@ MainLoop_AudioPeriodicCheck:
 	call	16679601
 	ret
 Seq_ProcessMidiEvent:
-	lda_24 xhl, (0x01f37b)
+	lda xhl, (0x01f37b:24)
 	ld iy, (xhl - 8)
 	ld ix, (xhl - 4)
 	xor bc, bc
@@ -1275,7 +1275,7 @@ MidiSerial_ProcessAndReinit:
 	calr	75
 	jr	0
 MidiEvt_UpdateReadPosition:
-	lda_24 xhl, (0x01f37b)
+	lda xhl, (0x01f37b:24)
 	ld wa, (xhl - 6)
 	ld (xhl - 8), wa
 	popw wa
@@ -1350,7 +1350,7 @@ RhythmBuf_ProcessLoop_Done:
 	ret
 
 RhythmBuf_DispatchEvent:
-	lda_24	xhl, (126813)
+	lda	xhl, (126813:24)
 	calr	41
 	jr	c, 6
 	call	16646967
@@ -1428,7 +1428,7 @@ SeqEvt_ProcessBuffer:
 	calr SyncTiming_Snapshot
 
 SeqEvt_ProcessBuffer_Main:
-	lda_24 xhl, (0x01f271)
+	lda xhl, (0x01f271:24)
 
 SeqEvt_ProcessLoop:
 	.byte 0x9b, 0xfc, 0x20, 0x9b, 0xf8, 0xf0, 0x66, 0x2a
@@ -1437,7 +1437,7 @@ SeqEvt_ProcessLoop:
 SeqEvt_Dispatch_NonNoteOn:
 	call	16678899
 SeqEvt_UpdateReadPos:
-	lda_24 xhl, (0x01f271)
+	lda xhl, (0x01f271:24)
 	ld wa, (xhl - 6)
 	ld bc, (xhl - 8)
 	ld (xhl - 8), wa
@@ -1525,7 +1525,7 @@ SeqEvt_ProcessTimedEvents_Idle:
 TempoRingBuf_Consume:
 	push xix
 	pushw hl
-	lda_d16 xix, (1143)
+	lda xix, (1143:16)
 	xor hl, hl
 	ei 6
 
@@ -1555,8 +1555,8 @@ TempoRingBuf_BytecodeSnippet:
 	calr	24
 	ret
 	push	xix
-	lda_d16	xix, (1143)
-	ldw_d16	hl, (1141)
+	lda	xix, (1143:16)
+	ld	hl, (1141:16)
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xec
@@ -1571,7 +1571,7 @@ TempoRingBuf_DequeueOne:
 	push xix
 	pushw hl
 	pushw wa
-	lda_24 xix, (0x01e753)
+	lda xix, (0x01e753:24)
 	ld wa, (xix - 2)
 	and wa, wa
 	jr z, TempoRingBuf_DequeueOne_Done
@@ -1590,11 +1590,11 @@ TempoRingBuf_DequeueOne_Done:
 
 SeqEvt_CheckExpiry:
 	anddi8 (0x0422), 0x7f
-	ldb_d8 a, (0xe8f6)
+	ld a, (0xe8f6:16)
 	and A,A
 	jr z, SeqEvt_CheckExpiry_Return
 	dec 1,A
-	stb_d8 (0xe8f6), a
+	ld (0xe8f6:16), a
 	jr nz, SeqEvt_CheckExpiry_Return
 	call 0xfe832d
 	cp L,0xff
@@ -1605,10 +1605,10 @@ SeqEvt_CheckExpiry_Return:
 
 SeqTiming_Snapshot:
 	ei 0x06
-	ldw_d16 wa, (0x0460)
-	ldb_d8 l, (0x0462)
+	ld wa, (0x0460:16)
+	ld l, (0x0462:16)
 	stda16 (0x045e), wa
-	stb_d8 (0x045d), l
+	ld (0x045d:16), l
 	.byte 0xd1, 0xd6, 0x32, 0xf0, 0x67, 0x06, 0xf1, 0x60
 	.byte 0x04, 0x02, 0x00, 0x00
 SeqTiming_Snapshot_CheckFrac:
@@ -1631,10 +1631,10 @@ SeqTiming_Snapshot_Return:
 
 SyncTiming_Snapshot:
 	ei 0x06
-	ldw_d16 wa, (0x0470)
-	ldb_d8 l, (0x046d)
+	ld wa, (0x0470:16)
+	ld l, (0x046d:16)
 	stda16 (0x046e), wa
-	stb_d8 (0x046c), l
+	ld (0x046c:16), l
 	.byte 0xd1, 0x62, 0x7d, 0xf0, 0x67, 0x06, 0xf1, 0x70
 	.byte 0x04, 0x02, 0x00, 0x00
 SyncTiming_Snapshot_CheckFrac:
@@ -1657,9 +1657,9 @@ SyncTiming_Snapshot_Return:
 
 Seq_FullInit:
 	ldb	a, 255
-	stb_d8	(1043), a
-	stb_d8	(1058), a
-	stb_d8	(1139), a
+	ld	(1043:16), a
+	ld	(1058:16), a
+	ld	(1139:16), a
 	call	15669194
 	call	15672365
 	call	15672539
@@ -1982,13 +1982,13 @@ TaskSched_HaltLoop:
 
 TaskSched_Dispatch:
 	stdi8 (305), 0
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	or wa, wa
 	jr nz, TaskSched_ReturnToDispatch
 	xor wa, wa
 	cpdm16 1159, xwa
 	jr z, TaskSched_ScanPriorityQueues
-	ldw_d16 xiy, (1159)
+	ld iy, (1159:16)
 	extz xiy
 	ld (xiy + 4), xsp
 	ld xsp, 0x1e53a
@@ -2013,7 +2013,7 @@ TaskSched_FoundReadyTask:
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
-	stb_d8 (305), a
+	ld (305:16), a
 	ld xsp, (xhl + 4)
 
 TaskSched_ReturnToDispatch:
@@ -2029,7 +2029,7 @@ TaskSched_ReturnToDispatch:
 
 
 TaskSched_TimerTick:
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	inc 1, wa
 	stda16 (1475), xwa
 	ldc_cr16 wa, 0x7c
@@ -2053,7 +2053,7 @@ TaskSched_TimerSlot_Skip:
 	add ix, 0x8
 	djnz8 b, TaskSched_CheckTimerSlot
 	ei 6
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	dec 1, wa
 	stda16 (1475), xwa
 	ldc_cr16 wa, 0x7c
@@ -2062,7 +2062,7 @@ TaskSched_TimerSlot_Skip:
 TaskSched_TimerSlot_Fire:
 	ld wa, (xix + 2)
 	ld (xix + 256), wa
-	lda_24 xwa, (TaskSched_TimerSlot_Skip)
+	lda xwa, (TaskSched_TimerSlot_Skip:24)
 	push xwa
 	ld xwa, (xix + 4)
 	jp (xwa)
@@ -2070,7 +2070,7 @@ TaskSched_TimerSlot_Fire:
 
 INTT3_CheckNesting:
 	pushw wa
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	cps wa, 1
 	jr z, INTT3_EnterScheduler
 	dec 1, wa
@@ -2162,7 +2162,7 @@ Show_ScreenGroup_Entry:
 	jrl TaskSched_Dispatch
 	ei 6
 	ld xsp, 0x1e53a
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
@@ -2178,11 +2178,11 @@ Show_ScreenGroup_Entry:
 	jrl TaskSched_Dispatch
 
 TaskSched_GetCurrentGroup:
-	ldw_d16 xhl, (1475)
+	ld hl, (1475:16)
 	or hl, hl
 	jr nz, TaskSched_GetCurrentGroup_Nested
 	push xix
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	ld l, (xix + 11)
 	extz hl
@@ -2274,7 +2274,7 @@ TaskSched_Resume:
 	push xix
 	push xiy
 	push xiz
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	ld a, (xix + 10)
 	cps a, 0
@@ -2507,7 +2507,7 @@ TaskSched_WaitForEvent:
 	jrl TaskSched_ReturnToDispatch
 
 TaskSched_WaitForEvent_Block:
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -2690,7 +2690,7 @@ Audio_Lock_Acquire:
 	jrl TaskSched_ReturnToDispatch
 
 AudioLock_Acquire_Block:
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -2760,7 +2760,7 @@ TaskMsg_Send:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsg_Send_WakeReceiver
-	ldw_d16 xix, (1463)
+	ld ix, (1463:16)
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -2835,7 +2835,7 @@ TaskMsg_Send_WakeReceiver:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsg_Send_NB_WakeReceiver
-	ldw_d16 xix, (1463)
+	ld ix, (1463:16)
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -2950,7 +2950,7 @@ TaskMsg_Receive:
 	jrl TaskSched_ReturnToDispatch
 
 TaskMsg_Receive_Block:
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -3178,7 +3178,7 @@ SeqBuf_BytecodeSnippet:
 SeqBuf_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01e549)
+	lda xde, (0x01e549:24)
 	calr RingBuf_CheckFull_512
 	pop xde
 	popw ix
@@ -3189,7 +3189,7 @@ SeqBuf_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01e549)
+	lda xde, (0x01e549:24)
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
@@ -3203,7 +3203,7 @@ SeqBuf_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01e549)
+	lda xde, (0x01e549:24)
 
 SeqBuf_WriteBytes_Loop:
 	ld a, (xiy)
@@ -3232,7 +3232,7 @@ SeqBuf_GetWritePos:
 SeqBuf_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01e549)
+	lda xde, (0x01e549:24)
 	call Seq_RingBuf_Init_512
 	pop xde
 	popw ix
@@ -3248,7 +3248,7 @@ SeqBuf_SaveReadPos:
 SeqBuf_ReadAlternate:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01e549)
+	lda xde, (0x01e549:24)
 	call RingBuf_CheckFull_256
 	pop xde
 	popw ix
@@ -3257,7 +3257,7 @@ SeqBuf_ReadAlternate:
 SeqBuf_ReadAlternate2:
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1e549)
+	lda	xde, (0x1e549:24)
 	call	RingBuf512_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
@@ -3278,7 +3278,7 @@ SeqBuf_SaveWritePos:
 TempoRingBuf_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01e753)
+	lda xde, (0x01e753:24)
 	calr Seq_RingBuf_PeekByte
 	pop xde
 	popw ix
@@ -3289,7 +3289,7 @@ TempoRingBuf_WriteByte_Ext:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01e753)
+	lda xde, (0x01e753:24)
 	calr Seq_RingBuf_WriteByte_Check
 	pop xde
 	popw ix
@@ -3303,7 +3303,7 @@ TempoRingBuf_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01e753)
+	lda xde, (0x01e753:24)
 
 TempoRingBuf_WriteBytes_Loop:
 	ld a, (xiy)
@@ -3333,7 +3333,7 @@ TempoRingBuf_BytecodeSnippet2:
 TempoRingBuf_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01e753)
+	lda xde, (0x01e753:24)
 	call Seq_RingBuf_Init_2048
 	pop xde
 	popw ix
@@ -3349,7 +3349,7 @@ TempoRingBuf_SaveReadPos:
 TempoRingBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1e753)
+	lda	xde, (0x1e753:24)
 	call	Seq_RingBuf_WriteByte_Data
 	pop	xde
 	popw	ix
@@ -3358,7 +3358,7 @@ TempoRingBuf_InlineBytecode2:
 TempoRingBuf_ReadAlternate:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01e753)
+	lda xde, (0x01e753:24)
 	call Seq_RingBuf_ReadAhead
 	pop xde
 	popw ix
@@ -3377,7 +3377,7 @@ TempoRingBuf_SaveWritePos:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1ef5d)
+	lda	xde, (0x1ef5d:24)
 	calr	2738
 	pop	xde
 	popw	ix
@@ -3388,7 +3388,7 @@ RhythmBuf_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01ef5d)
+	lda xde, (0x01ef5d:24)
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
@@ -3402,7 +3402,7 @@ RhythmBuf_InlineBytecode:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x1ef5d)
+	lda	xde, (0x1ef5d:24)
 	ld	a, (xiy)
 	calr	2774
 	inc	1, xiy
@@ -3430,7 +3430,7 @@ RhythmBuf_BytecodeSnippet:
 RhythmBuf_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01ef5d)
+	lda xde, (0x01ef5d:24)
 	call Seq_RingBuf_Init_512
 	pop xde
 	popw ix
@@ -3446,7 +3446,7 @@ RhythmBuf_SaveWritePos:
 RhythmBuf_ReadAlternate:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01ef5d)
+	lda xde, (0x01ef5d:24)
 	call RingBuf_CheckFull_256
 	pop xde
 	popw ix
@@ -3455,7 +3455,7 @@ RhythmBuf_ReadAlternate:
 RhythmBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1ef5d)
+	lda	xde, (0x1ef5d:24)
 	call	RingBuf512_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
@@ -3472,7 +3472,7 @@ RhythmBuf_InlineBytecode2:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1f167)
+	lda	xde, (0x1f167:24)
 	calr	2421
 	pop	xde
 	popw	ix
@@ -3481,7 +3481,7 @@ RhythmBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
-	lda_24	xde, (0x1f167)
+	lda	xde, (0x1f167:24)
 	calr	2485
 	pop	xde
 	popw	ix
@@ -3495,7 +3495,7 @@ AltEvtBuf_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01f167)
+	lda xde, (0x01f167:24)
 
 AltEvtBuf_WriteBytes_Loop:
 	ld a, (xiy)
@@ -3523,7 +3523,7 @@ AltEvtBuf_InlineBytecode:
 AltEvtBuf_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f167)
+	lda xde, (0x01f167:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -3537,14 +3537,14 @@ AltEvtBuf_Helpers:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1f167)
+	lda	xde, (0x1f167:24)
 	call	Seq_RingBuf_ReadByte_Large
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1f167)
+	lda	xde, (0x1f167:24)
 	call	Seq_RingBuf_ReadByte_Small
 	pop	xde
 	popw	ix
@@ -3561,7 +3561,7 @@ AltEvtBuf_Helpers:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1f271)
+	lda	xde, (0x1f271:24)
 	calr	2247
 	pop	xde
 	popw	ix
@@ -3572,7 +3572,7 @@ SeqEvtBuf_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01f271)
+	lda xde, (0x01f271:24)
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
@@ -3586,7 +3586,7 @@ SeqEvtBuf_InlineBytecode:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x1f271)
+	lda	xde, (0x1f271:24)
 	ld	a, (xiy)
 	calr	2283
 	inc	1, xiy
@@ -3610,7 +3610,7 @@ SeqEvtBuf_InlineBytecode:
 SeqEvtBuf_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f271)
+	lda xde, (0x01f271:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -3626,7 +3626,7 @@ SeqEvtBuf_SaveReadPos:
 SeqEvtBuf_ReadAlternate:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f271)
+	lda xde, (0x01f271:24)
 	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
@@ -3636,7 +3636,7 @@ SeqEvtBuf_ReadAlternate2:
 	; --- Sub 1: call EF2FBC with XDE=0x01f271 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x1f271)
+	lda	xde, (0x1f271:24)
 	call Seq_RingBuf_ReadByte_Small
 	pop xde
 	popw ix
@@ -3659,7 +3659,7 @@ SeqMain_ReadByte_1024:
 	; --- Sub 4: calr EF30A1 with XDE=0x01f37b (13 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x1f37b)
+	lda	xde, (0x1f37b:24)
 	calr Seq_RingBuf_Dequeue_1024
 	pop xde
 	popw ix
@@ -3671,7 +3671,7 @@ SeqMain_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01f37b)
+	lda xde, (0x01f37b:24)
 	calr Seq_RingBuf_WriteByte
 	pop xde
 	popw ix
@@ -3685,7 +3685,7 @@ SeqMain_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01f37b)
+	lda xde, (0x01f37b:24)
 
 SeqMain_WriteBytes_Loop:
 	ld a, (xiy)
@@ -3715,7 +3715,7 @@ SeqMain_GetTimingValue:
 SeqMain_InitBuffer:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f37b)
+	lda xde, (0x01f37b:24)
 	call Seq_RingBuf_Init_1024
 	pop xde
 	popw ix
@@ -3731,7 +3731,7 @@ SeqMain_SaveWritePos:
 SeqMain_ReadData:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f37b)
+	lda xde, (0x01f37b:24)
 	call Seq_RingBuf_ReadData
 	pop xde
 	popw ix
@@ -3740,7 +3740,7 @@ SeqMain_ReadData:
 SeqMain_ReadAlternate:
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1f37b)
+	lda	xde, (0x1f37b:24)
 	call	RingBuf1024_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
@@ -3759,7 +3759,7 @@ SeqMain_ReadAlternate:
 SeqBuf_MidiOut_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f785)
+	lda xde, (0x01f785:24)
 	calr Seq_RingBuf_ReadByte
 	pop xde
 	popw ix
@@ -3770,7 +3770,7 @@ SeqBuf_MidiOut_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01f785)
+	lda xde, (0x01f785:24)
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
@@ -3784,7 +3784,7 @@ SeqBuf_MidiOut_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01f785)
+	lda xde, (0x01f785:24)
 
 SeqBuf_MidiOut_WriteBytes_Loop:
 	ld a, (xiy)
@@ -3814,7 +3814,7 @@ SeqBuf_MidiOut_GetTimingValue:
 SeqBuf_MidiOut_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f785)
+	lda xde, (0x01f785:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -3831,7 +3831,7 @@ SeqBuf_MidiOut_ReadAlternate:
 	; --- Sub 2: call EF2FA1 with XDE=0x01f785 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x1f785)
+	lda	xde, (0x1f785:24)
 	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
@@ -3840,7 +3840,7 @@ SeqBuf_MidiOut_ReadAlternate2:
 	; --- Sub 3: call EF2FBC with XDE=0x01f785 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x1f785)
+	lda	xde, (0x1f785:24)
 	call Seq_RingBuf_ReadByte_Small
 	pop xde
 	popw ix
@@ -3864,7 +3864,7 @@ SeqBuf_MidiOut_SaveReadPos3:
 SeqBuf2_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f88f)
+	lda xde, (0x01f88f:24)
 	calr RingBuf_CheckFull_512
 	pop xde
 	popw ix
@@ -3875,7 +3875,7 @@ SeqBuf2_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01f88f)
+	lda xde, (0x01f88f:24)
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
@@ -3889,7 +3889,7 @@ SeqBuf2_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01f88f)
+	lda xde, (0x01f88f:24)
 
 SeqBuf2_WriteBytes_Loop:
 	ld a, (xiy)
@@ -3917,7 +3917,7 @@ SeqBuf2_InlineBytecode:
 SeqBuf2_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01f88f)
+	lda xde, (0x01f88f:24)
 	call Seq_RingBuf_Init_512
 	pop xde
 	popw ix
@@ -3934,7 +3934,7 @@ SeqBuf2_ReadAlternate:
 	; --- Sub 2: call EF3030 with XDE=0x01f88f (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x1f88f)
+	lda	xde, (0x1f88f:24)
 	call RingBuf_CheckFull_256
 	pop xde
 	popw ix
@@ -3943,7 +3943,7 @@ SeqBuf2_ReadAlternate2:
 	; --- Sub 3: call EF304B with XDE=0x01f88f (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x1f88f)
+	lda	xde, (0x1f88f:24)
 	call RingBuf512_ReadAlt_ByteBlock
 	pop xde
 	popw ix
@@ -3967,7 +3967,7 @@ SeqBuf2_SaveReadPos3:
 SeqBuf3_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01fa99)
+	lda xde, (0x01fa99:24)
 	calr RingBuf_CheckFull_512
 	pop xde
 	popw ix
@@ -3978,7 +3978,7 @@ SeqBuf3_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01fa99)
+	lda xde, (0x01fa99:24)
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
@@ -3992,7 +3992,7 @@ SeqBuf3_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01fa99)
+	lda xde, (0x01fa99:24)
 
 SeqBuf3_WriteBytes_Loop:
 	ld a, (xiy)
@@ -4022,7 +4022,7 @@ SeqBuf3_GetTimingValue:
 SeqBuf3_Init:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01fa99)
+	lda xde, (0x01fa99:24)
 	call Seq_RingBuf_Init_512
 	pop xde
 	popw ix
@@ -4036,14 +4036,14 @@ SeqBuf3_Helpers:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1fa99)
+	lda	xde, (0x1fa99:24)
 	call	RingBuf_CheckFull_256
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1fa99)
+	lda	xde, (0x1fa99:24)
 	call	RingBuf512_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
@@ -4062,7 +4062,7 @@ SeqBuf3_Helpers:
 SeqBuf_DspSysEx_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01fca3)
+	lda xde, (0x01fca3:24)
 	calr Seq_RingBuf_Dequeue_1024
 	pop xde
 	popw ix
@@ -4074,7 +4074,7 @@ SeqBuf_DspSysEx_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x01fca3)
+	lda xde, (0x01fca3:24)
 	calr Seq_RingBuf_WriteByte
 	pop xde
 	popw ix
@@ -4088,7 +4088,7 @@ SeqBuf_DspSysEx_WriteBytes:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x01fca3)
+	lda xde, (0x01fca3:24)
 
 SeqBuf_DspSysEx_WriteBytes_Loop:
 	ld a, (xiy)
@@ -4119,7 +4119,7 @@ SeqBuf_DspSysEx_OrphanData:
 SeqBuf_DspSysEx_InitBuffer:
 	pushw ix
 	push xde
-	lda_24 xde, (0x01fca3)
+	lda xde, (0x01fca3:24)
 	call Seq_RingBuf_Init_1024
 	pop xde
 	popw ix
@@ -4133,14 +4133,14 @@ SeqBuf_DspSysEx_CopyPointers:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1fca3)
+	lda	xde, (0x1fca3:24)
 	call	Seq_RingBuf_ReadData
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x1fca3)
+	lda	xde, (0x1fca3:24)
 	call	RingBuf1024_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
@@ -4160,7 +4160,7 @@ SeqBuf_DspSysEx_CopyPointers:
 Seq_DataHandler:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0200ad)
+	lda xde, (0x0200ad:24)
 	calr RingBuf128_CheckEmpty
 	pop xde
 	popw ix
@@ -4172,7 +4172,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
-	lda_24	xde, (0x200ad)
+	lda	xde, (0x200ad:24)
 	calr	1124
 	pop	xde
 	popw	ix
@@ -4184,7 +4184,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x200ad)
+	lda	xde, (0x200ad:24)
 	ld	a, (xiy)
 	calr	1096
 	inc	1, xiy
@@ -4204,7 +4204,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x200ad)
+	lda	xde, (0x200ad:24)
 	call	RingBuf_InitStructFields
 	pop	xde
 	popw	ix
@@ -4216,14 +4216,14 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x200ad)
+	lda	xde, (0x200ad:24)
 	call	RingBuf128_ReadAlt_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x200ad)
+	lda	xde, (0x200ad:24)
 	call	RingBuf128_ReadAlt2_CheckEmpty
 	pop	xde
 	popw	ix
@@ -4240,7 +4240,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x20137)
+	lda	xde, (0x20137:24)
 	calr	886
 	pop	xde
 	popw	ix
@@ -4252,7 +4252,7 @@ Seq_TimerEventLoop:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x020137)
+	lda xde, (0x020137:24)
 	calr RingBuf128_WriteByte_CheckFull
 	pop xde
 	popw ix
@@ -4267,7 +4267,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x20137)
+	lda	xde, (0x20137:24)
 	ld	a, (xiy)
 	calr	922
 	inc	1, xiy
@@ -4291,7 +4291,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x20137)
+	lda	xde, (0x20137:24)
 	call	RingBuf_InitStructFields
 	pop	xde
 	popw	ix
@@ -4303,14 +4303,14 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x20137)
+	lda	xde, (0x20137:24)
 	call	RingBuf128_ReadAlt_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x20137)
+	lda	xde, (0x20137:24)
 	call	RingBuf128_ReadAlt2_CheckEmpty
 	pop	xde
 	popw	ix
@@ -4330,7 +4330,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 SeqBuf_VoiceMap_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0201c1)
+	lda xde, (0x0201c1:24)
 	calr Seq_RingBuf_ReadByte
 	pop xde
 	popw ix
@@ -4342,7 +4342,7 @@ SeqBuf_VoiceMap_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda_24 xde, (0x0201c1)
+	lda xde, (0x0201c1:24)
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
@@ -4357,7 +4357,7 @@ SeqBuf_VoiceMap_WriteBlock:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda_24 xde, (0x0201c1)
+	lda xde, (0x0201c1:24)
 
 SeqBuf_VoiceMap_WriteBlock_Loop:
 	ld a, (xiy)
@@ -4389,7 +4389,7 @@ SeqBuf_VoiceMap_GetWritePos:
 SeqBuf_VoiceMap_Flush:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0201c1)
+	lda xde, (0x0201c1:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -4406,7 +4406,7 @@ SeqBuf_VoiceMap_CommitWrite:
 	; --- Sub 2: call EF2FA1 with XDE=0x0201c1 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x201c1)
+	lda	xde, (0x201c1:24)
 	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
@@ -4415,7 +4415,7 @@ SeqBuf_VoiceMap_RollbackWrite:
 	; --- Sub 3: call EF2FBC with XDE=0x0201c1 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x201c1)
+	lda	xde, (0x201c1:24)
 	call Seq_RingBuf_ReadByte_Small
 	pop xde
 	popw ix
@@ -4439,7 +4439,7 @@ SeqBuf_VoiceMap_AdvanceCheckpoint:
 SeqBuf_NoteEvent_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0202cb)
+	lda xde, (0x0202cb:24)
 	calr Seq_RingBuf_ReadByte
 	pop xde
 	popw ix
@@ -4450,7 +4450,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
-	lda_24	xde, (0x202cb)
+	lda	xde, (0x202cb:24)
 	calr	745
 	pop	xde
 	popw	ix
@@ -4462,7 +4462,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x202cb)
+	lda	xde, (0x202cb:24)
 	ld	a, (xiy)
 	calr	717
 	inc	1, xiy
@@ -4484,7 +4484,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 SeqBuf_NoteEvent_Flush:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0202cb)
+	lda xde, (0x0202cb:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -4499,14 +4499,14 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x202cb)
+	lda	xde, (0x202cb:24)
 	call	Seq_RingBuf_ReadByte_Large
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x202cb)
+	lda	xde, (0x202cb:24)
 	call	Seq_RingBuf_ReadByte_Small
 	pop	xde
 	popw	ix
@@ -4523,7 +4523,7 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	ret
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x203d5)
+	lda	xde, (0x203d5:24)
 	calr	507
 	pop	xde
 	popw	ix
@@ -4534,7 +4534,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
-	lda_24	xde, (0x203d5)
+	lda	xde, (0x203d5:24)
 	calr	571
 	pop	xde
 	popw	ix
@@ -4546,7 +4546,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x203d5)
+	lda	xde, (0x203d5:24)
 	ld	a, (xiy)
 	calr	543
 	inc	1, xiy
@@ -4568,7 +4568,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 SeqBuf_SoundEdit_Flush:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0203d5)
+	lda xde, (0x0203d5:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -4585,7 +4585,7 @@ SeqBuf_SoundEdit_CommitWrite:
 	; --- Sub 2: call EF2FA1 with XDE=0x0203d5 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x203d5)
+	lda	xde, (0x203d5:24)
 	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
@@ -4594,7 +4594,7 @@ SeqBuf_SoundEdit_RollbackWrite:
 	; --- Sub 3: call EF2FBC with XDE=0x0203d5 (14 bytes) ---
 	pushw ix
 	push xde
-	lda_24	xde, (0x203d5)
+	lda	xde, (0x203d5:24)
 	call Seq_RingBuf_ReadByte_Small
 	pop xde
 	popw ix
@@ -4618,7 +4618,7 @@ SeqBuf_SoundEdit_AdvanceCheckpoint:
 SeqBuf_SoundEdit_ReadByte:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0204df)
+	lda xde, (0x0204df:24)
 	calr Seq_RingBuf_ReadByte
 	pop xde
 	popw ix
@@ -4629,7 +4629,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
-	lda_24	xde, (0x204df)
+	lda	xde, (0x204df:24)
 	calr	397
 	pop	xde
 	popw	ix
@@ -4641,7 +4641,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda_24	xde, (0x204df)
+	lda	xde, (0x204df:24)
 	ld	a, (xiy)
 	calr	369
 	inc	1, xiy
@@ -4669,7 +4669,7 @@ SeqBuf_NoteEvent_OrphanData:
 SeqBuf_NoteEvent_InitBuffer:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0204df)
+	lda xde, (0x0204df:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -4685,7 +4685,7 @@ SeqBuf_NoteEvent_CopyPointers:
 SeqBuf_NoteEvent_AlternateRead:
 	pushw	ix
 	push	xde
-	lda_24	xde, (0x204df)
+	lda	xde, (0x204df:24)
 	call	Seq_RingBuf_ReadByte_Large
 	pop	xde
 	popw	ix
@@ -4694,7 +4694,7 @@ SeqBuf_NoteEvent_AlternateRead:
 Seq_RingBuf_ReadSmall:
 	pushw ix
 	push xde
-	lda_24 xde, (0x0204df)
+	lda xde, (0x0204df:24)
 	call Seq_RingBuf_ReadByte_Small
 	pop xde
 	popw ix
@@ -5246,11 +5246,11 @@ SubCPU_Init_DMA_Channels:
 	set 0, a
 	ld (xbc), a
 	ldio 0x8a, 0x07
-	lda_24 xwa, (0x140000)
+	lda xwa, (0x140000:24)
 	ldc_cr32 xwa, 0x28
 	ldb a, 0x8
 	ldc_cr8 a, 0x4a
-	lda_24 xwa, (0x140000)
+	lda xwa, (0x140000:24)
 	ldc_cr32 xwa, 0x00
 	ldb a, 0x0
 	ldc_cr8 a, 0x42
@@ -5405,7 +5405,7 @@ InterCPU_E2_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_E2_TimeoutLoop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal E2 header data ready
-	lda_d16 xhl, (1478)
+	lda xhl, (1478:16)
 	ld (xhl), xwa
 	ld (xhl + 4), xde
 	ld (xhl + 8), bc
@@ -5451,7 +5451,7 @@ InterCPU_E2_TimeoutLoop:
 ;        The label is not renamed here, so this note stands in for it.
 ; ===========================================================================
 Audio_DMA_Transfer:
-	ldw_d16 xwa, (1502)
+	ld wa, (1502:16)
 	ld de, wa
 	extz xde
 	cps wa, 0
@@ -5530,9 +5530,9 @@ E1Bulk_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
 	jrl nz, E1Bulk_AckTimeout_Loop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal 6-byte header data ready
-	lda_d16 xhl, (1544)
+	lda xhl, (1544:16)
 	ld (xhl), xwa
-	lda_d16 xwa, (1488)
+	lda xwa, (1488:16)
 	ld (xwa), xde
 	ld (xhl + 4), bc
 	ld (xwa + 4), bc
@@ -5554,7 +5554,7 @@ E1Bulk_Phase2_Delay:
 	inc 1, wa
 	cp wa, 0xc8
 	jr c, E1Bulk_Phase2_Delay
-	lda_d16 xbc, (1544)
+	lda xbc, (1544:16)
 	ld xwa, (xbc)
 	stda32 1498, xwa
 	mrdw5 0x99, 0x04, 0x19, 0xde, 0x05
@@ -5733,11 +5733,11 @@ INT0_ReadLatch:
 				; MSTAT1 is lowered at 0xEF359A, with neither gate
 				; re-checked and no DI in between -- see the
 				; RE-ENTRANCY HAZARD note above INT0_HANDLER.
-	stb_d8 (1508), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
+	ld (1508:16), a	; 0x05E4 = the header byte, kept for INTTC0_HANDLER
 	cp a, 0xe1
 	jr nz, INT0_CheckE2Command
 	stdi8 (1506), 2
-	lda_d16 xwa, (1550)
+	lda xwa, (1550:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
 	lds wa, 6
@@ -5753,7 +5753,7 @@ INT0_CheckE2Command:
 	cp a, 0xe2
 	jr nz, INT0_HandleDataCommand
 	stdi8 (1506), 3
-	lda_d16 xwa, (1556)
+	lda xwa, (1556:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xa
@@ -5767,10 +5767,10 @@ INT0_CheckE2Command:
 
 INT0_HandleDataCommand:
 	stdi8 (1506), 1
-	lda_d16 xwa, (1512)
+	lda xwa, (1512:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
-	ldb_d8 a, (1508)
+	ld a, (1508:16)
 	and a, 0x1f
 	inc 1, a
 	extz wa
@@ -5824,7 +5824,7 @@ INTTC0_HANDLER:
 	and a, 0xf8
 	set 0, a
 	ld (xbc), a
-	ldb_d8 a, (1506)
+	ld a, (1506:16)
 	cps a, 4
 	jr z, INTTC0_E1_Phase2_Complete
 	cps a, 3
@@ -5833,7 +5833,7 @@ INTTC0_HANDLER:
 	jr z, E1DMA_TransferSetup
 	cps a, 1
 	jr nz, E1DMA_ISR_Epilogue
-	ldb_d8 c, (1508)
+	ld c, (1508:16)
 	ld a, c
 	and a, 0x1f
 	inc 1, a
@@ -5841,7 +5841,7 @@ INTTC0_HANDLER:
 	srl c, 5
 	extz bc
 	sla bc, 2
-	lda_24 xde, (SeqRingBuf_WriteDispatch_Table)
+	lda xde, (SeqRingBuf_WriteDispatch_Table:24)
 	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld xbc, 0x5e8
 	ld xhl, (xde)
@@ -5851,7 +5851,7 @@ INTTC0_HANDLER:
 
 ; E1DMA ISR - DMA transfer setup (after SeqRingBuf dispatch)
 E1DMA_TransferSetup:
-	lda_d16 xwa, (1550)
+	lda xwa, (1550:16)
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x20
 	ld wa, (xwa + 4)
@@ -5890,14 +5890,14 @@ E1DMA_ISR_Epilogue:
 E1DMA_ISR_BytecodeBlock:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 40 of 57 slots byte-identical
 	ei	6
-	lda_d16	xwa, (1566)
+	lda	xwa, (1566:16)
 	.byte 0xb0	; v10 does not spell this byte either
 	inc	6, l
 	zcf
 	.byte 0xb0	; v10 does not spell this byte either
 	.byte 0xb7	; v10 does not spell this byte either
 	di
-	lda_d16	xde, (1556)
+	lda	xde, (1556:16)
 	ld	xwa, (xde)
 	ld	bc, (xde+8)
 	ld	xde, (xde+4)
@@ -5915,7 +5915,7 @@ E1DMA_ISR_BytecodeBlock:
 	stda16	(58054), wa
 	jr	6
 	stdi16	(58052), 0
-	ldw_d16	wa, (58052)
+	ld	wa, (58052:16)
 	cp	wa, 10
 	ret	ule
 	stdi16	(58052), 0
@@ -5924,7 +5924,7 @@ E1DMA_ISR_BytecodeBlock:
 	set_dd8	1, 104
 	incdi8	1, (58050)
 	ret
-	ldw_d16	de, (1033)
+	ld	de, (1033:16)
 	.byte 0xf1	; v10 does not spell this byte either
 	ldb	w, 6
 	dec	6, l
@@ -5932,7 +5932,7 @@ E1DMA_ISR_BytecodeBlock:
 	lds	hl, 0
 	ret
 	ld	wa, de
-	ldw_d16	bc, (1033)
+	ld	bc, (1033:16)
 	sub	bc, wa
 	cp	bc, 250
 	jr	le, -23
@@ -6054,7 +6054,7 @@ Flash_ProgramWord_WaitReady:
 	jr z, Flash_ProgramWord_WaitReady
 	cps a, 1
 	jr nz, Flash_ProgramWord_UseBank1
-	lda_24 xiz, (0x300000)
+	lda xiz, (0x300000:24)
 	call Get_Region_Code
 	cps l, 4
 	jr nz, Flash_WriteWordSeq
@@ -6065,7 +6065,7 @@ Flash_ProgramWord_WaitReady:
 	jr Flash_WriteWordSeq
 
 Flash_ProgramWord_UseBank1:
-	lda_24 xiz, (0x280000)
+	lda xiz, (0x280000:24)
 
 Flash_WriteWordSeq:
 	ei 6
@@ -6115,7 +6115,7 @@ Flash_ChipErase_UseBank1:
 	jr nz, Flash_ChipErase_Done
 	cp (xsp + 4), 0x1
 	jr nz, Flash_ChipErase_Done
-	lda_24 xiz, (0x380000)
+	lda xiz, (0x380000:24)
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
@@ -6181,7 +6181,7 @@ Flash_EraseSector_WriteSequence:
 	jr nz, Flash_EraseSector_CheckRegion
 	cp (xsp + 12), 0x1
 	jrl nz, FlashOp_Epilogue10
-	lda_24 xwa, (0x300000)
+	lda xwa, (0x300000:24)
 	ld xbc, xwa
 	add xbc, 0x70000
 	cp xbc, (xsp + 4)
@@ -6210,7 +6210,7 @@ Flash_EraseSector_BootBlock_HighBank:
 Flash_EraseSector_CheckRegion:
 	cp (xsp + 12), 0x1
 	jr nz, Flash_EraseSector_Bank2Check
-	lda_24 xwa, (0x300000)
+	lda xwa, (0x300000:24)
 	cpw_da (0x205e0), 8792
 	jr nz, Flash_EraseSector_TopSector
 	cp xwa, (xsp + 4)
@@ -6241,7 +6241,7 @@ Flash_EraseSector_TopSector:
 	jr Flash_EraseSector_FinalWrite
 
 Flash_EraseSector_Bank2Check:
-	lda_24 xwa, (0x280000)
+	lda xwa, (0x280000:24)
 	cpw_da (0x205e2), 8875
 	jr nz, Flash_EraseSector_Bank2TopSector
 	cp xwa, (xsp + 4)
@@ -6336,7 +6336,7 @@ Flash_WriteBufferToChip:
 	lda xsp, (xsp - 10)
 	pushw iz
 	ld (xsp + 10), a
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 2), xwa
 	and xbc, 0xff0000
 	ld (xsp + 6), xbc
@@ -6457,7 +6457,7 @@ FlashWrite:
 	calr Flash_EraseSectorWithBankSelect
 	ld XBC,XIZ
 	ld QBC,0
-	lda_24 xde, (0x069800)
+	lda xde, (0x069800:24)
 	add XDE,XBC
 	.byte 0x9f, 0x04, 0x04, 0xaf, 0x08, 0x20, 0x38, 0x3a
 	.byte 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0a, 0x37, 0x1e
@@ -7138,7 +7138,7 @@ FDC_SetupSectorParams:
 
 	call	16712763
 
-	lda_d16 xiz, (1582)
+	lda xiz, (1582:16)
 
 	ldw (xiz + 2), 0x0
 
@@ -7196,7 +7196,7 @@ FDC_ReadSectors_Retry:
 	ld bc, (xsp + 8)
 	ld xde, (xsp + 4)
 	calr FDC_SetupSectorParams
-	lda_d16 xwa, (1582)
+	lda xwa, (1582:16)
 	ldw (xwa), 0x3
 	push xwa
 	call FDC_CommandEntry
@@ -7338,7 +7338,7 @@ FDC_WriteSectors:
 	ld bc, iz
 	ld xde, 0x69800
 	calr FDC_ReadSectors
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 10), xwa
 	ldiw_erp 0xfa, 0
 	jr FDC_WriteSectors_TrackLoopCheck
@@ -7381,7 +7381,7 @@ FDC_WriteSectors_FullTrackOuter:
 	ld xde, 0x69800
 	calr FDC_ReadSectors
 	addiw_da (xsp + 6), 0x12
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 10), xwa
 	ldiw_erp 0xfa, 0
 
@@ -7414,7 +7414,7 @@ FDC_WriteSectors_Remainder:
 	ld bc, iz
 	ld xde, 0x69800
 	calr FDC_ReadSectors
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 10), xwa
 	ldiw_erp 0xfa, 0
 	jr FDC_WriteSectors_RemainderCheck
@@ -7464,7 +7464,7 @@ FDC_WriteSectors_Compressed:
 	ld bc, iz
 	ld xde, 0x69800
 	calr FDC_ReadSectors
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 10), xwa
 	ldiw_erp 0xfa, 0
 	jr FDC_WriteCompressed_PartialTrackCheck
@@ -7509,7 +7509,7 @@ FDC_WriteCompressed_FullTrackOuter:
 	ld xde, 0x69800
 	calr FDC_ReadSectors
 	addiw_da (xsp + 6), 0x12
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 10), xwa
 	ldiw_erp 0xfa, 0
 
@@ -7544,7 +7544,7 @@ FDC_WriteCompressed_Remainder:
 	ld bc, iz
 	ld xde, 0x69800
 	calr FDC_ReadSectors
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	ld (xsp + 10), xwa
 	ldiw_erp 0xfa, 0
 	jr FDC_WriteCompressed_RemainderCheck
@@ -7681,9 +7681,9 @@ Erase_and_Burn____when_disk_is_valid:
 	cps wa, 7
 	jrl gt, SHOW_ILLEGAL_DISK_MESSAGE
 	add wa, wa
-	lda_24 xix, (HANDLE_UPDATE_OFFSETS)
+	lda xix, (HANDLE_UPDATE_OFFSETS:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (HANDLE_UPDATE_FILE_TYPE_ID_001h)
+	lda xix, (HANDLE_UPDATE_FILE_TYPE_ID_001h:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 
@@ -7797,7 +7797,7 @@ BusyWait_Loop:
 
 LED_CyclePattern:
 	incdi8 1, (1574)
-	ldb_d8 a, (1574)
+	ld a, (1574:16)
 	and a, 0x3
 	cps a, 3
 	jr z, LED_CyclePattern_Phase3
@@ -7907,14 +7907,14 @@ HDAE5000_ROM_Transfer_Return:
 	retd 0x2
 	lda xsp, (xsp - 10)
 	push xiz
-	lda_24 xwa, (0x300000)
+	lda xwa, (0x300000:24)
 	ld (xsp + 8), xwa
 	ld (xsp + 12), 0x0
 
 HDAE5000_FlashWrite_BankLoop:
 	ld a, (xsp + 12)
 	stb_da (0x160000), a
-	lda_24 xwa, (0x200000)
+	lda xwa, (0x200000:24)
 	ld (xsp + 4), xwa
 	lds32 xiz, 0
 
@@ -7944,7 +7944,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	(xsp+12), 0
 	ld	a, (xsp+12)
 	stb_da	1441792, a
-	lda_24	xwa, 2621440
+	lda	xwa, (2621440:24)
 	ld	(xsp+4), xwa
 	lds32	xiz, 0
 	ld	xwa, (xsp+8)
@@ -7974,7 +7974,7 @@ HDAE5000_TableData_Write:
 HDAE5000_TableData_BankLoop:
 	ld a, (xsp + 12)
 	stb_da (0x160000), a
-	lda_24 xwa, (0x280000)
+	lda xwa, (0x280000:24)
 	ld (xsp + 4), xwa
 	lds32 xiz, 0
 
@@ -8070,19 +8070,19 @@ Parport_ReadNextByte:
 	jr Parport_ReadByte_Return
 
 Parport_ReadByte_FromBuffer:
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	add xwa, 0x9000
 	cpda32 xwa, 1610
 	jr nz, Parport_ReadByte_Emit
 	incdi16 8, (1614)
-	ldw_d16 xwa, (1614)
-	ldw_d16 xbc, (1616)
+	ld wa, (1614:16)
+	ld bc, (1616:16)
 	lds de, 6
 	call VRAM_FillRect
 	lds iz, 0
 
 Parport_RefillBuffer_Loop:
-	ldw_d16 xwa, (1618)
+	ld wa, (1618:16)
 	extz xwa
 	ldw bc, 0x2400
 	mul xbc, xiz
@@ -8094,7 +8094,7 @@ Parport_RefillBuffer_Loop:
 	inc 1, iz
 	cps iz, 4
 	jr c, Parport_RefillBuffer_Loop
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 1610, xwa
 
 Parport_ReadByte_Emit:
@@ -8109,16 +8109,16 @@ Parport_ReadByte_Return:
 	ret
 
 Flash_AccumWrite_Byte:
-	ldb_d8 e, (1620)
+	ld e, (1620:16)
 	extz de
-	lda_d16 xbc, (1576)
+	lda xbc, (1576:16)
 	extz xde
 	add xde, xbc
 	ld (xde), a
-	ldb_d8 a, (1620)
+	ld a, (1620:16)
 	ld e, a
 	inc 1, a
-	stb_d8 (1620), a
+	ld (1620:16), a
 	cps e, 3
 	jr nz, Flash_AccumWrite_ByteDone
 	ld xwa, (1606:16)
@@ -8135,16 +8135,16 @@ Flash_AccumWrite_ByteDone:
 	ret
 
 Flash_AccumWrite_Word:
-	ldb_d8 c, (1620)
+	ld c, (1620:16)
 	extz bc
-	lda_d16 xde, (1580)
+	lda xde, (1580:16)
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
-	ldb_d8 a, (1620)
+	ld a, (1620:16)
 	ld c, a
 	inc 1, a
-	stb_d8 (1620), a
+	ld (1620:16), a
 	cps c, 1
 	jr nz, Flash_AccumWrite_WordDone
 	ld xwa, (1622:16)
@@ -8164,7 +8164,7 @@ LZSS_Decompress_ToFlash:
 	dec 6, xsp
 	pushw iz
 	stdi8 (1620), 0
-	lda_24 xwa, (0x300000)
+	lda xwa, (0x300000:24)
 	add xwa, 0xe0000
 	stda32 1622, xwa
 	ld xwa, 0x20000
@@ -8255,7 +8255,7 @@ LZ_Decompress_ClearRing:
 	stdi8 (1620), 0
 	lds32 xwa, 0
 	stda32 1602, xwa
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 1610, xwa
 	ld xwa, 0x800000
 	stda32 1606, xwa
@@ -8271,7 +8271,7 @@ LZ_Decompress_ClearRing:
 	ldiw_erp 0xfa, 0
 
 LZ_Decompress_ReadTracks:
-	ldw_d16 xwa, (1618)
+	ld wa, (1618:16)
 	extz xwa
 	ldw bc, 0x2400
 	mulw_erp BC, 0xfa
@@ -8549,7 +8549,7 @@ DrawBitmap_NextBit:
 	inc 1, iz
 	cp iz, 0x268	; 28 bytes (224 pixels/line) * 22 lines = 0268h bytes
 	jr c, DrawBitmap_RowLoop
-	lda_24 xwa, (0x1a0000)
+	lda xwa, (0x1a0000:24)
 	ldw de, 0x9600	; 2 pixels per word
 	call Copy_DE_words_from_XBC_to_XWA	; <-- "blit-screen"
 	popw iz

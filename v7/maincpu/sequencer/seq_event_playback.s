@@ -20,23 +20,23 @@ SeqEvt_InitAndProcess:
 	stdi16	(32104), 72
 	stdi8	(32106), 16
 	stdi8	(32107), 1
-	ldb_d8	a, (32108)
-	stb_d8	(32110), a
+	ld	a, (32108:16)
+	ld	(32110:16), a
 	ld	xhl, 31312
 	ld	xbc, 31952
 	calr	51
-	ldb_d8	a, (32110)
-	stb_d8	(32108), a
+	ld	a, (32110:16)
+	ld	(32108:16), a
 	stdi8	(32107), 2
-	ldb_d8	a, (32109)
-	stb_d8	(32110), a
+	ld	a, (32109:16)
+	ld	(32110:16), a
 	ld	xhl, 31568
 	ld	xbc, 32024
 	calr	17
-	ldb_d8	a, (32110)
-	stb_d8	(32109), a
-	ldb_d8	a, (32097)
-	stb_d8	(32096), a
+	ld	a, (32110:16)
+	ld	(32109:16), a
+	ld	a, (32097:16)
+	ld	(32096:16), a
 	ret
 SeqEvt_ProcessReadLoop:
 	ld	ix, (xhl+6)
@@ -175,7 +175,7 @@ SeqEvt_WriteNoteOff:
 SeqEvt_WriteNoteOnRotating:
 	push XWA
 	xor XWA,XWA
-	ldb_d8 a, (0x7d6e)
+	ld a, (0x7d6e:16)
 	ld XIX,SeqEvt_RotationOffsetTable
 	add XIX,XWA
 	ld IX,(XIX)
@@ -281,14 +281,14 @@ SeqEvt_WriteRemainingParams:
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 SeqEvt_UpdateReadPosition:
-	ldw_d16	ix, (32115)
+	ld	ix, (32115:16)
 	ld	(xhl+6), ix
 	ret
 SeqEvt_HandleControlEvent:
 	ld W,A
 	orda8 a, (0x7d6b)
 	calr SeqEvtBuf_WriteBytePreserve
-	ldw_d16 ix, (0x7d73)
+	ld ix, (0x7d73:16)
 	cp W,0xd0
 	jr nz, SeqEvt_HandleExtendedCtrl
 	ldb_dri a, 0x07, 0xec, 0xf0
@@ -337,10 +337,10 @@ SeqEvt_CalcTempoOffset:
 	subda8 a, (0x046c)
 	cpda8 a, (0x7d61)
 	jr nc, .Lc_f70aef
-	stb_d8 (0x7d61), a
+	ld (0x7d61:16), a
 SeqEvt_UpdateMinTempo:
 .Lc_f70aef:
-	ldw_d16 iy, (0x7d75)
+	ld iy, (0x7d75:16)
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xd8, 0xd0, 0xc1
 	.byte 0x72, 0x7d, 0x21, 0xd1, 0x73, 0x7d, 0x80, 0xf1
 	.byte 0x73, 0x7d, 0x50, 0xd8, 0x8c, 0x9b, 0x02, 0xf4
@@ -405,7 +405,7 @@ SeqEvt_InitVoiceScan:
 	stdi8	(32107), 2
 	ld	xhl, 32024
 	calr	11
-	ldw_d16	wa, (32100)
+	ld	wa, (32100:16)
 	stda16	(32098), wa
 	jr	0
 SeqEvt_VoiceScanDone:
@@ -1901,11 +1901,11 @@ AccPlay_InitializeStart:
 	pop XBC
 	pop XHL
 	pop XWA
-	ldb_d8 a, (0x0433)
+	ld a, (0x0433:16)
 	sla A, 0x01
 	and A,0x1f
 	or A,0x80
-	stb_d8 (0x7e7a), a
+	ld (0x7e7a:16), a
 	ld XHL,0x001e880a
 	.byte 0x83, 0x3e, 0x01, 0x40, 0x22, 0x00, 0x00, 0x00
 	.byte 0xe9, 0xa8, 0xea, 0xa8, 0x1d, 0xb7, 0x71, 0xfc
@@ -2016,7 +2016,7 @@ TempoEvt_ReadAndClassify:
 	.byte 0xc9, 0xe0, 0xc9, 0xd8, 0x6e, 0x06, 0xc8, 0xcc
 	.byte 0x7f, 0x1e, 0x28, 0x02
 TempoEvt_StoreBankParam:
-	stb_d8	(32378), w
+	ld	(32378:16), w
 	jr	42
 TempoEvt_CheckHighBit:
 	.byte 0xc9, 0x33, 0x07, 0x66, 0x25, 0xc1, 0x7a, 0x7e
@@ -2108,7 +2108,7 @@ AccPlay_VoiceBankRet:
 	ret
 
 Voice_GetBankEntryPointer:
-	ldb_d8	a, (32376)
+	ld	a, (32376:16)
 	cp	a, 12
 	jr	c, 2
 	ldb	a, 0
@@ -2163,19 +2163,19 @@ Voice_SlotTemplateData:
 
 AccPlay_SetupSoundParams:
 	ldb A, 0x17
-	stb_d8 (0x8c9e), a
+	ld (0x8c9e:16), a
 	ldb E, 0x90
 	ldb D, 0x10
 	ldb A, 0x17
 	ldb W, 0xff
 	call SysEx_ApplyVoiceParam_49
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	cp WA,0x01ff
 	jr nz, AccPlay_SetupJumpTarget
 	lds wa, 0
-	stb_d8 (0xfd62), a
-	stb_d8 (0xfd63), w
+	ld (0xfd62:16), a
+	ld (0xfd63:16), w
 	ldb E, 0x17
 	ldb D, 0x01
 	ldb A, 0x00
@@ -2238,14 +2238,14 @@ AccPlay_AllocateVoiceSlot:
 AccPlay_CheckReverbFlag:
 	ld (xiy + 13), a
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 3, w
 	jr z, AccPlay_CheckChorusFlag
 	or a, 0x1
 
 AccPlay_CheckChorusFlag:
 	ld (xiy + 14), a
-	ldb_d8 a, (0xfd6a)
+	ld a, (0xfd6a:16)
 	and a, 0x7f
 	ld (xiy + 12), a
 	ret
@@ -2255,11 +2255,11 @@ AccPlay_UpdateBankParams:
 	push xhl
 	push xwa
 	calr Voice_GetBankEntryPointer
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	ld (xiy + 9), wa
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 6, w
 	jr z, AccPlay_UpdateReverbParam
 	or a, 0x1
@@ -2267,14 +2267,14 @@ AccPlay_UpdateBankParams:
 AccPlay_UpdateReverbParam:
 	ld (xiy + 13), a
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 3, w
 	jr z, AccPlay_UpdateChorusParam
 	or a, 0x1
 
 AccPlay_UpdateChorusParam:
 	ld (xiy + 14), a
-	ldb_d8 a, (0xfd6a)
+	ld a, (0xfd6a:16)
 	and a, 0x7f
 	ld (xiy + 12), a
 	pop xwa
@@ -2289,13 +2289,13 @@ AccPlay_UnusedCodeFragment:
 	ret
 
 AccPlay_ExtractVoiceSlot:
-	ldw_d16 hl, (32372)
+	ld hl, (32372:16)
 
 	calr 1938
 
 	ldb a, 0x83
 
-	ldw_d16 hl, (32374)
+	ld hl, (32374:16)
 
 	stb_dri A, 0x07, 0xf0, 0xec
 
@@ -2306,7 +2306,7 @@ AccPlay_ExtractVoiceSlot:
 AccPlay_ProcessNoteEvent:
 	lds	bc, 5
 	calr	1983
-	ldb_d8	a, (32413)
+	ld	a, (32413:16)
 	cps	a, 0
 	jr	z, 5
 	calr	6
@@ -2401,7 +2401,7 @@ AccPlay_ScanActiveRet:
 	ret
 
 AccPlay_FindSlotByChannel:
-	ldb_d8	w, (32412)
+	ld	w, (32412:16)
 	ld	xhl, 32223
 AccPlay_ChannelScanLoop:
 	ld	a, (xhl)
@@ -2420,7 +2420,7 @@ AccPlay_ChannelSlotFound:
 	ld	(xhl), a
 	ld	d, (xhl+1)
 	ld	a, (xhl+2)
-	ldb_d8	c, (32411)
+	ld	c, (32411:16)
 	cp	c, a
 	jr	nc, 9
 	add	c, 96
@@ -2437,9 +2437,9 @@ AccPlay_CalcNoteOffset:
 	ldb e, 0x2
 
 AccPlay_WriteNoteRelease:
-	ldw_d16	wa, (32372)
+	ld	wa, (32372:16)
 	pushw	wa
-	ldw_d16	wa, (32374)
+	ld	wa, (32374:16)
 	pushw	wa
 	ld	wa, (xhl+3)
 	stda16	(32372), wa
@@ -2525,7 +2525,7 @@ MidiSeq_HandleProgChange:
 	and	a, 240
 	ld	(xhl), a
 	xor	w, w
-	ldb_d8	a, (64870)
+	ld	a, (64870:16)
 	bit	6, a
 	jr	z, 3
 	or	w, 1
@@ -2605,11 +2605,11 @@ MidiSeq_SustainRet:
 	ret
 
 AccPlay_TrackMeasureChange:
-	ldb_d8	a, (1076)
-	ldb_d8	w, (32408)
+	ld	a, (1076:16)
+	ld	w, (32408:16)
 	cp	a, w
 	jr	z, 45
-	ldw_d16	hl, (32370)
+	ld	hl, (32370:16)
 	inc	1, hl
 	cps	hl, 0
 	jr	nz, 2
@@ -2634,13 +2634,13 @@ AccPlay_MeasureIncrement:
 	pop	xhl
 	pop	xwa
 AccPlay_MeasureNotifyDone:
-	stb_d8	(32408), a
+	ld	(32408:16), a
 AccPlay_MeasureTrackRet:
 	ret
 
 AccPlay_TrackVoiceCount:
-	ldw_d16 wa, (0x7d7c)
-	ldw_d16 hl, (0x7d7e)
+	ld wa, (0x7d7c:16)
+	ld hl, (0x7d7e:16)
 	cp WA,HL
 	jr z, AccPlay_VoiceCountRet
 	cpdi8 (0x8c9c), 0xc9
@@ -2676,26 +2676,26 @@ AccPlay_InitVoiceBankState:
 	calr AccPlay_RestoreVoiceBank
 
 AccPlay_SaveCurrentState:
-	ldb_d8	a, (64866)
-	ldb_d8	w, (64867)
+	ld	a, (64866:16)
+	ld	w, (64867:16)
 	and	w, 127
 	stda16	(32380), wa
-	ldb_d8	a, (64870)
+	ld	a, (64870:16)
 	and	a, 72
 	xor	w, w
 	stda16	(32382), wa
 	ret
 AccPlay_CompareAndSendProg:
-	ldw_d16	hl, (32380)
-	ldb_d8	a, (64866)
-	ldb_d8	w, (64867)
+	ld	hl, (32380:16)
+	ld	a, (64866:16)
+	ld	w, (64867:16)
 	and	w, 127
 	cp	wa, hl
 	jr	z, 28
 	ld	e, w
 	ld	w, a
 	ldb	a, 193
-	stb_d8	(32164), w
+	ld	(32164:16), w
 	and	e, 15
 	bit	7, w
 	jr	z, 6
@@ -2705,8 +2705,8 @@ AccPlay_SendProgChange:
 	call AccompSeq_SendMidiEvent
 
 AccPlay_CompareReverbState:
-	ldw_d16	hl, (32382)
-	ldb_d8	a, (64870)
+	ld	hl, (32382:16)
+	ld	a, (64870:16)
 	and	a, 64
 	xor	w, w
 	and	l, 64
@@ -2723,8 +2723,8 @@ AccPlay_SetReverbValue:
 
 AccPlay_CompareChorusState:
 	jr	36
-	ldw_d16	hl, (32382)
-	ldb_d8	a, (64870)
+	ld	hl, (32382:16)
+	ld	a, (64870:16)
 	and	a, 8
 	xor	w, w
 	and	l, 8
@@ -2748,7 +2748,7 @@ AccPlay_RestoreVoiceBank:
 	ld	e, w
 	ld	w, a
 	ldb	a, 193
-	stb_d8	(32164), w
+	ld	(32164:16), w
 	and	e, 15
 	bit	7, w
 	jr	z, 6
@@ -2757,8 +2757,8 @@ AccPlay_RestoreVoiceBank:
 AccPlay_SendBankProgram:
 	call	16179773
 	ld	wa, (xiy+9)
-	stb_d8	(64866), a
-	stb_d8	(64867), w
+	ld	(64866:16), a
+	ld	(64867:16), w
 	ldb	e, 23
 	ldb	d, 1
 	ld	a, w
@@ -2775,7 +2775,7 @@ AccPlay_SendBankProgram:
 	ldb	a, 209
 	call	16179773
 	ld	a, (xiy+12)
-	stb_d8	(64874), a
+	ld	(64874:16), a
 	ldb	e, 23
 	ldb	d, 8
 	ldb	w, 127
@@ -2790,14 +2790,14 @@ AccPlay_RestoreReverbVal:
 	ldb a, 0xd1
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 13)
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	and w, 0xbf
 	bit 0, a
 	jr z, AccPlay_WriteReverbFlag
 	or w, 0x40
 
 AccPlay_WriteReverbFlag:
-	stb_d8	(64870), w
+	ld	(64870:16), w
 	ldb	e, 23
 	ldb	d, 4
 	ld	a, w
@@ -2813,14 +2813,14 @@ AccPlay_RestoreChorusVal:
 	ldb a, 0xd1
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 14)
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	and w, 0xf7
 	bit 0, a
 	jr z, AccPlay_WriteChorusFlag
 	or w, 0x8
 
 AccPlay_WriteChorusFlag:
-	stb_d8	(64870), w
+	ld	(64870:16), w
 	ldb	e, 23
 	ldb	d, 4
 	ld	a, w
@@ -2840,41 +2840,41 @@ AccPlay_ClearSlotDone:
 	ret
 
 AccPlay_SaveMuteStates:
-	ldb_d8	a, (63939)
-	ldb_d8	w, (63965)
+	ld	a, (63939:16)
+	ld	w, (63965:16)
 	stda16	(32384), wa
-	ldb_d8	a, (63991)
-	ldb_d8	w, (64017)
+	ld	a, (63991:16)
+	ld	w, (64017:16)
 	stda16	(32386), wa
-	ldb_d8	a, (64043)
-	ldb_d8	w, (64069)
+	ld	a, (64043:16)
+	ld	w, (64069:16)
 	stda16	(32388), wa
-	ldb_d8	a, (64095)
-	ldb_d8	w, (64121)
+	ld	a, (64095:16)
+	ld	w, (64121:16)
 	stda16	(32390), wa
-	ldb_d8	a, (64147)
-	ldb_d8	w, (64173)
+	ld	a, (64147:16)
+	ld	w, (64173:16)
 	stda16	(32392), wa
-	ldb_d8	a, (64199)
-	ldb_d8	w, (64225)
+	ld	a, (64199:16)
+	ld	w, (64225:16)
 	stda16	(32394), wa
-	ldb_d8	a, (64251)
-	ldb_d8	w, (64277)
+	ld	a, (64251:16)
+	ld	w, (64277:16)
 	stda16	(32396), wa
-	ldb_d8	a, (64303)
-	ldb_d8	w, (64329)
+	ld	a, (64303:16)
+	ld	w, (64329:16)
 	stda16	(32398), wa
-	ldb_d8	a, (64355)
-	ldb_d8	w, (64381)
+	ld	a, (64355:16)
+	ld	w, (64381:16)
 	stda16	(32400), wa
-	ldb_d8	a, (64407)
-	ldb_d8	w, (64433)
+	ld	a, (64407:16)
+	ld	w, (64433:16)
 	stda16	(32402), wa
-	ldb_d8	a, (64459)
-	ldb_d8	w, (64485)
+	ld	a, (64459:16)
+	ld	w, (64485:16)
 	stda16	(32404), wa
-	ldb_d8	a, (64511)
-	ldb_d8	w, (64537)
+	ld	a, (64511:16)
+	ld	w, (64537:16)
 	stda16	(32406), wa
 	ldb	a, 192
 	orddm8	(63939), a
@@ -2901,10 +2901,10 @@ AccPlay_SaveMuteStates:
 	orddm8	(64485), a
 	orddm8	(64511), a
 	orddm8	(64537), a
-	ldb_d8	a, (64879)
+	ld	a, (64879:16)
 	and	a, 63
 	and	a, 240
-	stb_d8	(64879), a
+	ld	(64879:16), a
 	ldb	e, 23
 	ldb	d, 13
 	ldb	w, 207
@@ -2913,76 +2913,76 @@ AccPlay_SaveMuteStates:
 	ret
 AccompSeq_QueueAllMutes:
 	ldb e, 0x0
-	ldb_d8 a, (0xf9c3)
+	ld a, (0xf9c3:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x1
-	ldb_d8 a, (0xf9dd)
+	ld a, (0xf9dd:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x2
-	ldb_d8 a, (0xf9f7)
+	ld a, (0xf9f7:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x3
-	ldb_d8 a, (0xfa11)
+	ld a, (0xfa11:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x4
-	ldb_d8 a, (0xfa2b)
+	ld a, (0xfa2b:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x5
-	ldb_d8 a, (0xfa45)
+	ld a, (0xfa45:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x6
-	ldb_d8 a, (0xfa5f)
+	ld a, (0xfa5f:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x7
-	ldb_d8 a, (0xfa79)
+	ld a, (0xfa79:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x8
-	ldb_d8 a, (0xfa93)
+	ld a, (0xfa93:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x9
-	ldb_d8 a, (0xfaad)
+	ld a, (0xfaad:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xa
-	ldb_d8 a, (0xfac7)
+	ld a, (0xfac7:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xb
-	ldb_d8 a, (0xfae1)
+	ld a, (0xfae1:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xc
-	ldb_d8 a, (0xfafb)
+	ld a, (0xfafb:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xd
-	ldb_d8 a, (0xfb15)
+	ld a, (0xfb15:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xe
-	ldb_d8 a, (0xfb2f)
+	ld a, (0xfb2f:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xf
-	ldb_d8 a, (0xfb49)
+	ld a, (0xfb49:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x10
-	ldb_d8 a, (0xfb63)
+	ld a, (0xfb63:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x11
-	ldb_d8 a, (0xfb7d)
+	ld a, (0xfb7d:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x12
-	ldb_d8 a, (0xfb97)
+	ld a, (0xfb97:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x13
-	ldb_d8 a, (0xfbb1)
+	ld a, (0xfbb1:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x14
-	ldb_d8 a, (0xfbcb)
+	ld a, (0xfbcb:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x15
-	ldb_d8 a, (0xfbe5)
+	ld a, (0xfbe5:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x16
-	ldb_d8 a, (0xfbff)
+	ld a, (0xfbff:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x19
-	ldb_d8 a, (0xfc19)
+	ld a, (0xfc19:16)
 	calr AccompSeq_QueueMuteEvent
 	ret
 
@@ -2992,45 +2992,45 @@ AccompSeq_QueueMuteEvent:
 	call	16624672
 	ret
 AccPlay_RestoreMuteStates:
-	ldw_d16	wa, (32384)
-	stb_d8	(63939), a
-	stb_d8	(63965), w
-	ldw_d16	wa, (32386)
-	stb_d8	(63991), a
-	stb_d8	(64017), w
-	ldw_d16	wa, (32388)
-	stb_d8	(64043), a
-	stb_d8	(64069), w
-	ldw_d16	wa, (32390)
-	stb_d8	(64095), a
-	stb_d8	(64121), w
-	ldw_d16	wa, (32392)
-	stb_d8	(64147), a
-	stb_d8	(64173), w
-	ldw_d16	wa, (32394)
-	stb_d8	(64199), a
-	stb_d8	(64225), w
-	ldw_d16	wa, (32396)
-	stb_d8	(64251), a
-	stb_d8	(64277), w
-	ldw_d16	wa, (32398)
-	stb_d8	(64303), a
-	stb_d8	(64329), w
-	ldw_d16	wa, (32400)
-	stb_d8	(64355), a
-	stb_d8	(64381), w
-	ldw_d16	wa, (32402)
-	stb_d8	(64407), a
-	stb_d8	(64433), w
-	ldw_d16	wa, (32404)
-	stb_d8	(64459), a
-	stb_d8	(64485), w
-	ldw_d16	wa, (32406)
-	stb_d8	(64511), a
-	stb_d8	(64537), w
-	ldb_d8	a, (64879)
+	ld	wa, (32384:16)
+	ld	(63939:16), a
+	ld	(63965:16), w
+	ld	wa, (32386:16)
+	ld	(63991:16), a
+	ld	(64017:16), w
+	ld	wa, (32388:16)
+	ld	(64043:16), a
+	ld	(64069:16), w
+	ld	wa, (32390:16)
+	ld	(64095:16), a
+	ld	(64121:16), w
+	ld	wa, (32392:16)
+	ld	(64147:16), a
+	ld	(64173:16), w
+	ld	wa, (32394:16)
+	ld	(64199:16), a
+	ld	(64225:16), w
+	ld	wa, (32396:16)
+	ld	(64251:16), a
+	ld	(64277:16), w
+	ld	wa, (32398:16)
+	ld	(64303:16), a
+	ld	(64329:16), w
+	ld	wa, (32400:16)
+	ld	(64355:16), a
+	ld	(64381:16), w
+	ld	wa, (32402:16)
+	ld	(64407:16), a
+	ld	(64433:16), w
+	ld	wa, (32404:16)
+	ld	(64459:16), a
+	ld	(64485:16), w
+	ld	wa, (32406:16)
+	ld	(64511:16), a
+	ld	(64537:16), w
+	ld	a, (64879:16)
 	or	a, 192
-	stb_d8	(64879), a
+	ld	(64879:16), a
 	ldb	e, 23
 	ldb	d, 13
 	ldb	w, 79
@@ -3112,14 +3112,14 @@ MidiSeqBuf_AdvanceDone:
 	stda16	(32374), wa
 	ret
 MidiSeqBuf_AdvanceWritePos:
-	ldw_d16	wa, (32374)
+	ld	wa, (32374:16)
 	inc	1, wa
 	cp	wa, 255
 	jr	nz, 24
 	push	xix
 	push	xde
 	push	xhl
-	ldw_d16	hl, (32372)
+	ld	hl, (32372:16)
 	ld	de, hl
 	calr	65300
 	ld	wa, (xix+3)
@@ -3136,11 +3136,11 @@ MidiSeqBuf_WriteByte:
 
 	push xhl
 
-	ldw_d16 hl, (32372)
+	ld hl, (32372:16)
 
 	calr 65274
 
-	ldw_d16 hl, (32374)
+	ld hl, (32374:16)
 
 	stb_dri A, 0x07, 0xf0, 0xec
 
@@ -3183,7 +3183,7 @@ AccPlay_CheckAndToggle:
 	call AccWrap_PlayModeStartAccPlay
 	lds wa, 0
 	ei 0x06
-	stb_d8 (0x046a), a
+	ld (0x046a:16), a
 	stda16 (0x0468), wa
 	stdi8 (0x041f), 0x01
 	ei 0x00
@@ -3199,13 +3199,13 @@ AccPlay_StopAndReset:
 	bitda 2, (1056)
 	jr nz, AccPlay_StopResetRet
 	lds wa, 0
-	stb_d8 (1047), a
+	ld (1047:16), a
 	stda16 (1048), xwa
-	stb_d8 (1045), a
-	stb_d8 (1046), a
-	stb_d8 (1076), a
-	stb_d8 (1077), a
-	stb_d8 (1130), a
+	ld (1045:16), a
+	ld (1046:16), a
+	ld (1076:16), a
+	ld (1077:16), a
+	ld (1130:16), a
 	stda16 (1128), xwa
 	stdi8 (1056), 1
 	stdi8 (1054), 1
@@ -3219,513 +3219,513 @@ InitializeEast:
 	lda XBC, (XSP)
 	ld XWA,0x01600004
 	ld (XBC),XWA
-	lda_24 xwa, (ClassProc)
+	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
 	ldw_da wa, (0xe55cd4)
 	ld (XBC+0x08),WA
-	lda_24 xwa, (0xe559ea)
+	lda xwa, (0xe559ea:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0163
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000c
 	ld (XBC),XWA
-	lda_24 xwa, (ResEventProc)
+	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
 	ldw_da wa, (0xe55cda)
 	ld (XBC+0x08),WA
-	lda_24 xwa, (0xe55cd6)
+	lda xwa, (0xe55cd6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01c3
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000d
 	ld (XBC),XWA
-	lda_24 xwa, (ResMethodProc)
+	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
 	ldw_da wa, (0xe55dac)
 	ld (XBC+0x08),WA
-	lda_24 xwa, (0xe55cdc)
+	lda xwa, (0xe55cdc:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01e3
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600002
 	ld (XBC),XWA
-	lda_24 xwa, (ApFunctionProc)
+	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x003c
-	lda_24 xwa, (0xe55210)
+	lda xwa, (0xe55210:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0123
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600002
 	ld (XBC),XWA
-	lda_24 xwa, (ApFunctionProc)
+	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x003c
-	lda_24 xwa, (0xe55304)
+	lda xwa, (0xe55304:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0423
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600001
 	ld (XBC),XWA
-	lda_24 xwa, (FunctionProc)
+	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0010
-	lda_24 xwa, (0xe55dae)
+	lda xwa, (0xe55dae:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0103
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600001
 	ld (XBC),XWA
-	lda_24 xwa, (FunctionProc)
+	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0010
-	lda_24 xwa, (MidiMenu_NakaProcName_Table)
+	lda xwa, (MidiMenu_NakaProcName_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0403
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600003
 	ld (XBC),XWA
-	lda_24 xwa, (MainFunctionProc)
+	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda_24 xwa, (0xe5ad8c)
+	lda xwa, (0xe5ad8c:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0143
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600003
 	ld (XBC),XWA
-	lda_24 xwa, (MainFunctionProc)
+	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda_24 xwa, (0xe5adac)
+	lda xwa, (0xe5adac:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0443
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda_24 xwa, (0xe59c5a)
+	lda xwa, (0xe59c5a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0009
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda_24 xwa, (0xe5a122)
+	lda xwa, (0xe5a122:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0309
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda_24 xwa, (0xe59c6e)
+	lda xwa, (0xe59c6e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x000f
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda_24 xwa, (0xe5a152)
+	lda xwa, (0xe5a152:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x030f
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda_24 xwa, (0xe59c7e)
+	lda xwa, (0xe59c7e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0018
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda_24 xwa, (0xe5a17a)
+	lda xwa, (0xe5a17a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0318
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda_24 xwa, (0xe59cb2)
+	lda xwa, (0xe59cb2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0019
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda_24 xwa, (0xe5a1d4)
+	lda xwa, (0xe5a1d4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0319
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda_24 xwa, (0xe59ce6)
+	lda xwa, (0xe59ce6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x001a
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda_24 xwa, (0xe5a23a)
+	lda xwa, (0xe5a23a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x031a
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0014
-	lda_24 xwa, (0xe59d1a)
+	lda xwa, (0xe59d1a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0050
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0014
-	lda_24 xwa, (0xe5a2a8)
+	lda xwa, (0xe5a2a8:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0350
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda_24 xwa, (0xe59d6e)
+	lda xwa, (0xe59d6e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0051
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda_24 xwa, (0xe5a350)
+	lda xwa, (0xe5a350:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0351
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xe59d8e)
+	lda xwa, (0xe59d8e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0052
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (NakaData_WidgetTables2)
+	lda xwa, (NakaData_WidgetTables2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0352
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe59db2)
+	lda xwa, (0xe59db2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0053
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe5a3f2)
+	lda xwa, (0xe5a3f2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0353
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0005
-	lda_24 xwa, (0xe59dce)
+	lda xwa, (0xe59dce:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0054
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0005
-	lda_24 xwa, (NakaObj_MidiCommonSetting_Table)
+	lda xwa, (NakaObj_MidiCommonSetting_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0354
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0005
-	lda_24 xwa, (0xe59de6)
+	lda xwa, (0xe59de6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0055
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0005
-	lda_24 xwa, (NakaObj_MidiInOutSetting_Table)
+	lda xwa, (NakaObj_MidiInOutSetting_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0355
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0043
-	lda_24 xwa, (0xe59dfe)
+	lda xwa, (0xe59dfe:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0056
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0043
-	lda_24 xwa, (NakaObj_MidiPresets_Table)
+	lda xwa, (NakaObj_MidiPresets_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0356
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001c
-	lda_24 xwa, (0xe59f0e)
+	lda xwa, (0xe59f0e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0057
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001c
-	lda_24 xwa, (0xe5a77c)
+	lda xwa, (0xe5a77c:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0357
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda_24 xwa, (0xe59f82)
+	lda xwa, (0xe59f82:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0058
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda_24 xwa, (0xe5a906)
+	lda xwa, (0xe5a906:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0358
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe59fda)
+	lda xwa, (0xe59fda:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0059
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe5a9ae)
+	lda xwa, (0xe5a9ae:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0359
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe59ff6)
+	lda xwa, (0xe59ff6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x005a
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (NakaObj_MidiComputerConn_Table)
+	lda xwa, (NakaObj_MidiComputerConn_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x035a
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0011
-	lda_24 xwa, (0xe5a012)
+	lda xwa, (0xe5a012:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x005b
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0011
-	lda_24 xwa, (NakaObj_MidiPmemOutput_Table)
+	lda xwa, (NakaObj_MidiPmemOutput_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x035b
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xe5a05a)
+	lda xwa, (0xe5a05a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x005c
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xe5aac6)
+	lda xwa, (0xe5aac6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x035c
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0018
-	lda_24 xwa, (0xe5a07e)
+	lda xwa, (0xe5a07e:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00d7
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0018
-	lda_24 xwa, (0xe5ab12)
+	lda xwa, (0xe5ab12:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03d7
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xe5a0e2)
+	lda xwa, (0xe5a0e2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00d8
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda_24 xwa, (0xe5ac06)
+	lda xwa, (0xe5ac06:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03d8
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x01600010
 	ld (XBC),XWA
-	lda_24 xwa, (ViewableProc)
+	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe5a106)
+	lda xwa, (0xe5a106:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00ec
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f
 	ld (XBC),XWA
-	lda_24 xwa, (ResNameProc)
+	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda_24 xwa, (0xe5ac5a)
+	lda xwa, (0xe5ac5a:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03ec
 	call RegisterObjectTable
@@ -3819,7 +3819,7 @@ BitmapBmphk:
 	ret
 
 BitmapBmphk_ReturnA1:
-	lda_24 xhl, (Bitmap_Bmphk)
+	lda xhl, (Bitmap_Bmphk:24)
 	ret
 
 BitmapBmphk_ReturnA2:
@@ -3907,7 +3907,7 @@ AcVocalGridBoxProc:
 	add xbc, xbc
 	add xbc, MidiPart_PageStr_1of3_0x42
 	ld bc, (xbc)
-	lda_24 xix, (AcVocalGrid_DialSetup)
+	lda xix, (AcVocalGrid_DialSetup:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; AcVocalGridBoxProc dial setup handler
@@ -3964,7 +3964,7 @@ AcVocalGrid_DialSetup:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, (MidiPart_PageStr_1of3_0x12)
+	lda xbc, (MidiPart_PageStr_1of3_0x12:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -4022,7 +4022,7 @@ AcVocalGrid_CheckEvent91:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, (MidiPart_PageStr_1of3_0x2A)
+	lda xbc, (MidiPart_PageStr_1of3_0x2A:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -4137,7 +4137,7 @@ VocalistGridCheck:
 	ldirw
 	ld xix, xhl
 	lda xbc, (xsp + 12)
-	lda_24 xwa, (MidiPart_OctaveStr_m2_0x4)
+	lda xwa, (MidiPart_OctaveStr_m2_0x4:24)
 	ld (xsp + 8), xwa
 	lda xiy, (xbc + 2)
 	cp xhl, 0x1e0008d
@@ -4151,7 +4151,7 @@ VocalistGridCheck:
 	add xwa, xwa
 	add xwa, MidiPart_ColWidthData_0x28
 	ld wa, (xwa)
-	lda_24 xix, (VocalistGrid_DispatchData)
+	lda xix, (VocalistGrid_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 VocalistGrid_DispatchData:
 	call	16400579
@@ -4177,7 +4177,7 @@ VocalistGrid_DispatchData:
 	sla	bc, 3
 	ld	ix, bc
 	add	ix, wa
-	lda_24	xde, 15199840
+	lda	xde, (15199840:24)
 	ld_rrl	xwa, xde, ix
 	cp	xwa, 4294967295
 	jrl	z, 1571
@@ -4212,7 +4212,7 @@ VocalistGrid_DispatchData:
 	sla	bc, 3
 	ld	ix, bc
 	add	ix, wa
-	lda_24	xde, 15199840
+	lda	xde, (15199840:24)
 	ld_rrl	xwa, xde, ix
 	cp	xwa, 4294967295
 	jrl	z, 1468
@@ -4269,7 +4269,7 @@ VocalistGrid_DispatchData:
 	add	xwa, xwa
 	add	xwa, 15200368
 	ld	wa, (xwa)
-	lda_24	xix, 16201364
+	lda	xix, (16201364:24)
 	jp_rr 8, xix, wa
 	ld	wa, (xbc)
 	cp	wa, 16
@@ -4327,7 +4327,7 @@ VocalistGrid_DispatchData:
 	jrl	1144
 	ld	wa, (xbc)
 	sla	wa, 2
-	lda_24	xbc, 15199646
+	lda	xbc, (15199646:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw 231
@@ -4400,20 +4400,20 @@ VocalistGrid_DispatchData:
 	exts	xwa
 	divs	wa, 12
 	sla	wa, 2
-	lda_24	xhl, 15199752
+	lda	xhl, (15199752:24)
 	ld_rrl	xwa, xhl, wa
 	push	xwa
 	exts	xde
 	divs	de, 12
 	ld	wa, qde
 	sla	wa, 2
-	lda_24	xde, 15199646
+	lda	xde, (15199646:24)
 	ld_rrl	xwa, xde, wa
 	push	xwa
 	and	bc, 128
 	sra	bc, 7
 	sla	bc, 2
-	lda_24	xwa, 15199626
+	lda	xwa, (15199626:24)
 	ld_rrl	xwa, xwa, bc
 	push	xwa
 	pushw 231
@@ -4468,7 +4468,7 @@ VocalistGrid_CheckHandler:
 	add xwa, xwa
 	add xwa, MidiPart_AfterStr_0x34
 	ld wa, (xwa)
-	lda_24 xix, (VocalistGrid_CheckDispData)
+	lda xix, (VocalistGrid_CheckDispData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 VocalistGrid_CheckDispData:
@@ -4535,7 +4535,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, 11526
 	call	16567398
 	sla	hl, 2
-	lda_24	xwa, (15199646)
+	lda	xwa, (15199646:24)
 	ld_rrl	xwa, xwa, hl
 	push	xwa
 	pushw	231
@@ -4610,7 +4610,7 @@ VocalistGrid_CheckDispData:
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
-	lda_24	xbc, (15199752)
+	lda	xbc, (15199752:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	ld	xwa, 11533
@@ -4619,13 +4619,13 @@ VocalistGrid_CheckDispData:
 	divs	hl, 12
 	ld	wa, qhl
 	sla	wa, 2
-	lda_24	xbc, (15199646)
+	lda	xbc, (15199646:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, 11534
 	call	16567398
 	sla	hl, 2
-	lda_24	xwa, (15199626)
+	lda	xwa, (15199626:24)
 	ld_rrl	xwa, xwa, hl
 	push	xwa
 	pushw	231
@@ -4644,7 +4644,7 @@ VocalistGrid_CheckDispData:
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
-	lda_24	xbc, (15199752)
+	lda	xbc, (15199752:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	ld	xwa, 11537
@@ -4653,13 +4653,13 @@ VocalistGrid_CheckDispData:
 	divs	hl, 12
 	ld	wa, qhl
 	sla	wa, 2
-	lda_24	xbc, (15199646)
+	lda	xbc, (15199646:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, 11538
 	call	16567398
 	sla	hl, 2
-	lda_24	xwa, (15199626)
+	lda	xwa, (15199626:24)
 	ld_rrl	xwa, xwa, hl
 	push	xwa
 	pushw	231
@@ -4722,7 +4722,7 @@ AcVocalist_ListSetup:
 	add xhl, xhl
 	add xhl, MidiPart_ColWidthData_0x36
 	ld hl, (xhl)
-	lda_24 xix, (AcVocalist_ListDispatch)
+	lda xix, (AcVocalist_ListDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 ; AcVocalistListBoxProc dispatch
 AcVocalist_ListDispatch:
@@ -4958,9 +4958,9 @@ MainVocalistPage1OKFunc:
 	cps de, 5
 	jr ugt, VocalistPage_Handler
 	add de, de
-	lda_24 xix, (MidiPart_HarmLocalStr_0x24)
+	lda xix, (MidiPart_HarmLocalStr_0x24:24)
 	ldw_sri DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, (VocalistPage1OK_Dispatch)
+	lda xix, (VocalistPage1OK_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:
@@ -5070,7 +5070,7 @@ VocalistPage2_ReturnZero:
 	ret
 
 AccPlay_GetCurrentPart:
-	ldb_d8	l, (32420)
+	ld	l, (32420:16)
 	ret
 RevSelFunc:
 	dec 4, xsp
@@ -5464,7 +5464,7 @@ AcGMOnOff_CleanupAndRet:
 StsAttentionCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsAttention_ReturnZero
-	lda_24 xhl, (GMMode_AttentionTable)
+	lda xhl, (GMMode_AttentionTable:24)
 	ret
 
 StsAttention_ReturnZero:
@@ -5474,7 +5474,7 @@ StsAttention_ReturnZero:
 StsGMOnCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsGMOn_ReturnZero
-	lda_24 xhl, (GMMode_Attention_English2_0x204)
+	lda xhl, (GMMode_Attention_English2_0x204:24)
 	ret
 
 StsGMOn_ReturnZero:
@@ -5484,7 +5484,7 @@ StsGMOn_ReturnZero:
 StsGMOffCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsGMOff_ReturnZero
-	lda_24 xhl, (GMMode_Attention_English2_0x47C)
+	lda xhl, (GMMode_Attention_English2_0x47C:24)
 	ret
 
 StsGMOff_ReturnZero:
@@ -5494,7 +5494,7 @@ StsGMOff_ReturnZero:
 StsAreYouSureCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsAreYouSure_ReturnZero
-	lda_24 xhl, (GMMode_Attention_English2_0x494)
+	lda xhl, (GMMode_Attention_English2_0x494:24)
 	ret
 
 StsAreYouSure_ReturnZero:
@@ -5594,7 +5594,7 @@ TtMdGm_ReturnZero:
 StsSplitCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsSplit_ReturnZero
-	lda_24 xhl, (GMMode_Attention_English2_0x514)
+	lda xhl, (GMMode_Attention_English2_0x514:24)
 	ret
 
 StsSplit_ReturnZero:
@@ -5649,7 +5649,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	ld c, b
 	extz bc
 	sla bc, 2
-	lda_24 xde, (SplitPoint_NoteEntry_C_Code_0x4)
+	lda xde, (SplitPoint_NoteEntry_C_Code_0x4:24)
 	ld_sril3 XBC, 0x07, 0xe8, 0xe4
 	pushw 0x34
 	ldw de, 0x39
@@ -5696,7 +5696,7 @@ SplitPoint_HandleNoteEvt:
 	divs	bc, 12
 	ld	wa, qbc
 	sla	wa, 2
-	lda_24	xbc, 15202168
+	lda	xbc, (15202168:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw 231

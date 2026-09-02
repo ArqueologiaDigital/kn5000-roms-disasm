@@ -9,7 +9,7 @@
 FDemoText:
 	cp xbc, 0x1e0009f
 	jr nz, FDemoText_ReturnNull
-	lda_24 xhl, (DemoDisk_LangPromptTable)
+	lda xhl, (DemoDisk_LangPromptTable:24)
 	ret
 
 FDemoText_ReturnNull:
@@ -26,8 +26,8 @@ FDemoText_LookupTableEntry:
 	ret
 
 FDemoText_ByteData_VoiceProbeA:
-	ldb_d8	c, (0xc07d)
-	ldb_d8	a, (0xc080)
+	ld	c, (0xc07d:16)
+	ld	a, (0xc080:16)
 	extz	wa
 	cps	c, 5
 	jr	z, 24
@@ -35,7 +35,7 @@ FDemoText_ByteData_VoiceProbeA:
 	jr	z, 4
 	cps	c, 0
 	ret	nz
-	lda_24	xbc, (DemoDiskPrompt_English1_0x86)
+	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb a, xbc, wa
 	ordm8_24 (149486), xbc
 	ret
@@ -43,9 +43,9 @@ FDemoText_ByteData_VoiceProbeA:
 	inc	5, xhl
 	cp	(xhl), 0
 	ret	nz
-	ldb_d8	a, (0xc080)
+	ld	a, (0xc080:16)
 	extz	wa
-	lda_24	xbc, (DemoDiskPrompt_English1_0x86)
+	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb a, xbc, wa
 	ordm8_24 (149490), xbc
 	ret
@@ -54,7 +54,7 @@ FDemoText_ByteData_VoiceProbeB:
 	jrl	pl, 16320
 	normal
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	res	7, a
 	cps	a, 0
 	ret	z
@@ -63,9 +63,9 @@ FDemoText_ByteData_VoiceProbeB:
 	.byte 0xbe
 	ret
 FDemoText_ByteData_VoiceProbeC:
-	ldb_d8	e, (0xc080)
+	ld	e, (0xc080:16)
 	sub	e, 68
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	extz	wa
 	dec	1, wa
 	cps	wa, 0
@@ -73,7 +73,7 @@ FDemoText_ByteData_VoiceProbeC:
 	cps	wa, 6
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (DemoDiskPrompt_English1_0x96)
+	lda	xix, (DemoDiskPrompt_English1_0x96:24)
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -89,15 +89,15 @@ FDemoText_ByteData_VoiceProbeC:
 	.byte 0xe9
 	nop
 	jr	42
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 15
 	jr	z, 19
 	ld	a, e
 	extz	wa
-	lda_24	xbc, (DemoDiskPrompt_English1_0x8E)
+	lda	xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ld_rrb a, xbc, wa
 	ordm8_24 (149484), xbc
-	ldb_d8 a, (49279)
+	ld a, (49279:16)
 	and a, 48
 	ret z
 	ld	xwa, DemoDiskPrompt_English1_0x92
@@ -108,13 +108,13 @@ FDemoText_ByteData_VoiceProbeC:
 
 FDemoText_ProcessVoiceFlags:
 	pushw_erp 0xfa
-	ldb_d8 a, (0x8d46)
+	ld a, (0x8d46:16)
 	bit 6, a
 	jr z, FDemoText_ProcessVoiceFlags_ReadState
 	setda_24 6, (0x0247ee)
-	ldb_d8 a, (0x8d46)
+	ld a, (0x8d46:16)
 	res 6, a
-	stb_d8 (0x8d46), a
+	ld (0x8d46:16), a
 
 FDemoText_ProcessVoiceFlags_ReadState:
 	call Boot_CheckConfigFlag7
@@ -144,7 +144,7 @@ FDemoText_ProcessVoiceFlags_CheckBits:
 FDemoText_ProbeVoice_Loop:
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_erp C, 0xfa
 	calr FDemoText_CheckVoiceState
@@ -170,12 +170,12 @@ FDemoText_ProcessChannels:
 FDemoText_ProcessChannels_Loop:
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x86)
+	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_da e, (0x0247ee)
 	and c, e
 	jr z, FDemoText_ProcessChannel_CheckMask
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	and c, e
 	jr z, FDemoText_ProcessChannel_CheckNoFlag
@@ -208,7 +208,7 @@ FDemoText_ProcessChannel_Deactivate:
 FDemoText_ProcessChannel_CheckMask:
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x86)
+	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	andda8_24 c, (0x0247f2)
 	call_24 nz, FDemoText_CheckAndSetTimer
@@ -218,13 +218,13 @@ FDemoText_ProcessChannel_CheckMask:
 	ldib_erp 0xfb, 0
 
 FDemoText_ProcessOutputChannels:
-	lda_24 xhl, (DemoDiskPrompt_English1_0x92)
+	lda xhl, (DemoDiskPrompt_English1_0x92:24)
 	ldb_da c, (0x0247ec)
 	bit 6, c
 	jr z, FDemoText_ProcessOutput_CheckFlags
 	stb_erp E, 0xfb
 	extz de
-	lda_24 xwa, (DemoDiskPrompt_English1_0x8A)
+	lda xwa, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe0, 0xe8
 	andda8_24 a, (0x0247ee)
 	jr z, FDemoText_ProcessOutput_CheckFlags
@@ -234,11 +234,11 @@ FDemoText_ProcessOutputChannels:
 FDemoText_ProcessOutput_CheckFlags:
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	andda8_24 c, (0x0247ee)
 	jr z, FDemoText_ProcessOutput_NextCh
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8E)
+	lda xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_da e, (0x0247ec)
 	and c, e
@@ -283,7 +283,7 @@ FDemoText_ActivateVoice_Done:
 
 FDemoText_DeactivateVoice:
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	cpl c
 	anddm8_24 (0x0247ee), c
@@ -300,7 +300,7 @@ FDemoText_ActivateVoiceAlt:
 	calr FDemoText_SyncVoicePreset
 	ld a, (xsp)
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ordm8_24 (0x0247ee), a
 	inc 2, xsp
@@ -342,7 +342,7 @@ FDemoText_UpdateVoiceDisplay_CheckSend:
 	ldb_da a, (0x0247ee)
 	and a, 0x38
 	jr nz, FDemoText_UpdateVoiceDisplay_Done
-	ldb_d8 c, (0xfc26)
+	ld c, (0xfc26:16)
 	cpdm8 0xfc74, c
 	jr z, FDemoText_UpdateVoiceDisplay_Done
 	extz bc
@@ -358,7 +358,7 @@ FDemoText_SyncVoicePreset:
 	dec 6, xsp
 	pushw_erp 0xfa
 	ld (xsp + 6), a
-	lda_d16 xwa, (0xfc74)
+	lda xwa, (0xfc74:16)
 	ld (xsp + 2), xwa
 	ldb_da a, (0x0247ee)
 	and a, 0x38
@@ -374,7 +374,7 @@ FDemoText_SyncPreset_ActiveLoop:
 	cps l, 1
 	jr nz, FDemoText_SyncPreset_CallUpdate
 	ld bc, wa
-	lda_24 xde, (DemoDiskPrompt_English1_0x86)
+	lda xde, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri A, 0x07, 0xe8, 0xe0
 	andda8_24 a, (0x0247ee)
 	jr z, FDemoText_SyncPreset_NextActive
@@ -392,7 +392,7 @@ FDemoText_SyncPreset_NextActive:
 FDemoText_SyncPreset_DirectCopy:
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
-	stb_d8 (0xfc26), a
+	ld (0xfc26:16), a
 	ldib_erp 0xfb, 0
 
 FDemoText_SyncPreset_DirectLoop:
@@ -406,7 +406,7 @@ FDemoText_SyncPreset_DirectLoop:
 FDemoText_SyncPreset_Compare:
 	ld a, (xsp + 6)
 	extz wa
-	lda_24 xbc, (0x0247f4)
+	lda xbc, (0x0247f4:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 2)
 	cp c, (xwa)
@@ -501,7 +501,7 @@ FDemoText_CheckTimer_Done:
 	ret
 
 FDemoText_ParseControlMessage:
-	lda_24 xbc, (0x020c33)
+	lda xbc, (0x020c33:24)
 	ld a, (xbc + 1)
 	cpda8 a, 0x8d3a
 	ret nz
@@ -554,7 +554,7 @@ FDemoText_ParseCtrl_BuildWorkspace:
 	call DemoMenu_BuildItemWorkspace
 
 FDemoText_ParseCtrl_SecondHalf:
-	lda_24 xwa, (0x020c33)
+	lda xwa, (0x020c33:24)
 	ld c, (xwa + 2)
 	cp c, 0x82
 	jr z, FDemoText_ParseCtrl_FormatC3
@@ -936,7 +936,7 @@ FDemoText_CheckVoice_TypeF:
 FDemoText_CheckVoice_MaskedActive:
 	ld a, (xsp)
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	andda8_24 a, (0x0247f0)
 	jr z, FDemoText_CheckVoice_Inactive
@@ -1060,7 +1060,7 @@ FDemoText_ScanMIDI_ValidateResponse:
 FDemoText_ScanMIDI_LookupActive:
 	ld a, (xsp + 4)
 	extz wa
-	lda_24 xde, (0x0247f4)
+	lda xde, (0x0247f4:24)
 	stb_dri C, 0x07, 0xe8, 0xe0
 
 FDemoText_ScanMIDI_NoMatch:
@@ -1081,7 +1081,7 @@ FDemoText_ScanMIDI_CheckTimeout:
 FDemoText_ScanMIDI_UpdateFlags:
 	ld a, (xsp + 4)
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	exts xwa
 	add xwa, xbc
 	cpib_erp 0xfb, 1
@@ -1124,7 +1124,7 @@ FDemoText_RescanAllVoices:
 FDemoText_Rescan_Loop:
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_erp C, 0xfa
 	calr FDemoText_CheckVoiceState
@@ -1148,7 +1148,7 @@ FDemoText_Rescan_NextVoice:
 FDemoText_Rescan_SendUpdates:
 	stb_erp A, 0xfb
 	extz wa
-	lda_24 xbc, (DemoDiskPrompt_English1_0x8A)
+	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	andda8_24 c, (0x0247ee)
 	call_24 nz, FDemoText_SendVoiceParams
@@ -1163,7 +1163,7 @@ FDemoText_NotifyUIChange:
 	extz bc
 	ld xwa, 0x4900
 	call DSPCfg_WriteParamFull
-	ldb_d8 e, (0xfc74)
+	ld e, (0xfc74:16)
 	extz de
 	pushw 0xff
 	ldw wa, 0x61
@@ -1215,7 +1215,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xiz, xwa
 	cp	xiz, 0xffffffff
 	jr	nz, 7
-	lda_24	xhl, (DemoDiskPrompt_English1_0x192)
+	lda	xhl, (DemoDiskPrompt_English1_0x192:24)
 	jr	94
 	ld	xwa, xiz
 	ld	xbc, 0x01e00015
@@ -1246,7 +1246,7 @@ FDemoText_ByteData_DisplayRefresh:
 	pushw	0x47f6
 	call	Strcpy
 	inc	8, xsp
-	lda_24	xhl, (0x0247f6)
+	lda	xhl, (0x0247f6:24)
 	pop	xiz
 	ret
 	lda xsp, (xsp-136)
@@ -1450,7 +1450,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	push xwa
 	ld bc, (xsp + 26)
 	sla bc, 3
-	lda_24 xwa, (DemoDiskPrompt_English1_0xB4)
+	lda xwa, (DemoDiskPrompt_English1_0xB4:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call String_Compare
@@ -1459,7 +1459,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	jrl nz, FDemoText_ProcessMarkup_NextTag
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda_24 xwa, (DemoDiskPrompt_English1_0xB8)
+	lda xwa, (DemoDiskPrompt_English1_0xB8:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	ld (xsp + 4), xwa
 	or xwa, xwa
@@ -1595,7 +1595,7 @@ FDemoText_ProcessMarkup_NextTag:
 FDemoText_ProcessMarkup_TagTableLoop:
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda_24 xwa, (DemoDiskPrompt_English1_0xB4)
+	lda xwa, (DemoDiskPrompt_English1_0xB4:24)
 	exts xbc
 	add xbc, xwa
 	ld xwa, (xbc)
@@ -1840,7 +1840,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc 1, qiz
 	ld bc, qiz
 	sla bc, 2
-	lda_24	xwa, (FileType_NameTable)
+	lda	xwa, (FileType_NameTable:24)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
@@ -1992,7 +1992,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc 1, qiz
 	ld bc, qiz
 	sla bc, 2
-	lda_24	xwa, (FileTypeName_Song_0x5A)
+	lda	xwa, (FileTypeName_Song_0x5A:24)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
@@ -2035,7 +2035,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	gt, 20
 	ld	bc, iz
 	sla	bc, 2
-	lda_24	xde, (0x024fd8)
+	lda	xde, (0x024fd8:24)
 	ldl_da	xwa, (0x0249d4)
 	st_rrl xwa, xde, bc
 	lds hl, 0
@@ -2068,7 +2068,7 @@ FDemoText_ByteData_LayoutEngine:
 	stw_da	(0x025b72), wa
 	cp	wa, 8
 	jr	ge, 11
-	lda_24	xbc, (0x025b74)
+	lda	xbc, (0x025b74:24)
 	.byte 0xf3
 	.long ToneGen_ParamTable
 	nop
@@ -2085,7 +2085,7 @@ FDemoText_ByteData_LayoutEngine:
 	cps	wa, 0
 	jr	ge, 7
 	stiw_da	(0x025b72), 0
-	lda_24	xbc, (0x025b74)
+	lda	xbc, (0x025b74:24)
 	ldw_da	wa, (0x025b72)
 	.byte 0xf3
 	reti
@@ -2101,7 +2101,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld (xsp+148), wa
 	ldw_da	wa, (0x025b3e)
 	sla	wa, 2
-	lda_24	xbc, (0x025b40)
+	lda	xbc, (0x025b40:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2112,7 +2112,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	sr
 	ldb	w, 216
 	.byte 0xec, 0x01
-	lda_24	xbc, (0x025b62)
+	lda	xbc, (0x025b62:24)
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -2154,7 +2154,7 @@ FDemoText_ByteData_LayoutEngine:
 	cp	hl, 9
 	jr	gt, 38
 	sla	hl, 2
-	lda_24	xwa, (ImgAttr_Size_0x6)
+	lda	xwa, (ImgAttr_Size_0x6:24)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -2173,7 +2173,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc 1, qiz
 	ld bc, qiz
 	sla bc, 2
-	lda_24	xwa, (UIStr_No_0x4)
+	lda	xwa, (UIStr_No_0x4:24)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
@@ -2201,7 +2201,7 @@ FDemoText_ByteData_LayoutEngine:
 	cp	bc, 8
 	jr	ge, 37
 	sla	bc, 2
-	lda_24	xde, (0x025b40)
+	lda	xde, (0x025b40:24)
 	ld	xwa, (xsp+4)
 	.byte 0xf3
 	reti
@@ -2211,7 +2211,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	sr
 	ldb	a, 217
 	.byte 0xec, 0x01
-	lda_24	xde, (0x025b62)
+	lda	xde, (0x025b62:24)
 	ld	wa, (xsp+8)
 	st_rrw wa, xde, bc
 	lds	hl, 0
@@ -2232,7 +2232,7 @@ FDemoText_ByteData_LayoutEngine:
 	stiw_da	(0x025b60), 0
 	ldw_da	bc, (0x025b3e)
 	sla	bc, 2
-	lda_24	xde, (0x025b40)
+	lda	xde, (0x025b40:24)
 	lds32	xwa, 5
 	.byte 0xf3
 	reti
@@ -2242,7 +2242,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	sr
 	ldb	w, 216
 	.byte 0xec, 0x01
-	lda_24	xbc, (0x025b62)
+	lda	xbc, (0x025b62:24)
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -2322,7 +2322,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc 1, qiz
 	ld bc, qiz
 	sla bc, 2
-	lda_24	xwa, (ImgAttr_NameTable)
+	lda	xwa, (ImgAttr_NameTable:24)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
@@ -2394,7 +2394,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc 1, qiz
 	ld bc, qiz
 	sla bc, 2
-	lda_24	xwa, (ImgAttrName_Src_0x88)
+	lda	xwa, (ImgAttrName_Src_0x88:24)
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
@@ -2429,7 +2429,7 @@ FDemoText_ByteData_LayoutEngine:
 	pop	xiz
 	lda xsp, (xsp+206)
 	ret
-	lda_24	xbc, (0x0251da)
+	lda	xbc, (0x0251da:24)
 	ld	xwa, xbc
 	lda xbc, (xbc+2400)
 	ld xde, xwa
@@ -2440,15 +2440,15 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xwa, (xwa+40)
 	cp	xwa, xbc
 	jr	c, -20
-	lda_24	xwa, (0x025b3a)
+	lda	xwa, (0x025b3a:24)
 	ldw	(xwa), 0
 	ldw	(xwa+2), 0
 	stiw_da	(0x025b3e), 0
 	stiw_da	(0x025b60), 0
 	stiw_da	(0x025b72), 0
-	lda_24	xhl, (0x025b40)
-	lda_24	xde, (0x025b62)
-	lda_24	xwa, (0x025b74)
+	lda	xhl, (0x025b40:24)
+	lda	xde, (0x025b62:24)
+	lda	xwa, (0x025b74:24)
 	ld	xbc, xwa
 	lda	xix, (xwa+8)
 	lds32	xwa, 5
@@ -2502,7 +2502,7 @@ FDemoText_CalcTextExtent:
 	jr ge, FDemoText_CalcExtent_Done
 	ld wa, (xwa + 2)
 	muls wa, 0x28
-	lda_24 xde, (0x0251da)
+	lda xde, (0x0251da:24)
 
 FDemoText_CalcExtent_ScanLoop:
 	ld bc, wa
@@ -2527,13 +2527,13 @@ FDemoText_UpdateCursorPosition:
 	calr FDemoText_ScaleDownCoords
 	ldw_da xwa, (0x025b3e)
 	sla wa, 2
-	lda_24 xbc, (0x025b40)
+	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCenteredDelta
 	ld iz, hl
 	ldw_da xwa, (0x025b3e)
 	sla wa, 2
-	lda_24 xbc, (0x025b40)
+	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCharHeight
 	add hl, iz
@@ -2549,7 +2549,7 @@ FDemoText_UpdateCursorPosition:
 	jr ge, FDemoText_FindCursor_NotFound
 	ldw iy, 0xffff
 	ld iz, (xwa)
-	lda_24 xix, (0x0251da)
+	lda xix, (0x0251da:24)
 	muls bc, 0x28
 	ld hl, bc
 	cps iz, 0
@@ -2613,17 +2613,17 @@ FDemoText_RenderTextLine:
 	ldirw
 	ldw_da xwa, (0x025b3e)
 	sla wa, 2
-	lda_24 xbc, (0x025b40)
+	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCharHeight
 	ld iz, hl
 	ldw_da xwa, (0x025b3e)
 	sla wa, 2
-	lda_24 xbc, (0x025b40)
+	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCharDescent
 	sub iz, hl
-	lda_24 xde, (0x025b3c)
+	lda xde, (0x025b3c:24)
 	ld bc, (xde)
 	ld wa, bc
 	sub wa, iz
@@ -2664,7 +2664,7 @@ FDemoText_Layout_Setup:
 	ld (xsp + 4), hl
 	ldw_da xwa, (0x025b3e)
 	sla wa, 2
-	lda_24 xbc, (0x025b40)
+	lda xbc, (0x025b40:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 16)
 	ld de, (xsp + 4)
@@ -2690,14 +2690,14 @@ FDemoText_Layout_NoWrap:
 FDemoText_Layout_ProcessLine:
 	ldw_da xwa, (0x025b3e)
 	sla wa, 2
-	lda_24 xbc, (0x025b40)
+	lda xbc, (0x025b40:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	call CalcTotalWidth
 	ld (xsp + 8), hl
 	cps iz, 0
 	jr z, FDemoText_Layout_UpdatePosition
-	lda_24 xbc, (0x025b74)
+	lda xbc, (0x025b74:24)
 	ldw_da xwa, (0x025b72)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	lda xbc, (xsp + 20)
@@ -2729,12 +2729,12 @@ FDemoText_Layout_DrawText:
 	lda xbc, (xsp + 20)
 	ldw_da xde, (0x025b3e)
 	sla de, 2
-	lda_24 xhl, (0x025b40)
+	lda xhl, (0x025b40:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	push xde
 	ldw_da xde, (0x025b60)
 	sla de, 1
-	lda_24 xhl, (0x025b62)
+	lda xhl, (0x025b62:24)
 	push_sriw 0x07, 0xec, 0xe8
 	pushw 0xf7
 	ld xde, (xsp + 24)
@@ -2768,7 +2768,7 @@ FDemoText_ByteData_LayoutB:
 	ld	(xsp+12), xwa
 	ldw_da	wa, (0x025b3e)
 	sla	wa, 2
-	lda_24	xbc, (0x025b40)
+	lda	xbc, (0x025b40:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2777,7 +2777,7 @@ FDemoText_ByteData_LayoutB:
 	.byte 0x8e
 	ldw_da	wa, (0x025b3e)
 	sla	wa, 2
-	lda_24	xbc, (0x025b40)
+	lda	xbc, (0x025b40:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2785,7 +2785,7 @@ FDemoText_ByteData_LayoutB:
 	.byte 0x17
 	ldb	h, 251
 	sub	iz, hl
-	lda_24	xde, (0x025b3c)
+	lda	xde, (0x025b3c:24)
 	ld	bc, (xde)
 	ld	wa, bc
 	sub	wa, iz
@@ -2816,7 +2816,7 @@ FDemoText_ByteData_LayoutB:
 	lda	xwa, (xsp+8)
 	sub	(xwa+2), iz
 	calr	64683
-	lda_24	xbc, (0x025b74)
+	lda	xbc, (0x025b74:24)
 	ldw_da	wa, (0x025b72)
 	ld_rrb a, xbc, wa
 	lda xbc, (xsp+8)
@@ -2862,7 +2862,7 @@ Seq_InitVoiceStructures:
 	push xiz
 	ld iz, wa
 	stiw_da (0x025b7c), 0x0000
-	lda_24 xwa, (0x0248c8)
+	lda xwa, (0x0248c8:24)
 	ld (xwa), 0x0
 	stl_da (0x0248c4), xwa
 	stl_da (0x0249c8), xwa
@@ -2873,14 +2873,14 @@ Seq_InitVoiceLoop:
 	pushw 0x4
 	stw_erp BC, 0xfa
 	muls bc, 0x18
-	lda_24 xwa, (0x0249d8)
+	lda xwa, (0x0249d8:24)
 	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	stw_erp WA, 0xfa
 	muls wa, 0x18
-	lda_24 xbc, (0x0249d8)
+	lda xbc, (0x0249d8:24)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lds32 xwa, 0
 	ld (xde + 16), xwa
@@ -2901,8 +2901,8 @@ Seq_PostProcessDisplay:
 	jr	0
 
 Seq_CopyResourcePtrs:
-	lda_24 xde, (0x024fd8)
-	lda_24 xhl, (Presentation_RootEntry_0x6)
+	lda xde, (0x024fd8:24)
+	lda xhl, (Presentation_RootEntry_0x6:24)
 	ld xbc, xde
 	lda_dri XDE, 0xe9, 0xfc, 0x01
 

@@ -72,7 +72,7 @@ ExcDotFunc:
 	add xbc, xbc
 	add xbc, NakaInst_DIRECT_E7FCE4_0xA6
 	ld bc, (xbc)
-	lda_24 xix, (ExcDotFunc_HandlerJumpTable)
+	lda xix, (ExcDotFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcDotFunc_HandlerJumpTable:
 	ld	xix, (xde+18)
@@ -105,7 +105,7 @@ ExcDotFunc_InvalidIndex_Exit:
 	ret
 
 ExcDotFunc_HandlerJumpTable_Ext:
-	lda_24	xhl, (149342)
+	lda	xhl, (149342:24)
 	ret
 
 ExcPmemFunc:
@@ -119,7 +119,7 @@ ExcPmemFunc:
 	add xbc, xbc
 	add xbc, FileTransfer_BlankStatus_0xA
 	ld bc, (xbc)
-	lda_24 xix, (ExcPmemFunc_HandlerJumpTable)
+	lda xix, (ExcPmemFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
@@ -142,7 +142,7 @@ ExcPmemFunc_HandlerJumpTable:
 ExcPmemFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcPmemFunc_Return
-	lda_24 xhl, (0x024760)
+	lda xhl, (0x024760:24)
 
 ExcPmemFunc_Return:
 	pop xiz
@@ -159,7 +159,7 @@ ExcSmemFunc:
 	add xbc, xbc
 	add xbc, FileTransfer_BlankStatus_0x1E
 	ld bc, (xbc)
-	lda_24 xix, (ExcSmemFunc_HandlerJumpTable)
+	lda xix, (ExcSmemFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
@@ -182,7 +182,7 @@ ExcSmemFunc_HandlerJumpTable:
 ExcSmemFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcSmemFunc_Return
-	lda_24 xhl, (0x024762)
+	lda xhl, (0x024762:24)
 
 ExcSmemFunc_Return:
 	pop xiz
@@ -199,7 +199,7 @@ ExcCompFunc:
 	add xbc, xbc
 	add xbc, FileTransfer_BlankStatus_0x32
 	ld bc, (xbc)
-	lda_24 xix, (ExcCompFunc_HandlerJumpTable)
+	lda xix, (ExcCompFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
@@ -222,7 +222,7 @@ ExcCompFunc_HandlerJumpTable:
 ExcCompFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcCompFunc_Return
-	lda_24 xhl, (0x024764)
+	lda xhl, (0x024764:24)
 
 ExcCompFunc_Return:
 	pop xiz
@@ -239,7 +239,7 @@ ExcSeqFunc:
 	add xbc, xbc
 	add xbc, FileTransfer_BlankStatus_0x46
 	ld bc, (xbc)
-	lda_24 xix, (ExcSeqFunc_HandlerJumpTable)
+	lda xix, (ExcSeqFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
@@ -262,7 +262,7 @@ ExcSeqFunc_HandlerJumpTable:
 ExcSeqFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcSeqFunc_Return
-	lda_24 xhl, (0x024766)
+	lda xhl, (0x024766:24)
 
 ExcSeqFunc_Return:
 	pop xiz
@@ -279,7 +279,7 @@ ExcMspFunc:
 	add xbc, xbc
 	add xbc, FileTransfer_BlankStatus_0x5A
 	ld bc, (xbc)
-	lda_24 xix, (ExcMspFunc_HandlerJumpTable)
+	lda xix, (ExcMspFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
@@ -302,7 +302,7 @@ ExcMspFunc_HandlerJumpTable:
 ExcMspFunc_InvalidIndex_Exit:
 	lds32 xhl, 0
 	jr ExcMspFunc_Return
-	lda_24 xhl, (0x024768)
+	lda xhl, (0x024768:24)
 
 ExcMspFunc_Return:
 	pop xiz

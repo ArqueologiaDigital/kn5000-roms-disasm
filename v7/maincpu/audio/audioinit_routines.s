@@ -30,7 +30,7 @@ AudioInit_CheckGroupA:
 	ordi16 (0xc500), 0x0020
 	ret
 	pushw iz
-	ldw_d16 iz, (0xc4fa)
+	ld iz, (0xc4fa:16)
 	anddi16 (0xc4fa), 0xffef
 	call 0xfe8d01
 	.byte 0xcf
@@ -277,7 +277,7 @@ AudioInit_Routing_NoSplitCheckAux:
 AudioInit_Routing_CheckTypeEDFlags:
 	extz	de
 	ld	wa, iz
-	lda_d16	xbc, (49542)
+	lda	xbc, (49542:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -352,7 +352,7 @@ AudioInit_Pan_SetStereoLeft:
 AudioInit_Pan_CheckMode1:
 	and	d, w
 	nop
-	lda_d16	xbc, (49865)
+	lda	xbc, (49865:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	h, (xwa)
@@ -383,7 +383,7 @@ AudioInit_Pan_Reverb_Left:
 AudioInit_Pan_Reverb_CheckMode1:
 	swi	0
 	ld	e, a
-	ldb_d8	a, (49864)
+	ld	a, (49864:16)
 	xorda8	a, (49506)
 	ld	c, a
 AudioInit_Pan_Reverb_CheckMode1b:
@@ -393,16 +393,16 @@ AudioInit_Pan_Reverb_Right:
 AudioInit_Pan_Reverb_CheckTypeED:
 	inc	6, l
 	pushw	de
-	ldb_d8	a, (50072)
+	ld	a, (50072:16)
 	res	7, a
-	ldb_d8	c, (49714)
+	ld	c, (49714:16)
 	res	7, c
 	cp	c, a
 	jr	nz, 18
-	ldb_d8	a, (50073)
+	ld	a, (50073:16)
 	srl	a, 1
 AudioInit_Pan_Reverb_TypeED_Left:
-	ldb_d8	c, (49715)
+	ld	c, (49715:16)
 	srl	c, 1
 AudioInit_Pan_Reverb_Center:
 	cp	c, a

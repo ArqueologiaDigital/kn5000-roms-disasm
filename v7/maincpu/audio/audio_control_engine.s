@@ -34,7 +34,7 @@ FileIO_AdvancePointer:
 	inc 8, xiz
 
 FileIO_MainLoop:
-	lda_d16	xbc, (36320)
+	lda	xbc, (36320:16)
 	ld	a, (xiz)
 	ld	(xbc), a
 	cp	a, 255
@@ -45,7 +45,7 @@ FileIO_BytecodeData:
 	.incbin "includes/romslices/v7_transplant_FileIO_BytecodeData_head.bin"
 	push XIZ
 	ld XIZ,XWA
-	ldb_d8 a, (0x8c98)
+	ld a, (0x8c98:16)
 	cp A,0x10
 	jr z, .Lc_fc5cd8
 	cp A,0x0f
@@ -90,7 +90,7 @@ FileIO_BytecodeData:
 	ret
 	push XIZ
 	ld XIZ,XWA
-	ldb_d8 a, (0x8c98)
+	ld a, (0x8c98:16)
 	cp A,0x10
 	jr z, .Lc_fc5d43
 	cp A,0x0f
@@ -360,16 +360,16 @@ ExtDev_SndParam_ConfigAndWrite:
 	.byte 0x9e	; differs from v10 here and llvm-objdump cannot read it
 	.byte 0x8c	; v10 does not spell this byte either
 	ld	(xiz+1), 5
-	ldb_d8	a, (35998)
+	ld	a, (35998:16)
 	extz	wa
 	ldw	bc, 93
 	call	16567590
 	lda	xbc, (xiz+2)
 	cps	hl, 0
 	jr	nz, 20
-	ldb_d8	a, (35998)
+	ld	a, (35998:16)
 	extz	wa
-	lda_d16	xde, (37105)
+	lda	xde, (37105:16)
 	extz	xwa
 	add	xwa, xde
 	ld	a, (xwa)
@@ -457,7 +457,7 @@ ExtDev_SndParam_Block70_Var04:
 ExtDev_SndParam_DispatchAndWriteA8:
 	push	xiz
 	ld	xiz, xwa
-	ldb_d8	a, (35992)
+	ld	a, (35992:16)
 	cp	a, 16
 	jr	z, 24	; -> 0xFC6015
 	cp	a, 15
@@ -495,7 +495,7 @@ ExtDev_SndParam_DispatchAndWriteA8:
 ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	push	xiz
 	ld	xiz, xwa
-	ldb_d8	a, (35992)
+	ld	a, (35992:16)
 	cp	a, 16
 	jr	z, 24	; -> 0xFC606E
 	cp	a, 15
@@ -559,7 +559,7 @@ ExtDev_SndParam_DispatchComplex:
 	push	xiz
 	ld	(xsp+4), c
 	ld	xiz, xwa
-	ldb_d8	a, 35992
+	ld	a, (35992:16)
 	cp	a, 16
 	jr	z, 24
 	cp	a, 15
@@ -605,10 +605,10 @@ ExtDev_SndParam_DispatchComplex:
 	call	16544872
 	lda	xbc, (xiz+2)
 	ld	(xbc), l
-	ldb_d8	a, 36340
+	ld	a, (36340:16)
 	extz	wa
 	sla	wa, 2
-	lda_24	xde, 15572900
+	lda	xde, (15572900:24)
 	ld_rrl	xde, xde, wa
 	or	xde, xde
 	jr	z, 23
@@ -623,7 +623,7 @@ ExtDev_SndParam_DispatchComplex:
 	pop	xiz
 	ret
 VoiceEntry_FindMasterVolume:
-	lda_d16	xde, (49053)
+	lda	xde, (49053:16)
 	lds32	xbc, 0
 	lds	wa, 0
 	jr	37
@@ -654,9 +654,9 @@ VoiceEntry_CheckTerminator:
 
 Audio_CopyStateFromROM:
 	calr	735
-	lda_24	xbc, (15573024)
+	lda	xbc, (15573024:24)
 	ld	xwa, xbc
-	lda_d16	xde, (36378)
+	lda	xde, (36378:16)
 	lda	xhl, (xbc+12)
 AudioCopy_TransferLoop:
 	ld xiy, xwa
@@ -680,13 +680,13 @@ Audio_NullHandler_C:
 
 Encoder_TimingAndOutput:
 	incdi8	1, (36394)
-	ldw_d16	wa, (36396)
+	ld	wa, (36396:16)
 	cps	wa, 0
 	jr	z, 6
 	dec	1, wa
 	stda16	(36396), wa
 Encoder_CheckTimerDelta:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	subda16	xwa, (36390)
 	cp	wa, 16
 	jr	c, 7	; -> 0xFC61F3
@@ -777,13 +777,13 @@ MIDI_ProcessVoiceAssignment:
 MIDI_ValidateParam:
 	cpdi16	36396, 0
 	jr	nz, 16
-	lda_d16	xwa, 36382
+	lda	xwa, (36382:16)
 	ld_sd8b	c, 64
 	and	c, 240
 	srl	c, 4
 	calr	11
 MIDI_WriteSecondByte:
-	lda_d16	xwa, (36386)
+	lda	xwa, (36386:16)
 	ldcf_dd8	6, 52
 	scc8	c, c
 	jr	0
@@ -810,7 +810,7 @@ MIDI_ChannelSetup_Store:
 	.byte 0xd8, 0x6e, 0x06, 0x88, 0x03, 0x3f, 0x00, 0x66
 	.byte 0x40
 MIDI_ChannelSetup_Init:
-	lda_d16	xiz, (36374)
+	lda	xiz, (36374:16)
 	ld	(xsp+4), xiz
 	lda	xiy, (xwa+3)
 	ld	e, (xiy)
@@ -865,14 +865,14 @@ MidiCC_LookupHandler:
 	srl a, 1
 	or a, c
 	extz wa
-	lda_24 xbc, (EffectMode_DispatchTable_0x10)
+	lda xbc, (EffectMode_DispatchTable_0x10:24)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
 Voice_SetupFromData:
 	push XIZ
 	ld XIZ,XWA
-	ldb_d8 c, (0x8e28)
+	ld c, (0x8e28:16)
 	ld A,C
 	extz WA
 	muls WA,0x0003
@@ -917,7 +917,7 @@ MIDI_PopIzRet:
 	ret
 
 MidiCC_SyncForceResync:
-	lda_d16	xhl, (36344)
+	lda	xhl, (36344:16)
 	ret
 MidiCC_ResetState:
 	stdi8 (0x8df8), 0xff
@@ -948,19 +948,19 @@ MidiChannel_GetParamByIndex:
 	jr z, MidiChannel_GetParam1
 	cps a, 0
 	jr nz, MidiChannel_GetParamReturn
-	lda_d16 xbc, (288)
+	lda xbc, (288:16)
 	jr MidiChannel_GetParamReturn
 
 MidiChannel_GetParam1:
-	lda_d16 xbc, (290)
+	lda xbc, (290:16)
 	jr MidiChannel_GetParamReturn
 
 MidiChannel_GetParam2:
-	lda_d16 xbc, (292)
+	lda xbc, (292:16)
 	jr MidiChannel_GetParamReturn
 
 MidiChannel_GetParam3:
-	lda_d16 xbc, (294)
+	lda xbc, (294:16)
 
 MidiChannel_GetParamReturn:
 	ld l, (xbc + 1)
@@ -980,16 +980,16 @@ MidiParam_ProcessChannel0:
 	st_erpb_rr l, 0xfb
 	ld_erpb_rr a, 0xfb
 	extz WA
-	ldb_d8 c, (0x8e60)
+	ld c, (0x8e60:16)
 	extz BC
 	ld XDE,0x00008e68
 	calr MIDI_ComputeParamDelta
-	lda_d16 xwa, (0x8e68)
+	lda xwa, (0x8e68:16)
 	bit 3,(XWA)
 	jr z, MidiParam_Ch0_Done
 	res 3,(XWA)
 	ld_erpb_rr a, 0xfb
-	stb_d8 (0x8e60), a
+	ld (0x8e60:16), a
 	ld_erpb_rr a, 0xfb
 	extz WA
 	lds bc, 2
@@ -1012,16 +1012,16 @@ MidiParam_ProcessChannel1:
 	ldb_erp	l, 251
 	stb_erp	a, 251
 	extz	wa
-	ldb_d8	c, 36450
+	ld	c, (36450:16)
 	extz	bc
 	ld	xde, 36458
 	calr	48
-	lda_d16	xwa, 36458
+	lda	xwa, (36458:16)
 	.byte 0xb0, 0xcb
 	jr	z, 34
 	.byte 0xb0, 0xb3
 	stb_erp	a, 251
-	stb_d8	36450, a
+	ld	(36450:16), a
 	stb_erp	a, 251
 	extz	wa
 	lds	bc, 5
@@ -1116,7 +1116,7 @@ MIDI_ProcessChangedChannels:
 	cpdi8 (0x8c9a), 0xfb
 	ret Z
 	calr Audio_CheckAndFlagChanges
-	ldw_d16 wa, (0x8ea0)
+	ld wa, (0x8ea0:16)
 	cpl WA
 	andda16 xwa, 0x8e9e
 	jr z, .Lc_fc6863
@@ -1125,7 +1125,7 @@ MIDI_ProcessChangedChannels:
 	stdi16 (0x8e9e), 0x0000
 MidiChanged_ProcessGroup2:
 .Lc_fc6863:
-	ldw_d16 wa, (0x8ea4)
+	ld wa, (0x8ea4:16)
 	cpl WA
 	andda16 xwa, 0x8ea2
 	jr z, .Lc_fc687d
@@ -1134,7 +1134,7 @@ MidiChanged_ProcessGroup2:
 	stdi16 (0x8ea2), 0x0000
 MidiChanged_ProcessGroup3:
 .Lc_fc687d:
-	ldw_d16 wa, (0x8ea8)
+	ld wa, (0x8ea8:16)
 	cpl WA
 	andda16 xwa, 0x8ea6
 	jr z, .Lc_fc6897
@@ -1143,7 +1143,7 @@ MidiChanged_ProcessGroup3:
 	stdi16 (0x8ea6), 0x0000
 MidiChanged_ProcessGroup4:
 .Lc_fc6897:
-	ldw_d16 wa, (0x8eac)
+	ld wa, (0x8eac:16)
 	cpl WA
 	andda16 xwa, 0x8eaa
 	ret Z
@@ -1154,25 +1154,25 @@ MidiChanged_ProcessGroup4:
 MidiChannel_DispatchChanged:
 	cpdi8 (0x8c9a), 0xfb
 	ret Z
-	ldw_d16 wa, (0x8ea0)
+	ld wa, (0x8ea0:16)
 	cps wa, 0
 	jr z, MidiDispatch_CheckGroup2
 	ld XBC,ENCODER_LUT_MODWHEEL_0x49E
 	calr DispatchBitmaskHandlers
 MidiDispatch_CheckGroup2:
-	ldw_d16	wa, (36516)
+	ld	wa, (36516:16)
 	cps	wa, 0
 	jr	z, 8
 	ld	xbc, 15574496
 	calr	135
 MidiDispatch_CheckGroup3:
-	ldw_d16	wa, (36520)
+	ld	wa, (36520:16)
 	cps	wa, 0
 	jr	z, 8
 	ld	xbc, 15574520
 	calr	119
 MidiDispatch_CheckGroup4:
-	ldw_d16	wa, (36524)
+	ld	wa, (36524:16)
 	cps	wa, 0
 	jr	z, 8
 	ld	xbc, 15574544
@@ -1196,7 +1196,7 @@ Audio_CheckAndFlagChanges:
 	cpda8 l, (0x8ec2)
 	jr z, .Lc_fc6934
 	ordi16 (0x8ea6), 0x0040
-	stb_d8 (0x8ec2), l
+	ld (0x8ec2:16), l
 AudioChange_CheckSelectionState:
 .Lc_fc6934:
 	call CtrlPanel_GetSelectionState
@@ -1213,7 +1213,7 @@ AudioChange_UpdatePreviousSelect:
 AudioChange_SetChannelFlag:
 .Lc_fc6955:
 	ordi16 (0x8ea6), 0x0004
-	stb_d8 (0x8ec4), l
+	ld (0x8ec4:16), l
 	ret
 DispatchBitmaskHandlers:
 	dec 2, xsp
@@ -1248,9 +1248,9 @@ BitmaskDispatch_Return:
 CtrlPanel_UpdateLEDState:
 	dec 0,XSP
 	push QIZ
-	lda_d16 xwa, (0x8e7c)
+	lda xwa, (0x8e7c:16)
 	ld (XSP+0x02),XWA
-	lda_d16 xwa, (0x8e8c)
+	lda xwa, (0x8e8c:16)
 	ld (XSP+0x06),XWA
 	cpdi8 (0x8c9a), 0xf7
 	jr z, LEDUpdate_Cleanup
@@ -1289,9 +1289,9 @@ Set_LEDs:
 	ld E,A
 	cp E,0x0f
 	ret UGT
-	lda_d16	xwa, 36508
+	lda	xwa, (36508:16)
 	extz	de
-	lda_24	xhl, 15574550
+	lda	xhl, (15574550:24)
 	ld_rrb	e, xhl, de
 	ld	(xwa), e
 	ld	(xwa+1), c
@@ -1312,7 +1312,7 @@ SndParam028100_Done:
 	ret
 SndParam_SetResBit1_ViaRegs0100_0101:
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	ld	xwa, 164096
 	call	16567398
 	cps	hl, 2
@@ -1331,7 +1331,7 @@ SndParam028101_Done:
 	ret
 SndParam_SetResBit2_ViaRegs0101_0102:
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	ld	xwa, 164097
 	call	16567398
 	cps	hl, 2
@@ -1352,7 +1352,7 @@ SndParam028102_Done:
 
 SndParam_SetResBit3_ViaRegs0101_0102:
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	ld	xwa, 164097
 	call	16567398
 	cps	hl, 3
@@ -1412,7 +1412,7 @@ SndParamCC5E_Done:
 
 SndParam_SetResBit2_ViaPartCC5D:
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	call	16355409
 	extz	hl
 	ld	wa, hl
@@ -1513,7 +1513,7 @@ SndParam4200_Done:
 	pop xiz
 	ret
 SndParam_MaskShiftMerge_8F58:
-	ldb_d8 a, (36540)
+	ld a, (36540:16)
 
 	and a, 0x07
 
@@ -1527,7 +1527,7 @@ SndParam_MaskShiftMerge_8F58:
 
 SndParam_DecrLookup_Via0300:
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	ld	xwa, 768
 	call	16567398
 	cps	hl, 0
@@ -1580,7 +1580,7 @@ SndParamF9A541_Done:
 ExtData_VoiceParam_DispatchBytecode:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 186 of 292 slots byte-identical
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	lda	xbc, (xiz+2)
 	.byte 0xb1	; v10 does not spell this byte either
 	.byte 0xb7	; v10 does not spell this byte either
@@ -1607,7 +1607,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	.byte 0xb2	; v10 does not spell this byte either
 	.byte 0xb5	; v10 does not spell this byte either
 	.byte 0xb3	; v10 does not spell this byte either
-	ldb_d8	a, (35992)
+	ld	a, (35992:16)
 	extz	wa
 	dec	2, wa
 	cps	wa, 0
@@ -1615,7 +1615,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, 82
 	add	wa, wa
-	lda_24	xix, (Protocol_values_for_LED_rows_0x16)
+	lda	xix, (Protocol_values_for_LED_rows_0x16:24)
 	.byte 0xd3	; v10 does not spell this byte either
 	reti
 	.byte 0xf0	; v10 does not spell this byte either
@@ -1671,7 +1671,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	pushw	ix
 	pop	xiz
 	ret
-	lda_d16	xwa, (36476)
+	lda	xwa, (36476:16)
 	.byte 0xc1, 0xf4, 0x32, 0x3f, 0x00	; differs from v10 here and llvm-objdump cannot read it
 	jr	z, 3
 	.byte 0xb0	; v10 does not spell this byte either
@@ -1680,7 +1680,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	.byte 0xb0	; v10 does not spell this byte either
 	.byte 0xb3	; v10 does not spell this byte either
 	ret
-	lda_d16	xwa, (36482)
+	lda	xwa, (36482:16)
 	.byte 0xb0	; v10 does not spell this byte either
 	.byte 0xb5	; v10 does not spell this byte either
 	.byte 0xf1	; v10 does not spell this byte either
@@ -1688,7 +1688,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	pushw	wa
 	sbc	w, w
 	.byte 0xf6	; v10 does not spell this byte either
-	ldb_d8	c, (35992)
+	ld	c, (35992:16)
 	cp	c, 13
 	ret	z
 	cp	c, 12
@@ -1704,7 +1704,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	ret
 	lda	xsp, (xsp-10)
 	push	xiz
-	lda_d16	xwa, (36476)
+	lda	xwa, (36476:16)
 	ld	(xsp+4), xwa
 	ld	(xwa+7), 0
 	ld	xwa, (xsp+4)
@@ -1773,7 +1773,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	ret
 	dec	6, xsp
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	.byte 0xb6	; v10 does not spell this byte either
 	.byte 0xb0	; v10 does not spell this byte either
 	ld	(xiz+1), 0
@@ -1831,7 +1831,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	inc	6, xsp
 	ret
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	call	GetCurrentPartSelect
 	lda	xbc, (xiz+10)
 	ld	a, (xbc)
@@ -1859,7 +1859,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	pop	xiz
 	ret
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	ld	xwa, 16576
 	call	16567398
 	cps	hl, 1
@@ -1882,7 +1882,7 @@ CtrlPanel_Bit6Done:
 	ret
 CtrlPanel_MultiWayBitManip_ViaE0:
 	push	xiz
-	lda_d16	xiz, (36476)
+	lda	xiz, (36476:16)
 	ld	xwa, 16608
 	call	16567398
 	lda	xbc, (xiz+13)
@@ -1973,7 +1973,7 @@ CtrlPanel_GuardedNibbleSet_8F4E:
 	.byte 0xc1, 0x98, 0x8c, 0x3f, 0x13, 0x66, 0x07, 0xc1
 	.byte 0x6f, 0x7e, 0x3f, 0x00, 0x66, 0x24
 CtrlPanelGuard_PassedCheck:
-	ldb_d8	a, (36530)
+	ld	a, (36530:16)
 	extz	wa
 	call	16544856
 	andda8	l, (36526)
@@ -2113,22 +2113,22 @@ MidiChOutState_Return:
 
 MidiChannel_ProcessOutputState:
 	push XIZ
-	lda_d16 xiz, (0x8e7c)
+	lda xiz, (0x8e7c:16)
 	calr MidiChOut_DetectChanges
 	lda xde, (xiz + 0x0e)
-	ldb_d8 c, (0x8dda)
+	ld c, (0x8dda:16)
 	bitda 2, (0x041e)
 	jr nz, .Lc_fc726a
 	ld A,C
 	bit 0x01,C
 	jr z, MidiChannel_CleanupRet
 	res 0x01,A
-	stb_d8 (0x8dda), a
+	ld (0x8dda:16), a
 	jr t, MidiChOut_ClearLowNibble
 MidiChOut_CheckHWState:
 .Lc_fc726a:
-	ldb_d8 l, (0x0416)
-	ldb_d8 a, (0x0415)
+	ld l, (0x0416:16)
+	ld a, (0x0415:16)
 	and A,0x60
 	jr nz, MidiChOut_CheckBit1Clear
 	.byte 0xf1, 0xda, 0x8d, 0xb9, 0xc1, 0x33, 0x04, 0x21
@@ -2155,7 +2155,7 @@ MidiChOut_CheckBit1Clear:
 	bit	1, c
 	jr	z, 10
 	res	1, a
-	stb_d8	(36314), a
+	ld	(36314:16), a
 MidiChOut_ClearLowNibble:
 	andmi8 (xde), 0xf0
 
@@ -2168,7 +2168,7 @@ MidiChOut_DetectChanges:
 
 	ret nz
 
-	ldb_d8 a, (1056)
+	ld a, (1056:16)
 
 	xorda8 xbc, (13279)
 
@@ -2186,11 +2186,11 @@ MidiChOut_DetectChanges:
 
 MidiChannel_ScanPending:
 	push XIZ
-	lda_d16 xiz, (0x8e7c)
-	ldw_d16 wa, (0x8ea4)
+	lda xiz, (0x8e7c:16)
+	ld wa, (0x8ea4:16)
 	bit 0x02,WA
 	jr nz, MidiScan_PopIzRet
-	ldb_d8 a, (0x8eae)
+	ld a, (0x8eae:16)
 	and A,0x03
 	jr nz, MidiScan_PopIzRet
 	bitda 2, (0x041e)
@@ -2202,7 +2202,7 @@ MidiChannel_ScanPending:
 	lda xbc, (xiz + 0x0e)
 	cps hl, 1
 	jr nz, MidiScan_CheckBit2InAddr1057
-	ldw_d16 wa, (0x040f)
+	ld wa, (0x040f:16)
 	bit 0x06,WA
 	jr nz, MidiScan_ClearAndReturn
 	ld A,(XBC)
@@ -2267,16 +2267,16 @@ UIState_Mode4:
 
 UIState_ProcessExtendedMode:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 29 of 48 slots byte-identical
-	ldb_d8	a, (49121)
+	ld	a, (49121:16)
 	extz	wa
 	cps	wa, 0
 	ret	mi
 	cps	wa, 7
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (Protocol_values_for_LED_rows_0x46)
+	lda	xix, (Protocol_values_for_LED_rows_0x46:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16544698)
+	lda	xix, (16544698:24)
 	.byte 0xf3	; v10 does not spell this byte either
 	reti
 	.byte 0xf0	; v10 does not spell this byte either
@@ -2318,7 +2318,7 @@ UIState_ProcessExtendedMode:
 UIStateEvt_NullHandler:
 	ret
 UIState_SwitchForMidiFlags:
-	ldb_d8	a, (49121)
+	ld	a, (49121:16)
 	cp	a, 20
 	jr	z, 34
 	cps	a, 4
@@ -2363,7 +2363,7 @@ UIState_ProcessSimpleMode:
 CtrlPanel_LookupIndicatorEntry:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Protocol_values_for_LED_rows_0x56)
+	lda xbc, (Protocol_values_for_LED_rows_0x56:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -2395,11 +2395,11 @@ Audio_InitAllDefaults:
 	stdi8	(37174), 255
 	stdi8	(36956), 127
 	stdi8	(36551), 255
-	lda_24	xwa, (15576676)
+	lda	xwa, (15576676:24)
 	stda32	(36950), xwa
-	lda_24	xwa, (15577700)
+	lda	xwa, (15577700:24)
 	stda32	(37094), xwa
-	lda_d16	xbc, (37105)
+	lda	xbc, (37105:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+31)
 AudioInit_FillLoop:
@@ -2456,7 +2456,7 @@ Audio_ReinitToneGen:
 	calr	4
 	jp	16626944
 Audio_FillParamBuffer:
-	lda_d16	xbc, (37105)
+	lda	xbc, (37105:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+31)
 AudioFill_Loop:
@@ -2503,9 +2503,9 @@ Audio_UpdateTempoAndReturn:
 	call	16554829
 	jp	16626944
 Audio_FullReinitWithPreset:
-	lda_24	xwa, (15576676)
+	lda	xwa, (15576676:24)
 	stda32	(36950), xwa
-	lda_24	xwa, (15577700)
+	lda	xwa, (15577700:24)
 	stda32	(37094), xwa
 	call	15665502
 	cps	hl, 0
@@ -2571,13 +2571,13 @@ VoiceData_InitAndCopyParams:
 	sll XWA, 0x04
 	sub XWA,XIZ
 	sll XWA, 0x06
-	lda_24 xiz, (0x1ed400)
+	lda xiz, (0x1ed400:24)
 	add XIZ,XWA
 	pushw 0x007c
 	push XHL
 	push XIZ
 	call 0xff05bc
-	lda_24 xwa, (Naka_ToshiParam_Table_0x8C)
+	lda xwa, (Naka_ToshiParam_Table_0x8C:24)
 	add XWA,0x0000007c
 	lda xiz, (xiz + 0x7c)
 	pushw 0x011e
@@ -2609,7 +2609,7 @@ VoiceData_ExtendedParamSetup:
 	extz XWA
 	ld XDE,XWA
 	add XDE,0x0099ec00
-	lda_24 xbc, (0x1ed360)
+	lda xbc, (0x1ed360:24)
 	add XBC,XWA
 	pushw 0x0010
 	push XDE
@@ -2626,9 +2626,9 @@ VoiceData_ExtendedParamSetup:
 	jrl t, Audio_FillParamBuffer
 	dec 0,XSP
 	pushw iz
-	lda_24 xwa, (Naka_ToshiParam_Table_0x8C)
+	lda xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld (XSP+0x02),XWA
-	lda_d16 xwa, (0xf9a0)
+	lda xwa, (0xf9a0:16)
 	ld (XSP+0x06),XWA
 	lds iz, 0
 .Lc_fc770b:
@@ -2666,9 +2666,9 @@ VoiceData_ExtendedParamSetup:
 	ret
 	lda xsp, (xsp - 0x0a)
 	push QIZ
-	lda_24 xwa, (Naka_ToshiParam_Table_0x8C)
+	lda xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld (XSP+0x04),XWA
-	lda_d16 xwa, (0xf9a0)
+	lda xwa, (0xf9a0:16)
 	ld (XSP+0x08),XWA
 	ld (XSP+0x02),0x00
 .Lc_fc777f:
@@ -2782,7 +2782,7 @@ VoiceData_ExtendedParamSetup:
 	pop	xhl
 	pop	xde
 	ld	(xsp+2), 0
-	lda_24	xwa, 15578108
+	lda	xwa, (15578108:24)
 	ld	(xsp+4), xwa
 	lds32	xwa, 0
 	ld	a, (xsp+2)
@@ -2854,7 +2854,7 @@ VoiceData_ExtendedParamSetup:
 	jp	16554829
 MidiMsg_ParseChannelStream:
 	push xiz
-	lda_d16 xiz, (0xf9a0)
+	lda xiz, (0xf9a0:16)
 	jr MidiMsg_LoopAndFlush
 
 MidiMsg_CheckTerminator:
@@ -2971,7 +2971,7 @@ BitmapTable_ProcessEntry:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, (SoundProgram_DispatchTable_0x892)
+	lda xwa, (SoundProgram_DispatchTable_0x892:24)
 	add xwa, xbc
 	ld a, (xwa)
 	calr VoiceData_LookupPtrByIndex
@@ -2985,7 +2985,7 @@ BitmapTable_ProcessEntry:
 	add xbc, xbc
 	ld xwa, SoundProgram_DispatchTable_0x890
 	add xwa, xbc
-	lda_24 xbc, (0x1ed400)
+	lda xbc, (0x1ed400:24)
 	lda xde, (xwa + 3)
 	lda xhl, (xwa + 4)
 	lda xix, (xwa + 5)
@@ -3123,7 +3123,7 @@ MidiNoHeader_Done:
 	ret
 
 MIDI_WriteCommandToBuffer:
-	ldw_d16 hl, (0x9042)
+	ld hl, (0x9042:16)
 	ld IX,HL
 	inc 1,HL
 	stda16 (0x9042), hl
@@ -3180,7 +3180,7 @@ Audio_MainPeriodicUpdate:
 	cpdi8 (0xbf9d), 0xff
 	ret Z
 	resda 0, (0x90c9)
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
+	lda xwa, (SoundProgram_DispatchTable_0x400:24)
 	stda32 (0x9056), xwa
 	calr Audio_SyncBufferPositions
 	push XDE
@@ -3206,10 +3206,10 @@ Audio_SyncBufferPositions:
 FileIO_OperationDispatch:
 .Lc_fc7d1f:
 	calr SndParam_FetchSequencerParams
-	ldb_d8 a, (0x908b)
+	ld a, (0x908b:16)
 	extz WA
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable)
+	lda xbc, (SoundProgram_DispatchTable:24)
 	ldl_dri xhl, 0x07, 0xe4, 0xe0
 	call (XHL)
 	cpdi16 (0x9042), 0x01fc
@@ -3226,14 +3226,14 @@ FileIO_OperationDispatch:
 	stdi16 (0x9044), 0x0000
 FileIO_ProcessRemainingOps:
 .Lc_fc7d51:
-	lda_d16 xbc, (0xbf9d)
-	ldw_d16 wa, (0x9097)
+	lda xbc, (0xbf9d:16)
+	ld wa, (0x9097:16)
 	extz XWA
 	add XWA,XBC
 	cp (XWA),0xff
 	jr nz, .Lc_fc7d1f
-	lda_d16 xbc, (0xbca0)
-	ldw_d16 wa, (0x9042)
+	lda xbc, (0xbca0:16)
+	ld wa, (0x9042:16)
 	extz XWA
 	add XWA,XBC
 	ld (XWA),0xff
@@ -3242,7 +3242,7 @@ FileIO_ProcessRemainingOps:
 ExtData_ToneParam_DispatchHandler:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 149 of 201 slots byte-identical
 	calr	4351
-	ldb_d8	a, (37011)
+	ld	a, (37011:16)
 	cp	a, 22
 	jr	z, 63
 	extz	wa
@@ -3251,9 +3251,9 @@ ExtData_ToneParam_DispatchHandler:
 	cp	wa, 11
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x896)
+	lda	xix, (SoundProgram_DispatchTable_0x896:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16547237)
+	lda	xix, (16547237:24)
 	jp_rr	8, xix, wa
 	jr	31
 	jrl	179
@@ -3279,7 +3279,7 @@ ExtData_ToneParam_DispatchHandler:
 	push_a
 	.byte 0x8b, 0x90	; differs from v10 here and llvm-objdump cannot read it
 	call	16703634
-	ldb_d8	a, (37003)
+	ld	a, (37003:16)
 	extz	wa
 	calr	6212
 	cp	xhl, 4294967295
@@ -3326,7 +3326,7 @@ ExtData_ToneParam_DispatchHandler:
 	.byte 0x90	; v10 does not spell this byte either
 	stdi8	(37006), 255
 	calr	4179
-	ldb_d8	a, (37003)
+	ld	a, (37003:16)
 	extz	wa
 	lda	xde, (xsp)
 	ld	c, (xde+3)
@@ -3342,7 +3342,7 @@ ExtData_ToneParam_DispatchHandler:
 	calr	4414
 	jrl	4140
 	dec	6, xsp
-	ldb_d8	a, (37003)
+	ld	a, (37003:16)
 	extz	wa
 	calr	6066
 	cp	xhl, 4294967295
@@ -3386,7 +3386,7 @@ ExtData_ToneParam_DispatchHandler:
 	jr	3
 	ldw	wa, 104
 	calr	4137
-	ldb_d8	c, (37013)
+	ld	c, (37013:16)
 	ld	a, c
 	and	a, 7
 	cps	a, 7
@@ -3396,7 +3396,7 @@ ExtData_ToneParam_DispatchHandler:
 	jr	60
 	and	c, 3
 	jr	z, 55
-	ldb_d8	a, (37012)
+	ld	a, (37012:16)
 	cps	a, 2
 	jr	nz, 21
 	stdi8	(37047), 1
@@ -3446,7 +3446,7 @@ FileIO_AllocBuffer:
 	ret
 ExtData_ToneParam_CheckMode:
 	calr	3844
-	ldb_d8	a, (37011)
+	ld	a, (37011:16)
 	cps	a, 1
 	jr	z, 6
 	cps	a, 0
@@ -3464,16 +3464,16 @@ ExtData_ToneParam_CheckMode:
 	jrl	3833
 ExtData_ToneParam_AltDispatch:
 	calr	3799
-	ldb_d8	a, (37011)
+	ld	a, (37011:16)
 	extz	wa
 	cps	wa, 0
 	ret	mi
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (15577874)
+	lda	xix, (15577874:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16547784)
+	lda	xix, (16547784:24)
 	jp_rr	8, xix, wa
 	jr	8	; -> 0xFC7FD2
 	jr	15	; -> 0xFC7FDB
@@ -3502,16 +3502,16 @@ ExtData_ToneParam_AltEntry:
 	ret
 ExtData_ToneParam_AltBody:
 	calr	3693
-	ldb_d8	a, 37011
+	ld	a, (37011:16)
 	extz	wa
 	cps	wa, 0
 	ret mi
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda_24	xix, 15577892
+	lda	xix, (15577892:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 16547890
+	lda	xix, (16547890:24)
 	jp_rr 8, xix, wa
 	jr	15
 	jr	112
@@ -3520,15 +3520,15 @@ ExtData_ToneParam_AltBody:
 	jrl	161
 	calr	167
 	ret
-	lda_d16	xwa, 36942
+	lda	xwa, (36942:16)
 	.byte 0xb0, 0x14, 0x94, 0x90, 0xb8, 0x01, 0x14, 0x95, 0x90, 0xb8, 0x02, 0x14, 0x8b, 0x90
 	call	16068350
-	ldb_d8	a, 37003
+	ld	a, (37003:16)
 	extz	wa
 	calr	5575
 	cp	xhl, 4294967295
 	ret	z
-	lda_d16	xde, 36946
+	lda	xde, (36946:16)
 	ldb_spi	a, 232
 	lda_dpi	xbc, 236
 	ld	c, (xhl)
@@ -3550,7 +3550,7 @@ ExtData_ToneParam_AltBody:
 	calr	4004
 	ldw	wa, 8
 	calr	3654
-	ldb_d8	a, 37006
+	ld	a, (37006:16)
 	and	a, 7
 	jr	z, 8
 	call	16554949
@@ -3566,10 +3566,10 @@ ExtData_ToneParam_AltBody:
 	calr	3777
 	jrl	3503
 	push	xiz
-	lda_d16	xiz, 64602
+	lda	xiz, (64602:16)
 	lda	xbc, (xiz+8)
 	lda	xhl, (xiz+9)
-	ldb_d8	e, 37012
+	ld	e, (37012:16)
 	cp	(xbc), e
 	jr	nz, 8
 	ld	a, (xhl)
@@ -3588,7 +3588,7 @@ ExtData_ToneParam_AltBody:
 	ret
 ExtData_ToneParam_MultiChannel:
 	calr	3400
-	ldb_d8	a, 37011
+	ld	a, (37011:16)
 	cp	a, 16
 	jr	z, 20
 	cps	a, 4
@@ -3602,7 +3602,7 @@ ExtData_ToneParam_MultiChannel:
 	jrl	129
 	calr	620
 	ret
-	ldb_d8	c, 37013
+	ld	c, (37013:16)
 	ld	a, c
 	and	a, 255
 	cp	a, 255
@@ -3611,9 +3611,9 @@ ExtData_ToneParam_MultiChannel:
 	jrl	3649
 	and	c, 3
 	ret	z
-	ldb_d8	c, 37012
+	ld	c, (37012:16)
 	and	c, 3
-	lda_d16	xwa, 64618
+	lda	xwa, (64618:16)
 	cps	c, 3
 	jr	z, 59
 	cps	c, 1
@@ -3636,7 +3636,7 @@ ExtData_ToneParam_MultiChannel:
 	cp	e, a
 	ret	z
 	ld	(xbc), e
-	stb_d8	37005, e
+	ld	(37005:16), e
 	jr	17
 	ld	xbc, xwa
 	ld	a, (xwa)
@@ -3647,7 +3647,7 @@ ExtData_ToneParam_MultiChannel:
 	stdi8	37006, 255
 	calr	3274
 	ret
-	lda_d16	xbc, 64614
+	lda	xbc, (64614:16)
 	ld	e, (xbc+1)
 	extz	de
 	sll	de, 8
@@ -3655,7 +3655,7 @@ ExtData_ToneParam_MultiChannel:
 	extz	wa
 	add	wa, de
 	stda16	37063, wa
-	ldb_d8	a, 64605
+	ld	a, (64605:16)
 	and	a, 7
 	cps	a, 2
 	jr	z, 32
@@ -3682,24 +3682,24 @@ ExtData_ToneParam_MultiChannel:
 	calr	7
 	call	16554949
 	jrl	142
-	ldb_d8	c, 37013
+	ld	c, (37013:16)
 	cps	c, 0
 	ret	z
-	lda_d16	xix, 37059
-	lda_d16	xhl, 37061
-	ldb_d8	e, 37011
+	lda	xix, (37059:16)
+	lda	xhl, (37061:16)
+	ld	e, (37011:16)
 	extz	de
-	ldb_d8	a, 37012
+	ld	a, (37012:16)
 	and	a, c
 	.byte 0xc3, 0x07, 0xf0, 0xe8, 0xe9
-	ldb_d8	c, 37011
+	ld	c, (37011:16)
 	extz	bc
-	ldb_d8	a, 37013
+	ld	a, (37013:16)
 	cpl	a
 	.byte 0xc3, 0x07, 0xec, 0xe4, 0xc9
-	ldb_d8	c, 37011
+	ld	c, (37011:16)
 	extz	bc
-	ldb_d8	a, 37012
+	ld	a, (37012:16)
 	andda8	a, 37013
 	.byte 0xc3, 0x07, 0xec, 0xe4, 0xe9
 	ld	c, (xhl)
@@ -3715,9 +3715,9 @@ ExtData_ToneParam_MultiChannel:
 	jr	nz, 5
 	bit	1, c
 	ret	z
-	lda_d16	xde, 64614
+	lda	xde, (64614:16)
 	extz	wa
-	lda_24	xbc, 15577910
+	lda	xbc, (15577910:24)
 	ld_rrb	c, xbc, wa
 	ld	(xde), c
 	ld	a, (xde+1)
@@ -3730,55 +3730,55 @@ ExtData_ToneParam_MultiChannel:
 	.byte 0xf1, 0x5d, 0x90, 0xb8
 	ret
 MIDI_WriteResetSequence:
-	ldb_d8	a, (36957)
+	ld	a, (36957:16)
 	bit	0, a
 	ret	z
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	de, wa
 	inc	1, wa
 	stda16	(36930), wa
-	lda_d16	xbc, (48288)
+	lda	xbc, (48288:16)
 	extz	xde
 	add	xde, xbc
 	ld	(xde), 144
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	de, wa
 	inc	1, wa
 	stda16	(36930), wa
 	extz	xde
 	add	xde, xbc
 	ld	(xde), 0
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
 	stda16	(36930), wa
 	extz	xhl
 	add	xhl, xbc
-	lda_d16	xde, (64614)
+	lda	xde, (64614:16)
 	ld	a, (xde)
 	ld	(xhl), a
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
 	stda16	(36930), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	(xhl), 31
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
 	stda16	(36930), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	(xhl), 144
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
 	stda16	(36930), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	(xhl), 1
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
 	stda16	(36930), wa
@@ -3786,16 +3786,16 @@ MIDI_WriteResetSequence:
 	add	xhl, xbc
 	ld	a, (xde+1)
 	ld	(xhl), a
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	ld	de, wa
 	inc	1, wa
 	stda16	(36930), wa
 	extz	xde
 	add	xde, xbc
 	ld	(xde), 31
-	ldb_d8	a, (36957)
+	ld	a, (36957:16)
 	res	0, a
-	stb_d8	(36957), a
+	ld	(36957:16), a
 	ret
 ExtData_Voice_UpdateFlags:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 23 of 36 slots byte-identical
@@ -3804,12 +3804,12 @@ ExtData_Voice_UpdateFlags:
 	lds	wa, 1
 	calr	3097
 	calr	2823
-	lda_d16	xbc, (64614)
+	lda	xbc, (64614:16)
 	.byte 0xb9	; v10 does not spell this byte either
 	pop	sr
 	sbc	w, w
 	swi	6
-	ldb_d8	a, (64605)
+	ld	a, (64605:16)
 	and	a, 7
 	cps	a, 1
 	ret	nz
@@ -3837,7 +3837,7 @@ ExtData_Voice_UpdateFlags:
 	jrl	2764
 ExtData_Voice_CheckMode:
 	calr	2730
-	ldb_d8	a, (37011)
+	ld	a, (37011:16)
 	cps	a, 1
 	ret	nz
 	calr	1
@@ -3849,7 +3849,7 @@ ExtData_Voice_RetEntry:
 	ret
 ExtData_Voice_MixedHandler:
 	calr	2705
-	ldb_d8	a, 37011
+	ld	a, (37011:16)
 	cps	a, 2
 	jr	z, 6
 	cps	a, 0
@@ -3869,21 +3869,21 @@ ExtData_Voice_MixedHandler:
 	calr	2685
 	cpdi8	50476, 255
 	ret	nz
-	ldb_d8	a, 37012
+	ld	a, (37012:16)
 	andda8	a, 37013
 	bit	0, a
 	jr	z, 23
-	ldb_d8	a, 64770
+	ld	a, (64770:16)
 	and	a, 3
 	extz	wa
-	lda_24	xbc, 15577914
+	lda	xbc, (15577914:24)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0xbc, 0x8e
 	jr	5
 	stdi8	36540, 0
 	ldw	wa, 69
 	call	16544114
 	ret
-	ldb_d8	c, 37013
+	ld	c, (37013:16)
 	ld	a, c
 	and	a, 255
 	cp	a, 255
@@ -3895,7 +3895,7 @@ ExtData_Voice_MixedHandler:
 	jr	nz, 90
 	and	c, 3
 	jr	z, 85
-	ldb_d8	a, 37012
+	ld	a, (37012:16)
 	and	a, 3
 	cps	a, 1
 	jr	z, 26
@@ -3914,7 +3914,7 @@ ExtData_Voice_MixedHandler:
 	ldw	bc, 255
 	calr	3056
 	jr	23
-	lda_d16	xbc, 64772
+	lda	xbc, (64772:16)
 	ld	a, (xbc)
 	cps	a, 5
 	ret	z
@@ -3927,7 +3927,7 @@ ExtData_Voice_MixedHandler:
 	jrl	2496
 ExtData_Voice_CheckMode3:
 	calr	2462
-	ldb_d8	a, (37011)
+	ld	a, (37011:16)
 	cps	a, 3
 	ret	nz
 	calr	63863
@@ -3937,7 +3937,7 @@ ExtData_Voice_RetEntry2:
 ExtData_Voice_FullHandler:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 66 of 90 slots byte-identical
 	calr	2446
-	ldb_d8	a, (37011)
+	ld	a, (37011:16)
 	cp	a, 11
 	jr	z, 19
 	cps	a, 2
@@ -3959,7 +3959,7 @@ ExtData_Voice_FullHandler:
 	ldw	wa, 127
 	calr	2612
 	jrl	2425
-	ldb_d8	a, (37012)
+	ld	a, (37012:16)
 	andda8	xbc, (37013)
 	ret	z
 	lds	wa, 1
@@ -3977,14 +3977,14 @@ ExtData_Voice_FullHandler:
 	.byte 0xd7	; v10 does not spell this byte either
 	swi	2
 	.byte 0x04	; v10 does not spell this byte either
-	ldb_d8	a, (64929)
+	ld	a, (64929:16)
 	and	a, 192
 	ldb_erp	a, 251
 	ldw	wa, 128
 	calr	2463
 	ldw	wa, 64
 	calr	2457
-	lda_d16	xde, (64929)
+	lda	xde, (64929:16)
 	ld	c, (xde)
 	ld	a, c
 	and	a, 192
@@ -4012,7 +4012,7 @@ ExtData_Voice_FullHandler:
 	cp	a, l
 	jr	z, 7
 	set	7, c
-	stb_d8	(37006), c
+	ld	(37006:16), c
 	ld	c, (xde)
 	and	c, 64
 	.byte 0xc7	; v10 does not spell this byte either
@@ -4042,19 +4042,19 @@ ExtData_Voice_CompareAndDispatch:
 	.byte 0x26, 0x9a, 0xfc
 MidiChannel_ResetAndConfigure:
 	resda 7, (0x28ae)
-	ldb_d8 a, (0x8e48)
+	ld a, (0x8e48:16)
 	set 0x07,A
-	stb_d8 (0x8e44), a
+	ld (0x8e44:16), a
 	bitda 7, (0x8e48)
 	ret Z
 	calr	3085
 	stdi8	37003, 176
 	stdi8	37004, 1
-	ldb_d8	a, 36424
+	ld	a, (36424:16)
 	res	7, a
-	stb_d8	37005, a
+	ld	(37005:16), a
 	stdi8	37006, 127
-	ldb_d8	e, 37005
+	ld	e, (37005:16)
 	extz	de
 	pushw 127
 	ldw	wa, 176
@@ -4065,17 +4065,17 @@ MidiChannel_ResetAndConfigure:
 	call	16554534
 	ret
 MidiCh_ConfigVoiceAndParts:
-	ldb_d8	a, 36420
+	ld	a, (36420:16)
 	res	7, a
-	stb_d8	36420, a
-	ldb_d8	c, 36424
+	ld	(36420:16), a
+	ld	c, (36424:16)
 	cp	c, a
 	ret	z
-	ldb_d8	a, 10414
+	ld	a, (10414:16)
 	bit	7, a
 	jr	z, 37
-	stb_d8	9828, c
-	ldb_d8	e, 10414
+	ld	(9828:16), c
+	ld	e, (10414:16)
 	ld	l, e
 	res	7, l
 	cp	l, c
@@ -4087,15 +4087,15 @@ MidiCh_ConfigVoiceAndParts:
 	cp	c, 16
 	jr	c, 17
 	res	7, e
-	stb_d8	10414, e
+	ld	(10414:16), e
 	.byte 0xc1, 0x48, 0x8e, 0x19, 0x44, 0x8e, 0xf1, 0x48, 0x8e, 0xbf, 0xf1, 0x48, 0x8e, 0xcf
 	ret	z
 	calr	2929
 	stdi8	37003, 176
 	stdi8	37004, 1
-	ldb_d8	a, 36424
+	ld	a, (36424:16)
 	res	7, a
-	stb_d8	37005, a
+	ld	(37005:16), a
 	stdi8	37006, 127
 	calr	1988
 	.byte 0xc1, 0x8b, 0x90, 0x19, 0xe2, 0x90, 0xc1, 0x8c, 0x90, 0x19, 0xe3, 0x90, 0xc1, 0x94, 0x90, 0x19, 0xe4, 0x90, 0xc1, 0x95, 0x90, 0x19, 0xe5, 0x90
@@ -4103,12 +4103,12 @@ MidiCh_ConfigVoiceAndParts:
 	ret
 MidiCh_IterateVolume_Forward:
 	pushw	iz
-	ldb_d8	a, 37013
+	ld	a, (37013:16)
 	res	7, a
 	cps	a, 0
 	jr	z, 114
 	lds	iz, 0
-	lda_d16	xde, 36959
+	lda	xde, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xde
@@ -4121,7 +4121,7 @@ MidiCh_IterateVolume_Forward:
 	jr	nz, 77
 	.byte 0xc1, 0x8b, 0x90, 0x19, 0xe2, 0x90, 0x81, 0x19, 0xe3, 0x90, 0xc1, 0x94, 0x90, 0x19, 0xe4, 0x90, 0xc1, 0x95, 0x90, 0x19, 0xe5, 0x90
 	call	16554534
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -4130,7 +4130,7 @@ MidiCh_IterateVolume_Forward:
 	calr	3812
 	.byte 0xbb, 0x0d, 0xcd
 	jr	nz, 29
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -4144,7 +4144,7 @@ MidiCh_IterateVolume_Forward:
 MidiCh_IterateVolume_Reverse:
 	pushw	iz
 	lds	iz, 0
-	lda_d16	xde, 36959
+	lda	xde, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xde
@@ -4157,7 +4157,7 @@ MidiCh_IterateVolume_Reverse:
 	jr	nz, 77
 	.byte 0xc1, 0x8b, 0x90, 0x19, 0xe2, 0x90, 0x81, 0x19, 0xe3, 0x90, 0xc1, 0x94, 0x90, 0x19, 0xe4, 0x90, 0xc1, 0x95, 0x90, 0x19, 0xe5, 0x90
 	call	16554534
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -4166,7 +4166,7 @@ MidiCh_IterateVolume_Reverse:
 	calr	3695
 	.byte 0xbb, 0x0d, 0xcd
 	jr	nz, 29
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -4179,12 +4179,12 @@ MidiCh_IterateVolume_Reverse:
 	ret
 MidiCh_IteratePan_Forward:
 	pushw	iz
-	ldb_d8	a, 37013
+	ld	a, (37013:16)
 	res	7, a
 	cps	a, 0
 	jrl	z, 135
 	lds	iz, 0
-	lda_d16	xbc, 36959
+	lda	xbc, (36959:16)
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xbc
@@ -4200,13 +4200,13 @@ MidiCh_IteratePan_Forward:
 	.byte 0xbb, 0x0c, 0xcc
 	jr	z, 87
 	.byte 0xc1, 0x8b, 0x90, 0x19, 0xe2, 0x90
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
 	.byte 0x81, 0x19, 0xe3, 0x90, 0xc1, 0x94, 0x90, 0x19, 0xe4, 0x90, 0xc1, 0x95, 0x90, 0x19, 0xe5, 0x90
 	call	16554534
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -4215,7 +4215,7 @@ MidiCh_IteratePan_Forward:
 	calr	3546
 	.byte 0xbb, 0x0d, 0xcd
 	jr	nz, 29
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -4229,12 +4229,12 @@ MidiCh_IteratePan_Forward:
 MidiCh_IterateExpression:
 	dec	2, xsp
 	push	xiz
-	ldb_d8	a, 37013
+	ld	a, (37013:16)
 	res	7, a
 	cps	a, 0
 	jr	z, 125
 	ldw	(xsp+4), 0
-	lda_d16	xbc, 36959
+	lda	xbc, (36959:16)
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xbc
@@ -4249,7 +4249,7 @@ MidiCh_IterateExpression:
 	.byte 0xbe, 0x04, 0xcd
 	jr	z, 72
 	.byte 0xc1, 0x8b, 0x90, 0x19, 0xe2, 0x90
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, (xsp+4)
 	extz	xbc
 	add	xbc, xwa
@@ -4257,7 +4257,7 @@ MidiCh_IterateExpression:
 	call	16554534
 	.byte 0xbe, 0x0d, 0xcd
 	jr	nz, 30
-	lda_d16	xwa, 36959
+	lda	xwa, (36959:16)
 	ld	bc, (xsp+4)
 	extz	xbc
 	add	xbc, xwa
@@ -4307,32 +4307,32 @@ CtrlPanel_CompareAndUpdateIndicators:
 	push xiz
 	stl_dri XBC, 0xfd, 0x6e, 0x01
 	stl_dri XWA, 0xfd, 0x72, 0x01
-	ld_sril XWA, (xsp + 0x0172)
+	ld XWA, (xsp + 0x0172)
 	calr CtrlPanel_BuildIndicatorBitmask
 	ld (xsp + 4), xhl
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	calr CtrlPanel_BuildIndicatorBitmask
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	xor xwa, xiz
 	and xwa, xiz
 	calr Part_BitmaskToIndexList
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	ldw wa, 0x80
 	calr Audio_IteratePartsWithExpression
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	lds wa, 0
 	calr Audio_IteratePartsWithVolume
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	lds wa, 0
 	calr Audio_IteratePartsWithPan
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr z, CtrlPanelRefresh_ProcessRemoved
@@ -4354,7 +4354,7 @@ CtrlPanelRefresh_ProcessRemoved:
 	.byte 0xfd, 0x6e, 0x01, 0x20, 0x88, 0x01, 0x3f, 0xff
 	.byte 0x6e, 0x05, 0x81, 0x3f, 0xff, 0x6e, 0x10
 CtrlPanelRefresh_DispatchVoiceCC:
-	ldb_d8	a, (36424)
+	ld	a, (36424:16)
 	res	7, a
 	extz	wa
 	ld	c, (xbc)
@@ -4382,7 +4382,7 @@ CtrlPanelRefresh_Done:
 CtrlPanel_BuildIndicatorBitmask:
 	push xiz
 	lds32 xiz, 0
-	lda_24 xde, (SoundProgram_DispatchTable_0x8DA)
+	lda xde, (SoundProgram_DispatchTable_0x8DA:24)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr nz, IndBitmask_LookupByChannel
@@ -4412,7 +4412,7 @@ IndBitmask_ReturnResult:
 
 Part_BitmaskToIndexList:
 	lds	iy, 0
-	lda_d16	xde, (36959)
+	lda	xde, (36959:16)
 	ld	(xde), 255
 	lds	hl, 0
 BitmaskToIndex_ScanLoop:
@@ -4533,7 +4533,7 @@ Audio_IteratePartsWithPan:
 	lds iz, 0
 
 PanIter_NextPart:
-	lda_d16 xbc, (0x905f)
+	lda xbc, (0x905f:16)
 	ld WA,IZ
 	extz XWA
 	add XWA,XBC
@@ -4551,7 +4551,7 @@ PanIter_ApplyParam:
 	bit 4,(XHL+0x0c)
 	jr z, MidiLoadParams_ContinueLoop
 	stdi8 (0x90e2), 0xb4
-	lda_d16 xwa, (0x905f)
+	lda xwa, (0x905f:16)
 	ld BC,IZ
 	extz XBC
 	add XBC,XWA
@@ -4612,10 +4612,10 @@ UIState_CheckAndRenderBitmap:
 	pushw	iz
 	.byte 0xc1, 0xe1, 0xbf, 0x3f, 0x02	; differs from v10 here and llvm-objdump cannot read it
 	jr	nz, 67
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 255
 	jr	z, 58
-	ldb_d8	a, (49122)
+	ld	a, (49122:16)
 	and	a, 255
 	cp	a, 183
 	jr	z, 32
@@ -4643,11 +4643,11 @@ ToshiCmd_DefaultHandler_Ret:
 	ret
 
 SndParam_FetchSequencerParams:
-	ldw_d16 wa, (0x9097)
+	ld wa, (0x9097:16)
 	ld BC,WA
 	inc 1,WA
 	stda16 (0x9097), wa
-	lda_d16 xwa, (0xbf9d)
+	lda xwa, (0xbf9d:16)
 	extz XBC
 	add XBC,XWA
 	.byte 0x81, 0x19, 0x8b, 0x90, 0xc1, 0x8b, 0x90, 0x21
@@ -4664,7 +4664,7 @@ SndParam_FetchSequencerParams:
 	.byte 0x82, 0x19, 0x95, 0x90, 0xf1, 0x8e, 0x90, 0x00
 	.byte 0x00, 0x0e
 SndParam_WriteLookupAndStore:
-	ldb_d8 a, (0x908b)
+	ld a, (0x908b:16)
 	extz WA
 	calr VoiceData_LookupPtrByIndex
 	cp XHL,0xffffffff
@@ -4737,19 +4737,19 @@ SwbtWr_WriteParamBlock_Body:
 	jrl t, SwbtWr_AppendFixedParamBlock
 	dec 2,XSP
 	ld (XSP),A
-	ldb_d8 c, (0x9095)
+	ld c, (0x9095:16)
 	ld A,C
 	and A,(XSP)
 	jr z, Voice_Update_Return
-	ldb_d8 a, (0x9094)
+	ld a, (0x9094:16)
 	and A,C
 	jr z, Voice_Update_Return
-	ldb_d8 a, (0x908b)
+	ld a, (0x908b:16)
 	extz WA
 	calr VoiceData_LookupPtrByIndex
 	cp XHL,0xffffffff
 	jr z, Voice_Update_Return
-	ldb_d8 a, (0x9093)
+	ld a, (0x9093:16)
 	extz WA
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33, 0xc1, 0x94, 0x90
 	.byte 0x21, 0xc1, 0x95, 0x90, 0xc1, 0x83, 0xd9, 0xc1
@@ -4775,15 +4775,15 @@ VoiceParam_CompareAndUpdate:
 	.byte 0xc1, 0x8e, 0x90, 0xe9, 0xef, 0x62, 0x0e
 	dec 2,XSP
 	ld (XSP),A
-	ldb_d8 a, (0x9095)
+	ld a, (0x9095:16)
 	and A,(XSP)
 	jr z, .Lc_fc8ff3
-	ldb_d8 a, (0x908b)
+	ld a, (0x908b:16)
 	extz WA
 	calr VoiceData_LookupPtrByIndex
 	cp XHL,0xffffffff
 	jr z, .Lc_fc8ff3
-	ldb_d8 a, (0x9093)
+	ld a, (0x9093:16)
 	extz WA
 	lda_dri xhl, 0x07, 0xec, 0xe0
 	ld A,(XSP)
@@ -4791,12 +4791,12 @@ VoiceParam_CompareAndUpdate:
 	and A,(XHL)
 	orda8 a, (0x9094)
 	ld C,A
-	ldb_d8 a, (0x9096)
+	ld a, (0x9096:16)
 	cp C,A
 	jr z, .Lc_fc8ff3
 	ld (XHL),C
-	stb_d8 (0x9096), c
-	stb_d8 (0x908d), c
+	ld (0x9096:16), c
+	ld (0x908d:16), c
 	ld A,(XSP)
 	orddm8 0x908e, a
 .Lc_fc8ff3:
@@ -4884,25 +4884,25 @@ SwbtWr_NullRet:
 	ret
 
 Audio_FlushPendingBankSelects:
-	ldb_d8	a, (36422)
+	ld	a, (36422:16)
 	bit	7, a
 	jr	z, 29
 	res	7, a
-	stb_d8	(36422), a
+	ld	(36422:16), a
 	stdi8	(37003), 176
 	stdi8	(37004), 0
-	stb_d8	(37005), a
+	ld	(37005:16), a
 	stdi8	(37006), 127
 	calr	64586
 BankFlush_CheckChannel1:
-	ldb_d8	a, (36420)
+	ld	a, (36420:16)
 	bit	7, a
 	ret	z
 	res	7, a
-	stb_d8	(36420), a
+	ld	(36420:16), a
 	stdi8	(37003), 176
 	stdi8	(37004), 1
-	stb_d8	(37005), a
+	ld	(37005:16), a
 	stdi8	(37006), 127
 	calr	64548
 	ret
@@ -4911,7 +4911,7 @@ UIWidget_MidiStreamControl:
 SndParam_ApplyAndFetch:
 	dec	6, xsp
 	lda	xwa, (xsp)
-	lda_d16	xde, (36942)
+	lda	xde, (36942:16)
 	ld	c, (xde)
 	ld	(xwa), c
 	ld	c, (xde+1)
@@ -4921,7 +4921,7 @@ SndParam_ApplyAndFetch:
 	cp	c, 31
 	jr	ugt, 23
 	call	16703634
-	lda_d16	xde, (36946)
+	lda	xde, (36946:16)
 	lda	xbc, (xsp)
 	ld	a, (xbc+3)
 	ld	(xde), a
@@ -4948,7 +4948,7 @@ SndParam_ApplyFromPointer:
 	jr	43
 	cp	a, 72
 	jr	nz, 38
-	lda_d16	xbc, (36942)
+	lda	xbc, (36942:16)
 	ld	a, (xiz)
 	ld	(xbc), a
 	ld	a, (xiz+1)
@@ -4956,7 +4956,7 @@ SndParam_ApplyFromPointer:
 	ld	a, (xde)
 	ld	(xbc+2), a
 	call	16068350
-	lda_d16	xbc, (36946)
+	lda	xbc, (36946:16)
 	ld	a, (xbc)
 	ld	(xiz+3), a
 	ld	a, (xbc+1)
@@ -4966,7 +4966,7 @@ SndParam_ApplyFromPointer:
 SndParam_FetchAndStore:
 	dec	6, xsp
 	lda	xwa, (xsp)
-	lda_d16	xde, (36942)
+	lda	xde, (36942:16)
 	ld	c, (xde)
 	ld	(xwa+3), c
 	ld	c, (xde+1)
@@ -4976,7 +4976,7 @@ SndParam_FetchAndStore:
 	cp	c, 31
 	jr	ugt, 22
 	call	16703515
-	lda_d16	xde, (36946)
+	lda	xde, (36946:16)
 	lda	xbc, (xsp)
 	ld	a, (xbc)
 	ld	(xde), a
@@ -5004,7 +5004,7 @@ SndParam_ResolveVoiceEntry:
 SndParamResolve_CheckRhythm:
 	cp	a, 72
 	jr	nz, 38
-	lda_d16	xbc, (36942)
+	lda	xbc, (36942:16)
 	ld	a, (xiz+3)
 	ld	(xbc), a
 	ld	a, (xiz+4)
@@ -5012,7 +5012,7 @@ SndParamResolve_CheckRhythm:
 	ld	a, (xde)
 	ld	(xbc+2), a
 	call	16068357
-	lda_d16	xbc, (36946)
+	lda	xbc, (36946:16)
 	ld	a, (xbc)
 	ld	(xiz), a
 	ld	a, (xbc+1)
@@ -5024,7 +5024,7 @@ SndParamResolve_Done:
 SndBuf_WriteParamEntries:
 	dec 6,XSP
 	lda XWA, (XSP)
-	lda_d16 xde, (0x904e)
+	lda xde, (0x904e:16)
 	ld C,(XDE)
 	ld (XWA),C
 	ld C,(XDE+0x01)
@@ -5034,7 +5034,7 @@ SndBuf_WriteParamEntries:
 	ld C,(XDE+0x03)
 	ld (XWA+0x05),C
 	call 0xfee1d0
-	lda_d16 xde, (0x9052)
+	lda xde, (0x9052:16)
 	lda XBC, (XSP)
 	ld A,(XBC+0x03)
 	ld (XDE),A
@@ -5180,11 +5180,11 @@ VoiceData_DistributeToChannels:
 	inc	8, xsp
 	ret
 SwbtWr_AppendFixedParamBlock:
-	ldw_d16 wa, (0x9042)
+	ld wa, (0x9042:16)
 	ld DE,WA
 	inc 1,WA
 	stda16 (0x9042), wa
-	lda_d16 xbc, (0xbca0)
+	lda xbc, (0xbca0:16)
 	extz XDE
 	add XDE,XBC
 	.byte 0xb2, 0x14, 0x8b, 0x90, 0xd1, 0x42, 0x90, 0x20
@@ -5201,7 +5201,7 @@ SwbtWr_AppendFixedParamBlock:
 VoiceData_LookupPtrByIndex:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable_0x400)
+	lda xbc, (SoundProgram_DispatchTable_0x400:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -5210,14 +5210,14 @@ VoiceData_LookupPtrByChannel:
 	jr ugt, VoiceLookup_CheckRhythm
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable_0x800)
+	lda xbc, (SoundProgram_DispatchTable_0x800:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
 VoiceLookup_CheckRhythm:
 	cp a, 0x48
 	jr nz, VoiceLookup_ReturnInvalid
-	lda_d16 xhl, (0xff92)
+	lda xhl, (0xff92:16)
 	ret
 
 VoiceLookup_ReturnInvalid:
@@ -5226,24 +5226,24 @@ VoiceLookup_ReturnInvalid:
 
 VoiceChannels_InitPanFromPreset:
 	push xiz
-	ldw_d16 xiz, (0xf290)
+	ld iz, (0xf290:16)
 	ldiw_erp 0xfa, 0
 
 VoicePanInit_Loop:
-	lda_d16	xwa, (36914)
+	lda	xwa, (36914:16)
 	ld	bc, qiz
 	extz	xbc
 	add	xbc, xwa
 	ld	(xbc), 16
 	bit	0, iz
 	jr	z, 62	; -> 0xFC96B7
-	lda_d16	xwa, (61856)
+	lda	xwa, (61856:16)
 	ld	bc, qiz
 	extz	xbc
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	lda_24	xbc, (15577944)
+	lda	xbc, (15577944:24)
 	ld_rrb	a, xbc, wa
 	calr	65428
 	cp	xhl, 4294967295
@@ -5252,7 +5252,7 @@ VoicePanInit_Loop:
 	ld	a, c
 	and	a, 192
 	jr	nz, 16	; -> 0xFC96B7
-	lda_d16	xwa, (36914)
+	lda	xwa, (36914:16)
 	ld	de, qiz
 	extz	xde
 	add	xde, xwa
@@ -5431,7 +5431,7 @@ ReverbPreset_Load:
 	pushw	iz
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (15577964)
+	lda	xbc, (15577964:24)
 	ld_rrl	xwa, xbc, wa
 	pushw	24
 	push	xwa
@@ -5443,7 +5443,7 @@ ReverbPreset_Load:
 ReverbPreset_SendLoop:
 	stb_erp	c, 248
 	extz	bc
-	lda_d16	xwa, (64654)
+	lda	xwa, (64654:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
@@ -5465,7 +5465,7 @@ EQPreset_Load:
 	pushw	iz
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (15578004)
+	lda	xbc, (15578004:24)
 	ld_rrl	xwa, xbc, wa
 	pushw	24
 	push	xwa
@@ -5477,7 +5477,7 @@ EQPreset_Load:
 EQPreset_SendLoop:
 	stb_erp	c, 248
 	extz	bc
-	lda_d16	xwa, (64680)
+	lda	xwa, (64680:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
@@ -5500,7 +5500,7 @@ CombinedPreset_Load:
 	pushw IZ
 	extz WA
 	sla WA, 0x02
-	lda_24 xbc, (Naka_ToshiParam_Table_0x48)
+	lda xbc, (Naka_ToshiParam_Table_0x48:24)
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0xbf, 0x02, 0x60
 	.byte 0x0b, 0x18, 0x00, 0xaf, 0x04, 0x20, 0x38, 0x0b
 	.byte 0x00, 0x00, 0x0b, 0x8e, 0xfc, 0x1d, 0xbc, 0x05
@@ -5508,7 +5508,7 @@ CombinedPreset_Load:
 CombinedPreset_SendReverbLoop:
 	stb_erp	c, 248
 	extz	bc
-	lda_d16	xwa, (64654)
+	lda	xwa, (64654:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
@@ -5532,7 +5532,7 @@ CombinedPreset_SendReverbLoop:
 CombinedPreset_SendEQLoop:
 	stb_erp	c, 248
 	extz	bc
-	lda_d16	xwa, (64680)
+	lda	xwa, (64680:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
@@ -5658,8 +5658,8 @@ SndParam_ApplyProgramChange_Safe:
 	push	xiy
 	push	xiz
 	stda16	(36942), hl
-	ldb_d8	a, (36954)
-	stb_d8	(36944), a
+	ld	a, (36954:16)
+	ld	(36944:16), a
 	call	16552650
 	pop	xiz
 	pop	xiy
@@ -5668,7 +5668,7 @@ SndParam_ApplyProgramChange_Safe:
 	pop	xde
 	pop	xbc
 	pop	xwa
-	ldw_d16	hl, (36946)
+	ld	hl, (36946:16)
 	ret
 PartCtrl_WriteProgramChange:
 	push	xwa
@@ -5679,8 +5679,8 @@ PartCtrl_WriteProgramChange:
 	push	xiy
 	push	xiz
 	stda16	(36942), hl
-	ldb_d8	a, (36955)
-	stb_d8	(36944), a
+	ld	a, (36955:16)
+	ld	(36944:16), a
 	call	16552779
 	pop	xiz
 	pop	xiy
@@ -5689,7 +5689,7 @@ PartCtrl_WriteProgramChange:
 	pop	xde
 	pop	xbc
 	pop	xwa
-	ldw_d16	hl, (36946)
+	ld	hl, (36946:16)
 	ret
 SndParam_UpdateVoiceEntry_Safe:
 	push xwa
@@ -5716,8 +5716,8 @@ SndParam_UpdateVoiceEntry_Safe:
 	ret
 
 MIDI_LoadParamsAndDispatchCC:
-	ldw_d16	bc, (37090)
-	ldw_d16	de, (37092)
+	ld	bc, (37090:16)
+	ld	de, (37092:16)
 	call	16554547
 	ret
 MIDI_ClearGuardAndDispatchCC:
@@ -5776,10 +5776,10 @@ MidiWriteVoice_Done:
 	ret
 
 MIDI_WriteVoiceParamFromBuffer:
-	ldb_d8	c, (37090)
-	ldb_d8	b, (37091)
-	ldb_d8	e, (37092)
-	ldb_d8	d, (37093)
+	ld	c, (37090:16)
+	ld	b, (37091:16)
+	ld	e, (37092:16)
+	ld	d, (37093:16)
 MIDI_WriteVoiceParamDirect:
 	push	xix
 	pushw	wa
@@ -5840,7 +5840,7 @@ Audio_WriteBankSelectParams:
 	jr z, .Lc_fc9b2d
 	anddi8 (0x8e46), 0x7f
 	stdi16 (0x908b), 0x00b0
-	ldb_d8 e, (0x8e46)
+	ld e, (0x8e46:16)
 	ldb D, 0x7f
 	stda16 (0x908d), de
 	calr SwbtWr_WriteVoiceParam_PreserveRegs
@@ -5850,7 +5850,7 @@ BankSelect_CheckChannel1:
 	jr z, BankSelect_Done
 	anddi8 (0x8e44), 0x7f
 	stdi16 (0x908b), 0x01b0
-	ldb_d8 e, (0x8e44)
+	ld e, (0x8e44:16)
 	ldb D, 0x7f
 	stda16 (0x908d), de
 	calr SwbtWr_WriteVoiceParam_PreserveRegs
@@ -5923,7 +5923,7 @@ ToneGen_DispatchByMode:
 	pushw wa
 	pushw hl
 	push xix
-	ldw_d16 xwa, (0xfc66)
+	ld wa, (0xfc66:16)
 	and wa, 0x203
 	cps a, 0
 	jr nz, RegBitManip_Dispatch
@@ -5935,7 +5935,7 @@ ToneGen_DispatchByMode:
 RegBitManip_Dispatch:
 	extz xhl
 	xor h, h
-	ldb_d8 l, (0xfc5d)
+	ld l, (0xfc5d:16)
 	and l, 0x7
 	sla hl, 2
 	ld xix, RegisterBit_Manipulate_Table
@@ -6032,8 +6032,8 @@ RegBitManip_Handler_4:
 	pop	xde
 	pop	xbc
 	pop	xwa
-	ldw_d16	hl, (37079)
-	ldb_d8	w, (37081)
+	ld	hl, (37079:16)
+	ld	w, (37081:16)
 	ret
 MIDI_ParamValidate_CheckBit2:
 	xor hl, hl
@@ -6055,18 +6055,18 @@ MidiParamValid_Return:
 
 MidiStream_ProcessEventBuffer:
 	push XIZ
-	ldb_d8 a, (0x36ff)
+	ld a, (0x36ff:16)
 	and A,0x0f
 	jrl z, MidiStream_Return
 	calr MidiStream_InitFromLookup
 	ei 0x06
 	ordi8 (0x0459), 0x01
-	ldb_d8 a, (0x0415)
-	stb_d8 (0x912d), a
+	ld a, (0x0415:16)
+	ld (0x912d:16), a
 	ei 0x00
 	ld XIX,0x0000bca0
 	extz XWA
-	ldw_d16 wa, (0x9044)
+	ld wa, (0x9044:16)
 	add XIX,XWA
 	stda32 (0x9125), xix
 MidiStream_NextEvent:
@@ -6078,8 +6078,8 @@ MidiStream_NextEvent:
 	ld_spiw	wa, 241
 	stda32	(37157), xix
 	stda16	(37155), wa
-	ldw_d16	bc, (37153)
-	ldw_d16	de, (37155)
+	ld	bc, (37153:16)
+	ld	de, (37155:16)
 	ld	xix, 37174
 MidiStream_ScanForMatch:
 	ld_spiw WA, 0xf1
@@ -6132,7 +6132,7 @@ MidiStream_ProcessHandler_5:
 MidiStream_InitFromLookup:
 	stdi8 (0x9136), 0xff
 	extz HL
-	ldb_d8 l, (0x36ff)
+	ld l, (0x36ff:16)
 	and L,0x0f
 	sll HL, 0x02
 	ld XIY,VoiceMode_ParamConfigTables_0xAB8
@@ -6154,9 +6154,9 @@ MidiStreamInit_Done:
 MidiStream_ProcessHandler_0:
 	ld	xix, 37137
 	ldb	a, 209
-	ldb_d8	w, (37165)
+	ld	w, (37165:16)
 	stw_dpi	wa, 241
-	ldb_d8	a, (37155)
+	ld	a, (37155:16)
 	ldb	w, 255
 	ld	(xix), wa
 	stdi8	(37166), 3
@@ -6165,9 +6165,9 @@ MidiStream_ProcessHandler_0:
 MidiStream_ProcessHandler_1:
 	ld	xix, 37137
 	ldb	a, 210
-	ldb_d8	w, (37165)
+	ld	w, (37165:16)
 	stw_dpi	wa, 241
-	ldb_d8	a, (37156)
+	ld	a, (37156:16)
 	ldb	w, 255
 	ld	(xix), wa
 	stdi8	(37166), 3
@@ -6176,9 +6176,9 @@ MidiStream_ProcessHandler_1:
 MidiStream_ProcessHandler_2:
 	ld	xix, 37137
 	ldb	a, 211
-	ldb_d8	w, (37165)
+	ld	w, (37165:16)
 	stw_dpi	wa, 241
-	ldb_d8	a, (37155)
+	ld	a, (37155:16)
 	ldb	w, 255
 	ld	(xix), wa
 	stdi8	(37166), 3
@@ -6193,9 +6193,9 @@ MidiStream_ProcessHandler_3:
 MidiStream_ProcessHandler_4:
 	ld	xix, 37137
 	ldb	a, 213
-	ldb_d8	w, (37165)
+	ld	w, (37165:16)
 	stw_dpi	wa, 241
-	ldb_d8	a, (37155)
+	ld	a, (37155:16)
 	ldb	w, 255
 	ld	(xix), wa
 	stdi8	(37166), 3
@@ -6209,12 +6209,12 @@ MidiStream_ProcessSeqBuffer:
 	jrl z, MidiSeqBuf_Return
 	ei 0x06
 	setda 0, (0x0459)
-	ldb_d8 a, (0x046a)
-	stb_d8 (0x912d), a
+	ld a, (0x046a:16)
+	ld (0x912d:16), a
 	ei 0x00
 	ld XIX,0x0000bca0
 	extz XWA
-	ldw_d16 wa, (0x9044)
+	ld wa, (0x9044:16)
 	add XIX,XWA
 	stda32 (0x9125), xix
 MidiSeqBuf_NextEvent:
@@ -6227,8 +6227,8 @@ MidiSeqBuf_NextEvent:
 	stda32	(37157), xix
 	stda16	(37155), wa
 	calr	115
-	ldw_d16	bc, (37153)
-	ldb_d8	d, (37156)
+	ld	bc, (37153:16)
+	ld	d, (37156:16)
 	ld	xix, 37174
 MidiSeqBuf_ScanForMatch:
 	ld_spiw WA, 0xf1
@@ -6316,7 +6316,7 @@ TempoExpr_CheckHighBitW:
 TempoExpr_WriteAndProcess:
 	stw_dpi WA, 0xf1
 
-	ldb_d8 a, (37163)
+	ld a, (37163:16)
 
 	ldb w, 0xff
 
@@ -6346,12 +6346,12 @@ Audio_ProcessAllMidiStreams:
 MIDI_SelectTempoExpressionSource:
 	push XIZ
 	xor WA,WA
-	ldb_d8 e, (0x8c98)
+	ld e, (0x8c98:16)
 	cp E,0x0b
 	jr z, .Lc_fc9fcb
 	cp E,0x0d
 	jr z, TempoSrc_DirectTempoMode
-	ldb_d8 d, (0x8c9a)
+	ld d, (0x8c9a:16)
 	cp D,0x87
 	jr z, Tempo_Expression_Bypass
 	cp D,0x88
@@ -6362,17 +6362,17 @@ TempoSrc_CheckAutoPlay:
 .Lc_fc9fcb:
 	bitda 2, (0x0421)
 	jr z, Tempo_ExpressionStore
-	ldw_d16 wa, (0x28a8)
+	ld wa, (0x28a8:16)
 	setda 2, (0x905d)
 	jr t, Tempo_ExpressionStore
 Tempo_Expression_Bypass:
 	bitda 0, (0x28c5)
 	jr z, Tempo_ExpressionStore
-	ldw_d16 xwa, (0x28aa)
+	ld wa, (0x28aa:16)
 	jr Tempo_ExpressionStore
 
 TempoSrc_DirectTempoMode:
-	ldw_d16 xwa, (3407)
+	ld wa, (3407:16)
 
 	.byte 0xf1, 0x5d, 0x90, 0xbb	; setda 3, 0x90f9 (v7 patched)
 
@@ -6384,12 +6384,12 @@ Tempo_ExpressionStore:
 	ret
 Mod_SelectExpressionSource:
 	xor WA,WA
-	ldb_d8 e, (0x8c98)
+	ld e, (0x8c98:16)
 	cp E,0x0b
 	jr z, .Lc_fca01a
 	cp E,0x0d
 	jr z, ModExpr_DirectMode
-	ldb_d8 d, (0x8c9a)
+	ld d, (0x8c9a:16)
 	cp D,0x87
 	jr z, Tempo_Expression_Bypass
 	cp D,0x88
@@ -6400,12 +6400,12 @@ ModExpr_CheckAutoPlay:
 .Lc_fca01a:
 	cpdi16 (0x28a8), 0x0000
 	jr z, Mod_ExpressionStore
-	ldw_d16 wa, (0x28a8)
+	ld wa, (0x28a8:16)
 	.byte 0xf1, 0x5d, 0x90, 0xba, 0x68, 0x14, 0xf1, 0xc5
 	.byte 0x28, 0xc8, 0x66, 0x0e, 0xd1, 0xaa, 0x28, 0x20
 	.byte 0x68, 0x08
 ModExpr_DirectMode:
-	ldw_d16 xwa, (3407)
+	ld wa, (3407:16)
 
 	.byte 0xf1, 0x5d, 0x90, 0xbb	; setda 3, 0x90f9 (v7 patched)
 
@@ -6420,12 +6420,12 @@ MidiStream_ProcessTempoRingBuf:
 	jrl z, TempoRing_Return
 	ei 0x06
 	setda 0, (0x0459)
-	ldb_d8 a, (0x041b)
-	stb_d8 (0x912d), a
+	ld a, (0x041b:16)
+	ld (0x912d:16), a
 	ei 0x00
 	ld XIX,0x0000bca0
 	extz XWA
-	ldw_d16 wa, (0x9044)
+	ld wa, (0x9044:16)
 	add XIX,XWA
 	stda32 (0x9125), xix
 TempoRing_NextEvent:
@@ -6441,8 +6441,8 @@ TempoRing_NextEvent:
 	stdi8	(37163), 0
 TempoRing_InitAndScan:
 	calr	680
-	ldw_d16	bc, (37153)
-	ldb_d8	d, (37156)
+	ld	bc, (37153:16)
+	ld	d, (37156:16)
 	ld	xix, 37174
 TempoRing_ScanForMatch:
 	ld_spiw WA, 0xf1
@@ -6498,7 +6498,7 @@ TempoRing_ValidateState:
 	ld xix, (0x9125:16)
 	cp XIX,0x0000bca4
 	jr z, MIDI_ParamValidation_ReturnNoOp
-	ldw_d16 bc, (0x9121)
+	ld bc, (0x9121:16)
 	cp C,0x1f
 	jr ugt, MIDI_ParamValidation_ReturnNoOp
 	cps b, 4
@@ -6564,12 +6564,12 @@ MIDI_TransmitTempoCC:
 	jr z, TempoCC_Return
 	ei 0x06
 	setda 0, (0x0459)
-	ldb_d8 a, (0x041b)
-	stb_d8 (0x912d), a
+	ld a, (0x041b:16)
+	ld (0x912d:16), a
 	ei 0x00
 	ld XIX,0x00009111
 	ldb A, 0xb0
-	ldb_d8 w, (0x912d)
+	ld w, (0x912d:16)
 	.byte 0xf5, 0xf1, 0x50, 0xd1, 0x21, 0x91, 0x20, 0xf5
 	.byte 0xf1, 0x50, 0xd1, 0x23, 0x91, 0x20, 0xc9, 0x33
 	.byte 0x07, 0x66, 0x07, 0xc9, 0x30, 0x07, 0xf1, 0x11
@@ -6599,7 +6599,7 @@ TempoCC_Return:
 
 TempoRing_InitPartStream:
 	stdi8 (0x9136), 0xff
-	ldb_d8 c, (0x912b)
+	ld c, (0x912b:16)
 	ldb_erp a, 0x3c
 	.byte 0xd7, 0x3e, 0x9a, 0xd1, 0x29, 0x91, 0x22, 0xcb
 	.byte 0x89, 0x11, 0xda, 0x2a, 0xd7, 0x3e, 0x8a, 0xc7
@@ -6626,7 +6626,7 @@ TempoRingBuf_ProcessEntry:
 	ld XIX,0x00009111
 	push XIX
 	extz WA
-	ldb_d8 a, (0x912e)
+	ld a, (0x912e:16)
 	and A,0x07
 	pushw wa
 	ei 0x06
@@ -6650,7 +6650,7 @@ Audio_ProcessPartExpressions:
 	.byte 0x59, 0x04, 0xb8, 0xc1, 0x1b, 0x04, 0x21, 0xf1
 	.byte 0x2d, 0x91, 0x41, 0x06, 0x00, 0xcb, 0xd3
 PartExpr_ProcessNextBit:
-	ldw_d16	wa, (37161)
+	ld	wa, (37161:16)
 	srl	wa, 1
 	stda16	(37161), wa
 	jr	nc, 98	; -> 0xFCA45E
@@ -6697,10 +6697,10 @@ Part_ReinitAllActive:
 	push	xiz
 	stdi8	(37164), 0
 PartReinit_ProcessNextPart:
-	ldb_d8	c, 37164
+	ld	c, (37164:16)
 	ldb_erp	a, 60
 	.byte 0xd7, 0x3e, 0x9a
-	ldw_d16	de, 61854
+	ld	de, (61854:16)
 	ld	a, c
 	scf
 	.byte 0xda, 0x2a, 0xd7, 0x3e, 0x8a
@@ -6710,7 +6710,7 @@ PartReinit_ProcessNextPart:
 	ld	l, c
 	ld	xix, 61856
 	ld_rrb	a, xix, hl
-	stb_d8	37169, a
+	ld	(37169:16), a
 	calr	92
 	calr	116
 	calr	29
@@ -6732,7 +6732,7 @@ PartReinit_SendD2Command:
 	xor	a, a
 	ldb	w, 64
 	stw_dpi	wa, 241
-	ldb_d8	a, (37164)
+	ld	a, (37164:16)
 	ldb	w, 255
 	ld	(xix), wa
 	calr	1950
@@ -6742,7 +6742,7 @@ PartReinit_SendD1Command:
 	ldw	wa, 209
 	stw_dpi	wa, 241
 	ldb	a, 0
-	ldb_d8	w, (37164)
+	ld	w, (37164:16)
 	stw_dpi	wa, 241
 	ld	(xix), 255
 	calr	1923
@@ -6752,7 +6752,7 @@ PartReinit_SendD0Command:
 	ldw	wa, 208
 	stw_dpi	wa, 241
 	ldb	a, 0
-	ldb_d8	w, (37164)
+	ld	w, (37164:16)
 	stw_dpi	wa, 241
 	ld	(xix), 255
 	calr	1896
@@ -6762,7 +6762,7 @@ PartReinit_SendB0Command:
 	ldw	wa, 176
 	stw_dpi	wa, 241
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xiy, 61856
 	ld_rrb	l, xiy, hl
 	ld	xiy, 16560696
@@ -6771,7 +6771,7 @@ PartReinit_SendB0Command:
 	stw_dpi	wa, 241
 	ldw	wa, 2048
 	stw_dpi	wa, 241
-	ldb_d8	a, 37164
+	ld	a, (37164:16)
 	ldb	w, 255
 	ld	(xix), wa
 	calr	735
@@ -6792,7 +6792,7 @@ Audio_ReinitAndProcessEvents:
 	call	16619593
 	ret
 Audio_SyncAndProcessSequencer:
-	ldw_d16	wa, (36930)
+	ld	wa, (36930:16)
 	stda16	(36932), wa
 	call	15672379
 AudioSeq_CheckEventPending:
@@ -6816,10 +6816,10 @@ AudioSeq_ReadNextEvent:
 ; 32-bit function pointers, call (xhl)
 VoiceMode_ParamDispatch:
 	ld	(xiy), 255
-	ldb_d8	a, (37146)
-	stb_d8	(36956), a
+	ld	a, (37146:16)
+	ld	(36956:16), a
 	extz	hl
-	ldb_d8	l, (37145)
+	ld	l, (37145:16)
 	and	l, 112
 	srl	hl, 2
 	ld	xiy, 16557528
@@ -6846,7 +6846,7 @@ VoiceMode_ParamHandler_1:
 AudioSeq_FlushAndTerminate:
 	ld xix, 48288
 
-	ldw_d16 hl, (36930)
+	ld hl, (36930:16)
 
 	stib_ind 0x07, 0xf0, 0xec, 0xff
 
@@ -6859,7 +6859,7 @@ VoiceMode_ParamHandler_4:
 	ld_spiw	bc, 241
 	ld_spiw	de, 241
 	ld	a, (xix)
-	stb_d8	37164, a
+	ld	(37164:16), a
 	extz	hl
 	ld	l, c
 	sll	hl, 2
@@ -6869,7 +6869,7 @@ VoiceMode_ParamHandler_4:
 	jrl	z, 456
 	stda16	37055, bc
 	stda16	37057, de
-	stb_d8	36955, c
+	ld	(36955:16), c
 	ld	hl, de
 	call	16554468
 	stda16	37171, hl
@@ -6883,26 +6883,26 @@ VoiceMode_ParamHandler_4:
 VoiceMode4_SetupChannelAndWrite:
 	call	16554735
 	.byte 0x8c, 0x01, 0x3c, 0x80
-	ldb_d8	a, 37058
+	ld	a, (37058:16)
 	or	(xix+1), a
-	ldb_d8	a, 37057
+	ld	a, (37057:16)
 	ld	(xix), a
-	ldb_d8	a, 37055
+	ld	a, (37055:16)
 	ldb	w, 1
 	stda16	37003, wa
-	ldb_d8	a, 37058
+	ld	a, (37058:16)
 	ldb	w, 127
 	stda16	37005, wa
 	call	16554376
-	ldb_d8	a, 37055
+	ld	a, (37055:16)
 	ldb	w, 0
 	stda16	37003, wa
-	ldb_d8	a, 37057
+	ld	a, (37057:16)
 	ldb	w, 255
 	stda16	37005, wa
 	call	16554376
-	ldw_d16	bc, 37055
-	ldw_d16	de, 37057
+	ld	bc, (37055:16)
+	ld	de, (37057:16)
 	call	16554503
 VoiceMode4_CheckPart0:
 	cpdi8	37055, 0
@@ -6911,7 +6911,7 @@ VoiceMode4_CheckPart0:
 	jrl	nz, 319
 MidiCtrl_DispatchHandler:
 	xor	h, h
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	ld_rrb	a, xix, hl
 	cp	a, 13
@@ -6927,9 +6927,9 @@ MidiCtrl_DispatchHandler:
 	cp	a, 16
 	jrl	z, 263
 	set	7, a
-	stb_d8	36937, a
+	ld	(36937:16), a
 	extz	hl
-	ldb_d8	l, 64848
+	ld	l, (64848:16)
 	and	l, 3
 	sll	hl, 2
 	ld	xix, 16557854
@@ -6978,7 +6978,7 @@ VoiceMode3_DispatchTable:
 	.incbin "includes/romslices/v7_transplant_VoiceMode3_DispatchTable.bin"
 MidiPartCC_WriteAndDispatch:
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	ld_rrb	l, xix, hl
 	ld	xix, 16560696
@@ -6993,7 +6993,7 @@ MidiPartCC_WriteAndDispatch:
 	call	16554376
 MidiPartCC_CheckAndGuard:
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	ld_rrb	a, xix, hl
 	cp	a, 14
@@ -7005,9 +7005,9 @@ MidiPartCC_CheckAndGuard:
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37055
-	ldw_d16	de, 37057
+	ld	(36937:16), a
+	ld	bc, (37055:16)
+	ld	de, (37057:16)
 	call	16554552
 MIDI_PartCC_DispatchExit:
 	ret
@@ -7022,7 +7022,7 @@ MidiVoice_DataBlockHandler:
 	ld	wa, (xiy+2)
 	stda16	37005, wa
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 36914
 	ld_rrb	a, xix, hl
 	cp	a, 16
@@ -7037,75 +7037,75 @@ MidiVoice_DataBlockHandler:
 	call	16554376
 	ret
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
 	jr	nz, 64
 	call	16560581
 	jr	nc, 17
 	ldw	bc, 664
-	ldb_d8	e, 37149
+	ld	e, (37149:16)
 	ldb	d, 128
 	call	16554667
 	call	16554376
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 36914
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 20
 	set	7, a
-	stb_d8	36937, a
+	ld	(36937:16), a
 	ldw	bc, 664
-	ldb_d8	e, 37149
+	ld	e, (37149:16)
 	ldb	d, 128
 	call	16554552
 	ret
 	call	16560581
 	jr	nc, 33
 	ldb	a, 0
-	stb_d8	38312, a
-	ldw_d16	wa, 37147
+	ld	(38312:16), a
+	ld	wa, (37147:16)
 	stda16	38312, wa
 	ldw	wa, 32512
 	stda16	38314, wa
 	call	16563926
-	ldb_d8	a, 37146
-	stb_d8	36956, a
+	ld	a, (37146:16)
+	ld	(36956:16), a
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 36914
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37147
-	ldw_d16	de, 37149
+	ld	(36937:16), a
+	ld	bc, (37147:16)
+	ld	de, (37149:16)
 	call	16554552
 	ret
 	call	16560581
 	jr	nc, 20
-	ldw_d16	wa, 37147
+	ld	wa, (37147:16)
 	stda16	37003, wa
-	ldw_d16	wa, 37149
+	ld	wa, (37149:16)
 	stda16	37005, wa
 	call	16554376
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 36914
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37147
-	ldw_d16	de, 37149
+	ld	(36937:16), a
+	ld	bc, (37147:16)
+	ld	de, (37149:16)
 	call	16554552
 	ret
 VoiceMode3_InitChannelMatch:
-	ldb_d8	a, 37151
-	stb_d8	37164, a
+	ld	a, (37151:16)
+	ld	(37164:16), a
 	calr	92
 	cpdi8	37174, 255
 	jr	z, 73
@@ -7149,14 +7149,14 @@ VoiceMode3_NoMatch:
 	stdi8	(37145), 255
 	jr	4
 VoiceMode3_StoreSubMode:
-	stb_d8	(37173), w
+	ld	(37173:16), w
 VoiceMode3_ScanDone:
 	ret
 
 VoiceMode3_BuildChannelTable:
 	stdi8	37174, 255
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	ld_rrb	l, xix, hl
 	sll	hl, 2
@@ -7178,11 +7178,11 @@ VoiceMode3_TableCopyDone:
 VoiceMode_ParamHandler_0:
 	cpdi8	37145, 128
 	jr	nz, 59
-	ldb_d8	a, 37149
-	stb_d8	37164, a
+	ld	a, (37149:16)
+	ld	(37164:16), a
 	call	16560581
 	jr	nc, 45
-	ldw_d16	wa, 37147
+	ld	wa, (37147:16)
 	srl	w, 1
 	jr	nc, 3
 	set	7, a
@@ -7214,7 +7214,7 @@ VoiceParam_DispatchByMode:
 	calr MidiVoiceNote_Dispatch
 	cpdi8 (0x9119), 0xff
 	jr z, VoiceParam_DispatchDone
-	ldb_d8 a, (0x9119)
+	ld a, (0x9119:16)
 	and A,0x03
 	sll A, 0x02
 	ld XIX,VoiceParam_ModeDispatch_Table
@@ -7230,11 +7230,11 @@ VoiceParam_ModeDispatch_Table:
 VoiceParam_StoreExpression:
 	extz hl
 
-	ldb_d8 l, (37164)
+	ld l, (37164:16)
 
 	ld xix, 37942
 
-	ldb_d8 a, (37147)
+	ld a, (37147:16)
 
 	set 7, a
 
@@ -7244,7 +7244,7 @@ VoiceParam_StoreExpression:
 VoiceParam_WriteExpression:
 	ldb	c, 180
 	ld	xix, 61856
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld_rr8b	l, xix, l
 	ld	xix, 16560696
 	ld_rr8b	b, xix, l
@@ -7253,13 +7253,13 @@ VoiceParam_WriteExpression:
 	stda16	37057, de
 	call	16560581
 	jr	nc, 20
-	ldw_d16	wa, 37055
+	ld	wa, (37055:16)
 	stda16	37003, wa
-	ldw_d16	wa, 37057
+	ld	wa, (37057:16)
 	stda16	37005, wa
 	call	16554376
 VoiceParam_ExprCheckGuard:
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x3f, 0x0f
 	jr	z, 34
@@ -7268,9 +7268,9 @@ VoiceParam_ExprCheckGuard:
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37055
-	ldw_d16	de, 37057
+	ld	(36937:16), a
+	ld	bc, (37055:16)
+	ld	de, (37057:16)
 	call	16554552
 VoiceParam_ExprDone:
 	ret
@@ -7278,11 +7278,11 @@ VoiceParam_ExprDone:
 VoiceParam_StoreVolume:
 	extz hl
 
-	ldb_d8 l, (37164)
+	ld l, (37164:16)
 
 	ld xix, 37814
 
-	ldb_d8 a, (37147)
+	ld a, (37147:16)
 
 	set 7, a
 
@@ -7292,7 +7292,7 @@ VoiceParam_StoreVolume:
 VoiceParam_WriteVolume:
 	ldb	c, 178
 	ld	xix, 61856
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld_rr8b	l, xix, l
 	ld	xix, 16560696
 	ld_rr8b	b, xix, l
@@ -7301,13 +7301,13 @@ VoiceParam_WriteVolume:
 	stda16	37057, de
 	call	16560581
 	jr	nc, 20
-	ldw_d16	wa, 37055
+	ld	wa, (37055:16)
 	stda16	37003, wa
-	ldw_d16	wa, 37057
+	ld	wa, (37057:16)
 	stda16	37005, wa
 	call	16554376
 VoiceParam_VolCheckGuard:
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x3f, 0x0f
 	jr	z, 34
@@ -7316,9 +7316,9 @@ VoiceParam_VolCheckGuard:
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37055
-	ldw_d16	de, 37057
+	ld	(36937:16), a
+	ld	bc, (37055:16)
+	ld	de, (37057:16)
 	call	16554552
 VoiceParam_VolDone:
 	ret
@@ -7326,13 +7326,13 @@ VoiceParam_VolDone:
 VoiceParam_StorePan:
 	extz hl
 
-	ldb_d8 l, (37164)
+	ld l, (37164:16)
 
 	sll l, 1
 
 	ld xix, 37846
 
-	ldw_d16 wa, (37147)
+	ld wa, (37147:16)
 
 	and wa, 0x7f7f
 
@@ -7344,7 +7344,7 @@ VoiceParam_StorePan:
 VoiceParam_WritePan:
 	ldb	c, 177
 	ld	xix, 61856
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld_rr8b	l, xix, l
 	ld	xix, 16560696
 	ld_rr8b	b, xix, l
@@ -7353,13 +7353,13 @@ VoiceParam_WritePan:
 	stda16	37057, de
 	call	16560581
 	jr	nc, 20
-	ldw_d16	wa, 37055
+	ld	wa, (37055:16)
 	stda16	37003, wa
-	ldw_d16	wa, 37057
+	ld	wa, (37057:16)
 	stda16	37005, wa
 	call	16554414
 VoiceParam_PanCheckGuard:
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x3f, 0x0f
 	jr	z, 34
@@ -7368,16 +7368,16 @@ VoiceParam_PanCheckGuard:
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37055
-	ldw_d16	de, 37057
+	ld	(36937:16), a
+	ld	bc, (37055:16)
+	ld	de, (37057:16)
 	call	16554552
 VoiceParam_PanDone:
 	ret
 VoiceNote_StoreBankSelect:
-	ldb_d8	e, 37147
+	ld	e, (37147:16)
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	.byte 0xf1, 0xad, 0x28, 0xcf
 	jr	nz, 14
 	set	7, e
@@ -7387,7 +7387,7 @@ VoiceNote_StoreBankSelect:
 VoiceNote_WriteBankAndCC:
 	ldw	bc, 432
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	ld_rrb	a, xix, hl
 	cp	a, 15
@@ -7403,9 +7403,9 @@ VoiceNote_SetupCCParams:
 	jr	nc, 66
 	cpdi8	37055, 176
 	jr	z, 22
-	ldw_d16	wa, 37055
+	ld	wa, (37055:16)
 	stda16	37003, wa
-	ldw_d16	wa, 37057
+	ld	wa, (37057:16)
 	stda16	37005, wa
 	call	16554376
 	jr	37
@@ -7415,31 +7415,31 @@ VoiceNote_CheckBankSelect:
 	bitda 7, (0x28ae)
 	jr z, VoiceNote_CtrlDone
 VoiceNote_ApplyBankSelect:
-	ldb_d8	a, 37057
+	ld	a, (37057:16)
 	set	7, a
-	stb_d8	36420, a
+	ld	(36420:16), a
 	call	16554766
 	.byte 0xf1, 0xad, 0x28, 0xcf
 	jr	z, 4
 MIDI_VoiceNote_CtrlExit:
 	.byte 0xf1, 0xad, 0x28, 0xb7
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 36914
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
-	stb_d8	36937, a
-	ldw_d16	bc, 37055
-	ldw_d16	de, 37057
+	ld	(36937:16), a
+	ld	bc, (37055:16)
+	ld	de, (37057:16)
 	call	16554552
 VoiceNote_CtrlDone:
 	ret
 
 ; MIDI voice note dispatch
 MidiVoiceNote_Dispatch:
-	ldb_d8	l, (37145)
+	ld	l, (37145:16)
 	and	l, 3
 	sll	l, 2
 	ld	xix, 16559918
@@ -7453,29 +7453,29 @@ MidiVoiceNote_Dispatch_Table:
 MidiVoiceNote_LookupMode0:
 	ld	xiy, 16560731
 	ld	xbc, 15
-	ldb_d8	l, (37148)
+	ld	l, (37148:16)
 	jr	46
 MidiVoiceNote_LookupMode1:
 	ld	xiy, 16560716
 	ld	xbc, 15
-	ldb_d8	l, (37148)
+	ld	l, (37148:16)
 	jr	30
 MidiVoiceNote_LookupMode2:
 	ld	xiy, 16560716
 	ld	xbc, 15
-	ldb_d8	l, (37149)
+	ld	l, (37149:16)
 	jr	14
 MidiVoiceNote_LookupMode3:
 	ld	xiy, 16560746
 	ld	xbc, 17
-	ldb_d8	l, (37148)
+	ld	l, (37148:16)
 MidiPart_FindChannelInTable:
 	cp	xbc, 0
 	jr	z, 28	; -> 0xFCAFA0
-	stb_d8	(37164), l
+	ld	(37164:16), l
 	ld	xix, 61856
 	ld_rrb	w, xix, hl
-	stb_d8	(37169), w
+	ld	(37169:16), w
 MidiPart_ScanNextEntry:
 	ldb_spi A, 0xf4
 	cp a, w
@@ -7491,8 +7491,8 @@ MidiNote_RhythmPartDispatch:
 	jrl	nz, 286
 	stda16	37055, bc
 	stda16	37057, de
-	stb_d8	37164, a
-	stb_d8	36955, c
+	ld	(37164:16), a
+	ld	(36955:16), c
 	ld	hl, de
 	call	16554468
 	stda16	37171, hl
@@ -7500,23 +7500,23 @@ MidiNote_RhythmPartDispatch:
 	jr	nc, 50
 	ld	xix, 64602
 	call	16554735
-	ldw_d16	wa, 37057
+	ld	wa, (37057:16)
 	ld	(xix), a
 	.byte 0x8c, 0x01, 0x3c, 0x80
 	or	(xix+1), w
 	pushw	hl
-	ldb_d8	a, 37058
+	ld	a, (37058:16)
 	ldb	w, 127
 	ldw	de, 328
 	call	16624672
-	ldb_d8	a, 37057
+	ld	a, (37057:16)
 	ldb	w, 255
 	ldw	de, 72
 	call	16624672
 	popw	hl
 MidiPart_ChannelDispatch:
 	extz	hl
-	ldb_d8	l, 37164
+	ld	l, (37164:16)
 	ld	xix, 61856
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x10
 	jrl	nz, 184
@@ -7525,9 +7525,9 @@ MidiPart_ChannelDispatch:
 	cp	a, 16
 	jrl	nz, 168
 	set	7, a
-	stb_d8	36937, a
+	ld	(36937:16), a
 	xor	h, h
-	ldb_d8	l, 64848
+	ld	l, (64848:16)
 	and	l, 3
 	sll	hl, 2
 	ld	xix, 16560194
@@ -7626,8 +7626,8 @@ PendingPartCC_NextEntry:
 PartCtrl_CheckBitmaskBit:
 	pushw	wa
 	pushw	bc
-	ldw_d16	wa, (61904)
-	ldb_d8	c, (37164)
+	ld	wa, (61904:16)
+	ld	c, (37164:16)
 	inc	1, c
 PartCtrl_ShiftBitmask:
 	srl wa, 1
@@ -7686,7 +7686,7 @@ MidiStream_DispatchData:
 	st_rr8b	e, xix, c
 	jr	13
 	stdi8	36956, 255
-	stb_d8	36422, e
+	ld	(36422:16), e
 	call	16554766
 	ret
 	calr	1320
@@ -7694,7 +7694,7 @@ MidiStream_DispatchData:
 	cp	c, 176
 	jr	nz, 9
 	set	7, e
-	stb_d8	37974, e
+	ld	(37974:16), e
 	jr	18
 	cp	b, 31
 	jr	ugt, 13
@@ -7722,71 +7722,71 @@ MidiStream_DispatchData:
 	calr	1234
 	ret
 	stdi8	36956, 255
-	ldw_d16	bc, 38312
-	ldw_d16	de, 38314
+	ld	bc, (38312:16)
+	ld	de, (38314:16)
 	call	16554583
 	call	16554376
 	ret
 	calr	1208
 	ret
 	stdi8	36956, 255
-	ldw_d16	wa, 38312
+	ld	wa, (38312:16)
 	stda16	37003, wa
-	ldw_d16	wa, 38314
+	ld	wa, (38314:16)
 	stda16	37005, wa
 	call	16554376
 	ret
 	calr	1178
 	ret
 	stdi8	36956, 255
-	ldw_d16	wa, 38312
+	ld	wa, (38312:16)
 	stda16	37003, wa
-	ldw_d16	wa, 38314
+	ld	wa, (38314:16)
 	stda16	37005, wa
 	call	16554376
 	ret
 	calr	1148
 	ret
-	ldw_d16	bc, 38312
-	ldw_d16	de, 38314
+	ld	bc, (38312:16)
+	ld	de, (38314:16)
 	stdi8	36956, 255
 	stda16	37003, bc
 	stda16	37005, de
 	call	16554376
 	ldb	e, 177
-	ldb_d8	d, 38313
+	ld	d, (38313:16)
 	ldw	wa, 16384
 	call	16624672
 	ldb	e, 180
-	ldb_d8	d, 38313
+	ld	d, (38313:16)
 	ldw	wa, 32512
 	call	16624672
 	ldb	e, 178
-	ldb_d8	d, 38313
+	ld	d, (38313:16)
 	ldw	wa, 32512
 	call	16624672
 	ldb	e, 179
-	ldb_d8	d, 38313
+	ld	d, (38313:16)
 	ldw	wa, 32639
 	call	16624672
-	ldb_d8	c, 38313
+	ld	c, (38313:16)
 	ldb	b, 4
 	ldw	de, 2048
 	call	16554667
-	ldw_d16	de, 37003
-	ldw_d16	wa, 37005
+	ld	de, (37003:16)
+	ld	wa, (37005:16)
 	call	16624672
 	stdi8	37006, 0
 	xor	h, h
-	ldb_d8	l, 38313
+	ld	l, (38313:16)
 	sla	hl, 1
 	ld	xix, 38360
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f
 	ret
 	calr	1015
 	ret
-	ldw_d16	bc, 38312
-	ldw_d16	de, 38314
+	ld	bc, (38312:16)
+	ld	de, (38314:16)
 	stdi8	36956, 255
 	stda16	37003, bc
 	stda16	37005, de
@@ -7795,8 +7795,8 @@ MidiStream_DispatchData:
 	calr	985
 	ret
 	stdi8	36956, 255
-	ldw_d16	bc, 38312
-	ldw_d16	de, 38314
+	ld	bc, (38312:16)
+	ld	de, (38314:16)
 	call	16554583
 	call	16554376
 	ret
@@ -7823,9 +7823,9 @@ MidiStream_LoadVoiceLoop:
 	res	7, a
 	st_rrb	a, xiy, hl
 	stdi8	36956, 255
-	stb_d8	37003, w
-	stb_d8	37004, l
-	stb_d8	37005, a
+	ld	(37003:16), w
+	ld	(37004:16), l
+	ld	(37005:16), a
 	stdi8	37006, 127
 	call	16554376
 MidiStream_LoadVoiceNext:
@@ -7841,12 +7841,12 @@ MidiStream_LoadBankSelect:
 	jr	z, 41
 	res	7, a
 	ld	(xiy), a
-	stb_d8	(36420), a
+	ld	(36420:16), a
 	call	16554766
 	stdi8	(36956), 255
 	stdi8	(37003), 176
 	stdi8	(37004), 1
-	stb_d8	(37005), a
+	ld	(37005:16), a
 	stdi8	(37006), 127
 	call	16554376
 MidiStream_LoadBankDone:
@@ -7904,7 +7904,7 @@ MidiStream_ProcessRxBuffer:
 	stdi16 (0x9097), 0x0000
 MidiStream_DispatchLoop:
 	ld XIX,0x0000bf9d
-	ldw_d16 hl, (0x9097)
+	ld hl, (0x9097:16)
 	ldb_dri a, 0x07, 0xf0, 0xec
 	cp A,0xff
 	jr z, MidiStream_ProcessDone
@@ -7964,7 +7964,7 @@ MidiStream_HandleNoteCC:
 	ld	wa, (xix)
 	stda16	(36942), wa
 	pushw	wa
-	stb_d8	(36944), c
+	ld	(36944:16), c
 	call	16555051
 	popw	wa
 	pushw	hl
@@ -7974,12 +7974,12 @@ MidiStream_HandleNoteCC:
 	jr	nz, 12	; -> 0xFCC16D
 	ld	b, c
 	ldb	c, 129
-	ldw_d16	de, (36946)
+	ld	de, (36946:16)
 	call	MIDI_ClearGuardAndDispatchCC
 MidiStream_PostNoteCC:
-	ldb_d8	c, (37055)
+	ld	c, (37055:16)
 	xor	b, b
-	ldb_d8	e, (36948)
+	ld	e, (36948:16)
 	ldb	d, 255
 	call	16554547
 MidiStream_HandleNoteCC_Ret:
@@ -8047,7 +8047,7 @@ MidiStream_SysExData_Code:
 	jr	z, 18
 	and	d, 7
 	jr	z, 13
-	ldb_d8	e, (64605)
+	ld	e, (64605:16)
 	and	e, 7
 	ldb	d, 7
 	call	16554547
@@ -8070,7 +8070,7 @@ MidiStream_CtrlData:
 	jr	z, 18
 	bit	7, e
 	jr	z, 13
-	ldb_d8	e, (0xfc6f)
+	ld	e, (0xfc6f:16)
 	and	e, 128
 	ldb	d, 128
 	call	MIDI_ClearGuardAndDispatchCC
@@ -8107,7 +8107,7 @@ MidiStream_CmdMaskedNotify:
 	jr z, MidiStream_CmdMaskedDone
 	and e, d
 	jr z, MidiStream_CmdMaskedDone
-	ldb_d8	e, (0xfda1)
+	ld	e, (0xfda1:16)
 	and e, 0xc0
 	ldb d, 0xc0
 	call MIDI_ClearGuardAndDispatchCC
@@ -8130,25 +8130,25 @@ MidiStream_CmdPedalDone:
 	or W,0x80
 	pushw wa
 	ld WA,(XSP)
-	stb_d8 (0x9049), w
+	ld (0x9049:16), w
 	ld C,A
 	ldb B, 0x04
 	ldw DE, 0x0800
 	call MIDI_DispatchCC_Guarded
 	ld WA,(XSP)
-	stb_d8 (0x9049), w
+	ld (0x9049:16), w
 	ldb C, 0xb1
 	ld B,A
 	ldw DE, 0x4000
 	call MIDI_DispatchCC_Guarded
 	ld WA,(XSP)
-	stb_d8 (0x9049), w
+	ld (0x9049:16), w
 	ldb C, 0xb2
 	ld B,A
 	ldw DE, 0x7f00
 	call MIDI_DispatchCC_Guarded
 	ld WA,(XSP)
-	stb_d8 (0x9049), w
+	ld (0x9049:16), w
 	ldb C, 0xb4
 	ld B,A
 	ldw DE, 0x7f00

@@ -78,7 +78,7 @@ FDC_ProbeDiskFormat__recal_done:
 	stdi16	(0x0d5c), 0		; +0x0a count = 0
 	lds32	xwa, 0
 	stda32	(0x0d5e), xwa		; +0x0c buffer = NULL
-	lda_d16	xwa, (0x0d52)
+	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 2: read track 0, sector 1, count 1 ---
@@ -88,9 +88,9 @@ FDC_ProbeDiskFormat__recal_done:
 	stdi16	(0x0d58), 0		; track 0
 	stdi16	(0x0d5a), 1		; sector 1
 	stdi16	(0x0d5c), 1		; count 1
-	lda_d16	xwa, (0x0d62)
+	lda	xwa, (0x0d62:16)
 	stda32	(0x0d5e), xwa		; buffer = 0x0d62
-	lda_d16	xwa, (0x0d52)
+	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 3: read track 78 ---
@@ -100,9 +100,9 @@ FDC_ProbeDiskFormat__recal_done:
 	stdi16	(0x0d58), 78
 	stdi16	(0x0d5a), 1
 	stdi16	(0x0d5c), 1
-	lda_d16	xwa, (0x0d62)
+	lda	xwa, (0x0d62:16)
 	stda32	(0x0d5e), xwa
-	lda_d16	xwa, (0x0d52)
+	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 4: read track 10 ---
@@ -112,9 +112,9 @@ FDC_ProbeDiskFormat__recal_done:
 	stdi16	(0x0d58), 10
 	stdi16	(0x0d5a), 1
 	stdi16	(0x0d5c), 1
-	lda_d16	xwa, (0x0d62)
+	lda	xwa, (0x0d62:16)
 	stda32	(0x0d5e), xwa
-	lda_d16	xwa, (0x0d52)
+	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 5: read track 40 ---
@@ -124,9 +124,9 @@ FDC_ProbeDiskFormat__recal_done:
 	stdi16	(0x0d58), 40
 	stdi16	(0x0d5a), 1
 	stdi16	(0x0d5c), 1
-	lda_d16	xwa, (0x0d62)
+	lda	xwa, (0x0d62:16)
 	stda32	(0x0d5e), xwa
-	lda_d16	xwa, (0x0d52)
+	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	lda	xsp, (xsp + 20)		; drop the five pushed block pointers

@@ -46,11 +46,11 @@ FCopy_ScrollNeg_Reset:
 	jrl	536
 FCopy_HandleExecute:
 	stdi8	(33904), 0
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
-	lda_d16	xwa, (33905)
-	ldw_d16	de, (32458)
+	lda	xwa, (33905:16)
+	ld	de, (32458:16)
 	inc	1, de
 	pushw	6
 	pushw	0
@@ -63,7 +63,7 @@ FCopy_HandleExecute:
 FCopy_HandleScroll:
 	or	xiz, xiz
 	jrl	nz, 154
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	ld	de, wa
 	cp	xbc, 29360152
 	jr	nz, 96
@@ -72,7 +72,7 @@ FCopy_HandleScroll:
 	dec	1, wa
 	stda16	(32458), wa
 FCopy_ScrollDown_CheckMin:
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	cpda16	xwa, (32456)
 	jr	nz, 16	; -> 0xF8B862
 	cps	wa, 0
@@ -83,16 +83,16 @@ FCopy_ScrollDown_CheckMin:
 FCopy_ScrollDown_RestoreOld:
 	stda16	(32458), de
 FCopy_ScrollDown_Reload:
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 FCopy_Scroll_Apply:
 	cp	wa, de
 	jrl	z, 416
 	stdi8	(33904), 0
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
-	lda_d16	xwa, (33905)
-	ldw_d16	de, (32458)
+	lda	xwa, (33905:16)
+	ld	de, (32458:16)
 	inc	1, de
 	pushw	6
 	pushw	0
@@ -109,7 +109,7 @@ FCopy_ScrollUp_Adjust:
 	inc	1, wa
 	stda16	(32458), wa
 FCopy_ScrollUp_CheckMax:
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	cpda16	xwa, (32456)
 	jr	nz, -90	; -> 0xF8B862
 	cp	wa, 19
@@ -123,7 +123,7 @@ FCopy_HandleCopyContext:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, FCopy_CopyExecute
-	ldw_d16 wa, (0x7eca)
+	ld wa, (0x7eca:16)
 	call FileIO_GetRecordFlags
 	cps hl, 0
 	jr z, FCopy_CopyConfirm_Execute
@@ -143,12 +143,12 @@ FCopy_CopyConfirm_Execute:
 	call	16423243
 	lds	wa, 0
 	calr	62671
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16287180
 	ld	wa, hl
 	lds	bc, 5
 	calr	63306
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62741
 	call	16290139
 	call	16290094
@@ -179,12 +179,12 @@ FCopy_CopyExecute:
 	call	16423243
 	lds	wa, 0
 	calr	62544
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16287180
 	ld	wa, hl
 	lds	bc, 5
 	calr	63179
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62614
 	call	16290139
 	call	16290094
@@ -224,15 +224,15 @@ FileRenameFunc:
 	call	16290274
 	cps	hl, 0
 	jr	lt, 89
-	lda_d16	xiz, (34772)
+	lda	xiz, (34772:16)
 	ld	wa, hl
 	call	16290326
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_24	xix, (15652728)
-	lda_d16	xwa, (34772)
+	lda	xix, (15652728:24)
+	lda	xwa, (34772:16)
 	ld	xhl, xwa
 	jr	17
 FRename_PadLoop_CheckChar:
@@ -296,7 +296,7 @@ FRename_HandleApply:
 	ld	wa, hl
 	lds	bc, 5
 	calr	62879
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62314
 	call	16290928
 	stda16	(33894), hl
@@ -323,15 +323,15 @@ FileRenameSmfFunc:
 	call	16291514
 	cps	hl, 0
 	jr	lt, 95
-	lda_d16	xiz, (34772)
+	lda	xiz, (34772:16)
 	ld	wa, hl
 	call	16291811
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_24	xix, (15652728)
-	lda_d16	xwa, (34772)
+	lda	xix, (15652728:24)
+	lda	xwa, (34772:16)
 	ld	xhl, xwa
 	jr	17
 FRenameSmf_PadLoop_CheckChar:
@@ -395,7 +395,7 @@ FRenameSmf_HandleApply:
 	ld	wa, hl
 	lds	bc, 5
 	calr	62612
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	calr	62047
 	call	16291947
 	stda16	(33896), hl
@@ -430,13 +430,13 @@ FmmFormatFunc:
 	stda16	33892, hl
 	calr	-3594
 FmmFmt_InitPhase_CheckDrive:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 2
 	jr	z, 4
 	cps	wa, 3
 	jr	nz, 27
 FmmFmt_InitPhase_DriveType23:
-	stb_d8	(32460), a
+	ld	(32460:16), a
 	ld	xwa, 8060982
 	ld	xbc, 29360129
 	lds32	xde, 0
@@ -460,11 +460,11 @@ FmmFmt_HandleCancel:
 FmmFmt_HandleProgress:
 	cpdi8	32464, 0
 	jrl	z, 324
-	ldb_d8	a, 32462
+	ld	a, (32462:16)
 	extz	wa
 	cp	xde, 15
 	jrl	z, 295
-	ldb_d8	c, 33890
+	ld	c, (33890:16)
 	cp	xde, 11
 	jrl	z, 222
 	cp	xde, 10
@@ -478,7 +478,7 @@ FmmFmt_HandleProgress:
 	call	16423243
 	lds	wa, 0
 	calr	-3843
-	ldb_d8	a, 32460
+	ld	a, (32460:16)
 	extz	wa
 	call	16288900
 	ld	iz, hl
@@ -494,7 +494,7 @@ FmmFmt_HandleProgress:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, 32462
+	ld	a, (32462:16)
 	extz	wa
 	call	16355459
 	stdi8	32464, 0
@@ -505,7 +505,7 @@ FmmFmt_HandleProgress:
 	ld	wa, iz
 	ldw	bc, 8
 	calr	-3286
-	stb_d8	32422, l
+	ld	(32422:16), l
 	ldw	wa, 238
 	call	16355504
 	jrl	147
@@ -602,7 +602,7 @@ FmmLoadTitleFunc:
 	stda16	33892, hl
 	calr	-4139
 FmmLoadTtl_StateDispatch:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 193
 	cps	wa, 0
@@ -656,7 +656,7 @@ FmmLoadTtl_StateCancelLoad:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32466)
+	ld	a, (32466:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -684,7 +684,7 @@ FmmLoadTtl_StateSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32466)
+	ld	a, (32466:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -840,7 +840,7 @@ DiskNameFunc:
 	jrl	nz, 193
 	lds	wa, 0
 	calr	60599
-	lda_d16	xiz, (34544)
+	lda	xiz, (34544:16)
 	call	16290176
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -852,15 +852,15 @@ DiskNameFunc:
 DiskName_TextChange:
 	lds	wa, 0
 	calr	60563
-	lda_d16	xiz, (34544)
+	lda	xiz, (34544:16)
 	call	16290176
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_d16	xix, (34772)
-	lda_24	xiz, (15652728)
-	lda_d16	xde, (34544)
+	lda	xix, (34772:16)
+	lda	xiz, (15652728:24)
+	lda	xde, (34544:16)
 	ld	xhl, xde
 	jr	22
 DiskName_PadLoop_CheckChar:
@@ -933,7 +933,7 @@ DiskInfoFunc:
 	extz HL
 	stda16 (0x8464), hl
 DiskInfo_ReadDriveType:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jr	z, 28
 	cps	wa, 0
@@ -977,16 +977,16 @@ DiskInfo_RenderStrings:
 	ld	(xsp+4), xbc
 	sra	xbc, 10
 	ld	(xsp+4), xbc
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	sla	wa, 2
-	lda_24	xbc, 15336792
+	lda	xbc, (15336792:24)
 	ld_rrl	xbc, xbc, wa
 	ld	xwa, 34610
 	call	16288975
 	ld	xwa, 34610
 	ld	xbc, 15337174
 	call	16289030
-	lda_d16	xwa, 34610
+	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+4)
 	lds	bc, 4
@@ -997,7 +997,7 @@ DiskInfo_RenderStrings:
 	ld	xwa, 34610
 	ld	xbc, 15337178
 	call	16289030
-	lda_d16	xwa, 34610
+	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+8)
 	lds	bc, 3
@@ -1030,14 +1030,14 @@ SongNameFunc:
 	jr	lt, 67
 	lds	wa, 0
 	calr	60075
-	lda_d16	xwa, (34674)
+	lda	xwa, (34674:16)
 	ld	(xsp+2), xwa
 	ld	wa, iz
 	call	16292978
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	call	16288975
-	lda_d16	xwa, (34674)
+	lda	xwa, (34674:16)
 	ld	(xwa+30), 0
 	lda	xbc, (xwa+29)
 	ld	xde, xbc
@@ -1113,7 +1113,7 @@ SaveFileNameFunc:
 	jr	z, 49
 	cp	xbc, 29360139
 	jrl	nz, 160
-	lda_d16	xiz, (34740)
+	lda	xiz, (34740:16)
 	call	16289455
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1125,14 +1125,14 @@ SaveFileNameFunc:
 	ld	xde, 34740
 	jr	93
 SaveFileName_TextChange:
-	lda_d16	xiz, (34740)
+	lda	xiz, (34740:16)
 	call	16289455
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_24	xix, (15652728)
-	lda_d16	xde, (34740)
+	lda	xix, (15652728:24)
+	lda	xde, (34740:16)
 	ld	xhl, xde
 	jr	17
 SaveFileName_PadLoop_CheckChar:

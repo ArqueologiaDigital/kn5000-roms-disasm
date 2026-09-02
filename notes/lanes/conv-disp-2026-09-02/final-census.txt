@@ -1,0 +1,29 @@
+llvm-mc      /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap
+llvm-mc sha  53c6621d5f6dd3c1
+tracked .s   547
+
+=== lda_24     LDA of a 24-bit direct address
+    0 distinct operand spellings, 0 sites, 27 skipped inside .macro bodies
+
+=== ldw_d16    16-bit load from a 16-bit direct address
+    0 distinct operand spellings, 0 sites
+
+=== lda_d16    LDA of a 16-bit direct address
+    0 distinct operand spellings, 0 sites
+
+=== ld_sril    32-bit load, (base register + d16)
+    96 distinct operand spellings, 1030 sites
+    accepted       0 sites (0 spellings)
+    refused      841 sites  DIAGNOSTIC_OR_FIXUP_DIFFERS
+    refused      189 sites  BYTES_DIFFER
+
+=== ldb_d8     8-bit load from a 16-bit direct address
+    0 distinct operand spellings, 0 sites
+
+=== stb_d8     8-bit store to a 16-bit direct address
+    0 distinct operand spellings, 0 sites
+
+--- totals ---
+ld_sril:accepted                                0
+ld_sril:refused:BYTES_DIFFER                  189
+ld_sril:refused:DIAGNOSTIC_OR_FIXUP_DIFFERS      841

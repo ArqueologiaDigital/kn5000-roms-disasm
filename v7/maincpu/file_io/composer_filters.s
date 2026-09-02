@@ -119,7 +119,7 @@ CompLoad_DrawItemLoop:
 	ld	wa, iz
 	ld	hl, wa
 	sll	hl, 5
-	lda_d16	xde, 33904
+	lda	xde, (33904:16)
 	extz	xhl
 	add	xhl, xde
 	stb_erp	c, 248
@@ -133,7 +133,7 @@ CompLoad_DrawItemLoop:
 	ld	xbc, xhl
 	jr	5
 CompLoad_DrawItem_Empty:
-	lda_24 xbc, (DiskOp_ChannelCfgTable_0x80)
+	lda xbc, (DiskOp_ChannelCfgTable_0x80:24)
 
 CompLoad_DrawItem_Continue:
 	ld	de, iz
@@ -141,7 +141,7 @@ CompLoad_DrawItem_Continue:
 	sll	wa, 5
 	lds	hl, 1
 	add	hl, wa
-	lda_d16	xix, (33904)
+	lda	xix, (33904:16)
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
@@ -151,7 +151,7 @@ CompLoad_DrawItem_Continue:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32480:16)
@@ -162,7 +162,7 @@ CompLoad_DrawItem_Continue:
 	jr	lt, -112
 	jrl	330
 CompLoad_HandleScroll:
-	ldw_d16	wa, (32484)
+	ld	wa, (32484:16)
 	ld	(xsp+2), wa
 	or	xde, xde
 	jr	nz, 37
@@ -226,7 +226,7 @@ CompLoad_HideButtons_Loop:
 	ld	wa, hl
 	lds	bc, 1
 	calr	-8097
-	stb_d8	32422, l
+	ld	(32422:16), l
 	calr	-8662
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -245,27 +245,27 @@ CompLoad_HideButtons_Loop:
 	ldw	wa, 238
 	call	16355504
 CompLoad_GetSelection:
-	ldw_d16	wa, (32484)
+	ld	wa, (32484:16)
 CompLoad_UpdateDisplay:
 	cp	(xsp+2), wa
 	jr	z, 78
 	call	16290296
-	ldw_d16	de, (32484)
+	ld	de, (32484:16)
 	exts	xde
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	call	16423243
 	ld	de, (xsp+2)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32480:16)
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	de, (32484)
+	ld	de, (32484:16)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32480:16)
@@ -465,14 +465,14 @@ LoadFilter_UpdateDisplay:
 	extz	bc
 	ld	wa, bc
 	sla	wa, 4
-	lda_d16	xde, 32490
+	lda	xde, (32490:16)
 	exts	xwa
 	add	xwa, xde
 	calr	-469
 	ld	xwa, (xsp+2)
 	extz	wa
 	sla	wa, 4
-	lda_d16	xbc, 32490
+	lda	xbc, (32490:16)
 	lda_rr	xde, xbc, wa
 	ld	xwa, (32486:16)
 	ld	xbc, 29360143
@@ -502,7 +502,7 @@ LoadFilter_OpLoad:
 	ld WA,HL
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
-	stb_d8 (0x7ea6), l
+	ld (0x7ea6:16), l
 	calr SignalProgressUpdate
 	ld XWA,0x00600026
 	ld XBC,0x01c00002
@@ -671,14 +671,14 @@ SaveFilter_UpdateDisplay:
 	extz	bc
 	ld	wa, bc
 	sla	wa, 4
-	lda_d16	xde, 32622
+	lda	xde, (32622:16)
 	exts	xwa
 	add	xwa, xde
 	calr	-334
 	ld	xwa, (xsp+2)
 	extz	wa
 	sla	wa, 4
-	lda_d16	xbc, 32622
+	lda	xbc, (32622:16)
 	lda_rr	xde, xbc, wa
 	ld	xwa, (32618:16)
 	ld	xbc, 29360143
@@ -722,7 +722,7 @@ SaveFilter_DeselectAll_Loop:
 	call	16289650
 	ld	wa, (xsp)
 	sll	wa, 4
-	lda_d16	xbc, 32622
+	lda	xbc, (32622:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, (xsp)
@@ -730,7 +730,7 @@ SaveFilter_DeselectAll_Loop:
 	calr	-506
 	ld	de, (xsp)
 	sll	de, 4
-	lda_d16	xbc, 32622
+	lda	xbc, (32622:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32618:16)
@@ -751,7 +751,7 @@ SaveFilter_OpSave:
 	cps	hl, 0
 	jr	z, 18
 	lds32	xde, 0
-	ldb_d8	e, (35184)
+	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
 	jr	44
@@ -784,7 +784,7 @@ SaveFilter_Save_Execute:
 	ld	wa, hl
 	lds	bc, 5
 	calr	55914
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928
@@ -820,7 +820,7 @@ SaveFilter_OpFormat:
 	ld	wa, hl
 	lds	bc, 5
 	calr	55789
-	stb_d8	(32422), l
+	ld	(32422:16), l
 	call	16290139
 	call	16290094
 	call	16290928

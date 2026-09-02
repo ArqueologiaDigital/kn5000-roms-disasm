@@ -13627,16 +13627,16 @@ sub_FA26CB:
 	pushw	hl                                   ; FA26CF  push HL
 	push	xix                                   ; FA26D0  push XIX
 	ei	6                                       ; FA26D1  ei 0x06
-	lda_24	xix, (0x864D)                       ; FA26D3  lda XIX,0x00864d
-	lda_24	xiy, (0x8644)                       ; FA26D8  lda XIY,0x008644
+	lda	xix, (0x864D:24)                       ; FA26D3  lda XIX,0x00864d
+	lda	xiy, (0x8644:24)                       ; FA26D8  lda XIY,0x008644
 	ldw	bc, 3                                  ; FA26DD  ld BC,0x0003
 	extpfx2 0x85, 0x11                         ; FA26E0  ldir
-	lda_24	xix, (0x8650)                       ; FA26E2  lda XIX,0x008650
-	lda_24	xiy, (0x8647)                       ; FA26E7  lda XIY,0x008647
+	lda	xix, (0x8650:24)                       ; FA26E2  lda XIX,0x008650
+	lda	xiy, (0x8647:24)                       ; FA26E7  lda XIY,0x008647
 	ldw	bc, 3                                  ; FA26EC  ld BC,0x0003
 	extpfx2 0x85, 0x11                         ; FA26EF  ldir
-	lda_24	xix, (0x8653)                       ; FA26F1  lda XIX,0x008653
-	lda_24	xiy, (0x864A)                       ; FA26F6  lda XIY,0x00864a
+	lda	xix, (0x8653:24)                       ; FA26F1  lda XIX,0x008653
+	lda	xiy, (0x864A:24)                       ; FA26F6  lda XIY,0x00864a
 	ldw	bc, 3                                  ; FA26FB  ld BC,0x0003
 	extpfx2 0x85, 0x11                         ; FA26FE  ldir
 	ei	0                                       ; FA2700  ei 0x00
@@ -14149,7 +14149,7 @@ sub_FA2A19__FA2A9D:
 	extz	wa                                    ; FA2ADE  extz WA
 	inc	1, wa                                  ; FA2AE0  inc 1,WA
 	pushw	wa                                   ; FA2AE2  push WA
-	lda_24	xwa, (0xFD4B97)                     ; FA2AE3  lda XWA,0xfd4b97
+	lda	xwa, (0xFD4B97:24)                     ; FA2AE3  lda XWA,0xfd4b97
 	push	xwa                                   ; FA2AE8  push XWA
 	ld	iy, (xiz-9)                             ; FA2AE9  ld IY,(XIZ+0xf7)
 	extz	iy                                    ; FA2AEC  extz IY
@@ -14303,7 +14303,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	extz	wa                                    ; FA2C35  extz WA
 	inc	1, wa                                  ; FA2C37  inc 1,WA
 	pushw	wa                                   ; FA2C39  push WA
-	lda_24	xwa, (0xFD4B85)                     ; FA2C3A  lda XWA,0xfd4b85
+	lda	xwa, (0xFD4B85:24)                     ; FA2C3A  lda XWA,0xfd4b85
 	push	xwa                                   ; FA2C3F  push XWA
 	sub	xiy, xiy                               ; FA2C40  sub XIY,XIY
 	push	xiy                                   ; FA2C42  push XIY
@@ -14401,7 +14401,7 @@ P7Unit_LoadProgramStreams:
 	extz	wa                                    ; FA2CEB  extz WA
 	inc	1, wa                                  ; FA2CED  inc 1,WA
 	pushw	wa                                   ; FA2CEF  push WA
-	lda_24	xwa, (0xFD4B85)                     ; FA2CF0  lda XWA,0xfd4b85
+	lda	xwa, (0xFD4B85:24)                     ; FA2CF0  lda XWA,0xfd4b85
 	push	xwa                                   ; FA2CF5  push XWA
 	sub	xiy, xiy                               ; FA2CF6  sub XIY,XIY
 	push	xiy                                   ; FA2CF8  push XIY
@@ -14496,7 +14496,7 @@ P7Unit_SendParamValue:
 	extz	wa                                    ; FA2DA1  extz WA
 	inc	1, wa                                  ; FA2DA3  inc 1,WA
 	pushw	wa                                   ; FA2DA5  push WA
-	lda_24	xwa, (0xFD4B85)                     ; FA2DA6  lda XWA,0xfd4b85
+	lda	xwa, (0xFD4B85:24)                     ; FA2DA6  lda XWA,0xfd4b85
 	push	xwa                                   ; FA2DAB  push XWA
 	ld	iy, (xiz+12)                            ; FA2DAC  ld IY,(XIZ+0x0c)
 	exts	xiy                                   ; FA2DAF  exts XIY
@@ -14970,189 +14970,189 @@ P7Units_BootLoadAndStartTask:
 	call	0xF98B39                              ; FA3136  call 0xf98b39
 	set_dd8	2, PB                              ; FA313A  set 2,(0x1f)
 	popw	bc                                    ; FA313D  pop BC
-	lda_24	xbc, (0xFD4B97)                     ; FA313E  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA313E  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3143  push XBC
 	pushw	1                                    ; FA3144  push 0x0001
-	lda_24	xwa, (0xFCD2C6)                     ; FA3147  lda XWA,0xfcd2c6
+	lda	xwa, (0xFCD2C6:24)                     ; FA3147  lda XWA,0xfcd2c6
 	push	xwa                                   ; FA314C  push XWA
 	call	0xF9A646                              ; FA314D  call 0xf9a646
 	inc	8, xsp                                 ; FA3151  inc 0,XSP
 	inc	2, xsp                                 ; FA3153  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3155  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3155  lda XBC,0xfd4b97
 	push	xbc                                   ; FA315A  push XBC
 	pushw	3                                    ; FA315B  push 0x0003
-	lda_24	xwa, (0xFCD5E2)                     ; FA315E  lda XWA,0xfcd5e2
+	lda	xwa, (0xFCD5E2:24)                     ; FA315E  lda XWA,0xfcd5e2
 	push	xwa                                   ; FA3163  push XWA
 	call	0xF9A646                              ; FA3164  call 0xf9a646
 	inc	8, xsp                                 ; FA3168  inc 0,XSP
 	inc	2, xsp                                 ; FA316A  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA316C  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA316C  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3171  push XBC
 	pushw	4                                    ; FA3172  push 0x0004
-	lda_24	xwa, (0xFCDA77)                     ; FA3175  lda XWA,0xfcda77
+	lda	xwa, (0xFCDA77:24)                     ; FA3175  lda XWA,0xfcda77
 	push	xwa                                   ; FA317A  push XWA
 	call	0xF9A646                              ; FA317B  call 0xf9a646
 	inc	8, xsp                                 ; FA317F  inc 0,XSP
 	inc	2, xsp                                 ; FA3181  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3183  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3183  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3188  push XBC
 	pushw	1                                    ; FA3189  push 0x0001
-	lda_24	xwa, (0xFD26C7)                     ; FA318C  lda XWA,0xfd26c7
+	lda	xwa, (0xFD26C7:24)                     ; FA318C  lda XWA,0xfd26c7
 	push	xwa                                   ; FA3191  push XWA
 	call	0xF9A646                              ; FA3192  call 0xf9a646
 	set_dd8	3, PB                              ; FA3196  set 3,(0x1f)
 	inc	8, xsp                                 ; FA3199  inc 0,XSP
 	inc	2, xsp                                 ; FA319B  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA319D  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA319D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31A2  push XBC
 	pushw	3                                    ; FA31A3  push 0x0003
-	lda_24	xwa, (0xFD26EB)                     ; FA31A6  lda XWA,0xfd26eb
+	lda	xwa, (0xFD26EB:24)                     ; FA31A6  lda XWA,0xfd26eb
 	push	xwa                                   ; FA31AB  push XWA
 	call	0xF9A646                              ; FA31AC  call 0xf9a646
 	set_dd8	4, PB                              ; FA31B0  set 4,(0x1f)
 	inc	8, xsp                                 ; FA31B3  inc 0,XSP
 	inc	2, xsp                                 ; FA31B5  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA31B7  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA31B7  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31BC  push XBC
 	pushw	4                                    ; FA31BD  push 0x0004
-	lda_24	xwa, (0xFD270F)                     ; FA31C0  lda XWA,0xfd270f
+	lda	xwa, (0xFD270F:24)                     ; FA31C0  lda XWA,0xfd270f
 	push	xwa                                   ; FA31C5  push XWA
 	call	0xF9A646                              ; FA31C6  call 0xf9a646
 	set_dd8	1, PB                              ; FA31CA  set 1,(0x1f)
 	inc	8, xsp                                 ; FA31CD  inc 0,XSP
 	inc	2, xsp                                 ; FA31CF  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA31D1  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA31D1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31D6  push XBC
 	pushw	1                                    ; FA31D7  push 0x0001
-	lda_24	xwa, (0xFCD243)                     ; FA31DA  lda XWA,0xfcd243
+	lda	xwa, (0xFCD243:24)                     ; FA31DA  lda XWA,0xfcd243
 	push	xwa                                   ; FA31DF  push XWA
 	call	0xF9A646                              ; FA31E0  call 0xf9a646
 	inc	8, xsp                                 ; FA31E4  inc 0,XSP
 	inc	2, xsp                                 ; FA31E6  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA31E8  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA31E8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31ED  push XBC
 	pushw	3                                    ; FA31EE  push 0x0003
-	lda_24	xwa, (0xFCD42F)                     ; FA31F1  lda XWA,0xfcd42f
+	lda	xwa, (0xFCD42F:24)                     ; FA31F1  lda XWA,0xfcd42f
 	push	xwa                                   ; FA31F6  push XWA
 	call	0xF9A646                              ; FA31F7  call 0xf9a646
 	inc	8, xsp                                 ; FA31FB  inc 0,XSP
 	inc	2, xsp                                 ; FA31FD  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA31FF  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA31FF  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3204  push XBC
 	pushw	4                                    ; FA3205  push 0x0004
-	lda_24	xwa, (0xFCDA18)                     ; FA3208  lda XWA,0xfcda18
+	lda	xwa, (0xFCDA18:24)                     ; FA3208  lda XWA,0xfcda18
 	push	xwa                                   ; FA320D  push XWA
 	call	0xF9A646                              ; FA320E  call 0xf9a646
 	inc	8, xsp                                 ; FA3212  inc 0,XSP
 	inc	2, xsp                                 ; FA3214  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3216  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3216  lda XBC,0xfd4b97
 	push	xbc                                   ; FA321B  push XBC
 	pushw	1                                    ; FA321C  push 0x0001
-	lda_24	xwa, (0xFD26B8)                     ; FA321F  lda XWA,0xfd26b8
+	lda	xwa, (0xFD26B8:24)                     ; FA321F  lda XWA,0xfd26b8
 	push	xwa                                   ; FA3224  push XWA
 	call	0xF9A646                              ; FA3225  call 0xf9a646
 	inc	8, xsp                                 ; FA3229  inc 0,XSP
 	inc	2, xsp                                 ; FA322B  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA322D  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA322D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3232  push XBC
 	pushw	3                                    ; FA3233  push 0x0003
-	lda_24	xwa, (0xFD26DC)                     ; FA3236  lda XWA,0xfd26dc
+	lda	xwa, (0xFD26DC:24)                     ; FA3236  lda XWA,0xfd26dc
 	push	xwa                                   ; FA323B  push XWA
 	call	0xF9A646                              ; FA323C  call 0xf9a646
 	inc	8, xsp                                 ; FA3240  inc 0,XSP
 	inc	2, xsp                                 ; FA3242  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3244  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3244  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3249  push XBC
 	pushw	4                                    ; FA324A  push 0x0004
-	lda_24	xwa, (0xFD2700)                     ; FA324D  lda XWA,0xfd2700
+	lda	xwa, (0xFD2700:24)                     ; FA324D  lda XWA,0xfd2700
 	push	xwa                                   ; FA3252  push XWA
 	call	0xF9A646                              ; FA3253  call 0xf9a646
 	inc	8, xsp                                 ; FA3257  inc 0,XSP
 	inc	2, xsp                                 ; FA3259  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA325B  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA325B  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3260  push XBC
 	pushw	1                                    ; FA3261  push 0x0001
-	lda_24	xwa, (0xFD4093)                     ; FA3264  lda XWA,0xfd4093
+	lda	xwa, (0xFD4093:24)                     ; FA3264  lda XWA,0xfd4093
 	push	xwa                                   ; FA3269  push XWA
 	call	0xF9A646                              ; FA326A  call 0xf9a646
 	inc	8, xsp                                 ; FA326E  inc 0,XSP
 	inc	2, xsp                                 ; FA3270  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3272  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3272  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3277  push XBC
 	pushw	1                                    ; FA3278  push 0x0001
-	lda_24	xwa, (0xFD4B4C)                     ; FA327B  lda XWA,0xfd4b4c
+	lda	xwa, (0xFD4B4C:24)                     ; FA327B  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3280  push XWA
 	call	0xF9A646                              ; FA3281  call 0xf9a646
 	inc	8, xsp                                 ; FA3285  inc 0,XSP
 	inc	2, xsp                                 ; FA3287  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3289  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3289  lda XBC,0xfd4b85
 	push	xbc                                   ; FA328E  push XBC
 	pushw	1                                    ; FA328F  push 0x0001
-	lda_24	xwa, (0xFD4AFD)                     ; FA3292  lda XWA,0xfd4afd
+	lda	xwa, (0xFD4AFD:24)                     ; FA3292  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3297  push XWA
 	call	0xF9A646                              ; FA3298  call 0xf9a646
 	inc	8, xsp                                 ; FA329C  inc 0,XSP
 	inc	2, xsp                                 ; FA329E  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA32A0  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA32A0  lda XBC,0xfd4b97
 	push	xbc                                   ; FA32A5  push XBC
 	pushw	1                                    ; FA32A6  push 0x0001
-	lda_24	xwa, (0xFCD209)                     ; FA32A9  lda XWA,0xfcd209
+	lda	xwa, (0xFCD209:24)                     ; FA32A9  lda XWA,0xfcd209
 	push	xwa                                   ; FA32AE  push XWA
 	call	0xF9A646                              ; FA32AF  call 0xf9a646
 	inc	8, xsp                                 ; FA32B3  inc 0,XSP
 	inc	2, xsp                                 ; FA32B5  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA32B7  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA32B7  lda XBC,0xfd4b85
 	push	xbc                                   ; FA32BC  push XBC
 	pushw	2                                    ; FA32BD  push 0x0002
-	lda_24	xwa, (0xFD4B4C)                     ; FA32C0  lda XWA,0xfd4b4c
+	lda	xwa, (0xFD4B4C:24)                     ; FA32C0  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA32C5  push XWA
 	call	0xF9A646                              ; FA32C6  call 0xf9a646
 	inc	8, xsp                                 ; FA32CA  inc 0,XSP
 	inc	2, xsp                                 ; FA32CC  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA32CE  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA32CE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA32D3  push XBC
 	pushw	2                                    ; FA32D4  push 0x0002
-	lda_24	xwa, (0xFD4AFD)                     ; FA32D7  lda XWA,0xfd4afd
+	lda	xwa, (0xFD4AFD:24)                     ; FA32D7  lda XWA,0xfd4afd
 	push	xwa                                   ; FA32DC  push XWA
 	call	0xF9A646                              ; FA32DD  call 0xf9a646
 	inc	8, xsp                                 ; FA32E1  inc 0,XSP
 	inc	2, xsp                                 ; FA32E3  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA32E5  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA32E5  lda XBC,0xfd4b97
 	push	xbc                                   ; FA32EA  push XBC
 	pushw	2                                    ; FA32EB  push 0x0002
-	lda_24	xwa, (0xFCD221)                     ; FA32EE  lda XWA,0xfcd221
+	lda	xwa, (0xFCD221:24)                     ; FA32EE  lda XWA,0xfcd221
 	push	xwa                                   ; FA32F3  push XWA
 	call	0xF9A646                              ; FA32F4  call 0xf9a646
 	inc	8, xsp                                 ; FA32F8  inc 0,XSP
 	inc	2, xsp                                 ; FA32FA  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA32FC  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA32FC  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3301  push XBC
 	pushw	3                                    ; FA3302  push 0x0003
-	lda_24	xwa, (0xFD4093)                     ; FA3305  lda XWA,0xfd4093
+	lda	xwa, (0xFD4093:24)                     ; FA3305  lda XWA,0xfd4093
 	push	xwa                                   ; FA330A  push XWA
 	call	0xF9A646                              ; FA330B  call 0xf9a646
 	inc	8, xsp                                 ; FA330F  inc 0,XSP
 	inc	2, xsp                                 ; FA3311  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3313  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3313  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3318  push XBC
 	pushw	3                                    ; FA3319  push 0x0003
-	lda_24	xwa, (0xFD4B4C)                     ; FA331C  lda XWA,0xfd4b4c
+	lda	xwa, (0xFD4B4C:24)                     ; FA331C  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3321  push XWA
 	call	0xF9A646                              ; FA3322  call 0xf9a646
 	inc	8, xsp                                 ; FA3326  inc 0,XSP
 	inc	2, xsp                                 ; FA3328  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA332A  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA332A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA332F  push XBC
 	pushw	3                                    ; FA3330  push 0x0003
-	lda_24	xwa, (0xFD4AFD)                     ; FA3333  lda XWA,0xfd4afd
+	lda	xwa, (0xFD4AFD:24)                     ; FA3333  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3338  push XWA
 	call	0xF9A646                              ; FA3339  call 0xf9a646
 	inc	8, xsp                                 ; FA333D  inc 0,XSP
 	inc	2, xsp                                 ; FA333F  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3341  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3341  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3346  push XBC
 	pushw	3                                    ; FA3347  push 0x0003
-	lda_24	xwa, (0xFCD403)                     ; FA334A  lda XWA,0xfcd403
+	lda	xwa, (0xFCD403:24)                     ; FA334A  lda XWA,0xfcd403
 	push	xwa                                   ; FA334F  push XWA
 	call	0xF9A646                              ; FA3350  call 0xf9a646
 	inc	8, xsp                                 ; FA3354  inc 0,XSP
@@ -15200,210 +15200,210 @@ P7Units_ReloadFixedStreams:
 	call	0xF98B39                              ; FA337A  call 0xf98b39
 	set_dd8	2, PB                              ; FA337E  set 2,(0x1f)
 	popw	bc                                    ; FA3381  pop BC
-	lda_24	xbc, (0xFD4B97)                     ; FA3382  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3382  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3387  push XBC
 	pushw	1                                    ; FA3388  push 0x0001
-	lda_24	xwa, (0xFCD2C6)                     ; FA338B  lda XWA,0xfcd2c6
+	lda	xwa, (0xFCD2C6:24)                     ; FA338B  lda XWA,0xfcd2c6
 	push	xwa                                   ; FA3390  push XWA
 	call	0xF9A646                              ; FA3391  call 0xf9a646
 	inc	8, xsp                                 ; FA3395  inc 0,XSP
 	inc	2, xsp                                 ; FA3397  inc 2,XSP
 	cpib_da 0x00F35F, 0x02                     ; FA3399  cp (0x00f35f),0x02
 	jr z, P7Units_ReloadFixedStreams__FA33D1                   ; FA339F  jr Z,0xfa33d1
-	lda_24	xbc, (0xFD4B97)                     ; FA33A1  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA33A1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33A6  push XBC
 	pushw	3                                    ; FA33A7  push 0x0003
-	lda_24	xwa, (0xFCD5E2)                     ; FA33AA  lda XWA,0xfcd5e2
+	lda	xwa, (0xFCD5E2:24)                     ; FA33AA  lda XWA,0xfcd5e2
 	push	xwa                                   ; FA33AF  push XWA
 	call	0xF9A646                              ; FA33B0  call 0xf9a646
 	inc	8, xsp                                 ; FA33B4  inc 0,XSP
 	inc	2, xsp                                 ; FA33B6  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA33B8  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA33B8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33BD  push XBC
 	pushw	4                                    ; FA33BE  push 0x0004
-	lda_24	xwa, (0xFCDA77)                     ; FA33C1  lda XWA,0xfcda77
+	lda	xwa, (0xFCDA77:24)                     ; FA33C1  lda XWA,0xfcda77
 	push	xwa                                   ; FA33C6  push XWA
 	call	0xF9A646                              ; FA33C7  call 0xf9a646
 	inc	8, xsp                                 ; FA33CB  inc 0,XSP
 	inc	2, xsp                                 ; FA33CD  inc 2,XSP
 	jr P7Units_ReloadFixedStreams__FA33FF                      ; FA33CF  jr T,0xfa33ff
 P7Units_ReloadFixedStreams__FA33D1:
-	lda_24	xbc, (0xFD4B97)                     ; FA33D1  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA33D1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33D6  push XBC
 	pushw	3                                    ; FA33D7  push 0x0003
-	lda_24	xwa, (0xFDBC5A)                     ; FA33DA  lda XWA,0xfdbc5a
+	lda	xwa, (0xFDBC5A:24)                     ; FA33DA  lda XWA,0xfdbc5a
 	push	xwa                                   ; FA33DF  push XWA
 	call	0xF9A646                              ; FA33E0  call 0xf9a646
 	inc	8, xsp                                 ; FA33E4  inc 0,XSP
 	inc	2, xsp                                 ; FA33E6  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA33E8  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA33E8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33ED  push XBC
 	pushw	4                                    ; FA33EE  push 0x0004
-	lda_24	xwa, (0xFDBE94)                     ; FA33F1  lda XWA,0xfdbe94
+	lda	xwa, (0xFDBE94:24)                     ; FA33F1  lda XWA,0xfdbe94
 	push	xwa                                   ; FA33F6  push XWA
 	call	0xF9A646                              ; FA33F7  call 0xf9a646
 	inc	8, xsp                                 ; FA33FB  inc 0,XSP
 	inc	2, xsp                                 ; FA33FD  inc 2,XSP
 P7Units_ReloadFixedStreams__FA33FF:
-	lda_24	xbc, (0xFD4B97)                     ; FA33FF  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA33FF  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3404  push XBC
 	pushw	1                                    ; FA3405  push 0x0001
-	lda_24	xwa, (0xFD26C7)                     ; FA3408  lda XWA,0xfd26c7
+	lda	xwa, (0xFD26C7:24)                     ; FA3408  lda XWA,0xfd26c7
 	push	xwa                                   ; FA340D  push XWA
 	call	0xF9A646                              ; FA340E  call 0xf9a646
 	set_dd8	3, PB                              ; FA3412  set 3,(0x1f)
 	inc	8, xsp                                 ; FA3415  inc 0,XSP
 	inc	2, xsp                                 ; FA3417  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3419  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3419  lda XBC,0xfd4b97
 	push	xbc                                   ; FA341E  push XBC
 	pushw	3                                    ; FA341F  push 0x0003
-	lda_24	xwa, (0xFD26EB)                     ; FA3422  lda XWA,0xfd26eb
+	lda	xwa, (0xFD26EB:24)                     ; FA3422  lda XWA,0xfd26eb
 	push	xwa                                   ; FA3427  push XWA
 	call	0xF9A646                              ; FA3428  call 0xf9a646
 	set_dd8	4, PB                              ; FA342C  set 4,(0x1f)
 	inc	8, xsp                                 ; FA342F  inc 0,XSP
 	inc	2, xsp                                 ; FA3431  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3433  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3433  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3438  push XBC
 	pushw	4                                    ; FA3439  push 0x0004
-	lda_24	xwa, (0xFD270F)                     ; FA343C  lda XWA,0xfd270f
+	lda	xwa, (0xFD270F:24)                     ; FA343C  lda XWA,0xfd270f
 	push	xwa                                   ; FA3441  push XWA
 	call	0xF9A646                              ; FA3442  call 0xf9a646
 	set_dd8	1, PB                              ; FA3446  set 1,(0x1f)
 	inc	8, xsp                                 ; FA3449  inc 0,XSP
 	inc	2, xsp                                 ; FA344B  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA344D  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA344D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3452  push XBC
 	pushw	1                                    ; FA3453  push 0x0001
-	lda_24	xwa, (0xFCD243)                     ; FA3456  lda XWA,0xfcd243
+	lda	xwa, (0xFCD243:24)                     ; FA3456  lda XWA,0xfcd243
 	push	xwa                                   ; FA345B  push XWA
 	call	0xF9A646                              ; FA345C  call 0xf9a646
 	inc	8, xsp                                 ; FA3460  inc 0,XSP
 	inc	2, xsp                                 ; FA3462  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3464  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3464  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3469  push XBC
 	pushw	3                                    ; FA346A  push 0x0003
-	lda_24	xwa, (0xFCD42F)                     ; FA346D  lda XWA,0xfcd42f
+	lda	xwa, (0xFCD42F:24)                     ; FA346D  lda XWA,0xfcd42f
 	push	xwa                                   ; FA3472  push XWA
 	call	0xF9A646                              ; FA3473  call 0xf9a646
 	inc	8, xsp                                 ; FA3477  inc 0,XSP
 	inc	2, xsp                                 ; FA3479  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA347B  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA347B  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3480  push XBC
 	pushw	4                                    ; FA3481  push 0x0004
-	lda_24	xwa, (0xFCDA18)                     ; FA3484  lda XWA,0xfcda18
+	lda	xwa, (0xFCDA18:24)                     ; FA3484  lda XWA,0xfcda18
 	push	xwa                                   ; FA3489  push XWA
 	call	0xF9A646                              ; FA348A  call 0xf9a646
 	inc	8, xsp                                 ; FA348E  inc 0,XSP
 	inc	2, xsp                                 ; FA3490  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3492  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3492  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3497  push XBC
 	pushw	1                                    ; FA3498  push 0x0001
-	lda_24	xwa, (0xFD26B8)                     ; FA349B  lda XWA,0xfd26b8
+	lda	xwa, (0xFD26B8:24)                     ; FA349B  lda XWA,0xfd26b8
 	push	xwa                                   ; FA34A0  push XWA
 	call	0xF9A646                              ; FA34A1  call 0xf9a646
 	inc	8, xsp                                 ; FA34A5  inc 0,XSP
 	inc	2, xsp                                 ; FA34A7  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA34A9  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA34A9  lda XBC,0xfd4b97
 	push	xbc                                   ; FA34AE  push XBC
 	pushw	3                                    ; FA34AF  push 0x0003
-	lda_24	xwa, (0xFD26DC)                     ; FA34B2  lda XWA,0xfd26dc
+	lda	xwa, (0xFD26DC:24)                     ; FA34B2  lda XWA,0xfd26dc
 	push	xwa                                   ; FA34B7  push XWA
 	call	0xF9A646                              ; FA34B8  call 0xf9a646
 	inc	8, xsp                                 ; FA34BC  inc 0,XSP
 	inc	2, xsp                                 ; FA34BE  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA34C0  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA34C0  lda XBC,0xfd4b97
 	push	xbc                                   ; FA34C5  push XBC
 	pushw	4                                    ; FA34C6  push 0x0004
-	lda_24	xwa, (0xFD2700)                     ; FA34C9  lda XWA,0xfd2700
+	lda	xwa, (0xFD2700:24)                     ; FA34C9  lda XWA,0xfd2700
 	push	xwa                                   ; FA34CE  push XWA
 	call	0xF9A646                              ; FA34CF  call 0xf9a646
 	inc	8, xsp                                 ; FA34D3  inc 0,XSP
 	inc	2, xsp                                 ; FA34D5  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA34D7  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA34D7  lda XBC,0xfd4b97
 	push	xbc                                   ; FA34DC  push XBC
 	pushw	1                                    ; FA34DD  push 0x0001
-	lda_24	xwa, (0xFD4093)                     ; FA34E0  lda XWA,0xfd4093
+	lda	xwa, (0xFD4093:24)                     ; FA34E0  lda XWA,0xfd4093
 	push	xwa                                   ; FA34E5  push XWA
 	call	0xF9A646                              ; FA34E6  call 0xf9a646
 	inc	8, xsp                                 ; FA34EA  inc 0,XSP
 	inc	2, xsp                                 ; FA34EC  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA34EE  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA34EE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA34F3  push XBC
 	pushw	1                                    ; FA34F4  push 0x0001
-	lda_24	xwa, (0xFD4B4C)                     ; FA34F7  lda XWA,0xfd4b4c
+	lda	xwa, (0xFD4B4C:24)                     ; FA34F7  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA34FC  push XWA
 	call	0xF9A646                              ; FA34FD  call 0xf9a646
 	inc	8, xsp                                 ; FA3501  inc 0,XSP
 	inc	2, xsp                                 ; FA3503  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3505  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3505  lda XBC,0xfd4b85
 	push	xbc                                   ; FA350A  push XBC
 	pushw	1                                    ; FA350B  push 0x0001
-	lda_24	xwa, (0xFD4AFD)                     ; FA350E  lda XWA,0xfd4afd
+	lda	xwa, (0xFD4AFD:24)                     ; FA350E  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3513  push XWA
 	call	0xF9A646                              ; FA3514  call 0xf9a646
 	inc	8, xsp                                 ; FA3518  inc 0,XSP
 	inc	2, xsp                                 ; FA351A  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA351C  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA351C  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3521  push XBC
 	pushw	1                                    ; FA3522  push 0x0001
-	lda_24	xwa, (0xFCD209)                     ; FA3525  lda XWA,0xfcd209
+	lda	xwa, (0xFCD209:24)                     ; FA3525  lda XWA,0xfcd209
 	push	xwa                                   ; FA352A  push XWA
 	call	0xF9A646                              ; FA352B  call 0xf9a646
 	inc	8, xsp                                 ; FA352F  inc 0,XSP
 	inc	2, xsp                                 ; FA3531  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3533  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3533  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3538  push XBC
 	pushw	2                                    ; FA3539  push 0x0002
-	lda_24	xwa, (0xFD4B4C)                     ; FA353C  lda XWA,0xfd4b4c
+	lda	xwa, (0xFD4B4C:24)                     ; FA353C  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3541  push XWA
 	call	0xF9A646                              ; FA3542  call 0xf9a646
 	inc	8, xsp                                 ; FA3546  inc 0,XSP
 	inc	2, xsp                                 ; FA3548  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA354A  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA354A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA354F  push XBC
 	pushw	2                                    ; FA3550  push 0x0002
-	lda_24	xwa, (0xFD4AFD)                     ; FA3553  lda XWA,0xfd4afd
+	lda	xwa, (0xFD4AFD:24)                     ; FA3553  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3558  push XWA
 	call	0xF9A646                              ; FA3559  call 0xf9a646
 	inc	8, xsp                                 ; FA355D  inc 0,XSP
 	inc	2, xsp                                 ; FA355F  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3561  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3561  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3566  push XBC
 	pushw	2                                    ; FA3567  push 0x0002
-	lda_24	xwa, (0xFCD221)                     ; FA356A  lda XWA,0xfcd221
+	lda	xwa, (0xFCD221:24)                     ; FA356A  lda XWA,0xfcd221
 	push	xwa                                   ; FA356F  push XWA
 	call	0xF9A646                              ; FA3570  call 0xf9a646
 	inc	8, xsp                                 ; FA3574  inc 0,XSP
 	inc	2, xsp                                 ; FA3576  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA3578  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3578  lda XBC,0xfd4b97
 	push	xbc                                   ; FA357D  push XBC
 	pushw	3                                    ; FA357E  push 0x0003
-	lda_24	xwa, (0xFD4093)                     ; FA3581  lda XWA,0xfd4093
+	lda	xwa, (0xFD4093:24)                     ; FA3581  lda XWA,0xfd4093
 	push	xwa                                   ; FA3586  push XWA
 	call	0xF9A646                              ; FA3587  call 0xf9a646
 	inc	8, xsp                                 ; FA358B  inc 0,XSP
 	inc	2, xsp                                 ; FA358D  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA358F  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA358F  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3594  push XBC
 	pushw	3                                    ; FA3595  push 0x0003
-	lda_24	xwa, (0xFD4B4C)                     ; FA3598  lda XWA,0xfd4b4c
+	lda	xwa, (0xFD4B4C:24)                     ; FA3598  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA359D  push XWA
 	call	0xF9A646                              ; FA359E  call 0xf9a646
 	inc	8, xsp                                 ; FA35A2  inc 0,XSP
 	inc	2, xsp                                 ; FA35A4  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA35A6  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA35A6  lda XBC,0xfd4b85
 	push	xbc                                   ; FA35AB  push XBC
 	pushw	3                                    ; FA35AC  push 0x0003
-	lda_24	xwa, (0xFD4AFD)                     ; FA35AF  lda XWA,0xfd4afd
+	lda	xwa, (0xFD4AFD:24)                     ; FA35AF  lda XWA,0xfd4afd
 	push	xwa                                   ; FA35B4  push XWA
 	call	0xF9A646                              ; FA35B5  call 0xf9a646
 	inc	8, xsp                                 ; FA35B9  inc 0,XSP
 	inc	2, xsp                                 ; FA35BB  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA35BD  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA35BD  lda XBC,0xfd4b97
 	push	xbc                                   ; FA35C2  push XBC
 	pushw	3                                    ; FA35C3  push 0x0003
-	lda_24	xwa, (0xFCD403)                     ; FA35C6  lda XWA,0xfcd403
+	lda	xwa, (0xFCD403:24)                     ; FA35C6  lda XWA,0xfcd403
 	push	xwa                                   ; FA35CB  push XWA
 	call	0xF9A646                              ; FA35CC  call 0xf9a646
 	inc	8, xsp                                 ; FA35D0  inc 0,XSP
@@ -15444,13 +15444,13 @@ P7Unit_SendPreambleOnce:
 	ld	bc, (xbc)                               ; FA35E6  ld BC,(XBC)
 	cps	bc, 0                                  ; FA35E8  cp BC,0
 	jr nz, P7Unit_SendPreambleOnce__FA3620                  ; FA35EA  jr NZ,0xfa3620
-	lda_24	xbc, (0xFD4B85)                     ; FA35EC  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA35EC  lda XBC,0xfd4b85
 	push	xbc                                   ; FA35F1  push XBC
 	ld	wa, (xiz+8)                             ; FA35F2  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA35F5  extz WA
 	inc	1, wa                                  ; FA35F7  inc 1,WA
 	pushw	wa                                   ; FA35F9  push WA
-	lda_24	xwa, (0xFD2C2B)                     ; FA35FA  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA35FA  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA35FF  push XWA
 	call	0xF9A646                              ; FA3600  call 0xf9a646
 	inc	8, xsp                                 ; FA3604  inc 0,XSP
@@ -15499,30 +15499,30 @@ sub_FA362C__FA363B:
 	ld	(xiz-4), bc                             ; FA3640  ld (XIZ+0xfc),BC
 	jr sub_FA362C__FA3690                      ; FA3643  jr T,0xfa3690
 sub_FA362C__FA3645:
-	lda_24	xbc, (0xFD4B97)                     ; FA3645  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3645  lda XBC,0xfd4b97
 	push	xbc                                   ; FA364A  push XBC
 	pushw	1                                    ; FA364B  push 0x0001
-	lda_24	xwa, (0xFCD1FD)                     ; FA364E  lda XWA,0xfcd1fd
+	lda	xwa, (0xFCD1FD:24)                     ; FA364E  lda XWA,0xfcd1fd
 	push	xwa                                   ; FA3653  push XWA
 	call	0xF9A646                              ; FA3654  call 0xf9a646
 	inc	8, xsp                                 ; FA3658  inc 0,XSP
 	inc	2, xsp                                 ; FA365A  inc 2,XSP
 	jr sub_FA362C__FA369F                      ; FA365C  jr T,0xfa369f
 sub_FA362C__FA365E:
-	lda_24	xbc, (0xFD4B97)                     ; FA365E  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA365E  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3663  push XBC
 	pushw	2                                    ; FA3664  push 0x0002
-	lda_24	xwa, (0xFCD215)                     ; FA3667  lda XWA,0xfcd215
+	lda	xwa, (0xFCD215:24)                     ; FA3667  lda XWA,0xfcd215
 	push	xwa                                   ; FA366C  push XWA
 	call	0xF9A646                              ; FA366D  call 0xf9a646
 	inc	8, xsp                                 ; FA3671  inc 0,XSP
 	inc	2, xsp                                 ; FA3673  inc 2,XSP
 	jr sub_FA362C__FA369F                      ; FA3675  jr T,0xfa369f
 sub_FA362C__FA3677:
-	lda_24	xbc, (0xFD4B97)                     ; FA3677  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3677  lda XBC,0xfd4b97
 	push	xbc                                   ; FA367C  push XBC
 	pushw	3                                    ; FA367D  push 0x0003
-	lda_24	xwa, (0xFCD3F7)                     ; FA3680  lda XWA,0xfcd3f7
+	lda	xwa, (0xFCD3F7:24)                     ; FA3680  lda XWA,0xfcd3f7
 	push	xwa                                   ; FA3685  push XWA
 	call	0xF9A646                              ; FA3686  call 0xf9a646
 	inc	8, xsp                                 ; FA368A  inc 0,XSP
@@ -15544,30 +15544,30 @@ sub_FA362C__FA36A2:
 	ld	(xiz-6), bc                             ; FA36A7  ld (XIZ+0xfa),BC
 	jr sub_FA362C__FA36F7                      ; FA36AA  jr T,0xfa36f7
 sub_FA362C__FA36AC:
-	lda_24	xbc, (0xFD4B97)                     ; FA36AC  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA36AC  lda XBC,0xfd4b97
 	push	xbc                                   ; FA36B1  push XBC
 	pushw	1                                    ; FA36B2  push 0x0001
-	lda_24	xwa, (0xFCD94D)                     ; FA36B5  lda XWA,0xfcd94d
+	lda	xwa, (0xFCD94D:24)                     ; FA36B5  lda XWA,0xfcd94d
 	push	xwa                                   ; FA36BA  push XWA
 	call	0xF9A646                              ; FA36BB  call 0xf9a646
 	inc	8, xsp                                 ; FA36BF  inc 0,XSP
 	inc	2, xsp                                 ; FA36C1  inc 2,XSP
 	jr sub_FA362C__FA3706                      ; FA36C3  jr T,0xfa3706
 sub_FA362C__FA36C5:
-	lda_24	xbc, (0xFD4B97)                     ; FA36C5  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA36C5  lda XBC,0xfd4b97
 	push	xbc                                   ; FA36CA  push XBC
 	pushw	2                                    ; FA36CB  push 0x0002
-	lda_24	xwa, (0xFCD965)                     ; FA36CE  lda XWA,0xfcd965
+	lda	xwa, (0xFCD965:24)                     ; FA36CE  lda XWA,0xfcd965
 	push	xwa                                   ; FA36D3  push XWA
 	call	0xF9A646                              ; FA36D4  call 0xf9a646
 	inc	8, xsp                                 ; FA36D8  inc 0,XSP
 	inc	2, xsp                                 ; FA36DA  inc 2,XSP
 	jr sub_FA362C__FA3706                      ; FA36DC  jr T,0xfa3706
 sub_FA362C__FA36DE:
-	lda_24	xbc, (0xFD4B97)                     ; FA36DE  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA36DE  lda XBC,0xfd4b97
 	push	xbc                                   ; FA36E3  push XBC
 	pushw	3                                    ; FA36E4  push 0x0003
-	lda_24	xwa, (0xFCD3F7)                     ; FA36E7  lda XWA,0xfcd3f7
+	lda	xwa, (0xFCD3F7:24)                     ; FA36E7  lda XWA,0xfcd3f7
 	push	xwa                                   ; FA36EC  push XWA
 	call	0xF9A646                              ; FA36ED  call 0xf9a646
 	inc	8, xsp                                 ; FA36F1  inc 0,XSP
@@ -15621,30 +15621,30 @@ sub_FA3717__FA3726:
 	ld	(xiz-4), bc                             ; FA372B  ld (XIZ+0xfc),BC
 	jr sub_FA3717__FA377B                      ; FA372E  jr T,0xfa377b
 sub_FA3717__FA3730:
-	lda_24	xbc, (0xFD4B97)                     ; FA3730  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3730  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3735  push XBC
 	pushw	1                                    ; FA3736  push 0x0001
-	lda_24	xwa, (0xFCD209)                     ; FA3739  lda XWA,0xfcd209
+	lda	xwa, (0xFCD209:24)                     ; FA3739  lda XWA,0xfcd209
 	push	xwa                                   ; FA373E  push XWA
 	call	0xF9A646                              ; FA373F  call 0xf9a646
 	inc	8, xsp                                 ; FA3743  inc 0,XSP
 	inc	2, xsp                                 ; FA3745  inc 2,XSP
 	jr sub_FA3717__FA378A                      ; FA3747  jr T,0xfa378a
 sub_FA3717__FA3749:
-	lda_24	xbc, (0xFD4B97)                     ; FA3749  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3749  lda XBC,0xfd4b97
 	push	xbc                                   ; FA374E  push XBC
 	pushw	2                                    ; FA374F  push 0x0002
-	lda_24	xwa, (0xFCD221)                     ; FA3752  lda XWA,0xfcd221
+	lda	xwa, (0xFCD221:24)                     ; FA3752  lda XWA,0xfcd221
 	push	xwa                                   ; FA3757  push XWA
 	call	0xF9A646                              ; FA3758  call 0xf9a646
 	inc	8, xsp                                 ; FA375C  inc 0,XSP
 	inc	2, xsp                                 ; FA375E  inc 2,XSP
 	jr sub_FA3717__FA378A                      ; FA3760  jr T,0xfa378a
 sub_FA3717__FA3762:
-	lda_24	xbc, (0xFD4B97)                     ; FA3762  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3762  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3767  push XBC
 	pushw	3                                    ; FA3768  push 0x0003
-	lda_24	xwa, (0xFCD403)                     ; FA376B  lda XWA,0xfcd403
+	lda	xwa, (0xFCD403:24)                     ; FA376B  lda XWA,0xfcd403
 	push	xwa                                   ; FA3770  push XWA
 	call	0xF9A646                              ; FA3771  call 0xf9a646
 	inc	8, xsp                                 ; FA3775  inc 0,XSP
@@ -15666,30 +15666,30 @@ sub_FA3717__FA378D:
 	ld	(xiz-6), bc                             ; FA3792  ld (XIZ+0xfa),BC
 	jr sub_FA3717__FA37E2                      ; FA3795  jr T,0xfa37e2
 sub_FA3717__FA3797:
-	lda_24	xbc, (0xFD4B97)                     ; FA3797  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3797  lda XBC,0xfd4b97
 	push	xbc                                   ; FA379C  push XBC
 	pushw	1                                    ; FA379D  push 0x0001
-	lda_24	xwa, (0xFCD959)                     ; FA37A0  lda XWA,0xfcd959
+	lda	xwa, (0xFCD959:24)                     ; FA37A0  lda XWA,0xfcd959
 	push	xwa                                   ; FA37A5  push XWA
 	call	0xF9A646                              ; FA37A6  call 0xf9a646
 	inc	8, xsp                                 ; FA37AA  inc 0,XSP
 	inc	2, xsp                                 ; FA37AC  inc 2,XSP
 	jr sub_FA3717__FA37F1                      ; FA37AE  jr T,0xfa37f1
 sub_FA3717__FA37B0:
-	lda_24	xbc, (0xFD4B97)                     ; FA37B0  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA37B0  lda XBC,0xfd4b97
 	push	xbc                                   ; FA37B5  push XBC
 	pushw	2                                    ; FA37B6  push 0x0002
-	lda_24	xwa, (0xFCD971)                     ; FA37B9  lda XWA,0xfcd971
+	lda	xwa, (0xFCD971:24)                     ; FA37B9  lda XWA,0xfcd971
 	push	xwa                                   ; FA37BE  push XWA
 	call	0xF9A646                              ; FA37BF  call 0xf9a646
 	inc	8, xsp                                 ; FA37C3  inc 0,XSP
 	inc	2, xsp                                 ; FA37C5  inc 2,XSP
 	jr sub_FA3717__FA37F1                      ; FA37C7  jr T,0xfa37f1
 sub_FA3717__FA37C9:
-	lda_24	xbc, (0xFD4B97)                     ; FA37C9  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA37C9  lda XBC,0xfd4b97
 	push	xbc                                   ; FA37CE  push XBC
 	pushw	3                                    ; FA37CF  push 0x0003
-	lda_24	xwa, (0xFCD403)                     ; FA37D2  lda XWA,0xfcd403
+	lda	xwa, (0xFCD403:24)                     ; FA37D2  lda XWA,0xfcd403
 	push	xwa                                   ; FA37D7  push XWA
 	call	0xF9A646                              ; FA37D8  call 0xf9a646
 	inc	8, xsp                                 ; FA37DC  inc 0,XSP
@@ -15759,26 +15759,26 @@ P7Units_ReloadForGroup__FA3811:
 	pushw	2                                    ; FA381F  push 0x0002
 	calr (0xFA2C5E - 0xFA3825)                 ; FA3822  calr 0xfa2c5e
 	popw	bc                                    ; FA3825  pop BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3826  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3826  lda XBC,0xfd4b85
 	push	xbc                                   ; FA382B  push XBC
 	pushw	1                                    ; FA382C  push 0x0001
-	lda_24	xwa, (0xFD2C2B)                     ; FA382F  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA382F  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3834  push XWA
 	call	0xF9A646                              ; FA3835  call 0xf9a646
 	inc	8, xsp                                 ; FA3839  inc 0,XSP
 	inc	2, xsp                                 ; FA383B  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA383D  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA383D  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3842  push XBC
 	pushw	2                                    ; FA3843  push 0x0002
-	lda_24	xwa, (0xFD2C2B)                     ; FA3846  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA3846  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA384B  push XWA
 	call	0xF9A646                              ; FA384C  call 0xf9a646
 	inc	8, xsp                                 ; FA3850  inc 0,XSP
 	inc	2, xsp                                 ; FA3852  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3854  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3854  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3859  push XBC
 	pushw	3                                    ; FA385A  push 0x0003
-	lda_24	xwa, (0xFD2C2B)                     ; FA385D  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA385D  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3862  push XWA
 	call	0xF9A646                              ; FA3863  call 0xf9a646
 	inc	8, xsp                                 ; FA3867  inc 0,XSP
@@ -15786,36 +15786,36 @@ P7Units_ReloadForGroup__FA3811:
 	pushw	20                                   ; FA386B  push 0x0014
 	calr (0xFA30F6 - 0xFA3871)                 ; FA386E  calr 0xfa30f6
 	popw	bc                                    ; FA3871  pop BC
-	lda_24	xbc, (0xFD4B97)                     ; FA3872  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3872  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3877  push XBC
 	pushw	1                                    ; FA3878  push 0x0001
-	lda_24	xwa, (0xFD26C7)                     ; FA387B  lda XWA,0xfd26c7
+	lda	xwa, (0xFD26C7:24)                     ; FA387B  lda XWA,0xfd26c7
 	push	xwa                                   ; FA3880  push XWA
 	call	0xF9A646                              ; FA3881  call 0xf9a646
 	res_dd8	3, PB                              ; FA3885  res 3,(0x1f)
 	inc	8, xsp                                 ; FA3888  inc 0,XSP
 	inc	2, xsp                                 ; FA388A  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA388C  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA388C  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3891  push XBC
 	pushw	1                                    ; FA3892  push 0x0001
-	lda_24	xwa, (0xFCD2C6)                     ; FA3895  lda XWA,0xfcd2c6
+	lda	xwa, (0xFCD2C6:24)                     ; FA3895  lda XWA,0xfcd2c6
 	push	xwa                                   ; FA389A  push XWA
 	call	0xF9A646                              ; FA389B  call 0xf9a646
 	set_dd8	3, PB                              ; FA389F  set 3,(0x1f)
 	inc	8, xsp                                 ; FA38A2  inc 0,XSP
 	inc	2, xsp                                 ; FA38A4  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA38A6  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA38A6  lda XBC,0xfd4b97
 	push	xbc                                   ; FA38AB  push XBC
 	pushw	1                                    ; FA38AC  push 0x0001
-	lda_24	xwa, (0xFCD243)                     ; FA38AF  lda XWA,0xfcd243
+	lda	xwa, (0xFCD243:24)                     ; FA38AF  lda XWA,0xfcd243
 	push	xwa                                   ; FA38B4  push XWA
 	call	0xF9A646                              ; FA38B5  call 0xf9a646
 	inc	8, xsp                                 ; FA38B9  inc 0,XSP
 	inc	2, xsp                                 ; FA38BB  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA38BD  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA38BD  lda XBC,0xfd4b97
 	push	xbc                                   ; FA38C2  push XBC
 	pushw	1                                    ; FA38C3  push 0x0001
-	lda_24	xwa, (0xFD26B8)                     ; FA38C6  lda XWA,0xfd26b8
+	lda	xwa, (0xFD26B8:24)                     ; FA38C6  lda XWA,0xfd26b8
 	push	xwa                                   ; FA38CB  push XWA
 	call	0xF9A646                              ; FA38CC  call 0xf9a646
 	ldb_da	c, (0x8586)                         ; FA38D0  ld C,(0x008586)
@@ -15849,26 +15849,26 @@ P7Units_ReloadForGroup__FA391F:
 	pushw	2                                    ; FA392D  push 0x0002
 	calr (0xFA2C5E - 0xFA3933)                 ; FA3930  calr 0xfa2c5e
 	popw	bc                                    ; FA3933  pop BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3934  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3934  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3939  push XBC
 	pushw	1                                    ; FA393A  push 0x0001
-	lda_24	xwa, (0xFD2C2B)                     ; FA393D  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA393D  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3942  push XWA
 	call	0xF9A646                              ; FA3943  call 0xf9a646
 	inc	8, xsp                                 ; FA3947  inc 0,XSP
 	inc	2, xsp                                 ; FA3949  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA394B  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA394B  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3950  push XBC
 	pushw	2                                    ; FA3951  push 0x0002
-	lda_24	xwa, (0xFD2C2B)                     ; FA3954  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA3954  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3959  push XWA
 	call	0xF9A646                              ; FA395A  call 0xf9a646
 	inc	8, xsp                                 ; FA395E  inc 0,XSP
 	inc	2, xsp                                 ; FA3960  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3962  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3962  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3967  push XBC
 	pushw	3                                    ; FA3968  push 0x0003
-	lda_24	xwa, (0xFD2C2B)                     ; FA396B  lda XWA,0xfd2c2b
+	lda	xwa, (0xFD2C2B:24)                     ; FA396B  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3970  push XWA
 	call	0xF9A646                              ; FA3971  call 0xf9a646
 	inc	8, xsp                                 ; FA3975  inc 0,XSP
@@ -15876,36 +15876,36 @@ P7Units_ReloadForGroup__FA391F:
 	pushw	20                                   ; FA3979  push 0x0014
 	calr (0xFA30F6 - 0xFA397F)                 ; FA397C  calr 0xfa30f6
 	popw	bc                                    ; FA397F  pop BC
-	lda_24	xbc, (0xFD4B97)                     ; FA3980  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA3980  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3985  push XBC
 	pushw	1                                    ; FA3986  push 0x0001
-	lda_24	xwa, (0xFD26C7)                     ; FA3989  lda XWA,0xfd26c7
+	lda	xwa, (0xFD26C7:24)                     ; FA3989  lda XWA,0xfd26c7
 	push	xwa                                   ; FA398E  push XWA
 	call	0xF9A646                              ; FA398F  call 0xf9a646
 	res_dd8	3, PB                              ; FA3993  res 3,(0x1f)
 	inc	8, xsp                                 ; FA3996  inc 0,XSP
 	inc	2, xsp                                 ; FA3998  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA399A  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA399A  lda XBC,0xfd4b97
 	push	xbc                                   ; FA399F  push XBC
 	pushw	1                                    ; FA39A0  push 0x0001
-	lda_24	xwa, (0xFCD81C)                     ; FA39A3  lda XWA,0xfcd81c
+	lda	xwa, (0xFCD81C:24)                     ; FA39A3  lda XWA,0xfcd81c
 	push	xwa                                   ; FA39A8  push XWA
 	call	0xF9A646                              ; FA39A9  call 0xf9a646
 	set_dd8	3, PB                              ; FA39AD  set 3,(0x1f)
 	inc	8, xsp                                 ; FA39B0  inc 0,XSP
 	inc	2, xsp                                 ; FA39B2  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA39B4  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA39B4  lda XBC,0xfd4b97
 	push	xbc                                   ; FA39B9  push XBC
 	pushw	1                                    ; FA39BA  push 0x0001
-	lda_24	xwa, (0xFCD993)                     ; FA39BD  lda XWA,0xfcd993
+	lda	xwa, (0xFCD993:24)                     ; FA39BD  lda XWA,0xfcd993
 	push	xwa                                   ; FA39C2  push XWA
 	call	0xF9A646                              ; FA39C3  call 0xf9a646
 	inc	8, xsp                                 ; FA39C7  inc 0,XSP
 	inc	2, xsp                                 ; FA39C9  inc 2,XSP
-	lda_24	xbc, (0xFD4B97)                     ; FA39CB  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA39CB  lda XBC,0xfd4b97
 	push	xbc                                   ; FA39D0  push XBC
 	pushw	1                                    ; FA39D1  push 0x0001
-	lda_24	xwa, (0xFD26B8)                     ; FA39D4  lda XWA,0xfd26b8
+	lda	xwa, (0xFD26B8:24)                     ; FA39D4  lda XWA,0xfd26b8
 	push	xwa                                   ; FA39D9  push XWA
 	call	0xF9A646                              ; FA39DA  call 0xf9a646
 	ldb_da	c, (0x8586)                         ; FA39DE  ld C,(0x008586)
@@ -15985,24 +15985,24 @@ sub_FA3A3C:
 	pushw	bc                                   ; FA3A76  push BC
 	calr (0xFA362C - 0xFA3A7A)                 ; FA3A77  calr 0xfa362c
 	pop	xiy                                    ; FA3A7A  pop XIY
-	lda_24	xbc, (0xFD4B85)                     ; FA3A7B  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3A7B  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3A80  push XBC
 	ld	wa, (xiz+8)                             ; FA3A81  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3A84  extz WA
 	inc	1, wa                                  ; FA3A86  inc 1,WA
 	pushw	wa                                   ; FA3A88  push WA
-	lda_24	xwa, (0xFD29F9)                     ; FA3A89  lda XWA,0xfd29f9
+	lda	xwa, (0xFD29F9:24)                     ; FA3A89  lda XWA,0xfd29f9
 	push	xwa                                   ; FA3A8E  push XWA
 	call	0xF9A646                              ; FA3A8F  call 0xf9a646
 	inc	8, xsp                                 ; FA3A93  inc 0,XSP
 	inc	2, xsp                                 ; FA3A95  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3A97  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3A97  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3A9C  push XBC
 	ld	wa, (xiz+8)                             ; FA3A9D  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3AA0  extz WA
 	inc	1, wa                                  ; FA3AA2  inc 1,WA
 	pushw	wa                                   ; FA3AA4  push WA
-	lda_24	xwa, (0xFD292B)                     ; FA3AA5  lda XWA,0xfd292b
+	lda	xwa, (0xFD292B:24)                     ; FA3AA5  lda XWA,0xfd292b
 	push	xwa                                   ; FA3AAA  push XWA
 	call	0xF9A646                              ; FA3AAB  call 0xf9a646
 	inc	8, xsp                                 ; FA3AAF  inc 0,XSP
@@ -16077,7 +16077,7 @@ sub_FA3A3C:
 	pushw	bc                                   ; FA3B85  push BC
 	calr (0xFA362C - 0xFA3B89)                 ; FA3B86  calr 0xfa362c
 	pop	xiy                                    ; FA3B89  pop XIY
-	lda_24	xbc, (0xFD4B85)                     ; FA3B8A  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3B8A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3B8F  push XBC
 	ld	wa, (xiz+8)                             ; FA3B90  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3B93  extz WA
@@ -16088,7 +16088,7 @@ sub_FA3A3C:
 	call	0xF9A646                              ; FA3B9C  call 0xf9a646
 	inc	8, xsp                                 ; FA3BA0  inc 0,XSP
 	inc	2, xsp                                 ; FA3BA2  inc 2,XSP
-	lda_24	xbc, (0xFD4B85)                     ; FA3BA4  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3BA4  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3BA9  push XBC
 	ld	wa, (xiz+8)                             ; FA3BAA  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3BAD  extz WA
@@ -16113,10 +16113,10 @@ sub_FA3A3C:
 	extz	xbc                                   ; FA3BE0  extz XBC
 	ld	xix, xbc                                ; FA3BE2  ld XIX,XBC
 	inc	1, xix                                 ; FA3BE4  inc 1,XIX
-	lda_24	xbc, (0x85BC)                       ; FA3BE6  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA3BE6  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA3BEB  add XBC,XIX
 	ld	(xiz-18), xbc                           ; FA3BED  ld (XIZ+0xee),XBC
-	lda_24	xwa, (0x856E)                       ; FA3BF0  lda XWA,0x00856e
+	lda	xwa, (0x856E:24)                       ; FA3BF0  lda XWA,0x00856e
 	add	xwa, xix                               ; FA3BF5  add XWA,XIX
 	ld	(xiz-22), xwa                           ; FA3BF7  ld (XIZ+0xea),XWA
 	popw	bc                                    ; FA3BFA  pop BC
@@ -16178,10 +16178,10 @@ sub_FA3A3C__FA3C5D:
 	add	xbc, xwa                               ; FA3C6D  add XBC,XWA
 	ld	xix, xbc                                ; FA3C6F  ld XIX,XBC
 	inc	1, xix                                 ; FA3C71  inc 1,XIX
-	lda_24	xbc, (0x856E)                       ; FA3C73  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA3C73  lda XBC,0x00856e
 	add	xbc, xix                               ; FA3C78  add XBC,XIX
 	ld	a, (xbc)                                ; FA3C7A  ld A,(XBC)
-	lda_24	xbc, (0x85BC)                       ; FA3C7C  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA3C7C  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA3C81  add XBC,XIX
 	ld	(xbc), a                                ; FA3C83  ld (XBC),A
 	jr sub_FA3A3C__FA3C58                      ; FA3C85  jr T,0xfa3c58
@@ -16387,7 +16387,7 @@ P7Unit_EmitChangedParams__FA3DF5:
 	extz	bc                                    ; FA3DF8  extz BC
 	inc	1, bc                                  ; FA3DFA  inc 1,BC
 	pushw	bc                                   ; FA3DFC  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3DFD  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3DFD  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3E02  push XBC
 	ld	xwa, (xiz-30)                           ; FA3E03  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA3E06  push XWA
@@ -16437,7 +16437,7 @@ P7Unit_EmitChangedParams__FA3E1C:
 	extz	bc                                    ; FA3E72  extz BC
 	inc	1, bc                                  ; FA3E74  inc 1,BC
 	pushw	bc                                   ; FA3E76  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3E77  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3E77  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3E7C  push XBC
 	ld	xwa, (xiz-30)                           ; FA3E7D  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA3E80  push XWA
@@ -16452,7 +16452,7 @@ P7Unit_EmitChangedParams__FA3E1C:
 	inc	1, bc                                  ; FA3E95  inc 1,BC
 	add	xsp, 20                                ; FA3E97  add XSP,0x00000014
 	pushw	bc                                   ; FA3E9D  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3E9E  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3E9E  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3EA3  push XBC
 	ld	xwa, (xiz-34)                           ; FA3EA4  ld XWA,(XIZ+0xde)
 	push	xwa                                   ; FA3EA7  push XWA
@@ -16467,7 +16467,7 @@ P7Unit_EmitChangedParams__FA3E1C:
 	inc	1, bc                                  ; FA3EBC  inc 1,BC
 	add	xsp, 20                                ; FA3EBE  add XSP,0x00000014
 	pushw	bc                                   ; FA3EC4  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3EC5  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3EC5  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3ECA  push XBC
 	ld	xwa, (xiz-38)                           ; FA3ECB  ld XWA,(XIZ+0xda)
 	push	xwa                                   ; FA3ECE  push XWA
@@ -16492,7 +16492,7 @@ P7Unit_EmitChangedParams__FA3EE7:
 	extz	bc                                    ; FA3EFC  extz BC
 	inc	1, bc                                  ; FA3EFE  inc 1,BC
 	pushw	bc                                   ; FA3F00  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3F01  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3F01  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3F06  push XBC
 	ld	xwa, (xiz-34)                           ; FA3F07  ld XWA,(XIZ+0xde)
 	push	xwa                                   ; FA3F0A  push XWA
@@ -16516,7 +16516,7 @@ P7Unit_EmitChangedParams__FA3F20:
 	extz	bc                                    ; FA3F35  extz BC
 	inc	1, bc                                  ; FA3F37  inc 1,BC
 	pushw	bc                                   ; FA3F39  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA3F3A  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA3F3A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3F3F  push XBC
 	ld	xwa, (xiz-38)                           ; FA3F40  ld XWA,(XIZ+0xda)
 	push	xwa                                   ; FA3F43  push XWA
@@ -16614,7 +16614,7 @@ P7Unit_EmitChangedParams__FA4029:
 	extz	bc                                    ; FA402C  extz BC
 	inc	1, bc                                  ; FA402E  inc 1,BC
 	pushw	bc                                   ; FA4030  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA4031  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA4031  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4036  push XBC
 	ld	xwa, (xiz-30)                           ; FA4037  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA403A  push XWA
@@ -16711,7 +16711,7 @@ P7Unit_EmitChangedParams__FA411B:
 	extz	bc                                    ; FA411E  extz BC
 	inc	1, bc                                  ; FA4120  inc 1,BC
 	pushw	bc                                   ; FA4122  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA4123  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA4123  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4128  push XBC
 	ld	xwa, (xiz-30)                           ; FA4129  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA412C  push XWA
@@ -16779,7 +16779,7 @@ P7Unit_EmitChangedParams__FA41C3:
 	extz	bc                                    ; FA41C6  extz BC
 	inc	1, bc                                  ; FA41C8  inc 1,BC
 	pushw	bc                                   ; FA41CA  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA41CB  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA41CB  lda XBC,0xfd4b85
 	push	xbc                                   ; FA41D0  push XBC
 	ld	xwa, (xiz-30)                           ; FA41D1  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA41D4  push XWA
@@ -16835,7 +16835,7 @@ P7Unit_EmitChangedParams__FA4251:
 	extz	bc                                    ; FA4254  extz BC
 	inc	1, bc                                  ; FA4256  inc 1,BC
 	pushw	bc                                   ; FA4258  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA4259  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA4259  lda XBC,0xfd4b85
 	push	xbc                                   ; FA425E  push XBC
 	ld	xwa, (xiz-30)                           ; FA425F  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA4262  push XWA
@@ -16893,7 +16893,7 @@ P7Unit_EmitChangedParams__FA42E2:
 	extz	bc                                    ; FA42E5  extz BC
 	inc	1, bc                                  ; FA42E7  inc 1,BC
 	pushw	bc                                   ; FA42E9  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA42EA  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA42EA  lda XBC,0xfd4b85
 	push	xbc                                   ; FA42EF  push XBC
 	ld	xwa, (xiz-30)                           ; FA42F0  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA42F3  push XWA
@@ -16930,10 +16930,10 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA4348  extz XBC
 	ld	xix, xbc                                ; FA434A  ld XIX,XBC
 	add	xix, 15                                ; FA434C  add XIX,0x0000000f
-	lda_24	xbc, (0x85BC)                       ; FA4352  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4352  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4357  add XBC,XIX
 	ld	h, (xbc)                                ; FA4359  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA435B  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA435B  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4360  add XBC,XIX
 	ld	a, (xbc)                                ; FA4362  ld A,(XBC)
 	cp	a, h                                    ; FA4364  cp A,H
@@ -16943,11 +16943,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA436E  extz XBC
 	ld	xix, xbc                                ; FA4370  ld XIX,XBC
 	inc	5, xix                                 ; FA4372  inc 5,XIX
-	lda_24	xbc, (0x856E)                       ; FA4374  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA4374  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4379  add XBC,XIX
 	ld	a, (xbc)                                ; FA437B  ld A,(XBC)
 	xor	a, 0xFF                                ; FA437D  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA4380  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4380  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4385  add XBC,XIX
 	ld	(xbc), a                                ; FA4387  ld (XBC),A
 	ldb	c, 26                                  ; FA4389  ld C,0x1a
@@ -16955,11 +16955,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA438E  extz XBC
 	ld	xix, xbc                                ; FA4390  ld XIX,XBC
 	inc	6, xix                                 ; FA4392  inc 6,XIX
-	lda_24	xbc, (0x856E)                       ; FA4394  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA4394  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4399  add XBC,XIX
 	ld	a, (xbc)                                ; FA439B  ld A,(XBC)
 	xor	a, 0xFF                                ; FA439D  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA43A0  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA43A0  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA43A5  add XBC,XIX
 	ld	(xbc), a                                ; FA43A7  ld (XBC),A
 	ldb	c, 26                                  ; FA43A9  ld C,0x1a
@@ -16967,11 +16967,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA43AE  extz XBC
 	ld	xix, xbc                                ; FA43B0  ld XIX,XBC
 	inc	7, xix                                 ; FA43B2  inc 7,XIX
-	lda_24	xbc, (0x856E)                       ; FA43B4  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA43B4  lda XBC,0x00856e
 	add	xbc, xix                               ; FA43B9  add XBC,XIX
 	ld	a, (xbc)                                ; FA43BB  ld A,(XBC)
 	xor	a, 0xFF                                ; FA43BD  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA43C0  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA43C0  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA43C5  add XBC,XIX
 	ld	(xbc), a                                ; FA43C7  ld (XBC),A
 	ldb	c, 26                                  ; FA43C9  ld C,0x1a
@@ -16979,11 +16979,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA43CE  extz XBC
 	ld	xix, xbc                                ; FA43D0  ld XIX,XBC
 	inc	8, xix                                 ; FA43D2  inc 0,XIX
-	lda_24	xbc, (0x856E)                       ; FA43D4  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA43D4  lda XBC,0x00856e
 	add	xbc, xix                               ; FA43D9  add XBC,XIX
 	ld	a, (xbc)                                ; FA43DB  ld A,(XBC)
 	xor	a, 0xFF                                ; FA43DD  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA43E0  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA43E0  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA43E5  add XBC,XIX
 	ld	(xbc), a                                ; FA43E7  ld (XBC),A
 	ldb	c, 26                                  ; FA43E9  ld C,0x1a
@@ -16991,11 +16991,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA43EE  extz XBC
 	ld	xix, xbc                                ; FA43F0  ld XIX,XBC
 	add	xix, 10                                ; FA43F2  add XIX,0x0000000a
-	lda_24	xbc, (0x856E)                       ; FA43F8  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA43F8  lda XBC,0x00856e
 	add	xbc, xix                               ; FA43FD  add XBC,XIX
 	ld	a, (xbc)                                ; FA43FF  ld A,(XBC)
 	xor	a, 0xFF                                ; FA4401  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA4404  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4404  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4409  add XBC,XIX
 	ld	(xbc), a                                ; FA440B  ld (XBC),A
 	ldb	c, 26                                  ; FA440D  ld C,0x1a
@@ -17003,11 +17003,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA4412  extz XBC
 	ld	xix, xbc                                ; FA4414  ld XIX,XBC
 	add	xix, 11                                ; FA4416  add XIX,0x0000000b
-	lda_24	xbc, (0x856E)                       ; FA441C  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA441C  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4421  add XBC,XIX
 	ld	a, (xbc)                                ; FA4423  ld A,(XBC)
 	xor	a, 0xFF                                ; FA4425  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA4428  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4428  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA442D  add XBC,XIX
 	ld	(xbc), a                                ; FA442F  ld (XBC),A
 	ldb	c, 26                                  ; FA4431  ld C,0x1a
@@ -17015,11 +17015,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA4436  extz XBC
 	ld	xix, xbc                                ; FA4438  ld XIX,XBC
 	add	xix, 12                                ; FA443A  add XIX,0x0000000c
-	lda_24	xbc, (0x856E)                       ; FA4440  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA4440  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4445  add XBC,XIX
 	ld	a, (xbc)                                ; FA4447  ld A,(XBC)
 	xor	a, 0xFF                                ; FA4449  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA444C  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA444C  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4451  add XBC,XIX
 	ld	(xbc), a                                ; FA4453  ld (XBC),A
 	ldb	c, 26                                  ; FA4455  ld C,0x1a
@@ -17027,11 +17027,11 @@ P7Unit_EmitChangedParams__FA432D:
 	extz	xbc                                   ; FA445A  extz XBC
 	ld	xix, xbc                                ; FA445C  ld XIX,XBC
 	add	xix, 13                                ; FA445E  add XIX,0x0000000d
-	lda_24	xbc, (0x856E)                       ; FA4464  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA4464  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4469  add XBC,XIX
 	ld	a, (xbc)                                ; FA446B  ld A,(XBC)
 	xor	a, 0xFF                                ; FA446D  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA4470  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4470  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4475  add XBC,XIX
 	ld	(xbc), a                                ; FA4477  ld (XBC),A
 P7Unit_EmitChangedParams__FA4479:
@@ -17173,7 +17173,7 @@ P7Unit_EmitChangedParams__FA45D6:
 	extz	bc                                    ; FA45D9  extz BC
 	inc	1, bc                                  ; FA45DB  inc 1,BC
 	pushw	bc                                   ; FA45DD  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA45DE  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA45DE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA45E3  push XBC
 	ld	xwa, (xiz-30)                           ; FA45E4  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA45E7  push XWA
@@ -17375,7 +17375,7 @@ P7Unit_EmitChangedParams__FA47BF:
 	extz	bc                                    ; FA47C2  extz BC
 	inc	1, bc                                  ; FA47C4  inc 1,BC
 	pushw	bc                                   ; FA47C6  push BC
-	lda_24	xbc, (0xFD4B85)                     ; FA47C7  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA47C7  lda XBC,0xfd4b85
 	push	xbc                                   ; FA47CC  push XBC
 	ld	xwa, (xiz-30)                           ; FA47CD  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA47D0  push XWA
@@ -17444,18 +17444,18 @@ P7Unit_SelectStreamsForRecord:
 	ld	(xiz-2), bc                             ; FA4822  ld (XIZ+0xfe),BC
 	jrl P7Unit_SelectStreamsForRecord__FA48FA                     ; FA4825  jrl T,0xfa48fa
 P7Unit_SelectStreamsForRecord__FA4828:
-	lda_24	xbc, (0xFD28C7)                     ; FA4828  lda XBC,0xfd28c7
+	lda	xbc, (0xFD28C7:24)                     ; FA4828  lda XBC,0xfd28c7
 	stl_da	(0x8622), xbc                       ; FA482D  ld (0x008622),XBC
-	lda_24	xwa, (0xFD4E13)                     ; FA4832  lda XWA,0xfd4e13
+	lda	xwa, (0xFD4E13:24)                     ; FA4832  lda XWA,0xfd4e13
 	stl_da	(0x8626), xwa                       ; FA4837  ld (0x008626),XWA
-	lda_24	xiy, (0xFD3B60)                     ; FA483C  lda XIY,0xfd3b60
+	lda	xiy, (0xFD3B60:24)                     ; FA483C  lda XIY,0xfd3b60
 	stl_da	(0x862A), xiy                       ; FA4841  ld (0x00862a),XIY
 	stiw_da	(0xF365), 99                       ; FA4846  ld (0x00f365),0x0063
 	stiw_da	(0xF367), 99                       ; FA484D  ld (0x00f367),0x0063
 	stiw_da	(0xF369), 99                       ; FA4854  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA485B  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA485E:
-	lda_24	xbc, (0xFD28C7)                     ; FA485E  lda XBC,0xfd28c7
+	lda	xbc, (0xFD28C7:24)                     ; FA485E  lda XBC,0xfd28c7
 	stl_da	(0x8622), xbc                       ; FA4863  ld (0x008622),XBC
 	stl_da	(0x8626), xbc                       ; FA4868  ld (0x008626),XBC
 	ldl_da	xwa, (0x8622)                       ; FA486D  ld XWA,(0x008622)
@@ -17465,22 +17465,22 @@ P7Unit_SelectStreamsForRecord__FA485E:
 	stiw_da	(0xF369), 99                       ; FA4885  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA488C  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA488F:
-	lda_24	xbc, (0xFD06FA)                     ; FA488F  lda XBC,0xfd06fa
+	lda	xbc, (0xFD06FA:24)                     ; FA488F  lda XBC,0xfd06fa
 	stl_da	(0x8622), xbc                       ; FA4894  ld (0x008622),XBC
-	lda_24	xwa, (0xFD06FA)                     ; FA4899  lda XWA,0xfd06fa
+	lda	xwa, (0xFD06FA:24)                     ; FA4899  lda XWA,0xfd06fa
 	stl_da	(0x8626), xwa                       ; FA489E  ld (0x008626),XWA
-	lda_24	xiy, (0xFD06FA)                     ; FA48A3  lda XIY,0xfd06fa
+	lda	xiy, (0xFD06FA:24)                     ; FA48A3  lda XIY,0xfd06fa
 	stl_da	(0x862A), xiy                       ; FA48A8  ld (0x00862a),XIY
 	stiw_da	(0xF365), 99                       ; FA48AD  ld (0x00f365),0x0063
 	stiw_da	(0xF367), 99                       ; FA48B4  ld (0x00f367),0x0063
 	stiw_da	(0xF369), 99                       ; FA48BB  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA48C2  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA48C5:
-	lda_24	xbc, (0xFDA4E7)                     ; FA48C5  lda XBC,0xfda4e7
+	lda	xbc, (0xFDA4E7:24)                     ; FA48C5  lda XBC,0xfda4e7
 	stl_da	(0x8622), xbc                       ; FA48CA  ld (0x008622),XBC
-	lda_24	xwa, (0xFDA5C1)                     ; FA48CF  lda XWA,0xfda5c1
+	lda	xwa, (0xFDA5C1:24)                     ; FA48CF  lda XWA,0xfda5c1
 	stl_da	(0x8626), xwa                       ; FA48D4  ld (0x008626),XWA
-	lda_24	xiy, (0xFDA554)                     ; FA48D9  lda XIY,0xfda554
+	lda	xiy, (0xFDA554:24)                     ; FA48D9  lda XIY,0xfda554
 	stl_da	(0x862A), xiy                       ; FA48DE  ld (0x00862a),XIY
 	stiw_da	(0xF365), 0x6C                     ; FA48E3  ld (0x00f365),0x006c
 	stiw_da	(0xF367), 0x6C                     ; FA48EA  ld (0x00f367),0x006c
@@ -17601,11 +17601,11 @@ P7Unit_FlushDirtyParams:
 	add	xwa, xiy                               ; FA49AC  add XWA,XIY
 	ld	xix, xwa                                ; FA49AE  ld XIX,XWA
 	inc	1, xix                                 ; FA49B0  inc 1,XIX
-	lda_24	xwa, (0x856E)                       ; FA49B2  lda XWA,0x00856e
+	lda	xwa, (0x856E:24)                       ; FA49B2  lda XWA,0x00856e
 	add	xwa, xix                               ; FA49B7  add XWA,XIX
 	ld	c, (xwa)                                ; FA49B9  ld C,(XWA)
 	xor	c, 0xFF                                ; FA49BB  xor C,0xff
-	lda_24	xwa, (0x85BC)                       ; FA49BE  lda XWA,0x0085bc
+	lda	xwa, (0x85BC:24)                       ; FA49BE  lda XWA,0x0085bc
 	add	xwa, xix                               ; FA49C3  add XWA,XIX
 	ld	(xwa), c                                ; FA49C5  ld (XWA),C
 	push	0                                     ; FA49C7  push 0x00
@@ -17621,10 +17621,10 @@ P7Unit_FlushDirtyParams:
 	add	xbc, xwa                               ; FA49DF  add XBC,XWA
 	ld	xix, xbc                                ; FA49E1  ld XIX,XBC
 	inc	1, xix                                 ; FA49E3  inc 1,XIX
-	lda_24	xbc, (0x856E)                       ; FA49E5  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA49E5  lda XBC,0x00856e
 	add	xbc, xix                               ; FA49EA  add XBC,XIX
 	ld	a, (xbc)                                ; FA49EC  ld A,(XBC)
-	lda_24	xbc, (0x85BC)                       ; FA49EE  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA49EE  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA49F3  add XBC,XIX
 	ld	(xbc), a                                ; FA49F5  ld (XBC),A
 	ld	bc, (xiz+8)                             ; FA49F7  ld BC,(XIZ+0x08)
@@ -17769,28 +17769,28 @@ sub_FA4A0D__FA4B37:
 	popw	bc                                    ; FA4B57  pop BC
 sub_FA4A0D__FA4B58:
 	pushw	3                                    ; FA4B58  push 0x0003
-	lda_24	xbc, (0xFD4B97)                     ; FA4B5B  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4B5B  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4B60  push XBC
 	ld	wa, (xiz-4)                             ; FA4B61  ld WA,(XIZ+0xfc)
 	extz	xwa                                   ; FA4B64  extz XWA
 	push	xwa                                   ; FA4B66  push XWA
 	pushw	0                                    ; FA4B67  push 0x0000
-	lda_24	xwa, (0xFCD199)                     ; FA4B6A  lda XWA,0xfcd199
+	lda	xwa, (0xFCD199:24)                     ; FA4B6A  lda XWA,0xfcd199
 	push	xwa                                   ; FA4B6F  push XWA
-	lda_24	xiy, (0xFCD188)                     ; FA4B70  lda XIY,0xfcd188
+	lda	xiy, (0xFCD188:24)                     ; FA4B70  lda XIY,0xfcd188
 	push	xiy                                   ; FA4B75  push XIY
 	call	0xF9ADB5                              ; FA4B76  call 0xf9adb5
 	add	xsp, 20                                ; FA4B7A  add XSP,0x00000014
 	pushw	3                                    ; FA4B80  push 0x0003
-	lda_24	xbc, (0xFD4B97)                     ; FA4B83  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4B83  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4B88  push XBC
 	ld	wa, (xiz-2)                             ; FA4B89  ld WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA4B8C  extz XWA
 	push	xwa                                   ; FA4B8E  push XWA
 	pushw	1                                    ; FA4B8F  push 0x0001
-	lda_24	xwa, (0xFCD199)                     ; FA4B92  lda XWA,0xfcd199
+	lda	xwa, (0xFCD199:24)                     ; FA4B92  lda XWA,0xfcd199
 	push	xwa                                   ; FA4B97  push XWA
-	lda_24	xiy, (0xFCD188)                     ; FA4B98  lda XIY,0xfcd188
+	lda	xiy, (0xFCD188:24)                     ; FA4B98  lda XIY,0xfcd188
 	push	xiy                                   ; FA4B9D  push XIY
 	call	0xF9ADB5                              ; FA4B9E  call 0xf9adb5
 	add	xsp, 20                                ; FA4BA2  add XSP,0x00000014
@@ -17824,28 +17824,28 @@ sub_FA4A0D__FA4BCD:
 	popw	bc                                    ; FA4BED  pop BC
 sub_FA4A0D__FA4BEE:
 	pushw	3                                    ; FA4BEE  push 0x0003
-	lda_24	xbc, (0xFD4B97)                     ; FA4BF1  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4BF1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4BF6  push XBC
 	ld	wa, (xiz-4)                             ; FA4BF7  ld WA,(XIZ+0xfc)
 	extz	xwa                                   ; FA4BFA  extz XWA
 	push	xwa                                   ; FA4BFC  push XWA
 	pushw	0                                    ; FA4BFD  push 0x0000
-	lda_24	xwa, (0xFCD1C0)                     ; FA4C00  lda XWA,0xfcd1c0
+	lda	xwa, (0xFCD1C0:24)                     ; FA4C00  lda XWA,0xfcd1c0
 	push	xwa                                   ; FA4C05  push XWA
-	lda_24	xiy, (0xFCD1AF)                     ; FA4C06  lda XIY,0xfcd1af
+	lda	xiy, (0xFCD1AF:24)                     ; FA4C06  lda XIY,0xfcd1af
 	push	xiy                                   ; FA4C0B  push XIY
 	call	0xF9ADB5                              ; FA4C0C  call 0xf9adb5
 	add	xsp, 20                                ; FA4C10  add XSP,0x00000014
 	pushw	3                                    ; FA4C16  push 0x0003
-	lda_24	xbc, (0xFD4B97)                     ; FA4C19  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4C19  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4C1E  push XBC
 	ld	wa, (xiz-2)                             ; FA4C1F  ld WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA4C22  extz XWA
 	push	xwa                                   ; FA4C24  push XWA
 	pushw	1                                    ; FA4C25  push 0x0001
-	lda_24	xwa, (0xFCD1C0)                     ; FA4C28  lda XWA,0xfcd1c0
+	lda	xwa, (0xFCD1C0:24)                     ; FA4C28  lda XWA,0xfcd1c0
 	push	xwa                                   ; FA4C2D  push XWA
-	lda_24	xiy, (0xFCD1AF)                     ; FA4C2E  lda XIY,0xfcd1af
+	lda	xiy, (0xFCD1AF:24)                     ; FA4C2E  lda XIY,0xfcd1af
 	push	xiy                                   ; FA4C33  push XIY
 	call	0xF9ADB5                              ; FA4C34  call 0xf9adb5
 	add	xsp, 20                                ; FA4C38  add XSP,0x00000014
@@ -17891,15 +17891,15 @@ sub_FA4C5E:
 	cp	bc, hl                                  ; FA4C69  cp BC,HL
 	jr z, sub_FA4C5E__FA4C97                   ; FA4C6B  jr Z,0xfa4c97
 	pushw	3                                    ; FA4C6D  push 0x0003
-	lda_24	xbc, (0xFD4B85)                     ; FA4C70  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA4C70  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4C75  push XBC
 	ldw_da	wa, (0x860A)                        ; FA4C76  ld WA,(0x00860a)
 	extz	xwa                                   ; FA4C7B  extz XWA
 	push	xwa                                   ; FA4C7D  push XWA
 	pushw	0                                    ; FA4C7E  push 0x0000
-	lda_24	xwa, (0xFCD1E7)                     ; FA4C81  lda XWA,0xfcd1e7
+	lda	xwa, (0xFCD1E7:24)                     ; FA4C81  lda XWA,0xfcd1e7
 	push	xwa                                   ; FA4C86  push XWA
-	lda_24	xiy, (0xFCD1D6)                     ; FA4C87  lda XIY,0xfcd1d6
+	lda	xiy, (0xFCD1D6:24)                     ; FA4C87  lda XIY,0xfcd1d6
 	push	xiy                                   ; FA4C8C  push XIY
 	call	0xF9ADB5                              ; FA4C8D  call 0xf9adb5
 	add	xsp, 20                                ; FA4C91  add XSP,0x00000014
@@ -17911,15 +17911,15 @@ sub_FA4C5E__FA4C97:
 	cp	bc, hl                                  ; FA4CAB  cp BC,HL
 	jr z, sub_FA4C5E__FA4CD9                   ; FA4CAD  jr Z,0xfa4cd9
 	pushw	3                                    ; FA4CAF  push 0x0003
-	lda_24	xbc, (0xFD4B85)                     ; FA4CB2  lda XBC,0xfd4b85
+	lda	xbc, (0xFD4B85:24)                     ; FA4CB2  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4CB7  push XBC
 	ldw_da	wa, (0x860C)                        ; FA4CB8  ld WA,(0x00860c)
 	extz	xwa                                   ; FA4CBD  extz XWA
 	push	xwa                                   ; FA4CBF  push XWA
 	pushw	1                                    ; FA4CC0  push 0x0001
-	lda_24	xwa, (0xFCD1E7)                     ; FA4CC3  lda XWA,0xfcd1e7
+	lda	xwa, (0xFCD1E7:24)                     ; FA4CC3  lda XWA,0xfcd1e7
 	push	xwa                                   ; FA4CC8  push XWA
-	lda_24	xiy, (0xFCD1D6)                     ; FA4CC9  lda XIY,0xfcd1d6
+	lda	xiy, (0xFCD1D6:24)                     ; FA4CC9  lda XIY,0xfcd1d6
 	push	xiy                                   ; FA4CCE  push XIY
 	call	0xF9ADB5                              ; FA4CCF  call 0xf9adb5
 	add	xsp, 20                                ; FA4CD3  add XSP,0x00000014
@@ -17980,7 +17980,7 @@ sub_FA4CE5__FA4D2F:
 	jrl sub_FA4CE5__FA4E06                     ; FA4D37  jrl T,0xfa4e06
 sub_FA4CE5__FA4D3A:
 	pushw	3                                    ; FA4D3A  push 0x0003
-	lda_24	xbc, (0xFD4B97)                     ; FA4D3D  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4D3D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4D42  push XBC
 	ldb	a, 26                                  ; FA4D43  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA4D45  mul WA,(XIZ+0x08)
@@ -17993,9 +17993,9 @@ sub_FA4CE5__FA4D3A:
 	extz	xiy                                   ; FA4D5D  extz XIY
 	push	xiy                                   ; FA4D5F  push XIY
 	pushw	0                                    ; FA4D60  push 0x0000
-	lda_24	xwa, (0xFCD149)                     ; FA4D63  lda XWA,0xfcd149
+	lda	xwa, (0xFCD149:24)                     ; FA4D63  lda XWA,0xfcd149
 	push	xwa                                   ; FA4D68  push XWA
-	lda_24	xiy, (0xFCD40F)                     ; FA4D69  lda XIY,0xfcd40f
+	lda	xiy, (0xFCD40F:24)                     ; FA4D69  lda XIY,0xfcd40f
 	push	xiy                                   ; FA4D6E  push XIY
 	call	0xF9ADB5                              ; FA4D6F  call 0xf9adb5
 	add	xsp, 20                                ; FA4D73  add XSP,0x00000014
@@ -18004,7 +18004,7 @@ sub_FA4CE5__FA4D7C:
 	cpib_da 0x00F35D, 0x00                     ; FA4D7C  cp (0x00f35d),0x00
 	jr nz, sub_FA4CE5__FA4DC5                  ; FA4D82  jr NZ,0xfa4dc5
 	pushw	1                                    ; FA4D84  push 0x0001
-	lda_24	xbc, (0xFD4B97)                     ; FA4D87  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4D87  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4D8C  push XBC
 	ldb	a, 26                                  ; FA4D8D  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA4D8F  mul WA,(XIZ+0x08)
@@ -18017,16 +18017,16 @@ sub_FA4CE5__FA4D7C:
 	extz	xiy                                   ; FA4DA7  extz XIY
 	push	xiy                                   ; FA4DA9  push XIY
 	pushw	0                                    ; FA4DAA  push 0x0000
-	lda_24	xwa, (0xFCD15E)                     ; FA4DAD  lda XWA,0xfcd15e
+	lda	xwa, (0xFCD15E:24)                     ; FA4DAD  lda XWA,0xfcd15e
 	push	xwa                                   ; FA4DB2  push XWA
-	lda_24	xiy, (0xFCD22D)                     ; FA4DB3  lda XIY,0xfcd22d
+	lda	xiy, (0xFCD22D:24)                     ; FA4DB3  lda XIY,0xfcd22d
 	push	xiy                                   ; FA4DB8  push XIY
 	call	0xF9ADB5                              ; FA4DB9  call 0xf9adb5
 	add	xsp, 20                                ; FA4DBD  add XSP,0x00000014
 	jr sub_FA4CE5__FA4E04                      ; FA4DC3  jr T,0xfa4e04
 sub_FA4CE5__FA4DC5:
 	pushw	1                                    ; FA4DC5  push 0x0001
-	lda_24	xbc, (0xFD4B97)                     ; FA4DC8  lda XBC,0xfd4b97
+	lda	xbc, (0xFD4B97:24)                     ; FA4DC8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4DCD  push XBC
 	ldb	a, 26                                  ; FA4DCE  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA4DD0  mul WA,(XIZ+0x08)
@@ -18039,9 +18039,9 @@ sub_FA4CE5__FA4DC5:
 	extz	xiy                                   ; FA4DE8  extz XIY
 	push	xiy                                   ; FA4DEA  push XIY
 	pushw	0                                    ; FA4DEB  push 0x0000
-	lda_24	xwa, (0xFCD173)                     ; FA4DEE  lda XWA,0xfcd173
+	lda	xwa, (0xFCD173:24)                     ; FA4DEE  lda XWA,0xfcd173
 	push	xwa                                   ; FA4DF3  push XWA
-	lda_24	xiy, (0xFCD97D)                     ; FA4DF4  lda XIY,0xfcd97d
+	lda	xiy, (0xFCD97D:24)                     ; FA4DF4  lda XIY,0xfcd97d
 	push	xiy                                   ; FA4DF9  push XIY
 	call	0xF9ADB5                              ; FA4DFA  call 0xf9adb5
 	add	xsp, 20                                ; FA4DFE  add XSP,0x00000014
@@ -18088,10 +18088,10 @@ sub_FA4E23:
 	extz	xbc                                   ; FA4E2E  extz XBC
 	ld	xix, xbc                                ; FA4E30  ld XIX,XBC
 	add	xix, 22                                ; FA4E32  add XIX,0x00000016
-	lda_24	xbc, (0x85BC)                       ; FA4E38  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4E38  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4E3D  add XBC,XIX
 	ld	h, (xbc)                                ; FA4E3F  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA4E41  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA4E41  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4E46  add XBC,XIX
 	ld	a, (xbc)                                ; FA4E48  ld A,(XBC)
 	cp	a, h                                    ; FA4E4A  cp A,H
@@ -18159,10 +18159,10 @@ sub_FA4E97:
 	extz	xbc                                   ; FA4EBC  extz XBC
 	ld	xix, xbc                                ; FA4EBE  ld XIX,XBC
 	add	xix, 23                                ; FA4EC0  add XIX,0x00000017
-	lda_24	xbc, (0x85BC)                       ; FA4EC6  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA4EC6  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4ECB  add XBC,XIX
 	ld	h, (xbc)                                ; FA4ECD  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA4ECF  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA4ECF  lda XBC,0x00856e
 	add	xbc, xix                               ; FA4ED4  add XBC,XIX
 	ld	a, (xbc)                                ; FA4ED6  ld A,(XBC)
 	cp	a, h                                    ; FA4ED8  cp A,H
@@ -18453,10 +18453,10 @@ P7Units_ServiceTask__FA51C8:
 	add	xbc, xwa                               ; FA51D6  add XBC,XWA
 	ld	xix, xbc                                ; FA51D8  ld XIX,XBC
 	inc	1, xix                                 ; FA51DA  inc 1,XIX
-	lda_24	xbc, (0x85BC)                       ; FA51DC  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA51DC  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA51E1  add XBC,XIX
 	ld	h, (xbc)                                ; FA51E3  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA51E5  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA51E5  lda XBC,0x00856e
 	add	xbc, xix                               ; FA51EA  add XBC,XIX
 	ld	a, (xbc)                                ; FA51EC  ld A,(XBC)
 	cp	a, h                                    ; FA51EE  cp A,H
@@ -18484,10 +18484,10 @@ P7Units_ServiceTask__FA520D:
 	add	xbc, xwa                               ; FA521B  add XBC,XWA
 	ld	xix, xbc                                ; FA521D  ld XIX,XBC
 	add	xix, 17                                ; FA521F  add XIX,0x00000011
-	lda_24	xbc, (0x85BC)                       ; FA5225  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5225  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA522A  add XBC,XIX
 	ld	h, (xbc)                                ; FA522C  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA522E  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA522E  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5233  add XBC,XIX
 	ld	a, (xbc)                                ; FA5235  ld A,(XBC)
 	cp	a, h                                    ; FA5237  cp A,H
@@ -18502,10 +18502,10 @@ P7Units_ServiceTask__FA5243:
 	extz	xbc                                   ; FA5248  extz XBC
 	ld	xix, xbc                                ; FA524A  ld XIX,XBC
 	add	xix, 21                                ; FA524C  add XIX,0x00000015
-	lda_24	xbc, (0x85BC)                       ; FA5252  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5252  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5257  add XBC,XIX
 	ld	h, (xbc)                                ; FA5259  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA525B  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA525B  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5260  add XBC,XIX
 	ld	a, (xbc)                                ; FA5262  ld A,(XBC)
 	cp	a, h                                    ; FA5264  cp A,H
@@ -18522,11 +18522,11 @@ P7Units_ServiceTask__FA526C:
 	extz	xbc                                   ; FA527F  extz XBC
 	ld	xix, xbc                                ; FA5281  ld XIX,XBC
 	add	xix, 22                                ; FA5283  add XIX,0x00000016
-	lda_24	xbc, (0x856E)                       ; FA5289  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5289  lda XBC,0x00856e
 	add	xbc, xix                               ; FA528E  add XBC,XIX
 	ld	a, (xbc)                                ; FA5290  ld A,(XBC)
 	xor	a, 0xFF                                ; FA5292  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA5295  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5295  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA529A  add XBC,XIX
 	ld	(xbc), a                                ; FA529C  ld (XBC),A
 	popw	bc                                    ; FA529E  pop BC
@@ -18569,10 +18569,10 @@ P7Units_ServiceTask__FA52F3:
 	add	xbc, xwa                               ; FA5301  add XBC,XWA
 	ld	xix, xbc                                ; FA5303  ld XIX,XBC
 	inc	1, xix                                 ; FA5305  inc 1,XIX
-	lda_24	xbc, (0x85BC)                       ; FA5307  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5307  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA530C  add XBC,XIX
 	ld	h, (xbc)                                ; FA530E  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA5310  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5310  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5315  add XBC,XIX
 	ld	a, (xbc)                                ; FA5317  ld A,(XBC)
 	cp	a, h                                    ; FA5319  cp A,H
@@ -18600,10 +18600,10 @@ P7Units_ServiceTask__FA5338:
 	add	xbc, xwa                               ; FA5346  add XBC,XWA
 	ld	xix, xbc                                ; FA5348  ld XIX,XBC
 	add	xix, 17                                ; FA534A  add XIX,0x00000011
-	lda_24	xbc, (0x85BC)                       ; FA5350  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5350  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5355  add XBC,XIX
 	ld	h, (xbc)                                ; FA5357  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA5359  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5359  lda XBC,0x00856e
 	add	xbc, xix                               ; FA535E  add XBC,XIX
 	ld	a, (xbc)                                ; FA5360  ld A,(XBC)
 	cp	a, h                                    ; FA5362  cp A,H
@@ -18618,10 +18618,10 @@ P7Units_ServiceTask__FA536E:
 	extz	xbc                                   ; FA5373  extz XBC
 	ld	xix, xbc                                ; FA5375  ld XIX,XBC
 	add	xix, 21                                ; FA5377  add XIX,0x00000015
-	lda_24	xbc, (0x85BC)                       ; FA537D  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA537D  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5382  add XBC,XIX
 	ld	h, (xbc)                                ; FA5384  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA5386  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5386  lda XBC,0x00856e
 	add	xbc, xix                               ; FA538B  add XBC,XIX
 	ld	a, (xbc)                                ; FA538D  ld A,(XBC)
 	cp	a, h                                    ; FA538F  cp A,H
@@ -18638,11 +18638,11 @@ P7Units_ServiceTask__FA5397:
 	extz	xbc                                   ; FA53AA  extz XBC
 	ld	xix, xbc                                ; FA53AC  ld XIX,XBC
 	add	xix, 22                                ; FA53AE  add XIX,0x00000016
-	lda_24	xbc, (0x856E)                       ; FA53B4  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA53B4  lda XBC,0x00856e
 	add	xbc, xix                               ; FA53B9  add XBC,XIX
 	ld	a, (xbc)                                ; FA53BB  ld A,(XBC)
 	xor	a, 0xFF                                ; FA53BD  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA53C0  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA53C0  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA53C5  add XBC,XIX
 	ld	(xbc), a                                ; FA53C7  ld (XBC),A
 	popw	bc                                    ; FA53C9  pop BC
@@ -18685,10 +18685,10 @@ P7Units_ServiceTask__FA541E:
 	add	xbc, xwa                               ; FA542C  add XBC,XWA
 	ld	xix, xbc                                ; FA542E  ld XIX,XBC
 	inc	1, xix                                 ; FA5430  inc 1,XIX
-	lda_24	xbc, (0x85BC)                       ; FA5432  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5432  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5437  add XBC,XIX
 	ld	h, (xbc)                                ; FA5439  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA543B  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA543B  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5440  add XBC,XIX
 	ld	a, (xbc)                                ; FA5442  ld A,(XBC)
 	cp	a, h                                    ; FA5444  cp A,H
@@ -18716,10 +18716,10 @@ P7Units_ServiceTask__FA5463:
 	add	xbc, xwa                               ; FA5471  add XBC,XWA
 	ld	xix, xbc                                ; FA5473  ld XIX,XBC
 	add	xix, 17                                ; FA5475  add XIX,0x00000011
-	lda_24	xbc, (0x85BC)                       ; FA547B  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA547B  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5480  add XBC,XIX
 	ld	h, (xbc)                                ; FA5482  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA5484  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5484  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5489  add XBC,XIX
 	ld	a, (xbc)                                ; FA548B  ld A,(XBC)
 	cp	a, h                                    ; FA548D  cp A,H
@@ -18739,11 +18739,11 @@ P7Units_ServiceTask__FA5499:
 	extz	xbc                                   ; FA54AC  extz XBC
 	ld	xix, xbc                                ; FA54AE  ld XIX,XBC
 	add	xix, 22                                ; FA54B0  add XIX,0x00000016
-	lda_24	xbc, (0x856E)                       ; FA54B6  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA54B6  lda XBC,0x00856e
 	add	xbc, xix                               ; FA54BB  add XBC,XIX
 	ld	a, (xbc)                                ; FA54BD  ld A,(XBC)
 	xor	a, 0xFF                                ; FA54BF  xor A,0xff
-	lda_24	xbc, (0x85BC)                       ; FA54C2  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA54C2  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA54C7  add XBC,XIX
 	ld	(xbc), a                                ; FA54C9  ld (XBC),A
 	popw	bc                                    ; FA54CB  pop BC
@@ -18833,16 +18833,16 @@ P7Units_ResolveProgramsAndReload:
 	pushw	hl                                   ; FA5539  push HL
 	push	xix                                   ; FA553A  push XIX
 	ei	6                                       ; FA553B  ei 0x06
-	lda_24	xix, (0x856E)                       ; FA553D  lda XIX,0x00856e
-	lda_24	xiy, (0x7E7E)                       ; FA5542  lda XIY,0x007e7e
+	lda	xix, (0x856E:24)                       ; FA553D  lda XIX,0x00856e
+	lda	xiy, (0x7E7E:24)                       ; FA5542  lda XIY,0x007e7e
 	ldw	bc, 13                                 ; FA5547  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA554A  ldirw
-	lda_24	xix, (0x8588)                       ; FA554C  lda XIX,0x008588
-	lda_24	xiy, (0x7E98)                       ; FA5551  lda XIY,0x007e98
+	lda	xix, (0x8588:24)                       ; FA554C  lda XIX,0x008588
+	lda	xiy, (0x7E98:24)                       ; FA5551  lda XIY,0x007e98
 	ldw	bc, 13                                 ; FA5556  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5559  ldirw
-	lda_24	xix, (0x85A2)                       ; FA555B  lda XIX,0x0085a2
-	lda_24	xiy, (0x7EB2)                       ; FA5560  lda XIY,0x007eb2
+	lda	xix, (0x85A2:24)                       ; FA555B  lda XIX,0x0085a2
+	lda	xiy, (0x7EB2:24)                       ; FA5560  lda XIY,0x007eb2
 	ldw	bc, 13                                 ; FA5565  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5568  ldirw
 	ldb_da	a, (0x856E)                         ; FA556A  ld A,(0x00856e)
@@ -19007,10 +19007,10 @@ P7Units_ResolveProgramsAndReload__FA5734:
 	extz	xbc                                   ; FA5747  extz XBC
 	ld	xix, xbc                                ; FA5749  ld XIX,XBC
 	add	xix, 24                                ; FA574B  add XIX,0x00000018
-	lda_24	xbc, (0x85BC)                       ; FA5751  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5751  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5756  add XBC,XIX
 	ld	h, (xbc)                                ; FA5758  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA575A  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA575A  lda XBC,0x00856e
 	add	xbc, xix                               ; FA575F  add XBC,XIX
 	ld	a, (xbc)                                ; FA5761  ld A,(XBC)
 	cp	a, h                                    ; FA5763  cp A,H
@@ -19032,10 +19032,10 @@ P7Units_ResolveProgramsAndReload__FA5782:
 	extz	xbc                                   ; FA5787  extz XBC
 	ld	xix, xbc                                ; FA5789  ld XIX,XBC
 	add	xix, 21                                ; FA578B  add XIX,0x00000015
-	lda_24	xbc, (0x85BC)                       ; FA5791  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA5791  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA5796  add XBC,XIX
 	ld	h, (xbc)                                ; FA5798  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA579A  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA579A  lda XBC,0x00856e
 	add	xbc, xix                               ; FA579F  add XBC,XIX
 	ld	a, (xbc)                                ; FA57A1  ld A,(XBC)
 	cp	a, h                                    ; FA57A3  cp A,H
@@ -19058,9 +19058,9 @@ P7Units_ResolveProgramsAndReload__FA57B9:
 	extz	xbc                                   ; FA57C6  extz XBC
 	ld	xix, xbc                                ; FA57C8  ld XIX,XBC
 	push	xix                                   ; FA57CA  push XIX
-	lda_24	xix, (0x85BC)                       ; FA57CB  lda XIX,0x0085bc
+	lda	xix, (0x85BC:24)                       ; FA57CB  lda XIX,0x0085bc
 	add	xix, xbc                               ; FA57D0  add XIX,XBC
-	lda_24	xiy, (0x856E)                       ; FA57D2  lda XIY,0x00856e
+	lda	xiy, (0x856E:24)                       ; FA57D2  lda XIY,0x00856e
 	add	xiy, xbc                               ; FA57D7  add XIY,XBC
 	ldw	bc, 13                                 ; FA57D9  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA57DC  ldirw
@@ -19074,10 +19074,10 @@ P7Units_ResolveProgramsAndReload__FA57B9:
 	extz	xbc                                   ; FA57EF  extz XBC
 	ld	xix, xbc                                ; FA57F1  ld XIX,XBC
 	add	xix, 24                                ; FA57F3  add XIX,0x00000018
-	lda_24	xbc, (0x85BC)                       ; FA57F9  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA57F9  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA57FE  add XBC,XIX
 	ld	h, (xbc)                                ; FA5800  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA5802  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5802  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5807  add XBC,XIX
 	ld	a, (xbc)                                ; FA5809  ld A,(XBC)
 	popw	iy                                    ; FA580B  pop IY
@@ -19100,10 +19100,10 @@ P7Units_ResolveProgramsAndReload__FA582B:
 	extz	xbc                                   ; FA5830  extz XBC
 	ld	xix, xbc                                ; FA5832  ld XIX,XBC
 	add	xix, 21                                ; FA5834  add XIX,0x00000015
-	lda_24	xbc, (0x85BC)                       ; FA583A  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA583A  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA583F  add XBC,XIX
 	ld	h, (xbc)                                ; FA5841  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA5843  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA5843  lda XBC,0x00856e
 	add	xbc, xix                               ; FA5848  add XBC,XIX
 	ld	a, (xbc)                                ; FA584A  ld A,(XBC)
 	cp	a, h                                    ; FA584C  cp A,H
@@ -19130,9 +19130,9 @@ P7Units_ResolveProgramsAndReload__FA5862:
 	extz	xbc                                   ; FA5878  extz XBC
 	ld	xix, xbc                                ; FA587A  ld XIX,XBC
 	push	xix                                   ; FA587C  push XIX
-	lda_24	xix, (0x85BC)                       ; FA587D  lda XIX,0x0085bc
+	lda	xix, (0x85BC:24)                       ; FA587D  lda XIX,0x0085bc
 	add	xix, xbc                               ; FA5882  add XIX,XBC
-	lda_24	xiy, (0x856E)                       ; FA5884  lda XIY,0x00856e
+	lda	xiy, (0x856E:24)                       ; FA5884  lda XIY,0x00856e
 	add	xiy, xbc                               ; FA5889  add XIY,XBC
 	ldw	bc, 13                                 ; FA588B  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA588E  ldirw
@@ -19146,10 +19146,10 @@ P7Units_ResolveProgramsAndReload__FA5862:
 	extz	xbc                                   ; FA58A1  extz XBC
 	ld	xix, xbc                                ; FA58A3  ld XIX,XBC
 	add	xix, 24                                ; FA58A5  add XIX,0x00000018
-	lda_24	xbc, (0x85BC)                       ; FA58AB  lda XBC,0x0085bc
+	lda	xbc, (0x85BC:24)                       ; FA58AB  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA58B0  add XBC,XIX
 	ld	h, (xbc)                                ; FA58B2  ld H,(XBC)
-	lda_24	xbc, (0x856E)                       ; FA58B4  lda XBC,0x00856e
+	lda	xbc, (0x856E:24)                       ; FA58B4  lda XBC,0x00856e
 	add	xbc, xix                               ; FA58B9  add XBC,XIX
 	ld	a, (xbc)                                ; FA58BB  ld A,(XBC)
 	popw	iy                                    ; FA58BD  pop IY
@@ -19180,9 +19180,9 @@ P7Units_ResolveProgramsAndReload__FA58DD:
 	extz	xbc                                   ; FA58F3  extz XBC
 	ld	xix, xbc                                ; FA58F5  ld XIX,XBC
 	push	xix                                   ; FA58F7  push XIX
-	lda_24	xix, (0x85BC)                       ; FA58F8  lda XIX,0x0085bc
+	lda	xix, (0x85BC:24)                       ; FA58F8  lda XIX,0x0085bc
 	add	xix, xbc                               ; FA58FD  add XIX,XBC
-	lda_24	xiy, (0x856E)                       ; FA58FF  lda XIY,0x00856e
+	lda	xiy, (0x856E:24)                       ; FA58FF  lda XIY,0x00856e
 	add	xiy, xbc                               ; FA5904  add XIY,XBC
 	ldw	bc, 13                                 ; FA5906  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5909  ldirw
@@ -19191,16 +19191,16 @@ P7Units_ResolveProgramsAndReload__FA58DD:
 	popw	bc                                    ; FA590F  pop BC
 	pushw	2                                    ; FA5910  push 0x0002
 	calr (0xFA4957 - 0xFA5916)                 ; FA5913  calr 0xfa4957
-	lda_24	xix, (0x85BC)                       ; FA5916  lda XIX,0x0085bc
-	lda_24	xiy, (0x856E)                       ; FA591B  lda XIY,0x00856e
+	lda	xix, (0x85BC:24)                       ; FA5916  lda XIX,0x0085bc
+	lda	xiy, (0x856E:24)                       ; FA591B  lda XIY,0x00856e
 	ldw	bc, 13                                 ; FA5920  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5923  ldirw
-	lda_24	xix, (0x85D6)                       ; FA5925  lda XIX,0x0085d6
-	lda_24	xiy, (0x8588)                       ; FA592A  lda XIY,0x008588
+	lda	xix, (0x85D6:24)                       ; FA5925  lda XIX,0x0085d6
+	lda	xiy, (0x8588:24)                       ; FA592A  lda XIY,0x008588
 	ldw	bc, 13                                 ; FA592F  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5932  ldirw
-	lda_24	xix, (0x85F0)                       ; FA5934  lda XIX,0x0085f0
-	lda_24	xiy, (0x85A2)                       ; FA5939  lda XIY,0x0085a2
+	lda	xix, (0x85F0:24)                       ; FA5934  lda XIX,0x0085f0
+	lda	xiy, (0x85A2:24)                       ; FA5939  lda XIY,0x0085a2
 	ldw	bc, 13                                 ; FA593E  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5941  ldirw
 	popw	bc                                    ; FA5943  pop BC
