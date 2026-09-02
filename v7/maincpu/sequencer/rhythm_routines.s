@@ -402,14 +402,17 @@ Rhythm_NoteRangeCheck:
 	push XIY
 	ld W,A
 	ld XIY,Display_FontPalette_Table_0x12EA
-	.byte 0xc3, 0x03, 0xf4, 0xe0, 0x20, 0xc8, 0xa1, 0x5d
-	.byte 0xf1, 0x97, 0x33, 0x00, 0x00, 0xf1, 0x98, 0x33
-	.byte 0x00, 0x00
+	ld_rr8b	w, xiy, a
+	sub	a, w
+	pop	xiy
+	stdi8	13207, 0
+	stdi8	13208, 0
 Rhythm_NoteRangeReturn:
 	ret
 
 Rhythm_NoteRangeData:
-	.byte 0x00, 0x00
+	nop
+	nop
 
 Rhythm_VelocityLookup_A:
 	push XIY
@@ -793,8 +796,10 @@ Rhythm_ValidateAndSend:
 	stb_d8 (0x3387), a
 	call AccTuning_CallWithSaveRestore
 	ldb_d8 a, (0x3386)
-	.byte 0xc1, 0x88, 0x33, 0xf9, 0x6e, 0x05, 0x1e, 0x06
-	.byte 0x00, 0x68, 0x03
+	cpdm8	13192, a
+	jr	nz, 5
+	calr	6
+	jr	3
 Rhythm_Validate_Mismatch:
 	calr Rhythm_MismatchedPhrase
 

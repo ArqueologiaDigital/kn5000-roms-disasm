@@ -7013,7 +7013,7 @@ GetMediaType_Epilogue:
 
 	push xwa
 
-	.byte 0x1d, 0x15, 0x03, 0xff	; call Free (v7 addr)
+	call	16712469
 
 	stb_erp A, 0xfb
 

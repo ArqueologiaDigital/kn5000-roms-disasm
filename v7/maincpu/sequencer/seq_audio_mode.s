@@ -623,7 +623,7 @@ AccVoice_LoadTuningBlock:
 
 	pop xiy
 
-	.byte 0x1d, 0xb0, 0x93, 0xf5	; call AccTuning_LoadFromROM (v7 addr)
+	call	16094128
 
 	nop
 
@@ -978,10 +978,14 @@ RhythmAccent_UpdateRingBufPosition:
 RhythmAccent_StorePosition:
 	stb_d8	(13202), a
 RhythmAccent_AddAndCompare:
-	.byte 0xc1, 0x62, 0x04, 0x20, 0xc8, 0x81, 0xf3, 0x07
-	.byte 0xec, 0xf4, 0x41, 0x1e, 0x0f, 0x00, 0xc1, 0xda
-	.byte 0x32, 0x20, 0xc8, 0xf1, 0x6f, 0x04, 0xf1, 0xda
-	.byte 0x32, 0x41
+	ldb_d8	w, 1122
+	add	a, w
+	st_rrb	a, xhl, iy
+	calr	15
+	ldb_d8	w, 13018
+	cp	a, w
+	jr	nc, 4
+	stb_d8	13018, a
 RhythmAccent_UpdateDone:
 	ei 0
 	ret
