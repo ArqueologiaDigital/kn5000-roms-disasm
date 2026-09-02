@@ -57434,7 +57434,11 @@ ValueGlyph_Bitmaps:
 	.ascii "4th"
 
 ; --------------------------------------------------------------------------
-; Data_F3281C -- 29 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F3281C -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; SHRUNK 2026-09-02 from a declared 29 B: the trailing 5 declared bytes
+; plus the 7 B .incbin that followed it were really the first record of
+; the display list right after this object -- see
+; notes/gen_prom_b_f3281c_fix_module.py.
 ; Reached from: 0x00F3281C appears as a 32-bit word at 0xF32830 0xF5C589;
 ;               converted code at 0xF5C588 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -57448,14 +57452,13 @@ ValueGlyph_Bitmaps:
 ; --------------------------------------------------------------------------
 Data_F3281C:
 	.byte	0x00, 0x28, 0xF3, 0x00, 0x00, 0x28, 0xF3, 0x00, 0x07, 0x28, 0xF3, 0x00, 0x0E, 0x28, 0xF3, 0x00	; F3281C  |.(...(...(...(..|
-	.byte	0x15, 0x28, 0xF3, 0x00, 0x1C, 0x28, 0xF3, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F3282C  |.(...(.......|
-
-	
-; --- 0xF32839-0xF3283F: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032839, 0x000007
+	.byte	0x15, 0x28, 0xF3, 0x00, 0x1C, 0x28, 0xF3, 0x00	; F3282C
 
 ; ------------------------------------------------------------------
-; 0xF32840-0xF32863 -- 3 display-list records, 36 bytes -- interpreter A
+; 0xF32834-0xF32863 -- 4 display-list records, 48 bytes -- interpreter A.
+; The FIRST record (0xF32834-0xF32840, 12 B) was recovered from
+; Data_F3281C's oversized declaration (see notes/gen_prom_b_f3281c_fix_module.py);
+; the other 3 (0xF32840-0xF32863) are as follows.
 ; NOT reached by any known call shape (reachability.py: prom_b has 0
 ; bytes with start evidence) and not named by any converted record's
 ; own table field either -- found because a plain op/len walk, starting
@@ -57465,6 +57468,11 @@ Data_F3281C:
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
 ; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE, recovered from Data_F3281C's oversized declaration
+	.long 0x00F0191A
+	.short 0x0A06
+	.short 0x0003
+	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01938
 	.short 0x0EDE
