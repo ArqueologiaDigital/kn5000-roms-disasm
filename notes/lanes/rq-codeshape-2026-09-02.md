@@ -16,11 +16,16 @@ re-verified identical.
 | | census §6 | this lane |
 |---|---|---|
 | control-transfer-targeted | 1,089 regions / 85,536 B, uncounted | **484 sites enumerated and graded; 64 converted, 2,466 B** |
-| code-shaped label | 26,853 regions / 542,405 B, unranked | **ranked; 33.7% of the flagged bytes de-rated as self-labelled tables** |
+| code-shaped label | 26,853 regions / 542,405 B, unranked | **ranked; only 2.6 % of its bytes carry reference evidence, 30 % are address-taken-only, 67 % have no reference at all** |
 
-**Phantoms found: none at any meaningful size.** The IC19 shape — a transfer
-that is really the displacement byte of a preceding `jr cc,d8` — does not
-reproduce in this population. Evidence in §3.
+**Phantoms found: zero.** The IC19 shape — a transfer that is really the
+displacement byte of a preceding `jr cc,d8` — does not reproduce anywhere in
+this population. The 14 sites that looked like it are misframes of real code,
+7 of them duplicated across the v9/v10 twin trees. Evidence in §3.
+
+**And the phantom test itself had to be corrected**: asking llvm-mc "does the
+first instruction fail" flagged 199 regions / 6,543 B, all of them real
+instructions the backend cannot spell. §3b.
 
 ## 1. The instruments, and their nulls
 
@@ -93,13 +98,23 @@ This lane's rule is **stricter** than the census's: the targeted label must
 *head* the data run, where the census accepts a targeted label anywhere within
 a few lines of the region. Under the strict rule:
 
+(measured at `ec98912f`, BEFORE this lane's 64 conversions -- this is the
+population that was adjudicated, not what is left)
+
     image   sites   bytes(symbol-derived extent)
     v7        413   23,341
     v9         36       83
     v10        35       82
-    wsa1        1        3
-    others      0        0
-    TOTAL     484   23,506 B
+    GRADED    484   23,506 B
+
+    wsa1        1        3   screened only -- the grader has no linked image
+    others      0        0   for the WSA1 proms. 485 screened, 484 graded.
+
+The one WSA1 site is `prom_a/wsa1_prom_a.s:3479 sub_F81A83` (`0xF81A83`),
+target of `call sub_F81A83` from `0xF81A2D`. It is 3 bytes the source ALREADY
+annotates in line as `ld XBC3,0` — a WSA1 backend spelling gap, the same shape
+as v9/v10's 71 sites. Real code, blocked on the assembler, adjudicated by
+reading it.
 
 The census's larger figure is not contradicted; it is a looser cut of the same
 flag, and its extra bytes are regions whose *governing* label is targeted but
@@ -365,6 +380,16 @@ available. Everything outside that is screened by name and size alone.
    hard-zero false-positive rate on 11,179 certified data regions — and they
    are blocked on *named* llvm spelling gaps, not on judgement. `--blockers`
    prints the form census; `bit`, `cp` and `res` alone gate 193 of them.
+   ⚠ **Do not bulk-convert them PARTIALLY.** `convert_interrupted_region` will
+   happily emit instructions for the decodable prefix and leave the rest as
+   `.byte`, which would harvest most of the 20,533 B and rebuild
+   byte-identically. But the decode after an unspellable instruction continues
+   from **unidasm's length for an instruction llvm-mc could not confirm**, so a
+   mis-sized blocker silently misframes everything downstream — and the byte
+   gate cannot object, because the bytes are read back from the same offsets.
+   For the fully-clean regions the whole run tiles exactly and that risk does
+   not exist. Fix the spelling gaps first, then re-run the clean gate.
+
 2. **The 3 extent-shorter-than-run regions** need an `.incbin` or `.byte`-run
    split first (`scripts/converters/README-incbin-range-splits.md`).
 3. **The 7 misframed 1-2 byte sites of §3b-2**, in both v9 and v10, with the
