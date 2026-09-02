@@ -72,7 +72,7 @@ WndScroll_BasicWindowProc:
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_HandleSelectionChange:
-	stw_da (0x0274de), xde
+	ld (0x0274de:24), de
 	cpdm16_24 (0x0274e0), xde
 	jrl z, UIDialog_ReturnZeroJmp
 	ld xwa, (xsp + 50)
@@ -175,7 +175,7 @@ WndScroll_DrawCurrentItem:
 	ldw bc, 0xf2
 	call DrawFrame
 	ld wa, (0x0274de:24)
-	stw_da (0x0274e0), xwa
+	ld (0x0274e0:24), wa
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_RepaintAll:
@@ -242,7 +242,7 @@ WndScroll_ItemCountCheck:
 	add xde, xbc
 	cp iz, (xde)
 	jr ule, WndScroll_DrawSingleItem
-	stw_da (0x0274dc), xwa
+	ld (0x0274dc:24), wa
 	jrl UIDialog_ReturnZeroJmp
 
 WndEvt_DispatchByEventCode:
@@ -269,7 +269,7 @@ WndEvt_EventCodeDispatch:
 	cps	wa, 0
 	jrl	z, 2252
 	dec	1, wa
-	stw_da	(0x0274d8), wa
+	ld	(0x0274d8:24), wa
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -286,7 +286,7 @@ WndEvt_EventCodeDispatch:
 	cpda16_24 xbc, (160982)
 	jrl	nc, 2200
 	inc	1, wa
-	stw_da	(0x0274d8), wa
+	ld	(0x0274d8:24), wa
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -307,7 +307,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
 	dec	1, bc
-	stw_da	(0x0274de), bc
+	ld	(0x0274de:24), bc
 	extz	xbc
 	sll	xbc, 2
 	ld	xwa, xbc
@@ -350,7 +350,7 @@ WndEvt_EventCodeDispatch:
 	cp	bc, 13
 	jrl	c, 1980
 	sub	bc, 13
-	stw_da	(0x0274de), bc
+	ld	(0x0274de:24), bc
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
@@ -414,7 +414,7 @@ WndEvt_EventCodeDispatch:
 	cp	c, 122
 	jr	nz, 7
 	dec	1, wa
-	stw_da	(0x0274de), wa
+	ld	(0x0274de:24), wa
 	ld	bc, (0x0274e2:24)
 	mul	bc, 3
 	ld	wa, (0x0274da:24)
@@ -429,7 +429,7 @@ WndEvt_EventCodeDispatch:
 	jrl	ugt, 1732
 	ld	bc, wa
 	add	bc, 13
-	stw_da	(0x0274de), bc
+	ld	(0x0274de:24), bc
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
@@ -500,7 +500,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0x91, 0xf2
 	jrl	ugt, 1516
 	inc	1, wa
-	stw_da	(0x0274de), wa
+	ld	(0x0274de:24), wa
 	extz	xwa
 	sll	xwa, 2
 	.byte 0xaf, 0x04, 0x80
@@ -807,7 +807,7 @@ WndScroll_StoreCallerPtr:
 
 WndScroll_HandleIndexChange:
 	ld wa, de
-	stw_da (0x0274da), xde
+	ld (0x0274da:24), de
 	cpw_da (0x0274e2), 0
 	jr nz, WndScroll_SendSelectionEvents
 	ld de, wa
@@ -834,7 +834,7 @@ WndScroll_SendSelectionEvents:
 
 WndScroll_HandleCharInput:
 	ld xwa, (xsp + 42)
-	stw_da (0x0274d8), xwa
+	ld (0x0274d8:24), wa
 	ld de, wa
 	extz xde
 	ld xwa, 0x16
@@ -884,7 +884,7 @@ WndScroll_ComputeCharOffset:
 	ld a, (xde)
 	sub a, c
 	extz wa
-	stw_da (0x0274de), xwa
+	ld (0x0274de:24), wa
 	jrl WndScroll_SendPageEvents
 
 WndScroll_CharIsSpace:
@@ -933,7 +933,7 @@ WndScroll_CompareCharLoop:
 	cp a, (xsp + 12)
 	jr nz, WndScroll_CharMismatch
 	stiw_da (0x0274da), 0x0002
-	stw_da (0x0274de), xiz
+	ld (0x0274de:24), iz
 
 WndScroll_CharMismatch:
 	inc 1, iz
@@ -1001,7 +1001,7 @@ WndScroll_HandleDialPage:
 	ld wa, (xwa)
 	cpdm16_24 (0x0274de), xwa
 	jr ule, WndScroll_ClampPageCount
-	stw_da (0x0274de), xwa
+	ld (0x0274de:24), wa
 
 WndScroll_ClampPageCount:
 	ld wa, (0x0274da:24)
@@ -7047,7 +7047,7 @@ ChangeWall_QueueCallback:
 	jr	0
 
 ChangeWall_Impl:
-	stw_da (0x03ef9c), xwa
+	ld (0x03ef9c:24), wa
 	extz xwa
 	ld xbc, xwa
 	sll xbc, 2
@@ -7190,7 +7190,7 @@ UIRender_IterateCallbacks:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0xe0, 0x00
 	jr c, UIRender_IterateCallbacks
-	stw_da (0x03ef9e), xiz
+	ld (0x03ef9e:24), iz
 	stiw_da (0x030460), 0x0001
 	pop xiz
 	ret

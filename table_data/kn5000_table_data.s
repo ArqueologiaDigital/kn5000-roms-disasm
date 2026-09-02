@@ -1998,12 +1998,12 @@ Flash_Init_Custom_And_Table:
 	; Read Custom Data device ID
 	lds wa, 1	; d8 a9
 	calr Flash_ReadID_16bit	; CALR Flash_ReadID_16bit (0x9FB888)
-	stw_da (0x009994), xhl; LD (009994h), HL
+	ld (0x009994:24), hl; LD (009994h), HL
 
 	; Read HDAE5000 device ID
 	lds wa, 2	; d8 aa
 	calr Flash_ReadID_16bit	; CALR Flash_ReadID_16bit (0x9FB888)
-	stw_da (0x009996), xhl; LD (009996h), HL
+	ld (0x009996:24), hl; LD (009996h), HL
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------

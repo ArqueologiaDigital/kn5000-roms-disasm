@@ -1948,37 +1948,37 @@ sub_F9ADB5:
 	extpfx3 0xAE, 0x16, 0x81                   ; F9ADC2  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9ADC5  ld A,(XBC)
 	extz	wa                                    ; F9ADC7  extz WA
-	stw_da	(0x8614), wa                        ; F9ADC9  ld (0x008614),WA
+	ld	(0x8614:24), wa                        ; F9ADC9  ld (0x008614),WA
 	ldw	bc, 6                                  ; F9ADCE  ld BC,0x0006
 	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADD1  muls XBC,(XIZ+0x1a)
 	dec	5, xbc                                 ; F9ADD4  dec 5,XBC
 	extpfx3 0xAE, 0x16, 0x81                   ; F9ADD6  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9ADD9  ld A,(XBC)
 	extz	wa                                    ; F9ADDB  extz WA
-	stw_da	(0x8616), wa                        ; F9ADDD  ld (0x008616),WA
+	ld	(0x8616:24), wa                        ; F9ADDD  ld (0x008616),WA
 	ldw	bc, 6                                  ; F9ADE2  ld BC,0x0006
 	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADE5  muls XBC,(XIZ+0x1a)
 	dec	4, xbc                                 ; F9ADE8  dec 4,XBC
 	extpfx3 0xAE, 0x16, 0x81                   ; F9ADEA  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9ADED  ld A,(XBC)
 	extz	wa                                    ; F9ADEF  extz WA
-	stw_da	(0x8618), wa                        ; F9ADF1  ld (0x008618),WA
+	ld	(0x8618:24), wa                        ; F9ADF1  ld (0x008618),WA
 	ldw	bc, 6                                  ; F9ADF6  ld BC,0x0006
 	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADF9  muls XBC,(XIZ+0x1a)
 	dec	2, xbc                                 ; F9ADFC  dec 2,XBC
 	extpfx3 0xAE, 0x16, 0x81                   ; F9ADFE  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9AE01  ld A,(XBC)
 	extz	wa                                    ; F9AE03  extz WA
-	stw_da	(0x861A), wa                        ; F9AE05  ld (0x00861a),WA
+	ld	(0x861A:24), wa                        ; F9AE05  ld (0x00861a),WA
 	and	wa, 0xFF                               ; F9AE0A  and WA,0x00ff
-	stw_da	(0x861A), wa                        ; F9AE0E  ld (0x00861a),WA
+	ld	(0x861A:24), wa                        ; F9AE0E  ld (0x00861a),WA
 	ldw	bc, 6                                  ; F9AE13  ld BC,0x0006
 	extpfx3 0x9E, 0x1A, 0x49                   ; F9AE16  muls XBC,(XIZ+0x1a)
 	dec	1, xbc                                 ; F9AE19  dec 1,XBC
 	extpfx3 0xAE, 0x16, 0x81                   ; F9AE1B  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9AE1E  ld A,(XBC)
 	extz	wa                                    ; F9AE20  extz WA
-	stw_da	(0x861C), wa                        ; F9AE22  ld (0x00861c),WA
+	ld	(0x861C:24), wa                        ; F9AE22  ld (0x00861c),WA
 	extpfx3 0x9E, 0x10, 0x04                   ; F9AE27  pushw (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; F9AE2A  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; F9AE2D  push XBC
@@ -5698,7 +5698,7 @@ sub_F9BE3A__F9D612:
 	ld	xbc, (xiz+16)                           ; F9D612  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; F9D615  push XBC
 	calr (0xF9F765 - 0xF9D619)                 ; F9D616  calr 0xf9f765
-	stw_da	(0x8612), wa                        ; F9D619  ld (0x008612),WA
+	ld	(0x8612:24), wa                        ; F9D619  ld (0x008612),WA
 	pop	xiy                                    ; F9D61E  pop XIY
 	jrl sub_F9BE3A__F9DFAC                     ; F9D61F  jrl T,0xf9dfac
 sub_F9BE3A__F9D622:
@@ -9121,19 +9121,19 @@ sub_F9F765__F9F80A:
 	pushw	bc                                   ; F9F816  push BC
 	pushw	1                                    ; F9F817  push 0x0001
 	calr (0xF9A163 - 0xF9F81D)                 ; F9F81A  calr 0xf9a163
-	stw_da	(0x8612), wa                        ; F9F81D  ld (0x008612),WA
+	ld	(0x8612:24), wa                        ; F9F81D  ld (0x008612),WA
 	ld	c, (0x861C:24)                         ; F9F822  ld C,(0x00861c)
 	pop	xiy                                    ; F9F827  pop XIY
 	pushw	bc                                   ; F9F828  push BC
 	pushw	1                                    ; F9F829  push 0x0001
 	calr (0xF9A4B0 - 0xF9F82F)                 ; F9F82C  calr 0xf9a4b0
-	stw_da	(0x8612), wa                        ; F9F82F  ld (0x008612),WA
+	ld	(0x8612:24), wa                        ; F9F82F  ld (0x008612),WA
 	ld	c, (0x861C:24)                         ; F9F834  ld C,(0x00861c)
 	pop	xiy                                    ; F9F839  pop XIY
 	pushw	bc                                   ; F9F83A  push BC
 	pushw	96                                   ; F9F83B  push 0x0060
 	calr (0xF9A4B0 - 0xF9F841)                 ; F9F83E  calr 0xf9a4b0
-	stw_da	(0x8612), wa                        ; F9F841  ld (0x008612),WA
+	ld	(0x8612:24), wa                        ; F9F841  ld (0x008612),WA
 	pop	xiy                                    ; F9F846  pop XIY
 sub_F9F765__F9F847:
 	lda	xbc, (xiz-12)                          ; F9F847  lda XBC,XIZ+0xf4
@@ -9250,9 +9250,9 @@ P7Stream_StageAndSend:
 	ld	xbc, (xiz+28)                           ; F9F8FD  ld XBC,(XIZ+0x1c)
 	stl_da	(0x863A), xbc                       ; F9F900  ld (0x00863a),XBC
 	ld	bc, (xiz+34)                            ; F9F905  ld BC,(XIZ+0x22)
-	stw_da	(0x863E), bc                        ; F9F908  ld (0x00863e),BC
+	ld	(0x863E:24), bc                        ; F9F908  ld (0x00863e),BC
 	ld	bc, (xiz+16)                            ; F9F90D  ld BC,(XIZ+0x10)
-	stw_da	(0x8640), bc                        ; F9F910  ld (0x008640),BC
+	ld	(0x8640:24), bc                        ; F9F910  ld (0x008640),BC
 	ldw	bc, 6                                  ; F9F915  ld BC,0x0006
 	extpfx3 0x9E, 0x1A, 0x49                   ; F9F918  muls XBC,(XIZ+0x1a)
 	dec	6, xbc                                 ; F9F91B  dec 6,XBC
@@ -9260,31 +9260,31 @@ P7Stream_StageAndSend:
 	ld	(xiz-16), xiy                           ; F9F91F  ld (XIZ+0xf0),XIY
 	ld	c, (xiy)                                ; F9F922  ld C,(XIY)
 	extz	bc                                    ; F9F924  extz BC
-	stw_da	(0x8614), bc                        ; F9F926  ld (0x008614),BC
+	ld	(0x8614:24), bc                        ; F9F926  ld (0x008614),BC
 	inc	1, xiy                                 ; F9F92B  inc 1,XIY
 	ld	(xiz-16), xiy                           ; F9F92D  ld (XIZ+0xf0),XIY
 	ld	c, (xiy)                                ; F9F930  ld C,(XIY)
 	extz	bc                                    ; F9F932  extz BC
-	stw_da	(0x8616), bc                        ; F9F934  ld (0x008616),BC
+	ld	(0x8616:24), bc                        ; F9F934  ld (0x008616),BC
 	inc	1, xiy                                 ; F9F939  inc 1,XIY
 	ld	(xiz-16), xiy                           ; F9F93B  ld (XIZ+0xf0),XIY
 	ld	c, (xiy)                                ; F9F93E  ld C,(XIY)
 	extz	bc                                    ; F9F940  extz BC
-	stw_da	(0x8618), bc                        ; F9F942  ld (0x008618),BC
+	ld	(0x8618:24), bc                        ; F9F942  ld (0x008618),BC
 	inc	1, xiy                                 ; F9F947  inc 1,XIY
 	ld	(xiz-16), xiy                           ; F9F949  ld (XIZ+0xf0),XIY
 	inc	1, xiy                                 ; F9F94C  inc 1,XIY
 	ld	(xiz-16), xiy                           ; F9F94E  ld (XIZ+0xf0),XIY
 	ld	c, (xiy)                                ; F9F951  ld C,(XIY)
 	extz	bc                                    ; F9F953  extz BC
-	stw_da	(0x861A), bc                        ; F9F955  ld (0x00861a),BC
+	ld	(0x861A:24), bc                        ; F9F955  ld (0x00861a),BC
 	inc	1, xiy                                 ; F9F95A  inc 1,XIY
 	ld	(xiz-16), xiy                           ; F9F95C  ld (XIZ+0xf0),XIY
 	ld	c, (xiy)                                ; F9F95F  ld C,(XIY)
 	extz	bc                                    ; F9F961  extz BC
-	stw_da	(0x861C), bc                        ; F9F963  ld (0x00861c),BC
+	ld	(0x861C:24), bc                        ; F9F963  ld (0x00861c),BC
 	ld	bc, (xiz+32)                            ; F9F968  ld BC,(XIZ+0x20)
-	stw_da	(0x8642), bc                        ; F9F96B  ld (0x008642),BC
+	ld	(0x8642:24), bc                        ; F9F96B  ld (0x008642),BC
 	ld	xbc, (0x862E:24)                       ; F9F970  ld XBC,(0x00862e)
 	ld	(xiz-8), xbc                            ; F9F975  ld (XIZ+0xf8),XBC
 	extpfx7 0xD2, 0x40, 0x86, 0x00, 0x3F, 0x63, 0x00 ; F9F978  cp (0x008640),0x0063
@@ -17905,7 +17905,7 @@ sub_FA4C5E:
 	add	xsp, 20                                ; FA4C91  add XSP,0x00000014
 sub_FA4C5E__FA4C97:
 	ld	bc, (0x860A:24)                        ; FA4C97  ld BC,(0x00860a)
-	stw_da	(0x860E), bc                        ; FA4C9C  ld (0x00860e),BC
+	ld	(0x860E:24), bc                        ; FA4C9C  ld (0x00860e),BC
 	ld	hl, (0x8610:24)                        ; FA4CA1  ld HL,(0x008610)
 	ld	bc, (0x860C:24)                        ; FA4CA6  ld BC,(0x00860c)
 	cp	bc, hl                                  ; FA4CAB  cp BC,HL
@@ -17925,7 +17925,7 @@ sub_FA4C5E__FA4C97:
 	add	xsp, 20                                ; FA4CD3  add XSP,0x00000014
 sub_FA4C5E__FA4CD9:
 	ld	bc, (0x860C:24)                        ; FA4CD9  ld BC,(0x00860c)
-	stw_da	(0x8610), bc                        ; FA4CDE  ld (0x008610),BC
+	ld	(0x8610:24), bc                        ; FA4CDE  ld (0x008610),BC
 	popw	hl                                    ; FA4CE3  pop HL
 	ret                                        ; FA4CE4  ret
 ; --------------------------------------------------------------------------
@@ -18882,9 +18882,9 @@ P7Units_ResolveProgramsAndReload__FA55C5:
 	ld	a, (xbc)                                ; FA55D2  ld A,(XBC)
 	stb_da	(0x85BA), a                         ; FA55D4  ld (0x0085ba),A
 	ld	bc, (0x7ECD:24)                        ; FA55D9  ld BC,(0x007ecd)
-	stw_da	(0x860A), bc                        ; FA55DE  ld (0x00860a),BC
+	ld	(0x860A:24), bc                        ; FA55DE  ld (0x00860a),BC
 	ld	bc, (0x7ECF:24)                        ; FA55E3  ld BC,(0x007ecf)
-	stw_da	(0x860C), bc                        ; FA55E8  ld (0x00860c),BC
+	ld	(0x860C:24), bc                        ; FA55E8  ld (0x00860c),BC
 	ld	c, (0x7E97:24)                         ; FA55ED  ld C,(0x007e97)
 	cps	c, 0                                   ; FA55F2  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA55FC                   ; FA55F4  jr Z,0xfa55fc

@@ -1220,7 +1220,7 @@ SeqStep_VoiceReassignStore:
 	dec 1, a
 	cpda8_24 a, (0xffe3)
 	jr nz, SeqStep_VoiceReassignUpdate
-	stw_da (0x00ffec), xde
+	ld (0x00ffec:24), de
 	jr SeqStep_VoiceReassignDone
 
 SeqStep_VoiceReassignUpdate:
@@ -3051,7 +3051,7 @@ SeqStep_ByteBlockEA5F:
 	stb_da	65507, a
 	ld	(62023:16), 0
 	ld	wa, (62024:16)
-	stw_da	65516, wa
+	ld	(65516:24), wa
 	ldw	(62024:16), 0
 	ldw	(9832:16), 1
 	.byte 0xf1, 0xa7, 0x28, 0xb3

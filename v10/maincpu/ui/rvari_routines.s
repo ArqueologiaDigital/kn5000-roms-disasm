@@ -2656,7 +2656,7 @@ RVari_OK_PageScroll:
 	exts xwa
 	divs wa, 0xa
 	inc 1, wa
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	ld XWA, (xsp + 0x0220)
 	cp xwa, 0x10
 	jr nz, RVari_OK_CheckPageDown

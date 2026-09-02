@@ -13,7 +13,7 @@ Sequencer_ResetAfterFloppyIO:
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
 	ld (0xf19e:16), wa
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	ldw (0xf19c:16), 0
 	cpdi16 6699, 49
 	jrl z, SeqPlay_ReadyStateTransition
@@ -25,7 +25,7 @@ SeqPlay_ResetAndStop:
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
 	ld (0xf19e:16), wa
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	ldw (0xf19c:16), 0
 	push xhl
 	ld xhl, (6701:16)
@@ -305,7 +305,7 @@ SeqPlay_PrepareAndScanChannels:
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
 	ld (0xf19e:16), wa
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	ld (4237:16), wa
 
 SeqPlay_InitTrackLoop:
@@ -1924,7 +1924,7 @@ SoundGen_SetVoiceBitAndWriteRegs:
 	ld a, c
 	scf
 	stcf_a_16 de
-	stw_da (0x00ffec), xde
+	ld (0x00ffec:24), de
 	call ToneGen_WriteChannelRegs
 	ld (4323:16), 0
 
@@ -2495,7 +2495,7 @@ ToneGen_SetChannelFlag:
 	ld a, c
 	scf
 	stcf_a_16 de
-	stw_da (0x00ffec), xde
+	ld (0x00ffec:24), de
 	ret
 
 ToneGen_WriteChannelRegs:
@@ -4277,7 +4277,7 @@ ToneGen_SetSustainBit:
 	ld a, c
 	scf
 	stcf_a_16 de
-	stw_da (0x00ffec), xde
+	ld (0x00ffec:24), de
 	popw bc
 	ret
 

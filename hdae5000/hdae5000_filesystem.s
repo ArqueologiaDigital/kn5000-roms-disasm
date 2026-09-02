@@ -3808,7 +3808,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld wa, (0x23a08e:24)
 	ld bc, iz
 	add bc, wa
-	stw_da (0x23a092), xbc
+	ld (0x23a092:24), bc
 	ld wa, bc
 	call HDAE5000_Get_Display_Dimensions_A1_2F
 	cp hl, 0xffff
@@ -3911,7 +3911,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld wa, (0x23a08e:24)
 	ld bc, iz
 	add bc, wa
-	stw_da (0x23a092), xbc
+	ld (0x23a092:24), bc
 	ld wa, bc
 	call HDAE5000_Calc_Offset_16
 	ld xde, xhl

@@ -980,7 +980,7 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	ld bc, (0x23a08e:24); BC = base offset
 	ld wa, iz
 	add wa, bc
-	stw_da (0x23a092), xwa; store new position
+	ld (0x23a092:24), wa; store new position
 	lds wa, 0			; WA = 0
 	lds bc, 0			; BC = 0
 	calr HDAE5000_HD_Read_Write	; call HD read/write
@@ -1000,7 +1000,7 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	ld wa, (0x23a08e:24); WA = base offset
 	ld bc, iz
 	add bc, wa
-	stw_da (0x23a092), xbc; store seek position
+	ld (0x23a092:24), bc; store seek position
 	ld wa, bc
 	call HDAE5000_Calc_Offset_16			; XHL = sector address
 	ld xde, xhl
@@ -5546,17 +5546,17 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	jr gt, .LHD_SR__apply
 	lds bc, 1
 .LHD_SR__apply:				; store results
-	stw_da (0x22aa5e), xde; store cylinder
-	stw_da (0x22aa60), xbc; store head
+	ld (0x22aa5e:24), de; store cylinder
+	ld (0x22aa60:24), bc; store head
 	cpw_da (0x22aa5c), 0x0005; state == 5?
 	jr nz, .LHD_SR__fs_init
 	; State 5: complete — do table lookup and seek
 	ld wa, (0x22aa5e:24)
 	dec 1, wa
-	stw_da (0x23a092), xwa
+	ld (0x23a092:24), wa
 	ld wa, (0x22aa60:24)
 	dec 1, wa
-	stw_da (0x23a094), xwa
+	ld (0x23a094:24), wa
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
 	call HDAE5000_Table_Lookup
@@ -5885,7 +5885,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	; === Case 0: initialize cylinder from BC*100, set state=1 ===
 	ld wa, bc				; d9 88
 	mul wa, 0x0064				; d8 08 64 00
-	stw_da (0x22aa5e), xwa; f2 5e aa 22 50 — ld (0x22aa5e), wa
+	ld (0x22aa5e:24), wa; f2 5e aa 22 50 — ld (0x22aa5e), wa
 	stiw_da (0x22aa60), 0x0000; f2 60 aa 22 02 00 00
 	stiw_da (0x22aa5c), 0x0001; f2 5c aa 22 02 01 00
 	pushw 0x0001
@@ -5926,7 +5926,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 .Lsw_case3:					; 0x286EF8
 	ld wa, bc				; d9 88
 	mul wa, 0x000a				; d8 08 0a 00
-	stw_da (0x22aa60), xwa; f2 60 aa 22 50
+	ld (0x22aa60:24), wa; f2 60 aa 22 50
 	stiw_da (0x22aa5c), 0x0004; f2 5c aa 22 02 04 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
@@ -5955,10 +5955,10 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	; --- Compute sector address and look up in table ---
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20 — cylinder
 	dec 1, wa				; d8 69
-	stw_da (0x23a092), xwa; f2 92 a0 23 50
+	ld (0x23a092:24), wa; f2 92 a0 23 50
 	ld wa, (0x22aa60:24); d2 60 aa 22 20 — head
 	dec 1, wa				; d8 69
-	stw_da (0x23a094), xwa; f2 94 a0 23 50
+	ld (0x23a094:24), wa; f2 94 a0 23 50
 	ld wa, (0x23a092:24); d2 92 a0 23 20
 	ld bc, (0x23a094:24); d2 94 a0 23 21
 	call HDAE5000_Table_Lookup		; 1d b3 03 29

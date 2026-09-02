@@ -2670,12 +2670,12 @@ SeqDemo_SaveCurrentState:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c, 0xc1, 0x98
 	.byte 0x8c, 0x19, 0x99, 0x8c, 0x68, 0x68
 MainTitleCtrl_HandleAB:
-	stw_da (0x0274ac), xde
+	ld (0x0274ac:24), de
 	stiw_da (0x0274ae), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBA:
-	stw_da (0x0274a8), xde
+	ld (0x0274a8:24), de
 	stiw_da (0x0274aa), 0x000a
 	jr UIWidget_ReturnZero
 
@@ -2684,11 +2684,11 @@ MainTitleCtrl_HandleBB:
 	cps wa, 0
 	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
-	stw_da (0x0274aa), xwa
+	ld (0x0274aa:24), wa
 	cps wa, 0
 	jr nz, MainTitleCtrl_CheckSecondTimer
 	ld wa, (0x0274a8:24)
-	stw_da (0x0274a6), xwa
+	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
 	.byte 0xd2, 0xae, 0x74, 0x02, 0x20, 0xd8, 0xd8, 0x66

@@ -214,7 +214,7 @@ Flash_ReadDeviceId:
 	extpfx4 0xB1, 0x02, 0x90, 0x00         ; FC85CA  ld (XBC),0x0090   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC85CE  ld XBC,(XIZ+0xfc)
 	ld	de, (xbc)                           ; FC85D1  ld DE,(XBC)
-	stw_da	(0xE29F), de                    ; FC85D3  ld (0x00e29f),DE
+	ld	(0xE29F:24), de                    ; FC85D3  ld (0x00e29f),DE
 	ld	hl, (xbc+2)                         ; FC85D8  ld HL,(XBC+0x02)
 	cps	de, 1                              ; FC85DB  cp DE,1
 	jr z, Flash_ReadDeviceId__FC85E3                        ; FC85DD  jr Z,0xfc85e3
@@ -655,7 +655,7 @@ Flash_WriteTwoBlocksIntoSector__FC8882:
 Flash_ProbeAndStoreDeviceId:
 	calr (0xFC856C - 0xFC88A3)             ; FC88A0  calr 0xfc856c
 	calr (0xFC859E - 0xFC88A6)             ; FC88A3  calr 0xfc859e
-	stw_da	(0xE29D), wa                    ; FC88A6  ld (0x00e29d),WA
+	ld	(0xE29D:24), wa                    ; FC88A6  ld (0x00e29d),WA
 	ret                                    ; FC88AB  ret
 ; --------------------------------------------------------------------------
 ; MemFillWordRamp -- fill a word array with 0, 1, 2, ... n-1.

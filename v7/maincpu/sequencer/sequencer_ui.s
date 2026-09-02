@@ -4450,7 +4450,7 @@ SqAftSet_LookupTableEntry:
 	add wa, wa
 	lda xbc, (NakaWidgetPtrTbl_SmfDp_0x25D6:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
-	stw_da (0x021086), xwa
+	ld (0x021086:24), wa
 	ret
 
 MuteChSetFunc:

@@ -390,7 +390,7 @@ SoundBank_LoadToWorkRAM:
 	ld wa, (0x2871:16)
 	ld (0xf231:16), wa
 	ld wa, (0xf19e:16)
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	xor wa, wa
 	ld (0xf19e:16), wa
 	ret
@@ -553,7 +553,7 @@ SMF_ReadTrackData_Continue:
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
 	ld (0xf19e:16), wa
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	call SeqTrack_AssignFloppyChannels
 	cp (4323:16), 0
 	jrl nz, Sequencer_ResetAfterFloppyIO

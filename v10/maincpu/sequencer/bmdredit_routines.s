@@ -12,7 +12,7 @@ BmDrEdit_AdvanceStreamPos:
 	cp wa, 0xff
 	jr nc, BmDrEdit_AdvanceStreamWrap
 	inc 1, wa
-	stw_da (0x0210a6), xwa
+	ld (0x0210a6:24), wa
 	ret
 
 BmDrEdit_AdvanceStreamWrap:
@@ -32,7 +32,7 @@ BmDrEdit_AdvanceStreamWrap:
 	ld a, (xde)
 	extz wa
 	add wa, hl
-	stw_da (0x0210a4), xwa
+	ld (0x0210a4:24), wa
 	stiw_da (0x0210a6), 0x0005
 	ret
 
@@ -95,7 +95,7 @@ BmDrEdit_ScanForward_CheckNote:
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
-	stw_da (0x0210a2), xwa
+	ld (0x0210a2:24), wa
 	calr BmDrEdit_AdvanceStreamPos
 	ld bc, (0x0210a6:24)
 	extz xbc
@@ -474,7 +474,7 @@ BmDrEdit_CalcSecondaryPos_ClampSize:
 	cp bc, de
 	ret ule
 	sub de, wa
-	stw_da (0x0210b2), xde
+	ld (0x0210b2:24), de
 	ret
 
 BmDrEdit_InitDisplayParams:

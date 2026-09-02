@@ -18524,7 +18524,7 @@ SeqVoice_PopRetFA:
 
 SeqPlay_SaveStateAndCleanup:
 	ld wa, (0xf19e:16)
-	stw_da (0x00ffec), wa
+	ld (0x00ffec:24), wa
 	bit 0, (0x28a5:16)
 	jr nz, SeqSave_JumpCheckSubsys
 	ldw (0xf19e:16), 0x0000
@@ -24891,7 +24891,7 @@ SeqLoad_RestorePartConfig:
 	lds wa, 1
 	ldw bc, 0xc8
 	call Part_ReadWord
-	stw_da (0x00ffec), xhl
+	ld (0x00ffec:24), hl
 	lds wa, 1
 	ldw bc, 0xc8
 	lds de, 0

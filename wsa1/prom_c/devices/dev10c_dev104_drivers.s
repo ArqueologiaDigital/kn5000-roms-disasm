@@ -3420,7 +3420,7 @@ Dev10C_ResetAllChannels__FB8175:
 	sll	bc, 8                                  ; FB818F  d9 ee 08          sll 0x08,BC
 	and	bc, 0x3F00                             ; FB8192  d9 cc 00 3f       and BC,0x3f00
 	or	bc, ix                                  ; FB8196  dc e1             or BC,IX
-	stw_da	0x00D91F, bc                        ; FB8198  f2 1f d9 00 51    ld (0x00d91f),BC
+	ld	(0x00D91F:24), bc                        ; FB8198  f2 1f d9 00 51    ld (0x00d91f),BC
 	lda	xbc, (0x00D91F:24)                       ; FB819D  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB81A2  39                push XBC
 	pushw	de                                   ; FB81A3  2a                push DE
@@ -3486,12 +3486,12 @@ Dev10C_ResetAllChannels__FB81DB:
 	ld	bc, (0x00D91F:24)                        ; FB8240  d2 1f d9 00 21    ld BC,(0x00d91f)
 	res	2, bc                                  ; FB8245  d9 30 02          res 0x02,BC
 	ld	(xiz-12), bc                            ; FB8248  be f4 51          ld (XIZ+0xf4),BC
-	stw_da	0x00D91F, bc                        ; FB824B  f2 1f d9 00 51    ld (0x00d91f),BC
+	ld	(0x00D91F:24), bc                        ; FB824B  f2 1f d9 00 51    ld (0x00d91f),BC
 	ld	bc, (xiz-10)                            ; FB8250  9e f6 21          ld BC,(XIZ+0xf6)
 	sll	bc, 8                                  ; FB8253  d9 ee 08          sll 0x08,BC
 	and	bc, 0x3F00                             ; FB8256  d9 cc 00 3f       and BC,0x3f00
 	extpfx3 0x9E, 0xF4, 0xE1                   ; FB825A  9e f4 e1          or BC,(XIZ+0xf4)
-	stw_da	0x00D91F, bc                        ; FB825D  f2 1f d9 00 51    ld (0x00d91f),BC
+	ld	(0x00D91F:24), bc                        ; FB825D  f2 1f d9 00 51    ld (0x00d91f),BC
 	lda	xbc, (0x00D91F:24)                       ; FB8262  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB8267  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8268  9e f6 04          pushw (XIZ+0xf6)

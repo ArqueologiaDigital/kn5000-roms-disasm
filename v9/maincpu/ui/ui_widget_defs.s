@@ -10603,7 +10603,7 @@ EnumList_OK:
 TitleProc_ToggleFlag:
 	ld de, (0x02bc30:24)
 	xor de, 0x1
-	stw_da (0x02bc30), xde
+	ld (0x02bc30:24), de
 	extz xde
 	ld xwa, 0x1400001
 	ld xbc, 0x1e000ba
@@ -10813,7 +10813,7 @@ EnumList_Reset:
 	ld xbc, Str_No_0x6B6
 	add xbc, xwa
 	ld wa, (xbc)
-	stw_da (0x02bc32), xwa
+	ld (0x02bc32:24), wa
 	popw iz
 	ret
 
@@ -18237,7 +18237,7 @@ MainPostEvent_Allocate:
 
 MainGetEvent_Prologue:
 	inc 1, wa
-	stw_da (0x02f83a), xwa
+	ld (0x02f83a:24), wa
 
 MainGetEvent_ScanLoop:
 	lds wa, 7
@@ -18468,7 +18468,7 @@ ObjectSearch_Continue:
 
 ApPostEvent_ReturnZero:
 	inc 1, wa
-	stw_da (0x02ec36), xwa
+	ld (0x02ec36:24), wa
 
 ApPostEvent_Return:
 	lds wa, 4
@@ -18556,7 +18556,7 @@ ApDeliveryEvent_Return:
 
 ApTimer_Prologue:
 	inc 1, wa
-	stw_da (0x02ec36), xwa
+	ld (0x02ec36:24), wa
 
 ApTimer_ScanLoop:
 	lds wa, 4
@@ -18638,7 +18638,7 @@ ApTimer_VirtDispatch_Return:
 	lda_dri XHL, 0x07, 0xec, 0xe0
 	ld xwa, 0xffffffff
 	ld (xhl + 8), xwa
-	stw_da (0x030448), xbc
+	ld (0x030448:24), bc
 	cp bc, 0xffff
 	jrl z, ApTimer_IncrementCounter
 	jr SetApTimer_Allocate
@@ -18670,7 +18670,7 @@ SetApTimer_Prologue:
 	lda_dri XHL, 0x07, 0xec, 0xe0
 	ld xwa, 0xffffffff
 	ld (xhl + 8), xwa
-	stw_da (0x030448), xbc
+	ld (0x030448:24), bc
 	cp bc, 0xffff
 	jrl z, ApTimer_IncrementCounter
 
@@ -18731,7 +18731,7 @@ RootContext_Setup:
 	lda_dri XIX, 0x07, 0xec, 0xe0
 	ld xwa, 0xffffffff
 	ld (xix + 8), xwa
-	stw_da (0x030448), xbc
+	ld (0x030448:24), bc
 	cp bc, 0xffff
 	jr z, ApTimer_VirtualDispatch
 	muls bc, 0x18
@@ -18843,7 +18843,7 @@ ResetApTimer_ReturnZero:
 	jr nz, ResetApTimer_ReturnOneDone
 
 ResetApTimer_ReturnAlt:
-	stw_da (0x030448), xbc
+	ld (0x030448:24), bc
 	jr ResetApTimer_ReturnOneDone
 
 ResetApTimer_ReturnOne:
@@ -18947,7 +18947,7 @@ KillApTimer_CheckNextEntry_Unlink:
 	cpda16_24 xix, (0x030448)
 	jr nz, KillApTimer_CheckNextEntry_Done
 	ld wa, (xbc)
-	stw_da (0x030448), xwa
+	ld (0x030448:24), wa
 
 KillApTimer_CheckNextEntry_Done:
 	ld xwa, 0xffffffff
@@ -18998,7 +18998,7 @@ DrawTask_FuncDispatch:
 
 DrawTask_DequeueLoop:
 	ld wa, (0x030450:24)
-	stw_da (0x03044e), xwa
+	ld (0x03044e:24), wa
 	lds wa, 1
 	call Audio_Lock_Acquire
 	jr DrawTask_EventLoop
@@ -19116,7 +19116,7 @@ DisplayCmd_Execute_Type3:
 
 DisplayCmd_Return:
 	ld ix, (0x032474:24)
-	stw_da (0x032472), xix
+	ld (0x032472:24), ix
 	ret
 
 DrawQueue_Alloc_Prologue:
@@ -19417,7 +19417,7 @@ UpdateScreen:
 	ld wa, (0x030450:24)
 	cps wa, 0
 	ret nz
-	stw_da (0x03044e), xwa
+	ld (0x03044e:24), wa
 	ret
 
 UpdateScreen_Prologue:
@@ -19510,7 +19510,7 @@ Display_CheckDim_CheckWidth:
 	jr z, Display_CheckDim_CheckHeight
 	calr InitGraphics_SetupVRAM_Loop
 	ld wa, (0x03ef9e:24)
-	stw_da (0x03efa0), xwa
+	ld (0x03efa0:24), wa
 	stiw_da (0x030460), 0x0000
 	jr Display_CheckDim_Done
 

@@ -345,7 +345,7 @@ GroupBox_Epilogue:
 	ret
 
 SetDialEnable:
-	stw_da (0x03ef50), xwa
+	ld (0x03ef50:24), wa
 	ret
 
 GetDialEnableState:
@@ -1858,7 +1858,7 @@ AcNaming_InitScrollState:
 	ld xbc, 0x1e0007c
 	lds32 xde, 0
 	call ApFuncCall
-	stw_da (0x0274d6), xhl
+	ld (0x0274d6:24), hl
 	cp hl, 0x20
 	jr ule, AcNaming_QueryCharSet
 	stiw_da (0x0274d6), 0x0020
@@ -1868,7 +1868,7 @@ AcNaming_QueryCharSet:
 	ld xbc, 0x1e00084
 	lds32 xde, 0
 	call ApFuncCall
-	stw_da (0x0274e2), xhl
+	ld (0x0274e2:24), hl
 	ld wa, hl
 	extz xwa
 	sll xwa, 2

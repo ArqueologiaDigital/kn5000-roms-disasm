@@ -1860,7 +1860,7 @@ FDemoText_ByteData_LayoutEngine:
 	jrl	z, 206
 	ld	wa, (xsp+4)
 	dec	1, wa
-	stw_da	(0x024876), wa
+	ld	(0x024876:24), wa
 	push	xbc
 	pushw	233
 	pushw	0xfe66
@@ -2065,7 +2065,7 @@ FDemoText_ByteData_LayoutEngine:
 	calr	1161
 	ld	wa, (0x025b72:24)
 	inc	1, wa
-	stw_da	(0x025b72), wa
+	ld	(0x025b72:24), wa
 	cp	wa, 8
 	jr	ge, 11
 	lda	xbc, (0x025b74:24)
@@ -2081,7 +2081,7 @@ FDemoText_ByteData_LayoutEngine:
 	calr	1118
 	ld	wa, (0x025b72:24)
 	dec	1, wa
-	stw_da	(0x025b72), wa
+	ld	(0x025b72:24), wa
 	cps	wa, 0
 	jr	ge, 7
 	stiw_da	(0x025b72), 0
@@ -2194,10 +2194,10 @@ FDemoText_ByteData_LayoutEngine:
 	jr	nz, 67
 	ld	bc, (0x025b3e:24)
 	inc	1, bc
-	stw_da	(0x025b3e), bc
+	ld	(0x025b3e:24), bc
 	ld	wa, (0x025b60:24)
 	inc	1, wa
-	stw_da	(0x025b60), wa
+	ld	(0x025b60:24), wa
 	cp	bc, 8
 	jr	ge, 37
 	sla	bc, 2
@@ -2224,7 +2224,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	nz, 75
 	ld	wa, (0x025b3e:24)
 	dec	1, wa
-	stw_da	(0x025b3e), wa
+	ld	(0x025b3e:24), wa
 	decdi16_24	1, (0x025b60)
 	cps	wa, 0
 	jr	ge, 14
@@ -2743,7 +2743,7 @@ FDemoText_Layout_DrawText:
 FDemoText_Layout_UpdatePosition:
 	ld wa, (xsp + 20)
 	add wa, (xsp + 8)
-	stw_da (0x025b3a), xwa
+	ld (0x025b3a:24), wa
 	cpw (xsp + 14), 0x0
 	jr z, FDemoText_Layout_FreeBuffer
 	calr FDemoText_UpdateCursorPosition
@@ -2853,7 +2853,7 @@ FDemoText_ByteData_LayoutB:
 	call	DrawBitmap
 	ld	wa, (xsp+8)
 	add	wa, (xsp+2)
-	stw_da	(0x025b3a), wa
+	ld	(0x025b3a:24), wa
 	popw	iz
 	lda	xsp, (xsp+14)
 	ret
@@ -2892,7 +2892,7 @@ Seq_InitVoiceLoop:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x40, 0x00
 	jr lt, Seq_InitVoiceLoop
-	stw_da (0x025b82), xiz
+	ld (0x025b82:24), iz
 	pop xiz
 	ret
 

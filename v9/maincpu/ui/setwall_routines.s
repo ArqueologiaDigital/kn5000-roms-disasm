@@ -304,7 +304,7 @@ SetWall_SlotSetup_Active:
 	call Scoop_SpecialMode_ParamCheckBound
 	call SetWall_SlotBitUpdate
 	ld wa, (0x2875:16)
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	xor wa, wa
 	ld a, (3295:16)
 	ld iy, wa
@@ -749,7 +749,7 @@ SetWall_SlotBitUpdate:
 	rcf
 	stcf_a_16 de
 	stb_erp A, 0x3c
-	stw_da (0x00ffec), xde
+	ld (0x00ffec:24), de
 	stw_erp DE, 0x3e
 	ret
 
@@ -2108,7 +2108,7 @@ SetWall_SyncToneGenToDRAM:
 	ld wa, (0x2871:16)
 	ld (0xf231:16), wa
 	ld wa, (0xf19e:16)
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	anddi8 (0x28a5), 254
 	cps wa, 0
 	jr z, SetWall_Sync_CheckPanelBit

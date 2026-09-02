@@ -978,7 +978,7 @@ SongBank_LoadToWorkArea:
 	ldw bc, 0x800
 	ldir85
 	ld wa, (0xf19e:16)
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	ld wa, (0x286f:16)
 	ld (0xf22f:16), wa
 	ld wa, (0x2871:16)

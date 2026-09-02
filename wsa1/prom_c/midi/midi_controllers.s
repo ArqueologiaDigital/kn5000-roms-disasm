@@ -3791,7 +3791,7 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B:
 	push	0                                     ; FAE45B  push 0x00
 	push	h                                     ; FAE45D  push H
 	call	0xFA796D                              ; FAE45F  call 0xfa796d
-	stw_da	(0xD79E), wa                        ; FAE463  ld (0x00d79e),WA
+	ld	(0xD79E:24), wa                        ; FAE463  ld (0x00d79e),WA
 	popw	bc                                    ; FAE468  pop BC
 Voice_Restage_Reg0440_BaseCurve_ForPart__FAE469:
 	lda	xbc, (0xD75E:24)                       ; FAE469  lda XBC,0x00d75e
@@ -3958,7 +3958,7 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE59F:
 	push	0                                     ; FAE59F  push 0x00
 	push	h                                     ; FAE5A1  push H
 	call	0xFA79F4                              ; FAE5A3  call 0xfa79f4
-	stw_da	(0xD79A), wa                        ; FAE5A7  ld (0x00d79a),WA
+	ld	(0xD79A:24), wa                        ; FAE5A7  ld (0x00d79a),WA
 	lda	xbc, (0xD75E:24)                       ; FAE5AC  lda XBC,0x00d75e
 	push	xbc                                   ; FAE5B1  push XBC
 	ld	a, h                                    ; FAE5B2  ld A,H
@@ -4117,7 +4117,7 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA:
 	push	0                                     ; FAE6DA  push 0x00
 	push	h                                     ; FAE6DC  push H
 	call	0xFA7A4B                              ; FAE6DE  call 0xfa7a4b
-	stw_da	(0xD796), wa                        ; FAE6E2  ld (0x00d796),WA
+	ld	(0xD796:24), wa                        ; FAE6E2  ld (0x00d796),WA
 	popw	bc                                    ; FAE6E7  pop BC
 Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6E8:
 	lda	xbc, (0xD75E:24)                       ; FAE6E8  lda XBC,0x00d75e
@@ -4285,7 +4285,7 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE820:
 	push	0                                     ; FAE820  push 0x00
 	push	h                                     ; FAE822  push H
 	call	0xFA7AD6                              ; FAE824  call 0xfa7ad6
-	stw_da	(0xD798), wa                        ; FAE828  ld (0x00d798),WA
+	ld	(0xD798:24), wa                        ; FAE828  ld (0x00d798),WA
 	lda	xbc, (0xD75E:24)                       ; FAE82D  lda XBC,0x00d75e
 	push	xbc                                   ; FAE832  push XBC
 	ld	a, h                                    ; FAE833  ld A,H

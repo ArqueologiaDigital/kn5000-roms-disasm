@@ -6886,7 +6886,7 @@ ScoopParam_ValueTable:
 	ld	a, c
 	rcf
 	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
-	stw_da	65516, de
+	ld	(65516:24), de
 	.byte 0xd7, 0x3e, 0x8a, 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
 	ld	de, (61854:16)
 	ld	a, c
@@ -7603,7 +7603,7 @@ ClockConfig_Handler_0:
 	push	xiz
 	.byte 0x8a
 	ld	(0xf19e:16), de
-	stw_da	(0xffec), de
+	ld	(0xffec:24), de
 	.byte 0xc1, 0xa5
 	pushw	wa
 	push	xiz

@@ -131,14 +131,14 @@ Seq_StartWithFullInit:
 	ld	xwa, xiz
 	calr	64511
 	jr	-12
-	stw_da	(154492), de
+	ld	(154492:24), de
 	cps	de, 0
 	jr	lt, -21
 	ld	xwa, (149700:24)
 	lds	bc, 0
 	calr	60666
 	jr	-33
-	stw_da	(154492), de
+	ld	(154492:24), de
 	cps	de, 0
 	jr	lt, -42
 	pushw	2
@@ -161,7 +161,7 @@ Seq_StartWithFullInit:
 	ld	xbc, 31457315
 	ld	xde, xiz
 	jr	-109
-	stw_da	(154492), de
+	ld	(154492:24), de
 	cps	de, 0
 	jr	lt, -114
 	ld	xwa, 21037056
@@ -1170,8 +1170,8 @@ Demo_RecordChainReturn:
 
 Demo_StoreRecordChainParams:
 	stl_da (0x025b8a), xwa
-	stw_da (0x03ec4e), xbc
-	stw_da (0x025b8e), xde
+	ld (0x03ec4e:24), bc
+	ld (0x025b8e:24), de
 	ret
 
 RecordChain_ReadNextByte:
@@ -1195,11 +1195,11 @@ RecordChain_ReadAdvance:
 	ld l, (xbc)
 	extz hl
 	inc 1, wa
-	stw_da (0x025b8e), xwa
+	ld (0x025b8e:24), wa
 	cp wa, 0xfa
 	ret ule
 	ld wa, (xde + 3)
-	stw_da (0x03ec4e), xwa
+	ld (0x03ec4e:24), wa
 	stiw_da (0x025b8e), 0x0000
 	ret
 
@@ -5182,7 +5182,7 @@ NotifyUIOfSelectionChange:
 
 NotifyUI_StoreIndex:
 	ld hl, iz
-	stw_da (0x025ea8), xhl
+	ld (0x025ea8:24), hl
 
 NotifyUI_Return:
 	popw iz
@@ -5831,7 +5831,7 @@ NavToFileIdx_InSecondPage:
 	div wa, 0x3c
 	mul wa, 0x3c
 	ld bc, wa
-	stw_da (0x0271ee), xbc
+	ld (0x0271ee:24), bc
 	add bc, 0x3b
 	ld wa, (0x0271ec:24)
 	cp bc, wa
@@ -5839,12 +5839,12 @@ NavToFileIdx_InSecondPage:
 	ld wa, bc
 
 NavToFileIdx_ClampEnd:
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	calr BuildSecondPageRecords
 
 NavToFileIdx_StoreIndex:
 	ld hl, iz
-	stw_da (0x0271ea), xhl
+	ld (0x0271ea:24), hl
 
 NavToFileIdx_Return:
 	popw iz
@@ -5922,10 +5922,10 @@ GetFileCountEncoded:
 	dec 1, wa
 
 GetFileCount_StoreAndClamp:
-	stw_da (0x0271ec), xwa
+	ld (0x0271ec:24), wa
 	cpdm16_24 (0x271f0), xwa
 	ret le
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	ret
 
 ReadVariableLengthInt:
@@ -6806,7 +6806,7 @@ SetIndex_InvalidWrap:
 	div wa, 0x3c
 	mul wa, 0x3c
 	ld bc, wa
-	stw_da (0x0271ee), xbc
+	ld (0x0271ee:24), bc
 	add bc, 0x3b
 	ld wa, (0x0271ec:24)
 	cp bc, wa
@@ -6814,12 +6814,12 @@ SetIndex_InvalidWrap:
 	ld wa, bc
 
 SetIndex_UpdatePageEnd:
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	calr BuildPageRecords
 
 SetIndex_StoreIndex:
 	ld hl, iz
-	stw_da (0x0271ea), xhl
+	ld (0x0271ea:24), hl
 
 SetIndex_Return:
 	popw iz
@@ -6861,10 +6861,10 @@ BuildPageRecordsAlt:
 	dec 1, wa
 
 BuildRecordsAlt_StoreCount:
-	stw_da (0x0271ec), xwa
+	ld (0x0271ec:24), wa
 	cpdm16_24 (0x271f0), xwa
 	ret le
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	ret
 
 TrimAndFormatFilename:
@@ -7203,7 +7203,7 @@ SelectFile_CheckPageBound:
 	div wa, 0x3c
 	mul wa, 0x3c
 	ld bc, wa
-	stw_da (0x0271ee), xbc
+	ld (0x0271ee:24), bc
 	add bc, 0x3b
 	ld wa, (0x0271ec:24)
 	cp bc, wa
@@ -7211,12 +7211,12 @@ SelectFile_CheckPageBound:
 	ld wa, bc
 
 SelectFile_ClampEnd:
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	calr FileIO_InitDirScan
 
 SelectFile_StoreIndex:
 	ld hl, iz
-	stw_da (0x0271ea), xhl
+	ld (0x0271ea:24), hl
 
 SelectFile_Return:
 	popw iz
@@ -7258,10 +7258,10 @@ FileIO_InitFileNavigation:
 	dec 1, wa
 
 InitFileNav_ClampEnd:
-	stw_da (0x0271ec), xwa
+	ld (0x0271ec:24), wa
 	cpdm16_24 (0x271f0), xwa
 	ret le
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	ret
 
 FileIO_RefreshFileNames:
@@ -7993,7 +7993,7 @@ SelectWP_CheckPageBound:
 	div wa, 0xa
 	mul wa, 0xa
 	ld bc, wa
-	stw_da (0x0271ee), xbc
+	ld (0x0271ee:24), bc
 	add bc, 0x9
 	ld wa, (0x0272ca:24)
 	cp bc, wa
@@ -8001,12 +8001,12 @@ SelectWP_CheckPageBound:
 	ld wa, bc
 
 SelectWP_ClampEnd:
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	calr FileIO_ScanDirEntries
 
 SelectWP_StoreIndex:
 	ld hl, iz
-	stw_da (0x0272c8), xhl
+	ld (0x0272c8:24), hl
 
 SelectWP_Return:
 	popw iz
@@ -8050,10 +8050,10 @@ FileIO_InitWallpaperNav:
 	dec 1, wa
 
 InitWPNav_ClampEnd:
-	stw_da (0x0272ca), xwa
+	ld (0x0272ca:24), wa
 	cpdm16_24 (0x271f0), xwa
 	ret le
-	stw_da (0x0271f0), xwa
+	ld (0x0271f0:24), wa
 	ret
 
 ResetProgressIndication:

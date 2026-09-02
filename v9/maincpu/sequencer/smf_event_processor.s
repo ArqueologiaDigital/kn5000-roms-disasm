@@ -3253,7 +3253,7 @@ FileOpen_PopulateStruct:
 	stl_dri XWA, 0x07, 0xe8, 0xe4
 	ld a, l
 	exts wa
-	stw_da (0x01e53c), xwa
+	ld (0x01e53c:24), wa
 	ld xwa, xiz
 	push xwa
 	call SeqStep_FreeMemory
@@ -3557,7 +3557,7 @@ SeqStep_FileCloseProcess:
 	jr z, SeqStep_FileCloseReturn
 	ld wa, (xsp + 4)
 	exts wa
-	stw_da (0x01e53c), xwa
+	ld (0x01e53c:24), wa
 
 SeqStep_FileCloseReturn:
 	incdi8_24 1, (0x210f4)
@@ -3766,7 +3766,7 @@ SeqStep_ByteBlockF245:
 	jr	61
 	ld	wa, (xsp+4)
 	exts	wa
-	stw_da	(0x1e53c), wa
+	ld	(0x1e53c:24), wa
 	pushw	228
 	pushw	0x501c
 	ld	xwa, (xsp+14)
@@ -3837,7 +3837,7 @@ SeqStep_ByteBlockF245:
 	ret	z
 	ld	a, l
 	exts	wa
-	stw_da	(0x1e53c), wa
+	ld	(0x1e53c:24), wa
 	ret
 
 SeqStep_FileSeekSetup:
@@ -3918,7 +3918,7 @@ SeqStep_FileSeekUpdate:
 	ret z
 	ld a, l
 	exts wa
-	stw_da (0x01e53c), xwa
+	ld (0x01e53c:24), wa
 	ret
 
 SeqStep_FileSeekStore:
@@ -7065,7 +7065,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 17
 	ld	a, l
 	exts	wa
-	stw_da	(0x1e53c), wa
+	ld	(0x1e53c:24), wa
 	ld	(xiz+6), wa
 	lds	hl, 0
 	jrl	269
@@ -7278,7 +7278,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 26
 	ld	a, l
 	exts	wa
-	stw_da	(0x1e53c), wa
+	ld	(0x1e53c:24), wa
 	ld	hl, (xsp+2)
 	jrl	354
 	ld	xwa, (xsp+10)
@@ -7543,7 +7543,7 @@ SeqChan_InitChannelState:
 	jr	z, 15
 	ld	a, l
 	exts	wa
-	stw_da	(0x1e53c), wa
+	ld	(0x1e53c:24), wa
 	ld	hl, (xsp+2)
 	jrl	442
 	ld	xwa, (xsp+12)
@@ -10522,7 +10522,7 @@ TaskBuf_ReadNextByte:
 	call TaskMsg_Receive
 	stl_da (0x023582), xhl
 	ld wa, (xhl)
-	stw_da (0x023580), xwa
+	ld (0x023580:24), wa
 	ld xwa, (0x023582:24)
 	inc 4, xwa
 	stl_da (0x023586), xwa
@@ -10742,11 +10742,11 @@ SndTable_LookupD_CalcAddr:
 	muls bc, 0x2c
 	lda xde, (0x0235a8:24)
 	ldw_sri BC, 0x07, 0xe8, 0xe4
-	stw_da (0x02358c), xbc
+	ld (0x02358c:24), bc
 	muls wa, 0x2c
 	lda xbc, (0x0235a6:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
-	stw_da (0x02474e), xwa
+	ld (0x02474e:24), wa
 	ld wa, (0x02474e:24)
 	extz xwa
 	sll xwa, 9
@@ -10927,7 +10927,7 @@ FileIO_ReadDir_CopyLoop:
 	jr lt, FileIO_ReadDir_CopyLoop
 
 FileIO_FillRemainingEntries:
-	stw_da (0x024750), xiz
+	ld (0x024750:24), iz
 	cp iz, 0x50
 	jr ge, FileIO_ReadDir_GetRetVal
 

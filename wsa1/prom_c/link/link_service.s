@@ -272,7 +272,7 @@ Link_ServiceTask__F99F85:
 	stiw_da	(0xF32F), 0                    ; F99F85  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F8C:
 	call	0xF9A030                          ; F99F8C  call 0xf9a030
-	stw_da	(0xF331), wa                    ; F99F90  ld (0x00f331),WA
+	ld	(0xF331:24), wa                    ; F99F90  ld (0x00f331),WA
 	jr Link_ServiceTask__F99F9E                           ; F99F95  jr T,0xf99f9e
 Link_ServiceTask__F99F97:
 	stiw_da	(0xF32F), 0                    ; F99F97  ld (0x00f32f),0x0000

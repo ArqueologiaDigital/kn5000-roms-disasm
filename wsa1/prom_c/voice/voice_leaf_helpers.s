@@ -104,7 +104,7 @@
 sub_FA5949:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA5949  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FA594D  ld BC,(XIZ+0x08)
-	stw_da	(0x8678), bc                        ; FA5950  ld (0x008678),BC
+	ld	(0x8678:24), bc                        ; FA5950  ld (0x008678),BC
 	unlk32 xiz                                 ; FA5955  unlk XIZ
 	ret                                        ; FA5957  ret
 ; --------------------------------------------------------------------------
@@ -3087,7 +3087,7 @@ sub_FA6BB5__FA6D43:
 	ld	(xbc), ix                               ; FA6DB7  ld (XBC),IX
 	jr sub_FA6BB5__FA6DD6                      ; FA6DB9  jr T,0xfa6dd6
 sub_FA6BB5__FA6DBB:
-	stw_da	(0x87D0), de                        ; FA6DBB  ld (0x0087d0),DE
+	ld	(0x87D0:24), de                        ; FA6DBB  ld (0x0087d0),DE
 	ld	hl, (xde+8)                             ; FA6DC0  ld HL,(XDE+0x08)
 	ld	ix, (xde+10)                            ; FA6DC3  ld IX,(XDE+0x0a)
 	extz	xix                                   ; FA6DC6  extz XIX
@@ -4106,7 +4106,7 @@ KeyZone_Stage_Reg0040_Stride8:
 	ld	(xhl+15), xix                           ; FA747E  ld (XHL+0x0f),XIX
 	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x60       ; FA7481  or (XHL+0x01),0x6000
 	ld	bc, (xix)                               ; FA7486  ld BC,(XIX)
-	stw_da	(0xD760), bc                        ; FA7488  ld (0x00d760),BC
+	ld	(0xD760:24), bc                        ; FA7488  ld (0x00d760),BC
 	ld	bc, (xix+6)                             ; FA748D  ld BC,(XIX+0x06)
 	ld	(0x5A4F:16), bc                        ; FA7490  ld (0x5a4f),BC
 	ld	bc, (xix+6)                             ; FA7494  ld BC,(XIX+0x06)
@@ -4160,7 +4160,7 @@ KeyZone_Stage_Reg0040_Stride6A:
 	ld	(xhl+15), xix                           ; FA74C2  ld (XHL+0x0f),XIX
 	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x60       ; FA74C5  or (XHL+0x01),0x6000
 	ld	bc, (xix)                               ; FA74CA  ld BC,(XIX)
-	stw_da	(0xD760), bc                        ; FA74CC  ld (0x00d760),BC
+	ld	(0xD760:24), bc                        ; FA74CC  ld (0x00d760),BC
 	ldw	(0x5A4F:16), 0                         ; FA74D1  ld (0x5a4f),0x0000
 	pushw	0                                    ; FA74D7  push 0x0000
 	ld	c, (xix+5)                              ; FA74DA  ld C,(XIX+0x05)
@@ -4212,7 +4212,7 @@ KeyZone_Stage_Reg0040_Stride6B:
 	ld	(xhl+15), xix                           ; FA7504  ld (XHL+0x0f),XIX
 	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x40       ; FA7507  or (XHL+0x01),0x4000
 	ld	bc, (xix)                               ; FA750C  ld BC,(XIX)
-	stw_da	(0xD760), bc                        ; FA750E  ld (0x00d760),BC
+	ld	(0xD760:24), bc                        ; FA750E  ld (0x00d760),BC
 	ld	bc, (xix+4)                             ; FA7513  ld BC,(XIX+0x04)
 	ld	(0x5A4F:16), bc                        ; FA7516  ld (0x5a4f),BC
 	ld	bc, (xix+4)                             ; FA751A  ld BC,(XIX+0x04)
@@ -4265,7 +4265,7 @@ KeyZone_Stage_Reg0040_Stride4:
 	ld	bc, (xhl+1)                             ; FA7549  ld BC,(XHL+0x01)
 	ld	(xhl+1), bc                             ; FA754C  ld (XHL+0x01),BC
 	ld	bc, (xix)                               ; FA754F  ld BC,(XIX)
-	stw_da	(0xD760), bc                        ; FA7551  ld (0x00d760),BC
+	ld	(0xD760:24), bc                        ; FA7551  ld (0x00d760),BC
 	ldw	(0x5A4F:16), 0                         ; FA7556  ld (0x5a4f),0x0000
 	pushw	0                                    ; FA755C  push 0x0000
 	pushw	0                                    ; FA755F  push 0x0000
@@ -5555,7 +5555,7 @@ EGEnv_Eval_FreqWriteBaseCurve__FA7BA4:
 	add	xbc, 0xFDEBEC                          ; FA7BB2  add XBC,0x00fdebec
 	ld	bc, (xbc)                               ; FA7BB8  ld BC,(XBC)
 	or	bc, hl                                  ; FA7BBA  or BC,HL
-	stw_da	(0xD796), bc                        ; FA7BBC  ld (0x00d796),BC
+	ld	(0xD796:24), bc                        ; FA7BBC  ld (0x00d796),BC
 	jrl EGEnv_Eval_FreqWriteBaseCurve__FA7C34                     ; FA7BC1  jrl T,0xfa7c34
 EGEnv_Eval_FreqWriteBaseCurve__FA7BC4:
 	extz	xde                                   ; FA7BC4  extz XDE
@@ -5602,7 +5602,7 @@ EGEnv_Eval_FreqWriteBaseCurve__FA7C17:
 	add	xbc, 0xFDEBEC                          ; FA7C25  add XBC,0x00fdebec
 	ld	bc, (xbc)                               ; FA7C2B  ld BC,(XBC)
 	or	bc, hl                                  ; FA7C2D  or BC,HL
-	stw_da	(0xD7A0), bc                        ; FA7C2F  ld (0x00d7a0),BC
+	ld	(0xD7A0:24), bc                        ; FA7C2F  ld (0x00d7a0),BC
 EGEnv_Eval_FreqWriteBaseCurve__FA7C34:
 	pop	xix                                    ; FA7C34  pop XIX
 	pop	xde                                    ; FA7C35  pop XDE
@@ -5671,11 +5671,11 @@ EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7C91:
 	jr z, EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CA6                   ; FA7C98  jr Z,0xfa7ca6
 	ld	bc, ix                                  ; FA7C9A  ld BC,IX
 	set	15, bc                                 ; FA7C9C  set 0x0f,BC
-	stw_da	(0xD798), bc                        ; FA7C9F  ld (0x00d798),BC
+	ld	(0xD798:24), bc                        ; FA7C9F  ld (0x00d798),BC
 	jr EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3                      ; FA7CA4  jr T,0xfa7cc3
 EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CA6:
 	ld	bc, ix                                  ; FA7CA6  ld BC,IX
-	stw_da	(0xD798), bc                        ; FA7CA8  ld (0x00d798),BC
+	ld	(0xD798:24), bc                        ; FA7CA8  ld (0x00d798),BC
 	jr EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3                      ; FA7CAD  jr T,0xfa7cc3
 EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CAF:
 	cp	xix, 0x3FFF                             ; FA7CAF  cp XIX,0x00003fff
@@ -5683,7 +5683,7 @@ EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CAF:
 	ld	xix, 0x3FFF                             ; FA7CB7  ld XIX,0x00003fff
 EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CBC:
 	ld	bc, ix                                  ; FA7CBC  ld BC,IX
-	stw_da	(0xD79C), bc                        ; FA7CBE  ld (0x00d79c),BC
+	ld	(0xD79C:24), bc                        ; FA7CBE  ld (0x00d79c),BC
 EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3:
 	pop	xix                                    ; FA7CC3  pop XIX
 	popw	de                                    ; FA7CC4  pop DE
@@ -5947,7 +5947,7 @@ Voice_StageLevel_Reg0080__FA7E1A:
 	ld	bc, hl                                  ; FA7E1A  ld BC,HL
 	or	bc, ix                                  ; FA7E1C  or BC,IX
 	set	15, bc                                 ; FA7E1E  set 0x0f,BC
-	stw_da	(0xD762), bc                        ; FA7E21  ld (0x00d762),BC
+	ld	(0xD762:24), bc                        ; FA7E21  ld (0x00d762),BC
 	popw	ix                                    ; FA7E26  pop IX
 	pop	xde                                    ; FA7E27  pop XDE
 	pop	xhl                                    ; FA7E28  pop XHL

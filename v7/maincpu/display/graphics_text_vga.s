@@ -85,11 +85,11 @@ TextRender_PopAndReturn:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x3a, 0x01
 	retd 0x8
-	stw_da (0x03efa2), xwa
+	ld (0x03efa2:24), wa
 	ret
 
 GraphicsRender_ByteData:
-	stw_da	(0x03efa4), wa
+	ld	(0x03efa4:24), wa
 	ret
 	pushw	iz
 	ld	iz, wa
@@ -112,7 +112,7 @@ GraphicsRender_ByteData:
 	jr	0
 	dec	4, xsp
 	pushw	iz
-	stw_da	(0x03efa6), wa
+	ld	(0x03efa6:24), wa
 	call	Table_LookupDword
 	ld	(xsp+2), xhl
 	ldw	iz, 64

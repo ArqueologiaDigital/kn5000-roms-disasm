@@ -1147,12 +1147,12 @@ Voice_RecomputeEnv_AndWriteSlot2__FB8A85:
 	inc	2, xsp                                 ; FB8AC6  inc 2,XSP
 	pushw	bc                                   ; FB8AC8  push BC
 	call	0xFA796D                              ; FB8AC9  call 0xfa796d
-	stw_da	(0xD79E), wa                        ; FB8ACD  ld (0x00d79e),WA
+	ld	(0xD79E:24), wa                        ; FB8ACD  ld (0x00d79e),WA
 	ld	c, (xiz-6)                              ; FB8AD2  ld C,(XIZ+0xfa)
 	popw	wa                                    ; FB8AD5  pop WA
 	pushw	bc                                   ; FB8AD6  push BC
 	call	0xFA79F4                              ; FB8AD7  call 0xfa79f4
-	stw_da	(0xD79A), wa                        ; FB8ADB  ld (0x00d79a),WA
+	ld	(0xD79A:24), wa                        ; FB8ADB  ld (0x00d79a),WA
 	popw	bc                                    ; FB8AE0  pop BC
 	lda	xbc, (0xD75E:24)                       ; FB8AE1  lda XBC,0x00d75e
 	push	xbc                                   ; FB8AE6  push XBC
@@ -1273,12 +1273,12 @@ Voice_RecomputeEnv_AndWriteSlot1__FB8B85:
 	inc	2, xsp                                 ; FB8BC6  inc 2,XSP
 	pushw	bc                                   ; FB8BC8  push BC
 	call	0xFA7A4B                              ; FB8BC9  call 0xfa7a4b
-	stw_da	(0xD796), wa                        ; FB8BCD  ld (0x00d796),WA
+	ld	(0xD796:24), wa                        ; FB8BCD  ld (0x00d796),WA
 	ld	c, (xiz-6)                              ; FB8BD2  ld C,(XIZ+0xfa)
 	popw	wa                                    ; FB8BD5  pop WA
 	pushw	bc                                   ; FB8BD6  push BC
 	call	0xFA7AD6                              ; FB8BD7  call 0xfa7ad6
-	stw_da	(0xD798), wa                        ; FB8BDB  ld (0x00d798),WA
+	ld	(0xD798:24), wa                        ; FB8BDB  ld (0x00d798),WA
 	popw	bc                                    ; FB8BE0  pop BC
 	lda	xbc, (0xD75E:24)                       ; FB8BE1  lda XBC,0x00d75e
 	push	xbc                                   ; FB8BE6  push XBC

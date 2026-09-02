@@ -1228,7 +1228,7 @@ SeqStep_VoiceReassignStore:
 	dec 1, a
 	cpda8_24 a, (0xffe3)
 	jr nz, SeqStep_VoiceReassignUpdate
-	stw_da (0x00ffec), xde
+	ld (0x00ffec:24), de
 	jr SeqStep_VoiceReassignDone
 
 SeqStep_VoiceReassignUpdate:

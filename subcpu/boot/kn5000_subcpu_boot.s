@@ -2267,7 +2267,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__zero_velocity:
 	.org 0xFF8C75 - 0xFE0000, 0xFF
 
 AUDIO_HW_WRITE_READ:
-	stw_da (0x100000), xwa; Write WA to hardware register
+	ld (0x100000:24), wa; Write WA to hardware register
 	ld hl, (0x100004:24); Read status/result
 	ret
 
@@ -2384,11 +2384,11 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	; Write parameter 0 (offset +0x40)
 	ld wa, iz
 	add wa, 0x40
-	stw_da (0x100000), xwa; Address = base + 0x40
+	ld (0x100000:24), wa; Address = base + 0x40
 	nop
 	ld xbc, (xsp + 2)	; Restore XBC
 	ld wa, (xbc + 2)	; Get param[2:3]
-	stw_da (0x100002), xwa; Write data
+	ld (0x100002:24), wa; Write data
 	jr __jrt_nop_FF8D2B
 __jrt_nop_FF8D2B:
 	nop
@@ -2398,11 +2398,11 @@ __jrt_nop_FF8D2B:
 	; Write parameter 1 (offset +0x80)
 	ld wa, iz
 	add wa, 0x80
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 4)	; Get param[4:5]
 	set 15, wa	; Set bit 15
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8D47
 __jrt_nop_FF8D47:
 	nop
@@ -2412,10 +2412,10 @@ __jrt_nop_FF8D47:
 	; Write parameter 2 (offset +0xC0)
 	ld wa, iz
 	add wa, 0xC0
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 6)	; Get param[6:7]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8D60
 __jrt_nop_FF8D60:
 	nop
@@ -2425,10 +2425,10 @@ __jrt_nop_FF8D60:
 	; Write parameter 3 (offset +0x100)
 	ld wa, iz
 	add wa, 0x100
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 8)	; Get param[8:9]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8D79
 __jrt_nop_FF8D79:
 	nop
@@ -2438,10 +2438,10 @@ __jrt_nop_FF8D79:
 	; Write parameter 4 (offset +0x140)
 	ld wa, iz
 	add wa, 0x140
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 10)	; Get param[10:11]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8D92
 __jrt_nop_FF8D92:
 	nop
@@ -2451,10 +2451,10 @@ __jrt_nop_FF8D92:
 	; Write parameter 5 (offset +0x180)
 	ld wa, iz
 	add wa, 0x180
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 12)	; Get param[12:13]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8DAB
 __jrt_nop_FF8DAB:
 	nop
@@ -2464,10 +2464,10 @@ __jrt_nop_FF8DAB:
 	; Write parameter 6 (offset +0x400)
 	ld wa, iz
 	add wa, 0x400
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 14)	; Get param[14:15]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8DC4
 __jrt_nop_FF8DC4:
 	nop
@@ -2477,10 +2477,10 @@ __jrt_nop_FF8DC4:
 	; Write parameter 7 (offset +0x440)
 	ld wa, iz
 	add wa, 0x440
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 16)	; Get param[16:17]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8DDD
 __jrt_nop_FF8DDD:
 	nop
@@ -2490,10 +2490,10 @@ __jrt_nop_FF8DDD:
 	; Write parameter 8 (offset +0x480)
 	ld wa, iz
 	add wa, 0x480
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 18)	; Get param[18:19]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8DF6
 __jrt_nop_FF8DF6:
 	nop
@@ -2503,10 +2503,10 @@ __jrt_nop_FF8DF6:
 	; Write parameter 9 (offset +0x4C0)
 	ld wa, iz
 	add wa, 0x4C0
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 20)	; Get param[20:21]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8E0F
 __jrt_nop_FF8E0F:
 	nop
@@ -2516,10 +2516,10 @@ __jrt_nop_FF8E0F:
 	; Write parameter 10 (offset +0x500)
 	ld wa, iz
 	add wa, 0x500
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 22)	; Get param[22:23]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8E28
 __jrt_nop_FF8E28:
 	nop
@@ -2529,10 +2529,10 @@ __jrt_nop_FF8E28:
 	; Write parameter 11 (offset +0x800)
 	ld wa, iz
 	add wa, 0x800
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 24)	; Get param[24:25]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8E41
 __jrt_nop_FF8E41:
 	nop
@@ -2540,7 +2540,7 @@ __jrt_nop_FF8E41:
 	nop
 
 	; Write IZ directly with constant 0x8100
-	stw_da (0x100000), xiz; Write base offset
+	ld (0x100000:24), iz; Write base offset
 	nop
 	stiw_da (0x100002), 0x8100; Write 0x8100
 	jr __jrt_nop_FF8E53
@@ -2552,10 +2552,10 @@ __jrt_nop_FF8E53:
 	; Write parameter 12 (offset +0x840)
 	ld wa, iz
 	add wa, 0x840
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 26)	; Get param[26:27]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8E6C
 __jrt_nop_FF8E6C:
 	nop
@@ -2565,10 +2565,10 @@ __jrt_nop_FF8E6C:
 	; Write parameter 13 (offset +0x880)
 	ld wa, iz
 	add wa, 0x880
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 28)	; Get param[28:29]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8E85
 __jrt_nop_FF8E85:
 	nop
@@ -2578,10 +2578,10 @@ __jrt_nop_FF8E85:
 	; Write parameter 14 (offset +0x8C0)
 	ld wa, iz
 	add wa, 0x8C0
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 30)	; Get param[30:31]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8E9E
 __jrt_nop_FF8E9E:
 	nop
@@ -2591,10 +2591,10 @@ __jrt_nop_FF8E9E:
 	; Write parameter 15 (offset +0x900)
 	ld wa, iz
 	add wa, 0x900
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 32)	; Get param[32:33]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8EB7
 __jrt_nop_FF8EB7:
 	nop
@@ -2604,10 +2604,10 @@ __jrt_nop_FF8EB7:
 	; Write parameter 16 (offset +0x940)
 	ld wa, iz
 	add wa, 0x940
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 34)	; Get param[34:35]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8ED0
 __jrt_nop_FF8ED0:
 	nop
@@ -2617,10 +2617,10 @@ __jrt_nop_FF8ED0:
 	; Write parameter 17 (offset +0x980)
 	ld wa, iz
 	add wa, 0x980
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 36)	; Get param[36:37]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8EE9
 __jrt_nop_FF8EE9:
 	nop
@@ -2630,10 +2630,10 @@ __jrt_nop_FF8EE9:
 	; Write parameter 18 (offset +0x9C0)
 	ld wa, iz
 	add wa, 0x9C0
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 38)	; Get param[38:39]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8F02
 __jrt_nop_FF8F02:
 	nop
@@ -2643,10 +2643,10 @@ __jrt_nop_FF8F02:
 	; Write parameter 19 (offset +0xA00)
 	ld wa, iz
 	add wa, 0xA00
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 40)	; Get param[40:41]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8F1B
 __jrt_nop_FF8F1B:
 	nop
@@ -2656,10 +2656,10 @@ __jrt_nop_FF8F1B:
 	; Write parameter 20 (offset +0xA40)
 	ld wa, iz
 	add wa, 0xA40
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 42)	; Get param[42:43]
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8F34
 __jrt_nop_FF8F34:
 	nop
@@ -2669,11 +2669,11 @@ __jrt_nop_FF8F34:
 	; Final write - parameter 1 again with bit 15 cleared (offset +0x80)
 	ld wa, iz
 	add wa, 0x80
-	stw_da (0x100000), xwa
+	ld (0x100000:24), wa
 	nop
 	ld wa, (xbc + 4)	; Get param[4:5] again
 	res 15, wa	; Clear bit 15 (was set earlier)
-	stw_da (0x100002), xwa
+	ld (0x100002:24), wa
 	jr __jrt_nop_FF8F50
 __jrt_nop_FF8F50:
 	nop
@@ -2699,9 +2699,9 @@ __jrt_nop_FF8F50:
 HARDWARE_VERIFY_WRITE:
 	pushw iz
 	ld iz, bc	; Save BC in IZ
-	stw_da (0x100000), xwa; Write address/command
+	ld (0x100000:24), wa; Write address/command
 	nop
-	stw_da (0x100002), xiz; Write data from IZ
+	ld (0x100002:24), iz; Write data from IZ
 	jr __jrt_nop_FF8F67	; Short delay
 __jrt_nop_FF8F67:
 	nop

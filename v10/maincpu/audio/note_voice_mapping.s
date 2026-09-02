@@ -15964,7 +15964,7 @@ Audio_NullRet2_LoopBody:
 	ld xiz, xiy
 	add xiz, xhl
 	ld wa, (xiz + 4)
-	stw_da (0x00cf33), xwa
+	ld (0x00cf33:24), wa
 	ordi8_24 (0xcede), 2
 	ld (0x00cee5:24), 0x07
 	dec 1, de
@@ -15985,7 +15985,7 @@ Audio_NullRet2_LoopCheck:
 	ld xiz, xiy
 	add xiz, xhl
 	ld wa, (xiz + 4)
-	stw_da (0x00cf33), xwa
+	ld (0x00cf33:24), wa
 	ordi8_24 (0xcede), 2
 	ld (0x00cee5:24), 0x07
 	dec 1, de
@@ -16549,7 +16549,7 @@ VoiceSlot_SetPitchParams_LoadReg:
 	ldb_sri W, 0x07, 0xf8, 0xec
 	ldb a, 0x40
 	stiw_da (0x00cf77), 0x0001
-	stw_da (0x00cf7b), xwa
+	ld (0x00cf7b:24), wa
 	ret
 
 VoiceSlot_SetPitchParams_TestBit24:
@@ -16655,7 +16655,7 @@ VoiceSlot_IterateAlloc_Block2:
 
 VoiceSlot_IterateAlloc_Block3:
 	ld bc, (0x00ceff:24)
-	stw_da (0x00cf5f), xbc
+	ld (0x00cf5f:24), bc
 	cps bc, 0
 	jr z, VoiceSlot_IterateAlloc_Return2
 	ld xiy, 0xcf03
@@ -26059,7 +26059,7 @@ COMM_SendPartDataBlock:
 	jr nz, SendPartDataBlock_LoadParam
 	ld a, (0xe354:16)
 	extz wa
-	stw_da (0x03c1b6), xwa
+	ld (0x03c1b6:24), wa
 
 SendPartDataBlock_LoadParam:
 	ld a, (xsp + 2)
@@ -26189,16 +26189,16 @@ SendPartDataBlock_Block9:
 	lds	de, 1
 	call	SendCOMM_VariableLengthPacket
 	ret
-	stw_da	(0x3c0fa), wa
+	ld	(0x3c0fa:24), wa
 	lds	hl, 0
 	ret
-	stw_da	(0x3c0fc), wa
+	ld	(0x3c0fc:24), wa
 	lds	hl, 0
 	ret
-	stw_da	(0x3c0fe), wa
+	ld	(0x3c0fe:24), wa
 	lds	hl, 0
 	ret
-	stw_da	(0x3c100), wa
+	ld	(0x3c100:24), wa
 	lds	hl, 0
 	ret
 

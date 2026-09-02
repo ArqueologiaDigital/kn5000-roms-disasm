@@ -463,7 +463,7 @@ VoiceFloat_ConvergenceLoop:
 
 ; Restore errno and frexp both operands into (XSP+0x24) and (XSP+0x22).
 VoiceFloat_ConvergenceLoop_Body:
-	stw_da 0x040c22, xiz
+	ld (0x040c22:24), iz
 	lda xwa, (xsp + 36)
 	push xwa
 	lda xiy, (xsp + 70)

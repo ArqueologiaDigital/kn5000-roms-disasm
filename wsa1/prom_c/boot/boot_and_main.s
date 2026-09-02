@@ -878,7 +878,7 @@ MAIN__bit4:
 	ld	bc, hl
 	inc	1, bc
 	ld	(xiz-56), bc
-	stw_da	0x00E2DF, bc
+	ld	(0x00E2DF:24), bc
 	cp	hl, 0x000c
 	jr	le, MAIN__no_wrap
 	stiw_da	0x00E2DF, 0x0000

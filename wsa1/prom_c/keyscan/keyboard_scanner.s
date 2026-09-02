@@ -960,7 +960,7 @@ Link_SendCmdE1__F99B5A:
 	ld	bc, (xiz+12)                        ; F99B6A  ld BC,(XIZ+0x0c)
 	ld	(xix+4), bc                         ; F99B6D  ld (XIX+0x04),BC
 	ld	bc, (xiz+12)                        ; F99B70  ld BC,(XIZ+0x0c)
-	stw_da	(0x8546), bc                    ; F99B73  ld (0x008546),BC
+	ld	(0x8546:24), bc                    ; F99B73  ld (0x008546),BC
 	pushw	6                                ; F99B78  push 0x0006
 	lda	xbc, (0x8542:24)                   ; F99B7B  lda XBC,0x008542
 	push	xbc                               ; F99B80  push XBC

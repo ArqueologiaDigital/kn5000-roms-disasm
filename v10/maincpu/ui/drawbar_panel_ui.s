@@ -4609,7 +4609,7 @@ IvSdpart_ShowHide:
 	ld de, hl
 	cp de, 0xffff
 	jr z, IvSdpart_ShowHide_UpdateUI
-	stw_da (0x03e99e), xde
+	ld (0x03e99e:24), de
 
 IvSdpart_ShowHide_UpdateUI:
 	calr SdpartUpdatePartUI
@@ -4686,7 +4686,7 @@ IvSdpart_PageSelect:
 	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
-	stw_da (0x03e99c), xiz
+	ld (0x03e99c:24), iz
 	ld wa, iz
 	sla wa, 2
 	lda xbc, (MixerPartTable_Start_0x108:24)
@@ -4716,7 +4716,7 @@ IvSdpart_PageSelect:
 	cp bc, 0x17
 	jrl gt, IvSdpart_ReturnHandled
 	add wa, hl
-	stw_da (0x03e99e), xwa
+	ld (0x03e99e:24), wa
 	calr SdpartUpdatePartUI
 	ld wa, (0x03e99e:24)
 	sla wa, 2
@@ -4762,7 +4762,7 @@ IvSdpart_Refresh:
 	jrl z, IvSdpart_ReturnHandled
 	cpdm16_24 (0x3e99e), xde
 	jrl z, IvSdpart_ReturnHandled
-	stw_da (0x03e99e), xde
+	ld (0x03e99e:24), de
 	calr SdpartUpdatePartUI
 	ld wa, (0x03e99e:24)
 	sla wa, 2
@@ -8355,7 +8355,7 @@ IvMesageProc:
 	jr z, IvMessage_Close
 	cp xbc, 0x1c00001
 	jrl nz, IvMessage_ForwardToBase
-	stw_da (0x02478c), xwa
+	ld (0x02478c:24), wa
 	ld xwa, xiz
 	call InheritedProc
 	ld wa, (0x02478c:24)
@@ -8406,7 +8406,7 @@ IvMessage_SendEvent:
 	jr IvMessageStrcpyReturn
 
 IvMessage_SelectionChange:
-	stw_da (0x02478c), xwa
+	ld (0x02478c:24), wa
 	muls wa, 0xe
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
@@ -8678,7 +8678,7 @@ CheckMessage:
 	cps wa, 0
 	jr le, LanguageCheckReturn
 	dec 1, bc
-	stw_da (0x02478c), xbc
+	ld (0x02478c:24), bc
 	jr LanguageCheckReturn
 
 CheckMsg_IncrementCheck:
@@ -8690,7 +8690,7 @@ CheckMsg_IncrementCheck:
 	or xwa, xwa
 	jr z, LanguageCheckReturn
 	inc 1, bc
-	stw_da (0x02478c), xbc
+	ld (0x02478c:24), bc
 
 LanguageCheckReturn:
 	ld wa, (0x02478c:24)
@@ -8903,7 +8903,7 @@ IvAccordion_ShowHide:
 	stiw_da (0x02477c), 0xffff
 	stiw_da (0x024780), 0xffff
 	call GetPartSelect
-	stw_da (0x02477e), xhl
+	ld (0x02477e:24), hl
 	ld wa, hl
 	calr SndParam_ResolveOscEntry
 	ld xde, xhl
@@ -8941,7 +8941,7 @@ IvAccordion_ShowHide_Toggle:
 	call SendEvent
 	ld wa, (0x024782:24)
 	cpl wa
-	stw_da (0x024782), xwa
+	ld (0x024782:24), wa
 
 IvAccordion_ShowHide_UpdatePart:
 	ld wa, (0x02477e:24)
@@ -9135,7 +9135,7 @@ IvAccordion_Refresh:
 	ld xde, xiz
 	call InheritedProc
 	call GetPartSelect
-	stw_da (0x02477e), xhl
+	ld (0x02477e:24), hl
 	sla hl, 2
 	lda xwa, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe0, 0xec
@@ -10047,7 +10047,7 @@ Sdscltyp2_ScrollDown:
 	cp wa, 0xb
 	jr ge, Sdscltyp2_SetAutoIncDown
 	inc 1, wa
-	stw_da (0x02478e), xwa
+	ld (0x02478e:24), wa
 	ld xwa, 0x50011
 	ld xbc, 0x1e00051
 	lds32 xde, 0
@@ -10082,7 +10082,7 @@ Sdscltyp2_ScrollUp:
 	cps wa, 0
 	jr le, Sdscltyp2_SetAutoIncUp
 	dec 1, wa
-	stw_da (0x02478e), xwa
+	ld (0x02478e:24), wa
 	ld xwa, 0x50011
 	ld xbc, 0x1e00051
 	lds32 xde, 0
@@ -11094,7 +11094,7 @@ AcWelcomScreen_RenderBytecode:
 AcWelcomScreen_Select_NextStep:
 	ld wa, (0x024784:24)
 	inc 1, wa
-	stw_da (0x024784), xwa
+	ld (0x024784:24), wa
 	exts xwa
 	ld xbc, xwa
 	add xbc, xbc
@@ -11220,7 +11220,7 @@ PsMixer_ControlHandler:
 	lds32 xde, 1
 	call SendEvent
 	call GetPartSelect
-	stw_da (0x02478a), xhl
+	ld (0x02478a:24), hl
 
 AudioCtrl_InitCounters:
 	stiw_da (0x024794), 0x0000
@@ -11237,7 +11237,7 @@ AudioCtrl_ScanLoop:
 	cpw (xwa + 6), 0x1
 	jr nz, AudioCtrl_ScanNext
 	ld wa, (xsp + 10)
-	stw_da (0x024792), xwa
+	ld (0x024792:24), wa
 	jr AudioCtrl_MainFuncCallPt
 
 AudioCtrl_ScanNext:
@@ -11443,7 +11443,7 @@ PsMixer_GridLoop:
 	call InheritedProc
 	ld xwa, (xsp + 82)
 	dec 1, wa
-	stw_da (0x024796), xwa
+	ld (0x024796:24), wa
 	muls wa, 0x5
 	ld (xsp + 8), wa
 	ldw (xsp + 10), 0x0
@@ -11456,7 +11456,7 @@ PsMixer_FindActiveLoop:
 	cpw (xwa + 6), 0x1
 	jr nz, PsMixer_FindActiveNext
 	ld wa, (xsp + 8)
-	stw_da (0x024792), xwa
+	ld (0x024792:24), wa
 	jr PsMixer_ShowEventAndForward
 
 PsMixer_FindActiveNext:
@@ -11518,7 +11518,7 @@ PsMixer_ControlCase5:
 	call SetDialDown
 	lds wa, 1
 	call SetDialEnable
-	stw_da (0x024790), xiz
+	ld (0x024790:24), iz
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -11611,7 +11611,7 @@ AudioCtrl_DispatchHandler:
 	ld xhl, (xhl)
 	call (xhl)
 	ld wa, (xsp + 8)
-	stw_da (0x024792), xwa
+	ld (0x024792:24), wa
 	ld bc, (xsp + 8)
 	extz xbc
 	ld wa, (0x024790:24)
@@ -11664,7 +11664,7 @@ AudioCtrl_PageAdvance:
 	exts xwa
 	divs wa, 0x8
 	stw_erp WA, 0xe2
-	stw_da (0x024790), xwa
+	ld (0x024790:24), wa
 	stiw_da (0x024794), 0x0000
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
@@ -12157,11 +12157,11 @@ PsMixer_VolumeSelect_Continue:
 	ld wa, (0x024790:24)
 	cp wa, iz
 	jrl z, AudioCtrl_ReturnZero
-	stw_da (0x024790), xiz
+	ld (0x024790:24), iz
 	ld wa, iz
 	exts xwa
 	divs wa, 0x8
-	stw_da (0x024794), xwa
+	ld (0x024794:24), wa
 	stw_erp WA, 0xfa
 	add wa, wa
 	lda xbc, (MixerPartTable_Start_0x12C:24)
@@ -15026,7 +15026,7 @@ IvDrawbarProc:
 IvDrawbar_Init_Part03:
 	stiw_da (0x024798), 0x0000
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	stiw_da (0x03e99e), 0x0000
 	call GetModeNow
 	cp xhl, 0x1800003
@@ -15123,7 +15123,7 @@ IvDrawbar_Close:
 
 IvDrawbar_ShowHide:
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	ld wa, hl
 	calr SndParam_ResolveOscEntry
 	ld xde, xhl
@@ -15164,11 +15164,11 @@ IvDrawbar_LoadVals:
 	ld wa, (0x02479a:24)
 	ldw bc, 0x2c1
 	call SndParam_LookupViaEncode
-	stw_da (0x0247c2), xhl
+	ld (0x0247c2:24), hl
 	ld wa, (0x02479a:24)
 	ldw bc, 0x2c0
 	call SndParam_LookupViaEncode
-	stw_da (0x0247c4), xhl
+	ld (0x0247c4:24), hl
 	jrl IvDrawbar_ReturnHandled
 
 IvDrawbar_LoadVals_DualMode:
@@ -15269,7 +15269,7 @@ IvDrawbar_Release:
 	jrl nz, IvDrawbar_ReturnHandled
 	cpw_da (0x24798), 0
 	scc16 z, wa
-	stw_da (0x024798), xwa
+	ld (0x024798:24), wa
 	inc 1, wa
 	ld de, wa
 	exts xde
@@ -15347,7 +15347,7 @@ IvDrawbar_Update:
 	cp c, 0xc
 	jr nz, IvDrawbar_Update_GenericParam
 	extz wa
-	stw_da (0x02479c), xwa
+	ld (0x02479c:24), wa
 	jrl IvDrawbar_ReturnHandled
 
 IvDrawbar_Update_GenericParam:
@@ -15390,7 +15390,7 @@ IvDrawbar_Match_CheckUpper:
 	ld xwa, (xsp + 4)
 	cp xix, (xwa)
 	jr nz, IvDrawbar_Match_CheckLower
-	stw_da (0x0247c2), xbc
+	ld (0x0247c2:24), bc
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1e000a7
 	lds32 xde, 2
@@ -15400,7 +15400,7 @@ IvDrawbar_Match_CheckLower:
 	add xde, 0x82c0
 	cp xde, (xhl)
 	jr nz, IvDrawbar_Match_Forward
-	stw_da (0x0247c4), xbc
+	ld (0x0247c4:24), bc
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1e000a7
 	lds32 xde, 3
@@ -15423,7 +15423,7 @@ IvDrawbar_Refresh:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	ld wa, hl
 	calr SndParam_ResolveOscEntry
 	ld xde, xhl
@@ -16068,7 +16068,7 @@ LswPercDecay_StepSize:
 	jr LswPercDecay_PopIzRet
 
 LswPercDecay_StoreDE:
-	stw_da (0x0247c6), xde
+	ld (0x0247c6:24), de
 	jr LswPercDecay_Return
 
 Lsw_PercDecay_DialScroll:
@@ -16185,7 +16185,7 @@ LswPercLevel_StepSize:
 	jr LswPercLevel_PopIzRet
 
 LswPercLevel_StoreDE:
-	stw_da (0x0247c8), xde
+	ld (0x0247c8:24), de
 	jr LswPercLevel_Return
 
 Lsw_PercLevel_DialScroll:
@@ -16272,7 +16272,7 @@ LswDrawAttack_StepSize:
 	jr LswDrawAttack_PopIzRet
 
 LswDrawAttack_StoreDE:
-	stw_da (0x0247cc), xde
+	ld (0x0247cc:24), de
 	jr LswDrawAttack_Return
 
 Lsw_DrawAttack_DialScroll:
@@ -16359,7 +16359,7 @@ LswDrawRelease_StepSize:
 	jr LswDrawRelease_PopIzRet
 
 LswDrawRelease_StoreDE:
-	stw_da (0x0247ca), xde
+	ld (0x0247ca:24), de
 	jr LswDrawRelease_Return
 
 Lsw_DrawRelease_DialScroll:
@@ -16428,7 +16428,7 @@ IvDrawbar1_Close:
 
 IvDrawbar1_ShowHide:
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e10008
 	lds32 xde, 0
@@ -16678,7 +16678,7 @@ IvDrawbar1_Match:
 	cp xbc, (xwa)
 	jr nz, IvDrawbar1_Match_Ch1
 	ld wa, (xhl)
-	stw_da (0x0247b0), xwa
+	ld (0x0247b0:24), wa
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -16690,7 +16690,7 @@ IvDrawbar1_Match_Ch1:
 	cp xwa, (xix)
 	jr nz, IvDrawbar1_Match_Ch2
 	ld wa, (xhl)
-	stw_da (0x0247b2), xwa
+	ld (0x0247b2:24), wa
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000a7
 	lds32 xde, 1
@@ -16702,7 +16702,7 @@ IvDrawbar1_Match_Ch2:
 	cp xwa, (xix)
 	jr nz, IvDrawbar1_Match_Ch3
 	ld wa, (xhl)
-	stw_da (0x0247b4), xwa
+	ld (0x0247b4:24), wa
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000a7
 	lds32 xde, 2
@@ -16714,7 +16714,7 @@ IvDrawbar1_Match_Ch3:
 	cp xwa, (xix)
 	jr nz, IvDrawbar1_Match_Ch4
 	ld wa, (xhl)
-	stw_da (0x0247b6), xwa
+	ld (0x0247b6:24), wa
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000a7
 	lds32 xde, 3
@@ -16796,7 +16796,7 @@ IvDrawbar1_Refresh:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e10008
 	lds32 xde, 0
@@ -16869,7 +16869,7 @@ IvDrawbar2Proc:
 
 IvDrawbar2_ShowHideHandler:
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -16900,19 +16900,19 @@ IvDrawbar2_LoadValsHandler:
 	ld wa, (0x02479a:24)
 	ldw bc, 0x2cc
 	call SndParam_LookupViaEncode
-	stw_da (0x0247c6), xhl
+	ld (0x0247c6:24), hl
 	ld wa, (0x02479a:24)
 	ldw bc, 0x2cb
 	call SndParam_LookupViaEncode
-	stw_da (0x0247c8), xhl
+	ld (0x0247c8:24), hl
 	ld wa, (0x02479a:24)
 	ldw bc, 0x293
 	call SndParam_LookupViaEncode
-	stw_da (0x0247ca), xhl
+	ld (0x0247ca:24), hl
 	ld wa, (0x02479a:24)
 	ldw bc, 0x294
 	call SndParam_LookupViaEncode
-	stw_da (0x0247cc), xhl
+	ld (0x0247cc:24), hl
 	jrl IvDrawbar_ReturnZeroJmp
 
 IvDrawbar2_LoadMode3:
@@ -16933,7 +16933,7 @@ IvDrawbar2_MatchHandler:
 	cp xix, (xwa)
 	jr nz, IvDrawbar2_MatchCheck2CB
 	ld wa, (xde)
-	stw_da (0x0247c6), xwa
+	ld (0x0247c6:24), wa
 	jr IvDrawbar_ForwardUnhandled
 
 IvDrawbar2_MatchCheck2CB:
@@ -16942,7 +16942,7 @@ IvDrawbar2_MatchCheck2CB:
 	cp xwa, (xhl)
 	jr nz, IvDrawbar2_MatchCheck294
 	ld wa, (xde)
-	stw_da (0x0247c8), xwa
+	ld (0x0247c8:24), wa
 	jr IvDrawbar_ForwardUnhandled
 
 IvDrawbar2_MatchCheck294:
@@ -16951,14 +16951,14 @@ IvDrawbar2_MatchCheck294:
 	ld wa, (xde)
 	cp xix, (xhl)
 	jr nz, IvDrawbar2_MatchCheck293
-	stw_da (0x0247cc), xwa
+	ld (0x0247cc:24), wa
 	jr IvDrawbar_ForwardUnhandled
 
 IvDrawbar2_MatchCheck293:
 	add xbc, 0x8293
 	cp xbc, (xhl)
 	jr nz, IvDrawbar_ForwardUnhandled
-	stw_da (0x0247ca), xwa
+	ld (0x0247ca:24), wa
 
 IvDrawbar_ForwardUnhandled:
 	ld xwa, (xsp + 8)
@@ -17127,7 +17127,7 @@ DrawbarNorm_Refresh:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	call GetPartSelect
-	stw_da (0x02479a), xhl
+	ld (0x02479a:24), hl
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1e000a7
 	lds32 xde, 4
@@ -17403,17 +17403,17 @@ DemoMenu_WorkspaceFunc:
 
 ; DemoMenu workspace dispatch (6-entry, table 0xe9f984)
 DemoMenu_WorkspaceDispatch:
-	stw_da	(0x247e0), iz
+	ld	(0x247e0:24), iz
 	jr	42
-	stw_da	(0x247e2), iz
+	ld	(0x247e2:24), iz
 	jr	35
-	stw_da	(0x247e4), iz
+	ld	(0x247e4:24), iz
 	jr	19
-	stw_da	(0x247e6), iz
+	ld	(0x247e6:24), iz
 	jr	12
-	stw_da	(0x247e8), iz
+	ld	(0x247e8:24), iz
 	jr	5
-	stw_da	(0x247ea), iz
+	ld	(0x247ea:24), iz
 	ld	bc, (xbc)
 	extz	xbc
 	ld	xwa, (xsp+2)

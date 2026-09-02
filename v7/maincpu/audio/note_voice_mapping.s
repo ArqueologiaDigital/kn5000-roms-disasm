@@ -7515,7 +7515,7 @@ NoteBuffer_CompactEn_Increment:
 	push sr
 	normal
 	nop
-	stw_da (52959), wa
+	ld (52959:24), wa
 	ret
 	bitda_24 1, (0x00ce42)
 	jr z, .Lc_fe9a32

@@ -2051,7 +2051,7 @@ FDemoText_Layout_DrawText:
 FDemoText_Layout_UpdatePosition:
 	ld wa, (xsp + 20)
 	add wa, (xsp + 8)
-	stw_da (0x025b3a), xwa
+	ld (0x025b3a:24), wa
 	cpw (xsp + 14), 0x0
 	jr z, FDemoText_Layout_FreeBuffer
 	calr FDemoText_UpdateCursorPosition
@@ -2150,7 +2150,7 @@ FDemoText_ByteData_LayoutB:
 	call	16431151
 	ld	wa, (xsp+8)
 	.byte 0x9f, 0x02, 0x80
-	stw_da	154426, wa
+	ld	(154426:24), wa
 	popw	iz
 	lda	xsp, (xsp+14)
 	ret
@@ -2186,7 +2186,7 @@ Seq_InitVoiceLoop:
 	inc 1, qiz
 	cpw	qiz, 64
 	jr	lt, -79
-	stw_da	154498, iz
+	ld	(154498:24), iz
 	pop	xiz
 	ret
 Seq_PostProcessDisplay:

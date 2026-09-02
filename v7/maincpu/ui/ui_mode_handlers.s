@@ -3238,7 +3238,7 @@ MstStyle_EventDispatch:
 	muls wa, 0xa
 	sub wa, 0xa
 	add wa, iy
-	stw_da (0x0340c4), xwa
+	ld (0x0340c4:24), wa
 	jrl SeqFileAlt_ReturnZeroJmp
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -3270,7 +3270,7 @@ MstStyle_EventDispatch:
 	ld wa, (xwa)
 	muls wa, 0xa
 	dec 1, wa
-	stw_da (0x0340c4), xwa
+	ld (0x0340c4:24), wa
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -3360,7 +3360,7 @@ MstStyle_FallbackEvent:
 	ld wa, (xwa)
 	muls wa, 0xa
 	sub wa, 0xa
-	stw_da (0x0340c4), xwa
+	ld (0x0340c4:24), wa
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -3733,7 +3733,7 @@ MstStyle1Sub_CountEntries_Adjust:
 	add xde, xwa
 	ld a, (xde)
 	extz wa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld xhl, (xsp + 8)
 	ld xde, (xhl + 74)
 	ld a, c
@@ -3811,7 +3811,7 @@ MstStyle1Sub_SubSel_Adjust:
 	add xde, xwa
 	ld a, (xde)
 	extz wa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld xde, (xhl + 74)
 	ld a, c
 	extz wa
@@ -3863,7 +3863,7 @@ MstStyle1Sub_SubSel_Adjust:
 	ld wa, (xwa)
 	muls wa, 0xa
 	dec 1, wa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld de, (0x0340c4:24)
 	extz xde
 	add xbc, xde
@@ -3884,7 +3884,7 @@ MstStyle1Sub_SubSel_Adjust:
 MstStyle1Sub_DialDown_Decrement:
 	ld wa, (0x0340c6:24)
 	dec 1, wa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld de, (0x0340c4:24)
 	extz xde
 	add xbc, xde
@@ -3971,7 +3971,7 @@ MstStyle1Sub_FallbackEvent:
 	ld wa, (xwa)
 	muls wa, 0xa
 	sub wa, 0xa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld bc, (0x0340c4:24)
 	extz xbc
 	add xix, xbc
@@ -3991,7 +3991,7 @@ MstStyle1Sub_FallbackEvent:
 
 MstStyle1Sub_DialUp_Increment:
 	inc 1, bc
-	stw_da (0x0340c6), xbc
+	ld (0x0340c6:24), bc
 	ld wa, (0x0340c4:24)
 	extz xwa
 	add xix, xwa
@@ -4014,7 +4014,7 @@ MstStyle1Sub_DialUp_CheckLimit:
 	cp hl, wa
 	jrl ge, SeqFile_ReturnZeroJmp
 	inc 1, bc
-	stw_da (0x0340c6), xbc
+	ld (0x0340c6:24), bc
 	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xhl, 0x340c8
@@ -4800,12 +4800,12 @@ MstStyle2_PageInc_CountAdj:
 	ld (xhl), bc
 	ld xwa, (xix)
 	ld wa, (xwa)
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	ld xwa, (xiy)
 	ld wa, (xwa)
 	sla wa, 1
 	dec 2, wa
-	stw_da (0x0340be), xwa
+	ld (0x0340be:24), wa
 	cpdm16_24 (0x340bc), xwa
 	jr le, MstStyle2_DialUp_UpdateAndPost
 	ld xwa, (xiy)
@@ -4891,7 +4891,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	lda xde, (xhl + 82)
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	cps wa, 1
 	jrl le, MstStyle2_DialScroll_SetAutoInc
 	lda xhl, (xhl + 86)
@@ -5129,10 +5129,10 @@ MstStyle2_DialScrollUp_NextPage:
 	lda xix, (xbc + 82)
 	ld xwa, (xix)
 	ld wa, (xwa)
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	ld xwa, (xbc + 78)
 	ld wa, (xwa)
-	stw_da (0x0340be), xwa
+	ld (0x0340be:24), wa
 	cpdm16_24 (0x340bc), xwa
 	jrl ge, MstStyle2_DialScroll_AutoInc
 	ld xwa, (xix)

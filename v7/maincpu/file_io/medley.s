@@ -3746,7 +3746,7 @@ CheckAnySlotHasData:
 
 SetCurrentSlotIndex_Entry:
 SetCurrentSlotIndex:
-	stw_da (0x09480e), xwa
+	ld (0x09480e:24), wa
 	ret
 
 GetCurrentSlotIndex_Entry:

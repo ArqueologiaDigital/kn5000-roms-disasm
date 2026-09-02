@@ -2756,12 +2756,12 @@ SeqDemo_SaveCurrentState:
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleAB:
-	stw_da (0x0274ac), xde
+	ld (0x0274ac:24), de
 	stiw_da (0x0274ae), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBA:
-	stw_da (0x0274a8), xde
+	ld (0x0274a8:24), de
 	stiw_da (0x0274aa), 0x000a
 	jr UIWidget_ReturnZero
 
@@ -2770,18 +2770,18 @@ MainTitleCtrl_HandleBB:
 	cps wa, 0
 	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
-	stw_da (0x0274aa), xwa
+	ld (0x0274aa:24), wa
 	cps wa, 0
 	jr nz, MainTitleCtrl_CheckSecondTimer
 	ld wa, (0x0274a8:24)
-	stw_da (0x0274a6), xwa
+	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
 	ld wa, (0x0274ae:24)
 	cps wa, 0
 	jr z, UIWidget_ReturnZero
 	dec 1, wa
-	stw_da (0x0274ae), xwa
+	ld (0x0274ae:24), wa
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
 	cpw_da (0x274ac), 0
