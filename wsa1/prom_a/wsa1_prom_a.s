@@ -20397,7 +20397,34 @@ sub_F8BF07:
 ; Boundaries: notes/reachability.py's walk, frozen against this file's own output.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C000, 0x000032
+sub_F8C000:
+	jp 0xf8c018                                   ; F8C000  1b 18 c0 f8
+	ret                                           ; F8C004  0e
+	nop                                           ; F8C005  00
+	nop                                           ; F8C006  00
+	nop                                           ; F8C007  00
+	ret                                           ; F8C008  0e
+	nop                                           ; F8C009  00
+	nop                                           ; F8C00A  00
+	nop                                           ; F8C00B  00
+	ret                                           ; F8C00C  0e
+	nop                                           ; F8C00D  00
+	nop                                           ; F8C00E  00
+	nop                                           ; F8C00F  00
+	ret                                           ; F8C010  0e
+	nop                                           ; F8C011  00
+	nop                                           ; F8C012  00
+	nop                                           ; F8C013  00
+	ret                                           ; F8C014  0e
+	nop                                           ; F8C015  00
+	nop                                           ; F8C016  00
+	nop                                           ; F8C017  00
+	stdi8 (0x2143), 0x05                          ; F8C018  f1 43 21 00 05
+	stdi8 (0x2144), 0x05                          ; F8C01D  f1 44 21 00 05
+	stdi8 (0x2146), 0x05                          ; F8C022  f1 46 21 00 05
+	stdi8 (0x2147), 0x05                          ; F8C027  f1 47 21 00 05
+	stdi8 (0x2145), 0x05                          ; F8C02C  f1 45 21 00 05
+	ret                                           ; F8C031  0e
 sub_F8C032:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20b8)                                   ; F8C032  c1 b8 20 21
 	cps a, 0x00                                          ; F8C036  c9 d8
@@ -20407,13 +20434,35 @@ sub_F8C032:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c046                                    ; F8C03D  45 46 c0 f8 00
 	calr 0x0128                                          ; F8C042  1e 28 01
 	ret                                                  ; F8C045  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C046, 0x000008
+; ---------------------------------------------------------------------
+; CmdList_F8C046 -- 8 bytes, 1 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C03D `ld XIY,0x00f8c046` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C046:
+	.byte 0x00, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C046  record 0
+	.byte 0xff  ; F8C04D  terminator
 sub_F8C04E:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20b8)                                   ; F8C04E  c1 b8 20 21
 	ld XIY,0x00f8c05b                                    ; F8C052  45 5b c0 f8 00
 	calr 0x0113                                          ; F8C057  1e 13 01
 	ret                                                  ; F8C05A  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C05B, 0x000016
+; ---------------------------------------------------------------------
+; CmdList_F8C05B -- 22 bytes, 3 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C052 `ld XIY,0x00f8c05b` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C05B:
+	.byte 0x18, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C05B  record 0
+	.byte 0x19, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C062  record 1
+	.byte 0x1a, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C069  record 2
+	.byte 0xff  ; F8C070  terminator
 sub_F8C071:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20b8)                                   ; F8C071  c1 b8 20 21
 	cp A,0x10                                            ; F8C075  c9 cf 10
@@ -20423,7 +20472,18 @@ sub_F8C071:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c086                                    ; F8C07D  45 86 c0 f8 00
 	calr 0xe8                                            ; F8C082  1e e8 00
 	ret                                                  ; F8C085  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C086, 0x00000F
+; ---------------------------------------------------------------------
+; CmdList_F8C086 -- 15 bytes, 2 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C07D `ld XIY,0x00f8c086` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C086:
+	.byte 0x10, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C086  record 0
+	.byte 0x10, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C08D  record 1
+	.byte 0xff  ; F8C094  terminator
 sub_F8C095:   ; entry: prom_b routine directory
 	ret                                                  ; F8C095  0e
 sub_F8C096:   ; entry: prom_b routine directory
@@ -20433,7 +20493,18 @@ sub_F8C097:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c0a4                                    ; F8C09B  45 a4 c0 f8 00
 	calr 0xca                                            ; F8C0A0  1e ca 00
 	ret                                                  ; F8C0A3  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C0A4, 0x00000F
+; ---------------------------------------------------------------------
+; CmdList_F8C0A4 -- 15 bytes, 2 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C09B `ld XIY,0x00f8c0a4` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C0A4:
+	.byte 0x08, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0A4  record 0
+	.byte 0x07, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0AB  record 1
+	.byte 0xff  ; F8C0B2  terminator
 sub_F8C0B3:   ; entry: prom_b routine directory
 	ret                                                  ; F8C0B3  0e
 sub_F8C0B4:   ; entry: prom_b routine directory
@@ -20441,7 +20512,18 @@ sub_F8C0B4:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c0c1                                    ; F8C0B8  45 c1 c0 f8 00
 	calr 0xad                                            ; F8C0BD  1e ad 00
 	ret                                                  ; F8C0C0  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C0C1, 0x00000F
+; ---------------------------------------------------------------------
+; CmdList_F8C0C1 -- 15 bytes, 2 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C0B8 `ld XIY,0x00f8c0c1` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C0C1:
+	.byte 0x00, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0C1  record 0
+	.byte 0x01, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0C8  record 1
+	.byte 0xff  ; F8C0CF  terminator
 sub_F8C0D0:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20ba)                                   ; F8C0D0  c1 ba 20 21
 	and A,A                                              ; F8C0D4  c9 c1
@@ -20608,7 +20690,28 @@ sub_F8C18B:   ; entry: prom_b routine directory
 	stdi16 (0x213a), 0x00                                ; F8C2AB  f1 3a 21 02 00 00
 .LF8C2B1:
 	ret                                                  ; F8C2B1  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C2B2, 0x00003A
+; ---------------------------------------------------------------------
+; DispatchTable_F8C2B2 -- 58 bytes.  Variable-length: a 2-byte id, then either
+; a 2-byte placeholder (id == 0xFFFF) or a 4-byte little-endian pointer.
+; 8 non-placeholder pointers, ALL landing inside the two neighbouring
+; still-.incbin spans 0xF8C485-0xF8C630 and 0xF8C652-0xF8C842 (two of
+; them are those spans' own START addresses) -- neither neighbour is
+; converted this pass, see notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+DispatchTable_F8C2B2:
+	.byte 0x04, 0x00, 0x85, 0xc4, 0xf8, 0x00  ; F8C2B2  id=0x0004 ptr=0x00f8c485
+	.byte 0x40, 0x00, 0xd8, 0xc4, 0xf8, 0x00  ; F8C2B8  id=0x0040 ptr=0x00f8c4d8
+	.byte 0xff, 0xff  ; F8C2BE  placeholder
+	.byte 0xff, 0xff  ; F8C2C0  placeholder
+	.byte 0xff, 0xff  ; F8C2C2  placeholder
+	.byte 0x02, 0x00, 0x07, 0xc7, 0xf8, 0x00  ; F8C2C4  id=0x0002 ptr=0x00f8c707
+	.byte 0xff, 0xff  ; F8C2CA  placeholder
+	.byte 0x00, 0x01, 0x96, 0xc5, 0xf8, 0x00  ; F8C2CC  id=0x0100 ptr=0x00f8c596
+	.byte 0x00, 0x08, 0xe3, 0xc5, 0xf8, 0x00  ; F8C2D2  id=0x0800 ptr=0x00f8c5e3
+	.byte 0x80, 0x00, 0x52, 0xc6, 0xf8, 0x00  ; F8C2D8  id=0x0080 ptr=0x00f8c652
+	.byte 0x00, 0x02, 0x7d, 0xc7, 0xf8, 0x00  ; F8C2DE  id=0x0200 ptr=0x00f8c77d
+	.byte 0x00, 0x04, 0xac, 0xc7, 0xf8, 0x00  ; F8C2E4  id=0x0400 ptr=0x00f8c7ac
+	.byte 0xff, 0xff  ; F8C2EA  placeholder
 .LF8C2EC:
 sub_F8C2EC:   ; entry: reachable-run entry
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8C2EC  c0 c4 3f 02
@@ -38443,7 +38546,32 @@ sub_F97418:   ; entry: reachable-run entry
 	pop XIX                                              ; F97500  5c
 	pop XIZ                                              ; F97501  5e
 	ret                                                  ; F97502  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x017503, 0x000030
+sub_F97503:
+	push XIZ                                      ; F97503  3e
+	push XIX                                      ; F97504  3c
+	push XHL                                      ; F97505  3b
+	push XDE                                      ; F97506  3a
+	ldda32 xix, (0x218b)                          ; F97507  e1 8b 21 24
+	bit 2,(XIX+0x15)                              ; F9750B  bc 15 ca
+	jr z, .LF9751C                                ; F9750E  66 0c
+	ldb b, 0x08                                   ; F97510  22 08
+	ld E,(XIX+0x08)                               ; F97512  8c 08 25
+	and E,0x7f                                    ; F97515  cd cc 7f
+	ldb d, 0x7f                                   ; F97518  24 7f
+	jr .LF97526                                   ; F9751A  68 0a
+.LF9751C:
+	ldb b, 0x08                                   ; F9751C  22 08
+	ld E,(XIX+0x12)                               ; F9751E  8c 12 25
+	and E,0x7f                                    ; F97521  cd cc 7f
+	ldb d, 0x7f                                   ; F97524  24 7f
+.LF97526:
+	ldb_d8 c, (0x218f)                            ; F97526  c1 8f 21 23
+	call 0xf40748                                 ; F9752A  1d 48 07 f4
+	pop XDE                                       ; F9752E  5a
+	pop XHL                                       ; F9752F  5b
+	pop XIX                                       ; F97530  5c
+	pop XIZ                                       ; F97531  5e
+	ret                                           ; F97532  0e
 sub_F97533:   ; entry: reachable-run entry
 	push XIZ                                             ; F97533  3e
 	push XIX                                             ; F97534  3c
