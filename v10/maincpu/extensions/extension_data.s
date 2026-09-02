@@ -240,13 +240,9 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	ldb	w, 0
 	swi	7
 	aligned_string "A~a0"
-	ld	xsp, 0x47ff0020
-	jrl	nz, 12385
-	nop
-	swi	7
-	ld	xiz, 0x45ff0020
-	ldb	w, 0
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED0272-0xED0284 (18 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=9 near ChordTypeStr_7sus4+162
+	.byte 0x47, 0x20, 0x00, 0xff, 0x47, 0x7e, 0x61, 0x30, 0x00, 0xff, 0x46, 0x20
+	.byte 0x00, 0xff, 0x45, 0x20, 0x00, 0xff
 	aligned_string "E~a0"
 	ld	xix, 0x44ff0020
 	jrl	nz, 12385
@@ -1006,51 +1002,15 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	nop
 	nop
 	.byte 0x04
-	pushw	bc
-	nop
-	nop
-	push	sr
-	pushw	bc
-	nop
-	nop
-	pop	sr
-	pushw	bc
-	nop
-	nop
-	ldwio	41, 0
-	pushw	41
-	nop
-	incf
-	pushw	bc
-	nop
-	nop
-	decf
-	pushw	bc
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x52+9
+	.byte 0x29, 0x00, 0x00, 0x02, 0x29, 0x00, 0x00, 0x03, 0x29, 0x00, 0x00, 0x0a
+	.byte 0x29, 0x00, 0x00, 0x0b, 0x29, 0x00, 0x00, 0x0c, 0x29, 0x00, 0x00, 0x0d
+	.byte 0x29, 0x00, 0x00
 	ret
-	pushw	bc
-	nop
-	nop
-	halt
-	pushw	bc
-	nop
-	nop
-	reti
-	pushw	bc
-	nop
-	nop
-	ldio	41, 0
-	nop
-	retd	41
-	nop
-	rcf
-	pushw	bc
-	nop
-	nop
-	push	41
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x76+1
+	.byte 0x29, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00, 0x07, 0x29, 0x00, 0x00, 0x08
+	.byte 0x29, 0x00, 0x00, 0x0f, 0x29, 0x00, 0x00, 0x10, 0x29, 0x00, 0x00, 0x09
+	.byte 0x29, 0x00, 0x00
 	.byte 0x06
 	pushw	bc
 	nop
@@ -1250,34 +1210,13 @@ VariationStr_V1:
 	.byte 0x56
 	ldw	bc, 0xff00
 	aligned_string "RHYTHM"
-	ldb	e, 115
-	push	xde
-	nop
-	ldb	e, 115
-	push	xde
-	nop
-	ldb	e, 100
-	push	xde
-	nop
-	ldb	e, 100
-	push	xde
-	nop
-	ldb	e, 115
-	push	xde
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
+	.byte 0x25, 0x73, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00
 	aligned_string "PAGE %d/%d"
-	ldb	e, 100
-	push	xde
-	nop
-	ldb	e, 115
-	push	xde
-	nop
-	ldb	e, 100
-	push	xde
-	nop
-	ldb	e, 100
-	push	xde
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+	.byte 0x25, 0x64, 0x3a, 0x00
 	push	sr
 	nop
 	push	xiz
@@ -1700,25 +1639,10 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	ldb	e, 252
 	nop
 	.byte 0xb2
-	ldb	e, 252
-	nop
-	pushw	iy
-	ldb	h, 252
-	nop
-	reti
-	ldb	l, 252
-	nop
-	ld	xhl, 0x5900fc27
-	ldb	l, 252
-	nop
-	jr	pl, 39
-	swi	4
-	nop
-	jr	gt, 39
-	swi	4
-	nop
-	ldw	de, 0xfc27
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1D1B-0xED1D3A (31 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=70% dist=12 near KeyScaleNoteStr_G_0x18+129
+	.byte 0x25, 0xfc, 0x00, 0x2d, 0x26, 0xfc, 0x00, 0x07, 0x27, 0xfc, 0x00, 0x43
+	.byte 0x27, 0xfc, 0x00, 0x59, 0x27, 0xfc, 0x00, 0x6d, 0x27, 0xfc, 0x00, 0x6a
+	.byte 0x27, 0xfc, 0x00, 0x32, 0x27, 0xfc, 0x00
 	.byte 0xee
 	jrl	nc, 251
 	swi	7
@@ -1999,16 +1923,9 @@ NakaParam_AcMstStyleAlpGridBox:
 	nop
 	ldb	d, 36
 	.byte 0xed
-	nop
-	calr	60708
-	nop
-	ex_ff
-	ldb	d, 237
-	nop
-	ldwio	36, 237
-	swi	6
-	ldb	c, 237
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED239D-0xED23AE (17 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near NakaParam_AcMstStyleAlpGridBox+7
+	.byte 0x00, 0x1e, 0x24, 0xed, 0x00, 0x16, 0x24, 0xed, 0x00, 0x0a, 0x24, 0xed
+	.byte 0x00, 0xfe, 0x23, 0xed, 0x00
 	.byte 0xee
 	ldb	c, 237
 	nop
@@ -2128,21 +2045,10 @@ NakaParam_AcMstSong2GridBox:
 	ldb	h, 237
 	nop
 	.byte 0xb4
-	ldb	h, 237
-	nop
-	or	(xiz+38), xiy
-	nop
-	or	(xiz+38), iy
-	nop
-	or	(xix+38), e
-	nop
-	jrl	nov, -4826
-	nop
-	jrl	gt, -4826
-	nop
-MstSong2Grid_Empty:
-	nop
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2663-0xED267C (25 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=9 near NakaParam_AcMstSong2GridBox+5
+	.byte 0x26, 0xed, 0x00, 0xae, 0x26, 0xed, 0x00, 0x9e, 0x26, 0xed, 0x00, 0x8c
+	.byte 0x26, 0xed, 0x00, 0x7c, 0x26, 0xed, 0x00, 0x7a, 0x26, 0xed, 0x00, 0x00
+	.byte 0xff
 MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
 MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
 MstSong2Grid_nowsongctgdtno:	jr	nz, 0x6f
@@ -2378,38 +2284,15 @@ MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
 	nop
 	ld	xbc, 0xeb00fbd8
 	.byte 0xd4
-	swi	3
-	nop
-	xor	xhl, xix
-	swi	3
-	nop
-	stdi8	(0xfbcd), 208
-	ld	(xbc-5), 187
-	cp	(xsp), xhl
-	nop
-	cp	(xhl-83), hl
-	nop
-	popw	ix
-	ld	(xhl-5), 18
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2F90-0xED2FAB (27 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=67% dist=14 near MethodNameStr_MT_SvariIni+70
+	.byte 0xfb, 0x00, 0xec, 0xd3, 0xfb, 0x00, 0xf1, 0xcd, 0xfb, 0x00, 0xd0, 0xb9
+	.byte 0xfb, 0x00, 0xbb, 0xa7, 0xfb, 0x00, 0x9b, 0xad, 0xfb, 0x00, 0x4c, 0xbb
+	.byte 0xfb, 0x00, 0x12
 	.byte 0xc4
-	swi	3
-	nop
-	ldb	a, 128
-	swi	3
-	nop
-	pushw	wa
-	cp	(xwa), c
-	nop
-	sub	xiz, xsp
-	swi	3
-	nop
-	pushw	0xfb8b
-	nop
-	push	xiy
-	cp	(xwa), hl
-	nop
-	cp	(xiy-105), c
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2FAC-0xED2FC6 (26 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=13 near MethodNameStr_MT_SvariIni+98
+	.byte 0xfb, 0x00, 0x21, 0x80, 0xfb, 0x00, 0x28, 0x80, 0xfb, 0x00, 0xef, 0xa6
+	.byte 0xfb, 0x00, 0x0b, 0x8b, 0xfb, 0x00, 0x3d, 0x90, 0xfb, 0x00, 0x8d, 0x97
+	.byte 0xfb, 0x00
 	.byte 0xe1
 	cp	(xiz), xhl
 	nop
@@ -2532,14 +2415,9 @@ ProcNameStr_NormScreenProc:	aligned_string "NormScreenProc"
 	nop
 	scf
 	.byte 0xcd
-	swi	3
-	nop
-	ld	xiz, 0x4400fc26
-	jrl	pl, 251
-	jrl	-1155
-	nop
-	cp	(xix+125), xhl
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED32CC-0xED32DE (18 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=100% dist=9 near ProcNameStr_NormScreenProc+74
+	.byte 0xfb, 0x00, 0x46, 0x26, 0xfc, 0x00, 0x44, 0x7d, 0xfb, 0x00, 0x78, 0x7d
+	.byte 0xfb, 0x00, 0xac, 0x7d, 0xfb, 0x00
 	.byte 0xe0
 	jrl	pl, 251
 	nop
@@ -2681,20 +2559,9 @@ NakaInstTable8_NullTerm:
 	zcf
 	nop
 	.byte 0x04
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	calr	7168
-	nop
-	ldio	0, 121
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3859-0xED386A (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1041
+	.byte 0x00, 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1e, 0x00, 0x1c
+	.byte 0x00, 0x08, 0x00, 0x79, 0x00
 	.byte 0x80
 	nop
 	.byte 0x9f
@@ -2840,19 +2707,9 @@ NakaInstTable8_NullTerm:
 	pop_a
 	nop
 	.byte 0x04
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldb	a, 0
-	swi	7
-	swi	7
-	ldb	d, 0
-	ldb	b, 0
-	ldio	0, 121
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED391D-0xED392E (17 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1237
+	.byte 0x00, 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x24, 0x00, 0x22
+	.byte 0x00, 0x08, 0x00, 0x79, 0x00
 	.byte 0x80
 	nop
 	.long WidgetName_PtrBlock_F2
@@ -2882,21 +2739,9 @@ NakaInstTable8_NullTerm:
 	nop
 	cpdm8	0xff00, l
 	.byte 0x17
-	nop
-	push	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldb	a, 0
-	swi	7
-	swi	7
-	ldb	h, 0
-	ldb	d, 0
-	ldio	0, 43
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED395B-0xED396E (19 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+1299
+	.byte 0x00, 0x02, 0x00, 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x26
+	.byte 0x00, 0x24, 0x00, 0x08, 0x00, 0x2b, 0x00
 	.byte 0x80
 	nop
 	.long WidgetName_PtrBlock_D
@@ -2906,20 +2751,9 @@ NakaInstTable8_NullTerm:
 	.byte 0x1a
 	nop
 	.byte 0x01
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldb	a, 0
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ldb	e, 0
-	ldio	0, 4
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED397D-0xED398E (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=9 near NakaInst_MainVariSet+1333
+	.byte 0x00, 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0xff, 0xff, 0x25
+	.byte 0x00, 0x08, 0x00, 0x04, 0x00
 	.byte 0x80
 	nop
 	.long WidgetName_PtrBlock_C
@@ -3008,21 +2842,9 @@ NakaInstTable8_NullTerm:
 	.byte 0x01
 	nop
 	.byte 0x01
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldb	l, 0
-	swi	7
-	swi	7
-	pushw	hl
-	nop
-	pushw	bc
-	nop
-	ldio	0, 82
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A01-0xED3A12 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1465
+	.byte 0x00, 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2b, 0x00, 0x29
+	.byte 0x00, 0x08, 0x00, 0x52, 0x00
 	.byte 0x80
 	nop
 	jrl	-5376
@@ -3087,21 +2909,9 @@ NakaInstTable8_NullTerm:
 	.byte 0x04
 	nop
 	.byte 0x04
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldb	l, 0
-	swi	7
-	swi	7
-	pushw	iz
-	nop
-	pushw	ix
-	nop
-	ldio	0, 199
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A61-0xED3A72 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1561
+	.byte 0x00, 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2e, 0x00, 0x2c
+	.byte 0x00, 0x08, 0x00, 0xc7, 0x00
 	.byte 0x80
 	nop
 	.byte 0xed
@@ -3229,18 +3039,9 @@ NakaInstTable8_NullTerm:
 	cpdm8	0xff00, l
 	push	0
 	.byte 0x01
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	ix, 0x3200
-	nop
-	ldio	0, 82
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3B25-0xED3B36 (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1757
+	.byte 0x00, 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x34, 0x00, 0x32
+	.byte 0x00, 0x08, 0x00, 0x52, 0x00
 	.byte 0x80
 	nop
 	.long WidgetName_PtrBlock_E
@@ -3401,24 +3202,9 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	.byte 0x01, 0xe0
-	nop
-	ex_ff
-	nop
-	ldb	b, 1
-
-
-	jr	ge, 0
-	jr	f, 1
-	push	xbc
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	push	xde
-	nop
-	ldio	0, 56
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C1F-0xED3C34 (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2007
+	.byte 0x00, 0x16, 0x00, 0x22, 0x01, 0x69, 0x00, 0x60, 0x01, 0x39, 0x00, 0xff
+	.byte 0xff, 0xff, 0xff, 0x3a, 0x00, 0x08, 0x00, 0x38, 0x00
 	.byte 0xcc
 	nop
 	.byte 0x87
@@ -3476,24 +3262,9 @@ NakaInstTable8_NullTerm:
 	.byte 0x93
 	nop
 	.byte 0xdf
-	nop
-	pop_f
-	nop
-	ldb	b, 1
-
-
-	jr	ge, 0
-	jr	f, 1
-	push	xix
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	push	xiy
-	nop
-	ldio	0, 160
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C77-0xED3C8C (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2095
+	.byte 0x00, 0x19, 0x00, 0x22, 0x01, 0x69, 0x00, 0x60, 0x01, 0x3c, 0x00, 0xff
+	.byte 0xff, 0xff, 0xff, 0x3d, 0x00, 0x08, 0x00, 0xa0, 0x00
 	.byte 0xc8
 	nop
 	rcf
@@ -3911,17 +3682,9 @@ ErrorDialog_RecoveryLine3:
 	nop
 	.long SndParam_VoiceEntryLookup_ViaReg8000
 	.byte 0x04
-	nop
-	cp	(xiz+115), ix
-	nop
-	ldio	0, 217
-	jrl	ule, 252
-	rcf
-	nop
-	jr	gt, 114
-	swi	4
-	nop
-	ldb	w, 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near ENCODER_LUT_MODWHEEL_0x3FC+13
+	.byte 0x00, 0x9e, 0x73, 0xfc, 0x00, 0x08, 0x00, 0xd9, 0x73, 0xfc, 0x00, 0x10
+	.byte 0x00, 0x6a, 0x72, 0xfc, 0x00, 0x20, 0x00
 	.long SndParam_SetResBit3_ViaRegs0101_0102
 	ld	xwa, 0xfc722400
 	nop
@@ -4106,18 +3869,9 @@ Protocol_values_for_LED_rows:
 	.byte 0x04
 	ldio	1, 2
 	.byte 0x04
-	ldio	0, 0
-	ldw	ix, 0x3400
-	nop
-	ret
-	nop
-	ldb	l, 0
-	reti
-	nop
-	reti
-	nop
-	pushw	iz
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near Protocol_values_for_LED_rows_0x3E+7
+	.byte 0x08, 0x00, 0x00, 0x34, 0x00, 0x34, 0x00, 0x0e, 0x00, 0x27, 0x00, 0x07
+	.byte 0x00, 0x07, 0x00, 0x2e, 0x00
 	.byte 0x01
 	nop
 	nop
@@ -4227,46 +3981,17 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	push_f
-	nop
-	jr	lt, 24
-	jr	ule, 94
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+148
+	.byte 0x00, 0x00, 0x63, 0x00, 0x10, 0x18, 0x00, 0x61, 0x18, 0x63, 0x5e, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ccf
-	push	sr
-	nop
-	pushw	iy
-	incf
-	ldw	de, 80
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+172
+	.byte 0x00, 0x00, 0x63, 0x00, 0x12, 0x02, 0x00, 0x2d, 0x0c, 0x32, 0x50, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_a
-	pushw	iz
-	nop
-	call	0x503a14
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+196
+	.byte 0x00, 0x00, 0x63, 0x00, 0x14, 0x2e, 0x00, 0x1d, 0x14, 0x3a, 0x50, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4283,33 +4008,13 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ex_ff
-	push_a
-	nop
-	pop_a
-	push_f
-	ldw	ix, 73
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+244
+	.byte 0x00, 0x00, 0x63, 0x00, 0x16, 0x14, 0x00, 0x15, 0x18, 0x34, 0x49, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_f
-	ldb	a, 0
-	push	sr
-	nop
-	jr	f, 79
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+268
+	.byte 0x00, 0x00, 0x63, 0x00, 0x18, 0x21, 0x00, 0x02, 0x00, 0x60, 0x4f, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4387,18 +4092,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	ld	h, 152
-	halt
-	push_f
-	halt
-	jr	84
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near Protocol_values_for_LED_rows_0x56+436
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x00, 0xce, 0x03, 0x98, 0x05, 0x18, 0x05
+	.byte 0x68, 0x54, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4466,17 +4162,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_a
-	ldw	iz, 2816
-	push_a
-	ldw	de, 74
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+580
+	.byte 0x00, 0x00, 0x63, 0x00, 0x14, 0x36, 0x00, 0x0b, 0x14, 0x32, 0x4a, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4489,18 +4177,9 @@ Protocol_values_for_LED_rows:
 	retd	84
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	push	sr
-	nop
-	ldw	iy, 0x5400
-	jr	ov, 0
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+628
+	.byte 0x00, 0x00, 0x63, 0x00, 0x10, 0x02, 0x00, 0x35, 0x00, 0x54, 0x64, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4548,18 +4227,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ccf
-	ldb	c, 0
-	ldw	bc, 0x320c
-	popw	iz
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+724
+	.byte 0x00, 0x00, 0x63, 0x00, 0x12, 0x23, 0x00, 0x31, 0x0c, 0x32, 0x4e, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4575,19 +4245,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ex_ff
-	pushw	iy
-	nop
-	push	xde
-	incf
-	ldw	de, 82
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+772
+	.byte 0x00, 0x00, 0x63, 0x00, 0x16, 0x2d, 0x00, 0x3a, 0x0c, 0x32, 0x52, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4602,19 +4262,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_f
-	pushw	bc
-	nop
-	pop_f
-	push_a
-	ldw	de, 74
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+820
+	.byte 0x00, 0x00, 0x63, 0x00, 0x18, 0x29, 0x00, 0x19, 0x14, 0x32, 0x4a, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4627,18 +4277,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_f
-	zcf
-	nop
-	ccf
-	ldwio	87, 63
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+868
+	.byte 0x00, 0x00, 0x63, 0x00, 0x19, 0x13, 0x00, 0x12, 0x0a, 0x57, 0x3f, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4652,16 +4293,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	jp	0x590034
-	ccf
-	ldw	de, 79
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+916
+	.byte 0x00, 0x00, 0x63, 0x00, 0x1b, 0x34, 0x00, 0x59, 0x12, 0x32, 0x4f, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -4677,16 +4311,9 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	scf
-	ldb	c, 0
-	ld	xsp, 0x693214
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+964
+	.byte 0x00, 0x00, 0x63, 0x00, 0x11, 0x23, 0x00, 0x47, 0x14, 0x32, 0x69, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	nop
 	nop
@@ -7870,18 +7497,9 @@ MidiChParam_Entry_086:
 	swi	7
 MidiChParam_Entry_087:
 	.byte 0x01, 0x80
-	nop
-	nop
-	ld	(xde), 127
-	nop
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDC820-0xEDC830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=67% dist=6 near MidiChParam_Entry_087+2
+	.byte 0x00, 0x00, 0xb2, 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0x03, 0x02, 0x03
+	.byte 0x00, 0x00, 0x00, 0xff
 MidiChParam_Entry_088:
 	reti
 	.byte 0x80
@@ -8069,18 +7687,9 @@ MidiChParam_Entry_100:
 	swi	7
 MidiChParam_Entry_101:
 	.byte 0xb0, 0x81
-	nop
-	nop
-	ld	(xbc), 127
-	nop
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDC924-0xEDC934 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=67% dist=6 near MidiChParam_Entry_101+2
+	.byte 0x00, 0x00, 0xb1, 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0x02, 0x02, 0x03
+	.byte 0x00, 0x00, 0x00, 0xff
 MidiChParam_Entry_102:
 	.byte 0xb2, 0x81
 	nop
@@ -8151,17 +7760,9 @@ MidiChParam_Entry_105:
 	swi	7
 MidiChParam_Entry_106:
 	.byte 0x93, 0x82
-	nop
-	nop
-	ld	xix, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDC994-0xEDC9A4 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=67% dist=9 near MidiChParam_Entry_106+2
+	.byte 0x00, 0x00, 0x44, 0x02, 0x0f, 0x00, 0x0f, 0x00, 0x00, 0x09, 0x01, 0x07
+	.byte 0x05, 0x00, 0x00, 0xff
 MidiChParam_Entry_107:
 	.byte 0x94, 0x82
 	nop
@@ -8587,17 +8188,9 @@ VoiceParamEx_Entry_026:
 	swi	7
 VoiceParamEx_Entry_027:
 	.byte 0x93, 0x86
-	nop
-	nop
-	ld	xiy, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDCBE6-0xEDCBF6 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=67% dist=9 near VoiceParamEx_Entry_027+2
+	.byte 0x00, 0x00, 0x45, 0x02, 0x0f, 0x00, 0x0f, 0x00, 0x00, 0x09, 0x01, 0x07
+	.byte 0x05, 0x00, 0x00, 0xff
 VoiceParamEx_Entry_028:
 	.byte 0x94, 0x86
 	nop
