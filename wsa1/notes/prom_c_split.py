@@ -53,6 +53,37 @@ COMMANDS
   extracted file it will report those edits as insertions/deletions, which is
   correct and is the signal to retire it.
 
+★★ THAT SIGNAL ARRIVED ON 2026-09-03, AND --verify IS NOW RETIRED.
+
+  The split proof HELD to the end.  Run at commit a6507fdd -- the last before the
+  mnemonic-convergence merges -- it reports:
+
+      PASS: every line of the pre-split listing survives, in order, unaltered.
+      inserted   25 line(s)  (the new per-file headers)
+
+  Then four convergence lanes rewrote mnemonic spellings across the tree, and
+  ~3,147 lines in these files legitimately changed (`stib_da 0x007ECC, 0x00` ->
+  `ld (0x007ECC:24), 0x00`).  --verify now reports those as non-insertion hunks,
+  which is exactly what this header predicted and is NOT a defect in either the
+  conversions or the split.
+
+  ⚠ DO NOT RE-BASELINE IT.  Moving BASE_COMMIT forward would convert a proof
+  about a past event into a check that proves nothing, while still looking
+  green.  Run it at a6507fdd if you want to see the proof; from HEAD it is
+  expected to fail.
+
+  ★ THE FORWARD-LOOKING HALF OF ITS JOB CONTINUES ELSEWHERE.  The reason this
+  existed is that the BYTE GATE CANNOT SEE A LOST COMMENT -- comments assemble
+  to nothing.  That is still true, and it matters most during a semantic
+  labelling pass, which edits code lines on purpose.  Use:
+
+      python3 scripts/analysis/assert_comments_preserved.py --base <rev> <paths>
+
+  It requires the base's comments to be a SUBSEQUENCE of the new ones:
+  additions pass, a deletion or a one-character rewording fails.  Measured
+  across the convergence merges: 403,234 comments at a6507fdd, 403,234 now,
+  none lost or altered.
+
 ★ --selftest DOES NOT PIN TODAY'S NUMBERS.  It builds a synthetic listing, splits
   it, and checks two things that are true of any correct splitter: a faithful
   split verifies, and a split with ONE COMMENT LINE DELETED FAILS.  A checker
