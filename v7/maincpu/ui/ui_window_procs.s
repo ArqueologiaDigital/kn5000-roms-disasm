@@ -6798,7 +6798,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw	bc
 	call	16713825
 	add	hl, hl
-	lda_24	xwa, 15380116
+	lda_24	xwa, (15380116)
 	ld_rrw	de, xwa, hl
 	ldw	bc, 30
 	sub	bc, de

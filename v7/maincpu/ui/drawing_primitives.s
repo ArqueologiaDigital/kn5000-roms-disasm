@@ -3536,7 +3536,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ld	xwa, (xsp+1080)
 	calr	1987
 	cps	hl, 0
-	jrl	z, 169
+	jrl	z, 169	; -> 0xFAC6B6
 	ld	xbc, (xsp+36)
 	ld	xwa, (xbc+4)
 	ld	(xsp+40), wa
@@ -3562,7 +3562,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ldw	(xsp+32), 0
 	ld	wa, (xsp+42)
 	cps	wa, 0
-	jr	ule, 50
+	jr	ule, 50	; -> 0xFAC68A
 DrawBitmapFile_Impl_VRAMRowLoop:
 	.byte 0x9f, 0x22, 0x3f, 0xf0, 0x00, 0x6f, 0x2b, 0x9f
 	.byte 0x28, 0x20, 0x28, 0xaf, 0x26, 0x20, 0x38, 0x3e

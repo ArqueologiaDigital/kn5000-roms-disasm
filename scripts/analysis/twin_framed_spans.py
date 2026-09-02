@@ -71,6 +71,8 @@ RUN
 rebuilt ROM sizes.
 """
 import argparse
+import io
+import json
 import os
 import re
 import subprocess
@@ -338,6 +340,231 @@ def analyse(min_size, twin_keys=("v10", "v9"), thresh=0.98):
     return res, stats
 
 
+
+# ----------------------------------------------------------------- emission
+CALLJP = re.compile(r'^(call|jp|calr)(\s+)((?:\w+,\s*)?)(\d+)$')
+BYTELINE = re.compile(r'^\s*\.byte\s+(.*?)\s*(?:;.*)?$')
+
+
+def symbolise(mn, addr_to_name):
+    """`call 16421459` -> `call MainDrawText` when a label is defined at that
+    address.  Only a BARE numeric operand of an absolute call/jp is touched:
+    a parenthesised operand is a data address and `jrl`'s operand is a raw
+    DISPLACEMENT in this assembler's syntax (measured: `jrl z, 2252` assembles
+    back to 76 cc 08), so neither may be rewritten as a symbol."""
+    m = CALLJP.match(mn.replace("\t", " ").strip())
+    if not m:
+        return mn
+    nm = addr_to_name.get(int(m.group(4)))
+    if not nm:
+        return mn
+    return "%s\t%s%s" % (m.group(1), m.group(3), nm)
+
+
+def render(r, addr_to_name):
+    """The source lines for one PASSING span, label line excluded."""
+    out = []
+    base = BASE + r["off"]
+    for o, ln, mn in r["text"]:
+        if not mn:
+            blob = ROMS["v7"][r["off"] + o:r["off"] + o + ln]
+            out.append("\t.byte " + ", ".join("0x%02x" % b for b in blob)
+                       + "\t; llvm-mc cannot spell this byte")
+            continue
+        t = symbolise(mn, addr_to_name)
+        if re.match(r'^(jrl|jr|djnz)\b', t.replace("\t", " ")):
+            # the operand is a displacement; say where it lands so the reader
+            # does not have to add it up
+            m = re.search(r'(-?\d+)$', t)
+            if m:
+                t += "\t; -> 0x%06X" % (base + o + ln + int(m.group(1)))
+        out.append("\t" + t)
+    return out
+
+
+def roundtrip(lines, blob, addr_to_name):
+    """Assemble the rendered text on its own and require the ORIGINAL bytes.
+
+    ⚠ This is the check that must exist per span rather than per image.  A
+    whole-image rebuild says only that SOMETHING is wrong; with 87 spans in
+    flight that is not a diagnosis.  Every symbol the rendering substituted is
+    re-declared with `.set` at the address it was taken from, so a name that
+    resolves to a different address here would also fail.
+    """
+    import tempfile
+    used = set()
+    for ln in lines:
+        for w in re.findall(r'[A-Za-z_][\w.$]*', ln.split(";")[0]):
+            used.add(w)
+    name_to_addr = {}
+    for a, nm in addr_to_name.items():
+        if nm in used:
+            name_to_addr[nm] = a
+    text = "".join(".set %s, 0x%X\n" % (n, a) for n, a in name_to_addr.items())
+    text += ".text\n" + "\n".join(lines) + "\n"
+    with tempfile.TemporaryDirectory() as td:
+        srcp, objp, binp = (os.path.join(td, x) for x in ("s.s", "s.o", "s.bin"))
+        open(srcp, "w", encoding="latin-1").write(text)
+        r = subprocess.run([MC, "-triple=tlcs900", "-filetype=obj", "-o", objp, srcp],
+                           capture_output=True, text=True)
+        if r.returncode:
+            return False, r.stderr.strip().split("\n")[0][:120]
+        subprocess.run([os.path.join(os.path.dirname(MC), "llvm-objcopy"),
+                        "-O", "binary", "-j", ".text", objp, binp], check=True)
+        got = open(binp, "rb").read()
+    if got != blob:
+        n = min(len(got), len(blob))
+        d = next((i for i in range(n) if got[i] != blob[i]), n)
+        return False, "differs at +0x%X (%d B emitted, %d expected)" % (d, len(got), len(blob))
+    return True, ""
+
+
+def load_linemap(path):
+    d = json.load(open(path))
+    return {rel: {int(k): v for k, v in m.items()} for rel, m in d.items()}
+
+
+def guard_linemap(lm):
+    """⚠ A STALE ADDRESS MAP IS INVISIBLE TO EVERY CHECK EXCEPT THE REBUILT ROM
+    (lane brief, 2026-09-02).  So every `.byte` line the map places is checked
+    against the ROM: the first literal on the line must equal the byte at the
+    mapped address.  -> (checked, bad).  A non-zero `bad` must abort the run."""
+    checked = bad = 0
+    for rel, m in lm.items():
+        path = os.path.join(ROOT, rel)
+        if not os.path.exists(path):
+            continue
+        lines = io.open(path, encoding="latin-1").read().split("\n")
+        for ln, addr in m.items():
+            if not (1 <= ln <= len(lines)):
+                continue
+            mm = BYTELINE.match(lines[ln - 1])
+            if not mm:
+                continue
+            tok = mm.group(1).split(",")[0].strip()
+            try:
+                v = int(tok, 0) & 0xFF
+            except ValueError:
+                continue
+            checked += 1
+            off = addr - BASE
+            if not (0 <= off < len(ROMS["v7"])) or ROMS["v7"][off] != v:
+                bad += 1
+    return checked, bad
+
+
+def apply_spans(linemap_path, min_size, thresh):
+    lm = load_linemap(linemap_path)
+    load_roms()
+    checked, bad = guard_linemap(lm)
+    print("line-map guard: %d `.byte` lines checked against the ROM, %d disagree"
+          % (checked, bad))
+    if bad:
+        sys.exit("REFUSED: the line map does not describe this source tree")
+    res, st = analyse(min_size, thresh=thresh)
+    k7, s7, l7, o7, sz7 = flatten("v7")
+    addr_to_name = {}
+    for nm, off in l7.items():
+        if not nm.startswith("."):
+            addr_to_name.setdefault(BASE + off, nm)
+    # address -> (rel, line) for every mapped line
+    where = {}
+    for rel, m in lm.items():
+        for ln, addr in m.items():
+            where.setdefault(addr, []).append((rel, ln))
+    edits = {}      # rel -> [(first_line, last_line_excl, newlines)]
+    done = converted = refusedbytes = 0
+    for r in sorted([x for x in res if x["verdict"] == "PASS"],
+                    key=lambda x: -x["n"]):
+        lo, hi = BASE + r["off"], BASE + r["off"] + r["n"]
+        rels = set()
+        for a in range(lo, hi):
+            for rel, ln in where.get(a, []):
+                rels.add(rel)
+        if len(rels) != 1:
+            print("  skip %-40s: %d source files claim its bytes"
+                  % (r["name"], len(rels)))
+            continue
+        rel = rels.pop()
+        m = lm[rel]
+        lns = sorted(ln for ln, a in m.items() if lo <= a < hi)
+        if not lns:
+            print("  skip %-40s: no mapped lines" % r["name"])
+            continue
+        src = io.open(os.path.join(ROOT, rel), encoding="latin-1").read().split("\n")
+        # The label line maps to the span's first address and emits nothing, so
+        # the replaceable block starts at the first `.byte` LINE, not the first
+        # mapped line.  Keeping the label is not cosmetic: it is the boundary
+        # the whole adjudication rests on.
+        byte_lns = [ln for ln in lns if BYTELINE.match(src[ln - 1])]
+        if not byte_lns:
+            print("  skip %-40s: no `.byte` lines in range" % r["name"])
+            continue
+        first, last = byte_lns[0], byte_lns[-1]
+        block = src[first - 1:last]
+        if not all(BYTELINE.match(x) or not x.strip() or x.strip().startswith(";")
+                   for x in block):
+            print("  skip %-40s: block is not pure `.byte`" % r["name"])
+            continue
+        # ⚠ The block must emit EXACTLY the span, or the rewrite would move a
+        # byte that belongs to a neighbour.  Counted from the directives, not
+        # assumed from the map.
+        emitted = 0
+        for x in block:
+            mm = BYTELINE.match(x)
+            if mm:
+                emitted += len([t for t in mm.group(1).split(",") if t.strip()])
+        if emitted != r["n"] or m[first] != lo:
+            print("  skip %-40s: block emits %d B at 0x%06X, span is %d B at 0x%06X"
+                  % (r["name"], emitted, m[first], r["n"], lo))
+            continue
+        comments = [x for x in block if x.strip().startswith(";")]
+        body = render(r, addr_to_name)
+        ok, why = roundtrip(body, ROMS["v7"][r["off"]:r["off"] + r["n"]], addr_to_name)
+        if not ok:
+            print("  skip %-40s: does not round-trip -- %s" % (r["name"], why))
+            continue
+        new = comments + body
+        edits.setdefault(rel, []).append((first, last + 1, new))
+        done += 1
+        converted += r["n"] - r["refusals"]
+        refusedbytes += r["refusals"]
+    for rel, es in edits.items():
+        path = os.path.join(ROOT, rel)
+        src = io.open(path, encoding="latin-1").read().split("\n")
+        for first, last, new in sorted(es, key=lambda x: -x[0]):
+            src = src[:first - 1] + new + src[last - 1:]
+        io.open(path, "w", encoding="latin-1").write("\n".join(src))
+    print("\nrewrote %d spans in %d files: %d B now instructions, %d B still "
+          "`.byte` (bytes llvm-mc cannot spell)"
+          % (done, len(edits), converted, refusedbytes))
+    if not verify_v7():
+        for rel in edits:
+            subprocess.run(["git", "checkout", "--", rel], cwd=ROOT)
+        sys.exit("REJECTED: rebuilt v7 is not byte-identical; edits rolled back")
+    print("VERIFIED: rebuilt v7 image is byte-identical to the ROM")
+    return 0
+
+
+def verify_v7():
+    import tempfile
+    td = tempfile.mkdtemp(prefix="twinframe-")
+    inc = os.path.join(ROOT, "v7/maincpu")
+    obj, elf, binf = (os.path.join(td, x) for x in ("a.o", "a.elf", "a.bin"))
+    LB = os.path.dirname(MC)
+    r = subprocess.run([MC, "-triple=tlcs900", "-filetype=obj", "-I", inc, "-o", obj,
+                        os.path.join(inc, "kn5000_v7_program.s")],
+                       cwd=ROOT, capture_output=True, text=True)
+    if r.returncode:
+        print(r.stderr[-3000:])
+        return False
+    subprocess.run([os.path.join(LB, "ld.lld"), "-e", "0", "-T",
+                    os.path.join(inc, "maincpu.ld"), "-o", elf, obj], check=True)
+    subprocess.run([os.path.join(LB, "llvm-objcopy"), "-O", "binary", elf, binf],
+                   check=True)
+    return open(binf, "rb").read() == ROMS["v7"]
+
+
 def toolchain():
     return subprocess.run(["git", "-C", os.path.expanduser("~/compartilhado/llvm-project"),
                            "log", "-1", "--format=%h (%H)"],
@@ -350,10 +577,15 @@ def main():
     ap.add_argument("--emit", default="")
     ap.add_argument("--min", type=int, default=64)
     ap.add_argument("--thresh", type=float, default=0.98)
+    ap.add_argument("--apply", default="",
+                    help="path to a v7 line map (v10_line_address_map.py --image v7); rewrite every passing span and verify byte-identity")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
+    if a.apply:
+        print("toolchain: %s" % toolchain())
+        return apply_spans(a.apply, a.min, a.thresh)
     if a.emit:
         load_roms()
         flatten("v7")
