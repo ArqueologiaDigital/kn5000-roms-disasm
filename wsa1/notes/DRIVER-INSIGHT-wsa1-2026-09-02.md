@@ -318,6 +318,14 @@ naming — `wsa1_prom_a.ic12`, "CPU 1, MICROCOMPUTER (MAIN), IC1/IC12" in
    4M-bit EPROM, IC21.  prom_d is at `0xF00000-0xF7FFFF` on CPU 2, which is
    what the disassembly already concluded from CPU 1's remote read of the build
    tag at `0x00F7FFF0`.  The flash and the fourth EPROM are different chips.
+   ★ Lane `drvpromd` reached `0xF00000` **independently and first**, from the
+   firmware alone, and its `notes/DRIVER-INSIGHT-promd-base-2026-09-02.md` is
+   the fuller argument; this sheet is a second, physical witness to the same
+   number, and the two agree.  Note also that IC17's `2Y0 = EXTCS` puts CPU 1's
+   expansion-board window at `0xE00000-0xE7FFFF`, which is a *different* window
+   from the `0x00C00000` base prom_c installs for the board on CPU 2's bus, and
+   prom_a never names `0x00E00000` in an immediate at all — so what CPU 1 does
+   with `EXTCS`, if anything, is open and is not claimed here.
 4. **Port pin names for IC1, free of charge** (`fig1_ic1_main.png`):
    `P65=MSTAT0`, `P70=MSTAT1`, `P71=SSTAT0`, `P72=SSTAT1`, `P73=LCDOFF`,
    `P74=MUTE`; `TXD0/RXD0 = MIDI1OUT/MIDI1IN`, `P82 = MIDI1SNS`;
