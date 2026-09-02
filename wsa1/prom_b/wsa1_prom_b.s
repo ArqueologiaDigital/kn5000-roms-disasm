@@ -18895,7 +18895,21 @@ DL_F0DA73:
 	.short 0x002F
 
 ; --- 0xF0DA93-0xF0DAA1: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00DA93, 0x00000F
+
+; ------------------------------------------------------------------
+; 0xF0DA93-0xF0DAA1 -- 1 display-list records, 15 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF0DA93 lands with ZERO DRIFT exactly on 0xF0DAA2,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F0DA93:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xC507
+	.short 0xF0CC
+	.byte 0x00, 0x03, 0x00, 0x9A, 0x11	; operand bytes the handler does not read
 
 ; ------------------------------------------------------------------
 ; 0xF0DAA2-0xF0DB17 -- 13 display-list records, 118 bytes -- interpreter A
@@ -48141,7 +48155,219 @@ DL_CombinationGroupMenuReMap1:
 	.short 0x00EC
 
 ; --- 0xF2AF81-0xF2B12F: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02AF81, 0x0001AF
+
+; ------------------------------------------------------------------
+; 0xF2AF81-0xF2B12F -- 50 display-list records, 431 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF2AF81 lands with ZERO DRIFT exactly on 0xF2B130,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F2AF81:
+	.byte 0x1C, 0x0B	; op 1C, 11 bytes -> handler 0xF31A52
+	.short 0x0055
+	.short 0x0005
+	.ascii "SOUND"
+	.byte 0x1C, 0x0B	; op 1C, 11 bytes -> handler 0xF31A52
+	.short 0x0097
+	.short 0x0005
+	.ascii "GROUP"
+	.byte 0x1C, 0x0A	; op 1C, 10 bytes -> handler 0xF31A52
+	.short 0x00D9
+	.short 0x0005
+	.ascii "MENU"
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x05A1
+	.ascii "1."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x05B5
+	.ascii "9."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x08C1
+	.ascii "2."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x08D4
+	.ascii "10."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x0BE1
+	.ascii "3."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x0BF4
+	.ascii "11."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x0F01
+	.ascii "4."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x0F14
+	.ascii "12."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x1221
+	.ascii "5."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x1234
+	.ascii "13."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x1541
+	.ascii "6."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x1554
+	.ascii "14."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x1861
+	.ascii "7."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x1874
+	.ascii "15."
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x1B81
+	.ascii "8."
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x1B94
+	.ascii "16."
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0009
+	.short 0x00C9
+	.ascii "USER1"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0036
+	.short 0x00C9
+	.ascii "USER2"
+	.byte 0x17, 0x0D	; op 17, 13 bytes -> handler 0xF31A52
+	.short 0x0063
+	.short 0x00C9
+	.ascii "ROM/EXT"
+	.byte 0x08, 0x05	; op 08, 5 bytes -> handler 0xF31A3A
+	.short 0x2096
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x08, 0x05	; op 08, 5 bytes -> handler 0xF31A3A
+	.short 0x22C6
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x236B
+	.ascii "OK"
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x25
+	.short 0x0007
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0002
+	.short 0x001A
+	.short 0x013D
+	.short 0x00C6
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0003
+	.short 0x001B
+	.short 0x013C
+	.short 0x00C5
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0007
+	.short 0x00D2
+	.short 0x0029
+	.short 0x00D2
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0034
+	.short 0x00D2
+	.short 0x0056
+	.short 0x00D2
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0061
+	.short 0x00D2
+	.short 0x008F
+	.short 0x00D2
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00A9
+	.short 0x00D3
+	.short 0x00C6
+	.short 0x00D3
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00A9
+	.short 0x00E0
+	.short 0x00C6
+	.short 0x00E0
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00A9
+	.short 0x00ED
+	.short 0x00C6
+	.short 0x00ED
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D2
+	.short 0x00E0
+	.short 0x00ED
+	.short 0x00E0
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D2
+	.short 0x00ED
+	.short 0x00ED
+	.short 0x00ED
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0006
+	.short 0x00C8
+	.short 0x0006
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x002A
+	.short 0x00C8
+	.short 0x002A
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0033
+	.short 0x00C8
+	.short 0x0033
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0057
+	.short 0x00C8
+	.short 0x0057
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0060
+	.short 0x00C8
+	.short 0x0060
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00A8
+	.short 0x00E1
+	.short 0x00A8
+	.short 0x00EC
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0090
+	.short 0x00C8
+	.short 0x0090
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009E
+	.short 0x001A
+	.short 0x009E
+	.short 0x00C6
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00A8
+	.short 0x00D4
+	.short 0x00A8
+	.short 0x00DF
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00A8
+	.short 0x00E1
+	.short 0x00A8
+	.short 0x00EC
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00C7
+	.short 0x00D4
+	.short 0x00C7
+	.short 0x00DF
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00C7
+	.short 0x00E1
+	.short 0x00C7
+	.short 0x00EC
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00D1
+	.short 0x00E1
+	.short 0x00D1
+	.short 0x00EC
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00EE
+	.short 0x00E1
+	.short 0x00EE
+	.short 0x00EC
 
 ; ------------------------------------------------------------------
 ; 0xF2B130-0xF2B2E2 -- 50 display-list records, 435 bytes -- interpreter A
@@ -68892,7 +69118,25 @@ DL_F3C17B:
 	.short 0x1355	; +0x0D -> IX
 
 ; --- 0xF3C199-0xF3C1AC: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C199, 0x000014
+
+; ------------------------------------------------------------------
+; 0xF3C199-0xF3C1AC -- 2 display-list records, 20 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF3C199 lands with ZERO DRIFT exactly on 0xF3C1AD,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F3C199:
+	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x000F
+	.short 0x8407
+	.short 0x020A
+	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
+	.short 0x12F7
+	.short 0x000F
+	.short 0x9507
+	.short 0x020A
 
 ; ------------------------------------------------------------------
 ; 0xF3C1AD-0xF3C350 -- 41 display-list records, 420 bytes -- interpreter A (37 records) and B (4)
@@ -69086,7 +69330,25 @@ DL_F3C31E:
 	.byte 0x03	; +0x0B digit count
 
 ; --- 0xF3C351-0xF3C366: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C351, 0x000016
+
+; ------------------------------------------------------------------
+; 0xF3C351-0xF3C366 -- 2 display-list records, 22 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF3C351 lands with ZERO DRIFT exactly on 0xF3C367,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F3C351:
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x000F1301
+	.short 0x7D05
+	.short 0xF3C3
+	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00FF1302
+	.short 0xAD05
+	.short 0xF3C3
+	.byte 0x00	; operand bytes the handler does not read
 
 ; ------------------------------------------------------------------
 ; 0xF3C367-0xF3C37C -- 2 display-list records, 22 bytes -- interpreter B
@@ -69388,7 +69650,69 @@ DL_SequencerMedleyStartFirstS0ng:
 	.short 0x00A0
 
 ; --- 0xF3C6B3-0xF3C720: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C6B3, 0x00006E
+
+; ------------------------------------------------------------------
+; 0xF3C6B3-0xF3C720 -- 13 display-list records, 110 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF3C6B3 lands with ZERO DRIFT exactly on 0xF3C721,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F3C6B3:
+	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
+	.short 0x1E59
+	.ascii "SELECT"
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x219D
+	.ascii "INT"
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x21A3
+	.ascii "FD"
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x21A8
+	.ascii "HD"
+	.byte 0x1C, 0x07	; op 1C, 7 bytes -> handler 0xF31A52
+	.short 0x002E
+	.short 0x00E5
+	.byte 0x12	; character codes below 0x20
+	.byte 0x1C, 0x07	; op 1C, 7 bytes -> handler 0xF31A52
+	.short 0x0059
+	.short 0x00E5
+	.byte 0x12	; character codes below 0x20
+	.byte 0x1C, 0x07	; op 1C, 7 bytes -> handler 0xF31A52
+	.short 0x0082
+	.short 0x00E5
+	.byte 0x12	; character codes below 0x20
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0024
+	.short 0x00D4
+	.short 0x0044
+	.short 0x00E4
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x004D
+	.short 0x00D4
+	.short 0x006D
+	.short 0x00E4
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0078
+	.short 0x00D4
+	.short 0x0098
+	.short 0x00E4
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0024
+	.short 0x00CE
+	.short 0x0098
+	.short 0x00CE
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0024
+	.short 0x00CE
+	.short 0x0024
+	.short 0x00D1
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0098
+	.short 0x00CE
+	.short 0x0098
+	.short 0x00D1
 
 ; ------------------------------------------------------------------
 ; 0xF3C721-0xF3C7AC -- 15 display-list records, 140 bytes -- interpreter A (10 records) and B (5)
@@ -69491,7 +69815,25 @@ DL_FirstS0ngLastS0ng:
 	.long 0x00F3C813	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3C7AD-0xF3C7C2: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C7AD, 0x000016
+
+; ------------------------------------------------------------------
+; 0xF3C7AD-0xF3C7C2 -- 2 display-list records, 22 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF3C7AD lands with ZERO DRIFT exactly on 0xF3C7C3,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F3C7AD:
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x000F1305
+	.short 0x2305
+	.short 0xF3C8
+	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
+	.short 0x1302
+	.byte 0x0F, 0x00, 0x1B	; character codes below 0x20
+	.ascii "3"
+	.byte 0xC8, 0xF3, 0x00	; character codes below 0x20
 
 ; ------------------------------------------------------------------
 ; 0xF3C7C3-0xF3C7CC -- 1 display-list records, 10 bytes -- interpreter A
@@ -69513,7 +69855,25 @@ DL_F3C7C3:
 ; NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C7CD, 0x000016
+
+; ------------------------------------------------------------------
+; 0xF3C7CD-0xF3C7E2 -- 2 display-list records, 22 bytes -- interpreter A
+; SELF-FRAMING: no call site found for this span, but DL.walk()'s
+; op/len walk from 0xF3C7CD lands with ZERO DRIFT exactly on 0xF3C7E3,
+; and every opcode resolves to a documented interpreter-A handler.
+; notes/gen_prom_b_selfframing_incbin_module.py
+; ------------------------------------------------------------------
+DL_F3C7CD:
+	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
+	.short 0x1304
+	.byte 0x0F, 0x00, 0x1B	; character codes below 0x20
+	.ascii "K"
+	.byte 0xC8, 0xF3, 0x00	; character codes below 0x20
+	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
+	.short 0x1305
+	.byte 0x0F, 0x00, 0x1B	; character codes below 0x20
+	.ascii "["
+	.byte 0xC8, 0xF3, 0x00	; character codes below 0x20
 
 ; --------------------------------------------------------------------------
 ; Data_F3C7E3 -- 136 bytes, EMITTED AS DATA (not promoted to code).
