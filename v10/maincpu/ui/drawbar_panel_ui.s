@@ -1745,7 +1745,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add xbc, (xsp+0x1c)	; F792E0 (add xbc,(xsp+0x1c))
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
@@ -10831,7 +10831,7 @@ AcWelcomScreen_RenderBytecode:
 	rcf
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushw (xde)	; F7F709 (pushw (xde))
 	pushw	247
 	ld	xbc, NakaInst_TOTAL_0x34
 	ldw	de, 16
@@ -12615,10 +12615,10 @@ AudioCtrl_DataBlock:
 	scf
 	lda	xwa, (xsp+12)
 	ld	bc, (xiz)
-	.byte 0x9f, 0x06, 0x81
+	add bc, (xsp+0x06)	; F809F6 (add bc,(xsp+0x06))
 	ld	(xwa+4), bc
 	ld	bc, (xiz+2)
-	.byte 0x9f, 0x04, 0x81
+	add bc, (xsp+0x04)	; F809FF (add bc,(xsp+0x04))
 	ld	(xwa+6), bc
 	lda	xbc, (xsp+8)
 	call	GetBoxCenter

@@ -20,6 +20,19 @@ three ways:
                      instruction would DEEPEN the error while passing the gate
   (c) TYPED DATA     `.byte` flanked by data; already correctly represented,
                      or structured data that could be typed further
+  (d) DECODER GAP    a run STARTING with one of {0x01, 0x04, 0x17, 0x1a, 0x1c},
+                     five leading opcodes tlcs900_backend cannot decode but
+                     unidasm reads as real instructions (normal / max / ldf /
+                     JP nnnn / CALL nnnn).  Reported as an overlay on (a)/(b),
+                     not a fourth disjoint bucket, because the blind first byte
+                     says the DECODER refused -- it does not say whether the
+                     region is code.  ⚠ MEASURED HERE: in the pre-conversion
+                     storage/flash_floppy_handlers.s, 63 of the file's 80
+                     blind-starting runs (79%) sat inside 0xF15907-0xF1612F,
+                     which this lane proved is a record stream.  Zero control-
+                     byte runs sat there.  So a blind first byte tracks "the
+                     decoder gave up here", in real code and in a data region
+                     wrongly framed as code alike.
 
 HOW EACH RUN IS JUDGED
   FLANKING    the emitting source line immediately before and after the run.
@@ -73,6 +86,21 @@ LABEL_RE = re.compile(r'^([A-Za-z_.$][\w.$]*):')
 DATA_DIRS = ("byte", "word", "hword", "long", "dword", "ascii", "asciz",
              "zero", "fill", "space", "incbin", "short")
 BRANCH_RE = re.compile(r'^\s*(call|calr|call_24|jp|jp_24|jr|jrl|djnz)\b')
+SET_RE = re.compile(r'^\s*\.(?:set|equ)\s+([A-Za-z_][\w]*)\s*,')
+
+# Leading opcode bytes tlcs900_backend cannot decode; unidasm reads them as
+# normal / max / ldf / JP nnnn / CALL nnnn.
+BLIND = {0x01, 0x04, 0x17, 0x1a, 0x1c}
+
+
+def first_byte(line):
+    m = BYTE_RE.match(line)
+    if not m:
+        return None
+    try:
+        return int(m.group(1).split(";")[0].split(",")[0].strip(), 0)
+    except ValueError:
+        return None
 
 # The pre-conversion control: file, git revision, and the line range that the
 # record-stream evidence script proves is data.
@@ -134,6 +162,14 @@ def tree_reference_kinds():
     for p in files:
         for line in open(p, encoding="latin-1"):
             m = LABEL_RE.match(line)
+            if m:
+                defined.add(m.group(1))
+            # ⚠ `.set NAME, 0xADDR` names an interior entry point that carries
+            # no label of its own.  Leaving these out wrongly condemned
+            # PlayModeStop_InitFlagBlock, whose label nothing references but
+            # whose interior IS called at +0x4/+0x10/+0x21/+0x2C through exactly
+            # such `.set` names.
+            m = SET_RE.match(line)
             if m:
                 defined.add(m.group(1))
     word = re.compile(r'\b([A-Za-z_][A-Za-z0-9_]*)\b')
@@ -202,6 +238,11 @@ def classify(dirs, refkind, detail=None):
                     cls = "b_suspect"
                 else:
                     cls = "c_typed_data"
+                first = first_byte(lines[i])
+                if first in BLIND:
+                    tot["d_decoder_gap"] += nb
+                    tot["d_decoder_gap_runs"] += 1
+                    per_dir[d]["d_decoder_gap"] += nb
                 tot[cls] += nb
                 tot[cls + "_runs"] += 1
                 per_dir[d][cls] += nb
@@ -286,18 +327,21 @@ def main():
     tot, per_dir, rows = classify(dirs, refkind, a.detail)
     print("THREE-WAY SPLIT of .byte operands, v10/maincpu/{%s}" % ",".join(dirs))
     print()
-    hdr = f"{'dir':<14}{'(a) code-debt':>15}{'(b) suspect':>14}{'(c) typed data':>16}"
+    hdr = (f"{'dir':<14}{'(a) code-debt':>15}{'(b) suspect':>14}"
+           f"{'(c) typed data':>16}{'(d) decoder gap':>18}")
     print(hdr)
     print("-" * len(hdr))
     for d in dirs:
         c = per_dir[d]
         print(f"{d:<14}{c['a_code_debt']:>15}{c['b_suspect']:>14}"
-              f"{c['c_typed_data']:>16}")
+              f"{c['c_typed_data']:>16}{c['d_decoder_gap']:>18}")
     print("-" * len(hdr))
     print(f"{'TOTAL':<14}{tot['a_code_debt']:>15}{tot['b_suspect']:>14}"
-          f"{tot['c_typed_data']:>16}")
+          f"{tot['c_typed_data']:>16}{tot['d_decoder_gap']:>18}")
     print(f"{'(runs)':<14}{tot['a_code_debt_runs']:>15}{tot['b_suspect_runs']:>14}"
-          f"{tot['c_typed_data_runs']:>16}")
+          f"{tot['c_typed_data_runs']:>16}{tot['d_decoder_gap_runs']:>18}")
+    print()
+    print("(d) OVERLAPS (a)/(b)/(c) -- it is not a fourth column of the total.")
     print()
     print(f"grand total {sum(tot[k] for k in ('a_code_debt','b_suspect','c_typed_data'))}"
           f" .byte operands")

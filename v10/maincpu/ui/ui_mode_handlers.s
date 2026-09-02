@@ -6803,7 +6803,7 @@ TchSensGrid_EventDispatch:
 	nop
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
-	.byte 0x94, 0x04
+	pushw (xix)	; FBABB9 (pushw (xix))
 	pushw	237
 	pushw	3808
 	push	xbc
@@ -9690,7 +9690,7 @@ DispTimeSet_EventDispatch:
 	jrl	825
 	lda_24	xwa, (0x340e6)
 	lda	xiy, (xde+14)
-	.byte 0xa2, 0xf0
+	cp xwa, (xde)	; FBC9C0 (cp xwa,(xde))
 	jr	nz, 64
 	lda	xwa, (xsp+40)
 	.byte 0xb0
