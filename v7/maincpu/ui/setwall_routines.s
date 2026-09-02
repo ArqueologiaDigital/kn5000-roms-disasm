@@ -521,6 +521,7 @@ SetWall_WriteAll_Loop:
 	cpdi8 (3390), 3
 	jr nz, SetWall_WriteAll_ModeSet
 	ldb a, 0xff
+
 SetWall_WriteAll_ModeSet:
 	ld	(xix), a
 	ld	xix, 700416
@@ -533,14 +534,14 @@ SetWall_WriteAll_ModeSet:
 	ldw	(xix), 65535
 	inc1b_erp	52
 	cp_erpb	52, 10
-	jr	c, -102
+	jr	c, -102	; -> 0xF1F23C
 	xor	xwa, xwa
-	ldb_d8	a, 3391
+	ldb_d8	a, (3391)
 	xor	xbc, xbc
-	ldb_d8	c, 3390
+	ldb_d8	c, (3390)
 	call	16600920
-	call	15860208
-	call	16553566
+	call	SetWall_SyncToneGenToDRAM
+	call	VoiceChannels_InitPanFromPreset
 	ret
 SetWall_NopPadding:
 	.fill 6, 1, 0x0e

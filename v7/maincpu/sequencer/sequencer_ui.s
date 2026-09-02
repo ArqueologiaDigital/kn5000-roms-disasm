@@ -16193,9 +16193,10 @@ DspItem0CngFunc:
 	ld iy, (xiy)
 	lda_24 xix, (DspItem0_DisplayEffectName)
 	jp_ind 8, 0x07, 0xf0, 0xf4
+
 DspItem0_DisplayEffectName:
 	ld	(xsp), xde
-	ldw_d16	wa, 10614
+	ldw_d16	wa, (10614)
 	extz	xwa
 	sll	xwa, 2
 	ld	xbc, 14887546
@@ -16205,9 +16206,9 @@ DspItem0_DisplayEffectName:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	269
+	jrl	269	; -> 0xF356FB
 	ld	(xsp), xde
 	ldw	(xsp+18), 0
 DspItem0_DisplayParamNames:

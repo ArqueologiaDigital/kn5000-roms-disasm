@@ -8122,16 +8122,17 @@ LanguageSelectEventReturn:
 	lds32 xde, 0
 	call SendEvent
 	jr CheckLang_ReturnZero
+
 CheckLang_GetTextStr:
 	ldb_da	a, (213220)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 15325254
+	lda_24	xbc, (15325254)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 CheckLang_ReturnZero:
 	lds32 xhl, 0

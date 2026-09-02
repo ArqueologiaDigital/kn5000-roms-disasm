@@ -494,13 +494,14 @@ Rhythm_Transp_CheckZero:
 	jr nz, Rhythm_Transp_Apply
 	ldb a, 0x0
 	jr Rhythm_Transp_Done
+
 Rhythm_Transp_Apply:
 	dec	1, a
-	cpda8	a, 12847
-	jr	ugt, 12
+	cpda8	xbc, (12847)
+	jr	ugt, 12	; -> 0xF54D83
 	add	w, a
 	bit	7, w
-	jr	z, 3
+	jr	z, 3	; -> 0xF54D81
 	sub	w, 12
 Rhythm_Transp_JumpToWrap:
 	jr Rhythm_Transp_WrapCheck
@@ -550,9 +551,13 @@ Rhythm_VoiceMap_ClampInstr:
 	.byte 0x45, 0x6b, 0x4e, 0xf5, 0x00, 0xf1, 0x58, 0x32
 	.byte 0xcb, 0x66, 0x05, 0x45, 0x9c, 0x4e, 0xf5, 0x00
 Rhythm_VoiceMap_SelectTable:
-	.byte 0xc3, 0x03, 0xf4, 0xec, 0x27, 0xcf, 0xd8, 0x66
-	.byte 0x26, 0xc1, 0x97, 0x33, 0x26, 0xcf, 0xd9, 0x66
-	.byte 0x04, 0xc1, 0x98, 0x33, 0x26
+	ld_rr8b	l, xiy, l
+	cps	l, 0
+	jr	z, 38	; -> 0xF54E1F
+	ldb_d8	h, (13207)
+	cps	l, 1
+	jr	z, 4	; -> 0xF54E05
+	ldb_d8	h, (13208)
 Rhythm_VoiceMap_CheckMute:
 	bit 5, h
 	jr z, Rhythm_VoiceMap_CheckDir
