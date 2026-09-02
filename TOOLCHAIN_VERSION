@@ -7,12 +7,29 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: dbb72df07371 (dbb72df073711ef98be1e41f003e04a7022bf120)
-Date: 2026-09-01
-Subject: [TLCS900] A regression guard for the SX-WSA1R's sound-code C7 forms
+Commit: 975a2c17d683 (975a2c17d683be783e00219e3e28cc0bb8dcb28f)
+Date: 2026-09-02
+Subject: [TLCS900] Corroborate the ERP/SriRR decoders with real v10 + WSA1R bytes
 Repository: /home/fsanches/compartilhado/llvm-project
 
+# What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
+# and all 13 images rebuild byte-identically under it):
+#   * ad8129f59880  two decoder bugs, one a SILENT MISCOMPILE -- the ROM's
+#                   bf 04 02 01 00 disassembled to text re-encoding as
+#                   bf 04 14 01 00, accepted with no diagnostic.
+#   * 662b3929a72a  the two families the disassembler could not see at all:
+#                   register-indexed SriRR (mode bytes 07/03 fell into a
+#                   rejection) and ERP byte/long forms (decodeERPPrefix was a
+#                   stub returning Fail). ~30 mnemonics the assembler had
+#                   always encoded correctly.
+#   * 975a2c17d683  54 lit regression tests built from real ROM bytes.
+#
+# ⚠ These gaps were SILENT: a tool that cannot disassemble a region reports
+# nothing there rather than reporting a problem, which is why they hid 312 B of
+# real code from every automated audit for months.
+
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: dbb72df07371  [TLCS900] A regression guard for the SX-WSA1R's sound-code C7 forms
 #   Commit: 4149d0474bf8  [TLCS900] The last KN5000 sound forms, and an inverted 8-bit index address
 #   Commit: 95f7f2d40428  [TLCS900] Refuse an immediate or an index register that does not fit
 #   Commit: f29a4827693f  [TLCS900] Native mnemonics for the memory forms, and two silent miscompiles
