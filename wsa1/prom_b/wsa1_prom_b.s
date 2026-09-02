@@ -7025,6 +7025,78 @@ DL_F039D9:
 ; a `.long` or a 32-bit immediate names it) in 6 runs.  Everything else here
 ; is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+;
+; ⚠⚠ SUPERSEDED 2026-09-02 BY LANE res03a -- AND THE HEADLINE IS THE OPPOSITE
+;    OF THE SENTENCE ABOVE.  "Everything else here is NOT reachable and stays
+;    `.incbin`" is withdrawn: 0 of these 680 bytes are `.incbin` now, and none
+;    of them is code.
+;
+; WHAT THIS REGION IS.  Eight instances of one object:
+;
+;        <list 1><list 2>...<list N><selector table of N+2 LE32 entries>
+;
+;    table[0] == table[1] == list 1's first byte    (entry 0 is padding)
+;    table[i] == list i's first byte                (i = 1..N)
+;    table[N+1] == the table's OWN address          (one past the last list)
+;
+;    A list is an ordinary interpreter-A display list: `(opcode, length)`
+;    records run by DisplayList_Run (0xF31A09, thunk 0xF417F0).  The table is
+;    what the firmware indexes, in a loop that is identical at every reader:
+;
+;        push C                    ; C = 4 or 2, counted DOWN by djnz
+;        xor  B,B
+;        sla  0x02,BC              ; BC = index*4
+;        ld   XIZ,<table>
+;        ld   XIY,(XIZ+BC)         ; start = table[i]
+;        add  BC,0x0004
+;        ld   XIX,(XIZ+BC)         ; end   = table[i+1]
+;        call 0xf417f0             ; -> DisplayList_Run
+;        pop  C
+;        djnz C,<top>
+;
+;    `djnz` runs C down from 4 (or 2) to 1, so entries 1..N+1 are used and
+;    entry 0 never is -- which is why entry 0 duplicates entry 1, and why the
+;    C=2 blocks carry four entries where the C=4 blocks carry six.
+;
+; ⚠ WHY THIS MATTERS MORE THAN THE BYTE COUNT.  Four `.incbin` spans here
+;   (0xF03A26+7, 0xF03ADE+21, 0xF03AF8+77, 0xF03BE6+5, 110 bytes) each began
+;   and ended MID-RECORD, and so did five of the six `Data_*` extents around
+;   them.  Any stride read off those bytes would have framed fake records and
+;   rebuilt the ROM perfectly, because ANY framing of the right bytes does.
+;   The boundaries below are not read off the bytes: they come from the
+;   `ld XIZ` sites in already-converted code listed per block.
+;
+;   The four span markers this replaces, kept verbatim -- each said exactly
+;   what was true, that the bytes decode as neither interpreter's records,
+;   because each span STARTS in the middle of one:
+;
+; | ; --- 0xF03A26-0xF03A2C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+; | ; --- 0xF03ADE-0xF03AF2: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+; | ; --- 0xF03AF8-0xF03B44: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+; | ; --- 0xF03BE6-0xF03BEA: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+;
+;   0xF03A26 is bytes 6..12 of the op-03 record at 0xF03A21; 0xF03ADE bytes
+;   6..12 of the record at 0xF03AD9 plus the whole record at 0xF03AE5 plus the
+;   header of the one at 0xF03AF1; 0xF03AF8 the tail of that record, two more
+;   lists and block 3's whole selector table; 0xF03BE6 bytes 8..12 of the
+;   op-03 record at 0xF03BDF.
+;
+; ⚠ TWO OF THE EIGHT TABLES HAVE NO READER.  0xF03AB5 and 0xF03B2D are named
+;   by nothing outside themselves anywhere in the four ROM images.  Their
+;   framing rests on the chain -- each starts where the previous
+;   reader-proven table ends, ends on its own self-referential last entry,
+;   and 0xF03B2D's block ends exactly where the reader-proven table at
+;   0xF03B6F says its own block begins.  Pinned at both ends, but say so.
+;
+; Regenerate / re-check:
+;   python3 notes/gen_prom_b_f039ed_selector_blocks.py --check
+;   python3 notes/gen_prom_b_f039ed_selector_blocks.py --evidence
+
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 0 -- 0xF039ED-0xF03A20, 52 bytes: 4 display lists
+; then a 6-entry selector table at 0xF03A09.
+; Boundary evidence: the table is read by 0xF5C407 (`ld XIZ,0x00F03A09`, djnz from C=4).
+; ------------------------------------------------------------------
 
 ; --------------------------------------------------------------------------
 ; Data_F039ED -- 57 bytes, EMITTED AS DATA (not promoted to code).
@@ -7038,16 +7110,51 @@ DL_F039D9:
 ; ⚠ The extent is the reachability walk's, not the object's; the rest of
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ OVERTURNED 2026-09-02 (lane res03a).  "57 bytes" and "the rest of this
+;   span is unreachable and stays `.incbin`" are both withdrawn.  The extent
+;   was the walk's: it ran 4 text records + a 24-byte selector table + the
+;   first 5 bytes of the record at 0xF03A21.  What survives unchanged is the
+;   verdict DATA, and the "Reached from" line -- 0xF5C3C4 does load
+;   0x00F039ED, as the END operand of a display-list call, and 0xF03A09 and
+;   0xF03A0D are entries 0 and 1 of this block's own selector table.
 ; --------------------------------------------------------------------------
+; list 1 of block 0 -- 0xF039ED-0xF039F3, 1 record, 7 bytes
 Data_F039ED:
-	.byte	0x20, 0x07, 0x5A, 0x0C, 0x31, 0x73, 0x74, 0x20, 0x07, 0x5A, 0x11, 0x32, 0x6E, 0x64, 0x20, 0x07	; F039ED  | .Z.1st .Z.2nd .|
-	.byte	0x5A, 0x16, 0x33, 0x72, 0x64, 0x20, 0x07, 0x5A, 0x1B, 0x34, 0x74, 0x68, 0xED, 0x39, 0xF0, 0x00	; F039FD  |Z.3rd .Z.4th.9..|
-	.byte	0xED, 0x39, 0xF0, 0x00, 0xF4, 0x39, 0xF0, 0x00, 0xFB, 0x39, 0xF0, 0x00, 0x02, 0x3A, 0xF0, 0x00	; F03A0D  |.9...9...9...:..|
-	.byte	0x09, 0x3A, 0xF0, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F03A1D  |.:.......|
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x0C5A
+	.ascii "1st"
+; list 2 of block 0 -- 0xF039F4-0xF039FA, 1 record, 7 bytes
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x115A
+	.ascii "2nd"
+; list 3 of block 0 -- 0xF039FB-0xF03A01, 1 record, 7 bytes
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x165A
+	.ascii "3rd"
+; list 4 of block 0 -- 0xF03A02-0xF03A08, 1 record, 7 bytes
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1B5A
+	.ascii "4th"
 
-	
-; --- 0xF03A26-0xF03A2C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003A26, 0x000007
+; selector table of block 0 -- 0xF03A09-0xF03A20, 6 LE32 entries
+	.long	0x00F039ED	; F03A09  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F039ED	; F03A0D  [1] start of list 1
+	.long	0x00F039F4	; F03A11  [2] end of list 1 / start of list 2
+	.long	0x00F039FB	; F03A15  [3] end of list 2 / start of list 3
+	.long	0x00F03A02	; F03A19  [4] end of list 3 / start of list 4
+	.long	0x00F03A09	; F03A1D  [5] end of list 4 == this table's own address
+
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 1 -- 0xF03A21-0xF03A68, 72 bytes: 4 display lists
+; then a 6-entry selector table at 0xF03A51.
+; Boundary evidence: the table is read by 0xF5C3E5 (`ld XIZ,0x00F03A51`, djnz from C=4).
+; ------------------------------------------------------------------
+; list 1 of block 1 -- 0xF03A21-0xF03A2C, 1 record, 12 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F0191A
+	.short 0x0C5A
+	.short 0x0003
+	.short 0x000A
 
 ; ------------------------------------------------------------------
 ; 0xF03A2D-0xF03A50 -- 3 display-list records, 36 bytes -- interpreter A
@@ -7059,17 +7166,25 @@ Data_F039ED:
 ; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
+; ⚠ 2026-09-02 (lane res03a): these records are UNCHANGED -- that lane's
+;   framing was right.  What is withdrawn is the span it measured
+;   itself against: the `.incbin` supplying the "7 bytes into this
+;   span" offset is converted, and this run is simply a list of the
+;   selector block above, named by that block's own table.
 ; ------------------------------------------------------------------
+; list 2 of block 1 -- 0xF03A2D-0xF03A38, 1 record, 12 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01938
 	.short 0x115A
 	.short 0x0003
 	.short 0x000A
+; list 3 of block 1 -- 0xF03A39-0xF03A44, 1 record, 12 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01956
 	.short 0x165A
 	.short 0x0003
 	.short 0x000A
+; list 4 of block 1 -- 0xF03A45-0xF03A50, 1 record, 12 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01974
 	.short 0x1B5A
@@ -7088,38 +7203,156 @@ Data_F039ED:
 ; ⚠ The extent is the reachability walk's, not the object's; the rest of
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED 2026-09-02 (lane res03a).  "141 bytes" is withdrawn -- the walk
+;   ran from this table's first byte straight through two more blocks and
+;   stopped mid-record at 0xF03ADD.  The label itself lands EXACTLY right:
+;   0xF03A51 is block 1's 24-byte selector table, and 0xF5C3E5 is the
+;   `ld XIZ` that indexes it.  0xF03A65 is its own entry 5, the
+;   self-referential terminator.
 ; --------------------------------------------------------------------------
+; selector table of block 1 -- 0xF03A51-0xF03A68, 6 LE32 entries
 Data_F03A51:
-	.byte	0x21, 0x3A, 0xF0, 0x00, 0x21, 0x3A, 0xF0, 0x00, 0x2D, 0x3A, 0xF0, 0x00, 0x39, 0x3A, 0xF0, 0x00	; F03A51  |!:..!:..-:..9:..|
-	.byte	0x45, 0x3A, 0xF0, 0x00, 0x51, 0x3A, 0xF0, 0x00, 0x03, 0x0C, 0x92, 0x19, 0xF0, 0x00, 0xD2, 0x0C	; F03A61  |E:..Q:..........|
-	.byte	0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0xD4, 0x0C, 0x31, 0x73, 0x74, 0x03, 0x0C, 0x92, 0x19, 0xF0	; F03A71  |.... ...1st.....|
-	.byte	0x00, 0xD2, 0x11, 0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0xD4, 0x11, 0x32, 0x6E, 0x64, 0x03, 0x0C	; F03A81  |....... ...2nd..|
-	.byte	0x92, 0x19, 0xF0, 0x00, 0xD2, 0x16, 0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0xD4, 0x16, 0x33, 0x72	; F03A91  |.......... ...3r|
-	.byte	0x64, 0x03, 0x0C, 0x92, 0x19, 0xF0, 0x00, 0xD2, 0x1B, 0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0xD4	; F03AA1  |d............ ..|
-	.byte	0x1B, 0x34, 0x74, 0x68, 0x69, 0x3A, 0xF0, 0x00, 0x69, 0x3A, 0xF0, 0x00, 0x7C, 0x3A, 0xF0, 0x00	; F03AB1  |.4thi:..i:..|:..|
-	.byte	0x8F, 0x3A, 0xF0, 0x00, 0xA2, 0x3A, 0xF0, 0x00, 0xB5, 0x3A, 0xF0, 0x00, 0x03, 0x0C, 0xAA, 0x19	; F03AC1  |.:...:...:......|
-	.byte	0xF0, 0x00, 0xD2, 0x0C, 0x02, 0x00, 0x0C, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F03AD1  |.............|
+	.long	0x00F03A21	; F03A51  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03A21	; F03A55  [1] start of list 1
+	.long	0x00F03A2D	; F03A59  [2] end of list 1 / start of list 2
+	.long	0x00F03A39	; F03A5D  [3] end of list 2 / start of list 3
+	.long	0x00F03A45	; F03A61  [4] end of list 3 / start of list 4
+	.long	0x00F03A51	; F03A65  [5] end of list 4 == this table's own address
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003ADE, 0x000015
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 2 -- 0xF03A69-0xF03ACC, 100 bytes: 4 display lists
+; then a 6-entry selector table at 0xF03AB5.
+; Boundary evidence: the table is named by NO INSTRUCTION anywhere in the four images; framed by the chain (see the region header).
+; ------------------------------------------------------------------
+; list 1 of block 2 -- 0xF03A69-0xF03A7B, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x0CD2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x0CD4
+	.ascii "1st"
+; list 2 of block 2 -- 0xF03A7C-0xF03A8E, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x11D2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x11D4
+	.ascii "2nd"
+; list 3 of block 2 -- 0xF03A8F-0xF03AA1, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x16D2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x16D4
+	.ascii "3rd"
+; list 4 of block 2 -- 0xF03AA2-0xF03AB4, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x1BD2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1BD4
+	.ascii "4th"
 
+; selector table of block 2 -- 0xF03AB5-0xF03ACC, 6 LE32 entries
+	.long	0x00F03A69	; F03AB5  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03A69	; F03AB9  [1] start of list 1
+	.long	0x00F03A7C	; F03ABD  [2] end of list 1 / start of list 2
+	.long	0x00F03A8F	; F03AC1  [3] end of list 2 / start of list 3
+	.long	0x00F03AA2	; F03AC5  [4] end of list 3 / start of list 4
+	.long	0x00F03AB5	; F03AC9  [5] end of list 4 == this table's own address
+
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 3 -- 0xF03ACD-0xF03B44, 120 bytes: 4 display lists
+; then a 6-entry selector table at 0xF03B2D.
+; Boundary evidence: the table is named by NO INSTRUCTION anywhere in the four images; framed by the chain (see the region header).
+; ------------------------------------------------------------------
+; list 1 of block 3 -- 0xF03ACD-0xF03AE4, 2 records, 24 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x0CD2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F0191A
+	.short 0x0CD4
+	.short 0x0003
+	.short 0x000A
+; list 2 of block 3 -- 0xF03AE5-0xF03AFC, 2 records, 24 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x11D2
+	.short 0x0002
+	.short 0x000C
 ; --------------------------------------------------------------------------
-; Data_F03AF3 -- 5 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: nothing aligned holds this address; the walk fell through into
-;               it.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 20% printable ASCII; a linear decode runs 3 instructions and ends
-;           `jp PE/OV,0x00`, with 0% of the bytes in spellings llvm-mc will
-;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ THE ONE LABEL THIS CONVERSION RETIRES, WITH ITS HEADER KEPT VERBATIM.
+;   `Data_F03AF3` named bytes 3..7 of the 12-byte op-03 record that starts at
+;   0xF03AF1, so it cannot stand on an object boundary and the label is gone.
+;   Its own header already said as much -- "nothing aligned holds this
+;   address; the walk fell through into it" -- and that sentence is the most
+;   accurate thing anyone wrote about this region before now:
+;
+; | ; --------------------------------------------------------------------------
+; | ; Data_F03AF3 -- 5 bytes, EMITTED AS DATA (not promoted to code).
+; | ; Reached from: nothing aligned holds this address; the walk fell through into
+; | ;               it.  No routine-directory slot and no branch decoded in
+; | ;               converted code names it.
+; | ; Measured: 20% printable ASCII; a linear decode runs 3 instructions and ends
+; | ;           `jp PE/OV,0x00`, with 0% of the bytes in spellings llvm-mc will
+; | ;           not encode.
+; | ; ⚠ The extent is the reachability walk's, not the object's; the rest of
+; | ;   this span is unreachable and stays `.incbin`.  Why this is data and
+; | ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; | ; --------------------------------------------------------------------------
 ; --------------------------------------------------------------------------
-Data_F03AF3:
-	.byte	0x38, 0x19, 0xF0, 0x00, 0xD4	; F03AF3  |8....|
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01938
+	.short 0x11D4
+	.short 0x0003
+	.short 0x000A
+; list 3 of block 3 -- 0xF03AFD-0xF03B14, 2 records, 24 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x16D2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01956
+	.short 0x16D4
+	.short 0x0003
+	.short 0x000A
+; list 4 of block 3 -- 0xF03B15-0xF03B2C, 2 records, 24 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x1BD2
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01974
+	.short 0x1BD4
+	.short 0x0003
+	.short 0x000A
 
-	
-; --- 0xF03AF8-0xF03B44: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003AF8, 0x00004D
+; selector table of block 3 -- 0xF03B2D-0xF03B44, 6 LE32 entries
+	.long	0x00F03ACD	; F03B2D  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03ACD	; F03B31  [1] start of list 1
+	.long	0x00F03AE5	; F03B35  [2] end of list 1 / start of list 2
+	.long	0x00F03AFD	; F03B39  [3] end of list 2 / start of list 3
+	.long	0x00F03B15	; F03B3D  [4] end of list 3 / start of list 4
+	.long	0x00F03B2D	; F03B41  [5] end of list 4 == this table's own address
+
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 4 -- 0xF03B45-0xF03B7E, 58 bytes: 2 display lists
+; then a 4-entry selector table at 0xF03B6F.
+; Boundary evidence: the table is read by 0xF09DD0 0xF09E35 (`ld XIZ,0x00F03B6F`, djnz from C=2).
+; ------------------------------------------------------------------
 
 ; ------------------------------------------------------------------
 ; 0xF03B45-0xF03B6E -- 4 display-list records, 42 bytes -- interpreter A
@@ -7131,7 +7364,13 @@ Data_F03AF3:
 ; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
+; ⚠ 2026-09-02 (lane res03a): these records are UNCHANGED -- that lane's
+;   framing was right.  What is withdrawn is the span it measured
+;   itself against: the `.incbin` supplying the "77 bytes into this
+;   span" offset is converted, and this run is simply a list of the
+;   selector block above, named by that block's own table.
 ; ------------------------------------------------------------------
+; list 1 of block 4 -- 0xF03B45-0xF03B59, 2 records, 21 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01992
 	.short 0x129A
@@ -7141,6 +7380,7 @@ Data_F03AF3:
 	.short 0x0021
 	.short 0x007A
 	.ascii "1st"
+; list 2 of block 4 -- 0xF03B5A-0xF03B6E, 2 records, 21 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01992
 	.short 0x174A
@@ -7163,20 +7403,79 @@ Data_F03AF3:
 ; ⚠ The extent is the reachability walk's, not the object's; the rest of
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED 2026-09-02 (lane res03a).  "119 bytes" is withdrawn; the walk
+;   ran through block 5 and stopped mid-record at 0xF03BE5.  The label is on
+;   a real boundary: block 4's selector table, FOUR entries not six, because
+;   both its readers (0xF09DD0, 0xF09E35) start their djnz loop at C=2.
 ; --------------------------------------------------------------------------
+; selector table of block 4 -- 0xF03B6F-0xF03B7E, 4 LE32 entries
 Data_F03B6F:
-	.byte	0x45, 0x3B, 0xF0, 0x00, 0x45, 0x3B, 0xF0, 0x00, 0x5A, 0x3B, 0xF0, 0x00, 0x6F, 0x3B, 0xF0, 0x00	; F03B6F  |E;..E;..Z;..o;..|
-	.byte	0x03, 0x0C, 0xAA, 0x19, 0xF0, 0x00, 0x9A, 0x12, 0x02, 0x00, 0x0C, 0x00, 0x17, 0x09, 0x21, 0x00	; F03B7F  |..............!.|
-	.byte	0x7A, 0x00, 0x31, 0x73, 0x74, 0x03, 0x0C, 0xAA, 0x19, 0xF0, 0x00, 0x4A, 0x17, 0x02, 0x00, 0x0C	; F03B8F  |z.1st......J....|
-	.byte	0x00, 0x17, 0x09, 0x21, 0x00, 0x98, 0x00, 0x32, 0x6E, 0x64, 0x7F, 0x3B, 0xF0, 0x00, 0x7F, 0x3B	; F03B9F  |...!...2nd.;...;|
-	.byte	0xF0, 0x00, 0x94, 0x3B, 0xF0, 0x00, 0xA9, 0x3B, 0xF0, 0x00, 0x03, 0x0C, 0x92, 0x19, 0xF0, 0x00	; F03BAF  |...;...;........|
-	.byte	0x68, 0x0B, 0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0x92, 0x0B, 0x31, 0x73, 0x74, 0x03, 0x0C, 0x92	; F03BBF  |h..... ...1st...|
-	.byte	0x19, 0xF0, 0x00, 0x30, 0x11, 0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0x5A, 0x11, 0x32, 0x6E, 0x64	; F03BCF  |...0..... .Z.2nd|
-	.byte	0x03, 0x0C, 0x92, 0x19, 0xF0, 0x00, 0xF8	; F03BDF  |.......|
+	.long	0x00F03B45	; F03B6F  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03B45	; F03B73  [1] start of list 1
+	.long	0x00F03B5A	; F03B77  [2] end of list 1 / start of list 2
+	.long	0x00F03B6F	; F03B7B  [3] end of list 2 == this table's own address
 
-	
-; --- 0xF03BE6-0xF03BEA: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003BE6, 0x000005
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 5 -- 0xF03B7F-0xF03BB8, 58 bytes: 2 display lists
+; then a 4-entry selector table at 0xF03BA9.
+; Boundary evidence: the table is read by 0xF09DAE (`ld XIZ,0x00F03BA9`, djnz from C=2).
+; ------------------------------------------------------------------
+; list 1 of block 5 -- 0xF03B7F-0xF03B93, 2 records, 21 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x129A
+	.short 0x0002
+	.short 0x000C
+	.byte 0x17, 0x09	; op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0021
+	.short 0x007A
+	.ascii "1st"
+; list 2 of block 5 -- 0xF03B94-0xF03BA8, 2 records, 21 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x174A
+	.short 0x0002
+	.short 0x000C
+	.byte 0x17, 0x09	; op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0021
+	.short 0x0098
+	.ascii "2nd"
+
+; selector table of block 5 -- 0xF03BA9-0xF03BB8, 4 LE32 entries
+	.long	0x00F03B7F	; F03BA9  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03B7F	; F03BAD  [1] start of list 1
+	.long	0x00F03B94	; F03BB1  [2] end of list 1 / start of list 2
+	.long	0x00F03BA9	; F03BB5  [3] end of list 2 == this table's own address
+
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 6 -- 0xF03BB9-0xF03C1C, 100 bytes: 4 display lists
+; then a 6-entry selector table at 0xF03C05.
+; Boundary evidence: the table is read by 0xF5C46E (`ld XIZ,0x00F03C05`, djnz from C=4).
+; ------------------------------------------------------------------
+; list 1 of block 6 -- 0xF03BB9-0xF03BCB, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x0B68
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x0B92
+	.ascii "1st"
+; list 2 of block 6 -- 0xF03BCC-0xF03BDE, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x1130
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x115A
+	.ascii "2nd"
+; list 3 of block 6 -- 0xF03BDF-0xF03BF1, 2 records, 19 bytes
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x16F8
+	.short 0x0002
+	.short 0x000C
 
 ; ------------------------------------------------------------------
 ; 0xF03BEB-0xF03C04 -- 3 display-list records, 26 bytes -- interpreter A
@@ -7188,10 +7487,16 @@ Data_F03B6F:
 ; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
+; ⚠ 2026-09-02 (lane res03a): these records are UNCHANGED -- that lane's
+;   framing was right.  What is withdrawn is the span it measured
+;   itself against: the `.incbin` supplying the "5 bytes into this
+;   span" offset is converted, and this run is simply a list of the
+;   selector block above, named by that block's own table.
 ; ------------------------------------------------------------------
 	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
 	.short 0x1722
 	.ascii "3rd"
+; list 4 of block 6 -- 0xF03BF2-0xF03C04, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01992
 	.short 0x1CC0
@@ -7213,18 +7518,39 @@ Data_F03B6F:
 ; ⚠ The extent is the reachability walk's, not the object's; the rest of
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED 2026-09-02 (lane res03a).  "13 bytes" is withdrawn: the object
+;   is a 24-byte, 6-entry selector table, and the walk stopped 11 bytes into
+;   it.  Lane promB6 had already spotted the tail from the far side and
+;   emitted 0xF03C12-0xF03C1C as "6-entry pointer array"; its three loose
+;   bytes were the top of entry 3.  Both halves are now one table.
 ; --------------------------------------------------------------------------
+; selector table of block 6 -- 0xF03C05-0xF03C1C, 6 LE32 entries
 Data_F03C05:
-	.byte	0xB9, 0x3B, 0xF0, 0x00, 0xB9, 0x3B, 0xF0, 0x00, 0xCC, 0x3B, 0xF0, 0x00, 0xDF	; F03C05  |.;...;...;...|
+	.long	0x00F03BB9	; F03C05  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03BB9	; F03C09  [1] start of list 1
+	.long	0x00F03BCC	; F03C0D  [2] end of list 1 / start of list 2
+; | ; --- 0xF03C12-0xF03C1C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+; | ; --- 0xF03C12-0xF03C1C, 11 B, converted by lane promB6 (PTRTAB4).
+; | ;     6-entry pointer array
+; | ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+; | 	.byte	0x3B, 0xF0, 0x00	; F03C12  top 3 bytes of the entry at F03C11 = 0x00F03BDF
+; | 	.long	0x00F03BF2	; F03C15  entry 4
+; | 	.long	0x00F03C05	; F03C19  entry 5
+; ⚠ 2026-09-02 (lane res03a): that lane had the object RIGHT -- a 6-entry
+;   pointer array -- and could only see its last 11 bytes because the
+;   reachability walk had cut the first 13 into `Data_F03C05`.  Its three
+;   loose leading bytes really were the top of entry 3.  The two halves are
+;   one table again, above; the note is kept because it named the object
+;   correctly from a fragment.
+	.long	0x00F03BDF	; F03C11  [3] end of list 2 / start of list 3
+	.long	0x00F03BF2	; F03C15  [4] end of list 3 / start of list 4
+	.long	0x00F03C05	; F03C19  [5] end of list 4 == this table's own address
 
-	
-; --- 0xF03C12-0xF03C1C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-; --- 0xF03C12-0xF03C1C, 11 B, converted by lane promB6 (PTRTAB4).
-;     6-entry pointer array
-;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
-	.byte	0x3B, 0xF0, 0x00	; F03C12  top 3 bytes of the entry at F03C11 = 0x00F03BDF
-	.long	0x00F03BF2	; F03C15  entry 4
-	.long	0x00F03C05	; F03C19  entry 5
+; ------------------------------------------------------------------
+; SELECTOR BLOCK 7 -- 0xF03C1D-0xF03C94, 120 bytes: 4 display lists
+; then a 6-entry selector table at 0xF03C7D.
+; Boundary evidence: the table is read by 0xF5C44C (`ld XIZ,0x00F03C7D`, djnz from C=4).
+; ------------------------------------------------------------------
 
 ; ------------------------------------------------------------------
 ; 0xF03C1D-0xF03C7C -- 8 display-list records, 96 bytes -- interpreter A
@@ -7236,7 +7562,13 @@ Data_F03C05:
 ; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
+; ⚠ 2026-09-02 (lane res03a): these records are UNCHANGED -- that lane's
+;   framing was right.  What is withdrawn is the span it measured
+;   itself against: the `.incbin` supplying the "11 bytes into this
+;   span" offset is converted, and this run is simply a list of the
+;   selector block above, named by that block's own table.
 ; ------------------------------------------------------------------
+; list 1 of block 7 -- 0xF03C1D-0xF03C34, 2 records, 24 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F019AA
 	.short 0x0B68
@@ -7247,6 +7579,7 @@ Data_F03C05:
 	.short 0x0B92
 	.short 0x0003
 	.short 0x000A
+; list 2 of block 7 -- 0xF03C35-0xF03C4C, 2 records, 24 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F019AA
 	.short 0x1130
@@ -7257,6 +7590,7 @@ Data_F03C05:
 	.short 0x115A
 	.short 0x0003
 	.short 0x000A
+; list 3 of block 7 -- 0xF03C4D-0xF03C64, 2 records, 24 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F019AA
 	.short 0x16F8
@@ -7267,6 +7601,7 @@ Data_F03C05:
 	.short 0x1722
 	.short 0x0003
 	.short 0x000A
+; list 4 of block 7 -- 0xF03C65-0xF03C7C, 2 records, 24 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F019AA
 	.short 0x1CC0
@@ -7290,10 +7625,18 @@ Data_F03C05:
 ; ⚠ The extent is the reachability walk's, not the object's; the rest of
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CONFIRMED 2026-09-02 (lane res03a).  This one the walk got exactly right:
+;   24 bytes IS the object -- block 7's 6-entry selector table, read by
+;   0xF5C44C.  Only the "stays `.incbin`" sentence is withdrawn.
 ; --------------------------------------------------------------------------
+; selector table of block 7 -- 0xF03C7D-0xF03C94, 6 LE32 entries
 Data_F03C7D:
-	.byte	0x1D, 0x3C, 0xF0, 0x00, 0x1D, 0x3C, 0xF0, 0x00, 0x35, 0x3C, 0xF0, 0x00, 0x4D, 0x3C, 0xF0, 0x00	; F03C7D  |.<...<..5<..M<..|
-	.byte	0x65, 0x3C, 0xF0, 0x00, 0x7D, 0x3C, 0xF0, 0x00	; F03C8D  |e<..}<..|
+	.long	0x00F03C1D	; F03C7D  [0] padding: never indexed (djnz runs C down to 1)
+	.long	0x00F03C1D	; F03C81  [1] start of list 1
+	.long	0x00F03C35	; F03C85  [2] end of list 1 / start of list 2
+	.long	0x00F03C4D	; F03C89  [3] end of list 2 / start of list 3
+	.long	0x00F03C65	; F03C8D  [4] end of list 3 / start of list 4
+	.long	0x00F03C7D	; F03C91  [5] end of list 4 == this table's own address
 
 ; === END COVER-R1 0xF039ED-0xF03C95 ===
 
