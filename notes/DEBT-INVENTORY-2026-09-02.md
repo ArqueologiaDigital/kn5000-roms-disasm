@@ -257,6 +257,33 @@ generator. So the detector had nothing to search, and a zero here means "no
 foothold", not "no defect". Finding the equivalent shape elsewhere needs a
 different signature derived from how those images declare object extents.
 
+## ⚠ No converter has a structural defence against a uniform fill
+
+Found 2026-09-02 by testing a known-DATA region and expecting a rejection that
+did not come. `convert_interrupted_region.py` does NOT abort on the `swi7`x3
+region at `widget_dispatch.s:8073`: it proposes converting 55 of 64 bytes,
+because **a run of `0xFF` trivially round-trips as repeated `swi 7`**. Only the
+documented hand-audit rejects it.
+
+This generalises beyond that one tool and that one byte value. Any uniform or
+near-uniform fill whose byte happens to be a valid opcode will:
+
+* decode cleanly,
+* re-assemble to the identical bytes,
+* pass the byte-identity gate,
+* and produce a long, plausible-looking instruction run.
+
+Every defence this tree has built is aimed at something else — context tiling
+proves a run is *reachable*, `looks_like_a_table_tail()` catches *periodic
+record* structure, call-target corroboration needs *calls to exist*. A fill has
+no records, no calls, and sits between real code by construction.
+
+**Practical rule until a guard exists: measure the repeated-byte run BEFORE
+walking.** That is exactly how prom_b's `0xF33F01` was handled correctly — a
+naive walk there produced 44 plausible records of `[op 0x0E, len 14]`,
+indistinguishable from the ROM's own padding, and measuring the run instead
+revealed 255 B of genuine `.fill` with the real list starting after it.
+
 ## Where the next pass should aim
 
 1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
