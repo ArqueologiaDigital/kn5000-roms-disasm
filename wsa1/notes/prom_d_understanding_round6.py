@@ -422,6 +422,12 @@ PROMOTED_OCT = re.compile(r"^ToneDB_OctaveShiftByProgram_Bank([0-9]):$")
 # rather than only its own.
 PROMOTED_SEL = re.compile(
     r"^([A-Za-z_][A-Za-z0-9_]*_[0-9]{1,4})_SelectedFor(?:Group)?_[A-Za-z0-9_]+:$")
+# ⚠ ADDED IN WAVE 14, for exactly the reason the round-11 note above gives.
+# notes/prom_d_drawbar_chain.py promoted slot +0x70's three pool objects from
+# `<stem>_Pool_B00n` to `<stem>_00n_ComboTable`, so without this the round-5
+# denominator would have fallen 614 -> 611 and Q8d would have gone red again.
+PROMOTED_COMBO = re.compile(
+    r"^([A-Za-z_][A-Za-z0-9_]*)_([0-9]{3})_ComboTable:$")
 
 
 def framed_labels():
@@ -456,6 +462,10 @@ def framed_labels():
         m = PROMOTED_SEL.match(t)
         if m:
             out.append(m.group(1))
+            continue
+        m = PROMOTED_COMBO.match(t)
+        if m:
+            out.append("%s_Pool_B%s" % (m.group(1), m.group(2)))
             continue
         if FRAMED_RE.match(t):
             out.append(t[:-1])

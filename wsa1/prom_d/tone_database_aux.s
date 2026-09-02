@@ -6951,9 +6951,12 @@ ToneDB_DescCurve_Step1:
 ;     descriptor  +0x00  1 B    tag
 ;                 +0x01  LE32   file offset of part A   (0 = none)
 ;                 +0x05  LE32   file offset of part B
-;                 +0x09  1 B    unidentified
-;                 +0x0A  LE16   unidentified
-;                 +0x0C  LE16   unidentified
+;                 +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)
+;                 +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)
+;                 +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with
+;                                `ld DE,(XWA+0x0C)` at 0xFA8160 through
+;                                voice[+0x1F] and the sum lands in
+;                                voice[+0x06], the pitch.  WAVE 14.
 ; 
 ; Every non-null offset lands past the array and inside the block, and the
 ; SMALLEST of them is exactly where the array ends -- that is what proves the
@@ -6965,8 +6968,10 @@ ToneDB_DescCurve_Step1:
 ; ⚠ ROUND 2 ENDED HERE with 'NO field inside a descriptor, a part A or a part
 ; B is identified'.  That sentence is now WRONG for three of them and is
 ; corrected rather than left standing: see THE INDEX CHAIN below, which
-; identifies tag bit 7 and the ROLE of both offsets.  It is still true of the
-; descriptor's +0x09/+0x0A/+0x0B/+0x0C and of every byte inside an element.
+; identifies tag bit 7 and the ROLE of both offsets.  ⚠ AND CORRECTED AGAIN IN
+; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
+; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
+; and every byte of an element at slots +0x30 and +0x38.
 ; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
 ; note below states what that leaves standing and what it does not.
 ; 
@@ -32749,9 +32754,12 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ;     descriptor  +0x00  1 B    tag
 ;                 +0x01  LE32   file offset of part A   (0 = none)
 ;                 +0x05  LE32   file offset of part B
-;                 +0x09  1 B    unidentified
-;                 +0x0A  LE16   unidentified
-;                 +0x0C  LE16   unidentified
+;                 +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)
+;                 +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)
+;                 +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with
+;                                `ld DE,(XWA+0x0C)` at 0xFA8160 through
+;                                voice[+0x1F] and the sum lands in
+;                                voice[+0x06], the pitch.  WAVE 14.
 ; 
 ; Every non-null offset lands past the array and inside the block, and the
 ; SMALLEST of them is exactly where the array ends -- that is what proves the
@@ -32763,8 +32771,10 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; ⚠ ROUND 2 ENDED HERE with 'NO field inside a descriptor, a part A or a part
 ; B is identified'.  That sentence is now WRONG for three of them and is
 ; corrected rather than left standing: see THE INDEX CHAIN below, which
-; identifies tag bit 7 and the ROLE of both offsets.  It is still true of the
-; descriptor's +0x09/+0x0A/+0x0B/+0x0C and of every byte inside an element.
+; identifies tag bit 7 and the ROLE of both offsets.  ⚠ AND CORRECTED AGAIN IN
+; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
+; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
+; and every byte of an element at slots +0x30 and +0x38.
 ; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
 ; note below states what that leaves standing and what it does not.
 ; 
@@ -35172,9 +35182,12 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ;     descriptor  +0x00  1 B    tag
 ;                 +0x01  LE32   file offset of part A   (0 = none)
 ;                 +0x05  LE32   file offset of part B
-;                 +0x09  1 B    unidentified
-;                 +0x0A  LE16   unidentified
-;                 +0x0C  LE16   unidentified
+;                 +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)
+;                 +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)
+;                 +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with
+;                                `ld DE,(XWA+0x0C)` at 0xFA8160 through
+;                                voice[+0x1F] and the sum lands in
+;                                voice[+0x06], the pitch.  WAVE 14.
 ; 
 ; Every non-null offset lands past the array and inside the block, and the
 ; SMALLEST of them is exactly where the array ends -- that is what proves the
@@ -35186,32 +35199,111 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ; ⚠ ROUND 2 ENDED HERE with 'NO field inside a descriptor, a part A or a part
 ; B is identified'.  That sentence is now WRONG for three of them and is
 ; corrected rather than left standing: see THE INDEX CHAIN below, which
-; identifies tag bit 7 and the ROLE of both offsets.  It is still true of the
-; descriptor's +0x09/+0x0A/+0x0B/+0x0C and of every byte inside an element.
-; ⚠ And no field is identified even though the block IS reached: see the Evidence
-; line below, which pins the ARRAY STRIDE and nothing else.
+; identifies tag bit 7 and the ROLE of both offsets.  ⚠ AND CORRECTED AGAIN IN
+; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
+; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
+; and every byte of an element at slots +0x30 and +0x38.
+; ★ AND AT THIS SLOT THE READER SAYS WHAT THE FIELDS ARE.  The Evidence line
+; below pins the ARRAY STRIDE; THE INDEX CHAIN further down pins the element
+; stride, the index, and every field of an element.
 ; 
 ; A DIFFERENT record class: tag 0x92 in all four, part A null in all four, and
 ; the four part-B offsets name only THREE objects -- 4374, 4374 and 24 bytes,
-; the first two being 729 rows of 6.  A column census over the first object
-; picks period 6 (3 near-constant columns) over 4, 5, 7 and 8 (0 each).
-; ⚠ Tag 0x92 has bit 7 SET yet every object is a multiple of 6, so the bit-7
-; rule stated on slot +0x30 is NOT claimed for this block.
+; the first two being 729 rows of 6.  The row size is NOT a period picked out
+; of the bytes: it is `mul WA,0x0006` in prom_c's Voice_StageRegs_0040_B, the
+; routine that reads these objects.  See THE INDEX CHAIN below.
+; ★ Tag 0x92 has bit 6 CLEAR and bit 7 SET, which is the two-bit table's
+; 6-byte row -- so the element size agrees with the reader as well.  (The
+; one-bit rule stated on slot +0x30 predicts 8 here and is still not claimed.)
 ; 
 ; Here: 4 descriptors x 14 = 56 bytes, then a pool of 8772 bytes
 ; at 0x44B26..0x46D69, holding 3 objects.  56 + 8772 = 8828, the whole
 ; block, with nothing unaccounted for.
 ; KN5000 label at the same directory slot: DrawbarPreset_EnvDescTable.
 ; 
-; ⚠ THE INDEX CHAIN DOES NOT REACH THIS BLOCK.  Its descriptors carry
-; no part-A offset at all (all four are 0), so the curve -> stage 2 ->
-; element chain that names the pool objects at slots +0x30 and +0x38
-; cannot even start here.  These pool objects therefore keep a
-; POSITIONAL name.  notes/prom_d_understanding_round4.py Q4a.
-; ⚠ RE-MEASURED, NOT RESTATED, in round 5 Q4a: through round 2's own
-; segmentation this block still has 0 part-A objects, so the refusal
-; is not a sentence that was copied forward.  It stays a refusal, and
-; raising prom_d's content score is not a reason to weaken it.
+; ★★ WAVE 14 -- WHAT THESE POOLS ARE.  This banner used to say THE
+; INDEX CHAIN DOES NOT REACH THIS BLOCK and leave the objects with a
+; positional name and a 'role NOT established'.  That was true of the
+; curve -> stage 2 -> element chain, which needs a part A and finds
+; four nulls -- and it was the wrong chain.  This block has a DIFFERENT
+; reader and a different chain, and every step of it below is an
+; instruction operand re-decoded from prom_c's ROM at the address
+; cited.  notes/prom_d_drawbar_chain.py, 65 checks with two nulls.
+; 
+;   A pool object is a 9 x 9 x 9 TABLE OF DRAWBAR COMBINATIONS:
+;   729 records of 6 bytes, one per setting of THREE drawbars of 9
+;   positions each, giving the composite waveform, the level trim and
+;   the octave transpose for that combination.
+; 
+;   stage 1  tone record +0x10 bits 7:6 == 0x40 marks a DRAWBAR tone.
+;            0xFB47F3 `ld A,(XIY+0x10)` / `and A,0xC0` picks the arm in
+;            sub_FB47C4; MidiNote_OnByPartMode tests the same field at
+;            0xFB3877 and routes 0x40 to VoiceRegs_Stage_B.  Exactly 2
+;            of the 274 tone records carry it: 0x58, 0x59, the two Drawbar
+;            records immediately above this block.
+;   stage 2  each of the tone's four element blocks carries THREE
+;            NIBBLES at +0x02/+0x03.  sub_FC28B5 packs them --
+;            0xFC28F3 `ld C,(XWA+0x02)`, 0xFC28FA `ld C,(XWA+0x03)` /
+;            `sll 8`, 0xFC2906 `and DE,0x0FFF` -- into RAM 0x00DC0E +
+;            23*part + 2*element, which is the LIVE drawbar setting.
+;            All 24 nibbles in both tones are 0..8, the radix; over
+;            ordinary elements the same test passes only 57.7%.
+;   stage 3  bits 5:4 of that SAME byte +0x03 pick one of the four
+;            descriptors -- 0xFC2983 `ld C,(XWA+0x03)` / `and C,0x30` /
+;            `srl 4,C` in DrawbarPreset_GetDescriptor, which multiplies
+;            by the directory's own stride word +0xEC (14) and parks the
+;            descriptor where voice[+0x1F] is loaded from (0xFB2078,
+;            0xFB20F4).  Element i selects descriptor i, in both tones.
+;   stage 4  Voice_StageRegs_0040_B takes the descriptor's PART B alone
+;            -- 0xFA8278 `ld XBC,(XDE+0x1F)`, 0xFA827B `ld XWA,(XBC+0x05)`,
+;            0xFA8281 `add XIX,(0x00D7ED)` -- converts the three nibbles
+;            to a linear index with sub_FC355B's base 9,
+;            `mul BC,0x0051` (81) at 0xFC356E and `mul IY,0x0009` at
+;            0xFC357D, i.e. n2*81 + n1*9 + n0, and indexes the table with
+;            `mul WA,0x0006` at 0xFA82C2 and again at 0xFA82D0.
+; 
+; ★ THE STRIDE AND THE RADIX ARE THE READER'S, NOT THE POOL'S.  4374 has
+; 15 divisors and any of them would reproduce these bytes, so a stride
+; swept out of the data would have proved nothing.  6 and 9 are `ld`
+; and `mul` operands in prom_c.
+; 
+; ★ AND THE CODOMAIN CLOSES, the way the +0x30 chain's joins do: the
+; wave field of the two 729-record tables takes EXACTLY the contiguous
+; interval [0x08A,0x448] -- 959 values, no gap, nothing outside, and the
+; two tables partition it (0x08A..0x27C, then 0x27D..0x448).
+; 
+; ★ KEYBOARD FOLDBACK, and it lands on the right elements.  prom_c
+; folds the drawbar digits before the base-9 conversion: sub_FC3407
+; (element 0) merges the two low digits BELOW note 24 -- 0xFC3427
+; `ld IY,(XWA+0x3BCF)` / `srl 8` is the note number, 0xFC3440
+; `cp HL,0x0024` is the threshold -- while sub_FC3480 (elements 1 and 2)
+; folds the HIGH digit down in 12-semitone steps above note 96
+; (0xFC34AD `sub BC,0x000C`, 0xFC34BC `cp DE,0x0054`).  The elements'
+; own coarse transposes are -12, +12, +7, +0 semitones: the element that folds
+; at the BASS end is the one transposed DOWN and the two that fold at
+; the TREBLE end are the two transposed UP.  Nothing arranged that.
+; 
+; ★ AND THE TABLE PRECOMPUTES THE SAME FOLD.  Field +0x04 is non-zero
+; in exactly the cells whose low digit is 0, and only ever 0x0C00 or
+; 0x1800 = one or two octaves in the pitch word's note<<8 units.
+; 
+; ★ THE LEVEL TRIM IS A MONOTONE MIXING SURFACE.  Read signed, as
+; 0xFAB66B `exts WA` reads it, descriptor 0's cube is non-decreasing on
+; ALL 243 axis-parallel lines and descriptors 1/2's on 164 with a worst
+; backward step of 3 in a 128-wide range -- rounding, not structure.
+; Null: the wave field is monotone on 240 of the same 486 lines.
+; 
+; ⚠ WHAT IS STILL NOT ESTABLISHED.  That the nine values are 'the nine
+; Hammond drawbars': what is measured is four elements, transposes
+; -12, +12, +7, +0, three 0..8 nibbles each.  The FOOTAGE reading
+; (-12 = 16', 0 = 8', +7 = 5 1/3', +12 = 4') is an inference from the
+; intervals and is marked as one.  Nor what descriptor 3's 4-record
+; table selects: its element takes prom_c's h >= 3 arm at 0xFA82CC,
+; where the slot word is used RAW with no base-9 conversion, so an
+; index space of 0..3 is exactly the right size and nothing says what
+; the four choices are.  Nor descriptor +0x09/+0x0A -- arguments 2 and 3
+; of sub_FA73EB at 0xFA818C.  +0x0C IS placed: 0xFA8160
+; `ld DE,(XWA+0x0C)` makes it the base pitch.
 ; 
 ; Evidence: (image-internal, NOT from code) the array's end is fixed
 ; by the records' own 32-bit offsets.  The smallest non-null offset over all
@@ -35255,9 +35347,35 @@ DrawbarPreset_EnvDescTable_Desc003:		; tag 0x92  A=none  B=0x46D52
 ; ---- the pool ----
 DrawbarPreset_EnvDescTable_Pool:
 
-; DrawbarPreset_EnvDescTable_Pool_B000 -- file 0x44B26..0x45C3B (4374 bytes)
-; part B of descriptor 0 -- role NOT established
-DrawbarPreset_EnvDescTable_Pool_B000:
+; DrawbarPreset_EnvDescTable_000_ComboTable -- file 0x44B26..0x45C3B (4374 bytes)
+; descriptor 0: 729 records of 6 B = 9^3 drawbar settings, 0..8 each
+; index = n2*81 + n1*9 + n0, each digit 0..8 -- prom_c's
+; sub_FC355B (`mul BC,0x0051` 0xFC356E, `mul IY,0x0009`
+; 0xFC357D), the digits being the element block's +0x02/+0x03
+; nibbles after keyboard foldback.
+;
+; struct DrawbarCombo {           /* 6 B; stride from prom_c
+;                                    `mul WA,0x0006` 0xFA82C2 */
+;     uint16_t wave;              /* +0x00 -> RAM 0x00D760 ->
+;                                    TG register chan+0x0040;
+;                                    4-bit bank | 12-bit payload */
+;     uint8_t  level_override;    /* +0x02 bit 7 = present, bits
+;                                    6..4 = level; read by
+;                                    Voice_StageLevel_Reg0080 at
+;                                    0xFA7DE5.  0 in every record
+;                                    of this block. */
+;     int8_t   level_trim;        /* +0x03 sign-extended at
+;                                    0xFAB66B and summed into
+;                                    voice[+0x0D] -> register
+;                                    0x0080 */
+;     uint16_t pitch_offset;      /* +0x04 -> RAM 0x005A4F, which
+;                                    Voice_PitchAddZoneOffset_AB
+;                                    adds to the note pitch at
+;                                    0xFA8330; 0x0C00 = 12
+;                                    semitones */
+; };
+; notes/prom_d_drawbar_chain.py Q2, Q3, Q7.
+DrawbarPreset_EnvDescTable_000_ComboTable:
 	.byte 0x8A, 0x00, 0x00, 0x80, 0x00, 0x00, 0x8A, 0x00, 0x00, 0xA6, 0x00, 0x00, 0x8A, 0x00, 0x00, 0xB6	; 44B26  |................|
 	.byte 0x00, 0x00, 0x8A, 0x00, 0x00, 0xC2, 0x00, 0x00, 0x8A, 0x00, 0x00, 0xCA, 0x00, 0x00, 0x8A, 0x00	; 44B36  |................|
 	.byte 0x00, 0xD2, 0x00, 0x00, 0x8A, 0x00, 0x00, 0xDA, 0x00, 0x00, 0x8A, 0x00, 0x00, 0xE2, 0x00, 0x00	; 44B46  |................|
@@ -35533,9 +35651,35 @@ DrawbarPreset_EnvDescTable_Pool_B000:
 	.byte 0x00, 0xFB, 0x00, 0x00, 0x7A, 0x02, 0x00, 0xFC, 0x00, 0x00, 0x7B, 0x02, 0x00, 0xFE, 0x00, 0x00	; 45C26  |....z.....{.....|
 	.byte 0x7C, 0x02, 0x00, 0x00, 0x00, 0x00	; 45C36  ||.....|
 
-; DrawbarPreset_EnvDescTable_Pool_B001 -- file 0x45C3C..0x46D51 (4374 bytes)
-; part B of descriptor 1 -- role NOT established (shared by 2 descriptors)
-DrawbarPreset_EnvDescTable_Pool_B001:
+; DrawbarPreset_EnvDescTable_001_ComboTable -- file 0x45C3C..0x46D51 (4374 bytes)
+; descriptor 1: 729 records of 6 B = 9^3 drawbar settings, 0..8 each (shared by 2 descriptors)
+; index = n2*81 + n1*9 + n0, each digit 0..8 -- prom_c's
+; sub_FC355B (`mul BC,0x0051` 0xFC356E, `mul IY,0x0009`
+; 0xFC357D), the digits being the element block's +0x02/+0x03
+; nibbles after keyboard foldback.
+;
+; struct DrawbarCombo {           /* 6 B; stride from prom_c
+;                                    `mul WA,0x0006` 0xFA82C2 */
+;     uint16_t wave;              /* +0x00 -> RAM 0x00D760 ->
+;                                    TG register chan+0x0040;
+;                                    4-bit bank | 12-bit payload */
+;     uint8_t  level_override;    /* +0x02 bit 7 = present, bits
+;                                    6..4 = level; read by
+;                                    Voice_StageLevel_Reg0080 at
+;                                    0xFA7DE5.  0 in every record
+;                                    of this block. */
+;     int8_t   level_trim;        /* +0x03 sign-extended at
+;                                    0xFAB66B and summed into
+;                                    voice[+0x0D] -> register
+;                                    0x0080 */
+;     uint16_t pitch_offset;      /* +0x04 -> RAM 0x005A4F, which
+;                                    Voice_PitchAddZoneOffset_AB
+;                                    adds to the note pitch at
+;                                    0xFA8330; 0x0C00 = 12
+;                                    semitones */
+; };
+; notes/prom_d_drawbar_chain.py Q2, Q3, Q7.
+DrawbarPreset_EnvDescTable_001_ComboTable:
 	.byte 0x7D, 0x02, 0x00, 0x80, 0x00, 0x00, 0x7D, 0x02, 0x00, 0xA9, 0x00, 0x00, 0x7D, 0x02, 0x00, 0xB9	; 45C3C  |}.....}.....}...|
 	.byte 0x00, 0x00, 0x7D, 0x02, 0x00, 0xC5, 0x00, 0x00, 0x7D, 0x02, 0x00, 0xCD, 0x00, 0x00, 0x7D, 0x02	; 45C4C  |..}.....}.....}.|
 	.byte 0x00, 0xD5, 0x00, 0x00, 0x7D, 0x02, 0x00, 0xDD, 0x00, 0x00, 0x7D, 0x02, 0x00, 0xE5, 0x00, 0x00	; 45C5C  |....}.....}.....|
@@ -35811,9 +35955,35 @@ DrawbarPreset_EnvDescTable_Pool_B001:
 	.byte 0x00, 0xFC, 0x00, 0x00, 0x46, 0x04, 0x00, 0xFD, 0x00, 0x00, 0x47, 0x04, 0x00, 0xFE, 0x00, 0x00	; 46D3C  |....F.....G.....|
 	.byte 0x48, 0x04, 0x00, 0x00, 0x00, 0x00	; 46D4C  |H.....|
 
-; DrawbarPreset_EnvDescTable_Pool_B003 -- file 0x46D52..0x46D69 (24 bytes)
-; part B of descriptor 3 -- role NOT established
-DrawbarPreset_EnvDescTable_Pool_B003:
+; DrawbarPreset_EnvDescTable_003_ComboTable -- file 0x46D52..0x46D69 (24 bytes)
+; descriptor 3: 4 records of 6 B -- element 3 takes prom_c's h >= 3 arm
+; index arrives RAW from the slot record -- prom_c takes the
+; h >= 3 arm at 0xFA82CC, with no base-9 conversion, so the
+; index space is 0..3.  What the 4 choices ARE is NOT
+; established.
+;
+; struct DrawbarCombo {           /* 6 B; stride from prom_c
+;                                    `mul WA,0x0006` 0xFA82C2 */
+;     uint16_t wave;              /* +0x00 -> RAM 0x00D760 ->
+;                                    TG register chan+0x0040;
+;                                    4-bit bank | 12-bit payload */
+;     uint8_t  level_override;    /* +0x02 bit 7 = present, bits
+;                                    6..4 = level; read by
+;                                    Voice_StageLevel_Reg0080 at
+;                                    0xFA7DE5.  0 in every record
+;                                    of this block. */
+;     int8_t   level_trim;        /* +0x03 sign-extended at
+;                                    0xFAB66B and summed into
+;                                    voice[+0x0D] -> register
+;                                    0x0080 */
+;     uint16_t pitch_offset;      /* +0x04 -> RAM 0x005A4F, which
+;                                    Voice_PitchAddZoneOffset_AB
+;                                    adds to the note pitch at
+;                                    0xFA8330; 0x0C00 = 12
+;                                    semitones */
+; };
+; notes/prom_d_drawbar_chain.py Q2, Q3, Q7.
+DrawbarPreset_EnvDescTable_003_ComboTable:
 	.byte 0x7D, 0x02, 0x00, 0x80, 0x00, 0x00, 0x7D, 0x02, 0x00, 0xED, 0x00, 0x0C, 0x7D, 0x02, 0x00, 0xED	; 46D52  |}.....}.....}...|
 	.byte 0x00, 0x13, 0x49, 0x04, 0x00, 0x00, 0x00, 0x00	; 46D62  |..I.....|
 

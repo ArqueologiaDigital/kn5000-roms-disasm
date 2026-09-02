@@ -165,9 +165,9 @@
 ;
 ;     python3 notes/prom_d_finish_round7.py
 ;
-;   witnessed  3,429   the name has a route: the object's own ASCII, an
+;   witnessed  3,432   the name has a route: the object's own ASCII, an
 ;                      Evidence: line, or a witnessed object it is part of
-;   nameless     235   NOT named -- and the reason is stated PER OBJECT, in
+;   nameless     232   NOT named -- and the reason is stated PER OBJECT, in
 ;                      this file, next to the object it is about
 ;   boundary       1   prom_d_end, a zero-length end marker, not an object
 ;   ★ NO WITNESS AT ALL: 0
@@ -181,18 +181,18 @@
 ;                            +0x0C +0x10 +0x14 +0x18 +0x20 +0x24
 ;                            +0x28 +0x2C +0x30 +0x38 +0x48 +0x5C
 ;   image-internal      337  a relation measured inside this image
-;   reader-backed        49  prom_c reads the slot and the read says what it is
-;   nameless            235  the 235 above, kept in the same denominator
+;   reader-backed        52  prom_c reads the slot and the read says what it is
+;   nameless            232  the 232 above, kept in the same denominator
 ; So a reader who wants only what THIS machine's firmware confirms should
 ; discount 1,335 of the 3,665 labels below.  That is the number, said once, here.
 ;
-; ⚠ AND THE 93.6% CONTENT FIGURE THIS FILE SCORES ON
+; ⚠ AND THE 93.7% CONTENT FIGURE THIS FILE SCORES ON
 ; notes/wave7_documentation_metrics.py IS NOT ROBUST TO SPELLING.  491 of the
 ; labels it grades CONTENT are <stem>_<Word><digits> whose digits run 0..n-1
 ; over three or more siblings with no self-named ancestor -- the same shape as
 ; `PercInst_17`, which the same metric grades FRAMED.  The difference is an
 ; underscore before the number.  Counting those as framed instead, this file
-; reads 80.2%.  Both are true of a stated rule and neither is quoted without
+; reads 80.3%.  Both are true of a stated rule and neither is quoted without
 ; the other.  notes/prom_d_finish_round7.py Q1, Q2, Q8; 56 checks.
 ;
 ; ------------------------------------------------------------------------------
@@ -205,7 +205,7 @@
 ;     B  does a prom_c READER reach the region it is in?
 ;     C  does anything POINT AT it -- a stored index, one of this image's
 ;        own 1,281 pointer fields, or an address spelling?
-; 3,430 NAMED, 235 NAMELESS -- and every nameless object carries all three
+; 3,433 NAMED, 232 NAMELESS -- and every nameless object carries all three
 ; answers below, not one mechanism's failure.
 ;
 ; ⚠ AND THE TABLE ADMITS ITS OWN GAP: 854 objects are NAMED while answering
@@ -258,10 +258,10 @@
 ;
 ; ★★ AND IT PUBLISHES A HARSHER NUMBER THAN THE GOAL METRIC'S UPPER BOUND
 ; OF 100 PER CENT:
-;       2,894 of 3,665 labels have their NAME re-derived from this image's own
+;       2,897 of 3,665 labels have their NAME re-derived from this image's own
 ;       bytes -- a record's ASCII name field, a measured byte identity, a
 ;       curve's own run lengths, a descriptor's own 32-bit offsets;
-;       771 have only their ADDRESS derived.  Those names are structural
+;       768 have only their ADDRESS derived.  Those names are structural
 ;       or transplanted and this image does not spell them.
 ;     Framing is not naming, and that split is the honest reading of a
 ;     file with zero sub_XXXXXX.
@@ -395,7 +395,7 @@
 ; Rounds 4-11 each measured something new.  What this image did not have is
 ; the thing a FINISHED image needs: one table that names every object still
 ; carrying a kind-plus-a-number and states, per object, why.  Round 12 is
-; that table -- 235 objects in 6 families, a reason DERIVED for each, and one
+; that table -- 232 objects in 5 families, a reason DERIVED for each, and one
 ; command that re-checks it:
 ;       python3 notes/prom_d_finish_round12.py            # the inventory
 ;       python3 notes/prom_d_finish_round12.py --selftest # 35 checks

@@ -330,7 +330,7 @@ Regenerate with `--targets N`. Largest 40:
 | prom_a | 0x06B5C4-0x06F746 | 16,770 | `DrumKitNames` | self-admitted | text |
 | prom_a | 0x078000-0x07A580 | 9,600 | `SplashImage_DitherA` | self-admitted | bitmap |
 | prom_b | 0x006800-0x008CD8 | 9,432 | `ScaleTuningOff` … `SoundCodeByGroupMember` | self-admitted | ptr-table, text |
-| **prom_d** | **0x044B26-0x046D6A** | **8,772** | `DrawbarPreset_EnvDescTable_Pool_B000/B001` | **no-explanation** | — |
+| prom_d | 0x044B26-0x046D6A | 8,772 | ~~`DrawbarPreset_EnvDescTable_Pool_B000/B001`~~ → `*_ComboTable` | ~~no-explanation~~ ✅ **CLOSED 2026-09-02** | 9×9×9 drawbar-combination tables — see §8.1 |
 | table data | 0x057914-0x05959D | 7,305 | `ToneDB_EnvDescTable` | self-admitted | — |
 | v7 | 0x1804E2-0x1820C0 | 7,134 | `AudioCtrl_DataBlock` | embedded-in-code | — |
 | prom_b | 0x078029-0x0799E8 | 6,591 | ~~`Data_F78029` … `Bitmap_F799D0`~~ → `DLGlyph_*` | ~~no-explanation~~ **CLOSED**, see §8.3 | bitmap (**not** text) |
@@ -398,11 +398,39 @@ compressed region), set A `0x38`, and `Font_Svc06` `0xB0`/`0xBC`.
 **The three worth a lane first**, because they are the only large ranges where
 nobody can say anything at all:
 
-1. **`prom_d 0x044B26-0x046D6A`, 8,772 B — `DrawbarPreset_EnvDescTable_Pool_B000`
+1. ~~**`prom_d 0x044B26-0x046D6A`, 8,772 B — `DrawbarPreset_EnvDescTable_Pool_B000`
    and `_B001`.** Two 4,374-byte pools reached from `_Desc000..003`'s `+0x05`
    field. Their own header says *"part B of descriptor 0 — role NOT
    established"*. This is the largest range in the tree with a genuine
-   no-explanation verdict.
+   no-explanation verdict.~~
+   **CLOSED 2026-09-02 by lane RQ-PROMD.** Each 4,374-byte pool is a **9×9×9
+   table of drawbar combinations**: 729 six-byte records giving the composite
+   waveform, level trim and octave transpose for one setting of three organ
+   drawbars of 9 positions each. Nothing was typed from the byte shape — 4,374
+   has 15 divisors and any of them reproduces these bytes. Both the stride and
+   the radix are prom_c operands:
+
+   | fact | where it comes from |
+   |---|---|
+   | record stride 6 | `mul WA,0x0006` at `0xFA82C2` and `0xFA82D0`, `Voice_StageRegs_0040_B` |
+   | index = `n2*81 + n1*9 + n0` | `sub_FC355B`: `mul BC,0x0051` at `0xFC356E`, `mul IY,0x0009` at `0xFC357D` |
+   | the three digits | `sub_FC28B5` packs element bytes `+0x02`/`+0x03` with `and DE,0x0FFF` at `0xFC2906` |
+   | which of the 4 descriptors | the same byte `+0x03`, bits 5:4 — `and C,0x30` at `0xFC2986` |
+   | who takes this path | tone record `+0x10` bits 7:6 == `0x40` — exactly 2 of 274 records, the two `<<< Drawbar n>>>` |
+
+   Two joins close it the way the `+0x30` chain's do: all 24 nibbles of both
+   tones' elements are 0..8, the radix (null: 57.7 % over 523 ordinary
+   elements), and the two cubes' wave field is **exactly the contiguous interval
+   `[0x08A,0x448]`** — 959 values, no gap, nothing outside, the two tables
+   partitioning it. prom_c's keyboard **foldback** arms also land where the
+   transposes say they should: the element that folds at the bass end
+   (`cp HL,0x0024`, `0xFC3440`) is the one transposed −12, and the two that fold
+   at the treble end (`cp DE,0x0054`, `0xFC34BC`) are the two transposed +12 and
+   +7. Evidence: `wsa1/notes/prom_d_drawbar_chain.py`, 65 checks, two nulls;
+   the record's C struct is in the banner in `wsa1/prom_d/tone_database_aux.s`.
+   **Still refused:** descriptor `+0x09`/`+0x0A`, what descriptor 3's 4-record
+   table selects, and the footage reading (−12 = 16′, 0 = 8′, +7 = 5⅓′, +12 = 4′)
+   which is an inference from the intervals and marked as one.
 2. **`v7 0x1804E2-0x1820C0`, 7,134 B — `AudioCtrl_DataBlock`**, and the rest of
    the `embedded-in-code` column. 222,810 B sitting between decoded routines
    under routine names: this is v7/v9/v10's known code-as-`.byte` debt located
