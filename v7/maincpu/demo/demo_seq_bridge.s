@@ -329,7 +329,7 @@ SongBank_EventHandler_Return:
 	ret
 
 CDlikeSwTtl_DispatchData:
-	.incbin "includes/romslices/v7_transplant_CDlikeSwTtl_DispatchData_head.bin"
+	.byte 0xeb, 0xa8, 0x0e, 0xeb, 0xa8, 0x0e
 	bitda 0, (0x0ce0)
 	jr nz, .Lc_f22901
 	ldb_d8 a, (0x0cdf)
