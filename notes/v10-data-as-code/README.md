@@ -1,5 +1,13 @@
 # v10 DATA-AS-CODE census (lane V10DATACODE, 2026-09-02)
 
+★ **CONVERSION STATUS (lane V10DAC, 2026-09-02):** 120 of the STRICT list's spans (3,390 B) have
+been converted to typed `.byte` data, with the whole-ROM gate green and every converted span
+independently re-verified against the original ROM bytes. See
+`notes/v10-data-as-code/lane-v10dac-conversions-2026-09-02.md` for the method, the false positives
+it found and excluded (55 spans/1,257 B — real code the reachability signal couldn't trace), and
+`notes/v10-data-as-code/v10dac_conversion_manifest.json` for the full per-span list. Re-run the
+census (below) for the current remaining total; it drifts as other lanes touch v10 source.
+
 **Question this answers:** how much of v10 is the THIRD kind of debt identified
 this week in HD-AE5000 — data disassembled into plausible instruction
 mnemonics, invisible to `.byte`/`.incbin` scanners and to the byte-identity

@@ -16871,19 +16871,9 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	nop
 	.byte 0x04
-	reti
-	ldwio	0, 1796
-	pushw	1024
-	ldio	0, 0
-	pop	sr
-	reti
-	nop
-	nop
-	pop	sr
-	reti
-	ldwio	0, 1539
-	push	0
-	pop	sr
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFEA409-0xFEA421 (24 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=60% dist=9 near VoiceSlot_CheckAndApply_Data_0xBA+6
+	.byte 0x07, 0x0a, 0x00, 0x04, 0x07, 0x0b, 0x00, 0x04, 0x08, 0x00, 0x00, 0x03
+	.byte 0x07, 0x00, 0x00, 0x03, 0x07, 0x0a, 0x00, 0x03, 0x06, 0x09, 0x00, 0x03
 	.byte 0x06
 	ldwio	0, 1795
 	pushw	1280

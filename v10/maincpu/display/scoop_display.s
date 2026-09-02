@@ -878,14 +878,9 @@ SoundEvt_LongPacketHandler:
 	decf
 	push	xsp
 	.byte 0x04
-	jrl	ule, 19
-	cps	w, 3
-	jrl	ugt, 9
-	cps	a, 3
-	jrl	ugt, 17
-	jp	SoundEvt_LongPacketHandler_0xA6
-	cps	a, 3
-	jrl	ule, 8
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEF612D-0xEF6143 (22 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=67% dist=14 near SoundEvt_LongPacketHandler_0x35+91
+	.byte 0x73, 0x13, 0x00, 0xc8, 0xdb, 0x7b, 0x09, 0x00, 0xc9, 0xdb, 0x7b, 0x11
+	.byte 0x00, 0x1b, 0x43, 0x61, 0xef, 0xc9, 0xdb, 0x73, 0x08, 0x00
 	call	VoiceState_DataBlock2_0x472
 	jp	SoundEvt_LongPacketHandler_0xB7
 	.byte 0xc1, 0xd3
@@ -12813,19 +12808,9 @@ SubCPU_ToneDispatch:
 	nop
 	nop
 	.byte 0xd0
-	swi	1
-	nop
-	nop
-	jr	nov, -6
-	nop
-	nop
-	cp	(xiz), b
-	nop
-	nop
-	cp	(xwa), xde
-	nop
-	nop
-	ld	(xde-6), 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEFDB49-0xEFDB5C (19 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=73% dist=7 near SubCPU_ToneDispatch+9
+	.byte 0xf9, 0x00, 0x00, 0x6c, 0xfa, 0x00, 0x00, 0x86, 0xfa, 0x00, 0x00, 0xa0
+	.byte 0xfa, 0x00, 0x00, 0xba, 0xfa, 0x00, 0x00
 	.byte 0xd4
 	swi	2
 	nop
@@ -15303,19 +15288,9 @@ StringData_KeyNames:	.ascii "  C D"
 	ld	w, (xwa+68)
 	.byte 0x45, 0x88
 	.ascii "E F FŒG AˆA BˆB                 7    Maj7 aug  min  min7 dim  m7ˆ5 mM7  7sus46    aug7   ˆ5 7 ˆ5 79   7 ˆ9 M79  69   m6   m ˆ5 m79  m69  sus4 7 Œ9 M7ˆ5 M7Œ5 mM7ˆ5   139Œ5  ˆ9 13Œ9 13  ˆ13ˆ9ˆ13Œ9ˆ13   13  ˆ137 Œ11m7 11+7Œ11 add9madd9                                                                                                                  "
-	zcf
-	ldb	w, 32
-	ldb	w, 20
-	pushw	iz
-	ldb	w, 32
-	push_a
-	ldb	w, 32
-	ldb	w, 21
-	ldb	w, 32
-	ldb	w, 21
-	pushw	iz
-	ldb	w, 32
-	ex_ff
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEFF6FD-0xEFF712 (21 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=67% dist=6 near StringData_KeyNames_0x160+4
+	.byte 0x13, 0x20, 0x20, 0x20, 0x14, 0x2e, 0x20, 0x20, 0x14, 0x20, 0x20, 0x20
+	.byte 0x15, 0x20, 0x20, 0x20, 0x15, 0x2e, 0x20, 0x20, 0x16
 	.ascii "   XX  D"
 	.byte 0xd9
 	ret
@@ -15390,18 +15365,9 @@ StringData_KeyNames:	.ascii "  C D"
 	ldb	w, 32
 	ldb	w, 21
 	.byte 0x1f
-	ldb	w, 32
-	pop_a
-	ldb	w, 32
-	ldb	w, 20
-	ldb	w, 32
-	ldb	w, 19
-	ldb	w, 32
-	zcf
-	ld	w, (xhl+50)
-	zcf
-	ld	w, (xhl+51)
-	zcf
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEFF7B6-0xEFF7CC (22 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=67% dist=7 near StringData_KeyNames_0x1FE+31
+	.byte 0x20, 0x20, 0x15, 0x20, 0x20, 0x20, 0x14, 0x20, 0x20, 0x20, 0x13, 0x20
+	.byte 0x20, 0x13, 0x8b, 0x32, 0x20, 0x13, 0x8b, 0x33, 0x20, 0x13
 	.byte 0x8b
 	.ascii "4              + "
 	push_f
@@ -17081,24 +17047,10 @@ Scoop_GridLineData:
 	jp	2058
 	ldw	de, 4096
 	.byte 0x01
-	ld	xde, 0x050a1b00
-	nop
-	popw	hl
-	nop
-	halt
-	nop
-	popw	sp
-	nop
-	jp	0x490a
-	popw	hl
-	nop
-	popw	bc
-	nop
-	popw	sp
-	nop
-	jp	0x890a
-	popw	hl
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00AEE-0xF00B0A (28 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=78% dist=9 near Scoop_GridLineData+8
+	.byte 0x42, 0x00, 0x1b, 0x0a, 0x05, 0x00, 0x4b, 0x00, 0x05, 0x00, 0x4f, 0x00
+	.byte 0x1b, 0x0a, 0x49, 0x00, 0x4b, 0x00, 0x49, 0x00, 0x4f, 0x00, 0x1b, 0x0a
+	.byte 0x89, 0x00, 0x4b, 0x00
 	.byte 0x89
 	nop
 	popw	sp
@@ -17107,16 +17059,9 @@ Scoop_GridLineData:
 	popw	hl
 	nop
 	.byte 0xc9
-	nop
-	popw	sp
-	nop
-	jp	0x01090a
-	popw	hl
-	nop
-	push	1
-	popw	sp
-	nop
-	jp	1290
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00B15-0xF00B26 (17 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Scoop_GridLineData+47
+	.byte 0x00, 0x4f, 0x00, 0x1b, 0x0a, 0x09, 0x01, 0x4b, 0x00, 0x09, 0x01, 0x4f
+	.byte 0x00, 0x1b, 0x0a, 0x05, 0x00
 	.byte 0x50
 	nop
 	push	1
@@ -17143,16 +17088,9 @@ Scoop_DrawGridDividers:
 
 Scoop_GridDividerData:
 	jp	2058
-	pushw	wa
-	nop
-	ldb	l, 0
-	ldw	de, 6912
-	ldwio	8, 0x5500
-	nop
-	ldb	l, 0
-	pop	xsp
-	nop
-	jp	2058
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00B53-0xF00B67 (20 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=9 near Scoop_GridDividerData+4
+	.byte 0x28, 0x00, 0x27, 0x00, 0x32, 0x00, 0x1b, 0x0a, 0x08, 0x00, 0x55, 0x00
+	.byte 0x27, 0x00, 0x5f, 0x00, 0x1b, 0x0a, 0x08, 0x00
 	.byte 0x82
 	nop
 	ldb	l, 0
@@ -17167,28 +17105,10 @@ Scoop_DrawFrameLines:
 
 Scoop_FrameData:
 	ret
-	ldio	18, 6
-	di
-	zcf
-	nop
-	ret
-	ldio	82, 12
-	di
-	zcf
-	nop
-	ret
-	ldio	146, 18
-	di
-	zcf
-	nop
-	ret
-	ldio	209, 24
-	reti
-	nop
-	zcf
-	nop
-	ldb	w, 41
-	pop_f
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00B7D-0xF00B9F (34 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=62% dist=15 near Scoop_FrameData+1
+	.byte 0x08, 0x12, 0x06, 0x06, 0x00, 0x13, 0x00, 0x0e, 0x08, 0x52, 0x0c, 0x06
+	.byte 0x00, 0x13, 0x00, 0x0e, 0x08, 0x92, 0x12, 0x06, 0x00, 0x13, 0x00, 0x0e
+	.byte 0x08, 0xd1, 0x18, 0x07, 0x00, 0x13, 0x00, 0x20, 0x29, 0x19
 	.byte 0x1f
 	.ascii "                                     "
 	ret
@@ -18829,13 +18749,9 @@ Scoop_EnvelopeCalc_Data:
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
-	ldw	bc, 8337
-	extz	xwa
-	div	wa, 40
-	ld	(xsp+2), wa
-	ld	wa, (xbc)
-	extz	xwa
-	div	wa, 40
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF01B97-0xF01BAB (20 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=89% dist=12 near Scoop_EnvelopeCalc_Data+337
+	.byte 0x31, 0x91, 0x20, 0xe8, 0x12, 0xd8, 0x0a, 0x28, 0x00, 0xbf, 0x02, 0x50
+	.byte 0x91, 0x20, 0xe8, 0x12, 0xd8, 0x0a, 0x28, 0x00
 	.byte 0xd7, 0xe2
 	or	(xwa-40), h
 	pop	sr

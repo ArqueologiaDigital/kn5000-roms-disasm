@@ -1,0 +1,3146 @@
+{
+ "converted": [
+  {
+   "addr_lo": "0xED0272",
+   "addr_hi": "0xED0284",
+   "size": 18,
+   "loc": "ChordTypeStr_7sus4+162",
+   "per": "75",
+   "dist": "9",
+   "ascii": "78",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    242,
+    248
+   ]
+  },
+  {
+   "addr_lo": "0xED1437",
+   "addr_hi": "0xED1452",
+   "size": 27,
+   "loc": "ParamStr02_Vocalist_0x52+9",
+   "per": "100",
+   "dist": "8",
+   "ascii": "85",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    1008,
+    1029
+   ]
+  },
+  {
+   "addr_lo": "0xED1453",
+   "addr_hi": "0xED146E",
+   "size": 27,
+   "loc": "ParamStr02_Vocalist_0x76+1",
+   "per": "100",
+   "dist": "8",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    1031,
+    1052
+   ]
+  },
+  {
+   "addr_lo": "0xED164E",
+   "addr_hi": "0xED1662",
+   "size": 20,
+   "loc": "VariationStr_V1_0x4+8",
+   "per": "100",
+   "dist": "5",
+   "ascii": "100",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    1252,
+    1266
+   ]
+  },
+  {
+   "addr_lo": "0xED166E",
+   "addr_hi": "0xED167E",
+   "size": 16,
+   "loc": "VariationStr_V1_0x4+40",
+   "per": "100",
+   "dist": "5",
+   "ascii": "100",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    1268,
+    1279
+   ]
+  },
+  {
+   "addr_lo": "0xED1D1B",
+   "addr_hi": "0xED1D3A",
+   "size": 31,
+   "loc": "KeyScaleNoteStr_G_0x18+129",
+   "per": "70",
+   "dist": "12",
+   "ascii": "71",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    1702,
+    1720
+   ]
+  },
+  {
+   "addr_lo": "0xED239D",
+   "addr_hi": "0xED23AE",
+   "size": 17,
+   "loc": "NakaParam_AcMstStyleAlpGridBox+7",
+   "per": "100",
+   "dist": "8",
+   "ascii": "59",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2001,
+    2010
+   ]
+  },
+  {
+   "addr_lo": "0xED2663",
+   "addr_hi": "0xED267C",
+   "size": 25,
+   "loc": "NakaParam_AcMstSong2GridBox+5",
+   "per": "71",
+   "dist": "9",
+   "ascii": "60",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2130,
+    2144
+   ]
+  },
+  {
+   "addr_lo": "0xED2F90",
+   "addr_hi": "0xED2FAB",
+   "size": 27,
+   "loc": "MethodNameStr_MT_SvariIni+70",
+   "per": "67",
+   "dist": "14",
+   "ascii": "30",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2380,
+    2392
+   ]
+  },
+  {
+   "addr_lo": "0xED2FAC",
+   "addr_hi": "0xED2FC6",
+   "size": 26,
+   "loc": "MethodNameStr_MT_SvariIni+98",
+   "per": "100",
+   "dist": "13",
+   "ascii": "38",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2394,
+    2411
+   ]
+  },
+  {
+   "addr_lo": "0xED32CC",
+   "addr_hi": "0xED32DE",
+   "size": 18,
+   "loc": "ProcNameStr_NormScreenProc+74",
+   "per": "100",
+   "dist": "9",
+   "ascii": "67",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2534,
+    2541
+   ]
+  },
+  {
+   "addr_lo": "0xED3859",
+   "addr_hi": "0xED386A",
+   "size": 17,
+   "loc": "NakaInst_MainVariSet+1041",
+   "per": "100",
+   "dist": "10",
+   "ascii": "59",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2683,
+    2696
+   ]
+  },
+  {
+   "addr_lo": "0xED391D",
+   "addr_hi": "0xED392E",
+   "size": 17,
+   "loc": "NakaInst_MainVariSet+1237",
+   "per": "100",
+   "dist": "10",
+   "ascii": "76",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2842,
+    2854
+   ]
+  },
+  {
+   "addr_lo": "0xED395B",
+   "addr_hi": "0xED396E",
+   "size": 19,
+   "loc": "NakaInst_MainVariSet+1299",
+   "per": "100",
+   "dist": "11",
+   "ascii": "74",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2884,
+    2898
+   ]
+  },
+  {
+   "addr_lo": "0xED397D",
+   "addr_hi": "0xED398E",
+   "size": 17,
+   "loc": "NakaInst_MainVariSet+1333",
+   "per": "100",
+   "dist": "9",
+   "ascii": "59",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2908,
+    2921
+   ]
+  },
+  {
+   "addr_lo": "0xED3A01",
+   "addr_hi": "0xED3A12",
+   "size": 17,
+   "loc": "NakaInst_MainVariSet+1465",
+   "per": "100",
+   "dist": "10",
+   "ascii": "76",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3010,
+    3024
+   ]
+  },
+  {
+   "addr_lo": "0xED3A61",
+   "addr_hi": "0xED3A72",
+   "size": 17,
+   "loc": "NakaInst_MainVariSet+1561",
+   "per": "100",
+   "dist": "10",
+   "ascii": "71",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3089,
+    3103
+   ]
+  },
+  {
+   "addr_lo": "0xED3B25",
+   "addr_hi": "0xED3B36",
+   "size": 17,
+   "loc": "NakaInst_MainVariSet+1757",
+   "per": "100",
+   "dist": "10",
+   "ascii": "76",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3231,
+    3242
+   ]
+  },
+  {
+   "addr_lo": "0xED3C1F",
+   "addr_hi": "0xED3C34",
+   "size": 21,
+   "loc": "NakaInst_MainVariSet+2007",
+   "per": "100",
+   "dist": "11",
+   "ascii": "62",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3403,
+    3420
+   ]
+  },
+  {
+   "addr_lo": "0xED3C77",
+   "addr_hi": "0xED3C8C",
+   "size": 21,
+   "loc": "NakaInst_MainVariSet+2095",
+   "per": "100",
+   "dist": "11",
+   "ascii": "57",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3478,
+    3495
+   ]
+  },
+  {
+   "addr_lo": "0xEDA545",
+   "addr_hi": "0xEDA558",
+   "size": 19,
+   "loc": "ENCODER_LUT_MODWHEEL_0x3FC+13",
+   "per": "100",
+   "dist": "10",
+   "ascii": "63",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3913,
+    3923
+   ]
+  },
+  {
+   "addr_lo": "0xEDA65B",
+   "addr_hi": "0xEDA66C",
+   "size": 17,
+   "loc": "Protocol_values_for_LED_rows_0x3E+7",
+   "per": "60",
+   "dist": "7",
+   "ascii": "76",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4108,
+    4119
+   ]
+  },
+  {
+   "addr_lo": "0xEDA700",
+   "addr_hi": "0xEDA710",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+148",
+   "per": "100",
+   "dist": "6",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4229,
+    4241
+   ]
+  },
+  {
+   "addr_lo": "0xEDA718",
+   "addr_hi": "0xEDA728",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+172",
+   "per": "100",
+   "dist": "8",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4243,
+    4255
+   ]
+  },
+  {
+   "addr_lo": "0xEDA730",
+   "addr_hi": "0xEDA740",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+196",
+   "per": "100",
+   "dist": "7",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4257,
+    4268
+   ]
+  },
+  {
+   "addr_lo": "0xEDA760",
+   "addr_hi": "0xEDA770",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+244",
+   "per": "100",
+   "dist": "8",
+   "ascii": "75",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4285,
+    4297
+   ]
+  },
+  {
+   "addr_lo": "0xEDA778",
+   "addr_hi": "0xEDA788",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+268",
+   "per": "100",
+   "dist": "7",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4299,
+    4311
+   ]
+  },
+  {
+   "addr_lo": "0xEDA820",
+   "addr_hi": "0xEDA830",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+436",
+   "per": "100",
+   "dist": "10",
+   "ascii": "62",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4389,
+    4400
+   ]
+  },
+  {
+   "addr_lo": "0xEDA8B0",
+   "addr_hi": "0xEDA8C0",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+580",
+   "per": "100",
+   "dist": "7",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4468,
+    4478
+   ]
+  },
+  {
+   "addr_lo": "0xEDA8E0",
+   "addr_hi": "0xEDA8F0",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+628",
+   "per": "100",
+   "dist": "7",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4491,
+    4502
+   ]
+  },
+  {
+   "addr_lo": "0xEDA940",
+   "addr_hi": "0xEDA950",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+724",
+   "per": "100",
+   "dist": "8",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4550,
+    4561
+   ]
+  },
+  {
+   "addr_lo": "0xEDA970",
+   "addr_hi": "0xEDA980",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+772",
+   "per": "100",
+   "dist": "8",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4577,
+    4589
+   ]
+  },
+  {
+   "addr_lo": "0xEDA9A0",
+   "addr_hi": "0xEDA9B0",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+820",
+   "per": "100",
+   "dist": "8",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4604,
+    4616
+   ]
+  },
+  {
+   "addr_lo": "0xEDA9D0",
+   "addr_hi": "0xEDA9E0",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+868",
+   "per": "100",
+   "dist": "8",
+   "ascii": "81",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4629,
+    4640
+   ]
+  },
+  {
+   "addr_lo": "0xEDAA00",
+   "addr_hi": "0xEDAA10",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+916",
+   "per": "100",
+   "dist": "8",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4654,
+    4663
+   ]
+  },
+  {
+   "addr_lo": "0xEDAA30",
+   "addr_hi": "0xEDAA40",
+   "size": 16,
+   "loc": "Protocol_values_for_LED_rows_0x56+964",
+   "per": "100",
+   "dist": "8",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    4679,
+    4688
+   ]
+  },
+  {
+   "addr_lo": "0xEDC820",
+   "addr_hi": "0xEDC830",
+   "size": 16,
+   "loc": "MidiChParam_Entry_087+2",
+   "per": "67",
+   "dist": "6",
+   "ascii": "56",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    7872,
+    7883
+   ]
+  },
+  {
+   "addr_lo": "0xEDC924",
+   "addr_hi": "0xEDC934",
+   "size": 16,
+   "loc": "MidiChParam_Entry_101+2",
+   "per": "67",
+   "dist": "6",
+   "ascii": "56",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    8071,
+    8082
+   ]
+  },
+  {
+   "addr_lo": "0xEDC994",
+   "addr_hi": "0xEDC9A4",
+   "size": 16,
+   "loc": "MidiChParam_Entry_106+2",
+   "per": "67",
+   "dist": "9",
+   "ascii": "56",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    8153,
+    8163
+   ]
+  },
+  {
+   "addr_lo": "0xEDCBE6",
+   "addr_hi": "0xEDCBF6",
+   "size": 16,
+   "loc": "VoiceParamEx_Entry_027+2",
+   "per": "67",
+   "dist": "9",
+   "ascii": "56",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    8589,
+    8599
+   ]
+  },
+  {
+   "addr_lo": "0xEF612D",
+   "addr_hi": "0xEF6143",
+   "size": 22,
+   "loc": "SoundEvt_LongPacketHandler_0x35+91",
+   "per": "67",
+   "dist": "14",
+   "ascii": "50",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    880,
+    887
+   ]
+  },
+  {
+   "addr_lo": "0xEFDB49",
+   "addr_hi": "0xEFDB5C",
+   "size": 19,
+   "loc": "SubCPU_ToneDispatch+9",
+   "per": "73",
+   "dist": "7",
+   "ascii": "58",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    12812,
+    12824
+   ]
+  },
+  {
+   "addr_lo": "0xEFF6FD",
+   "addr_hi": "0xEFF712",
+   "size": 21,
+   "loc": "StringData_KeyNames_0x160+4",
+   "per": "67",
+   "dist": "6",
+   "ascii": "71",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    15302,
+    15314
+   ]
+  },
+  {
+   "addr_lo": "0xEFF7B6",
+   "addr_hi": "0xEFF7CC",
+   "size": 22,
+   "loc": "StringData_KeyNames_0x1FE+31",
+   "per": "67",
+   "dist": "7",
+   "ascii": "64",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    15389,
+    15400
+   ]
+  },
+  {
+   "addr_lo": "0xF00AEE",
+   "addr_hi": "0xF00B0A",
+   "size": 28,
+   "loc": "Scoop_GridLineData+8",
+   "per": "78",
+   "dist": "9",
+   "ascii": "79",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    17080,
+    17097
+   ]
+  },
+  {
+   "addr_lo": "0xF00B15",
+   "addr_hi": "0xF00B26",
+   "size": 17,
+   "loc": "Scoop_GridLineData+47",
+   "per": "100",
+   "dist": "8",
+   "ascii": "71",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    17106,
+    17115
+   ]
+  },
+  {
+   "addr_lo": "0xF00B53",
+   "addr_hi": "0xF00B67",
+   "size": 20,
+   "loc": "Scoop_GridDividerData+4",
+   "per": "80",
+   "dist": "9",
+   "ascii": "80",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    17142,
+    17151
+   ]
+  },
+  {
+   "addr_lo": "0xF00B7D",
+   "addr_hi": "0xF00B9F",
+   "size": 34,
+   "loc": "Scoop_FrameData+1",
+   "per": "62",
+   "dist": "15",
+   "ascii": "32",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    17166,
+    17187
+   ]
+  },
+  {
+   "addr_lo": "0xF01B97",
+   "addr_hi": "0xF01BAB",
+   "size": 20,
+   "loc": "Scoop_EnvelopeCalc_Data+337",
+   "per": "89",
+   "dist": "12",
+   "ascii": "50",
+   "file": "display/scoop_display.s",
+   "lines_0indexed": [
+    18828,
+    18834
+   ]
+  },
+  {
+   "addr_lo": "0xF0F381",
+   "addr_hi": "0xF0F392",
+   "size": 17,
+   "loc": "SeMenu_ShowConfirmDialog_Data_0x3F4+3",
+   "per": "100",
+   "dist": "9",
+   "ascii": "59",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    8968,
+    8980
+   ]
+  },
+  {
+   "addr_lo": "0xF10D1F",
+   "addr_hi": "0xF10D2F",
+   "size": 16,
+   "loc": "SeBitmap_EnvCurve1+113",
+   "per": "100",
+   "dist": "4",
+   "ascii": "69",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    11177,
+    11190
+   ]
+  },
+  {
+   "addr_lo": "0xF1121D",
+   "addr_hi": "0xF11236",
+   "size": 25,
+   "loc": "SeBitmap_EnvCurve5_0x19A+181",
+   "per": "100",
+   "dist": "15",
+   "ascii": "88",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    11705,
+    11717
+   ]
+  },
+  {
+   "addr_lo": "0xF11245",
+   "addr_hi": "0xF11261",
+   "size": 28,
+   "loc": "SeBitmap_EnvCurve5_0x19A+221",
+   "per": "62",
+   "dist": "12",
+   "ascii": "57",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    11726,
+    11740
+   ]
+  },
+  {
+   "addr_lo": "0xF11353",
+   "addr_hi": "0xF11367",
+   "size": 20,
+   "loc": "SeBitmap_EnvCurve5_0x327+94",
+   "per": "100",
+   "dist": "2",
+   "ascii": "85",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    11861,
+    11880
+   ]
+  },
+  {
+   "addr_lo": "0xF11402",
+   "addr_hi": "0xF11419",
+   "size": 23,
+   "loc": "SeBitmap_EnvCurve5_0x40B+41",
+   "per": "73",
+   "dist": "11",
+   "ascii": "52",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    11947,
+    11957
+   ]
+  },
+  {
+   "addr_lo": "0xF11697",
+   "addr_hi": "0xF116AC",
+   "size": 21,
+   "loc": "SeBitmap_EnvCurve5_0x612+183",
+   "per": "75",
+   "dist": "9",
+   "ascii": "38",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12278,
+    12287
+   ]
+  },
+  {
+   "addr_lo": "0xF117DD",
+   "addr_hi": "0xF117F4",
+   "size": 23,
+   "loc": "SeBitmap_EnvCurve5_0x7E6+41",
+   "per": "82",
+   "dist": "10",
+   "ascii": "52",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12461,
+    12472
+   ]
+  },
+  {
+   "addr_lo": "0xF118AF",
+   "addr_hi": "0xF118C2",
+   "size": 19,
+   "loc": "SeBitmap_EnvCurve5_0x892+79",
+   "per": "71",
+   "dist": "9",
+   "ascii": "37",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12612,
+    12623
+   ]
+  },
+  {
+   "addr_lo": "0xF11B4E",
+   "addr_hi": "0xF11B61",
+   "size": 19,
+   "loc": "SeBitmap_EnvCurve5_0x986+506",
+   "per": "100",
+   "dist": "8",
+   "ascii": "74",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12994,
+    13004
+   ]
+  },
+  {
+   "addr_lo": "0xF11CC5",
+   "addr_hi": "0xF11CD7",
+   "size": 18,
+   "loc": "SeBitmap_EnvCurve5_0xCC1+54",
+   "per": "62",
+   "dist": "10",
+   "ascii": "72",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    13204,
+    13211
+   ]
+  },
+  {
+   "addr_lo": "0xF11E53",
+   "addr_hi": "0xF11E76",
+   "size": 35,
+   "loc": "SeBitmap_EnvCurve5_0xD8C+249",
+   "per": "74",
+   "dist": "11",
+   "ascii": "40",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    13406,
+    13417
+   ]
+  },
+  {
+   "addr_lo": "0xF121F0",
+   "addr_hi": "0xF1220D",
+   "size": 29,
+   "loc": "SeBitmap_EnvCurve5_0x115B+199",
+   "per": "71",
+   "dist": "12",
+   "ascii": "41",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    13910,
+    13924
+   ]
+  },
+  {
+   "addr_lo": "0xF1224B",
+   "addr_hi": "0xF12266",
+   "size": 27,
+   "loc": "SeBitmap_EnvCurve5_0x115B+290",
+   "per": "100",
+   "dist": "14",
+   "ascii": "63",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    13968,
+    13981
+   ]
+  },
+  {
+   "addr_lo": "0xF12440",
+   "addr_hi": "0xF12454",
+   "size": 20,
+   "loc": "SeBitmap_EnvCurve5_0x13C3+175",
+   "per": "67",
+   "dist": "9",
+   "ascii": "45",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    14217,
+    14226
+   ]
+  },
+  {
+   "addr_lo": "0xF12693",
+   "addr_hi": "0xF126A5",
+   "size": 18,
+   "loc": "SeBitmap_EnvCurve5_0x15F8+205",
+   "per": "75",
+   "dist": "9",
+   "ascii": "72",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    14523,
+    14531
+   ]
+  },
+  {
+   "addr_lo": "0xF126BB",
+   "addr_hi": "0xF126CC",
+   "size": 17,
+   "loc": "SeBitmap_EnvCurve5_0x15F8+245",
+   "per": "100",
+   "dist": "8",
+   "ascii": "65",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    14544,
+    14552
+   ]
+  },
+  {
+   "addr_lo": "0xF12D01",
+   "addr_hi": "0xF12D11",
+   "size": 16,
+   "loc": "SeBitmap_EnvCurve5_0x1BB8+379",
+   "per": "75",
+   "dist": "7",
+   "ascii": "75",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    15189,
+    15195
+   ]
+  },
+  {
+   "addr_lo": "0xF13518",
+   "addr_hi": "0xF13534",
+   "size": 28,
+   "loc": "TuningSystem_Handler_Table_0xCB+6",
+   "per": "71",
+   "dist": "11",
+   "ascii": "50",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    15671,
+    15677
+   ]
+  },
+  {
+   "addr_lo": "0xF13ACD",
+   "addr_hi": "0xF13AE2",
+   "size": 21,
+   "loc": "TuningSystem_Handler_Table_0x67F+7",
+   "per": "100",
+   "dist": "6",
+   "ascii": "100",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    15979,
+    15993
+   ]
+  },
+  {
+   "addr_lo": "0xF14096",
+   "addr_hi": "0xF140AF",
+   "size": 25,
+   "loc": "TuningSystem_Handler_Table_0x71F+1328",
+   "per": "60",
+   "dist": "10",
+   "ascii": "60",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    16201,
+    16209
+   ]
+  },
+  {
+   "addr_lo": "0xF143C8",
+   "addr_hi": "0xF143E1",
+   "size": 25,
+   "loc": "TuningSystem_Handler_Table_0xE1F+354",
+   "per": "100",
+   "dist": "9",
+   "ascii": "68",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    16410,
+    16422
+   ]
+  },
+  {
+   "addr_lo": "0xF145C6",
+   "addr_hi": "0xF14602",
+   "size": 60,
+   "loc": "TuningSystem_Handler_Table_0x117D+2",
+   "per": "83",
+   "dist": "15",
+   "ascii": "60",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    16451,
+    16465
+   ]
+  },
+  {
+   "addr_lo": "0xF14637",
+   "addr_hi": "0xF14656",
+   "size": 31,
+   "loc": "TuningSystem_Handler_Table_0x117D+115",
+   "per": "61",
+   "dist": "12",
+   "ascii": "61",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    16487,
+    16495
+   ]
+  },
+  {
+   "addr_lo": "0xF1580A",
+   "addr_hi": "0xF15846",
+   "size": 60,
+   "loc": "TuningSystem_Handler_Table_0x23BD+6",
+   "per": "81",
+   "dist": "10",
+   "ascii": "62",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    17185,
+    17199
+   ]
+  },
+  {
+   "addr_lo": "0xF15866",
+   "addr_hi": "0xF15877",
+   "size": 17,
+   "loc": "TuningSystem_Handler_Table_0x241D+2",
+   "per": "100",
+   "dist": "12",
+   "ascii": "53",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    17201,
+    17207
+   ]
+  },
+  {
+   "addr_lo": "0xF15ACE",
+   "addr_hi": "0xF15AFF",
+   "size": 49,
+   "loc": "FlashWrite_BlockRef_Type6_0x10+45",
+   "per": "91",
+   "dist": "8",
+   "ascii": "71",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    339,
+    351
+   ]
+  },
+  {
+   "addr_lo": "0xF15D8A",
+   "addr_hi": "0xF15DA3",
+   "size": 25,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+100",
+   "per": "60",
+   "dist": "14",
+   "ascii": "76",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    584,
+    594
+   ]
+  },
+  {
+   "addr_lo": "0xF15EC9",
+   "addr_hi": "0xF15EDD",
+   "size": 20,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+419",
+   "per": "60",
+   "dist": "11",
+   "ascii": "85",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    738,
+    750
+   ]
+  },
+  {
+   "addr_lo": "0xF160F0",
+   "addr_hi": "0xF16106",
+   "size": 22,
+   "loc": "FlashWrite_BlockRef_Type6_0x655+10",
+   "per": "80",
+   "dist": "11",
+   "ascii": "50",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    1087,
+    1096
+   ]
+  },
+  {
+   "addr_lo": "0xF3C890",
+   "addr_hi": "0xF3C8A4",
+   "size": 20,
+   "loc": "NotePool_DataBlock_890",
+   "per": "75",
+   "dist": "11",
+   "ascii": "25",
+   "file": "sequencer/sequencer_engine.s",
+   "lines_0indexed": [
+    6988,
+    6994
+   ]
+  },
+  {
+   "addr_lo": "0xF5672F",
+   "addr_hi": "0xF56747",
+   "size": 24,
+   "loc": "AccTuning_ValueTable+6",
+   "per": "64",
+   "dist": "5",
+   "ascii": "21",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    1179,
+    1194
+   ]
+  },
+  {
+   "addr_lo": "0xF5AAE5",
+   "addr_hi": "0xF5AAF5",
+   "size": 16,
+   "loc": "AccAutoPlay_ModeAvail_Extended_0x2+24",
+   "per": "67",
+   "dist": "13",
+   "ascii": "50",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    8149,
+    8153
+   ]
+  },
+  {
+   "addr_lo": "0xF5BD66",
+   "addr_hi": "0xF5BD76",
+   "size": 16,
+   "loc": "AccTiming_SlotOffsetTables_0x20+16",
+   "per": "75",
+   "dist": "5",
+   "ascii": "100",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    10320,
+    10332
+   ]
+  },
+  {
+   "addr_lo": "0xF5C1E6",
+   "addr_hi": "0xF5C219",
+   "size": 51,
+   "loc": "AccVoice_IndexedTableLookup_BaseOffsets_0x2+94",
+   "per": "98",
+   "dist": "3",
+   "ascii": "100",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    10833,
+    10857
+   ]
+  },
+  {
+   "addr_lo": "0xF5C246",
+   "addr_hi": "0xF5C279",
+   "size": 51,
+   "loc": "AccVoice_IndexedTableLookup_BaseOffsets_0x2+190",
+   "per": "98",
+   "dist": "3",
+   "ascii": "100",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    10881,
+    10905
+   ]
+  },
+  {
+   "addr_lo": "0xF5D20D",
+   "addr_hi": "0xF5D230",
+   "size": 35,
+   "loc": "Demo_StyleRhythmData_0x240+1",
+   "per": "63",
+   "dist": "10",
+   "ascii": "80",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    12416,
+    12437
+   ]
+  },
+  {
+   "addr_lo": "0xF5EFB7",
+   "addr_hi": "0xF5EFC7",
+   "size": 16,
+   "loc": "AccPatch_DefaultSlotData+16",
+   "per": "100",
+   "dist": "7",
+   "ascii": "81",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    15050,
+    15061
+   ]
+  },
+  {
+   "addr_lo": "0xF63652",
+   "addr_hi": "0xF63663",
+   "size": 17,
+   "loc": "RhythmROM_PatternDisp_CheckCmd+15",
+   "per": "100",
+   "dist": "4",
+   "ascii": "24",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    23166,
+    23182
+   ]
+  },
+  {
+   "addr_lo": "0xF64859",
+   "addr_hi": "0xF64869",
+   "size": 16,
+   "loc": "DrumParam_PointerTableAndData_0x2+238",
+   "per": "71",
+   "dist": "3",
+   "ascii": "75",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    24849,
+    24862
+   ]
+  },
+  {
+   "addr_lo": "0xF64979",
+   "addr_hi": "0xF64989",
+   "size": 16,
+   "loc": "DrumParam_PointerTableAndData_0x2+526",
+   "per": "71",
+   "dist": "3",
+   "ascii": "50",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    24905,
+    24918
+   ]
+  },
+  {
+   "addr_lo": "0xF649D3",
+   "addr_hi": "0xF649F9",
+   "size": 38,
+   "loc": "DrumParam_PointerTableAndData_0x2+616",
+   "per": "72",
+   "dist": "6",
+   "ascii": "16",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    24923,
+    24947
+   ]
+  },
+  {
+   "addr_lo": "0xF65B28",
+   "addr_hi": "0xF65B38",
+   "size": 16,
+   "loc": "TimeSig_DisplayStrings_0x21B+4",
+   "per": "86",
+   "dist": "2",
+   "ascii": "50",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    26817,
+    26826
+   ]
+  },
+  {
+   "addr_lo": "0xF6A38B",
+   "addr_hi": "0xF6A39D",
+   "size": 18,
+   "loc": "AccScreen_DataBlock+5",
+   "per": "78",
+   "dist": "10",
+   "ascii": "39",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    34457,
+    34466
+   ]
+  },
+  {
+   "addr_lo": "0xF710A3",
+   "addr_hi": "0xF710C3",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable1_0x2+78",
+   "per": "83",
+   "dist": "5",
+   "ascii": "75",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    580,
+    609
+   ]
+  },
+  {
+   "addr_lo": "0xF710DB",
+   "addr_hi": "0xF7110B",
+   "size": 48,
+   "loc": "Voice_NoteChannelTable1_0x2+134",
+   "per": "77",
+   "dist": "7",
+   "ascii": "90",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    611,
+    652
+   ]
+  },
+  {
+   "addr_lo": "0xF7116B",
+   "addr_hi": "0xF7118B",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable1_0x2+278",
+   "per": "100",
+   "dist": "7",
+   "ascii": "84",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    688,
+    704
+   ]
+  },
+  {
+   "addr_lo": "0xF711F3",
+   "addr_hi": "0xF71213",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable1_0x2+414",
+   "per": "100",
+   "dist": "5",
+   "ascii": "78",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    721,
+    744
+   ]
+  },
+  {
+   "addr_lo": "0xF71258",
+   "addr_hi": "0xF7126A",
+   "size": 18,
+   "loc": "Voice_NoteChannelTable1_0x2+515",
+   "per": "75",
+   "dist": "4",
+   "ascii": "72",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    751,
+    768
+   ]
+  },
+  {
+   "addr_lo": "0xF7132D",
+   "addr_hi": "0xF71344",
+   "size": 23,
+   "loc": "Voice_NoteChannelTable1_0x2+728",
+   "per": "80",
+   "dist": "3",
+   "ascii": "70",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    881,
+    903
+   ]
+  },
+  {
+   "addr_lo": "0xF715CA",
+   "addr_hi": "0xF715DA",
+   "size": 16,
+   "loc": "Voice_NoteChannelTable2_0x2+22",
+   "per": "100",
+   "dist": "6",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1249,
+    1261
+   ]
+  },
+  {
+   "addr_lo": "0xF715EA",
+   "addr_hi": "0xF715FA",
+   "size": 16,
+   "loc": "Voice_NoteChannelTable2_0x2+54",
+   "per": "100",
+   "dist": "4",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1263,
+    1278
+   ]
+  },
+  {
+   "addr_lo": "0xF71602",
+   "addr_hi": "0xF71622",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable2_0x2+78",
+   "per": "100",
+   "dist": "5",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1280,
+    1310
+   ]
+  },
+  {
+   "addr_lo": "0xF71647",
+   "addr_hi": "0xF7166A",
+   "size": 35,
+   "loc": "Voice_NoteChannelTable2_0x2+147",
+   "per": "100",
+   "dist": "5",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1325,
+    1357
+   ]
+  },
+  {
+   "addr_lo": "0xF7167A",
+   "addr_hi": "0xF7169A",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable2_0x2+198",
+   "per": "100",
+   "dist": "7",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1359,
+    1382
+   ]
+  },
+  {
+   "addr_lo": "0xF716CA",
+   "addr_hi": "0xF716E6",
+   "size": 28,
+   "loc": "Voice_NoteChannelTable2_0x2+278",
+   "per": "100",
+   "dist": "5",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1393,
+    1416
+   ]
+  },
+  {
+   "addr_lo": "0xF71752",
+   "addr_hi": "0xF71772",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable2_0x2+414",
+   "per": "100",
+   "dist": "5",
+   "ascii": "100",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1435,
+    1454
+   ]
+  },
+  {
+   "addr_lo": "0xF717B2",
+   "addr_hi": "0xF717D0",
+   "size": 30,
+   "loc": "Voice_NoteChannelTable2_0x2+510",
+   "per": "100",
+   "dist": "5",
+   "ascii": "97",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1456,
+    1481
+   ]
+  },
+  {
+   "addr_lo": "0xF717DA",
+   "addr_hi": "0xF717FA",
+   "size": 32,
+   "loc": "Voice_NoteChannelTable2_0x2+550",
+   "per": "100",
+   "dist": "7",
+   "ascii": "97",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1485,
+    1513
+   ]
+  },
+  {
+   "addr_lo": "0xF718DA",
+   "addr_hi": "0xF718EA",
+   "size": 16,
+   "loc": "Voice_NoteChannelTable2_0x2+806",
+   "per": "100",
+   "dist": "3",
+   "ascii": "88",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1627,
+    1642
+   ]
+  },
+  {
+   "addr_lo": "0xF71972",
+   "addr_hi": "0xF719A2",
+   "size": 48,
+   "loc": "Voice_NoteChannelTable2_0x2+958",
+   "per": "88",
+   "dist": "7",
+   "ascii": "92",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1678,
+    1717
+   ]
+  },
+  {
+   "addr_lo": "0xFCD01C",
+   "addr_hi": "0xFCD02C",
+   "size": 16,
+   "loc": "MidiStream_HandleRunningStatus_0x98+283",
+   "per": "100",
+   "dist": "5",
+   "ascii": "6",
+   "file": "boot/interrupt_vector_trampolines.s",
+   "lines_0indexed": [
+    12,
+    25
+   ]
+  },
+  {
+   "addr_lo": "0xFCD15C",
+   "addr_hi": "0xFCD16C",
+   "size": 16,
+   "loc": "MidiStream_HandleRunningStatus_0x98+603",
+   "per": "100",
+   "dist": "5",
+   "ascii": "12",
+   "file": "boot/interrupt_vector_trampolines.s",
+   "lines_0indexed": [
+    77,
+    88
+   ]
+  },
+  {
+   "addr_lo": "0xFCFDF3",
+   "addr_hi": "0xFCFE0A",
+   "size": 23,
+   "loc": "MidiCC_Handler_ChannelMapping_0x60+24",
+   "per": "68",
+   "dist": "8",
+   "ascii": "48",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    455,
+    473
+   ]
+  },
+  {
+   "addr_lo": "0xFD0F79",
+   "addr_hi": "0xFD0F8C",
+   "size": 19,
+   "loc": "MidiCC_ChannelMappingData_0xE0+50",
+   "per": "69",
+   "dist": "6",
+   "ascii": "0",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    2569,
+    2579
+   ]
+  },
+  {
+   "addr_lo": "0xFD17AB",
+   "addr_hi": "0xFD191E",
+   "size": 371,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x77+77",
+   "per": "97",
+   "dist": "10",
+   "ascii": "26",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3428,
+    3615
+   ]
+  },
+  {
+   "addr_lo": "0xFD191F",
+   "addr_hi": "0xFD1A22",
+   "size": 259,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x77+449",
+   "per": "94",
+   "dist": "11",
+   "ascii": "29",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3617,
+    3746
+   ]
+  },
+  {
+   "addr_lo": "0xFD1A33",
+   "addr_hi": "0xFD1A5E",
+   "size": 43,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x77+725",
+   "per": "97",
+   "dist": "5",
+   "ascii": "26",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3753,
+    3773
+   ]
+  },
+  {
+   "addr_lo": "0xFD27FF",
+   "addr_hi": "0xFD2818",
+   "size": 25,
+   "loc": "FileData_RawDataBlock+145",
+   "per": "67",
+   "dist": "14",
+   "ascii": "24",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5945,
+    5955
+   ]
+  },
+  {
+   "addr_lo": "0xFD2A1D",
+   "addr_hi": "0xFD2A37",
+   "size": 26,
+   "loc": "FileData_RawDataBlock+687",
+   "per": "75",
+   "dist": "14",
+   "ascii": "23",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    6174,
+    6183
+   ]
+  },
+  {
+   "addr_lo": "0xFEA409",
+   "addr_hi": "0xFEA421",
+   "size": 24,
+   "loc": "VoiceSlot_CheckAndApply_Data_0xBA+6",
+   "per": "60",
+   "dist": "9",
+   "ascii": "46",
+   "file": "audio/note_voice_mapping.s",
+   "lines_0indexed": [
+    16873,
+    16885
+   ]
+  }
+ ],
+ "excluded": [
+  {
+   "addr_lo": "0xED11EE",
+   "addr_hi": "0xED1226",
+   "size": 56,
+   "loc": "CtrlAssignStr_Off+18",
+   "per": "100",
+   "dist": "4",
+   "ascii": "75",
+   "reason": "20 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED1552",
+   "addr_hi": "0xED1582",
+   "size": 48,
+   "loc": "FadeTimeStr_Off+8",
+   "per": "100",
+   "dist": "4",
+   "ascii": "75",
+   "reason": "20 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED1CBF",
+   "addr_hi": "0xED1CD2",
+   "size": 19,
+   "loc": "KeyScaleNoteStr_G_0x18+37",
+   "per": "67",
+   "dist": "9",
+   "ascii": "32",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED37EF",
+   "addr_hi": "0xED380A",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+935",
+   "per": "100",
+   "dist": "12",
+   "ascii": "52",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED382F",
+   "addr_hi": "0xED384A",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+999",
+   "per": "100",
+   "dist": "14",
+   "ascii": "48",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED39D7",
+   "addr_hi": "0xED39F2",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+1423",
+   "per": "100",
+   "dist": "12",
+   "ascii": "70",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED3A13",
+   "addr_hi": "0xED3A32",
+   "size": 31,
+   "loc": "NakaInst_MainVariSet+1483",
+   "per": "100",
+   "dist": "15",
+   "ascii": "65",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED3A37",
+   "addr_hi": "0xED3A52",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+1519",
+   "per": "100",
+   "dist": "13",
+   "ascii": "59",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xED3A77",
+   "addr_hi": "0xED3A92",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+1583",
+   "per": "100",
+   "dist": "13",
+   "ascii": "59",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEDA675",
+   "addr_hi": "0xEDA68D",
+   "size": 24,
+   "loc": "Protocol_values_for_LED_rows_0x56+9",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEDA696",
+   "addr_hi": "0xEDA6AE",
+   "size": 24,
+   "loc": "Protocol_values_for_LED_rows_0x56+42",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEDA6B7",
+   "addr_hi": "0xEDA6CF",
+   "size": 24,
+   "loc": "Protocol_values_for_LED_rows_0x56+75",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEDA6D8",
+   "addr_hi": "0xEDA6F8",
+   "size": 32,
+   "loc": "Protocol_values_for_LED_rows_0x56+108",
+   "per": "100",
+   "dist": "11",
+   "ascii": "81",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEF2EC0",
+   "addr_hi": "0xEF2EDA",
+   "size": 26,
+   "loc": "RingBuf_CopyPtr_Sub1",
+   "per": "85",
+   "dist": "12",
+   "ascii": "31",
+   "reason": "excluded (manual review): manual read: clean, prior-commented real code (`pushw hl/ldw_da hl,(addr)/stw_da (addr),hl/popw hl/ret`), a genuine tiny pointer-copy subroutine"
+  },
+  {
+   "addr_lo": "0xEF61B0",
+   "addr_hi": "0xEF61C6",
+   "size": 22,
+   "loc": "ScoopDisp_HandlerData2+87",
+   "per": "67",
+   "dist": "15",
+   "ascii": "41",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xEF77A7",
+   "addr_hi": "0xEF77BA",
+   "size": 19,
+   "loc": "ScoopDisp_DispatchTable_Extended_0x3E+16",
+   "per": "60",
+   "dist": "11",
+   "ascii": "37",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEF880E",
+   "addr_hi": "0xEF8822",
+   "size": 20,
+   "loc": "DisplayMode_Handler_3+19",
+   "per": "75",
+   "dist": "13",
+   "ascii": "25",
+   "reason": "excluded: indirect jp/call within 40 lines of label def; manual: dispatched via register-indirect call (xhl) from DisplayMode_DispatchTable"
+  },
+  {
+   "addr_lo": "0xEF8BA2",
+   "addr_hi": "0xEF8BB6",
+   "size": 20,
+   "loc": "DisplayMode_Handler_3_0x399+14",
+   "per": "71",
+   "dist": "14",
+   "ascii": "30",
+   "reason": "excluded: exact-name is branch target elsewhere; manual: same routine family as DisplayMode_Handler_3"
+  },
+  {
+   "addr_lo": "0xEF8E1D",
+   "addr_hi": "0xEF8E31",
+   "size": 20,
+   "loc": "DisplayMode_Handler_3_0x612+16",
+   "per": "71",
+   "dist": "14",
+   "ascii": "35",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEF8E64",
+   "addr_hi": "0xEF8E78",
+   "size": 20,
+   "loc": "DisplayMode_Handler_3_0x65A+15",
+   "per": "71",
+   "dist": "14",
+   "ascii": "35",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xEF9554",
+   "addr_hi": "0xEF9566",
+   "size": 18,
+   "loc": "VoiceSlot_TableSetup_0x525+1",
+   "per": "89",
+   "dist": "8",
+   "ascii": "0",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFAE70",
+   "addr_hi": "0xEFAE82",
+   "size": 18,
+   "loc": "MemConfig_Handler_1_0x57+33",
+   "per": "75",
+   "dist": "11",
+   "ascii": "11",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFC5A3",
+   "addr_hi": "0xEFC5B4",
+   "size": 17,
+   "loc": "VoiceSlot_FinalRetZ_0xB8+210",
+   "per": "67",
+   "dist": "11",
+   "ascii": "12",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFC81C",
+   "addr_hi": "0xEFC834",
+   "size": 24,
+   "loc": "VoiceSlot_StatusRet_0x60+10",
+   "per": "64",
+   "dist": "14",
+   "ascii": "25",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFCA38",
+   "addr_hi": "0xEFCA51",
+   "size": 25,
+   "loc": "VoiceSlot_StatusRet_0x1C5+193",
+   "per": "82",
+   "dist": "15",
+   "ascii": "36",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFCC81",
+   "addr_hi": "0xEFCC98",
+   "size": 23,
+   "loc": "VoiceSlot_StatusRet_0x371+350",
+   "per": "67",
+   "dist": "15",
+   "ascii": "48",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFD211",
+   "addr_hi": "0xEFD225",
+   "size": 20,
+   "loc": "VoiceState_DataBlock2_0x7D+26",
+   "per": "64",
+   "dist": "12",
+   "ascii": "45",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xEFE6CB",
+   "addr_hi": "0xEFE6E0",
+   "size": 21,
+   "loc": "SubCPU_ToneParamRet_0x9D1+57",
+   "per": "100",
+   "dist": "15",
+   "ascii": "38",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF006F1",
+   "addr_hi": "0xF00701",
+   "size": 16,
+   "loc": "StringData_APCModeNames_0x713+317",
+   "per": "75",
+   "dist": "9",
+   "ascii": "19",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF0078D",
+   "addr_hi": "0xF007A2",
+   "size": 21,
+   "loc": "StringData_APCModeNames_0x713+473",
+   "per": "67",
+   "dist": "15",
+   "ascii": "52",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF0446E",
+   "addr_hi": "0xF04483",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+1539",
+   "per": "67",
+   "dist": "14",
+   "ascii": "29",
+   "reason": "5 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF0450E",
+   "addr_hi": "0xF04523",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+1699",
+   "per": "67",
+   "dist": "14",
+   "ascii": "29",
+   "reason": "5 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF045AE",
+   "addr_hi": "0xF045C3",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+1859",
+   "per": "67",
+   "dist": "14",
+   "ascii": "29",
+   "reason": "5 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF04665",
+   "addr_hi": "0xF0467A",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+2042",
+   "per": "67",
+   "dist": "15",
+   "ascii": "29",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF0471C",
+   "addr_hi": "0xF04731",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+2225",
+   "per": "67",
+   "dist": "15",
+   "ascii": "29",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF08AFB",
+   "addr_hi": "0xF08B0E",
+   "size": 19,
+   "loc": "SeMenu_ApplyPartEdit_Data2_0x13DE+177",
+   "per": "100",
+   "dist": "8",
+   "ascii": "53",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF0C289",
+   "addr_hi": "0xF0C299",
+   "size": 16,
+   "loc": "SeMenu_CopyWriteUpdate_Data_0x582+835",
+   "per": "100",
+   "dist": "13",
+   "ascii": "44",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF0E77C",
+   "addr_hi": "0xF0E78E",
+   "size": 18,
+   "loc": "SeMenu_CopyWriteUpdate_Data_0x292E+1162",
+   "per": "78",
+   "dist": "11",
+   "ascii": "33",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF0F5AE",
+   "addr_hi": "0xF0F5CF",
+   "size": 33,
+   "loc": "SeMenu_WaveformSelect_Data_0x6D+11",
+   "per": "71",
+   "dist": "15",
+   "ascii": "36",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF10637",
+   "addr_hi": "0xF10653",
+   "size": 28,
+   "loc": "Data_UnknownBlock_0x23D+254",
+   "per": "64",
+   "dist": "14",
+   "ascii": "57",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF10E80",
+   "addr_hi": "0xF10E96",
+   "size": 22,
+   "loc": "SeBitmap_EnvCurve3+66",
+   "per": "100",
+   "dist": "2",
+   "ascii": "86",
+   "reason": "4 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF116D5",
+   "addr_hi": "0xF116EC",
+   "size": 23,
+   "loc": "SeBitmap_EnvCurve5_0x612+245",
+   "per": "100",
+   "dist": "10",
+   "ascii": "78",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF1173F",
+   "addr_hi": "0xF11750",
+   "size": 17,
+   "loc": "SeBitmap_EnvCurve5_0x612+351",
+   "per": "71",
+   "dist": "8",
+   "ascii": "76",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF11A18",
+   "addr_hi": "0xF11A37",
+   "size": 31,
+   "loc": "SeBitmap_EnvCurve5_0x986+196",
+   "per": "100",
+   "dist": "13",
+   "ascii": "61",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF11B94",
+   "addr_hi": "0xF11BA7",
+   "size": 19,
+   "loc": "SeBitmap_EnvCurve5_0x986+576",
+   "per": "100",
+   "dist": "9",
+   "ascii": "84",
+   "reason": "3 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF120E6",
+   "addr_hi": "0xF12105",
+   "size": 31,
+   "loc": "SeBitmap_EnvCurve5_0x10B6+98",
+   "per": "69",
+   "dist": "12",
+   "ascii": "45",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF127AA",
+   "addr_hi": "0xF127CB",
+   "size": 33,
+   "loc": "SeBitmap_EnvCurve5_0x1743+153",
+   "per": "64",
+   "dist": "13",
+   "ascii": "52",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF140D1",
+   "addr_hi": "0xF140E1",
+   "size": 16,
+   "loc": "TuningSystem_Handler_Table_0x71F+1387",
+   "per": "83",
+   "dist": "7",
+   "ascii": "75",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF14388",
+   "addr_hi": "0xF143A5",
+   "size": 29,
+   "loc": "TuningSystem_Handler_Table_0xE1F+290",
+   "per": "100",
+   "dist": "9",
+   "ascii": "72",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF15E71",
+   "addr_hi": "0xF15E84",
+   "size": 19,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+331",
+   "per": "71",
+   "dist": "9",
+   "ascii": "37",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF15F25",
+   "addr_hi": "0xF15F3C",
+   "size": 23,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+511",
+   "per": "100",
+   "dist": "10",
+   "ascii": "78",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF15F8F",
+   "addr_hi": "0xF15FA0",
+   "size": 17,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+617",
+   "per": "71",
+   "dist": "8",
+   "ascii": "76",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF16B58",
+   "addr_hi": "0xF16B68",
+   "size": 16,
+   "loc": "Flash_InitBytecodeBlock+141",
+   "per": "75",
+   "dist": "10",
+   "ascii": "50",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF1715B",
+   "addr_hi": "0xF1717D",
+   "size": 34,
+   "loc": "NOTE_EVENT_DISPATCH_1+6",
+   "per": "75",
+   "dist": "15",
+   "ascii": "41",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF1F06A",
+   "addr_hi": "0xF1F092",
+   "size": 40,
+   "loc": "SetWall_InitCallSequences",
+   "per": "77",
+   "dist": "14",
+   "ascii": "22",
+   "reason": "excluded (manual review): manual read: coherent real code, two near-identical `call.../call.../stdi8.../call.../ret` init sequences with different constants"
+  },
+  {
+   "addr_lo": "0xF2012E",
+   "addr_hi": "0xF20140",
+   "size": 18,
+   "loc": "SetWall_MiscDataAndCode_0x2+61",
+   "per": "62",
+   "dist": "13",
+   "ascii": "28",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF34162",
+   "addr_hi": "0xF34179",
+   "size": 23,
+   "loc": "SeqAccomp_Dispatch+26",
+   "per": "69",
+   "dist": "11",
+   "ascii": "57",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF3FF2D",
+   "addr_hi": "0xF3FF49",
+   "size": 28,
+   "loc": "Part_ApplyVoiceTableB",
+   "per": "71",
+   "dist": "12",
+   "ascii": "61",
+   "reason": "excluded: exact-name is branch target elsewhere; manual: coherent ld+jr code, looks like real shared-tail dispatch"
+  },
+  {
+   "addr_lo": "0xF46532",
+   "addr_hi": "0xF4654E",
+   "size": 28,
+   "loc": "NoteEditSy_Dispatch85",
+   "per": "79",
+   "dist": "15",
+   "ascii": "46",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF4FA3E",
+   "addr_hi": "0xF4FA59",
+   "size": 27,
+   "loc": "SeqStep_FileSectorDone+96",
+   "per": "60",
+   "dist": "15",
+   "ascii": "33",
+   "reason": "excluded (manual review): manual read: clean real code, two `ld xbc,(xsp+6)/ld xde,(xbc)/.../ld (xde),a` struct-field-store blocks ending in ret"
+  },
+  {
+   "addr_lo": "0xF501C2",
+   "addr_hi": "0xF501D6",
+   "size": 20,
+   "loc": "SeqByteBlock_StyleBitmapRef+214",
+   "per": "67",
+   "dist": "15",
+   "ascii": "45",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF501D9",
+   "addr_hi": "0xF501E9",
+   "size": 16,
+   "loc": "SeqByteBlock_StyleBitmapRef+237",
+   "per": "67",
+   "dist": "13",
+   "ascii": "38",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF50C02",
+   "addr_hi": "0xF50C1F",
+   "size": 29,
+   "loc": "SeqByteBlock_StyleBitmapRef_0x736+992",
+   "per": "100",
+   "dist": "15",
+   "ascii": "34",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF50C5F",
+   "addr_hi": "0xF50C6F",
+   "size": 16,
+   "loc": "SeqByteBlock_StyleBitmapRef_0x736+1085",
+   "per": "100",
+   "dist": "11",
+   "ascii": "50",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF50E59",
+   "addr_hi": "0xF50E69",
+   "size": 16,
+   "loc": "SeqByteBlock_ChannelContainer+470",
+   "per": "60",
+   "dist": "12",
+   "ascii": "44",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF516CE",
+   "addr_hi": "0xF516DE",
+   "size": 16,
+   "loc": "SeqChan_TraverseAndProcess+135",
+   "per": "100",
+   "dist": "9",
+   "ascii": "44",
+   "reason": "excluded: manual: stray single-byte escapes interleaved with clean code (misframed-island signature)"
+  },
+  {
+   "addr_lo": "0xF52782",
+   "addr_hi": "0xF52794",
+   "size": 18,
+   "loc": "GetDiskFreeSpace_JumpTable+4",
+   "per": "67",
+   "dist": "11",
+   "ascii": "67",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF59A85",
+   "addr_hi": "0xF59A95",
+   "size": 16,
+   "loc": "AccWrap_JumpTable+4",
+   "per": "100",
+   "dist": "4",
+   "ascii": "0",
+   "reason": "excluded (manual review): same pattern: `jp AccWrap_JumpTable_0x14/0x15` to real named targets -- a real trampoline table"
+  },
+  {
+   "addr_lo": "0xF5C2A7",
+   "addr_hi": "0xF5C2D8",
+   "size": 49,
+   "loc": "AccVoice_IndexedTableLookup_BaseOffsets_0x2+287",
+   "per": "100",
+   "dist": "2",
+   "ascii": "100",
+   "reason": "10 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF5C577",
+   "addr_hi": "0xF5C59F",
+   "size": 40,
+   "loc": "AccStyle_JumpTable2+4",
+   "per": "78",
+   "dist": "10",
+   "ascii": "42",
+   "reason": "excluded (manual review): real jump-trampoline table: entries are `jp NAMED_LABEL` to genuine functions (AccStyle_IndexedLookup, AccStyle_SC0ByteSelect...), not data"
+  },
+  {
+   "addr_lo": "0xF5D2E1",
+   "addr_hi": "0xF5D300",
+   "size": 31,
+   "loc": "Demo_StyleRhythmData_0x274+161",
+   "per": "100",
+   "dist": "2",
+   "ascii": "74",
+   "reason": "4 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF6A51F",
+   "addr_hi": "0xF6A537",
+   "size": 24,
+   "loc": "AccScreen_DataBlock_0x18C+13",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF6A540",
+   "addr_hi": "0xF6A558",
+   "size": 24,
+   "loc": "AccScreen_DataBlock_0x18C+46",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF6A561",
+   "addr_hi": "0xF6A579",
+   "size": 24,
+   "loc": "AccScreen_DataBlock_0x18C+79",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "reason": "8 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF6B4B2",
+   "addr_hi": "0xF6B4CA",
+   "size": 24,
+   "loc": "AccPatch_VoiceAssignDataBlock+269",
+   "per": "70",
+   "dist": "13",
+   "ascii": "46",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xF71872",
+   "addr_hi": "0xF718AA",
+   "size": 56,
+   "loc": "Voice_NoteChannelTable2_0x2+702",
+   "per": "79",
+   "dist": "10",
+   "ascii": "86",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF83DEF",
+   "addr_hi": "0xF83E0D",
+   "size": 30,
+   "loc": "DemoDesc_DispatchTable+6",
+   "per": "83",
+   "dist": "10",
+   "ascii": "33",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xF85A1B",
+   "addr_hi": "0xF85A2E",
+   "size": 19,
+   "loc": "FDemoText_ByteData_LayoutEngine+754",
+   "per": "86",
+   "dist": "10",
+   "ascii": "16",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF8FE19",
+   "addr_hi": "0xF8FE2B",
+   "size": 18,
+   "loc": "SLSrcBankList_FuncBody+3424",
+   "per": "75",
+   "dist": "14",
+   "ascii": "28",
+   "reason": "excluded (manual review): manual read: real prologue (dec 6,xsp/push xiz/ld (xsp+4),c/...) continuing into more real-looking code after a single stray escape byte -- looks like a misframed island, not data"
+  },
+  {
+   "addr_lo": "0xF97771",
+   "addr_hi": "0xF97785",
+   "size": 20,
+   "loc": "FDC_CMD_EXEC+141",
+   "per": "75",
+   "dist": "12",
+   "ascii": "45",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xF978A4",
+   "addr_hi": "0xF978B8",
+   "size": 20,
+   "loc": "FDC_CMD_EXEC+448",
+   "per": "75",
+   "dist": "12",
+   "ascii": "45",
+   "reason": "2 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFA0E51",
+   "addr_hi": "0xFA0E6D",
+   "size": 28,
+   "loc": "ButtonState_DispatchDSP_InlineData+19",
+   "per": "71",
+   "dist": "12",
+   "ascii": "57",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFA4B97",
+   "addr_hi": "0xFA4BA7",
+   "size": 16,
+   "loc": "ObjectEnum_Init+23",
+   "per": "75",
+   "dist": "10",
+   "ascii": "38",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xFA5010",
+   "addr_hi": "0xFA5020",
+   "size": 16,
+   "loc": "EventDispatch_Select+23",
+   "per": "75",
+   "dist": "10",
+   "ascii": "38",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xFAA601",
+   "addr_hi": "0xFAA61D",
+   "size": 28,
+   "loc": "LcdOff_Done",
+   "per": "93",
+   "dist": "14",
+   "ascii": "36",
+   "reason": "excluded (manual review): manual read: clean real code (`cpw_da (0x030464),0/ret z/call VGA_ScreenUnblank/ret`), a genuine guarded-call routine"
+  },
+  {
+   "addr_lo": "0xFBAAEE",
+   "addr_hi": "0xFBAB01",
+   "size": 19,
+   "loc": "TchSensGrid_EventDispatch+82",
+   "per": "100",
+   "dist": "14",
+   "ascii": "42",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFBC8A8",
+   "addr_hi": "0xFBC8C1",
+   "size": 25,
+   "loc": "DispTimeSet_EventDispatch+371",
+   "per": "100",
+   "dist": "13",
+   "ascii": "48",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFBC8D9",
+   "addr_hi": "0xFBC8F2",
+   "size": 25,
+   "loc": "DispTimeSet_EventDispatch+420",
+   "per": "100",
+   "dist": "13",
+   "ascii": "48",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFBC90A",
+   "addr_hi": "0xFBC920",
+   "size": 22,
+   "loc": "DispTimeSet_EventDispatch+469",
+   "per": "100",
+   "dist": "13",
+   "ascii": "36",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFC5984",
+   "addr_hi": "0xFC59A8",
+   "size": 36,
+   "loc": "FileIO_BytecodeData+272",
+   "per": "75",
+   "dist": "15",
+   "ascii": "61",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFC6139",
+   "addr_hi": "0xFC614C",
+   "size": 19,
+   "loc": "FileIO_BytecodeData+2245",
+   "per": "62",
+   "dist": "12",
+   "ascii": "26",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFC75C3",
+   "addr_hi": "0xFC75E0",
+   "size": 29,
+   "loc": "ExtData_VoiceParam_DispatchBytecode+170",
+   "per": "67",
+   "dist": "13",
+   "ascii": "14",
+   "reason": "excluded (manual review): manual read: coherent switch-style code (successive `cp c,N / ret z` comparisons), looks like real bytecode dispatch, not data"
+  },
+  {
+   "addr_lo": "0xFC972C",
+   "addr_hi": "0xFC9746",
+   "size": 26,
+   "loc": "VoiceParam_CompareAndUpdate+17",
+   "per": "67",
+   "dist": "15",
+   "ascii": "31",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFC977B",
+   "addr_hi": "0xFC9795",
+   "size": 26,
+   "loc": "VoiceParam_CompareAndUpdate+96",
+   "per": "67",
+   "dist": "15",
+   "ascii": "35",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFCEBFC",
+   "addr_hi": "0xFCEC0D",
+   "size": 17,
+   "loc": "SndParam_BatchUpdate_Data+189",
+   "per": "100",
+   "dist": "15",
+   "ascii": "29",
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1A93",
+   "addr_hi": "0xFD1AB2",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x3A7+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1ABB",
+   "addr_hi": "0xFD1ADA",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x3A7+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1B13",
+   "addr_hi": "0xFD1B32",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x427+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1B3B",
+   "addr_hi": "0xFD1B5A",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x427+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1B93",
+   "addr_hi": "0xFD1BB2",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x4A7+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1BBB",
+   "addr_hi": "0xFD1BCF",
+   "size": 20,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x4A7+45",
+   "per": "69",
+   "dist": "7",
+   "ascii": "60",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1C13",
+   "addr_hi": "0xFD1C32",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x527+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1C3B",
+   "addr_hi": "0xFD1C5A",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x527+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1C93",
+   "addr_hi": "0xFD1CB2",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x5A7+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1CBB",
+   "addr_hi": "0xFD1CDA",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x5A7+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1D14",
+   "addr_hi": "0xFD1D33",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x628+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1D3C",
+   "addr_hi": "0xFD1D5B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x628+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1D94",
+   "addr_hi": "0xFD1DB3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x6A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1E14",
+   "addr_hi": "0xFD1E33",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x728+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1E94",
+   "addr_hi": "0xFD1EB3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x7A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1F14",
+   "addr_hi": "0xFD1F33",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x828+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1F3C",
+   "addr_hi": "0xFD1F4F",
+   "size": 19,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x828+45",
+   "per": "73",
+   "dist": "6",
+   "ascii": "63",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1F94",
+   "addr_hi": "0xFD1FB3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x8A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD1FBC",
+   "addr_hi": "0xFD1FCF",
+   "size": 19,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x8A8+45",
+   "per": "73",
+   "dist": "6",
+   "ascii": "63",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2014",
+   "addr_hi": "0xFD2033",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x928+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD203C",
+   "addr_hi": "0xFD205B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x928+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2094",
+   "addr_hi": "0xFD20B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x9A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD20BC",
+   "addr_hi": "0xFD20DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x9A8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2114",
+   "addr_hi": "0xFD2133",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xA28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD213C",
+   "addr_hi": "0xFD215B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xA28+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2194",
+   "addr_hi": "0xFD21B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xAA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2214",
+   "addr_hi": "0xFD2233",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xB28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD223C",
+   "addr_hi": "0xFD225B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xB28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2294",
+   "addr_hi": "0xFD22B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xBA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD22BC",
+   "addr_hi": "0xFD22DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xBA8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2314",
+   "addr_hi": "0xFD2333",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xC28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD233C",
+   "addr_hi": "0xFD235B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xC28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2394",
+   "addr_hi": "0xFD23B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xCA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD23BC",
+   "addr_hi": "0xFD23DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xCA8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2414",
+   "addr_hi": "0xFD2433",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xD28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD243C",
+   "addr_hi": "0xFD245B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xD28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2494",
+   "addr_hi": "0xFD24B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xDA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD24BC",
+   "addr_hi": "0xFD24DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xDA8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2514",
+   "addr_hi": "0xFD2533",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD253C",
+   "addr_hi": "0xFD255B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2594",
+   "addr_hi": "0xFD25B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+133",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD25BC",
+   "addr_hi": "0xFD25DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+173",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD2614",
+   "addr_hi": "0xFD2633",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+261",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD263C",
+   "addr_hi": "0xFD265B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+301",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "reason": "24 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFD4DFA",
+   "addr_hi": "0xFD4E10",
+   "size": 22,
+   "loc": "DSPCfg_VoiceSlotB_ExtractData+56",
+   "per": "78",
+   "dist": "13",
+   "ascii": "23",
+   "reason": "excluded (manual review): manual read: coherent bit-manipulation and NakaInst_SoundConfig_LookupTable indexed-copy code nearby -- real code, not data"
+  },
+  {
+   "addr_lo": "0xFD5202",
+   "addr_hi": "0xFD5218",
+   "size": 22,
+   "loc": "DSPCfg_VoiceSlotB_ExtractData+1088",
+   "per": "78",
+   "dist": "12",
+   "ascii": "14",
+   "reason": "excluded (manual review): manual read: coherent bit-manipulation and NakaInst_SoundConfig_LookupTable indexed-copy code nearby -- real code, not data"
+  },
+  {
+   "addr_lo": "0xFDBCC1",
+   "addr_hi": "0xFDBCD1",
+   "size": 16,
+   "loc": null,
+   "per": null,
+   "dist": null,
+   "ascii": null,
+   "reason": "0 matches (no unique context)"
+  },
+  {
+   "addr_lo": "0xFE9413",
+   "addr_hi": "0xFE942C",
+   "size": 25,
+   "loc": "Audio_NullRet1_Data",
+   "per": "81",
+   "dist": "6",
+   "ascii": "64",
+   "reason": "excluded (manual review): first instruction is `jp NullRet2_Block`, a real named function; likely an orphaned/unused code stub, not a data table"
+  },
+  {
+   "addr_lo": "0xFEEB0E",
+   "addr_hi": "0xFEEB2C",
+   "size": 30,
+   "loc": "SndParam_TypeDispatch_Entry1",
+   "per": "75",
+   "dist": "12",
+   "ascii": "40",
+   "reason": "excluded: indirect jp/call within 40 lines of label def"
+  },
+  {
+   "addr_lo": "0xFF0711",
+   "addr_hi": "0xFF0721",
+   "size": 16,
+   "loc": null,
+   "per": null,
+   "dist": null,
+   "ascii": null,
+   "reason": "excluded (manual review): no report-row evidence available to corroborate; small ascii-looking fragment sits inside otherwise clean real code"
+  },
+  {
+   "addr_lo": "0xFF25B4",
+   "addr_hi": "0xFF25C7",
+   "size": 19,
+   "loc": "Sprintf_InsertCarry_Propagate",
+   "per": "70",
+   "dist": "11",
+   "ascii": "26",
+   "reason": "excluded: exact-name is branch target elsewhere"
+  }
+ ]
+}

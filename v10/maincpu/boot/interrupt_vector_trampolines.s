@@ -10,20 +10,9 @@
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	adc	c, 252
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD01C-0xFCD02C (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_HandleRunningStatus_0x98+283
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xcb, 0xc9, 0xfc, 0x00, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -75,18 +64,9 @@
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	xiy, 0xff00fcca
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD15C-0xFCD16C (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_HandleRunningStatus_0x98+603
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x45, 0xca, 0xfc, 0x00, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff

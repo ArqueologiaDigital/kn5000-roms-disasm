@@ -1177,22 +1177,9 @@ AccTuning_ValueTable:
 	nop
 	nop
 	halt
-	halt
-	halt
-	halt
-	halt
-	ldwio	10, 2570
-	ldwio	15, 3855
-	retd	0x140f
-	push_a
-	push_a
-	push_a
-	push_a
-	pop_f
-	pop_f
-	pop_f
-	pop_f
-	pop_f
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5672F-0xF56747 (24 B), unreached CODE-territory, was disassembled as 16 plausible-but-dead instruction lines; per=64% dist=5 near AccTuning_ValueTable+6
+	.byte 0x05, 0x05, 0x05, 0x05, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0f, 0x0f, 0x0f
+	.byte 0x0f, 0x0f, 0x14, 0x14, 0x14, 0x14, 0x14, 0x19, 0x19, 0x19, 0x19, 0x19
 	.byte 0x1e, 0x1e
 	calr	0x1e1e
 	.ascii "#####"
@@ -8147,11 +8134,9 @@ AccAutoPlay_ModeAvail_Extended:
 	and	(xwa+52), wa
 	jr	z, 22
 	.byte 0xf1
-	and	(xbc+52), wa
-	jr	nz, 16
-	calr	72
-	ldb_d8	a, (0x3498)
-	stb_d8	(0x3499), a
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5AAE5-0xF5AAF5 (16 B), unreached CODE-territory, was disassembled as 5 plausible-but-dead instruction lines; per=67% dist=13 near AccAutoPlay_ModeAvail_Extended_0x2+24
+	.byte 0x99, 0x34, 0xc8, 0x6e, 0x10, 0x1e, 0x48, 0x00, 0xc1, 0x98, 0x34, 0x21
+	.byte 0xf1, 0x99, 0x34, 0x41
 	.byte 0xc1, 0x98
 	ldw	ix, 318
 	ret
@@ -10318,19 +10303,9 @@ AccTiming_SlotOffsetTables:
 	nop
 	nop
 	jp	0
-	ldb	d, 0
-	nop
-	nop
-	pushw	iy
-	nop
-	nop
-	nop
-	ldw	iz, 0
-	nop
-	push	xsp
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5BD66-0xF5BD76 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=75% dist=5 near AccTiming_SlotOffsetTables_0x20+16
+	.byte 0x24, 0x00, 0x00, 0x00, 0x2d, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00
+	.byte 0x3f, 0x00, 0x00, 0x00
 
 AccDir_Entry:
 	jp AccDir_Main
@@ -10834,31 +10809,12 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0x98
 	ldw	bc, 0
 	.byte 0x98
-	ldw	bc, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
-	nop
-	ldw	hl, 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5C1E6-0xF5C219 (51 B), unreached CODE-territory, was disassembled as 25 plausible-but-dead instruction lines; per=98% dist=3 near AccVoice_IndexedTableLookup_BaseOffsets_0x2+94
+	.byte 0x31, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
+	.byte 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
+	.byte 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
+	.byte 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
+	.byte 0x33, 0x00, 0x00
 	.byte 0x98
 	ldw	ix, 0
 	.byte 0x98
@@ -10882,31 +10838,12 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0x98
 	ldw	ix, 0
 	.byte 0x98
-	ldw	ix, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
-	nop
-	ldw	iz, 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5C246-0xF5C279 (51 B), unreached CODE-territory, was disassembled as 25 plausible-but-dead instruction lines; per=98% dist=3 near AccVoice_IndexedTableLookup_BaseOffsets_0x2+190
+	.byte 0x34, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00
+	.byte 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00
+	.byte 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00
+	.byte 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00
+	.byte 0x36, 0x00, 0x00
 	.byte 0x98, 0x37
 	nop
 	nop
@@ -12417,28 +12354,10 @@ Demo_StyleRhythmData:
 	.zero 48
 	.ascii "a-variation1    a-variation2    a-variation3    a-variation4    b-variation1    b-variation2    b-variation3    b-variation4    c-variation1    c-variation2    c-variation3    c-variation4     a-intro 1       a-intro 2       a-fill in 1     a-fill in 2     a-ending 1      a-ending 2      b-intro 1       b-intro 2       b-fill in 1     b-fill in 2     b-ending 1      b-ending 2      c-intro 1       c-intro 2       c-fill in 1     c-fill in 2     c-ending 1      c-ending 2     "
 	reti
-	pop	sr
-	ldb	w, 0
-	pop	xwa
-	push	sr
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ld	xwa, 0x7f005000
-	nop
-	pushw	wa
-	nop
-	ld	xwa, 0x7f065000
-	nop
-	nop
-	nop
-	ld	xwa, 0x7f065000
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5D20D-0xF5D230 (35 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=63% dist=10 near Demo_StyleRhythmData_0x240+1
+	.byte 0x03, 0x20, 0x00, 0x58, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x40, 0x00, 0x50, 0x00, 0x7f, 0x00, 0x28, 0x00, 0x40, 0x00, 0x50
+	.byte 0x06, 0x7f, 0x00, 0x00, 0x00, 0x40, 0x00, 0x50, 0x06, 0x7f, 0x00
 	.byte 0x1c
 	nop
 	ld	xwa, 0x7f065000
@@ -15051,18 +14970,9 @@ AccPatch_DefaultSlotData:
 	nop
 	nop
 	.zero 8
-	nop
-	nop
-	nop
-	nop
-	pushw	wa
-	nop
-	ld	xwa, 0x7f065000
-	nop
-	nop
-	nop
-	incf
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5EFB7-0xF5EFC7 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near AccPatch_DefaultSlotData+16
+	.byte 0x00, 0x00, 0x00, 0x00, 0x28, 0x00, 0x40, 0x00, 0x50, 0x06, 0x7f, 0x00
+	.byte 0x00, 0x00, 0x0c, 0x00
 	.byte 0x50, 0x06
 	jrl	nc, 14336
 	nop
@@ -23167,23 +23077,9 @@ RhythmROM_PatternDisp_CheckCmd:
 	.byte 0x9f
 	pop	sr
 	.byte 0x9f
-	reti
-	incf
-	pop	sr
-	incf
-	pop	sr
-	push	xiy
-	pop	sr
-	push	xiy
-	pop	sr
-	incf
-	reti
-	incf
-	reti
-	push	xiy
-	reti
-	push	xiy
-	reti
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF63652-0xF63663 (17 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=4 near RhythmROM_PatternDisp_CheckCmd+15
+	.byte 0x07, 0x0c, 0x03, 0x0c, 0x03, 0x3d, 0x03, 0x3d, 0x03, 0x0c, 0x07, 0x0c
+	.byte 0x07, 0x3d, 0x07, 0x3d, 0x07
 
 RhythmROM_PatternDisp_Handle90:
 	ldda32 xiy, (0x3564)
@@ -24850,20 +24746,9 @@ DrumParam_PointerTableAndData:
 	jrl	nc, 32639
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
-	jrl	nc, 127
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	push_f
-	push_f
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF64859-0xF64869 (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=71% dist=3 near DrumParam_PointerTableAndData_0x2+238
+	.byte 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x18, 0x18
 	.fill 8, 1, 0x18
 	.fill 8, 1, 0x18
 	push_f
@@ -24906,49 +24791,18 @@ DrumParam_PointerTableAndData:
 	jrl	nc, 32639
 	jrl	nc, 32639
 	.fill 8, 1, 0x7f
-	jrl	nc, 127
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF64979-0xF64989 (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=71% dist=3 near DrumParam_PointerTableAndData_0x2+526
+	.byte 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x10
+	.byte 0x10, 0x10, 0x10, 0x10
 	.fill 8, 1, 0x10
 	rcf
 	rcf
 	.ascii "                0000000000000000@@@@@@@@@@@@@@@@PPPPPPPPPPPPPPPP"
-	jrl	nc, 32639
-	jrl	nc, 32639
-	jrl	nc, 127
-	nop
-	nop
-	nop
-	ldio	8, 8
-	ldio	8, 8
-	ldio	8, 16
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
-	push_f
-	push_f
-	push_f
-	push_f
-	push_f
-	push_f
-	push_f
-	push_f
-	ldb	w, 32
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF649D3-0xF649F9 (38 B), unreached CODE-territory, was disassembled as 25 plausible-but-dead instruction lines; per=72% dist=6 near DrumParam_PointerTableAndData_0x2+616
+	.byte 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00
+	.byte 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x10, 0x10
+	.byte 0x10, 0x10, 0x10, 0x10, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18
+	.byte 0x20, 0x20
 	.ascii "      ((((((((0000000088888888@@@@@@@@HHHHHHHHPPPPPPPPXXXXXXXX"
 	jrl	nc, 32639
 	.byte 0x7f
@@ -26818,16 +26672,9 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	stb_d8	(0xfc5b), h
 	ret
 	.byte 0x04, 0x04, 0x04, 0x04
-	ldio	8, 8
-	ldio	8, 8
-	ldio	8, 0
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF65B28-0xF65B38 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=86% dist=2 near TimeSig_DisplayStrings_0x21B+4
+	.byte 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x04, 0x04, 0x04, 0x04
 	ldb_d8	a, (0xfc5a)
 	and	a, 255
@@ -34458,16 +34305,9 @@ AccScreen_DataBlock:
 	ld	xwa, xiy
 	pop	xwa
 	ret
-	push	xwa
-	ld	xwa, xiy
-	call	DrawFunc_Init_Variant1_0x108
-	pop	xwa
-	ret
-	push	xwa
-	ld	xwa, xiy
-	call	ColorBlit_Variant_ByteData
-	pop	xwa
-	ret
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF6A38B-0xF6A39D (18 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=78% dist=10 near AccScreen_DataBlock+5
+	.byte 0x38, 0xed, 0x88, 0x1d, 0x01, 0x22, 0xfb, 0x58, 0x0e, 0x38, 0xed, 0x88
+	.byte 0x1d, 0x38, 0x25, 0xfb, 0x58, 0x0e
 	push	xiz
 	calr	2
 	pop	xiz

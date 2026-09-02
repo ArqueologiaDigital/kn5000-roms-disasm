@@ -6986,13 +6986,9 @@ NotePool_Insert_Return:
 	ret
 
 NotePool_DataBlock_890:
-	ldb_d8	a, (0xc07f)
-	cps	a, 0
-	ret	z
-	ldb_d8	a, (0xc07e)
-	cps	a, 0
-	ret	nz
-	ldb_d8	a, (0xc07d)
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF3C890-0xF3C8A4 (20 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=11 near NotePool_DataBlock_890
+	.byte 0xc1, 0x7f, 0xc0, 0x21, 0xc9, 0xd8, 0xb0, 0xf6, 0xc1, 0x7e, 0xc0, 0x21
+	.byte 0xc9, 0xd8, 0xb0, 0xfe, 0xc1, 0x7d, 0xc0, 0x21
 	.byte 0xf1, 0xb3
 	pushw	wa
 	sbc	w, e
