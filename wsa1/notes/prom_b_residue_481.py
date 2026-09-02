@@ -76,6 +76,19 @@ BASE = 0xF00000
 # The 16 remaining .incbin spans, (file offset, length). Regenerate with:
 #   grep -a '\.incbin' prom_b/wsa1_prom_b.s
 # ⚠ grep -a, not grep: an agent shell's grep skips files it deems binary.
+#
+# ⚠ THIS IS A SNAPSHOT OF 2026-09-02 AND LANES ARE CLOSING IT.  The list is left
+# as it was because every measurement in this file's docstring -- the 22
+# pointers, the null, the 0xF0540B stride -- was taken over exactly these 16
+# spans, and shrinking the list would silently change those numbers.  Closed so
+# far, by lane res02f (notes/gen_res02f_spans.py):
+#   0x002FFE (44 B)  the +0x07 pointer field of the record at 0xF02FF7 plus the
+#                    5 x 8-byte operand array it names -- NOT a table of its own
+#   0x013D34 (44 B)  the tail of the 24-byte bitmap at 0xF13D30 and the whole
+#                    one at 0xF13D48; four 2 x 12 bitmaps tile 0xF13D00-0xF13D5F
+# Both confirm this file's central claim -- the spans are cut MID-OBJECT -- and
+# both took their width from the naming record, not from the stride, exactly as
+# the "WHAT THIS SCRIPT DOES *NOT* CLAIM" section insists.
 SPANS = [
     (0x003AF8, 77), (0x00540B, 58), (0x003F81, 46), (0x005792, 46),
     (0x0286CC, 45), (0x002FFE, 44), (0x013D34, 44), (0x03A443, 30),
