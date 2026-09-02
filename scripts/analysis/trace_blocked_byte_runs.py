@@ -30,13 +30,13 @@ RUN
   unnoticed. Corroborate any conversion with call targets landing on
   routines already named in the tree.
 """
-import re, subprocess, sys
+#!/usr/bin/env python3
+import re, subprocess
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path.home() / 'compartilhado/disasm-lanes/v142block'
 SRC = ROOT / 'v142/subcpu/kn5000_subprogram_v142.s'
-MC = Path.home() / 'compartilhado/llvm-project/build/bin/llvm-mc'
-UNIDASM = Path.home() / 'compartilhado/tools/unidasm'
+MC = str(Path.home() / 'compartilhado/llvm-project/build/bin/llvm-mc')
 
 lines = SRC.read_text(encoding='latin-1').splitlines()
 
@@ -50,79 +50,61 @@ def bytes_of_line(l):
         return [b for b in s.encode('latin-1')]
     return None
 
-def extract_run(start_line, end_line):
-    raw = []
-    for i in range(start_line, end_line+1):
+def extract_run(s,e):
+    raw=[]
+    for i in range(s,e+1):
         bs = bytes_of_line(lines[i-1])
-        if bs is not None:
-            raw.extend(bs)
+        if bs: raw.extend(bs)
     return bytes(raw)
 
-def disasm_stream(raw):
-    hex_str = (' '.join(f'0x{b:02x}' for b in raw) + '\n').encode()
-    r = subprocess.run([str(MC), '--triple=tlcs900', '--disassemble', '--show-encoding', '-'],
-                        input=hex_str, capture_output=True, timeout=30)
-    return r.stdout.decode(errors='replace'), r.stderr.decode(errors='replace')
+WARN_RE = re.compile(r'^<stdin>:1:(\d+): warning: invalid instruction encoding$')
 
-ENC_RE = re.compile(rb'encoding: \[([^\]]+)\]')
-def parse(out):
-    res=[]
-    for l in out.strip().split('\n'):
-        l=l.strip()
-        if not l or l.startswith('.'): continue
-        m = ENC_RE.search(l.encode())
-        if not m: continue
-        enc = bytes(int(h.strip(),16) for h in m.group(1).decode().split(','))
-        text = l.split(';',1)[0].strip()
-        res.append((text, enc))
-    return res
+def analyze(raw):
+    hex_str = ' '.join(f'0x{b:02x}' for b in raw) + '\n'
+    r = subprocess.run([MC, '--triple=tlcs900', '--disassemble', '--show-encoding', '-'],
+                        input=hex_str.encode(), capture_output=True, timeout=30)
+    err = r.stderr.decode(errors='replace')
+    fail_idx = []
+    for l in err.splitlines():
+        m = WARN_RE.match(l.strip())
+        if m:
+            col = int(m.group(1))
+            idx = (col - 1) // 5
+            fail_idx.append(idx)
+    return sorted(set(fail_idx)), r.stdout.decode(errors='replace')
 
-def unidasm_at(raw, base=0):
-    import tempfile, os
-    with tempfile.NamedTemporaryFile(suffix='.bin', delete=False) as f:
-        f.write(raw)
-        path = f.name
-    try:
-        r = subprocess.run([str(UNIDASM), path, '-arch', 'tlcs900', '-basepc', hex(base)],
-                            capture_output=True, timeout=30, text=True)
-        return r.stdout, r.stderr
-    finally:
-        os.unlink(path)
+RUNS = [(572,578,'DSP_ChannelConfigTable [DATA TABLE]'),
+        (710,710,'TaskSched_Init_ConfigData [DATA, addr-loaded]'),
+        (796,798,'TaskSched_SoftTimer_Service'),
+        (801,804,'TaskSched_SoftTimer_Entry'),
+        (811,813,'TaskSched_SoftTimer_Unlock'),
+        (816,818,'TaskSched_SoftTimer_Fire'),
+        (1008,1014,'TaskQueue_Operations_Opaque'),
+        (1028,1037,'TaskSched_Wake_Task'),
+        (1047,1054,'TaskSched_Wake_Task_NoResched'),
+        (1095,1101,'TaskEvent_Signal'),
+        (1104,1111,'TaskEvent_Signal_Wake'),
+        (1115,1120,'TaskEvent_Signal_NoResched'),
+        (1131,1139,'TaskEvent_Signal_NoResched_Wake'),
+        (1146,1150,'TaskEvent_Wait'),
+        (1153,1160,'TaskEvent_Wait_Block'),
+        (1164,1166,'TaskEvent_Clear'),
+        (1749,1756,'RingBuf_Access_Opaque_A'),
+        (1762,1763,'Timer_Delay_Ticks [PROVEN OK]')]
 
-RUNS = [(572,578,'DSP_ChannelConfigTable'),(710,710,'TaskSched_Init_ConfigData'),
-        (796,798,'TaskSched_SoftTimer_Service_a'),(801,804,'TaskSched_SoftTimer_Service_b'),
-        (811,813,'TaskSched_SoftTimer_Entry_a'),(816,818,'TaskSched_SoftTimer_Entry_b'),
-        (1008,1014,'TaskQueue_Operations_Opaque'),(1028,1037,'TaskSched_Wake_Task'),
-        (1047,1054,'TaskSched_Wake_Task_NoResched'),(1095,1101,'TaskEvent_Signal'),
-        (1104,1111,'TaskEvent_Signal_Wake'),(1115,1120,'TaskEvent_Signal_NoResched'),
-        (1131,1139,'TaskEvent_Signal_NoResched_Wake'),(1146,1150,'TaskEvent_Wait'),
-        (1153,1160,'TaskEvent_Wait_Block'),(1164,1166,'TaskEvent_Clear'),
-        (1749,1756,'RingBuf_Access_Opaque_A (incl misframed .ascii)'),
-        (1762,1763,'Timer_Delay_Ticks (PROVEN OK)')]
-
+total_bytes = 0
+total_fail_bytes = 0
 for s,e,name in RUNS:
     raw = extract_run(s,e)
-    out, err = disasm_stream(raw)
-    decoded = parse(out)
-    consumed = sum(len(b) for _,b in decoded)
+    fail_idx, out = analyze(raw)
+    total_bytes += len(raw)
+    total_fail_bytes += len(fail_idx)
     print(f"=== {name}  lines {s}-{e}  ({len(raw)} B) ===")
-    print(f"  bytes: {raw.hex(' ')}")
-    print(f"  llvm-mc consumed {consumed}/{len(raw)} bytes, {len(decoded)} insns")
-    if consumed < len(raw):
-        fail_off = consumed
-        ctx = raw[fail_off:fail_off+8]
-        print(f"  FIRST FAILURE at offset {fail_off} (byte 0x{raw[fail_off]:02x}): next bytes {ctx.hex(' ')}")
+    if not fail_idx:
+        print(f"  NO STRUCTURAL FAILURE -- llvm-mc decodes the entire {len(raw)}-byte stream (0 warnings)")
+    else:
+        for idx in fail_idx:
+            ctx = raw[max(0,idx-2):idx+6]
+            print(f"  FAIL at byte offset {idx}: 0x{raw[idx]:02x}  (context @{max(0,idx-2)}: {ctx.hex(' ')})")
     print()
-
-print("\n\n=== DETAIL: instructions decoded per run ===")
-for s,e,name in RUNS:
-    raw = extract_run(s,e)
-    out, err = disasm_stream(raw)
-    decoded = parse(out)
-    print(f"--- {name} ---")
-    off=0
-    for text,enc in decoded:
-        print(f"  +{off:3d}  {enc.hex(' '):20s}  {text}")
-        off += len(enc)
-    if off < len(raw):
-        print(f"  +{off:3d}  UNDECODED TAIL: {raw[off:].hex(' ')}")
+print(f"TOTAL bytes examined: {total_bytes}, TOTAL byte-offsets with hard decode FAILURE: {total_fail_bytes}")
