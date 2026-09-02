@@ -181,15 +181,24 @@ require the original bytes).
   denominator.
 * custom data IC19: **39.6%** proven erased or zero fill.
 
-## ⚠ A silent spelling trap in natural memory syntax
+## A spelling trap in natural memory syntax — ⚠ NOT a miscompile
 
-Found 2026-09-02 and NOT fixed. The natural-syntax encoder treats `(reg+N)` as
-SIGNED, so writing a raw disp8 byte of 0x80 or above as its positive value
-silently selects the wrong 5-byte d16 encoding: `(xde+0x97)` produces wrong
-bytes while `(xde-105)` produces the right ones. No diagnostic either way. This
-blocks 3 of the 68 forced-mnemonic sites from retirement and will bite anyone
-converting `_rid8` spellings by hand. Documented in
-`scripts/analysis/census_rid8_zero_disp.py`.
+★ CORRECTED 2026-09-02. This entry previously called it a silent wrong-encoding
+defect, "the fifth in this backend". **That was wrong.**
+
+`(Xrr+d8)` is SIGNED. A displacement written as `+151` does not fit the signed
+8-bit field, so it legitimately assembles to the 5-byte `(Xrr+d16)` form. And
+`+151` and `-105` are **different addresses** — not one byte read two ways —
+with hundreds of genuine d16 displacements in that range across this tree. The
+assembler is behaving correctly.
+
+The trap is for a HUMAN transcribing a raw disp8 byte out of a disassembly
+listing: to reproduce raw byte `0x97` in the 2-byte encoding you must write the
+signed form `-105`, because `+0x97` means something else. It cannot be upgraded
+to an error, nor silently re-encoded as d8, without changing what already-correct
+spellings assemble to — the one thing this backend forbids. It is therefore a
+**warning**, added in `TLCS900MCCodeEmitter.cpp`, naming the signed spelling to
+use.
 
 ## Where the next pass should aim
 
