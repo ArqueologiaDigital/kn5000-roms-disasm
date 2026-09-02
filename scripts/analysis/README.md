@@ -475,14 +475,30 @@ tree.
     python3 scripts/analysis/mem_subopcode_gap_census.py --oracle    # vs MAME unidasm
     python3 scripts/analysis/mem_prefix_test_sites.py --check
 
-Measured with LLVM `tlcs900_backend@e816cddb6e2d`, against this tree:
+Measured against this tree at `b9dc136c` (its v7/v9/v10 sources are unchanged
+from there to `84a7137f`). ⚠ Each row names the toolchain commit it was taken
+with, because a decodability figure is a property of the decoder as much as of
+the bytes, and this lane rebuilt the shared toolchain three times:
 
-| | before (`6f456a19f05b`) | after (`e816cddb6e2d`) |
+| measurement | toolchain | value |
 |---|---|---|
-| `decoder_gap_ranking.py`, v10 statements refused or mis-sized | 171 / 655 | 26 / 655 |
-| distinct v10 memory-prefix samples refused | 2,665 | 358 |
-| decoded samples that do NOT re-assemble to the ROM's bytes (v7+v9+v10) | 157 | 0 |
-| our decode vs unidasm: length disagreements | 0 | 0 |
+| `decoder_gap_ranking.py`, v10 statements refused or mis-sized | `6f456a19f05b` (before this lane) | **171 / 655** |
+| same | `b3814f8f7b11` (after the two decoder commits) | **26 / 655** |
+| distinct v10 memory-prefix samples refused, register-indirect prefixes only | `6f456a19f05b` | 1,794 / 7,797 |
+| same | `b3814f8f7b11` | 259 / 7,797 |
+| distinct v10 samples refused, register-indirect **and** direct-address prefixes | `1f75e04f774a` | 2,665 / 20,976 |
+| same | `b3814f8f7b11` | **358 / 20,976** |
+| decoded samples that do NOT re-assemble to the ROM's bytes (v7+v9+v10) | `1f75e04f774a` | 157 |
+| same | `b3814f8f7b11` | **0** |
+| our decode vs MAME unidasm, v10: LENGTH disagreements | `b3814f8f7b11` | 0 |
+| our decode vs MAME unidasm, v10: MNEMONIC disagreements outside the naming table | `b3814f8f7b11` | 0 |
+
+⚠ The two rows at `1f75e04f774a` are NOT a pre-lane baseline: the census only
+learned to classify direct-address prefixes after the first decoder commit had
+already landed, so no measurement of that sample space exists for
+`6f456a19f05b`. Rebuilding the shared toolchain backwards to take one would have
+invalidated every other lane's in-flight measurement, which is why it was not
+done. The clean before/after pair is the `decoder_gap_ranking.py` row.
 
 WARNING: every number here is a property of the DECODER as much as of the bytes,
 so quote the toolchain commit beside it. `--roundtrip` and `--oracle` take a few
