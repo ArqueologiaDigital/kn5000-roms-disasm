@@ -16,8 +16,16 @@ table_data/ only, and reporting BYTES not directive counts):
                        `make ...-images` regenerates the .bin, verify asserts the round trip
     round-trip-codec   demo-song / help-db compressed stream; codec has a committed
                        decoder AND encoder (LZSS / SLIDE8K) and rebuilds byte-exactly
+    round-trip-shifted the table_data stale-remnant duplicate (17,570 B, CLOSED 2026-09-02):
+                       StyleRecords_Residue + HelpDB_German_Stale's body are the live
+                       English+German SLIDE8K streams duplicated 0x8000 lower in the ROM;
+                       gen_stale_help_duplicate.py derives them from help_db_english/german_
+                       compressed.bin (themselves round-trip-codec build products) instead of
+                       the old icons_to_strings.bin blob -- see that script's header and
+                       scripts/analysis/verify_stale_band.py for the original discovery
     verbatim-bmp       genuine Windows BMP, stored verbatim by the firmware, checked into git
     stale-remnant      documented dead/superseded slice preserved byte-exact on purpose
+                       (0 B as of 2026-09-02: this class is now empty -- see round-trip-shifted)
     UNCLASSIFIED       anything not matching the above -- this is the number that matters
 
 Run:
@@ -52,6 +60,7 @@ RULES = [
     (('FTBMP',), 'verbatim-bmp'),
     (('images/',), 'round-trip-png'),
     (('includes/generated/',), 'round-trip-png'),
+    (('stale_style_records_residue.bin', 'stale_help_db_german_head.bin'), 'round-trip-shifted'),
     (('demo_preset', 'help_db'), 'round-trip-codec'),
     (('icons_to_strings.bin',), 'stale-remnant'),
 ]
@@ -101,6 +110,8 @@ def selftest():
         ("includes/generated/Composer_FactoryMemoryImage.bin", "round-trip-png"),
         ("includes/demo_presets/demo_preset_00_compressed.bin", "round-trip-codec"),
         ("includes/help_databases/help_db_english_compressed.bin", "round-trip-codec"),
+        ("includes/help_databases/stale_style_records_residue.bin", "round-trip-shifted"),
+        ("includes/help_databases/stale_help_db_german_head.bin", "round-trip-shifted"),
         ("includes/icons_to_strings.bin", "stale-remnant"),
     ]
     for p, expected in known:
@@ -120,6 +131,8 @@ def selftest():
          ["scripts/build/indexed_images.py", "verify"]),
         ("round-trip-png: boot-update banners", ["scripts/build/mono_images.py", "verify"]),
         ("round-trip-png: Composer/style banks", ["scripts/build/style_events.py", "verify"]),
+        ("round-trip-shifted: stale help duplicate",
+         ["scripts/generators/gen_stale_help_duplicate.py", "verify"]),
     ]
     for name, argv in py_checks:
         try:

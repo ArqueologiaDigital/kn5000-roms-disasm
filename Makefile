@@ -21,6 +21,13 @@ HELP_DB_COMPRESSED=$(foreach l,$(HELP_DB_LANGS),$(HELP_DB_DIR)/help_db_$(l)_comp
 # bytes as a raw slice (see table_data/help_databases.s), so its rebuilt
 # payload is used by verify-help-databases only, never by the ROM build.
 HELP_DB_STALE_COMPRESSED=$(HELP_DB_DIR)/help_db_german_stale_compressed.bin
+# The two remaining "stale-remnant" .incbin slices (table_data/style_records.s
+# StyleRecords_Residue + table_data/help_databases.s HelpDB_German_Stale body,
+# 17,570 B total) are NOT independent debt: verify_stale_band.py proved they are
+# the live English+German SLIDE8K streams duplicated 0x8000 lower in the ROM.
+# gen_stale_help_duplicate.py derives them from HELP_DB_COMPRESSED instead of the
+# static icons_to_strings.bin blob -- see that script's header for the evidence.
+STALE_HELP_DUPLICATE=$(HELP_DB_DIR)/stale_style_records_residue.bin $(HELP_DB_DIR)/stale_help_db_german_head.bin
 CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
@@ -30,6 +37,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
 .PHONY: decompress-help-databases rebuild-help-databases verify-help-databases
+.PHONY: verify-stale-help-duplicate
 .PHONY: audit-icons-blob
 .PHONY: dsp dsp-verify dsp-flowcharts
 
@@ -752,7 +760,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) tabledata-images style-events $(LLVM_MC)
+rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) $(STALE_HELP_DUPLICATE) tabledata-images style-events $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ table_data/kn5000_table_data.s
 
@@ -889,6 +897,17 @@ $(HELP_DB_DIR)/help_db_%_compressed.bin: $(HELP_DB_DIR)/help_db_%.bin original_R
 
 rebuild-help-databases: $(HELP_DB_COMPRESSED) $(HELP_DB_STALE_COMPRESSED)
 	@echo "Help databases recompressed (byte-identical via --strict --reference)."
+
+# The two stale-remnant .incbin slices in style_records.s / help_databases.s: derived
+# from the live English+German compressed streams, not from a raw blob. See
+# scripts/generators/gen_stale_help_duplicate.py.
+$(HELP_DB_DIR)/stale_style_records_residue.bin $(HELP_DB_DIR)/stale_help_db_german_head.bin &: \
+		$(HELP_DB_DIR)/help_db_english_compressed.bin $(HELP_DB_DIR)/help_db_german_compressed.bin \
+		scripts/generators/gen_stale_help_duplicate.py
+	python3 scripts/generators/gen_stale_help_duplicate.py build
+
+verify-stale-help-duplicate: $(STALE_HELP_DUPLICATE)
+	python3 scripts/generators/gen_stale_help_duplicate.py verify
 
 verify-help-databases: $(HELP_DB_COMPRESSED) $(HELP_DB_STALE_COMPRESSED)
 	@for l in $(HELP_DB_LANGS) german_stale; do \
