@@ -337,39 +337,37 @@ naive walk there produced 44 plausible records of `[op 0x0E, len 14]`,
 indistinguishable from the ROM's own padding, and measuring the run instead
 revealed 255 B of genuine `.fill` with the real list starting after it.
 
-## ⚠ DISPUTED: AccPatch_VoiceAssignDataBlock (v7, 2,175 B)
+## ✅ RESOLVED: AccPatch_VoiceAssignDataBlock is CODE
 
-**Two lanes reached opposite conclusions about this region on 2026-09-02, and it
-was converted. It is the first thing to re-examine in v7.**
+Settled 2026-09-02 by finding both readers, which is what the note said would
+settle it. An external `call` lands on the region's exact start, from a
+string-tag dispatcher comparing bytes against accompaniment tags; an internal
+call reaches base+494, matching a pre-existing positional label. All 701
+instructions decode with zero failures.
 
-* Lane V7REGIONS2 hand-checked it as its strongest table-tail candidate and
-  called it **a genuine fixed-width data table** — already named `...DataBlock`,
-  with a visible period in the raw bytes. On that basis it left all 135 of its
-  table-tail exclusions alone.
-* Lane V7TABLETAIL, adjudicating the 32 regions where the guard disagreed with
-  100% call-target corroboration, converted it **as code**.
+★ **The evidence that looked like a table is explained by the code reading.**
+The 8-byte motif with an incrementing index (`8d 00 …`, `8d 01 …`, `8d 02 …`)
+decodes as a repeated string-compare idiom — load a byte at an index, compare
+against an immediate, branch if not equal. And the low whole-region self-match
+of 0.104 is precisely what that idiom produces, not evidence against a table in
+spite of the motif. Two observations that appeared to point in opposite
+directions point the same way once the consumer is known.
 
-Evidence on both sides, measured directly from the ROM:
+The lesson generalises: **structural signals measured without a reader can be
+read either way.** Find the consumer first.
 
-* **For data**: the opening bytes carry an unmistakable 8-byte record motif with
-  an incrementing index — `8d 00 21 c9 cf .. 6e ..`, `8d 01 21 c9 cf ..`,
-  `8d 02 21 c9 cf ..` — and a recurring `f1 fe 36 00 00 68 ..` separator.
-* **For code**: every call target in the region resolves to an already-named
-  routine (that was the selection filter), and the converted text reads as
-  coherent routine code — `calr`/`ldw_d16`/`stda16` against a consistent block
-  of RAM addresses, ending in a real `call`.
-* **Against a simple table**: whole-region self-match peaks at only **0.104** at
-  stride 8, with **203 distinct byte values across 2,175 B**. A uniform
-  fixed-width table of small fields would show far stronger periodicity.
+## ✅ RESOLVED: v7 batch F holds — 20/20 on the stronger test
 
-⚠ The most likely reading is that BOTH are partly right — a table head followed
-by code, the same head/tail split this lane confirmed elsewhere in
-`DrumKit_GroupAssignTable` + `RhythmROM_LoadDrumKit`. If so the conversion
-absorbed a real table head. **Nothing in the build can detect this**: the bytes
-are unchanged either way.
+The 55% that made this the tree's weakest evidence was NAME RESOLUTION. Under
+the boundary audit — does the target land exactly on an instruction boundary —
+**20 of 20 pass**: 11 exact pre-existing names plus 9 boundary-corroborated
+valid entry points. None of the 27 underlying labels is ever `lda*`-referenced,
+ruling out table use, and all 22 regions decode with zero undecodable opcodes.
+Zero reverts.
 
-Resolve by finding the region's reader. If code reaches it via `call`, it is
-code; if something indexes it with a stride, the head is a table.
+⚠ Keep the distinction that produced the scare: a name-resolution rate and a
+boundary-corroboration rate measure different things, and the weaker one is the
+easier to compute. Quote which you mean.
 
 ## ⚠ CORRECTED: v7 region conversion was overstated by ~9%
 
