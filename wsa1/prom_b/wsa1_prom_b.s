@@ -193,6 +193,24 @@ wsa1_prom_b:
 ; DATA (only a `.long` or a 32-bit immediate names it) in 2 runs.  Everything
 ; else here is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+;
+; ⚠ AMENDED 2026-09-02 (lane promB2).  "Everything else here is NOT reachable
+; and stays `.incbin`" is TWO claims, and only the first still holds.  NOT
+; REACHABLE stands, and was re-checked independently: 0 `call nnn` / `jp nnn`
+; operands in all four ROM images land in 0xF0033F-0xF007FF, and 0 routine-
+; directory slots point in.  STAYS `.incbin` does NOT stand, and is withdrawn:
+; reachability decides whether a span is CODE, not whether it can be TYPED, and
+; 0xF0033F-0xF007FF is four runs of 4-byte pointer slots that other parts of the
+; firmware read.  It is converted below.
+;
+; ⚠⚠ AND THAT MAKES A RE-RUN OF `gen_prom_b_cover_round1.py --splice` DESTRUCTIVE
+; HERE.  That tool replaces a whole `; === COVER-R1 ... ===` block with its own
+; emission, and its "nothing was touched" guard collects the converted lines
+; OUTSIDE the markers -- so work spliced INSIDE one is invisible to it and would
+; be silently reverted to `.incbin`, with the byte gate still green.  A guard
+; was added to its splice() (it now refuses when a block holds labels its own
+; emission does not); if you are reading this because that guard fired, the
+; block is right and the tool's span record is stale.
 
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x000000, 0x00001A
 
@@ -1557,6 +1575,13 @@ DL_ToneLayerDspEffectPitchDigital:
 ; a `.long` or a 32-bit immediate names it) in 1 run.  Everything else here is
 ; NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+;
+; ⚠ AMENDED 2026-09-02 (lane promB2).  As at 0xF00000 above: NOT REACHABLE
+; stands (0 `call`/`jp` operands in four images land in 0xF0199E-0xF01E71, 0
+; routine-directory slots point in), STAYS `.incbin` is withdrawn.  The rest of
+; this span is two 12x16 icon cells and six 200-byte bitmaps, and is converted
+; below.  ⚠⚠ A re-run of gen_prom_b_cover_round1.py --splice would silently
+; revert it -- see the longer note under the 0xF00000 marker.
 
 ; --------------------------------------------------------------------------
 ; Data_F0191A -- 132 bytes, EMITTED AS DATA (not promoted to code).
@@ -1570,6 +1595,16 @@ DL_ToneLayerDspEffectPitchDigital:
 ; ⚠ The extent is the reachability walk's, not the object's; the rest of
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ AMENDED 2026-09-02 (lane promB2): the warning above was right, and the
+;   object grid is now known.  0x00F019AA is named as a 32-bit word ten times
+;   in the display-list region and 0x00F0191A six times; their difference is
+;   144 = 6 * 24, and the first 200-byte bitmap below starts at 0xF019C2 =
+;   0xF0191A + 7 * 24.  So this region is SEVEN 24-byte cells, each a 12x16
+;   icon (12 columns * 2 pages of 8 rows), and these 132 bytes are 5.5 of them:
+;   the cell at 0xF01992 has its upper page here and its lower page in
+;   Bitmap_F0199E below.  This block is NOT re-cut here -- doing so is a
+;   separate change and this lane owned only the `.incbin` spans.  Evidence:
+;   python3 notes/gen_prom_b_f0033f_f0199e.py --evidence --render
 ; --------------------------------------------------------------------------
 Data_F0191A:
 	.byte	0x08, 0x10, 0x28, 0x10, 0x08, 0x10, 0x08, 0x10, 0x28, 0x14, 0x00, 0x00, 0x2A, 0x55, 0x20, 0x54	; F0191A  |..(.....(...*U T|
