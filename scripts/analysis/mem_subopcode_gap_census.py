@@ -213,6 +213,7 @@ ORACLE_ALIAS.update({
     "stcfda": {"stcf"}, "stcfda_24": {"stcf"},
     "tsetda16": {"tset"}, "tsetda16_24": {"tset"},
     "pushdi_b": {"push"}, "pushdi_w": {"pushw"}, "pushdi_24": {"pushw"},
+    "xorda16_24": {"xor"},
     "andda32_24": {"and"}, "anddm32_24": {"and"},
     "orda32_24": {"or"}, "ordm32_24": {"or"},
     "and_sd8b_im": {"and"}, "or_sd8b_im": {"or"},
