@@ -2651,7 +2651,7 @@ Flash_ExtendedOpsBlock:
 	or	wa, 1280
 	.byte 0xf3
 	reti
-	.byte 0xf4, 0xe8, 0x50
+	st_dpdw	wa, 232
 	inc	1, h
 	inc	1, l
 	jr	7
@@ -2722,7 +2722,7 @@ Flash_ExtendedOpsBlock:
 	lda_d16	xix, (1952)
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xf4, 0x51
+	st_dd8w	bc, 244
 	ld	bc, wa
 	inc	6, bc
 	set	7, h
@@ -2760,7 +2760,7 @@ Flash_ExtendedOpsBlock:
 	lda_d16	xix, (1952)
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xf4, 0x51
+	st_dd8w	bc, 244
 	ld	bc, wa
 	inc	6, bc
 	set	7, h
@@ -3462,7 +3462,7 @@ Flash_ExtendedOpsBlock:
 	halt
 	.byte 0x8f
 	ldwio	240, 0x2f6e
-	.byte 0xc7, 0xf0, 0x9d
+	ldb_erp	e, 240
 	extz	ix
 	sla	ix, 2
 	ld	iz, ix
@@ -3481,7 +3481,7 @@ Flash_ExtendedOpsBlock:
 	or	wa, 1280
 	.byte 0xf3
 	reti
-	.byte 0xf4, 0xf0, 0x50
+	st_dpdw	wa, 240
 	inc	1, e
 	inc	1, c
 	jr	7
@@ -3522,7 +3522,7 @@ Flash_ExtendedOpsBlock:
 	ld	b, w
 	ld	d, c
 	inc	1, c
-	.byte 0xc7, 0xf4, 0x9d
+	ldb_erp	e, 244
 	extz	iy
 	cp	c, 40
 	jr	c, -63
@@ -3562,7 +3562,7 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	.byte 0xf3
 	reti
-	.byte 0xf4, 0xec, 0x50
+	st_dpdw	wa, 236
 	ld	a, d
 	extz	wa
 	add	wa, wa
@@ -3967,7 +3967,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xec, 0xe8
 	ldb	w, 243
 	reti
-	.byte 0xf0, 0xf4, 0x50
+	st_dd8w	wa, 244
 	ld	de, (xbc)
 	.byte 0xc7
 	ld	xbc, xde
@@ -3977,7 +3977,7 @@ Flash_ExtendedOpsBlock:
 	add	bc, 106
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xe4, 0x52
+	st_dd8w	de, 228
 	add	wa, 108
 	.byte 0xf3
 	reti
@@ -5112,7 +5112,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xbc+46)
 	ld	a, (xbc+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	lda	xbc, (xsp+16)
 	lda	xwa, (xbc+68)
 	ld	(xsp+12), xwa
@@ -5126,7 +5126,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	lda	xwa, (xbc+72)
 	ld	(xsp+8), xwa
 	sll	xix, 8
@@ -5139,7 +5139,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	lda	xwa, (xbc+76)
 	ld	(xsp+4), xwa
 	sll	xix, 8
@@ -5152,7 +5152,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	lda	xde, (xbc+80)
 	sll	xix, 8
 	add	xix, xhl
@@ -5163,7 +5163,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	lda	xiy, (xbc+84)
 	sll	xix, 8
 	add	xix, xhl
@@ -5174,7 +5174,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	lda	xiz, (xbc+88)
 	sll	xix, 8
 	add	xix, xhl
@@ -5759,7 +5759,7 @@ ToneParam_ExtendedOpsBlock:
 	calr	56145
 	ldda32	xde, (3182)
 	ld	a, (xde)
-	.byte 0xc7, 0xee, 0x99
+	ldb_erp	a, 238
 	lda	xwa, (xde+1)
 	ld	h, (xwa)
 	lda	xbc, (xde+2)

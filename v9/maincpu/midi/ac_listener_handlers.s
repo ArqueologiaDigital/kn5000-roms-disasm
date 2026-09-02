@@ -1313,7 +1313,7 @@ Data_InOutGridDispatch:
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
@@ -1388,7 +1388,7 @@ Data_InOutGridDispatch:
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc

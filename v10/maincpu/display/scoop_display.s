@@ -15181,7 +15181,7 @@ Display_BytecodeBlock_F:
 	nop
 	nop
 	ldw	wa, 8224
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	call	Display_UpdateRegion0
@@ -16648,7 +16648,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldw_d16	wa, (4468)
 	ldw	bc, 96
 	muls	xwa, xbc
-	.byte 0xd7, 0xe2, 0x8a
+	ld	de, qwa
 	add	hl, wa
 	stda16	(4470), hl
 	ldw_d16	wa, (3778)
@@ -16675,13 +16675,13 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	de, de
 	xor	b, b
 	ldb	c, 96
-	.byte 0xd7, 0xe2, 0x9a
+	ld	qwa, de
 	div	xwa, xbc
 	.byte 0xd7, 0xe2
 	add	(xde-40), a
 	ldw	hl, 96
 	muls	xwa, xhl
-	.byte 0xd7, 0xe2, 0x8a
+	ld	de, qwa
 	ldw_d16	de, (3778)
 	sub	de, wa
 	stda16	(3778), de
@@ -16879,7 +16879,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	xix, 4462
 	xor	wa, wa
 	lds	bc, 3
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	ldw_d16	wa, (4472)
@@ -19905,7 +19905,7 @@ Scoop_EventLoop_36Entry_Data:
 	lda_24	xbc, (Str_No_0xDEE)
 	.byte 0xe3
 	reti
-	.byte 0xe4, 0xe0, 0x24
+	ld_spdl	xix, 224
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	.byte 0xf3

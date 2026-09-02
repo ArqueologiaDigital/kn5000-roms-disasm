@@ -612,7 +612,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
 	cpw	(xwa), 1
@@ -673,7 +673,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
 	cpw	(xwa), 1

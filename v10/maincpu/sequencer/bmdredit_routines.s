@@ -3918,7 +3918,7 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 
 BmDrEdit_ByteData_CompoundWidgetUpdate:
 	dec	8, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push	qiz
 	lda	xwa, (xsp+8)
 	lda	xbc, (xsp+6)
 	calr	-6217
@@ -3926,11 +3926,11 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	sub	(xsp+8), wa
 	.byte 0x9f, 0x08, 0x19, 0xce, 0x27
 	call	15999398
-	.byte 0xc7, 0xfa, 0x9f
+	ldb_erp	l, 250
 	lda	xwa, (xsp+4)
 	lda	xbc, (xsp+2)
 	calr	-5184
-	.byte 0xc7, 0xfa, 0x89
+	stb_erp	a, 250
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
@@ -3938,18 +3938,23 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	call	15990866
 	call	15990866
 	call	15999398
-	.byte 0xc7, 0xfa, 0x9f, 0xc7, 0xfa, 0x89, 0xc7, 0xfb, 0x99
+	ldb_erp	l, 250
+	stb_erp	a, 250
+	ldb_erp	a, 251
 	call	15990866
 	call	15999398
-	.byte 0xc7, 0xfa, 0x9f, 0xc7, 0xfb, 0x30, 0x07, 0xc7, 0xfa, 0x30, 0x07, 0xc7, 0xfa, 0x8b
+	ldb_erp	l, 250
+	res_erpb	251, 7
+	res_erpb	250, 7
+	stb_erp	c, 250
 	extz	bc
 	mul	bc, 96
-	.byte 0xc7, 0xfb, 0x89
+	stb_erp	a, 251
 	extz	wa
 	add	bc, wa
 	stda16	10192, bc
 	calr	6
-	.byte 0xd7, 0xfa, 0x05
+	pop	qiz
 	inc	8, xsp
 	ret
 	ldb_d8	e, 10100
@@ -3957,7 +3962,7 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	dec	1, de
 	ldw_d16	wa, 10190
 	ld	bc, wa
-	.byte 0xd1, 0xd0, 0x27, 0x81
+	addda16	xbc, (10192)
 	cp	bc, de
 	ret	ule
 	sub	de, wa
@@ -3969,7 +3974,7 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	stda16	10170, wa
 	ldw_d16	wa, 10192
 	srl	wa, 2
-	.byte 0xd1, 0xba, 0x27, 0x80
+	addda16	xwa, (10170)
 	stda16	10172, wa
 	ldw_d16	wa, 10174
 	inc	3, wa

@@ -93,7 +93,7 @@ UIStateEvt_VoiceParamHandler:
 	xor	bc, bc
 	ldb	c, 16
 	ldb	a, 16
-	.byte 0xc5, 0xf0, 0xf1
+	cp_spib	a, 240
 	jr	z, 5
 	djnz16	bc, -8
 	jr	68
@@ -1458,7 +1458,7 @@ SqTrAsPsTtl_CaseF:
 	retd	0x34f2
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	push	xde
 	push	xhl
 	push	xix

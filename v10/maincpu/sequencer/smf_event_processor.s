@@ -6058,7 +6058,7 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0x88
 	ex_ff
 	push	xix
-	.byte 0xe7, 0x9f, 0x04
+	push_lerp	159
 	push	xde
 	rcf
 	nop

@@ -2444,7 +2444,8 @@ UI_EventHandler_PopAndReturn:
 	ret
 
 ChordProc_TrailingData:
-	.byte 0x43, 0x03, 0x00, 0x02, 0x01, 0x0e
+	ld	xhl, 16908291
+	ret
 AcChordBoxProc_Entry:
 
 AcChordBoxProc:
@@ -2815,7 +2816,12 @@ Debug_PrintString_Done:
 	ret
 
 Debug_UartHelpers:
-	.byte 0xc9, 0xcf, 0x0a, 0x6f, 0x04, 0xc9, 0xc8, 0x30, 0x0e, 0xc9, 0xc8, 0x57, 0x0e
+	cp	a, 10
+	jr	nc, 4
+	add	a, 48
+	ret
+	add	a, 87
+	ret
 
 Debug_UartDelay:
 	ldw iz, 0xfe00

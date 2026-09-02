@@ -434,7 +434,8 @@ Rhythm_NoteRangeReturn:
 	ret
 
 Rhythm_NoteRangeData:
-	.byte 0x00, 0x00
+	nop
+	nop
 
 Rhythm_VelocityLookup_A:
 	push xiy

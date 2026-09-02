@@ -10537,7 +10537,10 @@ AccDir_Periodic_Ret:
 	ret
 
 AccDir_JumpTable:
-	.byte 0x00, 0x00, 0x1d, 0x4e, 0xbf, 0xf5, 0x0e
+	nop
+	nop
+	call	16105294
+	ret
 
 AccProcess_Entry:
 	call AccProcess_TimerCompare
@@ -12918,11 +12921,11 @@ AccTone_InlineBytecodeData:
 	ldb_d8	a, 13016
 	extz	wa
 	lda_24	xbc, 14983112
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	stb_d8	13355, a
 	ldda32	xbc, 13006
 	extz	wa
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	stb_d8	13354, a
 	cp	a, 255
 	ret	nz
@@ -12966,7 +12969,7 @@ AccTone_InlineBytecodeData:
 	add	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 611392
-	.byte 0xd3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrw	hl, xbc, hl
 	ret
 	extz	de
 	sla	de, 2
@@ -12981,7 +12984,7 @@ AccTone_InlineBytecodeData:
 	add	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 611392
-	.byte 0xf3, 0x07, 0xe4, 0xec, 0x30
+	lda_rr	xwa, xbc, hl
 	ld	hl, (xwa+2)
 	ret
 	dec	2, xsp
@@ -12991,7 +12994,7 @@ AccTone_InlineBytecodeData:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 14983092
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	stda32	13006, xwa
 	ld	a, (xwa)
 	stb_d8	13297, a
@@ -13079,7 +13082,7 @@ AccTone_InlineBytecodeData:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 14983092
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	stda32	13006, xwa
 	ld	a, (xwa)
 	stb_d8	13297, a
@@ -13682,7 +13685,7 @@ AccTuning_ComplexBytecodeData:
 	ldb	e, 104
 	.byte 0xc3, 0xd8, 0x12
 	lda_24	xbc, 14983160
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x27
+	ld_rrb	l, xbc, wa
 	ld	a, e
 	extz	wa
 	sla	wa, 2
@@ -14574,12 +14577,12 @@ AccPatch_SlotScanByteData:
 	ldw_d16	wa, (0x3612)
 	.byte 0xf3
 	pop	sr
-	.byte 0xf0, 0xe4, 0x50
+	st_dd8w	wa, 228
 	ldw_d16	wa, (0x3614)
 	inc	2, c
 	.byte 0xf3
 	pop	sr
-	.byte 0xf0, 0xe4, 0x50
+	st_dd8w	wa, 228
 	ret
 	push	sr
 	pop	sr
@@ -32291,9 +32294,9 @@ CmEsyTtl_Dispatch:
 	lda_d16	xde, (0x37b2)
 	lds32	xbc, 0
 	ldb_spi	a, 244
-	.byte 0xf5, 0xf0, 0x41
+	lda_dpi	xbc, 240
 	ldb_spi	a, 236
-	.byte 0xf5, 0xe8, 0x41
+	lda_dpi	xbc, 232
 	inc	1, xbc
 	cp	xbc, 7
 	jr	c, -22
@@ -32395,9 +32398,9 @@ CmpEsy_DeliverEventAndCheck:
 ; CmpEsyTtl sub-mode B
 CmpEsyTtl_SubModeB:
 	ldb_spi	a, 244
-	.byte 0xf5, 0xf0, 0x41
+	lda_dpi	xbc, 240
 	ldb_spi	a, 236
-	.byte 0xf5, 0xe8, 0x41
+	lda_dpi	xbc, 232
 	inc 1, xbc
 	cp xbc, 0x00000007
 	jr c, CmpEsyTtl_SubModeB
@@ -34589,7 +34592,7 @@ AccScreen_DataBlock:
 	andda8_24	c, (0xf6a6)
 	.byte 0xa6, 0xf6
 	nop
-	.byte 0xd5, 0xa6, 0xf6
+	cp_spiw	iz, 166
 	nop
 	.byte 0xd6, 0xa6, 0xf6
 	nop

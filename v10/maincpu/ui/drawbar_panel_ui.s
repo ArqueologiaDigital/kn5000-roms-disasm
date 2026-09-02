@@ -1266,7 +1266,7 @@ PmemOutLGridCheck_JumpTable:
 	call	16383626
 	jrl	1574
 	ld	(xsp+4), xhl
-	.byte 0xb1, 0x02, 0x01, 0x00
+	ldw	(xbc), 1
 	lda	xwa, (xsp+44)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+28)
@@ -1280,7 +1280,7 @@ PmemOutLGridCheck_JumpTable:
 	.byte 0xa2, 0xf1
 	jrl	nz, 530
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x00, 0x00
+	ldw	(xwa), 0
 	ld	xwa, (xsp+28)
 	ld	xde, (xwa)
 	ld	xwa, xde
@@ -1301,7 +1301,8 @@ PmemOutLGridCheck_JumpTable:
 	sra	xbc, 3
 	inc	1, xbc
 	pushw	bc
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x34, 0x01
+	pushw	232
+	pushw	308
 	push	xhl
 	.byte 0x1d
 	addr24 Sprintf_Locked
@@ -1532,12 +1533,13 @@ PmemOutLGridCheck_JumpTable:
 	cp	(xwa), xbc
 	jrl	nz, 288
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x02, 0x00
+	ldw	(xwa), 2
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	bit	7, wa
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xa4, 0x01
+	pushw	232
+	pushw	420
 	ld	xwa, (xsp+16)
 	push	xwa
 	.byte 0x1d
@@ -1706,7 +1708,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xwa, (xsp+32)
 	ld	xbc, xiz
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
@@ -3783,7 +3785,7 @@ MidiPartGridCheck_JumpTable:
 	ld	de, wa
 	add	de, hl
 	lda_24	xwa, 15205664
-	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x20
+	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
 	cps	wa, 3
@@ -3827,7 +3829,7 @@ MidiPartGridCheck_JumpTable:
 	ld	wa, hl
 	add	wa, wa
 	lda_24	xbc, 15205952
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrw	bc, xbc, wa
 	cp	bc, hl
 	jrl	z, 924
 	ld	xwa, (xsp+12)
@@ -3864,7 +3866,7 @@ MidiPartGridCheck_JumpTable:
 	ld	de, wa
 	add	de, hl
 	lda_24	xwa, 15205664
-	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x20
+	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
 	cps	wa, 3
@@ -3909,7 +3911,7 @@ MidiPartGridCheck_JumpTable:
 	ld	wa, hl
 	add	wa, wa
 	lda_24	xbc, 15205968
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrw	bc, xbc, wa
 	cp	bc, hl
 	jrl	z, 691
 	ld	xwa, (xsp+12)
@@ -3936,7 +3938,7 @@ MidiPartGridCheck_JumpTable:
 	ld	iy, wa
 	add	iy, de
 	lda_24	xhl, 15205664
-	.byte 0xe3, 0x07, 0xec, 0xf4, 0x26
+	ld_rrl	xiz, xhl, iy
 	ld	xde, (xsp+34)
 	cp	(xde), xiz
 	jr	nz, 80
@@ -3947,7 +3949,8 @@ MidiPartGridCheck_JumpTable:
 	call	16569399
 	cps	hl, 0
 	jr	nz, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xba, 0x06
+	pushw	232
+	pushw	1722
 	lda	xwa, (xsp+28)
 	push	xwa
 	.byte 0x1d
@@ -12636,7 +12639,7 @@ AudioCtrl_DataBlock:
 	ld	wa, bc
 	exts	xwa
 	divs	wa, 5
-	.byte 0xd7, 0xe2, 0x88
+	ld	wa, qwa
 	ld	(xsp+6), wa
 	ld	wa, bc
 	exts	xwa
@@ -13135,7 +13138,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+62)
 	ld	xbc, (xsp+70)
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	xde, (xsp+6)
 	ld	xde, (xde+8)
 	calr	64010
@@ -13428,7 +13431,7 @@ AudioCtrl_DataBlock:
 	popw	wa
 	.long OscScope_RenderBlock
 	ld	(xsp+12), wa
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xsp+14), bc
 	ld	xwa, (xsp+76)
 	cp	xwa, 0x1c00031
@@ -13470,7 +13473,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+64)
 	ld	xbc, (xsp+72)
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	xde, (xiz+8)
 	calr	63050
 	jrl	636
@@ -13704,7 +13707,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, (xsp+74)
 	srl	xbc, 0
 	ld	(xsp+10), wa
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xsp+12), bc
 	ld	xwa, (xsp+78)
 	cp	xwa, 0x1c0001a
@@ -13744,7 +13747,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+66)
 	ld	xbc, (xsp+74)
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	xde, (xiz+8)
 	calr	62237
 	jrl	506
@@ -13945,7 +13948,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, (xsp+72)
 	srl	xbc, 0
 	ld	(xsp+12), wa
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xsp+14), bc
 	ld	xwa, (xsp+76)
 	cp	xwa, 0x1c0001a
@@ -13988,7 +13991,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+64)
 	ld	xbc, (xsp+72)
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	xde, (xiz+8)
 	calr	61549
 	jrl	528
@@ -14220,7 +14223,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+8), wa
 	ld	xwa, (xsp+30)
 	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
+	ld	qwa, 0
 	ld	(xsp+10), wa
 	ld	wa, (xsp+10)
 	calr	60680
@@ -14512,7 +14515,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, (xsp+90)
 	srl	xbc, 0
 	ld	(xsp+18), wa
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xsp+20), bc
 	ld	xwa, (xsp+94)
 	cp	xwa, 0x1c0001a
@@ -14648,7 +14651,7 @@ AudioCtrl_DataBlock:
 	nop
 	ld	xbc, (xsp+90)
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	xde, (xiz+8)
 	calr	59732
 	jrl	451

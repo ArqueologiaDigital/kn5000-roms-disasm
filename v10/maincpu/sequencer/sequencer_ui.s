@@ -2845,7 +2845,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65181
-	.byte 0xd1, 0xd0, 0xf1, 0xeb
+	orddm16	(61904), xhl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -2861,7 +2861,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65130
-	.byte 0xd1, 0x90, 0xf2, 0xeb
+	orddm16	(62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -2870,7 +2870,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65103
-	.byte 0xd1, 0x90, 0xf2, 0xeb
+	orddm16	(62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -2950,7 +2950,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64865
 	cpl	hl
-	.byte 0xd1, 0xd0, 0xf1, 0xcb
+	anddm16	(61904), xhl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -2967,7 +2967,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64813
 	cpl	hl
-	.byte 0xd1, 0x90, 0xf2, 0xcb
+	anddm16	(62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -2977,7 +2977,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64784
 	cpl	hl
-	.byte 0xd1, 0x90, 0xf2, 0xcb
+	anddm16	(62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -6112,7 +6112,7 @@ NoteEditBox_EventDispatch2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
-	.byte 0xd7, 0xe2, 0x88
+	ld	wa, qwa
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x140
@@ -6228,7 +6228,7 @@ NoteEditBox_EventDispatch2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
-	.byte 0xd7, 0xe2, 0x88
+	ld	wa, qwa
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x14C
@@ -7687,7 +7687,7 @@ SndParam_Dispatch:
 	reti
 	.byte 0xf0, 0xe0
 	ldb	w, 242
-	.byte 0xd5, 0x04, 0xf3
+	cp_spiw	hl, 4
 	ldw	ix, 2035
 	.byte 0xf0, 0xe0
 	lds	wa, 7

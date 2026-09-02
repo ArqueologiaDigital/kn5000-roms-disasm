@@ -407,7 +407,8 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x47, 0x4f, 0x00, 0xff
 	aligned_string "Finishd"
 	aligned_string "Media Error"
-	.byte 0x72, 0x62, 0x00, 0xff
+	jrl	le, 98
+	swi	7
 	aligned_string "A:HKEXT.XAP"
 	aligned_string "Cannot open"
 	.byte 0x58, 0x41, 0x50, 0x52

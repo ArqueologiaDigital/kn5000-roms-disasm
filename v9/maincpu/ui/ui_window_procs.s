@@ -9911,7 +9911,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x01
 	jrl	ugt, 192
 	ldb_da	a, (0x03efaa)
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	ld	wa, (xbc+2)
 	exts	xwa
 	ld	xhl, xwa
