@@ -83,12 +83,16 @@ V = [
  (0xF00097, 0x02, "TRAILER", None, "after sub_F0003C's `ret`, before sub_F00099"),
  (0xF000E3, 0x02, "TRAILER", None, "after sub_F00099's `ret`, before Data_F000E5"),
  (0xF000E6, 0x22, "PTRTAB4", (0xF000E5, 0xF00105),
-  "the rest of the 8-entry handler-pointer array Data_F000E5.  Its eight targets "
-  "are 0x00F00105 0x00F0028D 0x00F002C9 0x00F002EB 0x00F002B9 0x00F00280 "
-  "0x00F002B6 0x00F002B3 -- and ALL EIGHT land on an instruction boundary in the "
-  "code this lane converted at 0xF00280/0xF0029D/0xF002CD.  That mutual check is "
-  "what makes both the table and those spans safe.  The 3 bytes after the array "
-  "are 0xF00105 (a bare 0x0E `ret`, the array's entry 0) and a `00 00` trailer."),
+  "the rest of the 8-entry CALL-DISPATCH array Data_F000E5.  sub_F00099 "
+  "ends `ld XWA,0x00F000E5` / `add XHL,XWA` / `ld XWA,(XHL)` / `call XWA` "
+  "at 0xF000D5-0xF000DE, so the object is a table of routine pointers "
+  "reached by an index.  Its eight targets are 0x00F00105 0x00F0028D "
+  "0x00F002C9 0x00F002EB 0x00F002B9 0x00F00280 0x00F002B6 0x00F002B3 -- and "
+  "ALL EIGHT land on an instruction boundary in the code this lane "
+  "converted at 0xF00280/0xF0029D/0xF002CD.  That mutual check is what "
+  "makes both the table and those spans safe.  The 3 bytes after the array "
+  "are 0xF00105 (a bare 0x0E `ret`, the array's entry 0) and a `00 00` "
+  "trailer."),
  (0xF0017B, 0x02, "TRAILER", None, "after sub_F00108's `ret`, before sub_F0017D"),
  (0xF001AE, 0x02, "TRAILER", None, "after sub_F0017D's `ret`, before sub_F001B0"),
  (0xF001B4, 0x01, "TRAILER", None,
@@ -254,6 +258,9 @@ def check(verbose=True):
             starts |= set(addr_of(l) for l in transcribe(a, ln))
     starts.add(0xF00105)               # the array's own `ret` stub, a TRAILER byte
     starts.add(0xF002C9)               # sub_F002C9, converted before this lane
+    c("sub_F00099 loads 0x00F000E5 as a 32-bit immediate at 0xF000D6 and CALLs "
+      "through it -- the array is a call-dispatch table",
+      w(0, d, 0xF000D6, 4) == 0x00F000E5)
     for k in range(8):
         t = w(0, d, 0xF000E5 + 4 * k, 3)
         c("Data_F000E5 entry %d = 0x00%06X lands on an instruction boundary" % (k, t),
@@ -380,8 +387,9 @@ def splice():
         else:
             out.append(line)
     if todo:
-        raise SystemExit("these spans were not found in the source: %s"
-                         % [hex(B + k[0]) for k in todo])
+        skipped = len(todo)
+        print("skipped %d span(s) whose .incbin is already gone: %s"
+              % (skipped, " ".join("0x%06X" % (B + k[0]) for k in sorted(todo))))
     open(SRC, "w", encoding="latin-1").write("\n".join(out))
     print("spliced %d spans, %d bytes"
           % (done, sum(ln for _a, ln, k, _g, _n in V if k != "REFUSE")))

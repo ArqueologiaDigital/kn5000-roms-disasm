@@ -194,7 +194,19 @@ wsa1_prom_b:
 ; else here is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x000000, 0x00001A
+; --- 0xF00000-0xF00019, 26 B, converted by lane promB6 (CODE).
+;     five `jp 0x00F00014` slots -- the image's own entry-vector block --
+;     followed by the two routines they name.  Every jump target is inside the
+;     span.
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	jp	15728660	; F00000  jp 0xf00014
+	jp	15728660	; F00004  jp 0xf00014
+	jp	15728660	; F00008  jp 0xf00014
+	jp	15728661	; F0000C  jp 0xf00015
+	jp	15728660	; F00010  jp 0xf00014
+	ret	; F00014  ret
+	call	15993220	; F00015  call 0xf40984
+	ret	; F00019  ret
 
 ; --------------------------------------------------------------------------
 ; sub_F0001A
@@ -221,7 +233,10 @@ sub_F0001A:
 	calr	3	; F00036  calr 0xf0003c
 	ret	; F00039  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00003A, 0x000002
+; --- 0xF0003A-0xF0003B, 2 B, converted by lane promB6 (TRAILER).
+;     after sub_F0001A's `ret`, before sub_F0003C
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x00	; F0003A  routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F0003C
@@ -272,7 +287,10 @@ sub_F0003C:
 	calr	114	; F00093  calr 0xf00108
 	ret	; F00096  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x000097, 0x000002
+; --- 0xF00097-0xF00098, 2 B, converted by lane promB6 (TRAILER).
+;     after sub_F0003C's `ret`, before sub_F00099
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x00	; F00097  routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F00099
@@ -316,7 +334,10 @@ sub_F00099:
 	di	; F000E0  ei 0x00
 	ret	; F000E2  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0000E3, 0x000002
+; --- 0xF000E3-0xF000E4, 2 B, converted by lane promB6 (TRAILER).
+;     after sub_F00099's `ret`, before Data_F000E5
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x00	; F000E3  routine trailer
 
 ; --------------------------------------------------------------------------
 ; Data_F000E5 -- 1 bytes, EMITTED AS DATA (not promoted to code).
@@ -332,7 +353,27 @@ sub_F00099:
 Data_F000E5:
 	.byte	0x05	; F000E5  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0000E6, 0x000022
+; --- 0xF000E6-0xF00107, 34 B, converted by lane promB6 (PTRTAB4).
+;     the rest of the 8-entry CALL-DISPATCH array Data_F000E5.  sub_F00099
+;     ends `ld XWA,0x00F000E5` / `add XHL,XWA` / `ld XWA,(XHL)` / `call XWA`
+;     at 0xF000D5-0xF000DE, so the object is a table of routine pointers
+;     reached by an index.  Its eight targets are 0x00F00105 0x00F0028D
+;     0x00F002C9 0x00F002EB 0x00F002B9 0x00F00280 0x00F002B6 0x00F002B3 -- and
+;     ALL EIGHT land on an instruction boundary in the code this lane
+;     converted at 0xF00280/0xF0029D/0xF002CD.  That mutual check is what
+;     makes both the table and those spans safe.  The 3 bytes after the array
+;     are 0xF00105 (a bare 0x0E `ret`, the array's entry 0) and a `00 00`
+;     trailer.
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x01, 0xF0, 0x00	; F000E6  top 3 bytes of the entry at F000E5 = 0x00F00105
+	.long	0x00F0028D	; F000E9  entry 1
+	.long	0x00F002C9	; F000ED  entry 2
+	.long	0x00F002EB	; F000F1  entry 3
+	.long	0x00F002B9	; F000F5  entry 4
+	.long	0x00F00280	; F000F9  entry 5
+	.long	0x00F002B6	; F000FD  entry 6
+	.long	0x00F002B3	; F00101  entry 7
+	.byte	0x0E, 0x00, 0x00	; F00105  past the array: 0x0E (`ret`) and the routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F00108
@@ -381,7 +422,10 @@ sub_F00108:
 	jr	0	; F00178  jr T,0xf0017a
 	ret	; F0017A  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00017B, 0x000002
+; --- 0xF0017B-0xF0017C, 2 B, converted by lane promB6 (TRAILER).
+;     after sub_F00108's `ret`, before sub_F0017D
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x00	; F0017B  routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F0017D
@@ -411,7 +455,10 @@ sub_F0017D:
 	calr	65292	; F001AA  calr 0xf000b9
 	ret	; F001AD  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0001AE, 0x000002
+; --- 0xF001AE-0xF001AF, 2 B, converted by lane promB6 (TRAILER).
+;     after sub_F0017D's `ret`, before sub_F001B0
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x00	; F001AE  routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F001B0
@@ -428,7 +475,12 @@ sub_F001B0:
 	calr	65482	; F001B0  calr 0xf0017d
 	ret	; F001B3  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0001B4, 0x000001
+; --- 0xF001B4-0xF001B4, 1 B, converted by lane promB6 (TRAILER).
+;     one 0x0E byte after sub_F001B0's `ret`: the 0x0E (`ret`) pad this build
+;     uses, already asserted as `.fill ..., 0x0E` in eight other places in
+;     this file
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x0E	; F001B4  routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F001B5
@@ -451,7 +503,10 @@ sub_F001B5:
 	calr	65267	; F001C3  calr 0xf000b9
 	ret	; F001C6  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0001C7, 0x000002
+; --- 0xF001C7-0xF001C8, 2 B, converted by lane promB6 (TRAILER).
+;     after sub_F001B5's `ret`, before sub_F001C9
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x00	; F001C7  routine trailer
 
 ; --------------------------------------------------------------------------
 ; sub_F001C9
@@ -527,7 +582,18 @@ sub_F001C9:
 	calr	130	; F0027C  calr 0xf00301
 	ret	; F0027F  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x000280, 0x000013
+; --- 0xF00280-0xF00292, 19 B, converted by lane promB6 (CODE).
+;     entry 0x00F00280 (and 0x00F0028D) of the array Data_F000E5
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	bit_dd8	3, 149	; F00280  bit 3,(0x95)
+	jr	nz, 8	; F00283  jr NZ,0xf0028d
+	bit_dd8	2, 149	; F00285  bit 2,(0x95)
+	jr	z, 3	; F00288  jr Z,0xf0028d
+	ldio	149, 12	; F0028A  ld (0x95),0x0c
+	ldio	148, 12	; F0028D  ld (0x94),0x0c
+	ret	; F00290  ret
+	nop	; F00291  nop
+	nop	; F00292  nop
 
 ; --------------------------------------------------------------------------
 ; sub_F00293
@@ -546,7 +612,29 @@ sub_F00293:
 	ldio	150, 1	; F00299  ld (0x96),0x01
 	ret	; F0029C  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00029D, 0x00002C
+; --- 0xF0029D-0xF002C8, 44 B, converted by lane promB6 (CODE).
+;     entries 0x00F002B9 0x00F002B6 0x00F002B3 of Data_F000E5
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	bit_dd8	0, 149	; F0029D  bit 0,(0x95)
+	jr	nz, 14	; F002A0  jr NZ,0xf002b0
+	bit_dd8	2, 149	; F002A2  bit 2,(0x95)
+	jr	nz, 9	; F002A5  jr NZ,0xf002b0
+	ldio	149, 1	; F002A7  ld (0x95),0x01
+	calr	71	; F002AA  calr 0xf002f4
+	calr	112	; F002AD  calr 0xf00320
+	ret	; F002B0  ret
+	nop	; F002B1  nop
+	nop	; F002B2  nop
+	ldio	148, 12	; F002B3  ld (0x94),0x0c
+	ldio	150, 12	; F002B6  ld (0x96),0x0c
+	bit_dd8	3, 149	; F002B9  bit 3,(0x95)
+	jr	nz, 8	; F002BC  jr NZ,0xf002c6
+	bit_dd8	2, 149	; F002BE  bit 2,(0x95)
+	jr	z, 3	; F002C1  jr Z,0xf002c6
+	ldio	149, 12	; F002C3  ld (0x95),0x0c
+	ret	; F002C6  ret
+	nop	; F002C7  nop
+	nop	; F002C8  nop
 
 ; --------------------------------------------------------------------------
 ; sub_F002C9
@@ -563,7 +651,28 @@ sub_F002C9:
 	ldio	150, 12	; F002C9  ld (0x96),0x0c
 	ret	; F002CC  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0002CD, 0x000027
+; --- 0xF002CD-0xF002F3, 39 B, converted by lane promB6 (CODE).
+;     entry 0x00F002EB of Data_F000E5
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	nop	; F002CD  nop
+	nop	; F002CE  nop
+	ldio	148, 1	; F002CF  ld (0x94),0x01
+	calr	44	; F002D2  calr 0xf00301
+	bit_dd8	0, 149	; F002D5  bit 0,(0x95)
+	jr	nz, 14	; F002D8  jr NZ,0xf002e8
+	bit_dd8	2, 149	; F002DA  bit 2,(0x95)
+	jr	nz, 9	; F002DD  jr NZ,0xf002e8
+	ldio	149, 1	; F002DF  ld (0x95),0x01
+	calr	15	; F002E2  calr 0xf002f4
+	calr	56	; F002E5  calr 0xf00320
+	ret	; F002E8  ret
+	nop	; F002E9  nop
+	nop	; F002EA  nop
+	ldio	150, 12	; F002EB  ld (0x96),0x0c
+	ldio	148, 12	; F002EE  ld (0x94),0x0c
+	ret	; F002F1  ret
+	nop	; F002F2  nop
+	nop	; F002F3  nop
 
 ; --------------------------------------------------------------------------
 ; sub_F002F4
@@ -4283,7 +4392,14 @@ DL_F035CA:
 Data_F03617:
 	.byte	0x0C, 0x36, 0xF0, 0x00, 0xCA, 0x35, 0xF0, 0x00, 0xD5	; F03617  |.6...5...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003620, 0x000013
+; --- 0xF03620-0xF03632, 19 B, converted by lane promB6 (PTRTAB4).
+;     7-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x35, 0xF0, 0x00	; F03620  top 3 bytes of the entry at F0361F = 0x00F035D5
+	.long	0x00F035E0	; F03623  entry 3
+	.long	0x00F035EB	; F03627  entry 4
+	.long	0x00F035F6	; F0362B  entry 5
+	.long	0x00F03601	; F0362F  entry 6
 
 ; === END COVER-R1 0xF03617-0xF03633 ===
 
@@ -4997,7 +5113,12 @@ Data_F03C05:
 
 	
 ; --- 0xF03C12-0xF03C1C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003C12, 0x00000B
+; --- 0xF03C12-0xF03C1C, 11 B, converted by lane promB6 (PTRTAB4).
+;     6-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x3B, 0xF0, 0x00	; F03C12  top 3 bytes of the entry at F03C11 = 0x00F03BDF
+	.long	0x00F03BF2	; F03C15  entry 4
+	.long	0x00F03C05	; F03C19  entry 5
 
 ; ------------------------------------------------------------------
 ; 0xF03C1D-0xF03C7C -- 8 display-list records, 96 bytes -- interpreter A
@@ -7361,7 +7482,13 @@ DL_F04DFF:
 Data_F04E32:
 	.byte	0xFF	; F04E32  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004E33, 0x00000F
+; --- 0xF04E33-0xF04E41, 15 B, converted by lane promB6 (PTRTAB4).
+;     4-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x4D, 0xF0, 0x00	; F04E33  top 3 bytes of the entry at F04E32 = 0x00F04DFF
+	.long	0x00F04E0A	; F04E36  entry 1
+	.long	0x00F04E14	; F04E3A  entry 2
+	.long	0x00F04E23	; F04E3E  entry 3
 
 ; === END COVER-R1 0xF04E32-0xF04E42 ===
 
@@ -7603,7 +7730,16 @@ Data_F04F46:
 	.byte	0x15, 0x4F, 0xF0, 0x00, 0xC1, 0x4E, 0xF0, 0x00, 0xAB, 0x4E, 0xF0, 0x00, 0xCC, 0x4E, 0xF0, 0x00	; F04F46  |.O...N...N...N..|
 	.byte	0xD6	; F04F56  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004F57, 0x00001B
+; --- 0xF04F57-0xF04F71, 27 B, converted by lane promB6 (PTRTAB4).
+;     11-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x4E, 0xF0, 0x00	; F04F57  top 3 bytes of the entry at F04F56 = 0x00F04ED6
+	.long	0x00F04EE1	; F04F5A  entry 5
+	.long	0x00F04EEB	; F04F5E  entry 6
+	.long	0x00F04EF6	; F04F62  entry 7
+	.long	0x00F04F00	; F04F66  entry 8
+	.long	0x00F04F0B	; F04F6A  entry 9
+	.long	0x00F04EB6	; F04F6E  entry 10
 
 ; === END COVER-R1 0xF04F46-0xF04F72 ===
 
@@ -7738,7 +7874,12 @@ Data_F04FFD:
 	.byte	0x90, 0x4F, 0xF0, 0x00, 0x9A, 0x4F, 0xF0, 0x00, 0xA5, 0x4F, 0xF0, 0x00, 0xB0, 0x4F, 0xF0, 0x00	; F0500D  |.O...O...O...O..|
 	.byte	0xBB, 0x4F, 0xF0, 0x00, 0xC6, 0x4F, 0xF0, 0x00, 0xD1	; F0501D  |.O...O...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005026, 0x00000B
+; --- 0xF05026-0xF05030, 11 B, converted by lane promB6 (PTRTAB4).
+;     13-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x4F, 0xF0, 0x00	; F05026  top 3 bytes of the entry at F05025 = 0x00F04FD1
+	.long	0x00F04FDC	; F05029  entry 11
+	.long	0x00F04FE7	; F0502D  entry 12
 
 ; --------------------------------------------------------------------------
 ; Data_F05031 -- 4 bytes, EMITTED AS DATA (not promoted to code).
@@ -7924,7 +8065,12 @@ Data_F050F1:
 	.byte	0xAB, 0x50, 0xF0, 0x00, 0xB5, 0x50, 0xF0, 0x00, 0xBF, 0x50, 0xF0, 0x00, 0xC9, 0x50, 0xF0, 0x00	; F050F1  |.P...P...P...P..|
 	.byte	0xD3	; F05101  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005102, 0x00000B
+; --- 0xF05102-0xF0510C, 11 B, converted by lane promB6 (PTRTAB4).
+;     7-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x50, 0xF0, 0x00	; F05102  top 3 bytes of the entry at F05101 = 0x00F050D3
+	.long	0x00F050DD	; F05105  entry 5
+	.long	0x00F050E7	; F05109  entry 6
 
 ; === END COVER-R1 0xF050F1-0xF0510D ===
 
@@ -8204,7 +8350,13 @@ Data_F05286:
 	.byte	0x0D, 0x00, 0x8C, 0x00, 0xA6, 0x00, 0xA8, 0x00, 0x0D, 0x00, 0xAC, 0x00, 0xA6, 0x00, 0xC8, 0x00	; F05336  |................|
 	.byte	0xB5, 0x00, 0x43, 0x00, 0xF9	; F05346  |..C..|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00534B, 0x000013
+; --- 0xF0534B-0xF0535D, 19 B, converted by lane promB6 (SHORTARR8).
+;     the array 0xF0531E declared by a display-list record's `+0x07 -> XIX`
+;     field
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x50, 0x00	; F0534B  rest of the 8-byte entry at F05346
+	.short	0x00B5, 0x0093, 0x00F9, 0x00A0	; F0534E  entry 6
+	.short	0x00B5, 0x00BB, 0x00F9, 0x00C8	; F05356  entry 7
 
 ; === END COVER-R1 0xF05286-0xF0535E ===
 
@@ -8250,7 +8402,23 @@ DL_F05368:
 Data_F05372:
 	.byte	0x70, 0x52, 0xF0, 0x00, 0xC2, 0x51, 0xF0, 0x00, 0xCD, 0x51, 0xF0, 0x00, 0xD8	; F05372  |pR...Q...Q...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00537F, 0x000037
+; --- 0xF0537F-0xF053B5, 55 B, converted by lane promB6 (PTRTAB4).
+;     17-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x51, 0xF0, 0x00	; F0537F  top 3 bytes of the entry at F0537E = 0x00F051D8
+	.long	0x00F051E7	; F05382  entry 4
+	.long	0x00F051F2	; F05386  entry 5
+	.long	0x00F051FD	; F0538A  entry 6
+	.long	0x00F0520C	; F0538E  entry 7
+	.long	0x00F05217	; F05392  entry 8
+	.long	0x00F05222	; F05396  entry 9
+	.long	0x00F05231	; F0539A  entry 10
+	.long	0x00F0523C	; F0539E  entry 11
+	.long	0x00F05247	; F053A2  entry 12
+	.long	0x00F0527B	; F053A6  entry 13
+	.long	0x00F05256	; F053AA  entry 14
+	.long	0x00F05265	; F053AE  entry 15
+	.long	0x00F05256	; F053B2  entry 16
 
 ; === END COVER-R1 0xF05372-0xF053B6 ===
 
@@ -8354,7 +8522,14 @@ Data_F05407:
 Data_F05445:
 	.byte	0xFC	; F05445  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005446, 0x000013
+; --- 0xF05446-0xF05458, 19 B, converted by lane promB6 (PTRTAB4).
+;     5-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x53, 0xF0, 0x00	; F05446  top 3 bytes of the entry at F05445 = 0x00F053FC
+	.long	0x00F053D9	; F05449  entry 1
+	.long	0x00F053CF	; F0544D  entry 2
+	.long	0x00F053E3	; F05451  entry 3
+	.long	0x00F053B6	; F05455  entry 4
 
 ; --------------------------------------------------------------------------
 ; Data_F05459 -- 1 bytes, EMITTED AS DATA (not promoted to code).
@@ -8371,7 +8546,13 @@ Data_F05445:
 Data_F05459:
 	.byte	0x07	; F05459  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00545A, 0x00000F
+; --- 0xF0545A-0xF05468, 15 B, converted by lane promB6 (PTRTAB4).
+;     4-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x54, 0xF0, 0x00	; F0545A  top 3 bytes of the entry at F05459 = 0x00F05407
+	.long	0x00F05416	; F0545D  entry 1
+	.long	0x00F05425	; F05461  entry 2
+	.long	0x00F05434	; F05465  entry 3
 
 ; --------------------------------------------------------------------------
 ; Data_F05469 -- 52 bytes, EMITTED AS DATA (not promoted to code).
@@ -8463,7 +8644,10 @@ Data_F054D9:
 	.byte	0xB1, 0x54, 0xF0, 0x00, 0xBB, 0x54, 0xF0, 0x00, 0xC5, 0x54, 0xF0, 0x00, 0xCF, 0x54, 0xF0, 0x00	; F054D9  |.T...T...T...T..|
 	.byte	0xD9	; F054E9  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0054EA, 0x000003
+; --- 0xF054EA-0xF054EC, 3 B, converted by lane promB6 (PTRTAB4).
+;     5-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x54, 0xF0, 0x00	; F054EA  top 3 bytes of the entry at F054E9 = 0x00F054D9
 
 ; === END COVER-R1 0xF054B1-0xF054ED ===
 
@@ -45801,7 +45985,13 @@ Data_F28866:
 	.byte	0xC1, 0x00, 0xB2, 0x00, 0xC9, 0x00, 0xBA, 0x00, 0xCF, 0x00, 0xB2, 0x00, 0xD7, 0x00, 0xBA, 0x00	; F28866  |................|
 	.byte	0xDD	; F28876  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x028877, 0x00001F
+; --- 0xF28877-0xF28895, 31 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF28866
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0xB2, 0x00, 0xE5, 0x00, 0xBA, 0x00	; F28877  rest of the 8-byte entry at F28876
+	.short	0x00EB, 0x00B2, 0x00F3, 0x00BA	; F2887E  entry 3
+	.short	0x00F9, 0x00B2, 0x0101, 0x00BA	; F28886  entry 4
+	.short	0x0107, 0x00B2, 0x010F, 0x00BA	; F2888E  entry 5
 
 ; === END COVER-R1 0xF28866-0xF28896 ===
 
@@ -45842,7 +46032,12 @@ Data_F288A1:
 	.byte	0xC6, 0x00, 0x9E, 0x00, 0xCE, 0x00, 0xA6, 0x00, 0xD4, 0x00, 0x9E, 0x00, 0xDC, 0x00, 0xA6, 0x00	; F288A1  |................|
 	.byte	0xE2, 0x00, 0x9E, 0x00, 0xEA, 0x00, 0xA6, 0x00, 0xF0, 0x00, 0x9E, 0x00, 0xF8	; F288B1  |.............|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0288BE, 0x000013
+; --- 0xF288BE-0xF288D0, 19 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF288A1
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0xA6, 0x00	; F288BE  rest of the 8-byte entry at F288B9
+	.short	0x00FE, 0x009E, 0x0106, 0x00A6	; F288C1  entry 4
+	.short	0x010C, 0x009E, 0x0114, 0x00A6	; F288C9  entry 5
 
 ; === END COVER-R1 0xF288A1-0xF288D1 ===
 
@@ -57723,7 +57918,15 @@ Data_F32992:
 Data_F32A36:
 	.byte	0xFA	; F32A36  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032A37, 0x000017
+; --- 0xF32A37-0xF32A4D, 23 B, converted by lane promB6 (PTRTAB4).
+;     6-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x29, 0xF3, 0x00	; F32A37  top 3 bytes of the entry at F32A36 = 0x00F329FA
+	.long	0x00F329FA	; F32A3A  entry 1
+	.long	0x00F329FA	; F32A3E  entry 2
+	.long	0x00F32A09	; F32A42  entry 3
+	.long	0x00F32A18	; F32A46  entry 4
+	.long	0x00F32A27	; F32A4A  entry 5
 
 ; --------------------------------------------------------------------------
 ; Data_F32A4E -- 47 bytes, EMITTED AS DATA (not promoted to code).
@@ -57854,7 +58057,12 @@ DL_F32AD7:
 Data_F32B1E:
 	.byte	0x13, 0x2B, 0xF3, 0x00, 0xE6, 0x2A, 0xF3, 0x00, 0xD7	; F32B1E  |.+...*...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032B27, 0x00000B
+; --- 0xF32B27-0xF32B31, 11 B, converted by lane promB6 (PTRTAB4).
+;     5-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x2A, 0xF3, 0x00	; F32B27  top 3 bytes of the entry at F32B26 = 0x00F32AD7
+	.long	0x00F32AF5	; F32B2A  entry 3
+	.long	0x00F32B04	; F32B2E  entry 4
 
 ; === END COVER-R1 0xF32B1E-0xF32B32 ===
 
@@ -57894,7 +58102,14 @@ DL_F32B32:
 Data_F32B3C:
 	.byte	0x08, 0x00, 0x49, 0x00, 0xFA	; F32B3C  |..I..|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032B41, 0x000023
+; --- 0xF32B41-0xF32B63, 35 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF32B3C
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x67, 0x00	; F32B41  rest of the 8-byte entry at F32B3C
+	.short	0x0008, 0x0049, 0x00FA, 0x0067	; F32B44  entry 1
+	.short	0x0008, 0x0068, 0x00FA, 0x0086	; F32B4C  entry 2
+	.short	0x0008, 0x0087, 0x00FA, 0x00A5	; F32B54  entry 3
+	.short	0x0008, 0x00A6, 0x00FA, 0x00C5	; F32B5C  entry 4
 
 ; === END COVER-R1 0xF32B3C-0xF32B64 ===
 
@@ -58054,7 +58269,17 @@ DL_F32BAB:
 Data_F32C02:
 	.byte	0xAB, 0x2B, 0xF3, 0x00, 0xB6, 0x2B, 0xF3, 0x00, 0xC1, 0x2B, 0xF3, 0x00, 0xD0	; F32C02  |.+...+...+...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032C0F, 0x000016
+; --- 0xF32C0F-0xF32C24, 22 B, converted by lane promB6 (PTRTAB4).
+;     pointer array whose LAST entry is completed by the first byte of
+;     Data_F32C25, so the array's own end (0xF32C26) is past this span; the 3
+;     bytes of that entry inside the span stay `.byte`
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x2B, 0xF3, 0x00	; F32C0F  top 3 bytes of the entry at F32C0E = 0x00F32BD0
+	.long	0x00F32BDB	; F32C12  entry 4
+	.long	0x00F32BE6	; F32C16  entry 5
+	.long	0x00F32BF1	; F32C1A  entry 6
+	.long	0x00F32BF1	; F32C1E  entry 7
+	.byte	0xF1, 0x2B, 0xF3	; F32C22  past the array: 0xF1 trailing bytes
 
 ; --------------------------------------------------------------------------
 ; Data_F32C25 -- 5 bytes, EMITTED AS DATA (not promoted to code).
@@ -58722,7 +58947,13 @@ Data_F33394:
 	.byte	0x65, 0x00, 0x97, 0x00, 0x6F, 0x00, 0xA0, 0x00, 0xCF, 0x00, 0x97, 0x00, 0xD9, 0x00, 0xA0, 0x00	; F333E4  |e...o...........|
 	.byte	0xDF, 0x00, 0x97, 0x00, 0xE9, 0x00, 0xA0, 0x00, 0xEF, 0x00, 0x97, 0x00, 0xF9	; F333F4  |.............|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033401, 0x00001B
+; --- 0xF33401-0xF3341B, 27 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF33394
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0xA0, 0x00	; F33401  rest of the 8-byte entry at F333FC
+	.short	0x00FF, 0x0097, 0x0109, 0x00A0	; F33404  entry 14
+	.short	0x010F, 0x0097, 0x0119, 0x00A0	; F3340C  entry 15
+	.short	0x011F, 0x0097, 0x0129, 0x00A0	; F33414  entry 16
 
 ; === END COVER-R1 0xF33394-0xF3341C ===
 
@@ -59434,7 +59665,12 @@ Data_F338A5:
 	.byte	0x58, 0x38, 0xF3, 0x00, 0x67, 0x38, 0xF3, 0x00, 0x71, 0x38, 0xF3, 0x00, 0x7B, 0x38, 0xF3, 0x00	; F338A5  |X8..g8..q8..{8..|
 	.byte	0x85, 0x38, 0xF3, 0x00, 0xC9, 0x38, 0xF3, 0x00, 0xD3	; F338B5  |.8...8...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0338BE, 0x00000B
+; --- 0xF338BE-0xF338C8, 11 B, converted by lane promB6 (PTRTAB4).
+;     9-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x38, 0xF3, 0x00	; F338BE  top 3 bytes of the entry at F338BD = 0x00F338D3
+	.long	0x00F3388F	; F338C1  entry 7
+	.long	0x00F3389A	; F338C5  entry 8
 
 ; === END COVER-R1 0xF338A5-0xF338C9 ===
 
@@ -59703,7 +59939,12 @@ Data_F33A49:
 	.byte	0x3D, 0x00, 0x76, 0x00, 0xFC, 0x00, 0x84, 0x00, 0x3D, 0x00, 0x76, 0x00, 0xFC, 0x00, 0x84, 0x00	; F33A49  |=.v.....=.v.....|
 	.byte	0x3D, 0x00, 0x86, 0x00, 0xFC	; F33A59  |=....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033A5E, 0x000013
+; --- 0xF33A5E-0xF33A70, 19 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF33A49
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x94, 0x00	; F33A5E  rest of the 8-byte entry at F33A59
+	.short	0x003D, 0x0096, 0x00FC, 0x00A4	; F33A61  entry 3
+	.short	0x003D, 0x00A6, 0x00FC, 0x00B4	; F33A69  entry 4
 
 ; === END COVER-R1 0xF33A49-0xF33A71 ===
 
@@ -59917,7 +60158,18 @@ Data_F33B8C:
 	.byte	0x8A, 0x3A, 0xF3, 0x00, 0x97, 0x3A, 0xF3, 0x00, 0xA3, 0x3A, 0xF3, 0x00, 0xB0, 0x3A, 0xF3, 0x00	; F33B9C  |.:...:...:...:..|
 	.byte	0xBD, 0x3A, 0xF3, 0x00, 0xC9, 0x3A, 0xF3, 0x00, 0xD6	; F33BAC  |.:...:...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033BB5, 0x000023
+; --- 0xF33BB5-0xF33BD7, 35 B, converted by lane promB6 (PTRTAB4).
+;     19-entry pointer array
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x3A, 0xF3, 0x00	; F33BB5  top 3 bytes of the entry at F33BB4 = 0x00F33AD6
+	.long	0x00F33AE3	; F33BB8  entry 11
+	.long	0x00F33AEF	; F33BBC  entry 12
+	.long	0x00F33AFC	; F33BC0  entry 13
+	.long	0x00F33B09	; F33BC4  entry 14
+	.long	0x00F33B27	; F33BC8  entry 15
+	.long	0x00F33B45	; F33BCC  entry 16
+	.long	0x00F33B63	; F33BD0  entry 17
+	.long	0x00F33B81	; F33BD4  entry 18
 
 ; === END COVER-R1 0xF33B8C-0xF33BD8 ===
 
@@ -62114,7 +62366,13 @@ Data_F34C6E:
 	.byte	0x2A, 0x17, 0x2F, 0x17, 0x34, 0x17, 0x39, 0x17, 0x3E, 0x17, 0x43, 0x17, 0xA0, 0x1E, 0xA5, 0x1E	; F34C7E  |*./.4.9.>.C.....|
 	.byte	0xAA, 0x1E, 0xAF, 0x1E, 0xB4, 0x1E, 0xB9, 0x1E, 0xBE, 0x1E, 0xC3, 0x1E, 0x0E	; F34C8E  |.............|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034C9B, 0x000007
+; --- 0xF34C9B-0xF34CA1, 7 B, converted by lane promB6 (DLTAIL).
+;     one interpreter record op 0x0E, length 8, whose first byte 0xF34C9A the
+;     previous `.byte` row absorbed.  Handler 0xF31A9F reads three 16-bit
+;     operands -- exactly the 8 bytes -- and the record lands on Data_F34CA2,
+;     which a previous pass already re-framed as a record start
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x08, 0x20, 0x17, 0x28, 0x00, 0x4B, 0x00	; F34C9B  rest of the op 0x0E record that starts at F34C9A
 
 ; --------------------------------------------------------------------------
 ; Data_F34CA2 -- 5 bytes, EMITTED AS DATA (not promoted to code).
@@ -62527,7 +62785,13 @@ DL_F34FF2:
 Data_F35035:
 	.byte	0x4F, 0x46, 0x46, 0x20, 0x4F, 0x4E, 0x0E	; F35035  |OFF ON.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03503C, 0x00001F
+; --- 0xF3503C-0xF3505A, 31 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF3503B
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x42, 0x00, 0x94, 0x00, 0x5E, 0x00	; F3503C  rest of the 8-byte entry at F3503B
+	.short	0x000E, 0x0068, 0x00E3, 0x0084	; F35043  entry 1
+	.short	0x000E, 0x008E, 0x00E3, 0x00AA	; F3504B  entry 2
+	.short	0x000E, 0x0042, 0x00E3, 0x005E	; F35053  entry 3
 
 ; === END COVER-R1 0xF35035-0xF3505B ===
 
@@ -68077,7 +68341,17 @@ Data_F3A0A5:
 	.byte	0x2A, 0x17, 0x2F, 0x17, 0x34, 0x17, 0x39, 0x17, 0x3E, 0x17, 0x43, 0x17, 0xF0, 0x1E, 0xF5, 0x1E	; F3A0B5  |*./.4.9.>.C.....|
 	.byte	0xFA	; F3A0C5  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A0C6, 0x00000B
+; --- 0xF3A0C6-0xF3A0D0, 11 B, converted by lane promB6 (SHORTPROG).
+;     a 16-bit table in strict +5 progression: 0x1EF0 0x1EF5 ... 0x1F13.  The
+;     step is constant over the converted part and over the span, so the cut
+;     is inside a single table
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x1E	; F3A0C6  high byte of the value at F3A0C5 = 0x1EFA
+	.short	0x1EFF	; F3A0C7
+	.short	0x1F04	; F3A0C9
+	.short	0x1F09	; F3A0CB
+	.short	0x1F0E	; F3A0CD
+	.short	0x1F13	; F3A0CF
 
 ; === END COVER-R1 0xF3A0A5-0xF3A0D1 ===
 
@@ -72271,7 +72545,20 @@ Data_F3C37D:
 	.byte	0xD8, 0x00, 0x83, 0x00, 0xE0, 0x00, 0x8E, 0x00, 0xE8, 0x00, 0x83, 0x00, 0xF0, 0x00, 0x8E, 0x00	; F3C46D  |................|
 	.byte	0xF8	; F3C47D  |.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C47E, 0x000057
+; --- 0xF3C47E-0xF3C4D4, 87 B, converted by lane promB6 (SHORTARR8).
+;     declared array base 0xF3C37D
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte	0x00, 0x83, 0x00, 0x00, 0x01, 0x8E, 0x00	; F3C47E  rest of the 8-byte entry at F3C47D
+	.short	0x0038, 0x0093, 0x0040, 0x009E	; F3C485  entry 33
+	.short	0x0048, 0x0093, 0x0050, 0x009E	; F3C48D  entry 34
+	.short	0x0058, 0x0093, 0x0060, 0x009E	; F3C495  entry 35
+	.short	0x0068, 0x0093, 0x0070, 0x009E	; F3C49D  entry 36
+	.short	0x0078, 0x0093, 0x0080, 0x009E	; F3C4A5  entry 37
+	.short	0x0088, 0x0093, 0x0090, 0x009E	; F3C4AD  entry 38
+	.short	0x0098, 0x0093, 0x00A0, 0x009E	; F3C4B5  entry 39
+	.short	0x00A8, 0x0093, 0x00B0, 0x009E	; F3C4BD  entry 40
+	.short	0x00B8, 0x0093, 0x00C0, 0x009E	; F3C4C5  entry 41
+	.short	0x00C8, 0x0093, 0x00D0, 0x009E	; F3C4CD  entry 42
 
 ; === END COVER-R1 0xF3C37D-0xF3C4D5 ===
 
