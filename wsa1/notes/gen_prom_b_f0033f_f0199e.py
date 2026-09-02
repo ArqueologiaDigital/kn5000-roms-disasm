@@ -716,21 +716,27 @@ def emit_r1():
     L += brow(0xF00761, 1, 1, "  phase pad")
 
     L += ptr_block(0xF00762, 39, "PtrTable_F00762", [
-        "; --------------------------------------------------------------------------",
-        "; PtrTable_F00762 -- 39 slots -> prom_a 0xFE28B2-0xFE2F8C",
-        "; Evidence: %d distinct targets, all inside a 1,755-byte prom_a window; %d"
-        % census(0xF00762, 39)[:2],
-        ";           slots are the sentinel and %d are zero.  The SLOTS are pointers"
-        % census(0xF00762, 39)[2],
-        ";           on the same 290-word test as the rest of the span.",
+        '; --------------------------------------------------------------------------',
+        '; PtrTable_F00762 -- 39 slots -> prom_a 0xFE28B2-0xFE2F8C',
+        '; Evidence: 21 distinct targets, all inside a 1,755-byte prom_a window; 16',
+        ';           slots are the sentinel and 2 are zero.  The SLOTS are pointers',
+        ';           on the same 290-word test as the rest of the span.',
         "; ⚠ WHAT THE TARGETS ARE IS NOT ESTABLISHED.  prom_a's current transcription",
-        ";   frames 0xFE28B2-0xFE2F8C as CODE, but only 6 of the 21 targets land on an",
-        ";   instruction boundary there -- against 35.7% of ALL addresses in that range,",
+        ';   frames 0xFE28B2-0xFE2F8C as CODE, but only 6 of the 21 targets land on an',
+        ';   instruction boundary there -- against 35.7% of ALL addresses in that range,',
         ";   i.e. BELOW chance.  So this table lends prom_a's framing no support, and no",
-        ";   claim is made here about whether that region is code or data.  A prom_a",
-        ";   lane should look: 21 pointers into a span is what an object index looks",
-        ";   like, and 6/21 is what a misframe looks like.",
-        "; --------------------------------------------------------------------------",
+        ';   claim is made here about whether that region is code or data.  A prom_a',
+        ';   lane should look: 21 pointers into a span is what an object index looks',
+        ';   like, and 6/21 is what a misframe looks like.',
+        ';   ⚠ AND IT IS THE THIRD TABLE IN THIS SPAN TO FAIL THAT WAY.  PtrTable_F003F9',
+        ";   misses the 0xF78028 icon sheet's grid (1 of 121 on it, chance 1.7) and",
+        ";   PtrTable_F006CD misses DisplayList_FC4000's record boundaries (3 of 24,",
+        ';   chance 1.8).  Three of the four tables in 0xF0033F-0xF007FF point at',
+        ';   nothing that any proven framing recognises, and only the first -- the',
+        ';   dispatch table at 0xF00340 -- has a consumer at all.  Whatever that says',
+        ';   about this span, it is a property of the SPAN and not of one table, and',
+        ';   whoever picks it up should treat all three together.',
+        '; --------------------------------------------------------------------------',
     ])
 
     L.append("")

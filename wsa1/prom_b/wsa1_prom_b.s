@@ -1191,6 +1191,14 @@ Data_F00759:
 ;   claim is made here about whether that region is code or data.  A prom_a
 ;   lane should look: 21 pointers into a span is what an object index looks
 ;   like, and 6/21 is what a misframe looks like.
+;   ⚠ AND IT IS THE THIRD TABLE IN THIS SPAN TO FAIL THAT WAY.  PtrTable_F003F9
+;   misses the 0xF78028 icon sheet's grid (1 of 121 on it, chance 1.7) and
+;   PtrTable_F006CD misses DisplayList_FC4000's record boundaries (3 of 24,
+;   chance 1.8).  Three of the four tables in 0xF0033F-0xF007FF point at
+;   nothing that any proven framing recognises, and only the first -- the
+;   dispatch table at 0xF00340 -- has a consumer at all.  Whatever that says
+;   about this span, it is a property of the SPAN and not of one table, and
+;   whoever picks it up should treat all three together.
 ; --------------------------------------------------------------------------
 PtrTable_F00762:
 	.long 0x00FDB10E	; F00762  [  0]  absent (sentinel)
