@@ -1,0 +1,143 @@
+  v10          building map ...
+    inert=True  covered 2097152 / 2097152  regions 52738
+  v9           building map ...
+    inert=True  covered 2097152 / 2097152  regions 58579
+  v7           building map ...
+    inert=True  covered 2097152 / 2097152  regions 46280
+
+RECONCILIATION
+  image              dump     census      delta  inert
+  v10             2097152    2097152          0  yes
+  v9              2097152    2097152          0  yes
+  v7              2097152    2097152          0  yes
+  TOTAL           6291456    6291456          0
+  every byte of every image is in exactly one bucket.
+
+PER-IMAGE CENSUS (bytes)
+  image             CODE   KNOWN-A   KNOWN-B   UNKNOWN    FILLER
+  v10             992624    193954    846279      1254     63041
+  v9             1023365    157831    850707      1240     64009
+  v7              764746    156169   1112647      3467     60123
+  --------------------------------------------------------------
+  TOTAL          2780735    507954   2809633      5961    187173
+
+  per-image share explained by the raw census (before the false-positive correction):
+    v10            2095898 /   2097152 =  99.94%   (strict A-only:  59.59%)
+    v9             2095912 /   2097152 =  99.94%   (strict A-only:  59.38%)
+    v7             2093685 /   2097152 =  99.83%   (strict A-only:  46.78%)
+  KNOWN regions >=   8192 B:    74 regions,   1351908 B (40.7% of the explained figure)
+  KNOWN regions >=  32768 B:     3 regions,    111786 B (3.4% of the explained figure)
+
+  explained (CODE + KNOWN-A/B + FILLER) : 6285495 / 6291456 = 99.91%
+  strict (CODE + KNOWN-A + FILLER)      : 3475862 / 6291456 = 55.25%
+
+LARGEST PURPOSE-UNKNOWN RANGES
+  v7          0x110374-0x110785     1041  Data_UnknownBlock            audio/sound_editor_ui.s:7748  []
+  v7          0x163B8B-0x163D36      427  __pad_F63F8F                 sequencer/accompaniment_engine.s:20152  [] CODE-SUSPECT
+  v10         0x055BCA-0x055CE0      278  -                            ui_widgets/naka_widget_desc_dispatch.s:7  [text]
+  v7          0x1637D6-0x1638A8      210  __pad_F63BDA                 sequencer/accompaniment_engine.s:19898  [] CODE-SUSPECT
+  v9          0x055C36-0x055CD4      158  -                            ui_widgets/naka_widget_desc_dispatch.s:27  [text]
+  v7          0x055C36-0x055CD4      158  -                            ui_widgets/naka_widget_desc_dispatch.s:27  [text]
+  v7          0x162FDF-0x16306C      141  __pad_F633E3                 sequencer/accompaniment_engine.s:19229  []
+  v7          0x161E2C-0x161EB6      138  __pad_F62230                 sequencer/accompaniment_engine.s:17454  [bitmap-like]
+  v10         0x0EFF78-0x0F0000      136  -                            ui/char_encoding_naka_state.s:6  [text]
+  v9          0x0EFF78-0x0F0000      136  -                            ui/char_encoding_naka_state.s:6  [text]
+  v7          0x0EFF4E-0x0EFFD6      136  -                            ui/char_encoding_naka_state.s:6  [text]
+  v7          0x1102D2-0x110340      110  Data_UnknownBlock            audio/sound_editor_ui.s:7721  []
+  v7          0x16135C-0x1613C3      103  __pad_F61760                 sequencer/accompaniment_engine.s:16336  [] CODE-SUSPECT
+  v7          0x1638F7-0x163940       73  __pad_F63CFB                 sequencer/accompaniment_engine.s:19954  []
+  v7          0x163943-0x16398C       73  __pad_F63D47                 sequencer/accompaniment_engine.s:19968  []
+  v7          0x16398F-0x1639D8       73  __pad_F63D93                 sequencer/accompaniment_engine.s:19982  []
+  v7          0x1639DB-0x163A24       73  __pad_F63DDF                 sequencer/accompaniment_engine.s:19996  []
+  v10         0x16290E-0x162956       72  __pad_F6288E                 sequencer/accompaniment_engine.s:21160  [text]
+  v9          0x16290E-0x162956       72  __pad_F6288E                 sequencer/accompaniment_engine.s:21722  [text]
+  v7          0x16250A-0x162552       72  __pad_F6288E                 sequencer/accompaniment_engine.s:18055  [text]
+  v7          0x163A65-0x163AAA       69  __pad_F63E69                 sequencer/accompaniment_engine.s:20055  [] CODE-SUSPECT
+  v10         0x02755A-0x027598       62  -                            ui_widgets/naka_effects_eq_dispatch.s:8  [text]
+  v7          0x163668-0x1636A4       60  __pad_F63A6C                 sequencer/accompaniment_engine.s:19770  []
+  v7          0x1C42FA-0x1C431F       37  c                            ui/cpanel_routines.s:940  []
+  v7          0x166C15-0x166C32       29  __pad_F67013                 sequencer/accompaniment_engine.s:24097  []
+  v10         0x0818F0-0x08190A       26  -                            ui_widgets/naka_sound_technichord_dispatch.s:9  []
+  v9          0x02755A-0x027574       26  -                            ui_widgets/naka_effects_eq_dispatch.s:8  [text]
+  v9          0x0818F0-0x08190A       26  -                            ui_widgets/naka_sound_technichord_dispatch.s:9  []
+  v7          0x02755A-0x027574       26  -                            ui_widgets/naka_effects_eq_dispatch.s:8  [text]
+  v7          0x0818F0-0x08190A       26  -                            ui_widgets/naka_sound_technichord_dispatch.s:9  []
+  v7          0x163094-0x1630AB       23  __pad_F63498                 sequencer/accompaniment_engine.s:19268  []
+  v9          0x055BF4-0x055C0A       22  -                            ui_widgets/naka_widget_desc_dispatch.s:15  [text]
+  v7          0x055BF4-0x055C0A       22  -                            ui_widgets/naka_widget_desc_dispatch.s:15  [text]
+  v10         0x16289F-0x1628B4       21  __pad_F6288E                 sequencer/accompaniment_engine.s:21127  [text]
+  v10         0x162971-0x162986       21  __pad_F6288E                 sequencer/accompaniment_engine.s:21179  [text] CODE-SUSPECT
+  v9          0x16289F-0x1628B4       21  __pad_F6288E                 sequencer/accompaniment_engine.s:21689  [text]
+  v9          0x162971-0x162986       21  __pad_F6288E                 sequencer/accompaniment_engine.s:21741  [text] CODE-SUSPECT
+  v7          0x16249B-0x1624B0       21  __pad_F6288E                 sequencer/accompaniment_engine.s:18022  [text]
+  v7          0x16256D-0x162582       21  __pad_F6288E                 sequencer/accompaniment_engine.s:18074  [text]
+  v10         0x1628F6-0x16290A       20  __pad_F6288E                 sequencer/accompaniment_engine.s:21157  [text]
+
+  KNOWN-B by reason (bytes) -- the bucket the FP sample is drawn from:
+    descriptive name only                                  2745497
+    descriptive name + header                                49545
+    short/non-uniform fill: descriptive name only            14457
+    section header only (address-derived label)                110
+    short/non-uniform fill: descriptive name + header           24
+
+  CODE-SHAPED LABEL on a DATA region: 16532 regions, 431117 B
+    positive control (regions the source itself frames as CODE): 56.1% of 103676
+    NULL (data regions of table_data/custom_data/prom_d, where a hit can only be wrong): 0.0% of 0
+
+  EMBEDDED-IN-CODE (undocumented data between two instruction regions in the same file):
+    24292 regions, 186004 B -- KNOWN-B 182084 B, UNKNOWN 3920 B
+
+  self-admitted-ignorance regions: 4 (16176 B) -- research targets whatever their grade
+
+  code-suspect data regions: 894 (68211 B)
+  format hints (bytes): name:bitmap=1197092, bitmap-like=728835, ptr-table=619768, text=428697, name:midi=335680, name:text=223441, name:coefficients=134169, name:palette=127188, name:sequence=93494, name:glyph=91078, name:pcm=7012, midi=39
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/rq-embedded/census-after.json (157597 regions)
+
+RESEARCH TARGETS -- ranges whose purpose is NOT established
+  24330 merged ranges, 204221 bytes total (1.65% of 12,386,304)
+    embedded-in-code        186004 B (apportioned where a merged range has more than one reason)
+    self-admitted            16176 B (apportioned where a merged range has more than one reason)
+    no-explanation            2041 B (apportioned where a merged range has more than one reason)
+  image       range                  bytes label(s)                       why
+  v10         0x16F62F-0x170B2F     5376 MSP_FACTORY_DEFAULTS           self-admitted
+  v9          0x16F62F-0x170B2F     5376 MSP_FACTORY_DEFAULTS           self-admitted
+  v7          0x16F22B-0x17072B     5376 MSP_FACTORY_DEFAULTS           self-admitted
+  v7          0x10D7E7-0x10E905     4382 .Lc_f0d7e3                     embedded-in-code
+  v7          0x103E6F-0x104E34     4037 .Lc_f03e6c                     embedded-in-code
+  v7          0x1C50A9-0x1C5CB4     3083 FileIO_BytecodeData            embedded-in-code
+  v7          0x0FFE77-0x10096F     2808 StringData_APCModeNames        embedded-in-code  [name:pcm,name:text]
+  v7          0x16A5D3-0x16AE03     2096 AccScreen_UIDataBlock          embedded-in-code
+  v7          0x11757A-0x117CB1     1847 .Lc_f1756e                     embedded-in-code
+  v7          0x185325-0x185A4C     1831 FDemoText_ByteData_LayoutEngin embedded-in-code  [name:text]
+  v7          0x17860D-0x178CFE     1777 PmemOutLGridCheck_JumpTable    embedded-in-code
+  v7          0x14FCE8-0x15035E     1654 SeqByteBlock_StyleBitmapRef    embedded-in-code  [name:bitmap]
+  v7          0x12DF42-0x12E442     1280 InitializeKubo                 embedded-in-code
+  v7          0x1772B9-0x177742     1161 PcgOutGridCheckJumpTable       embedded-in-code
+  v7          0x150431-0x15087F     1102 SeqByteBlock_StyleBitmapRef    embedded-in-code  [name:bitmap]
+  v7          0x1650AC-0x1654EE     1090 DrumVoice_Handler7             embedded-in-code
+  v7          0x110374-0x110785     1041 Data_UnknownBlock              embedded-in-code
+  v9          0x171A24-0x171E26     1026 Voice_NoteParamTable           embedded-in-code  [name:coefficients]
+  v7          0x171620-0x171A22     1026 Voice_NoteParamTable           embedded-in-code  [name:coefficients]
+  v7          0x1024D9-0x102864      907 Scoop_EventLoop_36Entry_Data   embedded-in-code
+  v7          0x15D649-0x15D996      845 AccTone_InlineBytecodeData     embedded-in-code
+  v7          0x17A4D0-0x17A81C      844 MidiPartGridCheck_JumpTable    embedded-in-code  [name:midi]
+  v7          0x149E1D-0x14A100      739 SeqPart_ByteBlockA207          embedded-in-code
+  v9          0x0ED348-0x0ED628      736 CharMap_FullPermutation        embedded-in-code
+  v7          0x164365-0x164637      722 DrumParam_PointerTableAndData  embedded-in-code  [name:coefficients]
+  v7          0x118E9E-0x119161      707 ToneParam_ExtendedOpsBlock     embedded-in-code  [name:coefficients]
+  v7          0x0FBA3C-0x0FBCFB      703 .Lc_efb9fd                     embedded-in-code
+  v9          0x113CE7-0x113F7D      662 TuningSystem_Handler_Table     embedded-in-code  [text]
+  v7          0x172F1C-0x17317C      608 InitializeEast                 embedded-in-code
+  v7          0x1EEC4B-0x1EEE9D      594 .Lc_fee965                     embedded-in-code
+  v7          0x168F0C-0x16915B      591 CstmCpTtl_Dispatch2            embedded-in-code
+  v7          0x1454E3-0x145727      580 EffEdit_DSPConfigBlock         embedded-in-code
+  v7          0x194587-0x1947CB      580 InitializeCheap                embedded-in-code
+  v7          0x1B1E82-0x1B20BE      572 .Lc_fb1e56                     embedded-in-code
+  v7          0x118447-0x11867F      568 .Lc_f18430                     embedded-in-code
+  v10         0x15DC9E-0x15DEC4      550 AccTone_InlineBytecodeData     embedded-in-code
+  v9          0x15DC9E-0x15DEC4      550 AccTone_InlineBytecodeData     embedded-in-code
+  v10         0x113516-0x11373A      548 TuningSystem_Handler_Table     embedded-in-code
+  v10         0x177939-0x177B45      524 PcgOutGridCheckJumpTable       embedded-in-code
+  v9          0x177939-0x177B45      524 PcgOutGridCheckJumpTable       embedded-in-code
+EXIT=0

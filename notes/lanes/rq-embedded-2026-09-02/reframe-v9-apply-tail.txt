@@ -1,0 +1,68 @@
+te values that blocked a span: 
+sound_menu_drawbar_screens.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+style_bitmaps.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+style_ui_params.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+technichord_part_settings.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+technichord_string_data.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+widget_descriptors.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+widget_dispatch.s
+  (a) converted              76 spans,  1040 B of .byte,   1051 B re-framed
+  (b) in-data, left to the data pass    16 regions,  6677 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte        11 runs,      651 B
+  refused: 408 undecodable, 11 symbol-losing, 15 not-round-tripping,
+           0 label-crossing, 11 string-containing  (16795 B total)
+      undecodable byte values that blocked a span: 0xee x172, 0x52 x20, 0x99 x18, 0x1f x12, 0x8f x12, 0x53 x12, 0x50 x11, 0xe0 x10, 0x57 x10, 0x55 x10, 0x56 x6, 0xc2 x6
+widget_names_charmap.s
+  (a) converted               0 spans,     0 B of .byte,      0 B re-framed
+  (b) in-data, left to the data pass     0 regions,     0 B
+  (d) blocked on a backend gap           0 runs,        0 B
+      would swallow a blind byte         0 runs,        0 B
+  refused: 0 undecodable, 0 symbol-losing, 0 not-round-tripping,
+           0 label-crossing, 0 string-containing  (0 B total)
+      undecodable byte values that blocked a span: 
+TOTAL converted 4292 spans covering 9863 B of .byte; 18823 B re-framed; 35554 B refused; 21091 B left to the data pass
+VERIFIED: rebuilt v10 image is byte-identical to the ROM
+EXIT=0
