@@ -36,6 +36,7 @@ CLANG=$(LLVM_BIN)/clang
 .SECONDARY:
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
+.PHONY: style-events style-midi verify-style-midi
 .PHONY: decompress-help-databases rebuild-help-databases verify-help-databases
 .PHONY: verify-stale-help-duplicate
 .PHONY: audit-icons-blob
@@ -796,8 +797,48 @@ rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.e
 # The board's graphics are built FROM the committed PNGs and palette text files, not
 # incbin'd out of a ROM slice. scripts/build/hdae5000_images.py verify asserts the round
 # trip is byte-exact, so the readable form is the source rather than a view of a blob.
-style-events:
+# ⚠ THE .bin FILES MUST BE REAL PREREQUISITES, NOT A BARE `style-events`.
+# This rule used to be `style-events:` with no output files, and the .o rules named
+# `style-events` as a prerequisite.  That does NOT force a rebuild in this Makefile:
+# `.SECONDARY:` is declared with no prerequisites, which marks every target
+# intermediate, and make then reports
+#     Prerequisite 'style-events' of target '...custom_data.llvm.o' does not exist.
+#     No need to remake target '...custom_data.llvm.o'.
+# MEASURED 2026-09-02: with one NOTE pitch changed in custom_data/styles/section_0.styles
+# -- a change that really does move ROM byte 0x1409 -- `make gate` printed
+# `kn5000_custom_data IDENTICAL` and exited 0, on an already-built tree.  It only went
+# red after `touch custom_data/kn5000_custom_data.s` forced the object.  The style
+# listings are the committed SOURCE of the accompaniment styles, so the gate was not
+# certifying them at all.
+# Naming the outputs fixes it and keeps the build incremental.
+# ⚠ The same shape is still present for `indexed-images`, `tabledata-images` and
+# `hdae5000-images`, which are also output-less and also named as prerequisites. They
+# belong to other lanes' files and are left alone here; see
+# notes/sound/FINDINGS-audio-and-music-ranges-2026-09-02.md section 10.
+STYLE_EVENT_BINS = custom_data/includes/section_0.bin \
+                   custom_data/includes/section_1_2.bin \
+                   custom_data/includes/section_3_4.bin \
+                   custom_data/includes/section_5_6.bin \
+                   table_data/includes/generated/Composer_FactoryMemoryImage.bin
+STYLE_EVENT_SRC = $(wildcard custom_data/styles/*.styles)
+
+# `&:` is a GROUPED target (GNU make >= 4.3): one recipe produces all five, so the
+# script runs once rather than once per output.
+$(STYLE_EVENT_BINS) &: $(STYLE_EVENT_SRC) scripts/build/style_events.py
 	python3 scripts/build/style_events.py build
+
+style-events: $(STYLE_EVENT_BINS)
+
+# The 240 factory accompaniment styles as Standard MIDI Files, one per directory
+# record. DERIVED AND PLAYABLE, NOT A BUILD INPUT: `custom_data/styles/*.styles` is
+# what the ROM is built from and it holds what MIDI cannot (cell allocation and link
+# topology, the PAD bytes after 0x83, explicit-vs-running status). Deliberately NOT a
+# prerequisite of any ROM target, so a change here can never move a ROM byte.
+style-midi:
+	python3 scripts/build/style_to_midi.py build
+
+verify-style-midi:
+	python3 scripts/build/style_to_midi.py verify
 
 indexed-images:
 	python3 scripts/build/indexed_images.py build
@@ -825,7 +866,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) $(STALE_HELP_DUPLICATE) tabledata-images style-events $(LLVM_MC)
+rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) $(STALE_HELP_DUPLICATE) tabledata-images $(STYLE_EVENT_BINS) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ table_data/kn5000_table_data.s
 
@@ -836,7 +877,7 @@ rebuilt_ROMs/kn5000_table_data.llvm.rom: rebuilt_ROMs/kn5000_table_data.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Custom data ---
-rebuilt_ROMs/kn5000_custom_data.llvm.o: $(CUSTOMDATA_SRC) style-events $(LLVM_MC)
+rebuilt_ROMs/kn5000_custom_data.llvm.o: $(CUSTOMDATA_SRC) $(STYLE_EVENT_BINS) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I custom_data -o $@ custom_data/kn5000_custom_data.s
 

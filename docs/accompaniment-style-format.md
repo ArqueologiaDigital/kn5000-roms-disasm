@@ -33,6 +33,31 @@ The names are now typed out in the source, so they are greppable: "Bolero puro",
 "GentleSwing 1", "GospelRevival", "Roaring 20's", "AccordionJazz", "8BtPopBallad D".
 **Only the name field is established.** No other field in the 96 bytes has been identified.
 
+## The directory names its chains -- a bijection (2026-09-02)
+
+The record layout above lists everything but the name as "unidentified".  The five u16
+fields at record **+0x00, +0x04, +0x06, +0x08 and +0x0A** are CELL POINTERS, resolved by
+the same rule as the chain links (`block = (v & 0x0FFF) + first_cell_block_of_section`),
+and they are a consecutive ascending run `v, v+1, v+2, v+3, v+4` in **240 of 240**
+records.  Field +0x02 is zero in every record.
+
+Across all 240 records they name **all 1,200 linked chains (`byte[0] == 0x80`) and none
+of the 818 unlinked template blocks (`byte[0] == 0x00`)** -- no duplicate, no gap.  So
+every music chain now has a style name, and `scripts/build/style_to_midi.py` writes one
+Standard MIDI File per record into `custom_data/styles/midi/`.
+
+⚠ The obvious test -- "the value resolves to a chain head" -- is **worthless here**: it
+passes 1,200/1,200, and so does a uniformly random value drawn from the same block range,
+because chain heads are dense in the cell region.  The two properties above are the ones
+whose null can fail.
+
+⚠ **A zero is a valid pointer.**  The Composer bank's section nibble is 0 rather than
+section+1, so its first pointer is literally `0x0000`, addressing that section's first
+cell block.  Treating zero as "absent" discards one real pointer and invents one unnamed
+chain.
+
+Reproduce: `python3 scripts/analysis/style_directory_chains.py [--names|--gaps|--selftest]`.
+
 ## Cells
 
 Style music lives in 256-byte cells. A cell is recognised by `byte[0] == 0x80 && byte[5] == 0x87`:

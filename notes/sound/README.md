@@ -9,6 +9,7 @@ Run them from the repository root.
 | `kn5000_sound_boundary.py` | Which routines touch a sound chip, where do the chip boundaries lie, and does any of that code's control flow leave disassembled text? | `python3 notes/sound/kn5000_sound_boundary.py --calibrate --windows --tgregs --misframes --coverage --unspellable` |
 | `kn5000_unspellable_forms.py` | Which instruction FORMS does the tree still carry as `.byte`, what are their bytes, and can the assembler spell them at all? | `python3 notes/sound/kn5000_unspellable_forms.py --sites` |
 | `dsp_protocol_cross_product.py` | Is the uPD6383GF host protocol the SAME on the KN5000 and the SX-WSA1R -- which parts are a property of the CHIP and which of the PRODUCT, and how much DSP payload is literally the same bytes? Backs `notes/DRIVER-INSIGHT-dsp-2026-09-02.md`. | `python3 notes/sound/dsp_protocol_cross_product.py` (or one of `grammar params handlers shared runs commands transport`) |
+| `pcm_discriminator.py` | **Is any byte range in the 13 gated images PCM audio?** Three lanes -- s16le, 8-bit and IMA ADPCM -- each with a hardware-rooted positive control (the KN5000's IC307 waveform mask ROM) and its own nulls. Backs `FINDINGS-audio-and-music-ranges-2026-09-02.md`. | `python3 notes/sound/pcm_discriminator.py --calibrate --census --containers --sounddata` |
 | `sound_coverage.py` | (superseded — the first, territorial census; see §1 of the findings for why its conclusion did not follow) | `python3 notes/sound/sound_coverage.py` |
 
 Selftests:
@@ -19,7 +20,14 @@ python3 notes/sound/kn5000_unspellable_forms.py --selftest   # the work list is 
 python3 notes/sound/dsp_protocol_cross_product.py --selftest # 28 invariants, incl.
                                                              # figures published in
                                                              # the wsa1/ notes
+python3 notes/sound/pcm_discriminator.py --selftest           # every calibration figure,
+                                                              # every null, and the
+                                                              # census verdict
 ```
+
+⚠ `pcm_discriminator.py` needs its positive control, which lives OUTSIDE this repository
+at `~/compartilhado/kn7000-emulator/roms/kn5000/kn5000_waveform_rom.ic307`.  Without it
+it exits 2 and reports nothing rather than running uncalibrated.
 
 ## The two converters these drive
 
@@ -28,6 +36,8 @@ They live in `scripts/converters/` because they WRITE sources; the scripts here 
 | script | the question it answers | command |
 |---|---|---|
 | `convert_sound_byte_blocks.py` | Can this `.byte` RUN, which converted code branches into, be reframed as instructions without moving a byte? | `python3 scripts/converters/convert_sound_byte_blocks.py --list` then `... LABEL [LABEL ...]` |
+| `style_to_midi.py` (in `scripts/build/`) | Can the 240 factory accompaniment styles be HEARD? Writes one Standard MIDI File per style-directory record, with every non-BEAT event also carried verbatim. A VIEW, not the build source. | `make style-midi` then `make verify-style-midi` |
+| `style_directory_chains.py` (in `scripts/analysis/`) | Which chains belong to which named style? | `python3 scripts/analysis/style_directory_chains.py --selftest` |
 | `convert_unspellable_forms.py` | Can this single `.byte` LINE, already framed as one instruction by unidasm, be spelt natively? | `python3 scripts/converters/convert_unspellable_forms.py --dry-run` |
 
 ## What makes these measurements rather than greps
