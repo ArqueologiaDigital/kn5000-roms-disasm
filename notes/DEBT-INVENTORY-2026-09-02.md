@@ -29,9 +29,14 @@ call or jump sites anywhere in the tree. A smaller instance exists in
 false-positive against its own control). ⚠ Do NOT quote the raw
 "375,743 B unreached" figure that census also prints — its own null shows a
 17.3% seed-coverage gap, so the raw number is dominated by REAL code reached
-through dispatch mechanisms static analysis cannot follow. The category
-remains unmeasured on the other twelve images, so their figures are still
-LOWER BOUNDS.
+through dispatch mechanisms static analysis cannot follow. ★ **ALSO MEASURED on all four WSA1R images 2026-09-02**
+(`wsa1/notes/data_as_code_audit.py`, null 2.24% by bytes): **no defect in any
+of them.** prom_c has zero HIGH candidates; prom_d has zero code regions at all,
+confirmed by a byte closure (0 + 330,521 + 193,767 = 524,288); prom_a's one HIGH
+candidate is a corroborated false positive. That method flattens with the
+ASSEMBLER rather than the disassembler, so the decoder blind spots cannot
+affect it. The category remains unmeasured on the remaining eight images, whose
+figures are still LOWER BOUNDS.
 
 A `.byte` run is exactly as un-decoded as an `.incbin`, and it passes every
 "no `.incbin`" test. This project has now shipped that false claim twice.
