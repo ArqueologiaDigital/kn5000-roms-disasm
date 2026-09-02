@@ -12,7 +12,7 @@ What question does it answer?
 
 Run:
     python3 wsa1/notes/orphan_tables_f0033f.py               # the whole argument
-    python3 wsa1/notes/orphan_tables_f0033f.py --selftest    # 15 checks
+    python3 wsa1/notes/orphan_tables_f0033f.py --selftest    # 16 checks
 
 Individual controls, each of which is a NULL for one claim in the note
 (ORPHAN-TABLES-F0033F-2026-09-02.md).  Every one prints its observation and

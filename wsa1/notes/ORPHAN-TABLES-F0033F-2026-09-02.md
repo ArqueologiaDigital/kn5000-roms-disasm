@@ -8,7 +8,7 @@ Everything below is re-derived by
 
 ```
 python3 wsa1/notes/orphan_tables_f0033f.py            # the whole argument
-python3 wsa1/notes/orphan_tables_f0033f.py --selftest # 15 checks, all green
+python3 wsa1/notes/orphan_tables_f0033f.py --selftest # 16 checks, all green
 ```
 
 which is committed beside this note and refuses if any number here moves.
@@ -424,5 +424,5 @@ noted only so the next lane does not rediscover it and believe it.
 ---
 
 *Reproduce: `python3 wsa1/notes/orphan_tables_f0033f.py --selftest`
-(15 checks).  Nothing in `prom_a`, `prom_b`, `prom_c`, `prom_d` or the KN5000
+(16 checks).  Nothing in `prom_a`, `prom_b`, `prom_c`, `prom_d` or the KN5000
 sources was modified by this lane.*

@@ -1657,7 +1657,7 @@ names, and nothing was ever found that reads them. Are they four unrelated
 objects, and is "no reader" a fact or a failed search?*
 
     python3 notes/orphan_tables_f0033f.py               # the whole argument
-    python3 notes/orphan_tables_f0033f.py --selftest    # 15 checks
+    python3 notes/orphan_tables_f0033f.py --selftest    # 16 checks
 
 **Answer: ONE array type instantiated three times, 18 four-byte slots per
 record.** The width is a *reader-side* fact — the four dispatchers at `0xF00CCF
