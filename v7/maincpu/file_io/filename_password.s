@@ -215,7 +215,7 @@ FmmFileNameFunc:
 	jr	z, 70
 	cp	xwa, 31784964
 	jrl	nz, 1544
-	stda32	(32470), xbc
+	ld	(32470:16), xbc
 	call	16290274
 	ld	(32478:16), hl
 	cps	hl, 0
@@ -233,7 +233,7 @@ FileName_ListSelect_Negative:
 FileName_ListSelect_Forward:
 	call	16423243
 	lds32	xwa, 0
-	stda32	(32474), xwa
+	ld	(32474:16), xwa
 	jrl	1483
 FileName_HandleShow:
 	ldw (xsp + 6), 0x0
@@ -694,7 +694,7 @@ FileName_Callback_Simple:
 	ld	xde, xhl
 	jr	99
 FileName_HandleRegister:
-	stda32 (0x7eda), xbc
+	ld (0x7eda:16), xbc
 	cp (0x8c9a:16), 0x67
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus

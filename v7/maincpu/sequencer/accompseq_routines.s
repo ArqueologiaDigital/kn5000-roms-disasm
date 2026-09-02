@@ -60,11 +60,11 @@ AccompSeq_SetupChannel1:
 	jr z, .Lc_f6d97e
 	ld (0x7db6:16), 0x00
 	ld XWA,0x00007a50
-	stda32 (0x7db0), xwa
+	ld (0x7db0:16), xwa
 	ld XWA,0x00007da4
-	stda32 (0x7dac), xwa
+	ld (0x7dac:16), xwa
 	ld XWA,0x00007dd6
-	stda32 (0x7dd8), xwa
+	ld (0x7dd8:16), xwa
 	ld wa, (0x7d90:16)
 	ld (0x7da6:16), wa
 	ld wa, (0x7d92:16)
@@ -88,11 +88,11 @@ AccompSeq_SetupChannel2:
 	jr z, AccompSeq_ChannelSetupDone
 	ld (0x7db6:16), 0x01
 	ld XWA,0x00007b50
-	stda32 (0x7db0), xwa
+	ld (0x7db0:16), xwa
 	ld XWA,0x00007da5
-	stda32 (0x7dac), xwa
+	ld (0x7dac:16), xwa
 	ld XWA,0x00007dd7
-	stda32 (0x7dd8), xwa
+	ld (0x7dd8:16), xwa
 	ld wa, (0x7d94:16)
 	ld (0x7da6:16), wa
 	ld wa, (0x7d96:16)

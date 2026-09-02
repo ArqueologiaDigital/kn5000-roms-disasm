@@ -1449,7 +1449,7 @@ RhythmROM_BytecodeBlock4:
 	push	xwa
 	call	16713379
 	add	xsp, 4
-	stda32	(13504), xhl
+	ld	(13504:16), xhl
 	ld	xwa, 4096
 	push	xwa
 	call	16713379
@@ -1541,7 +1541,7 @@ AccentData_Part5_Done:
 
 RhythmROM_ValidateHeader:
 	xor	xwa, xwa
-	stda32	(12763), xwa
+	ld	(12763:16), xwa
 	ld	xix, 4194304
 	ld	xwa, (xix)
 	cp	xwa, 84148480
@@ -1555,7 +1555,7 @@ RhythmROM_ValidateHeader:
 	jr	9
 AccChord_CheckFailed:
 	ld	xwa, 4294967295
-	stda32	(12763), xwa
+	ld	(12763:16), xwa
 RhythmROM_HeaderValid:
 	ret
 

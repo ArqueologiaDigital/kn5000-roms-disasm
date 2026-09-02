@@ -7741,7 +7741,7 @@ SeMenu_NameEditor_DeleteChar:
 	; --- Wrapper function 6: set flag + store 4 regs, call ---
 	ld	(0x03efa8:24), 0
 	push xwa
-	stda32	1740, xiy
+	ld	(1740:16), xiy
 	ld	(1744:16), ix
 	ld	(1746:16), bc
 	ld	(1748:16), hl

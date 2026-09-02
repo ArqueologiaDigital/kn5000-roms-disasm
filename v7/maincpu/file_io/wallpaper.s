@@ -96,7 +96,7 @@ WPLoad_HandleAbort:
 
 WPLoad_HandleSelection:
 	ld	xwa, (xsp+6)
-	stda32	(33044), xwa
+	ld	(33044:16), xwa
 	call	16296968
 	ld	(33048:16), hl
 	cps	hl, 0

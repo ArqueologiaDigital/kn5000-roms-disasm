@@ -125,7 +125,7 @@ WPLoad_HandleAbort:
 
 WPLoad_HandleSelection:
 	ld xwa, (xsp + 6)
-	stda32 0x81b0, xwa
+	ld (0x81b0:16), xwa
 	call FileIO_GetCurrentWallpaperIndex
 	ld (0x81b4:16), hl
 	cps hl, 0

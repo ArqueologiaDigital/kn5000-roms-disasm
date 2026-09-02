@@ -1993,7 +1993,7 @@ SeqPlay_InitDemo_LoadVoiceData:
 	ldb_erp A, 0xfb
 	extz wa
 	call Demo_GetPresetBaseForPart
-	stda32 0x283e, xhl
+	ld (0x283e:16), xhl
 	stb_erp A, 0xfb
 	extz wa
 	call Demo_GetPresetBaseForPartExt
@@ -13008,7 +13008,7 @@ SeqVoice_SetDefaultParams:
 	ld (0x289e:16), 15
 	ldmm16 0x28a2, 0x286d
 	ld xwa, (7514:16)
-	stda32 3304, xwa
+	ld (3304:16), xwa
 	ldw (3376:16), 0
 	ret
 
@@ -13114,7 +13114,7 @@ SeqData_ScanAllTracks:
 	push xiz
 	lds iz, 0
 	lds32 xwa, 1
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	resda 1, 0x287b
 	cpdi16 9694, 0
 	jr z, SeqData_PopIzRet
@@ -13611,7 +13611,7 @@ SeqPart_CalcRemainingTicks:
 	cp xhl, xwa
 	jr ugt, SeqPart_CalcDivideAndStore
 	lds32 xwa, 0
-	stda32 9914, xwa
+	ld (9914:16), xwa
 	jr SeqPart_CalcStoreResult
 
 SeqPart_CalcDivideAndStore:
@@ -13621,7 +13621,7 @@ SeqPart_CalcDivideAndStore:
 	ld xwa, xhl
 	ld xbc, 0xfb
 	call Math_DivideU32
-	stda32 9914, xhl
+	ld (9914:16), xhl
 
 SeqPart_CalcStoreResult:
 	ld xwa, (9914:16)
@@ -13874,13 +13874,13 @@ SeqBuf_ComputePageLayout:
 	ld wa, (9890:16)
 	extz xwa
 	addda32 xwa, 9690
-	stda32 9914, xwa
+	ld (9914:16), xwa
 	ldmm16 9912, 9884
 	jrl SeqBuf_PageLayoutReturn
 
 SeqBuf_CalcPageDivision:
 	sub xwa, xbc
-	stda32 9922, xwa
+	ld (9922:16), xwa
 	add xwa, 0xfb
 	dec 1, xwa
 	ld xbc, 0xfb
@@ -13897,7 +13897,7 @@ SeqBuf_CalcPageDivision:
 	inc 4, a
 	ldb w, 0x0
 	extz xwa
-	stda32 9914, xwa
+	ld (9914:16), xwa
 	cpda16 xiz, 0xf231
 	jr ugt, SeqBuf_PageOverflowError
 	ld iz, (9884:16)
@@ -14000,7 +14000,7 @@ SeqPart_MultiVoiceScanTracks:
 
 SeqPart_MultiVoiceCalcDelta:
 	ld xwa, (9690:16)
-	stda32 9934, xwa
+	ld (9934:16), xwa
 	ldmm16 0x287f, 9778
 	ld l, (0x288d:16)
 	ld a, (9780:16)
@@ -14038,7 +14038,7 @@ SeqPart_MultiVoiceCompareDelta:
 	cp xwa, xbc
 	jr ule, SeqPart_MultiVoiceReverseCalc
 	sub xwa, xbc
-	stda32 9934, xwa
+	ld (9934:16), xwa
 	ld a, (0x287b:16)
 	bit 4, a
 	jr z, SeqPart_MultiVoiceStoreDelta
@@ -14046,11 +14046,11 @@ SeqPart_MultiVoiceCompareDelta:
 	jr nz, SeqPart_MultiVoiceStoreDelta
 	ld xwa, (9934:16)
 	dec 1, xwa
-	stda32 9934, xwa
+	ld (9934:16), xwa
 
 SeqPart_MultiVoiceStoreDelta:
 	ld xwa, (9934:16)
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	calr SeqPart_CalcTickRate
 	ld wa, (9930:16)
 	adddm16 9932, xwa
@@ -14060,7 +14060,7 @@ SeqPart_MultiVoiceReverseCalc:
 	cp xwa, xbc
 	jr nc, SeqVoice_AdvanceReadLoop
 	sub xbc, xwa
-	stda32 9690, xbc
+	ld (9690:16), xbc
 	ld a, (0x287b:16)
 	bit 4, a
 	jr z, SeqPart_MultiVoiceCheckBounds
@@ -14068,7 +14068,7 @@ SeqPart_MultiVoiceReverseCalc:
 	jr nz, SeqPart_MultiVoiceCheckBounds
 	ld xwa, (9690:16)
 	inc 1, xwa
-	stda32 9690, xwa
+	ld (9690:16), xwa
 
 SeqPart_MultiVoiceCheckBounds:
 	calr SeqPart_CalcPlaybackOffset
@@ -15023,7 +15023,7 @@ SeqBufInit_MainSetup:
 	ld (9884:16), wa
 	ldmm16 9890, 9822
 	lds32 xwa, 6
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	calr SeqBuf_ComputePageLayout
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_AbortAndUpdateState
@@ -15057,7 +15057,7 @@ SeqBufInit_SecondaryPath:
 	cp (xbc), 0x0
 	jr nz, SeqBufInit_DualTrackPath
 	lds32 xwa, 6
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	calr SeqBuf_ComputePageLayout
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_AbortAndUpdateState
@@ -15087,7 +15087,7 @@ SeqBufInit_SecondaryPath:
 
 SeqBufInit_DualTrackPath:
 	ld xwa, 0xc
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	calr SeqBuf_ComputePageLayout
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_AbortAndUpdateState
@@ -18437,7 +18437,7 @@ SeqInit_ReturnStub:
 SeqInit_SetBaseAddress:
 	ldw (0x286d:16), 1240
 	lda xwa, (0x0b0000:24)
-	stda32 7514, xwa
+	ld (7514:16), xwa
 	ret
 
 SeqInit_JumpToPartInit:
@@ -20054,7 +20054,7 @@ ApEditSyori:
 	jr z, SeqEvent_CaseC
 	cp xbc, 0x1c0000b
 	jr nz, SeqEvent_CaseE
-	stda32 0x2972, xde
+	ld (0x2972:16), xde
 	calr SeqEvent_MainHandler
 	jr SeqEvent_CaseE
 
@@ -21900,7 +21900,7 @@ EffEditMain:
 	cp xbc, 0x1c0000b
 	jrl nz, AppEvent_ReturnZeroEpilogue4
 	ld xwa, (xsp + 2)
-	stda32 0x2972, xwa
+	ld (0x2972:16), xwa
 	calr EffEdit_ValidateAndReadParams
 	cps hl, 0
 	jrl nz, AppEvent_ReturnZeroEpilogue4
@@ -22694,7 +22694,7 @@ ApPlaySyori:
 	cp xbc, 0x1c0000b
 	jrl nz, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
-	stda32 0x2972, xwa
+	ld (0x2972:16), xwa
 	ld c, (0x8d36:16)
 	cp c, 0x99
 	jrl z, SeqAccomp_DispatchRhythmEvents
@@ -23765,7 +23765,7 @@ SngSelSyori:
 	jr z, SngSel_HandlePrevSong
 	cp xbc, 0x1c0000b
 	jr nz, SeqAcc_CheckLoopAndSendEvent
-	stda32 0x29c6, xde
+	ld (0x29c6:16), xde
 	ld xwa, xde
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -23844,7 +23844,7 @@ NoteEditSyori:
 	jr z, NoteEditSy_HandleUpScroll
 	cp xbc, 0x1c0000b
 	jrl nz, NoteEditSy_ReturnZero
-	stda32 0x2972, xde
+	ld (0x2972:16), xde
 	bit 0, (0x2742:16)
 	jr z, NoteEditSy_InitPlayMode
 	call BmDrEdit_InitDrumMode
@@ -26081,7 +26081,7 @@ SeqSave_AllocAndWrite:
 	pushw 0x2020
 	call Malloc
 	inc 2, xsp
-	stda32 0x29ee, xhl
+	ld (0x29ee:16), xhl
 	or xhl, xhl
 	jr nz, SeqSave_WriteAndFree
 	ldw hl, 0xfffd
@@ -32208,7 +32208,7 @@ SeqPart_ExchangeValidate:
 	ldmm16 9898, 9830
 	ldmm16 9896, 0x28af
 	ld xwa, (9690:16)
-	stda32 0x27e0, xwa
+	ld (0x27e0:16), xwa
 	resda 0, 0x282a
 	ld l, (0x288d:16)
 	ld a, (9810:16)
@@ -32259,9 +32259,9 @@ SeqPart_ExchangeUpdate:
 	ldmm16 0x27ea, 9830
 	ldmm16 0x27e8, 0x28af
 	ld xwa, (9690:16)
-	stda32 0x27e4, xwa
+	ld (0x27e4:16), xwa
 	ld xbc, (0x27e0:16)
-	stda32 9690, xbc
+	ld (9690:16), xbc
 	cp xwa, xbc
 	jr nc, SeqPart_ExchangeFinish
 	calr SeqPart_PositionForward
@@ -32420,7 +32420,7 @@ SeqPart_PositionBackward:
 	dec 1, xbc
 
 SeqPart_PosBackwardLoop:
-	stda32 9690, xbc
+	ld (9690:16), xbc
 	ldmm16 0x27ec, 0x27e8
 	ldmm16 0x27ee, 0x27ea
 	ld xwa, 0x27ec
@@ -32613,7 +32613,7 @@ SeqPart_NavBackwardProcess:
 	ldmm16 9898, 9830
 	ldmm16 9896, 0x28af
 	ld xwa, (9690:16)
-	stda32 0x27e0, xwa
+	ld (0x27e0:16), xwa
 	ld l, (0x288d:16)
 	ld a, (9810:16)
 	ldmm16 0x287f, 9862
@@ -32635,9 +32635,9 @@ SeqPart_NavBackwardValidate:
 	ldmm16 0x27ea, 9830
 	ldmm16 0x27e8, 0x28af
 	ld xbc, (9690:16)
-	stda32 0x27e4, xbc
+	ld (0x27e4:16), xbc
 	ld xbc, (0x27e0:16)
-	stda32 9690, xbc
+	ld (9690:16), xbc
 	bit 3, (0x287b:16)
 	jr z, SeqPart_NavBackwardWrite
 	lda xwa, (0x282c:16)
@@ -32686,7 +32686,7 @@ SeqPart_NavBackwardWrite:
 	cp xwa, xbc
 	jrl nc, SeqPart_NavProcessWalker
 	sub xbc, xwa
-	stda32 9690, xbc
+	ld (9690:16), xbc
 	ldmm16 9884, 9820
 	ldmm16 9890, 9822
 	call SeqBuf_ComputePageLayout
@@ -32745,7 +32745,7 @@ SeqPart_NavProcessWalker:
 	cp xwa, xbc
 	jrl ule, SeqPart_NavWalkerCleanup
 	sub xwa, xbc
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	ld wa, (9862:16)
 	addda16 xwa, 9694
 	cpda16 xwa, 9778
@@ -32960,7 +32960,7 @@ SeqPart_ComputeStepCount:
 	jr nz, SeqPart_StepCountPopReturn
 	lds iz, 0
 	lds32 xwa, 0
-	stda32 9690, xwa
+	ld (9690:16), xwa
 
 SeqPart_StepCountLoop:
 	call SeqData_ReadNextByte
@@ -32971,7 +32971,7 @@ SeqPart_StepCountLoop:
 	lds32 xwa, 0
 	ld a, (0x288e:16)
 	sub xwa, xbc
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	lds iz, 0
 	cpdi16 0x27f4, 0
 	jr z, SeqPart_StepCountError
@@ -33016,7 +33016,7 @@ SeqPart_ReplayForward:
 	ldmm16 0x2889, 9822
 	ld xwa, (9690:16)
 	dec 1, xwa
-	stda32 9690, xwa
+	ld (9690:16), xwa
 	lds32 xiz, 0
 	or xwa, xwa
 	jr z, SeqPart_ReplayEnd

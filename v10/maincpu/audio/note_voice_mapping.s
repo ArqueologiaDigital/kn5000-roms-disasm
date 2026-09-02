@@ -18985,15 +18985,15 @@ SendEpilogue_Data:
 	ldw	wa, 80
 	calr	810
 	jr	28
-	stda32	0xcfb4, xwa
+	ld	(0xcfb4:16), xwa
 	jr	22
-	stda32	0xcfb8, xwa
+	ld	(0xcfb8:16), xwa
 	jr	16
-	stda32	0xcfbc, xwa
+	ld	(0xcfbc:16), xwa
 	jr	10
-	stda32	0xcfc0, xwa
+	ld	(0xcfc0:16), xwa
 	jr	4
-	stda32	0xcfc4, xwa
+	ld	(0xcfc4:16), xwa
 	call	MIDI_PostSendStub
 	pop	xiz
 	inc	4, xsp
@@ -19155,15 +19155,15 @@ SendPartDataBlocks_Send:
 
 COMM_SendDataReturn:
 	ld xwa, 0xffffffff
-	stda32 0xcfb4, xwa
+	ld (0xcfb4:16), xwa
 	ld xwa, 0xffffffff
-	stda32 0xcfb8, xwa
+	ld (0xcfb8:16), xwa
 	ld xwa, 0xffffffff
-	stda32 0xcfbc, xwa
+	ld (0xcfbc:16), xwa
 	ld xwa, 0xffffffff
-	stda32 0xcfc0, xwa
+	ld (0xcfc0:16), xwa
 	ld xwa, 0xffffffff
-	stda32 0xcfc4, xwa
+	ld (0xcfc4:16), xwa
 	ldw (0xcfc8:16), 0xffff
 	ldw (0xcfca:16), 0xffff
 	ldw (0xcfcc:16), 0xffff
@@ -20236,10 +20236,10 @@ PlayModeStateMachine_Block4:
 	ei 6
 	ld wa, (1052:16)
 	extz xwa
-	stda32 0xd0a4, xwa
+	ld (0xd0a4:16), xwa
 	lds32 xwa, 0
 	ld a, (1051:16)
-	stda32 0xd0a0, xwa
+	ld (0xd0a0:16), xwa
 	ei 0
 	call AccWrap_PlayModeDispatch
 	lds32 xwa, 0
@@ -20288,7 +20288,7 @@ PlayModeStateMachine_Prologue:
 	ld (1052:16), hl
 	ld wa, (1052:16)
 	extz xwa
-	stda32 0xd0a4, xwa
+	ld (0xd0a4:16), xwa
 	ld xwa, xiz
 	ld xbc, 0x60
 	call DivMod32
@@ -20296,7 +20296,7 @@ PlayModeStateMachine_Prologue:
 	ld (1051:16), a
 	ldb w, 0x0
 	extz xwa
-	stda32 0xd0a0, xwa
+	ld (0xd0a0:16), xwa
 	ei 0
 
 PlayModeStateMachine_LoadParam:
@@ -20944,7 +20944,7 @@ ConfigureBanks_LoadReg4:
 	lds de, 3
 	call SoundParam_NotifyChange
 	call SeqTimer_UpdateTempoReg
-	stda32 0xe9eb, xiz
+	ld (0xe9eb:16), xiz
 	jr FileIO_SeekRecord_LoopDone
 
 ConfigureBanks_Block10:
@@ -21719,7 +21719,7 @@ SeqPlay_RecordReadOK:
 
 RecordReadOK_Block:
 	lds32 xwa, 0
-	stda32 0xe9eb, xwa
+	ld (0xe9eb:16), xwa
 	lds iz, 0
 	cps iz, 6
 	jr nc, RecordReadOK_InitVal
@@ -21893,7 +21893,7 @@ RecordReadOK_LoadReg3:
 	add a, 0x1d
 	ldb w, 0x0
 	extz xwa
-	stda32 0xe9eb, xwa
+	ld (0xe9eb:16), xwa
 	lds iz, 0
 	cps iz, 1
 	jr ugt, RecordReadOK_CheckDRAM
@@ -21945,7 +21945,7 @@ RecordReadOK_LoadReg4:
 	add a, 0x1d
 	ldb w, 0x0
 	extz xwa
-	stda32 0xe9eb, xwa
+	ld (0xe9eb:16), xwa
 	lds iz, 0
 	jr RecordReadOK_LoopCheck6
 
@@ -22036,7 +22036,7 @@ RecordReadOK_LoadReg6:
 	call SoundParam_NotifyChange
 	call SeqTimer_UpdateTempoReg
 	lds32 xwa, 0
-	stda32 0xe9e7, xwa
+	ld (0xe9e7:16), xwa
 	lds hl, 0
 
 FileIO_Epilogue:
@@ -22123,7 +22123,7 @@ Epilogue_LoadIter:
 
 Epilogue_Block:
 	lds32 xwa, 0
-	stda32 0xebfd, xwa
+	ld (0xebfd:16), xwa
 	ldw (0xec01:16), 0
 	lds hl, 0
 	popw iz
@@ -22978,7 +22978,7 @@ ProcessMidiConverge_Block:
 	lds32 xwa, 0
 	ld a, l
 	and xwa, 0xff
-	stda32 0xebfd, xwa
+	ld (0xebfd:16), xwa
 	calr RingBuffer_ReadByte
 	ld wa, hl
 	cps wa, 0
@@ -23084,7 +23084,7 @@ ToneGen_ValidateRange_Loop:
 ToneGen_VoiceReset_Return:
 	ldw (0xec01:16), 0
 	lds32 xwa, 0
-	stda32 0xebfd, xwa
+	ld (0xebfd:16), xwa
 
 VoiceReset_Return_RestoreReg:
 	popw iz
@@ -23514,16 +23514,16 @@ SndParam_StoreAndReturn:
 StoreAndReturn_Block:
 	ld (0xe9e4:16), 0
 	lds32 xwa, 0
-	stda32 0xe9e7, xwa
+	ld (0xe9e7:16), xwa
 	lds32 xwa, 0
-	stda32 0xe9f5, xwa
+	ld (0xe9f5:16), xwa
 	ldw (0xe9e5:16), 0
 	lds32 xwa, 0
-	stda32 0xe9eb, xwa
+	ld (0xe9eb:16), xwa
 	ldw (0xe9ef:16), 0
 	ldw (0xe9f1:16), 0
 	lds32 xwa, 0
-	stda32 0xebfd, xwa
+	ld (0xebfd:16), xwa
 	ldw (0xec01:16), 0
 	ld (0xe9c4:16), 0
 	calr FileIO_InitTrackSlots
@@ -24991,7 +24991,7 @@ Param_SignExtendRetu_Return:
 
 Param_SignExtendRetu_Block:
 	ld xwa, (SoundData_CategoryDescPtr:24)
-	stda32 0xe14e, xwa
+	ld (0xe14e:16), xwa
 	ret
 
 Param_SignExtendRetu_Block2:
@@ -25442,7 +25442,7 @@ Param_SignExtendRetu_Data:
 	jr	z, 5
 	cp	a, 17
 	jr	nz, 11
-	stda32	0xe193, xde
+	ld	(0xe193:16), xde
 	lds	wa, 3
 	ldw	bc, 21
 	jr	23
@@ -25452,7 +25452,7 @@ Param_SignExtendRetu_Data:
 	jr	nz, 21
 	cps	w, 2
 	jr	nc, 17
-	stda32	0xe193, xde
+	ld	(0xe193:16), xde
 	lds	wa, 3
 	ldw	bc, 21
 	call	sendCOMM
@@ -25462,7 +25462,7 @@ Param_SignExtendRetu_Data:
 	ret
 	dec	2, xsp
 	push	xiz
-	stda32	0xe193, xwa
+	ld	(0xe193:16), xwa
 	ld	(xwa), 240
 	ld	xwa, (0xe193:16)
 	ld	(xwa+1), 80
@@ -25546,14 +25546,14 @@ Param_SignExtendRetu_Data:
 	jr	nz, 56
 	cp	xhl, 470
 	jr	ugt, 43
-	stda32	0xe193, xiz
+	ld	(0xe193:16), xiz
 	lds	wa, 3
 	ld	bc, (xsp+6)
 	ld	xde, xiz
 	jr	19
 	cp	xhl, 0x2927
 	jr	ugt, 22
-	stda32	0xe193, xiz
+	ld	(0xe193:16), xiz
 	lds	wa, 3
 	ld	bc, (xsp+6)
 	ld	xde, xiz

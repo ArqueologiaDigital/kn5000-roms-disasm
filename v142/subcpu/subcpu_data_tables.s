@@ -11652,7 +11652,7 @@ Audio_CheckQueuedData_Send:
 	sub xde, xwa
 	cp xde, 0x87
 	ret c
-	stda32 4140, xbc
+	ld (4140:16), xbc
 	setda 0, 4148
 	calr Serial1_Enable_TX_Interrupt
 	ret

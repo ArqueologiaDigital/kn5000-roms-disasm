@@ -27,7 +27,7 @@ ToneGen_DispatchSubHandler:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	cpda16 xix, 0x286d
 	jr ule, ToneGen_StoreBlockAndLink
@@ -577,7 +577,7 @@ FileIO_ReadBlockToBuffer:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_ReadBlock
-	stda32 6701, xhl
+	ld (6701:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -590,7 +590,7 @@ FileIO_ReadBlockToFilePos:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_ReadBlock
-	stda32 6701, xhl
+	ld (6701:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -994,12 +994,12 @@ SMF_SetupActiveChannel:
 	xor wa, wa
 	ld (4002:16), wa
 	ld (4004:16), wa
-	stda32 6705, xix
+	ld (6705:16), xix
 	ld wa, (4002:16)
 	stw_dpi WA, 0xf1
 	ld wa, (4004:16)
 	stw_dpi WA, 0xf1
-	stda32 4376, xix
+	ld (4376:16), xix
 	ld xix, (4376:16)
 	ld xiy, SMF_HeaderConstants
 	lds bc, 4
@@ -1007,7 +1007,7 @@ SMF_SetupActiveChannel:
 	ld xiy, 0xf280
 	ldw bc, 0x10
 	ldir85
-	stda32 4376, xix
+	ld (4376:16), xix
 	ldw (4206:16), 0
 	ld (4208:16), 0
 	ld xiy, 0x106e
@@ -1027,7 +1027,7 @@ SMF_WaitForReady:
 	stw_dpi WA, 0xf1
 	ldb a, 0x8
 	lda_dpi XBC, 0xf0
-	stda32 4376, xix
+	ld (4376:16), xix
 	ld l, (0xfc62:16)
 	xor h, h
 	pushw bc
@@ -1092,7 +1092,7 @@ SMF_WriteChannel_FileUnderflow:
 SMF_WriteChannel_Continue:
 	djnz16 bc, -46
 
-	stda32 4376, xix
+	ld (4376:16), xix
 
 	cp (6709:16), 0
 

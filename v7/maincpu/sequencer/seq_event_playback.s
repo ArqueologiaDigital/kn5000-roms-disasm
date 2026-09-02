@@ -94,7 +94,7 @@ SeqEvt_ProcessNoteOn:
 
 	ldb_sri W, 0x07, 0xec, 0xf0
 
-	stda32 (32119), xhl
+	ld (32119:16), xhl
 
 	ld xhl, xbc
 
@@ -197,7 +197,7 @@ SeqEvt_RotateIndexDone:
 SeqEvt_WriteVoiceParams:
 	orda8 a, (0x7d6b)
 	calr SeqEvtBuf_WriteBytePreserve
-	stda32 (0x7d77), xhl
+	ld (0x7d77:16), xhl
 	ld XHL,XBC
 	ld xbc, (0x7d77:16)
 	ld A,W
@@ -206,7 +206,7 @@ SeqEvt_WriteVoiceParams:
 	ldb A, 0x00
 	stb_dri a, 0x07, 0xec, 0xf0
 	inc 1,IX
-	stda32 (0x7d77), xhl
+	ld (0x7d77:16), xhl
 	ld XHL,XBC
 	ld xbc, (0x7d77:16)
 	.byte 0xdc, 0xbe, 0xd1, 0x73, 0x7d, 0x24, 0xc3, 0x07
@@ -226,12 +226,12 @@ SeqEvt_WriteVoiceParams:
 	.byte 0x80, 0xc9, 0xcf, 0x60, 0x67, 0x05, 0xc8, 0x61
 	.byte 0xc9, 0xca, 0x60
 SeqEvt_AdjustNoteOctave:
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	st_rrw	wa, xhl, ix
 	inc	2, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	cpda16	xwa, (32098)
@@ -244,12 +244,12 @@ SeqEvt_WriteRemainingParams:
 	calr	341
 	ld	(32115:16), ix
 	ex16	iz, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	st_rrb	a, xhl, ix
 	inc	1, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	cp	w, 144
@@ -259,12 +259,12 @@ SeqEvt_WriteRemainingParams:
 	calr	293
 	ld	(32115:16), ix
 	ex16	iz, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	st_rrb	a, xhl, ix
 	inc	1, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	ex16	iz, ix
@@ -272,12 +272,12 @@ SeqEvt_WriteRemainingParams:
 	calr	250
 	ld	(32115:16), ix
 	ex16	iz, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	st_rrb	a, xhl, ix
 	inc	1, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 SeqEvt_UpdateReadPosition:

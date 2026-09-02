@@ -96,7 +96,7 @@ CompLoad_HandleAbort:
 	jrl CompLoad_Return
 
 CompLoad_HandleSelection:
-	stda32	(32480), xde
+	ld	(32480:16), xde
 	call	16290274
 	ld	(32484:16), hl
 	cps	hl, 0
@@ -390,7 +390,7 @@ FmmLoadFilterFunc:
 	cp	xbc, 31784964
 	jrl	nz, 425
 	ld	xwa, (xsp+2)
-	stda32	(32486), xwa
+	ld	(32486:16), xwa
 	jrl	415
 LoadFilter_HandleShow:
 	ldw (xsp), 0x0
@@ -595,7 +595,7 @@ FmmSaveFilterFunc:
 	cp	xbc, 31784964
 	jrl	nz, 848
 	ld	xwa, (xsp+2)
-	stda32	(32618), xwa
+	ld	(32618:16), xwa
 	jrl	838
 SaveFilter_HandleShow:
 	ldw (xsp), 0x0

@@ -842,31 +842,31 @@ SwbtWr_ProcessAll_CompactDone:
 
 SwbtWr_InitBank1:
 	ld xiy, Naka_DisplayMode_Table_0x10
-	stda32 0xc081, xiy
+	ld (0xc081:16), xiy
 	ld xiy, UIState_DefaultConfig_A_0x4
-	stda32 0xc085, xiy
+	ld (0xc085:16), xiy
 	ld xiy, 0xbd3c
-	stda32 0xc089, xiy
+	ld (0xc089:16), xiy
 	calr SwbtWr_DispatchLoop_Init
 	ret
 
 SwbtWr_InitBank2:
 	ld xiy, Naka_RenderMode_A_Table
-	stda32 0xc081, xiy
+	ld (0xc081:16), xiy
 	ld xiy, UIState_DefaultConfig_B_0x4
-	stda32 0xc085, xiy
+	ld (0xc085:16), xiy
 	ld xiy, 0xbd3c
-	stda32 0xc089, xiy
+	ld (0xc089:16), xiy
 	calr SwbtWr_DispatchLoop_Init
 	ret
 
 SwbtWr_InitBank3:
 	ld xiy, Naka_EventHandler_Table
-	stda32 0xc081, xiy
+	ld (0xc081:16), xiy
 	ld xiy, UIState_DefaultConfig_C_0x4
-	stda32 0xc085, xiy
+	ld (0xc085:16), xiy
 	ld xiy, 0xc039
-	stda32 0xc089, xiy
+	ld (0xc089:16), xiy
 	calr SwbtWr_DispatchLoop_Init
 	ret
 

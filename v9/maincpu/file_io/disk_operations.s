@@ -26,7 +26,7 @@ FileCopyFunc:
 	jr z, FCopy_HandleExecute
 	cp xbc, 0x1e50004
 	jrl nz, FCopy_Return
-	stda32 0x7f60, xiz
+	ld (0x7f60:16), xiz
 	call GetCurrentFileIndex
 	ld (0x7f64:16), hl
 	cps hl, 0

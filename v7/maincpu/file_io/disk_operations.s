@@ -26,7 +26,7 @@ FileCopyFunc:
 	jr	z, 64
 	cp	xbc, 31784964
 	jrl	nz, 591
-	stda32	(32452), xiz
+	ld	(32452:16), xiz
 	call	16290274
 	ld	(32456:16), hl
 	cps	hl, 0

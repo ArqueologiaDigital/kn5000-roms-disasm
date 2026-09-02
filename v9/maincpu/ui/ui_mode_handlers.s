@@ -355,7 +355,7 @@ EffectMode_ProcessPresetChange_CheckBit7:
 EffectMode_ProcessPresetChange_Apply:
 	calr EffectMode_ClampAndLookupPreset
 	ld xwa, xhl
-	stda32 0x8d60, xwa
+	ld (0x8d60:16), xwa
 	calr EffectMode_UpdateDisplay
 	lda xwa, (0xfc5a:16)
 	ld (xsp + 4), xwa

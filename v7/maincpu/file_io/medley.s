@@ -32,7 +32,7 @@ FmmSeqSongNameFunc:
 	jr z, SeqName_InitAllSlots
 	cp XBC,0x01e50004
 	jr nz, SeqName_ReturnZero
-	stda32 (0x8238), xde
+	ld (0x8238:16), xde
 	cp (0x8462:16), 0x00
 	jr nz, SeqName_SendCurrentIndex
 	ldw (0x823c:16), 0x0000
@@ -334,7 +334,7 @@ IntMed_NextSlot:
 	cp	iz, 10
 	jr	c, -54
 	lds32	xwa, 0
-	stda32	(33346), xwa
+	ld	(33346:16), xwa
 	jrl	990
 IntMed_CheckPlaying:
 	call	15861571
@@ -430,7 +430,7 @@ IntMed_HandleStop:
 
 
 IntMed_StoreWindowPtr:
-	stda32	(33342), xwa
+	ld	(33342:16), xwa
 	jrl	732
 IntMed_InitSlotDisplay:
 	lds iz, 0
@@ -686,7 +686,7 @@ IntMed_NextPlaySlot:
 	jr IntMed_Exit
 
 IntMed_StoreDelayFlag:
-	stda32	(33346), xwa
+	ld	(33346:16), xwa
 	jr	30
 IntMed_CheckContinue:
 	cp (0x8462:16), 0x00
@@ -709,7 +709,7 @@ FmmDiskMedley1Func:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 74
-	stda32	(33430), xde
+	ld	(33430:16), xde
 	jr	68
 DiskMed1_InitLoop:
 	lds iz, 0
@@ -750,7 +750,7 @@ FmmDiskMedley2Func:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 83
-	stda32	(33514), xde
+	ld	(33514:16), xde
 	jr	77
 DiskMed2_InitLoop:
 	ldw iz, 0xa
@@ -1275,7 +1275,7 @@ DiskSel_PostStopEvent:
 
 DiskSel_StoreWindowPtr:
 	ld	xwa, (xsp+6)
-	stda32	(33598), xwa
+	ld	(33598:16), xwa
 	call	16290274
 	ld	(33602:16), hl
 	cps	hl, 0
@@ -2024,7 +2024,7 @@ SmfMed_ClearSlotsLoop:
 SmfMed_FinishInit:
 	call	15862435
 	lds32	xwa, 0
-	stda32	(33688), xwa
+	ld	(33688:16), xwa
 	jrl	556
 SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
@@ -2042,7 +2042,7 @@ SmfMed_HandleStop:
 	ld	(33890:16), 0
 	jrl	513
 SmfMed_StoreWindowPtr:
-	stda32	(33684), xwa
+	ld	(33684:16), xwa
 	jrl	506
 SmfMed_RefreshDisplay:
 	ld	xwa, (33684:16)
@@ -2214,7 +2214,7 @@ SmfMed_CheckAutoPlay:
 	ldw	wa, 111
 	jr	35
 SmfMed_StoreDelayFlag:
-	stda32	(33688), xwa
+	ld	(33688:16), xwa
 	jr	33
 SmfMed_CheckContinue:
 	cp (0x8462:16), 0x00
@@ -2301,7 +2301,7 @@ FmmPdFileNameFunc:
 	jr	z, 57
 	cp	xbc, 31784964
 	jr	nz, 62
-	stda32	(33698), xde
+	ld	(33698:16), xde
 	call	16294075
 	ld	(33702:16), hl
 	cps	hl, 0
@@ -2698,7 +2698,7 @@ PdMed_ClearSlotsLoop:
 PdMed_FinishInit:
 	call	15862435
 	lds32	xwa, 0
-	stda32	(33788), xwa
+	ld	(33788:16), xwa
 	jrl	509
 PdMed_HandleStop:
 	ld	a, (35994:16)
@@ -2711,7 +2711,7 @@ PdMed_HandleStop:
 	ld	(33890:16), 0
 	jrl	477
 PdMed_StoreWindowPtr:
-	stda32	(33784), xwa
+	ld	(33784:16), xwa
 	jrl	470
 PdMed_RefreshDisplay:
 	ld	xwa, (33784:16)
@@ -2882,7 +2882,7 @@ PdMed_CheckAutoPlay:
 	ldw	wa, 113
 	jr	32
 PdMed_StoreDelayFlag:
-	stda32	(33788), xwa
+	ld	(33788:16), xwa
 	jr	30
 PdMed_CheckContinue:
 	cp (0x8462:16), 0x00
@@ -3017,7 +3017,7 @@ FmmDocFileNameFunc:
 	jr	z, 57
 	cp	xbc, 31784964
 	jr	nz, 62
-	stda32	(33794), xde
+	ld	(33794:16), xde
 	call	16294849
 	ld	(33798:16), hl
 	cps	hl, 0
@@ -3426,7 +3426,7 @@ DocMed_ClearSlotsLoop:
 DocMed_FinishInit:
 	call	15862435
 	lds32	xwa, 0
-	stda32	(33884), xwa
+	ld	(33884:16), xwa
 	jrl	521
 DocMed_HandleStop:
 	ld	a, (35994:16)
@@ -3439,7 +3439,7 @@ DocMed_HandleStop:
 	ld	(33890:16), 0
 	jrl	489
 DocMed_StoreWindowPtr:
-	stda32	(33880), xwa
+	ld	(33880:16), xwa
 	jrl	482
 DocMed_RefreshDisplay:
 	ld	xwa, (33880:16)
@@ -3614,7 +3614,7 @@ DocMed_CheckAutoPlay:
 	ldw	wa, 112
 	jr	32
 DocMed_StoreDelayFlag:
-	stda32	(33884), xwa
+	ld	(33884:16), xwa
 	jr	30
 DocMed_CheckContinue:
 	cp (0x8462:16), 0x00

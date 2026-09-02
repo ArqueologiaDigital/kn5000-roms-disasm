@@ -3796,9 +3796,9 @@ Audio_InitAllDefaults:
 	ld (0x90f8:16), 127
 	ld (0x8f63:16), 255
 	lda xwa, (SoundProgram_DispatchTable_0x400:24)
-	stda32 0x90f2, xwa
+	ld (0x90f2:16), xwa
 	lda xwa, (SoundProgram_DispatchTable_0x800:24)
-	stda32 0x9182, xwa
+	ld (0x9182:16), xwa
 	lda xbc, (0x918d:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 31)
@@ -3909,9 +3909,9 @@ Audio_UpdateTempoAndReturn:
 
 Audio_FullReinitWithPreset:
 	lda xwa, (SoundProgram_DispatchTable_0x400:24)
-	stda32 0x90f2, xwa
+	ld (0x90f2:16), xwa
 	lda xwa, (SoundProgram_DispatchTable_0x800:24)
-	stda32 0x9182, xwa
+	ld (0x9182:16), xwa
 	call Sys_CheckPowerStableFlag
 	cps hl, 0
 	jr nz, Audio_CheckAndReinitReverb
@@ -4666,7 +4666,7 @@ Audio_MainPeriodicUpdate:
 	ret z
 	resda 0, 0x9165
 	lda xwa, (SoundProgram_DispatchTable_0x400:24)
-	stda32 0x90f2, xwa
+	ld (0x90f2:16), xwa
 	calr Audio_SyncBufferPositions
 	push xde
 	push xhl
@@ -6512,7 +6512,7 @@ SndParam_FetchSequencerParams:
 	ld a, (0x9127:16)
 	extz wa
 	calr VoiceData_LookupPtrByIndex
-	stda32 0x912b, xhl
+	ld (0x912b:16), xhl
 	ld wa, (0x9133:16)
 	ld de, wa
 	inc 1, wa
@@ -8259,7 +8259,7 @@ MidiStream_ProcessEventBuffer:
 	extz xwa
 	ld wa, (0x90e0:16)
 	add xix, xwa
-	stda32 0x91c1, xix
+	ld (0x91c1:16), xix
 
 MidiStream_NextEvent:
 	ld xix, (0x91c1:16)
@@ -8268,7 +8268,7 @@ MidiStream_NextEvent:
 	jr z, MidiStream_BufferDone
 	ld (0x91bd:16), wa
 	ld_spiw WA, 0xf1
-	stda32 0x91c1, xix
+	ld (0x91c1:16), xix
 	ld (0x91bf:16), wa
 	ld bc, (0x91bd:16)
 	ld de, (0x91bf:16)
@@ -8420,7 +8420,7 @@ MidiStream_ProcessSeqBuffer:
 	extz xwa
 	ld wa, (0x90e0:16)
 	add xix, xwa
-	stda32 0x91c1, xix
+	ld (0x91c1:16), xix
 
 MidiSeqBuf_NextEvent:
 	ld xix, (0x91c1:16)
@@ -8429,7 +8429,7 @@ MidiSeqBuf_NextEvent:
 	jr z, MidiSeqBuf_Done
 	ld (0x91bd:16), wa
 	ld_spiw WA, 0xf1
-	stda32 0x91c1, xix
+	ld (0x91c1:16), xix
 	ld (0x91bf:16), wa
 	calr MidiSeqBuf_InitFromTable
 	ld bc, (0x91bd:16)
@@ -8643,7 +8643,7 @@ MidiStream_ProcessTempoRingBuf:
 	extz xwa
 	ld wa, (0x90e0:16)
 	add xix, xwa
-	stda32 0x91c1, xix
+	ld (0x91c1:16), xix
 
 TempoRing_NextEvent:
 	ld xix, (0x91c1:16)
@@ -8652,7 +8652,7 @@ TempoRing_NextEvent:
 	jr z, TempoRing_Done
 	ld (0x91bd:16), wa
 	ld_spiw WA, 0xf1
-	stda32 0x91c1, xix
+	ld (0x91c1:16), xix
 	ld (0x91bf:16), wa
 	calr TempoRing_ValidateState
 	ld (0x91c7:16), 0
@@ -8840,7 +8840,7 @@ TempoCC_TransmitBytecodeBlock:
 	ldb	a, 128
 	ld	w, (0x91c9:16)
 	.byte 0xf5
-	stda32	0xd150, xde
+	ld	(0xd150:16), xde
 	swi	4
 	ldb	w, 216
 	.byte 0xcc
@@ -10292,13 +10292,13 @@ PartCtrl_ShiftBitmask:
 	ret
 
 AudioCtrl_SaveAllRegs:
-	stda32 0x9137, xwa
-	stda32 0x913b, xbc
-	stda32 0x913f, xde
-	stda32 0x9143, xhl
-	stda32 0x9147, xix
-	stda32 0x914b, xiy
-	stda32 0x914f, xiz
+	ld (0x9137:16), xwa
+	ld (0x913b:16), xbc
+	ld (0x913f:16), xde
+	ld (0x9143:16), xhl
+	ld (0x9147:16), xix
+	ld (0x914b:16), xiy
+	ld (0x914f:16), xiz
 	ret
 
 AudioCtrl_RestoreAllRegs:

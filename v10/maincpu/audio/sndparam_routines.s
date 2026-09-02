@@ -2088,7 +2088,7 @@ SndParam_NotifyQuick_Data:
 	ld	xwa, xiz
 	ld	de, (xsp+4)
 	calr	63612
-	stda32	0x9770, xhl
+	ld	(0x9770:16), xhl
 	ld	xhl, (0x9770:16)
 	pop	xiz
 	inc	4, xsp

@@ -63,11 +63,11 @@ AccompSeq_SetupChannel1:
 	jr z, AccompSeq_SetupChannel2
 	ld (0x7e52:16), 0
 	ld xwa, 0x7aec
-	stda32 0x7e4c, xwa
+	ld (0x7e4c:16), xwa
 	ld xwa, 0x7e40
-	stda32 0x7e48, xwa
+	ld (0x7e48:16), xwa
 	ld xwa, 0x7e72
-	stda32 0x7e74, xwa
+	ld (0x7e74:16), xwa
 	ld wa, (0x7e2c:16)
 	ld (0x7e42:16), wa
 	ld wa, (0x7e2e:16)
@@ -91,11 +91,11 @@ AccompSeq_SetupChannel2:
 	jr z, AccompSeq_ChannelSetupDone
 	ld (0x7e52:16), 1
 	ld xwa, 0x7bec
-	stda32 0x7e4c, xwa
+	ld (0x7e4c:16), xwa
 	ld xwa, 0x7e41
-	stda32 0x7e48, xwa
+	ld (0x7e48:16), xwa
 	ld xwa, 0x7e73
-	stda32 0x7e74, xwa
+	ld (0x7e74:16), xwa
 	ld wa, (0x7e30:16)
 	ld (0x7e42:16), wa
 	ld wa, (0x7e32:16)
@@ -1233,11 +1233,11 @@ AccompSeq_LoadParams_OverrideCheck:
 	ld wa, (0x7e2c:16)
 	ldw_erp WA, 0xe2
 	ld wa, (0x7e2e:16)
-	stda32 0x7e65, xwa
+	ld (0x7e65:16), xwa
 	ld wa, (0x7e30:16)
 	ldw_erp WA, 0xe2
 	ld wa, (0x7e32:16)
-	stda32 0x7e69, xwa
+	ld (0x7e69:16), xwa
 	lds wa, 0
 	ld a, (1075:16)
 	dec 1, a
@@ -1901,9 +1901,9 @@ AccompSeq_SetupChannels:
 	jr z, AccompSeq_SetupCh2
 	ld (0x7e52:16), 0
 	ld xwa, 0x7e40
-	stda32 0x7e48, xwa
+	ld (0x7e48:16), xwa
 	ld xwa, 0x7e72
-	stda32 0x7e74, xwa
+	ld (0x7e74:16), xwa
 	ld wa, (0x7e2c:16)
 	ld (0x7e42:16), wa
 	ld wa, (0x7e2e:16)
@@ -1927,9 +1927,9 @@ AccompSeq_SetupCh2:
 	jr z, AccompSeq_SetupCh_Return
 	ld (0x7e52:16), 1
 	ld xwa, 0x7e41
-	stda32 0x7e48, xwa
+	ld (0x7e48:16), xwa
 	ld xwa, 0x7e73
-	stda32 0x7e74, xwa
+	ld (0x7e74:16), xwa
 	ld wa, (0x7e30:16)
 	ld (0x7e42:16), wa
 	ld wa, (0x7e32:16)

@@ -22,7 +22,7 @@ SingleLoadModeFunc:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 38
-	stda32	(33050), xde
+	ld	(33050:16), xde
 	jr	32
 SLMode_HandleShow:
 	ld	a, (35164:16)
@@ -42,7 +42,7 @@ SingleLoadDstBankFunc:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 38
-	stda32	(33054), xde
+	ld	(33054:16), xde
 	jr	32
 SLDstBank_HandleShow:
 	ld	a, (35164:16)
@@ -62,7 +62,7 @@ SingleLoadDstMemFunc:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 62
-	stda32	(33058), xde
+	ld	(33058:16), xde
 	jr	56
 SLDstMem_HandleShow:
 	.byte 0xe1, 0x22, 0x81, 0x20, 0xf2, 0x24, 0x06, 0xea
@@ -95,7 +95,7 @@ SingleLoadSrcBankFunc:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 59
-	stda32	(33062), xde
+	ld	(33062:16), xde
 	jr	53
 SLSrcBank_HandleShow:
 	ld	xwa, (33062:16)
@@ -126,7 +126,7 @@ SingleLoadSrcMemFunc:
 	jr	z, 14
 	cp	xbc, 31784964
 	jr	nz, 59
-	stda32	(33066), xde
+	ld	(33066:16), xde
 	jr	53
 SLSrcMem_HandleShow:
 	ld	xwa, (33066:16)
@@ -320,7 +320,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-167
 	lds32	xwa, 0
-	stda32	33070, xwa
+	ld	(33070:16), xwa
 	ld	(33074:16), 0
 	ld	(33076:16), 0
 	jrl	453
@@ -445,7 +445,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, (xsp+4)
-	stda32	33070, xwa
+	ld	(33070:16), xwa
 	jr	55
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
@@ -687,7 +687,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-159
 	lds32	xwa, 0
-	stda32	33078, xwa
+	ld	(33078:16), xwa
 	jrl	408
 	ld	l, (35170:16)
 	ld	xwa, (xsp+4)
@@ -807,7 +807,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, (xsp+4)
-	stda32	33078, xwa
+	ld	(33078:16), xwa
 	jr	28
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
@@ -1042,7 +1042,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-169
 	lds32	xwa, 0
-	stda32	33084, xwa
+	ld	(33084:16), xwa
 	ld	(33088:16), 0
 	ld	(33090:16), 0
 	jrl	648
@@ -1231,7 +1231,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, (xsp+4)
-	stda32	33084, xwa
+	ld	(33084:16), xwa
 	jr	52
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
@@ -1305,7 +1305,7 @@ SingleLoadSrcFunc:
 	cp	xwa, 31784964
 	jrl	nz, 400
 	ld	xwa, xiz
-	stda32	(33092), xwa
+	ld	(33092:16), xwa
 	ld	xbc, 31784962
 	ld	xde, 4294967295
 	call	16423243
@@ -1572,7 +1572,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-261
 	lds32	xwa, 0
-	stda32	33096, xwa
+	ld	(33096:16), xwa
 	jrl	160
 	ld	l, (35174:16)
 	ld	xwa, (xsp+4)
@@ -1621,7 +1621,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, (xsp+4)
-	stda32	33096, xwa
+	ld	(33096:16), xwa
 	lds32	xhl, 0
 	jrl	282
 	ld	xwa, (xsp+4)
@@ -1962,7 +1962,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-253
 	lds32	xwa, 0
-	stda32	33100, xwa
+	ld	(33100:16), xwa
 	jrl	160
 	ld	l, (35178:16)
 	ld	xwa, (xsp+4)
@@ -2011,7 +2011,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, (xsp+4)
-	stda32	33100, xwa
+	ld	(33100:16), xwa
 	lds32	xhl, 0
 	jrl	282
 	ld	xwa, (xsp+4)
@@ -2277,7 +2277,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-403
 	lds32	xwa, 0
-	stda32	33104, xwa
+	ld	(33104:16), xwa
 	jrl	229
 	ld	l, (35180:16)
 	ld	xwa, (xsp+4)
@@ -2350,7 +2350,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, (xsp+4)
-	stda32	33104, xwa
+	ld	(33104:16), xwa
 	lds32	xhl, 0
 	jrl	420
 	ld	xwa, (xsp+4)
@@ -2547,7 +2547,7 @@ SingleLoadDstFunc:
 	cp	xwa, 31784964
 	jr	nz, 103
 	ld	xwa, (xsp+4)
-	stda32	33108, xwa
+	ld	(33108:16), xwa
 	lds	wa, 0
 	calr	-23561
 	calr	-23472
@@ -2925,7 +2925,7 @@ CmpSingleLoadSrcFunc:
 	cp	xiz, 31784964
 	jrl	nz, 427
 	ld	xwa, (xsp+4)
-	stda32	(33112), xwa
+	ld	(33112:16), xwa
 	ld	xbc, 31784962
 	ld	xde, 4294967295
 	call	16423243
@@ -3063,7 +3063,7 @@ CmpSingleLoadDstFunc:
 	cp	xwa, 31784964
 	jrl	nz, 685
 	ld	xwa, (xsp+4)
-	stda32	(33116), xwa
+	ld	(33116:16), xwa
 	ld	xbc, 31784962
 	ld	xde, 4294967295
 	call	16423243
@@ -3298,7 +3298,7 @@ CmpSingleLoadFileFunc:
 	jr	z, 47
 	cp	xbc, 31784964
 	jrl	nz, 278
-	stda32	(33120), xde
+	ld	(33120:16), xde
 	call	16290274
 	ld	(33124:16), hl
 	cps	hl, 0

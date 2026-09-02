@@ -1824,7 +1824,7 @@ FDC_MC_EXIT:
 	calr	22
 	ld	(0x8a28:16), 77
 	lda	xwa, (0x8a70:16)
-	stda32	0x8a4c, xwa
+	ld	(0x8a4c:16), xwa
 	calr	62949
 	calr	63057
 	jrl	403
@@ -2116,7 +2116,7 @@ FDC_CommandEntry_CopyParams:
 	ld wa, (xiz + 10)
 	ld (0x8a4a:16), wa
 	ld xwa, (xiz + 12)
-	stda32 0x8a4c, xwa
+	ld (0x8a4c:16), xwa
 	ld wa, (xiz)
 	ld (0x8a50:16), wa
 	ld wa, (xiz + 2)
@@ -2130,7 +2130,7 @@ FDC_CommandEntry_CopyParams:
 	ld wa, (xiz + 10)
 	ld (0x8a5a:16), wa
 	ld xwa, (xiz + 12)
-	stda32 0x8a5c, xwa
+	ld (0x8a5c:16), xwa
 	ld (0x8a20:16), 0
 	ldmm8 0x8a26, 0x8a24
 	ld (0x8a24:16), 0
@@ -2275,7 +2275,7 @@ FDC_ByteTransfer_PIO:
 	ld	xhl, (0x8a4e:16)
 	ld	(xhl), c
 	inc	1, xhl
-	stda32	0x8a4e, xhl
+	ld	(0x8a4e:16), xhl
 	.byte 0xd1, 0x1c, 0x8a
 	push	xde
 	normal
@@ -2288,7 +2288,7 @@ FDC_ByteTransfer_PIO:
 	ld	c, (xhl)
 	stb_da	(0x120000), c
 	inc	1, xhl
-	stda32	0x8a4e, xhl
+	ld	(0x8a4e:16), xhl
 	jr	-34
 
 INTTC3_HANDLER:
@@ -2420,7 +2420,7 @@ FDC_Reset_BuildParams:
 	ldw (0x8b2c:16), 0
 	ldw (0x8b2e:16), 0
 	lds32 xwa, 0
-	stda32 0x8b30, xwa
+	ld (0x8b30:16), xwa
 	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
@@ -2431,7 +2431,7 @@ FDC_Reset_BuildParams:
 	ldw (0x8b2c:16), 1
 	ldw (0x8b2e:16), 1
 	lda xwa, (0x8b34:16)
-	stda32 0x8b30, xwa
+	ld (0x8b30:16), xwa
 	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
@@ -2442,7 +2442,7 @@ FDC_Reset_BuildParams:
 	ldw (0x8b2c:16), 1
 	ldw (0x8b2e:16), 1
 	lda xwa, (0x8b34:16)
-	stda32 0x8b30, xwa
+	ld (0x8b30:16), xwa
 	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
@@ -2453,7 +2453,7 @@ FDC_Reset_BuildParams:
 	ldw (0x8b2c:16), 1
 	ldw (0x8b2e:16), 1
 	lda xwa, (0x8b34:16)
-	stda32 0x8b30, xwa
+	ld (0x8b30:16), xwa
 	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
@@ -2464,7 +2464,7 @@ FDC_Reset_BuildParams:
 	ldw (0x8b2c:16), 1
 	ldw (0x8b2e:16), 1
 	lda xwa, (0x8b34:16)
-	stda32 0x8b30, xwa
+	ld (0x8b30:16), xwa
 	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry

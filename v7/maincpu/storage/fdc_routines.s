@@ -1260,7 +1260,7 @@ FDC_Reset_BuildParams:
 	ldw	(35472:16), 0
 	ldw	(35474:16), 0
 	lds32	xwa, 0
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64935
@@ -1271,7 +1271,7 @@ FDC_Reset_BuildParams:
 	ldw	(35472:16), 1
 	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64883
@@ -1282,7 +1282,7 @@ FDC_Reset_BuildParams:
 	ldw	(35472:16), 1
 	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64831
@@ -1293,7 +1293,7 @@ FDC_Reset_BuildParams:
 	ldw	(35472:16), 1
 	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64779
@@ -1304,7 +1304,7 @@ FDC_Reset_BuildParams:
 	ldw	(35472:16), 1
 	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64727

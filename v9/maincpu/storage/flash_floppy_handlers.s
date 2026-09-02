@@ -1563,33 +1563,33 @@ NoteEvent_CopySlotData_Body:
 
 Flash_InitExtMemAddrs:
 	lda xwa, (0x300000:24)
-	stda32 3190, xwa
+	ld (3190:16), xwa
 	ld xbc, xwa
 	add xbc, 0x19800
-	stda32 3194, xbc
+	ld (3194:16), xbc
 	ld xbc, xwa
 	add xbc, 0x30000
-	stda32 3198, xbc
+	ld (3198:16), xbc
 	ld xbc, xwa
 	add xbc, 0x49800
-	stda32 3202, xbc
+	ld (3202:16), xbc
 	ld xbc, xwa
 	add xbc, 0x60000
-	stda32 3206, xbc
+	ld (3206:16), xbc
 	ld xbc, xwa
 	add xbc, 0x79800
-	stda32 3210, xbc
+	ld (3210:16), xbc
 	ld xbc, xwa
 	add xbc, 0x90000
-	stda32 3214, xbc
+	ld (3214:16), xbc
 	ld xbc, xwa
 	add xbc, 0xb0000
-	stda32 3218, xbc
+	ld (3218:16), xbc
 	lda xwa, (0x094800:24)
-	stda32 3182, xwa
+	ld (3182:16), xwa
 	lda xwa, (0x069800:24)
-	stda32 3186, xwa
-	stda32 3222, xwa
+	ld (3186:16), xwa
+	ld (3222:16), xwa
 	ret
 
 Flash_InitBytecodeBlock:
@@ -1626,7 +1626,7 @@ Flash_InitBytecodeBlock:
 	ld_rrb a, xbc, wa
 	ld (xsp+6), a
 	ld xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ldib_erp 251, 0
 	ld	c, (xsp+6)
 	extz	bc
@@ -1647,9 +1647,9 @@ Flash_InitBytecodeBlock:
 	cp_erpb 251, 10
 	jr c, -43
 	ld	xwa, (3182:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ld	xwa, (3186:16)
-	stda32	0x39b2, xwa
+	ld	(0x39b2:16), xwa
 	.byte 0xf1
 	lda	xiy, (xwa)
 	.byte 0xb0, 0xc7
@@ -1767,7 +1767,7 @@ Flash_InitBytecodeBlock:
 	ld_rrb a, xbc, wa
 	ld (xsp+6), a
 	ld xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ldib_erp 251, 0
 	ld	c, (xsp+10)
 	extz	bc
@@ -1790,9 +1790,9 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+12)
 	extz	wa
 	calr	320
-	stda32	0x39ae, xhl
+	ld	(0x39ae:16), xhl
 	ld	xwa, (3186:16)
-	stda32	0x39b2, xwa
+	ld	(0x39b2:16), xwa
 	.byte 0xf1
 	lda	xiy, (xwa)
 	.byte 0xb0, 0xc7
@@ -1826,7 +1826,7 @@ Flash_InitBytecodeBlock:
 	jr	z, 24
 	ld	(xsp+8), 1
 	ld	xwa, (0x39b2:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	.byte 0xc1, 0xad
 	push	xbc
 	pop_f
@@ -2443,7 +2443,7 @@ Flash_EraseAndWriteFinal:
 
 Flash_StoreBaseAndInitAccPatch:
 	ld xwa, (3186:16)
-	stda32 0x39ae, xwa
+	ld (0x39ae:16), xwa
 	jp AccPatch_InitSlotChain_Wrap
 Flash_ExtendedOpsBlock:
 	push	xiz
@@ -5417,9 +5417,9 @@ ToneParam_ExtendedOpsBlock:
 	rcf
 	call	cmp_ld_mae
 	ld	xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ld	xwa, (3182:16)
-	stda32	0x39b2, xwa
+	ld	(0x39b2:16), xwa
 	lds32	xwa, 0
 	ld	(xsp), xwa
 	ld	xwa, (xsp)
@@ -5556,7 +5556,7 @@ ToneParam_ExtendedOpsBlock:
 	bit	0, wa
 	jr	z, 29
 	ld	xwa, (0x39b2:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	.byte 0xc1, 0xad
 	push	xbc
 	pop_f
@@ -5564,7 +5564,7 @@ ToneParam_ExtendedOpsBlock:
 	push	xbc
 	call	AccPatch_InitFromSlotIndex
 	ld	xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ldw	iz, 0xff95
 	ld	hl, iz
 	popw	iz
@@ -5736,7 +5736,7 @@ DualVoice_LoadAndScan:
 	ld (xsp + 4), 0x0
 	ld (xsp + 10), 0x0
 	calr Flash_InitExtMemAddrs
-	stda32 3182, xiz
+	ld (3182:16), xiz
 	cp (xsp + 14), 0xa
 	jrl nc, DualVoice_LoadDoneRetVal
 	ld a, (xsp + 14)
@@ -5759,7 +5759,7 @@ DualVoice_LoadAndScan:
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), a
 	ld xwa, (3186:16)
-	stda32 0x39ae, xwa
+	ld (0x39ae:16), xwa
 	ldib_erp 0xfb, 0
 
 DualVoice_AccPatchLoop:
@@ -5777,9 +5777,9 @@ DualVoice_AccPatchLoop:
 	cp_erpb 0xfb, 0x0a
 	jr c, DualVoice_AccPatchLoop
 	ld xwa, (3182:16)
-	stda32 0x39ae, xwa
+	ld (0x39ae:16), xwa
 	ld xwa, (3186:16)
-	stda32 0x39b2, xwa
+	ld (0x39b2:16), xwa
 	resda 0, 0x35b0
 	ldib_erp 0xfb, 0
 
@@ -5893,7 +5893,7 @@ FileHdr_CopyDataLoop:
 
 FileHdr_InitBasePointer:
 	lda xwa, (0x1e8800:24)
-	stda32 3226, xwa
+	ld (3226:16), xwa
 	ret
 
 ToneData_SetupCopyPointers:

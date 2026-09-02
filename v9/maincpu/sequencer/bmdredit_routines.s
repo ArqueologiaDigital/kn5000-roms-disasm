@@ -1765,8 +1765,8 @@ BmDrEdit_InitDrumMode:
 	pushw 0x6a4
 	call Malloc
 	inc 2, xsp
-	stda32 7504, xhl
-	stda32 7508, xhl
+	ld (7504:16), xhl
+	ld (7508:16), xhl
 	calr NoteEditSy_ScanAndSortEntries
 	ldw (0x278e:16), 10
 	ldmm16 0x2792, 0x2796

@@ -5491,7 +5491,7 @@ InterCPU_Send_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_Send_AckTimeoutLoop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal DMA data transfer starting
-	stda32 1498, xde
+	ld (1498:16), xde
 	extz bc
 	ld (1502:16), bc
 	calr Audio_DMA_Transfer
@@ -5560,7 +5560,7 @@ InterCPU_E2_WaitAck:
 	ld (xhl), xwa
 	ld (xhl + 4), xde
 	ld (xhl + 8), bc
-	stda32 1498, xhl
+	ld (1498:16), xhl
 	ldw (1502:16), 10
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
@@ -5617,7 +5617,7 @@ Audio_DMA_Transfer_CheckSize:
 Audio_DMA_Transfer_ByteLoop:
 	ld xwa, (1498:16)
 	stb_dpi A, 0xe0
-	stda32 1498, xwa
+	ld (1498:16), xwa
 	ld a, (xbc)
 	stb_da (0x140000), a
 	ldb a, 0x0
@@ -5687,7 +5687,7 @@ E1Bulk_WaitAck:
 	ld (xwa), xde
 	ld (xhl + 4), bc
 	ld (xwa + 4), bc
-	stda32 1498, xwa
+	ld (1498:16), xwa
 	ldw (1502:16), 6
 	calr Audio_DMA_Transfer
 	ld (1504:16), 1
@@ -5707,7 +5707,7 @@ E1Bulk_Phase2_Delay:
 	jr c, E1Bulk_Phase2_Delay
 	lda xbc, (1544:16)
 	ld xwa, (xbc)
-	stda32 1498, xwa
+	ld (1498:16), xwa
 	mrdw5 0x99, 0x04, 0x19, 0xde, 0x05
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
@@ -5888,7 +5888,7 @@ INT0_ReadLatch:
 	jr nz, INT0_CheckE2Command
 	ld (1506:16), 2
 	lda xwa, (1550:16)
-	stda32 1494, xwa
+	ld (1494:16), xwa
 	ldc_cr32 xwa, 0x20
 	lds wa, 6
 	ldc_cr16 wa, 0x40
@@ -5904,7 +5904,7 @@ INT0_CheckE2Command:
 	jr nz, INT0_HandleDataCommand
 	ld (1506:16), 3
 	lda xwa, (1556:16)
-	stda32 1494, xwa
+	ld (1494:16), xwa
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xa
 	ldc_cr16 wa, 0x40
@@ -5918,7 +5918,7 @@ INT0_CheckE2Command:
 INT0_HandleDataCommand:
 	ld (1506:16), 1
 	lda xwa, (1512:16)
-	stda32 1494, xwa
+	ld (1494:16), xwa
 	ldc_cr32 xwa, 0x20
 	ld a, (1508:16)
 	and a, 0x1f
@@ -6967,7 +6967,7 @@ SLIDE_Decompress_4K_Init:
 	pushw 0x1000
 	call Malloc
 	inc 2, xsp
-	stda32 1570, xhl
+	ld (1570:16), xhl
 	ld xwa, xhl
 	lda_dri XBC, 0xed, 0xee, 0x0f
 
@@ -7090,7 +7090,7 @@ SLIDE_Decompress_8K_Init:
 	pushw 0x2000
 	call Malloc
 	inc 2, xsp
-	stda32 1570, xhl
+	ld (1570:16), xhl
 	ld xwa, xhl
 	lda_dri XBC, 0xed, 0xf6, 0x1f
 
@@ -7764,7 +7764,7 @@ Flash_BurnWithProgress:
 	pushw iz
 	ldw iz, 0x32
 	lds32 xwa, 0
-	stda32 1033, xwa
+	ld (1033:16), xwa
 	call HDAE5000_Flash_Verify
 	call HDAE5000_Status_Check
 	cp hl, 0xffff
@@ -7780,7 +7780,7 @@ FlashBurn_ProgressLoop:
 	lds de, 5
 	call VRAM_FillRect
 	lds32 xwa, 0
-	stda32 1033, xwa
+	ld (1033:16), xwa
 
 FlashBurn_CheckDone:
 	call HDAE5000_Status_Check
@@ -8370,12 +8370,12 @@ Parport_RefillBuffer_Loop:
 	cps iz, 4
 	jr c, Parport_RefillBuffer_Loop
 	lda xwa, (0x069800:24)
-	stda32 1610, xwa
+	ld (1610:16), xwa
 
 Parport_ReadByte_Emit:
 	ld xwa, (1610:16)
 	stb_dpi A, 0xe0
-	stda32 1610, xwa
+	ld (1610:16), xwa
 	ld l, (xbc)
 	extz hl
 
@@ -8398,7 +8398,7 @@ Flash_AccumWrite_Byte:
 	jr nz, Flash_AccumWrite_ByteDone
 	ld xwa, (1606:16)
 	stb_dpi B, 0xe2
-	stda32 1606, xwa
+	ld (1606:16), xwa
 	ld xbc, (xbc)
 	ld xwa, xde
 	call Flash_ProgramByte
@@ -8424,7 +8424,7 @@ Flash_AccumWrite_Word:
 	jr nz, Flash_AccumWrite_WordDone
 	ld xwa, (1622:16)
 	stb_dpi A, 0xe1
-	stda32 1622, xwa
+	ld (1622:16), xwa
 	ld de, (xde)
 	lds wa, 1
 	call Flash_ProgramWord
@@ -8441,7 +8441,7 @@ LZSS_Decompress_ToFlash:
 	ld (1620:16), 0
 	lda xwa, (0x300000:24)
 	add xwa, 0xe0000
-	stda32 1622, xwa
+	ld (1622:16), xwa
 	ld xwa, 0x20000
 	adddm32 1598, xwa
 	lds iz, 0
@@ -8515,7 +8515,7 @@ LZ_Decompress_Init:
 	ld xwa, (xsp + 16)
 	ld (xsp + 12), xwa
 	lds32 xwa, 0
-	stda32 1602, xwa
+	ld (1602:16), xwa
 
 LZ_Decompress_ClearRing:
 	ld xwa, (1602:16)
@@ -8524,18 +8524,18 @@ LZ_Decompress_ClearRing:
 	ld (xbc), 0x0
 	ld xwa, (1602:16)
 	inc 1, xwa
-	stda32 1602, xwa
+	ld (1602:16), xwa
 	cp xwa, 0xfee
 	jr c, LZ_Decompress_ClearRing
 	ldw (xsp + 10), 0xfee
 	ldw (xsp + 4), 0x0
 	ld (1620:16), 0
 	lds32 xwa, 0
-	stda32 1602, xwa
+	ld (1602:16), xwa
 	lda xwa, (0x069800:24)
-	stda32 1610, xwa
+	ld (1610:16), xwa
 	ld xwa, 0x800000
-	stda32 1606, xwa
+	ld (1606:16), xwa
 	ldw (1614:16), 50
 	ldw (1616:16), 180
 	ldw wa, 0x32
@@ -8543,7 +8543,7 @@ LZ_Decompress_ClearRing:
 	lds de, 6
 	call VRAM_FillRect
 	ld xwa, 0x3e8
-	stda32 1598, xwa
+	ld (1598:16), xwa
 	ldw (1618:16), 36
 	ldiw_erp 0xfa, 0
 
@@ -8570,7 +8570,7 @@ LZ_Decompress_ReadSizeField:
 	calr Parport_ReadNextByte
 	extz xhl
 	sla xhl, 0
-	stda32 1598, xhl
+	ld (1598:16), xhl
 	calr Parport_ReadNextByte
 	sll hl, 8
 	extz xhl
@@ -8579,7 +8579,7 @@ LZ_Decompress_ReadSizeField:
 	extz xhl
 	ld xwa, (1598:16)
 	add xwa, xhl
-	stda32 1598, xwa
+	ld (1598:16), xwa
 	cpdm32 1602, xwa
 	jrl nc, LZ_Decompress_Done
 

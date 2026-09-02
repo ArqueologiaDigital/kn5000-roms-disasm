@@ -840,13 +840,13 @@ MIDI_RX_CONTEXT_RESTORE:
 	ret
 
 MIDI_RX_CONTEXT_SAVE:
-	stda32 1080, xwa
-	stda32 1084, xbc
-	stda32 1088, xde
-	stda32 1092, xhl
-	stda32 1096, xix
-	stda32 1100, xiy
-	stda32 1104, xiz
+	ld (1080:16), xwa
+	ld (1084:16), xbc
+	ld (1088:16), xde
+	ld (1092:16), xhl
+	ld (1096:16), xix
+	ld (1100:16), xiy
+	ld (1104:16), xiz
 	ret
 
 SC0Init_Entry:

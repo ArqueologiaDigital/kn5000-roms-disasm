@@ -119,7 +119,7 @@ SeqStep_NoteCheckVel:
 	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
-	stda32 0x2722, xwa
+	ld (0x2722:16), xwa
 	ld a, (9824:16)
 	set 0, a
 	ld (9824:16), a
@@ -367,7 +367,7 @@ SeqStep_EventStorePos:
 	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
-	stda32 0x2722, xwa
+	ld (0x2722:16), xwa
 	ld a, (9824:16)
 	set 0, a
 	ld (9824:16), a
@@ -482,7 +482,7 @@ SeqStep_DeleteConsumeAdvance:
 	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
-	stda32 0x2722, xwa
+	ld (0x2722:16), xwa
 	ld a, (9824:16)
 	set 0, a
 	ld (9824:16), a

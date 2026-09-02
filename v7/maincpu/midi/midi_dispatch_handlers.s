@@ -7289,7 +7289,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	push XIZ
 	call 0xfd6495
 	inc 4,XSP
-	stda32 (0xbc86), xhl
+	ld (0xbc86:16), xhl
 	lda xwa, (0xbc86:16)
 	cp (XWA),0xff
 	jr z, .Lc_fd989b

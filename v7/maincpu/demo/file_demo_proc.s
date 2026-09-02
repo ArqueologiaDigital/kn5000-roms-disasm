@@ -3941,7 +3941,7 @@ FileIO_CloseHandle:
 	call	16051286
 	inc	4, xsp
 	lds32	xwa, 0
-	stda32	(32424), xwa
+	ld	(32424:16), xwa
 FileIO_CloseHandle_Done:
 	lds hl, 0
 	ret

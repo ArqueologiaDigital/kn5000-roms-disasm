@@ -4066,7 +4066,7 @@ FileIO_OpenWithMode:
 	push xwa
 	call FileOpen
 	inc 8, xsp
-	stda32 0x7f44, xhl
+	ld (0x7f44:16), xhl
 	or xhl, xhl
 	jr nz, FileIO_OpenMode_Success
 	cp (xiz), 0x72
@@ -4111,7 +4111,7 @@ FileIO_CloseHandle:
 	call FileClose
 	inc 4, xsp
 	lds32 xwa, 0
-	stda32 0x7f44, xwa
+	ld (0x7f44:16), xwa
 
 FileIO_CloseHandle_Done:
 	lds hl, 0

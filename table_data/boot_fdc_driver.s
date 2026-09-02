@@ -1858,7 +1858,7 @@ FDC_FormatOneTrack:
 	calr FDC_BuildFormatFieldBuffer	; calr 0xffe6ed
 	ld (0x0c56:16), 0x4d	; ld (0x0c56),0x4d - 0x4D = MF FORMAT TRACK
 	lda xwa, (0x0c9e:16)	; lda XWA,0x0c9e
-	stda32 (0x0c7a), xwa	; ld (0x0c7a),XWA
+	ld (0x0c7a:16), xwa	; ld (0x0c7a),XWA
 	calr FDC_SetupDMAMode	; calr 0xffdd2c
 	calr FDC_ReloadDMACount	; calr 0xffdd9b
 	jrl FDC_SubmitFormatTrackCmd	; jrl T,0xffe880
@@ -2193,7 +2193,7 @@ FDC_Request__start:
 	ld wa, (xiz+0x0a)	; ld WA,(XIZ+0x0a)
 	ld (0x0c78:16), wa	; ld (0x0c78),WA
 	ld xwa, (xiz+0x0c)	; ld XWA,(XIZ+0x0c)
-	stda32 (0x0c7a), xwa	; ld (0x0c7a),XWA
+	ld (0x0c7a:16), xwa	; ld (0x0c7a),XWA
 	ld wa, (xiz)	; ld WA,(XIZ)
 	ld (0x0c7e:16), wa	; ld (0x0c7e),WA
 	ld wa, (xiz+0x02)	; ld WA,(XIZ+0x02)
@@ -2207,7 +2207,7 @@ FDC_Request__start:
 	ld wa, (xiz+0x0a)	; ld WA,(XIZ+0x0a)
 	ld (0x0c88:16), wa	; ld (0x0c88),WA
 	ld xwa, (xiz+0x0c)	; ld XWA,(XIZ+0x0c)
-	stda32 (0x0c8a), xwa	; ld (0x0c8a),XWA
+	ld (0x0c8a:16), xwa	; ld (0x0c8a),XWA
 	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	ldmm8 (0x0c54), (0x0c52)	; ld (0x0c54),(0x0c52)
 	ld (0x0c52:16), 0	; ld (0x0c52),0x00
@@ -2296,7 +2296,7 @@ FDC_PIO_ReadTransfer:
 	ld xhl, (0x0c7c:16)	; ld XHL,(0x0c7c) - NOTE: pointer kept at 0x0C7C = +2 into the 32-bit buffer field at 0x0C7A; the maincpu twin has the same +2 quirk (0x8A4E vs buffer at 0x8A4C) -- apparent shared latent defect; the DMA path is what ships
 	ld (xhl), c	; ld (XHL),C
 	inc 1, xhl	; inc 1,XHL
-	stda32 (0x0c7c), xhl	; ld (0x0c7c),XHL
+	ld (0x0c7c:16), xhl	; ld (0x0c7c),XHL
 FDC_PIO_CountAndFinish:
 	subdi16 (0x0c4a), 1	; sub (0x0c4a),0x0001
 	ret nz	; ret NZ
@@ -2312,5 +2312,5 @@ FDC_PIO_WriteTransfer:
 	ld c, (xhl)	; ld C,(XHL)
 	stb_da (0x120000), c	; ld (0x120000),C - write one byte to the FDC DMA-acknowledge port
 	inc 1, xhl	; inc 1,XHL
-	stda32 (0x0c7c), xhl	; ld (0x0c7c),XHL
+	ld (0x0c7c:16), xhl	; ld (0x0c7c),XHL
 	jr FDC_PIO_CountAndFinish	; jr T,0xffea7b

@@ -1043,7 +1043,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	nop
 	nop
 	ld	xiy, 0x95b4
-	stda32	0x9664, xiy
+	ld	(0x9664:16), xiy
 	ld	(0x966e:16), 0
 	ldb	w, 0
 	lds32	xhl, 1
@@ -12777,21 +12777,21 @@ MidiChan_ClearStorageFields:
 
 MidiChan_InitAllBufferPtrs:
 	lda xwa, (0xb7f4:16)
-	stda32 0xbc54, xwa
+	ld (0xbc54:16), xwa
 	lda xbc, (0xbc6c:16)
-	stda32 0xbcac, xbc
+	ld (0xbcac:16), xbc
 	lda xde, (0xb90c:16)
-	stda32 0xbc58, xde
+	ld (0xbc58:16), xde
 	lda xde, (0xbc7c:16)
-	stda32 0xbcb0, xde
+	ld (0xbcb0:16), xde
 	lda xde, (0xba24:16)
-	stda32 0xbc5c, xde
+	ld (0xbc5c:16), xde
 	lda xde, (0xbc8c:16)
-	stda32 0xbcb4, xde
+	ld (0xbcb4:16), xde
 	lda xde, (0xbb3c:16)
-	stda32 0xbc60, xde
+	ld (0xbc60:16), xde
 	lda xde, (0xbc9c:16)
-	stda32 0xbcb8, xde
+	ld (0xbcb8:16), xde
 	calr ArpQueue_InitBuffer
 	ld xwa, (0xbc58:16)
 	ld xbc, (0xbcb0:16)
@@ -12826,12 +12826,12 @@ MidiSeq_SwapActiveBuffers:
 	cp xde, (xwa + 10)
 	jr z, MidiSeq_SwapBuffersFallthru
 	ld xwa, (0xbcb0:16)
-	stda32 0xbcb0, xbc
-	stda32 0xbcac, xwa
+	ld (0xbcb0:16), xbc
+	ld (0xbcac:16), xwa
 	ld xbc, (0xbc58:16)
 	ld xwa, (0xbc54:16)
-	stda32 0xbc58, xwa
-	stda32 0xbc54, xbc
+	ld (0xbc58:16), xwa
+	ld (0xbc54:16), xbc
 
 MidiSeq_SwapBuffersFallthru:
 	jr MidiSeq_ReinitCurrentBuffer
@@ -12845,12 +12845,12 @@ ArpQueue_SwapBuffers:
 	cp xde, (xwa + 10)
 	jr z, ArpQueue_SwapFallthru
 	ld xwa, (0xbcb8:16)
-	stda32 0xbcb8, xbc
-	stda32 0xbcb4, xwa
+	ld (0xbcb8:16), xbc
+	ld (0xbcb4:16), xwa
 	ld xbc, (0xbc60:16)
 	ld xwa, (0xbc5c:16)
-	stda32 0xbc60, xwa
-	stda32 0xbc5c, xbc
+	ld (0xbc60:16), xwa
+	ld (0xbc5c:16), xbc
 	calr ArpQueue_ReinitCurrentBuffer
 	ld xbc, (0xbcb4:16)
 	ld xwa, (0xbcb8:16)

@@ -114,7 +114,7 @@ RESET:	; 01F924
 	ld (341:16), 129
 	ldio 0xF6, 0x00
 	lds32 xwa, 0
-	stda32 4160, xwa
+	ld (4160:16), xwa
 	calr MemClear_DRAM_And_ExtRAM
 
 PostReset_InitAudio:
@@ -2735,7 +2735,7 @@ INT0_HANDLER:	; 20E86
 	jr nz, INT0_Check_E2
 	ld (4330:16), 2	; E1 command - state 2
 	lda xwa, (4374:16)	; E1 data buffer
-	stda32 4324, xwa	; Save DMA target
+	ld (4324:16), xwa	; Save DMA target
 	ldc_cr32 xwa, 0x20
 	lds wa, 6	; 6 bytes for E1
 	ldc_cr16 wa, 0x40
@@ -2746,7 +2746,7 @@ INT0_Check_E2:	; 020EB1h
 	jr nz, INT0_Check_E3
 	ld (4330:16), 3	; E2 command - state 3
 	lda xwa, (4380:16)	; E2 data buffer
-	stda32 4324, xwa
+	ld (4324:16), xwa
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xA	; 10 bytes for E2
 	ldc_cr16 wa, 0x40
@@ -2761,7 +2761,7 @@ INT0_Check_E3:	; 020ECEh
 INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
 	ld (4330:16), 1	; State 1
 	lda xwa, (4336:16)	; Standard command buffer
-	stda32 4324, xwa
+	ld (4324:16), xwa
 	ldc_cr32 xwa, 0x20
 	ld a, (4332:16)
 	and a, 0x1F	; Bits 4-0 = length - 1
@@ -5106,7 +5106,7 @@ Voice_Allocate_Nodes:
 	bitm 6, (xwa + 6)
 	jr nz, Voice_Allocate_Nodes_SlotLoop
 	lds32 xwa, 0
-	stda32 4393, xwa
+	ld (4393:16), xwa
 
 ; Extract the part index (event word bits 8..12); >= 0x1A jumps to the all-slots-fail exit. Then run the layer limiter and compute the part descriptor pointer.
 Voice_Allocate_Nodes_SlotLoop:
@@ -5261,7 +5261,7 @@ Voice_Allocate_Nodes_UpdateLists:
 
 ; Global chain was empty: this node becomes the head (0x1129) and self-links.
 Voice_Allocate_Nodes_SetGlobalHead:
-	stda32 4393, xiz
+	ld (4393:16), xiz
 	ld xwa, xiz
 	calr DList_Unlink_SelfLink_Offsets16
 
@@ -51047,12 +51047,12 @@ DSP_State_ApplyBuf:
 	ld xiz, xwa
 	lds wa, 2
 	call TaskMsgQ_TryReceive
-	stda32 19002, xhl
+	ld (19002:16), xhl
 	or xhl, xhl
 	jr nz, DSP_State_ApplyBuf_DoCopy
 	lds wa, 1
 	call TaskMsgQ_Receive
-	stda32 19002, xhl
+	ld (19002:16), xhl
 
 ; Join point: a buffer has been obtained (from either queue); copy, flag, and post it.
 DSP_State_ApplyBuf_DoCopy:
@@ -51075,7 +51075,7 @@ DSP_State_ApplyBuf_DoCopy:
 ; block, which is why reset uses it.
 DSP_State_LoadAndApplyAll:
 	lda xde, (0x045324:24)
-	stda32 19006, xde
+	ld (19006:16), xde
 	ld xiy, xwa
 	ld xix, xde
 	ldw bc, 0x91

@@ -77,7 +77,7 @@ FDC_ProbeDiskFormat__recal_done:
 	ldw	(0x0d5a:16), 0		; +0x08 sector = 0
 	ldw	(0x0d5c:16), 0		; +0x0a count = 0
 	lds32	xwa, 0
-	stda32	(0x0d5e), xwa		; +0x0c buffer = NULL
+	ld	(0x0d5e:16), xwa		; +0x0c buffer = NULL
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
@@ -89,7 +89,7 @@ FDC_ProbeDiskFormat__recal_done:
 	ldw	(0x0d5a:16), 1		; sector 1
 	ldw	(0x0d5c:16), 1		; count 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa		; buffer = 0x0d62
+	ld	(0x0d5e:16), xwa		; buffer = 0x0d62
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
@@ -101,7 +101,7 @@ FDC_ProbeDiskFormat__recal_done:
 	ldw	(0x0d5a:16), 1
 	ldw	(0x0d5c:16), 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa
+	ld	(0x0d5e:16), xwa
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
@@ -113,7 +113,7 @@ FDC_ProbeDiskFormat__recal_done:
 	ldw	(0x0d5a:16), 1
 	ldw	(0x0d5c:16), 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa
+	ld	(0x0d5e:16), xwa
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
@@ -125,7 +125,7 @@ FDC_ProbeDiskFormat__recal_done:
 	ldw	(0x0d5a:16), 1
 	ldw	(0x0d5c:16), 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa
+	ld	(0x0d5e:16), xwa
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request

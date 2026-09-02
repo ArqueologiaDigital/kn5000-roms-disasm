@@ -9976,7 +9976,7 @@ SeqFile_ValidateAndStore:
 SeqFile_ValidateAndS_LoadIter:
 	push	sr
 	lds32	xwa, 0
-	stda32	(59685), xwa
+	ld	(59685:16), xwa
 	lds	iz, 0
 	cps	iz, 6
 	jr	nc, 19
@@ -10071,7 +10071,7 @@ DecodeMidiEvent_LoadAddr:
 	add	a, 29
 	ldb	w, 0
 	extz	xwa
-	stda32	(59685), xwa
+	ld	(59685:16), xwa
 	lds	iz, 0
 	cps	iz, 1
 	jr	ugt, 19
@@ -10105,7 +10105,7 @@ DecodeMidiEvent_LoadParam6:
 	add	a, 29
 	ldb	w, 0
 	extz	xwa
-	stda32	(59685), xwa
+	ld	(59685:16), xwa
 	lds	iz, 0
 	jr	15
 	calr	3394
@@ -10629,7 +10629,7 @@ Dispatch_Data:
 	.byte 0xeb, 0x00, 0x7f, 0x78, 0xc7, 0xfe
 	ldw (0xeb3b:16), 0x0000
 	lds32 xwa, 0
-	stda32 (0xeb37), xwa
+	ld (0xeb37:16), xwa
 	popw iz
 	inc 4,XSP
 	ret
@@ -10830,16 +10830,16 @@ ProcessMidiConverge_LoopBody:
 	ld	xbc, (xwa-15)
 	inc	8, xbc
 	lds32	xwa, 0
-	stda32	(59695), xwa
+	ld	(59695:16), xwa
 	ldw	(59679:16), 0
 	lds32	xwa, 0
-	stda32	(59685), xwa
+	ld	(59685:16), xwa
 ProcessMidiConverge_LoopCheck:
 	ldw	(59689:16), 0
 ProcessMidiConverge_LoadDRAM:
 	ldw	(59691:16), 0
 	lds32	xwa, 0
-	stda32	60215, xwa
+	ld	(60215:16), xwa
 	ldw	(60219:16), 0
 	ld	(59646:16), 0
 	calr	6
@@ -12020,7 +12020,7 @@ Param_SignExtendRetu_Return:
 	cp A,0x11
 	jr nz, .Lc_fee944
 .Lc_fee939:
-	stda32 (0xe0f7), xde
+	ld (0xe0f7:16), xde
 	lds wa, 3
 	ldw BC, 0x0015
 	jr t, .Lc_fee95b
@@ -12032,7 +12032,7 @@ Param_SignExtendRetu_Return:
 .Lc_fee94e:
 	cps w, 2
 	jr nc, .Lc_fee963
-	stda32 (0xe0f7), xde
+	ld (0xe0f7:16), xde
 	lds wa, 3
 	ldw BC, 0x0015
 .Lc_fee95b:

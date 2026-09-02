@@ -1478,7 +1478,7 @@ InterCPU_RX_Handler:
 	; E1: Set up DMA for 6 bytes
 	ld (1304:16), 2
 	lda xwa, (1348:16)
-	stda32 1298, xwa
+	ld (1298:16), xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	lds wa, 6
 	ldc_cr16 wa, 0x40	; DMA channel 0 count = 6
@@ -1489,7 +1489,7 @@ InterCPU_RX_Handler__not_e1:
 	; E2: Set up DMA for 10 bytes
 	ld (1304:16), 3
 	lda xwa, (1354:16)
-	stda32 1298, xwa
+	ld (1298:16), xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	ldw wa, 0xA
 	ldc_cr16 wa, 0x40	; DMA channel 0 count = 10
@@ -1504,7 +1504,7 @@ InterCPU_RX_Handler__default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
 	ld (1304:16), 1
 	lda xwa, (1310:16)
-	stda32 1298, xwa
+	ld (1298:16), xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	ld a, (1306:16)
 	and a, 0x1F	; Low 5 bits = count - 1

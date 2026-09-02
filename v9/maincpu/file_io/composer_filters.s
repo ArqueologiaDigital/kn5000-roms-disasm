@@ -122,7 +122,7 @@ CompLoad_HandleAbort:
 	jrl CompLoad_Return
 
 CompLoad_HandleSelection:
-	stda32 0x7f7c, xde
+	ld (0x7f7c:16), xde
 	call GetCurrentFileIndex
 	ld (0x7f80:16), hl
 	cps hl, 0
@@ -426,7 +426,7 @@ FmmLoadFilterFunc:
 	cp xbc, 0x1e50004
 	jrl nz, LoadFilter_Return
 	ld xwa, (xsp + 2)
-	stda32 0x7f82, xwa
+	ld (0x7f82:16), xwa
 	jrl LoadFilter_Return
 
 LoadFilter_HandleShow:
@@ -647,7 +647,7 @@ FmmSaveFilterFunc:
 	cp xbc, 0x1e50004
 	jrl nz, SaveFilter_Return
 	ld xwa, (xsp + 2)
-	stda32 0x8006, xwa
+	ld (0x8006:16), xwa
 	jrl SaveFilter_Return
 
 SaveFilter_HandleShow:

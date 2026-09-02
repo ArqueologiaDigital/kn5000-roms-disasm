@@ -1240,7 +1240,7 @@ Boot_Init:
 
 	; === Clear RAM Variable ===
 	lds32 xwa, 0
-	stda32 3072, xwa	; LD (0x0C00), XWA
+	ld (3072:16), xwa	; LD (0x0C00), XWA
 
 	; === Call Boot_ClearRAM ===
 	calr Boot_ClearRAM
@@ -3118,7 +3118,7 @@ Boot_WaitFDCReady:
 	ldw iz, 0x32	; LD IZ, 0x0032 - timeout counter
 Boot_WaitFDCReady__wfdc_poll:
 	lds32 xwa, 0	; LD XWA, 0
-	stda32 3072, xwa	; LD (0x0C00), XWA
+	ld (3072:16), xwa	; LD (0x0C00), XWA
 	call 0xFFBD17	; CALL 0xFFBD17 - reset FDC
 	call 0xFFBE85	; CALL 0xFFBE85 - check FDC ready
 	cp hl, 0xFFFF	; CP HL, 0xFFFF - error?
@@ -3137,7 +3137,7 @@ Boot_WaitFDCReady__wfdc_timeout_check:
 	lds de, 5	; LD DE, 5 - mode
 	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
 	lds32 xwa, 0	; LD XWA, 0
-	stda32 3072, xwa	; LD (0x0C00), XWA
+	ld (3072:16), xwa	; LD (0x0C00), XWA
 
 Boot_WaitFDCReady__wfdc_continue:
 	call 0xFFBE85	; CALL 0xFFBE85
@@ -3814,11 +3814,11 @@ LZSS_ReadByte__read_sectors:
 	cps iz, 4	; CP IZ, 4
 	jr c, LZSS_ReadByte__read_sectors	; JR C, .read_sectors
 	lda xwa, (0x0099a4:24); LDA XWA, 0x0099A4
-	stda32 3116, xwa	; LD (0x0C2C), XWA - reset buffer pointer
+	ld (3116:16), xwa	; LD (0x0C2C), XWA - reset buffer pointer
 LZSS_ReadByte__read_byte:
 	ld xwa, (3116:16); LD XWA, (0x0C2C) - get buffer pointer
 	stb_dpi A, 0xE0	; LDA XBC, XWA+ (post-increment read)
-	stda32 3116, xwa	; LD (0x0C2C), XWA - save updated pointer
+	ld (3116:16), xwa	; LD (0x0C2C), XWA - save updated pointer
 	ld l, (xbc)	; LD L, (XBC) - read byte into L
 	extz hl	; EXTZ HL - zero-extend to HL
 LZSS_ReadByte__exit:
@@ -3849,7 +3849,7 @@ LZSS_OutputByte:
 	; Flush 4-byte buffer to destination
 	ld xwa, (3112:16); LD XWA, (0x0C28) - dest ptr
 	stb_dpi B, 0xE2	; LDA XDE, XWA+ (post-increment)
-	stda32 3112, xwa	; LD (0x0C28), XWA
+	ld (3112:16), xwa	; LD (0x0C28), XWA
 	ld xbc, (xbc)	; LD XBC, (XBC) - load 4 bytes from buffer
 	ld xwa, xde	; LD XWA, XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7 (write to dest)
@@ -3879,7 +3879,7 @@ LZSS_OutputByte_Alt:
 	jr nz, LZSS_OutputByte_Alt__not_full	; JR NZ, .not_full
 	ld xwa, (3128:16); LD XWA, (0x0C38)
 	stb_dpi A, 0xE1	; LDA XBC, XWA+
-	stda32 3128, xwa	; LD (0x0C38), XWA
+	ld (3128:16), xwa	; LD (0x0C38), XWA
 	ld de, (xde)	; LD DE, (XDE)
 	lds wa, 1	; LD WA, 1
 	call 0xFFB903	; CALL 0xFFB903
@@ -3900,7 +3900,7 @@ LZSS_ParseHeader:
 	ld (3126:16), 0; LD (0x0C36), 0x00
 	lda xwa, (0x300000:24); LDA XWA, 0x300000
 	add xwa, 0xE0000	; ADD XWA, 0x000E0000 (XWA = 0x3E0000)
-	stda32 3128, xwa	; LD (0x0C38), XWA - store source ptr
+	ld (3128:16), xwa	; LD (0x0C38), XWA - store source ptr
 	ld xwa, 0x20000	; LD XWA, 0x00020000
 	adddm32 3104, xwa	; ADD (0x0C20), XWA
 	lds iz, 0	; LD IZ, 0
@@ -3986,7 +3986,7 @@ LZSS_Decompress:
 
 	; === Pre-fill window with zeros (positions 0 to 0x0FED) ===
 	lds32 xwa, 0	; LD XWA, 0
-	stda32 3108, xwa	; LD (0x0C24), XWA - window fill index
+	ld (3108:16), xwa	; LD (0x0C24), XWA - window fill index
 LZSS_Decompress__prefill_loop:
 	ld xwa, (3108:16); LD XWA, (0x0C24)
 	ld xbc, (xsp + 16)	; LD XBC, (XSP+0x10) - window base
@@ -3994,7 +3994,7 @@ LZSS_Decompress__prefill_loop:
 	ld (xbc), 0x0	; LD (XBC), 0x00
 	ld xwa, (3108:16); LD XWA, (0x0C24)
 	inc 1, xwa	; INC 1, XWA
-	stda32 3108, xwa	; LD (0x0C24), XWA
+	ld (3108:16), xwa	; LD (0x0C24), XWA
 	cp xwa, 0xFEE	; CP XWA, 0x00000FEE
 	jr c, LZSS_Decompress__prefill_loop	; JR C, .prefill_loop
 
@@ -4003,13 +4003,13 @@ LZSS_Decompress__prefill_loop:
 	ldw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000 - flag byte
 	ld (3126:16), 0; LD (0x0C36), 0x00 - output counter
 	lds32 xwa, 0	; LD XWA, 0
-	stda32 3108, xwa	; LD (0x0C24), XWA - output position
+	ld (3108:16), xwa	; LD (0x0C24), XWA - output position
 
 	; === Setup source and display parameters ===
 	lda xwa, (0x0099a4:24); LDA XWA, 0x0099A4 - sector buffer
-	stda32 3116, xwa	; LD (0x0C2C), XWA
+	ld (3116:16), xwa	; LD (0x0C2C), XWA
 	ld xwa, 0x800000	; LD XWA, 0x00800000 - source ROM base
-	stda32 3112, xwa	; LD (0x0C28), XWA
+	ld (3112:16), xwa	; LD (0x0C28), XWA
 	ldw (3120:16), 50; LD (0x0C30), 0x0032 - display X
 	ldw (3122:16), 180; LD (0x0C32), 0x00B4 - display Y
 	ldw wa, 0x32	; LD WA, 0x0032
@@ -4019,7 +4019,7 @@ LZSS_Decompress__prefill_loop:
 
 	; === Read expected decompressed size (3 bytes, little-endian) ===
 	ld xwa, 0x3E8	; LD XWA, 0x000003E8 - initial guess
-	stda32 3104, xwa	; LD (0x0C20), XWA
+	ld (3104:16), xwa	; LD (0x0C20), XWA
 	ldw (3124:16), 36; LD (0x0C34), 0x0024
 
 	; === Pre-read 4 sectors for initial buffer fill ===
@@ -4050,7 +4050,7 @@ LZSS_Decompress__read_header_loop:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	extz xhl	; EXTZ XHL
 	sla xhl, 0	; SLA 0, XHL (shift left for alignment)
-	stda32 3104, xhl	; LD (0x0C20), XHL
+	ld (3104:16), xhl	; LD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	sll hl, 8	; SLL 8, HL
 	extz xhl	; EXTZ XHL
@@ -4059,7 +4059,7 @@ LZSS_Decompress__read_header_loop:
 	extz xhl	; EXTZ XHL
 	ld xwa, (3104:16); LD XWA, (0x0C20)
 	add xwa, xhl	; ADD XWA, XHL
-	stda32 3104, xwa	; LD (0x0C20), XWA
+	ld (3104:16), xwa	; LD (0x0C20), XWA
 	cpdm32 3108, xwa	; CP (0x0C24), XWA
 	jrl nc, LZSS_Decompress__done	; JRL NC, .done - already past size
 

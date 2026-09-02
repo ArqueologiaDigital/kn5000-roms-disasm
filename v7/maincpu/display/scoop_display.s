@@ -4564,7 +4564,7 @@ AccPedal_RestoreAndReturn:
 	pop_lerp 0x38
 	push xwa
 	ldto_lerp XWA, 0x38
-	stda32 4349, xwa
+	ld (4349:16), xwa
 	pop xwa
 	ret
 
@@ -5941,7 +5941,7 @@ SysEx_ControllerBitCheck:
 	add c, 0x5
 	ld xwa, (0x02749a:24)
 	orda32_24 xwa, (0x02749e)
-	stda32 4560, xwa
+	ld (4560:16), xwa
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
 	ld de, (4560:16)
@@ -7639,7 +7639,7 @@ VoiceSlot_UpdateCurrentPointer:
 	extz xhl
 	sla xhl, 8
 	addda32 xhl, 7514
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -8221,7 +8221,7 @@ VoiceState_DataBlock2:
 	pop_lerp 56
 	push	xwa
 	ldto_lerp	xwa, 56
-	stda32	4349, xwa
+	ld	(4349:16), xwa
 	pop	xwa
 	ret
 	call	15713930
@@ -9236,7 +9236,7 @@ VoiceBank_LoadLerpState:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	ret
 
@@ -9267,7 +9267,7 @@ VoiceBank_StoreIndex:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	ret
 
@@ -9315,7 +9315,7 @@ DisplayStr_BytecodeBlock_A:
 	ld	xwa, 3733
 	ld	e, (3668:16)
 	ld	(3777:16), e
-	stda32	4372, xwa
+	ld	(4372:16), xwa
 	ld	(3782:16), l
 	xor	b, b
 	subdm16 (3780), xbc
@@ -9377,7 +9377,7 @@ DisplayStr_BytecodeBlock_A:
 	ld	xwa, 3733
 	ld	e, (3668:16)
 	ld	(3777:16), e
-	stda32	4372, xwa
+	ld	(4372:16), xwa
 	ld	(3782:16), l
 	xor	b, b
 	subdm16 (3780), xbc
@@ -9429,7 +9429,7 @@ DisplayStr_ComputeTableAddr:
 	extz xhl
 	sla xhl, 8
 	addda32 xhl, 7514
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -11666,11 +11666,11 @@ Scoop_EventHandler_Scroll:
 	ld hl, (0x28ba:16)
 	call SetWall_StreamIndexResolve
 	ld xwa, (4349:16)
-	stda32 9854, xwa
+	ld (9854:16), xwa
 	ld hl, (0x289f:16)
 	call SetWall_StreamIndexResolve
 	ld xwa, (4349:16)
-	stda32 9850, xwa
+	ld (9850:16), xwa
 	cpda16 xde, 0x28ba
 	jr nz, Scoop_Scroll_ValidateRange
 	ld iy, (0x28bc:16)
@@ -11854,7 +11854,7 @@ Scoop_EventHandler_SpecialMode:
 	call	SetWall_StreamIndexResolve
 	push	xwa
 	ld	xwa, (4349:16)
-	stda32	9854, xwa
+	ld	(9854:16), xwa
 	ld	hl, (0x289f:16)
 	call	SetWall_StreamIndexResolve
 	ld	xwa, (4349:16)
@@ -12068,14 +12068,14 @@ Scoop_SpecialMode_CheckState:
 Scoop_SpecialMode_Data:
 	xor iy, iy
 	ld xiy, (9854:16)
-	stda32 4349, xiy
+	ld (4349:16), xiy
 	ld wa, (xiy + 1)
 	ld (0x28ba:16), wa
 	extz xwa
 	dec 1, xwa
 	sla xwa, 8
 	addda32 xwa, 7514
-	stda32 4349, xwa
+	ld (4349:16), xwa
 	bitm 7, (xwa)
 	jr nz, Scoop_SpecialMode_Toggle
 	ld (0x287a:16), 11
@@ -12083,7 +12083,7 @@ Scoop_SpecialMode_Data:
 
 Scoop_SpecialMode_Toggle:
 	ld xwa, (4349:16)
-	stda32 9854, xwa
+	ld (9854:16), xwa
 	ldw iy, 0xff
 
 Scoop_SpecialMode_ToggleEnd:
@@ -12092,14 +12092,14 @@ Scoop_SpecialMode_ToggleEnd:
 Scoop_SpecialMode_Draw:
 	xor ix, ix
 	ld xix, (9850:16)
-	stda32 4349, xix
+	ld (4349:16), xix
 	ld wa, (xix + 1)
 	ld (0x289f:16), wa
 	extz xwa
 	dec 1, xwa
 	sla xwa, 8
 	addda32 xwa, 7514
-	stda32 4349, xwa
+	ld (4349:16), xwa
 	bitm 7, (xwa)
 	jr nz, Scoop_SpecialMode_DrawAlt
 	ld (0x287a:16), 11
@@ -12107,7 +12107,7 @@ Scoop_SpecialMode_Draw:
 
 Scoop_SpecialMode_DrawAlt:
 	ld xwa, (4349:16)
-	stda32 9850, xwa
+	ld (9850:16), xwa
 	ldw ix, 0xff
 
 Scoop_SpecialMode_DrawEnd:
@@ -12116,14 +12116,14 @@ Scoop_SpecialMode_DrawEnd:
 Scoop_SpecialMode_UpdateParams:
 	xor	iy, iy
 	ld	xiy, (9854:16)
-	stda32	3304, xiy
+	ld	(3304:16), xiy
 	ld	wa, (xiy+3)
 	ld	(0x28ba:16), wa
 	extz	xwa
 	dec	1, xwa
 	sla	xwa, 8
 	addda32	xwa, 7514
-	stda32	4349, xwa
+	ld	(4349:16), xwa
 	.byte 0xb0
 	dec	6, l
 	reti
@@ -12131,20 +12131,20 @@ Scoop_SpecialMode_UpdateParams:
 	jr	12
 	push	xwa
 	ld	xwa, (4349:16)
-	stda32	9854, xwa
+	ld	(9854:16), xwa
 	pop	xwa
 	lds	iy, 5
 	ret
 	xor	xix, xix
 	ld	xix, (9850:16)
-	stda32	4349, xix
+	ld	(4349:16), xix
 	ld	wa, (xix+3)
 	ld	(0x289f:16), wa
 	extz	xwa
 	dec	1, xwa
 	sla	xwa, 8
 	addda32	xwa, 7514
-	stda32	4349, xwa
+	ld	(4349:16), xwa
 	.byte 0xb4
 	sbc	w, l
 	dec	6, l
@@ -12152,7 +12152,7 @@ Scoop_SpecialMode_UpdateParams:
 	ld	(0x287a:16), 11
 	jr	10
 	ld	xwa, (4349:16)
-	stda32	9850, xwa
+	ld	(9850:16), xwa
 	lds	ix, 5
 	ret
 	pushw	wa

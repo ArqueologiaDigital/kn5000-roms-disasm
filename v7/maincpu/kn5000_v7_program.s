@@ -542,7 +542,7 @@ We_seem_to_be_running_boot_ROM_code:
 
 Boot_PostSelfTest:
 	lds32 xwa, 0
-	stda32 1033, xwa
+	ld (1033:16), xwa
 	ld (1024:16), 2
 	call TaskSched_Init
 	ld (1024:16), 3

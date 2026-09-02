@@ -532,11 +532,11 @@ SMF_WriteByte:
 	push xwa
 	xor xwa, xwa
 	lds32 xwa, 2
-	stda32 6701, xwa
+	ld (6701:16), xwa
 	pop xwa
 	cp xix, 0x17f9
 	jr ugt, SMF_WriteByte_SectorCheck
-	stda32 4376, xix
+	ld (4376:16), xix
 	jr SMF_WriteByte_Done
 
 SMF_WriteByte_SectorCheck:
@@ -606,7 +606,7 @@ SMF_WriteByte_AlignError:
 SMF_WriteByte_AllocSector:
 	incdi16 1, (4347)
 	ld xwa, 0x13fa
-	stda32 4376, xwa
+	ld (4376:16), xwa
 	ld xix, xwa
 	ld a, c
 
@@ -794,7 +794,7 @@ SMF_ProcessChannels:
 	push xwa
 	xor xwa, xwa
 	lds32 xwa, 2
-	stda32 6701, xwa
+	ld (6701:16), xwa
 	pop xwa
 	call SMF_ClearOutputQueue
 	xor hl, hl
@@ -871,7 +871,7 @@ SMF_CheckAndFlush:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
-	stda32 6701, xhl
+	ld (6701:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -1373,7 +1373,7 @@ SMF_FileWrite:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
-	stda32 6701, xhl
+	ld (6701:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -1386,7 +1386,7 @@ SMF_FileWriteAndClear:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
-	stda32 6701, xhl
+	ld (6701:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -1865,7 +1865,7 @@ SMF_ConfigSlot_Setup:
 	pop xiy
 	push xhl
 	ld xhl, (4349:16)
-	stda32 0x2881, xhl
+	ld (0x2881:16), xhl
 	pop xhl
 	ld (0x2885:16), iy
 	ld wa, (0x28af:16)
@@ -2261,7 +2261,7 @@ SMF_ConfigSlot_CodeBlock:
 	jr	nz, 7
 	ld	(10362:16), 2
 	jr	12
-	stda32	10369, xhl
+	ld	(10369:16), xhl
 	ldw	(4417:16), 5
 	lds	iy, 5
 	pop	xwa
@@ -2339,12 +2339,12 @@ SMF_AdvanceWritePtr:
 	jr SMF_AdvanceWrite_Return
 
 SMF_AdvanceWrite_NewPage:
-	stda32 0x2881, xhl
+	ld (0x2881:16), xhl
 	lds iy, 5
 
 SMF_AdvanceWrite_Return:
 	pop xwa
-	stda32 4349, xwa
+	ld (4349:16), xwa
 	ret
 
 SMF_CalcPageAddress:
@@ -2352,7 +2352,7 @@ SMF_CalcPageAddress:
 	extz xhl
 	sla xhl, 8
 	addda32 xhl, 7514
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -3246,7 +3246,7 @@ SMF_SlotParam_Type80Handler:
 SMF_SetupSongBankRead:
 	push xhl
 	ld xhl, (4349:16)
-	stda32 0x2881, xhl
+	ld (0x2881:16), xhl
 	pop xhl
 	ld wa, (0x28af:16)
 	ld (0x2887:16), wa

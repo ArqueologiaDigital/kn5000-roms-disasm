@@ -340,7 +340,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	push xiz
 	call SeqVoice_StoreEntry
 	inc 4, xsp
-	stda32 0xbd22, xhl
+	ld (0xbd22:16), xhl
 	lda xwa, (0xbd22:16)
 	cp (xwa), 0xff
 	jr z, MidiPkt_ProcessEventQueue_Done

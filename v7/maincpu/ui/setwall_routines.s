@@ -804,7 +804,7 @@ SetWall_ParsePatternStream:
 SetWall_ParseStream_Init:
 	push xhl
 	ld xhl, (4349:16)
-	stda32 0x2881, xhl
+	ld (0x2881:16), xhl
 	pop xhl
 	ld (0x2885:16), iy
 	ld wa, (0x28af:16)
@@ -899,7 +899,7 @@ SetWall_ParseStream_TypeC0:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	cps l, 0
 	jrl nz, SetWall_ParseStream_Advance
@@ -970,7 +970,7 @@ SetWall_ParseStream_B0_ShiftLoop:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	cp (0x287a:16), 0
 	jrl nz, SetWall_ParseStream_Return
@@ -1065,7 +1065,7 @@ SetWall_ParserInit:
 	ld iy, (0x286d:16)
 	ld (0x28a2:16), iy
 	ld xiy, (7514:16)
-	stda32 3304, xiy
+	ld (3304:16), xiy
 	ldw (3376:16), 0
 	ld (0x289e:16), 15
 	pop xiy
@@ -1112,12 +1112,12 @@ SetWall_AdvanceWritePos:
 	jr SetWall_AdvanceWrite_Return
 
 SetWall_AdvanceWrite_Reset:
-	stda32 0x2881, xhl
+	ld (0x2881:16), xhl
 	lds ix, 5
 
 SetWall_AdvanceWrite_Return:
 	pop xwa
-	stda32 4349, xwa
+	ld (4349:16), xwa
 	ret
 
 SetWall_SkipC0Scanner:
@@ -1331,7 +1331,7 @@ SetWall_SlotResolve_Init:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	xor de, de
 	inc 1, de
@@ -1370,7 +1370,7 @@ SetWall_SlotResolve_FoundMatch:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	cp (0x287a:16), 0
 	jr nz, SetWall_SlotResolve_Return
@@ -1384,7 +1384,7 @@ SetWall_StreamIndexResolve:
 	extz xhl
 	sla xhl, 8
 	addda32 xhl, 7514
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -1588,7 +1588,7 @@ SetWall_DualPass_InitLoop:
 	xor hl, hl
 	push xwa
 	ld xwa, (4349:16)
-	stda32 0x288f, xwa
+	ld (0x288f:16), xwa
 	pop xwa
 	lds iy, 5
 
@@ -1657,7 +1657,7 @@ SetWall_DualPass_TypeC0:
 	pop_lerp 0x30
 	push xiz
 	ldto_lerp XIZ, 0x30
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	ld (0x288e:16), a
 	call SetWall_StreamAdvanceBounded
@@ -1726,7 +1726,7 @@ SetWall_ReplayScanner:
 	jrl nz, SetWall_Replay_Done
 	xor hl, hl
 	ld xhl, (0x2897:16)
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	ld iy, (0x289b:16)
 
 SetWall_Replay_MainLoop:
@@ -1819,7 +1819,7 @@ SetWall_Replay_C0_ReadCC:
 	pop_lerp 0x3c
 	push xiz
 	ldto_lerp XIZ, 0x3c
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	ld (0x288e:16), a
 	call SetWall_StreamAdvanceBounded
@@ -1859,7 +1859,7 @@ SetWall_ResolveStreamPtr:
 	dec 1, hl
 	sla xhl, 8
 	addda32 xhl, 4362
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -1921,7 +1921,7 @@ SetWall_ForwardSkip_CheckType:
 SetWall_ForwardSkip_Type84:
 	lds iy, 5
 	ld xhl, (0x288f:16)
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	jr SetWall_ForwardSkip_Loop
 
 SetWall_ForwardSkip_Type81:
@@ -1948,7 +1948,7 @@ SetWall_ForwardSkip_SaveState:
 	ld (0x289b:16), iy
 	push xwa
 	ld xwa, (4349:16)
-	stda32 0x2897, xwa
+	ld (0x2897:16), xwa
 	pop xwa
 	jr SetWall_ForwardSkip_Return
 
@@ -2078,7 +2078,7 @@ SetWall_MiscDataAndCode:
 	ldw	bc, 99
 	ld	(10348:16), c
 	pop	xwa
-	stda32	4349, xwa
+	ld	(4349:16), xwa
 	ret
 	.byte 0xe7, 0x34, 0xa8
 	ld	wa, de
@@ -2112,7 +2112,7 @@ SetWall_MiscDataAndCode:
 	dec	1, xhl
 	sla	xhl, 8
 	add	xiy, xhl
-	stda32	4349, xiy
+	ld	(4349:16), xiy
 	xor	xhl, xhl
 	pop	xiy
 	ret

@@ -4885,7 +4885,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	wa
 	.byte 0x9f
 	ldwio	4, 0x491d
-	stda32	0xeff0, xwa
+	ld	(0xeff0:16), xwa
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+18)

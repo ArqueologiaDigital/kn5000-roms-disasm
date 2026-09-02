@@ -257,7 +257,7 @@ FmmFileNameFunc:
 	jr z, FileName_HandleShow
 	cp xwa, 0x1e50004
 	jrl nz, FileName_Return
-	stda32 0x7f72, xbc
+	ld (0x7f72:16), xbc
 	call GetCurrentFileIndex
 	ld (0x7f7a:16), hl
 	cps hl, 0
@@ -277,7 +277,7 @@ FileName_ListSelect_Negative:
 FileName_ListSelect_Forward:
 	call ApPostEvent
 	lds32 xwa, 0
-	stda32 0x7f76, xwa
+	ld (0x7f76:16), xwa
 	jrl FileName_Return
 
 FileName_HandleShow:
@@ -756,7 +756,7 @@ FileName_Callback_Simple:
 	jr FileName_DispatchWidget
 
 FileName_HandleRegister:
-	stda32 0x7f76, xbc
+	ld (0x7f76:16), xbc
 	cp (0x8d36:16), 103
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus

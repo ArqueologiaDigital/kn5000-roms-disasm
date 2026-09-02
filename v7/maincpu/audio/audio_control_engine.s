@@ -2396,9 +2396,9 @@ Audio_InitAllDefaults:
 	ld	(36956:16), 127
 	ld	(36551:16), 255
 	lda	xwa, (15576676:24)
-	stda32	(36950), xwa
+	ld	(36950:16), xwa
 	lda	xwa, (15577700:24)
-	stda32	(37094), xwa
+	ld	(37094:16), xwa
 	lda	xbc, (37105:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+31)
@@ -2504,9 +2504,9 @@ Audio_UpdateTempoAndReturn:
 	jp	16626944
 Audio_FullReinitWithPreset:
 	lda	xwa, (15576676:24)
-	stda32	(36950), xwa
+	ld	(36950:16), xwa
 	lda	xwa, (15577700:24)
-	stda32	(37094), xwa
+	ld	(37094:16), xwa
 	call	15665502
 	cps	hl, 0
 	jr	nz, 25
@@ -3181,7 +3181,7 @@ Audio_MainPeriodicUpdate:
 	ret Z
 	resda 0, (0x90c9)
 	lda xwa, (SoundProgram_DispatchTable_0x400:24)
-	stda32 (0x9056), xwa
+	ld (0x9056:16), xwa
 	calr Audio_SyncBufferPositions
 	push XDE
 	push XHL
@@ -6068,7 +6068,7 @@ MidiStream_ProcessEventBuffer:
 	extz XWA
 	ld wa, (0x9044:16)
 	add XIX,XWA
-	stda32 (0x9125), xix
+	ld (0x9125:16), xix
 MidiStream_NextEvent:
 	ld	xix, (37157:16)
 	ld_spiw	wa, 241
@@ -6076,7 +6076,7 @@ MidiStream_NextEvent:
 	jr	z, 76
 	ld	(37153:16), wa
 	ld_spiw	wa, 241
-	stda32	(37157), xix
+	ld	(37157:16), xix
 	ld	(37155:16), wa
 	ld	bc, (37153:16)
 	ld	de, (37155:16)
@@ -6216,7 +6216,7 @@ MidiStream_ProcessSeqBuffer:
 	extz XWA
 	ld wa, (0x9044:16)
 	add XIX,XWA
-	stda32 (0x9125), xix
+	ld (0x9125:16), xix
 MidiSeqBuf_NextEvent:
 	ld	xix, (37157:16)
 	ld_spiw	wa, 241
@@ -6224,7 +6224,7 @@ MidiSeqBuf_NextEvent:
 	jr	z, 89
 	ld	(37153:16), wa
 	ld_spiw	wa, 241
-	stda32	(37157), xix
+	ld	(37157:16), xix
 	ld	(37155:16), wa
 	calr	115
 	ld	bc, (37153:16)
@@ -6427,7 +6427,7 @@ MidiStream_ProcessTempoRingBuf:
 	extz XWA
 	ld wa, (0x9044:16)
 	add XIX,XWA
-	stda32 (0x9125), xix
+	ld (0x9125:16), xix
 TempoRing_NextEvent:
 	ld	xix, (37157:16)
 	ld_spiw	wa, 241
@@ -6435,7 +6435,7 @@ TempoRing_NextEvent:
 	jr	z, 103
 	ld	(37153:16), wa
 	ld_spiw	wa, 241
-	stda32	(37157), xix
+	ld	(37157:16), xix
 	ld	(37155:16), wa
 	calr	161
 	ld	(37163:16), 0
@@ -7637,13 +7637,13 @@ PartCtrl_ShiftBitmask:
 	ret
 
 AudioCtrl_SaveAllRegs:
-	stda32	(37019), xwa
-	stda32	(37023), xbc
-	stda32	(37027), xde
-	stda32	(37031), xhl
-	stda32	(37035), xix
-	stda32	(37039), xiy
-	stda32	(37043), xiz
+	ld	(37019:16), xwa
+	ld	(37023:16), xbc
+	ld	(37027:16), xde
+	ld	(37031:16), xhl
+	ld	(37035:16), xix
+	ld	(37039:16), xiy
+	ld	(37043:16), xiz
 	ret
 AudioCtrl_RestoreAllRegs:
 	ld	xwa, (37019:16)

@@ -184,7 +184,7 @@ SeqSongNameFunc:
 	jr z, SeqSongName_RefreshAll
 	cp xbc, 0x1e70002
 	jrl nz, SongBank_ReturnZero
-	stda32 7116, xde
+	ld (7116:16), xde
 	ld a, (0x00ffe3:24)
 	extz wa
 	ld (7120:16), wa
@@ -339,7 +339,7 @@ SeqSongMemoryFunc:
 	jr z, SeqSongMem_RefreshAll
 	cp xbc, 0x1e70002
 	jrl nz, SongBank_EventHandler_Return
-	stda32 7192, xde
+	ld (7192:16), xde
 	ld a, (0x00ffe3:24)
 	extz wa
 	ld (7196:16), wa
@@ -827,7 +827,7 @@ DispatchResolve_MarkCurrent:
 	ormi8 (xhl), 0x80
 	decdi16 1, 0xf231
 	pop xde
-	stda32 4349, xde
+	ld (4349:16), xde
 	ldb w, 0x0
 	pop xde
 	ret
@@ -924,7 +924,7 @@ SeqNode_ResolveSlotPtr:
 	dec 1, hl
 	sla xhl, 8
 	addda32 xhl, 4362
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -934,7 +934,7 @@ VoiceSlot_AssignWrapper:
 
 VoiceSlot_AssignToChannel:
 	pushw bc
-	stda32 4353, xiy
+	ld (4353:16), xiy
 	ld (3822:16), a
 	ld c, w
 	call VoiceSlot_ComputeWordIndex

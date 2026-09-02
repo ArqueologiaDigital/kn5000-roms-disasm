@@ -148,7 +148,7 @@ FloppyIO_ReadNextByte_DivDone:
 	ld xix, 0x13fa
 
 FloppyIO_ReadNextByte_StorePtr:
-	stda32 4376, xix
+	ld (4376:16), xix
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -160,7 +160,7 @@ FloppyIO_ReadNextByte_StorePtr:
 	dec 1, xwa
 
 FloppyIO_ReadNextByte_UpdateRemaining:
-	stda32 6883, xwa
+	ld (6883:16), xwa
 	pop xbc
 	pop xwa
 	pop xix
@@ -1626,7 +1626,7 @@ ToneGen_ComputeBlockPtr:
 	dec 1, xhl
 	sla xhl, 8
 	add xiy, xhl
-	stda32 4349, xiy
+	ld (4349:16), xiy
 	xor xhl, xhl
 	pop xiy
 	ret
@@ -1758,7 +1758,7 @@ Sequencer_Advance_DivDone:
 	sub xix, 0x400
 
 Sequencer_Advance_StorePtr:
-	stda32 4376, xix
+	ld (4376:16), xix
 	push xwa
 	push xbc
 	lds32 xbc, 0
@@ -1770,7 +1770,7 @@ Sequencer_Advance_StorePtr:
 	subda32 xwa, 4211
 
 Sequencer_Advance_UpdateRemaining:
-	stda32 6883, xwa
+	ld (6883:16), xwa
 	pop xbc
 	pop xwa
 	ld (4323:16), 0
@@ -2272,7 +2272,7 @@ SetWall_InitVoiceSlots:
 	ld hl, ix
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
-	stda32 0x2881, xhl
+	ld (0x2881:16), xhl
 	lds ix, 5
 	ldw (xhl + 1), 0x0
 	ldw (xhl + 3), 0xffff
@@ -2360,7 +2360,7 @@ ToneGen_CopyBlockToVoiceBuffer:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	xor xiy, xiy
 	lds iy, 5
@@ -4129,7 +4129,7 @@ VoiceChannel_CopyParamBlock:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	pop xhl
 	popw bc
@@ -5555,7 +5555,7 @@ ToneGen_SaveVoiceState_Continue:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	ret
 
@@ -5578,7 +5578,7 @@ Scoop_AssignVoiceAfterMatch:
 	pop_lerp 0x38
 	push xiz
 	ldto_lerp XIZ, 0x38
-	stda32 4349, xiz
+	ld (4349:16), xiz
 	pop xiz
 	pop xiy
 	ret

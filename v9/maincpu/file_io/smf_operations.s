@@ -250,7 +250,7 @@ SaveFileNameSmfFunc:
 	cp xbc, 0x1e50004
 	jrl nz, SaveFN_Return
 	ld xwa, (xsp + 4)
-	stda32 0x808c, xwa
+	ld (0x808c:16), xwa
 	jrl SaveFN_Return
 
 SaveFN_HandleActivate:
@@ -309,7 +309,7 @@ SmfSeqToSongNumFunc:
 	jr z, SeqToSong_BuildEntry
 	cp xbc, 0x1e50004
 	jr nz, SeqToSong_Return
-	stda32 0x8090, xde
+	ld (0x8090:16), xde
 	jr SeqToSong_Return
 
 SeqToSong_BuildEntry:
@@ -342,7 +342,7 @@ SmfSeqFromSongNumFunc:
 	jr z, SeqFromSong_BuildEntry
 	cp xbc, 0x1e50004
 	jr nz, SeqFromSong_Return
-	stda32 0x8114, xde
+	ld (0x8114:16), xde
 	jr SeqFromSong_Return
 
 SeqFromSong_BuildEntry:
@@ -374,7 +374,7 @@ SmfSeqSongNameFunc:
 	jr z, SeqSongName_BuildEntry
 	cp xbc, 0x1e50004
 	jr nz, SeqSongName_Return
-	stda32 0x8198, xde
+	ld (0x8198:16), xde
 	jr SeqSongName_Return
 
 SeqSongName_BuildEntry:
@@ -397,7 +397,7 @@ SmfLoadAsFunc:
 	jr z, SmfLoadAs_Apply
 	cp xbc, 0x1e50004
 	jr nz, SmfLoadAs_Return
-	stda32 0x819c, xde
+	ld (0x819c:16), xde
 	jr SmfLoadAs_Return
 
 SmfLoadAs_Apply:
@@ -563,10 +563,10 @@ FmmSmfFileNameFunc:
 	lda xix, (SmfFN_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 SmfFN_JumpTable:
-	stda32	0x81a0, xbc
+	ld	(0x81a0:16), xbc
 	lds32	xwa, 0
-	stda32	0x81a4, xwa
-	stda32	0x81a8, xwa
+	ld	(0x81a4:16), xwa
+	ld	(0x81a8:16), xwa
 	cp	(0x8d36:16), 107
 	jr	z, 20
 	call	GetFirstPageBase
@@ -1245,9 +1245,9 @@ SmfFN_SendOkState:
 	ld xbc, 0x1c50001
 	lds32 xde, 0
 	jr SmfFN_DispatchFinalEvent
-	stda32 0x81a4, xbc
+	ld (0x81a4:16), xbc
 	jrl SmfFN_ReturnZero
-	stda32 0x81a8, xbc
+	ld (0x81a8:16), xbc
 	jrl SmfFN_ReturnZero
 	ld (0x81ae:16), iz
 	jrl SmfFN_ReturnZero

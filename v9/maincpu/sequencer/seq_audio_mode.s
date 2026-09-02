@@ -1470,7 +1470,7 @@ AccentData_Part5_Done:
 
 RhythmROM_ValidateHeader:
 	xor xwa, xwa
-	stda32 0x3277, xwa
+	ld (0x3277:16), xwa
 	ld xix, 0x400000
 	ld xwa, (xix)
 	cp xwa, 0x5040100
@@ -1485,7 +1485,7 @@ RhythmROM_ValidateHeader:
 
 AccChord_CheckFailed:
 	ld xwa, 0xffffffff
-	stda32 0x3277, xwa
+	ld (0x3277:16), xwa
 
 RhythmROM_HeaderValid:
 	ret

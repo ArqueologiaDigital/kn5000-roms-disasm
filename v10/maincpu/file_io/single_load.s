@@ -22,7 +22,7 @@ SingleLoadModeFunc:
 	jr z, SLMode_HandleShow
 	cp xbc, 0x1e50004
 	jr nz, SLMode_Return
-	stda32 0x81b6, xde
+	ld (0x81b6:16), xde
 	jr SLMode_Return
 
 SLMode_HandleShow:
@@ -44,7 +44,7 @@ SingleLoadDstBankFunc:
 	jr z, SLDstBank_HandleShow
 	cp xbc, 0x1e50004
 	jr nz, SLDstBank_Return
-	stda32 0x81ba, xde
+	ld (0x81ba:16), xde
 	jr SLDstBank_Return
 
 SLDstBank_HandleShow:
@@ -66,7 +66,7 @@ SingleLoadDstMemFunc:
 	jr z, SLDstMem_HandleShow
 	cp xbc, 0x1e50004
 	jr nz, SLDstMem_Return
-	stda32 0x81be, xde
+	ld (0x81be:16), xde
 	jr SLDstMem_Return
 
 SLDstMem_HandleShow:
@@ -99,7 +99,7 @@ SingleLoadSrcBankFunc:
 	jr z, SLSrcBank_HandleShow
 	cp xbc, 0x1e50004
 	jr nz, SLSrcBank_Return
-	stda32 0x81c2, xde
+	ld (0x81c2:16), xde
 	jr SLSrcBank_Return
 
 SLSrcBank_HandleShow:
@@ -132,7 +132,7 @@ SingleLoadSrcMemFunc:
 	jr z, SLSrcMem_HandleShow
 	cp xbc, 0x1e50004
 	jr nz, SLSrcMem_Return
-	stda32 0x81c6, xde
+	ld (0x81c6:16), xde
 	jr SLSrcMem_Return
 
 SLSrcMem_HandleShow:
@@ -352,7 +352,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	65369
 	lds32	xwa, 0
-	stda32	0x81ca, xwa
+	ld	(0x81ca:16), xwa
 	ld	(0x81ce:16), 0
 	ld	(0x81d0:16), 0
 	jrl	453
@@ -478,7 +478,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
-	stda32	0x81ca, xwa
+	ld	(0x81ca:16), xwa
 	jr	55
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
@@ -752,7 +752,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	65377
 	lds32	xwa, 0
-	stda32	0x81d2, xwa
+	ld	(0x81d2:16), xwa
 	jrl	408
 	ld	l, (0x89fe:16)
 	ld	xwa, (xsp+4)
@@ -872,7 +872,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
-	stda32	0x81d2, xwa
+	ld	(0x81d2:16), xwa
 	jr	28
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
@@ -1130,7 +1130,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	65367
 	lds32	xwa, 0
-	stda32	0x81d8, xwa
+	ld	(0x81d8:16), xwa
 	ld	(0x81dc:16), 0
 	ld	(0x81de:16), 0
 	jrl	648
@@ -1319,7 +1319,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
-	stda32	0x81d8, xwa
+	ld	(0x81d8:16), xwa
 	jr	52
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
@@ -1400,7 +1400,7 @@ SingleLoadSrcFunc:
 	cp xwa, 0x1e50004
 	jrl nz, SLSrc_Return
 	ld xwa, xiz
-	stda32 0x81e0, xwa
+	ld (0x81e0:16), xwa
 	ld xbc, 0x1e50002
 	ld xde, 0xffffffff
 	call ApPostEvent
@@ -1690,7 +1690,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	65275
 	lds32	xwa, 0
-	stda32	0x81e4, xwa
+	ld	(0x81e4:16), xwa
 	jrl	160
 	ld	l, (0x8a02:16)
 	ld	xwa, (xsp+4)
@@ -1739,7 +1739,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
-	stda32	0x81e4, xwa
+	ld	(0x81e4:16), xwa
 	lds32	xhl, 0
 	jrl	282
 	ld	xwa, (xsp+4)
@@ -2104,7 +2104,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	65283
 	lds32	xwa, 0
-	stda32	0x81e8, xwa
+	ld	(0x81e8:16), xwa
 	jrl	160
 	ld	l, (0x8a06:16)
 	ld	xwa, (xsp+4)
@@ -2153,7 +2153,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
-	stda32	0x81e8, xwa
+	ld	(0x81e8:16), xwa
 	lds32	xhl, 0
 	jrl	282
 	ld	xwa, (xsp+4)
@@ -2518,7 +2518,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
-	stda32	0x81ec, xwa
+	ld	(0x81ec:16), xwa
 	lds32	xhl, 0
 	jrl	420
 	ld	xwa, (xsp+4)
@@ -2723,7 +2723,7 @@ SingleLoadDstFunc:
 	cp xwa, 0x1e50004
 	jr nz, SLDst_Return
 	ld xwa, (xsp + 4)
-	stda32 0x81f0, xwa
+	ld (0x81f0:16), xwa
 	lds wa, 0
 	calr InitializeOperationState
 	calr SignalProgressUpdate
@@ -3119,7 +3119,7 @@ CmpSingleLoadSrcFunc:
 	cp xiz, 0x1e50004
 	jrl nz, CmpSrc_Return
 	ld xwa, (xsp + 4)
-	stda32 0x81f4, xwa
+	ld (0x81f4:16), xwa
 	ld xbc, 0x1e50002
 	ld xde, 0xffffffff
 	call ApPostEvent
@@ -3286,7 +3286,7 @@ CmpSingleLoadDstFunc:
 	cp xwa, 0x1e50004
 	jrl nz, CmpDst_Return
 	ld xwa, (xsp + 4)
-	stda32 0x81f8, xwa
+	ld (0x81f8:16), xwa
 	ld xbc, 0x1e50002
 	ld xde, 0xffffffff
 	call ApPostEvent
@@ -3524,7 +3524,7 @@ CmpSingleLoadFileFunc:
 	jr z, CmpFile_HandleShow
 	cp xbc, 0x1e50004
 	jrl nz, CmpFile_Return
-	stda32 0x81fc, xde
+	ld (0x81fc:16), xde
 	call GetCurrentFileIndex
 	ld (0x8200:16), hl
 	cps hl, 0
