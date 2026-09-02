@@ -30,6 +30,13 @@ every "remaining debt" figure in this file is a LOWER BOUND.
 A `.byte` run is exactly as un-decoded as an `.incbin`, and it passes every
 "no `.incbin`" test. This project has now shipped that false claim twice.
 
+## ⚠ THE HEADLINE, NOW THAT EVERY IMAGE HAS BEEN MEASURED
+
+**Code-as-`.byte` is the dominant debt in this tree, not verbatim blobs.**
+v7 alone holds 275,822 B of it — more than the 225,670 B of real verbatim debt
+across all thirteen images put together. Every "95%+ source" figure ever quoted
+here came from an instrument that could not see it.
+
 ## Verbatim debt: 544,138 B counted, but ⚠ only 225,670 B is real
 
 The tool reports 544,138 B of 12,386,304 (95.6% source). **318,468 B of that is
@@ -78,7 +85,16 @@ Measured this push, per image where a census exists:
   single-byte numeric fields. `hdae5000/tools/measure_debt.py`
 * **wsa1/prom_b: audited and clean** — all 188 runs of 64 B or more are typed and
   understood, so its true debt equals its `.incbin` count.
-* **v7: NOT MEASURED in this shape.** Its 123,927 B figure is verbatim only.
+* ★ **v7: 275,822 B — MEASURED 2026-09-02, and it is the largest single debt in
+  the tree.** 797 confirmed code-shaped regions (247,603 B) plus 2,268 misframed
+  islands (28,219 B). This is separate from, and more than twice, v7's 123,927 B
+  of verbatim romslice debt. 9,681 B of it has since been converted.
+  ⚠ v7 calibrates as HIGH RISK for this measure — DATA-control false-positive
+  rates of 15.7%/11.7% against v9's 1.0%/0.2%, because v7 is only ~30% CODE and
+  far more fragmented — so the figure was corroborated before being trusted:
+  788 of 1,048 absolute call targets (75%) across all 797 regions resolve to
+  routines already named in the tree. Treat the figure as sound in aggregate
+  and each individual region as needing its own check.
 
 The coverage tool also prints six **self-tagged** markers, three of which say
 `MISLABELLED, THIS IS CODE` in the v1.42 payload. Those are the tree telling you
