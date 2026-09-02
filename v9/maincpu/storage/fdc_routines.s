@@ -1552,7 +1552,7 @@ FDC_CMD_EXEC:
 	ccf
 	sub	(xhl-34), a
 	ldw_d16	wa, (0x8a1e)
-	.byte 0xd1, 0x1c, 0x8a, 0x88
+	adddm16	(35356), xwa
 	lda_d16	xwa, (0x8a4a)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1697,7 +1697,7 @@ FDC_CMD_EXEC:
 	ccf
 	sub	(xhl-34), a
 	ldw_d16	wa, (0x8a1e)
-	.byte 0xd1, 0x1c, 0x8a, 0x88
+	adddm16	(35356), xwa
 	lda_d16	xwa, (0x8a4a)
 	decm	1, (xwa)
 	ld	wa, (xwa)

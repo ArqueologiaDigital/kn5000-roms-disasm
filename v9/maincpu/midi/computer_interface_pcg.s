@@ -491,7 +491,8 @@ PcgOutGridCheckJumpTable:
 	ld	xwa, (xwa)
 	inc	1, xwa
 	push	xwa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x4e, 0xff
+	pushw	231
+	pushw	65358
 	push	xhl
 	.byte 0x1d
 	addr24 Sprintf_Locked

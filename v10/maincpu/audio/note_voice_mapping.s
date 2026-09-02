@@ -17809,7 +17809,7 @@ HdaeRom_TableEntry2:
 	.byte 0xac
 	swi	6
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	ld	a, (xsp+3)
 	and	a, 255
 	jr	z, 98
@@ -18869,7 +18869,7 @@ SendEpilogue_Data:
 	sbc	xix, xiz
 	swi	6
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	ldw	wa, 127
 	cps	iz, 0
 	jr	nz, 2
@@ -19898,7 +19898,7 @@ MIDI_WriteChannelData_Block:
 	ldb	w, 242
 	ld	xiy, 0xf334febf
 	reti
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	ldb	l, 1
 	ret
 
@@ -25416,7 +25416,7 @@ Param_SignExtendRetu_Data:
 	or	(xbc), iy
 	swi	6
 	ldw	ix, 2035
-	.byte 0xf0, 0xe4, 0xd8
+	jp_dd8	8, 228
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -26918,7 +26918,7 @@ SendPartDataBlock_Data:
 	.byte 0xb3, 0xbb
 	ld	c, (xwa+18)
 	and	c, 240
-	.byte 0xc7, 0xf0, 0x9b
+	ldb_erp	c, 240
 	srl	c, 4
 	extz	bc
 	lda_24	xhl, (CharMap_FullPermutation_0x475)
@@ -26932,7 +26932,7 @@ SendPartDataBlock_Data:
 	ld	e, (xwa+19)
 	ld	c, e
 	and	c, 240
-	.byte 0xc7, 0xf0, 0x9b
+	ldb_erp	c, 240
 	srl	c, 4
 	extz	bc
 	.byte 0xc3
@@ -26944,7 +26944,8 @@ SendPartDataBlock_Data:
 	.byte 0x04
 	or	d, c
 	and	e, 15
-	.byte 0xc7, 0xf0, 0x9d, 0xc7, 0xf0, 0x8b
+	ldb_erp	e, 240
+	stb_erp	c, 240
 	extz	bc
 	.byte 0xc3
 	reti
@@ -27005,7 +27006,7 @@ SendPartDataBlock_Data:
 	ldb	c, 189
 	decf
 	ld	xhl, 0x82e813ea
-	.byte 0xc7, 0xf0, 0x8b
+	stb_erp	c, 240
 	ld	(xde+12), c
 	add	hl, 34
 	cp	hl, 102

@@ -6689,7 +6689,7 @@ TchSensGrid_EventDispatch:
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
@@ -6739,7 +6739,7 @@ TchSensGrid_EventDispatch:
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90
@@ -7253,7 +7253,7 @@ FSWAssGrid_EventDispatch:
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90
@@ -9422,7 +9422,7 @@ DispTimeSet_EventDispatch:
 	lda	xwa, (xsp+40)
 	ld	xbc, xde
 	srl	xbc, 0
-	.byte 0xd7, 0xe6, 0xa8
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
@@ -9554,7 +9554,7 @@ DispTimeSet_EventDispatch:
 	lda	xiy, (xsp+40)
 	ld	xwa, xde
 	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
+	ld	qwa, 0
 	ld	(xiy), wa
 	ld	iz, de
 	ld	(xiy+2), iz

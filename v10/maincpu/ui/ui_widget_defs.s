@@ -3219,7 +3219,7 @@ PsEditSwBox_InlineData:
 	ld	iz, bc
 	cp	wa, iz
 	jr	c, 2
-	.byte 0xd8, 0xbe
+	ex16	iz, wa
 	lda	xbc, (xsp+6)
 	calr	40333
 	lda	xbc, (xsp+2)
@@ -7910,9 +7910,9 @@ PsTrkSw_TrailingData:
 	lda	xwa, (xbc+2)
 	.byte 0x92, 0x3f, 0x08, 0x00
 	jr	nc, 6
-	.byte 0xb0, 0x02, 0xa4, 0x00
+	ldw	(xwa), 164
 	jr	4
-	.byte 0xb0, 0x02, 0xc4, 0x00
+	ldw	(xwa), 196
 	ld	wa, (xde)
 	and	wa, 7
 	mul	wa, 40

@@ -1769,7 +1769,9 @@ GetPlayState2:
 	ret
 
 SmfMedley_RawData:
-	.byte 0xc9, 0xd8, 0xd8, 0x7e, 0xf1, 0x44, 0x89, 0x41
+	cps	a, 0
+	scc	nz, wa
+	stb_d8	(35140), a
 	ret
 
 NavigateSongList_Entry:

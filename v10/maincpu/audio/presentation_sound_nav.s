@@ -1344,7 +1344,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	push	xix
 	push	xiz
 	ld	xwa, (xiz)
-	.byte 0xb0, 0xe8
+	call	(xwa)
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1356,7 +1356,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	push	xix
 	push	xiz
 	ld	xwa, (xiz)
-	.byte 0xb0, 0xe8
+	call	(xwa)
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1378,7 +1378,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	pushw	de
 	ld	xde, (xwa+8)
 	ld	wa, bc
-	.byte 0xb2, 0xe8
+	call	(xde)
 	inc	4, xsp
 	pop	xiz
 	pop	xix

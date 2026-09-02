@@ -1212,7 +1212,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	xix, 0x9594
 	ldw	wa, 0xffff
 	ldw	bc, 16
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 0x9514
 	.byte 0xc1
@@ -1223,7 +1223,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	xix, 0x95b4
 	xor	wa, wa
 	ldw	bc, 64
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 0x94f4
 	ld	xiy, 0x9514
@@ -12756,11 +12756,11 @@ SeqOut_TimedChunkRemainder:
 SeqVoice_ReadEntryFields_Data:
 	ld	xde, xwa
 	ld	a, (xde)
-	.byte 0xf5, 0xe4, 0x41
+	lda_dpi	xbc, 228
 	ld	a, (xde+1)
-	.byte 0xf5, 0xe4, 0x41
+	lda_dpi	xbc, 228
 	ld	a, (xde+2)
-	.byte 0xf5, 0xe4, 0x41
+	lda_dpi	xbc, 228
 	ld	a, (xde+3)
 	.byte 0xf5, 0xe4
 	ld	xbc, 0x0eff00b1
@@ -13383,7 +13383,7 @@ AssSwb_ProcessLoop_Data:
 	and	(xix), wa
 	lda	xde, (xiz+1)
 	ld	a, (xde)
-	.byte 0xc7, 0xf4, 0x99
+	ldb_erp	a, 244
 	extz	iy
 	ld	wa, (xhl)
 	cpl	a

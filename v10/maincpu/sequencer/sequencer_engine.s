@@ -17807,14 +17807,14 @@ Rhythm_NoteAllocBlock:
 	sub	wa, hl
 	extz	xwa
 	div	xwa, xbc
-	.byte 0xd7, 0xe2, 0x88
+	ld	wa, qwa
 	add	wa, hl
 	ld	(xsp+4), wa
 	jr	13
 	ld	wa, (xsp+4)
 	extz	xwa
 	div	xwa, xiz
-	.byte 0xd7, 0xe2, 0x88
+	ld	wa, qwa
 	ld	(xsp+4), wa
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -21317,7 +21317,7 @@ AppEvent_SubDispatch:
 	and	bc, (xix+4096)
 	.byte 0xd3, 0xf1
 	ldb	a, 193
-	.byte 0xd4, 0xf1, 0xf1
+	cp_spdw	bc, 241
 	jr	nz, 17
 	cps	a, 1
 	jr	ule, 8
@@ -25462,7 +25462,7 @@ MainExe_InlineByteData:
 	ldw_d16	wa, (0xf1d7)
 	stda16	(9778), wa
 	ldw_d16	wa, (9772)
-	.byte 0xd1, 0xd7, 0xf1, 0xa0
+	subda16	xwa, (61911)
 	inc	1, wa
 	stda16	(9694), wa
 	stdi8	(0x7f42), 255
@@ -25478,7 +25478,7 @@ MainExe_InlineByteData:
 	pop_f
 	ld	h, (xiz)
 	ldw_d16	wa, (9774)
-	.byte 0xd1, 0xe2, 0xf1, 0xa0
+	subda16	xwa, (61922)
 	inc	1, wa
 	stda16	(9694), wa
 	.byte 0xc1, 0xe6, 0xf1

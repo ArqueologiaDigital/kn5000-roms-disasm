@@ -3855,7 +3855,7 @@ VocalistGrid_DispatchData:
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
 	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
+	ld	qwa, 0
 	ld	(xhl), wa
 	ld	bc, de
 	ld	(xhl+2), bc
@@ -3899,7 +3899,7 @@ VocalistGrid_DispatchData:
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
 	srl	xwa, 0
-	.byte 0xd7, 0xe2, 0xa8
+	ld	qwa, 0
 	ld	(xhl), wa
 	ld	bc, de
 	ld	(xhl+2), bc
