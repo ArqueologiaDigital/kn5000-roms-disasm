@@ -130,6 +130,18 @@ BYTE_RE = re.compile(r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+)\s*$')
 # still stands unconverted.
 BYTE_RE_CALL_ADDR_COMMENT = re.compile(
     r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+);\s*call\s+\S+\s*\(v7 addr\)\s*$')
+# 2026-09-02, lane V7ISLANDS2: same stale-line-hint trap as BYTE_RE_CALL_ADDR_
+# COMMENT above, for the RELATIVE-branch sibling annotation. 178 `.byte` runs
+# tree-wide carry a trailing `; calr NAME (v7 displacement)` or `; jrl NAME
+# (v7 displacement)` comment instead of `(v7 addr)` -- same prior pass, same
+# reason the bytes were never converted, same silent "0 B collected" SKIP.
+# Recognised the same way and just as narrowly (only this exact suffix,
+# `calr` or `jrl` only); collect_span's VALUES check against the ROM is the
+# actual safety net either way, so widening recognition here does not weaken
+# anything -- it only lets already-safe candidates reach that check instead
+# of being skipped for a comment-format reason alone.
+BYTE_RE_DISP_COMMENT = re.compile(
+    r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+);\s*(?:calr|jrl)\s+\S+\s*\(v7 displacement\)\s*$')
 
 
 def is_near_uniform_run(raw, byte_frac=0.4, min_len=3):
@@ -197,7 +209,8 @@ def collect_span(lines, start_idx, size):
     n_lines = 0
     values = []
     while i < len(lines):
-        m = BYTE_RE.match(lines[i]) or BYTE_RE_CALL_ADDR_COMMENT.match(lines[i])
+        m = (BYTE_RE.match(lines[i]) or BYTE_RE_CALL_ADDR_COMMENT.match(lines[i])
+             or BYTE_RE_DISP_COMMENT.match(lines[i]))
         if not m:
             break
         vals = re.findall(r'0x([0-9a-fA-F]{2})', m.group(1))
