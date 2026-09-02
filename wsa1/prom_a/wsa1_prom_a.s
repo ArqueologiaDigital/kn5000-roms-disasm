@@ -20397,7 +20397,34 @@ sub_F8BF07:
 ; Boundaries: notes/reachability.py's walk, frozen against this file's own output.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C000, 0x000032
+sub_F8C000:
+	jp 0xf8c018                                   ; F8C000  1b 18 c0 f8
+	ret                                           ; F8C004  0e
+	nop                                           ; F8C005  00
+	nop                                           ; F8C006  00
+	nop                                           ; F8C007  00
+	ret                                           ; F8C008  0e
+	nop                                           ; F8C009  00
+	nop                                           ; F8C00A  00
+	nop                                           ; F8C00B  00
+	ret                                           ; F8C00C  0e
+	nop                                           ; F8C00D  00
+	nop                                           ; F8C00E  00
+	nop                                           ; F8C00F  00
+	ret                                           ; F8C010  0e
+	nop                                           ; F8C011  00
+	nop                                           ; F8C012  00
+	nop                                           ; F8C013  00
+	ret                                           ; F8C014  0e
+	nop                                           ; F8C015  00
+	nop                                           ; F8C016  00
+	nop                                           ; F8C017  00
+	stdi8 (0x2143), 0x05                          ; F8C018  f1 43 21 00 05
+	stdi8 (0x2144), 0x05                          ; F8C01D  f1 44 21 00 05
+	stdi8 (0x2146), 0x05                          ; F8C022  f1 46 21 00 05
+	stdi8 (0x2147), 0x05                          ; F8C027  f1 47 21 00 05
+	stdi8 (0x2145), 0x05                          ; F8C02C  f1 45 21 00 05
+	ret                                           ; F8C031  0e
 sub_F8C032:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20b8)                                   ; F8C032  c1 b8 20 21
 	cps a, 0x00                                          ; F8C036  c9 d8
@@ -20407,13 +20434,35 @@ sub_F8C032:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c046                                    ; F8C03D  45 46 c0 f8 00
 	calr 0x0128                                          ; F8C042  1e 28 01
 	ret                                                  ; F8C045  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C046, 0x000008
+; ---------------------------------------------------------------------
+; CmdList_F8C046 -- 8 bytes, 1 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C03D `ld XIY,0x00f8c046` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C046:
+	.byte 0x00, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C046  record 0
+	.byte 0xff  ; F8C04D  terminator
 sub_F8C04E:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20b8)                                   ; F8C04E  c1 b8 20 21
 	ld XIY,0x00f8c05b                                    ; F8C052  45 5b c0 f8 00
 	calr 0x0113                                          ; F8C057  1e 13 01
 	ret                                                  ; F8C05A  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C05B, 0x000016
+; ---------------------------------------------------------------------
+; CmdList_F8C05B -- 22 bytes, 3 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C052 `ld XIY,0x00f8c05b` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C05B:
+	.byte 0x18, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C05B  record 0
+	.byte 0x19, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C062  record 1
+	.byte 0x1a, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C069  record 2
+	.byte 0xff  ; F8C070  terminator
 sub_F8C071:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20b8)                                   ; F8C071  c1 b8 20 21
 	cp A,0x10                                            ; F8C075  c9 cf 10
@@ -20423,7 +20472,18 @@ sub_F8C071:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c086                                    ; F8C07D  45 86 c0 f8 00
 	calr 0xe8                                            ; F8C082  1e e8 00
 	ret                                                  ; F8C085  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C086, 0x00000F
+; ---------------------------------------------------------------------
+; CmdList_F8C086 -- 15 bytes, 2 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C07D `ld XIY,0x00f8c086` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C086:
+	.byte 0x10, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C086  record 0
+	.byte 0x10, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C08D  record 1
+	.byte 0xff  ; F8C094  terminator
 sub_F8C095:   ; entry: prom_b routine directory
 	ret                                                  ; F8C095  0e
 sub_F8C096:   ; entry: prom_b routine directory
@@ -20433,7 +20493,18 @@ sub_F8C097:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c0a4                                    ; F8C09B  45 a4 c0 f8 00
 	calr 0xca                                            ; F8C0A0  1e ca 00
 	ret                                                  ; F8C0A3  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C0A4, 0x00000F
+; ---------------------------------------------------------------------
+; CmdList_F8C0A4 -- 15 bytes, 2 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C09B `ld XIY,0x00f8c0a4` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C0A4:
+	.byte 0x08, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0A4  record 0
+	.byte 0x07, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0AB  record 1
+	.byte 0xff  ; F8C0B2  terminator
 sub_F8C0B3:   ; entry: prom_b routine directory
 	ret                                                  ; F8C0B3  0e
 sub_F8C0B4:   ; entry: prom_b routine directory
@@ -20441,7 +20512,18 @@ sub_F8C0B4:   ; entry: prom_b routine directory
 	ld XIY,0x00f8c0c1                                    ; F8C0B8  45 c1 c0 f8 00
 	calr 0xad                                            ; F8C0BD  1e ad 00
 	ret                                                  ; F8C0C0  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C0C1, 0x00000F
+; ---------------------------------------------------------------------
+; CmdList_F8C0C1 -- 15 bytes, 2 x 7-byte record(s) + 0xFF terminator.
+; Reader: 0xF8C0B8 `ld XIY,0x00f8c0c1` (already-converted),
+; whose `calr` resolves to 0xF8C16D (`.LF8C16D: cp (XIY),0xff`, also
+; already-converted) -- the exact terminator byte below.  See
+; notes/gen_prom_a_f8c000_cluster.py --check and
+; notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+CmdList_F8C0C1:
+	.byte 0x00, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0C1  record 0
+	.byte 0x01, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0C8  record 1
+	.byte 0xff  ; F8C0CF  terminator
 sub_F8C0D0:   ; entry: prom_b routine directory
 	ldb_d8 a, (0x20ba)                                   ; F8C0D0  c1 ba 20 21
 	and A,A                                              ; F8C0D4  c9 c1
@@ -20608,7 +20690,28 @@ sub_F8C18B:   ; entry: prom_b routine directory
 	stdi16 (0x213a), 0x00                                ; F8C2AB  f1 3a 21 02 00 00
 .LF8C2B1:
 	ret                                                  ; F8C2B1  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C2B2, 0x00003A
+; ---------------------------------------------------------------------
+; DispatchTable_F8C2B2 -- 58 bytes.  Variable-length: a 2-byte id, then either
+; a 2-byte placeholder (id == 0xFFFF) or a 4-byte little-endian pointer.
+; 8 non-placeholder pointers, ALL landing inside the two neighbouring
+; still-.incbin spans 0xF8C485-0xF8C630 and 0xF8C652-0xF8C842 (two of
+; them are those spans' own START addresses) -- neither neighbour is
+; converted this pass, see notes/FINDINGS-prom_a-f8c000-cluster.md.
+; ---------------------------------------------------------------------
+DispatchTable_F8C2B2:
+	.byte 0x04, 0x00, 0x85, 0xc4, 0xf8, 0x00  ; F8C2B2  id=0x0004 ptr=0x00f8c485
+	.byte 0x40, 0x00, 0xd8, 0xc4, 0xf8, 0x00  ; F8C2B8  id=0x0040 ptr=0x00f8c4d8
+	.byte 0xff, 0xff  ; F8C2BE  placeholder
+	.byte 0xff, 0xff  ; F8C2C0  placeholder
+	.byte 0xff, 0xff  ; F8C2C2  placeholder
+	.byte 0x02, 0x00, 0x07, 0xc7, 0xf8, 0x00  ; F8C2C4  id=0x0002 ptr=0x00f8c707
+	.byte 0xff, 0xff  ; F8C2CA  placeholder
+	.byte 0x00, 0x01, 0x96, 0xc5, 0xf8, 0x00  ; F8C2CC  id=0x0100 ptr=0x00f8c596
+	.byte 0x00, 0x08, 0xe3, 0xc5, 0xf8, 0x00  ; F8C2D2  id=0x0800 ptr=0x00f8c5e3
+	.byte 0x80, 0x00, 0x52, 0xc6, 0xf8, 0x00  ; F8C2D8  id=0x0080 ptr=0x00f8c652
+	.byte 0x00, 0x02, 0x7d, 0xc7, 0xf8, 0x00  ; F8C2DE  id=0x0200 ptr=0x00f8c77d
+	.byte 0x00, 0x04, 0xac, 0xc7, 0xf8, 0x00  ; F8C2E4  id=0x0400 ptr=0x00f8c7ac
+	.byte 0xff, 0xff  ; F8C2EA  placeholder
 .LF8C2EC:
 sub_F8C2EC:   ; entry: reachable-run entry
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8C2EC  c0 c4 3f 02
@@ -38443,7 +38546,32 @@ sub_F97418:   ; entry: reachable-run entry
 	pop XIX                                              ; F97500  5c
 	pop XIZ                                              ; F97501  5e
 	ret                                                  ; F97502  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x017503, 0x000030
+sub_F97503:
+	push XIZ                                      ; F97503  3e
+	push XIX                                      ; F97504  3c
+	push XHL                                      ; F97505  3b
+	push XDE                                      ; F97506  3a
+	ldda32 xix, (0x218b)                          ; F97507  e1 8b 21 24
+	bit 2,(XIX+0x15)                              ; F9750B  bc 15 ca
+	jr z, .LF9751C                                ; F9750E  66 0c
+	ldb b, 0x08                                   ; F97510  22 08
+	ld E,(XIX+0x08)                               ; F97512  8c 08 25
+	and E,0x7f                                    ; F97515  cd cc 7f
+	ldb d, 0x7f                                   ; F97518  24 7f
+	jr .LF97526                                   ; F9751A  68 0a
+.LF9751C:
+	ldb b, 0x08                                   ; F9751C  22 08
+	ld E,(XIX+0x12)                               ; F9751E  8c 12 25
+	and E,0x7f                                    ; F97521  cd cc 7f
+	ldb d, 0x7f                                   ; F97524  24 7f
+.LF97526:
+	ldb_d8 c, (0x218f)                            ; F97526  c1 8f 21 23
+	call 0xf40748                                 ; F9752A  1d 48 07 f4
+	pop XDE                                       ; F9752E  5a
+	pop XHL                                       ; F9752F  5b
+	pop XIX                                       ; F97530  5c
+	pop XIZ                                       ; F97531  5e
+	ret                                           ; F97532  0e
 sub_F97533:   ; entry: reachable-run entry
 	push XIZ                                             ; F97533  3e
 	push XIX                                             ; F97534  3c
@@ -141276,7 +141404,21 @@ sub_FDE729:
 	lda_24 xiy, (0xfde74c)                        ; FDE744  f2 4c e7 fd 35
 	push XIY                                      ; FDE749  3d
 	jp (xbc)                                      ; FDE74A  b1 d8
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E74C, 0x000011
+; ---------------------------------------------------------------------
+; sub_FDE74C -- 17 bytes, the head of the block that used to be all
+;               `.incbin`.  Falls straight through into sub_FDE75D
+;               (already converted).  See
+;               notes/FINDINGS-prom_a-fde74c-boundary.md for the argument
+;               that licenses treating this as code.
+; ---------------------------------------------------------------------
+sub_FDE74C:
+	call 0xfd60b9                                 ; FDE74C  1d b9 60 fd
+	popw bc                                       ; FDE750  49
+	cps a, 0x00                                   ; FDE751  c9 d8
+	jr nz, 0x08                                   ; FDE753  6e 08
+	pushw 0x10                                    ; FDE755  0b 10 00
+	call 0xfd6447                                 ; FDE758  1d 47 64 fd
+	popw bc                                       ; FDE75C  49
 ; ---------------------------------------------------------------------
 ; sub_FDE75D -- an epilogue: `unlk XIZ / ret`, three bytes.
 ; Evidence: START -- the `jr z` at 0xFDE729+4 = 0xFDE72D (bytes 66 2e) targets
@@ -141289,7 +141431,2642 @@ sub_FDE729:
 sub_FDE75D:
 	unlk XIZ                                      ; FDE75D  ee 0d
 	ret                                           ; FDE75F  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E760, 0x0018A0
+; =======================================================================
+; 0xFDE760-0xFDFFDF -- 6,271 bytes, CONVERTED FOR COVERAGE, NOT NAMED.
+;
+; reachability.py still reports ZERO reachable bytes: nothing in prom_a's
+; own control-flow graph names this span.  What licenses the conversion is
+; external: 64/64 distinct call/calr targets resolve against material this
+; pass did not produce -- the independently certified 0xFCFDA7-0xFDE70F
+; module (45 hits + the 3 addresses that module's own findings file already
+; flagged as "1-2 bytes past a boundary"), this span's own internal calr
+; targets (15), and one already-named prom_b thunk slot, T_Dispatch_Code80
+; at 0xF41ED4, separately reached by 109 other references in the tree.
+; Full argument: notes/FINDINGS-prom_a-fde74c-boundary.md and
+; notes/gen_prom_a_fde74c_module.py --check.
+;
+; The span ends at 0xFDFFDF, on the common `unlk XIZ / ret` epilogue that
+; closes dozens of routines in this same block -- not a guess: the next 33
+; bytes (0xFDFFDF-0xFE0000) do not decode self-consistently from ANY start
+; tried, including the two candidates
+; (notes/prom_a_fcf000_checks.py --tail) that are the only ones among 128
+; that make 0xFE0000 (the next module's `jp`-veneer boundary) land right.
+; Left `.incbin`, refused -- see the tail comment below.
+;
+; Every label here is `sub_XXXXXX`/`.LXXXXXX`: an address, not a claim.
+; =======================================================================
+sub_FDE760:
+	link XIZ,0x0000                               ; FDE760  ee 0c 00 00
+	pushw 0x90                                    ; FDE764  0b 90 00
+	pushw 0x01                                    ; FDE767  0b 01 00
+	ld BC,(XIZ+0x08)                              ; FDE76A  9e 08 21
+	extz BC                                       ; FDE76D  d9 12
+	pushw bc                                      ; FDE76F  29
+	calr .LFDE784                                 ; FDE770  1e 11 00
+	pushw 0x00                                    ; FDE773  0b 00 00
+	pushw 0x00                                    ; FDE776  0b 00 00
+	call 0xfd98bd                                 ; FDE779  1d bd 98 fd
+	inc 0,XSP                                     ; FDE77D  ef 60
+	inc 2,XSP                                     ; FDE77F  ef 62
+	unlk XIZ                                      ; FDE781  ee 0d
+	ret                                           ; FDE783  0e
+.LFDE784:
+	link XIZ,0xffec                               ; FDE784  ee 0c ec ff
+	pushw hl                                      ; FDE788  2b
+	push XIX                                      ; FDE789  3c
+	lda xix, (xiz-16)                             ; FDE78A  be f0 34
+	lda xbc, (xiz-2)                              ; FDE78D  be fe 31
+	push XBC                                      ; FDE790  39
+	call 0xfd6b4d                                 ; FDE791  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDE795  be fc 31
+	push XBC                                      ; FDE798  39
+	call 0xfda0ca                                 ; FDE799  1d ca a0 fd
+	push XIX                                      ; FDE79D  3c
+	pushw 0x02                                    ; FDE79E  0b 02 00
+	call 0xfd6c7b                                 ; FDE7A1  1d 7b 6c fd
+	ld (XIX+0x06),0xff                            ; FDE7A5  bc 06 00 ff
+	ld (XIX+0x07),0x00                            ; FDE7A9  bc 07 00 00
+	ld (XIX+0x08),0x7f                            ; FDE7AD  bc 08 00 7f
+	ld (XIX+0x09),0x00                            ; FDE7B1  bc 09 00 00
+	ld XBC,XIX                                    ; FDE7B5  ec 89
+	add XBC,0x0000000a                            ; FDE7B7  e9 c8 0a 00 00 00
+	push XBC                                      ; FDE7BD  39
+	ld BC,(XIZ+0x08)                              ; FDE7BE  9e 08 21
+	extz BC                                       ; FDE7C1  d9 12
+	pushw bc                                      ; FDE7C3  29
+	call 0xfd7c2d                                 ; FDE7C4  1d 2d 7c fd
+	ldb h, 0x4d                                   ; FDE7C8  26 4d
+	add XSP,0x00000014                            ; FDE7CA  ef c8 14 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDE7D0  8e fc 3f 00
+	jr z, .LFDE7F0                                ; FDE7D4  66 1a
+	sub XBC,XBC                                   ; FDE7D6  e9 a1
+	ld (xiz-20), xbc                              ; FDE7D8  be ec 61
+	ldb a, 0x17                                   ; FDE7DB  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDE7DD  8e fe 41
+	extz XWA                                      ; FDE7E0  e8 12
+	add XWA,0x0000000e                            ; FDE7E2  e8 c8 0e 00 00 00
+	add XBC,XWA                                   ; FDE7E8  e8 81
+	ld H,C                                        ; FDE7EA  cb 8e
+	ld (xiz-2), 0x00                              ; FDE7EC  be fe 00 00
+.LFDE7F0:
+	push XIX                                      ; FDE7F0  3c
+	ld C,H                                        ; FDE7F1  ce 8b
+	extz BC                                       ; FDE7F3  d9 12
+	pushw bc                                      ; FDE7F5  29
+	ld bc, (xiz-2)                                ; FDE7F6  9e fe 21
+	extz BC                                       ; FDE7F9  d9 12
+	pushw bc                                      ; FDE7FB  29
+	pushw 0x02                                    ; FDE7FC  0b 02 00
+	ld BC,(XIZ+0x0c)                              ; FDE7FF  9e 0c 21
+	extz BC                                       ; FDE802  d9 12
+	pushw bc                                      ; FDE804  29
+	call 0xfd7435                                 ; FDE805  1d 35 74 fd
+	ld BC,(XIZ+0x0a)                              ; FDE809  9e 0a 21
+	extz BC                                       ; FDE80C  d9 12
+	pushw bc                                      ; FDE80E  29
+	call 0xfd7c01                                 ; FDE80F  1d 01 7c fd
+	inc 0,XSP                                     ; FDE813  ef 60
+	inc 6,XSP                                     ; FDE815  ef 66
+	pop XIX                                       ; FDE817  5c
+	popw hl                                       ; FDE818  4b
+	unlk XIZ                                      ; FDE819  ee 0d
+	ret                                           ; FDE81B  0e
+	link XIZ,0x0000                               ; FDE81C  ee 0c 00 00
+	pushw 0x90                                    ; FDE820  0b 90 00
+	pushw 0x02                                    ; FDE823  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDE826  9e 08 21
+	extz BC                                       ; FDE829  d9 12
+	pushw bc                                      ; FDE82B  29
+	calr .LFDE840                                 ; FDE82C  1e 11 00
+	pushw 0x00                                    ; FDE82F  0b 00 00
+	pushw 0x00                                    ; FDE832  0b 00 00
+	call 0xfd98bd                                 ; FDE835  1d bd 98 fd
+	inc 0,XSP                                     ; FDE839  ef 60
+	inc 2,XSP                                     ; FDE83B  ef 62
+	unlk XIZ                                      ; FDE83D  ee 0d
+	ret                                           ; FDE83F  0e
+.LFDE840:
+	link XIZ,0xffec                               ; FDE840  ee 0c ec ff
+	pushw hl                                      ; FDE844  2b
+	push XIX                                      ; FDE845  3c
+	lda xix, (xiz-16)                             ; FDE846  be f0 34
+	lda xbc, (xiz-2)                              ; FDE849  be fe 31
+	push XBC                                      ; FDE84C  39
+	call 0xfd6b4d                                 ; FDE84D  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDE851  be fc 31
+	push XBC                                      ; FDE854  39
+	call 0xfda0ca                                 ; FDE855  1d ca a0 fd
+	push XIX                                      ; FDE859  3c
+	pushw 0x03                                    ; FDE85A  0b 03 00
+	call 0xfd6c7b                                 ; FDE85D  1d 7b 6c fd
+	ld (XIX+0x06),0x7f                            ; FDE861  bc 06 00 7f
+	ld (XIX+0x07),0x00                            ; FDE865  bc 07 00 00
+	ld (XIX+0x08),0x05                            ; FDE869  bc 08 00 05
+	ld (XIX+0x09),0x00                            ; FDE86D  bc 09 00 00
+	ld XBC,XIX                                    ; FDE871  ec 89
+	add XBC,0x0000000a                            ; FDE873  e9 c8 0a 00 00 00
+	push XBC                                      ; FDE879  39
+	ld BC,(XIZ+0x08)                              ; FDE87A  9e 08 21
+	extz BC                                       ; FDE87D  d9 12
+	pushw bc                                      ; FDE87F  29
+	call 0xfd7c2d                                 ; FDE880  1d 2d 7c fd
+	ldb h, 0x4e                                   ; FDE884  26 4e
+	add XSP,0x00000014                            ; FDE886  ef c8 14 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDE88C  8e fc 3f 00
+	jr z, .LFDE8AC                                ; FDE890  66 1a
+	sub XBC,XBC                                   ; FDE892  e9 a1
+	ld (xiz-20), xbc                              ; FDE894  be ec 61
+	ldb a, 0x17                                   ; FDE897  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDE899  8e fe 41
+	extz XWA                                      ; FDE89C  e8 12
+	add XWA,0x0000000f                            ; FDE89E  e8 c8 0f 00 00 00
+	add XBC,XWA                                   ; FDE8A4  e8 81
+	ld H,C                                        ; FDE8A6  cb 8e
+	ld (xiz-2), 0x00                              ; FDE8A8  be fe 00 00
+.LFDE8AC:
+	push XIX                                      ; FDE8AC  3c
+	ld C,H                                        ; FDE8AD  ce 8b
+	extz BC                                       ; FDE8AF  d9 12
+	pushw bc                                      ; FDE8B1  29
+	ld bc, (xiz-2)                                ; FDE8B2  9e fe 21
+	extz BC                                       ; FDE8B5  d9 12
+	pushw bc                                      ; FDE8B7  29
+	pushw 0x03                                    ; FDE8B8  0b 03 00
+	ld BC,(XIZ+0x0c)                              ; FDE8BB  9e 0c 21
+	extz BC                                       ; FDE8BE  d9 12
+	pushw bc                                      ; FDE8C0  29
+	call 0xfd7435                                 ; FDE8C1  1d 35 74 fd
+	ld BC,(XIZ+0x0a)                              ; FDE8C5  9e 0a 21
+	extz BC                                       ; FDE8C8  d9 12
+	pushw bc                                      ; FDE8CA  29
+	call 0xfd7c01                                 ; FDE8CB  1d 01 7c fd
+	inc 0,XSP                                     ; FDE8CF  ef 60
+	inc 6,XSP                                     ; FDE8D1  ef 66
+	pop XIX                                       ; FDE8D3  5c
+	popw hl                                       ; FDE8D4  4b
+	unlk XIZ                                      ; FDE8D5  ee 0d
+	ret                                           ; FDE8D7  0e
+	link XIZ,0x0000                               ; FDE8D8  ee 0c 00 00
+	pushw 0x90                                    ; FDE8DC  0b 90 00
+	pushw 0x03                                    ; FDE8DF  0b 03 00
+	ld BC,(XIZ+0x08)                              ; FDE8E2  9e 08 21
+	extz BC                                       ; FDE8E5  d9 12
+	pushw bc                                      ; FDE8E7  29
+	calr .LFDE8F0                                 ; FDE8E8  1e 05 00
+	inc 6,XSP                                     ; FDE8EB  ef 66
+	unlk XIZ                                      ; FDE8ED  ee 0d
+	ret                                           ; FDE8EF  0e
+.LFDE8F0:
+	link XIZ,0xffec                               ; FDE8F0  ee 0c ec ff
+	pushw hl                                      ; FDE8F4  2b
+	push XIX                                      ; FDE8F5  3c
+	lda xix, (xiz-16)                             ; FDE8F6  be f0 34
+	lda xbc, (xiz-2)                              ; FDE8F9  be fe 31
+	push XBC                                      ; FDE8FC  39
+	call 0xfd6b4d                                 ; FDE8FD  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDE901  be fc 31
+	push XBC                                      ; FDE904  39
+	call 0xfda0ca                                 ; FDE905  1d ca a0 fd
+	push XIX                                      ; FDE909  3c
+	pushw 0x01                                    ; FDE90A  0b 01 00
+	call 0xfd6c7b                                 ; FDE90D  1d 7b 6c fd
+	ld (XIX+0x06),0x3f                            ; FDE911  bc 06 00 3f
+	ld (XIX+0x07),0x00                            ; FDE915  bc 07 00 00
+	ld (XIX+0x08),0x32                            ; FDE919  bc 08 00 32
+	ld (XIX+0x09),0x00                            ; FDE91D  bc 09 00 00
+	ld XBC,XIX                                    ; FDE921  ec 89
+	add XBC,0x0000000a                            ; FDE923  e9 c8 0a 00 00 00
+	push XBC                                      ; FDE929  39
+	ld BC,(XIZ+0x08)                              ; FDE92A  9e 08 21
+	extz BC                                       ; FDE92D  d9 12
+	pushw bc                                      ; FDE92F  29
+	call 0xfd7c2d                                 ; FDE930  1d 2d 7c fd
+	ldb h, 0x37                                   ; FDE934  26 37
+	add XSP,0x00000014                            ; FDE936  ef c8 14 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDE93C  8e fc 3f 00
+	jr z, .LFDE95C                                ; FDE940  66 1a
+	sub XBC,XBC                                   ; FDE942  e9 a1
+	ld (xiz-20), xbc                              ; FDE944  be ec 61
+	ldb a, 0x17                                   ; FDE947  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDE949  8e fe 41
+	extz XWA                                      ; FDE94C  e8 12
+	add XWA,0x0000000d                            ; FDE94E  e8 c8 0d 00 00 00
+	add XBC,XWA                                   ; FDE954  e8 81
+	ld H,C                                        ; FDE956  cb 8e
+	ld (xiz-2), 0x00                              ; FDE958  be fe 00 00
+.LFDE95C:
+	push XIX                                      ; FDE95C  3c
+	ld C,H                                        ; FDE95D  ce 8b
+	extz BC                                       ; FDE95F  d9 12
+	pushw bc                                      ; FDE961  29
+	ld bc, (xiz-2)                                ; FDE962  9e fe 21
+	extz BC                                       ; FDE965  d9 12
+	pushw bc                                      ; FDE967  29
+	pushw 0x01                                    ; FDE968  0b 01 00
+	ld BC,(XIZ+0x0c)                              ; FDE96B  9e 0c 21
+	extz BC                                       ; FDE96E  d9 12
+	pushw bc                                      ; FDE970  29
+	call 0xfd7435                                 ; FDE971  1d 35 74 fd
+	ld BC,(XIZ+0x0a)                              ; FDE975  9e 0a 21
+	extz BC                                       ; FDE978  d9 12
+	pushw bc                                      ; FDE97A  29
+	call 0xfd7c01                                 ; FDE97B  1d 01 7c fd
+	inc 0,XSP                                     ; FDE97F  ef 60
+	inc 6,XSP                                     ; FDE981  ef 66
+	pop XIX                                       ; FDE983  5c
+	popw hl                                       ; FDE984  4b
+	unlk XIZ                                      ; FDE985  ee 0d
+	ret                                           ; FDE987  0e
+	link XIZ,0x0000                               ; FDE988  ee 0c 00 00
+	pushw 0x90                                    ; FDE98C  0b 90 00
+	pushw 0x04                                    ; FDE98F  0b 04 00
+	ld BC,(XIZ+0x08)                              ; FDE992  9e 08 21
+	extz BC                                       ; FDE995  d9 12
+	pushw bc                                      ; FDE997  29
+	calr .LFDE9A0                                 ; FDE998  1e 05 00
+	inc 6,XSP                                     ; FDE99B  ef 66
+	unlk XIZ                                      ; FDE99D  ee 0d
+	ret                                           ; FDE99F  0e
+.LFDE9A0:
+	link XIZ,0xffec                               ; FDE9A0  ee 0c ec ff
+	pushw hl                                      ; FDE9A4  2b
+	push XIX                                      ; FDE9A5  3c
+	lda xix, (xiz-16)                             ; FDE9A6  be f0 34
+	lda xbc, (xiz-2)                              ; FDE9A9  be fe 31
+	push XBC                                      ; FDE9AC  39
+	call 0xfd6b4d                                 ; FDE9AD  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDE9B1  be fc 31
+	push XBC                                      ; FDE9B4  39
+	call 0xfda0ca                                 ; FDE9B5  1d ca a0 fd
+	push XIX                                      ; FDE9B9  3c
+	pushw 0x00                                    ; FDE9BA  0b 00 00
+	call 0xfd6c7b                                 ; FDE9BD  1d 7b 6c fd
+	ld (XIX+0x06),0x07                            ; FDE9C1  bc 06 00 07
+	ld (XIX+0x07),0x05                            ; FDE9C5  bc 07 00 05
+	ld (XIX+0x08),0x06                            ; FDE9C9  bc 08 00 06
+	ld (XIX+0x09),0x00                            ; FDE9CD  bc 09 00 00
+	ld XBC,XIX                                    ; FDE9D1  ec 89
+	add XBC,0x0000000a                            ; FDE9D3  e9 c8 0a 00 00 00
+	push XBC                                      ; FDE9D9  39
+	ld BC,(XIZ+0x08)                              ; FDE9DA  9e 08 21
+	extz BC                                       ; FDE9DD  d9 12
+	pushw bc                                      ; FDE9DF  29
+	call 0xfd7c2d                                 ; FDE9E0  1d 2d 7c fd
+	ldb h, 0x36                                   ; FDE9E4  26 36
+	add XSP,0x00000014                            ; FDE9E6  ef c8 14 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDE9EC  8e fc 3f 00
+	jr z, .LFDEA0C                                ; FDE9F0  66 1a
+	sub XBC,XBC                                   ; FDE9F2  e9 a1
+	ld (xiz-20), xbc                              ; FDE9F4  be ec 61
+	ldb a, 0x17                                   ; FDE9F7  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDE9F9  8e fe 41
+	extz XWA                                      ; FDE9FC  e8 12
+	add XWA,0x0000000c                            ; FDE9FE  e8 c8 0c 00 00 00
+	add XBC,XWA                                   ; FDEA04  e8 81
+	ld H,C                                        ; FDEA06  cb 8e
+	ld (xiz-2), 0x00                              ; FDEA08  be fe 00 00
+.LFDEA0C:
+	push XIX                                      ; FDEA0C  3c
+	ld C,H                                        ; FDEA0D  ce 8b
+	extz BC                                       ; FDEA0F  d9 12
+	pushw bc                                      ; FDEA11  29
+	ld bc, (xiz-2)                                ; FDEA12  9e fe 21
+	extz BC                                       ; FDEA15  d9 12
+	pushw bc                                      ; FDEA17  29
+	pushw 0x00                                    ; FDEA18  0b 00 00
+	ld BC,(XIZ+0x0c)                              ; FDEA1B  9e 0c 21
+	extz BC                                       ; FDEA1E  d9 12
+	pushw bc                                      ; FDEA20  29
+	call 0xfd7435                                 ; FDEA21  1d 35 74 fd
+	ld BC,(XIZ+0x0a)                              ; FDEA25  9e 0a 21
+	extz BC                                       ; FDEA28  d9 12
+	pushw bc                                      ; FDEA2A  29
+	call 0xfd7c01                                 ; FDEA2B  1d 01 7c fd
+	inc 0,XSP                                     ; FDEA2F  ef 60
+	inc 6,XSP                                     ; FDEA31  ef 66
+	pop XIX                                       ; FDEA33  5c
+	popw hl                                       ; FDEA34  4b
+	unlk XIZ                                      ; FDEA35  ee 0d
+	ret                                           ; FDEA37  0e
+.LFDEA38:
+	link XIZ,0xffec                               ; FDEA38  ee 0c ec ff
+	pushw hl                                      ; FDEA3C  2b
+	push XIX                                      ; FDEA3D  3c
+	lda xix, (xiz-16)                             ; FDEA3E  be f0 34
+	lda xbc, (xiz-2)                              ; FDEA41  be fe 31
+	push XBC                                      ; FDEA44  39
+	call 0xfd6b4d                                 ; FDEA45  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDEA49  be fc 31
+	push XBC                                      ; FDEA4C  39
+	call 0xfda0ca                                 ; FDEA4D  1d ca a0 fd
+	push XIX                                      ; FDEA51  3c
+	pushw 0x05                                    ; FDEA52  0b 05 00
+	call 0xfd6c7b                                 ; FDEA55  1d 7b 6c fd
+	ld (XIX+0x06),0x01                            ; FDEA59  bc 06 00 01
+	ld (XIX+0x07),0x07                            ; FDEA5D  bc 07 00 07
+	ld (XIX+0x08),0x01                            ; FDEA61  bc 08 00 01
+	ld (XIX+0x09),0x00                            ; FDEA65  bc 09 00 00
+	ld C,(XIZ+0x08)                               ; FDEA69  8e 08 23
+	res 0x07,C                                    ; FDEA6C  cb 30 07
+	inc 0,XSP                                     ; FDEA6F  ef 60
+	inc 6,XSP                                     ; FDEA71  ef 66
+	cps c, 0x00                                   ; FDEA73  cb d8
+	jr nz, .LFDEA7D                               ; FDEA75  6e 06
+	ld (XIX+0x0a),0x01                            ; FDEA77  bc 0a 00 01
+	jr .LFDEA81                                   ; FDEA7B  68 04
+.LFDEA7D:
+	ld (XIX+0x0a),0xff                            ; FDEA7D  bc 0a 00 ff
+.LFDEA81:
+	ldb h, 0x50                                   ; FDEA81  26 50
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDEA83  8e fc 3f 00
+	jr z, .LFDEAA3                                ; FDEA87  66 1a
+	sub XBC,XBC                                   ; FDEA89  e9 a1
+	ld (xiz-20), xbc                              ; FDEA8B  be ec 61
+	ldb a, 0x17                                   ; FDEA8E  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDEA90  8e fe 41
+	extz XWA                                      ; FDEA93  e8 12
+	add XWA,0x00000011                            ; FDEA95  e8 c8 11 00 00 00
+	add XBC,XWA                                   ; FDEA9B  e8 81
+	ld H,C                                        ; FDEA9D  cb 8e
+	ld (xiz-2), 0x00                              ; FDEA9F  be fe 00 00
+.LFDEAA3:
+	push XIX                                      ; FDEAA3  3c
+	ld C,H                                        ; FDEAA4  ce 8b
+	extz BC                                       ; FDEAA6  d9 12
+	pushw bc                                      ; FDEAA8  29
+	ld bc, (xiz-2)                                ; FDEAA9  9e fe 21
+	extz BC                                       ; FDEAAC  d9 12
+	pushw bc                                      ; FDEAAE  29
+	pushw 0x05                                    ; FDEAAF  0b 05 00
+	pushw 0x90                                    ; FDEAB2  0b 90 00
+	call 0xfd7435                                 ; FDEAB5  1d 35 74 fd
+	inc 0,XSP                                     ; FDEAB9  ef 60
+	inc 4,XSP                                     ; FDEABB  ef 64
+	cps a, 0x01                                   ; FDEABD  c9 d9
+	jr nz, .LFDEAC5                               ; FDEABF  6e 04
+	call 0xfd9a7a                                 ; FDEAC1  1d 7a 9a fd
+.LFDEAC5:
+	pushw 0x06                                    ; FDEAC5  0b 06 00
+	call 0xfd7c01                                 ; FDEAC8  1d 01 7c fd
+	popw bc                                       ; FDEACC  49
+	pop XIX                                       ; FDEACD  5c
+	popw hl                                       ; FDEACE  4b
+	unlk XIZ                                      ; FDEACF  ee 0d
+	ret                                           ; FDEAD1  0e
+.LFDEAD2:
+	link XIZ,0xffec                               ; FDEAD2  ee 0c ec ff
+	pushw hl                                      ; FDEAD6  2b
+	push XIX                                      ; FDEAD7  3c
+	lda xix, (xiz-16)                             ; FDEAD8  be f0 34
+	lda xbc, (xiz-2)                              ; FDEADB  be fe 31
+	push XBC                                      ; FDEADE  39
+	call 0xfd6b4d                                 ; FDEADF  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDEAE3  be fc 31
+	push XBC                                      ; FDEAE6  39
+	call 0xfda0ca                                 ; FDEAE7  1d ca a0 fd
+	push XIX                                      ; FDEAEB  3c
+	pushw 0x04                                    ; FDEAEC  0b 04 00
+	call 0xfd6c7b                                 ; FDEAEF  1d 7b 6c fd
+	ld (XIX+0x06),0x7f                            ; FDEAF3  bc 06 00 7f
+	ld (XIX+0x07),0x00                            ; FDEAF7  bc 07 00 00
+	ld (XIX+0x08),0x7f                            ; FDEAFB  bc 08 00 7f
+	ld (XIX+0x09),0x00                            ; FDEAFF  bc 09 00 00
+	ld XBC,XIX                                    ; FDEB03  ec 89
+	add XBC,0x0000000a                            ; FDEB05  e9 c8 0a 00 00 00
+	push XBC                                      ; FDEB0B  39
+	ld BC,(XIZ+0x08)                              ; FDEB0C  9e 08 21
+	extz BC                                       ; FDEB0F  d9 12
+	pushw bc                                      ; FDEB11  29
+	call 0xfd7c2d                                 ; FDEB12  1d 2d 7c fd
+	ldb h, 0x4f                                   ; FDEB16  26 4f
+	add XSP,0x00000014                            ; FDEB18  ef c8 14 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDEB1E  8e fc 3f 00
+	jr z, .LFDEB3E                                ; FDEB22  66 1a
+	sub XBC,XBC                                   ; FDEB24  e9 a1
+	ld (xiz-20), xbc                              ; FDEB26  be ec 61
+	ldb a, 0x17                                   ; FDEB29  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDEB2B  8e fe 41
+	extz XWA                                      ; FDEB2E  e8 12
+	add XWA,0x00000010                            ; FDEB30  e8 c8 10 00 00 00
+	add XBC,XWA                                   ; FDEB36  e8 81
+	ld H,C                                        ; FDEB38  cb 8e
+	ld (xiz-2), 0x00                              ; FDEB3A  be fe 00 00
+.LFDEB3E:
+	push XIX                                      ; FDEB3E  3c
+	ld C,H                                        ; FDEB3F  ce 8b
+	extz BC                                       ; FDEB41  d9 12
+	pushw bc                                      ; FDEB43  29
+	ld bc, (xiz-2)                                ; FDEB44  9e fe 21
+	extz BC                                       ; FDEB47  d9 12
+	pushw bc                                      ; FDEB49  29
+	pushw 0x04                                    ; FDEB4A  0b 04 00
+	pushw 0x90                                    ; FDEB4D  0b 90 00
+	call 0xfd7435                                 ; FDEB50  1d 35 74 fd
+	inc 0,XSP                                     ; FDEB54  ef 60
+	inc 4,XSP                                     ; FDEB56  ef 64
+	cps a, 0x01                                   ; FDEB58  c9 d9
+	jr nz, .LFDEB60                               ; FDEB5A  6e 04
+	call 0xfd9a7a                                 ; FDEB5C  1d 7a 9a fd
+.LFDEB60:
+	pushw 0x07                                    ; FDEB60  0b 07 00
+	call 0xfd7c01                                 ; FDEB63  1d 01 7c fd
+	popw bc                                       ; FDEB67  49
+	pop XIX                                       ; FDEB68  5c
+	popw hl                                       ; FDEB69  4b
+	unlk XIZ                                      ; FDEB6A  ee 0d
+	ret                                           ; FDEB6C  0e
+.LFDEB6D:
+	link XIZ,0xffec                               ; FDEB6D  ee 0c ec ff
+	pushw hl                                      ; FDEB71  2b
+	push XIX                                      ; FDEB72  3c
+	lda xix, (xiz-16)                             ; FDEB73  be f0 34
+	lda xbc, (xiz-2)                              ; FDEB76  be fe 31
+	push XBC                                      ; FDEB79  39
+	call 0xfd6b4d                                 ; FDEB7A  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDEB7E  be fc 31
+	push XBC                                      ; FDEB81  39
+	call 0xfda0ca                                 ; FDEB82  1d ca a0 fd
+	push XIX                                      ; FDEB86  3c
+	pushw 0x05                                    ; FDEB87  0b 05 00
+	call 0xfd6c7b                                 ; FDEB8A  1d 7b 6c fd
+	ld (XIX+0x06),0x7f                            ; FDEB8E  bc 06 00 7f
+	ld (XIX+0x07),0x00                            ; FDEB92  bc 07 00 00
+	ld (XIX+0x08),0x0d                            ; FDEB96  bc 08 00 0d
+	ld (XIX+0x09),0x00                            ; FDEB9A  bc 09 00 00
+	ld XBC,XIX                                    ; FDEB9E  ec 89
+	add XBC,0x0000000a                            ; FDEBA0  e9 c8 0a 00 00 00
+	push XBC                                      ; FDEBA6  39
+	ld BC,(XIZ+0x08)                              ; FDEBA7  9e 08 21
+	extz BC                                       ; FDEBAA  d9 12
+	pushw bc                                      ; FDEBAC  29
+	call 0xfd7c2d                                 ; FDEBAD  1d 2d 7c fd
+	ldb h, 0x50                                   ; FDEBB1  26 50
+	add XSP,0x00000014                            ; FDEBB3  ef c8 14 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDEBB9  8e fc 3f 00
+	jr z, .LFDEBD9                                ; FDEBBD  66 1a
+	sub XBC,XBC                                   ; FDEBBF  e9 a1
+	ld (xiz-20), xbc                              ; FDEBC1  be ec 61
+	ldb a, 0x17                                   ; FDEBC4  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDEBC6  8e fe 41
+	extz XWA                                      ; FDEBC9  e8 12
+	add XWA,0x00000011                            ; FDEBCB  e8 c8 11 00 00 00
+	add XBC,XWA                                   ; FDEBD1  e8 81
+	ld H,C                                        ; FDEBD3  cb 8e
+	ld (xiz-2), 0x00                              ; FDEBD5  be fe 00 00
+.LFDEBD9:
+	push XIX                                      ; FDEBD9  3c
+	ld C,H                                        ; FDEBDA  ce 8b
+	extz BC                                       ; FDEBDC  d9 12
+	pushw bc                                      ; FDEBDE  29
+	ld bc, (xiz-2)                                ; FDEBDF  9e fe 21
+	extz BC                                       ; FDEBE2  d9 12
+	pushw bc                                      ; FDEBE4  29
+	pushw 0x05                                    ; FDEBE5  0b 05 00
+	pushw 0x90                                    ; FDEBE8  0b 90 00
+	call 0xfd7435                                 ; FDEBEB  1d 35 74 fd
+	inc 0,XSP                                     ; FDEBEF  ef 60
+	inc 4,XSP                                     ; FDEBF1  ef 64
+	cps a, 0x01                                   ; FDEBF3  c9 d9
+	jr nz, .LFDEBFB                               ; FDEBF5  6e 04
+	call 0xfd9a7a                                 ; FDEBF7  1d 7a 9a fd
+.LFDEBFB:
+	pushw 0x08                                    ; FDEBFB  0b 08 00
+	call 0xfd7c01                                 ; FDEBFE  1d 01 7c fd
+	popw bc                                       ; FDEC02  49
+	pop XIX                                       ; FDEC03  5c
+	popw hl                                       ; FDEC04  4b
+	unlk XIZ                                      ; FDEC05  ee 0d
+	ret                                           ; FDEC07  0e
+.LFDEC08:
+	link XIZ,0xfffe                               ; FDEC08  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDEC0C  be fe 31
+	push XBC                                      ; FDEC0F  39
+	call 0xfda0ca                                 ; FDEC10  1d ca a0 fd
+	pop XIY                                       ; FDEC14  5d
+	cp (XIZ+0x08),0x00                            ; FDEC15  8e 08 3f 00
+	jr nz, .LFDEC2E                               ; FDEC19  6e 13
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEC1B  8e fe 3f 00
+	jr nz, .LFDEC32                               ; FDEC1F  6e 11
+	pushw 0x00                                    ; FDEC21  0b 00 00
+	pushw 0x97                                    ; FDEC24  0b 97 00
+	call 0xfd608b                                 ; FDEC27  1d 8b 60 fd
+	pop XIY                                       ; FDEC2B  5d
+	jr .LFDEC32                                   ; FDEC2C  68 04
+.LFDEC2E:
+	call 0xfd6e90                                 ; FDEC2E  1d 90 6e fd
+.LFDEC32:
+	unlk XIZ                                      ; FDEC32  ee 0d
+	ret                                           ; FDEC34  0e
+.LFDEC35:
+	link XIZ,0x0000                               ; FDEC35  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDEC39  8e 08 3f 00
+	jr z, .LFDEC56                                ; FDEC3D  66 17
+	pushw 0x01                                    ; FDEC3F  0b 01 00
+	call 0xfd74ae                                 ; FDEC42  1d ae 74 fd
+	popw bc                                       ; FDEC46  49
+	cps a, 0x00                                   ; FDEC47  c9 d8
+	jr z, .LFDEC56                                ; FDEC49  66 0b
+	pushw 0x00                                    ; FDEC4B  0b 00 00
+	pushw 0x90                                    ; FDEC4E  0b 90 00
+	call 0xfd608b                                 ; FDEC51  1d 8b 60 fd
+	pop XIY                                       ; FDEC55  5d
+.LFDEC56:
+	unlk XIZ                                      ; FDEC56  ee 0d
+	ret                                           ; FDEC58  0e
+.LFDEC59:
+	link XIZ,0xfffe                               ; FDEC59  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDEC5D  be fe 31
+	push XBC                                      ; FDEC60  39
+	call 0xfda0ca                                 ; FDEC61  1d ca a0 fd
+	pop XIY                                       ; FDEC65  5d
+	cp (XIZ+0x08),0x00                            ; FDEC66  8e 08 3f 00
+	jr nz, .LFDEC7A                               ; FDEC6A  6e 0e
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEC6C  8e fe 3f 00
+	jr nz, .LFDEC91                               ; FDEC70  6e 1f
+	pushw 0x00                                    ; FDEC72  0b 00 00
+	pushw 0x99                                    ; FDEC75  0b 99 00
+	jr .LFDEC8C                                   ; FDEC78  68 12
+.LFDEC7A:
+	pushw 0x02                                    ; FDEC7A  0b 02 00
+	call 0xfd74ae                                 ; FDEC7D  1d ae 74 fd
+	popw bc                                       ; FDEC81  49
+	cps a, 0x00                                   ; FDEC82  c9 d8
+	jr z, .LFDEC91                                ; FDEC84  66 0b
+	pushw 0x00                                    ; FDEC86  0b 00 00
+	pushw 0x90                                    ; FDEC89  0b 90 00
+.LFDEC8C:
+	call 0xfd608b                                 ; FDEC8C  1d 8b 60 fd
+	pop XIY                                       ; FDEC90  5d
+.LFDEC91:
+	unlk XIZ                                      ; FDEC91  ee 0d
+	ret                                           ; FDEC93  0e
+	link XIZ,0xfffc                               ; FDEC94  ee 0c fc ff
+	pushw hl                                      ; FDEC98  2b
+	lda xbc, (xiz-2)                              ; FDEC99  be fe 31
+	push XBC                                      ; FDEC9C  39
+	call 0xfda0ca                                 ; FDEC9D  1d ca a0 fd
+	pop XIY                                       ; FDECA1  5d
+	cp (XIZ+0x08),0x00                            ; FDECA2  8e 08 3f 00
+	jr nz, .LFDECCD                               ; FDECA6  6e 25
+	lda xbc, (xiz-4)                              ; FDECA8  be fc 31
+	push XBC                                      ; FDECAB  39
+	pushw 0x00                                    ; FDECAC  0b 00 00
+	call 0xfd6c7b                                 ; FDECAF  1d 7b 6c fd
+	.byte 0x8e, 0xfc, 0x3c, 0xf8                  ; FDECB3  8e fc 3c f8
+	ld h, (xiz-4)                                 ; FDECB7  8e fc 26
+	set 0x01,H                                    ; FDECBA  ce 31 01
+	ld (xiz-4), h                                 ; FDECBD  be fc 46
+	ld C,H                                        ; FDECC0  ce 8b
+	extz BC                                       ; FDECC2  d9 12
+	pushw bc                                      ; FDECC4  29
+	call 0xfd6ec4                                 ; FDECC5  1d c4 6e fd
+	inc 0,XSP                                     ; FDECC9  ef 60
+	jr .LFDECDF                                   ; FDECCB  68 12
+.LFDECCD:
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDECCD  8e fe 3f 01
+	jr z, .LFDECEA                                ; FDECD1  66 17
+	pushw 0x03                                    ; FDECD3  0b 03 00
+	call 0xfd74ae                                 ; FDECD6  1d ae 74 fd
+	popw bc                                       ; FDECDA  49
+	cps a, 0x00                                   ; FDECDB  c9 d8
+	jr z, .LFDECEA                                ; FDECDD  66 0b
+.LFDECDF:
+	pushw 0x00                                    ; FDECDF  0b 00 00
+	pushw 0x90                                    ; FDECE2  0b 90 00
+	call 0xfd608b                                 ; FDECE5  1d 8b 60 fd
+	pop XIY                                       ; FDECE9  5d
+.LFDECEA:
+	popw hl                                       ; FDECEA  4b
+	unlk XIZ                                      ; FDECEB  ee 0d
+	ret                                           ; FDECED  0e
+.LFDECEE:
+	link XIZ,0xfffe                               ; FDECEE  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDECF2  be fe 31
+	push XBC                                      ; FDECF5  39
+	call 0xfda0ca                                 ; FDECF6  1d ca a0 fd
+	pop XIY                                       ; FDECFA  5d
+	cp (XIZ+0x08),0x00                            ; FDECFB  8e 08 3f 00
+	jr z, .LFDED1E                                ; FDECFF  66 1d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDED01  8e fe 3f 01
+	jr z, .LFDED1E                                ; FDED05  66 17
+	pushw 0x04                                    ; FDED07  0b 04 00
+	call 0xfd74ae                                 ; FDED0A  1d ae 74 fd
+	popw bc                                       ; FDED0E  49
+	cps a, 0x00                                   ; FDED0F  c9 d8
+	jr z, .LFDED1E                                ; FDED11  66 0b
+	pushw 0x00                                    ; FDED13  0b 00 00
+	pushw 0x90                                    ; FDED16  0b 90 00
+	call 0xfd608b                                 ; FDED19  1d 8b 60 fd
+	pop XIY                                       ; FDED1D  5d
+.LFDED1E:
+	unlk XIZ                                      ; FDED1E  ee 0d
+	ret                                           ; FDED20  0e
+	link XIZ,0xfffe                               ; FDED21  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDED25  be fe 31
+	push XBC                                      ; FDED28  39
+	call 0xfda0ca                                 ; FDED29  1d ca a0 fd
+	pop XIY                                       ; FDED2D  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDED2E  8e fe 3f 01
+	jr z, .LFDED45                                ; FDED32  66 11
+	cp (XIZ+0x08),0x00                            ; FDED34  8e 08 3f 00
+	jr nz, .LFDED45                               ; FDED38  6e 0b
+	pushw 0x00                                    ; FDED3A  0b 00 00
+	pushw 0x96                                    ; FDED3D  0b 96 00
+	call 0xfd608b                                 ; FDED40  1d 8b 60 fd
+	pop XIY                                       ; FDED44  5d
+.LFDED45:
+	unlk XIZ                                      ; FDED45  ee 0d
+	ret                                           ; FDED47  0e
+	link XIZ,0xfffe                               ; FDED48  ee 0c fe ff
+	cp (XIZ+0x08),0x00                            ; FDED4C  8e 08 3f 00
+	jr nz, .LFDED79                               ; FDED50  6e 27
+	pushw 0x00                                    ; FDED52  0b 00 00
+	call 0xfd69e0                                 ; FDED55  1d e0 69 fd
+	lda xbc, (xiz-2)                              ; FDED59  be fe 31
+	push XBC                                      ; FDED5C  39
+	call 0xfda0ca                                 ; FDED5D  1d ca a0 fd
+	inc 6,XSP                                     ; FDED61  ef 66
+	pushw 0x00                                    ; FDED63  0b 00 00
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDED66  8e fe 3f 00
+	jr nz, .LFDED71                               ; FDED6A  6e 05
+	pushw 0x80                                    ; FDED6C  0b 80 00
+	jr .LFDED74                                   ; FDED6F  68 03
+.LFDED71:
+	pushw 0xcb                                    ; FDED71  0b cb 00
+.LFDED74:
+	call 0xfd608b                                 ; FDED74  1d 8b 60 fd
+	pop XIY                                       ; FDED78  5d
+.LFDED79:
+	unlk XIZ                                      ; FDED79  ee 0d
+	ret                                           ; FDED7B  0e
+	link XIZ,0x0000                               ; FDED7C  ee 0c 00 00
+	pushw 0x91                                    ; FDED80  0b 91 00
+	pushw 0x01                                    ; FDED83  0b 01 00
+	ld BC,(XIZ+0x08)                              ; FDED86  9e 08 21
+	extz BC                                       ; FDED89  d9 12
+	pushw bc                                      ; FDED8B  29
+	calr .LFDE784                                 ; FDED8C  1e f5 f9
+	pushw 0x00                                    ; FDED8F  0b 00 00
+	pushw 0x01                                    ; FDED92  0b 01 00
+	call 0xfd98bd                                 ; FDED95  1d bd 98 fd
+	inc 0,XSP                                     ; FDED99  ef 60
+	inc 2,XSP                                     ; FDED9B  ef 62
+	unlk XIZ                                      ; FDED9D  ee 0d
+	ret                                           ; FDED9F  0e
+	link XIZ,0x0000                               ; FDEDA0  ee 0c 00 00
+	pushw 0x91                                    ; FDEDA4  0b 91 00
+	pushw 0x02                                    ; FDEDA7  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDEDAA  9e 08 21
+	extz BC                                       ; FDEDAD  d9 12
+	pushw bc                                      ; FDEDAF  29
+	calr .LFDE840                                 ; FDEDB0  1e 8d fa
+	pushw 0x00                                    ; FDEDB3  0b 00 00
+	pushw 0x01                                    ; FDEDB6  0b 01 00
+	call 0xfd98bd                                 ; FDEDB9  1d bd 98 fd
+	inc 0,XSP                                     ; FDEDBD  ef 60
+	inc 2,XSP                                     ; FDEDBF  ef 62
+	unlk XIZ                                      ; FDEDC1  ee 0d
+	ret                                           ; FDEDC3  0e
+	link XIZ,0x0000                               ; FDEDC4  ee 0c 00 00
+	pushw 0x91                                    ; FDEDC8  0b 91 00
+	pushw 0x03                                    ; FDEDCB  0b 03 00
+	ld BC,(XIZ+0x08)                              ; FDEDCE  9e 08 21
+	extz BC                                       ; FDEDD1  d9 12
+	pushw bc                                      ; FDEDD3  29
+	calr .LFDE8F0                                 ; FDEDD4  1e 19 fb
+	inc 6,XSP                                     ; FDEDD7  ef 66
+	unlk XIZ                                      ; FDEDD9  ee 0d
+	ret                                           ; FDEDDB  0e
+	link XIZ,0x0000                               ; FDEDDC  ee 0c 00 00
+	pushw 0x91                                    ; FDEDE0  0b 91 00
+	pushw 0x04                                    ; FDEDE3  0b 04 00
+	ld BC,(XIZ+0x08)                              ; FDEDE6  9e 08 21
+	extz BC                                       ; FDEDE9  d9 12
+	pushw bc                                      ; FDEDEB  29
+	calr .LFDE9A0                                 ; FDEDEC  1e b1 fb
+	inc 6,XSP                                     ; FDEDEF  ef 66
+	unlk XIZ                                      ; FDEDF1  ee 0d
+	ret                                           ; FDEDF3  0e
+	link XIZ,0x0000                               ; FDEDF4  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEDF8  9e 08 21
+	extz BC                                       ; FDEDFB  d9 12
+	pushw bc                                      ; FDEDFD  29
+	calr .LFDEA38                                 ; FDEDFE  1e 37 fc
+	popw bc                                       ; FDEE01  49
+	unlk XIZ                                      ; FDEE02  ee 0d
+	ret                                           ; FDEE04  0e
+	link XIZ,0x0000                               ; FDEE05  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEE09  9e 08 21
+	extz BC                                       ; FDEE0C  d9 12
+	pushw bc                                      ; FDEE0E  29
+	calr .LFDEAD2                                 ; FDEE0F  1e c0 fc
+	popw bc                                       ; FDEE12  49
+	unlk XIZ                                      ; FDEE13  ee 0d
+	ret                                           ; FDEE15  0e
+	link XIZ,0x0000                               ; FDEE16  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEE1A  9e 08 21
+	extz BC                                       ; FDEE1D  d9 12
+	pushw bc                                      ; FDEE1F  29
+	calr .LFDEB6D                                 ; FDEE20  1e 4a fd
+	popw bc                                       ; FDEE23  49
+	unlk XIZ                                      ; FDEE24  ee 0d
+	ret                                           ; FDEE26  0e
+	link XIZ,0x0000                               ; FDEE27  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEE2B  9e 08 21
+	extz BC                                       ; FDEE2E  d9 12
+	pushw bc                                      ; FDEE30  29
+	calr .LFDEC08                                 ; FDEE31  1e d4 fd
+	popw bc                                       ; FDEE34  49
+	unlk XIZ                                      ; FDEE35  ee 0d
+	ret                                           ; FDEE37  0e
+	link XIZ,0x0000                               ; FDEE38  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEE3C  9e 08 21
+	extz BC                                       ; FDEE3F  d9 12
+	pushw bc                                      ; FDEE41  29
+	calr .LFDEC35                                 ; FDEE42  1e f0 fd
+	popw bc                                       ; FDEE45  49
+	unlk XIZ                                      ; FDEE46  ee 0d
+	ret                                           ; FDEE48  0e
+	link XIZ,0x0000                               ; FDEE49  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEE4D  9e 08 21
+	extz BC                                       ; FDEE50  d9 12
+	pushw bc                                      ; FDEE52  29
+	calr .LFDEC59                                 ; FDEE53  1e 03 fe
+	popw bc                                       ; FDEE56  49
+	unlk XIZ                                      ; FDEE57  ee 0d
+	ret                                           ; FDEE59  0e
+	link XIZ,0xfffc                               ; FDEE5A  ee 0c fc ff
+	pushw hl                                      ; FDEE5E  2b
+	lda xbc, (xiz-2)                              ; FDEE5F  be fe 31
+	push XBC                                      ; FDEE62  39
+	call 0xfda0ca                                 ; FDEE63  1d ca a0 fd
+	pop XIY                                       ; FDEE67  5d
+	cp (XIZ+0x08),0x00                            ; FDEE68  8e 08 3f 00
+	jr nz, .LFDEE93                               ; FDEE6C  6e 25
+	lda xbc, (xiz-4)                              ; FDEE6E  be fc 31
+	push XBC                                      ; FDEE71  39
+	pushw 0x00                                    ; FDEE72  0b 00 00
+	call 0xfd6c7b                                 ; FDEE75  1d 7b 6c fd
+	.byte 0x8e, 0xfc, 0x3c, 0xf8                  ; FDEE79  8e fc 3c f8
+	ld h, (xiz-4)                                 ; FDEE7D  8e fc 26
+	or H,0x03                                     ; FDEE80  ce ce 03
+	ld (xiz-4), h                                 ; FDEE83  be fc 46
+	ld C,H                                        ; FDEE86  ce 8b
+	extz BC                                       ; FDEE88  d9 12
+	pushw bc                                      ; FDEE8A  29
+	call 0xfd6ec4                                 ; FDEE8B  1d c4 6e fd
+	inc 0,XSP                                     ; FDEE8F  ef 60
+	jr .LFDEEA5                                   ; FDEE91  68 12
+.LFDEE93:
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEE93  8e fe 3f 00
+	jr nz, .LFDEEB0                               ; FDEE97  6e 17
+	pushw 0x03                                    ; FDEE99  0b 03 00
+	call 0xfd74ae                                 ; FDEE9C  1d ae 74 fd
+	popw bc                                       ; FDEEA0  49
+	cps a, 0x00                                   ; FDEEA1  c9 d8
+	jr z, .LFDEEB0                                ; FDEEA3  66 0b
+.LFDEEA5:
+	pushw 0x00                                    ; FDEEA5  0b 00 00
+	pushw 0x90                                    ; FDEEA8  0b 90 00
+	call 0xfd608b                                 ; FDEEAB  1d 8b 60 fd
+	pop XIY                                       ; FDEEAF  5d
+.LFDEEB0:
+	popw hl                                       ; FDEEB0  4b
+	unlk XIZ                                      ; FDEEB1  ee 0d
+	ret                                           ; FDEEB3  0e
+	link XIZ,0x0000                               ; FDEEB4  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDEEB8  9e 08 21
+	extz BC                                       ; FDEEBB  d9 12
+	pushw bc                                      ; FDEEBD  29
+	calr .LFDECEE                                 ; FDEEBE  1e 2d fe
+	popw bc                                       ; FDEEC1  49
+	unlk XIZ                                      ; FDEEC2  ee 0d
+	ret                                           ; FDEEC4  0e
+	link XIZ,0xfffe                               ; FDEEC5  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDEEC9  be fe 31
+	push XBC                                      ; FDEECC  39
+	call 0xfda0ca                                 ; FDEECD  1d ca a0 fd
+	pop XIY                                       ; FDEED1  5d
+	cp (XIZ+0x08),0x00                            ; FDEED2  8e 08 3f 00
+	jr nz, .LFDEEE9                               ; FDEED6  6e 11
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEED8  8e fe 3f 00
+	jr nz, .LFDEEE9                               ; FDEEDC  6e 0b
+	pushw 0x00                                    ; FDEEDE  0b 00 00
+	pushw 0x96                                    ; FDEEE1  0b 96 00
+	call 0xfd608b                                 ; FDEEE4  1d 8b 60 fd
+	pop XIY                                       ; FDEEE8  5d
+.LFDEEE9:
+	unlk XIZ                                      ; FDEEE9  ee 0d
+	ret                                           ; FDEEEB  0e
+	link XIZ,0xfffe                               ; FDEEEC  ee 0c fe ff
+	cp (XIZ+0x08),0x00                            ; FDEEF0  8e 08 3f 00
+	jr nz, .LFDEF1D                               ; FDEEF4  6e 27
+	pushw 0x00                                    ; FDEEF6  0b 00 00
+	call 0xfd69e0                                 ; FDEEF9  1d e0 69 fd
+	lda xbc, (xiz-2)                              ; FDEEFD  be fe 31
+	push XBC                                      ; FDEF00  39
+	call 0xfda0ca                                 ; FDEF01  1d ca a0 fd
+	inc 6,XSP                                     ; FDEF05  ef 66
+	pushw 0x00                                    ; FDEF07  0b 00 00
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEF0A  8e fe 3f 00
+	jr nz, .LFDEF15                               ; FDEF0E  6e 05
+	pushw 0x80                                    ; FDEF10  0b 80 00
+	jr .LFDEF18                                   ; FDEF13  68 03
+.LFDEF15:
+	pushw 0xcb                                    ; FDEF15  0b cb 00
+.LFDEF18:
+	call 0xfd608b                                 ; FDEF18  1d 8b 60 fd
+	pop XIY                                       ; FDEF1C  5d
+.LFDEF1D:
+	unlk XIZ                                      ; FDEF1D  ee 0d
+	ret                                           ; FDEF1F  0e
+	link XIZ,0x0000                               ; FDEF20  ee 0c 00 00
+	pushw 0x92                                    ; FDEF24  0b 92 00
+	pushw 0x03                                    ; FDEF27  0b 03 00
+	ld BC,(XIZ+0x08)                              ; FDEF2A  9e 08 21
+	extz BC                                       ; FDEF2D  d9 12
+	pushw bc                                      ; FDEF2F  29
+	calr .LFDE784                                 ; FDEF30  1e 51 f8
+	pushw 0x01                                    ; FDEF33  0b 01 00
+	pushw 0x00                                    ; FDEF36  0b 00 00
+	call 0xfd98bd                                 ; FDEF39  1d bd 98 fd
+	inc 0,XSP                                     ; FDEF3D  ef 60
+	inc 2,XSP                                     ; FDEF3F  ef 62
+	unlk XIZ                                      ; FDEF41  ee 0d
+	ret                                           ; FDEF43  0e
+	link XIZ,0x0000                               ; FDEF44  ee 0c 00 00
+	pushw 0x92                                    ; FDEF48  0b 92 00
+	pushw 0x04                                    ; FDEF4B  0b 04 00
+	ld BC,(XIZ+0x08)                              ; FDEF4E  9e 08 21
+	extz BC                                       ; FDEF51  d9 12
+	pushw bc                                      ; FDEF53  29
+	calr .LFDE840                                 ; FDEF54  1e e9 f8
+	pushw 0x01                                    ; FDEF57  0b 01 00
+	pushw 0x00                                    ; FDEF5A  0b 00 00
+	call 0xfd98bd                                 ; FDEF5D  1d bd 98 fd
+	inc 0,XSP                                     ; FDEF61  ef 60
+	inc 2,XSP                                     ; FDEF63  ef 62
+	unlk XIZ                                      ; FDEF65  ee 0d
+	ret                                           ; FDEF67  0e
+	link XIZ,0x0000                               ; FDEF68  ee 0c 00 00
+	pushw 0x92                                    ; FDEF6C  0b 92 00
+	pushw 0x05                                    ; FDEF6F  0b 05 00
+	ld BC,(XIZ+0x08)                              ; FDEF72  9e 08 21
+	extz BC                                       ; FDEF75  d9 12
+	pushw bc                                      ; FDEF77  29
+	calr .LFDE8F0                                 ; FDEF78  1e 75 f9
+	inc 6,XSP                                     ; FDEF7B  ef 66
+	unlk XIZ                                      ; FDEF7D  ee 0d
+	ret                                           ; FDEF7F  0e
+	link XIZ,0x0000                               ; FDEF80  ee 0c 00 00
+	pushw 0x92                                    ; FDEF84  0b 92 00
+	pushw 0x06                                    ; FDEF87  0b 06 00
+	ld BC,(XIZ+0x08)                              ; FDEF8A  9e 08 21
+	extz BC                                       ; FDEF8D  d9 12
+	pushw bc                                      ; FDEF8F  29
+	calr .LFDE9A0                                 ; FDEF90  1e 0d fa
+	inc 6,XSP                                     ; FDEF93  ef 66
+	unlk XIZ                                      ; FDEF95  ee 0d
+	ret                                           ; FDEF97  0e
+.LFDEF98:
+	link XIZ,0xfffe                               ; FDEF98  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDEF9C  be fe 31
+	push XBC                                      ; FDEF9F  39
+	call 0xfda0ca                                 ; FDEFA0  1d ca a0 fd
+	pop XIY                                       ; FDEFA4  5d
+	cp (XIZ+0x08),0x00                            ; FDEFA5  8e 08 3f 00
+	jr nz, .LFDEFBE                               ; FDEFA9  6e 13
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEFAB  8e fe 3f 00
+	jr nz, .LFDEFC2                               ; FDEFAF  6e 11
+	pushw 0x00                                    ; FDEFB1  0b 00 00
+	pushw 0x97                                    ; FDEFB4  0b 97 00
+	call 0xfd608b                                 ; FDEFB7  1d 8b 60 fd
+	pop XIY                                       ; FDEFBB  5d
+	jr .LFDEFC2                                   ; FDEFBC  68 04
+.LFDEFBE:
+	call 0xfd6e90                                 ; FDEFBE  1d 90 6e fd
+.LFDEFC2:
+	unlk XIZ                                      ; FDEFC2  ee 0d
+	ret                                           ; FDEFC4  0e
+.LFDEFC5:
+	link XIZ,0x0000                               ; FDEFC5  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDEFC9  8e 08 3f 00
+	jr z, .LFDEFE6                                ; FDEFCD  66 17
+	pushw 0x01                                    ; FDEFCF  0b 01 00
+	call 0xfd74ae                                 ; FDEFD2  1d ae 74 fd
+	popw bc                                       ; FDEFD6  49
+	cps a, 0x00                                   ; FDEFD7  c9 d8
+	jr z, .LFDEFE6                                ; FDEFD9  66 0b
+	pushw 0x00                                    ; FDEFDB  0b 00 00
+	pushw 0x90                                    ; FDEFDE  0b 90 00
+	call 0xfd608b                                 ; FDEFE1  1d 8b 60 fd
+	pop XIY                                       ; FDEFE5  5d
+.LFDEFE6:
+	unlk XIZ                                      ; FDEFE6  ee 0d
+	ret                                           ; FDEFE8  0e
+.LFDEFE9:
+	link XIZ,0xfffe                               ; FDEFE9  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDEFED  be fe 31
+	push XBC                                      ; FDEFF0  39
+	call 0xfda0ca                                 ; FDEFF1  1d ca a0 fd
+	pop XIY                                       ; FDEFF5  5d
+	cp (XIZ+0x08),0x00                            ; FDEFF6  8e 08 3f 00
+	jr nz, .LFDF00A                               ; FDEFFA  6e 0e
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDEFFC  8e fe 3f 00
+	jr nz, .LFDF021                               ; FDF000  6e 1f
+	pushw 0x00                                    ; FDF002  0b 00 00
+	pushw 0x99                                    ; FDF005  0b 99 00
+	jr .LFDF01C                                   ; FDF008  68 12
+.LFDF00A:
+	pushw 0x02                                    ; FDF00A  0b 02 00
+	call 0xfd74ae                                 ; FDF00D  1d ae 74 fd
+	popw bc                                       ; FDF011  49
+	cps a, 0x00                                   ; FDF012  c9 d8
+	jr z, .LFDF021                                ; FDF014  66 0b
+	pushw 0x00                                    ; FDF016  0b 00 00
+	pushw 0x90                                    ; FDF019  0b 90 00
+.LFDF01C:
+	call 0xfd608b                                 ; FDF01C  1d 8b 60 fd
+	pop XIY                                       ; FDF020  5d
+.LFDF021:
+	unlk XIZ                                      ; FDF021  ee 0d
+	ret                                           ; FDF023  0e
+	link XIZ,0xfffc                               ; FDF024  ee 0c fc ff
+	pushw hl                                      ; FDF028  2b
+	lda xbc, (xiz-2)                              ; FDF029  be fe 31
+	push XBC                                      ; FDF02C  39
+	call 0xfda0ca                                 ; FDF02D  1d ca a0 fd
+	pop XIY                                       ; FDF031  5d
+	cp (XIZ+0x08),0x00                            ; FDF032  8e 08 3f 00
+	jr nz, .LFDF05D                               ; FDF036  6e 25
+	lda xbc, (xiz-4)                              ; FDF038  be fc 31
+	push XBC                                      ; FDF03B  39
+	pushw 0x00                                    ; FDF03C  0b 00 00
+	call 0xfd6c7b                                 ; FDF03F  1d 7b 6c fd
+	.byte 0x8e, 0xfc, 0x3c, 0xf8                  ; FDF043  8e fc 3c f8
+	ld h, (xiz-4)                                 ; FDF047  8e fc 26
+	set 0x02,H                                    ; FDF04A  ce 31 02
+	ld (xiz-4), h                                 ; FDF04D  be fc 46
+	ld C,H                                        ; FDF050  ce 8b
+	extz BC                                       ; FDF052  d9 12
+	pushw bc                                      ; FDF054  29
+	call 0xfd6ec4                                 ; FDF055  1d c4 6e fd
+	inc 0,XSP                                     ; FDF059  ef 60
+	jr .LFDF06F                                   ; FDF05B  68 12
+.LFDF05D:
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF05D  8e fe 3f 01
+	jr z, .LFDF07A                                ; FDF061  66 17
+	pushw 0x03                                    ; FDF063  0b 03 00
+	call 0xfd74ae                                 ; FDF066  1d ae 74 fd
+	popw bc                                       ; FDF06A  49
+	cps a, 0x00                                   ; FDF06B  c9 d8
+	jr z, .LFDF07A                                ; FDF06D  66 0b
+.LFDF06F:
+	pushw 0x00                                    ; FDF06F  0b 00 00
+	pushw 0x90                                    ; FDF072  0b 90 00
+	call 0xfd608b                                 ; FDF075  1d 8b 60 fd
+	pop XIY                                       ; FDF079  5d
+.LFDF07A:
+	popw hl                                       ; FDF07A  4b
+	unlk XIZ                                      ; FDF07B  ee 0d
+	ret                                           ; FDF07D  0e
+.LFDF07E:
+	link XIZ,0xfffe                               ; FDF07E  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF082  be fe 31
+	push XBC                                      ; FDF085  39
+	call 0xfda0ca                                 ; FDF086  1d ca a0 fd
+	pop XIY                                       ; FDF08A  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF08B  8e fe 3f 01
+	jr z, .LFDF0AE                                ; FDF08F  66 1d
+	cp (XIZ+0x08),0x00                            ; FDF091  8e 08 3f 00
+	jr z, .LFDF0AE                                ; FDF095  66 17
+	pushw 0x04                                    ; FDF097  0b 04 00
+	call 0xfd74ae                                 ; FDF09A  1d ae 74 fd
+	popw bc                                       ; FDF09E  49
+	cps a, 0x00                                   ; FDF09F  c9 d8
+	jr z, .LFDF0AE                                ; FDF0A1  66 0b
+	pushw 0x00                                    ; FDF0A3  0b 00 00
+	pushw 0x90                                    ; FDF0A6  0b 90 00
+	call 0xfd608b                                 ; FDF0A9  1d 8b 60 fd
+	pop XIY                                       ; FDF0AD  5d
+.LFDF0AE:
+	unlk XIZ                                      ; FDF0AE  ee 0d
+	ret                                           ; FDF0B0  0e
+	link XIZ,0xfffe                               ; FDF0B1  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF0B5  be fe 31
+	push XBC                                      ; FDF0B8  39
+	call 0xfda0ca                                 ; FDF0B9  1d ca a0 fd
+	pop XIY                                       ; FDF0BD  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF0BE  8e fe 3f 01
+	jr z, .LFDF0D5                                ; FDF0C2  66 11
+	cp (XIZ+0x08),0x00                            ; FDF0C4  8e 08 3f 00
+	jr nz, .LFDF0D5                               ; FDF0C8  6e 0b
+	pushw 0x00                                    ; FDF0CA  0b 00 00
+	pushw 0x96                                    ; FDF0CD  0b 96 00
+	call 0xfd608b                                 ; FDF0D0  1d 8b 60 fd
+	pop XIY                                       ; FDF0D4  5d
+.LFDF0D5:
+	unlk XIZ                                      ; FDF0D5  ee 0d
+	ret                                           ; FDF0D7  0e
+	link XIZ,0xfffe                               ; FDF0D8  ee 0c fe ff
+	cp (XIZ+0x08),0x00                            ; FDF0DC  8e 08 3f 00
+	jr nz, .LFDF109                               ; FDF0E0  6e 27
+	pushw 0x00                                    ; FDF0E2  0b 00 00
+	call 0xfd69e0                                 ; FDF0E5  1d e0 69 fd
+	lda xbc, (xiz-2)                              ; FDF0E9  be fe 31
+	push XBC                                      ; FDF0EC  39
+	call 0xfda0ca                                 ; FDF0ED  1d ca a0 fd
+	inc 6,XSP                                     ; FDF0F1  ef 66
+	pushw 0x00                                    ; FDF0F3  0b 00 00
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF0F6  8e fe 3f 00
+	jr nz, .LFDF101                               ; FDF0FA  6e 05
+	pushw 0x80                                    ; FDF0FC  0b 80 00
+	jr .LFDF104                                   ; FDF0FF  68 03
+.LFDF101:
+	pushw 0xcb                                    ; FDF101  0b cb 00
+.LFDF104:
+	call 0xfd608b                                 ; FDF104  1d 8b 60 fd
+	pop XIY                                       ; FDF108  5d
+.LFDF109:
+	unlk XIZ                                      ; FDF109  ee 0d
+	ret                                           ; FDF10B  0e
+	link XIZ,0x0000                               ; FDF10C  ee 0c 00 00
+	pushw 0x93                                    ; FDF110  0b 93 00
+	pushw 0x03                                    ; FDF113  0b 03 00
+	ld BC,(XIZ+0x08)                              ; FDF116  9e 08 21
+	extz BC                                       ; FDF119  d9 12
+	pushw bc                                      ; FDF11B  29
+	calr .LFDE784                                 ; FDF11C  1e 65 f6
+	pushw 0x01                                    ; FDF11F  0b 01 00
+	pushw 0x01                                    ; FDF122  0b 01 00
+	call 0xfd98bd                                 ; FDF125  1d bd 98 fd
+	inc 0,XSP                                     ; FDF129  ef 60
+	inc 2,XSP                                     ; FDF12B  ef 62
+	unlk XIZ                                      ; FDF12D  ee 0d
+	ret                                           ; FDF12F  0e
+	link XIZ,0x0000                               ; FDF130  ee 0c 00 00
+	pushw 0x93                                    ; FDF134  0b 93 00
+	pushw 0x04                                    ; FDF137  0b 04 00
+	ld BC,(XIZ+0x08)                              ; FDF13A  9e 08 21
+	extz BC                                       ; FDF13D  d9 12
+	pushw bc                                      ; FDF13F  29
+	calr .LFDE840                                 ; FDF140  1e fd f6
+	pushw 0x01                                    ; FDF143  0b 01 00
+	pushw 0x01                                    ; FDF146  0b 01 00
+	call 0xfd98bd                                 ; FDF149  1d bd 98 fd
+	inc 0,XSP                                     ; FDF14D  ef 60
+	inc 2,XSP                                     ; FDF14F  ef 62
+	unlk XIZ                                      ; FDF151  ee 0d
+	ret                                           ; FDF153  0e
+	link XIZ,0x0000                               ; FDF154  ee 0c 00 00
+	pushw 0x93                                    ; FDF158  0b 93 00
+	pushw 0x05                                    ; FDF15B  0b 05 00
+	ld BC,(XIZ+0x08)                              ; FDF15E  9e 08 21
+	extz BC                                       ; FDF161  d9 12
+	pushw bc                                      ; FDF163  29
+	calr .LFDE8F0                                 ; FDF164  1e 89 f7
+	inc 6,XSP                                     ; FDF167  ef 66
+	unlk XIZ                                      ; FDF169  ee 0d
+	ret                                           ; FDF16B  0e
+	link XIZ,0x0000                               ; FDF16C  ee 0c 00 00
+	pushw 0x93                                    ; FDF170  0b 93 00
+	pushw 0x06                                    ; FDF173  0b 06 00
+	ld BC,(XIZ+0x08)                              ; FDF176  9e 08 21
+	extz BC                                       ; FDF179  d9 12
+	pushw bc                                      ; FDF17B  29
+	calr .LFDE9A0                                 ; FDF17C  1e 21 f8
+	inc 6,XSP                                     ; FDF17F  ef 66
+	unlk XIZ                                      ; FDF181  ee 0d
+	ret                                           ; FDF183  0e
+	link XIZ,0x0000                               ; FDF184  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDF188  9e 08 21
+	extz BC                                       ; FDF18B  d9 12
+	pushw bc                                      ; FDF18D  29
+	calr .LFDEF98                                 ; FDF18E  1e 07 fe
+	popw bc                                       ; FDF191  49
+	unlk XIZ                                      ; FDF192  ee 0d
+	ret                                           ; FDF194  0e
+	link XIZ,0x0000                               ; FDF195  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDF199  9e 08 21
+	extz BC                                       ; FDF19C  d9 12
+	pushw bc                                      ; FDF19E  29
+	calr .LFDEFC5                                 ; FDF19F  1e 23 fe
+	popw bc                                       ; FDF1A2  49
+	unlk XIZ                                      ; FDF1A3  ee 0d
+	ret                                           ; FDF1A5  0e
+	link XIZ,0x0000                               ; FDF1A6  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDF1AA  9e 08 21
+	extz BC                                       ; FDF1AD  d9 12
+	pushw bc                                      ; FDF1AF  29
+	calr .LFDEFE9                                 ; FDF1B0  1e 36 fe
+	popw bc                                       ; FDF1B3  49
+	unlk XIZ                                      ; FDF1B4  ee 0d
+	ret                                           ; FDF1B6  0e
+	link XIZ,0xfffc                               ; FDF1B7  ee 0c fc ff
+	pushw hl                                      ; FDF1BB  2b
+	lda xbc, (xiz-2)                              ; FDF1BC  be fe 31
+	push XBC                                      ; FDF1BF  39
+	call 0xfda0ca                                 ; FDF1C0  1d ca a0 fd
+	pop XIY                                       ; FDF1C4  5d
+	cp (XIZ+0x08),0x00                            ; FDF1C5  8e 08 3f 00
+	jr nz, .LFDF1F0                               ; FDF1C9  6e 25
+	lda xbc, (xiz-4)                              ; FDF1CB  be fc 31
+	push XBC                                      ; FDF1CE  39
+	pushw 0x00                                    ; FDF1CF  0b 00 00
+	call 0xfd6c7b                                 ; FDF1D2  1d 7b 6c fd
+	.byte 0x8e, 0xfc, 0x3c, 0xf8                  ; FDF1D6  8e fc 3c f8
+	ld h, (xiz-4)                                 ; FDF1DA  8e fc 26
+	or H,0x05                                     ; FDF1DD  ce ce 05
+	ld (xiz-4), h                                 ; FDF1E0  be fc 46
+	ld C,H                                        ; FDF1E3  ce 8b
+	extz BC                                       ; FDF1E5  d9 12
+	pushw bc                                      ; FDF1E7  29
+	call 0xfd6ec4                                 ; FDF1E8  1d c4 6e fd
+	inc 0,XSP                                     ; FDF1EC  ef 60
+	jr .LFDF202                                   ; FDF1EE  68 12
+.LFDF1F0:
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF1F0  8e fe 3f 01
+	jr z, .LFDF20D                                ; FDF1F4  66 17
+	pushw 0x03                                    ; FDF1F6  0b 03 00
+	call 0xfd74ae                                 ; FDF1F9  1d ae 74 fd
+	popw bc                                       ; FDF1FD  49
+	cps a, 0x00                                   ; FDF1FE  c9 d8
+	jr z, .LFDF20D                                ; FDF200  66 0b
+.LFDF202:
+	pushw 0x00                                    ; FDF202  0b 00 00
+	pushw 0x90                                    ; FDF205  0b 90 00
+	call 0xfd608b                                 ; FDF208  1d 8b 60 fd
+	pop XIY                                       ; FDF20C  5d
+.LFDF20D:
+	popw hl                                       ; FDF20D  4b
+	unlk XIZ                                      ; FDF20E  ee 0d
+	ret                                           ; FDF210  0e
+	link XIZ,0x0000                               ; FDF211  ee 0c 00 00
+	ld BC,(XIZ+0x08)                              ; FDF215  9e 08 21
+	extz BC                                       ; FDF218  d9 12
+	pushw bc                                      ; FDF21A  29
+	calr .LFDF07E                                 ; FDF21B  1e 60 fe
+	popw bc                                       ; FDF21E  49
+	unlk XIZ                                      ; FDF21F  ee 0d
+	ret                                           ; FDF221  0e
+	link XIZ,0xfffe                               ; FDF222  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF226  be fe 31
+	push XBC                                      ; FDF229  39
+	call 0xfda0ca                                 ; FDF22A  1d ca a0 fd
+	pop XIY                                       ; FDF22E  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF22F  8e fe 3f 01
+	jr z, .LFDF246                                ; FDF233  66 11
+	cp (XIZ+0x08),0x00                            ; FDF235  8e 08 3f 00
+	jr nz, .LFDF246                               ; FDF239  6e 0b
+	pushw 0x00                                    ; FDF23B  0b 00 00
+	pushw 0x96                                    ; FDF23E  0b 96 00
+	call 0xfd608b                                 ; FDF241  1d 8b 60 fd
+	pop XIY                                       ; FDF245  5d
+.LFDF246:
+	unlk XIZ                                      ; FDF246  ee 0d
+	ret                                           ; FDF248  0e
+	link XIZ,0xfffe                               ; FDF249  ee 0c fe ff
+	cp (XIZ+0x08),0x00                            ; FDF24D  8e 08 3f 00
+	jr nz, .LFDF27A                               ; FDF251  6e 27
+	pushw 0x00                                    ; FDF253  0b 00 00
+	call 0xfd69e0                                 ; FDF256  1d e0 69 fd
+	lda xbc, (xiz-2)                              ; FDF25A  be fe 31
+	push XBC                                      ; FDF25D  39
+	call 0xfda0ca                                 ; FDF25E  1d ca a0 fd
+	inc 6,XSP                                     ; FDF262  ef 66
+	pushw 0x00                                    ; FDF264  0b 00 00
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF267  8e fe 3f 00
+	jr nz, .LFDF272                               ; FDF26B  6e 05
+	pushw 0x80                                    ; FDF26D  0b 80 00
+	jr .LFDF275                                   ; FDF270  68 03
+.LFDF272:
+	pushw 0xcb                                    ; FDF272  0b cb 00
+.LFDF275:
+	call 0xfd608b                                 ; FDF275  1d 8b 60 fd
+	pop XIY                                       ; FDF279  5d
+.LFDF27A:
+	unlk XIZ                                      ; FDF27A  ee 0d
+	ret                                           ; FDF27C  0e
+	link XIZ,0xffea                               ; FDF27D  ee 0c ea ff
+	pushw hl                                      ; FDF281  2b
+	push XIX                                      ; FDF282  3c
+	lda xix, (xiz-18)                             ; FDF283  be ee 34
+	lda xbc, (xiz-2)                              ; FDF286  be fe 31
+	push XBC                                      ; FDF289  39
+	call 0xfd6b4d                                 ; FDF28A  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDF28E  be fc 31
+	push XBC                                      ; FDF291  39
+	call 0xfda0ca                                 ; FDF292  1d ca a0 fd
+	lda xbc, (xiz-6)                              ; FDF296  be fa 31
+	push XBC                                      ; FDF299  39
+	pushw 0x04                                    ; FDF29A  0b 04 00
+	call 0xfd6c7b                                 ; FDF29D  1d 7b 6c fd
+	push XIX                                      ; FDF2A1  3c
+	pushw 0x02                                    ; FDF2A2  0b 02 00
+	call 0xfd6c7b                                 ; FDF2A5  1d 7b 6c fd
+	ld (XIX+0x06),0xff                            ; FDF2A9  bc 06 00 ff
+	ld (XIX+0x07),0x00                            ; FDF2AD  bc 07 00 00
+	ld c, (xiz-6)                                 ; FDF2B1  8e fa 23
+	dec 1,C                                       ; FDF2B4  cb 69
+	ld (XIX+0x08),C                               ; FDF2B6  bc 08 43
+	ld (XIX+0x09),0x00                            ; FDF2B9  bc 09 00 00
+	ld XBC,XIX                                    ; FDF2BD  ec 89
+	add XBC,0x0000000a                            ; FDF2BF  e9 c8 0a 00 00 00
+	push XBC                                      ; FDF2C5  39
+	ld BC,(XIZ+0x08)                              ; FDF2C6  9e 08 21
+	extz BC                                       ; FDF2C9  d9 12
+	pushw bc                                      ; FDF2CB  29
+	call 0xfd7c2d                                 ; FDF2CC  1d 2d 7c fd
+	ldb h, 0x4d                                   ; FDF2D0  26 4d
+	add XSP,0x0000001a                            ; FDF2D2  ef c8 1a 00 00 00
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDF2D8  8e fc 3f 00
+	jr z, .LFDF2F8                                ; FDF2DC  66 1a
+	sub XBC,XBC                                   ; FDF2DE  e9 a1
+	ld (xiz-22), xbc                              ; FDF2E0  be ea 61
+	ldb a, 0x17                                   ; FDF2E3  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDF2E5  8e fe 41
+	extz XWA                                      ; FDF2E8  e8 12
+	add XWA,0x0000000e                            ; FDF2EA  e8 c8 0e 00 00 00
+	add XBC,XWA                                   ; FDF2F0  e8 81
+	ld H,C                                        ; FDF2F2  cb 8e
+	ld (xiz-2), 0x00                              ; FDF2F4  be fe 00 00
+.LFDF2F8:
+	push XIX                                      ; FDF2F8  3c
+	ld C,H                                        ; FDF2F9  ce 8b
+	extz BC                                       ; FDF2FB  d9 12
+	pushw bc                                      ; FDF2FD  29
+	ld bc, (xiz-2)                                ; FDF2FE  9e fe 21
+	extz BC                                       ; FDF301  d9 12
+	pushw bc                                      ; FDF303  29
+	pushw 0x02                                    ; FDF304  0b 02 00
+	pushw 0x94                                    ; FDF307  0b 94 00
+	call 0xfd7435                                 ; FDF30A  1d 35 74 fd
+	call 0xfd9b58                                 ; FDF30E  1d 58 9b fd
+	pushw 0x02                                    ; FDF312  0b 02 00
+	call 0xfd7c01                                 ; FDF315  1d 01 7c fd
+	inc 0,XSP                                     ; FDF319  ef 60
+	inc 6,XSP                                     ; FDF31B  ef 66
+	pop XIX                                       ; FDF31D  5c
+	popw hl                                       ; FDF31E  4b
+	unlk XIZ                                      ; FDF31F  ee 0d
+	ret                                           ; FDF321  0e
+	link XIZ,0x0000                               ; FDF322  ee 0c 00 00
+	pushw 0x94                                    ; FDF326  0b 94 00
+	pushw 0x03                                    ; FDF329  0b 03 00
+	ld BC,(XIZ+0x08)                              ; FDF32C  9e 08 21
+	extz BC                                       ; FDF32F  d9 12
+	pushw bc                                      ; FDF331  29
+	calr .LFDE840                                 ; FDF332  1e 0b f5
+	call 0xfd9b58                                 ; FDF335  1d 58 9b fd
+	inc 6,XSP                                     ; FDF339  ef 66
+	unlk XIZ                                      ; FDF33B  ee 0d
+	ret                                           ; FDF33D  0e
+	link XIZ,0xffea                               ; FDF33E  ee 0c ea ff
+	push XIX                                      ; FDF342  3c
+	lda xix, (xiz-18)                             ; FDF343  be ee 34
+	lda xbc, (xiz-2)                              ; FDF346  be fe 31
+	push XBC                                      ; FDF349  39
+	call 0xfd6b4d                                 ; FDF34A  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDF34E  be fc 31
+	push XBC                                      ; FDF351  39
+	call 0xfda0ca                                 ; FDF352  1d ca a0 fd
+	lda xbc, (xiz-6)                              ; FDF356  be fa 31
+	push XBC                                      ; FDF359  39
+	pushw 0x02                                    ; FDF35A  0b 02 00
+	call 0xfd6c7b                                 ; FDF35D  1d 7b 6c fd
+	push XIX                                      ; FDF361  3c
+	pushw 0x04                                    ; FDF362  0b 04 00
+	call 0xfd6c7b                                 ; FDF365  1d 7b 6c fd
+	ld (XIX+0x06),0xff                            ; FDF369  bc 06 00 ff
+	ld (XIX+0x07),0x00                            ; FDF36D  bc 07 00 00
+	ld (XIX+0x08),0x7f                            ; FDF371  bc 08 00 7f
+	ld c, (xiz-6)                                 ; FDF375  8e fa 23
+	inc 1,C                                       ; FDF378  cb 61
+	ld (XIX+0x09),C                               ; FDF37A  bc 09 43
+	ld XBC,XIX                                    ; FDF37D  ec 89
+	add XBC,0x0000000a                            ; FDF37F  e9 c8 0a 00 00 00
+	push XBC                                      ; FDF385  39
+	ld BC,(XIZ+0x08)                              ; FDF386  9e 08 21
+	extz BC                                       ; FDF389  d9 12
+	pushw bc                                      ; FDF38B  29
+	call 0xfd7c2d                                 ; FDF38C  1d 2d 7c fd
+	add XSP,0x0000001a                            ; FDF390  ef c8 1a 00 00 00
+	push XIX                                      ; FDF396  3c
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDF397  8e fc 3f 00
+	jr nz, .LFDF3A8                               ; FDF39B  6e 0b
+	pushw 0x4f                                    ; FDF39D  0b 4f 00
+	ld bc, (xiz-2)                                ; FDF3A0  9e fe 21
+	extz BC                                       ; FDF3A3  d9 12
+	pushw bc                                      ; FDF3A5  29
+	jr .LFDF3C2                                   ; FDF3A6  68 1a
+.LFDF3A8:
+	sub XBC,XBC                                   ; FDF3A8  e9 a1
+	ld (xiz-22), xbc                              ; FDF3AA  be ea 61
+	ldb a, 0x17                                   ; FDF3AD  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDF3AF  8e fe 41
+	extz XWA                                      ; FDF3B2  e8 12
+	add XWA,0x00000010                            ; FDF3B4  e8 c8 10 00 00 00
+	add XBC,XWA                                   ; FDF3BA  e8 81
+	extz BC                                       ; FDF3BC  d9 12
+	pushw bc                                      ; FDF3BE  29
+	pushw 0x00                                    ; FDF3BF  0b 00 00
+.LFDF3C2:
+	pushw 0x04                                    ; FDF3C2  0b 04 00
+	pushw 0x94                                    ; FDF3C5  0b 94 00
+	call 0xfd7435                                 ; FDF3C8  1d 35 74 fd
+	call 0xfd9b58                                 ; FDF3CC  1d 58 9b fd
+	pushw 0x04                                    ; FDF3D0  0b 04 00
+	call 0xfd7c01                                 ; FDF3D3  1d 01 7c fd
+	inc 0,XSP                                     ; FDF3D7  ef 60
+	inc 6,XSP                                     ; FDF3D9  ef 66
+	pop XIX                                       ; FDF3DB  5c
+	unlk XIZ                                      ; FDF3DC  ee 0d
+	ret                                           ; FDF3DE  0e
+	link XIZ,0xffec                               ; FDF3DF  ee 0c ec ff
+	push XIX                                      ; FDF3E3  3c
+	lda xix, (xiz-16)                             ; FDF3E4  be f0 34
+	lda xbc, (xiz-2)                              ; FDF3E7  be fe 31
+	push XBC                                      ; FDF3EA  39
+	call 0xfd6b4d                                 ; FDF3EB  1d 4d 6b fd
+	lda xbc, (xiz-4)                              ; FDF3EF  be fc 31
+	push XBC                                      ; FDF3F2  39
+	call 0xfda0ca                                 ; FDF3F3  1d ca a0 fd
+	push XIX                                      ; FDF3F7  3c
+	pushw 0x05                                    ; FDF3F8  0b 05 00
+	call 0xfd6c7b                                 ; FDF3FB  1d 7b 6c fd
+	ld (XIX+0x06),0x0f                            ; FDF3FF  bc 06 00 0f
+	ld (XIX+0x07),0x00                            ; FDF403  bc 07 00 00
+	ld (XIX+0x08),0x05                            ; FDF407  bc 08 00 05
+	ld (XIX+0x09),0x00                            ; FDF40B  bc 09 00 00
+	ld XBC,XIX                                    ; FDF40F  ec 89
+	add XBC,0x0000000a                            ; FDF411  e9 c8 0a 00 00 00
+	push XBC                                      ; FDF417  39
+	ld BC,(XIZ+0x08)                              ; FDF418  9e 08 21
+	extz BC                                       ; FDF41B  d9 12
+	pushw bc                                      ; FDF41D  29
+	call 0xfd7c2d                                 ; FDF41E  1d 2d 7c fd
+	add XSP,0x00000014                            ; FDF422  ef c8 14 00 00 00
+	push XIX                                      ; FDF428  3c
+	.byte 0x8e, 0xfc, 0x3f, 0x00                  ; FDF429  8e fc 3f 00
+	jr nz, .LFDF43A                               ; FDF42D  6e 0b
+	pushw 0x50                                    ; FDF42F  0b 50 00
+	ld bc, (xiz-2)                                ; FDF432  9e fe 21
+	extz BC                                       ; FDF435  d9 12
+	pushw bc                                      ; FDF437  29
+	jr .LFDF454                                   ; FDF438  68 1a
+.LFDF43A:
+	sub XBC,XBC                                   ; FDF43A  e9 a1
+	ld (xiz-20), xbc                              ; FDF43C  be ec 61
+	ldb a, 0x17                                   ; FDF43F  21 17
+	.byte 0x8e, 0xfe, 0x41                        ; FDF441  8e fe 41
+	extz XWA                                      ; FDF444  e8 12
+	add XWA,0x00000011                            ; FDF446  e8 c8 11 00 00 00
+	add XBC,XWA                                   ; FDF44C  e8 81
+	extz BC                                       ; FDF44E  d9 12
+	pushw bc                                      ; FDF450  29
+	pushw 0x00                                    ; FDF451  0b 00 00
+.LFDF454:
+	pushw 0x05                                    ; FDF454  0b 05 00
+	pushw 0x94                                    ; FDF457  0b 94 00
+	call 0xfd7435                                 ; FDF45A  1d 35 74 fd
+	call 0xfd9b58                                 ; FDF45E  1d 58 9b fd
+	pushw 0x05                                    ; FDF462  0b 05 00
+	call 0xfd7c01                                 ; FDF465  1d 01 7c fd
+	inc 0,XSP                                     ; FDF469  ef 60
+	inc 6,XSP                                     ; FDF46B  ef 66
+	pop XIX                                       ; FDF46D  5c
+	unlk XIZ                                      ; FDF46E  ee 0d
+	ret                                           ; FDF470  0e
+	link XIZ,0x0000                               ; FDF471  ee 0c 00 00
+	pushw 0x94                                    ; FDF475  0b 94 00
+	pushw 0x06                                    ; FDF478  0b 06 00
+	ld BC,(XIZ+0x08)                              ; FDF47B  9e 08 21
+	extz BC                                       ; FDF47E  d9 12
+	pushw bc                                      ; FDF480  29
+	calr .LFDE8F0                                 ; FDF481  1e 6c f4
+	inc 6,XSP                                     ; FDF484  ef 66
+	unlk XIZ                                      ; FDF486  ee 0d
+	ret                                           ; FDF488  0e
+	link XIZ,0x0000                               ; FDF489  ee 0c 00 00
+	pushw 0x94                                    ; FDF48D  0b 94 00
+	pushw 0x07                                    ; FDF490  0b 07 00
+	ld BC,(XIZ+0x08)                              ; FDF493  9e 08 21
+	extz BC                                       ; FDF496  d9 12
+	pushw bc                                      ; FDF498  29
+	calr .LFDE9A0                                 ; FDF499  1e 04 f5
+	inc 6,XSP                                     ; FDF49C  ef 66
+	unlk XIZ                                      ; FDF49E  ee 0d
+	ret                                           ; FDF4A0  0e
+	link XIZ,0xfffe                               ; FDF4A1  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF4A5  be fe 31
+	push XBC                                      ; FDF4A8  39
+	call 0xfda0ca                                 ; FDF4A9  1d ca a0 fd
+	pop XIY                                       ; FDF4AD  5d
+	cp (XIZ+0x08),0x00                            ; FDF4AE  8e 08 3f 00
+	jr nz, .LFDF4C7                               ; FDF4B2  6e 13
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF4B4  8e fe 3f 00
+	jr nz, .LFDF4CB                               ; FDF4B8  6e 11
+	pushw 0x00                                    ; FDF4BA  0b 00 00
+	pushw 0x97                                    ; FDF4BD  0b 97 00
+	call 0xfd608b                                 ; FDF4C0  1d 8b 60 fd
+	pop XIY                                       ; FDF4C4  5d
+	jr .LFDF4CB                                   ; FDF4C5  68 04
+.LFDF4C7:
+	call 0xfd6e90                                 ; FDF4C7  1d 90 6e fd
+.LFDF4CB:
+	unlk XIZ                                      ; FDF4CB  ee 0d
+	ret                                           ; FDF4CD  0e
+	link XIZ,0x0000                               ; FDF4CE  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDF4D2  8e 08 3f 00
+	jr z, .LFDF4EF                                ; FDF4D6  66 17
+	pushw 0x01                                    ; FDF4D8  0b 01 00
+	call 0xfd74ae                                 ; FDF4DB  1d ae 74 fd
+	popw bc                                       ; FDF4DF  49
+	cps a, 0x00                                   ; FDF4E0  c9 d8
+	jr z, .LFDF4EF                                ; FDF4E2  66 0b
+	pushw 0x00                                    ; FDF4E4  0b 00 00
+	pushw 0x90                                    ; FDF4E7  0b 90 00
+	call 0xfd608b                                 ; FDF4EA  1d 8b 60 fd
+	pop XIY                                       ; FDF4EE  5d
+.LFDF4EF:
+	unlk XIZ                                      ; FDF4EF  ee 0d
+	ret                                           ; FDF4F1  0e
+	link XIZ,0xfffe                               ; FDF4F2  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF4F6  be fe 31
+	push XBC                                      ; FDF4F9  39
+	call 0xfda0ca                                 ; FDF4FA  1d ca a0 fd
+	pop XIY                                       ; FDF4FE  5d
+	cp (XIZ+0x08),0x00                            ; FDF4FF  8e 08 3f 00
+	jr nz, .LFDF513                               ; FDF503  6e 0e
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF505  8e fe 3f 00
+	jr nz, .LFDF52A                               ; FDF509  6e 1f
+	pushw 0x00                                    ; FDF50B  0b 00 00
+	pushw 0x99                                    ; FDF50E  0b 99 00
+	jr .LFDF525                                   ; FDF511  68 12
+.LFDF513:
+	pushw 0x02                                    ; FDF513  0b 02 00
+	call 0xfd74ae                                 ; FDF516  1d ae 74 fd
+	popw bc                                       ; FDF51A  49
+	cps a, 0x00                                   ; FDF51B  c9 d8
+	jr z, .LFDF52A                                ; FDF51D  66 0b
+	pushw 0x00                                    ; FDF51F  0b 00 00
+	pushw 0x90                                    ; FDF522  0b 90 00
+.LFDF525:
+	call 0xfd608b                                 ; FDF525  1d 8b 60 fd
+	pop XIY                                       ; FDF529  5d
+.LFDF52A:
+	unlk XIZ                                      ; FDF52A  ee 0d
+	ret                                           ; FDF52C  0e
+	link XIZ,0xfffc                               ; FDF52D  ee 0c fc ff
+	lda xbc, (xiz-2)                              ; FDF531  be fe 31
+	push XBC                                      ; FDF534  39
+	call 0xfda0ca                                 ; FDF535  1d ca a0 fd
+	pop XIY                                       ; FDF539  5d
+	cp (XIZ+0x08),0x00                            ; FDF53A  8e 08 3f 00
+	jr nz, .LFDF55D                               ; FDF53E  6e 1d
+	lda xbc, (xiz-4)                              ; FDF540  be fc 31
+	push XBC                                      ; FDF543  39
+	pushw 0x00                                    ; FDF544  0b 00 00
+	call 0xfd6c7b                                 ; FDF547  1d 7b 6c fd
+	.byte 0x8e, 0xfc, 0x3c, 0xf8                  ; FDF54B  8e fc 3c f8
+	ld bc, (xiz-4)                                ; FDF54F  9e fc 21
+	extz BC                                       ; FDF552  d9 12
+	pushw bc                                      ; FDF554  29
+	call 0xfd6ec4                                 ; FDF555  1d c4 6e fd
+	inc 0,XSP                                     ; FDF559  ef 60
+	jr .LFDF56F                                   ; FDF55B  68 12
+.LFDF55D:
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF55D  8e fe 3f 01
+	jr z, .LFDF57A                                ; FDF561  66 17
+	pushw 0x03                                    ; FDF563  0b 03 00
+	call 0xfd74ae                                 ; FDF566  1d ae 74 fd
+	popw bc                                       ; FDF56A  49
+	cps a, 0x00                                   ; FDF56B  c9 d8
+	jr z, .LFDF57A                                ; FDF56D  66 0b
+.LFDF56F:
+	pushw 0x00                                    ; FDF56F  0b 00 00
+	pushw 0x90                                    ; FDF572  0b 90 00
+	call 0xfd608b                                 ; FDF575  1d 8b 60 fd
+	pop XIY                                       ; FDF579  5d
+.LFDF57A:
+	unlk XIZ                                      ; FDF57A  ee 0d
+	ret                                           ; FDF57C  0e
+	link XIZ,0xfffe                               ; FDF57D  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF581  be fe 31
+	push XBC                                      ; FDF584  39
+	call 0xfda0ca                                 ; FDF585  1d ca a0 fd
+	pop XIY                                       ; FDF589  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF58A  8e fe 3f 01
+	jr z, .LFDF5AD                                ; FDF58E  66 1d
+	cp (XIZ+0x08),0x00                            ; FDF590  8e 08 3f 00
+	jr z, .LFDF5AD                                ; FDF594  66 17
+	pushw 0x04                                    ; FDF596  0b 04 00
+	call 0xfd74ae                                 ; FDF599  1d ae 74 fd
+	popw bc                                       ; FDF59D  49
+	cps a, 0x00                                   ; FDF59E  c9 d8
+	jr z, .LFDF5AD                                ; FDF5A0  66 0b
+	pushw 0x00                                    ; FDF5A2  0b 00 00
+	pushw 0x90                                    ; FDF5A5  0b 90 00
+	call 0xfd608b                                 ; FDF5A8  1d 8b 60 fd
+	pop XIY                                       ; FDF5AC  5d
+.LFDF5AD:
+	unlk XIZ                                      ; FDF5AD  ee 0d
+	ret                                           ; FDF5AF  0e
+	link XIZ,0xfffe                               ; FDF5B0  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF5B4  be fe 31
+	push XBC                                      ; FDF5B7  39
+	call 0xfda0ca                                 ; FDF5B8  1d ca a0 fd
+	pop XIY                                       ; FDF5BC  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF5BD  8e fe 3f 01
+	jr z, .LFDF5D4                                ; FDF5C1  66 11
+	cp (XIZ+0x08),0x00                            ; FDF5C3  8e 08 3f 00
+	jr nz, .LFDF5D4                               ; FDF5C7  6e 0b
+	pushw 0x00                                    ; FDF5C9  0b 00 00
+	pushw 0x96                                    ; FDF5CC  0b 96 00
+	call 0xfd608b                                 ; FDF5CF  1d 8b 60 fd
+	pop XIY                                       ; FDF5D3  5d
+.LFDF5D4:
+	unlk XIZ                                      ; FDF5D4  ee 0d
+	ret                                           ; FDF5D6  0e
+	link XIZ,0xfffe                               ; FDF5D7  ee 0c fe ff
+	cp (XIZ+0x08),0x00                            ; FDF5DB  8e 08 3f 00
+	jr nz, .LFDF608                               ; FDF5DF  6e 27
+	pushw 0x00                                    ; FDF5E1  0b 00 00
+	call 0xfd69e0                                 ; FDF5E4  1d e0 69 fd
+	lda xbc, (xiz-2)                              ; FDF5E8  be fe 31
+	push XBC                                      ; FDF5EB  39
+	call 0xfda0ca                                 ; FDF5EC  1d ca a0 fd
+	inc 6,XSP                                     ; FDF5F0  ef 66
+	pushw 0x00                                    ; FDF5F2  0b 00 00
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF5F5  8e fe 3f 00
+	jr nz, .LFDF600                               ; FDF5F9  6e 05
+	pushw 0x80                                    ; FDF5FB  0b 80 00
+	jr T,.LFDF603                                 ; FDF5FE  68 03
+.LFDF600:
+	pushw 0xcb                                    ; FDF600  0b cb 00
+.LFDF603:
+	call 0xfd608b                                 ; FDF603  1d 8b 60 fd
+	pop XIY                                       ; FDF607  5d
+.LFDF608:
+	unlk XIZ                                      ; FDF608  ee 0d
+	ret                                           ; FDF60A  0e
+	link XIZ,0xfffe                               ; FDF60B  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF60F  be fe 31
+	push XBC                                      ; FDF612  39
+	call 0xfda0ca                                 ; FDF613  1d ca a0 fd
+	pop XIY                                       ; FDF617  5d
+	cp (XIZ+0x08),0x00                            ; FDF618  8e 08 3f 00
+	jr nz, .LFDF631                               ; FDF61C  6e 13
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF61E  8e fe 3f 00
+	jr nz, .LFDF635                               ; FDF622  6e 11
+	pushw 0x00                                    ; FDF624  0b 00 00
+	pushw 0x97                                    ; FDF627  0b 97 00
+	call 0xfd608b                                 ; FDF62A  1d 8b 60 fd
+	pop XIY                                       ; FDF62E  5d
+	jr .LFDF635                                   ; FDF62F  68 04
+.LFDF631:
+	call 0xfd6e90                                 ; FDF631  1d 90 6e fd
+.LFDF635:
+	unlk XIZ                                      ; FDF635  ee 0d
+	ret                                           ; FDF637  0e
+	link XIZ,0x0000                               ; FDF638  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDF63C  8e 08 3f 00
+	jr z, .LFDF659                                ; FDF640  66 17
+	pushw 0x01                                    ; FDF642  0b 01 00
+	call 0xfd74ae                                 ; FDF645  1d ae 74 fd
+	popw bc                                       ; FDF649  49
+	cps a, 0x00                                   ; FDF64A  c9 d8
+	jr z, .LFDF659                                ; FDF64C  66 0b
+	pushw 0x00                                    ; FDF64E  0b 00 00
+	pushw 0x90                                    ; FDF651  0b 90 00
+	call 0xfd608b                                 ; FDF654  1d 8b 60 fd
+	pop XIY                                       ; FDF658  5d
+.LFDF659:
+	unlk XIZ                                      ; FDF659  ee 0d
+	ret                                           ; FDF65B  0e
+	link XIZ,0xfffe                               ; FDF65C  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF660  be fe 31
+	push XBC                                      ; FDF663  39
+	call 0xfda0ca                                 ; FDF664  1d ca a0 fd
+	pop XIY                                       ; FDF668  5d
+	cp (XIZ+0x08),0x00                            ; FDF669  8e 08 3f 00
+	jr nz, .LFDF67D                               ; FDF66D  6e 0e
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF66F  8e fe 3f 00
+	jr nz, .LFDF694                               ; FDF673  6e 1f
+	pushw 0x00                                    ; FDF675  0b 00 00
+	pushw 0x99                                    ; FDF678  0b 99 00
+	jr .LFDF68F                                   ; FDF67B  68 12
+.LFDF67D:
+	pushw 0x02                                    ; FDF67D  0b 02 00
+	call 0xfd74ae                                 ; FDF680  1d ae 74 fd
+	popw bc                                       ; FDF684  49
+	cps a, 0x00                                   ; FDF685  c9 d8
+	jr z, .LFDF694                                ; FDF687  66 0b
+	pushw 0x00                                    ; FDF689  0b 00 00
+	pushw 0x90                                    ; FDF68C  0b 90 00
+.LFDF68F:
+	call 0xfd608b                                 ; FDF68F  1d 8b 60 fd
+	pop XIY                                       ; FDF693  5d
+.LFDF694:
+	unlk XIZ                                      ; FDF694  ee 0d
+	ret                                           ; FDF696  0e
+	link XIZ,0xfffc                               ; FDF697  ee 0c fc ff
+	pushw hl                                      ; FDF69B  2b
+	lda xbc, (xiz-2)                              ; FDF69C  be fe 31
+	push XBC                                      ; FDF69F  39
+	call 0xfda0ca                                 ; FDF6A0  1d ca a0 fd
+	pop XIY                                       ; FDF6A4  5d
+	cp (XIZ+0x08),0x00                            ; FDF6A5  8e 08 3f 00
+	jr nz, .LFDF6D0                               ; FDF6A9  6e 25
+	lda xbc, (xiz-4)                              ; FDF6AB  be fc 31
+	push XBC                                      ; FDF6AE  39
+	pushw 0x00                                    ; FDF6AF  0b 00 00
+	call 0xfd6c7b                                 ; FDF6B2  1d 7b 6c fd
+	.byte 0x8e, 0xfc, 0x3c, 0xf8                  ; FDF6B6  8e fc 3c f8
+	ld h, (xiz-4)                                 ; FDF6BA  8e fc 26
+	set 0x00,H                                    ; FDF6BD  ce 31 00
+	ld (xiz-4), h                                 ; FDF6C0  be fc 46
+	ld C,H                                        ; FDF6C3  ce 8b
+	extz BC                                       ; FDF6C5  d9 12
+	pushw bc                                      ; FDF6C7  29
+	call 0xfd6ec4                                 ; FDF6C8  1d c4 6e fd
+	inc 0,XSP                                     ; FDF6CC  ef 60
+	jr .LFDF6E2                                   ; FDF6CE  68 12
+.LFDF6D0:
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF6D0  8e fe 3f 01
+	jr z, .LFDF6ED                                ; FDF6D4  66 17
+	pushw 0x03                                    ; FDF6D6  0b 03 00
+	call 0xfd74ae                                 ; FDF6D9  1d ae 74 fd
+	popw bc                                       ; FDF6DD  49
+	cps a, 0x00                                   ; FDF6DE  c9 d8
+	jr z, .LFDF6ED                                ; FDF6E0  66 0b
+.LFDF6E2:
+	pushw 0x00                                    ; FDF6E2  0b 00 00
+	pushw 0x90                                    ; FDF6E5  0b 90 00
+	call 0xfd608b                                 ; FDF6E8  1d 8b 60 fd
+	pop XIY                                       ; FDF6EC  5d
+.LFDF6ED:
+	popw hl                                       ; FDF6ED  4b
+	unlk XIZ                                      ; FDF6EE  ee 0d
+	ret                                           ; FDF6F0  0e
+	link XIZ,0xfffe                               ; FDF6F1  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF6F5  be fe 31
+	push XBC                                      ; FDF6F8  39
+	call 0xfda0ca                                 ; FDF6F9  1d ca a0 fd
+	pop XIY                                       ; FDF6FD  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF6FE  8e fe 3f 01
+	jr z, .LFDF721                                ; FDF702  66 1d
+	cp (XIZ+0x08),0x00                            ; FDF704  8e 08 3f 00
+	jr z, .LFDF721                                ; FDF708  66 17
+	pushw 0x04                                    ; FDF70A  0b 04 00
+	call 0xfd74ae                                 ; FDF70D  1d ae 74 fd
+	popw bc                                       ; FDF711  49
+	cps a, 0x00                                   ; FDF712  c9 d8
+	jr z, .LFDF721                                ; FDF714  66 0b
+	pushw 0x00                                    ; FDF716  0b 00 00
+	pushw 0x90                                    ; FDF719  0b 90 00
+	call 0xfd608b                                 ; FDF71C  1d 8b 60 fd
+	pop XIY                                       ; FDF720  5d
+.LFDF721:
+	unlk XIZ                                      ; FDF721  ee 0d
+	ret                                           ; FDF723  0e
+	link XIZ,0xfffe                               ; FDF724  ee 0c fe ff
+	lda xbc, (xiz-2)                              ; FDF728  be fe 31
+	push XBC                                      ; FDF72B  39
+	call 0xfda0ca                                 ; FDF72C  1d ca a0 fd
+	pop XIY                                       ; FDF730  5d
+	.byte 0x8e, 0xfe, 0x3f, 0x01                  ; FDF731  8e fe 3f 01
+	jr z, .LFDF748                                ; FDF735  66 11
+	cp (XIZ+0x08),0x00                            ; FDF737  8e 08 3f 00
+	jr nz, .LFDF748                               ; FDF73B  6e 0b
+	pushw 0x00                                    ; FDF73D  0b 00 00
+	pushw 0x96                                    ; FDF740  0b 96 00
+	call 0xfd608b                                 ; FDF743  1d 8b 60 fd
+	pop XIY                                       ; FDF747  5d
+.LFDF748:
+	unlk XIZ                                      ; FDF748  ee 0d
+	ret                                           ; FDF74A  0e
+	link XIZ,0xfffe                               ; FDF74B  ee 0c fe ff
+	cp (XIZ+0x08),0x00                            ; FDF74F  8e 08 3f 00
+	jr nz, .LFDF77C                               ; FDF753  6e 27
+	pushw 0x00                                    ; FDF755  0b 00 00
+	call 0xfd69e0                                 ; FDF758  1d e0 69 fd
+	lda xbc, (xiz-2)                              ; FDF75C  be fe 31
+	push XBC                                      ; FDF75F  39
+	call 0xfda0ca                                 ; FDF760  1d ca a0 fd
+	inc 6,XSP                                     ; FDF764  ef 66
+	pushw 0x00                                    ; FDF766  0b 00 00
+	.byte 0x8e, 0xfe, 0x3f, 0x00                  ; FDF769  8e fe 3f 00
+	jr nz, .LFDF774                               ; FDF76D  6e 05
+	pushw 0x80                                    ; FDF76F  0b 80 00
+	jr .LFDF777                                   ; FDF772  68 03
+.LFDF774:
+	pushw 0xcb                                    ; FDF774  0b cb 00
+.LFDF777:
+	call 0xfd608b                                 ; FDF777  1d 8b 60 fd
+	pop XIY                                       ; FDF77B  5d
+.LFDF77C:
+	unlk XIZ                                      ; FDF77C  ee 0d
+	ret                                           ; FDF77E  0e
+	link XIZ,0xfff0                               ; FDF77F  ee 0c f0 ff
+	push XIX                                      ; FDF783  3c
+	lda xix, (xiz-16)                             ; FDF784  be f0 34
+	lda xbc, (xiz-2)                              ; FDF787  be fe 31
+	push XBC                                      ; FDF78A  39
+	call 0xfd6b4d                                 ; FDF78B  1d 4d 6b fd
+	push XIX                                      ; FDF78F  3c
+	pushw 0x03                                    ; FDF790  0b 03 00
+	call 0xfd6c7b                                 ; FDF793  1d 7b 6c fd
+	ld (XIX+0x06),0xff                            ; FDF797  bc 06 00 ff
+	ld (XIX+0x07),0x00                            ; FDF79B  bc 07 00 00
+	ld (XIX+0x08),0x32                            ; FDF79F  bc 08 00 32
+	ld (XIX+0x09),0xce                            ; FDF7A3  bc 09 00 ce
+	ld XBC,XIX                                    ; FDF7A7  ec 89
+	add XBC,0x0000000a                            ; FDF7A9  e9 c8 0a 00 00 00
+	push XBC                                      ; FDF7AF  39
+	ld BC,(XIZ+0x08)                              ; FDF7B0  9e 08 21
+	extz BC                                       ; FDF7B3  d9 12
+	pushw bc                                      ; FDF7B5  29
+	call 0xfd7c2d                                 ; FDF7B6  1d 2d 7c fd
+	push XIX                                      ; FDF7BA  3c
+	pushw 0x3c                                    ; FDF7BB  0b 3c 00
+	ld bc, (xiz-2)                                ; FDF7BE  9e fe 21
+	extz BC                                       ; FDF7C1  d9 12
+	pushw bc                                      ; FDF7C3  29
+	pushw 0x03                                    ; FDF7C4  0b 03 00
+	pushw 0x96                                    ; FDF7C7  0b 96 00
+	call 0xfd7435                                 ; FDF7CA  1d 35 74 fd
+	add XSP,0x0000001c                            ; FDF7CE  ef c8 1c 00 00 00
+	cps a, 0x01                                   ; FDF7D4  c9 d9
+	jr nz, .LFDF7FE                               ; FDF7D6  6e 26
+	lda xbc, (xiz-4)                              ; FDF7D8  be fc 31
+	push XBC                                      ; FDF7DB  39
+	pushw 0x03                                    ; FDF7DC  0b 03 00
+	call 0xfd6c7b                                 ; FDF7DF  1d 7b 6c fd
+	ld bc, (xiz-4)                                ; FDF7E3  9e fc 21
+	extz BC                                       ; FDF7E6  d9 12
+	pushw bc                                      ; FDF7E8  29
+	pushw 0x0a                                    ; FDF7E9  0b 0a 00
+	call 0xfd6c65                                 ; FDF7EC  1d 65 6c fd
+	pushw 0x00                                    ; FDF7F0  0b 00 00
+	pushw 0x00                                    ; FDF7F3  0b 00 00
+	call 0xfd946b                                 ; FDF7F6  1d 6b 94 fd
+	inc 0,XSP                                     ; FDF7FA  ef 60
+	inc 6,XSP                                     ; FDF7FC  ef 66
+.LFDF7FE:
+	pushw 0x03                                    ; FDF7FE  0b 03 00
+	call 0xfd7c01                                 ; FDF801  1d 01 7c fd
+	popw bc                                       ; FDF805  49
+	pop XIX                                       ; FDF806  5c
+	unlk XIZ                                      ; FDF807  ee 0d
+	ret                                           ; FDF809  0e
+	link XIZ,0xfffa                               ; FDF80A  ee 0c fa ff
+	lda xbc, (xiz-2)                              ; FDF80E  be fe 31
+	push XBC                                      ; FDF811  39
+	pushw 0x00                                    ; FDF812  0b 00 00
+	call 0xfd6c7b                                 ; FDF815  1d 7b 6c fd
+	.byte 0xbe, 0xfe, 0xb7                        ; FDF819  be fe b7
+	ld bc, (xiz-2)                                ; FDF81C  9e fe 21
+	extz BC                                       ; FDF81F  d9 12
+	pushw bc                                      ; FDF821  29
+	pushw 0x00                                    ; FDF822  0b 00 00
+	pushw 0x01                                    ; FDF825  0b 01 00
+	ld BC,(XIZ+0x08)                              ; FDF828  9e 08 21
+	extz BC                                       ; FDF82B  d9 12
+	pushw bc                                      ; FDF82D  29
+	call 0xfda3e2                                 ; FDF82E  1d e2 a3 fd
+	inc 0,XSP                                     ; FDF832  ef 60
+	inc 6,XSP                                     ; FDF834  ef 66
+	cps a, 0x01                                   ; FDF836  c9 d9
+	jr nz, .LFDF87B                               ; FDF838  6e 41
+	lda xbc, (xiz-4)                              ; FDF83A  be fc 31
+	push XBC                                      ; FDF83D  39
+	call 0xfd6b4d                                 ; FDF83E  1d 4d 6b fd
+	lda xbc, (xiz-6)                              ; FDF842  be fa 31
+	push XBC                                      ; FDF845  39
+	pushw 0x01                                    ; FDF846  0b 01 00
+	call 0xfd6c7b                                 ; FDF849  1d 7b 6c fd
+	pushw 0x7f                                    ; FDF84D  0b 7f 00
+	lda xbc, (xiz-6)                              ; FDF850  be fa 31
+	push XBC                                      ; FDF853  39
+	pushw 0x3a                                    ; FDF854  0b 3a 00
+	ld wa, (xiz-4)                                ; FDF857  9e fc 20
+	extz WA                                       ; FDF85A  d8 12
+	pushw wa                                      ; FDF85C  28
+	call 0xfd616a                                 ; FDF85D  1d 6a 61 fd
+	pushw 0x01                                    ; FDF861  0b 01 00
+	pushw 0x96                                    ; FDF864  0b 96 00
+	call 0xf41ed4                                 ; FDF867  1d d4 1e f4
+	pushw 0x00                                    ; FDF86B  0b 00 00
+	pushw 0x00                                    ; FDF86E  0b 00 00
+	call 0xfd946b                                 ; FDF871  1d 6b 94 fd
+	add XSP,0x0000001c                            ; FDF875  ef c8 1c 00 00 00
+.LFDF87B:
+	pushw 0x04                                    ; FDF87B  0b 04 00
+	call 0xfd7c01                                 ; FDF87E  1d 01 7c fd
+	popw bc                                       ; FDF882  49
+	unlk XIZ                                      ; FDF883  ee 0d
+	ret                                           ; FDF885  0e
+	link XIZ,0xfff8                               ; FDF886  ee 0c f8 ff
+	push XIX                                      ; FDF88A  3c
+	lda_24 xix, (0xfd6c7b)                        ; FDF88B  f2 7b 6c fd 34
+	lda xbc, (xiz-2)                              ; FDF890  be fe 31
+	push XBC                                      ; FDF893  39
+	pushw 0x01                                    ; FDF894  0b 01 00
+	lda_24 xiy, (0xfdf89f)                        ; FDF897  f2 9f f8 fd 35
+	push XIY                                      ; FDF89C  3d
+	jp (xix)                                      ; FDF89D  b4 d8
+	lda xbc, (xiz-4)                              ; FDF89F  be fc 31
+	push XBC                                      ; FDF8A2  39
+	pushw 0x02                                    ; FDF8A3  0b 02 00
+	lda_24 xiy, (0xfdf8ae)                        ; FDF8A6  f2 ae f8 fd 35
+	push XIY                                      ; FDF8AB  3d
+	jp (xix)                                      ; FDF8AC  b4 d8
+	.byte 0xbe, 0xfe, 0xb7                        ; FDF8AE  be fe b7
+	.byte 0xbe, 0xfc, 0xb7                        ; FDF8B1  be fc b7
+	ld bc, (xiz-4)                                ; FDF8B4  9e fc 21
+	extz BC                                       ; FDF8B7  d9 12
+	pushw bc                                      ; FDF8B9  29
+	ld bc, (xiz-2)                                ; FDF8BA  9e fe 21
+	extz BC                                       ; FDF8BD  d9 12
+	pushw bc                                      ; FDF8BF  29
+	pushw 0x00                                    ; FDF8C0  0b 00 00
+	ld BC,(XIZ+0x08)                              ; FDF8C3  9e 08 21
+	extz BC                                       ; FDF8C6  d9 12
+	pushw bc                                      ; FDF8C8  29
+	call 0xfda3e2                                 ; FDF8C9  1d e2 a3 fd
+	add XSP,0x00000014                            ; FDF8CD  ef c8 14 00 00 00
+	cps a, 0x01                                   ; FDF8D3  c9 d9
+	jr nz, .LFDF91C                               ; FDF8D5  6e 45
+	lda xbc, (xiz-6)                              ; FDF8D7  be fa 31
+	push XBC                                      ; FDF8DA  39
+	call 0xfd6b4d                                 ; FDF8DB  1d 4d 6b fd
+	lda xbc, (xiz-8)                              ; FDF8DF  be f8 31
+	push XBC                                      ; FDF8E2  39
+	pushw 0x00                                    ; FDF8E3  0b 00 00
+	lda_24 xiy, (0xfdf8ee)                        ; FDF8E6  f2 ee f8 fd 35
+	push XIY                                      ; FDF8EB  3d
+	jp (xix)                                      ; FDF8EC  b4 d8
+	pushw 0x7f                                    ; FDF8EE  0b 7f 00
+	lda xbc, (xiz-8)                              ; FDF8F1  be f8 31
+	push XBC                                      ; FDF8F4  39
+	pushw 0x39                                    ; FDF8F5  0b 39 00
+	ld wa, (xiz-6)                                ; FDF8F8  9e fa 20
+	extz WA                                       ; FDF8FB  d8 12
+	pushw wa                                      ; FDF8FD  28
+	call 0xfd616a                                 ; FDF8FE  1d 6a 61 fd
+	pushw 0x00                                    ; FDF902  0b 00 00
+	pushw 0x96                                    ; FDF905  0b 96 00
+	call 0xf41ed4                                 ; FDF908  1d d4 1e f4
+	pushw 0x00                                    ; FDF90C  0b 00 00
+	pushw 0x00                                    ; FDF90F  0b 00 00
+	call 0xfd946b                                 ; FDF912  1d 6b 94 fd
+	add XSP,0x0000001c                            ; FDF916  ef c8 1c 00 00 00
+.LFDF91C:
+	pushw 0x05                                    ; FDF91C  0b 05 00
+	call 0xfd7c01                                 ; FDF91F  1d 01 7c fd
+	popw bc                                       ; FDF923  49
+	pop XIX                                       ; FDF924  5c
+	unlk XIZ                                      ; FDF925  ee 0d
+	ret                                           ; FDF927  0e
+	link XIZ,0xfffa                               ; FDF928  ee 0c fa ff
+	lda xbc, (xiz-2)                              ; FDF92C  be fe 31
+	push XBC                                      ; FDF92F  39
+	pushw 0x00                                    ; FDF930  0b 00 00
+	call 0xfd6c7b                                 ; FDF933  1d 7b 6c fd
+	.byte 0xbe, 0xfe, 0xb7                        ; FDF937  be fe b7
+	pushw 0x7f                                    ; FDF93A  0b 7f 00
+	ld bc, (xiz-2)                                ; FDF93D  9e fe 21
+	extz BC                                       ; FDF940  d9 12
+	pushw bc                                      ; FDF942  29
+	pushw 0x02                                    ; FDF943  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDF946  9e 08 21
+	extz BC                                       ; FDF949  d9 12
+	pushw bc                                      ; FDF94B  29
+	call 0xfda3e2                                 ; FDF94C  1d e2 a3 fd
+	inc 0,XSP                                     ; FDF950  ef 60
+	inc 6,XSP                                     ; FDF952  ef 66
+	cps a, 0x01                                   ; FDF954  c9 d9
+	jr nz, .LFDF999                               ; FDF956  6e 41
+	lda xbc, (xiz-4)                              ; FDF958  be fc 31
+	push XBC                                      ; FDF95B  39
+	call 0xfd6b4d                                 ; FDF95C  1d 4d 6b fd
+	lda xbc, (xiz-6)                              ; FDF960  be fa 31
+	push XBC                                      ; FDF963  39
+	pushw 0x02                                    ; FDF964  0b 02 00
+	call 0xfd6c7b                                 ; FDF967  1d 7b 6c fd
+	pushw 0x7f                                    ; FDF96B  0b 7f 00
+	lda xbc, (xiz-6)                              ; FDF96E  be fa 31
+	push XBC                                      ; FDF971  39
+	pushw 0x3b                                    ; FDF972  0b 3b 00
+	ld wa, (xiz-4)                                ; FDF975  9e fc 20
+	extz WA                                       ; FDF978  d8 12
+	pushw wa                                      ; FDF97A  28
+	call 0xfd616a                                 ; FDF97B  1d 6a 61 fd
+	pushw 0x02                                    ; FDF97F  0b 02 00
+	pushw 0x96                                    ; FDF982  0b 96 00
+	call 0xf41ed4                                 ; FDF985  1d d4 1e f4
+	pushw 0x00                                    ; FDF989  0b 00 00
+	pushw 0x00                                    ; FDF98C  0b 00 00
+	call 0xfd946b                                 ; FDF98F  1d 6b 94 fd
+	add XSP,0x0000001c                            ; FDF993  ef c8 1c 00 00 00
+.LFDF999:
+	pushw 0x06                                    ; FDF999  0b 06 00
+	call 0xfd7c01                                 ; FDF99C  1d 01 7c fd
+	popw bc                                       ; FDF9A0  49
+	unlk XIZ                                      ; FDF9A1  ee 0d
+	ret                                           ; FDF9A3  0e
+	link XIZ,0x0000                               ; FDF9A4  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDF9A8  8e 08 3f 00
+	jr nz, .LFDF9BB                               ; FDF9AC  6e 0d
+	pushw 0x00                                    ; FDF9AE  0b 00 00
+	pushw 0x97                                    ; FDF9B1  0b 97 00
+	call 0xfd608b                                 ; FDF9B4  1d 8b 60 fd
+	pop XIY                                       ; FDF9B8  5d
+	jr .LFDF9BF                                   ; FDF9B9  68 04
+.LFDF9BB:
+	call 0xfd6e90                                 ; FDF9BB  1d 90 6e fd
+.LFDF9BF:
+	unlk XIZ                                      ; FDF9BF  ee 0d
+	ret                                           ; FDF9C1  0e
+	link XIZ,0x0000                               ; FDF9C2  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDF9C6  8e 08 3f 00
+	jr z, .LFDF9E3                                ; FDF9CA  66 17
+	pushw 0x01                                    ; FDF9CC  0b 01 00
+	call 0xfd74ae                                 ; FDF9CF  1d ae 74 fd
+	popw bc                                       ; FDF9D3  49
+	cps a, 0x00                                   ; FDF9D4  c9 d8
+	jr z, .LFDF9E3                                ; FDF9D6  66 0b
+	pushw 0x01                                    ; FDF9D8  0b 01 00
+	pushw 0x96                                    ; FDF9DB  0b 96 00
+	call 0xfd608b                                 ; FDF9DE  1d 8b 60 fd
+	pop XIY                                       ; FDF9E2  5d
+.LFDF9E3:
+	unlk XIZ                                      ; FDF9E3  ee 0d
+	ret                                           ; FDF9E5  0e
+	link XIZ,0x0000                               ; FDF9E6  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDF9EA  8e 08 3f 00
+	jr nz, .LFDF9F8                               ; FDF9EE  6e 08
+	pushw 0x00                                    ; FDF9F0  0b 00 00
+	pushw 0x99                                    ; FDF9F3  0b 99 00
+	jr .LFDFA0A                                   ; FDF9F6  68 12
+.LFDF9F8:
+	pushw 0x02                                    ; FDF9F8  0b 02 00
+	call 0xfd74ae                                 ; FDF9FB  1d ae 74 fd
+	popw bc                                       ; FDF9FF  49
+	cps a, 0x00                                   ; FDFA00  c9 d8
+	jr z, .LFDFA0F                                ; FDFA02  66 0b
+	pushw 0x01                                    ; FDFA04  0b 01 00
+	pushw 0x96                                    ; FDFA07  0b 96 00
+.LFDFA0A:
+	call 0xfd608b                                 ; FDFA0A  1d 8b 60 fd
+	pop XIY                                       ; FDFA0E  5d
+.LFDFA0F:
+	unlk XIZ                                      ; FDFA0F  ee 0d
+	ret                                           ; FDFA11  0e
+	link XIZ,0x0000                               ; FDFA12  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFA16  8e 08 3f 00
+	jr z, .LFDFA33                                ; FDFA1A  66 17
+	pushw 0x03                                    ; FDFA1C  0b 03 00
+	call 0xfd74ae                                 ; FDFA1F  1d ae 74 fd
+	popw bc                                       ; FDFA23  49
+	cps a, 0x00                                   ; FDFA24  c9 d8
+	jr z, .LFDFA33                                ; FDFA26  66 0b
+	pushw 0x01                                    ; FDFA28  0b 01 00
+	pushw 0x96                                    ; FDFA2B  0b 96 00
+	call 0xfd608b                                 ; FDFA2E  1d 8b 60 fd
+	pop XIY                                       ; FDFA32  5d
+.LFDFA33:
+	unlk XIZ                                      ; FDFA33  ee 0d
+	ret                                           ; FDFA35  0e
+	link XIZ,0x0000                               ; FDFA36  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFA3A  8e 08 3f 00
+	jr z, .LFDFA57                                ; FDFA3E  66 17
+	pushw 0x04                                    ; FDFA40  0b 04 00
+	call 0xfd74ae                                 ; FDFA43  1d ae 74 fd
+	popw bc                                       ; FDFA47  49
+	cps a, 0x00                                   ; FDFA48  c9 d8
+	jr z, .LFDFA57                                ; FDFA4A  66 0b
+	pushw 0x01                                    ; FDFA4C  0b 01 00
+	pushw 0x96                                    ; FDFA4F  0b 96 00
+	call 0xfd608b                                 ; FDFA52  1d 8b 60 fd
+	pop XIY                                       ; FDFA56  5d
+.LFDFA57:
+	unlk XIZ                                      ; FDFA57  ee 0d
+	ret                                           ; FDFA59  0e
+	link XIZ,0x0000                               ; FDFA5A  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFA5E  8e 08 3f 00
+	jr z, .LFDFA6F                                ; FDFA62  66 0b
+	pushw 0x00                                    ; FDFA64  0b 00 00
+	pushw 0x90                                    ; FDFA67  0b 90 00
+	call 0xfd608b                                 ; FDFA6A  1d 8b 60 fd
+	pop XIY                                       ; FDFA6E  5d
+.LFDFA6F:
+	unlk XIZ                                      ; FDFA6F  ee 0d
+	ret                                           ; FDFA71  0e
+	link XIZ,0x0000                               ; FDFA72  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFA76  8e 08 3f 00
+	jr nz, .LFDFA8F                               ; FDFA7A  6e 13
+	pushw 0x00                                    ; FDFA7C  0b 00 00
+	call 0xfd69e0                                 ; FDFA7F  1d e0 69 fd
+	pushw 0x00                                    ; FDFA83  0b 00 00
+	pushw 0x80                                    ; FDFA86  0b 80 00
+	call 0xfd608b                                 ; FDFA89  1d 8b 60 fd
+	inc 6,XSP                                     ; FDFA8D  ef 66
+.LFDFA8F:
+	unlk XIZ                                      ; FDFA8F  ee 0d
+	ret                                           ; FDFA91  0e
+	link XIZ,0x0000                               ; FDFA92  ee 0c 00 00
+	pushw 0x00                                    ; FDFA96  0b 00 00
+	pushw 0x3f                                    ; FDFA99  0b 3f 00
+	ld BC,(XIZ+0x08)                              ; FDFA9C  9e 08 21
+	extz BC                                       ; FDFA9F  d9 12
+	pushw bc                                      ; FDFAA1  29
+	call 0xfd8155                                 ; FDFAA2  1d 55 81 fd
+	inc 6,XSP                                     ; FDFAA6  ef 66
+	unlk XIZ                                      ; FDFAA8  ee 0d
+	ret                                           ; FDFAAA  0e
+	link XIZ,0x0000                               ; FDFAAB  ee 0c 00 00
+	pushw 0x00                                    ; FDFAAF  0b 00 00
+	pushw 0x40                                    ; FDFAB2  0b 40 00
+	ld BC,(XIZ+0x08)                              ; FDFAB5  9e 08 21
+	extz BC                                       ; FDFAB8  d9 12
+	pushw bc                                      ; FDFABA  29
+	call 0xfd81c8                                 ; FDFABB  1d c8 81 fd
+	inc 6,XSP                                     ; FDFABF  ef 66
+	unlk XIZ                                      ; FDFAC1  ee 0d
+	ret                                           ; FDFAC3  0e
+	link XIZ,0x0000                               ; FDFAC4  ee 0c 00 00
+	pushw 0x41                                    ; FDFAC8  0b 41 00
+	pushw 0x3e                                    ; FDFACB  0b 3e 00
+	ld BC,(XIZ+0x08)                              ; FDFACE  9e 08 21
+	extz BC                                       ; FDFAD1  d9 12
+	pushw bc                                      ; FDFAD3  29
+	call 0xfd823b                                 ; FDFAD4  1d 3b 82 fd
+	inc 6,XSP                                     ; FDFAD8  ef 66
+	unlk XIZ                                      ; FDFADA  ee 0d
+	ret                                           ; FDFADC  0e
+	link XIZ,0x0000                               ; FDFADD  ee 0c 00 00
+	pushw 0x00                                    ; FDFAE1  0b 00 00
+	pushw 0x42                                    ; FDFAE4  0b 42 00
+	ld BC,(XIZ+0x08)                              ; FDFAE7  9e 08 21
+	extz BC                                       ; FDFAEA  d9 12
+	pushw bc                                      ; FDFAEC  29
+	call 0xfd82d8                                 ; FDFAED  1d d8 82 fd
+	inc 6,XSP                                     ; FDFAF1  ef 66
+	unlk XIZ                                      ; FDFAF3  ee 0d
+	ret                                           ; FDFAF5  0e
+	link XIZ,0x0000                               ; FDFAF6  ee 0c 00 00
+	pushw 0x43                                    ; FDFAFA  0b 43 00
+	pushw 0x46                                    ; FDFAFD  0b 46 00
+	ld BC,(XIZ+0x08)                              ; FDFB00  9e 08 21
+	extz BC                                       ; FDFB03  d9 12
+	pushw bc                                      ; FDFB05  29
+	call 0xfd834b                                 ; FDFB06  1d 4b 83 fd
+	inc 6,XSP                                     ; FDFB0A  ef 66
+	unlk XIZ                                      ; FDFB0C  ee 0d
+	ret                                           ; FDFB0E  0e
+	link XIZ,0x0000                               ; FDFB0F  ee 0c 00 00
+	pushw 0x00                                    ; FDFB13  0b 00 00
+	pushw 0x44                                    ; FDFB16  0b 44 00
+	ld BC,(XIZ+0x08)                              ; FDFB19  9e 08 21
+	extz BC                                       ; FDFB1C  d9 12
+	pushw bc                                      ; FDFB1E  29
+	call 0xfd83e8                                 ; FDFB1F  1d e8 83 fd
+	inc 6,XSP                                     ; FDFB23  ef 66
+	unlk XIZ                                      ; FDFB25  ee 0d
+	ret                                           ; FDFB27  0e
+	link XIZ,0x0000                               ; FDFB28  ee 0c 00 00
+	pushw 0x45                                    ; FDFB2C  0b 45 00
+	pushw 0x3d                                    ; FDFB2F  0b 3d 00
+	ld BC,(XIZ+0x08)                              ; FDFB32  9e 08 21
+	extz BC                                       ; FDFB35  d9 12
+	pushw bc                                      ; FDFB37  29
+	call 0xfd845b                                 ; FDFB38  1d 5b 84 fd
+	inc 6,XSP                                     ; FDFB3C  ef 66
+	unlk XIZ                                      ; FDFB3E  ee 0d
+	ret                                           ; FDFB40  0e
+	link XIZ,0x0000                               ; FDFB41  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFB45  8e 08 3f 00
+	jr z, .LFDFB4F                                ; FDFB49  66 04
+	call 0xfd6e90                                 ; FDFB4B  1d 90 6e fd
+.LFDFB4F:
+	unlk XIZ                                      ; FDFB4F  ee 0d
+	ret                                           ; FDFB51  0e
+	link XIZ,0x0000                               ; FDFB52  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFB56  8e 08 3f 00
+	jr nz, .LFDFB64                               ; FDFB5A  6e 08
+	pushw 0x00                                    ; FDFB5C  0b 00 00
+	pushw 0x90                                    ; FDFB5F  0b 90 00
+	jr .LFDFB76                                   ; FDFB62  68 12
+.LFDFB64:
+	pushw 0x01                                    ; FDFB64  0b 01 00
+	call 0xfd74ae                                 ; FDFB67  1d ae 74 fd
+	popw bc                                       ; FDFB6B  49
+	cps a, 0x00                                   ; FDFB6C  c9 d8
+	jr z, .LFDFB7B                                ; FDFB6E  66 0b
+	pushw 0x01                                    ; FDFB70  0b 01 00
+	pushw 0x97                                    ; FDFB73  0b 97 00
+.LFDFB76:
+	call 0xfd608b                                 ; FDFB76  1d 8b 60 fd
+	pop XIY                                       ; FDFB7A  5d
+.LFDFB7B:
+	unlk XIZ                                      ; FDFB7B  ee 0d
+	ret                                           ; FDFB7D  0e
+	link XIZ,0x0000                               ; FDFB7E  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFB82  8e 08 3f 00
+	jr nz, .LFDFB90                               ; FDFB86  6e 08
+	pushw 0x00                                    ; FDFB88  0b 00 00
+	pushw 0x99                                    ; FDFB8B  0b 99 00
+	jr .LFDFBA2                                   ; FDFB8E  68 12
+.LFDFB90:
+	pushw 0x02                                    ; FDFB90  0b 02 00
+	call 0xfd74ae                                 ; FDFB93  1d ae 74 fd
+	popw bc                                       ; FDFB97  49
+	cps a, 0x00                                   ; FDFB98  c9 d8
+	jr z, .LFDFBA7                                ; FDFB9A  66 0b
+	pushw 0x01                                    ; FDFB9C  0b 01 00
+	pushw 0x97                                    ; FDFB9F  0b 97 00
+.LFDFBA2:
+	call 0xfd608b                                 ; FDFBA2  1d 8b 60 fd
+	pop XIY                                       ; FDFBA6  5d
+.LFDFBA7:
+	unlk XIZ                                      ; FDFBA7  ee 0d
+	ret                                           ; FDFBA9  0e
+	link XIZ,0x0000                               ; FDFBAA  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFBAE  8e 08 3f 00
+	jr nz, .LFDFBBE                               ; FDFBB2  6e 0a
+	pushw 0x00                                    ; FDFBB4  0b 00 00
+	call 0xfd8116                                 ; FDFBB7  1d 16 81 fd
+	popw bc                                       ; FDFBBB  49
+	jr .LFDFBD5                                   ; FDFBBC  68 17
+.LFDFBBE:
+	pushw 0x03                                    ; FDFBBE  0b 03 00
+	call 0xfd74ae                                 ; FDFBC1  1d ae 74 fd
+	popw bc                                       ; FDFBC5  49
+	cps a, 0x00                                   ; FDFBC6  c9 d8
+	jr z, .LFDFBD5                                ; FDFBC8  66 0b
+	pushw 0x01                                    ; FDFBCA  0b 01 00
+	pushw 0x97                                    ; FDFBCD  0b 97 00
+	call 0xfd608b                                 ; FDFBD0  1d 8b 60 fd
+	pop XIY                                       ; FDFBD4  5d
+.LFDFBD5:
+	unlk XIZ                                      ; FDFBD5  ee 0d
+	ret                                           ; FDFBD7  0e
+	link XIZ,0x0000                               ; FDFBD8  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFBDC  8e 08 3f 00
+	jr nz, .LFDFBEC                               ; FDFBE0  6e 0a
+	pushw 0x01                                    ; FDFBE2  0b 01 00
+	call 0xfd8116                                 ; FDFBE5  1d 16 81 fd
+	popw bc                                       ; FDFBE9  49
+	jr .LFDFC03                                   ; FDFBEA  68 17
+.LFDFBEC:
+	pushw 0x04                                    ; FDFBEC  0b 04 00
+	call 0xfd74ae                                 ; FDFBEF  1d ae 74 fd
+	popw bc                                       ; FDFBF3  49
+	cps a, 0x00                                   ; FDFBF4  c9 d8
+	jr z, .LFDFC03                                ; FDFBF6  66 0b
+	pushw 0x01                                    ; FDFBF8  0b 01 00
+	pushw 0x97                                    ; FDFBFB  0b 97 00
+	call 0xfd608b                                 ; FDFBFE  1d 8b 60 fd
+	pop XIY                                       ; FDFC02  5d
+.LFDFC03:
+	unlk XIZ                                      ; FDFC03  ee 0d
+	ret                                           ; FDFC05  0e
+	link XIZ,0x0000                               ; FDFC06  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFC0A  8e 08 3f 00
+	jr nz, .LFDFC1B                               ; FDFC0E  6e 0b
+	pushw 0x00                                    ; FDFC10  0b 00 00
+	pushw 0x98                                    ; FDFC13  0b 98 00
+	call 0xfd608b                                 ; FDFC16  1d 8b 60 fd
+	pop XIY                                       ; FDFC1A  5d
+.LFDFC1B:
+	unlk XIZ                                      ; FDFC1B  ee 0d
+	ret                                           ; FDFC1D  0e
+	link XIZ,0x0000                               ; FDFC1E  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFC22  8e 08 3f 00
+	jr nz, .LFDFC3B                               ; FDFC26  6e 13
+	pushw 0x00                                    ; FDFC28  0b 00 00
+	call 0xfd69e0                                 ; FDFC2B  1d e0 69 fd
+	pushw 0x00                                    ; FDFC2F  0b 00 00
+	pushw 0x80                                    ; FDFC32  0b 80 00
+	call 0xfd608b                                 ; FDFC35  1d 8b 60 fd
+	inc 6,XSP                                     ; FDFC39  ef 66
+.LFDFC3B:
+	unlk XIZ                                      ; FDFC3B  ee 0d
+	ret                                           ; FDFC3D  0e
+	link XIZ,0x0000                               ; FDFC3E  ee 0c 00 00
+	pushw 0x4a                                    ; FDFC42  0b 4a 00
+	ld BC,(XIZ+0x08)                              ; FDFC45  9e 08 21
+	extz BC                                       ; FDFC48  d9 12
+	pushw bc                                      ; FDFC4A  29
+	call 0xfd84f8                                 ; FDFC4B  1d f8 84 fd
+	pop XBC                                       ; FDFC4F  59
+	unlk XIZ                                      ; FDFC50  ee 0d
+	ret                                           ; FDFC52  0e
+	link XIZ,0x0000                               ; FDFC53  ee 0c 00 00
+	pushw 0x4b                                    ; FDFC57  0b 4b 00
+	ld BC,(XIZ+0x08)                              ; FDFC5A  9e 08 21
+	extz BC                                       ; FDFC5D  d9 12
+	pushw bc                                      ; FDFC5F  29
+	call 0xfd859b                                 ; FDFC60  1d 9b 85 fd
+	pop XBC                                       ; FDFC64  59
+	unlk XIZ                                      ; FDFC65  ee 0d
+	ret                                           ; FDFC67  0e
+	link XIZ,0x0000                               ; FDFC68  ee 0c 00 00
+	pushw 0x4c                                    ; FDFC6C  0b 4c 00
+	ld BC,(XIZ+0x08)                              ; FDFC6F  9e 08 21
+	extz BC                                       ; FDFC72  d9 12
+	pushw bc                                      ; FDFC74  29
+	call 0xfd863e                                 ; FDFC75  1d 3e 86 fd
+	pop XBC                                       ; FDFC79  59
+	unlk XIZ                                      ; FDFC7A  ee 0d
+	ret                                           ; FDFC7C  0e
+	link XIZ,0x0000                               ; FDFC7D  ee 0c 00 00
+	pushw 0x49                                    ; FDFC81  0b 49 00
+	ld BC,(XIZ+0x08)                              ; FDFC84  9e 08 21
+	extz BC                                       ; FDFC87  d9 12
+	pushw bc                                      ; FDFC89  29
+	call 0xfd86e1                                 ; FDFC8A  1d e1 86 fd
+	pop XBC                                       ; FDFC8E  59
+	unlk XIZ                                      ; FDFC8F  ee 0d
+	ret                                           ; FDFC91  0e
+	link XIZ,0x0000                               ; FDFC92  ee 0c 00 00
+	pushw 0x47                                    ; FDFC96  0b 47 00
+	ld BC,(XIZ+0x08)                              ; FDFC99  9e 08 21
+	extz BC                                       ; FDFC9C  d9 12
+	pushw bc                                      ; FDFC9E  29
+	call 0xfd8747                                 ; FDFC9F  1d 47 87 fd
+	pop XBC                                       ; FDFCA3  59
+	unlk XIZ                                      ; FDFCA4  ee 0d
+	ret                                           ; FDFCA6  0e
+	link XIZ,0x0000                               ; FDFCA7  ee 0c 00 00
+	pushw 0x48                                    ; FDFCAB  0b 48 00
+	ld BC,(XIZ+0x08)                              ; FDFCAE  9e 08 21
+	extz BC                                       ; FDFCB1  d9 12
+	pushw bc                                      ; FDFCB3  29
+	call 0xfd87a5                                 ; FDFCB4  1d a5 87 fd
+	pop XBC                                       ; FDFCB8  59
+	unlk XIZ                                      ; FDFCB9  ee 0d
+	ret                                           ; FDFCBB  0e
+	link XIZ,0x0000                               ; FDFCBC  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFCC0  8e 08 3f 00
+	jr z, .LFDFCCA                                ; FDFCC4  66 04
+	call 0xfd6e90                                 ; FDFCC6  1d 90 6e fd
+.LFDFCCA:
+	unlk XIZ                                      ; FDFCCA  ee 0d
+	ret                                           ; FDFCCC  0e
+	link XIZ,0x0000                               ; FDFCCD  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFCD1  8e 08 3f 00
+	jr nz, .LFDFCDF                               ; FDFCD5  6e 08
+	pushw 0x00                                    ; FDFCD7  0b 00 00
+	pushw 0x90                                    ; FDFCDA  0b 90 00
+	jr .LFDFCF1                                   ; FDFCDD  68 12
+.LFDFCDF:
+	pushw 0x01                                    ; FDFCDF  0b 01 00
+	call 0xfd74ae                                 ; FDFCE2  1d ae 74 fd
+	popw bc                                       ; FDFCE6  49
+	cps a, 0x00                                   ; FDFCE7  c9 d8
+	jr z, .LFDFCF6                                ; FDFCE9  66 0b
+	pushw 0x01                                    ; FDFCEB  0b 01 00
+	pushw 0x98                                    ; FDFCEE  0b 98 00
+.LFDFCF1:
+	call 0xfd608b                                 ; FDFCF1  1d 8b 60 fd
+	pop XIY                                       ; FDFCF5  5d
+.LFDFCF6:
+	unlk XIZ                                      ; FDFCF6  ee 0d
+	ret                                           ; FDFCF8  0e
+	link XIZ,0x0000                               ; FDFCF9  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFCFD  8e 08 3f 00
+	jr nz, .LFDFD0B                               ; FDFD01  6e 08
+	pushw 0x00                                    ; FDFD03  0b 00 00
+	pushw 0x99                                    ; FDFD06  0b 99 00
+	jr .LFDFD1D                                   ; FDFD09  68 12
+.LFDFD0B:
+	pushw 0x02                                    ; FDFD0B  0b 02 00
+	call 0xfd74ae                                 ; FDFD0E  1d ae 74 fd
+	popw bc                                       ; FDFD12  49
+	cps a, 0x00                                   ; FDFD13  c9 d8
+	jr z, .LFDFD22                                ; FDFD15  66 0b
+	pushw 0x01                                    ; FDFD17  0b 01 00
+	pushw 0x98                                    ; FDFD1A  0b 98 00
+.LFDFD1D:
+	call 0xfd608b                                 ; FDFD1D  1d 8b 60 fd
+	pop XIY                                       ; FDFD21  5d
+.LFDFD22:
+	unlk XIZ                                      ; FDFD22  ee 0d
+	ret                                           ; FDFD24  0e
+	link XIZ,0x0000                               ; FDFD25  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFD29  8e 08 3f 00
+	jr z, .LFDFD46                                ; FDFD2D  66 17
+	pushw 0x03                                    ; FDFD2F  0b 03 00
+	call 0xfd74ae                                 ; FDFD32  1d ae 74 fd
+	popw bc                                       ; FDFD36  49
+	cps a, 0x00                                   ; FDFD37  c9 d8
+	jr z, .LFDFD46                                ; FDFD39  66 0b
+	pushw 0x01                                    ; FDFD3B  0b 01 00
+	pushw 0x98                                    ; FDFD3E  0b 98 00
+	call 0xfd608b                                 ; FDFD41  1d 8b 60 fd
+	pop XIY                                       ; FDFD45  5d
+.LFDFD46:
+	unlk XIZ                                      ; FDFD46  ee 0d
+	ret                                           ; FDFD48  0e
+	link XIZ,0x0000                               ; FDFD49  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFD4D  8e 08 3f 00
+	jr z, .LFDFD6A                                ; FDFD51  66 17
+	pushw 0x04                                    ; FDFD53  0b 04 00
+	call 0xfd74ae                                 ; FDFD56  1d ae 74 fd
+	popw bc                                       ; FDFD5A  49
+	cps a, 0x00                                   ; FDFD5B  c9 d8
+	jr z, .LFDFD6A                                ; FDFD5D  66 0b
+	pushw 0x01                                    ; FDFD5F  0b 01 00
+	pushw 0x98                                    ; FDFD62  0b 98 00
+	call 0xfd608b                                 ; FDFD65  1d 8b 60 fd
+	pop XIY                                       ; FDFD69  5d
+.LFDFD6A:
+	unlk XIZ                                      ; FDFD6A  ee 0d
+	ret                                           ; FDFD6C  0e
+	link XIZ,0x0000                               ; FDFD6D  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFD71  8e 08 3f 00
+	jr z, .LFDFD82                                ; FDFD75  66 0b
+	pushw 0x00                                    ; FDFD77  0b 00 00
+	pushw 0x97                                    ; FDFD7A  0b 97 00
+	call 0xfd608b                                 ; FDFD7D  1d 8b 60 fd
+	pop XIY                                       ; FDFD81  5d
+.LFDFD82:
+	unlk XIZ                                      ; FDFD82  ee 0d
+	ret                                           ; FDFD84  0e
+	link XIZ,0x0000                               ; FDFD85  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFD89  8e 08 3f 00
+	jr nz, .LFDFDA2                               ; FDFD8D  6e 13
+	pushw 0x00                                    ; FDFD8F  0b 00 00
+	call 0xfd69e0                                 ; FDFD92  1d e0 69 fd
+	pushw 0x00                                    ; FDFD96  0b 00 00
+	pushw 0x80                                    ; FDFD99  0b 80 00
+	call 0xfd608b                                 ; FDFD9C  1d 8b 60 fd
+	inc 6,XSP                                     ; FDFDA0  ef 66
+.LFDFDA2:
+	unlk XIZ                                      ; FDFDA2  ee 0d
+	ret                                           ; FDFDA4  0e
+	link XIZ,0x0000                               ; FDFDA5  ee 0c 00 00
+	pushw 0x02                                    ; FDFDA9  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFDAC  9e 08 21
+	extz BC                                       ; FDFDAF  d9 12
+	pushw bc                                      ; FDFDB1  29
+	call 0xfd7e1a                                 ; FDFDB2  1d 1a 7e fd
+	pop XBC                                       ; FDFDB6  59
+	unlk XIZ                                      ; FDFDB7  ee 0d
+	ret                                           ; FDFDB9  0e
+	link XIZ,0x0000                               ; FDFDBA  ee 0c 00 00
+	pushw 0x02                                    ; FDFDBE  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFDC1  9e 08 21
+	extz BC                                       ; FDFDC4  d9 12
+	pushw bc                                      ; FDFDC6  29
+	call 0xfd7e66                                 ; FDFDC7  1d 66 7e fd
+	pop XBC                                       ; FDFDCB  59
+	unlk XIZ                                      ; FDFDCC  ee 0d
+	ret                                           ; FDFDCE  0e
+	link XIZ,0x0000                               ; FDFDCF  ee 0c 00 00
+	pushw 0x02                                    ; FDFDD3  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFDD6  9e 08 21
+	extz BC                                       ; FDFDD9  d9 12
+	pushw bc                                      ; FDFDDB  29
+	call 0xfd7ed9                                 ; FDFDDC  1d d9 7e fd
+	pop XBC                                       ; FDFDE0  59
+	unlk XIZ                                      ; FDFDE1  ee 0d
+	ret                                           ; FDFDE3  0e
+	link XIZ,0x0000                               ; FDFDE4  ee 0c 00 00
+	pushw 0x02                                    ; FDFDE8  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFDEB  9e 08 21
+	extz BC                                       ; FDFDEE  d9 12
+	pushw bc                                      ; FDFDF0  29
+	call 0xfd7f4c                                 ; FDFDF1  1d 4c 7f fd
+	pop XBC                                       ; FDFDF5  59
+	unlk XIZ                                      ; FDFDF6  ee 0d
+	ret                                           ; FDFDF8  0e
+	link XIZ,0x0000                               ; FDFDF9  ee 0c 00 00
+	pushw 0x02                                    ; FDFDFD  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFE00  9e 08 21
+	extz BC                                       ; FDFE03  d9 12
+	pushw bc                                      ; FDFE05  29
+	call 0xfd7fbf                                 ; FDFE06  1d bf 7f fd
+	pop XBC                                       ; FDFE0A  59
+	unlk XIZ                                      ; FDFE0B  ee 0d
+	ret                                           ; FDFE0D  0e
+	link XIZ,0x0000                               ; FDFE0E  ee 0c 00 00
+	pushw 0x02                                    ; FDFE12  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFE15  9e 08 21
+	extz BC                                       ; FDFE18  d9 12
+	pushw bc                                      ; FDFE1A  29
+	call 0xfd8030                                 ; FDFE1B  1d 30 80 fd
+	pop XBC                                       ; FDFE1F  59
+	unlk XIZ                                      ; FDFE20  ee 0d
+	ret                                           ; FDFE22  0e
+	link XIZ,0x0000                               ; FDFE23  ee 0c 00 00
+	pushw 0x02                                    ; FDFE27  0b 02 00
+	ld BC,(XIZ+0x08)                              ; FDFE2A  9e 08 21
+	extz BC                                       ; FDFE2D  d9 12
+	pushw bc                                      ; FDFE2F  29
+	call 0xfd80a3                                 ; FDFE30  1d a3 80 fd
+	pop XBC                                       ; FDFE34  59
+	unlk XIZ                                      ; FDFE35  ee 0d
+	ret                                           ; FDFE37  0e
+	link XIZ,0x0000                               ; FDFE38  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFE3C  8e 08 3f 00
+	jr nz, .LFDFE4F                               ; FDFE40  6e 0d
+	pushw 0x00                                    ; FDFE42  0b 00 00
+	pushw 0x97                                    ; FDFE45  0b 97 00
+	call 0xfd608b                                 ; FDFE48  1d 8b 60 fd
+	pop XIY                                       ; FDFE4C  5d
+	jr .LFDFE53                                   ; FDFE4D  68 04
+.LFDFE4F:
+	call 0xfd6e90                                 ; FDFE4F  1d 90 6e fd
+.LFDFE53:
+	unlk XIZ                                      ; FDFE53  ee 0d
+	ret                                           ; FDFE55  0e
+	link XIZ,0x0000                               ; FDFE56  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFE5A  8e 08 3f 00
+	jr nz, .LFDFE6C                               ; FDFE5E  6e 0c
+	pushw 0x00                                    ; FDFE60  0b 00 00
+	pushw 0x90                                    ; FDFE63  0b 90 00
+	call 0xfd608b                                 ; FDFE66  1d 8b 60 fd
+	jr .LFDFE76                                   ; FDFE6A  68 0a
+.LFDFE6C:
+	pushw 0x01                                    ; FDFE6C  0b 01 00
+	pushw 0x02                                    ; FDFE6F  0b 02 00
+	call 0xfd74e0                                 ; FDFE72  1d e0 74 fd
+.LFDFE76:
+	pop XIY                                       ; FDFE76  5d
+	unlk XIZ                                      ; FDFE77  ee 0d
+	ret                                           ; FDFE79  0e
+	link XIZ,0x0000                               ; FDFE7A  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFE7E  8e 08 3f 00
+	jr z, .LFDFE8F                                ; FDFE82  66 0b
+	pushw 0x02                                    ; FDFE84  0b 02 00
+	pushw 0x02                                    ; FDFE87  0b 02 00
+	call 0xfd74e0                                 ; FDFE8A  1d e0 74 fd
+	pop XIY                                       ; FDFE8E  5d
+.LFDFE8F:
+	unlk XIZ                                      ; FDFE8F  ee 0d
+	ret                                           ; FDFE91  0e
+	link XIZ,0x0000                               ; FDFE92  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFE96  8e 08 3f 00
+	jr z, .LFDFEA7                                ; FDFE9A  66 0b
+	pushw 0x03                                    ; FDFE9C  0b 03 00
+	pushw 0x02                                    ; FDFE9F  0b 02 00
+	call 0xfd74e0                                 ; FDFEA2  1d e0 74 fd
+	pop XIY                                       ; FDFEA6  5d
+.LFDFEA7:
+	unlk XIZ                                      ; FDFEA7  ee 0d
+	ret                                           ; FDFEA9  0e
+	link XIZ,0x0000                               ; FDFEAA  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFEAE  8e 08 3f 00
+	jr z, .LFDFEBF                                ; FDFEB2  66 0b
+	pushw 0x04                                    ; FDFEB4  0b 04 00
+	pushw 0x02                                    ; FDFEB7  0b 02 00
+	call 0xfd74e0                                 ; FDFEBA  1d e0 74 fd
+	pop XIY                                       ; FDFEBE  5d
+.LFDFEBF:
+	unlk XIZ                                      ; FDFEBF  ee 0d
+	ret                                           ; FDFEC1  0e
+	link XIZ,0x0000                               ; FDFEC2  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFEC6  8e 08 3f 00
+	jr nz, .LFDFEDF                               ; FDFECA  6e 13
+	pushw 0x00                                    ; FDFECC  0b 00 00
+	call 0xfd69e0                                 ; FDFECF  1d e0 69 fd
+	pushw 0x00                                    ; FDFED3  0b 00 00
+	pushw 0x80                                    ; FDFED6  0b 80 00
+	call 0xfd608b                                 ; FDFED9  1d 8b 60 fd
+	inc 6,XSP                                     ; FDFEDD  ef 66
+.LFDFEDF:
+	unlk XIZ                                      ; FDFEDF  ee 0d
+	ret                                           ; FDFEE1  0e
+	decf                                          ; FDFEE2  0d
+	pushw 0x00                                    ; FDFEE3  0b 00 00
+	pushw 0x97                                    ; FDFEE6  0b 97 00
+	call 0xfd61e9                                 ; FDFEE9  1d e9 61 fd
+	pop XIY                                       ; FDFEED  5d
+	jr .LFDFEF4                                   ; FDFEEE  68 04
+	call 0xfd6fee                                 ; FDFEF0  1d ee 6f fd
+.LFDFEF4:
+	unlk XIZ                                      ; FDFEF4  ee 0d
+	ret                                           ; FDFEF6  0e
+	link XIZ,0x0000                               ; FDFEF7  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFEFB  8e 08 3f 00
+	jr nz, .LFDFF0D                               ; FDFEFF  6e 0c
+	pushw 0x00                                    ; FDFF01  0b 00 00
+	pushw 0x90                                    ; FDFF04  0b 90 00
+	call 0xfd61e9                                 ; FDFF07  1d e9 61 fd
+	jr .LFDFF17                                   ; FDFF0B  68 0a
+.LFDFF0D:
+	pushw 0x01                                    ; FDFF0D  0b 01 00
+	pushw 0x02                                    ; FDFF10  0b 02 00
+	call 0xfd763e                                 ; FDFF13  1d 3e 76 fd
+.LFDFF17:
+	pop XIY                                       ; FDFF17  5d
+	unlk XIZ                                      ; FDFF18  ee 0d
+	ret                                           ; FDFF1A  0e
+	link XIZ,0x0000                               ; FDFF1B  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFF1F  8e 08 3f 00
+	jr z, .LFDFF30                                ; FDFF23  66 0b
+	pushw 0x02                                    ; FDFF25  0b 02 00
+	pushw 0x02                                    ; FDFF28  0b 02 00
+	call 0xfd763e                                 ; FDFF2B  1d 3e 76 fd
+	pop XIY                                       ; FDFF2F  5d
+.LFDFF30:
+	unlk XIZ                                      ; FDFF30  ee 0d
+	ret                                           ; FDFF32  0e
+	link XIZ,0x0000                               ; FDFF33  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFF37  8e 08 3f 00
+	jr z, .LFDFF48                                ; FDFF3B  66 0b
+	pushw 0x03                                    ; FDFF3D  0b 03 00
+	pushw 0x02                                    ; FDFF40  0b 02 00
+	call 0xfd763e                                 ; FDFF43  1d 3e 76 fd
+	pop XIY                                       ; FDFF47  5d
+.LFDFF48:
+	unlk XIZ                                      ; FDFF48  ee 0d
+	ret                                           ; FDFF4A  0e
+	link XIZ,0x0000                               ; FDFF4B  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFF4F  8e 08 3f 00
+	jr z, .LFDFF60                                ; FDFF53  66 0b
+	pushw 0x04                                    ; FDFF55  0b 04 00
+	pushw 0x02                                    ; FDFF58  0b 02 00
+	call 0xfd763e                                 ; FDFF5B  1d 3e 76 fd
+	pop XIY                                       ; FDFF5F  5d
+.LFDFF60:
+	unlk XIZ                                      ; FDFF60  ee 0d
+	ret                                           ; FDFF62  0e
+	link XIZ,0x0000                               ; FDFF63  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFF67  8e 08 3f 00
+	jr nz, .LFDFF80                               ; FDFF6B  6e 13
+	pushw 0x00                                    ; FDFF6D  0b 00 00
+	call 0xfd6b3e                                 ; FDFF70  1d 3e 6b fd
+	pushw 0x00                                    ; FDFF74  0b 00 00
+	pushw 0x80                                    ; FDFF77  0b 80 00
+	call 0xfd61e9                                 ; FDFF7A  1d e9 61 fd
+	inc 6,XSP                                     ; FDFF7E  ef 66
+.LFDFF80:
+	unlk XIZ                                      ; FDFF80  ee 0d
+	ret                                           ; FDFF82  0e
+	nop                                           ; FDFF83  00
+	pushw 0xc5                                    ; FDFF84  0b c5 00
+	jr .LFDFF9B                                   ; FDFF87  68 12
+	pushw 0x03                                    ; FDFF89  0b 03 00
+	call 0xfd5486                                 ; FDFF8C  1d 86 54 fd
+	popw bc                                       ; FDFF90  49
+	cps a, 0x00                                   ; FDFF91  c9 d8
+	jr z, .LFDFFA0                                ; FDFF93  66 0b
+	pushw 0x01                                    ; FDFF95  0b 01 00
+	pushw 0x86                                    ; FDFF98  0b 86 00
+.LFDFF9B:
+	call 0xfd40b6                                 ; FDFF9B  1d b6 40 fd
+	pop XIY                                       ; FDFF9F  5d
+.LFDFFA0:
+	unlk XIZ                                      ; FDFFA0  ee 0d
+	ret                                           ; FDFFA2  0e
+	link XIZ,0x0000                               ; FDFFA3  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFFA7  8e 08 3f 00
+	jr z, .LFDFFC4                                ; FDFFAB  66 17
+	pushw 0x04                                    ; FDFFAD  0b 04 00
+	call 0xfd5486                                 ; FDFFB0  1d 86 54 fd
+	popw bc                                       ; FDFFB4  49
+	cps a, 0x00                                   ; FDFFB5  c9 d8
+	jr z, .LFDFFC4                                ; FDFFB7  66 0b
+	pushw 0x01                                    ; FDFFB9  0b 01 00
+	pushw 0x86                                    ; FDFFBC  0b 86 00
+	call 0xfd40b6                                 ; FDFFBF  1d b6 40 fd
+	pop XIY                                       ; FDFFC3  5d
+.LFDFFC4:
+	unlk XIZ                                      ; FDFFC4  ee 0d
+	ret                                           ; FDFFC6  0e
+	link XIZ,0x0000                               ; FDFFC7  ee 0c 00 00
+	cp (XIZ+0x08),0x00                            ; FDFFCB  8e 08 3f 00
+	jr nz, .LFDFFDC                               ; FDFFCF  6e 0b
+	pushw 0x00                                    ; FDFFD1  0b 00 00
+	pushw 0xc0                                    ; FDFFD4  0b c0 00
+	call 0xfd40b6                                 ; FDFFD7  1d b6 40 fd
+	pop XIY                                       ; FDFFDB  5d
+.LFDFFDC:
+	unlk XIZ                                      ; FDFFDC  ee 0d
+	ret                                           ; FDFFDE  0e
+; ---------------------------------------------------------------------
+; 0xFDFFDF-0xFE0000 -- 33 bytes, REFUSED.  The preceding `ret` at 0xFDFFDE
+; is a clean function boundary (the same `unlk XIZ / ret` idiom that closes
+; dozens of routines above).  A decode continued from here never
+; resynchronises before 0xFE0000: it produces `ld (0x04),0x1d`,
+; `call NC,XIY+0xfd`, `jr F,...`, `jr PE/OV,...`, `srl A,L` -- condition
+; codes and operand shapes that do not occur anywhere else in this span,
+; the signature of genuinely different content, not a misread continuation.
+; notes/prom_a_fcf000_checks.py --tail already proved (2026-08-25, before
+; this pass) that of the 128 possible decode starts in 0xFDFF80-0xFDFFFF,
+; only 0xFDFFFD and 0xFDFFFF make 0xFE0000 a boundary -- and 0xFDFFFD's own
+; first instruction disassembles as `mul ??,W`, an unresolved operand, not
+; a clean start either. No route (reader, stored extent, inbound pointer,
+; or byte-value stride) was found to fix what these 33 bytes are; see
+; notes/FINDINGS-prom_a-fde74c-boundary.md for what was tried and
+; eliminated.
+; ---------------------------------------------------------------------
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05FFDF, 0x000021
 
 ; ==============================================================================
 ; 0xFE0000-0xFE54B5 -- 21,686 bytes of application code, converted but NOT NAMED
