@@ -33,7 +33,7 @@ FmmComposerLoadFunc:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, CompLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
@@ -48,7 +48,7 @@ CompLoad_DispatchState:
 	jr z, CompLoad_HandleError
 	cps wa, 5
 	jr z, CompLoad_HandleCancel
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, CompLoad_ContinueWait
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
@@ -563,7 +563,7 @@ LoadFilter_OpLoad:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done

@@ -3651,7 +3651,7 @@ FmmCmpSingleLoadFunc:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmCmpLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
@@ -3666,7 +3666,7 @@ FmmCmpLoad_DispatchState:
 	jrl z, FmmCmpLoad_HandleError
 	cps wa, 5
 	jr z, FmmCmpLoad_HandleCancel
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmCmpLoad_ContinueLoad
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl

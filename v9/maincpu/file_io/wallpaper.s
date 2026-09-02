@@ -35,7 +35,7 @@ FmmWallpaperLoadFunc:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, WPLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
@@ -50,7 +50,7 @@ WPLoad_DispatchState:
 	jr z, WPLoad_HandleError
 	cps wa, 5
 	jr z, WPLoad_HandleCancel
-	cpdi16 0x850a, 0
+	cpw (0x850a:16), 0
 	jr ge, WPLoad_ContinueWait
 	call FileIO_InitWallpaperNav
 	ld (0x850a:16), hl

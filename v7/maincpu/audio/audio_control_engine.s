@@ -775,7 +775,7 @@ MIDI_ProcessVoiceAssignment:
 	ldw	(36396:16), 500
 	jr	24
 MIDI_ValidateParam:
-	cpdi16	36396, 0
+	cpw	(36396:16), 0
 	jr	nz, 16
 	lda	xwa, (36382:16)
 	ld_sd8b	c, 64
@@ -3212,7 +3212,7 @@ FileIO_OperationDispatch:
 	lda xbc, (SoundProgram_DispatchTable:24)
 	ldl_dri xhl, 0x07, 0xe4, 0xe0
 	call (XHL)
-	cpdi16 (0x9042), 0x01fc
+	cpw (0x9042:16), 0x01fc
 	jr c, .Lc_fc7d51
 	push XDE
 	push XHL
@@ -4674,7 +4674,7 @@ SndParam_WriteLookupAndStore:
 SwbtWr_FlushAndAppendParams:
 	cp (0x908e:16), 0x00
 	ret Z
-	cpdi16 (0x9042), 0x01fc
+	cpw (0x9042:16), 0x01fc
 	jr c, SwbtWr_FlushDone
 	push XDE
 	push XHL
@@ -4720,7 +4720,7 @@ SwbtWr_CheckBufferOverflow:
 
 
 SwbtWr_WriteParamBlock:
-	cpdi16 (0x9042), 0x01fc
+	cpw (0x9042:16), 0x01fc
 	jr c, .Lc_fc8ef4
 	push XDE
 	push XHL
@@ -6291,7 +6291,7 @@ MidiSeqBufInit_Done:
 Tempo_ProcessExpressionChange:
 	pushw	wa
 	calr	145
-	cpdi16	37161, 0
+	cpw	(37161:16), 0
 	jr	z, 115
 	xor	l, l
 	ld	xix, 61856
@@ -6398,7 +6398,7 @@ Mod_SelectExpressionSource:
 	jr t, Mod_ExpressionStore
 ModExpr_CheckAutoPlay:
 .Lc_fca01a:
-	cpdi16 (0x28a8), 0x0000
+	cpw (0x28a8:16), 0x0000
 	jr z, Mod_ExpressionStore
 	ld wa, (0x28a8:16)
 	.byte 0xf1, 0x5d, 0x90, 0xba, 0x68, 0x14, 0xf1, 0xc5
@@ -6416,7 +6416,7 @@ Mod_ExpressionStore:
 	ret
 MidiStream_ProcessTempoRingBuf:
 	push XIZ
-	cpdi16 (0x9129), 0x0000
+	cpw (0x9129:16), 0x0000
 	jrl z, TempoRing_Return
 	ei 0x06
 	setda 0, (0x0459)
@@ -6560,7 +6560,7 @@ MIDI_TransmitTempoCC:
 	ld (0x9121:16), bc
 	ld (0x9123:16), de
 	calr MIDI_SelectTempoExpressionSource
-	cpdi16 (0x9129), 0x0000
+	cpw (0x9129:16), 0x0000
 	jr z, TempoCC_Return
 	ei 0x06
 	setda 0, (0x0459)

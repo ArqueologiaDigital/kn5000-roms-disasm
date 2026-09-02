@@ -139,7 +139,7 @@ EffectMode_TimerCountdown:
 	ld	(36018:16), a
 	cps	a, 0
 	ret	nz
-	cpdi16	36026, 0
+	cpw	(36026:16), 0
 	jr	z, 11
 	push	xde
 	push	xhl

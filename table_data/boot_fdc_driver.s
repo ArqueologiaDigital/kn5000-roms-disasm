@@ -373,13 +373,13 @@ FDC_Validate_DriveTrackSector__check_track:
 	ldw wa, 0xfe	; ld WA,0x00fe
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__track_ok:
-	cpdi16 (0x0c6e), 2	; cp (0x0c6e),0x0002
+	cpw (0x0c6e:16), 2	; cp (0x0c6e),0x0002
 	jr nz, FDC_Validate_DriveTrackSector__check_count	; jr NZ,0xffdb21
 	calr FDC_ValidateHead	; calr 0xffdcbd
 	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_DriveTrackSector__check_count:
-	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
+	cpw (0x0c78:16), 0	; cp (0x0c78),0x0000
 	jr nz, FDC_Validate_DriveTrackSector__check_sector	; jr NZ,0xffdb2f
 	ldw wa, 0xfe	; ld WA,0x00fe
 	jrl FDC_Error	; jrl T,0xffe231
@@ -547,9 +547,9 @@ FDC_ValidateStub:
 ; Twin: maincpu FDC_Validate_Drive_Head (fdc_routines.s:556)
 ; -----------------------------------------------------------------------------
 FDC_ValidateDrive:
-	cpdi16 (0x0c72), 0	; cp (0x0c72),0x0000
+	cpw (0x0c72:16), 0	; cp (0x0c72),0x0000
 	ret z	; ret Z
-	cpdi16 (0x0c72), 1	; cp (0x0c72),0x0001
+	cpw (0x0c72:16), 1	; cp (0x0c72),0x0001
 	ret z	; ret Z
 	ldw wa, 0xfe	; ld WA,0x00fe
 	calr FDC_Error	; calr 0xffe231
@@ -1283,34 +1283,34 @@ FDC_SendParams_ReadWrite__send_dtl:
 ; issued by FDC_ProbeDiskFormat gets a single retry and forces a re-seek.
 ; -----------------------------------------------------------------------------
 FDC_IsMediaProbeRead:
-	cpdi16 (0x0c74), 0	; cp (0x0c74),0x0000
+	cpw (0x0c74:16), 0	; cp (0x0c74),0x0000
 	jr z, FDC_IsMediaProbeRead__check_head	; jr Z,0xffe1d3
 	lds hl, 0	; ld HL,0
 	ret	; ret
 FDC_IsMediaProbeRead__check_head:
-	cpdi16 (0x0c72), 0	; cp (0x0c72),0x0000
+	cpw (0x0c72:16), 0	; cp (0x0c72),0x0000
 	jr z, FDC_IsMediaProbeRead__check_command	; jr Z,0xffe1de
 	lds hl, 0	; ld HL,0
 	ret	; ret
 FDC_IsMediaProbeRead__check_command:
-	cpdi16 (0x0c6e), 3	; cp (0x0c6e),0x0003
+	cpw (0x0c6e:16), 3	; cp (0x0c6e),0x0003
 	jr z, FDC_IsMediaProbeRead__check_count	; jr Z,0xffe1e9
 	lds hl, 0	; ld HL,0
 	ret	; ret
 FDC_IsMediaProbeRead__check_count:
-	cpdi16 (0x0c78), 1	; cp (0x0c78),0x0001
+	cpw (0x0c78:16), 1	; cp (0x0c78),0x0001
 	jr z, FDC_IsMediaProbeRead__check_probe_flag	; jr Z,0xffe1f4
 	lds hl, 0	; ld HL,0
 	ret	; ret
 FDC_IsMediaProbeRead__check_probe_flag:
-	cpdi16 (0x0c3e), 0xffff	; cp (0x0c3e),0xffff
+	cpw (0x0c3e:16), 0xffff	; cp (0x0c3e),0xffff
 	jr z, FDC_IsMediaProbeRead__check_sector	; jr Z,0xffe1ff
 	lds hl, 0	; ld HL,0
 	ret	; ret
 FDC_IsMediaProbeRead__check_sector:
-	cpdi16 (0x0c76), 2	; cp (0x0c76),0x0002
+	cpw (0x0c76:16), 2	; cp (0x0c76),0x0002
 	jr z, FDC_IsMediaProbeRead__is_probe	; jr Z,0xffe20f
-	cpdi16 (0x0c76), 0xff	; cp (0x0c76),0x00ff
+	cpw (0x0c76:16), 0xff	; cp (0x0c76),0x00ff
 	jr nz, FDC_IsMediaProbeRead__not_probe	; jr NZ,0xffe213
 FDC_IsMediaProbeRead__is_probe:
 	ldw hl, 0xffff	; ld HL,0xffff
@@ -1324,12 +1324,12 @@ FDC_IsMediaProbeRead__not_probe:
 ; Returns HL = 0xFFFF when count = 0xFFFF (sentinel) and cmd = 0.
 ; -----------------------------------------------------------------------------
 FDC_IsMediaProbeInit:
-	cpdi16 (0x0c78), 0xffff	; cp (0x0c78),0xffff
+	cpw (0x0c78:16), 0xffff	; cp (0x0c78),0xffff
 	jr z, FDC_IsMediaProbeInit__check_command	; jr Z,0xffe221
 	lds hl, 0	; ld HL,0
 	ret	; ret
 FDC_IsMediaProbeInit__check_command:
-	cpdi16 (0x0c6e), 0	; cp (0x0c6e),0x0000
+	cpw (0x0c6e:16), 0	; cp (0x0c6e),0x0000
 	jr z, FDC_IsMediaProbeInit__is_probe	; jr Z,0xffe22c
 	lds hl, 0	; ld HL,0
 	ret	; ret
@@ -1620,7 +1620,7 @@ FDC_CmdReadSectors__advance:
 	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
 	sub wa, iz	; sub WA,IZ
 	ld (0x0c78:16), wa	; ld (0x0c78),WA
-	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
+	cpw (0x0c78:16), 0	; cp (0x0c78),0x0000
 	jr z, FDC_CmdReadSectors__check_remaining	; jr Z,0xffe49f
 	lda xbc, (0x0c7a:16)	; lda XBC,0x0c7a
 	ld wa, (0x0c4a:16)	; ld WA,(0x0c4a)
@@ -1640,7 +1640,7 @@ FDC_CmdReadSectors__advance:
 	ld a, (xwa)	; ld A,(XWA)
 	ld (0x0c64:16), a	; ld (0x0c64),A
 FDC_CmdReadSectors__check_remaining:
-	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
+	cpw (0x0c78:16), 0	; cp (0x0c78),0x0000
 	jrl nz, FDC_CmdReadSectors__retry	; jrl NZ,0xffe380
 FDC_CmdReadSectors__done:
 	popw iz	; pop IZ
@@ -1731,7 +1731,7 @@ FDC_CmdWriteSectors__advance:
 	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
 	sub wa, iz	; sub WA,IZ
 	ld (0x0c78:16), wa	; ld (0x0c78),WA
-	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
+	cpw (0x0c78:16), 0	; cp (0x0c78),0x0000
 	jr z, FDC_CmdWriteSectors__check_remaining	; jr Z,0xffe5d8
 	lda xbc, (0x0c7a:16)	; lda XBC,0x0c7a
 	ld wa, (0x0c4a:16)	; ld WA,(0x0c4a)
@@ -1751,7 +1751,7 @@ FDC_CmdWriteSectors__advance:
 	ld a, (xwa)	; ld A,(XWA)
 	ld (0x0c64:16), a	; ld (0x0c64),A
 FDC_CmdWriteSectors__check_remaining:
-	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
+	cpw (0x0c78:16), 0	; cp (0x0c78),0x0000
 	jrl nz, FDC_CmdWriteSectors__retry	; jrl NZ,0xffe4b3
 FDC_CmdWriteSectors__done:
 	popw iz	; pop IZ
@@ -1939,7 +1939,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
-	cpdi16 (0x0c74), 0	; cp (0x0c74),0x0000
+	cpw (0x0c74:16), 0	; cp (0x0c74),0x0000
 	jr nz, FDC_BuildFormatFieldBuffer__offset_numbering	; jr NZ,0xffe7c8
 	incdi8 1, (0x0c5b)	; inc 1,(0x0c5b)
 	ld a, e	; ld A,E
@@ -2285,7 +2285,7 @@ FDC_Request__return:
 ; Twin: maincpu FDC_ByteTransfer_PIO (fdc_routines.s:2345)
 ; -----------------------------------------------------------------------------
 FDC_PIO_ReadTransfer:
-	cpdi16 (0x0c4a), 0	; cp (0x0c4a),0x0000
+	cpw (0x0c4a:16), 0	; cp (0x0c4a),0x0000
 	ret z	; ret Z
 	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e) - cmd 4 = write, cmd 3 = read; anything else has no PIO path
 	cps wa, 4	; cp WA,4

@@ -15,7 +15,7 @@ FmmSmfLoadTitleFunc:
 	lds32	xde, 5
 	call	16423243
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xee, 0x7f
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 13
 	call	16290067
 	extz	hl
@@ -29,7 +29,7 @@ SmfLoad_DispatchState:
 	jrl	z, 166
 	cps	wa, 5
 	jr	z, 94
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jr	ge, 19
 	call	16291947
 	ld	(33896:16), hl
@@ -37,9 +37,9 @@ SmfLoad_DispatchState:
 	call	16290094
 	calr	-10611
 SmfLoad_CheckFileCount:
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jrl	nz, 223
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 11
 	call	16290928
 	ld	(33894:16), hl
@@ -162,7 +162,7 @@ FmmSmfSaveTitleFunc:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jr	ge, 19
 	call	16291947
 	ld	(33896:16), hl
@@ -705,7 +705,7 @@ SmfFN_Save_Finish:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, SmfFN_Save_NoAltSlot
 	ldw wa, 0xa
 	jr SmfFN_Save_CallResult

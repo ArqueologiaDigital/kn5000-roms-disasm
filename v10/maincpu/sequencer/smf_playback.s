@@ -469,7 +469,7 @@ SMF_ReadMThd_Matched:
 	jrl nz, SeqPlay_SetState48AndFloppyReady
 	call FloppyIO_ReadNextByte
 	ld (3936:16), a
-	cpdi16 3936, 0
+	cpw (3936:16), 0
 	jrl nz, FloppyIO_WaitReadComplete
 	ldw (6699:16), 48
 	jrl SeqPlay_FloppyReady
@@ -488,11 +488,11 @@ FloppyIO_WaitReadComplete:
 SMF_AfterFloppyWait:
 	ld a, (4600:16)
 	call SeqTrack_ClearPartParamBuffers
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, FloppyIO_ReadAndValidateHeader
-	cpdi16 3932, 1
+	cpw (3932:16), 1
 	jrl nz, SeqPlay_SetState48AndFloppyReady
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, FloppyIO_ReadAndValidateHeader
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
@@ -501,7 +501,7 @@ SMF_AfterFloppyWait:
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	cp (3830:16), 0
 	jrl z, SeqPlay_FinishFloppyLoadAndStart
-	cpdi16 6699, 49
+	cpw (6699:16), 49
 	jrl SeqPlay_ResetAndStop
 
 FloppyIO_ReadAndValidateHeader:

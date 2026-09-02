@@ -31,7 +31,7 @@ FmmSmfLoadTitleFunc:
 	lds32 xde, 5
 	call ApPostEvent
 	ldmm8 0x808a, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, SmfLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
@@ -46,7 +46,7 @@ SmfLoad_DispatchState:
 	jrl z, SmfLoad_ErrorCancel
 	cps wa, 5
 	jr z, SmfLoad_AbortPartial
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, SmfLoad_CheckFileCount
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
@@ -55,16 +55,16 @@ SmfLoad_DispatchState:
 	calr SignalProgressUpdate
 
 SmfLoad_CheckFileCount:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jrl nz, SmfLoad_SendWait
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, SmfLoad_CheckSlotCount
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 
 SmfLoad_CheckSlotCount:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jrl le, SmfLoad_SendWait
 	cp (0x808a:16), 97
 	jrl z, SmfLoad_SendWait
@@ -174,7 +174,7 @@ FmmSmfSaveTitleFunc:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, SmfSave_SendWait
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
@@ -777,7 +777,7 @@ SmfFN_Save_Finish:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, SmfFN_Save_NoAltSlot
 	ldw wa, 0xa
 	jr SmfFN_Save_CallResult
@@ -1139,7 +1139,7 @@ SmfFN_SeqSongName_Dispatch:
 SmfFN_HandleMedleyConfirm:
 	cp xiz, 0x28
 	jr nz, SmfFN_UpdateDisplay
-	cpdi16 0x81ae, 0
+	cpw (0x81ae:16), 0
 	jr z, SmfFN_UpdateDisplay
 	ld xwa, (0x81a4:16)
 	or xwa, xwa

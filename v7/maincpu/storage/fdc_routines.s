@@ -358,7 +358,7 @@ FDC_CheckHead:
 FDC_Command5_Epilogue:
 	ret
 FDC_Validate_Drive_Head:
-	cpdi16	35240, 0
+	cpw	(35240:16), 0
 
 	ret z
 

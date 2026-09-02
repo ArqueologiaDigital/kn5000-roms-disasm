@@ -188,7 +188,7 @@ SeqStep_EventProcess:
 	cp a, 0xa
 	jrl nz, SeqStep_EventExit
 	ld (0x287a:16), 0
-	cpdi16 9778, 1
+	cpw (9778:16), 1
 	jr nz, SeqStep_EventPosManage
 	cps iz, 0
 	jr nz, SeqStep_EventPosManage
@@ -672,7 +672,7 @@ SeqStep_TrackChangeNext:
 	jr ule, SeqStep_TrackChangeAdvance
 
 SeqStep_TrackChangeNonDrum:
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr nz, SeqStep_TrackChangeLoopDone
 
 SeqStep_TrackChangeLoop:
@@ -700,7 +700,7 @@ SeqStep_TrackChangeLoopBody:
 	extz bc
 	lds de, 0
 	call Part_WriteSubBlock32
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr z, SeqStep_TrackChangeLoop
 
 SeqStep_TrackChangeLoopDone:
@@ -770,7 +770,7 @@ SeqStep_TrackChangeFinish:
 	jrl SeqStep_TrackChangeWriteDone
 
 SeqStep_TrackChangeComplete:
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr nz, SeqStep_TrackChangeFinal
 
 SeqStep_TrackChangeValidate:
@@ -970,7 +970,7 @@ SeqStep_MultiTrackProcess:
 	ld (0x2877:16), 0
 
 SeqStep_MultiTrackLoop:
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jrl z, SeqStep_MultiTrackCleanup
 	ld c, (9992:16)
 	ld a, c
@@ -1030,7 +1030,7 @@ SeqStep_MultiTrackInner:
 	jrl SeqStep_PartCopyFinish
 
 SeqStep_MultiTrackCopyCheck:
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr nz, SeqStep_PartCopy
 
 SeqStep_MultiTrackCleanup:
@@ -1646,7 +1646,7 @@ SeqStep_InsertEventInner:
 	jr SeqStep_InsertError
 
 SeqStep_InsertValidate:
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr z, SeqStep_InsertDone
 	ldw wa, 0x81
 	call PartCtrl_WriteByte_Indexed
@@ -1806,7 +1806,7 @@ SeqStep_DeleteShiftCleanup:
 
 SeqStep_DeleteShiftExit:
 	pushw iz
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr nz, SeqStep_DeleteShiftFinal
 	ldw hl, 0xffff
 	jr SeqStep_BoundaryCheckB
@@ -2568,11 +2568,11 @@ SeqStep_PlaybackDecrCount:
 	res 4, a
 	ld (1057:16), a
 	ei 0
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqStep_PlaybackCheck10408
 	bit_erpb 0xfb, 0x04
 	jr z, SeqStep_PlaybackCheckFill
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, SeqStep_PlaybackCallFill
 
 SeqStep_PlaybackCheckFill:
@@ -2592,7 +2592,7 @@ SeqStep_PlaybackCheckBeat:
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackCheckPattern:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr z, SeqStep_PlaybackNoAction
 	call SeqNote_ProcessNoteOn
 	jr SeqStep_PlaybackResultDispatch
@@ -2604,7 +2604,7 @@ SeqStep_PlaybackNoAction:
 SeqStep_PlaybackCheck10408:
 	bit_erpb 0xfb, 0x04
 	jr z, SeqStep_PlaybackCheckFill2
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr nz, SeqStep_PlaybackCallExtFill
 
 SeqStep_PlaybackCheckFill2:
@@ -2634,9 +2634,9 @@ SeqStep_PlaybackCheckBeat2:
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackCheckTiming:
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr nz, SeqStep_PlaybackCallPattern
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr z, SeqStep_PlaybackNoAction
 	bit 0, (0x28c5:16)
 	jr z, SeqStep_PlaybackNoAction

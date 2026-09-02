@@ -96,7 +96,7 @@ FmmUtilityTitleFunc:
 	lds32	xde, 0
 	call	16423418
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xc0, 0x7e
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 13
 	call	16290067
 	extz	hl
@@ -110,7 +110,7 @@ FmmUtility_DispatchState:
 	jrl	z, 165
 	cps	wa, 5
 	jr	z, 93
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 19
 	call	16290928
 	ld	(33894:16), hl
@@ -118,15 +118,15 @@ FmmUtility_DispatchState:
 	call	16290094
 	calr	-1698
 FmmUtility_ScanFormat:
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jrl	nz, 225
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jr	ge, 11
 	call	16291947
 	ld	(33896:16), hl
 	calr	-1726
 FmmUtility_CheckCapacity:
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jrl	le, 197
 	cp	(32448:16), 124
 	jrl	z, 189
@@ -221,7 +221,7 @@ FmmSmfUtilityTitleFunc:
 	lds32	xde, 0
 	call	16423418
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xc2, 0x7e
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 13
 	call	16290067
 	extz	hl
@@ -235,7 +235,7 @@ FmmSmfUtility_DispatchState:
 	jrl	z, 165
 	cps	wa, 5
 	jr	z, 93
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jr	ge, 19
 	call	16291947
 	ld	(33896:16), hl
@@ -243,15 +243,15 @@ FmmSmfUtility_DispatchState:
 	call	16290094
 	calr	-2097
 FmmSmfUtility_ScanFormat:
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jrl	nz, 225
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 11
 	call	16290928
 	ld	(33894:16), hl
 	calr	-2125
 FmmSmfUtility_CheckCapacity:
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jrl	le, 197
 	cp	(32450:16), 123
 	jrl	z, 189

@@ -107,7 +107,7 @@ SMF_EndMarker_BufferEmpty:
 	jp SMF_FlushAndFinalize
 
 SMF_EndMarker_CheckPlayback:
-	cpdi16 4347, 0
+	cpw (4347:16), 0
 	jr nz, SMF_FinalizeAndStartPlayback
 	call SMF_FlushToFile
 	push xwa
@@ -540,7 +540,7 @@ SMF_WriteByte:
 	jr SMF_WriteByte_Done
 
 SMF_WriteByte_SectorCheck:
-	cpdi16 4347, 0
+	cpw (4347:16), 0
 	jr nz, SMF_WriteByte_NewSector
 	ld c, a
 	pushw bc
@@ -863,7 +863,7 @@ SMF_FlushToFile:
 	ret
 
 SMF_CheckAndFlush:
-	cpdi16 4347, 0
+	cpw (4347:16), 0
 	jr z, SMF_CheckFlush_Return
 	push xwa
 	push xbc
@@ -1243,9 +1243,9 @@ SMF_EncodeTimeDelta:
 	ldw (4208:16), 0
 	cp (4231:16), 0
 	jr nz, SMF_Encode_LargeValue
-	cpdi16 4229, 127
+	cpw (4229:16), 127
 	jrl ule, SMF_Encode_OneByte
-	cpdi16 4229, 0x3fff
+	cpw (4229:16), 0x3fff
 	jr ule, SMF_Encode_TwoBytes
 
 SMF_Encode_LargeValue:
@@ -1998,7 +1998,7 @@ SMF_Config_Format1:
 	push xix
 	push xiy
 	ld xiy, 0x112c
-	cpdi16 4402, 4
+	cpw (4402:16), 4
 	jr nz, SMF_Config_Format1_Done
 	calr SMF_SlotParam_PortamentoSwitch
 
@@ -2011,7 +2011,7 @@ SMF_Config_Format2:
 	push xix
 	push xiy
 	ld xiy, 0x112c
-	cpdi16 4402, 5
+	cpw (4402:16), 5
 	jr nz, SMF_Config_Format2_Done
 
 SMF_Config_Format2_Done:
@@ -2023,7 +2023,7 @@ SMF_Config_Format3:
 	push xix
 	push xiy
 	ld xiy, 0x112c
-	cpdi16 4402, 5
+	cpw (4402:16), 5
 	jr nz, SMF_Config_Format3_Done
 	calr SMF_SlotChain_Fmt3Voice
 
@@ -2036,13 +2036,13 @@ SMF_Config_ProcessSlotData:
 	push xix
 	push xiy
 	ld xiy, 0x112c
-	cpdi16 4402, 4
+	cpw (4402:16), 4
 	jr z, SMF_Config_Count4
-	cpdi16 4402, 5
+	cpw (4402:16), 5
 	jr z, SMF_Config_Count5
-	cpdi16 4402, 2
+	cpw (4402:16), 2
 	jr z, SMF_Config_Count2
-	cpdi16 4402, 3
+	cpw (4402:16), 3
 	jr z, SMF_Config_Count3
 	jr SMF_Config_PopAndContinue
 
@@ -2091,7 +2091,7 @@ SMF_Config_Format4or5:
 	push xix
 	push xiy
 	ld xiy, 0x112c
-	cpdi16 4402, 5
+	cpw (4402:16), 5
 	jr z, SMF_Config_Format5_Handler
 	jr SMF_Config_PopAndContinue
 
@@ -2248,7 +2248,7 @@ SMF_ConfigSlot_CodeBlock:
 	ld	(4415:16), wa
 	ld	(4417:16), iy
 	incdi16	1, (4417)
-	cpdi16	4417, 255
+	cpw	(4417:16), 255
 	jr	ule, 47
 	ld	xhl, (10369:16)
 	ld	wa, (xhl+3)

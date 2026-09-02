@@ -1664,7 +1664,7 @@ AudioInit_QueueCommand:
 	ld (xsp), e
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	cpdi16 0xc4ca, 49
+	cpw (0xc4ca:16), 49
 	jr c, AudioInit_QueueCommand_Write
 	call VoiceEvent_HandlerTable
 	ldw (0xc4ca:16), 0

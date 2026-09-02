@@ -527,7 +527,7 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	.byte 0xf1, 0xe2, 0xbf, 0xc8
 	ret	z
-	cpdi16	10420, 0
+	cpw	(10420:16), 0
 	jr	nz, 6
 	.byte 0xf1, 0xe7, 0x31, 0xc8
 	jr	z, 52
@@ -552,7 +552,7 @@ Demo_SelectEntry_ByteTable:
 	ld	(4440:16), 18
 	jrl	227
 Demo_SelectEntry_ProcessSongList:
-	cpdi16 (0x28b4), 0x0000
+	cpw (0x28b4:16), 0x0000
 	jr z, Demo_SelectEntry_ToCountdown
 	bit 3, (0x28ad:16)
 	jr z, Demo_SelectEntry_ManualSelect
@@ -8138,7 +8138,7 @@ SeqPhase_OperationStateCheck:
 	jrl nz, SeqPhase_PopIzRet
 	lds wa, 0
 	calr InitializeOperationState
-	cpdi16 (0x8464), 0x0000
+	cpw (0x8464:16), 0x0000
 	jr ge, SeqPhase_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
@@ -8153,13 +8153,13 @@ SeqPhase_CheckMediaType:
 	calr	65259
 	jrl	129
 SeqPhase_MediaIsValid:
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 11
 	call	16290928
 	ld	(33894:16), hl
 	calr	-103
 SeqPhase_CheckEncodedData:
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	z, 102
 	ld	a, (1068:16)
 	res	7, a
@@ -8229,7 +8229,7 @@ FileIO_DiskEventDispatch:
 	dec 4,XSP
 	ld (XSP),C
 	ld (XSP+0x02),A
-	cpdi16 (0x8464), 0x0000
+	cpw (0x8464:16), 0x0000
 	jr ge, DiskEvt_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
@@ -8281,7 +8281,7 @@ DiskEvt_Return:
 	ret
 
 FileIO_DetectFileTypeAndPost:
-	cpdi16 (0x8464), 0x0000
+	cpw (0x8464:16), 0x0000
 	jr ge, DetectType_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
@@ -8330,7 +8330,7 @@ DetectType_IsCardReset:
 FileIO_GetDiskCapacity:
 	dec 2,XSP
 	ld (XSP),A
-	cpdi16 (0x8464), 0x0000
+	cpw (0x8464:16), 0x0000
 	jr ge, DiskCap_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
@@ -8508,7 +8508,7 @@ FileIO_ErrorCodeByteBlock:
 	call	16278518
 	cps	hl, 0
 	ret	z
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 10
 	call	16290067
 	extz	hl

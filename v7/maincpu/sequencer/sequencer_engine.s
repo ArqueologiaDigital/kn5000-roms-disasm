@@ -191,7 +191,7 @@ SeqAcc_CheckRepeatEdgeCases:
 	extz xwa
 	bit 15, wa
 	jr z, SeqAcc_UpdatePlaybackFlags
-	cpdi16 0xf238, 1
+	cpw (0xf238:16), 1
 	jr nz, SeqAcc_UpdatePlaybackFlags
 	ldmm16 0x28c6, 0x28a8
 
@@ -218,7 +218,7 @@ SeqPlay_CheckAndActivateParts:
 	jr nz, SeqPlay_CheckAndActivateParts_RetFFFF
 	bit 2, (1057:16)
 	jr z, SeqPlay_CheckAndActivateParts_RetFFFF
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqPlay_CheckAndActivateParts_Bit6
 
 SeqPlay_CheckAndActivateParts_RetFFFF:
@@ -240,7 +240,7 @@ SeqPlay_CheckAndActivateParts_Bit6:
 
 SeqPlay_CheckAndActivateParts_Deactivate:
 	calr SeqPlay_DeactivateAndSendOff
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, SeqPlay_CheckAndActivateParts_SetHL0
 	ld (8956:16), 0
 
@@ -778,7 +778,7 @@ SeqPlay_SendStopAndClearParts:
 SeqPlay_FinalCleanupAndReset:
 	calr SeqPlay_CopyVoicePositionsToParts
 	call SeqBuf_Init
-	cpdi16 (0xf19e), 0x0000
+	cpw (0xf19e:16), 0x0000
 	jr z, SeqPlay_FinalCleanup_ClearFlags
 	ld (0x11f4:16), 0x00
 	lds wa, 0
@@ -1198,9 +1198,9 @@ SeqAcc_InitPlaybackState:
 	resda 0, 1115
 	call SeqPlay_CheckRepeatActive
 	ld (7570:16), l
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, SeqAcc_InitPlayback_HasActiveVoices
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jrl nz, SeqAcc_ClearStepCounter
 	ld a, (0x28a7:16)
 	res 0, a
@@ -1245,9 +1245,9 @@ SeqAcc_InitPlayback_RestartPath:
 
 SeqAcc_InitPlayback_CheckDrum:
 	resda 4, 0x28ac
-	cpdi16 8982, 0
+	cpw (8982:16), 0
 	jr nz, SeqAcc_InitPlayback_DrumActive
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqAcc_ClearStepCounter
 
 SeqAcc_InitPlayback_SetState0:
@@ -1259,7 +1259,7 @@ SeqAcc_ClearStepCounter:
 
 SeqAcc_InitPlayback_DrumActive:
 	calr SeqPlay_CheckDrumPartAndClearCounters
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqPlay_StateSetExit
 	cp (7570:16), 0
 	jr nz, SeqAcc_InitPlayback_SetState4
@@ -1984,7 +1984,7 @@ SeqPlay_InitFreshPlayback:
 
 	resda 3, 0x28a7
 
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 
 	jrl z, 224
 
@@ -2043,7 +2043,7 @@ SeqPlay_InitFresh_SetPosition:
 	ld	a, (1075:16)
 	ld	(9010:16), a
 	call	16016734
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	z, 10
 	.byte 0xf1, 0xb3, 0x28, 0xbb
 	call	16635550
@@ -2067,7 +2067,7 @@ SeqPlay_InitFresh_StateB:
 
 SeqPlay_InitFresh_State8orC:
 	ldb a, 0x8
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, SeqPlay_StoreChannelVal
 	ldb a, 0xc
 
@@ -2086,7 +2086,7 @@ SeqPlay_InitResumePlayback:
 	res 1, a
 	res 7, a
 	ld (0x28b2:16), a
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jrl z, SeqPlay_InitResume_Return
 	ldmm16 8998, 1052
 	ldw (8954:16), 0xffff
@@ -2231,7 +2231,7 @@ SeqPlay_ReassignVoicesAlt:
 	jrl SeqPlay_ReturnFalse_Return
 
 SeqPlay_SaveState_NoActive:
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jrl z, SeqPlay_ReturnFalse
 
 SeqPlay_SaveState_SetPlayFlags:
@@ -2245,7 +2245,7 @@ SeqPlay_SaveState_SetPlayFlags:
 SeqPlay_SaveState_CheckVoices:
 	res 1, c
 	ld (8970:16), c
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, SeqPlay_SaveState_CheckChordVoice
 	bit 1, (0x28a7:16)
 	jrl z, SeqPlay_ReturnFalse
@@ -2349,7 +2349,7 @@ SeqPlay_Prepare_CheckRepeat:
 SeqPlay_Prepare_LoadVoiceConfig:
 	calr SeqNote_LoadVoicePositions
 	ldmm16 7588, 1052
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, KeyScan_DisableComplete_Return
 	cp (7570:16), 0
 	jr nz, SeqPlay_Prepare_SetState6
@@ -2447,7 +2447,7 @@ SeqPlay_ProcessVoice_AccMode:
 	jrl SeqPlay_ProcessVoice_Return
 
 SeqPlay_ProcessVoice_CheckActive:
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr nz, SeqPlay_ProcessVoice_ReadTempo
 	ld a, (0x28be:16)
 	cp a, 0xff
@@ -2558,7 +2558,7 @@ SeqPlay_ProcessNoteAndTempo:
 	calr SeqNote_ProcessNoteOn
 	cps l, 0
 	jr nz, SeqPlay_ReadTempo_Return
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, SeqPlay_ReadTempoEvents_ReturnZero
 	ld a, (0x28c5:16)
 	bit 0, a
@@ -3161,7 +3161,7 @@ SeqNote_ProcessNoteOn:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 6), 0x0
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, SeqNote_NoteOn_HasParts
 	ldb l, 0x0
 	jrl SeqNote_ProcessNoteOn_Return
@@ -3211,7 +3211,7 @@ SeqNote_NoteOn_Reconfigure:
 	ld (0x2866:16), 0
 
 SeqNote_FindExtraChannel:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, SeqNote_AllocateMainChannel
 
 SeqNote_FindExtra_CheckPosition:
@@ -3233,7 +3233,7 @@ SeqNote_FindExtra_ProcessChannel:
 	jrl nz, SeqNote_LoadNoteParam_Return
 	ldw wa, 0x11
 	call SeqCh_LoadChannelConfig
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqNote_FindExtra_CheckPosition
 
 SeqNote_AllocateMainChannel:
@@ -3412,7 +3412,7 @@ SeqNote_ProcessCurrent_DrumCheck:
 	jr nz, SeqNote_ProcessCurrent_ComparePos
 
 SeqNote_UpdateScoreDisplay:
-	cpdi16 7578, 0xffff
+	cpw (7578:16), 0xffff
 	jr nz, SeqNote_ScoreDisplay_HasTarget
 	jr VoiceConfig_SlotCheck
 
@@ -3623,7 +3623,7 @@ SeqNote_ShiftAndIncrement:
 SeqNote_DispatchActive_CheckSpecial:
 	cp (8988:16), 255
 	jr z, SeqNote_ProcessSpecialChannels
-	cpdi16 7574, 0xffff
+	cpw (7574:16), 0xffff
 	jr nz, SeqNote_SpecialChan_LoadAddr
 	jr SeqNote_ProcessSpecialChannels
 
@@ -3665,7 +3665,7 @@ SeqNote_ProcessRepeatNote:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 8), 0x0
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, SeqRepeat_LoadTickAndPos
 	ldb l, 0x0
 	jrl SeqRepeat_Return
@@ -3958,7 +3958,7 @@ SeqNoteCh_CopyEventLoop:
 	jr c, SeqNoteCh_CopyEventLoop
 	cp (xsp + 20), 0x11
 	jr nz, SeqNoteCh_StoreChannel
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, SeqNoteCh_StoreChannel
 	ldmi16 (xsp + 20), 0x231a
 	ld (xsp + 8), 0x11
@@ -4164,7 +4164,7 @@ SeqNoteCh_EndMark_ShiftDone:
 	anddm16 8982, xde
 	ld wa, bc
 	calr SeqCh_ClearActivePartBit
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqNoteCh_EndMark_SetStatus5
 	cp (7570:16), 0
 	jr nz, SeqNoteCh_EndMark_SetStatus5
@@ -5563,7 +5563,7 @@ SeqVoiceBuf_CopyToVoiceBlock:
 	ld (xde + 8), c
 	ld bc, (xsp + 8)
 	ld (xde + 4), bc
-	cpdi16 8954, 0xffff
+	cpw (8954:16), 0xffff
 	jr nz, SeqVoiceBuf_CheckMinPosition
 	mrdw5 0x9f, 0x08, 0x19, 0xfa, 0x22
 
@@ -6782,7 +6782,7 @@ NotePool_DataBlock_8BA:
 
 	ret	z
 
-	cpdi16	0xf19e, 0
+	cpw	(0xf19e:16), 0
 
 	ret	z
 
@@ -6790,7 +6790,7 @@ NotePool_DataBlock_8BA:
 
 	ret	nz
 
-	cpdi16	0x28a8, 0
+	cpw	(0x28a8:16), 0
 
 	ret	nz
 
@@ -6808,7 +6808,7 @@ SeqPlay_CheckStartConditions:
 	ret nz
 	set 7, a
 	ld (8958:16), a
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, SeqPlay_CheckStart_TestSysFlag
 	ld a, (8958:16)
 	res 7, a
@@ -6832,7 +6832,7 @@ SeqPlay_CheckStart_TestBit5:
 
 SeqStart_CheckActiveParts:
 	ld a, (8958:16)
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, SeqStart_CheckPlaybackBit
 	res 7, a
 	ld (8958:16), a
@@ -6955,7 +6955,7 @@ Seq_ResetRestart_CheckSubsystem:
 SeqPlay_StopAndResetAll:
 	bit 0, (0x28c5:16)
 	jr z, SeqPlay_StopReset_NotPlaying
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	ret nz
 	ld (8956:16), 0
 	ret
@@ -7069,7 +7069,7 @@ Part_ReadVoice_RestorePos:
 SeqPlay_ReconfigureVoices:
 	lda xsp, (xsp - 24)
 	push xiz
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	scc8 nz, a
 	ld (xsp + 18), a
 	ldw wa, 0x32
@@ -7825,7 +7825,7 @@ SeqPlay_ReallocateAndReconfig:
 	call VoiceAlloc_ProcessAll
 	call BitMapOut_PrepareAndDisplay
 	call 0xfdd69e
-	cpdi16 (0x28a8), 0x0000
+	cpw (0x28a8:16), 0x0000
 	jrl z, SeqPlay_PendingCh_Return
 	calr SeqChanAssignExt_InitLoop
 	call PartCtrl_DeallocAndWriteEnd
@@ -8382,7 +8382,7 @@ SeqActivate_PartLoopNext:
 SeqPlay_CheckDrumAndStart:
 	cp (7570:16), 1
 	jr nz, SeqPlayCheck_ReturnFFFF
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, SeqPlayCheck_ReturnFFFF
 	ld a, (8986:16)
 	bit 2, (1057:16)
@@ -8448,7 +8448,7 @@ SeqPlay_ScanAndStoreChannelPos:
 	ld (xbc), wa
 	ld wa, (xde)
 	ld (xbc + 2), wa
-	cpdi16 7544, 0
+	cpw (7544:16), 0
 	jr ule, SeqPlay_StoreChannelPosition
 
 SeqScanPos_ReadNextEvent:
@@ -9312,7 +9312,7 @@ PartDeact_ClearShiftDone:
 	ld wa, (0x28b4:16)
 	and wa, bc
 	ld (0x28b4:16), wa
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, PartDeact_CheckSubsystem
 	ldw (0x28b4:16), 0
 	resda 7, 0x28ad
@@ -9329,7 +9329,7 @@ PartDeact_CheckSubsystem:
 Accomp_UpdateModeFlag:
 	cp (0x8c9a:16), 0x81
 	jr z, AccompMode_SetFlag
-	cpdi16 (0xf19e), 0x0000
+	cpw (0xf19e:16), 0x0000
 	jr z, AccompMode_ClearFlag
 AccompMode_SetFlag:
 	setda 0, 0x28a5
@@ -10108,7 +10108,7 @@ SeqPlay_InitStartState:
 	setda 4, 0x28b3
 	setda 2, 0x28a7
 	ld (9508:16), 1
-	cpdi16 9832, 1
+	cpw (9832:16), 1
 	jr z, SeqInitStart_CheckPlayMode
 	ld (7518:16), 250
 	setda 3, 0x28a7
@@ -10602,7 +10602,7 @@ SeqNotify_ClearStartFlag:
 	ret
 
 Seq_HandleModeTransition:
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, SeqModeTransit_ClearFlags
 	ld (8968:16), 0
 	resda 3, 0x28a7
@@ -10657,7 +10657,7 @@ SeqModeTransit_ClearPartState:
 	ld a, (0x28a7:16)
 	res 0, a
 	ld (0x28a7:16), a
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, SeqModeTransit_SetRepeatBit
 	set 0, a
 	ld (0x28a7:16), a
@@ -11191,7 +11191,7 @@ PartCtrl_IncrAndLoop:
 	jr PartCtrl_DeallocReturn
 
 PartCtrl_CheckUnlinkFlag:
-	cpdi16 0xf22f, 1
+	cpw (0xf22f:16), 1
 	jr nz, PartCtrl_DeallocVoices
 	calr Part_UnlinkVoiceFromChain
 	jr PartCtrl_DeallocReturn
@@ -12336,7 +12336,7 @@ SeqVoice_SeekToBar:
 	cp (0x287a:16), 0
 	jr nz, SeqVoice_PopIzRet2
 	calr SeqVoice_ValidateAndProcessState
-	cpdi16 0x287f, 1
+	cpw (0x287f:16), 1
 	jr z, SeqVoice_PopIzRet2
 
 SeqVoice_SeekBarLoop:
@@ -12524,7 +12524,7 @@ SeqData_ScanAllTracks:
 	lds32 xwa, 1
 	ld (9690:16), xwa
 	resda 1, 0x287b
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jr z, SeqData_PopIzRet
 
 SeqData_ScanTracks_OuterLoop:
@@ -13761,7 +13761,7 @@ SeqVoice_SeekAndScanTracks:
 	ldmm16 0x2889, 9830
 	ldmm16 0x288b, 0x28af
 	ldw (xsp + 4), 0x0
-	cpdi16 9948, 0
+	cpw (9948:16), 0
 	jrl z, SeqVoice_WriteErrorAndReturn
 
 SeqScan_OuterBarLoop:
@@ -13892,7 +13892,7 @@ SeqCount_ValidateChannel:
 	ldw (xsp + 2), 0x1
 	ldw (xsp + 4), 0x0
 	ldw (xsp), 0x0
-	cpdi16 3299, 0
+	cpw (3299:16), 0
 	jr z, SeqData_EOL_Cleanup
 
 SeqCount_EventLoop:
@@ -17001,7 +17001,7 @@ Rhythm_SetupAndDispatch:
 	cps l, 0
 	jr z, Rhythm_SetupFail
 	calr Rhythm_ClearHighBitFlag
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, Rhythm_SetupFail
 	bit 2, (1057:16)
 	jr z, Rhythm_SetupComputeState
@@ -18188,7 +18188,7 @@ SeqPlay_ClearFlags_Exit:
 	.byte 0xf1, 0x68, 0x26, 0x02, 0x01, 0x00, 0x68, 0x12
 SeqPlay_StateSetBarPosition:
 	ldmm16 9832, 9504
-	cpdi16 9832, 1
+	cpw (9832:16), 1
 	jr z, SeqPlay_ResetModeAndDisplay
 	setda 3, 0x28a7
 
@@ -18205,7 +18205,7 @@ SeqPlay_StateReturn:
 SeqPlay_HandleChannelSolo:
 	dec 2, xsp
 	ld (xsp), a
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, SeqPlay_SoloCheckAutoChord
 	bit 0, (0x28b1:16)
 	jr z, SeqPlay_SoloSetBar1
@@ -18222,7 +18222,7 @@ SeqPlay_SoloSetBarFromSave:
 
 SeqPlay_SoloResetMode:
 	call NoteEditSy_SendModeScrollReset
-	cpdi16 9832, 1
+	cpw (9832:16), 1
 	jr nz, SeqPlay_SoloSetBit3
 	resda 3, 0x28a7
 	jr SeqPlay_SoloInitState
@@ -18279,7 +18279,7 @@ Chan_DeactivateAfterAccomp:
 SeqVoice_ActivateWithBarSync:
 	dec 2, xsp
 	ld (xsp), a
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, SeqActivate_AssignAndEnable
 	bit 0, (0x28b1:16)
 	jr z, SeqActivate_SetBar1
@@ -18296,7 +18296,7 @@ SeqActivate_SetBarFromSave:
 
 SeqActivate_ResetMode:
 	call NoteEditSy_SendModeScrollReset
-	cpdi16 9832, 1
+	cpw (9832:16), 1
 	jr nz, SeqActivate_SetBit3
 	resda 3, 0x28a7
 	jr SeqActivate_DispatchAccomp
@@ -18368,7 +18368,7 @@ SeqPlay_FindCheckAlternate:
 	jr nz, SeqPlay_FindReturn
 
 SeqPlay_FindCheckBitMask:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, SeqPlay_FindClearFlags
 	resda 2, 0x28a7
 
@@ -18542,18 +18542,18 @@ SeqPlay_CheckAndStartPlayback:
 	call TempoRingBuf_CheckEmpty
 	cps hl, 0
 	ret z
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	ret nz
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	ret z
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	ret nz
 	bit 1, (0x28b2:16)
 	ret nz
 	call SeqPlay_ReassignVoiceChannels
 	cps l, 0
 	jrl nz, SeqPlay_StopAndClearChannels
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	ret z
 	setda 1, 0x28b3
 	ei 6
@@ -18641,7 +18641,7 @@ SeqPlay_SetupRhythmMode:
 	calr Rhythm_SetupAndDispatch
 	cps l, 0
 	ret nz
-	cpdi16 1052, 0
+	cpw (1052:16), 0
 	jr nz, SeqPlay_RhythmHasBar
 	cp (1051:16), 0
 	jr z, SeqPlay_RhythmNoBar
@@ -19156,7 +19156,7 @@ SeqTimer_BarChangeReturn:
 	push	xiz
 	call	15668425
 	pop	xiz
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	z, 11
 	ld	(4596:16), 0
 	lds	wa, 0
@@ -19199,7 +19199,7 @@ SeqTimer_FlagsReturn:
 
 ; SeqEvent dispatch case A
 SeqEvent_CaseA:
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, SeqEvent_CaseB
 	and (0x28a7:16), 247
 	call SeqAcc_InitPlaybackState
@@ -22977,7 +22977,7 @@ SeqReal_HandleActivation:
 	ld	wa, (9502:16)
 	call	15982555
 	ld	(9002:16), hl
-	cpdi16	9832, 1
+	cpw	(9832:16), 1
 	jr	nz, 6
 	.byte 0xf1, 0xa7, 0x28, 0xb3
 	jr	15
@@ -23518,7 +23518,7 @@ MainExe_Handle85:
 	ld a, (1057:16)
 	and a, 0x14
 	jrl z, MainExe_ReturnZero
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jrl z, MainExe_ReturnZero
 	setda 1, 9834
 	call SeqPlay_ProcessVoiceAndNotes
@@ -23578,7 +23578,7 @@ MainExe_Handle91:
 MainExe_SongMemoryLoop:
 	calr SoundCtrl_SendCmd_EE
 	jrl MainExe_ReturnZero
-	cpdi16 9704, 0
+	cpw (9704:16), 0
 	jr nz, MainExe_SongMemStart
 	ldw wa, 0x9a
 	jrl MainExe_CallModeSwitch
@@ -24427,7 +24427,7 @@ FileIO_WriteBlockCopyLoop:
 	ld (xix + 1), wa
 	inc 1, bc
 	ld (xix + 3), bc
-	cpdi16 0x29f4, 0
+	cpw (0x29f4:16), 0
 	jr nz, FileIO_WriteCheckDefault
 	ldw (xde + 1), 0x0
 
@@ -26518,7 +26518,7 @@ SeqEvt_SelectNearestTiming:
 	ld bc, (9636:16)
 	cp bc, 0xffff
 	jr nz, SeqEvt_CompareBothTracks
-	cpdi16 9640, 0xffff
+	cpw (9640:16), 0xffff
 	jr nz, SeqEvt_CompareBothTracks
 	ld a, (9666:16)
 	extz wa
@@ -27199,7 +27199,7 @@ SeqScan_StoreBarTickByte:
 	ldmm8 9618, 9680
 
 SeqScan_CheckBarNonZero:
-	cpdi16 9616, 0
+	cpw (9616:16), 0
 	jr nz, SeqScan_ProcessBarSlots
 	cp (9618:16), 0
 	ret z
@@ -28339,7 +28339,7 @@ SeqPart_FullLoad:
 	ldw (xsp + 4), 0x0
 	cps a, 0
 	jrl nz, SeqPart_FullLoadMode1
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jrl z, SeqPart_FullLoadExit
 
 SeqPart_FullLoadWalk:
@@ -28425,7 +28425,7 @@ SeqPart_FullLoadValidate:
 SeqPart_FullLoadMode1:
 	cps a, 1
 	jrl nz, SeqPart_FullLoadMode2
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jrl z, SeqPart_FullLoadExit
 
 SeqPart_FullLoadMode1Walk:
@@ -28501,7 +28501,7 @@ SeqPart_FullLoadMode1Validate:
 	jrl SeqPart_FullLoadErrorExit
 
 SeqPart_FullLoadMode2:
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jrl z, SeqPart_FullLoadExit
 
 SeqPart_FullLoadMode2Walk:
@@ -29263,7 +29263,7 @@ SeqPart_MultiPartWalker:
 	ldmm16 0x288b, 0x28af
 	ldmm16 0x2889, 9830
 	lds iz, 0
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jr z, SeqPart_WalkerNote
 
 SeqPart_WalkerLoop:
@@ -30685,7 +30685,7 @@ SeqPart_StepCountLoop:
 	sub xwa, xbc
 	ld (9690:16), xwa
 	lds iz, 0
-	cpdi16 0x27f4, 0
+	cpw (0x27f4:16), 0
 	jr z, SeqPart_StepCountError
 
 SeqPart_StepCountAdvance:
@@ -30943,7 +30943,7 @@ SeqPart_TransposeWalker:
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_TransposePopReturn
 	lds iz, 0
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jrl z, SeqPart_TransposePopReturn
 
 SeqPart_TransposeWalkLoop:
@@ -31431,7 +31431,7 @@ SeqPart_VelExprEdit:
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_VelExprFinalExit
 	lds iz, 0
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jr z, SeqPart_VelExprExit
 
 SeqPart_VelExprLoop:
@@ -31805,7 +31805,7 @@ SeqPart_InnerProcess:
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_InnerReturn
 	lds iz, 0
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jrl z, SeqPart_InnerReturn
 
 SeqPart_InnerLoop:
@@ -32007,7 +32007,7 @@ SeqPart_VoiceCheckSetup:
 	ldmm16 0x2889, 9830
 	ldmm16 0x288b, 0x28af
 	lds iz, 0
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jr z, SeqPart_VoiceCheckComplete
 
 SeqPart_VoiceCheckSetupDone:
@@ -32163,7 +32163,7 @@ SeqPart_VoiceCheckWalkReturn:
 	cp (0x287a:16), 0
 	jrl nz, SeqPart_VoiceCheckEndCleanup
 	ldw (xsp + 4), 0x0
-	cpdi16 9694, 0
+	cpw (9694:16), 0
 	jrl z, SeqPart_VoiceCheckWalkFinish
 
 SeqPart_VoiceCheckWalkAdvance:

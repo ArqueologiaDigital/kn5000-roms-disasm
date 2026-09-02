@@ -335,7 +335,7 @@ FDemo_MultiGuardCheck:
 	; --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
 	cp	(0x8d38:16), 228
 	jr nz, Banner_ReturnZero
-	cpdi16	0x28b4, 0
+	cpw	(0x28b4:16), 0
 	jr nz, Banner_ReturnZero
 	cp	(3375:16), 0
 	jr nz, Banner_ReturnZero
@@ -664,7 +664,7 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	bit	0, (0xc07e:16)
 	ret	z
-	cpdi16	0x28b4, 0
+	cpw	(0x28b4:16), 0
 	jr	nz, 6
 	bit	0, (0x3283:16)
 	jr	z, 52
@@ -690,7 +690,7 @@ Demo_SelectEntry_ByteTable:
 	jrl	t, 0x00e3
 
 Demo_SelectEntry_ProcessSongList:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr z, Demo_SelectEntry_ToCountdown
 	bit 3, (0x28ad:16)
 	jr z, Demo_SelectEntry_ManualSelect
@@ -8419,7 +8419,7 @@ SeqPhase_OperationStateCheck:
 	jrl nz, SeqPhase_PopIzRet
 	lds wa, 0
 	calr InitializeOperationState
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, SeqPhase_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
@@ -8436,14 +8436,14 @@ SeqPhase_CheckMediaType:
 	jrl SeqPhase_PopIzRet
 
 SeqPhase_MediaIsValid:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, SeqPhase_CheckEncodedData
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 
 SeqPhase_CheckEncodedData:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr z, SeqPhase_PopIzRet
 	ld a, (1068:16)
 	res 7, a
@@ -8517,7 +8517,7 @@ FileIO_DiskEventDispatch:
 	dec 4, xsp
 	ld (xsp), c
 	ld (xsp + 2), a
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, DiskEvt_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
@@ -8573,7 +8573,7 @@ DiskEvt_Return:
 	ret
 
 FileIO_DetectFileTypeAndPost:
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, DetectType_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
@@ -8625,7 +8625,7 @@ DetectType_IsCardReset:
 FileIO_GetDiskCapacity:
 	dec 2, xsp
 	ld (xsp), a
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, DiskCap_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl

@@ -275,7 +275,7 @@ CPanel_PanelDetection:
 	ldb W, 0x00
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpdi16 (0x8d03), 0x0000
+	cpw (0x8d03:16), 0x0000
 	jr z, .Lc_fc39fd
 	or (0x8cf7:16), 0x01
 PanelDet_ProbeRight:
@@ -290,7 +290,7 @@ PanelDet_ProbeRight:
 	ldb W, 0x00
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpdi16 (0x8d03), 0x0000
+	cpw (0x8d03:16), 0x0000
 	jr z, PanelDet_Return
 	or (0x8cf7:16), 0x08
 PanelDet_Return:

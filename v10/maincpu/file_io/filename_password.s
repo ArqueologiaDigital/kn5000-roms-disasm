@@ -396,7 +396,7 @@ FileName_OpSave:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done

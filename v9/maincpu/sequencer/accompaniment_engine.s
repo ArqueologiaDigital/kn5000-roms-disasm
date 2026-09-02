@@ -2198,7 +2198,7 @@ AccKbd1_CheckRecording:
 	jr nz, AccKbd1_CheckReturn
 	ld xhl, 0x2a94
 	calr AccBuf_ComputeFillLevel
-	cpdi16 0x3324, 16
+	cpw (0x3324:16), 16
 	jr ule, AccKbd1_CheckReturn
 	or (0x33e1:16), 1
 
@@ -2546,7 +2546,7 @@ AccKbd2_CheckEligible:
 	jr nz, AccKbd2_CheckReturn
 	ld xhl, 0x2b94
 	calr AccBuf_ComputeFillLevel
-	cpdi16 0x3324, 16
+	cpw (0x3324:16), 16
 	jr ule, AccKbd2_CheckReturn
 	or (0x33e1:16), 1
 
@@ -2918,7 +2918,7 @@ AccCh1_CheckEligible:
 	jr nz, AccCh1_CheckReturn
 	ld xhl, 0x2c94
 	call AccBuf_ComputeFillLevel
-	cpdi16 0x3324, 16
+	cpw (0x3324:16), 16
 	jr ugt, AccCh1_SetReady
 	calr AccBuf_InitWithDefaults
 	jr AccCh1_CheckReturn
@@ -3276,7 +3276,7 @@ AccCh2_CheckEligible:
 	jr nz, AccCh2_CheckReturn
 	ld xhl, 0x2d94
 	call AccBuf_ComputeFillLevel
-	cpdi16 0x3324, 16
+	cpw (0x3324:16), 16
 	jr ugt, AccCh2_SetReady
 	calr AccBuf_InitWithDefaults
 	jr AccCh2_CheckReturn
@@ -3451,7 +3451,7 @@ AccCh3_CheckEligible:
 	jr nz, AccCh3_CheckReturn
 	ld xhl, 0x2e94
 	call AccBuf_ComputeFillLevel
-	cpdi16 0x3324, 16
+	cpw (0x3324:16), 16
 	jr ugt, AccCh3_SetReady
 	calr AccBuf_InitWithDefaults
 	jr AccCh3_CheckReturn
@@ -3626,7 +3626,7 @@ AccCh4_CheckEligible:
 	jr nz, AccCh4_CheckReturn
 	ld xhl, 0x2f94
 	call AccBuf_ComputeFillLevel
-	cpdi16 0x3324, 16
+	cpw (0x3324:16), 16
 	jr ugt, AccCh4_SetReady
 	calr AccBuf_InitWithDefaults
 	jr AccCh4_CheckReturn
@@ -5538,9 +5538,9 @@ AccState_CollectAcc4_Loop:
 	jr c, AccState_CollectAcc4_Loop
 	bit 7, a
 	jr nz, AccState_CollectReturn
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, AccState_CollectAcc4_Active
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, AccState_CollectAcc4_Active
 	call AccWrap_PlayModeStopSync
 	jr AccState_Apply
@@ -7860,7 +7860,7 @@ AccAutoPlay_NoteDispatch_Check:
 	or (0x3498:16), 128
 
 AccAutoPlay_NoteDispatch_Process:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, AccAutoPlay_NoteDispatch_Return
 	bit 2, (1054:16)
 	jr nz, AccAutoPlay_NoteDispatch_Return
@@ -7882,7 +7882,7 @@ AccAutoPlay_NoteDispatch_Return:
 
 AccAutoPlay_SplitDetect:
 	ldb c, 0x0
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, AccAutoPlay_SplitDetect_Check
 	bit 3, (0x28b3:16)
 	jr z, AccAutoPlay_SplitDetect_Check
@@ -8044,9 +8044,9 @@ AccAutoPlay_StateMachine:
 	calr AccAutoPlay_TriggerCheck
 	bit 6, (0x346e:16)
 	jr z, AccAutoPlay_SM_CheckEligible
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, AccAutoPlay_SM_CheckEligible
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, AccAutoPlay_SM_CheckEligible
 	calr AccAutoPlay_SetConfig
 	bit 7, (0x346d:16)
@@ -8097,9 +8097,9 @@ AccAutoPlay_Trigger_Activate:
 	jr nz, AccAutoPlay_ModeAvail_Padding
 	bit 7, (0x346d:16)
 	jr z, AccAutoPlay_Trigger_Return
-	cpdi16 0x349c, 0
+	cpw (0x349c:16), 0
 	jr nz, AccAutoPlay_Trigger_Configure
-	cpdi16 0x349a, 0
+	cpw (0x349a:16), 0
 	jr z, AccAutoPlay_Trigger_Configure
 	calr AccAutoPlay_SeqHandoff
 	and (0x3498:16), 254
@@ -8108,9 +8108,9 @@ AccAutoPlay_Trigger_Activate:
 	jr AccAutoPlay_ModeAvail_Padding
 
 AccAutoPlay_Trigger_Configure:
-	cpdi16 0x349c, 0
+	cpw (0x349c:16), 0
 	jr nz, AccAutoPlay_Trigger_Finalize
-	cpdi16 0x349a, 0
+	cpw (0x349a:16), 0
 	jr nz, AccAutoPlay_Trigger_Finalize
 	ld (0x3498:16), 0
 	ld (0x3499:16), 0
@@ -8187,9 +8187,9 @@ AccAutoPlay_ModeAvail_Extended:
 	ret
 
 AccAutoPlay_SetConfig:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, AccAutoPlay_SetConfig_Apply
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, AccAutoPlay_SetConfig_Apply
 	cp (0x379b:16), 0
 	jr nz, AccAutoPlay_SetConfig_Apply
@@ -8214,9 +8214,9 @@ AccAutoPlay_Configure:
 	and (0x346e:16), 31
 	cp (0x379b:16), 0
 	jr nz, AccAutoPlay_Configure_Mode1
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, AccAutoPlay_Configure_Mode2
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, AccAutoPlay_Configure_Mode1
 	jr AccAutoPlay_Configure_Store
 
@@ -8226,7 +8226,7 @@ AccAutoPlay_Configure_Mode1:
 	jr AccAutoPlay_Configure_Return
 
 AccAutoPlay_Configure_Mode2:
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, AccAutoPlay_Configure_Store
 	bit 2, (1056:16)
 	jr z, AccAutoPlay_Configure_Apply
@@ -8295,9 +8295,9 @@ AccAutoPlay_Periodic_Padding:
 	jr AccAutoPlay_Periodic_Return
 
 AccAutoPlay_Periodic_Process:
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, AccAutoPlay_Periodic_Toggle
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, AccAutoPlay_Periodic_Return
 
 AccAutoPlay_Periodic_Toggle:
@@ -8395,13 +8395,13 @@ AccAutoPlay_SubModeB_Padding:
 AccAutoPlay_SeqHandoff:
 	cp (0x379b:16), 0
 	jr nz, AccAutoPlay_SeqHandoff_Return
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr nz, AccAutoPlay_SeqHandoff_Return
 	bit 2, (1054:16)
 	jr z, AccAutoPlay_SeqHandoff_Return
 	and (0x346d:16), 247
 	or (0x346d:16), 16
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, AccAutoPlay_SeqHandoff_Process
 	bit 2, (1056:16)
 	jr z, AccAutoPlay_SeqHandoff_Return
@@ -8572,9 +8572,9 @@ AccPlayMode_Dispatch_Table:
 	.byte 0xf5, 0x00, 0x0e, 0x00, 0x00
 
 AccPlayMode_TransitionRouter:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, AccPlayMode_Router_Process
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, AccPlayMode_Router_Check
 	calr AccPlayMode_Router_Alt
 	jr AccPlayMode_Router_Return
@@ -8584,7 +8584,7 @@ AccPlayMode_Router_Check:
 	jr AccPlayMode_Router_Return
 
 AccPlayMode_Router_Process:
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, AccPlayMode_Router_Apply
 	calr AccPlayMode_StartAcc
 	jr AccPlayMode_Router_Return
@@ -8930,7 +8930,7 @@ AccSync_MidiClock_Padding:
 	nop
 
 AccTempo_WriteStartMarker:
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, AccTempo_WriteMarker_Return
 
 AccTempo_WriteStopMarker:
@@ -11588,7 +11588,7 @@ AccStyle_ModeEnter:
 	ld (0x338f:16), 0
 	ld (0x339f:16), 0
 	and (0x33d1:16), 254
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, AccStyle_ModeEnter_SetFlags
 	call SeqAcc_SetIndicator_PB
 	ldw (0xf19e:16), 0
@@ -13773,7 +13773,7 @@ AccTuning_ComplexBytecodeData:
 	sll	xbc, 5
 	add	xbc, 611392
 	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x19, 0x97, 0x32
-	cpdi16	12951, 65534
+	cpw	(12951:16), 65534
 	jr	nz, 4
 	.byte 0xf1, 0xe0, 0x33, 0xb8
 	ld	e, (13291:16)
@@ -13800,7 +13800,7 @@ AccTuning_ComplexBytecodeData:
 	sll	xbc, 5
 	add	xbc, 611392
 	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x19, 0x9b, 0x32
-	cpdi16	12955, 65534
+	cpw	(12955:16), 65534
 	jr	nz, 4
 	.byte 0xf1, 0xe0, 0x33, 0xba
 	ld	a, (13293:16)
@@ -13829,7 +13829,7 @@ AccTuning_ComplexBytecodeData:
 	sll	xbc, 5
 	add	xbc, 611392
 	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x19, 0x9d, 0x32
-	cpdi16	12957, 65534
+	cpw	(12957:16), 65534
 	jr	nz, 4
 	.byte 0xf1, 0xe0, 0x33, 0xbb
 	ld	a, (13294:16)
@@ -13858,7 +13858,7 @@ AccTuning_ComplexBytecodeData:
 	sll	xbc, 5
 	add	xbc, 611392
 	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x19, 0x9f, 0x32
-	cpdi16	12959, 65534
+	cpw	(12959:16), 65534
 	jr	nz, 4
 	.byte 0xf1, 0xe0, 0x33, 0xbc
 	ld	a, (13295:16)
@@ -13887,7 +13887,7 @@ AccTuning_ComplexBytecodeData:
 	sll	xbc, 5
 	add	xbc, 611392
 	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x19, 0xa1, 0x32
-	cpdi16	12961, 65534
+	cpw	(12961:16), 65534
 	jr	nz, 4
 	.byte 0xf1, 0xe0, 0x33, 0xbd
 	ld	a, (13296:16)
@@ -16722,7 +16722,7 @@ AccPatch_SeqDispatch_RunNotes:
 	ldw (0x360e:16), 0
 	ld (0x35ff:16), 0
 	calr AccPatch_EventDispatch_Nop
-	cpdi16 0x360a, 0
+	cpw (0x360a:16), 0
 	jr z, AccPatch_SeqDispatch_CheckQueued
 	ld wa, (0x3602:16)
 	ld (0x36fe:16), wa
@@ -16734,7 +16734,7 @@ AccPatch_SeqDispatch_RunNotes:
 	ldw (0x360a:16), 0
 
 AccPatch_SeqDispatch_CheckQueued:
-	cpdi16 0x360e, 0
+	cpw (0x360e:16), 0
 	jr z, AccPatch_SyncStateAndReturn
 	calr AccPatch_DispatchQueuedNotes
 
@@ -17266,7 +17266,7 @@ AccPatch_ResumeSeq_HandleMarker:
 	calr AccPatch_SeqReadByte
 	cp a, 0x83
 	jr z, AccPatch_ResumeSeq_InitSlot
-	cpdi16 0x360a, 0
+	cpw (0x360a:16), 0
 	jr z, AccPatch_ResumeSeq_LoopBack
 	calr AccPatch_PrepareSequencePlayback
 	ldw (0x360a:16), 0
@@ -17300,7 +17300,7 @@ AccPatch_PrepareSequencePlayback:
 	ret
 
 AccPatch_CheckSequenceChanged:
-	cpdi16 0x360a, 0
+	cpw (0x360a:16), 0
 	jr z, AccPatch_CheckChanged_Return
 	ld wa, (0x35de:16)
 	ld (0x365a:16), wa
@@ -17660,7 +17660,7 @@ __pad_F60699:
 	nop
 
 AccPatch_UpdatePlayback:
-	cpdi16 0x360a, 0
+	cpw (0x360a:16), 0
 	jr z, AccPatch_UpdatePlayback_CheckQueue
 	ld wa, (0x3602:16)
 	ld (0x36fe:16), wa
@@ -17672,7 +17672,7 @@ AccPatch_UpdatePlayback:
 	ldw (0x360a:16), 0
 
 AccPatch_UpdatePlayback_CheckQueue:
-	cpdi16 0x360e, 0
+	cpw (0x360e:16), 0
 	jr z, AccPatch_UpdatePlayback_ClearStep
 	calr AccPatch_DispatchQueuedNotes
 
@@ -17812,7 +17812,7 @@ AccPatch_CopySteps_FindFreeSlot:
 
 AccPatch_CopySteps_ProcessEntry:
 	ld de, iy
-	cpdi16 0x34d4, 0
+	cpw (0x34d4:16), 0
 	jr z, AccPatch_CopySteps_Overflow
 	ld (0x3431:16), 0
 	ld (0x36ea:16), 144
@@ -18027,7 +18027,7 @@ AccPatch_SeqAdvanceStep:
 	ld wa, (0x3614:16)
 	cp wa, 0xfe
 	jr nz, AccPatch_SeqAdvStep_Increment
-	cpdi16 0x34d4, 0
+	cpw (0x34d4:16), 0
 	jr z, AccPatch_SeqAdvStep_Return
 	calr AccPatch_SeqAdvStep_WrapToNext
 	jr AccPatch_SeqAdvStep_Return
@@ -18107,7 +18107,7 @@ __pad_F60A51:
 	nop
 
 AccPatch_ProcessMarkerEvent:
-	cpdi16 0x34d4, 0
+	cpw (0x34d4:16), 0
 	jr z, AccPatch_ProcessMarker_Return
 	ld a, (0x36ea:16)
 	cp a, 0xd4
@@ -20399,7 +20399,7 @@ AccPlayback_ReadEvt_Continue:
 AccPlayback_ReadEvt_CheckBit7:
 	bit 7, (0x34d0:16)
 	jr z, ToneGenSetup_Done
-	cpdi16 0x34d4, 0
+	cpw (0x34d4:16), 0
 	jr nz, AccPlayback_ReadEvt_HasEntries
 	ld (0x7f42:16), 15
 	ld (0xe3dc:16), 238
@@ -21976,7 +21976,7 @@ __pad_F62BC1_2:
 	nop
 
 ToneGen_StepWithBoundsCheck:
-	cpdi16 0x34d4, 0
+	cpw (0x34d4:16), 0
 	jr z, ToneGen_SeqAdvanceMain
 	ld xiy, 0x366a
 	ld a, (xiy)
@@ -22954,7 +22954,7 @@ ToneBank_CopyEntry:
 	ldir85
 
 __pad_F633E3:
-	cpdi16 0x35ae, 0xffff
+	cpw (0x35ae:16), 0xffff
 	jrl z, ToneBank_CopyComplete_Return
 	calr ToneBank_CopyChunk_Return
 	bit 0, (0x35b0:16)
@@ -25134,9 +25134,9 @@ DrumKitExit_PostRestore:
 	call AccWrap_PlayModeDispatch
 	calr DrumKit_ValidateBank
 	call SeqAcc_RestorePlaybackState
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, DrumKitExit_ExtraInit
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, DrumKitExit_ExtraInit
 	jr DrumKitExit_CheckAutoPlay
 
@@ -36161,7 +36161,7 @@ AccPatch_InitSlotChain:
 	xor xhl, xhl
 
 AccPatch_IterateSlotChain:
-	cpdi16 0x377e, 0xffff
+	cpw (0x377e:16), 0xffff
 	jr z, AccPatch_IterateSlot_NextBlock
 	ld hl, (0x377e:16)
 	calr AccPatch_CalcSlotBufferAddr
@@ -37847,7 +37847,7 @@ StylCnvModl_ScanMatchingModels:
 	jr c, StylCnvModl_ScanMatchingModels
 
 StylCnvModl_ScanDone:
-	cpdi16 0x3a82, 0
+	cpw (0x3a82:16), 0
 	jr nz, StylCnvModl_PadModelNames
 	ldw wa, 0x10
 	jrl StylCnvModl_OK_Select_ShowError
@@ -38796,7 +38796,7 @@ StyleConv_DispatchSoundMemState:
 	ld a, (0x0ffc00:24)
 	cps a, 0
 	jr nz, StylCnvDisp_CheckFE
-	cpdi16 0x48ac, 1
+	cpw (0x48ac:16), 1
 	jr nz, StylCnvDisp_PostMode13
 	calr AccBankData_InitAllSlots
 	lds wa, 1
@@ -39421,7 +39421,7 @@ StylCnv_Type6_ClearRegion:
 	ld xwa, (0x3d5c:16)
 	ld (0x3d60:16), xwa
 	ldw (xsp + 4), 0x0
-	cpdi16 0x48d8, 0
+	cpw (0x48d8:16), 0
 	jrl ule, StylCnv_Type6_BuildFfcBuffer
 
 StylCnv_Type6_MainLoop:
@@ -39496,7 +39496,7 @@ StylCnv_Type6_BuildFfcBuffer:
 	ld (0x0ffc01:24), 0x00
 	ldw (xsp + 4), 0x0
 	lds iz, 0
-	cpdi16 0x48d8, 0
+	cpw (0x48d8:16), 0
 	jrl ule, StylCnv_FinalizeAndCheckStatus
 
 StylCnv_Type6_CopyBlockLoop:
@@ -39576,7 +39576,7 @@ StylCnv_Type6_FileReadError:
 	extz xbc
 	add xbc, xwa
 	ld (xbc), 0x0
-	cpdi16 0x48d8, 2
+	cpw (0x48d8:16), 2
 	jrl nc, StylCnv_Type6_AdvanceEntry
 	jrl StylCnv_AbortWithError
 
@@ -39587,7 +39587,7 @@ StylCnv_Type6_FileOpenError:
 	extz xbc
 	add xbc, xwa
 	ld (xbc), 0x0
-	cpdi16 0x48d8, 2
+	cpw (0x48d8:16), 2
 	jrl nc, StylCnv_Type6_AdvanceEntry
 	jrl StylCnv_AbortWithError
 

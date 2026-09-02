@@ -1314,7 +1314,7 @@ TempoEvt_ContinueProcessing:
 	jp TempoEvt_ProcessLoop
 
 TempoEvt_DispatchEvent:
-	cpdi16 0x7e18, 0
+	cpw (0x7e18:16), 0
 	jr nz, TempoEvt_HandleEndMarker
 	calr AccPlay_InitAndStartLoop
 	jr TempoEvent_ContinueLoop
@@ -1622,7 +1622,7 @@ AccPlay_NoteEventRet:
 	ret
 
 AccPlay_NoteWithSlot:
-	cpdi16 0x7e18, 0
+	cpw (0x7e18:16), 0
 	jr z, AccPlay_NoteNoSlotAvail
 	calr AccPlay_FindActiveSlot
 	cp xhl, 0xffff
@@ -2467,7 +2467,7 @@ MidiSeqBuf_ScanDone:
 	ret
 
 MidiSeqBuf_ProcessEntries:
-	cpdi16 0x7e18, 0
+	cpw (0x7e18:16), 0
 	jr z, MidiSeqBuf_ProcessDone
 	xor ix, ix
 

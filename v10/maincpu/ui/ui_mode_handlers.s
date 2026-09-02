@@ -293,7 +293,7 @@ EffectMode_TimerCountdown:
 	ld (0x8d4e:16), a
 	cps a, 0
 	ret nz
-	cpdi16 0x8d56, 0
+	cpw (0x8d56:16), 0
 	jr z, EffectMode_TimerCountdown_CheckMode
 	push xde
 	push xhl

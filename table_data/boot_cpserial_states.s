@@ -137,7 +137,7 @@ BootSerial_State08_TxFirstByte:
 	ld	a, (xiy)
 	st_dd8b	a, 0xd4			; frame byte -> SC1BUF
 	incdi16	1, (0x0fd5)
-	cpdi16	(0x0fd5), 0x003c
+	cpw	(0x0fd5:16), 0x003c
 	jr	c, BootSerial_State08_TxFirstByte__no_wrap
 	ldw	(0x0fd5:16), 0
 BootSerial_State08_TxFirstByte__no_wrap:
@@ -176,7 +176,7 @@ BootSerial_State10_TxNextByte:
 	ld	a, (xiy)
 	st_dd8b	a, 0xd4			; frame byte -> SC1BUF
 	incdi16	1, (0x0fd5)
-	cpdi16	(0x0fd5), 0x003c
+	cpw	(0x0fd5:16), 0x003c
 	jr	c, BootSerial_State10_TxNextByte__no_wrap
 	ldw	(0x0fd5:16), 0
 BootSerial_State10_TxNextByte__no_wrap:
@@ -273,7 +273,7 @@ BootSerial_State20_RxFirstByte__have_free:
 BootSerial_State20_RxFirstByte__room:
 	and	(0x0f6a:16), 0xfe
 	incdi16	1, (0x0f77)
-	cpdi16	(0x0f77), 0x005c
+	cpw	(0x0f77:16), 0x005c
 	jr	c, BootSerial_State20_RxFirstByte__counted
 	ldw	(0x0f77:16), 0
 BootSerial_State20_RxFirstByte__counted:
@@ -305,7 +305,7 @@ BootSerial_State24_RxNextByte:
 	bit	0, (0x0f6a:16)		; overflow latched?
 	jr	nz, BootSerial_State24_RxNextByte__no_advance
 	incdi16	1, (0x0f77)
-	cpdi16	(0x0f77), 0x005c
+	cpw	(0x0f77:16), 0x005c
 	jr	c, BootSerial_State24_RxNextByte__no_advance
 	ldw	(0x0f77:16), 0
 BootSerial_State24_RxNextByte__no_advance:

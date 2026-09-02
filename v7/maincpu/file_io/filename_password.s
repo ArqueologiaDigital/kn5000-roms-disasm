@@ -348,7 +348,7 @@ FileName_OpSave:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	z, 36
 	lds	wa, 2
 	call	16289512

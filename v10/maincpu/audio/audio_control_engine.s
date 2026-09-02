@@ -220,7 +220,7 @@ FileIO_BytecodeData:
 	.byte 0xf1, 0x6a, 0x26, 0xc8
 	jr	z, 3
 	ld	(xwa), 10
-	cpdi16	10408, 0
+	cpw	(10408:16), 0
 	jr	z, 17
 	ld	a, (xwa)
 	cp	a, 19
@@ -1856,7 +1856,7 @@ MIDI_ProcessVoiceAssignment:
 	jr MIDI_WriteSecondByte
 
 MIDI_ValidateParam:
-	cpdi16 0x8ec8, 0
+	cpw (0x8ec8:16), 0
 	jr nz, MIDI_WriteSecondByte
 	lda xwa, (0x8eba:16)
 	ld_sd8b C, 0x40
@@ -4597,7 +4597,7 @@ MIDI_WriteCommandToBuffer:
 	extz xwa
 	add xwa, xhl
 	ld (xwa), 0xff
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	jr c, MidiWrite_ReturnDiscard
 	push xde
 	push xhl
@@ -4696,7 +4696,7 @@ FileIO_OperationDispatch:
 	lda xbc, (SoundProgram_DispatchTable:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	call (xhl)
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	jr c, FileIO_ProcessRemainingOps
 	push xde
 	push xhl
@@ -6531,7 +6531,7 @@ SndParam_WriteLookupAndStore:
 SwbtWr_FlushAndAppendParams:
 	cp (0x912a:16), 0
 	ret z
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	jr c, SwbtWr_FlushDone
 	push xde
 	push xhl
@@ -6549,7 +6549,7 @@ SwbtWr_FlushDone:
 	ret
 
 SwbtWr_CheckBufferOverflow:
-	cpdi16	0x90de, 508
+	cpw	(0x90de:16), 508
 	jr	c, 18
 	push	xde
 	push	xhl
@@ -6564,7 +6564,7 @@ SwbtWr_CheckBufferOverflow:
 	jrl	1770
 
 SwbtWr_WriteParamBlock:
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	jr c, SwbtWr_WriteParamBlock_Body
 	push xde
 	push xhl
@@ -8470,7 +8470,7 @@ MidiSeqBufInit_Done:
 Tempo_ProcessExpressionChange:
 	pushw wa
 	calr MIDI_SelectTempoExpressionSource
-	cpdi16 0x91c5, 0
+	cpw (0x91c5:16), 0
 	jr z, TempoExpr_Done
 	xor l, l
 	ld xix, 0xf1a0
@@ -8582,7 +8582,7 @@ Mod_SelectExpressionSource:
 	jr Mod_ExpressionStore
 
 ModExpr_CheckAutoPlay:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, Mod_ExpressionStore
 	ld wa, (0x28a8:16)
 	setda 2, 0x90f9
@@ -8602,7 +8602,7 @@ Mod_ExpressionStore:
 
 MidiStream_ProcessTempoRingBuf:
 	push xiz
-	cpdi16 0x91c5, 0
+	cpw (0x91c5:16), 0
 	jrl z, TempoRing_Return
 	ei 6
 	setda 0, 1113
@@ -8840,7 +8840,7 @@ MIDI_TransmitTempoCC:
 	ld (0x91bd:16), bc
 	ld (0x91bf:16), de
 	calr MIDI_SelectTempoExpressionSource
-	cpdi16 0x91c5, 0
+	cpw (0x91c5:16), 0
 	jr z, TempoCC_Return
 	ei 6
 	setda 0, 1113
@@ -8939,7 +8939,7 @@ TempoRingBuf_EntryDone:
 Audio_ProcessPartExpressions:
 	push xiz
 	calr MIDI_SelectTempoExpressionSource
-	cpdi16 0x91c5, 0
+	cpw (0x91c5:16), 0
 	jrl z, PartExpr_Done
 	ei 6
 	setda 0, 1113
@@ -9468,7 +9468,7 @@ VoiceMode3_DispatchTable:
 	ld	(37159:16), bc
 	ld	(37161:16), de
 	call	16556371
-	cpdi16	37303, 920
+	cpw	(37303:16), 920
 	jr	nz, 4
 	.byte 0xf1, 0x52, 0x8d, 0xbb
 	extz	hl

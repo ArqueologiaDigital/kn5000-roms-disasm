@@ -431,7 +431,7 @@ CPanel_PanelDetection:
 	ldb w, 0x0
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpdi16 0x8d9f, 0
+	cpw (0x8d9f:16), 0
 	jr z, PanelDet_ProbeRight
 	or (0x8d93:16), 1	; my guess: CP_Flags_C.0
 					  ; = Got response from left-panel MCU
@@ -447,7 +447,7 @@ PanelDet_ProbeRight:
 	ldb w, 0x0
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpdi16 0x8d9f, 0
+	cpw (0x8d9f:16), 0
 	jr z, PanelDet_Return
 	or (0x8d93:16), 8	; my guess: CP_Flags_C.4
 					 ; = Got response from right-panel MCU
@@ -689,7 +689,7 @@ INTA_HANDLER:
 	jr INTA_HANDLER_END
 
 INTA_HandleCountdown:
-	cpdi16 0x8d9f, 0
+	cpw (0x8d9f:16), 0
 	jr nz, INTA_DecrementRXCount
 
 	ldw (0x8d9f:16), 92
@@ -851,7 +851,7 @@ CPanel_SM_SendByte1:
 	ld a, (xiy)
 	st_dd8b A, 0xd4
 	incdi16 1, (0x8dfd)
-	cpdi16 0x8dfd, 60
+	cpw (0x8dfd:16), 60
 	jr c, SendByte1_InspectByte
 	ldw (0x8dfd:16), 0
 
@@ -888,7 +888,7 @@ CPanel_SM_SendByteN:
 	ld a, (xiy)
 	st_dd8b A, 0xd4
 	incdi16 1, (0x8dfd)
-	cpdi16 0x8dfd, 60
+	cpw (0x8dfd:16), 60
 	jr c, SendByteN_CheckDone
 	ldw (0x8dfd:16), 0
 
@@ -979,7 +979,7 @@ RXByte1_CheckThreshold:
 RXByte1_AdvanceWritePtr:
 	and (0x8d92:16), 254; CP_Flags_B.0 = 0
 	incdi16 1, (0x8d9f)
-	cpdi16 0x8d9f, 92
+	cpw (0x8d9f:16), 92
 	jr c, RXByte1_InspectByte
 	ldw (0x8d9f:16), 0
 
@@ -1005,7 +1005,7 @@ CPanel_SM_RXByteN:
 	bit 0, (0x8d92:16); CP_Flags_B.0
 	jr nz, RXByteN_CheckDone
 	incdi16 1, (0x8d9f)
-	cpdi16 0x8d9f, 92
+	cpw (0x8d9f:16), 92
 	jr c, RXByteN_CheckDone
 	ldw (0x8d9f:16), 0
 

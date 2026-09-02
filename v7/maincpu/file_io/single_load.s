@@ -3416,7 +3416,7 @@ FmmCmpSingleLoadFunc:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 13
 	call	16290067
 	extz	hl
@@ -3430,7 +3430,7 @@ FmmCmpLoad_DispatchState:
 	jrl	z, 139
 	cps	wa, 5
 	jr	z, 102
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 19
 	call	16290928
 	ld	(33894:16), hl

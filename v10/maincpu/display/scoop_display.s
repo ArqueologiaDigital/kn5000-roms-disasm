@@ -6849,7 +6849,7 @@ ScoopParam_ValueTable:
 	call	15705997
 	call	15706023
 	call	15706052
-	cpdi16	62001, 0
+	cpw	(62001:16), 0
 	jrl	nz, 18
 	call	15717118
 	cps	w, 0
@@ -16521,7 +16521,7 @@ Display_RedrawFooter:
 	ld (4497:16), a
 	ld (4498:16), a
 	ld xiy, StyleUI_ScreenData_Main_0x21C
-	cpdi16 3664, 0
+	cpw (3664:16), 0
 	jr nz, Scoop_FooterShowPartValue
 	ld xix, StyleUI_ScreenData_Main_0x258
 	jr Scoop_FooterCallDisplay
@@ -16546,11 +16546,11 @@ Display_RedrawTitleBar:
 	ld (0x03efa8:24), 0x02
 	calr Scoop_DrawGridLines
 	calr Scoop_TitleBar_SelectPartRange
-	cpdi16 3660, 0
+	cpw (3660:16), 0
 	jr z, Scoop_TitleBar_Part1Check
 	xor bc, bc
 	calr Scoop_TitleBar_GetPartConfig
-	cpdi16 3660, 1000
+	cpw (3660:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part0
 	ld xiy, StyleUI_ScreenData_Main_0x1E0
 	call Scoop_ConditionalGlideSetup
@@ -16563,11 +16563,11 @@ Scoop_TitleBar_ShowBPM_Part0:
 	call GraphicsRender_EventCheck
 
 Scoop_TitleBar_Part1Check:
-	cpdi16 3662, 0
+	cpw (3662:16), 0
 	jr z, Scoop_TitleBar_Part2Check
 	lds bc, 1
 	calr Scoop_TitleBar_GetPartConfig
-	cpdi16 3662, 1000
+	cpw (3662:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part1
 	ld xiy, StyleUI_ScreenData_Main_0x1E5
 	call Scoop_ConditionalGlideSetup
@@ -16580,11 +16580,11 @@ Scoop_TitleBar_ShowBPM_Part1:
 	call GraphicsRender_EventCheck
 
 Scoop_TitleBar_Part2Check:
-	cpdi16 3664, 0
+	cpw (3664:16), 0
 	jr z, Scoop_TitleBar_End
 	lds bc, 2
 	calr Scoop_TitleBar_GetPartConfig
-	cpdi16 3664, 1000
+	cpw (3664:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part2
 	ld xiy, StyleUI_ScreenData_Main_0x1EA
 	call Scoop_ConditionalGlideSetup

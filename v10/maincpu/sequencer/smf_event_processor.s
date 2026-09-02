@@ -450,9 +450,9 @@ VoiceChannel_ParamTable1:
 
 SoundGen_PrepareAndBuildVoice:
 	push xiy
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jr z, SoundGen_CaptureAndBuildParams
-	cpdi16 3934, 2
+	cpw (3934:16), 2
 	jr c, SoundGen_CaptureAndBuildParams
 	ld iy, (4237:16)
 	extz xiy
@@ -499,9 +499,9 @@ SoundGen_UpdateAndWriteChannel:
 	ld l, (4011:16)
 	and l, 0xf
 	xor h, h
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jr z, SoundGen_SelectChannelTable
-	cpdi16 3934, 2
+	cpw (3934:16), 2
 	jr c, SoundGen_SelectChannelTable
 	ld a, l
 	jr SoundGen_ApplyChannelParam
@@ -551,9 +551,9 @@ SoundGen_ApplyChannelParam:
 	ld iy, (4011:16)
 	and iy, 0xf
 	extz xiy
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jr z, SoundGen_CommitChannelRegs
-	cpdi16 3934, 2
+	cpw (3934:16), 2
 	jr c, SoundGen_CommitChannelRegs
 	ld iy, (4237:16)
 	extz xiy
@@ -710,7 +710,7 @@ VoiceChannel_StoreVoiceIdx:
 	and e, 0xf
 	ld (6751:16), de
 	pop xde
-	cpdi16 6751, 9
+	cpw (6751:16), 9
 	jr nz, VoiceChannel_StoreVoiceReturn
 	ld xwa, 0x1a57
 	call SndParam_ApplyVoiceValue
@@ -757,7 +757,7 @@ SMF_SysEx_CheckBlockLimit:
 	ld bc, ix
 	sub a, c
 	sub a, 0x1
-	cpdi16 4212, 0
+	cpw (4212:16), 0
 	jr nz, Seq_AdvanceBlock
 	cpdm8 4211, a
 	jr ugt, Seq_AdvanceBlock
@@ -921,7 +921,7 @@ SeqPlay_QueueDisplayEvent:
 
 SMF_InitPlaybackState:
 	pushw wa
-	cpdi16 0xf19c, 0
+	cpw (0xf19c:16), 0
 	jr z, SMF_InitChannelState
 	ldw (6699:16), 9
 	jrl SMF_PopReturn

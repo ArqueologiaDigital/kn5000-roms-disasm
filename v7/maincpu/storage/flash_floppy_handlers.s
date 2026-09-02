@@ -1737,7 +1737,7 @@ Flash_ExtendedOpsBlock:
 	dec 2,XSP
 	push XIZ
 	ld (XSP+0x04),A
-	cpdi16 (0x07a0), 0xffff
+	cpw (0x07a0:16), 0xffff
 	jr z, .Lc_f1756b
 	lds_erpb 0xf9, 0
 .Lc_f17529:

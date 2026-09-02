@@ -347,14 +347,14 @@ FDC_ValidateTrack:
 	jrl FDC_Set_Status
 
 FDC_HandleCmd2:
-	cpdi16 0x8a40, 2
+	cpw (0x8a40:16), 2
 	jr nz, FDC_CheckSectorCount
 	calr FDC_CheckHead
 	ld l, (0x8a24:16)
 	ret
 
 FDC_CheckSectorCount:
-	cpdi16 0x8a4a, 0
+	cpw (0x8a4a:16), 0
 	jr nz, FDC_CheckSectorNum
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
@@ -509,9 +509,9 @@ FDC_Command5_Epilogue:
 	ret
 
 FDC_Validate_Drive_Head:
-	cpdi16 0x8a44, 0
+	cpw (0x8a44:16), 0
 	ret z
-	cpdi16 0x8a44, 1
+	cpw (0x8a44:16), 1
 	ret z
 	ldw wa, 0xfe
 	calr FDC_Set_Status

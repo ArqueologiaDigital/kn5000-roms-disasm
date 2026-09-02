@@ -512,7 +512,7 @@ LoadFilter_OpLoad:
 	ld XBC,0x01e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 (0xf19e), 0x0000
+	cpw (0xf19e:16), 0x0000
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done

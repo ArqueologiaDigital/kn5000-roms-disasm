@@ -1024,7 +1024,7 @@ FmmDiskMedleySelectFunc:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, DiskSel_InitState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -1785,7 +1785,7 @@ NavigateSongList:
 	jr nz, NavSong_Exit
 
 NavSong_CheckBounds:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr le, NavSong_Exit
 	call GetFirstPageBase
 	cps hl, 0
@@ -1825,7 +1825,7 @@ NavigateDocList:
 	jr nz, NavDoc_Exit
 
 NavDoc_CheckBounds:
-	cpdi16 0x8508, 0
+	cpw (0x8508:16), 0
 	jr le, NavDoc_Exit
 	call FileIO_GetCurrentFileIndex_Alt
 	cps hl, 0
@@ -1860,7 +1860,7 @@ NavigatePdList:
 	jr nz, NavPd_Exit
 
 NavPd_CheckBounds:
-	cpdi16 0x8506, 0
+	cpw (0x8506:16), 0
 	jr le, NavPd_Exit
 	call GetCurrentFileIndexAlt
 	cps hl, 0
@@ -2172,7 +2172,7 @@ SmfMed_InitFromDisk:
 	ld xwa, 0x6c0018
 	ld xbc, 0x1e0003b
 	call ApPostEvent
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, SmfMed_InitState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -2946,7 +2946,7 @@ PdMed_ShowError:
 
 PdMed_InitFromDisk_Entry:
 PdMed_InitFromDisk:
-	cpdi16 0x8506, 0
+	cpw (0x8506:16), 0
 	jr ge, PdMed_InitState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -3753,9 +3753,9 @@ DocMed_ShowError:
 
 DocMed_CheckInit_Entry:
 DocMed_CheckInit:
-	cpdi16 0x8508, 0
+	cpw (0x8508:16), 0
 	jr lt, DocMed_InitFromDisk
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr nz, DocMed_InitState
 
 DocMed_InitFromDisk:

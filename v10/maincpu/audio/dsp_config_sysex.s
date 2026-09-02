@@ -955,7 +955,7 @@ SwbtWr_PostCallback_Done:
 	ret
 
 SwbtWr_QueueMainEvent:
-	cpdi16 0x90de, 507
+	cpw (0x90de:16), 507
 	jr ugt, SwbtWr_QueueMainEvent_Done
 	ld xhl, 0xbd3c
 	addda16 xhl, 0x90de
@@ -968,7 +968,7 @@ SwbtWr_QueueMainEvent_Done:
 	ret
 
 SwbtWr_QueuePostEvent:
-	cpdi16 0x90e2, 251
+	cpw (0x90e2:16), 251
 	jr ugt, SwbtWr_QueuePostEvent_Done
 	ld xhl, 0xbf39
 	addda16 xhl, 0x90e2
@@ -1836,7 +1836,7 @@ CompIface_ProcessInput:
 	jr z, CompIface_CheckUpDown
 	bit 5, (0xc1f0:16)
 	jr z, CompIface_CheckUpDown
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr nz, CompIface_SetPedalBit
 	jr CompIface_CallFilterA
 
@@ -1850,7 +1850,7 @@ CompIface_CheckUpDown:
 CompIface_RampDown:
 	bit 5, (0xc1f0:16)
 	jr z, CompIface_PostProcess
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, CompIface_RampDown_Start
 	setda 1, 9834
 
@@ -1878,7 +1878,7 @@ CompIface_FromSource2:
 	jr CompIface_PostProcess
 
 CompIface_Source2_ZeroCheck:
-	cpdi16 0x28a8, 0
+	cpw (0x28a8:16), 0
 	jr z, CompIface_CallFilterA
 
 CompIface_SetPedalBit:

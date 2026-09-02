@@ -2804,7 +2804,7 @@ SndParam_WidgetDispatch:
 	jr z, SndParam_WidgetAppendType2
 	cps hl, 1
 	jr nz, SndParam_WidgetDispatchDone
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	call_24 nc, SwbtWr_ReinitBothBanks
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)
@@ -2821,7 +2821,7 @@ SndParam_WidgetDispatch:
 	jr SndParam_WidgetAppendTail
 
 SndParam_WidgetAppendType2:
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	call_24 nc, SwbtWr_ReinitOutputBank
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)
@@ -2875,7 +2875,7 @@ SndParam_WidgetNotifyType1:
 	jr z, SndParam_Widget1_AppendType2
 	cps wa, 1
 	jrl nz, SndParam_Widget1_Done
-	cpdi16 0x90de, 504
+	cpw (0x90de:16), 504
 	call_24 nc, SwbtWr_ReinitBothBanks
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)
@@ -2900,7 +2900,7 @@ SndParam_WidgetNotifyType1:
 	jr SndParam_Widget1_AppendTail
 
 SndParam_Widget1_AppendType2:
-	cpdi16 0x90de, 504
+	cpw (0x90de:16), 504
 	call_24 nc, SwbtWr_ReinitOutputBank
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)

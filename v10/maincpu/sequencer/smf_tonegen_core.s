@@ -15,7 +15,7 @@ Sequencer_ResetAfterFloppyIO:
 	ld (0xf19e:16), wa
 	ld (0x00ffec:24), wa
 	ldw (0xf19c:16), 0
-	cpdi16 6699, 49
+	cpw (6699:16), 49
 	jrl z, SeqPlay_ReadyStateTransition
 	ldw (6699:16), 31
 	jrl SeqPlay_ReadyStateTransition
@@ -346,7 +346,7 @@ SeqTrack_AssignFloppyChannels:
 	ld (5113:16), 0
 
 SeqTrack_AssignChannel_Loop:
-	cpdi16 0xf231, 16
+	cpw (0xf231:16), 16
 	jrl c, SeqTrack_ErrorMark
 	push xiy
 	push xix
@@ -980,9 +980,9 @@ FloppyIO_ReadMidiEvtBytes_Trap:
 	jrl	t, 0xffc3
 
 FloppyIO_ReadMidiEvtBytes_DispatchCheck:
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, FloppyIO_DispatchMidiEvent
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, FloppyIO_DispatchMidiEvent
 	call MidiEvent_DispatchSetB
 	jrl FloppyIO_ReadMidiEvtBytes_Exit
@@ -1063,7 +1063,7 @@ SMF_VoiceSetup_AssignToTrack:
 	ld iy, (4237:16)
 	call SoundGen_ClampVoiceIndexMin1
 	ld ix, iy
-	cpdi16 0xf231, 16
+	cpw (0xf231:16), 16
 	jrl c, SMF_VoiceSetup_Exit
 	push xiy
 	push xix
@@ -1383,7 +1383,7 @@ SeqTrack_InitScoopAndSetWall:
 	ret
 
 SeqTrack_ValidateAndAssignVoices:
-	cpdi16 0xf231, 16
+	cpw (0xf231:16), 16
 	jrl nc, SeqTrack_AssignVoices_HaveDispatch
 	ld (4323:16), 255
 	jrl SoundGen_ResetVoiceBitmapAndFlag
@@ -1842,9 +1842,9 @@ SoundGen_EncodeTempoByte:
 	sla h, 1
 	or w, h
 	lds32 xiy, 7
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, SoundGen_ApplyTempoToVoice
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, SoundGen_ApplyTempoToVoice
 	ld iy, (4237:16)
 	extz xiy
@@ -1856,9 +1856,9 @@ SoundGen_ApplyTempoToVoice:
 	popw wa
 	ld bc, wa
 	ldb a, 0x80
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, SoundGen_UpdateTempoAndScale
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, SoundGen_UpdateTempoAndScale
 	ldb a, 0xa0
 	ldb w, 0x7
@@ -1871,9 +1871,9 @@ SoundGen_UpdateTempoAndScale:
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
 	lds iy, 7
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, SoundGen_ScaleAndWriteTempo
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, SoundGen_ScaleAndWriteTempo
 	ld iy, (4237:16)
 	extz xiy
@@ -1913,9 +1913,9 @@ SoundGen_ScaleAndWriteTempo:
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
 	lds32 xiy, 7
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, SoundGen_SetVoiceBitAndWriteRegs
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, SoundGen_SetVoiceBitAndWriteRegs
 	ld iy, (4237:16)
 	extz xiy
@@ -3165,7 +3165,7 @@ MidiPgmChg_Mode2_SetupA:
 	call VoiceChannel_StoreVoiceIdx
 	ld xwa, 0x1a57
 	call SndParam_LookupOscEnvelope
-	cpdi16 6751, 9
+	cpw (6751:16), 9
 	jr z, MidiPgmChg_Mode2_ApplyEnvelopeA
 	ld xhl, 0x1a37
 	ld bc, (6751:16)
@@ -3888,7 +3888,7 @@ MidiPgmChg_Mode2_SetupB:
 	call VoiceChannel_StoreVoiceIdx
 	ld xwa, 0x1a57
 	call SndParam_LookupOscEnvelope
-	cpdi16 6751, 9
+	cpw (6751:16), 9
 	jr z, MidiPgmChg_Mode2_ApplyEnvelopeB
 	ld xhl, 0x1a37
 	ld bc, (6751:16)
@@ -4353,7 +4353,7 @@ ToneGen_AdvancePosition:
 	ld wa, (9830:16)
 	cp wa, 0xff
 	jr nz, ToneGen_AdvPos_Increment
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr nz, ToneGen_AdvPos_DispatchLink
 	ld (4323:16), 255
 	jr ToneGen_AdvPos_Return
@@ -4376,7 +4376,7 @@ ToneGen_AdvPosForRefresh:
 	ld wa, (9830:16)
 	cp wa, 0xff
 	jr nz, ToneGen_AdvRefresh_Increment
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr nz, ToneGen_AdvRefresh_DispatchLink
 	ld (4323:16), 255
 	jr ToneGen_AdvRefresh_Return
@@ -4813,7 +4813,7 @@ VoiceParam_ByMode_Mode2:
 	call VoiceChannel_StoreVoiceIdx
 	ld xwa, 0x1a57
 	call SndParam_LookupOscEnvelope
-	cpdi16 6751, 9
+	cpw (6751:16), 9
 	jr z, VoiceParam_ByMode_Mode2_Apply
 	ld xhl, 0x1a37
 	ld bc, (6751:16)

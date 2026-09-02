@@ -388,7 +388,7 @@ ClkTick_Src3ClickCheck:
 	jr nz, ClkTick_Src3LowerSyncCheck
 	resda 0, 1073
 	ld (1054:16), 1
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, ClkTick_Src3LowerSyncCheck
 	ldb a, 0x85
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -400,7 +400,7 @@ ClkTick_Src3LowerSyncCheck:
 	jr nz, ClkTick_Src3OverflowQueue
 	resda 3, 1073
 	ld (1054:16), 8
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, ClkTick_Src3OverflowQueue
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -410,7 +410,7 @@ ClkTick_Src3OverflowQueue:
 	jr nz, Transport_Return
 	ld (1051:16), 0
 	incdi16 1, (1052)
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, Transport_StopHandler
 	calr MIDI_QUEUE_TRACK_EVENT
 
@@ -428,7 +428,7 @@ Transport_StopHandler:
 
 Transport_StopSrc1QueueEvent:
 	ld (1054:16), 16
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, Transport_StopSrc3Snapshot
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -461,7 +461,7 @@ Transport_NoClockReturn:
 	ret
 
 MIDI_START_PLAYBACK_REQUEST:
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, StartPlay_Return
 	push	sr
 	ei 6
@@ -475,7 +475,7 @@ StartPlay_Return:
 StartPlay_Body:
 	setda 5, 0x28ac
 	ld (1108:16), 0
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, ResetPlay_Return
 
 MIDI_RESET_PLAYBACK_STATE:
@@ -491,7 +491,7 @@ MIDI_RESET_PLAYBACK_STATE:
 	ld (1077:16), a
 	ld (1054:16), 1
 	resda 0, 0x28a6
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, ResetPlay_Src3Check
 	ldb a, 0x85
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -579,7 +579,7 @@ AltClk_DisabledClockPath:
 
 AltClk_StopSrc1Queue:
 	ld (1054:16), 12
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, AltClk_StopSrc3Snapshot
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR

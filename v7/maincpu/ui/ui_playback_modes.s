@@ -901,7 +901,7 @@ CDlikeSw_NullRet:
 
 CDlike_LoadSongBankData:
 	ld (6882:16), 0
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr nz, CDlikeBankLoad_CheckSavedState
 	ld (6882:16), 1
 

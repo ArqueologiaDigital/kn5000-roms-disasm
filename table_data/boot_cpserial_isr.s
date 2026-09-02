@@ -74,7 +74,7 @@ Handler_INTA:
 	or	(0x0f64:16), 0x01		; RX-active flag
 	jr	t, Handler_INTA__exit
 Handler_INTA__rx_pacing:
-	cpdi16	(0x0f77), 0
+	cpw	(0x0f77:16), 0
 	jr	nz, Handler_INTA__count_ok
 	ldw	(0x0f77:16), 0x005c	; reload with the RX ring size
 Handler_INTA__count_ok:

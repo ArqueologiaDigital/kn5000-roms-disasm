@@ -423,7 +423,7 @@ FmmFormatFunc:
 	lds	wa, 1
 	calr	-3659
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xce, 0x7e
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 13
 	call	16290067
 	extz	hl
@@ -595,7 +595,7 @@ FmmLoadTitleFunc:
 	lds32	xde, 5
 	call	16423243
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xd2, 0x7e
-	cpdi16	33892, 0
+	cpw	(33892:16), 0
 	jr	ge, 13
 	call	16290067
 	extz	hl
@@ -609,7 +609,7 @@ FmmLoadTtl_StateDispatch:
 	jrl	z, 166
 	cps	wa, 5
 	jr	z, 94
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 19
 	call	16290928
 	ld	(33894:16), hl
@@ -617,9 +617,9 @@ FmmLoadTtl_StateDispatch:
 	call	16290094
 	calr	-4184
 FmmLoadTtl_CheckFileHandle:
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jrl	nz, 224
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jr	ge, 11
 	call	16291947
 	ld	(33896:16), hl
@@ -771,7 +771,7 @@ FmmSaveTitleFunc:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	cpdi16	33894, 0
+	cpw	(33894:16), 0
 	jr	ge, 19
 	call	16290928
 	ld	(33894:16), hl
@@ -927,7 +927,7 @@ DiskInfoFunc:
 	jrl nz, DiskInfo_Return
 	lds wa, 0
 	calr InitializeOperationState
-	cpdi16 (0x8464), 0x0000
+	cpw (0x8464:16), 0x0000
 	jr ge, DiskInfo_ReadDriveType
 	call GetDiskSizeInfo
 	extz HL

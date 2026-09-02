@@ -230,7 +230,7 @@ SysEx_ApplyVoiceParam_4B_128_RestoreSlotId:
 SysEx_ApplyVoiceParam_4B_128_Return:
 	.byte 0x90, 0x38, 0x04, 0x0e
 SysEx_ApplyVoiceParam_49:
-	cpdi16 (0x9046), 0x00fb
+	cpw (0x9046:16), 0x00fb
 	jr ugt, .Lc_fdac40
 	ld XHL,0x0000be9d
 	addda16 xhl, 0x9046

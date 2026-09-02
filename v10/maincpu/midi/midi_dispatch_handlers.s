@@ -4961,7 +4961,7 @@ DataBuf_CopyEQBlock7:
 	and a, 0xf
 	andmi8 (xbc + 6), 0xf0
 	or (xbc + 6), a
-	cpdi16 0xb7ea, 2
+	cpw (0xb7ea:16), 2
 	ret nz
 	ld a, (xde + 5)
 	ld (xbc + 5), a

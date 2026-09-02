@@ -3003,7 +3003,7 @@ RingBuf_SetOffsetLo:
 RingBuf_CheckOffset_ClearFlags:
 	cp (10214:16), 0
 	jr z, RingBuf_CheckOffset_LoZero
-	cpdi16 10215, 48
+	cpw (10215:16), 48
 	jr c, RingBuf_CheckOffset_Level1
 	resm 7, (xwa + 3)
 	resm 7, (xwa + 4)
@@ -3011,14 +3011,14 @@ RingBuf_CheckOffset_ClearFlags:
 	ret
 
 RingBuf_CheckOffset_Level1:
-	cpdi16 10215, 32
+	cpw (10215:16), 32
 	ret c
 	resm 7, (xwa + 4)
 	resm 7, (xwa + 5)
 	ret
 
 RingBuf_CheckOffset_LoZero:
-	cpdi16 10215, 80
+	cpw (10215:16), 80
 	jr c, RingBuf_CheckOffset_LoZero_Level1
 	resm 7, (xwa + 3)
 	resm 7, (xwa + 4)
@@ -3026,7 +3026,7 @@ RingBuf_CheckOffset_LoZero:
 	ret
 
 RingBuf_CheckOffset_LoZero_Level1:
-	cpdi16 10215, 64
+	cpw (10215:16), 64
 	ret c
 	resm 7, (xwa + 4)
 	resm 7, (xwa + 5)
@@ -42775,9 +42775,9 @@ DSP_RingBuf_Write2K:
 Audio_CmdHandler_60_7F:
 	ld xhl, (xsp + 6)
 	ld de, (xsp + 4)
-	cpdi16 17548, 0
+	cpw (17548:16), 0
 	jr z, CmdHandler60_StreamSizeC
-	cpdi16 17548, 1
+	cpw (17548:16), 1
 	jr ule, CmdHandler60_StreamSizeA
 	lds ix, 0
 
@@ -43160,7 +43160,7 @@ Audio_Process_DSP:
 	ld (xsp + 4), xwa
 	ld wa, (xwa + 4)
 	calr DSP_StoreBufferCount
-	cpdi16 17548, 0
+	cpw (17548:16), 0
 	jrl z, DSP_Process_ReadNext
 	jrl DSP_Process_Exit
 
@@ -44057,7 +44057,7 @@ DSP_ApplyConfig_BufSelectA:
 DSP_ApplyConfig_BufSelectB:
 	lda xbc, (17738:16)
 	lds wa, 0
-	cpdi16 17850, 0
+	cpw (17850:16), 0
 	jr z, DSP_ApplyConfig_Epilogue
 	ld wa, (17848:16)
 
@@ -44170,7 +44170,7 @@ DSP_Set_Value_45B8:
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
 	extz	wa
 	ld	(17848:16), wa
-	cpdi16	(17850), 0
+	cpw	(17850:16), 0
 	ret	z
 	ldw	(17550:16), 0
 	ldmm16	17738, 17848
@@ -47094,7 +47094,7 @@ DSP_State_ApplyAll:
 ; 0x4958 + n*0x32 + 0x10 = 1 unless slot +0x30 equals 0x63. Otherwise (0x4930 + n*2) = 0.
 EFF_SlotActive_UpdateFlags:
 	lds de, 0
-	cpdi16 18750, 1
+	cpw (18750:16), 1
 	jr nz, EFF_SlotActive_SlotActive
 	lds hl, 0
 	cps hl, 5
@@ -47263,7 +47263,7 @@ EFF_SlotActive_Epilogue:
 ; Called from 0x038078, immediately after EFF_SlotActive_UpdateFlags and immediately before
 ; EFF_DspChannel_InitFlags -- the three form one "prepare the dirty state" block.
 EFF_DSPLink_ResetFlags:
-	cpdi16 18750, 1
+	cpw (18750:16), 1
 	jr nz, EFF_DSPLink_ResetFlags_LoopNext
 	ldw (18746:16), 1
 	lds de, 1
@@ -47319,7 +47319,7 @@ EFF_DspChannel_InitFlags:
 
 ; (0x493E) == 1 -> force this slot's dirty word to 1.
 EFF_DspChannel_Init_AlgoCheck:
-	cpdi16 18750, 1
+	cpw (18750:16), 1
 	jr nz, EFF_DspChannel_Init_SlotNext
 	ld bc, de
 	mul bc, 0x32
@@ -48254,7 +48254,7 @@ DSP_UnmuteLoop_Epilogue:
 ; DSP_AlgorithmChange (0x03800D) with XWA still pointing at the config block; otherwise
 ; return immediately. The flag is set by DSP_AlgoChange_CheckAndFlag, outside this region.
 DSP_AlgorithmChangeCheck:
-	cpdi16 18750, 1
+	cpw (18750:16), 1
 	ret nz
 	call DSP_AlgorithmChange
 	ret

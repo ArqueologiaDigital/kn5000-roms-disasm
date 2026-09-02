@@ -550,7 +550,7 @@ BootSerial_TestLoopback:
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
-	cpdi16	(0x0f77), 0
+	cpw	(0x0f77:16), 0
 	jr	z, BootSerial_TestLoopback__no_resp1
 	or	(0x0f6b:16), 1
 BootSerial_TestLoopback__no_resp1:
@@ -561,7 +561,7 @@ BootSerial_TestLoopback__no_resp1:
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
-	cpdi16	(0x0f77), 0
+	cpw	(0x0f77:16), 0
 	jr	z, BootSerial_TestLoopback__no_resp2
 	or	(0x0f6b:16), 8
 BootSerial_TestLoopback__no_resp2:

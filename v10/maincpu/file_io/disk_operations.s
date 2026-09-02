@@ -450,7 +450,7 @@ FmmFormatFunc:
 	lds wa, 1
 	calr InitializeOperationState
 	ldmm8 0x7f6a, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmFmt_InitPhase_CheckDrive
 	call GetDiskSizeInfo
 	extz hl
@@ -636,7 +636,7 @@ FmmLoadTitleFunc:
 	lds32 xde, 5
 	call ApPostEvent
 	ldmm8 0x7f6e, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmLoadTtl_StateDispatch
 	call GetDiskSizeInfo
 	extz hl
@@ -651,7 +651,7 @@ FmmLoadTtl_StateDispatch:
 	jrl z, FmmLoadTtl_StateIdle
 	cps wa, 5
 	jr z, FmmLoadTtl_StateCancelLoad
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmLoadTtl_CheckFileHandle
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
@@ -660,16 +660,16 @@ FmmLoadTtl_StateDispatch:
 	calr SignalProgressUpdate
 
 FmmLoadTtl_CheckFileHandle:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jrl nz, FmmLoadTtl_LoadSlots
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, FmmLoadTtl_CheckSmfHandle
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 
 FmmLoadTtl_CheckSmfHandle:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jrl le, FmmLoadTtl_LoadSlots
 	cp (0x7f6e:16), 100
 	jrl z, FmmLoadTtl_LoadSlots
@@ -761,7 +761,7 @@ FmmLoadTtl_SlotLoop:
 	jr FmmLoadTtl_Return
 
 FmmLoadTtl_HandleScrollNav:
-	cpdi16 0x7f70, 0
+	cpw (0x7f70:16), 0
 	jr lt, FmmLoadTtl_Return
 	call GetCurrentFileIndex
 	ld iz, hl
@@ -818,7 +818,7 @@ FmmSaveTitleFunc:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmSaveTtl_CheckFont
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
@@ -980,7 +980,7 @@ DiskInfoFunc:
 	jrl nz, DiskInfo_Return
 	lds wa, 0
 	calr InitializeOperationState
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, DiskInfo_ReadDriveType
 	call GetDiskSizeInfo
 	extz hl

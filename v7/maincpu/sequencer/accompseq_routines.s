@@ -415,7 +415,7 @@ AccompSeq_Parse_TypeC0:
 AccompSeq_Parse_Type90:
 	calr	186
 	calr	226
-	cpdi16	32180, 16
+	cpw	(32180:16), 16
 	jr	ugt, 5
 	calr	263
 	jr	13
@@ -434,7 +434,7 @@ AccompSeq_Parse_Type91_Impl:
 	ld (0x7dbf:16), a
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_CalcEventSize
-	cpdi16 (0x7db4), 0x0010
+	cpw (0x7db4:16), 0x0010
 	jr ugt, AccompSeq_Parse_Type91_CalcSize
 	calr AccompSeq_ResetCounters
 	jr t, AccompSeq_Parse_Type91_Done
@@ -460,7 +460,7 @@ AccompSeq_Parse_Fallthrough:
 	ld	(32187:16), a
 	calr	-571
 	calr	106
-	cpdi16	32180, 16
+	cpw	(32180:16), 16
 	jr	ugt, 5
 	calr	143
 	jr	13
@@ -475,7 +475,7 @@ AccompSeq_Parse_TypeC0_Done:
 AccompSeq_Parse_TypeC0_Impl:
 	calr AccompSeq_ReadParams
 	calr AccompSeq_CalcEventSize
-	cpdi16 (0x7db4), 0x0010
+	cpw (0x7db4:16), 0x0010
 	jr ugt, AccompSeq_Parse_TypeC0_Finalize
 	calr AccompSeq_ResetCounters
 	jr t, AccompSeq_Parse_Return

@@ -517,7 +517,7 @@ BmDrEdit_CheckTempoData:
 BmDrEdit_CheckTempoData_ReadyToProcess:
 	bit 7, (0x295c:16)
 	ret nz
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jr z, BmDrEdit_ClearNoteAndRefresh
 	call TempoRingBuf_CheckEmpty
 	cps hl, 0
@@ -1785,7 +1785,7 @@ BmDrEdit_InitMelodicMode:
 
 BmDrEdit_InitCommon:
 	pushw iz
-	cpdi16 0x2792, 0
+	cpw (0x2792:16), 0
 	jr nz, BmDrEdit_InitCommon_CheckSongActive
 	ldw (0x2792:16), 48
 
@@ -1851,7 +1851,7 @@ BmDrEdit_CopyStepCount:
 
 BmDrEdit_InitFirstStep:
 	ldw (0x2744:16), 1
-	cpdi16 0xf231, 0
+	cpw (0xf231:16), 0
 	jrl z, BmDrEdit_RefreshAndReturn
 	call Part_ProcessAndDecrementVoice
 	ld iz, hl
@@ -2027,7 +2027,7 @@ BmDrEdit_WalkEventsOrSetError:
 BmDrEdit_WalkToGridPosition:
 	dec 4, xsp
 	calr BmDrEdit_LoadAlternateState
-	cpdi16 0x279a, 0
+	cpw (0x279a:16), 0
 	jr nz, BmDrEdit_WalkToGrid_ReadNext
 	jr BmDrEdit_CleanupReturn
 
@@ -2104,7 +2104,7 @@ BmDrEdit_ValidateAndInsertSteps:
 
 BmDrEdit_ValidateSteps_CheckCount:
 	calr BmDrEdit_CountMeasuresAndValidate
-	cpdi16 0x2772, 0
+	cpw (0x2772:16), 0
 	ret nz
 	ldw (0x2772:16), 2
 
@@ -2265,7 +2265,7 @@ BmDrEdit_SkipToEvent_ReadLoop:
 
 BmDrEdit_SkipToEvent_SkipAndCheck:
 	call SeqData_SkipToNextEvent
-	cpdi16 0x2772, 0
+	cpw (0x2772:16), 0
 	jr nz, BmDrEdit_SkipToEvent_ReadLoop
 	ret
 
@@ -2644,7 +2644,7 @@ BmDrEdit_InsertNoteSequence:
 	sub bc, wa
 	ld (0x2772:16), bc
 	calr EditChannel_LoadVoiceParams
-	cpdi16 0x2772, 0
+	cpw (0x2772:16), 0
 	jr z, BmDrEdit_SavePositionAndReturn
 
 BmDrEdit_InsertSeq_StepLoop:
@@ -2673,7 +2673,7 @@ BmDrEdit_InsertSeq_PopIzRet:
 BmDrEdit_ScanAfterModify:
 	dec 4, xsp
 	resda 3, 0x295f
-	cpdi16 0x279c, 0
+	cpw (0x279c:16), 0
 	jr nz, BmDrEdit_ScanAfterModify_LoadAndWalk
 	call SeqData_ReadNextByte
 	cp l, 0x81
@@ -2787,9 +2787,9 @@ BmDrEdit_NavigateBackwardWithEdit:
 	calr BmDrEdit_ScanAfterModify
 	bit 3, (0x295f:16)
 	jr z, BmDrEdit_NavEdit_CheckPosition
-	cpdi16 0x2744, 1
+	cpw (0x2744:16), 1
 	jr z, BmDrEdit_ResetToFirstEvent
-	cpdi16 0x279c, 0
+	cpw (0x279c:16), 0
 	jr z, BmDrEdit_GoToPrevPage
 
 BmDrEdit_ResetToFirstEvent:
@@ -2836,9 +2836,9 @@ BmDrEdit_NavigateAfterEdit:
 	calr BmDrEdit_WalkAndScanAfterEdit
 	bit 3, (0x295f:16)
 	jr z, BmDrEdit_NavEdit_CalcCoords
-	cpdi16 0x2744, 1
+	cpw (0x2744:16), 1
 	jr z, BmDrEdit_ResetToFirstEvent
-	cpdi16 0x279c, 0
+	cpw (0x279c:16), 0
 	jr z, BmDrEdit_GoToPrevPage
 	jr BmDrEdit_ResetToFirstEvent
 
@@ -3291,7 +3291,7 @@ BmDrEdit_ValidateVoice_ProcessState:
 	ldw (xsp + 4), 0x1
 	ld xwa, (xsp + 6)
 	ldw (xwa), 0x0
-	cpdi16 0x287f, 1
+	cpw (0x287f:16), 1
 	jr z, BmDrEdit_TrackValidateRet
 
 BmDrEdit_ValidateVoice_SkipSections:
@@ -4152,7 +4152,7 @@ BmDrEdit_InitScanEventPositions:
 	ldib_erp 0xfb, 0
 	ld (0x275e:16), iz
 	ld (0x2760:16), 0
-	cpdi16 0x2782, 0
+	cpw (0x2782:16), 0
 	jr z, BmDrEdit_SyncSeek_ReadNext
 	ldw (0x2772:16), 0
 
@@ -4334,7 +4334,7 @@ BmDrEdit_SyncStorePos:
 BmDrEdit_StoreStreamPos:
 	ld (0x275e:16), iz
 	ld (0x2760:16), 0
-	cpdi16 0x2782, 0
+	cpw (0x2782:16), 0
 	jrl nz, BmDrEdit_SeekFwd_InitCountLoop
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -4456,7 +4456,7 @@ BmDrEdit_EnterPlay_CheckAudio:
 
 BmDrEdit_EnterPlay_UpdateProgress:
 	ldmm16 9832, 9500
-	cpdi16 9832, 1
+	cpw (9832:16), 1
 	jr z, BmDrEdit_EnterPlay_AllocAndInit
 	setda 3, 0x28a7
 

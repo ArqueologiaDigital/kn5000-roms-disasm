@@ -724,7 +724,7 @@ INTTR4_CheckAltSeqEnable:
 	jr lt, INTTR4_MetroPhaseSync
 	ld (1051:16), 0
 	incdi16 1, (1052)
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, INTTR4_MetroPhaseSync
 	calr TempoRingBuf_Write
 
@@ -883,7 +883,7 @@ INTTR4_AltSeqAccum_Update:
 	jr nz, INTTR4_AltSeqSync_Check
 	ld (1054:16), 8
 	and (1073:16), 247
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, INTTR4_AltSeqSync_Check
 	ldb a, 0x86
 	calr TempoRingBuf_WritePair
@@ -895,7 +895,7 @@ INTTR4_AltSeqSync_Check:
 	jr nz, INTTR4_FadeDelay_Check
 	ld (1054:16), 1
 	and (1073:16), 254
-	cpdi16 0x28aa, 0
+	cpw (0x28aa:16), 0
 	jr z, INTTR4_FadeDelay_Check
 	ldb a, 0x85
 	calr TempoRingBuf_WritePair

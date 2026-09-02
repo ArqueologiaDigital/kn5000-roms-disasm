@@ -98,7 +98,7 @@ FmmUtilityTitleFunc:
 	lds32 xde, 0
 	call ApDeliveryEvent
 	ldmm8 0x7f5c, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmUtility_DispatchState
 	call GetDiskSizeInfo
 	extz hl
@@ -113,7 +113,7 @@ FmmUtility_DispatchState:
 	jrl z, FmmUtility_HandleError
 	cps wa, 5
 	jr z, FmmUtility_HandleCancel
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmUtility_ScanFormat
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
@@ -122,16 +122,16 @@ FmmUtility_DispatchState:
 	calr SignalProgressUpdate
 
 FmmUtility_ScanFormat:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jrl nz, FmmUtility_ContinueWait
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, FmmUtility_CheckCapacity
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 
 FmmUtility_CheckCapacity:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jrl le, FmmUtility_ContinueWait
 	cp (0x7f5c:16), 124
 	jrl z, FmmUtility_ContinueWait
@@ -230,7 +230,7 @@ FmmSmfUtilityTitleFunc:
 	lds32 xde, 0
 	call ApDeliveryEvent
 	ldmm8 0x7f5e, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmSmfUtility_DispatchState
 	call GetDiskSizeInfo
 	extz hl
@@ -245,7 +245,7 @@ FmmSmfUtility_DispatchState:
 	jrl z, FmmSmfUtility_HandleError
 	cps wa, 5
 	jr z, FmmSmfUtility_HandleCancel
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, FmmSmfUtility_ScanFormat
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
@@ -254,16 +254,16 @@ FmmSmfUtility_DispatchState:
 	calr SignalProgressUpdate
 
 FmmSmfUtility_ScanFormat:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jrl nz, FmmSmfUtility_ContinueWait
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmSmfUtility_CheckCapacity
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 
 FmmSmfUtility_CheckCapacity:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jrl le, FmmSmfUtility_ContinueWait
 	cp (0x7f5e:16), 123
 	jrl z, FmmSmfUtility_ContinueWait

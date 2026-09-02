@@ -944,7 +944,7 @@ FmmDiskMedleySelectFunc:
 	ld XBC,0x01c0000a
 	lds32 xde, 0
 	call ApPostEvent
-	cpdi16 (0x8466), 0x0000
+	cpw (0x8466:16), 0x0000
 	jr ge, DiskSel_InitState
 	ld XWA,0x00600026
 	ld XBC,0x01c00001
@@ -1979,7 +1979,7 @@ SmfMed_InitFromDisk:
 	ld XWA,0x006c0018
 	ld XBC,0x01e0003b
 	call ApPostEvent
-	cpdi16 (0x8468), 0x0000
+	cpw (0x8468:16), 0x0000
 	jr ge, SmfMed_InitState
 	ld XWA,0x00600026
 	ld XBC,0x01c00001
@@ -3379,9 +3379,9 @@ DocMed_ShowError:
 
 DocMed_CheckInit_Entry:
 DocMed_CheckInit:
-	cpdi16	33900, 0
+	cpw	(33900:16), 0
 	jr	lt, 8
-	cpdi16	33896, 0
+	cpw	(33896:16), 0
 	jr	nz, 66
 DocMed_InitFromDisk:
 	ldw	(33896:16), 65535

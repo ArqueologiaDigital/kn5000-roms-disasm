@@ -1323,7 +1323,7 @@ SndParam_Widget1_CallType3:
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb0
 	ld	(1054:16), 1
-	cpdi16	10410, 0
+	cpw	(10410:16), 0
 	jr	z, 5
 	ldb	a, 133
 	calr	643
@@ -1333,7 +1333,7 @@ SndParam_Widget1_CallType3:
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb3
 	ld	(1054:16), 8
-	cpdi16	10410, 0
+	cpw	(10410:16), 0
 	jr	z, 5
 	ldb	a, 134
 	calr	609
@@ -1341,7 +1341,7 @@ SndParam_Widget1_CallType3:
 	jr	nz, 99
 	ld	(1051:16), 0
 	incdi16	1, (1052)
-	cpdi16	10410, 0
+	cpw	(10410:16), 0
 	jr	z, 3
 	calr	512
 	.byte 0xf1, 0x52, 0xfd, 0xca
@@ -1355,7 +1355,7 @@ SndParam_Widget1_CallType3:
 	jr	z, 4
 	.byte 0xf1, 0xde, 0x33, 0xba
 	ld	(1054:16), 16
-	cpdi16	10410, 0
+	cpw	(10410:16), 0
 	jr	z, 5
 	ldb	a, 134
 	calr	532
@@ -1378,7 +1378,7 @@ SndParam_Widget1_CallType3:
 	cp	d, 251
 	jrl	z, 200
 	ret
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	z, 10
 	push	sr
 	ei	0x06
@@ -1388,7 +1388,7 @@ SndParam_Widget1_CallType3:
 	ret
 	.byte 0xf1, 0xac, 0x28, 0xbd
 	ld	(1108:16), 0
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	nz, 80
 	xor	wa, wa
 	ld	(1047:16), a
