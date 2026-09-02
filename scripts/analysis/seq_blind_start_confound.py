@@ -90,17 +90,28 @@ def score(rev, path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--file", required=True)
+    ap.add_argument("--file", help="one tracked path")
+    ap.add_argument("--dir", help="score every tracked *.s under this path")
     ap.add_argument("--before", required=True)
     ap.add_argument("--after", default="HEAD")
     a = ap.parse_args()
-    print("%s" % a.file)
+    if not a.file and not a.dir:
+        ap.error("give --file or --dir")
     for rev, tag in ((a.before, "BEFORE"), (a.after, "AFTER ")):
-        runs, blind, ctrl = score(rev, a.file)
-        print("  %s %-10s runs=%4d  blind=%3d (%4.1f%%)  control=%d  bytes=%d"
-              % (tag, rev, len(runs), len(blind),
-                 100.0 * len(blind) / max(1, len(runs)), len(ctrl),
-                 sum(len(r) for r in runs)))
+        if a.file:
+            paths = [a.file]
+        else:
+            listing = subprocess.run(["git", "ls-tree", "-r", "--name-only",
+                                      rev, a.dir], capture_output=True,
+                                     check=True).stdout.decode()
+            paths = [p for p in listing.split("\n") if p.endswith(".s")]
+        R = B = C = N = 0
+        for p in paths:
+            runs, blind, ctrl = score(rev, p)
+            R += len(runs); B += len(blind); C += len(ctrl)
+            N += sum(len(r) for r in runs)
+        print("  %s %-10s files=%2d runs=%4d  blind=%3d (%4.1f%%)  control=%d  operands=%d"
+              % (tag, rev, len(paths), R, B, 100.0 * B / max(1, R), C, N))
 
 
 if __name__ == "__main__":
