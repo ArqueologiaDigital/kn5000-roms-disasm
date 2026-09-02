@@ -585,25 +585,219 @@ mode exists.
 
 ---
 
-## What I could NOT settle
+## The KN7000 floppy `FORMAT` / class-5 question
 
-**The KN7000 floppy `FORMAT` / class-5 disk-task defect.**  The brief asks
-whether the now-complete disassembly can say what class-5 dispatch requires.
-It cannot, and the reason is a false premise worth stating plainly:
+The brief asks whether the now-complete disassembly can say what class-5
+dispatch requires.  **It cannot answer that directly**, for a reason worth
+stating plainly, but it does settle two things the KN7000 investigation has been
+assuming, and one of them is assumed wrongly.
+
+### The false premise
 
 * The class-5 failure is a **KN7000** defect.  Every address in
-  `kn7000_mame/notes/fdc-architecture.md` addenda 12-15 is an MN10300 address
-  (`0x484ADxxx`, `0x484A1766`, `0x4C03C5AF`).
+  `kn7000_mame/notes/fdc-architecture.md` addenda 12-20 is an MN10300 address
+  (`0x484ADxxx`, `0x484D7930`, `0x484D7490`, `0x4C03C5AF`).
 * The images that reached zero verbatim debt are the **KN5000** ones —
   TLCS-900 main CPU (v10/v9/v7), the v1.42 sub-CPU payload and its update image,
   the sub-CPU boot ROM, table data, custom data, HD-AE5000.
 * The KN7000's own firmware disassembly is a different repository
-  (`~/compartilhado/kn7000_disassembly`) and its own tooling puts coverage at
+  (`~/compartilhado/kn7000_disassembly`), and its own tooling puts coverage at
   **3.64%** (commit `080d1d7`, *"tools: measure KN7000 source coverage honestly
   (3.64%, not 18.03%)"*).  The class-5 dispatcher is not inside that 3.64%.
 
-The one route that could have worked — the two firmwares descending from a
-shared Technics RTOS, so that the KN5000's complete source documents the same
-kernel — was put to a dedicated search of the KN5000 tree; its verdict is in the
-next section.
+So the "sub-CPU and main-CPU images now fully disassembled" in the brief are not
+the images the defect lives in.
 
+### What the KN5000 does settle (1): the kernel is µITRON, and it is named in the ROM
+
+Not a label guess — the factory-diagnostics table carries the original Technics
+names as **literal ROM strings**, `v10/maincpu/factory_test/test_data.s:200-212`:
+
+```
+HamaStr_pdly_tim_X:	aligned_string "pdly_tim_X"
+HamaStr_get_tid_X:	aligned_string "get_tid_X"
+HamaStr_prcv_msg_X:	aligned_string "prcv_msg_X"
+HamaStr_rcv_msg_X:	aligned_string "rcv_msg_X"
+HamaStr_snd_msg_X:	aligned_string "snd_msg_X"
+HamaStr_ref_sem_X:	aligned_string "ref_sem_X"
+HamaStr_wai_sem_X:	aligned_string "wai_sem_X"
+HamaStr_preq_sem_X:	aligned_string "preq_sem_X"
+HamaStr_sig_sem_X:	aligned_string "sig_sem_X"
+HamaStr_wai_flg_X:	aligned_string "wai_flg_X"
+HamaStr_set_flg_X:	aligned_string "set_flg_X"
+HamaStr_rot_rdq_X:	aligned_string "rot_rdq_X"
+```
+
+and `v10/maincpu/kn5000_v10_program.s:1234-1268` is the wrapper table those
+names point at (`snd_msg_X: jp TaskMsg_Send`, `wai_flg_X: jp
+TaskSched_WaitForEvent`, and so on).  `rot_rdq / set_flg / wai_flg / sig_sem /
+preq_sem / wai_sem / ref_sem / snd_msg / rcv_msg / prcv_msg / get_tid /
+pdly_tim` is the µITRON service-call vocabulary; `snd_msg`/`rcv_msg`/`prcv_msg`
+are the ITRON-2 mailbox calls.  The `_X` suffix is Technics' wrapper marker.
+
+Task descriptors are 12 bytes `{entry PC, stack top, initial SR, priority}` at
+`0x00EF18EB + 12*tid`, tid 1..5 — `TaskSched_ScreenGroupTable`
+(`boot/system_handlers.s:1946`, whose bytes decode to
+`Boot_InitPeripherals`/`0x1DC34`/`0x8800`/3, then `0xF52D92`, then a `jr $` stub
+that is never spawned, then `0xF9806C`, then `0xFAA2FA`).  The spawner is
+`Show_ScreenGroup` (`:2264`) — a **mislabel**: it is `sta_tsk`, byte-identical to
+the sub-CPU's `TaskSched_SpawnTask` (`v142/subcpu/kn5000_subprogram_v142.s:868`),
+and `kn5000_v10_program.s:661`'s comment *"Show screen group 4"* is wrong too.
+
+If anyone wants a clean reference copy of this kernel to compare a KN7000 trace
+against, the best-disassembled one in the repo is
+`v142/subcpu/kn5000_subprogram_v142.s:596-1200`.
+
+### What the KN5000 does settle (2): ⚠ ERROR 08 does NOT identify a decision point
+
+Several KN7000 addenda speak of *"the ERROR-08 decision point 0x484ADxxx"*, i.e.
+they treat 8 as pointing at a particular branch.  On the KN5000 — same
+manufacturer, same `"ERROR NN"` message scheme, same numbering shape — it does
+not.  Chain, each link read from the ROM
+(`scripts/analysis/error_number_table.py`, commit `8198df45`):
+
+1. `FmmFormatFunc` (`v10/maincpu/file_io/disk_operations.s:538-541`) passes
+   **`ldw bc, 0x8` as the DEFAULT message number** to `FileIO_ValidateSignedValue`
+   and stores the result at DRAM `0x7F42`.
+2. `FileIO_ValidateSignedValue` (`demo/file_demo_proc.s:8711`) looks the return
+   code up in a `{int16 code, uint8 msgno, uint8 pad}` table at ROM `0x00EA067C`,
+   terminated by `{0, 255}`.  Decoded from the ROM:
+   `-2→1, -3→5, -4→7, -6→8, -7→0, -8→2, -11→6, -101→7, -102→0, -104→3,
+   -105→61, -107→15`.  **Anything not in that list takes the caller's default —
+   which for the format is 8.**
+3. The format worker's own failure return is `-6`
+   (`demo/file_demo_proc.s:4666-4671`, `ldw hl, 0xfffa`), which the table also
+   maps to 8.
+4. Message 8's string is at ROM `0xE96A5E` and reads (Spanish arm quoted, the
+   block is multilingual): *"Se ha producido un error mientras se hacía el
+   formato del disco…"* — **"an error occurred while formatting the disk"**.
+
+So on this firmware family **ERROR 08 means "the format worker returned failure"
+and carries no information about where**.  It is the catch-all.  Any KN7000
+reasoning that treats 8 as naming a specific branch should be re-examined.
+
+### What the KN5000 does settle (3): on the KN5000 the FDC is NOT owned by a task
+
+The single funnel is `FDC_CommandEntry` (`v10/maincpu/storage/fdc_routines.s:2178`)
+— a **plain synchronous subroutine** taking a 16-byte command block, guarded by
+one byte:
+
+```
+	cpdi8 (0x8a16), 165          ; 0xA5 = "FDC in use"
+	jr nz, FDC_CommandEntry_CopyParams
+	ei 0
+	ldw wa, 0xfb                 ; status 0xFB = BUSY, bail out immediately
+	calr FDC_Set_Status
+	...
+FDC_CommandEntry_CopyParams:
+	stdi8 (0x8a16), 165          ; take it
+	...
+FDC_Handler_ExitStatus:
+	stdi8 (0x8a16), 90           ; 0x5A = release
+```
+
+`0x8A16` is touched from exactly those four lines in the whole image
+(`fdc_routines.s:2183, 2187, 2196, 2339` — the one other textual match, at
+`extensions/extension_init.s:104`, is a coincidental constant inside a macro
+argument list, not an access).  No semaphore, no mailbox, no task hand-off: a
+loser gets status `0xFB` **immediately** rather than blocking.  Every FDC caller
+— `format_FD`, `GetMediaType`, `_findfirst`, `Reset_Floppy_Disk_Controller`, the
+factory test — is a synchronous `call`.
+
+There IS a disk **task** (tid 2, entry `0x00F52D92`,
+`sequencer/smf_event_processor.s:10594`) but its job is only to prefetch file
+bytes into mailbox buffers: `rcv_msg(2)` for a free 1 KB buffer, read, `snd_msg(3)`
+to the consumer.  It is spawned on demand and it is not what drives the
+controller.
+
+So the KN5000 gives **no precedent for a device-driver method table** of the kind
+the KN7000's addendum 13 says is unpopulated.  That indirection is a KN7000-era
+evolution, and the KN5000 cannot adjudicate it.  Stating that plainly is the
+honest result: this lane cannot crack the class-5 blocker.
+
+### Two cheap checks the KN5000 does suggest for the KN7000
+
+Offered as hypotheses with their disproofs attached, not as answers.
+
+1. **Does the KN7000's format worker have a media-type gate that returns failure
+   before any FDC access?**  The KN5000's does, and it is the only place the
+   format fails with zero FDC traffic:
+
+   ```
+   format_FD:
+   	extz wa
+   	cps wa, 3
+   	jrl z, FDC_Format2HD_Start     ; 3 = 2HD
+   	cps wa, 2
+   	jr nz, FDC_Format_InvalidType  ; anything but 2 or 3 ...
+   	jr FDC_Format2DD_Start         ; 2 = 2DD
+   FDC_Format_InvalidType:
+   	lds hl, 0                      ; ... returns FAIL, FDC never touched
+   	ret
+   ```
+
+   That signature — *"errors before the FDC is touched"* — is exactly the KN7000
+   symptom.  On the KN5000 the type comes from `GetMediaType`
+   (`sequencer/smf_event_processor.s:9656`), which itself issues FDC commands and
+   reads **Port D bit 6** (the disk-change line); it is cached at `0x8500` and
+   re-checked twice (`file_io/disk_operations.s:466-473`, then inside `format_FD`).
+   ⚠ The KN7000 notes record that *"forcing the disk-present type to 3 (read-tap
+   OR-ing strap bits10/11) does NOT clear ERROR 08"* — but a strap is not
+   `GetMediaType`.  **Disproof**: find the KN7000's `GetMediaType` equivalent and
+   tap its return value during a format.  If it already returns 2 or 3, this
+   hypothesis is dead and should be recorded as dead.
+   ⚠ Counter-evidence already on file: the KN7000 trace shows the class-5 state
+   machine actually running through states 0..5, i.e. the format got further than
+   a type gate would allow.  So I rate this hypothesis **unlikely but cheap**.
+
+2. **Could the observation-sensitivity be a MUTEX race rather than a scheduler
+   race?**  On the KN5000 the FDC guard byte hands a losing caller an immediate
+   `0xFB` "busy" failure rather than blocking it.  If the KN7000 kept that
+   convention, then two callers whose interleaving depends on scheduling
+   granularity would produce exactly the reported pattern: with the trace's
+   cross-device synchronisation one ordering wins and the format proceeds;
+   without it the other ordering wins and the format gets an instant busy-fail
+   that becomes ERROR 08 — with **no** task-dispatch race involved.
+   **Disproof**: find the KN7000's equivalent guard byte (a byte written with two
+   distinct sentinels around the disk-command entry, the KN5000's being
+   `0xA5`/`0x5A`) and memory-tap it in a normal run.  If it is never contended,
+   this hypothesis is dead.  `perfect_quantum` having been ruled out is *not* a
+   disproof: `perfect_quantum` changes CPU interleaving, not the ordering of
+   device callbacks and timer callbacks within one time slice.
+
+Both are stated so they can be killed cheaply.  Neither is a finding.
+
+---
+
+## Method notes worth keeping
+
+* **A zero from one search instrument is not a fact.**  Finding 7 (`0x1e0000`)
+  survived a direct-addressing census returning zero *and* a plain `grep -a`
+  returning zero, and was only found by the census's `--bases` mode.  The
+  literal was spelled in a different case than the pattern.
+* **Register-indirect access is invisible to an operand census.**  The DSP1
+  driver (finding 10) and the flash routines (finding 3) both load a base into a
+  register first.  `io_address_census.py --bases` exists for exactly that, and
+  the limitation is in the script's header, not only here.
+* **Auto-generated labels in this tree are guesses and several are wrong.**
+  Confirmed wrong in this pass: `HDAE5000_Detect` (identifies the *table-data*
+  flash), `HDAE5000_Status_Check` (is `Flash_CheckReady`), `Show_ScreenGroup`
+  (is `sta_tsk`), `MIDI_ProcessVoiceAssignment` (is a foot-switch scan),
+  `smf_event_processor.s` (is the FAT/file-system + FDC command layer),
+  `Audio_Lock_*` (is the generic `sem` family).  Every claim above is stated
+  from the instructions, with the label named only for navigation.
+* **Some regions are data framed as code and pass the byte gate.**  The
+  direct-addressing census turns up single isolated "accesses" at addresses like
+  `0x149f06`, `0x169f06`, `0x2700e3`, `0xc8d888` — all one-site, all in the
+  middle of misdecoded runs.  None of them is reported above as a device.
+
+## Gate
+
+This lane changed **no `.s` file** — only two notes and four analysis scripts
+under `scripts/analysis/`, none of which is referenced by the `Makefile`'s build
+or gate rules (`grep -an 'scripts/analysis' Makefile` shows only
+`assert_images_assemble.py`, `assert_byte_identical.py`,
+`rom_provenance_poison.py` and `audit_icons_blob_coverage.py`, none of them
+touched).  No ROM byte can have moved, so the 13-image gate is not this lane's
+certification and running it would only add load; the integrator's post-merge
+gate on `main` covers it.  Stated explicitly rather than silently skipped.
