@@ -4,6 +4,96 @@ Result of an eleven-lane parallel push across all 13 gated images. **The byte
 gate is green: 13/13 byte-identical, 8/8 KN5000 images assembling with the
 pinned toolchain**, re-run centrally on `main` after every merge.
 
+## ★★ SX-WSA1R: 13,206 B → 481 B in one push (2026-09-02)
+
+**Three of the four SX-WSA1R images are at ZERO verbatim debt. The fourth,
+prom_b, holds 481 bytes.** Seven lanes, all merged and gated together from a
+clean rebuild: `make all` in `wsa1/` then `assert_byte_identical.py`, 4/4
+byte-identical.
+
+| image | start of push | now |
+|---|---:|---:|
+| prom_a | 2,542 B | **0** ✅ |
+| prom_b | 10,664 B | **481 B** (99.9% source) |
+| prom_c | 0 | **0** ✅ |
+| prom_d | 0 | **0** ✅ |
+
+Every lane's figure proved exact and additive: 2,995 + 2,453 + 1,757 + 1,139 +
+1,115 + 811 = 10,183, and 10,664 − 10,183 = 481 to the byte.
+
+### What the spans actually were — and it was almost never "undecoded code"
+
+Across six independent lanes the same answer kept arriving: **display-list data
+named by pointers**, and the reason it had been left behind was always the same
+mechanism.
+
+> **Round 1 sized each object by a reachability walk, and a walk's extent is not
+> an object's extent.** It reached an object's FIRST byte through a 32-bit
+> pointer and stopped, because it had no notion of how big the pointed-at thing
+> is. The display-list HANDLER does: `0xF31ABE` gives BC×HL for a bitmap,
+> `0xF31B57` is `sla 3,HL` ⇒ 8-byte entries, `0xF31B86` is `mul HL,6`,
+> `0xF31B21` takes the width from the record's `+0x0B`. That one fact closed
+> most of the remaining debt.
+
+The small-span lane made the mechanism visible statistically: of 55 spans ≤128 B,
+**44 follow a data directive and 48 are followed by a label**. They were never
+gaps *between* objects — they are the **rest of the object above them**, left
+when the walk cut a fixed-stride array mid-entry.
+
+★ Consequently **several object extents in the tree were too long**, each having
+warned in its own header that its extent was the walk's and not the object's.
+`Data_F3C37D` was recorded as 257 B and is 48 — it ran through an entire second
+array and one byte into its 27th entry.
+
+### The exceptions, which are the interesting part
+
+* **prom_a 0xF96504** (1,889 B) is a **bit-field script interpreter** whose
+  reader was already converted one screen above; its three literals all land
+  inside the span. Walking every script the two tables name tiles
+  0xF9667A–0xF969A1 exactly: 18 scripts, 259 records, no gap, no double-claim.
+* **prom_a 0xFDFFDF** (33 B) is **linker slack** holding the middle of a stale
+  routine prologue — 31 of 33 bytes match four prom_b copies against a 15% null,
+  and it begins and ends mid-instruction because it was overwritten at both ends.
+* **prom_b 0xF00C4D** (2,995 B) really was code: 828 instructions, framed
+  without using reachability at all — an exact `unidasm` tiling with no `db`
+  inside against 26 in the 786 bytes after, all 54 internal branch targets on
+  instruction starts, and 26 pointers held OUTSIDE the span all landing on
+  instruction starts. ★ **And it is in the image but not in the machine**: only
+  14 of its 34 prom_a call targets are instruction starts in a window that is
+  20,372 of 20,480 bytes framed as instructions. It appears linked against a
+  *different* prom_a, so **no routine there may be named for what its target
+  does in the prom_a we have.**
+
+### Two hazards this push demonstrated live
+
+⚠ **A tool in the tree would have silently reverted 2,453 bytes.**
+`gen_prom_b_cover_round1.py --splice` replaces a whole `COVER-R1` block with its
+own emission, and its no-overwrite guard collects the converted lines *outside*
+the markers — so work spliced *inside* one is invisible to it and would be
+reverted to `.incbin` **with the byte gate still green**, because `.incbin`
+reproduces the ROM by construction. A guard and a probe are now committed.
+
+⚠ **Two lanes framed the same array from bases 48 bytes apart** — exactly six
+whole entries, so both put every entry boundary in the same place and emitted
+identical bytes. The gate cannot distinguish them. The disagreement is written
+into the source at `DLTable_F3C3AD` rather than silently resolved; the
+record-anchored base was kept.
+
+### Refusals, which are results
+
+**17 spans / 551 B were refused** by an exhaustive search that finds a
+decomposition for 1 of 18 candidates and none for the other 17 — display-list
+record streams with no anchored boundary, or 8-byte-looking arrays whose base is
+declared nowhere. One worth someone's time is `0xF3B656`: `Data_F3B651` starts
+`00 0B`, but as op 0x00 length 11 its record ends at 0xF3B65C while the next
+record demonstrably starts at 0xF3B65B. Either op 0x00 does not carry its length
+at +1 in this interpreter, or `DL_F3B65B` is off by one. Guessing would put a
+wrong boundary into the tree that the gate would certify.
+
+⚠ Every lane demonstrated the gate goes **red** on a deliberate one-byte
+perturbation of its own conversion, then green on restore. A green gate never
+shown to fail on the change certifies nothing.
+
 ## ⚠ Read this before quoting any number below
 
 **There are TWO kinds of debt and they are counted by different instruments.**
