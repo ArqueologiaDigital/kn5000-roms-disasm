@@ -40,11 +40,13 @@ SPAN 1 -- 0xF0033F-0xF007FF, 1,217 bytes: FOUR TABLES OF 4-BYTE LE POINTERS
   -----
   1,217
 
-  WHY "4-BYTE LE POINTER".  290 consecutive 4-byte little-endian words are each
-  either 0x00000000, the repeated sentinel 0x00FDB10E, or an address inside the
-  1 MiB CS2 window 0xF00000-0xFFFFFF.  A 24-bit address space is 16 MiB, so a
-  random word lands in that window with probability 2**-4 at best; 290 in a row
-  is not a coincidence.
+  WHY "4-BYTE LE POINTER".  290 4-byte little-endian words are each either
+  0x00000000, the repeated sentinel 0x00FDB10E, or an address inside the 1 MiB
+  CS2 window 0xF00000-0xFFFFFF.  A 24-bit address space is 16 MiB, so a random
+  word lands in that window with probability 2**-4 at best.  At BYTE level they
+  form three uninterrupted runs of 35, 216 and 39 slots -- 216 in a row is not a
+  coincidence.  The 216-slot run is LABELLED as two tables, 181 + 35, on a cut
+  that comes from the targets and not from the bytes; see below.
 
   ⚠ NO SINGLE PHASE EXPLAINS THE SPAN, which is why one alignment never fit it:
   scored across the whole span the four byte phases give 222, 51, 42 and 6 of
@@ -530,9 +532,11 @@ def emit_r1():
     L.append("; withdrawn is `unreachable, therefore leave it verbatim'.  Data is typed")
     L.append("; from what REFERENCES it, and every object below is bounded that way.")
     L.append(";")
-    L.append("; 290 consecutive 4-byte little-endian words are each 0x00000000, the")
-    L.append("; repeated sentinel 0x00FDB10E, or an address in the 1 MiB CS2 window")
-    L.append("; 0xF00000-0xFFFFFF -- in a 16 MiB address space, and 290 in a row.")
+    L.append("; 290 4-byte little-endian words are each 0x00000000, the repeated sentinel")
+    L.append("; 0x00FDB10E, or an address in the 1 MiB CS2 window 0xF00000-0xFFFFFF, out")
+    L.append("; of a 16 MiB address space.  At BYTE level they form three uninterrupted")
+    L.append("; runs of 35, 216 and 39 slots; the 216-slot run is labelled below as two")
+    L.append("; tables, 181 + 35, on a cut that comes from the TARGETS and not the bytes.")
     L.append(";")
     L.append("; ⚠ THE PHASE IS NOT CONSTANT ACROSS THE SPAN, which is why one alignment")
     L.append("; never fit it: scored across the whole span the four byte phases give 222,")

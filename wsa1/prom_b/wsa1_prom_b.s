@@ -640,9 +640,11 @@ sub_F002F4:
 ; withdrawn is `unreachable, therefore leave it verbatim'.  Data is typed
 ; from what REFERENCES it, and every object below is bounded that way.
 ;
-; 290 consecutive 4-byte little-endian words are each 0x00000000, the
-; repeated sentinel 0x00FDB10E, or an address in the 1 MiB CS2 window
-; 0xF00000-0xFFFFFF -- in a 16 MiB address space, and 290 in a row.
+; 290 4-byte little-endian words are each 0x00000000, the repeated sentinel
+; 0x00FDB10E, or an address in the 1 MiB CS2 window 0xF00000-0xFFFFFF, out
+; of a 16 MiB address space.  At BYTE level they form three uninterrupted
+; runs of 35, 216 and 39 slots; the 216-slot run is labelled below as two
+; tables, 181 + 35, on a cut that comes from the TARGETS and not the bytes.
 ;
 ; ⚠ THE PHASE IS NOT CONSTANT ACROSS THE SPAN, which is why one alignment
 ; never fit it: scored across the whole span the four byte phases give 222,
