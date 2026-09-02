@@ -2402,7 +2402,7 @@ RamCtrl_Set_InvalidSize:
 RamCtrl_Set_Dispatch:
 	pushw 0x16
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -2426,7 +2426,7 @@ RamCtrl_Set_Dispatch:
 
 	ld xde, (xsp + 12)
 
-	.byte 0x1d, 0x4b, 0x99, 0xfa	; call ApPostEvent (v7 addr)
+	call	16423243
 
 	ld xwa, 0xffffffff
 
@@ -2491,7 +2491,7 @@ BitCtrl_ReadBitZero:
 BitCtrl_ReadBitDone:
 	pushw 0xe
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -2513,7 +2513,7 @@ BitCtrl_ReadBitDone:
 
 	ld xde, (xsp + 8)
 
-	.byte 0x1d, 0x4b, 0x99, 0xfa	; call ApPostEvent (v7 addr)
+	call	16423243
 
 	ld xwa, 0xffffffff
 

@@ -4696,7 +4696,7 @@ MainPmGet_HandleCheckBit2:
 MainPmGet_HandleBankDisplay:
 	pushw 0x13
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -4714,7 +4714,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xwa, 0x300
 
-	.byte 0x1d, 0x66, 0xcc, 0xfc	; call SndParam_LookupReadOnly (v7 addr)
+	call	16567398
 
 	ld xbc, (xsp + 2)
 
@@ -4726,7 +4726,7 @@ MainPmGet_HandleBankDisplay:
 
 	inc 2, xbc
 
-	.byte 0x1d, 0xb1, 0x59, 0xfb	; call BitMapOut_UpdateDisplayWidget (v7 addr)
+	call	16472497
 
 	ld xwa, 0xffffffff
 
@@ -4734,7 +4734,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xde, (xsp + 2)
 
-	.byte 0x1d, 0x4b, 0x99, 0xfa	; call ApPostEvent (v7 addr)
+	call	16423243
 
 	ld xwa, 0xffffffff
 

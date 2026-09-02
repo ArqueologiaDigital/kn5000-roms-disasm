@@ -142,7 +142,7 @@ WndScroll_DrawCurrentItem:
 
 	ld xwa, (xwa)
 
-	.byte 0x1d, 0x33, 0x22, 0xfb	; call ConvertStrings (v7 addr)
+	call	16458291
 
 	ldw_da xwa, (0x0274de)
 
@@ -190,7 +190,7 @@ WndScroll_DrawCurrentItem:
 
 	push xwa
 
-	.byte 0x1d, 0xc3, 0x07, 0xff	; call Strlen (v7 addr)
+	call	16713667
 
 	inc 4, xsp
 
@@ -214,7 +214,7 @@ WndScroll_DrawCurrentItem:
 
 	ldw bc, 0xf2
 
-	.byte 0x1d, 0xd1, 0xaf, 0xfa	; call DrawFrame (v7 addr)
+	call	16429009
 
 	ldw_da xwa, (0x0274de)
 
@@ -5688,7 +5688,7 @@ SplashBMP_CopyRemainder:
 
 	ld xbc, (xsp + 14)
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	ld xwa, 0x140
 
@@ -5707,7 +5707,7 @@ SplashBMP_CopyRemainder:
 
 
 SplashBMP_CopyToFramebuffer:
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	lda xsp, (xsp + 10)
 

@@ -432,7 +432,7 @@ DrawLine_Impl_PatternDiagCheck:
 
 	ld xbc, (xsp + 24)
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	ld (xsp + 12), xhl
 
@@ -810,7 +810,7 @@ DrawLineEx_DiagSetup:
 
 	ld xbc, (xsp + 8)
 
-	.byte 0x1d, 0x31, 0x04, 0xff	; call Math_DivideSigned32 (v7 addr)
+	call	16712753
 
 	ld xiz, xhl
 
@@ -818,7 +818,7 @@ DrawLineEx_DiagSetup:
 
 	ld xbc, xiz
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	ld (xsp + 12), xhl
 
@@ -1985,7 +1985,7 @@ DrawWall_DoCopy:
 
 	push xwa
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	ld xwa, 0x9600
 
@@ -2001,7 +2001,7 @@ DrawWall_DoCopy:
 
 	push xwa
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	lda xsp, (xsp + 20)
 
@@ -3455,7 +3455,7 @@ DrawBitmapFile_Impl_TileRemainder:
 
 	ld xbc, (xsp + 16)
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	ld xwa, 0x140
 
