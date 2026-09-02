@@ -144,7 +144,14 @@ SEPAOUT_BINS = v10/maincpu/includes/generated/sepaout_config.bin
 GUI_BINS = v10/maincpu/includes/generated/gui_display_struct_data.bin
 TONEKIT_BINS = v10/maincpu/includes/generated/tonekit_param_blocks.bin
 SOUNDCFG_BINS = v10/maincpu/includes/generated/sound_config_lookup.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS) $(SOUNDCFG_BINS)
+MSP_BINS = v10/maincpu/includes/generated/msp_factory_defaults.bin
+
+# 18-byte sound-parameter descriptor runs (v10 ONLY -- v7 and v9 carry a
+# different, much smaller extension_data.s, so these runs do not exist there
+# at the same addresses).  See v10/maincpu/audio/sndparam_records/.
+SNDPARAM_NAMES = run_edbac0 run_edbc9e run_edc2a4 run_edc634 run_edc7fa run_edc8a4 run_edc980 run_ede9fc run_ee0010
+SNDPARAM_BINS = $(patsubst %,v10/maincpu/includes/generated/sndparam_%.bin,$(SNDPARAM_NAMES))
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS) $(SOUNDCFG_BINS) $(MSP_BINS) $(SNDPARAM_BINS)
 
 # V9 C data bins (compiled from v9/maincpu sources)
 V9_PARAMBLOCK_BINS = $(patsubst %,v9/maincpu/includes/generated/style_ui_paramblock_%.bin,$(PARAMBLOCK_NAMES))
@@ -163,7 +170,8 @@ V9_SEPAOUT_BINS = v9/maincpu/includes/generated/sepaout_config.bin
 V9_GUI_BINS = v9/maincpu/includes/generated/gui_display_struct_data.bin
 V9_TONEKIT_BINS = v9/maincpu/includes/generated/tonekit_param_blocks.bin
 V9_SOUNDCFG_BINS = v9/maincpu/includes/generated/sound_config_lookup.bin
-V9_C_DATA_BINS = $(V9_PARAMBLOCK_BINS) $(V9_VOICE_BINS) $(V9_AUDIO_BINS) $(V9_SOUND_DATA_BINS) $(V9_SCREENDATA_BINS) $(V9_ACCOMP_BINS) $(V9_SE_BINS) $(V9_NAKA_BINS) $(V9_SEPAOUT_BINS) $(V9_GUI_BINS) $(V9_TONEKIT_BINS) $(V9_SOUNDCFG_BINS)
+V9_MSP_BINS = v9/maincpu/includes/generated/msp_factory_defaults.bin
+V9_C_DATA_BINS = $(V9_PARAMBLOCK_BINS) $(V9_VOICE_BINS) $(V9_AUDIO_BINS) $(V9_SOUND_DATA_BINS) $(V9_SCREENDATA_BINS) $(V9_ACCOMP_BINS) $(V9_SE_BINS) $(V9_NAKA_BINS) $(V9_SEPAOUT_BINS) $(V9_GUI_BINS) $(V9_TONEKIT_BINS) $(V9_SOUNDCFG_BINS) $(V9_MSP_BINS)
 
 # V7 C data bins (compiled from v7/maincpu sources)
 V7_PARAMBLOCK_BINS = $(patsubst %,v7/maincpu/includes/generated/style_ui_paramblock_%.bin,$(PARAMBLOCK_NAMES))
@@ -182,7 +190,8 @@ V7_SEPAOUT_BINS = v7/maincpu/includes/generated/sepaout_config.bin
 V7_GUI_BINS = v7/maincpu/includes/generated/gui_display_struct_data.bin
 V7_TONEKIT_BINS = v7/maincpu/includes/generated/tonekit_param_blocks.bin
 V7_SOUNDCFG_BINS = v7/maincpu/includes/generated/sound_config_lookup.bin
-V7_C_DATA_BINS = $(V7_PARAMBLOCK_BINS) $(V7_VOICE_BINS) $(V7_AUDIO_BINS) $(V7_SOUND_DATA_BINS) $(V7_SCREENDATA_BINS) $(V7_ACCOMP_BINS) $(V7_SE_BINS) $(V7_NAKA_BINS) $(V7_SEPAOUT_BINS) $(V7_GUI_BINS) $(V7_TONEKIT_BINS) $(V7_SOUNDCFG_BINS)
+V7_MSP_BINS = v7/maincpu/includes/generated/msp_factory_defaults.bin
+V7_C_DATA_BINS = $(V7_PARAMBLOCK_BINS) $(V7_VOICE_BINS) $(V7_AUDIO_BINS) $(V7_SOUND_DATA_BINS) $(V7_SCREENDATA_BINS) $(V7_ACCOMP_BINS) $(V7_SE_BINS) $(V7_NAKA_BINS) $(V7_SEPAOUT_BINS) $(V7_GUI_BINS) $(V7_TONEKIT_BINS) $(V7_SOUNDCFG_BINS) $(V7_MSP_BINS)
 
 v10/maincpu/includes/generated/style_ui_paramblock_%.bin: v10/maincpu/style_ui/paramblock/%.c v10/maincpu/style_ui/screendata_types.h
 	@mkdir -p v10/maincpu/includes/generated
@@ -425,6 +434,18 @@ v10/maincpu/includes/generated/sound_config_lookup.bin: v10/maincpu/ui_widgets/s
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
+v10/maincpu/includes/generated/sndparam_%.bin: v10/maincpu/audio/sndparam_records/%.c v10/maincpu/audio/sndparam_records/sndparam_types.h
+	@mkdir -p v10/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v10/maincpu/audio/sndparam_records -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v10/maincpu/includes/generated/msp_factory_defaults.bin: v10/maincpu/msp_factory_defaults.c
+	@mkdir -p v10/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
 v10/maincpu/includes/generated/voice_factory_presets.bin: v10/maincpu/audio/voice_factory_presets.c
 	@mkdir -p v10/maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
@@ -508,6 +529,12 @@ v9/maincpu/includes/generated/naka_control_menu_header.bin: v9/maincpu/ui_widget
 	$(LLVM_LLD) -T $(V9_NAKA_LINK_LD) -o $@.elf $@.o
 	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
 	@rm -f $@.o $@.elf
+
+v9/maincpu/includes/generated/msp_factory_defaults.bin: v9/maincpu/msp_factory_defaults.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
 
 v9/maincpu/includes/generated/voice_factory_presets.bin: v9/maincpu/audio/voice_factory_presets.c
 	@mkdir -p v9/maincpu/includes/generated
@@ -601,6 +628,12 @@ v7/maincpu/includes/generated/naka_control_menu_header.bin: v7/maincpu/ui_widget
 	$(LLVM_LLD) -T $(V7_NAKA_LINK_LD) -o $@.elf $@.o
 	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
 	@rm -f $@.o $@.elf
+
+v7/maincpu/includes/generated/msp_factory_defaults.bin: v7/maincpu/msp_factory_defaults.c
+	@mkdir -p v7/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
 
 v7/maincpu/includes/generated/voice_factory_presets.bin: v7/maincpu/audio/voice_factory_presets.c
 	@mkdir -p v7/maincpu/includes/generated

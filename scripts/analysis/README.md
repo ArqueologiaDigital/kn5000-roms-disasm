@@ -435,3 +435,15 @@ Answer: no.  8 is the format handler's DEFAULT message number, taken by any
 return code absent from the table at `0x00EA067C`; the format worker's own
 failure return (-6) also maps to 8.  Written because the sibling KN7000's floppy
 notes treat ERROR 08 as naming a decision point.
+
+## uncommented_data_census.py
+
+**Question:** which regions are still nameless data soup? Ranks every `.s` file
+by bytes of `.byte`/`.short`/`.long` on rows that carry **no comment at all**,
+because total `.byte` volume ranks the already-documented files (style_records.s,
+hdae5000_data_tables.s, the WSA1R display lists) at the top and they need no work.
+
+    python3 scripts/analysis/uncommented_data_census.py
+
+Tree total 1,076,671 B on 2026-09-02 before lane w13/census-structs, 1,049,062 B
+after it.
