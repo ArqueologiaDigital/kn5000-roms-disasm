@@ -145,7 +145,13 @@ GUI_BINS = v10/maincpu/includes/generated/gui_display_struct_data.bin
 TONEKIT_BINS = v10/maincpu/includes/generated/tonekit_param_blocks.bin
 SOUNDCFG_BINS = v10/maincpu/includes/generated/sound_config_lookup.bin
 MSP_BINS = v10/maincpu/includes/generated/msp_factory_defaults.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS) $(SOUNDCFG_BINS) $(MSP_BINS)
+
+# 18-byte sound-parameter descriptor runs (v10 ONLY -- v7 and v9 carry a
+# different, much smaller extension_data.s, so these runs do not exist there
+# at the same addresses).  See v10/maincpu/audio/sndparam_records/.
+SNDPARAM_NAMES = run_edbac0 run_edbc9e run_edc2a4 run_edc634 run_edc7fa run_edc8a4 run_edc980 run_ede9fc run_ee0010
+SNDPARAM_BINS = $(patsubst %,v10/maincpu/includes/generated/sndparam_%.bin,$(SNDPARAM_NAMES))
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS) $(SOUNDCFG_BINS) $(MSP_BINS) $(SNDPARAM_BINS)
 
 # V9 C data bins (compiled from v9/maincpu sources)
 V9_PARAMBLOCK_BINS = $(patsubst %,v9/maincpu/includes/generated/style_ui_paramblock_%.bin,$(PARAMBLOCK_NAMES))
@@ -425,6 +431,12 @@ v10/maincpu/includes/generated/tonekit_param_blocks.bin: v10/maincpu/ui_widgets/
 v10/maincpu/includes/generated/sound_config_lookup.bin: v10/maincpu/ui_widgets/sound_config_lookup.c
 	@mkdir -p v10/maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v10/maincpu/includes/generated/sndparam_%.bin: v10/maincpu/audio/sndparam_records/%.c v10/maincpu/audio/sndparam_records/sndparam_types.h
+	@mkdir -p v10/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v10/maincpu/audio/sndparam_records -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
