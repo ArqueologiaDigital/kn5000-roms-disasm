@@ -538,13 +538,72 @@ def operand_target(mnem, text, addr, ln, labels):
     return None
 
 
+# ---------------------------------------------------------- C-table refs
+# ⚠ v9 and v7 each carry ~735,000 lines of clang-compiled C
+# (v9/maincpu/ui_widgets, v7/maincpu/ui_widgets -- the same
+# widget-descriptor/paramblock architecture v10/maincpu has, confirmed by
+# line count: v10's own census script's docstring measures v10 at "~736,000
+# lines" too). Those tables are compiled to a raw binary, `.incbin`'d, and
+# llvm-mc's `-show-encoding` renders an `.incbin` as ONE giant escaped
+# `.ascii` LITERAL (confirmed empirically -- see the module docstring) --
+# so a 32-bit function-pointer entry buried inside one of these tables is
+# invisible to build_reference_index() above: it is not a `.word` directive
+# (the WIDTH-based scan only fires on a literal `.word` in the .s text) and
+# it is not an instruction operand. v10_data_as_code_census.py hit this
+# exact blindness first ("an early version of this script that skipped
+# .c/.h mis-measured 56.9% of v10's CODE territory as unreached") and fixed
+# it by scanning the RAW C SOURCE TEXT (before compilation, while identifier
+# names are still readable) for any token matching a known assembly label.
+# Ported here, scoped to v9 and v7 (the only two of this lane's seven images
+# with C source at all -- v142/subboot/table_data/custom_data/hdae5000 are
+# `.s`-only, confirmed by `find <root> -name '*.c' -o -name '*.h'` returning
+# nothing for any of them).
+IDENT_TOKEN = re.compile(r'[A-Za-z_][A-Za-z0-9_]*')
+
+
+def scan_c_source_refs(tag, names):
+    """Every label NAME in `names` (a name->addr dict) that also appears as
+    an identifier token anywhere in tag's own maincpu/*.c or */.h tree.
+    Returns a set of matched names -- the caller resolves them to
+    addresses, exactly as v10_data_as_code_census.py's data_seeds does."""
+    root = os.path.dirname(os.path.join(REPO, SRC_PATH[tag]))
+    hits = set()
+    for dp, _dn, fns in os.walk(root):
+        for fn in fns:
+            if fn.endswith((".c", ".h")):
+                text = open(os.path.join(dp, fn), encoding="utf-8",
+                            errors="surrogateescape").read()
+                for tok in IDENT_TOKEN.findall(text):
+                    if tok in names:
+                        hits.add(tok)
+    return hits
+
+
 # ------------------------------------------------------------ reference index
 def build_reference_index():
     """branch_targets[addr] = [(src_tag, src_addr, kind), ...]
        addr_refs[addr]      = [(src_tag, src_addr, kind), ...]  (non-branch)
     Built once over all seven images so a subboot->v142 reference (the
     payload entry point/vector table -- see module docstring) is seen the
-    same as an in-image one, via the shared "SUBCPU" group."""
+    same as an in-image one, via the shared "SUBCPU" group.
+
+    A name matched by scan_c_source_refs() is added into `branch_targets`,
+    not `addr_refs`, DESPITE being a data-shaped (address-taken) reference,
+    not a control transfer: this mirrors v10_data_as_code_census.py's own
+    Stage 3 design (a data_seed is a full reachability root there too, not
+    merely a confidence booster) rather than wsa1's (where an address-only
+    reference earns MEDIUM but is still counted unreached). The reason is
+    architectural, not a preference: v9/v7's ui_widgets tables are function-
+    pointer DISPATCH tables read by a generic interpreter, the same
+    legitimate pattern v10 already has 106+ confirmed instances of in
+    naka_widget_descriptors.c alone -- treating that pattern as unreached
+    debt would be the exact false report notes/DEBT-INVENTORY-2026-09-02.md
+    warns against ("real code reached through dispatch that static analysis
+    cannot follow"). wsa1's stricter MEDIUM convention stays the right
+    default for a plain in-.s immediate load (which is genuinely ambiguous,
+    as the HDAE5000_RECORD_TABLE calibration case shows) -- this carve-out
+    applies ONLY to names independently confirmed, by a C-file identifier
+    match, to be part of that specific architecture."""
     branch_targets = defaultdict(list)
     addr_refs = defaultdict(list)
     for tag, _s, _e, _b, _sz, group in IMAGES:
@@ -564,6 +623,26 @@ def build_reference_index():
         for waddr, val in words:
             if owner(val, group):
                 addr_refs[val].append((tag, waddr, "pointer_table"))
+                # A `.word`/`.long` POINTER-TABLE entry, unlike a bare
+                # in-code IMMEDIATE, is also promoted to a full reachability
+                # seed (added into branch_targets, not just addr_refs) --
+                # confirmed necessary and safe by hand on the real ROM, not
+                # a guess: hdae5000 0x295642 ("HDAE5000_Code_2_PartB",
+                # explicitly named CODE) is entry 0 of `.Lppe_jump_table`
+                # at 0x2953CE (hdae5000_ui_display.s:15884), reached only
+                # via `lda_24 xix, (0x2953ce)` / `add xix, xwa` / `ld xiy,
+                # (xix)` / `jp (xiy)` -- a genuine indexed INDIRECT jump
+                # table this tool cannot statically resolve, and without
+                # this promotion it was reported MEDIUM/17,264 B, a false
+                # positive. The RECORD_TABLE calibration case is NOT a
+                # pointer_table reference (it is a bare immediate load, see
+                # the classify_region docstring note above) so this
+                # promotion cannot exonerate it -- confirmed by --selftest's
+                # own #3b check, still required to pass after this change.
+                branch_targets[val].append((tag, waddr, "pointer_table"))
+        if tag in ("v9", "v7"):
+            for name in scan_c_source_refs(tag, labels):
+                branch_targets[labels[name]].append((tag, -1, "c_table:" + name))
     return branch_targets, addr_refs
 
 
@@ -885,6 +964,22 @@ def selftest():
         check("...and IS reached (cross-image reference resolved)",
               entry["reached"] and entry["confidence"] == "none",
               "reached=%s confidence=%s" % (entry["reached"], entry["confidence"]))
+
+    # 4d. THE .Lppe_jump_table FALSE POSITIVE, on the REAL ROM: hdae5000
+    #     0x295642 ("HDAE5000_Code_2_PartB", a name that says CODE) is
+    #     entry 0 of a genuine 5-entry indirect jump table at 0x2953CE
+    #     (hdae5000_ui_display.s:15884, `jp (xiy)` reached only through a
+    #     computed `lda_24 xix, (0x2953ce)` / `add xix, xwa` chain this tool
+    #     cannot statically resolve). Before the pointer_table->seed
+    #     promotion this reported MEDIUM/17,264 B; it must not now.
+    hdae_rows2 = analyse_all()[0]["hdae5000"]
+    ppe = next((r for r in hdae_rows2 if r["start"] == 0x295642), None)
+    check("hdae5000 0x295642 (.Lppe_jump_table entry 0) is a code region",
+          ppe is not None)
+    if ppe:
+        check("...and IS reached via the pointer_table->seed promotion",
+              ppe["reached"] and ppe["confidence"] == "none",
+              "reached=%s confidence=%s" % (ppe["reached"], ppe["confidence"]))
 
     # 5. periodicity_score sanity.
     tiled = bytes([1, 2, 3, 4] * 40)
