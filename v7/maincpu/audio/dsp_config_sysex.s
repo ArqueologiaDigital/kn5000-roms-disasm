@@ -158,7 +158,7 @@ SysEx_ApplyVoiceParam_4B:
 	ret
 	ld XIY,0x0000be9d
 	ld XIX,0x0000bca0
-	ldw_d16 bc, (0x9046)
+	ld bc, (0x9046:16)
 	srl BC, 0x01
 	cps bc, 0
 	jr z, .Lc_fdaae1
@@ -749,9 +749,9 @@ MidiSeq_ReceiveAndForward:
 	.byte 0x66, 0x56, 0xd9, 0xcf, 0x0f, 0x00, 0xb0, 0xf7
 MidiSeq_ReceiveAndForward_CompIface:
 	stda16	(49486), wa
-	ldw_d16	bc, (49490)
+	ld	bc, (49490:16)
 	extz	xbc
-	ldw_d16	wa, (49500)
+	ld	wa, (49500:16)
 	extz	xwa
 MidiSeq_ReceiveAndForward_SerialTiming:
 	add	xbc, xwa
@@ -914,7 +914,7 @@ MidiOut_ReadSysExByte:
 	or (xwa+30), b
 	swi 5
 	stda16 (49502), hl
-	ldw_d16 bc, (49498)
+	ld bc, (49498:16)
 	lds wa, 1
 	jrl 151
 	bit 0x00,C
@@ -2495,7 +2495,7 @@ DSPCfg_EventType50:
 	.byte 0xf1, 0xd1, 0xc9, 0x00, 0x00, 0xf1, 0xd2, 0xc9
 	.byte 0x00, 0x10, 0xf1, 0xd3, 0xc9, 0x00, 0x00, 0x1b
 	.byte 0xc2, 0xb2, 0xfe
-	ldw_d16 wa, (0xc4f8)
+	ld wa, (0xc4f8:16)
 	bit 0x02,WA
 	ret Z
 	.byte 0x1d, 0x87, 0xe8, 0xfd, 0xd1, 0xf8, 0xc4, 0x3c
@@ -2536,7 +2536,7 @@ DSPCfg_EventType51:
 	jp AudioInit_RefreshToneBank
 	cps a, 0
 	jr z, .Lc_fdd741
-	ldw_d16 wa, (0xc4fc)
+	ld wa, (0xc4fc:16)
 	bit 0x02,WA
 	jr z, .Lc_fdd756
 	bitda 0, (0x28b2)

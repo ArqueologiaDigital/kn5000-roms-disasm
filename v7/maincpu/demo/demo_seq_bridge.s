@@ -213,7 +213,7 @@ SeqSongName_RefreshLoop:
 	jrl SongBank_ReturnZero
 
 SongBank_HandleNextPrev:
-	ldw_d16 xwa, (7120)
+	ld wa, (7120:16)
 	ld iz, wa
 	cp xbc, 0x1c00018
 	jr nz, SeqSongName_CheckPrev
@@ -233,7 +233,7 @@ SeqSongName_StoreCurrent:
 	stda16 (7120), xwa
 
 SongBank_StoreCurrentSong:
-	ldw_d16 xde, (7120)
+	ld de, (7120:16)
 	cp iz, de
 	jr z, SongBank_ReturnZero
 	extz xde
@@ -248,7 +248,7 @@ SongBank_StoreCurrentSong:
 	ld xwa, (7116:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xbc, (7120)
+	ld bc, (7120:16)
 	ld wa, bc
 	lds de, 1
 	calr SongBank_ComputeTableOfs
@@ -258,7 +258,7 @@ SongBank_StoreCurrentSong:
 	call ApPostEvent
 	stb_erp A, 0xf8
 	stb_d8 (7500), a
-	ldw_d16 xwa, (7120)
+	ld wa, (7120:16)
 	stb_d8 (7502), a
 	push xde
 	push xhl
@@ -367,7 +367,7 @@ SeqSongMem_RefreshLoop:
 	jr SongBank_EventHandler_Return
 
 SongBank_HandleNextPrevAlt:
-	ldw_d16 xwa, (7196)
+	ld wa, (7196:16)
 	ld iz, wa
 	cp xbc, 0x1c00018
 	jr nz, SeqSongMem_CheckPrev
@@ -387,7 +387,7 @@ SeqSongMem_StoreCurrent:
 	stda16 (7196), xwa
 
 SongBank_EventCompare:
-	ldw_d16 xde, (7196)
+	ld de, (7196:16)
 	cp iz, de
 	jr z, SongBank_EventHandler_Return
 	extz xde
@@ -402,7 +402,7 @@ SongBank_EventCompare:
 	ld xwa, (7192:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xbc, (7196)
+	ld bc, (7196:16)
 	ld wa, bc
 	lds de, 0
 	calr SongBank_LookupTableEntry
@@ -741,7 +741,7 @@ DispatchHandler_InitAllSlots:
 	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
-	ldw_d16 xbc, (0x286d)
+	ld bc, (0x286d:16)
 	stda16 (0xf231), xbc
 	dec 1, bc
 
@@ -803,7 +803,7 @@ DispatchHandler_ResolveSlot:
 	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
-	ldw_d16 xiy, (0xf22f)
+	ld iy, (0xf22f:16)
 	cp iy, 0xffff
 	jr z, DispatchResolve_ReturnFail
 	ld xde, (4349:16)
@@ -844,7 +844,7 @@ SeqNode_InsertAtPosition:
 	ld (xhl), xde
 	pop xde
 	stda16 (3302), xwa
-	ldw_d16 xbc, (0xf22f)
+	ld bc, (0xf22f:16)
 	stda16 (0xf22f), xiy
 	xor wa, wa
 	call SeqNode_ResolveSlotPtr
@@ -1030,7 +1030,7 @@ VoiceSlot_Overflow:
 	ld iy, ix
 	ld xix, 0xf1f8
 	srl iz, 1
-	ldw_d16 xwa, (0x28b6)
+	ld wa, (0x28b6:16)
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
 	ld (xix + 32), a

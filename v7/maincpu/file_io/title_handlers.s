@@ -103,7 +103,7 @@ FmmUtilityTitleFunc:
 	stda16	33892, hl
 	calr	-1653
 FmmUtility_DispatchState:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 195
 	cps	wa, 0
@@ -228,7 +228,7 @@ FmmSmfUtilityTitleFunc:
 	stda16	33892, hl
 	calr	-2052
 FmmSmfUtility_DispatchState:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 195
 	cps	wa, 0

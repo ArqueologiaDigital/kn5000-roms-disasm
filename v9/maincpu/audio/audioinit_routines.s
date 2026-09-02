@@ -25,18 +25,18 @@ AudioInit_ConfigStereoVoice:
 	cp a, 0xff
 	jr z, AudioInit_VoiceNotConfigured
 	ordi16 0xc59c, 2
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x6
 	jr nz, AudioInit_CheckVoiceMixFlags
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_SetDefaultLevels
 
 AudioInit_CheckVoiceMixFlags:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr z, AudioInit_SetDefaultLevels
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearModeRegister
 	setda 3, 0xc1fe
@@ -67,22 +67,22 @@ AudioInit_CheckBit5_FBF1:
 AudioInit_VoiceNotConfigured:
 	stdi8 (0xc1ff), 255
 	ordi16 0xc59c, 3
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x6
 	jr nz, AudioInit_CheckMixFlagsAlt
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_RouteAndPan
 
 AudioInit_CheckMixFlagsAlt:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr nz, AudioInit_CheckBit2Mode
 	bitda 2, (0xc1fe)
 	jr z, AudioInit_RouteAndPan
 
 AudioInit_CheckBit2Mode:
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearModeAlt
 	setda 3, 0xc1fe
@@ -100,18 +100,18 @@ AudioInit_RouteAndPan:
 	jp AudioInit_CheckStereoMode
 
 AudioInit_ConfigureVoiceFromFlags:
-	ldw_d16 xbc, (0xc598)
+	ld bc, (0xc598:16)
 	bit 0, bc
 	jr z, AudioInit_FallbackToStereo
 	ldmm8 0xc1ff, 0xc59e
 	ordi16 0xc59c, 2
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x6e
 	jr z, AudioInit_VoiceRouteJump
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0xe
 	jr z, AudioInit_VoiceRouteJump
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearModeFromFlags
 	setda 3, 0xc1fe
@@ -214,13 +214,13 @@ AudioInit_LoadGroupVoice:
 	cp c, 0xff
 	jr z, AudioInit_GroupFallbackStereo
 	ordi16 0xc59c, 2
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_SetGroupLevels
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr z, AudioInit_SetGroupLevels
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearGroupMode
 	setda 3, 0xc1fe
@@ -267,13 +267,13 @@ AudioInit_CheckSoundGroup51:
 	cp c, 0xff
 	jr z, AudioInit_G51FallbackStereo
 	ordi16 0xc59c, 2
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_SetGroup51Levels
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr z, AudioInit_SetGroup51Levels
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearGroup51Mode
 	setda 3, 0xc1fe
@@ -329,7 +329,7 @@ AudioInit_LoadAndConfigure:
 	cp c, 0xff
 	jr z, AudioInit_MixFallbackConfig
 	ordi16 0xc59c, 2
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	ret z
 	stdi8 (0xc1ff), 255
@@ -374,18 +374,18 @@ AudioInit_CheckVoiceParamState:
 	cpdi8 (0xc5c8), 255
 	jr z, AudioInit_CheckBit2VoiceParam
 	set 0, c
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x80
 	cp wa, 0x80
 	jr nz, AudioInit_CompareAndSendMIDI
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x3
 	jr z, AudioInit_CompareAndSendMIDI
 	set 4, c
 	jr AudioInit_CompareAndSendMIDI
 
 AudioInit_CheckBit2VoiceParam:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 2, wa
 	jr z, AudioInit_CompareAndSendMIDI
 	or c, 0x18
@@ -422,21 +422,21 @@ AudioInit_DrumRoutingCheck:
 	lds de, 0
 	bitda 2, (0xc1fe)
 	jr nz, AudioInit_ProcessVoiceAssign
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x6
 	jr z, AudioInit_CheckOutputFlags
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 0, wa
 	jr nz, AudioInit_CheckOutputFlags
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x3
 	jr nz, AudioInit_ProcessVoiceAssign
 
 AudioInit_CheckOutputFlags:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jrl nz, AudioInit_NoRoutingActive
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x3
 	jrl z, AudioInit_NoRoutingActive
 
@@ -571,7 +571,7 @@ AudioInit_ClearBank2Routing:
 	ordi16 0xc59a, 512
 
 AudioInit_CheckBit2Routing:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 2, wa
 	jr z, AudioInit_ClearBank3Routing
 	ldb_d8 a, (0xc2ce)
@@ -629,7 +629,7 @@ AudioInit_ClearDrumModeAlt:
 	ret
 
 AudioInit_ClearPartFlags_ByMode:
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	and wa, 0x3
 	jr z, AudioInit_SetPartMasks
 	lds de, 0
@@ -709,7 +709,7 @@ Audio_CheckInitStatus:
 	ldw (xsp), 0x0
 	stdi16 (0xc598), 0
 	stdi8 (0xc59e), 255
-	ldw_d16 xhl, (0xf19e)
+	ld hl, (0xf19e:16)
 	orda16 xhl, 3409
 	ld wa, hl
 	cps wa, 0
@@ -721,7 +721,7 @@ AudioInit_ClearStatusBit8:
 	anddi16 0xc598, 0xfeff
 
 AudioInit_CheckGroupB_Presence:
-	ldw_d16 xbc, (0x28a8)
+	ld bc, (0x28a8:16)
 	orda16 xbc, 3407
 	ld wa, bc
 	cps wa, 0
@@ -804,7 +804,7 @@ AudioInit_VoiceUnchanged:
 	jrl AudioInit_ChannelLoop_Next
 
 AudioInit_CheckGroupA:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 8, wa
 	jrl z, AudioInit_CheckGroupB_Channel
 	ld a, e
@@ -966,7 +966,7 @@ AudioInit_StoreChannelMapping:
 	ld (xiy), a
 
 AudioInit_CheckGroupB_Channel:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 9, wa
 	jrl z, AudioInit_ChannelLoop_Next
 	ld a, e
@@ -1100,7 +1100,7 @@ AudioInit_SetChangedFlag:
 	anddi16 0xc598, 0xfdff
 
 AudioInit_CheckExternalBit3:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 6, wa
 	jr z, AudioInit_NoTypeE_CheckD
 	ldb_d8 a, (0xfc5e)
@@ -1118,7 +1118,7 @@ AudioInit_CheckExternalBit3:
 	jr AudioInit_ApplyOutputRouting
 
 AudioInit_NoTypeE_CheckD:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x22
 	cp wa, 0x20
 	jr nz, AudioInit_DefaultOutputRouting
@@ -1226,7 +1226,7 @@ AudioInit_MIDIDisabled:
 
 AudioInit_RefreshToneBank:
 	pushw iz
-	ldw_d16 xiz, (0xc596)
+	ld iz, (0xc596:16)
 	anddi16 0xc596, 0xffef
 	call Voice_UpdatePlayModeState
 	cp l, 0xff
@@ -1273,10 +1273,10 @@ AudioInit_VoiceRoutingTable:
 
 AudioInit_ConfigureVoiceRouting:
 	anddi16 0xc596, 0xfeff
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x3
 	jrl z, AudioInit_Routing_NoActiveVoices
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0xa0
 	cp wa, 0xa0
 	jrl nz, AudioInit_Routing_NoGroupAB
@@ -1286,7 +1286,7 @@ AudioInit_ConfigureVoiceRouting:
 	stdi8 (0xc2bb), 22
 	stdi8 (0xc204), 255
 	stdi8 (0xc218), 255
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 9, wa
 	jr z, AudioInit_Routing_CheckSplitMode
 	ldb_d8 a, (0xfc5f)
@@ -1345,7 +1345,7 @@ AudioInit_Routing_NoSplitCheckAux:
 	jrl AudioInit_Routing_Done
 
 AudioInit_Routing_CheckTypeEDFlags:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_Routing_TypeED_Override
 	bitda 5, (0xf9f7)
@@ -1374,7 +1374,7 @@ AudioInit_Routing_SimpleAssign:
 	stdi8 (0xc218), 255
 	cpdi8 (3431), 4
 	jr z, AudioInit_Routing_AllDisabled
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x22
 	cp wa, 0x20
 	jr nz, AudioInit_Routing_CheckMixMode
@@ -1385,7 +1385,7 @@ AudioInit_Routing_AllDisabled:
 	jrl AudioInit_Routing_Done
 
 AudioInit_Routing_CheckMixMode:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 9, wa
 	jrl nz, AudioInit_Routing_Done
 	bitda 1, (0xfc5f)
@@ -1407,7 +1407,7 @@ AudioInit_Routing_MixCheckAux:
 	jr AudioInit_Routing_Done
 
 AudioInit_Routing_MixFCBits:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_Routing_Done
 	bitda 5, (0xfbe5)
@@ -1423,7 +1423,7 @@ AudioInit_Routing_SkipToEnd:
 	jr AudioInit_Routing_Done
 
 AudioInit_Routing_NoActiveVoices:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 2, wa
 	jr z, AudioInit_Routing_FullDisable
 	stdi8 (0xc2ba), 21
@@ -1443,11 +1443,11 @@ AudioInit_Routing_Done:
 	ret
 
 AudioInit_ConfigurePanning:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x400
 	cp wa, 0x400
 	ret nz
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 2, wa
 	ret nz
 	cpdi8 (0xc1ff), 255
@@ -1478,7 +1478,7 @@ AudioInit_Pan_SetStereoRight:
 	jr AudioInit_Pan_CheckReverbChannel
 
 AudioInit_Pan_CheckTypeED:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr z, AudioInit_Pan_DefaultCenter
 	ldb_d8 a, (0xfc66)
@@ -1526,7 +1526,7 @@ AudioInit_Pan_Reverb_Right:
 	jr AudioInit_Pan_Done
 
 AudioInit_Pan_Reverb_CheckTypeED:
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr z, AudioInit_Pan_Reverb_Center
 	ldb_d8 a, (0xfc66)
@@ -1552,7 +1552,7 @@ AudioInit_Pan_Done:
 	ret
 
 AudioInit_CheckStereoMode:
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 11, wa
 	ret z
 	bitda 0, (0xc1fe)
@@ -1577,23 +1577,23 @@ AudioInit_Stereo_CheckBit3:
 
 AudioInit_DispatchChanges:
 	stdi16 (0xc4ca), 0
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	and wa, 0x188
 	call_24 nz, AudioInit_ComparePartStates
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	and wa, 0x1c0
 	call_24 nz, AudioInit_CompareChannelMappings
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	and wa, 0x102
 	jr z, AudioInit_Dispatch_CheckVoiceChange
 	calr AudioInit_CompareVoiceConfig
 	jr AudioInit_Dispatch_CheckPartChange
 
 AudioInit_Dispatch_CheckVoiceChange:
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 0, wa
 	jr nz, AudioInit_Dispatch_SendVoiceChange
-	ldw_d16 xwa, (0xc59a)
+	ld wa, (0xc59a:16)
 	bit 9, wa
 	jr z, AudioInit_Dispatch_CheckPartChange
 
@@ -1601,10 +1601,10 @@ AudioInit_Dispatch_SendVoiceChange:
 	calr AudioInit_CompareVoiceConfig
 
 AudioInit_Dispatch_CheckPartChange:
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 8, wa
 	jr nz, AudioInit_Dispatch_SendPartChange
-	ldw_d16 xwa, (0xc59a)
+	ld wa, (0xc59a:16)
 	and wa, 0x7000
 	jr z, AudioInit_Dispatch_CheckMisc
 
@@ -1612,27 +1612,27 @@ AudioInit_Dispatch_SendPartChange:
 	calr AudioInit_ComparePriorityTable
 
 AudioInit_Dispatch_CheckMisc:
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 2, wa
 	call_24 nz, AudioInit_ComparePartAssignment
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 3, wa
 	call_24 nz, AudioInit_ComparePartConfig
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 6, wa
 	call_24 nz, AudioInit_CompareChannelConfig
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 4, wa
 	call_24 nz, AudioInit_CompareVolumeTable
-	ldw_d16 xwa, (0xc59a)
+	ld wa, (0xc59a:16)
 	bit 13, wa
 	jr z, AudioInit_Dispatch_CheckToneRefresh
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	bit 4, wa
 	jr z, AudioInit_Dispatch_RefreshTone
 
 AudioInit_Dispatch_CheckToneRefresh:
-	ldw_d16 xwa, (0xc59a)
+	ld wa, (0xc59a:16)
 	bit 12, wa
 	jr z, AudioInit_Dispatch_CheckVoiceAssign
 
@@ -1642,7 +1642,7 @@ AudioInit_Dispatch_RefreshTone:
 	call_24 nz, VoiceEvent_AllocAllLayers
 
 AudioInit_Dispatch_CheckVoiceAssign:
-	ldw_d16 xwa, (0xc59a)
+	ld wa, (0xc59a:16)
 	bit 14, wa
 	jr z, AudioInit_Dispatch_Finalize
 	call NoteMap_FindBestMatch
@@ -1670,7 +1670,7 @@ AudioInit_QueueCommand:
 	stdi16 (0xc4ca), 0
 
 AudioInit_QueueCommand_Write:
-	ldw_d16 xwa, (0xc4ca)
+	ld wa, (0xc4ca:16)
 	sll wa, 2
 	lda_d16 xbc, (0xc4cc)
 	ld de, wa
@@ -1678,7 +1678,7 @@ AudioInit_QueueCommand_Write:
 	add xde, xbc
 	ld a, (xsp + 4)
 	ld (xde), a
-	ldw_d16 xwa, (0xc4ca)
+	ld wa, (0xc4ca:16)
 	sll wa, 2
 	lda_d16 xbc, (0xc4cd)
 	ld de, wa
@@ -1686,7 +1686,7 @@ AudioInit_QueueCommand_Write:
 	add xde, xbc
 	ld a, (xsp + 2)
 	ld (xde), a
-	ldw_d16 xwa, (0xc4ca)
+	ld wa, (0xc4ca:16)
 	sll wa, 2
 	lda_d16 xbc, (0xc4ce)
 	ld de, wa
@@ -1694,7 +1694,7 @@ AudioInit_QueueCommand_Write:
 	add xde, xbc
 	ld a, (xsp)
 	ld (xde), a
-	ldw_d16 xwa, (0xc4ca)
+	ld wa, (0xc4ca:16)
 	sll wa, 2
 	lda_d16 xbc, (0xc4cf)
 	ld de, wa
@@ -1708,7 +1708,7 @@ AudioInit_QueueCommand_Write:
 
 AudioInit_ComparePartStates:
 	pushw iz
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 3, wa
 	jrl z, AudioInit_ComparePanState
 	lds iz, 0
@@ -1809,7 +1809,7 @@ AudioInit_PartCompare_CheckGlobalBits:
 	calr AudioInit_QueueCommand
 
 AudioInit_ComparePanState:
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 8, wa
 	jr z, AudioInit_PartCompare_Return
 	ldb_d8 a, (0xc41a)
@@ -1834,7 +1834,7 @@ AudioInit_CompareVoiceConfig:
 	ldb e, 0x0
 	ldb l, 0x0
 	ldb d, 0x1
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 1, wa
 	jr z, AudioInit_VoiceCompare_BothFF
 	ldb_d8 a, (0xc365)
@@ -2013,7 +2013,7 @@ AudioInit_VoiceCompare_PanCheck:
 
 AudioInit_CompareChannelMappings:
 	pushw iz
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	and wa, 0xc0
 	jrl z, AudioInit_ChannelMap_CheckPan
 	lds iz, 0
@@ -2094,7 +2094,7 @@ AudioInit_ChannelMap_Next:
 	jrl c, AudioInit_ChannelMap_Loop
 
 AudioInit_ChannelMap_CheckPan:
-	ldw_d16 xwa, (0xc59c)
+	ld wa, (0xc59c:16)
 	bit 8, wa
 	jr z, AudioInit_ChannelMap_Return
 	ldb_d8 a, (0xc41a)

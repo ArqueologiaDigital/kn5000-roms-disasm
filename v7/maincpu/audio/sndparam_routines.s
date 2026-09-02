@@ -1224,13 +1224,13 @@ SndParam_Widget1_CallType3:
 	jr	ugt, 20
 	cps	a, 4
 	jr	ugt, 6
-	ldw_d16	wa, 46908
+	ld	wa, (46908:16)
 	jr	14
 	extz	xwa
 	xor	w, w
 	.byte 0xd1, 0x3e, 0xb7, 0x48
 	jr	4
-	ldw_d16	wa, 46906
+	ld	wa, (46906:16)
 	stda16	146, wa
 	stdi8	1066, 0
 	.byte 0xf1, 0x1f, 0x04, 0xc8

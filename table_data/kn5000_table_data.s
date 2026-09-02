@@ -3795,13 +3795,13 @@ LZSS_ReadByte__not_eof:
 	jr nz, LZSS_ReadByte__read_byte	; JR NZ, .read_byte
 	; Need to read next sector
 	incdi16 8, (3120); INCW 0, (0x0C30) - next sector X
-	ldw_d16 xwa, (3120); LD WA, (0x0C30)
-	ldw_d16 xbc, (3122); LD BC, (0x0C32)
+	ld wa, (3120:16); LD WA, (0x0C30)
+	ld bc, (3122:16); LD BC, (0x0C32)
 	lds de, 6	; LD DE, 6 - sector size index
 	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
 	lds iz, 0	; LD IZ, 0
 LZSS_ReadByte__read_sectors:
-	ldw_d16 xwa, (3124); LD WA, (0x0C34)
+	ld wa, (3124:16); LD WA, (0x0C34)
 	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400 - sector size
 	mul xbc, xiz	; MUL XBC, IZ
@@ -4025,7 +4025,7 @@ LZSS_Decompress__prefill_loop:
 	; === Pre-read 4 sectors for initial buffer fill ===
 	ldiw_erp 0xFA, 0	; LD QIZ, 0
 LZSS_Decompress__preread_loop:
-	ldw_d16 xwa, (3124); LD WA, (0x0C34)
+	ld wa, (3124:16); LD WA, (0x0C34)
 	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400
 	mulw_erp BC, 0xFA	; MUL XBC, QIZ
@@ -4592,7 +4592,7 @@ FDC_WriteData:
 ; -----------------------------------------------------------------------------
 FDC_WaitReady:
 	push xiz	; 3e
-	ldw_d16 xiz, (3072); LD IZ, (0x0C00) - get timer
+	ld iz, (3072:16); LD IZ, (0x0C00) - get timer
 	ldi_erpw 0xFA, 0x80, 0x00	; LD QIZ, 0x0080 - flag = pending
 
 FDC_WaitReady__fwr_check:
@@ -4608,7 +4608,7 @@ FDC_WaitReady__fwr_loop:
 	ldiw_erp 0xFA, 0	; LD QIZ, 0 - flag = success
 
 FDC_WaitReady__fwr_not_ready:
-	ldw_d16 xwa, (3072); LD WA, (0x0C00)
+	ld wa, (3072:16); LD WA, (0x0C00)
 	sub wa, iz	; SUB WA, IZ
 	cp wa, 0x1F4	; CP WA, 0x01F4 (500) - timeout
 	jr ule, FDC_WaitReady__fwr_continue	; 63 05
@@ -4636,7 +4636,7 @@ FDC_WaitReady__fwr_done:
 ; -----------------------------------------------------------------------------
 FDC_WaitComplete:
 	push xiz	; 3e
-	ldw_d16 xiz, (3072); LD IZ, (0x0C00)
+	ld iz, (3072:16); LD IZ, (0x0C00)
 	ldi_erpw 0xFA, 0x80, 0x00	; LD QIZ, 0x0080
 
 FDC_WaitComplete__fwc_check:
@@ -4650,7 +4650,7 @@ FDC_WaitComplete__fwc_loop:
 	ldiw_erp 0xFA, 0	; LD QIZ, 0 - success
 
 FDC_WaitComplete__fwc_not_done:
-	ldw_d16 xwa, (3072); LD WA, (0x0C00)
+	ld wa, (3072:16); LD WA, (0x0C00)
 	sub wa, iz	; SUB WA, IZ
 	cp wa, 0x1F4	; CP WA, 0x01F4 - timeout
 	jr ule, FDC_WaitComplete__fwc_continue	; 63 05

@@ -106,7 +106,7 @@ FmmUtilityTitleFunc:
 	calr SignalProgressUpdate
 
 FmmUtility_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, FmmUtility_HandleSuccess
 	cps wa, 0
@@ -238,7 +238,7 @@ FmmSmfUtilityTitleFunc:
 	calr SignalProgressUpdate
 
 FmmSmfUtility_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, FmmSmfUtility_HandleSuccess
 	cps wa, 0

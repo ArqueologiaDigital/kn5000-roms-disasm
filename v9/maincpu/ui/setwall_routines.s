@@ -303,7 +303,7 @@ SetWall_SlotSetup_Active:
 	stb_d8 (0x2877), a
 	call Scoop_SpecialMode_ParamCheckBound
 	call SetWall_SlotBitUpdate
-	ldw_d16 xwa, (0x2875)
+	ld wa, (0x2875:16)
 	stw_da (0x00ffec), xwa
 	xor wa, wa
 	ldb_d8 a, (3295)
@@ -770,12 +770,12 @@ SetWall_ParseStream_Init:
 	stda32 0x2881, xhl
 	pop xhl
 	stda16 (0x2885), xiy
-	ldw_d16 xwa, (0x28af)
+	ld wa, (0x28af:16)
 	stda16 (0x2887), xwa
 	stda16 (0x2889), xiy
 	stda16 (0x288b), xwa
 	ld ix, iy
-	ldw_d16 xhl, (3376)
+	ld hl, (3376:16)
 
 SetWall_ParseStream_MainLoop:
 	push xde
@@ -1014,7 +1014,7 @@ SetWall_ParseStream_End:
 	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	pop xhl
-	ldw_d16 xwa, (0x2887)
+	ld wa, (0x2887:16)
 	stda16 (0x289f), xwa
 	call SetWall_EventOutput
 	call SetWall_EventAdvanceCheck
@@ -1025,7 +1025,7 @@ SetWall_ParseStream_Return:
 SetWall_ParserInit:
 	push xiy
 	stdi8 (0x28a1), 16
-	ldw_d16 xiy, (0x286d)
+	ld iy, (0x286d:16)
 	stda16 (0x28a2), xiy
 	ld xiy, (7514:16)
 	stda32 3304, xiy
@@ -1038,7 +1038,7 @@ SetWall_AdvanceStreamPos:
 	inc 1, iy
 	cp iy, 0xff
 	jr ule, SetWall_AdvanceStream_Return
-	ldw_d16 xhl, (0x288b)
+	ld hl, (0x288b:16)
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
@@ -1223,13 +1223,13 @@ SetWall_B0CC_Return:
 SetWall_EventOutput:
 	push xde
 	push xiz
-	ldw_d16 xhl, (0x287d)
+	ld hl, (0x287d:16)
 	dec 1, hl
 	ld wa, ix
 	ld xde, 0xf218
 	stb_dri A, 0x07, 0xe8, 0xec
 	sla hl, 1
-	ldw_d16 xwa, (0x289f)
+	ld wa, (0x289f:16)
 	ld xde, 0xf1f8
 	stw_dri WA, 0x07, 0xe8, 0xec
 	xor xwa, xwa
@@ -1244,7 +1244,7 @@ SetWall_EventOutput:
 	sla hl, 1
 	ld xde, 0x78
 	add xde, xiz
-	ldw_d16 xwa, (0x289f)
+	ld wa, (0x289f:16)
 	stw_dri WA, 0x07, 0xe8, 0xec
 	pop xiz
 	pop xde
@@ -1265,7 +1265,7 @@ SetWall_EventAdvanceCheck:
 
 SetWall_EventAdvance_Sync:
 	ld iy, wa
-	ldw_d16 xwa, (0x28a2)
+	ld wa, (0x28a2:16)
 	call DispatchHandler_JumpSub
 
 SetWall_EventAdvance_Return:
@@ -1363,7 +1363,7 @@ SetWall_BankInit:
 	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
-	ldw_d16 xbc, (0x286d)
+	ld bc, (0x286d:16)
 	stda16 (0xf231), xbc
 	dec 1, bc
 
@@ -1594,7 +1594,7 @@ SetWall_DualPass_TypeC0:
 	call SetWall_StreamAdvanceBounded
 	cpdi8 (0x287a), 0
 	jrl nz, SetWall_DualPass_Error
-	ldw_d16 xwa, (0x2893)
+	ld wa, (0x2893:16)
 	ld xhl, (4349:16)
 	ldb_sri W, 0x07, 0xec, 0xf4
 	or a, w
@@ -1605,7 +1605,7 @@ SetWall_DualPass_TypeC0:
 	jr nz, SetWall_DualPass_Error
 	ld xhl, (4349:16)
 	ldb_sri D, 0x07, 0xec, 0xf4
-	ldw_d16 xhl, (0x2895)
+	ld hl, (0x2895:16)
 	or d, l
 	push xiz
 	ld xiz, (4349:16)
@@ -1690,7 +1690,7 @@ SetWall_ReplayScanner:
 	xor hl, hl
 	ld xhl, (0x2897:16)
 	stda32 4349, xhl
-	ldw_d16 xiy, (0x289b)
+	ld iy, (0x289b:16)
 
 SetWall_Replay_MainLoop:
 	ldb_sri A, 0x07, 0xec, 0xf4
@@ -1754,7 +1754,7 @@ SetWall_Replay_C0_Byte4:
 	jr SetWall_Replay_Done
 
 SetWall_Replay_C0_ReadBank:
-	ldw_d16 xwa, (0x2893)
+	ld wa, (0x2893:16)
 	ld xhl, (4349:16)
 	ldb_sri W, 0x07, 0xec, 0xf4
 	or a, w
@@ -2032,7 +2032,7 @@ SetWall_MiscDataAndCode:
 	jr	z, 23
 	ld	xde, xbc
 	mul	bc, 100
-	ldw_d16	hl, (0x286d)
+	ld	hl, (0x286d:16)
 	div	xbc, xhl
 	inc	1, bc
 	cp	bc, 100
@@ -2091,9 +2091,9 @@ SetWall_MiscDataAndCode:
 	ret
 
 SetWall_SyncToneGenToDRAM:
-	ldw_d16 xwa, (0xf22f)
+	ld wa, (0xf22f:16)
 	stda16 (0x286f), xwa
-	ldw_d16 xwa, (0xf231)
+	ld wa, (0xf231:16)
 	stda16 (0x2871), xwa
 	xor xwa, xwa
 	ldb_da a, (0x00ffe3)
@@ -2103,11 +2103,11 @@ SetWall_SyncToneGenToDRAM:
 	ld xix, 0xf180
 	ldw bc, 0x800
 	ldir85
-	ldw_d16 xwa, (0x286f)
+	ld wa, (0x286f:16)
 	stda16 (0xf22f), xwa
-	ldw_d16 xwa, (0x2871)
+	ld wa, (0x2871:16)
 	stda16 (0xf231), xwa
-	ldw_d16 xwa, (0xf19e)
+	ld wa, (0xf19e:16)
 	stw_da (0x00ffec), xwa
 	anddi8 (0x28a5), 254
 	cps wa, 0

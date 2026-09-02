@@ -282,7 +282,7 @@ MidiCC_Handler_BitManipulation:
 	call	16564059
 	ret
 	ldb_d8	a, 38298
-	ldw_d16	de, 38314
+	ld	de, (38314:16)
 	xor	e, e
 	cp	a, 64
 	jr	c, 2
@@ -4147,7 +4147,7 @@ MidiSysEx_SendProgramChange:
 	push	xiz
 	ldib_erp	251, 0
 	.byte 0xf1, 0x7c, 0xbc, 0xb5
-	ldw_d16	iz, 1033
+	ld	iz, (1033:16)
 	jrl	151
 	ld	xwa, (48144:16)
 	lds	bc, 4
@@ -4157,7 +4157,7 @@ MidiSysEx_SendProgramChange:
 	call	15673490
 	cp	hl, 65535
 	jr	z, 119
-	ldw_d16	iz, 1033
+	ld	iz, (1033:16)
 	ld	c, l
 	extz	bc
 	ld	xwa, (48144:16)
@@ -5120,7 +5120,7 @@ SeqVoice_DispatchProcess_Data:
 	jr z, .Lc_fd68fc
 	ldw DE, 0x03e8
 .Lc_fd68fc:
-	ldw_d16 bc, (0x0409)
+	ld bc, (0x0409:16)
 	sub BC,WA
 	cp BC,DE
 	ret LE
@@ -5140,10 +5140,10 @@ SeqVoice_DispatchProcess_Data:
 	pop	xhl
 	pop	xde
 	ret
-	ldw_d16 de, (0x0409)
+	ld de, (0x0409:16)
 .Lc_fd6927:
 	ld WA,DE
-	ldw_d16 bc, (0x0409)
+	ld bc, (0x0409:16)
 	sub BC,WA
 	cp BC,0x0019
 	jr lt, .Lc_fd6927
@@ -6362,7 +6362,7 @@ SoundMode_NotifyActiveVoices:
 	jr	c, -31
 SoundMode_RenderPopRegs:
 	ret
-	ldw_d16 wa, (0x11f5)
+	ld wa, (0x11f5:16)
 	bit 0x0f,WA
 	ret Z
 	.byte 0xf1, 0x5a, 0xfc, 0x31, 0xb9, 0x08
@@ -7281,7 +7281,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	bitda 0, (0xb74b)
 	jr nz, .Lc_fd989b
 	lda_d16 xbc, (0xbca0)
-	ldw_d16 wa, (0x9044)
+	ld wa, (0x9044:16)
 	ld IZ,WA
 	extz XIZ
 	add XIZ,XBC

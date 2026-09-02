@@ -8256,8 +8256,8 @@ SeMenu_ShowConfirmDialog_Data:
 	ret
 	stib_da	(0x03efa8), 0
 	ldb	c, 7
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	pushw	ix
 	pushw	iy
 	push	c
@@ -8268,8 +8268,8 @@ SeMenu_ShowConfirmDialog_Data:
 	add	ix, 28
 	dec	1, c
 	jr	nz, -20
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	stda16	(1740), ix
 	.byte 0xd1
 	cpl	d
@@ -8288,8 +8288,8 @@ SeMenu_ShowConfirmDialog_Data:
 	incf
 	nop
 	call	SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	add	ix, 196
 	stda16	(1740), ix
 	stda16	(1744), ix
@@ -8305,8 +8305,8 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0x01
 	nop
 	call	SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	stda16	(1740), ix
 	.byte 0xd1
 	cpl	d
@@ -8320,8 +8320,8 @@ SeMenu_ShowConfirmDialog_Data:
 	incf
 	nop
 	call	SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	stda16	(1740), ix
 	.byte 0xd1
 	cpl	d
@@ -8345,8 +8345,8 @@ SeMenu_ShowConfirmDialog_Data:
 	reti
 	nop
 	call	SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	sub	ix, 4
 	stda16	(1740), ix
 	stda16	(1744), ix
@@ -8361,8 +8361,8 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	pushw	7424
 	ldw	iy, 0xf0ec
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	stda16	(1740), ix
 	.byte 0xd1
 	cpl	d
@@ -8554,8 +8554,8 @@ SeMenu_ShowConfirmDialog_Data:
 	srl	a, 5
 	cps	a, 3
 	jr	nz, 106
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	stda16	(1740), ix
 	.byte 0xd1
 	cpl	d
@@ -8577,8 +8577,8 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	ldb	e, 0
 	call	SeMenu_NameEditor_Complete
-	ldw_d16	ix, (1734)
-	ldw_d16	iy, (1736)
+	ld	ix, (1734:16)
+	ld	iy, (1736:16)
 	stda16	(1740), ix
 	.byte 0xd1
 	cpl	d
@@ -8612,7 +8612,7 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0xc6, 0x06
 	ldb	w, 201
 	ldwio	8, 0xd0c8
-	ldw_d16	hl, (1736)
+	ld	hl, (1736:16)
 	mul	l, 40
 	add	hl, wa
 	ld	ix, hl
@@ -19718,7 +19718,7 @@ MspMeasBox_HandleEvtBC:
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
-	ldw_d16 xwa, (0x7f0e)
+	ld wa, (0x7f0e:16)
 	pushw wa
 	pushw 0xe1
 	pushw 0xe2f8
@@ -19772,7 +19772,7 @@ MspMemBox_HandleEvtBC:
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
-	ldw_d16 xwa, (0x7e18)
+	ld wa, (0x7e18:16)
 	mul wa, 0x64
 	extz xwa
 	div wa, 0x39

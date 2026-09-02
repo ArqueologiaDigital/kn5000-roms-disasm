@@ -46,11 +46,11 @@ FCopy_ScrollNeg_Reset:
 	jrl	536
 FCopy_HandleExecute:
 	stdi8	(33904), 0
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
 	lda_d16	xwa, (33905)
-	ldw_d16	de, (32458)
+	ld	de, (32458:16)
 	inc	1, de
 	pushw	6
 	pushw	0
@@ -63,7 +63,7 @@ FCopy_HandleExecute:
 FCopy_HandleScroll:
 	or	xiz, xiz
 	jrl	nz, 154
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	ld	de, wa
 	cp	xbc, 29360152
 	jr	nz, 96
@@ -72,7 +72,7 @@ FCopy_HandleScroll:
 	dec	1, wa
 	stda16	(32458), wa
 FCopy_ScrollDown_CheckMin:
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	cpda16	xwa, (32456)
 	jr	nz, 16	; -> 0xF8B862
 	cps	wa, 0
@@ -83,16 +83,16 @@ FCopy_ScrollDown_CheckMin:
 FCopy_ScrollDown_RestoreOld:
 	stda16	(32458), de
 FCopy_ScrollDown_Reload:
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 FCopy_Scroll_Apply:
 	cp	wa, de
 	jrl	z, 416
 	stdi8	(33904), 0
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
 	lda_d16	xwa, (33905)
-	ldw_d16	de, (32458)
+	ld	de, (32458:16)
 	inc	1, de
 	pushw	6
 	pushw	0
@@ -109,7 +109,7 @@ FCopy_ScrollUp_Adjust:
 	inc	1, wa
 	stda16	(32458), wa
 FCopy_ScrollUp_CheckMax:
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	cpda16	xwa, (32456)
 	jr	nz, -90	; -> 0xF8B862
 	cp	wa, 19
@@ -123,7 +123,7 @@ FCopy_HandleCopyContext:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, FCopy_CopyExecute
-	ldw_d16 wa, (0x7eca)
+	ld wa, (0x7eca:16)
 	call FileIO_GetRecordFlags
 	cps hl, 0
 	jr z, FCopy_CopyConfirm_Execute
@@ -143,7 +143,7 @@ FCopy_CopyConfirm_Execute:
 	call	16423243
 	lds	wa, 0
 	calr	62671
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16287180
 	ld	wa, hl
 	lds	bc, 5
@@ -179,7 +179,7 @@ FCopy_CopyExecute:
 	call	16423243
 	lds	wa, 0
 	calr	62544
-	ldw_d16	wa, (32458)
+	ld	wa, (32458:16)
 	call	16287180
 	ld	wa, hl
 	lds	bc, 5
@@ -430,7 +430,7 @@ FmmFormatFunc:
 	stda16	33892, hl
 	calr	-3594
 FmmFmt_InitPhase_CheckDrive:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 2
 	jr	z, 4
 	cps	wa, 3
@@ -602,7 +602,7 @@ FmmLoadTitleFunc:
 	stda16	33892, hl
 	calr	-4139
 FmmLoadTtl_StateDispatch:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 193
 	cps	wa, 0
@@ -933,7 +933,7 @@ DiskInfoFunc:
 	extz HL
 	stda16 (0x8464), hl
 DiskInfo_ReadDriveType:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jr	z, 28
 	cps	wa, 0
@@ -977,7 +977,7 @@ DiskInfo_RenderStrings:
 	ld	(xsp+4), xbc
 	sra	xbc, 10
 	ld	(xsp+4), xbc
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	sla	wa, 2
 	lda	xbc, (15336792:24)
 	ld_rrl	xbc, xbc, wa

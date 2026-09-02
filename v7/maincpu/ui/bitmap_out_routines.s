@@ -1704,7 +1704,7 @@ BitMapOut_DetectChanges_CheckMode:
 	jr z, .Lc_fb4e45
 BitMapOut_DetectChanges_UseShortList:
 .Lc_fb4e34:
-	ldw_d16 hl, (0x9042)
+	ld hl, (0x9042:16)
 	lda_d16 xwa, (0xbca0)
 	ld (XSP+0x08),XWA
 	setda 2, (0x8caa)
@@ -1714,7 +1714,7 @@ BitMapOut_DetectChanges_FullScan:
 	calr BitMapOut_RefreshDisplay_ClearDirty
 	calr BitMapOut_CalcDisplayMetrics
 	calr BitMapOut_PrepareRenderState
-	ldw_d16 hl, (0x9046)
+	ld hl, (0x9046:16)
 	lda_d16 xwa, (0xbe9d)
 	ld (XSP+0x08),XWA
 	resda 2, (0x8caa)
@@ -1788,7 +1788,7 @@ BitMapOut_DeltaEncode_BufferFull:
 	stda16	(36934), hl
 	lda_d16	xwa, (48288)
 	ld	(xsp+8), xwa
-	ldw_d16	hl, (36930)
+	ld	hl, (36930:16)
 	ldb_d8	a, (36010)
 	set	2, a
 	stb_d8	(36010), a
@@ -2653,7 +2653,7 @@ BitMapOut_RefreshDisplay_CheckDirty:
 BitMapOut_RefreshDisplay_ClearDirty:
 	dec 0,XSP
 	push XIZ
-	ldw_d16 de, (0x9046)
+	ld de, (0x9046:16)
 	lda_d16 xhl, (0xbe9d)
 	lda_d16 xwa, (0xf9a0)
 	ld (XSP+0x08),XWA
@@ -2758,7 +2758,7 @@ BitMapOut_RefreshDisplay_Commit:
 
 BitMapOut_CalcDisplayMetrics:
 	push XIZ
-	ldw_d16 bc, (0x9046)
+	ld bc, (0x9046:16)
 	ldw WA, 0x0100
 	sub WA,BC
 	cp WA,0x0008
@@ -2808,7 +2808,7 @@ BitMapOut_CalcMetrics_Done:
 
 BitMapOut_PrepareRenderState:
 	push	xiz
-	ldw_d16	bc, (36934)
+	ld	bc, (36934:16)
 	ldw	wa, 256
 	sub	wa, bc
 	cp	wa, 8

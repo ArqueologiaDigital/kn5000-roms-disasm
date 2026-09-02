@@ -405,11 +405,11 @@ Link_ServiceTask__F99FBF:
 ;          the three timeout actions are the instructions at 0xF99FD9-0xF99FE5.
 Link_WaitBlockDone:
 	pushw hl                                   ; F99FC1  2b
-	ldw_d16 hl, 0xF2F3                         ; F99FC2  d1 f3 f2 23   HL := the INTT1 tick count at entry (low 16 bits)
+	ld hl, (0xF2F3:16)                         ; F99FC2  d1 f3 f2 23   HL := the INTT1 tick count at entry (low 16 bits)
 Link_WaitBlockDone__poll:
 	bitda_24 7, 0x00852B                       ; F99FC6  f2 2b 85 00 cf   still outstanding?
 	jr z, Link_WaitBlockDone__ok               ; F99FCB  66 27
-	ldw_d16 bc, 0xF2F3                         ; F99FCD  d1 f3 f2 21
+	ld bc, (0xF2F3:16)                         ; F99FCD  d1 f3 f2 21
 	sub bc, hl                                 ; F99FD1  db a1
 	cp bc, 0x01f4                              ; F99FD3  d9 cf f4 01   500 ticks
 	jr le, Link_WaitBlockDone__poll            ; F99FD7  62 ed

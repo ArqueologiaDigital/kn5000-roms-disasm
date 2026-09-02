@@ -331,7 +331,7 @@ MidiPkt_ProcessEventQueue:
 	bitda 0, (0xb7e7)
 	jr nz, MidiPkt_ProcessEventQueue_Done
 	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xwa, (0x90e0)
+	ld wa, (0x90e0:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xbc

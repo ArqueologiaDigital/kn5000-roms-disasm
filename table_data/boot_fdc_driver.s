@@ -305,7 +305,7 @@ FDC_CmdControllerReset__present:
 ; -----------------------------------------------------------------------------
 FDC_ValidateRequest:
 	stdi8 (0x0c58), 0	; ld (0x0c58),0x00
-	ldw_d16 xwa, (0x0c6e)	; ld WA,(0x0c6e)
+	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e)
 	cp wa, 0x0b	; cp WA,0x000b
 	jr ugt, FDC_Validate_DriveTrackSector	; jr UGT,0xffdab9
 	add wa, wa	; add WA,WA
@@ -336,14 +336,14 @@ FDC_Validate_AcceptAlways:
 FDC_Validate_HeadDrive:
 	calr FDC_ValidateDrive	; calr 0xffdcdf
 FDC_Validate_DriveTrackSector:
-	ldw_d16 xwa, (0x0c70)	; ld WA,(0x0c70)
+	ld wa, (0x0c70:16)	; ld WA,(0x0c70)
 	stb_d8 (0x0c58), a	; ld (0x0c58),A
 	cpdi8 (0x0c58), 1	; cp (0x0c58),0x01 - drive number must be 0 or 1
 	jr ule, FDC_Validate_DriveTrackSector__check_command	; jr ULE,0xffdace
 	ldw wa, 0xfe	; ld WA,0x00fe
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__check_command:
-	ldw_d16 xwa, (0x0c6e)	; ld WA,(0x0c6e)
+	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e)
 	cps wa, 4	; cp WA,4
 	jr z, FDC_Validate_DriveTrackSector__check_track	; jr Z,0xffdaf7
 	cps wa, 3	; cp WA,3
@@ -364,7 +364,7 @@ FDC_Validate_DriveTrackSector__format_check:
 	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_DriveTrackSector__check_track:
-	ldw_d16 xwa, (0x0c74)	; ld WA,(0x0c74)
+	ld wa, (0x0c74:16)	; ld WA,(0x0c74)
 	stb_d8 (0x0c59), a	; ld (0x0c59),A
 	stb_d8 (0x0c64), a	; ld (0x0c64),A
 	extz wa	; extz WA
@@ -384,7 +384,7 @@ FDC_Validate_DriveTrackSector__check_count:
 	ldw wa, 0xfe	; ld WA,0x00fe
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__check_sector:
-	ldw_d16 xwa, (0x0c76)	; ld WA,(0x0c76)
+	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
 	stb_d8 (0x0c5b), a	; ld (0x0c5b),A
 	cpdi8 (0x0c5b), 0	; cp (0x0c5b),0x00
 	jr nz, FDC_Validate_DriveTrackSector__sector_by_format	; jr NZ,0xffdb44
@@ -449,7 +449,7 @@ FDC_Validate_DriveTrackSector__check_head:
 ;       (fdc_routines.s:466-524)
 ; -----------------------------------------------------------------------------
 FDC_SetGeometryForDiskType:
-	ldw_d16 xwa, (0x0c74)	; ld WA,(0x0c74)
+	ld wa, (0x0c74:16)	; ld WA,(0x0c74)
 	stb_d8 (0x0c9c), a	; ld (0x0c9c),A
 	and a, 0x0f	; and A,0x0f
 	cps a, 3	; cp A,3
@@ -524,7 +524,7 @@ FDC_SetGeometryForDiskType__common:
 ; Twin: maincpu FDC_CheckHead (fdc_routines.s:541)
 ; -----------------------------------------------------------------------------
 FDC_ValidateHead:
-	ldw_d16 xwa, (0x0c72)	; ld WA,(0x0c72)
+	ld wa, (0x0c72:16)	; ld WA,(0x0c72)
 	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
 	stb_d8 (0x0c57), a	; ld (0x0c57),A
 	cpdi8 (0x0c57), 0	; cp (0x0c57),0x00
@@ -626,7 +626,7 @@ Boot_UpdateDisplay:
 ; Twin: maincpu FDC_Setup_DMA_Mode (fdc_routines.s:611)
 ; -----------------------------------------------------------------------------
 FDC_SetupDMAMode:
-	ldw_d16 xbc, (0x0c4a)	; ld BC,(0x0c4a)
+	ld bc, (0x0c4a:16)	; ld BC,(0x0c4a)
 	ldc_cr16 bc, 0x4c	; ldc unknown,BC - DMAC3 = transfer byte count
 	ldb_d8 a, (0x0c56)	; ld A,(0x0c56)
 	cp a, 0x4d	; cp A,0x4d
@@ -683,7 +683,7 @@ FDC_SetupDMA_WriteToFDC:
 ; Twin: unlabeled tail after FDC_Setup_DMA_Src_Ack (fdc_routines.s:662)
 ; -----------------------------------------------------------------------------
 FDC_ReloadDMACount:
-	ldw_d16 xbc, (0x0c4a)	; ld BC,(0x0c4a)
+	ld bc, (0x0c4a:16)	; ld BC,(0x0c4a)
 	ldc_cr16 bc, 0x4c	; ldc unknown,BC - DMAC3 = transfer byte count
 	ret	; ret
 
@@ -697,7 +697,7 @@ FDC_ReloadDMACount:
 ; -----------------------------------------------------------------------------
 FDC_WaitRQM:
 	push xiz	; push XIZ
-	ldw_d16 xiz, (0x0c00)	; ld IZ,(0x0c00) - snapshot the tick counter
+	ld iz, (0x0c00:16)	; ld IZ,(0x0c00) - snapshot the tick counter
 	ldi_erpw 0xfa, 0x80, 0x00	; ld QIZ,0x0080
 	cpw qiz, 0x80	; cp QIZ,0x0080
 	jr nz, FDC_WaitRQM__check_result	; jr NZ,0xffdde1
@@ -711,7 +711,7 @@ FDC_WaitRQM__poll:
 	jr nz, FDC_WaitRQM__check_timeout	; jr NZ,0xffddc9
 	ldiw_erp 0xfa, 0	; ld QIZ,0
 FDC_WaitRQM__check_timeout:
-	ldw_d16 xwa, (0x0c00)	; ld WA,(0x0c00)
+	ld wa, (0x0c00:16)	; ld WA,(0x0c00)
 	sub wa, iz	; sub WA,IZ
 	cp wa, 0x01f4	; cp WA,0x01f4 - timed out after 500 ticks
 	jr ule, FDC_WaitRQM__continue	; jr ULE,0xffddda
@@ -738,7 +738,7 @@ FDC_WaitRQM__done:
 ; -----------------------------------------------------------------------------
 FDC_WaitRQM_Timeout:
 	push xiz	; push XIZ
-	ldw_d16 xiz, (0x0c00)	; ld IZ,(0x0c00) - snapshot the tick counter
+	ld iz, (0x0c00:16)	; ld IZ,(0x0c00) - snapshot the tick counter
 	ldi_erpw 0xfa, 0x80, 0x00	; ld QIZ,0x0080
 	cpw qiz, 0x80	; cp QIZ,0x0080
 	jr nz, FDC_WaitRQM_Timeout__check_result	; jr NZ,0xffde29
@@ -751,7 +751,7 @@ FDC_WaitRQM_Timeout__poll:
 	jr nz, FDC_WaitRQM_Timeout__check_timeout	; jr NZ,0xffde11
 	ldiw_erp 0xfa, 0	; ld QIZ,0
 FDC_WaitRQM_Timeout__check_timeout:
-	ldw_d16 xwa, (0x0c00)	; ld WA,(0x0c00)
+	ld wa, (0x0c00:16)	; ld WA,(0x0c00)
 	sub wa, iz	; sub WA,IZ
 	cp wa, 0x01f4	; cp WA,0x01f4 - timed out after 500 ticks
 	jr ule, FDC_WaitRQM_Timeout__continue	; jr ULE,0xffde22
@@ -808,7 +808,7 @@ FDC_ReadResultPhase__read_loop:
 	cp qiz, 0	; cp QIZ,0
 	jr z, FDC_ReadResultPhase__read_loop	; jr Z,0xffde6a
 FDC_ReadResultPhase__check_timeout:
-	ldw_d16 xwa, (0x0c00)	; ld WA,(0x0c00)
+	ld wa, (0x0c00:16)	; ld WA,(0x0c00)
 	sub wa, (xsp+0x04)	; sub WA,(XSP+0x04)
 	cp wa, 0x01f4	; cp WA,0x01f4
 	jr ule, FDC_ReadResultPhase__continue	; jr ULE,0xffde95
@@ -1397,14 +1397,14 @@ FDC_ClearResultBuf:
 FDC_WaitResult:
 	push xiz	; push XIZ
 	ldi_erpw 0xfa, 0xf4, 0x01	; ld QIZ,0x01f4
-	ldw_d16 xiz, (0x0c00)	; ld IZ,(0x0c00)
+	ld iz, (0x0c00:16)	; ld IZ,(0x0c00)
 	lds bc, 0	; ld BC,0
 FDC_WaitResult__poll:
 	cpdi8 (0x0c8e), 0xff	; cp (0x0c8e),0xff
 	jr z, FDC_WaitResult__check_timeout	; jr Z,0xffe27c
 	ldw bc, 0xffff	; ld BC,0xffff
 FDC_WaitResult__check_timeout:
-	ldw_d16 xwa, (0x0c00)	; ld WA,(0x0c00)
+	ld wa, (0x0c00:16)	; ld WA,(0x0c00)
 	sub wa, iz	; sub WA,IZ
 	cp wa, qiz	; cp WA,QIZ
 	jr ule, FDC_WaitResult__check_done	; jr ULE,0xffe290
@@ -1423,12 +1423,12 @@ FDC_WaitResult__check_done:
 ; -----------------------------------------------------------------------------
 Boot_Delay:
 	srl wa, 1	; srl 0x01,WA
-	ldw_d16 xde, (0x0c00)	; ld DE,(0x0c00)
+	ld de, (0x0c00:16)	; ld DE,(0x0c00)
 	lds hl, 0	; ld HL,0
 	cp hl, 0xffff	; cp HL,0xffff
 	ret nc	; ret NC
 Boot_Delay__wait_loop:
-	ldw_d16 xbc, (0x0c00)	; ld BC,(0x0c00)
+	ld bc, (0x0c00:16)	; ld BC,(0x0c00)
 	sub bc, de	; sub BC,DE
 	cp bc, wa	; cp BC,WA
 	ret ugt	; ret UGT
@@ -1560,7 +1560,7 @@ FDC_CmdReadSectors__retry:
 	stb_d8 (0x0c52), a	; ld (0x0c52),A
 	jrl FDC_CmdReadSectors__done	; jrl T,0xffe4a8
 FDC_CmdReadSectors__seek_ok:
-	ldw_d16 xwa, (0x0c76)	; ld WA,(0x0c76)
+	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ule, FDC_CmdReadSectors__save_position	; jr ULE,0xffe3b5
 	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
@@ -1577,7 +1577,7 @@ FDC_CmdReadSectors__count_burst:
 	ldmm16 (0x0d40), (0x0c78)	; ldw (0x0d40),(0x0c78)
 	lds iz, 1	; ld IZ,1
 FDC_CmdReadSectors__burst_loop:
-	ldw_d16 xwa, (0x0c4c)	; ld WA,(0x0c4c)
+	ld wa, (0x0c4c:16)	; ld WA,(0x0c4c)
 	adddm16 (0x0c4a), xwa	; add (0x0c4a),WA
 	lda_d16 xwa, (0x0c78)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
@@ -1617,13 +1617,13 @@ FDC_CmdReadSectors__next_retry:
 	stdi8 (0x0c52), 0x10	; ld (0x0c52),0x10 - error 0x10 = read retries exhausted
 	jr FDC_CmdReadSectors__done	; jr T,0xffe4a8
 FDC_CmdReadSectors__advance:
-	ldw_d16 xwa, (0x0d40)	; ld WA,(0x0d40)
+	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
 	sub wa, iz	; sub WA,IZ
 	stda16 (0x0c78), wa	; ld (0x0c78),WA
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
 	jr z, FDC_CmdReadSectors__check_remaining	; jr Z,0xffe49f
 	lda_d16 xbc, (0x0c7a)	; lda XBC,0x0c7a
-	ldw_d16 xwa, (0x0c4a)	; ld WA,(0x0c4a)
+	ld wa, (0x0c4a:16)	; ld WA,(0x0c4a)
 	extz xwa	; extz XWA
 	add xwa, (xbc)	; add XWA,(XBC)
 	ld (xbc), xwa	; ld (XBC),XWA
@@ -1669,7 +1669,7 @@ FDC_CmdWriteSectors__retry:
 	stb_d8 (0x0c52), a	; ld (0x0c52),A
 	jrl FDC_CmdWriteSectors__done	; jrl T,0xffe5e1
 FDC_CmdWriteSectors__seek_ok:
-	ldw_d16 xwa, (0x0c76)	; ld WA,(0x0c76)
+	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ule, FDC_CmdWriteSectors__save_position	; jr ULE,0xffe4e8
 	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
@@ -1686,7 +1686,7 @@ FDC_CmdWriteSectors__count_burst:
 	ldmm16 (0x0d40), (0x0c78)	; ldw (0x0d40),(0x0c78)
 	lds iz, 1	; ld IZ,1
 FDC_CmdWriteSectors__burst_loop:
-	ldw_d16 xwa, (0x0c4c)	; ld WA,(0x0c4c)
+	ld wa, (0x0c4c:16)	; ld WA,(0x0c4c)
 	adddm16 (0x0c4a), xwa	; add (0x0c4a),WA
 	lda_d16 xwa, (0x0c78)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
@@ -1728,13 +1728,13 @@ FDC_CmdWriteSectors__recover:
 	stdi8 (0x0c52), 0x20	; ld (0x0c52),0x20 - error 0x20 = write retries exhausted
 	jr FDC_CmdWriteSectors__done	; jr T,0xffe5e1
 FDC_CmdWriteSectors__advance:
-	ldw_d16 xwa, (0x0d40)	; ld WA,(0x0d40)
+	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
 	sub wa, iz	; sub WA,IZ
 	stda16 (0x0c78), wa	; ld (0x0c78),WA
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
 	jr z, FDC_CmdWriteSectors__check_remaining	; jr Z,0xffe5d8
 	lda_d16 xbc, (0x0c7a)	; lda XBC,0x0c7a
-	ldw_d16 xwa, (0x0c4a)	; ld WA,(0x0c4a)
+	ld wa, (0x0c4a:16)	; ld WA,(0x0c4a)
 	extz xwa	; extz XWA
 	add xwa, (xbc)	; add XWA,(XBC)
 	ld (xbc), xwa	; ld (XBC),XWA
@@ -1872,7 +1872,7 @@ FDC_FormatOneTrack:
 FDC_BuildFormatFieldBuffer:
 	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
 	stdi16 (0x0c4a), 0	; ld (0x0c4a),0x0000
-	ldw_d16 xix, (0x0d38)	; ld IX,(0x0d38)
+	ld ix, (0x0d38:16)	; ld IX,(0x0d38)
 	srl ix, 1	; srl 0x01,IX
 	ldb e, 0	; ld E,0x00
 	lds iy, 0	; ld IY,0
@@ -1953,7 +1953,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld (xhl), a	; ld (XHL),A
 	jr FDC_BuildFormatFieldBuffer__next_pair	; jr T,0xffe7e5
 FDC_BuildFormatFieldBuffer__offset_numbering:
-	ldw_d16 xwa, (0x0d38)	; ld WA,(0x0d38)
+	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	srl wa, 1	; srl 0x01,WA
 	addda8 a, (0x0c5b)	; add A,(0x0c5b)
 	ld l, a	; ld L,A
@@ -1981,7 +1981,7 @@ FDC_BuildFormatFieldBuffer__next_pair:
 	cp iy, ix	; cp IY,IX
 	jrl c, FDC_BuildFormatFieldBuffer__pair_loop	; jrl C,0xffe708
 FDC_BuildFormatFieldBuffer__odd_tail:
-	ldw_d16 xwa, (0x0d38)	; ld WA,(0x0d38)
+	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	bit 0, wa	; bit 0x00,WA
 	ret z	; ret Z
 	ld a, e	; ld A,E
@@ -2011,7 +2011,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldw_d16 xwa, (0x0d38)	; ld WA,(0x0d38)
+	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -2092,7 +2092,7 @@ FDC_CmdGetLastError:
 ; Twin: maincpu FDC_OUTPUT_CTRL (fdc_routines.s dispatch entry 9)
 ; -----------------------------------------------------------------------------
 FDC_CmdSetDiskChanged:
-	ldw_d16 xwa, (0x0c72)	; ld WA,(0x0c72) - cmd 9 entry
+	ld wa, (0x0c72:16)	; ld WA,(0x0c72) - cmd 9 entry
 	cps wa, 1	; cp WA,1
 	jr z, FDC_CmdSetDiskChanged__set	; jr Z,0xffe8ea
 	cps wa, 0	; cp WA,0
@@ -2214,7 +2214,7 @@ FDC_Request__start:
 	calr FDC_ValidateRequest	; calr 0xffda86
 	cps l, 0	; cp L,0
 	jr nz, FDC_Request__finish	; jr NZ,0xffea49 - L != 0: validation rejected the request
-	ldw_d16 xwa, (0x0c6e)	; ld WA,(0x0c6e)
+	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e)
 	cp wa, 0x0b	; cp WA,0x000b - commands are 0..11
 	jr ugt, FDC_Request__invalid_command	; jr UGT,0xffea43
 	add wa, wa	; add WA,WA
@@ -2287,7 +2287,7 @@ FDC_Request__return:
 FDC_PIO_ReadTransfer:
 	cpdi16 (0x0c4a), 0	; cp (0x0c4a),0x0000
 	ret z	; ret Z
-	ldw_d16 xwa, (0x0c6e)	; ld WA,(0x0c6e) - cmd 4 = write, cmd 3 = read; anything else has no PIO path
+	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e) - cmd 4 = write, cmd 3 = read; anything else has no PIO path
 	cps wa, 4	; cp WA,4
 	jr z, FDC_PIO_WriteTransfer	; jr Z,0xffea8a
 	cps wa, 3	; cp WA,3

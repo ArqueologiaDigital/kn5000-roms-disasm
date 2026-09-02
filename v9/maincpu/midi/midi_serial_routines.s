@@ -261,7 +261,7 @@ ClkTick_TempoThresholdCheck:
 	jr ugt, ClkTick_HighTempoLoad
 	cps a, 4
 	jr ugt, ClkTick_MidRangeTempoMul
-	ldw_d16 xwa, (0xb7d8)
+	ld wa, (0xb7d8:16)
 	jr ClkTick_WriteTimingReg
 
 ClkTick_MidRangeTempoMul:
@@ -271,7 +271,7 @@ ClkTick_MidRangeTempoMul:
 	jr ClkTick_WriteTimingReg
 
 ClkTick_HighTempoLoad:
-	ldw_d16 xwa, (0xb7d6)
+	ld wa, (0xb7d6:16)
 
 ClkTick_WriteTimingReg:
 	stda16 (146), xwa; LD (TREG5L), WA
@@ -648,7 +648,7 @@ QueueTrack_FifoWriteOrClear:
 
 QueueTrack_LinearBufWrite:
 	ld xix, 0x477
-	ldw_d16 xhl, (1141)
+	ld hl, (1141:16)
 	stib_ind 0x07, 0xf0, 0xec, 0x81
 	inc 1, hl
 	stda16 (1141), xhl
@@ -678,7 +678,7 @@ QueuePair_FifoFullReturn:
 
 QueuePair_LinearBufWrite:
 	ld xix, 0x477
-	ldw_d16 xhl, (1141)
+	ld hl, (1141:16)
 	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, hl
 	ldb_d8 a, (1051)

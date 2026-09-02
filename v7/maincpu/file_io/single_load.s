@@ -3313,7 +3313,7 @@ CmpFile_HandleShow:
 	stdi8	34772, 0
 	cpdi8	35164, 2
 	jr	nz, 12
-	ldw_d16	wa, 33124
+	ld	wa, (33124:16)
 	call	16290326
 	ld	xiz, xhl
 	jr	5
@@ -3322,7 +3322,7 @@ CmpFile_ShowDefault:
 
 CmpFile_ShowDraw:
 	lda_d16	xwa, (34773)
-	ldw_d16	de, (33124)
+	ld	de, (33124:16)
 	inc	1, de
 	pushw	6
 	pushw	0
@@ -3336,7 +3336,7 @@ CmpFile_ShowDispatch:
 	jrl CmpFile_Return
 
 CmpFile_HandleScroll:
-	ldw_d16	wa, (33124)
+	ld	wa, (33124:16)
 	ld	hl, wa
 	or	xde, xde
 	jr	nz, 14
@@ -3356,7 +3356,7 @@ CmpFile_ScrollDown:
 CmpFile_ScrollStore:
 	stda16	(33124), wa
 CmpFile_ScrollRedraw:
-	ldw_d16	wa, (33124)
+	ld	wa, (33124:16)
 	cp	wa, hl
 	jr	z, 118
 	call	16290296
@@ -3371,12 +3371,12 @@ CmpFile_ScrollRedraw:
 	cps	hl, 0
 	jr	z, 15
 	stdi8	(35164), 2
-	ldw_d16	wa, (33124)
+	ld	wa, (33124:16)
 	call	16290326
 	ld	xiz, xhl
 CmpFile_RedrawDispatch:
 	lda_d16	xwa, (34773)
-	ldw_d16	de, (33124)
+	ld	de, (33124:16)
 	inc	1, de
 	pushw	6
 	pushw	0
@@ -3423,7 +3423,7 @@ FmmCmpSingleLoadFunc:
 	stda16	33892, hl
 	calr	-26275
 FmmCmpLoad_DispatchState:
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, 169
 	cps	wa, 0

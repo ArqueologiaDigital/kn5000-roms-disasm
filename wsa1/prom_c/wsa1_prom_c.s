@@ -885,7 +885,7 @@ sub_FAC2AE:
 	push	xix                                   ; FAC2B2  push XIX
 	lda	xix, (0xD75E:24)                       ; FAC2B3  lda XIX,0x00d75e
 	extpfx5 0xBC, 0x02, 0x02, 0x00, 0x00       ; FAC2B8  ld (XIX+0x02),0x0000
-	ldw_d16	bc, (0x151D)                       ; FAC2BD  ld BC,(0x151d)
+	ld	bc, (0x151D:16)                       ; FAC2BD  ld BC,(0x151d)
 	ld	(xix+14), bc                            ; FAC2C1  ld (XIX+0x0e),BC
 	extpfx5 0xBC, 0x20, 0x02, 0x00, 0x00       ; FAC2C4  ld (XIX+0x20),0x0000
 	extpfx5 0xBC, 0x22, 0x02, 0x00, 0x00       ; FAC2C9  ld (XIX+0x22),0x0000
@@ -903,11 +903,11 @@ sub_FAC2AE:
 	extpfx5 0xBC, 0x14, 0x02, 0x00, 0x00       ; FAC305  ld (XIX+0x14),0x0000
 	extpfx5 0xBC, 0x06, 0x02, 0x00, 0x00       ; FAC30A  ld (XIX+0x06),0x0000
 	extpfx5 0xBC, 0x18, 0x02, 0x7F, 0xFF       ; FAC30F  ld (XIX+0x18),0xff7f
-	ldw_d16	bc, (0x151F)                       ; FAC314  ld BC,(0x151f)
+	ld	bc, (0x151F:16)                       ; FAC314  ld BC,(0x151f)
 	ld	(xix+26), bc                            ; FAC318  ld (XIX+0x1a),BC
-	ldw_d16	bc, (0x151F)                       ; FAC31B  ld BC,(0x151f)
+	ld	bc, (0x151F:16)                       ; FAC31B  ld BC,(0x151f)
 	ld	(xix+28), bc                            ; FAC31F  ld (XIX+0x1c),BC
-	ldw_d16	bc, (0x1521)                       ; FAC322  ld BC,(0x1521)
+	ld	bc, (0x1521:16)                       ; FAC322  ld BC,(0x1521)
 	muls	bc, 2                                 ; FAC326  muls BC,0x0002
 	add	xbc, 0xFDDE2B                          ; FAC32A  add XBC,0x00fdde2b
 	ld	bc, (xbc)                               ; FAC330  ld BC,(XBC)

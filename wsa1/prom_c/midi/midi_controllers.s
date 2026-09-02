@@ -1034,7 +1034,7 @@ MidiCtrl_CC07:
 	ld	h, (xiz+8)                              ; FAD6F9  ld H,(XIZ+0x08)
 	cps	l, 0                                   ; FAD6FC  cp L,0
 	jr z, MidiCtrl_CC07__FAD74A                   ; FAD6FE  jr Z,0xfad74a
-	ldw_d16	bc, (0x14FF)                       ; FAD700  ld BC,(0x14ff)
+	ld	bc, (0x14FF:16)                       ; FAD700  ld BC,(0x14ff)
 	and	bc, 3                                  ; FAD704  and BC,0x0003
 	jr z, MidiCtrl_CC07__FAD72C                   ; FAD708  jr Z,0xfad72c
 	ldb	c, 2                                   ; FAD70A  ld C,0x02
@@ -1141,7 +1141,7 @@ MidiCtrl_CC11:
 	ld	h, (xiz+8)                              ; FAD790  ld H,(XIZ+0x08)
 	cps	l, 0                                   ; FAD793  cp L,0
 	jr z, MidiCtrl_CC11__FAD7E1                   ; FAD795  jr Z,0xfad7e1
-	ldw_d16	bc, (0x14FF)                       ; FAD797  ld BC,(0x14ff)
+	ld	bc, (0x14FF:16)                       ; FAD797  ld BC,(0x14ff)
 	and	bc, 3                                  ; FAD79B  and BC,0x0003
 	jr z, MidiCtrl_CC11__FAD7C3                   ; FAD79F  jr Z,0xfad7c3
 	ldb	c, 2                                   ; FAD7A1  ld C,0x02

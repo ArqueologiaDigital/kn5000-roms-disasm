@@ -175,7 +175,7 @@ AccChannel_BytecodeBlock2:
 	.byte 0x5b, 0x32, 0x21, 0xc8, 0xcc, 0x7f, 0xc8, 0xcc
 	.byte 0x07, 0xf1, 0x4c, 0x32, 0x41, 0x0e
 AccChannel_SetDirtyIfActive:
-	ldw_d16 wa, (0x3247)
+	ld wa, (0x3247:16)
 	and W,0x07
 	cps w, 0
 	jr z, AccChannel_SetDirtyDone
@@ -320,7 +320,7 @@ AccVoice_ChannelActiveDone:
 	ret
 
 AccVoice_CheckBitsAndSetFlags:
-	ldw_d16 de, (0x3247)
+	ld de, (0x3247:16)
 	and D,0x07
 	inc 1,D
 	cpda8 d, (0x0433)
@@ -1433,7 +1433,7 @@ RhythmROM_CheckValid:
 	jr t, RhythmROM_CheckDone
 RhythmROM_InvalidIncrement:
 	ldb	c, 1
-	ldw_d16	wa, (13240)
+	ld	wa, (13240:16)
 	add	wa, 1
 	stda16	(13240), wa
 	cps	wa, 0

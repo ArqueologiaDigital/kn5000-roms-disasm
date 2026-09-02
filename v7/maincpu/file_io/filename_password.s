@@ -329,7 +329,7 @@ FileName_OpSave:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	ldw_d16	wa, 32478
+	ld	wa, (32478:16)
 	extz	wa
 	calr	-6531
 	lds	wa, 0
@@ -550,7 +550,7 @@ FileName_OpNavigate:
 	cps	hl, 0
 	jrl	z, 134
 	ld	xbc, (xsp+8)
-	ldw_d16	wa, (32478)
+	ld	wa, (32478:16)
 	cp	xbc, 29360152
 	jr	nz, 16
 	ld	bc, wa
@@ -577,7 +577,7 @@ FileName_Navigate_CheckChanged:
 	call	16423243
 	lds	wa, 0
 	calr	-7615
-	ldw_d16	wa, 32478
+	ld	wa, (32478:16)
 	call	16286763
 	ld	wa, hl
 	lds	bc, 5
@@ -595,13 +595,13 @@ FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 FileName_GetSelection:
-	ldw_d16	wa, (32478)
+	ld	wa, (32478:16)
 FileName_UpdateDisplay:
 	cp	(xsp+4), wa
 	jrl	z, 363	; -> 0xF8CD60
 	call	NotifyUIOfSelectionChange
 	stdi8	(35164), 4
-	ldw_d16	de, (32478)
+	ld	de, (32478:16)
 	exts	xde
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
@@ -614,7 +614,7 @@ FileName_UpdateDisplay:
 	ld	xwa, (32470:16)
 	ld	xbc, 29360143
 	call	ApPostEvent
-	ldw_d16	de, (32478)
+	ld	de, (32478:16)
 	sll	de, 5
 	lda_d16	xbc, (33904)
 	extz	xde

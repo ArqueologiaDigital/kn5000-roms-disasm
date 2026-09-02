@@ -6754,7 +6754,7 @@ SoundFX_Handler_5:
 	decdi8 1, 0xce17
 	jr z, .Lc_fe8c84
 .Lc_fe8c84:
-	ldw_d16 de, (0xc4fa)
+	ld de, (0xc4fa:16)
 	and DE,0x2000
 	jr nz, .Lc_fe8c9b
 	call 0xfe8d01
@@ -6806,7 +6806,7 @@ SoundFX_Handler_6:
 SoundFX_Handler_6_ClearWord:
 	.byte 0x00, 0xcf, 0x66, 0x0a
 SoundFX_Handler_6_LoadReg:
-	ldw_d16	de, (50426)
+	ld	de, (50426:16)
 SoundFX_Handler_7:
 	.byte 0xda, 0xcc, 0x02, 0x00, 0x6e, 0x30, 0xf2, 0x42
 	.byte 0xce, 0x00, 0xcc, 0x66, 0x29, 0x68, 0x19, 0xd1
@@ -8818,7 +8818,7 @@ MIDI_SendPitchBend:
 	.byte 0x21, 0xd8, 0x12, 0x42, 0xf4, 0xcf, 0x00, 0x00
 	.byte 0xd8, 0x89, 0xd8, 0xa8, 0x1b, 0xca, 0x32, 0xef
 	.byte 0x0e
-	ldw_d16 hl, (0xe91f)
+	ld hl, (0xe91f:16)
 	ret
 MIDI_SendChannelPressure:
 	pushw	iz
@@ -8846,19 +8846,19 @@ MIDI_SendChannelPressure:
 	jr	nz, 5
 	lds	hl, 0
 	jrl	142
-	ldw_d16	wa, 59679
+	ld	wa, (59679:16)
 	and	wa, 2
 	cps	wa, 2
 	jr	nz, 13
-	ldw_d16	wa, 59679
+	ld	wa, (59679:16)
 	bit	2, wa
 	jr	nz, 4
 	lds	hl, 0
 	jr	117
 	lds	wa, 1
 	calr	828
-	ldw_d16	wa, 59679
-	ldw_d16	bc, 59689
+	ld	wa, (59679:16)
+	ld	bc, (59689:16)
 	calr	1054
 	ld	xiz, xhl
 	cpdi8	59678, 4
@@ -9881,7 +9881,7 @@ SeekRecord_Done_DoLookupRe:
 	ldw	(xsp+270), 0
 	ld	xwa, (59695:16)
 	ld	(xsp+6), xwa
-	ldw_d16	wa, 59679
+	ld	wa, (59679:16)
 	bit	4, wa
 FileIO_SeekRecord_Return:
 	jr	nz, 46
@@ -10865,7 +10865,7 @@ ToneGen_VoiceReset_Return:
 	jr	nz, 5
 	ldw	hl, 65535
 	jr	40
-	ldw_d16	bc, (53260)
+	ld	bc, (53260:16)
 VoiceReset_Return_RestoreReg:
 	lda_d16	xde, (53266)
 VoiceReset_Return_Prologue:
@@ -10881,7 +10881,7 @@ VoiceReset_Return_LoadDRAM:
 	.byte 0x68
 VoiceReset_Return_Block2:
 	pushw	wa
-	ldw_d16	wa, (53262)
+	ld	wa, (53262:16)
 VoiceReset_Return_Block3:
 	.byte 0xf1, 0x12, 0xd0
 VoiceReset_Return_Block4:
@@ -10936,7 +10936,7 @@ SoundParam_InitDefaultBanks:
 	ldw HL, 0xffff
 	jr t, .Lc_feda3e
 .Lc_feda16:
-	ldw_d16 bc, (0xd812)
+	ld bc, (0xd812:16)
 	lda_d16 xde, (0xd818)
 	extz XBC
 	add XBC,XDE
@@ -10952,13 +10952,13 @@ SoundParam_InitDefaultBanks:
 	lds hl, 0
 .Lc_feda3e:
 	ret
-	ldw_d16 wa, (0xd812)
+	ld wa, (0xd812:16)
 	cpda16 xwa, 0xd814
 	jr nz, .Lc_feda4e
 	ldw HL, 0xffff
 	jr t, .Lc_feda76
 .Lc_feda4e:
-	ldw_d16 wa, (0xd814)
+	ld wa, (0xd814:16)
 	lda_d16 xbc, (0xd818)
 	extz XWA
 	add XWA,XBC

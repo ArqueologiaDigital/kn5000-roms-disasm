@@ -2666,14 +2666,14 @@ sub_FA69FD:
 	ld	c, (xiz+14)                             ; FA6A04  ld C,(XIZ+0x0e)
 	and	c, 32                                  ; FA6A07  and C,0x20
 	jrl z, sub_FA69FD__FA6B10                  ; FA6A0A  jrl Z,0xfa6b10
-	ldw_d16	hl, (0x40C)                        ; FA6A0D  ld HL,(0x040c)
+	ld	hl, (0x40C:16)                        ; FA6A0D  ld HL,(0x040c)
 	sub	bc, bc                                 ; FA6A11  sub BC,BC
 	cp	hl, bc                                  ; FA6A13  cp HL,BC
 	jr z, sub_FA69FD__FA6A3A                   ; FA6A15  jr Z,0xfa6a3a
 	ldb_d8	c, (0x414)                          ; FA6A17  ld C,(0x0414)
 	cps	c, 0                                   ; FA6A1B  cp C,0
 	jr z, sub_FA69FD__FA6A3A                   ; FA6A1D  jr Z,0xfa6a3a
-	ldw_d16	de, (0x40C)                        ; FA6A1F  ld DE,(0x040c)
+	ld	de, (0x40C:16)                        ; FA6A1F  ld DE,(0x040c)
 	ld	hl, de                                  ; FA6A23  ld HL,DE
 sub_FA69FD__FA6A25:
 	extz	xhl                                   ; FA6A25  extz XHL
@@ -2788,14 +2788,14 @@ sub_FA69FD__FA6B06:
 	add	(xiz+10), xbc                          ; FA6B0A  add (XIZ+0x0a),XBC
 	jrl sub_FA69FD__FA6A6D                     ; FA6B0D  jrl T,0xfa6a6d
 sub_FA69FD__FA6B10:
-	ldw_d16	hl, (0x40C)                        ; FA6B10  ld HL,(0x040c)
+	ld	hl, (0x40C:16)                        ; FA6B10  ld HL,(0x040c)
 	sub	bc, bc                                 ; FA6B14  sub BC,BC
 	cp	hl, bc                                  ; FA6B16  cp HL,BC
 	jr z, sub_FA69FD__FA6B4A                   ; FA6B18  jr Z,0xfa6b4a
 	ldb_d8	c, (0x41B)                          ; FA6B1A  ld C,(0x041b)
 	cps	c, 0                                   ; FA6B1E  cp C,0
 	jr z, sub_FA69FD__FA6B41                   ; FA6B20  jr Z,0xfa6b41
-	ldw_d16	de, (0x40C)                        ; FA6B22  ld DE,(0x040c)
+	ld	de, (0x40C:16)                        ; FA6B22  ld DE,(0x040c)
 	ld	hl, de                                  ; FA6B26  ld HL,DE
 sub_FA69FD__FA6B28:
 	extz	xhl                                   ; FA6B28  extz XHL
@@ -2811,7 +2811,7 @@ sub_FA69FD__FA6B3C:
 	ld	wa, hl                                  ; FA6B3C  ld WA,HL
 	jrl sub_FA69FD__FA6BAF                     ; FA6B3E  jrl T,0xfa6baf
 sub_FA69FD__FA6B41:
-	ldw_d16	bc, (0x40C)                        ; FA6B41  ld BC,(0x040c)
+	ld	bc, (0x40C:16)                        ; FA6B41  ld BC,(0x040c)
 	ld	wa, bc                                  ; FA6B45  ld WA,BC
 	jrl sub_FA69FD__FA6BAF                     ; FA6B47  jrl T,0xfa6baf
 sub_FA69FD__FA6B4A:
@@ -3846,7 +3846,7 @@ Voice_GetOctaveShift:
 	pushw	hl                                   ; FA72ED  push HL
 	pushw	de                                   ; FA72EE  push DE
 	push	xix                                   ; FA72EF  push XIX
-	ldw_d16	hl, (0x14FF)                       ; FA72F0  ld HL,(0x14ff)
+	ld	hl, (0x14FF:16)                       ; FA72F0  ld HL,(0x14ff)
 	ld	bc, hl                                  ; FA72F4  ld BC,HL
 	and	bc, 1                                  ; FA72F6  and BC,0x0001
 	jr z, Voice_GetOctaveShift__FA7366                   ; FA72FA  jr Z,0xfa7366

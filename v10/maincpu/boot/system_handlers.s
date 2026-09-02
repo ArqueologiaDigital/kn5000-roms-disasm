@@ -971,7 +971,7 @@ TempoRingBuf_Write_Dequeue:
 TempoRingBuf_Write_Enqueue:
 	pushw ix
 	lda_d16 xhl, (1143)
-	ldw_d16 xix, (1141)
+	ld ix, (1141:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x81
 	inc 1, ix
 	stda16 (1141), xix
@@ -1008,7 +1008,7 @@ TempoRingBuf_WritePair_ClearPending:
 TempoRingBuf_WritePair_Enqueue:
 	pushw ix
 	lda_d16 xhl, (1143)
-	ldw_d16 xix, (1141)
+	ld ix, (1141:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	ldb_d8 a, (1051)
 	inc 1, ix
@@ -1678,7 +1678,7 @@ TempoRingBuf_BytecodeSnippet:
 	ret
 	push	xix
 	lda_d16	xix, (1143)
-	ldw_d16	hl, (1141)
+	ld	hl, (1141:16)
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xec
@@ -1728,7 +1728,7 @@ SeqEvt_CheckExpiry_Return:
 
 SeqTiming_Snapshot:
 	ei 6
-	ldw_d16 xwa, (1120)
+	ld wa, (1120:16)
 	ldb_d8 l, (1122)
 	stda16 (1118), xwa
 	stb_d8 (1117), l
@@ -1761,7 +1761,7 @@ SeqTiming_Snapshot_Return:
 
 SyncTiming_Snapshot:
 	ei 6
-	ldw_d16 xwa, (1136)
+	ld wa, (1136:16)
 	ldb_d8 l, (1133)
 	stda16 (1134), xwa
 	stb_d8 (1132), l
@@ -2133,13 +2133,13 @@ TaskSched_HaltLoop:
 
 TaskSched_Dispatch:
 	stdi8 (305), 0
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	or wa, wa
 	jr nz, TaskSched_ReturnToDispatch
 	xor wa, wa
 	cpdm16 1159, xwa
 	jr z, TaskSched_ScanPriorityQueues
-	ldw_d16 xiy, (1159)
+	ld iy, (1159:16)
 	extz xiy
 	ld (xiy + 4), xsp
 	ld xsp, 0x1e53a
@@ -2180,7 +2180,7 @@ TaskSched_ReturnToDispatch:
 
 
 TaskSched_TimerTick:
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	inc 1, wa
 	stda16 (1475), xwa
 	ldc_cr16 wa, 0x7c
@@ -2204,7 +2204,7 @@ TaskSched_TimerSlot_Skip:
 	add ix, 0x8
 	djnz8 b, TaskSched_CheckTimerSlot
 	ei 6
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	dec 1, wa
 	stda16 (1475), xwa
 	ldc_cr16 wa, 0x7c
@@ -2221,7 +2221,7 @@ TaskSched_TimerSlot_Fire:
 
 INTT3_CheckNesting:
 	pushw wa
-	ldw_d16 xwa, (1475)
+	ld wa, (1475:16)
 	cps wa, 1
 	jr z, INTT3_EnterScheduler
 	dec 1, wa
@@ -2313,7 +2313,7 @@ Show_ScreenGroup_Entry:
 	jrl TaskSched_Dispatch
 	ei 6
 	ld xsp, 0x1e53a
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
@@ -2329,11 +2329,11 @@ Show_ScreenGroup_Entry:
 	jrl TaskSched_Dispatch
 
 TaskSched_GetCurrentGroup:
-	ldw_d16 xhl, (1475)
+	ld hl, (1475:16)
 	or hl, hl
 	jr nz, TaskSched_GetCurrentGroup_Nested
 	push xix
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	ld l, (xix + 11)
 	extz hl
@@ -2425,7 +2425,7 @@ TaskSched_Resume:
 	push xix
 	push xiy
 	push xiz
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	ld a, (xix + 10)
 	cps a, 0
@@ -2658,7 +2658,7 @@ TaskSched_WaitForEvent:
 	jrl TaskSched_ReturnToDispatch
 
 TaskSched_WaitForEvent_Block:
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -2841,7 +2841,7 @@ Audio_Lock_Acquire:
 	jrl TaskSched_ReturnToDispatch
 
 AudioLock_Acquire_Block:
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -2911,7 +2911,7 @@ TaskMsg_Send:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsg_Send_WakeReceiver
-	ldw_d16 xix, (1463)
+	ld ix, (1463:16)
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -2986,7 +2986,7 @@ TaskMsg_Send_WakeReceiver:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsg_Send_NB_WakeReceiver
-	ldw_d16 xix, (1463)
+	ld ix, (1463:16)
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -3101,7 +3101,7 @@ TaskMsg_Receive:
 	jrl TaskSched_ReturnToDispatch
 
 TaskMsg_Receive_Block:
-	ldw_d16 xix, (1159)
+	ld ix, (1159:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -5602,7 +5602,7 @@ InterCPU_E2_TimeoutLoop:
 ;        The label is not renamed here, so this note stands in for it.
 ; ===========================================================================
 Audio_DMA_Transfer:
-	ldw_d16 xwa, (1502)
+	ld wa, (1502:16)
 	ld de, wa
 	extz xde
 	cps wa, 0
@@ -6063,7 +6063,7 @@ E1DMA_ISR_BytecodeBlock:
 	stda16	(0xe362), wa
 	jr	6
 	stdi16	(0xe360), 0
-	ldw_d16	wa, (0xe360)
+	ld	wa, (0xe360:16)
 	cp	wa, 10
 	ret	ule
 	stdi16	(0xe360), 0
@@ -6072,7 +6072,7 @@ E1DMA_ISR_BytecodeBlock:
 	set_dd8 1, 104
 	incdi8	1, (0xe35e)
 	ret
-	ldw_d16	de, (1033)
+	ld	de, (1033:16)
 	.byte 0xf1
 	ldb	w, 6
 	dec	6, l
@@ -6080,7 +6080,7 @@ E1DMA_ISR_BytecodeBlock:
 	lds	hl, 0
 	ret
 	ld	wa, de
-	ldw_d16	bc, (1033)
+	ld	bc, (1033:16)
 	sub	bc, wa
 	cp	bc, 250
 	jr	le, -23
@@ -8350,14 +8350,14 @@ Parport_ReadByte_FromBuffer:
 	cpda32 xwa, 1610
 	jr nz, Parport_ReadByte_Emit
 	incdi16 8, (1614)
-	ldw_d16 xwa, (1614)
-	ldw_d16 xbc, (1616)
+	ld wa, (1614:16)
+	ld bc, (1616:16)
 	lds de, 6
 	call VRAM_FillRect
 	lds iz, 0
 
 Parport_RefillBuffer_Loop:
-	ldw_d16 xwa, (1618)
+	ld wa, (1618:16)
 	extz xwa
 	ldw bc, 0x2400
 	mul xbc, xiz
@@ -8548,7 +8548,7 @@ LZ_Decompress_ClearRing:
 	ldiw_erp 0xfa, 0
 
 LZ_Decompress_ReadTracks:
-	ldw_d16 xwa, (1618)
+	ld wa, (1618:16)
 	extz xwa
 	ldw bc, 0x2400
 	mulw_erp BC, 0xfa

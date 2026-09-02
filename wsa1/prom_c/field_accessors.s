@@ -592,7 +592,7 @@ sub_FC36BE:
 	ld	wa, (xbc+16)                            ; FC36F5  ld WA,(XBC+0x10)
 	add	wa, de                                 ; FC36F8  add WA,DE
 	ld	(xiz-6), wa                             ; FC36FA  ld (XIZ+0xfa),WA
-	ldw_d16	bc, (0x1505)                       ; FC36FD  ld BC,(0x1505)
+	ld	bc, (0x1505:16)                       ; FC36FD  ld BC,(0x1505)
 	ld	de, wa                                  ; FC3701  ld DE,WA
 	add	de, bc                                 ; FC3703  add DE,BC
 	ld	bc, (xhl+35)                            ; FC3705  ld BC,(XHL+0x23)

@@ -103,7 +103,7 @@ WPLoad_HandleSelection:
 	jr	ge, 6
 	stdi16	(33048), 0
 WPLoad_Selection_Positive:
-	ldw_d16	wa, (33048)
+	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -112,7 +112,7 @@ WPLoad_Selection_Positive:
 	ld	xbc, 31784962
 	jrl	468
 WPLoad_HandleShow:
-	ldw_d16	bc, (33048)
+	ld	bc, (33048:16)
 	exts	xbc
 	divs	bc, 10
 	muls	bc, 10
@@ -122,7 +122,7 @@ WPLoad_HandleScroll:
 	ld	xbc, 29687809
 	lds32	xde, 1
 	call	ApPostEvent
-	ldw_d16	hl, (33048)
+	ld	hl, (33048:16)
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	or	xwa, xwa
@@ -159,7 +159,7 @@ WPLoad_PageDown:
 	jr	nz, 69
 	ld	wa, hl
 	add	wa, 10
-	ldw_d16	de, (33902)
+	ld	de, (33902:16)
 	cp	wa, de
 	jr	ge, 13
 	add	hl, 10
@@ -217,13 +217,13 @@ WPLoad_OpLoad:
 	ldw	wa, 238
 	call	16355504
 WPLoad_GetSelection:
-	ldw_d16	bc, (33048)
+	ld	bc, (33048:16)
 WPLoad_UpdateDisplay:
 	cp	(xsp+4), bc
 	jrl	z, 143
 	ld	wa, bc
 	call	16297188
-	ldw_d16	wa, (33048)
+	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -231,7 +231,7 @@ WPLoad_UpdateDisplay:
 	ld	xwa, (33044:16)
 	ld	xbc, 31784962
 	call	16423243
-	ldw_d16	bc, (33048)
+	ld	bc, (33048:16)
 	exts	xbc
 	divs	bc, 10
 	ld	de, (xsp+4)
@@ -251,7 +251,7 @@ WPLoad_UpdateDisplay:
 	add	xde, xhl
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	wa, (33048)
+	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
 	ld	wa, qwa
@@ -374,7 +374,7 @@ WP_FindNextSlot:
 	ldb_d8	a, (35164)
 	cps	a, 4
 	jr	nc, 66
-	ldw_d16	bc, (35162)
+	ld	bc, (35162:16)
 	cps	bc, 0
 	jr	z, 58
 	lds	iz, 1

@@ -39,7 +39,7 @@ ToneGen_StoreBlockAndLink:
 	ld (xhl + 3), ix
 	ld hl, ix
 	call ToneGen_ComputeBlockPtr
-	ldw_d16 xwa, (3308)
+	ld wa, (3308:16)
 	ld xhl, (4349:16)
 	ld (xhl + 1), wa
 	ldw (xhl + 3), 0xffff
@@ -54,14 +54,14 @@ ToneGen_DispatchAndLinkBlock:
 	push xiy
 	call DispatchHandler_JumpToSubHandler
 	ld wa, ix
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld (xhl + 3), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
-	ldw_d16 xbc, (0x28af)
+	ld bc, (0x28af:16)
 	ld (xhl + 1), bc
 	ldw (xhl + 3), 0xffff
 	stda16 (0x28af), xwa
@@ -100,7 +100,7 @@ VoiceChannel_CombineStatusBits:
 	ret
 
 VoiceChannel_LookupParams:
-	ldw_d16 xiy, (4011)
+	ld iy, (4011:16)
 	and iy, 0xf
 	push xix
 	ld xix, 0x10b3
@@ -138,7 +138,7 @@ VoiceChannel_MergePanBit:
 	ret
 
 VoiceChannel_UpdateWithPitch:
-	ldw_d16 xiy, (4011)
+	ld iy, (4011:16)
 	and iy, 0xf
 	extz xiy
 	push xiy
@@ -212,7 +212,7 @@ VoiceChannel_NullRet:
 	ret
 
 SoundGen_ClampUpdateVoice:
-	ldw_d16 xiy, (4237)
+	ld iy, (4237:16)
 	call SoundGen_ClampVoiceIndexMin1
 	and iy, 0xf
 	push xiy
@@ -287,7 +287,7 @@ VoiceChannel_MergeParamByte5:
 	ret
 
 SoundGen_LookupChannelBankParams:
-	ldw_d16 xiy, (4011)
+	ld iy, (4011:16)
 	and iy, 0xf
 	push xix
 	ld xix, 0x1093
@@ -454,7 +454,7 @@ SoundGen_PrepareAndBuildVoice:
 	jr z, SoundGen_CaptureAndBuildParams
 	cpdi16 3934, 2
 	jr c, SoundGen_CaptureAndBuildParams
-	ldw_d16 xiy, (4237)
+	ld iy, (4237:16)
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
@@ -548,14 +548,14 @@ SoundGen_ApplyChannelParam:
 	cpdi8 (4323), 0
 	jrl nz, SoundGen_PopIyRet
 	call ToneGen_SetSustainBit
-	ldw_d16 xiy, (4011)
+	ld iy, (4011:16)
 	and iy, 0xf
 	extz xiy
 	cpdi16 3932, 0
 	jr z, SoundGen_CommitChannelRegs
 	cpdi16 3934, 2
 	jr c, SoundGen_CommitChannelRegs
-	ldw_d16 xiy, (4237)
+	ld iy, (4237:16)
 	extz xiy
 	call SoundGen_ClampVoiceIndexMin1
 
@@ -714,7 +714,7 @@ VoiceChannel_StoreVoiceIdx:
 	ld XWA,0x00001a57
 	call 0xfee195
 	ld XHL,0x00001a37
-	ldw_d16 bc, (0x1a5f)
+	ld bc, (0x1a5f:16)
 	mul C,0x02
 	add XHL,XBC
 	ldb_d8 a, (0x1a5a)
@@ -840,7 +840,7 @@ SMF_LoadBank_ClearAndPrepare:
 	pop xde
 	pop xix
 	pop xiz
-	ldw_d16 xhl, (6699)
+	ld hl, (6699:16)
 	bit 15, hl
 	jr nz, SMF_SeekAndPreparePlayback
 	cps hl, 2
@@ -995,9 +995,9 @@ SMF_SetupActiveChannel:
 	stda16 (4002), xwa
 	stda16 (4004), xwa
 	stda32 6705, xix
-	ldw_d16 xwa, (4002)
+	ld wa, (4002:16)
 	stw_dpi WA, 0xf1
-	ldw_d16 xwa, (4004)
+	ld wa, (4004:16)
 	stw_dpi WA, 0xf1
 	stda32 4376, xix
 	ld xix, (4376:16)
@@ -1109,7 +1109,7 @@ SMF_ScanAndProcessChannel:
 	xor hl, hl
 	ldb_d8 l, (0x2877)
 	ld c, l
-	ldw_d16 xde, (4325)
+	ld de, (4325:16)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1862,7 +1862,7 @@ SMF_MetaTiming_GetNextLoop:
 	jr SMF_MetaTiming_GetNextLoop
 
 SMF_MetaTiming_ApplyMultiplier:
-	ldw_d16 xwa, (3946)
+	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, xde
 	stw_erp DE, 0xe2
@@ -1895,7 +1895,7 @@ SMF_PolyAftertouch_4Byte_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_PolyAftertouch_4Byte_WriteOutput:
-	ldw_d16 xhl, (4213)
+	ld hl, (4213:16)
 	and l, 0x7f
 	and h, 0x1
 	rrc h
@@ -2881,7 +2881,7 @@ SMF_CC_Pan_Done:
 	jrl SMF_ProcessEventLoop
 
 SMF_CC_Portamento_CheckBit3:
-	ldw_d16 xbc, (4215)
+	ld bc, (4215:16)
 	bit 3, b
 	jr nz, SMF_CC_Sustain_CheckBits
 	jrl SMF_ProcessEventLoop
@@ -2898,7 +2898,7 @@ SMF_CC_Reverb_SetupCC93:
 	jr SMF_ProcessTimedEvent_Continue
 
 SMF_CC_Sustain_CheckBits:
-	ldw_d16 xbc, (4215)
+	ld bc, (4215:16)
 	bit 3, b
 	jrl z, SMF_ProcessEventLoop
 	cpdi8 (6709), 0
@@ -9872,7 +9872,7 @@ Rhythm_QueuePartChangeEvent:
 	ret
 Seq_ReadTempoLookup:
 	xor	xhl, xhl
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	ld	l, a
 	add	xhl, 14969879
 	ld	a, (xhl)

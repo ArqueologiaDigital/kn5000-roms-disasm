@@ -49,11 +49,11 @@ FCopy_ScrollNeg_Reset:
 
 FCopy_HandleExecute:
 	stdi8 (0x850c), 0
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	call GetFileEntryPtr
 	ld xbc, xhl
 	lda_d16 xwa, (0x850d)
-	ldw_d16 xde, (0x7f66)
+	ld de, (0x7f66:16)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
@@ -67,7 +67,7 @@ FCopy_HandleExecute:
 FCopy_HandleScroll:
 	or xiz, xiz
 	jrl nz, FCopy_HandleCopyContext
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	ld de, wa
 	cp xbc, 0x1c00018
 	jr nz, FCopy_ScrollUp_Adjust
@@ -77,7 +77,7 @@ FCopy_HandleScroll:
 	stda16 (0x7f66), xwa
 
 FCopy_ScrollDown_CheckMin:
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	cpda16 xwa, 0x7f64
 	jr nz, FCopy_ScrollDown_Reload
 	cps wa, 0
@@ -90,17 +90,17 @@ FCopy_ScrollDown_RestoreOld:
 	stda16 (0x7f66), xde
 
 FCopy_ScrollDown_Reload:
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 
 FCopy_Scroll_Apply:
 	cp wa, de
 	jrl z, FCopy_Return
 	stdi8 (0x850c), 0
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	call GetFileEntryPtr
 	ld xbc, xhl
 	lda_d16 xwa, (0x850d)
-	ldw_d16 xde, (0x7f66)
+	ld de, (0x7f66:16)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
@@ -119,7 +119,7 @@ FCopy_ScrollUp_Adjust:
 	stda16 (0x7f66), xwa
 
 FCopy_ScrollUp_CheckMax:
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	cpda16 xwa, 0x7f64
 	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
@@ -134,7 +134,7 @@ FCopy_HandleCopyContext:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, FCopy_CopyExecute
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	call FileIO_GetRecordFlags
 	cps hl, 0
 	jr z, FCopy_CopyConfirm_Execute
@@ -159,7 +159,7 @@ FCopy_CopyConfirm_Execute:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
@@ -196,7 +196,7 @@ FCopy_CopyExecute:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldw_d16 xwa, (0x7f66)
+	ld wa, (0x7f66:16)
 	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
@@ -458,7 +458,7 @@ FmmFormatFunc:
 	calr SignalProgressUpdate
 
 FmmFmt_InitPhase_CheckDrive:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 2
 	jr z, FmmFmt_InitPhase_DriveType23
 	cps wa, 3
@@ -644,7 +644,7 @@ FmmLoadTitleFunc:
 	calr SignalProgressUpdate
 
 FmmLoadTtl_StateDispatch:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, FmmLoadTtl_StateSuccess
 	cps wa, 0
@@ -987,7 +987,7 @@ DiskInfoFunc:
 	stda16 (0x8500), xhl
 
 DiskInfo_ReadDriveType:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jr z, DiskInfo_ResetCapacity
 	cps wa, 0
@@ -1041,7 +1041,7 @@ DiskInfo_RenderStrings:
 	ld (xsp + 4), xbc
 	sra xbc, 10
 	ld (xsp + 4), xbc
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	sla wa, 2
 	lda xbc, (DiskType_CodeTable:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0

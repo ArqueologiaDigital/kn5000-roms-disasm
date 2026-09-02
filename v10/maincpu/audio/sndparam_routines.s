@@ -2801,7 +2801,7 @@ SndParam_WidgetDispatch:
 	cpdi16 0x90de, 508
 	call_24 nc, SwbtWr_ReinitBothBanks
 	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xde, (0x90de)
+	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
@@ -2818,7 +2818,7 @@ SndParam_WidgetAppendType2:
 	cpdi16 0x90de, 508
 	call_24 nc, SwbtWr_ReinitOutputBank
 	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xde, (0x90de)
+	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
@@ -2872,7 +2872,7 @@ SndParam_WidgetNotifyType1:
 	cpdi16 0x90de, 504
 	call_24 nc, SwbtWr_ReinitBothBanks
 	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xde, (0x90de)
+	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
@@ -2897,7 +2897,7 @@ SndParam_Widget1_AppendType2:
 	cpdi16 0x90de, 504
 	call_24 nc, SwbtWr_ReinitOutputBank
 	lda_d16 xbc, (0xbd3c)
-	ldw_d16 xde, (0x90de)
+	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)

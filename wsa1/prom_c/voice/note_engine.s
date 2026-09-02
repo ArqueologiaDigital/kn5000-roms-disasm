@@ -6533,7 +6533,7 @@ VoiceRecords_InitFromAlloc:
 	pushw	de                                   ; FB3FA5  push DE
 	push	xix                                   ; FB3FA6  push XIX
 	ld	xix, (xiz+8)                            ; FB3FA7  ld XIX,(XIZ+0x08)
-	ldw_d16	bc, (0x151D)                       ; FB3FAA  ld BC,(0x151d)
+	ld	bc, (0x151D:16)                       ; FB3FAA  ld BC,(0x151d)
 	srl	bc, 8                                  ; FB3FAE  srl 0x08,BC
 	or	bc, 0x2080                              ; FB3FB1  or BC,0x2080
 	ld	(xix), bc                               ; FB3FB5  ld (XIX),BC
@@ -6557,10 +6557,10 @@ VoiceRecords_InitFromAlloc:
 	ldw	bc, 0x3BCF                             ; FB3FEA  ld BC,0x3bcf
 	ld	ix, bc                                  ; FB3FED  ld IX,BC
 	add	ix, wa                                 ; FB3FEF  add IX,WA
-	ldw_d16	bc, (0x151D)                       ; FB3FF1  ld BC,(0x151d)
+	ld	bc, (0x151D:16)                       ; FB3FF1  ld BC,(0x151d)
 	extz	xix                                   ; FB3FF5  extz XIX
 	ld	(xix+8), bc                             ; FB3FF7  ld (XIX+0x08),BC
-	ldw_d16	bc, (0x151D)                       ; FB3FFA  ld BC,(0x151d)
+	ld	bc, (0x151D:16)                       ; FB3FFA  ld BC,(0x151d)
 	ld	(xix+6), bc                             ; FB3FFE  ld (XIX+0x06),BC
 	extpfx5 0xBC, 0x01, 0x02, 0x01, 0x00       ; FB4001  ld (XIX+0x01),0x0001
 	sub	xbc, xbc                               ; FB4006  sub XBC,XBC
@@ -6575,7 +6575,7 @@ VoiceRecords_InitFromAlloc:
 	ld	(xix+37), bc                            ; FB401C  ld (XIX+0x25),BC
 	ld	(xix+12), 0                             ; FB401F  ld (XIX+0x0c),0x00
 	ld	(xix+4), 32                             ; FB4023  ld (XIX+0x04),0x20
-	ldw_d16	bc, (0x151D)                       ; FB4027  ld BC,(0x151d)
+	ld	bc, (0x151D:16)                       ; FB4027  ld BC,(0x151d)
 	srl	bc, 8                                  ; FB402B  srl 0x08,BC
 	ld	(xix+5), c                              ; FB402E  ld (XIX+0x05),C
 	ld	xbc, (xiz-4)                            ; FB4031  ld XBC,(XIZ+0xfc)

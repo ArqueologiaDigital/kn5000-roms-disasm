@@ -6618,7 +6618,7 @@ NoteEditFunc:
 
 NoteEdit_FormatTempo:
 	ld xiz, xde
-	ldw_d16 xwa, (0x2744)
+	ld wa, (0x2744:16)
 	cp wa, 0x3e7
 	jr ugt, NoteEdit_FormatTempoString
 	pushw wa
@@ -6639,7 +6639,7 @@ NoteEdit_FormatTempoString:
 	inc 8, xsp
 	jrl NoteEdit_RestoreAndReturn
 	ld xiz, xde
-	ldw_d16 xwa, (0x2782)
+	ld wa, (0x2782:16)
 	inc 1, wa
 	pushw wa
 	ld xwa, ExtDevice_ModeDispatch_Table_0x19C
@@ -6691,7 +6691,7 @@ NoteEdit_FormatNoteOther:
 	ld xwa, ExtDevice_ModeDispatch_Table_0x1BC
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
-	ldw_d16 xde, (0x2792)
+	ld de, (0x2792:16)
 	cp de, 0x60
 	jr z, NoteEdit_GateTime60
 	cp de, 0x30
@@ -6802,16 +6802,16 @@ NoteEdit_GetParamValue:
 	lda xix, (NoteEdit_ParamJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 NoteEdit_ParamJumpTable:
-	ldw_d16	hl, (0x2782)
+	ld	hl, (0x2782:16)
 	extz	xhl
 	jrl	177
-	ldw_d16	hl, (0x2784)
+	ld	hl, (0x2784:16)
 	extz	xhl
 	jrl	168
 	lds32	xhl, 0
 	ldb_d8	l, (0x2786)
 	jrl	159
-	ldw_d16	hl, (0x2792)
+	ld	hl, (0x2792:16)
 	extz	xhl
 	jrl	150
 	lds32	xhl, 0
@@ -6822,19 +6822,19 @@ NoteEdit_ParamJumpTable:
 	jrl	132
 
 NoteEdit_GetTempoValue:
-	ldw_d16 xhl, (0x2744)
+	ld hl, (0x2744:16)
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldw_d16 xhl, (0x27b4)
+	ld hl, (0x27b4:16)
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldw_d16 xhl, (0x27b6)
+	ld hl, (0x27b6:16)
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldw_d16 xhl, (0x27b8)
+	ld hl, (0x27b8:16)
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldw_d16 xhl, (0x27b2)
+	ld hl, (0x27b2:16)
 	extz xhl
 	jr NoteEdit_Epilogue
 	extz de
@@ -7779,7 +7779,7 @@ EntGridCheck_CopyStringResult:
 
 EntGridCheck_Handle4E00:
 	pushw 0x9
-	ldw_d16 xwa, (0x2976)
+	ld wa, (0x2976:16)
 	extz xwa
 	sll xwa, 2
 	ld xbc, (xsp + 18)
@@ -7904,7 +7904,7 @@ EntGridCheck_Return:
 	ld xde, (xsp + 28)
 	ld (xwa), xde
 	pushw 0x9
-	ldw_d16 xwa, (0x2976)
+	ld wa, (0x2976:16)
 	extz xwa
 	sll xwa, 2
 	ld xbc, (xsp + 18)
@@ -13428,7 +13428,7 @@ SqplyFunc:
 	jrl z, SqplyFunc_FormatEnding
 	cp xbc, 0x1e8004e
 	jrl z, SqplyFunc_FormatIntro
-	ldw_d16 xde, (9832)
+	ld de, (9832:16)
 	cp xbc, 0x1e8004d
 	jrl z, SqplyFunc_FormatRhythmPattern
 	sub xhl, 0x1e8003e
@@ -15002,7 +15002,7 @@ DspItem0CngFunc:
 ; -----------------------------------------------------------------------------
 DspItem0_DisplayEffectName:
 	ld (xsp), xde
-	ldw_d16 xwa, (0x2976)
+	ld wa, (0x2976:16)
 	extz xwa
 	sll xwa, 2
 	ld xbc, DspEffectName_PtrTable
@@ -15275,49 +15275,49 @@ Equalizer_DispatchA:
 ; to a common handler. Alternates between XBC and XDE base registers.
 ; EqualizerCngFunc dispatch B
 Equalizer_DispatchB:
-	ldw_d16	wa, (0x297a)
+	ld	wa, (0x297a:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xbc, xwa
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	300
-	ldw_d16	wa, (0x297c)
+	ld	wa, (0x297c:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xde, xwa
 	ld	hl, (xde)
 	extz	xhl
 	jrl	283
-	ldw_d16	wa, (0x297e)
+	ld	wa, (0x297e:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xbc, xwa
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	266
-	ldw_d16	wa, (0x2980)
+	ld	wa, (0x2980:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xde, xwa
 	ld	hl, (xde)
 	extz	xhl
 	jrl	249
-	ldw_d16	wa, (0x2982)
+	ld	wa, (0x2982:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xbc, xwa
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	232
-	ldw_d16	wa, (0x2984)
+	ld	wa, (0x2984:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xde, xwa
 	ld	hl, (xde)
 	extz	xhl
 	jrl	215
-	ldw_d16	wa, (0x2986)
+	ld	wa, (0x2986:16)
 	extz	xwa
 	add	xwa, xwa
 	add	xbc, xwa
@@ -15326,7 +15326,7 @@ Equalizer_DispatchB:
 	jrl	198
 
 Equalizer_LookupParamByIndex:
-	ldw_d16 xwa, (0x2978)
+	ld wa, (0x2978:16)
 	extz xwa
 	add xwa, xwa
 	add xde, xwa

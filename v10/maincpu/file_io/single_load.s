@@ -3541,7 +3541,7 @@ CmpFile_HandleShow:
 	stdi8 (0x8870), 0
 	cpdi8 (0x89f8), 2
 	jr nz, CmpFile_ShowDefault
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	call GetFileEntryPtr
 	ld xiz, xhl
 	jr CmpFile_ShowDraw
@@ -3551,7 +3551,7 @@ CmpFile_ShowDefault:
 
 CmpFile_ShowDraw:
 	lda_d16 xwa, (0x8871)
-	ldw_d16 xde, (0x8200)
+	ld de, (0x8200:16)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
@@ -3566,7 +3566,7 @@ CmpFile_ShowDispatch:
 	jrl CmpFile_Return
 
 CmpFile_HandleScroll:
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	ld hl, wa
 	or xde, xde
 	jr nz, CmpFile_ScrollDown
@@ -3588,7 +3588,7 @@ CmpFile_ScrollStore:
 	stda16 (0x8200), xwa
 
 CmpFile_ScrollRedraw:
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	cp wa, hl
 	jr z, CmpFile_Return
 	call NotifyUIOfSelectionChange
@@ -3603,13 +3603,13 @@ CmpFile_ScrollRedraw:
 	cps hl, 0
 	jr z, CmpFile_RedrawDispatch
 	stdi8 (0x89f8), 2
-	ldw_d16 xwa, (0x8200)
+	ld wa, (0x8200:16)
 	call GetFileEntryPtr
 	ld xiz, xhl
 
 CmpFile_RedrawDispatch:
 	lda_d16 xwa, (0x8871)
-	ldw_d16 xde, (0x8200)
+	ld de, (0x8200:16)
 	inc 1, de
 	pushw 0x6
 	pushw 0x0
@@ -3659,7 +3659,7 @@ FmmCmpSingleLoadFunc:
 	calr SignalProgressUpdate
 
 FmmCmpLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, FmmCmpLoad_HandleSuccess
 	cps wa, 0

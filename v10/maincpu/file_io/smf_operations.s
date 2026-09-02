@@ -39,7 +39,7 @@ FmmSmfLoadTitleFunc:
 	calr SignalProgressUpdate
 
 SmfLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, SmfLoad_Success
 	cps wa, 0
@@ -575,13 +575,13 @@ SmfFN_JumpTable:
 	jr	ge, 26
 	stdi16	(0x81ac), 0
 	jr	18
-	ldw_d16	wa, (0x8504)
+	ld	wa, (0x8504:16)
 	stda16	(0x81ac), wa
 	cps	wa, 0
 	jr	le, 2
 	dec	1, wa
 	call	NavigateToFileIndex
-	ldw_d16	wa, (0x81ac)
+	ld	wa, (0x81ac:16)
 	exts	xwa
 	divs	wa, 10
 	ld	de, qwa
@@ -591,7 +591,7 @@ SmfFN_JumpTable:
 	jrl	1929
 
 SmfFN_HandleActivate:
-	ldw_d16 xbc, (0x81ac)
+	ld bc, (0x81ac:16)
 	exts xbc
 	divs bc, 0xa
 	muls bc, 0xa
@@ -605,7 +605,7 @@ SmfFN_NavSetup:
 	ld xbc, 0x1c50001
 	lds32 xde, 1
 	call ApPostEvent
-	ldw_d16 xix, (0x81ac)
+	ld ix, (0x81ac:16)
 	ld (xsp + 4), ix
 	or xiz, xiz
 	jr nz, SmfFN_PageUp
@@ -623,7 +623,7 @@ SmfFN_NavSetup:
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_NavDown_WrapCheck:
-	ldw_d16 xwa, (0x8504)
+	ld wa, (0x8504:16)
 	inc 1, wa
 	cp bc, wa
 	jrl ge, SmfFN_UpdateDisplay
@@ -657,7 +657,7 @@ SmfFN_PageDown:
 	jr nz, SmfFN_HandleSave
 	ld iy, ix
 	add iy, 0xa
-	ldw_d16 xbc, (0x8504)
+	ld bc, (0x8504:16)
 	ld de, ix
 	exts xde
 	divs de, 0xa
@@ -728,7 +728,7 @@ SmfFN_HandleSave:
 	calr SignalProgressUpdate
 	cpw (xsp + 6), 0x0
 	jr lt, SmfFN_Save_Finish
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	call GetFileEntryByIndex
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
@@ -739,7 +739,7 @@ SmfFN_HandleSave:
 	calr ValidateSmfFilename
 	cps l, 0
 	jr z, SmfFN_Save_WriteSlot
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	call GetRecordPtrForFile
 	ld xbc, xhl
 	lda xwa, (xsp + 8)
@@ -938,7 +938,7 @@ SmfFN_Delete_Execute:
 	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_Delete_AdjustIndex
 	cps wa, 0
@@ -974,7 +974,7 @@ SmfFN_HandleDelete2:
 	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_Delete2_AdjustIndex
 	cps wa, 0
@@ -1151,14 +1151,14 @@ SmfFN_DispatchEvent:
 	call ApPostEvent
 
 SmfFN_UpdateDisplay:
-	ldw_d16 xhl, (0x81ac)
+	ld hl, (0x81ac:16)
 
 SmfFN_RefreshIfChanged:
 	cp (xsp + 4), hl
 	jrl z, SmfFN_SendOkState
 	ld wa, hl
 	call NavigateToFileIndex
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	exts xwa
 	divs wa, 0xa
 	stw_erp DE, 0xe2
@@ -1166,7 +1166,7 @@ SmfFN_RefreshIfChanged:
 	ld xwa, (0x81a0:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
-	ldw_d16 xbc, (0x81ac)
+	ld bc, (0x81ac:16)
 	exts xbc
 	divs bc, 0xa
 	ld de, (xsp + 4)
@@ -1186,7 +1186,7 @@ SmfFN_RefreshIfChanged:
 	add xde, xhl
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	exts xwa
 	divs wa, 0xa
 	stw_erp WA, 0xe2
@@ -1214,7 +1214,7 @@ SmfFN_UpdateFilenameField:
 	cpdi8 (0x8d36), 107
 	jr nz, SmfFN_SendOkState
 	lda_d16 xiz, (0x8850)
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_FetchFilename
 	cps wa, 0
@@ -1256,7 +1256,7 @@ SmfFN_SendOkState:
 	ld wa, iz
 	stda16 (0x81ac), xwa
 	call NavigateToFileIndex
-	ldw_d16 xwa, (0x81ac)
+	ld wa, (0x81ac:16)
 	exts xwa
 	divs wa, 0xa
 	stw_erp DE, 0xe2
@@ -1267,7 +1267,7 @@ SmfFN_SendOkState:
 SmfFN_DispatchFinalEvent:
 	call ApPostEvent
 	jrl SmfFN_ReturnZero
-	ldw_d16 xhl, (0x81ac)
+	ld hl, (0x81ac:16)
 	exts xhl
 
 SmfFN_Return:

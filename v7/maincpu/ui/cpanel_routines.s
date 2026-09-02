@@ -216,19 +216,19 @@ Delay3000L_Done:
 
 
 DELAY_2_TICKS:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	stda16	(36095), wa
 DELAY_2_TICKS__loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xda, 0x61, 0xf4, 0x0e
 DELAY_6_TICKS:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	stda16	(36095), wa
 Delay6T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xde, 0x61, 0xf4, 0x0e
 DELAY_51_TICKS:
-	ldw_d16	wa, (1033)
+	ld	wa, (1033:16)
 	stda16	(36095), wa
 Delay51T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
@@ -718,7 +718,7 @@ CPanel_InterruptPoll_MainLoop:
 	cpdi8 (0x8cfe), 0x2a
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
-	ldw_d16 wa, (0x8d63)
+	ld wa, (0x8d63:16)
 	.byte 0xd1, 0x61, 0x8d, 0xa0, 0x6f, 0x06, 0xd8, 0x07
 	.byte 0xd8, 0x8b, 0x68, 0x05
 PollLoop_TXForwardDist:
@@ -731,7 +731,7 @@ PollLoop_TXCheckThreshold:
 	stdi8	(36094), 0
 	ldb	w, 224
 	ldb	a, 19
-	ldw_d16	iy, (36195)
+	ld	iy, (36195:16)
 	ld	xde, 36197
 	st_rrb	w, xde, iy
 	calr	964
@@ -784,7 +784,7 @@ CPanel_RX_Process:
 
 CPanel_RX_DispatchLoop:
 	ld	xde, 36101
-	ldw_d16	iy, (36097)
+	ld	iy, (36097:16)
 	ld	xiz, 131245
 	ld	ix, (xiz-4)
 CPanel_RX_ParseNext:
@@ -985,7 +985,7 @@ CPanel_RX_Done:
 
 
 CPanel_UpdateLEDs:
-	ldw_d16	iy, (36195)
+	ld	iy, (36195:16)
 	ld	xde, 36197
 	ld	xiz, 131383
 	ld	ix, (xiz-8)
@@ -997,7 +997,7 @@ CPanel_UpdateLEDs__check_next:
 	jrl nz, LEDs_Return
 
 LEDs_CheckTXSpace:
-	ldw_d16	wa, (36195)
+	ld	wa, (36195:16)
 	subda16	xwa, (36193)
 	jr	nc, 6	; -> 0xFC4393
 	neg	wa

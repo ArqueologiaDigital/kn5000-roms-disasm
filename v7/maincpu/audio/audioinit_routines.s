@@ -30,7 +30,7 @@ AudioInit_CheckGroupA:
 	ordi16 (0xc500), 0x0020
 	ret
 	pushw iz
-	ldw_d16 iz, (0xc4fa)
+	ld iz, (0xc4fa:16)
 	anddi16 (0xc4fa), 0xffef
 	call 0xfe8d01
 	.byte 0xcf

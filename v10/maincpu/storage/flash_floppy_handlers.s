@@ -2404,7 +2404,7 @@ Flash_ExtendedOpsBlock:
 	cps	c, 4
 	jr	c, -27
 	lda_d16	xhl, (1952)
-	ldw_d16	wa, (1748)
+	ld	wa, (1748:16)
 	ld	(xhl), wa
 	ld	a, d
 	extz	wa
@@ -3540,7 +3540,7 @@ Flash_SlotUpdateOpsBlock:
 	calr	60524
 	calr	64734
 	lda_d16	xbc, (1952)
-	ldw_d16	wa, (2362)
+	ld	wa, (2362:16)
 	ld	(xbc), wa
 	ldw (xbc+2), 0
 	ld	a, (xsp)

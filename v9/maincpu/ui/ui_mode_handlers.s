@@ -341,7 +341,7 @@ EffectMode_TransposeInvalid:
 EffectMode_ProcessPresetChange:
 	dec 4, xsp
 	push xiz
-	ldw_d16 xbc, (0x8d56)
+	ld bc, (0x8d56:16)
 	ld wa, bc
 	cps bc, 0
 	jr z, EffectMode_ProcessPresetChange_CheckBit7
@@ -440,7 +440,7 @@ EffectMode_DisplayPresetName:
 	jr nz, EffectMode_DisplayName_Done
 
 EffectMode_DisplayName_ValidMode:
-	ldw_d16 xwa, (0x8d56)
+	ld wa, (0x8d56:16)
 	ld iz, wa
 	cps wa, 0
 	jr z, EffectMode_DisplayName_CheckC2C5
@@ -797,7 +797,7 @@ EffectMode_SetRegion_Apply:
 EffectMode_CheckPedalType:
 	bitda 2, (1054)
 	jr nz, EffectMode_PopIzRet
-	ldw_d16 xwa, (0x8d56)
+	ld wa, (0x8d56:16)
 	bit 0, wa
 	jr z, EffectMode_SendPedalType_Bank1
 	ld xwa, 0x28101
@@ -939,12 +939,12 @@ SndOutput_ReinitByMode_TypeA:
 
 SndOutput_ReinitByMode_TypeB:
 	push xiz
-	ldw_d16 xiz, (0x8d58)
-	ldw_d16 xwa, (0x8d56)
+	ld iz, (0x8d58:16)
+	ld wa, (0x8d56:16)
 	ldw_erp WA, 0xfa
 	stdi16 (0x8d58), 0xffff
 	calr EffectMode_CheckTransposeChanged
-	ldw_d16 xbc, (0x8d56)
+	ld bc, (0x8d56:16)
 	cps bc, 0
 	jr z, SndOutput_ReinitByMode_Restore
 	dec 1, bc

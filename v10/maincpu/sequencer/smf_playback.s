@@ -336,7 +336,7 @@ SMF_SelectBank_AfterToneLoad:
 	pop xde
 	pop xix
 	pop xiz
-	ldw_d16 xhl, (6699)
+	ld hl, (6699:16)
 	bit 15, hl
 	jr nz, SMF_SelectBank_Return
 	cps hl, 1
@@ -374,9 +374,9 @@ SMF_ResetMidiChanMap_Loop:
 	ret
 
 SoundBank_LoadToWorkRAM:
-	ldw_d16 xwa, (0xf22f)
+	ld wa, (0xf22f:16)
 	stda16 (0x286f), xwa
-	ldw_d16 xwa, (0xf231)
+	ld wa, (0xf231:16)
 	stda16 (0x2871), xwa
 	xor xwa, xwa
 	ldb_da a, (0x00ffe3)
@@ -386,11 +386,11 @@ SoundBank_LoadToWorkRAM:
 	ld xix, 0xf180
 	ldw bc, 0x800
 	ldir85
-	ldw_d16 xwa, (0x286f)
+	ld wa, (0x286f:16)
 	stda16 (0xf22f), xwa
-	ldw_d16 xwa, (0x2871)
+	ld wa, (0x2871:16)
 	stda16 (0xf231), xwa
-	ldw_d16 xwa, (0xf19e)
+	ld wa, (0xf19e:16)
 	stw_da (0x00ffec), xwa
 	xor wa, wa
 	stda16 (0xf19e), xwa

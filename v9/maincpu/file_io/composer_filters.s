@@ -41,7 +41,7 @@ FmmComposerLoadFunc:
 	calr SignalProgressUpdate
 
 CompLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, CompLoad_HandleSuccess
 	cps wa, 0
@@ -192,7 +192,7 @@ CompLoad_DrawItem_Continue:
 	jrl CompLoad_Return
 
 CompLoad_HandleScroll:
-	ldw_d16 xwa, (0x7f80)
+	ld wa, (0x7f80:16)
 	ld (xsp + 2), wa
 	or xde, xde
 	jr nz, CompLoad_PageScroll
@@ -279,13 +279,13 @@ CompLoad_HideButtons_Loop:
 	call SoundCtrl_SendCommand
 
 CompLoad_GetSelection:
-	ldw_d16 xwa, (0x7f80)
+	ld wa, (0x7f80:16)
 
 CompLoad_UpdateDisplay:
 	cp (xsp + 2), wa
 	jr z, CompLoad_Return
 	call NotifyUIOfSelectionChange
-	ldw_d16 xde, (0x7f80)
+	ld de, (0x7f80:16)
 	exts xde
 	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
@@ -298,7 +298,7 @@ CompLoad_UpdateDisplay:
 	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xde, (0x7f80)
+	ld de, (0x7f80:16)
 	sll de, 5
 	lda_d16 xbc, (0x850c)
 	extz xde

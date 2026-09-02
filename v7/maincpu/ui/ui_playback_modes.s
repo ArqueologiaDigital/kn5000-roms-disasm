@@ -73,7 +73,7 @@ UIStateEvt_VoiceParamHandler:
 	sub	wa, bc
 	ld	c, a
 	ld	b, a
-	ldw_d16	iz, 61854
+	ld	iz, (61854:16)
 	ld	a, c
 	scf
 	.byte 0xde, 0x2a
@@ -126,7 +126,7 @@ PlayMode_NullRet:
 	ret
 PlayMode_SetupAndDispatch:
 	; --- Setup: load/store/call/set flag ---
-	ldw_d16	wa, (0xf19e)
+	ld	wa, (0xf19e:16)
 	stda16	(0x2875), wa
 	stdi8	(3424), 0
 	call AccWrap_PlayModeDispatch
@@ -134,7 +134,7 @@ PlayMode_SetupAndDispatch:
 	ret
 PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
-	ldw_d16	wa, (0x2875)
+	ld	wa, (0x2875:16)
 	stda16	(0xf19e), wa
 	anddi8	(0x28a7), 251
 	ordi8	0x28b3, 16
@@ -888,7 +888,7 @@ CDlike_InitModeAndLoadBank:
 	cpdi8 (0x8c9a), 0x7a
 	jr z, CDlikeSw_NullRet
 	call SqTrAs_InitWall
-	ldw_d16 wa, (0xf19e)
+	ld wa, (0xf19e:16)
 	stda16 (0x2875), wa
 	stdi16 (0xf19e), 0x0000
 	stdi16 (0x2314), 0x0000
@@ -946,7 +946,7 @@ CDlikeExit_CheckPlaybackType:
 	call SeqTimer_UpdateTempoReg
 	call 0xfd84c2
 	call SqTrAs_Setup
-	ldw_d16 wa, (0x2875)
+	ld wa, (0x2875:16)
 	stda16 (0xf19e), wa
 PlayMode_ResetAndSchedule:
 	stdi8	(3380), 0
@@ -959,9 +959,9 @@ SongBank_SwitchAndUpdateTempo:
 	ret
 
 SongBank_SaveAndReload:
-	ldw_d16 xwa, (0xf22f)
+	ld wa, (0xf22f:16)
 	stda16 (0x286f), xwa
-	ldw_d16 xwa, (0xf231)
+	ld wa, (0xf231:16)
 	stda16 (0x2871), xwa
 	call SongBank_LoadToWorkArea
 	call SongBank_CheckAccompanimentMode
@@ -977,11 +977,11 @@ SongBank_LoadToWorkArea:
 	ld xix, 0xf180
 	ldw bc, 0x800
 	ldir85
-	ldw_d16 xwa, (0xf19e)
+	ld wa, (0xf19e:16)
 	stw_da (0x00ffec), xwa
-	ldw_d16 xwa, (0x286f)
+	ld wa, (0x286f:16)
 	stda16 (0xf22f), xwa
-	ldw_d16 xwa, (0x2871)
+	ld wa, (0x2871:16)
 	stda16 (0xf231), xwa
 	ret
 

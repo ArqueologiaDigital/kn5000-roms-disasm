@@ -265,7 +265,7 @@ RhythmEvt_PostProcess:
 
 RhythmEvt_SkipUnknown:
 	popw iy
-	ldw_d16 xiy, (0x345d)
+	ld iy, (0x345d:16)
 	call RingBuf_AdvanceIndex
 	jrl RhythmEvt_NoteOnLoop
 
@@ -1209,7 +1209,7 @@ Rhythm_NoteOffMax_D6_Done:
 	ret
 
 Rhythm_AdvanceTick:
-	ldw_d16 xwa, (0x32e3)
+	ld wa, (0x32e3:16)
 	stb_d8 (0x3356), w
 	ldb_d8 a, (0x327f)
 	ldb_d8 w, (0x3280)

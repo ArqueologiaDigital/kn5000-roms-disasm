@@ -59,7 +59,7 @@ SMF_IncrementPosition:
 	push xwa
 	push xde
 	incdi16 1, (3946)
-	ldw_d16 xwa, (3946)
+	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, xde
 	stw_erp DE, 0xe2
@@ -571,7 +571,7 @@ SMF_WriteByte_NewSector:
 	push xhl
 	pushw bc
 	pushw de
-	ldw_d16 xwa, (4327)
+	ld wa, (4327:16)
 	xor de, de
 	lds hl, 4
 	ldw_erp DE, 0xe2
@@ -730,18 +730,18 @@ SMF_ChannelHelperReturn:
 	ret
 
 SMF_GetNextEvent:
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
-	ldw_d16 xiy, (9830)
+	ld iy, (9830:16)
 	ldb_sri A, 0x07, 0xec, 0xf4
 	ret
 
 SMF_AdvancePosition:
-	ldw_d16 xwa, (9830)
+	ld wa, (9830:16)
 	cp wa, 0xff
 	jr nz, SMF_AdvancePos_Inc
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
@@ -763,10 +763,10 @@ SMF_CalcTimeDelta:
 	xor wa, wa
 	stda16 (4229), xwa
 	stb_d8 (4231), a
-	ldw_d16 xwa, (3938)
+	ld wa, (3938:16)
 	xor b, b
 	add wa, bc
-	ldw_d16 xde, (3942)
+	ld de, (3942:16)
 	cp wa, de
 	jr nc, SMF_TimeDelta_CheckFirst
 	ld wa, de
@@ -1394,12 +1394,12 @@ SMF_FileWriteAndClear:
 	ret
 
 SMF_LookupSongBank:
-	ldw_d16 xhl, (0x28af)
+	ld hl, (0x28af:16)
 	extz xhl
 	dec 1, xhl
 	sla xhl, 8
 	addda32 xhl, 7514
-	ldw_d16 xiy, (9830)
+	ld iy, (9830:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	ret
 
@@ -1520,7 +1520,7 @@ SMF_Resolve_Return:
 	ret
 
 SMF_UpdateTempo:
-	ldw_d16 xbc, (3942)
+	ld bc, (3942:16)
 	ld xiy, 0xfae
 	xor hl, hl
 
@@ -1588,7 +1588,7 @@ SMF_UpdateTempo_Encode:
 	jr SMF_UpdateTempo_Loop
 
 SMF_UpdateTempo_Finalize:
-	ldw_d16 xwa, (3942)
+	ld wa, (3942:16)
 	addda16 xwa, 3952
 	stda16 (3942), xbc
 	addda16 xbc, 3938
@@ -1603,7 +1603,7 @@ SMF_CalcFilePosition:
 	xor wa, wa
 	stda16 (4002), xwa
 	stda16 (4004), xwa
-	ldw_d16 xwa, (4347)
+	ld wa, (4347:16)
 	mul wa, 0x400
 	ld xhl, (4376:16)
 	sub xhl, 0x13fa
@@ -1636,7 +1636,7 @@ SMF_ResolveGlobalChannel:
 	push xbc
 	push xde
 	xor iy, iy
-	ldw_d16 xiy, (0x2877)
+	ld iy, (0x2877:16)
 	ld xix, 0xf1a0
 	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
 	jr nz, SMF_GlobalCh_NoDrum
@@ -1742,9 +1742,9 @@ SMF_LoadBank_Return:
 	ret
 
 SMF_SetupReadPointers:
-	ldw_d16 xwa, (0xf22f)
+	ld wa, (0xf22f:16)
 	stda16 (0x286f), xwa
-	ldw_d16 xwa, (0xf231)
+	ld wa, (0xf231:16)
 	stda16 (0x2871), xwa
 	call SongBank_LoadToWorkArea
 	ret
@@ -1770,7 +1770,7 @@ SMF_ParseEvents:
 	cp a, 0xf
 	jr ugt, SMF_Parse_Complete
 	ldb_d8 c, (3301)
-	ldw_d16 xwa, (0xf19e)
+	ld wa, (0xf19e:16)
 	stdi8 (0x287a), 0
 	anddi8 (0x287b), 191
 	xor xhl, xhl
@@ -1868,12 +1868,12 @@ SMF_ConfigSlot_Setup:
 	stda32 0x2881, xhl
 	pop xhl
 	stda16 (0x2885), xiy
-	ldw_d16 xwa, (0x28af)
+	ld wa, (0x28af:16)
 	stda16 (0x2887), xwa
 	stda16 (0x2889), xiy
 	stda16 (0x288b), xwa
 	ld ix, iy
-	ldw_d16 xhl, (3376)
+	ld hl, (3376:16)
 
 SMF_ConfigSlot_EventLoop:
 	push xde
@@ -2167,7 +2167,7 @@ SMF_Config_SaveAndRestore:
 	ld xde, 0xc9e
 	ldw_sri BC, 0x07, 0xe8, 0xec
 	stda16 (4412), xbc
-	ldw_d16 xbc, (0x288b)
+	ld bc, (0x288b:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
 	ld xde, 0xcbe
@@ -2197,7 +2197,7 @@ SMF_Config_CallHandler:
 	sll hl, 1
 	push xde
 	ld xde, 0xc9e
-	ldw_d16 xbc, (4412)
+	ld bc, (4412:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
 	ld xde, 0xcbe
@@ -2233,7 +2233,7 @@ SMF_ConfigSlot_EndOfTrack:
 	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
-	ldw_d16 xwa, (0x2887)
+	ld wa, (0x2887:16)
 	stda16 (0x289f), xwa
 	call SetWall_EventOutput
 	call SetWall_EventAdvanceCheck
@@ -2244,7 +2244,7 @@ SMF_ConfigSlot_Return:
 SMF_ConfigSlot_CodeBlock:
 	push	xhl
 	push	xwa
-	ldw_d16	wa, 10375
+	ld	wa, (10375:16)
 	stda16	4415, wa
 	stda16	4417, iy
 	incdi16	1, (4417)
@@ -2302,7 +2302,7 @@ SMF_AdvanceReadPtr:
 	inc 1, ix
 	cp ix, 0xff
 	jr ule, SMF_AdvanceRead_Return
-	ldw_d16 xhl, (0x288b)
+	ld hl, (0x288b:16)
 	calr SMF_CalcPageAddress
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
@@ -3248,7 +3248,7 @@ SMF_SetupSongBankRead:
 	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	pop xhl
-	ldw_d16 xwa, (0x28af)
+	ld wa, (0x28af:16)
 	stda16 (0x2887), xwa
 
 SMF_SetupRead_Adjust:
@@ -3267,7 +3267,7 @@ SMF_SetupRead_Finalize:
 	sll hl, 1
 	push xde
 	ld xde, 0xf1f8
-	ldw_d16 xbc, (0x2887)
+	ld bc, (0x2887:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
 	ld xde, 0xf218

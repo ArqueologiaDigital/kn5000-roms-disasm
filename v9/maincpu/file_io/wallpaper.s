@@ -43,7 +43,7 @@ FmmWallpaperLoadFunc:
 	calr SignalProgressUpdate
 
 WPLoad_DispatchState:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jrl z, WPLoad_HandleSuccess
 	cps wa, 0
@@ -133,7 +133,7 @@ WPLoad_HandleSelection:
 	stdi16 (0x81b4), 0
 
 WPLoad_Selection_Positive:
-	ldw_d16 xwa, (0x81b4)
+	ld wa, (0x81b4:16)
 	exts xwa
 	divs wa, 0xa
 	stw_erp DE, 0xe2
@@ -143,7 +143,7 @@ WPLoad_Selection_Positive:
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleShow:
-	ldw_d16 xbc, (0x81b4)
+	ld bc, (0x81b4:16)
 	exts xbc
 	divs bc, 0xa
 	muls bc, 0xa
@@ -154,7 +154,7 @@ WPLoad_HandleScroll:
 	ld xbc, 0x1c50001
 	lds32 xde, 1
 	call ApPostEvent
-	ldw_d16 xhl, (0x81b4)
+	ld hl, (0x81b4:16)
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
@@ -192,7 +192,7 @@ WPLoad_PageDown:
 	jr nz, WPLoad_OpLoad
 	ld wa, hl
 	add wa, 0xa
-	ldw_d16 xde, (0x850a)
+	ld de, (0x850a:16)
 	cp wa, de
 	jr ge, WPLoad_PageDown_Boundary
 	add hl, 0xa
@@ -254,14 +254,14 @@ WPLoad_OpLoad:
 	call SoundCtrl_SendCommand
 
 WPLoad_GetSelection:
-	ldw_d16 xbc, (0x81b4)
+	ld bc, (0x81b4:16)
 
 WPLoad_UpdateDisplay:
 	cp (xsp + 4), bc
 	jrl z, WPLoad_SendState
 	ld wa, bc
 	call FileIO_SelectWallpaperByIndex
-	ldw_d16 xwa, (0x81b4)
+	ld wa, (0x81b4:16)
 	exts xwa
 	divs wa, 0xa
 	stw_erp DE, 0xe2
@@ -269,7 +269,7 @@ WPLoad_UpdateDisplay:
 	ld xwa, (0x81b0:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
-	ldw_d16 xbc, (0x81b4)
+	ld bc, (0x81b4:16)
 	exts xbc
 	divs bc, 0xa
 	ld de, (xsp + 4)
@@ -289,7 +289,7 @@ WPLoad_UpdateDisplay:
 	add xde, xhl
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xwa, (0x81b4)
+	ld wa, (0x81b4:16)
 	exts xwa
 	divs wa, 0xa
 	stw_erp WA, 0xe2
@@ -425,7 +425,7 @@ WP_FindNextSlot:
 	ldb_d8 a, (0x89f8)
 	cps a, 4
 	jr nc, WPFind_NotFound
-	ldw_d16 xbc, (0x89f6)
+	ld bc, (0x89f6:16)
 	cps bc, 0
 	jr z, WPFind_NotFound
 	lds iz, 1

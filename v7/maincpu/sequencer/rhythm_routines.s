@@ -246,7 +246,7 @@ RhythmEvt_PostProcess:
 
 RhythmEvt_SkipUnknown:
 	popw	iy
-	ldw_d16	iy, (13249)
+	ld	iy, (13249:16)
 	call	16071765
 	jrl	-111
 RhythmEvt_IterDone:
@@ -1117,7 +1117,7 @@ Rhythm_NoteOffMax_D6_Done:
 	ret
 
 Rhythm_AdvanceTick:
-	ldw_d16 wa, (0x3247)
+	ld wa, (0x3247:16)
 	stb_d8 (0x32ba), w
 	ldb_d8 a, (0x31e3)
 	ldb_d8 w, (0x31e4)

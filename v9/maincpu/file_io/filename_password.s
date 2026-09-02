@@ -377,7 +377,7 @@ FileName_OpSave:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 	extz wa
 	calr FileIO_MidiOutSendByte
 	lds wa, 0
@@ -604,7 +604,7 @@ FileName_OpNavigate:
 	cps hl, 0
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 	cp xbc, 0x1c00018
 	jr nz, FileName_Navigate_ScrollUp
 	ld bc, wa
@@ -633,7 +633,7 @@ FileName_Navigate_CheckChanged:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 	call ReadDualFileEx
 	ld wa, hl
 	lds bc, 5
@@ -652,14 +652,14 @@ FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 FileName_GetSelection:
-	ldw_d16 xwa, (0x7f7a)
+	ld wa, (0x7f7a:16)
 
 FileName_UpdateDisplay:
 	cp (xsp + 4), wa
 	jrl z, FileName_Return
 	call NotifyUIOfSelectionChange
 	stdi8 (0x89f8), 4
-	ldw_d16 xde, (0x7f7a)
+	ld de, (0x7f7a:16)
 	exts xde
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
@@ -672,7 +672,7 @@ FileName_UpdateDisplay:
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	ldw_d16 xde, (0x7f7a)
+	ld de, (0x7f7a:16)
 	sll de, 5
 	lda_d16 xbc, (0x850c)
 	extz xde

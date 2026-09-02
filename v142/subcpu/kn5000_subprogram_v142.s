@@ -171,7 +171,7 @@ AudioLoop_CheckPeriodicReinit:
 	resda 1, 4158
 	call Cmd_Check_E2_Pending
 	call Audio_Process_Init
-	ldw_d16 xwa, 61458
+	ld wa, (61458:16)
 	ld bc, wa
 	inc 1, wa
 	stda16 61458, xwa
@@ -741,13 +741,13 @@ TaskSched_HaltLoop:
 
 TaskSched_Dispatch:
 	stdi8 305, 0
-	ldw_d16 xwa, 4306
+	ld wa, (4306:16)
 	or wa, wa
 	jr nz, TaskSched_ContextRestore
 	xor wa, wa
 	cpdm16 4166, xwa
 	jr z, TaskSched_Dispatch_ScanQueues
-	ldw_d16 xiy, 4166
+	ld iy, (4166:16)
 	extz xiy
 	ld (xiy + 4), xsp
 	ld xsp, 0x40B1E
@@ -798,7 +798,7 @@ TaskSched_ContextRestore:
 ; No caller was found by a whole-ROM branch-target scan; it is most likely reached through
 ; a dynamically installed vector (see Task_ConfigTimer 0x02072A). Register use: WA, XIX, B.
 TaskSched_SoftTimer_Service:
-	ldw_d16	wa, (4306)
+	ld	wa, (4306:16)
 	inc	1, wa
 	stda16	(4306), wa
 	ldc_cr16	wa, 0x7c
@@ -823,7 +823,7 @@ TaskSched_SoftTimer_Next:
 ; Restore interrupt level 6, decrement lock depth 0x10D2, mirror to cr 0x7C, return.
 TaskSched_SoftTimer_Unlock:
 	ei	6
-	ldw_d16	wa, (4306)
+	ld	wa, (4306:16)
 	dec	1, wa
 	stda16	(4306), wa
 	ldc_cr16	wa, 0x7c
@@ -839,7 +839,7 @@ TaskSched_SoftTimer_Fire:
 
 TaskSwitch_Countdown:
 	pushw wa
-	ldw_d16 xwa, 4306
+	ld wa, (4306:16)
 	cps wa, 1
 	jr z, TaskSwitch_Expired
 	dec 1, wa
@@ -916,7 +916,7 @@ TaskSched_SpawnTask:
 	jrl TaskSched_Dispatch
 	ei 6
 	ld xsp, 0x40B1E
-	ldw_d16 xix, 4166
+	ld ix, (4166:16)
 	extz xix
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
@@ -930,11 +930,11 @@ TaskSched_SpawnTask:
 	ld (xhl + 256), wa
 	ld (xwa + 2), hl
 	jrl TaskSched_Dispatch
-	ldw_d16 xhl, 4306
+	ld hl, (4306:16)
 	or hl, hl
 	jr nz, TaskSched_ReturnZero
 	push xix
-	ldw_d16 xix, 4166
+	ld ix, (4166:16)
 	extz xix
 	ld l, (xix + 11)
 	extz hl
@@ -1034,7 +1034,7 @@ TaskQueue_Operations_Opaque:
 	push	xix
 	push	xiy
 	push	xiz
-	ldw_d16	ix, (4166)
+	ld	ix, (4166:16)
 	extz	xix
 	ld8_src_rid8	xix, 0x0a, a	; ld a,(XIX+0x0a)
 	cps	a, 0
@@ -1296,7 +1296,7 @@ TaskEvent_Wait:
 	jrl	-947
 ; No latched signal: block the caller on the event queue and dispatch.
 TaskEvent_Wait_Block:
-	ldw_d16	ix, (4166)
+	ld	ix, (4166:16)
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
@@ -1463,7 +1463,7 @@ TaskSched_Wait:
 	jrl TaskSched_ContextRestore
 
 TaskSched_Wait_Block:
-	ldw_d16 xix, 4166
+	ld ix, (4166:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -1537,7 +1537,7 @@ TaskMsgQ_Send:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsgQ_Send_DirectDeliver
-	ldw_d16 xix, 4294
+	ld ix, (4294:16)
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -1612,7 +1612,7 @@ TaskMsgQ_Send_DirectDeliver:
 	ld ix, (xiy + 256)
 	cp ix, iy
 	jr nz, TaskMsgQ_Send_Guard_DirectDeliver
-	ldw_d16 xix, 4294
+	ld ix, (4294:16)
 	extz xix
 	ld iy, (xix + 256)
 	cp iy, ix
@@ -1727,7 +1727,7 @@ TaskMsgQ_Receive:
 	jrl TaskSched_ContextRestore
 
 TaskMsgQ_Receive_Empty:
-	ldw_d16 xix, 4166
+	ld ix, (4166:16)
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -2943,7 +2943,7 @@ Cmd_DMA_Idle:	; 020FFBh
 	stdi16 61466, 0
 
 Cmd_DMA_Check_Stuck:	; 021001h
-	ldw_d16 xwa, 61466
+	ld wa, (61466:16)
 	cp wa, 0xA	; Stuck for 10 iterations?
 	ret ule
 	; Timeout recovery - abort stuck DMA
@@ -42399,7 +42399,7 @@ ToneGen_SetupPolyVoice_Path:
 	call ToneGen_WriteVoiceParams
 	ld a, (xsp + 2)
 	extz wa
-	ldw_d16 xbc, 15132
+	ld bc, (15132:16)
 	call ToneGen_WriteSingleReg
 	inc 4, xsp
 	retd 0x2
@@ -42445,7 +42445,7 @@ ToneGen_SetupPercussionVoice:
 	call ToneGen_WriteVoiceParams
 	ld a, (xsp)
 	extz wa
-	ldw_d16 xbc, 15132
+	ld bc, (15132:16)
 	call ToneGen_WriteSingleReg
 	inc 2, xsp
 	retd 0x2
@@ -42784,7 +42784,7 @@ Audio_CmdHandler_60_7F:
 ; Accumulate: if (0x448A) + count >= (0x4488) go to StreamSizeB (stream complete), else
 ; (0x448A) += count and ++(0x448C), then enqueue.
 CmdHandler60_StreamSizeA:
-	ldw_d16 xwa, 17546
+	ld wa, (17546:16)
 	add wa, de
 	cpda16 xwa, 17544
 	jr nc, CmdHandler60_StreamSizeB
@@ -43941,9 +43941,9 @@ DSP_Reset:
 	stdi16 17846, 0
 	stdi16 17848, 0
 	stdi16 17850, 0
-	ldw_d16 xwa, 17842
-	ldw_d16 xbc, 17844
-	ldw_d16 xde, 17846
+	ld wa, (17842:16)
+	ld bc, (17844:16)
+	ld de, (17846:16)
 	call DSP_MixerCoeff_Compute
 	ld xiy, 0xF01E
 	ld xix, 0x448E
@@ -43953,14 +43953,14 @@ DSP_Reset:
 	call DSP_State_LoadAndApplyAll
 	stdi16 17554, 0
 	call DSP_State_DmaLoadPresets
-	ldw_d16 xiz, 61478
+	ld iz, (61478:16)
 	ld wa, iz
 	calr DSP_WriteAlgoInitPreset
 	ld wa, iz
 	calr DSP_ApplyAlgoForVoiceType
-	ldw_d16 xwa, 17842
-	ldw_d16 xbc, 17844
-	ldw_d16 xde, 17846
+	ld wa, (17842:16)
+	ld bc, (17844:16)
+	ld de, (17846:16)
 	call DSP_MixerCoeff_Compute
 	popw iz
 	ret
@@ -44042,7 +44042,7 @@ DSP_ApplyConfig_InactivePath:
 	ret nz
 	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
-	ldw_d16 xwa, 17558
+	ld wa, (17558:16)
 	jrl DSP_ApplyAlgoForVoiceType
 
 ; Slots 1, 2, 4: jp DSP_State_ApplyBuf(0x448E).
@@ -44059,7 +44059,7 @@ DSP_ApplyConfig_BufSelectB:
 	lds wa, 0
 	cpdi16 17850, 0
 	jr z, DSP_ApplyConfig_Epilogue
-	ldw_d16 xwa, 17848
+	ld wa, (17848:16)
 
 ; Stores the selected word and calls DSP_State_ApplyBuf.
 DSP_ApplyConfig_Epilogue:
@@ -44074,7 +44074,7 @@ DSP_ApplyConfig_Epilogue:
 DSP_ReconfigAndStatus:
 	lda_d16 xwa, 17550
 	call DSP_State_ApplyBuf
-	ldw_d16 xwa, 17558
+	ld wa, (17558:16)
 	jrl DSP_ApplyAlgoForVoiceType
 
 ; ALREADY NAMED -- doc header only. XHL = 0x448E. Three bytes.
@@ -44132,32 +44132,32 @@ EFF_GetSlotBuffer_Epilogue:
 DSP_StateTable_DefaultData:
 	extz	wa
 	stda16	(17842), wa
-	ldw_d16	bc, (17844)
-	ldw_d16	de, (17846)
+	ld	bc, (17844:16)
+	ld	de, (17846:16)
 	jp	245863
-	ldw_d16	hl, (17842)
+	ld	hl, (17842:16)
 	ret
 ; ★ NEW NAME. (0x45B4) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
 ; 0x036232. CmdHandler2C global sub-command 0x02.
 DSP_Set_MixParam_45B4:
 	extz	wa
 	stda16	(17844), wa
-	ldw_d16	wa, (17842)
-	ldw_d16	bc, (17844)
-	ldw_d16	de, (17846)
+	ld	wa, (17842:16)
+	ld	bc, (17844:16)
+	ld	de, (17846:16)
 	jp	245863
-	ldw_d16	hl, (17844)
+	ld	hl, (17844:16)
 	ret
 ; ★ NEW NAME. (0x45B6) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
 ; 0x03624D. CmdHandler2C global sub-command 0x06.
 DSP_Set_MixParam_45B6:
 	extz	wa
 	stda16	(17846), wa
-	ldw_d16	wa, (17842)
-	ldw_d16	bc, (17844)
-	ldw_d16	de, (17846)
+	ld	wa, (17842:16)
+	ld	bc, (17844:16)
+	ld	de, (17846:16)
 	jp	245863
-	ldw_d16	hl, (17846)
+	ld	hl, (17846:16)
 	ret
 ; ★ NEW NAME. (0x45B8) = WA. Returns immediately if (0x45BA) == 0 -- i.e. the value is only
 ; propagated when its enable word is set. Otherwise (0x448E) = 0 ("changed"),
@@ -44177,7 +44177,7 @@ DSP_Set_Value_45B8:
 	lda_d16	xwa, (17550)
 	call	233009
 	ret
-	ldw_d16	hl, (17848)
+	ld	hl, (17848:16)
 	ret
 ; ★ NEW NAME. (0x45BA) = zero-extended A (the enable for the value above). (0x448E) = 0, then
 ; (0x454A) = (0x45B8) if A != 0 else 0, then tail-jump DSP_State_ApplyBuf(0x448E).
@@ -44219,7 +44219,7 @@ DSP_Set_AlgoType_45B0:
 	stdi16	(17550), 0
 	extz	wa
 	stda16	(17840), wa
-	ldw_d16	wa, (17558)
+	ld	wa, (17558:16)
 	jrl	-593
 ; ★ NEW NAME. Target (0x4574) = 0x4496 + 0xDE = slot 3 record + 0x36. Global sub-command 0x24.
 DSP_Set_CfgWord_4574:
@@ -47078,7 +47078,7 @@ DSP_State_ApplyAll:
 	calr DSP_State_Dispatcher
 	ld xwa, xiz
 	calr DSP_StateTable_Reset
-	ldw_d16 xhl, 17864
+	ld hl, (17864:16)
 	pop xiz
 	ret
 

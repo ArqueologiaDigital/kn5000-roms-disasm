@@ -6592,8 +6592,8 @@ SeMenu_ShowConfirmDialog_Data:
 	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_mid0.bin"
 	stib_da (0x03efa8), 0x00
 	ldb C, 0x07
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 .Lc_f0f166:
 	pushw ix
 	pushw iy
@@ -6605,8 +6605,8 @@ SeMenu_ShowConfirmDialog_Data:
 	add IX,0x001c
 	dec 1,C
 	jr nz, .Lc_f0f166
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 	stda16 (0x06cc), ix
 	adddi16 (0x06cc), 0x00c4
 	stda16 (0x06d0), ix
@@ -6615,8 +6615,8 @@ SeMenu_ShowConfirmDialog_Data:
 	stda16 (0x06d2), iy
 	adddi16 (0x06d2), 0x000c
 	call SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 	add IX,0x00c4
 	stda16 (0x06cc), ix
 	stda16 (0x06d0), ix
@@ -6625,8 +6625,8 @@ SeMenu_ShowConfirmDialog_Data:
 	stda16 (0x06d2), iy
 	subdi16 (0x06d2), 0x0001
 	call SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 	stda16 (0x06cc), ix
 	subdi16 (0x06cc), 0x0008
 	stda16 (0x06d0), ix
@@ -6634,8 +6634,8 @@ SeMenu_ShowConfirmDialog_Data:
 	stda16 (0x06d2), iy
 	adddi16 (0x06d2), 0x000c
 	call SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 	stda16 (0x06cc), ix
 	subdi16 (0x06cc), 0x0005
 	stda16 (0x06d0), ix
@@ -6645,8 +6645,8 @@ SeMenu_ShowConfirmDialog_Data:
 	stda16 (0x06d2), iy
 	adddi16 (0x06d2), 0x0007
 	call SeMenu_NameEditor_ChangeCase_Data
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 	sub IX,0x0004
 	stda16 (0x06cc), ix
 	stda16 (0x06d0), ix
@@ -6655,8 +6655,8 @@ SeMenu_ShowConfirmDialog_Data:
 	stda16 (0x06d2), iy
 	adddi16 (0x06d2), 0x000b
 	call SeMenu_NameEditor_InsertChar
-	ldw_d16 ix, (0x06c6)
-	ldw_d16 iy, (0x06c8)
+	ld ix, (0x06c6:16)
+	ld iy, (0x06c8:16)
 	stda16 (0x06cc), ix
 	adddi16 (0x06cc), 0x001c
 	stda16 (0x06d0), ix
@@ -11618,7 +11618,7 @@ MspMeasBox_HandleEvtBC:
 	call	16400380
 	ld	xwa, xiz
 	call	16408153
-	ldw_d16	wa, (32370)
+	ld	wa, (32370:16)
 	pushw	wa
 	pushw	225
 	pushw	58104
@@ -11671,7 +11671,7 @@ MspMemBox_HandleEvtBC:
 	call	16400380
 	ld	xwa, xiz
 	call	16408153
-	ldw_d16	wa, (32124)
+	ld	wa, (32124:16)
 	mul	wa, 100
 	extz	xwa
 	div	wa, 57

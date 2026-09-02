@@ -332,11 +332,11 @@ Delay3000L_Done:
 
 
 DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	stda16 (0x8d9b), xwa
 
 DELAY_2_TICKS__loop:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	subda16 xwa, 0x8d9b
 	cps wa, 2
 	jr lt, DELAY_2_TICKS__loop
@@ -344,11 +344,11 @@ DELAY_2_TICKS__loop:
 
 
 DELAY_6_TICKS:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	stda16 (0x8d9b), xwa
 
 Delay6T_Loop:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	subda16 xwa, 0x8d9b
 	cps wa, 6
 	jr lt, Delay6T_Loop
@@ -356,11 +356,11 @@ Delay6T_Loop:
 
 
 DELAY_51_TICKS:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	stda16 (0x8d9b), xwa
 
 Delay51T_Loop:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	subda16 xwa, 0x8d9b
 	cp wa, 0x33
 	jr lt, Delay51T_Loop
@@ -464,7 +464,7 @@ CPanel_ReadAllButtons:
 	ldw (xhl - 2), 0x80
 
 	ei 6
-	ldw_d16 xwa, (0x8d9d)
+	ld wa, (0x8d9d:16)
 	stda16 (0x8d9f), xwa
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
@@ -623,7 +623,7 @@ CPanel_WaitTXReady_Timeout:
 CPanel_WaitTXReady_BufferCheck:
 	; Only reaches here when CP_Flags_A.10 == 00, and I think only CPanel_SM_Idle sets that value...
 
-	ldw_d16 xwa, (0x8dff)
+	ld wa, (0x8dff:16)
 	cpda16 xwa, 0x8dfd
 	jr nz, CPanel_WaitTXReady_Timeout
 
@@ -909,7 +909,7 @@ SendByteN_AdvanceState:
 CPanel_SM_TXComplete:
 	stdi8 (0x8d8b), 0
 	stdi8 (0x8d8a), 0; ROUTINE_0
-	ldw_d16 xwa, (0x8dff)
+	ld wa, (0x8dff:16)
 	subda16 xwa, 0x8dfd
 	cps wa, 2
 	jr c, TXComplete_BufferEmpty
@@ -959,7 +959,7 @@ CPanel_SM_RXByte1:
 	ld xiy, 0x8da1
 	addda16 xiy, 0x8d9f
 	ld (xiy), a
-	ldw_d16 xhl, (0x8d9f)
+	ld hl, (0x8d9f:16)
 	subda16 xhl, 0x8d9d
 	jr nc, RXByte1_ForwardDist
 	neg hl
@@ -1059,7 +1059,7 @@ CPanel_InterruptPoll_MainLoop:
 	cpdi8 (0x8d9a), 42; =42 ;-)
 	jr ule, PollLoop_DispatchWork
 	ei 6
-	ldw_d16 xwa, (0x8dff)
+	ld wa, (0x8dff:16)
 	subda16 xwa, 0x8dfd
 	jr nc, PollLoop_TXForwardDist
 	neg wa
@@ -1076,7 +1076,7 @@ PollLoop_TXCheckThreshold:
 	stdi8 (0x8d9a), 0
 	ldb w, 0xe0
 	ldb a, 0x13
-	ldw_d16 xiy, (0x8dff)
+	ld iy, (0x8dff:16)
 	ld xde, 0x8e01
 	stb_dri W, 0x07, 0xe8, 0xf4
 	calr CPanel_IncLEDPtr
@@ -1123,7 +1123,7 @@ PollLoop_CheckTXReady:
 	jr nz, PollLoop_BusyRetry
 
 	; Only reaches here when (CPANEL_TX_RX_FLAGS), CP_Flags_A.10 == 00:
-	ldw_d16 xwa, (0x8dff)
+	ld wa, (0x8dff:16)
 	subda16 xwa, 0x8dfd
 	jr nc, PollLoop_StartTX
 	neg wa
@@ -1185,7 +1185,7 @@ CPanel_RX_Process:
 
 CPanel_RX_DispatchLoop:
 	ld xde, 0x8da1
-	ldw_d16 xiy, (0x8d9d)
+	ld iy, (0x8d9d:16)
 	ld xiz, 0x200ad
 	ld ix, (xiz - 4)
 
@@ -1193,7 +1193,7 @@ CPanel_RX_ParseNext:
 	cpw (xiz - 2), 0x4
 	jrl c, CPanel_RX_Done
 
-	ldw_d16 xwa, (0x8d9f)
+	ld wa, (0x8d9f:16)
 	subda16 xwa, 0x8d9d
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
@@ -1418,7 +1418,7 @@ CPanel_RX_Done:
 
 
 CPanel_UpdateLEDs:	; do this
-	ldw_d16 xiy, (0x8dff)
+	ld iy, (0x8dff:16)
 	ld xde, 0x8e01
 	ld xiz, 0x20137
 	ld ix, (xiz - 8)
@@ -1431,7 +1431,7 @@ CPanel_UpdateLEDs__check_next:
 	jrl nz, LEDs_Return
 
 LEDs_CheckTXSpace:
-	ldw_d16 xwa, (0x8dff)
+	ld wa, (0x8dff:16)
 	subda16 xwa, 0x8dfd
 	jr nc, LEDs_TXForwardDist
 	neg wa

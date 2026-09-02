@@ -526,7 +526,7 @@ DSPCfg_SyncBitmapData:
 	lda_d16	xwa, 48288
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
-	ldw_d16	bc, 36930
+	ld	bc, (36930:16)
 	jrl	136
 	ld	(xsp+6), 0
 	ldb_spi	a, 248
@@ -655,7 +655,7 @@ SoundParam_NotifyMultipleChanges:
 ToneGen_DiffScanAndUpdate:
 	lda	xsp, (xsp-14)
 	pushw	iz
-	ldw_d16	bc, (36930)
+	ld	bc, (36930:16)
 	lda_d16	xwa, (48288)
 	ld	(xsp+12), xwa
 	ld	(xsp+8), xwa

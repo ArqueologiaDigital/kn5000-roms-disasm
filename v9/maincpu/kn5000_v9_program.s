@@ -829,7 +829,7 @@ Boot_ParseTableDataTimestamp:
 	ret
 
 Boot_GetSystemPointer:
-	ldw_d16 xhl, (1028)
+	ld hl, (1028:16)
 	ret
 
 Boot_ParseSubCPUTimestamp:

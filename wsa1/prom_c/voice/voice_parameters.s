@@ -372,7 +372,7 @@ Voice_ComputePitch:
 	and	wa, 0x7F00                             ; FA7F42  and WA,0x7f00
 	ld	hl, wa                                  ; FA7F46  ld HL,WA
 	add	hl, 0x80                               ; FA7F48  add HL,0x0080
-	ldw_d16	wa, (0x1505)                       ; FA7F4C  ld WA,(0x1505)
+	ld	wa, (0x1505:16)                       ; FA7F4C  ld WA,(0x1505)
 	add	wa, hl                                 ; FA7F50  add WA,HL
 	ld	(xiz-6), wa                             ; FA7F52  ld (XIZ+0xfa),WA
 	ld	hl, (xix+35)                            ; FA7F55  ld HL,(XIX+0x23)
@@ -393,7 +393,7 @@ Voice_ComputePitch:
 	calr (0xFA72E9 - 0xFA7F7D)                 ; FA7F7A  calr 0xfa72e9
 	ld	de, wa                                  ; FA7F7D  ld DE,WA
 	add	de, hl                                 ; FA7F7F  add DE,HL
-	ldw_d16	bc, (0x14FF)                       ; FA7F81  ld BC,(0x14ff)
+	ld	bc, (0x14FF:16)                       ; FA7F81  ld BC,(0x14ff)
 	and	bc, 0x200                              ; FA7F85  and BC,0x0200
 	pop	xiy                                    ; FA7F89  pop XIY
 	jr z, Voice_ComputePitch__FA7FE0                   ; FA7F8A  jr Z,0xfa7fe0
@@ -767,7 +767,7 @@ Voice_SelectKeyZone_Reg0040__FA822E:
 	calr (0xFA752F - 0xFA8231)                 ; FA822E  calr 0xfa752f
 Voice_SelectKeyZone_Reg0040__FA8231:
 	inc	8, xsp                                 ; FA8231  inc 0,XSP
-	ldw_d16	bc, (0x14FF)                       ; FA8233  ld BC,(0x14ff)
+	ld	bc, (0x14FF:16)                       ; FA8233  ld BC,(0x14ff)
 	and	bc, 4                                  ; FA8237  and BC,0x0004
 	jr z, Voice_SelectKeyZone_Reg0040__FA8266                   ; FA823B  jr Z,0xfa8266
 	ldw_da	de, (0xD760)                        ; FA823D  ld DE,(0x00d760)
@@ -882,7 +882,7 @@ Voice_StageRegs_0040_B__FA82D8:
 	stw_da	(0xD760), bc                        ; FA82E4  ld (0x00d760),BC
 	ld	bc, (xix+4)                             ; FA82E9  ld BC,(XIX+0x04)
 	stda16	(0x5A4F), bc                        ; FA82EC  ld (0x5a4f),BC
-	ldw_d16	bc, (0x14FF)                       ; FA82F0  ld BC,(0x14ff)
+	ld	bc, (0x14FF:16)                       ; FA82F0  ld BC,(0x14ff)
 	and	bc, 4                                  ; FA82F4  and BC,0x0004
 	jr z, Voice_StageRegs_0040_B__FA831D                   ; FA82F8  jr Z,0xfa831d
 	ldw_da	hl, (0xD760)                        ; FA82FA  ld HL,(0x00d760)
@@ -933,7 +933,7 @@ Voice_PitchAddZoneOffset_AB:
 	ld	bc, (xiz+8)                             ; FA8328  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA832B  extz XBC
 	ld	hl, (xbc+6)                             ; FA832D  ld HL,(XBC+0x06)
-	ldw_d16	wa, (0x5A4F)                       ; FA8330  ld WA,(0x5a4f)
+	ld	wa, (0x5A4F:16)                       ; FA8330  ld WA,(0x5a4f)
 	add	wa, hl                                 ; FA8334  add WA,HL
 	pushw	wa                                   ; FA8336  push WA
 	calr (0xFA7570 - 0xFA833A)                 ; FA8337  calr 0xfa7570
@@ -985,7 +985,7 @@ Voice_StagePitch_Reg0400_AB:
 	ld	ix, (xiz+8)                             ; FA834E  ld IX,(XIZ+0x08)
 	extz	xix                                   ; FA8351  extz XIX
 	ld	hl, (xix+10)                            ; FA8353  ld HL,(XIX+0x0a)
-	ldw_d16	bc, (0x1503)                       ; FA8356  ld BC,(0x1503)
+	ld	bc, (0x1503:16)                       ; FA8356  ld BC,(0x1503)
 	ld	de, bc                                  ; FA835A  ld DE,BC
 	add	de, hl                                 ; FA835C  add DE,HL
 	ld	bc, (xix+1)                             ; FA835E  ld BC,(XIX+0x01)
@@ -1044,7 +1044,7 @@ Voice_StagePitch_Reg0400_AB__FA8398:
 Voice_PitchAddZoneOffset_CD:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA83A8  link XIZ,0x0000
 	pushw	hl                                   ; FA83AC  push HL
-	ldw_d16	hl, (0x5A4F)                       ; FA83AD  ld HL,(0x5a4f)
+	ld	hl, (0x5A4F:16)                       ; FA83AD  ld HL,(0x5a4f)
 	ld	bc, (xiz+8)                             ; FA83B1  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA83B4  extz XBC
 	ld	wa, (xbc+6)                             ; FA83B6  ld WA,(XBC+0x06)
@@ -1086,7 +1086,7 @@ Voice_StagePitch_Reg0400_CD:
 	ld	ix, (xiz+8)                             ; FA83D3  ld IX,(XIZ+0x08)
 	extz	xix                                   ; FA83D6  extz XIX
 	ld	hl, (xix+10)                            ; FA83D8  ld HL,(XIX+0x0a)
-	ldw_d16	bc, (0x1503)                       ; FA83DB  ld BC,(0x1503)
+	ld	bc, (0x1503:16)                       ; FA83DB  ld BC,(0x1503)
 	ld	de, bc                                  ; FA83DF  ld DE,BC
 	add	de, hl                                 ; FA83E1  add DE,HL
 	ld	bc, (xix+1)                             ; FA83E3  ld BC,(XIX+0x01)
@@ -5670,7 +5670,7 @@ Voice_StageRegs_0800_A:
 	ld	(xiz-6), xwa                            ; FAA4D2  ld (XIZ+0xfa),XWA
 	ld	xiy, (xbc+31)                           ; FAA4D5  ld XIY,(XBC+0x1f)
 	ld	(xiz-10), xiy                           ; FAA4D8  ld (XIZ+0xf6),XIY
-	ldw_d16	bc, (0x14FF)                       ; FAA4DB  ld BC,(0x14ff)
+	ld	bc, (0x14FF:16)                       ; FAA4DB  ld BC,(0x14ff)
 	and	bc, 1                                  ; FAA4DF  and BC,0x0001
 	jr nz, Voice_StageRegs_0800_A__FAA4F5                  ; FAA4E3  jr NZ,0xfaa4f5
 	ld	bc, (xiz+8)                             ; FAA4E5  ld BC,(XIZ+0x08)
@@ -7852,7 +7852,7 @@ sub_FAB5A5__FAB61F:
 	ld	iy, (xbc+0xE0)                          ; FAB678  ld IY,(XBC+0x00e0)
 	add	wa, iy                                 ; FAB67D  add WA,IY
 	ld	(xiz-10), wa                            ; FAB67F  ld (XIZ+0xf6),WA
-	ldw_d16	iy, (0x5A51)                       ; FAB682  ld IY,(0x5a51)
+	ld	iy, (0x5A51:16)                       ; FAB682  ld IY,(0x5a51)
 	add	wa, iy                                 ; FAB686  add WA,IY
 	ld	(xiz-12), wa                            ; FAB688  ld (XIZ+0xf4),WA
 	push	xix                                   ; FAB68B  push XIX
@@ -7976,7 +7976,7 @@ sub_FAB6D5__FAB742:
 	ld	wa, (xbc+0xE0)                          ; FAB778  ld WA,(XBC+0x00e0)
 	ld	ix, wa                                  ; FAB77D  ld IX,WA
 	add	ix, hl                                 ; FAB77F  add IX,HL
-	ldw_d16	wa, (0x5A51)                       ; FAB781  ld WA,(0x5a51)
+	ld	wa, (0x5A51:16)                       ; FAB781  ld WA,(0x5a51)
 	ld	hl, wa                                  ; FAB785  ld HL,WA
 	add	hl, ix                                 ; FAB787  add HL,IX
 	call	0xFC578C                              ; FAB789  call 0xfc578c

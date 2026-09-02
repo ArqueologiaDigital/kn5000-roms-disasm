@@ -464,30 +464,30 @@ BootSerial_SpinWait3000__done:
 ;          TickWait51: BootSerial_Init (3 sites)
 ; -----------------------------------------------------------------------------
 BootSerial_TickWait2:
-	ldw_d16	xwa, (0x0c00)
+	ld	wa, (0x0c00:16)
 	stda16	(0x0f73), xwa
 BootSerial_TickWait2__loop:
-	ldw_d16	xwa, (0x0c00)
+	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
 	cps	wa, 2
 	jr	lt, BootSerial_TickWait2__loop
 	ret
 
 BootSerial_TickWait6:
-	ldw_d16	xwa, (0x0c00)
+	ld	wa, (0x0c00:16)
 	stda16	(0x0f73), xwa
 BootSerial_TickWait6__loop:
-	ldw_d16	xwa, (0x0c00)
+	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
 	cps	wa, 6
 	jr	lt, BootSerial_TickWait6__loop
 	ret
 
 BootSerial_TickWait51:
-	ldw_d16	xwa, (0x0c00)
+	ld	wa, (0x0c00:16)
 	stda16	(0x0f73), xwa
 BootSerial_TickWait51__loop:
-	ldw_d16	xwa, (0x0c00)
+	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
 	cp	wa, 51
 	jr	lt, BootSerial_TickWait51__loop
@@ -584,7 +584,7 @@ BootSerial_ProbeSequence:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	ldw_d16	xwa, (0x0f75)
+	ld	wa, (0x0f75:16)
 	stda16	(0x0f77), xwa		; (0x0f77) = (0x0f75) snapshot
 	ei	0
 	call	0xfff173		; BootSerial_WaitTxIdle (boot-time
@@ -756,7 +756,7 @@ BootSerial_WaitTxIdle__busy:
 	calr	BootSerial_SpinWait1500
 	jr	BootSerial_WaitTxIdle__outer
 BootSerial_WaitTxIdle__check_tx:
-	ldw_d16	xwa, (0x0fd7)		; TX pending count
+	ld	wa, (0x0fd7:16)		; TX pending count
 	cpda16	xwa, 0x0fd5		; == send index -> drained
 	jr	nz, BootSerial_WaitTxIdle__busy
 BootSerial_WaitTxIdle__exit:

@@ -748,7 +748,7 @@ AssswbWr_Return:
 	pop xiz
 	ret
 AssswbWr:
-	ldw_d16 xhl, (0x90de)
+	ld hl, (0x90de:16)
 	cp hl, 0x1fc
 	jr nc, AssswbWr_BufferFull
 	lda_d16 xix, (0xbd3c)
@@ -760,7 +760,7 @@ AssswbWr:
 	ld a, (xsp + 4)
 	lda_dpi XBC, 0xec
 	ld (xhl), 0xff
-	ldw_d16 xwa, (0x90de)
+	ld wa, (0x90de:16)
 	inc 4, wa
 	stda16 (0x90de), xwa
 
@@ -768,7 +768,7 @@ AssswbWr_BufferFull:
 	retd 0x2
 
 AddswbWr:
-	ldw_d16 xhl, (0x90e2)
+	ld hl, (0x90e2:16)
 	cp hl, 0xfc
 	jr nc, AddswbWr_BufferFull
 	lda_d16 xix, (0xbf39)
@@ -780,7 +780,7 @@ AddswbWr:
 	ld a, (xsp + 4)
 	lda_dpi XBC, 0xec
 	ld (xhl), 0xff
-	ldw_d16 xwa, (0x90e2)
+	ld wa, (0x90e2:16)
 	inc 4, wa
 	stda16 (0x90e2), xwa
 
@@ -826,7 +826,7 @@ SwbtWr_SoundBankParamTable:
 SwbtWr_ProcessAll:
 	ld xiy, 0xbf39
 	ld xix, 0xbd3c
-	ldw_d16 xbc, (0x90e2)
+	ld bc, (0x90e2:16)
 	srl bc, 1
 	cps bc, 0
 	jr z, SwbtWr_ProcessAll_CompactDone
@@ -1887,7 +1887,7 @@ CompIface_PostProcess:
 	call AccompSeq_StopSequence
 	bitda 6, (0xc1f0)
 	ret z
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	subda16 xwa, 0xc1ea
 	cpda16 xwa, 0xc1fc
 	ret ule
@@ -1901,7 +1901,7 @@ CompIface_PostProcess:
 	ret
 
 CompIface_RampControl:
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	ld bc, wa
 	subda16 xbc, 0xc1ea
 	bitda 0, (0xc1f0)
@@ -1909,9 +1909,9 @@ CompIface_RampControl:
 	cp bc, 0xf
 	ret c
 	stda16 (0xc1ea), xwa
-	ldw_d16 xbc, (0xc1ee)
+	ld bc, (0xc1ee:16)
 	extz xbc
-	ldw_d16 xwa, (0xc1f8)
+	ld wa, (0xc1f8:16)
 	extz xwa
 	add xbc, xwa
 	cp xbc, 0x7f00
@@ -1941,9 +1941,9 @@ CompIface_RampDown_Apply:
 	cp bc, 0xf
 	ret c
 	stda16 (0xc1ea), xwa
-	ldw_d16 xbc, (0xc1ee)
+	ld bc, (0xc1ee:16)
 	extz xbc
-	ldw_d16 xwa, (0xc1fa)
+	ld wa, (0xc1fa:16)
 	extz xwa
 	sub xbc, xwa
 	jr ge, CompIface_RampDown_Clamp
@@ -2201,7 +2201,7 @@ DSPCfg_CompressorDispatch:
 	call SndParam_LookupReadOnly
 	stb_d8 (0xc1f2), l
 	extz hl
-	ldw_d16 xbc, (0xc1f6)
+	ld bc, (0xc1f6:16)
 	ld wa, hl
 	calr CompIface_ScaleAndNormalize
 	stda16 (0xc1f8), xhl
@@ -2214,11 +2214,11 @@ DSPCfg_CompParam_SubType6:
 	call SndParam_LookupReadOnly
 	stb_d8 (0xc1f4), l
 	extz hl
-	ldw_d16 xbc, (0xc1f6)
+	ld bc, (0xc1f6:16)
 	ld wa, hl
 	calr CompIface_ScaleAndNormalize
 	stda16 (0xc1fa), xhl
-	ldw_d16 xbc, (0xc1f6)
+	ld bc, (0xc1f6:16)
 	lds wa, 1
 	jrl DSPCfg_ScaleFactor_StoreResult
 
@@ -2270,10 +2270,10 @@ DSPCfg_ScaleFactor_Update:
 	stda16 (0xc1f8), xhl
 	ldb_d8 a, (0xc1f4)
 	extz wa
-	ldw_d16 xbc, (0xc1f6)
+	ld bc, (0xc1f6:16)
 	calr CompIface_ScaleAndNormalize
 	stda16 (0xc1fa), xhl
-	ldw_d16 xbc, (0xc1f6)
+	ld bc, (0xc1f6:16)
 	lds wa, 1
 
 DSPCfg_ScaleFactor_StoreResult:
@@ -5268,14 +5268,14 @@ DSPCfg_ReturnValueTable:
 	.include "boot/screen_group_dispatch.s"
 
 AudioInit_ProcessModeChange:
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 2, wa
 	ret z
 	call Audio_CheckInitStatus
 	anddi16 0xc594, 0xfffb
 	bitda 1, (0xfc67)
 	jr z, AudioModeChange_Handler
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioModeChange_ClearVoiceFlags
 	setda 2, 0xc1fe
@@ -5312,12 +5312,12 @@ AudioModeChange_Handler:
 
 Audio_CheckSubsystemReady:
 	call Audio_CheckInitStatus
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	and wa, 0x60
 	call_24 z, AudioInit_RefreshToneBank
 	bitda 1, (0xfc67)
 	jr z, AudioSubsystem_Callback
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioSubsystem_ClearVoiceFlags
 	setda 2, 0xc1fe
@@ -5363,7 +5363,7 @@ AudioInit_CheckMIDIAndDispatch:
 Audio_InitDispatchReturn:
 	cps a, 0
 	jr z, AudioDispatch_ClearAccFlags
-	ldw_d16 xwa, (0xc598)
+	ld wa, (0xc598:16)
 	bit 2, wa
 	jr z, AudioDispatch_SetAccMode
 	bitda 0, (0x28b2)
@@ -5379,7 +5379,7 @@ AudioDispatch_ClearAccFlags:
 AudioDispatch_SetAccMode:
 	ordi16 0xc596, 512
 	call AccAutoPlay_PeriodicCheck
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr z, AudioDispatch_SetTimerBase
 	stdi8 (0xc5a0), 31
@@ -5391,7 +5391,7 @@ AudioDispatch_SetTimerBase:
 AudioDispatch_CheckStereoMode:
 	bitda 1, (0xfc67)
 	jr z, AudioVoice_Callback
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioDispatch_ClearVoiceFlags
 	setda 2, 0xc1fe
@@ -5432,7 +5432,7 @@ AudioMode_SetStereoFlags:
 AudioMode_ResetVoiceState:
 	bitda 1, (0xfc67)
 	jr z, AudioVoiceReset_Handler
-	ldw_d16 xwa, (0xc594)
+	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioVoiceReset_ClearFlags
 	setda 2, 0xc1fe
@@ -5494,7 +5494,7 @@ AudioMode_ConfigExternal_CheckStereo:
 
 AudioMode_ConfigExternal_NoStereo:
 	anddi16 0xc596, 0xffdf
-	ldw_d16 xwa, (0xc596)
+	ld wa, (0xc596:16)
 	and wa, 0x7
 	call_24 z, AudioInit_RefreshToneBank
 
@@ -5737,7 +5737,7 @@ UIStateEvt_ParamEdit_Data:
 	ldb_d8 a, (49279)
 	and	a, 7
 	jrl	z, 183
-	ldw_d16	wa, (0xc598)
+	ld	wa, (0xc598:16)
 	bit	6, wa
 	jr	z, 44
 	ldb_d8	a, (0xfc5e)
@@ -5755,7 +5755,7 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	60
-	ldw_d16	wa, (0xc598)
+	ld	wa, (0xc598:16)
 	and	wa, 34
 	cp	wa, 32
 	jr	nz, 25
@@ -5775,13 +5775,13 @@ UIStateEvt_ParamEdit_Data:
 	add	wa, wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
 	ld_rrw iz, xbc, wa
-	ldw_d16 wa, (50582)
+	ld wa, (50582:16)
 	and wa, 6
 	jr	z, 18
 	ld	wa, iz
 	and	wa, 6
 	jr	z, 10
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	and	wa, 7
 	jr	nz, 4
 	call	AudioInit_RefreshToneBank
@@ -5795,7 +5795,7 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	and	wa, 7
 	jr	z, 7
 	stdi8	(0xc5a0), 31
@@ -5871,7 +5871,7 @@ UIStateEvt_ParamEdit_Data:
 	ldb_d8	a, (0xc07f)
 	and	a, 7
 	jrl	z, 258
-	ldw_d16	wa, (0xc598)
+	ld	wa, (0xc598:16)
 	bit	6, wa
 	jr	z, 44
 	ldb_d8	a, (0xfc5e)
@@ -5889,7 +5889,7 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	55
-	ldw_d16	wa, (0xc598)
+	ld	wa, (0xc598:16)
 	bit	5, wa
 	jr	z, 25
 	lds	iz, 2
@@ -5921,7 +5921,7 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	and	wa, 7
 	jr	z, 7
 	stdi8	(0xc5a0), 31
@@ -5934,7 +5934,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0xf1, 0x84
 	ldw	de, 0x6ec8
 	ccf
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	bit	9, wa
 	jr	z, 9
 	ldb_d8	a, (0xfc5f)
@@ -5952,7 +5952,7 @@ UIStateEvt_ParamEdit_Data:
 	swi	4
 	inc	6, a
 	incf
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	bit	9, wa
 	.byte 0xf2, 0xf5, 0xf5
 	swi	5
@@ -5967,7 +5967,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0xf1, 0x84
 	ldw	de, 0x6ec8
 	ccf
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	bit	9, wa
 	jr	z, 9
 	ldb_d8	a, (0xfc5f)
@@ -6004,7 +6004,7 @@ UIStateEvt_VolumeMixer_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldw_d16	wa, (0xc594)
+	ld	wa, (0xc594:16)
 	bit	4, wa
 	ret	z
 	stdi8	(0xc1fe), 0
@@ -6027,7 +6027,7 @@ UIStateEvt_VolumeMixer_Data:
 	push	xix
 	.byte 0xdf
 	swi	7
-	ldw_d16	wa, (0xc596)
+	ld	wa, (0xc596:16)
 	and	wa, 7
 	.byte 0xf2, 0xf5, 0xf5
 	swi	5
@@ -6043,7 +6043,7 @@ UIStateEvt_VolumeMixer_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldw_d16	wa, (0xc594)
+	ld	wa, (0xc594:16)
 	bit	4, wa
 	ret	z
 	stdi8	(0xc1fe), 0

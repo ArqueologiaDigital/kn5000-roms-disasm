@@ -4046,7 +4046,7 @@ LoadSecondary_Return:
 	ret
 
 FileIO_ReturnError:
-	ldw_d16 xhl, (0x7f48)
+	ld hl, (0x7f48:16)
 	ret
 
 FileIO_OpenWithMode:
@@ -4096,7 +4096,7 @@ FileIO_OpenMode_UnknownMode:
 
 FileIO_OpenMode_Success:
 	stdi16 (0x7f48), 0
-	ldw_d16 xhl, (0x7f48)
+	ld hl, (0x7f48:16)
 
 FileIO_OpenMode_Return:
 	pop xiz
@@ -4214,7 +4214,7 @@ FileIO_ReadByte_CheckEOF:
 	ret ge
 
 FileIO_ReadByte_Return:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_ReadByte_Extended
 	ld wa, hl
@@ -4252,7 +4252,7 @@ FileIO_SeekAndRead_Error:
 	ldw iz, 0xff9c
 
 FileIO_SeekAndRead_Return:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_SeekToOffset
 	ld wa, iz
@@ -4328,7 +4328,7 @@ FileIO_WriteBlock_Error:
 	jr ge, FileIO_WriteByte
 
 FileIO_WriteBlock_Return:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_WriteWord
 	ld wa, (xsp + 4)
@@ -4410,7 +4410,7 @@ FileIO_FlushClose_Return:
 	jr ge, FileIO_CheckHandle
 
 FileIO_GetPosition:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_GetPosition_Return
 	ld wa, (xsp + 4)
@@ -4445,7 +4445,7 @@ FileIO_SeekRead_NoHandle:
 	ldw hl, 0xff9c
 
 FileIO_SeekRead_Return:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_SeekRead_Extended
 	ld wa, hl
@@ -4469,7 +4469,7 @@ FileIO_SeekWrite_NoHandle:
 	ldw iz, 0xff9c
 
 FileIO_SeekWrite_Return:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_SeekWriteBlock
 	ld wa, iz
@@ -4501,7 +4501,7 @@ FileIO_SeekWriteBlock_Error:
 	ret ge
 
 FileIO_SeekWriteBlock_Return:
-	ldw_d16 xwa, (0x7f48)
+	ld wa, (0x7f48:16)
 	cps wa, 0
 	jr lt, FileIO_SeekWriteBlock_Done
 	ld wa, hl
@@ -8427,7 +8427,7 @@ SeqPhase_OperationStateCheck:
 	calr SignalProgressUpdate
 
 SeqPhase_CheckMediaType:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 2
 	jr z, SeqPhase_MediaIsValid
 	cps wa, 3
@@ -8524,7 +8524,7 @@ FileIO_DiskEventDispatch:
 	stda16 (0x8500), xhl
 
 DiskEvt_CheckMediaType:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jr z, DiskEvt_TypeIsCard
 	cps wa, 0
@@ -8580,7 +8580,7 @@ FileIO_DetectFileTypeAndPost:
 	stda16 (0x8500), xhl
 
 DetectType_CheckMediaType:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 1
 	jr z, DetectType_IsCardReset
 	cps wa, 0
@@ -8632,7 +8632,7 @@ FileIO_GetDiskCapacity:
 	stda16 (0x8500), xhl
 
 DiskCap_CheckMediaType:
-	ldw_d16 xwa, (0x8500)
+	ld wa, (0x8500:16)
 	cps wa, 3
 	jr z, DiskCap_TypeIsFloppyOrHD
 	cps wa, 2
@@ -8823,7 +8823,7 @@ FileIO_ErrorCodeByteBlock:
 	call	GetDiskSizeInfo
 	extz	hl
 	stda16	(0x8500), hl
-	ldw_d16	wa, (0x8500)
+	ld	wa, (0x8500:16)
 	cps	wa, 1
 	jrl	z, -190
 	cps	wa, 0

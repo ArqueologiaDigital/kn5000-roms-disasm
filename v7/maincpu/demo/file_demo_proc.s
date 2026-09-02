@@ -3890,7 +3890,7 @@ LoadSecondary_Return:
 	ret
 
 FileIO_ReturnError:
-	ldw_d16	hl, (32428)
+	ld	hl, (32428:16)
 	ret
 FileIO_OpenWithMode:
 	lda xsp, (xsp - 0x80)
@@ -3927,7 +3927,7 @@ FileIO_OpenMode_UnknownMode:
 	jr	10
 FileIO_OpenMode_Success:
 	stdi16	(32428), 0
-	ldw_d16	hl, (32428)
+	ld	hl, (32428:16)
 FileIO_OpenMode_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x80, 0x00
@@ -4042,7 +4042,7 @@ FileIO_ReadByte_CheckEOF:
 	ret ge
 
 FileIO_ReadByte_Return:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 2
 	ld	wa, hl
@@ -4077,7 +4077,7 @@ FileIO_SeekAndRead_Error:
 	ldw iz, 0xff9c
 
 FileIO_SeekAndRead_Return:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 2
 	ld	wa, iz
@@ -4148,7 +4148,7 @@ FileIO_WriteBlock_Error:
 	jr ge, FileIO_WriteByte
 
 FileIO_WriteBlock_Return:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 3
 	ld	wa, (xsp+4)
@@ -4226,7 +4226,7 @@ FileIO_FlushClose_Return:
 	jr ge, FileIO_CheckHandle
 
 FileIO_GetPosition:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 3
 	ld	wa, (xsp+4)
@@ -4258,7 +4258,7 @@ FileIO_SeekRead_NoHandle:
 	ldw hl, 0xff9c
 
 FileIO_SeekRead_Return:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 2
 	ld	wa, hl
@@ -4279,7 +4279,7 @@ FileIO_SeekWrite_NoHandle:
 	ldw iz, 0xff9c
 
 FileIO_SeekWrite_Return:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 2
 	ld	wa, iz
@@ -4308,7 +4308,7 @@ FileIO_SeekWriteBlock_Error:
 	ret ge
 
 FileIO_SeekWriteBlock_Return:
-	ldw_d16	wa, (32428)
+	ld	wa, (32428:16)
 	cps	wa, 0
 	jr	lt, 2
 	ld	wa, hl
@@ -8145,7 +8145,7 @@ SeqPhase_OperationStateCheck:
 	stda16 (0x8464), hl
 	calr SignalProgressUpdate
 SeqPhase_CheckMediaType:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 2
 	jr	z, 10
 	cps	wa, 3
@@ -8235,7 +8235,7 @@ FileIO_DiskEventDispatch:
 	extz HL
 	stda16 (0x8464), hl
 DiskEvt_CheckMediaType:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jr	z, 55
 	cps	wa, 0
@@ -8287,7 +8287,7 @@ FileIO_DetectFileTypeAndPost:
 	extz HL
 	stda16 (0x8464), hl
 DetectType_CheckMediaType:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jr	z, 51
 	cps	wa, 0
@@ -8336,7 +8336,7 @@ FileIO_GetDiskCapacity:
 	extz HL
 	stda16 (0x8464), hl
 DiskCap_CheckMediaType:
-	ldw_d16	wa, (33892)
+	ld	wa, (33892:16)
 	cps	wa, 3
 	jr	z, 48
 	cps	wa, 2
@@ -8513,7 +8513,7 @@ FileIO_ErrorCodeByteBlock:
 	call	16290067
 	extz	hl
 	stda16	33892, hl
-	ldw_d16	wa, 33892
+	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, -190
 	cps	wa, 0

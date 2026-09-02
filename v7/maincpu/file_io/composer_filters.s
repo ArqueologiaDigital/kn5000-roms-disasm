@@ -162,7 +162,7 @@ CompLoad_DrawItem_Continue:
 	jr	lt, -112
 	jrl	330
 CompLoad_HandleScroll:
-	ldw_d16	wa, (32484)
+	ld	wa, (32484:16)
 	ld	(xsp+2), wa
 	or	xde, xde
 	jr	nz, 37
@@ -245,12 +245,12 @@ CompLoad_HideButtons_Loop:
 	ldw	wa, 238
 	call	16355504
 CompLoad_GetSelection:
-	ldw_d16	wa, (32484)
+	ld	wa, (32484:16)
 CompLoad_UpdateDisplay:
 	cp	(xsp+2), wa
 	jr	z, 78
 	call	16290296
-	ldw_d16	de, (32484)
+	ld	de, (32484:16)
 	exts	xde
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
@@ -263,7 +263,7 @@ CompLoad_UpdateDisplay:
 	ld	xwa, (32480:16)
 	ld	xbc, 29360143
 	call	16423243
-	ldw_d16	de, (32484)
+	ld	de, (32484:16)
 	sll	de, 5
 	lda_d16	xbc, (33904)
 	extz	xde

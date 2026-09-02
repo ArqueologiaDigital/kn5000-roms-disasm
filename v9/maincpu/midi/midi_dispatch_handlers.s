@@ -37,7 +37,7 @@ MidiSerial_PumpLoop:
 MidiSerial_PumpDone:
 	call MidiStream_LoadAllPresets
 	ld xix, 0xbd3c
-	ldw_d16 xhl, (0x90de)
+	ld hl, (0x90de:16)
 	stib_ind 0x07, 0xf0, 0xec, 0xff
 
 MidiSerial_Return:
@@ -112,7 +112,7 @@ MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 MidiSerial_HandleSysReset_Data:
-	ldw_d16	wa, (0x9635)
+	ld	wa, (0x9635:16)
 	stb_d8	(1069), a
 	.byte 0xf1, 0x52
 	swi	5
@@ -908,7 +908,7 @@ MidiCC_Handler_TableDispatch_Ret:
 MidiCC_Helper_ConditionalESetup:
 	; --- Subroutine 2: conditional E setup from D (26 bytes) ---
 	ldb_d8	a, (0x9636)
-	ldw_d16	de, (0x9646)
+	ld	de, (0x9646:16)
 	xor e, e
 	cp a, 0x40
 	jr c, MidiCC_Helper_ConditionalESetup_Store
@@ -1675,7 +1675,7 @@ MidiCC_ChannelDispatch_TableA:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, MidiCC_ChannelDispatch_TableA_Ret
-	ldw_d16 xde, (0x964e)
+	ld de, (0x964e:16)
 	call MidiCC_ChannelDispatch_DualSend
 
 MidiCC_ChannelDispatch_TableA_Ret:
@@ -2123,7 +2123,7 @@ Periodic_TimestampCheck:
 Periodic_TimestampCompare:
 	pushw wa
 	pushw de
-	ldw_d16 xwa, (1033)
+	ld wa, (1033:16)
 	ld de, wa
 	subda16 xwa, 0xb7e3
 	cp wa, 0x96
@@ -5774,7 +5774,7 @@ FileData_RawDataBlock:
 	ret
 	lda	xsp, (xsp-14)
 	push	xiz
-	ldw_d16	wa, (0xb7ea)
+	ld	wa, (0xb7ea:16)
 	cps	wa, 1
 	jr	z, 119
 	cps	wa, 2
@@ -6661,7 +6661,7 @@ DataBuf_LoadAndDispatchFormat2:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 6), xbc
-	ldw_d16 xhl, (0xb7ea)
+	ld hl, (0xb7ea:16)
 	lda xbc, (xwa + 2)
 	ld xwa, (xsp + 6)
 	lda xde, (xwa + 2)
@@ -10816,7 +10816,7 @@ MidiChan_ParseVoiceData:
 	push xiz
 	ldib_erp 0xfb, 0
 	resda 5, 0xbd18
-	ldw_d16 xiz, (1033)
+	ld iz, (1033:16)
 	jrl MidiChan_CheckSysExFlag
 
 MidiChan_ReadNextByte:
@@ -10828,7 +10828,7 @@ MidiChan_ReadNextByte:
 	call SeqBuf2_ReadByte
 	cp hl, 0xffff
 	jr z, MIDI_ProcessChannelPair
-	ldw_d16 xiz, (1033)
+	ld iz, (1033:16)
 	ld c, l
 	extz bc
 	ld xwa, (0xbcac:16)
@@ -12874,7 +12874,7 @@ SeqVoice_DispatchProcess_Data:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldw_d16	hl, (0xf1ce)
+	ld	hl, (0xf1ce:16)
 	extz	xhl
 	sll	xhl, 4
 	ret
@@ -12915,7 +12915,7 @@ MidiChan_CheckTimeout:
 	ldw de, 0x3e8
 
 MidiChan_ApplyTimeout:
-	ldw_d16 xbc, (1033)
+	ld bc, (1033:16)
 	sub bc, wa
 	cp bc, de
 	ret le
@@ -12933,9 +12933,9 @@ MidiChan_TimerDispatch_Data:	.ascii ":;<>"
 	pop	xhl
 	pop	xde
 	ret
-	ldw_d16	de, (1033)
+	ld	de, (1033:16)
 	ld	wa, de
-	ldw_d16	bc, (1033)
+	ld	bc, (1033:16)
 	sub	bc, wa
 	cp	bc, 25
 	jr	lt, -14
@@ -15143,7 +15143,7 @@ MidiCtrl_ModeSwitchHandler:
 	ret nz
 	set 0, a
 	stb_d8 (0xb7ee), a
-	ldw_d16 xwa, (4597)
+	ld wa, (4597:16)
 	bit 15, wa
 	jr nz, MidiCtrl_ApplyModeSwitch
 	push xde
@@ -15594,7 +15594,7 @@ VoiceData_ZeroFillNext:
 	ret
 
 SoundParam_ApplyBit15Toggle:
-	ldw_d16 xwa, (4597)
+	ld wa, (4597:16)
 	bit 15, wa
 	ret z
 	lda_d16 xbc, (0xfc5a)
@@ -15603,7 +15603,7 @@ SoundParam_ApplyBit15Toggle:
 	ld c, (xde)
 	res 0, c
 	ld (xde), c
-	ldw_d16 xwa, (4597)
+	ld wa, (4597:16)
 	srl wa, 8
 	and a, 0x1
 	or c, a
@@ -16038,7 +16038,7 @@ SeqData_DispatchLoop_Done:
 	ld xwa, MidiPkt_EventType_Table_0x580
 	lds bc, 3
 	call SeqBuf_FlushNoteOffs
-	ldw_d16 xwa, (0xbd3a)
+	ld wa, (0xbd3a:16)
 	cp wa, 0x28
 	jr nc, SeqData_FormatOutput
 	stdi16 (0xbd3a), 40
@@ -16051,10 +16051,10 @@ SeqData_FormatOutput:
 
 SeqData_FormatOutput_Loop:
 	lda xwa, (xsp)
-	ldw_d16 xbc, (0xbd3a)
+	ld bc, (0xbd3a:16)
 	and c, 0xf
 	ld (xwa), c
-	ldw_d16 xbc, (0xbd3a)
+	ld bc, (0xbd3a:16)
 	srl bc, 4
 	and c, 0x1f
 	ld (xwa + 1), c

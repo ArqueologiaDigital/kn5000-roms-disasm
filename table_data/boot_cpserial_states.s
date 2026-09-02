@@ -202,7 +202,7 @@ BootSerial_State10_TxNextByte__last:
 BootSerial_State18_TxFrameDone:
 	stdi8	(0x0f63), 0
 	stdi8	(0x0f62), 0
-	ldw_d16	xwa, (0x0fd7)		; pending count
+	ld	wa, (0x0fd7:16)		; pending count
 	subda16	xwa, 0x0fd5		; - send index
 	cps	wa, 2
 	jr	c, BootSerial_State18_TxFrameDone__go_idle
@@ -256,7 +256,7 @@ BootSerial_State20_RxFirstByte:
 	ld	xiy, 0x0f79		; RX serial ring
 	addda16	xiy, 0x0f77		; + head index
 	ld	(xiy), a
-	ldw_d16	xhl, (0x0f77)
+	ld	hl, (0x0f77:16)
 	subda16	xhl, 0x0f75		; head - tail
 	jr	nc, BootSerial_State20_RxFirstByte__fwd
 	neg	hl
@@ -384,7 +384,7 @@ BootSerial_PollTX__inject_sync:
 	cpdi8	(0x0f72), 42
 	jr	ule, BootSerial_PollTX__inject_done
 	ei	6
-	ldw_d16	xwa, (0x0fd7)
+	ld	wa, (0x0fd7:16)
 	subda16	xwa, 0x0fd5
 	jr	nc, BootSerial_PollTX__inject_fwd
 	neg	wa
@@ -399,7 +399,7 @@ BootSerial_PollTX__inject_free:
 	stdi8	(0x0f72), 0
 	ldb	w, 0x20			; sync frame (0x20, 0x10)
 	ldb	a, 0x10
-	ldw_d16	xiy, (0x0fd7)
+	ld	iy, (0x0fd7:16)
 	ld	xde, 0x0fd9		; TX serial ring
 	stb_dri w, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
 	calr	BootSerial_TxRingAdvanceIY
@@ -419,7 +419,7 @@ BootSerial_PollTX__encode:
 	jr	nz, BootSerial_PollTX__line_busy
 	bitda	0, (0x0f64)		; RX-active flag clear?
 	jr	nz, BootSerial_PollTX__line_busy
-	ldw_d16	xwa, (0x0fd7)
+	ld	wa, (0x0fd7:16)
 	subda16	xwa, 0x0fd5		; pending - sent
 	jr	nc, BootSerial_PollTX__have_count
 	neg	wa
@@ -492,13 +492,13 @@ BootSerial_RX_ParsePackets:
 	anddi8	(0x0f64), 0xfb		; clear RX-busy flag
 BootSerial_RX_ParsePackets__scan:
 	ld	xde, 0x0f79		; RX serial ring
-	ldw_d16	xiy, (0x0f75)		; IY = serial ring tail
+	ld	iy, (0x0f75:16)		; IY = serial ring tail
 	ld	xiz, 0x988a		; RX transfer-control block
 	ld	ix, (xiz - 4)		; IX = control ring head
 BootSerial_RX_ParsePackets__next:
 	cpw	(xiz - 2), 4		; >= 4 free control-ring slots?
 	jrl	c, BootSerial_RxParseDone
-	ldw_d16	xwa, (0x0f77)
+	ld	wa, (0x0f77:16)
 	subda16	xwa, 0x0f75		; head - tail
 	jr	nc, BootSerial_RX_ParsePackets__have_avail
 	neg	wa
@@ -765,7 +765,7 @@ BootSerial_RxParseDone:
 ; Callers: BootSerial_PollTX
 ; -----------------------------------------------------------------------------
 BootSerial_TX_EncodePackets:
-	ldw_d16	xiy, (0x0fd7)		; IY = serial-ring pending count
+	ld	iy, (0x0fd7:16)		; IY = serial-ring pending count
 	ld	xde, 0x0fd9		; TX serial ring
 	ld	xiz, 0x9914		; TX transfer-control block
 	ld	ix, (xiz - 8)		; IX = control ring tail
@@ -776,7 +776,7 @@ BootSerial_TX_EncodePackets__next:
 	cpw	(xiz - 2), 0		; empty (free count nonzero)?
 	jrl	nz, BootSerial_TxEncodeDone
 BootSerial_TX_EncodePackets__have_data:
-	ldw_d16	xwa, (0x0fd7)
+	ld	wa, (0x0fd7:16)
 	subda16	xwa, 0x0fd5
 	jr	nc, BootSerial_TX_EncodePackets__fwd
 	neg	wa
