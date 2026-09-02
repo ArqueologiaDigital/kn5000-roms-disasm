@@ -77,3 +77,7 @@ island-work/
 # nature as island-work/ above, just scoped to one tag): rebuild with
 # `python3 scripts/analysis/census_one_image.py v7`, never commit.
 census-work/
+
+# NAKA lane: cached v10 address<->line map (35 MB build product,
+# regenerate with scripts/analysis/address_line_map.py --dump)
+scripts/analysis/.amap_v10.json

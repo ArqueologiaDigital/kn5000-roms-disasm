@@ -1,3 +1,15 @@
+; !! THIS FILE IS NOT IN ANY BUILD. It emits zero bytes into any ROM.
+; Nothing `.include`s it; kn5000_v10_program.s takes 0xE0CFDE-0xE0E406 from
+; includes/generated/gui_display_struct_data.bin, compiled by
+; `clang -target tlcs900` from includes/gui_display_struct_data.c -- which
+; already carries this region's record shape as a packed 34-byte struct with
+; named u16 fields. This .s is the superseded raw-byte duplicate.
+; Measured 2026-09-02: scripts/analysis/naka_lane_split.py reports it as
+; "NOT IN THE BUILD (0 address-map entries)"; the map is built and self-tested
+; by scripts/analysis/address_line_map.py --selftest.
+; Kept, not deleted, because removing another lane's file is not this lane's
+; call -- but do not spend budget re-deriving its 5,161 .byte operands.
+;
 ; GUI_DisplayStructData: GUI display structure data
 ; Total: 5161 bytes
 ; Source: e0cfde_e0e406.bin

@@ -4,16 +4,13 @@
 // EvtEffDraw_PtrTable, EvtName_* event strings,
 // MT_FuncName_PtrTable and all MT_* function name strings.
 
-	jr	gt, 0x00
+	.byte 0x6a, 0x00
 	aligned_string "SqedtVal2"
 	aligned_string "^^jC"
 	aligned_string "SqedtVal"
-	jr	gt, 67
-	.byte 0x00			; padding
-	.byte 0xff			; padding
+	.byte 0x6a, 0x43, 0x00, 0xff		; padding
 	aligned_string "EqualizerBox"
-	jr	gt, 66
-	.byte 0x42, 0x43, 0x00, 0xff
+	.byte 0x6a, 0x42, 0x42, 0x43, 0x00, 0xff
 	aligned_string "EffectBox"
 	.byte 0x1a, 0x00
 EvtEffDraw_PtrTable:

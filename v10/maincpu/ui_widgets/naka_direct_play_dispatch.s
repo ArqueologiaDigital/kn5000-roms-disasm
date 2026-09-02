@@ -6,10 +6,7 @@
 ; =============================================================================
 
 	naka_header NAKA_TYPE_0x47
-	ex_ff
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
+	.byte 0x16, 0x00, 0x00, 0x00		; padding
 NakaWidgetList_AcModeBoxes:
 	.long NakaBoxName_IvNamingExit
 	.long NakaBoxData_IvNamingExit
@@ -28,7 +25,7 @@ NakaWidgetList_AcModeBoxes:
 	.long NakaPropTbl_Ram
 	.long AcDemoSongBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x36, 0x00, 0x04, 0x00
+	.long 0x00040036
 	.long NakaBoxName_AcDemoSongBox
 	.long NakaBoxData_AcDemoSongBox
 	.long NakaPropTbl_Func
@@ -46,7 +43,7 @@ NakaWidgetList_AcModeBoxes:
 	.long NakaPropTbl_TrAsGrid
 	.long AcTrAsGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	.byte 0x4a, 0x00, 0x0c, 0x00
+	.long 0x000C004A
 	.long NakaBoxName_AcTrAsGridBox
 	.long NakaBoxData_AcTrAsGridBox
 	.long NakaPropTbl_Grid
@@ -94,7 +91,7 @@ NakaWidgetList_AcModeBoxes:
 	.long NakaPropTbl_MeasureBox
 	.long MeasureBoxProc
 	naka_header NAKA_TYPE_0x10
-	.byte 0x1e, 0x00, 0x08, 0x00
+	.long 0x0008001E
 	.long NakaBoxName_MeasureBox
 	.long NakaBoxData_MeasureBox
 	.long NakaPropTbl_MuteToggle
@@ -106,19 +103,19 @@ NakaWidgetList_AcModeBoxes:
 	.long NakaPropTbl_LyricsBox
 	.long LyricsBoxProc
 	naka_header NAKA_TYPE_0x11
-	.byte 0x28, 0x00, 0x0c, 0x00
+	.long 0x000C0028
 	.long NakaStr_LyricsBox
 	.long NakaBoxData_LyricsBox
 	.long NakaPropTbl_TextLabel
 	.long SongNameBoxProc
 	naka_header NAKA_TYPE_0x11
-	.byte 0x26, 0x00, 0x0a, 0x00
+	.long 0x000A0026
 	.long NakaBoxName_SongNameBox
 	.long NakaBoxData_SongNameBox
 	.long NakaPropTbl_TextLabel2
 	.long ComporserNameBoxProc
 	naka_header NAKA_TYPE_0x11
-	.byte 0x26, 0x00, 0x0a, 0x00
+	.long 0x000A0026
 	.long NakaBoxName_ComporserNameBox
 	.long NakaBoxData_ComporserNameBox
 	.long NakaDirectPlay_PropPtrTable
@@ -152,10 +149,7 @@ NakaBoxName_ComporserNameBox:	aligned_string "ComporserNameBox"
 NakaBoxData_SongNameBox:	aligned_string "c^dB"
 NakaBoxName_SongNameBox:	aligned_string "SongNameBox"
 NakaBoxData_LyricsBox:
-	jr	ule, 0x5e
-	pop xiz
-	jr	pe, 66
-	.byte 0x00			; padding
+	.byte 0x63, 0x5e, 0x5e, 0x64, 0x42, 0x00		; padding
 	aligned_string "LyricsBox"
 	.byte 0x00			; padding
 	.byte 0xff			; padding
@@ -240,11 +234,7 @@ EvtName_SmfSongName:	aligned_string "EV_SMFSONGNAME"
 EvtName_SmfFileName:	aligned_string "EV_SMFFILENAME"
 EvtName_DiskFileName:	aligned_string "EV_DISKFILENAME"
 EvtName_CurSongName:	aligned_string "EV_CURSONGNAME"
-	push_a
-	.byte 0x00			; padding
-	pop	xde
-	rcf
-	.byte 0xe2, 0x00
+	.byte 0x14, 0x00, 0x5a, 0x10, 0xe2, 0x00		; padding
 MtName_PtrTable:
 	.long MtName_SongNameSet
 	.long MtName_PsSongSelBoxID
@@ -303,8 +293,5 @@ MtName_SetSelectedFileNum:	aligned_string "MT_SetSelectedFileNum"
 MtName_PsSongSelBoxID:		aligned_string "MT_PsSongSelBoxID"
 MtName_SongNameSet:		aligned_string "MT_SongNameSet"
 	aligned_string "MT_DemoSongSel"
-	jp	0xbbf900
-	.byte 0xf2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10
-	.byte 0xe2
-	.byte 0x00			; padding
+	.byte 0x1b, 0x00, 0xf9, 0xbb, 0xf2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10, 0xe2, 0x00		; padding
 	.long NakaBoxData_PsSongSelBox
