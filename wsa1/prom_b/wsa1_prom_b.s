@@ -7690,45 +7690,122 @@ DL_StartPitchStopPitchTotal:
 ; a `.long` or a 32-bit immediate names it) in 2 runs.  Everything else here
 ; is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+; ⚠ CORRECTED 2026-09-02 (lane res05x): the sentence above is no
+;   longer true of this span -- 183 of 183 bytes are real source now, and no
+;   `.incbin` remains between these markers.  What round 1 measured was
+;   REACHABILITY, which finds an object's first byte and never its last;
+;   the extents below come from the code that RUNS these records.
 
-; --------------------------------------------------------------------------
-; Data_F03F77 -- 10 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F03F77 appears as a 32-bit word at 0xF5C72D 0xF5D569;
-;               converted code at 0xF5C72C 0xF5D568 loads it as a 32-bit
-;               immediate.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 40% printable ASCII; a linear decode runs 6 instructions and ends
-;           `halt`, with 30% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
+; ------------------------------------------------------------------
+; 0xF03F77-0xF0402D -- 18 display-list records, 183 bytes -- interpreter A
+;   entered at: 0xF03F77
+;   ends used:  0xF03FF3, 0xF0402E
+; Formerly Data_F03F77 + a 46-byte `.incbin` + Data_F03FAF -- the head,
+; the middle and the tail of ONE list, cut in two places by the round-1
+; reachability walk.  THE READER NAMES BOTH EDGES: sub_F5C727 does
+;   F5C72C  ld XIY,0x00F03F77   /  F5C738 ld XIX,0x00F0402E
+;   F5C73F  ld XIX,0x00F03FF3   /  F5C744 call 0xF417F0
+; so the list starts at 0xF03F77 and ends at 0xF03FF3 or 0xF0402E; the
+; op/len chain below lands on BOTH.  Evidence, with the rejected
+; alternatives: python3 notes/prom_b_res05x_spans.py --selftest
+;
+; Provenance kept from the superseded framing:
+;   Data_F03F77 -- reached from: 0x00F03F77 appears as a 32-bit word at
+;     0xF5C72D 0xF5D569; converted code at 0xF5C72C 0xF5D568 loads it as
+;     a 32-bit immediate.  No routine-directory slot and no branch
+;     decoded in converted code names it.
+;   Data_F03FAF -- reached from: nothing aligned holds this address; the
+;     walk fell through into it.
+;   Both blocks carried the warning "The extent is the reachability
+;   walk's, not the object's".  They were right, and this is the
+;   correction they asked for.
+; ------------------------------------------------------------------
+DL_F03F77:
 Data_F03F77:
-	.byte	0x23, 0x05, 0x63, 0x34, 0x00, 0x1C, 0x0F, 0x7A, 0x00, 0x05	; F03F77  |#.c4...z..|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003F81, 0x00002E
-
-; --------------------------------------------------------------------------
-; Data_F03FAF -- 127 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: nothing aligned holds this address; the walk fell through into
-;               it.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 37% printable ASCII; a linear decode runs 66 instructions and ends
-;           `nop`, with 8% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F03FAF:
-	.byte	0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00, 0x09, 0x0A, 0x14, 0x01, 0x25, 0x00, 0x34, 0x01	; F03FAF  |....D.......%.4.|
-	.byte	0x36, 0x00, 0x09, 0x0A, 0x14, 0x01, 0x41, 0x00, 0x34, 0x01, 0x5E, 0x00, 0x01, 0x0A, 0x20, 0x01	; F03FBF  |6.....A.4.^... .|
-	.byte	0x3D, 0x00, 0x27, 0x01, 0x3D, 0x00, 0x01, 0x0A, 0x21, 0x01, 0x3E, 0x00, 0x26, 0x01, 0x3E, 0x00	; F03FCF  |=.'.=...!.>.&.>.|
-	.byte	0x01, 0x0A, 0x22, 0x01, 0x3F, 0x00, 0x25, 0x01, 0x3F, 0x00, 0x09, 0x0A, 0x23, 0x01, 0x36, 0x00	; F03FDF  |..".?.%.?...#.6.|
-	.byte	0x24, 0x01, 0x41, 0x00, 0x06, 0x09, 0x2B, 0x11, 0x4C, 0x46, 0x30, 0x20, 0x11, 0x01, 0x0A, 0x22	; F03FEF  |$.A...+.LF0 ..."|
-	.byte	0x01, 0x60, 0x00, 0x25, 0x01, 0x60, 0x00, 0x01, 0x0A, 0x21, 0x01, 0x61, 0x00, 0x26, 0x01, 0x61	; F03FFF  |.`.%.`...!.a.&.a|
-	.byte	0x00, 0x01, 0x0A, 0x20, 0x01, 0x62, 0x00, 0x27, 0x01, 0x62, 0x00, 0x09, 0x0A, 0x23, 0x01, 0x5E	; F0400F  |... .b.'.b...#.^|
-	.byte	0x00, 0x24, 0x01, 0x69, 0x00, 0x09, 0x0A, 0x14, 0x01, 0x69, 0x00, 0x34, 0x01, 0x7A, 0x00	; F0401F  |.$.i.....i.4.z.|
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x63
+	.short 0x0034
+	.byte 0x1C, 0x0F	; op 1C, 15 bytes -> handler 0xF31A52
+	.short 0x007A
+	.short 0x0005
+	.ascii "AMPLITUDE"
+	.byte 0x17, 0x10	; op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006
+	.short 0x0007
+	.ascii "SOUND EDIT"
+	.byte 0x06, 0x09	; op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x068B
+	.ascii "ENV "
+	.byte 0x11	; character codes below 0x20
+	.byte 0x06, 0x09	; op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x0BDB
+	.ascii "AMP "
+	.byte 0x11	; character codes below 0x20
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0004
+	.short 0x0044
+	.short 0x0010
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x0025
+	.short 0x0134
+	.short 0x0036
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x0041
+	.short 0x0134
+	.short 0x005E
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0120
+	.short 0x003D
+	.short 0x0127
+	.short 0x003D
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0121
+	.short 0x003E
+	.short 0x0126
+	.short 0x003E
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0122
+	.short 0x003F
+	.short 0x0125
+	.short 0x003F
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0123
+	.short 0x0036
+	.short 0x0124
+	.short 0x0041
+DL_F03FF3:	; the reader's other list end
+	.byte 0x06, 0x09	; op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x112B
+	.ascii "LF0 "
+	.byte 0x11	; character codes below 0x20
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0122
+	.short 0x0060
+	.short 0x0125
+	.short 0x0060
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0121
+	.short 0x0061
+	.short 0x0126
+	.short 0x0061
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0120
+	.short 0x0062
+	.short 0x0127
+	.short 0x0062
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0123
+	.short 0x005E
+	.short 0x0124
+	.short 0x0069
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x0069
+	.short 0x0134
+	.short 0x007A
 
 ; === END COVER-R1 0xF03F77-0xF0402E ===
 
@@ -9383,42 +9460,63 @@ DL_F04CDE:
 ; a `.long` or a 32-bit immediate names it) in 2 runs.  Everything else here
 ; is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+; ⚠ CORRECTED 2026-09-02 (lane res05x): the sentence above is no
+;   longer true of this span -- 91 of 91 bytes are real source now, and no
+;   `.incbin` remains between these markers.  What round 1 measured was
+;   REACHABILITY, which finds an object's first byte and never its last;
+;   the extents below come from the code that RUNS these records.
 
-; --------------------------------------------------------------------------
-; Data_F04CE8 -- 44 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F04CE8 appears as a 32-bit word at 0xF33B88 0xF5CE99;
-;               converted code at 0xF5CE98 loads it as a 32-bit immediate.  No
-;               routine-directory slot and no branch decoded in converted code
-;               names it.
-; Measured: 14% printable ASCII; a linear decode runs 27 instructions and ends
-;           `retd 0x27be`, with 36% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F04CE8:
-	.byte	0x0D, 0x00, 0x4C, 0x00, 0x06, 0x01, 0x68, 0x00, 0x0D, 0x00, 0x4C, 0x00, 0x06, 0x01, 0x68, 0x00	; F04CE8  |..L...h...L...h.|
-	.byte	0x0D, 0x00, 0x6C, 0x00, 0x06, 0x01, 0x88, 0x00, 0x0D, 0x00, 0x8C, 0x00, 0x06, 0x01, 0xA8, 0x00	; F04CF8  |..l.............|
-	.byte	0x0D, 0x00, 0xAC, 0x00, 0x06, 0x01, 0xC8, 0x00, 0x02, 0x0F, 0xBE, 0x27	; F04D08  |...........'|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004D14, 0x00000F
-
-; --------------------------------------------------------------------------
-; Data_F04D23 -- 32 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: nothing aligned holds this address; the walk fell through into
-;               it.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 100% printable ASCII; a linear decode runs 13 instructions and
-;           ends `ld W,0x00`, with 12% of the bytes in spellings llvm-mc will
-;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F04D23:
-	.byte	0x45, 0x51, 0x48, 0x50, 0x46, 0x2B, 0x45, 0x51, 0x4C, 0x50, 0x46, 0x32, 0x34, 0x20, 0x48, 0x50	; F04D23  |EQHPF+EQLPF24 HP|
-	.byte	0x46, 0x32, 0x34, 0x20, 0x20, 0x42, 0x50, 0x46, 0x20, 0x20, 0x20, 0x54, 0x48, 0x52, 0x55, 0x20	; F04D33  |F24  BPF   THRU |
+; ------------------------------------------------------------------
+; 0xF04CE8-0xF04D42 -- a 5x8 rectangle array, one display-list record,
+; and the 6-byte string table that record points at.  91 bytes, tiled
+; end to end between two addresses the READER names:
+;   0xF5CE93  ld XIY,0x00F04CDE ; ld XIX,0x00F04CE8  -> list ends here
+;   0xF5C979  ld XIY,0x00F04D10 ; call 0xF41830      -> record starts here
+;   0xF5C907  ld XIY,0x00F04D43                      -> next list
+; 5*8 + 15 + 6*6 = 91 = 0xF04D43 - 0xF04CE8, with no slack.
+; Evidence: python3 notes/prom_b_res05x_spans.py --selftest
+;
+; Provenance kept from the superseded framing:
+;   Data_F04CE8 -- reached from: 0x00F04CE8 appears as a 32-bit word at
+;     0xF33B88 0xF5CE99; converted code at 0xF5CE98 loads it as a 32-bit
+;     immediate.  (0xF33B81 is the interpreter-B op-03 record whose
+;     +0x07 operand that is -- "array of 8-byte entries".)
+;   Data_F04D23 -- reached from: nothing aligned holds this address; the
+;     walk fell through into it.  ITS START WAS MID-ENTRY: 0xF04D23 is
+;     +4 inside the first 6-byte table entry, which is why the label is
+;     not reproduced here.  The table's real head is 0xF04D1F, named by
+;     the record at 0xF04D10.
+; ------------------------------------------------------------------
+DLTable_F04CE8:	; 5 entries of 8 bytes -- highlight rectangles (x1,y1,x2,y2)
+;   Referenced by: display-list record 0xF33B81 (interpreter B op 03,
+;   handler 0xF31B57, which does `sla 3,HL` -> 8-byte entries).
+;   5 entries is the EXTENT (40 bytes / 8), not the (mask >> shift) + 1
+;   = 16 the record would allow.  [0] == [1] is this ROM's idiom for a
+;   4-item list whose selector is 1-based.
+	.short 0x000D, 0x004C, 0x0106, 0x0068	; [0]
+	.short 0x000D, 0x004C, 0x0106, 0x0068	; [1]
+	.short 0x000D, 0x006C, 0x0106, 0x0088	; [2]
+	.short 0x000D, 0x008C, 0x0106, 0x00A8	; [3]
+	.short 0x000D, 0x00AC, 0x0106, 0x00C8	; [4]
+DL_F04D10:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27BE	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04D1F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x1808	; +0x0D -> IX
+DLTable_F04D1F:	; 6 entries of 6 bytes -- the filter-mode names
+;   Referenced by: the record at 0xF04D10, whose +0x0B says 6 bytes per
+;   entry.  6 entries is the EXTENT (36 bytes / 6); the mask 0x07 at
+;   +0x04 would allow 8.
+	.ascii "LPF+EQ"	; [0]
+	.ascii "HPF+EQ"	; [1]
+	.ascii "LPF24 "	; [2]
+	.ascii "HPF24 "	; [3]
+	.ascii " BPF  "	; [4]
+	.ascii " THRU "	; [5]
 
 ; === END COVER-R1 0xF04CE8-0xF04D43 ===
 
@@ -10593,24 +10691,71 @@ DL_F053E3:
 ; a `.long` or a 32-bit immediate names it) in 4 runs.  Everything else here
 ; is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+; ⚠ CORRECTED 2026-09-02 (lane res05x): the sentence above is no
+;   longer true of this span -- 150 of 150 bytes are real source now, and no
+;   `.incbin` remains between these markers.  What round 1 measured was
+;   REACHABILITY, which finds an object's first byte and never its last;
+;   the extents below come from the code that RUNS these records.
 
-; --------------------------------------------------------------------------
-; Data_F05407 -- 4 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F05407 appears as a 32-bit word at 0xF05459 0xF5C540
-;               0xF5CF8B; converted code at 0xF5C53F 0xF5CF8A loads it as a
-;               32-bit immediate.  No routine-directory slot and no branch
-;               decoded in converted code names it.
-; Measured: 25% printable ASCII; a linear decode runs 2 instructions and ends
-;           `retd 0x27ab`, with 0% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
+; ------------------------------------------------------------------
+; 0xF05407-0xF05444 -- four interpreter-B op-02 records of 15 bytes and
+; the 2-entry string table all four of them point at.
+; THE RECORD STARTS ARE WRITTEN DOWN 79 BYTES LATER: the 4-entry pointer
+; array at 0xF0545A holds 0x00F05407 0x00F05416 0x00F05425 0x00F05434.
+; The reader at 0xF5C53A/0xF5CF85 runs the list 0xF053B6..0xF05407, so
+; 0xF05407 is also the first byte after a display list; and the last
+; record's own +0x07 pointer, 0x00F05443, names the first byte after
+; itself.  Evidence: python3 notes/prom_b_res05x_spans.py --selftest
+;
+; Provenance kept from the superseded framing:
+;   Data_F05407 -- reached from: 0x00F05407 appears as a 32-bit word at
+;     0xF05459 0xF5C540 0xF5CF8B; converted code at 0xF5C53F 0xF5CF8A
+;     loads it as a 32-bit immediate.  It was emitted as 4 bytes; those
+;     4 bytes were the head of the first record.
+; ------------------------------------------------------------------
+DL_F05407:
 Data_F05407:
-	.byte	0x02, 0x0F, 0xAB, 0x27	; F05407  |...'|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00540B, 0x00003A
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x10	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05443	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A32	; +0x0D -> IX
+DL_F05416:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x10	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05443	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0F0A	; +0x0D -> IX
+DL_F05425:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0x10	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05443	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x13E2	; +0x0D -> IX
+DL_F05434:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x10	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05443	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x18BA	; +0x0D -> IX
+DLTable_F05443:	; 2 entries of 1 byte -- the sign shown for the value
+;   Referenced by: all four records above (+0x07 = 0x00F05443, +0x0B = 1).
+;   Exactly two entries: mask 0x10 at +0x04 with shift 4 at +0x05 can
+;   only ever produce index 0 or 1.
+	.ascii "+"	; [0]
+	.ascii "-"	; [1]
 
 ; --------------------------------------------------------------------------
 ; Data_F05445 -- 1 bytes, EMITTED AS DATA (not promoted to code).
@@ -10998,28 +11143,95 @@ DL_Mem0ryWriteSoundEditName:
 ; a `.long` or a 32-bit immediate names it) in 1 run.  Everything else here is
 ; NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+; ⚠ CORRECTED 2026-09-02 (lane res05x): the sentence above is no
+;   longer true of this span -- 115 of 115 bytes are real source now, and no
+;   `.incbin` remains between these markers.  What round 1 measured was
+;   REACHABILITY, which finds an object's first byte and never its last;
+;   the extents below come from the code that RUNS these records.
 
-; --------------------------------------------------------------------------
-; Data_F0574D -- 69 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F0574D appears as a 32-bit word at 0xF338FD 0xF33925
-;               0xF33957 0xF33989 0xF5D160; converted code at 0xF5D15F loads
-;               it as a 32-bit immediate.  No routine-directory slot and no
-;               branch decoded in converted code names it.
-; Measured: 94% printable ASCII; a linear decode runs 44 instructions and ends
-;           `jp 0x000e0a`, with 10% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F0574D:
-	.byte	0x41, 0x3A, 0x42, 0x3A, 0x43, 0x3A, 0x44, 0x3A, 0x45, 0x3A, 0x46, 0x3A, 0x47, 0x3A, 0x48, 0x3A	; F0574D  |A:B:C:D:E:F:G:H:|
-	.byte	0x49, 0x3A, 0x4A, 0x3A, 0x4B, 0x3A, 0x4C, 0x3A, 0x4D, 0x3A, 0x4E, 0x3A, 0x4F, 0x3A, 0x50, 0x3A	; F0575D  |I:J:K:L:M:N:O:P:|
-	.byte	0x51, 0x3A, 0x52, 0x3A, 0x53, 0x3A, 0x55, 0x3A, 0x56, 0x3A, 0x57, 0x3A, 0x58, 0x3A, 0x59, 0x3A	; F0576D  |Q:R:S:U:V:W:X:Y:|
-	.byte	0x5A, 0x3A, 0x31, 0x73, 0x74, 0x31, 0x73, 0x74, 0x32, 0x6E, 0x64, 0x33, 0x72, 0x64, 0x34, 0x74	; F0577D  |Z:1st1st2nd3rd4t|
-	.byte	0x68, 0x1B, 0x0A, 0x0E, 0x00	; F0578D  |h....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005792, 0x00002E
+; ------------------------------------------------------------------
+; 0xF0574D-0xF057BF -- two string tables, one display-list record and a
+; 5x8 rectangle array.  115 bytes, tiled end to end between two
+; addresses the READER names:
+;   0xF5D15A  ld XIY,0x00F0564B ; ld XIX,0x00F0574D -> list ends here
+;   0xF5D168  ld XIY,0x00F057C0                     -> next list starts
+; 25*2 + 5*3 + 10 + 5*8 = 115 = 0xF057C0 - 0xF0574D, with no slack.
+;
+; THIS IS THE WEAKEST OF THIS LANE'S FIVE REGIONS and the comment says so
+; on purpose: NOTHING in any of the four WSA1R ROMs holds 0xF0577F,
+; 0xF0578E, 0xF05790 or 0xF05798 as a 32-bit word, so the three interior
+; splits rest on tiling plus three agreements, not on a pointer:
+;   * a 26th 2-byte letter slot would be "1s", splitting a word;
+;   * the op-1B record's four words ARE the bounding box of the five
+;     rectangles that follow it;
+;   * five entries with [0] == [1] is what all three externally-sized
+;     rectangle arrays in this ROM look like (0xF04CE8, 0xF05475,
+;     DLTable_F031C9), and the ordinal table beside it is also five
+;     entries with [0] == [1].
+; The competing framing -- six rectangles from 0xF05790 -- also tiles,
+; and is rejected because it makes [0] the bounding box and [1] == [2].
+; Evidence and both framings: notes/prom_b_res05x_spans.py --selftest
+;
+; Provenance kept from the superseded framing:
+;   Data_F0574D -- reached from: 0x00F0574D appears as a 32-bit word at
+;     0xF338FD 0xF33925 0xF33957 0xF33989 0xF5D160; converted code at
+;     0xF5D15F loads it as a 32-bit immediate.  (0xF338F6 is the
+;     interpreter-B op-02 record whose +0x07 operand that is, with
+;     +0x0B = 2 bytes per entry.)  It was emitted as 69 bytes, four more
+;     than the table has: the extra four were the head of the 0xF0578E
+;     record.
+; ------------------------------------------------------------------
+DLTable_F0574D:	; 25 entries of 2 bytes -- letter labels, T absent
+;   Referenced by: display-list record 0xF338F6 (+0x0B = 2).  25 entries
+;   is the EXTENT, not the (mask 0x3F >> 0) + 1 = 64 the record allows.
+	.ascii "A:"	; [0]
+	.ascii "B:"	; [1]
+	.ascii "C:"	; [2]
+	.ascii "D:"	; [3]
+	.ascii "E:"	; [4]
+	.ascii "F:"	; [5]
+	.ascii "G:"	; [6]
+	.ascii "H:"	; [7]
+	.ascii "I:"	; [8]
+	.ascii "J:"	; [9]
+	.ascii "K:"	; [10]
+	.ascii "L:"	; [11]
+	.ascii "M:"	; [12]
+	.ascii "N:"	; [13]
+	.ascii "O:"	; [14]
+	.ascii "P:"	; [15]
+	.ascii "Q:"	; [16]
+	.ascii "R:"	; [17]
+	.ascii "S:"	; [18]
+	.ascii "U:"	; [19]
+	.ascii "V:"	; [20]
+	.ascii "W:"	; [21]
+	.ascii "X:"	; [22]
+	.ascii "Y:"	; [23]
+	.ascii "Z:"	; [24]
+DLTable_F0577F:	; 5 entries of 3 bytes -- ordinals, [0] == [1]
+;   Not named by any pointer in the four ROMs; framed by the tiling and
+;   by being the parallel array of DLTable_F05798 below.
+	.ascii "1st"	; [0]
+	.ascii "1st"	; [1]
+	.ascii "2nd"	; [2]
+	.ascii "3rd"	; [3]
+	.ascii "4th"	; [4]
+DL_F0578E:	; one record, not named by any pointer in the four ROMs;
+;   its four words are the bounding box of the five rectangles below.
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x000E
+	.short 0x004D
+	.short 0x0100
+	.short 0x00C9
+DLTable_F05798:	; 5 entries of 8 bytes -- highlight rectangles (x1,y1,x2,y2)
+;   Same shape as DLTable_F04CE8 one pixel over: x1/x2 constant, y
+;   stepping 0x20, [0] == [1].
+	.short 0x000E, 0x004D, 0x0100, 0x0069	; [0]
+	.short 0x000E, 0x004D, 0x0100, 0x0069	; [1]
+	.short 0x000E, 0x006D, 0x0100, 0x0089	; [2]
+	.short 0x000E, 0x008D, 0x0100, 0x00A9	; [3]
+	.short 0x000E, 0x00AD, 0x0100, 0x00C9	; [4]
 
 ; === END COVER-R1 0xF0574D-0xF057C0 ===
 
@@ -11378,9 +11590,20 @@ DL_F05AAA:
 ; (only a `.long` or a 32-bit immediate names it) in 2 runs.  Everything else
 ; here is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+; ⚠ CORRECTED 2026-09-02 (lane res05x): the sentence above is no
+;   longer true of this span -- 1220 of 1220 bytes are real source now, and no
+;   `.incbin` remains between these markers.  What round 1 measured was
+;   REACHABILITY, which finds an object's first byte and never its last;
+;   the extents below come from the code that RUNS these records.
 
 ; --------------------------------------------------------------------------
 ; Data_F05AB4 -- 568 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ SUPERSEDED 2026-09-02 (lane res05x): 568 was the reachability walk's
+;   extent and it is 12 bytes TOO LONG.  Its last 12 bytes are the first
+;   byte-column of the 2x12 bitmap at 0xF05CE0, whose size three op-03
+;   records state (2 bytes x 12 rows = 24) and which now stands on its
+;   own below.  So: 556 bytes, 0xF05AB4-0xF05CDF, and the `stays
+;   `.incbin`` sentence below no longer holds for the span that followed.
 ; Reached from: 0x00F05AB4 appears as a 32-bit word at 0xF05A64 0xF05A80
 ;               0xF05A9C 0xF5D32A 0xF5D36D +1 more; converted code at 0xF5D329
 ;               0xF5D36C 0xF5D38E loads it as a 32-bit immediate.  No routine-
@@ -11428,10 +11651,42 @@ Data_F05AB4:
 	.byte	0x43, 0x37, 0x20, 0x44, 0x88, 0x37, 0x44, 0x37, 0x20, 0x45, 0x88, 0x37, 0x45, 0x37, 0x20, 0x46	; F05CA4  |C7 D.7D7 E.7E7 F|
 	.byte	0x37, 0x20, 0x46, 0x8C, 0x37, 0x47, 0x37, 0x20, 0x41, 0x88, 0x37, 0x41, 0x37, 0x20, 0x42, 0x88	; F05CB4  |7 F.7G7 A.7A7 B.|
 	.byte	0x37, 0x42, 0x37, 0x20, 0x43, 0x38, 0x20, 0x44, 0x88, 0x38, 0x44, 0x38, 0x20, 0x45, 0x88, 0x38	; F05CC4  |7B7 C8 D.8D8 E.8|
-	.byte	0x45, 0x38, 0x20, 0x46, 0x38, 0x20, 0x46, 0x8C, 0x38, 0x47, 0x38, 0x20, 0x07, 0x18, 0x20, 0x20	; F05CD4  |E8 F8 F.8G8 ..  |
-	.byte	0x40, 0xC1, 0xC0, 0x40, 0x20, 0x20, 0x18, 0x07	; F05CE4  |@..@  ..|
+	.byte	0x45, 0x38, 0x20, 0x46, 0x38, 0x20, 0x46, 0x8C, 0x38, 0x47, 0x38, 0x20	; F05CD4  |E8 F8 F.8G8 |
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005CEC, 0x00000C
+; ------------------------------------------------------------------
+; Bitmap_F05CE0 -- 24 bytes, 2 bytes wide x 12 rows.
+; Referenced by: three interpreter-A op-03 records, at 0xF02B97,
+; 0xF06307 and 0xF0631D.  Each is `.long 0x00F05CE0`, a VRAM address,
+; `.short 0x0002` (width in BYTES) and `.short 0x000C` (rows); handler
+; 0xF31ABE issues swi 7 service 3 with BC = width and HL = rows, so the
+; size is 2 * 12 = 24 -- and 0xF05CE0 + 24 = 0xF05CF8, the head of the
+; note-frequency table.  Both edges and the length come from outside the
+; span.  The first 12 bytes used to be the tail of Data_F05AB4, the last
+; 12 were the `.incbin` at file offset 0x005CEC.
+; Evidence: python3 notes/prom_b_res05x_spans.py --selftest, and
+; notes/prom_b_dl_operand_tables.py, which reports it independently as
+; `0xF05CE0 + 24  A bitmap, 2 bytes x 12 rows`.
+; ------------------------------------------------------------------
+Bitmap_F05CE0:
+; Drawn as two byte-COLUMNS (bytes 0-11 = column 0, 12-23 = column 1)
+; these 24 bytes are a closed 16x12 ring with an interior diagonal.
+; Drawn row-major (2 bytes per row) they are not a closed shape.  The
+; blitter's actual pixel order is NOT established here -- only the
+; EXTENT is, and the extent is all this conversion rests on.
+; row  0  .....####.......
+; row  1  ...##....##.....
+; row  2  ..#.......##....
+; row  3  ..#......#.#....
+; row  4  .#......#...#...
+; row  5  ##.....#....####
+; row  6  ##..........#...
+; row  7  .#..........#...
+; row  8  ..#........#....
+; row  9  ..#........#....
+; row 10  ...##....##.....
+; row 11  .....####.......
+	.byte	0x07, 0x18, 0x20, 0x20, 0x40, 0xC1, 0xC0, 0x40, 0x20, 0x20, 0x18, 0x07	; F05CE0  byte-column 0, rows 0-11
+	.byte	0x80, 0x60, 0x30, 0x50, 0x88, 0x0F, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80	; F05CEC  byte-column 1, rows 0-11
 
 ; --------------------------------------------------------------------------
 ; Data_F05CF8 -- 640 bytes, EMITTED AS DATA (not promoted to code).
