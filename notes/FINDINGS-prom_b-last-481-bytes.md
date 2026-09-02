@@ -4,6 +4,22 @@
 zero verbatim debt — 481 bytes in 16 `.incbin` spans. Can those be described as
 source as well, or are they actually data?
 
+> ## ⚠ STATUS: the answer holds, the COUNT is moving
+>
+> This document was written when the residue was **16 spans / 481 bytes**. Lanes
+> are now converting it, so **re-derive the count before quoting it**:
+>
+>     grep -ac '\.incbin' wsa1/prom_b/wsa1_prom_b.s
+>
+> **2026-09-02, after lane `res3xx`: 11 spans / 375 bytes.** That lane closed all
+> five of its spans as typed data — which is the answer below, demonstrated
+> rather than argued. Three further lanes are working the rest.
+>
+> Two specifics below are now superseded and are kept because the reasoning
+> around them is still the point: `0xF286CC` and `0xF3B656` are converted, and
+> the `0xF286CC` bullet under "sharp enough to hand to a lane" understated the
+> error — see the correction at the end.
+
 **Answer: they are data — every one of the sixteen — and being data is exactly
 what makes them writable as source.** Nothing here is undecoded program text.
 The remaining work is a *typing* problem, not a *decoding* one.
@@ -121,3 +137,44 @@ understanding of the program. It is sixteen small pieces of display-list data
 whose record boundaries were cut in the wrong places by a tool that has since
 been superseded. Calling the image "not fully disassembled" is accurate about
 the `.incbin` count and misleading about what is unknown.
+
+---
+
+## ★ What the conversions established (appended 2026-09-02)
+
+### ADVANCE and EXTENT are different numbers
+
+Lane `promB6` left a precise open question on `0xF3B656`: `Data_F3B651` starts
+`00 0B`, so as op 0x00 with length 11 the record ends at `0xF3B65C` — but the
+next record demonstrably starts at `0xF3B65B`. Either op 0x00 does not carry its
+length at `+1`, or `DL_F3B65B` is off by one. It refused to guess, correctly.
+
+**Neither branch was right.** Op 0x00 *does* carry its advance at `+1` — the
+interpreter reads `+1` for every opcode without inspecting the opcode
+(`ld A,(XIY+0x01)` at `0xF31B15`, then `add XIY,XWA`). And `DL_B65B` is *not*
+off by one — prom_b `0xF7E79E` passes `0xF3B65B` as XIX, the list's exclusive
+end.
+
+The resolution is that **a record's ADVANCE and its EXTENT are different
+quantities**. Handler `0xF31BA1`'s highest read is `+9`, so the record *occupies*
+10 bytes; its advance byte says 11, which lands XIY past XIX so the list
+terminates. The machine draws the record and stops. It is the only
+over-declaring record in the image — 83 other interpreter-B op-00 records
+declare 10.
+
+⚠ **Generalise this before framing any record by its length byte.** A length
+field that disagrees with a handler's reads is not necessarily a misframe; it
+may be a deliberate list terminator. The handler's highest offset read is the
+extent; the byte at `+1` is only the step.
+
+### The `0xF286CC` lead was right in direction, wrong by 41 bytes
+
+Lane `promB5` recorded that `Data_F28522` was declared **one byte** too long. It
+was **42** bytes too long: promB5 measured to the `.incbin` edge, while the
+record that *names* the table measures to `0xF286A1` — it declares width 3 and
+mask `0x7F`, so 128 × 3 = 384 bytes. The two embedded pointers at `+6` and `+29`
+land exactly where that tiling predicts.
+
+★ The lesson is the one this file already argues: **measure an object from the
+thing that names it, never from the `.incbin` boundary**, which was cut by a
+superseded walk and carries no structural information at all.
