@@ -21051,7 +21051,136 @@ sub_F8C630:   ; entry: reachable-run entry
 	and (XIX+0x02),0xfc                                  ; F8C649  8c 02 3c fc
 	and (XIX+0x03),0xfc                                  ; F8C64D  8c 03 3c fc
 	ret                                                  ; F8C651  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C652, 0x0001F0
+; ---------------------------------------------------------------------
+; 0xF8C652-0xF8C842 (496 B) -- CONVERTED, see
+; notes/FINDINGS-prom_a-f8c652-boundary.md.  Four short routines reached
+; by DispatchTable_F8C2B2 and a shared record-parser, three data tables
+; pinned by their own readers -- the naive decode's 8-undecodable-byte
+; count only caught the first of these three.
+; ---------------------------------------------------------------------
+sub_F8C652:   ; entry: DispatchTable_F8C2B2 id=0x0080
+	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C652  c0 c4 3f 02
+	jr z, .LF8C686                                ; F8C656  66 2e
+	ld XIX,0x000020d0                             ; F8C658  44 d0 20 00 00
+	and (XIX+0x03),0xc0                           ; F8C65D  8c 03 3c c0
+	ld XIY,0x00f8c687                             ; F8C661  45 87 c6 f8 00
+	ldb_d8 a, (0x2250)                            ; F8C666  c1 50 22 21
+	sla a, 0x02                                   ; F8C66A  c9 ec 02
+	ld_rr8l xiy, xiy, a                           ; F8C66D  e3 03 f4 e0 25
+	ld W,(XIY+0x19)                               ; F8C672  8d 19 20
+	and W,0x3f                                    ; F8C675  c8 cc 3f
+	bit 0,(XIY+0x18)                              ; F8C678  bd 18 c8
+	jr z, .LF8C683                                ; F8C67B  66 06
+	ld W,(XIY+0x1a)                               ; F8C67D  8d 1a 20
+	and W,0x3f                                    ; F8C680  c8 cc 3f
+.LF8C683:
+	or (XIX+0x03),W                               ; F8C683  8c 03 e8
+.LF8C686:
+	ret                                           ; F8C686  0e
+PointerTable_F8C687:   ; 128 B, 32 longs, +0x40 arithmetic progression, read via (5-bit index)*4
+	.long 0x000076c2, 0x00007702, 0x00007742, 0x00007782   ; F8C687
+	.long 0x000077c2, 0x00007802, 0x00007842, 0x00007882   ; F8C697
+	.long 0x00007902, 0x00007942, 0x00007982, 0x000079c2   ; F8C6A7
+	.long 0x00007a02, 0x00007a42, 0x00007a82, 0x00007ac2   ; F8C6B7
+	.long 0x00007b02, 0x00007b42, 0x00007b82, 0x00007bc2   ; F8C6C7
+	.long 0x00007c02, 0x00007c42, 0x00007c82, 0x00007cc2   ; F8C6D7
+	.long 0x00007d02, 0x00007d42, 0x00007d82, 0x00007dc2   ; F8C6E7
+	.long 0x00007e02, 0x00007e42, 0x00007e82, 0x00007ec2   ; F8C6F7
+sub_F8C707:   ; entry: DispatchTable_F8C2B2 id=0x0002
+	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C707  c0 c4 3f 02
+	jr z, 0x39                                    ; F8C70B  66 39
+	ld XIX,0x000020d0                             ; F8C70D  44 d0 20 00 00
+	and (XIX+0x02),0xf0                           ; F8C712  8c 02 3c f0
+	and (XIX+0x04),0xc0                           ; F8C716  8c 04 3c c0
+	ldb_d8 a, (0x2076)                            ; F8C71A  c1 76 20 21
+	ld XIY,0x00f8c727                             ; F8C71E  45 27 c7 f8 00
+	calr 0xd3                                     ; F8C723  1e d3 00
+	ret                                           ; F8C726  0e
+RecordTable_F8C727:   ; 10 x [key,val_lo,val_hi] + 0xFF terminator, read by sub_F8C7F9's shared linear scan
+	.byte 0x01, 0x02, 0x01, 0x02, 0x02, 0x02, 0x17, 0x02, 0x04, 0x16, 0x02, 0x08, 0x09, 0x04, 0x01, 0x0a, 0x04, 0x02, 0x12, 0x04, 0x04, 0x15, 0x04, 0x08, 0x08, 0x04, 0x10, 0x03, 0x04, 0x20, 0xff   ; F8C727
+	ld XIX,0x000020d0                             ; F8C746  44 d0 20 00 00
+	and (XIX+0x01),0xf0                           ; F8C74B  8c 01 3c f0
+	and (XIX+0x04),0xfc                           ; F8C74F  8c 04 3c fc
+	and (XIX+0x05),0xfc                           ; F8C753  8c 05 3c fc
+	ldb_d8 a, (0x2076)                            ; F8C757  c1 76 20 21
+	ld XIY,0x00f8c764                             ; F8C75B  45 64 c7 f8 00
+	calr 0x96                                     ; F8C760  1e 96 00
+	ret                                           ; F8C763  0e
+RecordTable_F8C764:   ; 8 x [key,val_lo,val_hi] + 0xFF terminator, read by sub_F8C7F9's shared linear scan
+	.byte 0x01, 0x01, 0x01, 0x02, 0x01, 0x02, 0x17, 0x01, 0x04, 0x16, 0x01, 0x08, 0x09, 0x04, 0x01, 0x0a, 0x04, 0x02, 0x12, 0x05, 0x01, 0x15, 0x05, 0x02, 0xff   ; F8C764
+sub_F8C77D:   ; entry: DispatchTable_F8C2B2 id=0x0200
+	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C77D  c0 c4 3f 02
+	jr z, .LF8C798                                ; F8C781  66 15
+	ld XIX,0x000020d0                             ; F8C783  44 d0 20 00 00
+	and (XIX+0x05),0xfd                           ; F8C788  8c 05 3c fd
+	.byte 0xf1, 0x75, 0x20, 0xc9                  ; F8C78C  f1 75 20 c9
+	jr z, .LF8C7AB                                ; F8C790  66 19
+	or (XIX+0x05),0x02                            ; F8C792  8c 05 3e 02
+	jr .LF8C7AB                                   ; F8C796  68 13
+.LF8C798:
+	ld XIX,0x000020d0                             ; F8C798  44 d0 20 00 00
+	and (XIX+0x06),0xf7                           ; F8C79D  8c 06 3c f7
+	.byte 0xf1, 0x75, 0x20, 0xc9                  ; F8C7A1  f1 75 20 c9
+	jr z, .LF8C7AB                                ; F8C7A5  66 04
+	or (XIX+0x06),0x08                            ; F8C7A7  8c 06 3e 08
+.LF8C7AB:
+	ret                                           ; F8C7AB  0e
+	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C7AC  c0 c4 3f 02
+	jr z, .LF8C7C7                                ; F8C7B0  66 15
+	ld XIX,0x000020d0                             ; F8C7B2  44 d0 20 00 00
+	and (XIX+0x07),0xfd                           ; F8C7B7  8c 07 3c fd
+	.byte 0xf1, 0x6e, 0x21, 0xc8                  ; F8C7BB  f1 6e 21 c8
+	jr z, .LF8C7DA                                ; F8C7BF  66 19
+	or (XIX+0x07),0x02                            ; F8C7C1  8c 07 3e 02
+	jr .LF8C7DA                                   ; F8C7C5  68 13
+.LF8C7C7:
+	ld XIX,0x000020d0                             ; F8C7C7  44 d0 20 00 00
+	and (XIX+0x06),0xfb                           ; F8C7CC  8c 06 3c fb
+	.byte 0xf1, 0x6e, 0x21, 0xc8                  ; F8C7D0  f1 6e 21 c8
+	jr z, .LF8C7DA                                ; F8C7D4  66 04
+	or (XIX+0x06),0x04                            ; F8C7D6  8c 06 3e 04
+.LF8C7DA:
+	ret                                           ; F8C7DA  0e
+	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C7DB  c0 c4 3f 02
+	jr z, .LF8C7F8                                ; F8C7DF  66 17
+	bit_dd8 0x02, 0x94                            ; F8C7E1  f0 94 ca
+	jr nz, .LF8C7F8                               ; F8C7E4  6e 12
+	ld XIX,0x000020d0                             ; F8C7E6  44 d0 20 00 00
+	and (XIX+0x04),0xbf                           ; F8C7EB  8c 04 3c bf
+	bit_dd8 0x02, 0x96                            ; F8C7EF  f0 96 ca
+	jr z, .LF8C7F8                                ; F8C7F2  66 04
+	or (XIX+0x04),0x40                            ; F8C7F4  8c 04 3e 40
+.LF8C7F8:
+	ret                                           ; F8C7F8  0e
+.LF8C7F9:
+	cp (XIY),0xff                                 ; F8C7F9  85 3f ff
+	jr z, .LF8C815                                ; F8C7FC  66 17
+	cp A,(XIY)                                    ; F8C7FE  85 f1
+	jr z, .LF8C808                                ; F8C800  66 06
+	add IY,0x0003                                 ; F8C802  dd c8 03 00
+	jr .LF8C7F9                                   ; F8C806  68 f1
+.LF8C808:
+	ld WA,(XIY+0x01)                              ; F8C808  9d 01 20
+	ld XIY,0x000020d0                             ; F8C80B  45 d0 20 00 00
+	.byte 0xc3, 0x03, 0xf4, 0xe0, 0xe8            ; F8C810  c3 03 f4 e0 e8
+.LF8C815:
+	ret                                           ; F8C815  0e
+	ld XIY,0x000020d0                             ; F8C816  45 d0 20 00 00
+	ld_rr8b a, xiy, w                             ; F8C81B  c3 03 f4 e1 21
+	ld XIY,0x000020d0                             ; F8C820  45 d0 20 00 00
+	ex8 a, c                                      ; F8C825  cb b9
+	scf                                           ; F8C827  11
+	.byte 0xf1, 0x9b, 0x21, 0x2a                  ; F8C828  f1 9b 21 2a
+	jr c, .LF8C837                                ; F8C82C  67 09
+	or C,B                                        ; F8C82E  ca e3
+	st_rr8b c, xiy, w                             ; F8C830  f3 03 f4 e1 43
+	jr .LF8C841                                   ; F8C835  68 0a
+.LF8C837:
+	xor B,0xff                                    ; F8C837  ca cd ff
+	and C,B                                       ; F8C83A  ca c3
+	st_rr8b c, xiy, w                             ; F8C83C  f3 03 f4 e1 43
+.LF8C841:
+	ret                                           ; F8C841  0e
 sub_F8C842:   ; entry: prom_b routine directory
 	calr .LF8C84A                                        ; F8C842  1e 05 00
 	ret                                                  ; F8C845  0e
