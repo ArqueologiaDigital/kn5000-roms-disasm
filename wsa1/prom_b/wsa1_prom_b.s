@@ -155,6 +155,24 @@
 ;                      end.  64 of the records (op 0x00-0x3F, once each) are a
 ;                      uniform 32-byte slot table; field semantics deferred.
 ;                      notes/gen_prom_b_f3f400_module.py.
+; â ADDED 2026-09-02 (lane promB1):
+;   0xF00C4D-0xF017FF  THE LARGEST `.incbin` THIS IMAGE HAD LEFT -- 2,995 bytes,
+;                      28% of prom_b's whole verbatim debt.  Three objects and a
+;                      two-byte remainder, not one thing: 21 `.long` closing the
+;                      pointer array that starts at 0xF00C46; 2,124 bytes of CODE
+;                      in 828 instructions, 0 of them left as `.byte`; a
+;                      196-entry pointer array in 18-slot records; and 2 bytes
+;                      REFUSED at the site, because the entry they begin cannot
+;                      be completed without overrunning the display list at
+;                      0xF01800.
+;                      â  THE CODE IS UNREACHED AND ITS CALL TARGETS ARE NOT
+;                      prom_a ENTRY POINTS.  Read the ANOMALY section of
+;                      notes/gen_prom_b_f00c4d_module.py before naming anything
+;                      in it -- naming a routine after what its target does in
+;                      the prom_a we have would invent a whole module of
+;                      semantics.  --selftest is 20 checks; the reference census,
+;                      with a positive control for each instrument, is
+;                      notes/prom_b_f00c4d_xrefs.py.
 ; Everything else is still .incbin, so it builds byte-exact by construction and
 ; asserts nothing.  The gate (scripts/analysis/assert_byte_identical.py) must
 ; print PASS after every edit.
@@ -193,6 +211,25 @@ wsa1_prom_b:
 ; DATA (only a `.long` or a 32-bit immediate names it) in 2 runs.  Everything
 ; else here is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
+;
+; â  AMENDED 2026-09-02, and the sentence above is KEPT because it is still
+; true: 0xF00C4D-0xF017FF really is unreachable from every seed round 1 had.
+; What it does not follow from is "and therefore stays `.incbin`".  Those
+; 2,995 bytes -- the largest `.incbin` this image had left, 28% of prom_b's
+; whole verbatim debt -- are now converted, as two pointer arrays and 828
+; instructions, on evidence that does not use reachability at all: an exact
+; unidasm tiling with no `db`, internal branches landing on boundaries, a
+; unique byte phase for each array, and 26 pointers from 0xF0033C -- outside
+; the span -- landing on instruction starts.  Unreachable is a fact about the
+; call graph; it was never a fact about the bytes.
+;   â AND WHY IT IS UNREACHABLE IS NOW ON THE RECORD TOO: the cluster is a
+;     closed loop that calls a prom_a which is not the prom_a next to it.
+;     notes/gen_prom_b_f00c4d_module.py, section ANOMALY; the reference
+;     census with its positive controls is notes/prom_b_f00c4d_xrefs.py.
+;   â  THE NEW BLOCK SITS INSIDE THESE MARKERS.  gen_prom_b_cover_round1.py's
+;     preservation check only guards lines OUTSIDE them, so re-running its
+;     --splice would silently replace it.  If that happens, put it back with
+;     `python3 notes/gen_prom_b_f00c4d_module.py --apply`.
 
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x000000, 0x00001A
 
@@ -927,7 +964,1168 @@ Data_F00B48:
 	.byte	0x7D, 0x00, 0x2F, 0x02, 0x7E, 0x00, 0x30, 0x02, 0x7D, 0x38, 0x47, 0x02, 0x7D, 0x00, 0xFF, 0x93	; F00C38  |}./.~.0.}8G.}...|
 	.byte	0xFD, 0x00, 0x80, 0x44, 0xFC	; F00C48  |...D.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x000C4D, 0x000BB3
+; === MODULE F00C4D 0xF00C4D-0xF017FF ===
+; 0xF00C4D-0xF017FF, 2,995 bytes -- the largest `.incbin` this image had
+; left.  THREE OBJECTS AND A REMAINDER, not one thing:
+;   0xF00C4D-0xF00CA1    85 B  tail of the pointer array that starts at
+;                              0xF00C46, 7 bytes before this span
+;   0xF00CA2-0xF014ED  2124 B  code, 828 instructions
+;   0xF014EE-0xF017FD   784 B  a 196-entry pointer array, 18-slot records
+;                              (10 whole and a partial 11th of 16)
+;   0xF017FE-0xF017FF     2 B  REFUSED, reason at the site
+; The evidence for every boundary, the five code checks and the ANOMALY
+; (nothing in the image reaches this cluster, and its prom_a call targets
+; are not prom_a entry points) are in notes/gen_prom_b_f00c4d_module.py.
+; Regenerate: python3 notes/gen_prom_b_f00c4d_module.py --apply
+
+; --------------------------------------------------------------------------
+; PtrArray_F00C46 (tail) -- 4-byte pointers into prom_a's window.
+; The array starts at 0xF00C46, inside Data_F00B48 above, so this span opens
+; ONE BYTE INTO the entry that begins at 0xF00C4A.  It ends at 0xF00CA1, the
+; byte before the `link XIZ` prologue below; the word below the array's own
+; start is 0x007D0247, out of window.
+; ⚠ WHAT the slots select is NOT decoded -- see the ANOMALY in the
+;   generator before reading any meaning into a target address.
+; --------------------------------------------------------------------------
+	.byte	0x00	; F00C4D  high byte of the pointer at 0xF00C4A
+PtrArray_F00C4E:
+	.long	0x00FD8E21	; F00C4E
+	.long	0x00FD8F66	; F00C52
+	.long	0x00FD9CAA	; F00C56
+	.long	0x00FD9ABB	; F00C5A
+	.long	0x00FD9BDA	; F00C5E
+	.long	0x00FD9D2F	; F00C62
+	.long	0x00FD9F0C	; F00C66
+	.long	0x00FD9F0D	; F00C6A
+	.long	0x00FD9F0E	; F00C6E
+	.long	0x00FD9FDB	; F00C72
+	.long	0x00FDA062	; F00C76
+	.long	0x00FDA1EA	; F00C7A
+	.long	0x00FDA2FB	; F00C7E
+	.long	0x00FDA40D	; F00C82
+	.long	0x00FC4480	; F00C86
+	.long	0x00FD9D2C	; F00C8A
+	.long	0x00FD9D2D	; F00C8E
+	.long	0x00FD9D2E	; F00C92
+	.long	0x00FD8CD5	; F00C96
+	.long	0x00FC4480	; F00C9A
+	.long	0x00FC4480	; F00C9E
+
+; --------------------------------------------------------------------------
+; CODE -- 0xF00CA2-0xF014ED, 828 instructions, 2124 bytes.
+; The decode tiles the region exactly and stops on the array below; there is
+; no `db` in it; every internal branch lands on an instruction start; and
+; 26 pointers in 0xF0033C-0xF003C7, outside this span, name addresses in it that
+; all land on instruction starts too.
+; ★ COVERAGE ROUND: labels are bare sub_XXXXXX and nothing is named.  ⚠ Do
+;   NOT name a routine here after what its call target does in prom_a --
+;   the targets are not prom_a entry points (the ANOMALY, N2).
+; --------------------------------------------------------------------------
+sub_F00CA2:
+	link XIZ,0xfffc	; F00CA2  link XIZ,0xfffc
+	lda	xbc, (xiz-2)	; F00CA6  lda XBC,XIZ+0xfe
+	push	xbc	; F00CA9  push XBC
+	lda	xwa, (xiz-4)	; F00CAA  lda XWA,XIZ+0xfc
+	push	xwa	; F00CAD  push XWA
+	m_push MWD+r6, 0x0a	; F00CAE  pushw (XIZ+0x0a)
+	m_push MWD+r6, 0x08	; F00CB1  pushw (XIZ+0x08)
+	call	16629032	; F00CB4  call 0xfdbd28
+	inc	8, xsp	; F00CB8  inc 0,XSP
+	inc	4, xsp	; F00CBA  inc 4,XSP
+	cp	wa, 65535	; F00CBC  cp WA,0xffff
+	jr	z, 30	; F00CC0  jr Z,0xf00ce0
+	ld	bc, (xiz-2)	; F00CC2  ld BC,(XIZ+0xfe)
+	extz	bc	; F00CC5  extz BC
+	pushw	bc	; F00CC7  push BC
+	ldb	c, 4	; F00CC8  ld C,0x04
+	m_mul MBD+r6, 0xfc, 3	; F00CCA  mul BC,(XIZ+0xfc)
+	extz	xbc	; F00CCD  extz XBC
+	add	xbc, 15729324	; F00CCF  add XBC,0x00f002ac
+	ld	xbc, (xbc)	; F00CD5  ld XBC,(XBC)
+	lda_24	xiy, (15731935)	; F00CD7  lda XIY,0xf00cdf
+	push	xiy	; F00CDC  push XIY
+	jp	(xbc)	; F00CDD  jp T,XBC
+	popw	bc	; F00CDF  pop BC
+	unlk XIZ	; F00CE0  unlk XIZ
+	ret	; F00CE2  ret
+sub_F00CE3:
+	link XIZ,0xfffc	; F00CE3  link XIZ,0xfffc
+	lda	xbc, (xiz-2)	; F00CE7  lda XBC,XIZ+0xfe
+	push	xbc	; F00CEA  push XBC
+	lda	xwa, (xiz-4)	; F00CEB  lda XWA,XIZ+0xfc
+	push	xwa	; F00CEE  push XWA
+	m_push MWD+r6, 0x0a	; F00CEF  pushw (XIZ+0x0a)
+	m_push MWD+r6, 0x08	; F00CF2  pushw (XIZ+0x08)
+	call	16629032	; F00CF5  call 0xfdbd28
+	inc	8, xsp	; F00CF9  inc 0,XSP
+	inc	4, xsp	; F00CFB  inc 4,XSP
+	cp	wa, 65535	; F00CFD  cp WA,0xffff
+	jr	z, 30	; F00D01  jr Z,0xf00d21
+	ld	bc, (xiz-2)	; F00D03  ld BC,(XIZ+0xfe)
+	extz	bc	; F00D06  extz BC
+	pushw	bc	; F00D08  push BC
+	ldb	c, 4	; F00D09  ld C,0x04
+	m_mul MBD+r6, 0xfc, 3	; F00D0B  mul BC,(XIZ+0xfc)
+	extz	xbc	; F00D0E  extz XBC
+	add	xbc, 15729396	; F00D10  add XBC,0x00f002f4
+	ld	xbc, (xbc)	; F00D16  ld XBC,(XBC)
+	lda_24	xiy, (15732000)	; F00D18  lda XIY,0xf00d20
+	push	xiy	; F00D1D  push XIY
+	jp	(xbc)	; F00D1E  jp T,XBC
+	popw	bc	; F00D20  pop BC
+	unlk XIZ	; F00D21  unlk XIZ
+	ret	; F00D23  ret
+sub_F00D24:
+	link XIZ,0xfffc	; F00D24  link XIZ,0xfffc
+	lda	xbc, (xiz-2)	; F00D28  lda XBC,XIZ+0xfe
+	push	xbc	; F00D2B  push XBC
+	lda	xwa, (xiz-4)	; F00D2C  lda XWA,XIZ+0xfc
+	push	xwa	; F00D2F  push XWA
+	m_push MWD+r6, 0x0a	; F00D30  pushw (XIZ+0x0a)
+	m_push MWD+r6, 0x08	; F00D33  pushw (XIZ+0x08)
+	call	16629032	; F00D36  call 0xfdbd28
+	inc	8, xsp	; F00D3A  inc 0,XSP
+	inc	4, xsp	; F00D3C  inc 4,XSP
+	cp	wa, 65535	; F00D3E  cp WA,0xffff
+	jr	z, 30	; F00D42  jr Z,0xf00d62
+	ld	bc, (xiz-2)	; F00D44  ld BC,(XIZ+0xfe)
+	extz	bc	; F00D47  extz BC
+	pushw	bc	; F00D49  push BC
+	ldb	c, 4	; F00D4A  ld C,0x04
+	m_mul MBD+r6, 0xfc, 3	; F00D4C  mul BC,(XIZ+0xfc)
+	extz	xbc	; F00D4F  extz XBC
+	add	xbc, 15729468	; F00D51  add XBC,0x00f0033c
+	ld	xbc, (xbc)	; F00D57  ld XBC,(XBC)
+	lda_24	xiy, (15732065)	; F00D59  lda XIY,0xf00d61
+	push	xiy	; F00D5E  push XIY
+	jp	(xbc)	; F00D5F  jp T,XBC
+	popw	bc	; F00D61  pop BC
+	unlk XIZ	; F00D62  unlk XIZ
+	ret	; F00D64  ret
+sub_F00D65:
+	link XIZ,0xfffc	; F00D65  link XIZ,0xfffc
+	lda	xbc, (xiz-2)	; F00D69  lda XBC,XIZ+0xfe
+	push	xbc	; F00D6C  push XBC
+	lda	xwa, (xiz-4)	; F00D6D  lda XWA,XIZ+0xfc
+	push	xwa	; F00D70  push XWA
+	m_push MWD+r6, 0x0a	; F00D71  pushw (XIZ+0x0a)
+	m_push MWD+r6, 0x08	; F00D74  pushw (XIZ+0x08)
+	call	16629032	; F00D77  call 0xfdbd28
+	inc	8, xsp	; F00D7B  inc 0,XSP
+	inc	4, xsp	; F00D7D  inc 4,XSP
+	cp	wa, 65535	; F00D7F  cp WA,0xffff
+	jr	z, 30	; F00D83  jr Z,0xf00da3
+	ld	bc, (xiz-2)	; F00D85  ld BC,(XIZ+0xfe)
+	extz	bc	; F00D88  extz BC
+	pushw	bc	; F00D8A  push BC
+	ldb	c, 4	; F00D8B  ld C,0x04
+	m_mul MBD+r6, 0xfc, 3	; F00D8D  mul BC,(XIZ+0xfc)
+	extz	xbc	; F00D90  extz XBC
+	add	xbc, 15729540	; F00D92  add XBC,0x00f00384
+	ld	xbc, (xbc)	; F00D98  ld XBC,(XBC)
+	lda_24	xiy, (15732130)	; F00D9A  lda XIY,0xf00da2
+	push	xiy	; F00D9F  push XIY
+	jp	(xbc)	; F00DA0  jp T,XBC
+	popw	bc	; F00DA2  pop BC
+	unlk XIZ	; F00DA3  unlk XIZ
+	ret	; F00DA5  ret
+sub_F00DA6:
+	link XIZ,0xfff2	; F00DA6  link XIZ,0xfff2
+	pushw	hl	; F00DAA  push HL
+	pushw	de	; F00DAB  push DE
+	push	xix	; F00DAC  push XIX
+	lda	xix, (xiz-14)	; F00DAD  lda XIX,XIZ+0xf2
+	lda	xbc, (xiz-2)	; F00DB0  lda XBC,XIZ+0xfe
+	push	xbc	; F00DB3  push XBC
+	call	16625608	; F00DB4  call 0xfdafc8
+	ldb	c, 3	; F00DB8  ld C,0x03
+	m_mul MBD+r6, 0xfe, 3	; F00DBA  mul BC,(XIZ+0xfe)
+	ld	h, c	; F00DBD  ld H,C
+	dec	2, h	; F00DBF  dec 2,H
+	push	xix	; F00DC1  push XIX
+	ld	c, h	; F00DC2  ld C,H
+	extz	bc	; F00DC4  extz BC
+	ld	de, bc	; F00DC6  ld DE,BC
+	pushw	bc	; F00DC8  push BC
+	call	16625910	; F00DC9  call 0xfdb0f6
+	ld	(xix+6), 255	; F00DCD  ld (XIX+0x06),0xff
+	ld	(xix+7), 0	; F00DD1  ld (XIX+0x07),0x00
+	ld	(xix+8), 24	; F00DD5  ld (XIX+0x08),0x18
+	ld	(xix+9), 232	; F00DD9  ld (XIX+0x09),0xe8
+	ld	xbc, xix	; F00DDD  ld XBC,XIX
+	add	xbc, 10	; F00DDF  add XBC,0x0000000a
+	push	xbc	; F00DE5  push XBC
+	ld	bc, (xiz+8)	; F00DE6  ld BC,(XIZ+0x08)
+	extz	bc	; F00DE9  extz BC
+	pushw	bc	; F00DEB  push BC
+	call	16629557	; F00DEC  call 0xfdbf35
+	push	xix	; F00DF0  push XIX
+	pushw	4	; F00DF1  push 0x0004
+	ld	bc, (xiz-2)	; F00DF4  ld BC,(XIZ+0xfe)
+	extz	bc	; F00DF7  extz BC
+	pushw	bc	; F00DF9  push BC
+	pushw	de	; F00DFA  push DE
+	pushw	135	; F00DFB  push 0x0087
+	call	16627800	; F00DFE  call 0xfdb858
+	pushw	2	; F00E02  push 0x0002
+	call	16629513	; F00E05  call 0xfdbf09
+	add	xsp, 30	; F00E09  add XSP,0x0000001e
+	pop	xix	; F00E0F  pop XIX
+	popw	de	; F00E10  pop DE
+	popw	hl	; F00E11  pop HL
+	unlk XIZ	; F00E12  unlk XIZ
+	ret	; F00E14  ret
+sub_F00E15:
+	link XIZ,0xfff2	; F00E15  link XIZ,0xfff2
+	pushw	hl	; F00E19  push HL
+	pushw	de	; F00E1A  push DE
+	push	xix	; F00E1B  push XIX
+	lda	xix, (xiz-14)	; F00E1C  lda XIX,XIZ+0xf2
+	lda	xbc, (xiz-2)	; F00E1F  lda XBC,XIZ+0xfe
+	push	xbc	; F00E22  push XBC
+	call	16625608	; F00E23  call 0xfdafc8
+	ldb	c, 3	; F00E27  ld C,0x03
+	m_mul MBD+r6, 0xfe, 3	; F00E29  mul BC,(XIZ+0xfe)
+	ld	h, c	; F00E2C  ld H,C
+	dec	1, h	; F00E2E  dec 1,H
+	push	xix	; F00E30  push XIX
+	ld	c, h	; F00E31  ld C,H
+	extz	bc	; F00E33  extz BC
+	ld	de, bc	; F00E35  ld DE,BC
+	pushw	bc	; F00E37  push BC
+	call	16625910	; F00E38  call 0xfdb0f6
+	ld	(xix+6), 255	; F00E3C  ld (XIX+0x06),0xff
+	ld	(xix+7), 0	; F00E40  ld (XIX+0x07),0x00
+	ld	(xix+8), 127	; F00E44  ld (XIX+0x08),0x7f
+	ld	(xix+9), 129	; F00E48  ld (XIX+0x09),0x81
+	ld	xbc, xix	; F00E4C  ld XBC,XIX
+	add	xbc, 10	; F00E4E  add XBC,0x0000000a
+	push	xbc	; F00E54  push XBC
+	ld	bc, (xiz+8)	; F00E55  ld BC,(XIZ+0x08)
+	extz	bc	; F00E58  extz BC
+	pushw	bc	; F00E5A  push BC
+	call	16629557	; F00E5B  call 0xfdbf35
+	push	xix	; F00E5F  push XIX
+	pushw	5	; F00E60  push 0x0005
+	ld	bc, (xiz-2)	; F00E63  ld BC,(XIZ+0xfe)
+	extz	bc	; F00E66  extz BC
+	pushw	bc	; F00E68  push BC
+	pushw	de	; F00E69  push DE
+	pushw	135	; F00E6A  push 0x0087
+	call	16627800	; F00E6D  call 0xfdb858
+	pushw	3	; F00E71  push 0x0003
+	call	16629513	; F00E74  call 0xfdbf09
+	add	xsp, 30	; F00E78  add XSP,0x0000001e
+	pop	xix	; F00E7E  pop XIX
+	popw	de	; F00E7F  pop DE
+	popw	hl	; F00E80  pop HL
+	unlk XIZ	; F00E81  unlk XIZ
+	ret	; F00E83  ret
+sub_F00E84:
+	link XIZ,0xfff2	; F00E84  link XIZ,0xfff2
+	pushw	hl	; F00E88  push HL
+	pushw	de	; F00E89  push DE
+	push	xix	; F00E8A  push XIX
+	lda	xix, (xiz-14)	; F00E8B  lda XIX,XIZ+0xf2
+	lda	xbc, (xiz-2)	; F00E8E  lda XBC,XIZ+0xfe
+	push	xbc	; F00E91  push XBC
+	call	16625608	; F00E92  call 0xfdafc8
+	ldb	c, 3	; F00E96  ld C,0x03
+	m_mul MBD+r6, 0xfe, 3	; F00E98  mul BC,(XIZ+0xfe)
+	ld	h, c	; F00E9B  ld H,C
+	push	xix	; F00E9D  push XIX
+	extz	bc	; F00E9E  extz BC
+	ld	de, bc	; F00EA0  ld DE,BC
+	pushw	bc	; F00EA2  push BC
+	call	16625910	; F00EA3  call 0xfdb0f6
+	ld	(xix+6), 7	; F00EA7  ld (XIX+0x06),0x07
+	ld	(xix+7), 0	; F00EAB  ld (XIX+0x07),0x00
+	ld	(xix+8), 7	; F00EAF  ld (XIX+0x08),0x07
+	ld	(xix+9), 0	; F00EB3  ld (XIX+0x09),0x00
+	ld	xbc, xix	; F00EB7  ld XBC,XIX
+	add	xbc, 10	; F00EB9  add XBC,0x0000000a
+	push	xbc	; F00EBF  push XBC
+	ld	bc, (xiz+8)	; F00EC0  ld BC,(XIZ+0x08)
+	extz	bc	; F00EC3  extz BC
+	pushw	bc	; F00EC5  push BC
+	call	16629557	; F00EC6  call 0xfdbf35
+	push	xix	; F00ECA  push XIX
+	pushw	6	; F00ECB  push 0x0006
+	ld	bc, (xiz-2)	; F00ECE  ld BC,(XIZ+0xfe)
+	extz	bc	; F00ED1  extz BC
+	pushw	bc	; F00ED3  push BC
+	pushw	de	; F00ED4  push DE
+	pushw	135	; F00ED5  push 0x0087
+	call	16627800	; F00ED8  call 0xfdb858
+	pushw	4	; F00EDC  push 0x0004
+	call	16629513	; F00EDF  call 0xfdbf09
+	add	xsp, 30	; F00EE3  add XSP,0x0000001e
+	pop	xix	; F00EE9  pop XIX
+	popw	de	; F00EEA  pop DE
+	popw	hl	; F00EEB  pop HL
+	unlk XIZ	; F00EEC  unlk XIZ
+	ret	; F00EEE  ret
+sub_F00EEF:
+	link XIZ,0xfff2	; F00EEF  link XIZ,0xfff2
+	pushw	hl	; F00EF3  push HL
+	push	xix	; F00EF4  push XIX
+	lda	xix, (xiz-14)	; F00EF5  lda XIX,XIZ+0xf2
+	lda	xbc, (xiz-2)	; F00EF8  lda XBC,XIZ+0xfe
+	push	xbc	; F00EFB  push XBC
+	pushw	13	; F00EFC  push 0x000d
+	call	16625910	; F00EFF  call 0xfdb0f6
+	inc	6, xsp	; F00F03  inc 6,XSP
+	m_cp_mi8 MBD+r6, 0xfe, 0x01	; F00F05  cp (XIZ+0xfe),0x01
+	jr	nz, 30	; F00F09  jr NZ,0xf00f29
+	ldb	l, 14	; F00F0B  ld L,0x0e
+	ldb	h, 19	; F00F0D  ld H,0x13
+	push	xix	; F00F0F  push XIX
+	pushw	14	; F00F10  push 0x000e
+	call	16625910	; F00F13  call 0xfdb0f6
+	ld	(xix+6), 15	; F00F17  ld (XIX+0x06),0x0f
+	ld	(xix+7), 4	; F00F1B  ld (XIX+0x07),0x04
+	ld	(xix+8), 15	; F00F1F  ld (XIX+0x08),0x0f
+	ld	(xix+9), 0	; F00F23  ld (XIX+0x09),0x00
+	jr	28	; F00F27  jr T,0xf00f45
+	ldb	l, 15	; F00F29  ld L,0x0f
+	ldb	h, 85	; F00F2B  ld H,0x55
+	push	xix	; F00F2D  push XIX
+	pushw	15	; F00F2E  push 0x000f
+	call	16625910	; F00F31  call 0xfdb0f6
+	ld	(xix+6), 15	; F00F35  ld (XIX+0x06),0x0f
+	ld	(xix+7), 0	; F00F39  ld (XIX+0x07),0x00
+	ld	(xix+8), 10	; F00F3D  ld (XIX+0x08),0x0a
+	ld	(xix+9), 6	; F00F41  ld (XIX+0x09),0x06
+	inc	6, xsp	; F00F45  inc 6,XSP
+	ld	xbc, xix	; F00F47  ld XBC,XIX
+	add	xbc, 10	; F00F49  add XBC,0x0000000a
+	push	xbc	; F00F4F  push XBC
+	ld	bc, (xiz+8)	; F00F50  ld BC,(XIZ+0x08)
+	extz	bc	; F00F53  extz BC
+	pushw	bc	; F00F55  push BC
+	call	16629557	; F00F56  call 0xfdbf35
+	push	xix	; F00F5A  push XIX
+	ld	c, h	; F00F5B  ld C,H
+	extz	bc	; F00F5D  extz BC
+	pushw	bc	; F00F5F  push BC
+	pushw	0	; F00F60  push 0x0000
+	ld	c, l	; F00F63  ld C,L
+	extz	bc	; F00F65  extz BC
+	pushw	bc	; F00F67  push BC
+	pushw	135	; F00F68  push 0x0087
+	call	16627800	; F00F6B  call 0xfdb858
+	pushw	6	; F00F6F  push 0x0006
+	call	16629513	; F00F72  call 0xfdbf09
+	add	xsp, 20	; F00F76  add XSP,0x00000014
+	pop	xix	; F00F7C  pop XIX
+	popw	hl	; F00F7D  pop HL
+	unlk XIZ	; F00F7E  unlk XIZ
+	ret	; F00F80  ret
+sub_F00F81:
+	link XIZ,0x0000	; F00F81  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00F85  cp (XIZ+0x08),0x00
+	jr	nz, 13	; F00F89  jr NZ,0xf00f98
+	pushw	0	; F00F8B  push 0x0000
+	pushw	136	; F00F8E  push 0x0088
+	call	16623356	; F00F91  call 0xfda6fc
+	pop	xiy	; F00F95  pop XIY
+	jr	4	; F00F96  jr T,0xf00f9c
+	call	16626443	; F00F98  call 0xfdb30b
+	unlk XIZ	; F00F9C  unlk XIZ
+	ret	; F00F9E  ret
+sub_F00F9F:
+	link XIZ,0x0000	; F00F9F  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00FA3  cp (XIZ+0x08),0x00
+	jr	z, 15	; F00FA7  jr Z,0xf00fb8
+	pushw	1	; F00FA9  push 0x0001
+	pushw	1	; F00FAC  push 0x0001
+	pushw	135	; F00FAF  push 0x0087
+	call	16636539	; F00FB2  call 0xfdda7b
+	inc	6, xsp	; F00FB6  inc 6,XSP
+	unlk XIZ	; F00FB8  unlk XIZ
+	ret	; F00FBA  ret
+sub_F00FBB:
+	link XIZ,0x0000	; F00FBB  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00FBF  cp (XIZ+0x08),0x00
+	jr	nz, 13	; F00FC3  jr NZ,0xf00fd2
+	pushw	0	; F00FC5  push 0x0000
+	pushw	138	; F00FC8  push 0x008a
+	call	16623356	; F00FCB  call 0xfda6fc
+	pop	xiy	; F00FCF  pop XIY
+	jr	15	; F00FD0  jr T,0xf00fe1
+	pushw	1	; F00FD2  push 0x0001
+	pushw	2	; F00FD5  push 0x0002
+	pushw	135	; F00FD8  push 0x0087
+	call	16636539	; F00FDB  call 0xfdda7b
+	inc	6, xsp	; F00FDF  inc 6,XSP
+	unlk XIZ	; F00FE1  unlk XIZ
+	ret	; F00FE3  ret
+sub_F00FE4:
+	link XIZ,0xfffe	; F00FE4  link XIZ,0xfffe
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00FE8  cp (XIZ+0x08),0x00
+	jr	nz, 49	; F00FEC  jr NZ,0xf0101f
+	lda	xbc, (xiz-2)	; F00FEE  lda XBC,XIZ+0xfe
+	push	xbc	; F00FF1  push XBC
+	pushw	13	; F00FF2  push 0x000d
+	call	16625910	; F00FF5  call 0xfdb0f6
+	inc	6, xsp	; F00FF9  inc 6,XSP
+	m_cp_mi8 MBD+r6, 0xfe, 0x01	; F00FFB  cp (XIZ+0xfe),0x01
+	jr	ule, 45	; F00FFF  jr ULE,0xf0102e
+	decm8	1, (xiz-2)	; F01001  dec 1,(XIZ+0xfe)
+	ld	bc, (xiz-2)	; F01004  ld BC,(XIZ+0xfe)
+	extz	bc	; F01007  extz BC
+	pushw	bc	; F01009  push BC
+	pushw	13	; F0100A  push 0x000d
+	call	16625888	; F0100D  call 0xfdb0e0
+	pushw	13	; F01011  push 0x000d
+	pushw	135	; F01014  push 0x0087
+	call	15998676	; F01017  call 0xf41ed4
+	inc	8, xsp	; F0101B  inc 0,XSP
+	jr	15	; F0101D  jr T,0xf0102e
+	pushw	1	; F0101F  push 0x0001
+	pushw	3	; F01022  push 0x0003
+	pushw	135	; F01025  push 0x0087
+	call	16636539	; F01028  call 0xfdda7b
+	inc	6, xsp	; F0102C  inc 6,XSP
+	unlk XIZ	; F0102E  unlk XIZ
+	ret	; F01030  ret
+sub_F01031:
+	link XIZ,0xfffe	; F01031  link XIZ,0xfffe
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01035  cp (XIZ+0x08),0x00
+	jr	nz, 49	; F01039  jr NZ,0xf0106c
+	lda	xbc, (xiz-2)	; F0103B  lda XBC,XIZ+0xfe
+	push	xbc	; F0103E  push XBC
+	pushw	13	; F0103F  push 0x000d
+	call	16625910	; F01042  call 0xfdb0f6
+	inc	6, xsp	; F01046  inc 6,XSP
+	m_cp_mi8 MBD+r6, 0xfe, 0x02	; F01048  cp (XIZ+0xfe),0x02
+	jr	nc, 45	; F0104C  jr NC,0xf0107b
+	incm8	1, (xiz-2)	; F0104E  inc 1,(XIZ+0xfe)
+	ld	bc, (xiz-2)	; F01051  ld BC,(XIZ+0xfe)
+	extz	bc	; F01054  extz BC
+	pushw	bc	; F01056  push BC
+	pushw	13	; F01057  push 0x000d
+	call	16625888	; F0105A  call 0xfdb0e0
+	pushw	13	; F0105E  push 0x000d
+	pushw	135	; F01061  push 0x0087
+	call	15998676	; F01064  call 0xf41ed4
+	inc	8, xsp	; F01068  inc 0,XSP
+	jr	15	; F0106A  jr T,0xf0107b
+	pushw	1	; F0106C  push 0x0001
+	pushw	4	; F0106F  push 0x0004
+	pushw	135	; F01072  push 0x0087
+	call	16636539	; F01075  call 0xfdda7b
+	inc	6, xsp	; F01079  inc 6,XSP
+	unlk XIZ	; F0107B  unlk XIZ
+	ret	; F0107D  ret
+sub_F0107E:
+	link XIZ,0x0000	; F0107E  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01082  cp (XIZ+0x08),0x00
+	jr	nz, 19	; F01086  jr NZ,0xf0109b
+	pushw	0	; F01088  push 0x0000
+	call	16625258	; F0108B  call 0xfdae6a
+	pushw	0	; F0108F  push 0x0000
+	pushw	128	; F01092  push 0x0080
+	call	16623356	; F01095  call 0xfda6fc
+	inc	6, xsp	; F01099  inc 6,XSP
+	unlk XIZ	; F0109B  unlk XIZ
+	ret	; F0109D  ret
+sub_F0109E:
+	link XIZ,0x0000	; F0109E  link XIZ,0x0000
+	pushw	0	; F010A2  push 0x0000
+	pushw	9	; F010A5  push 0x0009
+	ld	bc, (xiz+8)	; F010A8  ld BC,(XIZ+0x08)
+	extz	bc	; F010AB  extz BC
+	pushw	bc	; F010AD  push BC
+	call	16630840	; F010AE  call 0xfdc438
+	inc	6, xsp	; F010B2  inc 6,XSP
+	unlk XIZ	; F010B4  unlk XIZ
+	ret	; F010B6  ret
+sub_F010B7:
+	link XIZ,0x0000	; F010B7  link XIZ,0x0000
+	pushw	0	; F010BB  push 0x0000
+	pushw	10	; F010BE  push 0x000a
+	ld	bc, (xiz+8)	; F010C1  ld BC,(XIZ+0x08)
+	extz	bc	; F010C4  extz BC
+	pushw	bc	; F010C6  push BC
+	call	16630955	; F010C7  call 0xfdc4ab
+	inc	6, xsp	; F010CB  inc 6,XSP
+	unlk XIZ	; F010CD  unlk XIZ
+	ret	; F010CF  ret
+sub_F010D0:
+	link XIZ,0x0000	; F010D0  link XIZ,0x0000
+	pushw	11	; F010D4  push 0x000b
+	pushw	8	; F010D7  push 0x0008
+	ld	bc, (xiz+8)	; F010DA  ld BC,(XIZ+0x08)
+	extz	bc	; F010DD  extz BC
+	pushw	bc	; F010DF  push BC
+	call	16631070	; F010E0  call 0xfdc51e
+	inc	6, xsp	; F010E4  inc 6,XSP
+	unlk XIZ	; F010E6  unlk XIZ
+	ret	; F010E8  ret
+sub_F010E9:
+	link XIZ,0x0000	; F010E9  link XIZ,0x0000
+	pushw	0	; F010ED  push 0x0000
+	pushw	12	; F010F0  push 0x000c
+	ld	bc, (xiz+8)	; F010F3  ld BC,(XIZ+0x08)
+	extz	bc	; F010F6  extz BC
+	pushw	bc	; F010F8  push BC
+	call	16631227	; F010F9  call 0xfdc5bb
+	inc	6, xsp	; F010FD  inc 6,XSP
+	unlk XIZ	; F010FF  unlk XIZ
+	ret	; F01101  ret
+sub_F01102:
+	link XIZ,0x0000	; F01102  link XIZ,0x0000
+	pushw	13	; F01106  push 0x000d
+	pushw	16	; F01109  push 0x0010
+	ld	bc, (xiz+8)	; F0110C  ld BC,(XIZ+0x08)
+	extz	bc	; F0110F  extz BC
+	pushw	bc	; F01111  push BC
+	call	16631342	; F01112  call 0xfdc62e
+	inc	6, xsp	; F01116  inc 6,XSP
+	unlk XIZ	; F01118  unlk XIZ
+	ret	; F0111A  ret
+sub_F0111B:
+	link XIZ,0x0000	; F0111B  link XIZ,0x0000
+	pushw	0	; F0111F  push 0x0000
+	pushw	14	; F01122  push 0x000e
+	ld	bc, (xiz+8)	; F01125  ld BC,(XIZ+0x08)
+	extz	bc	; F01128  extz BC
+	pushw	bc	; F0112A  push BC
+	call	16631499	; F0112B  call 0xfdc6cb
+	inc	6, xsp	; F0112F  inc 6,XSP
+	unlk XIZ	; F01131  unlk XIZ
+	ret	; F01133  ret
+sub_F01134:
+	link XIZ,0x0000	; F01134  link XIZ,0x0000
+	pushw	15	; F01138  push 0x000f
+	pushw	7	; F0113B  push 0x0007
+	ld	bc, (xiz+8)	; F0113E  ld BC,(XIZ+0x08)
+	extz	bc	; F01141  extz BC
+	pushw	bc	; F01143  push BC
+	call	16631614	; F01144  call 0xfdc73e
+	inc	6, xsp	; F01148  inc 6,XSP
+	unlk XIZ	; F0114A  unlk XIZ
+	ret	; F0114C  ret
+sub_F0114D:
+	link XIZ,0x0000	; F0114D  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01151  cp (XIZ+0x08),0x00
+	jr	z, 4	; F01155  jr Z,0xf0115b
+	call	16626443	; F01157  call 0xfdb30b
+	unlk XIZ	; F0115B  unlk XIZ
+	ret	; F0115D  ret
+sub_F0115E:
+	link XIZ,0x0000	; F0115E  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01162  cp (XIZ+0x08),0x00
+	jr	nz, 8	; F01166  jr NZ,0xf01170
+	pushw	0	; F01168  push 0x0000
+	pushw	135	; F0116B  push 0x0087
+	jr	18	; F0116E  jr T,0xf01182
+	pushw	1	; F01170  push 0x0001
+	call	16627921	; F01173  call 0xfdb8d1
+	popw	bc	; F01177  pop BC
+	cps	a, 0	; F01178  cp A,0
+	jr	z, 11	; F0117A  jr Z,0xf01187
+	pushw	1	; F0117C  push 0x0001
+	pushw	136	; F0117F  push 0x0088
+	call	16623356	; F01182  call 0xfda6fc
+	pop	xiy	; F01186  pop XIY
+	unlk XIZ	; F01187  unlk XIZ
+	ret	; F01189  ret
+sub_F0118A:
+	link XIZ,0x0000	; F0118A  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0118E  cp (XIZ+0x08),0x00
+	jr	nz, 8	; F01192  jr NZ,0xf0119c
+	pushw	0	; F01194  push 0x0000
+	pushw	138	; F01197  push 0x008a
+	jr	18	; F0119A  jr T,0xf011ae
+	pushw	2	; F0119C  push 0x0002
+	call	16627921	; F0119F  call 0xfdb8d1
+	popw	bc	; F011A3  pop BC
+	cps	a, 0	; F011A4  cp A,0
+	jr	z, 11	; F011A6  jr Z,0xf011b3
+	pushw	1	; F011A8  push 0x0001
+	pushw	136	; F011AB  push 0x0088
+	call	16623356	; F011AE  call 0xfda6fc
+	pop	xiy	; F011B2  pop XIY
+	unlk XIZ	; F011B3  unlk XIZ
+	ret	; F011B5  ret
+sub_F011B6:
+	link XIZ,0x0000	; F011B6  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F011BA  cp (XIZ+0x08),0x00
+	jr	nz, 10	; F011BE  jr NZ,0xf011ca
+	pushw	0	; F011C0  push 0x0000
+	call	16630777	; F011C3  call 0xfdc3f9
+	popw	bc	; F011C7  pop BC
+	jr	23	; F011C8  jr T,0xf011e1
+	pushw	3	; F011CA  push 0x0003
+	call	16627921	; F011CD  call 0xfdb8d1
+	popw	bc	; F011D1  pop BC
+	cps	a, 0	; F011D2  cp A,0
+	jr	z, 11	; F011D4  jr Z,0xf011e1
+	pushw	1	; F011D6  push 0x0001
+	pushw	136	; F011D9  push 0x0088
+	call	16623356	; F011DC  call 0xfda6fc
+	pop	xiy	; F011E0  pop XIY
+	unlk XIZ	; F011E1  unlk XIZ
+	ret	; F011E3  ret
+sub_F011E4:
+	link XIZ,0x0000	; F011E4  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F011E8  cp (XIZ+0x08),0x00
+	jr	nz, 10	; F011EC  jr NZ,0xf011f8
+	pushw	1	; F011EE  push 0x0001
+	call	16630777	; F011F1  call 0xfdc3f9
+	popw	bc	; F011F5  pop BC
+	jr	23	; F011F6  jr T,0xf0120f
+	pushw	4	; F011F8  push 0x0004
+	call	16627921	; F011FB  call 0xfdb8d1
+	popw	bc	; F011FF  pop BC
+sub_F01200:
+	cps	a, 0	; F01200  cp A,0
+	jr	z, 11	; F01202  jr Z,0xf0120f
+	pushw	1	; F01204  push 0x0001
+	pushw	136	; F01207  push 0x0088
+	call	16623356	; F0120A  call 0xfda6fc
+	pop	xiy	; F0120E  pop XIY
+	unlk XIZ	; F0120F  unlk XIZ
+	ret	; F01211  ret
+sub_F01212:
+	link XIZ,0x0000	; F01212  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01216  cp (XIZ+0x08),0x00
+	jr	nz, 11	; F0121A  jr NZ,0xf01227
+	pushw	0	; F0121C  push 0x0000
+	pushw	137	; F0121F  push 0x0089
+	call	16623356	; F01222  call 0xfda6fc
+	pop	xiy	; F01226  pop XIY
+	unlk XIZ	; F01227  unlk XIZ
+	ret	; F01229  ret
+sub_F0122A:
+	link XIZ,0x0000	; F0122A  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0122E  cp (XIZ+0x08),0x00
+	jr	nz, 19	; F01232  jr NZ,0xf01247
+	pushw	0	; F01234  push 0x0000
+	call	16625258	; F01237  call 0xfdae6a
+	pushw	0	; F0123B  push 0x0000
+	pushw	128	; F0123E  push 0x0080
+	call	16623356	; F01241  call 0xfda6fc
+	inc	6, xsp	; F01245  inc 6,XSP
+	unlk XIZ	; F01247  unlk XIZ
+	ret	; F01249  ret
+sub_F0124A:
+	link XIZ,0x0000	; F0124A  link XIZ,0x0000
+	pushw	20	; F0124E  push 0x0014
+	ld	bc, (xiz+8)	; F01251  ld BC,(XIZ+0x08)
+	extz	bc	; F01254  extz BC
+	pushw	bc	; F01256  push BC
+	call	16631771	; F01257  call 0xfdc7db
+	pop	xbc	; F0125B  pop XBC
+	unlk XIZ	; F0125C  unlk XIZ
+	ret	; F0125E  ret
+sub_F0125F:
+	link XIZ,0x0000	; F0125F  link XIZ,0x0000
+	pushw	21	; F01263  push 0x0015
+	ld	bc, (xiz+8)	; F01266  ld BC,(XIZ+0x08)
+	extz	bc	; F01269  extz BC
+	pushw	bc	; F0126B  push BC
+	call	16631934	; F0126C  call 0xfdc87e
+	pop	xbc	; F01270  pop XBC
+	unlk XIZ	; F01271  unlk XIZ
+	ret	; F01273  ret
+sub_F01274:
+	link XIZ,0x0000	; F01274  link XIZ,0x0000
+	pushw	22	; F01278  push 0x0016
+	ld	bc, (xiz+8)	; F0127B  ld BC,(XIZ+0x08)
+	extz	bc	; F0127E  extz BC
+	pushw	bc	; F01280  push BC
+	call	16632097	; F01281  call 0xfdc921
+	pop	xbc	; F01285  pop XBC
+	unlk XIZ	; F01286  unlk XIZ
+	ret	; F01288  ret
+sub_F01289:
+	link XIZ,0x0000	; F01289  link XIZ,0x0000
+	pushw	19	; F0128D  push 0x0013
+	ld	bc, (xiz+8)	; F01290  ld BC,(XIZ+0x08)
+	extz	bc	; F01293  extz BC
+	pushw	bc	; F01295  push BC
+	call	16632260	; F01296  call 0xfdc9c4
+	pop	xbc	; F0129A  pop XBC
+	unlk XIZ	; F0129B  unlk XIZ
+	ret	; F0129D  ret
+sub_F0129E:
+	link XIZ,0x0000	; F0129E  link XIZ,0x0000
+	pushw	17	; F012A2  push 0x0011
+	ld	bc, (xiz+8)	; F012A5  ld BC,(XIZ+0x08)
+	extz	bc	; F012A8  extz BC
+	pushw	bc	; F012AA  push BC
+	call	16632362	; F012AB  call 0xfdca2a
+	pop	xbc	; F012AF  pop XBC
+	unlk XIZ	; F012B0  unlk XIZ
+	ret	; F012B2  ret
+sub_F012B3:
+	link XIZ,0x0000	; F012B3  link XIZ,0x0000
+	pushw	18	; F012B7  push 0x0012
+	ld	bc, (xiz+8)	; F012BA  ld BC,(XIZ+0x08)
+	extz	bc	; F012BD  extz BC
+	pushw	bc	; F012BF  push BC
+	call	16632456	; F012C0  call 0xfdca88
+	pop	xbc	; F012C4  pop XBC
+	unlk XIZ	; F012C5  unlk XIZ
+	ret	; F012C7  ret
+sub_F012C8:
+	link XIZ,0x0000	; F012C8  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F012CC  cp (XIZ+0x08),0x00
+	jr	z, 4	; F012D0  jr Z,0xf012d6
+	call	16626443	; F012D2  call 0xfdb30b
+	unlk XIZ	; F012D6  unlk XIZ
+	ret	; F012D8  ret
+sub_F012D9:
+	link XIZ,0x0000	; F012D9  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F012DD  cp (XIZ+0x08),0x00
+	jr	nz, 8	; F012E1  jr NZ,0xf012eb
+	pushw	0	; F012E3  push 0x0000
+	pushw	135	; F012E6  push 0x0087
+	jr	18	; F012E9  jr T,0xf012fd
+	pushw	1	; F012EB  push 0x0001
+	call	16627921	; F012EE  call 0xfdb8d1
+	popw	bc	; F012F2  pop BC
+	cps	a, 0	; F012F3  cp A,0
+	jr	z, 11	; F012F5  jr Z,0xf01302
+	pushw	1	; F012F7  push 0x0001
+	pushw	137	; F012FA  push 0x0089
+	call	16623356	; F012FD  call 0xfda6fc
+	pop	xiy	; F01301  pop XIY
+	unlk XIZ	; F01302  unlk XIZ
+	ret	; F01304  ret
+sub_F01305:
+	link XIZ,0x0000	; F01305  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01309  cp (XIZ+0x08),0x00
+	jr	nz, 8	; F0130D  jr NZ,0xf01317
+	pushw	0	; F0130F  push 0x0000
+	pushw	138	; F01312  push 0x008a
+	jr	18	; F01315  jr T,0xf01329
+	pushw	2	; F01317  push 0x0002
+	call	16627921	; F0131A  call 0xfdb8d1
+	popw	bc	; F0131E  pop BC
+	cps	a, 0	; F0131F  cp A,0
+	jr	z, 11	; F01321  jr Z,0xf0132e
+	pushw	1	; F01323  push 0x0001
+	pushw	137	; F01326  push 0x0089
+	call	16623356	; F01329  call 0xfda6fc
+	pop	xiy	; F0132D  pop XIY
+	unlk XIZ	; F0132E  unlk XIZ
+	ret	; F01330  ret
+sub_F01331:
+	link XIZ,0x0000	; F01331  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01335  cp (XIZ+0x08),0x00
+	jr	z, 23	; F01339  jr Z,0xf01352
+	pushw	3	; F0133B  push 0x0003
+	call	16627921	; F0133E  call 0xfdb8d1
+	popw	bc	; F01342  pop BC
+	cps	a, 0	; F01343  cp A,0
+	jr	z, 11	; F01345  jr Z,0xf01352
+	pushw	1	; F01347  push 0x0001
+	pushw	137	; F0134A  push 0x0089
+	call	16623356	; F0134D  call 0xfda6fc
+	pop	xiy	; F01351  pop XIY
+	unlk XIZ	; F01352  unlk XIZ
+	ret	; F01354  ret
+sub_F01355:
+	link XIZ,0x0000	; F01355  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01359  cp (XIZ+0x08),0x00
+	jr	z, 23	; F0135D  jr Z,0xf01376
+	pushw	4	; F0135F  push 0x0004
+	call	16627921	; F01362  call 0xfdb8d1
+	popw	bc	; F01366  pop BC
+	cps	a, 0	; F01367  cp A,0
+	jr	z, 11	; F01369  jr Z,0xf01376
+	pushw	1	; F0136B  push 0x0001
+	pushw	137	; F0136E  push 0x0089
+	call	16623356	; F01371  call 0xfda6fc
+	pop	xiy	; F01375  pop XIY
+	unlk XIZ	; F01376  unlk XIZ
+	ret	; F01378  ret
+sub_F01379:
+	link XIZ,0x0000	; F01379  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0137D  cp (XIZ+0x08),0x00
+	jr	z, 11	; F01381  jr Z,0xf0138e
+	pushw	0	; F01383  push 0x0000
+	pushw	136	; F01386  push 0x0088
+	call	16623356	; F01389  call 0xfda6fc
+	pop	xiy	; F0138D  pop XIY
+	unlk XIZ	; F0138E  unlk XIZ
+	ret	; F01390  ret
+sub_F01391:
+	link XIZ,0x0000	; F01391  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01395  cp (XIZ+0x08),0x00
+	jr	nz, 19	; F01399  jr NZ,0xf013ae
+	pushw	0	; F0139B  push 0x0000
+	call	16625258	; F0139E  call 0xfdae6a
+	pushw	0	; F013A2  push 0x0000
+	pushw	128	; F013A5  push 0x0080
+	call	16623356	; F013A8  call 0xfda6fc
+	inc	6, xsp	; F013AC  inc 6,XSP
+	unlk XIZ	; F013AE  unlk XIZ
+	ret	; F013B0  ret
+sub_F013B1:
+	link XIZ,0x0000	; F013B1  link XIZ,0x0000
+	pushw	1	; F013B5  push 0x0001
+	ld	bc, (xiz+8)	; F013B8  ld BC,(XIZ+0x08)
+	extz	bc	; F013BB  extz BC
+	pushw	bc	; F013BD  push BC
+	call	16630013	; F013BE  call 0xfdc0fd
+	pop	xbc	; F013C2  pop XBC
+	unlk XIZ	; F013C3  unlk XIZ
+	ret	; F013C5  ret
+sub_F013C6:
+	link XIZ,0x0000	; F013C6  link XIZ,0x0000
+	pushw	1	; F013CA  push 0x0001
+	ld	bc, (xiz+8)	; F013CD  ld BC,(XIZ+0x08)
+	extz	bc	; F013D0  extz BC
+	pushw	bc	; F013D2  push BC
+	call	16630089	; F013D3  call 0xfdc149
+	pop	xbc	; F013D7  pop XBC
+	unlk XIZ	; F013D8  unlk XIZ
+	ret	; F013DA  ret
+sub_F013DB:
+	link XIZ,0x0000	; F013DB  link XIZ,0x0000
+	pushw	1	; F013DF  push 0x0001
+	ld	bc, (xiz+8)	; F013E2  ld BC,(XIZ+0x08)
+	extz	bc	; F013E5  extz BC
+	pushw	bc	; F013E7  push BC
+	call	16630204	; F013E8  call 0xfdc1bc
+	pop	xbc	; F013EC  pop XBC
+	unlk XIZ	; F013ED  unlk XIZ
+	ret	; F013EF  ret
+sub_F013F0:
+	link XIZ,0x0000	; F013F0  link XIZ,0x0000
+	pushw	1	; F013F4  push 0x0001
+	ld	bc, (xiz+8)	; F013F7  ld BC,(XIZ+0x08)
+	extz	bc	; F013FA  extz BC
+	pushw	bc	; F013FC  push BC
+	call	16630319	; F013FD  call 0xfdc22f
+	pop	xbc	; F01401  pop XBC
+	unlk XIZ	; F01402  unlk XIZ
+	ret	; F01404  ret
+sub_F01405:
+	link XIZ,0x0000	; F01405  link XIZ,0x0000
+	pushw	1	; F01409  push 0x0001
+	ld	bc, (xiz+8)	; F0140C  ld BC,(XIZ+0x08)
+	extz	bc	; F0140F  extz BC
+	pushw	bc	; F01411  push BC
+	call	16630434	; F01412  call 0xfdc2a2
+	pop	xbc	; F01416  pop XBC
+	unlk XIZ	; F01417  unlk XIZ
+	ret	; F01419  ret
+sub_F0141A:
+	link XIZ,0x0000	; F0141A  link XIZ,0x0000
+	pushw	1	; F0141E  push 0x0001
+	ld	bc, (xiz+8)	; F01421  ld BC,(XIZ+0x08)
+	extz	bc	; F01424  extz BC
+	pushw	bc	; F01426  push BC
+	call	16630547	; F01427  call 0xfdc313
+	pop	xbc	; F0142B  pop XBC
+	unlk XIZ	; F0142C  unlk XIZ
+	ret	; F0142E  ret
+sub_F0142F:
+	link XIZ,0x0000	; F0142F  link XIZ,0x0000
+	pushw	1	; F01433  push 0x0001
+	ld	bc, (xiz+8)	; F01436  ld BC,(XIZ+0x08)
+	extz	bc	; F01439  extz BC
+	pushw	bc	; F0143B  push BC
+	call	16630662	; F0143C  call 0xfdc386
+	pop	xbc	; F01440  pop XBC
+	unlk XIZ	; F01441  unlk XIZ
+	ret	; F01443  ret
+sub_F01444:
+	link XIZ,0x0000	; F01444  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01448  cp (XIZ+0x08),0x00
+	jr	nz, 13	; F0144C  jr NZ,0xf0145b
+	pushw	0	; F0144E  push 0x0000
+	pushw	136	; F01451  push 0x0088
+	call	16623356	; F01454  call 0xfda6fc
+	pop	xiy	; F01458  pop XIY
+	jr	4	; F01459  jr T,0xf0145f
+	call	16626443	; F0145B  call 0xfdb30b
+	unlk XIZ	; F0145F  unlk XIZ
+	ret	; F01461  ret
+sub_F01462:
+	link XIZ,0x0000	; F01462  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01466  cp (XIZ+0x08),0x00
+	jr	nz, 12	; F0146A  jr NZ,0xf01478
+	pushw	0	; F0146C  push 0x0000
+	pushw	135	; F0146F  push 0x0087
+	call	16623356	; F01472  call 0xfda6fc
+	jr	10	; F01476  jr T,0xf01482
+	pushw	1	; F01478  push 0x0001
+	pushw	1	; F0147B  push 0x0001
+	call	16627971	; F0147E  call 0xfdb903
+	pop	xiy	; F01482  pop XIY
+	unlk XIZ	; F01483  unlk XIZ
+	ret	; F01485  ret
+sub_F01486:
+	link XIZ,0x0000	; F01486  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0148A  cp (XIZ+0x08),0x00
+	jr	z, 11	; F0148E  jr Z,0xf0149b
+	pushw	2	; F01490  push 0x0002
+	pushw	1	; F01493  push 0x0001
+	call	16627971	; F01496  call 0xfdb903
+	pop	xiy	; F0149A  pop XIY
+	unlk XIZ	; F0149B  unlk XIZ
+	ret	; F0149D  ret
+sub_F0149E:
+	link XIZ,0x0000	; F0149E  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F014A2  cp (XIZ+0x08),0x00
+	jr	z, 11	; F014A6  jr Z,0xf014b3
+	pushw	3	; F014A8  push 0x0003
+	pushw	1	; F014AB  push 0x0001
+	call	16627971	; F014AE  call 0xfdb903
+	pop	xiy	; F014B2  pop XIY
+	unlk XIZ	; F014B3  unlk XIZ
+	ret	; F014B5  ret
+sub_F014B6:
+	link XIZ,0x0000	; F014B6  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F014BA  cp (XIZ+0x08),0x00
+	jr	z, 11	; F014BE  jr Z,0xf014cb
+	pushw	4	; F014C0  push 0x0004
+	pushw	1	; F014C3  push 0x0001
+	call	16627971	; F014C6  call 0xfdb903
+	pop	xiy	; F014CA  pop XIY
+	unlk XIZ	; F014CB  unlk XIZ
+	ret	; F014CD  ret
+sub_F014CE:
+	link XIZ,0x0000	; F014CE  link XIZ,0x0000
+	m_cp_mi8 MBD+r6, 0x08, 0x00	; F014D2  cp (XIZ+0x08),0x00
+	jr	nz, 19	; F014D6  jr NZ,0xf014eb
+	pushw	0	; F014D8  push 0x0000
+	call	16625258	; F014DB  call 0xfdae6a
+	pushw	0	; F014DF  push 0x0000
+	pushw	128	; F014E2  push 0x0080
+	call	16623356	; F014E5  call 0xfda6fc
+	inc	6, xsp	; F014E9  inc 6,XSP
+	unlk XIZ	; F014EB  unlk XIZ
+	ret	; F014ED  ret
+
+; --------------------------------------------------------------------------
+; PtrArray_F014EE -- 196 4-byte pointers: 10 whole records of 18 slots and a
+; partial 11th of 16.
+; Slot 9 of every record is 0x00000000 and slots 5, 6 and 10 hold the same
+; value the way an unfilled slot holds a common stub.  At the other three
+; byte phases 0 of 196 words are in prom_a's window; at this one, 185 are.
+; ⚠ Emitted as `.long` because the SHAPE is established.  The slots' meaning
+;   is deferred -- and see the ANOMALY (N2) before assuming a target is a
+;   routine in the prom_a next door.
+; --------------------------------------------------------------------------
+PtrArray_F014EE:
+	.long	0x00FDD45D	; F014EE	record 0
+	.long	0x00FDD46E	; F014F2
+	.long	0x00FDD49C	; F014F6
+	.long	0x00FDD4CA	; F014FA
+	.long	0x00FDD4F0	; F014FE
+	.long	0x00FDA7CE	; F01502
+	.long	0x00FDA7CE	; F01506
+	.long	0x00FDD52F	; F0150A
+	.long	0x00FDD516	; F0150E
+	.long	0x00000000	; F01512
+	.long	0x00FDA7CE	; F01516
+	.long	0x00FDD53C	; F0151A
+	.long	0x00FDD584	; F0151E
+	.long	0x00FDD61E	; F01522
+	.long	0x00FDD6B8	; F01526
+	.long	0x00FDD72B	; F0152A
+	.long	0x00FDD7C5	; F0152E
+	.long	0x00FDD871	; F01532
+	.long	0x00FDD90B	; F01536	record 1
+	.long	0x00FDD91C	; F0153A
+	.long	0x00FDD94A	; F0153E
+	.long	0x00FDD978	; F01542
+	.long	0x00FDD99E	; F01546
+	.long	0x00FDA7CE	; F0154A
+	.long	0x00FDA7CE	; F0154E
+	.long	0x00FDD9DD	; F01552
+	.long	0x00FDD9C4	; F01556
+	.long	0x00000000	; F0155A
+	.long	0x00FDA7CE	; F0155E
+	.long	0x00FDD9EA	; F01562
+	.long	0x00FDD9FF	; F01566
+	.long	0x00FDDA14	; F0156A
+	.long	0x00FDDA29	; F0156E
+	.long	0x00FDDA3E	; F01572
+	.long	0x00FDDA53	; F01576
+	.long	0x00FDDA68	; F0157A
+	.long	0x00FDDA7D	; F0157E	record 2
+	.long	0x00FDDA9C	; F01582
+	.long	0x00FDDAC3	; F01586
+	.long	0x00FDDADC	; F0158A
+	.long	0x00FDDAF5	; F0158E
+	.long	0x00FDA7CE	; F01592
+	.long	0x00FDA7CE	; F01596
+	.long	0x00FDDB0E	; F0159A
+	.long	0x00FDA7CE	; F0159E
+	.long	0x00000000	; F015A2
+	.long	0x00FDA7CE	; F015A6
+	.long	0x00FDDC2B	; F015AA
+	.long	0x00FDA7CE	; F015AE
+	.long	0x00FDDC92	; F015B2
+	.long	0x00FDDCFB	; F015B6
+	.long	0x00FDA7CE	; F015BA
+	.long	0x00FDDD64	; F015BE
+	.long	0x00FDA7CE	; F015C2
+	.long	0x00FDDDB6	; F015C6	record 3
+	.long	0x00FDDDD5	; F015CA
+	.long	0x00FDDE1E	; F015CE
+	.long	0x00FDDE75	; F015D2
+	.long	0x00FDDEBE	; F015D6
+	.long	0x00FDA7CE	; F015DA
+	.long	0x00FDA7CE	; F015DE
+	.long	0x00FDDF07	; F015E2
+	.long	0x00FDA7CE	; F015E6
+	.long	0x00000000	; F015EA
+	.long	0x00FDA7CE	; F015EE
+	.long	0x00FDDF14	; F015F2
+	.long	0x00FDDF2C	; F015F6
+	.long	0x00FDDF44	; F015FA
+	.long	0x00FDDF5C	; F015FE
+	.long	0x00FDDF74	; F01602
+	.long	0x00FDDF8C	; F01606
+	.long	0x00FDDFA4	; F0160A
+	.long	0x00FDDFBC	; F0160E	record 4
+	.long	0x00FDDFCD	; F01612
+	.long	0x00FDDFFB	; F01616
+	.long	0x00FDE029	; F0161A
+	.long	0x00FDE04F	; F0161E
+	.long	0x00FDA7CE	; F01622
+	.long	0x00FDA7CE	; F01626
+	.long	0x00FDE08E	; F0162A
+	.long	0x00FDE075	; F0162E
+	.long	0x00000000	; F01632
+	.long	0x00FDA7CE	; F01636
+	.long	0x00FDE09B	; F0163A
+	.long	0x00FDE0B0	; F0163E
+	.long	0x00FDE0C5	; F01642
+	.long	0x00FDE0DA	; F01646
+	.long	0x00FDA7CE	; F0164A
+	.long	0x00FDE0EF	; F0164E
+	.long	0x00FDE104	; F01652
+	.long	0x00FDE119	; F01656	record 5
+	.long	0x00FDE12A	; F0165A
+	.long	0x00FDE158	; F0165E
+	.long	0x00FDE186	; F01662
+	.long	0x00FDE1AC	; F01666
+	.long	0x00FDA7CE	; F0166A
+	.long	0x00FDA7CE	; F0166E
+	.long	0x00FDE1EB	; F01672
+	.long	0x00FDE1D2	; F01676
+	.long	0x00000000	; F0167A
+	.long	0x00FDA7CE	; F0167E
+	.long	0x00FDE1F8	; F01682
+	.long	0x00FDE20D	; F01686
+	.long	0x00FDE222	; F0168A
+	.long	0x00FDE237	; F0168E
+	.long	0x00FDE24C	; F01692
+	.long	0x00FDE261	; F01696
+	.long	0x00FDE276	; F0169A
+	.long	0x00FDE28B	; F0169E	record 6
+	.long	0x00FDE2AA	; F016A2
+	.long	0x00FDE2D1	; F016A6
+	.long	0x00FDE2EA	; F016AA
+	.long	0x00FDE303	; F016AE
+	.long	0x00FDA7CE	; F016B2
+	.long	0x00FDA7CE	; F016B6
+	.long	0x00FDE31C	; F016BA
+	.long	0x00FDA7CE	; F016BE
+	.long	0x00000000	; F016C2
+	.long	0x00FDE58E	; F016C6
+	.long	0x00FDA7CE	; F016CA
+	.long	0x00FDE5D2	; F016CE
+	.long	0x00FDE630	; F016D2
+	.long	0x00FDA7CE	; F016D6
+	.long	0x00FDE68E	; F016DA
+	.long	0x00FDE6F0	; F016DE
+	.long	0x00FDE74E	; F016E2
+	.long	0x00FDE7AC	; F016E6	record 7
+	.long	0x00FDE7CB	; F016EA
+	.long	0x00FDE7F1	; F016EE
+	.long	0x00FDE81F	; F016F2
+	.long	0x00FDE845	; F016F6
+	.long	0x00FDA7CE	; F016FA
+	.long	0x00FDA7CE	; F016FE
+	.long	0x00FDE884	; F01702
+	.long	0x00FDE86B	; F01706
+	.long	0x00000000	; F0170A
+	.long	0x00FDE891	; F0170E
+	.long	0x00FDA7CE	; F01712
+	.long	0x00FDE8D9	; F01716
+	.long	0x00FDE8EA	; F0171A
+	.long	0x00FDA7CE	; F0171E
+	.long	0x00FDE8FB	; F01722
+	.long	0x00FDE90C	; F01726
+	.long	0x00FDE91D	; F0172A
+	.long	0x00FDE92E	; F0172E	record 8
+	.long	0x00FDE93F	; F01732
+	.long	0x00FDE950	; F01736
+	.long	0x00FDE961	; F0173A
+	.long	0x00FDE972	; F0173E
+	.long	0x00FDA7CE	; F01742
+	.long	0x00FDA7CE	; F01746
+	.long	0x00FDE99C	; F0174A
+	.long	0x00FDE983	; F0174E
+	.long	0x00000000	; F01752
+	.long	0x00FDE9A9	; F01756
+	.long	0x00FDA7CE	; F0175A
+	.long	0x00FDA7CE	; F0175E
+	.long	0x00FDE9F1	; F01762
+	.long	0x00FDEA4F	; F01766
+	.long	0x00FDA7CE	; F0176A
+	.long	0x00FDA7CE	; F0176E
+	.long	0x00FDA7CE	; F01772
+	.long	0x00FDEAAD	; F01776	record 9
+	.long	0x00FDEACC	; F0177A
+	.long	0x00FDEAF2	; F0177E
+	.long	0x00FDEB20	; F01782
+	.long	0x00FDEB46	; F01786
+	.long	0x00FDA7CE	; F0178A
+	.long	0x00FDA7CE	; F0178E
+	.long	0x00FDEB85	; F01792
+	.long	0x00FDEB6C	; F01796
+	.long	0x00000000	; F0179A
+	.long	0x00FDEB92	; F0179E
+	.long	0x00FDA7CE	; F017A2
+	.long	0x00FDA7CE	; F017A6
+	.long	0x00FDEBDA	; F017AA
+	.long	0x00FDEBEB	; F017AE
+	.long	0x00FDA7CE	; F017B2
+	.long	0x00FDA7CE	; F017B6
+	.long	0x00FDA7CE	; F017BA
+	.long	0x00FDEBFC	; F017BE	record 10
+	.long	0x00FDEC0D	; F017C2
+	.long	0x00FDEC1E	; F017C6
+	.long	0x00FDEC2F	; F017CA
+	.long	0x00FDEC40	; F017CE
+	.long	0x00FDA7CE	; F017D2
+	.long	0x00FDA7CE	; F017D6
+	.long	0x00FDEC6A	; F017DA
+	.long	0x00FDEC51	; F017DE
+	.long	0x00000000	; F017E2
+	.long	0x00FDEC77	; F017E6
+	.long	0x00FDA7CE	; F017EA
+	.long	0x00FDA7CE	; F017EE
+	.long	0x00FDECBB	; F017F2
+	.long	0x00FDED19	; F017F6
+	.long	0x00FDED77	; F017FA
+
+; --------------------------------------------------------------------------
+; 0xF017FE-0xF017FF -- REFUSED, 2 bytes, deliberately still `.byte`.
+; The three entries above run 0x00FDECBB, 0x00FDED19, 0x00FDED77: a +0x5E progression
+; whose next term, 0x00FDEDD5, has exactly these two bytes as its low half.
+; Completing it would need 0xF01800-0xF01801, and those belong to the
+; display list at 0xF01800 -- `1C 10` is op 0x1C, length 16, and 6 header
+; bytes + the 10 characters of "SOUND EDIT" is exactly 16.  Starting that
+; list two bytes later instead gives `6E 00`, a record of length 0, which
+; never terminates.  So the entry cannot be completed and is not invented.
+; --------------------------------------------------------------------------
+	.byte	0xD5, 0xED	; F017FE  low half of a 4-byte entry that has no room
+
+; === END MODULE F00C4D 0xF00C4D-0xF017FF ===
 
 ; === END COVER-R1 0xF00000-0xF01800 ===
 
