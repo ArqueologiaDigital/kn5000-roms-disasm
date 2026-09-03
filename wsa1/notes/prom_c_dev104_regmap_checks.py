@@ -39,6 +39,10 @@ WHAT EACH SECTION PROVES
       all 251 entries, so 0x00104000 register 0x0100 + chan is a CONSTANT on this firmware.
   12  Dev104_LoadStageBImage (0xFC571A) copies 19 words from 0xFE1315 and patches five fields,
       so on the Stage_B path the 19 registers are an image, not a packing.
+  13  the COMPANION device's block census, for the two-device comparison the register-map
+      header in prom_c/devices/dev10c_reg_writers.s draws: 0x0010C000's full writer reaches
+      22 blocks, its accessor banks reach SIX the writer never does and miss SEVEN the writer
+      has, 28 distinct blocks in all, plus the 13 GLOBAL registers written by immediate.
 
 RUN
   python3 notes/prom_c_dev104_regmap_checks.py            # print every section
@@ -392,10 +396,74 @@ def sec12_stage_b_image():
     check('38 bytes is exactly the 19 words Dev104_WriteAllChanRegs reads', 0x26 // 2, 19)
 
 
+
+# ---------------------------------------------------------------- section 13
+# The COMPANION device's block census, so the comparison the register-map header in
+# prom_c/devices/dev10c_reg_writers.s draws between the two devices is checkable.
+DEV10C_SPANS = [
+    ('Dev10C_WriteAllChanRegs 0xFB713A', 0xFB713A, 0xFB732C),
+    ('accessor bank 1 0xFACE67',         0xFACE67, 0xFAD142),
+    ('accessor bank 2 0xFB7B63',         0xFB7B63, 0xFB828E),
+    ('the 0xFB6E0A helpers',             0xFB6E0A, 0xFB713A),
+]
+
+
+def _adds(lo, hi):
+    out = []
+    a = lo
+    while a < hi:
+        b = by(a, 4)
+        if b[0] in (0xD9, 0xDA, 0xDB) and b[1] == 0xC8:
+            out.append(b[2] | (b[3] << 8))
+            a += 4
+            continue
+        a += 1
+    return out
+
+
+def sec13_dev10c_block_census():
+    if not QUIET:
+        print('=== 13. the 0x0010C000 block census (for the two-device comparison) ===')
+    got = {}
+    for name, lo, hi in DEV10C_SPANS:
+        got[name] = sorted(set(_adds(lo, hi)))
+        if not QUIET:
+            print('    %-34s %s' % (name, ' '.join('0x%04X' % b for b in got[name])))
+    writer = set(got['Dev10C_WriteAllChanRegs 0xFB713A']) | {0}
+    banks = set().union(*(set(got[n]) for n, _, _ in DEV10C_SPANS[1:]))
+    check('the full writer reaches 22 blocks including block 0', len(writer), 22)
+    check('...and every one is a multiple of 0x40', sorted(set(b % 0x40 for b in writer)), [0])
+    check('the accessor banks and helpers reach these and six MORE',
+          sorted('0x%04X' % b for b in banks - writer),
+          ['0x01C0', '0x0540', '0x0580', '0x05C0', '0x0600', '0x0640'])
+    check('...and seven of the writer\'s are reached by no accessor',
+          sorted('0x%04X' % b for b in writer - banks),
+          ['0x0000', '0x0040', '0x00C0', '0x08C0', '0x09C0', '0x0A00', '0x0A40'])
+    check('28 distinct per-channel blocks in all', len(writer | banks), 28)
+    check('the highest is 0x0A40, so the file extends to 0x0A40+0x3F = 0x0A7F',
+          max(writer | banks), 0x0A40)
+    # the 13 GLOBAL registers, immediates inside Dev10C_WriteGlobalRegs
+    glob = []
+    a = 0xFB7715
+    while a < 0xFB77EF:
+        b = by(a, 4)
+        if b[0] == 0xB1 and b[1] == 0x02:
+            glob.append(b[2] | (b[3] << 8))
+            a += 4
+            continue
+        a += 1
+    check('Dev10C_WriteGlobalRegs writes 13 registers by IMMEDIATE, no channel',
+          glob, [0x0200, 0x0201, 0x0202, 0x0203, 0x0204, 0x0205,
+                 0x0C00, 0x0C01, 0x0C02, 0x0C03, 0x0C04, 0x0C05, 0x0E00])
+    check('13 words = 0x1A bytes = the gap between the two reset images',
+          0xFE12CF - 0xFE12B5, 2 * len(glob))
+    return sorted(writer | banks)
+
+
 SECTIONS = [sec1_writer_map, sec2_small_accessors, sec3_literal_census, sec4_struct_stores,
             sec5_misread, sec6_input_globals, sec7_staging_struct_address,
             sec8_zone_word_reaches_both_devices, sec9_note66_pivot, sec10_q5_depth,
-            sec11_constants, sec12_stage_b_image]
+            sec11_constants, sec12_stage_b_image, sec13_dev10c_block_census]
 
 
 def main():
