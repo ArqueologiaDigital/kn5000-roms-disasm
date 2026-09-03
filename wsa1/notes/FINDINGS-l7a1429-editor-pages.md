@@ -16,9 +16,26 @@ python3 notes/wsa1_toneedit_pages.py --nulls    # nulls 1-3
 python3 notes/wsa1_toneedit_pages.py --selftest # FAILURES: 0   (22 checks)
 ```
 
-No `.s` file is an input to it, and this lane edited no `.s` file.  Where a claim
-is quoted from another lane's converted source it is cited at the address and was
-re-read there.
+No `.s` file is an input to it.  Where a claim is quoted from another lane's
+converted source it is cited at the address and was re-read there.
+
+This lane made ONE source edit, to `prom_a/wsa1_prom_a.s`: the five page ENTER
+routines are renamed from `sub_XXXXXX` and given a header apiece.  The map is
+`notes/w21-lsi-editor-page-renames.map`:
+
+```
+sub_FDD7F9 = ToneEditPage_A3_PositionParameter
+sub_FDD958 = ToneEditPage_A4_PositionMovement
+sub_FDDA1C = ToneEditPage_A5_FittingMutingTuning
+sub_FDDC3A = ToneEditPage_A6_TouchDepth
+sub_FDDDAA = ToneEditPage_A7_ResoModeKeyFollow
+```
+
+Each is reached only through the panel-screen vtable, so the rename touches one
+line each; the screen code in each name is the literal the routine's own messages
+carry.  Both gates were run: `make gate-all` byte-identical, and
+`assert_comments_preserved.py --base main --rename-map` PASS with +134 comments
+and none altered.
 
 ---
 
@@ -34,11 +51,11 @@ on display rows **156** and **187**, four rows under the `MAIN RESONATOR` and
 `SUB RESONATOR` labels the *same paint routine* draws, and the read-back order puts
 `p21 p22 p29 p30` on the MAIN row and `p31 p32 p41 p42` on the SUB row.  Eight
 independent (index, parameter) pairs named by the per-field editors agree with that
-order, 8 of 8.  **Three of the four WEAK registers are now named** -- `0x0300` is
-`INTERACTION GAIN` (p19) and `0x0240` is what `DEPTH` (p14 bits 0-6) scales -- and
-the fourth pair, `0x03C0`/`0x0480`, is **shown to have no editor name at all**,
-because its input `p15` is set by the RESONATOR TYPE preset and is not an editor
-parameter.  **`SCALE` is found**: it is the `RESO SCALE` column, `OFF`/`ON`, and it
+order, 8 of 8.  **All four WEAK registers are resolved**: `0x0300` is
+`INTERACTION GAIN` (p19), `0x0240` is what `DEPTH` (p14 bits 0-6) scales, and the
+remaining pair `0x03C0`/`0x0480` is **shown to have no editor name at all**,
+because its only input `p15` is set by the RESONATOR TYPE preset and is not an
+editor parameter -- so two are named and two are refused, with a reason.  **`SCALE` is found**: it is the `RESO SCALE` column, `OFF`/`ON`, and it
 is **bit 7 of p22 / p32**.  The `FITTING`/`MUTING` split is corroborated by a
 second, positional route.  Two claims are overturned; see section 1.
 
@@ -183,7 +200,7 @@ the message carries, not by adjacency.
 Positions are `(display row, pixel x)`.  `p<N>` is arm-4 tone-edit parameter N =
 wave-select byte `+0x0N` in hex.
 
-### 3a. `PAGE1/2  P0SITI0N PARAMETER` (screen `0xA3`, enter `0xFDD7F9`)
+### 3a. `PAGE1/2  P0SITI0N PARAMETER` (screen `0xA3`, enter `ToneEditPage_A3_PositionParameter` `0xFDD7F9`)
 
 Reads **p13, p14, p19** into indices 0, 1, 2.  Caption and value share a row, five
 times out of five:
@@ -204,7 +221,7 @@ parameter `0x0D` and writes the same `/5` split into indices 4 and 5
 `Arr27A6_Set(5,..)` at `0xFD4586`), and the ENTER routine's reply path does the
 identical split from index 0 (`0xFDD8EE`-`0xFDD929`).
 
-### 3b. `PAGE2/2  P0SITI0N M0VEMENT` (screen `0xA4`, enter `0xFDD958`)
+### 3b. `PAGE2/2  P0SITI0N M0VEMENT` (screen `0xA4`, enter `ToneEditPage_A4_PositionMovement` `0xFDD958`)
 
 One request, parameter `0x10` with **count 3** (`pushw 0x03` at `0xFDD992`), and a
 reply loop that copies the three returned bytes to indices 0, 1, 2 in order
@@ -219,7 +236,7 @@ reply loop that copies the three returned bytes to indices 0, 1, 2 in order
 
 Four for four on the row test.
 
-### 3c. `PAGE1/3` (screen `0xA5`, enter `0xFDDA1C`) -- the page that settles MAIN/SUB
+### 3c. `PAGE1/3` (screen `0xA5`, enter `ToneEditPage_A5_FittingMutingTuning` `0xFDDA1C`) -- the page that settles MAIN/SUB
 
 Reads `0x15 0x16 0x1D 0x1E 0x1F 0x20 0x29 0x2A` into indices 1..8.  Its ten value
 records land on exactly two rows with **identical** column sets:
@@ -254,17 +271,19 @@ and `-27`: unequal, and one puts a value above its own label.
 **Therefore `{p21, p22, p29, p30}` is the MAIN resonator and `{p31, p32, p41,
 p42}` the SUB.**  `SUB GAIN`, p33 and p36 appear nowhere in that argument.
 
-### 3d. `PAGE2/3  TOUCH DEPTH` (screen `0xA6`, enter `0xFDDC3A`)
+### 3d. `PAGE2/3  TOUCH DEPTH` (screen `0xA6`, enter `ToneEditPage_A6_TouchDepth` `0xFDDC3A`)
 
 Two loops -- `ld HL,0x17 / ldb D,0x02` and `ld HL,0x21 / ldb D,0x04` -- read
 `0x17 0x18 0x21 0x22 0x23 0x24` into indices 1..6.
 
 ```
-    column x      48        96       152       200
-    header      FITTING   MUTING   (TOUCH)    SUB/GAIN  (x 208)
-    row 156    (0x27A7)  (0x27A8)    '--'       '--'
+    header      FITTING   MUTING              SUB / GAIN  (x 208)
+                (x 46, in the legend `FITTING MUTING SUB-GAIN`)
+    row 156     x 48      x 96      x 160      x 216
+               (0x27A7)  (0x27A8)    '--'       '--'
                  p23       p24
-    row 187    (0x27AA)  (0x27AB)  (0x27AC)   (0x27A9)
+    row 187     x 48      x 96      x 152      x 200
+               (0x27AA)  (0x27AB)  (0x27AC)   (0x27A9)
                  p34       p35       p36        p33
 ```
 
@@ -273,7 +292,7 @@ SUB row's rightmost field, the only one under the `SUB` / `GAIN` header at x 208
 is **p33**.  That is the old note's section 5b fact, now positional: it does not
 add to the direction argument, but it is no longer an inference from an asymmetry.
 
-### 3e. `PAGE3/3` (screen `0xA7`, enter `0xFDDDAA`)
+### 3e. `PAGE3/3` (screen `0xA7`, enter `ToneEditPage_A7_ResoModeKeyFollow` `0xFDDDAA`)
 
 Reads `0x15 0x1F` then two loops `0x19..0x1C` and `0x25..0x28`, into indices 1..10.
 
@@ -333,9 +352,25 @@ draws; **it is not a claim about the physical quantity**.
 | `0x0440` | as `0x0380` | SUB `MUTING`, second curve | **PROVEN** |
 | `0x0480` | p15 only | ⚠ **NO EDITOR NAME EXISTS** | **RESOLVED, negatively** |
 
-**12 STRONG before this pass -> 12 PROVEN, 3 STRONG, 2 resolved-negatively, 2
-constants.**  Nothing is left at WEAK, and nothing is left UNIDENTIFIED except
-register `0x0000`'s bits 6:4.
+**Before this pass: 12 STRONG, 4 WEAK, 1 UNIDENTIFIED, 2 constants.  After:
+12 PROVEN, 3 STRONG, 2 resolved-negatively, 2 constants.**  Nothing is left at
+WEAK, and nothing is left UNIDENTIFIED except register `0x0000`'s bits 6:4.
+
+⚠ **HOW THE GRADES ARE ASSIGNED, so a reader can disagree with them.**  A row is
+**PROVEN** when its parameters come from `PAGE1/3` or `PAGE3/3`, whose read-back
+order is fixed by a counter the code increments once per reply AND pinned at eight
+separate points by the field editors (section 2b); or from a control with its own
+dedicated editor (`p13`, `p11`).  A row is **STRONG** when the parameter comes from
+`PAGE1/2` or `PAGE2/2`, where the same counter mechanism applies but no editor
+binding was found to pin it -- with two mitigations: `PAGE2/2` is a SINGLE request
+with count 3 whose three reply bytes are copied to indices 0,1,2 in buffer order,
+and `PAGE1/2`'s index 0 is pinned independently, because the code that consumes it
+performs exactly the `/5` split the `P0SITI0N` editor performs.  So the STRONG rows
+are `0x0000` (`RESO MODE`, from `PAGE3/3` but naming a bit whose consumer is a
+different register), `0x0240` (`DEPTH`, from `PAGE1/2`) and `0x0300`
+(`INTERACTION GAIN`, from `PAGE1/2`).  ⚠ Inside `0x00C0`, `P0SITI0N` is PROVEN and
+the `WIDTH`/`SPEED`/`S/H`/`TOUCH` and `FORMANT` parts of the cell are STRONG; the
+row is graded by its principal name.
 
 ### 4a. Why `0x03C0` / `0x0480` cannot be named, and why that is an answer
 
@@ -344,9 +379,11 @@ register `0x0000`'s bits 6:4.
 an arm-4 selector.**  prom_a has twenty tone-message builders (the twenty callers
 of `sub_FD6132`, `0xFD616A` through `0xFD686B`); across every call site of all
 twenty, exactly ONE pushes `0x0F` in the parameter slot -- `0xFD5F12`, with
-selector `0x00`, which is the 300-byte part record on a different screen.  `p15` sits inside the block `ToneStage_ApplyWaveSelTailPreset` overwrites
-when the RESONATOR TYPE changes (bytes 13..42), and its factory value is 84 in 123
-of 133 records.  So it is **a preset constant, not a control**, and the three
+selector `0x00`, which is the 300-byte part record on a different screen.
+
+`p15` sits inside the block `ToneStage_ApplyWaveSelTailPreset` overwrites when the
+RESONATOR TYPE changes (bytes 13..42), and its factory value is 84 in 123 of 133
+records.  So it is **a preset constant, not a control**, and the three
 unassigned captions `DEPTH`, `FORMANT` and `INTERACTION GAIN` were never candidates
 for it.  The old note's 3! six-way choice was a false dilemma: the three captions
 belong to p14, p14 bit 7 and p19, and `0x03C0`/`0x0480` belong to none of them.
@@ -447,7 +484,10 @@ consumers); **PROVEN** for the arithmetic.
   `R[+0x1A]` (`index_bias_A`), whose writer this lane did not locate.  Until that is
   found, `RESO SCALE` is a named control with no traced effect.
 * **Where the DATA-dial edit for `DEPTH`, `FORMANT`, `INTERACTION GAIN`, `WIDTH`,
-  `SPEED`, `S/H`, `TOUCH`, `FITTING`, `KEY SHIFT` and `DETUNE` lives.**  The whole
+  `SPEED`, `S/H`, `TOUCH`, `FITTING`, `KEY SHIFT`, `DETUNE`, `RESO SCALE` and
+  `RESO MODE` lives.**  The two `MUTING` editors clamp their value to 0..0x7F
+  (`ld (XIX+0x06),0x7f` at `0xFD4C15`), so they cannot be the thing that toggles
+  `RESO SCALE`; something else sets bit 7 of p22/p32.  The whole
   region `0xFD40B6-0xFD5B5E` contains editors for only `RESONATOR TYPE`, `GROUP`,
   `P0SITI0N`, the two `MUTING` values and the six key-follow notes; the other
   fields must be written from somewhere this pass did not find.  ⚠ This does not

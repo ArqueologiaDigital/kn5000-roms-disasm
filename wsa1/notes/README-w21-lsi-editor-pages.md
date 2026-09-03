@@ -24,3 +24,16 @@ fixed by `LCD_Init_SED1330`'s SYSTEM SET bytes, not by the fit. NULL 2 shows
 the MAIN/SUB row pairing has equal `+4` offsets and that the swap gives `+35`
 and `-27`. NULL 3 measures how often a value record shares a display row with
 its caption by chance: 5 of 5 measured, 0.19 of 5 over 100,000 random draws.
+
+## The one source edit
+
+`notes/w21-lsi-editor-page-renames.map` is the explicit `old=new` list for the
+five page ENTER routines this lane named in `prom_a/wsa1_prom_a.s`. Pass it to
+both halves of the gate:
+
+```
+python3 ../scripts/converters/sync_comments_to_renamed_labels.py \
+    --map notes/w21-lsi-editor-page-renames.map --apply prom_a/wsa1_prom_a.s
+python3 ../scripts/analysis/assert_comments_preserved.py --base main \
+    --rename-map wsa1/notes/w21-lsi-editor-page-renames.map wsa1/prom_a/wsa1_prom_a.s
+```

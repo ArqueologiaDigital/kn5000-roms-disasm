@@ -141021,7 +141021,31 @@ sub_FDD7F7:
 	ret                                                  ; FDD7F7  0e
 sub_FDD7F8:
 	ret                                                  ; FDD7F8  0e
-sub_FDD7F9:
+; ---------------------------------------------------------------------
+; ToneEditPage_A3_PositionParameter -- the SOUND EDIT MODELING page whose
+; screen dispatch code is 0xA3: it asks CPU 2 for the page's fields and
+; repaints when the last reply lands.
+;
+; Shape:   arg1 == 0 -> send 3 read-back request(s) (sub_FD61CF when
+;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+;          percussion path), each tagged 0xC3, then Var27DA_Set(1).
+;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
+;          and once the count reaches 3 repaint through T_Dispatch_Code80_Bracketed
+;          with the same 0xC3.
+; Parameters, IN REQUEST ORDER -- which IS the map to the RAM byte the page
+;          draws, because reply n is stored at index 0+n:
+;          p13 -> 0x27A6[0]  P0SITI0N        (drawn as p13/5 . 2*(p13%5))
+;          p14 -> 0x27A6[1]  DEPTH (bits 0-6) + FORMANT (bit 7, FIX/MOVE)
+;          p19 -> 0x27A6[2]  INTERACTION GAIN
+; Evidence: the request tag 0xC3 is a literal in every one of this routine's
+;          messages, and Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k
+;          (0x00F5BA78 = 0x00F5B9F8 + 0x80), so the code names the screen.
+;          The order-to-index map is checked against the (index, parameter)
+;          pairs this page's field editors carry: 8 of 8 agree image-wide.
+;          Re-derived from the ROM by notes/wsa1_toneedit_pages.py --selftest.
+; Detail:  notes/FINDINGS-l7a1429-editor-pages.md sections 2 and 3.
+; ---------------------------------------------------------------------
+ToneEditPage_A3_PositionParameter:
 	link XIZ,0xffea                                      ; FDD7F9  ee 0c ea ff
 	pushw hl                                             ; FDD7FD  2b
 	push XIX                                             ; FDD7FE  3c
@@ -141156,7 +141180,33 @@ sub_FDD7F9:
 	popw hl                                              ; FDD954  4b
 	unlk XIZ                                             ; FDD955  ee 0d
 	ret                                                  ; FDD957  0e
-sub_FDD958:
+; ---------------------------------------------------------------------
+; ToneEditPage_A4_PositionMovement -- the SOUND EDIT MODELING page whose
+; screen dispatch code is 0xA4: it asks CPU 2 for the page's fields and
+; repaints when the last reply lands.
+;
+; Shape:   arg1 == 0 -> send 3 read-back request(s) (sub_FD61CF when
+;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+;          percussion path), each tagged 0xC4, then Var27DA_Set(1).
+;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
+;          and once the count reaches 3 repaint through T_Dispatch_Code80_Bracketed
+;          with the same 0xC4.
+; Parameters, IN REQUEST ORDER -- which IS the map to the RAM byte the page
+;          draws, because reply n is stored at index 0+n:
+;          ONE request, parameter 0x10 with COUNT 3; the reply's three bytes are
+;          copied to indices 0,1,2 in order (0xFDD9D8-0xFDD9F4):
+;          p16 -> 0x27A6[0]  TOUCH
+;          p17 -> 0x27A6[1]  WIDTH
+;          p18 -> 0x27A6[2]  SPEED (bits 0-6) + S/H (bit 7, OFF/ON)
+; Evidence: the request tag 0xC4 is a literal in every one of this routine's
+;          messages, and Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k
+;          (0x00F5BA78 = 0x00F5B9F8 + 0x80), so the code names the screen.
+;          The order-to-index map is checked against the (index, parameter)
+;          pairs this page's field editors carry: 8 of 8 agree image-wide.
+;          Re-derived from the ROM by notes/wsa1_toneedit_pages.py --selftest.
+; Detail:  notes/FINDINGS-l7a1429-editor-pages.md sections 2 and 3.
+; ---------------------------------------------------------------------
+ToneEditPage_A4_PositionMovement:
 	link XIZ,0xfff0                                      ; FDD958  ee 0c f0 ff
 	pushw hl                                             ; FDD95C  2b
 	call 0xf42e80                                        ; FDD95D  1d 80 2e f4
@@ -141239,7 +141289,38 @@ sub_FDD958:
 	popw hl                                              ; FDDA18  4b
 	unlk XIZ                                             ; FDDA19  ee 0d
 	ret                                                  ; FDDA1B  0e
-sub_FDDA1C:
+; ---------------------------------------------------------------------
+; ToneEditPage_A5_FittingMutingTuning -- the SOUND EDIT MODELING page whose
+; screen dispatch code is 0xA5: it asks CPU 2 for the page's fields and
+; repaints when the last reply lands.
+;
+; Shape:   arg1 == 0 -> send 8 read-back request(s) (sub_FD61CF when
+;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+;          percussion path), each tagged 0xC5, then Var27DA_Set(1).
+;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
+;          and once the count reaches 8 repaint through T_Dispatch_Code80_Bracketed
+;          with the same 0xC5.
+; Parameters, IN REQUEST ORDER -- which IS the map to the RAM byte the page
+;          draws, because reply n is stored at index 1+n:
+;          p21 -> [1] MAIN FITTING     p31 -> [5] SUB FITTING
+;          p22 -> [2] MAIN MUTING      p32 -> [6] SUB MUTING
+;                  + RESO SCALE (bit 7)        + RESO SCALE (bit 7)
+;          p29 -> [3] MAIN KEY SHIFT   p41 -> [7] SUB KEY SHIFT
+;          p30 -> [4] MAIN DETUNE      p42 -> [8] SUB DETUNE
+;          and it derives [0x0A] = (p22 & 0x7F) - 0x7F and [0x0B] likewise from p32,
+;          which are the MUTING numbers the page prints (0xFDDBD0-0xFDDC0B).
+;          MAIN is the row at display row 156 and SUB the row at 187, four rows
+;          under the MAIN RESONATOR / SUB RESONATOR labels this page's own paint
+;          routine draws from list 0xF02B47.
+; Evidence: the request tag 0xC5 is a literal in every one of this routine's
+;          messages, and Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k
+;          (0x00F5BA78 = 0x00F5B9F8 + 0x80), so the code names the screen.
+;          The order-to-index map is checked against the (index, parameter)
+;          pairs this page's field editors carry: 8 of 8 agree image-wide.
+;          Re-derived from the ROM by notes/wsa1_toneedit_pages.py --selftest.
+; Detail:  notes/FINDINGS-l7a1429-editor-pages.md sections 2 and 3.
+; ---------------------------------------------------------------------
+ToneEditPage_A5_FittingMutingTuning:
 	link XIZ,0xffe6                                      ; FDDA1C  ee 0c e6 ff
 	pushw hl                                             ; FDDA20  2b
 	push XIX                                             ; FDDA21  3c
@@ -141454,7 +141535,33 @@ sub_FDDA1C:
 	popw hl                                              ; FDDC36  4b
 	unlk XIZ                                             ; FDDC37  ee 0d
 	ret                                                  ; FDDC39  0e
-sub_FDDC3A:
+; ---------------------------------------------------------------------
+; ToneEditPage_A6_TouchDepth -- the SOUND EDIT MODELING page whose
+; screen dispatch code is 0xA6: it asks CPU 2 for the page's fields and
+; repaints when the last reply lands.
+;
+; Shape:   arg1 == 0 -> send 6 read-back request(s) (sub_FD61CF when
+;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+;          percussion path), each tagged 0xC6, then Var27DA_Set(1).
+;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
+;          and once the count reaches 6 repaint through T_Dispatch_Code80_Bracketed
+;          with the same 0xC6.
+; Parameters, IN REQUEST ORDER -- which IS the map to the RAM byte the page
+;          draws, because reply n is stored at index 1+n:
+;          two loops, `ld HL,0x17 / ldb D,2` and `ld HL,0x21 / ldb D,4`:
+;          p23 -> [1] MAIN FITTING touch   p34 -> [4] SUB FITTING touch
+;          p24 -> [2] MAIN MUTING  touch   p35 -> [5] SUB MUTING  touch
+;          p33 -> [3] SUB GAIN value       p36 -> [6] SUB GAIN    touch
+;          the MAIN row prints '--' in the two columns that belong to the sub side.
+; Evidence: the request tag 0xC6 is a literal in every one of this routine's
+;          messages, and Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k
+;          (0x00F5BA78 = 0x00F5B9F8 + 0x80), so the code names the screen.
+;          The order-to-index map is checked against the (index, parameter)
+;          pairs this page's field editors carry: 8 of 8 agree image-wide.
+;          Re-derived from the ROM by notes/wsa1_toneedit_pages.py --selftest.
+; Detail:  notes/FINDINGS-l7a1429-editor-pages.md sections 2 and 3.
+; ---------------------------------------------------------------------
+ToneEditPage_A6_TouchDepth:
 	link XIZ,0xffe4                                      ; FDDC3A  ee 0c e4 ff
 	pushw hl                                             ; FDDC3E  2b
 	pushw de                                             ; FDDC3F  2a
@@ -141608,7 +141715,34 @@ sub_FDDCB9:
 	popw hl                                              ; FDDDA6  4b
 	unlk XIZ                                             ; FDDDA7  ee 0d
 	ret                                                  ; FDDDA9  0e
-sub_FDDDAA:
+; ---------------------------------------------------------------------
+; ToneEditPage_A7_ResoModeKeyFollow -- the SOUND EDIT MODELING page whose
+; screen dispatch code is 0xA7: it asks CPU 2 for the page's fields and
+; repaints when the last reply lands.
+;
+; Shape:   arg1 == 0 -> send 10 read-back request(s) (sub_FD61CF when
+;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+;          percussion path), each tagged 0xC7, then Var27DA_Set(1).
+;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
+;          and once the count reaches 10 repaint through T_Dispatch_Code80_Bracketed
+;          with the same 0xC7.
+; Parameters, IN REQUEST ORDER -- which IS the map to the RAM byte the page
+;          draws, because reply n is stored at index 1+n:
+;          p21 -> [1] MAIN RESO MODE (bit 7)   p31 -> [2] SUB RESO MODE (bit 7)
+;          then two loops, 0x19..0x1C and 0x25..0x28 -- the two key-scaling stages
+;          prom_c calls ks(Q,0x19) and ks(Q,0x25):
+;          p25 -> [3] break   p26 -> [4] lo   p27 -> [5] hi   p28 -> [6] slope
+;          p37 -> [7] break   p38 -> [8] lo   p39 -> [9] hi   p40 -> [10] slope
+;          In the percussion mode (0x27F5) == 1 prom_b draws only the RESO MODE half.
+; Evidence: the request tag 0xC7 is a literal in every one of this routine's
+;          messages, and Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k
+;          (0x00F5BA78 = 0x00F5B9F8 + 0x80), so the code names the screen.
+;          The order-to-index map is checked against the (index, parameter)
+;          pairs this page's field editors carry: 8 of 8 agree image-wide.
+;          Re-derived from the ROM by notes/wsa1_toneedit_pages.py --selftest.
+; Detail:  notes/FINDINGS-l7a1429-editor-pages.md sections 2 and 3.
+; ---------------------------------------------------------------------
+ToneEditPage_A7_ResoModeKeyFollow:
 	link XIZ,0xffe4                                      ; FDDDAA  ee 0c e4 ff
 	pushw hl                                             ; FDDDAE  2b
 	pushw de                                             ; FDDDAF  2a
