@@ -875,6 +875,41 @@ source and `--dev104-selftest` now pins them. The scanner MISSED +0x16 because t
 spelled as a raw-byte pseudo-instruction, which matches no `ld` pattern -- a store spelled as
 bytes is still a store.
 
+### `dev104_topology_probe.py`
+**"Given how the firmware programs 0x00104000, what KIND of engine is on the other end?"**
+
+```
+python3 notes/dev104_topology_probe.py             # print all 10 sections
+python3 notes/dev104_topology_probe.py --selftest  # assert; exit 1 on any failure
+```
+
+Ten sections over `original_ROMs/wsa1_prom_c.ic28` and `wsa1_prom_d.bin`; no `.s` file and no
+unidasm text. It is the evidence behind `notes/HLE-GUIDE-l7a1429.md`. The results that matter:
+
+* **`fold()` is a sign-magnitude -> offset-binary converter.** Under it, `Curve_FE04C9` and
+  `Curve_FE05C9` are MONOTONE over all 128 entries, including across the `0x8459 -> 0x015E`
+  step that looks like a wrap in the two's-complement reading. The null is that reading,
+  which is not monotone. ⚠ `prom_c/data_tables/tail_data_zone.s` describes both tables in
+  two's complement; **reported, not edited** — that file is another lane's.
+* **`Curve_FE04C9` is a bilinear one-pole coefficient.** Read as sign-magnitude Q15 it is
+  `a1 = (K-1)/(K+1)` with `K = tan(pi*f/fs)`, and `f` doubles every **12.0016 index steps**
+  with a max residual of **0.8 cents** over i=14..90. Four rival value-to-frequency maps are
+  fitted as a null; the best is 50x worse. Index `i` is MIDI note `i+36` at **44,091 +/- 11 Hz**,
+  which is 44,100 to 0.33 cent — agreeing with IC4's 33.8688 MHz crystal by a wholly
+  independent route.
+* **`srl 0x00,XIY` is a shift by 16** (registers 0x01C0/0x0200/0x0240 are the product's HIGH
+  half), on five independent arguments; section 4 lists them and grades the result STRONG.
+* **THREE sections, not two.** `Curve_FE04C9`, `Curve_FE05C9` and `Curve_Exp2Rise_128` are each
+  cited **exactly three times in the whole image** — an exhaustive census, not a sighting — and
+  the third pair lands in `P[+0x24]` / `P[+0x26]`, i.e. registers 0x03C0 and 0x0480. The
+  Stage_B ROM image at 0xFE1315 says the same thing from a path that never runs the packer.
+* **The four tone elements are four CHANNELS**, so the A/B grouping cannot be "two elements
+  per voice": `MidiNote_OnTail` passes the literal 0 as the sub-record index while the three
+  `MidiNote_OnByPartMode` sites push `HL`, a loop counter bounded by `cp L,4` / `cp L,2`.
+* **A negative result, recorded so it is not repeated:** the `Tone104` record cannot be located
+  inside prom_d's 81-byte element blocks by its note-bound fields (eight candidate offsets in
+  0.90-0.93 against a pooled null of 0.55).
+
 ## `tone_db_naming_w17.py`
 **"Which prom_c instruction touches which byte of which prom_d record, and what does
 the code do with the value?"**
