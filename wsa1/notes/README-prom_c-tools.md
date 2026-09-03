@@ -1097,3 +1097,30 @@ a **one-pole lowpass cutoff**, `F = 65536·g/(1+g)` and `G = 8192·(1 − 1/(128
 makes register `0x00C0`'s unit **1/256 semitone**; `LinCoef_FE0196`'s slope makes a depth byte
 of 64 exactly **100% cutoff key follow**. Findings:
 `notes/FINDINGS-l7a1429-curve-tables.md`.
+
+
+## `dev104_apply_regsyms.py`
+**"The L7A1429 driver selects a register with a bare `add BC,0x0140`. Can the names wave 19
+established be written at the instruction itself, and can that be proved to move no byte?"**
+
+```
+python3 notes/dev104_apply_regsyms.py            # apply (idempotent)
+python3 notes/dev104_apply_regsyms.py --verify   # assert every site carries its symbol
+python3 notes/dev104_apply_regsyms.py --checks   # the ROM evidence behind header section 7
+python3 notes/dev104_apply_regsyms.py --selftest # FAILURES: 0
+```
+
+Rewrites 44 operands in `prom_c/devices/dev10c_dev104_drivers.s` -- 34 register-block numbers,
+9 device-base literals and the one global `0x0800` write -- to the `DEV104_*` symbols the file
+header now defines. Each site is keyed by the ROM address in its own trailing comment and the
+value already there must equal the symbol's, so a drifting listing aborts the run instead of
+mis-labelling a register. ★ **The proof is `make gate-all`:** these values are `add rr,imm16`
+and `ld (rr),imm16` operands, so a symbol resolved differently would change the ROM. Comments
+are never touched -- the instruction text left of `;` is rewritten and re-padded so the comment
+stays in its column -- and `--selftest` requires the applier to REFUSE both a site whose literal
+disagrees with the symbol and an `extpfx*` raw-byte pseudo-instruction, whose operand is a byte
+list and could not be proved. `--checks` re-reads the ROM for the three claims the new
+header section makes on its own account -- the 64-channel bound read off this device's own
+writers, the 0x1100 in register 0x0800, and the nine-literal 0x00104000 census that keeps
+the file's four `sub_` routines out of this device's story. Names and grades:
+`notes/FINDINGS-l7a1429-parameter-names.md`, `notes/HLE-GUIDE-l7a1429.md`.

@@ -36,6 +36,14 @@ which is the single strongest thing this note says about what the device *is*.
 
 ## 1. ⚠⚠ TWO CORRECTIONS OWED
 
+★ **1a IS NOW CARRIED, 2026-09-03, lane `w20/lsi-regsyms`; 1b is still open.** It is written into
+`prom_c/devices/dev10c_dev104_drivers.s` section 7.2(c) as an ADDED correction (the
+wave-17 text is left as it was, newest last), together with two more that section's
+own lines needed: the channel count is PROVEN 64 from this device's own loop bounds,
+and the measured grouping is two pairs and three triples, not eight A/B pairs. 1b is
+not owed to a file this lane owns, so it stays open.
+
+
 ### 1a. `Q` is a 43-byte WAVE-SELECT RECORD, not a tone record — GRADE PROVEN
 
 `prom_c/devices/dev10c_dev104_drivers.s`, the ★★ WAVE 17 header, says
