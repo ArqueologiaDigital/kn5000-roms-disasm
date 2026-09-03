@@ -31,7 +31,11 @@ WHAT IS MEASURED, AND THE NULL FOR EACH
      phase reaches -- if a wrong phase scored as well, the framing would carry no
      information.
   3. The pool directory's four stream-pointer fields against the pool's own
-     "interpreter-clean" flag.
+     "interpreter-clean" flag.  ⚠ NOT NEW -- notes/prom_c_fcd0f7_interpreter.py
+     established this split first, and named the second consumer (0xF9ADB5, framed by
+     0xF9E140).  It is re-derived here from a different starting point only so that
+     section 2's claim about the relocation globals rests on a check this script itself
+     runs; read that note for the argument.
      NULL: the pool-wide clean fraction (167/297 = 56.2%), so a field of 56 pointers
      drawn at random would be all-clean with probability 0.562**56 ~ 1e-14.
 
@@ -196,7 +200,9 @@ def s3_directory():
     return out
 
 def s4_chunkwalk():
-    print("\n4. THE SECOND CONSUMER: the chunk walkers use the pool's OWN end-of-record marker")
+    print("\n4. THE BLOCK WALKERS USE THE POOL'S OWN END-OF-RECORD MARKER")
+    print("   (the second consumer itself was identified in notes/prom_c_fcd0f7_interpreter.py;")
+    print("    this is one further check on it, not the finding)")
     print("   0xF9E0B7 and 0xF9E140 each read a 16-bit BIG-ENDIAN word at the cursor")
     print("   (`ld A,(XBC) / sll 8,A / ... / ld A,(XBC+1) / add DE,HL`) and stop on the")
     print("   exact value 0xF000 -- which is byte-for-byte the pool's END record, opcode 15")
@@ -206,11 +212,41 @@ def s4_chunkwalk():
     print(f"     `cp WA,0xf000` sites : {n}     END records in the pool : {ends}")
     return n, ends
 
+VALUE_TABLES = {   # the pointer P7Unit_SelectStreamsForRecord installs -> the word it
+    0xFD28C7: 99,  # installs beside it in 0x00F365/67/69, read off 0xFA4828-0xFA48F1
+    0xFD4E13: 99,
+    0xFD3B60: 99,
+    0xFD06FA: 99,
+    0xFDA4E7: 0x6C,
+    0xFDA5C1: 0x6C,
+    0xFDA554: 0x6C,
+}
+
+def s5_tables():
+    """P7Unit_SendValueTable reads table byte 0 as a base index and then (0x00F36x)/12
+    groups of four 24-bit big-endian values.  If (0x00F36x) is the table's PAYLOAD
+    length then every table must be exactly 1 + that many bytes long."""
+    print("\n5. IS (0x00F365/67/69) THE VALUE TABLE'S PAYLOAD LENGTH?")
+    print("   NULL: the seven tables would have to land on the predicted length by chance;")
+    print("         nothing forces a DATA object in a 65,972-byte pool to any given size.")
+    ok = 0
+    ends = sorted(VALUE_TABLES)
+    for a, n in sorted(VALUE_TABLES.items()):
+        # the object boundary: the next value table, or the pool object header
+        nxt = a + 1 + n
+        hit = nxt in VALUE_TABLES or nxt == 0xFDA62E or nxt in (0xFD075E, 0xFD292B, 0xFD3BC4, 0xFD4E77)
+        ok += hit
+        print(f"     0x{a:06X} + 1 + {n:3d} = 0x{nxt:06X}   "
+              f"{'lands on the next table or the object end' if hit else 'DOES NOT land on a boundary'}")
+    print(f"   {ok} of {len(VALUE_TABLES)}")
+    return ok
+
 def main():
     lit, first = s1_commands()
     res = s2_groups()
     dirf = s3_directory()
     n_f000, ends = s4_chunkwalk()
+    ok5 = s5_tables()
     if "--verify" not in sys.argv: return
     print("\nASSERTIONS")
     check(set(lit) == {0x01, 0x03}, "the only LITERAL command bytes in the module are 0x01 and 0x03")
@@ -234,11 +270,14 @@ def main():
           "the 0x008618 emitter adds")
     check(h1.get((1,1,0x60), 0) == sum(h1.values()) and h5.get((1,1,0x60), 0) == sum(h5.values()),
           "opcode-1 and opcode-5 records all open 01 01 60 -- the exact triple "
-          "P7Reloc_LoadRecordAndSendChunk sends as cmd 0x01 / arg 0x01 / arg 0x60")
+          "P7Block_Run sends as cmd 0x01 / arg 0x01 / arg 0x60")
     for f, want in ((0, "not"), (4, "clean"), (8, "not"), (12, "clean")):
         c, n, u = dirf[f]
         check((c == 56 and u == 0) if want == "clean" else (n == 56 and u == 0),
               f"all 56 of pool-directory field +{f} are {want}-interpreter-clean streams")
+    check(ok5 == len(VALUE_TABLES),
+          "all 7 value tables are exactly 1 + (0x00F36x) bytes long -- the four 99-byte "
+          "ones end on the next pool object, the three 0x6C ones tile one 327-byte object")
     check(n_f000 == 2 and ends == 297,
           "the 0xF000 end test occurs exactly twice (the two chunk walkers) and the pool "
           "has 297 END records")

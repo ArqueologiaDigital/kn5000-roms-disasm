@@ -1939,7 +1939,7 @@ sub_F9AD65__F9ADB0:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9ADB5:
+P7Block_Run:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9ADB5  link XIZ,0xfff0
 	push	xix                                   ; F9ADB9  push XIX
 	ldw	bc, 6                                  ; F9ADBA  ld BC,0x0006
@@ -1986,15 +1986,15 @@ sub_F9ADB5:
 	ld	(xiz-8), xiy                            ; F9AE31  ld (XIZ+0xf8),XIY
 	inc	6, xsp                                 ; F9AE34  inc 6,XSP
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9AE36  cp (0x008612),0x0000
-	jr z, sub_F9ADB5__F9AE48                   ; F9AE3D  jr Z,0xf9ae48
+	jr z, P7Block_Run__F9AE48                   ; F9AE3D  jr Z,0xf9ae48
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9AE3F  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9AE47)                 ; F9AE44  calr 0xf9e1ac
 	popw	bc                                    ; F9AE47  pop BC
-sub_F9ADB5__F9AE48:
+P7Block_Run__F9AE48:
 	ld	xix, (0x861E:24)                       ; F9AE48  ld XIX,(0x00861e)
 	ld	xbc, (xiz-8)                            ; F9AE4D  ld XBC,(XIZ+0xf8)
 	cp	xbc, xix                                ; F9AE50  cp XBC,XIX
-	jr nc, sub_F9ADB5__F9AEB2                  ; F9AE52  jr NC,0xf9aeb2
+	jr nc, P7Block_Run__F9AEB2                  ; F9AE52  jr NC,0xf9aeb2
 	ld	c, (0x861C:24)                         ; F9AE54  ld C,(0x00861c)
 	pushw	bc                                   ; F9AE59  push BC
 	pushw	1                                    ; F9AE5A  push 0x0001
@@ -2021,18 +2021,18 @@ sub_F9ADB5__F9AE48:
 	inc	8, xsp                                 ; F9AE8D  inc 0,XSP
 	inc	4, xsp                                 ; F9AE8F  inc 4,XSP
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9AE91  cp (0x008612),0x0000
-	jr z, sub_F9ADB5__F9AEA3                   ; F9AE98  jr Z,0xf9aea3
+	jr z, P7Block_Run__F9AEA3                   ; F9AE98  jr Z,0xf9aea3
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9AE9A  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9AEA2)                 ; F9AE9F  calr 0xf9e1ac
 	popw	bc                                    ; F9AEA2  pop BC
-sub_F9ADB5__F9AEA3:
+P7Block_Run__F9AEA3:
 	ld	c, (0x861C:24)                         ; F9AEA3  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEA8  push BC
 	pushw	3                                    ; F9AEA9  push 0x0003
 	calr (0xF9A163 - 0xF9AEAF)                 ; F9AEAC  calr 0xf9a163
 	pop	xiy                                    ; F9AEAF  pop XIY
-	jr sub_F9ADB5__F9AE48                      ; F9AEB0  jr T,0xf9ae48
-sub_F9ADB5__F9AEB2:
+	jr P7Block_Run__F9AE48                      ; F9AEB0  jr T,0xf9ae48
+P7Block_Run__F9AEB2:
 	pop	xix                                    ; F9AEB2  pop XIX
 	unlk32 xiz                                 ; F9AEB3  unlk XIZ
 	ret                                        ; F9AEB5  ret
@@ -2056,7 +2056,7 @@ sub_F9ADB5__F9AEB2:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9AEB6:
+P7Group_SendOp0AddrValueScaled:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9AEB6  link XIZ,0xffec
 	ld	c, (0x861C:24)                         ; F9AEBA  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEBF  push BC
@@ -2179,7 +2179,7 @@ sub_F9AEB6:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9AFDC:
+P7Group_SendOp0AddrValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9AFDC  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9AFE0  ld C,(0x00861c)
 	pushw	bc                                   ; F9AFE5  push BC
@@ -2284,7 +2284,7 @@ sub_F9AFDC:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B0D1:
+P7Group_SendValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B0D1  link XIZ,0xfffc
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B0D5  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; F9B0D8  pushw (XIZ+0x08)
@@ -2358,7 +2358,7 @@ sub_F9B0D1:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B167:
+P7Group_SendOp1AddrValueScaled:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B167  link XIZ,0xffec
 	ld	c, (0x861C:24)                         ; F9B16B  ld C,(0x00861c)
 	pushw	bc                                   ; F9B170  push BC
@@ -2480,7 +2480,7 @@ sub_F9B167:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B28B:
+P7Group_SendOp1AddrValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B28B  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9B28F  ld C,(0x00861c)
 	pushw	bc                                   ; F9B294  push BC
@@ -2538,7 +2538,7 @@ sub_F9B28B:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B2EE:
+P7Group_SendOp1AddrValue__F9B2EE:
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B2EE  pushw (XIZ+0x0a)
 	call	0xFCAB29                              ; F9B2F1  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B2F5  ld (XIZ+0xfc),XIY
@@ -2569,7 +2569,7 @@ sub_F9B2EE:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B305:
+P7Group_SendOp1AddrValue__F9B305:
 	ld	c, (0x861C:24)                         ; F9B305  ld C,(0x00861c)
 	pop	xiy                                    ; F9B30A  pop XIY
 	pushw	bc                                   ; F9B30B  push BC
@@ -2605,7 +2605,7 @@ sub_F9B305:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B32C:
+P7Group_SendOp1AddrValue__F9B32C:
 	pushw	bc                                   ; F9B32C  push BC
 	ld	xiy, (xiz-4)                            ; F9B32D  ld XIY,(XIZ+0xfc)
 	sra	xiy, 9                                 ; F9B330  sra 0x09,XIY
@@ -2658,7 +2658,7 @@ sub_F9B32C:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B37E:
+P7Group_SendValueScaled:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B37E  link XIZ,0xffec
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B382  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; F9B385  pushw (XIZ+0x08)
@@ -2748,7 +2748,7 @@ sub_F9B37E:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B445:
+P7Group_SendOp5AddrValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B445  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9B449  ld C,(0x00861c)
 	pushw	bc                                   ; F9B44E  push BC
@@ -6869,11 +6869,11 @@ sub_F9E0B7__F9E137:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9E140:
+P7Block_Seek:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; F9E140  link XIZ,0xfffe
 	pushw	hl                                   ; F9E144  push HL
 	pushw	de                                   ; F9E145  push DE
-sub_F9E140__F9E146:
+P7Block_Seek__F9E146:
 	ld	xbc, (xiz+8)                            ; F9E146  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; F9E149  ld A,(XBC)
 	sll	a, 8                                   ; F9E14B  sll 0x08,A
@@ -6887,9 +6887,9 @@ sub_F9E140__F9E146:
 	ld	wa, de                                  ; F9E15E  ld WA,DE
 	and	wa, 0xFFFF                             ; F9E160  and WA,0xffff
 	cp	wa, 0xF000                              ; F9E164  cp WA,0xf000
-	jr z, sub_F9E140__F9E19D                   ; F9E168  jr Z,0xf9e19d
+	jr z, P7Block_Seek__F9E19D                   ; F9E168  jr Z,0xf9e19d
 	cpw (xiz+12), 0x0000                       ; F9E16A  cp (XIZ+0x0c),0x0000
-	jr nz, sub_F9E140__F9E190                  ; F9E16F  jr NZ,0xf9e190
+	jr nz, P7Block_Seek__F9E190                  ; F9E16F  jr NZ,0xf9e190
 	ldw	(0x8612:24), 0                        ; F9E171  ld (0x008612),0x0000
 	ld	wa, (xiz-2)                             ; F9E178  ld WA,(XIZ+0xfe)
 	exts	xwa                                   ; F9E17B  exts XWA
@@ -6899,17 +6899,17 @@ sub_F9E140__F9E146:
 	inc	2, xwa                                 ; F9E186  inc 2,XWA
 	add	(xiz+8), xwa                           ; F9E188  add (XIZ+0x08),XWA
 	ld	xiy, (xiz+8)                            ; F9E18B  ld XIY,(XIZ+0x08)
-	jr sub_F9E140__F9E1A7                      ; F9E18E  jr T,0xf9e1a7
-sub_F9E140__F9E190:
+	jr P7Block_Seek__F9E1A7                      ; F9E18E  jr T,0xf9e1a7
+P7Block_Seek__F9E190:
 	ld	bc, (xiz-2)                             ; F9E190  ld BC,(XIZ+0xfe)
 	exts	xbc                                   ; F9E193  exts XBC
 	add	(xiz+8), xbc                           ; F9E195  add (XIZ+0x08),XBC
 	decm	1, (xiz+12)                           ; F9E198  decw 1,(XIZ+0x0c)
-	jr sub_F9E140__F9E146                      ; F9E19B  jr T,0xf9e146
-sub_F9E140__F9E19D:
+	jr P7Block_Seek__F9E146                      ; F9E19B  jr T,0xf9e146
+P7Block_Seek__F9E19D:
 	ldw	(0x8612:24), 2                        ; F9E19D  ld (0x008612),0x0002
 	ld	xiy, (xiz+8)                            ; F9E1A4  ld XIY,(XIZ+0x08)
-sub_F9E140__F9E1A7:
+P7Block_Seek__F9E1A7:
 	popw	de                                    ; F9E1A7  pop DE
 	popw	hl                                    ; F9E1A8  pop HL
 	unlk32 xiz                                 ; F9E1A9  unlk XIZ
@@ -6931,27 +6931,27 @@ sub_F9E140__F9E1A7:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9E1AC:
+P7Block_ReportStatus:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; F9E1AC  link XIZ,0x0000
-	jr sub_F9E1AC__F9E1BE                      ; F9E1B0  jr T,0xf9e1be
-sub_F9E1AC__F9E1B2:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B2  jr T,0xf9e1ea
-sub_F9E1AC__F9E1B4:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B4  jr T,0xf9e1ea
-sub_F9E1AC__F9E1B6:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B6  jr T,0xf9e1ea
-sub_F9E1AC__F9E1B8:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B8  jr T,0xf9e1ea
-sub_F9E1AC__F9E1BA:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1BA  jr T,0xf9e1ea
-sub_F9E1AC__F9E1BC:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1BC  jr T,0xf9e1ea
-sub_F9E1AC__F9E1BE:
+	jr P7Block_ReportStatus__F9E1BE                      ; F9E1B0  jr T,0xf9e1be
+P7Block_ReportStatus__F9E1B2:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B2  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1B4:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B4  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1B6:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B6  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1B8:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B8  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1BA:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1BA  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1BC:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1BC  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1BE:
 	sub	xbc, xbc                               ; F9E1BE  sub XBC,XBC
 	ld	bc, (xiz+8)                             ; F9E1C0  ld BC,(XIZ+0x08)
 	dec	1, bc                                  ; F9E1C3  dec 1,BC
 	cps	bc, 4                                  ; F9E1C5  cp BC,4
-	jr ugt, sub_F9E1AC__F9E1BC                 ; F9E1C7  jr UGT,0xf9e1bc
+	jr ugt, P7Block_ReportStatus__F9E1BC                 ; F9E1C7  jr UGT,0xf9e1bc
 	sll	bc, 2                                  ; F9E1C9  sll 0x02,BC
 	add	xbc, 0xF9E1D6                          ; F9E1CC  add XBC,0x00f9e1d6
 	ld	xbc, (xbc)                              ; F9E1D2  ld XBC,(XBC)
@@ -6969,7 +6969,7 @@ sub_F9E1AC__F9E1BE:
 	.long 0x00F9E1B6	; 0xF9E1DE  entry 2 -> 0xF9E1B6
 	.long 0x00F9E1B8	; 0xF9E1E2  entry 3 -> 0xF9E1B8
 	.long 0x00F9E1BA	; 0xF9E1E6  entry 4 -> 0xF9E1BA
-sub_F9E1AC__F9E1EA:
+P7Block_ReportStatus__F9E1EA:
 	unlk32 xiz                                 ; F9E1EA  unlk XIZ
 	ret                                        ; F9E1EC  ret
 ; --------------------------------------------------------------------------
@@ -9053,46 +9053,46 @@ sub_F9ECF1__F9F75E:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9F765:
+P7Unit_SendValueTable:
 	link32 0xEE, 0x0C, 0x1C, 0xFF              ; F9F765  link XIZ,0xff1c
 	ld	bc, (xiz+8)                             ; F9F769  ld BC,(XIZ+0x08)
 	and	bc, 3                                  ; F9F76C  and BC,0x0003
 	ld	(xiz-0xE2), bc                          ; F9F770  ld (XIZ+0xff1e),BC
-	jr sub_F9F765__F9F7BF                      ; F9F775  jr T,0xf9f7bf
-sub_F9F765__F9F777:
+	jr P7Unit_SendValueTable__F9F7BF                      ; F9F775  jr T,0xf9f7bf
+P7Unit_SendValueTable__F9F777:
 	ld	xbc, (0x8622:24)                       ; F9F777  ld XBC,(0x008622)
 	ld	(xiz-20), xbc                           ; F9F77C  ld (XIZ+0xec),XBC
 	ld	wa, (0xF365:24)                        ; F9F77F  ld WA,(0x00f365)
 	ld	(xiz-2), wa                             ; F9F784  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F787  jr T,0xf9f7d2
-sub_F9F765__F9F789:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F787  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F789:
 	ld	xbc, (0x8626:24)                       ; F9F789  ld XBC,(0x008626)
 	ld	(xiz-20), xbc                           ; F9F78E  ld (XIZ+0xec),XBC
 	ld	wa, (0xF367:24)                        ; F9F791  ld WA,(0x00f367)
 	ld	(xiz-2), wa                             ; F9F796  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F799  jr T,0xf9f7d2
-sub_F9F765__F9F79B:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F799  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F79B:
 	ld	xbc, (0x862A:24)                       ; F9F79B  ld XBC,(0x00862a)
 	ld	(xiz-20), xbc                           ; F9F7A0  ld (XIZ+0xec),XBC
 	ld	wa, (0xF369:24)                        ; F9F7A3  ld WA,(0x00f369)
 	ld	(xiz-2), wa                             ; F9F7A8  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F7AB  jr T,0xf9f7d2
-sub_F9F765__F9F7AD:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F7AB  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F7AD:
 	ld	xbc, (0x8622:24)                       ; F9F7AD  ld XBC,(0x008622)
 	ld	(xiz-20), xbc                           ; F9F7B2  ld (XIZ+0xec),XBC
 	ld	wa, (0xF365:24)                        ; F9F7B5  ld WA,(0x00f365)
 	ld	(xiz-2), wa                             ; F9F7BA  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F7BD  jr T,0xf9f7d2
-sub_F9F765__F9F7BF:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F7BD  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F7BF:
 	ld	bc, (xiz-0xE2)                          ; F9F7BF  ld BC,(XIZ+0xff1e)
 	cps	bc, 0                                  ; F9F7C4  cp BC,0
-	jr z, sub_F9F765__F9F777                   ; F9F7C6  jr Z,0xf9f777
+	jr z, P7Unit_SendValueTable__F9F777                   ; F9F7C6  jr Z,0xf9f777
 	cps	bc, 1                                  ; F9F7C8  cp BC,1
-	jr z, sub_F9F765__F9F789                   ; F9F7CA  jr Z,0xf9f789
+	jr z, P7Unit_SendValueTable__F9F789                   ; F9F7CA  jr Z,0xf9f789
 	cps	bc, 2                                  ; F9F7CC  cp BC,2
-	jr z, sub_F9F765__F9F79B                   ; F9F7CE  jr Z,0xf9f79b
-	jr sub_F9F765__F9F7AD                      ; F9F7D0  jr T,0xf9f7ad
-sub_F9F765__F9F7D2:
+	jr z, P7Unit_SendValueTable__F9F79B                   ; F9F7CE  jr Z,0xf9f79b
+	jr P7Unit_SendValueTable__F9F7AD                      ; F9F7D0  jr T,0xf9f7ad
+P7Unit_SendValueTable__F9F7D2:
 	ld	xbc, (xiz-20)                           ; F9F7D2  ld XBC,(XIZ+0xec)
 	ld	a, (xbc)                                ; F9F7D5  ld A,(XBC)
 	extz	wa                                    ; F9F7D7  extz WA
@@ -9100,7 +9100,7 @@ sub_F9F765__F9F7D2:
 	inc	1, xbc                                 ; F9F7DC  inc 1,XBC
 	ld	(xiz-24), xbc                           ; F9F7DE  ld (XIZ+0xe8),XBC
 	ldw (xiz-4), 0x0000                        ; F9F7E1  ld (XIZ+0xfc),0x0000
-sub_F9F765__F9F7E6:
+P7Unit_SendValueTable__F9F7E6:
 	ld	bc, (xiz-2)                             ; F9F7E6  ld BC,(XIZ+0xfe)
 	exts	xbc                                   ; F9F7E9  exts XBC
 	divs	bc, 3                                 ; F9F7EB  divs BC,0x0003
@@ -9109,14 +9109,14 @@ sub_F9F765__F9F7E6:
 	exts	xwa                                   ; F9F7F7  exts XWA
 	divs	wa, 12                                ; F9F7F9  divs WA,0x000c
 	cp	(xiz-4), wa                             ; F9F7FD  cp (XIZ+0xfc),WA
-	jrl ge, sub_F9F765__F9F8DE                 ; F9F800  jrl GE,0xf9f8de
-	jr sub_F9F765__F9F80A                      ; F9F803  jr T,0xf9f80a
-sub_F9F765__F9F805:
+	jrl ge, P7Unit_SendValueTable__F9F8DE                 ; F9F800  jrl GE,0xf9f8de
+	jr P7Unit_SendValueTable__F9F80A                      ; F9F803  jr T,0xf9f80a
+P7Unit_SendValueTable__F9F805:
 	incw	1, (xiz-4)                            ; F9F805  incw 1,(XIZ+0xfc)
-	jr sub_F9F765__F9F7E6                      ; F9F808  jr T,0xf9f7e6
-sub_F9F765__F9F80A:
+	jr P7Unit_SendValueTable__F9F7E6                      ; F9F808  jr T,0xf9f7e6
+P7Unit_SendValueTable__F9F80A:
 	cpw (xiz-4), 0x0000                        ; F9F80A  cp (XIZ+0xfc),0x0000
-	jr z, sub_F9F765__F9F847                   ; F9F80F  jr Z,0xf9f847
+	jr z, P7Unit_SendValueTable__F9F847                   ; F9F80F  jr Z,0xf9f847
 	ld	c, (0x861C:24)                         ; F9F811  ld C,(0x00861c)
 	pushw	bc                                   ; F9F816  push BC
 	pushw	1                                    ; F9F817  push 0x0001
@@ -9135,7 +9135,7 @@ sub_F9F765__F9F80A:
 	calr (0xF9A4B0 - 0xF9F841)                 ; F9F83E  calr 0xf9a4b0
 	ld	(0x8612:24), wa                        ; F9F841  ld (0x008612),WA
 	pop	xiy                                    ; F9F846  pop XIY
-sub_F9F765__F9F847:
+P7Unit_SendValueTable__F9F847:
 	lda	xbc, (xiz-12)                          ; F9F847  lda XBC,XIZ+0xf4
 	push	xbc                                   ; F9F84A  push XBC
 	ld	xwa, (xiz-24)                           ; F9F84B  ld XWA,(XIZ+0xe8)
@@ -9197,8 +9197,8 @@ sub_F9F765__F9F847:
 	pushw	3                                    ; F9F8D4  push 0x0003
 	calr (0xF9A163 - 0xF9F8DA)                 ; F9F8D7  calr 0xf9a163
 	pop	xiy                                    ; F9F8DA  pop XIY
-	jrl sub_F9F765__F9F805                     ; F9F8DB  jrl T,0xf9f805
-sub_F9F765__F9F8DE:
+	jrl P7Unit_SendValueTable__F9F805                     ; F9F8DB  jrl T,0xf9f805
+P7Unit_SendValueTable__F9F8DE:
 	unlk32 xiz                                 ; F9F8DE  unlk XIZ
 	ret                                        ; F9F8E0  ret
 ; --------------------------------------------------------------------------
