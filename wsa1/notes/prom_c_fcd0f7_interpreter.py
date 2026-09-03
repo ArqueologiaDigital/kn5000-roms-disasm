@@ -21,8 +21,8 @@ QUESTION IT ANSWERS
        cannot be what `P7Stream_Run` runs.  The container is the same; the payload
        convention is not, and the routine that reads them has not been found."
 
-  It is found here.  It is `sub_F9ADB5` (0xF9ADB5), and its framer is
-  `sub_F9E140` (0xF9E140), which builds a 16-bit length out of the SAME two header
+  It is found here.  It is `P7Block_Run` (0xF9ADB5), and its framer is
+  `P7Block_Seek` (0xF9E140), which builds a 16-bit length out of the SAME two header
   bytes and tests it against the terminator 0xF000 -- i.e. the 16-bit reading wave 3
   tried and wave 5 replaced is not wrong, it is the OTHER HALF of the pool.
 
@@ -31,7 +31,7 @@ QUESTION IT ANSWERS
   `sll 0x08,A` -- an EIGHT-BIT register shifted left by eight -- and MAME's
   `tlcs900_device::sla8()` returns 0 for that (`900tbl.hxx`, `count = (s & 0x0f) ?
   (s & 0x0f) : 16`).  Under that semantics the high byte contributes NOTHING, the
-  compare `cp WA,0xF000` at 0xF9E164 can never be true, and sub_F9E140 never finds a
+  compare `cp WA,0xF000` at 0xF9E164 can never be true, and P7Block_Seek never finds a
   terminator.  It has to find one: all 297 END records in the pool are exactly
   `F0 00`.  So the value is (b0 << 8) | b1 and the byte-shift decode is the thing to
   doubt -- a candidate TLCS-900 core question for the emulator, not a fact about the
@@ -42,7 +42,7 @@ QUESTION IT ANSWERS
 
 THE TWO READINGS, each read out of its own instructions
 
-  P7Stream_Run, 0xF9A6C4-0xF9A702          sub_F9E140, 0xF9E149-0xF9E188
+  P7Stream_Run, 0xF9A6C4-0xF9A702          P7Block_Seek, 0xF9E149-0xF9E188
     F9A6C4 and A,0xf0 / cp A,0xf0  -> END     F9E149 ld A,(XBC)      -> b0
     F9A6D9 ld A,(XBC+1)   -> len[7:0]         F9E14B sll 8,A         -> see --shift
     F9A6E5 and A,0x0f / sll 8 -> len[11:8]    F9E152 ld A,(XBC+1)    -> b1
@@ -51,7 +51,7 @@ THE TWO READINGS, each read out of its own instructions
     F9A702 jrl 0xF9AD84   -> dispatch         F9E17F (0x861E) := ptr + len16
                                               F9E188 cursor := ptr + 2
   Note the SHAPE difference, which is the point: P7Stream_Run dispatches on the top
-  nibble and its arms consume the payload; sub_F9E140 has no opcode field at all --
+  nibble and its arms consume the payload; P7Block_Seek has no opcode field at all --
   it only measures a block and hands the inside to sub_F9B54B.
   The two lengths AGREE byte for byte on any record whose opcode nibble is 0, and
   only there.
@@ -70,8 +70,8 @@ WHAT SEPARATES THE TWO FAMILIES -- the measurement, not an argument
   add XBC,0x00FDBFD9 / ld XBC,(XBC)` shape:
 
       field  loaded at   into      pushed to                at
-      +0     0xFA3D14    (XIZ-6)   sub_F9ADB5 arg (XIZ+0x08) 0xFA3E12
-      +8     0xFA3D02    (XIZ-10)  sub_F9ADB5 arg (XIZ+0x0C) 0xFA3E12
+      +0     0xFA3D14    (XIZ-6)   P7Block_Run arg (XIZ+0x08) 0xFA3E12
+      +8     0xFA3D02    (XIZ-10)  P7Block_Run arg (XIZ+0x0C) 0xFA3E12
       +4     0xFA3B13    (XIZ-10)  P7Stream_Run              0xFA3BB6
       +12    0xFA3AEA    (XIZ-6)   P7Stream_Run              0xFA3B9C
 
@@ -97,12 +97,12 @@ WHAT SEPARATES THE TWO FAMILIES -- the measurement, not an argument
   cannot frame is BE-parsable -- 130 of 130.  Twelve further streams are framable
   BOTH ways (all-opcode-0 AND every length a multiple of five); those twelve are
   genuinely ambiguous on the container alone, and NINE of them are settled by being
-  literal arguments of sub_F9ADB5 (0xFCD188 0xFCD199 0xFCD1AF 0xFCD1C0 0xFCD1D6
+  literal arguments of P7Block_Run (0xFCD188 0xFCD199 0xFCD1AF 0xFCD1C0 0xFCD1D6
   0xFCD1E7 0xFCD22D 0xFCD40F 0xFCD97D).  The remaining THREE -- 0xFCD0F7, 0xFCD0FE,
   0xFCD105 -- are reached only from `P7Unit_StreamPtrsByGroupAndUnit` and stay ambiguous;
   that is the honest hole and `--verify` names them.
 
-  ⚠ WHAT THE NAME "second consumer" IS AND IS NOT.  sub_F9ADB5 is the routine that
+  ⚠ WHAT THE NAME "second consumer" IS AND IS NOT.  P7Block_Run is the routine that
   READS these streams and pushes their bytes out of P7.  It is not a second
   "interpreter" in P7Stream_Run's sense: the per-record work is done by sub_F9B54B
   (0xF9B54B), which reads a byte, compares it to 0x7A, reads one more and jumps
@@ -124,7 +124,7 @@ RUN
     python3 notes/prom_c_fcd0f7_interpreter.py --frame        # both walks, to the last byte
     python3 notes/prom_c_fcd0f7_interpreter.py --shift        # the one unproven instruction
     python3 notes/prom_c_fcd0f7_interpreter.py --families     # the directory cross-tab
-    python3 notes/prom_c_fcd0f7_interpreter.py --consumer     # sub_F9ADB5's literal sites
+    python3 notes/prom_c_fcd0f7_interpreter.py --consumer     # P7Block_Run's literal sites
     python3 notes/prom_c_fcd0f7_interpreter.py --verify       # all of it, exit!=0 on failure
 
 WHAT THIS SCRIPT DOES NOT ESTABLISH
@@ -154,8 +154,8 @@ DESCLO, IDXLO, FRLO, PTRLO = P.DESCLO, P.IDXLO, P.FRLO, P.PTRLO
 NDIR, DIRSTRIDE = P.NDIR, P.DIRSTRIDE
 
 RUN_ADDR   = 0xF9A646        # P7Stream_Run
-SECOND     = 0xF9ADB5        # sub_F9ADB5 -- the second consumer
-FRAMER     = 0xF9E140        # sub_F9E140 -- its 16-bit-BE framer
+SECOND     = 0xF9ADB5        # P7Block_Run -- the second consumer
+FRAMER     = 0xF9E140        # P7Block_Seek -- its 16-bit-BE framer
 INNER      = 0xF9B54B        # sub_F9B54B -- its per-iteration reader
 
 # ------------------------------------------------------------------ the tiling
@@ -176,7 +176,7 @@ def pool():
 
 
 def be_walk(a, limit=DESCLO):
-    """sub_F9E140's framing, 0xF9E149-0xF9E168: a 16-bit BIG-ENDIAN length whose
+    """P7Block_Seek's framing, 0xF9E149-0xF9E168: a 16-bit BIG-ENDIAN length whose
     terminator is exactly 0xF000.  Returns (end, records, reached_terminator).
 
     The only guard added over the ROM's own loop is `v == 0`, which would make the
@@ -342,7 +342,7 @@ def second_consumer_sites():
     push XIY / call 0xF9ADB5`, bytes  F2 <s2> 30  38  F2 <s1> 35  3D  1D B5 AD F9.
     Pushes go to the frame in reverse, so the LAST pushed is (XIZ+0x08) -- which is
     `sub_F9B54B`'s context argument -- and the one before it is (XIZ+0x0C), the
-    block chain `sub_F9E140` frames."""
+    block chain `P7Block_Seek` frames."""
     out = []
     for i in range(len(D) - 16):
         if (D[i] == 0xF2 and D[i + 4] == 0x30 and D[i + 5] == 0x38
@@ -498,7 +498,7 @@ def rep_frame():
           "(gen_prom_c_p7stream_pool.py --verify).")
     print()
     nbe = sum(1 for s in streams if be[s])
-    print("  sub_F9E140's reading (16-bit BIG-ENDIAN length, END = 0xF000):")
+    print("  P7Block_Seek's reading (16-bit BIG-ENDIAN length, END = 0xF000):")
     print("    walked from every one of the %d stream starts, it reaches the terminator"
           % len(streams))
     print("    exactly on the object end for %d of them and DESYNCHRONISES on %d."
@@ -527,7 +527,7 @@ def rep_frame():
 
 def divergence(stream):
     """(record_index, addr, opcode, len12) of the FIRST record of `stream` on which
-    P7Stream_Run's 12-bit reading and sub_F9E140's 16-bit-BE reading disagree, or
+    P7Stream_Run's 12-bit reading and P7Block_Seek's 16-bit-BE reading disagree, or
     None if they never do.
 
     They agree on a record when its opcode nibble is 0 (identical lengths) and on
@@ -559,7 +559,7 @@ def rep_shift():
     print("  `sll 0x08,WA`, the SIXTEEN-bit form.  The two differ in the prefix byte only.")
     print()
     print("  Under MAME's semantics the high byte is discarded, so the value compared at")
-    print("  0xF9E164 can never be 0xF000 and sub_F9E140 can never terminate.  It must")
+    print("  0xF9E164 can never be 0xF000 and P7Block_Seek can never terminate.  It must")
     print("  terminate, and the data says exactly where:")
     ends = [(a, P.B(a), P.B(a + 1)) for s, o in streams.items()
             for a, op, ln in o["recs"] if op == 15]
@@ -588,14 +588,14 @@ def rep_families():
     print("    0xFA3D00, is rendered `inc 0,XBC` by unidasm/MAME and `inc 8, xbc` by the")
     print("    LLVM backend the gate uses -- TLCS-900 encodes #8 as the 3-bit field 000.")
     print("    The LLVM reading is the right one, and the stack arithmetic in this very")
-    print("    module proves it independently: sub_F9ADB5 cleans up three 4-byte")
+    print("    module proves it independently: P7Block_Run cleans up three 4-byte")
     print("    arguments with `inc 8,XSP / inc 4,XSP` at 0xF9AE8D-0xF9AE8F (12 = 8+4, not")
     print("    4 = 0+4), and one word plus one long with `inc 6,XSP` at 0xF9AE34.")
     print()
     print("  field   distinct   group-clean   BE-parsable   read by")
-    reader = {0:  "0xFA3D14 -> (XIZ-6)  -> sub_F9ADB5  arg+0x08 @0xFA3E12",
+    reader = {0:  "0xFA3D14 -> (XIZ-6)  -> P7Block_Run  arg+0x08 @0xFA3E12",
               4:  "0xFA3B13 -> (XIZ-10) -> P7Stream_Run           @0xFA3BB6",
-              8:  "0xFA3D02 -> (XIZ-10) -> sub_F9ADB5  arg+0x0C @0xFA3E12",
+              8:  "0xFA3D02 -> (XIZ-10) -> P7Block_Run  arg+0x0C @0xFA3E12",
               12: "0xFA3AEA -> (XIZ-6)  -> P7Stream_Run           @0xFA3B9C"}
     for f in (0, 4, 8, 12):
         tg = F[f]
@@ -631,7 +631,7 @@ def rep_consumer():
     lit = second_consumer_sites()
     allc = all_second_calls()
     progs = sorted({c[1] for c in P.CALLS})
-    print("THE SECOND CONSUMER: sub_F9ADB5 at 0x%06X" % SECOND)
+    print("THE SECOND CONSUMER: P7Block_Run at 0x%06X" % SECOND)
     print()
     print("  It reads the SAME six-byte relocation record as P7Stream_Run, at")
     print("  `record_table + 6*index - 6`:")
@@ -641,10 +641,10 @@ def rep_consumer():
     print("      P7Byte_SendCmd (0xF9AE5D, 0xF9AEAC) and P7Byte_SendArg (0xF9AE6A, 0xF9AE77).")
     print("      ⚠ It does NOT read byte 3, and does not shift byte 4 left 8, both of")
     print("        which P7Stream_Run does -- so the two are not the same decoder.")
-    print("  Its framer is sub_F9E140 (0x%06X): 16-bit BIG-ENDIAN length, END = 0xF000." % FRAMER)
+    print("  Its framer is P7Block_Seek (0x%06X): 16-bit BIG-ENDIAN length, END = 0xF000." % FRAMER)
     print("  Its per-iteration reader is sub_F9B54B (0x%06X), reached from the loop at" % INNER)
     print("  0xF9AE48 that runs while the cursor is below (0x00861E) -- the block end")
-    print("  sub_F9E140 stored at 0xF9E17F.")
+    print("  P7Block_Seek stored at 0xF9E17F.")
     print()
     calr = calr_sites(SECOND)
     print("  LITERAL CALL SITES (%d of the %d `call 0x%06X` sites carry two literal streams;"
@@ -751,7 +751,7 @@ def verify():
             for a, op, ln in o["recs"] if op == 15]
     chk(all(e == (0xF0, 0x00) for e in ends),
         "all %d END records are exactly F0 00 -- which is 0xF000 only if the high byte "
-        "weighs 0x100, so sub_F9E140's compare at 0xF9E164 fixes the reading (see "
+        "weighs 0x100, so P7Block_Seek's compare at 0xF9E164 fixes the reading (see "
         "--shift)" % len(ends))
     allop0 = [s for s in streams if be[s]]
     lens = [ln for s in allop0 for _, op, ln in streams[s]["recs"] if op == 0]
@@ -769,7 +769,7 @@ def verify():
         "0 of the %d +0|+8 streams is group-clean -- P7Stream_Run cannot frame any of them"
         % len(A))
     chk(sum(be[s] for s in A) == len(A),
-        "%d of %d +0|+8 streams parse under sub_F9E140's 16-bit-BE reading, to the exact "
+        "%d of %d +0|+8 streams parse under P7Block_Seek's 16-bit-BE reading, to the exact "
         "object end" % (sum(be[s] for s in A), len(A)))
     chk(sum(clean[s] for s in B) == len(B),
         "%d of %d +4|+12 streams ARE group-clean" % (sum(clean[s] for s in B), len(B)))
@@ -834,7 +834,7 @@ def verify():
         "%d streams are framable BOTH ways (all-opcode-0 AND every length a multiple "
         "of 5)" % len(both))
     chk(both & S == {s for s in S if clean[s]} and len(both & S) == 9,
-        "%d of those %d are literal sub_F9ADB5 arguments, so their consumer is settled"
+        "%d of those %d are literal P7Block_Run arguments, so their consumer is settled"
         % (len(both & S), len(both)))
     chk(sorted(both - S) == [0xFCD0F7, 0xFCD0FE, 0xFCD105],
         "the remaining %d stay AMBIGUOUS -- %s -- and are reached only from "

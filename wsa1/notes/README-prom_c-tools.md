@@ -694,6 +694,41 @@ opcode-4 arm consumes exactly one payload byte and all 266 opcode-4 records have
 ⚠ It names no stream's meaning and no destination chip.  See
 `notes/FINDINGS-prom_c-p7-byte-stream-pool.md`.
 
+### `p7_group_template_probe.py`
+**"Do prom_c's COMPUTED byte emitters produce the same 5-byte groups the POOL replays?"**
+
+```
+python3 notes/p7_group_template_probe.py            # the tables
+python3 notes/p7_group_template_probe.py --verify   # assertions; exit != 0 on failure
+```
+
+Answer: **yes, and exactly.**  The routines at 0xF9AEB6-0xF9B54A compute a value in
+floating point and emit it as the SAME five-byte group `P7Stream_Run` replays out of the
+pool, using the same six-byte relocation record -- held in globals 0x008614/16/18/1A/1C
+instead of frame slots.  The agreement pins each global to an opcode: 99/99 opcode-1
+address groups end 0x21 (the constant the 0x008614 emitters push), 81/81 opcode-5 ones end
+0x25 (0x008618), 963/963 opcode-0 value groups end 0x15 and 1036/1036 opcode-5 ones end
+0x4C.  Carries a phase control (re-cut at every wrong head offset: best wrong phase 0.4%
+against 68-93% for the true one) and the pool-directory field separation (all 56 of fields
++4/+12 interpreter-clean, all 56 of +0/+8 not; null 56.2%).
+
+Written up in `notes/FINDINGS-prom_c-p7-group-and-naming.md`.
+
+### `p7_sub_classify.py`
+**"Which of p7_module.s's 43 `sub_XXXXXX` objects are ROUTINES, and which are the
+CONTINUATION of the object above them?"**
+
+```
+python3 notes/p7_sub_classify.py            # the table
+python3 notes/p7_sub_classify.py --null     # base rates only
+```
+
+The splitter cuts a top-level object at every `ret`/`link` pair, so a routine with an
+interior `ret` is emitted as several objects and every piece after the first gets an
+address name.  Ten of the 43 are continuations, not entry points.  Prints the base rate
+that makes "no `link` at entry" evidence at all: 29/32 of the already-NAMED objects open
+with a frame.
+
 ### `prom_c_dsp_port.py`
 **"By which port do CPU 2's microcode bytes leave, and what answers READY?"**  (gap G)
 

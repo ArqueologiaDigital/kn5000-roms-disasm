@@ -29,6 +29,158 @@
 ;   ⚠ NO LABEL BELOW IS RENAMED.  572 P7* labels is a bulk rename and belongs in
 ;     its own pass; the proposed mapping is in the note.
 ;
+
+; ==============================================================================
+; ★ ADDED 2026-09-03 by lane w17/p7-dsp -- THE POOL'S STRUCTURES, WRITTEN OUT.
+;
+;   Added text only; nothing here was reworded (assert_comments_preserved.py).
+;   Every field below is one an instruction fixes, and the instruction is cited.
+;   The transport that carries these bytes is documented in the added banner at
+;   the top of prom_c/p7/p7_module.s.
+; ==============================================================================
+;
+; ---------------------------------------------- WHAT IS A STREAM, WHAT IS A UNIT
+; They are different kinds of thing and the module's own vocabulary keeps them
+; apart:
+;
+;   a STREAM is DATA.  297 of them live in this file, in ROM, at fixed addresses.
+;     A stream is a chain of length-prefixed RECORDS ending in `F0 00`.  It is not
+;     allocated and it is not released: there is no allocator anywhere in the
+;     module, no free list, and no RAM copy of a stream.  A stream is SELECTED --
+;     by a directory index, or by a literal address in an instruction -- and then
+;     played out of the port.  "How one is allocated and released" has the answer
+;     "it is not"; the lifetime question is about the UNIT, below.
+;
+;   a UNIT is STATE.  There are exactly THREE, statically, one per P7 destination.
+;     Each is a 26-byte block in work RAM at 0x856E + 26*unit, with a shadow copy
+;     at 0x85BC + 26*unit (the banner over 0xFA2784 in p7_module.s has the stride's
+;     instruction).  A unit holds a PROGRAM 0..127 at +0 and the directory index
+;     that program resolves to at +0x18.  Programs change; the three units do not.
+;
+;   and a unit is an EFFECT SLOT: program 5 is PHASER in prom_b's name table and
+;     resolves to the record whose field +4 is byte-identical to the KN5000's
+;     DSP_Eff05_Coef_Bytecode (notes/FINDINGS-prom_c-p7-is-dsp-effects.md).
+;
+; ------------------------------------------------------------- THE STRUCTURES
+; As C, with the instruction that fixes each field.  All multi-byte scalars in the
+; POOL are big-endian; the 32-bit POINTERS are the CPU's little-endian.
+;
+;   /* one record of a stream -- the container this file tiles with.
+;      Read at 0xF9A6C4-0xF9A702 (P7Stream_Run). */
+;   struct P7StreamRecord {
+;       unsigned opcode      : 4;   /* byte 0 bits 7:4  `and A,0xf0 / srl 4,IY`   */
+;       unsigned length_hi   : 4;   /* byte 0 bits 3:0  `and A,0x0f / sll 8,WA`   */
+;       uint8_t  length_lo;         /* byte 1           `ld A,(XBC+1)`            */
+;       uint8_t  payload[];         /* length - 2       `dec 2,WA`                */
+;   };                              /* opcode 15, length 0 -> END, and nothing else
+;                                      in the pool is 0xF0 0x00                   */
+;
+;   /* the payload of an opcode-0/1/5 record: a command, two arguments, then
+;      five-byte GROUPS.  The arm sends byte 0 through P7Byte_SendCmd, bytes 1
+;      and 2 through P7Byte_SendArg and the rest through P7Byte_SendData
+;      (0xF9A705-0xF9A73D for opcode 0). */
+;   struct P7RecordPayload {
+;       uint8_t command;            /* 0x01 opens, 0x03 closes; 34 values occur   */
+;       uint8_t arg[2];             /* 01 60 in every opcode-1 and opcode-5 record*/
+;       uint8_t group[][5];         /* see P7Group below                          */
+;   };
+;
+;   /* a five-byte GROUP.  Both shapes are emitted by code as well as carried as
+;      data -- the two halves agree with no exception in 2,633 groups
+;      (notes/p7_group_template_probe.py --verify, section 2). */
+;   union P7Group {
+;       struct {                    /* ADDRESS group, opcode-0 form  (316 in pool)*/
+;           uint8_t zero0, zero1;   /*   00 00                                    */
+;           uint8_t addr_hi;        /*   0x10 + ((A >> 4) & 0x0F)                 */
+;           uint8_t addr_lo;        /*   (A << 4) & 0xF0                          */
+;           uint8_t tail;           /*   0x00                                     */
+;       } addr_op0;
+;       struct {                    /* ADDRESS group, opcode-1/5 form (180 in pool)*/
+;           uint8_t eight, one;     /*   08 01                                    */
+;           uint8_t addr_hi;        /*   (A >> 4) & 0x0F                          */
+;           uint8_t addr_lo;        /*   ((A << 4) & 0xF0) + 8                    */
+;           uint8_t tail;           /*   0x21 for opcode 1, 0x25 for opcode 5     */
+;       } addr_op15;
+;       struct {                    /* VALUE group                (1,999 in pool) */
+;           uint8_t tag;            /*   0x0A                                     */
+;           uint8_t v_23_17;        /*   (v >> 17) & 0x7F                         */
+;           uint8_t v_16_9;         /*   (v >>  9) & 0xFF                         */
+;           uint8_t v_8_1;          /*   (v >>  1) & 0xFF                         */
+;           uint8_t v_0_and_tail;   /*   ((v << 7) & 0x80) + K                    */
+;       } value;                    /*   K = 0x15 beside an opcode-0 address,
+;                                        0x4C beside an opcode-5 one              */
+;   };
+;   /* A is base + index, where the base is the relocation byte for that opcode --
+;      which is what makes the pool RELOCATABLE: the same stream lands somewhere
+;      else if the six-byte record below changes. */
+;
+;   /* the six-byte RELOCATION RECORD.  P7Stream_Run reads it into frame slots
+;      (0xF9A652 `ld A,0x06 / mul WA,(XIZ+0x0c) / dec 6,XWA`); P7Block_Run reads the
+;      same record into module globals (0xF9ADBA, the identical arithmetic).
+;      P7Stream_Data_FD4B85 and P7Stream_Data_FD4B97 below are two such tables. */
+;   struct P7RelocRecord {
+;       uint8_t base_op1;           /* b0 -> (0x008614)                           */
+;       uint8_t base_op0;           /* b1 -> (0x008616)                           */
+;       uint8_t base_op5;           /* b2 -> (0x008618)                           */
+;       uint8_t base_op3;           /* b3 -- P7Block_Run does not keep this one    */
+;       uint8_t base_op2;           /* b4 -> (0x00861A); opcode 2 shifts it left 8 */
+;       uint8_t destination;        /* b5 -> (0x00861C); 0, 1 or 2                */
+;   };
+;
+;   /* PoolDir_Records, 0xFDBFD9, stride 25, 56 entries.  The stride is the operand
+;      of `mul A,0x19 / add XWA,0x00FDBFD9` at 0xFA2B44. */
+;   struct PoolDirRecord {          /* +0  and +8  are read by P7Block_Run,        */
+;       uint32_t stream_block_a;    /* +0  ALL 56 not interpreter-clean            */
+;       uint32_t stream_tokens_a;   /* +4  ALL 56 interpreter-clean, P7Stream_Run  */
+;       uint32_t stream_block_b;    /* +8  ALL 56 not interpreter-clean            */
+;       uint32_t stream_tokens_b;   /* +12 ALL 56 interpreter-clean, P7Stream_Run  */
+;       uint32_t type_string;       /* +16 into DescriptorStrings                  */
+;       uint32_t digit_string;      /* +20 into DescriptorStrings                  */
+;       uint8_t  unit_block_offset; /* +24 a byte offset into the 26-byte unit block*/
+;   };
+;   /* ★ THE +0/+8 vs +4/+12 SPLIT IS PERFECT AND IT IS NOT A COINCIDENCE: the pool
+;      is 167/297 = 56.2% interpreter-clean, so 56 pointers all landing on one side
+;      is ~1e-14 under a random draw, and it happens four times.  The finding is
+;      notes/prom_c_fcd0f7_interpreter.py's; re-measured by
+;      notes/p7_group_template_probe.py --verify, section 3. */
+;
+;   /* PoolDir_RecordForUnitProgram, 0xFDC551: program 0..127 -> record 0..55.
+;      PoolDir_FieldRec_PtrTable, 0xFDD1CB: record -> its field descriptors. */
+;   struct P7FieldDescriptor {      /* 7 bytes; every PoolDir_FieldRec is a multiple */
+;       int16_t  min;               /* +0                                          */
+;       int16_t  max;               /* +2                                          */
+;       uint8_t  block_offset;      /* +4 into the unit block, live byte = +1+off  */
+;       uint8_t  flag;              /* +5                                          */
+;       uint8_t  field_index;       /* +6                                          */
+;   };
+;
+;   /* the DATA objects below -- P7Stream_Data_FD06FA / FD28C7 / FD3B60 / FD4E13 /
+;      FDA4E7 / FDA554 / FDA5C1 -- are NOT streams and do not parse as records.
+;      P7Unit_SendValueTable reads them: */
+;   struct P7ValueTable {
+;       uint8_t  base_index;        /* +0, the device index the first value goes to*/
+;       uint8_t  value[][3];        /* 24-bit BIG-ENDIAN, sent four at a time      */
+;   };
+;   /* Its length is NOT in the object: it is (0x00F365/67/69), installed beside the
+;      pointer by P7Unit_SelectStreamsForRecord.  All SEVEN tables are exactly
+;      1 + that many bytes -- the four that take 99 are 100 bytes and end on the
+;      next pool object, the three that take 0x6C are 109 bytes and tile one
+;      327-byte object exactly.  7 of 7; nothing forces a data object to any size.
+;      notes/p7_group_template_probe.py --verify, section 5. */
+;
+; ----------------------------------- ⚠ ONE PARAGRAPH IN THE BANNER BELOW IS STALE
+; The banner's `⚠ WHAT IS NOT ESTABLISHED` says:
+;     "130 of the 297 streams contain at least one record whose payload is NOT a
+;      whole number of the interpreter's groups.  Those streams cannot be what
+;      P7Stream_Run runs, so a SECOND consumer exists that this pass has not found."
+; THE SECOND CONSUMER HAS SINCE BEEN FOUND.  It is 0xF9ADB5 -- now `P7Block_Run` --
+; with 0xF9E140 as its framer, and the two read different FIELDS of the same
+; directory record, which is why the 130 sort perfectly:
+;       python3 notes/prom_c_fcd0f7_interpreter.py --verify
+; The paragraph is LEFT EXACTLY AS WRITTEN.  This pass adds text and does not reword
+; it, and correcting a sentence in place would fail
+; scripts/analysis/assert_comments_preserved.py.  Read it with this note beside it.
+; ==============================================================================
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================

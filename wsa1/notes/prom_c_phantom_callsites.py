@@ -30,8 +30,8 @@ QUESTION IT ANSWERS
   The routines affected each had exactly ONE "outside" caller and it was one of these, so
   after this the honest reading is that they have NO located caller:
 
-      sub_F9A86B  sub_F9AB2A  sub_F9ACCE  sub_F9AD65  sub_F9B2EE
-      sub_F9B305  sub_F9B32C  sub_F9B5A5  sub_F9B887  sub_F9BE3A
+      sub_F9A86B  sub_F9AB2A  sub_F9ACCE  sub_F9AD65  P7Group_SendOp1AddrValue__F9B2EE
+      P7Group_SendOp1AddrValue__F9B305  P7Group_SendOp1AddrValue__F9B32C  sub_F9B5A5  sub_F9B887  sub_F9BE3A
 
   sub_F9BE3A is the 8,573-byte double-precision routine that reads 64 slots of the floating-
   point constant pool, so this matters: "called once from 0xF95B01" was in two notes and is
@@ -73,8 +73,8 @@ IMG = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 # The ten preset-bank citations this tool found, RECORDED because the headers that carried
 # them have been rewritten to say they are not call sites.  --selftest re-checks their
 # in-record geometry, and that each one really does spell `calr <that routine>` in the data.
-FOUND_PRESET = [("sub_F9AB2A", 0xF947E1), ("sub_F9AD65", 0xF94A61), ("sub_F9B2EE", 0xF94FE1),
-                ("sub_F9B32C", 0xF94FED), ("sub_F9B305", 0xF95001), ("sub_F9B5A5", 0xF952A1),
+FOUND_PRESET = [("sub_F9AB2A", 0xF947E1), ("sub_F9AD65", 0xF94A61), ("P7Group_SendOp1AddrValue__F9B2EE", 0xF94FE1),
+                ("P7Group_SendOp1AddrValue__F9B32C", 0xF94FED), ("P7Group_SendOp1AddrValue__F9B305", 0xF95001), ("sub_F9B5A5", 0xF952A1),
                 ("sub_F9B887", 0xF95581), ("sub_F9A86B", 0xF95841), ("sub_F9BE3A", 0xF95B01),
                 ("sub_F9ACCE", 0xF95DC1)]
 

@@ -45,6 +45,292 @@
 ;   ⚠ NO LABEL BELOW IS RENAMED.  572 P7* labels is a bulk rename and belongs in
 ;     its own pass; the proposed mapping is in the note.
 ;
+
+; ==============================================================================
+; ★ ADDED 2026-09-03 by lane w17/p7-dsp -- THE TRANSPORT, THE GROUP, THE TWO
+;   CONSUMERS, AND WHAT THIS PASS NAMED.
+;
+;   This block and the `★ RENAMED` blocks in the routine headers below are the
+;   ONLY text this pass wrote.  Nothing that was here was reworded or reflowed:
+;       python3 scripts/analysis/assert_comments_preserved.py --base main \
+;           wsa1/prom_c/p7/*.s
+;   which requires the base's comments to be a subsequence of these.  That is why
+;   the banner line over a renamed routine still spells its old `sub_XXXXXX`.
+;
+;   Every number below is produced by
+;       python3 notes/p7_group_template_probe.py --verify
+;       python3 notes/p7_sub_classify.py
+;   and by the two probes this pass leans on but did not write,
+;       python3 notes/prom_c_dsp_port.py --verify            (the transport)
+;       python3 notes/prom_c_fcd0f7_interpreter.py --verify  (the two consumers)
+; ==============================================================================
+;
+; ------------------------------------------------------------------ A. ONE BYTE
+; The transport is a hand-rolled parallel handshake.  Six lines, one port:
+;
+;       data       P7      SFR 0x13, written whole    `ld (0x0013),(XIZ+0x08)`
+;       strobe     P5.4    destination 0
+;                  P5.5    destination 1
+;                  P2.7    destination 2
+;       valid      PB.5    lowered for EVERY byte, in all nine arms
+;       cmd/data   P5.3    lowered ONLY by P7Byte_SendCmd
+;       enable     PB.6    set once in the preamble and never cleared
+;       ready in   P9.3    polled until non-zero, TWICE per byte
+;
+; and the sequence for ONE byte, destination 0 (P7Byte_SendCmd, 0xF9A197-0xF9A210;
+; destinations 1 and 2 swap P5.5 or P2.7 in for P5.4):
+;
+;       res 4,(P5)                      ; strobe low
+;       wait P9.3 != 0, <= 8000 spins   ; the peer says it is ready
+;       set 4,(P5)
+;       ld (P7),<byte>                  ; DATA ON THE BUS
+;       res 5,(PB) / res 3,(P5) / res 4,(P5)
+;       wait P9.3 != 0, <= 8000 spins   ; the peer says it took it
+;       set 4,(P5) / set 3,(P5) / set 5,(PB)
+;
+; ⚠ THE READY POLL IS THE ONLY THING THAT CAN FAIL, AND IT FAILS SILENTLY.  Each
+;   wait spins at most 0x1F40 = 8000 times; on expiry it sets (0x00F35C) := 1 and
+;   SENDS THE BYTE ANYWAY.  That flag is the only error report in the transport,
+;   and no routine in this module reads it.
+;
+; THREE ROUTINES, ONE PER BYTE ROLE.  They differ only in the trace helper they
+; call, and P7Byte_SendCmd additionally holds P5.3 low:
+;       0xF9A163  P7Byte_SendCmd    P5.3 LOW    trace "\n\r[XX]\n\r"
+;       0xF9A31A  P7Byte_SendData   P5.3 high   trace "XX "
+;       0xF9A4B0  P7Byte_SendArg    P5.3 high   trace "[XX] "
+; Both arguments are the same in all three: arg1 = the byte, arg2 = the destination.
+;
+; ------------------------------------------------------- B. WHICH OF THE THREE
+; The destination is arg2 of every P7Byte_Send* call, and almost every call site
+; loads it from ONE global:
+;
+;       (0x00861C)  u16   the current destination, 0 / 1 / 2
+;
+; Of the 170 occurrences of 0x00861C in this file, 165 are a LOAD feeding that
+; argument (163 `ld C,`, 2 `ld A,`), four are stores and one is prose.  The four
+; stores are:
+;       0xF9AE22  P7Block_Run         := record byte 5   (the data decides)
+;       0xF9F963  P7Stream_StageAndSend
+;       0xFA2E4C  P7Mixer_SendGain    := 1               (a literal)
+;       0xFA2F80  P7Mixer_SendGain    := 2               (a literal)
+; and P7Stream_Run keeps the same value in a frame slot (XIZ-5) instead, from the
+; same record byte 5.  So a destination is chosen by a DATA RECORD, not by code,
+; everywhere except the mixer.
+;
+; ⚠ NOTHING SAYS WHAT A DESTINATION IS.  P7 is an instruction operand; the chip on
+;   the other end is not.  The machine carries three uPD6383GF DSPs and this port
+;   has three destinations, which is consistent and is NOT proof.
+;
+; ------------------------------------------------ C. THE RESIDENT COMMAND SET
+; A "command" is a byte sent through P7Byte_SendCmd, i.e. with P5.3 held low.
+; There are 21 such call sites in this file.  FOURTEEN carry a literal:
+;
+;       0x01   8 sites   OPENS a record.  Always followed by P7Byte_SendArg bytes
+;                        and then payload through P7Byte_SendData.
+;       0x03   6 sites   CLOSES it.  SIX of the eight opens are closed inside the
+;                        same routine -- 0xF9AE5D/0xF9AEAC (P7Block_Run),
+;                        0xF9F81A/0xF9F8D7 (P7Unit_SendValueTable),
+;                        0xF9FD62/0xF9FE9E, 0xF9FEF9/0xFA0004, and both of
+;                        P7Mixer_SendGain's, 0xFA2E5D/0xFA2F7C and
+;                        0xFA2F91/0xFA30B0.
+;                        ⚠ TWO OPENS ARE NOT CLOSED IN THEIR OWN BODY: 0xF9FA3A in
+;                        sub_F9F9FA and 0xF9FBE9 in sub_F9FBA9.  Both routines are
+;                        called only from sub_FA237C, so the close is the caller's
+;                        or there is none; this pass did not settle which, and it
+;                        is one reason those two keep their addresses.
+;
+; The other SEVEN are the opcode arms of P7Stream_Run, which take the byte from the
+; STREAM -- so the pool's own records decide the command.  Read out of the pool:
+;
+;       opcode 1  ->  0x01   99 of 99 records
+;       opcode 2  ->  0x02   99 of 99
+;       opcode 3  ->  0x01   70 of 70
+;       opcode 5  ->  0x01   81 of 81
+;       opcode 4  ->  0x03  260 of 266,  0x0F for the other 6
+;       opcode 0  ->  28 distinct values: 0x01 (80), 0x24, 0x40, and a dense band
+;                     that fills 0x61..0x79 with no gap
+;       opcode 14 ->  0x01, 0x04, 0x09, 0x0C
+;
+; ★ SO {0x01, 0x02, 0x03} IS THE COMMAND SET OF THE RECORD LAYER AND NOT OF THE
+;   DEVICE.  0x01 opens, 0x03 closes, 0x02 is opcode 2's opener; but opcode 0
+;   carries 28 further command bytes and opcode 4 carries a 0x0F this module never
+;   writes as a literal.  Any statement of the form "the device has three commands"
+;   is contradicted by the data, and the honest count is: 2 literal commands in the
+;   code, 34 distinct command bytes in the pool.
+; ⚠ WHAT NONE OF THEM MEAN is established.  0x01 and 0x03 bracket; that is all the
+;   ROM shows.  What would settle the rest: the 0x6x band's arguments correlate with
+;   nothing in this module, so it needs the device side, not more of this ROM.
+;
+; ------------------------------------------------------- D. THE FIVE-BYTE GROUP
+; Inside an opened record the payload is groups of five bytes.  Two shapes occur,
+; and BOTH are emitted by the computed path and carried by the canned pool:
+;
+;   ADDRESS GROUP  -- says where the following values go.  A = base + index.
+;       opcode 0 form :  00 / 00 / 0x10+((A>>4)&0x0F) / (A<<4)&0xF0 / 00
+;       opcode 1 form :  08 / 01 / (A>>4)&0x0F / ((A<<4)&0xF0)+8 / 0x21
+;       opcode 5 form :  08 / 01 / (A>>4)&0x0F / ((A<<4)&0xF0)+8 / 0x25
+;   VALUE GROUP    -- 24 bits of a signed value in 7+8+8+1.
+;       0x0A / (v>>17)&0x7F / (v>>9)&0xFF / (v>>1)&0xFF / ((v<<7)&0x80)+K
+;       K = 0x15 beside an opcode-0 address, 0x4C beside an opcode-5 one, 0x26 in
+;       the two emitters that use opcode 1's base.
+;   (The scaled emitters shift 25/17/9/1 instead of 17/9/1/<<7; eight more fraction
+;    bits, same field widths.)
+;
+; ★ THE POOL AGREES WITH THE CODE, EXACTLY AND WITH NO EXCEPTIONS -- 2,633 groups:
+;       opcode 1 : 99 of 99 records are one 08 01 address group ending 0x21
+;       opcode 5 : 81 of 81 open with an 08 01 address group ending 0x25
+;       opcode 0 : 0 of 1,417 groups use the 08 01 form.  316 open 00 00, and of
+;                  those 310 end 0x00 and 301 carry high nibble 1 in byte 2 --
+;                  the `+0x10` the emitter adds.  963 value groups, all K = 0x15
+;       opcode 5 : 1,036 value groups, all K = 0x4C
+;   NULL: uniform-random bytes hit a fixed first byte 0.39% of the time and a fixed
+;   7-bit tail 0.78%.  PHASE CONTROL: re-cutting the same payloads at any other head
+;   offset drops "0x0A first" from 68-93% to 0.4%.  So the group framing carries
+;   information, and the two halves of the module speak one language.
+;
+; ★ AND THAT PINS EACH GLOBAL TO AN OPCODE.  The tail constant is the witness:
+;       (0x008614) = record byte 0 -> the base opcode 1 relocates   (tail 0x21)
+;       (0x008616) = record byte 1 -> the base opcode 0 relocates   (00 00 form)
+;       (0x008618) = record byte 2 -> the base opcode 5 relocates   (tail 0x25)
+;       (0x00861A) = record byte 4 -> opcode 2's base; enters a VALUE, scaled 256
+;       (0x00861C) = record byte 5 -> the destination
+;   which is the same b0/b1/b2/b4/b5 assignment P7Stream_Run's header states for its
+;   frame slots, arrived at from the other end.
+;
+; ⚠ K = 0x26 OCCURS IN NO CANNED STREAM.  The pool's opcode-1 records carry an
+;   ADDRESS and no value; the value for those comes only from the computed path.
+;   That is a division of labour, not a contradiction, and it is stated because the
+;   opposite reading -- "0x26 is a decode error" -- is the one to rule out: the
+;   constant is an instruction immediate at 0xF9B36D, 0xF9B27A and 0xF9B434.
+;
+; -------------------------------------------------- E. THE MODULE'S OTHER GLOBALS
+;       (0x008612)  u16  status of the last block walk.  0 = found, 2 = chain end
+;                        while skipping, 3 = chain end while searching, 4 = the
+;                        requested offset ran past the block.  Read at five sites,
+;                        each of which hands a non-zero value to the EMPTY
+;                        P7Block_ReportStatus and carries on.
+;       (0x00861E)  u32  the END address of the block P7Block_Seek last found; it
+;                        is P7Block_Run's loop bound.
+;       (0x008622/26/2A) u32  the value-table pointer for unit 0/1/2, installed by
+;                        P7Unit_SelectStreamsForRecord, consumed by
+;                        P7Unit_SendValueTable.
+;       (0x00F365/67/69) u16  that table's PAYLOAD LENGTH; all seven tables the
+;                        selector installs are exactly 1 + this many bytes (7 of 7).
+;       (0x00F35A)  u16  != 0 turns the MIDI-OUT byte trace on.
+;       (0x00F35C)  u16  := 1 on a READY timeout.  Never read.
+;
+; ------------------------------------------------------ F. THE TWO CONSUMERS
+; The pool at 0xFCD0F7 is read TWO ways, by two routines that share a terminator:
+;
+;       P7Stream_Run  0xF9A646   12-bit length + 4-bit OPCODE, seven dispatch arms
+;       P7Block_Run   0xF9ADB5   16-bit BIG-ENDIAN length, no opcode field; the
+;                                block's contents are decoded and the bytes COMPUTED
+;
+; Both stop on `F0 00`.  Which streams belong to which is decided by the pool
+; directory FIELD a stream sits in, and the split has no exceptions:
+;       fields +4 and +12 -> 56 + 56 pointers, ALL interpreter-clean  (P7Stream_Run)
+;       fields +0 and +8  -> 56 + 56 pointers, ALL not clean          (P7Block_Run)
+; NULL: the pool is 167/297 = 56.2% clean, so 56 random draws all clean is ~1e-14.
+; ⚠ THIS IS NOT THIS PASS'S FINDING.  notes/prom_c_fcd0f7_interpreter.py established
+;   it and named both routines' roles; it is restated here because the group
+;   template in section D only makes sense beside it.
+;
+; ------------------------------- G. FROM "AN EFFECT IS SELECTED" TO BYTES ON P7
+; Read together with the unit-block banner at 0xFA2784 and the pool banner:
+;
+;   1. a PROGRAM 0..127 is written to unit-block +0 (three 26-byte blocks at RAM
+;      0x856E, live, with shadows at 0x85BC).
+;   2. P7Units_ServiceTask (kernel task 2) wakes on the module semaphore.
+;   3. P7Units_ResolveProgramsAndReload maps program -> PoolDir_RecordForUnitProgram
+;      -> a directory index, into unit-block +0x18, and reloads what changed.
+;   4. P7Unit_SendPreambleOnce sends P7Stream_UnitPreamble the first time a unit is
+;      used; P7Unit_SelectStreamsForRecord installs the three value tables.
+;   5. P7Unit_LoadProgramStreams takes PoolDir_Records[idx]:
+;         field +4 and field +12 -> P7Stream_Run  (canned, opcode-framed)
+;         field +0 and field  +8 -> P7Block_Run   (computed, 16-bit-BE-framed)
+;      P7Block_Run first copies that record's six relocation bytes into the globals
+;      in section D, so both halves relocate to the same place.
+;   6. P7Unit_EmitChangedParams diffs live against shadow and emits only the moved
+;      parameters, through the P7Group_Send* family.
+;   7. every one of those paths ends in P7Byte_SendCmd / SendData / SendArg, i.e. in
+;      section A, one byte at a time, to the destination in (0x00861C).
+;
+; ⚠ STEP 7 IS WHERE THE CHAIN STOPS BEING CHECKABLE FROM THIS ROM.  "The DSP is now
+;   running that microcode" is not something any ROM byte asserts; what is
+;   established is that the bytes leave, in this order, to one of three places.
+;
+; ------------------------------------------------------------ H. WHAT WAS NAMED
+;   0xF9ADB5  sub_F9ADB5 -> P7Block_Run
+;   0xF9AEB6  sub_F9AEB6 -> P7Group_SendOp0AddrValueScaled
+;   0xF9AFDC  sub_F9AFDC -> P7Group_SendOp0AddrValue
+;   0xF9B0D1  sub_F9B0D1 -> P7Group_SendValue
+;   0xF9B167  sub_F9B167 -> P7Group_SendOp1AddrValueScaled
+;   0xF9B28B  sub_F9B28B -> P7Group_SendOp1AddrValue
+;   0xF9B2EE  sub_F9B2EE -> P7Group_SendOp1AddrValue__F9B2EE   (continuation)
+;   0xF9B305  sub_F9B305 -> P7Group_SendOp1AddrValue__F9B305   (continuation)
+;   0xF9B32C  sub_F9B32C -> P7Group_SendOp1AddrValue__F9B32C   (continuation)
+;   0xF9B37E  sub_F9B37E -> P7Group_SendValueScaled
+;   0xF9B445  sub_F9B445 -> P7Group_SendOp5AddrValue
+;   0xF9E140  sub_F9E140 -> P7Block_Seek
+;   0xF9E1AC  sub_F9E1AC -> P7Block_ReportStatus
+;   0xF9F765  sub_F9F765 -> P7Unit_SendValueTable
+;
+; ---------------------------------------- I. WHAT IS STILL sub_XXXXXX, AND WHY
+; TEN of the 43 are NOT ROUTINES AT ALL -- they are the continuation of the object
+; above them, cut off by the splitter at an interior `ret`.  The test is: no `link`
+; at entry, no call site anywhere in the image, and reachable by fall-through or by
+; a `jr`/`jrl` from inside the run.  NULL for the first clause: 29 of the 32
+; already-named top-level objects DO open with `link`, so a missing frame is a
+; signal and not the norm.   python3 notes/p7_sub_classify.py
+;
+;   sub_F9A86B  sub_F9AB2A  sub_F9ACCE  sub_F9AD65   -> the body of P7Stream_Run.
+;       PROVEN: P7Stream_Run's own header says its opcode arms "are not inside this
+;       routine's address range", and the arm addresses the pool banner lists --
+;       0xF9A905 (op 1), 0xF9A9F0 (op 2), 0xF9AAFB (op 3), 0xF9AB91 (op 4),
+;       0xF9ABA8 (op 5), 0xF9AD40 (op 14) -- together with the dispatcher 0xF9AD84
+;       and the routine's own `pop XIX / pop HL / unlk XIZ / ret` epilogue at
+;       0xF9ADB0, fall inside exactly these four objects.  0xF9A86B is a straight
+;       fall-through from 0xF9A869.
+;   sub_F9B5A5  sub_F9B887  sub_F9BE3A                -> the body of sub_F9B54B.
+;
+;   ⚠ THEY ARE NOT RENAMED, and the reason is not doubt.  `sub_F9A86B` is cited in
+;     notes/sound/dsp_protocol_cross_product.py and `sub_F9B5A5` / `sub_F9B887` /
+;     `sub_F9BE3A` in prom_c/mathlib/mathlib.s and prom_c/data_tables/
+;     touch_eq_mixer.s -- files this lane may not write, and a rename must update
+;     every reference tree-wide or it is worse than none.  The proposed names are
+;     `P7Stream_Run__XXXXXX` and `<sub_F9B54B's name>__XXXXXX`.
+;
+; TWO more are named in all but the label, blocked the same way:
+;   sub_F9E0B7  -> proposed `P7Block_FindByTag`.  It walks the SAME 16-bit-BE chain
+;       P7Block_Seek walks, but searches: at each block it compares the first
+;       payload byte against arg2 and, on a match, returns a pointer arg3 + 1 bytes
+;       into it, with (0x008612) := 0, or 4 if that ran past the block's end; 3 at
+;       the `F0 00` terminator.  Cited in prom_c/data_tables/touch_eq_mixer.s.
+;   sub_F9B54B  -> proposed `P7Block_EmitItems`.  P7Block_Run's per-record body: it
+;       reads a two-byte item (a selector and an offset), ends on selector 0x7A
+;       (0xF9B567), looks the value up with sub_F9E0B7 and jumps into the arms in
+;       sub_F9BE3A.  Its own continuations are the blocked labels above.
+;
+; THE REMAINING NINETEEN ARE UNIDENTIFIED, and this pass says so rather than
+; guessing.  What each would take:
+;   sub_FA362C, sub_FA3717   twins: a two-level switch that runs ONE canned stream
+;       through record table P7Stream_Data_FD4B97 for unit 1/2/3.  Their structure
+;       is fully readable; what separates them is the literal stream each picks
+;       (0xFCD1FD/0xFCD215/0xFCD3F7 against 0xFCD209/0xFCD221/0xFCD403).  Naming
+;       either needs those streams' meaning, which is the pool's open question, and
+;       a positional name ("A"/"B") would be exactly the wrong kind of name.
+;   sub_F9E1ED, sub_F9ECF1, sub_FA000B, sub_F9BE3A   2,676 to 9,073 bytes of
+;       floating-point arithmetic over the constant pools at 0xFCC81E-0xFCCA7E,
+;       ending in P7Group_Send* calls.  They compute the values; naming them needs
+;       the values' engineering meaning, and no ROM byte carries a unit.
+;   sub_F9F9FA, sub_F9FBA9, sub_F9FD0E, sub_F9FEA5   the four siblings around
+;       P7Stream_StageAndSend, each opening a 0x01/0x03 record and reading globals
+;       0x00863A/3E/42.  What those three globals are is not established here.
+;   sub_FA237C, sub_FA26CB, sub_FA2784, sub_FA294F, sub_FA2A19, sub_FA3A3C,
+;   sub_FA4A0D, sub_FA4C5E, sub_FA4CE5, sub_FA4E23, sub_FA4E97   the unit
+;       state-machine's helpers.  Several are one switch away from a name; none was
+;       taken on the strength of position or of a plausible-looking caller.
+; ==============================================================================
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================
@@ -1248,6 +1534,15 @@ P7Stream_Run__F9A861:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ THIS IS NOT A ROUTINE -- it is the BODY of P7Stream_Run, 2026-09-03 (w17/p7-dsp).
+;   No `link` at entry, no call site anywhere in the image, and 0xF9A86B is a straight
+;   fall-through from 0xF9A869.  NULL for the missing frame: 29 of the 32 already-named
+;   top-level objects in this file DO open with `link`.   notes/p7_sub_classify.py
+;   It holds P7Stream_Run's arms for opcodes 1 (0xF9A905), 2 (0xF9A9F0) and 3
+;   (0xF9AAFB) -- the addresses the pool banner lists -- which is why P7Stream_Run's
+;   own header says its arms "are not inside this routine's address range".
+;   Proposed label `P7Stream_Run__F9A86B`, NOT APPLIED: `sub_F9A86B` is cited in
+;   notes/sound/dsp_protocol_cross_product.py, outside this lane's writable set.
 ; --------------------------------------------------------------------------
 sub_F9A86B:
 	pushw	wa                                   ; F9A86B  push WA
@@ -1580,6 +1875,11 @@ sub_F9A86B__F9AAFB:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ THIS IS NOT A ROUTINE -- it is the BODY of P7Stream_Run, 2026-09-03 (w17/p7-dsp).
+;   No frame, no call site, reached from the object above.  It holds the arms for
+;   opcode 4 (0xF9AB91) and opcode 5 (0xF9ABA8).  Proposed `P7Stream_Run__F9AB2A`,
+;   held with the rest of the family (see section I of the added banner at the top of
+;   this file).   notes/p7_sub_classify.py
 ; --------------------------------------------------------------------------
 sub_F9AB2A:
 	ld	(xiz-24), wa                            ; F9AB2A  ld (XIZ+0xe8),WA
@@ -1785,6 +2085,9 @@ sub_F9AB2A__F9AC9C:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ THIS IS NOT A ROUTINE -- it is the BODY of P7Stream_Run, 2026-09-03 (w17/p7-dsp).
+;   No frame, no call site.  It holds the arm for opcode 14 (0xF9AD40).  Proposed
+;   `P7Stream_Run__F9ACCE`, held with the family.   notes/p7_sub_classify.py
 ; --------------------------------------------------------------------------
 sub_F9ACCE:
 	pushw	wa                                   ; F9ACCE  push WA
@@ -1873,6 +2176,12 @@ sub_F9ACCE__F9AD59:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ THIS IS NOT A ROUTINE -- it is the TAIL of P7Stream_Run, 2026-09-03 (w17/p7-dsp).
+;   No frame, no call site; its entry is a jump target from inside the run.  It holds
+;   the OPCODE DISPATCHER at 0xF9AD84 and P7Stream_Run's own epilogue at 0xF9ADB0 --
+;   `pop XIX / pop HL / unlk XIZ / ret`, matching the `link XIZ,-30` at 0xF9A646, which
+;   is what closes the argument that these four objects are one routine.  Proposed
+;   `P7Stream_Run__F9AD65`, held with the family.   notes/p7_sub_classify.py
 ; --------------------------------------------------------------------------
 sub_F9AD65:
 	incw	1, (xiz-18)                           ; F9AD65  incw 1,(XIZ+0xee)
@@ -1938,8 +2247,43 @@ sub_F9AD65__F9ADB0:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Block_Run`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    the SECOND consumer of the pool at 0xFCD0F7, and the sibling of P7Stream_Run.
+;          Where P7Stream_Run replays a canned opcode-framed stream, this routine walks
+;          a 16-bit-BE-framed BLOCK and sends bytes that are COMPUTED from its contents.
+;          The identification of 0xF9ADB5 as that second consumer, and of 0xF9E140 as its
+;          framer, is notes/prom_c_fcd0f7_interpreter.py's, not this pass's.
+; Signature: the frame reads (XIZ+0x08), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x12), (XIZ+0x16),
+;          (XIZ+0x1A).  (XIZ+0x16) is a RECORD TABLE and (XIZ+0x1A) a 1-based INDEX into
+;          it: 0xF9ADBA-0xF9ADC5 is `ld BC,0x0006 / muls XBC,(XIZ+0x1a) / dec 6,XBC /
+;          add XBC,(XIZ+0x16)`, byte for byte the arithmetic P7Stream_Run uses at
+;          0xF9A652 to reach the same six-byte record.
+; ★ THE SIX-BYTE RECORD GOES INTO MODULE GLOBALS, not frame slots.  Five of its six
+;          bytes are stored, at 0xF9ADC9-0xF9AE22:
+;              b0 -> (0x008614)    b1 -> (0x008616)    b2 -> (0x008618)
+;              b4 -> (0x00861A), masked 0xFF          b5 -> (0x00861C)
+;          Read against P7Stream_Run's own header, that is opcode 1's, opcode 0's,
+;          opcode 5's and opcode 2's RELOCATION BASE, and the DESTINATION.  Byte 3
+;          (opcode 3's base) is the one this routine does not keep.
+;          ⚠ These are the ONLY writes to those five globals in the whole image apart
+;          from P7Mixer_SendGain's two literal stores to (0x00861C).
+; Then:    0xF9AE2E calls P7Block_Seek, which leaves the block's END in (0x00861E); while
+;          the cursor is below that end (0xF9AE48-0xF9AEB0) each pass emits one record --
+;              P7Byte_SendCmd(0x01) / P7Byte_SendArg(0x01) / P7Byte_SendArg(0x60)
+;              ... the payload, from sub_F9B54B ...
+;              P7Byte_SendCmd(0x03)
+;          and a non-zero (0x008612) is handed to P7Block_ReportStatus.
+; Evidence: python3 notes/p7_group_template_probe.py --verify.  The head triple this
+;          routine sends, 01 01 60, is the head triple of 99 of 99 opcode-1 records and
+;          81 of 81 opcode-5 records in the pool -- i.e. the canned streams open exactly
+;          the way this routine opens a record it computes.
+; Unknown:  what a block MEANS, and what the 0x60 argument selects.
 ; --------------------------------------------------------------------------
-sub_F9ADB5:
+P7Block_Run:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9ADB5  link XIZ,0xfff0
 	push	xix                                   ; F9ADB9  push XIX
 	ldw	bc, 6                                  ; F9ADBA  ld BC,0x0006
@@ -1986,15 +2330,15 @@ sub_F9ADB5:
 	ld	(xiz-8), xiy                            ; F9AE31  ld (XIZ+0xf8),XIY
 	inc	6, xsp                                 ; F9AE34  inc 6,XSP
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9AE36  cp (0x008612),0x0000
-	jr z, sub_F9ADB5__F9AE48                   ; F9AE3D  jr Z,0xf9ae48
+	jr z, P7Block_Run__F9AE48                   ; F9AE3D  jr Z,0xf9ae48
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9AE3F  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9AE47)                 ; F9AE44  calr 0xf9e1ac
 	popw	bc                                    ; F9AE47  pop BC
-sub_F9ADB5__F9AE48:
+P7Block_Run__F9AE48:
 	ld	xix, (0x861E:24)                       ; F9AE48  ld XIX,(0x00861e)
 	ld	xbc, (xiz-8)                            ; F9AE4D  ld XBC,(XIZ+0xf8)
 	cp	xbc, xix                                ; F9AE50  cp XBC,XIX
-	jr nc, sub_F9ADB5__F9AEB2                  ; F9AE52  jr NC,0xf9aeb2
+	jr nc, P7Block_Run__F9AEB2                  ; F9AE52  jr NC,0xf9aeb2
 	ld	c, (0x861C:24)                         ; F9AE54  ld C,(0x00861c)
 	pushw	bc                                   ; F9AE59  push BC
 	pushw	1                                    ; F9AE5A  push 0x0001
@@ -2021,18 +2365,18 @@ sub_F9ADB5__F9AE48:
 	inc	8, xsp                                 ; F9AE8D  inc 0,XSP
 	inc	4, xsp                                 ; F9AE8F  inc 4,XSP
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9AE91  cp (0x008612),0x0000
-	jr z, sub_F9ADB5__F9AEA3                   ; F9AE98  jr Z,0xf9aea3
+	jr z, P7Block_Run__F9AEA3                   ; F9AE98  jr Z,0xf9aea3
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9AE9A  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9AEA2)                 ; F9AE9F  calr 0xf9e1ac
 	popw	bc                                    ; F9AEA2  pop BC
-sub_F9ADB5__F9AEA3:
+P7Block_Run__F9AEA3:
 	ld	c, (0x861C:24)                         ; F9AEA3  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEA8  push BC
 	pushw	3                                    ; F9AEA9  push 0x0003
 	calr (0xF9A163 - 0xF9AEAF)                 ; F9AEAC  calr 0xf9a163
 	pop	xiy                                    ; F9AEAF  pop XIY
-	jr sub_F9ADB5__F9AE48                      ; F9AEB0  jr T,0xf9ae48
-sub_F9ADB5__F9AEB2:
+	jr P7Block_Run__F9AE48                      ; F9AEB0  jr T,0xf9ae48
+P7Block_Run__F9AEB2:
 	pop	xix                                    ; F9AEB2  pop XIX
 	unlk32 xiz                                 ; F9AEB3  unlk XIZ
 	ret                                        ; F9AEB5  ret
@@ -2055,8 +2399,26 @@ sub_F9ADB5__F9AEB2:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendOp0AddrValueScaled`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    P7Group_SendOp0AddrValue's scaled twin -- the same opcode-0 address group from
+;          the same base (0x008616), then a value group whose value has been multiplied
+;          by the double constant at 0xFCCA7A/0xFCCA7E before conversion.
+; Template: address group   0x00 / 0x00 / 0x10 + ((A>>4)&0x0F) / (A<<4)&0xF0 / 0x00
+;           value   group   0x0A / (v>>25)&0x7F / (v>>17)&0xFF / (v>>9)&0xFF /
+;                           ((v>>1)&0x80) + 0x15
+;          with A = (0x008616) + (XIZ+0x08) and v = Double_ToInt32(Float32_ToDouble(arg)
+;          * (0xFCCA7A)).  The tail constant is 0x15, the same as the unscaled twin's,
+;          which is why both are opcode-0-shaped.
+; Evidence: as P7Group_SendOp0AddrValue; the two differ only in the four instructions
+;          between 0xF9AF18 and 0xF9AF4C that do the multiply.
+; Unknown:  when the scaled form is chosen over the unscaled one.  Both are called only
+;          from the big computation blocks below, and nothing here reads their meaning.
 ; --------------------------------------------------------------------------
-sub_F9AEB6:
+P7Group_SendOp0AddrValueScaled:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9AEB6  link XIZ,0xffec
 	ld	c, (0x861C:24)                         ; F9AEBA  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEBF  push BC
@@ -2178,8 +2540,29 @@ sub_F9AEB6:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendOp0AddrValue`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    sends an ADDRESS GROUP in stream-opcode 0's form, then one VALUE GROUP.
+; Template: with A = (0x008616) + the 16-bit index at (XIZ+0x08), and
+;          v = Float32_ToInt32(the float32 at (XIZ+0x0A)),
+;              address group   0x00 / 0x00 / 0x10 + ((A>>4)&0x0F) / (A<<4)&0xF0 / 0x00
+;              value   group   0x0A / (v>>17)&0x7F / (v>>9)&0xFF / (v>>1)&0xFF /
+;                              ((v<<7)&0x80) + 0x15
+;          A is carried in a 12-bit field that straddles the two middle bytes at a
+;          four-bit shift -- which is exactly the field P7Stream_Run's opcode-0 arm
+;          relocates, and (0x008616) is exactly the base that arm adds (record byte 1,
+;          per P7Block_Run above).
+; Evidence: 316 of the pool's opcode-0 groups open 00 00; 310 of those end 0x00 and 301
+;          carry high nibble 1 in byte 2, i.e. the `+0x10` this routine adds.  No
+;          opcode-1 or opcode-5 record uses this form -- 0 of 180.
+;              python3 notes/p7_group_template_probe.py --verify   (section 2)
+; Unknown:  what A addresses on the device.  It is an offset from a base that arrives in
+;          a data record; nothing here says what the base means.
 ; --------------------------------------------------------------------------
-sub_F9AFDC:
+P7Group_SendOp0AddrValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9AFDC  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9AFE0  ld C,(0x00861c)
 	pushw	bc                                   ; F9AFE5  push BC
@@ -2283,8 +2666,30 @@ sub_F9AFDC:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendValue`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    sends ONE five-byte VALUE GROUP -- the interpreter's own unit of payload.
+; Template: with v = Float32_ToInt32(the float32 argument at (XIZ+0x08)),
+;              byte 0  0x0A
+;              byte 1  (v >> 17) & 0x7F
+;              byte 2  (v >>  9) & 0xFF
+;              byte 3  (v >>  1) & 0xFF
+;              byte 4  ((v << 7) & 0x80) + 0x15
+;          so 24 bits of v go out in 7+8+8+1, and the group's first and last bytes are
+;          constants.  Every byte goes through P7Byte_SendData with (0x00861C) as the
+;          destination -- no P7Byte_SendCmd, so this never opens a record of its own.
+; ★ IT IS THE SAME GROUP THE POOL CARRIES.  Of the 1,417 five-byte groups in the pool's
+;          opcode-0 records, 963 begin 0x0A and ALL 963 of those end in a byte whose low
+;          seven bits are 0x15 -- no exceptions.  A uniform-random byte stream would put
+;          0x0A first 0.39% of the time and any fixed 7-bit tail 0.78% of the time, and
+;          re-cutting the same payloads at any other phase drops 0x0A-first to 0.4%.
+;              python3 notes/p7_group_template_probe.py --verify   (section 2)
+; Unknown:  what the value SCALES, and what 0x0A and 0x15 mean to the device.
 ; --------------------------------------------------------------------------
-sub_F9B0D1:
+P7Group_SendValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B0D1  link XIZ,0xfffc
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B0D5  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; F9B0D8  pushw (XIZ+0x08)
@@ -2357,8 +2762,22 @@ sub_F9B0D1:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendOp1AddrValueScaled`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    P7Group_SendOp1AddrValue's scaled twin -- the same opcode-1 address group from
+;          the same base (0x008614) with the same 0x21 tail, then a value group whose
+;          value has been multiplied by the double at 0xFCCA7A/0xFCCA7E.
+; Template: address group   0x08 / 0x01 / (A>>4)&0x0F / ((A<<4)&0xF0) + 8 / 0x21
+;           value   group   0x0A / (v>>25)&0x7F / (v>>17)&0xFF / (v>>9)&0xFF /
+;                           ((v>>1)&0x80) + 0x26
+; Evidence: as P7Group_SendOp1AddrValue.  This is the module's most-called emitter --
+;          17 sites -- which is consistent with the scaled form being the normal one.
+; Unknown:  as P7Group_SendOp1AddrValue.
 ; --------------------------------------------------------------------------
-sub_F9B167:
+P7Group_SendOp1AddrValueScaled:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B167  link XIZ,0xffec
 	ld	c, (0x861C:24)                         ; F9B16B  ld C,(0x00861c)
 	pushw	bc                                   ; F9B170  push BC
@@ -2479,8 +2898,32 @@ sub_F9B167:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendOp1AddrValue`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    sends an ADDRESS GROUP in stream-opcode 1's form, then one VALUE GROUP.
+; Template: with A = (0x008614) + the index at (XIZ+0x08),
+;              address group   0x08 / 0x01 / (A>>4)&0x0F / ((A<<4)&0xF0) + 8 / 0x21
+;              value   group   0x0A / (v>>17)&0x7F / (v>>9)&0xFF / (v>>1)&0xFF /
+;                              ((v<<7)&0x80) + 0x26
+;          (0x008614) is record byte 0 -- opcode 1's relocation base, per P7Block_Run
+;          above -- and 0x21 is the group's fixed tail.
+; ★ EVERY OPCODE-1 RECORD IN THE POOL IS ONE OF THESE ADDRESS GROUPS.  All 99 of them,
+;          with no exceptions: head triple 01 01 60, then a single five-byte group whose
+;          first two bytes are 08 01 and whose fifth is 0x21 -- the exact constant this
+;          routine pushes at 0xF9B2E5.  Null: any fixed byte in that position would occur
+;          0.39% of the time by chance.
+;              python3 notes/p7_group_template_probe.py --verify   (section 2)
+; ★ AND THE POOL CARRIES NO VALUE GROUP FOR OPCODE 1 -- 0 of 99.  The canned half of the
+;          pool supplies opcode 1's ADDRESS and the computed half supplies its VALUE.
+; ⚠ The routine's body runs into three further top-level objects below (they are
+;          continuations, not routines: no frame, no caller, reached by fall-through).
+;          They are named `P7Group_SendOp1AddrValue__XXXXXX` for that reason.
+; Unknown:  what A addresses, and what 0x21 and 0x26 mean to the device.
 ; --------------------------------------------------------------------------
-sub_F9B28B:
+P7Group_SendOp1AddrValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B28B  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9B28F  ld C,(0x00861c)
 	pushw	bc                                   ; F9B294  push BC
@@ -2538,7 +2981,7 @@ sub_F9B28B:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B2EE:
+P7Group_SendOp1AddrValue__F9B2EE:
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B2EE  pushw (XIZ+0x0a)
 	call	0xFCAB29                              ; F9B2F1  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B2F5  ld (XIZ+0xfc),XIY
@@ -2569,7 +3012,7 @@ sub_F9B2EE:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B305:
+P7Group_SendOp1AddrValue__F9B305:
 	ld	c, (0x861C:24)                         ; F9B305  ld C,(0x00861c)
 	pop	xiy                                    ; F9B30A  pop XIY
 	pushw	bc                                   ; F9B30B  push BC
@@ -2605,7 +3048,7 @@ sub_F9B305:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_F9B32C:
+P7Group_SendOp1AddrValue__F9B32C:
 	pushw	bc                                   ; F9B32C  push BC
 	ld	xiy, (xiz-4)                            ; F9B32D  ld XIY,(XIZ+0xfc)
 	sra	xiy, 9                                 ; F9B330  sra 0x09,XIY
@@ -2657,8 +3100,26 @@ sub_F9B32C:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendValueScaled`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    P7Group_SendValue's scaled twin: one five-byte VALUE GROUP whose value has
+;          first been multiplied by the double constant at 0xFCCA7A/0xFCCA7E.
+; Template: with v = Double_ToInt32(Float32_ToDouble(arg) * (0xFCCA7A)),
+;              0x0A / (v>>25)&0x7F / (v>>17)&0xFF / (v>>9)&0xFF / ((v>>1)&0x80)+0x26
+;          The shifts are eight higher than P7Group_SendValue's because the scaling adds
+;          eight fraction bits; the field widths and the leading 0x0A are identical.
+; ⚠ THE TAIL CONSTANT 0x26 HAS NO COUNTERPART IN THE POOL.  Every value group in the
+;          pool ends 0x15 (opcode 0, 963 of 963) or 0x4C (opcode 5, 1,036 of 1,036); 0x26
+;          occurs in NO canned stream.  So this group shape reaches the device only from
+;          the computed path -- which is a fact about the two halves' division of labour,
+;          and is NOT evidence that the shape is wrong.
+;              python3 notes/p7_group_template_probe.py   (section 2)
+; Unknown:  what 0x26 selects, and what the constant at 0xFCCA7A is in engineering units.
 ; --------------------------------------------------------------------------
-sub_F9B37E:
+P7Group_SendValueScaled:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B37E  link XIZ,0xffec
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B382  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; F9B385  pushw (XIZ+0x08)
@@ -2747,8 +3208,30 @@ sub_F9B37E:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Group_SendOp5AddrValue`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    sends an ADDRESS GROUP in stream-opcode 5's form, then one VALUE GROUP, with
+;          an OFFSET added to the value first.
+; Template: with A = (0x008618) + the index at (XIZ+0x08),
+;              address group   0x08 / 0x01 / (A>>4)&0x0F / ((A<<4)&0xF0) + 8 / 0x25
+;              value   group   0x0A / (v>>17)&0x7F / (v>>9)&0xFF / (v>>1)&0xFF /
+;                              ((v<<7)&0x80) + 0x4C
+;          where v = Float32_ToInt32(Float32_Add(Int32_ToFloat32(0x100 * (0x00861A)),
+;          the float32 argument)) -- 0xF9B4A5 onward.  (0x008618) is record byte 2,
+;          opcode 5's relocation base; (0x00861A) is record byte 4, opcode 2's base,
+;          and it enters this group as a VALUE offset scaled by 256, not as an address.
+; ★ THE TWO CONSTANTS BOTH MATCH THE POOL EXACTLY.  All 81 opcode-5 records open with an
+;          08 01 address group ending 0x25 -- the constant pushed at 0xF9B49F -- and all
+;          1,036 of their value groups end in a byte whose low seven bits are 0x4C, the
+;          constant added at 0xF9B53A.  Zero exceptions in either.
+;              python3 notes/p7_group_template_probe.py --verify   (section 2)
+; Unknown:  why opcode 2's base is added to opcode 5's value.  That is the one place in
+;          the module where two of the six record bytes meet, and nothing explains it.
 ; --------------------------------------------------------------------------
-sub_F9B445:
+P7Group_SendOp5AddrValue:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B445  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9B449  ld C,(0x00861c)
 	pushw	bc                                   ; F9B44E  push BC
@@ -2858,6 +3341,19 @@ sub_F9B445:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED BUT NOT RENAMED, 2026-09-03 (lane w17/p7-dsp).  Proposed: `P7Block_EmitItems`.
+;   Its own body continues into sub_F9B5A5 / sub_F9B887 / sub_F9BE3A, and those three
+;   are cited in prom_c/mathlib/mathlib.s and prom_c/data_tables/touch_eq_mixer.s,
+;   which this lane may not write; renaming the head without the tail would split one
+;   routine across two naming conventions.
+; Name:    P7Block_Run's per-record body.  It reads ITEMS from the cursor: byte 0 is a
+;          TAG, byte 1 an OFFSET (0xF9B55E and 0xF9B56E), tag 0x7A ends the record
+;          (`cp HL,0x007a / jrl Z,` at 0xF9B567), and the pair is handed to sub_F9E0B7
+;          to fetch that parameter's live value.  A non-zero (0x008612) aborts.  What
+;          follows is the arm for that tag, inside the 10,770 bytes below.
+; ⚠ THE INNER GRAMMAR IS NOT TRACED, and notes/prom_c_fcd0f7_interpreter.py says the
+;   same.  What is established here is only the ITEM SHAPE and the terminator.
+; Unknown:  the tag alphabet, and which arm serves which tag.
 ; --------------------------------------------------------------------------
 sub_F9B54B:
 	link32 0xEE, 0x0C, 0x32, 0xFF              ; F9B54B  link XIZ,0xff32
@@ -6790,6 +7286,29 @@ Int32_ToFloat32_Q31:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED BUT NOT RENAMED, 2026-09-03 (lane w17/p7-dsp).  Proposed: `P7Block_FindByTag`.
+;   The label is left alone because `sub_F9E0B7` is cited in
+;   prom_c/data_tables/touch_eq_mixer.s, which this lane may not write, and a rename
+;   that leaves a stale citation behind is worse than no rename.
+; Name:    SEARCHES the same 16-bit-BE block chain P7Block_Seek walks, by TAG, and
+;          returns a pointer into the matching block.
+; Signature: (chain = (XIZ+0x08), tag = (XIZ+0x0C), offset = (XIZ+0x0E)).
+;          At each block: `ld A,(XBC) / sll 8,A / ld A,(XBC+1) / add DE,HL` builds the
+;          16-bit big-endian length (0xF9E0C1-0xF9E0D3) and `cp WA,0xf000` (0xF9E0DC)
+;          ends the chain.  The block's FIRST PAYLOAD BYTE (0xF9E0F6 `ld C,(XIY)`) is
+;          compared against the tag; on a mismatch the cursor jumps to the block's end
+;          and the walk continues, and on a match the routine returns
+;          XIY + offset + 1 -- `ld BC,(XIZ+0x0e) / exts XBC / inc 1,XBC / add XIY,XBC`
+;          at 0xF9E0FF-0xF9E106 -- i.e. a pointer to ONE FIELD inside the block.
+; Status:  (0x008612) := 0 found / 3 at the `F0 00` terminator / 4 when the requested
+;          offset landed at or past the block's end (`cp XIY,XIX / jr C,` 0xF9E10E).
+; ★ SO A BLOCK IS A TAGGED RECORD AND THE PAIR IS A LOOKUP.  sub_F9B54B below reads a
+;   two-byte item -- a tag and an offset -- and hands both to this routine; that is
+;   how a parameter's current value is found before its coefficients are computed.
+; Evidence: the byte-exact terminator match is
+;          `python3 notes/p7_group_template_probe.py --verify` section 4; everything
+;          else above is an operand of the listing below.
+; Unknown:  what a tag MEANS.  The tags are data, and no table in this ROM names them.
 ; --------------------------------------------------------------------------
 sub_F9E0B7:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; F9E0B7  link XIZ,0xfffa
@@ -6868,12 +7387,38 @@ sub_F9E0B7__F9E137:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Block_Seek`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    seeks the (XIZ+0x0C)-th BLOCK of the 16-bit-BE-framed chain at (XIZ+0x08) and
+;          returns a pointer to its payload; the block's END address goes to (0x00861E)
+;          and a status code to (0x008612).
+; Sequence: at each block, `ld A,(XBC) / sll 8,A / ld A,(XBC+1) / add DE,HL` builds a
+;          16-bit BIG-ENDIAN length (0xF9E149-0xF9E15B); `cp WA,0xf000` (0xF9E164) ends
+;          the chain; while the skip count is non-zero the cursor advances by that length
+;          and the count is decremented (0xF9E190-0xF9E19B).  On arrival:
+;              (0x008612) := 0        (0x00861E) := cursor + length     return cursor + 2
+;          On the terminator:
+;              (0x008612) := 2        return the cursor unchanged
+; ⚠ THE TERMINATOR IS THE POOL'S OWN END RECORD.  0xF000 is byte for byte the `F0 00`
+;          that ends all 297 streams in the pool at 0xFCD0F7 -- opcode 15, length 0.  So
+;          the two readings of the pool share a terminator and differ only in how they
+;          read the two header bytes.
+; ⚠ The `sll 8,A` at 0xF9E14B is the one instruction in this routine whose semantics are
+;          NOT settled; notes/prom_c_fcd0f7_interpreter.py --shift is the whole argument,
+;          and nothing here supersedes it.
+; Evidence: notes/p7_group_template_probe.py section 4 (the 0xF000 test occurs exactly
+;          twice in this file, in this routine and in sub_F9E0B7, against 297 END records
+;          in the pool); the status codes are the two `ld (0x008612),n` operands below.
+; Unknown:  what a block CONTAINS.  This routine measures one; it does not read it.
 ; --------------------------------------------------------------------------
-sub_F9E140:
+P7Block_Seek:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; F9E140  link XIZ,0xfffe
 	pushw	hl                                   ; F9E144  push HL
 	pushw	de                                   ; F9E145  push DE
-sub_F9E140__F9E146:
+P7Block_Seek__F9E146:
 	ld	xbc, (xiz+8)                            ; F9E146  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; F9E149  ld A,(XBC)
 	sll	a, 8                                   ; F9E14B  sll 0x08,A
@@ -6887,9 +7432,9 @@ sub_F9E140__F9E146:
 	ld	wa, de                                  ; F9E15E  ld WA,DE
 	and	wa, 0xFFFF                             ; F9E160  and WA,0xffff
 	cp	wa, 0xF000                              ; F9E164  cp WA,0xf000
-	jr z, sub_F9E140__F9E19D                   ; F9E168  jr Z,0xf9e19d
+	jr z, P7Block_Seek__F9E19D                   ; F9E168  jr Z,0xf9e19d
 	cpw (xiz+12), 0x0000                       ; F9E16A  cp (XIZ+0x0c),0x0000
-	jr nz, sub_F9E140__F9E190                  ; F9E16F  jr NZ,0xf9e190
+	jr nz, P7Block_Seek__F9E190                  ; F9E16F  jr NZ,0xf9e190
 	ldw	(0x8612:24), 0                        ; F9E171  ld (0x008612),0x0000
 	ld	wa, (xiz-2)                             ; F9E178  ld WA,(XIZ+0xfe)
 	exts	xwa                                   ; F9E17B  exts XWA
@@ -6899,17 +7444,17 @@ sub_F9E140__F9E146:
 	inc	2, xwa                                 ; F9E186  inc 2,XWA
 	add	(xiz+8), xwa                           ; F9E188  add (XIZ+0x08),XWA
 	ld	xiy, (xiz+8)                            ; F9E18B  ld XIY,(XIZ+0x08)
-	jr sub_F9E140__F9E1A7                      ; F9E18E  jr T,0xf9e1a7
-sub_F9E140__F9E190:
+	jr P7Block_Seek__F9E1A7                      ; F9E18E  jr T,0xf9e1a7
+P7Block_Seek__F9E190:
 	ld	bc, (xiz-2)                             ; F9E190  ld BC,(XIZ+0xfe)
 	exts	xbc                                   ; F9E193  exts XBC
 	add	(xiz+8), xbc                           ; F9E195  add (XIZ+0x08),XBC
 	decm	1, (xiz+12)                           ; F9E198  decw 1,(XIZ+0x0c)
-	jr sub_F9E140__F9E146                      ; F9E19B  jr T,0xf9e146
-sub_F9E140__F9E19D:
+	jr P7Block_Seek__F9E146                      ; F9E19B  jr T,0xf9e146
+P7Block_Seek__F9E19D:
 	ldw	(0x8612:24), 2                        ; F9E19D  ld (0x008612),0x0002
 	ld	xiy, (xiz+8)                            ; F9E1A4  ld XIY,(XIZ+0x08)
-sub_F9E140__F9E1A7:
+P7Block_Seek__F9E1A7:
 	popw	de                                    ; F9E1A7  pop DE
 	popw	hl                                    ; F9E1A8  pop HL
 	unlk32 xiz                                 ; F9E1A9  unlk XIZ
@@ -6930,28 +7475,47 @@ sub_F9E140__F9E1A7:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Block_ReportStatus`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    the status hook for the block walkers -- and it is EMPTY.  The argument is a
+;          non-zero (0x008612), and the routine does nothing with it.
+; Evidence: 0xF9E1BE-0xF9E1D4 is `dec 1,BC / cp BC,4 / jr UGT,<default> / sll 2,BC /
+;          add XBC,0x00F9E1D6 / ld XBC,(XBC) / jp XBC` -- a five-entry computed goto on
+;          status-1, so it accepts statuses 1..5.  The table is emitted below, and ALL
+;          FIVE of its targets (0xF9E1B2, 0xF9E1B4, 0xF9E1B6, 0xF9E1B8, 0xF9E1BA) are a
+;          single `jr` to the epilogue at 0xF9E1EA, as is the out-of-range arm.  The
+;          routine has no absolute-addressed write and calls nothing.
+; ★ WHY THAT IS WORTH SAYING: every one of its five call sites guards it with
+;          `cp (0x008612),0x0000 / jr Z,<skip>`, so the firmware DETECTS a failed block
+;          walk and then discards it.  A block-walk error is unreported on this machine;
+;          the only error the transport reports at all is P7Byte_SendCmd's timeout flag
+;          (0x00F35C).
+; Unknown:  what statuses 1 and 5 are.  The two walkers below write only 0, 2, 3 and 4.
 ; --------------------------------------------------------------------------
-sub_F9E1AC:
+P7Block_ReportStatus:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; F9E1AC  link XIZ,0x0000
-	jr sub_F9E1AC__F9E1BE                      ; F9E1B0  jr T,0xf9e1be
-sub_F9E1AC__F9E1B2:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B2  jr T,0xf9e1ea
-sub_F9E1AC__F9E1B4:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B4  jr T,0xf9e1ea
-sub_F9E1AC__F9E1B6:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B6  jr T,0xf9e1ea
-sub_F9E1AC__F9E1B8:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1B8  jr T,0xf9e1ea
-sub_F9E1AC__F9E1BA:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1BA  jr T,0xf9e1ea
-sub_F9E1AC__F9E1BC:
-	jr sub_F9E1AC__F9E1EA                      ; F9E1BC  jr T,0xf9e1ea
-sub_F9E1AC__F9E1BE:
+	jr P7Block_ReportStatus__F9E1BE                      ; F9E1B0  jr T,0xf9e1be
+P7Block_ReportStatus__F9E1B2:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B2  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1B4:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B4  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1B6:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B6  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1B8:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B8  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1BA:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1BA  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1BC:
+	jr P7Block_ReportStatus__F9E1EA                      ; F9E1BC  jr T,0xf9e1ea
+P7Block_ReportStatus__F9E1BE:
 	sub	xbc, xbc                               ; F9E1BE  sub XBC,XBC
 	ld	bc, (xiz+8)                             ; F9E1C0  ld BC,(XIZ+0x08)
 	dec	1, bc                                  ; F9E1C3  dec 1,BC
 	cps	bc, 4                                  ; F9E1C5  cp BC,4
-	jr ugt, sub_F9E1AC__F9E1BC                 ; F9E1C7  jr UGT,0xf9e1bc
+	jr ugt, P7Block_ReportStatus__F9E1BC                 ; F9E1C7  jr UGT,0xf9e1bc
 	sll	bc, 2                                  ; F9E1C9  sll 0x02,BC
 	add	xbc, 0xF9E1D6                          ; F9E1CC  add XBC,0x00f9e1d6
 	ld	xbc, (xbc)                              ; F9E1D2  ld XBC,(XBC)
@@ -6969,7 +7533,7 @@ sub_F9E1AC__F9E1BE:
 	.long 0x00F9E1B6	; 0xF9E1DE  entry 2 -> 0xF9E1B6
 	.long 0x00F9E1B8	; 0xF9E1E2  entry 3 -> 0xF9E1B8
 	.long 0x00F9E1BA	; 0xF9E1E6  entry 4 -> 0xF9E1BA
-sub_F9E1AC__F9E1EA:
+P7Block_ReportStatus__F9E1EA:
 	unlk32 xiz                                 ; F9E1EA  unlk XIZ
 	ret                                        ; F9E1EC  ret
 ; --------------------------------------------------------------------------
@@ -9052,47 +9616,81 @@ sub_F9ECF1__F9F75E:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ RENAMED 2026-09-03 (lane w17/p7-dsp): this object's label is now `P7Unit_SendValueTable`.
+;   EVERY LINE ABOVE IS LEFT EXACTLY AS GENERATED -- this pass adds text and never
+;   rewords it (scripts/analysis/assert_comments_preserved.py), so the banner line and
+;   the Calls list above still spell the pre-rename `sub_XXXXXX` names.  The rename
+;   table for the whole file is in the added banner at the top.
+; Name:    sends one of the module's THREE value tables to the device, four values at a
+;          time.  The argument is a UNIT: `and BC,0x0003` at 0xF9F76C, then a switch that
+;          picks the pointer/length pair for unit 0, 1 or 2 and falls back to unit 0's.
+;              unit 0 -> (0x008622) with (0x00F365)
+;              unit 1 -> (0x008626) with (0x00F367)
+;              unit 2 -> (0x00862A) with (0x00F369)
+;          Those are exactly the three pairs P7Unit_SelectStreamsForRecord installs, so
+;          "unit" here is that routine's unit and not a fourth numbering.
+; Layout:  table byte 0 is a BASE INDEX; the payload that follows is 24-bit big-endian
+;          values.  The loop runs (length / 12) times -- `divs WA,0x000c` at 0xF9F7F9 --
+;          and 12 is four values of three bytes.  Each pass after the first emits
+;              P7Byte_SendCmd(0x01) / P7Byte_SendArg(0x01) / P7Byte_SendArg(0x60)
+;              four x [ Stream_ReadU24BE -> Int32_ToFloat32 ], the first through
+;                     P7Group_SendOp0AddrValue at index (byte 0) + 4*i, the other three
+;                     through P7Group_SendValue
+;              P7Byte_SendCmd(0x03)
+;          i.e. it writes four consecutive device locations per pass, address first.
+; ★ (0x00F365/67/69) IS THE TABLE'S PAYLOAD LENGTH, and the tables prove it by their own
+;          size: all SEVEN tables the selector installs are exactly 1 + that many bytes.
+;          The four that take 99 (0xFD06FA, 0xFD28C7, 0xFD3B60, 0xFD4E13) are each 100
+;          bytes and end on the next pool object; the three that take 0x6C (0xFDA4E7,
+;          0xFDA554, 0xFDA5C1) are 109 bytes each and TILE one 327-byte object exactly.
+;          7 of 7, and nothing forces a data object in a 65,972-byte pool to any size.
+;              python3 notes/p7_group_template_probe.py --verify   (section 5)
+; ⚠ 99 is not a multiple of 12, so the last three bytes of each 99-byte table are never
+;          sent -- 8 passes reach 96 bytes.  `divs BC,0x0003` at 0xF9F7EB computes 33 and
+;          its result is never read; that is a dead instruction, not a second count.
+; Unknown:  what the values ARE.  They are 24-bit big-endian, monotone in magnitude down
+;          0xFD28C7, and go out as ordinary value groups; nothing here names them.
 ; --------------------------------------------------------------------------
-sub_F9F765:
+P7Unit_SendValueTable:
 	link32 0xEE, 0x0C, 0x1C, 0xFF              ; F9F765  link XIZ,0xff1c
 	ld	bc, (xiz+8)                             ; F9F769  ld BC,(XIZ+0x08)
 	and	bc, 3                                  ; F9F76C  and BC,0x0003
 	ld	(xiz-0xE2), bc                          ; F9F770  ld (XIZ+0xff1e),BC
-	jr sub_F9F765__F9F7BF                      ; F9F775  jr T,0xf9f7bf
-sub_F9F765__F9F777:
+	jr P7Unit_SendValueTable__F9F7BF                      ; F9F775  jr T,0xf9f7bf
+P7Unit_SendValueTable__F9F777:
 	ld	xbc, (0x8622:24)                       ; F9F777  ld XBC,(0x008622)
 	ld	(xiz-20), xbc                           ; F9F77C  ld (XIZ+0xec),XBC
 	ld	wa, (0xF365:24)                        ; F9F77F  ld WA,(0x00f365)
 	ld	(xiz-2), wa                             ; F9F784  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F787  jr T,0xf9f7d2
-sub_F9F765__F9F789:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F787  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F789:
 	ld	xbc, (0x8626:24)                       ; F9F789  ld XBC,(0x008626)
 	ld	(xiz-20), xbc                           ; F9F78E  ld (XIZ+0xec),XBC
 	ld	wa, (0xF367:24)                        ; F9F791  ld WA,(0x00f367)
 	ld	(xiz-2), wa                             ; F9F796  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F799  jr T,0xf9f7d2
-sub_F9F765__F9F79B:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F799  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F79B:
 	ld	xbc, (0x862A:24)                       ; F9F79B  ld XBC,(0x00862a)
 	ld	(xiz-20), xbc                           ; F9F7A0  ld (XIZ+0xec),XBC
 	ld	wa, (0xF369:24)                        ; F9F7A3  ld WA,(0x00f369)
 	ld	(xiz-2), wa                             ; F9F7A8  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F7AB  jr T,0xf9f7d2
-sub_F9F765__F9F7AD:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F7AB  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F7AD:
 	ld	xbc, (0x8622:24)                       ; F9F7AD  ld XBC,(0x008622)
 	ld	(xiz-20), xbc                           ; F9F7B2  ld (XIZ+0xec),XBC
 	ld	wa, (0xF365:24)                        ; F9F7B5  ld WA,(0x00f365)
 	ld	(xiz-2), wa                             ; F9F7BA  ld (XIZ+0xfe),WA
-	jr sub_F9F765__F9F7D2                      ; F9F7BD  jr T,0xf9f7d2
-sub_F9F765__F9F7BF:
+	jr P7Unit_SendValueTable__F9F7D2                      ; F9F7BD  jr T,0xf9f7d2
+P7Unit_SendValueTable__F9F7BF:
 	ld	bc, (xiz-0xE2)                          ; F9F7BF  ld BC,(XIZ+0xff1e)
 	cps	bc, 0                                  ; F9F7C4  cp BC,0
-	jr z, sub_F9F765__F9F777                   ; F9F7C6  jr Z,0xf9f777
+	jr z, P7Unit_SendValueTable__F9F777                   ; F9F7C6  jr Z,0xf9f777
 	cps	bc, 1                                  ; F9F7C8  cp BC,1
-	jr z, sub_F9F765__F9F789                   ; F9F7CA  jr Z,0xf9f789
+	jr z, P7Unit_SendValueTable__F9F789                   ; F9F7CA  jr Z,0xf9f789
 	cps	bc, 2                                  ; F9F7CC  cp BC,2
-	jr z, sub_F9F765__F9F79B                   ; F9F7CE  jr Z,0xf9f79b
-	jr sub_F9F765__F9F7AD                      ; F9F7D0  jr T,0xf9f7ad
-sub_F9F765__F9F7D2:
+	jr z, P7Unit_SendValueTable__F9F79B                   ; F9F7CE  jr Z,0xf9f79b
+	jr P7Unit_SendValueTable__F9F7AD                      ; F9F7D0  jr T,0xf9f7ad
+P7Unit_SendValueTable__F9F7D2:
 	ld	xbc, (xiz-20)                           ; F9F7D2  ld XBC,(XIZ+0xec)
 	ld	a, (xbc)                                ; F9F7D5  ld A,(XBC)
 	extz	wa                                    ; F9F7D7  extz WA
@@ -9100,7 +9698,7 @@ sub_F9F765__F9F7D2:
 	inc	1, xbc                                 ; F9F7DC  inc 1,XBC
 	ld	(xiz-24), xbc                           ; F9F7DE  ld (XIZ+0xe8),XBC
 	ldw (xiz-4), 0x0000                        ; F9F7E1  ld (XIZ+0xfc),0x0000
-sub_F9F765__F9F7E6:
+P7Unit_SendValueTable__F9F7E6:
 	ld	bc, (xiz-2)                             ; F9F7E6  ld BC,(XIZ+0xfe)
 	exts	xbc                                   ; F9F7E9  exts XBC
 	divs	bc, 3                                 ; F9F7EB  divs BC,0x0003
@@ -9109,14 +9707,14 @@ sub_F9F765__F9F7E6:
 	exts	xwa                                   ; F9F7F7  exts XWA
 	divs	wa, 12                                ; F9F7F9  divs WA,0x000c
 	cp	(xiz-4), wa                             ; F9F7FD  cp (XIZ+0xfc),WA
-	jrl ge, sub_F9F765__F9F8DE                 ; F9F800  jrl GE,0xf9f8de
-	jr sub_F9F765__F9F80A                      ; F9F803  jr T,0xf9f80a
-sub_F9F765__F9F805:
+	jrl ge, P7Unit_SendValueTable__F9F8DE                 ; F9F800  jrl GE,0xf9f8de
+	jr P7Unit_SendValueTable__F9F80A                      ; F9F803  jr T,0xf9f80a
+P7Unit_SendValueTable__F9F805:
 	incw	1, (xiz-4)                            ; F9F805  incw 1,(XIZ+0xfc)
-	jr sub_F9F765__F9F7E6                      ; F9F808  jr T,0xf9f7e6
-sub_F9F765__F9F80A:
+	jr P7Unit_SendValueTable__F9F7E6                      ; F9F808  jr T,0xf9f7e6
+P7Unit_SendValueTable__F9F80A:
 	cpw (xiz-4), 0x0000                        ; F9F80A  cp (XIZ+0xfc),0x0000
-	jr z, sub_F9F765__F9F847                   ; F9F80F  jr Z,0xf9f847
+	jr z, P7Unit_SendValueTable__F9F847                   ; F9F80F  jr Z,0xf9f847
 	ld	c, (0x861C:24)                         ; F9F811  ld C,(0x00861c)
 	pushw	bc                                   ; F9F816  push BC
 	pushw	1                                    ; F9F817  push 0x0001
@@ -9135,7 +9733,7 @@ sub_F9F765__F9F80A:
 	calr (0xF9A4B0 - 0xF9F841)                 ; F9F83E  calr 0xf9a4b0
 	ld	(0x8612:24), wa                        ; F9F841  ld (0x008612),WA
 	pop	xiy                                    ; F9F846  pop XIY
-sub_F9F765__F9F847:
+P7Unit_SendValueTable__F9F847:
 	lda	xbc, (xiz-12)                          ; F9F847  lda XBC,XIZ+0xf4
 	push	xbc                                   ; F9F84A  push XBC
 	ld	xwa, (xiz-24)                           ; F9F84B  ld XWA,(XIZ+0xe8)
@@ -9197,8 +9795,8 @@ sub_F9F765__F9F847:
 	pushw	3                                    ; F9F8D4  push 0x0003
 	calr (0xF9A163 - 0xF9F8DA)                 ; F9F8D7  calr 0xf9a163
 	pop	xiy                                    ; F9F8DA  pop XIY
-	jrl sub_F9F765__F9F805                     ; F9F8DB  jrl T,0xf9f805
-sub_F9F765__F9F8DE:
+	jrl P7Unit_SendValueTable__F9F805                     ; F9F8DB  jrl T,0xf9f805
+P7Unit_SendValueTable__F9F8DE:
 	unlk32 xiz                                 ; F9F8DE  unlk XIZ
 	ret                                        ; F9F8E0  ret
 ; --------------------------------------------------------------------------

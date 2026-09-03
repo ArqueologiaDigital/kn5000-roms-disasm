@@ -2359,7 +2359,7 @@
     },
     {
      "claim": "'CONSEQUENCE, observed live: an untracked `notes/prom_c_fcd0f7_interpreter.py` appeared under notes/ during this session \u2014 a sibling wave-7 lane is hunting an interpreter that was found and named in wave 5.'",
-     "problem": "Over-read. I read that file: its docstring opens by declaring the paragraph stale ('\u26a0 THAT PARAGRAPH IS STALE, and `--stale` proves it from the tree'), cites P7Stream_Run at 0xF9A646 and gen_prom_c_p7stream_pool.py --verify, and then pivots to the genuinely open question the pool findings doc leaves in its own section 0 \u2014 the SECOND consumer of the 130 non-interpreter-clean streams, which it identifies as sub_F9ADB5 with framer sub_F9E140. So the sibling lane was MISDIRECTED BY the briefing (which is the dossier's real point, and findings 11-14 stand fully confirmed) but did not spend the round chasing a phantom. As written, the sentence claims a wasted lane that did not happen.",
+     "problem": "Over-read. I read that file: its docstring opens by declaring the paragraph stale ('\u26a0 THAT PARAGRAPH IS STALE, and `--stale` proves it from the tree'), cites P7Stream_Run at 0xF9A646 and gen_prom_c_p7stream_pool.py --verify, and then pivots to the genuinely open question the pool findings doc leaves in its own section 0 \u2014 the SECOND consumer of the 130 non-interpreter-clean streams, which it identifies as P7Block_Run with framer P7Block_Seek. So the sibling lane was MISDIRECTED BY the briefing (which is the dossier's real point, and findings 11-14 stand fully confirmed) but did not spend the round chasing a phantom. As written, the sentence claims a wasted lane that did not happen.",
      "severity": "minor"
     },
     {
