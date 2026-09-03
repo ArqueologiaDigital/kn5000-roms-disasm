@@ -379,7 +379,7 @@ RENAMES = {
     "0xC000 only when ToneRec +0xD0 bit 6 AND descriptor bit 1 are both set",
     "(0xFB5FFC, 0xFB6003), else 0x4000.",
     "★ ToneRec +0xD0 BIT 6 HAS A READER.  prom_d's block says `Bits 4:6",
-    "UNIDENTIFIED`; this instruction and 0xFB5EEB / 0xFB5F31 in",
+    "UNIDENTIFIED`; this instruction and 0xFB5EEB / 0xFB5F36 in",
     "Dev10C_ChanSelHighBits and 0xFB4F44 in the still-refused sub_FB4D45 all gate",
     "on bit 6.  Reported to prom_d, not edited there.",
     "GRADE STRONG: the source bits are decoded and the caller",
@@ -635,7 +635,14 @@ def apply_to(path):
         m = HEADER_RE.match(line)
         if m and m.group(1) in RENAMES:
             new, grade, why = RENAMES[m.group(1)]
-            out.append(f"; {STAR} NAMED (wave 18): `{m.group(1)}` is now `{new}`.")
+            # ⚠ The old label is spelled as an ADDRESS here, never as the token
+            # `sub_XXXXXX`.  sync_comments_to_renamed_labels.py substitutes that
+            # token everywhere it appears in a comment, which would turn this
+            # line into "`X` is now `X`" and delete the very provenance it
+            # carries.  The address-form spellings live in the committed
+            # notes/prom_c_voice_tonedb_w18.rename-map instead.
+            addr = m.group(1)[4:]
+            out.append(f"; {STAR} NAMED (wave 18): the routine at 0x{addr} is now `{new}`.")
             out.append(f";   GRADE {grade}.  WHY `{new}`:")
             for w in why:
                 out.append(f";   {w}")
@@ -792,8 +799,69 @@ def claims():
     check("0x26AC == 300 * 33", 0x26AC == 300 * 33)
     cite(0xFB6D78, 0x21, 1, "and the per-part loop stops at part 0x21 = 33")
 
+    print("\nI. THE CENSUS OF ToneRec +0xD0 READS, SWEPT NOT SAMPLED")
+    loads, masks, owners = _d0_census()
+    check("21 loads of ToneRec +0xD0 in 0xFB405F-0xFB6E09", len(loads) == 21,
+          " ".join("%06X" % a for a in loads))
+    check("16 of them are masked 0x0F -- the ALGORITHM TYPE",
+          len(masks["0f"]) == 16, " ".join("%06X" % a for a in masks["0f"]))
+    check("...spread over 15 routines (0xFB4A9F loads it twice)",
+          len(owners) == 15, " ".join("%06X" % a for a in owners))
+    check("4 mask 0x40 -- ToneRec +0xD0 BIT 6, which prom_d calls UNIDENTIFIED",
+          len(masks["40"]) == 4, " ".join("%06X" % a for a in masks["40"]))
+    check("1 masks 0x80 -- bit 7, in MidiProgram_SelectToneForPart",
+          len(masks["80"]) == 1, " ".join("%06X" % a for a in masks["80"]))
+    check("no read of +0xD0 in this block masks 0x10 or 0x20 -- bits 4:5 stay"
+          " unread", not masks["10"] and not masks["20"])
+
     print("\n   %d checks, %d failed" % (_n, len(_fail)))
     return 1 if _fail else 0
+
+
+def _d0_census():
+    """Sweep the block's own listing for every `ld r,(rr+0x00d0)` and classify it
+    by which `and r,imm` the loaded value reaches.
+
+    HOW, said plainly because it is a heuristic and not a proof: the load's
+    DESTINATION register is tainted; a following `ld rB,rA` with rA tainted
+    taints rB; an `and rX,imm` with rX tainted is attributed to this load.  The
+    follow stops after 16 listing lines or at the next routine, whichever comes
+    first, and it does NOT model branches -- so it can over-attribute across an
+    arm boundary.  It is used only to COUNT, and its counts are printed with the
+    addresses so a reader can check any one of them by hand.
+
+    Reads the .s file, not the ROM, because the question is about the DECODE --
+    and the decode is what the byte gate certifies."""
+    txt = TARGET.read_text(encoding="utf-8")
+    rows = [(int(a, 16), t.strip()) for a, t in
+            re.findall(r";\s([0-9A-F]{6})\s\s(.*)$", txt, re.M)]
+    blk = sorted(set(r for r in rows if 0xFB405F <= r[0] <= 0xFB6E09))
+    idx = {a: i for i, (a, _t) in enumerate(blk)}
+    labs = sorted(int(m.group(1), 16) for m in
+                  re.finditer(r"^; \S+ -- 0x(FB[0-9A-F]{4})\.\.", txt, re.M)
+                  if 0xFB405F <= int(m.group(1), 16) <= 0xFB6E09)
+    loads = [a for a, t in blk if "0x00d0" in t]
+    masks = {k: [] for k in ("0f", "10", "20", "40", "80")}
+    owners = set()
+    for a in loads:
+        dst = re.match(r"ld (\w+),\(", dict(blk)[a]).group(1)
+        taint, own = {dst}, max(l for l in labs if l <= a)
+        for k in range(1, 17):
+            j = idx[a] + k
+            if j >= len(blk) or max(l for l in labs if l <= blk[j][0]) != own:
+                break
+            t = blk[j][1]
+            m = re.match(r"ld (\w+),(\w+)$", t)
+            if m and m.group(2) in taint:
+                taint.add(m.group(1))
+                continue
+            m = re.match(r"and (\w+),0x([0-9a-f]{2})$", t)
+            if m and m.group(1) in taint and m.group(2) in masks:
+                masks[m.group(2)].append(blk[j][0])
+                if m.group(2) == "0f":
+                    owners.add(own)
+                break
+    return loads, masks, sorted(owners)
 
 
 # ---------------------------------------------------------------------------
