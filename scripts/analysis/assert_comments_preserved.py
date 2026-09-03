@@ -45,6 +45,7 @@ RUN
 import argparse
 import difflib
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -78,9 +79,39 @@ def git_show(rev, path):
     return p.stdout.decode("latin-1")
 
 
-def check(base_text, new_text):
-    """Return the list of comments present in base and missing/altered in new."""
+def apply_renames(text, renames):
+    """Substitute old label names for new ones, longest name first.
+
+    Longest-first matters: `sub_F9ADB5` is a prefix of `sub_F9ADB5__F9AE48`,
+    and substituting the short one first would leave `P7Block_Run__F9AE48`
+    spelled as `P7Block_Run__F9AE48` only by luck and mangle other pairs.
+    """
+    if not renames:
+        return text
+    pat = re.compile(r"\b(" + "|".join(
+        re.escape(k) for k in sorted(renames, key=len, reverse=True)) + r")\b")
+    return pat.sub(lambda m: renames[m.group(1)], text)
+
+
+def check(base_text, new_text, renames=None):
+    """Return the list of comments present in base and missing/altered in new.
+
+    With `renames`, a base comment also matches if it becomes the new comment
+    once renamed labels are substituted. ⚠ THIS IS A NARROW EXEMPTION AND IT
+    MUST STAY NARROW: it permits exactly the substitution of a label this pass
+    renamed, and nothing else. A reworded sentence still fails, because the
+    renamed base still will not equal it.
+
+    It exists because a labelling pass rewrites GENERATED cross-reference
+    comments (`Calls:`, `Called from:`, `Arms:`) as a matter of course, and
+    forbidding that leaves the tree with comments that contradict the code --
+    which is a worse documentation outcome than the one this check defends
+    against. Two lanes hit exactly that on 2026-09-03 and correctly stopped
+    rather than reword.
+    """
     base = [c for _, c in comments_of(base_text)]
+    if renames:
+        base = [apply_renames(c, renames) for c in base]
     new = [c for _, c in comments_of(new_text)]
     sm = difflib.SequenceMatcher(None, base, new, autojunk=False)
     lost = []
@@ -120,6 +151,32 @@ def selftest():
             ok = False
         print(f"    {name:<48} {'passes' if got_pass else 'FAILS ':<7} "
               f"(want {'pass' if want_pass else 'fail'})   {verdict}")
+
+    # --- controls for --rename-map, which is an EXEMPTION and so needs its own
+    #     proof that it did not become a licence to reword anything.
+    ren = {"sub_F9ADB5": "P7Block_Run"}
+    xref = ('; Calls: sub_F9ADB5\n'
+            'sub_F9ADB5:\n'
+            '\tret\t; the only exit\n')
+    rcases = [
+        ("rename mode: the cross-reference follows the label",
+         xref.replace("sub_F9ADB5", "P7Block_Run"), ren, True),
+        ("rename mode: an UNRELATED reword still FAILS",
+         xref.replace("sub_F9ADB5", "P7Block_Run")
+             .replace("the only exit", "the sole exit"), ren, False),
+        ("rename mode: a DELETION still FAILS",
+         xref.replace("; Calls: sub_F9ADB5\n", ""), ren, False),
+        ("WITHOUT the map, the same rename FAILS",
+         xref.replace("sub_F9ADB5", "P7Block_Run"), None, False),
+    ]
+    for name, new, rmap, want_pass in rcases:
+        lost, _, _ = check(xref, new, rmap)
+        got_pass = not lost
+        if got_pass != want_pass:
+            ok = False
+        print(f"    {name:<48} {'passes' if got_pass else 'FAILS ':<7} "
+              f"(want {'pass' if want_pass else 'fail'})   "
+              f"{'ok' if got_pass == want_pass else 'WRONG'}")
     return ok
 
 
@@ -129,12 +186,23 @@ def main():
     ap.add_argument("--base", default="HEAD",
                     help="git revision to compare against (default HEAD)")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--rename-map", default=None, metavar="FILE",
+                    help="file of old=new label renames; a base comment may "
+                         "differ from the new one ONLY by these substitutions")
     a = ap.parse_args()
 
     if a.selftest:
         return 0 if selftest() else 1
     if not a.paths:
         ap.error("give at least one path, or --selftest")
+
+    renames = {}
+    if a.rename_map:
+        for line in pathlib.Path(a.rename_map).read_text().splitlines():
+            if "=" in line:
+                k, v = line.split("=", 1)
+                renames[k.strip()] = v.strip()
+        print(f"  rename map: {len(renames)} label(s)\n")
 
     failures = []
     total_base = total_new = 0
@@ -144,7 +212,7 @@ def main():
             print(f"  {path:<52} not in {a.base} -- new file, skipped")
             continue
         new_text = pathlib.Path(path).read_text(encoding="latin-1")
-        lost, nb, nn = check(base_text, new_text)
+        lost, nb, nn = check(base_text, new_text, renames)
         total_base += nb
         total_new += nn
         status = "ok" if not lost else f"{len(lost)} LOST"

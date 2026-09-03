@@ -49,37 +49,37 @@
 ; ------------------------------------------------------------------------------
 ; THE RENAME TABLE -- old -> new, in address order
 ; ------------------------------------------------------------------------------
-;   0xFB828E  sub_FB828E    -> MemCopyBytes
-;   0xFB82C3  sub_FB82C3    -> ToneDB_ResolveWaveSelectRecord
-;   0xFB8432  sub_FB8432    -> ToneStage_LoadElementWaveSelect_FromCatalogueRow
-;   0xFB8478  sub_FB8478    -> ToneStage_LoadPercWaveSelect_FromCatalogueRow
-;   0xFB84CB  sub_FB84CB    -> ToneStage_LoadToneRecord_FromPart
-;   0xFB8550  sub_FB8550    -> ToneStage_LoadKitRecord_FromPart
-;   0xFB857E  sub_FB857E    -> ToneStage_LoadPercInstHead
-;   0xFB8603  sub_FB8603    -> ToneStage_LoadElementWaveSelect_FromToneRecord
-;   0xFB8668  sub_FB8668    -> ToneStage_LoadPercWaveSelect_FromInstRecord
-;   0xFB86BB  sub_FB86BB    -> ToneStage_SwitchToPart
-;   0xFBAAA2  sub_FBAAA2    -> ToneStage_EnsurePartLoaded
-;   0xFBAC24  sub_FBAC24    -> ToneEdit_Dispatch
-;   0xFBAF38  sub_FBAF38    -> ToneRec_LoadDspParams_AlgoTypes0to3
-;   0xFBAFD0  sub_FBAFD0    -> ToneRec_LoadDspParams_AlgoTypes4and5
-;   0xFBB078  sub_FBB078    -> ToneRec_LoadDspParams_AlgoType6
-;   0xFBB101  sub_FBB101    -> ToneRec_LoadDspParams_AlgoType7
-;   0xFBB189  sub_FBB189    -> ToneRec_LoadDspParams_AlgoType8
-;   0xFBB212  sub_FBB212    -> ToneRec_LoadDspParams_AlgoType9
-;   0xFBB29B  sub_FBB29B    -> ToneRec_LoadDspParams_AlgoType10
-;   0xFBB315  sub_FBB315    -> ToneRec_LoadDspParams_AlgoType11
-;   0xFBB39F  sub_FBB39F    -> ToneRec_LoadDspParams_ByAlgoType
-;   0xFBC725  sub_FBC725    -> ToneStage_ApplyWaveSelTailPreset
-;   0xFBC80E  sub_FBC80E    -> ToneStage_ApplyPercWaveSelTailPreset
-;   0xFBD858  sub_FBD858    -> ToneQuery_ReplyPartStagingFlags
-;   0xFC10BE  sub_FC10BE    -> ToneQuery_ReplyToneDspAlgoByte
-;   0xFC206F  sub_FC206F    -> LinkQuery_ReplyElementBlockBytes_Elements01
-;   0xFC2160  sub_FC2160    -> LinkQuery_ReplyElementBlockBytes_Elements23
-;   0xFC2251  sub_FC2251    -> LinkQuery_ReplyElementWaveSelectBytes
-;   0xFC2388  sub_FC2388    -> LinkQuery_ReplyToneRecordBytes
-;   0xFC2600  sub_FC2600    -> ToneMsg_Dispatch
-;   0xFC2930  sub_FC2930    -> PartElement_SetWaveSelectPointer_ToRomDefault
+;   0xFB828E  MemCopyBytes    -> MemCopyBytes
+;   0xFB82C3  ToneDB_ResolveWaveSelectRecord    -> ToneDB_ResolveWaveSelectRecord
+;   0xFB8432  ToneStage_LoadElementWaveSelect_FromCatalogueRow    -> ToneStage_LoadElementWaveSelect_FromCatalogueRow
+;   0xFB8478  ToneStage_LoadPercWaveSelect_FromCatalogueRow    -> ToneStage_LoadPercWaveSelect_FromCatalogueRow
+;   0xFB84CB  ToneStage_LoadToneRecord_FromPart    -> ToneStage_LoadToneRecord_FromPart
+;   0xFB8550  ToneStage_LoadKitRecord_FromPart    -> ToneStage_LoadKitRecord_FromPart
+;   0xFB857E  ToneStage_LoadPercInstHead    -> ToneStage_LoadPercInstHead
+;   0xFB8603  ToneStage_LoadElementWaveSelect_FromToneRecord    -> ToneStage_LoadElementWaveSelect_FromToneRecord
+;   0xFB8668  ToneStage_LoadPercWaveSelect_FromInstRecord    -> ToneStage_LoadPercWaveSelect_FromInstRecord
+;   0xFB86BB  ToneStage_SwitchToPart    -> ToneStage_SwitchToPart
+;   0xFBAAA2  ToneStage_EnsurePartLoaded    -> ToneStage_EnsurePartLoaded
+;   0xFBAC24  ToneEdit_Dispatch    -> ToneEdit_Dispatch
+;   0xFBAF38  ToneRec_LoadDspParams_AlgoTypes0to3    -> ToneRec_LoadDspParams_AlgoTypes0to3
+;   0xFBAFD0  ToneRec_LoadDspParams_AlgoTypes4and5    -> ToneRec_LoadDspParams_AlgoTypes4and5
+;   0xFBB078  ToneRec_LoadDspParams_AlgoType6    -> ToneRec_LoadDspParams_AlgoType6
+;   0xFBB101  ToneRec_LoadDspParams_AlgoType7    -> ToneRec_LoadDspParams_AlgoType7
+;   0xFBB189  ToneRec_LoadDspParams_AlgoType8    -> ToneRec_LoadDspParams_AlgoType8
+;   0xFBB212  ToneRec_LoadDspParams_AlgoType9    -> ToneRec_LoadDspParams_AlgoType9
+;   0xFBB29B  ToneRec_LoadDspParams_AlgoType10    -> ToneRec_LoadDspParams_AlgoType10
+;   0xFBB315  ToneRec_LoadDspParams_AlgoType11    -> ToneRec_LoadDspParams_AlgoType11
+;   0xFBB39F  ToneRec_LoadDspParams_ByAlgoType    -> ToneRec_LoadDspParams_ByAlgoType
+;   0xFBC725  ToneStage_ApplyWaveSelTailPreset    -> ToneStage_ApplyWaveSelTailPreset
+;   0xFBC80E  ToneStage_ApplyPercWaveSelTailPreset    -> ToneStage_ApplyPercWaveSelTailPreset
+;   0xFBD858  ToneQuery_ReplyPartStagingFlags    -> ToneQuery_ReplyPartStagingFlags
+;   0xFC10BE  ToneQuery_ReplyToneDspAlgoByte    -> ToneQuery_ReplyToneDspAlgoByte
+;   0xFC206F  LinkQuery_ReplyElementBlockBytes_Elements01    -> LinkQuery_ReplyElementBlockBytes_Elements01
+;   0xFC2160  LinkQuery_ReplyElementBlockBytes_Elements23    -> LinkQuery_ReplyElementBlockBytes_Elements23
+;   0xFC2251  LinkQuery_ReplyElementWaveSelectBytes    -> LinkQuery_ReplyElementWaveSelectBytes
+;   0xFC2388  LinkQuery_ReplyToneRecordBytes    -> LinkQuery_ReplyToneRecordBytes
+;   0xFC2600  ToneMsg_Dispatch    -> ToneMsg_Dispatch
+;   0xFC2930  PartElement_SetWaveSelectPointer_ToRomDefault    -> PartElement_SetWaveSelectPointer_ToRomDefault
 ;
 ; ------------------------------------------------------------------------------
 ; ★ WHAT THIS MODULE IS, in one paragraph
@@ -263,7 +263,7 @@
 ;     python3 notes/prom_c_verify_fragment.py c 0xFB828E /tmp/b.final.s
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FB828E -- 0xFB828E..0xFB82C2 (53 bytes)
+; MemCopyBytes -- 0xFB828E..0xFB82C2 (53 bytes)
 ;
 ; Called from: no site outside this module.
 ;          8 site(s) inside this module:
@@ -297,7 +297,7 @@
 ;           order and the counts they push are prom_d record sizes: 217, 81,
 ;           408, 64, and the directory's own stride words +0xEA / +0xF0.
 ; Unknown:  nothing about this routine; it is a memcpy.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB828E`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `MemCopyBytes`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -330,7 +330,7 @@ MemCopyBytes__FB82BF:
 	unlk32 xiz                                 ; FB82C0  unlk XIZ
 	ret                                        ; FB82C2  ret
 ; --------------------------------------------------------------------------
-; sub_FB82C3 -- 0xFB82C3..0xFB8431 (367 bytes)
+; ToneDB_ResolveWaveSelectRecord -- 0xFB82C3..0xFB8431 (367 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -382,7 +382,7 @@ MemCopyBytes__FB82BF:
 ;           arg1 is for: the code masks bits 4:5 together and treats 0x00
 ;           and 0x10 identically, and 0x20 and 0x30 identically, so bit 4 is
 ;           READ and never acted on.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB82C3`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneDB_ResolveWaveSelectRecord`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -516,7 +516,7 @@ ToneDB_ResolveWaveSelectRecord__FB840C:
 	unlk32 xiz                                 ; FB842F  unlk XIZ
 	ret                                        ; FB8431  ret
 ; --------------------------------------------------------------------------
-; sub_FB8432 -- 0xFB8432..0xFB8477 (70 bytes)
+; ToneStage_LoadElementWaveSelect_FromCatalogueRow -- 0xFB8432..0xFB8477 (70 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -524,7 +524,7 @@ ToneDB_ResolveWaveSelectRecord__FB840C:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7F1
-; Calls:   0xFB828E = sub_FB828E, 0xFB82C3 = sub_FB82C3
+; Calls:   0xFB828E = MemCopyBytes, 0xFB82C3 = ToneDB_ResolveWaveSelectRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8432-0xFB8477
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -549,7 +549,7 @@ ToneDB_ResolveWaveSelectRecord__FB840C:
 ;           follows the four element blocks.
 ; Unknown:  which of the 43 bytes the catalogue row's choice actually
 ;           changes.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB8432`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadElementWaveSelect_FromCatalogueRow`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -581,7 +581,7 @@ ToneStage_LoadElementWaveSelect_FromCatalogueRow:
 	unlk32 xiz                                 ; FB8475  unlk XIZ
 	ret                                        ; FB8477  ret
 ; --------------------------------------------------------------------------
-; sub_FB8478 -- 0xFB8478..0xFB84CA (83 bytes)
+; ToneStage_LoadPercWaveSelect_FromCatalogueRow -- 0xFB8478..0xFB84CA (83 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -589,7 +589,7 @@ ToneStage_LoadElementWaveSelect_FromCatalogueRow:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7F1
-; Calls:   0xFB828E = sub_FB828E, 0xFB82C3 = sub_FB82C3
+; Calls:   0xFB828E = MemCopyBytes, 0xFB82C3 = ToneDB_ResolveWaveSelectRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8478-0xFB84CA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -613,7 +613,7 @@ ToneStage_LoadElementWaveSelect_FromCatalogueRow:
 ;           - 0x461 = 0x40, so the sub-array starts 64 bytes into a 150-byte
 ;           drum-instrument record and 64 + 2*43 = 150 exactly.
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB8478`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadPercWaveSelect_FromCatalogueRow`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -652,14 +652,14 @@ ToneStage_LoadPercWaveSelect_FromCatalogueRow:
 	unlk32 xiz                                 ; FB84C8  unlk XIZ
 	ret                                        ; FB84CA  ret
 ; --------------------------------------------------------------------------
-; sub_FB84CB -- 0xFB84CB..0xFB854F (133 bytes)
+; ToneStage_LoadToneRecord_FromPart -- 0xFB84CB..0xFB854F (133 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFB877E
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB828E = sub_FB828E
+; Calls:   0xFB828E = MemCopyBytes
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB84CB-0xFB854F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -687,7 +687,7 @@ ToneStage_LoadPercWaveSelect_FromCatalogueRow:
 ;           exactly, so the four 41-byte sub-records tile the part record.
 ; Unknown:  every field inside the 217-byte head except +0xD0 and
 ;           +0x23/+0x24.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB84CB`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadToneRecord_FromPart`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -747,14 +747,14 @@ ToneStage_LoadToneRecord_FromPart__FB854C:
 	unlk32 xiz                                 ; FB854D  unlk XIZ
 	ret                                        ; FB854F  ret
 ; --------------------------------------------------------------------------
-; sub_FB8550 -- 0xFB8550..0xFB857D (46 bytes)
+; ToneStage_LoadKitRecord_FromPart -- 0xFB8550..0xFB857D (46 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFB88B1
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB828E = sub_FB828E
+; Calls:   0xFB828E = MemCopyBytes
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8550-0xFB857D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -777,7 +777,7 @@ ToneStage_LoadToneRecord_FromPart__FB854C:
 ;           + 128 x 2). And 0x0087D2 + 713 = 0x008A9B, so this image sits
 ;           immediately after the tone-record image with no slack.
 ; Unknown:  the 136-byte common part of a kit record.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB8550`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadKitRecord_FromPart`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -801,14 +801,14 @@ ToneStage_LoadKitRecord_FromPart:
 	unlk32 xiz                                 ; FB857B  unlk XIZ
 	ret                                        ; FB857D  ret
 ; --------------------------------------------------------------------------
-; sub_FB857E -- 0xFB857E..0xFB8602 (133 bytes)
+; ToneStage_LoadPercInstHead -- 0xFB857E..0xFB8602 (133 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
 ;          0xFB893B 0xFB95DF 0xFBCBC1
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB828E = sub_FB828E
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB828E = MemCopyBytes
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB857E-0xFB8602
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -835,7 +835,7 @@ ToneStage_LoadKitRecord_FromPart:
 ;           prom_d's stride word +0xEE.
 ; Unknown:  the 64 bytes' fields, and what the 2-bit selector selects
 ;           between.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB857E`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadPercInstHead`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -890,7 +890,7 @@ ToneStage_LoadPercInstHead:
 	unlk32 xiz                                 ; FB8600  unlk XIZ
 	ret                                        ; FB8602  ret
 ; --------------------------------------------------------------------------
-; sub_FB8603 -- 0xFB8603..0xFB8667 (101 bytes)
+; ToneStage_LoadElementWaveSelect_FromToneRecord -- 0xFB8603..0xFB8667 (101 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -898,7 +898,7 @@ ToneStage_LoadPercInstHead:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7F1
-; Calls:   0xFB44A5 = sub_FB44A5, 0xFB828E = sub_FB828E
+; Calls:   0xFB44A5 = sub_FB44A5, 0xFB828E = MemCopyBytes
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8603-0xFB8667
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -925,7 +925,7 @@ ToneStage_LoadPercInstHead:
 ;           immediately after ToneStage_LoadToneRecord_FromPart.
 ; Unknown:  what 0xFB44A5 does with part record +0x1C; that routine is
 ;           unnamed and is not this lane's file.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB8603`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadElementWaveSelect_FromToneRecord`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -969,7 +969,7 @@ ToneStage_LoadElementWaveSelect_FromToneRecord:
 	unlk32 xiz                                 ; FB8665  unlk XIZ
 	ret                                        ; FB8667  ret
 ; --------------------------------------------------------------------------
-; sub_FB8668 -- 0xFB8668..0xFB86BA (83 bytes)
+; ToneStage_LoadPercWaveSelect_FromInstRecord -- 0xFB8668..0xFB86BA (83 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -977,7 +977,7 @@ ToneStage_LoadElementWaveSelect_FromToneRecord:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7F1
-; Calls:   0xFB454C = sub_FB454C, 0xFB828E = sub_FB828E
+; Calls:   0xFB454C = sub_FB454C, 0xFB828E = MemCopyBytes
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8668-0xFB86BA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1002,7 +1002,7 @@ ToneStage_LoadElementWaveSelect_FromToneRecord:
 ;           at 0xFB897D), which is the second witness for two wave-select
 ;           records per drum-instrument record.
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB8668`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_LoadPercWaveSelect_FromInstRecord`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -1041,7 +1041,7 @@ ToneStage_LoadPercWaveSelect_FromInstRecord:
 	unlk32 xiz                                 ; FB86B8  unlk XIZ
 	ret                                        ; FB86BA  ret
 ; --------------------------------------------------------------------------
-; sub_FB86BB -- 0xFB86BB..0xFB89F7 (829 bytes)
+; ToneStage_SwitchToPart -- 0xFB86BB..0xFB89F7 (829 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -1051,9 +1051,9 @@ ToneStage_LoadPercWaveSelect_FromInstRecord:
 ;          reads 0x0088A2, 0x00D734
 ; Calls:   0xFB47C4 = sub_FB47C4, 0xFB48F7 = DrumKit_ResolveInstrumentRecord
 ;          0xFB64C8 = sub_FB64C8, 0xFB6681 = sub_FB6681
-;          0xFB68DD = sub_FB68DD, 0xFB84CB = sub_FB84CB
-;          0xFB8550 = sub_FB8550, 0xFB857E = sub_FB857E
-;          0xFB8603 = sub_FB8603, 0xFB8668 = sub_FB8668
+;          0xFB68DD = sub_FB68DD, 0xFB84CB = ToneStage_LoadToneRecord_FromPart
+;          0xFB8550 = ToneStage_LoadKitRecord_FromPart, 0xFB857E = ToneStage_LoadPercInstHead
+;          0xFB8603 = ToneStage_LoadElementWaveSelect_FromToneRecord, 0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB86BB-0xFB89F7
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1100,7 +1100,7 @@ ToneStage_LoadPercWaveSelect_FromInstRecord:
 ;           0x80 arm IS the drum one, which agrees but does not name the
 ;           other three values. And what the 4 x 5 table at 0x0087D2 +
 ;           0x4F6C is for.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FB86BB`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_SwitchToPart`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -2193,7 +2193,7 @@ sub_FB8CEC__FB90AF:
 ; Inputs:  frame `link XIZ,-18`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFB477B = sub_FB477B, 0xFB8432 = sub_FB8432
+; Calls:   0xFB477B = sub_FB477B, 0xFB8432 = ToneStage_LoadElementWaveSelect_FromCatalogueRow
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB90B3-0xFB9280
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2720,8 +2720,8 @@ sub_FB9414__FB952F:
 ; Inputs:  frame `link XIZ,-37`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735, 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = sub_FB857E
-;          0xFB8668 = sub_FB8668, 0xFC6803 = sub_FC6803
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = ToneStage_LoadPercInstHead
+;          0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9541-0xFB978A
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2964,7 +2964,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB9779:
 ; Inputs:  frame `link XIZ,-26`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735, 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFB8478 = sub_FB8478, 0xFC6803 = sub_FC6803
+; Calls:   0xFB8478 = ToneStage_LoadPercWaveSelect_FromCatalogueRow, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB978B-0xFB994D
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -4870,7 +4870,7 @@ sub_FB9B69__FBAA9D:
 	unlk32 xiz                                 ; FBAA9F  unlk XIZ
 	ret                                        ; FBAAA1  ret
 ; --------------------------------------------------------------------------
-; sub_FBAAA2 -- 0xFBAAA2..0xFBAC23 (386 bytes)
+; ToneStage_EnsurePartLoaded -- 0xFBAAA2..0xFBAC23 (386 bytes)
 ;
 ; Called from: no site outside this module.
 ;          21 site(s) inside this module:
@@ -4880,7 +4880,7 @@ sub_FB9B69__FBAA9D:
 ;          0xFC2706 0xFC271B 0xFC2730
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB47C4 = sub_FB47C4, 0xFB86BB = sub_FB86BB
+; Calls:   0xFB47C4 = sub_FB47C4, 0xFB86BB = ToneStage_SwitchToPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBAAA2-0xFBAC23
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4914,7 +4914,7 @@ sub_FB9B69__FBAA9D:
 ;           first.
 ; Unknown:  what part record +0x04's other bits are, and what +0x17/+0x18
 ;           hold.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBAAA2`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_EnsurePartLoaded`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5061,7 +5061,7 @@ ToneStage_EnsurePartLoaded__FBAC20:
 	unlk32 xiz                                 ; FBAC21  unlk XIZ
 	ret                                        ; FBAC23  ret
 ; --------------------------------------------------------------------------
-; sub_FBAC24 -- 0xFBAC24..0xFBAF37 (788 bytes)
+; ToneEdit_Dispatch -- 0xFBAC24..0xFBAF37 (788 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -5072,7 +5072,7 @@ ToneStage_EnsurePartLoaded__FBAC20:
 ;          0xFB9281 = ToneDB_SourceNameList2_SelectEntry, 0xFB9414 = sub_FB9414
 ;          0xFB9541 = ToneDB_DrumSourceNameList_SelectEntry, 0xFB978B = ToneDB_PercSourceNameList1_SelectEntry
 ;          0xFB994E = ToneDB_PercSourceNameList2_SelectEntry, 0xFB9B69 = sub_FB9B69
-;          0xFBAAA2 = sub_FBAAA2, 0xFC2DA3 = sub_FC2DA3
+;          0xFBAAA2 = ToneStage_EnsurePartLoaded, 0xFC2DA3 = sub_FC2DA3
 ;          0xFC2E4B = sub_FC2E4B, 0xFC2F1A = sub_FC2F1A
 ;          0xFC2FE9 = sub_FC2FE9, 0xFC30B7 = sub_FC30B7
 ;          0xFC3178 = sub_FC3178, 0xFC31BF = sub_FC31BF
@@ -5113,7 +5113,7 @@ ToneStage_EnsurePartLoaded__FBAC20:
 ;           catalogues' bounds are 16-bit.
 ; Unknown:  what each arm's operands mean. The dispatch shape is decoded; 19
 ;           of the 27 arms lead to routines this lane has not named.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBAC24`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneEdit_Dispatch`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5455,7 +5455,7 @@ ToneEdit_Dispatch__FBAF34:
 	unlk32 xiz                                 ; FBAF35  unlk XIZ
 	ret                                        ; FBAF37  ret
 ; --------------------------------------------------------------------------
-; sub_FBAF38 -- 0xFBAF38..0xFBAFCF (152 bytes)
+; ToneRec_LoadDspParams_AlgoTypes0to3 -- 0xFBAF38..0xFBAFCF (152 bytes)
 ;
 ; Called from: no site outside this module.
 ;          4 site(s) inside this module:
@@ -5491,7 +5491,7 @@ ToneEdit_Dispatch__FBAF34:
 ;           image reaches it.
 ; Unknown:  what any of the eight tone-record bytes IS. The map is decoded;
 ;           the meaning is not.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBAF38`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoTypes0to3`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5548,7 +5548,7 @@ ToneRec_LoadDspParams_AlgoTypes0to3:
 	unlk32 xiz                                 ; FBAFCD  unlk XIZ
 	ret                                        ; FBAFCF  ret
 ; --------------------------------------------------------------------------
-; sub_FBAFD0 -- 0xFBAFD0..0xFBB077 (168 bytes)
+; ToneRec_LoadDspParams_AlgoTypes4and5 -- 0xFBAFD0..0xFBB077 (168 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -5577,7 +5577,7 @@ ToneRec_LoadDspParams_AlgoTypes0to3:
 ;           call sites are arms 4 and 5 of ToneRec_LoadDspParams_ByAlgoType
 ;           (0xFBB407, 0xFBB416).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBAFD0`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoTypes4and5`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5639,7 +5639,7 @@ ToneRec_LoadDspParams_AlgoTypes4and5:
 	unlk32 xiz                                 ; FBB075  unlk XIZ
 	ret                                        ; FBB077  ret
 ; --------------------------------------------------------------------------
-; sub_FBB078 -- 0xFBB078..0xFBB100 (137 bytes)
+; ToneRec_LoadDspParams_AlgoType6 -- 0xFBB078..0xFBB100 (137 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -5665,7 +5665,7 @@ ToneRec_LoadDspParams_AlgoTypes4and5:
 ; Evidence: 0xFBB090 `ld C,0x27`, 0xFBB097 `add XBC,0x00fdf4f1`; its one
 ;           call site is arm 6 (0xFBB425).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB078`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoType6`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5717,7 +5717,7 @@ ToneRec_LoadDspParams_AlgoType6:
 	unlk32 xiz                                 ; FBB0FE  unlk XIZ
 	ret                                        ; FBB100  ret
 ; --------------------------------------------------------------------------
-; sub_FBB101 -- 0xFBB101..0xFBB188 (136 bytes)
+; ToneRec_LoadDspParams_AlgoType7 -- 0xFBB101..0xFBB188 (136 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -5742,7 +5742,7 @@ ToneRec_LoadDspParams_AlgoType6:
 ; Evidence: 0xFBB119 `ld C,0x27`, 0xFBB120 `add XBC,0x00fdf4f1`; its one
 ;           call site is arm 7 (0xFBB434).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB101`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoType7`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5794,7 +5794,7 @@ ToneRec_LoadDspParams_AlgoType7:
 	unlk32 xiz                                 ; FBB186  unlk XIZ
 	ret                                        ; FBB188  ret
 ; --------------------------------------------------------------------------
-; sub_FBB189 -- 0xFBB189..0xFBB211 (137 bytes)
+; ToneRec_LoadDspParams_AlgoType8 -- 0xFBB189..0xFBB211 (137 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -5819,7 +5819,7 @@ ToneRec_LoadDspParams_AlgoType7:
 ; Evidence: 0xFBB1A1 `ld C,0x27`, 0xFBB1A8 `add XBC,0x00fdf4f1`; its one
 ;           call site is arm 8 (0xFBB443).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB189`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoType8`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5871,7 +5871,7 @@ ToneRec_LoadDspParams_AlgoType8:
 	unlk32 xiz                                 ; FBB20F  unlk XIZ
 	ret                                        ; FBB211  ret
 ; --------------------------------------------------------------------------
-; sub_FBB212 -- 0xFBB212..0xFBB29A (137 bytes)
+; ToneRec_LoadDspParams_AlgoType9 -- 0xFBB212..0xFBB29A (137 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -5896,7 +5896,7 @@ ToneRec_LoadDspParams_AlgoType8:
 ; Evidence: 0xFBB22A `ld C,0x27`, 0xFBB231 `add XBC,0x00fdf4f1`; its one
 ;           call site is arm 9 (0xFBB452).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB212`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoType9`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -5948,7 +5948,7 @@ ToneRec_LoadDspParams_AlgoType9:
 	unlk32 xiz                                 ; FBB298  unlk XIZ
 	ret                                        ; FBB29A  ret
 ; --------------------------------------------------------------------------
-; sub_FBB29B -- 0xFBB29B..0xFBB314 (122 bytes)
+; ToneRec_LoadDspParams_AlgoType10 -- 0xFBB29B..0xFBB314 (122 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -5973,7 +5973,7 @@ ToneRec_LoadDspParams_AlgoType9:
 ; Evidence: 0xFBB2B2 `ld C,0x27`, 0xFBB2B9 `add XBC,0x00fdf4f1`; its one
 ;           call site is arm 10 (0xFBB460).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB29B`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoType10`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -6022,7 +6022,7 @@ ToneRec_LoadDspParams_AlgoType10__FBB2DF:
 	unlk32 xiz                                 ; FBB312  unlk XIZ
 	ret                                        ; FBB314  ret
 ; --------------------------------------------------------------------------
-; sub_FBB315 -- 0xFBB315..0xFBB39E (138 bytes)
+; ToneRec_LoadDspParams_AlgoType11 -- 0xFBB315..0xFBB39E (138 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -6047,7 +6047,7 @@ ToneRec_LoadDspParams_AlgoType10__FBB2DF:
 ; Evidence: 0xFBB32C `ld C,0x27`, 0xFBB333 `add XBC,0x00fdf4f1`; its one
 ;           call site is arm 11 (0xFBB46E).
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB315`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_AlgoType11`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -6101,17 +6101,17 @@ ToneRec_LoadDspParams_AlgoType11__FBB359:
 	unlk32 xiz                                 ; FBB39C  unlk XIZ
 	ret                                        ; FBB39E  ret
 ; --------------------------------------------------------------------------
-; sub_FBB39F -- 0xFBB39F..0xFBB4BE (288 bytes)
+; ToneRec_LoadDspParams_ByAlgoType -- 0xFBB39F..0xFBB4BE (288 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFBBC90
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFBAF38 = sub_FBAF38, 0xFBAFD0 = sub_FBAFD0
-;          0xFBB078 = sub_FBB078, 0xFBB101 = sub_FBB101
-;          0xFBB189 = sub_FBB189, 0xFBB212 = sub_FBB212
-;          0xFBB29B = sub_FBB29B, 0xFBB315 = sub_FBB315
+; Calls:   0xFBAF38 = ToneRec_LoadDspParams_AlgoTypes0to3, 0xFBAFD0 = ToneRec_LoadDspParams_AlgoTypes4and5
+;          0xFBB078 = ToneRec_LoadDspParams_AlgoType6, 0xFBB101 = ToneRec_LoadDspParams_AlgoType7
+;          0xFBB189 = ToneRec_LoadDspParams_AlgoType8, 0xFBB212 = ToneRec_LoadDspParams_AlgoType9
+;          0xFBB29B = ToneRec_LoadDspParams_AlgoType10, 0xFBB315 = ToneRec_LoadDspParams_AlgoType11
 ; Arms:    12 computed-goto arm(s) inside this routine: 0xFBB3C3 0xFBB3D2 0xFBB3E1 0xFBB3F0 0xFBB3FF 0xFBB40E 0xFBB41D 0xFBB42C 0xFBB43B 0xFBB44A 0xFBB458 0xFBB466
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBB39F-0xFBB4BE
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -6147,7 +6147,7 @@ ToneRec_LoadDspParams_AlgoType11__FBB359:
 ; Unknown:  what bits 4:6 of +0xD0 are. Bit 7 is set and cleared by
 ;           ToneStage_SwitchToPart from part record +0x09 bit 15, and the
 ;           low nibble is this; bits 4:6 are read by nothing found here.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBB39F`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneRec_LoadDspParams_ByAlgoType`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -6704,7 +6704,7 @@ sub_FBB6F8__FBB762:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x0088A2, 0x00D733
-; Calls:   0xFBAAA2 = sub_FBAAA2
+; Calls:   0xFBAAA2 = ToneStage_EnsurePartLoaded
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBB765-0xFBB792
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -6715,7 +6715,7 @@ sub_FBB6F8__FBB762:
 ; --------------------------------------------------------------------------
 ; ★ W17 -- NOT NAMED, and this is what was tried.
 ; NotNamed: 46 bytes, the module's only routine called from outside it other
-;           than ToneMsg_Dispatch, sub_FC28B5 and sub_FC2930. It reads
+;           than ToneMsg_Dispatch, sub_FC28B5 and PartElement_SetWaveSelectPointer_ToRomDefault. It reads
 ;           0x0088A2 -- which IS tone record +0xD0 in the staging image --
 ;           and 0x00D733, and calls ToneStage_EnsurePartLoaded. Not named
 ;           because what it RETURNS is not traced past its one caller,
@@ -6755,7 +6755,7 @@ sub_FBB765__FBB790:
 ;          0xFB5636 = sub_FB5636, 0xFB5E00 = sub_FB5E00
 ;          0xFB639A = sub_FB639A, 0xFB6487 = sub_FB6487
 ;          0xFB89F8 = Voice_RecomputeEnv_AndWriteSlot2, 0xFB8AF6 = Voice_RecomputeEnv_AndWriteSlot1
-;          0xFB8BF6 = Voice_RecomputeEnv_AndWriteSlot1or3, 0xFBB39F = sub_FBB39F
+;          0xFB8BF6 = Voice_RecomputeEnv_AndWriteSlot1or3, 0xFBB39F = ToneRec_LoadDspParams_ByAlgoType
 ;          0xFBB4BF = sub_FBB4BF, 0xFBB57C = sub_FBB57C
 ;          0xFBB645 = sub_FBB645, 0xFBB6F8 = sub_FBB6F8
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
@@ -7589,7 +7589,7 @@ sub_FBB793__FBBFF7:
 ;          0xFBC42F
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB477B = sub_FB477B, 0xFB8432 = sub_FB8432
+; Calls:   0xFB477B = sub_FB477B, 0xFB8432 = ToneStage_LoadElementWaveSelect_FromCatalogueRow
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBBFFB-0xFBC109
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -8424,7 +8424,7 @@ sub_FBC39D__FBC720:
 	unlk32 xiz                                 ; FBC722  unlk XIZ
 	ret                                        ; FBC724  ret
 ; --------------------------------------------------------------------------
-; sub_FBC725 -- 0xFBC725..0xFBC80D (233 bytes)
+; ToneStage_ApplyWaveSelTailPreset -- 0xFBC725..0xFBC80D (233 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -8467,7 +8467,7 @@ sub_FBC39D__FBC720:
 ;           other. Nothing here supplies that chain: this says what prom_c
 ;           DOES with the field, not where its value comes from. And no byte
 ;           of the 30-byte tail is named.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBC725`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_ApplyWaveSelTailPreset`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -8564,7 +8564,7 @@ ToneStage_ApplyWaveSelTailPreset__FBC809:
 	unlk32 xiz                                 ; FBC80B  unlk XIZ
 	ret                                        ; FBC80D  ret
 ; --------------------------------------------------------------------------
-; sub_FBC80E -- 0xFBC80E..0xFBC957 (330 bytes)
+; ToneStage_ApplyPercWaveSelTailPreset -- 0xFBC80E..0xFBC957 (330 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -8601,7 +8601,7 @@ ToneStage_ApplyWaveSelTailPreset__FBC809:
 ;           resolves the instrument record; non-zero takes directory slot
 ;           +0x40, prom_d's alias of +0x3C, with stride word +0xF0.
 ; Unknown:  as for the melodic twin.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBC80E`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneStage_ApplyPercWaveSelTailPreset`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -8739,7 +8739,7 @@ ToneStage_ApplyPercWaveSelTailPreset__FBC945:
 ;          0xFC26F8
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB477B = sub_FB477B, 0xFBC725 = sub_FBC725
+; Calls:   0xFB477B = sub_FB477B, 0xFBC725 = ToneStage_ApplyWaveSelTailPreset
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
 ; Arms:    9 computed-goto arm(s) inside this routine: 0xFBC9BC 0xFBC9BF 0xFBC9D5 0xFBC9EB 0xFBCA01 0xFBCA17 0xFBCA3B 0xFBCA3E 0xFBCA41
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBC958-0xFBCBA6
@@ -8989,8 +8989,8 @@ sub_FBC958__FBCB96:
 ;          0xFBD098
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = sub_FB857E
-;          0xFB8668 = sub_FB8668, 0xFC6803 = sub_FC6803
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = ToneStage_LoadPercInstHead
+;          0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBCBA7-0xFBCD16
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -9522,7 +9522,7 @@ sub_FBCD17__FBD09D:
 ;          0xFBD59C 0xFBD5D1
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB8478 = sub_FB8478, 0xFC6803 = sub_FC6803
+; Calls:   0xFB8478 = ToneStage_LoadPercWaveSelect_FromCatalogueRow, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBD0A2-0xFBD1D2
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -10295,7 +10295,7 @@ sub_FBD46B__FBD6F7:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735
 ; Calls:   0xFB454C = sub_FB454C, 0xFB49EB = sub_FB49EB
-;          0xFBC80E = sub_FBC80E, 0xFC6803 = sub_FC6803
+;          0xFBC80E = ToneStage_ApplyPercWaveSelTailPreset, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBD6FC-0xFBD857
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -10459,7 +10459,7 @@ sub_FBD6FC__FBD846:
 	unlk32 xiz                                 ; FBD855  unlk XIZ
 	ret                                        ; FBD857  ret
 ; --------------------------------------------------------------------------
-; sub_FBD858 -- 0xFBD858..0xFBD88D (54 bytes)
+; ToneQuery_ReplyPartStagingFlags -- 0xFBD858..0xFBD88D (54 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -10492,7 +10492,7 @@ sub_FBD6FC__FBD846:
 ;           one ToneStage_EnsurePartLoaded sets when it stages a part.
 ; Unknown:  what bit 1 is. ToneStage_EnsurePartLoaded tests it, for parts >=
 ;           0x21 only, and nothing found here sets it.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FBD858`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneQuery_ReplyPartStagingFlags`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -16680,7 +16680,7 @@ sub_FC0F83__FC10B6:
 	unlk32 xiz                                 ; FC10BB  unlk XIZ
 	ret                                        ; FC10BD  ret
 ; --------------------------------------------------------------------------
-; sub_FC10BE -- 0xFC10BE..0xFC10DF (34 bytes)
+; ToneQuery_ReplyToneDspAlgoByte -- 0xFC10BE..0xFC10DF (34 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -16727,7 +16727,7 @@ sub_FC0F83__FC10B6:
 ;           12's REFUSAL WAS RIGHT ON ITS OWN FACTS -- `prom_d names bytes
 ;           +0x00..+0x0F of a tone record and nothing else` was true when it
 ;           was written. What changed is the reader, not the argument.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC10BE`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneQuery_ReplyToneDspAlgoByte`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -18092,13 +18092,13 @@ sub_FC1B6E:
 ; Outputs: writes 0x00D946, 0x00D948
 ;          reads 0x00D733, 0x00D735, 0x00D75C, 0x00D75D
 ; Calls:   0xF98B20 = converted, 0xFB4124 = ToneDB_ResolveToneRecord
-;          0xFBAAA2 = sub_FBAAA2, 0xFBD858 = sub_FBD858
+;          0xFBAAA2 = ToneStage_EnsurePartLoaded, 0xFBD858 = ToneQuery_ReplyPartStagingFlags
 ;          0xFBFFD4 = sub_FBFFD4, 0xFC02FF = ToneQuery_ReplyToneName
 ;          0xFC035E = ToneQuery_ReplySourceName1_ViaIndexMap, 0xFC04EC = ToneQuery_ReplySourceName2_ViaIndexMap
 ;          0xFC067A = ToneQuery_ReplySourceName1_ByRow, 0xFC0746 = ToneQuery_ReplySourceName2_ByRow
 ;          0xFC0817 = ToneQuery_ReplyPartElementSourceName1, 0xFC0AD4 = ToneQuery_ReplyPartElementSourceName2
 ;          0xFC0DB4 = ToneQuery_ReplyCatalogueListFooter, 0xFC0F83 = sub_FC0F83
-;          0xFC10BE = sub_FC10BE, 0xFC11D8 = ToneQuery_ReplyDrumNameForCurrentPart
+;          0xFC10BE = ToneQuery_ReplyToneDspAlgoByte, 0xFC11D8 = ToneQuery_ReplyDrumNameForCurrentPart
 ;          0xFC12ED = ToneQuery_ReplyDrumSourceName_ByRow, 0xFC13B6 = ToneQuery_ReplyDrumSourceNameAndIndex
 ;          0xFC164D = ToneQuery_ReplyPercSourceName1_ByRow, 0xFC1716 = ToneQuery_ReplyPercSourceName1AndIndex
 ;          0xFC1845 = ToneQuery_ReplyPercSourceName2AndIndex, 0xFC1AA1 = ToneQuery_ReplyWholeToneRecord
@@ -18653,7 +18653,7 @@ LinkQuery_ReplyPartRecordBytes__FC204F:
 	unlk32 xiz                                 ; FC206C  unlk XIZ
 	ret                                        ; FC206E  ret
 ; --------------------------------------------------------------------------
-; sub_FC206F -- 0xFC206F..0xFC215F (241 bytes)
+; LinkQuery_ReplyElementBlockBytes_Elements01 -- 0xFC206F..0xFC215F (241 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -18685,7 +18685,7 @@ LinkQuery_ReplyPartRecordBytes__FC204F:
 ;           same length arithmetic and same sender as
 ;           LinkQuery_ReplyToneRecordBytes.
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC206F`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `LinkQuery_ReplyElementBlockBytes_Elements01`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -18794,7 +18794,7 @@ LinkQuery_ReplyElementBlockBytes_Elements01__FC2140:
 	unlk32 xiz                                 ; FC215D  unlk XIZ
 	ret                                        ; FC215F  ret
 ; --------------------------------------------------------------------------
-; sub_FC2160 -- 0xFC2160..0xFC2250 (241 bytes)
+; LinkQuery_ReplyElementBlockBytes_Elements23 -- 0xFC2160..0xFC2250 (241 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -18822,7 +18822,7 @@ LinkQuery_ReplyElementBlockBytes_Elements01__FC2140:
 ;           by `and A,0x80` at 0xFC2199. Every other instruction is
 ;           LinkQuery_ReplyElementBlockBytes_Elements01's.
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC2160`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `LinkQuery_ReplyElementBlockBytes_Elements23`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -18931,7 +18931,7 @@ LinkQuery_ReplyElementBlockBytes_Elements23__FC2231:
 	unlk32 xiz                                 ; FC224E  unlk XIZ
 	ret                                        ; FC2250  ret
 ; --------------------------------------------------------------------------
-; sub_FC2251 -- 0xFC2251..0xFC2387 (311 bytes)
+; LinkQuery_ReplyElementWaveSelectBytes -- 0xFC2251..0xFC2387 (311 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -18964,7 +18964,7 @@ LinkQuery_ReplyElementBlockBytes_Elements23__FC2231:
 ;           doing: it fills the same field with Table_FE14A0, and
 ;           Table_FE14A0 is 43 bytes.
 ; Unknown:  as above.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC2251`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `LinkQuery_ReplyElementWaveSelectBytes`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -19097,7 +19097,7 @@ LinkQuery_ReplyElementWaveSelectBytes__FC2368:
 	unlk32 xiz                                 ; FC2385  unlk XIZ
 	ret                                        ; FC2387  ret
 ; --------------------------------------------------------------------------
-; sub_FC2388 -- 0xFC2388..0xFC242F (168 bytes)
+; LinkQuery_ReplyToneRecordBytes -- 0xFC2388..0xFC242F (168 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -19130,7 +19130,7 @@ LinkQuery_ReplyElementWaveSelectBytes__FC2368:
 ;           channel in request[+0x04].
 ; Unknown:  nothing about the routine; what the bytes MEAN is the tone
 ;           record's question, not this one's.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC2388`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `LinkQuery_ReplyToneRecordBytes`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -19463,19 +19463,19 @@ sub_FC24F6__FC25E0:
 	unlk32 xiz                                 ; FC25FD  unlk XIZ
 	ret                                        ; FC25FF  ret
 ; --------------------------------------------------------------------------
-; sub_FC2600 -- 0xFC2600..0xFC280C (525 bytes)
+; ToneMsg_Dispatch -- 0xFC2600..0xFC280C (525 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB079B in MidiIn_ParseRingAndDispatch__FB079B
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFBAAA2 = sub_FBAAA2, 0xFBAC24 = sub_FBAC24
+; Calls:   0xFBAAA2 = ToneStage_EnsurePartLoaded, 0xFBAC24 = ToneEdit_Dispatch
 ;          0xFBB793 = sub_FBB793, 0xFBC39D = sub_FBC39D
 ;          0xFBC958 = sub_FBC958, 0xFBCD17 = sub_FBCD17
 ;          0xFBD46B = sub_FBD46B, 0xFBD6FC = sub_FBD6FC
 ;          0xFC1BDE = ToneQuery_Dispatch, 0xFC1FC7 = LinkQuery_ReplyPartRecordBytes
-;          0xFC206F = sub_FC206F, 0xFC2160 = sub_FC2160
-;          0xFC2251 = sub_FC2251, 0xFC2388 = sub_FC2388
+;          0xFC206F = LinkQuery_ReplyElementBlockBytes_Elements01, 0xFC2160 = LinkQuery_ReplyElementBlockBytes_Elements23
+;          0xFC2251 = LinkQuery_ReplyElementWaveSelectBytes, 0xFC2388 = LinkQuery_ReplyToneRecordBytes
 ;          0xFC2430 = sub_FC2430, 0xFC24F6 = sub_FC24F6
 ;          0xFC81F8 = sub_FC81F8
 ; Arms:    16 computed-goto arm(s) inside this routine: 0xFC2622 0xFC262D 0xFC264F 0xFC269C 0xFC26E9 0xFC26FF 0xFC2714 0xFC2729 0xFC2781 0xFC278C 0xFC2797 0xFC27A2 0xFC27AC 0xFC27B6 0xFC27C0 0xFC27CA
@@ -19511,7 +19511,7 @@ sub_FC24F6__FC25E0:
 ; Unknown:  what request bytes beyond +0x05 carry, and the panel-side names
 ;           of the sixteen arms -- those live in prom_a, which this lane
 ;           does not own.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC2600`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `ToneMsg_Dispatch`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================
@@ -19973,7 +19973,7 @@ sub_FC28B5__FC28DE:
 	unlk32 xiz                                 ; FC292D  unlk XIZ
 	ret                                        ; FC292F  ret
 ; --------------------------------------------------------------------------
-; sub_FC2930 -- 0xFC2930..0xFC295A (43 bytes)
+; PartElement_SetWaveSelectPointer_ToRomDefault -- 0xFC2930..0xFC295A (43 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB48CF in sub_FB47C4__FB489E
@@ -20005,7 +20005,7 @@ sub_FC28B5__FC28DE:
 ;           (0xFB48CF).
 ; Unknown:  what makes 0xFE14A0 the right default -- its bytes are `7f 7f 7f
 ;           00 ...`, and no field of a wave-select record is named.
-; Named:    WAVE 17, lane w17/tone-db -- it was `sub_FC2930`. Every literal
+; Named:    WAVE 17, lane w17/tone-db -- it was `PartElement_SetWaveSelectPointer_ToRomDefault`. Every literal
 ;           cited above is re-read from the ROM at the address it is cited
 ;           at by notes/tone_db_naming_w17.py (102 checks).
 ; ==========================================================================

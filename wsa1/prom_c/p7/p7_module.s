@@ -260,20 +260,20 @@
 ;   established is that the bytes leave, in this order, to one of three places.
 ;
 ; ------------------------------------------------------------ H. WHAT WAS NAMED
-;   0xF9ADB5  sub_F9ADB5 -> P7Block_Run
-;   0xF9AEB6  sub_F9AEB6 -> P7Group_SendOp0AddrValueScaled
-;   0xF9AFDC  sub_F9AFDC -> P7Group_SendOp0AddrValue
-;   0xF9B0D1  sub_F9B0D1 -> P7Group_SendValue
-;   0xF9B167  sub_F9B167 -> P7Group_SendOp1AddrValueScaled
-;   0xF9B28B  sub_F9B28B -> P7Group_SendOp1AddrValue
-;   0xF9B2EE  sub_F9B2EE -> P7Group_SendOp1AddrValue__F9B2EE   (continuation)
-;   0xF9B305  sub_F9B305 -> P7Group_SendOp1AddrValue__F9B305   (continuation)
-;   0xF9B32C  sub_F9B32C -> P7Group_SendOp1AddrValue__F9B32C   (continuation)
-;   0xF9B37E  sub_F9B37E -> P7Group_SendValueScaled
-;   0xF9B445  sub_F9B445 -> P7Group_SendOp5AddrValue
-;   0xF9E140  sub_F9E140 -> P7Block_Seek
-;   0xF9E1AC  sub_F9E1AC -> P7Block_ReportStatus
-;   0xF9F765  sub_F9F765 -> P7Unit_SendValueTable
+;   0xF9ADB5  P7Block_Run -> P7Block_Run
+;   0xF9AEB6  P7Group_SendOp0AddrValueScaled -> P7Group_SendOp0AddrValueScaled
+;   0xF9AFDC  P7Group_SendOp0AddrValue -> P7Group_SendOp0AddrValue
+;   0xF9B0D1  P7Group_SendValue -> P7Group_SendValue
+;   0xF9B167  P7Group_SendOp1AddrValueScaled -> P7Group_SendOp1AddrValueScaled
+;   0xF9B28B  P7Group_SendOp1AddrValue -> P7Group_SendOp1AddrValue
+;   0xF9B2EE  P7Group_SendOp1AddrValue__F9B2EE -> P7Group_SendOp1AddrValue__F9B2EE   (continuation)
+;   0xF9B305  P7Group_SendOp1AddrValue__F9B305 -> P7Group_SendOp1AddrValue__F9B305   (continuation)
+;   0xF9B32C  P7Group_SendOp1AddrValue__F9B32C -> P7Group_SendOp1AddrValue__F9B32C   (continuation)
+;   0xF9B37E  P7Group_SendValueScaled -> P7Group_SendValueScaled
+;   0xF9B445  P7Group_SendOp5AddrValue -> P7Group_SendOp5AddrValue
+;   0xF9E140  P7Block_Seek -> P7Block_Seek
+;   0xF9E1AC  P7Block_ReportStatus -> P7Block_ReportStatus
+;   0xF9F765  P7Unit_SendValueTable -> P7Unit_SendValueTable
 ;
 ; ---------------------------------------- I. WHAT IS STILL sub_XXXXXX, AND WHY
 ; TEN of the 43 are NOT ROUTINES AT ALL -- they are the continuation of the object
@@ -2226,7 +2226,7 @@ sub_F9AD65__F9ADB0:
 	unlk32 xiz                                 ; F9ADB2  unlk XIZ
 	ret                                        ; F9ADB4  ret
 ; --------------------------------------------------------------------------
-; sub_F9ADB5 -- 0xF9ADB5..0xF9AEB5 (257 bytes)
+; P7Block_Run -- 0xF9ADB5..0xF9AEB5 (257 bytes)
 ;
 ; Called from: no site outside this module.
 ;          23 site(s) inside this module:
@@ -2238,8 +2238,8 @@ sub_F9AD65__F9ADB0:
 ; Outputs: writes 0x008614, 0x008616, 0x008618, 0x00861A, 0x00861C
 ;          reads 0x008612, 0x00861E
 ; Calls:   0xF9A163 = P7Byte_SendCmd, 0xF9A4B0 = P7Byte_SendArg
-;          0xF9B54B = sub_F9B54B, 0xF9E140 = sub_F9E140
-;          0xF9E1AC = sub_F9E1AC
+;          0xF9B54B = sub_F9B54B, 0xF9E140 = P7Block_Seek
+;          0xF9E1AC = P7Block_ReportStatus
 ; Evidence: the listing below is the byte-identical round-trip of 0xF9ADB5-0xF9AEB5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2381,7 +2381,7 @@ P7Block_Run__F9AEB2:
 	unlk32 xiz                                 ; F9AEB3  unlk XIZ
 	ret                                        ; F9AEB5  ret
 ; --------------------------------------------------------------------------
-; sub_F9AEB6 -- 0xF9AEB6..0xF9AFDB (294 bytes)
+; P7Group_SendOp0AddrValueScaled -- 0xF9AEB6..0xF9AFDB (294 bytes)
 ;
 ; Called from: no site outside this module.
 ;          5 site(s) inside this module:
@@ -2523,7 +2523,7 @@ P7Group_SendOp0AddrValueScaled:
 	unlk32 xiz                                 ; F9AFD9  unlk XIZ
 	ret                                        ; F9AFDB  ret
 ; --------------------------------------------------------------------------
-; sub_F9AFDC -- 0xF9AFDC..0xF9B0D0 (245 bytes)
+; P7Group_SendOp0AddrValue -- 0xF9AFDC..0xF9B0D0 (245 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -2649,7 +2649,7 @@ P7Group_SendOp0AddrValue:
 	unlk32 xiz                                 ; F9B0CE  unlk XIZ
 	ret                                        ; F9B0D0  ret
 ; --------------------------------------------------------------------------
-; sub_F9B0D1 -- 0xF9B0D1..0xF9B166 (150 bytes)
+; P7Group_SendValue -- 0xF9B0D1..0xF9B166 (150 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -2742,7 +2742,7 @@ P7Group_SendValue:
 	unlk32 xiz                                 ; F9B164  unlk XIZ
 	ret                                        ; F9B166  ret
 ; --------------------------------------------------------------------------
-; sub_F9B167 -- 0xF9B167..0xF9B28A (292 bytes)
+; P7Group_SendOp1AddrValueScaled -- 0xF9B167..0xF9B28A (292 bytes)
 ;
 ; Called from: no site outside this module.
 ;          17 site(s) inside this module:
@@ -2882,7 +2882,7 @@ P7Group_SendOp1AddrValueScaled:
 	unlk32 xiz                                 ; F9B288  unlk XIZ
 	ret                                        ; F9B28A  ret
 ; --------------------------------------------------------------------------
-; sub_F9B28B -- 0xF9B28B..0xF9B2ED (99 bytes)
+; P7Group_SendOp1AddrValue -- 0xF9B28B..0xF9B2ED (99 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -2960,7 +2960,7 @@ P7Group_SendOp1AddrValue:
 	calr (0xF9A31A - 0xF9B2EB)                 ; F9B2E8  calr 0xf9a31a
 	extpfx3 0x9E, 0x0C, 0x04                   ; F9B2EB  pushw (XIZ+0x0c)
 ; --------------------------------------------------------------------------
-; sub_F9B2EE -- 0xF9B2EE..0xF9B304 (23 bytes)
+; P7Group_SendOp1AddrValue__F9B2EE -- 0xF9B2EE..0xF9B304 (23 bytes)
 ;
 ; Called from: ⚠ NO LOCATED CALLER (⚠ CORRECTED 2026-08-25).  The one citation the
 ;          image-wide scan produced, 0xF94FE1, IS NOT A CALL SITE: it lies inside the
@@ -2991,7 +2991,7 @@ P7Group_SendOp1AddrValue__F9B2EE:
 	pushw	10                                   ; F9B2FF  push 0x000a
 	calr (0xF9A31A - 0xF9B305)                 ; F9B302  calr 0xf9a31a
 ; --------------------------------------------------------------------------
-; sub_F9B305 -- 0xF9B305..0xF9B32B (39 bytes)
+; P7Group_SendOp1AddrValue__F9B305 -- 0xF9B305..0xF9B32B (39 bytes)
 ;
 ; Called from: ⚠ NO LOCATED CALLER (⚠ CORRECTED 2026-08-25).  The one citation the
 ;          image-wide scan produced, 0xF95001, IS NOT A CALL SITE: it lies inside the
@@ -3027,7 +3027,7 @@ P7Group_SendOp1AddrValue__F9B305:
 	ld	c, (0x861C:24)                         ; F9B326  ld C,(0x00861c)
 	pop	xiy                                    ; F9B32B  pop XIY
 ; --------------------------------------------------------------------------
-; sub_F9B32C -- 0xF9B32C..0xF9B37D (82 bytes)
+; P7Group_SendOp1AddrValue__F9B32C -- 0xF9B32C..0xF9B37D (82 bytes)
 ;
 ; Called from: ⚠ NO LOCATED CALLER (⚠ CORRECTED 2026-08-25).  The one citation the
 ;          image-wide scan produced, 0xF94FED, IS NOT A CALL SITE: it lies inside the
@@ -3079,7 +3079,7 @@ P7Group_SendOp1AddrValue__F9B32C:
 	unlk32 xiz                                 ; F9B37B  unlk XIZ
 	ret                                        ; F9B37D  ret
 ; --------------------------------------------------------------------------
-; sub_F9B37E -- 0xF9B37E..0xF9B444 (199 bytes)
+; P7Group_SendValueScaled -- 0xF9B37E..0xF9B444 (199 bytes)
 ;
 ; Called from: no site outside this module.
 ;          19 site(s) inside this module:
@@ -3190,7 +3190,7 @@ P7Group_SendValueScaled:
 	unlk32 xiz                                 ; F9B442  unlk XIZ
 	ret                                        ; F9B444  ret
 ; --------------------------------------------------------------------------
-; sub_F9B445 -- 0xF9B445..0xF9B54A (262 bytes)
+; P7Group_SendOp5AddrValue -- 0xF9B445..0xF9B54A (262 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -3406,7 +3406,7 @@ sub_F9B54B__F9B59D:
 ; Inputs:  no frame; argument slots read: (XIZ+0x08), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCCA32, 0xFCCA36, 0xFCCA3A, 0xFCCA3E, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA52, 0xFCCA56, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66, 0xFCCA6A, 0xFCCA6E, 0xFCCA72, 0xFCCA76
-; Calls:   0xF9B167 = sub_F9B167, 0xFC9576 = sub_FC9576
+; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xFC9576 = sub_FC9576
 ;          0xFCA252 = Double_Multiply, 0xFCA626 = Double_Subtract
 ;          0xFCAA50 = Float32_ToDouble, 0xFCABC6 = Int32_ToFloat32
 ;          0xFCADD6 = Double_ToFloat32
@@ -3668,7 +3668,7 @@ sub_F9B5A5__F9B827:
 ; Inputs:  no frame; argument slots read: (XIZ+0x08), (XIZ+0x10), (XIZ+0x12)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCCA0A, 0xFCCA0E, 0xFCCA12, 0xFCCA16, 0xFCCA1A, 0xFCCA1E, 0xFCCA22, 0xFCCA26, 0xFCCA2A, 0xFCCA2E, 0xFCCA32, 0xFCCA36, 0xFCCA3A, 0xFCCA3E, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA52, 0xFCCA56, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66
-; Calls:   0xF9AEB6 = sub_F9AEB6, 0xF9E020 = Stream_ReadU24BE
+; Calls:   0xF9AEB6 = P7Group_SendOp0AddrValueScaled, 0xF9E020 = Stream_ReadU24BE
 ;          0xFC9576 = sub_FC9576, 0xFCA252 = Double_Multiply
 ;          0xFCA626 = Double_Subtract, 0xFCAA50 = Float32_ToDouble
 ;          0xFCABC6 = Int32_ToFloat32, 0xFCADD6 = Double_ToFloat32
@@ -4164,12 +4164,12 @@ sub_F9B887__F9BDC9:
 ; Inputs:  no frame; argument slots read: (XIZ+0x08), (XIZ+0x10), (XIZ+0x12)
 ; Outputs: writes 0x008612
 ;          reads 0x00861A, 0xFCC92A, 0xFCC92E, 0xFCC932, 0xFCC936, 0xFCC93A, 0xFCC93E, 0xFCC942, 0xFCC946, 0xFCC94A, 0xFCC94E, 0xFCC952, 0xFCC956, 0xFCC95A, 0xFCC95E, 0xFCC962, 0xFCC966, 0xFCC96A, 0xFCC96E, 0xFCC972, 0xFCC976, 0xFCC97A, 0xFCC97E, 0xFCC982, 0xFCC986, 0xFCC98A, 0xFCC98E, 0xFCC992, 0xFCC996, 0xFCC99A, 0xFCC99E, 0xFCC9A2, 0xFCC9A6, 0xFCC9AA, 0xFCC9AE, 0xFCC9B2, 0xFCC9B6, 0xFCC9BA, 0xFCC9BE, 0xFCC9C2, 0xFCC9C6, 0xFCC9CA, 0xFCC9CE, 0xFCC9D2, 0xFCC9D6, 0xFCC9DA, 0xFCC9DE, 0xFCC9E2, 0xFCC9E6, 0xFCC9EA, 0xFCC9EE, 0xFCC9F2, 0xFCC9F6, 0xFCC9FA, 0xFCC9FE, 0xFCCA02, 0xFCCA06, 0xFCCA3A, 0xFCCA3E, 0xFCCA4A, 0xFCCA4E, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66
-; Calls:   0xF9AEB6 = sub_F9AEB6, 0xF9AFDC = sub_F9AFDC
-;          0xF9B167 = sub_F9B167, 0xF9B28B = sub_F9B28B
-;          0xF9B37E = sub_F9B37E, 0xF9B445 = sub_F9B445
+; Calls:   0xF9AEB6 = P7Group_SendOp0AddrValueScaled, 0xF9AFDC = P7Group_SendOp0AddrValue
+;          0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xF9B28B = P7Group_SendOp1AddrValue
+;          0xF9B37E = P7Group_SendValueScaled, 0xF9B445 = P7Group_SendOp5AddrValue
 ;          0xF9DFB7 = Stream_ReadU24BE_Shl8, 0xF9E020 = Stream_ReadU24BE
 ;          0xF9E077 = Int32_ToFloat32_Q31, 0xF9E1ED = sub_F9E1ED
-;          0xF9ECF1 = sub_F9ECF1, 0xF9F765 = sub_F9F765
+;          0xF9ECF1 = sub_F9ECF1, 0xF9F765 = P7Unit_SendValueTable
 ;          0xFC9576 = sub_FC9576, 0xFCA1B6 = Double_Negate
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
 ;          0xFCA626 = Double_Subtract, 0xFCA6FD = Int32_ToDouble
@@ -7373,7 +7373,7 @@ sub_F9E0B7__F9E137:
 	unlk32 xiz                                 ; F9E13D  unlk XIZ
 	ret                                        ; F9E13F  ret
 ; --------------------------------------------------------------------------
-; sub_F9E140 -- 0xF9E140..0xF9E1AB (108 bytes)
+; P7Block_Seek -- 0xF9E140..0xF9E1AB (108 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -7460,7 +7460,7 @@ P7Block_Seek__F9E1A7:
 	unlk32 xiz                                 ; F9E1A9  unlk XIZ
 	ret                                        ; F9E1AB  ret
 ; --------------------------------------------------------------------------
-; sub_F9E1AC -- 0xF9E1AC..0xF9E1EC (65 bytes)
+; P7Block_ReportStatus -- 0xF9E1AC..0xF9E1EC (65 bytes)
 ;
 ; Called from: no site outside this module.
 ;          5 site(s) inside this module:
@@ -7545,7 +7545,7 @@ P7Block_ReportStatus__F9E1EA:
 ; Inputs:  frame `link XIZ,-170`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCC912, 0xFCC916, 0xFCC91A, 0xFCC91E, 0xFCC922, 0xFCC926, 0xFCC95A, 0xFCC95E, 0xFCC9D2, 0xFCC9D6, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66
-; Calls:   0xF9B167 = sub_F9B167, 0xF9B37E = sub_F9B37E
+; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xF9B37E = P7Group_SendValueScaled
 ;          0xFC9140 = sub_FC9140, 0xFC9576 = sub_FC9576
 ;          0xFCA121 = Double_Compare, 0xFCA252 = Double_Multiply
 ;          0xFCA41F = Double_Add, 0xFCA626 = Double_Subtract
@@ -8561,7 +8561,7 @@ sub_F9E1ED__F9ECEA:
 ; Inputs:  frame `link XIZ,-114`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCC8FE, 0xFCC902, 0xFCC906, 0xFCC90A, 0xFCC90E, 0xFCC9D2, 0xFCC9D6, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66, 0xFCCA72, 0xFCCA76
-; Calls:   0xF9B167 = sub_F9B167, 0xF9B37E = sub_F9B37E
+; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xF9B37E = P7Group_SendValueScaled
 ;          0xFC8BB2 = sub_FC8BB2, 0xFC8C45 = sub_FC8C45
 ;          0xFC9576 = sub_FC9576, 0xFCA121 = Double_Compare
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
@@ -9598,7 +9598,7 @@ sub_F9ECF1__F9F75E:
 	unlk32 xiz                                 ; F9F762  unlk XIZ
 	ret                                        ; F9F764  ret
 ; --------------------------------------------------------------------------
-; sub_F9F765 -- 0xF9F765..0xF9F8E0 (380 bytes)
+; P7Unit_SendValueTable -- 0xF9F765..0xF9F8E0 (380 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -9607,7 +9607,7 @@ sub_F9ECF1__F9F75E:
 ; Outputs: writes 0x008612
 ;          reads 0x00861C, 0x008622, 0x008626, 0x00862A, 0x00F365, 0x00F367, 0x00F369
 ; Calls:   0xF9A163 = P7Byte_SendCmd, 0xF9A4B0 = P7Byte_SendArg
-;          0xF9AFDC = sub_F9AFDC, 0xF9B0D1 = sub_F9B0D1
+;          0xF9AFDC = P7Group_SendOp0AddrValue, 0xF9B0D1 = P7Group_SendValue
 ;          0xF9E020 = Stream_ReadU24BE, 0xFCABC6 = Int32_ToFloat32
 ; Evidence: the listing below is the byte-identical round-trip of 0xF9F765-0xF9F8E0
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -9808,7 +9808,7 @@ P7Unit_SendValueTable__F9F8DE:
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x12), (XIZ+0x16), (XIZ+0x1A), (XIZ+0x1C), (XIZ+0x20), (XIZ+0x22)
 ; Outputs: writes 0x008614, 0x008616, 0x008618, 0x00861A, 0x00861C, 0x00862E, 0x008632, 0x008636, 0x00863A, 0x00863E, 0x008640, 0x008642
 ;          reads 0x008612
-; Calls:   0xF9E140 = sub_F9E140, 0xF9E1AC = sub_F9E1AC
+; Calls:   0xF9E140 = P7Block_Seek, 0xF9E1AC = P7Block_ReportStatus
 ;          0xFA000B = sub_FA000B, 0xFA237C = sub_FA237C
 ; Evidence: the listing below is the byte-identical round-trip of 0xF9F8E1-0xF9F9F9
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -14654,7 +14654,7 @@ sub_FA294F__FA2A12:
 ; Inputs:  frame `link XIZ,-42`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F35D
-; Calls:   0xF9ADB5 = sub_F9ADB5
+; Calls:   0xF9ADB5 = P7Block_Run
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2A19-0xFA2B08
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -16856,7 +16856,7 @@ Base36DigitToValue__FA3CD4:
 ;          0xFA283C 0xFA3C48 0xFA49CC 0xFA57B5 0xFA585E 0xFA58D9
 ; Inputs:  frame `link XIZ,-54`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2784 = sub_FA2784
+; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2784 = sub_FA2784
 ;          0xFA3CA6 = Base36DigitToValue, 0xFA4819 = P7Unit_SelectStreamsForRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3CD7-0xFA4818
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -18245,7 +18245,7 @@ P7Unit_FlushDirtyParams__FA4A08:
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x0085D2, 0x008606
 ;          reads 0x008584, 0x0085B8
-; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2C5E = P7Unit_LoadProgramStreams
+; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2C5E = P7Unit_LoadProgramStreams
 ;          0xFA35D5 = P7Unit_SendPreambleOnce, 0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4A0D-0xFA4C5D
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -18473,7 +18473,7 @@ sub_FA4A0D__FA4C5A:
 ; Inputs:  no frame and no argument slot read.
 ; Outputs: writes 0x00860E, 0x008610
 ;          reads 0x00860A, 0x00860C
-; Calls:   0xF9ADB5 = sub_F9ADB5
+; Calls:   0xF9ADB5 = P7Block_Run
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4C5E-0xFA4CE4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -18535,7 +18535,7 @@ sub_FA4C5E__FA4CD9:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x008606
 ;          reads 0x0085B8, 0x00F35D
-; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2C5E = P7Unit_LoadProgramStreams
+; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2C5E = P7Unit_LoadProgramStreams
 ;          0xFA35D5 = P7Unit_SendPreambleOnce, 0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4CE5-0xFA4E22
 ;          (notes/gen_prom_c_block.py, cleared by

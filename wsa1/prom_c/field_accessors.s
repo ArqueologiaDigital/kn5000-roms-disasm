@@ -902,7 +902,7 @@ sub_FC382A__FC3867:
 ; SoundRam_ClearFourBanks -- 0xFC386C..0xFC39F9 (398 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFBAE75 in sub_FBAC24__FBAE72
+;          0xFBAE75 in ToneEdit_Dispatch__FBAE72
 ;          2 site(s) inside this module:
 ;          0xFC3A24 0xFC3B4E
 ; Inputs:  frame `link XIZ,-40`; no positive frame slot is read
@@ -1399,7 +1399,7 @@ sub_FC3B24__FC3C3D:
 ; sub_FC3CB8 -- 0xFC3CB8..0xFC3CB8 (1 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFBAE7D in sub_FBAC24__FBAE7D
+;          0xFBAE7D in ToneEdit_Dispatch__FBAE7D
 ; Inputs:  no frame and no argument slot read.
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3CB8-0xFC3CB8
@@ -10168,7 +10168,7 @@ sub_FC81B8__FC81F4:
 ; Called from: 6 site(s) outside this module:
 ;          0xFAD8E9 in MidiCtrl_Int80, 0xFB68D1 in sub_FB6681__FB6891
 ;          0xFB6B4E in sub_FB68DD__FB6B0F, 0xFB6CE2 in sub_FB6BA8__FB6CD1
-;          0xFBC4A4 in sub_FBC39D__FBC49F, 0xFC2647 in sub_FC2600__FC262D
+;          0xFBC4A4 in sub_FBC39D__FBC49F, 0xFC2647 in ToneMsg_Dispatch__FC262D
 ; Inputs:  frame `link XIZ,-26`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFC8164 = PartRec_TallyScaledField_80_40, 0xFC81B8 = sub_FC81B8

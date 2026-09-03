@@ -774,7 +774,7 @@ ToneDB_ToneIndexMapB:
 ;          at exactly {3,5,7,9,11} and 13 at exactly {4,6,8,10,11} -- the
 ;          low and the high bytes of four 16-bit fields.  REJECTED by the
 ;          SAME instruction that justified the one-byte mask: prom_c
-;          sub_FBC725 is the only writer of a wave-select record and it
+;          ToneStage_ApplyWaveSelTailPreset is the only writer of a wave-select record and it
 ;          writes byte 11 (0xFBC7D6) and bytes 13..42 (0xFBC7D9 sets the
 ;          index to 13, 0xFBC7E3 fetches the stride word as the bound).
 ;          Bytes 3..10 are written by NOTHING, so a record that differs
@@ -5423,7 +5423,7 @@ ToneDB_MixerDefaultTable_321_SelectedForGroup_PERCUSSION:
 ToneDB_WaveSelTailPresets:
 
 ; ToneDB_WaveSelTailPresets_000 -- file 0x20F7B..0x20FA5
-; ⚠ NOT SELECTABLE by prom_c's sub_FBC725: the index this
+; ⚠ NOT SELECTABLE by prom_c's ToneStage_ApplyWaveSelTailPreset: the index this
 ; record would need is 0, and 0xFBC74E `jr NZ` sends index 0
 ; down the other arm, which builds the tail from RAM 0x1523
 ; instead of from this array.  What this record is FOR is
