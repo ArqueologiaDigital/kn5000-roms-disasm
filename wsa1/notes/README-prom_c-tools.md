@@ -879,11 +879,11 @@ bytes is still a store.
 **"Given how the firmware programs 0x00104000, what KIND of engine is on the other end?"**
 
 ```
-python3 notes/dev104_topology_probe.py             # print all 12 sections
+python3 notes/dev104_topology_probe.py             # print all 13 sections
 python3 notes/dev104_topology_probe.py --selftest  # assert; exit 1 on any failure
 ```
 
-Twelve sections over `original_ROMs/wsa1_prom_c.ic28` and `wsa1_prom_d.bin`; no `.s` file and no
+Thirteen sections over `original_ROMs/wsa1_prom_{b.ic13,c.ic28,d.bin}`; no `.s` file and no
 unidasm text. It is the evidence behind **`notes/HLE-GUIDE-l7a1429.md`**, the topology hypothesis and
 per-register HLE guidance it supports. The results that matter:
 
@@ -912,9 +912,17 @@ per-register HLE guidance it supports. The results that matter:
   `MidiNote_OnByPartMode` sites push `HL`, a loop counter bounded by `cp L,4` / `cp L,2`.
 * **Register 0x0100 is 0x00C0's table-pair companion, not a latch** (section 12) — the answer
   to the write-sequencing lane's tension about a constant register refreshed at 40.69 Hz.
-* **A negative result, recorded so it is not repeated:** the `Tone104` record cannot be located
-  inside prom_d's 81-byte element blocks by its note-bound fields (eight candidate offsets in
-  0.90-0.93 against a pooled null of 0.55).
+* **The factory data confirms MAIN/SUB from the data side** (section 13): over 133 clean
+  melodic wave-select records the ten twinned parameters agree per record in **130-133 of 133**,
+  and of the 28 ordered column pairs in the whole 43-byte record that reach that level, **16 are
+  the claimed map's own ordered forms** and the other 12 are all inside the unrelated
+  envelope-descriptor cluster `{p3, p5, p7, p9}`.  Every factory melodic record carries
+  RESONATOR TYPE = `ORIGINAL`, so the resonator families are a UI preset selector and the chip
+  never sees them.
+* **A negative result, superseded but kept:** section 7 could not locate the record `Q` inside
+  prom_d's 81-byte element blocks.  It is not there — `Q` is the 43-byte `WaveSelRec`
+  (`FINDINGS-l7a1429-parameter-names.md` §1a).  The failed search is kept because its null is
+  what says the element block was the wrong object, not that the method was.
 
 ## `tone_db_naming_w17.py`
 **"Which prom_c instruction touches which byte of which prom_d record, and what does

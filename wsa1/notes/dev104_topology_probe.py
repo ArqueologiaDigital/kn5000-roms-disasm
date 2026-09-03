@@ -57,10 +57,12 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROM_C = os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_c.ic28')
+ROM_B = os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_b.ic13')
 ROM_D = os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_d.bin')
 BASE = 0xF80000
 
 IMG = open(ROM_C, 'rb').read()
+BIMG = open(ROM_B, 'rb').read()
 DIMG = open(ROM_D, 'rb').read()
 FAILURES = []
 QUIET = False
@@ -658,11 +660,123 @@ def sec12_reg0100_is_a_companion():
     say('       (a) needs no separate explanation once the companion reading is taken.')
 
 
+# ---------------------------------------------------------------- section 13
+def _wave_select_records():
+    """The 43-byte WaveSelRec of every melodic tone record whose framing self-checks.
+
+    ⚠ CONSERVATIVE ON PURPOSE.  A record is kept only if its 16-byte name is printable
+    AND every one of its element blocks passes the parameter-names lane's NULL 3 -- bytes
+    +0x02/+0x03 as an LE16 index into prom_d's 307-entry wave catalogue.  That drops more
+    records than that lane's name-chaining walk keeps, so this is a clean SUBSET, not a
+    different population; section 13 checks it against that lane's published invariants.
+    """
+    off = struct.unpack_from('<I', DIMG, 0x08)[0]
+    tones = [struct.unpack_from('<I', DIMG, off + 4 * i)[0] for i in range(274)]
+    out = []
+    for t in tones:
+        if not all(32 <= c < 127 for c in DIMG[t:t + 16]):
+            continue
+        typ = DIMG[t + 0x10]
+        mask = DIMG[t + 0x11]
+        n = sum(1 for k in range(4) if (mask >> (2 * k)) & 3)
+        if typ == 0x80 or n == 0:
+            continue
+        if not all((DIMG[t + 0xD9 + 81 * k + 2] | (DIMG[t + 0xD9 + 81 * k + 3] << 8)) < 307
+                   for k in range(n)):
+            continue
+        b = t + 0xD9 + 81 * n
+        out += [DIMG[b + 43 * k:b + 43 * k + 43] for k in range(n)]
+    return out
+
+
+def sec13_factory_data():
+    say('=== 13. what the FACTORY DATA asks the engine for ===')
+    ws = _wave_select_records()
+    n = len(ws)
+    check('melodic WaveSelRec records whose framing self-checks', n, 133)
+    # the parameter-names lane's published invariants, on this subset
+    check('  p20 (+0x14) is 100 in every one', set(r[0x14] for r in ws), {100})
+    check('  p25 (+0x19) breakpoints are 66 +/- 12k',
+          sorted(set(r[0x19] & 0x7F for r in ws)), [42, 54, 66, 78, 90])
+    check('  p26 (+0x1A) lower note bounds', sorted(set(r[0x1A] for r in ws)), [24, 36, 48, 60])
+    check('  p28 (+0x1C) Q5 slope stays inside 0..32',
+          (min(r[0x1C] for r in ws), max(r[0x1C] for r in ws)), (0, 32))
+    check('  p33 (+0x21) SUB GAIN is 0 or 100', sorted(set(r[0x21] for r in ws)), [0, 100])
+    say('    -> five of the parameter-names lane\'s invariants hold exactly here, so the')
+    say('       subset is clean.')
+    # ** the MAIN/SUB twin map, tested as EXACT per-record equality, with a null
+    twin = {21: 31, 22: 32, 23: 34, 24: 35, 25: 37, 26: 38, 27: 39, 28: 40, 29: 41, 30: 42}
+    say('    ** MAIN AND SUB ARE CONFIGURED IDENTICALLY IN THE FACTORY SET:')
+    for a, b in twin.items():
+        e = sum(1 for r in ws if r[a] == r[b])
+        say('       p%-2d == p%-2d   %3d / %3d' % (a, b, e, n))
+    worst = min(sum(1 for r in ws if r[a] == r[b]) for a, b in twin.items())
+    check('  every one of the ten twinned parameters agrees in at least 130 of 133',
+          worst >= 130, True)
+    # NULL: how special is that, among all ordered column pairs?
+    const = [c for c in range(43) if len(set(r[c] for r in ws)) == 1]
+    claimed = set()
+    for a, b in twin.items():
+        claimed.add((a, b))
+        claimed.add((b, a))
+    hi = [(a, b) for a in range(43) for b in range(43)
+          if a != b and a not in const and b not in const
+          and sum(1 for r in ws if r[a] == r[b]) >= 130]
+    say('    NULL over all 43 x 42 ordered column pairs, constant columns %s excluded:'
+        % const)
+    say('      pairs equal in >= 130 of 133 records: %d' % len(hi))
+    say('      of those, the claimed MAIN/SUB map accounts for %d (its 20 ordered forms)'
+        % sum(1 for x in hi if x in claimed))
+    say('      the remaining %d are all inside {p3, p5, p7, p9} -- the four envelope-'
+        % sum(1 for x in hi if x not in claimed))
+    say('      descriptor parameters, a different structure (arm 0xFBC9BF..).')
+    say('      (the map\'s other 4 ordered forms involve p29/p30/p42, which are constant')
+    say('      columns and are excluded from the null by construction)')
+    check('  the claimed map is 16 of the %d high pairs' % len(hi),
+          sum(1 for x in hi if x in claimed), 16)
+    check('  and every non-claimed high pair is within {3,5,7,9}',
+          all(a in (3, 5, 7, 9) and b in (3, 5, 7, 9) for a, b in hi if x_ok(a, b, claimed)),
+          True)
+    # RESONATOR TYPE census
+    rt = [BIMG[0xF03241 - 0xF00000 + 8 * i:0xF03241 - 0xF00000 + 8 * i + 8]
+          .decode('latin1').strip() for i in range(64)]
+    check('the 64-name RESONATOR TYPE list begins as the UI lane reports',
+          rt[:10], ['ORIGINAL', 'STRING', 'CYLINDER', 'CONE', 'FLARE', 'PLATE L',
+                    'PLATE H', 'MEMB L', 'MEMB H', 'THROUGH'])
+    cen = {}
+    for r in ws:
+        cen[rt[r[0x0B] & 0x3F]] = cen.get(rt[r[0x0B] & 0x3F], 0) + 1
+    say('    RESONATOR TYPE (p11 bits 5..0) across the %d records: %s' % (n, cen))
+    check('  every factory melodic record carries ORIGINAL, i.e. its OWN coefficients',
+          cen, {'ORIGINAL': n})
+    say('    -> ** so the resonator FAMILY is a UI preset selector, not a device mode.  The')
+    say('       chip never sees it: writing it overwrites bytes 13..42 with a preset')
+    say('       (ToneStage_ApplyWaveSelTailPreset), and the factory set has been edited')
+    say('       past every preset.  AN EMULATOR MUST IMPLEMENT THE COEFFICIENTS, NOT THE')
+    say('       FAMILIES.')
+    # section C's cutoff, from p15, through the now-known law
+    def cut(k):
+        return 440 * 2 ** ((max(44, min(96, k)) + 36 - 69) / 12.0)
+    c15 = {}
+    for r in ws:
+        c15[round(cut(r[0x0F]))] = c15.get(round(cut(r[0x0F])), 0) + 1
+    say('    p15 (+0x0F) -> section C cutoff, Hz at 44.1 kHz: %s' % c15)
+    check('  p15 is 84 in most records -- the index the power-on reset image uses',
+          sorted(set(r[0x0F] for r in ws)), [65, 67, 70, 84])
+    say('    -> the reset image\'s section-C index of 84 is the factory-default value of the')
+    say('       parameter that feeds it.  A fifth object agreeing with the fourth.')
+
+
+def x_ok(a, b, claimed):
+    return (a, b) not in claimed
+
+
 SECTIONS = [sec1_closed_forms, sec2_fold_is_sign_magnitude, sec3_bilinear,
             sec4_srl, sec5_pairing_null, sec6_elements_are_channels,
             sec7_tone_record_not_located, sec8_two_gains_move_apart,
             sec9_three_sections, sec10_stage_b_image,
-            sec11_reset_image_settles_srl, sec12_reg0100_is_a_companion]
+            sec11_reset_image_settles_srl, sec12_reg0100_is_a_companion,
+            sec13_factory_data]
 
 
 def main():
