@@ -12551,8 +12551,8 @@ PartRec_Word0004_ClearStagedSetBit2:
 ;   zero into the 4 x 3 pairs at +0x37 + 16j + 4e and +0x38 + ... (0xFB6618,
 ;   0xFB6626), and 0x40 into the 12 x 2 bytes from +0x76 (0xFB665F).  It also
 ;   calls nine setters with a zero argument -- sub_FC7E10, three
-;   Rec8644_Store3Bytes_AndFlagChanged, sub_FC589E, sub_FC59EF, sub_FC5EFB,
-;   sub_FC6175, sub_FC63EC, sub_FC654F, sub_FC65EC.
+;   Rec8644_Store3Bytes_AndFlagChanged, PartRec_SetFittingOffset_0001, PartRec_SetPositionOffset_0003, PartRec_SetMovementDepth_0007,
+;   PartRec_SetMovementRate_0009, PartRec_SetMutingOffset_000B, PartRec_SetTuningOffset_000D, PartRec_SetSubGainOffset_000F.
 ;   GRADE STRONG: the verb (write constants), the object (this part's record) and
 ;   every offset are decoded; what the fields hold is not.  Its five call sites
 ;   are all resets -- PartRec_InitAllParts, MidiProgram_SelectToneForPart,
@@ -12566,10 +12566,10 @@ PartRec_Word0004_ClearStagedSetBit2:
 ;          0xFB6C0C 0xFB6D71
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA267A = Rec8644_Store3Bytes_AndFlagChanged, 0xFC589E = sub_FC589E
-;          0xFC59EF = sub_FC59EF, 0xFC5EFB = sub_FC5EFB
-;          0xFC6175 = sub_FC6175, 0xFC63EC = sub_FC63EC
-;          0xFC654F = sub_FC654F, 0xFC65EC = sub_FC65EC
+; Calls:   0xFA267A = Rec8644_Store3Bytes_AndFlagChanged, 0xFC589E = PartRec_SetFittingOffset_0001
+;          0xFC59EF = PartRec_SetPositionOffset_0003, 0xFC5EFB = PartRec_SetMovementDepth_0007
+;          0xFC6175 = PartRec_SetMovementRate_0009, 0xFC63EC = PartRec_SetMutingOffset_000B
+;          0xFC654F = PartRec_SetTuningOffset_000D, 0xFC65EC = PartRec_SetSubGainOffset_000F
 ;          0xFC7E10 = sub_FC7E10
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6500-0xFB6680
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -12722,9 +12722,9 @@ sub_FB6500__FB6657:
 ;   PartRec_RecomputeWord0006_FromToneRec and sub_FB4D45 (0xFB6690-0xFB66A8),
 ;   then a 3 x 4 pass over the 4-byte records at part record +0x35 followed by
 ;   sub_FB53C5 per element (0xFB66C4-0xFB6847), then
-;   PartElement_StageAlgoDescBytes_0024 (0xFB684F), then for each element sub_FC6803
+;   PartElement_StageAlgoDescBytes_0024 (0xFB684F), then for each element Pack104_LoadElementWaveSelRec
 ;   with that element's WAVE-SELECT pointer from +0x8C and a bit tested against
-;   BitMask_Table_FDE695 (0xFB687C-0xFB68AA), and finally sub_FC7481 and
+;   BitMask_Table_FDE695 (0xFB687C-0xFB68AA), and finally Pack104_DispatchByResoMode_ForPart and
 ;   sub_FC81F8.
 ;   GRADE STRONG: the arm selector is prom_d's `kind` and every callee above is
 ;   named, but three of its own steps are still `sub_`.
@@ -12740,7 +12740,7 @@ sub_FB6500__FB6657:
 ; Calls:   0xFB4A9F = PartRec_RecomputeWord0006_FromToneRec, 0xFB4D45 = sub_FB4D45
 ;          0xFB53C5 = sub_FB53C5, 0xFB5636 = Part_StageDspAlgoParams
 ;          0xFB639A = PartElement_StageAlgoDescBytes_0024, 0xFB6487 = PartRec_StageByte0075_FromDspParam00D7
-;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ;          0xFC81F8 = sub_FC81F8
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6681-0xFB68DC
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -13000,8 +13000,8 @@ sub_FB6681__FB6891:
 ;   Part_LoadToneRecordAndPointers routes to
 ;   PartElement_SetWaveSelectPointer_ToRomDefault and DrawbarPreset_GetDescriptor,
 ;   which is what makes it the DRAWBAR kind.  Same shape as
-;   Part_RestageVoiceParams_Melodic and the same closing sequence (sub_FC6803 per
-;   element, sub_FC7481, sub_FC81F8), with sub_FC2CD5 inserted at 0xFB68FC, an
+;   Part_RestageVoiceParams_Melodic and the same closing sequence (Pack104_LoadElementWaveSelRec per
+;   element, Pack104_DispatchByResoMode_ForPart, sub_FC81F8), with sub_FC2CD5 inserted at 0xFB68FC, an
 ;   extra 0x0010 step of the outer index at 0xFB6AB9, and no
 ;   PartRec_RecomputeWord0006_FromToneRec.
 ;   ⚠ prom_d says `0x80 is the DRUM path`; 0x80 is the third arm here
@@ -13018,7 +13018,7 @@ sub_FB6681__FB6891:
 ; Calls:   0xFB4D45 = sub_FB4D45, 0xFB53C5 = sub_FB53C5
 ;          0xFB5636 = Part_StageDspAlgoParams, 0xFB639A = PartElement_StageAlgoDescBytes_0024
 ;          0xFB6487 = PartRec_StageByte0075_FromDspParam00D7, 0xFC2CD5 = sub_FC2CD5
-;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ;          0xFC81F8 = sub_FC81F8
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB68DD-0xFB6B59
 ;          (notes/gen_prom_c_block.py, cleared by

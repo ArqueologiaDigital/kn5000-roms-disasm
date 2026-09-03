@@ -932,7 +932,7 @@ sub_FAC2AE:
 ; Calls:   0xFAC2AE = sub_FAC2AE, 0xFB3FA0 = VoiceRecords_InitFromAlloc
 ;          0xFB713A = Dev10C_WriteAllChanRegs, 0xFB732C = Dev10C_WriteReg_c
 ;          0xFB77EF = Dev104_WriteAllChanRegs, 0xFB7A58 = Dev104_WriteChanReg0
-;          0xFC571A = Dev104_LoadStageBImage, 0xFC7DAF = sub_FC7DAF
+;          0xFC571A = Dev104_LoadStageBImage, 0xFC7DAF = Pack104_StageReg_0000_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAC34D-0xFAC42B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1955,7 +1955,7 @@ sub_FACA40__FACAB3:
 ;          0xFAC90E = sub_FAC90E, 0xFAC9A6 = sub_FAC9A6
 ;          0xFB3D09 = VoiceQuery_Tag00_All, 0xFB3D26 = Voice_Retire_Mode20
 ;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFB7AC9 = Dev104_SetChanRegs_00C0_0100
-;          0xFC7C0D = sub_FC7C0D
+;          0xFC7C0D = Pack104_TickPositionMovement_ForVoice
 ; Voice record: touches voice_record[+0x00(r), +0x23(r), +0x2B(rw), +0x2D(rw)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFACAB7-0xFACC3E
 ;          (notes/gen_prom_c_block.py, cleared by

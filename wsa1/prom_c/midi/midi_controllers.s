@@ -4637,7 +4637,7 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8:
 ;          0xFAF240
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC589E = sub_FC589E
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC589E = PartRec_SetFittingOffset_0001
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEACE-0xFAEAF8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4676,8 +4676,8 @@ sub_FAEACE:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFB3CE0 = VoiceQuery_Tag00_Part
-;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFC59EF = sub_FC59EF
-;          0xFC5D5B = sub_FC5D5B
+;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFC59EF = PartRec_SetPositionOffset_0003
+;          0xFC5D5B = Pack104_RestageRegs_00C0_0100_0240_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEAF9-0xFAEB64
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4747,8 +4747,8 @@ sub_FAEAF9__FAEB60:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFB3CE0 = VoiceQuery_Tag00_Part
-;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFC5BA2 = sub_FC5BA2
-;          0xFC5D5B = sub_FC5D5B
+;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFC5BA2 = PartRec_SetPositionOffset_0005
+;          0xFC5D5B = Pack104_RestageRegs_00C0_0100_0240_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEB65-0xFAEBD0
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4818,7 +4818,7 @@ sub_FAEB65__FAEBCC:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD561 = sub_FAD561, 0xFB3CE0 = VoiceQuery_Tag00_Part
-;          0xFC5EFB = sub_FC5EFB, 0xFC6027 = sub_FC6027
+;          0xFC5EFB = PartRec_SetMovementDepth_0007, 0xFC6027 = Pack104_RefreshMovementDepth_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEBD1-0xFAEC20
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4876,7 +4876,7 @@ sub_FAEBD1__FAEC1C:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD561 = sub_FAD561, 0xFB3CE0 = VoiceQuery_Tag00_Part
-;          0xFC6175 = sub_FC6175, 0xFC629B = sub_FC629B
+;          0xFC6175 = PartRec_SetMovementRate_0009, 0xFC629B = Pack104_RefreshMovementRate_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEC21-0xFAEC70
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4933,7 +4933,7 @@ sub_FAEC21__FAEC6C:
 ;          0xFAF286
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC63EC = sub_FC63EC
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC63EC = PartRec_SetMutingOffset_000B
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEC71-0xFAEC9B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4971,7 +4971,7 @@ sub_FAEC71:
 ;          0xFAF294
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC654F = sub_FC654F
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC654F = PartRec_SetTuningOffset_000D
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEC9C-0xFAECC6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5010,8 +5010,8 @@ sub_FAEC9C:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFB3CE0 = VoiceQuery_Tag00_Part
-;          0xFB7B41 = Dev104_SetChanReg_0280, 0xFC65EC = sub_FC65EC
-;          0xFC6712 = sub_FC6712
+;          0xFB7B41 = Dev104_SetChanReg_0280, 0xFC65EC = PartRec_SetSubGainOffset_000F
+;          0xFC6712 = Pack104_RestageReg_0280_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAECC7-0xFAED32
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7296,7 +7296,7 @@ MidiCtrl_CC19__FAFBDD:
 ;          0xFB4D45 = sub_FB4D45, 0xFB5636 = Part_StageDspAlgoParams
 ;          0xFB5E00 = Part_GetDspParam_00D8, 0xFB639A = PartElement_StageAlgoDescBytes_0024
 ;          0xFB6487 = PartRec_StageByte0075_FromDspParam00D7, 0xFBB765 = sub_FBB765
-;          0xFC6803 = sub_FC6803
+;          0xFC6803 = Pack104_LoadElementWaveSelRec
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAFBEC-0xFAFCE0
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above

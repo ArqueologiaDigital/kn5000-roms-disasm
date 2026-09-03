@@ -127,7 +127,7 @@
 ;                       (*(R[+0x01]))[+0x0E]                        WITH A
 ;                     - R[+0x0C]                                    KEY-FOLLOW
 ;                     then forced to 0x0000 or 0x7F00 on a          TERM: STRONG
-;                     negative result (0xFC4A2B).  In sub_FC49AD.
+;                     negative result (0xFC4A2B).  In Pack104_StageRegs_00C0_0100_0240.
 ;  chan+0x0100  0x08  Dev104_Reg0100_Const_251[the SAME index] -- and that    PROVEN: a
 ;                     table is 0x0100 in all 251 entries.           CONSTANT on
 ;                                                                   this firmware
@@ -164,10 +164,10 @@
 ;                                                                   UNIDENTIFIED
 ;  chan+0x0240  0x12  ( high16( fold(R[+0x1A]) * Curve_Fitting_Exp2Rise_128 PROVEN /
 ;                       [clamp(R[+0x14]+R[+0x18]+|R[+0x21]|/4,      UNIDENTIFIED
-;                        0..0x7F)] ) & 0xFFF8 ) | 7.  In sub_FC49AD;
+;                        0..0x7F)] ) & 0xFFF8 ) | 7.  In Pack104_StageRegs_00C0_0100_0240;
 ;                     R[+0x1A] is P[+0x26], i.e. word 18's value.
 ;  chan+0x0280  0x14  Curve_Exp2Gain_Percent_101[clamp(R[+0x10]+R[+0x23],  PROVEN /
-;                     0..100)].  In sub_FC4AED.                     UNIDENTIFIED
+;                     0..100)].  In Pack104_StageReg_0280.                     UNIDENTIFIED
 ;  chan+0x02C0  0x16  the literal 0xFF00.  ALWAYS -- it is the only PROVEN
 ;                     value any instruction ever puts in word 11
 ;                     (0xFC51AD; the Stage_B image patches the same
@@ -208,7 +208,7 @@
 ;   DEVICES.  The immediate occurs in exactly FOUR instruction operands in the
 ;   whole image: three on the 0x0010C000 pitch chain (0xFA80C7, 0xFA80D8,
 ;   0xFA80DF, the key-follow pivot §2 already documents) and ONE at 0xFC4A18,
-;   inside sub_FC49AD, on the way to 0x00104000 register 0x00C0 + chan.  Two
+;   inside Pack104_StageRegs_00C0_0100_0240, on the way to 0x00104000 register 0x00C0 + chan.  Two
 ;   devices, one reference note, and the census is exhaustive rather than a
 ;   sighting (checker section 9).
 ;
@@ -321,8 +321,8 @@
 ;
 ; Nineteen words, TWENTY-FOUR stores:
 ;   * 20 in Dev104_PackStagingStruct itself, covering 15 offsets;
-;   * 3 in sub_FC49AD, covering +0x06, +0x08 and +0x12;
-;   * 1 in sub_FC4AED, covering +0x14.
+;   * 3 in Pack104_StageRegs_00C0_0100_0240, covering +0x06, +0x08 and +0x12;
+;   * 1 in Pack104_StageReg_0280, covering +0x14.
 ; Checker section 4 asserts each one by its bytes and that the union is exactly
 ; {0x00, 0x02, ... 0x24}.
 ;

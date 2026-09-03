@@ -2194,7 +2194,7 @@ sub_FB8CEC__FB90AF:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
 ; Calls:   0xFB477B = PartElement_SetEnvDescriptorPointer, 0xFB8432 = ToneStage_LoadElementWaveSelect_FromCatalogueRow
-;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB90B3-0xFB9280
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2425,8 +2425,8 @@ ToneDB_SourceNameList1_SelectEntry__FB9270:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFB477B = PartElement_SetEnvDescriptorPointer, 0xFC6803 = sub_FC6803
-;          0xFC7481 = sub_FC7481
+; Calls:   0xFB477B = PartElement_SetEnvDescriptorPointer, 0xFC6803 = Pack104_LoadElementWaveSelRec
+;          0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9281-0xFB9413
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2606,7 +2606,7 @@ ToneDB_SourceNameList2_SelectEntry__FB9401:
 ;          0xFBADD3
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D735
-; Calls:   0xFC6803 = sub_FC6803, 0xFC7A1F = sub_FC7A1F
+; Calls:   0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9414-0xFB9540
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2749,7 +2749,7 @@ sub_FB9414__FB952F:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735, 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
 ; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = ToneStage_LoadPercInstHead
-;          0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord, 0xFC6803 = sub_FC6803
+;          0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord, 0xFC6803 = Pack104_LoadElementWaveSelRec
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9541-0xFB978A
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2992,7 +2992,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB9779:
 ; Inputs:  frame `link XIZ,-26`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735, 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFB8478 = ToneStage_LoadPercWaveSelect_FromCatalogueRow, 0xFC6803 = sub_FC6803
+; Calls:   0xFB8478 = ToneStage_LoadPercWaveSelect_FromCatalogueRow, 0xFC6803 = Pack104_LoadElementWaveSelRec
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB978B-0xFB994D
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -3180,7 +3180,7 @@ ToneDB_PercSourceNameList1_SelectEntry__FB993D:
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735, 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFC6803 = sub_FC6803, 0xFC7A1F = sub_FC7A1F
+; Calls:   0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB994E-0xFB9AC1
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -6786,7 +6786,7 @@ sub_FBB765__FBB790:
 ;          0xFB8BF6 = Voice_RecomputeEnv_AndWriteSlot1or3, 0xFBB39F = ToneRec_LoadDspParams_ByAlgoType
 ;          0xFBB4BF = sub_FBB4BF, 0xFBB57C = sub_FBB57C
 ;          0xFBB645 = sub_FBB645, 0xFBB6F8 = sub_FBB6F8
-;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBB793-0xFBBFFA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7618,7 +7618,7 @@ sub_FBB793__FBBFF7:
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFB477B = PartElement_SetEnvDescriptorPointer, 0xFB8432 = ToneStage_LoadElementWaveSelect_FromCatalogueRow
-;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBBFFB-0xFBC109
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8768,7 +8768,7 @@ ToneStage_ApplyPercWaveSelTailPreset__FBC945:
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFB477B = PartElement_SetEnvDescriptorPointer, 0xFBC725 = ToneStage_ApplyWaveSelTailPreset
-;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7481 = Pack104_DispatchByResoMode_ForPart
 ; Arms:    9 computed-goto arm(s) inside this routine: 0xFBC9BC 0xFBC9BF 0xFBC9D5 0xFBC9EB 0xFBCA01 0xFBCA17 0xFBCA3B 0xFBCA3E 0xFBCA41
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBC958-0xFBCBA6
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -9018,7 +9018,7 @@ sub_FBC958__FBCB96:
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = ToneStage_LoadPercInstHead
-;          0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord, 0xFC6803 = sub_FC6803
+;          0xFB8668 = ToneStage_LoadPercWaveSelect_FromInstRecord, 0xFC6803 = Pack104_LoadElementWaveSelRec
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBCBA7-0xFBCD16
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -9550,7 +9550,7 @@ sub_FBCD17__FBD09D:
 ;          0xFBD59C 0xFBD5D1
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB8478 = ToneStage_LoadPercWaveSelect_FromCatalogueRow, 0xFC6803 = sub_FC6803
+; Calls:   0xFB8478 = ToneStage_LoadPercWaveSelect_FromCatalogueRow, 0xFC6803 = Pack104_LoadElementWaveSelRec
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBD0A2-0xFBD1D2
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -10035,7 +10035,7 @@ sub_FBD3E8__FBD466:
 ;          0xFB3C8B = VoiceQuery_Tag40_Part, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ;          0xFB49EB = Part_ResolveDrumInstrumentRecord, 0xFBD0A2 = sub_FBD0A2
 ;          0xFBD1D3 = sub_FBD1D3, 0xFBD3E8 = sub_FBD3E8
-;          0xFC6803 = sub_FC6803, 0xFC7A1F = sub_FC7A1F
+;          0xFC6803 = Pack104_LoadElementWaveSelRec, 0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBD46B-0xFBD6FB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -10323,7 +10323,7 @@ sub_FBD46B__FBD6F7:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735
 ; Calls:   0xFB454C = PercInst_GetWaveSelectRecord, 0xFB49EB = Part_ResolveDrumInstrumentRecord
-;          0xFBC80E = ToneStage_ApplyPercWaveSelTailPreset, 0xFC6803 = sub_FC6803
+;          0xFBC80E = ToneStage_ApplyPercWaveSelTailPreset, 0xFC6803 = Pack104_LoadElementWaveSelRec
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBD6FC-0xFBD857
 ;          (notes/gen_prom_c_block.py, cleared by
