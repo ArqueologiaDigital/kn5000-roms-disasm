@@ -600,6 +600,10 @@
 ;                                              prom_c 0xFB87B7-0xFB87C5 mirrors
 ;                                              from part record +0x09 bit 15.
 ;                                              Bits 4:6 UNIDENTIFIED            */
+;       ★ CORRECTED (wave 18, verified 2026-09-03): BIT 6 HAS FOUR READERS --
+;         prom_c 0xFB4F44, 0xFB5EEB, 0xFB5F36, 0xFB5FFC, each `and <r>,0x40`.
+;         The first is fed by `ld L,(XIY+0x00d0)` at 0xFB4F2E three instructions
+;         earlier, so the byte tested IS this field. Bits 4 and 5 remain unread.
 ;       u8    dsp_param[8];         /* +0x0D1..+0x0D8  PROVEN as a GROUP: eight
 ;                                              routines write exactly this run
 ;                                              from one DSP_AlgoDescriptor row,
@@ -797,6 +801,13 @@
 ;         that none of them behaves like +0x0C (best 3.3%, each within a few
 ;         points of its own shuffled null).  ⚠ THAT IS A MEASURED NEGATIVE, not
 ;         a gap: whatever they select, it is not the +0x18 array.
+;       ★ CORRECTED (wave 18): +0x24/+0x28/+0x2C DO have a reader --
+;         ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0), which walks the same
+;         (map, array, stride) shape as ToneDB_ResolveWaveSelectRecord through a
+;         PARALLEL triple. ⚠ This does not overturn round 11's Q23: that negative
+;         says these maps do not behave like +0x0C, and it is right -- they
+;         select a DIFFERENT array. The measured negative and the found reader
+;         are consistent, which is why neither is retracted.
 ;     ⚠ The 8-banks-x-128 indexing is PROVEN for +0x0C/+0x10/+0x14 only.  For
 ;     the rest the 1024 is a span, and this block does not promote it.
 ;
@@ -824,6 +835,22 @@
 ;            ⚠ STILL NO READER.  The framing is this image's own (round 2) and
 ;            wave 17 did not find one either: they are the largest structures
 ;            in the file and nothing in prom_c reaches their slots.
+;       ★★ CORRECTED (wave 18, verified 2026-09-03). BOTH HALVES OF THAT ARE
+;          WRONG, and the reason wave 17 missed it is worth more than the fact.
+;
+;          A READER EXISTS: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0)
+;          reaches all three slots. Earlier censuses looked for the shape
+;          `base load; load (base+slot)` at the indexing site, and this routine
+;          does not have it -- the same blind spot that hid sub_FB82C3 from
+;          round 3. ⚠ A READER CENSUS THAT MATCHES ONE INSTRUCTION SHAPE FINDS
+;          ONLY READERS OF THAT SHAPE; say which shape you searched, so the
+;          negative is falsifiable.
+;
+;          AND THE STRIDE ATTRIBUTION IS WRONG: +0x30 and +0x34 are scaled by
+;          the word at +0xEC (0xFB4679, 0xFB46C4), and only +0x38 by +0xF2
+;          (0xFB469D). Both words hold 14, so NO ADDRESS CHANGES and nothing
+;          downstream of this line is affected -- but the two slots are not
+;          reading the field this line names.
 ;     the six 128-byte monotone curves at file 0x22A3B are what all 318 part-A
 ;     objects of +0x30 point at.  UNIDENTIFIED as to what a curve IS.
 ;
