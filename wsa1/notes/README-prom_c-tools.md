@@ -1020,3 +1020,31 @@ the device with no block-0 write after it.  Also derives the periodic-refresh ra
 INTT1 phase table and `Toggle14FE_AndDispatch`'s alternation.
 
 Findings: `notes/FINDINGS-l7a1429-write-sequencing.md`.
+
+### `lsi_curve_tables.py`
+**"The 0x00104000 register map proves the arithmetic of all nineteen per-channel registers
+and names the quantity of none of them. Every one of those expressions runs through a named
+ROM table — so what ARE the numbers in those tables, and what physical quantity does each
+one produce?"**
+
+```
+python3 notes/lsi_curve_tables.py --selftest   # 49 assertions, FAILURES: 0
+python3 notes/lsi_curve_tables.py --fit        # every fit, with residual AND a competing null
+python3 notes/lsi_curve_tables.py --summary    # (table, entries, fit, endpoints, unit, grade)
+python3 notes/lsi_curve_tables.py --dump NAME  # the raw entries of one table
+```
+
+Thirteen tables out of `original_ROMs/wsa1_prom_c.ic28`, no `.s` file. Every fit is printed
+beside a **straight-line fit through the same points**, so "this is an exponential" can be
+compared with something that is not; and the fifteen instructions the unit arguments rest on
+(the clamps, the `0x4280` pivot, the `0x7F00` ceiling) are re-read from the image here rather
+than cited from another file.
+
+★ **The result:** `fold(Curve_FE04C9)` and `fold(Curve_FE05C9)` are **one quantity, not two** —
+a **one-pole lowpass cutoff**, `F = 65536·g/(1+g)` and `G = 8192·(1 − 1/(128·g))` with
+`g = tan(π f/44100)` and `f = 440·2^((k−33)/12)`, residuals 1 and 5 counts. So the index is a
+**semitone**, `k = MIDI note − 36` to 0.4 cent, and the table saturates at `k = 100` because
+`θ(101) > π/2` — one step past **Nyquist**. `Curve_Log2_251`'s slope of 3072 counts per octave
+makes register `0x00C0`'s unit **1/256 semitone**; `LinCoef_FE0196`'s slope makes a depth byte
+of 64 exactly **100% cutoff key follow**. Findings:
+`notes/FINDINGS-l7a1429-curve-tables.md`.
