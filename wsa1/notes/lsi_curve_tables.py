@@ -19,7 +19,7 @@ QUESTION IT ANSWERS
     k = 100 because theta(101) > pi/2 -- the next semitone is past NYQUIST.
 
 RUN
-  python3 notes/lsi_curve_tables.py --selftest   # every number quoted in the findings note
+  python3 notes/lsi_curve_tables.py --selftest   # 49 assertions; every number quoted in the note
   python3 notes/lsi_curve_tables.py --fit        # the fits, with residuals and nulls
   python3 notes/lsi_curve_tables.py --summary    # the (table, fit, endpoints, unit, grade) table
   python3 notes/lsi_curve_tables.py --dump NAME  # the raw entries of one table
@@ -555,7 +555,7 @@ SUMMARY = [
   "0 -> 0x7F7A", "Q15 DEPTH; as a cutoff scaler, 0 to -4.56 octaves",
   "PROVEN fit / STRONG for 0x01C0"),
  ("Curve_Exp2Decay_101", 101, "T[0]=0; T[k]=round(32768*2^((k-100)/16))",
-  "0 / 450 -> 0x8000", "Q15 GAIN over a 0..100 UI PERCENT, 37.3 dB + OFF", "PROVEN fit / STRONG unit"),
+  "0 / 448 -> 0x8000", "Q15 GAIN over a 0..100 UI PERCENT, 37.3 dB + OFF", "PROVEN fit / STRONG unit"),
  ("ExpCurve_0_to_0x80", 128, "T[0]=0; T[k]=max(1,round(128*2^((k-127)/16)))",
   "0 -> 0x80", "8-bit GAIN over a 0..127 UI value, 42.1 dB, duplicated into both register halves",
   "PROVEN fit / STRONG unit"),
@@ -566,7 +566,7 @@ SUMMARY = [
   "25 -> 8188", "Q13 companion of the SAME cutoff: (1-G/8192)*g = 1/128 exactly",
   "PROVEN fit / UNIDENTIFIED role"),
  ("Table_FDFF96", 256, "no closed form; 27 distinct values 0x22..0x3C",
-  "0x22 -> 0x3C", "MINIMUM CUTOFF per key zone: 466 Hz .. 2094 Hz", "PROVEN range / STRONG unit"),
+  "0x22 -> 0x3C", "MINIMUM CUTOFF per key zone: 466 Hz .. 2093 Hz", "PROVEN range / STRONG unit"),
  ("LinCoef_FE0096", 128, "T[k]=2k-128 exact",
   "-128 -> +126", "Q5 key ramp +/-4.0; 1/16 of a Curve_Log2_251 index step per key",
   "PROVEN fit / STRONG unit"),
