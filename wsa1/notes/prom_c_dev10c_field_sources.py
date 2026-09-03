@@ -34,7 +34,10 @@ WHAT THIS DOES NOT ESTABLISH
     value may arrive as an argument.  The listing prints the value operand so that is
     visible.
   * The 0x00104000 twin struct at 0x00D7A2 is filled by ONE routine, Dev104_PackStagingStruct, which
-    writes 19 struct offsets through its (XIZ+0x08) pointer argument; `--dev104` prints
+    writes 19 SITES over 15 DISTINCT OFFSETS through its (XIZ+0x08) pointer argument
+    (+0x00, +0x0A, +0x0C and +0x18 are each written twice on different paths);
+    ⚠ this line previously said "19 struct offsets", conflating the two units.
+    `--dev104-selftest` pins both. `--dev104` prints
     those.  That asymmetry -- one packer there, many small writers here -- is itself a
     finding.
 
@@ -142,10 +145,71 @@ def dev104():
         if m and m.group(1) in ptr:
             out.append((a, int(m.group(2) or 0), m.group(3)))
             continue
-        m = re.match(r"ld\s+(x[a-z]{2}),", ins)
-        if m and m.group(1) in ptr and "(xiz+8)" not in ins:
+
+        # ★ A STORE SPELLED AS A RAW-BYTE PSEUDO-INSTRUCTION IS STILL A STORE.
+        # `extpfx5 0xB9,0x16,0x02,0x00,0xFF` at 0xFC51AD is `ld (XBC+0x16),0xff00`
+        # -- a genuine struct write this scanner used to MISS, because the
+        # extended-prefix forms have no modelled operands and so match no `ld`
+        # pattern.  The trailing comment carries the decoder's rendering, so the
+        # form is read from there and the base register is still required to be
+        # a live struct pointer.  ⚠ This is the one place the scanner trusts a
+        # comment; --selftest pins the site it was built for.
+        if ins.startswith("extpfx"):
+            c = re.search(r"ld\s+\((X[A-Z]{2})\+0x([0-9a-fA-F]+)\),\s*(\S+)",
+                          l.split(";", 1)[1] if ";" in l else "")
+            if c and c.group(1).lower() in ptr:
+                out.append((a, int(c.group(2), 16), c.group(3)))
+            continue
+
+        # ⚠ INVALIDATE ON THE LOW HALF TOO.  `ld wa,(0x00e086)` + `extz xwa`
+        # re-points XWA at a DIFFERENT record (the 37-byte one at 0x00E086) and
+        # never writes the token `ld xwa,`.  Matching only the 32-bit form left
+        # a stale pointer live and attributed four writes -- 0xFC5522, 0xFC55AF,
+        # 0xFC55C5, 0xFC5657 -- to the Part104 struct that never touch it.
+        # Consequence of the fix: the packer writes 15 offsets, not 16, and
+        # +0x1D is not a struct offset at all.
+        m = re.match(r"ld\s+(x?[a-z]{2}),", ins)
+        if m and "(xiz+8)" not in ins:
+            reg = m.group(1)
+            for dead in {reg, "x" + reg} & ptr:
+                ptr.discard(dead)
+            continue
+        m = re.match(r"extz\s+(x[a-z]{2})", ins)
+        if m:
             ptr.discard(m.group(1))
     return out
+
+
+def dev104_selftest():
+    """Controls for the two defects fixed on 2026-09-03.
+
+    Both are properties of the REAL listing, so this is a regression pin, not a
+    synthetic fixture: the sites are quoted with their addresses and either the
+    scanner reproduces them or it has regressed.
+    """
+    got = {a: off for a, off, _ in dev104()}
+    ok = True
+    # (1) the four writes through the 0x00E086 record must NOT be attributed
+    for a in (0xFC5522, 0xFC55AF, 0xFC55C5, 0xFC5657):
+        bad = a in got
+        ok &= not bad
+        print(f"    0x{a:06X} not a struct write   "
+              f"{'STILL ATTRIBUTED -- regressed' if bad else 'ok'}")
+    # (2) the extended-prefix store at +0x16 must BE attributed
+    hit = got.get(0xFC51AD)
+    ok &= (hit == 0x16)
+    print(f"    0xFC51AD writes +0x16              "
+          f"{'ok' if hit == 0x16 else f'MISSED (got {hit})'}")
+    # ★ STATE THE UNIT.  19 write SITES cover 15 distinct OFFSETS -- +0x00,
+    # +0x0A, +0x0C and +0x18 are each written twice on different paths.  The
+    # two figures are both correct and are not interchangeable; pinning one
+    # against the other is how this check first went red on a correct fix.
+    sites = len(dev104())
+    offs = len({o for _, o, _ in dev104()})
+    ok &= (sites == 19 and offs == 15)
+    print(f"    {sites} write sites over {offs} distinct offsets   "
+          f"{'ok' if (sites, offs) == (19, 15) else 'CHANGED -- re-adjudicate'}")
+    return ok
 
 
 def table():
@@ -229,6 +293,8 @@ if __name__ == "__main__":
         sys.exit(verify())
     elif "--sites" in sys.argv:
         sites()
+    elif "--dev104-selftest" in sys.argv:
+        sys.exit(0 if dev104_selftest() else 1)
     elif "--dev104" in sys.argv:
         for a, o, v in dev104():
             print(f"  0x{a:06X}  struct+0x{o:02X} (word {o//2:2d}, register block "
