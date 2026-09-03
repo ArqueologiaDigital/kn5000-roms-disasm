@@ -7138,9 +7138,17 @@ VoiceRecords_InitFromAlloc__FB4059:
 ; `sel_bank_family` and gives them at ToneRec_Element +0x02/+0x03, copied there
 ; from bytes 14 and 15 of a wave-catalogue row.  tone_db_module.s's
 ; ToneDB_ResolveWaveSelectRecord turns that pair into a 43-byte WAVE-SELECT
-; RECORD.  ToneDB_ResolveEnvDescriptor (0xFB45C0), below, turns THE SAME PAIR,
-; masked by the same two instructions, into a 14-byte ENVELOPE DESCRIPTOR -- and
-; the two walks are identical bar the triple of directory slots they read:
+; RECORD.  ToneDB_ResolveEnvDescriptor (0xFB45C0), below, turns a pair IN THE
+; SAME ENCODING -- 7-bit program, 4-bit bank, 2-bit family, expansion bit,
+; masked by the same literals -- into a 14-byte ENVELOPE DESCRIPTOR, and the two
+; walks are identical bar the triple of directory slots they read:
+;
+; ⚠ IT IS A CHAIN, NOT ONE PAIR READ TWICE, and the difference matters.  The
+;   ELEMENT BLOCK's pair (+0x02/+0x03) resolves to a wave-select record; that
+;   RECORD then carries four more pairs of its own (+0x03..+0x0A, below), and it
+;   is those that reach ToneDB_ResolveEnvDescriptor.  Every one of its call sites
+;   passes bytes of a WaveSelRec -- 0xFB4745 and 0xFB4772 are the only two, and
+;   both come from the pointer at part element sub-record +0x04.
 ;
 ;     i = (family & 0x0F) * 128 + (program & 0x7F)      8 banks of 128
 ;     n = LE16 at  base + dir[index map]  + 2*i

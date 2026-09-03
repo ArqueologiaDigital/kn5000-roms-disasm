@@ -974,3 +974,21 @@ by `+0xEC`, not `+0xF2`); the four selector pairs at wave-select record
 the `dsp_algo` readers index, with the curve-pool row numbers derived
 (`0xFDEA21 = pool + 8*0x66`, `0xFDEB53 = pool + 11*0x66`); and `0x26AC = 300 * 33`.
 Every literal is cited with its image-wide occurrence count beside it as the null.
+
+### `prom_c_voice_tonedb_w18-block.txt` and `prom_c_voice_tonedb_w18.rename-map`
+The `★★ WAVE 18` subject block inserted at the head of `0xFB405F-0xFB6E09` in
+`prom_c/voice/note_engine.s`, kept beside the tool so the block can be diffed
+without diffing an 800 KB listing; and the `old=new` map that
+`assert_comments_preserved.py --rename-map` needs to accept the re-spelled
+`Calls:` / `Called from:` lines. Regenerate the map with
+
+```
+python3 scripts/converters/sync_comments_to_renamed_labels.py \
+    --base <the commit before the rename> --apply \
+    --write-map wsa1/notes/prom_c_voice_tonedb_w18.rename-map \
+    wsa1/prom_c/voice/note_engine.s
+```
+
+The map is also the only place the 42 **address-form** labels survive: the block
+comments spell the old name as an address (`the routine at 0xFB405F is now ...`)
+precisely so the sync tool cannot substitute it away.
