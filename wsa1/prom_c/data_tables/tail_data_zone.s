@@ -466,7 +466,7 @@ Table_Muting_CutoffFloor_ByKeyZone_256:
 	.byte	0x2f, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x33, 0x34, 0x35, 0x36, 0x37, 0x37, 0x38, 0x39, 0x3a, 0x3b   ; 0xFE0086
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0096 -- 0xFE0096-0xFE0115  (128 bytes)
+; LinCoef_Position_KeyRamp_Q5_128 -- 0xFE0096-0xFE0115  (128 bytes)
 ;
 ; 128 SIGNED bytes.  T[k] = (k*256)//128 - 128 = 2k - 128: -128 .. +126 in steps of 2,
 ; exact on all 128 entries.  One of four tables read by the identical idiom, at 0xFC55E0:
@@ -480,8 +480,19 @@ Table_Muting_CutoffFloor_ByKeyZone_256:
 ; ⚠ that the key IS a note number is not established here.
 ;
 ; Cited by: 0xFC55E0 [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales the resonator POSITION.  Grade: fit PROVEN
+; (exact, not "approximately linear"), unit STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §6).
+;
+;   fit       T[k] = 2k - 128, exact on all 128 entries.
+;   endpoints -128 .. +126 = -4.000 .. +3.938 in Q5; slope 1/16 of a Q5 unit per key.
+;   unit      Q5 (32 = 1.0), multiplied by the signed depth byte at wave-select +0x10 and
+;             shifted right 5 -- the idiom above.
+;   feeds     R[+0x12], the index into Curve_Position_Log2Period_251, hence chan+0x00C0.
+;             One index step there is 1/256 semitone of POSITION.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0096:
+LinCoef_Position_KeyRamp_Q5_128:
 	.byte	0x80, 0x82, 0x84, 0x86, 0x88, 0x8a, 0x8c, 0x8e, 0x90, 0x92, 0x94, 0x96, 0x98, 0x9a, 0x9c, 0x9e   ; 0xFE0096
 	.byte	0xa0, 0xa2, 0xa4, 0xa6, 0xa8, 0xaa, 0xac, 0xae, 0xb0, 0xb2, 0xb4, 0xb6, 0xb8, 0xba, 0xbc, 0xbe   ; 0xFE00A6
 	.byte	0xc0, 0xc2, 0xc4, 0xc6, 0xc8, 0xca, 0xcc, 0xce, 0xd0, 0xd2, 0xd4, 0xd6, 0xd8, 0xda, 0xdc, 0xde   ; 0xFE00B6
@@ -492,7 +503,7 @@ LinCoef_FE0096:
 	.byte	0x60, 0x62, 0x64, 0x66, 0x68, 0x6a, 0x6c, 0x6e, 0x70, 0x72, 0x74, 0x76, 0x78, 0x7a, 0x7c, 0x7e   ; 0xFE0106
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0116 -- 0xFE0116-0xFE0195  (128 bytes)
+; LinCoef_Fitting_KeyRamp_Q5_128 -- 0xFE0116-0xFE0195  (128 bytes)
 ;
 ; 128 signed bytes, same reader idiom (0xFC4F51, 0xFC500E).
 ; T[k] = (k*65)//128 - 32: -32 .. +32, i.e. -1.0 .. +1.0 in Q5, exact on all 128.
@@ -501,8 +512,19 @@ LinCoef_FE0096:
 ; (..., -1, -1, 0, 1, 1, 2, ...), which only the slope 65/128 reproduces.  T[127] = +32.
 ;
 ; Cited by: 0xFC4F51 [lda <X..>,addr24], 0xFC500E [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales FITTING.  Grade: fit PROVEN (exact), unit STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §6).
+;
+;   fit       T[k] = 65k//128 - 32, exact on all 128; BIPOLAR, with a single zero at k = 64.
+;   endpoints -32 .. +32 = -1.000 .. +1.000 in Q5; slope 1/63 of a Q5 unit per key.
+;   feeds     v1 (depth byte at wave-select +0x17) and v2 (+0x22), the indices into
+;             Curve_Fitting_Exp2Decay_256 and Curve_Fitting_Exp2Rise_128, hence
+;             chan+0x0140/0x01C0 (MAIN FITTING) and chan+0x0180/0x0200 (SUB FITTING).
+;   unit      ★ one step of the destination index is 0.3763 dB, so this ramp is a
+;             dB-per-key slope: the full Q5 unit spans 16 index steps = 6.02 dB.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0116:
+LinCoef_Fitting_KeyRamp_Q5_128:
 	.byte	0xe0, 0xe0, 0xe1, 0xe1, 0xe2, 0xe2, 0xe3, 0xe3, 0xe4, 0xe4, 0xe5, 0xe5, 0xe6, 0xe6, 0xe7, 0xe7   ; 0xFE0116
 	.byte	0xe8, 0xe8, 0xe9, 0xe9, 0xea, 0xea, 0xeb, 0xeb, 0xec, 0xec, 0xed, 0xed, 0xee, 0xee, 0xef, 0xef   ; 0xFE0126
 	.byte	0xf0, 0xf0, 0xf1, 0xf1, 0xf2, 0xf2, 0xf3, 0xf3, 0xf4, 0xf4, 0xf5, 0xf5, 0xf6, 0xf6, 0xf7, 0xf7   ; 0xFE0136
@@ -513,7 +535,7 @@ LinCoef_FE0116:
 	.byte	0x18, 0x19, 0x19, 0x1a, 0x1a, 0x1b, 0x1b, 0x1c, 0x1c, 0x1d, 0x1d, 0x1e, 0x1e, 0x1f, 0x1f, 0x20   ; 0xFE0186
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0196 -- 0xFE0196-0xFE0215  (128 bytes)
+; LinCoef_Muting_KeyRamp_Q5_128 -- 0xFE0196-0xFE0215  (128 bytes)
 ;
 ; 128 signed bytes, same reader idiom (0xFC5249, 0xFC53BF).
 ; T[k] = k//2 - 64 for k = 0..126: -64 .. -1, i.e. -2.0 .. -0.03 in Q5.
@@ -521,8 +543,22 @@ LinCoef_FE0116:
 ; sampled check would have missed that; every entry was compared.
 ;
 ; Cited by: 0xFC5249 [lda <X..>,addr24], 0xFC53BF [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales MUTING.  Grade: fit PROVEN (exact, T[127]
+; included), unit STRONG (notes/FINDINGS-l7a1429-curve-tables.md §6).
+;
+;   fit       T[k] = k//2 - 64 for k = 0..126, and T[127] = 0 -- the exception the block
+;             above records, which a sampled check would have missed.
+;   endpoints -64 .. -1 = -2.000 .. -0.031 in Q5, UNIPOLAR; slope 1/64 of a Q5 unit per key.
+;   feeds     i3 (depth byte at wave-select +0x18) and i4 (+0x23), the MUTING cutoff
+;             indices, hence chan+0x0340/0x0400 (MAIN MUTING) and chan+0x0380/0x0440 (SUB).
+;   ★★ IT GIVES THE CUTOFF KEY FOLLOW AN EXACT UNIT.  The destination index is in
+;      SEMITONES OF CUTOFF (k = MIDI note - 36), and the slope is 1/64 of a Q5 unit per
+;      key, so a depth byte of 64 is exactly ONE SEMITONE OF CUTOFF PER SEMITONE OF KEY =
+;      100% KEY FOLLOW, and the signed byte's +-127 range is +-198%.  The same holds for
+;      the ks(Q, o) key-scaling stage, whose slope is Q[+o+3] >> 5: there 32 = 100%.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0196:
+LinCoef_Muting_KeyRamp_Q5_128:
 	.byte	0xc0, 0xc0, 0xc1, 0xc1, 0xc2, 0xc2, 0xc3, 0xc3, 0xc4, 0xc4, 0xc5, 0xc5, 0xc6, 0xc6, 0xc7, 0xc7   ; 0xFE0196
 	.byte	0xc8, 0xc8, 0xc9, 0xc9, 0xca, 0xca, 0xcb, 0xcb, 0xcc, 0xcc, 0xcd, 0xcd, 0xce, 0xce, 0xcf, 0xcf   ; 0xFE01A6
 	.byte	0xd0, 0xd0, 0xd1, 0xd1, 0xd2, 0xd2, 0xd3, 0xd3, 0xd4, 0xd4, 0xd5, 0xd5, 0xd6, 0xd6, 0xd7, 0xd7   ; 0xFE01B6
@@ -533,14 +569,27 @@ LinCoef_FE0196:
 	.byte	0xf8, 0xf8, 0xf9, 0xf9, 0xfa, 0xfa, 0xfb, 0xfb, 0xfc, 0xfc, 0xfd, 0xfd, 0xfe, 0xfe, 0xff, 0x00   ; 0xFE0206
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0216 -- 0xFE0216-0xFE0295  (128 bytes)
+; LinCoef_SubGain_KeyRamp_Q5_128 -- 0xFE0216-0xFE0295  (128 bytes)
 ;
-; 128 signed bytes, BYTE-IDENTICAL to LinCoef_FE0196 (all 128), and read by the same
+; 128 signed bytes, BYTE-IDENTICAL to LinCoef_Muting_KeyRamp_Q5_128 (all 128), and read by the same
 ; idiom at 0xFC513E.  Two copies of one curve, not two curves.
 ;
 ; Cited by: 0xFC513E [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales SUB GAIN.  Byte-identical to
+; LinCoef_Muting_KeyRamp_Q5_128, so the LAW is the same and only the DESTINATION differs;
+; that is the whole reason the two carry different names.  Grade: fit PROVEN, destination
+; STRONG (notes/FINDINGS-l7a1429-curve-tables.md §6,
+; notes/FINDINGS-l7a1429-parameter-names.md §5b).
+;
+;   fit       as its twin: T[k] = k//2 - 64 for k = 0..126, T[127] = 0.
+;   endpoints -64 .. -1 = -2.000 .. -0.031 in Q5; slope 1/64 of a Q5 unit per key.
+;   feeds     R[+0x10], the 0..100 index into Curve_Exp2Gain_Percent_101, hence chan+0x0280
+;             -- the editor's SUB GAIN.  Its depth byte is wave-select +0x24, which is 0 in
+;             all 392 factory records: what an unused touch depth looks like.
+;   unit      one step of the destination index is 0.3763 dB of that gain.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0216:
+LinCoef_SubGain_KeyRamp_Q5_128:
 	.byte	0xc0, 0xc0, 0xc1, 0xc1, 0xc2, 0xc2, 0xc3, 0xc3, 0xc4, 0xc4, 0xc5, 0xc5, 0xc6, 0xc6, 0xc7, 0xc7   ; 0xFE0216
 	.byte	0xc8, 0xc8, 0xc9, 0xc9, 0xca, 0xca, 0xcb, 0xcb, 0xcc, 0xcc, 0xcd, 0xcd, 0xce, 0xce, 0xcf, 0xcf   ; 0xFE0226
 	.byte	0xd0, 0xd0, 0xd1, 0xd1, 0xd2, 0xd2, 0xd3, 0xd3, 0xd4, 0xd4, 0xd5, 0xd5, 0xd6, 0xd6, 0xd7, 0xd7   ; 0xFE0236

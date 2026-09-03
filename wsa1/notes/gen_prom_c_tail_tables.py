@@ -172,7 +172,7 @@ OBJ_R1 = [
   "(0xFC52A6 `ld C,(0x00e08c) / extz BC / extz XBC / add XBC,<this> / ld B,(XBC)`), so the",
   "index is 0..255 and the object is exactly 256 bytes.",
   "⚠ What the value is is NOT established; it is used as a shift/limit further down."]),
- (0xFE0096, 128, 'b', "LinCoef_FE0096", [
+ (0xFE0096, 128, 'b', "LinCoef_Position_KeyRamp_Q5_128", [
   "128 SIGNED bytes.  T[k] = (k*256)//128 - 128 = 2k - 128: -128 .. +126 in steps of 2,",
   "exact on all 128 entries.  One of four tables read by the identical idiom, at 0xFC55E0:",
   "    lda XIX,<this> ; A = record[+0x10] (signed) ; if A == 0 -> result 0",
@@ -183,19 +183,19 @@ OBJ_R1 = [
   "COUNT 128: the index is (0x00E088), which Pack104_SetInputs_E088_E089_E08A builds as voice_record[+0x0C] with",
   "BIT 7 CLEARED, so 0..127, and 0x7F - D stays in range.",
   "⚠ that the key IS a note number is not established here."]),
- (0xFE0116, 128, 'b', "LinCoef_FE0116", [
+ (0xFE0116, 128, 'b', "LinCoef_Fitting_KeyRamp_Q5_128", [
   "128 signed bytes, same reader idiom (0xFC4F51, 0xFC500E).",
   "T[k] = (k*65)//128 - 32: -32 .. +32, i.e. -1.0 .. +1.0 in Q5, exact on all 128.",
   "★ The LAST entries are what pick the law.  T[63] = T[64]... is wrong and so is",
   "floor(k/2) - 32: the real table repeats each step below k = 64 and then stops repeating",
   "(..., -1, -1, 0, 1, 1, 2, ...), which only the slope 65/128 reproduces.  T[127] = +32."]),
- (0xFE0196, 128, 'b', "LinCoef_FE0196", [
+ (0xFE0196, 128, 'b', "LinCoef_Muting_KeyRamp_Q5_128", [
   "128 signed bytes, same reader idiom (0xFC5249, 0xFC53BF).",
   "T[k] = k//2 - 64 for k = 0..126: -64 .. -1, i.e. -2.0 .. -0.03 in Q5.",
   "★ AND THE LAST ENTRY BREAKS THE RULE: T[127] is 0, where the ramp would give -1.  A",
   "sampled check would have missed that; every entry was compared."]),
- (0xFE0216, 128, 'b', "LinCoef_FE0216", [
-  "128 signed bytes, BYTE-IDENTICAL to LinCoef_FE0196 (all 128), and read by the same",
+ (0xFE0216, 128, 'b', "LinCoef_SubGain_KeyRamp_Q5_128", [
+  "128 signed bytes, BYTE-IDENTICAL to LinCoef_Muting_KeyRamp_Q5_128 (all 128), and read by the same",
   "idiom at 0xFC513E.  Two copies of one curve, not two curves."]),
  (0xFE0296, 51, 'b', "Curve_FE0296", [
   "51 u8, 0x00..0x7E, rising with a flat head (0,1,2,3,4,6,8,12,17,...) and a flat tail.",
@@ -585,7 +585,7 @@ def verify():
     chk(d <= {6038, 6039, 6040},
         "Curve_Position_Log2Period_251[k] - MathTable_Log2_256[k] is 6039 +/- 1 for every k in 1..250")
     chk(IMG[0xFE0196 - BASE:0xFE0216 - BASE] == IMG[0xFE0216 - BASE:0xFE0296 - BASE],
-        "LinCoef_FE0196 and LinCoef_FE0216 are byte-identical, all 128")
+        "LinCoef_Muting_KeyRamp_Q5_128 and LinCoef_SubGain_KeyRamp_Q5_128 are byte-identical, all 128")
     chk(u16(0xFE08C9) == 0x8000 and (u16(0xFE08C9) >> 4) >= 0x800,
         "MathTable_Cos_S16_256[0] = 0x8000, which the reader's `sra 4` turns into -2048")
 

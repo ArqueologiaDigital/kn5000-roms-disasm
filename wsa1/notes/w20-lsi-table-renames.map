@@ -1,3 +1,24 @@
+# Lane w20/lsi-tables: the 0x00104000 curve tables renamed from address labels to
+# semantic ones, after wave 19 established what each table produces.
+#
+# Used as the NARROW EXEMPTION of the comment gate, which otherwise forbids any
+# change to an existing comment:
+#
+#   python3 scripts/analysis/assert_comments_preserved.py --base main \
+#       --rename-map wsa1/notes/w20-lsi-table-renames.map \
+#       wsa1/prom_c/data_tables/tail_data_zone.s \
+#       wsa1/prom_c/data_tables/voice_dsp_tables.s \
+#       wsa1/prom_c/devices/dev10c_dev104_drivers.s
+#
+# It is hand-written because scripts/converters/sync_comments_to_renamed_labels.py
+# derives only sub_* -> non-sub_* renames and takes none of these.  Every line was
+# applied by whole-word substitution over the three sources above, so no assembly
+# source anywhere in the tree still spells a left-hand name.
+#
+# The wave-19 notes -- FINDINGS-l7a1429-curve-tables.md, -parameter-names.md,
+# -write-sequencing.md, HLE-GUIDE-l7a1429.md and their probes -- were left as
+# written and still use the LEFT-HAND names.  This file is the index between them.
+#
 Const_0100_251=Dev104_Reg0100_Const_251
 Curve_Exp2Decay_101=Curve_Exp2Gain_Percent_101
 Curve_Exp2Decay_256=Curve_Fitting_Exp2Decay_256
@@ -6,4 +27,8 @@ Curve_FE04C9=Curve_Muting_Cutoff_Q16_128
 Curve_FE05C9=Curve_Muting_Cutoff_Q13_128
 Curve_Log2_251=Curve_Position_Log2Period_251
 ExpCurve_0_to_0x80=Curve_Exp2Gain_U8_128
+LinCoef_FE0096=LinCoef_Position_KeyRamp_Q5_128
+LinCoef_FE0116=LinCoef_Fitting_KeyRamp_Q5_128
+LinCoef_FE0196=LinCoef_Muting_KeyRamp_Q5_128
+LinCoef_FE0216=LinCoef_SubGain_KeyRamp_Q5_128
 Table_FDFF96=Table_Muting_CutoffFloor_ByKeyZone_256
