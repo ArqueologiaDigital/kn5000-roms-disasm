@@ -176,12 +176,12 @@
 ;                     value = (b << 8) | b   -- one byte in BOTH    UNIDENTIFIED
 ;                     halves -- and 0x0000 when word 0's bits 6..4
 ;                     are clear.
-;  chan+0x0340  0x1A  Curve_FE05C9[i3]                              PROVEN /
-;  chan+0x0400  0x20  Curve_FE04C9[i3]   -- the SAME index          UNIDENTIFIED
-;  chan+0x0380  0x1C  Curve_FE05C9[i4]                              PROVEN /
-;  chan+0x0440  0x22  Curve_FE04C9[i4]   -- the SAME index          UNIDENTIFIED
+;  chan+0x0340  0x1A  Curve_Muting_Cutoff_Q13_128[i3]                              PROVEN /
+;  chan+0x0400  0x20  Curve_Muting_Cutoff_Q16_128[i3]   -- the SAME index          UNIDENTIFIED
+;  chan+0x0380  0x1C  Curve_Muting_Cutoff_Q13_128[i4]                              PROVEN /
+;  chan+0x0440  0x22  Curve_Muting_Cutoff_Q16_128[i4]   -- the SAME index          UNIDENTIFIED
 ;       i3 = clamp( ks(Q,0x19) + Q5(LinCoef_FE0196, Q[+0x18]) + P[+0x1A],
-;                   Table_FDFF96[(0x00E08C)] .. PART[+0x12] )
+;                   Table_Muting_CutoffFloor_ByKeyZone_256[(0x00E08C)] .. PART[+0x12] )
 ;       i4 = clamp( ks(Q,0x25) + Q5(LinCoef_FE0196, Q[+0x23]) + P[+0x1C],
 ;                   the same bounds )
 ;  chan+0x03C0  0x1E  P[+0x24], copied straight through (0xFC56BA). PROVEN /
@@ -399,7 +399,7 @@
 ;   which puts it in R[+0x0C], which this device's packer SUBTRACTS from register
 ;   0x00C0 (0xFC4A29) and NEGATES as the delta for registers 0x0040 and 0x0080
 ;   (0xFC4E72).  The same zone byte +0x05 becomes (0x00E08C), the index into
-;   Table_FDFF96 that lower-bounds i3 and i4.
+;   Table_Muting_CutoffFloor_ByKeyZone_256 that lower-bounds i3 and i4.
 ;
 ; ★ AND ONE PATH SKIPS THE PACKER ENTIRELY.  VoiceRegs_Stage_B calls
 ;   Dev104_LoadStageBImage instead: 38 bytes = 19 words copied from

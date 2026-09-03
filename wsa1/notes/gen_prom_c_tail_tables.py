@@ -167,7 +167,7 @@ OBJ_R1 = [
   "101 u16.  T[0] = 0; T[k] = Curve_Exp2Decay_256[k+155] for k = 1..100 -- entry for entry,",
   "no exceptions -- i.e. the same exponential over its top 100 steps, ending on 0x8000.",
   "COUNT 101, from the readers' clamp to 0..0x64 (0xFC4B04, 0xFC6ECA)."]),
- (0xFDFF96, 256, 'b', "Table_FDFF96", [
+ (0xFDFF96, 256, 'b', "Table_Muting_CutoffFloor_ByKeyZone_256", [
   "256 u8, values 0x22..0x3C.  Indexed by the byte at RAM (0x00E08C), zero-extended",
   "(0xFC52A6 `ld C,(0x00e08c) / extz BC / extz XBC / add XBC,<this> / ld B,(XBC)`), so the",
   "index is 0..255 and the object is exactly 256 bytes.",
@@ -208,14 +208,14 @@ OBJ_R1 = [
   "512 SIGNED bytes.  T[k] = round(128 * sin(2*pi*k/512)) over all 512 entries, |err| <= 1.",
   "The period IS the object: one full cycle, so the size is fixed by the data itself and",
   "not only by the next citation.  Read at 0xFC5570 and 0xFC7C91."]),
- (0xFE04C9, 256, 'w', "Curve_FE04C9", [
+ (0xFE04C9, 256, 'w', "Curve_Muting_Cutoff_Q16_128", [
   "128 s16, rising from -510 (repeated ten times) to +28591 (repeated at the top).",
   "Read at 0xFC4987 / 0xFC52E1 / 0xFC5457 with `ld BC,2 / muls XBC,HL / add XBC,<this>`;",
   "the visible clamp at 0xFC4976 is a LOWER one (`cp HL,44`, else 44) and 0xFC4971 loads 96,",
   "so the reachable index band is narrower than the table.  ⚠ No upper clamp located, so",
   "the count 128 rests on the next cited base, 0xFE05C9, and not on the reader."]),
- (0xFE05C9, 256, 'w', "Curve_FE05C9", [
-  "128 s16, falling from -25 to -8188, read one instruction after Curve_FE04C9 through the",
+ (0xFE05C9, 256, 'w', "Curve_Muting_Cutoff_Q13_128", [
+  "128 s16, falling from -25 to -8188, read one instruction after Curve_Muting_Cutoff_Q16_128 through the",
   "same index (`lda XBC,0xFE05C9 / add XBC,XIX` at 0xFC4996, 0xFC52EF, 0xFC5465).",
   "The pair is the same shape as (Curve_Log2_251, Const_0100_251): two parallel tables,",
   "one index, two struct words."]),

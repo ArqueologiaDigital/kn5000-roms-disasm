@@ -84,7 +84,7 @@
 ; tail data zone rather than just the two copies, reports ZERO for copy B.
 ;
 ; That single hit is not a reference either: it is at 0xFE05DC, inside
-; Curve_FE05C9 (`... e7 ff | e2 ff | 18 fe | 68 fc ...`), where the bytes
+; Curve_Muting_Cutoff_Q13_128 (`... e7 ff | e2 ff | 18 fe | 68 fc ...`), where the bytes
 ; `e2 ff 18 fe` are the boundary between two table ENTRIES.
 ; ⚠ The search is for literals only.  A pointer already in RAM, or an address
 ; computed at run time, would be invisible -- this is "no literal reference",
@@ -326,7 +326,7 @@ Curve_Exp2Decay_101:
 	.short	0x6BA0, 0x7068, 0x7560, 0x7A90, 0x8000   ; 0xFDFF8C
 
 ; ----------------------------------------------------------------------------
-; Table_FDFF96 -- 0xFDFF96-0xFE0095  (256 bytes)
+; Table_Muting_CutoffFloor_ByKeyZone_256 -- 0xFDFF96-0xFE0095  (256 bytes)
 ;
 ; 256 u8, values 0x22..0x3C.  Indexed by the byte at RAM (0x00E08C), zero-extended
 ; (0xFC52A6 `ld C,(0x00e08c) / extz BC / extz XBC / add XBC,<this> / ld B,(XBC)`), so the
@@ -334,8 +334,24 @@ Curve_Exp2Decay_101:
 ; ⚠ What the value is is NOT established; it is used as a shift/limit further down.
 ;
 ; Cited by: 0xFC52AF [add <X..>,#imm32], 0xFC5425 [add <X..>,#imm32]
+;
+; ★ WHAT IT IS -- the MINIMUM MUTING CUTOFF for a key zone.  Grade: range PROVEN, unit
+; STRONG, inherited from the cutoff table (notes/FINDINGS-l7a1429-curve-tables.md §7).
+;
+;   data   256 u8, 27 distinct values, 0x22..0x3C (34..60); no closed form -- these are data.
+;   unit   a cutoff INDEX in semitones, k = MIDI note - 36, so the values are a floor of
+;          466 Hz .. 2093 Hz -- a floor that keeps the filter above its zone's own band.
+;   use    the LOWER CLAMP on the cutoff indices i3/i4 at 0xFC52D2 and 0xFC5439, whose upper
+;          bound is PART[+0x12]; the index into this table is the key-zone byte at 0x00E08C.
+;   feeds  through Curve_Muting_Cutoff_Q16_128 / Curve_Muting_Cutoff_Q13_128 into
+;          chan+0x0400/0x0340 (MAIN MUTING) and chan+0x0440/0x0380 (SUB MUTING).
+;   ⚠ The block above says the value "is NOT established"; that was true when it was
+;     written and wave 19 has since fixed the unit.  The older sentence is LEFT AS WRITTEN
+;     rather than reworded -- this paragraph is the correction.
+;   ⚠ The producer of (0x00E08C) is a key-zone record in prom_d, so what the 27 values mean
+;     zone by zone is still not established here.
 ; ----------------------------------------------------------------------------
-Table_FDFF96:
+Table_Muting_CutoffFloor_ByKeyZone_256:
 	.byte	0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c   ; 0xFDFF96
 	.byte	0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c   ; 0xFDFFA6
 	.byte	0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c   ; 0xFDFFB6
@@ -500,7 +516,7 @@ MathTable_Sin_S8_512:
 	.byte	0xe7, 0xe9, 0xea, 0xec, 0xed, 0xef, 0xf0, 0xf2, 0xf4, 0xf5, 0xf7, 0xf8, 0xfa, 0xfb, 0xfd, 0xfe   ; 0xFE04B9
 
 ; ----------------------------------------------------------------------------
-; Curve_FE04C9 -- 0xFE04C9-0xFE05C8  (256 bytes)
+; Curve_Muting_Cutoff_Q16_128 -- 0xFE04C9-0xFE05C8  (256 bytes)
 ;
 ; 128 s16, rising from -510 (repeated ten times) to +28591 (repeated at the top).
 ; Read at 0xFC4987 / 0xFC52E1 / 0xFC5457 with `ld BC,2 / muls XBC,HL / add XBC,<this>`;
@@ -509,8 +525,36 @@ MathTable_Sin_S8_512:
 ; the count 128 rests on the next cited base, 0xFE05C9, and not on the reader.
 ;
 ; Cited by: 0xFC4987 [add <X..>,#imm32], 0xFC52E1 [add <X..>,#imm32], 0xFC5457 [add <X..>,#imm32]
+;
+; ★★ WHAT IT IS -- the tone editor's MUTING, and the numbers say it is a ONE-POLE LOWPASS
+; CUTOFF COEFFICIENT whose index is literally a MIDI note.  Grade: fit PROVEN, unit STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §1, notes/FINDINGS-l7a1429-parameter-names.md §4).
+;
+;   encoding  the entries are FOLD-ENCODED -- sign-magnitude to offset-binary -- by the
+;             packer's own step at 0xFC5361:
+;                 fold(x) = (x & 0x8000) ? 0x8000 - (x & 0x7FFF) : x + 0x8000
+;             ★ Under fold the table is strictly monotone; read as s16 it is not, and that
+;             two's-complement reading is the null the fit had to beat.
+;   fit       fold(T[k]) = round(65536 * g/(1+g)), g = tan(pi*f_k/44100),
+;             f_k = 440*2^((k-33)/12) -- max |residual| ONE COUNT over k = 9..100.
+;   endpoints fold: 510 .. 61359, then saturated for k = 100..127.
+;   unit      the Q16 coefficient of a one-pole lowpass under the BILINEAR TRANSFORM, g
+;             being the prewarped cutoff.  ★ THE INDEX IS A SEMITONE: force the slope to
+;             1/12 and the ROM's own entries put index 0 at 65.4201 Hz = MIDI note 36.0036,
+;             0.36 cents from note 36 against a fit scatter of 1.63 cents.  So
+;             k = MIDI note - 36, and the readers' band 44..96 is 831 Hz .. 16.7 kHz.
+;   ★ ceiling both tables saturate at exactly k = 100, the last index whose prewarp tan() is
+;             finite: theta(100) = 1.50285 < pi/2 < theta(101) = 1.59221.  A tan() table
+;             that stops one step before its own pole is a bilinear filter coefficient.
+;   feeds     chan+0x0400 (MAIN MUTING) and chan+0x0440 (SUB MUTING) from 0xFC52E1 and
+;             0xFC5457, both ONE-SHOT voice parameters written only inside a full
+;             19-register burst.  ⚠ Its THIRD reader, 0xFC4987, feeds chan+0x0480 from the
+;             p15 index -- the same quantity a third time, which the editor's unassigned
+;             FORMANT caption may name.  That one is graded WEAK and MUTING does not cover it.
+;   ⚠ 44,100 Hz is the SCHEMATIC's number, not a fitted one: IC4's crystal X4 =
+;     33.8688 MHz = 768 x 44100.  Nothing was fitted to obtain f_k.
 ; ----------------------------------------------------------------------------
-Curve_FE04C9:
+Curve_Muting_Cutoff_Q16_128:
 	.short	0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02   ; 0xFE04C9
 	.short	0xFE02, 0xFE02, 0xFDE4, 0xFDC4, 0xFDA2, 0xFD7F, 0xFD59, 0xFD31   ; 0xFE04D9
 	.short	0xFD07, 0xFCDA, 0xFCAB, 0xFC79, 0xFC44, 0xFC0C, 0xFBD1, 0xFB93   ; 0xFE04E9
@@ -529,16 +573,35 @@ Curve_FE04C9:
 	.short	0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF   ; 0xFE05B9
 
 ; ----------------------------------------------------------------------------
-; Curve_FE05C9 -- 0xFE05C9-0xFE06C8  (256 bytes)
+; Curve_Muting_Cutoff_Q13_128 -- 0xFE05C9-0xFE06C8  (256 bytes)
 ;
-; 128 s16, falling from -25 to -8188, read one instruction after Curve_FE04C9 through the
+; 128 s16, falling from -25 to -8188, read one instruction after Curve_Muting_Cutoff_Q16_128 through the
 ; same index (`lda XBC,0xFE05C9 / add XBC,XIX` at 0xFC4996, 0xFC52EF, 0xFC5465).
 ; The pair is the same shape as (Curve_Log2_251, Const_0100_251): two parallel tables,
 ; one index, two struct words.
 ;
 ; Cited by: 0xFC4996 [lda <X..>,addr24], 0xFC52EF [lda <X..>,addr24], 0xFC5465 [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the Q13 companion of the SAME MUTING cutoff, not a second parameter.
+; Grade: fit PROVEN, the tie to the cutoff STRONG, the ROLE UNIDENTIFIED
+; (notes/FINDINGS-l7a1429-curve-tables.md §1).
+;
+;   fit       fold(T[k]) = round(8192 * (1 - 1/(128*g))) with the SAME g as
+;             Curve_Muting_Cutoff_Q16_128 -- max |residual| 5 counts over k = 9..100.
+;             Equivalently, entry for entry, (1 - fold(T)/8192) * g = 1/128.
+;   endpoints fold: 25 .. 8188, then saturated for k = 100..127, like its partner.
+;   ★ AN EMULATOR HAS ONE PARAMETER HERE, NOT TWO.  Invert each table for the theta it
+;     implies -- atan(F/(65536-F)) against atan(1/(128*(1-G/8192))) -- and the two agree to
+;     17.4 cents worst case over the live band and 3.4 cents over k = 9..60.  So given
+;     chan+0x0400, register chan+0x0340 is COMPUTABLE; same for chan+0x0440 / chan+0x0380.
+;   feeds     chan+0x0340 (MAIN MUTING) and chan+0x0380 (SUB MUTING) from 0xFC52EF and
+;             0xFC5465; and chan+0x03C0 from 0xFC4996 on the p15 index, the FORMANT
+;             candidate its partner also feeds.
+;   ⚠ WHAT IT IS FOR is open: no standard filter structure this pass tried puts
+;     8192*(1 - 1/(128g)) next to 65536*g/(1+g).  Recorded as a shape, not a role -- which
+;     is why the name says Q13 and stops.
 ; ----------------------------------------------------------------------------
-Curve_FE05C9:
+Curve_Muting_Cutoff_Q13_128:
 	.short	0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7   ; 0xFE05C9
 	.short	0xFFE7, 0xFFE2, 0xFE18, 0xFC68, 0xFAD4, 0xF952, 0xF7E6, 0xF68F   ; 0xFE05D9
 	.short	0xF54B, 0xF419, 0xF2F8, 0xF1E7, 0xF0E6, 0xEFF3, 0xEF0E, 0xEE36   ; 0xFE05E9
