@@ -1773,7 +1773,7 @@ NotePool8_StageVoice_Var1:
 ;          0xFB732C = Dev10C_WriteReg_c, 0xFB77EF = Dev104_WriteAllChanRegs
 ;          0xFB7A58 = Dev104_WriteChanReg0, 0xFC3D26 = NotePool8_StageVoice
 ;          0xFC3DAF = NotePool8_StageVoice_Var1, 0xFC571A = Dev104_LoadStageBImage
-;          0xFC7DAF = sub_FC7DAF
+;          0xFC7DAF = Pack104_StageReg_0000_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3E02-0xFC3FAD
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1999,7 +1999,7 @@ NotePool8_NoteOnOff__FC3FA8:
 	unlk32 xiz                                 ; FC3FAB  unlk XIZ
 	ret                                        ; FC3FAD  ret
 ; --------------------------------------------------------------------------
-; sub_FC3FAE -- 0xFC3FAE..0xFC405D (176 bytes)
+; Slot64Pool_MoveToList -- 0xFC3FAE..0xFC405D (176 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -2013,8 +2013,26 @@ NotePool8_NoteOnOff__FC3FA8:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Slot64Pool_MoveToList -- moves one node of the 64-entry
+;          pool at 0x005B63 onto list `(XIZ+0x0a)`, unlinking it from the list it
+;          is on.  The pool is 64 entries of 7 bytes -- 0x005B63 + 7*i, and
+;          64*7 = 448 ends at 0x005D22, the byte before the part-record array at
+;          0x005D23 (Pack104_SetInputs_PartRecord's own base).  Entry layout,
+;          from the operands here and in Slot64Pool_InitAllFree:
+;            +0x00 next (2)   +0x02 prev (2)   +0x04 list id (1)
+;            +0x05 the entry's own index 0..63 (1)   +0x06 a use count (1)
+;          The two list heads are the words at 0x00E00E (list 0) and 0x00E010
+;          (list 1), indexed as `head[listid]` by `mul C,0x02 / add XBC,0x0000e00e`
+;          at 0xFC3FBD and 0xFC3FC4.  New nodes are spliced in at the head.
+; WHY IT IS ON THE 0x00104000 PATH: the index this pool hands out
+;          (Slot64Pool_AcquireOrAddRef) is stored to R[+0x07] at 0xFC4D27 and
+;          0xFC7DE9, and Dev104_PackStagingStruct builds staging word 0 --
+;          register chan+0x0000 -- as `(R[+0x07] << 8) | P[+0x07]` at
+;          0xFC4DE3-0xFC4DF1.  So this pool's index IS bits 15:8 of that register.
+; GRADE: PROVEN for the data structure and for where the index lands.
 ; --------------------------------------------------------------------------
-sub_FC3FAE:
+Slot64Pool_MoveToList:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FC3FAE  link XIZ,0xfffe
 	push	xhl                                   ; FC3FB2  push XHL
 	push	xde                                   ; FC3FB3  push XDE
@@ -2028,21 +2046,21 @@ sub_FC3FAE:
 	add	xbc, 0xE00E                            ; FC3FC4  add XBC,0x0000e00e
 	ld	bc, (xbc)                               ; FC3FCA  ld BC,(XBC)
 	cp	bc, de                                  ; FC3FCC  cp BC,DE
-	jr nz, sub_FC3FAE__FC3FEE                  ; FC3FCE  jr NZ,0xfc3fee
+	jr nz, Slot64Pool_MoveToList__FC3FEE                  ; FC3FCE  jr NZ,0xfc3fee
 	extz	xde                                   ; FC3FD0  extz XDE
 	ld	hl, (xde)                               ; FC3FD2  ld HL,(XDE)
 	cp	hl, de                                  ; FC3FD4  cp HL,DE
-	jr z, sub_FC3FAE__FC3FE3                   ; FC3FD6  jr Z,0xfc3fe3
+	jr z, Slot64Pool_MoveToList__FC3FE3                   ; FC3FD6  jr Z,0xfc3fe3
 	lda	xbc, (0xE00E:24)                       ; FC3FD8  lda XBC,0x00e00e
 	add	xbc, xix                               ; FC3FDD  add XBC,XIX
 	ld	(xbc), hl                               ; FC3FDF  ld (XBC),HL
-	jr sub_FC3FAE__FC3FEE                      ; FC3FE1  jr T,0xfc3fee
-sub_FC3FAE__FC3FE3:
+	jr Slot64Pool_MoveToList__FC3FEE                      ; FC3FE1  jr T,0xfc3fee
+Slot64Pool_MoveToList__FC3FE3:
 	sub	bc, bc                                 ; FC3FE3  sub BC,BC
 	lda	xwa, (0xE00E:24)                       ; FC3FE5  lda XWA,0x00e00e
 	add	xwa, xix                               ; FC3FEA  add XWA,XIX
 	ld	(xwa), bc                               ; FC3FEC  ld (XWA),BC
-sub_FC3FAE__FC3FEE:
+Slot64Pool_MoveToList__FC3FEE:
 	ldb	c, 2                                   ; FC3FEE  ld C,0x02
 	extpfx3 0x8E, 0x0A, 0x43                   ; FC3FF0  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FC3FF3  extz XBC
@@ -2051,7 +2069,7 @@ sub_FC3FAE__FC3FEE:
 	ld	hl, (xbc)                               ; FC3FFD  ld HL,(XBC)
 	sub	bc, bc                                 ; FC3FFF  sub BC,BC
 	cp	hl, bc                                  ; FC4001  cp HL,BC
-	jr nz, sub_FC3FAE__FC4029                  ; FC4003  jr NZ,0xfc4029
+	jr nz, Slot64Pool_MoveToList__FC4029                  ; FC4003  jr NZ,0xfc4029
 	lda	xbc, (0xE00E:24)                       ; FC4005  lda XBC,0x00e00e
 	add	xbc, xix                               ; FC400A  add XBC,XIX
 	ld	(xbc), de                               ; FC400C  ld (XBC),DE
@@ -2065,8 +2083,8 @@ sub_FC3FAE__FC3FEE:
 	ld	(xhl+2), bc                             ; FC401F  ld (XHL+0x02),BC
 	ld	(xde), de                               ; FC4022  ld (XDE),DE
 	ld	(xde+2), de                             ; FC4024  ld (XDE+0x02),DE
-	jr sub_FC3FAE__FC4050                      ; FC4027  jr T,0xfc4050
-sub_FC3FAE__FC4029:
+	jr Slot64Pool_MoveToList__FC4050                      ; FC4027  jr T,0xfc4050
+Slot64Pool_MoveToList__FC4029:
 	extz	xde                                   ; FC4029  extz XDE
 	ld	ix, (xde)                               ; FC402B  ld IX,(XDE)
 	ld	bc, (xde+2)                             ; FC402D  ld BC,(XDE+0x02)
@@ -2083,7 +2101,7 @@ sub_FC3FAE__FC4029:
 	ld	(xhl+2), de                             ; FC4048  ld (XHL+0x02),DE
 	ld	(xde), hl                               ; FC404B  ld (XDE),HL
 	ld	(xde+2), ix                             ; FC404D  ld (XDE+0x02),IX
-sub_FC3FAE__FC4050:
+Slot64Pool_MoveToList__FC4050:
 	extz	xde                                   ; FC4050  extz XDE
 	ld	c, (xiz+10)                             ; FC4052  ld C,(XIZ+0x0a)
 	ld	(xde+4), c                              ; FC4055  ld (XDE+0x04),C
@@ -2093,7 +2111,7 @@ sub_FC3FAE__FC4050:
 	unlk32 xiz                                 ; FC405B  unlk XIZ
 	ret                                        ; FC405D  ret
 ; --------------------------------------------------------------------------
-; sub_FC405E -- 0xFC405E..0xFC40A8 (75 bytes)
+; Slot64Pool_AcquireOrAddRef -- 0xFC405E..0xFC40A8 (75 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -2101,7 +2119,7 @@ sub_FC3FAE__FC4050:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00E00E, 0x00E010
-; Calls:   0xFC3FAE = sub_FC3FAE
+; Calls:   0xFC3FAE = Slot64Pool_MoveToList
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC405E-0xFC40A8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2109,13 +2127,38 @@ sub_FC3FAE__FC4050:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Slot64Pool_AcquireOrAddRef -- returns an index 0..63 out
+;          of the 0x005B63 pool.  Two arms, on the argument:
+;            arg < 0x40   0xFC4064   take THAT entry and bump its use count
+;                                    (`inc 1,(XHL+0x06)`, 0xFC4078)
+;            arg >= 0x40  0xFC407D   take the head of list 1, or of list 0 when
+;                                    list 1 is empty (0xFC4087-0xFC408D), move it
+;                                    to list 1 and set its use count to 1
+;          The return value is the entry's own index byte +0x05 (0xFC409F).
+;          Callers pass 0x00FF for "give me a fresh one" (0xFC4D1B, 0xFC7DDD).
+; WHERE IT REACHES THE DEVICE: see Slot64Pool_MoveToList -- the result is
+;          R[+0x07] and thence bits 15:8 of register chan+0x0000.
+; ★★ THIS DECODES ONE OF THE TWO SITES notes/HLE-GUIDE-l7a1429.md section 8.5
+;          lists as the undecoded writers of register 0x0000.  Both of them --
+;          0xFC4D27 in Pack104_SetInputs_SubRecordPair and 0xFC7DE9 in
+;          Pack104_StageReg_0000_ForVoice -- store THIS routine's return value.
+;          The guide reports bits 13:8 as "the CHANNEL on the power-on path"; a
+;          64-entry allocator handing an index into exactly those bits on the note
+;          path is the same field, allocated.  Grade STRONG for "these are the
+;          device's 64 channels", PROVEN for "a 0..63 index from a 64-entry pool".
+; ⚠ REPORTED, NOT EDITED: notes/FINDINGS-l7a1429-parameter-names.md section 6
+;          and the guide's section 8.5 say those two sites write `P[+0x07]` bits
+;          6:4.  They write `R[+0x07]` -- the base is `lda XIX,0x00e086` at
+;          0xFC4C8C / 0xFC7DB6, i.e. the 37-byte record, not the 42-byte
+;          sub-record.  So the producer of P[+0x07] bits 6:4 is still unlocated.
 ; --------------------------------------------------------------------------
-sub_FC405E:
+Slot64Pool_AcquireOrAddRef:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC405E  link XIZ,0x0000
 	push	xhl                                   ; FC4062  push XHL
 	pushw	de                                   ; FC4063  push DE
 	cp (xiz+8), 0x40                           ; FC4064  cp (XIZ+0x08),0x40
-	jr nc, sub_FC405E__FC407D                  ; FC4068  jr NC,0xfc407d
+	jr nc, Slot64Pool_AcquireOrAddRef__FC407D                  ; FC4068  jr NC,0xfc407d
 	ldb	c, 7                                   ; FC406A  ld C,0x07
 	extpfx3 0x8E, 0x08, 0x43                   ; FC406C  mul BC,(XIZ+0x08)
 	ld	de, bc                                  ; FC406F  ld DE,BC
@@ -2123,22 +2166,22 @@ sub_FC405E:
 	add	hl, bc                                 ; FC4074  add HL,BC
 	extz	xhl                                   ; FC4076  extz XHL
 	incm8	1, (xhl+6)                           ; FC4078  inc 1,(XHL+0x06)
-	jr sub_FC405E__FC409D                      ; FC407B  jr T,0xfc409d
-sub_FC405E__FC407D:
+	jr Slot64Pool_AcquireOrAddRef__FC409D                      ; FC407B  jr T,0xfc409d
+Slot64Pool_AcquireOrAddRef__FC407D:
 	ld	de, (0xE00E:24)                        ; FC407D  ld DE,(0x00e00e)
 	ld	hl, (0xE010:24)                        ; FC4082  ld HL,(0x00e010)
 	sub	bc, bc                                 ; FC4087  sub BC,BC
 	cp	de, bc                                  ; FC4089  cp DE,BC
-	jr z, sub_FC405E__FC408F                   ; FC408B  jr Z,0xfc408f
+	jr z, Slot64Pool_AcquireOrAddRef__FC408F                   ; FC408B  jr Z,0xfc408f
 	ld	hl, de                                  ; FC408D  ld HL,DE
-sub_FC405E__FC408F:
+Slot64Pool_AcquireOrAddRef__FC408F:
 	pushw	1                                    ; FC408F  push 0x0001
 	pushw	hl                                   ; FC4092  push HL
 	calr (0xFC3FAE - 0xFC4096)                 ; FC4093  calr 0xfc3fae
 	extz	xhl                                   ; FC4096  extz XHL
 	ld	(xhl+6), 1                              ; FC4098  ld (XHL+0x06),0x01
 	pop	xiy                                    ; FC409C  pop XIY
-sub_FC405E__FC409D:
+Slot64Pool_AcquireOrAddRef__FC409D:
 	extz	xhl                                   ; FC409D  extz XHL
 	ld	c, (xhl+5)                              ; FC409F  ld C,(XHL+0x05)
 	ld	a, c                                    ; FC40A2  ld A,C
@@ -2147,14 +2190,14 @@ sub_FC405E__FC409D:
 	unlk32 xiz                                 ; FC40A6  unlk XIZ
 	ret                                        ; FC40A8  ret
 ; --------------------------------------------------------------------------
-; sub_FC40A9 -- 0xFC40A9..0xFC40E5 (61 bytes)
+; Slot64Pool_Release -- 0xFC40A9..0xFC40E5 (61 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
 ;          0xFC4CF0 0xFC7DD9
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC3FAE = sub_FC3FAE
+; Calls:   0xFC3FAE = Slot64Pool_MoveToList
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC40A9-0xFC40E5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2162,8 +2205,17 @@ sub_FC405E__FC409D:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Slot64Pool_Release -- drops one reference to pool entry
+;          `(XIZ+0x08)`.  Use count 1 (0xFC40C1) means last user: the entry goes
+;          back to list 0 and its count to 0 (0xFC40C5-0xFC40CC).  A count above 1
+;          is merely decremented (0xFC40D9).  A count of 0 is a no-op.
+;          Called from 0xFC4CF0 (Pack104_SetInputs_SubRecordPair, releasing the
+;          slot the voice held) and 0xFC7DD9 (Pack104_StageReg_0000_ForVoice).
+; GRADE: PROVEN for the arithmetic; for what the slot IS see
+;          Slot64Pool_AcquireOrAddRef.
 ; --------------------------------------------------------------------------
-sub_FC40A9:
+Slot64Pool_Release:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC40A9  link XIZ,0x0000
 	push	xhl                                   ; FC40AD  push XHL
 	pushw	de                                   ; FC40AE  push DE
@@ -2176,35 +2228,35 @@ sub_FC40A9:
 	extz	xhl                                   ; FC40BC  extz XHL
 	ld	d, (xhl+6)                              ; FC40BE  ld D,(XHL+0x06)
 	cps	d, 1                                   ; FC40C1  cp D,1
-	jr nz, sub_FC40A9__FC40D3                  ; FC40C3  jr NZ,0xfc40d3
+	jr nz, Slot64Pool_Release__FC40D3                  ; FC40C3  jr NZ,0xfc40d3
 	pushw	0                                    ; FC40C5  push 0x0000
 	pushw	hl                                   ; FC40C8  push HL
 	calr (0xFC3FAE - 0xFC40CC)                 ; FC40C9  calr 0xfc3fae
 	ld	(xhl+6), 0                              ; FC40CC  ld (XHL+0x06),0x00
 	pop	xiy                                    ; FC40D0  pop XIY
-	jr sub_FC40A9__FC40E0                      ; FC40D1  jr T,0xfc40e0
-sub_FC40A9__FC40D3:
+	jr Slot64Pool_Release__FC40E0                      ; FC40D1  jr T,0xfc40e0
+Slot64Pool_Release__FC40D3:
 	cps	d, 1                                   ; FC40D3  cp D,1
-	jr le, sub_FC40A9__FC40E0                  ; FC40D5  jr LE,0xfc40e0
+	jr le, Slot64Pool_Release__FC40E0                  ; FC40D5  jr LE,0xfc40e0
 	ld	c, d                                    ; FC40D7  ld C,D
 	dec	1, c                                   ; FC40D9  dec 1,C
 	extz	xhl                                   ; FC40DB  extz XHL
 	ld	(xhl+6), c                              ; FC40DD  ld (XHL+0x06),C
-sub_FC40A9__FC40E0:
+Slot64Pool_Release__FC40E0:
 	popw	ix                                    ; FC40E0  pop IX
 	popw	de                                    ; FC40E1  pop DE
 	pop	xhl                                    ; FC40E2  pop XHL
 	unlk32 xiz                                 ; FC40E3  unlk XIZ
 	ret                                        ; FC40E5  ret
 ; --------------------------------------------------------------------------
-; sub_FC40E6 -- 0xFC40E6..0xFC412D (72 bytes)
+; Slot64Pool_InitAllFree -- 0xFC40E6..0xFC412D (72 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFC7D00
 ; Inputs:  no frame and no argument slot read.
 ; Outputs: writes 0x00E00E, 0x00E010
-; Calls:   0xFC3FAE = sub_FC3FAE
+; Calls:   0xFC3FAE = Slot64Pool_MoveToList
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC40E6-0xFC412D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2212,8 +2264,17 @@ sub_FC40A9__FC40E0:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Slot64Pool_InitAllFree -- builds the 0x005B63 pool: both
+;          list heads cleared (0xFC40EA, 0xFC40F1), then 64 entries of 7 bytes
+;          stamped with their own index (`ld (XDE+0x05),H`, 0xFC40FD; `inc 7,DE`
+;          and `cp H,0x40` at 0xFC410D-0xFC4114), then all 64 pushed onto list 0
+;          (0xFC411B-0xFC4129).
+;          ★ 64 entries is the count, and 64 is the L7A1429's channel count
+;          (notes/FINDINGS-l7a1429-write-sequencing.md section 1).
+; GRADE: PROVEN for the structure; STRONG for "these are the device's channels".
 ; --------------------------------------------------------------------------
-sub_FC40E6:
+Slot64Pool_InitAllFree:
 	pushw	hl                                   ; FC40E6  push HL
 	push	xde                                   ; FC40E7  push XDE
 	sub	bc, bc                                 ; FC40E8  sub BC,BC
@@ -2222,7 +2283,7 @@ sub_FC40E6:
 	ld	(0xE010:24), bc                        ; FC40F1  ld (0x00e010),BC
 	ldw	de, 0x5B63                             ; FC40F6  ld DE,0x5b63
 	ldb	h, 0                                   ; FC40F9  ld H,0x00
-sub_FC40E6__FC40FB:
+Slot64Pool_InitAllFree__FC40FB:
 	extz	xde                                   ; FC40FB  extz XDE
 	ld	(xde+5), h                              ; FC40FD  ld (XDE+0x05),H
 	ld	(xde), de                               ; FC4100  ld (XDE),DE
@@ -2232,10 +2293,10 @@ sub_FC40E6__FC40FB:
 	inc	7, de                                  ; FC410D  inc 7,DE
 	inc	1, h                                   ; FC410F  inc 1,H
 	cp	h, 64                                   ; FC4111  cp H,0x40
-	jr c, sub_FC40E6__FC40FB                   ; FC4114  jr C,0xfc40fb
+	jr c, Slot64Pool_InitAllFree__FC40FB                   ; FC4114  jr C,0xfc40fb
 	ldw	de, 0x5B63                             ; FC4116  ld DE,0x5b63
 	ldb	h, 64                                  ; FC4119  ld H,0x40
-sub_FC40E6__FC411B:
+Slot64Pool_InitAllFree__FC411B:
 	pushw	0                                    ; FC411B  push 0x0000
 	pushw	de                                   ; FC411E  push DE
 	calr (0xFC3FAE - 0xFC4122)                 ; FC411F  calr 0xfc3fae
@@ -2243,7 +2304,7 @@ sub_FC40E6__FC411B:
 	dec	1, h                                   ; FC4124  dec 1,H
 	pop	xiy                                    ; FC4126  pop XIY
 	cps	h, 0                                   ; FC4127  cp H,0
-	jr nz, sub_FC40E6__FC411B                  ; FC4129  jr NZ,0xfc411b
+	jr nz, Slot64Pool_InitAllFree__FC411B                  ; FC4129  jr NZ,0xfc411b
 	pop	xde                                    ; FC412B  pop XDE
 	popw	hl                                    ; FC412C  pop HL
 	ret                                        ; FC412D  ret
@@ -2987,7 +3048,7 @@ sub_FC4269__FC46A2:
 	unlk32 xiz                                 ; FC46A5  unlk XIZ
 	ret                                        ; FC46A7  ret
 ; --------------------------------------------------------------------------
-; sub_FC46A8 -- 0xFC46A8..0xFC47ED (326 bytes)
+; Pack104_ComputeTuningWords_0040_0080 -- 0xFC46A8..0xFC47ED (326 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -3002,8 +3063,33 @@ sub_FC4269__FC46A2:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_ComputeTuningWords_0040_0080 -- builds the two
+;          tuning words registers chan+0x0040 (MAIN RESONATOR) and chan+0x0080
+;          (SUB RESONATOR) are made from.  P is the 42-byte sub-record
+;          *(0x00E084), PART the 187-byte part record *(0x00E082).
+;            mode = bits 7:6 of P[+0x02]                    0xFC46B2-0xFC46B8
+;            mode 1:  P[+0x0A] = sat(PART[+0x0D] + P[+0x0E])
+;                     P[+0x0C] = sat(PART[+0x0D] + P[+0x10])
+;            mode 2:  the same with PART[+0x0D] negated     0xFC474E, 0xFC4794
+;            other:   P[+0x0A] = P[+0x0E], P[+0x0C] = P[+0x10]        0xFC47D0
+;          `sat` is the packer's asymmetric saturate: positive overflow -> 0x7FFF
+;          (0xFC46ED), negative overflow -> 0x0000 (0xFC46FC).
+; WHERE THE VALUES GO: Dev104_PackStagingStruct reads P[+0x0A] at 0xFC4DFD into
+;          staging word 1 (struct+0x02 = register chan+0x0040) and P[+0x0C] at
+;          0xFC4EAC into word 2 (struct+0x04 = chan+0x0080).  That is the first
+;          term of notes/HLE-GUIDE-l7a1429.md section 5's
+;          `SatAsym(P[+0x0A] + P[+0x12] + d1)`.
+; UNITS: P[+0x0E]/P[+0x10] are KEY SHIFT + TUNE in 1/256 semitone
+;          (Pack104_UnpackWaveSelRec_ToSubRecord); PART[+0x0D] is written
+;          `value << 8` by PartRec_SetTuningOffset_000D at 0xFC6572, so the
+;          part-level offset is in whole semitones.
+; GRADE: PROVEN for the arithmetic and for which staging words it feeds.  STRONG
+;          for the names MAIN/SUB RESONATOR, KEY SHIFT and TUNE, which come from
+;          notes/FINDINGS-l7a1429-parameter-names.md section 4 and carry that
+;          note's two points of failure (its section 5b).
 ; --------------------------------------------------------------------------
-sub_FC46A8:
+Pack104_ComputeTuningWords_0040_0080:
 	pushw	hl                                   ; FC46A8  push HL
 	pushw	de                                   ; FC46A9  push DE
 	pushw	ix                                   ; FC46AA  push IX
@@ -3014,11 +3100,11 @@ sub_FC46A8:
 	srl	a, 6                                   ; FC46B8  srl 0x06,A
 	extz	wa                                    ; FC46BB  extz WA
 	cps	wa, 1                                  ; FC46BD  cp WA,1
-	jr z, sub_FC46A8__FC46C9                   ; FC46BF  jr Z,0xfc46c9
+	jr z, Pack104_ComputeTuningWords_0040_0080__FC46C9                   ; FC46BF  jr Z,0xfc46c9
 	cps	wa, 2                                  ; FC46C1  cp WA,2
-	jrl z, sub_FC46A8__FC4742                  ; FC46C3  jrl Z,0xfc4742
-	jrl sub_FC46A8__FC47D0                     ; FC46C6  jrl T,0xfc47d0
-sub_FC46A8__FC46C9:
+	jrl z, Pack104_ComputeTuningWords_0040_0080__FC4742                  ; FC46C3  jrl Z,0xfc4742
+	jrl Pack104_ComputeTuningWords_0040_0080__FC47D0                     ; FC46C6  jrl T,0xfc47d0
+Pack104_ComputeTuningWords_0040_0080__FC46C9:
 	ld	bc, (0xE082:24)                        ; FC46C9  ld BC,(0x00e082)
 	extz	xbc                                   ; FC46CE  extz XBC
 	ld	ix, (xbc+13)                            ; FC46D0  ld IX,(XBC+0x0d)
@@ -3028,21 +3114,21 @@ sub_FC46A8__FC46C9:
 	ld	hl, de                                  ; FC46DD  ld HL,DE
 	add	hl, ix                                 ; FC46DF  add HL,IX
 	cps	hl, 0                                  ; FC46E1  cp HL,0
-	jr ge, sub_FC46A8__FC46F0                  ; FC46E3  jr GE,0xfc46f0
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC46F0                  ; FC46E3  jr GE,0xfc46f0
 	cps	de, 0                                  ; FC46E5  cp DE,0
-	jr lt, sub_FC46A8__FC46F0                  ; FC46E7  jr LT,0xfc46f0
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC46F0                  ; FC46E7  jr LT,0xfc46f0
 	cps	ix, 0                                  ; FC46E9  cp IX,0
-	jr lt, sub_FC46A8__FC46F0                  ; FC46EB  jr LT,0xfc46f0
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC46F0                  ; FC46EB  jr LT,0xfc46f0
 	ldw	hl, 0x7FFF                             ; FC46ED  ld HL,0x7fff
-sub_FC46A8__FC46F0:
+Pack104_ComputeTuningWords_0040_0080__FC46F0:
 	cps	hl, 0                                  ; FC46F0  cp HL,0
-	jr le, sub_FC46A8__FC46FF                  ; FC46F2  jr LE,0xfc46ff
+	jr le, Pack104_ComputeTuningWords_0040_0080__FC46FF                  ; FC46F2  jr LE,0xfc46ff
 	cps	de, 0                                  ; FC46F4  cp DE,0
-	jr ge, sub_FC46A8__FC46FF                  ; FC46F6  jr GE,0xfc46ff
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC46FF                  ; FC46F6  jr GE,0xfc46ff
 	cps	ix, 0                                  ; FC46F8  cp IX,0
-	jr ge, sub_FC46A8__FC46FF                  ; FC46FA  jr GE,0xfc46ff
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC46FF                  ; FC46FA  jr GE,0xfc46ff
 	ldw	hl, 0                                  ; FC46FC  ld HL,0x0000
-sub_FC46A8__FC46FF:
+Pack104_ComputeTuningWords_0040_0080__FC46FF:
 	ld	bc, (0xE084:24)                        ; FC46FF  ld BC,(0x00e084)
 	extz	xbc                                   ; FC4704  extz XBC
 	ld	(xbc+10), hl                            ; FC4706  ld (XBC+0x0a),HL
@@ -3055,23 +3141,23 @@ sub_FC46A8__FC46FF:
 	ld	hl, de                                  ; FC471D  ld HL,DE
 	add	hl, ix                                 ; FC471F  add HL,IX
 	cps	hl, 0                                  ; FC4721  cp HL,0
-	jr ge, sub_FC46A8__FC4730                  ; FC4723  jr GE,0xfc4730
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC4730                  ; FC4723  jr GE,0xfc4730
 	cps	de, 0                                  ; FC4725  cp DE,0
-	jr lt, sub_FC46A8__FC4730                  ; FC4727  jr LT,0xfc4730
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC4730                  ; FC4727  jr LT,0xfc4730
 	cps	ix, 0                                  ; FC4729  cp IX,0
-	jr lt, sub_FC46A8__FC4730                  ; FC472B  jr LT,0xfc4730
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC4730                  ; FC472B  jr LT,0xfc4730
 	ldw	hl, 0x7FFF                             ; FC472D  ld HL,0x7fff
-sub_FC46A8__FC4730:
+Pack104_ComputeTuningWords_0040_0080__FC4730:
 	cps	hl, 0                                  ; FC4730  cp HL,0
-	jr le, sub_FC46A8__FC473F                  ; FC4732  jr LE,0xfc473f
+	jr le, Pack104_ComputeTuningWords_0040_0080__FC473F                  ; FC4732  jr LE,0xfc473f
 	cps	de, 0                                  ; FC4734  cp DE,0
-	jr ge, sub_FC46A8__FC473F                  ; FC4736  jr GE,0xfc473f
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC473F                  ; FC4736  jr GE,0xfc473f
 	cps	ix, 0                                  ; FC4738  cp IX,0
-	jr ge, sub_FC46A8__FC473F                  ; FC473A  jr GE,0xfc473f
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC473F                  ; FC473A  jr GE,0xfc473f
 	ldw	hl, 0                                  ; FC473C  ld HL,0x0000
-sub_FC46A8__FC473F:
-	jrl sub_FC46A8__FC47C4                     ; FC473F  jrl T,0xfc47c4
-sub_FC46A8__FC4742:
+Pack104_ComputeTuningWords_0040_0080__FC473F:
+	jrl Pack104_ComputeTuningWords_0040_0080__FC47C4                     ; FC473F  jrl T,0xfc47c4
+Pack104_ComputeTuningWords_0040_0080__FC4742:
 	ld	bc, (0xE082:24)                        ; FC4742  ld BC,(0x00e082)
 	extz	xbc                                   ; FC4747  extz XBC
 	ld	ix, (xbc+13)                            ; FC4749  ld IX,(XBC+0x0d)
@@ -3084,21 +3170,21 @@ sub_FC46A8__FC4742:
 	ld	hl, wa                                  ; FC475C  ld HL,WA
 	add	hl, de                                 ; FC475E  add HL,DE
 	cps	hl, 0                                  ; FC4760  cp HL,0
-	jr ge, sub_FC46A8__FC476F                  ; FC4762  jr GE,0xfc476f
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC476F                  ; FC4762  jr GE,0xfc476f
 	cps	de, 0                                  ; FC4764  cp DE,0
-	jr lt, sub_FC46A8__FC476F                  ; FC4766  jr LT,0xfc476f
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC476F                  ; FC4766  jr LT,0xfc476f
 	cps	wa, 0                                  ; FC4768  cp WA,0
-	jr lt, sub_FC46A8__FC476F                  ; FC476A  jr LT,0xfc476f
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC476F                  ; FC476A  jr LT,0xfc476f
 	ldw	hl, 0x7FFF                             ; FC476C  ld HL,0x7fff
-sub_FC46A8__FC476F:
+Pack104_ComputeTuningWords_0040_0080__FC476F:
 	cps	hl, 0                                  ; FC476F  cp HL,0
-	jr le, sub_FC46A8__FC477E                  ; FC4771  jr LE,0xfc477e
+	jr le, Pack104_ComputeTuningWords_0040_0080__FC477E                  ; FC4771  jr LE,0xfc477e
 	cps	de, 0                                  ; FC4773  cp DE,0
-	jr ge, sub_FC46A8__FC477E                  ; FC4775  jr GE,0xfc477e
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC477E                  ; FC4775  jr GE,0xfc477e
 	cps	ix, 0                                  ; FC4777  cp IX,0
-	jr ge, sub_FC46A8__FC477E                  ; FC4779  jr GE,0xfc477e
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC477E                  ; FC4779  jr GE,0xfc477e
 	ldw	hl, 0                                  ; FC477B  ld HL,0x0000
-sub_FC46A8__FC477E:
+Pack104_ComputeTuningWords_0040_0080__FC477E:
 	ld	bc, (0xE084:24)                        ; FC477E  ld BC,(0x00e084)
 	extz	xbc                                   ; FC4783  extz XBC
 	ld	(xbc+10), hl                            ; FC4785  ld (XBC+0x0a),HL
@@ -3114,26 +3200,26 @@ sub_FC46A8__FC477E:
 	ld	hl, wa                                  ; FC47A2  ld HL,WA
 	add	hl, de                                 ; FC47A4  add HL,DE
 	cps	hl, 0                                  ; FC47A6  cp HL,0
-	jr ge, sub_FC46A8__FC47B5                  ; FC47A8  jr GE,0xfc47b5
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC47B5                  ; FC47A8  jr GE,0xfc47b5
 	cps	de, 0                                  ; FC47AA  cp DE,0
-	jr lt, sub_FC46A8__FC47B5                  ; FC47AC  jr LT,0xfc47b5
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC47B5                  ; FC47AC  jr LT,0xfc47b5
 	cps	wa, 0                                  ; FC47AE  cp WA,0
-	jr lt, sub_FC46A8__FC47B5                  ; FC47B0  jr LT,0xfc47b5
+	jr lt, Pack104_ComputeTuningWords_0040_0080__FC47B5                  ; FC47B0  jr LT,0xfc47b5
 	ldw	hl, 0x7FFF                             ; FC47B2  ld HL,0x7fff
-sub_FC46A8__FC47B5:
+Pack104_ComputeTuningWords_0040_0080__FC47B5:
 	cps	hl, 0                                  ; FC47B5  cp HL,0
-	jr le, sub_FC46A8__FC47C4                  ; FC47B7  jr LE,0xfc47c4
+	jr le, Pack104_ComputeTuningWords_0040_0080__FC47C4                  ; FC47B7  jr LE,0xfc47c4
 	cps	de, 0                                  ; FC47B9  cp DE,0
-	jr ge, sub_FC46A8__FC47C4                  ; FC47BB  jr GE,0xfc47c4
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC47C4                  ; FC47BB  jr GE,0xfc47c4
 	cps	ix, 0                                  ; FC47BD  cp IX,0
-	jr ge, sub_FC46A8__FC47C4                  ; FC47BF  jr GE,0xfc47c4
+	jr ge, Pack104_ComputeTuningWords_0040_0080__FC47C4                  ; FC47BF  jr GE,0xfc47c4
 	ldw	hl, 0                                  ; FC47C1  ld HL,0x0000
-sub_FC46A8__FC47C4:
+Pack104_ComputeTuningWords_0040_0080__FC47C4:
 	ld	bc, (0xE084:24)                        ; FC47C4  ld BC,(0x00e084)
 	extz	xbc                                   ; FC47C9  extz XBC
 	ld	(xbc+12), hl                            ; FC47CB  ld (XBC+0x0c),HL
-	jr sub_FC46A8__FC47EA                      ; FC47CE  jr T,0xfc47ea
-sub_FC46A8__FC47D0:
+	jr Pack104_ComputeTuningWords_0040_0080__FC47EA                      ; FC47CE  jr T,0xfc47ea
+Pack104_ComputeTuningWords_0040_0080__FC47D0:
 	ld	bc, (0xE084:24)                        ; FC47D0  ld BC,(0x00e084)
 	extz	xbc                                   ; FC47D5  extz XBC
 	ld	wa, (xbc+14)                            ; FC47D7  ld WA,(XBC+0x0e)
@@ -3142,13 +3228,13 @@ sub_FC46A8__FC47D0:
 	extz	xbc                                   ; FC47E2  extz XBC
 	ld	wa, (xbc+16)                            ; FC47E4  ld WA,(XBC+0x10)
 	ld	(xbc+12), wa                            ; FC47E7  ld (XBC+0x0c),WA
-sub_FC46A8__FC47EA:
+Pack104_ComputeTuningWords_0040_0080__FC47EA:
 	popw	ix                                    ; FC47EA  pop IX
 	popw	de                                    ; FC47EB  pop DE
 	popw	hl                                    ; FC47EC  pop HL
 	ret                                        ; FC47ED  ret
 ; --------------------------------------------------------------------------
-; sub_FC47EE -- 0xFC47EE..0xFC49AC (447 bytes)
+; Pack104_UnpackWaveSelRec_ToSubRecord -- 0xFC47EE..0xFC49AC (447 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -3162,8 +3248,38 @@ sub_FC46A8__FC47EA:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_UnpackWaveSelRec_ToSubRecord -- reads the
+;          43-byte WAVE-SELECT RECORD passed in (XIZ+0x08) and expands its
+;          modelling tail into the fields of the 42-byte sub-record P
+;          (*(0x00E084)) that Dev104_PackStagingStruct then consumes.  `pN` below
+;          is arm-4 tone-edit parameter N = wave-select byte +0x0N
+;          (notes/FINDINGS-l7a1429-parameter-names.md section 2b, PROVEN):
+;            P[+0x0E] = (s8)p29 * 256 + (s8)p30 * 2   0xFC480B, 0xFC4828
+;            P[+0x10] = (s8)p41 * 256 + (s8)p42 * 2   0xFC483C, 0xFC4859
+;                       MAIN / SUB `KEY SHIFT` + `TUNE`, 1/256 semitone; the *2
+;                       makes a TUNE step 2/256 semitone = 0.78 cent
+;            P[+0x07] &= 0x0070                        0xFC4865  (bits 6:4 kept)
+;            p21 bit 7 -> set bit 15 of P[+0x07] and P[+0x0E] += 0x0C00  0xFC488B
+;            p31 bit 7 -> set bit 14 of P[+0x07] and P[+0x10] += 0x0C00  0xFC48BD
+;            p33 < 0   -> set bit 7 of P[+0x07]                          0xFC48EE
+;            p25 bit 7 -> P[+0x12] = (p26 << 8) + p27  0xFC490A, 0xFC4926
+;            p37 bit 7 -> P[+0x14] = (p38 << 8) + p39  0xFC4942, 0xFC495E
+;                       these are the second term of registers 0x0040 / 0x0080
+;            i5 = clamp(p15, 44..96)                   0xFC496B-0xFC497C
+;            P[+0x26] = Curve_Muting_Cutoff_Q16_128[i5]   0xFC4987, 0xFC4993
+;            P[+0x24] = Curve_Muting_Cutoff_Q13_128[i5]   0xFC4996, 0xFC49A4
+; WHERE THE VALUES GO: the packer copies P[+0x26] to R[+0x1A] (0xFC5675-0xFC567F)
+;          and thence to staging word 18 = register chan+0x0480 (0xFC568F), and
+;          P[+0x24] straight to word 15 = chan+0x03C0 (0xFC56BA).  Those are the
+;          THIRD instance of the MUTING curve pair that
+;          notes/HLE-GUIDE-l7a1429.md section 2.3 proves exists; this routine is
+;          where its index `i5` is formed and cached.
+; GRADE: PROVEN for every line above -- all operands.  The parameter NAMES are
+;          STRONG (parameter-names note section 4); `FORMANT` for the i5 section
+;          stays WEAK there and is not asserted here.
 ; --------------------------------------------------------------------------
-sub_FC47EE:
+Pack104_UnpackWaveSelRec_ToSubRecord:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC47EE  link XIZ,0xfffc
 	pushw	hl                                   ; FC47F2  push HL
 	pushw	de                                   ; FC47F3  push DE
@@ -3220,7 +3336,7 @@ sub_FC47EE:
 	ld	xbc, (xiz+8)                            ; FC4870  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+21)                             ; FC4873  ld A,(XBC+0x15)
 	and	a, 0x80                                ; FC4876  and A,0x80
-	jr z, sub_FC47EE__FC48A2                   ; FC4879  jr Z,0xfc48a2
+	jr z, Pack104_UnpackWaveSelRec_ToSubRecord__FC48A2                   ; FC4879  jr Z,0xfc48a2
 	ld	wa, (xix)                               ; FC487B  ld WA,(XIX)
 	extz	xwa                                   ; FC487D  extz XWA
 	ld	iy, (xwa+7)                             ; FC487F  ld IY,(XWA+0x07)
@@ -3237,11 +3353,11 @@ sub_FC47EE:
 	ld	bc, (xix)                               ; FC489B  ld BC,(XIX)
 	extz	xbc                                   ; FC489D  extz XBC
 	ld	(xbc+14), hl                            ; FC489F  ld (XBC+0x0e),HL
-sub_FC47EE__FC48A2:
+Pack104_UnpackWaveSelRec_ToSubRecord__FC48A2:
 	ld	xbc, (xiz+8)                            ; FC48A2  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+31)                             ; FC48A5  ld A,(XBC+0x1f)
 	and	a, 0x80                                ; FC48A8  and A,0x80
-	jr z, sub_FC47EE__FC48D4                   ; FC48AB  jr Z,0xfc48d4
+	jr z, Pack104_UnpackWaveSelRec_ToSubRecord__FC48D4                   ; FC48AB  jr Z,0xfc48d4
 	ld	wa, (xix)                               ; FC48AD  ld WA,(XIX)
 	extz	xwa                                   ; FC48AF  extz XWA
 	ld	iy, (xwa+7)                             ; FC48B1  ld IY,(XWA+0x07)
@@ -3258,11 +3374,11 @@ sub_FC47EE__FC48A2:
 	ld	bc, (xix)                               ; FC48CD  ld BC,(XIX)
 	extz	xbc                                   ; FC48CF  extz XBC
 	ld	(xbc+16), hl                            ; FC48D1  ld (XBC+0x10),HL
-sub_FC47EE__FC48D4:
+Pack104_UnpackWaveSelRec_ToSubRecord__FC48D4:
 	ld	xbc, (xiz+8)                            ; FC48D4  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+33)                             ; FC48D7  ld A,(XBC+0x21)
 	cps	a, 0                                   ; FC48DA  cp A,0
-	jr ge, sub_FC47EE__FC48F1                  ; FC48DC  jr GE,0xfc48f1
+	jr ge, Pack104_UnpackWaveSelRec_ToSubRecord__FC48F1                  ; FC48DC  jr GE,0xfc48f1
 	ld	wa, (xix)                               ; FC48DE  ld WA,(XIX)
 	extz	xwa                                   ; FC48E0  extz XWA
 	ld	iy, (xwa+7)                             ; FC48E2  ld IY,(XWA+0x07)
@@ -3271,11 +3387,11 @@ sub_FC47EE__FC48D4:
 	ld	wa, (xix)                               ; FC48EA  ld WA,(XIX)
 	extz	xwa                                   ; FC48EC  extz XWA
 	ld	(xwa+7), hl                             ; FC48EE  ld (XWA+0x07),HL
-sub_FC47EE__FC48F1:
+Pack104_UnpackWaveSelRec_ToSubRecord__FC48F1:
 	ld	xbc, (xiz+8)                            ; FC48F1  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+25)                             ; FC48F4  ld A,(XBC+0x19)
 	and	a, 0x80                                ; FC48F7  and A,0x80
-	jr z, sub_FC47EE__FC4929                   ; FC48FA  jr Z,0xfc4929
+	jr z, Pack104_UnpackWaveSelRec_ToSubRecord__FC4929                   ; FC48FA  jr Z,0xfc4929
 	ld	a, (xbc+26)                             ; FC48FC  ld A,(XBC+0x1a)
 	extz	wa                                    ; FC48FF  extz WA
 	ld	hl, wa                                  ; FC4901  ld HL,WA
@@ -3295,11 +3411,11 @@ sub_FC47EE__FC48F1:
 	ld	bc, (xix)                               ; FC4922  ld BC,(XIX)
 	extz	xbc                                   ; FC4924  extz XBC
 	ld	(xbc+18), de                            ; FC4926  ld (XBC+0x12),DE
-sub_FC47EE__FC4929:
+Pack104_UnpackWaveSelRec_ToSubRecord__FC4929:
 	ld	xbc, (xiz+8)                            ; FC4929  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+37)                             ; FC492C  ld A,(XBC+0x25)
 	and	a, 0x80                                ; FC492F  and A,0x80
-	jr z, sub_FC47EE__FC4961                   ; FC4932  jr Z,0xfc4961
+	jr z, Pack104_UnpackWaveSelRec_ToSubRecord__FC4961                   ; FC4932  jr Z,0xfc4961
 	ld	a, (xbc+38)                             ; FC4934  ld A,(XBC+0x26)
 	extz	wa                                    ; FC4937  extz WA
 	ld	hl, wa                                  ; FC4939  ld HL,WA
@@ -3319,20 +3435,20 @@ sub_FC47EE__FC4929:
 	ld	bc, (xix)                               ; FC495A  ld BC,(XIX)
 	extz	xbc                                   ; FC495C  extz XBC
 	ld	(xbc+20), de                            ; FC495E  ld (XBC+0x14),DE
-sub_FC47EE__FC4961:
+Pack104_UnpackWaveSelRec_ToSubRecord__FC4961:
 	ld	xbc, (xiz+8)                            ; FC4961  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+15)                             ; FC4964  ld A,(XBC+0x0f)
 	extz	wa                                    ; FC4967  extz WA
 	ld	hl, wa                                  ; FC4969  ld HL,WA
 	cp	wa, 96                                  ; FC496B  cp WA,0x0060
-	jr le, sub_FC47EE__FC4976                  ; FC496F  jr LE,0xfc4976
+	jr le, Pack104_UnpackWaveSelRec_ToSubRecord__FC4976                  ; FC496F  jr LE,0xfc4976
 	ldw	hl, 96                                 ; FC4971  ld HL,0x0060
-	jr sub_FC47EE__FC497F                      ; FC4974  jr T,0xfc497f
-sub_FC47EE__FC4976:
+	jr Pack104_UnpackWaveSelRec_ToSubRecord__FC497F                      ; FC4974  jr T,0xfc497f
+Pack104_UnpackWaveSelRec_ToSubRecord__FC4976:
 	cp	hl, 44                                  ; FC4976  cp HL,0x002c
-	jr ge, sub_FC47EE__FC497F                  ; FC497A  jr GE,0xfc497f
+	jr ge, Pack104_UnpackWaveSelRec_ToSubRecord__FC497F                  ; FC497A  jr GE,0xfc497f
 	ldw	hl, 44                                 ; FC497C  ld HL,0x002c
-sub_FC47EE__FC497F:
+Pack104_UnpackWaveSelRec_ToSubRecord__FC497F:
 	ldw	bc, 2                                  ; FC497F  ld BC,0x0002
 	muls	xbc, xhl                              ; FC4982  muls XBC,HL
 	ld	(xiz-4), xbc                            ; FC4984  ld (XIZ+0xfc),XBC
@@ -3353,7 +3469,7 @@ sub_FC47EE__FC497F:
 	unlk32 xiz                                 ; FC49AA  unlk XIZ
 	ret                                        ; FC49AC  ret
 ; --------------------------------------------------------------------------
-; sub_FC49AD -- 0xFC49AD..0xFC4AEC (320 bytes)
+; Pack104_StageRegs_00C0_0100_0240 -- 0xFC49AD..0xFC4AEC (320 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -3369,8 +3485,41 @@ sub_FC47EE__FC497F:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_StageRegs_00C0_0100_0240 -- fills the three
+;          staging words its counterpart Dev104_SetChanRegs_00C0_0100_0240 ships,
+;          into the struct passed in (XIZ+0x08).  R is the 37-byte record
+;          *(0x00E086).  This routine IS notes/HLE-GUIDE-l7a1429.md section 5's
+;          value expression for registers 0x00C0, 0x0100 and 0x0240:
+;            i = clamp(R[+0x12] + R[+0x16] + R[+0x21], 0..250)   0xFC49CC-0xFC49DB
+;            struct+0x06 (word 3, reg chan+0x00C0) =
+;                Curve_Position_Log2Period_251[i]               0xFC49E5
+;              + (0x4280 - R[+0x0E])   unless bit 7 of *(R+1)[+0x0E]   0xFC4A18
+;              - R[+0x0C]                                       0xFC4A29
+;              forced to 0x0000 / 0x7F00 on underflow           0xFC4A37/0xFC4A3C
+;            struct+0x08 (word 4, reg chan+0x0100) =
+;                Dev104_Reg0100_Const_251[the SAME index i]     0xFC49ED-0xFC49F9
+;            struct+0x12 (word 9, reg chan+0x0240) =
+;                high16( fold(R[+0x1A])
+;                      * Curve_Fitting_Exp2Rise_128[
+;                            clamp(R[+0x14] + R[+0x18] + |R[+0x21]|/4, 0..0x7F)] )
+;                then `& 0xFFF8 | 7`                            0xFC4AD9-0xFC4ADD
+;              `fold` is the sign-magnitude -> offset-binary step at
+;              0xFC4A51-0xFC4A72, and R[+0x1A] is the word register chan+0x0480
+;              carries (see Pack104_UnpackWaveSelRec_ToSubRecord).
+;              ⚠ `srl 0x00,XIY` at 0xFC4ACC is a shift by SIXTEEN; the guide's
+;              section 4 settles that from the 0xFE133B reset image and grades it
+;              PROVEN on one stated premise.
+; ★ WHY THESE THREE TRAVEL TOGETHER: 0x00C0 and 0x0240 are exactly the two
+;          registers whose index carries R[+0x21], the `P0SITI0N M0VEMENT` term
+;          that Pack104_TickPositionMovement_ForVoice recomputes; 0x0100 rides
+;          along because its table is read with the same index register.
+; GRADE: PROVEN for the arithmetic and the destinations.  The names
+;          `P0SITI0N` (0x00C0) and its table-pair companion (0x0100) are STRONG;
+;          0x0240's name is WEAK -- a 3! choice among DEPTH / FORMANT /
+;          INTERACTION GAIN with no measurement (guide sections 3 and 8.3).
 ; --------------------------------------------------------------------------
-sub_FC49AD:
+Pack104_StageRegs_00C0_0100_0240:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC49AD  link XIZ,0xfffc
 	pushw	hl                                   ; FC49B1  push HL
 	pushw	de                                   ; FC49B2  push DE
@@ -3385,14 +3534,14 @@ sub_FC49AD:
 	ld	hl, wa                                  ; FC49C8  ld HL,WA
 	add	hl, ix                                 ; FC49CA  add HL,IX
 	cp	hl, 0xFA                                ; FC49CC  cp HL,0x00fa
-	jr le, sub_FC49AD__FC49D7                  ; FC49D0  jr LE,0xfc49d7
+	jr le, Pack104_StageRegs_00C0_0100_0240__FC49D7                  ; FC49D0  jr LE,0xfc49d7
 	ldw	hl, 0xFA                               ; FC49D2  ld HL,0x00fa
-	jr sub_FC49AD__FC49DE                      ; FC49D5  jr T,0xfc49de
-sub_FC49AD__FC49D7:
+	jr Pack104_StageRegs_00C0_0100_0240__FC49DE                      ; FC49D5  jr T,0xfc49de
+Pack104_StageRegs_00C0_0100_0240__FC49D7:
 	cps	hl, 0                                  ; FC49D7  cp HL,0
-	jr ge, sub_FC49AD__FC49DE                  ; FC49D9  jr GE,0xfc49de
+	jr ge, Pack104_StageRegs_00C0_0100_0240__FC49DE                  ; FC49D9  jr GE,0xfc49de
 	ldw	hl, 0                                  ; FC49DB  ld HL,0x0000
-sub_FC49AD__FC49DE:
+Pack104_StageRegs_00C0_0100_0240__FC49DE:
 	ldw	bc, 2                                  ; FC49DE  ld BC,0x0002
 	muls	xbc, xhl                              ; FC49E1  muls XBC,HL
 	ld	xix, xbc                                ; FC49E3  ld XIX,XBC
@@ -3408,28 +3557,28 @@ sub_FC49AD__FC49DE:
 	ld	xwa, (xbc+1)                            ; FC4A03  ld XWA,(XBC+0x01)
 	ld	c, (xwa+14)                             ; FC4A06  ld C,(XWA+0x0e)
 	and	c, 0x80                                ; FC4A09  and C,0x80
-	jr nz, sub_FC49AD__FC4A1F                  ; FC4A0C  jr NZ,0xfc4a1f
+	jr nz, Pack104_StageRegs_00C0_0100_0240__FC4A1F                  ; FC4A0C  jr NZ,0xfc4a1f
 	ld	bc, (0xE086:24)                        ; FC4A0E  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4A13  extz XBC
 	ld	wa, (xbc+14)                            ; FC4A15  ld WA,(XBC+0x0e)
 	ldw	iy, 0x4280                             ; FC4A18  ld IY,0x4280
 	sub	iy, wa                                 ; FC4A1B  sub IY,WA
 	add	hl, iy                                 ; FC4A1D  add HL,IY
-sub_FC49AD__FC4A1F:
+Pack104_StageRegs_00C0_0100_0240__FC4A1F:
 	ld	bc, (0xE086:24)                        ; FC4A1F  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4A24  extz XBC
 	ld	wa, (xbc+12)                            ; FC4A26  ld WA,(XBC+0x0c)
 	sub	hl, wa                                 ; FC4A29  sub HL,WA
 	cps	hl, 0                                  ; FC4A2B  cp HL,0
-	jr ge, sub_FC49AD__FC4A3F                  ; FC4A2D  jr GE,0xfc4a3f
+	jr ge, Pack104_StageRegs_00C0_0100_0240__FC4A3F                  ; FC4A2D  jr GE,0xfc4a3f
 	ld	wa, hl                                  ; FC4A2F  ld WA,HL
 	and	wa, 0x4000                             ; FC4A31  and WA,0x4000
-	jr z, sub_FC49AD__FC4A3C                   ; FC4A35  jr Z,0xfc4a3c
+	jr z, Pack104_StageRegs_00C0_0100_0240__FC4A3C                   ; FC4A35  jr Z,0xfc4a3c
 	ldw	hl, 0                                  ; FC4A37  ld HL,0x0000
-	jr sub_FC49AD__FC4A3F                      ; FC4A3A  jr T,0xfc4a3f
-sub_FC49AD__FC4A3C:
+	jr Pack104_StageRegs_00C0_0100_0240__FC4A3F                      ; FC4A3A  jr T,0xfc4a3f
+Pack104_StageRegs_00C0_0100_0240__FC4A3C:
 	ldw	hl, 0x7F00                             ; FC4A3C  ld HL,0x7f00
-sub_FC49AD__FC4A3F:
+Pack104_StageRegs_00C0_0100_0240__FC4A3F:
 	ld	xbc, (xiz+8)                            ; FC4A3F  ld XBC,(XIZ+0x08)
 	ld	(xbc+6), hl                             ; FC4A42  ld (XBC+0x06),HL
 	ld	bc, (0xE086:24)                        ; FC4A45  ld BC,(0x00e086)
@@ -3437,28 +3586,28 @@ sub_FC49AD__FC4A3F:
 	ld	hl, (xbc+26)                            ; FC4A4C  ld HL,(XBC+0x1a)
 	ld	wa, hl                                  ; FC4A4F  ld WA,HL
 	and	wa, 0x8000                             ; FC4A51  and WA,0x8000
-	jr z, sub_FC49AD__FC4A6A                   ; FC4A55  jr Z,0xfc4a6a
+	jr z, Pack104_StageRegs_00C0_0100_0240__FC4A6A                   ; FC4A55  jr Z,0xfc4a6a
 	ld	wa, hl                                  ; FC4A57  ld WA,HL
 	res	15, wa                                 ; FC4A59  res 0x0f,WA
 	extz	xwa                                   ; FC4A5C  extz XWA
 	ld	(xiz-4), xwa                            ; FC4A5E  ld (XIZ+0xfc),XWA
 	ld	xix, 0x8000                             ; FC4A61  ld XIX,0x00008000
 	sub	xix, xwa                               ; FC4A66  sub XIX,XWA
-	jr sub_FC49AD__FC4A74                      ; FC4A68  jr T,0xfc4a74
-sub_FC49AD__FC4A6A:
+	jr Pack104_StageRegs_00C0_0100_0240__FC4A74                      ; FC4A68  jr T,0xfc4a74
+Pack104_StageRegs_00C0_0100_0240__FC4A6A:
 	ld	ix, hl                                  ; FC4A6A  ld IX,HL
 	extz	xix                                   ; FC4A6C  extz XIX
 	add	xix, 0x8000                            ; FC4A6E  add XIX,0x00008000
-sub_FC49AD__FC4A74:
+Pack104_StageRegs_00C0_0100_0240__FC4A74:
 	ld	bc, (0xE086:24)                        ; FC4A74  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4A79  extz XBC
 	ld	hl, (xbc+33)                            ; FC4A7B  ld HL,(XBC+0x21)
 	cps	hl, 0                                  ; FC4A7E  cp HL,0
-	jr ge, sub_FC49AD__FC4A88                  ; FC4A80  jr GE,0xfc4a88
+	jr ge, Pack104_StageRegs_00C0_0100_0240__FC4A88                  ; FC4A80  jr GE,0xfc4a88
 	ld	wa, hl                                  ; FC4A82  ld WA,HL
 	neg	wa                                     ; FC4A84  neg WA
 	ld	hl, wa                                  ; FC4A86  ld HL,WA
-sub_FC49AD__FC4A88:
+Pack104_StageRegs_00C0_0100_0240__FC4A88:
 	ld	de, hl                                  ; FC4A88  ld DE,HL
 	sra	de, 2                                  ; FC4A8A  sra 0x02,DE
 	ld	bc, (0xE086:24)                        ; FC4A8D  ld BC,(0x00e086)
@@ -3470,14 +3619,14 @@ sub_FC49AD__FC4A88:
 	ld	hl, iy                                  ; FC4A9F  ld HL,IY
 	add	hl, de                                 ; FC4AA1  add HL,DE
 	cp	hl, 0x7F                                ; FC4AA3  cp HL,0x007f
-	jr le, sub_FC49AD__FC4AAE                  ; FC4AA7  jr LE,0xfc4aae
+	jr le, Pack104_StageRegs_00C0_0100_0240__FC4AAE                  ; FC4AA7  jr LE,0xfc4aae
 	ldw	hl, 0x7F                               ; FC4AA9  ld HL,0x007f
-	jr sub_FC49AD__FC4AB5                      ; FC4AAC  jr T,0xfc4ab5
-sub_FC49AD__FC4AAE:
+	jr Pack104_StageRegs_00C0_0100_0240__FC4AB5                      ; FC4AAC  jr T,0xfc4ab5
+Pack104_StageRegs_00C0_0100_0240__FC4AAE:
 	cps	hl, 0                                  ; FC4AAE  cp HL,0
-	jr ge, sub_FC49AD__FC4AB5                  ; FC4AB0  jr GE,0xfc4ab5
+	jr ge, Pack104_StageRegs_00C0_0100_0240__FC4AB5                  ; FC4AB0  jr GE,0xfc4ab5
 	ldw	hl, 0                                  ; FC4AB2  ld HL,0x0000
-sub_FC49AD__FC4AB5:
+Pack104_StageRegs_00C0_0100_0240__FC4AB5:
 	ldw	bc, 2                                  ; FC4AB5  ld BC,0x0002
 	muls	xbc, xhl                              ; FC4AB8  muls XBC,HL
 	add	xbc, 0xFDF9E0                          ; FC4ABA  add XBC,0x00fdf9e0
@@ -3502,7 +3651,7 @@ sub_FC49AD__FC4AB5:
 	unlk32 xiz                                 ; FC4AEA  unlk XIZ
 	ret                                        ; FC4AEC  ret
 ; --------------------------------------------------------------------------
-; sub_FC4AED -- 0xFC4AED..0xFC4B2D (65 bytes)
+; Pack104_StageReg_0280 -- 0xFC4AED..0xFC4B2D (65 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -3517,8 +3666,25 @@ sub_FC49AD__FC4AB5:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_StageReg_0280 -- fills the one staging word its
+;          counterpart Dev104_SetChanReg_0280 ships (that routine reads struct
+;          offset +0x14, 0xFB7B58).  With R = *(0x00E086):
+;            struct+0x14 (word 10, register chan+0x0280) =
+;                Curve_Exp2Gain_Percent_101[clamp(R[+0x10] + R[+0x23], 0..100)]
+;            0xFC4AFA-0xFC4B26
+;          which is notes/HLE-GUIDE-l7a1429.md section 5's row for 0x0280
+;          verbatim.  The 0..100 clamp against a 101-entry curve is the reason
+;          that note reads the control as a PERCENT.
+; WHERE ITS INPUTS COME FROM: Dev104_PackStagingStruct sets
+;          R[+0x10] = Q5(LinCoef_SubGain_KeyRamp_Q5_128, p36) at 0xFC513E-0xFC518C
+;          -- the touch depth -- and R[+0x23] = P[+0x1E] at 0xFC5196-0xFC51A0,
+;          the value PartRec_SetSubGainOffset_000F derives from p33.
+; GRADE: PROVEN for the arithmetic and the destination.  The name `SUB GAIN` is
+;          STRONG and is the single fact the whole MAIN/SUB direction rests on
+;          (notes/FINDINGS-l7a1429-parameter-names.md section 5b).
 ; --------------------------------------------------------------------------
-sub_FC4AED:
+Pack104_StageReg_0280:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC4AED  link XIZ,0x0000
 	pushw	hl                                   ; FC4AF1  push HL
 	pushw	de                                   ; FC4AF2  push DE
@@ -3529,14 +3695,14 @@ sub_FC4AED:
 	ld	wa, de                                  ; FC4B00  ld WA,DE
 	add	hl, wa                                 ; FC4B02  add HL,WA
 	cp	hl, 0x64                                ; FC4B04  cp HL,0x0064
-	jr le, sub_FC4AED__FC4B0F                  ; FC4B08  jr LE,0xfc4b0f
+	jr le, Pack104_StageReg_0280__FC4B0F                  ; FC4B08  jr LE,0xfc4b0f
 	ldw	hl, 0x64                               ; FC4B0A  ld HL,0x0064
-	jr sub_FC4AED__FC4B16                      ; FC4B0D  jr T,0xfc4b16
-sub_FC4AED__FC4B0F:
+	jr Pack104_StageReg_0280__FC4B16                      ; FC4B0D  jr T,0xfc4b16
+Pack104_StageReg_0280__FC4B0F:
 	cps	hl, 0                                  ; FC4B0F  cp HL,0
-	jr ge, sub_FC4AED__FC4B16                  ; FC4B11  jr GE,0xfc4b16
+	jr ge, Pack104_StageReg_0280__FC4B16                  ; FC4B11  jr GE,0xfc4b16
 	ldw	hl, 0                                  ; FC4B13  ld HL,0x0000
-sub_FC4AED__FC4B16:
+Pack104_StageReg_0280__FC4B16:
 	ldw	bc, 2                                  ; FC4B16  ld BC,0x0002
 	muls	xbc, xhl                              ; FC4B19  muls XBC,HL
 	add	xbc, 0xFDFECC                          ; FC4B1B  add XBC,0x00fdfecc
@@ -3744,7 +3910,7 @@ Pack104_SetInputs_PartRecord__FC4C7F:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E084
 ;          reads 0x00E082
-; Calls:   0xFC405E = sub_FC405E, 0xFC40A9 = sub_FC40A9
+; Calls:   0xFC405E = Slot64Pool_AcquireOrAddRef, 0xFC40A9 = Slot64Pool_Release
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC4C85-0xFC4D62
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -3971,7 +4137,7 @@ Pack104_SetInputs_Rec0E_E08D:
 ; Inputs:  frame `link XIZ,-18`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00E082, 0x00E084, 0x00E086, 0x00E088, 0x00E089, 0x00E08A, 0x00E08C, 0x00E08D, 0x00F2F3
-; Calls:   0xFC49AD = sub_FC49AD, 0xFC4AED = sub_FC4AED
+; Calls:   0xFC49AD = Pack104_StageRegs_00C0_0100_0240, 0xFC4AED = Pack104_StageReg_0280
 ;          0xFCB11B = Multiply32
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC4DBD-0xFC56C3
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -3987,7 +4153,7 @@ Pack104_SetInputs_Rec0E_E08D:
 ;          in 0x00..0x24".  Nineteen is the number of WRITE SITES; the distinct offsets are
 ;          16, of which 15 are even (whole words) and one (+0x1D) is a high-byte write.  Four
 ;          of the nineteen even fields -- +0x06, +0x08, +0x12 and +0x16 -- are not written by
-;          this routine's own instructions at all; +0x06 and +0x08 come from sub_FC49AD, which
+;          this routine's own instructions at all; +0x06 and +0x08 come from Pack104_StageRegs_00C0_0100_0240, which
 ;          it calls at 0xFC56AA.
 ;          Its inputs are the globals 0x00E082-0x00E08D, set by Pack104_SetInputs_PartRecord,
 ;          Pack104_SetInputs_SubRecordPair, Pack104_SetInputs_E088_E089_E08A and
@@ -5213,7 +5379,7 @@ sub_FC578C__FC589A:
 	popw	hl                                    ; FC589C  pop HL
 	ret                                        ; FC589D  ret
 ; --------------------------------------------------------------------------
-; sub_FC589E -- 0xFC589E..0xFC59EE (337 bytes)
+; PartRec_SetFittingOffset_0001 -- 0xFC589E..0xFC59EE (337 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAEAED in sub_FAEACE, 0xFB659F in PartRec_ResetToDefaults
@@ -5226,8 +5392,26 @@ sub_FC578C__FC589A:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetFittingOffset_0001 -- stores a part-level
+;          FITTING offset into PART[+0x01] (0xFC58BD; the part record is
+;          0x005D23 + 0xBB*arg) and then, for each of the four elements whose
+;          sub-record P has bit 7 of P[+0x00] set, re-derives
+;            P[+0x16] = (p21 & 0x7F) +/- PART[+0x01]     0xFC5938-0xFC5951
+;            P[+0x18] = (p31 & 0x7F) +/- PART[+0x01]     0xFC5959-0xFC596F
+;          with the sign taken from bits 4:3 of P[+0x00] (0xFC5925), which this
+;          routine also sets from its mask argument.  `pN` is read through
+;          P[+0x03], the wave-select record pointer.
+; WHERE THE VALUES GO: Dev104_PackStagingStruct reads P[+0x16] at 0xFC4FA0 and
+;          P[+0x18] at 0xFC505D as the additive term of `v1` / `v2` in
+;          notes/HLE-GUIDE-l7a1429.md section 5.2, and v1/v2 index
+;          Curve_Fitting_Exp2Decay_256 and Curve_Fitting_Exp2Rise_128 for
+;          registers chan+0x0140 / 0x01C0 (MAIN) and chan+0x0180 / 0x0200 (SUB).
+; GRADE: PROVEN for the offsets and the data path.  STRONG for the name
+;          `FITTING`, from notes/FINDINGS-l7a1429-parameter-names.md section 5c,
+;          which carries that note's one-caption point of failure.
 ; --------------------------------------------------------------------------
-sub_FC589E:
+PartRec_SetFittingOffset_0001:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FC589E  link XIZ,0xfffe
 	pushw	hl                                   ; FC58A2  push HL
 	push	xde                                   ; FC58A3  push XDE
@@ -5248,7 +5432,7 @@ sub_FC589E:
 	ld	l, (xiz+12)                             ; FC58CE  ld L,(XIZ+0x0c)
 	ld	de, bc                                  ; FC58D1  ld DE,BC
 	ldb	h, 4                                   ; FC58D3  ld H,0x04
-sub_FC589E__FC58D5:
+PartRec_SetFittingOffset_0001__FC58D5:
 	extz	xde                                   ; FC58D5  extz XDE
 	extpfx2 0xB2, 0xB3                         ; FC58D7  res 3,(XDE)
 	extpfx2 0xB2, 0xB4                         ; FC58D9  res 4,(XDE)
@@ -5256,29 +5440,29 @@ sub_FC589E__FC58D5:
 	ld	bc, de                                  ; FC58E0  ld BC,DE
 	extz	xde                                   ; FC58E2  extz XDE
 	extpfx2 0xB2, 0xCF                         ; FC58E4  bit 7,(XDE)
-	jrl z, sub_FC589E__FC59D2                  ; FC58E6  jrl Z,0xfc59d2
+	jrl z, PartRec_SetFittingOffset_0001__FC59D2                  ; FC58E6  jrl Z,0xfc59d2
 	ld	a, l                                    ; FC58E9  ld A,L
 	and	a, 1                                   ; FC58EB  and A,0x01
-	jr z, sub_FC589E__FC590A                   ; FC58EE  jr Z,0xfc590a
+	jr z, PartRec_SetFittingOffset_0001__FC590A                   ; FC58EE  jr Z,0xfc590a
 	ld	a, l                                    ; FC58F0  ld A,L
 	and	a, 2                                   ; FC58F2  and A,0x02
-	jr z, sub_FC589E__FC58FF                   ; FC58F5  jr Z,0xfc58ff
+	jr z, PartRec_SetFittingOffset_0001__FC58FF                   ; FC58F5  jr Z,0xfc58ff
 	extz	xde                                   ; FC58F7  extz XDE
 	extpfx2 0xB2, 0xB3                         ; FC58F9  res 3,(XDE)
 	extpfx2 0xB2, 0xBC                         ; FC58FB  set 4,(XDE)
-	jr sub_FC589E__FC5905                      ; FC58FD  jr T,0xfc5905
-sub_FC589E__FC58FF:
+	jr PartRec_SetFittingOffset_0001__FC5905                      ; FC58FD  jr T,0xfc5905
+PartRec_SetFittingOffset_0001__FC58FF:
 	extz	xde                                   ; FC58FF  extz XDE
 	extpfx2 0xB2, 0xBB                         ; FC5901  set 3,(XDE)
 	extpfx2 0xB2, 0xB4                         ; FC5903  res 4,(XDE)
-sub_FC589E__FC5905:
+PartRec_SetFittingOffset_0001__FC5905:
 	ld	de, (0xE084:24)                        ; FC5905  ld DE,(0x00e084)
-sub_FC589E__FC590A:
+PartRec_SetFittingOffset_0001__FC590A:
 	ld	bc, (0xE082:24)                        ; FC590A  ld BC,(0x00e082)
 	extz	xbc                                   ; FC590F  extz XBC
 	ld	a, (xbc)                                ; FC5911  ld A,(XBC)
 	cps	a, 0                                   ; FC5913  cp A,0
-	jrl nz, sub_FC589E__FC59D2                 ; FC5915  jrl NZ,0xfc59d2
+	jrl nz, PartRec_SetFittingOffset_0001__FC59D2                 ; FC5915  jrl NZ,0xfc59d2
 	extz	xde                                   ; FC5918  extz XDE
 	ld	xwa, (xde+3)                            ; FC591A  ld XWA,(XDE+0x03)
 	ld	xix, xwa                                ; FC591D  ld XIX,XWA
@@ -5289,11 +5473,11 @@ sub_FC589E__FC590A:
 	srl	c, 3                                   ; FC5928  srl 0x03,C
 	extz	bc                                    ; FC592B  extz BC
 	cps	bc, 1                                  ; FC592D  cp BC,1
-	jr z, sub_FC589E__FC5938                   ; FC592F  jr Z,0xfc5938
+	jr z, PartRec_SetFittingOffset_0001__FC5938                   ; FC592F  jr Z,0xfc5938
 	cps	bc, 2                                  ; FC5931  cp BC,2
-	jr z, sub_FC589E__FC5974                   ; FC5933  jr Z,0xfc5974
-	jrl sub_FC589E__FC59B0                     ; FC5935  jrl T,0xfc59b0
-sub_FC589E__FC5938:
+	jr z, PartRec_SetFittingOffset_0001__FC5974                   ; FC5933  jr Z,0xfc5974
+	jrl PartRec_SetFittingOffset_0001__FC59B0                     ; FC5935  jrl T,0xfc59b0
+PartRec_SetFittingOffset_0001__FC5938:
 	ld	c, (xix+21)                             ; FC5938  ld C,(XIX+0x15)
 	res	7, c                                   ; FC593B  res 0x07,C
 	extz	bc                                    ; FC593E  extz BC
@@ -5314,8 +5498,8 @@ sub_FC589E__FC5938:
 	ld	iy, (xwa+1)                             ; FC596A  ld IY,(XWA+0x01)
 	add	bc, iy                                 ; FC596D  add BC,IY
 	ld	(xde+24), bc                            ; FC596F  ld (XDE+0x18),BC
-	jr sub_FC589E__FC59CD                      ; FC5972  jr T,0xfc59cd
-sub_FC589E__FC5974:
+	jr PartRec_SetFittingOffset_0001__FC59CD                      ; FC5972  jr T,0xfc59cd
+PartRec_SetFittingOffset_0001__FC5974:
 	ld	c, (xix+21)                             ; FC5974  ld C,(XIX+0x15)
 	res	7, c                                   ; FC5977  res 0x07,C
 	extz	bc                                    ; FC597A  extz BC
@@ -5336,8 +5520,8 @@ sub_FC589E__FC5974:
 	ld	iy, (xwa+1)                             ; FC59A6  ld IY,(XWA+0x01)
 	sub	bc, iy                                 ; FC59A9  sub BC,IY
 	ld	(xde+24), bc                            ; FC59AB  ld (XDE+0x18),BC
-	jr sub_FC589E__FC59CD                      ; FC59AE  jr T,0xfc59cd
-sub_FC589E__FC59B0:
+	jr PartRec_SetFittingOffset_0001__FC59CD                      ; FC59AE  jr T,0xfc59cd
+PartRec_SetFittingOffset_0001__FC59B0:
 	ld	c, (xix+21)                             ; FC59B0  ld C,(XIX+0x15)
 	res	7, c                                   ; FC59B3  res 0x07,C
 	extz	bc                                    ; FC59B6  extz BC
@@ -5348,9 +5532,9 @@ sub_FC589E__FC59B0:
 	res	7, c                                   ; FC59C5  res 0x07,C
 	extz	bc                                    ; FC59C8  extz BC
 	ld	(xde+24), bc                            ; FC59CA  ld (XDE+0x18),BC
-sub_FC589E__FC59CD:
+PartRec_SetFittingOffset_0001__FC59CD:
 	ld	de, (0xE084:24)                        ; FC59CD  ld DE,(0x00e084)
-sub_FC589E__FC59D2:
+PartRec_SetFittingOffset_0001__FC59D2:
 	dec	1, h                                   ; FC59D2  dec 1,H
 	add	de, 42                                 ; FC59D4  add DE,0x002a
 	ld	(0xE084:24), de                        ; FC59D8  ld (0x00e084),DE
@@ -5358,14 +5542,14 @@ sub_FC589E__FC59D2:
 	srl	c, 2                                   ; FC59DF  srl 0x02,C
 	ld	l, c                                    ; FC59E2  ld L,C
 	cps	h, 0                                   ; FC59E4  cp H,0
-	jrl nz, sub_FC589E__FC58D5                 ; FC59E6  jrl NZ,0xfc58d5
+	jrl nz, PartRec_SetFittingOffset_0001__FC58D5                 ; FC59E6  jrl NZ,0xfc58d5
 	pop	xix                                    ; FC59E9  pop XIX
 	pop	xde                                    ; FC59EA  pop XDE
 	popw	hl                                    ; FC59EB  pop HL
 	unlk32 xiz                                 ; FC59EC  unlk XIZ
 	ret                                        ; FC59EE  ret
 ; --------------------------------------------------------------------------
-; sub_FC59EF -- 0xFC59EF..0xFC5BA1 (435 bytes)
+; PartRec_SetPositionOffset_0003 -- 0xFC59EF..0xFC5BA1 (435 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAEB19 in sub_FAEAF9, 0xFB65AD in PartRec_ResetToDefaults
@@ -5378,8 +5562,22 @@ sub_FC589E__FC59D2:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetPositionOffset_0003 -- stores a part-level
+;          `P0SITI0N` offset into PART[+0x03] (0xFC5A0E) and re-derives, per
+;          enabled element, with the sign from bits 2:1 of P[+0x00] (0xFC5A73):
+;            P[+0x20] = p13 +/- PART[+0x03]             0xFC5A86-0xFC5AA2
+;            P[+0x22] = (p14 & 0x7F) +/- PART[+0x03]/4  0xFC5AE2-0xFC5B1B
+; WHERE THE VALUES GO: the packer copies P[+0x20] to R[+0x16] (0xFC5661-0xFC566B)
+;          and P[+0x22] to R[+0x18] (0xFC5699-0xFC56A3), and those are two of the
+;          three terms of the index that
+;          Pack104_StageRegs_00C0_0100_0240 turns into registers chan+0x00C0
+;          (via R[+0x16]) and chan+0x0240 (via R[+0x18]).
+; GRADE: PROVEN for the offsets and the data path.  STRONG for `P0SITI0N`, from
+;          notes/FINDINGS-l7a1429-parameter-names.md section 5e.  p14's own role
+;          stays WEAK there and is not asserted here.
 ; --------------------------------------------------------------------------
-sub_FC59EF:
+PartRec_SetPositionOffset_0003:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC59EF  link XIZ,0x0000
 	pushw	hl                                   ; FC59F3  push HL
 	pushw	de                                   ; FC59F4  push DE
@@ -5399,35 +5597,35 @@ sub_FC59EF:
 	ld	(0xE084:24), bc                        ; FC5A1A  ld (0x00e084),BC
 	ld	l, (xiz+12)                             ; FC5A1F  ld L,(XIZ+0x0c)
 	ldb	h, 4                                   ; FC5A22  ld H,0x04
-sub_FC59EF__FC5A24:
+PartRec_SetPositionOffset_0003__FC5A24:
 	ld	bc, (0xE084:24)                        ; FC5A24  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5A29  extz XBC
 	extpfx2 0xB1, 0xB1                         ; FC5A2B  res 1,(XBC)
 	extpfx2 0xB1, 0xB2                         ; FC5A2D  res 2,(XBC)
 	extpfx2 0xB1, 0xB5                         ; FC5A2F  res 5,(XBC)
 	extpfx2 0xB1, 0xCF                         ; FC5A31  bit 7,(XBC)
-	jrl z, sub_FC59EF__FC5B87                  ; FC5A33  jrl Z,0xfc5b87
+	jrl z, PartRec_SetPositionOffset_0003__FC5B87                  ; FC5A33  jrl Z,0xfc5b87
 	ld	a, l                                    ; FC5A36  ld A,L
 	and	a, 1                                   ; FC5A38  and A,0x01
-	jr z, sub_FC59EF__FC5A57                   ; FC5A3B  jr Z,0xfc5a57
+	jr z, PartRec_SetPositionOffset_0003__FC5A57                   ; FC5A3B  jr Z,0xfc5a57
 	extpfx2 0xB1, 0xBD                         ; FC5A3D  set 5,(XBC)
 	ld	a, l                                    ; FC5A3F  ld A,L
 	and	a, 2                                   ; FC5A41  and A,0x02
-	jr z, sub_FC59EF__FC5A4C                   ; FC5A44  jr Z,0xfc5a4c
+	jr z, PartRec_SetPositionOffset_0003__FC5A4C                   ; FC5A44  jr Z,0xfc5a4c
 	extpfx2 0xB1, 0xB1                         ; FC5A46  res 1,(XBC)
 	extpfx2 0xB1, 0xBA                         ; FC5A48  set 2,(XBC)
-	jr sub_FC59EF__FC5A57                      ; FC5A4A  jr T,0xfc5a57
-sub_FC59EF__FC5A4C:
+	jr PartRec_SetPositionOffset_0003__FC5A57                      ; FC5A4A  jr T,0xfc5a57
+PartRec_SetPositionOffset_0003__FC5A4C:
 	ld	bc, (0xE084:24)                        ; FC5A4C  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5A51  extz XBC
 	extpfx2 0xB1, 0xB9                         ; FC5A53  set 1,(XBC)
 	extpfx2 0xB1, 0xB2                         ; FC5A55  res 2,(XBC)
-sub_FC59EF__FC5A57:
+PartRec_SetPositionOffset_0003__FC5A57:
 	ld	bc, (0xE082:24)                        ; FC5A57  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5A5C  extz XBC
 	ld	a, (xbc)                                ; FC5A5E  ld A,(XBC)
 	cps	a, 0                                   ; FC5A60  cp A,0
-	jrl nz, sub_FC59EF__FC5B87                 ; FC5A62  jrl NZ,0xfc5b87
+	jrl nz, PartRec_SetPositionOffset_0003__FC5B87                 ; FC5A62  jrl NZ,0xfc5b87
 	ld	wa, (0xE084:24)                        ; FC5A65  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5A6A  extz XWA
 	ld	xiy, (xwa+3)                            ; FC5A6C  ld XIY,(XWA+0x03)
@@ -5437,11 +5635,11 @@ sub_FC59EF__FC5A57:
 	srl	c, 1                                   ; FC5A76  srl 0x01,C
 	extz	bc                                    ; FC5A79  extz BC
 	cps	bc, 1                                  ; FC5A7B  cp BC,1
-	jr z, sub_FC59EF__FC5A86                   ; FC5A7D  jr Z,0xfc5a86
+	jr z, PartRec_SetPositionOffset_0003__FC5A86                   ; FC5A7D  jr Z,0xfc5a86
 	cps	bc, 2                                  ; FC5A7F  cp BC,2
-	jr z, sub_FC59EF__FC5AB5                   ; FC5A81  jr Z,0xfc5ab5
-	jrl sub_FC59EF__FC5B20                     ; FC5A83  jrl T,0xfc5b20
-sub_FC59EF__FC5A86:
+	jr z, PartRec_SetPositionOffset_0003__FC5AB5                   ; FC5A81  jr Z,0xfc5ab5
+	jrl PartRec_SetPositionOffset_0003__FC5B20                     ; FC5A83  jrl T,0xfc5b20
+PartRec_SetPositionOffset_0003__FC5A86:
 	ld	c, (xix+13)                             ; FC5A86  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5A89  extz BC
 	ld	de, bc                                  ; FC5A8B  ld DE,BC
@@ -5457,9 +5655,9 @@ sub_FC59EF__FC5A86:
 	extz	xbc                                   ; FC5AAA  extz XBC
 	ld	wa, (xbc+3)                             ; FC5AAC  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC5AAF  cp WA,0
-	jr ge, sub_FC59EF__FC5AF9                  ; FC5AB1  jr GE,0xfc5af9
-	jr sub_FC59EF__FC5AE2                      ; FC5AB3  jr T,0xfc5ae2
-sub_FC59EF__FC5AB5:
+	jr ge, PartRec_SetPositionOffset_0003__FC5AF9                  ; FC5AB1  jr GE,0xfc5af9
+	jr PartRec_SetPositionOffset_0003__FC5AE2                      ; FC5AB3  jr T,0xfc5ae2
+PartRec_SetPositionOffset_0003__FC5AB5:
 	ld	c, (xix+13)                             ; FC5AB5  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5AB8  extz BC
 	ld	de, bc                                  ; FC5ABA  ld DE,BC
@@ -5475,8 +5673,8 @@ sub_FC59EF__FC5AB5:
 	extz	xbc                                   ; FC5AD9  extz XBC
 	ld	wa, (xbc+3)                             ; FC5ADB  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC5ADE  cp WA,0
-	jr ge, sub_FC59EF__FC5AF9                  ; FC5AE0  jr GE,0xfc5af9
-sub_FC59EF__FC5AE2:
+	jr ge, PartRec_SetPositionOffset_0003__FC5AF9                  ; FC5AE0  jr GE,0xfc5af9
+PartRec_SetPositionOffset_0003__FC5AE2:
 	ld	bc, (0xE082:24)                        ; FC5AE2  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5AE7  extz XBC
 	ld	de, (xbc+3)                             ; FC5AE9  ld DE,(XBC+0x03)
@@ -5485,15 +5683,15 @@ sub_FC59EF__FC5AE2:
 	ld	de, wa                                  ; FC5AF0  ld DE,WA
 	sra	wa, 2                                  ; FC5AF2  sra 0x02,WA
 	ld	de, wa                                  ; FC5AF5  ld DE,WA
-	jr sub_FC59EF__FC5B0A                      ; FC5AF7  jr T,0xfc5b0a
-sub_FC59EF__FC5AF9:
+	jr PartRec_SetPositionOffset_0003__FC5B0A                      ; FC5AF7  jr T,0xfc5b0a
+PartRec_SetPositionOffset_0003__FC5AF9:
 	ld	bc, (0xE082:24)                        ; FC5AF9  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5AFE  extz XBC
 	ld	de, (xbc+3)                             ; FC5B00  ld DE,(XBC+0x03)
 	ld	iy, de                                  ; FC5B03  ld IY,DE
 	sra	iy, 2                                  ; FC5B05  sra 0x02,IY
 	ld	de, iy                                  ; FC5B08  ld DE,IY
-sub_FC59EF__FC5B0A:
+PartRec_SetPositionOffset_0003__FC5B0A:
 	ld	c, (xix+14)                             ; FC5B0A  ld C,(XIX+0x0e)
 	res	7, c                                   ; FC5B0D  res 0x07,C
 	extz	bc                                    ; FC5B10  extz BC
@@ -5501,8 +5699,8 @@ sub_FC59EF__FC5B0A:
 	ld	wa, (0xE084:24)                        ; FC5B14  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5B19  extz XWA
 	ld	(xwa+34), bc                            ; FC5B1B  ld (XWA+0x22),BC
-	jr sub_FC59EF__FC5B41                      ; FC5B1E  jr T,0xfc5b41
-sub_FC59EF__FC5B20:
+	jr PartRec_SetPositionOffset_0003__FC5B41                      ; FC5B1E  jr T,0xfc5b41
+PartRec_SetPositionOffset_0003__FC5B20:
 	ld	c, (xix+13)                             ; FC5B20  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5B23  extz BC
 	ld	wa, (0xE084:24)                        ; FC5B25  ld WA,(0x00e084)
@@ -5514,7 +5712,7 @@ sub_FC59EF__FC5B20:
 	ld	wa, (0xE084:24)                        ; FC5B37  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5B3C  extz XWA
 	ld	(xwa+34), bc                            ; FC5B3E  ld (XWA+0x22),BC
-sub_FC59EF__FC5B41:
+PartRec_SetPositionOffset_0003__FC5B41:
 	ld	bc, (0xE084:24)                        ; FC5B41  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5B46  extz XBC
 	ld	a, (xbc+1)                              ; FC5B48  ld A,(XBC+0x01)
@@ -5522,40 +5720,40 @@ sub_FC59EF__FC5B41:
 	srl	a, 6                                   ; FC5B4E  srl 0x06,A
 	extz	wa                                    ; FC5B51  extz WA
 	cps	wa, 1                                  ; FC5B53  cp WA,1
-	jr z, sub_FC59EF__FC5B5D                   ; FC5B55  jr Z,0xfc5b5d
+	jr z, PartRec_SetPositionOffset_0003__FC5B5D                   ; FC5B55  jr Z,0xfc5b5d
 	cps	wa, 2                                  ; FC5B57  cp WA,2
-	jr z, sub_FC59EF__FC5B73                   ; FC5B59  jr Z,0xfc5b73
-	jr sub_FC59EF__FC5B87                      ; FC5B5B  jr T,0xfc5b87
-sub_FC59EF__FC5B5D:
+	jr z, PartRec_SetPositionOffset_0003__FC5B73                   ; FC5B59  jr Z,0xfc5b73
+	jr PartRec_SetPositionOffset_0003__FC5B87                      ; FC5B5B  jr T,0xfc5b87
+PartRec_SetPositionOffset_0003__FC5B5D:
 	ld	bc, (0xE082:24)                        ; FC5B5D  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5B62  extz XBC
 	ld	wa, (xbc+5)                             ; FC5B64  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC5B67  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5B6C  extz XBC
 	add	(xbc+34), wa                           ; FC5B6E  add (XBC+0x22),WA
-	jr sub_FC59EF__FC5B87                      ; FC5B71  jr T,0xfc5b87
-sub_FC59EF__FC5B73:
+	jr PartRec_SetPositionOffset_0003__FC5B87                      ; FC5B71  jr T,0xfc5b87
+PartRec_SetPositionOffset_0003__FC5B73:
 	ld	bc, (0xE082:24)                        ; FC5B73  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5B78  extz XBC
 	ld	wa, (xbc+5)                             ; FC5B7A  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC5B7D  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5B82  extz XBC
 	sub	(xbc+34), wa                           ; FC5B84  sub (XBC+0x22),WA
-sub_FC59EF__FC5B87:
+PartRec_SetPositionOffset_0003__FC5B87:
 	dec	1, h                                   ; FC5B87  dec 1,H
 	extpfx7 0xD2, 0x84, 0xE0, 0x00, 0x38, 0x2A, 0x00 ; FC5B89  add (0x00e084),0x002a
 	ld	c, l                                    ; FC5B90  ld C,L
 	srl	c, 2                                   ; FC5B92  srl 0x02,C
 	ld	l, c                                    ; FC5B95  ld L,C
 	cps	h, 0                                   ; FC5B97  cp H,0
-	jrl nz, sub_FC59EF__FC5A24                 ; FC5B99  jrl NZ,0xfc5a24
+	jrl nz, PartRec_SetPositionOffset_0003__FC5A24                 ; FC5B99  jrl NZ,0xfc5a24
 	pop	xix                                    ; FC5B9C  pop XIX
 	popw	de                                    ; FC5B9D  pop DE
 	popw	hl                                    ; FC5B9E  pop HL
 	unlk32 xiz                                 ; FC5B9F  unlk XIZ
 	ret                                        ; FC5BA1  ret
 ; --------------------------------------------------------------------------
-; sub_FC5BA2 -- 0xFC5BA2..0xFC5D5A (441 bytes)
+; PartRec_SetPositionOffset_0005 -- 0xFC5BA2..0xFC5D5A (441 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAEB85 in sub_FAEB65
@@ -5568,8 +5766,25 @@ sub_FC59EF__FC5B87:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetPositionOffset_0005 -- the same routine as
+;          PartRec_SetPositionOffset_0003 with two differences: it stores its
+;          value into PART[+0x05] instead (0xFC5BC1), and it takes its sign from
+;          bits 7:6 of P[+0x01] plus bit 5 of P[+0x00] (0xFC5BDE-0xFC5C0D) rather
+;          than bits 2:1 of P[+0x00].  It re-derives the same two sub-record
+;          fields, P[+0x20] and P[+0x22] (0xFC5C5B, 0xFC5CD4, 0xFC5CE5, 0xFC5CF7),
+;          and so reaches registers chan+0x00C0 and chan+0x0240 by the same route.
+; ⚠ AN ASYMMETRY, REPORTED AND NOT RESOLVED.  The re-derivation reads
+;          PART[+0x03] (0xFC5C4D, 0xFC5C7C, 0xFC5CA2, 0xFC5CB9), NOT the
+;          PART[+0x05] this routine has just written.  So a second, independent
+;          part-level position control exists in the record and this pass could
+;          not find where its value is folded into what the elements see.  The
+;          name says which field the routine SETS and which parameter it
+;          refreshes; it does not claim the two are the same number.
+; GRADE: PROVEN for the store, the refresh and the destinations.  STRONG for
+;          `P0SITI0N`.
 ; --------------------------------------------------------------------------
-sub_FC5BA2:
+PartRec_SetPositionOffset_0005:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC5BA2  link XIZ,0x0000
 	pushw	hl                                   ; FC5BA6  push HL
 	pushw	de                                   ; FC5BA7  push DE
@@ -5589,35 +5804,35 @@ sub_FC5BA2:
 	ld	(0xE084:24), bc                        ; FC5BCD  ld (0x00e084),BC
 	ld	l, (xiz+12)                             ; FC5BD2  ld L,(XIZ+0x0c)
 	ldb	h, 4                                   ; FC5BD5  ld H,0x04
-sub_FC5BA2__FC5BD7:
+PartRec_SetPositionOffset_0005__FC5BD7:
 	ld	bc, (0xE084:24)                        ; FC5BD7  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5BDC  extz XBC
 	extpfx3 0xB9, 0x01, 0xB6                   ; FC5BDE  res 6,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB7                   ; FC5BE1  res 7,(XBC+0x01)
 	extpfx2 0xB1, 0xB5                         ; FC5BE4  res 5,(XBC)
 	extpfx2 0xB1, 0xCF                         ; FC5BE6  bit 7,(XBC)
-	jrl z, sub_FC5BA2__FC5D40                  ; FC5BE8  jrl Z,0xfc5d40
+	jrl z, PartRec_SetPositionOffset_0005__FC5D40                  ; FC5BE8  jrl Z,0xfc5d40
 	ld	a, l                                    ; FC5BEB  ld A,L
 	and	a, 1                                   ; FC5BED  and A,0x01
-	jr z, sub_FC5BA2__FC5C10                   ; FC5BF0  jr Z,0xfc5c10
+	jr z, PartRec_SetPositionOffset_0005__FC5C10                   ; FC5BF0  jr Z,0xfc5c10
 	extpfx2 0xB1, 0xBD                         ; FC5BF2  set 5,(XBC)
 	ld	a, l                                    ; FC5BF4  ld A,L
 	and	a, 2                                   ; FC5BF6  and A,0x02
-	jr z, sub_FC5BA2__FC5C03                   ; FC5BF9  jr Z,0xfc5c03
+	jr z, PartRec_SetPositionOffset_0005__FC5C03                   ; FC5BF9  jr Z,0xfc5c03
 	extpfx3 0xB9, 0x01, 0xB6                   ; FC5BFB  res 6,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xBF                   ; FC5BFE  set 7,(XBC+0x01)
-	jr sub_FC5BA2__FC5C10                      ; FC5C01  jr T,0xfc5c10
-sub_FC5BA2__FC5C03:
+	jr PartRec_SetPositionOffset_0005__FC5C10                      ; FC5C01  jr T,0xfc5c10
+PartRec_SetPositionOffset_0005__FC5C03:
 	ld	bc, (0xE084:24)                        ; FC5C03  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5C08  extz XBC
 	extpfx3 0xB9, 0x01, 0xBE                   ; FC5C0A  set 6,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB7                   ; FC5C0D  res 7,(XBC+0x01)
-sub_FC5BA2__FC5C10:
+PartRec_SetPositionOffset_0005__FC5C10:
 	ld	bc, (0xE082:24)                        ; FC5C10  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5C15  extz XBC
 	ld	a, (xbc)                                ; FC5C17  ld A,(XBC)
 	cps	a, 0                                   ; FC5C19  cp A,0
-	jrl nz, sub_FC5BA2__FC5D40                 ; FC5C1B  jrl NZ,0xfc5d40
+	jrl nz, PartRec_SetPositionOffset_0005__FC5D40                 ; FC5C1B  jrl NZ,0xfc5d40
 	ld	wa, (0xE084:24)                        ; FC5C1E  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5C23  extz XWA
 	ld	xiy, (xwa+3)                            ; FC5C25  ld XIY,(XWA+0x03)
@@ -5627,11 +5842,11 @@ sub_FC5BA2__FC5C10:
 	srl	c, 1                                   ; FC5C2F  srl 0x01,C
 	extz	bc                                    ; FC5C32  extz BC
 	cps	bc, 1                                  ; FC5C34  cp BC,1
-	jr z, sub_FC5BA2__FC5C3F                   ; FC5C36  jr Z,0xfc5c3f
+	jr z, PartRec_SetPositionOffset_0005__FC5C3F                   ; FC5C36  jr Z,0xfc5c3f
 	cps	bc, 2                                  ; FC5C38  cp BC,2
-	jr z, sub_FC5BA2__FC5C6E                   ; FC5C3A  jr Z,0xfc5c6e
-	jrl sub_FC5BA2__FC5CD9                     ; FC5C3C  jrl T,0xfc5cd9
-sub_FC5BA2__FC5C3F:
+	jr z, PartRec_SetPositionOffset_0005__FC5C6E                   ; FC5C3A  jr Z,0xfc5c6e
+	jrl PartRec_SetPositionOffset_0005__FC5CD9                     ; FC5C3C  jrl T,0xfc5cd9
+PartRec_SetPositionOffset_0005__FC5C3F:
 	ld	c, (xix+13)                             ; FC5C3F  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5C42  extz BC
 	ld	de, bc                                  ; FC5C44  ld DE,BC
@@ -5647,9 +5862,9 @@ sub_FC5BA2__FC5C3F:
 	extz	xbc                                   ; FC5C63  extz XBC
 	ld	wa, (xbc+3)                             ; FC5C65  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC5C68  cp WA,0
-	jr ge, sub_FC5BA2__FC5CB2                  ; FC5C6A  jr GE,0xfc5cb2
-	jr sub_FC5BA2__FC5C9B                      ; FC5C6C  jr T,0xfc5c9b
-sub_FC5BA2__FC5C6E:
+	jr ge, PartRec_SetPositionOffset_0005__FC5CB2                  ; FC5C6A  jr GE,0xfc5cb2
+	jr PartRec_SetPositionOffset_0005__FC5C9B                      ; FC5C6C  jr T,0xfc5c9b
+PartRec_SetPositionOffset_0005__FC5C6E:
 	ld	c, (xix+13)                             ; FC5C6E  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5C71  extz BC
 	ld	de, bc                                  ; FC5C73  ld DE,BC
@@ -5665,8 +5880,8 @@ sub_FC5BA2__FC5C6E:
 	extz	xbc                                   ; FC5C92  extz XBC
 	ld	wa, (xbc+3)                             ; FC5C94  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC5C97  cp WA,0
-	jr ge, sub_FC5BA2__FC5CB2                  ; FC5C99  jr GE,0xfc5cb2
-sub_FC5BA2__FC5C9B:
+	jr ge, PartRec_SetPositionOffset_0005__FC5CB2                  ; FC5C99  jr GE,0xfc5cb2
+PartRec_SetPositionOffset_0005__FC5C9B:
 	ld	bc, (0xE082:24)                        ; FC5C9B  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5CA0  extz XBC
 	ld	de, (xbc+3)                             ; FC5CA2  ld DE,(XBC+0x03)
@@ -5675,15 +5890,15 @@ sub_FC5BA2__FC5C9B:
 	ld	de, wa                                  ; FC5CA9  ld DE,WA
 	sra	wa, 2                                  ; FC5CAB  sra 0x02,WA
 	ld	de, wa                                  ; FC5CAE  ld DE,WA
-	jr sub_FC5BA2__FC5CC3                      ; FC5CB0  jr T,0xfc5cc3
-sub_FC5BA2__FC5CB2:
+	jr PartRec_SetPositionOffset_0005__FC5CC3                      ; FC5CB0  jr T,0xfc5cc3
+PartRec_SetPositionOffset_0005__FC5CB2:
 	ld	bc, (0xE082:24)                        ; FC5CB2  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5CB7  extz XBC
 	ld	de, (xbc+3)                             ; FC5CB9  ld DE,(XBC+0x03)
 	ld	iy, de                                  ; FC5CBC  ld IY,DE
 	sra	iy, 2                                  ; FC5CBE  sra 0x02,IY
 	ld	de, iy                                  ; FC5CC1  ld DE,IY
-sub_FC5BA2__FC5CC3:
+PartRec_SetPositionOffset_0005__FC5CC3:
 	ld	c, (xix+14)                             ; FC5CC3  ld C,(XIX+0x0e)
 	res	7, c                                   ; FC5CC6  res 0x07,C
 	extz	bc                                    ; FC5CC9  extz BC
@@ -5691,8 +5906,8 @@ sub_FC5BA2__FC5CC3:
 	ld	wa, (0xE084:24)                        ; FC5CCD  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5CD2  extz XWA
 	ld	(xwa+34), bc                            ; FC5CD4  ld (XWA+0x22),BC
-	jr sub_FC5BA2__FC5CFA                      ; FC5CD7  jr T,0xfc5cfa
-sub_FC5BA2__FC5CD9:
+	jr PartRec_SetPositionOffset_0005__FC5CFA                      ; FC5CD7  jr T,0xfc5cfa
+PartRec_SetPositionOffset_0005__FC5CD9:
 	ld	c, (xix+13)                             ; FC5CD9  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5CDC  extz BC
 	ld	wa, (0xE084:24)                        ; FC5CDE  ld WA,(0x00e084)
@@ -5704,7 +5919,7 @@ sub_FC5BA2__FC5CD9:
 	ld	wa, (0xE084:24)                        ; FC5CF0  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5CF5  extz XWA
 	ld	(xwa+34), bc                            ; FC5CF7  ld (XWA+0x22),BC
-sub_FC5BA2__FC5CFA:
+PartRec_SetPositionOffset_0005__FC5CFA:
 	ld	bc, (0xE084:24)                        ; FC5CFA  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5CFF  extz XBC
 	ld	a, (xbc+1)                              ; FC5D01  ld A,(XBC+0x01)
@@ -5712,47 +5927,47 @@ sub_FC5BA2__FC5CFA:
 	srl	a, 6                                   ; FC5D07  srl 0x06,A
 	extz	wa                                    ; FC5D0A  extz WA
 	cps	wa, 1                                  ; FC5D0C  cp WA,1
-	jr z, sub_FC5BA2__FC5D16                   ; FC5D0E  jr Z,0xfc5d16
+	jr z, PartRec_SetPositionOffset_0005__FC5D16                   ; FC5D0E  jr Z,0xfc5d16
 	cps	wa, 2                                  ; FC5D10  cp WA,2
-	jr z, sub_FC5BA2__FC5D2C                   ; FC5D12  jr Z,0xfc5d2c
-	jr sub_FC5BA2__FC5D40                      ; FC5D14  jr T,0xfc5d40
-sub_FC5BA2__FC5D16:
+	jr z, PartRec_SetPositionOffset_0005__FC5D2C                   ; FC5D12  jr Z,0xfc5d2c
+	jr PartRec_SetPositionOffset_0005__FC5D40                      ; FC5D14  jr T,0xfc5d40
+PartRec_SetPositionOffset_0005__FC5D16:
 	ld	bc, (0xE082:24)                        ; FC5D16  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5D1B  extz XBC
 	ld	wa, (xbc+5)                             ; FC5D1D  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC5D20  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5D25  extz XBC
 	add	(xbc+34), wa                           ; FC5D27  add (XBC+0x22),WA
-	jr sub_FC5BA2__FC5D40                      ; FC5D2A  jr T,0xfc5d40
-sub_FC5BA2__FC5D2C:
+	jr PartRec_SetPositionOffset_0005__FC5D40                      ; FC5D2A  jr T,0xfc5d40
+PartRec_SetPositionOffset_0005__FC5D2C:
 	ld	bc, (0xE082:24)                        ; FC5D2C  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5D31  extz XBC
 	ld	wa, (xbc+5)                             ; FC5D33  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC5D36  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5D3B  extz XBC
 	sub	(xbc+34), wa                           ; FC5D3D  sub (XBC+0x22),WA
-sub_FC5BA2__FC5D40:
+PartRec_SetPositionOffset_0005__FC5D40:
 	dec	1, h                                   ; FC5D40  dec 1,H
 	extpfx7 0xD2, 0x84, 0xE0, 0x00, 0x38, 0x2A, 0x00 ; FC5D42  add (0x00e084),0x002a
 	ld	c, l                                    ; FC5D49  ld C,L
 	srl	c, 2                                   ; FC5D4B  srl 0x02,C
 	ld	l, c                                    ; FC5D4E  ld L,C
 	cps	h, 0                                   ; FC5D50  cp H,0
-	jrl nz, sub_FC5BA2__FC5BD7                 ; FC5D52  jrl NZ,0xfc5bd7
+	jrl nz, PartRec_SetPositionOffset_0005__FC5BD7                 ; FC5D52  jrl NZ,0xfc5bd7
 	pop	xix                                    ; FC5D55  pop XIX
 	popw	de                                    ; FC5D56  pop DE
 	popw	hl                                    ; FC5D57  pop HL
 	unlk32 xiz                                 ; FC5D58  unlk XIZ
 	ret                                        ; FC5D5A  ret
 ; --------------------------------------------------------------------------
-; sub_FC5D5B -- 0xFC5D5B..0xFC5EFA (416 bytes)
+; Pack104_RestageRegs_00C0_0100_0240_ForVoice -- 0xFC5D5B..0xFC5EFA (416 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAEB41 in sub_FAEAF9__FAEB30, 0xFAEBAD in sub_FAEB65__FAEB9C
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00E084, 0x00E086
 ;          reads 0x00E082
-; Calls:   0xFC49AD = sub_FC49AD
+; Calls:   0xFC49AD = Pack104_StageRegs_00C0_0100_0240
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC5D5B-0xFC5EFA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5760,8 +5975,24 @@ sub_FC5BA2__FC5D40:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_RestageRegs_00C0_0100_0240_ForVoice --
+;          points the packer's globals at one sounding voice and rebuilds the
+;          three `P0SITI0N` staging words for it, returning non-zero when it did.
+;            0x00E086 = 0x00753E + 37*(XIZ+0x08)   the voice's 37-byte record R
+;            0x00E084 = R[+0x05]                   its 42-byte sub-record P
+;          then recomputes R's position terms and calls
+;          Pack104_StageRegs_00C0_0100_0240 with the caller's staging struct
+;          (0xFC5EE9).
+; ★★ WHAT PINS IT: its caller `sub_FAEAF9` (prom_c/midi/midi_controllers.s)
+;          walks the part's sounding voices from VoiceQuery_Tag00_Part, calls this
+;          routine at 0xFAEB41 and, when it returns non-zero, calls
+;          Dev104_SetChanRegs_00C0_0100_0240 at 0xFAEB56 with the SAME staging
+;          buffer 0x00D7A2.  The pair is prepare-then-write, and the writer's name
+;          is already established from its own `add rr,0x00C0` operands.
+; GRADE: PROVEN for the pairing and the destinations; STRONG for `P0SITI0N`.
 ; --------------------------------------------------------------------------
-sub_FC5D5B:
+Pack104_RestageRegs_00C0_0100_0240_ForVoice:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC5D5B  link XIZ,0x0000
 	pushw	hl                                   ; FC5D5F  push HL
 	pushw	de                                   ; FC5D60  push DE
@@ -5777,7 +6008,7 @@ sub_FC5D5B:
 	ld	(0xE084:24), bc                        ; FC5D78  ld (0x00e084),BC
 	sub	iy, iy                                 ; FC5D7D  sub IY,IY
 	cp	bc, iy                                  ; FC5D7F  cp BC,IY
-	jrl z, sub_FC5D5B__FC5EEF                  ; FC5D81  jrl Z,0xfc5eef
+	jrl z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EEF                  ; FC5D81  jrl Z,0xfc5eef
 	ld	iy, bc                                  ; FC5D84  ld IY,BC
 	extz	xbc                                   ; FC5D86  extz XBC
 	ld	c, (xbc)                                ; FC5D88  ld C,(XBC)
@@ -5785,10 +6016,10 @@ sub_FC5D5B:
 	srl	c, 5                                   ; FC5D8D  srl 0x05,C
 	ld	d, c                                    ; FC5D90  ld D,C
 	cps	c, 0                                   ; FC5D92  cp C,0
-	jrl z, sub_FC5D5B__FC5EF3                  ; FC5D94  jrl Z,0xfc5ef3
+	jrl z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EF3                  ; FC5D94  jrl Z,0xfc5ef3
 	ld	b, (xwa)                                ; FC5D97  ld B,(XWA)
 	cps	b, 0                                   ; FC5D99  cp B,0
-	jrl z, sub_FC5D5B__FC5EBD                  ; FC5D9B  jrl Z,0xfc5ebd
+	jrl z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EBD                  ; FC5D9B  jrl Z,0xfc5ebd
 	ld	xbc, (xwa+1)                            ; FC5D9E  ld XBC,(XWA+0x01)
 	ld	xix, xbc                                ; FC5DA1  ld XIX,XBC
 	ld	bc, iy                                  ; FC5DA3  ld BC,IY
@@ -5798,11 +6029,11 @@ sub_FC5D5B:
 	srl	c, 1                                   ; FC5DAC  srl 0x01,C
 	extz	bc                                    ; FC5DAF  extz BC
 	cps	bc, 1                                  ; FC5DB1  cp BC,1
-	jr z, sub_FC5D5B__FC5DBC                   ; FC5DB3  jr Z,0xfc5dbc
+	jr z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5DBC                   ; FC5DB3  jr Z,0xfc5dbc
 	cps	bc, 2                                  ; FC5DB5  cp BC,2
-	jr z, sub_FC5D5B__FC5DEB                   ; FC5DB7  jr Z,0xfc5deb
-	jrl sub_FC5D5B__FC5E56                     ; FC5DB9  jrl T,0xfc5e56
-sub_FC5D5B__FC5DBC:
+	jr z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5DEB                   ; FC5DB7  jr Z,0xfc5deb
+	jrl Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E56                     ; FC5DB9  jrl T,0xfc5e56
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5DBC:
 	ld	c, (xix+13)                             ; FC5DBC  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5DBF  extz BC
 	ld	hl, bc                                  ; FC5DC1  ld HL,BC
@@ -5818,9 +6049,9 @@ sub_FC5D5B__FC5DBC:
 	extz	xbc                                   ; FC5DE0  extz XBC
 	ld	wa, (xbc+3)                             ; FC5DE2  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC5DE5  cp WA,0
-	jr ge, sub_FC5D5B__FC5E2F                  ; FC5DE7  jr GE,0xfc5e2f
-	jr sub_FC5D5B__FC5E18                      ; FC5DE9  jr T,0xfc5e18
-sub_FC5D5B__FC5DEB:
+	jr ge, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E2F                  ; FC5DE7  jr GE,0xfc5e2f
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E18                      ; FC5DE9  jr T,0xfc5e18
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5DEB:
 	ld	c, (xix+13)                             ; FC5DEB  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5DEE  extz BC
 	ld	hl, bc                                  ; FC5DF0  ld HL,BC
@@ -5836,8 +6067,8 @@ sub_FC5D5B__FC5DEB:
 	extz	xbc                                   ; FC5E0F  extz XBC
 	ld	wa, (xbc+3)                             ; FC5E11  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC5E14  cp WA,0
-	jr ge, sub_FC5D5B__FC5E2F                  ; FC5E16  jr GE,0xfc5e2f
-sub_FC5D5B__FC5E18:
+	jr ge, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E2F                  ; FC5E16  jr GE,0xfc5e2f
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E18:
 	ld	bc, (0xE082:24)                        ; FC5E18  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5E1D  extz XBC
 	ld	hl, (xbc+3)                             ; FC5E1F  ld HL,(XBC+0x03)
@@ -5846,15 +6077,15 @@ sub_FC5D5B__FC5E18:
 	ld	hl, wa                                  ; FC5E26  ld HL,WA
 	sra	wa, 2                                  ; FC5E28  sra 0x02,WA
 	ld	hl, wa                                  ; FC5E2B  ld HL,WA
-	jr sub_FC5D5B__FC5E40                      ; FC5E2D  jr T,0xfc5e40
-sub_FC5D5B__FC5E2F:
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E40                      ; FC5E2D  jr T,0xfc5e40
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E2F:
 	ld	bc, (0xE082:24)                        ; FC5E2F  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5E34  extz XBC
 	ld	hl, (xbc+3)                             ; FC5E36  ld HL,(XBC+0x03)
 	ld	iy, hl                                  ; FC5E39  ld IY,HL
 	sra	iy, 2                                  ; FC5E3B  sra 0x02,IY
 	ld	hl, iy                                  ; FC5E3E  ld HL,IY
-sub_FC5D5B__FC5E40:
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E40:
 	ld	c, (xix+14)                             ; FC5E40  ld C,(XIX+0x0e)
 	res	7, c                                   ; FC5E43  res 0x07,C
 	extz	bc                                    ; FC5E46  extz BC
@@ -5862,8 +6093,8 @@ sub_FC5D5B__FC5E40:
 	ld	wa, (0xE084:24)                        ; FC5E4A  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5E4F  extz XWA
 	ld	(xwa+34), bc                            ; FC5E51  ld (XWA+0x22),BC
-	jr sub_FC5D5B__FC5E77                      ; FC5E54  jr T,0xfc5e77
-sub_FC5D5B__FC5E56:
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E77                      ; FC5E54  jr T,0xfc5e77
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E56:
 	ld	c, (xix+13)                             ; FC5E56  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC5E59  extz BC
 	ld	wa, (0xE084:24)                        ; FC5E5B  ld WA,(0x00e084)
@@ -5875,7 +6106,7 @@ sub_FC5D5B__FC5E56:
 	ld	wa, (0xE084:24)                        ; FC5E6D  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5E72  extz XWA
 	ld	(xwa+34), bc                            ; FC5E74  ld (XWA+0x22),BC
-sub_FC5D5B__FC5E77:
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E77:
 	ld	bc, (0xE084:24)                        ; FC5E77  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5E7C  extz XBC
 	ld	a, (xbc+1)                              ; FC5E7E  ld A,(XBC+0x01)
@@ -5883,26 +6114,26 @@ sub_FC5D5B__FC5E77:
 	srl	a, 6                                   ; FC5E84  srl 0x06,A
 	extz	wa                                    ; FC5E87  extz WA
 	cps	wa, 1                                  ; FC5E89  cp WA,1
-	jr z, sub_FC5D5B__FC5E93                   ; FC5E8B  jr Z,0xfc5e93
+	jr z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E93                   ; FC5E8B  jr Z,0xfc5e93
 	cps	wa, 2                                  ; FC5E8D  cp WA,2
-	jr z, sub_FC5D5B__FC5EA9                   ; FC5E8F  jr Z,0xfc5ea9
-	jr sub_FC5D5B__FC5EBD                      ; FC5E91  jr T,0xfc5ebd
-sub_FC5D5B__FC5E93:
+	jr z, Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EA9                   ; FC5E8F  jr Z,0xfc5ea9
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EBD                      ; FC5E91  jr T,0xfc5ebd
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5E93:
 	ld	bc, (0xE082:24)                        ; FC5E93  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5E98  extz XBC
 	ld	wa, (xbc+5)                             ; FC5E9A  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC5E9D  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5EA2  extz XBC
 	add	(xbc+34), wa                           ; FC5EA4  add (XBC+0x22),WA
-	jr sub_FC5D5B__FC5EBD                      ; FC5EA7  jr T,0xfc5ebd
-sub_FC5D5B__FC5EA9:
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EBD                      ; FC5EA7  jr T,0xfc5ebd
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EA9:
 	ld	bc, (0xE082:24)                        ; FC5EA9  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5EAE  extz XBC
 	ld	wa, (xbc+5)                             ; FC5EB0  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC5EB3  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5EB8  extz XBC
 	sub	(xbc+34), wa                           ; FC5EBA  sub (XBC+0x22),WA
-sub_FC5D5B__FC5EBD:
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EBD:
 	ld	bc, (0xE084:24)                        ; FC5EBD  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5EC2  extz XBC
 	ld	wa, (xbc+32)                            ; FC5EC4  ld WA,(XBC+0x20)
@@ -5919,20 +6150,20 @@ sub_FC5D5B__FC5EBD:
 	push	xbc                                   ; FC5EE8  push XBC
 	calr (0xFC49AD - 0xFC5EEC)                 ; FC5EE9  calr 0xfc49ad
 	pop	xiy                                    ; FC5EEC  pop XIY
-	jr sub_FC5D5B__FC5EF3                      ; FC5EED  jr T,0xfc5ef3
-sub_FC5D5B__FC5EEF:
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EF3                      ; FC5EED  jr T,0xfc5ef3
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EEF:
 	sub	a, a                                   ; FC5EEF  sub A,A
-	jr sub_FC5D5B__FC5EF5                      ; FC5EF1  jr T,0xfc5ef5
-sub_FC5D5B__FC5EF3:
+	jr Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EF5                      ; FC5EF1  jr T,0xfc5ef5
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EF3:
 	ld	a, d                                    ; FC5EF3  ld A,D
-sub_FC5D5B__FC5EF5:
+Pack104_RestageRegs_00C0_0100_0240_ForVoice__FC5EF5:
 	pop	xix                                    ; FC5EF5  pop XIX
 	popw	de                                    ; FC5EF6  pop DE
 	popw	hl                                    ; FC5EF7  pop HL
 	unlk32 xiz                                 ; FC5EF8  unlk XIZ
 	ret                                        ; FC5EFA  ret
 ; --------------------------------------------------------------------------
-; sub_FC5EFB -- 0xFC5EFB..0xFC6026 (300 bytes)
+; PartRec_SetMovementDepth_0007 -- 0xFC5EFB..0xFC6026 (300 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAEBF1 in sub_FAEBD1, 0xFB65BB in PartRec_ResetToDefaults
@@ -5945,8 +6176,24 @@ sub_FC5D5B__FC5EF5:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetMovementDepth_0007 -- stores a part-level
+;          `P0SITI0N M0VEMENT` depth offset into PART[+0x07] (0xFC5F1A) and
+;          re-derives, per enabled element,
+;            P[+0x28] = clamp(p17 +/- PART[+0x07], 0..50)   0xFC5F95-0xFC5FEE
+;          with the sign from bits 5:4 of P[+0x01] (0xFC5F37-0xFC5F62).
+; WHERE THE VALUE GOES: the packer copies P[+0x28] into R[+0x1D]
+;          (0xFC55A3-0xFC55AF), and R[+0x1D] is the depth in
+;          `R[+0x21] = waveform * R[+0x1D] / 50`, computed by
+;          Pack104_TickPositionMovement_ForVoice at 0xFC7CA6-0xFC7CB4.  R[+0x21]
+;          is the movement term of registers chan+0x00C0 and chan+0x0240.
+;          ★ The 0..50 clamp and the divide by 50 are the same 50: p17's own
+;          factory values are {0,10,15,16,20,30,40,50}
+;          (notes/FINDINGS-l7a1429-parameter-names.md section 5e).
+; GRADE: PROVEN for the arithmetic and the data path; STRONG for the name, which
+;          is the guide's `P0SITI0N M0VEMENT` page.
 ; --------------------------------------------------------------------------
-sub_FC5EFB:
+PartRec_SetMovementDepth_0007:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FC5EFB  link XIZ,0xfffe
 	pushw	hl                                   ; FC5EFF  push HL
 	pushw	de                                   ; FC5F00  push DE
@@ -5966,33 +6213,33 @@ sub_FC5EFB:
 	ld	(0xE084:24), bc                        ; FC5F26  ld (0x00e084),BC
 	ld	e, (xiz+12)                             ; FC5F2B  ld E,(XIZ+0x0c)
 	ldb	d, 4                                   ; FC5F2E  ld D,0x04
-sub_FC5EFB__FC5F30:
+PartRec_SetMovementDepth_0007__FC5F30:
 	ld	bc, (0xE084:24)                        ; FC5F30  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5F35  extz XBC
 	extpfx3 0xB9, 0x01, 0xB4                   ; FC5F37  res 4,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB5                   ; FC5F3A  res 5,(XBC+0x01)
 	extpfx2 0xB1, 0xCF                         ; FC5F3D  bit 7,(XBC)
-	jrl z, sub_FC5EFB__FC600C                  ; FC5F3F  jrl Z,0xfc600c
+	jrl z, PartRec_SetMovementDepth_0007__FC600C                  ; FC5F3F  jrl Z,0xfc600c
 	ld	a, e                                    ; FC5F42  ld A,E
 	and	a, 1                                   ; FC5F44  and A,0x01
-	jr z, sub_FC5EFB__FC5F65                   ; FC5F47  jr Z,0xfc5f65
+	jr z, PartRec_SetMovementDepth_0007__FC5F65                   ; FC5F47  jr Z,0xfc5f65
 	ld	a, e                                    ; FC5F49  ld A,E
 	and	a, 2                                   ; FC5F4B  and A,0x02
-	jr z, sub_FC5EFB__FC5F58                   ; FC5F4E  jr Z,0xfc5f58
+	jr z, PartRec_SetMovementDepth_0007__FC5F58                   ; FC5F4E  jr Z,0xfc5f58
 	extpfx3 0xB9, 0x01, 0xB4                   ; FC5F50  res 4,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xBD                   ; FC5F53  set 5,(XBC+0x01)
-	jr sub_FC5EFB__FC5F65                      ; FC5F56  jr T,0xfc5f65
-sub_FC5EFB__FC5F58:
+	jr PartRec_SetMovementDepth_0007__FC5F65                      ; FC5F56  jr T,0xfc5f65
+PartRec_SetMovementDepth_0007__FC5F58:
 	ld	bc, (0xE084:24)                        ; FC5F58  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5F5D  extz XBC
 	extpfx3 0xB9, 0x01, 0xBC                   ; FC5F5F  set 4,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB5                   ; FC5F62  res 5,(XBC+0x01)
-sub_FC5EFB__FC5F65:
+PartRec_SetMovementDepth_0007__FC5F65:
 	ld	bc, (0xE082:24)                        ; FC5F65  ld BC,(0x00e082)
 	extz	xbc                                   ; FC5F6A  extz XBC
 	ld	a, (xbc)                                ; FC5F6C  ld A,(XBC)
 	cps	a, 0                                   ; FC5F6E  cp A,0
-	jrl nz, sub_FC5EFB__FC600C                 ; FC5F70  jrl NZ,0xfc600c
+	jrl nz, PartRec_SetMovementDepth_0007__FC600C                 ; FC5F70  jrl NZ,0xfc600c
 	ld	wa, (0xE084:24)                        ; FC5F73  ld WA,(0x00e084)
 	extz	xwa                                   ; FC5F78  extz XWA
 	ld	xiy, (xwa+3)                            ; FC5F7A  ld XIY,(XWA+0x03)
@@ -6002,11 +6249,11 @@ sub_FC5EFB__FC5F65:
 	srl	c, 4                                   ; FC5F85  srl 0x04,C
 	extz	bc                                    ; FC5F88  extz BC
 	cps	bc, 1                                  ; FC5F8A  cp BC,1
-	jr z, sub_FC5EFB__FC5F95                   ; FC5F8C  jr Z,0xfc5f95
+	jr z, PartRec_SetMovementDepth_0007__FC5F95                   ; FC5F8C  jr Z,0xfc5f95
 	cps	bc, 2                                  ; FC5F8E  cp BC,2
-	jr z, sub_FC5EFB__FC5FB7                   ; FC5F90  jr Z,0xfc5fb7
-	jrl sub_FC5EFB__FC5FF3                     ; FC5F92  jrl T,0xfc5ff3
-sub_FC5EFB__FC5F95:
+	jr z, PartRec_SetMovementDepth_0007__FC5FB7                   ; FC5F90  jr Z,0xfc5fb7
+	jrl PartRec_SetMovementDepth_0007__FC5FF3                     ; FC5F92  jrl T,0xfc5ff3
+PartRec_SetMovementDepth_0007__FC5F95:
 	ld	c, (xix+17)                             ; FC5F95  ld C,(XIX+0x11)
 	extz	bc                                    ; FC5F98  extz BC
 	ld	(xiz-2), bc                             ; FC5F9A  ld (XIZ+0xfe),BC
@@ -6016,11 +6263,11 @@ sub_FC5EFB__FC5F95:
 	ld	hl, bc                                  ; FC5FA7  ld HL,BC
 	add	hl, iy                                 ; FC5FA9  add HL,IY
 	cp	hl, 50                                  ; FC5FAB  cp HL,0x0032
-	jr gt, sub_FC5EFB__FC5FD3                  ; FC5FAF  jr GT,0xfc5fd3
+	jr gt, PartRec_SetMovementDepth_0007__FC5FD3                  ; FC5FAF  jr GT,0xfc5fd3
 	cps	hl, 0                                  ; FC5FB1  cp HL,0
-	jr ge, sub_FC5EFB__FC5FDF                  ; FC5FB3  jr GE,0xfc5fdf
-	jr sub_FC5EFB__FC5FDC                      ; FC5FB5  jr T,0xfc5fdc
-sub_FC5EFB__FC5FB7:
+	jr ge, PartRec_SetMovementDepth_0007__FC5FDF                  ; FC5FB3  jr GE,0xfc5fdf
+	jr PartRec_SetMovementDepth_0007__FC5FDC                      ; FC5FB5  jr T,0xfc5fdc
+PartRec_SetMovementDepth_0007__FC5FB7:
 	ld	c, (xix+17)                             ; FC5FB7  ld C,(XIX+0x11)
 	extz	bc                                    ; FC5FBA  extz BC
 	ld	(xiz-2), bc                             ; FC5FBC  ld (XIZ+0xfe),BC
@@ -6030,49 +6277,49 @@ sub_FC5EFB__FC5FB7:
 	ld	hl, bc                                  ; FC5FC9  ld HL,BC
 	sub	hl, iy                                 ; FC5FCB  sub HL,IY
 	cp	hl, 50                                  ; FC5FCD  cp HL,0x0032
-	jr le, sub_FC5EFB__FC5FD8                  ; FC5FD1  jr LE,0xfc5fd8
-sub_FC5EFB__FC5FD3:
+	jr le, PartRec_SetMovementDepth_0007__FC5FD8                  ; FC5FD1  jr LE,0xfc5fd8
+PartRec_SetMovementDepth_0007__FC5FD3:
 	ldw	hl, 50                                 ; FC5FD3  ld HL,0x0032
-	jr sub_FC5EFB__FC5FDF                      ; FC5FD6  jr T,0xfc5fdf
-sub_FC5EFB__FC5FD8:
+	jr PartRec_SetMovementDepth_0007__FC5FDF                      ; FC5FD6  jr T,0xfc5fdf
+PartRec_SetMovementDepth_0007__FC5FD8:
 	cps	hl, 0                                  ; FC5FD8  cp HL,0
-	jr ge, sub_FC5EFB__FC5FDF                  ; FC5FDA  jr GE,0xfc5fdf
-sub_FC5EFB__FC5FDC:
+	jr ge, PartRec_SetMovementDepth_0007__FC5FDF                  ; FC5FDA  jr GE,0xfc5fdf
+PartRec_SetMovementDepth_0007__FC5FDC:
 	ldw	hl, 0                                  ; FC5FDC  ld HL,0x0000
-sub_FC5EFB__FC5FDF:
+PartRec_SetMovementDepth_0007__FC5FDF:
 	ld	c, l                                    ; FC5FDF  ld C,L
 	ld	(xiz-2), c                              ; FC5FE1  ld (XIZ+0xfe),C
 	ld	bc, (0xE084:24)                        ; FC5FE4  ld BC,(0x00e084)
 	extz	xbc                                   ; FC5FE9  extz XBC
 	ld	a, (xiz-2)                              ; FC5FEB  ld A,(XIZ+0xfe)
 	ld	(xbc+40), a                             ; FC5FEE  ld (XBC+0x28),A
-	jr sub_FC5EFB__FC5FFA                      ; FC5FF1  jr T,0xfc5ffa
-sub_FC5EFB__FC5FF3:
+	jr PartRec_SetMovementDepth_0007__FC5FFA                      ; FC5FF1  jr T,0xfc5ffa
+PartRec_SetMovementDepth_0007__FC5FF3:
 	ld	c, (xix+17)                             ; FC5FF3  ld C,(XIX+0x11)
 	extz	bc                                    ; FC5FF6  extz BC
 	ld	hl, bc                                  ; FC5FF8  ld HL,BC
-sub_FC5EFB__FC5FFA:
+PartRec_SetMovementDepth_0007__FC5FFA:
 	ld	c, l                                    ; FC5FFA  ld C,L
 	ld	(xiz-2), c                              ; FC5FFC  ld (XIZ+0xfe),C
 	ld	bc, (0xE084:24)                        ; FC5FFF  ld BC,(0x00e084)
 	extz	xbc                                   ; FC6004  extz XBC
 	ld	a, (xiz-2)                              ; FC6006  ld A,(XIZ+0xfe)
 	ld	(xbc+40), a                             ; FC6009  ld (XBC+0x28),A
-sub_FC5EFB__FC600C:
+PartRec_SetMovementDepth_0007__FC600C:
 	dec	1, d                                   ; FC600C  dec 1,D
 	extpfx7 0xD2, 0x84, 0xE0, 0x00, 0x38, 0x2A, 0x00 ; FC600E  add (0x00e084),0x002a
 	ld	c, e                                    ; FC6015  ld C,E
 	srl	c, 2                                   ; FC6017  srl 0x02,C
 	ld	e, c                                    ; FC601A  ld E,C
 	cps	d, 0                                   ; FC601C  cp D,0
-	jrl nz, sub_FC5EFB__FC5F30                 ; FC601E  jrl NZ,0xfc5f30
+	jrl nz, PartRec_SetMovementDepth_0007__FC5F30                 ; FC601E  jrl NZ,0xfc5f30
 	pop	xix                                    ; FC6021  pop XIX
 	popw	de                                    ; FC6022  pop DE
 	popw	hl                                    ; FC6023  pop HL
 	unlk32 xiz                                 ; FC6024  unlk XIZ
 	ret                                        ; FC6026  ret
 ; --------------------------------------------------------------------------
-; sub_FC6027 -- 0xFC6027..0xFC6174 (334 bytes)
+; Pack104_RefreshMovementDepth_ForVoice -- 0xFC6027..0xFC6174 (334 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAEC13 in sub_FAEBD1__FAEC08
@@ -6086,8 +6333,23 @@ sub_FC5EFB__FC600C:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_RefreshMovementDepth_ForVoice -- the
+;          per-voice half of PartRec_SetMovementDepth_0007.  It points
+;          0x00E086 at the voice's 37-byte record and 0x00E084 at its sub-record
+;          (0xFC603A, 0xFC6044), rewrites P[+0x28] (0xFC60CB, 0xFC60E2) and copies
+;          it into the live modulator state R[+0x1D] (0xFC60F8), then sets the
+;          movement run state R[+0x1C] to one of 0..4 (0xFC611B-0xFC616B).
+; ★ IT SHIPS NOTHING TO THE DEVICE, and it does not need to: registers
+;          chan+0x00C0 / 0x0100 / 0x0240 are rewritten for every sounding voice at
+;          the measured 40.69 Hz refresh
+;          (notes/FINDINGS-l7a1429-write-sequencing.md), so a new depth is picked
+;          up on the next tick.  Its caller `sub_FAEBD1` (midi_controllers.s,
+;          0xFAEC13) accordingly has no Dev104_ call after the loop, unlike the
+;          0x00C0 and 0x0280 handlers.
+; GRADE: PROVEN for the stores; STRONG for `P0SITI0N M0VEMENT`.
 ; --------------------------------------------------------------------------
-sub_FC6027:
+Pack104_RefreshMovementDepth_ForVoice:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC6027  link XIZ,0x0000
 	pushw	hl                                   ; FC602B  push HL
 	pushw	de                                   ; FC602C  push DE
@@ -6103,10 +6365,10 @@ sub_FC6027:
 	ld	(0xE084:24), bc                        ; FC6044  ld (0x00e084),BC
 	sub	iy, iy                                 ; FC6049  sub IY,IY
 	cp	bc, iy                                  ; FC604B  cp BC,IY
-	jrl z, sub_FC6027__FC616F                  ; FC604D  jrl Z,0xfc616f
+	jrl z, Pack104_RefreshMovementDepth_ForVoice__FC616F                  ; FC604D  jrl Z,0xfc616f
 	ld	c, (xwa)                                ; FC6050  ld C,(XWA)
 	cps	c, 0                                   ; FC6052  cp C,0
-	jrl z, sub_FC6027__FC60E5                  ; FC6054  jrl Z,0xfc60e5
+	jrl z, Pack104_RefreshMovementDepth_ForVoice__FC60E5                  ; FC6054  jrl Z,0xfc60e5
 	ld	xbc, (xwa+1)                            ; FC6057  ld XBC,(XWA+0x01)
 	ld	xix, xbc                                ; FC605A  ld XIX,XBC
 	ld	iy, (0xE084:24)                        ; FC605C  ld IY,(0x00e084)
@@ -6116,11 +6378,11 @@ sub_FC6027:
 	srl	c, 4                                   ; FC6069  srl 0x04,C
 	extz	bc                                    ; FC606C  extz BC
 	cps	bc, 1                                  ; FC606E  cp BC,1
-	jr z, sub_FC6027__FC6078                   ; FC6070  jr Z,0xfc6078
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6078                   ; FC6070  jr Z,0xfc6078
 	cps	bc, 2                                  ; FC6072  cp BC,2
-	jr z, sub_FC6027__FC6099                   ; FC6074  jr Z,0xfc6099
-	jr sub_FC6027__FC60D0                      ; FC6076  jr T,0xfc60d0
-sub_FC6027__FC6078:
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6099                   ; FC6074  jr Z,0xfc6099
+	jr Pack104_RefreshMovementDepth_ForVoice__FC60D0                      ; FC6076  jr T,0xfc60d0
+Pack104_RefreshMovementDepth_ForVoice__FC6078:
 	ld	c, (xix+17)                             ; FC6078  ld C,(XIX+0x11)
 	extz	bc                                    ; FC607B  extz BC
 	ld	de, bc                                  ; FC607D  ld DE,BC
@@ -6130,11 +6392,11 @@ sub_FC6027__FC6078:
 	ld	hl, bc                                  ; FC6089  ld HL,BC
 	add	hl, iy                                 ; FC608B  add HL,IY
 	cp	hl, 50                                  ; FC608D  cp HL,0x0032
-	jr gt, sub_FC6027__FC60B4                  ; FC6091  jr GT,0xfc60b4
+	jr gt, Pack104_RefreshMovementDepth_ForVoice__FC60B4                  ; FC6091  jr GT,0xfc60b4
 	cps	hl, 0                                  ; FC6093  cp HL,0
-	jr ge, sub_FC6027__FC60C0                  ; FC6095  jr GE,0xfc60c0
-	jr sub_FC6027__FC60BD                      ; FC6097  jr T,0xfc60bd
-sub_FC6027__FC6099:
+	jr ge, Pack104_RefreshMovementDepth_ForVoice__FC60C0                  ; FC6095  jr GE,0xfc60c0
+	jr Pack104_RefreshMovementDepth_ForVoice__FC60BD                      ; FC6097  jr T,0xfc60bd
+Pack104_RefreshMovementDepth_ForVoice__FC6099:
 	ld	c, (xix+17)                             ; FC6099  ld C,(XIX+0x11)
 	extz	bc                                    ; FC609C  extz BC
 	ld	de, bc                                  ; FC609E  ld DE,BC
@@ -6144,33 +6406,33 @@ sub_FC6027__FC6099:
 	ld	hl, bc                                  ; FC60AA  ld HL,BC
 	sub	hl, iy                                 ; FC60AC  sub HL,IY
 	cp	hl, 50                                  ; FC60AE  cp HL,0x0032
-	jr le, sub_FC6027__FC60B9                  ; FC60B2  jr LE,0xfc60b9
-sub_FC6027__FC60B4:
+	jr le, Pack104_RefreshMovementDepth_ForVoice__FC60B9                  ; FC60B2  jr LE,0xfc60b9
+Pack104_RefreshMovementDepth_ForVoice__FC60B4:
 	ldw	hl, 50                                 ; FC60B4  ld HL,0x0032
-	jr sub_FC6027__FC60C0                      ; FC60B7  jr T,0xfc60c0
-sub_FC6027__FC60B9:
+	jr Pack104_RefreshMovementDepth_ForVoice__FC60C0                      ; FC60B7  jr T,0xfc60c0
+Pack104_RefreshMovementDepth_ForVoice__FC60B9:
 	cps	hl, 0                                  ; FC60B9  cp HL,0
-	jr ge, sub_FC6027__FC60C0                  ; FC60BB  jr GE,0xfc60c0
-sub_FC6027__FC60BD:
+	jr ge, Pack104_RefreshMovementDepth_ForVoice__FC60C0                  ; FC60BB  jr GE,0xfc60c0
+Pack104_RefreshMovementDepth_ForVoice__FC60BD:
 	ldw	hl, 0                                  ; FC60BD  ld HL,0x0000
-sub_FC6027__FC60C0:
+Pack104_RefreshMovementDepth_ForVoice__FC60C0:
 	ld	c, l                                    ; FC60C0  ld C,L
 	ld	d, c                                    ; FC60C2  ld D,C
 	ld	bc, (0xE084:24)                        ; FC60C4  ld BC,(0x00e084)
 	extz	xbc                                   ; FC60C9  extz XBC
 	ld	(xbc+40), d                             ; FC60CB  ld (XBC+0x28),D
-	jr sub_FC6027__FC60D7                      ; FC60CE  jr T,0xfc60d7
-sub_FC6027__FC60D0:
+	jr Pack104_RefreshMovementDepth_ForVoice__FC60D7                      ; FC60CE  jr T,0xfc60d7
+Pack104_RefreshMovementDepth_ForVoice__FC60D0:
 	ld	c, (xix+17)                             ; FC60D0  ld C,(XIX+0x11)
 	extz	bc                                    ; FC60D3  extz BC
 	ld	hl, bc                                  ; FC60D5  ld HL,BC
-sub_FC6027__FC60D7:
+Pack104_RefreshMovementDepth_ForVoice__FC60D7:
 	ld	c, l                                    ; FC60D7  ld C,L
 	ld	d, c                                    ; FC60D9  ld D,C
 	ld	bc, (0xE084:24)                        ; FC60DB  ld BC,(0x00e084)
 	extz	xbc                                   ; FC60E0  extz XBC
 	ld	(xbc+40), d                             ; FC60E2  ld (XBC+0x28),D
-sub_FC6027__FC60E5:
+Pack104_RefreshMovementDepth_ForVoice__FC60E5:
 	ld	bc, (0xE084:24)                        ; FC60E5  ld BC,(0x00e084)
 	extz	xbc                                   ; FC60EA  extz XBC
 	ld	a, (xbc+40)                             ; FC60EC  ld A,(XBC+0x28)
@@ -6183,53 +6445,53 @@ sub_FC6027__FC60E5:
 	ld	xwa, (xbc+1)                            ; FC6102  ld XWA,(XBC+0x01)
 	ld	c, (xwa+18)                             ; FC6105  ld C,(XWA+0x12)
 	and	c, 0x80                                ; FC6108  and C,0x80
-	jr z, sub_FC6027__FC6121                   ; FC610B  jr Z,0xfc6121
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6121                   ; FC610B  jr Z,0xfc6121
 	ld	bc, (0xE086:24)                        ; FC610D  ld BC,(0x00e086)
 	extz	xbc                                   ; FC6112  extz XBC
 	ld	a, (xbc+29)                             ; FC6114  ld A,(XBC+0x1d)
 	cps	a, 0                                   ; FC6117  cp A,0
-	jr z, sub_FC6027__FC6164                   ; FC6119  jr Z,0xfc6164
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6164                   ; FC6119  jr Z,0xfc6164
 	ld	(xbc+28), 2                             ; FC611B  ld (XBC+0x1c),0x02
-	jr sub_FC6027__FC616F                      ; FC611F  jr T,0xfc616f
-sub_FC6027__FC6121:
+	jr Pack104_RefreshMovementDepth_ForVoice__FC616F                      ; FC611F  jr T,0xfc616f
+Pack104_RefreshMovementDepth_ForVoice__FC6121:
 	ld	bc, (0xE086:24)                        ; FC6121  ld BC,(0x00e086)
 	extz	xbc                                   ; FC6126  extz XBC
 	ld	a, (xbc+30)                             ; FC6128  ld A,(XBC+0x1e)
 	cps	a, 0                                   ; FC612B  cp A,0
-	jr z, sub_FC6027__FC6150                   ; FC612D  jr Z,0xfc6150
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6150                   ; FC612D  jr Z,0xfc6150
 	ld	a, (xbc+29)                             ; FC612F  ld A,(XBC+0x1d)
 	cps	a, 0                                   ; FC6132  cp A,0
-	jr z, sub_FC6027__FC6150                   ; FC6134  jr Z,0xfc6150
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6150                   ; FC6134  jr Z,0xfc6150
 	ld	a, (xbc+28)                             ; FC6136  ld A,(XBC+0x1c)
 	cps	a, 1                                   ; FC6139  cp A,1
-	jr z, sub_FC6027__FC6143                   ; FC613B  jr Z,0xfc6143
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6143                   ; FC613B  jr Z,0xfc6143
 	ld	(xbc+28), 4                             ; FC613D  ld (XBC+0x1c),0x04
-	jr sub_FC6027__FC616F                      ; FC6141  jr T,0xfc616f
-sub_FC6027__FC6143:
+	jr Pack104_RefreshMovementDepth_ForVoice__FC616F                      ; FC6141  jr T,0xfc616f
+Pack104_RefreshMovementDepth_ForVoice__FC6143:
 	ld	bc, (0xE086:24)                        ; FC6143  ld BC,(0x00e086)
 	extz	xbc                                   ; FC6148  extz XBC
 	ld	(xbc+28), 1                             ; FC614A  ld (XBC+0x1c),0x01
-	jr sub_FC6027__FC616F                      ; FC614E  jr T,0xfc616f
-sub_FC6027__FC6150:
+	jr Pack104_RefreshMovementDepth_ForVoice__FC616F                      ; FC614E  jr T,0xfc616f
+Pack104_RefreshMovementDepth_ForVoice__FC6150:
 	ld	bc, (0xE086:24)                        ; FC6150  ld BC,(0x00e086)
 	extz	xbc                                   ; FC6155  extz XBC
 	ld	a, (xbc+28)                             ; FC6157  ld A,(XBC+0x1c)
 	cps	a, 0                                   ; FC615A  cp A,0
-	jr z, sub_FC6027__FC6164                   ; FC615C  jr Z,0xfc6164
+	jr z, Pack104_RefreshMovementDepth_ForVoice__FC6164                   ; FC615C  jr Z,0xfc6164
 	ld	(xbc+28), 3                             ; FC615E  ld (XBC+0x1c),0x03
-	jr sub_FC6027__FC616F                      ; FC6162  jr T,0xfc616f
-sub_FC6027__FC6164:
+	jr Pack104_RefreshMovementDepth_ForVoice__FC616F                      ; FC6162  jr T,0xfc616f
+Pack104_RefreshMovementDepth_ForVoice__FC6164:
 	ld	bc, (0xE086:24)                        ; FC6164  ld BC,(0x00e086)
 	extz	xbc                                   ; FC6169  extz XBC
 	ld	(xbc+28), 0                             ; FC616B  ld (XBC+0x1c),0x00
-sub_FC6027__FC616F:
+Pack104_RefreshMovementDepth_ForVoice__FC616F:
 	pop	xix                                    ; FC616F  pop XIX
 	popw	de                                    ; FC6170  pop DE
 	popw	hl                                    ; FC6171  pop HL
 	unlk32 xiz                                 ; FC6172  unlk XIZ
 	ret                                        ; FC6174  ret
 ; --------------------------------------------------------------------------
-; sub_FC6175 -- 0xFC6175..0xFC629A (294 bytes)
+; PartRec_SetMovementRate_0009 -- 0xFC6175..0xFC629A (294 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAEC41 in sub_FAEC21, 0xFB65C9 in PartRec_ResetToDefaults
@@ -6242,8 +6504,29 @@ sub_FC6027__FC616F:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetMovementRate_0009 -- stores a part-level
+;          `P0SITI0N M0VEMENT` rate offset into PART[+0x09] (0xFC6194) and
+;          re-derives, per enabled element,
+;            P[+0x29] = Curve_FE0296[clamp((p18 & 0x7F) +/- PART[+0x09], 0..50)]
+;            0xFC620E-0xFC627D
+;          with the sign from bits 3:2 of P[+0x01] (0xFC61B1-0xFC61DC).
+; WHERE THE VALUE GOES: the packer copies P[+0x29] into R[+0x1E]
+;          (0xFC55B9-0xFC55C5), and Pack104_TickPositionMovement_ForVoice adds
+;          R[+0x1E] to the 9-bit phase accumulator R[+0x1F] once per tick
+;          (0xFC7C5D-0xFC7C84).  ★ A per-tick phase increment IS a rate, which
+;          is why this pass says RATE where
+;          notes/FINDINGS-l7a1429-parameter-names.md section 5e says p18 is the
+;          movement "form".  Reported as a sharpening of that lane's word, not as
+;          a contradiction: bit 7 of p18, which that note calls the form flag, is
+;          masked off here (`res 0x07,C`, 0xFC6211) and is a separate field.
+; ★ Curve_FE0296 (0x00FE0296) is therefore the MOVEMENT RATE table, 51 entries
+;          for the 0..50 index, and it ends exactly where the 512-byte movement
+;          waveform begins at 0x00FE02C9 (0xFE0296 + 51 = 0xFE02C9).  Both tables
+;          are in another file and were NOT renamed by this lane.
+; GRADE: PROVEN for the arithmetic, the table extents and the phase use.
 ; --------------------------------------------------------------------------
-sub_FC6175:
+PartRec_SetMovementRate_0009:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FC6175  link XIZ,0xfffe
 	pushw	hl                                   ; FC6179  push HL
 	pushw	de                                   ; FC617A  push DE
@@ -6263,33 +6546,33 @@ sub_FC6175:
 	ld	(0xE084:24), bc                        ; FC61A0  ld (0x00e084),BC
 	ld	e, (xiz+12)                             ; FC61A5  ld E,(XIZ+0x0c)
 	ldb	d, 4                                   ; FC61A8  ld D,0x04
-sub_FC6175__FC61AA:
+PartRec_SetMovementRate_0009__FC61AA:
 	ld	bc, (0xE084:24)                        ; FC61AA  ld BC,(0x00e084)
 	extz	xbc                                   ; FC61AF  extz XBC
 	extpfx3 0xB9, 0x01, 0xB2                   ; FC61B1  res 2,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB3                   ; FC61B4  res 3,(XBC+0x01)
 	extpfx2 0xB1, 0xCF                         ; FC61B7  bit 7,(XBC)
-	jrl z, sub_FC6175__FC6280                  ; FC61B9  jrl Z,0xfc6280
+	jrl z, PartRec_SetMovementRate_0009__FC6280                  ; FC61B9  jrl Z,0xfc6280
 	ld	a, e                                    ; FC61BC  ld A,E
 	and	a, 1                                   ; FC61BE  and A,0x01
-	jr z, sub_FC6175__FC61DF                   ; FC61C1  jr Z,0xfc61df
+	jr z, PartRec_SetMovementRate_0009__FC61DF                   ; FC61C1  jr Z,0xfc61df
 	ld	a, e                                    ; FC61C3  ld A,E
 	and	a, 2                                   ; FC61C5  and A,0x02
-	jr z, sub_FC6175__FC61D2                   ; FC61C8  jr Z,0xfc61d2
+	jr z, PartRec_SetMovementRate_0009__FC61D2                   ; FC61C8  jr Z,0xfc61d2
 	extpfx3 0xB9, 0x01, 0xB2                   ; FC61CA  res 2,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xBB                   ; FC61CD  set 3,(XBC+0x01)
-	jr sub_FC6175__FC61DF                      ; FC61D0  jr T,0xfc61df
-sub_FC6175__FC61D2:
+	jr PartRec_SetMovementRate_0009__FC61DF                      ; FC61D0  jr T,0xfc61df
+PartRec_SetMovementRate_0009__FC61D2:
 	ld	bc, (0xE084:24)                        ; FC61D2  ld BC,(0x00e084)
 	extz	xbc                                   ; FC61D7  extz XBC
 	extpfx3 0xB9, 0x01, 0xBA                   ; FC61D9  set 2,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB3                   ; FC61DC  res 3,(XBC+0x01)
-sub_FC6175__FC61DF:
+PartRec_SetMovementRate_0009__FC61DF:
 	ld	bc, (0xE082:24)                        ; FC61DF  ld BC,(0x00e082)
 	extz	xbc                                   ; FC61E4  extz XBC
 	ld	a, (xbc)                                ; FC61E6  ld A,(XBC)
 	cps	a, 0                                   ; FC61E8  cp A,0
-	jrl nz, sub_FC6175__FC6280                 ; FC61EA  jrl NZ,0xfc6280
+	jrl nz, PartRec_SetMovementRate_0009__FC6280                 ; FC61EA  jrl NZ,0xfc6280
 	ld	wa, (0xE084:24)                        ; FC61ED  ld WA,(0x00e084)
 	extz	xwa                                   ; FC61F2  extz XWA
 	ld	xiy, (xwa+3)                            ; FC61F4  ld XIY,(XWA+0x03)
@@ -6299,11 +6582,11 @@ sub_FC6175__FC61DF:
 	srl	c, 2                                   ; FC61FF  srl 0x02,C
 	extz	bc                                    ; FC6202  extz BC
 	cps	bc, 1                                  ; FC6204  cp BC,1
-	jr z, sub_FC6175__FC620E                   ; FC6206  jr Z,0xfc620e
+	jr z, PartRec_SetMovementRate_0009__FC620E                   ; FC6206  jr Z,0xfc620e
 	cps	bc, 2                                  ; FC6208  cp BC,2
-	jr z, sub_FC6175__FC6233                   ; FC620A  jr Z,0xfc6233
-	jr sub_FC6175__FC6260                      ; FC620C  jr T,0xfc6260
-sub_FC6175__FC620E:
+	jr z, PartRec_SetMovementRate_0009__FC6233                   ; FC620A  jr Z,0xfc6233
+	jr PartRec_SetMovementRate_0009__FC6260                      ; FC620C  jr T,0xfc6260
+PartRec_SetMovementRate_0009__FC620E:
 	ld	c, (xix+18)                             ; FC620E  ld C,(XIX+0x12)
 	res	7, c                                   ; FC6211  res 0x07,C
 	extz	bc                                    ; FC6214  extz BC
@@ -6314,11 +6597,11 @@ sub_FC6175__FC620E:
 	ld	hl, bc                                  ; FC6223  ld HL,BC
 	add	hl, iy                                 ; FC6225  add HL,IY
 	cp	hl, 50                                  ; FC6227  cp HL,0x0032
-	jr gt, sub_FC6175__FC6252                  ; FC622B  jr GT,0xfc6252
+	jr gt, PartRec_SetMovementRate_0009__FC6252                  ; FC622B  jr GT,0xfc6252
 	cps	hl, 0                                  ; FC622D  cp HL,0
-	jr ge, sub_FC6175__FC626A                  ; FC622F  jr GE,0xfc626a
-	jr sub_FC6175__FC625B                      ; FC6231  jr T,0xfc625b
-sub_FC6175__FC6233:
+	jr ge, PartRec_SetMovementRate_0009__FC626A                  ; FC622F  jr GE,0xfc626a
+	jr PartRec_SetMovementRate_0009__FC625B                      ; FC6231  jr T,0xfc625b
+PartRec_SetMovementRate_0009__FC6233:
 	ld	c, (xix+18)                             ; FC6233  ld C,(XIX+0x12)
 	res	7, c                                   ; FC6236  res 0x07,C
 	extz	bc                                    ; FC6239  extz BC
@@ -6329,22 +6612,22 @@ sub_FC6175__FC6233:
 	ld	hl, bc                                  ; FC6248  ld HL,BC
 	add	hl, iy                                 ; FC624A  add HL,IY
 	cp	hl, 50                                  ; FC624C  cp HL,0x0032
-	jr le, sub_FC6175__FC6257                  ; FC6250  jr LE,0xfc6257
-sub_FC6175__FC6252:
+	jr le, PartRec_SetMovementRate_0009__FC6257                  ; FC6250  jr LE,0xfc6257
+PartRec_SetMovementRate_0009__FC6252:
 	ldw	hl, 50                                 ; FC6252  ld HL,0x0032
-	jr sub_FC6175__FC626A                      ; FC6255  jr T,0xfc626a
-sub_FC6175__FC6257:
+	jr PartRec_SetMovementRate_0009__FC626A                      ; FC6255  jr T,0xfc626a
+PartRec_SetMovementRate_0009__FC6257:
 	cps	hl, 0                                  ; FC6257  cp HL,0
-	jr ge, sub_FC6175__FC626A                  ; FC6259  jr GE,0xfc626a
-sub_FC6175__FC625B:
+	jr ge, PartRec_SetMovementRate_0009__FC626A                  ; FC6259  jr GE,0xfc626a
+PartRec_SetMovementRate_0009__FC625B:
 	ldw	hl, 0                                  ; FC625B  ld HL,0x0000
-	jr sub_FC6175__FC626A                      ; FC625E  jr T,0xfc626a
-sub_FC6175__FC6260:
+	jr PartRec_SetMovementRate_0009__FC626A                      ; FC625E  jr T,0xfc626a
+PartRec_SetMovementRate_0009__FC6260:
 	ld	c, (xix+18)                             ; FC6260  ld C,(XIX+0x12)
 	res	7, c                                   ; FC6263  res 0x07,C
 	extz	bc                                    ; FC6266  extz BC
 	ld	hl, bc                                  ; FC6268  ld HL,BC
-sub_FC6175__FC626A:
+PartRec_SetMovementRate_0009__FC626A:
 	ld	bc, hl                                  ; FC626A  ld BC,HL
 	exts	xbc                                   ; FC626C  exts XBC
 	add	xbc, 0xFE0296                          ; FC626E  add XBC,0x00fe0296
@@ -6352,21 +6635,21 @@ sub_FC6175__FC626A:
 	ld	bc, (0xE084:24)                        ; FC6276  ld BC,(0x00e084)
 	extz	xbc                                   ; FC627B  extz XBC
 	ld	(xbc+41), a                             ; FC627D  ld (XBC+0x29),A
-sub_FC6175__FC6280:
+PartRec_SetMovementRate_0009__FC6280:
 	dec	1, d                                   ; FC6280  dec 1,D
 	extpfx7 0xD2, 0x84, 0xE0, 0x00, 0x38, 0x2A, 0x00 ; FC6282  add (0x00e084),0x002a
 	ld	c, e                                    ; FC6289  ld C,E
 	srl	c, 2                                   ; FC628B  srl 0x02,C
 	ld	e, c                                    ; FC628E  ld E,C
 	cps	d, 0                                   ; FC6290  cp D,0
-	jrl nz, sub_FC6175__FC61AA                 ; FC6292  jrl NZ,0xfc61aa
+	jrl nz, PartRec_SetMovementRate_0009__FC61AA                 ; FC6292  jrl NZ,0xfc61aa
 	pop	xix                                    ; FC6295  pop XIX
 	popw	de                                    ; FC6296  pop DE
 	popw	hl                                    ; FC6297  pop HL
 	unlk32 xiz                                 ; FC6298  unlk XIZ
 	ret                                        ; FC629A  ret
 ; --------------------------------------------------------------------------
-; sub_FC629B -- 0xFC629B..0xFC63EB (337 bytes)
+; Pack104_RefreshMovementRate_ForVoice -- 0xFC629B..0xFC63EB (337 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAEC63 in sub_FAEC21__FAEC58
@@ -6380,8 +6663,18 @@ sub_FC6175__FC6280:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_RefreshMovementRate_ForVoice -- the
+;          per-voice half of PartRec_SetMovementRate_0009: points 0x00E086 /
+;          0x00E084 at the voice's records (0xFC62AE, 0xFC62B8), rewrites
+;          P[+0x29] through Curve_FE0296 (0xFC634A, 0xFC6359), copies it into the
+;          live phase increment R[+0x1E] (0xFC636F) and sets the run state
+;          R[+0x1C] (0xFC6392-0xFC63E2).
+; It ships nothing to the device, for the reason given under
+;          Pack104_RefreshMovementDepth_ForVoice.
+; GRADE: PROVEN for the stores and the destination.
 ; --------------------------------------------------------------------------
-sub_FC629B:
+Pack104_RefreshMovementRate_ForVoice:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC629B  link XIZ,0x0000
 	pushw	hl                                   ; FC629F  push HL
 	pushw	de                                   ; FC62A0  push DE
@@ -6397,10 +6690,10 @@ sub_FC629B:
 	ld	(0xE084:24), bc                        ; FC62B8  ld (0x00e084),BC
 	sub	iy, iy                                 ; FC62BD  sub IY,IY
 	cp	bc, iy                                  ; FC62BF  cp BC,IY
-	jrl z, sub_FC629B__FC63E6                  ; FC62C1  jrl Z,0xfc63e6
+	jrl z, Pack104_RefreshMovementRate_ForVoice__FC63E6                  ; FC62C1  jrl Z,0xfc63e6
 	ld	c, (xwa)                                ; FC62C4  ld C,(XWA)
 	cps	c, 0                                   ; FC62C6  cp C,0
-	jrl z, sub_FC629B__FC635C                  ; FC62C8  jrl Z,0xfc635c
+	jrl z, Pack104_RefreshMovementRate_ForVoice__FC635C                  ; FC62C8  jrl Z,0xfc635c
 	ld	xbc, (xwa+1)                            ; FC62CB  ld XBC,(XWA+0x01)
 	ld	xix, xbc                                ; FC62CE  ld XIX,XBC
 	ld	iy, (0xE084:24)                        ; FC62D0  ld IY,(0x00e084)
@@ -6410,11 +6703,11 @@ sub_FC629B:
 	srl	c, 2                                   ; FC62DD  srl 0x02,C
 	extz	bc                                    ; FC62E0  extz BC
 	cps	bc, 1                                  ; FC62E2  cp BC,1
-	jr z, sub_FC629B__FC62EC                   ; FC62E4  jr Z,0xfc62ec
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC62EC                   ; FC62E4  jr Z,0xfc62ec
 	cps	bc, 2                                  ; FC62E6  cp BC,2
-	jr z, sub_FC629B__FC6310                   ; FC62E8  jr Z,0xfc6310
-	jr sub_FC629B__FC633C                      ; FC62EA  jr T,0xfc633c
-sub_FC629B__FC62EC:
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC6310                   ; FC62E8  jr Z,0xfc6310
+	jr Pack104_RefreshMovementRate_ForVoice__FC633C                      ; FC62EA  jr T,0xfc633c
+Pack104_RefreshMovementRate_ForVoice__FC62EC:
 	ld	c, (xix+18)                             ; FC62EC  ld C,(XIX+0x12)
 	res	7, c                                   ; FC62EF  res 0x07,C
 	extz	bc                                    ; FC62F2  extz BC
@@ -6425,11 +6718,11 @@ sub_FC629B__FC62EC:
 	ld	hl, bc                                  ; FC6300  ld HL,BC
 	add	hl, iy                                 ; FC6302  add HL,IY
 	cp	hl, 50                                  ; FC6304  cp HL,0x0032
-	jr gt, sub_FC629B__FC632E                  ; FC6308  jr GT,0xfc632e
+	jr gt, Pack104_RefreshMovementRate_ForVoice__FC632E                  ; FC6308  jr GT,0xfc632e
 	cps	hl, 0                                  ; FC630A  cp HL,0
-	jr ge, sub_FC629B__FC6346                  ; FC630C  jr GE,0xfc6346
-	jr sub_FC629B__FC6337                      ; FC630E  jr T,0xfc6337
-sub_FC629B__FC6310:
+	jr ge, Pack104_RefreshMovementRate_ForVoice__FC6346                  ; FC630C  jr GE,0xfc6346
+	jr Pack104_RefreshMovementRate_ForVoice__FC6337                      ; FC630E  jr T,0xfc6337
+Pack104_RefreshMovementRate_ForVoice__FC6310:
 	ld	c, (xix+18)                             ; FC6310  ld C,(XIX+0x12)
 	res	7, c                                   ; FC6313  res 0x07,C
 	extz	bc                                    ; FC6316  extz BC
@@ -6440,22 +6733,22 @@ sub_FC629B__FC6310:
 	ld	hl, bc                                  ; FC6324  ld HL,BC
 	add	hl, iy                                 ; FC6326  add HL,IY
 	cp	hl, 50                                  ; FC6328  cp HL,0x0032
-	jr le, sub_FC629B__FC6333                  ; FC632C  jr LE,0xfc6333
-sub_FC629B__FC632E:
+	jr le, Pack104_RefreshMovementRate_ForVoice__FC6333                  ; FC632C  jr LE,0xfc6333
+Pack104_RefreshMovementRate_ForVoice__FC632E:
 	ldw	hl, 50                                 ; FC632E  ld HL,0x0032
-	jr sub_FC629B__FC6346                      ; FC6331  jr T,0xfc6346
-sub_FC629B__FC6333:
+	jr Pack104_RefreshMovementRate_ForVoice__FC6346                      ; FC6331  jr T,0xfc6346
+Pack104_RefreshMovementRate_ForVoice__FC6333:
 	cps	hl, 0                                  ; FC6333  cp HL,0
-	jr ge, sub_FC629B__FC6346                  ; FC6335  jr GE,0xfc6346
-sub_FC629B__FC6337:
+	jr ge, Pack104_RefreshMovementRate_ForVoice__FC6346                  ; FC6335  jr GE,0xfc6346
+Pack104_RefreshMovementRate_ForVoice__FC6337:
 	ldw	hl, 0                                  ; FC6337  ld HL,0x0000
-	jr sub_FC629B__FC6346                      ; FC633A  jr T,0xfc6346
-sub_FC629B__FC633C:
+	jr Pack104_RefreshMovementRate_ForVoice__FC6346                      ; FC633A  jr T,0xfc6346
+Pack104_RefreshMovementRate_ForVoice__FC633C:
 	ld	c, (xix+18)                             ; FC633C  ld C,(XIX+0x12)
 	res	7, c                                   ; FC633F  res 0x07,C
 	extz	bc                                    ; FC6342  extz BC
 	ld	hl, bc                                  ; FC6344  ld HL,BC
-sub_FC629B__FC6346:
+Pack104_RefreshMovementRate_ForVoice__FC6346:
 	ld	bc, hl                                  ; FC6346  ld BC,HL
 	exts	xbc                                   ; FC6348  exts XBC
 	add	xbc, 0xFE0296                          ; FC634A  add XBC,0x00fe0296
@@ -6463,7 +6756,7 @@ sub_FC629B__FC6346:
 	ld	bc, (0xE084:24)                        ; FC6352  ld BC,(0x00e084)
 	extz	xbc                                   ; FC6357  extz XBC
 	ld	(xbc+41), a                             ; FC6359  ld (XBC+0x29),A
-sub_FC629B__FC635C:
+Pack104_RefreshMovementRate_ForVoice__FC635C:
 	ld	bc, (0xE084:24)                        ; FC635C  ld BC,(0x00e084)
 	extz	xbc                                   ; FC6361  extz XBC
 	ld	a, (xbc+41)                             ; FC6363  ld A,(XBC+0x29)
@@ -6476,53 +6769,53 @@ sub_FC629B__FC635C:
 	ld	xwa, (xbc+1)                            ; FC6379  ld XWA,(XBC+0x01)
 	ld	c, (xwa+18)                             ; FC637C  ld C,(XWA+0x12)
 	and	c, 0x80                                ; FC637F  and C,0x80
-	jr z, sub_FC629B__FC6398                   ; FC6382  jr Z,0xfc6398
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC6398                   ; FC6382  jr Z,0xfc6398
 	ld	bc, (0xE086:24)                        ; FC6384  ld BC,(0x00e086)
 	extz	xbc                                   ; FC6389  extz XBC
 	ld	a, (xbc+29)                             ; FC638B  ld A,(XBC+0x1d)
 	cps	a, 0                                   ; FC638E  cp A,0
-	jr z, sub_FC629B__FC63DB                   ; FC6390  jr Z,0xfc63db
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC63DB                   ; FC6390  jr Z,0xfc63db
 	ld	(xbc+28), 2                             ; FC6392  ld (XBC+0x1c),0x02
-	jr sub_FC629B__FC63E6                      ; FC6396  jr T,0xfc63e6
-sub_FC629B__FC6398:
+	jr Pack104_RefreshMovementRate_ForVoice__FC63E6                      ; FC6396  jr T,0xfc63e6
+Pack104_RefreshMovementRate_ForVoice__FC6398:
 	ld	bc, (0xE086:24)                        ; FC6398  ld BC,(0x00e086)
 	extz	xbc                                   ; FC639D  extz XBC
 	ld	a, (xbc+30)                             ; FC639F  ld A,(XBC+0x1e)
 	cps	a, 0                                   ; FC63A2  cp A,0
-	jr z, sub_FC629B__FC63C7                   ; FC63A4  jr Z,0xfc63c7
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC63C7                   ; FC63A4  jr Z,0xfc63c7
 	ld	a, (xbc+29)                             ; FC63A6  ld A,(XBC+0x1d)
 	cps	a, 0                                   ; FC63A9  cp A,0
-	jr z, sub_FC629B__FC63C7                   ; FC63AB  jr Z,0xfc63c7
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC63C7                   ; FC63AB  jr Z,0xfc63c7
 	ld	a, (xbc+28)                             ; FC63AD  ld A,(XBC+0x1c)
 	cps	a, 1                                   ; FC63B0  cp A,1
-	jr z, sub_FC629B__FC63BA                   ; FC63B2  jr Z,0xfc63ba
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC63BA                   ; FC63B2  jr Z,0xfc63ba
 	ld	(xbc+28), 4                             ; FC63B4  ld (XBC+0x1c),0x04
-	jr sub_FC629B__FC63E6                      ; FC63B8  jr T,0xfc63e6
-sub_FC629B__FC63BA:
+	jr Pack104_RefreshMovementRate_ForVoice__FC63E6                      ; FC63B8  jr T,0xfc63e6
+Pack104_RefreshMovementRate_ForVoice__FC63BA:
 	ld	bc, (0xE086:24)                        ; FC63BA  ld BC,(0x00e086)
 	extz	xbc                                   ; FC63BF  extz XBC
 	ld	(xbc+28), 1                             ; FC63C1  ld (XBC+0x1c),0x01
-	jr sub_FC629B__FC63E6                      ; FC63C5  jr T,0xfc63e6
-sub_FC629B__FC63C7:
+	jr Pack104_RefreshMovementRate_ForVoice__FC63E6                      ; FC63C5  jr T,0xfc63e6
+Pack104_RefreshMovementRate_ForVoice__FC63C7:
 	ld	bc, (0xE086:24)                        ; FC63C7  ld BC,(0x00e086)
 	extz	xbc                                   ; FC63CC  extz XBC
 	ld	a, (xbc+28)                             ; FC63CE  ld A,(XBC+0x1c)
 	cps	a, 0                                   ; FC63D1  cp A,0
-	jr z, sub_FC629B__FC63DB                   ; FC63D3  jr Z,0xfc63db
+	jr z, Pack104_RefreshMovementRate_ForVoice__FC63DB                   ; FC63D3  jr Z,0xfc63db
 	ld	(xbc+28), 3                             ; FC63D5  ld (XBC+0x1c),0x03
-	jr sub_FC629B__FC63E6                      ; FC63D9  jr T,0xfc63e6
-sub_FC629B__FC63DB:
+	jr Pack104_RefreshMovementRate_ForVoice__FC63E6                      ; FC63D9  jr T,0xfc63e6
+Pack104_RefreshMovementRate_ForVoice__FC63DB:
 	ld	bc, (0xE086:24)                        ; FC63DB  ld BC,(0x00e086)
 	extz	xbc                                   ; FC63E0  extz XBC
 	ld	(xbc+28), 0                             ; FC63E2  ld (XBC+0x1c),0x00
-sub_FC629B__FC63E6:
+Pack104_RefreshMovementRate_ForVoice__FC63E6:
 	pop	xix                                    ; FC63E6  pop XIX
 	popw	de                                    ; FC63E7  pop DE
 	popw	hl                                    ; FC63E8  pop HL
 	unlk32 xiz                                 ; FC63E9  unlk XIZ
 	ret                                        ; FC63EB  ret
 ; --------------------------------------------------------------------------
-; sub_FC63EC -- 0xFC63EC..0xFC654E (355 bytes)
+; PartRec_SetMutingOffset_000B -- 0xFC63EC..0xFC654E (355 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAEC90 in sub_FAEC71, 0xFB65D7 in PartRec_ResetToDefaults
@@ -6535,8 +6828,29 @@ sub_FC629B__FC63E6:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetMutingOffset_000B -- stores a part-level
+;          `MUTING` cutoff offset into PART[+0x0B] (0xFC640B) and re-derives, per
+;          enabled element,
+;            P[+0x1A] = (p22 & 0x7F) +/- PART[+0x0B]   0xFC6483-0xFC64A2
+;            P[+0x1C] = (p32 & 0x7F) +/- PART[+0x0B]   0xFC64A5-0xFC64C4
+;          with the sign from bits 1:0 of P[+0x01] (0xFC6428-0xFC6453).
+; WHERE THE VALUES GO: Dev104_PackStagingStruct reads P[+0x1A] at 0xFC529F as the
+;          additive term of the index `i3` and P[+0x1C] at 0xFC5415 for `i4`
+;          (notes/HLE-GUIDE-l7a1429.md section 5.2).  i3 indexes
+;          Curve_Muting_Cutoff_Q16_128 for register chan+0x0400 (0xFC52E1) and
+;          Curve_Muting_Cutoff_Q13_128 for chan+0x0340 (0xFC52EF); i4 does the
+;          same for chan+0x0440 and chan+0x0380.
+; ★ UNIT: the guide's fit makes that index a MIDI note -- cutoff(i) =
+;          440 * 2^((i + 36 - 69)/12) Hz at 44.1 kHz, PROVEN to 0.8 cent -- so
+;          this part-level control is an offset in SEMITONES OF CUTOFF, clamped
+;          between Table_Muting_CutoffFloor_ByKeyZone_256[zone] and PART[+0x12]
+;          (0xFC52AF-0xFC52D6).
+; GRADE: PROVEN for the arithmetic, the data path and the unit.  STRONG for the
+;          name `MUTING`, which carries the parameter-names note's section 5c
+;          point of failure.
 ; --------------------------------------------------------------------------
-sub_FC63EC:
+PartRec_SetMutingOffset_000B:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC63EC  link XIZ,0x0000
 	pushw	hl                                   ; FC63F0  push HL
 	pushw	de                                   ; FC63F1  push DE
@@ -6556,33 +6870,33 @@ sub_FC63EC:
 	ld	(0xE084:24), bc                        ; FC6417  ld (0x00e084),BC
 	ld	l, (xiz+12)                             ; FC641C  ld L,(XIZ+0x0c)
 	ldb	h, 4                                   ; FC641F  ld H,0x04
-sub_FC63EC__FC6421:
+PartRec_SetMutingOffset_000B__FC6421:
 	ld	bc, (0xE084:24)                        ; FC6421  ld BC,(0x00e084)
 	extz	xbc                                   ; FC6426  extz XBC
 	extpfx3 0xB9, 0x01, 0xB0                   ; FC6428  res 0,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB1                   ; FC642B  res 1,(XBC+0x01)
 	extpfx2 0xB1, 0xCF                         ; FC642E  bit 7,(XBC)
-	jrl z, sub_FC63EC__FC6534                  ; FC6430  jrl Z,0xfc6534
+	jrl z, PartRec_SetMutingOffset_000B__FC6534                  ; FC6430  jrl Z,0xfc6534
 	ld	a, l                                    ; FC6433  ld A,L
 	and	a, 1                                   ; FC6435  and A,0x01
-	jr z, sub_FC63EC__FC6456                   ; FC6438  jr Z,0xfc6456
+	jr z, PartRec_SetMutingOffset_000B__FC6456                   ; FC6438  jr Z,0xfc6456
 	ld	a, l                                    ; FC643A  ld A,L
 	and	a, 2                                   ; FC643C  and A,0x02
-	jr z, sub_FC63EC__FC6449                   ; FC643F  jr Z,0xfc6449
+	jr z, PartRec_SetMutingOffset_000B__FC6449                   ; FC643F  jr Z,0xfc6449
 	extpfx3 0xB9, 0x01, 0xB0                   ; FC6441  res 0,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB9                   ; FC6444  set 1,(XBC+0x01)
-	jr sub_FC63EC__FC6456                      ; FC6447  jr T,0xfc6456
-sub_FC63EC__FC6449:
+	jr PartRec_SetMutingOffset_000B__FC6456                      ; FC6447  jr T,0xfc6456
+PartRec_SetMutingOffset_000B__FC6449:
 	ld	bc, (0xE084:24)                        ; FC6449  ld BC,(0x00e084)
 	extz	xbc                                   ; FC644E  extz XBC
 	extpfx3 0xB9, 0x01, 0xB8                   ; FC6450  set 0,(XBC+0x01)
 	extpfx3 0xB9, 0x01, 0xB1                   ; FC6453  res 1,(XBC+0x01)
-sub_FC63EC__FC6456:
+PartRec_SetMutingOffset_000B__FC6456:
 	ld	bc, (0xE082:24)                        ; FC6456  ld BC,(0x00e082)
 	extz	xbc                                   ; FC645B  extz XBC
 	ld	a, (xbc)                                ; FC645D  ld A,(XBC)
 	cps	a, 0                                   ; FC645F  cp A,0
-	jrl nz, sub_FC63EC__FC6534                 ; FC6461  jrl NZ,0xfc6534
+	jrl nz, PartRec_SetMutingOffset_000B__FC6534                 ; FC6461  jrl NZ,0xfc6534
 	ld	wa, (0xE084:24)                        ; FC6464  ld WA,(0x00e084)
 	extz	xwa                                   ; FC6469  extz XWA
 	ld	xiy, (xwa+3)                            ; FC646B  ld XIY,(XWA+0x03)
@@ -6591,11 +6905,11 @@ sub_FC63EC__FC6456:
 	and	c, 3                                   ; FC6473  and C,0x03
 	extz	bc                                    ; FC6476  extz BC
 	cps	bc, 1                                  ; FC6478  cp BC,1
-	jr z, sub_FC63EC__FC6483                   ; FC647A  jr Z,0xfc6483
+	jr z, PartRec_SetMutingOffset_000B__FC6483                   ; FC647A  jr Z,0xfc6483
 	cps	bc, 2                                  ; FC647C  cp BC,2
-	jr z, sub_FC63EC__FC64CA                   ; FC647E  jr Z,0xfc64ca
-	jrl sub_FC63EC__FC6510                     ; FC6480  jrl T,0xfc6510
-sub_FC63EC__FC6483:
+	jr z, PartRec_SetMutingOffset_000B__FC64CA                   ; FC647E  jr Z,0xfc64ca
+	jrl PartRec_SetMutingOffset_000B__FC6510                     ; FC6480  jrl T,0xfc6510
+PartRec_SetMutingOffset_000B__FC6483:
 	ld	c, (xix+22)                             ; FC6483  ld C,(XIX+0x16)
 	res	7, c                                   ; FC6486  res 0x07,C
 	extz	bc                                    ; FC6489  extz BC
@@ -6620,8 +6934,8 @@ sub_FC63EC__FC6483:
 	ld	bc, (0xE084:24)                        ; FC64BD  ld BC,(0x00e084)
 	extz	xbc                                   ; FC64C2  extz XBC
 	ld	(xbc+28), de                            ; FC64C4  ld (XBC+0x1c),DE
-	jrl sub_FC63EC__FC6534                     ; FC64C7  jrl T,0xfc6534
-sub_FC63EC__FC64CA:
+	jrl PartRec_SetMutingOffset_000B__FC6534                     ; FC64C7  jrl T,0xfc6534
+PartRec_SetMutingOffset_000B__FC64CA:
 	ld	c, (xix+22)                             ; FC64CA  ld C,(XIX+0x16)
 	res	7, c                                   ; FC64CD  res 0x07,C
 	extz	bc                                    ; FC64D0  extz BC
@@ -6646,8 +6960,8 @@ sub_FC63EC__FC64CA:
 	ld	bc, (0xE084:24)                        ; FC6504  ld BC,(0x00e084)
 	extz	xbc                                   ; FC6509  extz XBC
 	ld	(xbc+28), de                            ; FC650B  ld (XBC+0x1c),DE
-	jr sub_FC63EC__FC6534                      ; FC650E  jr T,0xfc6534
-sub_FC63EC__FC6510:
+	jr PartRec_SetMutingOffset_000B__FC6534                      ; FC650E  jr T,0xfc6534
+PartRec_SetMutingOffset_000B__FC6510:
 	ld	c, (xix+22)                             ; FC6510  ld C,(XIX+0x16)
 	res	7, c                                   ; FC6513  res 0x07,C
 	extz	bc                                    ; FC6516  extz BC
@@ -6660,27 +6974,27 @@ sub_FC63EC__FC6510:
 	ld	wa, (0xE084:24)                        ; FC652A  ld WA,(0x00e084)
 	extz	xwa                                   ; FC652F  extz XWA
 	ld	(xwa+28), bc                            ; FC6531  ld (XWA+0x1c),BC
-sub_FC63EC__FC6534:
+PartRec_SetMutingOffset_000B__FC6534:
 	dec	1, h                                   ; FC6534  dec 1,H
 	extpfx7 0xD2, 0x84, 0xE0, 0x00, 0x38, 0x2A, 0x00 ; FC6536  add (0x00e084),0x002a
 	ld	c, l                                    ; FC653D  ld C,L
 	srl	c, 2                                   ; FC653F  srl 0x02,C
 	ld	l, c                                    ; FC6542  ld L,C
 	cps	h, 0                                   ; FC6544  cp H,0
-	jrl nz, sub_FC63EC__FC6421                 ; FC6546  jrl NZ,0xfc6421
+	jrl nz, PartRec_SetMutingOffset_000B__FC6421                 ; FC6546  jrl NZ,0xfc6421
 	pop	xix                                    ; FC6549  pop XIX
 	popw	de                                    ; FC654A  pop DE
 	popw	hl                                    ; FC654B  pop HL
 	unlk32 xiz                                 ; FC654C  unlk XIZ
 	ret                                        ; FC654E  ret
 ; --------------------------------------------------------------------------
-; sub_FC654F -- 0xFC654F..0xFC65EB (157 bytes)
+; PartRec_SetTuningOffset_000D -- 0xFC654F..0xFC65EB (157 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAECBB in sub_FAEC9C, 0xFB65E5 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082
-; Calls:   0xFC46A8 = sub_FC46A8
+; Calls:   0xFC46A8 = Pack104_ComputeTuningWords_0040_0080
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC654F-0xFC65EB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -6688,8 +7002,19 @@ sub_FC63EC__FC6534:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetTuningOffset_000D -- stores a part-level
+;          tuning offset into PART[+0x0D] as `value << 8` (0xFC6572, 0xFC657A) --
+;          i.e. in whole semitones of the register's 1/256-semitone unit -- sets
+;          the per-element sign in bits 7:6 of P[+0x02] (0xFC6591-0xFC65C2), and
+;          calls Pack104_ComputeTuningWords_0040_0080 (0xFC65D2) to fold it into
+;          P[+0x0A] / P[+0x0C], the words registers chan+0x0040 and chan+0x0080
+;          are built from.
+; GRADE: PROVEN for the store, the shift and the callee.  STRONG for the names
+;          MAIN / SUB RESONATOR `KEY SHIFT` + `TUNE` (parameter-names note
+;          section 5d).
 ; --------------------------------------------------------------------------
-sub_FC654F:
+PartRec_SetTuningOffset_000D:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FC654F  link XIZ,0xfffe
 	pushw	hl                                   ; FC6553  push HL
 	pushw	de                                   ; FC6554  push DE
@@ -6712,7 +7037,7 @@ sub_FC654F:
 	ld	(xix), bc                               ; FC6586  ld (XIX),BC
 	ld	l, (xiz+12)                             ; FC6588  ld L,(XIZ+0x0c)
 	ldb	h, 4                                   ; FC658B  ld H,0x04
-sub_FC654F__FC658D:
+PartRec_SetTuningOffset_000D__FC658D:
 	ld	bc, (xix)                               ; FC658D  ld BC,(XIX)
 	extz	xbc                                   ; FC658F  extz XBC
 	extpfx3 0xB9, 0x02, 0xB6                   ; FC6591  res 6,(XBC+0x02)
@@ -6721,45 +7046,45 @@ sub_FC654F__FC658D:
 	ld	wa, bc                                  ; FC6599  ld WA,BC
 	extz	xbc                                   ; FC659B  extz XBC
 	extpfx2 0xB1, 0xCF                         ; FC659D  bit 7,(XBC)
-	jr z, sub_FC654F__FC65D5                   ; FC659F  jr Z,0xfc65d5
+	jr z, PartRec_SetTuningOffset_000D__FC65D5                   ; FC659F  jr Z,0xfc65d5
 	ld	c, l                                    ; FC65A1  ld C,L
 	and	c, 1                                   ; FC65A3  and C,0x01
-	jr z, sub_FC654F__FC65C5                   ; FC65A6  jr Z,0xfc65c5
+	jr z, PartRec_SetTuningOffset_000D__FC65C5                   ; FC65A6  jr Z,0xfc65c5
 	ld	c, l                                    ; FC65A8  ld C,L
 	and	c, 2                                   ; FC65AA  and C,0x02
-	jr z, sub_FC654F__FC65BB                   ; FC65AD  jr Z,0xfc65bb
+	jr z, PartRec_SetTuningOffset_000D__FC65BB                   ; FC65AD  jr Z,0xfc65bb
 	ld	bc, (xix)                               ; FC65AF  ld BC,(XIX)
 	extz	xbc                                   ; FC65B1  extz XBC
 	extpfx3 0xB9, 0x02, 0xB6                   ; FC65B3  res 6,(XBC+0x02)
 	extpfx3 0xB9, 0x02, 0xBF                   ; FC65B6  set 7,(XBC+0x02)
-	jr sub_FC654F__FC65C5                      ; FC65B9  jr T,0xfc65c5
-sub_FC654F__FC65BB:
+	jr PartRec_SetTuningOffset_000D__FC65C5                      ; FC65B9  jr T,0xfc65c5
+PartRec_SetTuningOffset_000D__FC65BB:
 	ld	bc, (xix)                               ; FC65BB  ld BC,(XIX)
 	extz	xbc                                   ; FC65BD  extz XBC
 	extpfx3 0xB9, 0x02, 0xBE                   ; FC65BF  set 6,(XBC+0x02)
 	extpfx3 0xB9, 0x02, 0xB7                   ; FC65C2  res 7,(XBC+0x02)
-sub_FC654F__FC65C5:
+PartRec_SetTuningOffset_000D__FC65C5:
 	ld	bc, (0xE082:24)                        ; FC65C5  ld BC,(0x00e082)
 	extz	xbc                                   ; FC65CA  extz XBC
 	ld	a, (xbc)                                ; FC65CC  ld A,(XBC)
 	cps	a, 0                                   ; FC65CE  cp A,0
-	jr nz, sub_FC654F__FC65D5                  ; FC65D0  jr NZ,0xfc65d5
+	jr nz, PartRec_SetTuningOffset_000D__FC65D5                  ; FC65D0  jr NZ,0xfc65d5
 	calr (0xFC46A8 - 0xFC65D5)                 ; FC65D2  calr 0xfc46a8
-sub_FC654F__FC65D5:
+PartRec_SetTuningOffset_000D__FC65D5:
 	dec	1, h                                   ; FC65D5  dec 1,H
 	extpfx4 0x94, 0x38, 0x2A, 0x00             ; FC65D7  add (XIX),0x002a
 	ld	c, l                                    ; FC65DB  ld C,L
 	srl	c, 2                                   ; FC65DD  srl 0x02,C
 	ld	l, c                                    ; FC65E0  ld L,C
 	cps	h, 0                                   ; FC65E2  cp H,0
-	jr nz, sub_FC654F__FC658D                  ; FC65E4  jr NZ,0xfc658d
+	jr nz, PartRec_SetTuningOffset_000D__FC658D                  ; FC65E4  jr NZ,0xfc658d
 	pop	xix                                    ; FC65E6  pop XIX
 	popw	de                                    ; FC65E7  pop DE
 	popw	hl                                    ; FC65E8  pop HL
 	unlk32 xiz                                 ; FC65E9  unlk XIZ
 	ret                                        ; FC65EB  ret
 ; --------------------------------------------------------------------------
-; sub_FC65EC -- 0xFC65EC..0xFC6711 (294 bytes)
+; PartRec_SetSubGainOffset_000F -- 0xFC65EC..0xFC6711 (294 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAECE7 in sub_FAECC7, 0xFB65F3 in PartRec_ResetToDefaults
@@ -6772,8 +7097,21 @@ sub_FC654F__FC65D5:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; PartRec_SetSubGainOffset_000F -- stores a part-level
+;          `SUB GAIN` offset into PART[+0x0F] (0xFC660B) and re-derives, per
+;          enabled element,
+;            P[+0x1E] = |(s8)p33| +/- PART[+0x0F]      0xFC668F-0xFC66EB
+;          with the sign from bits 5:4 of P[+0x02] (0xFC66AC), which it also sets
+;          from its mask argument (0xFC6662, 0xFC666E).
+; WHERE THE VALUE GOES: Dev104_PackStagingStruct copies P[+0x1E] into R[+0x23]
+;          (0xFC5196-0xFC51A0) and Pack104_StageReg_0280 turns
+;          R[+0x10] + R[+0x23] into staging word 10 = register chan+0x0280.
+; GRADE: PROVEN for the arithmetic and the data path.  STRONG for `SUB GAIN`
+;          (parameter-names note section 5b) -- the one name the MAIN/SUB
+;          direction of the whole register map rests on.
 ; --------------------------------------------------------------------------
-sub_FC65EC:
+PartRec_SetSubGainOffset_000F:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC65EC  link XIZ,0xfffc
 	pushw	hl                                   ; FC65F0  push HL
 	push	xde                                   ; FC65F1  push XDE
@@ -6793,7 +7131,7 @@ sub_FC65EC:
 	ld	(0xE084:24), bc                        ; FC6617  ld (0x00e084),BC
 	ld	ix, bc                                  ; FC661C  ld IX,BC
 	ldb	e, 4                                   ; FC661E  ld E,0x04
-sub_FC65EC__FC6620:
+PartRec_SetSubGainOffset_000F__FC6620:
 	ld	bc, ix                                  ; FC6620  ld BC,IX
 	extz	xbc                                   ; FC6622  extz XBC
 	extpfx3 0xB9, 0x02, 0xB4                   ; FC6624  res 4,(XBC+0x02)
@@ -6806,52 +7144,52 @@ sub_FC65EC__FC6620:
 	ld	bc, ix                                  ; FC663A  ld BC,IX
 	extz	xix                                   ; FC663C  extz XIX
 	extpfx2 0xB4, 0xCF                         ; FC663E  bit 7,(XIX)
-	jrl z, sub_FC65EC__FC66F3                  ; FC6640  jrl Z,0xfc66f3
+	jrl z, PartRec_SetSubGainOffset_000F__FC66F3                  ; FC6640  jrl Z,0xfc66f3
 	ld	a, (xiz+12)                             ; FC6643  ld A,(XIZ+0x0c)
 	and	a, 1                                   ; FC6646  and A,0x01
-	jr z, sub_FC65EC__FC6679                   ; FC6649  jr Z,0xfc6679
+	jr z, PartRec_SetSubGainOffset_000F__FC6679                   ; FC6649  jr Z,0xfc6679
 	ld	bc, ix                                  ; FC664B  ld BC,IX
 	extz	xbc                                   ; FC664D  extz XBC
 	extpfx2 0xB1, 0xBE                         ; FC664F  set 6,(XBC)
 	ld	ix, (0xE084:24)                        ; FC6651  ld IX,(0x00e084)
 	ld	c, (xiz+12)                             ; FC6656  ld C,(XIZ+0x0c)
 	and	c, 2                                   ; FC6659  and C,0x02
-	jr z, sub_FC65EC__FC666A                   ; FC665C  jr Z,0xfc666a
+	jr z, PartRec_SetSubGainOffset_000F__FC666A                   ; FC665C  jr Z,0xfc666a
 	ld	bc, ix                                  ; FC665E  ld BC,IX
 	extz	xbc                                   ; FC6660  extz XBC
 	extpfx3 0xB9, 0x02, 0xB4                   ; FC6662  res 4,(XBC+0x02)
 	extpfx3 0xB9, 0x02, 0xBD                   ; FC6665  set 5,(XBC+0x02)
-	jr sub_FC65EC__FC6674                      ; FC6668  jr T,0xfc6674
-sub_FC65EC__FC666A:
+	jr PartRec_SetSubGainOffset_000F__FC6674                      ; FC6668  jr T,0xfc6674
+PartRec_SetSubGainOffset_000F__FC666A:
 	ld	bc, ix                                  ; FC666A  ld BC,IX
 	extz	xbc                                   ; FC666C  extz XBC
 	extpfx3 0xB9, 0x02, 0xBC                   ; FC666E  set 4,(XBC+0x02)
 	extpfx3 0xB9, 0x02, 0xB5                   ; FC6671  res 5,(XBC+0x02)
-sub_FC65EC__FC6674:
+PartRec_SetSubGainOffset_000F__FC6674:
 	ld	ix, (0xE084:24)                        ; FC6674  ld IX,(0x00e084)
-sub_FC65EC__FC6679:
+PartRec_SetSubGainOffset_000F__FC6679:
 	ld	bc, (0xE082:24)                        ; FC6679  ld BC,(0x00e082)
 	extz	xbc                                   ; FC667E  extz XBC
 	ld	a, (xbc)                                ; FC6680  ld A,(XBC)
 	cps	a, 0                                   ; FC6682  cp A,0
-	jrl nz, sub_FC65EC__FC66F3                 ; FC6684  jrl NZ,0xfc66f3
+	jrl nz, PartRec_SetSubGainOffset_000F__FC66F3                 ; FC6684  jrl NZ,0xfc66f3
 	extz	xix                                   ; FC6687  extz XIX
 	ld	xwa, (xix+3)                            ; FC6689  ld XWA,(XIX+0x03)
 	ld	(xiz-4), xwa                            ; FC668C  ld (XIZ+0xfc),XWA
 	ld	d, (xwa+33)                             ; FC668F  ld D,(XWA+0x21)
 	cps	d, 0                                   ; FC6692  cp D,0
-	jr ge, sub_FC65EC__FC66A2                  ; FC6694  jr GE,0xfc66a2
+	jr ge, PartRec_SetSubGainOffset_000F__FC66A2                  ; FC6694  jr GE,0xfc66a2
 	ld	a, d                                    ; FC6696  ld A,D
 	exts	wa                                    ; FC6698  exts WA
 	ld	hl, wa                                  ; FC669A  ld HL,WA
 	neg	wa                                     ; FC669C  neg WA
 	ld	hl, wa                                  ; FC669E  ld HL,WA
-	jr sub_FC65EC__FC66A8                      ; FC66A0  jr T,0xfc66a8
-sub_FC65EC__FC66A2:
+	jr PartRec_SetSubGainOffset_000F__FC66A8                      ; FC66A0  jr T,0xfc66a8
+PartRec_SetSubGainOffset_000F__FC66A2:
 	ld	c, d                                    ; FC66A2  ld C,D
 	exts	bc                                    ; FC66A4  exts BC
 	ld	hl, bc                                  ; FC66A6  ld HL,BC
-sub_FC65EC__FC66A8:
+PartRec_SetSubGainOffset_000F__FC66A8:
 	ld	bc, ix                                  ; FC66A8  ld BC,IX
 	extz	xix                                   ; FC66AA  extz XIX
 	ld	a, (xix+2)                              ; FC66AC  ld A,(XIX+0x02)
@@ -6859,19 +7197,19 @@ sub_FC65EC__FC66A8:
 	srl	a, 4                                   ; FC66B2  srl 0x04,A
 	extz	wa                                    ; FC66B5  extz WA
 	cps	wa, 1                                  ; FC66B7  cp WA,1
-	jr z, sub_FC65EC__FC66C1                   ; FC66B9  jr Z,0xfc66c1
+	jr z, PartRec_SetSubGainOffset_000F__FC66C1                   ; FC66B9  jr Z,0xfc66c1
 	cps	wa, 2                                  ; FC66BB  cp WA,2
-	jr z, sub_FC65EC__FC66D4                   ; FC66BD  jr Z,0xfc66d4
-	jr sub_FC65EC__FC66E9                      ; FC66BF  jr T,0xfc66e9
-sub_FC65EC__FC66C1:
+	jr z, PartRec_SetSubGainOffset_000F__FC66D4                   ; FC66BD  jr Z,0xfc66d4
+	jr PartRec_SetSubGainOffset_000F__FC66E9                      ; FC66BF  jr T,0xfc66e9
+PartRec_SetSubGainOffset_000F__FC66C1:
 	ld	bc, (0xE082:24)                        ; FC66C1  ld BC,(0x00e082)
 	extz	xbc                                   ; FC66C6  extz XBC
 	ld	wa, (xbc+15)                            ; FC66C8  ld WA,(XBC+0x0f)
 	add	wa, hl                                 ; FC66CB  add WA,HL
 	extz	xix                                   ; FC66CD  extz XIX
 	ld	(xix+30), wa                            ; FC66CF  ld (XIX+0x1e),WA
-	jr sub_FC65EC__FC66EE                      ; FC66D2  jr T,0xfc66ee
-sub_FC65EC__FC66D4:
+	jr PartRec_SetSubGainOffset_000F__FC66EE                      ; FC66D2  jr T,0xfc66ee
+PartRec_SetSubGainOffset_000F__FC66D4:
 	ld	bc, (0xE082:24)                        ; FC66D4  ld BC,(0x00e082)
 	extz	xbc                                   ; FC66D9  extz XBC
 	ld	wa, (xbc+15)                            ; FC66DB  ld WA,(XBC+0x0f)
@@ -6879,13 +7217,13 @@ sub_FC65EC__FC66D4:
 	sub	iy, wa                                 ; FC66E0  sub IY,WA
 	extz	xix                                   ; FC66E2  extz XIX
 	ld	(xix+30), iy                            ; FC66E4  ld (XIX+0x1e),IY
-	jr sub_FC65EC__FC66EE                      ; FC66E7  jr T,0xfc66ee
-sub_FC65EC__FC66E9:
+	jr PartRec_SetSubGainOffset_000F__FC66EE                      ; FC66E7  jr T,0xfc66ee
+PartRec_SetSubGainOffset_000F__FC66E9:
 	extz	xix                                   ; FC66E9  extz XIX
 	ld	(xix+30), hl                            ; FC66EB  ld (XIX+0x1e),HL
-sub_FC65EC__FC66EE:
+PartRec_SetSubGainOffset_000F__FC66EE:
 	ld	ix, (0xE084:24)                        ; FC66EE  ld IX,(0x00e084)
-sub_FC65EC__FC66F3:
+PartRec_SetSubGainOffset_000F__FC66F3:
 	dec	1, e                                   ; FC66F3  dec 1,E
 	add	ix, 42                                 ; FC66F5  add IX,0x002a
 	ld	(0xE084:24), ix                        ; FC66F9  ld (0x00e084),IX
@@ -6893,21 +7231,21 @@ sub_FC65EC__FC66F3:
 	srl	c, 2                                   ; FC6701  srl 0x02,C
 	ld	(xiz+12), c                             ; FC6704  ld (XIZ+0x0c),C
 	cps	e, 0                                   ; FC6707  cp E,0
-	jrl nz, sub_FC65EC__FC6620                 ; FC6709  jrl NZ,0xfc6620
+	jrl nz, PartRec_SetSubGainOffset_000F__FC6620                 ; FC6709  jrl NZ,0xfc6620
 	pop	xix                                    ; FC670C  pop XIX
 	pop	xde                                    ; FC670D  pop XDE
 	popw	hl                                    ; FC670E  pop HL
 	unlk32 xiz                                 ; FC670F  unlk XIZ
 	ret                                        ; FC6711  ret
 ; --------------------------------------------------------------------------
-; sub_FC6712 -- 0xFC6712..0xFC6802 (241 bytes)
+; Pack104_RestageReg_0280_ForVoice -- 0xFC6712..0xFC6802 (241 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAED0F in sub_FAECC7__FAECFE
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00E086
 ;          reads 0x00E082
-; Calls:   0xFC4AED = sub_FC4AED
+; Calls:   0xFC4AED = Pack104_StageReg_0280
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC6712-0xFC6802
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -6915,8 +7253,24 @@ sub_FC65EC__FC66F3:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_RestageReg_0280_ForVoice -- points the
+;          packer's globals at one sounding voice (0x00E086 = 0x00753E +
+;          37*(XIZ+0x08) at 0xFC672A, 0x00E084 = R[+0x05] at 0xFC6734), re-derives
+;          that voice's `SUB GAIN` value into P[+0x1E] and R[+0x23]
+;          (0xFC6782-0xFC67E2) and calls Pack104_StageReg_0280 (0xFC67E9).
+;          Returns non-zero when it staged something.
+;          ⚠ It then ORs 7 into the low three bits of the staged word
+;          (0xFC67EF).  Dev104_PackStagingStruct does NOT do that on the note
+;          path, so register chan+0x0280 has a low-3-bit field this refresh sets
+;          and the packer leaves clear.  Recorded, not explained.
+; ★★ WHAT PINS IT: its caller `sub_FAECC7` (midi_controllers.s) calls this at
+;          0xFAED0F and, on a non-zero return, Dev104_SetChanReg_0280 at 0xFAED24
+;          with the same staging buffer -- and that writer reads struct offset
+;          +0x14, which is the word Pack104_StageReg_0280 fills.
+; GRADE: PROVEN for the pairing and the destination; STRONG for `SUB GAIN`.
 ; --------------------------------------------------------------------------
-sub_FC6712:
+Pack104_RestageReg_0280_ForVoice:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FC6712  link XIZ,0xfffa
 	pushw	hl                                   ; FC6716  push HL
 	pushw	de                                   ; FC6717  push DE
@@ -6934,7 +7288,7 @@ sub_FC6712:
 	ldw	hl, 0                                  ; FC6736  ld HL,0x0000
 	ld	bc, (xix)                               ; FC6739  ld BC,(XIX)
 	cp	bc, hl                                  ; FC673B  cp BC,HL
-	jrl z, sub_FC6712__FC67F7                  ; FC673D  jrl Z,0xfc67f7
+	jrl z, Pack104_RestageReg_0280_ForVoice__FC67F7                  ; FC673D  jrl Z,0xfc67f7
 	ld	bc, (xix)                               ; FC6740  ld BC,(XIX)
 	ld	wa, bc                                  ; FC6742  ld WA,BC
 	extz	xbc                                   ; FC6744  extz XBC
@@ -6943,28 +7297,28 @@ sub_FC6712:
 	srl	c, 6                                   ; FC674B  srl 0x06,C
 	ld	e, c                                    ; FC674E  ld E,C
 	cps	c, 0                                   ; FC6750  cp C,0
-	jrl z, sub_FC6712__FC67FB                  ; FC6752  jrl Z,0xfc67fb
+	jrl z, Pack104_RestageReg_0280_ForVoice__FC67FB                  ; FC6752  jrl Z,0xfc67fb
 	ld	bc, (0xE086:24)                        ; FC6755  ld BC,(0x00e086)
 	extz	xbc                                   ; FC675A  extz XBC
 	ld	a, (xbc)                                ; FC675C  ld A,(XBC)
 	cps	a, 0                                   ; FC675E  cp A,0
-	jrl z, sub_FC6712__FC67D4                  ; FC6760  jrl Z,0xfc67d4
+	jrl z, Pack104_RestageReg_0280_ForVoice__FC67D4                  ; FC6760  jrl Z,0xfc67d4
 	ld	xwa, (xbc+1)                            ; FC6763  ld XWA,(XBC+0x01)
 	ld	(xiz-4), xwa                            ; FC6766  ld (XIZ+0xfc),XWA
 	ld	d, (xwa+33)                             ; FC6769  ld D,(XWA+0x21)
 	cps	d, 0                                   ; FC676C  cp D,0
-	jr ge, sub_FC6712__FC677C                  ; FC676E  jr GE,0xfc677c
+	jr ge, Pack104_RestageReg_0280_ForVoice__FC677C                  ; FC676E  jr GE,0xfc677c
 	ld	a, d                                    ; FC6770  ld A,D
 	exts	wa                                    ; FC6772  exts WA
 	ld	hl, wa                                  ; FC6774  ld HL,WA
 	neg	wa                                     ; FC6776  neg WA
 	ld	hl, wa                                  ; FC6778  ld HL,WA
-	jr sub_FC6712__FC6782                      ; FC677A  jr T,0xfc6782
-sub_FC6712__FC677C:
+	jr Pack104_RestageReg_0280_ForVoice__FC6782                      ; FC677A  jr T,0xfc6782
+Pack104_RestageReg_0280_ForVoice__FC677C:
 	ld	c, d                                    ; FC677C  ld C,D
 	exts	bc                                    ; FC677E  exts BC
 	ld	hl, bc                                  ; FC6780  ld HL,BC
-sub_FC6712__FC6782:
+Pack104_RestageReg_0280_ForVoice__FC6782:
 	ld	bc, (xix)                               ; FC6782  ld BC,(XIX)
 	extz	xbc                                   ; FC6784  extz XBC
 	ld	a, (xbc+2)                              ; FC6786  ld A,(XBC+0x02)
@@ -6972,11 +7326,11 @@ sub_FC6712__FC6782:
 	srl	a, 4                                   ; FC678C  srl 0x04,A
 	extz	wa                                    ; FC678F  extz WA
 	cps	wa, 1                                  ; FC6791  cp WA,1
-	jr z, sub_FC6712__FC679B                   ; FC6793  jr Z,0xfc679b
+	jr z, Pack104_RestageReg_0280_ForVoice__FC679B                   ; FC6793  jr Z,0xfc679b
 	cps	wa, 2                                  ; FC6795  cp WA,2
-	jr z, sub_FC6712__FC67B3                   ; FC6797  jr Z,0xfc67b3
-	jr sub_FC6712__FC67CD                      ; FC6799  jr T,0xfc67cd
-sub_FC6712__FC679B:
+	jr z, Pack104_RestageReg_0280_ForVoice__FC67B3                   ; FC6797  jr Z,0xfc67b3
+	jr Pack104_RestageReg_0280_ForVoice__FC67CD                      ; FC6799  jr T,0xfc67cd
+Pack104_RestageReg_0280_ForVoice__FC679B:
 	ld	bc, (0xE082:24)                        ; FC679B  ld BC,(0x00e082)
 	extz	xbc                                   ; FC67A0  extz XBC
 	ld	wa, (xbc+15)                            ; FC67A2  ld WA,(XBC+0x0f)
@@ -6985,8 +7339,8 @@ sub_FC6712__FC679B:
 	ld	iy, (xix)                               ; FC67AA  ld IY,(XIX)
 	extz	xiy                                   ; FC67AC  extz XIY
 	ld	(xiy+30), wa                            ; FC67AE  ld (XIY+0x1e),WA
-	jr sub_FC6712__FC67D4                      ; FC67B1  jr T,0xfc67d4
-sub_FC6712__FC67B3:
+	jr Pack104_RestageReg_0280_ForVoice__FC67D4                      ; FC67B1  jr T,0xfc67d4
+Pack104_RestageReg_0280_ForVoice__FC67B3:
 	ld	bc, (0xE082:24)                        ; FC67B3  ld BC,(0x00e082)
 	extz	xbc                                   ; FC67B8  extz XBC
 	ld	wa, (xbc+15)                            ; FC67BA  ld WA,(XBC+0x0f)
@@ -6996,12 +7350,12 @@ sub_FC6712__FC67B3:
 	ld	wa, (xix)                               ; FC67C4  ld WA,(XIX)
 	extz	xwa                                   ; FC67C6  extz XWA
 	ld	(xwa+30), iy                            ; FC67C8  ld (XWA+0x1e),IY
-	jr sub_FC6712__FC67D4                      ; FC67CB  jr T,0xfc67d4
-sub_FC6712__FC67CD:
+	jr Pack104_RestageReg_0280_ForVoice__FC67D4                      ; FC67CB  jr T,0xfc67d4
+Pack104_RestageReg_0280_ForVoice__FC67CD:
 	ld	bc, (xix)                               ; FC67CD  ld BC,(XIX)
 	extz	xbc                                   ; FC67CF  extz XBC
 	ld	(xbc+30), hl                            ; FC67D1  ld (XBC+0x1e),HL
-sub_FC6712__FC67D4:
+Pack104_RestageReg_0280_ForVoice__FC67D4:
 	ld	bc, (xix)                               ; FC67D4  ld BC,(XIX)
 	extz	xbc                                   ; FC67D6  extz XBC
 	ld	wa, (xbc+30)                            ; FC67D8  ld WA,(XBC+0x1e)
@@ -7014,20 +7368,20 @@ sub_FC6712__FC67D4:
 	ld	xbc, (xiz+10)                           ; FC67EC  ld XBC,(XIZ+0x0a)
 	extpfx5 0x99, 0x14, 0x3E, 0x07, 0x00       ; FC67EF  or (XBC+0x14),0x0007
 	pop	xiy                                    ; FC67F4  pop XIY
-	jr sub_FC6712__FC67FB                      ; FC67F5  jr T,0xfc67fb
-sub_FC6712__FC67F7:
+	jr Pack104_RestageReg_0280_ForVoice__FC67FB                      ; FC67F5  jr T,0xfc67fb
+Pack104_RestageReg_0280_ForVoice__FC67F7:
 	sub	a, a                                   ; FC67F7  sub A,A
-	jr sub_FC6712__FC67FD                      ; FC67F9  jr T,0xfc67fd
-sub_FC6712__FC67FB:
+	jr Pack104_RestageReg_0280_ForVoice__FC67FD                      ; FC67F9  jr T,0xfc67fd
+Pack104_RestageReg_0280_ForVoice__FC67FB:
 	ld	a, e                                    ; FC67FB  ld A,E
-sub_FC6712__FC67FD:
+Pack104_RestageReg_0280_ForVoice__FC67FD:
 	pop	xix                                    ; FC67FD  pop XIX
 	popw	de                                    ; FC67FE  pop DE
 	popw	hl                                    ; FC67FF  pop HL
 	unlk32 xiz                                 ; FC6800  unlk XIZ
 	ret                                        ; FC6802  ret
 ; --------------------------------------------------------------------------
-; sub_FC6803 -- 0xFC6803..0xFC6CA7 (1189 bytes)
+; Pack104_LoadElementWaveSelRec -- 0xFC6803..0xFC6CA7 (1189 bytes)
 ;
 ; Called from: 40 site(s) outside this module:
 ;          0xFAFCC7 in sub_FAFBEC__FAFCB1, 0xFB2A10 in sub_FB289A
@@ -7052,7 +7406,7 @@ sub_FC6712__FC67FD:
 ;          0xFBD821 in sub_FBD6FC__FBD7D3, 0xFBD83C in sub_FBD6FC__FBD82B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00E082
-; Calls:   0xFC46A8 = sub_FC46A8, 0xFC47EE = sub_FC47EE
+; Calls:   0xFC46A8 = Pack104_ComputeTuningWords_0040_0080, 0xFC47EE = Pack104_UnpackWaveSelRec_ToSubRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC6803-0xFC6CA7
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7060,8 +7414,29 @@ sub_FC6712__FC67FD:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_LoadElementWaveSelRec -- binds one 43-byte
+;          wave-select record to one element of one part and derives every
+;          sub-record field the 0x00104000 packer reads from it.  Arguments
+;          (part, element, waveSelRec, enable):
+;            0x00E082 = 0x005D23 + 0xBB*part                    0xFC681B
+;            0x00E084 = that + 0x13 + 42*element                0xFC682B
+;            P[+0x03] = the wave-select record pointer          0xFC6834
+;            bit 7 of P[+0x00] = (enable != 0)                  0xFC6841/0xFC6849
+;            enable == 0 -> return without deriving             0xFC684F
+;            else call Pack104_UnpackWaveSelRec_ToSubRecord     0xFC6856
+;          then a dispatch on bits 4:3 of P[+0x00] that folds the part-level
+;          offsets into the element's derived fields, ending at P[+0x1E]
+;          (0xFC6C7F, 0xFC6C96, 0xFC6C9F).
+; ★ P[+0x03] IS the `Q` of notes/HLE-GUIDE-l7a1429.md and this store at
+;          0xFC6834 is the one notes/FINDINGS-l7a1429-parameter-names.md section
+;          1a cites when it proves Q is a 43-byte WAVE-SELECT record and not a
+;          tone record.  All 40 of this routine's call sites pass a 43-byte
+;          object; the census is in that note.
+; GRADE: PROVEN for the strides, the bind and the enable bit; STRONG for "this is
+;          where a tone's modelling parameters enter the packer".
 ; --------------------------------------------------------------------------
-sub_FC6803:
+Pack104_LoadElementWaveSelRec:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC6803  link XIZ,0x0000
 	pushw	hl                                   ; FC6807  push HL
 	pushw	de                                   ; FC6808  push DE
@@ -7083,18 +7458,18 @@ sub_FC6803:
 	ld	xwa, (xiz+12)                           ; FC6831  ld XWA,(XIZ+0x0c)
 	ld	(xbc+3), xwa                            ; FC6834  ld (XBC+0x03),XWA
 	cp (xiz+16), 0x00                          ; FC6837  cp (XIZ+0x10),0x00
-	jr z, sub_FC6803__FC6845                   ; FC683B  jr Z,0xfc6845
+	jr z, Pack104_LoadElementWaveSelRec__FC6845                   ; FC683B  jr Z,0xfc6845
 	ld	bc, (xix)                               ; FC683D  ld BC,(XIX)
 	extz	xbc                                   ; FC683F  extz XBC
 	extpfx2 0xB1, 0xBF                         ; FC6841  set 7,(XBC)
-	jr sub_FC6803__FC684B                      ; FC6843  jr T,0xfc684b
-sub_FC6803__FC6845:
+	jr Pack104_LoadElementWaveSelRec__FC684B                      ; FC6843  jr T,0xfc684b
+Pack104_LoadElementWaveSelRec__FC6845:
 	ld	bc, (xix)                               ; FC6845  ld BC,(XIX)
 	extz	xbc                                   ; FC6847  extz XBC
 	extpfx2 0xB1, 0xB7                         ; FC6849  res 7,(XBC)
-sub_FC6803__FC684B:
+Pack104_LoadElementWaveSelRec__FC684B:
 	cp (xiz+16), 0x00                          ; FC684B  cp (XIZ+0x10),0x00
-	jrl z, sub_FC6803__FC6CA2                  ; FC684F  jrl Z,0xfc6ca2
+	jrl z, Pack104_LoadElementWaveSelRec__FC6CA2                  ; FC684F  jrl Z,0xfc6ca2
 	ld	xbc, (xiz+12)                           ; FC6852  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC6855  push XBC
 	calr (0xFC47EE - 0xFC6859)                 ; FC6856  calr 0xfc47ee
@@ -7106,11 +7481,11 @@ sub_FC6803__FC684B:
 	extz	wa                                    ; FC6865  extz WA
 	pop	xiy                                    ; FC6867  pop XIY
 	cps	wa, 1                                  ; FC6868  cp WA,1
-	jr z, sub_FC6803__FC6873                   ; FC686A  jr Z,0xfc6873
+	jr z, Pack104_LoadElementWaveSelRec__FC6873                   ; FC686A  jr Z,0xfc6873
 	cps	wa, 2                                  ; FC686C  cp WA,2
-	jr z, sub_FC6803__FC68BA                   ; FC686E  jr Z,0xfc68ba
-	jrl sub_FC6803__FC6900                     ; FC6870  jrl T,0xfc6900
-sub_FC6803__FC6873:
+	jr z, Pack104_LoadElementWaveSelRec__FC68BA                   ; FC686E  jr Z,0xfc68ba
+	jrl Pack104_LoadElementWaveSelRec__FC6900                     ; FC6870  jrl T,0xfc6900
+Pack104_LoadElementWaveSelRec__FC6873:
 	ld	xbc, (xiz+12)                           ; FC6873  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+21)                             ; FC6876  ld A,(XBC+0x15)
 	res	7, a                                   ; FC6879  res 0x07,A
@@ -7137,8 +7512,8 @@ sub_FC6803__FC6873:
 	ld	wa, (xix)                               ; FC68B0  ld WA,(XIX)
 	extz	xwa                                   ; FC68B2  extz XWA
 	ld	(xwa+24), de                            ; FC68B4  ld (XWA+0x18),DE
-	jrl sub_FC6803__FC6928                     ; FC68B7  jrl T,0xfc6928
-sub_FC6803__FC68BA:
+	jrl Pack104_LoadElementWaveSelRec__FC6928                     ; FC68B7  jrl T,0xfc6928
+Pack104_LoadElementWaveSelRec__FC68BA:
 	ld	xbc, (xiz+12)                           ; FC68BA  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+21)                             ; FC68BD  ld A,(XBC+0x15)
 	res	7, a                                   ; FC68C0  res 0x07,A
@@ -7165,8 +7540,8 @@ sub_FC6803__FC68BA:
 	ld	wa, (xix)                               ; FC68F7  ld WA,(XIX)
 	extz	xwa                                   ; FC68F9  extz XWA
 	ld	(xwa+24), de                            ; FC68FB  ld (XWA+0x18),DE
-	jr sub_FC6803__FC6928                      ; FC68FE  jr T,0xfc6928
-sub_FC6803__FC6900:
+	jr Pack104_LoadElementWaveSelRec__FC6928                      ; FC68FE  jr T,0xfc6928
+Pack104_LoadElementWaveSelRec__FC6900:
 	ld	xbc, (xiz+12)                           ; FC6900  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+21)                             ; FC6903  ld A,(XBC+0x15)
 	res	7, a                                   ; FC6906  res 0x07,A
@@ -7183,7 +7558,7 @@ sub_FC6803__FC6900:
 	ld	iy, (xix)                               ; FC6921  ld IY,(XIX)
 	extz	xiy                                   ; FC6923  extz XIY
 	ld	(xiy+24), wa                            ; FC6925  ld (XIY+0x18),WA
-sub_FC6803__FC6928:
+Pack104_LoadElementWaveSelRec__FC6928:
 	ld	bc, (xix)                               ; FC6928  ld BC,(XIX)
 	extz	xbc                                   ; FC692A  extz XBC
 	ld	a, (xbc)                                ; FC692C  ld A,(XBC)
@@ -7191,11 +7566,11 @@ sub_FC6803__FC6928:
 	srl	a, 1                                   ; FC6931  srl 0x01,A
 	extz	wa                                    ; FC6934  extz WA
 	cps	wa, 1                                  ; FC6936  cp WA,1
-	jr z, sub_FC6803__FC6941                   ; FC6938  jr Z,0xfc6941
+	jr z, Pack104_LoadElementWaveSelRec__FC6941                   ; FC6938  jr Z,0xfc6941
 	cps	wa, 2                                  ; FC693A  cp WA,2
-	jr z, sub_FC6803__FC6970                   ; FC693C  jr Z,0xfc6970
-	jrl sub_FC6803__FC69DD                     ; FC693E  jrl T,0xfc69dd
-sub_FC6803__FC6941:
+	jr z, Pack104_LoadElementWaveSelRec__FC6970                   ; FC693C  jr Z,0xfc6970
+	jrl Pack104_LoadElementWaveSelRec__FC69DD                     ; FC693E  jrl T,0xfc69dd
+Pack104_LoadElementWaveSelRec__FC6941:
 	ld	xbc, (xiz+12)                           ; FC6941  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+13)                             ; FC6944  ld A,(XBC+0x0d)
 	extz	wa                                    ; FC6947  extz WA
@@ -7212,9 +7587,9 @@ sub_FC6803__FC6941:
 	extz	xbc                                   ; FC6965  extz XBC
 	ld	wa, (xbc+3)                             ; FC6967  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC696A  cp WA,0
-	jr ge, sub_FC6803__FC69B4                  ; FC696C  jr GE,0xfc69b4
-	jr sub_FC6803__FC699D                      ; FC696E  jr T,0xfc699d
-sub_FC6803__FC6970:
+	jr ge, Pack104_LoadElementWaveSelRec__FC69B4                  ; FC696C  jr GE,0xfc69b4
+	jr Pack104_LoadElementWaveSelRec__FC699D                      ; FC696E  jr T,0xfc699d
+Pack104_LoadElementWaveSelRec__FC6970:
 	ld	xbc, (xiz+12)                           ; FC6970  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+13)                             ; FC6973  ld A,(XBC+0x0d)
 	extz	wa                                    ; FC6976  extz WA
@@ -7231,8 +7606,8 @@ sub_FC6803__FC6970:
 	extz	xbc                                   ; FC6994  extz XBC
 	ld	wa, (xbc+3)                             ; FC6996  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC6999  cp WA,0
-	jr ge, sub_FC6803__FC69B4                  ; FC699B  jr GE,0xfc69b4
-sub_FC6803__FC699D:
+	jr ge, Pack104_LoadElementWaveSelRec__FC69B4                  ; FC699B  jr GE,0xfc69b4
+Pack104_LoadElementWaveSelRec__FC699D:
 	ld	bc, (0xE082:24)                        ; FC699D  ld BC,(0x00e082)
 	extz	xbc                                   ; FC69A2  extz XBC
 	ld	hl, (xbc+3)                             ; FC69A4  ld HL,(XBC+0x03)
@@ -7241,15 +7616,15 @@ sub_FC6803__FC699D:
 	ld	hl, wa                                  ; FC69AB  ld HL,WA
 	sra	wa, 2                                  ; FC69AD  sra 0x02,WA
 	ld	hl, wa                                  ; FC69B0  ld HL,WA
-	jr sub_FC6803__FC69C5                      ; FC69B2  jr T,0xfc69c5
-sub_FC6803__FC69B4:
+	jr Pack104_LoadElementWaveSelRec__FC69C5                      ; FC69B2  jr T,0xfc69c5
+Pack104_LoadElementWaveSelRec__FC69B4:
 	ld	bc, (0xE082:24)                        ; FC69B4  ld BC,(0x00e082)
 	extz	xbc                                   ; FC69B9  extz XBC
 	ld	hl, (xbc+3)                             ; FC69BB  ld HL,(XBC+0x03)
 	ld	iy, hl                                  ; FC69BE  ld IY,HL
 	sra	iy, 2                                  ; FC69C0  sra 0x02,IY
 	ld	hl, iy                                  ; FC69C3  ld HL,IY
-sub_FC6803__FC69C5:
+Pack104_LoadElementWaveSelRec__FC69C5:
 	ld	xbc, (xiz+12)                           ; FC69C5  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+14)                             ; FC69C8  ld A,(XBC+0x0e)
 	res	7, a                                   ; FC69CB  res 0x07,A
@@ -7259,8 +7634,8 @@ sub_FC6803__FC69C5:
 	ld	wa, (xix)                               ; FC69D4  ld WA,(XIX)
 	extz	xwa                                   ; FC69D6  extz XWA
 	ld	(xwa+34), de                            ; FC69D8  ld (XWA+0x22),DE
-	jr sub_FC6803__FC6A02                      ; FC69DB  jr T,0xfc6a02
-sub_FC6803__FC69DD:
+	jr Pack104_LoadElementWaveSelRec__FC6A02                      ; FC69DB  jr T,0xfc6a02
+Pack104_LoadElementWaveSelRec__FC69DD:
 	ld	xbc, (xiz+12)                           ; FC69DD  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+13)                             ; FC69E0  ld A,(XBC+0x0d)
 	extz	wa                                    ; FC69E3  extz WA
@@ -7276,7 +7651,7 @@ sub_FC6803__FC69DD:
 	ld	iy, (xix)                               ; FC69FB  ld IY,(XIX)
 	extz	xiy                                   ; FC69FD  extz XIY
 	ld	(xiy+34), wa                            ; FC69FF  ld (XIY+0x22),WA
-sub_FC6803__FC6A02:
+Pack104_LoadElementWaveSelRec__FC6A02:
 	ld	bc, (xix)                               ; FC6A02  ld BC,(XIX)
 	extz	xbc                                   ; FC6A04  extz XBC
 	ld	a, (xbc+1)                              ; FC6A06  ld A,(XBC+0x01)
@@ -7284,11 +7659,11 @@ sub_FC6803__FC6A02:
 	srl	a, 6                                   ; FC6A0C  srl 0x06,A
 	extz	wa                                    ; FC6A0F  extz WA
 	cps	wa, 1                                  ; FC6A11  cp WA,1
-	jr z, sub_FC6803__FC6A1B                   ; FC6A13  jr Z,0xfc6a1b
+	jr z, Pack104_LoadElementWaveSelRec__FC6A1B                   ; FC6A13  jr Z,0xfc6a1b
 	cps	wa, 2                                  ; FC6A15  cp WA,2
-	jr z, sub_FC6803__FC6A39                   ; FC6A17  jr Z,0xfc6a39
-	jr sub_FC6803__FC6A55                      ; FC6A19  jr T,0xfc6a55
-sub_FC6803__FC6A1B:
+	jr z, Pack104_LoadElementWaveSelRec__FC6A39                   ; FC6A17  jr Z,0xfc6a39
+	jr Pack104_LoadElementWaveSelRec__FC6A55                      ; FC6A19  jr T,0xfc6a55
+Pack104_LoadElementWaveSelRec__FC6A1B:
 	ld	bc, (0xE082:24)                        ; FC6A1B  ld BC,(0x00e082)
 	extz	xbc                                   ; FC6A20  extz XBC
 	ld	hl, (xbc+5)                             ; FC6A22  ld HL,(XBC+0x05)
@@ -7300,8 +7675,8 @@ sub_FC6803__FC6A1B:
 	ld	wa, (xix)                               ; FC6A30  ld WA,(XIX)
 	extz	xwa                                   ; FC6A32  extz XWA
 	ld	(xwa+34), de                            ; FC6A34  ld (XWA+0x22),DE
-	jr sub_FC6803__FC6A55                      ; FC6A37  jr T,0xfc6a55
-sub_FC6803__FC6A39:
+	jr Pack104_LoadElementWaveSelRec__FC6A55                      ; FC6A37  jr T,0xfc6a55
+Pack104_LoadElementWaveSelRec__FC6A39:
 	ld	bc, (0xE082:24)                        ; FC6A39  ld BC,(0x00e082)
 	extz	xbc                                   ; FC6A3E  extz XBC
 	ld	hl, (xbc+5)                             ; FC6A40  ld HL,(XBC+0x05)
@@ -7313,7 +7688,7 @@ sub_FC6803__FC6A39:
 	ld	wa, (xix)                               ; FC6A4E  ld WA,(XIX)
 	extz	xwa                                   ; FC6A50  extz XWA
 	ld	(xwa+34), de                            ; FC6A52  ld (XWA+0x22),DE
-sub_FC6803__FC6A55:
+Pack104_LoadElementWaveSelRec__FC6A55:
 	ld	bc, (xix)                               ; FC6A55  ld BC,(XIX)
 	extz	xbc                                   ; FC6A57  extz XBC
 	ld	a, (xbc+1)                              ; FC6A59  ld A,(XBC+0x01)
@@ -7321,11 +7696,11 @@ sub_FC6803__FC6A55:
 	srl	a, 4                                   ; FC6A5F  srl 0x04,A
 	extz	wa                                    ; FC6A62  extz WA
 	cps	wa, 1                                  ; FC6A64  cp WA,1
-	jr z, sub_FC6803__FC6A6E                   ; FC6A66  jr Z,0xfc6a6e
+	jr z, Pack104_LoadElementWaveSelRec__FC6A6E                   ; FC6A66  jr Z,0xfc6a6e
 	cps	wa, 2                                  ; FC6A68  cp WA,2
-	jr z, sub_FC6803__FC6A92                   ; FC6A6A  jr Z,0xfc6a92
-	jr sub_FC6803__FC6AC7                      ; FC6A6C  jr T,0xfc6ac7
-sub_FC6803__FC6A6E:
+	jr z, Pack104_LoadElementWaveSelRec__FC6A92                   ; FC6A6A  jr Z,0xfc6a92
+	jr Pack104_LoadElementWaveSelRec__FC6AC7                      ; FC6A6C  jr T,0xfc6ac7
+Pack104_LoadElementWaveSelRec__FC6A6E:
 	ld	xbc, (xiz+12)                           ; FC6A6E  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+17)                             ; FC6A71  ld A,(XBC+0x11)
 	extz	wa                                    ; FC6A74  extz WA
@@ -7336,11 +7711,11 @@ sub_FC6803__FC6A6E:
 	ld	hl, wa                                  ; FC6A82  ld HL,WA
 	add	hl, iy                                 ; FC6A84  add HL,IY
 	cp	hl, 50                                  ; FC6A86  cp HL,0x0032
-	jr gt, sub_FC6803__FC6AB0                  ; FC6A8A  jr GT,0xfc6ab0
+	jr gt, Pack104_LoadElementWaveSelRec__FC6AB0                  ; FC6A8A  jr GT,0xfc6ab0
 	cps	hl, 0                                  ; FC6A8C  cp HL,0
-	jr ge, sub_FC6803__FC6ABC                  ; FC6A8E  jr GE,0xfc6abc
-	jr sub_FC6803__FC6AB9                      ; FC6A90  jr T,0xfc6ab9
-sub_FC6803__FC6A92:
+	jr ge, Pack104_LoadElementWaveSelRec__FC6ABC                  ; FC6A8E  jr GE,0xfc6abc
+	jr Pack104_LoadElementWaveSelRec__FC6AB9                      ; FC6A90  jr T,0xfc6ab9
+Pack104_LoadElementWaveSelRec__FC6A92:
 	ld	xbc, (xiz+12)                           ; FC6A92  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+17)                             ; FC6A95  ld A,(XBC+0x11)
 	extz	wa                                    ; FC6A98  extz WA
@@ -7351,27 +7726,27 @@ sub_FC6803__FC6A92:
 	ld	hl, wa                                  ; FC6AA6  ld HL,WA
 	sub	hl, iy                                 ; FC6AA8  sub HL,IY
 	cp	hl, 50                                  ; FC6AAA  cp HL,0x0032
-	jr le, sub_FC6803__FC6AB5                  ; FC6AAE  jr LE,0xfc6ab5
-sub_FC6803__FC6AB0:
+	jr le, Pack104_LoadElementWaveSelRec__FC6AB5                  ; FC6AAE  jr LE,0xfc6ab5
+Pack104_LoadElementWaveSelRec__FC6AB0:
 	ldw	hl, 50                                 ; FC6AB0  ld HL,0x0032
-	jr sub_FC6803__FC6ABC                      ; FC6AB3  jr T,0xfc6abc
-sub_FC6803__FC6AB5:
+	jr Pack104_LoadElementWaveSelRec__FC6ABC                      ; FC6AB3  jr T,0xfc6abc
+Pack104_LoadElementWaveSelRec__FC6AB5:
 	cps	hl, 0                                  ; FC6AB5  cp HL,0
-	jr ge, sub_FC6803__FC6ABC                  ; FC6AB7  jr GE,0xfc6abc
-sub_FC6803__FC6AB9:
+	jr ge, Pack104_LoadElementWaveSelRec__FC6ABC                  ; FC6AB7  jr GE,0xfc6abc
+Pack104_LoadElementWaveSelRec__FC6AB9:
 	ldw	hl, 0                                  ; FC6AB9  ld HL,0x0000
-sub_FC6803__FC6ABC:
+Pack104_LoadElementWaveSelRec__FC6ABC:
 	ld	d, l                                    ; FC6ABC  ld D,L
 	ld	bc, (xix)                               ; FC6ABE  ld BC,(XIX)
 	extz	xbc                                   ; FC6AC0  extz XBC
 	ld	(xbc+40), d                             ; FC6AC2  ld (XBC+0x28),D
-	jr sub_FC6803__FC6AD1                      ; FC6AC5  jr T,0xfc6ad1
-sub_FC6803__FC6AC7:
+	jr Pack104_LoadElementWaveSelRec__FC6AD1                      ; FC6AC5  jr T,0xfc6ad1
+Pack104_LoadElementWaveSelRec__FC6AC7:
 	ld	xbc, (xiz+12)                           ; FC6AC7  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+17)                             ; FC6ACA  ld A,(XBC+0x11)
 	extz	wa                                    ; FC6ACD  extz WA
 	ld	hl, wa                                  ; FC6ACF  ld HL,WA
-sub_FC6803__FC6AD1:
+Pack104_LoadElementWaveSelRec__FC6AD1:
 	ld	d, l                                    ; FC6AD1  ld D,L
 	ld	bc, (xix)                               ; FC6AD3  ld BC,(XIX)
 	extz	xbc                                   ; FC6AD5  extz XBC
@@ -7383,11 +7758,11 @@ sub_FC6803__FC6AD1:
 	srl	a, 2                                   ; FC6AE4  srl 0x02,A
 	extz	wa                                    ; FC6AE7  extz WA
 	cps	wa, 1                                  ; FC6AE9  cp WA,1
-	jr z, sub_FC6803__FC6AF3                   ; FC6AEB  jr Z,0xfc6af3
+	jr z, Pack104_LoadElementWaveSelRec__FC6AF3                   ; FC6AEB  jr Z,0xfc6af3
 	cps	wa, 2                                  ; FC6AED  cp WA,2
-	jr z, sub_FC6803__FC6B1A                   ; FC6AEF  jr Z,0xfc6b1a
-	jr sub_FC6803__FC6B49                      ; FC6AF1  jr T,0xfc6b49
-sub_FC6803__FC6AF3:
+	jr z, Pack104_LoadElementWaveSelRec__FC6B1A                   ; FC6AEF  jr Z,0xfc6b1a
+	jr Pack104_LoadElementWaveSelRec__FC6B49                      ; FC6AF1  jr T,0xfc6b49
+Pack104_LoadElementWaveSelRec__FC6AF3:
 	ld	xbc, (xiz+12)                           ; FC6AF3  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+18)                             ; FC6AF6  ld A,(XBC+0x12)
 	res	7, a                                   ; FC6AF9  res 0x07,A
@@ -7399,11 +7774,11 @@ sub_FC6803__FC6AF3:
 	ld	hl, wa                                  ; FC6B0A  ld HL,WA
 	add	hl, iy                                 ; FC6B0C  add HL,IY
 	cp	hl, 50                                  ; FC6B0E  cp HL,0x0032
-	jr gt, sub_FC6803__FC6B3B                  ; FC6B12  jr GT,0xfc6b3b
+	jr gt, Pack104_LoadElementWaveSelRec__FC6B3B                  ; FC6B12  jr GT,0xfc6b3b
 	cps	hl, 0                                  ; FC6B14  cp HL,0
-	jr ge, sub_FC6803__FC6B56                  ; FC6B16  jr GE,0xfc6b56
-	jr sub_FC6803__FC6B44                      ; FC6B18  jr T,0xfc6b44
-sub_FC6803__FC6B1A:
+	jr ge, Pack104_LoadElementWaveSelRec__FC6B56                  ; FC6B16  jr GE,0xfc6b56
+	jr Pack104_LoadElementWaveSelRec__FC6B44                      ; FC6B18  jr T,0xfc6b44
+Pack104_LoadElementWaveSelRec__FC6B1A:
 	ld	xbc, (xiz+12)                           ; FC6B1A  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+18)                             ; FC6B1D  ld A,(XBC+0x12)
 	res	7, a                                   ; FC6B20  res 0x07,A
@@ -7415,23 +7790,23 @@ sub_FC6803__FC6B1A:
 	ld	hl, wa                                  ; FC6B31  ld HL,WA
 	add	hl, iy                                 ; FC6B33  add HL,IY
 	cp	hl, 50                                  ; FC6B35  cp HL,0x0032
-	jr le, sub_FC6803__FC6B40                  ; FC6B39  jr LE,0xfc6b40
-sub_FC6803__FC6B3B:
+	jr le, Pack104_LoadElementWaveSelRec__FC6B40                  ; FC6B39  jr LE,0xfc6b40
+Pack104_LoadElementWaveSelRec__FC6B3B:
 	ldw	hl, 50                                 ; FC6B3B  ld HL,0x0032
-	jr sub_FC6803__FC6B56                      ; FC6B3E  jr T,0xfc6b56
-sub_FC6803__FC6B40:
+	jr Pack104_LoadElementWaveSelRec__FC6B56                      ; FC6B3E  jr T,0xfc6b56
+Pack104_LoadElementWaveSelRec__FC6B40:
 	cps	hl, 0                                  ; FC6B40  cp HL,0
-	jr ge, sub_FC6803__FC6B56                  ; FC6B42  jr GE,0xfc6b56
-sub_FC6803__FC6B44:
+	jr ge, Pack104_LoadElementWaveSelRec__FC6B56                  ; FC6B42  jr GE,0xfc6b56
+Pack104_LoadElementWaveSelRec__FC6B44:
 	ldw	hl, 0                                  ; FC6B44  ld HL,0x0000
-	jr sub_FC6803__FC6B56                      ; FC6B47  jr T,0xfc6b56
-sub_FC6803__FC6B49:
+	jr Pack104_LoadElementWaveSelRec__FC6B56                      ; FC6B47  jr T,0xfc6b56
+Pack104_LoadElementWaveSelRec__FC6B49:
 	ld	xbc, (xiz+12)                           ; FC6B49  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+18)                             ; FC6B4C  ld A,(XBC+0x12)
 	res	7, a                                   ; FC6B4F  res 0x07,A
 	extz	wa                                    ; FC6B52  extz WA
 	ld	hl, wa                                  ; FC6B54  ld HL,WA
-sub_FC6803__FC6B56:
+Pack104_LoadElementWaveSelRec__FC6B56:
 	ld	bc, hl                                  ; FC6B56  ld BC,HL
 	exts	xbc                                   ; FC6B58  exts XBC
 	add	xbc, 0xFE0296                          ; FC6B5A  add XBC,0x00fe0296
@@ -7445,11 +7820,11 @@ sub_FC6803__FC6B56:
 	and	a, 3                                   ; FC6B70  and A,0x03
 	extz	wa                                    ; FC6B73  extz WA
 	cps	wa, 1                                  ; FC6B75  cp WA,1
-	jr z, sub_FC6803__FC6B80                   ; FC6B77  jr Z,0xfc6b80
+	jr z, Pack104_LoadElementWaveSelRec__FC6B80                   ; FC6B77  jr Z,0xfc6b80
 	cps	wa, 2                                  ; FC6B79  cp WA,2
-	jr z, sub_FC6803__FC6BC7                   ; FC6B7B  jr Z,0xfc6bc7
-	jrl sub_FC6803__FC6C0D                     ; FC6B7D  jrl T,0xfc6c0d
-sub_FC6803__FC6B80:
+	jr z, Pack104_LoadElementWaveSelRec__FC6BC7                   ; FC6B7B  jr Z,0xfc6bc7
+	jrl Pack104_LoadElementWaveSelRec__FC6C0D                     ; FC6B7D  jrl T,0xfc6c0d
+Pack104_LoadElementWaveSelRec__FC6B80:
 	ld	xbc, (xiz+12)                           ; FC6B80  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+22)                             ; FC6B83  ld A,(XBC+0x16)
 	res	7, a                                   ; FC6B86  res 0x07,A
@@ -7476,8 +7851,8 @@ sub_FC6803__FC6B80:
 	ld	wa, (xix)                               ; FC6BBD  ld WA,(XIX)
 	extz	xwa                                   ; FC6BBF  extz XWA
 	ld	(xwa+28), de                            ; FC6BC1  ld (XWA+0x1c),DE
-	jrl sub_FC6803__FC6C35                     ; FC6BC4  jrl T,0xfc6c35
-sub_FC6803__FC6BC7:
+	jrl Pack104_LoadElementWaveSelRec__FC6C35                     ; FC6BC4  jrl T,0xfc6c35
+Pack104_LoadElementWaveSelRec__FC6BC7:
 	ld	xbc, (xiz+12)                           ; FC6BC7  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+22)                             ; FC6BCA  ld A,(XBC+0x16)
 	res	7, a                                   ; FC6BCD  res 0x07,A
@@ -7504,8 +7879,8 @@ sub_FC6803__FC6BC7:
 	ld	wa, (xix)                               ; FC6C04  ld WA,(XIX)
 	extz	xwa                                   ; FC6C06  extz XWA
 	ld	(xwa+28), de                            ; FC6C08  ld (XWA+0x1c),DE
-	jr sub_FC6803__FC6C35                      ; FC6C0B  jr T,0xfc6c35
-sub_FC6803__FC6C0D:
+	jr Pack104_LoadElementWaveSelRec__FC6C35                      ; FC6C0B  jr T,0xfc6c35
+Pack104_LoadElementWaveSelRec__FC6C0D:
 	ld	xbc, (xiz+12)                           ; FC6C0D  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+22)                             ; FC6C10  ld A,(XBC+0x16)
 	res	7, a                                   ; FC6C13  res 0x07,A
@@ -7522,23 +7897,23 @@ sub_FC6803__FC6C0D:
 	ld	iy, (xix)                               ; FC6C2E  ld IY,(XIX)
 	extz	xiy                                   ; FC6C30  extz XIY
 	ld	(xiy+28), wa                            ; FC6C32  ld (XIY+0x1c),WA
-sub_FC6803__FC6C35:
+Pack104_LoadElementWaveSelRec__FC6C35:
 	calr (0xFC46A8 - 0xFC6C38)                 ; FC6C35  calr 0xfc46a8
 	ld	xbc, (xiz+12)                           ; FC6C38  ld XBC,(XIZ+0x0c)
 	ld	d, (xbc+33)                             ; FC6C3B  ld D,(XBC+0x21)
 	cps	d, 0                                   ; FC6C3E  cp D,0
-	jr ge, sub_FC6803__FC6C4E                  ; FC6C40  jr GE,0xfc6c4e
+	jr ge, Pack104_LoadElementWaveSelRec__FC6C4E                  ; FC6C40  jr GE,0xfc6c4e
 	ld	a, d                                    ; FC6C42  ld A,D
 	exts	wa                                    ; FC6C44  exts WA
 	ld	hl, wa                                  ; FC6C46  ld HL,WA
 	neg	wa                                     ; FC6C48  neg WA
 	ld	hl, wa                                  ; FC6C4A  ld HL,WA
-	jr sub_FC6803__FC6C54                      ; FC6C4C  jr T,0xfc6c54
-sub_FC6803__FC6C4E:
+	jr Pack104_LoadElementWaveSelRec__FC6C54                      ; FC6C4C  jr T,0xfc6c54
+Pack104_LoadElementWaveSelRec__FC6C4E:
 	ld	c, d                                    ; FC6C4E  ld C,D
 	exts	bc                                    ; FC6C50  exts BC
 	ld	hl, bc                                  ; FC6C52  ld HL,BC
-sub_FC6803__FC6C54:
+Pack104_LoadElementWaveSelRec__FC6C54:
 	ld	bc, (xix)                               ; FC6C54  ld BC,(XIX)
 	extz	xbc                                   ; FC6C56  extz XBC
 	ld	a, (xbc+2)                              ; FC6C58  ld A,(XBC+0x02)
@@ -7546,11 +7921,11 @@ sub_FC6803__FC6C54:
 	srl	a, 4                                   ; FC6C5E  srl 0x04,A
 	extz	wa                                    ; FC6C61  extz WA
 	cps	wa, 1                                  ; FC6C63  cp WA,1
-	jr z, sub_FC6803__FC6C6D                   ; FC6C65  jr Z,0xfc6c6d
+	jr z, Pack104_LoadElementWaveSelRec__FC6C6D                   ; FC6C65  jr Z,0xfc6c6d
 	cps	wa, 2                                  ; FC6C67  cp WA,2
-	jr z, sub_FC6803__FC6C84                   ; FC6C69  jr Z,0xfc6c84
-	jr sub_FC6803__FC6C9B                      ; FC6C6B  jr T,0xfc6c9b
-sub_FC6803__FC6C6D:
+	jr z, Pack104_LoadElementWaveSelRec__FC6C84                   ; FC6C69  jr Z,0xfc6c84
+	jr Pack104_LoadElementWaveSelRec__FC6C9B                      ; FC6C6B  jr T,0xfc6c9b
+Pack104_LoadElementWaveSelRec__FC6C6D:
 	ld	bc, (0xE082:24)                        ; FC6C6D  ld BC,(0x00e082)
 	extz	xbc                                   ; FC6C72  extz XBC
 	ld	wa, (xbc+15)                            ; FC6C74  ld WA,(XBC+0x0f)
@@ -7559,8 +7934,8 @@ sub_FC6803__FC6C6D:
 	ld	wa, (xix)                               ; FC6C7B  ld WA,(XIX)
 	extz	xwa                                   ; FC6C7D  extz XWA
 	ld	(xwa+30), de                            ; FC6C7F  ld (XWA+0x1e),DE
-	jr sub_FC6803__FC6CA2                      ; FC6C82  jr T,0xfc6ca2
-sub_FC6803__FC6C84:
+	jr Pack104_LoadElementWaveSelRec__FC6CA2                      ; FC6C82  jr T,0xfc6ca2
+Pack104_LoadElementWaveSelRec__FC6C84:
 	ld	bc, (0xE082:24)                        ; FC6C84  ld BC,(0x00e082)
 	extz	xbc                                   ; FC6C89  extz XBC
 	ld	wa, (xbc+15)                            ; FC6C8B  ld WA,(XBC+0x0f)
@@ -7569,12 +7944,12 @@ sub_FC6803__FC6C84:
 	ld	wa, (xix)                               ; FC6C92  ld WA,(XIX)
 	extz	xwa                                   ; FC6C94  extz XWA
 	ld	(xwa+30), de                            ; FC6C96  ld (XWA+0x1e),DE
-	jr sub_FC6803__FC6CA2                      ; FC6C99  jr T,0xfc6ca2
-sub_FC6803__FC6C9B:
+	jr Pack104_LoadElementWaveSelRec__FC6CA2                      ; FC6C99  jr T,0xfc6ca2
+Pack104_LoadElementWaveSelRec__FC6C9B:
 	ld	bc, (xix)                               ; FC6C9B  ld BC,(XIX)
 	extz	xbc                                   ; FC6C9D  extz XBC
 	ld	(xbc+30), hl                            ; FC6C9F  ld (XBC+0x1e),HL
-sub_FC6803__FC6CA2:
+Pack104_LoadElementWaveSelRec__FC6CA2:
 	pop	xix                                    ; FC6CA2  pop XIX
 	popw	de                                    ; FC6CA3  pop DE
 	popw	hl                                    ; FC6CA4  pop HL
@@ -8414,7 +8789,7 @@ sub_FC723F__FC741F:
 	unlk32 xiz                                 ; FC747E  unlk XIZ
 	ret                                        ; FC7480  ret
 ; --------------------------------------------------------------------------
-; sub_FC7481 -- 0xFC7481..0xFC7A1E (1438 bytes)
+; Pack104_DispatchByResoMode_ForPart -- 0xFC7481..0xFC7A1E (1438 bytes)
 ;
 ; Called from: 8 site(s) outside this module:
 ;          0xFB68C8 in sub_FB6681__FB6891, 0xFB6B45 in sub_FB68DD__FB6B0F
@@ -8423,7 +8798,7 @@ sub_FC723F__FC741F:
 ;          0xFBC101 in sub_FBBFFB__FBC0F9, 0xFBCB9E in sub_FBC958__FBCB96
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00E082, 0x00E084
-; Calls:   0xFC46A8 = sub_FC46A8, 0xFC6CA8 = sub_FC6CA8
+; Calls:   0xFC46A8 = Pack104_ComputeTuningWords_0040_0080, 0xFC6CA8 = sub_FC6CA8
 ;          0xFC6CEA = sub_FC6CEA, 0xFC6D2C = sub_FC6D2C
 ;          0xFC6D6E = sub_FC6D6E, 0xFC6FFD = sub_FC6FFD
 ;          0xFC723F = sub_FC723F
@@ -8434,8 +8809,34 @@ sub_FC723F__FC741F:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_DispatchByResoMode_ForPart -- reads the
+;          `RESO MODE` field of all four elements of a part and dispatches on the
+;          combination.  For each of the four sub-records it takes
+;          `Q[+0x0B] & 0xC0` through P[+0x03] (0xFC74B9-0xFC74BF) and shifts it
+;          into an 8-bit code H, two bits per element (0xFC74CF-0xFC74D6); then
+;            H == 0     -> sub_FC6CA8      0xFC74EC
+;            H == 0xAA  -> sub_FC6D6E      0xFC74F6
+;            low nibble non-zero -> sub_FC6FFD else sub_FC6CEA   0xFC7502/0xFC7507
+;            high nibble non-zero -> sub_FC723F else sub_FC6D2C  0xFC7511/0xFC7516
+;          When its second argument is 1 it first clears the part's eight
+;          modelling-parameter words -- PART[+0x01], +0x03, +0x05, +0x07, +0x09,
+;          +0x0B, +0x0D, +0x0F (0xFC7527-0xFC757B) -- and then re-derives each
+;          enabled element.
+; ★★ THOSE EIGHT WORDS ARE EXACTLY the eight this lane names one setter for:
+;          PartRec_SetFittingOffset_0001, SetPositionOffset_0003/_0005,
+;          SetMovementDepth_0007, SetMovementRate_0009, SetMutingOffset_000B,
+;          SetTuningOffset_000D, SetSubGainOffset_000F.  One routine clearing
+;          precisely that set, on a stride of two, is independent confirmation
+;          that they are one group.
+; GRADE: PROVEN that it reads wave-select byte +0x0B bits 7:6 and that it clears
+;          those eight words.  `RESO MODE` for that field is STRONG
+;          (notes/FINDINGS-l7a1429-parameter-names.md section 2d, where the
+;          64-name RESONATOR TYPE list in bits 5:0 is PROVEN).
+;          ⚠ What the six dispatch arms COMPUTE is not established -- they are
+;          left as sub_XXXXXX.  The name says what selects them, nothing more.
 ; --------------------------------------------------------------------------
-sub_FC7481:
+Pack104_DispatchByResoMode_ForPart:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FC7481  link XIZ,0xfff6
 	pushw	hl                                   ; FC7485  push HL
 	pushw	de                                   ; FC7486  push DE
@@ -8454,7 +8855,7 @@ sub_FC7481:
 	ld	(0xE084:24), bc                        ; FC74A9  ld (0x00e084),BC
 	ldb	h, 0                                   ; FC74AE  ld H,0x00
 	ldb	e, 3                                   ; FC74B0  ld E,0x03
-sub_FC7481__FC74B2:
+Pack104_DispatchByResoMode_ForPart__FC74B2:
 	ld	bc, (0xE084:24)                        ; FC74B2  ld BC,(0x00e084)
 	extz	xbc                                   ; FC74B7  extz XBC
 	ld	xwa, (xbc+3)                            ; FC74B9  ld XWA,(XBC+0x03)
@@ -8467,40 +8868,40 @@ sub_FC7481__FC74B2:
 	ld	h, l                                    ; FC74CF  ld H,L
 	srl	h, 2                                   ; FC74D1  srl 0x02,H
 	cps	e, 0                                   ; FC74D4  cp E,0
-	jr nz, sub_FC7481__FC74B2                  ; FC74D6  jr NZ,0xfc74b2
+	jr nz, Pack104_DispatchByResoMode_ForPart__FC74B2                  ; FC74D6  jr NZ,0xfc74b2
 	ld	bc, (0xE084:24)                        ; FC74D8  ld BC,(0x00e084)
 	extz	xbc                                   ; FC74DD  extz XBC
 	ld	xwa, (xbc+3)                            ; FC74DF  ld XWA,(XBC+0x03)
 	ld	c, (xwa+11)                             ; FC74E2  ld C,(XWA+0x0b)
 	and	c, 0xC0                                ; FC74E5  and C,0xc0
 	or	h, c                                    ; FC74E8  or H,C
-	jr nz, sub_FC7481__FC74F1                  ; FC74EA  jr NZ,0xfc74f1
+	jr nz, Pack104_DispatchByResoMode_ForPart__FC74F1                  ; FC74EA  jr NZ,0xfc74f1
 	calr (0xFC6CA8 - 0xFC74EF)                 ; FC74EC  calr 0xfc6ca8
-	jr sub_FC7481__FC7519                      ; FC74EF  jr T,0xfc7519
-sub_FC7481__FC74F1:
+	jr Pack104_DispatchByResoMode_ForPart__FC7519                      ; FC74EF  jr T,0xfc7519
+Pack104_DispatchByResoMode_ForPart__FC74F1:
 	cp	h, 0xAA                                 ; FC74F1  cp H,0xaa
-	jr nz, sub_FC7481__FC74FB                  ; FC74F4  jr NZ,0xfc74fb
+	jr nz, Pack104_DispatchByResoMode_ForPart__FC74FB                  ; FC74F4  jr NZ,0xfc74fb
 	calr (0xFC6D6E - 0xFC74F9)                 ; FC74F6  calr 0xfc6d6e
-	jr sub_FC7481__FC7519                      ; FC74F9  jr T,0xfc7519
-sub_FC7481__FC74FB:
+	jr Pack104_DispatchByResoMode_ForPart__FC7519                      ; FC74F9  jr T,0xfc7519
+Pack104_DispatchByResoMode_ForPart__FC74FB:
 	ld	c, h                                    ; FC74FB  ld C,H
 	and	c, 15                                  ; FC74FD  and C,0x0f
-	jr z, sub_FC7481__FC7507                   ; FC7500  jr Z,0xfc7507
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7507                   ; FC7500  jr Z,0xfc7507
 	calr (0xFC6FFD - 0xFC7505)                 ; FC7502  calr 0xfc6ffd
-	jr sub_FC7481__FC750A                      ; FC7505  jr T,0xfc750a
-sub_FC7481__FC7507:
+	jr Pack104_DispatchByResoMode_ForPart__FC750A                      ; FC7505  jr T,0xfc750a
+Pack104_DispatchByResoMode_ForPart__FC7507:
 	calr (0xFC6CEA - 0xFC750A)                 ; FC7507  calr 0xfc6cea
-sub_FC7481__FC750A:
+Pack104_DispatchByResoMode_ForPart__FC750A:
 	ld	c, h                                    ; FC750A  ld C,H
 	and	c, 0xF0                                ; FC750C  and C,0xf0
-	jr z, sub_FC7481__FC7516                   ; FC750F  jr Z,0xfc7516
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7516                   ; FC750F  jr Z,0xfc7516
 	calr (0xFC723F - 0xFC7514)                 ; FC7511  calr 0xfc723f
-	jr sub_FC7481__FC7519                      ; FC7514  jr T,0xfc7519
-sub_FC7481__FC7516:
+	jr Pack104_DispatchByResoMode_ForPart__FC7519                      ; FC7514  jr T,0xfc7519
+Pack104_DispatchByResoMode_ForPart__FC7516:
 	calr (0xFC6D2C - 0xFC7519)                 ; FC7516  calr 0xfc6d2c
-sub_FC7481__FC7519:
+Pack104_DispatchByResoMode_ForPart__FC7519:
 	cp (xiz+10), 0x01                          ; FC7519  cp (XIZ+0x0a),0x01
-	jrl nz, sub_FC7481__FC7A19                 ; FC751D  jrl NZ,0xfc7a19
+	jrl nz, Pack104_DispatchByResoMode_ForPart__FC7A19                 ; FC751D  jrl NZ,0xfc7a19
 	ld	bc, (0xE082:24)                        ; FC7520  ld BC,(0x00e082)
 	extz	xbc                                   ; FC7525  extz XBC
 	extpfx5 0xB9, 0x01, 0x02, 0x00, 0x00       ; FC7527  ld (XBC+0x01),0x0000
@@ -8529,11 +8930,11 @@ sub_FC7481__FC7519:
 	add	bc, 19                                 ; FC7585  add BC,0x0013
 	ld	(0xE084:24), bc                        ; FC7589  ld (0x00e084),BC
 	ldb	e, 4                                   ; FC758E  ld E,0x04
-sub_FC7481__FC7590:
+Pack104_DispatchByResoMode_ForPart__FC7590:
 	ld	bc, (0xE084:24)                        ; FC7590  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7595  extz XBC
 	extpfx2 0xB1, 0xCF                         ; FC7597  bit 7,(XBC)
-	jrl z, sub_FC7481__FC7A0B                  ; FC7599  jrl Z,0xfc7a0b
+	jrl z, Pack104_DispatchByResoMode_ForPart__FC7A0B                  ; FC7599  jrl Z,0xfc7a0b
 	ld	xwa, (xbc+3)                            ; FC759C  ld XWA,(XBC+0x03)
 	ld	(xiz-4), xwa                            ; FC759F  ld (XIZ+0xfc),XWA
 	extpfx3 0x81, 0x3C, 0xE1                   ; FC75A2  and (XBC),0xe1
@@ -8546,11 +8947,11 @@ sub_FC7481__FC7590:
 	srl	a, 3                                   ; FC75B9  srl 0x03,A
 	extz	wa                                    ; FC75BC  extz WA
 	cps	wa, 1                                  ; FC75BE  cp WA,1
-	jr z, sub_FC7481__FC75C9                   ; FC75C0  jr Z,0xfc75c9
+	jr z, Pack104_DispatchByResoMode_ForPart__FC75C9                   ; FC75C0  jr Z,0xfc75c9
 	cps	wa, 2                                  ; FC75C2  cp WA,2
-	jr z, sub_FC7481__FC7612                   ; FC75C4  jr Z,0xfc7612
-	jrl sub_FC7481__FC765A                     ; FC75C6  jrl T,0xfc765a
-sub_FC7481__FC75C9:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7612                   ; FC75C4  jr Z,0xfc7612
+	jrl Pack104_DispatchByResoMode_ForPart__FC765A                     ; FC75C6  jrl T,0xfc765a
+Pack104_DispatchByResoMode_ForPart__FC75C9:
 	ld	xbc, (xiz-4)                            ; FC75C9  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+21)                             ; FC75CC  ld A,(XBC+0x15)
 	res	7, a                                   ; FC75CF  res 0x07,A
@@ -8575,8 +8976,8 @@ sub_FC7481__FC75C9:
 	ld	bc, (0xE084:24)                        ; FC7605  ld BC,(0x00e084)
 	extz	xbc                                   ; FC760A  extz XBC
 	ld	(xbc+24), wa                            ; FC760C  ld (XBC+0x18),WA
-	jrl sub_FC7481__FC7684                     ; FC760F  jrl T,0xfc7684
-sub_FC7481__FC7612:
+	jrl Pack104_DispatchByResoMode_ForPart__FC7684                     ; FC760F  jrl T,0xfc7684
+Pack104_DispatchByResoMode_ForPart__FC7612:
 	ld	xbc, (xiz-4)                            ; FC7612  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+21)                             ; FC7615  ld A,(XBC+0x15)
 	res	7, a                                   ; FC7618  res 0x07,A
@@ -8601,8 +9002,8 @@ sub_FC7481__FC7612:
 	ld	bc, (0xE084:24)                        ; FC764E  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7653  extz XBC
 	ld	(xbc+24), wa                            ; FC7655  ld (XBC+0x18),WA
-	jr sub_FC7481__FC7684                      ; FC7658  jr T,0xfc7684
-sub_FC7481__FC765A:
+	jr Pack104_DispatchByResoMode_ForPart__FC7684                      ; FC7658  jr T,0xfc7684
+Pack104_DispatchByResoMode_ForPart__FC765A:
 	ld	xbc, (xiz-4)                            ; FC765A  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+21)                             ; FC765D  ld A,(XBC+0x15)
 	res	7, a                                   ; FC7660  res 0x07,A
@@ -8617,7 +9018,7 @@ sub_FC7481__FC765A:
 	ld	bc, (0xE084:24)                        ; FC767A  ld BC,(0x00e084)
 	extz	xbc                                   ; FC767F  extz XBC
 	ld	(xbc+24), wa                            ; FC7681  ld (XBC+0x18),WA
-sub_FC7481__FC7684:
+Pack104_DispatchByResoMode_ForPart__FC7684:
 	ld	xix, (xiz-4)                            ; FC7684  ld XIX,(XIZ+0xfc)
 	ld	bc, (0xE084:24)                        ; FC7687  ld BC,(0x00e084)
 	extz	xbc                                   ; FC768C  extz XBC
@@ -8626,11 +9027,11 @@ sub_FC7481__FC7684:
 	srl	a, 1                                   ; FC7693  srl 0x01,A
 	extz	wa                                    ; FC7696  extz WA
 	cps	wa, 1                                  ; FC7698  cp WA,1
-	jr z, sub_FC7481__FC76A3                   ; FC769A  jr Z,0xfc76a3
+	jr z, Pack104_DispatchByResoMode_ForPart__FC76A3                   ; FC769A  jr Z,0xfc76a3
 	cps	wa, 2                                  ; FC769C  cp WA,2
-	jr z, sub_FC7481__FC76D2                   ; FC769E  jr Z,0xfc76d2
-	jrl sub_FC7481__FC773D                     ; FC76A0  jrl T,0xfc773d
-sub_FC7481__FC76A3:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC76D2                   ; FC769E  jr Z,0xfc76d2
+	jrl Pack104_DispatchByResoMode_ForPart__FC773D                     ; FC76A0  jrl T,0xfc773d
+Pack104_DispatchByResoMode_ForPart__FC76A3:
 	ld	c, (xix+13)                             ; FC76A3  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC76A6  extz BC
 	ld	hl, bc                                  ; FC76A8  ld HL,BC
@@ -8646,9 +9047,9 @@ sub_FC7481__FC76A3:
 	extz	xbc                                   ; FC76C7  extz XBC
 	ld	wa, (xbc+3)                             ; FC76C9  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC76CC  cp WA,0
-	jr ge, sub_FC7481__FC7716                  ; FC76CE  jr GE,0xfc7716
-	jr sub_FC7481__FC76FF                      ; FC76D0  jr T,0xfc76ff
-sub_FC7481__FC76D2:
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC7716                  ; FC76CE  jr GE,0xfc7716
+	jr Pack104_DispatchByResoMode_ForPart__FC76FF                      ; FC76D0  jr T,0xfc76ff
+Pack104_DispatchByResoMode_ForPart__FC76D2:
 	ld	c, (xix+13)                             ; FC76D2  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC76D5  extz BC
 	ld	hl, bc                                  ; FC76D7  ld HL,BC
@@ -8664,8 +9065,8 @@ sub_FC7481__FC76D2:
 	extz	xbc                                   ; FC76F6  extz XBC
 	ld	wa, (xbc+3)                             ; FC76F8  ld WA,(XBC+0x03)
 	cps	wa, 0                                  ; FC76FB  cp WA,0
-	jr ge, sub_FC7481__FC7716                  ; FC76FD  jr GE,0xfc7716
-sub_FC7481__FC76FF:
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC7716                  ; FC76FD  jr GE,0xfc7716
+Pack104_DispatchByResoMode_ForPart__FC76FF:
 	ld	bc, (0xE082:24)                        ; FC76FF  ld BC,(0x00e082)
 	extz	xbc                                   ; FC7704  extz XBC
 	ld	hl, (xbc+3)                             ; FC7706  ld HL,(XBC+0x03)
@@ -8674,15 +9075,15 @@ sub_FC7481__FC76FF:
 	ld	hl, wa                                  ; FC770D  ld HL,WA
 	sra	wa, 2                                  ; FC770F  sra 0x02,WA
 	ld	hl, wa                                  ; FC7712  ld HL,WA
-	jr sub_FC7481__FC7727                      ; FC7714  jr T,0xfc7727
-sub_FC7481__FC7716:
+	jr Pack104_DispatchByResoMode_ForPart__FC7727                      ; FC7714  jr T,0xfc7727
+Pack104_DispatchByResoMode_ForPart__FC7716:
 	ld	bc, (0xE082:24)                        ; FC7716  ld BC,(0x00e082)
 	extz	xbc                                   ; FC771B  extz XBC
 	ld	hl, (xbc+3)                             ; FC771D  ld HL,(XBC+0x03)
 	ld	iy, hl                                  ; FC7720  ld IY,HL
 	sra	iy, 2                                  ; FC7722  sra 0x02,IY
 	ld	hl, iy                                  ; FC7725  ld HL,IY
-sub_FC7481__FC7727:
+Pack104_DispatchByResoMode_ForPart__FC7727:
 	ld	c, (xix+14)                             ; FC7727  ld C,(XIX+0x0e)
 	res	7, c                                   ; FC772A  res 0x07,C
 	extz	bc                                    ; FC772D  extz BC
@@ -8690,8 +9091,8 @@ sub_FC7481__FC7727:
 	ld	wa, (0xE084:24)                        ; FC7731  ld WA,(0x00e084)
 	extz	xwa                                   ; FC7736  extz XWA
 	ld	(xwa+34), bc                            ; FC7738  ld (XWA+0x22),BC
-	jr sub_FC7481__FC775E                      ; FC773B  jr T,0xfc775e
-sub_FC7481__FC773D:
+	jr Pack104_DispatchByResoMode_ForPart__FC775E                      ; FC773B  jr T,0xfc775e
+Pack104_DispatchByResoMode_ForPart__FC773D:
 	ld	c, (xix+13)                             ; FC773D  ld C,(XIX+0x0d)
 	extz	bc                                    ; FC7740  extz BC
 	ld	wa, (0xE084:24)                        ; FC7742  ld WA,(0x00e084)
@@ -8703,7 +9104,7 @@ sub_FC7481__FC773D:
 	ld	wa, (0xE084:24)                        ; FC7754  ld WA,(0x00e084)
 	extz	xwa                                   ; FC7759  extz XWA
 	ld	(xwa+34), bc                            ; FC775B  ld (XWA+0x22),BC
-sub_FC7481__FC775E:
+Pack104_DispatchByResoMode_ForPart__FC775E:
 	ld	bc, (0xE084:24)                        ; FC775E  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7763  extz XBC
 	ld	a, (xbc+1)                              ; FC7765  ld A,(XBC+0x01)
@@ -8711,26 +9112,26 @@ sub_FC7481__FC775E:
 	srl	a, 6                                   ; FC776B  srl 0x06,A
 	extz	wa                                    ; FC776E  extz WA
 	cps	wa, 1                                  ; FC7770  cp WA,1
-	jr z, sub_FC7481__FC777A                   ; FC7772  jr Z,0xfc777a
+	jr z, Pack104_DispatchByResoMode_ForPart__FC777A                   ; FC7772  jr Z,0xfc777a
 	cps	wa, 2                                  ; FC7774  cp WA,2
-	jr z, sub_FC7481__FC7790                   ; FC7776  jr Z,0xfc7790
-	jr sub_FC7481__FC77A4                      ; FC7778  jr T,0xfc77a4
-sub_FC7481__FC777A:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7790                   ; FC7776  jr Z,0xfc7790
+	jr Pack104_DispatchByResoMode_ForPart__FC77A4                      ; FC7778  jr T,0xfc77a4
+Pack104_DispatchByResoMode_ForPart__FC777A:
 	ld	bc, (0xE082:24)                        ; FC777A  ld BC,(0x00e082)
 	extz	xbc                                   ; FC777F  extz XBC
 	ld	wa, (xbc+5)                             ; FC7781  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC7784  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7789  extz XBC
 	add	(xbc+34), wa                           ; FC778B  add (XBC+0x22),WA
-	jr sub_FC7481__FC77A4                      ; FC778E  jr T,0xfc77a4
-sub_FC7481__FC7790:
+	jr Pack104_DispatchByResoMode_ForPart__FC77A4                      ; FC778E  jr T,0xfc77a4
+Pack104_DispatchByResoMode_ForPart__FC7790:
 	ld	bc, (0xE082:24)                        ; FC7790  ld BC,(0x00e082)
 	extz	xbc                                   ; FC7795  extz XBC
 	ld	wa, (xbc+5)                             ; FC7797  ld WA,(XBC+0x05)
 	ld	bc, (0xE084:24)                        ; FC779A  ld BC,(0x00e084)
 	extz	xbc                                   ; FC779F  extz XBC
 	sub	(xbc+34), wa                           ; FC77A1  sub (XBC+0x22),WA
-sub_FC7481__FC77A4:
+Pack104_DispatchByResoMode_ForPart__FC77A4:
 	ld	xix, (xiz-4)                            ; FC77A4  ld XIX,(XIZ+0xfc)
 	ld	bc, (0xE084:24)                        ; FC77A7  ld BC,(0x00e084)
 	extz	xbc                                   ; FC77AC  extz XBC
@@ -8739,11 +9140,11 @@ sub_FC7481__FC77A4:
 	srl	a, 4                                   ; FC77B4  srl 0x04,A
 	extz	wa                                    ; FC77B7  extz WA
 	cps	wa, 1                                  ; FC77B9  cp WA,1
-	jr z, sub_FC7481__FC77C3                   ; FC77BB  jr Z,0xfc77c3
+	jr z, Pack104_DispatchByResoMode_ForPart__FC77C3                   ; FC77BB  jr Z,0xfc77c3
 	cps	wa, 2                                  ; FC77BD  cp WA,2
-	jr z, sub_FC7481__FC77E5                   ; FC77BF  jr Z,0xfc77e5
-	jr sub_FC7481__FC781D                      ; FC77C1  jr T,0xfc781d
-sub_FC7481__FC77C3:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC77E5                   ; FC77BF  jr Z,0xfc77e5
+	jr Pack104_DispatchByResoMode_ForPart__FC781D                      ; FC77C1  jr T,0xfc781d
+Pack104_DispatchByResoMode_ForPart__FC77C3:
 	ld	c, (xix+17)                             ; FC77C3  ld C,(XIX+0x11)
 	extz	bc                                    ; FC77C6  extz BC
 	ld	(xiz-10), bc                            ; FC77C8  ld (XIZ+0xf6),BC
@@ -8753,11 +9154,11 @@ sub_FC7481__FC77C3:
 	ld	hl, bc                                  ; FC77D5  ld HL,BC
 	add	hl, iy                                 ; FC77D7  add HL,IY
 	cp	hl, 50                                  ; FC77D9  cp HL,0x0032
-	jr gt, sub_FC7481__FC7801                  ; FC77DD  jr GT,0xfc7801
+	jr gt, Pack104_DispatchByResoMode_ForPart__FC7801                  ; FC77DD  jr GT,0xfc7801
 	cps	hl, 0                                  ; FC77DF  cp HL,0
-	jr ge, sub_FC7481__FC780D                  ; FC77E1  jr GE,0xfc780d
-	jr sub_FC7481__FC780A                      ; FC77E3  jr T,0xfc780a
-sub_FC7481__FC77E5:
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC780D                  ; FC77E1  jr GE,0xfc780d
+	jr Pack104_DispatchByResoMode_ForPart__FC780A                      ; FC77E3  jr T,0xfc780a
+Pack104_DispatchByResoMode_ForPart__FC77E5:
 	ld	c, (xix+17)                             ; FC77E5  ld C,(XIX+0x11)
 	extz	bc                                    ; FC77E8  extz BC
 	ld	(xiz-10), bc                            ; FC77EA  ld (XIZ+0xf6),BC
@@ -8767,27 +9168,27 @@ sub_FC7481__FC77E5:
 	ld	hl, bc                                  ; FC77F7  ld HL,BC
 	sub	hl, iy                                 ; FC77F9  sub HL,IY
 	cp	hl, 50                                  ; FC77FB  cp HL,0x0032
-	jr le, sub_FC7481__FC7806                  ; FC77FF  jr LE,0xfc7806
-sub_FC7481__FC7801:
+	jr le, Pack104_DispatchByResoMode_ForPart__FC7806                  ; FC77FF  jr LE,0xfc7806
+Pack104_DispatchByResoMode_ForPart__FC7801:
 	ldw	hl, 50                                 ; FC7801  ld HL,0x0032
-	jr sub_FC7481__FC780D                      ; FC7804  jr T,0xfc780d
-sub_FC7481__FC7806:
+	jr Pack104_DispatchByResoMode_ForPart__FC780D                      ; FC7804  jr T,0xfc780d
+Pack104_DispatchByResoMode_ForPart__FC7806:
 	cps	hl, 0                                  ; FC7806  cp HL,0
-	jr ge, sub_FC7481__FC780D                  ; FC7808  jr GE,0xfc780d
-sub_FC7481__FC780A:
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC780D                  ; FC7808  jr GE,0xfc780d
+Pack104_DispatchByResoMode_ForPart__FC780A:
 	ldw	hl, 0                                  ; FC780A  ld HL,0x0000
-sub_FC7481__FC780D:
+Pack104_DispatchByResoMode_ForPart__FC780D:
 	ld	c, l                                    ; FC780D  ld C,L
 	ld	d, c                                    ; FC780F  ld D,C
 	ld	bc, (0xE084:24)                        ; FC7811  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7816  extz XBC
 	ld	(xbc+40), d                             ; FC7818  ld (XBC+0x28),D
-	jr sub_FC7481__FC7824                      ; FC781B  jr T,0xfc7824
-sub_FC7481__FC781D:
+	jr Pack104_DispatchByResoMode_ForPart__FC7824                      ; FC781B  jr T,0xfc7824
+Pack104_DispatchByResoMode_ForPart__FC781D:
 	ld	c, (xix+17)                             ; FC781D  ld C,(XIX+0x11)
 	extz	bc                                    ; FC7820  extz BC
 	ld	hl, bc                                  ; FC7822  ld HL,BC
-sub_FC7481__FC7824:
+Pack104_DispatchByResoMode_ForPart__FC7824:
 	ld	c, l                                    ; FC7824  ld C,L
 	ld	d, c                                    ; FC7826  ld D,C
 	ld	bc, (0xE084:24)                        ; FC7828  ld BC,(0x00e084)
@@ -8801,11 +9202,11 @@ sub_FC7481__FC7824:
 	srl	a, 2                                   ; FC7842  srl 0x02,A
 	extz	wa                                    ; FC7845  extz WA
 	cps	wa, 1                                  ; FC7847  cp WA,1
-	jr z, sub_FC7481__FC7851                   ; FC7849  jr Z,0xfc7851
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7851                   ; FC7849  jr Z,0xfc7851
 	cps	wa, 2                                  ; FC784B  cp WA,2
-	jr z, sub_FC7481__FC7876                   ; FC784D  jr Z,0xfc7876
-	jr sub_FC7481__FC78A3                      ; FC784F  jr T,0xfc78a3
-sub_FC7481__FC7851:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7876                   ; FC784D  jr Z,0xfc7876
+	jr Pack104_DispatchByResoMode_ForPart__FC78A3                      ; FC784F  jr T,0xfc78a3
+Pack104_DispatchByResoMode_ForPart__FC7851:
 	ld	c, (xix+18)                             ; FC7851  ld C,(XIX+0x12)
 	res	7, c                                   ; FC7854  res 0x07,C
 	extz	bc                                    ; FC7857  extz BC
@@ -8816,11 +9217,11 @@ sub_FC7481__FC7851:
 	ld	hl, bc                                  ; FC7866  ld HL,BC
 	add	hl, iy                                 ; FC7868  add HL,IY
 	cp	hl, 50                                  ; FC786A  cp HL,0x0032
-	jr gt, sub_FC7481__FC7895                  ; FC786E  jr GT,0xfc7895
+	jr gt, Pack104_DispatchByResoMode_ForPart__FC7895                  ; FC786E  jr GT,0xfc7895
 	cps	hl, 0                                  ; FC7870  cp HL,0
-	jr ge, sub_FC7481__FC78AD                  ; FC7872  jr GE,0xfc78ad
-	jr sub_FC7481__FC789E                      ; FC7874  jr T,0xfc789e
-sub_FC7481__FC7876:
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC78AD                  ; FC7872  jr GE,0xfc78ad
+	jr Pack104_DispatchByResoMode_ForPart__FC789E                      ; FC7874  jr T,0xfc789e
+Pack104_DispatchByResoMode_ForPart__FC7876:
 	ld	c, (xix+18)                             ; FC7876  ld C,(XIX+0x12)
 	res	7, c                                   ; FC7879  res 0x07,C
 	extz	bc                                    ; FC787C  extz BC
@@ -8831,22 +9232,22 @@ sub_FC7481__FC7876:
 	ld	hl, bc                                  ; FC788B  ld HL,BC
 	add	hl, iy                                 ; FC788D  add HL,IY
 	cp	hl, 50                                  ; FC788F  cp HL,0x0032
-	jr le, sub_FC7481__FC789A                  ; FC7893  jr LE,0xfc789a
-sub_FC7481__FC7895:
+	jr le, Pack104_DispatchByResoMode_ForPart__FC789A                  ; FC7893  jr LE,0xfc789a
+Pack104_DispatchByResoMode_ForPart__FC7895:
 	ldw	hl, 50                                 ; FC7895  ld HL,0x0032
-	jr sub_FC7481__FC78AD                      ; FC7898  jr T,0xfc78ad
-sub_FC7481__FC789A:
+	jr Pack104_DispatchByResoMode_ForPart__FC78AD                      ; FC7898  jr T,0xfc78ad
+Pack104_DispatchByResoMode_ForPart__FC789A:
 	cps	hl, 0                                  ; FC789A  cp HL,0
-	jr ge, sub_FC7481__FC78AD                  ; FC789C  jr GE,0xfc78ad
-sub_FC7481__FC789E:
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC78AD                  ; FC789C  jr GE,0xfc78ad
+Pack104_DispatchByResoMode_ForPart__FC789E:
 	ldw	hl, 0                                  ; FC789E  ld HL,0x0000
-	jr sub_FC7481__FC78AD                      ; FC78A1  jr T,0xfc78ad
-sub_FC7481__FC78A3:
+	jr Pack104_DispatchByResoMode_ForPart__FC78AD                      ; FC78A1  jr T,0xfc78ad
+Pack104_DispatchByResoMode_ForPart__FC78A3:
 	ld	c, (xix+18)                             ; FC78A3  ld C,(XIX+0x12)
 	res	7, c                                   ; FC78A6  res 0x07,C
 	extz	bc                                    ; FC78A9  extz BC
 	ld	hl, bc                                  ; FC78AB  ld HL,BC
-sub_FC7481__FC78AD:
+Pack104_DispatchByResoMode_ForPart__FC78AD:
 	ld	bc, hl                                  ; FC78AD  ld BC,HL
 	exts	xbc                                   ; FC78AF  exts XBC
 	add	xbc, 0xFE0296                          ; FC78B1  add XBC,0x00fe0296
@@ -8861,11 +9262,11 @@ sub_FC7481__FC78AD:
 	and	a, 3                                   ; FC78D0  and A,0x03
 	extz	wa                                    ; FC78D3  extz WA
 	cps	wa, 1                                  ; FC78D5  cp WA,1
-	jr z, sub_FC7481__FC78E0                   ; FC78D7  jr Z,0xfc78e0
+	jr z, Pack104_DispatchByResoMode_ForPart__FC78E0                   ; FC78D7  jr Z,0xfc78e0
 	cps	wa, 2                                  ; FC78D9  cp WA,2
-	jr z, sub_FC7481__FC7927                   ; FC78DB  jr Z,0xfc7927
-	jrl sub_FC7481__FC796D                     ; FC78DD  jrl T,0xfc796d
-sub_FC7481__FC78E0:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC7927                   ; FC78DB  jr Z,0xfc7927
+	jrl Pack104_DispatchByResoMode_ForPart__FC796D                     ; FC78DD  jrl T,0xfc796d
+Pack104_DispatchByResoMode_ForPart__FC78E0:
 	ld	c, (xix+22)                             ; FC78E0  ld C,(XIX+0x16)
 	res	7, c                                   ; FC78E3  res 0x07,C
 	extz	bc                                    ; FC78E6  extz BC
@@ -8890,8 +9291,8 @@ sub_FC7481__FC78E0:
 	ld	bc, (0xE084:24)                        ; FC791A  ld BC,(0x00e084)
 	extz	xbc                                   ; FC791F  extz XBC
 	ld	(xbc+28), hl                            ; FC7921  ld (XBC+0x1c),HL
-	jrl sub_FC7481__FC7991                     ; FC7924  jrl T,0xfc7991
-sub_FC7481__FC7927:
+	jrl Pack104_DispatchByResoMode_ForPart__FC7991                     ; FC7924  jrl T,0xfc7991
+Pack104_DispatchByResoMode_ForPart__FC7927:
 	ld	c, (xix+22)                             ; FC7927  ld C,(XIX+0x16)
 	res	7, c                                   ; FC792A  res 0x07,C
 	extz	bc                                    ; FC792D  extz BC
@@ -8916,8 +9317,8 @@ sub_FC7481__FC7927:
 	ld	bc, (0xE084:24)                        ; FC7961  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7966  extz XBC
 	ld	(xbc+28), hl                            ; FC7968  ld (XBC+0x1c),HL
-	jr sub_FC7481__FC7991                      ; FC796B  jr T,0xfc7991
-sub_FC7481__FC796D:
+	jr Pack104_DispatchByResoMode_ForPart__FC7991                      ; FC796B  jr T,0xfc7991
+Pack104_DispatchByResoMode_ForPart__FC796D:
 	ld	c, (xix+22)                             ; FC796D  ld C,(XIX+0x16)
 	res	7, c                                   ; FC7970  res 0x07,C
 	extz	bc                                    ; FC7973  extz BC
@@ -8930,24 +9331,24 @@ sub_FC7481__FC796D:
 	ld	wa, (0xE084:24)                        ; FC7987  ld WA,(0x00e084)
 	extz	xwa                                   ; FC798C  extz XWA
 	ld	(xwa+28), bc                            ; FC798E  ld (XWA+0x1c),BC
-sub_FC7481__FC7991:
+Pack104_DispatchByResoMode_ForPart__FC7991:
 	calr (0xFC46A8 - 0xFC7994)                 ; FC7991  calr 0xfc46a8
 	ld	xbc, (xiz-4)                            ; FC7994  ld XBC,(XIZ+0xfc)
 	ld	(xiz-8), xbc                            ; FC7997  ld (XIZ+0xf8),XBC
 	ld	d, (xbc+33)                             ; FC799A  ld D,(XBC+0x21)
 	cps	d, 0                                   ; FC799D  cp D,0
-	jr ge, sub_FC7481__FC79AD                  ; FC799F  jr GE,0xfc79ad
+	jr ge, Pack104_DispatchByResoMode_ForPart__FC79AD                  ; FC799F  jr GE,0xfc79ad
 	ld	c, d                                    ; FC79A1  ld C,D
 	exts	bc                                    ; FC79A3  exts BC
 	ld	hl, bc                                  ; FC79A5  ld HL,BC
 	neg	bc                                     ; FC79A7  neg BC
 	ld	hl, bc                                  ; FC79A9  ld HL,BC
-	jr sub_FC7481__FC79B3                      ; FC79AB  jr T,0xfc79b3
-sub_FC7481__FC79AD:
+	jr Pack104_DispatchByResoMode_ForPart__FC79B3                      ; FC79AB  jr T,0xfc79b3
+Pack104_DispatchByResoMode_ForPart__FC79AD:
 	ld	c, d                                    ; FC79AD  ld C,D
 	exts	bc                                    ; FC79AF  exts BC
 	ld	hl, bc                                  ; FC79B1  ld HL,BC
-sub_FC7481__FC79B3:
+Pack104_DispatchByResoMode_ForPart__FC79B3:
 	ld	bc, (0xE084:24)                        ; FC79B3  ld BC,(0x00e084)
 	extz	xbc                                   ; FC79B8  extz XBC
 	ld	a, (xbc+2)                              ; FC79BA  ld A,(XBC+0x02)
@@ -8955,11 +9356,11 @@ sub_FC7481__FC79B3:
 	srl	a, 4                                   ; FC79C0  srl 0x04,A
 	extz	wa                                    ; FC79C3  extz WA
 	cps	wa, 1                                  ; FC79C5  cp WA,1
-	jr z, sub_FC7481__FC79CF                   ; FC79C7  jr Z,0xfc79cf
+	jr z, Pack104_DispatchByResoMode_ForPart__FC79CF                   ; FC79C7  jr Z,0xfc79cf
 	cps	wa, 2                                  ; FC79C9  cp WA,2
-	jr z, sub_FC7481__FC79E7                   ; FC79CB  jr Z,0xfc79e7
-	jr sub_FC7481__FC7A01                      ; FC79CD  jr T,0xfc7a01
-sub_FC7481__FC79CF:
+	jr z, Pack104_DispatchByResoMode_ForPart__FC79E7                   ; FC79CB  jr Z,0xfc79e7
+	jr Pack104_DispatchByResoMode_ForPart__FC7A01                      ; FC79CD  jr T,0xfc7a01
+Pack104_DispatchByResoMode_ForPart__FC79CF:
 	ld	bc, (0xE082:24)                        ; FC79CF  ld BC,(0x00e082)
 	extz	xbc                                   ; FC79D4  extz XBC
 	ld	wa, (xbc+15)                            ; FC79D6  ld WA,(XBC+0x0f)
@@ -8967,8 +9368,8 @@ sub_FC7481__FC79CF:
 	ld	bc, (0xE084:24)                        ; FC79DB  ld BC,(0x00e084)
 	extz	xbc                                   ; FC79E0  extz XBC
 	ld	(xbc+30), wa                            ; FC79E2  ld (XBC+0x1e),WA
-	jr sub_FC7481__FC7A0B                      ; FC79E5  jr T,0xfc7a0b
-sub_FC7481__FC79E7:
+	jr Pack104_DispatchByResoMode_ForPart__FC7A0B                      ; FC79E5  jr T,0xfc7a0b
+Pack104_DispatchByResoMode_ForPart__FC79E7:
 	ld	bc, (0xE082:24)                        ; FC79E7  ld BC,(0x00e082)
 	extz	xbc                                   ; FC79EC  extz XBC
 	ld	wa, (xbc+15)                            ; FC79EE  ld WA,(XBC+0x0f)
@@ -8977,17 +9378,17 @@ sub_FC7481__FC79E7:
 	ld	wa, (0xE084:24)                        ; FC79F5  ld WA,(0x00e084)
 	extz	xwa                                   ; FC79FA  extz XWA
 	ld	(xwa+30), iy                            ; FC79FC  ld (XWA+0x1e),IY
-	jr sub_FC7481__FC7A0B                      ; FC79FF  jr T,0xfc7a0b
-sub_FC7481__FC7A01:
+	jr Pack104_DispatchByResoMode_ForPart__FC7A0B                      ; FC79FF  jr T,0xfc7a0b
+Pack104_DispatchByResoMode_ForPart__FC7A01:
 	ld	bc, (0xE084:24)                        ; FC7A01  ld BC,(0x00e084)
 	extz	xbc                                   ; FC7A06  extz XBC
 	ld	(xbc+30), hl                            ; FC7A08  ld (XBC+0x1e),HL
-sub_FC7481__FC7A0B:
+Pack104_DispatchByResoMode_ForPart__FC7A0B:
 	dec	1, e                                   ; FC7A0B  dec 1,E
 	extpfx7 0xD2, 0x84, 0xE0, 0x00, 0x38, 0x2A, 0x00 ; FC7A0D  add (0x00e084),0x002a
 	cps	e, 0                                   ; FC7A14  cp E,0
-	jrl nz, sub_FC7481__FC7590                 ; FC7A16  jrl NZ,0xfc7590
-sub_FC7481__FC7A19:
+	jrl nz, Pack104_DispatchByResoMode_ForPart__FC7590                 ; FC7A16  jrl NZ,0xfc7590
+Pack104_DispatchByResoMode_ForPart__FC7A19:
 	pop	xix                                    ; FC7A19  pop XIX
 	popw	de                                    ; FC7A1A  pop DE
 	popw	hl                                    ; FC7A1B  pop HL
@@ -9275,13 +9676,13 @@ sub_FC7B64__FC7C03:
 	unlk32 xiz                                 ; FC7C0A  unlk XIZ
 	ret                                        ; FC7C0C  ret
 ; --------------------------------------------------------------------------
-; sub_FC7C0D -- 0xFC7C0D..0xFC7CF8 (236 bytes)
+; Pack104_TickPositionMovement_ForVoice -- 0xFC7C0D..0xFC7CF8 (236 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFACB68 in sub_FACAB7__FACB5F
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00E084
-; Calls:   0xFC49AD = sub_FC49AD
+; Calls:   0xFC49AD = Pack104_StageRegs_00C0_0100_0240
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7C0D-0xFC7CF8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -9289,8 +9690,34 @@ sub_FC7B64__FC7C03:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_TickPositionMovement_ForVoice -- advances
+;          one voice's `P0SITI0N M0VEMENT` modulator by one tick and restages the
+;          three registers it moves.  With R = *(0x00E086) = 0x00753E +
+;          37*(XIZ+0x08) (0xFC7C2A) and 0x00E084 = R[+0x05] (0xFC7C34):
+;            R[+0x1C] run state, read at 0xFC7C44
+;                 == 1  run;  == 4  start (state <- 1, phase R[+0x1F] <- 0,
+;                                     0xFC7CC1-0xFC7CC9)
+;                 == 3  stop  (state <- 0, R[+0x21] <- 0, 0xFC7CD8-0xFC7CE0)
+;            running:  R[+0x1F] += R[+0x1E]          0xFC7C5D-0xFC7C6D
+;                      R[+0x1F] &= 0x01FF            0xFC7C7A   -- a 512-step phase
+;                      w = (s8) *(0x00FE02C9 + R[+0x1F])        0xFC7C91-0xFC7C99
+;                      R[+0x21] = w * R[+0x1D] / 50  0xFC7CA6-0xFC7CB4
+;            then call Pack104_StageRegs_00C0_0100_0240   0xFC7CE9
+; ★★ THIS IS the guide's `R[+0x21] = p17 * sine / 50`
+;          (notes/HLE-GUIDE-l7a1429.md section 5, row 0x00C0) implemented: the
+;          depth R[+0x1D] comes from p17 through PartRec_SetMovementDepth_0007 and
+;          the increment R[+0x1E] from p18 through PartRec_SetMovementRate_0009.
+;          It is also the 40.69 Hz rewrite of {0x00C0, 0x0100, 0x0240} that
+;          notes/FINDINGS-l7a1429-write-sequencing.md measured, seen from the
+;          producing side -- and it explains why those three and no others are
+;          periodic.
+; ★ 0x00FE02C9 is therefore a 512-entry signed movement WAVEFORM table.  It is
+;          in another file and was NOT renamed by this lane.
+; GRADE: PROVEN for the arithmetic, the phase width and the table address;
+;          STRONG for `P0SITI0N M0VEMENT`.
 ; --------------------------------------------------------------------------
-sub_FC7C0D:
+Pack104_TickPositionMovement_ForVoice:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FC7C0D  link XIZ,0xfffe
 	pushw	hl                                   ; FC7C11  push HL
 	pushw	de                                   ; FC7C12  push DE
@@ -9310,12 +9737,12 @@ sub_FC7C0D:
 	ld	(0xE084:24), wa                        ; FC7C34  ld (0x00e084),WA
 	sub	bc, bc                                 ; FC7C39  sub BC,BC
 	cp	wa, bc                                  ; FC7C3B  cp WA,BC
-	jrl z, sub_FC7C0D__FC7CF1                  ; FC7C3D  jrl Z,0xfc7cf1
+	jrl z, Pack104_TickPositionMovement_ForVoice__FC7CF1                  ; FC7C3D  jrl Z,0xfc7cf1
 	ld	bc, (xix)                               ; FC7C40  ld BC,(XIX)
 	extz	xbc                                   ; FC7C42  extz XBC
 	ld	h, (xbc+28)                             ; FC7C44  ld H,(XBC+0x1c)
 	cps	h, 1                                   ; FC7C47  cp H,1
-	jr nz, sub_FC7C0D__FC7CB9                  ; FC7C49  jr NZ,0xfc7cb9
+	jr nz, Pack104_TickPositionMovement_ForVoice__FC7CB9                  ; FC7C49  jr NZ,0xfc7cb9
 	ld	bc, (xix)                               ; FC7C4B  ld BC,(XIX)
 	extz	xbc                                   ; FC7C4D  extz XBC
 	ld	a, (xbc+30)                             ; FC7C4F  ld A,(XBC+0x1e)
@@ -9359,37 +9786,37 @@ sub_FC7C0D:
 	ld	wa, (xix)                               ; FC7CB0  ld WA,(XIX)
 	extz	xwa                                   ; FC7CB2  extz XWA
 	ld	(xwa+33), bc                            ; FC7CB4  ld (XWA+0x21),BC
-	jr sub_FC7C0D__FC7CE5                      ; FC7CB7  jr T,0xfc7ce5
-sub_FC7C0D__FC7CB9:
+	jr Pack104_TickPositionMovement_ForVoice__FC7CE5                      ; FC7CB7  jr T,0xfc7ce5
+Pack104_TickPositionMovement_ForVoice__FC7CB9:
 	cps	h, 4                                   ; FC7CB9  cp H,4
-	jr nz, sub_FC7C0D__FC7CD0                  ; FC7CBB  jr NZ,0xfc7cd0
+	jr nz, Pack104_TickPositionMovement_ForVoice__FC7CD0                  ; FC7CBB  jr NZ,0xfc7cd0
 	ld	bc, (xix)                               ; FC7CBD  ld BC,(XIX)
 	extz	xbc                                   ; FC7CBF  extz XBC
 	ld	(xbc+28), 1                             ; FC7CC1  ld (XBC+0x1c),0x01
 	ld	bc, (xix)                               ; FC7CC5  ld BC,(XIX)
 	extz	xbc                                   ; FC7CC7  extz XBC
 	extpfx5 0xB9, 0x1F, 0x02, 0x00, 0x00       ; FC7CC9  ld (XBC+0x1f),0x0000
-	jr sub_FC7C0D__FC7CDC                      ; FC7CCE  jr T,0xfc7cdc
-sub_FC7C0D__FC7CD0:
+	jr Pack104_TickPositionMovement_ForVoice__FC7CDC                      ; FC7CCE  jr T,0xfc7cdc
+Pack104_TickPositionMovement_ForVoice__FC7CD0:
 	cps	h, 3                                   ; FC7CD0  cp H,3
-	jr nz, sub_FC7C0D__FC7CF1                  ; FC7CD2  jr NZ,0xfc7cf1
+	jr nz, Pack104_TickPositionMovement_ForVoice__FC7CF1                  ; FC7CD2  jr NZ,0xfc7cf1
 	ld	bc, (xix)                               ; FC7CD4  ld BC,(XIX)
 	extz	xbc                                   ; FC7CD6  extz XBC
 	ld	(xbc+28), 0                             ; FC7CD8  ld (XBC+0x1c),0x00
-sub_FC7C0D__FC7CDC:
+Pack104_TickPositionMovement_ForVoice__FC7CDC:
 	ld	bc, (xix)                               ; FC7CDC  ld BC,(XIX)
 	extz	xbc                                   ; FC7CDE  extz XBC
 	extpfx5 0xB9, 0x21, 0x02, 0x00, 0x00       ; FC7CE0  ld (XBC+0x21),0x0000
-sub_FC7C0D__FC7CE5:
+Pack104_TickPositionMovement_ForVoice__FC7CE5:
 	ld	xbc, (xiz+10)                           ; FC7CE5  ld XBC,(XIZ+0x0a)
 	push	xbc                                   ; FC7CE8  push XBC
 	calr (0xFC49AD - 0xFC7CEC)                 ; FC7CE9  calr 0xfc49ad
 	pop	xiy                                    ; FC7CEC  pop XIY
 	ldb	a, 1                                   ; FC7CED  ld A,0x01
-	jr sub_FC7C0D__FC7CF3                      ; FC7CEF  jr T,0xfc7cf3
-sub_FC7C0D__FC7CF1:
+	jr Pack104_TickPositionMovement_ForVoice__FC7CF3                      ; FC7CEF  jr T,0xfc7cf3
+Pack104_TickPositionMovement_ForVoice__FC7CF1:
 	ld	a, l                                    ; FC7CF1  ld A,L
-sub_FC7C0D__FC7CF3:
+Pack104_TickPositionMovement_ForVoice__FC7CF3:
 	pop	xix                                    ; FC7CF3  pop XIX
 	popw	de                                    ; FC7CF4  pop DE
 	popw	hl                                    ; FC7CF5  pop HL
@@ -9402,7 +9829,7 @@ sub_FC7C0D__FC7CF3:
 ;          0xFB05D8 in ExtBoard_ProbeAndInstallBases__FB05CD
 ; Inputs:  frame `link XIZ,-10`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC40E6 = sub_FC40E6
+; Calls:   0xFC40E6 = Slot64Pool_InitAllFree
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7CF9-0xFC7DAE
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -9479,7 +9906,7 @@ sub_FC7CF9__FC7D5F:
 	unlk32 xiz                                 ; FC7DAC  unlk XIZ
 	ret                                        ; FC7DAE  ret
 ; --------------------------------------------------------------------------
-; sub_FC7DAF -- 0xFC7DAF..0xFC7E0F (97 bytes)
+; Pack104_StageReg_0000_ForVoice -- 0xFC7DAF..0xFC7E0F (97 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAC3CC in sub_FAC34D
@@ -9487,7 +9914,7 @@ sub_FC7CF9__FC7D5F:
 ;          0xFC3E91
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC405E = sub_FC405E, 0xFC40A9 = sub_FC40A9
+; Calls:   0xFC405E = Slot64Pool_AcquireOrAddRef, 0xFC40A9 = Slot64Pool_Release
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7DAF-0xFC7E0F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -9495,8 +9922,29 @@ sub_FC7CF9__FC7D5F:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+; Pack104_StageReg_0000_ForVoice -- gives one voice a
+;          slot out of the 64-entry pool and stages register chan+0x0000 from it.
+;          With R = *(0x00E086) = 0x00753E + 37*(XIZ+0x08) (0xFC7DC7):
+;            H = R[+0x07]; if H < 0x40 release it   Slot64Pool_Release, 0xFC7DD9
+;            R[+0x07] = Slot64Pool_AcquireOrAddRef(0x00FF)  0xFC7DE0, 0xFC7DE9
+;            struct+0x00 = R[+0x07] << 8            0xFC7DF7-0xFC7DFD
+;            then bit 2 SET                         0xFC7E01-0xFC7E07
+;          struct+0x00 is staging word 0 = register chan+0x0000.
+; ★★ 0xFC7DE9 is one of the two sites notes/HLE-GUIDE-l7a1429.md section 8.5
+;          lists as undecoded writers of register 0x0000; the other, 0xFC4D27, is
+;          the identical sequence in Pack104_SetInputs_SubRecordPair.  Both store
+;          a 0..63 index out of a 64-entry pool into R[+0x07], and the packer puts
+;          R[+0x07] in bits 15:8 of the register (0xFC4DE3-0xFC4DF1).  The guide
+;          reads bits 13:8 as the channel on the power-on path; this is the same
+;          field, allocated, on the note path.  Grade STRONG.
+;          ⚠ It is R[+0x07], not P[+0x07].  See Slot64Pool_AcquireOrAddRef for
+;          the correction that owes to the parameter-names note's section 6.
+;          The bit-2 set matches the guide's "bit 2 SET by every note event".
+; GRADE: PROVEN for the arithmetic and the destination; STRONG for the reading of
+;          bits 15:8.
 ; --------------------------------------------------------------------------
-sub_FC7DAF:
+Pack104_StageReg_0000_ForVoice:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC7DAF  link XIZ,0x0000
 	pushw	hl                                   ; FC7DB3  push HL
 	pushw	de                                   ; FC7DB4  push DE
@@ -9512,12 +9960,12 @@ sub_FC7DAF:
 	extz	xbc                                   ; FC7DCB  extz XBC
 	ld	h, (xbc+7)                              ; FC7DCD  ld H,(XBC+0x07)
 	cp	h, 64                                   ; FC7DD0  cp H,0x40
-	jr nc, sub_FC7DAF__FC7DDD                  ; FC7DD3  jr NC,0xfc7ddd
+	jr nc, Pack104_StageReg_0000_ForVoice__FC7DDD                  ; FC7DD3  jr NC,0xfc7ddd
 	push	0                                     ; FC7DD5  push 0x00
 	push	h                                     ; FC7DD7  push H
 	calr (0xFC40A9 - 0xFC7DDC)                 ; FC7DD9  calr 0xfc40a9
 	popw	bc                                    ; FC7DDC  pop BC
-sub_FC7DAF__FC7DDD:
+Pack104_StageReg_0000_ForVoice__FC7DDD:
 	pushw	0xFF                                 ; FC7DDD  push 0x00ff
 	calr (0xFC405E - 0xFC7DE3)                 ; FC7DE0  calr 0xfc405e
 	ld	h, a                                    ; FC7DE3  ld H,A
