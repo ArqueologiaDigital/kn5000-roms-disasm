@@ -20,6 +20,375 @@
 ; channel count at 64 with a literal loop counter.
 ; ⚠ The names stay Dev10C_/Dev104_.  See the header of this file.
 ;
+;
+; ==============================================================================
+; ★★ WAVE 17, 2026-09-03 -- THE 0x00104000 REGISTER MAP, THE PART RECORD THAT
+;    FEEDS IT, AND THE SIGNAL FLOW FROM A NOTE-ON TO THESE WRITES
+; ==============================================================================
+; ADDED, not replacing.  Everything already in this file stands; this section
+; puts the per-register map in one place and grades every line of it.
+; Every number below is an assertion in
+;     python3 notes/prom_c_dev104_regmap_checks.py --selftest      FAILURES: 0
+; which reads original_ROMs/wsa1_prom_c.ic28 and no .s file.
+;
+; ------------------------------------------------------------------------------
+; 0. WHERE THE LINE BETWEEN MEASUREMENT AND INFERENCE RUNS
+; ------------------------------------------------------------------------------
+; ⚠ DECLARED INFERENCE, held over from the driver work and NOT strengthened here:
+;   that 0x00104000 is the ACOUSTIC MODELLING section.  What supports it is that
+;   it is the only per-channel synthesis device CPU 2 commands that has no
+;   counterpart in the PCM sibling, the KN5000, and that the MAME driver models
+;   it as `l7a1429_device`.  NO WSA1R ROM NAMES ANY PART.  Nothing below is
+;   evidence for that reading and nothing below depends on it.
+;
+; ★ MEASURED, and the only thing this section asserts: what the firmware WRITES.
+;   Every row of the map is (register number, width, value expression), and the
+;   value expression is decoded from the instructions that compute it.
+;
+; ⚠ AND THE STANDING LIMIT IS UNCHANGED.  "No executable payload crosses
+;   0x00104000" is a claim about the BUS -- no opaque byte stream, no handshake,
+;   no micro-DMA channel, a fixed destination set, `block*0x40 + channel`
+;   numbering, values from a packed record.  A modelling engine with fixed
+;   on-die microcode exposing only coefficients produces exactly this traffic.
+;   ★ WAVE 17 ADDS ONE MEASUREMENT ON THAT POINT, not a verdict: the whole image
+;   holds NINE `ld X??,0x00104000` literals -- eight in this block and one in
+;   Dev10C_ResetAllChannels -- and NOT ONE OF THEM READS THE DEVICE.  The
+;   companion 0x0010C000 has a documented read port at +0x04 and a dedicated
+;   read accessor (Dev10C_ReadChanReg_0100, 0xFC7E57); 0x00104000 has neither.
+;   A write-only parameter port is consistent with the coefficient reading and
+;   is NOT proof of it.  Checker section 3.
+;
+; ------------------------------------------------------------------------------
+; 1. THE ADDRESSING SCHEME
+; ------------------------------------------------------------------------------
+;   0x00104000 + 0x00   write   16-bit REGISTER NUMBER          (select)
+;   0x00104000 + 0x02   write   that register's 16-bit VALUE    (data)
+;   0x00104000 + 0x04   -- no located access.  ⚠ NOT "absent"; not found.
+;
+;   register number = block * 0x40 + channel
+;
+; PROVEN, by Dev104_WriteAllChanRegs's own instructions: eighteen `add BC/DE,K`
+; immediates, every K a multiple of 0x40, running 0x0040..0x0480 with no gap,
+; each followed by `ld BC/DE,(XIX + 2*K/0x40)` -- so the struct field is exactly
+; twice the block index over all eighteen, and block 0 is the channel with no
+; arithmetic at all.  Checker section 1 re-derives the walk and asserts the LAST
+; pair (0x0480 <- 0x24) as well as the first.
+;
+; ★ THE EIGHT BLOCKS THE SMALL ACCESSORS TOUCH are 0x00C0, 0x0100, 0x0140,
+;   0x0180, 0x01C0, 0x0200, 0x0240 and 0x0280 -- exactly 0x40 apart, first to
+;   last, 0x0280 - 0x00C0 = 7 * 0x40 (checker section 2).  Plus block 0 on its
+;   own, which Dev104_WriteChanReg0 isolates and which is written LAST by the
+;   full writer and FIRST by the two multi-register accessors.
+;   ⚠ 64 channels per block is NOT established for THIS device.  It is
+;   established for 0x0010C000 (Dev10C_ResetAllChannels's literal loop counter);
+;   here the only bound is that the blocks are 0x40 apart, which is where a
+;   channel field of six bits would have to stop.
+;
+; ------------------------------------------------------------------------------
+; 2. THE 19-REGISTER PER-CHANNEL MAP
+; ------------------------------------------------------------------------------
+; All nineteen are 16 BITS: every store into the staging struct and every store
+; to the data port is a word store.  `chan` is the raw channel argument.
+;
+; Names used below, each a pointer this code dereferences and nothing more:
+;   PART  = *(0x00E082)   187-byte part record,   0x005D23 + 187 * part
+;   P     = *(0x00E084)    42-byte sub-record,    PART + 0x13 + 42 * n
+;   Q     = *(P + 0x03)    the TONE record P points at (frame slot XIZ-4)
+;   R     = *(0x00E086)    37-byte per-voice record, 0x00753E + 37 * m
+;   key   = voice[+0x0C] & 0x7F   at 0x00E088 -- the 0..127 LinCoef index
+;   Q5(T,d)  = (T[key'] * |d|) >> 5, with key' = 0x7F-key and the sign folded
+;              when d < 0; 32 = 1.0.  Six sites, four tables (checker s.10).
+;   SatAsym(x) = signed add, +overflow -> 0x7FFF, -overflow -> 0x0000
+;
+;  reg          word  value the firmware writes                        grade
+;  -----------  ----  -------------------------------------------  ------------
+;  chan+0x0000  0x00  (R[+0x07] << 8) | P[+0x07], then bit 7        PROVEN as
+;                     CLEARED (0xFC51E6) when bits 6..4 are         arithmetic;
+;                     non-zero.  Written LAST by the full writer,   MEANING
+;                     FIRST by the two multi-register accessors.    UNIDENTIFIED
+;                     Its own bits 6..4 gate register 0x0300.
+;  chan+0x0040  0x02  SatAsym(P[+0x0A] + P[+0x12] + d1)             PROVEN /
+;                       d1 = +(voice[+0x08] - voice[+0x0A])         UNIDENTIFIED
+;                            if bit 7 of Q[+0x16]
+;                          = -R[+0x0C]  otherwise
+;  chan+0x0080  0x04  SatAsym(P[+0x0C] + P[+0x14] + d2), the same   PROVEN /
+;                     rule with the selector bit 7 of Q[+0x20].     UNIDENTIFIED
+;                     ⚠ P[+0x12] is exactly 8 bytes after P[+0x0A]
+;                     and P[+0x14] 8 after P[+0x0C]: two copies of
+;                     one (base, offset) pair.
+;  chan+0x00C0  0x06  Curve_Log2_251[clamp(R[+0x12]+R[+0x16]        PROVEN as
+;                     +R[+0x21], 0..250)]                           arithmetic;
+;                     + (0x4280 - R[+0x0E])  unless bit 7 of        LOG-DOMAIN
+;                       (*(R[+0x01]))[+0x0E]                        WITH A
+;                     - R[+0x0C]                                    KEY-FOLLOW
+;                     then forced to 0x0000 or 0x7F00 on a          TERM: STRONG
+;                     negative result (0xFC4A2B).  In sub_FC49AD.
+;  chan+0x0100  0x08  Const_0100_251[the SAME index] -- and that    PROVEN: a
+;                     table is 0x0100 in all 251 entries.           CONSTANT on
+;                                                                   this firmware
+;  chan+0x0140  0x0A  Curve_Exp2Decay_256[i1] & 0xFFF8, or 0x0000   PROVEN /
+;                     when bit 0 of (0x00E089) is set.              UNIDENTIFIED
+;  chan+0x0180  0x0C  Curve_Exp2Decay_256[i2] & 0xFFF8, same gate.  PROVEN /
+;                                                                   UNIDENTIFIED
+;       i1 = clampU8( 0xCF - g(v1) + (int8)(0x00E08C) ),  g(v) = v<48 ? v/2+24 : v
+;       v1 = clamp( Q5(LinCoef_FE0116, Q[+0x17]) + P[+0x16], 0 .. PART[+0x11] )
+;       i2, v2: the same with Q[+0x22] and P[+0x18].
+;  chan+0x01C0  0x0E  high 16 bits of                               PROVEN /
+;                       fold(word 16) * Curve_Exp2Rise_128[         UNIDENTIFIED
+;                         clamp(v1, 0..PART[+0x11]) ]
+;                     fold(x) = (x & 0x8000) ? 0x8000-(x & 0x7FFF)
+;                                            : x + 0x8000
+;                     -- so register 0x01C0 is register 0x0400's
+;                     word, sign-folded, SCALED by a rising
+;                     exponential of the same v1 that scales 0x0140.
+;  chan+0x0200  0x10  the same, with v2 and word 17 (reg 0x0440).   PROVEN /
+;                                                                   UNIDENTIFIED
+;  chan+0x0240  0x12  ( high16( fold(R[+0x1A]) * Curve_Exp2Rise_128 PROVEN /
+;                       [clamp(R[+0x14]+R[+0x18]+|R[+0x21]|/4,      UNIDENTIFIED
+;                        0..0x7F)] ) & 0xFFF8 ) | 7.  In sub_FC49AD;
+;                     R[+0x1A] is P[+0x26], i.e. word 18's value.
+;  chan+0x0280  0x14  Curve_Exp2Decay_101[clamp(R[+0x10]+R[+0x23],  PROVEN /
+;                     0..100)].  In sub_FC4AED.                     UNIDENTIFIED
+;  chan+0x02C0  0x16  the literal 0xFF00.  ALWAYS -- it is the only PROVEN
+;                     value any instruction ever puts in word 11
+;                     (0xFC51AD; the Stage_B image patches the same
+;                     0xFF00 at 0xFC577A).
+;  chan+0x0300  0x18  b = ExpCurve_0_to_0x80[Q[+0x13]];             PROVEN /
+;                     value = (b << 8) | b   -- one byte in BOTH    UNIDENTIFIED
+;                     halves -- and 0x0000 when word 0's bits 6..4
+;                     are clear.
+;  chan+0x0340  0x1A  Curve_FE05C9[i3]                              PROVEN /
+;  chan+0x0400  0x20  Curve_FE04C9[i3]   -- the SAME index          UNIDENTIFIED
+;  chan+0x0380  0x1C  Curve_FE05C9[i4]                              PROVEN /
+;  chan+0x0440  0x22  Curve_FE04C9[i4]   -- the SAME index          UNIDENTIFIED
+;       i3 = clamp( ks(Q,0x19) + Q5(LinCoef_FE0196, Q[+0x18]) + P[+0x1A],
+;                   Table_FDFF96[(0x00E08C)] .. PART[+0x12] )
+;       i4 = clamp( ks(Q,0x25) + Q5(LinCoef_FE0196, Q[+0x23]) + P[+0x1C],
+;                   the same bounds )
+;  chan+0x03C0  0x1E  P[+0x24], copied straight through (0xFC56BA). PROVEN /
+;                                                                   UNIDENTIFIED
+;  chan+0x0480  0x24  P[+0x26], via R[+0x1A] (0xFC567F, 0xFC568F).  PROVEN /
+;                                                                   UNIDENTIFIED
+;
+; ★ ks(Q, o) IS A KEY-SCALING STAGE, and it is worth naming because the shape is
+;   unambiguous even though the quantity it scales is not:
+;
+;       if bit 7 of Q[+o]:  0
+;       else:  note = voice[+0x08] >> 8                 the NOTE NUMBER
+;              note = min(note, Q[+o+2]) then max(note, Q[+o+1])
+;              result = ( Q[+o+3] * (note - Q[+o]) ) >> 5
+;
+;   -- a breakpoint, a low and a high bound, and a Q5 slope, over a value that is
+;   a pitch word divided by 256.  The unit is §2 of
+;   notes/FINDINGS-prom_c-dev10c-register-meanings.md: the pitch chain's word is
+;   1/256 of a semitone, so `>> 8` is the note.  There are TWO of these,
+;   o = 0x19 and o = 0x25.  Grade STRONG: the arithmetic is PROVEN and the unit
+;   of its input rests on that note's derivation, not on this one.
+;
+; ★ AND 0x4280 -- note 66 with the half-step centre 0x80 -- IS A PIVOT ON BOTH
+;   DEVICES.  The immediate occurs in exactly FOUR instruction operands in the
+;   whole image: three on the 0x0010C000 pitch chain (0xFA80C7, 0xFA80D8,
+;   0xFA80DF, the key-follow pivot §2 already documents) and ONE at 0xFC4A18,
+;   inside sub_FC49AD, on the way to 0x00104000 register 0x00C0 + chan.  Two
+;   devices, one reference note, and the census is exhaustive rather than a
+;   sighting (checker section 9).
+;
+; ⚠ WHAT REMAINS UNIDENTIFIED, plainly: SEVENTEEN of the nineteen registers.
+;   Only 0x0100 (a constant) and 0x02C0 (a constant) have a value this image
+;   fixes; every other row above says how the number is BUILT and not what it
+;   IS.  What would settle it is a reader -- and there is none: nothing in prom_c
+;   reads this device back, and the sibling argument that named five 0x0010C000
+;   registers is unavailable here because the KN5000 has no counterpart device.
+;   The remaining routes are (a) the tone-editor UI, which must display these
+;   parameters under names, and (b) the ROM's own localisation strings.
+;
+; ------------------------------------------------------------------------------
+; 3. THE RECORDS, AS C STRUCTS
+; ------------------------------------------------------------------------------
+; ⚠⚠ TWO DIFFERENT RECORDS ARE CALLED "THE PART RECORD" IN THIS TREE, and mixing
+; them is exactly the class of error that has already forced retractions here:
+;
+;   * the 300-byte record at RAM 0x001523, stride 0x012C, that the MIDI
+;     controller handlers write -- notes/FINDINGS-prom_c-dev10c-register-
+;     meanings.md §1 calls that one "the part record";
+;   * the 187-byte record at RAM 0x005D23, stride 0xBB, that
+;     Pack104_SetInputs_PartRecord selects.
+;
+; ONLY THE SECOND FEEDS 0x00104000.  Nothing in the packer reads 0x001523.
+;
+;   /* selected by Pack104_SetInputs_PartRecord(part) -> (0x00E082).
+;      base 0x005D23, stride 0xBB = 187.  Only the fields this path reads are
+;      listed; the rest of the 187 bytes is not touched by the packer. */
+;   struct Part104 {                              /* consumer */
+;     u8   present;              /* +0x00  early-out if zero    Pack104_SetInputs_PartRecord 0xFC4BED */
+;     u8   _pad01[0x10];         /* +0x01  UNIDENTIFIED */
+;     u8   depth_clamp_hi;       /* +0x11  upper clamp on v1/v2 Dev104_PackStagingStruct 0xFC4FB0, 0xFC506D,
+;                                                               0xFC5330, 0xFC54A6 */
+;     u8   index_clamp_hi;       /* +0x12  upper clamp on i3/i4 0xFC52C3, 0xFC5439 */
+;     struct Part104Voice sub[4];/* +0x13  4 x 42 = 168 bytes; 187 - 19 = 168 exactly */
+;     /* the two pointers below OVERLAP sub[] and are read by the selector, not
+;        by the packer -- stated as measured, not reconciled: */
+;     /* u32 obj16  @ +0x16      Pack104_SetInputs_PartRecord 0xFC4C03 */
+;     /* u32 obj40  @ +0x40      Pack104_SetInputs_PartRecord 0xFC4C18 */
+;   };
+;
+;   /* selected by Pack104_SetInputs_SubRecordPair(n) -> (0x00E084) =
+;      (0x00E082) + 0x2A*n + 0x13.  42 bytes. */
+;   struct Part104Voice {                         /* register it feeds */
+;     u8   _pad00[3];            /* +0x00  UNIDENTIFIED */
+;     u32  tone;                 /* +0x03  -> Q, the tone record        (all of them) */
+;     u16  reg0000_low;          /* +0x07  low byte of chan+0x0000      0x0000 */
+;     u16  base_A;               /* +0x0A  base   of chan+0x0040        0x0040 */
+;     u16  base_B;               /* +0x0C  base   of chan+0x0080        0x0080 */
+;     u8   _pad0E[4];            /* +0x0E  UNIDENTIFIED */
+;     u16  offset_A;             /* +0x12  offset of chan+0x0040, 8 after base_A */
+;     u16  offset_B;             /* +0x14  offset of chan+0x0080, 8 after base_B */
+;     u16  depth_bias_A;         /* +0x16  added to v1                  0x0140, 0x01C0 */
+;     u16  depth_bias_B;         /* +0x18  added to v2                  0x0180, 0x0200 */
+;     u16  index_bias_A;         /* +0x1A  added to i3                  0x0340, 0x0400 */
+;     u16  index_bias_B;         /* +0x1C  added to i4                  0x0380, 0x0440 */
+;     u16  to_R23;               /* +0x1E  -> R[+0x23]                  0x0280 */
+;     u16  to_R16;               /* +0x20  -> R[+0x16]                  0x00C0 */
+;     u16  to_R18;               /* +0x22  -> R[+0x18]                  0x0240 */
+;     u16  reg03C0;              /* +0x24  copied through               0x03C0 */
+;     u16  reg0480;              /* +0x26  -> R[+0x1A], then through    0x0480, 0x0240 */
+;     u8   rand_depth;           /* +0x28  * sine / 50 -> R[+0x21]      0x00C0, 0x0240 */
+;     u8   mode;                 /* +0x29  tested with +0x28 to pick R[+0x1C] = 0/1/2 */
+;   };
+;
+;   /* *(Part104Voice.tone).  Every field below is read through the frame slot
+;      (XIZ-4) that Dev104_PackStagingStruct loads at 0xFC4DCB. */
+;   struct Tone104 {                              /* register it feeds */
+;     s8   lincoef_depth_R12;    /* +0x10  Q5 x LinCoef_FE0096 -> R[+0x12]  0x00C0 */
+;     u8   mode_bit7;            /* +0x12  bit 7 picks the R[+0x1C] arm */
+;     u8   reg0300_index;        /* +0x13  -> ExpCurve_0_to_0x80         0x0300 */
+;     u8   delta_sel_A;          /* +0x16  bit 7 picks d1's form         0x0040 */
+;     s8   depth_v1;             /* +0x17  Q5 x LinCoef_FE0116           0x0140, 0x01C0 */
+;     s8   depth_i3;             /* +0x18  Q5 x LinCoef_FE0196           0x0340, 0x0400 */
+;     u8   ks_break_i3;          /* +0x19  breakpoint; bit 7 DISABLES */
+;     u8   ks_lo_i3;             /* +0x1A  lower note bound */
+;     u8   ks_hi_i3;             /* +0x1B  upper note bound */
+;     s8   ks_slope_i3;          /* +0x1C  Q5 slope */
+;     u8   delta_sel_B;          /* +0x20  bit 7 picks d2's form         0x0080 */
+;     s8   depth_v2;             /* +0x22  Q5 x LinCoef_FE0116           0x0180, 0x0200 */
+;     s8   depth_i4;             /* +0x23  Q5 x LinCoef_FE0196           0x0380, 0x0440 */
+;     s8   depth_R10;            /* +0x24  Q5 x LinCoef_FE0216 -> R[+0x10] 0x0280 */
+;     u8   ks_break_i4;          /* +0x25  breakpoint; bit 7 DISABLES */
+;     u8   ks_lo_i4;             /* +0x26 */
+;     u8   ks_hi_i4;             /* +0x27 */
+;     s8   ks_slope_i4;          /* +0x28  Q5 slope */
+;   };
+;
+; ⚠ THE FIELD NAMES ABOVE ARE ROLE NAMES INSIDE THE ARITHMETIC, NOT PARAMETER
+;   NAMES.  `depth_v1` says "this byte is the Q5 depth in the expression that
+;   builds v1"; it does not say what v1 is a depth OF.  Where even that much is
+;   not readable the field is `_padNN` and says UNIDENTIFIED.
+;
+; ★ THE PAIRING IS THE STRONGEST STRUCTURAL SIGNAL IN THE MAP.  Sixteen of the
+;   nineteen registers fall into eight A/B pairs -- (0x0040, 0x0080),
+;   (0x0140, 0x0180), (0x01C0, 0x0200), (0x0340, 0x0380), (0x0400, 0x0440) --
+;   built by the same code twice over two field sets 2, 2, 8 and 0x0B bytes
+;   apart.  [INFERENCE, stated as such] two parallel generators per channel is
+;   what that shape is.  Nothing here decides what they generate.
+;
+; ------------------------------------------------------------------------------
+; 4. THE STAGING STRUCT, AND WHO FILLS IT
+; ------------------------------------------------------------------------------
+;   struct Dev104Staging { u16 w[19]; };   /* RAM 0x00D7A2, 38 bytes */
+;
+; PROVEN that 0x00D7A2 is this device's struct: VoiceRegs_Stage_A pushes it to
+; Dev104_PackStagingStruct at 0xFB0B5B and pushes the SAME literal to
+; Dev104_WriteAllChanRegs ten bytes later at 0xFB0B65 (checker section 7).
+;
+; Nineteen words, TWENTY-FOUR stores:
+;   * 20 in Dev104_PackStagingStruct itself, covering 15 offsets;
+;   * 3 in sub_FC49AD, covering +0x06, +0x08 and +0x12;
+;   * 1 in sub_FC4AED, covering +0x14.
+; Checker section 4 asserts each one by its bytes and that the union is exactly
+; {0x00, 0x02, ... 0x24}.
+;
+; ⚠⚠ A CORRECTION TO THE PRODUCER INDEX, and it changes three published counts.
+;   `python3 notes/prom_c_dev10c_field_sources.py --dev104` lists nineteen
+;   "struct" writes.  FOUR OF THEM ARE NOT STRUCT WRITES:
+;
+;       0xFC5522   ld (XWA+0x1c),0x01
+;       0xFC55AF   ld (XWA+0x1d),H
+;       0xFC55C5   ld (XWA+0x1e),H
+;       0xFC5657   ld (XWA+0x14),BC
+;
+;   Every one of the four loads its base with `ld WA,(0x00e086)` -- the ABSOLUTE
+;   global -- where every real struct store loads `ld X??,(XIZ+0x08)`, the
+;   routine's only argument.  The four write the 37-byte record R, not the
+;   struct.  Consequences, all asserted by checker section 5:
+;     * the packer writes 15 struct offsets by its own instructions, not 16;
+;     * `+0x1D` is NOT a struct offset at all, so the "one high-byte write" in
+;       the round-6 correction above Dev104_PackStagingStruct does not exist;
+;     * `+0x16` IS written by the packer (0xFC51AA, the literal 0xFF00), against
+;       that same correction's list of four fields it "does not write".
+;   ⚠ REPORTED, NOT EDITED: the sentences this contradicts are in
+;   prom_c/field_accessors.s and notes/FINDINGS-prom_c-dev10c-producers.md §3,
+;   which this lane does not own.
+;
+; ★ AND THE SCANNER MISSES FIVE REAL ONES, in the class its own docstring warns
+;   about: 0xFC50D5 and 0xFC50DD (`ld (XBC+0x0a),0x0000`, `ld (XBC+0x0c),0x0000`),
+;   0xFC51AD (0xFF00), 0xFC51EF (0x0000) and the read-modify-write 0xFC51E6
+;   (`and (XBC),0xff7f`) -- all extended-prefix immediate forms.
+;
+; ------------------------------------------------------------------------------
+; 5. SIGNAL FLOW: FROM A NOTE-ON TO THESE REGISTER WRITES
+; ------------------------------------------------------------------------------
+; What a "part record" is, in this image: the parameter set of one of the
+; instrument's parts, 187 bytes, holding four 42-byte sub-records, each of which
+; points at a tone record.  A note-on selects one part record and one sub-record,
+; a voice allocation gives the note a CHANNEL, and the packer turns the pair
+; (sub-record, voice state) into the nineteen words this device is then handed.
+;
+;   MidiNote_OnByPartMode / MidiNote_OnTail / MidiNote_OffTail
+;     |
+;     |-- Pack104_SetInputs_PartRecord(part)
+;     |       (0x00E082) = 0x005D23 + 187*part          the PART for this note
+;     |
+;     |-- Pack104_SetInputs_SubRecordPair(n, m)
+;     |       (0x00E084) = (0x00E082) + 42*n + 0x13     one of the four sub-records
+;     |       (0x00E086) = 0x00753E + 37*m              the per-voice record R
+;     |
+;     `-- VoiceRegs_Stage_A(voice)            [_C and _D likewise; _B does NOT]
+;           |
+;           |-- Pack104_SetInputs_E088_E089_E08A(voice[+0x03], voice[+0x08],
+;           |         voice[+0x0C], *(voice[+0x1F]))
+;           |       (0x00E088) = voice[+0x0C] & 0x7F    the 0..127 LinCoef key
+;           |       (0x00E08A) = voice[+0x08]           a pitch word
+;           |       (0x00E089) = *(voice[+0x1F])[0]     bit 0 gates 0x0140/0x0180
+;           |
+;           |-- ~20 Voice_* helpers fill the OTHER device's staging struct at
+;           |     0x00D75E; one of them, Voice_SelectKeyZone_Reg0040, also calls
+;           |     Pack104_SetInputs_Rec0C_E08C, which is how the key-zone record
+;           |     reaches THIS device (see below)
+;           |
+;           |-- Pack104_SetInputs_Rec0E_E08D(voice[+0x06], voice[+0x0A])
+;           |       R[+0x0E]   = voice[+0x06]           the key-followed pitch
+;           |       (0x00E08D) = voice[+0x0A]           pitch + zone offset
+;           |
+;           |-- Dev104_PackStagingStruct(&Dev104Staging)      0x00D7A2
+;           |-- Dev104_WriteAllChanRegs(voice, &Dev104Staging) -> 0x00104000
+;           |-- Dev10C_WriteAllChanRegs(voice, 0x00D75E)       -> 0x0010C000
+;
+; ★ ONE RECORD FIELD REACHES BOTH DEVICES, and it is checkable (section 8).  The
+;   key-zone record's word +0x06 -- what the played note selects out of the zone
+;   array -- is stored to RAM 0x005A4F, where the 0x0010C000 pitch chain adds it
+;   (Voice_PitchAddZoneOffset_*), AND pushed to Pack104_SetInputs_Rec0C_E08C,
+;   which puts it in R[+0x0C], which this device's packer SUBTRACTS from register
+;   0x00C0 (0xFC4A29) and NEGATES as the delta for registers 0x0040 and 0x0080
+;   (0xFC4E72).  The same zone byte +0x05 becomes (0x00E08C), the index into
+;   Table_FDFF96 that lower-bounds i3 and i4.
+;
+; ★ AND ONE PATH SKIPS THE PACKER ENTIRELY.  VoiceRegs_Stage_B calls
+;   Dev104_LoadStageBImage instead: 38 bytes = 19 words copied from
+;   Dev104_StagingStruct_StageBImage (0xFE1315) with five fields patched.  On
+;   that path the nineteen registers are a ROM IMAGE, not a computation, which
+;   is the cheapest possible starting point for an emulator.  Checker s.12.
+;   Unknown: what selects the Stage_B path.
+;
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================
@@ -328,6 +697,27 @@ Dev10C_ChanMinus2_ClrReg_0080_Bit15__FB6F26:
 ;          A hold time is the obvious reading and nothing here supports it.
 ;          Also unknown: what this routine is FOR.  It is left `sub_` rather than
 ;          given a plausible name.
+; ★ WAVE 17, 2026-09-03 -- WHY THIS LABEL IS STILL AN ADDRESS.
+; Round 12 refused to name this routine and the five others in its bucket S3, on a
+; CALIBRATED rule: `notes/prom_c_finish_round12.py --regblocks` reproduces the
+; register-block half of 36 already-named accessors and then declines to apply it
+; here, because "a register-block set names an ACCESSOR" and every one of the six is
+; larger than every member of the calibration set.  That refusal stands.
+; What HAS changed since is that rounds 7 and 9 named the registers this routine
+; touches, so its BEHAVIOUR can now be stated in named terms even though its label
+; cannot: block 0x0080 is the OUTPUT LEVEL with bit 15 as the gate the firmware
+; pulses 1-then-0 around a parameter update, and blocks 0x0900/0x0940/0x0980 are
+; three of the ten byte-pair registers.  In those terms this routine, for a channel
+; the record word says is "loaded", re-issues the channel's last output-level word
+; with the GATE HIGH five times, drops the loaded bit, re-issues it with the GATE
+; LOW once, and then writes the three 0x09xx registers from 0x0000E21D + 2*chan.
+; PROPOSED NAME, graded WEAK and NOT APPLIED: `Dev10C_ChanRegateAndSet_09xx`.
+; ⚠ WEAK because nothing establishes what a gate pulse with no parameter change
+; between the edges does, and "re-gate" is a description of the write pattern, not
+; of an effect.  What would settle it: a reader of block 0x0080, or the meaning of
+; the 0x0000E21D array.  Adopting it would also need the `Calls:` citations in
+; prom_c/wsa1_prom_c.s and prom_c/midi/midi_controllers.s updated, and
+; notes/prom_c_finish_round12.py's `regblocks("sub_FB762F")` check re-pointed.
 ; --------------------------------------------------------------------------
 sub_FB6F2C:
 	link32 0xEE, 0x0C, 0xF2, 0xFF          ; FB6F2C  link XIZ,0xfff2   [llvm-mc cannot encode this]
@@ -521,6 +911,14 @@ Dev10C_SetChanReg_0080_ClrBit15:
 ;          The four (block, field) pairs are the same four
 ;          Dev10C_WriteAllChanRegs uses for words 11, 16, 17 and 18.
 ; Unknown:  as sub_FB6F2C; and why this one has no entry guard.
+; ★ WAVE 17, 2026-09-03 -- as sub_FB6F2C above, and refused for the same reason.
+; In the named terms of rounds 7 and 9: five gate-high re-issues of the output-level
+; word, the loaded bit dropped, one gate-low re-issue, then FOUR registers written
+; from the caller's staging struct -- 0x0500 from word 11 and 0x0900/0x0940/0x0980
+; from words 16/17/18, which are exactly the four Dev10C_WriteAllChanRegs uses for
+; those words.  So this is the struct-driven twin of sub_FB6F2C, without the entry
+; guard.  PROPOSED NAME, graded WEAK and NOT APPLIED:
+; `Dev10C_ChanRegateAndSet_0500_09xx_FromStruct`.  Same caveat, same blocker.
 ; --------------------------------------------------------------------------
 sub_FB707E:
 	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FB707E  link XIZ,0xfff8   [llvm-mc cannot encode this]
@@ -1500,6 +1898,48 @@ Dev10C_SetChanReg_0180_FromArg:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 17, 2026-09-03 -- DECODED.  This header is the auto-generated boilerplate
+; ("Unknown: what the routine is FOR"); the routine is in fact a short, fully
+; readable per-channel sequence, and the decode is below.  The label is left as an
+; address for the reason given above sub_FB6F2C: round 12's refusal of bucket S3.
+;
+; Arguments: (XIZ+0x08) = chan; (XIZ+0x0A) = XIX, a struct pointer; (XIZ+0x0E) = HL,
+; a 16-bit RECORD pointer.  That third argument is the per-channel record array at
+; 0x00003BCF: this routine sends HL[+0x29] to register block 0, and 0xFADF40 ->
+; Dev10C_WriteReg does the same thing with (0x3BCF + 0x44*chan)[+0x29] -- the same
+; field to the same block, from two different routines.
+;
+; The writes, in execution order, from the (select, data) pairs at the addresses
+; shown:
+;     0xFB7542/54  register chan + 0x0800 = rec[+0x39]
+;     0xFB7559/5E  register chan + 0x0000 = 0x8100        the same literal the
+;                                                          second accessor bank writes
+;     0xFB756E/76  register chan + 0x0840 = rec[+0x3B]  ) four times, the same
+;     0xFB757E/86        "               = rec[+0x3B]  ) value each time
+;     0xFB758E/96        "               = rec[+0x3B]  )
+;     0xFB759E/A6        "               = rec[+0x3B]  )
+;     0xFB75A9     calr Dev10C_ChanPlus2_SetRegs_09xx(chan)
+;     0xFB75B8/CB  register chan + 0x0080 = struct[+0x04] & 0x7FFF   ) four times
+;     0xFB75D3/DE        "               = struct[+0x04] & 0x7FFF   ) -- bit 15
+;     0xFB75E6/F1        "               = struct[+0x04] & 0x7FFF   )    CLEAR
+;     0xFB75F9/04        "               = struct[+0x04] & 0x7FFF   )
+;     0xFB7609/11  register chan + 0x0000 = rec[+0x29]
+;     0xFB7626     shadow[chan] at 0x0000D85B = struct[+0x04] & 0x7FFF
+;
+; ★ IN NAMED TERMS: it loads block 0x0800 -- (envelope level << 8) | (envelope
+; rate), round 2 -- and its companion 0x0840 from a SECOND pair of record fields
+; (+0x39, +0x3B, not the +0x18/+0x1A the full writer uses), and then drives the
+; OUTPUT-LEVEL gate LOW and shadows the ungated word.  Dev10C_WriteAllChanRegs
+; ends with exactly that gate-low write and exactly that shadow store.
+; [INFERENCE, stated as such] a second envelope pair plus a falling gate is the
+; shape of a NOTE-OFF / RELEASE.  Its caller, sub_FAC08D, dispatches on bits 14..12
+; of voice_record[+0x2D] and elsewhere calls Voice_Retire_Mode20, which is
+; consistent and is NOT proof.
+; PROPOSED NAME, graded WEAK and NOT APPLIED:
+; `Dev10C_ChanSetEnvPair_ThenGateLow`.
+; ⚠ The 0x7FFF mask is `and BC,(XIZ+0xec)` against a frame slot loaded with the
+; literal 0x7FFF at 0xFB75C0 -- a masked constant, not an immediate, which is why a
+; naive immediate scan does not see the gate bit being cleared here.
 ; --------------------------------------------------------------------------
 sub_FB7521:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB7521  link XIZ,0xffec
@@ -1618,6 +2058,29 @@ sub_FB7521:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 17, 2026-09-03 -- DECODED, and it is sub_FB7521's shorter twin.
+; Arguments: (XIZ+0x08) = chan; (XIZ+0x0A) = HL, the same 16-bit record pointer.
+; There is no struct argument and no gate write at all.  Writes, in order:
+;     0xFB764A/59  register chan + 0x0800 = rec[+0x39]
+;     0xFB765E/63  register chan + 0x0000 = 0x8100
+;     0xFB7670/82  register chan + 0x0840 = rec[+0x3B]   ) EIGHT times, the value
+;     ... 0xFB76F3/0xFB7700, eight (select, data) pairs  ) fetched afresh each time
+;                                                          through `ld WA,(XHL+BC)`
+;                                                          with BC = 0x3B in a frame
+;                                                          slot (0xFB7672)
+;     0xFB7705/0D  register chan + 0x0000 = rec[+0x29]
+; Same three record fields, same 0x8100, same two register blocks as sub_FB7521.
+; Both are reached from the same dispatcher, sub_FAC08D, which selects on bits 14..12
+; of voice_record[+0x2D]: this one from 0xFAC1BB, inside the 0x2000 arm the
+; `cp BC,0x2000 / jrl Z,0xFAC174` at 0xFAC0F6 enters, and sub_FB7521 from 0xFAC247,
+; inside a different arm of the same routine.  The differences between the two are
+; exactly: four repeats there against eight here, and the gate-low block that only
+; sub_FB7521 has.
+; PROPOSED NAME, graded WEAK and NOT APPLIED: `Dev10C_ChanSetEnvPair_NoGate`.
+; ⚠ WHY THE REPEAT COUNT DIFFERS (4 vs 8, and 5 in sub_FB6F2C/sub_FB707E) IS NOT
+; ESTABLISHED.  Four routines in this file re-issue one register several times with
+; an unchanged value; a hold or settling time is the obvious reading and nothing in
+; the image supports it.
 ; --------------------------------------------------------------------------
 sub_FB762F:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB762F  link XIZ,0xfff6
