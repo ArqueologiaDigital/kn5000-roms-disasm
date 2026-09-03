@@ -283,9 +283,41 @@ BASE_ADJUDICATION = [
 
 def sec3b_bases():
     say("")
-    say("=== 3b. THE BASE OF EACH ONE, and why 30 of the 45 cannot be P[+0x07] ===")
+    say("=== 3b. THE BASE OF EACH ONE: 26 other objects + 4 + the 15 of section 4 ===")
     for site, base, verdict in BASE_ADJUDICATION:
         say("      %-27s %-46s %s" % (site, base, verdict))
+    say("")
+    NOT_P = [0xFA791E, 0xFA989C,
+             0xFB1520, 0xFB1529, 0xFB154F, 0xFB155F,
+             0xFB17BA, 0xFB17C3, 0xFB17E9, 0xFB17F9,
+             0xFB2461, 0xFB2471,
+             0xFB2DFC, 0xFB2E05, 0xFB2E15,
+             0xFB33C3, 0xFB3583, 0xFB358C, 0xFB359F,
+             0xFC4D27, 0xFC5F1A, 0xFC754B, 0xFC7DE9,
+             0xFC9CEA, 0xFC9CF0, 0xFCA098]
+    P_OTHER_BITS = [0xFC486D, 0xFC488B, 0xFC48BD, 0xFC48EE]
+    P_GATE = [0xFC4C33, 0xFC4C3E, 0xFC4C59, 0xFC4C64, 0xFC4C6F, 0xFC4C7A,
+              0xFC6CBD, 0xFC6CFF, 0xFC6D41,
+              0xFC6E4E, 0xFC6E5E, 0xFC707A, 0xFC708A, 0xFC72BC, 0xFC72CC]
+    say("   THE ARITHMETIC OF THE ADJUDICATION, checked rather than asserted: the three")
+    say("   groups above must partition the 45 prom_c write sites exactly.")
+    check("  a different object entirely", len(NOT_P), 26)
+    check("  P[+0x07], but bits 15/14/7 only", len(P_OTHER_BITS), 4)
+    check("  P[+0x07] bits 6..4 -- section 4's writers", len(P_GATE), 15)
+    check("  and they partition the 45 with no overlap and no remainder",
+          len(set(NOT_P) | set(P_OTHER_BITS) | set(P_GATE)), 45)
+    prom_c_writes = set()
+    try:
+        ia = _instr_addrs("prom_c", "prom_c/wsa1_prom_c.s")
+    except Exception:
+        ia = {}
+    for a, txt in ia.items():
+        if re.match(r"(ld|ldw|and|or|xor|add|sub|res|set|inc|dec|cpl|neg|rl|rr|sla|sra|srl|sll)"
+                    r"\s+\(X[A-Z]{2}\+0x07\),", txt):
+            prom_c_writes.add(a)
+    check("  and the partition IS the scan's own 45, address for address",
+          sorted(prom_c_writes) == sorted(set(NOT_P) | set(P_OTHER_BITS) | set(P_GATE)),
+          True)
     say("")
     say("   THE FORM THAT NEARLY GOT MISSED.  The three big RESO MODE arms hold the")
     say("   sub-record pointer in a FRAME SLOT (XIZ-22) and reload it before every")

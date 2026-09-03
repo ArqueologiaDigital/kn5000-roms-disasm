@@ -157,12 +157,13 @@ Probe §3 and §3b, in full:
 * **Address-space elimination.**  prom_a and prom_d contain **zero** such writes; prom_b's 43
   are CPU 1's address space and cannot reach the part record at `0x005D23`
   (`prom_c/prom_c.ld`: the two CPUs are separate address spaces).  That leaves prom_c's 45.
-* **Base adjudication, all 45.**  30 are provably a different object -- a stack local
+* **Base adjudication, all 45.**  26 are provably a different object -- a stack local
   (`VoiceParams_Compute_A..D`, whose destination is `(XIZ+0x08)` and whose **every** call site
   pushes an `lda XBC,XIZ+d` local: 0xFB38B3, 0xFB39FE, 0xFB3AFD, 0xFB3691, 0xFB379E), a
   mathlib frame variable, the RAM array at `0x4CCF`, the **PART** record's own `+0x07` word,
-  or the voice record `R[+0x07]`.  Four are `P[+0x07]` but write bits 15/14/7 only.  The
-  remaining eleven are §1.3's.
+  or the voice record `R[+0x07]`.  Four are `P[+0x07]` but write bits 15/14/7 only
+  (0xFC486D, 0xFC488B, 0xFC48BD, 0xFC48EE).  The remaining **fifteen are §1.3's**, and
+  26 + 4 + 15 = 45.
 * **Provenance, which closes the remaining forms at once.**  Any pointer that can reach a
   sub-record descends from the literal `0x5D23`.  Searching all four images for the byte pair
   `23 5d` at every offset, and keeping the hits whose preceding byte is an instruction start

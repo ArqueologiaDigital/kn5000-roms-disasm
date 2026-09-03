@@ -1160,6 +1160,7 @@ python3 notes/w21_lsi_gate_and_keyscaling.py --tables   # the four ramps, all 51
 
 | script | the question it answers |
 |---|---|
+| `notes/w21_lsi_gate_document.py` | *Are wave 21's findings next to the code, and did adding them change anything else?* Inserts one `★ WAVE 21` block into each of eleven existing headers in `prom_c/field_accessors.s` and `prom_c/data_tables/tail_data_zone.s` — nine routines and the four ramp tables — and nothing else: no rename, no reword. `--check` says all thirteen are present. Byte-safe: it reads and writes BYTES, so a `★` can never truncate a source on an encode error. |
 | `notes/w21_lsi_gate_and_keyscaling.py` | *(1) Register `chan+0x0000`'s bits 6..4 gate register `chan+0x0300`. Which record and offset does the packer take them from, and what writes that field?* — the field is `P[+0x07]` of the 42-byte sub-record, and its fifteen writers are `Pack104_SetInputs_PartRecord` plus the six `RESO MODE` dispatch arms; the value is `RESO MODE != 0`. *(2) What does a depth byte of ±32/±64/±127 into each of the four `LinCoef_*_KeyRamp_Q5_128` ramps mean in its destination's own unit?* Reads all four ROM images as bytes; the `.s` listings are used only for the set of instruction start addresses, so the census that looks for other writers is framing-independent. |
 
 ★ **The result:** register `chan+0x0300` is enabled only when at least one element of the
