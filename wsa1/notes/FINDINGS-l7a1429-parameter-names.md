@@ -434,6 +434,14 @@ whole of the argument, and it does not extend to the other three.
    with the screen id in `(0x207C)` and the cursor in `(0x27A5)`** and every
    WEAK row in §4 becomes PROVEN, the MAIN/SUB direction stops resting on one
    asymmetry, and `SCALE` gets found. This single hop is the whole remaining job.
+★★ CORRECTED 2026-09-03, and it REOPENS a question this section closed.
+   `0xFC4D27` and `0xFC7DE9` write **`R[+0x07]`, not `P[+0x07]`**: both load their
+   base with `lda XIX,0x00e086` (at `0xFC4C8C` / `0xFC7DB6`), which is the 37-byte
+   record, not the part record. The packer then shifts that byte into bits 15:8.
+   ⚠ So **the producer of the bits 6..4 that gate register `0x0300` is still
+   UNLOCATED** -- naming these two routines as its writers was wrong, and any
+   implementation that trusted it would look for the gate in the wrong record.
+
 2. **`0xFC4C85-0xFC4D62` and `0xFC7DAF-0xFC7E0F`**, the writers of `P[+0x07]`
    bits 6:4. They name `0x0000` and, through its gate, `0x0300`.
 3. **Print `Table_FE0296` and `LinCoef_FE0096/0116/0196/0216` as numbers.** A
