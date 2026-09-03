@@ -831,6 +831,43 @@ The 19 staging words are filled by **24 stores** — 20 in `Dev104_PackStagingSt
 ★ **It also asserts a correction.** `notes/prom_c_dev10c_field_sources.py --dev104` reports
 0xFC5522, 0xFC55AF, 0xFC55C5 and 0xFC5657 as struct writes. **They are not**: all four load
 their base from the absolute global `0x00E086`, so they write the 37-byte record, not the
-struct. Consequences: the packer writes **15** struct offsets by its own instructions (not 16),
+struct. Consequences: the packer writes **19 SITES over 15 DISTINCT OFFSETS** (state the unit --
+four offsets are written twice on different paths),
 `+0x1D` is **not a struct offset at all**, and `+0x16` **is** written by the packer
-(0xFC51AA, the literal `0xFF00`) against the round-6 note that says it is not.
+(0xFC51AD, `extpfx5 ... = ld (XBC+0x16),0xff00`) against the round-6 note that says it is
+not. ★ ADJUDICATED AND FIXED 2026-09-03 in `5c0cc732`: both defects were confirmed at the
+source and `--dev104-selftest` now pins them. The scanner MISSED +0x16 because the store is
+spelled as a raw-byte pseudo-instruction, which matches no `ld` pattern -- a store spelled as
+bytes is still a store.
+
+## `tone_db_naming_w17.py`
+**"Which prom_c instruction touches which byte of which prom_d record, and what does
+the code do with the value?"**
+
+```
+python3 notes/tone_db_naming_w17.py             # every section
+python3 notes/tone_db_naming_w17.py --selftest  # exit 1 on any failure
+python3 notes/tone_db_naming_w17.py --wrong     # just the wrong-comment report
+```
+
+Every number quoted in the W17 header block of `prom_c/tone_db/tone_db_module.s` and in
+the C structs added to `prom_d/wsa1_prom_d.s` is re-derived here from the ROM bytes, at
+the address it is cited at, with an image-wide occurrence count beside it so a reader can
+see how surprising the hit is.  102 checks.  `--wrong` prints the one existing comment
+this lane believes is wrong and did **not** edit.
+
+## `tone_db_apply_w17.py`
+**"Did the W17 rename touch a comment?"**  It must not: the comment gate requires
+insertions only, so this applier renames in the CODE half of a line and never inside a
+comment, and it INSERTS its documentation blocks rather than replacing the generator's
+`Unknown: what the routine is FOR` paragraph.
+
+```
+python3 notes/tone_db_apply_w17.py            # idempotent apply, then verify
+python3 notes/tone_db_apply_w17.py --verify
+```
+
+⚠ The price is stated in the file it edits: the generated `Called from:` / `Calls:` /
+`Arms:` comments in `prom_c/tone_db/tone_db_module.s` still spell the old
+`sub_XXXXXX`.  Their addresses are authoritative and the file header carries the full
+old -> new table.
