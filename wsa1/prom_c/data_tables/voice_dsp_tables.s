@@ -1300,7 +1300,7 @@ Voice_SecondaryParam_WordCurveB:
 	.short	0xffe8, 0xffec, 0xfff0, 0xfff4, 0xfff8, 0xfffc, 0x0000
 
 ; ----------------------------------------------------------------------------
-; ExpCurve_0_to_0x80 -- 0xFDF760..0xFDF7DF  (128 bytes)
+; Curve_Exp2Gain_U8_128 -- 0xFDF760..0xFDF7DF  (128 bytes)
 ;
 ; 128 bytes rising 0x00 -> 0x80 with an exponential shape (flat 0x01 for 24
 ; entries, then accelerating; the last 16 steps are 0x43 0x46 0x49 ... 0x7B 0x80).
@@ -1308,8 +1308,27 @@ Voice_SecondaryParam_WordCurveB:
 ; Four references: 0xFC51CA, 0xFC6E75, 0xFC70A1, 0xFC72E3 -- note these sit in a
 ; different part of the image from every other table here, so this one belongs to
 ; another subsystem.  Which one is NOT ESTABLISHED.
+;
+; ★ WHAT IT IS -- an 8-bit exp2 GAIN over a 0..127 control, on the same
+; 16-steps-per-doubling grid as the u16 exp2 curves in prom_c/data_tables/tail_data_zone.s.
+; Grade: fit PROVEN (exact), unit STRONG (notes/FINDINGS-l7a1429-curve-tables.md §4).
+;
+;   fit       T[0] = 0; T[k] = max(1, round(128 * 2^((k-127)/16))) -- exact on all 128.
+;   endpoints 0 (OFF), then 1 .. 0x80 -- 42.1 dB of span, 0.3763 dB a step.
+;   feeds     chan+0x0300 of the 0x00104000 device from 0xFC51CA, written as (b << 8) | b --
+;             ONE BYTE IN BOTH HALVES of the register, which is the shape of a device with
+;             two 8-bit fields fed the same number.  Its index is wave-select byte +0x13, a
+;             0..127 tone-record byte, and the register is gated by bits 6:4 of chan+0x0000.
+;   ⚠ THE NAME STOPS AT THE SHAPE.  The editor has three captions left unassigned on its
+;     RESONATOR pages -- DEPTH, FORMANT and INTERACTION GAIN -- and chan+0x0300 is graded
+;     WEAK for INTERACTION GAIN on the soft argument that a duplicated byte gated by a mode
+;     word is what a switchable GAIN looks like.  That is not evidence, so the name omits it.
+;   ⚠ The block above says this table "belongs to another subsystem.  Which one is NOT
+;     ESTABLISHED".  Wave 19 identified the 0xFC51CA reader -- it is the 0x00104000 packer.
+;     The other three (0xFC6E75, 0xFC70A1, 0xFC72E3) are still unidentified.  The older
+;     sentence is LEFT AS WRITTEN rather than reworded; this paragraph is the correction.
 ; ----------------------------------------------------------------------------
-ExpCurve_0_to_0x80:
+Curve_Exp2Gain_U8_128:
 	.byte	0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
 	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
 	.byte	0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04
