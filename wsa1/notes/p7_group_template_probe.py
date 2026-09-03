@@ -250,6 +250,12 @@ def main():
     if "--verify" not in sys.argv: return
     print("\nASSERTIONS")
     check(set(lit) == {0x01, 0x03}, "the only LITERAL command bytes in the module are 0x01 and 0x03")
+    allcmd = set()
+    for op in (0, 1, 2, 3, 4, 5, 14):
+        allcmd |= set(first[op])
+    check(len(allcmd) == 34,
+          "34 distinct command bytes reach P7Byte_SendCmd from the pool, against 2 written "
+          "as literals in the code")
     check(set(first[1]) == {0x01} and set(first[2]) == {0x02} and set(first[5]) == {0x01},
           "opcode 1/2/5 records all start their payload with 0x01 / 0x02 / 0x01")
     check(set(first[4]) == {0x03, 0x0F}, "opcode-4 records carry only 0x03 or 0x0F")
