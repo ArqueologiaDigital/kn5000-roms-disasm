@@ -12221,6 +12221,17 @@ sub_FB6B5A__FB6BA4:
 	unlk32 xiz                                 ; FB6BA5  unlk XIZ
 	ret                                        ; FB6BA7  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FB6BA8` is now `MidiProgram_SelectToneForPart`.
+;   GRADE STRONG.  WHY `MidiProgram_SelectToneForPart`:
+;   it is the handler the parser's 0xC0 arm calls, and MidiMsg_SendBootSequence
+;   hands it the literal packet `C0 00 00 00 00` -- 0xC0 is the MIDI status for
+;   PROGRAM CHANGE.  Body: bounds the part index with `cp H,0x21`, stores msg[2]
+;   in part[+0x1B] and a derived byte in part[+0x1C], and then reloads that
+;   part's tone object through sub_FB47C4(part, msg[2], msg[3]).
+;   ⚠ GRADE STRONG, not PROVEN: `0xC0 = program change` is the MIDI standard's
+;   meaning, and this message format is MIDI-DERIVED rather than MIDI (the 0x80
+;   arm consumes six bytes and is not note-off).  What the ROM settles on its own
+;   is that the routine selects a part's tone from a two-byte number.
 ; sub_FB6BA8 -- 0xFB6BA8..0xFB6CED (326 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
@@ -12240,7 +12251,7 @@ sub_FB6B5A__FB6BA4:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6BA8:
+MidiProgram_SelectToneForPart:
 	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FB6BA8  link XIZ,0xfff7
 	pushw	hl                                   ; FB6BAC  push HL
 	pushw	de                                   ; FB6BAD  push DE
