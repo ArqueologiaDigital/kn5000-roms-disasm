@@ -827,3 +827,19 @@ the C structs added to `prom_d/wsa1_prom_d.s` is re-derived here from the ROM by
 the address it is cited at, with an image-wide occurrence count beside it so a reader can
 see how surprising the hit is.  102 checks.  `--wrong` prints the one existing comment
 this lane believes is wrong and did **not** edit.
+
+## `tone_db_apply_w17.py`
+**"Did the W17 rename touch a comment?"**  It must not: the comment gate requires
+insertions only, so this applier renames in the CODE half of a line and never inside a
+comment, and it INSERTS its documentation blocks rather than replacing the generator's
+`Unknown: what the routine is FOR` paragraph.
+
+```
+python3 notes/tone_db_apply_w17.py            # idempotent apply, then verify
+python3 notes/tone_db_apply_w17.py --verify
+```
+
+⚠ The price is stated in the file it edits: the generated `Called from:` / `Calls:` /
+`Arms:` comments in `prom_c/tone_db/tone_db_module.s` still spell the old
+`sub_XXXXXX`.  Their addresses are authoritative and the file header carries the full
+old -> new table.
