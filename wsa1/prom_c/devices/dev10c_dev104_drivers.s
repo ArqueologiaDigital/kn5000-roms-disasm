@@ -121,25 +121,25 @@
 ;                     ⚠ P[+0x12] is exactly 8 bytes after P[+0x0A]
 ;                     and P[+0x14] 8 after P[+0x0C]: two copies of
 ;                     one (base, offset) pair.
-;  chan+0x00C0  0x06  Curve_Log2_251[clamp(R[+0x12]+R[+0x16]        PROVEN as
+;  chan+0x00C0  0x06  Curve_Position_Log2Period_251[clamp(R[+0x12]+R[+0x16]        PROVEN as
 ;                     +R[+0x21], 0..250)]                           arithmetic;
 ;                     + (0x4280 - R[+0x0E])  unless bit 7 of        LOG-DOMAIN
 ;                       (*(R[+0x01]))[+0x0E]                        WITH A
 ;                     - R[+0x0C]                                    KEY-FOLLOW
 ;                     then forced to 0x0000 or 0x7F00 on a          TERM: STRONG
 ;                     negative result (0xFC4A2B).  In sub_FC49AD.
-;  chan+0x0100  0x08  Const_0100_251[the SAME index] -- and that    PROVEN: a
+;  chan+0x0100  0x08  Dev104_Reg0100_Const_251[the SAME index] -- and that    PROVEN: a
 ;                     table is 0x0100 in all 251 entries.           CONSTANT on
 ;                                                                   this firmware
-;  chan+0x0140  0x0A  Curve_Exp2Decay_256[i1] & 0xFFF8, or 0x0000   PROVEN /
+;  chan+0x0140  0x0A  Curve_Fitting_Exp2Decay_256[i1] & 0xFFF8, or 0x0000   PROVEN /
 ;                     when bit 0 of (0x00E089) is set.              UNIDENTIFIED
-;  chan+0x0180  0x0C  Curve_Exp2Decay_256[i2] & 0xFFF8, same gate.  PROVEN /
+;  chan+0x0180  0x0C  Curve_Fitting_Exp2Decay_256[i2] & 0xFFF8, same gate.  PROVEN /
 ;                                                                   UNIDENTIFIED
 ;       i1 = clampU8( 0xCF - g(v1) + (int8)(0x00E08C) ),  g(v) = v<48 ? v/2+24 : v
-;       v1 = clamp( Q5(LinCoef_FE0116, Q[+0x17]) + P[+0x16], 0 .. PART[+0x11] )
+;       v1 = clamp( Q5(LinCoef_Fitting_KeyRamp_Q5_128, Q[+0x17]) + P[+0x16], 0 .. PART[+0x11] )
 ;       i2, v2: the same with Q[+0x22] and P[+0x18].
 ;  chan+0x01C0  0x0E  the TOP HALF of the 32-bit product           PROVEN /
-;                       fold(word 16) * Curve_Exp2Rise_128[         UNIDENTIFIED
+;                       fold(word 16) * Curve_Fitting_Exp2Rise_128[         UNIDENTIFIED
 ;                         clamp(v1, 0..PART[+0x11]) ]
 ;                     ⚠ "top half" reads `srl 0x00,XIY` (0xFC5361)
 ;                     as a shift of 16, which is the TLCS-900
@@ -162,27 +162,27 @@
 ;                     exponential of the same v1 that scales 0x0140.
 ;  chan+0x0200  0x10  the same, with v2 and word 17 (reg 0x0440).   PROVEN /
 ;                                                                   UNIDENTIFIED
-;  chan+0x0240  0x12  ( high16( fold(R[+0x1A]) * Curve_Exp2Rise_128 PROVEN /
+;  chan+0x0240  0x12  ( high16( fold(R[+0x1A]) * Curve_Fitting_Exp2Rise_128 PROVEN /
 ;                       [clamp(R[+0x14]+R[+0x18]+|R[+0x21]|/4,      UNIDENTIFIED
 ;                        0..0x7F)] ) & 0xFFF8 ) | 7.  In sub_FC49AD;
 ;                     R[+0x1A] is P[+0x26], i.e. word 18's value.
-;  chan+0x0280  0x14  Curve_Exp2Decay_101[clamp(R[+0x10]+R[+0x23],  PROVEN /
+;  chan+0x0280  0x14  Curve_Exp2Gain_Percent_101[clamp(R[+0x10]+R[+0x23],  PROVEN /
 ;                     0..100)].  In sub_FC4AED.                     UNIDENTIFIED
 ;  chan+0x02C0  0x16  the literal 0xFF00.  ALWAYS -- it is the only PROVEN
 ;                     value any instruction ever puts in word 11
 ;                     (0xFC51AD; the Stage_B image patches the same
 ;                     0xFF00 at 0xFC577A).
-;  chan+0x0300  0x18  b = ExpCurve_0_to_0x80[Q[+0x13]];             PROVEN /
+;  chan+0x0300  0x18  b = Curve_Exp2Gain_U8_128[Q[+0x13]];             PROVEN /
 ;                     value = (b << 8) | b   -- one byte in BOTH    UNIDENTIFIED
 ;                     halves -- and 0x0000 when word 0's bits 6..4
 ;                     are clear.
-;  chan+0x0340  0x1A  Curve_FE05C9[i3]                              PROVEN /
-;  chan+0x0400  0x20  Curve_FE04C9[i3]   -- the SAME index          UNIDENTIFIED
-;  chan+0x0380  0x1C  Curve_FE05C9[i4]                              PROVEN /
-;  chan+0x0440  0x22  Curve_FE04C9[i4]   -- the SAME index          UNIDENTIFIED
-;       i3 = clamp( ks(Q,0x19) + Q5(LinCoef_FE0196, Q[+0x18]) + P[+0x1A],
-;                   Table_FDFF96[(0x00E08C)] .. PART[+0x12] )
-;       i4 = clamp( ks(Q,0x25) + Q5(LinCoef_FE0196, Q[+0x23]) + P[+0x1C],
+;  chan+0x0340  0x1A  Curve_Muting_Cutoff_Q13_128[i3]                              PROVEN /
+;  chan+0x0400  0x20  Curve_Muting_Cutoff_Q16_128[i3]   -- the SAME index          UNIDENTIFIED
+;  chan+0x0380  0x1C  Curve_Muting_Cutoff_Q13_128[i4]                              PROVEN /
+;  chan+0x0440  0x22  Curve_Muting_Cutoff_Q16_128[i4]   -- the SAME index          UNIDENTIFIED
+;       i3 = clamp( ks(Q,0x19) + Q5(LinCoef_Muting_KeyRamp_Q5_128, Q[+0x18]) + P[+0x1A],
+;                   Table_Muting_CutoffFloor_ByKeyZone_256[(0x00E08C)] .. PART[+0x12] )
+;       i4 = clamp( ks(Q,0x25) + Q5(LinCoef_Muting_KeyRamp_Q5_128, Q[+0x23]) + P[+0x1C],
 ;                   the same bounds )
 ;  chan+0x03C0  0x1E  P[+0x24], copied straight through (0xFC56BA). PROVEN /
 ;                                                                   UNIDENTIFIED
@@ -278,20 +278,20 @@
 ;   /* *(Part104Voice.tone).  Every field below is read through the frame slot
 ;      (XIZ-4) that Dev104_PackStagingStruct loads at 0xFC4DCB. */
 ;   struct Tone104 {                              /* register it feeds */
-;     s8   lincoef_depth_R12;    /* +0x10  Q5 x LinCoef_FE0096 -> R[+0x12]  0x00C0 */
+;     s8   lincoef_depth_R12;    /* +0x10  Q5 x LinCoef_Position_KeyRamp_Q5_128 -> R[+0x12]  0x00C0 */
 ;     u8   mode_bit7;            /* +0x12  bit 7 picks the R[+0x1C] arm */
-;     u8   reg0300_index;        /* +0x13  -> ExpCurve_0_to_0x80         0x0300 */
+;     u8   reg0300_index;        /* +0x13  -> Curve_Exp2Gain_U8_128         0x0300 */
 ;     u8   delta_sel_A;          /* +0x16  bit 7 picks d1's form         0x0040 */
-;     s8   depth_v1;             /* +0x17  Q5 x LinCoef_FE0116           0x0140, 0x01C0 */
-;     s8   depth_i3;             /* +0x18  Q5 x LinCoef_FE0196           0x0340, 0x0400 */
+;     s8   depth_v1;             /* +0x17  Q5 x LinCoef_Fitting_KeyRamp_Q5_128           0x0140, 0x01C0 */
+;     s8   depth_i3;             /* +0x18  Q5 x LinCoef_Muting_KeyRamp_Q5_128           0x0340, 0x0400 */
 ;     u8   ks_break_i3;          /* +0x19  breakpoint; bit 7 DISABLES */
 ;     u8   ks_lo_i3;             /* +0x1A  lower note bound */
 ;     u8   ks_hi_i3;             /* +0x1B  upper note bound */
 ;     s8   ks_slope_i3;          /* +0x1C  Q5 slope */
 ;     u8   delta_sel_B;          /* +0x20  bit 7 picks d2's form         0x0080 */
-;     s8   depth_v2;             /* +0x22  Q5 x LinCoef_FE0116           0x0180, 0x0200 */
-;     s8   depth_i4;             /* +0x23  Q5 x LinCoef_FE0196           0x0380, 0x0440 */
-;     s8   depth_R10;            /* +0x24  Q5 x LinCoef_FE0216 -> R[+0x10] 0x0280 */
+;     s8   depth_v2;             /* +0x22  Q5 x LinCoef_Fitting_KeyRamp_Q5_128           0x0180, 0x0200 */
+;     s8   depth_i4;             /* +0x23  Q5 x LinCoef_Muting_KeyRamp_Q5_128           0x0380, 0x0440 */
+;     s8   depth_R10;            /* +0x24  Q5 x LinCoef_SubGain_KeyRamp_Q5_128 -> R[+0x10] 0x0280 */
 ;     u8   ks_break_i4;          /* +0x25  breakpoint; bit 7 DISABLES */
 ;     u8   ks_lo_i4;             /* +0x26 */
 ;     u8   ks_hi_i4;             /* +0x27 */
@@ -399,7 +399,7 @@
 ;   which puts it in R[+0x0C], which this device's packer SUBTRACTS from register
 ;   0x00C0 (0xFC4A29) and NEGATES as the delta for registers 0x0040 and 0x0080
 ;   (0xFC4E72).  The same zone byte +0x05 becomes (0x00E08C), the index into
-;   Table_FDFF96 that lower-bounds i3 and i4.
+;   Table_Muting_CutoffFloor_ByKeyZone_256 that lower-bounds i3 and i4.
 ;
 ; ★ AND ONE PATH SKIPS THE PACKER ENTIRELY.  VoiceRegs_Stage_B calls
 ;   Dev104_LoadStageBImage instead: 38 bytes = 19 words copied from

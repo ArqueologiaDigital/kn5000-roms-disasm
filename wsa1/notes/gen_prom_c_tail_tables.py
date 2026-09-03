@@ -138,18 +138,18 @@ def law_lin_0196(k):
 # (addr, size, unit, name, [description lines])
 # unit: 'b' bytes, 'w' u16, 'l' u32, 'sz' NUL-terminated string, 'r6' 6-byte {u32,u8,u8}
 OBJ_R1 = [
- (0xFDF7E0, 512, 'w', "Curve_Exp2Decay_256", [
+ (0xFDF7E0, 512, 'w', "Curve_Fitting_Exp2Decay_256", [
   "256 u16.  T[k] = round(32768 * 2^((k-255)/16)) over all 256 entries, |err| <= 4:",
   "a curve that DOUBLES EVERY 16 STEPS -- 0.376 dB a step, 96 dB end to end -- and is 0",
   "for k <= 46 because it has fallen below half a count.  T[255] = 0x8000.",
   "COUNT 256, from the reader's own clamp: 0xFC4FEC `cp BC,0x00ff` (else HL = 0xFF) and",
   "0xFC4FF7 `cp HL,0` (else HL = 0), then `ld BC,2 / muls XBC,HL / add XBC,<this>`.",
   "So index 255 is reachable and 256 is not."]),
- (0xFDF9E0, 256, 'w', "Curve_Exp2Rise_128", [
+ (0xFDF9E0, 256, 'w', "Curve_Fitting_Exp2Rise_128", [
   "128 u16.  T[k] = 32768 * (1 - 2^(-k/16)) EXACTLY -- zero error on all 128 entries,",
-  "the complement of Curve_Exp2Decay_256's ratio.  T[127] = 0x7F7A.",
+  "the complement of Curve_Fitting_Exp2Decay_256's ratio.  T[127] = 0x7F7A.",
   "COUNT 128, from the readers' clamp to 0..0x7F (0xFC4AA3 and 0xFC533A, `cp .,0x007f`)."]),
- (0xFDFAE0, 502, 'w', "Curve_Log2_251", [
+ (0xFDFAE0, 502, 'w', "Curve_Position_Log2Period_251", [
   "251 u16.  T[0] = 0x6C00; T[k] = round(27543 - 3072*log2 k) for k >= 1.  3072 counts per",
   "halving is the same slope MathTable_Log2_256 uses, and entry for entry this table is",
   "that one plus 6039 (+/-1 from independent rounding).",
@@ -157,22 +157,22 @@ OBJ_R1 = [
   "`cp HL,0` (else 0) -- index 0..250 -- and the table is 502 bytes = 251 u16.",
   "The value goes to word +0x06 of the 0x00104000 staging struct (register 0x00C0+chan)",
   "after two offsets are added and the result is clamped to 0x0000 / 0x7F00 (0xFC4A2B)."]),
- (0xFDFCD6, 502, 'w', "Const_0100_251", [
+ (0xFDFCD6, 502, 'w', "Dev104_Reg0100_Const_251", [
   "251 u16, and EVERY ONE OF THEM IS 0x0100.  Read with the same clamped 0..250 index as",
-  "Curve_Log2_251, one instruction later (`lda XBC,0xFDFCD6 / add XBC,XIX` at 0xFC49ED),",
+  "Curve_Position_Log2Period_251, one instruction later (`lda XBC,0xFDFCD6 / add XBC,XIX` at 0xFC49ED),",
   "and stored to word +0x08 of the 0x00104000 staging struct = register 0x0100 + channel.",
   "So on this firmware that register's value from this path is the constant 0x0100.",
   "⚠ A table of identical entries is a fact about THIS image, not about the hardware."]),
- (0xFDFECC, 202, 'w', "Curve_Exp2Decay_101", [
-  "101 u16.  T[0] = 0; T[k] = Curve_Exp2Decay_256[k+155] for k = 1..100 -- entry for entry,",
+ (0xFDFECC, 202, 'w', "Curve_Exp2Gain_Percent_101", [
+  "101 u16.  T[0] = 0; T[k] = Curve_Fitting_Exp2Decay_256[k+155] for k = 1..100 -- entry for entry,",
   "no exceptions -- i.e. the same exponential over its top 100 steps, ending on 0x8000.",
   "COUNT 101, from the readers' clamp to 0..0x64 (0xFC4B04, 0xFC6ECA)."]),
- (0xFDFF96, 256, 'b', "Table_FDFF96", [
+ (0xFDFF96, 256, 'b', "Table_Muting_CutoffFloor_ByKeyZone_256", [
   "256 u8, values 0x22..0x3C.  Indexed by the byte at RAM (0x00E08C), zero-extended",
   "(0xFC52A6 `ld C,(0x00e08c) / extz BC / extz XBC / add XBC,<this> / ld B,(XBC)`), so the",
   "index is 0..255 and the object is exactly 256 bytes.",
   "⚠ What the value is is NOT established; it is used as a shift/limit further down."]),
- (0xFE0096, 128, 'b', "LinCoef_FE0096", [
+ (0xFE0096, 128, 'b', "LinCoef_Position_KeyRamp_Q5_128", [
   "128 SIGNED bytes.  T[k] = (k*256)//128 - 128 = 2k - 128: -128 .. +126 in steps of 2,",
   "exact on all 128 entries.  One of four tables read by the identical idiom, at 0xFC55E0:",
   "    lda XIX,<this> ; A = record[+0x10] (signed) ; if A == 0 -> result 0",
@@ -183,19 +183,19 @@ OBJ_R1 = [
   "COUNT 128: the index is (0x00E088), which Pack104_SetInputs_E088_E089_E08A builds as voice_record[+0x0C] with",
   "BIT 7 CLEARED, so 0..127, and 0x7F - D stays in range.",
   "⚠ that the key IS a note number is not established here."]),
- (0xFE0116, 128, 'b', "LinCoef_FE0116", [
+ (0xFE0116, 128, 'b', "LinCoef_Fitting_KeyRamp_Q5_128", [
   "128 signed bytes, same reader idiom (0xFC4F51, 0xFC500E).",
   "T[k] = (k*65)//128 - 32: -32 .. +32, i.e. -1.0 .. +1.0 in Q5, exact on all 128.",
   "★ The LAST entries are what pick the law.  T[63] = T[64]... is wrong and so is",
   "floor(k/2) - 32: the real table repeats each step below k = 64 and then stops repeating",
   "(..., -1, -1, 0, 1, 1, 2, ...), which only the slope 65/128 reproduces.  T[127] = +32."]),
- (0xFE0196, 128, 'b', "LinCoef_FE0196", [
+ (0xFE0196, 128, 'b', "LinCoef_Muting_KeyRamp_Q5_128", [
   "128 signed bytes, same reader idiom (0xFC5249, 0xFC53BF).",
   "T[k] = k//2 - 64 for k = 0..126: -64 .. -1, i.e. -2.0 .. -0.03 in Q5.",
   "★ AND THE LAST ENTRY BREAKS THE RULE: T[127] is 0, where the ramp would give -1.  A",
   "sampled check would have missed that; every entry was compared."]),
- (0xFE0216, 128, 'b', "LinCoef_FE0216", [
-  "128 signed bytes, BYTE-IDENTICAL to LinCoef_FE0196 (all 128), and read by the same",
+ (0xFE0216, 128, 'b', "LinCoef_SubGain_KeyRamp_Q5_128", [
+  "128 signed bytes, BYTE-IDENTICAL to LinCoef_Muting_KeyRamp_Q5_128 (all 128), and read by the same",
   "idiom at 0xFC513E.  Two copies of one curve, not two curves."]),
  (0xFE0296, 51, 'b', "Curve_FE0296", [
   "51 u8, 0x00..0x7E, rising with a flat head (0,1,2,3,4,6,8,12,17,...) and a flat tail.",
@@ -208,16 +208,16 @@ OBJ_R1 = [
   "512 SIGNED bytes.  T[k] = round(128 * sin(2*pi*k/512)) over all 512 entries, |err| <= 1.",
   "The period IS the object: one full cycle, so the size is fixed by the data itself and",
   "not only by the next citation.  Read at 0xFC5570 and 0xFC7C91."]),
- (0xFE04C9, 256, 'w', "Curve_FE04C9", [
+ (0xFE04C9, 256, 'w', "Curve_Muting_Cutoff_Q16_128", [
   "128 s16, rising from -510 (repeated ten times) to +28591 (repeated at the top).",
   "Read at 0xFC4987 / 0xFC52E1 / 0xFC5457 with `ld BC,2 / muls XBC,HL / add XBC,<this>`;",
   "the visible clamp at 0xFC4976 is a LOWER one (`cp HL,44`, else 44) and 0xFC4971 loads 96,",
   "so the reachable index band is narrower than the table.  ⚠ No upper clamp located, so",
   "the count 128 rests on the next cited base, 0xFE05C9, and not on the reader."]),
- (0xFE05C9, 256, 'w', "Curve_FE05C9", [
-  "128 s16, falling from -25 to -8188, read one instruction after Curve_FE04C9 through the",
+ (0xFE05C9, 256, 'w', "Curve_Muting_Cutoff_Q13_128", [
+  "128 s16, falling from -25 to -8188, read one instruction after Curve_Muting_Cutoff_Q16_128 through the",
   "same index (`lda XBC,0xFE05C9 / add XBC,XIX` at 0xFC4996, 0xFC52EF, 0xFC5465).",
-  "The pair is the same shape as (Curve_Log2_251, Const_0100_251): two parallel tables,",
+  "The pair is the same shape as (Curve_Position_Log2Period_251, Dev104_Reg0100_Const_251): two parallel tables,",
   "one index, two struct words."]),
  (0xFE06C9, 512, 'w', "MathTable_Sin_S16_256", [
   "256 s16.  T[k] = round(32767 * sin(2*pi*k/256)), err in [-4, +8] over all 256.",
@@ -248,7 +248,7 @@ OBJ_R1 = [
   "for k >= 1, err in {-1, 0, +1}.  It is 0 at k = 128 and negative above it.",
   "Read at 0xFC465F as `ld BC,0x0800 / sub BC,WA / sra 4,BC / muls BC,2 / add XBC,<this>`",
   "i.e. index = (2048 - x)/16 with x in Q11, so the value is -3072*log2(1 - x/2048).",
-  "3072 counts per halving is the same slope Curve_Log2_251 uses."]),
+  "3072 counts per halving is the same slope Curve_Position_Log2Period_251 uses."]),
  (0xFE0EC9, 512, 'w', "MathTable_Exp2_256", [
   "256 u16.  T[k] = round(12868 * 2^(k/256)), err in {-1, 0} over all 256 entries, and",
   "12868 = round(2048 * 2*pi).  Read by Math_Exp2_Q11 (0xFC4227): index = (arg & 0x7FF) >> 3",
@@ -577,15 +577,15 @@ def verify():
 
     print("RELATIONS BETWEEN TABLES")
     chk(all(u16(0xFDFECC + 2 * k) == u16(0xFDF7E0 + 2 * (k + 155)) for k in range(1, 101)),
-        "Curve_Exp2Decay_101[1..100] == Curve_Exp2Decay_256[156..255], entry for entry")
-    chk(u16(0xFDFECC) == 0, "Curve_Exp2Decay_101[0] = 0, the one entry that is not shared")
+        "Curve_Exp2Gain_Percent_101[1..100] == Curve_Fitting_Exp2Decay_256[156..255], entry for entry")
+    chk(u16(0xFDFECC) == 0, "Curve_Exp2Gain_Percent_101[0] = 0, the one entry that is not shared")
     chk(all(u16(0xFDFCD6 + 2 * k) == 0x0100 for k in range(251)),
-        "all 251 entries of Const_0100_251 are 0x0100 (checked, not sampled)")
+        "all 251 entries of Dev104_Reg0100_Const_251 are 0x0100 (checked, not sampled)")
     d = set((u16(0xFDFAE0 + 2 * k) - u16(0xFE0CC9 + 2 * k)) % 65536 for k in range(1, 251))
     chk(d <= {6038, 6039, 6040},
-        "Curve_Log2_251[k] - MathTable_Log2_256[k] is 6039 +/- 1 for every k in 1..250")
+        "Curve_Position_Log2Period_251[k] - MathTable_Log2_256[k] is 6039 +/- 1 for every k in 1..250")
     chk(IMG[0xFE0196 - BASE:0xFE0216 - BASE] == IMG[0xFE0216 - BASE:0xFE0296 - BASE],
-        "LinCoef_FE0196 and LinCoef_FE0216 are byte-identical, all 128")
+        "LinCoef_Muting_KeyRamp_Q5_128 and LinCoef_SubGain_KeyRamp_Q5_128 are byte-identical, all 128")
     chk(u16(0xFE08C9) == 0x8000 and (u16(0xFE08C9) >> 4) >= 0x800,
         "MathTable_Cos_S16_256[0] = 0x8000, which the reader's `sra 4` turns into -2048")
 

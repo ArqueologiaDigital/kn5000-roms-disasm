@@ -312,7 +312,7 @@ SPEC = [
   "31 s16: 0xFF00 then -116..0 in steps of 4.  References: 0xFB0D7A, 0xFB100A,",
   "0xFB121B, 0xFB14B4.  Byte-identical to %s:2217.",
  ]),
- ("ExpCurve_0_to_0x80", 0xFDF760, 128, 'b', None, None, None, [
+ ("Curve_Exp2Gain_U8_128", 0xFDF760, 128, 'b', None, None, None, [
   "128 bytes rising 0x00 -> 0x80 with an exponential shape (flat 0x01 for 24",
   "entries, then accelerating; the last 16 steps are 0x43 0x46 0x49 ... 0x7B 0x80).",
   "WSA1-only -- no counterpart anywhere in the KN5000 payload.",

@@ -84,7 +84,7 @@
 ; tail data zone rather than just the two copies, reports ZERO for copy B.
 ;
 ; That single hit is not a reference either: it is at 0xFE05DC, inside
-; Curve_FE05C9 (`... e7 ff | e2 ff | 18 fe | 68 fc ...`), where the bytes
+; Curve_Muting_Cutoff_Q13_128 (`... e7 ff | e2 ff | 18 fe | 68 fc ...`), where the bytes
 ; `e2 ff 18 fe` are the boundary between two table ENTRIES.
 ; ⚠ The search is for literals only.  A pointer already in RAM, or an address
 ; computed at run time, would be invisible -- this is "no literal reference",
@@ -137,7 +137,7 @@
 ; ============================================================================
 
 ; ----------------------------------------------------------------------------
-; Curve_Exp2Decay_256 -- 0xFDF7E0-0xFDF9DF  (512 bytes)
+; Curve_Fitting_Exp2Decay_256 -- 0xFDF7E0-0xFDF9DF  (512 bytes)
 ;
 ; 256 u16.  T[k] = round(32768 * 2^((k-255)/16)) over all 256 entries, |err| <= 4:
 ; a curve that DOUBLES EVERY 16 STEPS -- 0.376 dB a step, 96 dB end to end -- and is 0
@@ -147,8 +147,28 @@
 ; So index 255 is reachable and 256 is not.
 ;
 ; Cited by: 0xFC5003 [add <X..>,#imm32], 0xFC50C0 [add <X..>,#imm32]
+;
+; ★ WHAT IT IS -- the tone editor's FITTING, in its DECAY form; the rise form is
+; Curve_Fitting_Exp2Rise_128 and the two share one slope.  Grade: fit PROVEN, name STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §4, notes/FINDINGS-l7a1429-parameter-names.md §4).
+;
+;   fit       T[k] = round(32768 * 2^((k-255)/16)), |err| <= 4 over all 256 entries.
+;   endpoints 0 for k <= 46 (the curve has fallen below half a count), then 448 .. 0x8000
+;             -- 78.6 dB of live span.
+;   unit      a Q15 gain, 16 steps per doubling = 0.3763 dB a step.  The device is handed
+;             13 bits of it: the packer ships the value masked with 0xFFF8.
+;   feeds     chan+0x0140 (MAIN FITTING) and chan+0x0180 (SUB FITTING) from 0xFC5003 and
+;             0xFC50C0.  ONE-SHOT, with a conditional extra write at note time.
+;   ⚠ NOT A PER-SAMPLE POLE.  Its top two entries are 1.000000 and 0.957520 with nothing
+;     between them; at 44.1 kHz that second one is a time constant of 0.522 ms, and no
+;     entry can express even 1 ms.  ★ Stepped instead at the driver's own 40.69 Hz refresh
+;     the same table gives 24 ms .. 3.9 s of T60, which is musical.  WHICH RATE THE LSI
+;     USES IS NOT IN THIS ROM -- the shape is established, the rate is not.
+;   ★ For a bias of 0x30 in the index arithmetic, T[k] and Curve_Fitting_Exp2Rise_128[k]
+;     are an exact (a, 1-a) pair -- a first-order lag toward the chan+0x0400 target.  That
+;     bias comes from a key-zone record in prom_d and is NOT fixed here.
 ; ----------------------------------------------------------------------------
-Curve_Exp2Decay_256:
+Curve_Fitting_Exp2Decay_256:
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   ; 0xFDF7E0
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   ; 0xFDF7F0
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   ; 0xFDF800
@@ -183,15 +203,33 @@ Curve_Exp2Decay_256:
 	.short	0x5E88, 0x62B0, 0x6710, 0x6BA0, 0x7068, 0x7560, 0x7A90, 0x8000   ; 0xFDF9D0
 
 ; ----------------------------------------------------------------------------
-; Curve_Exp2Rise_128 -- 0xFDF9E0-0xFDFADF  (256 bytes)
+; Curve_Fitting_Exp2Rise_128 -- 0xFDF9E0-0xFDFADF  (256 bytes)
 ;
 ; 128 u16.  T[k] = 32768 * (1 - 2^(-k/16)) EXACTLY -- zero error on all 128 entries,
-; the complement of Curve_Exp2Decay_256's ratio.  T[127] = 0x7F7A.
+; the complement of Curve_Fitting_Exp2Decay_256's ratio.  T[127] = 0x7F7A.
 ; COUNT 128, from the readers' clamp to 0..0x7F (0xFC4AA3 and 0xFC533A, `cp .,0x007f`).
 ;
 ; Cited by: 0xFC4ABA [add <X..>,#imm32], 0xFC534F [add <X..>,#imm32], 0xFC54C5 [add <X..>,#imm32]
+;
+; ★ WHAT IT IS -- the tone editor's FITTING in its RISE form, the complement of
+; Curve_Fitting_Exp2Decay_256's ratio.  Grade: fit PROVEN (exact), name STRONG for two of
+; its three readers (notes/FINDINGS-l7a1429-curve-tables.md §4-§5).
+;
+;   fit       T[k] = 32768 * (1 - 2^(-k/16)) -- ZERO ERROR on all 128 entries.
+;   endpoints 0 .. 0x7F7A = 0.99586.
+;   unit      a Q15 depth on the same 16-steps-per-doubling grid, 0.3763 dB a step.
+;   feeds     chan+0x01C0 (MAIN) and chan+0x0200 (SUB) from 0xFC534F and 0xFC54C5, each
+;             being the chan+0x0400 / chan+0x0440 MUTING cutoff coefficient multiplied by
+;             T[v]/2.  ★ Scaling that coefficient scales the cutoff, so as a cutoff floor
+;             this table spans 0 to -4.56 octaves: v=1 -> -4.56, v=16 -> -1.00,
+;             v=64 -> -0.09, v=127 -> -0.01.  That is a filter-envelope floor's range, and
+;             it is why chan+0x01C0/0x0200 are graded STRONG as the SAME QUANTITY as
+;             chan+0x0400/0x0440 rather than as a second parameter.
+;   ⚠ Its THIRD reader, 0xFC4ABA, feeds chan+0x0240, a scaled parameter word whose role is
+;     UNIDENTIFIED (its low three bits are a separate field, forced to 7).  The FITTING in
+;     the name covers the other two readers.
 ; ----------------------------------------------------------------------------
-Curve_Exp2Rise_128:
+Curve_Fitting_Exp2Rise_128:
 	.short	0x0000, 0x056D, 0x0AA0, 0x0F9A, 0x145E, 0x18EE, 0x1D4C, 0x217C   ; 0xFDF9E0
 	.short	0x257E, 0x2954, 0x2D01, 0x3085, 0x33E4, 0x371E, 0x3A35, 0x3D2B   ; 0xFDF9F0
 	.short	0x4000, 0x42B7, 0x4550, 0x47CD, 0x4A2F, 0x4C77, 0x4EA6, 0x50BE   ; 0xFDFA00
@@ -210,7 +248,7 @@ Curve_Exp2Rise_128:
 	.short	0x7F4B, 0x7F53, 0x7F5A, 0x7F61, 0x7F68, 0x7F6E, 0x7F74, 0x7F7A   ; 0xFDFAD0
 
 ; ----------------------------------------------------------------------------
-; Curve_Log2_251 -- 0xFDFAE0-0xFDFCD5  (502 bytes)
+; Curve_Position_Log2Period_251 -- 0xFDFAE0-0xFDFCD5  (502 bytes)
 ;
 ; 251 u16.  T[0] = 0x6C00; T[k] = round(27543 - 3072*log2 k) for k >= 1.  3072 counts per
 ; halving is the same slope MathTable_Log2_256 uses, and entry for entry this table is
@@ -221,8 +259,28 @@ Curve_Exp2Rise_128:
 ; after two offsets are added and the result is clamped to 0x0000 / 0x7F00 (0xFC4A2B).
 ;
 ; Cited by: 0xFC49E5 [add <X..>,#imm32]
+;
+; ★ WHAT IT IS -- the resonator POSITION curve.  The editor draws the parameter `P0SITI0N`
+; and gives it a `P0SITI0N M0VEMENT` page that modulates this very register; grade STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §2, notes/FINDINGS-l7a1429-parameter-names.md §5e).
+;
+;   fit       T[0] = 27648; T[k] = round(27543 - 3072*log2 k) for k >= 1, |residual| <= 1.
+;   endpoints 27648 down to 3072 -- 108.000 down to 12.000 in the unit below.
+;   unit      3072 counts per halving is 12 x 256, so ONE COUNT IS 1/256 SEMITONE -- the
+;             unit MathTable_Log2_256 uses and the unit the tone generator's own pitch
+;             register carries.  ★ A log-domain quantity that falls by an octave when the
+;             note rises by an octave is a PERIOD or a TIME: the packer feeds it
+;             0x4280 (note 66.5) MINUS the key-followed pitch, so the slope against pitch
+;             is exactly -1.
+;   feeds     chan+0x00C0, clamped to [0x0000, 0x7F00] = [0, 127.000] in that same unit at
+;             0xFC4A37/0xFC4A3C -- a 10.58-octave window.  ⚠ PERIODIC: this register is
+;             rewritten every 24.576 ms (40.69 Hz) per sounding voice, so an emulator must
+;             model it as a stream, not as a latched parameter.
+;   ⚠ THE ABSOLUTE SCALE IS UNIDENTIFIED.  The unit per count and the direction are fixed;
+;     nothing in the image says which register value is which time, and no reader in the
+;     image supplies one.  The name says log-domain period and stops there.
 ; ----------------------------------------------------------------------------
-Curve_Log2_251:
+Curve_Position_Log2Period_251:
 	.short	0x6C00, 0x6B97, 0x5F97, 0x5892, 0x5397, 0x4FBA, 0x4C92, 0x49E7   ; 0xFDFAE0
 	.short	0x4797, 0x458D, 0x43BA, 0x4214, 0x4092, 0x3F2F, 0x3DE7, 0x3CB5   ; 0xFDFAF0
 	.short	0x3B97, 0x3A8A, 0x398D, 0x389D, 0x37BA, 0x36E2, 0x3614, 0x354F   ; 0xFDFB00
@@ -257,17 +315,38 @@ Curve_Log2_251:
 	.short	0x0C24, 0x0C12, 0x0C00   ; 0xFDFCD0
 
 ; ----------------------------------------------------------------------------
-; Const_0100_251 -- 0xFDFCD6-0xFDFECB  (502 bytes)
+; Dev104_Reg0100_Const_251 -- 0xFDFCD6-0xFDFECB  (502 bytes)
 ;
 ; 251 u16, and EVERY ONE OF THEM IS 0x0100.  Read with the same clamped 0..250 index as
-; Curve_Log2_251, one instruction later (`lda XBC,0xFDFCD6 / add XBC,XIX` at 0xFC49ED),
+; Curve_Position_Log2Period_251, one instruction later (`lda XBC,0xFDFCD6 / add XBC,XIX` at 0xFC49ED),
 ; and stored to word +0x08 of the 0x00104000 staging struct = register 0x0100 + channel.
 ; So on this firmware that register's value from this path is the constant 0x0100.
 ; ⚠ A table of identical entries is a fact about THIS image, not about the hardware.
 ;
 ; Cited by: 0xFC49ED [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- whatever register chan+0x0100 takes, and the name deliberately says no
+; more than that.  Its VALUE is PROVEN and its UNIT IS UNIDENTIFIED
+; (notes/FINDINGS-l7a1429-curve-tables.md §3).
+;
+;   value     0x0100 in all 251 entries.  The run ends itself: the word before is
+;             Curve_Position_Log2Period_251[250] = 3072 and the word after is
+;             Curve_Exp2Gain_Percent_101[0] = 0, so this is not a run bleeding into padding.
+;   role      the second word of the POSITION pair -- same clamped 0..250 index, read one
+;             instruction later.  In the structurally identical pair
+;             (Curve_Muting_Cutoff_Q16_128, Curve_Muting_Cutoff_Q13_128) the second table
+;             is a real second coefficient, so this is a second-coefficient slot that THIS
+;             FIRMWARE pins.
+;   feeds     chan+0x0100, one of the three registers refreshed every 24.576 ms (40.69 Hz)
+;             per sounding voice: the TRAFFIC IS PERIODIC and the VALUE IS CONSTANT.  An
+;             emulator must expect the writes and may ignore the number.
+;   ⚠ THREE READINGS THE NUMBERS CANNOT SEPARATE, which is why the name states the role and
+;     not the unit: 1.0 in Q8; exactly one semitone (256) in the 1/256-semitone unit its
+;     partner register carries; or a lone flag in bit 8 -- 0x0100 has exactly one bit set,
+;     and register 0x0240 in the same periodic trio demonstrably IS field-split.  A name
+;     like `Q8_Unity_251` would assert the first of the three on no evidence.
 ; ----------------------------------------------------------------------------
-Const_0100_251:
+Dev104_Reg0100_Const_251:
 	.short	0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100   ; 0xFDFCD6
 	.short	0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100   ; 0xFDFCE6
 	.short	0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100   ; 0xFDFCF6
@@ -302,15 +381,32 @@ Const_0100_251:
 	.short	0x0100, 0x0100, 0x0100   ; 0xFDFEC6
 
 ; ----------------------------------------------------------------------------
-; Curve_Exp2Decay_101 -- 0xFDFECC-0xFDFF95  (202 bytes)
+; Curve_Exp2Gain_Percent_101 -- 0xFDFECC-0xFDFF95  (202 bytes)
 ;
-; 101 u16.  T[0] = 0; T[k] = Curve_Exp2Decay_256[k+155] for k = 1..100 -- entry for entry,
+; 101 u16.  T[0] = 0; T[k] = Curve_Fitting_Exp2Decay_256[k+155] for k = 1..100 -- entry for entry,
 ; no exceptions -- i.e. the same exponential over its top 100 steps, ending on 0x8000.
 ; COUNT 101, from the readers' clamp to 0..0x64 (0xFC4B04, 0xFC6ECA).
 ;
 ; Cited by: 0xFC4B1B [add <X..>,#imm32], 0xFC6EE1 [add <X..>,#imm32], 0xFC6F0B [add <X..>,#imm32], 0xFC710D [add <X..>,#imm32], 0xFC7137 [add <X..>,#imm32], 0xFC734F [add <X..>,#imm32], 0xFC7379 [add <X..>,#imm32]
+;
+; ★ WHAT IT IS -- an exp2 GAIN TAPER over a 0..100 control with an explicit OFF at 0.
+; Grade: fit PROVEN, unit STRONG (notes/FINDINGS-l7a1429-curve-tables.md §4).
+;
+;   fit       T[0] = 0; T[k] = round(32768 * 2^((k-100)/16)), |err| <= 4.
+;   endpoints 0 (OFF), then 448 .. 0x8000 -- 37.28 dB of live span.
+;   unit      a Q15 gain, 0.3763 dB a step.  ★ The reader's clamp to 0..100 against a
+;             101-entry table is what makes the control a PERCENTAGE: 101 entries for a
+;             0..100% control with an OFF position is not a coincidence of size.
+;   feeds     chan+0x0280 through the packer at 0xFC4B1B.  That register is the editor's
+;             SUB GAIN (grade STRONG, notes/FINDINGS-l7a1429-parameter-names.md §5b) -- the
+;             one parameter the SUB resonator has and the MAIN one does not; its value byte
+;             sits at 100 in 380 of the 392 factory records.
+;   ⚠ THE NAME DOES NOT SAY `SubGain`, BECAUSE SIX OF THE SEVEN READERS ARE NOT THAT PATH:
+;     0xFC6EE1 and 0xFC6F0B are in sub_FC6D6E, whose purpose the tree records as unknown,
+;     and 0xFC710D/0xFC7137/0xFC734F/0xFC7379 are three more such pairs.  The shape and the
+;     0..100 control are true at every reader; SUB GAIN is true at one.
 ; ----------------------------------------------------------------------------
-Curve_Exp2Decay_101:
+Curve_Exp2Gain_Percent_101:
 	.short	0x0000, 0x01C0, 0x01D8, 0x01E8, 0x0200, 0x0218, 0x0230, 0x0248   ; 0xFDFECC
 	.short	0x0260, 0x0278, 0x0298, 0x02B8, 0x02D8, 0x02F8, 0x0318, 0x0338   ; 0xFDFEDC
 	.short	0x0360, 0x0380, 0x03A8, 0x03D8, 0x0400, 0x0430, 0x0460, 0x0490   ; 0xFDFEEC
@@ -326,7 +422,7 @@ Curve_Exp2Decay_101:
 	.short	0x6BA0, 0x7068, 0x7560, 0x7A90, 0x8000   ; 0xFDFF8C
 
 ; ----------------------------------------------------------------------------
-; Table_FDFF96 -- 0xFDFF96-0xFE0095  (256 bytes)
+; Table_Muting_CutoffFloor_ByKeyZone_256 -- 0xFDFF96-0xFE0095  (256 bytes)
 ;
 ; 256 u8, values 0x22..0x3C.  Indexed by the byte at RAM (0x00E08C), zero-extended
 ; (0xFC52A6 `ld C,(0x00e08c) / extz BC / extz XBC / add XBC,<this> / ld B,(XBC)`), so the
@@ -334,8 +430,24 @@ Curve_Exp2Decay_101:
 ; ⚠ What the value is is NOT established; it is used as a shift/limit further down.
 ;
 ; Cited by: 0xFC52AF [add <X..>,#imm32], 0xFC5425 [add <X..>,#imm32]
+;
+; ★ WHAT IT IS -- the MINIMUM MUTING CUTOFF for a key zone.  Grade: range PROVEN, unit
+; STRONG, inherited from the cutoff table (notes/FINDINGS-l7a1429-curve-tables.md §7).
+;
+;   data   256 u8, 27 distinct values, 0x22..0x3C (34..60); no closed form -- these are data.
+;   unit   a cutoff INDEX in semitones, k = MIDI note - 36, so the values are a floor of
+;          466 Hz .. 2093 Hz -- a floor that keeps the filter above its zone's own band.
+;   use    the LOWER CLAMP on the cutoff indices i3/i4 at 0xFC52D2 and 0xFC5439, whose upper
+;          bound is PART[+0x12]; the index into this table is the key-zone byte at 0x00E08C.
+;   feeds  through Curve_Muting_Cutoff_Q16_128 / Curve_Muting_Cutoff_Q13_128 into
+;          chan+0x0400/0x0340 (MAIN MUTING) and chan+0x0440/0x0380 (SUB MUTING).
+;   ⚠ The block above says the value "is NOT established"; that was true when it was
+;     written and wave 19 has since fixed the unit.  The older sentence is LEFT AS WRITTEN
+;     rather than reworded -- this paragraph is the correction.
+;   ⚠ The producer of (0x00E08C) is a key-zone record in prom_d, so what the 27 values mean
+;     zone by zone is still not established here.
 ; ----------------------------------------------------------------------------
-Table_FDFF96:
+Table_Muting_CutoffFloor_ByKeyZone_256:
 	.byte	0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c   ; 0xFDFF96
 	.byte	0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c   ; 0xFDFFA6
 	.byte	0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c   ; 0xFDFFB6
@@ -354,7 +466,7 @@ Table_FDFF96:
 	.byte	0x2f, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x33, 0x34, 0x35, 0x36, 0x37, 0x37, 0x38, 0x39, 0x3a, 0x3b   ; 0xFE0086
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0096 -- 0xFE0096-0xFE0115  (128 bytes)
+; LinCoef_Position_KeyRamp_Q5_128 -- 0xFE0096-0xFE0115  (128 bytes)
 ;
 ; 128 SIGNED bytes.  T[k] = (k*256)//128 - 128 = 2k - 128: -128 .. +126 in steps of 2,
 ; exact on all 128 entries.  One of four tables read by the identical idiom, at 0xFC55E0:
@@ -368,8 +480,19 @@ Table_FDFF96:
 ; ⚠ that the key IS a note number is not established here.
 ;
 ; Cited by: 0xFC55E0 [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales the resonator POSITION.  Grade: fit PROVEN
+; (exact, not "approximately linear"), unit STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §6).
+;
+;   fit       T[k] = 2k - 128, exact on all 128 entries.
+;   endpoints -128 .. +126 = -4.000 .. +3.938 in Q5; slope 1/16 of a Q5 unit per key.
+;   unit      Q5 (32 = 1.0), multiplied by the signed depth byte at wave-select +0x10 and
+;             shifted right 5 -- the idiom above.
+;   feeds     R[+0x12], the index into Curve_Position_Log2Period_251, hence chan+0x00C0.
+;             One index step there is 1/256 semitone of POSITION.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0096:
+LinCoef_Position_KeyRamp_Q5_128:
 	.byte	0x80, 0x82, 0x84, 0x86, 0x88, 0x8a, 0x8c, 0x8e, 0x90, 0x92, 0x94, 0x96, 0x98, 0x9a, 0x9c, 0x9e   ; 0xFE0096
 	.byte	0xa0, 0xa2, 0xa4, 0xa6, 0xa8, 0xaa, 0xac, 0xae, 0xb0, 0xb2, 0xb4, 0xb6, 0xb8, 0xba, 0xbc, 0xbe   ; 0xFE00A6
 	.byte	0xc0, 0xc2, 0xc4, 0xc6, 0xc8, 0xca, 0xcc, 0xce, 0xd0, 0xd2, 0xd4, 0xd6, 0xd8, 0xda, 0xdc, 0xde   ; 0xFE00B6
@@ -380,7 +503,7 @@ LinCoef_FE0096:
 	.byte	0x60, 0x62, 0x64, 0x66, 0x68, 0x6a, 0x6c, 0x6e, 0x70, 0x72, 0x74, 0x76, 0x78, 0x7a, 0x7c, 0x7e   ; 0xFE0106
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0116 -- 0xFE0116-0xFE0195  (128 bytes)
+; LinCoef_Fitting_KeyRamp_Q5_128 -- 0xFE0116-0xFE0195  (128 bytes)
 ;
 ; 128 signed bytes, same reader idiom (0xFC4F51, 0xFC500E).
 ; T[k] = (k*65)//128 - 32: -32 .. +32, i.e. -1.0 .. +1.0 in Q5, exact on all 128.
@@ -389,8 +512,19 @@ LinCoef_FE0096:
 ; (..., -1, -1, 0, 1, 1, 2, ...), which only the slope 65/128 reproduces.  T[127] = +32.
 ;
 ; Cited by: 0xFC4F51 [lda <X..>,addr24], 0xFC500E [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales FITTING.  Grade: fit PROVEN (exact), unit STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §6).
+;
+;   fit       T[k] = 65k//128 - 32, exact on all 128; BIPOLAR, with a single zero at k = 64.
+;   endpoints -32 .. +32 = -1.000 .. +1.000 in Q5; slope 1/63 of a Q5 unit per key.
+;   feeds     v1 (depth byte at wave-select +0x17) and v2 (+0x22), the indices into
+;             Curve_Fitting_Exp2Decay_256 and Curve_Fitting_Exp2Rise_128, hence
+;             chan+0x0140/0x01C0 (MAIN FITTING) and chan+0x0180/0x0200 (SUB FITTING).
+;   unit      ★ one step of the destination index is 0.3763 dB, so this ramp is a
+;             dB-per-key slope: the full Q5 unit spans 16 index steps = 6.02 dB.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0116:
+LinCoef_Fitting_KeyRamp_Q5_128:
 	.byte	0xe0, 0xe0, 0xe1, 0xe1, 0xe2, 0xe2, 0xe3, 0xe3, 0xe4, 0xe4, 0xe5, 0xe5, 0xe6, 0xe6, 0xe7, 0xe7   ; 0xFE0116
 	.byte	0xe8, 0xe8, 0xe9, 0xe9, 0xea, 0xea, 0xeb, 0xeb, 0xec, 0xec, 0xed, 0xed, 0xee, 0xee, 0xef, 0xef   ; 0xFE0126
 	.byte	0xf0, 0xf0, 0xf1, 0xf1, 0xf2, 0xf2, 0xf3, 0xf3, 0xf4, 0xf4, 0xf5, 0xf5, 0xf6, 0xf6, 0xf7, 0xf7   ; 0xFE0136
@@ -401,7 +535,7 @@ LinCoef_FE0116:
 	.byte	0x18, 0x19, 0x19, 0x1a, 0x1a, 0x1b, 0x1b, 0x1c, 0x1c, 0x1d, 0x1d, 0x1e, 0x1e, 0x1f, 0x1f, 0x20   ; 0xFE0186
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0196 -- 0xFE0196-0xFE0215  (128 bytes)
+; LinCoef_Muting_KeyRamp_Q5_128 -- 0xFE0196-0xFE0215  (128 bytes)
 ;
 ; 128 signed bytes, same reader idiom (0xFC5249, 0xFC53BF).
 ; T[k] = k//2 - 64 for k = 0..126: -64 .. -1, i.e. -2.0 .. -0.03 in Q5.
@@ -409,8 +543,22 @@ LinCoef_FE0116:
 ; sampled check would have missed that; every entry was compared.
 ;
 ; Cited by: 0xFC5249 [lda <X..>,addr24], 0xFC53BF [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales MUTING.  Grade: fit PROVEN (exact, T[127]
+; included), unit STRONG (notes/FINDINGS-l7a1429-curve-tables.md §6).
+;
+;   fit       T[k] = k//2 - 64 for k = 0..126, and T[127] = 0 -- the exception the block
+;             above records, which a sampled check would have missed.
+;   endpoints -64 .. -1 = -2.000 .. -0.031 in Q5, UNIPOLAR; slope 1/64 of a Q5 unit per key.
+;   feeds     i3 (depth byte at wave-select +0x18) and i4 (+0x23), the MUTING cutoff
+;             indices, hence chan+0x0340/0x0400 (MAIN MUTING) and chan+0x0380/0x0440 (SUB).
+;   ★★ IT GIVES THE CUTOFF KEY FOLLOW AN EXACT UNIT.  The destination index is in
+;      SEMITONES OF CUTOFF (k = MIDI note - 36), and the slope is 1/64 of a Q5 unit per
+;      key, so a depth byte of 64 is exactly ONE SEMITONE OF CUTOFF PER SEMITONE OF KEY =
+;      100% KEY FOLLOW, and the signed byte's +-127 range is +-198%.  The same holds for
+;      the ks(Q, o) key-scaling stage, whose slope is Q[+o+3] >> 5: there 32 = 100%.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0196:
+LinCoef_Muting_KeyRamp_Q5_128:
 	.byte	0xc0, 0xc0, 0xc1, 0xc1, 0xc2, 0xc2, 0xc3, 0xc3, 0xc4, 0xc4, 0xc5, 0xc5, 0xc6, 0xc6, 0xc7, 0xc7   ; 0xFE0196
 	.byte	0xc8, 0xc8, 0xc9, 0xc9, 0xca, 0xca, 0xcb, 0xcb, 0xcc, 0xcc, 0xcd, 0xcd, 0xce, 0xce, 0xcf, 0xcf   ; 0xFE01A6
 	.byte	0xd0, 0xd0, 0xd1, 0xd1, 0xd2, 0xd2, 0xd3, 0xd3, 0xd4, 0xd4, 0xd5, 0xd5, 0xd6, 0xd6, 0xd7, 0xd7   ; 0xFE01B6
@@ -421,14 +569,27 @@ LinCoef_FE0196:
 	.byte	0xf8, 0xf8, 0xf9, 0xf9, 0xfa, 0xfa, 0xfb, 0xfb, 0xfc, 0xfc, 0xfd, 0xfd, 0xfe, 0xfe, 0xff, 0x00   ; 0xFE0206
 
 ; ----------------------------------------------------------------------------
-; LinCoef_FE0216 -- 0xFE0216-0xFE0295  (128 bytes)
+; LinCoef_SubGain_KeyRamp_Q5_128 -- 0xFE0216-0xFE0295  (128 bytes)
 ;
-; 128 signed bytes, BYTE-IDENTICAL to LinCoef_FE0196 (all 128), and read by the same
+; 128 signed bytes, BYTE-IDENTICAL to LinCoef_Muting_KeyRamp_Q5_128 (all 128), and read by the same
 ; idiom at 0xFC513E.  Two copies of one curve, not two curves.
 ;
 ; Cited by: 0xFC513E [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the KEY RAMP that scales SUB GAIN.  Byte-identical to
+; LinCoef_Muting_KeyRamp_Q5_128, so the LAW is the same and only the DESTINATION differs;
+; that is the whole reason the two carry different names.  Grade: fit PROVEN, destination
+; STRONG (notes/FINDINGS-l7a1429-curve-tables.md §6,
+; notes/FINDINGS-l7a1429-parameter-names.md §5b).
+;
+;   fit       as its twin: T[k] = k//2 - 64 for k = 0..126, T[127] = 0.
+;   endpoints -64 .. -1 = -2.000 .. -0.031 in Q5; slope 1/64 of a Q5 unit per key.
+;   feeds     R[+0x10], the 0..100 index into Curve_Exp2Gain_Percent_101, hence chan+0x0280
+;             -- the editor's SUB GAIN.  Its depth byte is wave-select +0x24, which is 0 in
+;             all 392 factory records: what an unused touch depth looks like.
+;   unit      one step of the destination index is 0.3763 dB of that gain.
 ; ----------------------------------------------------------------------------
-LinCoef_FE0216:
+LinCoef_SubGain_KeyRamp_Q5_128:
 	.byte	0xc0, 0xc0, 0xc1, 0xc1, 0xc2, 0xc2, 0xc3, 0xc3, 0xc4, 0xc4, 0xc5, 0xc5, 0xc6, 0xc6, 0xc7, 0xc7   ; 0xFE0216
 	.byte	0xc8, 0xc8, 0xc9, 0xc9, 0xca, 0xca, 0xcb, 0xcb, 0xcc, 0xcc, 0xcd, 0xcd, 0xce, 0xce, 0xcf, 0xcf   ; 0xFE0226
 	.byte	0xd0, 0xd0, 0xd1, 0xd1, 0xd2, 0xd2, 0xd3, 0xd3, 0xd4, 0xd4, 0xd5, 0xd5, 0xd6, 0xd6, 0xd7, 0xd7   ; 0xFE0236
@@ -500,7 +661,7 @@ MathTable_Sin_S8_512:
 	.byte	0xe7, 0xe9, 0xea, 0xec, 0xed, 0xef, 0xf0, 0xf2, 0xf4, 0xf5, 0xf7, 0xf8, 0xfa, 0xfb, 0xfd, 0xfe   ; 0xFE04B9
 
 ; ----------------------------------------------------------------------------
-; Curve_FE04C9 -- 0xFE04C9-0xFE05C8  (256 bytes)
+; Curve_Muting_Cutoff_Q16_128 -- 0xFE04C9-0xFE05C8  (256 bytes)
 ;
 ; 128 s16, rising from -510 (repeated ten times) to +28591 (repeated at the top).
 ; Read at 0xFC4987 / 0xFC52E1 / 0xFC5457 with `ld BC,2 / muls XBC,HL / add XBC,<this>`;
@@ -509,8 +670,36 @@ MathTable_Sin_S8_512:
 ; the count 128 rests on the next cited base, 0xFE05C9, and not on the reader.
 ;
 ; Cited by: 0xFC4987 [add <X..>,#imm32], 0xFC52E1 [add <X..>,#imm32], 0xFC5457 [add <X..>,#imm32]
+;
+; ★★ WHAT IT IS -- the tone editor's MUTING, and the numbers say it is a ONE-POLE LOWPASS
+; CUTOFF COEFFICIENT whose index is literally a MIDI note.  Grade: fit PROVEN, unit STRONG
+; (notes/FINDINGS-l7a1429-curve-tables.md §1, notes/FINDINGS-l7a1429-parameter-names.md §4).
+;
+;   encoding  the entries are FOLD-ENCODED -- sign-magnitude to offset-binary -- by the
+;             packer's own step at 0xFC5361:
+;                 fold(x) = (x & 0x8000) ? 0x8000 - (x & 0x7FFF) : x + 0x8000
+;             ★ Under fold the table is strictly monotone; read as s16 it is not, and that
+;             two's-complement reading is the null the fit had to beat.
+;   fit       fold(T[k]) = round(65536 * g/(1+g)), g = tan(pi*f_k/44100),
+;             f_k = 440*2^((k-33)/12) -- max |residual| ONE COUNT over k = 9..100.
+;   endpoints fold: 510 .. 61359, then saturated for k = 100..127.
+;   unit      the Q16 coefficient of a one-pole lowpass under the BILINEAR TRANSFORM, g
+;             being the prewarped cutoff.  ★ THE INDEX IS A SEMITONE: force the slope to
+;             1/12 and the ROM's own entries put index 0 at 65.4201 Hz = MIDI note 36.0036,
+;             0.36 cents from note 36 against a fit scatter of 1.63 cents.  So
+;             k = MIDI note - 36, and the readers' band 44..96 is 831 Hz .. 16.7 kHz.
+;   ★ ceiling both tables saturate at exactly k = 100, the last index whose prewarp tan() is
+;             finite: theta(100) = 1.50285 < pi/2 < theta(101) = 1.59221.  A tan() table
+;             that stops one step before its own pole is a bilinear filter coefficient.
+;   feeds     chan+0x0400 (MAIN MUTING) and chan+0x0440 (SUB MUTING) from 0xFC52E1 and
+;             0xFC5457, both ONE-SHOT voice parameters written only inside a full
+;             19-register burst.  ⚠ Its THIRD reader, 0xFC4987, feeds chan+0x0480 from the
+;             p15 index -- the same quantity a third time, which the editor's unassigned
+;             FORMANT caption may name.  That one is graded WEAK and MUTING does not cover it.
+;   ⚠ 44,100 Hz is the SCHEMATIC's number, not a fitted one: IC4's crystal X4 =
+;     33.8688 MHz = 768 x 44100.  Nothing was fitted to obtain f_k.
 ; ----------------------------------------------------------------------------
-Curve_FE04C9:
+Curve_Muting_Cutoff_Q16_128:
 	.short	0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02, 0xFE02   ; 0xFE04C9
 	.short	0xFE02, 0xFE02, 0xFDE4, 0xFDC4, 0xFDA2, 0xFD7F, 0xFD59, 0xFD31   ; 0xFE04D9
 	.short	0xFD07, 0xFCDA, 0xFCAB, 0xFC79, 0xFC44, 0xFC0C, 0xFBD1, 0xFB93   ; 0xFE04E9
@@ -529,16 +718,35 @@ Curve_FE04C9:
 	.short	0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF, 0x6FAF   ; 0xFE05B9
 
 ; ----------------------------------------------------------------------------
-; Curve_FE05C9 -- 0xFE05C9-0xFE06C8  (256 bytes)
+; Curve_Muting_Cutoff_Q13_128 -- 0xFE05C9-0xFE06C8  (256 bytes)
 ;
-; 128 s16, falling from -25 to -8188, read one instruction after Curve_FE04C9 through the
+; 128 s16, falling from -25 to -8188, read one instruction after Curve_Muting_Cutoff_Q16_128 through the
 ; same index (`lda XBC,0xFE05C9 / add XBC,XIX` at 0xFC4996, 0xFC52EF, 0xFC5465).
-; The pair is the same shape as (Curve_Log2_251, Const_0100_251): two parallel tables,
+; The pair is the same shape as (Curve_Position_Log2Period_251, Dev104_Reg0100_Const_251): two parallel tables,
 ; one index, two struct words.
 ;
 ; Cited by: 0xFC4996 [lda <X..>,addr24], 0xFC52EF [lda <X..>,addr24], 0xFC5465 [lda <X..>,addr24]
+;
+; ★ WHAT IT IS -- the Q13 companion of the SAME MUTING cutoff, not a second parameter.
+; Grade: fit PROVEN, the tie to the cutoff STRONG, the ROLE UNIDENTIFIED
+; (notes/FINDINGS-l7a1429-curve-tables.md §1).
+;
+;   fit       fold(T[k]) = round(8192 * (1 - 1/(128*g))) with the SAME g as
+;             Curve_Muting_Cutoff_Q16_128 -- max |residual| 5 counts over k = 9..100.
+;             Equivalently, entry for entry, (1 - fold(T)/8192) * g = 1/128.
+;   endpoints fold: 25 .. 8188, then saturated for k = 100..127, like its partner.
+;   ★ AN EMULATOR HAS ONE PARAMETER HERE, NOT TWO.  Invert each table for the theta it
+;     implies -- atan(F/(65536-F)) against atan(1/(128*(1-G/8192))) -- and the two agree to
+;     17.4 cents worst case over the live band and 3.4 cents over k = 9..60.  So given
+;     chan+0x0400, register chan+0x0340 is COMPUTABLE; same for chan+0x0440 / chan+0x0380.
+;   feeds     chan+0x0340 (MAIN MUTING) and chan+0x0380 (SUB MUTING) from 0xFC52EF and
+;             0xFC5465; and chan+0x03C0 from 0xFC4996 on the p15 index, the FORMANT
+;             candidate its partner also feeds.
+;   ⚠ WHAT IT IS FOR is open: no standard filter structure this pass tried puts
+;     8192*(1 - 1/(128g)) next to 65536*g/(1+g).  Recorded as a shape, not a role -- which
+;     is why the name says Q13 and stops.
 ; ----------------------------------------------------------------------------
-Curve_FE05C9:
+Curve_Muting_Cutoff_Q13_128:
 	.short	0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7, 0xFFE7   ; 0xFE05C9
 	.short	0xFFE7, 0xFFE2, 0xFE18, 0xFC68, 0xFAD4, 0xF952, 0xF7E6, 0xF68F   ; 0xFE05D9
 	.short	0xF54B, 0xF419, 0xF2F8, 0xF1E7, 0xF0E6, 0xEFF3, 0xEF0E, 0xEE36   ; 0xFE05E9
@@ -704,7 +912,7 @@ MathTable_Atan_256:
 ; for k >= 1, err in {-1, 0, +1}.  It is 0 at k = 128 and negative above it.
 ; Read at 0xFC465F as `ld BC,0x0800 / sub BC,WA / sra 4,BC / muls BC,2 / add XBC,<this>`
 ; i.e. index = (2048 - x)/16 with x in Q11, so the value is -3072*log2(1 - x/2048).
-; 3072 counts per halving is the same slope Curve_Log2_251 uses.
+; 3072 counts per halving is the same slope Curve_Position_Log2Period_251 uses.
 ;
 ; Cited by: 0xFC466B [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
