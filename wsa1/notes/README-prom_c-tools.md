@@ -1097,3 +1097,26 @@ a **one-pole lowpass cutoff**, `F = 65536·g/(1+g)` and `G = 8192·(1 − 1/(128
 makes register `0x00C0`'s unit **1/256 semitone**; `LinCoef_FE0196`'s slope makes a depth byte
 of 64 exactly **100% cutoff key follow**. Findings:
 `notes/FINDINGS-l7a1429-curve-tables.md`.
+
+---
+
+## Wave 20 — lane `w20/lsi-packers`: naming the routines that BUILD the register values
+
+```
+python3 notes/w20_lsi_packer_names.py --rename    # apply w20-lsi-packer-renames.map
+python3 notes/w20_lsi_packer_names.py --document  # insert one evidence block per routine
+python3 notes/w20_lsi_packer_names.py --check     # both applied, nothing left over
+python3 notes/w20_lsi_packer_checks.py --selftest # 9 sections, FAILURES: 0
+```
+
+| script | the question it answers |
+|---|---|
+| `notes/w20_lsi_packer_names.py` | *Which routines in `prom_c/field_accessors.s` build the L7A1429's nineteen register values, and what should each be called?* Renames 24 of them from `w20-lsi-packer-renames.map` and inserts the prose that justifies each name. Byte-safe: it reads and writes BYTES, so a `★` can never truncate the file on an encode error. |
+| `notes/w20_lsi_packer_checks.py` | *Is every attribution in those 24 headers actually in the ROM?* Reads `original_ROMs/wsa1_prom_c.ic28` only — never a `.s` file — and asserts the exact encoding at each address the headers cite: the 64-entry slot pool at `0x005B63`, the two writers of register `0x0000`'s high byte, the four curve reads of `Pack104_StageRegs_00C0_0100_0240`, the eight part-record parameter words with one setter each, and the `P0SITI0N MOVEMENT` chain. |
+
+★ **The result:** eight consecutive words of the part record — `PART[+0x01]` through
+`PART[+0x0F]`, on a stride of two — are one part-level control each for `FITTING`,
+`P0SITI0N` (twice), `P0SITI0N M0VEMENT` depth and rate, `MUTING`, `KEY SHIFT`/`TUNE` and
+`SUB GAIN`, and `Pack104_DispatchByResoMode_ForPart` clears exactly that set and no other
+word. Findings and the three corrections owed to other lanes:
+`notes/FINDINGS-l7a1429-packer-routines.md`.
