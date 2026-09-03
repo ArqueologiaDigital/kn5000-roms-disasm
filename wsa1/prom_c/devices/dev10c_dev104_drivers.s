@@ -429,6 +429,10 @@
 ;   `add rr,imm16` (4 bytes) and `ld (rr),imm16`, so a symbol the assembler
 ;   resolved differently would change the ROM.  `make gate-all` stays 13/13.
 ;   Applied and re-checkable by `python3 notes/dev104_apply_regsyms.py --verify`.
+;   ★ AND EVERY CLAIM SECTION 7 MAKES ON ITS OWN ACCOUNT -- the 64-channel bound,
+;   the value of register 0x0800, and the census of 0x00104000 literals -- is
+;   re-read from original_ROMs/wsa1_prom_c.ic28, no .s file, by
+;   `python3 notes/dev104_apply_regsyms.py --checks`.  FAILURES: 0.
 ;
 ; ⚠ WHAT IS *NOT* CONVERTED, and why: nothing.  Every 0x00104000 register-block
 ;   literal in this file is a plain instruction operand.  Had one sat inside an
@@ -512,9 +516,9 @@
 ; ------------------------------------------------------------------------------
 ; ⚠ (a) SECTION 1 SAYS "64 channels per block is NOT established for THIS device.
 ;   It is established for 0x0010C000".  THAT IS NOW WRONG, and this device
-;   establishes it ITSELF.  Dev10C_ResetAllChannels writes register 0x0800 of
-;   0x00104000 at 0xFB80F6 and then runs its `ldb D,0x40` loop; more directly,
-;   the power-on sweep's second loop (0xFB81DB, bound `cp HL,0x0040` at 0xFB8281)
+;   establishes it ITSELF.  ⚠ NOT via the `ldb D,0x40` loop at 0xFB8116 -- that one
+;   reloads XIX with 0x0010C000 at 0xFB8102 first and is the OTHER device's.  The
+;   power-on sweep's second loop (0xFB81DB, bound `cp HL,0x0040` at 0xFB8281)
 ;   calls Dev104_WriteChanReg0 with &0x00D8DB once per channel for HL = 0..0x3F,
 ;   and the first loop (0xFB8175, bound `cp HL,0x0040` at 0xFB81B9) calls
 ;   Dev104_WriteAllChanRegs the same way.  Both bounds are literal `0x0040`
@@ -572,7 +576,8 @@
 ;   `0x00104000` literal (this file holds nine, and section 0 enumerates them:
 ;   eight in the Dev104_ family and one in Dev10C_ResetAllChannels).  So naming
 ;   the L7A1429's registers cannot settle what any of the four is FOR, and the
-;   four keep their address labels.
+;   four keep their address labels.  The census and the four spans are section 3
+;   of `notes/dev104_apply_regsyms.py --checks`.
 ;   ⚠ What would settle them is unchanged: a reader of 0x0010C000 block 0x0080,
 ;   or the meaning of the 0x0000E21D array, or what a gate pulse with no
 ;   parameter change between its edges does.
@@ -934,6 +939,11 @@ Dev10C_ChanMinus2_ClrReg_0080_Bit15__FB6F26:
 ; the 0x0000E21D array.  Adopting it would also need the `Calls:` citations in
 ; prom_c/wsa1_prom_c.s and prom_c/midi/midi_controllers.s updated, and
 ; notes/prom_c_finish_round12.py's `regblocks("sub_FB762F")` check re-pointed.
+; ★ WAVE 20, 2026-09-03 -- THE REFUSAL STILL HOLDS, and not as a judgement
+; call: this routine drives 0x0010C000, NOT 0x00104000.  Its register blocks belong
+; to the OTHER device, whose numbering overlaps and means something else, and it
+; contains no 0x00104000 literal at all.  So naming the L7A1429's registers cannot
+; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB6F2C:
 	link32 0xEE, 0x0C, 0xF2, 0xFF          ; FB6F2C  link XIZ,0xfff2   [llvm-mc cannot encode this]
@@ -1135,6 +1145,11 @@ Dev10C_SetChanReg_0080_ClrBit15:
 ; those words.  So this is the struct-driven twin of sub_FB6F2C, without the entry
 ; guard.  PROPOSED NAME, graded WEAK and NOT APPLIED:
 ; `Dev10C_ChanRegateAndSet_0500_09xx_FromStruct`.  Same caveat, same blocker.
+; ★ WAVE 20, 2026-09-03 -- THE REFUSAL STILL HOLDS, and not as a judgement
+; call: this routine drives 0x0010C000, NOT 0x00104000.  Its register blocks belong
+; to the OTHER device, whose numbering overlaps and means something else, and it
+; contains no 0x00104000 literal at all.  So naming the L7A1429's registers cannot
+; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB707E:
 	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FB707E  link XIZ,0xfff8   [llvm-mc cannot encode this]
@@ -2156,6 +2171,11 @@ Dev10C_SetChanReg_0180_FromArg:
 ; ⚠ The 0x7FFF mask is `and BC,(XIZ+0xec)` against a frame slot loaded with the
 ; literal 0x7FFF at 0xFB75C0 -- a masked constant, not an immediate, which is why a
 ; naive immediate scan does not see the gate bit being cleared here.
+; ★ WAVE 20, 2026-09-03 -- THE REFUSAL STILL HOLDS, and not as a judgement
+; call: this routine drives 0x0010C000, NOT 0x00104000.  Its register blocks belong
+; to the OTHER device, whose numbering overlaps and means something else, and it
+; contains no 0x00104000 literal at all.  So naming the L7A1429's registers cannot
+; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB7521:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB7521  link XIZ,0xffec
@@ -2297,6 +2317,11 @@ sub_FB7521:
 ; ESTABLISHED.  Four routines in this file re-issue one register several times with
 ; an unchanged value; a hold or settling time is the obvious reading and nothing in
 ; the image supports it.
+; ★ WAVE 20, 2026-09-03 -- THE REFUSAL STILL HOLDS, and not as a judgement
+; call: this routine drives 0x0010C000, NOT 0x00104000.  Its register blocks belong
+; to the OTHER device, whose numbering overlaps and means something else, and it
+; contains no 0x00104000 literal at all.  So naming the L7A1429's registers cannot
+; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB762F:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB762F  link XIZ,0xfff6

@@ -27,7 +27,14 @@ WHAT IT EDITS
 RUN
     python3 notes/dev104_apply_regsyms.py            # apply (idempotent)
     python3 notes/dev104_apply_regsyms.py --verify   # assert every site is done
+    python3 notes/dev104_apply_regsyms.py --checks   # the header's own claims
     python3 notes/dev104_apply_regsyms.py --selftest # the checks below
+
+    --checks re-reads original_ROMs/wsa1_prom_c.ic28 -- bytes, no .s file -- for
+    the three claims section 7 of the driver header makes on its own account:
+    the 64-channel bound, the value of the one global register, and the census
+    of 0x00104000 literals that keeps the four sub_ routines out of this
+    device's story.
 
     --selftest requires the applier to REFUSE a site whose literal does not
     match the symbol, and to refuse an `extpfx` line.  A check that cannot go
@@ -183,6 +190,83 @@ def run(apply_changes):
     return changed, pending
 
 
+# ---------------------------------------------------------------------------
+# --checks: the ROM evidence behind section 7 of the driver header.
+# ---------------------------------------------------------------------------
+ROM = WSA1 / "original_ROMs" / "wsa1_prom_c.ic28"
+ROM_BASE = 0x00F80000
+
+# The four routines this file leaves as addresses, and their spans as their own
+# wave-17 headers state them.  The census below must miss every one of them.
+SUB_SPANS = [
+    ("sub_FB6F2C", 0xFB6F2C, 0xFB707D),
+    ("sub_FB707E", 0xFB707E, 0xFB7139),
+    ("sub_FB7521", 0xFB7521, 0xFB762E),
+    ("sub_FB762F", 0xFB762F, 0xFB7714),
+]
+
+
+def checks():
+    rom = ROM.read_bytes()
+
+    def at(addr, n):
+        return rom[addr - ROM_BASE:addr - ROM_BASE + n]
+
+    fails = 0
+
+    def want(cond, said):
+        nonlocal fails
+        print("  %-4s %s" % ("ok" if cond else "FAIL", said))
+        if not cond:
+            fails += 1
+
+    print("1. 64 CHANNELS, from THIS device's own writers")
+    # calr disp16 is relative to the address AFTER the 3-byte instruction.
+    def calr_target(addr):
+        d = int.from_bytes(at(addr + 1, 2), "little", signed=True)
+        return (addr + 3 + d) & 0xFFFFFF
+    want(at(0xFB81A4, 1) == b"\x1e" and calr_target(0xFB81A4) == 0xFB77EF,
+         "0xFB81A4 calls Dev104_WriteAllChanRegs (0xFB77EF)")
+    want(at(0xFB81B9, 4) == b"\xdb\xcf\x40\x00",
+         "0xFB81B9 bounds that loop with `cp HL,0x0040`")
+    want(at(0xFB826B, 1) == b"\x1e" and calr_target(0xFB826B) == 0xFB7A58,
+         "0xFB826B calls Dev104_WriteChanReg0 (0xFB7A58)")
+    want(at(0xFB8281, 4) == b"\xdb\xcf\x40\x00",
+         "0xFB8281 bounds that loop with `cp HL,0x0040`")
+    # And the loop that is NOT evidence, because it drives the other device.
+    want(at(0xFB8102, 5) == b"\x44\x00\xc0\x10\x00",
+         "0xFB8102 reloads XIX with 0x0010C000 before the `ldb D,0x40` loop")
+
+    print("2. THE GLOBAL REGISTER 0x0800")
+    want(at(0xFB80F6, 4) == b"\xb4\x02\x00\x08",
+         "0xFB80F6 selects register 0x0800 (`ld (XIX),0x0800`)")
+    want(at(0xFB80FA, 5) == b"\xd2\x13\x13\xfe\x21",
+         "0xFB80FA loads its value from ROM 0xFE1313")
+    w = int.from_bytes(at(0xFE1313, 2), "little")
+    want(w == 0x1100, "the word at 0xFE1313 is 0x%04X, i.e. 0x1100" % w)
+
+    print("3. THE 0x00104000 CENSUS, and the four sub_ routines")
+    seen = []
+    for op in (0x41, 0x44):                      # ld XBC,imm32 / ld XIX,imm32
+        pat = bytes([op]) + BASE_VALUE.to_bytes(4, "little")
+        i = -1
+        while True:
+            i = rom.find(pat, i + 1)
+            if i < 0:
+                break
+            seen.append(ROM_BASE + i)
+    seen.sort()
+    want(len(seen) == 9, "nine 0x00104000 literals in the image (%d)" % len(seen))
+    expect = sorted(a for a, v in SITES if v == BASE_VALUE)
+    want(seen == expect, "every one of them is a converted site")
+    for name, lo, hi in SUB_SPANS:
+        want(not any(lo <= a <= hi for a in seen),
+             "%s (0x%06X-0x%06X) holds none" % (name, lo, hi))
+
+    print("FAILURES: %d" % fails)
+    return 1 if fails else 0
+
+
 def selftest():
     fails = 0
 
@@ -229,10 +313,14 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--verify", action="store_true",
                     help="assert every site already carries its symbol")
+    ap.add_argument("--checks", action="store_true",
+                    help="re-read the ROM evidence behind header section 7")
     ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args()
     if args.selftest:
         return selftest()
+    if args.checks:
+        return checks()
     if args.verify:
         _, pending = run(apply_changes=False)
         print("%d sites, %d still literal" % (len(SITES), pending))

@@ -1106,6 +1106,7 @@ established be written at the instruction itself, and can that be proved to move
 ```
 python3 notes/dev104_apply_regsyms.py            # apply (idempotent)
 python3 notes/dev104_apply_regsyms.py --verify   # assert every site carries its symbol
+python3 notes/dev104_apply_regsyms.py --checks   # the ROM evidence behind header section 7
 python3 notes/dev104_apply_regsyms.py --selftest # FAILURES: 0
 ```
 
@@ -1118,5 +1119,8 @@ and `ld (rr),imm16` operands, so a symbol resolved differently would change the 
 are never touched -- the instruction text left of `;` is rewritten and re-padded so the comment
 stays in its column -- and `--selftest` requires the applier to REFUSE both a site whose literal
 disagrees with the symbol and an `extpfx*` raw-byte pseudo-instruction, whose operand is a byte
-list and could not be proved. Names and grades:
+list and could not be proved. `--checks` re-reads the ROM for the three claims the new
+header section makes on its own account -- the 64-channel bound read off this device's own
+writers, the 0x1100 in register 0x0800, and the nine-literal 0x00104000 census that keeps
+the file's four `sub_` routines out of this device's story. Names and grades:
 `notes/FINDINGS-l7a1429-parameter-names.md`, `notes/HLE-GUIDE-l7a1429.md`.
