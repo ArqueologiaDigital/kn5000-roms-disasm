@@ -411,7 +411,71 @@ def wrong():
     say("")
 
 
-SECTIONS = [q1, q2, q3, q4, q5, q6, q7, q8, q9, wrong]
+def q11():
+    say("== Q11  the resolver run on the real data: 829 catalogue rows, 0 misses ==")
+    say("   Q5 decoded sub_FB82C3 from its instructions.  This runs that decode")
+    say("   over every row of the three catalogues whose rows reach it, and asks")
+    say("   whether the answers land inside the arrays it claims to index.")
+    say("")
+    say("     map   array  rows  entries<count  max  catalogue rows resolving")
+    tot_rows = tot_ok = 0
+    for mapslot, arrslot, cat, ncat, nrec, fam_want in (
+            (0x0C, 0x18, 0x50, 307, 322, {0x00, 0x80}),
+            (0x10, 0x1C, 0x64, 314, 322, {0x00, 0x80}),
+            (0x14, 0x20, 0x8C, 208, 208, {0x40})):
+        m = struct.unpack_from("<I", D, mapslot)[0]
+        base = struct.unpack_from("<I", D, cat)[0]
+        vals = [struct.unpack_from("<H", D, m + 2 * i)[0] for i in range(1024)]
+        inrange = sum(1 for v in vals if v < nrec)
+        ok = bad_bank = 0
+        fams = set()
+        for i in range(ncat):
+            r = base + 16 * i
+            idx = (D[r + 0x0F] & 0x0F) * 128 + (D[r + 0x0E] & 0x7F)
+            fams.add(D[r + 0x0F] & 0xC0)
+            if idx >= 1024:
+                bad_bank += 1
+                continue
+            if struct.unpack_from("<H", D, m + 2 * idx)[0] < nrec:
+                ok += 1
+        tot_rows += ncat
+        tot_ok += ok
+        say("     +0x%02X  +0x%02X   %4d  %4d/1024      %3d  %d/%d"
+            % (mapslot, arrslot, ncat, inrange, max(vals), ok, ncat))
+        check("map +0x%02X: ALL 1024 entries are below %d, the record count of "
+              "the array this decode says it indexes (its maximum is %d)"
+              % (mapslot, nrec, max(vals)), inrange == 1024)
+        check("catalogue +0x%02X: all %d rows have a bank nibble <= 7, so none "
+              "indexes past the 1024-entry map" % (cat, ncat), bad_bank == 0)
+        check("catalogue +0x%02X: its rows carry ONLY the family bits %s, i.e. "
+              "only the arms that lead to a %d-record array"
+              % (cat, sorted("0x%02X" % f for f in fam_want), nrec),
+              fams == fam_want, "saw %s" % sorted("0x%02X" % f for f in fams))
+    check("829 of 829 rows resolve to a record that exists",
+          (tot_ok, tot_rows) == (829, 829), "%d/%d" % (tot_ok, tot_rows))
+    say("")
+    say("   ⚠ THE NULL, and it is what makes this worth quoting.  If the decode")
+    say("     were wrong, the map values would be 16-bit numbers with no reason")
+    say("     to stay small: a uniform LE16 lands below 322 with probability")
+    say("     322/65536 = 0.49%, so 1024 independent entries would ALL do so")
+    say("     with probability 0.0049^1024.  What is actually observed is that")
+    say("     each map's maximum sits just under its array's record count:")
+    say("     321 of 322, 316 of 322 and 207 of 208.  Two of the three")
+    say("     saturate EXACTLY, which is the signature of an index into that")
+    say("     array and not of a coincidence.")
+    say("   ★ AND THE FAMILY BITS SORT THEMSELVES.  The two MELODIC catalogues")
+    say("     use only the arms whose arrays hold 322 records and the")
+    say("     PERCUSSION catalogue uses only the arm whose array holds 208, in")
+    say("     829 rows with no exception -- so bits 6:7 of a catalogue row's")
+    say("     +0x0F are what sort melodic from percussion, which the")
+    say("     instructions alone could not have told us.")
+    say("   ⚠ BITS 4:5 STAY UNIDENTIFIED, and now for a measured reason: no")
+    say("     row of any internal catalogue sets either, so this image contains")
+    say("     no example of the expansion-board arm being taken.")
+    say("")
+
+
+SECTIONS = [q1, q2, q3, q4, q5, q6, q7, q8, q11, q9, wrong]
 
 
 def main():
