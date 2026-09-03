@@ -6951,9 +6951,9 @@ ToneDB_DescCurve_Step1:
 ;     descriptor  +0x00  1 B    tag
 ;                 +0x01  LE32   file offset of part A   (0 = none)
 ;                 +0x05  LE32   file offset of part B
-;                 +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)
-;                 +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)
-;                 +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with
+;                 +0x09  1 B    unidentified -- Pitch_FoldOctavesIntoRange arg 2 (0xFA818C)
+;                 +0x0A  LE16   unidentified -- Pitch_FoldOctavesIntoRange arg 3 (0xFA818C)
+;                 +0x0C  LE16   ★ the BASE PITCH: Voice_ComputePitch_FromToneRecord reads it with
 ;                                `ld DE,(XWA+0x0C)` at 0xFA8160 through
 ;                                voice[+0x1F] and the sum lands in
 ;                                voice[+0x06], the pitch.  WAVE 14.
@@ -32754,9 +32754,9 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ;     descriptor  +0x00  1 B    tag
 ;                 +0x01  LE32   file offset of part A   (0 = none)
 ;                 +0x05  LE32   file offset of part B
-;                 +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)
-;                 +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)
-;                 +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with
+;                 +0x09  1 B    unidentified -- Pitch_FoldOctavesIntoRange arg 2 (0xFA818C)
+;                 +0x0A  LE16   unidentified -- Pitch_FoldOctavesIntoRange arg 3 (0xFA818C)
+;                 +0x0C  LE16   ★ the BASE PITCH: Voice_ComputePitch_FromToneRecord reads it with
 ;                                `ld DE,(XWA+0x0C)` at 0xFA8160 through
 ;                                voice[+0x1F] and the sum lands in
 ;                                voice[+0x06], the pitch.  WAVE 14.
@@ -35182,9 +35182,9 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ;     descriptor  +0x00  1 B    tag
 ;                 +0x01  LE32   file offset of part A   (0 = none)
 ;                 +0x05  LE32   file offset of part B
-;                 +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)
-;                 +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)
-;                 +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with
+;                 +0x09  1 B    unidentified -- Pitch_FoldOctavesIntoRange arg 2 (0xFA818C)
+;                 +0x0A  LE16   unidentified -- Pitch_FoldOctavesIntoRange arg 3 (0xFA818C)
+;                 +0x0C  LE16   ★ the BASE PITCH: Voice_ComputePitch_FromToneRecord reads it with
 ;                                `ld DE,(XWA+0x0C)` at 0xFA8160 through
 ;                                voice[+0x1F] and the sum lands in
 ;                                voice[+0x06], the pitch.  WAVE 14.
@@ -35237,7 +35237,7 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ; 
 ;   stage 1  tone record +0x10 bits 7:6 == 0x40 marks a DRAWBAR tone.
 ;            0xFB47F3 `ld A,(XIY+0x10)` / `and A,0xC0` picks the arm in
-;            sub_FB47C4; MidiNote_OnByPartMode tests the same field at
+;            Part_LoadToneRecordAndPointers; MidiNote_OnByPartMode tests the same field at
 ;            0xFB3877 and routes 0x40 to VoiceRegs_Stage_B.  Exactly 2
 ;            of the 274 tone records carry it: 0x58, 0x59, the two Drawbar
 ;            records immediately above this block.
@@ -35302,7 +35302,7 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ; where the slot word is used RAW with no base-9 conversion, so an
 ; index space of 0..3 is exactly the right size and nothing says what
 ; the four choices are.  Nor descriptor +0x09/+0x0A -- arguments 2 and 3
-; of sub_FA73EB at 0xFA818C.  +0x0C IS placed: 0xFA8160
+; of Pitch_FoldOctavesIntoRange at 0xFA818C.  +0x0C IS placed: 0xFA8160
 ; `ld DE,(XWA+0x0C)` makes it the base pitch.
 ; 
 ; Evidence: (image-internal, NOT from code) the array's end is fixed

@@ -377,7 +377,7 @@ Toggle14FE_AndDispatch__FB0605:
 ;          what sends the packets -- they arrive over link channel 0 from CPU 1,
 ;          so any name for them lives in prom_a.
 ;          ✔ CLOSED 2026-08-25: the call to 0xFA5949 at 0xFB061F, made with the
-;          byte count pushed before any parsing happens, is sub_FA5949, converted
+;          byte count pushed before any parsing happens, is MidiIn_StoreRingBacklog, converted
 ;          above.  Its whole body is `ld BC,(XIZ+0x08) / ld (0x008678),BC / ret` --
 ;          fifteen bytes that store the pushed count at 0x008678 and return.  What
 ;          0x008678 is FOR is still not established; what the call does is.
@@ -7030,7 +7030,7 @@ VoiceRecords_InitFromAlloc__FB4059:
 ;          8  VoiceParams_Compute_D
 ;          6  sub_FAFBEC
 ;          6  VoiceParams_Compute_C
-;          5  sub_FB86BB
+;          5  ToneStage_SwitchToPart
 ;          4  sub_FB029E
 ;          4  sub_FB2F74
 ;       ... and 52 further caller(s)
@@ -7480,9 +7480,9 @@ sub_FB4103__FB411C:
 ; Called from: 13 site(s) outside this module:
 ;          0xFB2FB7 in sub_FB2F74, 0xFB3201 in VoiceParams_Compute_D
 ;          0xFB3408 in VoiceParams_Compute_D__FB33CE, 0xFB9BE5 in sub_FB9B69__FB9BDF
-;          0xFBA3CC in sub_FB9B69__FBA3C6, 0xFBC779 in sub_FBC725
-;          0xFBC87B in sub_FBC80E, 0xFC031B in ToneQuery_ReplyToneName
-;          0xFC10C8 in sub_FC10BE, 0xFC1AC5 in ToneQuery_ReplyWholeToneRecord
+;          0xFBA3CC in sub_FB9B69__FBA3C6, 0xFBC779 in ToneStage_ApplyWaveSelTailPreset
+;          0xFBC87B in ToneStage_ApplyPercWaveSelTailPreset, 0xFC031B in ToneQuery_ReplyToneName
+;          0xFC10C8 in ToneQuery_ReplyToneDspAlgoByte, 0xFC1AC5 in ToneQuery_ReplyWholeToneRecord
 ;          0xFC1E92 in ToneQuery_Dispatch__FC1E72, 0xFC3881 in SoundRam_ClearFourBanks
 ;          0xFC395C in SoundRam_ClearFourBanks__FC3917
 ;          1 site(s) inside this module:
@@ -8025,8 +8025,8 @@ sub_FB43CB__FB44A0:
 ; ToneRec_GetWaveSelectRecord_ByBankSelector -- 0xFB44A5..0xFB44EB (71 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
-;          0xFB862E in sub_FB8603, 0xFB9CB2 in sub_FB9B69__FB9C91
-;          0xFB9ED3 in sub_FB9B69__FB9EB2, 0xFBC79E in sub_FBC725
+;          0xFB862E in ToneStage_LoadElementWaveSelect_FromToneRecord, 0xFB9CB2 in sub_FB9B69__FB9C91
+;          0xFB9ED3 in sub_FB9B69__FB9EB2, 0xFBC79E in ToneStage_ApplyWaveSelTailPreset
 ;          0xFC1B46 in ToneQuery_ReplyWholeToneRecord__FC1AEF
 ;          1 site(s) inside this module:
 ;          0xFB4542
@@ -8151,9 +8151,9 @@ sub_FB44EC__FB4547:
 ;
 ; Called from: 8 site(s) outside this module:
 ;          0xFB301D in sub_FB2F74, 0xFB3262 in VoiceParams_Compute_D
-;          0xFB3466 in VoiceParams_Compute_D__FB33CE, 0xFB8676 in sub_FB8668
+;          0xFB3466 in VoiceParams_Compute_D__FB33CE, 0xFB8676 in ToneStage_LoadPercWaveSelect_FromInstRecord
 ;          0xFBA526 in sub_FB9B69__FBA51D, 0xFBA71C in sub_FB9B69__FBA713
-;          0xFBC8DA in sub_FBC80E, 0xFBD75E in sub_FBD6FC
+;          0xFBC8DA in ToneStage_ApplyPercWaveSelTailPreset, 0xFBD75E in sub_FBD6FC
 ;          1 site(s) inside this module:
 ;          0xFB45B7
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
@@ -8611,16 +8611,16 @@ PartElement_SetEnvDescriptorPointer:
 ; Part_LoadToneRecordAndPointers -- 0xFB47C4..0xFB48F6 (307 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
-;          0xFB02D9 in sub_FB029E__FB02B2, 0xFB8705 in sub_FB86BB
+;          0xFB02D9 in sub_FB029E__FB02B2, 0xFB8705 in ToneStage_SwitchToPart
 ;          0xFB8EB2 in sub_FB8CEC__FB8E88, 0xFB9AFE in sub_FB9AC2
-;          0xFBAB55 in sub_FBAAA2__FBAB0E
+;          0xFBAB55 in ToneStage_EnsurePartLoaded__FBAB0E
 ;          1 site(s) inside this module:
 ;          0xFB6C28
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFB42B0 = Part_ResolveToneRecord, 0xFB4383 = Part_GetElementBlock
 ;          0xFB44EC = Part_GetWaveSelectRecord, 0xFB477B = PartElement_SetEnvDescriptorPointer
-;          0xFC2930 = sub_FC2930, 0xFC295B = DrawbarPreset_GetDescriptor
+;          0xFC2930 = PartElement_SetWaveSelectPointer_ToRomDefault, 0xFC295B = DrawbarPreset_GetDescriptor
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB47C4-0xFB48F6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8764,9 +8764,9 @@ sub_FB47C4__FB48F1:
 ;
 ; Called from: 9 site(s) outside this module:
 ;          0xFB3001 in sub_FB2F74, 0xFB324B in VoiceParams_Compute_D
-;          0xFB344F in VoiceParams_Compute_D__FB33CE, 0xFB85D5 in sub_FB857E
-;          0xFB8970 in sub_FB86BB__FB890E, 0xFB9651 in ToneDB_DrumSourceNameList_SelectEntry__FB95B3
-;          0xFBA41C in sub_FB9B69__FBA3C6, 0xFBC8CB in sub_FBC80E
+;          0xFB344F in VoiceParams_Compute_D__FB33CE, 0xFB85D5 in ToneStage_LoadPercInstHead
+;          0xFB8970 in ToneStage_SwitchToPart__FB890E, 0xFB9651 in ToneDB_DrumSourceNameList_SelectEntry__FB95B3
+;          0xFBA41C in sub_FB9B69__FBA3C6, 0xFBC8CB in ToneStage_ApplyPercWaveSelTailPreset
 ;          0xFBCC19 in sub_FBCBA7
 ;          1 site(s) inside this module:
 ;          0xFB4A94
@@ -11104,7 +11104,7 @@ sub_FB59D2__FB5B33:
 ;   10 or 11, and 0 otherwise (0xFB5B6E/0xFB5B73 for the type, 0xFB5B78/0xFB5B7E
 ;   for the two arms, 0xFB5B96/0xFB5B9B for the field).  Its one caller,
 ;   Voice_StageChanSel_Reg0440_Reg0480, takes the answer at 0xFA9BD2 and passes
-;   it beside part record +0x65 & 0x1FFF into sub_FA7927 (0xFA9C0C/0xFA9C18).
+;   it beside part record +0x65 & 0x1FFF into EGEnv_ScaleDepth_Shr12 (0xFA9C0C/0xFA9C18).
 ; Part_GetDspParam_00D2_Low6 -- 0xFB5B56..0xFB5BA9 (84 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
@@ -12505,7 +12505,7 @@ sub_FB6487__FB64B1:
 ; PartRec_Word0004_ClearStagedSetBit2 -- 0xFB64C8..0xFB64FF (56 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFB86D6 in sub_FB86BB
+;          0xFB86D6 in ToneStage_SwitchToPart
 ;          1 site(s) inside this module:
 ;          0xFB6C04
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
@@ -12731,7 +12731,7 @@ sub_FB6500__FB6657:
 ; Part_RestageVoiceParams_Melodic -- 0xFB6681..0xFB68DC (604 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFB030D in sub_FB029E__FB0308, 0xFB872D in sub_FB86BB__FB8728
+;          0xFB030D in sub_FB029E__FB0308, 0xFB872D in ToneStage_SwitchToPart__FB8728
 ;          0xFB8F23 in sub_FB8CEC__FB8F1E, 0xFB9B09 in sub_FB9AC2
 ;          1 site(s) inside this module:
 ;          0xFB6CB7
@@ -13009,7 +13009,7 @@ sub_FB6681__FB6891:
 ; Part_RestageVoiceParams_Drawbar -- 0xFB68DD..0xFB6B59 (637 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFB0318 in sub_FB029E__FB0313, 0xFB8739 in sub_FB86BB__FB8734
+;          0xFB0318 in sub_FB029E__FB0313, 0xFB8739 in ToneStage_SwitchToPart__FB8734
 ;          0xFB8FDC in sub_FB8CEC__FB8FD7
 ;          1 site(s) inside this module:
 ;          0xFB6CCB
@@ -13347,7 +13347,7 @@ sub_FB6B5A__FB6BA4:
 	unlk32 xiz                                 ; FB6BA5  unlk XIZ
 	ret                                        ; FB6BA7  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FB6BA8` is now `MidiProgram_SelectToneForPart`.
+; ★ NAMED (wave 17): `MidiProgram_SelectToneForPart` is now `MidiProgram_SelectToneForPart`.
 ;   GRADE STRONG.  WHY `MidiProgram_SelectToneForPart`:
 ;   it is the handler the parser's 0xC0 arm calls, and MidiMsg_SendBootSequence
 ;   hands it the literal packet `C0 00 00 00 00` -- 0xC0 is the MIDI status for
@@ -13358,7 +13358,7 @@ sub_FB6B5A__FB6BA4:
 ;   meaning, and this message format is MIDI-DERIVED rather than MIDI (the 0x80
 ;   arm consumes six bytes and is not note-off).  What the ROM settles on its own
 ;   is that the routine selects a part's tone from a two-byte number.
-; sub_FB6BA8 -- 0xFB6BA8..0xFB6CED (326 bytes)
+; MidiProgram_SelectToneForPart -- 0xFB6BA8..0xFB6CED (326 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB08D3 in MidiIn_ParseRingAndDispatch__FB086A, 0xFB0A37 in MidiMsg_SendBootSequence
@@ -13516,7 +13516,7 @@ sub_FB6BA8__FB6CE8:
 ;   no arguments.  For every one of the 33 parts (`cp (XIZ+0xf5),0x21` 0xFB6D78)
 ;   it zeroes the 4 x 3 bytes at +0x35 + 16j + 41e and the words at +0xA6 + 41e +
 ;   2j (0xFB6D36, 0xFB6D44) and calls PartRec_ResetToDefaults (0xFB6D71); then it
-;   calls sub_FA78E8 for all 64 x 3 (chan, slot) pairs (0xFB6D8D); then it writes
+;   calls EnvRec_ClearSlot for all 64 x 3 (chan, slot) pairs (0xFB6D8D); then it writes
 ;   0xFF to 0x00D733 and 0x11 to 0x1509 (0xFB6DA1, 0xFB6DA7); then it writes 1
 ;   into +0x17, +0x18 and +0x19 of every part record, stepping 0x012C until
 ;   0x26AC (0xFB6DC2-0xFB6E02).  0x26AC = 300 * 33 EXACTLY, which is what fixes
@@ -13529,7 +13529,7 @@ sub_FB6BA8__FB6CE8:
 ;          0xFADAA5 in sub_FADA7C__FADAA1, 0xFB05DC in ExtBoard_ProbeAndInstallBases__FB05CD
 ; Inputs:  frame `link XIZ,-17`; no positive frame slot is read
 ; Outputs: writes 0x001509, 0x00D733
-; Calls:   0xFA78E8 = sub_FA78E8, 0xFB6500 = PartRec_ResetToDefaults
+; Calls:   0xFA78E8 = EnvRec_ClearSlot, 0xFB6500 = PartRec_ResetToDefaults
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6CEE-0xFB6E09
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above

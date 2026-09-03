@@ -346,7 +346,7 @@
 ; Call census (`python3 notes/prom_c_module_map.py 0xF9A050 0xFA5949`):
 ;   38 literal call site(s) from outside this block, 624 from inside it.
 ;         29  (caller not yet converted)
-;          3  sub_FB6500
+;          3  PartRec_ResetToDefaults
 ;          1  Analog_ScanAndReport
 ;          1  P7Mixer_SetGainIndex1
 ;          1  P7Mixer_SetGainIndex2
@@ -14150,8 +14150,8 @@ sub_FA237C__FA2672:
 ;
 ; Called from: 6 site(s) outside this module:
 ;          0xFAEFDE in sub_FAEFC2, 0xFAF003 in sub_FAEFE7
-;          0xFAF028 in sub_FAF00C, 0xFB6571 in sub_FB6500
-;          0xFB6581 in sub_FB6500, 0xFB6591 in sub_FB6500
+;          0xFAF028 in sub_FAF00C, 0xFB6571 in PartRec_ResetToDefaults
+;          0xFB6581 in PartRec_ResetToDefaults, 0xFB6591 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: writes 0x00F2F1
 ;          reads 0x007ECC
@@ -14173,7 +14173,7 @@ sub_FA237C__FA2672:
 ;          0xF98C5C and then signals semaphore 2.
 ; Unknown:  what the 3-byte record holds.  Six call sites pass slot 0, 1 and 2 --
 ;          the three arms of Voice_ApplyParamChange_Dispatch at 0xFAEFDE, 0xFAF003
-;          and 0xFAF028 -- plus three inside sub_FB6500.
+;          and 0xFAF028 -- plus three inside PartRec_ResetToDefaults.
 ; --------------------------------------------------------------------------
 Rec8644_Store3Bytes_AndFlagChanged:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA267A  link XIZ,0x0000

@@ -41,7 +41,7 @@
 ;   this block was converted).  The named ones are the note path again --
 ;   MidiNote_OnByPartMode (9), VoiceParams_Compute_A/C/D (19 between them), the four
 ;   VoiceRegs_Stage_* (20) -- plus Voice_StageRegs_0040_B from the block converted above and
-;   sub_FB6500 (8) and sub_FBB793 (6) from the blocks converted after it.
+;   PartRec_ResetToDefaults (8) and sub_FBB793 (6) from the blocks converted after it.
 ;   Full tally: `python3 notes/prom_c_module_map.py 0xFC3407 0xFC856C`.  ⚠ The
 ;   figures were 180/88 for most of round 3, before the tool filtered byte-pattern
 ;   noise out of its site scan.
@@ -558,7 +558,7 @@ Word_AddTickLow3:
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x001505
-; Calls:   0xFA73EB = sub_FA73EB, 0xFA7570 = Sat16_0_to_7FFF
+; Calls:   0xFA73EB = Pitch_FoldOctavesIntoRange, 0xFA7570 = Sat16_0_to_7FFF
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC36BE-0xFC376B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5216,7 +5216,7 @@ sub_FC578C__FC589A:
 ; sub_FC589E -- 0xFC589E..0xFC59EE (337 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEAED in sub_FAEACE, 0xFB659F in sub_FB6500
+;          0xFAEAED in sub_FAEACE, 0xFB659F in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC589E-0xFC59EE
@@ -5368,7 +5368,7 @@ sub_FC589E__FC59D2:
 ; sub_FC59EF -- 0xFC59EF..0xFC5BA1 (435 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEB19 in sub_FAEAF9, 0xFB65AD in sub_FB6500
+;          0xFAEB19 in sub_FAEAF9, 0xFB65AD in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC59EF-0xFC5BA1
@@ -5935,7 +5935,7 @@ sub_FC5D5B__FC5EF5:
 ; sub_FC5EFB -- 0xFC5EFB..0xFC6026 (300 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEBF1 in sub_FAEBD1, 0xFB65BB in sub_FB6500
+;          0xFAEBF1 in sub_FAEBD1, 0xFB65BB in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC5EFB-0xFC6026
@@ -6232,7 +6232,7 @@ sub_FC6027__FC616F:
 ; sub_FC6175 -- 0xFC6175..0xFC629A (294 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEC41 in sub_FAEC21, 0xFB65C9 in sub_FB6500
+;          0xFAEC41 in sub_FAEC21, 0xFB65C9 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC6175-0xFC629A
@@ -6525,7 +6525,7 @@ sub_FC629B__FC63E6:
 ; sub_FC63EC -- 0xFC63EC..0xFC654E (355 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEC90 in sub_FAEC71, 0xFB65D7 in sub_FB6500
+;          0xFAEC90 in sub_FAEC71, 0xFB65D7 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC63EC-0xFC654E
@@ -6677,7 +6677,7 @@ sub_FC63EC__FC6534:
 ; sub_FC654F -- 0xFC654F..0xFC65EB (157 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAECBB in sub_FAEC9C, 0xFB65E5 in sub_FB6500
+;          0xFAECBB in sub_FAEC9C, 0xFB65E5 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082
 ; Calls:   0xFC46A8 = sub_FC46A8
@@ -6762,7 +6762,7 @@ sub_FC654F__FC65D5:
 ; sub_FC65EC -- 0xFC65EC..0xFC6711 (294 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAECE7 in sub_FAECC7, 0xFB65F3 in sub_FB6500
+;          0xFAECE7 in sub_FAECC7, 0xFB65F3 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC65EC-0xFC6711
@@ -9546,7 +9546,7 @@ sub_FC7DAF__FC7DDD:
 ; sub_FC7E10 -- 0xFC7E10..0xFC7E56 (71 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAD312 in sub_FAD2D5__FAD2FD, 0xFB652A in sub_FB6500
+;          0xFAD312 in sub_FAD2D5__FAD2FD, 0xFB652A in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7E10-0xFC7E56
@@ -10007,7 +10007,7 @@ sub_FC810C:
 ; sub_FC8129 -- 0xFC8129..0xFC8163 (59 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFABAFF in Dev10C_StageRegs_0900_0940, 0xFABD14 in sub_FABCF9
+;          0xFABAFF in Dev10C_StageRegs_0900_0940, 0xFABD14 in Dev10C_StageSixChanRegs_ForRetire
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC8129-0xFC8163

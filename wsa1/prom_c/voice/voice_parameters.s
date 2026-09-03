@@ -238,13 +238,13 @@
 ;     when -- see section C of the wave-17 block in voice_leaf_helpers.s.
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA7E2C` is now `PartRec_UpdateRepeatCounter`.
+; ★ NAMED (wave 17): `PartRec_UpdateRepeatCounter` is now `PartRec_UpdateRepeatCounter`.
 ;   GRADE PROVEN.  WHY `PartRec_UpdateRepeatCounter`:
 ;   body: dt = (0x00F2F3) - part[+0x82] (the 32-bit tick and its last value);
 ;   dt >= 0x19 resets part[+0x86] and part[+0x87] to 0; otherwise part[+0x86] is
 ;   incremented and part[+0x87] set to 0 / 0x10 / 0x20 for the 1st / 2nd / 3rd+
 ;   note inside the 25-tick window; part[+0x82] is then restamped with the tick.
-; sub_FA7E2C -- 0xFA7E2C..0xFA7EE1 (182 bytes)
+; PartRec_UpdateRepeatCounter -- 0xFA7E2C..0xFA7EE1 (182 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFB367E in MidiNote_OnTail, 0xFB378B in MidiNote_OffTail
@@ -430,8 +430,8 @@ Rand_FromTickSquared:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x0014FF, 0x001505, 0x00150A
-; Calls:   0xFA72E9 = Voice_GetOctaveShift, 0xFA738F = sub_FA738F
-;          0xFA73EB = sub_FA73EB, 0xFA7570 = Sat16_0_to_7FFF
+; Calls:   0xFA72E9 = Voice_GetOctaveShift, 0xFA738F = Pitch_ClampToNoteRange
+;          0xFA73EB = Pitch_FoldOctavesIntoRange, 0xFA7570 = Sat16_0_to_7FFF
 ;          0xFA7F04 = Rand_FromTickSquared, 0xFCAA2F = Shift16_ArithRight
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7F28-0xFA814B
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -717,21 +717,21 @@ Voice_ComputePitch__FA8144:
 	unlk32 xiz                                 ; FA8149  unlk XIZ
 	ret                                        ; FA814B  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA814C` is now `Voice_ComputePitch_FromToneRecord`.
+; ★ NAMED (wave 17): `Voice_ComputePitch_FromToneRecord` is now `Voice_ComputePitch_FromToneRecord`.
 ;   GRADE PROVEN.  WHY `Voice_ComputePitch_FromToneRecord`:
 ;   body: writes voice[+0x08] = tone_object[+0x0C] and voice[+0x06] =
 ;   Pitch_FoldOctavesIntoRange(that + (elem[+0x04] << 8) + 2*elem[+0x05],
 ;   obj[+0x09], obj[+0x0A]) -- the SAME two fields Voice_ComputePitch writes,
 ;   and it never reads voice[+0x05], so the result does not depend on the note
 ;   played.
-; sub_FA814C -- 0xFA814C..0xFA8199 (78 bytes)
+; Voice_ComputePitch_FromToneRecord -- 0xFA814C..0xFA8199 (78 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFB29C8 in sub_FB289A, 0xFB2BC0 in VoiceParams_Compute_C
 ;          0xFB2D80 in VoiceParams_Compute_C__FB2C6D
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA73EB = sub_FA73EB
+; Calls:   0xFA73EB = Pitch_FoldOctavesIntoRange
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA814C-0xFA8199
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1539,22 +1539,22 @@ Voice_StageRegs_0900_0940_0980_AB__FA8665:
 	unlk32 xiz                                 ; FA8668  unlk XIZ
 	ret                                        ; FA866A  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA866B` is now `VoiceParam_Build0100_0140_On36_Arm1`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On36_Arm1` is now `VoiceParam_Build0100_0140_On36_Arm1`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm1`:
 ;   arm 1 of VoiceParam_DispatchOn_17_36's six-entry table at 0xFA8C05
 ;   (`calr 0xfa866b` at 0xFA8C24).  It writes voice_record[+0x3F] and [+0x41],
 ;   which Voice_StagePair_Reg0100_0140_* copy into staging words 0x00D766 and
 ;   0x00D768 -- struct offsets +0x08 and +0x0A, i.e. registers 0x0100 and 0x0140
 ;   (Dev10C_WriteAllChanRegs, 0xFB719B / 0xFB71AE).
-; sub_FA866B -- 0xFA866B..0xFA8758 (238 bytes)
+; VoiceParam_Build0100_0140_On36_Arm1 -- 0xFA866B..0xFA8758 (238 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA8C24
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = Add24_ClampTo120
-;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA76D6 = VoiceParam_AddCurveAndKeyDepth_Clamp, 0xFA77F3 = Add24_ClampTo120
+;          0xFA7810 = VoiceParam_LoadTriple_Set5A51, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA866B-0xFA8758
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -1673,18 +1673,18 @@ sub_FA866B__FA8747:
 	unlk32 xiz                                 ; FA8756  unlk XIZ
 	ret                                        ; FA8758  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8759` is now `VoiceParam_Build0100_0140_On36_Arm2`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On36_Arm2` is now `VoiceParam_Build0100_0140_On36_Arm2`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm2`:
 ;   arm 2 of the same table (`calr 0xfa8759` at 0xFA8C2A); same two outputs.
-; sub_FA8759 -- 0xFA8759..0xFA888B (307 bytes)
+; VoiceParam_Build0100_0140_On36_Arm2 -- 0xFA8759..0xFA888B (307 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA8C2A
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = Add24_ClampTo120
-;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA76D6 = VoiceParam_AddCurveAndKeyDepth_Clamp, 0xFA77F3 = Add24_ClampTo120
+;          0xFA7810 = VoiceParam_LoadTriple_Set5A51, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8759-0xFA888B
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -1831,18 +1831,18 @@ sub_FA8759__FA8878:
 	unlk32 xiz                                 ; FA8889  unlk XIZ
 	ret                                        ; FA888B  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA888C` is now `VoiceParam_Build0100_0140_On36_Arm3`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On36_Arm3` is now `VoiceParam_Build0100_0140_On36_Arm3`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm3`:
 ;   arm 3 of the same table (`calr 0xfa888c` at 0xFA8C30); same two outputs.
-; sub_FA888C -- 0xFA888C..0xFA8996 (267 bytes)
+; VoiceParam_Build0100_0140_On36_Arm3 -- 0xFA888C..0xFA8996 (267 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA8C30
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = Add24_ClampTo120
-;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA76D6 = VoiceParam_AddCurveAndKeyDepth_Clamp, 0xFA77F3 = Add24_ClampTo120
+;          0xFA7810 = VoiceParam_LoadTriple_Set5A51, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA888C-0xFA8996
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -1969,17 +1969,17 @@ sub_FA888C__FA8991:
 	unlk32 xiz                                 ; FA8994  unlk XIZ
 	ret                                        ; FA8996  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8997` is now `VoiceParam_Build0100_0140_On36_Arm4`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On36_Arm4` is now `VoiceParam_Build0100_0140_On36_Arm4`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm4`:
 ;   arm 4 of the same table (`calr 0xfa8997` at 0xFA8C36); same two outputs.
-; sub_FA8997 -- 0xFA8997..0xFA8A78 (226 bytes)
+; VoiceParam_Build0100_0140_On36_Arm4 -- 0xFA8997..0xFA8A78 (226 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA8C36
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA76D6 = VoiceParam_AddCurveAndKeyDepth_Clamp, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8997-0xFA8A78
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2094,17 +2094,17 @@ sub_FA8997__FA8A45:
 	unlk32 xiz                                 ; FA8A76  unlk XIZ
 	ret                                        ; FA8A78  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8A79` is now `VoiceParam_Build0100_0140_On36_Arm5`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On36_Arm5` is now `VoiceParam_Build0100_0140_On36_Arm5`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm5`:
 ;   arm 5 of the same table (`calr 0xfa8a79` at 0xFA8C3C); same two outputs.
-; sub_FA8A79 -- 0xFA8A79..0xFA8BDC (356 bytes)
+; VoiceParam_Build0100_0140_On36_Arm5 -- 0xFA8A79..0xFA8BDC (356 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA8C3C
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA76D6 = VoiceParam_AddCurveAndKeyDepth_Clamp, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8A79-0xFA8BDC
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2276,9 +2276,9 @@ sub_FA8A79__FA8BAA:
 ;          0xFB0B16 in VoiceRegs_Stage_A, 0xFB1F04 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA78AB = Rec_StoreConsts_003F_0041, 0xFA866B = sub_FA866B
-;          0xFA8759 = sub_FA8759, 0xFA888C = sub_FA888C
-;          0xFA8997 = sub_FA8997, 0xFA8A79 = sub_FA8A79
+; Calls:   0xFA78AB = Rec_StoreConsts_003F_0041, 0xFA866B = VoiceParam_Build0100_0140_On36_Arm1
+;          0xFA8759 = VoiceParam_Build0100_0140_On36_Arm2, 0xFA888C = VoiceParam_Build0100_0140_On36_Arm3
+;          0xFA8997 = VoiceParam_Build0100_0140_On36_Arm4, 0xFA8A79 = VoiceParam_Build0100_0140_On36_Arm5
 ; Arms:    6 computed-goto arm(s) inside this routine: 0xFA8C1D 0xFA8C23 0xFA8C29 0xFA8C2F 0xFA8C35 0xFA8C3B
 ; ★ THE NAME CLAIMS ONLY WHAT THE OPERANDS SAY.  The routine does
 ;      ld HL,(XIZ+0x08) / ld XBC,(XHL+0x17) / ld A,(XBC+0x36) / and A,0x07
@@ -2362,19 +2362,19 @@ VoiceParam_DispatchOn_17_36__FA8C3F:
 	unlk32 xiz                                 ; FA8C41  unlk XIZ
 	ret                                        ; FA8C43  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8C44` is now `VoiceParam_Build0100_0140_On11_Arm1`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On11_Arm1` is now `VoiceParam_Build0100_0140_On11_Arm1`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm1`:
 ;   arm 1 of VoiceParam_DispatchOn_17_11's six-entry table at 0xFA9032
 ;   (`calr 0xfa8c44` at 0xFA9061); writes the same voice[+0x3F] / [+0x41] pair.
-; sub_FA8C44 -- 0xFA8C44..0xFA8CEE (171 bytes)
+; VoiceParam_Build0100_0140_On11_Arm1 -- 0xFA8C44..0xFA8CEE (171 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA9061
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = Add24_ClampTo120
-;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA778E = VoiceParam_AddCurveDepth_Clamp, 0xFA77F3 = Add24_ClampTo120
+;          0xFA7810 = VoiceParam_LoadTriple_Set5A51, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8C44-0xFA8CEE
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2465,18 +2465,18 @@ sub_FA8C44__FA8CBB:
 	unlk32 xiz                                 ; FA8CEC  unlk XIZ
 	ret                                        ; FA8CEE  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8CEF` is now `VoiceParam_Build0100_0140_On11_Arm2`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On11_Arm2` is now `VoiceParam_Build0100_0140_On11_Arm2`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm2`:
 ;   arm 2 of the same table (`calr 0xfa8cef` at 0xFA9067); same two outputs.
-; sub_FA8CEF -- 0xFA8CEF..0xFA8D9A (172 bytes)
+; VoiceParam_Build0100_0140_On11_Arm2 -- 0xFA8CEF..0xFA8D9A (172 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA9067
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = Add24_ClampTo120
-;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA778E = VoiceParam_AddCurveDepth_Clamp, 0xFA77F3 = Add24_ClampTo120
+;          0xFA7810 = VoiceParam_LoadTriple_Set5A51, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8CEF-0xFA8D9A
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2567,17 +2567,17 @@ sub_FA8CEF__FA8D66:
 	unlk32 xiz                                 ; FA8D98  unlk XIZ
 	ret                                        ; FA8D9A  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8D9B` is now `VoiceParam_Build0100_0140_On11_Arm3`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On11_Arm3` is now `VoiceParam_Build0100_0140_On11_Arm3`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm3`:
 ;   arm 3 of the same table (`calr 0xfa8d9b` at 0xFA906D); same two outputs.
-; sub_FA8D9B -- 0xFA8D9B..0xFA8E46 (172 bytes)
+; VoiceParam_Build0100_0140_On11_Arm3 -- 0xFA8D9B..0xFA8E46 (172 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA906D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA778E = sub_FA778E, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA778E = VoiceParam_AddCurveDepth_Clamp, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8D9B-0xFA8E46
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2666,17 +2666,17 @@ sub_FA8D9B__FA8E15:
 	unlk32 xiz                                 ; FA8E44  unlk XIZ
 	ret                                        ; FA8E46  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8E47` is now `VoiceParam_Build0100_0140_On11_Arm4`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On11_Arm4` is now `VoiceParam_Build0100_0140_On11_Arm4`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm4`:
 ;   arm 4 of the same table (`calr 0xfa8e47` at 0xFA9073); same two outputs.
-; sub_FA8E47 -- 0xFA8E47..0xFA8EF6 (176 bytes)
+; VoiceParam_Build0100_0140_On11_Arm4 -- 0xFA8E47..0xFA8EF6 (176 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA9073
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA778E = sub_FA778E, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA778E = VoiceParam_AddCurveDepth_Clamp, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8E47-0xFA8EF6
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2766,17 +2766,17 @@ sub_FA8E47__FA8EC1:
 	unlk32 xiz                                 ; FA8EF4  unlk XIZ
 	ret                                        ; FA8EF6  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA8EF7` is now `VoiceParam_Build0100_0140_On11_Arm5`.
+; ★ NAMED (wave 17): `VoiceParam_Build0100_0140_On11_Arm5` is now `VoiceParam_Build0100_0140_On11_Arm5`.
 ;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm5`:
 ;   arm 5 of the same table (`calr 0xfa8ef7` at 0xFA9079); same two outputs.
-; sub_FA8EF7 -- 0xFA8EF7..0xFA9009 (275 bytes)
+; VoiceParam_Build0100_0140_On11_Arm5 -- 0xFA8EF7..0xFA9009 (275 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA9079
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA778E = sub_FA778E, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Calls:   0xFA778E = VoiceParam_AddCurveDepth_Clamp, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8EF7-0xFA9009
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -2913,9 +2913,9 @@ sub_FA8EF7__FA8FD7:
 ;          0xFB282F in VoiceRegs_Stage_C, 0xFB2F04 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D766, 0x00D768
-; Calls:   0xFA78AB = Rec_StoreConsts_003F_0041, 0xFA8C44 = sub_FA8C44
-;          0xFA8CEF = sub_FA8CEF, 0xFA8D9B = sub_FA8D9B
-;          0xFA8E47 = sub_FA8E47, 0xFA8EF7 = sub_FA8EF7
+; Calls:   0xFA78AB = Rec_StoreConsts_003F_0041, 0xFA8C44 = VoiceParam_Build0100_0140_On11_Arm1
+;          0xFA8CEF = VoiceParam_Build0100_0140_On11_Arm2, 0xFA8D9B = VoiceParam_Build0100_0140_On11_Arm3
+;          0xFA8E47 = VoiceParam_Build0100_0140_On11_Arm4, 0xFA8EF7 = VoiceParam_Build0100_0140_On11_Arm5
 ; Arms:    6 computed-goto arm(s) inside this routine: 0xFA904A 0xFA9060 0xFA9066 0xFA906C 0xFA9072 0xFA9078
 ; ★ Same shape as VoiceParam_DispatchOn_17_36 (0xFA8BDD): follow the pointer at
 ;  +0x17 of the argument, take the byte at +0x11 of the target, mask with 7, and
@@ -4088,13 +4088,13 @@ Voice_StageRegs_CD__FA9801:
 	unlk32 xiz                                 ; FA9818  unlk XIZ
 	ret                                        ; FA981A  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA981B` is now `EnvRec_LoadSlot`.
+; ★ NAMED (wave 17): `EnvRec_LoadSlot` is now `EnvRec_LoadSlot`.
 ;   GRADE PROVEN.  WHY `EnvRec_LoadSlot`:
 ;   body: fills bytes +0..+7 of the 9-byte sub-record at 0x4CCF + 27*chan +
 ;   9*slot from a part-record field group and a tone-record group -- the same
 ;   record EnvRec_ClearSlot zeroes and EGEnv_Eval_* read.  Its twelve callers
 ;   are the six Voice_Restage_* and the three Voice_RecomputeEnv_* routines.
-; sub_FA981B -- 0xFA981B..0xFA9914 (250 bytes)
+; EnvRec_LoadSlot -- 0xFA981B..0xFA9914 (250 bytes)
 ;
 ; Called from: 9 site(s) outside this module:
 ;          0xFAE436 in Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404, 0xFAE56A in Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D
@@ -4228,10 +4228,10 @@ sub_FA981B__FA98E9:
 ;          0xFB0B2A in VoiceRegs_Stage_A, 0xFB1F18 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76E, 0x00D770, 0x00D79A, 0x00D79C, 0x00D79E, 0x00D7A0
-; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = sub_FA78E8
-;          0xFA7927 = sub_FA7927, 0xFA796D = EGEnv_Eval_BaseCurveA
-;          0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA, 0xFA981B = sub_FA981B
-;          0xFB5B56 = sub_FB5B56, 0xFB5E39 = Dev10C_ChanSelHighBits
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = EnvRec_ClearSlot
+;          0xFA7927 = EGEnv_ScaleDepth_Shr12, 0xFA796D = EGEnv_Eval_BaseCurveA
+;          0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA, 0xFA981B = EnvRec_LoadSlot
+;          0xFB5B56 = Part_GetDspParam_00D2_Low6, 0xFB5E39 = Dev10C_ChanSelHighBits
 ;          0xFB7C27 = Dev10C_Slot2_WriteGateAndValue, 0xFB7C8F = Dev10C_SetChanReg_0600_b
 ;          0xFB7CB1 = Dev10C_Slot2_StrobeGate, 0xFB7CFF = Dev10C_Slot2_WriteGate8100
 ;          0xFB7D1D = Dev10C_Slot3_WriteGateAndValue
@@ -4635,10 +4635,10 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9C5A:
 ;          0xFB0B2F in VoiceRegs_Stage_A, 0xFB1F1D in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76A, 0x00D796, 0x00D798
-; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = sub_FA78E8
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = EnvRec_ClearSlot
 ;          0xFA7A4B = EGEnv_Eval_BaseCurveB, 0xFA7AD6 = EGEnv_Eval_ValueCurve_WithBaseCurveB
-;          0xFA7F04 = Rand_FromTickSquared, 0xFA981B = sub_FA981B
-;          0xFB5F91 = sub_FB5F91, 0xFB7E13 = Dev10C_Slot1_WriteGateAndValue
+;          0xFA7F04 = Rand_FromTickSquared, 0xFA981B = EnvRec_LoadSlot
+;          0xFB5F91 = Voice_Reg0180ModeBits_FromAlgoDesc, 0xFB7E13 = Dev10C_Slot1_WriteGateAndValue
 ;          0xFB7E7B = Dev10C_SetChanReg_01C0_b, 0xFB7E9D = Dev10C_Slot1_StrobeGate
 ;          0xFB7EEB = Dev10C_Slot1_WriteGate8100
 ; Voice record: touches voice_record[+0x00(r), +0x03(r), +0x04(r), +0x0C(r), +0x13(r), +0x17(r), +0x23(r), +0x25(r), +0x27(rw), +0x38(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
@@ -4952,7 +4952,7 @@ Voice_StageRegs_0180_AB__FA9F06:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D772, 0x00D796, 0x00D7A0
 ; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve
-;          0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve, 0xFA981B = sub_FA981B
+;          0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve, 0xFA981B = EnvRec_LoadSlot
 ;          0xFB7FCE = Dev10C_SetChanReg_01C0_or_0600_b, 0xFB8012 = Dev10C_Slot1or3_StrobeGate
 ;          0xFB80A9 = Dev10C_Slot1or3_WriteGate8100
 ; Voice record: touches voice_record[+0x00(r), +0x04(r), +0x0C(r), +0x13(r), +0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
@@ -5493,12 +5493,12 @@ Voice_StageRegs_00C0_CD__FAA2A6:
 	unlk32 xiz                                 ; FAA2B3  unlk XIZ
 	ret                                        ; FAA2B5  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAA2B6` is now `Voice_ComputeField0029_AB`.
+; ★ NAMED (wave 17): `Voice_ComputeField0029_AB` is now `Voice_ComputeField0029_AB`.
 ;   GRADE PROVEN.  WHY `Voice_ComputeField0029_AB`:
 ;   body: writes voice_record[+0x29] as a packed word -- bits 8..0 the 9-bit
 ;   value 0xFF - 4*level, bits 11..9 and 14..12 two 3-bit codes derived from the
 ;   part's byte +0x19.  Its two callers are VoiceRegs_Stage_A and _B.
-; sub_FAA2B6 -- 0xFAA2B6..0xFAA3B4 (255 bytes)
+; Voice_ComputeField0029_AB -- 0xFAA2B6..0xFAA3B4 (255 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB0B3E in VoiceRegs_Stage_A, 0xFB1F2C in VoiceRegs_Stage_B
@@ -5636,12 +5636,12 @@ sub_FAA2B6__FAA3A1:
 	unlk32 xiz                                 ; FAA3B2  unlk XIZ
 	ret                                        ; FAA3B4  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAA3B5` is now `Voice_Field0029_EncodeSelector`.
+; ★ NAMED (wave 17): `Voice_Field0029_EncodeSelector` is now `Voice_Field0029_EncodeSelector`.
 ;   GRADE PROVEN.  WHY `Voice_Field0029_EncodeSelector`:
 ;   body: 0 -> 7; 5 -> 6 when either nibble of the companion byte is 5; else
 ;   n - 1.  Its two callers are both inside Voice_ComputeField0029_CD, which
 ;   shifts the two results left by 9 and by 12 into voice_record[+0x29].
-; sub_FAA3B5 -- 0xFAA3B5..0xFAA3EA (54 bytes)
+; Voice_Field0029_EncodeSelector -- 0xFAA3B5..0xFAA3EA (54 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -5687,18 +5687,18 @@ sub_FAA3B5__FAA3E7:
 	unlk32 xiz                                 ; FAA3E8  unlk XIZ
 	ret                                        ; FAA3EA  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAA3EB` is now `Voice_ComputeField0029_CD`.
+; ★ NAMED (wave 17): `Voice_ComputeField0029_CD` is now `Voice_ComputeField0029_CD`.
 ;   GRADE PROVEN.  WHY `Voice_ComputeField0029_CD`:
 ;   the C/D counterpart of Voice_ComputeField0029_AB -- same output field, same
 ;   field layout, via Voice_Field0029_EncodeSelector.  Its two callers are
 ;   VoiceRegs_Stage_C and _D.
-; sub_FAA3EB -- 0xFAA3EB..0xFAA4C2 (216 bytes)
+; Voice_ComputeField0029_CD -- 0xFAA3EB..0xFAA4C2 (216 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB283E in VoiceRegs_Stage_C, 0xFB2F13 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA7EE2 = Clamp_ToRange_LowByte, 0xFAA3B5 = sub_FAA3B5
+; Calls:   0xFA7EE2 = Clamp_ToRange_LowByte, 0xFAA3B5 = Voice_Field0029_EncodeSelector
 ; Voice record: touches voice_record[+0x13(r), +0x17(r), +0x23(r), +0x25(r), +0x29(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA3EB-0xFAA4C2
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -7763,13 +7763,13 @@ Voice_StageRegs_0800_B_ModeGe3__FAB43D:
 	unlk32 xiz                                 ; FAB487  unlk XIZ
 	ret                                        ; FAB489  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAB48A` is now `KeyScale_LevelFromPitch`.
+; ★ NAMED (wave 17): `KeyScale_LevelFromPitch` is now `KeyScale_LevelFromPitch`.
 ;   GRADE PROVEN.  WHY `KeyScale_LevelFromPitch`:
 ;   body: a four-breakpoint piecewise-linear curve on voice[+0x08] >> 8 (the
 ;   note number of the computed pitch) against tone[+0x1E..+0x21}; the slope
 ;   constant is -64 (`muls WA,0xffc0`) and the out-of-range value is -512.  Its
 ;   one caller adds the result into the level accumulator.
-; sub_FAB48A -- 0xFAB48A..0xFAB516 (141 bytes)
+; KeyScale_LevelFromPitch -- 0xFAB48A..0xFAB516 (141 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -7854,12 +7854,12 @@ sub_FAB48A__FAB511:
 	unlk32 xiz                                 ; FAB514  unlk XIZ
 	ret                                        ; FAB516  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAB517` is now `VelScale_LevelFromVelocity`.
+; ★ NAMED (wave 17): `VelScale_LevelFromVelocity` is now `VelScale_LevelFromVelocity`.
 ;   GRADE PROVEN.  WHY `VelScale_LevelFromVelocity`:
 ;   byte-for-byte the same curve one field over: the input is
 ;   voice[+0x0C] & 0x7F -- the velocity -- and the breakpoints are
 ;   tone[+0x22..+0x25].
-; sub_FAB517 -- 0xFAB517..0xFAB5A4 (142 bytes)
+; VelScale_LevelFromVelocity -- 0xFAB517..0xFAB5A4 (142 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -7945,7 +7945,7 @@ sub_FAB517__FAB59F:
 	unlk32 xiz                                 ; FAB5A2  unlk XIZ
 	ret                                        ; FAB5A4  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAB5A5` is now `Voice_ComputeLevelBase_AB`.
+; ★ NAMED (wave 17): `Voice_ComputeLevelBase_AB` is now `Voice_ComputeLevelBase_AB`.
 ;   GRADE PROVEN.  WHY `Voice_ComputeLevelBase_AB`:
 ;   body: writes voice_record[+0x0D] -- the level accumulator that
 ;   Voice_StageLevel_Reg0080_AB/_CD turn into register 0x0080 -- from the
@@ -7953,7 +7953,7 @@ sub_FAB517__FAB59F:
 ;   ScaleClampedDelta_Shr5_b, KeyScale_LevelFromPitch, VelScale_LevelFromVelocity
 ;   and three global trims, and clears voice[+0x2F].  Callers: VoiceRegs_Stage_A
 ;   and _B.
-; sub_FAB5A5 -- 0xFAB5A5..0xFAB6D4 (304 bytes)
+; Voice_ComputeLevelBase_AB -- 0xFAB5A5..0xFAB6D4 (304 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFB0B76 in VoiceRegs_Stage_A, 0xFB1F70 in VoiceRegs_Stage_B
@@ -7961,8 +7961,8 @@ sub_FAB517__FAB59F:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x005A51, 0x00D7F1
-; Calls:   0xFA7CC9 = sub_FA7CC9, 0xFA7D03 = ScaleClampedDelta_Shr5_b
-;          0xFAB48A = sub_FAB48A, 0xFAB517 = sub_FAB517
+; Calls:   0xFA7CC9 = VelCurve_Lookup, 0xFA7D03 = ScaleClampedDelta_Shr5_b
+;          0xFAB48A = KeyScale_LevelFromPitch, 0xFAB517 = VelScale_LevelFromVelocity
 ;          0xFC578C = sub_FC578C
 ; Voice record: touches voice_record[+0x01(rw), +0x08(r), +0x0C(r), +0x0D(w), +0x0F(r), +0x17(r), +0x23(r), +0x27(r), +0x2F(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB5A5-0xFAB6D4
@@ -8099,19 +8099,19 @@ sub_FAB5A5__FAB6BF:
 	unlk32 xiz                                 ; FAB6D2  unlk XIZ
 	ret                                        ; FAB6D4  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAB6D5` is now `Voice_ComputeLevelBase_CD`.
+; ★ NAMED (wave 17): `Voice_ComputeLevelBase_CD` is now `Voice_ComputeLevelBase_CD`.
 ;   GRADE PROVEN.  WHY `Voice_ComputeLevelBase_CD`:
 ;   the C/D counterpart: the same accumulator, the same two output fields
 ;   (voice[+0x0D] written, voice[+0x2F] cleared), a shorter term list.
 ;   Callers: VoiceRegs_Stage_C and _D.
-; sub_FAB6D5 -- 0xFAB6D5..0xFAB79C (200 bytes)
+; Voice_ComputeLevelBase_CD -- 0xFAB6D5..0xFAB79C (200 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB287B in VoiceRegs_Stage_C, 0xFB2F50 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x005A51, 0x00D7F1
-; Calls:   0xFA7CC9 = sub_FA7CC9, 0xFC578C = sub_FC578C
+; Calls:   0xFA7CC9 = VelCurve_Lookup, 0xFC578C = sub_FC578C
 ; Voice record: touches voice_record[+0x0C(r), +0x0D(w), +0x0F(r), +0x17(r), +0x27(r), +0x2F(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB6D5-0xFAB79C
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -8205,13 +8205,13 @@ sub_FAB6D5__FAB742:
 	unlk32 xiz                                 ; FAB79A  unlk XIZ
 	ret                                        ; FAB79C  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAB79D` is now `Voice_StageLevel_Reg0080_AB`.
+; ★ NAMED (wave 17): `Voice_StageLevel_Reg0080_AB` is now `Voice_StageLevel_Reg0080_AB`.
 ;   GRADE PROVEN.  WHY `Voice_StageLevel_Reg0080_AB`:
 ;   body: forms voice[+0x0D] + tone[+0x17] - 100 (or voice[+0x0D] - 512 when
 ;   that byte is zero) + a signed byte, and calls Voice_StageLevel_Reg0080 --
 ;   its only call.  Callers: VoiceRegs_Stage_A and _B (plus the controller-driven
 ;   Voice_RestageReg0080_ForList).
-; sub_FAB79D -- 0xFAB79D..0xFAB7DF (67 bytes)
+; Voice_StageLevel_Reg0080_AB -- 0xFAB79D..0xFAB7DF (67 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFAC238 in sub_FAC08D__FAC232, 0xFADE08 in Voice_RestageReg0080_ForList__FADE07
@@ -8264,11 +8264,11 @@ sub_FAB79D__FAB7C6:
 	unlk32 xiz                                 ; FAB7DD  unlk XIZ
 	ret                                        ; FAB7DF  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FAB7E0` is now `Voice_StageLevel_Reg0080_CD`.
+; ★ NAMED (wave 17): `Voice_StageLevel_Reg0080_CD` is now `Voice_StageLevel_Reg0080_CD`.
 ;   GRADE PROVEN.  WHY `Voice_StageLevel_Reg0080_CD`:
 ;   the C/D counterpart of Voice_StageLevel_Reg0080_AB, same single call.
 ;   Callers: VoiceRegs_Stage_C and _D (plus Voice_RestageReg0080_ForList).
-; sub_FAB7E0 -- 0xFAB7E0..0xFAB817 (56 bytes)
+; Voice_StageLevel_Reg0080_CD -- 0xFAB7E0..0xFAB817 (56 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFADE0F in Voice_RestageReg0080_ForList__FADE0E, 0xFB2880 in VoiceRegs_Stage_C
@@ -9073,14 +9073,14 @@ Dev10C_StageRegs_09C0_0A00__FABCB9:
 	unlk32 xiz                                 ; FABCF6  unlk XIZ
 	ret                                        ; FABCF8  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FABCF9` is now `Dev10C_StageSixChanRegs_ForRetire`.
+; ★ NAMED (wave 17): `Dev10C_StageSixChanRegs_ForRetire` is now `Dev10C_StageSixChanRegs_ForRetire`.
 ;   GRADE PROVEN.  WHY `Dev10C_StageSixChanRegs_ForRetire`:
 ;   body: writes staging struct offsets +0x2C..+0x36, which
 ;   Dev10C_WriteSixChanRegs_FromD78A sends to registers 0x0800, 0x0840, 0x0900,
 ;   0x0940, 0x09C0 and 0x0A00 (0xFB7368-0xFB73DE).  +0x2C gets
 ;   (voice[+0x43] << 8) | 0x80 and +0x2E gets voice[+0x43] << 8.  Its ONE caller
 ;   is Voice_Retire_Mode10.
-; sub_FABCF9 -- 0xFABCF9..0xFABD4F (87 bytes)
+; Dev10C_StageSixChanRegs_ForRetire -- 0xFABCF9..0xFABD4F (87 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3E70 in Voice_Retire_Mode10
@@ -9132,14 +9132,14 @@ sub_FABCF9__FABD26:
 	unlk32 xiz                                 ; FABD4D  unlk XIZ
 	ret                                        ; FABD4F  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FABD50` is now `Dev10C_StageRegs_0800_0840_FABD50`.
+; ★ NAMED (wave 17): `Dev10C_StageRegs_0800_0840_FABD50` is now `Dev10C_StageRegs_0800_0840_FABD50`.
 ;   GRADE PROVEN.  WHY `Dev10C_StageRegs_0800_0840_FABD50`:
 ;   body: writes staging struct +0x2E (register 0x0840) from either
 ;   Table_FDEFD9[tone[+0x0E]] << 8 or voice[+0x3B] & 0xFF00, then +0x2C
 ;   (register 0x0800) = that value with bit 7 set.  A FOURTH producer of the
 ;   same pair, so it keeps the tree's address-suffix spelling alongside
 ;   Dev10C_StageRegs_0800_0840_ForNoteOn / _FAB8CC / _FAB9D8.
-; sub_FABD50 -- 0xFABD50..0xFABDAB (92 bytes)
+; Dev10C_StageRegs_0800_0840_FABD50 -- 0xFABD50..0xFABDAB (92 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFADF81 in sub_FADEAC__FADF7A
@@ -9192,14 +9192,14 @@ sub_FABD50__FABD9E:
 	unlk32 xiz                                 ; FABDA9  unlk XIZ
 	ret                                        ; FABDAB  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FABDAC` is now `EnvRec_AdvanceSegment`.
+; ★ NAMED (wave 17): `EnvRec_AdvanceSegment` is now `EnvRec_AdvanceSegment`.
 ;   GRADE PROVEN.  WHY `EnvRec_AdvanceSegment`:
 ;   body: on a 9-byte envelope sub-record, selects on rec[0] & 0x1C; both arms
 ;   increment the step counter rec[+0x08] and compare it with the segment length
 ;   rec[+0x07]; the 0x08 arm returns (rec[+0x08] << 8) / rec[+0x07] -- a 0..0x100
 ;   interpolation fraction -- and on overrun resets the counter and moves the
 ;   state bit.  All three callers are inside Voice_RecomputeAllThreeBaseCurves.
-; sub_FABDAC -- 0xFABDAC..0xFABE2F (132 bytes)
+; EnvRec_AdvanceSegment -- 0xFABDAC..0xFABE2F (132 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFABE52 in Voice_RecomputeAllThreeBaseCurves__FABE3F, 0xFABEDD in Voice_RecomputeAllThreeBaseCurves__FABECC

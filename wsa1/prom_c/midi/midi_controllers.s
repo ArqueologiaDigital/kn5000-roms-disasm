@@ -201,7 +201,7 @@ sub_FAD142__FAD1EF:
 ;          (`cp (XIZ+0xF9),0x04` at 0xFAD2C8).  So the two words this touches are
 ;          part_record + 41*i + 0xA2 and + 41*i + 0xA4, i = 0..3 -- FOUR SUB-RECORDS
 ;          OF 41 BYTES starting at part_record+0xA0.
-;          ★ THAT STRIDE IS CONFIRMED FROM OUTSIDE THIS ROUTINE: sub_FB4A9F's four
+;          ★ THAT STRIDE IS CONFIRMED FROM OUTSIDE THIS ROUTINE: PartRec_RecomputeWord0006_FromToneRec's four
 ;          constant offsets into the same record are 0xA0, 0xC9, 0xF2 and 0x11B --
 ;          three gaps of exactly 41.
 ;          THE ARMS, AND WHAT THE SELECTOR ARGUMENT IS.  Two 4-byte tables are
@@ -1780,7 +1780,7 @@ MidiCtrl_Int9C:
 ; it.  THIRTEEN are arms of GlobalSetup_Dispatch, the status-0xF0 message handler at
 ; 0xFB0338; a fourteenth, GlobalTune_StoreFineTune, sits one level below arm 0x82.
 ; The remaining FOUR are outside that message entirely:
-; ExtBoard_ProbeAndInstallBases, Toggle14FE_AndDispatch, sub_FB6CEE, and sub_FAC34D,
+; ExtBoard_ProbeAndInstallBases, Toggle14FE_AndDispatch, PartRec_InitAllParts, and sub_FAC34D,
 ; which decrements the countdown at +0x1E.
 ; `python3 notes/prom_c_inventory_round8.py --record` lists every writer and every
 ; reader per field, and asserts the last row.
@@ -1846,7 +1846,7 @@ MidiCtrl_Int9C:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA664B = VoiceSubsystem_Init, 0xFB029E = sub_FB029E
-;          0xFB6CEE = sub_FB6CEE
+;          0xFB6CEE = PartRec_InitAllParts
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADA7C-0xFADAB0
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1856,7 +1856,7 @@ MidiCtrl_Int9C:
 ;          `lda XIX,0x14fe` at 0xFADA81, then `cp (XIZ+0x08),0x01` at 0xFADA85 selecting
 ;          `or (XIX+0x01),0x0001` at 0xFADA8D or `and (XIX+0x01),0xfffe` at 0xFADA99 --
 ;          so v == 1 SETS global-setup flag bit 0 and anything else clears it -- and it
-;          then re-runs VoiceSubsystem_Init with the same 0/1, sub_FB6CEE and sub_FB029E.
+;          then re-runs VoiceSubsystem_Init with the same 0/1, PartRec_InitAllParts and sub_FB029E.
 ;          It is arm 0x09 of GlobalSetup_Dispatch (0xFB0409).
 ; Refused: bit 0 has two readers and neither says what it MEANS.  Voice_GetOctaveShift tests it
 ;          (`ld HL,(0x14ff) / and BC,0x0001 / jr Z` at 0xFA72F0) and so does
@@ -2685,7 +2685,7 @@ sub_FADD29__FADDC2:
 ;          0xFAFECD
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAB79D = sub_FAB79D, 0xFAB7E0 = sub_FAB7E0
+; Calls:   0xFAB79D = Voice_StageLevel_Reg0080_AB, 0xFAB7E0 = Voice_StageLevel_Reg0080_CD
 ;          0xFB7038 = Dev10C_SetChanReg_0080_ClrBit15
 ; Voice record: touches voice_record[+0x01(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADDC8-0xFADE2E
@@ -2695,7 +2695,7 @@ sub_FADD29__FADDC2:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; What it is:  re-sends device register 0x0080 for every voice in the list its
 ;          first argument points at.  Same walk as the rest of the family;
-;          stages through sub_FAB79D or sub_FAB7E0 and pushes with
+;          stages through Voice_StageLevel_Reg0080_AB or Voice_StageLevel_Reg0080_CD and pushes with
 ;          Dev10C_SetChanReg_0080_ClrBit15.
 ; Evidence: `call 0xfb7038` at 0xFADE1F IS Dev10C_SetChanReg_0080_ClrBit15, and
 ;          the two stagers are `call 0xfab79d` (0xFADE08) and `call 0xfab7e0`
@@ -2854,9 +2854,9 @@ sub_FADE2F__FADEA6:
 ;          0xFAEF70 0xFAFF26
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFAB8CC = Dev10C_StageRegs_0800_0840_FAB8CC
+; Calls:   0xFA6EA5 = ChanRec_ClearHoldAndRelease, 0xFAB8CC = Dev10C_StageRegs_0800_0840_FAB8CC
 ;          0xFABAE3 = Dev10C_StageRegs_0900_0940, 0xFABBFB = Dev10C_StageRegs_09C0_0A00
-;          0xFABD50 = sub_FABD50, 0xFACE89 = Dev10C_WriteReg
+;          0xFABD50 = Dev10C_StageRegs_0800_0840_FABD50, 0xFACE89 = Dev10C_WriteReg
 ;          0xFACEDE = Dev10C_SetChanReg_0840_0800, 0xFACF1A = Dev10C_SetChanReg_0840
 ;          0xFB3DC1 = Voice_Retire_Mode08, 0xFB7345 = Dev10C_WriteSixChanRegs_FromD78A
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADEAC-0xFADFAC
@@ -3658,8 +3658,8 @@ Voice_RestageArm_ValueCurve_Shared__FAE326:
 ;          0xFAF191
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D79E
-; Calls:   0xFA6110 = sub_FA6110, 0xFA796D = EGEnv_Eval_BaseCurveA
-;          0xFA981B = sub_FA981B, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
+; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFA796D = EGEnv_Eval_BaseCurveA
+;          0xFA981B = EnvRec_LoadSlot, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
 ;          0xFACFD6 = Dev10C_SetChanReg_0440, 0xFAD01A = Dev10C_SetChanReg_0600
 ;          0xFAE242 = Voice_RestageArm_BaseCurve_Shared, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE34A-0xFAE483
@@ -3818,8 +3818,8 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47E:
 ;          0xFAF1F3
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D79A, 0x00D79E
-; Calls:   0xFA6110 = sub_FA6110, 0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA
-;          0xFA981B = sub_FA981B, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
+; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA
+;          0xFA981B = EnvRec_LoadSlot, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
 ;          0xFACFD6 = Dev10C_SetChanReg_0440, 0xFAD01A = Dev10C_SetChanReg_0600
 ;          0xFAD03C = Dev10C_SetChanReg_0580, 0xFAE2C6 = Voice_RestageArm_ValueCurve_Shared
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
@@ -3983,8 +3983,8 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5C1:
 ;          0xFAF1B5
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7A4B = EGEnv_Eval_BaseCurveB
-;          0xFA981B = sub_FA981B, 0xFA9C60 = Voice_StageRegs_0180_AB
+; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFA7A4B = EGEnv_Eval_BaseCurveB
+;          0xFA981B = EnvRec_LoadSlot, 0xFA9C60 = Voice_StageRegs_0180_AB
 ;          0xFACFB4 = Dev10C_SetChanReg_0180, 0xFAD05E = Dev10C_SetChanReg_01C0
 ;          0xFAE242 = Voice_RestageArm_BaseCurve_Shared, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE5C7-0xFAE702
@@ -4144,8 +4144,8 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6FD:
 ;          0xFAF212
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D798
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7AD6 = EGEnv_Eval_ValueCurve_WithBaseCurveB
-;          0xFA981B = sub_FA981B, 0xFA9C60 = Voice_StageRegs_0180_AB
+; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFA7AD6 = EGEnv_Eval_ValueCurve_WithBaseCurveB
+;          0xFA981B = EnvRec_LoadSlot, 0xFA9C60 = Voice_StageRegs_0180_AB
 ;          0xFACFB4 = Dev10C_SetChanReg_0180, 0xFAD05E = Dev10C_SetChanReg_01C0
 ;          0xFAD080 = Dev10C_SetChanReg_0540, 0xFAE2C6 = Voice_RestageArm_ValueCurve_Shared
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
@@ -4310,8 +4310,8 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE842:
 ;          0xFAF1D4
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D7A0
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve
-;          0xFA981B = sub_FA981B, 0xFA9F19 = Voice_StageChanSel_Reg04C0
+; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve
+;          0xFA981B = EnvRec_LoadSlot, 0xFA9F19 = Voice_StageChanSel_Reg04C0
 ;          0xFACFF8 = Dev10C_SetChanReg_04C0, 0xFAD0A2 = Dev10C_SetChanReg_01C0_or_0600
 ;          0xFAE242 = Voice_RestageArm_BaseCurve_Shared, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE848-0xFAE985
@@ -4471,8 +4471,8 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE980:
 ;          0xFAF232
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D7A0
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve
-;          0xFA981B = sub_FA981B, 0xFA9F19 = Voice_StageChanSel_Reg04C0
+; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve
+;          0xFA981B = EnvRec_LoadSlot, 0xFA9F19 = Voice_StageChanSel_Reg04C0
 ;          0xFACFF8 = Dev10C_SetChanReg_04C0, 0xFAD0A2 = Dev10C_SetChanReg_01C0_or_0600
 ;          0xFAD0E6 = Dev10C_SetChanReg_0540_or_0580, 0xFAE2C6 = Voice_RestageArm_ValueCurve_Shared
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
@@ -7292,10 +7292,10 @@ MidiCtrl_CC19__FAFBDD:
 ;          0xFAFF54
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD880 = PartRec_Flags09_Bit14_SetOrClear, 0xFB4A9F = sub_FB4A9F
-;          0xFB4D45 = sub_FB4D45, 0xFB5636 = sub_FB5636
-;          0xFB5E00 = sub_FB5E00, 0xFB639A = sub_FB639A
-;          0xFB6487 = sub_FB6487, 0xFBB765 = sub_FBB765
+; Calls:   0xFAD880 = PartRec_Flags09_Bit14_SetOrClear, 0xFB4A9F = PartRec_RecomputeWord0006_FromToneRec
+;          0xFB4D45 = sub_FB4D45, 0xFB5636 = Part_StageDspAlgoParams
+;          0xFB5E00 = Part_GetDspParam_00D8, 0xFB639A = PartElement_StageAlgoDescBytes_0024
+;          0xFB6487 = PartRec_StageByte0075_FromDspParam00D7, 0xFBB765 = sub_FBB765
 ;          0xFC6803 = sub_FC6803
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAFBEC-0xFAFCE0
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -7554,7 +7554,7 @@ MidiCtrl_CC120__FAFDA0:
 ;     93  MidiCtrl_CC93               +0x11       byte   v, raw
 ;     94  sub_FAFBEC                  --                 (shared: 2 call sites)
 ;    120  MidiCtrl_CC120              --
-;    121  sub_FB6500                  --                 (shared: 5 call sites)
+;    121  PartRec_ResetToDefaults                  --                 (shared: 5 call sites)
 ;    123  PartRec_Word0006_SetBit13                  --                 (shared: 4 call sites)
 ;   0x80  MidiCtrl_Int80              +0x12       byte   v, raw
 ;   0x81  MidiCtrl_Int81_FineTune     +0x13       word   (v - 0x80) * 2
@@ -7610,7 +7610,7 @@ MidiCtrl_CC120__FAFDA0:
 ;          0xFAFBEC = sub_FAFBEC, 0xFAFCE1 = MidiCtrl_CC120
 ;          0xFB3C5F = VoiceQuery_Tag80_Part, 0xFB3C8B = VoiceQuery_Tag40_Part
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part, 0xFB3E8B = VoiceList_RetireByMode
-;          0xFB4D45 = sub_FB4D45, 0xFB6500 = sub_FB6500
+;          0xFB4D45 = sub_FB4D45, 0xFB6500 = PartRec_ResetToDefaults
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAFDA5-0xFB0012
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7821,7 +7821,7 @@ MidiCtrl_Dispatch__FAFF5A:                     ; controller 120   -> MidiCtrl_CC
 	pushw	bc                                   ; FAFF5D  push BC
 	calr (0xFAFCE1 - 0xFAFF61)                 ; FAFF5E  calr 0xfafce1
 	jr MidiCtrl_Dispatch__FAFF6B                      ; FAFF61  jr T,0xfaff6b
-MidiCtrl_Dispatch__FAFF63:                     ; controller 121   -> sub_FB6500 (shared)
+MidiCtrl_Dispatch__FAFF63:                     ; controller 121   -> PartRec_ResetToDefaults (shared)
 	ld	c, (xix+1)                              ; FAFF63  ld C,(XIX+0x01)
 	pushw	bc                                   ; FAFF66  push BC
 	call	0xFB6500                              ; FAFF67  call 0xfb6500
@@ -8157,7 +8157,7 @@ sub_FB0132__FB01FA:
 ;          0xFB046F
 ; Inputs:  frame `link XIZ,-8`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB3D09 = VoiceQuery_Tag00_All, 0xFB6500 = sub_FB6500
+; Calls:   0xFB3D09 = VoiceQuery_Tag00_All, 0xFB6500 = PartRec_ResetToDefaults
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0200-0xFB026B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8316,9 +8316,9 @@ sub_FB0285:
 ;          0xFADAA9 0xFB045F
 ; Inputs:  frame `link XIZ,-1`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB47C4 = sub_FB47C4
-;          0xFB6500 = sub_FB6500, 0xFB6681 = sub_FB6681
-;          0xFB68DD = sub_FB68DD
+; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB47C4 = Part_LoadToneRecordAndPointers
+;          0xFB6500 = PartRec_ResetToDefaults, 0xFB6681 = Part_RestageVoiceParams_Melodic
+;          0xFB68DD = Part_RestageVoiceParams_Drawbar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB029E-0xFB0337
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above

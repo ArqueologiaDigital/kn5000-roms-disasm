@@ -87,13 +87,13 @@
 ;       python3 notes/prom_c_verify_fragment.py c 0xFA5949 /tmp/m2.final.s
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5949` is now `MidiIn_StoreRingBacklog`.
+; ★ NAMED (wave 17): `MidiIn_StoreRingBacklog` is now `MidiIn_StoreRingBacklog`.
 ;   GRADE PROVEN.  WHY `MidiIn_StoreRingBacklog`:
 ;   the whole body is `(0x008678) = (XIZ+0x08)`, and its ONE caller pushes the
 ;   ring byte count it has just guarded (`cp DE,4` 0xFB0619, `push DE` 0xFB061E).
 ;   0x008678 is read only by ChanAlloc_ForNoteRequest, which compares it against
 ;   0x20/0x30/0x40/0x50 to pick how hard to work for a free channel.
-; sub_FA5949 -- 0xFA5949..0xFA5957 (15 bytes)
+; MidiIn_StoreRingBacklog -- 0xFA5949..0xFA5957 (15 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB061F in MidiIn_ParseRingAndDispatch__FB0619
@@ -114,13 +114,13 @@ MidiIn_StoreRingBacklog:
 	unlk32 xiz                                 ; FA5955  unlk XIZ
 	ret                                        ; FA5957  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5958` is now `MidiNote_StoreStatusBit3`.
+; ★ NAMED (wave 17): `MidiNote_StoreStatusBit3` is now `MidiNote_StoreStatusBit3`.
 ;   GRADE PROVEN.  WHY `MidiNote_StoreStatusBit3`:
 ;   the whole body is `(0x008677) = (XIZ+0x08)`, and its ONE caller pushes
 ;   `msg[0] & 0x08` (0xFB3F50-0xFB3F55) -- bit 3 of the message's status byte.
 ;   0x008677 is read only by ChanAlloc_ForNoteRequest, as the flag that chooses
 ;   between two sets of backlog thresholds.
-; sub_FA5958 -- 0xFA5958..0xFA5966 (15 bytes)
+; MidiNote_StoreStatusBit3 -- 0xFA5958..0xFA5966 (15 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3F56 in MidiNote_Dispatch
@@ -141,13 +141,13 @@ MidiNote_StoreStatusBit3:
 	unlk32 xiz                                 ; FA5964  unlk XIZ
 	ret                                        ; FA5966  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5967` is now `Rec0E3E_GroupOfIndex`.
+; ★ NAMED (wave 17): `Rec0E3E_GroupOfIndex` is now `Rec0E3E_GroupOfIndex`.
 ;   GRADE PROVEN.  WHY `Rec0E3E_GroupOfIndex`:
 ;   body: index < 0x40 -> 0, 0x40..0x7F -> 4, 0x80..0xBF -> 8, else 0.  Both
 ;   callers pass a 0x0E3E slot index and hand the result straight to
 ;   Rec0E3E_MoveToList as its COLUMN argument, so the three values are the three
 ;   64-slot groups the 192-record array is divided into.
-; sub_FA5967 -- 0xFA5967..0xFA598B (37 bytes)
+; Rec0E3E_GroupOfIndex -- 0xFA5967..0xFA598B (37 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -184,12 +184,12 @@ sub_FA5967__FA5988:
 	unlk32 xiz                                 ; FA5989  unlk XIZ
 	ret                                        ; FA598B  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA598C` is now `Rec0E3E_IndexWithinGroup`.
+; ★ NAMED (wave 17): `Rec0E3E_IndexWithinGroup` is now `Rec0E3E_IndexWithinGroup`.
 ;   GRADE PROVEN.  WHY `Rec0E3E_IndexWithinGroup`:
 ;   body: selector&3 == 0 or 1 -> i & 0x3F; == 2 -> (i - 0x40) & 0x7F;
 ;   == 3 -> i & 0x7F.  Every caller passes a 0x0E3E slot index and uses the
 ;   result as the low byte of a (selector, index) pair.
-; sub_FA598C -- 0xFA598C..0xFA59CD (66 bytes)
+; Rec0E3E_IndexWithinGroup -- 0xFA598C..0xFA59CD (66 bytes)
 ;
 ; Called from: no site outside this module.
 ;          5 site(s) inside this module:
@@ -240,12 +240,12 @@ sub_FA598C__FA59CA:
 	unlk32 xiz                                 ; FA59CB  unlk XIZ
 	ret                                        ; FA59CD  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA59CE` is now `Rec11FE_UnlinkFromRing`.
+; ★ NAMED (wave 17): `Rec11FE_UnlinkFromRing` is now `Rec11FE_UnlinkFromRing`.
 ;   GRADE PROVEN.  WHY `Rec11FE_UnlinkFromRing`:
 ;   body: with rec = 0x11FE + 12*chan and ring r, it does
 ;   `next=rec[r]; prev=rec[r+4]; A[prev][r]=next; A[next][r+4]=prev;`
 ;   `rec[r]=rec[r+4]=chan` -- a circular doubly-linked unlink and self-link.
-; sub_FA59CE -- 0xFA59CE..0xFA5A35 (104 bytes)
+; Rec11FE_UnlinkFromRing -- 0xFA59CE..0xFA5A35 (104 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -308,11 +308,11 @@ Rec11FE_UnlinkFromRing:
 	unlk32 xiz                                 ; FA5A33  unlk XIZ
 	ret                                        ; FA5A35  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5A36` is now `Rec11FE_InsertIntoRing`.
+; ★ NAMED (wave 17): `Rec11FE_InsertIntoRing` is now `Rec11FE_InsertIntoRing`.
 ;   GRADE PROVEN.  WHY `Rec11FE_InsertIntoRing`:
 ;   body: the same unlink, then splices `chan` in beside the third argument's
 ;   record on ring r, using the same next=[r] / prev=[r+4] pair.
-; sub_FA5A36 -- 0xFA5A36..0xFA5AC9 (148 bytes)
+; Rec11FE_InsertIntoRing -- 0xFA5A36..0xFA5AC9 (148 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -393,20 +393,20 @@ Rec11FE_InsertIntoRing:
 	unlk32 xiz                                 ; FA5AC7  unlk XIZ
 	ret                                        ; FA5AC9  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5ACA` is now `Rec11FE_BindRingToSlot`.
+; ★ NAMED (wave 17): `Rec11FE_BindRingToSlot` is now `Rec11FE_BindRingToSlot`.
 ;   GRADE PROVEN.  WHY `Rec11FE_BindRingToSlot`:
 ;   body: detaches chan's ring r from the 0x0E3E slot it currently names
 ;   (handing that slot's owner byte [+4] to the next channel on the ring, or
 ;   0xFF when chan was alone), then links chan into the new slot's ring and
 ;   stores the new slot index in rec11FE[chan][8+r].
-; sub_FA5ACA -- 0xFA5ACA..0xFA5B6F (166 bytes)
+; Rec11FE_BindRingToSlot -- 0xFA5ACA..0xFA5B6F (166 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
 ;          0xFA5FBA 0xFA5FFA
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA59CE = sub_FA59CE, 0xFA5A36 = sub_FA5A36
+; Calls:   0xFA59CE = Rec11FE_UnlinkFromRing, 0xFA5A36 = Rec11FE_InsertIntoRing
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5ACA-0xFA5B6F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -493,11 +493,11 @@ sub_FA5ACA__FA5B59:
 	unlk32 xiz                                 ; FA5B6D  unlk XIZ
 	ret                                        ; FA5B6F  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5B70` is now `Rec0E3E_UnlinkFromRing`.
+; ★ NAMED (wave 17): `Rec0E3E_UnlinkFromRing` is now `Rec0E3E_UnlinkFromRing`.
 ;   GRADE PROVEN.  WHY `Rec0E3E_UnlinkFromRing`:
 ;   body: with s = 0x0E3E + 5*index, `next=s[0]; prev=s[1];`
 ;   `S[prev][0]=next; S[next][1]=prev; s[0]=s[1]=index` -- unlink + self-link.
-; sub_FA5B70 -- 0xFA5B70..0xFA5BC6 (87 bytes)
+; Rec0E3E_UnlinkFromRing -- 0xFA5B70..0xFA5BC6 (87 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -553,11 +553,11 @@ Rec0E3E_UnlinkFromRing:
 	unlk32 xiz                                 ; FA5BC4  unlk XIZ
 	ret                                        ; FA5BC6  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5BC7` is now `Rec0E3E_InsertBeforeInRing`.
+; ★ NAMED (wave 17): `Rec0E3E_InsertBeforeInRing` is now `Rec0E3E_InsertBeforeInRing`.
 ;   GRADE PROVEN.  WHY `Rec0E3E_InsertBeforeInRing`:
 ;   body: the same unlink, then inserts the first argument's record immediately
 ;   before the second's in the [0]=next / [1]=prev ring.
-; sub_FA5BC7 -- 0xFA5BC7..0xFA5C42 (124 bytes)
+; Rec0E3E_InsertBeforeInRing -- 0xFA5BC7..0xFA5C42 (124 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -628,20 +628,20 @@ Rec0E3E_InsertBeforeInRing:
 	unlk32 xiz                                 ; FA5C40  unlk XIZ
 	ret                                        ; FA5C42  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5C43` is now `Rec0E3E_MoveToList`.
+; ★ NAMED (wave 17): `Rec0E3E_MoveToList` is now `Rec0E3E_MoveToList`.
 ;   GRADE PROVEN.  WHY `Rec0E3E_MoveToList`:
 ;   body: takes slot `s` off the list named by its own s[+2] (part) and s[+3]
 ;   (column) in the head table at 0x0AA8, links it onto list (arg2, arg3) --
 ;   self-linking when that head reads 0xFF -- and then stores arg2 into s[+2]
 ;   and arg3 into s[+3].
-; sub_FA5C43 -- 0xFA5C43..0xFA5CE8 (166 bytes)
+; Rec0E3E_MoveToList -- 0xFA5C43..0xFA5CE8 (166 bytes)
 ;
 ; Called from: no site outside this module.
 ;          4 site(s) inside this module:
 ;          0xFA5D56 0xFA5E6E 0xFA5FED 0xFA62C1
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5B70 = sub_FA5B70, 0xFA5BC7 = sub_FA5BC7
+; Calls:   0xFA5B70 = Rec0E3E_UnlinkFromRing, 0xFA5BC7 = Rec0E3E_InsertBeforeInRing
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5C43-0xFA5CE8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -729,22 +729,22 @@ sub_FA5C43__FA5CCD:
 	unlk32 xiz                                 ; FA5CE6  unlk XIZ
 	ret                                        ; FA5CE8  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5CE9` is now `Rec11FE_ReleaseAllRings`.
+; ★ NAMED (wave 17): `Rec11FE_ReleaseAllRings` is now `Rec11FE_ReleaseAllRings`.
 ;   GRADE PROVEN.  WHY `Rec11FE_ReleaseAllRings`:
 ;   body: for r = 0..3, if rec11FE[chan][8+r] < 0xC0 and that slot's owner byte
 ;   [+4] is chan, hand ownership to the next channel on the ring (or 0xFF),
 ;   Rec0E3E_MoveToList(slot, 0x21, Rec0E3E_GroupOfIndex(slot)) -- part 0x21 is
 ;   one past the 33 real parts, i.e. the free list -- unlink the ring, and store
 ;   0xFF in rec11FE[chan][8+r].
-; sub_FA5CE9 -- 0xFA5CE9..0xFA5D83 (155 bytes)
+; Rec11FE_ReleaseAllRings -- 0xFA5CE9..0xFA5D83 (155 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
 ;          0xFA603C 0xFA6998 0xFA6E4D
 ; Inputs:  frame `link XIZ,-5`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5967 = sub_FA5967, 0xFA59CE = sub_FA59CE
-;          0xFA5C43 = sub_FA5C43
+; Calls:   0xFA5967 = Rec0E3E_GroupOfIndex, 0xFA59CE = Rec11FE_UnlinkFromRing
+;          0xFA5C43 = Rec0E3E_MoveToList
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5CE9-0xFA5D83
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -823,20 +823,20 @@ sub_FA5CE9__FA5D73:
 	unlk32 xiz                                 ; FA5D81  unlk XIZ
 	ret                                        ; FA5D83  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5D84` is now `VoiceSlots_InitAllTables`.
+; ★ NAMED (wave 17): `VoiceSlots_InitAllTables` is now `VoiceSlots_InitAllTables`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_InitAllTables`:
 ;   body: fills all three tables with their own strides and counts --
 ;   0x11FE 64 x 12 (rings self-linked, slot bytes 0xFF), 0x0E3E 192 x 5 (rings
 ;   self-linked, owner 0xFF), 0x0AA8 34 x 27 (all 0xFF) -- then puts all 192
 ;   slots on the free list with Rec0E3E_MoveToList(s, 0x21, group).
-; sub_FA5D84 -- 0xFA5D84..0xFA5E81 (254 bytes)
+; VoiceSlots_InitAllTables -- 0xFA5D84..0xFA5E81 (254 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA68D3
 ; Inputs:  frame `link XIZ,-3`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5967 = sub_FA5967, 0xFA5C43 = sub_FA5C43
+; Calls:   0xFA5967 = Rec0E3E_GroupOfIndex, 0xFA5C43 = Rec0E3E_MoveToList
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5D84-0xFA5E81
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -948,12 +948,12 @@ sub_FA5D84__FA5E5D:
 	unlk32 xiz                                 ; FA5E7F  unlk XIZ
 	ret                                        ; FA5E81  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA5E82` is now `Rec0E3E_FreeListHead`.
+; ★ NAMED (wave 17): `Rec0E3E_FreeListHead` is now `Rec0E3E_FreeListHead`.
 ;   GRADE PROVEN.  WHY `Rec0E3E_FreeListHead`:
 ;   body: reads 0x0AA8 + 0x37B + {0, 4, 8} by a 2-bit selector.  0x37B = 27*33,
 ;   so the row is part 33 -- the free row, one past the 33 real parts -- and the
 ;   three columns are Rec0E3E_GroupOfIndex's three values.
-; sub_FA5E82 -- 0xFA5E82..0xFA5ED2 (81 bytes)
+; Rec0E3E_FreeListHead -- 0xFA5E82..0xFA5ED2 (81 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -1025,8 +1025,8 @@ sub_FA5E82__FA5ECE:
 ;          0xFA6071
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA598C = sub_FA598C, 0xFA5ACA = sub_FA5ACA
-;          0xFA5C43 = sub_FA5C43, 0xFA5E82 = sub_FA5E82
+; Calls:   0xFA598C = Rec0E3E_IndexWithinGroup, 0xFA5ACA = Rec11FE_BindRingToSlot
+;          0xFA5C43 = Rec0E3E_MoveToList, 0xFA5E82 = Rec0E3E_FreeListHead
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5ED3-0xFA6025
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1042,7 +1042,7 @@ sub_FA5E82__FA5ECE:
 ;
 ; ★ THE LOW BYTE IS A 0x0010C000 CHANNEL INDEX, and the name says only that
 ;   because only that is measured.  NINE of the ten call sites mask it to 0x3F or
-;   0x7F immediately (the tenth, 0xFA6071, is sub_FA6051's tail call and passes
+;   0x7F immediately (the tenth, 0xFA6071, is VoiceSlots_ReleaseThenLookup's tail call and passes
 ;   the value through untouched), and THREE of those nine hand the masked value
 ;   straight to a Dev10C_Slot* accessor as its `chan` argument -- 0xFA999F
 ;   (Dev10C_Slot2_WriteGate8100), 0xFA9CD6 (Dev10C_Slot1_WriteGate8100), 0xFA9F8C
@@ -1251,19 +1251,19 @@ Voice_LookupDev10CChanIndex__FA6020:
 	unlk32 xiz                                 ; FA6023  unlk XIZ
 	ret                                        ; FA6025  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6026` is now `VoiceSlots_ReleaseChanAndReturnNone`.
+; ★ NAMED (wave 17): `VoiceSlots_ReleaseChanAndReturnNone` is now `VoiceSlots_ReleaseChanAndReturnNone`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_ReleaseChanAndReturnNone`:
 ;   body: if chan < 0x40 call Rec11FE_ReleaseAllRings(chan); return
 ;   ((sel & 0x3F) << 8) | 0xFF -- the same two-byte (selector, result) shape
 ;   Voice_LookupDev10CChanIndex returns, with 0xFF meaning `no slot`.
-; sub_FA6026 -- 0xFA6026..0xFA6050 (43 bytes)
+; VoiceSlots_ReleaseChanAndReturnNone -- 0xFA6026..0xFA6050 (43 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA605F
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5CE9 = sub_FA5CE9
+; Calls:   0xFA5CE9 = Rec11FE_ReleaseAllRings
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6026-0xFA6050
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1293,7 +1293,7 @@ sub_FA6026__FA6040:
 	unlk32 xiz                                 ; FA604E  unlk XIZ
 	ret                                        ; FA6050  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6051` is now `VoiceSlots_ReleaseThenLookup`.
+; ★ NAMED (wave 17): `VoiceSlots_ReleaseThenLookup` is now `VoiceSlots_ReleaseThenLookup`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_ReleaseThenLookup`:
 ;   body is two calls and nothing else: VoiceSlots_ReleaseChanAndReturnNone
 ;   then Voice_LookupDev10CChanIndex on the same channel.
@@ -1301,7 +1301,7 @@ sub_FA6026__FA6040:
 ;   in the 512 KiB reaches it.  The BODY is the evidence for the name, not a
 ;   caller; the precedent for naming an unreferenced routine from its body alone
 ;   is Clamp_ToRange_Word_b (0xFA78C6).
-; sub_FA6051 -- 0xFA6051..0xFA607A (42 bytes)
+; VoiceSlots_ReleaseThenLookup -- 0xFA6051..0xFA607A (42 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -1309,7 +1309,7 @@ sub_FA6026__FA6040:
 ;          scan, so this is "not found", not "dead".
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA6026 = sub_FA6026
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA6026 = VoiceSlots_ReleaseChanAndReturnNone
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6051-0xFA607A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1337,13 +1337,13 @@ VoiceSlots_ReleaseThenLookup:
 	unlk32 xiz                                 ; FA6078  unlk XIZ
 	ret                                        ; FA607A  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA607B` is now `VoiceSlots_ListSlotsOfChannel`.
+; ★ NAMED (wave 17): `VoiceSlots_ListSlotsOfChannel` is now `VoiceSlots_ListSlotsOfChannel`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_ListSlotsOfChannel`:
 ;   body: walks rec11FE[chan] rings 0..3, keeps a ring whose slot's
 ;   Table_FE1129 code passes the caller's (value, mask) filter, and appends
 ;   (code << 8) | Rec0E3E_IndexWithinGroup(slot) to the buffer at RAM 0x0086FC,
 ;   terminating it with 0xFFFF.  ⚠ NOT REFERENCED (see VoiceSlots_ReleaseThenLookup).
-; sub_FA607B -- 0xFA607B..0xFA610F (149 bytes)
+; VoiceSlots_ListSlotsOfChannel -- 0xFA607B..0xFA610F (149 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -1351,7 +1351,7 @@ VoiceSlots_ReleaseThenLookup:
 ;          scan, so this is "not found", not "dead".
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA598C = sub_FA598C
+; Calls:   0xFA598C = Rec0E3E_IndexWithinGroup
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA607B-0xFA610F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1424,13 +1424,13 @@ sub_FA607B__FA60F9:
 	unlk32 xiz                                 ; FA610D  unlk XIZ
 	ret                                        ; FA610F  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6110` is now `VoiceSlots_ListSlotsOfPart`.
+; ★ NAMED (wave 17): `VoiceSlots_ListSlotsOfPart` is now `VoiceSlots_ListSlotsOfPart`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_ListSlotsOfPart`:
 ;   body: walks the 27 columns of the 0x0AA8 row for one part, and for each
 ;   column whose Table_FE1129 code passes the caller's (value, mask) filter walks
 ;   that column's ring of slots, appending (code << 8) |
 ;   Rec0E3E_IndexWithinGroup(slot) to the buffer at RAM 0x0086 7A, 0xFFFF-terminated.
-; sub_FA6110 -- 0xFA6110..0xFA61BC (173 bytes)
+; VoiceSlots_ListSlotsOfPart -- 0xFA6110..0xFA61BC (173 bytes)
 ;
 ; Called from: 21 site(s) outside this module:
 ;          0xFAC4F1 in sub_FAC42C__FAC49B, 0xFAC55A in sub_FAC526
@@ -1446,7 +1446,7 @@ sub_FA607B__FA60F9:
 ;          0xFB8C56 in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C47
 ; Inputs:  frame `link XIZ,-7`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA598C = sub_FA598C
+; Calls:   0xFA598C = Rec0E3E_IndexWithinGroup
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6110-0xFA61BC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1528,13 +1528,13 @@ sub_FA6110__FA61A5:
 	unlk32 xiz                                 ; FA61BA  unlk XIZ
 	ret                                        ; FA61BC  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA61BD` is now `VoiceSlots_ListChannelsOfPart`.
+; ★ NAMED (wave 17): `VoiceSlots_ListChannelsOfPart` is now `VoiceSlots_ListChannelsOfPart`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_ListChannelsOfPart`:
 ;   body: the same 0x0AA8 row walk, but for each surviving column it follows the
 ;   slot's owner byte [+4] into the 0x11FE ring and appends CHANNEL numbers to
 ;   the buffer at RAM 0x00877E, 0xFF-terminated.
 ;   ⚠ NOT REFERENCED (see VoiceSlots_ReleaseThenLookup).
-; sub_FA61BD -- 0xFA61BD..0xFA6268 (172 bytes)
+; VoiceSlots_ListChannelsOfPart -- 0xFA61BD..0xFA6268 (172 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -1624,20 +1624,20 @@ sub_FA61BD__FA6254:
 	unlk32 xiz                                 ; FA6266  unlk XIZ
 	ret                                        ; FA6268  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6269` is now `VoiceSlots_ReapOrphansInBank`.
+; ★ NAMED (wave 17): `VoiceSlots_ReapOrphansInBank` is now `VoiceSlots_ReapOrphansInBank`.
 ;   GRADE PROVEN.  WHY `VoiceSlots_ReapOrphansInBank`:
 ;   body: over the 48 slots of one bank (`mul BC,0x30` on the bank number, 4
 ;   banks x 48 = the 192 slots), any slot whose owner byte [+4] is > 0x40 and
 ;   whose part [+2] is not already 0x21 is put back on the free list.  Its one
 ;   caller is Dev10C_PollBankAndRetire's tail, once per bank sweep.
-; sub_FA6269 -- 0xFA6269..0xFA62D9 (113 bytes)
+; VoiceSlots_ReapOrphansInBank -- 0xFA6269..0xFA62D9 (113 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFA69F3
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5967 = sub_FA5967, 0xFA5C43 = sub_FA5C43
+; Calls:   0xFA5967 = Rec0E3E_GroupOfIndex, 0xFA5C43 = Rec0E3E_MoveToList
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6269-0xFA62D9
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -1699,7 +1699,7 @@ sub_FA6269__FA62D4:
 	unlk32 xiz                                 ; FA62D7  unlk XIZ
 	ret                                        ; FA62D9  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA62DA` is now `ChanRec_RelinkToPoolQueue`.
+; ★ NAMED (wave 17): `ChanRec_RelinkToPoolQueue` is now `ChanRec_RelinkToPoolQueue`.
 ;   GRADE PROVEN.  WHY `ChanRec_RelinkToPoolQueue`:
 ;   body: unlinks the channel record from the queue named by its OWN cursor
 ;   pair rec[+0x0F] (pool base) / rec[+0x11] (queue index), decrementing that
@@ -1707,7 +1707,7 @@ sub_FA6269__FA62D4:
 ;   channel number rec[+0x14]); links it onto queue arg2 of pool arg1 through
 ;   the rec[+0x00]/rec[+0x02] link pair; stores the new cursor and increments
 ;   the new queue's occupancy byte.
-; sub_FA62DA -- 0xFA62DA..0xFA643E (357 bytes)
+; ChanRec_RelinkToPoolQueue -- 0xFA62DA..0xFA643E (357 bytes)
 ;
 ; Called from: no site outside this module.
 ;          5 site(s) inside this module:
@@ -1881,12 +1881,12 @@ sub_FA62DA__FA6439:
 	unlk32 xiz                                 ; FA643C  unlk XIZ
 	ret                                        ; FA643E  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA643F` is now `ChanRec_RelinkToPartQueue`.
+; ★ NAMED (wave 17): `ChanRec_RelinkToPartQueue` is now `ChanRec_RelinkToPartQueue`.
 ;   GRADE PROVEN.  WHY `ChanRec_RelinkToPartQueue`:
 ;   the same routine one link pair over: it uses rec[+0x04]/rec[+0x06] as the
 ;   links and rec[+0x0C]/rec[+0x0E] as the cursor, and keeps no occupancy count.
 ;   ChanRec_Release passes it 0x041C + 6*33 -- the row one past the 33 parts.
-; sub_FA643F -- 0xFA643F..0xFA6527 (233 bytes)
+; ChanRec_RelinkToPartQueue -- 0xFA643F..0xFA6527 (233 bytes)
 ;
 ; Called from: no site outside this module.
 ;          4 site(s) inside this module:
@@ -2104,19 +2104,19 @@ sub_FA6528__FA65B7:
 	unlk32 xiz                                 ; FA65BA  unlk XIZ
 	ret                                        ; FA65BC  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA65BD` is now `ChanRec_ToPoolQueue6_SetFlag1`.
+; ★ NAMED (wave 17): `ChanRec_ToPoolQueue6_SetFlag1` is now `ChanRec_ToPoolQueue6_SetFlag1`.
 ;   GRADE PROVEN.  WHY `ChanRec_ToPoolQueue6_SetFlag1`:
 ;   body: if rec[+0x12] & 3 is zero, clear flag bits 2 and 3, set bit 1, and
 ;   ChanRec_RelinkToPoolQueue(rec, rec[+0x0F], 6) -- queue 6 of the record's own
 ;   pool, which is the queue ChanRec_Release also uses.
-; sub_FA65BD -- 0xFA65BD..0xFA65F5 (57 bytes)
+; ChanRec_ToPoolQueue6_SetFlag1 -- 0xFA65BD..0xFA65F5 (57 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
 ;          0xFA6614 0xFA69DA
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA62DA = sub_FA62DA
+; Calls:   0xFA62DA = ChanRec_RelinkToPoolQueue
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA65BD-0xFA65F5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2154,20 +2154,20 @@ sub_FA65BD__FA65F1:
 	unlk32 xiz                                 ; FA65F3  unlk XIZ
 	ret                                        ; FA65F5  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA65F6` is now `ChanRec_BeginRelease`.
+; ★ NAMED (wave 17): `ChanRec_BeginRelease` is now `ChanRec_BeginRelease`.
 ;   GRADE PROVEN.  WHY `ChanRec_BeginRelease`:
 ;   body: held channels (flag bit 7) are left alone; a channel whose cached
 ;   0x0180 read-back rec[+0x15] has fallen below 0x80 goes to
 ;   ChanRec_ToPoolQueue6_SetFlag1; otherwise, if flag bit 3 is set, bit 3 is
 ;   cleared, bit 2 set, and the record relinked to pool queue rec[+0x16].
-; sub_FA65F6 -- 0xFA65F6..0xFA664A (85 bytes)
+; ChanRec_BeginRelease -- 0xFA65F6..0xFA664A (85 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
 ;          0xFA6EF0 0xFA6F21 0xFA6F7A
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA62DA = sub_FA62DA, 0xFA65BD = sub_FA65BD
+; Calls:   0xFA62DA = ChanRec_RelinkToPoolQueue, 0xFA65BD = ChanRec_ToPoolQueue6_SetFlag1
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA65F6-0xFA664A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -2779,8 +2779,8 @@ VoiceSubsystem_Init__FA68AA:
 ;          0x0087BF[bank] = (the word read from the device) | 0x0087C7[bank];
 ;          rec[+0x15] for each polled channel; and, per retired channel,
 ;          Dev10C_ChanReset(chan) + 0xFA5CE9(chan) + ChanRec_Release(rec).
-; Calls:   0xFA5CE9 = sub_FA5CE9, 0xFA6269 = sub_FA6269
-;          0xFA6528 = ChanRec_Release, 0xFA65BD = sub_FA65BD
+; Calls:   0xFA5CE9 = Rec11FE_ReleaseAllRings, 0xFA6269 = VoiceSlots_ReapOrphansInBank
+;          0xFA6528 = ChanRec_Release, 0xFA65BD = ChanRec_ToPoolQueue6_SetFlag1
 ;          0xFB0A8B = Dev10C_ChanReset
 ;
 ; Evidence: EVERY INSTRUCTION BELOW IS ASSERTED FROM THE ROM BYTES BY
@@ -2946,14 +2946,14 @@ Dev10C_PollBankAndRetire__FA69DE:
 	unlk32 xiz                                 ; FA69FA  unlk XIZ
 	ret                                        ; FA69FC  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA69FD` is now `ChanAlloc_FindVictim`.
+; ★ NAMED (wave 17): `ChanAlloc_FindVictim` is now `ChanAlloc_FindVictim`.
 ;   GRADE PROVEN.  WHY `ChanAlloc_FindVictim`:
 ;   body: walks a 0xFF-terminated byte list of queue codes in priority order
 ;   (bit 7 = a queue of the shared pool at 0x03E0, else a queue of the pool the
 ;   part object's first word names), takes the first non-empty queue whose
 ;   occupancy byte is non-zero, and returns the first record on it whose channel
 ;   number rec[+0x14] has the wanted parity, or 0.
-; sub_FA69FD -- 0xFA69FD..0xFA6BB4 (440 bytes)
+; ChanAlloc_FindVictim -- 0xFA69FD..0xFA6BB4 (440 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -3182,7 +3182,7 @@ sub_FA69FD__FA6BAF:
 	unlk32 xiz                                 ; FA6BB2  unlk XIZ
 	ret                                        ; FA6BB4  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6BB5` is now `ChanAlloc_ForNoteRequest`.
+; ★ NAMED (wave 17): `ChanAlloc_ForNoteRequest` is now `ChanAlloc_ForNoteRequest`.
 ;   GRADE PROVEN.  WHY `ChanAlloc_ForNoteRequest`:
 ;   body: bounds the request's part index with `cp A,0x21`, then for each of the
 ;   four element slots req[+2+i] runs ChanAlloc_FindVictim over the search order
@@ -3192,7 +3192,7 @@ sub_FA69FD__FA6BAF:
 ;   into req[+0x0A+i] (0xFF when nothing was found).  Its five callers are
 ;   VoiceParams_Compute_A..D and VoiceRecords_InitFromAlloc, whose own header
 ;   already reads "asks the allocator for voices".
-; sub_FA6BB5 -- 0xFA6BB5..0xFA6EA4 (752 bytes)
+; ChanAlloc_ForNoteRequest -- 0xFA6BB5..0xFA6EA4 (752 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB1DA5 in VoiceParams_Compute_A__FB1DA1, 0xFB2784 in VoiceParams_Compute_B__FB2780
@@ -3201,8 +3201,8 @@ sub_FA69FD__FA6BAF:
 ; Inputs:  frame `link XIZ,-29`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x0087D0
 ;          reads 0x008677, 0x008678
-; Calls:   0xFA5CE9 = sub_FA5CE9, 0xFA62DA = sub_FA62DA
-;          0xFA643F = sub_FA643F, 0xFA69FD = sub_FA69FD
+; Calls:   0xFA5CE9 = Rec11FE_ReleaseAllRings, 0xFA62DA = ChanRec_RelinkToPoolQueue
+;          0xFA643F = ChanRec_RelinkToPartQueue, 0xFA69FD = ChanAlloc_FindVictim
 ;          0xFCA0BA = Shift16_Left
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6BB5-0xFA6EA4
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -3515,11 +3515,11 @@ sub_FA6BB5__FA6E9F:
 	unlk32 xiz                                 ; FA6EA2  unlk XIZ
 	ret                                        ; FA6EA4  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6EA5` is now `ChanRec_ClearHoldAndRelease`.
+; ★ NAMED (wave 17): `ChanRec_ClearHoldAndRelease` is now `ChanRec_ClearHoldAndRelease`.
 ;   GRADE PROVEN.  WHY `ChanRec_ClearHoldAndRelease`:
 ;   body: clears flag bit 7 of rec[+0x12], clears the channel's bit in the
 ;   0x0087C7 hold mask, then calls ChanRec_BeginRelease on the same record.
-; sub_FA6EA5 -- 0xFA6EA5..0xFA6EF9 (85 bytes)
+; ChanRec_ClearHoldAndRelease -- 0xFA6EA5..0xFA6EF9 (85 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFAC05B in sub_FAC026, 0xFAC1DD in sub_FAC08D__FAC1D3
@@ -3528,7 +3528,7 @@ sub_FA6BB5__FA6E9F:
 ;          0xFB3D8F in Voice_Retire_Mode20__FB3D5A
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA65F6 = sub_FA65F6, 0xFCA0BA = Shift16_Left
+; Calls:   0xFA65F6 = ChanRec_BeginRelease, 0xFCA0BA = Shift16_Left
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6EA5-0xFA6EF9
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -3576,18 +3576,18 @@ ChanRec_ClearHoldAndRelease:
 	unlk32 xiz                                 ; FA6EF7  unlk XIZ
 	ret                                        ; FA6EF9  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6EFA` is now `ChanRec_ReleaseByChannel`.
+; ★ NAMED (wave 17): `ChanRec_ReleaseByChannel` is now `ChanRec_ReleaseByChannel`.
 ;   GRADE PROVEN.  WHY `ChanRec_ReleaseByChannel`:
 ;   body: rejects chan >= 0x40, relinks the record to queue 1 of its own part
 ;   object, calls ChanRec_BeginRelease, and unlinks it from the
 ;   rec[+0x08]/rec[+0x0A] pair.  Its one caller is MidiNote_OffTail.
-; sub_FA6EFA -- 0xFA6EFA..0xFA6F47 (78 bytes)
+; ChanRec_ReleaseByChannel -- 0xFA6EFA..0xFA6F47 (78 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3855 in MidiNote_OffTail__FB384D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA643F = sub_FA643F, 0xFA65F6 = sub_FA65F6
+; Calls:   0xFA643F = ChanRec_RelinkToPartQueue, 0xFA65F6 = ChanRec_BeginRelease
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6EFA-0xFA6F47
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -3635,21 +3635,21 @@ sub_FA6EFA__FA6F42:
 	unlk32 xiz                                 ; FA6F45  unlk XIZ
 	ret                                        ; FA6F47  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6F48` is now `ChanRec_ReleaseQueueAndCollect`.
+; ★ NAMED (wave 17): `ChanRec_ReleaseQueueAndCollect` is now `ChanRec_ReleaseQueueAndCollect`.
 ;   GRADE PROVEN.  WHY `ChanRec_ReleaseQueueAndCollect`:
 ;   body: walks one part queue; unless the caller passes the `any note` flag it
 ;   keeps only records whose rec[+0x13] equals the wanted note; each kept record
 ;   is relinked to part queue 1, passed to ChanRec_BeginRelease, has its channel
 ;   number rec[+0x14] appended to the caller's output list, and is unlinked from
 ;   the rec[+0x08]/rec[+0x0A] pair.  The list is 0xFF-terminated.
-; sub_FA6F48 -- 0xFA6F48..0xFA6FDF (152 bytes)
+; ChanRec_ReleaseQueueAndCollect -- 0xFA6F48..0xFA6FDF (152 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
 ;          0xFA70A4 0xFA70CC
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA643F = sub_FA643F, 0xFA65F6 = sub_FA65F6
+; Calls:   0xFA643F = ChanRec_RelinkToPartQueue, 0xFA65F6 = ChanRec_BeginRelease
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6F48-0xFA6FDF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -3729,14 +3729,14 @@ sub_FA6F48__FA6FD2:
 	unlk32 xiz                                 ; FA6FDD  unlk XIZ
 	ret                                        ; FA6FDF  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA6FE0` is now `VoiceQuery_Run`.
+; ★ NAMED (wave 17): `VoiceQuery_Run` is now `VoiceQuery_Run`.
 ;   GRADE PROVEN.  WHY `VoiceQuery_Run`:
 ;   its six callers are exactly the six VoiceQuery_Tag* wrappers, and it is the
 ;   whole body of all six: it selects on the request's tag byte req[0] (bits
 ;   0x80 / 0x40) and on req[+3] bit 7, walks part queue 0 and/or queue 1 of
 ;   0x041C + 6*part -- or all 64 channel records when req[+3]'s part field is
 ;   non-zero -- and writes the matching channel numbers to req+5, 0xFF-terminated.
-; sub_FA6FE0 -- 0xFA6FE0..0xFA727C (669 bytes)
+; VoiceQuery_Run -- 0xFA6FE0..0xFA727C (669 bytes)
 ;
 ; Called from: 6 site(s) outside this module:
 ;          0xFB3C53 in VoiceQuery_Tag80_PartNote, 0xFB3C80 in VoiceQuery_Tag80_Part
@@ -3744,7 +3744,7 @@ sub_FA6F48__FA6FD2:
 ;          0xFB3CFE in VoiceQuery_Tag00_Part, 0xFB3D1D in VoiceQuery_Tag00_All
 ; Inputs:  frame `link XIZ,-15`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA6F48 = sub_FA6F48
+; Calls:   0xFA6F48 = ChanRec_ReleaseQueueAndCollect
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6FE0-0xFA727C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -4056,13 +4056,13 @@ sub_FA6FE0__FA7277:
 	unlk32 xiz                                 ; FA727A  unlk XIZ
 	ret                                        ; FA727C  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA727D` is now `VelSplit_LayerFromVelocity`.
+; ★ NAMED (wave 17): `VelSplit_LayerFromVelocity` is now `VelSplit_LayerFromVelocity`.
 ;   GRADE PROVEN.  WHY `VelSplit_LayerFromVelocity`:
 ;   body: `v = arg & 0x7F`; returns 0/1/2/3 for v <= t[0] / t[1] / t[2] / above.
 ;   Every caller passes VoiceParams_Compute_A's fourth argument, and
 ;   MidiNote_OnByPartMode pushes MidiNote_Dispatch's msg[3] into that slot
 ;   (0xFB38A4 / 0xFB38B7), i.e. the VELOCITY.
-; sub_FA727D -- 0xFA727D..0xFA72B2 (54 bytes)
+; VelSplit_LayerFromVelocity -- 0xFA727D..0xFA72B2 (54 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFB0C49 in sub_FB0B95__FB0C19, 0xFB0F00 in VoiceParams_Compute_A__FB0ED5
@@ -4111,13 +4111,13 @@ sub_FA727D__FA72AE:
 	unlk32 xiz                                 ; FA72B0  unlk XIZ
 	ret                                        ; FA72B2  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA72B3` is now `VelSplit_LayerFromVelocity_b`.
+; ★ NAMED (wave 17): `VelSplit_LayerFromVelocity_b` is now `VelSplit_LayerFromVelocity_b`.
 ;   GRADE PROVEN.  WHY `VelSplit_LayerFromVelocity_b`:
 ;   byte-for-byte identical to VelSplit_LayerFromVelocity (54 bytes, 0 differ,
 ;   prom_c_module_map.py --dups) and reached with the same argument from
 ;   VoiceParams_Compute_C/D.  The `_b` suffix is the tree's existing spelling
 ;   for a byte-identical twin (Clamp_ToRange_Word_b, ScaleClampedDelta_Shr5_b).
-; sub_FA72B3 -- 0xFA72B3..0xFA72E8 (54 bytes)
+; VelSplit_LayerFromVelocity_b -- 0xFA72B3..0xFA72E8 (54 bytes)
 ;
 ; Called from: 6 site(s) outside this module:
 ;          0xFB290D in sub_FB289A, 0xFB2B1B in VoiceParams_Compute_C
@@ -4265,13 +4265,13 @@ Voice_GetOctaveShift__FA7389:
 	unlk32 xiz                                 ; FA738C  unlk XIZ
 	ret                                        ; FA738E  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA738F` is now `Pitch_ClampToNoteRange`.
+; ★ NAMED (wave 17): `Pitch_ClampToNoteRange` is now `Pitch_ClampToNoteRange`.
 ;   GRADE PROVEN.  WHY `Pitch_ClampToNoteRange`:
 ;   body: negative pitches saturate to 0x7FFF or to 0 (the same 0xC000 split
 ;   Sat16_0_to_7FFF uses), then the value is clamped to
 ;   [lo*256 + 0x80, hi*256 + 0x80] -- the 1/256-semitone encoding of two note
 ;   numbers that Voice_ComputePitch's own header establishes.
-; sub_FA738F -- 0xFA738F..0xFA73EA (92 bytes)
+; Pitch_ClampToNoteRange -- 0xFA738F..0xFA73EA (92 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFA813C in Voice_ComputePitch__FA813C
@@ -4332,15 +4332,15 @@ sub_FA738F__FA73E5:
 	unlk32 xiz                                 ; FA73E8  unlk XIZ
 	ret                                        ; FA73EA  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA73EB` is now `Pitch_FoldOctavesIntoRange`.
+; ★ NAMED (wave 17): `Pitch_FoldOctavesIntoRange` is now `Pitch_FoldOctavesIntoRange`.
 ;   GRADE PROVEN.  WHY `Pitch_FoldOctavesIntoRange`:
 ;   the same two bounds, but instead of clamping it ADDS or SUBTRACTS 0x0C00 --
 ;   twelve semitones in the 1/256-semitone unit -- until the pitch lies inside
 ;   the range.
-; sub_FA73EB -- 0xFA73EB..0xFA744E (100 bytes)
+; Pitch_FoldOctavesIntoRange -- 0xFA73EB..0xFA744E (100 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA8132 in Voice_ComputePitch__FA80E2, 0xFA818C in sub_FA814C
+;          0xFA8132 in Voice_ComputePitch__FA80E2, 0xFA818C in Voice_ComputePitch_FromToneRecord
 ;          0xFC375D in sub_FC36BE
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
@@ -5044,8 +5044,8 @@ ScaleClampedDelta_Shr5__FA7698:
 ; Called by: eight sites, and ALL EIGHT ARE ON THE PATH TO REGISTERS 0x0100/0x0140 --
 ;          the four staging routines Voice_StagePair_Reg0100_0140_{First,Both,AB,CD}
 ;          (0xFA90D9, 0xFA915E, 0xFA9261, 0xFA9277, 0xFA936B, 0xFA9381) and the two
-;          routines that build the voice words those stagers copy, sub_FA76D6 (0xFA7784)
-;          and sub_FA778E (0xFA77E9).  No other caller exists in either image.
+;          routines that build the voice words those stagers copy, VoiceParam_AddCurveAndKeyDepth_Clamp (0xFA7784)
+;          and VoiceParam_AddCurveDepth_Clamp (0xFA77E9).  No other caller exists in either image.
 ; ⚠ SIBLING, NOT A TRANSPLANT.  The KN5000 sub-CPU has a structurally identical routine
 ;          its project calls `TVF_Clamp_Cutoff` (0x022BF2), clamping to [0, 120] -- SAME
 ;          upper immediate 0x78, DIFFERENT floor -- and it is called from that image's
@@ -5076,7 +5076,7 @@ Clamp_36_to_120__FA76D2:
 	unlk32 xiz                                 ; FA76D3  unlk XIZ
 	ret                                        ; FA76D5  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA76D6` is now `VoiceParam_AddCurveAndKeyDepth_Clamp`.
+; ★ NAMED (wave 17): `VoiceParam_AddCurveAndKeyDepth_Clamp` is now `VoiceParam_AddCurveAndKeyDepth_Clamp`.
 ;   GRADE STRONG.  WHY `VoiceParam_AddCurveAndKeyDepth_Clamp`:
 ;   body: base + (Table_FDEBF4[bank*0x80 + voice[+0x0C] & 0x7F] * depth1) >> 5
 ;   + ((voice[+0x08]>>8 clamped to tone[+0x3A]..tone[+0x3B]) - tone[+0x39])
@@ -5084,10 +5084,10 @@ Clamp_36_to_120__FA76D2:
 ;   five VoiceParam_Build0100_0140_On36_Arm* routines, and Clamp_36_to_120's own
 ;   header records that every one of ITS callers is on the path to registers
 ;   0x0100/0x0140.
-; sub_FA76D6 -- 0xFA76D6..0xFA778D (184 bytes)
+; VoiceParam_AddCurveAndKeyDepth_Clamp -- 0xFA76D6..0xFA778D (184 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
-;          0xFA86A4 in sub_FA866B, 0xFA8804 in sub_FA8759__FA87C5
+;          0xFA86A4 in VoiceParam_Build0100_0140_On36_Arm1, 0xFA8804 in sub_FA8759__FA87C5
 ;          0xFA8847 in sub_FA8759__FA882D, 0xFA892E in sub_FA888C__FA88F7
 ;          0xFA89E5 in sub_FA8997__FA89D7, 0xFA8ADB in sub_FA8A79__FA8ACB
 ;          0xFA8AF1 in sub_FA8A79__FA8ACB
@@ -5183,17 +5183,17 @@ sub_FA76D6__FA777D:
 	unlk32 xiz                                 ; FA778B  unlk XIZ
 	ret                                        ; FA778D  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA778E` is now `VoiceParam_AddCurveDepth_Clamp`.
+; ★ NAMED (wave 17): `VoiceParam_AddCurveDepth_Clamp` is now `VoiceParam_AddCurveDepth_Clamp`.
 ;   GRADE STRONG.  WHY `VoiceParam_AddCurveDepth_Clamp`:
 ;   the same shape with the velocity term only (tone[+0x12] as the depth,
 ;   tone[+0x11] bits 7..5 as the curve bank), + 0x18, Clamp_36_to_120.  All six
 ;   callers are the five VoiceParam_Build0100_0140_On11_Arm* routines.
-; sub_FA778E -- 0xFA778E..0xFA77F2 (101 bytes)
+; VoiceParam_AddCurveDepth_Clamp -- 0xFA778E..0xFA77F2 (101 bytes)
 ;
 ; Called from: 6 site(s) outside this module:
-;          0xFA8C5D in sub_FA8C44, 0xFA8D08 in sub_FA8CEF
-;          0xFA8DB5 in sub_FA8D9B, 0xFA8E61 in sub_FA8E47
-;          0xFA8F11 in sub_FA8EF7, 0xFA8F20 in sub_FA8EF7
+;          0xFA8C5D in VoiceParam_Build0100_0140_On11_Arm1, 0xFA8D08 in VoiceParam_Build0100_0140_On11_Arm2
+;          0xFA8DB5 in VoiceParam_Build0100_0140_On11_Arm3, 0xFA8E61 in VoiceParam_Build0100_0140_On11_Arm4
+;          0xFA8F11 in VoiceParam_Build0100_0140_On11_Arm5, 0xFA8F20 in VoiceParam_Build0100_0140_On11_Arm5
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA76B2 = Clamp_36_to_120
@@ -5292,13 +5292,13 @@ Add24_ClampTo120__FA780C:
 	unlk32 xiz                                 ; FA780D  unlk XIZ
 	ret                                        ; FA780F  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA7810` is now `VoiceParam_LoadTriple_Set5A51`.
+; ★ NAMED (wave 17): `VoiceParam_LoadTriple_Set5A51` is now `VoiceParam_LoadTriple_Set5A51`.
 ;   GRADE PROVEN.  WHY `VoiceParam_LoadTriple_Set5A51`:
 ;   body: reads a 3-byte record at 0xFDF180 + 3*(arg & 0x0F) when arg bit 7 is
 ;   set, else at 0xFDF156 + 3*(arg & 0x0F); returns (rec[1] << 8) | rec[0] and
 ;   stores rec[2], sign-extended, at RAM 0x005A51.  Every caller ORs the return
 ;   into voice_record[+0x41].
-; sub_FA7810 -- 0xFA7810..0xFA78AA (155 bytes)
+; VoiceParam_LoadTriple_Set5A51 -- 0xFA7810..0xFA78AA (155 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFA8747 in sub_FA866B__FA8747, 0xFA8878 in sub_FA8759__FA8878
@@ -5455,12 +5455,12 @@ sub_FA78C6__FA78E4:
 	unlk32 xiz                                 ; FA78E5  unlk XIZ
 	ret                                        ; FA78E7  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA78E8` is now `EnvRec_ClearSlot`.
+; ★ NAMED (wave 17): `EnvRec_ClearSlot` is now `EnvRec_ClearSlot`.
 ;   GRADE PROVEN.  WHY `EnvRec_ClearSlot`:
 ;   body: zeroes bytes +0..+5 and +7 of the 9-byte sub-record at
 ;   0x4CCF + 27*chan + 9*slot.  0x4CCF is 0x3BCF + 64*0x44, the byte after the
 ;   voice-record array, and 27 = 3 * 9.
-; sub_FA78E8 -- 0xFA78E8..0xFA7926 (63 bytes)
+; EnvRec_ClearSlot -- 0xFA78E8..0xFA7926 (63 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFA9B23 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9E65 in Voice_StageRegs_0180_AB__FA9E12
@@ -5502,13 +5502,13 @@ EnvRec_ClearSlot:
 	unlk32 xiz                                 ; FA7924  unlk XIZ
 	ret                                        ; FA7926  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA7927` is now `EGEnv_ScaleDepth_Shr12`.
+; ★ NAMED (wave 17): `EGEnv_ScaleDepth_Shr12` is now `EGEnv_ScaleDepth_Shr12`.
 ;   GRADE PROVEN.  WHY `EGEnv_ScaleDepth_Shr12`:
 ;   body: returns min(v, (v * ((0x7F - a) * b)) >> 12) using Multiply32 twice.
 ;   All five callers are EGEnv_Eval_BaseCurveA/B/FreqWrite and
 ;   Voice_StageChanSel_Reg0440_Reg0480, each subtracting the result from the
 ;   curve product it has just formed.
-; sub_FA7927 -- 0xFA7927..0xFA796C (70 bytes)
+; EGEnv_ScaleDepth_Shr12 -- 0xFA7927..0xFA796C (70 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFA9C18 in Voice_StageChanSel_Reg0440_Reg0480__FA9BF3
@@ -5566,7 +5566,7 @@ sub_FA7927__FA7969:
 ;          0xFAE45F in Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B, 0xFB8AC9 in Voice_RecomputeEnv_AndWriteSlot2__FB8A85
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA7927 = sub_FA7927, 0xFCB11B = Multiply32
+; Calls:   0xFA7927 = EGEnv_ScaleDepth_Shr12, 0xFCB11B = Multiply32
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA796D-0xFA79F3
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5581,7 +5581,7 @@ sub_FA7927__FA7969:
 ;          0xFA79C2  srl 0x07,XIY         the >> 7
 ;          0xFA79C7  cp XIY,0x1FFF        the clamp
 ;          0xFA79E2  add XBC,0x00FDEBEC   EGEnv_ModeBits_Table, indexed by rec[+0]&3
-;          The correction (skipped when rec[+5] == 0) is sub_FA7927(product, rec[+6], rec[+5]).
+;          The correction (skipped when rec[+5] == 0) is EGEnv_ScaleDepth_Shr12(product, rec[+6], rec[+5]).
 ;          Evidence: `python3 notes/prom_c_understanding_round6.py --blocks`, which reads all
 ;          six evaluators out of the listing and asserts that each indexes exactly one base
 ;          curve, that the base evaluators clamp to 0x1FFF and the value evaluators to
@@ -5731,7 +5731,7 @@ EGEnv_Eval_ValueCurve_WithBaseCurveA__FA7A41:
 ;          0xFAE6DE in Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA, 0xFB8BC9 in Voice_RecomputeEnv_AndWriteSlot1__FB8B85
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA7927 = sub_FA7927, 0xFCB11B = Multiply32
+; Calls:   0xFA7927 = EGEnv_ScaleDepth_Shr12, 0xFCB11B = Multiply32
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7A4B-0xFA7AD5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5873,7 +5873,7 @@ EGEnv_Eval_ValueCurve_WithBaseCurveB__FA7B27:
 ;          0xFAE966 in Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE962, 0xFB8CC9 in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D796, 0x00D7A0
-; Calls:   0xFA7927 = sub_FA7927, 0xFCB11B = Multiply32
+; Calls:   0xFA7927 = EGEnv_ScaleDepth_Shr12, 0xFCB11B = Multiply32
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7B31-0xFA7C39
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -6088,17 +6088,17 @@ EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3:
 	unlk32 xiz                                 ; FA7CC6  unlk XIZ
 	ret                                        ; FA7CC8  ret
 ; --------------------------------------------------------------------------
-; ★ NAMED (wave 17): `sub_FA7CC9` is now `VelCurve_Lookup`.
+; ★ NAMED (wave 17): `VelCurve_Lookup` is now `VelCurve_Lookup`.
 ;   GRADE STRONG.  WHY `VelCurve_Lookup`:
 ;   body: `Table_FDD6AB[0x100 * ((b & 0xE0) >> 5) + Table_FDDDAB[a]]` -- one of
 ;   eight 256-entry curves.  All four callers are Voice_ComputeLevelBase_AB/_CD,
 ;   which pass Table_FDD5AB[velocity] as `a` and a tone-record byte as the bank,
 ;   then subtract 0xD0 and multiply by the tone's signed sensitivity byte.
-; sub_FA7CC9 -- 0xFA7CC9..0xFA7D02 (58 bytes)
+; VelCurve_Lookup -- 0xFA7CC9..0xFA7D02 (58 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFAB5EE in sub_FAB5A5__FAB5CA, 0xFAB60C in sub_FAB5A5__FAB607
-;          0xFAB711 in sub_FAB6D5, 0xFAB72F in sub_FAB6D5__FAB72A
+;          0xFAB711 in Voice_ComputeLevelBase_CD, 0xFAB72F in sub_FAB6D5__FAB72A
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7CC9-0xFA7D02
