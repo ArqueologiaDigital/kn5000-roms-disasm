@@ -680,6 +680,12 @@ MathTable_Sin_S8_512:
 ;                 fold(x) = (x & 0x8000) ? 0x8000 - (x & 0x7FFF) : x + 0x8000
 ;             ★ Under fold the table is strictly monotone; read as s16 it is not, and that
 ;             two's-complement reading is the null the fit had to beat.
+;             ⚠ PRECISELY: non-decreasing, NOT strictly increasing. Measured over the
+;             128 entries -- as s16, 79 adjacent pairs decrease; under fold(), ZERO do.
+;             But the table has PLATEAUS (fold(T[0..9]) = 510 ten times, and the top
+;             saturates), so it is monotone in the weak sense and is NOT invertible
+;             there. Anyone fitting or inverting this curve needs that distinction;
+;             "strictly monotone" above overstates it by one word.
 ;   fit       fold(T[k]) = round(65536 * g/(1+g)), g = tan(pi*f_k/44100),
 ;             f_k = 440*2^((k-33)/12) -- max |residual| ONE COUNT over k = 9..100.
 ;   endpoints fold: 510 .. 61359, then saturated for k = 100..127.
