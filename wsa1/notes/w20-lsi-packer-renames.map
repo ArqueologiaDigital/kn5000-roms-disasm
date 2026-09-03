@@ -1,0 +1,48 @@
+# Lane w20/lsi-packers: the routines in prom_c/field_accessors.s that build the
+# L7A1429 (0x00104000) register values get semantic names, after wave 19
+# established what each register is and what the tone editor calls it.
+#
+# Applied by notes/w20_lsi_packer_names.py --rename (whole-word, longest first,
+# derived `__FCxxxx` labels included).  Used as the NARROW EXEMPTION of the
+# comment gate:
+#
+#   python3 scripts/analysis/assert_comments_preserved.py --base main \
+#       --rename-map wsa1/notes/w20-lsi-packer-renames.map \
+#       wsa1/prom_c/field_accessors.s
+#
+# ⚠ CROSS-FILE SWEEP STILL OWED.  This lane owns field_accessors.s only, so the
+# generated `Calls:` / `Called from:` comments in these files still spell the
+# left-hand names and must be swept with the same map:
+#     prom_c/wsa1_prom_c.s          FC7C0D FC7DAF
+#     prom_c/midi/midi_controllers.s FC589E FC59EF FC5BA2 FC5EFB FC6027 FC6175
+#                                    FC629B FC63EC FC654F FC65EC FC6712 FC5D5B
+#                                    FC6803
+#     prom_c/voice/note_engine.s     FC589E FC59EF FC5EFB FC6175 FC63EC FC654F
+#                                    FC65EC FC6803 FC7481
+#     prom_c/tone_db/tone_db_module.s FC6803 FC7481
+#     prom_c/devices/dev10c_dev104_drivers.s  FC49AD FC4AED   (another lane's file)
+#
+sub_FC3FAE=Slot64Pool_MoveToList
+sub_FC405E=Slot64Pool_AcquireOrAddRef
+sub_FC40A9=Slot64Pool_Release
+sub_FC40E6=Slot64Pool_InitAllFree
+sub_FC46A8=Pack104_ComputeTuningWords_0040_0080
+sub_FC47EE=Pack104_UnpackWaveSelRec_ToSubRecord
+sub_FC49AD=Pack104_StageRegs_00C0_0100_0240
+sub_FC4AED=Pack104_StageReg_0280
+sub_FC589E=PartRec_SetFittingOffset_0001
+sub_FC59EF=PartRec_SetPositionOffset_0003
+sub_FC5BA2=PartRec_SetPositionOffset_0005
+sub_FC5D5B=Pack104_RestageRegs_00C0_0100_0240_ForVoice
+sub_FC5EFB=PartRec_SetMovementDepth_0007
+sub_FC6027=Pack104_RefreshMovementDepth_ForVoice
+sub_FC6175=PartRec_SetMovementRate_0009
+sub_FC629B=Pack104_RefreshMovementRate_ForVoice
+sub_FC63EC=PartRec_SetMutingOffset_000B
+sub_FC654F=PartRec_SetTuningOffset_000D
+sub_FC65EC=PartRec_SetSubGainOffset_000F
+sub_FC6712=Pack104_RestageReg_0280_ForVoice
+sub_FC6803=Pack104_LoadElementWaveSelRec
+sub_FC7481=Pack104_DispatchByResoMode_ForPart
+sub_FC7C0D=Pack104_TickPositionMovement_ForVoice
+sub_FC7DAF=Pack104_StageReg_0000_ForVoice
