@@ -77,7 +77,7 @@ Do not assume the slope; fit it.
 |---|---|---|
 | straight line in `F` | 0.7781 | 25678 counts |
 | straight line in `log2 F` (a plain exponential) | 0.9982 | 0.155 in log2 |
-| **straight line in `log2 atan(F/(65536−F))`** (the claimed law) | **0.9999999** | **0.00136 in log2 = 1.63 cents** |
+| **straight line in `log2 atan(F/(65536−F))`** (the claimed law) | **0.99999998** | **0.00136 in log2 = 1.63 cents** |
 
 The fitted slope is **1 / 12.0017** per index step — twelve steps per octave to 0.01%.  A
 plain exponential is not the law: `F`'s own log slope drifts 12.1 → 15.7 → 11.2 steps per
