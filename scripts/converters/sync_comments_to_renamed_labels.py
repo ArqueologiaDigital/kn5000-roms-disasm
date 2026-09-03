@@ -47,6 +47,30 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LABEL = re.compile(r'^([A-Za-z_.$][\w.$]*):')
 
 
+def load_map(path):
+    """Read an explicit old=new map.
+
+    ⚠ WHY THIS EXISTS. derive_map() below only takes `sub_* -> non-sub_*`
+    renames, because it aligns label definitions BY POSITION and that is only
+    sound when the rename is a naming pass over auto-generated labels. A pass
+    that renames ALREADY-NAMED labels -- `Curve_FE04C9` to
+    `Curve_Muting_Cutoff_Q16_128`, say -- derives ZERO and silently updates
+    nothing, which is what happened on 2026-09-03: the lane had to do the
+    substitution by hand and hand-write the map.
+
+    A hand-written map is not a lesser artefact here. It is the same file the
+    comment gate takes as `--rename-map`, so the substitution and the check that
+    polices it read the identical list.
+    """
+    renames = {}
+    for line in pathlib.Path(path).read_text().splitlines():
+        line = line.split("#", 1)[0].strip()
+        if "=" in line:
+            k, v = line.split("=", 1)
+            renames[k.strip()] = v.strip()
+    return renames
+
+
 def derive_map(rev, paths):
     renames, skipped = {}, []
     for f in paths:
@@ -133,6 +157,10 @@ def main():
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--write-map", default=None)
+    ap.add_argument("--map", default=None, metavar="FILE",
+                    help="use an explicit old=new map instead of deriving one; "
+                         "required when renaming labels that were already named, "
+                         "which derive_map() cannot see")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
 
@@ -141,8 +169,16 @@ def main():
     if not a.paths:
         ap.error("give at least one path, or --selftest")
 
-    renames, skipped = derive_map(a.base, a.paths)
-    print(f"  {len(renames)} label(s) renamed since {a.base}")
+    if a.map:
+        renames, skipped = load_map(a.map), []
+        print(f"  {len(renames)} label(s) from {a.map}")
+    else:
+        renames, skipped = derive_map(a.base, a.paths)
+        print(f"  {len(renames)} label(s) renamed since {a.base}")
+        if not renames:
+            print("  ⚠ derived NOTHING. If this pass renamed labels that were "
+                  "ALREADY NAMED, derive_map cannot see them -- pass --map "
+                  "with an explicit old=new list.")
     for f, no, nn in skipped:
         print(f"  ⚠ SKIPPED {f}: label count {no} -> {nn}, "
               f"positional alignment unsound")
