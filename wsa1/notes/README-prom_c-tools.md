@@ -995,3 +995,28 @@ python3 scripts/converters/sync_comments_to_renamed_labels.py \
 The map is also the only place the 42 **address-form** labels survive: the block
 comments spell the old name as an address (`the routine at 0xFB405F is now ...`)
 precisely so the sync tool cannot substitute it away.
+
+### `wsa1_l7a1429_write_timing_probe.py`
+**"For the device at CPU 2's 0x00104000: how many channels does the firmware program, WHEN is
+each register written, how often, and in what order — and is block-0-last a commit strobe?"**
+
+```
+python3 notes/wsa1_l7a1429_write_timing_probe.py             # 11 sections, printed
+python3 notes/wsa1_l7a1429_write_timing_probe.py --selftest  # assert; exit 1 on any failure
+```
+
+The write-sequencing companion to `prom_c_dev104_regmap_checks.py` (which says what each
+register is built FROM).  Eleven sections over `original_ROMs/wsa1_prom_c.ic28`, no `.s` file
+and no unidasm text.  It establishes the **channel count = 64** from the two `cp HL,0x0040`
+loops in `Dev10C_ResetAllChannels` that drive *this* device (not by analogy with the sibling,
+and with the sibling's `chan >= 0x40` slot split computed as the null: 0 occurrences here
+against 6 there); censuses all **27 call sites over 6 of the 8 driver routines**; decodes the
+power-on sequence including the 20th register `0x0800` and the 19-word ROM image at 0xFE133B
+(whose words 4 and 11 independently agree with the register map's two known constants);
+and falsifies the commit-strobe reading of block-0-last — the **four** routines that never
+write block 0 are exactly the four with live callers, so every real parameter change reaches
+the device with no block-0 write after it.  Also derives the periodic-refresh rate,
+488.28 / 6 / 2 = **40.69 Hz**, from `T01MOD` at 0xFFF06C, `TREG1` = the fc byte, the six-entry
+INTT1 phase table and `Toggle14FE_AndDispatch`'s alternation.
+
+Findings: `notes/FINDINGS-l7a1429-write-sequencing.md`.
