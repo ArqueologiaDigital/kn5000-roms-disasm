@@ -472,6 +472,30 @@ def sec5_selector():
     check("0xFC74FD is `and C,0x0F`", cb(0xFC74FD, 3).hex(), "cbcc0f")
     check("0xFC750C is `and C,0xF0`", cb(0xFC750C, 3).hex(), "cbccf0")
     say("")
+    say("   CORROBORATION, and this lane's best single argument that the gate really is")
+    say("   ABOUT register 0x0300.  `Curve_Exp2Gain_U8_128` at 0xFDF760 -- the curve that")
+    say("   MAKES register 0x0300's value -- is cited FOUR times in the whole 512 KB")
+    say("   image, and the four sites are:")
+    say("      0xFC51C8   Dev104_PackStagingStruct, INSIDE the gated arm")
+    say("      0xFC6E73   sub_FC6D6E   <- the arm that sets bit 5")
+    say("      0xFC709F   sub_FC6FFD   <- an arm that sets bit 4")
+    say("      0xFC72E1   sub_FC723F   <- an arm that sets bit 4")
+    say("   i.e. THE THREE ROUTINES THAT OPEN THE GATE ARE EXACTLY THE THREE OTHER")
+    say("   READERS OF THE GATED REGISTER'S OWN CURVE, and the three that only clear it")
+    say("   (sub_FC6CA8, sub_FC6CEA, sub_FC6D2C) read nothing.  All four take the same")
+    say("   index -- `Q[+0x13]` = p19 -- through the same `P[+0x03]` pointer:")
+    for a_idx, a_tab, who in ((0xFC51C1, 0xFC51C8, "Dev104_PackStagingStruct"),
+                              (0xFC6E6C, 0xFC6E73, "sub_FC6D6E"),
+                              (0xFC7098, 0xFC709F, "sub_FC6FFD"),
+                              (0xFC72DA, 0xFC72E1, "sub_FC723F")):
+        check("0x%06X `ld C,(XWA+0x13)` + 0x%06X -> 0xFDF760   %s"
+              % (a_idx, a_tab, who),
+              (cb(a_idx, 3).hex(),
+               struct.unpack_from("<I", cb(a_tab, 6), 2)[0] & 0xFFFFFF),
+              ("881323", 0xFDF760))
+    say("   A coincidence would have to place the same table, the same record byte and")
+    say("   the same `(b << 8) | b` duplication in four routines that share no caller.")
+    say("")
     say("   Wave-select byte +0x0B bits 7:6 = `RESO MODE` (STRONG,")
     say("   notes/FINDINGS-l7a1429-parameter-names.md section 2d; prom_a sends parameter")
     say("   0x0B with mask 0xC0 at 0xFD434D, and bits 5:0 with mask 0x3F are the PROVEN")
@@ -489,6 +513,32 @@ def sec5_selector():
           cb(0xFC4C18, 3).hex(), "a94020")
     check("PART[+0x16] is element 0's Q pointer", 0x13 + 0x03, 0x16)
     check("PART[+0x40] is element 1's Q pointer", 0x13 + 42 + 0x03, 0x40)
+
+
+# ============================================================ section 5b
+def sec5b_arm_outputs():
+    say("")
+    say("=== 5b. WHAT ELSE THE THREE GATE-OPENING ARMS BUILD -- a lead, not a result ===")
+    say("   Each of them fills a per-element block at the global 0x00E093 (`lda XBC,")
+    say("   0x00e093 / add XBC,<slot>` -- eleven such sites, all in these three arms).")
+    say("   Taking sub_FC6D6E as the example, one element's block gets:")
+    say("      +?  (b << 8) & 0xFF00, b = Curve_Exp2Gain_U8_128[p19]      0xFC6E93")
+    say("      +?  (b << 8)                                               0xFC6EA3")
+    say("      +?  the constant 0x8000                                    0xFC6EAD")
+    say("      +?  Curve_Exp2Gain_Percent_101[clamp(|p33|, 0..100)]       0xFC6F20")
+    say("      +?  P[+0x0E]  = the MAIN KEY SHIFT + TUNE word             0xFC6F36")
+    say("      +?  P[+0x10]  = the SUB  KEY SHIFT + TUNE word             0xFC6F4C")
+    check("0xFC6EB9 reads p33 (`ld E,(XWA+0x21)`)", cb(0xFC6EB9, 3).hex(), "882125")
+    check("0xFC6EE1 indexes Curve_Exp2Gain_Percent_101 at 0xFDFECC",
+          struct.unpack_from("<I", cb(0xFC6EE1, 6), 2)[0] & 0xFFFFFF, 0xFDFECC)
+    check("  which is the table Pack104_StageReg_0280 reads for register 0x0280",
+          struct.unpack_from("<I", cb(0xFC4B1B, 6), 2)[0] & 0xFFFFFF, 0xFDFECC)
+    say("   So the arm assembles, per element, BOTH gains the register file carries")
+    say("   (register 0x0300's and register 0x0280's `SUB GAIN`) together with both")
+    say("   tuning words -- the shape of a MIX or COUPLING matrix over the four")
+    say("   elements.  ⚠ 0x00E093 has NO located reader: the eleven `lda` sites are all")
+    say("   writes, and no other spelling of that address exists in either image.  This")
+    say("   is recorded as the next thing to chase, NOT as a decode.")
 
 
 # ============================================================ section 6
@@ -910,6 +960,7 @@ def main():
     sec3b_bases()
     sec4_producer()
     sec5_selector()
+    sec5b_arm_outputs()
     sec6_factory()
     sec7_reader()
     sec8_tables(full)
