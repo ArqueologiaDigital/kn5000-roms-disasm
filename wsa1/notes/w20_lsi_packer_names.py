@@ -80,7 +80,7 @@ WARN = "⚠"
 DOCS = {
 
 "Slot64Pool_MoveToList": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Slot64Pool_MoveToList -- moves one node of the 64-entry
           pool at 0x005B63 onto list `(XIZ+0x0a)`, unlinking it from the list it
           is on.  The pool is 64 entries of 7 bytes -- 0x005B63 + 7*i, and
@@ -101,7 +101,7 @@ DOCS = {
 """,
 
 "Slot64Pool_AcquireOrAddRef": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Slot64Pool_AcquireOrAddRef -- returns an index 0..63 out
           of the 0x005B63 pool.  Two arms, on the argument:
             arg < 0x40   0xFC4064   take THAT entry and bump its use count
@@ -129,7 +129,7 @@ DOCS = {
 """,
 
 "Slot64Pool_Release": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Slot64Pool_Release -- drops one reference to pool entry
           `(XIZ+0x08)`.  Use count 1 (0xFC40C1) means last user: the entry goes
           back to list 0 and its count to 0 (0xFC40C5-0xFC40CC).  A count above 1
@@ -141,7 +141,7 @@ DOCS = {
 """,
 
 "Slot64Pool_InitAllFree": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Slot64Pool_InitAllFree -- builds the 0x005B63 pool: both
           list heads cleared (0xFC40EA, 0xFC40F1), then 64 entries of 7 bytes
           stamped with their own index (`ld (XDE+0x05),H`, 0xFC40FD; `inc 7,DE`
@@ -153,7 +153,7 @@ DOCS = {
 """,
 
 "Pack104_ComputeTuningWords_0040_0080": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_ComputeTuningWords_0040_0080 -- builds the two
           tuning words registers chan+0x0040 (MAIN RESONATOR) and chan+0x0080
           (SUB RESONATOR) are made from.  P is the 42-byte sub-record
@@ -181,7 +181,7 @@ DOCS = {
 """,
 
 "Pack104_UnpackWaveSelRec_ToSubRecord": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_UnpackWaveSelRec_ToSubRecord -- reads the
           43-byte WAVE-SELECT RECORD passed in (XIZ+0x08) and expands its
           modelling tail into the fields of the 42-byte sub-record P
@@ -214,7 +214,7 @@ DOCS = {
 """,
 
 "Pack104_StageRegs_00C0_0100_0240": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_StageRegs_00C0_0100_0240 -- fills the three
           staging words its counterpart Dev104_SetChanRegs_00C0_0100_0240 ships,
           into the struct passed in (XIZ+0x08).  R is the 37-byte record
@@ -250,7 +250,7 @@ DOCS = {
 """,
 
 "Pack104_StageReg_0280": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_StageReg_0280 -- fills the one staging word its
           counterpart Dev104_SetChanReg_0280 ships (that routine reads struct
           offset +0x14, 0xFB7B58).  With R = *(0x00E086):
@@ -270,7 +270,7 @@ DOCS = {
 """,
 
 "PartRec_SetFittingOffset_0001": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetFittingOffset_0001 -- stores a part-level
           FITTING offset into PART[+0x01] (0xFC58BD; the part record is
           0x005D23 + 0xBB*arg) and then, for each of the four elements whose
@@ -291,7 +291,7 @@ DOCS = {
 """,
 
 "PartRec_SetPositionOffset_0003": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetPositionOffset_0003 -- stores a part-level
           `P0SITI0N` offset into PART[+0x03] (0xFC5A0E) and re-derives, per
           enabled element, with the sign from bits 2:1 of P[+0x00] (0xFC5A73):
@@ -308,7 +308,7 @@ DOCS = {
 """,
 
 "PartRec_SetPositionOffset_0005": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetPositionOffset_0005 -- the same routine as
           PartRec_SetPositionOffset_0003 with two differences: it stores its
           value into PART[+0x05] instead (0xFC5BC1), and it takes its sign from
@@ -328,7 +328,7 @@ DOCS = {
 """,
 
 "Pack104_RestageRegs_00C0_0100_0240_ForVoice": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_RestageRegs_00C0_0100_0240_ForVoice --
           points the packer's globals at one sounding voice and rebuilds the
           three `P0SITI0N` staging words for it, returning non-zero when it did.
@@ -347,7 +347,7 @@ DOCS = {
 """,
 
 "PartRec_SetMovementDepth_0007": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetMovementDepth_0007 -- stores a part-level
           `P0SITI0N M0VEMENT` depth offset into PART[+0x07] (0xFC5F1A) and
           re-derives, per enabled element,
@@ -366,7 +366,7 @@ DOCS = {
 """,
 
 "Pack104_RefreshMovementDepth_ForVoice": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_RefreshMovementDepth_ForVoice -- the
           per-voice half of PartRec_SetMovementDepth_0007.  It points
           0x00E086 at the voice's 37-byte record and 0x00E084 at its sub-record
@@ -384,7 +384,7 @@ DOCS = {
 """,
 
 "PartRec_SetMovementRate_0009": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetMovementRate_0009 -- stores a part-level
           `P0SITI0N M0VEMENT` rate offset into PART[+0x09] (0xFC6194) and
           re-derives, per enabled element,
@@ -408,7 +408,7 @@ DOCS = {
 """,
 
 "Pack104_RefreshMovementRate_ForVoice": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_RefreshMovementRate_ForVoice -- the
           per-voice half of PartRec_SetMovementRate_0009: points 0x00E086 /
           0x00E084 at the voice's records (0xFC62AE, 0xFC62B8), rewrites
@@ -421,7 +421,7 @@ DOCS = {
 """,
 
 "PartRec_SetMutingOffset_000B": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetMutingOffset_000B -- stores a part-level
           `MUTING` cutoff offset into PART[+0x0B] (0xFC640B) and re-derives, per
           enabled element,
@@ -445,7 +445,7 @@ DOCS = {
 """,
 
 "PartRec_SetTuningOffset_000D": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetTuningOffset_000D -- stores a part-level
           tuning offset into PART[+0x0D] as `value << 8` (0xFC6572, 0xFC657A) --
           i.e. in whole semitones of the register's 1/256-semitone unit -- sets
@@ -459,7 +459,7 @@ DOCS = {
 """,
 
 "PartRec_SetSubGainOffset_000F": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  PartRec_SetSubGainOffset_000F -- stores a part-level
           `SUB GAIN` offset into PART[+0x0F] (0xFC660B) and re-derives, per
           enabled element,
@@ -475,7 +475,7 @@ DOCS = {
 """,
 
 "Pack104_RestageReg_0280_ForVoice": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_RestageReg_0280_ForVoice -- points the
           packer's globals at one sounding voice (0x00E086 = 0x00753E +
           37*(XIZ+0x08) at 0xFC672A, 0x00E084 = R[+0x05] at 0xFC6734), re-derives
@@ -494,7 +494,7 @@ DOCS = {
 """,
 
 "Pack104_LoadElementWaveSelRec": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_LoadElementWaveSelRec -- binds one 43-byte
           wave-select record to one element of one part and derives every
           sub-record field the 0x00104000 packer reads from it.  Arguments
@@ -518,7 +518,7 @@ DOCS = {
 """,
 
 "Pack104_DispatchByResoMode_ForPart": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_DispatchByResoMode_ForPart -- reads the
           `RESO MODE` field of all four elements of a part and dispatches on the
           combination.  For each of the four sub-records it takes
@@ -547,7 +547,7 @@ DOCS = {
 """,
 
 "Pack104_TickPositionMovement_ForVoice": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_TickPositionMovement_ForVoice -- advances
           one voice's `P0SITI0N M0VEMENT` modulator by one tick and restages the
           three registers it moves.  With R = *(0x00E086) = 0x00753E +
@@ -576,7 +576,7 @@ DOCS = {
 """,
 
 "Pack104_StageReg_0000_ForVoice": f"""
-{STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
+ {STAR} WAVE 20 (lane w20/lsi-packers) ------------------------------------------
  Pack104_StageReg_0000_ForVoice -- gives one voice a
           slot out of the 64-entry pool and stages register chan+0x0000 from it.
           With R = *(0x00E086) = 0x00753E + 37*(XIZ+0x08) (0xFC7DC7):
