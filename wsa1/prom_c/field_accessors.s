@@ -3677,7 +3677,7 @@ Pack104_StageRegs_00C0_0100_0240__FC4AB5:
 ;          verbatim.  The 0..100 clamp against a 101-entry curve is the reason
 ;          that note reads the control as a PERCENT.
 ; WHERE ITS INPUTS COME FROM: Dev104_PackStagingStruct sets
-;          R[+0x10] = Q5(LinCoef_SubGain_KeyRamp_Q5_128, p36) at 0xFC513E-0xFC518C
+;          R[+0x10] = Q5(LinCoef_SubGain_TouchRamp_Q5_128, p36) at 0xFC513E-0xFC518C
 ;          -- the touch depth -- and R[+0x23] = P[+0x1E] at 0xFC5196-0xFC51A0,
 ;          the value PartRec_SetSubGainOffset_000F derives from p33.
 ; GRADE: PROVEN for the arithmetic and the destination.  The name `SUB GAIN` is

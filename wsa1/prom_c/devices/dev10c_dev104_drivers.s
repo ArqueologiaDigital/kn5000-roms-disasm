@@ -136,7 +136,7 @@
 ;  chan+0x0180  0x0C  Curve_Fitting_Exp2Decay_256[i2] & 0xFFF8, same gate.  PROVEN /
 ;                                                                   UNIDENTIFIED
 ;       i1 = clampU8( 0xCF - g(v1) + (int8)(0x00E08C) ),  g(v) = v<48 ? v/2+24 : v
-;       v1 = clamp( Q5(LinCoef_Fitting_KeyRamp_Q5_128, Q[+0x17]) + P[+0x16], 0 .. PART[+0x11] )
+;       v1 = clamp( Q5(LinCoef_Fitting_TouchRamp_Q5_128, Q[+0x17]) + P[+0x16], 0 .. PART[+0x11] )
 ;       i2, v2: the same with Q[+0x22] and P[+0x18].
 ;  chan+0x01C0  0x0E  the TOP HALF of the 32-bit product           PROVEN /
 ;                       fold(word 16) * Curve_Fitting_Exp2Rise_128[         UNIDENTIFIED
@@ -180,9 +180,9 @@
 ;  chan+0x0400  0x20  Curve_Muting_Cutoff_Q16_128[i3]   -- the SAME index          UNIDENTIFIED
 ;  chan+0x0380  0x1C  Curve_Muting_Cutoff_Q13_128[i4]                              PROVEN /
 ;  chan+0x0440  0x22  Curve_Muting_Cutoff_Q16_128[i4]   -- the SAME index          UNIDENTIFIED
-;       i3 = clamp( ks(Q,0x19) + Q5(LinCoef_Muting_KeyRamp_Q5_128, Q[+0x18]) + P[+0x1A],
+;       i3 = clamp( ks(Q,0x19) + Q5(LinCoef_Muting_TouchRamp_Q5_128, Q[+0x18]) + P[+0x1A],
 ;                   Table_Muting_CutoffFloor_ByKeyZone_256[(0x00E08C)] .. PART[+0x12] )
-;       i4 = clamp( ks(Q,0x25) + Q5(LinCoef_Muting_KeyRamp_Q5_128, Q[+0x23]) + P[+0x1C],
+;       i4 = clamp( ks(Q,0x25) + Q5(LinCoef_Muting_TouchRamp_Q5_128, Q[+0x23]) + P[+0x1C],
 ;                   the same bounds )
 ;  chan+0x03C0  0x1E  P[+0x24], copied straight through (0xFC56BA). PROVEN /
 ;                                                                   UNIDENTIFIED
@@ -278,20 +278,20 @@
 ;   /* *(Part104Voice.tone).  Every field below is read through the frame slot
 ;      (XIZ-4) that Dev104_PackStagingStruct loads at 0xFC4DCB. */
 ;   struct Tone104 {                              /* register it feeds */
-;     s8   lincoef_depth_R12;    /* +0x10  Q5 x LinCoef_Position_KeyRamp_Q5_128 -> R[+0x12]  0x00C0 */
+;     s8   lincoef_depth_R12;    /* +0x10  Q5 x LinCoef_Position_TouchRamp_Q5_128 -> R[+0x12]  0x00C0 */
 ;     u8   mode_bit7;            /* +0x12  bit 7 picks the R[+0x1C] arm */
 ;     u8   reg0300_index;        /* +0x13  -> Curve_Exp2Gain_U8_128         0x0300 */
 ;     u8   delta_sel_A;          /* +0x16  bit 7 picks d1's form         0x0040 */
-;     s8   depth_v1;             /* +0x17  Q5 x LinCoef_Fitting_KeyRamp_Q5_128           0x0140, 0x01C0 */
-;     s8   depth_i3;             /* +0x18  Q5 x LinCoef_Muting_KeyRamp_Q5_128           0x0340, 0x0400 */
+;     s8   depth_v1;             /* +0x17  Q5 x LinCoef_Fitting_TouchRamp_Q5_128           0x0140, 0x01C0 */
+;     s8   depth_i3;             /* +0x18  Q5 x LinCoef_Muting_TouchRamp_Q5_128           0x0340, 0x0400 */
 ;     u8   ks_break_i3;          /* +0x19  breakpoint; bit 7 DISABLES */
 ;     u8   ks_lo_i3;             /* +0x1A  lower note bound */
 ;     u8   ks_hi_i3;             /* +0x1B  upper note bound */
 ;     s8   ks_slope_i3;          /* +0x1C  Q5 slope */
 ;     u8   delta_sel_B;          /* +0x20  bit 7 picks d2's form         0x0080 */
-;     s8   depth_v2;             /* +0x22  Q5 x LinCoef_Fitting_KeyRamp_Q5_128           0x0180, 0x0200 */
-;     s8   depth_i4;             /* +0x23  Q5 x LinCoef_Muting_KeyRamp_Q5_128           0x0380, 0x0440 */
-;     s8   depth_R10;            /* +0x24  Q5 x LinCoef_SubGain_KeyRamp_Q5_128 -> R[+0x10] 0x0280 */
+;     s8   depth_v2;             /* +0x22  Q5 x LinCoef_Fitting_TouchRamp_Q5_128           0x0180, 0x0200 */
+;     s8   depth_i4;             /* +0x23  Q5 x LinCoef_Muting_TouchRamp_Q5_128           0x0380, 0x0440 */
+;     s8   depth_R10;            /* +0x24  Q5 x LinCoef_SubGain_TouchRamp_Q5_128 -> R[+0x10] 0x0280 */
 ;     u8   ks_break_i4;          /* +0x25  breakpoint; bit 7 DISABLES */
 ;     u8   ks_lo_i4;             /* +0x26 */
 ;     u8   ks_hi_i4;             /* +0x27 */
@@ -376,6 +376,12 @@
 ;           |-- Pack104_SetInputs_E088_E089_E08A(voice[+0x03], voice[+0x08],
 ;           |         voice[+0x0C], *(voice[+0x1F]))
 ;           |       (0x00E088) = voice[+0x0C] & 0x7F    the 0..127 LinCoef key
+;           |       ★ CORRECTED 2026-09-03: voice[+0x0C] is THE VELOCITY, not a
+;           |         key -- the voice record's own field comment says so, and the
+;           |         note is at +0x05 as `note|0x80`. So this index is TOUCH, and
+;           |         the four LinCoef_* tables it drives are TOUCH ramps. They were
+;           |         named *_KeyRamp_Q5_128 on 2026-09-02 and are now
+;           |         *_TouchRamp_Q5_128. The line above is left as written.
 ;           |       (0x00E08A) = voice[+0x08]           a pitch word
 ;           |       (0x00E089) = *(voice[+0x1F])[0]     bit 0 gates 0x0140/0x0180
 ;           |
