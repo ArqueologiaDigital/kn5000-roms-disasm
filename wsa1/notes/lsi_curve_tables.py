@@ -41,6 +41,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMG = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 BASE = 0xF80000
 FS = 44100.0                    # see the docstring: schematic + constant pool, NOT measured here
+F_REFRESH = 28e6 / 2048 / 28 / 12   # 40.6901 Hz, period 24.576 ms.  The periodic 0x00104000
+#   refresh, from notes/FINDINGS-l7a1429-write-sequencing.md s.5 (lane w19/lsi-timing):
+#   INTT1 = 488.28 Hz, a six-phase counter, and a path that alternates -- 488.28/6/2.
+#   ⚠ NOT re-derived here, and it is an UPPER bound on the rate, never a floor.
 
 
 # ---------------------------------------------------------------- readers
@@ -177,16 +181,62 @@ def fit_log2_251(verbose):
 
 
 def fit_const_251(verbose):
+    """★ Three independent things fix this object's extent, and they agree exactly.
+    A 251-long constant run is also what a MISJUDGED LENGTH looks like, so the bound is
+    established three ways rather than assumed from a label."""
     T = get("Const_0100_251")
     check(all(v == 0x0100 for v in T), "Const_0100_251 all 0x0100")
+    base = TABLES["Const_0100_251"][0]
+
+    def word(a):
+        return IMG[a - BASE] | (IMG[a - BASE + 1] << 8)
+
+    lo = base
+    while word(lo - 2) == 0x0100:
+        lo -= 2
+    hi = base
+    while word(hi) == 0x0100:
+        hi += 2
+    check(lo == base and hi == base + 502, "the 0x0100 run is exactly 251 words, self-bounded")
+    check(word(base - 2) == 3072, "the word before is Curve_Log2_251[250] = 3072")
+    check(word(base + 502) == 0, "the word after is Curve_Exp2Decay_101[0] = 0")
+    check(base + 502 == TABLES["Curve_Exp2Decay_101"][0], "next cited base is exactly 502 on")
     if verbose:
         print("Const_0100_251        0x0100 in ALL 251 entries -- distinct values:",
               sorted(set(T)))
-        print( "    ⚠ A CONSTANT ON THIS FIRMWARE, not a property of the silicon.  Read with")
-        print( "    the SAME clamped 0..250 index as Curve_Log2_251, one instruction later")
-        print( "    (0xFC49ED), so an emulator can hard-wire register 0x0100 + chan = 0x0100")
-        print( "    for every write this path makes and compute nothing.")
-        print( "    0x0100 = 256 = exactly ONE SEMITONE in Curve_Log2_251's unit, and 1.0 in Q8.")
+        print( "  ⚠ HOW THE 251 BOUND IS SET.  A constant run is exactly what a wrong length")
+        print( "  looks like, so three independent bounds, all agreeing:")
+        print(f"    1. THE RUN ENDS ITSELF.  Scanning outward from 0x{base:06X} for words equal to")
+        print(f"       0x0100 stops at 0x{lo:06X}..0x{hi-1:06X} -- {(hi-lo)//2} words, {hi-lo} bytes, no more and")
+        print(f"       no fewer.  The word BEFORE is {word(base-2)} = Curve_Log2_251[250]; the word")
+        print(f"       AFTER is {word(base+502)} = Curve_Exp2Decay_101[0].  Neither is 0x0100, so this")
+        print( "       is not a run bleeding into padding or into a neighbour.")
+        print( "    2. THE READER'S CLAMP.  0xFC49CC `cp HL,0x00fa` (else 0xFA) and 0xFC49D7")
+        print( "       `cp HL,0` (else 0) give an index of 0..250 -- 251 entries -- and the")
+        print( "       SAME index reads Curve_Log2_251 two instructions earlier.")
+        print(f"    3. THE NEXT CITED BASE.  0x{base:06X} + 502 = 0x{base+502:06X} = Curve_Exp2Decay_101,")
+        print( "       which prom_c cites in its own `add <X..>,#imm32` at 0xFC4B1B.")
+        print( "  ⚠ AND IT IS REFRESHED, NOT LATCHED ONCE.  Register 0x0100 is one of the three")
+        print(f"  rewritten every {1000/F_REFRESH:.1f} ms ({F_REFRESH:.2f} Hz) per sounding voice")
+        print( "  (FINDINGS-l7a1429-write-sequencing.md s.5).  So the traffic is periodic and")
+        print( "  the value is constant; an emulator must expect the writes and can ignore")
+        print( "  the number.  That the number never changes is a fact about THIS firmware's")
+        print( "  table, not about what the register can hold.")
+        print( "  ★ IS 0x0100 A PLAUSIBLE VALUE IN ITS NEIGHBOURS' NUMBER SPACE?  The numbers")
+        print( "  support three readings and cannot separate them:")
+        print( "    * 1.0 in Q8 -- a UNITY COEFFICIENT.  The structural twin of this pair is")
+        print( "      (Curve_FE04C9, Curve_FE05C9) -> (0x0400, 0x0340): the same `add`-then-")
+        print( "      `lda`-one-instruction-later idiom, one index, two words -- and THERE the")
+        print( "      second table is a real second coefficient.  So the slot is a second-")
+        print( "      coefficient slot that this firmware pins.")
+        print( "    * exactly ONE SEMITONE (256) in the 1/256-semitone unit its partner")
+        print( "      register 0x00C0 carries.  Same index, adjacent register, same units.")
+        print( "    * a LONE FLAG IN BIT 8.  0x0100 has exactly one bit set, and register")
+        print( "      0x0240 in the same periodic trio demonstrably IS field-split (its low")
+        print( "      three bits are forced to 7).  A one-bit value is not evidence of a")
+        print( "      numeric coefficient at all.")
+        print( "  ⚠ One constant cannot distinguish a unity coefficient from a set flag.  Only")
+        print( "  a firmware or a UI path that writes some OTHER value could, and none does.")
     return T
 
 
@@ -443,10 +493,32 @@ def sanity_vs_music(verbose):
         print(f"    {a2:.6f} is a time constant of {tau*1000:.3f} ms at {FS:.0f} Hz, and even a 1 ms")
         print(f"    time constant would need {a_1ms:.6f} -- unrepresentable.  An envelope or a")
         print( "    string decay wants 0.1 s to 10 s, i.e. a pole within ~100 counts of 0x8000.")
-        print( "    So these are GAINS/DEPTHS, or coefficients applied at a CONTROL rate of a")
-        print( "    few hundred Hz, not per-sample poles.  ⚠ The ROM states no control rate;")
-        print( "    at fs/128 = 345 Hz the same entry would be 67 ms, which is musical.  That")
-        print( "    is a hypothesis with a number attached, not a finding.")
+        print( "    So these are GAINS/DEPTHS, or coefficients applied at a CONTROL rate, not")
+        print( "    per-sample poles.")
+        print()
+        print(f"  ★ AND AT THE DRIVER'S OWN CONTROL RATE THE SAME TABLE IS EXACTLY MUSICAL.")
+        print(f"    The periodic 0x00104000 refresh runs at {F_REFRESH:.2f} Hz, a period of")
+        print(f"    {1000/F_REFRESH:.3f} ms (FINDINGS-l7a1429-write-sequencing.md s.5).  Stepped at that")
+        print( "    rate, T[i]/32768 = 2^((i-255)/16) is a pole with")
+        print( "        tau = 16 / (f_refresh * ln2 * (255-i))  seconds,  T60 = 6.908 * tau")
+        print( "      i      pole        tau        T60         steps of 24.576 ms")
+        for i in (255, 254, 253, 251, 247, 239, 223, 191):
+            a = D[i] / 32768.0
+            if a >= 1.0:
+                print(f"      {i:3d}   {a:.6f}     infinite   (hold)")
+                continue
+            tau = -1.0 / (F_REFRESH * math.log(a))
+            print(f"      {i:3d}   {a:.6f}   {tau*1000:8.1f} ms  {tau*6.9078:6.3f} s   {tau*F_REFRESH:8.2f}")
+        print( "    -- 24 ms to 3.9 s of T60.  That IS a musical envelope range, where the")
+        print( "    per-sample reading gave 0.5 ms and nothing longer.  Curve_Exp2Rise_128's")
+        print( "    complement 2^(-k/16) gives the same law with tau = 16/(f_refresh*ln2*k):")
+        print(f"      k =   1 -> {1000*16/(F_REFRESH*math.log(2)*1):.0f} ms   k =  16 -> {1000*16/(F_REFRESH*math.log(2)*16):.0f} ms   k = 127 -> {1000*16/(F_REFRESH*math.log(2)*127):.1f} ms")
+        print( "    ⚠ [INFERENCE, and the condition is explicit] the refresh rate is measured")
+        print( "    for registers 0x00C0/0x0100/0x0240, NOT for 0x0140/0x0180, and nothing in")
+        print( "    the ROM says the LSI advances an envelope on the host's write cadence.")
+        print( "    What is established is the shape and the fact that ONE plausible rate")
+        print( "    turns an absurd range into a musical one; that is a hypothesis with a")
+        print( "    number attached, not a finding.")
         print()
         print( "  Curve_Exp2Rise_128 AS A CUTOFF SCALER IS musical.  Register 0x01C0 is")
         print( "  register 0x0400's word (a cutoff coefficient) times Curve_Exp2Rise_128[v1]/2:")
@@ -474,12 +546,14 @@ SUMMARY = [
  ("Curve_Log2_251", 251, "T[0]=27648; T[k]=round(27543-3072*log2 k)",
   "27648 -> 3072", "1/256 SEMITONE (3072/octave); log-domain", "PROVEN fit / STRONG unit"),
  ("Const_0100_251", 251, "T[k] = 0x0100",
-  "0x0100 -> 0x0100", "dimensionless; 1.0 in Q8 = 1 semitone in the line above",
-  "PROVEN (this firmware only)"),
+  "0x0100 -> 0x0100", "1.0 in Q8, or 1 semitone in 0x00C0's unit, or a lone bit-8 flag",
+  "PROVEN value / UNIDENTIFIED unit"),
  ("Curve_Exp2Decay_256", 256, "T[k]=round(32768*2^((k-255)/16))",
-  "0 (k<=46) -> 0x8000", "Q15 GAIN; 0.3763 dB/step, 78.6 dB live span", "PROVEN fit / UNIDENTIFIED role"),
+  "0 (k<=46) -> 0x8000", "Q15 GAIN, 0.3763 dB/step, 78.6 dB; NOT a per-sample pole",
+  "PROVEN fit / UNIDENTIFIED role"),
  ("Curve_Exp2Rise_128", 128, "T[k]=32768*(1-2^(-k/16)) exact",
-  "0 -> 0x7F7A", "Q15 DEPTH/mix (1 - the same 0.3763 dB/step ramp)", "PROVEN fit / UNIDENTIFIED role"),
+  "0 -> 0x7F7A", "Q15 DEPTH; as a cutoff scaler, 0 to -4.56 octaves",
+  "PROVEN fit / STRONG for 0x01C0"),
  ("Curve_Exp2Decay_101", 101, "T[0]=0; T[k]=round(32768*2^((k-100)/16))",
   "0 / 450 -> 0x8000", "Q15 GAIN over a 0..100 UI PERCENT, 37.3 dB + OFF", "PROVEN fit / STRONG unit"),
  ("ExpCurve_0_to_0x80", 128, "T[0]=0; T[k]=max(1,round(128*2^((k-127)/16)))",
@@ -508,7 +582,9 @@ SUMMARY = [
 REGISTERS = [
  ("0x00C0", "Curve_Log2_251 + (0x4280 - pitch) - zone, clamped 0x0000/0x7F00",
   "a LOG-DOMAIN TIME, 1/256 semitone per count, tracking pitch with slope -1", "STRONG"),
- ("0x0100", "Const_0100_251[same index]", "the constant 0x0100 on this firmware", "PROVEN"),
+ ("0x0100", "Const_0100_251[same index], rewritten at 40.69 Hz with 0x00C0 and 0x0240",
+  "the constant 0x0100 on this firmware; unity, one semitone, or a bit-8 flag -- the "
+  "numbers cannot separate them", "PROVEN value / UNIDENTIFIED unit"),
  ("0x0140", "Curve_Exp2Decay_256[i1] & 0xFFF8", "a Q15 gain, 13 bits used", "PROVEN / role UNIDENTIFIED"),
  ("0x0180", "Curve_Exp2Decay_256[i2] & 0xFFF8", "as 0x0140, the B generator", "PROVEN / role UNIDENTIFIED"),
  ("0x01C0", "high16(fold(reg 0x0400's word) * Curve_Exp2Rise_128[v1])",
