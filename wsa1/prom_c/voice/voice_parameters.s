@@ -114,6 +114,129 @@
 ;   table as `.long`.  The fragment verifier cleared the result before it was pasted
 ;   in, and scripts/analysis/assert_byte_identical.py cleared it afterwards.
 ; ==============================================================================
+; ==============================================================================
+; ★★ WAVE 17 -- WHAT THE VOICE-PARAMETER HELPERS COMPUTE, AND WHERE IT GOES
+; ==============================================================================
+; ADDED 2026-09-03 by the voice-engine lane, insertions only under
+; `scripts/analysis/assert_comments_preserved.py`.  Every `; sub_FAxxxx -- 0x...`
+; header line below still spells an address-form name where the label has been
+; renamed; the `★ NAMED (wave 17)` block in front of each carries the current
+; label and supersedes that header's `Unknown: what the routine is FOR` line.
+; Table and applier: `wsa1/notes/prom_c_voice_names_w17.py`.
+;
+; The block comment above says, of the previous round, "WHAT THIS BLOCK DOES NOT
+; ESTABLISH: not one field meaning, not one routine's purpose ... A name for any of
+; these needs the caller side decoded first, which is the next module, not this
+; one."  The caller side is now decoded, and this is what it bought.
+;
+; ★ EVERY NUMBER IN THIS BLOCK IS RE-DERIVED FROM THE ROM BYTES -- never from
+;   this file and never from a disassembler's text -- by
+;       python3 wsa1/notes/prom_c_voice_engine_w17_checks.py --selftest
+;   whose --selftest also runs two NEGATIVE CONTROLS (a wrong stride and a
+;   wrong table base) and requires both to go red.
+;
+; ------------------------------------------------------------------------------
+; A. THE STAGING STRUCT IS THE ANSWER TO "WHERE DOES THIS VALUE GO"
+; ------------------------------------------------------------------------------
+; Almost every routine in this block ends by storing a word into the 0x0010C000
+; staging struct at RAM 0x00D75E.  Dev10C_WriteAllChanRegs (0xFB713A) then walks
+; that struct, and its walk is a strict alternation -- write `chan + block` to the
+; device's select port, write the struct word to the data port -- so the pairing of
+; struct offset to register block is an instruction pair, not an inference:
+;
+;   struct  RAM      register   select instr   struct  RAM      register  select
+;   +0x02   0x00D760  0x0040    0xFB7155       +0x18   0x00D776  0x0800   0xFB7220
+;   +0x04   0x00D762  0x0080    0xFB7172       +0x1A   0x00D778  0x0840   0xFB723F
+;   +0x06   0x00D764  0x00C0    0xFB7188       +0x1C   0x00D77A  0x0880   0xFB7252
+;   +0x08   0x00D766  0x0100    0xFB719B       +0x1E   0x00D77C  0x08C0   0xFB72A2
+;   +0x0A   0x00D768  0x0140    0xFB71AE       +0x20   0x00D77E  0x0900   0xFB72C8
+;   +0x0C   0x00D76A  0x0180    0xFB71C1       +0x22   0x00D780  0x0940   0xFB72DB
+;   +0x0E   0x00D76C  0x0400    0xFB71D4       +0x24   0x00D782  0x0980   0xFB72EE
+;   +0x10   0x00D76E  0x0440    0xFB71E7       +0x26   0x00D784  0x09C0   0xFB7265
+;   +0x12   0x00D770  0x0480    0xFB71FA       +0x28   0x00D786  0x0A00   0xFB7278
+;   +0x14   0x00D772  0x04C0    0xFB720D       +0x2A   0x00D788  0x0A40   0xFB728B
+;   +0x16   0x00D774  0x0500    0xFB72B5
+;
+; Twenty-one blocks in twenty-one struct words, +0x02..+0x2A, with +0x00 written
+; separately (0x8100 on a full update, 0x7E00 on a stop).  Register 0x0080's value
+; is the only one the writer touches: `set 0x0f,BC` at 0xFB717E on the way in and a
+; second write with bit 15 clear at 0xFB7304 on the way out -- the 1-then-0 gate
+; pulse around the other twenty.
+;
+; ★ AND +0x2C..+0x36 IS A SECOND, SMALLER SET, six words that
+;   Dev10C_WriteSixChanRegs_FromD78A (0xFB7345) sends on their own:
+;       +0x2C -> 0x0800 (0xFB7398)   +0x2E -> 0x0840 (0xFB7368)
+;       +0x30 -> 0x0900 (0xFB73DE)   +0x32 -> 0x0940 (0xFB73CB)
+;       +0x34 -> 0x09C0 (0xFB73AB)   +0x36 -> 0x0A00 (0xFB7385)
+;   -- the six envelope registers, and the ones a retire or a controller refresh
+;   rewrites without redoing the whole channel.  Its producers in this file are
+;   Dev10C_StageRegs_0800_0840_ForNoteOn, _FAB8CC, _FAB9D8 and _FABD50, and
+;   Dev10C_StageSixChanRegs_ForRetire.
+;
+; ------------------------------------------------------------------------------
+; B. THE FOUR CHAINS THIS BLOCK IMPLEMENTS
+; ------------------------------------------------------------------------------
+; PITCH -> register 0x0400
+;   Voice_ComputePitch (note path) or Voice_ComputePitch_FromToneRecord (the C/D
+;   path, which never reads voice[+0x05] and so does not follow the played note)
+;     -> voice[+0x06] and voice[+0x08]
+;   Voice_PitchAddZoneOffset_AB/_CD  -> voice[+0x0A] = Sat16(pitch + (0x005A4F))
+;   Voice_StagePitch_Reg0400_AB/_CD  -> struct +0x0E
+;   Helpers: Pitch_ClampToNoteRange and Pitch_FoldOctavesIntoRange, which bound a
+;   pitch by two NOTE NUMBERS (`n*256 + 0x80`, this subsystem's own encoding) --
+;   the first by saturation, the second by adding or subtracting whole octaves of
+;   0x0C00.
+;
+; LEVEL -> register 0x0080
+;   Voice_ComputeLevelBase_AB/_CD    -> voice[+0x0D], and clears voice[+0x2F]
+;     from VelCurve_Lookup (one of eight 256-entry curves at 0xFDD6AB, chosen by a
+;     3-bit tone field), the tone's signed sensitivity byte,
+;     KeyScale_LevelFromPitch and VelScale_LevelFromVelocity (two four-breakpoint
+;     piecewise-linear curves, one on voice[+0x08] >> 8 and one on the velocity),
+;     and three global trims.
+;   Voice_StageLevel_Reg0080_AB/_CD  adds a tone offset and calls
+;   Voice_StageLevel_Reg0080          -> struct +0x04, where MIDI CC7 and CC11 join
+;                                        it through the part record.
+;
+; THE 0x0100 / 0x0140 PAIR -> registers 0x0100 and 0x0140
+;   TWO dispatchers, each a 3-bit mode field of the tone ELEMENT record with a
+;   six-entry computed goto and an out-of-range arm that writes constants:
+;     VoiceParam_DispatchOn_17_36  on (voice[+0x17])[+0x36] & 7
+;         arm 0 -> Rec_StoreConsts_003F_0041   (0x017F and 0x7F7F)
+;         arms 1..5 -> VoiceParam_Build0100_0140_On36_Arm1..Arm5
+;     VoiceParam_DispatchOn_17_11  on (voice[+0x17])[+0x11] & 7
+;         arm 0 -> Rec_StoreConsts_003F_0041, then copies the pair to the struct
+;         arms 1..5 -> VoiceParam_Build0100_0140_On11_Arm1..Arm5
+;   All ten arms write voice_record[+0x3F] and [+0x41] and nothing else of the
+;   record; Voice_StagePair_Reg0100_0140_{First,Both,AB,CD} copy those two fields
+;   to struct +0x08 and +0x0A.  The _On36 family reaches
+;   VoiceParam_AddCurveAndKeyDepth_Clamp (a velocity curve term AND a key term),
+;   the _On11 family VoiceParam_AddCurveDepth_Clamp (the velocity term only); both
+;   end `+ 0x18` then Clamp_36_to_120, whose own header records that every one of
+;   its callers is on this path.
+;
+; ENVELOPES -> registers 0x0800..0x0A40, and the 27-byte records at 0x004CCF
+;   Each channel owns 27 bytes at 0x004CCF + 27*chan = three 9-byte slots.
+;     EnvRec_ClearSlot        zeroes one slot's +0..+5 and +7
+;     EnvRec_LoadSlot         fills +0..+7 from a part-record group and a tone group
+;     EnvRec_AdvanceSegment   steps the segment counter +0x08 against the segment
+;                             length +0x07 and returns a 0..0x100 fraction
+;     EGEnv_Eval_BaseCurveA/B/FreqWrite and the three
+;     EGEnv_Eval_ValueCurve_* read the slot and a ROM curve, scaling with
+;     EGEnv_ScaleDepth_Shr12.
+;   0x004CCF is 0x003BCF + 64*68 -- the byte after the voice-record array.
+;
+; ------------------------------------------------------------------------------
+; C. WHAT IS STILL OPEN IN THIS BLOCK
+; ------------------------------------------------------------------------------
+;   * what registers 0x0440, 0x0480, 0x04C0 and 0x0500 carry.  The routines that
+;     stage them are named for the register, not for a quantity, and that is
+;     deliberate.
+;   * voice_record[+0x29]: Voice_ComputeField0029_AB/_CD build a packed word whose
+;     three fields are measured (bits 8..0, 11..9, 14..12) and whose meaning is not.
+;   * which of VoiceSubsystem_Init's two allocation policies the machine runs, and
+;     when -- see section C of the wave-17 block in voice_leaf_helpers.s.
+; ==============================================================================
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 17): `sub_FA7E2C` is now `PartRec_UpdateRepeatCounter`.
 ;   GRADE PROVEN.  WHY `PartRec_UpdateRepeatCounter`:

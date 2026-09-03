@@ -6431,6 +6431,413 @@ MidiNote_Dispatch__FB3F9C:
 	ret                                        ; FB3F9F  ret
 ; ------------------------------------------------------------------------------
 ; ==============================================================================
+; ★★ WAVE 17 -- HOW THE 64-VOICE NOTE ENGINE ACTUALLY WORKS
+; ==============================================================================
+; ADDED 2026-09-03 by the voice-engine lane.  Everything above and below it is
+; untouched: the guarantee that now holds for this file is
+; `python3 scripts/analysis/assert_comments_preserved.py --base <rev> <file>`,
+; which allows INSERTIONS ONLY and fails on a single reworded character.
+;
+; ⚠ TWO CONSEQUENCES OF THAT GATE, WORTH KNOWING BEFORE READING ANY HEADER BELOW:
+;   * a `; sub_FAxxxx -- 0x...` header line still spells an address-form name even
+;     where the label under it has been renamed.  Those lines are historical
+;     comments kept verbatim; the `★ NAMED (wave 17)` block in front of each
+;     carries the CURRENT label, its grade and its evidence.
+;   * the `Unknown: what the routine is FOR ... so the name is an address` line in
+;     such a header is SUPERSEDED by the ★ NAMED block above it.
+;   The rename table and the tool that applied it are
+;   `wsa1/notes/prom_c_voice_names_w17.py` (--report / --apply / --check).
+;
+; ★ EVERY NUMBER IN THIS BLOCK IS RE-DERIVED FROM THE ROM BYTES -- never from
+;   this file and never from a disassembler's text -- by
+;       python3 wsa1/notes/prom_c_voice_engine_w17_checks.py --selftest
+;   whose --selftest also runs two NEGATIVE CONTROLS (a wrong stride and a
+;   wrong table base) and requires both to go red.
+;
+; ------------------------------------------------------------------------------
+; 0. THE OBJECTS THE SUBSYSTEM IS BUILT ON, AND HOW MANY OF EACH
+; ------------------------------------------------------------------------------
+; Every base, stride and count below is an instruction immediate, and for the eight
+; arrays in the chain the count is fixed TWICE OVER, because each array ends exactly
+; where the next one starts:
+;
+;   RAM        stride  count  what it is
+;   ---------  ------  -----  ---------------------------------------------------
+;   0x000200      30      18  RESOURCE POOLS.  7 queue heads + 2 x 7 occupancy
+;                             bytes each.  0x0200 + 18*30 = 0x041C.
+;   0x00041C       6      34  PART QUEUE ROWS.  pool pointer + 2 queue heads.
+;                             33 real parts plus row 33, the unassigned row.
+;                             0x041C + 34*6 = 0x04E8.
+;   0x0004E8      23      64  CHANNEL RECORDS -- the LIFECYCLE state.  One per
+;                             tone-generator channel.  0x04E8 + 64*23 = 0x0AA8.
+;   0x000AA8      27      34  SLOT HEAD TABLE, [part][column].  0x0AA8+34*27=0x0E3E.
+;   0x000E3E       5     192  SLOT RECORDS, three groups of 64.  0x0E3E+192*5=0x11FE.
+;   0x0011FE      12      64  PER-CHANNEL SLOT BINDINGS, four rings each.
+;                             0x11FE + 64*12 = 0x14FE, the global flag word.
+;   0x001523     300      33  PART RECORDS.
+;   0x003BCF      68      64  VOICE RECORDS -- the PARAMETER state (section 1).
+;                             0x3BCF + 64*68 = 0x4CCF.
+;   0x004CCF      27      64  ENVELOPE RECORDS, three 9-byte slots each.
+;   0x005A4F       2       1  scratch: the key-zone tuning word.
+;   0x005A51       2       1  scratch: VoiceParam_LoadTriple_Set5A51's third byte.
+;   0x005A53      68       4  STAGING VOICE RECORDS -- where a note-on builds a
+;                             voice record before copying it into 0x3BCF.
+;
+; ★ THE ABUTMENT IS THE CHECK, AND HERE IS ITS NULL.  Eight joins close:
+;       0x0200 +18*30 = 0x041C   0x041C +34*6  = 0x04E8   0x04E8 +64*23 = 0x0AA8
+;       0x0AA8 +34*27 = 0x0E3E   0x0E3E +192*5 = 0x11FE   0x11FE +64*12 = 0x14FE
+;       0x1523 +33*300 = 0x3BCF  0x3BCF +64*68 = 0x4CCF
+;   -- and the one gap in the chain, 0x14FE..0x1522, is the globals this file's
+;   other headers already name (0x14FE, 0x14FF, 0x1505, 0x150A, the twelve-entry
+;   user scale at 0x150B, 0x151D).
+;   THE NULL: each base is an immediate in a DIFFERENT routine from the stride and
+;   the count that have to reach it.  For ONE join to close by accident a 16-bit
+;   base has to hit one value in 65,536; eight have to close at once.  And the test
+;   CAN fail -- a wrong stride or a wrong count anywhere breaks every join after
+;   it, which is how the 2026-08-25 correction to the voice-record end address was
+;   caught.
+;
+; ⚠ ONE EXISTING SENTENCE IN THIS FILE'S OWN BLOCK COMMENT IS MISLEADING, and it
+;   is left in place because the gate forbids editing it.  The header above says
+;   "THE PART RECORD -- 300 bytes (0x012C) each, reached through the POINTER ARRAY
+;   at RAM 0x00001523".  0x1523 is not a pointer array: it is the base of the
+;   300-byte records themselves, indexed `mul BC,0x012c` (the very instruction the
+;   sentence quotes), and `voice_record[+0x23] = 0x1523 + 0x012C*part` is that
+;   record's ADDRESS, not a pointer read out of a table.  What IS a pointer is
+;   part_record[+0x00], the first four bytes of each record.
+;
+; ------------------------------------------------------------------------------
+; 1. THE 68-BYTE VOICE RECORD, FIELD BY FIELD
+; ------------------------------------------------------------------------------
+; The tiling of all 68 bytes, the widths and the site counts are ROUND 10's map,
+; which follows this block and is unchanged.  What wave 17 adds is a MEANING for
+; twenty-six of the thirty-three fields, each from a reader or a writer, plus a
+; measured LAYOUT (and no meaning) for a twenty-seventh.  Six are left UNIDENTIFIED
+; and say so.
+;
+;   struct voice_record {                 /* RAM 0x00003BCF + 68*chan, chan 0..63.
+;                                            The index IS the tone-generator
+;                                            channel number: Dev10C_ChanReset takes
+;                                            one argument n, writes device registers
+;                                            n and n+0xC0, and clears the word at
+;                                            0x3BCF + n*0x44 + 1. */
+;
+;     u8   chan;            /* +0x00  this record's own channel number.
+;                              W VoiceParams_Compute_A 0xFB1DF0, ..._D 0xFB3618,
+;                                VoiceRecords_InitFromAlloc 0xFB4036.       PROVEN */
+;     u16  flags;           /* +0x01  a bit field, not a small integer:
+;                              bits 5..2 (& 0x3C) pick Voice_Retire_Mode08 / _Mode10
+;                                        / _Mode20 in VoiceList_RetireByMode;
+;                              bit 8    tracks (voice[+0x25])[+0x18] & 0x8000
+;                                        (0xFB1E8C set / 0xFB1E9C clear);
+;                              bit 9    gates Dev10C_StageSixChanRegs_ForRetire's
+;                                        call to 0xFC8129 (0xFABD0C);
+;                              bit 11   set by Voice_ComputeLevelBase_AB when the
+;                                        velocity byte's bit 7 is set (0xFAB5C5);
+;                              bits 13,14  OR'd 0x6000 / 0x4000 by three of the four
+;                                        KeyZone_Stage_Reg0040_* walkers.
+;                              W VoiceRecords_InitFromAlloc = 1 (0xFB4001);
+;                              cleared for one channel by Dev10C_ChanReset. STRONG */
+;     u8   f03;             /* +0x03  0..n, written 0 at build time; VoiceRegs_Stage_B
+;                              tests `cp L,3` on it to choose
+;                              Voice_StageRegs_0800_B_ModeLt3 over _ModeGe3
+;                              (0xFB1F55/0xFB1F5F), and passes it to 0xFC4D63.
+;                              UNIDENTIFIED -- a selector, of what is not settled. */
+;     u8   part_index;      /* +0x04  a PART INDEX.  Voice_ComputePitch passes it to
+;                              Voice_GetOctaveShift, which does `mul IY,0x012c` and
+;                              `ld C,(XIY+0x1523)` on it (0xFA730B-0xFA7317).
+;                              VoiceRecords_InitFromAlloc writes 0x20 = 32, inside
+;                              the 0..32 range MidiNote_Dispatch enforces.  STRONG.
+;                              ⚠ NOT necessarily the same part as +0x23. */
+;     u8   note_or_80;      /* +0x05  the played note number with bit 7 SET
+;                              (`ld C,(XIZ+0x0e) / set 7,C` 0xFB116F).  Every reader
+;                              masks it off: Voice_ComputePitch does
+;                              `sll 8,WA / and WA,0x7F00`.                  PROVEN */
+;     u16  pitch;           /* +0x06  THE PITCH, 1/256 of a semitone, 0..0x7FFF.
+;                              W Voice_ComputePitch (note path) or
+;                                Voice_ComputePitch_FromToneRecord (tone path).
+;                              R Voice_PitchAddZoneOffset_AB/_CD -> +0x0A ->
+;                                Voice_StagePitch_Reg0400_* -> register 0x0400.
+;                              Also indexes Voice_Reg080_NoteField_Table. PROVEN */
+;     u16  pitch_prekey;    /* +0x08  the pitch BEFORE the key-follow stage.
+;                              R KeyScale_LevelFromPitch (>>8 = the note number),
+;                                VoiceParam_AddCurveAndKeyDepth_Clamp,
+;                                ScaleClampedDelta_Shr5_b.                  PROVEN */
+;     u16  pitch_zoned;     /* +0x0A  Sat16_0_to_7FFF(pitch + (0x005A4F)), the
+;                              key-zone record's tuning word added.         PROVEN */
+;     u8   velocity;        /* +0x0C  THE VELOCITY, 7 bits (`ld C,(XIZ+0x10) /
+;                              res 7,C` 0xFB1178, 0xFB2B65).  R VelScale_LevelFrom-
+;                              Velocity, Voice_ComputeLevelBase_AB/_CD (curve index),
+;                              VoiceParam_AddCurveAndKeyDepth_Clamp.        PROVEN */
+;     s16  level_base;      /* +0x0D  the LEVEL accumulator.
+;                              W Voice_ComputeLevelBase_AB / _CD.
+;                              R Voice_StageLevel_Reg0080_AB / _CD, which add a tone
+;                                offset and hand it to Voice_StageLevel_Reg0080 ->
+;                                staging word 2 -> register 0x0080.         PROVEN */
+;     u32  zone_cursor;     /* +0x0F  the KEY-ZONE RECORD the played note selected.
+;                              W all four KeyZone_Stage_Reg0040_Stride* walkers
+;                                (`ld (XHL+0x0f),XIX`, 0xFA747E and siblings).
+;                              R Voice_StageLevel_Reg0080 reads (+0x02) for register
+;                                0x0080's 3-bit field; Voice_ComputeLevelBase_*
+;                                read (+0x03).                              PROVEN */
+;     u32  tone_object;     /* +0x13  the part's loaded TONE OBJECT -- the 32-bit
+;                              pointer at part_record[+0x00]
+;                              (`ld XBC,(XIX+0x1523) / ld (XHL+IX),XBC` where IX=0x13,
+;                              0xFB118B-0xFB119C).
+;                              R Voice_ComputePitch: (+0x13) is the per-tone scale
+;                                mode, (+0x55) a pitch term.                PROVEN */
+;     u32  tone_element;    /* +0x17  the pointer at part_record[+0x88].
+;                              R the two dispatchers select on (+0x36) and (+0x11);
+;                                Voice_ComputePitch takes key-follow from (+0x06)&7;
+;                                the level and 0x0100/0x0140 helpers read a dozen
+;                                more of its bytes.                         PROVEN */
+;     u32  f1B;             /* +0x1B  the pointer at part_record[+0x8C] (0xFB11AA).
+;                              Its first three bytes are the velocity split points
+;                              VelSplit_LayerFromVelocity compares against
+;                              (0xFB1110/0xFB1116).  Written once, no other reader
+;                              found through the record.                    STRONG */
+;     u32  zone_record;     /* +0x1F  the pointer at part_record[+0x90 + 4*layer]
+;                              (0xFB113D/0xFB11B0), `layer` being
+;                              VelSplit_LayerFromVelocity's 0..3.
+;                              R Voice_SelectKeyZone_Reg0040 relocates it against
+;                                (0x00D7ED) or (0x00D80D) and walks the key map and
+;                                zone array behind it.                      PROVEN */
+;     u16  part_record;     /* +0x23  = 0x1523 + 0x012C*part, the ADDRESS of this
+;                              voice's part record (round 9).  R everywhere:
+;                              Voice_StageLevel_Reg0080 takes MIDI CC7 from (+0x0B)
+;                              and CC11 from (+0x0E) through it.            PROVEN */
+;     u16  part_sub;        /* +0x25  = part_record + 0x88, i.e. &part[+0x88] --
+;                              the same object +0x17 points INTO, addressed as RAM.
+;                              R (+0x1A) and (+0x1C) are tested bit by bit by
+;                                Voice_StageLevel_Reg0080, Voice_ComputeField0029_*
+;                                and the ten 0x0100/0x0140 arms.            PROVEN */
+;     u16  f27;             /* +0x27  R Voice_ComputeLevelBase_AB/_CD as an index
+;                              into 0xFDF1AA masked to 7 bits.  Also the value the
+;                              two producers of staging word 6 write, i.e. the WRITE
+;                              side of register 0x0180.                     STRONG */
+;     u16  reg_field_29;    /* +0x29  a packed word: bits 8..0 = 0xFF - 4*level,
+;                              bits 11..9 and 14..12 two 3-bit codes from
+;                              part[+0x19].  W Voice_ComputeField0029_AB / _CD.
+;                              R Voice_Retire_Mode20 and 0xFAC026.
+;                              STRONG for the LAYOUT, UNIDENTIFIED for the meaning */
+;     u16  f2B;             /* +0x2B  = f(sub_FB6272(part, 0)): 0 when that returns
+;                              0, else (v<<8)|v|0x8000 (0xFB1E14-0xFB1E31).
+;                              VoiceRecords_InitFromAlloc writes 0.  UNIDENTIFIED */
+;     u16  f2D;             /* +0x2D  = 0x00FF when sub_FB5D05(part) is 0xFF, else
+;                              v|0xC000 (0xFB1E3E-0xFB1E5F); init 0x00FF. UNIDENT. */
+;     u16  level_offset;    /* +0x2F  cleared by Voice_ComputeLevelBase_AB/_CD and
+;                              added into Voice_StageLevel_Reg0080's table index
+;                              (0xFA7D93).                                  PROVEN */
+;     u8   f31;             /* +0x31  = Table_FDF6C5[tone_object[+0xD1]] (0xFB11E5) */
+;     u16  f32;             /* +0x32  = Table_FDF6E4[2*tone_object[+0xD2]]          */
+;     u16  f34;             /* +0x34  = Table_FDF6E4[2*tone_object[+0xD4]]          */
+;     u16  f36;             /* +0x36  = Table_FDF722[2*tone_object[+0xD3]]          */
+;     u8   f38;             /* +0x38  2 sites, 2 routines.  UNIDENTIFIED           */
+;     u16  f39;             /* +0x39  write-only in the tracker's view.  UNIDENT.  */
+;     u16  f3B;             /* +0x3B  R Dev10C_StageRegs_0800_0840_FABD50 takes its
+;                              high byte as register 0x0840's value.         STRONG */
+;     u16  f3D;             /* +0x3D  14 sites, 5 routines.  UNIDENTIFIED          */
+;     u16  reg_0100;        /* +0x3F  THE VALUE STAGED INTO REGISTER 0x0100.
+;                              W the five VoiceParam_Build0100_0140_On36_Arm* and the
+;                                five ..._On11_Arm*, or Rec_StoreConsts_003F_0041's
+;                                constant 0x017F on the out-of-range arm.
+;                              R Voice_StagePair_Reg0100_0140_{First,Both,AB,CD},
+;                                which store it at RAM 0x00D766 = staging struct
+;                                +0x08, which Dev10C_WriteAllChanRegs sends to
+;                                `chan + 0x0100` (0xFB719B).                PROVEN */
+;     u16  reg_0140;        /* +0x41  THE VALUE STAGED INTO REGISTER 0x0140, by the
+;                              same ten writers and the same four readers, through
+;                              RAM 0x00D768 = staging struct +0x0A (0xFB71AE).
+;                              Its out-of-range constant is 0x7F7F.         PROVEN */
+;     u8   release_level;   /* +0x43  R Dev10C_StageSixChanRegs_ForRetire, which puts
+;                              (v<<8)|0x80 in staging +0x2C (register 0x0800) and
+;                              v<<8 in +0x2E (register 0x0840) -- the level half of
+;                              the (level<<8)|rate pair, with the rate set to the
+;                              0x80 the normal path can never produce.      PROVEN */
+;   };
+;
+; ⚠ WHAT THE STRUCT ABOVE IS NOT.  It is not a second field map: the offsets, the
+;   widths and the tiling are ROUND 10's, unchanged, and the wave-17 contribution
+;   is only the `who writes / who reads / what it means` column.  Where that column
+;   says UNIDENTIFIED the field keeps its offset name on purpose.
+;
+; ------------------------------------------------------------------------------
+; 2. THE LIFECYCLE -- AND THE STATE VARIABLE IS NOT IN THIS RECORD
+; ------------------------------------------------------------------------------
+; ★★ The 68-byte voice record holds the PARAMETERS of a sounding note.  It holds
+;   no allocation state and no queue links.  The lifecycle lives one array over,
+;   in the 23-byte CHANNEL RECORD at RAM 0x04E8 + 23*chan, whose flag byte
+;   rec[+0x12] IS the state variable:
+;
+;     bit 0  RELEASED   -- ChanRec_Release is its only writer (it stores exactly
+;                          0x01) and four guards test it to skip work.
+;     bit 1  IDLE       -- set by ChanRec_ToPoolQueue6_SetFlag1, which also clears
+;                          bits 2 and 3 and moves the record to pool queue 6.
+;     bit 2  RELEASING  -- set by ChanRec_BeginRelease when a note-off arrives while
+;                          the channel's 0x0180 read-back is still >= 0x80; it is
+;                          also what gates Dev10C_PollBankAndRetire's decay action.
+;     bit 3  SOUNDING   -- set with the allocation (the byte written is 0x08, or
+;                          0x88 when the note is to be held).
+;     bit 7  HELD       -- mirrors the channel's bit in the 0x0087C7 hold mask
+;                          exactly, and a held channel is never retired.
+;
+;   The second half of the state is WHICH QUEUE the record is on.  Every channel
+;   record is on two doubly-linked lists at once:
+;     * a POOL queue -- links rec[+0x00]/rec[+0x02], cursor rec[+0x0F] (pool base) +
+;       rec[+0x11] (queue 0..6), moved by ChanRec_RelinkToPoolQueue, which keeps a
+;       per-queue occupancy count at base+idx+0x10 (even channels) or +0x17 (odd);
+;     * a PART queue -- links rec[+0x04]/rec[+0x06], cursor rec[+0x0C]/rec[+0x0E],
+;       moved by ChanRec_RelinkToPartQueue.  Row 33 of the 0x041C array is the
+;       unassigned row, one past the 33 real parts.
+;
+;   ALLOCATE.  ChanAlloc_ForNoteRequest takes one request struct and fills up to
+;   four channels for it.  For each requested element it reads a 6-byte ROM record
+;   at 0xFE1220 + 6*(req[+2+i] & 0x0F) whose first word is a POINTER to a
+;   0xFF-terminated list of pool-queue codes in priority order, and hands that list
+;   to ChanAlloc_FindVictim.
+;
+;   STEAL.  There is no separate stealing routine, and that is the point:
+;   ChanAlloc_FindVictim returns the first record on the FIRST NON-EMPTY queue of
+;   that priority list, so the ROM list IS the stealing policy -- idle first, then
+;   releasing, then sounding, as the queue numbering has it.  If every listed queue
+;   is empty the element gets 0xFF and no channel sounds.  Allocation then stamps
+;   the note into rec[+0x13], writes flag byte 0x08 (or 0x88 + a hold-mask bit),
+;   relinks the record to a pool queue and to the part's queue 0, and returns the
+;   channel number in req[+0x0A+i].
+;
+;   BUILD.  VoiceParams_Compute_A..D build each element's 68-byte record in one of
+;   the FOUR STAGING RECORDS at 0x005A53 + 0x44*i, then MemCopyWords 0x44 bytes to
+;   0x3BCF + 0x44*chan (`push 0x0044 / push 0x3BCF+... / push 0x5A53+... /
+;   call 0xF9A038` at 0xFB1DC9-0xFB1DE7) and patch four fields in place afterwards.
+;
+;   SOUND.  VoiceRegs_Stage_A..D read the finished record and fill the two staging
+;   structs -- 0x00D75E for device 0x0010C000 and 0x00D7A2 for 0x00104000 -- then
+;   Dev10C_WriteAllChanRegs and Dev104_WriteAllChanRegs push all 22 per-channel
+;   registers, with register 0x0080's bit 15 pulsed 1 before and 0 after.
+;
+;   NOTE OFF.  MidiNote_Dispatch's velocity-zero path calls
+;   VoiceQuery_Tag80_PartNote -- i.e. VoiceQuery_Run over that part's two queues,
+;   collecting the channels playing that note -- then VoiceList_RetireByMode, which
+;   walks the collected list and dispatches on voice_record[+0x01] & 0x3C to
+;   Voice_Retire_Mode08 / _Mode10 / _Mode20, and MidiNote_OffTail, which calls
+;   ChanRec_ReleaseByChannel per channel.  ChanRec_BeginRelease then either moves
+;   the record to its pool's release queue rec[+0x16] (bit 3 -> bit 2) or, if the
+;   channel is already quiet, straight to queue 6 (bit 1).
+;
+;   RETIRE.  Dev10C_PollBankAndRetire is the only reader of device 0x0010C000.  On
+;   every other pass of Toggle14FE_AndDispatch it services one bank of sixteen
+;   channels, so each channel is looked at once every eight MAIN passes:
+;     * a channel whose bit has GONE AWAY in the device's busy bitmap (register
+;       block 0, one word per sixteen channels) is torn down -- ChanRec_Release
+;       (flag = 0x01, queue 6, unlinked), Dev10C_ChanReset(chan) and
+;       Rec11FE_ReleaseAllRings(chan), which hands the channel's four slot bindings
+;       back to the free row;
+;     * a channel still reported busy whose register 0x0180 read-back has fallen
+;       below half scale, AND whose flag bit 2 is set, goes to
+;       ChanRec_ToPoolQueue6_SetFlag1.
+;     * the sweep ends with VoiceSlots_ReapOrphansInBank, which returns any slot in
+;       that bank whose owner byte is stale to the free row.
+;   ⚠ The emulator answers 0 to both device reads, which makes every channel look
+;   as if it stopped on the first sweep after it started.
+;
+; ------------------------------------------------------------------------------
+; 3. FROM A NOTE-ON MESSAGE TO A SOUNDING VOICE, ROUTINE BY ROUTINE
+; ------------------------------------------------------------------------------
+;   Link_Ch0_AppendToRing (0xF98D9A)          bytes into the ring at 0x00E2F1
+;        v
+;   MAIN  lda XBC,0x00E2EB / push / call      0xF98CA4-0xF98CAA
+;        v
+;   MidiIn_ParseRingAndDispatch (0xFB060A)    4-byte packet, status nibble 0x90
+;        |  MidiIn_StoreRingBacklog(count)    -> 0x008678, the allocator's backlog
+;        v
+;   MidiNote_Dispatch (0xFB3F36)              part = msg[1] (< 0x21), note = msg[2],
+;        |                                    velocity = msg[3]
+;        |  MidiNote_StoreStatusBit3(msg[0] & 8) -> 0x008677
+;        v
+;   MidiNote_OnByPartMode (0xFB3860)          switches on part_record[+0x10] & 0xC0
+;        |     0x00 -> VoiceParams_Compute_A (0xFB0E4F) + VoiceRegs_Stage_A/_C
+;        |     0x40 -> VoiceParams_Compute_B (0xFB2172) + VoiceRegs_Stage_B
+;        |     0x80 -> VoiceParams_Compute_C (0xFB2A98) + VoiceRegs_Stage_C
+;        |     0xC0 -> 0xFB3C0E, not traced
+;        |  PartRec_UpdateRepeatCounter(part)  -> part[+0x86]/[+0x87], the
+;        |                                       within-25-ticks repeat state
+;        v
+;   VoiceParams_Compute_X                     builds up to four staging records at
+;        |                                    0x005A53, calls
+;        |  ChanAlloc_ForNoteRequest -> ChanAlloc_FindVictim (per element)
+;        |  Voice_ComputePitch  or  Voice_ComputePitch_FromToneRecord
+;        |  VelSplit_LayerFromVelocity        picks the layer, hence +0x1F
+;        |  MemCopyWords                      staging record -> 0x3BCF + 0x44*chan
+;        v
+;   VoiceRegs_Stage_X                         ~19 helpers, each given the record
+;        |  Voice_SelectKeyZone_Reg0040       -> staging word 1  (register 0x0040)
+;        |  Voice_ComputeLevelBase_AB/_CD     -> voice[+0x0D]
+;        |  Voice_StageLevel_Reg0080_AB/_CD   -> staging word 2  (register 0x0080)
+;        |  Voice_PitchAddZoneOffset_* +
+;        |     Voice_StagePitch_Reg0400_*     -> staging word 7  (register 0x0400)
+;        |  VoiceParam_DispatchOn_17_36 / _11 -> voice[+0x3F]/[+0x41], then
+;        |     Voice_StagePair_Reg0100_0140_* -> words 4 and 5 (0x0100 / 0x0140)
+;        |  Voice_StageRegs_0800_* and friends-> words 12..21 (0x0800..0x0A40)
+;        v
+;   Dev104_WriteAllChanRegs (0xFB77EF, struct 0x00D7A2)
+;   Dev10C_WriteAllChanRegs (0xFB713A, struct 0x00D75E)
+;
+; ------------------------------------------------------------------------------
+; 4. WHAT VoiceParams_Compute_A..D COMPUTE, AND IN WHAT ORDER
+; ------------------------------------------------------------------------------
+; All four take the SAME four arguments -- (XIZ+0x08) a request buffer the caller
+; owns, (XIZ+0x0C) the part index, (XIZ+0x0E) the note, (XIZ+0x10) the velocity --
+; and all four end in the same three steps.  MidiNote_OnByPartMode pushes them in
+; that order at 0xFB38A4-0xFB38B3.  What differs is which part-record fields each
+; one reads and how many elements it asks for.
+;
+;   A  0xFB0E4F  part mode 0x00, one call site (0xFB38B7).  Up to FOUR elements,
+;                each with its own staging record; the element's velocity layer is
+;                VelSplit_LayerFromVelocity(velocity, part[+0x8C]), which selects
+;                part[+0x90 + 4*layer] as the element's zone-record pointer.  The
+;                arm then loops over the four returned channels and calls
+;                VoiceRegs_Stage_A or _C per channel, choosing on
+;                voice_record[+0x01] & 0x0002 (0xFB3933-0xFB394D).
+;   B  0xFB2172  part mode 0x40, one call site (0xFB3A02).  Same shape; its staging
+;                pass is VoiceRegs_Stage_B (0xFB3A7A).
+;   C  0xFB2A98  part mode 0x80, one call site (0xFB3B01).  Uses
+;                VelSplit_LayerFromVelocity_b, the byte-identical twin, and reaches
+;                Voice_ComputePitch_FromToneRecord instead of Voice_ComputePitch --
+;                so this path's pitch does NOT depend on the note played.
+;   D  0xFB31AB  TWO call sites, and neither is a part-mode arm: MidiNote_OnTail
+;                (0xFB3695) and MidiNote_OffTail (0xFB37A2), each followed a few
+;                instructions later by VoiceRegs_Stage_D.
+;
+;   THE ORDER INSIDE ONE ELEMENT, read off VoiceParams_Compute_A:
+;     1. resolve the part's four pointers -- part[+0x00] -> +0x13, part[+0x88] ->
+;        +0x17, part[+0x8C] -> +0x1B, part[+0x90+4*layer] -> +0x1F;
+;     2. stamp +0x01, +0x03, +0x04, +0x05 (note|0x80), +0x0C (velocity), +0x23, +0x25;
+;     3. Voice_ComputePitch -> +0x06 and +0x08;
+;     4. sub_FB6272 -> +0x2B, sub_FB5D05 -> +0x2D, and four table lookups through
+;        the tone object -> +0x31, +0x32, +0x34, +0x36;
+;     5. ChanAlloc_ForNoteRequest for the whole request;
+;     6. per returned channel: MemCopyWords into 0x3BCF, then +0x00 = chan and the
+;        +0x2B / +0x2D / +0x01-bit-8 fix-ups.
+;   ⚠ Steps 1-4 run per element BEFORE the allocation, so a note whose elements all
+;   fail to get a channel has still done the whole parameter computation.
+;
+; ------------------------------------------------------------------------------
+; 5. WHAT THIS BLOCK STILL DOES NOT ESTABLISH
+; ------------------------------------------------------------------------------
+;   * six of the thirty-three voice-record fields (+0x03, +0x2B, +0x2D, +0x38,
+;     +0x39, +0x3D), and the MEANING -- as against the layout -- of +0x29;
+;   * what part-record byte +0x10 IS, beyond its top two bits choosing an arm;
+;   * what the 0x0AA8 / 0x0E3E / 0x11FE slot machinery is FOR -- section 0 of
+;     voice_leaf_helpers.s states its shape and its operations and stops there;
+;   * what MidiNote_OnByPartMode's 0xC0 arm (0xFB3C0E) does;
+;   * 54 of the 119 `sub_` labels in this subsystem, 51 of them in the
+;     0xFB405F-0xFB6E09 block, which is the tone-database and program-change
+;     machinery rather than the note engine: they share one shape -- follow
+;     part_record[+0x00] to the loaded tone object, take `object[+0xD0] & 0x0F` as a
+;     class, and index a 0x27-byte ROM record at 0xFDF4F1 + 39*class -- and naming
+;     them needs prom_d's tone-record format, not this file.
+; ==============================================================================
+; ==============================================================================
 ; ★ ROUND 10 -- THE 68-BYTE VOICE RECORD AT RAM 0x003BCF, FIELD BY FIELD
 ; ==============================================================================
 ; GENERATED by `python3 notes/prom_c_record68_round10.py --emit68`, which

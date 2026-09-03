@@ -2219,6 +2219,179 @@ sub_FA65F6__FA6646:
 	unlk32 xiz                                 ; FA6648  unlk XIZ
 	ret                                        ; FA664A  ret
 ; --------------------------------------------------------------------------
+; ==============================================================================
+; ★★ WAVE 17 -- THE VOICE ALLOCATOR: POOLS, QUEUES, AND WHAT STEALS A VOICE
+; ==============================================================================
+; ADDED 2026-09-03 by the voice-engine lane, insertions only under
+; `scripts/analysis/assert_comments_preserved.py`.  Every `; sub_FAxxxx -- 0x...`
+; header line below still spells an address-form name where the label has been
+; renamed; the `★ NAMED (wave 17)` block in front of each carries the current
+; label, and supersedes that header's `Unknown: what the routine is FOR` line.
+; The table and the applier are `wsa1/notes/prom_c_voice_names_w17.py`.
+;
+; The whole of section 2 of the wave-17 block in note_engine.s -- the lifecycle --
+; is implemented by the routines in THIS file.  What follows is the data structure
+; those routines move records between.
+;
+; ★ EVERY NUMBER IN THIS BLOCK IS RE-DERIVED FROM THE ROM BYTES -- never from
+;   this file and never from a disassembler's text -- by
+;       python3 wsa1/notes/prom_c_voice_engine_w17_checks.py --selftest
+;   whose --selftest also runs two NEGATIVE CONTROLS (a wrong stride and a
+;   wrong table base) and requires both to go red.
+;
+; ------------------------------------------------------------------------------
+; A. THE POOL, THE PART ROW, AND THE TWO LISTS EVERY CHANNEL RECORD IS ON
+; ------------------------------------------------------------------------------
+; A RESOURCE POOL is 30 bytes at RAM 0x0200 + 30*p, p = 0..17.  Its shape is read
+; off VoiceSubsystem_Init's initialiser (`cp D,7` at 0xFA6770 counts the queues,
+; `add HL,0x001e` at 0xFA6774 is the stride, `cp (XIZ-7),0x12` at 0xFA677B the
+; count) and off the two relink routines' arithmetic:
+;
+;     +0x00  u8     LIMIT           -- from ROM, see C below
+;     +0x01  u8     COUNT           -- channels currently charged to this pool
+;     +0x02  u16[7] QUEUE HEADS     -- queue q's head is at +0x02 + 2*q
+;     +0x10  u8[7]  EVEN OCCUPANCY  -- queue q, channels with (chan & 1) == 0
+;     +0x17  u8[7]  ODD OCCUPANCY   -- queue q, channels with (chan & 1) == 1
+;
+; A PART ROW is 6 bytes at RAM 0x041C + 6*part, part = 0..33:
+;
+;     +0x00  u16    the base address of the POOL this part draws from
+;     +0x02  u16    queue 0 head   -- the part's SOUNDING channels
+;     +0x04  u16    queue 1 head   -- the part's RELEASED channels
+;
+; Every one of the 64 channel records at 0x04E8 is on one queue of each at all
+; times, through TWO INDEPENDENT LINK PAIRS -- which is why the record carries
+; four link words where two would do:
+;
+;     pool list   links rec[+0x00]/rec[+0x02], cursor rec[+0x0F] (pool base) and
+;                 rec[+0x11] (queue 0..6); moved by ChanRec_RelinkToPoolQueue,
+;                 which is the ONLY routine that touches the occupancy bytes.
+;     part list   links rec[+0x04]/rec[+0x06], cursor rec[+0x0C] (part row) and
+;                 rec[+0x0E] (queue 0 or 1); moved by ChanRec_RelinkToPartQueue.
+;
+; A third pair, rec[+0x08]/rec[+0x0A], is a transient list the note path splices
+; and unsplices directly (ChanRec_ReleaseByChannel, ChanRec_ReleaseQueueAndCollect,
+; ChanAlloc_ForNoteRequest's 0x0087D0 chain).
+;
+; ★ ROW 33 AND POOL 17 ARE THE UNASSIGNED ONES.  MidiNote_Dispatch refuses a part
+;   index >= 0x21 = 33, so row 33 is one past every real part; ChanRec_Release
+;   passes ChanRec_RelinkToPartQueue the address 0x04E2 = 0x041C + 6*33 and
+;   ChanRec_RelinkToPoolQueue the address 0x03FE = 0x0200 + 30*17, queue 6.  At
+;   boot VoiceSubsystem_Init calls ChanRec_Release on all 64 records in a row
+;   (0xFA6891-0xFA68A1), so every channel starts on pool 17, queue 6.
+;
+; ------------------------------------------------------------------------------
+; B. THE QUEUE NUMBER IS THE STEALING PRIORITY
+; ------------------------------------------------------------------------------
+; Seven queues per pool, and which one a record sits on is half of its state (the
+; other half is the flag byte rec[+0x12]; see note_engine.s section 2):
+;
+;     queue 6   IDLE / FREE   -- ChanRec_Release and ChanRec_ToPoolQueue6_SetFlag1
+;                               both put records here, and it is FIRST in every
+;                               search order in ROM.
+;     queues 5,4,3  RELEASING -- ChanRec_BeginRelease relinks to rec[+0x16], and
+;                               rec[+0x16] is byte +5 of the allocation descriptor
+;                               (section C), whose values in ROM are 3, 4 and 5.
+;     queues 2,1,0  SOUNDING  -- ChanAlloc_ForNoteRequest links a freshly allocated
+;                               record to byte +4 of the same descriptor, whose
+;                               values in ROM are 0, 1 and 2.
+;
+; ★ AND THE SEARCH ORDERS IN ROM ARE IN THAT ORDER, descending.  The list at
+;   0xFE11F8, the one the first descriptor names, reads
+;       86 85 06 05 84 83 82 04 03 02 81 80 01 00 FF
+;   -- bit 7 of an entry means "look in the OVERFLOW POOL (pool 16, base 0x03E0)
+;   for that queue instead of in the part's own pool", and dropping bit 7 leaves
+;   6 5 6 5 4 3 2 4 3 2 1 0 1 0 -- STRICTLY DESCENDING in queue number, free
+;   first and the lowest-numbered sounding queue last, split into three TIERS
+;   {6,5} {4,3,2} {1,0}; inside each tier the OVERFLOW copy comes first and the
+;   own-pool copy repeats it.  So a note takes a free channel before a releasing
+;   one and a releasing one before a sounding one, and within a tier it prefers a
+;   voice already pushed out into the overflow pool over one still charged to the
+;   part's own budget.
+;   The other two lists are the same sequence TRUNCATED -- 0xFE1207 drops the last
+;   entry (own queue 0) and 0xFE1215 stops after the second tier -- so an element
+;   whose descriptor is k >= 2 can never steal a voice sitting on queue 1 or
+;   queue 0, i.e. never one that descriptor k = 0 or k = 1 allocated.  The
+;   truncation IS the priority between elements.
+;
+; ------------------------------------------------------------------------------
+; C. ★★ THE POLYPHONY BUDGET IS IN ROM, AND BOTH COPIES OF IT SUM TO EXACTLY 64
+; ------------------------------------------------------------------------------
+; VoiceSubsystem_Init takes ONE argument and it selects between two complete
+; allocation policies -- a limit table and a part-to-pool map each:
+;
+;   arg == 0    Table_FE1144 limits   18 u8:  24 24 16  0 x13  64 64
+;               Table_FE1168 pool map 34 u16: part 0 -> pool 0, parts 1..7 ->
+;                                             pool 1, parts 8..32 -> pool 2,
+;                                             part 33 -> pool 17
+;   arg != 0    Table_FE1156 limits   18 u8:  12 6 6 4 4 4 4 4 2 2 2 2 2 2 2 6
+;                                             64 64
+;               Table_FE11AC pool map 34 u16: parts 0..15 -> pools 0..15, parts
+;                                             16..31 -> pools 0..15 again,
+;                                             part 32 -> pool 15, part 33 -> pool 17
+;
+; ★ THE CHECK, AND IT IS NOT A WEAK ONE.  The used entries of BOTH limit tables sum
+;   to exactly 64 -- 24 + 24 + 16 = 64, and 12+6+6+4+4+4+4+4+2+2+2+2+2+2+2+6 = 64 --
+;   which is the channel count `cp H,0x40` fixes three other ways in this
+;   subsystem.  The two tables share no byte pattern and were plainly authored
+;   separately; two independent 16-entry byte tables both summing to exactly the
+;   channel count is not what arbitrary data looks like.  Entries 16 and 17 are
+;   both 0x40 in both tables: pool 16 is the overflow pool and pool 17 the free
+;   pool, and each may hold all 64.
+;   ⚠ WHAT IS AND IS NOT CLAIMED.  That the byte is a LIMIT is read off the code:
+;   ChanRec_Release increments pool[+0x01] only `if pool[+0x01] < pool[+0x00]`
+;   (0xFA65AA), and ChanAlloc_ForNoteRequest does the same test (0xFA6DE5) and
+;   takes the overflow path when it fails.  That the two tables are "two allocation
+;   MODES" is a reading of the one argument that selects them; WHICH mode the
+;   machine uses when is not established here -- the argument comes from
+;   sub_FADA7C and from ExtBoard_ProbeAndInstallBases.
+;
+; ★ THE ALLOCATION DESCRIPTORS, 6 bytes at 0xFE1220 + 6*k, k = req[+2+i] & 0x0F:
+;       +0x00  u32  pointer to a 0xFF-terminated search order (section B)
+;       +0x04  u8   the pool queue a newly allocated record is linked to
+;       +0x05  u8   the pool queue ChanRec_BeginRelease will use, into rec[+0x16]
+;   The first three, read out of the ROM bytes:
+;       k=0  -> 0x00FE11F8, 0, 3      k=1  -> 0x00FE1207, 1, 3
+;       k=2  -> 0x00FE1215, 2, 4      k>=3 -> 0x00FE1215, 2, 5
+;
+; ★ WHAT HAPPENS WHEN A POOL IS FULL, and it is not a refusal.  After
+;   ChanAlloc_ForNoteRequest has taken a record it tests the new pool's
+;   `count < limit`.  If the pool is AT its limit it walks the second search order
+;   at 0xFE11F0 -- `06 05 02 04 03 01 00 FF` -- finds a record already in that pool,
+;   moves it to the OVERFLOW pool 16 with ChanRec_RelinkToPoolQueue(rec, 0x03E0,
+;   rec[+0x11]) keeping its queue number, bumps the overflow pool's count and sets
+;   flag bit 4 (0xFA6E42).  So a part that exceeds its budget does not lose the new
+;   note; it pushes an old one out of its own budget into the shared one, where
+;   section B's search order will steal it first.
+;
+; ------------------------------------------------------------------------------
+; D. THE OTHER THREE TABLES: THE SLOT MACHINERY
+; ------------------------------------------------------------------------------
+; Separate from the pool/part queues, and moved by a different set of routines,
+; three more arrays bind each channel to up to four shared "slots":
+;
+;     0x11FE  64 x 12   per channel: next[4], prev[4], slot index[4].  Four
+;                       independent rings, r = 0..3.  Rec11FE_UnlinkFromRing,
+;                       Rec11FE_InsertIntoRing, Rec11FE_BindRingToSlot,
+;                       Rec11FE_ReleaseAllRings.
+;     0x0E3E  192 x 5   a slot: next, prev, part, column, owner-channel (0xFF when
+;                       free).  Three groups of 64, and Rec0E3E_GroupOfIndex maps a
+;                       slot index onto its group code 0 / 4 / 8.
+;                       Rec0E3E_UnlinkFromRing, Rec0E3E_InsertBeforeInRing,
+;                       Rec0E3E_MoveToList, Rec0E3E_FreeListHead.
+;     0x0AA8  34 x 27   the head of the slot ring for (part, column).  Row 33 with
+;                       columns 0 / 4 / 8 is the free list, which is where
+;                       VoiceSlots_InitAllTables puts all 192 slots at boot.
+;
+; The consumer is Voice_LookupDev10CChanIndex, whose header below states the three
+; arguments and their bounds; its result is a 0x0010C000 channel index that
+; Voice_StageChanSel_Reg0440_Reg0480, Voice_StageRegs_0180_AB and
+; Voice_StageChanSel_Reg04C0 hand to the Dev10C_Slot* accessors.
+; ⚠ WHAT THIS MACHINERY IS FOR IS STILL NOT ESTABLISHED.  Its shape, its
+;   invariants and its operations are; the musical role of a "slot" is not, and no
+;   name in this file claims one -- Rec0E3E_ and Rec11FE_ name the ADDRESS of the
+;   array, which is a fact, and the verb after it is what the body does.
+; ==============================================================================
 ; ============================================================================
 ; ★★ THE 64 CHANNEL RECORDS, AND WHAT 0x0010C000 GIVES BACK   (round 2, 2026-08-25)
 ; ============================================================================

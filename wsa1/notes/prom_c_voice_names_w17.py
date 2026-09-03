@@ -354,6 +354,33 @@ RENAMES = {
 
 STAR = "★"
 
+# Labels wave 17 looked at and REFUSED to name, with what was tried.  A refusal is
+# a result: "UNIDENTIFIED, and here is what would settle it" is the honest outcome
+# when the body does not say what the routine is FOR.
+REFUSED = {
+    "sub_FB0B95": "unreferenced variant of VoiceParams_Compute_A; the tree already "
+                  "refused it in round 6 and nothing found since changes that.",
+    "sub_FB1FB1": "unreferenced variant of VoiceParams_Compute_B -- as sub_FB0B95.",
+    "sub_FB289A": "unreferenced variant of VoiceParams_Compute_C -- as sub_FB0B95.",
+    "sub_FB2F74": "unreferenced variant of VoiceParams_Compute_D -- as sub_FB0B95.",
+}
+# The other 50 refusals are one family and share one reason, recorded once:
+REFUSED_BLOCK = (
+    "0xFB405F-0xFB6E09, 50 routines.  They are the TONE DATABASE and PROGRAM "
+    "CHANGE machinery, not the note engine.  Fifteen of them were read; they share "
+    "one shape -- follow part_record[+0x00] to the part's loaded tone object, take "
+    "`object[+0xD0] & 0x0F` as a class 0..15, and index a 39-byte ROM record at "
+    "0xFDF4F1 + 39*class or one of the byte tables at 0xFDE69D / 0xFDEBB9 / "
+    "0xFDF6C5 -- and the rest are pointer arithmetic into records of stride 0x2B, "
+    "0x96 and 0x27 whose formats live in prom_d.  WHAT WOULD SETTLE THEM: prom_d's "
+    "tone-record layout (notes/FINDINGS-prom-d-tone-database.md) decoded far enough "
+    "to name `object[+0xD0]`'s class field and the 0xFDF4F1 record.  Naming them "
+    "from this side would be naming by position, which is what this pass refuses "
+    "to do.  The one exception taken is MidiProgram_SelectToneForPart (0xFB6BA8), "
+    "which the parser's 0xC0 arm and MidiMsg_SendBootSequence's literal packet "
+    "identify from outside the block."
+)
+
 HEADER_RE = re.compile(r"^; (sub_[0-9A-F]{6}) -- 0x[0-9A-F]{6}\.\.")
 
 
@@ -402,6 +429,10 @@ def report():
         for old, new, grade in rows:
             print(f"    {old} -> {new:<44} {grade}")
     print(f"\n  {len(RENAMES)} renames in the table.")
+    print(f"\n  REFUSED, individually ({len(REFUSED)}):")
+    for k, v in sorted(REFUSED.items()):
+        print(f"    {k}: {v}")
+    print(f"\n  REFUSED as one family:\n    {REFUSED_BLOCK}")
 
 
 def check():
