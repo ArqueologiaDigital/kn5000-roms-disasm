@@ -491,6 +491,27 @@ Table_Muting_CutoffFloor_ByKeyZone_256:
 ;             shifted right 5 -- the idiom above.
 ;   feeds     R[+0x12], the index into Curve_Position_Log2Period_251, hence chan+0x00C0.
 ;             One index step there is 1/256 semitone of POSITION.
+; ★ WAVE 21 -- IN IMPLEMENTER UNITS.  Reader: `r = ((s8)T[k] * A) >> 5` with A
+;          the depth byte and k MIRRORED to 0x7F-k when A < 0, so the SIGNED slope
+;          is A*(dT/dk)/32 either way and the sign of A chooses which end of the
+;          keyboard is the pivot, not the sign of the contribution.  `sra` FLOORS.
+;            law slope   2 table counts per key  ->  depth/16 index steps per key
+;            excursion   7.9375 * |depth| index steps across the 128 keys, zero at
+;                        k = 64
+;          ★★ AND THE INDEX IS THE RECIPROCAL OF THE POSITION.  Composing
+;          Curve_Position_Log2Period_251's own fit v = round(27543 - 3072*log2 i)
+;          with chan+0x00C0's 3072-counts-per-octave log-period unit gives
+;          position = C / i EXACTLY for i >= 1.  One index step at i moves the
+;          register by -4432.6/i counts = -17.315/i semitones of position.
+;          100% key follow is already HARD-WIRED into chan+0x00C0 by its `- R[+0x0C]`
+;          pitch term, so this ramp is an ADDITIONAL deviation and no depth byte
+;          means 100% on its own.  At the factory-standard index (p13 = 125 in 400
+;          of 459 records) depth 32 / 64 / 127 give +27.7% / +55.4% / +110.0% of
+;          that hard-wired follow.
+;          ★ SECOND DESTINATION: R[+0x14] = |r| >> 2 (0xFC5643, 0xFC564D), which is
+;          the first term of register chan+0x0240's Curve_Fitting_Exp2Rise_128
+;          index.  This ramp reaches TWO registers; the second gets its magnitude.
+;          Numbers: notes/w21_lsi_gate_and_keyscaling.py section 9.
 ; ----------------------------------------------------------------------------
 LinCoef_Position_KeyRamp_Q5_128:
 	.byte	0x80, 0x82, 0x84, 0x86, 0x88, 0x8a, 0x8c, 0x8e, 0x90, 0x92, 0x94, 0x96, 0x98, 0x9a, 0x9c, 0x9e   ; 0xFE0096
@@ -523,6 +544,25 @@ LinCoef_Position_KeyRamp_Q5_128:
 ;             chan+0x0140/0x01C0 (MAIN FITTING) and chan+0x0180/0x0200 (SUB FITTING).
 ;   unit      ★ one step of the destination index is 0.3763 dB, so this ramp is a
 ;             dB-per-key slope: the full Q5 unit spans 16 index steps = 6.02 dB.
+; ★ WAVE 21 -- IN IMPLEMENTER UNITS.  Same reader idiom (mirror on a negative
+;          depth, `sra 5`, so it FLOORS).
+;            law slope   65/128 = 0.507812 counts per key -> depth/63.02 index
+;                        steps per key
+;            excursion   2 * |depth| index steps across the 128 keys, zero at k = 64
+;          One destination index step is 2^(1/16) = 0.37631 dB, so
+;            depth  32 -> 0.191 dB/key = 2.29 dB/octave, 24.1 dB across the keyboard
+;            depth  64 -> 0.382 dB/key = 4.59 dB/octave, 48.2 dB
+;            depth 127 -> 0.758 dB/key = 9.10 dB/octave, 95.6 dB
+;          ⚠ There is no pitch-versus-gain identity, so `100% key follow' needs a
+;          stated convention here, unlike MUTING.  One octave of the exp2 parameter
+;          per octave of key is 4/3 step per key = depth 84 -- a CONVENTION, not a
+;          measurement.  The dB/octave column is convention-free.
+;          ⚠ AND IT IS NOT LinCoef_Muting_KeyRamp_Q5_128 SHIFTED BY 32, tempting
+;          though the endpoints make that: entry for entry the difference is 32 on
+;          96 entries and 33 on 32 of them, because the extra k/128 moves the
+;          stair's repeat by one key over the top half.  Only Muting and SubGain
+;          are byte-identical.  Numbers:
+;          notes/w21_lsi_gate_and_keyscaling.py sections 8 and 9.
 ; ----------------------------------------------------------------------------
 LinCoef_Fitting_KeyRamp_Q5_128:
 	.byte	0xe0, 0xe0, 0xe1, 0xe1, 0xe2, 0xe2, 0xe3, 0xe3, 0xe4, 0xe4, 0xe5, 0xe5, 0xe6, 0xe6, 0xe7, 0xe7   ; 0xFE0116
@@ -557,6 +597,23 @@ LinCoef_Fitting_KeyRamp_Q5_128:
 ;      key, so a depth byte of 64 is exactly ONE SEMITONE OF CUTOFF PER SEMITONE OF KEY =
 ;      100% KEY FOLLOW, and the signed byte's +-127 range is +-198%.  The same holds for
 ;      the ks(Q, o) key-scaling stage, whose slope is Q[+o+3] >> 5: there 32 = 100%.
+; ★ WAVE 21 -- IN IMPLEMENTER UNITS.  Same reader idiom; the mirror on a negative
+;          depth is what turns this UNIPOLAR table into a BIPOLAR control, moving
+;          the pivot from k = 127 to k = 0 rather than negating the contribution.
+;            law slope   exactly 1/2 table count per key -> depth/64 index steps
+;                        per key, and the index is a SEMITONE OF CUTOFF
+;            excursion   2 * |depth| semitones across the 128 keys
+;          so, exactly:
+;            depth +-32  ->  +-50.0% cutoff key follow
+;            depth +-64  ->  +-100.0%   (the exact one)
+;            depth +-127 ->  +-198.4%
+;          ⚠ THE ks() STAGE IN THE SAME CHAIN USES A DIFFERENT SCALING: its slope is
+;          Q[+o+3] >> 5, so THERE 32 = 100%, not 64.  An implementation that reuses
+;          one constant for both stages is wrong by a factor of two.
+;          ★ The factory depth bytes are multiples of TEN (132 of 133 in the strict
+;          population, the exception a single -5), so the control's real resolution
+;          is 15.6% of key follow per click and its factory range -50..+30 is
+;          -78%..+47%.  Numbers: notes/w21_lsi_gate_and_keyscaling.py sections 9-10.
 ; ----------------------------------------------------------------------------
 LinCoef_Muting_KeyRamp_Q5_128:
 	.byte	0xc0, 0xc0, 0xc1, 0xc1, 0xc2, 0xc2, 0xc3, 0xc3, 0xc4, 0xc4, 0xc5, 0xc5, 0xc6, 0xc6, 0xc7, 0xc7   ; 0xFE0196
@@ -588,6 +645,18 @@ LinCoef_Muting_KeyRamp_Q5_128:
 ;             -- the editor's SUB GAIN.  Its depth byte is wave-select +0x24, which is 0 in
 ;             all 392 factory records: what an unused touch depth looks like.
 ;   unit      one step of the destination index is 0.3763 dB of that gain.
+; ★ WAVE 21 -- IN IMPLEMENTER UNITS, and this one is exact too.  Same law and
+;          same reader as its twin, but the destination index is literally a
+;          PERCENTAGE of SUB GAIN: clamp(R[+0x10] + R[+0x23], 0..100) into the
+;          101-entry Curve_Exp2Gain_Percent_101, one point = 0.37631 dB.
+;            law slope   depth/64 PERCENTAGE POINTS OF SUB GAIN PER SEMITONE OF KEY
+;            depth  32 -> 0.50 point/key = 0.188 dB/key = 2.26 dB/octave
+;            depth  64 -> 1.00 point/key = 0.376 dB/key = 4.52 dB/octave  (exact)
+;            depth 127 -> 1.98 point/key = 0.747 dB/key = 8.96 dB/octave
+;          ★ and because the excursion is 2*|depth| points into a 0..100 window,
+;          |depth| = 50 sweeps exactly the whole control across the keyboard and
+;          anything larger saturates it somewhere on the keyboard.
+;          Numbers: notes/w21_lsi_gate_and_keyscaling.py section 9.
 ; ----------------------------------------------------------------------------
 LinCoef_SubGain_KeyRamp_Q5_128:
 	.byte	0xc0, 0xc0, 0xc1, 0xc1, 0xc2, 0xc2, 0xc3, 0xc3, 0xc4, 0xc4, 0xc5, 0xc5, 0xc6, 0xc6, 0xc7, 0xc7   ; 0xFE0216

@@ -3822,6 +3822,29 @@ sub_FC4B2E__FC4BB0:
 ;          0xFB3B09, so "the part this note-on belongs to" is what it selects.
 ;          Evidence: the stride 0xBB and the base 0x005D23 are instruction operands; the
 ;          caller list is the routine's own Called-from census.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★★ THIS IS ONE OF THE PRODUCERS OF THE BITS THAT GATE REGISTER chan+0x0300,
+;          which notes/HLE-GUIDE-l7a1429.md section 8.5 lists as UNLOCATED.  With
+;          DE = P0 = PART+0x13 and HL = P1 = PART+0x3D (0xFC4BF6, 0xFC4C0B), and
+;          XIY / XWA the two elements' 43-byte WAVE-SELECT records read through
+;          P[+0x03] at PART[+0x16] and PART[+0x40] (0xFC4C03, 0xFC4C18):
+;            c = Q0[+0x0B] & 0xC0                     0xFC4C1D-0xFC4C20
+;            c = Q1[+0x0B] & 0xC0                     0xFC4C25-0xFC4C28
+;            either non-zero -> P0[+0x07] &= 0xFF8F ; bit 4 SET   0xFC4C33-0xFC4C3E
+;                               P1[+0x07] &= 0xFF8F ; bit 4 SET   0xFC4C59-0xFC4C64
+;            both zero       -> P0[+0x07] &= 0xFF8F               0xFC4C6F
+;                               P1[+0x07] &= 0xFF8F               0xFC4C7A
+;          0xFF8F is ~0x0070, so the mask writes exactly bits 6:4 and preserves the
+;          rest of the word.  Dev104_PackStagingStruct ORs P[+0x07] whole into
+;          staging word 0 (0xFC4DEB) and tests those bits at 0xFC51B7 to decide
+;          whether register chan+0x0300 gets a value or 0x0000.
+;          Q[+0x0B] bits 7:6 are `RESO MODE`
+;          (notes/FINDINGS-l7a1429-parameter-names.md section 2d, STRONG).
+;          It also sets P0[+0x09] and P1[+0x09] to an element index, 0/1 or 0/0
+;          depending on bit 7 of P0[+0x00] (0xFC4C45).
+; GRADE: PROVEN for the arithmetic and for the destination field -- every line is
+;          an operand, asserted from the ROM by
+;          notes/w21_lsi_gate_and_keyscaling.py sections 4 and 5.
 ; --------------------------------------------------------------------------
 Pack104_SetInputs_PartRecord:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC4BB6  link XIZ,0xfffc
@@ -4161,6 +4184,24 @@ Pack104_SetInputs_Rec0E_E08D:
 ;          Evidence: `python3 notes/prom_c_understanding_round6.py --packer`, which counts the
 ;          sites and the offsets with notes/prom_c_dev10c_field_sources.py's own scanner and
 ;          asserts 19/16/15.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★★ THE GATE ON REGISTER chan+0x0300 IS AT 0xFC51B5-0xFC51F4, and its input is
+;          now located.  Staging word 0 is built at 0xFC4DC4-0xFC4DF1 as
+;          `(R[+0x07] << 8) | P[+0x07]`: R[+0x07] is read as a BYTE and shifted
+;          left eight, so bits 6:4 of that word can only be bits 6:4 of P[+0x07],
+;          the 42-byte sub-record's own field.  Then
+;            0xFC51B5  WA = staging word 0
+;            0xFC51B7  WA &= 0x0070
+;            zero     -> staging word 12 (register chan+0x0300) = 0x0000  0xFC51EF
+;            non-zero -> b = Curve_Exp2Gain_U8_128[Q[+0x13]]              0xFC51C8
+;                        staging word 12 = (b << 8) | b                   0xFC51E0
+;                        and bit 7 of staging word 0 is CLEARED           0xFC51E6
+;          The writers of P[+0x07] bits 6:4 are Pack104_SetInputs_PartRecord and
+;          the six RESO MODE arms; see their headers.
+; ⚠ THIS SUPERSEDES the claim in notes/HLE-GUIDE-l7a1429.md section 8.5 that
+;          0xFC4D27 and 0xFC7DE9 write those bits -- they write R[+0x07], which
+;          lands in bits 15:8 (notes/FINDINGS-l7a1429-packer-routines.md 4.1).
+; GRADE: PROVEN (operands; notes/w21_lsi_gate_and_keyscaling.py sections 1 and 2).
 ; --------------------------------------------------------------------------
 Dev104_PackStagingStruct:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC4DBD  link XIZ,0xffee
@@ -7970,6 +8011,17 @@ Pack104_LoadElementWaveSelRec__FC6CA2:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★ ONE OF Pack104_DispatchByResoMode_ForPart's SIX ARMS, and one of the three
+;          that CLEAR the gate on register chan+0x0300.  Over all four elements (H = 0x00, the no-RESO-MODE case)
+;          it writes, per sub-record P:
+;            P[+0x09] = the element index
+;            P[+0x07] &= 0xFF8F      bits 6:4 <- 0    (the gate on chan+0x0300)
+;            P[+0x12] = 0x0000 ; P[+0x14] = 0x0000
+;          and then PART[+0x11] = PART[+0x12] = 0x7F -- the two clamp limits the
+;          packer applies to v1/v2 and to i3/i4, opened wide.
+;          Unlike the three arms that SET a bit it reads no curve at all.
+; GRADE: PROVEN (operands; notes/w21_lsi_gate_and_keyscaling.py section 4).
 ; --------------------------------------------------------------------------
 sub_FC6CA8:
 	pushw	hl                                   ; FC6CA8  push HL
@@ -8014,6 +8066,17 @@ sub_FC6CA8__FC6CB8:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★ ONE OF Pack104_DispatchByResoMode_ForPart's SIX ARMS, and one of the three
+;          that CLEAR the gate on register chan+0x0300.  Over elements 0..1 (the low nibble of H is zero)
+;          it writes, per sub-record P:
+;            P[+0x09] = the element index
+;            P[+0x07] &= 0xFF8F      bits 6:4 <- 0    (the gate on chan+0x0300)
+;            P[+0x12] = 0x0000 ; P[+0x14] = 0x0000
+;          and then PART[+0x11] = PART[+0x12] = 0x7F -- the two clamp limits the
+;          packer applies to v1/v2 and to i3/i4, opened wide.
+;          Unlike the three arms that SET a bit it reads no curve at all.
+; GRADE: PROVEN (operands; notes/w21_lsi_gate_and_keyscaling.py section 4).
 ; --------------------------------------------------------------------------
 sub_FC6CEA:
 	pushw	hl                                   ; FC6CEA  push HL
@@ -8058,6 +8121,18 @@ sub_FC6CEA__FC6CFA:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★ ONE OF Pack104_DispatchByResoMode_ForPart's SIX ARMS, and one of the three
+;          that CLEAR the gate on register chan+0x0300.  Over elements 2..3 (the high nibble of H is zero); its base is
+;          PART+0x67 = 0x13 + 2*42 and its counter starts at 2
+;          it writes, per sub-record P:
+;            P[+0x09] = the element index
+;            P[+0x07] &= 0xFF8F      bits 6:4 <- 0    (the gate on chan+0x0300)
+;            P[+0x12] = 0x0000 ; P[+0x14] = 0x0000
+;          and then PART[+0x11] = PART[+0x12] = 0x7F -- the two clamp limits the
+;          packer applies to v1/v2 and to i3/i4, opened wide.
+;          Unlike the three arms that SET a bit it reads no curve at all.
+; GRADE: PROVEN (operands; notes/w21_lsi_gate_and_keyscaling.py section 4).
 ; --------------------------------------------------------------------------
 sub_FC6D2C:
 	pushw	hl                                   ; FC6D2C  push HL
@@ -8104,6 +8179,28 @@ sub_FC6D2C__FC6D3C:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★★ ONE OF THE THREE ARMS THAT OPEN THE GATE ON REGISTER chan+0x0300.
+;          Selected for H == 0xAA, i.e. all four elements in RESO MODE 2.
+;          Per sub-record P it does `P[+0x07] &= 0xFF8F` then `set 0x05` -- so the
+;          three-bit field at bits 6:4, which Dev104_PackStagingStruct tests at
+;          0xFC51B7, becomes 0x50 instead of 0.
+; ★ AND IT COMPUTES REGISTER 0x0300's OWN VALUE A SECOND TIME.  It reads
+;          Q[+0x13] = p19 through P[+0x03] and indexes Curve_Exp2Gain_U8_128 at
+;          0xFDF760 -- the same byte and the same table the packer's gated arm uses
+;          at 0xFC51C1/0xFC51C8 -- and stores the result into the per-element block
+;          at the global 0x00E093.  Those four are the ONLY citations of that curve
+;          in the whole image, so the routines that open the gate are exactly the
+;          other readers of the gated register's curve.
+;          The block also receives Curve_Exp2Gain_Percent_101[clamp(|p33|,0..100)],
+;          the curve register chan+0x0280 (`SUB GAIN`) is made from, and both tuning
+;          words P[+0x0E] and P[+0x10].
+; ⚠ 0x00E093 HAS NO LOCATED READER: every spelling of that address in either
+;          image is a write.  What this arm COMPUTES is therefore still open; what
+;          it SETS is not.
+; GRADE: PROVEN for the gate write and for the curve citation
+;          (notes/w21_lsi_gate_and_keyscaling.py sections 4, 5 and 5b);
+;          UNIDENTIFIED for the 0x00E093 block's meaning.
 ; --------------------------------------------------------------------------
 sub_FC6D6E:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FC6D6E  link XIZ,0xffde
@@ -8359,6 +8456,28 @@ sub_FC6D6E__FC6FB1:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★★ ONE OF THE THREE ARMS THAT OPEN THE GATE ON REGISTER chan+0x0300.
+;          Selected for the low nibble of H non-zero, i.e. elements 0..1.
+;          Per sub-record P it does `P[+0x07] &= 0xFF8F` then `set 0x04` -- so the
+;          three-bit field at bits 6:4, which Dev104_PackStagingStruct tests at
+;          0xFC51B7, becomes 0x40 instead of 0.
+; ★ AND IT COMPUTES REGISTER 0x0300's OWN VALUE A SECOND TIME.  It reads
+;          Q[+0x13] = p19 through P[+0x03] and indexes Curve_Exp2Gain_U8_128 at
+;          0xFDF760 -- the same byte and the same table the packer's gated arm uses
+;          at 0xFC51C1/0xFC51C8 -- and stores the result into the per-element block
+;          at the global 0x00E093.  Those four are the ONLY citations of that curve
+;          in the whole image, so the routines that open the gate are exactly the
+;          other readers of the gated register's curve.
+;          The block also receives Curve_Exp2Gain_Percent_101[clamp(|p33|,0..100)],
+;          the curve register chan+0x0280 (`SUB GAIN`) is made from, and both tuning
+;          words P[+0x0E] and P[+0x10].
+; ⚠ 0x00E093 HAS NO LOCATED READER: every spelling of that address in either
+;          image is a write.  What this arm COMPUTES is therefore still open; what
+;          it SETS is not.
+; GRADE: PROVEN for the gate write and for the curve citation
+;          (notes/w21_lsi_gate_and_keyscaling.py sections 4, 5 and 5b);
+;          UNIDENTIFIED for the 0x00E093 block's meaning.
 ; --------------------------------------------------------------------------
 sub_FC6FFD:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FC6FFD  link XIZ,0xffde
@@ -8582,6 +8701,28 @@ sub_FC6FFD__FC71DD:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★★ ONE OF THE THREE ARMS THAT OPEN THE GATE ON REGISTER chan+0x0300.
+;          Selected for the high nibble of H non-zero, i.e. elements 2..3.
+;          Per sub-record P it does `P[+0x07] &= 0xFF8F` then `set 0x04` -- so the
+;          three-bit field at bits 6:4, which Dev104_PackStagingStruct tests at
+;          0xFC51B7, becomes 0x40 instead of 0.
+; ★ AND IT COMPUTES REGISTER 0x0300's OWN VALUE A SECOND TIME.  It reads
+;          Q[+0x13] = p19 through P[+0x03] and indexes Curve_Exp2Gain_U8_128 at
+;          0xFDF760 -- the same byte and the same table the packer's gated arm uses
+;          at 0xFC51C1/0xFC51C8 -- and stores the result into the per-element block
+;          at the global 0x00E093.  Those four are the ONLY citations of that curve
+;          in the whole image, so the routines that open the gate are exactly the
+;          other readers of the gated register's curve.
+;          The block also receives Curve_Exp2Gain_Percent_101[clamp(|p33|,0..100)],
+;          the curve register chan+0x0280 (`SUB GAIN`) is made from, and both tuning
+;          words P[+0x0E] and P[+0x10].
+; ⚠ 0x00E093 HAS NO LOCATED READER: every spelling of that address in either
+;          image is a write.  What this arm COMPUTES is therefore still open; what
+;          it SETS is not.
+; GRADE: PROVEN for the gate write and for the curve citation
+;          (notes/w21_lsi_gate_and_keyscaling.py sections 4, 5 and 5b);
+;          UNIDENTIFIED for the 0x00E093 block's meaning.
 ; --------------------------------------------------------------------------
 sub_FC723F:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FC723F  link XIZ,0xffde
@@ -8835,6 +8976,24 @@ sub_FC723F__FC741F:
 ;          64-name RESONATOR TYPE list in bits 5:0 is PROVEN).
 ;          ⚠ What the six dispatch arms COMPUTE is not established -- they are
 ;          left as sub_XXXXXX.  The name says what selects them, nothing more.
+; ★ WAVE 21 (lane w21/lsi-gate) ------------------------------------------
+; ★★ WHAT THE SIX ARMS HAVE IN COMMON, found by lane w21/lsi-gate: every one of
+;          them writes bits 6:4 of P[+0x07] for the elements it covers, and that is
+;          the field Dev104_PackStagingStruct tests at 0xFC51B7 to gate register
+;          chan+0x0300.  Three arms clear it (sub_FC6CA8, sub_FC6CEA, sub_FC6D2C)
+;          and three set one bit -- bit 5 in sub_FC6D6E, bit 4 in sub_FC6FFD and
+;          sub_FC723F.  Bit 6 is never set by any path in either image, so the
+;          field is a two-bit enumeration: 0 = no RESO MODE, 1 = some element in a
+;          mode, 2 = all four in mode 2.
+;          In the factory tone database H is 0 for 246 of 256 framed tones; eight
+;          correctly framed tones give it a non-zero value and every one of them is
+;          a pad (Fantasia, Dream, Mist, Halo Pad, Voxmosphere, Dark Universe,
+;          Goblins, Windy Sweep), with `Dark Universe` the sole user of H == 0xAA.
+; GRADE: PROVEN for the dispatch and for the field; the eight tones are STRONG
+;          (their records pass the parameter-names lane's p20 and p25 invariants
+;          and beat a shuffle null at p < 0.001, but they fail the element-block
+;          filter dev104_topology_probe.py uses).
+;          Findings: notes/FINDINGS-l7a1429-gate-and-keyscaling.md.
 ; --------------------------------------------------------------------------
 Pack104_DispatchByResoMode_ForPart:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FC7481  link XIZ,0xfff6
