@@ -149,3 +149,24 @@ earlier 40,008-byte shortfall was first read as "these three files are not the
 whole image". That was wrong. It was an accumulator bug in the probe (the
 `.short` bucket was overwritten rather than accumulated), and the three files
 do account for all 524,288 bytes.
+
+## `wsa1_dsp_regfile_map_checks.py`
+
+**"Of each channel's 32 registers in the 4 x 32 file at CPU 1's `0x007F0000` and CPU 2's
+`0x00E00000`, which ones does the firmware ever write, and how wide are they?"**
+
+```
+python3 notes/sound/wsa1_dsp_regfile_map_checks.py
+python3 notes/sound/wsa1_dsp_regfile_map_checks.py --selftest
+```
+
+Reads both EPROM images, no `.s` file. **Nine registers of thirty-two** are written --
+`(ch << 5) | 0x10 .. +0x17` as bytes, and `(ch << 5) | 0x1F` armed with `0x01` at power-on
+-- and the window is DERIVED from three instruction operands (`sll 0x05,A`, `set 0x04,A`,
+`ldb d,0x08`) rather than typed as a list.
+
+★ **The control is a driver that shares no bytes with the shared one.** prom_a's own
+`Dev7F_WriteSlot8` (`0xF83197`) reaches the same nine registers with a different calling
+convention and `or W,0x10` in place of `set 0x04,A`. Section 5 is the whole-image literal
+census: five `0x007F0000` operands in prom_a, three `0x00E00000` in prom_c, no cross-naming,
+and **no read of either**.

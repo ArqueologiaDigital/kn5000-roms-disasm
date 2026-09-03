@@ -110,6 +110,113 @@
 ; borrowing at length and marks its limit; nothing here strengthens it.
 ;
 ; ------------------------------------------------------------------------------
+; ★★ WAVE 17, 2026-09-03 -- THE REGISTER MAP OF THE FILE THIS DRIVER WRITES
+; ------------------------------------------------------------------------------
+; ADDED, not replacing.  The four routine headers below already say what each
+; routine does; what was missing was the FILE's map -- which of each channel's 32
+; registers the firmware ever touches, how wide they are, and what is not there.
+; Every number is an assertion in
+;     python3 notes/sound/wsa1_dsp_regfile_map_checks.py --selftest   FAILURES: 0
+; over both original EPROM images and no .s file.
+;
+; ⚠ WHAT THIS IS AND IS NOT.  "DSP" is a BORROWED name, as the blocks below spell
+; out at length: it is the KN5000 lane's name for the device ITS byte-identical
+; code drives at its own base.  Nothing in either WSA1R image names a part.
+; ★★ AND THIS IS **NOT** THE uPD6383GF HOST INTERFACE.  The tree records that
+; separation in two places and both are negative results, not identifications:
+;   * notes/WSA1-EMULATION-DISASM-GAPS.md, "Gaps I could not frame sharply" --
+;     "on the KN5000 the standing correction is that it is NOT the DSP host
+;     interface.  So the DSP host interface on this machine has not been located
+;     at all, on either processor."
+;   * notes/FINDINGS-prom_c-p7-byte-stream-pool.md, answering the gap list's
+;     "which port do the microcode BYTES leave by -- 0x00E00000, or something not
+;     yet reached?" with
+;     "Neither."  The effect microcode goes out over the P7 HANDSHAKE
+;     (notes/FINDINGS-prom_c-p7-is-dsp-effects.md), to three destinations, which
+;     is the number of uPD6383GF-3BA parts on the schematic.
+; ⚠ SO DO NOT WRITE "the DSP base address" OF 0x007F0000 OR 0x00E00000 AS IF IT
+;   WERE ESTABLISHED.  An earlier write-up did; the address is an address/data
+;   register pair of unidentified silicon that this tree calls DSP_REGS_BASE
+;   because two of these four routines are byte-identical to a sibling project's
+;   and it would be perverse to call the same bytes something else.
+;
+; THE PORT
+;   DSP_REGS_BASE + 0x00   write   8-bit REGISTER INDEX
+;   DSP_REGS_BASE + 0x02   write   that register's 8-bit VALUE
+;   DSP_REGS_BASE + 0x04   -- nothing.  NO READ PATH ANYWHERE.  Neither driver
+;                             reads the device, and the whole of prom_a names
+;                             0x007F0000 in five instruction operands and prom_c
+;                             names 0x00E00000 in three, all of them stores.
+;   ⚠ The file does NOT auto-increment: the index is re-written before every
+;     value (`inc 1,A` between pairs).  PROVEN by the eight unrolled triples in
+;     DSP_WriteChannelRegs_Inner and by the loop in DSP_ChannelRegs_Write8.
+;
+;   DSP_REGS_BASE = 0x007F0000 on CPU 1, 0x00E00000 on CPU 2.  ONE equate; three
+;   literals per image; 231 of 234 bytes identical and the three that differ are
+;   at block offsets 0x034, 0x05A and 0x0A8, one byte of each literal.  Checker s.1.
+;
+; THE MAP -- 4 CHANNELS x 32 REGISTERS, OF WHICH NINE PER CHANNEL ARE WRITTEN
+;
+;   register number = (channel << 5) | 0x10 + k
+;
+;   reg (per channel)  width  what the firmware puts there              grade
+;   -----------------  -----  ---------------------------------------  ------------
+;   0x00 .. 0x0F         --   NEVER WRITTEN by any of these routines,  not touched
+;                             nor by prom_a's independent driver
+;   0x10                  8   data byte 0  (C,       or array[0])      PROVEN as a
+;   0x11                  8   data byte 1  (B,       or array[1])      transfer;
+;   0x12                  8   data byte 2  (QBC's C, or array[2])      MEANING
+;   0x13                  8   data byte 3  (QBC's B, or array[3])      UNIDENTIFIED
+;   0x14                  8   data byte 4  (E,       or array[4])      for all eight
+;   0x15                  8   data byte 5  (D,       or array[5])
+;   0x16                  8   data byte 6  (QDE's C, or array[6])
+;   0x17                  8   data byte 7  (QDE's B, or array[7])
+;   0x18 .. 0x1E         --   NEVER WRITTEN                            not touched
+;   0x1F                  8   0x01, written once per channel at        value PROVEN;
+;                             power-on AFTER 0x10..0x17 are zeroed.    role WEAK
+;                             "arm" / "enable" is the obvious reading
+;                             and nothing here supports it.
+;
+;   Twenty-three of the thirty-two are never written; nine are.  Four channels, so
+;   36 of the file's 128 register slots are reached at all.  ⚠ "Never written" is a
+;   statement about the CONVERTED drivers plus a whole-image literal census, not
+;   about the silicon: a register nothing writes may still exist and read back.
+;
+; ★★ THE WINDOW IS CORROBORATED BY A DRIVER THAT SHARES NO BYTES WITH THIS ONE.
+;   prom_a carries a SECOND, independent driver for the same file --
+;   `Dev7F_WriteSlot8` (0xF83197), published through four prom_b directory slots,
+;   plus its own init sweep at 0xF831EE.  Different calling convention (XHL and W,
+;   not the stack), different instruction for the same bit (`or W,0x10` against
+;   this driver's `set 0x04,A`), different loop form (`djnz16 bc` against `djnz8
+;   d`) -- and the SAME nine registers: `sll 0x05,W`, base 0x10, eight bytes, then
+;   register 0x1F of four channels set to 0x01 with a stride of 0x20.
+;   Two routines that share no bytes agreeing on a window is a fact about the
+;   DEVICE.  Checker sections 2, 3 and 5.
+;
+; ★ WIDTH: THE DATA REGISTERS ARE BYTES, WITH ONE UNRESOLVED EXCEPTION.  Every
+;   data write in DSP_ChannelRegs_Write8 and DSP_WriteChannelRegs_Inner is an
+;   8-bit store to +0x02.  The armed register 0x1F is written by a 32-BIT store of
+;   0x0101001F, which puts the index in BOTH +0x00 and +0x01 and 0x01 in BOTH
+;   +0x02 and +0x03 (`ld W,A` immediately before it keeps the two index bytes
+;   equal).  Whether +0x01 and +0x03 are the high halves of 16-bit registers or
+;   ignored mirrors is NOT ESTABLISHED -- and prom_a's independent driver does the
+;   SAME 32-bit store, so it is not an artefact of one author.
+;
+; ★ AND THE EIGHT DATA REGISTERS ARE REFRESHED, NOT JUST INITIALISED.
+;   DSP_ChannelRefresh_Loop (prom_c 0xF98118), the third entry in
+;   EntryPoint_Records, is an interrupt-disabled endless loop that calls
+;   DSP_ChannelRegs_Write8 four times, once per channel, from RAM.  So on CPU 2
+;   these 32 bytes are rewritten continuously for as long as the machine is on.
+;   (notes/FINDINGS-sound-subsystem-boundary.md §4.5.)
+;
+; ⚠ WHAT IS UNIDENTIFIED, plainly: all nine registers.  Not one of the eight data
+;   bytes has a meaning in either image, and the ninth has a value but not a role.
+;   What would settle it: this file has no reader anywhere, so the routes are the
+;   PRODUCERS of the eight bytes -- CPU 2's 0xFC8719 DSP_WriteChans0to3_FromE29D
+;   and whatever fills prom_a's eight-byte blocks -- or the schematic net names on
+;   whichever LSI carries the CS for 0x7F0000 and 0x00E00000.
+;
+; ------------------------------------------------------------------------------
 ; ⚠ REGENERATING THIS FILE
 ; ------------------------------------------------------------------------------
 ; `python3 notes/sound/wsa1_dsp_join_probe.py --emit` produced the first version
