@@ -551,8 +551,22 @@ def sec5_selector():
 def sec5b_arm_outputs():
     say("")
     say("=== 5b. WHAT ELSE THE THREE GATE-OPENING ARMS BUILD -- a lead, not a result ===")
+    lit = collections.Counter()
+    for tag in ROM:
+        d = ROM[tag]
+        i = d.find(b"\x93\xe0\x00")
+        while i >= 0:
+            lit[tag] += 1
+            i = d.find(b"\x93\xe0\x00", i + 1)
     say("   Each of them fills a per-element block at the global 0x00E093 (`lda XBC,")
-    say("   0x00e093 / add XBC,<slot>` -- eleven such sites, all in these three arms).")
+    say("   0x00e093 / add XBC,<slot>`).  The 24-bit literal 0x00E093 occurs %s in the"
+        % ", ".join("%s x%d" % (k, v) for k, v in sorted(lit.items())))
+    say("   four images, and every prom_c occurrence is inside sub_FC6D6E, sub_FC6FFD or")
+    say("   sub_FC723F -- 0xFC6E8B..0xFC6F16 (6), 0xFC70B7..0xFC71F6 (7) and")
+    say("   0xFC72F9..0xFC7438 (7), plus the six `ld (0x00E093/0x00E095),#` stores at")
+    say("   0xFC6F7C/83, 0xFC71A8/AF and 0xFC73EA/F1.  All of them WRITE.")
+    check("occurrences of the literal 0x00E093 outside prom_c",
+          sum(v for k, v in lit.items() if k != "prom_c"), 0)
     say("   Taking sub_FC6D6E as the example, one element's block gets:")
     say("      +?  (b << 8) & 0xFF00, b = Curve_Exp2Gain_U8_128[p19]      0xFC6E93")
     say("      +?  (b << 8)                                               0xFC6EA3")
@@ -568,8 +582,8 @@ def sec5b_arm_outputs():
     say("   So the arm assembles, per element, BOTH gains the register file carries")
     say("   (register 0x0300's and register 0x0280's `SUB GAIN`) together with both")
     say("   tuning words -- the shape of a MIX or COUPLING matrix over the four")
-    say("   elements.  ⚠ 0x00E093 has NO located reader: the eleven `lda` sites are all")
-    say("   writes, and no other spelling of that address exists in either image.  This")
+    say("   elements.  ⚠ 0x00E093 has NO located reader: every site above is a write,")
+    say("   and no other spelling of that address exists in either image.  This")
     say("   is recorded as the next thing to chase, NOT as a decode.")
 
 
