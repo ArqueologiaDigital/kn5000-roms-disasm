@@ -941,3 +941,36 @@ channel count; the two 34-entry part→pool maps; the four allocation descriptor
 staging-offset → register-block pairs read off `Dev10C_WriteAllChanRegs`'s own
 select/value alternation. `--selftest` adds two negative controls — a wrong stride and
 a wrong table base — and requires both to go red.
+
+### `prom_c_voice_tonedb_w18.py`
+**"Which of wave 17's fifty refusals in `0xFB405F-0xFB6E09` can be named now that
+prom_d's `dsp_algo` / `dsp_param` / `WaveSelRec` / `PercInst` decode exists, and
+which still cannot?"**
+
+```
+python3 wsa1/notes/prom_c_voice_tonedb_w18.py --report   # the table
+python3 wsa1/notes/prom_c_voice_tonedb_w18.py --claims   # re-read the ROM
+python3 wsa1/notes/prom_c_voice_tonedb_w18.py --apply    # do the rename
+python3 wsa1/notes/prom_c_voice_tonedb_w18.py --check    # assert it landed
+```
+
+The table IS the record: 42 renames and 8 stated refusals, covering exactly the 50
+`sub_` labels in that address range and no others. Each rename carries a grade
+(PROVEN / STRONG) and the instruction addresses it rests on; each refusal says what
+the routine turns on and what would settle it. `--apply` rewrites only the CODE half
+of a line and inserts a `★ NAMED (wave 18)` or `★ NOT NAMED (wave 18)` block above
+the generated header, so the comment gate stays green.
+
+`--claims` reads `original_ROMs/wsa1_prom_c.ic28` — bytes, never the `.s` file — and
+runs **56 checks** in eight sections: the `1 << 2i` element-mask byte table at
+`0xFDE69D`; that the three staging regions tile (`0x008A9B - 0x0087D2 = 713`,
+`0x008C33 - 0x0087D2 = 713 + 408`); that `ToneRec_GetWaveSelectRecord`'s four arms
+carry `0x51 / 0xA2 / 0xF3 / 0x144` = `81*N`; the three `(index map, descriptor array,
+stride)` triples `ToneDB_ResolveEnvDescriptor` reads out of the prom_d directory,
+including the one that **contradicts prom_d's own block** (`+0x30`/`+0x34` are scaled
+by `+0xEC`, not `+0xF2`); the four selector pairs at wave-select record
+`+0x03..+0x0A`; that `PartElement_SetEnvDescriptorPointer` and
+`DrawbarPreset_GetDescriptor` write the same `+0x90` slot; the seven DSP table bases
+the `dsp_algo` readers index, with the curve-pool row numbers derived
+(`0xFDEA21 = pool + 8*0x66`, `0xFDEB53 = pool + 11*0x66`); and `0x26AC = 300 * 33`.
+Every literal is cited with its image-wide occurrence count beside it as the null.
