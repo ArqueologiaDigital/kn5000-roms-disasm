@@ -528,10 +528,115 @@ def sec10_stage_b_image():
           abs(69 + 12 * math.log2(f * 44100 / 440.0) - 100.0) < 0.05, True)
 
 
+# ---------------------------------------------------------------- section 11
+def sec11_reset_image_settles_srl():
+    say('=== 11. ** THE POWER-ON RESET IMAGE SETTLES THE srl QUESTION WITH DATA ===')
+    img = [u16(0xFE133B + 2 * k) for k in range(19)]
+    check('Dev104_StagingStruct_ResetImage, 0xFE133B, 19 words',
+          ' '.join('%04X' % w for w in img),
+          '0004 0000 0000 6C00 0100 0230 0230 1C54 1C54 26D7 8000 FF00 0000 '
+          'E0B8 E0B8 E05E BDF0 BDF0 987B')
+    # every word, against the tables the packer would have used
+    check('w3  (reg 0x00C0) = Curve_Log2_251[0]', [i for i, v in enumerate(L251) if v == img[3]], [0])
+    check('w4  (reg 0x0100) = the Const_0100_251 value', img[4], 0x0100)
+    check('w5,w6 (reg 0x0140/0x0180) = Curve_Exp2Decay_256[161] & 0xFFF8',
+          [i for i, v in enumerate(D256) if (v & 0xFFF8) == img[5]], [161])
+    check('w10 (reg 0x0280) = Curve_Exp2Decay_101[100]',
+          [i for i, v in enumerate(E101) if v == img[10]], [100])
+    check('w13,w14 (reg 0x0340/0x0380) = Curve_FE05C9[74]',
+          [i for i, v in enumerate(FB) if v == img[13]], [74])
+    check('w15 (reg 0x03C0) = Curve_FE05C9[84]  -- a DIFFERENT index: section C',
+          [i for i, v in enumerate(FB) if v == img[15]], [84])
+    check('w16,w17 (reg 0x0400/0x0440) = Curve_FE04C9[74]',
+          [i for i, v in enumerate(FA) if v == img[16]], [74])
+    check('w18 (reg 0x0480) = Curve_FE04C9[84]  -- the same section-C index',
+          [i for i, v in enumerate(FA) if v == img[18]], [84])
+    say('    -> sections A and B share index 74, section C uses 84.  A FOURTH ROM object, on')
+    say('       a code path that never runs the packer, gives the same A/B/C grouping.')
+    say()
+    # THE SETTLING TEST: words 7, 8 and 9 are the three Rise products.
+    def hi(p): return (p >> 16) & 0xFFFF
+    def lo(p): return p & 0xFFFF
+
+    def solve(target, i, masked):
+        out = {'HIGH': [], 'LOW': []}
+        for name, rd in (('HIGH', hi), ('LOW', lo)):
+            for k in range(128):
+                v = rd(fold(FA[i]) * R128[k])
+                if masked:
+                    v = (v & 0xFFF8) | 7
+                if v == target:
+                    out[name].append(k)
+        return out
+    say('    words 7, 8 and 9 are the three `srl 0x00,XIY` products.  Solving each for the')
+    say('    Curve_Exp2Rise_128 index that reproduces it, under BOTH readings:')
+    for w, reg, i, masked in ((7, '0x01C0', 74, False), (8, '0x0200', 74, False),
+                              (9, '0x0240', 84, True)):
+        r = solve(img[w], i, masked)
+        say('      w%-2d reg %s = 0x%04X, from Curve_FE04C9[%d]:  HIGH half -> Rise[%s]   '
+            'LOW half -> %s' % (w, reg, img[w], i,
+                                ','.join(str(x) for x in r['HIGH']) or 'none',
+                                ('Rise[%s]' % ','.join(str(x) for x in r['LOW']))
+                                if r['LOW'] else 'NO SOLUTION'))
+    r7 = solve(img[7], 74, False); r8 = solve(img[8], 74, False); r9 = solve(img[9], 84, True)
+    check('  HIGH half reproduces w7 with exactly one Rise index', r7['HIGH'], [45])
+    check('  HIGH half reproduces w8 with the same one', r8['HIGH'], [45])
+    check('  HIGH half reproduces w9 with exactly one Rise index', r9['HIGH'], [32])
+    check('  LOW half reproduces NONE of the three, from any of the 128 Rise entries',
+          [r7['LOW'], r8['LOW'], r9['LOW']], [[], [], []])
+    say('    NULL: for a wrong model, a hit is a 16-bit coincidence -- 128 candidate indices')
+    say('    out of 65536 values, p = 1/512 per word.  Three of three under HIGH is')
+    say('    p ~ 7e-9; zero of three under LOW is what a wrong model predicts.')
+    say('    ** AND THE SECTION INDICES MATCH THE COEFFICIENT REGISTERS THEY BELONG TO:')
+    say('       w7/w8 come from Curve_FE04C9[74], which is w16/w17 = registers 0x0400/0x0440;')
+    say('       w9 comes from Curve_FE04C9[84], which is w18 = register 0x0480.  The image is')
+    say('       internally consistent with "reg 0x01C0 is reg 0x0400\'s word, folded and')
+    say('       scaled", which is the whole claim.')
+    say('    ** SO THE srl READING IS NO LONGER AN ARGUMENT FROM PLAUSIBILITY.  A ROM image')
+    say('       written by the same authors holds the exact output of the HIGH-half')
+    say('       computation, and the LOW-half computation cannot produce it.')
+
+
+# ---------------------------------------------------------------- section 12
+def sec12_reg0100_is_a_companion():
+    say('=== 12. register 0x0100 is 0x00C0\'s TABLE-PAIR COMPANION, not a latch ===')
+    # The two reads are one instruction apart and share the index register XIX.
+    check('0xFC49E1 `muls XBC,HL` / 0xFC49E3 `ld XIX,XBC` -- the index x2, kept in XIX',
+          by(0xFC49E1, 5).hex(' '), 'db 49 e9 8c e9')
+    check('0xFC49E5 `add XBC,0x00FDFAE0` -- Curve_Log2_251, indexed by it',
+          by(0xFC49E5, 6).hex(' '), 'e9 c8 e0 fa fd 00')
+    check('0xFC49ED `lda XBC,0xFDFCD6` / 0xFC49F2 `add XBC,XIX` -- Const_0100_251, THE SAME '
+          'index one instruction later', by(0xFC49ED, 7).hex(' '), 'f2 d6 fc fd 31 ec 81')
+    say('    -> (Curve_Log2_251, Const_0100_251) is the same shape as (Curve_FE04C9,')
+    say('       Curve_FE05C9): TWO PARALLEL TABLES, ONE INDEX, TWO STAGING WORDS.  For the')
+    say('       FE04C9/FE05C9 pair that shape is now established (sections 9-11) as two')
+    say('       coefficients of ONE section.  By the same shape, register 0x0100 is register')
+    say('       0x00C0\'s companion coefficient -- flat at 0x0100 in this firmware\'s table.')
+    say('    -> so the 40.69 Hz refresh of {0x00C0, 0x0100, 0x0240} is explained without a')
+    say('       latch: 0x00C0 and 0x0240 are the two registers whose index carries R[+0x21],')
+    say('       the RANDOMISED depth, so they are the modulation destinations; 0x0100 rides')
+    say('       along because its producer is the same table read.')
+    stage_b = [u16(0xFE1315 + 2 * k) for k in range(19)]
+    reset = [u16(0xFE133B + 2 * k) for k in range(19)]
+    check('and the register is NOT invariant: the Stage_B image writes 0x0000 to it',
+          (stage_b[4], reset[4]), (0x0000, 0x0100))
+    check('  exactly where it also writes 0x0000 to 0x00C0', (stage_b[3], reset[3]),
+          (0x0000, 0x6C00))
+    say('    -> against the coordinator\'s three readings: (c) is answered -- the register')
+    say('       takes TWO values in the whole image, 0x0100 and 0x0000, and 0x0000 only')
+    say('       where 0x00C0 is also 0x0000.  (b), the latch reading, is DISFAVOURED: a')
+    say('       commit register would not be sourced from a 251-entry table indexed by a')
+    say('       synthesis parameter; the other refresh arm ships {0x00C0, 0x0100} WITHOUT')
+    say('       0x0240, so 0x0100 travels with 0x00C0 and not with "whatever came before";')
+    say('       and in the full writer 0x0100 is the FOURTH of nineteen writes, not the last.')
+    say('       (a) needs no separate explanation once the companion reading is taken.')
+
+
 SECTIONS = [sec1_closed_forms, sec2_fold_is_sign_magnitude, sec3_bilinear,
             sec4_srl, sec5_pairing_null, sec6_elements_are_channels,
             sec7_tone_record_not_located, sec8_two_gains_move_apart,
-            sec9_three_sections, sec10_stage_b_image]
+            sec9_three_sections, sec10_stage_b_image,
+            sec11_reset_image_settles_srl, sec12_reg0100_is_a_companion]
 
 
 def main():

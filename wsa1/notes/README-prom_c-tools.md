@@ -879,11 +879,11 @@ bytes is still a store.
 **"Given how the firmware programs 0x00104000, what KIND of engine is on the other end?"**
 
 ```
-python3 notes/dev104_topology_probe.py             # print all 10 sections
+python3 notes/dev104_topology_probe.py             # print all 12 sections
 python3 notes/dev104_topology_probe.py --selftest  # assert; exit 1 on any failure
 ```
 
-Ten sections over `original_ROMs/wsa1_prom_c.ic28` and `wsa1_prom_d.bin`; no `.s` file and no
+Twelve sections over `original_ROMs/wsa1_prom_c.ic28` and `wsa1_prom_d.bin`; no `.s` file and no
 unidasm text. It is the evidence behind `notes/HLE-GUIDE-l7a1429.md`. The results that matter:
 
 * **`fold()` is a sign-magnitude -> offset-binary converter.** Under it, `Curve_FE04C9` and
@@ -898,7 +898,10 @@ unidasm text. It is the evidence behind `notes/HLE-GUIDE-l7a1429.md`. The result
   which is 44,100 to 0.33 cent — agreeing with IC4's 33.8688 MHz crystal by a wholly
   independent route.
 * **`srl 0x00,XIY` is a shift by 16** (registers 0x01C0/0x0200/0x0240 are the product's HIGH
-  half), on five independent arguments; section 4 lists them and grades the result STRONG.
+  half).  Section 4 gives five arguments from plausibility; **section 11 settles it with data**:
+  words 7, 8 and 9 of the power-on reset image at 0xFE133B are reproduced EXACTLY by the
+  high-half computation, each from one Curve_Exp2Rise_128 index, and the low-half computation
+  reproduces none of the three from any of the 128 entries.
 * **THREE sections, not two.** `Curve_FE04C9`, `Curve_FE05C9` and `Curve_Exp2Rise_128` are each
   cited **exactly three times in the whole image** — an exhaustive census, not a sighting — and
   the third pair lands in `P[+0x24]` / `P[+0x26]`, i.e. registers 0x03C0 and 0x0480. The
@@ -906,6 +909,8 @@ unidasm text. It is the evidence behind `notes/HLE-GUIDE-l7a1429.md`. The result
 * **The four tone elements are four CHANNELS**, so the A/B grouping cannot be "two elements
   per voice": `MidiNote_OnTail` passes the literal 0 as the sub-record index while the three
   `MidiNote_OnByPartMode` sites push `HL`, a loop counter bounded by `cp L,4` / `cp L,2`.
+* **Register 0x0100 is 0x00C0's table-pair companion, not a latch** (section 12) — the answer
+  to the write-sequencing lane's tension about a constant register refreshed at 40.69 Hz.
 * **A negative result, recorded so it is not repeated:** the `Tone104` record cannot be located
   inside prom_d's 81-byte element blocks by its note-bound fields (eight candidate offsets in
   0.90-0.93 against a pooled null of 0.55).
