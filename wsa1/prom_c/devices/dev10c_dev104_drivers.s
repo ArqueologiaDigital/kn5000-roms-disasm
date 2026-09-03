@@ -408,6 +408,203 @@
 ;   is the cheapest possible starting point for an emulator.  Checker s.12.
 ;   Unknown: what selects the Stage_B path.
 ;
+; ------------------------------------------------------------------------------
+; 7. ★★ WAVE 20, 2026-09-03 -- THE REGISTER BLOCKS NOW HAVE NAMES IN THE CODE
+; ------------------------------------------------------------------------------
+; ADDED, not replacing.  Every line of sections 0-6 above stands as written; this
+; section adds the symbolic spelling of the same map and three corrections that
+; wave 19 owes it.  ⚠ Where a line below CORRECTS an older one, the older line is
+; left exactly as it was -- read them together, newest last.
+;
+; Wave 19 named twelve of the nineteen registers out of the tone editor's OWN
+; vocabulary (notes/FINDINGS-l7a1429-parameter-names.md §4, all STRONG), fitted
+; the MUTING pair as a one-pole cutoff (notes/FINDINGS-l7a1429-curve-tables.md)
+; and put the engine together in notes/HLE-GUIDE-l7a1429.md.  Until now none of
+; that was readable at the instruction that writes the register: every block was
+; a bare `add BC,0x0140`.  The `.equ` block below gives each block a name and the
+; write sites use it.
+;
+; ★ THE SUBSTITUTION IS PROVED BY THE BYTE GATE, and here that is a real proof
+;   rather than a formality: these values are INSTRUCTION OPERANDS of
+;   `add rr,imm16` (4 bytes) and `ld (rr),imm16`, so a symbol the assembler
+;   resolved differently would change the ROM.  `make gate-all` stays 13/13.
+;   Applied and re-checkable by `python3 notes/dev104_apply_regsyms.py --verify`.
+;
+; ⚠ WHAT IS *NOT* CONVERTED, and why: nothing.  Every 0x00104000 register-block
+;   literal in this file is a plain instruction operand.  Had one sat inside an
+;   `extpfx*` raw-byte pseudo-instruction it could not take a symbol -- that form
+;   is a byte list, not an expression -- and the applier refuses such a line by
+;   construction (its --selftest requires the refusal).  Block 0x0000 has no
+;   operand at all: its register number is the channel argument unmodified, so
+;   DEV104_BLK_0000 is defined for the map's sake and used by no instruction.
+;
+; ★ NAMING RULE.  A block carries an editor name only where wave 19 graded that
+;   name STRONG.  The other eight are named DEV104_BLK_<block>, by NUMBER, so
+;   that a placeholder can never be mistaken for a finding -- including the three
+;   that wave 19 could describe structurally but not name (0x0240, 0x03C0,
+;   0x0480 are the third section's Rise-scaled coefficient and cutoff pair; the
+;   editor's three unassigned captions DEPTH / FORMANT / INTERACTION GAIN are a
+;   3! choice with no measurement behind it, graded WEAK, and are NOT adopted).
+;
+; ------------------------------------------------------------------------------
+; 7.1 THE SYMBOL TABLE
+; ------------------------------------------------------------------------------
+;   symbol                      block   what it is                        grade
+;   --------------------------  ------  --------------------------------  --------
+;   DEV104_BASE                 --      the device: 16-bit register        PROVEN
+;                                       NUMBER at +0x00, that register's
+;                                       16-bit VALUE at +0x02
+;   DEV104_BLK_0000             0x0000  a mode / enable word; its bits     UNIDENT-
+;                                       6..4 gate block 0x0300            IFIED
+;   DEV104_MAIN_TUNE            0x0040  MAIN RESONATOR KEY SHIFT + TUNE,  STRONG
+;                                       1/256 semitone
+;   DEV104_SUB_TUNE             0x0080  SUB RESONATOR KEY SHIFT + TUNE    STRONG
+;   DEV104_POSITION             0x00C0  resonator POSITION, and its       STRONG
+;                                       POSITION MOVEMENT page; a
+;                                       log-domain PERIOD, 3072
+;                                       counts/octave, pitch NEGATED
+;   DEV104_BLK_0100             0x0100  POSITION's table-pair companion,  value
+;                                       0x0100 in all 251 entries on      PROVEN /
+;                                       this firmware; unit unknown       UNIDENT.
+;   DEV104_MAIN_FITTING_DECAY   0x0140  MAIN FITTING, decay form          STRONG
+;   DEV104_SUB_FITTING_DECAY    0x0180  SUB FITTING, decay form           STRONG
+;   DEV104_MAIN_FITTING_RISE    0x01C0  MAIN FITTING, rise form -- block  STRONG
+;                                       0x0400's word folded and scaled
+;   DEV104_SUB_FITTING_RISE     0x0200  SUB FITTING, rise form            STRONG
+;   DEV104_BLK_0240             0x0240  the THIRD section's Rise-scaled   structure
+;                                       copy of block 0x0480              PROVEN /
+;                                                                         name WEAK
+;   DEV104_SUB_GAIN             0x0280  SUB GAIN, a 0..100 percent        STRONG
+;                                       control with an explicit OFF
+;   DEV104_BLK_02C0             0x02C0  the literal 0xFF00 on every path  UNIDENT.
+;   DEV104_BLK_0300             0x0300  an 8-bit gain over a 0..127       WEAK
+;                                       control, duplicated into BOTH
+;                                       halves; candidate INTERACTION
+;                                       GAIN, not adopted
+;   DEV104_MAIN_MUTING_Q13      0x0340  MAIN MUTING, the Q13 companion    STRONG
+;                                       coefficient -- COMPUTABLE from
+;                                       DEV104_MAIN_MUTING_Q16
+;   DEV104_SUB_MUTING_Q13       0x0380  SUB MUTING, Q13 companion         STRONG
+;   DEV104_BLK_03C0             0x03C0  the THIRD section's Q13           structure
+;                                       companion, index clamped 44..96   PROVEN /
+;                                                                         name WEAK
+;   DEV104_MAIN_MUTING_Q16      0x0400  MAIN MUTING, the Q16 BILINEAR     fit PROVEN
+;                                       cutoff: index = MIDI note - 36,   / name
+;                                       466 Hz .. 16.7 kHz                STRONG
+;   DEV104_SUB_MUTING_Q16       0x0440  SUB MUTING, Q16 bilinear cutoff   PROVEN /
+;                                                                         STRONG
+;   DEV104_BLK_0480             0x0480  the THIRD section's Q16 cutoff,   fit PROVEN
+;                                       831 Hz .. 16.7 kHz                / name WEAK
+;   DEV104_BLK_0800             0x0800  a GLOBAL register -- no channel   UNIDENT-
+;                                       field -- written once at power-on IFIED
+;                                       with the word at ROM 0xFE1313,
+;                                       which is 0x1100
+;
+; ⚠ MAIN vs SUB HAS ONE POINT OF FAILURE, and it is not this file's to settle:
+;   the whole direction rests on block 0x0280 being SUB GAIN, the editor's one
+;   parameter that belongs to one resonator and not the other.  If that were the
+;   main resonator's level instead, every MAIN_/SUB_ symbol above swaps and
+;   nothing else changes -- the pairing, the families and the arithmetic are all
+;   direction-blind.  notes/FINDINGS-l7a1429-parameter-names.md §5b.
+;
+; ------------------------------------------------------------------------------
+; 7.2 THREE CORRECTIONS TO THE SECTIONS ABOVE
+; ------------------------------------------------------------------------------
+; ⚠ (a) SECTION 1 SAYS "64 channels per block is NOT established for THIS device.
+;   It is established for 0x0010C000".  THAT IS NOW WRONG, and this device
+;   establishes it ITSELF.  Dev10C_ResetAllChannels writes register 0x0800 of
+;   0x00104000 at 0xFB80F6 and then runs its `ldb D,0x40` loop; more directly,
+;   the power-on sweep's second loop (0xFB81DB, bound `cp HL,0x0040` at 0xFB8281)
+;   calls Dev104_WriteChanReg0 with &0x00D8DB once per channel for HL = 0..0x3F,
+;   and the first loop (0xFB8175, bound `cp HL,0x0040` at 0xFB81B9) calls
+;   Dev104_WriteAllChanRegs the same way.  Both bounds are literal `0x0040`
+;   operands in THIS image driving THIS device's own writers, so the count is
+;   read off an instruction, not inferred from the 0x40 block stride.
+;   ★ 64 CHANNELS, PROVEN.  Section 1's sentence stands as the state of knowledge
+;   at wave 17 and is superseded here.
+;
+; ⚠ (b) SECTION 3 SAYS "Sixteen of the nineteen registers fall into eight A/B
+;   pairs" and then lists FIVE.  Neither number is the measured grouping.  What a
+;   correlation census over the factory tone records finds
+;   (notes/HLE-GUIDE-l7a1429.md §2.2) is TWO PAIRS AND THREE TRIPLES:
+;
+;       pair    0x0040  0x0080                    MAIN / SUB tuning
+;       pair    0x0140  0x0180                    MAIN / SUB FITTING, decay
+;       triple  0x01C0  0x0200  0x0240            three Rise-scaled coefficients
+;       triple  0x0340  0x0380  0x03C0            three Q13 companions
+;       triple  0x0400  0x0440  0x0480            three Q16 cutoffs
+;       alone   0x0000 0x00C0 0x0100 0x0280 0x02C0 0x0300
+;
+;   The triples are why there is a THIRD section at all: 0x0240, 0x03C0 and
+;   0x0480 are not spare registers, they are section C's members of the same
+;   three families the MAIN and SUB sections have.  The A/B-pair sentence above
+;   stays as written; this is the grouping to read the map by.
+;
+; ⚠ (c) SECTION 3 CALLS `Q` A TONE RECORD AND GIVES A `struct Tone104`.  Q IS THE
+;   43-BYTE WAVE-SELECT RECORD -- graded PROVEN in
+;   notes/FINDINGS-l7a1429-parameter-names.md §1a, which owes this file the
+;   correction: the complete census of Q reads on this path is `{+0x0B}` plus
+;   `[+0x0D, +0x2A]`, the record's last byte is `+0x2A`, and on the drawbar arm Q
+;   IS `Table_FE14A0`, six bytes before which the ASCII "WSA SOUND RAM S0" begins
+;   -- so reading it at `+0x51` would land inside a bank-name string.
+;   ★★ THE ARITHMETIC IN SECTION 2 IS UNTOUCHED.  Only the identity of the object
+;   those offsets are read from changes -- and that is what made the naming
+;   possible, because the 43-byte record has a byte-per-parameter editor behind
+;   it (`Q[+0x0B]` = RESONATOR TYPE, and writing it reloads bytes 13..42, every
+;   coefficient this device consumes, from a preset) and the tone record does not.
+;   `struct Tone104` above should be read as `struct WaveSelRec`, its field names
+;   still correct as ROLE names in the arithmetic.
+;
+; ------------------------------------------------------------------------------
+; 7.3 THE FOUR sub_ ROUTINES IN THIS FILE -- THE REFUSAL STILL HOLDS
+; ------------------------------------------------------------------------------
+; sub_FB6F2C, sub_FB707E, sub_FB7521 and sub_FB762F were refused a name by round
+; 12 on a calibrated rule (a register-block set names an ACCESSOR, and all four
+; are larger than every member of the calibration set), and wave 17 left that
+; refusal standing while adding a full write-by-write decode and a WEAK proposed
+; name to each.
+;
+; ★ WAVE 19'S EVIDENCE DOES NOT REACH THEM, and the reason is structural rather
+;   than a judgement call: ALL FOUR DRIVE 0x0010C000, NOT 0x00104000.  Their
+;   register blocks are 0x0000 (the literal 0x8100), 0x0080, 0x0800, 0x0840 and
+;   0x0900/0x0940/0x0980 -- of the OTHER device, whose block numbering happens to
+;   overlap this one's and means something else.  Not one of the four contains a
+;   `0x00104000` literal (this file holds nine, and section 0 enumerates them:
+;   eight in the Dev104_ family and one in Dev10C_ResetAllChannels).  So naming
+;   the L7A1429's registers cannot settle what any of the four is FOR, and the
+;   four keep their address labels.
+;   ⚠ What would settle them is unchanged: a reader of 0x0010C000 block 0x0080,
+;   or the meaning of the 0x0000E21D array, or what a gate pulse with no
+;   parameter change between its edges does.
+;
+; ------------------------------------------------------------------------------
+; 7.4 THE DEFINITIONS
+; ------------------------------------------------------------------------------
+; ⚠ These are `.equ`, i.e. `.set`: they emit no bytes.  The file is `.include`d
+;   into prom_c/wsa1_prom_c.s, so the names are visible to the whole image from
+;   that point on; the DEV104_ prefix keeps them out of every other device's way.
+
+	.equ DEV104_BASE, 0x00104000	; +0x00 register NUMBER, +0x02 its VALUE
+	.equ DEV104_BLK_0000, 0x0000	; mode/enable word; bits 6..4 gate 0x0300
+	.equ DEV104_MAIN_TUNE, 0x0040	; MAIN RESONATOR KEY SHIFT + TUNE
+	.equ DEV104_SUB_TUNE, 0x0080	; SUB RESONATOR KEY SHIFT + TUNE
+	.equ DEV104_POSITION, 0x00C0	; resonator POSITION, a log-domain period
+	.equ DEV104_BLK_0100, 0x0100	; POSITION's table-pair companion
+	.equ DEV104_MAIN_FITTING_DECAY, 0x0140	; MAIN FITTING, decay form
+	.equ DEV104_SUB_FITTING_DECAY, 0x0180	; SUB FITTING, decay form
+	.equ DEV104_MAIN_FITTING_RISE, 0x01C0	; MAIN FITTING, rise form
+	.equ DEV104_SUB_FITTING_RISE, 0x0200	; SUB FITTING, rise form
+	.equ DEV104_BLK_0240, 0x0240	; section C's Rise-scaled copy of 0x0480
+	.equ DEV104_SUB_GAIN, 0x0280	; SUB GAIN, 0..100 percent with an OFF
+	.equ DEV104_BLK_02C0, 0x02C0	; always the literal 0xFF00
+	.equ DEV104_BLK_0300, 0x0300	; 8-bit gain, 0..127, in both halves
+	.equ DEV104_MAIN_MUTING_Q13, 0x0340	; MAIN MUTING, Q13 companion
+	.equ DEV104_SUB_MUTING_Q13, 0x0380	; SUB MUTING, Q13 companion
+	.equ DEV104_BLK_03C0, 0x03C0	; section C's Q13 companion
+	.equ DEV104_MAIN_MUTING_Q16, 0x0400	; MAIN MUTING, Q16 bilinear cutoff
+	.equ DEV104_SUB_MUTING_Q16, 0x0440	; SUB MUTING, Q16 bilinear cutoff
+	.equ DEV104_BLK_0480, 0x0480	; section C's Q16 cutoff
+	.equ DEV104_BLK_0800, 0x0800	; GLOBAL, no channel field; power-on only
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================
@@ -2368,8 +2565,8 @@ Dev104_WriteAllChanRegs:
 	ld	xix, (xiz+10)                           ; FB77F6  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB77F9  9e 08 23          ld HL,(XIZ+0x08)
 	ld	de, hl                                  ; FB77FC  db 8a             ld DE,HL
-	add	de, 64                                 ; FB77FE  da c8 40 00       add DE,0x0040
-	ld	xbc, 0x00104000                         ; FB7802  41 00 40 10 00    ld XBC,0x00104000
+	add	de, DEV104_MAIN_TUNE                   ; FB77FE  da c8 40 00       add DE,0x0040
+	ld	xbc, DEV104_BASE                        ; FB7802  41 00 40 10 00    ld XBC,0x00104000
 	ld	(xiz-4), xbc                            ; FB7807  be fc 61          ld (XIZ+0xfc),XBC
 	ld	(xbc), de                               ; FB780A  b1 52             ld (XBC),DE
 	ld	de, (xix+2)                             ; FB780C  9c 02 22          ld DE,(XIX+0x02)
@@ -2378,119 +2575,119 @@ Dev104_WriteAllChanRegs:
 	ld	(xiz-8), xbc                            ; FB7814  be f8 61          ld (XIZ+0xf8),XBC
 	ld	(xbc), de                               ; FB7817  b1 52             ld (XBC),DE
 	ld	bc, hl                                  ; FB7819  db 89             ld BC,HL
-	add	bc, 128                                ; FB781B  d9 c8 80 00       add BC,0x0080
+	add	bc, DEV104_SUB_TUNE                    ; FB781B  d9 c8 80 00       add BC,0x0080
 	ld	xwa, (xiz-4)                            ; FB781F  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7822  b0 51             ld (XWA),BC
 	ld	bc, (xix+4)                             ; FB7824  9c 04 21          ld BC,(XIX+0x04)
 	ld	xwa, (xiz-8)                            ; FB7827  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB782A  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB782C  db 89             ld BC,HL
-	add	bc, 192                                ; FB782E  d9 c8 c0 00       add BC,0x00c0
+	add	bc, DEV104_POSITION                    ; FB782E  d9 c8 c0 00       add BC,0x00c0
 	ld	xwa, (xiz-4)                            ; FB7832  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7835  b0 51             ld (XWA),BC
 	ld	bc, (xix+6)                             ; FB7837  9c 06 21          ld BC,(XIX+0x06)
 	ld	xwa, (xiz-8)                            ; FB783A  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB783D  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB783F  db 89             ld BC,HL
-	add	bc, 0x0100                             ; FB7841  d9 c8 00 01       add BC,0x0100
+	add	bc, DEV104_BLK_0100                    ; FB7841  d9 c8 00 01       add BC,0x0100
 	ld	xwa, (xiz-4)                            ; FB7845  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7848  b0 51             ld (XWA),BC
 	ld	bc, (xix+8)                             ; FB784A  9c 08 21          ld BC,(XIX+0x08)
 	ld	xwa, (xiz-8)                            ; FB784D  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7850  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7852  db 89             ld BC,HL
-	add	bc, 0x0140                             ; FB7854  d9 c8 40 01       add BC,0x0140
+	add	bc, DEV104_MAIN_FITTING_DECAY          ; FB7854  d9 c8 40 01       add BC,0x0140
 	ld	xwa, (xiz-4)                            ; FB7858  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB785B  b0 51             ld (XWA),BC
 	ld	bc, (xix+10)                            ; FB785D  9c 0a 21          ld BC,(XIX+0x0a)
 	ld	xwa, (xiz-8)                            ; FB7860  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7863  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7865  db 89             ld BC,HL
-	add	bc, 0x0180                             ; FB7867  d9 c8 80 01       add BC,0x0180
+	add	bc, DEV104_SUB_FITTING_DECAY           ; FB7867  d9 c8 80 01       add BC,0x0180
 	ld	xwa, (xiz-4)                            ; FB786B  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB786E  b0 51             ld (XWA),BC
 	ld	bc, (xix+12)                            ; FB7870  9c 0c 21          ld BC,(XIX+0x0c)
 	ld	xwa, (xiz-8)                            ; FB7873  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7876  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7878  db 89             ld BC,HL
-	add	bc, 0x01C0                             ; FB787A  d9 c8 c0 01       add BC,0x01c0
+	add	bc, DEV104_MAIN_FITTING_RISE           ; FB787A  d9 c8 c0 01       add BC,0x01c0
 	ld	xwa, (xiz-4)                            ; FB787E  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7881  b0 51             ld (XWA),BC
 	ld	bc, (xix+14)                            ; FB7883  9c 0e 21          ld BC,(XIX+0x0e)
 	ld	xwa, (xiz-8)                            ; FB7886  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7889  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB788B  db 89             ld BC,HL
-	add	bc, 0x0200                             ; FB788D  d9 c8 00 02       add BC,0x0200
+	add	bc, DEV104_SUB_FITTING_RISE            ; FB788D  d9 c8 00 02       add BC,0x0200
 	ld	xwa, (xiz-4)                            ; FB7891  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7894  b0 51             ld (XWA),BC
 	ld	bc, (xix+16)                            ; FB7896  9c 10 21          ld BC,(XIX+0x10)
 	ld	xwa, (xiz-8)                            ; FB7899  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB789C  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB789E  db 89             ld BC,HL
-	add	bc, 0x0240                             ; FB78A0  d9 c8 40 02       add BC,0x0240
+	add	bc, DEV104_BLK_0240                    ; FB78A0  d9 c8 40 02       add BC,0x0240
 	ld	xwa, (xiz-4)                            ; FB78A4  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB78A7  b0 51             ld (XWA),BC
 	ld	bc, (xix+18)                            ; FB78A9  9c 12 21          ld BC,(XIX+0x12)
 	ld	xwa, (xiz-8)                            ; FB78AC  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB78AF  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB78B1  db 89             ld BC,HL
-	add	bc, 0x0280                             ; FB78B3  d9 c8 80 02       add BC,0x0280
+	add	bc, DEV104_SUB_GAIN                    ; FB78B3  d9 c8 80 02       add BC,0x0280
 	ld	xwa, (xiz-4)                            ; FB78B7  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB78BA  b0 51             ld (XWA),BC
 	ld	bc, (xix+20)                            ; FB78BC  9c 14 21          ld BC,(XIX+0x14)
 	ld	xwa, (xiz-8)                            ; FB78BF  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB78C2  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB78C4  db 89             ld BC,HL
-	add	bc, 0x02C0                             ; FB78C6  d9 c8 c0 02       add BC,0x02c0
+	add	bc, DEV104_BLK_02C0                    ; FB78C6  d9 c8 c0 02       add BC,0x02c0
 	ld	xwa, (xiz-4)                            ; FB78CA  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB78CD  b0 51             ld (XWA),BC
 	ld	bc, (xix+22)                            ; FB78CF  9c 16 21          ld BC,(XIX+0x16)
 	ld	xwa, (xiz-8)                            ; FB78D2  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB78D5  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB78D7  db 89             ld BC,HL
-	add	bc, 0x0300                             ; FB78D9  d9 c8 00 03       add BC,0x0300
+	add	bc, DEV104_BLK_0300                    ; FB78D9  d9 c8 00 03       add BC,0x0300
 	ld	xwa, (xiz-4)                            ; FB78DD  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB78E0  b0 51             ld (XWA),BC
 	ld	bc, (xix+24)                            ; FB78E2  9c 18 21          ld BC,(XIX+0x18)
 	ld	xwa, (xiz-8)                            ; FB78E5  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB78E8  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB78EA  db 89             ld BC,HL
-	add	bc, 0x0340                             ; FB78EC  d9 c8 40 03       add BC,0x0340
+	add	bc, DEV104_MAIN_MUTING_Q13             ; FB78EC  d9 c8 40 03       add BC,0x0340
 	ld	xwa, (xiz-4)                            ; FB78F0  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB78F3  b0 51             ld (XWA),BC
 	ld	bc, (xix+26)                            ; FB78F5  9c 1a 21          ld BC,(XIX+0x1a)
 	ld	xwa, (xiz-8)                            ; FB78F8  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB78FB  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB78FD  db 89             ld BC,HL
-	add	bc, 0x0380                             ; FB78FF  d9 c8 80 03       add BC,0x0380
+	add	bc, DEV104_SUB_MUTING_Q13              ; FB78FF  d9 c8 80 03       add BC,0x0380
 	ld	xwa, (xiz-4)                            ; FB7903  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7906  b0 51             ld (XWA),BC
 	ld	bc, (xix+28)                            ; FB7908  9c 1c 21          ld BC,(XIX+0x1c)
 	ld	xwa, (xiz-8)                            ; FB790B  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB790E  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7910  db 89             ld BC,HL
-	add	bc, 0x03C0                             ; FB7912  d9 c8 c0 03       add BC,0x03c0
+	add	bc, DEV104_BLK_03C0                    ; FB7912  d9 c8 c0 03       add BC,0x03c0
 	ld	xwa, (xiz-4)                            ; FB7916  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7919  b0 51             ld (XWA),BC
 	ld	bc, (xix+30)                            ; FB791B  9c 1e 21          ld BC,(XIX+0x1e)
 	ld	xwa, (xiz-8)                            ; FB791E  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7921  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7923  db 89             ld BC,HL
-	add	bc, 0x0400                             ; FB7925  d9 c8 00 04       add BC,0x0400
+	add	bc, DEV104_MAIN_MUTING_Q16             ; FB7925  d9 c8 00 04       add BC,0x0400
 	ld	xwa, (xiz-4)                            ; FB7929  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB792C  b0 51             ld (XWA),BC
 	ld	bc, (xix+32)                            ; FB792E  9c 20 21          ld BC,(XIX+0x20)
 	ld	xwa, (xiz-8)                            ; FB7931  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7934  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7936  db 89             ld BC,HL
-	add	bc, 0x0440                             ; FB7938  d9 c8 40 04       add BC,0x0440
+	add	bc, DEV104_SUB_MUTING_Q16              ; FB7938  d9 c8 40 04       add BC,0x0440
 	ld	xwa, (xiz-4)                            ; FB793C  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB793F  b0 51             ld (XWA),BC
 	ld	bc, (xix+34)                            ; FB7941  9c 22 21          ld BC,(XIX+0x22)
 	ld	xwa, (xiz-8)                            ; FB7944  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7947  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7949  db 89             ld BC,HL
-	add	bc, 0x0480                             ; FB794B  d9 c8 80 04       add BC,0x0480
+	add	bc, DEV104_BLK_0480                    ; FB794B  d9 c8 80 04       add BC,0x0480
 	ld	xwa, (xiz-4)                            ; FB794F  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7952  b0 51             ld (XWA),BC
 	ld	bc, (xix+36)                            ; FB7954  9c 24 21          ld BC,(XIX+0x24)
@@ -2528,7 +2725,7 @@ Dev104_SetChanRegs_01C0_0200_0240:
 	push	xix                                   ; FB7974  3c                push XIX
 	ld	xix, (xiz+10)                           ; FB7975  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB7978  9e 08 23          ld HL,(XIZ+0x08)
-	ld	xbc, 0x00104000                         ; FB797B  41 00 40 10 00    ld XBC,0x00104000
+	ld	xbc, DEV104_BASE                        ; FB797B  41 00 40 10 00    ld XBC,0x00104000
 	ld	(xiz-4), xbc                            ; FB7980  be fc 61          ld (XIZ+0xfc),XBC
 	ld	(xbc), hl                               ; FB7983  b1 53             ld (XBC),HL
 	ld	de, (xix)                               ; FB7985  94 22             ld DE,(XIX)
@@ -2537,21 +2734,21 @@ Dev104_SetChanRegs_01C0_0200_0240:
 	ld	(xiz-8), xbc                            ; FB798C  be f8 61          ld (XIZ+0xf8),XBC
 	ld	(xbc), de                               ; FB798F  b1 52             ld (XBC),DE
 	ld	bc, hl                                  ; FB7991  db 89             ld BC,HL
-	add	bc, 0x01C0                             ; FB7993  d9 c8 c0 01       add BC,0x01c0
+	add	bc, DEV104_MAIN_FITTING_RISE           ; FB7993  d9 c8 c0 01       add BC,0x01c0
 	ld	xwa, (xiz-4)                            ; FB7997  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB799A  b0 51             ld (XWA),BC
 	ld	bc, (xix+14)                            ; FB799C  9c 0e 21          ld BC,(XIX+0x0e)
 	ld	xwa, (xiz-8)                            ; FB799F  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB79A2  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB79A4  db 89             ld BC,HL
-	add	bc, 0x0200                             ; FB79A6  d9 c8 00 02       add BC,0x0200
+	add	bc, DEV104_SUB_FITTING_RISE            ; FB79A6  d9 c8 00 02       add BC,0x0200
 	ld	xwa, (xiz-4)                            ; FB79AA  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB79AD  b0 51             ld (XWA),BC
 	ld	bc, (xix+16)                            ; FB79AF  9c 10 21          ld BC,(XIX+0x10)
 	ld	xwa, (xiz-8)                            ; FB79B2  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB79B5  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB79B7  db 89             ld BC,HL
-	add	bc, 0x0240                             ; FB79B9  d9 c8 40 02       add BC,0x0240
+	add	bc, DEV104_BLK_0240                    ; FB79B9  d9 c8 40 02       add BC,0x0240
 	ld	xwa, (xiz-4)                            ; FB79BD  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB79C0  b0 51             ld (XWA),BC
 	ld	bc, (xix+18)                            ; FB79C2  9c 12 21          ld BC,(XIX+0x12)
@@ -2590,7 +2787,7 @@ Dev104_SetChanRegs_0140_to_0240:
 	push	xix                                   ; FB79D6  3c                push XIX
 	ld	xix, (xiz+10)                           ; FB79D7  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB79DA  9e 08 23          ld HL,(XIZ+0x08)
-	ld	xbc, 0x00104000                         ; FB79DD  41 00 40 10 00    ld XBC,0x00104000
+	ld	xbc, DEV104_BASE                        ; FB79DD  41 00 40 10 00    ld XBC,0x00104000
 	ld	(xiz-4), xbc                            ; FB79E2  be fc 61          ld (XIZ+0xfc),XBC
 	ld	(xbc), hl                               ; FB79E5  b1 53             ld (XBC),HL
 	ld	de, (xix)                               ; FB79E7  94 22             ld DE,(XIX)
@@ -2599,35 +2796,35 @@ Dev104_SetChanRegs_0140_to_0240:
 	ld	(xiz-8), xbc                            ; FB79EE  be f8 61          ld (XIZ+0xf8),XBC
 	ld	(xbc), de                               ; FB79F1  b1 52             ld (XBC),DE
 	ld	bc, hl                                  ; FB79F3  db 89             ld BC,HL
-	add	bc, 0x0140                             ; FB79F5  d9 c8 40 01       add BC,0x0140
+	add	bc, DEV104_MAIN_FITTING_DECAY          ; FB79F5  d9 c8 40 01       add BC,0x0140
 	ld	xwa, (xiz-4)                            ; FB79F9  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB79FC  b0 51             ld (XWA),BC
 	ld	bc, (xix+10)                            ; FB79FE  9c 0a 21          ld BC,(XIX+0x0a)
 	ld	xwa, (xiz-8)                            ; FB7A01  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7A04  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7A06  db 89             ld BC,HL
-	add	bc, 0x0180                             ; FB7A08  d9 c8 80 01       add BC,0x0180
+	add	bc, DEV104_SUB_FITTING_DECAY           ; FB7A08  d9 c8 80 01       add BC,0x0180
 	ld	xwa, (xiz-4)                            ; FB7A0C  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7A0F  b0 51             ld (XWA),BC
 	ld	bc, (xix+12)                            ; FB7A11  9c 0c 21          ld BC,(XIX+0x0c)
 	ld	xwa, (xiz-8)                            ; FB7A14  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7A17  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7A19  db 89             ld BC,HL
-	add	bc, 0x01C0                             ; FB7A1B  d9 c8 c0 01       add BC,0x01c0
+	add	bc, DEV104_MAIN_FITTING_RISE           ; FB7A1B  d9 c8 c0 01       add BC,0x01c0
 	ld	xwa, (xiz-4)                            ; FB7A1F  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7A22  b0 51             ld (XWA),BC
 	ld	bc, (xix+14)                            ; FB7A24  9c 0e 21          ld BC,(XIX+0x0e)
 	ld	xwa, (xiz-8)                            ; FB7A27  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7A2A  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7A2C  db 89             ld BC,HL
-	add	bc, 0x0200                             ; FB7A2E  d9 c8 00 02       add BC,0x0200
+	add	bc, DEV104_SUB_FITTING_RISE            ; FB7A2E  d9 c8 00 02       add BC,0x0200
 	ld	xwa, (xiz-4)                            ; FB7A32  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7A35  b0 51             ld (XWA),BC
 	ld	bc, (xix+16)                            ; FB7A37  9c 10 21          ld BC,(XIX+0x10)
 	ld	xwa, (xiz-8)                            ; FB7A3A  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7A3D  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7A3F  db 89             ld BC,HL
-	add	bc, 0x0240                             ; FB7A41  d9 c8 40 02       add BC,0x0240
+	add	bc, DEV104_BLK_0240                    ; FB7A41  d9 c8 40 02       add BC,0x0240
 	ld	xwa, (xiz-4)                            ; FB7A45  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7A48  b0 51             ld (XWA),BC
 	ld	bc, (xix+18)                            ; FB7A4A  9c 12 21          ld BC,(XIX+0x12)
@@ -2656,7 +2853,7 @@ Dev104_SetChanRegs_0140_to_0240:
 Dev104_WriteChanReg0:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7A58  ee 0c 00 00       link XIZ,0x0000
 	push	xix                                   ; FB7A5C  3c                push XIX
-	ld	xix, 0x00104000                         ; FB7A5D  44 00 40 10 00    ld XIX,0x00104000
+	ld	xix, DEV104_BASE                        ; FB7A5D  44 00 40 10 00    ld XIX,0x00104000
 	ld	bc, (xiz+8)                             ; FB7A62  9e 08 21          ld BC,(XIZ+0x08)
 	ld	(xix), bc                               ; FB7A65  b4 51             ld (XIX),BC
 	ld	xbc, (xiz+10)                           ; FB7A67  ae 0a 21          ld XBC,(XIZ+0x0a)
@@ -2691,8 +2888,8 @@ Dev104_SetChanRegs_00C0_0100_0240:
 	ld	xix, (xiz+10)                           ; FB7A7A  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB7A7D  9e 08 23          ld HL,(XIZ+0x08)
 	ld	de, hl                                  ; FB7A80  db 8a             ld DE,HL
-	add	de, 192                                ; FB7A82  da c8 c0 00       add DE,0x00c0
-	ld	xbc, 0x00104000                         ; FB7A86  41 00 40 10 00    ld XBC,0x00104000
+	add	de, DEV104_POSITION                    ; FB7A82  da c8 c0 00       add DE,0x00c0
+	ld	xbc, DEV104_BASE                        ; FB7A86  41 00 40 10 00    ld XBC,0x00104000
 	ld	(xiz-4), xbc                            ; FB7A8B  be fc 61          ld (XIZ+0xfc),XBC
 	ld	(xbc), de                               ; FB7A8E  b1 52             ld (XBC),DE
 	ld	de, (xix+6)                             ; FB7A90  9c 06 22          ld DE,(XIX+0x06)
@@ -2701,14 +2898,14 @@ Dev104_SetChanRegs_00C0_0100_0240:
 	ld	(xiz-8), xbc                            ; FB7A98  be f8 61          ld (XIZ+0xf8),XBC
 	ld	(xbc), de                               ; FB7A9B  b1 52             ld (XBC),DE
 	ld	bc, hl                                  ; FB7A9D  db 89             ld BC,HL
-	add	bc, 0x0100                             ; FB7A9F  d9 c8 00 01       add BC,0x0100
+	add	bc, DEV104_BLK_0100                    ; FB7A9F  d9 c8 00 01       add BC,0x0100
 	ld	xwa, (xiz-4)                            ; FB7AA3  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7AA6  b0 51             ld (XWA),BC
 	ld	bc, (xix+8)                             ; FB7AA8  9c 08 21          ld BC,(XIX+0x08)
 	ld	xwa, (xiz-8)                            ; FB7AAB  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7AAE  b0 51             ld (XWA),BC
 	ld	bc, hl                                  ; FB7AB0  db 89             ld BC,HL
-	add	bc, 0x0240                             ; FB7AB2  d9 c8 40 02       add BC,0x0240
+	add	bc, DEV104_BLK_0240                    ; FB7AB2  d9 c8 40 02       add BC,0x0240
 	ld	xwa, (xiz-4)                            ; FB7AB6  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FB7AB9  b0 51             ld (XWA),BC
 	ld	bc, (xix+18)                            ; FB7ABB  9c 12 21          ld BC,(XIX+0x12)
@@ -2739,8 +2936,8 @@ Dev104_SetChanRegs_00C0_0100:
 	pushw	hl                                   ; FB7ACD  2b                push HL
 	push	xix                                   ; FB7ACE  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7ACF  9e 08 23          ld HL,(XIZ+0x08)
-	add	hl, 192                                ; FB7AD2  db c8 c0 00       add HL,0x00c0
-	ld	xix, 0x00104000                         ; FB7AD6  44 00 40 10 00    ld XIX,0x00104000
+	add	hl, DEV104_POSITION                    ; FB7AD2  db c8 c0 00       add HL,0x00c0
+	ld	xix, DEV104_BASE                        ; FB7AD6  44 00 40 10 00    ld XIX,0x00104000
 	ld	(xix), hl                               ; FB7ADB  b4 53             ld (XIX),HL
 	ld	xbc, (xiz+10)                           ; FB7ADD  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	hl, (xbc+6)                             ; FB7AE0  99 06 23          ld HL,(XBC+0x06)
@@ -2749,7 +2946,7 @@ Dev104_SetChanRegs_00C0_0100:
 	ld	(xiz-4), xwa                            ; FB7AE7  be fc 60          ld (XIZ+0xfc),XWA
 	ld	(xwa), hl                               ; FB7AEA  b0 53             ld (XWA),HL
 	ld	bc, (xiz+8)                             ; FB7AEC  9e 08 21          ld BC,(XIZ+0x08)
-	add	bc, 0x0100                             ; FB7AEF  d9 c8 00 01       add BC,0x0100
+	add	bc, DEV104_BLK_0100                    ; FB7AEF  d9 c8 00 01       add BC,0x0100
 	ld	(xix), bc                               ; FB7AF3  b4 51             ld (XIX),BC
 	ld	xbc, (xiz+10)                           ; FB7AF5  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	wa, (xbc+8)                             ; FB7AF8  99 08 20          ld WA,(XBC+0x08)
@@ -2779,8 +2976,8 @@ Dev104_SetChanRegs_0140_0180:
 	pushw	hl                                   ; FB7B09  2b                push HL
 	push	xix                                   ; FB7B0A  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7B0B  9e 08 23          ld HL,(XIZ+0x08)
-	add	hl, 0x0140                             ; FB7B0E  db c8 40 01       add HL,0x0140
-	ld	xix, 0x00104000                         ; FB7B12  44 00 40 10 00    ld XIX,0x00104000
+	add	hl, DEV104_MAIN_FITTING_DECAY          ; FB7B0E  db c8 40 01       add HL,0x0140
+	ld	xix, DEV104_BASE                        ; FB7B12  44 00 40 10 00    ld XIX,0x00104000
 	ld	(xix), hl                               ; FB7B17  b4 53             ld (XIX),HL
 	ld	xbc, (xiz+10)                           ; FB7B19  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	hl, (xbc+10)                            ; FB7B1C  99 0a 23          ld HL,(XBC+0x0a)
@@ -2789,7 +2986,7 @@ Dev104_SetChanRegs_0140_0180:
 	ld	(xiz-4), xwa                            ; FB7B23  be fc 60          ld (XIZ+0xfc),XWA
 	ld	(xwa), hl                               ; FB7B26  b0 53             ld (XWA),HL
 	ld	bc, (xiz+8)                             ; FB7B28  9e 08 21          ld BC,(XIZ+0x08)
-	add	bc, 0x0180                             ; FB7B2B  d9 c8 80 01       add BC,0x0180
+	add	bc, DEV104_SUB_FITTING_DECAY           ; FB7B2B  d9 c8 80 01       add BC,0x0180
 	ld	(xix), bc                               ; FB7B2F  b4 51             ld (XIX),BC
 	ld	xbc, (xiz+10)                           ; FB7B31  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	wa, (xbc+12)                            ; FB7B34  99 0c 20          ld WA,(XBC+0x0c)
@@ -2815,8 +3012,8 @@ Dev104_SetChanReg_0280:
 	pushw	hl                                   ; FB7B45  2b                push HL
 	push	xix                                   ; FB7B46  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7B47  9e 08 23          ld HL,(XIZ+0x08)
-	add	hl, 0x0280                             ; FB7B4A  db c8 80 02       add HL,0x0280
-	ld	xix, 0x00104000                         ; FB7B4E  44 00 40 10 00    ld XIX,0x00104000
+	add	hl, DEV104_SUB_GAIN                    ; FB7B4A  db c8 80 02       add HL,0x0280
+	ld	xix, DEV104_BASE                        ; FB7B4E  44 00 40 10 00    ld XIX,0x00104000
 	ld	(xix), hl                               ; FB7B53  b4 53             ld (XIX),HL
 	ld	xbc, (xiz+10)                           ; FB7B55  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	wa, (xbc+20)                            ; FB7B58  99 14 20          ld WA,(XBC+0x14)
@@ -3843,8 +4040,8 @@ Dev10C_ResetAllChannels:
 	lda	xbc, (0xFE12B5:24)                       ; FB80E8  f2 b5 12 fe 31    lda XBC,0xfe12b5
 	push	xbc                                   ; FB80ED  39                push XBC
 	calr (0xFB7715 - 0xFB80F1)                 ; FB80EE  1e 24 f6          calr 0xfb7715
-	ld	xix, 0x00104000                         ; FB80F1  44 00 40 10 00    ld XIX,0x00104000
-	ldw (xix), 0x0800                          ; FB80F6  b4 02 00 08       ld (XIX),0x0800
+	ld	xix, DEV104_BASE                        ; FB80F1  44 00 40 10 00    ld XIX,0x00104000
+	ldw (xix), DEV104_BLK_0800                 ; FB80F6  b4 02 00 08       ld (XIX),0x0800
 	ld	bc, (0xFE1313:24)                        ; FB80FA  d2 13 13 fe 21    ld BC,(0xfe1313)
 	ld	(xix+2), bc                             ; FB80FF  bc 02 51          ld (XIX+0x02),BC
 	ld	xix, 0x0010C000                         ; FB8102  44 00 c0 10 00    ld XIX,0x0010c000
