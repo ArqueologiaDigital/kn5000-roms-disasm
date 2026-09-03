@@ -117,9 +117,17 @@ def fold(x):
     return (0x8000 - (x & 0x7FFF)) if (x & 0x8000) else (x + 0x8000)
 
 
+def _folded(t):
+    return [(0x8000 - (x & 0x7FFF)) if (x & 0x8000) else (x + 0x8000) for x in t]
+
+
 def sm15(x):
     """The same word as a SIGNED value: fold(x) - 0x8000, i.e. sign-magnitude."""
     return fold(x) - 0x8000
+
+
+FA_f = _folded(FA)
+FB_f = _folded(FB)
 
 
 # ---------------------------------------------------------------- section 1
@@ -233,24 +241,42 @@ def sec3_bilinear():
     check('implied fs is 44100 to within 1 cent', abs(1200 * math.log2(44100 / mean)) < 1.0, True)
     say('    -> registers 0x0400 / 0x0440 carry a1 of a one-pole lowpass whose CUTOFF IS A')
     say('       MIDI NOTE: index i <-> note i+36, C2 (65.4 Hz) at i=0, 16.7 kHz at i=96.')
-    say('    -> registers 0x01C0 / 0x0200 carry fold(that word) = b0 = (a1+1)/2 = K/(1+K),')
-    say('       the MATCHING FEEDFORWARD coefficient, scaled by Rise[v] in [0,1).')
-    # FE05C9: same family, saturating cutoff
-    a_tail = sm15(FB[127])
-    check('Curve_FE05C9 tail is exactly a1 = -3/4 (-24580/32768)', a_tail, -24580)
-    fmax = bilinear_f(FB[127])
-    say('    Curve_FE05C9 read the same way: a1 runs %.6f .. %.6f, so its cutoff RISES to a'
-        % (sm15(FB[0]) / 32768.0, a_tail / 32768.0))
-    say('    CEILING of %.6f*fs = %.1f Hz at 44.1 kHz, the deficit halving every 12 steps.'
-        % (fmax, fmax * 44100))
-    defic = [fmax - bilinear_f(FB[i]) for i in range(10, 100)]
-    ratios = [defic[k] / defic[k + 12] for k in range(0, 50, 12)]
-    say('    (fmax - f)(i) / (fmax - f)(i+12) at i=10,22,34,46: %s'
-        % ' '.join('%.3f' % r for r in ratios))
-    check('  those ratios are all within 6% of 2', all(1.88 < r < 2.12 for r in ratios), True)
-    say('    ** EXACT CLOSED FORM FOR FE05C9 IS NOT ESTABLISHED.  What is measured is that it')
-    say('       is the same one-pole family with an ABSOLUTE cutoff ceiling, where FE04C9\'s')
-    say('       cutoff tracks the index without limit.')
+    say('    -> registers 0x01C0 / 0x0200 / 0x0240 carry fold(that word) x Rise[v] >> 16,')
+    say('       i.e. the SAME coefficient scaled by 0 .. 0.996.  Whether the chip reads that')
+    say('       as a lower cutoff or as a gain folded into the coefficient is NOT decided.')
+    # FE05C9: the SAME cutoff, in a different encoding.  ** RETRACTION, see below.
+    def gk(k):
+        return math.tan(math.pi * 440 * 2 ** ((k - 33) / 12.0) / 44100.0)
+    eF = [FA_f[k] - round(65536 * gk(k) / (1 + gk(k))) for k in range(9, 101)]
+    eG = [FB_f[k] - round(8192 * (1 - 1 / (128 * gk(k)))) for k in range(9, 101)]
+    check('fold(Curve_FE04C9)[k] = round(65536*g/(1+g)), g = tan(pi*440*2^((k-33)/12)/44100)',
+          max(abs(x) for x in eF), 1)
+    check('fold(Curve_FE05C9)[k] = round(8192*(1 - 1/(128*g))), THE SAME g',
+          max(abs(x) for x in eG), 5)
+    worst = worst60 = 0.0
+    for k in range(9, 101):
+        tF = math.atan(FA_f[k] / (65536 - FA_f[k]))
+        r = 1 - FB_f[k] / 8192.0
+        tG = math.atan(1 / (128 * r)) if r > 0 else math.pi / 2
+        c = abs(1200 * math.log2(tF / tG))
+        worst = max(worst, c)
+        if k <= 60:
+            worst60 = max(worst60, c)
+    say('    the two tables imply the SAME prewarped cutoff theta to %.1f cents worst case'
+        % worst)
+    say('    over k=9..100, and %.1f cents over k=9..60 where FE05C9 still has resolution.'
+        % worst60)
+    check('  theta agreement is under 20 cents over the whole live band', worst < 20.0, True)
+    say('    ** SO Curve_FE05C9 IS NOT A SECOND CUTOFF.  It is the SAME cutoff in a second')
+    say('       encoding: entry for entry, (1 - G/8192) * g = 1/128.  Registers 0x0340 /')
+    say('       0x0380 / 0x03C0 are COMPUTABLE from 0x0400 / 0x0440 / 0x0480; an emulator has')
+    say('       ONE degree of freedom per section there, not two.')
+    say('    ** RETRACTION, kept visible.  An earlier revision of this probe read FE05C9 with')
+    say('       the g/(1+g) formula too and reported "a cutoff saturating at 0.045142*fs =')
+    say('       1990.8 Hz".  That number is an ARTEFACT of forcing the wrong formula on the')
+    say('       right bytes: 8188/65536 inverted through g/(1+g) is 0.0451 whatever it means.')
+    say('       The correct reading is `notes/FINDINGS-l7a1429-curve-tables.md` \u00a71, lane')
+    say('       w19/lsi-curves, reproduced above from the ROM.')
 
 
 # ---------------------------------------------------------------- section 4
