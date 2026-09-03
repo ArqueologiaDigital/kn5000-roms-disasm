@@ -389,6 +389,72 @@ def cmd_editors(a, order):
     return hits, tot
 
 
+# ---------------------------------------------------------------- section 7
+def senders(a):
+    """The tone-message BUILDERS, derived from the ROM: every `calr` (0x1E,
+    3 bytes, PC-relative from the next instruction) whose target is
+    sub_FD6132 -- the routine that posts a built message -- then the
+    `link XIZ,imm16` (0xEE 0x0C) that opens the routine containing it."""
+    POST = 0xFD6132
+    out = []
+    for o in range(A_BASE, A_BASE + len(a.d) - 3):
+        if a[o] != 0x1E:
+            continue
+        d = a.u16(o + 1)
+        if d >= 0x8000:
+            d -= 0x10000
+        if o + 3 + d != POST:
+            continue
+        k = o
+        while k > A_BASE and not (a[k] == 0xEE and a[k + 1] == 0x0C):
+            k -= 1
+        if k not in out:
+            out.append(k)
+    return sorted(out)
+
+
+def param_census(a, imm):
+    """Every call site of every sender that carries `pushw <imm>` (0x0B lo hi)
+    in the 30 bytes before the `call` (0x1D + 24-bit target)."""
+    S = set(senders(a))
+    pat = bytes([0x0B, imm, 0x00])
+    hits, sites = [], 0
+    for o in range(A_BASE, A_BASE + len(a.d) - 4):
+        if a[o] != 0x1D:
+            continue
+        t = a[o + 1] | a[o + 2] << 8 | a[o + 3] << 16
+        if t not in S:
+            continue
+        sites += 1
+        if pat in a.slice(o - 30, 30):
+            hits.append((o, t))
+    return sites, hits
+
+
+def cmd_senders(a):
+    S = senders(a)
+    print()
+    print("=== 7. is p15 (wave-select byte +0x0F) an editor parameter AT ALL?")
+    print("    prom_a's tone-message builders, derived from the ROM as the")
+    print("    routines containing a `calr sub_FD6132`: %d of them," % len(S))
+    print("    %s" % " ".join("0x%06X" % x for x in S))
+    for imm, what in ((0x0F, "p15"), (0x0D, "p13 -- the positive control"),
+                      (0x13, "p19 -- the positive control")):
+        sites, hits = param_census(a, imm)
+        print("    `pushw 0x%02X` within 30 bytes before a sender call (%s):"
+              % (imm, what))
+        print("        %d of %d call sites%s" % (len(hits), sites,
+              ("  ->  " + " ".join("0x%06X" % h[0] for h in hits)) if hits else ""))
+    print("    ⚠ NULL for the window: prom_a holds %d `0B xx 00` triples in all,"
+          % sum(1 for o in range(A_BASE, A_BASE + len(a.d) - 3)
+                if a[o] == 0x0B and a[o + 2] == 0x00))
+    print("    so a 30-byte window catching one by chance is not rare; what makes")
+    print("    the p15 count meaningful is that the SAME window catches p13 and")
+    print("    p19 at the sites the pages use, and catches 0x0F exactly once --")
+    print("    at 0xFD5F12, whose selector immediate is 0x00, i.e. arm 1, the")
+    print("    300-byte part record and not the 43-byte wave-select record.")
+
+
 # ---------------------------------------------------------------- nulls
 def cmd_nulls(b):
     print("=== NULL 1 -- is the 40-byte stride FITTED, or is it the hardware's?")
@@ -569,6 +635,12 @@ def selftest(a, b):
         allp |= set(order[code].values())
     allp |= {0x0B, 0x0D}                      # the two named single-field editors
     ck("S21 wave-select byte +0x0F is on no MODELING page", 0x0F not in allp)
+    ck("S23 prom_a has twenty tone-message builders", len(senders(a)) == 20)
+    _n, h0f = param_census(a, 0x0F)
+    ck("S24 exactly one sender call site carries pushw 0x0F, at 0xFD5F12",
+       len(h0f) == 1 and h0f[0][0] == 0xFD5F12)
+    ck("S25 that site's selector immediate is 0x00 (arm 1, not the wave-select record)",
+       a.slice(0xFD5F0F, 3) == b"\x0b\x00\x00")
     ck("S22 the pages cover 0x0B,0x0D-0x28 minus 0x0F,0x14 and 0x29-0x2A",
        allp == {0x0B, 0x0D, 0x0E, 0x10, 0x11, 0x12, 0x13, 0x15, 0x16, 0x17,
                 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21,
@@ -593,6 +665,7 @@ def main():
     print()
     order = cmd_prom_a(a)
     cmd_editors(a, order)
+    cmd_senders(a)
 
 
 if __name__ == "__main__":

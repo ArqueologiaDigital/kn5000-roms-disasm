@@ -11,9 +11,9 @@ committed script:
 
 ```
 cd <tree>/wsa1
-python3 notes/wsa1_toneedit_pages.py            # sections 1-6, printed
+python3 notes/wsa1_toneedit_pages.py            # sections 1-7, printed
 python3 notes/wsa1_toneedit_pages.py --nulls    # nulls 1-3
-python3 notes/wsa1_toneedit_pages.py --selftest # FAILURES: 0   (22 checks)
+python3 notes/wsa1_toneedit_pages.py --selftest # FAILURES: 0   (25 checks)
 ```
 
 No `.s` file is an input to it.  Where a claim is quoted from another lane's
@@ -88,9 +88,16 @@ screen entirely:
   INTERACTION` (`0xF020CF`-`0xF02101`), and `GROUP` is the second column.
 
 So p11 bits 7:6 encode which layers are **grouped together**, drawn as a bracket.
-GRADE **STRONG** (a drawn caption plus a measured five-state control plus a
-graphic that changes with it).  `RESO MODE` is a real caption, but it belongs to
-p21/p31 -- see 1b and section 4.
+The factory data agrees: over the 392 melodic wave-select records of section 4b,
+p11 takes only `{0x00, 0x40, 0x80}` and never `0xC0` -- exactly the three values
+that encoder can emit.  GRADE **STRONG** (a drawn caption, a measured five-state
+control, a graphic that changes with it, and a factory-data signature).
+
+⚠ **This field is what the sibling lane calls `RESO MODE`** when it reports that
+register `0x0300` is a part-level enable gated by "a non-zero mode".  Its
+measurement stands; the name it used is the one being corrected here, and once the
+field is read as `GROUP` its result and this one fit together -- see section 4c.
+`RESO MODE` is a real caption, but it belongs to p21/p31 bit 7 -- see section 4e.
 
 ### 1b. The `LinCoef_*_KeyRamp_Q5_128` tables are **TOUCH** (velocity), not key ramps
 
@@ -335,7 +342,7 @@ draws; **it is not a claim about the physical quantity**.
 | `0x0000` | bit 15 <- p21 bit 7, bit 14 <- p31 bit 7, bit 7 <- sign(p33); bits 6:4 from elsewhere | bits 15/14 = MAIN / SUB **`RESO MODE`** | **STRONG** |
 | `0x0040` | p29, p30 (+p26/p27 when p25 bit 7) | MAIN `KEY SHIFT` + `DETUNE` | **PROVEN** |
 | `0x0080` | p41, p42 (+p38/p39) | SUB `KEY SHIFT` + `DETUNE` | **PROVEN** |
-| `0x00C0` | p13, p16, p17, p18; key-follow gated by p14 bit 7 | `P0SITI0N`, its `TOUCH`, and `P0SITI0N M0VEMENT` `WIDTH`/`SPEED`/`S/H`; the gate is `FORMANT` | **PROVEN** |
+| `0x00C0` | p13, p16, p17, p18; key-follow gated by p14 bit 7 | `P0SITI0N`, its `TOUCH`, and `P0SITI0N M0VEMENT` `WIDTH`/`SPEED`/`S/H`; the gate is `FORMANT` (section 4d) | **PROVEN** |
 | `0x0100` | -- | a constant | (constant) |
 | `0x0140` | p21, p23 | MAIN `FITTING` + its `TOUCH DEPTH` | **PROVEN** |
 | `0x0180` | p31, p34 | SUB `FITTING` + its `TOUCH DEPTH` | **PROVEN** |
@@ -382,13 +389,70 @@ twenty, exactly ONE pushes `0x0F` in the parameter slot -- `0xFD5F12`, with
 selector `0x00`, which is the 300-byte part record on a different screen.
 
 `p15` sits inside the block `ToneStage_ApplyWaveSelTailPreset` overwrites when the
-RESONATOR TYPE changes (bytes 13..42), and its factory value is 84 in 123 of 133
-records.  So it is **a preset constant, not a control**, and the three
+RESONATOR TYPE changes (bytes 13..42).  ⚠ The old note said "84 in 123 of 133
+records"; that denominator is `dev104_topology_probe.py`'s **filtered** 133-record
+set, which the sibling lane has since shown selects on a property of ELEMENT
+BLOCKS.  Over the corpus of section 4b, p15 takes **six** values,
+`{51, 53, 65, 67, 70, 84}`, and its bit 7 is clear in all 392 -- i.e. it always
+lies inside the 44..96 clamp the packer applies, and it is not a constant.  The
+argument does not need it to be: what makes `0x03C0`/`0x0480` unnameable is that
+no editor writes p15, not what its values are.  So it is **a preset constant, not a control**, and the three
 unassigned captions `DEPTH`, `FORMANT` and `INTERACTION GAIN` were never candidates
 for it.  The old note's 3! six-way choice was a false dilemma: the three captions
 belong to p14, p14 bit 7 and p19, and `0x03C0`/`0x0480` belong to none of them.
 
-### 4b. `FORMANT` = `FIX`/`MOVE`, and the packer uses that exact bit -- PROVEN
+### 4b. ⚠ THE FACTORY DATA, WITH ITS DENOMINATOR STATED
+
+Every rate below is over **one** population, and the definition is part of the
+number: the **392 wave-select records** `notes/wsa1_tone_record_probe.py --wavesel`
+reaches from the **223 melodic tone records** prom_d's 17-byte-name chain yields on
+a `217 + 124*N` stride.  ⚠ That is a FILTERED population too -- it is melodic
+tones only, and it is not the sibling lane's loose 459-tone set.  A rate quoted
+through it is a rate about melodic factory tones and nothing wider.
+
+| parameter | field | over 392 melodic wave-select records |
+|---|---|---|
+| p11 whole byte | `RESONATOR TYPE` + `GROUP` | only `{0x00, 0x40, 0x80}` -- bit 7 set in 13.  Never `0xC0`, which is exactly the three values the MODELING top's `GROUP` encoder can emit (section 1a) |
+| p14 bit 7 | `FORMANT` | set in **293** of 392 -- `MOVE` in 293, `FIX` in 99 |
+| p14 bits 0-6 | `DEPTH` | 12 distinct values |
+| p15 | (no editor field) | `{51, 53, 65, 67, 70, 84}`, bit 7 clear in all 392 |
+| p19 | `INTERACTION GAIN` | `{0, 50, 70, 80, 90, 100, 127}` |
+| p21 / p31 bit 7 | `RESO MODE` | ⚠ set in **0** of 392 |
+| p22 / p32 bit 7 | `RESO SCALE` | set in **346** of 392 |
+| p33 | `SUB GAIN` | `{0, 70, 80, 100}` |
+| p36 | `SUB GAIN` touch | 0 in all 392 |
+
+⚠ **The `RESO MODE` row is a limitation of this population, NOT a finding.**  Zero
+of 392 does not say the control is unused; it says this corpus contains no tone
+that uses it, and the sibling lane's wider census finds tones outside it.  Nothing
+in this note rests on that row.  ★ The `GROUP` row, by contrast, is a real check:
+the encoder at `0xFD422B` can produce `0x00`, `0x40` and `0x80` and never `0xC0`,
+and the factory data contains exactly those three and never `0xC0`.
+
+### 4c. ★ `INTERACTION GAIN` and the `0x0300` gate -- the sibling lane's result, reconciled
+
+The sibling lane reports that register `0x0300` is a **part-level mode enable**,
+zero unless some element has a non-zero mode, and that the eight factory tones
+which open it are all pads.  ⚠ The "mode" it means is **bits 7:6 of `Q[+0x0B]`** --
+the field section 1a shows is the MODELING top's **`GROUP`**, not `RESO MODE`.  The
+two readings then fit together exactly:
+
+* `0x0300`'s VALUE is `Curve_Exp2Gain_U8_128[p19]`, and p19's caption is
+  **`INTERACTION GAIN`** (section 3a, five-of-five row alignment);
+* `0x0300` is zero unless word 0's bits 6:4 are set, i.e. unless something is
+  enabled at part level;
+* the control that is a part-level, multi-element enable is `GROUP`, and the
+  MODELING top's own bottom legend names its five columns
+  `ON/OFF  GROUP  DRIVER  RESONATOR  INTERACTION`.
+
+**A gain that only exists once layers are grouped, on a screen whose grouping
+control decides which layers interact, captioned `INTERACTION GAIN`.**  That gives
+the name a mechanism as well as a caption, which is why section 4 grades `0x0300`
+STRONG rather than WEAK.  ⚠ What is NOT traced here is the path from p11 bits 7:6
+to word 0's bits 6:4 -- section 6 still lists that as open, and this paragraph is a
+reconciliation of two measurements, not a third one.
+
+### 4d. `FORMANT` = `FIX`/`MOVE`, and the packer uses that exact bit -- PROVEN
 
 `Pack104_StageRegs_00C0_0100_0240` reads the tone record's byte `+0x0E` and tests
 **bit 7**:
@@ -418,7 +482,7 @@ matches the caption: `FIX` means the resonator position does **not** follow the
 key, `MOVE` means it does.  A formant that is fixed or moves with the note is what
 that control is for.
 
-### 4c. `RESO MODE` = an octave, and register `0x0000`'s top two bits
+### 4e. `RESO MODE` = an octave, and register `0x0000`'s top two bits
 
 `Pack104_UnpackWaveSelRec_ToSubRecord` tests p21 bit 7 and p31 bit 7 and does two
 things with each:
@@ -478,8 +542,11 @@ consumers); **PROVEN** for the arithmetic.
 
 * **Register `0x0000` bits 6:4**, which gate `0x0300` (`INTERACTION GAIN`).  The old
   note's section 7 already retracted `0xFC4D27`/`0xFC7DE9` as their writers.  The
-  MODELING top's `ON/OFF` and `GROUP` columns are the obvious lead -- `0xFC5B48`
-  reads `P[+0x01]` bits 7:6 and branches three ways -- but nothing here measures it.
+  MODELING top's `GROUP` column is now the named lead (section 4c): the sibling
+  lane measured that `0x0300` opens only when some element's `Q[+0x0B]` bits 7:6
+  are non-zero, and `0xFC5B48` reads `P[+0x01]` bits 7:6 and branches three ways.
+  What is still missing is the instruction that carries those bits into word 0
+  bits 6:4.
 * **What p22 bit 7 (`RESO SCALE`) does to the coefficients.**  It reaches
   `R[+0x1A]` (`index_bias_A`), whose writer this lane did not locate.  Until that is
   found, `RESO SCALE` is a named control with no traced effect.

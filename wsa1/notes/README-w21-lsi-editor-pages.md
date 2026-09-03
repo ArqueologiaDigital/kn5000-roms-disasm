@@ -6,13 +6,13 @@ One script, and the question it answers. It reads only
 
 | script | the question it answers | command |
 |---|---|---|
-| `notes/wsa1_toneedit_pages.py` | *Which editor page, and which field of it, does each tone-edit parameter of the 0x00104000 (L7A1429) modelling LSI belong to?* Reads prom_b's two 48-entry screen-dispatch tables and shows that code `0xC0+k` aliases `0xA0+k`; walks each MODELING page's paint routine for the display lists it runs; decodes every drawn value and fixed-pitch caption into a screen coordinate using the SED1330's own 40-byte line stride; then decodes, from prom_a's bytes, the ordered read-back run each page's ENTER routine fires and the eight `(RAM index, parameter)` pairs its per-field editors name, and compares the two. | `python3 notes/wsa1_toneedit_pages.py` · `--nulls` · `--selftest` |
+| `notes/wsa1_toneedit_pages.py` | *Which editor page, and which field of it, does each tone-edit parameter of the 0x00104000 (L7A1429) modelling LSI belong to?* Reads prom_b's two 48-entry screen-dispatch tables and shows that code `0xC0+k` aliases `0xA0+k`; walks each MODELING page's paint routine for the display lists it runs; decodes every drawn value and fixed-pitch caption into a screen coordinate using the SED1330's own 40-byte line stride; then decodes, from prom_a's bytes, the ordered read-back run each page's ENTER routine fires and the eight `(RAM index, parameter)` pairs its per-field editors name, and compares the two. Section 7 derives prom_a's twenty tone-message builders from the ROM (the routines containing a `calr sub_FD6132`) and censuses their 258 call sites for the parameter immediate, which is what establishes that wave-select byte `+0x0F` is on no editor page. | `python3 notes/wsa1_toneedit_pages.py` · `--nulls` · `--selftest` |
 
 **What the signal is, and what a pass means.** The page↔parameter map is read
 off two things that must agree: the ORDER of a page's read-back requests (the
 reply handler stores reply *n* at `((u8 *)0x27A6)[n]`) and the immediates the
 per-field editors carry. Section 6 of the printed output prints one line per
-editor binding; a pass is **8 of 8 AGREE**. `--selftest` is 22 checks and
+editor binding; a pass is **8 of 8 AGREE**. `--selftest` is 25 checks and
 currently reports `FAILURES: 0`; it also re-reads the PAGE1/3 grid (two rows at
 display rows 156 and 187, five columns at x 48/88/128/160/208) and the `MAIN`
 and `SUB` row labels at pixel y 152 and 183, which is the MAIN/SUB direction
