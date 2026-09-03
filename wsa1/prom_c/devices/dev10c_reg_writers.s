@@ -18,6 +18,186 @@
 ; ★ This banner also carries the round-4 NAMING RETRACTION that fixes the
 ; Dev10C_ prefix; keeping it with the driver it governs is the point.
 ;
+;
+; ==============================================================================
+; ★★ WAVE 17, 2026-09-03 -- THE 0x0010C000 PER-CHANNEL REGISTER MAP, IN ONE PLACE
+;    AND WITH A GRADE ON EVERY LINE
+; ==============================================================================
+; ADDED, not replacing.  The evidence for every row is already in this tree -- in
+; the banners of prom_c/devices/dev10c_dev104_drivers.s, in
+; notes/FINDINGS-prom_c-dev10c-register-meanings.md and in
+; notes/FINDINGS-prom_c-dev10c-sibling-register-map.md.  What was missing was one
+; table a reader can hold in their head, with the grade on each row rather than in
+; a paragraph three files away.  Nothing here is a new identification.
+;
+; ⚠ HOW TO READ THE GRADES.
+;   PROVEN        the instructions say it: an operand, a mask, a literal, a table
+;                 with a closed form checked entry by entry.
+;   STRONG        a decode with one step that rests on something outside these
+;                 instructions -- a unit fixed elsewhere in this image, or the
+;                 KN5000 sub-CPU agreeing where it has been calibrated against
+;                 five registers this image decoded independently.
+;   WEAK          consistent, and could be otherwise.  Not rounded up.
+;   UNIDENTIFIED  no statement of any kind.  Twelve of the twenty-two rows.
+;
+; ------------------------------------------------------------------------------
+; THE PORT
+; ------------------------------------------------------------------------------
+;   0x0010C000 + 0x00   write   16-bit register number     PROVEN (Dev10C_WriteReg,
+;   0x0010C000 + 0x02   write   that register's value       25 bytes, no arithmetic)
+;   0x0010C000 + 0x04   read    that register's value      PROVEN, two independent
+;                                                           sites: 0xFA6903 and
+;                                                           Dev10C_ReadChanReg_0100
+;   register number = block * 0x40 + channel               PROVEN as arithmetic
+;   64 channels                                            PROVEN -- the literal
+;                                                           loop counter in
+;                                                           Dev10C_ResetAllChannels
+;
+; ------------------------------------------------------------------------------
+; THE 22 REGISTERS DEV10C_WRITEALLCHANREGS COMMITS, IN STRUCT ORDER
+; ------------------------------------------------------------------------------
+;  reg          word  what it carries                                   grade
+;  -----------  ----  ---------------------------------------------  ------------
+;  chan+0x0000    --  the literal 0x8100.  No struct field.  ⚠ On     PROVEN as a
+;                     the NotePool8_NoteOnOff path a caller sends      value;
+;                     ITS word 0 here right afterwards.               UNIDENTIFIED
+;  chan+0x0040     1  word 0 of the key-zone record the played note   split PROVEN
+;                     selects: bits 15..12 a field a global config
+;                     bit DOUBLES, bits 11..0 a payload that passes
+;                     through.  ⚠ "bank selector over a wave number"
+;                     is DECLARED INFERENCE and is not asserted.
+;  chan+0x0080     2  OUTPUT LEVEL.  bits 11..0 log2 amplitude, 256   STRONG
+;                     counts per octave, LARGER = LOUDER; bits 14..12
+;                     a note-derived 3-bit field (UNIDENTIFIED);
+;                     bit 15 the GATE, pulsed 1-then-0 around every
+;                     full update.  The three fields TILE the word
+;                     with no overlap, which a wrong split does not.
+;                     Quiescent: not defined; the gate falls last.
+;  chan+0x00C0     3  (MIDI controller 91 << 8) | controller 93,      STRONG
+;                     each half 0..0x7F.  Two unrelated producers
+;                     agree on the split.  ⚠ What the two depths DO
+;                     is not established -- 91 and 93 are "effects
+;                     depth 1 and 3" in the MIDI allocation, and this
+;                     firmware corroborates only 7, 64 and 120 of its
+;                     own controller numbers.
+;  chan+0x0100     4  bits 6..0 a value clamped to 36..120, bits      split PROVEN;
+;  chan+0x0140     5  15..7 passed through.  ONE OBJECT: four         name
+;                     stagers write both words and nothing else.      TRANSPLANTED
+;                     The KN5000 sub-CPU calls 0x0100 the TVF CUTOFF
+;                     and 0x0140 its depth/bias.
+;  chan+0x0180     6  WRITE side: a 0..0x7F control; the tone byte    write PROVEN;
+;                     0x80 means "choose one at random"; the sibling   name
+;                     calls it PAN with 0x40 as centre.               TRANSPLANTED
+;                     ⚠ THE READ AT THIS BLOCK IS A DIFFERENT
+;                     QUANTITY -- masked 0x3FFF and shifted right 5
+;                     -- and nothing reconciles the two.
+;  chan+0x0400     7  PITCH, 1/256 of a semitone, saturated to        PROVEN
+;                     0x0000..0x7FFF = notes 0..127.996.  The unit is
+;                     fixed three times over, two of them independent.
+;  chan+0x0440     8  --                                             UNIDENTIFIED
+;  chan+0x0480     9  --                                             UNIDENTIFIED
+;  chan+0x04C0    10  --                                             UNIDENTIFIED
+;  chan+0x0500    11  --                                             UNIDENTIFIED
+;  chan+0x0800    12  (envelope LEVEL << 8) | (envelope RATE).  The   STRONG
+;                     high byte from a 101-entry curve indexed by a
+;                     0..100 parameter, the low byte from
+;                     Voice_EnvelopeRate_Table[tone[+0x28]].  Reached
+;                     twice independently: this image's four producers
+;                     are exactly the four readers of the attack
+;                     curve, and the KN5000 sub-CPU says the same
+;                     packing into the same register number 0x800 off
+;                     a byte-identical table.  ⚠ The curve DESCENDS,
+;                     so "level" vs "attenuation" at the pin is open.
+;                     Quiescent value 0xFF80.
+;  chan+0x0840    13  a byte pair; quiescent value 0xFF00             split PROVEN /
+;  chan+0x0880    14  a byte pair                                     UNIDENTIFIED
+;  chan+0x08C0    15  a byte pair                                     for all ten
+;  chan+0x0900    16  byte pair: HIGH byte a clamped
+;  chan+0x0940    17  Voice_EnvelopeLevel_Curve lookup, LOW byte
+;  chan+0x0980    18  SIGNED, DetuneCurve_LookupSigned of a value
+;  chan+0x09C0    19  first clamped to -50..+50, i.e. a +/-127 depth.
+;  chan+0x0A00    20  ⚠ That these six are envelope STAGES, and in
+;  chan+0x0A40    21  what order, is NOT asserted.
+;
+; ★ ALL TEN OF 0x0800..0x0A40 ARE ASSEMBLED AS TWO 8-BIT FIELDS.  A census of all
+;   22 computed stores classifies every one: twelve build `hi << 8 | (lo & 0xFF)`,
+;   eight keep a source word's high byte and replace the low, two put a 7-bit value
+;   with bit 15 set.  There is no other idiom.  That is the PROVEN part; what
+;   either byte of eight of the ten means is the UNIDENTIFIED part.
+;
+; ------------------------------------------------------------------------------
+; SIX MORE BLOCKS THE FULL WRITER NEVER TOUCHES
+; ------------------------------------------------------------------------------
+; ★ The accessor banks and the ±2 helpers reach 0x01C0, 0x0540, 0x0580, 0x05C0,
+;   0x0600 and 0x0640 -- SIX blocks that are not among the 22 staged words -- and
+;   miss seven the writer has (0x0000, 0x0040, 0x00C0, 0x08C0, 0x09C0, 0x0A00,
+;   0x0A40).  TWENTY-EIGHT distinct per-channel blocks in all, the highest 0x0A40,
+;   so the register file is known to extend to 0x0A40 + 0x3F = 0x0A7F.
+;   All six numbers are asserted by section 13 of
+;   `python3 notes/prom_c_dev104_regmap_checks.py --selftest`, which walks the four
+;   spans and takes the set differences rather than reading a list.
+;   ⚠ Those six have no staged word and therefore no producer index entry: they are
+;   the least-documented corner of this device.
+;
+; ------------------------------------------------------------------------------
+; THE 13 GLOBAL REGISTERS
+; ------------------------------------------------------------------------------
+;   0x0200 0x0201 0x0202 0x0203 0x0204 0x0205      <- image words 0..5
+;   0x0C00 0x0C01 0x0C02 0x0C03 0x0C04 0x0C05      <- image words 6..11
+;   0x0E00                                         <- image word 12
+; PROVEN global: Dev10C_WriteGlobalRegs takes NO channel argument and every one of
+; the thirteen register numbers is an immediate -- there is no `add` in the routine.
+; Two independent facts give the same argument size: thirteen fields = 0x1A bytes,
+; and the two ROM images Dev10C_ResetAllChannels hands out are 0xFE12CF - 0xFE12B5
+; = 0x1A apart.  ⚠ What any of the thirteen DO is UNIDENTIFIED.  Checker s.13.
+; ⚠ Note the numbering: these are NOT `block*0x40 + channel` -- 0x0201 is 0x0200+1,
+;   one apart, not 0x40.  A global block and a per-channel block are addressed
+;   differently on the same port, and Dev10C_WriteReg_0201 in this bank writes
+;   0x0201 on its own, which is how the two banks agree on it.
+;
+; ------------------------------------------------------------------------------
+; HOW THE ROUND-7 MEANINGS TABLE WAS DERIVED -- the method, not the result
+; ------------------------------------------------------------------------------
+; Four steps, in this order, and the order is the point:
+;   1. SHAPE FIRST, from one 25-byte routine.  Dev10C_WriteReg moves two arguments
+;      to +0x00 and +0x02 with no arithmetic between, which fixes select/data
+;      without interpretation.  Everything else is that pair with the number
+;      computed.
+;   2. THE MAP, by SYMBOLIC WALK, not by eye.  notes/prom_c_tg_chanmap.py follows
+;      the two frame slots holding the +0 and +2 pointers through
+;      Dev10C_WriteAllChanRegs and prints every port write in EXECUTION ORDER with
+;      its provenance.  It does not zip two lists -- that is the mistake §3 of
+;      notes/FINDINGS-prom_c-tone-generator.md had to retract.
+;   3. THE PRODUCERS, by an image-wide scan for every write into the staging
+;      struct's 0x00D75E..0x00D789, in both the absolute and based forms; the
+;      result is an index from register to routine.  ⚠ That scan misses 17 sites in
+;      three classes and its own docstring wrongly says it reports what it cannot
+;      follow; notes/prom_c_staging_producer_audit.py corrects it to 87 sites.
+;   4. ONLY THEN, MEANINGS -- and the lever was NOT any of the above.  It was the
+;      MIDI controller dispatcher, whose 26 arms carry the standard controller
+;      numbers with nothing in the list outside that allocation.  A controller
+;      number is a name the MIDI specification already gives; following one to the
+;      register it lands in names the register.  Controller 7 reached 0x0080,
+;      0x81/0x82 fixed the pitch unit from both sides, 91 and 93 split 0x00C0.
+;   5. AND THE SIBLING LAST, AGAINST A CALIBRATION.  The KN5000 sub-CPU stages the
+;      same 22 registers in the same order.  On the FIVE registers this image had
+;      already decoded on its own, the sibling agrees five times out of five and
+;      contradicts nothing -- and only then are its names for 0x0100, 0x0140 and
+;      0x0180 carried over, marked TRANSPLANTED.  ⚠ The BYTES are not shared: 19 of
+;      20, 100 of 102 and 116 of 120 shared bytes differ.  What is borrowed is an
+;      identification, not code.
+;
+; ------------------------------------------------------------------------------
+; THE COMPANION DEVICE
+; ------------------------------------------------------------------------------
+; 0x00104000 has the same port shape and the same `block*0x40 + channel` numbering,
+; 19 registers per channel instead of 22, ONE packer instead of many small stagers,
+; and NO located read path.  Its full map, its part record as a C struct and the
+; signal flow are in the header of prom_c/devices/dev10c_dev104_drivers.s.
+; ⚠⚠ BOTH DEVICES HAVE REGISTERS 0x0040 AND 0x0080, and the peripheral base is the
+; only thing that tells them apart.  This tree has already had to retract once over
+; exactly that confusion.  Nothing in the table above applies to 0x00104000.
+;
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================
