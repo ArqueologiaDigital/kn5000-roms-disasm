@@ -906,3 +906,38 @@ python3 notes/tone_db_apply_w17.py --verify
 `Arms:` comments in `prom_c/tone_db/tone_db_module.s` still spell the old
 `sub_XXXXXX`.  Their addresses are authoritative and the file header carries the full
 old -> new table.
+
+### `prom_c_voice_names_w17.py`
+**"Which address-form labels in `prom_c/voice/` were renamed in wave 17, to what, on
+what evidence, and at what confidence?"**
+
+```
+python3 wsa1/notes/prom_c_voice_names_w17.py --report    # the table
+python3 wsa1/notes/prom_c_voice_names_w17.py --check     # assert it landed
+```
+
+The table IS the record: 65 renames of the 119 `sub_` labels, each with a grade
+(PROVEN / STRONG) and a one-line reason. `--apply` rewrites only the CODE half of a
+line, so `scripts/analysis/assert_comments_preserved.py` stays green and every
+`; sub_FAxxxx -- 0x...` header line survives verbatim; the `★ NAMED (wave 17)` block
+inserted above each carries the new label. Internal `sub_XXXXXX__YYYYYY` branch labels
+are deliberately left alone, the same choice the tree already made for
+`ChanRec_Release`.
+
+### `prom_c_voice_engine_w17_checks.py`
+**"Do the numbers in the three `★★ WAVE 17` block comments come out of the ROM?"**
+
+```
+python3 wsa1/notes/prom_c_voice_engine_w17_checks.py --selftest
+```
+
+Reads `original_ROMs/wsa1_prom_c.ic28` — bytes, never the `.s` file — and asserts, in
+five sections: the eight-link array chain `0x0200 → 0x041C → 0x04E8 → 0x0AA8 → 0x0E3E
+→ 0x11FE → 0x14FE` and `0x1523 → 0x3BCF → 0x4CCF`, with each stride present as an
+immediate at the instruction the comment cites; that **both** polyphony-limit tables
+(`0xFE1144`, `0xFE1156`) sum over their sixteen used entries to **exactly 64**, the
+channel count; the two 34-entry part→pool maps; the four allocation descriptors at
+`0xFE1220` and the shape of the three voice-stealing search orders; and the 21+6
+staging-offset → register-block pairs read off `Dev10C_WriteAllChanRegs`'s own
+select/value alternation. `--selftest` adds two negative controls — a wrong stride and
+a wrong table base — and requires both to go red.

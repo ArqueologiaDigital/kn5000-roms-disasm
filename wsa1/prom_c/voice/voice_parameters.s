@@ -114,7 +114,136 @@
 ;   table as `.long`.  The fragment verifier cleared the result before it was pasted
 ;   in, and scripts/analysis/assert_byte_identical.py cleared it afterwards.
 ; ==============================================================================
+; ==============================================================================
+; ★★ WAVE 17 -- WHAT THE VOICE-PARAMETER HELPERS COMPUTE, AND WHERE IT GOES
+; ==============================================================================
+; ADDED 2026-09-03 by the voice-engine lane, insertions only under
+; `scripts/analysis/assert_comments_preserved.py`.  Every `; sub_FAxxxx -- 0x...`
+; header line below still spells an address-form name where the label has been
+; renamed; the `★ NAMED (wave 17)` block in front of each carries the current
+; label and supersedes that header's `Unknown: what the routine is FOR` line.
+; Table and applier: `wsa1/notes/prom_c_voice_names_w17.py`.
+;
+; The block comment above says, of the previous round, "WHAT THIS BLOCK DOES NOT
+; ESTABLISH: not one field meaning, not one routine's purpose ... A name for any of
+; these needs the caller side decoded first, which is the next module, not this
+; one."  The caller side is now decoded, and this is what it bought.
+;
+; ★ EVERY NUMBER IN THIS BLOCK IS RE-DERIVED FROM THE ROM BYTES -- never from
+;   this file and never from a disassembler's text -- by
+;       python3 wsa1/notes/prom_c_voice_engine_w17_checks.py --selftest
+;   whose --selftest also runs two NEGATIVE CONTROLS (a wrong stride and a
+;   wrong table base) and requires both to go red.
+;
+; ------------------------------------------------------------------------------
+; A. THE STAGING STRUCT IS THE ANSWER TO "WHERE DOES THIS VALUE GO"
+; ------------------------------------------------------------------------------
+; Almost every routine in this block ends by storing a word into the 0x0010C000
+; staging struct at RAM 0x00D75E.  Dev10C_WriteAllChanRegs (0xFB713A) then walks
+; that struct, and its walk is a strict alternation -- write `chan + block` to the
+; device's select port, write the struct word to the data port -- so the pairing of
+; struct offset to register block is an instruction pair, not an inference:
+;
+;   struct  RAM      register   select instr   struct  RAM      register  select
+;   +0x02   0x00D760  0x0040    0xFB7155       +0x18   0x00D776  0x0800   0xFB7220
+;   +0x04   0x00D762  0x0080    0xFB7172       +0x1A   0x00D778  0x0840   0xFB723F
+;   +0x06   0x00D764  0x00C0    0xFB7188       +0x1C   0x00D77A  0x0880   0xFB7252
+;   +0x08   0x00D766  0x0100    0xFB719B       +0x1E   0x00D77C  0x08C0   0xFB72A2
+;   +0x0A   0x00D768  0x0140    0xFB71AE       +0x20   0x00D77E  0x0900   0xFB72C8
+;   +0x0C   0x00D76A  0x0180    0xFB71C1       +0x22   0x00D780  0x0940   0xFB72DB
+;   +0x0E   0x00D76C  0x0400    0xFB71D4       +0x24   0x00D782  0x0980   0xFB72EE
+;   +0x10   0x00D76E  0x0440    0xFB71E7       +0x26   0x00D784  0x09C0   0xFB7265
+;   +0x12   0x00D770  0x0480    0xFB71FA       +0x28   0x00D786  0x0A00   0xFB7278
+;   +0x14   0x00D772  0x04C0    0xFB720D       +0x2A   0x00D788  0x0A40   0xFB728B
+;   +0x16   0x00D774  0x0500    0xFB72B5
+;
+; Twenty-one blocks in twenty-one struct words, +0x02..+0x2A, with +0x00 written
+; separately (0x8100 on a full update, 0x7E00 on a stop).  Register 0x0080's value
+; is the only one the writer touches: `set 0x0f,BC` at 0xFB717E on the way in and a
+; second write with bit 15 clear at 0xFB7304 on the way out -- the 1-then-0 gate
+; pulse around the other twenty.
+;
+; ★ AND +0x2C..+0x36 IS A SECOND, SMALLER SET, six words that
+;   Dev10C_WriteSixChanRegs_FromD78A (0xFB7345) sends on their own:
+;       +0x2C -> 0x0800 (0xFB7398)   +0x2E -> 0x0840 (0xFB7368)
+;       +0x30 -> 0x0900 (0xFB73DE)   +0x32 -> 0x0940 (0xFB73CB)
+;       +0x34 -> 0x09C0 (0xFB73AB)   +0x36 -> 0x0A00 (0xFB7385)
+;   -- the six envelope registers, and the ones a retire or a controller refresh
+;   rewrites without redoing the whole channel.  Its producers in this file are
+;   Dev10C_StageRegs_0800_0840_ForNoteOn, _FAB8CC, _FAB9D8 and _FABD50, and
+;   Dev10C_StageSixChanRegs_ForRetire.
+;
+; ------------------------------------------------------------------------------
+; B. THE FOUR CHAINS THIS BLOCK IMPLEMENTS
+; ------------------------------------------------------------------------------
+; PITCH -> register 0x0400
+;   Voice_ComputePitch (note path) or Voice_ComputePitch_FromToneRecord (the C/D
+;   path, which never reads voice[+0x05] and so does not follow the played note)
+;     -> voice[+0x06] and voice[+0x08]
+;   Voice_PitchAddZoneOffset_AB/_CD  -> voice[+0x0A] = Sat16(pitch + (0x005A4F))
+;   Voice_StagePitch_Reg0400_AB/_CD  -> struct +0x0E
+;   Helpers: Pitch_ClampToNoteRange and Pitch_FoldOctavesIntoRange, which bound a
+;   pitch by two NOTE NUMBERS (`n*256 + 0x80`, this subsystem's own encoding) --
+;   the first by saturation, the second by adding or subtracting whole octaves of
+;   0x0C00.
+;
+; LEVEL -> register 0x0080
+;   Voice_ComputeLevelBase_AB/_CD    -> voice[+0x0D], and clears voice[+0x2F]
+;     from VelCurve_Lookup (one of eight 256-entry curves at 0xFDD6AB, chosen by a
+;     3-bit tone field), the tone's signed sensitivity byte,
+;     KeyScale_LevelFromPitch and VelScale_LevelFromVelocity (two four-breakpoint
+;     piecewise-linear curves, one on voice[+0x08] >> 8 and one on the velocity),
+;     and three global trims.
+;   Voice_StageLevel_Reg0080_AB/_CD  adds a tone offset and calls
+;   Voice_StageLevel_Reg0080          -> struct +0x04, where MIDI CC7 and CC11 join
+;                                        it through the part record.
+;
+; THE 0x0100 / 0x0140 PAIR -> registers 0x0100 and 0x0140
+;   TWO dispatchers, each a 3-bit mode field of the tone ELEMENT record with a
+;   six-entry computed goto and an out-of-range arm that writes constants:
+;     VoiceParam_DispatchOn_17_36  on (voice[+0x17])[+0x36] & 7
+;         arm 0 -> Rec_StoreConsts_003F_0041   (0x017F and 0x7F7F)
+;         arms 1..5 -> VoiceParam_Build0100_0140_On36_Arm1..Arm5
+;     VoiceParam_DispatchOn_17_11  on (voice[+0x17])[+0x11] & 7
+;         arm 0 -> Rec_StoreConsts_003F_0041, then copies the pair to the struct
+;         arms 1..5 -> VoiceParam_Build0100_0140_On11_Arm1..Arm5
+;   All ten arms write voice_record[+0x3F] and [+0x41] and nothing else of the
+;   record; Voice_StagePair_Reg0100_0140_{First,Both,AB,CD} copy those two fields
+;   to struct +0x08 and +0x0A.  The _On36 family reaches
+;   VoiceParam_AddCurveAndKeyDepth_Clamp (a velocity curve term AND a key term),
+;   the _On11 family VoiceParam_AddCurveDepth_Clamp (the velocity term only); both
+;   end `+ 0x18` then Clamp_36_to_120, whose own header records that every one of
+;   its callers is on this path.
+;
+; ENVELOPES -> registers 0x0800..0x0A40, and the 27-byte records at 0x004CCF
+;   Each channel owns 27 bytes at 0x004CCF + 27*chan = three 9-byte slots.
+;     EnvRec_ClearSlot        zeroes one slot's +0..+5 and +7
+;     EnvRec_LoadSlot         fills +0..+7 from a part-record group and a tone group
+;     EnvRec_AdvanceSegment   steps the segment counter +0x08 against the segment
+;                             length +0x07 and returns a 0..0x100 fraction
+;     EGEnv_Eval_BaseCurveA/B/FreqWrite and the three
+;     EGEnv_Eval_ValueCurve_* read the slot and a ROM curve, scaling with
+;     EGEnv_ScaleDepth_Shr12.
+;   0x004CCF is 0x003BCF + 64*68 -- the byte after the voice-record array.
+;
+; ------------------------------------------------------------------------------
+; C. WHAT IS STILL OPEN IN THIS BLOCK
+; ------------------------------------------------------------------------------
+;   * what registers 0x0440, 0x0480, 0x04C0 and 0x0500 carry.  The routines that
+;     stage them are named for the register, not for a quantity, and that is
+;     deliberate.
+;   * voice_record[+0x29]: Voice_ComputeField0029_AB/_CD build a packed word whose
+;     three fields are measured (bits 8..0, 11..9, 14..12) and whose meaning is not.
+;   * which of VoiceSubsystem_Init's two allocation policies the machine runs, and
+;     when -- see section C of the wave-17 block in voice_leaf_helpers.s.
+; ==============================================================================
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA7E2C` is now `PartRec_UpdateRepeatCounter`.
+;   GRADE PROVEN.  WHY `PartRec_UpdateRepeatCounter`:
+;   body: dt = (0x00F2F3) - part[+0x82] (the 32-bit tick and its last value);
+;   dt >= 0x19 resets part[+0x86] and part[+0x87] to 0; otherwise part[+0x86] is
+;   incremented and part[+0x87] set to 0 / 0x10 / 0x20 for the 1st / 2nd / 3rd+
+;   note inside the 25-tick window; part[+0x82] is then restamped with the tick.
 ; sub_FA7E2C -- 0xFA7E2C..0xFA7EE1 (182 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
@@ -131,7 +260,7 @@
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA7E2C:
+PartRec_UpdateRepeatCounter:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA7E2C  link XIZ,0xfffa
 	pushw	hl                                   ; FA7E30  push HL
 	pushw	de                                   ; FA7E31  push DE
@@ -588,6 +717,13 @@ Voice_ComputePitch__FA8144:
 	unlk32 xiz                                 ; FA8149  unlk XIZ
 	ret                                        ; FA814B  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA814C` is now `Voice_ComputePitch_FromToneRecord`.
+;   GRADE PROVEN.  WHY `Voice_ComputePitch_FromToneRecord`:
+;   body: writes voice[+0x08] = tone_object[+0x0C] and voice[+0x06] =
+;   Pitch_FoldOctavesIntoRange(that + (elem[+0x04] << 8) + 2*elem[+0x05],
+;   obj[+0x09], obj[+0x0A]) -- the SAME two fields Voice_ComputePitch writes,
+;   and it never reads voice[+0x05], so the result does not depend on the note
+;   played.
 ; sub_FA814C -- 0xFA814C..0xFA8199 (78 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
@@ -604,7 +740,7 @@ Voice_ComputePitch__FA8144:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA814C:
+Voice_ComputePitch_FromToneRecord:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA814C  link XIZ,0xfffe
 	push	xhl                                   ; FA8150  push XHL
 	pushw	de                                   ; FA8151  push DE
@@ -1403,6 +1539,13 @@ Voice_StageRegs_0900_0940_0980_AB__FA8665:
 	unlk32 xiz                                 ; FA8668  unlk XIZ
 	ret                                        ; FA866A  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA866B` is now `VoiceParam_Build0100_0140_On36_Arm1`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm1`:
+;   arm 1 of VoiceParam_DispatchOn_17_36's six-entry table at 0xFA8C05
+;   (`calr 0xfa866b` at 0xFA8C24).  It writes voice_record[+0x3F] and [+0x41],
+;   which Voice_StagePair_Reg0100_0140_* copy into staging words 0x00D766 and
+;   0x00D768 -- struct offsets +0x08 and +0x0A, i.e. registers 0x0100 and 0x0140
+;   (Dev10C_WriteAllChanRegs, 0xFB719B / 0xFB71AE).
 ; sub_FA866B -- 0xFA866B..0xFA8758 (238 bytes)
 ;
 ; Called from: no site outside this module.
@@ -1421,7 +1564,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA8665:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA866B:
+VoiceParam_Build0100_0140_On36_Arm1:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FA866B  link XIZ,0xfff8
 	push	xhl                                   ; FA866F  push XHL
 	pushw	de                                   ; FA8670  push DE
@@ -1530,6 +1673,9 @@ sub_FA866B__FA8747:
 	unlk32 xiz                                 ; FA8756  unlk XIZ
 	ret                                        ; FA8758  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8759` is now `VoiceParam_Build0100_0140_On36_Arm2`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm2`:
+;   arm 2 of the same table (`calr 0xfa8759` at 0xFA8C2A); same two outputs.
 ; sub_FA8759 -- 0xFA8759..0xFA888B (307 bytes)
 ;
 ; Called from: no site outside this module.
@@ -1548,7 +1694,7 @@ sub_FA866B__FA8747:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8759:
+VoiceParam_Build0100_0140_On36_Arm2:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FA8759  link XIZ,0xfff8
 	push	xhl                                   ; FA875D  push XHL
 	pushw	de                                   ; FA875E  push DE
@@ -1685,6 +1831,9 @@ sub_FA8759__FA8878:
 	unlk32 xiz                                 ; FA8889  unlk XIZ
 	ret                                        ; FA888B  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA888C` is now `VoiceParam_Build0100_0140_On36_Arm3`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm3`:
+;   arm 3 of the same table (`calr 0xfa888c` at 0xFA8C30); same two outputs.
 ; sub_FA888C -- 0xFA888C..0xFA8996 (267 bytes)
 ;
 ; Called from: no site outside this module.
@@ -1703,7 +1852,7 @@ sub_FA8759__FA8878:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA888C:
+VoiceParam_Build0100_0140_On36_Arm3:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA888C  link XIZ,0xfff4
 	push	xhl                                   ; FA8890  push XHL
 	pushw	de                                   ; FA8891  push DE
@@ -1820,6 +1969,9 @@ sub_FA888C__FA8991:
 	unlk32 xiz                                 ; FA8994  unlk XIZ
 	ret                                        ; FA8996  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8997` is now `VoiceParam_Build0100_0140_On36_Arm4`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm4`:
+;   arm 4 of the same table (`calr 0xfa8997` at 0xFA8C36); same two outputs.
 ; sub_FA8997 -- 0xFA8997..0xFA8A78 (226 bytes)
 ;
 ; Called from: no site outside this module.
@@ -1837,7 +1989,7 @@ sub_FA888C__FA8991:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8997:
+VoiceParam_Build0100_0140_On36_Arm4:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA8997  link XIZ,0xfffe
 	push	xhl                                   ; FA899B  push XHL
 	pushw	de                                   ; FA899C  push DE
@@ -1942,6 +2094,9 @@ sub_FA8997__FA8A45:
 	unlk32 xiz                                 ; FA8A76  unlk XIZ
 	ret                                        ; FA8A78  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8A79` is now `VoiceParam_Build0100_0140_On36_Arm5`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On36_Arm5`:
+;   arm 5 of the same table (`calr 0xfa8a79` at 0xFA8C3C); same two outputs.
 ; sub_FA8A79 -- 0xFA8A79..0xFA8BDC (356 bytes)
 ;
 ; Called from: no site outside this module.
@@ -1959,7 +2114,7 @@ sub_FA8997__FA8A45:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8A79:
+VoiceParam_Build0100_0140_On36_Arm5:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA8A79  link XIZ,0xfffa
 	push	xhl                                   ; FA8A7D  push XHL
 	pushw	de                                   ; FA8A7E  push DE
@@ -2207,6 +2362,10 @@ VoiceParam_DispatchOn_17_36__FA8C3F:
 	unlk32 xiz                                 ; FA8C41  unlk XIZ
 	ret                                        ; FA8C43  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8C44` is now `VoiceParam_Build0100_0140_On11_Arm1`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm1`:
+;   arm 1 of VoiceParam_DispatchOn_17_11's six-entry table at 0xFA9032
+;   (`calr 0xfa8c44` at 0xFA9061); writes the same voice[+0x3F] / [+0x41] pair.
 ; sub_FA8C44 -- 0xFA8C44..0xFA8CEE (171 bytes)
 ;
 ; Called from: no site outside this module.
@@ -2225,7 +2384,7 @@ VoiceParam_DispatchOn_17_36__FA8C3F:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8C44:
+VoiceParam_Build0100_0140_On11_Arm1:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FA8C44  link XIZ,0xfff8
 	push	xhl                                   ; FA8C48  push XHL
 	pushw	de                                   ; FA8C49  push DE
@@ -2306,6 +2465,9 @@ sub_FA8C44__FA8CBB:
 	unlk32 xiz                                 ; FA8CEC  unlk XIZ
 	ret                                        ; FA8CEE  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8CEF` is now `VoiceParam_Build0100_0140_On11_Arm2`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm2`:
+;   arm 2 of the same table (`calr 0xfa8cef` at 0xFA9067); same two outputs.
 ; sub_FA8CEF -- 0xFA8CEF..0xFA8D9A (172 bytes)
 ;
 ; Called from: no site outside this module.
@@ -2324,7 +2486,7 @@ sub_FA8C44__FA8CBB:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8CEF:
+VoiceParam_Build0100_0140_On11_Arm2:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FA8CEF  link XIZ,0xfff8
 	push	xhl                                   ; FA8CF3  push XHL
 	pushw	de                                   ; FA8CF4  push DE
@@ -2405,6 +2567,9 @@ sub_FA8CEF__FA8D66:
 	unlk32 xiz                                 ; FA8D98  unlk XIZ
 	ret                                        ; FA8D9A  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8D9B` is now `VoiceParam_Build0100_0140_On11_Arm3`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm3`:
+;   arm 3 of the same table (`calr 0xfa8d9b` at 0xFA906D); same two outputs.
 ; sub_FA8D9B -- 0xFA8D9B..0xFA8E46 (172 bytes)
 ;
 ; Called from: no site outside this module.
@@ -2422,7 +2587,7 @@ sub_FA8CEF__FA8D66:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8D9B:
+VoiceParam_Build0100_0140_On11_Arm3:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA8D9B  link XIZ,0xfffc
 	push	xhl                                   ; FA8D9F  push XHL
 	pushw	de                                   ; FA8DA0  push DE
@@ -2501,6 +2666,9 @@ sub_FA8D9B__FA8E15:
 	unlk32 xiz                                 ; FA8E44  unlk XIZ
 	ret                                        ; FA8E46  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8E47` is now `VoiceParam_Build0100_0140_On11_Arm4`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm4`:
+;   arm 4 of the same table (`calr 0xfa8e47` at 0xFA9073); same two outputs.
 ; sub_FA8E47 -- 0xFA8E47..0xFA8EF6 (176 bytes)
 ;
 ; Called from: no site outside this module.
@@ -2518,7 +2686,7 @@ sub_FA8D9B__FA8E15:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8E47:
+VoiceParam_Build0100_0140_On11_Arm4:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA8E47  link XIZ,0xfffc
 	push	xhl                                   ; FA8E4B  push XHL
 	pushw	de                                   ; FA8E4C  push DE
@@ -2598,6 +2766,9 @@ sub_FA8E47__FA8EC1:
 	unlk32 xiz                                 ; FA8EF4  unlk XIZ
 	ret                                        ; FA8EF6  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA8EF7` is now `VoiceParam_Build0100_0140_On11_Arm5`.
+;   GRADE PROVEN.  WHY `VoiceParam_Build0100_0140_On11_Arm5`:
+;   arm 5 of the same table (`calr 0xfa8ef7` at 0xFA9079); same two outputs.
 ; sub_FA8EF7 -- 0xFA8EF7..0xFA9009 (275 bytes)
 ;
 ; Called from: no site outside this module.
@@ -2615,7 +2786,7 @@ sub_FA8E47__FA8EC1:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA8EF7:
+VoiceParam_Build0100_0140_On11_Arm5:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA8EF7  link XIZ,0xfffa
 	push	xhl                                   ; FA8EFB  push XHL
 	pushw	de                                   ; FA8EFC  push DE
@@ -3917,6 +4088,12 @@ Voice_StageRegs_CD__FA9801:
 	unlk32 xiz                                 ; FA9818  unlk XIZ
 	ret                                        ; FA981A  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FA981B` is now `EnvRec_LoadSlot`.
+;   GRADE PROVEN.  WHY `EnvRec_LoadSlot`:
+;   body: fills bytes +0..+7 of the 9-byte sub-record at 0x4CCF + 27*chan +
+;   9*slot from a part-record field group and a tone-record group -- the same
+;   record EnvRec_ClearSlot zeroes and EGEnv_Eval_* read.  Its twelve callers
+;   are the six Voice_Restage_* and the three Voice_RecomputeEnv_* routines.
 ; sub_FA981B -- 0xFA981B..0xFA9914 (250 bytes)
 ;
 ; Called from: 9 site(s) outside this module:
@@ -3937,7 +4114,7 @@ Voice_StageRegs_CD__FA9801:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FA981B:
+EnvRec_LoadSlot:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FA981B  link XIZ,0xffec
 	push	xhl                                   ; FA981F  push XHL
 	push	xde                                   ; FA9820  push XDE
@@ -5316,6 +5493,11 @@ Voice_StageRegs_00C0_CD__FAA2A6:
 	unlk32 xiz                                 ; FAA2B3  unlk XIZ
 	ret                                        ; FAA2B5  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAA2B6` is now `Voice_ComputeField0029_AB`.
+;   GRADE PROVEN.  WHY `Voice_ComputeField0029_AB`:
+;   body: writes voice_record[+0x29] as a packed word -- bits 8..0 the 9-bit
+;   value 0xFF - 4*level, bits 11..9 and 14..12 two 3-bit codes derived from the
+;   part's byte +0x19.  Its two callers are VoiceRegs_Stage_A and _B.
 ; sub_FAA2B6 -- 0xFAA2B6..0xFAA3B4 (255 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
@@ -5332,7 +5514,7 @@ Voice_StageRegs_00C0_CD__FAA2A6:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAA2B6:
+Voice_ComputeField0029_AB:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAA2B6  link XIZ,0x0000
 	push	xhl                                   ; FAA2BA  push XHL
 	pushw	de                                   ; FAA2BB  push DE
@@ -5454,6 +5636,11 @@ sub_FAA2B6__FAA3A1:
 	unlk32 xiz                                 ; FAA3B2  unlk XIZ
 	ret                                        ; FAA3B4  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAA3B5` is now `Voice_Field0029_EncodeSelector`.
+;   GRADE PROVEN.  WHY `Voice_Field0029_EncodeSelector`:
+;   body: 0 -> 7; 5 -> 6 when either nibble of the companion byte is 5; else
+;   n - 1.  Its two callers are both inside Voice_ComputeField0029_CD, which
+;   shifts the two results left by 9 and by 12 into voice_record[+0x29].
 ; sub_FAA3B5 -- 0xFAA3B5..0xFAA3EA (54 bytes)
 ;
 ; Called from: no site outside this module.
@@ -5469,7 +5656,7 @@ sub_FAA2B6__FAA3A1:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAA3B5:
+Voice_Field0029_EncodeSelector:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAA3B5  link XIZ,0x0000
 	pushw	hl                                   ; FAA3B9  push HL
 	ld	h, (xiz+10)                             ; FAA3BA  ld H,(XIZ+0x0a)
@@ -5500,6 +5687,11 @@ sub_FAA3B5__FAA3E7:
 	unlk32 xiz                                 ; FAA3E8  unlk XIZ
 	ret                                        ; FAA3EA  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAA3EB` is now `Voice_ComputeField0029_CD`.
+;   GRADE PROVEN.  WHY `Voice_ComputeField0029_CD`:
+;   the C/D counterpart of Voice_ComputeField0029_AB -- same output field, same
+;   field layout, via Voice_Field0029_EncodeSelector.  Its two callers are
+;   VoiceRegs_Stage_C and _D.
 ; sub_FAA3EB -- 0xFAA3EB..0xFAA4C2 (216 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
@@ -5516,7 +5708,7 @@ sub_FAA3B5__FAA3E7:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAA3EB:
+Voice_ComputeField0029_CD:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FAA3EB  link XIZ,0xfffa
 	push	xhl                                   ; FAA3EF  push XHL
 	pushw	de                                   ; FAA3F0  push DE
@@ -7571,6 +7763,12 @@ Voice_StageRegs_0800_B_ModeGe3__FAB43D:
 	unlk32 xiz                                 ; FAB487  unlk XIZ
 	ret                                        ; FAB489  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAB48A` is now `KeyScale_LevelFromPitch`.
+;   GRADE PROVEN.  WHY `KeyScale_LevelFromPitch`:
+;   body: a four-breakpoint piecewise-linear curve on voice[+0x08] >> 8 (the
+;   note number of the computed pitch) against tone[+0x1E..+0x21}; the slope
+;   constant is -64 (`muls WA,0xffc0`) and the out-of-range value is -512.  Its
+;   one caller adds the result into the level accumulator.
 ; sub_FAB48A -- 0xFAB48A..0xFAB516 (141 bytes)
 ;
 ; Called from: no site outside this module.
@@ -7587,7 +7785,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB43D:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAB48A:
+KeyScale_LevelFromPitch:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB48A  link XIZ,0xfffc
 	pushw	hl                                   ; FAB48E  push HL
 	pushw	de                                   ; FAB48F  push DE
@@ -7656,6 +7854,11 @@ sub_FAB48A__FAB511:
 	unlk32 xiz                                 ; FAB514  unlk XIZ
 	ret                                        ; FAB516  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAB517` is now `VelScale_LevelFromVelocity`.
+;   GRADE PROVEN.  WHY `VelScale_LevelFromVelocity`:
+;   byte-for-byte the same curve one field over: the input is
+;   voice[+0x0C] & 0x7F -- the velocity -- and the breakpoints are
+;   tone[+0x22..+0x25].
 ; sub_FAB517 -- 0xFAB517..0xFAB5A4 (142 bytes)
 ;
 ; Called from: no site outside this module.
@@ -7672,7 +7875,7 @@ sub_FAB48A__FAB511:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAB517:
+VelScale_LevelFromVelocity:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB517  link XIZ,0xfffc
 	pushw	hl                                   ; FAB51B  push HL
 	pushw	de                                   ; FAB51C  push DE
@@ -7742,6 +7945,14 @@ sub_FAB517__FAB59F:
 	unlk32 xiz                                 ; FAB5A2  unlk XIZ
 	ret                                        ; FAB5A4  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAB5A5` is now `Voice_ComputeLevelBase_AB`.
+;   GRADE PROVEN.  WHY `Voice_ComputeLevelBase_AB`:
+;   body: writes voice_record[+0x0D] -- the level accumulator that
+;   Voice_StageLevel_Reg0080_AB/_CD turn into register 0x0080 -- from the
+;   velocity curve (VelCurve_Lookup), the tone's sensitivity byte,
+;   ScaleClampedDelta_Shr5_b, KeyScale_LevelFromPitch, VelScale_LevelFromVelocity
+;   and three global trims, and clears voice[+0x2F].  Callers: VoiceRegs_Stage_A
+;   and _B.
 ; sub_FAB5A5 -- 0xFAB5A5..0xFAB6D4 (304 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
@@ -7762,7 +7973,7 @@ sub_FAB517__FAB59F:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAB5A5:
+Voice_ComputeLevelBase_AB:
 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FAB5A5  link XIZ,0xfff2
 	pushw	hl                                   ; FAB5A9  push HL
 	push	xde                                   ; FAB5AA  push XDE
@@ -7888,6 +8099,11 @@ sub_FAB5A5__FAB6BF:
 	unlk32 xiz                                 ; FAB6D2  unlk XIZ
 	ret                                        ; FAB6D4  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAB6D5` is now `Voice_ComputeLevelBase_CD`.
+;   GRADE PROVEN.  WHY `Voice_ComputeLevelBase_CD`:
+;   the C/D counterpart: the same accumulator, the same two output fields
+;   (voice[+0x0D] written, voice[+0x2F] cleared), a shorter term list.
+;   Callers: VoiceRegs_Stage_C and _D.
 ; sub_FAB6D5 -- 0xFAB6D5..0xFAB79C (200 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
@@ -7905,7 +8121,7 @@ sub_FAB5A5__FAB6BF:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAB6D5:
+Voice_ComputeLevelBase_CD:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB6D5  link XIZ,0xfffc
 	pushw	hl                                   ; FAB6D9  push HL
 	push	xde                                   ; FAB6DA  push XDE
@@ -7989,6 +8205,12 @@ sub_FAB6D5__FAB742:
 	unlk32 xiz                                 ; FAB79A  unlk XIZ
 	ret                                        ; FAB79C  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAB79D` is now `Voice_StageLevel_Reg0080_AB`.
+;   GRADE PROVEN.  WHY `Voice_StageLevel_Reg0080_AB`:
+;   body: forms voice[+0x0D] + tone[+0x17] - 100 (or voice[+0x0D] - 512 when
+;   that byte is zero) + a signed byte, and calls Voice_StageLevel_Reg0080 --
+;   its only call.  Callers: VoiceRegs_Stage_A and _B (plus the controller-driven
+;   Voice_RestageReg0080_ForList).
 ; sub_FAB79D -- 0xFAB79D..0xFAB7DF (67 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
@@ -8006,7 +8228,7 @@ sub_FAB6D5__FAB742:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAB79D:
+Voice_StageLevel_Reg0080_AB:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAB79D  link XIZ,0x0000
 	pushw	hl                                   ; FAB7A1  push HL
 	pushw	de                                   ; FAB7A2  push DE
@@ -8042,6 +8264,10 @@ sub_FAB79D__FAB7C6:
 	unlk32 xiz                                 ; FAB7DD  unlk XIZ
 	ret                                        ; FAB7DF  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FAB7E0` is now `Voice_StageLevel_Reg0080_CD`.
+;   GRADE PROVEN.  WHY `Voice_StageLevel_Reg0080_CD`:
+;   the C/D counterpart of Voice_StageLevel_Reg0080_AB, same single call.
+;   Callers: VoiceRegs_Stage_C and _D (plus Voice_RestageReg0080_ForList).
 ; sub_FAB7E0 -- 0xFAB7E0..0xFAB817 (56 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
@@ -8059,7 +8285,7 @@ sub_FAB79D__FAB7C6:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FAB7E0:
+Voice_StageLevel_Reg0080_CD:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB7E0  link XIZ,0xfffc
 	pushw	hl                                   ; FAB7E4  push HL
 	pushw	de                                   ; FAB7E5  push DE
@@ -8847,6 +9073,13 @@ Dev10C_StageRegs_09C0_0A00__FABCB9:
 	unlk32 xiz                                 ; FABCF6  unlk XIZ
 	ret                                        ; FABCF8  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FABCF9` is now `Dev10C_StageSixChanRegs_ForRetire`.
+;   GRADE PROVEN.  WHY `Dev10C_StageSixChanRegs_ForRetire`:
+;   body: writes staging struct offsets +0x2C..+0x36, which
+;   Dev10C_WriteSixChanRegs_FromD78A sends to registers 0x0800, 0x0840, 0x0900,
+;   0x0940, 0x09C0 and 0x0A00 (0xFB7368-0xFB73DE).  +0x2C gets
+;   (voice[+0x43] << 8) | 0x80 and +0x2E gets voice[+0x43] << 8.  Its ONE caller
+;   is Voice_Retire_Mode10.
 ; sub_FABCF9 -- 0xFABCF9..0xFABD4F (87 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
@@ -8863,7 +9096,7 @@ Dev10C_StageRegs_09C0_0A00__FABCB9:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FABCF9:
+Dev10C_StageSixChanRegs_ForRetire:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FABCF9  link XIZ,0x0000
 	push	xhl                                   ; FABCFD  push XHL
 	push	xix                                   ; FABCFE  push XIX
@@ -8899,6 +9132,13 @@ sub_FABCF9__FABD26:
 	unlk32 xiz                                 ; FABD4D  unlk XIZ
 	ret                                        ; FABD4F  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FABD50` is now `Dev10C_StageRegs_0800_0840_FABD50`.
+;   GRADE PROVEN.  WHY `Dev10C_StageRegs_0800_0840_FABD50`:
+;   body: writes staging struct +0x2E (register 0x0840) from either
+;   Table_FDEFD9[tone[+0x0E]] << 8 or voice[+0x3B] & 0xFF00, then +0x2C
+;   (register 0x0800) = that value with bit 7 set.  A FOURTH producer of the
+;   same pair, so it keeps the tree's address-suffix spelling alongside
+;   Dev10C_StageRegs_0800_0840_ForNoteOn / _FAB8CC / _FAB9D8.
 ; sub_FABD50 -- 0xFABD50..0xFABDAB (92 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
@@ -8913,7 +9153,7 @@ sub_FABCF9__FABD26:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FABD50:
+Dev10C_StageRegs_0800_0840_FABD50:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FABD50  link XIZ,0xfff8
 	push	xhl                                   ; FABD54  push XHL
 	push	xix                                   ; FABD55  push XIX
@@ -8952,6 +9192,13 @@ sub_FABD50__FABD9E:
 	unlk32 xiz                                 ; FABDA9  unlk XIZ
 	ret                                        ; FABDAB  ret
 ; --------------------------------------------------------------------------
+; ★ NAMED (wave 17): `sub_FABDAC` is now `EnvRec_AdvanceSegment`.
+;   GRADE PROVEN.  WHY `EnvRec_AdvanceSegment`:
+;   body: on a 9-byte envelope sub-record, selects on rec[0] & 0x1C; both arms
+;   increment the step counter rec[+0x08] and compare it with the segment length
+;   rec[+0x07]; the 0x08 arm returns (rec[+0x08] << 8) / rec[+0x07] -- a 0..0x100
+;   interpolation fraction -- and on overrun resets the counter and moves the
+;   state bit.  All three callers are inside Voice_RecomputeAllThreeBaseCurves.
 ; sub_FABDAC -- 0xFABDAC..0xFABE2F (132 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
@@ -8967,7 +9214,7 @@ sub_FABD50__FABD9E:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FABDAC:
+EnvRec_AdvanceSegment:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FABDAC  link XIZ,0x0000
 	pushw	hl                                   ; FABDB0  push HL
 	push	xde                                   ; FABDB1  push XDE
