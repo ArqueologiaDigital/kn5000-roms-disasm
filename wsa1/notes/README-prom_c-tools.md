@@ -811,3 +811,19 @@ call site does not repeat at a data structure's stride. All eleven headers now r
 **NO LOCATED CALLER**; the live scan is empty and `--selftest` asserts it stays empty.
 The largest casualty is `sub_F9BE3A`, the 8,573-byte double-precision routine, which two notes
 described as *"called once from 0xF95B01"*.
+
+## `tone_db_naming_w17.py`
+**"Which prom_c instruction touches which byte of which prom_d record, and what does
+the code do with the value?"**
+
+```
+python3 notes/tone_db_naming_w17.py             # every section
+python3 notes/tone_db_naming_w17.py --selftest  # exit 1 on any failure
+python3 notes/tone_db_naming_w17.py --wrong     # just the wrong-comment report
+```
+
+Every number quoted in the W17 header block of `prom_c/tone_db/tone_db_module.s` and in
+the C structs added to `prom_d/wsa1_prom_d.s` is re-derived here from the ROM bytes, at
+the address it is cited at, with an image-wide occurrence count beside it so a reader can
+see how surprising the hit is.  102 checks.  `--wrong` prints the one existing comment
+this lane believes is wrong and did **not** edit.
