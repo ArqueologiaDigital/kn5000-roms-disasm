@@ -712,6 +712,8 @@ address groups end 0x21 (the constant the 0x008614 emitters push), 81/81 opcode-
 against 68-93% for the true one) and the pool-directory field separation (all 56 of fields
 +4/+12 interpreter-clean, all 56 of +0/+8 not; null 56.2%).
 
+Written up in `notes/FINDINGS-prom_c-p7-group-and-naming.md`.
+
 ### `p7_sub_classify.py`
 **"Which of p7_module.s's 43 `sub_XXXXXX` objects are ROUTINES, and which are the
 CONTINUATION of the object above them?"**

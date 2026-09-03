@@ -179,7 +179,9 @@
 ; ★ THE POOL AGREES WITH THE CODE, EXACTLY AND WITH NO EXCEPTIONS -- 2,633 groups:
 ;       opcode 1 : 99 of 99 records are one 08 01 address group ending 0x21
 ;       opcode 5 : 81 of 81 open with an 08 01 address group ending 0x25
-;       opcode 0 : 316 address groups, all 00 00; 963 value groups, all K = 0x15
+;       opcode 0 : 0 of 1,417 groups use the 08 01 form.  316 open 00 00, and of
+;                  those 310 end 0x00 and 301 carry high nibble 1 in byte 2 --
+;                  the `+0x10` the emitter adds.  963 value groups, all K = 0x15
 ;       opcode 5 : 1,036 value groups, all K = 0x4C
 ;   NULL: uniform-random bytes hit a fixed first byte 0.39% of the time and a fixed
 ;   7-bit tail 0.78%.  PHASE CONTROL: re-cutting the same payloads at any other head
@@ -199,7 +201,7 @@
 ;   ADDRESS and no value; the value for those comes only from the computed path.
 ;   That is a division of labour, not a contradiction, and it is stated because the
 ;   opposite reading -- "0x26 is a decode error" -- is the one to rule out: the
-;   constant is an instruction immediate at 0xF9B36D, 0xF9B279 and 0xF9B43A.
+;   constant is an instruction immediate at 0xF9B36D, 0xF9B27A and 0xF9B434.
 ;
 ; -------------------------------------------------- E. THE MODULE'S OTHER GLOBALS
 ;       (0x008612)  u16  status of the last block walk.  0 = found, 2 = chain end
@@ -3218,13 +3220,13 @@ P7Group_SendValueScaled:
 ;              value   group   0x0A / (v>>17)&0x7F / (v>>9)&0xFF / (v>>1)&0xFF /
 ;                              ((v<<7)&0x80) + 0x4C
 ;          where v = Float32_ToInt32(Float32_Add(Int32_ToFloat32(0x100 * (0x00861A)),
-;          the float32 argument)) -- 0xF9B4A5-0xF9B4D6.  (0x008618) is record byte 2,
+;          the float32 argument)) -- 0xF9B4A5 onward.  (0x008618) is record byte 2,
 ;          opcode 5's relocation base; (0x00861A) is record byte 4, opcode 2's base,
 ;          and it enters this group as a VALUE offset scaled by 256, not as an address.
 ; ★ THE TWO CONSTANTS BOTH MATCH THE POOL EXACTLY.  All 81 opcode-5 records open with an
-;          08 01 address group ending 0x25 -- the constant pushed at 0xF9B4A0 -- and all
+;          08 01 address group ending 0x25 -- the constant pushed at 0xF9B49F -- and all
 ;          1,036 of their value groups end in a byte whose low seven bits are 0x4C, the
-;          constant added at 0xF9B53D.  Zero exceptions in either.
+;          constant added at 0xF9B53A.  Zero exceptions in either.
 ;              python3 notes/p7_group_template_probe.py --verify   (section 2)
 ; Unknown:  why opcode 2's base is added to opcode 5's value.  That is the one place in
 ;          the module where two of the six record bytes meet, and nothing explains it.
