@@ -884,7 +884,8 @@ python3 notes/dev104_topology_probe.py --selftest  # assert; exit 1 on any failu
 ```
 
 Twelve sections over `original_ROMs/wsa1_prom_c.ic28` and `wsa1_prom_d.bin`; no `.s` file and no
-unidasm text. It is the evidence behind `notes/HLE-GUIDE-l7a1429.md`. The results that matter:
+unidasm text. It is the evidence behind **`notes/HLE-GUIDE-l7a1429.md`**, the topology hypothesis and
+per-register HLE guidance it supports. The results that matter:
 
 * **`fold()` is a sign-magnitude -> offset-binary converter.** Under it, `Curve_FE04C9` and
   `Curve_FE05C9` are MONOTONE over all 128 entries, including across the `0x8459 -> 0x015E`
