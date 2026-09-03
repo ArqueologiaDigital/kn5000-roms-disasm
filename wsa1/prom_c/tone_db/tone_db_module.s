@@ -2217,6 +2217,34 @@ sub_FB8CEC__FB90AF:
 ;           0x88
 ; Unknown:  what row bytes 14 and 15 ARE. The rows' first 13 bytes are the
 ;           ASCII name; nothing in either image gives the last two a meaning
+;
+; ★★ ADJUDICATED 2026-09-03 -- THE `Evidence:` LINE ABOVE IS WRONG ABOUT THE
+;    DESTINATION, and it is left standing verbatim because this tree does not
+;    reword existing prose. Read it with this correction.
+;
+;    The two bytes do NOT land at +0x02/+0x03 of a record AT
+;    `0x1523 + 0x012C*part + 0x29*element + 0x88`. That expression is the
+;    address of a SLOT HOLDING A POINTER, and the store goes THROUGH it:
+;
+;        FB913A  ld   IY,(XIZ+0x08)        ; the part index
+;        FB913F  mul  IY,0x012c            ; * 300, the part-record stride
+;        FB9143  add  IY,BC                ; + 0x29*element
+;        FB9145  add  IY,0x0088            ; + 0x88
+;        FB914B  ld   XBC,(XIY+0x1523)     ; <- a 32-bit LOAD *from* that slot
+;        FB9150  ld   (XBC+0x02),A         ; <- the store lands at *ptr + 2
+;
+;    So the destination is +0x02/+0x03 of whatever the slot points at -- the
+;    81-byte element parameter block, which is also the SOURCE of the 81-byte
+;    copy at 0xFB8520/0xFB853E.
+;
+;    ⚠ TWO LANES REPORTED THIS INDEPENDENTLY, FROM OPPOSITE SIDES, AND BOTH
+;    WERE RIGHT. A voice-engine pass reported that `0x1523` is NOT a pointer
+;    array but the base of the 300-byte part records; a tone-database pass
+;    reported that this site loads a pointer. Both hold, because `0x1523` is
+;    the record base AND the field at `+0x29*element + 0x88` inside a record is
+;    a pointer. The original sentence conflated the address of the RECORD with
+;    the address the store LANDS at -- the one confusion that makes the two
+;    reports look contradictory when they are not.
 ; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB90B3`.
 ; --------------------------------------------------------------------------
 ToneDB_SourceNameList1_SelectEntry:
