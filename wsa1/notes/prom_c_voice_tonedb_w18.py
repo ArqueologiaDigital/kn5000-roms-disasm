@@ -30,6 +30,7 @@ RUN
     python3 wsa1/notes/prom_c_voice_tonedb_w18.py --claims   # re-read the ROM
     python3 wsa1/notes/prom_c_voice_tonedb_w18.py --apply    # do the rename
     python3 wsa1/notes/prom_c_voice_tonedb_w18.py --check    # assert it landed
+    python3 wsa1/notes/prom_c_voice_tonedb_w18.py --sync     # table vs the .s
 
 THE TEST APPLIED TO EVERY CANDIDATE, stated before the results so it can be
 checked against them:
@@ -119,8 +120,14 @@ RENAMES = {
     "XIX,0x0087d2` 0xFB4117).  Those two addresses are the first two regions of",
     "the RAM tone staging image tone_db_module.s documents: +0x000 the 713-byte",
     "TONE RECORD and +0x2C9 = 0x008A9B the 408-byte DRUM-KIT RECORD.  0x2C9 = 713",
-    "is why they are consecutive, and bank selectors >= 0x20 are the drum banks --",
-    "the same threshold ToneDB_ResolveToneRecord splits on at 0xFB4176."]),
+    "is why they are consecutive.  ⚠ THE 0x20 THRESHOLD IS THE PERCUSSION SPLIT,",
+    "and that is an inference from THREE readers rather than from one compare:",
+    "this routine hands >= 0x20 the DRUM-KIT staging record, Part_GetElementBlock_",
+    "Unpacked hands it the DRUM-INSTRUMENT staging region (0xFB42EF), and",
+    "Part_ResolveDrumInstrumentRecord forms its arm from part record +0x1C - 0x28",
+    "(0xFB4A78).  ToneDB_ResolveToneRecord also splits at 0x20 (0xFB4176), but it",
+    "routes >= 0x20 to the SAME arm as < 0x08, so that compare on its own says",
+    "nothing about percussion and is not offered as evidence here."]),
 
 "sub_FB42B0": ("Part_ResolveToneRecord", "PROVEN", [
     "args (part, program, bank selector).  If part record +0x04 bit 0 is set",
@@ -878,6 +885,27 @@ def report():
     return 0
 
 
+def check_sync():
+    """Assert the .s blocks still say what THIS table says.
+
+    ⚠ WHY THIS EXISTS: --apply writes the blocks once, and after that the two
+    can drift -- a wording fixed in the listing and not here, or here and not in
+    the listing, and nothing else would notice.  A stale evidence line is
+    exactly the kind of defect the comment gate cannot see."""
+    txt = TARGET.read_text(encoding="utf-8")
+    bad = []
+    for _old, (new, _g, why) in RENAMES.items():
+        bad += [(new, w) for w in why if (";   " + w) not in txt]
+    for old, why in REFUSED.items():
+        bad += [(old, w) for w in _wrap(why, 72) if (";   " + w) not in txt]
+    print("  %d evidence line(s) in the table, %d not found in note_engine.s"
+          % (sum(len(v[2]) for v in RENAMES.values())
+             + sum(len(_wrap(v, 72)) for v in REFUSED.values()), len(bad)))
+    for n, w in bad[:10]:
+        print("  FAIL", n, "|", w[:70])
+    return 1 if bad else 0
+
+
 def check_landed():
     txt = TARGET.read_text(encoding="utf-8")
     bad = [old for old in RENAMES if re.search(r"^%s:" % old, txt, re.M)]
@@ -898,6 +926,7 @@ def main():
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--claims", action="store_true")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--sync", action="store_true")
     a = ap.parse_args()
     if a.apply:
         r, n, f = apply_to(TARGET)
@@ -908,6 +937,8 @@ def main():
         return claims()
     if a.check:
         return check_landed()
+    if a.sync:
+        return check_sync()
     return report()
 
 

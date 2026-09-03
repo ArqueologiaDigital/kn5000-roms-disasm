@@ -7434,8 +7434,14 @@ sub_FB40C7__FB40FF:
 ;   XIX,0x0087d2` 0xFB4117).  Those two addresses are the first two regions of
 ;   the RAM tone staging image tone_db_module.s documents: +0x000 the 713-byte
 ;   TONE RECORD and +0x2C9 = 0x008A9B the 408-byte DRUM-KIT RECORD.  0x2C9 = 713
-;   is why they are consecutive, and bank selectors >= 0x20 are the drum banks --
-;   the same threshold ToneDB_ResolveToneRecord splits on at 0xFB4176.
+;   is why they are consecutive.  ⚠ THE 0x20 THRESHOLD IS THE PERCUSSION SPLIT,
+;   and that is an inference from THREE readers rather than from one compare:
+;   this routine hands >= 0x20 the DRUM-KIT staging record, Part_GetElementBlock_
+;   Unpacked hands it the DRUM-INSTRUMENT staging region (0xFB42EF), and
+;   Part_ResolveDrumInstrumentRecord forms its arm from part record +0x1C - 0x28
+;   (0xFB4A78).  ToneDB_ResolveToneRecord also splits at 0x20 (0xFB4176), but it
+;   routes >= 0x20 to the SAME arm as < 0x08, so that compare on its own says
+;   nothing about percussion and is not offered as evidence here.
 ; ToneStage_RecordForBankSelector -- 0xFB4103..0xFB4123 (33 bytes)
 ;
 ; Called from: 1 site(s) outside this module:

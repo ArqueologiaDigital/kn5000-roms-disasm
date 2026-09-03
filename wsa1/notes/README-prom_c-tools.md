@@ -961,6 +961,9 @@ the routine turns on and what would settle it. `--apply` rewrites only the CODE 
 of a line and inserts a `★ NAMED (wave 18)` or `★ NOT NAMED (wave 18)` block above
 the generated header, so the comment gate stays green.
 
+`--sync` asserts the 412 evidence lines in the table are still the ones the `.s`
+blocks carry, so the two cannot drift apart unnoticed.
+
 `--claims` reads `original_ROMs/wsa1_prom_c.ic28` — bytes, never the `.s` file — and
 runs **56 checks** in eight sections: the `1 << 2i` element-mask byte table at
 `0xFDE69D`; that the three staging regions tile (`0x008A9B - 0x0087D2 = 713`,
