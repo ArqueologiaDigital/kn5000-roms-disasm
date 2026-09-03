@@ -1,0 +1,202 @@
+; ==============================================================================
+; ★★ WAVE 18, LANE w18/voice-tonedb -- WHAT THIS BLOCK ACTUALLY IS, AND WHY IT
+;    COULD NOT BE SAID UNTIL prom_d's TONE RECORD WAS DECODED
+; ==============================================================================
+;
+; ⚠ THE LINE ABOVE -- "NO ROUTINE HERE IS NAMED FOR WHAT IT DOES" -- IS NOW
+;   FALSE FOR 42 OF THE 50, and this block is the retraction.  It is kept
+;   unedited because scripts/analysis/assert_comments_preserved.py requires
+;   insertions only, and because it was TRUE of the generated pass it describes.
+;   The other eight are still named for their address, on purpose, and each one
+;   carries a `★ NOT NAMED (wave 18)` block saying what it turns on.
+;
+; ★ WAVE 17 REFUSED ALL FIFTY, AND THE REFUSAL WAS RIGHT.  Its voice lane read
+;   fifteen of them, found they share one shape -- follow part record +0x00 to
+;   the loaded tone object, take `object[+0xD0] & 0x0F` as a class, index a
+;   39-byte ROM record at 0xFDF4F1 + 39*class -- and declined to name them
+;   because that would have meant naming a field whose meaning lived in prom_d,
+;   outside its lane.  It wrote down what would settle it.  The SAME wave's
+;   tone-db lane then settled exactly that from the other side, without knowing
+;   it was unblocking anyone.  This block is what the two halves say together.
+;
+; ------------------------------------------------------------------------------
+; ★ THE VOCABULARY IS INHERITED, NOT INVENTED.  Every term below is defined in
+;   another file, and this one uses that spelling and no other:
+; ------------------------------------------------------------------------------
+;   ToneRec, 217 + N*81 + N*43 ............. prom_d/wsa1_prom_d.s
+;   ToneRec +0x10 `kind`, +0x11 element mask  ditto
+;   ToneRec +0xD0 `dsp_algo`, low nibble = the ALGORITHM TYPE ......... ditto
+;   ToneRec +0xD1..+0xD8 `dsp_param[8]` ..... ditto
+;   ToneRec_Element, 81 B, the ELEMENT PARAMETER BLOCK ................ ditto
+;   WaveSelRec, 43 B ........................ ditto
+;   PercInst, 150 B; DrumKitRec, 408 B ...... ditto
+;   ToneDB_ToneIndexMapC/D, ToneDB_DrumToneIndexMap, ToneDB_EnvDescTable,
+;     ToneDB_EnvDescTable_Perc, and the stride words +0xEA/+0xEC/+0xEE/+0xF0/
+;     +0xF2 ................................. prom_d/tone_database_directory.s
+;   the PART RECORD, 33 x 300 B at RAM 0x1523, and its four 41-byte per-element
+;     sub-records at +0x88 ................... prom_c/tone_db/tone_db_module.s
+;   the RAM TONE STAGING IMAGE at 0x0087D2, three regions that tile ... ditto
+;   DSP_AlgoDescriptor_Records (12 x 39), DSP_AlgoChannel_SelectorRecords
+;     (12 x 6), DSP_ChanFreq_CurvePool (12 x 51 u16, stride 0x66),
+;     DSP_ChanFreq_IndexMap, EGEnv_ModeBits_Table, Voice_SecondaryParam_Curve
+;     ....................................... prom_c/data_tables/voice_dsp_tables.s
+;
+; ------------------------------------------------------------------------------
+; ★★ THE FINDING: THERE ARE TWO PARALLEL RESOLVERS, NOT ONE, AND THEY SHARE ONE
+;    SELECTOR PAIR
+; ------------------------------------------------------------------------------
+; An element's wave choice is two bytes -- prom_d calls them `sel_program` and
+; `sel_bank_family` and gives them at ToneRec_Element +0x02/+0x03, copied there
+; from bytes 14 and 15 of a wave-catalogue row.  tone_db_module.s's
+; ToneDB_ResolveWaveSelectRecord turns that pair into a 43-byte WAVE-SELECT
+; RECORD.  ToneDB_ResolveEnvDescriptor (0xFB45C0), below, turns a pair IN THE
+; SAME ENCODING -- 7-bit program, 4-bit bank, 2-bit family, expansion bit,
+; masked by the same literals -- into a 14-byte ENVELOPE DESCRIPTOR, and the two
+; walks are identical bar the triple of directory slots they read:
+;
+; ⚠ IT IS A CHAIN, NOT ONE PAIR READ TWICE, and the difference matters.  The
+;   ELEMENT BLOCK's pair (+0x02/+0x03) resolves to a wave-select record; that
+;   RECORD then carries four more pairs of its own (+0x03..+0x0A, below), and it
+;   is those that reach ToneDB_ResolveEnvDescriptor.  Every one of its call sites
+;   passes bytes of a WaveSelRec -- 0xFB4745 and 0xFB4772 are the only two, and
+;   both come from the pointer at part element sub-record +0x04.
+;
+;     i = (family & 0x0F) * 128 + (program & 0x7F)      8 banks of 128
+;     n = LE16 at  base + dir[index map]  + 2*i
+;         return   base + dir[record array] + n * dir[stride word]
+;
+;     family bits 7:6   wave-select walk        envelope-descriptor walk
+;       0x00 / 0xC0     +0x0C  +0x18  +0xEA     +0x24  +0x30  +0xEC
+;       0x40            +0x14  +0x20  +0xF0     +0x2C  +0x38  +0xF2
+;       0x80            +0x10  +0x1C  +0xEA     +0x28  +0x34  +0xEC
+;
+; ★★ THIS GIVES prom_d's LARGEST UNREAD STRUCTURES A READER.  prom_d's wave 17
+;   block says of slots +0x30/+0x34/+0x38 "⚠ STILL NO READER ... they are the
+;   largest structures in the file and nothing in prom_c reaches their slots",
+;   and of the index maps +0x24/+0x28/+0x2C "same 1024-entry shape, no reader
+;   located".  0xFB45C0 reaches all six, and its family-bit split is the same
+;   three-way split ToneDB_ResolveWaveSelectRecord makes, which is what makes
+;   the two triples parallel rather than a coincidence of shape.
+; ★ IT ALSO EXPLAINS ROUND 11's Q23 NEGATIVE instead of contradicting it.  Q23
+;   measured that none of +0x24/+0x28/+0x2C behaves like +0x0C (best 3.3%).
+;   Correct: they select a different array.
+;
+; ------------------------------------------------------------------------------
+; ★★ AND A WAVE-SELECT RECORD CARRIES FOUR SUCH PAIRS, AT +0x03..+0x0A
+; ------------------------------------------------------------------------------
+; PartElement_ResolveEnvDescriptor (0xFB46FC) and WaveSelRec_ResolveEnvDescriptor
+; (0xFB474E) both read a WaveSelRec's bytes at +0x03 + 2k and +0x04 + 2k for
+; k = 0..3 and hand each pair to ToneDB_ResolveEnvDescriptor.  So:
+;
+;     struct WaveSelRec {              /* 43 B */
+;         u8   unk_00[3];              /* +0x00..+0x02  UNIDENTIFIED           */
+;         struct { u8 sel_program;     /* +0x03 + 2k                           */
+;                  u8 sel_bank_family; /* +0x04 + 2k                           */
+;         } env[4];                    /* PROVEN -- 0xFB470B/0xFB4736 form the
+;                                         two offsets, 0xFB4745 consumes them  */
+;         u8   tail_preset;            /* +0x0B  as prom_d already has it      */
+;         ...
+;     };
+;
+; ★ THE FOUR PAIRS END EXACTLY WHERE tail_preset BEGINS: 0x03 + 2*3 + 1 = 0x0A.
+;   prom_d spells +0x00..+0x0A `unk_00[11]`; eight of those eleven bytes are
+;   these four pairs.  ⚠ It does NOT say what an envelope descriptor's 14 bytes
+;   mean -- prom_d's own "every byte of every descriptor ... UNIDENTIFIED"
+;   stands untouched.  What is new is the route to them.
+;
+; ------------------------------------------------------------------------------
+; ★ THE PART-ELEMENT SUB-RECORD, EXTENDED.  tone_db_module.s gives +0x00, +0x04
+;   and +0x36 of the 41-byte record at 0x1523 + 300*part + 41*e + 0x88.  The
+;   routines below write four more fields of it:
+; ------------------------------------------------------------------------------
+;     +0x00  ptr32  the 81-byte ELEMENT PARAMETER BLOCK   Part_GetElementBlock
+;     +0x04  ptr32  the 43-byte WAVE-SELECT RECORD        Part_GetWaveSelectRecord
+;     +0x08 + 4k    ptr32 x 4, ENVELOPE DESCRIPTORS       PartElement_SetEnvDescriptorPointer
+;     +0x18  LE16   bit 15 only                           PartRec_RecomputeWord0006_FromToneRec
+;     +0x1E + 2k    LE16 x 4                              sub_FB53C5   -- STILL REFUSED
+;     +0x24..+0x26  three bytes                           PartElement_StageAlgoDescBytes_0024
+;     +0x27, +0x28  a byte pair                           sub_FB4D45   -- STILL REFUSED
+;     +0x36  byte   low 3 bits                            (tone_db_module.s)
+;   ★ +0x08 IS SETTLED FROM OUTSIDE THIS FILE: round 11's
+;     DrawbarPreset_GetDescriptor writes its 14-byte descriptor to the SAME
+;     address, 0x1523 + 300*part + 41*e + 0x90 (0xFC29AC/0xFC29B7).  One slot,
+;     two producers: the melodic path fills four entries, the drawbar path one.
+;   300 = 0x88 + 4*41 exactly, so the four sub-records tile the part record.
+;
+; ------------------------------------------------------------------------------
+; ★ THE PROGRAM-CHANGE PATH, END TO END, all inside this block
+; ------------------------------------------------------------------------------
+;   MidiProgram_SelectToneForPart (named in wave 17 from the parser's 0xC0 arm)
+;     -> ExtBoard_RemapBankSelector      bank 0x10 -> 0x30 if the board has it
+;     -> PartRec_Word0004_ClearStagedSetBit2
+;     -> PartRec_ResetToDefaults
+;     -> Part_LoadToneRecordAndPointers
+;          -> Part_ResolveToneRecord     staging image, prom_d, or the board
+;          -> per element, kind 0x00/0xC0:  Part_GetElementBlock,
+;             Part_GetWaveSelectRecord, PartElement_SetEnvDescriptorPointer x4
+;          -> per element, kind 0x40:       PartElement_SetWaveSelectPointer_
+;             ToRomDefault, DrawbarPreset_GetDescriptor
+;     -> then, on ToneRec +0x10 & 0xC0:
+;          0x00 / 0xC0  Part_RestageVoiceParams_Melodic
+;          0x40         Part_RestageVoiceParams_Drawbar
+;          0x80         neither -- prom_d's DRUM path, handled elsewhere
+;   ★ THAT IS WHY THE BLOCK SITS IN note_engine.s AND IS NOT THE NOTE ENGINE:
+;     it is reached from MidiIn_ParseRingAndDispatch, one arm over from the note
+;     handlers, and it was cut into this file by ADDRESS.  Wave 17 said so; this
+;     pass agrees and does not move a line, because moving one would move a byte.
+;
+; ------------------------------------------------------------------------------
+; ★ THE ALGORITHM TYPE IS LOADED SIXTEEN TIMES IN FIFTEEN OF THESE ROUTINES,
+;   and those loads are what the wave 17 refusal was waiting for.  `ToneRec +0xD0 & 0x0F` bounded at 11 with a
+;   12-arm computed goto appears at 0xFB582A, 0xFB59D2 and 0xFB5E39; bounded at 8
+;   with a 9-arm goto at 0xFB4A9F (twice), 0xFB607F, 0xFB6190 and 0xFB6272; and
+;   compared against a literal type at 0xFB5636 (7 and 0x0A), 0xFB5B56 (10, 11),
+;   0xFB5BAA (6, 7), 0xFB5C77 (6, 7), 0xFB5D05 (9), 0xFB5D6C (10, 11), 0xFB5F91
+;   (6, 7) and 0xFB601A (8).  Twelve arms, twelve DSP_AlgoDescriptor_Records.
+;   ⚠ The count is a SWEEP of the block, not a sample: notes/
+;   prom_c_voice_tonedb_w18.py --claims section I re-derives it from the
+;   listing, and reports the other five reads of +0xD0 separately -- four mask
+;   0x40 (bit 6) and one masks 0x80 (bit 7, in MidiProgram_SelectToneForPart).
+;
+; ------------------------------------------------------------------------------
+; ⚠ THREE CORRECTIONS THIS LANE OWES OTHER FILES.  REPORTED, NOT EDITED -- the
+;   comment gate forbids the edit and the adjudication is not this lane's.
+; ------------------------------------------------------------------------------
+;   1. prom_d's wave 17 block gives descriptor stride +0xF2 for slots +0x30 and
+;      +0x34 as well as +0x38.  The instructions say +0x30 and +0x34 are scaled
+;      by +0xEC (0xFB4679, 0xFB46C4) and only +0x38 by +0xF2 (0xFB469D).  Both
+;      words hold 14, so no ADDRESS changes -- but the attribution does.
+;   2. prom_d says of ToneRec +0xD0 "Bits 4:6 UNIDENTIFIED".  BIT 6 HAS FOUR
+;      READERS: 0xFB4F44, 0xFB5EEB, 0xFB5F31 and 0xFB5FFC, each gating a
+;      two-valued answer on it.  Bits 4 and 5 remain unread.
+;   3. prom_d says slots +0x30/+0x34/+0x38 and the maps +0x24/+0x28/+0x2C have
+;      no reader.  ToneDB_ResolveEnvDescriptor is that reader.
+;
+; ------------------------------------------------------------------------------
+; ⚠ THE PRICE, stated rather than hidden
+; ------------------------------------------------------------------------------
+;   * 42 labels were renamed and the generated `Calls:` / `Called from:` lines
+;     INSIDE THIS FILE were re-spelled to match by
+;     scripts/converters/sync_comments_to_renamed_labels.py, which substitutes
+;     only whole-word labels this pass actually renamed and never a word of
+;     prose.  The same lines in OTHER files -- tone_db_module.s above all --
+;     still spell the old address-form names.  They are comments and this lane
+;     may not edit them; their ADDRESSES are authoritative, and the old -> new
+;     table is notes/prom_c_voice_tonedb_w18.rename-map, committed.
+;   * `sub_XXXXXX__YYYYYY` internal branch labels were deliberately left alone,
+;     the same choice the tree already made for ChanRec_Release and for wave 17.
+;     So a routine named `Part_GetElementBlock` still branches to
+;     `sub_FB4383__FB43B9`, which is the file's existing convention.
+;   * No code outside this file names these labels -- prom_c's call operands are
+;     numeric (`calr (0xFB4324 - 0xFB43C4)`), so the rename cannot break
+;     assembly.  The byte gate is what proves it did not.
+;
+; ★ THE TABLE, THE APPLIER AND THE CHECKS ARE ONE FILE, so the rename is
+;   re-derivable, auditable and revertable:
+;     python3 notes/prom_c_voice_tonedb_w18.py --report   # 42 named, 8 refused
+;     python3 notes/prom_c_voice_tonedb_w18.py --claims   # 56 ROM checks
+;     python3 notes/prom_c_voice_tonedb_w18.py --check    # assert it landed
+;   --claims reads original_ROMs/wsa1_prom_c.ic28 -- bytes, never this file --
+;   and re-reads every literal quoted above at the address it is quoted at, with
+;   that literal's image-wide occurrence count beside it as the null.
+; ==============================================================================

@@ -6620,10 +6620,10 @@ MidiNote_Dispatch__FB3F9C:
 ;                              part[+0x19].  W Voice_ComputeField0029_AB / _CD.
 ;                              R Voice_Retire_Mode20 and 0xFAC026.
 ;                              STRONG for the LAYOUT, UNIDENTIFIED for the meaning */
-;     u16  f2B;             /* +0x2B  = f(sub_FB6272(part, 0)): 0 when that returns
+;     u16  f2B;             /* +0x2B  = f(Part_GetAlgoDescByte17(part, 0)): 0 when that returns
 ;                              0, else (v<<8)|v|0x8000 (0xFB1E14-0xFB1E31).
 ;                              VoiceRecords_InitFromAlloc writes 0.  UNIDENTIFIED */
-;     u16  f2D;             /* +0x2D  = 0x00FF when sub_FB5D05(part) is 0xFF, else
+;     u16  f2D;             /* +0x2D  = 0x00FF when Part_GetSecondaryParam_AlgoType9(part) is 0xFF, else
 ;                              v|0xC000 (0xFB1E3E-0xFB1E5F); init 0x00FF. UNIDENT. */
 ;     u16  level_offset;    /* +0x2F  cleared by Voice_ComputeLevelBase_AB/_CD and
 ;                              added into Voice_StageLevel_Reg0080's table index
@@ -6813,7 +6813,7 @@ MidiNote_Dispatch__FB3F9C:
 ;        +0x17, part[+0x8C] -> +0x1B, part[+0x90+4*layer] -> +0x1F;
 ;     2. stamp +0x01, +0x03, +0x04, +0x05 (note|0x80), +0x0C (velocity), +0x23, +0x25;
 ;     3. Voice_ComputePitch -> +0x06 and +0x08;
-;     4. sub_FB6272 -> +0x2B, sub_FB5D05 -> +0x2D, and four table lookups through
+;     4. Part_GetAlgoDescByte17 -> +0x2B, Part_GetSecondaryParam_AlgoType9 -> +0x2D, and four table lookups through
 ;        the tone object -> +0x31, +0x32, +0x34, +0x36;
 ;     5. ChanAlloc_ForNoteRequest for the whole request;
 ;     6. per returned channel: MemCopyWords into 0x3BCF, then +0x00 = chan and the
@@ -7087,8 +7087,223 @@ VoiceRecords_InitFromAlloc__FB4059:
 ;         /tmp/b.headers > /tmp/b.final.s
 ;     python3 notes/prom_c_verify_fragment.py c 0xFB405F /tmp/b.final.s
 ; ==============================================================================
+; ==============================================================================
+; ★★ WAVE 18, LANE w18/voice-tonedb -- WHAT THIS BLOCK ACTUALLY IS, AND WHY IT
+;    COULD NOT BE SAID UNTIL prom_d's TONE RECORD WAS DECODED
+; ==============================================================================
+;
+; ⚠ THE LINE ABOVE -- "NO ROUTINE HERE IS NAMED FOR WHAT IT DOES" -- IS NOW
+;   FALSE FOR 42 OF THE 50, and this block is the retraction.  It is kept
+;   unedited because scripts/analysis/assert_comments_preserved.py requires
+;   insertions only, and because it was TRUE of the generated pass it describes.
+;   The other eight are still named for their address, on purpose, and each one
+;   carries a `★ NOT NAMED (wave 18)` block saying what it turns on.
+;
+; ★ WAVE 17 REFUSED ALL FIFTY, AND THE REFUSAL WAS RIGHT.  Its voice lane read
+;   fifteen of them, found they share one shape -- follow part record +0x00 to
+;   the loaded tone object, take `object[+0xD0] & 0x0F` as a class, index a
+;   39-byte ROM record at 0xFDF4F1 + 39*class -- and declined to name them
+;   because that would have meant naming a field whose meaning lived in prom_d,
+;   outside its lane.  It wrote down what would settle it.  The SAME wave's
+;   tone-db lane then settled exactly that from the other side, without knowing
+;   it was unblocking anyone.  This block is what the two halves say together.
+;
+; ------------------------------------------------------------------------------
+; ★ THE VOCABULARY IS INHERITED, NOT INVENTED.  Every term below is defined in
+;   another file, and this one uses that spelling and no other:
+; ------------------------------------------------------------------------------
+;   ToneRec, 217 + N*81 + N*43 ............. prom_d/wsa1_prom_d.s
+;   ToneRec +0x10 `kind`, +0x11 element mask  ditto
+;   ToneRec +0xD0 `dsp_algo`, low nibble = the ALGORITHM TYPE ......... ditto
+;   ToneRec +0xD1..+0xD8 `dsp_param[8]` ..... ditto
+;   ToneRec_Element, 81 B, the ELEMENT PARAMETER BLOCK ................ ditto
+;   WaveSelRec, 43 B ........................ ditto
+;   PercInst, 150 B; DrumKitRec, 408 B ...... ditto
+;   ToneDB_ToneIndexMapC/D, ToneDB_DrumToneIndexMap, ToneDB_EnvDescTable,
+;     ToneDB_EnvDescTable_Perc, and the stride words +0xEA/+0xEC/+0xEE/+0xF0/
+;     +0xF2 ................................. prom_d/tone_database_directory.s
+;   the PART RECORD, 33 x 300 B at RAM 0x1523, and its four 41-byte per-element
+;     sub-records at +0x88 ................... prom_c/tone_db/tone_db_module.s
+;   the RAM TONE STAGING IMAGE at 0x0087D2, three regions that tile ... ditto
+;   DSP_AlgoDescriptor_Records (12 x 39), DSP_AlgoChannel_SelectorRecords
+;     (12 x 6), DSP_ChanFreq_CurvePool (12 x 51 u16, stride 0x66),
+;     DSP_ChanFreq_IndexMap, EGEnv_ModeBits_Table, Voice_SecondaryParam_Curve
+;     ....................................... prom_c/data_tables/voice_dsp_tables.s
+;
+; ------------------------------------------------------------------------------
+; ★★ THE FINDING: THERE ARE TWO PARALLEL RESOLVERS, NOT ONE, AND THEY SHARE ONE
+;    SELECTOR PAIR
+; ------------------------------------------------------------------------------
+; An element's wave choice is two bytes -- prom_d calls them `sel_program` and
+; `sel_bank_family` and gives them at ToneRec_Element +0x02/+0x03, copied there
+; from bytes 14 and 15 of a wave-catalogue row.  tone_db_module.s's
+; ToneDB_ResolveWaveSelectRecord turns that pair into a 43-byte WAVE-SELECT
+; RECORD.  ToneDB_ResolveEnvDescriptor (0xFB45C0), below, turns a pair IN THE
+; SAME ENCODING -- 7-bit program, 4-bit bank, 2-bit family, expansion bit,
+; masked by the same literals -- into a 14-byte ENVELOPE DESCRIPTOR, and the two
+; walks are identical bar the triple of directory slots they read:
+;
+; ⚠ IT IS A CHAIN, NOT ONE PAIR READ TWICE, and the difference matters.  The
+;   ELEMENT BLOCK's pair (+0x02/+0x03) resolves to a wave-select record; that
+;   RECORD then carries four more pairs of its own (+0x03..+0x0A, below), and it
+;   is those that reach ToneDB_ResolveEnvDescriptor.  Every one of its call sites
+;   passes bytes of a WaveSelRec -- 0xFB4745 and 0xFB4772 are the only two, and
+;   both come from the pointer at part element sub-record +0x04.
+;
+;     i = (family & 0x0F) * 128 + (program & 0x7F)      8 banks of 128
+;     n = LE16 at  base + dir[index map]  + 2*i
+;         return   base + dir[record array] + n * dir[stride word]
+;
+;     family bits 7:6   wave-select walk        envelope-descriptor walk
+;       0x00 / 0xC0     +0x0C  +0x18  +0xEA     +0x24  +0x30  +0xEC
+;       0x40            +0x14  +0x20  +0xF0     +0x2C  +0x38  +0xF2
+;       0x80            +0x10  +0x1C  +0xEA     +0x28  +0x34  +0xEC
+;
+; ★★ THIS GIVES prom_d's LARGEST UNREAD STRUCTURES A READER.  prom_d's wave 17
+;   block says of slots +0x30/+0x34/+0x38 "⚠ STILL NO READER ... they are the
+;   largest structures in the file and nothing in prom_c reaches their slots",
+;   and of the index maps +0x24/+0x28/+0x2C "same 1024-entry shape, no reader
+;   located".  0xFB45C0 reaches all six, and its family-bit split is the same
+;   three-way split ToneDB_ResolveWaveSelectRecord makes, which is what makes
+;   the two triples parallel rather than a coincidence of shape.
+; ★ IT ALSO EXPLAINS ROUND 11's Q23 NEGATIVE instead of contradicting it.  Q23
+;   measured that none of +0x24/+0x28/+0x2C behaves like +0x0C (best 3.3%).
+;   Correct: they select a different array.
+;
+; ------------------------------------------------------------------------------
+; ★★ AND A WAVE-SELECT RECORD CARRIES FOUR SUCH PAIRS, AT +0x03..+0x0A
+; ------------------------------------------------------------------------------
+; PartElement_ResolveEnvDescriptor (0xFB46FC) and WaveSelRec_ResolveEnvDescriptor
+; (0xFB474E) both read a WaveSelRec's bytes at +0x03 + 2k and +0x04 + 2k for
+; k = 0..3 and hand each pair to ToneDB_ResolveEnvDescriptor.  So:
+;
+;     struct WaveSelRec {              /* 43 B */
+;         u8   unk_00[3];              /* +0x00..+0x02  UNIDENTIFIED           */
+;         struct { u8 sel_program;     /* +0x03 + 2k                           */
+;                  u8 sel_bank_family; /* +0x04 + 2k                           */
+;         } env[4];                    /* PROVEN -- 0xFB470B/0xFB4736 form the
+;                                         two offsets, 0xFB4745 consumes them  */
+;         u8   tail_preset;            /* +0x0B  as prom_d already has it      */
+;         ...
+;     };
+;
+; ★ THE FOUR PAIRS END EXACTLY WHERE tail_preset BEGINS: 0x03 + 2*3 + 1 = 0x0A.
+;   prom_d spells +0x00..+0x0A `unk_00[11]`; eight of those eleven bytes are
+;   these four pairs.  ⚠ It does NOT say what an envelope descriptor's 14 bytes
+;   mean -- prom_d's own "every byte of every descriptor ... UNIDENTIFIED"
+;   stands untouched.  What is new is the route to them.
+;
+; ------------------------------------------------------------------------------
+; ★ THE PART-ELEMENT SUB-RECORD, EXTENDED.  tone_db_module.s gives +0x00, +0x04
+;   and +0x36 of the 41-byte record at 0x1523 + 300*part + 41*e + 0x88.  The
+;   routines below write four more fields of it:
+; ------------------------------------------------------------------------------
+;     +0x00  ptr32  the 81-byte ELEMENT PARAMETER BLOCK   Part_GetElementBlock
+;     +0x04  ptr32  the 43-byte WAVE-SELECT RECORD        Part_GetWaveSelectRecord
+;     +0x08 + 4k    ptr32 x 4, ENVELOPE DESCRIPTORS       PartElement_SetEnvDescriptorPointer
+;     +0x18  LE16   bit 15 only                           PartRec_RecomputeWord0006_FromToneRec
+;     +0x1E + 2k    LE16 x 4                              sub_FB53C5   -- STILL REFUSED
+;     +0x24..+0x26  three bytes                           PartElement_StageAlgoDescBytes_0024
+;     +0x27, +0x28  a byte pair                           sub_FB4D45   -- STILL REFUSED
+;     +0x36  byte   low 3 bits                            (tone_db_module.s)
+;   ★ +0x08 IS SETTLED FROM OUTSIDE THIS FILE: round 11's
+;     DrawbarPreset_GetDescriptor writes its 14-byte descriptor to the SAME
+;     address, 0x1523 + 300*part + 41*e + 0x90 (0xFC29AC/0xFC29B7).  One slot,
+;     two producers: the melodic path fills four entries, the drawbar path one.
+;   300 = 0x88 + 4*41 exactly, so the four sub-records tile the part record.
+;
+; ------------------------------------------------------------------------------
+; ★ THE PROGRAM-CHANGE PATH, END TO END, all inside this block
+; ------------------------------------------------------------------------------
+;   MidiProgram_SelectToneForPart (named in wave 17 from the parser's 0xC0 arm)
+;     -> ExtBoard_RemapBankSelector      bank 0x10 -> 0x30 if the board has it
+;     -> PartRec_Word0004_ClearStagedSetBit2
+;     -> PartRec_ResetToDefaults
+;     -> Part_LoadToneRecordAndPointers
+;          -> Part_ResolveToneRecord     staging image, prom_d, or the board
+;          -> per element, kind 0x00/0xC0:  Part_GetElementBlock,
+;             Part_GetWaveSelectRecord, PartElement_SetEnvDescriptorPointer x4
+;          -> per element, kind 0x40:       PartElement_SetWaveSelectPointer_
+;             ToRomDefault, DrawbarPreset_GetDescriptor
+;     -> then, on ToneRec +0x10 & 0xC0:
+;          0x00 / 0xC0  Part_RestageVoiceParams_Melodic
+;          0x40         Part_RestageVoiceParams_Drawbar
+;          0x80         neither -- prom_d's DRUM path, handled elsewhere
+;   ★ THAT IS WHY THE BLOCK SITS IN note_engine.s AND IS NOT THE NOTE ENGINE:
+;     it is reached from MidiIn_ParseRingAndDispatch, one arm over from the note
+;     handlers, and it was cut into this file by ADDRESS.  Wave 17 said so; this
+;     pass agrees and does not move a line, because moving one would move a byte.
+;
+; ------------------------------------------------------------------------------
+; ★ THE ALGORITHM TYPE IS LOADED SIXTEEN TIMES IN FIFTEEN OF THESE ROUTINES,
+;   and those loads are what the wave 17 refusal was waiting for.  `ToneRec
+;   +0xD0 & 0x0F` bounded at 11 with a
+;   12-arm computed goto appears at 0xFB582A, 0xFB59D2 and 0xFB5E39; bounded at 8
+;   with a 9-arm goto at 0xFB4A9F (twice), 0xFB607F, 0xFB6190 and 0xFB6272; and
+;   compared against a literal type at 0xFB5636 (7 and 0x0A), 0xFB5B56 (10, 11),
+;   0xFB5BAA (6, 7), 0xFB5C77 (6, 7), 0xFB5D05 (9), 0xFB5D6C (10, 11), 0xFB5F91
+;   (6, 7) and 0xFB601A (8).  Twelve arms, twelve DSP_AlgoDescriptor_Records.
+;   ⚠ The count is a SWEEP of the block, not a sample: notes/
+;   prom_c_voice_tonedb_w18.py --claims section I re-derives it from the
+;   listing, and reports the other five reads of +0xD0 separately -- four mask
+;   0x40 (bit 6) and one masks 0x80 (bit 7, in MidiProgram_SelectToneForPart).
+;
+; ------------------------------------------------------------------------------
+; ⚠ THREE CORRECTIONS THIS LANE OWES OTHER FILES.  REPORTED, NOT EDITED -- the
+;   comment gate forbids the edit and the adjudication is not this lane's.
+; ------------------------------------------------------------------------------
+;   1. prom_d's wave 17 block gives descriptor stride +0xF2 for slots +0x30 and
+;      +0x34 as well as +0x38.  The instructions say +0x30 and +0x34 are scaled
+;      by +0xEC (0xFB4679, 0xFB46C4) and only +0x38 by +0xF2 (0xFB469D).  Both
+;      words hold 14, so no ADDRESS changes -- but the attribution does.
+;   2. prom_d says of ToneRec +0xD0 "Bits 4:6 UNIDENTIFIED".  BIT 6 HAS FOUR
+;      READERS: 0xFB4F44, 0xFB5EEB, 0xFB5F36 and 0xFB5FFC, each gating a
+;      two-valued answer on it.  Bits 4 and 5 remain unread.
+;   3. prom_d says slots +0x30/+0x34/+0x38 and the maps +0x24/+0x28/+0x2C have
+;      no reader.  ToneDB_ResolveEnvDescriptor is that reader.
+;
+; ------------------------------------------------------------------------------
+; ⚠ THE PRICE, stated rather than hidden
+; ------------------------------------------------------------------------------
+;   * 42 labels were renamed and the generated `Calls:` / `Called from:` lines
+;     INSIDE THIS FILE were re-spelled to match by
+;     scripts/converters/sync_comments_to_renamed_labels.py, which substitutes
+;     only whole-word labels this pass actually renamed and never a word of
+;     prose.  The same lines in OTHER files -- tone_db_module.s above all --
+;     still spell the old address-form names.  They are comments and this lane
+;     may not edit them; their ADDRESSES are authoritative, and the old -> new
+;     table is notes/prom_c_voice_tonedb_w18.rename-map, committed.
+;   * `sub_XXXXXX__YYYYYY` internal branch labels were deliberately left alone,
+;     the same choice the tree already made for ChanRec_Release and for wave 17.
+;     So a routine named `Part_GetElementBlock` still branches to
+;     `sub_FB4383__FB43B9`, which is the file's existing convention.
+;   * No code outside this file names these labels -- prom_c's call operands are
+;     numeric (`calr (0xFB4324 - 0xFB43C4)`), so the rename cannot break
+;     assembly.  The byte gate is what proves it did not.
+;
+; ★ THE TABLE, THE APPLIER AND THE CHECKS ARE ONE FILE, so the rename is
+;   re-derivable, auditable and revertable:
+;     python3 notes/prom_c_voice_tonedb_w18.py --report   # 42 named, 8 refused
+;     python3 notes/prom_c_voice_tonedb_w18.py --claims   # 56 ROM checks
+;     python3 notes/prom_c_voice_tonedb_w18.py --check    # assert it landed
+;   --claims reads original_ROMs/wsa1_prom_c.ic28 -- bytes, never this file --
+;   and re-reads every literal quoted above at the address it is quoted at, with
+;   that literal's image-wide occurrence count beside it as the null.
+; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FB405F -- 0xFB405F..0xFB40C6 (104 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB405F is now `ToneRec_MapElementIndex_ByMask`.
+;   GRADE PROVEN.  WHY `ToneRec_MapElementIndex_ByMask`:
+;   args (bank selector, element index i, element mask).  Body: bank selectors
+;   8..0x0F return i unchanged (0xFB4065/0xFB406B/0xFB4071 -- those banks are the
+;   713-byte 4-element RAM tones, see ToneDB_ResolveToneRecord's 0x02C9 arm).
+;   Otherwise it reads `1 << 2i` from the byte table at 0xFDE69D (0xFB407E; the
+;   bytes there are 01 04 10 40 ...) and ANDs it with the mask: no bit, return
+;   0xFF; a bit, return the count of set slots in 1..i (loop 0xFB4096-0xFB40B5).
+;   That count IS the PACKED position of element i among the elements the record
+;   actually stores, provided slot 0 is present -- said as a proviso because the
+;   ROM does not bound it.  prom_d already cites this routine as `the selector at
+;   0xFB405F, whose 0xFF answer means no element`; the mask is ToneRec +0x11.
+; ToneRec_MapElementIndex_ByMask -- 0xFB405F..0xFB40C6 (104 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -7103,7 +7318,7 @@ VoiceRecords_InitFromAlloc__FB4059:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB405F:
+ToneRec_MapElementIndex_ByMask:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB405F  link XIZ,0x0000
 	pushw	hl                                   ; FB4063  push HL
 	pushw	de                                   ; FB4064  push DE
@@ -7156,7 +7371,14 @@ sub_FB405F__FB40C2:
 	unlk32 xiz                                 ; FB40C4  unlk XIZ
 	ret                                        ; FB40C6  ret
 ; --------------------------------------------------------------------------
-; sub_FB40C7 -- 0xFB40C7..0xFB4102 (60 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB40C7 is now `ToneRec_CountElements_ByMask`.
+;   GRADE PROVEN.  WHY `ToneRec_CountElements_ByMask`:
+;   args (bank selector, element mask).  Bank selectors 8..0x0F return the
+;   constant 4 (0xFB40F9); every other selector counts the slots i = 0..3 whose
+;   `1 << 2i` (same 0xFDE69D table, 0xFB40E2) is set in the mask, bounded by
+;   `cp H,4` at 0xFB40F3.  The count is the N of prom_d's ToneRec: its one caller
+;   uses it to skip N*81 bytes of element blocks before the wave-select array.
+; ToneRec_CountElements_ByMask -- 0xFB40C7..0xFB4102 (60 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -7171,7 +7393,7 @@ sub_FB405F__FB40C2:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB40C7:
+ToneRec_CountElements_ByMask:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB40C7  link XIZ,0x0000
 	pushw	hl                                   ; FB40CB  push HL
 	ldb	l, 0                                   ; FB40CC  ld L,0x00
@@ -7205,7 +7427,22 @@ sub_FB40C7__FB40FF:
 	unlk32 xiz                                 ; FB4100  unlk XIZ
 	ret                                        ; FB4102  ret
 ; --------------------------------------------------------------------------
-; sub_FB4103 -- 0xFB4103..0xFB4123 (33 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB4103 is now `ToneStage_RecordForBankSelector`.
+;   GRADE PROVEN.  WHY `ToneStage_RecordForBankSelector`:
+;   the whole body is `return (bank selector >= 0x20) ? 0x008A9B : 0x0087D2`
+;   (`cp (XIZ+0x08),0x20` 0xFB4108, `lda XBC,0x008a9b` 0xFB410E, `lda
+;   XIX,0x0087d2` 0xFB4117).  Those two addresses are the first two regions of
+;   the RAM tone staging image tone_db_module.s documents: +0x000 the 713-byte
+;   TONE RECORD and +0x2C9 = 0x008A9B the 408-byte DRUM-KIT RECORD.  0x2C9 = 713
+;   is why they are consecutive.  ⚠ THE 0x20 THRESHOLD IS THE PERCUSSION SPLIT,
+;   and that is an inference from THREE readers rather than from one compare:
+;   this routine hands >= 0x20 the DRUM-KIT staging record, Part_GetElementBlock_
+;   Unpacked hands it the DRUM-INSTRUMENT staging region (0xFB42EF), and
+;   Part_ResolveDrumInstrumentRecord forms its arm from part record +0x1C - 0x28
+;   (0xFB4A78).  ToneDB_ResolveToneRecord also splits at 0x20 (0xFB4176), but it
+;   routes >= 0x20 to the SAME arm as < 0x08, so that compare on its own says
+;   nothing about percussion and is not offered as evidence here.
+; ToneStage_RecordForBankSelector -- 0xFB4103..0xFB4123 (33 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB9BD1 in sub_FB9B69
@@ -7221,7 +7458,7 @@ sub_FB40C7__FB40FF:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB4103:
+ToneStage_RecordForBankSelector:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4103  link XIZ,0x0000
 	push	xix                                   ; FB4107  push XIX
 	cp (xiz+8), 0x20                           ; FB4108  cp (XIZ+0x08),0x20
@@ -7423,7 +7660,14 @@ ToneDB_ResolveToneRecord__FB42A6:
 	unlk32 xiz                                 ; FB42AD  unlk XIZ
 	ret                                        ; FB42AF  ret
 ; --------------------------------------------------------------------------
-; sub_FB42B0 -- 0xFB42B0..0xFB42E2 (51 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB42B0 is now `Part_ResolveToneRecord`.
+;   GRADE PROVEN.  WHY `Part_ResolveToneRecord`:
+;   args (part, program, bank selector).  If part record +0x04 bit 0 is set
+;   (0xFB42C1/0xFB42C6 -- tone_db_module.s names that bit `staged`) it returns
+;   ToneStage_RecordForBankSelector(bank selector); otherwise it tail-calls
+;   ToneDB_ResolveToneRecord(program, bank selector) at 0xFB42DC.  So it is the
+;   one place that answers `where is this part's tone record`, RAM or database.
+; Part_ResolveToneRecord -- 0xFB42B0..0xFB42E2 (51 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFC1BA1 in sub_FC1B6E
@@ -7431,7 +7675,7 @@ ToneDB_ResolveToneRecord__FB42A6:
 ;          0xFB47DC
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB4103 = sub_FB4103, 0xFB4124 = ToneDB_ResolveToneRecord
+; Calls:   0xFB4103 = ToneStage_RecordForBankSelector, 0xFB4124 = ToneDB_ResolveToneRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB42B0-0xFB42E2
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7440,7 +7684,7 @@ ToneDB_ResolveToneRecord__FB42A6:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB42B0:
+Part_ResolveToneRecord:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB42B0  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FB42B4  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB42B7  extz BC
@@ -7464,7 +7708,15 @@ sub_FB42B0__FB42E0:
 	unlk32 xiz                                 ; FB42E0  unlk XIZ
 	ret                                        ; FB42E2  ret
 ; --------------------------------------------------------------------------
-; sub_FB42E3 -- 0xFB42E3..0xFB4323 (65 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB42E3 is now `Part_GetElementBlock_Unpacked`.
+;   GRADE PROVEN.  WHY `Part_GetElementBlock_Unpacked`:
+;   args (part, element index, bank selector).  Bank selectors >= 0x20 return
+;   0x008C33, the staging image's DRUM-INSTRUMENT region (0xFB42EF).  Otherwise
+;   it follows part record +0x00 to the tone record (`ld XIY,(XWA+0x1523)`
+;   0xFB4313) and adds 0xD9 + 81*index (`ld C,0x51` 0xFB42F8, `add XBC,0x000000d9`
+;   0xFB42FF) -- prom_d's ToneRec.element[] with NO mask packing, which is what
+;   makes it the counterpart of ToneRec_GetElementBlock rather than a copy of it.
+; Part_GetElementBlock_Unpacked -- 0xFB42E3..0xFB4323 (65 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB9C70 in sub_FB9B69__FB9C2D, 0xFB9E8D in sub_FB9B69__FB9E4A
@@ -7480,7 +7732,7 @@ sub_FB42B0__FB42E0:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB42E3:
+Part_GetElementBlock_Unpacked:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB42E3  link XIZ,0xfffc
 	push	xix                                   ; FB42E7  push XIX
 	cpw (xiz+12), 0x0020                       ; FB42E8  cp (XIZ+0x0c),0x0020
@@ -7518,7 +7770,7 @@ sub_FB42E3__FB431C:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1
-; Calls:   0xFB405F = sub_FB405F
+; Calls:   0xFB405F = ToneRec_MapElementIndex_ByMask
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB4324-0xFB4382
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7580,14 +7832,21 @@ ToneRec_GetElementBlock__FB437E:
 	unlk32 xiz                                 ; FB4380  unlk XIZ
 	ret                                        ; FB4382  ret
 ; --------------------------------------------------------------------------
-; sub_FB4383 -- 0xFB4383..0xFB43CA (72 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB4383 is now `Part_GetElementBlock`.
+;   GRADE PROVEN.  WHY `Part_GetElementBlock`:
+;   args (part, element index, bank selector).  It is the two-armed wrapper: part
+;   record +0x04 bit 0 set -> Part_GetElementBlock_Unpacked (0xFB43B2), clear ->
+;   ToneRec_GetElementBlock on part record +0x00 (0xFB43BB/0xFB43C1), which packs
+;   the index through the element mask.  Both arms return an 81-byte ELEMENT
+;   PARAMETER BLOCK, so the difference is only whether the index is packed.
+; Part_GetElementBlock -- 0xFB4383..0xFB43CA (72 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
 ;          0xFB4837 0xFB48AD
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB42E3 = sub_FB42E3, 0xFB4324 = ToneRec_GetElementBlock
+; Calls:   0xFB42E3 = Part_GetElementBlock_Unpacked, 0xFB4324 = ToneRec_GetElementBlock
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB4383-0xFB43CA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7596,7 +7855,7 @@ ToneRec_GetElementBlock__FB437E:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB4383:
+Part_GetElementBlock:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4383  link XIZ,0x0000
 	push	xhl                                   ; FB4387  push XHL
 	pushw	de                                   ; FB4388  push DE
@@ -7630,7 +7889,22 @@ sub_FB4383__FB43C6:
 	unlk32 xiz                                 ; FB43C8  unlk XIZ
 	ret                                        ; FB43CA  ret
 ; --------------------------------------------------------------------------
-; sub_FB43CB -- 0xFB43CB..0xFB44A4 (218 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB43CB is now `ToneRec_GetWaveSelectRecord`.
+;   GRADE PROVEN.  WHY `ToneRec_GetWaveSelectRecord`:
+;   args (bank selector, element index, tone record).  ★★ THIS IS THE
+;   WAVE-SELECT SIBLING OF ToneRec_GetElementBlock, and that is what round 11
+;   could not see when it refused this label for `reading slot +0xAC like
+;   ToneRec_GetElementBlock but sharing none of the arithmetic`.  Body: pack the
+;   index through the mask at ToneRec +0x11 (0xFB43D4/0xFB43E2); on 0xFF take
+;   directory slot +0xAC (ToneDB_DefaultLayerParams) PLUS 0x51 (0xFB4401) -- that
+;   slot is 81 + 43 bytes, so +0x51 is precisely its wave-select half, which is
+;   why the same slot serves both routines.  Otherwise ask
+;   ToneRec_CountElements_ByMask for N (0xFB4415) and return
+;   record + 0xD9 + 81*N + 43*packed: the four arms carry 0x51, 0xA2, 0xF3 and
+;   0x144 (0xFB443F, 0xFB445C, 0xFB4479, 0xFB4496) = 81, 162, 243, 324 = 81*N,
+;   each with `ld A,0x2b` (43) as the stride.  That is prom_d's
+;   `WaveSelRec wavesel[N] at +0xD9 + 81*N`, computed.
+; ToneRec_GetWaveSelectRecord -- 0xFB43CB..0xFB44A4 (218 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -7638,7 +7912,7 @@ sub_FB4383__FB43C6:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1
-; Calls:   0xFB405F = sub_FB405F, 0xFB40C7 = sub_FB40C7
+; Calls:   0xFB405F = ToneRec_MapElementIndex_ByMask, 0xFB40C7 = ToneRec_CountElements_ByMask
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB43CB-0xFB44A4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7650,7 +7924,7 @@ sub_FB4383__FB43C6:
 ;           instructions to its 37 and shares none of the arithmetic; a name
 ;           borrowed from the slot would claim a twin the diff denies.
 ; --------------------------------------------------------------------------
-sub_FB43CB:
+ToneRec_GetWaveSelectRecord:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB43CB  link XIZ,0xfffc
 	pushw	hl                                   ; FB43CF  push HL
 	push	xix                                   ; FB43D0  push XIX
@@ -7740,7 +8014,15 @@ sub_FB43CB__FB44A0:
 	unlk32 xiz                                 ; FB44A2  unlk XIZ
 	ret                                        ; FB44A4  ret
 ; --------------------------------------------------------------------------
-; sub_FB44A5 -- 0xFB44A5..0xFB44EB (71 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB44A5 is now `ToneRec_GetWaveSelectRecord_ByBankSelector`.
+;   GRADE PROVEN.  WHY `ToneRec_GetWaveSelectRecord_ByBankSelector`:
+;   args (bank selector, element index, tone record).  Bank selectors 8..0x0F
+;   (0xFB44AE/0xFB44B4) skip the packing entirely and take record + 0xD9 + 0x144 +
+;   43*index (0xFB44BD/0xFB44C3/0xFB44CA) -- 0x144 = 4*81, i.e. N is ASSUMED to be
+;   4, which is consistent with those banks holding 713-byte four-element records
+;   and with ToneRec_CountElements_ByMask returning the constant 4 for them.
+;   Every other selector defers to ToneRec_GetWaveSelectRecord (0xFB44E2).
+; ToneRec_GetWaveSelectRecord_ByBankSelector -- 0xFB44A5..0xFB44EB (71 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB862E in sub_FB8603, 0xFB9CB2 in sub_FB9B69__FB9C91
@@ -7750,7 +8032,7 @@ sub_FB43CB__FB44A0:
 ;          0xFB4542
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB43CB = sub_FB43CB
+; Calls:   0xFB43CB = ToneRec_GetWaveSelectRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB44A5-0xFB44EB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7759,7 +8041,7 @@ sub_FB43CB__FB44A0:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB44A5:
+ToneRec_GetWaveSelectRecord_ByBankSelector:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB44A5  link XIZ,0x0000
 	pushw	hl                                   ; FB44A9  push HL
 	push	xix                                   ; FB44AA  push XIX
@@ -7792,14 +8074,23 @@ sub_FB44A5__FB44E7:
 	unlk32 xiz                                 ; FB44E9  unlk XIZ
 	ret                                        ; FB44EB  ret
 ; --------------------------------------------------------------------------
-; sub_FB44EC -- 0xFB44EC..0xFB454B (96 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB44EC is now `Part_GetWaveSelectRecord`.
+;   GRADE PROVEN.  WHY `Part_GetWaveSelectRecord`:
+;   args (part, element index).  Part record +0x04 bit 0 set -> staging image
+;   0x0087D2 + 0x21D + 43*index (0xFB4510/0xFB4517/0xFB451D); 0x21D = 541 =
+;   217 + 4*81 is the staged tone's wave-select array.  Clear -> 
+;   ToneRec_GetWaveSelectRecord_ByBankSelector(part record +0x1C, index, part
+;   record +0x00) at 0xFB4536/0xFB4542.  ★ That call is where part record +0x1C
+;   is USED as the bank selector -- tone_db_module.s derived that field's role
+;   from Voice_GetOctaveShift, and this is a second, independent reader.
+; Part_GetWaveSelectRecord -- 0xFB44EC..0xFB454B (96 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFB485C
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB44A5 = sub_FB44A5
+; Calls:   0xFB44A5 = ToneRec_GetWaveSelectRecord_ByBankSelector
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB44EC-0xFB454B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7808,7 +8099,7 @@ sub_FB44A5__FB44E7:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB44EC:
+Part_GetWaveSelectRecord:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB44EC  link XIZ,0x0000
 	pushw	hl                                   ; FB44F0  push HL
 	push	xix                                   ; FB44F1  push XIX
@@ -7848,7 +8139,15 @@ sub_FB44EC__FB4547:
 	unlk32 xiz                                 ; FB4549  unlk XIZ
 	ret                                        ; FB454B  ret
 ; --------------------------------------------------------------------------
-; sub_FB454C -- 0xFB454C..0xFB456E (35 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB454C is now `PercInst_GetWaveSelectRecord`.
+;   GRADE PROVEN.  WHY `PercInst_GetWaveSelectRecord`:
+;   args (index, drum-instrument record).  Returns record + 0x12 + 0x2E +
+;   43*index (0xFB4554/0xFB455A/0xFB4561) = record + 0x40 + 43*index, which is
+;   prom_d's `PercInst.wavesel[2] at +0x40, stride 43` exactly.  The 0x12/0x2E
+;   split is how the compiler emitted 0x40, not two fields.  Its sibling
+;   Part_GetPercWaveSelectRecord proves the argument IS a PercInst: that routine's
+;   other arm computes the same thing in the staging image.
+; PercInst_GetWaveSelectRecord -- 0xFB454C..0xFB456E (35 bytes)
 ;
 ; Called from: 8 site(s) outside this module:
 ;          0xFB301D in sub_FB2F74, 0xFB3262 in VoiceParams_Compute_D
@@ -7867,7 +8166,7 @@ sub_FB44EC__FB4547:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB454C:
+PercInst_GetWaveSelectRecord:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB454C  link XIZ,0x0000
 	push	xix                                   ; FB4550  push XIX
 	ld	xix, (xiz+10)                           ; FB4551  ld XIX,(XIZ+0x0a)
@@ -7882,7 +8181,16 @@ sub_FB454C:
 	unlk32 xiz                                 ; FB456C  unlk XIZ
 	ret                                        ; FB456E  ret
 ; --------------------------------------------------------------------------
-; sub_FB456F -- 0xFB456F..0xFB45BF (81 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB456F is now `Part_GetPercWaveSelectRecord`.
+;   GRADE PROVEN.  WHY `Part_GetPercWaveSelectRecord`:
+;   args (part, wave-select index, drum-instrument record, instrument number).
+;   Part record +0x04 bit 0 set -> 0x0087D2 + 0x4A1 + 150*instrument +
+;   43*index (`ld A,0x96` 0xFB4595, `add XWA,0x000004a1` 0xFB459E,
+;   `add XWA,0x000087d2` 0xFB45A4).  0x4A1 = 0x461 + 0x40: 0x461 is the staging
+;   image's DRUM-INSTRUMENT region and +0x40 is PercInst.wavesel -- the same
+;   0x4A1 - 0x461 = 0x40 prom_d cites at 0xFB868F.  Clear -> 
+;   PercInst_GetWaveSelectRecord (0xFB45B7).  Two arms, one answer.
+; Part_GetPercWaveSelectRecord -- 0xFB456F..0xFB45BF (81 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB28EB in sub_FB289A, 0xFB2AF8 in VoiceParams_Compute_C
@@ -7890,7 +8198,7 @@ sub_FB454C:
 ;          0xFC258D in sub_FC24F6__FC252F
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB454C = sub_FB454C
+; Calls:   0xFB454C = PercInst_GetWaveSelectRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB456F-0xFB45BF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -7899,7 +8207,7 @@ sub_FB454C:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB456F:
+Part_GetPercWaveSelectRecord:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB456F  link XIZ,0x0000
 	push	xix                                   ; FB4573  push XIX
 	ld	bc, (xiz+8)                             ; FB4574  ld BC,(XIZ+0x08)
@@ -7934,7 +8242,39 @@ sub_FB456F__FB45BC:
 	unlk32 xiz                                 ; FB45BD  unlk XIZ
 	ret                                        ; FB45BF  ret
 ; --------------------------------------------------------------------------
-; sub_FB45C0 -- 0xFB45C0..0xFB46FB (316 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB45C0 is now `ToneDB_ResolveEnvDescriptor`.
+;   GRADE PROVEN.  WHY `ToneDB_ResolveEnvDescriptor`:
+;   ★★ THIS IS THE MISSING READER OF prom_d's DESCRIPTOR BLOCKS.  prom_d's wave
+;   17 block says of slots +0x30/+0x34/+0x38 `⚠ STILL NO READER ... nothing in
+;   prom_c reaches their slots`, and of the index maps +0x24/+0x28/+0x2C `same
+;   1024-entry shape, no reader located`.  This routine reaches all six.
+;   args (sel_program, sel_bank_family) -- the SAME two bytes
+;   ToneDB_ResolveWaveSelectRecord consumes, masked the same way: `res 0x07,C`
+;   0xFB45CE and `and A,0x0f` 0xFB45D8.  Family bits 5:4 pick the file base
+;   (internal 0x00D7ED/0x00D7F1, or the expansion board's 0x00D80D/0x00D811 at
+;   0xFB461B); family bits 7:6 pick a (map, array, stride) triple:
+;     0x00 / 0xC0 -> dir +0x24 ToneDB_ToneIndexMapC, +0x30 ToneDB_EnvDescTable,
+;                    stride +0xEC   (0xFB4668 `a9 24`, 0xFB466E `a9 30`,
+;                    0xFB4679 `d3 e5 ec 00`)
+;     0x40        -> dir +0x2C ToneDB_DrumToneIndexMap, +0x38
+;                    ToneDB_EnvDescTable_Perc, stride +0xF2   (0xFB468C `a9 2c`,
+;                    0xFB4692 `a9 38`, 0xFB469D `d3 e5 f2 00`)
+;     0x80        -> dir +0x28 ToneDB_ToneIndexMapD, +0x34 (the +0x30 alias),
+;                    stride +0xEC   (0xFB46B3 `a9 28`, 0xFB46B9 `a9 34`,
+;                    0xFB46C4 `d3 e5 ec 00`)
+;   and the walk itself is bit for bit ToneDB_ResolveWaveSelectRecord's:
+;     i = (family & 0x0F)*128 + (program & 0x7F)  (`sll 0x07,BC` 0xFB46DA)
+;     n = LE16 at base + dir[map] + 2*i           (0xFB46DF-0xFB46E9)
+;     return base + dir[array] + n*dir[stride]    (0xFB46EB-0xFB46F1)
+;   ★ TWO PARALLEL RESOLVERS, ONE SELECTOR PAIR: an element's (sel_program,
+;   sel_bank_family) chooses a 43-byte wave-select record through one triple and
+;   a 14-byte envelope descriptor through the other.  That is what makes the
+;   triples parallel rather than coincidental.
+;   ⚠ CORRECTION OWED TO prom_d, reported not edited: its block gives stride
+;   +0xF2 for +0x30/+0x34 as well as +0x38.  The instructions say +0x30 and
+;   +0x34 are scaled by +0xEC and only +0x38 by +0xF2.  Both words hold 14, so
+;   no address changes -- but the attribution does.
+; ToneDB_ResolveEnvDescriptor -- 0xFB45C0..0xFB46FB (316 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -7950,7 +8290,7 @@ sub_FB456F__FB45BC:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB45C0:
+ToneDB_ResolveEnvDescriptor:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB45C0  link XIZ,0xffec
 	pushw	hl                                   ; FB45C4  push HL
 	pushw	de                                   ; FB45C5  push DE
@@ -8070,14 +8410,26 @@ sub_FB45C0__FB46D8:
 	unlk32 xiz                                 ; FB46F9  unlk XIZ
 	ret                                        ; FB46FB  ret
 ; --------------------------------------------------------------------------
-; sub_FB46FC -- 0xFB46FC..0xFB474D (82 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB46FC is now `PartElement_ResolveEnvDescriptor`.
+;   GRADE PROVEN.  WHY `PartElement_ResolveEnvDescriptor`:
+;   args (part, element, slot k in 0..3).  Follows the part-element sub-record's
+;   WAVE-SELECT pointer -- 0x1523 + 300*part + 41*element + 0x8C (`ld A,0x29`
+;   0xFB4710, `add IY,0x008c` 0xFB4722, `ld XWA,(XIY+0x1523)` 0xFB4728), which
+;   tone_db_module.s already names -- reads the byte PAIR at +0x03 + 2k and
+;   +0x04 + 2k (0xFB470B/0xFB4732 and 0xFB4736/0xFB473B) and passes it to
+;   ToneDB_ResolveEnvDescriptor (0xFB4745).
+;   ★★ SO A WAVE-SELECT RECORD CARRIES FOUR (sel_program, sel_bank_family)
+;   PAIRS, at +0x03/+0x04, +0x05/+0x06, +0x07/+0x08, +0x09/+0x0A -- eight of the
+;   eleven bytes prom_d spells `unk_00[11]`, and they end exactly where
+;   tail_preset (+0x0B) begins.
+; PartElement_ResolveEnvDescriptor -- 0xFB46FC..0xFB474D (82 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFB4791
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB45C0 = sub_FB45C0
+; Calls:   0xFB45C0 = ToneDB_ResolveEnvDescriptor
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB46FC-0xFB474D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8086,7 +8438,7 @@ sub_FB45C0__FB46D8:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB46FC:
+PartElement_ResolveEnvDescriptor:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB46FC  link XIZ,0xfff8
 	pushw	hl                                   ; FB4700  push HL
 	push	xix                                   ; FB4701  push XIX
@@ -8124,7 +8476,14 @@ sub_FB46FC:
 	unlk32 xiz                                 ; FB474B  unlk XIZ
 	ret                                        ; FB474D  ret
 ; --------------------------------------------------------------------------
-; sub_FB474E -- 0xFB474E..0xFB477A (45 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB474E is now `WaveSelRec_ResolveEnvDescriptor`.
+;   GRADE PROVEN.  WHY `WaveSelRec_ResolveEnvDescriptor`:
+;   args (slot k, wave-select record).  The same two bytes at +0x03 + 2k and
+;   +0x04 + 2k (0xFB4754-0xFB476B) into ToneDB_ResolveEnvDescriptor (0xFB4772),
+;   but taking the record pointer directly instead of walking a part.  Six of its
+;   callers are the VoiceParams_Compute_* routines, which is the shortest
+;   statement of what the descriptor is FOR without saying what it means.
+; WaveSelRec_ResolveEnvDescriptor -- 0xFB474E..0xFB477A (45 bytes)
 ;
 ; Called from: 6 site(s) outside this module:
 ;          0xFB2916 in sub_FB289A, 0xFB2B23 in VoiceParams_Compute_C
@@ -8132,7 +8491,7 @@ sub_FB46FC:
 ;          0xFB3298 in VoiceParams_Compute_D, 0xFB349A in VoiceParams_Compute_D__FB33CE
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB45C0 = sub_FB45C0
+; Calls:   0xFB45C0 = ToneDB_ResolveEnvDescriptor
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB474E-0xFB477A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8141,7 +8500,7 @@ sub_FB46FC:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB474E:
+WaveSelRec_ResolveEnvDescriptor:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB474E  link XIZ,0x0000
 	pushw	hl                                   ; FB4752  push HL
 	push	xix                                   ; FB4753  push XIX
@@ -8166,7 +8525,18 @@ sub_FB474E:
 	unlk32 xiz                                 ; FB4778  unlk XIZ
 	ret                                        ; FB477A  ret
 ; --------------------------------------------------------------------------
-; sub_FB477B -- 0xFB477B..0xFB47C3 (73 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB477B is now `PartElement_SetEnvDescriptorPointer`.
+;   GRADE PROVEN.  WHY `PartElement_SetEnvDescriptorPointer`:
+;   args (part, element, slot k).  Calls PartElement_ResolveEnvDescriptor
+;   (0xFB4791) and stores the answer at 0x1523 + 300*part + 41*element + 0x90 +
+;   4k (`ld C,0x29` 0xFB4796, `ld C,0x04` 0xFB47AA, `add BC,0x0090` 0xFB47B1,
+;   `ld (XBC+0x1523),XIY` 0xFB47B7).
+;   ★ THE DESTINATION IS SETTLED FROM OUTSIDE THIS FILE: round 11's
+;   DrawbarPreset_GetDescriptor writes its 14-byte descriptor to the SAME slot,
+;   0x1523 + 300*part + 41*element + 0x90 (0xFC29AC/0xFC29B7).  So the part
+;   element sub-record's +0x08..+0x17 is an array of four descriptor pointers,
+;   and the drawbar path fills one where the melodic path fills four.
+; PartElement_SetEnvDescriptorPointer -- 0xFB477B..0xFB47C3 (73 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFB91DB in ToneDB_SourceNameList1_SelectEntry__FB91CD, 0xFB936E in ToneDB_SourceNameList2_SelectEntry__FB92D2
@@ -8177,7 +8547,7 @@ sub_FB474E:
 ;          0xFB4880
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB46FC = sub_FB46FC
+; Calls:   0xFB46FC = PartElement_ResolveEnvDescriptor
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB477B-0xFB47C3
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8186,7 +8556,7 @@ sub_FB474E:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB477B:
+PartElement_SetEnvDescriptorPointer:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB477B  link XIZ,0x0000
 	pushw	hl                                   ; FB477F  push HL
 	pushw	de                                   ; FB4780  push DE
@@ -8220,7 +8590,25 @@ sub_FB477B:
 	unlk32 xiz                                 ; FB47C1  unlk XIZ
 	ret                                        ; FB47C3  ret
 ; --------------------------------------------------------------------------
-; sub_FB47C4 -- 0xFB47C4..0xFB48F6 (307 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB47C4 is now `Part_LoadToneRecordAndPointers`.
+;   GRADE PROVEN.  WHY `Part_LoadToneRecordAndPointers`:
+;   args (part, program, bank selector).  The PROGRAM-CHANGE loader:
+;     1. tone = Part_ResolveToneRecord(part, program, selector) (0xFB47DC), and
+;        store it in part record +0x00 (0xFB47EE);
+;     2. switch on ToneRec +0x10 & 0xC0 (0xFB47F3) -- prom_d's `kind`, whose
+;        bits 7:6 it says `select the loader's arm`.  THIS IS THAT LOADER.
+;     3. arms 0x00 and 0xC0, for e = 0..3: part element +0x00 =
+;        Part_GetElementBlock (0xFB4837, stored 0xFB484E at +0x88), +0x04 =
+;        Part_GetWaveSelectRecord (0xFB485C, stored 0xFB486B at +0x8C), then
+;        PartElement_SetEnvDescriptorPointer for k = 0..3 (0xFB4880);
+;     4. arm 0x40, for e = 0..3: the element block as above, then
+;        PartElement_SetWaveSelectPointer_ToRomDefault (0xFB48CF) and
+;        DrawbarPreset_GetDescriptor (0xFB48DC) -- both already named, and both
+;        write the same two slots.  So kind 0x40 is the DRAWBAR arm, which is the
+;        complement of prom_d's `0x80 is the DRUM path`;
+;     5. arm 0x80 falls straight through and stores nothing here.
+;   0x0029 is added per element at 0xFB488B/0xFB48E3 -- the 41-byte stride.
+; Part_LoadToneRecordAndPointers -- 0xFB47C4..0xFB48F6 (307 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB02D9 in sub_FB029E__FB02B2, 0xFB8705 in sub_FB86BB
@@ -8230,8 +8618,8 @@ sub_FB477B:
 ;          0xFB6C28
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB42B0 = sub_FB42B0, 0xFB4383 = sub_FB4383
-;          0xFB44EC = sub_FB44EC, 0xFB477B = sub_FB477B
+; Calls:   0xFB42B0 = Part_ResolveToneRecord, 0xFB4383 = Part_GetElementBlock
+;          0xFB44EC = Part_GetWaveSelectRecord, 0xFB477B = PartElement_SetEnvDescriptorPointer
 ;          0xFC2930 = sub_FC2930, 0xFC295B = DrawbarPreset_GetDescriptor
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB47C4-0xFB48F6
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -8241,7 +8629,7 @@ sub_FB477B:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB47C4:
+Part_LoadToneRecordAndPointers:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB47C4  link XIZ,0xfff4
 	pushw	hl                                   ; FB47C8  push HL
 	pushw	de                                   ; FB47C9  push DE
@@ -8493,7 +8881,15 @@ DrumKit_ResolveInstrumentRecord__FB49E5:
 	unlk32 xiz                                 ; FB49E8  unlk XIZ
 	ret                                        ; FB49EA  ret
 ; --------------------------------------------------------------------------
-; sub_FB49EB -- 0xFB49EB..0xFB4A9E (180 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB49EB is now `Part_ResolveDrumInstrumentRecord`.
+;   GRADE PROVEN.  WHY `Part_ResolveDrumInstrumentRecord`:
+;   args (part, drum-kit record, ..., MIDI note).  Part record +0x04 bit 0 set ->
+;   staging image 0x0087D2 + 0x461 + 150*note (0xFB4A13/0xFB4A19/0xFB4A1F).
+;   Clear -> read the kit's note-map entry as TWO separate bytes at kit + 0x98 +
+;   2n and + 0x99 + 2n (0xFB4A33, 0xFB4A46 -- prom_d's DrumKitRec.note_map), form
+;   a 2-bit arm from part record +0x1B bit 0 and +0x1C - 0x28 (0xFB4A58-0xFB4A84)
+;   and hand all four to DrumKit_ResolveInstrumentRecord (0xFB4A94).
+; Part_ResolveDrumInstrumentRecord -- 0xFB49EB..0xFB4A9E (180 bytes)
 ;
 ; Called from: 9 site(s) outside this module:
 ;          0xFB28C5 in sub_FB289A, 0xFB2AD7 in VoiceParams_Compute_C
@@ -8512,7 +8908,7 @@ DrumKit_ResolveInstrumentRecord__FB49E5:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB49EB:
+Part_ResolveDrumInstrumentRecord:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB49EB  link XIZ,0xfff6
 	pushw	hl                                   ; FB49EF  push HL
 	pushw	de                                   ; FB49F0  push DE
@@ -8582,7 +8978,21 @@ sub_FB49EB__FB4A99:
 	unlk32 xiz                                 ; FB4A9C  unlk XIZ
 	ret                                        ; FB4A9E  ret
 ; --------------------------------------------------------------------------
-; sub_FB4A9F -- 0xFB4A9F..0xFB4D20 (642 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB4A9F is now `PartRec_RecomputeWord0006_FromToneRec`.
+;   GRADE STRONG.  WHY `PartRec_RecomputeWord0006_FromToneRec`:
+;   args (part).  Rebuilds part record +0x06: it keeps bits 13:4 (`and
+;   WA,0x3ff0` 0xFB4ABA), sets bit 0, 1, 2 or 3 from ToneRec +0x11 bits 0, 2, 4
+;   and 6 (0xFB4AD0, 0xFB4B9A, 0xFB4C62, 0xFB4CBC) -- the element mask, one bit
+;   per element, the same `1 << 2i` positions ToneRec_MapElementIndex_ByMask
+;   reads -- and ORs 0x4001 or 0x8002 through two 9-arm computed gotos whose
+;   arms are all the same target and whose index is the ALGORITHM TYPE bounded
+;   at 8 (0xFB4B0D, 0xFB4BD7).  It also sets or clears bit 15 of the word at
+;   part element sub-record +0x18 for each of the four elements -- +0xA0, +0xC9,
+;   +0xF2, +0x11B, which are 0x88 + 0x18 + 41e (0xFB4B5D, 0xFB4C27, 0xFB4C81,
+;   0xFB4CDB) -- from the 2-bit fields of ToneRec +0x12.
+;   GRADE STRONG: destination and one source are named fields; ToneRec +0x12 is
+;   UNIDENTIFIED in prom_d and this pass does not name it either.
+; PartRec_RecomputeWord0006_FromToneRec -- 0xFB4A9F..0xFB4D20 (642 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFAFC44 in sub_FAFBEC__FAFC28, 0xFBBAC3 in sub_FBB793__FBBABE
@@ -8601,7 +9011,7 @@ sub_FB49EB__FB4A99:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB4A9F:
+PartRec_RecomputeWord0006_FromToneRec:
 	link32 0xEE, 0x0C, 0xFB, 0xFF              ; FB4A9F  link XIZ,0xfffb
 	push	xhl                                   ; FB4AA3  push XHL
 	pushw	de                                   ; FB4AA4  push DE
@@ -8847,7 +9257,13 @@ sub_FB4A9F__FB4D06:
 	unlk32 xiz                                 ; FB4D1E  unlk XIZ
 	ret                                        ; FB4D20  ret
 ; --------------------------------------------------------------------------
-; sub_FB4D21 -- 0xFB4D21..0xFB4D44 (36 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB4D21 is now `Clamp_0_to_007F`.
+;   GRADE PROVEN.  WHY `Clamp_0_to_007F`:
+;   the whole body is `if (x > 0x7F) x = 0x7F; else if (x < 0) x = 0; return
+;   (s8)x` (0xFB4D29-0xFB4D3F).  Named to match the tree's existing
+;   Clamp_0_to_00FF and Clamp_36_to_120 rather than inventing a second idiom.
+;   Its one caller is the still-refused sub_FB4D45.
+; Clamp_0_to_007F -- 0xFB4D21..0xFB4D44 (36 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -8862,7 +9278,7 @@ sub_FB4A9F__FB4D06:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB4D21:
+Clamp_0_to_007F:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4D21  link XIZ,0x0000
 	pushw	hl                                   ; FB4D25  push HL
 	ld	hl, (xiz+8)                             ; FB4D26  ld HL,(XIZ+0x08)
@@ -8882,6 +9298,20 @@ sub_FB4D21__FB4D3B:
 	unlk32 xiz                                 ; FB4D42  unlk XIZ
 	ret                                        ; FB4D44  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB4D45` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   writes part element sub-record +0x27 and +0x28 for all four elements
+;   (part record +0xAF/+0xB0 and, for element 1, +0xD8/+0xD9 -- 0x88 + 0x27
+;   + 41e), from clamp(element block +0x01 + part record +0x0D - 0x40) using
+;   Clamp_0_to_007F. EVERY ONE of those is UNIDENTIFIED: prom_d's element
+;   block is `unk_00[2]` at +0x00..+0x01, and neither part-record field is
+;   named. The dsp_algo read at 0xFB4F2E-0xFB4F5A only gates a side branch.
+;   So both ends are unnamed and a name would be pure position. ★ IT DOES
+;   SETTLE ONE THING WORTH RECORDING: 0xFB4F44 `and A,0x40` is a reader of
+;   ToneRec +0xD0 BIT 6, which prom_d lists as UNIDENTIFIED. WHAT WOULD
+;   SETTLE IT: element parameter block +0x01, or part record +0x0D.
 ; sub_FB4D45 -- 0xFB4D45..0xFB501E (730 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
@@ -8893,7 +9323,7 @@ sub_FB4D21__FB4D3B:
 ;          0xFB66A8 0xFB6905
 ; Inputs:  frame `link XIZ,-34`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB4D21 = sub_FB4D21
+; Calls:   0xFB4D21 = Clamp_0_to_007F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB4D45-0xFB501E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -9182,6 +9612,18 @@ sub_FB4D45__FB5019:
 	unlk32 xiz                                 ; FB501C  unlk XIZ
 	ret                                        ; FB501E  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB501F` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   clears bits 0:1 of the byte at part record +0x35 + 16j + 4k and sets bit
+;   0 when any of the four elements has bit 5 set and bits 7:6 equal to k in
+;   its element block byte +0x06, +0x26 or +0x38 (chosen by j). prom_d's
+;   ToneRec_Element gives +0x04..+0x4C as `unk`, and nothing names the 4 x 4
+;   array of 4-byte records at part record +0x35. Both ends unnamed. WHAT
+;   WOULD SETTLE IT: element parameter block +0x06/+0x26/+0x38, whose bit 5
+;   and bits 7:6 this pass MEASURED (enable, plus a 2-bit selector compared
+;   against k) without being able to say what they select.
 ; sub_FB501F -- 0xFB501F..0xFB5102 (228 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
@@ -9299,6 +9741,14 @@ sub_FB501F__FB50FD:
 	unlk32 xiz                                 ; FB5100  unlk XIZ
 	ret                                        ; FB5102  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB5103` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   the same routine one bit-pair over: clears bits 2:3 of the same byte and
+;   sets bit 2, reading only element block +0x06. Refused for the same
+;   reason as sub_FB501F, and it would be worse to name one of the pair and
+;   not the other.
 ; sub_FB5103 -- 0xFB5103..0xFB519B (153 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
@@ -9385,6 +9835,18 @@ sub_FB5103__FB5196:
 	unlk32 xiz                                 ; FB5199  unlk XIZ
 	ret                                        ; FB519B  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB519C` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   ⚠ NOT REFERENCED -- no literal call/calr/jp/jrl anywhere in the image.
+;   Writes a word at arg0 + 0x1E + 2*arg3 built from a 2-bit selector and
+;   one of the constants 0xC0 / 0xC000 / 0x3300 / 0x1100 / bit 6 / bit 14,
+;   gated on the two byte tables at 0xFDE6A1 and 0xFDE6A5 (`1 << 2i` and `1
+;   << (2i+1)`) ANDed against byte +0x01 of its second argument. Its
+;   destination offset is shared with sub_FB53C5, so the object is probably
+;   the part element sub-record -- PROBABLY is not a grade. WHAT WOULD
+;   SETTLE IT: a caller.
 ; sub_FB519C -- 0xFB519C..0xFB52A4 (265 bytes)
 ;
 ; Called from: no site outside this module.
@@ -9523,6 +9985,14 @@ sub_FB519C__FB529F:
 	unlk32 xiz                                 ; FB52A2  unlk XIZ
 	ret                                        ; FB52A4  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB52A5` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   unreferenced, and a strict subset of sub_FB53C5's inner arm 0: writes
+;   arg0 + 0x1E + 2*arg1 with (k | 0xC0) or (k | 0x40) when a flag byte has
+;   bit 5 set and bits 7:6 equal to k, splitting on bit 4. The flag byte is
+;   passed in, so not even its record is decided here.
 ; sub_FB52A5 -- 0xFB52A5..0xFB5303 (95 bytes)
 ;
 ; Called from: no site outside this module.
@@ -9584,6 +10054,12 @@ sub_FB52A5__FB52FF:
 	unlk32 xiz                                 ; FB5301  unlk XIZ
 	ret                                        ; FB5303  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB5304` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   unreferenced; identical to sub_FB52A5 with the constants moved into the
+;   high half (0xC000 / bit 14 instead of 0xC0 / bit 6).
 ; sub_FB5304 -- 0xFB5304..0xFB5363 (96 bytes)
 ;
 ; Called from: no site outside this module.
@@ -9645,6 +10121,13 @@ sub_FB5304__FB535F:
 	unlk32 xiz                                 ; FB5361  unlk XIZ
 	ret                                        ; FB5363  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB5364` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   unreferenced; identical again with the constants 0x3300 and 0x1100. The
+;   three together are the three arms sub_FB53C5 has inline, which is a
+;   suggestive shape and not a name.
 ; sub_FB5364 -- 0xFB5364..0xFB53C4 (97 bytes)
 ;
 ; Called from: no site outside this module.
@@ -9706,6 +10189,18 @@ sub_FB5364__FB53C0:
 	unlk32 xiz                                 ; FB53C2  unlk XIZ
 	ret                                        ; FB53C4  ret
 ; --------------------------------------------------------------------------
+; ★ NOT NAMED (wave 18): `sub_FB53C5` stays an address.
+;   The wave 17 refusal of 0xFB405F-0xFB6E09 was lifted for 42 of its 50
+;   routines by prom_d's dsp_algo / dsp_param decode.  It is NOT lifted
+;   here, and this is why:
+;   args (part, element, k). Writes ONE word at part element sub-record
+;   +0x1E + 2k, chosen by scanning all four elements' +0x35 records and
+;   their element block bytes +0x06 / +0x26 / +0x38, with the same 0xFDE6A1
+;   / 0xFDE6A5 bit-pair tables and the same six constants as sub_FB519C. It
+;   is the live version of that family and it is REFERENCED (ten call
+;   sites), but every field it reads and the field it writes are all
+;   UNIDENTIFIED. WHAT WOULD SETTLE IT: the same element-block bytes as
+;   sub_FB501F, plus part element sub-record +0x1E.
 ; sub_FB53C5 -- 0xFB53C5..0xFB5635 (625 bytes)
 ;
 ; Called from: 8 site(s) outside this module:
@@ -9997,7 +10492,20 @@ sub_FB53C5__FB5623:
 	unlk32 xiz                                 ; FB5633  unlk XIZ
 	ret                                        ; FB5635  ret
 ; --------------------------------------------------------------------------
-; sub_FB5636 -- 0xFB5636..0xFB5829 (500 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5636 is now `Part_StageDspAlgoParams`.
+;   GRADE STRONG.  WHY `Part_StageDspAlgoParams`:
+;   args (part, mode).  Reads the tone's ALGORITHM TYPE, `(XWA+0x00d0)` masked
+;   0x0F at 0xFB564F/0xFB5654, and branches on it: type 7 forces part record
+;   +0x09 bit 15 (`or (XHL+0x1523),0x8000` 0xFB5667) -- the bit prom_d says is
+;   mirrored into ToneRec +0xD0 bit 7 -- writes the three bytes at part record
+;   +0x71/+0x72/+0x73 as either 0F/4F/96 or 01/01/01 depending on +0x09 bit 14,
+;   and then runs the four stagers PartRec_StageChanFreqWord_0065/_0067 (twice
+;   each, chan 0 and 1), _006D and _006F (0xFB56E0-0xFB570C).  Type 0x0A sets
+;   part record +0x06 bit 9 instead (0xFB57C8).  Every other type clears +0x09
+;   bit 15 and zeroes +0x71..+0x73.
+;   GRADE STRONG, not PROVEN: the algorithm type, the four stagers and every
+;   destination offset are decoded, but what +0x71..+0x73 hold is not.
+; Part_StageDspAlgoParams -- 0xFB5636..0xFB5829 (500 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAFC35 in sub_FAFBEC__FAFC28, 0xFBBC9C in sub_FBB793__FBBC8B
@@ -10005,8 +10513,8 @@ sub_FB53C5__FB5623:
 ;          0xFB6690 0xFB68EC
 ; Inputs:  frame `link XIZ,-1`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB582A = sub_FB582A, 0xFB59D2 = sub_FB59D2
-;          0xFB5BAA = sub_FB5BAA, 0xFB5C77 = sub_FB5C77
+; Calls:   0xFB582A = PartRec_StageChanFreqWord_0065, 0xFB59D2 = PartRec_StageChanFreqWord_0067
+;          0xFB5BAA = PartRec_StageChanFreqWord_006D, 0xFB5C77 = PartRec_StageChanFreqWord_006F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB5636-0xFB5829
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -10015,7 +10523,7 @@ sub_FB53C5__FB5623:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5636:
+Part_StageDspAlgoParams:
 	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FB5636  link XIZ,0xffff
 	push	xhl                                   ; FB563A  push XHL
 	pushw	de                                   ; FB563B  push DE
@@ -10194,7 +10702,25 @@ sub_FB5636__FB5824:
 	unlk32 xiz                                 ; FB5827  unlk XIZ
 	ret                                        ; FB5829  ret
 ; --------------------------------------------------------------------------
-; sub_FB582A -- 0xFB582A..0xFB59D1 (424 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB582A is now `PartRec_StageChanFreqWord_0065`.
+;   GRADE PROVEN.  WHY `PartRec_StageChanFreqWord_0065`:
+;   args (part, channel 0..1).  A 12-arm computed goto on the tone's ALGORITHM
+;   TYPE (`cp BC,0x000b` 0xFB5857; DSP_AlgoDescriptor_Records is 12 records).
+;   It takes byte 6*type + 2*chan of DSP_AlgoChannel_SelectorRecords (0xFB58AB /
+;   0xFB58C6 / 0xFB5946, `add XWA,0x00fde6a9`) as a ROW of DSP_ChanFreq_CurvePool,
+;   indexes that row by 2 * dsp_param at ToneRec +0xD1 (chan 0) or +0xD3 (chan 1)
+;   -- 0xFB58E1, 0xFB5915, 0xFB5962 -- with row base 0xFDEA21 = CurvePool + 8*0x66
+;   (0xFB58F6/0xFB592A/0xFB5977), and for types 10 and 11 ORs in
+;   EGEnv_ModeBits_Table[(AlgoDescriptor[39*type + 3*chan + 2] & 0xC0) >> 6]
+;   (0xFB5992 `add XWA,0x00fdf4f1`, 0xFB59A5 `add XBC,0x00fdebec`) -- which is the
+;   use voice_dsp_tables.s already attributes to descriptor byte +0x02, citing
+;   this very address.  The word lands at part record +0x65 + 4*chan (0xFB59BF
+;   `add WA,0x0065`), and Voice_StageChanSel_Reg0440_Reg0480 reads +0x65 at
+;   0xFA9BF8 straight into the 0x0010C000 staging word at 0x00D7A0.
+;   Named by DESTINATION because the destination is decoded and the MEANING of
+;   the curve value is not -- the idiom the tree already uses in
+;   PartRec_ApplyParam_0025 and PartRec_Word0006_SetBit13.
+; PartRec_StageChanFreqWord_0065 -- 0xFB582A..0xFB59D1 (424 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFAC4A3 in sub_FAC42C__FAC49B, 0xFAC546 in sub_FAC526
@@ -10213,7 +10739,7 @@ sub_FB5636__FB5824:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB582A:
+PartRec_StageChanFreqWord_0065:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB582A  link XIZ,0xfffc
 	pushw	hl                                   ; FB582E  push HL
 	pushw	de                                   ; FB582F  push DE
@@ -10383,7 +10909,18 @@ sub_FB582A__FB59AF:
 	unlk32 xiz                                 ; FB59CF  unlk XIZ
 	ret                                        ; FB59D1  ret
 ; --------------------------------------------------------------------------
-; sub_FB59D2 -- 0xFB59D2..0xFB5B55 (388 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB59D2 is now `PartRec_StageChanFreqWord_0067`.
+;   GRADE PROVEN.  WHY `PartRec_StageChanFreqWord_0067`:
+;   the twin of PartRec_StageChanFreqWord_0065, differing in exactly four
+;   operands and nothing else: the SECOND byte of the selector pair, 6*type +
+;   2*chan + 1 (`inc 1,XWA` 0xFB5A53/0xFB5A70/0xFB5AF1); dsp_param at ToneRec
+;   +0xD2 / +0xD4 (0xFB5A8D, 0xFB5AC1); curve-pool row base 0xFDE6F1, i.e. row 0
+;   (0xFB5AA2/0xFB5AD6/0xFB5B2B); descriptor byte 39*type + 3*chan + 1 (0xFB5B13);
+;   and destination part record +0x67 + 4*chan (0xFB5B43).  0x00D79C is fed from
+;   +0x67 at 0xFA9C3D.  The pairing of the two routines is the pairing of the two
+;   bytes voice_dsp_tables.s calls `three 2-byte channel pairs per algorithm
+;   type`.
+; PartRec_StageChanFreqWord_0067 -- 0xFB59D2..0xFB5B55 (388 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFAC43B in sub_FAC42C, 0xFAC535 in sub_FAC526
@@ -10402,7 +10939,7 @@ sub_FB582A__FB59AF:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB59D2:
+PartRec_StageChanFreqWord_0067:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB59D2  link XIZ,0xfff8
 	pushw	hl                                   ; FB59D6  push HL
 	pushw	de                                   ; FB59D7  push DE
@@ -10561,7 +11098,14 @@ sub_FB59D2__FB5B33:
 	unlk32 xiz                                 ; FB5B53  unlk XIZ
 	ret                                        ; FB5B55  ret
 ; --------------------------------------------------------------------------
-; sub_FB5B56 -- 0xFB5B56..0xFB5BA9 (84 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5B56 is now `Part_GetDspParam_00D2_Low6`.
+;   GRADE PROVEN.  WHY `Part_GetDspParam_00D2_Low6`:
+;   args (part).  Returns ToneRec +0xD2 & 0x3F when the tone's ALGORITHM TYPE is
+;   10 or 11, and 0 otherwise (0xFB5B6E/0xFB5B73 for the type, 0xFB5B78/0xFB5B7E
+;   for the two arms, 0xFB5B96/0xFB5B9B for the field).  Its one caller,
+;   Voice_StageChanSel_Reg0440_Reg0480, takes the answer at 0xFA9BD2 and passes
+;   it beside part record +0x65 & 0x1FFF into sub_FA7927 (0xFA9C0C/0xFA9C18).
+; Part_GetDspParam_00D2_Low6 -- 0xFB5B56..0xFB5BA9 (84 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFA9BD2 in Voice_StageChanSel_Reg0440_Reg0480__FA9B74
@@ -10575,7 +11119,7 @@ sub_FB59D2__FB5B33:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5B56:
+Part_GetDspParam_00D2_Low6:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5B56  link XIZ,0x0000
 	pushw	hl                                   ; FB5B5A  push HL
 	ldw	hl, 0                                  ; FB5B5B  ld HL,0x0000
@@ -10609,7 +11153,18 @@ sub_FB5B56__FB5BA2:
 	unlk32 xiz                                 ; FB5BA7  unlk XIZ
 	ret                                        ; FB5BA9  ret
 ; --------------------------------------------------------------------------
-; sub_FB5BAA -- 0xFB5BAA..0xFB5C76 (205 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5BAA is now `PartRec_StageChanFreqWord_006D`.
+;   GRADE PROVEN.  WHY `PartRec_StageChanFreqWord_006D`:
+;   args (part).  Only algorithm types 6 and 7 do anything (`cp BC,6` 0xFB5BCF,
+;   `cp BC,7` 0xFB5BD3); every other type stores 0.  Both take the THIRD selector
+;   pair's first byte, 6*type + 4 (`inc 4,XBC` 0xFB5BE0/0xFB5C25, base 0xFDE6A9),
+;   as a curve-pool row with base 0xFDEB53 = CurvePool + 11*0x66 (0xFB5BFF,
+;   0xFB5C4E).  Type 6 indexes it by 2 * dsp_param at ToneRec +0xD1 and ORs
+;   EGEnv_ModeBits_Table[2 * ToneRec +0xD3] (0xFB5C11); type 7 indexes it by
+;   2 * AlgoDescriptor[39*type + 6] (0xFB5C37 -- the `packet sub-index` byte
+;   voice_dsp_tables.s names, citing this address).  Destination part record
+;   +0x6D (0xFB5C64).
+; PartRec_StageChanFreqWord_006D -- 0xFB5BAA..0xFB5C76 (205 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFACDCD in sub_FACDC1
@@ -10625,7 +11180,7 @@ sub_FB5B56__FB5BA2:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5BAA:
+PartRec_StageChanFreqWord_006D:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB5BAA  link XIZ,0xfffc
 	pushw	hl                                   ; FB5BAE  push HL
 	pushw	de                                   ; FB5BAF  push DE
@@ -10709,7 +11264,13 @@ sub_FB5BAA__FB5C5B:
 	unlk32 xiz                                 ; FB5C74  unlk XIZ
 	ret                                        ; FB5C76  ret
 ; --------------------------------------------------------------------------
-; sub_FB5C77 -- 0xFB5C77..0xFB5D04 (142 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5C77 is now `PartRec_StageChanFreqWord_006F`.
+;   GRADE PROVEN.  WHY `PartRec_StageChanFreqWord_006F`:
+;   args (part).  Algorithm types 6 and 7 only (0xFB5CA0/0xFB5CA4); everything
+;   else stores 0.  Selector byte 6*type + 5 (`inc 5,XBC` 0xFB5CB0), curve-pool
+;   row base 0xFDE6F1 = row 0 (0xFB5CDE), indexed by 2 * dsp_param at ToneRec
+;   +0xD2 (0xFB5CC9).  Destination part record +0x6F (0xFB5CF3).
+; PartRec_StageChanFreqWord_006F -- 0xFB5C77..0xFB5D04 (142 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFAC6FE in sub_FAC6F2, 0xFAC7A8 in sub_FAC79C
@@ -10726,7 +11287,7 @@ sub_FB5BAA__FB5C5B:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5C77:
+PartRec_StageChanFreqWord_006F:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB5C77  link XIZ,0xfffc
 	pushw	hl                                   ; FB5C7B  push HL
 	pushw	de                                   ; FB5C7C  push DE
@@ -10787,7 +11348,16 @@ sub_FB5C77__FB5CEB:
 	unlk32 xiz                                 ; FB5D02  unlk XIZ
 	ret                                        ; FB5D04  ret
 ; --------------------------------------------------------------------------
-; sub_FB5D05 -- 0xFB5D05..0xFB5D6B (103 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5D05 is now `Part_GetSecondaryParam_AlgoType9`.
+;   GRADE PROVEN.  WHY `Part_GetSecondaryParam_AlgoType9`:
+;   args (part).  Returns 0xFF unless part record +0x09 bit 15 is set AND the
+;   ALGORITHM TYPE is exactly 9 (0xFB5D22, 0xFB5D31/0xFB5D36/0xFB5D39); then it
+;   returns Voice_SecondaryParam_Curve[ToneRec +0xD1] (0xFB5D3E, `add
+;   XWA,0x00fdf6c5` 0xFB5D47) and clears part record +0x09 bit 13 (0xFB5D57).
+;   Both the table and the field are named elsewhere; the curve is 31 bytes
+;   descending 0x46..0x00 and voice_dsp_tables.s already cites four other
+;   readers of it.
+; Part_GetSecondaryParam_AlgoType9 -- 0xFB5D05..0xFB5D6B (103 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFB0D26 in sub_FB0B95__FB0C19, 0xFB0FBF in VoiceParams_Compute_A__FB0ED5
@@ -10804,7 +11374,7 @@ sub_FB5C77__FB5CEB:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5D05:
+Part_GetSecondaryParam_AlgoType9:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5D05  link XIZ,0x0000
 	push	xhl                                   ; FB5D09  push XHL
 	pushw	de                                   ; FB5D0A  push DE
@@ -10847,7 +11417,15 @@ sub_FB5D05__FB5D66:
 	unlk32 xiz                                 ; FB5D69  unlk XIZ
 	ret                                        ; FB5D6B  ret
 ; --------------------------------------------------------------------------
-; sub_FB5D6C -- 0xFB5D6C..0xFB5DFF (148 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5D6C is now `Part_GetDspParam_00D7`.
+;   GRADE PROVEN.  WHY `Part_GetDspParam_00D7`:
+;   args (part).  Returns 0 unless part record +0x09 bit 15 is set (0xFB5D8B).
+;   Then, for ALGORITHM TYPES 10 and 11 only, if AlgoDescriptor[39*type + 0x0D]
+;   bit 7 is set it returns AlgoDescriptor[39*type + 0x0E] instead of the tone's
+;   own byte (0xFB5DB2-0xFB5DDD; voice_dsp_tables.s already states `+0x0D bit 7
+;   selects the +0x0E byte` and cites 0xFB5DC0, which is this instruction).
+;   Otherwise it returns dsp_param at ToneRec +0xD7 (0xFB5DEF).
+; Part_GetDspParam_00D7 -- 0xFB5D6C..0xFB5DFF (148 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -10862,7 +11440,7 @@ sub_FB5D05__FB5D66:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5D6C:
+Part_GetDspParam_00D7:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5D6C  link XIZ,0x0000
 	push	xhl                                   ; FB5D70  push XHL
 	pushw	de                                   ; FB5D71  push DE
@@ -10921,7 +11499,12 @@ sub_FB5D6C__FB5DFA:
 	unlk32 xiz                                 ; FB5DFD  unlk XIZ
 	ret                                        ; FB5DFF  ret
 ; --------------------------------------------------------------------------
-; sub_FB5E00 -- 0xFB5E00..0xFB5E38 (57 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5E00 is now `Part_GetDspParam_00D8`.
+;   GRADE PROVEN.  WHY `Part_GetDspParam_00D8`:
+;   args (part).  The whole body is `return part record +0x09 bit 15 ? ToneRec
+;   +0xD8 : 0` (0xFB5E19/0xFB5E1E for the gate, 0xFB5E2B for the field).  +0xD8 is
+;   the LAST byte of prom_d's dsp_param[8] and the last byte of the record head.
+; Part_GetDspParam_00D8 -- 0xFB5E00..0xFB5E38 (57 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFAFC58 in sub_FAFBEC__FAFC28, 0xFBBCF2 in sub_FBB793__FBBC8B
@@ -10936,7 +11519,7 @@ sub_FB5D6C__FB5DFA:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5E00:
+Part_GetDspParam_00D8:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5E00  link XIZ,0x0000
 	push	xhl                                   ; FB5E04  push XHL
 	pushw	de                                   ; FB5E05  push DE
@@ -11140,7 +11723,23 @@ Dev10C_ChanSelHighBits__FB5F8B:
 	unlk32 xiz                                 ; FB5F8E  unlk XIZ
 	ret                                        ; FB5F90  ret
 ; --------------------------------------------------------------------------
-; sub_FB5F91 -- 0xFB5F91..0xFB6019 (137 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB5F91 is now `Voice_Reg0180ModeBits_FromAlgoDesc`.
+;   GRADE STRONG.  WHY `Voice_Reg0180ModeBits_FromAlgoDesc`:
+;   args (part, channel).  Returns 0x0000, 0x4000 or 0xC000.  Algorithm types 6
+;   and 7 only (0xFB5FB7/0xFB5FBB); it reads AlgoDescriptor[39*type + 5*chan +
+;   0x13] (0xFB5FCC/0xFB5FD2/0xFB5FD8 -- the `+0x13 + 5*channel per-channel flag`
+;   voice_dsp_tables.s names), requires its bit 5 (0xFB5FE2), and then returns
+;   0xC000 only when ToneRec +0xD0 bit 6 AND descriptor bit 1 are both set
+;   (0xFB5FFC, 0xFB6003), else 0x4000.
+;   ★ ToneRec +0xD0 BIT 6 HAS A READER.  prom_d's block says `Bits 4:6
+;   UNIDENTIFIED`; this instruction and 0xFB5EEB / 0xFB5F36 in
+;   Dev10C_ChanSelHighBits and 0xFB4F44 in the still-refused sub_FB4D45 all gate
+;   on bit 6.  Reported to prom_d, not edited there.
+;   GRADE STRONG: the source bits are decoded and the caller
+;   (Voice_StageRegs_0180_AB, its only one) fixes where the value goes; what
+;   0x4000 versus 0xC000 MEANS is not established -- the same reservation
+;   Dev10C_ChanSelHighBits already records for its own 0x0040/0x00C0.
+; Voice_Reg0180ModeBits_FromAlgoDesc -- 0xFB5F91..0xFB6019 (137 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFA9E2A in Voice_StageRegs_0180_AB__FA9E12
@@ -11154,7 +11753,7 @@ Dev10C_ChanSelHighBits__FB5F8B:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB5F91:
+Voice_Reg0180ModeBits_FromAlgoDesc:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5F91  link XIZ,0x0000
 	pushw	hl                                   ; FB5F95  push HL
 	pushw	de                                   ; FB5F96  push DE
@@ -11214,7 +11813,14 @@ sub_FB5F91__FB6014:
 	unlk32 xiz                                 ; FB6017  unlk XIZ
 	ret                                        ; FB6019  ret
 ; --------------------------------------------------------------------------
-; sub_FB601A -- 0xFB601A..0xFB607E (101 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB601A is now `Part_GetAlgoDescByte14`.
+;   GRADE PROVEN.  WHY `Part_GetAlgoDescByte14`:
+;   args (part, channel).  Returns AlgoDescriptor[39*type + 5*chan + 0x14]
+;   (`ld C,0x05` 0xFB603C, `ld C,0x27` 0xFB6046, `add XBC,0x00000014` 0xFB604F,
+;   `add XBC,0x00fdf4f1` 0xFB6055), except that algorithm type 8 on channel 1
+;   returns dsp_param at ToneRec +0xD3 instead (0xFB6061/0xFB606F).  One of the
+;   five byte columns of the per-channel descriptor row +0x13..+0x17.
+; Part_GetAlgoDescByte14 -- 0xFB601A..0xFB607E (101 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -11229,7 +11835,7 @@ sub_FB5F91__FB6014:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB601A:
+Part_GetAlgoDescByte14:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB601A  link XIZ,0xfffc
 	pushw	hl                                   ; FB601E  push HL
 	push	xix                                   ; FB601F  push XIX
@@ -11272,7 +11878,14 @@ sub_FB601A__FB607A:
 	unlk32 xiz                                 ; FB607C  unlk XIZ
 	ret                                        ; FB607E  ret
 ; --------------------------------------------------------------------------
-; sub_FB607F -- 0xFB607F..0xFB6157 (217 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB607F is now `Part_GetAlgoDescByte15`.
+;   GRADE PROVEN.  WHY `Part_GetAlgoDescByte15`:
+;   args (part, channel).  AlgoDescriptor[39*type + 5*chan + 0x15] (0xFB60B9),
+;   with a 9-arm computed goto on the algorithm type (0xFB60CD) that overrides it
+;   on channel 1: types 0-3 use 2 * ToneRec +0xD3 (0xFB6118), types 4-5 use
+;   2 * +0xD5 (0xFB6136), type 8 uses 2 * +0xD2 (0xFB6145).  Types 6, 7 and
+;   anything out of range take the descriptor byte unchanged.
+; Part_GetAlgoDescByte15 -- 0xFB607F..0xFB6157 (217 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -11288,7 +11901,7 @@ sub_FB601A__FB607A:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB607F:
+Part_GetAlgoDescByte15:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB607F  link XIZ,0xfffc
 	pushw	hl                                   ; FB6083  push HL
 	pushw	de                                   ; FB6084  push DE
@@ -11381,7 +11994,18 @@ sub_FB607F__FB6152:
 	unlk32 xiz                                 ; FB6155  unlk XIZ
 	ret                                        ; FB6157  ret
 ; --------------------------------------------------------------------------
-; sub_FB6158 -- 0xFB6158..0xFB618F (56 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6158 is now `Part_GetAlgoDescByte16_Bias`.
+;   GRADE STRONG.  WHY `Part_GetAlgoDescByte16_Bias`:
+;   args (part, channel).  Returns 0xFC (-4) for channel 0, 0xF0 (-16) for
+;   channel 1 and 0 otherwise, but only when part record +0x06 & 0xC000 is
+;   non-zero (0xFB6169/0xFB616E); otherwise 0.
+;   ★ THE NAME IS THE CALL GRAPH, the same licence tone_db_module.s took for
+;   ToneRec_LoadDspParams_AlgoTypes0to3: both of its call sites are inside
+;   Part_GetAlgoDescByte16 (0xFB6238, 0xFB6245) and at the first one the result
+;   is added to that routine's descriptor byte (`add A,H` 0xFB623B).  Nothing
+;   else in the image reaches it.
+;   GRADE STRONG: what +0x06 bits 15:14 mean is not established.
+; Part_GetAlgoDescByte16_Bias -- 0xFB6158..0xFB618F (56 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -11396,7 +12020,7 @@ sub_FB607F__FB6152:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6158:
+Part_GetAlgoDescByte16_Bias:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB6158  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FB615C  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB615F  extz BC
@@ -11425,14 +12049,21 @@ sub_FB6158__FB618D:
 	unlk32 xiz                                 ; FB618D  unlk XIZ
 	ret                                        ; FB618F  ret
 ; --------------------------------------------------------------------------
-; sub_FB6190 -- 0xFB6190..0xFB6271 (226 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6190 is now `Part_GetAlgoDescByte16`.
+;   GRADE PROVEN.  WHY `Part_GetAlgoDescByte16`:
+;   args (part, channel).  AlgoDescriptor[39*type + 5*chan + 0x16] (0xFB61CB),
+;   with a 9-arm goto (0xFB61DF): types 0-3 on channel 1 use ToneRec +0xD5 - 0x64
+;   and then ADD Part_GetAlgoDescByte16_Bias (0xFB622A-0xFB623B); types 4-5 return
+;   the bias alone (0xFB6245); types 6 and 8 on channel 1 use ToneRec +0xD4 - 0x64
+;   (0xFB625E/0xFB6263); type 7 and out-of-range take the byte unchanged.
+; Part_GetAlgoDescByte16 -- 0xFB6190..0xFB6271 (226 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFB640E
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB6158 = sub_FB6158
+; Calls:   0xFB6158 = Part_GetAlgoDescByte16_Bias
 ; Arms:    4 computed-goto arm(s) inside this routine: 0xFB6217 0xFB6240 0xFB624B 0xFB626A
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6190-0xFB6271
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -11442,7 +12073,7 @@ sub_FB6158__FB618D:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6190:
+Part_GetAlgoDescByte16:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB6190  link XIZ,0xfffc
 	pushw	hl                                   ; FB6194  push HL
 	pushw	de                                   ; FB6195  push DE
@@ -11542,7 +12173,16 @@ sub_FB6190__FB626C:
 	unlk32 xiz                                 ; FB626F  unlk XIZ
 	ret                                        ; FB6271  ret
 ; --------------------------------------------------------------------------
-; sub_FB6272 -- 0xFB6272..0xFB6399 (296 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6272 is now `Part_GetAlgoDescByte17`.
+;   GRADE PROVEN.  WHY `Part_GetAlgoDescByte17`:
+;   args (part, channel).  AlgoDescriptor[39*type + 5*chan + 0x17] (0xFB62C6),
+;   gated on part record +0x09 bit 15 (0xFB6298), with a 9-arm goto (0xFB62DB):
+;   types 0-3 on channel 1 read DSP_ChanFreq_IndexMap[ToneRec +0xD4] (0xFB6327,
+;   `add XBC,0x00fdebb9` 0xFB6330), types 4-5 the same map indexed by +0xD6
+;   (0xFB6356), type 8 by +0xD1 (0xFB6370); those three arms also clear part
+;   record +0x09 bit 13 (0xFB6388).  voice_dsp_tables.s already lists 0xFB6330,
+;   0xFB6356 and 0xFB6372 as that map's three references.
+; Part_GetAlgoDescByte17 -- 0xFB6272..0xFB6399 (296 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFB0D18 in sub_FB0B95__FB0C19, 0xFB0FB1 in VoiceParams_Compute_A__FB0ED5
@@ -11560,7 +12200,7 @@ sub_FB6190__FB626C:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6272:
+Part_GetAlgoDescByte17:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB6272  link XIZ,0xfff6
 	pushw	hl                                   ; FB6276  push HL
 	pushw	de                                   ; FB6277  push DE
@@ -11678,7 +12318,16 @@ sub_FB6272__FB6394:
 	unlk32 xiz                                 ; FB6397  unlk XIZ
 	ret                                        ; FB6399  ret
 ; --------------------------------------------------------------------------
-; sub_FB639A -- 0xFB639A..0xFB6486 (237 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB639A is now `PartElement_StageAlgoDescBytes_0024`.
+;   GRADE PROVEN.  WHY `PartElement_StageAlgoDescBytes_0024`:
+;   args (part).  For e = 0..3 it calls Part_GetAlgoDescByte14, _15 and _16
+;   (0xFB63CC, 0xFB63F5, 0xFB640E) and stores the three answers at part element
+;   sub-record +0x24, +0x25, +0x26 -- 0x1523 + 300*part + 41*e + 0xAC/0xAD/0xAE
+;   (0xFB63E2, 0xFB63FE, 0xFB6417), stepping 0x0029 at 0xFB6425.  When part
+;   record +0x09 bit 15 is clear it writes zeros into the same twelve bytes
+;   instead (0xFB6450, 0xFB645F, 0xFB646E).  Byte +0x17 is NOT staged here;
+;   Part_GetAlgoDescByte17 is called from VoiceParams_Compute_A directly.
+; PartElement_StageAlgoDescBytes_0024 -- 0xFB639A..0xFB6486 (237 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFAFC4E in sub_FAFBEC__FAFC28, 0xFBBCBA in sub_FBB793__FBBC8B
@@ -11689,8 +12338,8 @@ sub_FB6272__FB6394:
 ;          0xFB684F 0xFB6ACD
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB601A = sub_FB601A, 0xFB607F = sub_FB607F
-;          0xFB6190 = sub_FB6190
+; Calls:   0xFB601A = Part_GetAlgoDescByte14, 0xFB607F = Part_GetAlgoDescByte15
+;          0xFB6190 = Part_GetAlgoDescByte16
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB639A-0xFB6486
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -11699,7 +12348,7 @@ sub_FB6272__FB6394:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB639A:
+PartElement_StageAlgoDescBytes_0024:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB639A  link XIZ,0xfff4
 	pushw	hl                                   ; FB639E  push HL
 	pushw	de                                   ; FB639F  push DE
@@ -11792,7 +12441,13 @@ sub_FB639A__FB6481:
 	unlk32 xiz                                 ; FB6484  unlk XIZ
 	ret                                        ; FB6486  ret
 ; --------------------------------------------------------------------------
-; sub_FB6487 -- 0xFB6487..0xFB64C7 (65 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6487 is now `PartRec_StageByte0075_FromDspParam00D7`.
+;   GRADE PROVEN.  WHY `PartRec_StageByte0075_FromDspParam00D7`:
+;   args (part).  Calls Part_GetDspParam_00D7 when part record +0x09 bit 15 is
+;   set (0xFB649F/0xFB64A4/0xFB64AB) and stores the byte -- or 0 -- at part record
+;   +0x75 (0xFB64B5/0xFB64BF).  Two decoded ends: the source is prom_d's
+;   dsp_param, the destination is a part-record byte.
+; PartRec_StageByte0075_FromDspParam00D7 -- 0xFB6487..0xFB64C7 (65 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFAFC53 in sub_FAFBEC__FAFC28, 0xFBBCE8 in sub_FBB793__FBBC8B
@@ -11801,7 +12456,7 @@ sub_FB639A__FB6481:
 ;          0xFB6698 0xFB68F4
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB5D6C = sub_FB5D6C
+; Calls:   0xFB5D6C = Part_GetDspParam_00D7
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6487-0xFB64C7
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -11810,7 +12465,7 @@ sub_FB639A__FB6481:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6487:
+PartRec_StageByte0075_FromDspParam00D7:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB6487  link XIZ,0x0000
 	pushw	hl                                   ; FB648B  push HL
 	ld	l, (xiz+8)                              ; FB648C  ld L,(XIZ+0x08)
@@ -11838,7 +12493,16 @@ sub_FB6487__FB64B1:
 	unlk32 xiz                                 ; FB64C5  unlk XIZ
 	ret                                        ; FB64C7  ret
 ; --------------------------------------------------------------------------
-; sub_FB64C8 -- 0xFB64C8..0xFB64FF (56 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB64C8 is now `PartRec_Word0004_ClearStagedSetBit2`.
+;   GRADE PROVEN.  WHY `PartRec_Word0004_ClearStagedSetBit2`:
+;   args (part).  The whole body is `part record +0x04 &= 0xFFFC; |= 0x0004`
+;   (0xFB64E5 `and (XBC),0xfffc`, 0xFB64F0 `set 0x02,BC`).  tone_db_module.s
+;   names that word: bit 0 = staged, bit 1 tested for part >= 0x21, bit 2 set by
+;   sub_FB9AC2.  So this drops the part out of the staging buffer and raises the
+;   same bit sub_FB9AC2 raises; MidiProgram_SelectToneForPart calls it first
+;   thing (0xFB6C04), before the tone is re-resolved.
+;   Named after the field the tree already names, as PartRec_Word0006_SetBit13 is.
+; PartRec_Word0004_ClearStagedSetBit2 -- 0xFB64C8..0xFB64FF (56 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB86D6 in sub_FB86BB
@@ -11854,7 +12518,7 @@ sub_FB6487__FB64B1:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB64C8:
+PartRec_Word0004_ClearStagedSetBit2:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB64C8  link XIZ,0x0000
 	pushw	hl                                   ; FB64CC  push HL
 	push	xix                                   ; FB64CD  push XIX
@@ -11880,7 +12544,20 @@ sub_FB64C8:
 	unlk32 xiz                                 ; FB64FD  unlk XIZ
 	ret                                        ; FB64FF  ret
 ; --------------------------------------------------------------------------
-; sub_FB6500 -- 0xFB6500..0xFB6680 (385 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6500 is now `PartRec_ResetToDefaults`.
+;   GRADE STRONG.  WHY `PartRec_ResetToDefaults`:
+;   args (part).  Writes CONSTANTS and nothing else, across the whole part
+;   record: zero into +0x1D and the eleven words +0x1F..+0x33 (0xFB651B-0xFB6560),
+;   zero into the 4 x 3 pairs at +0x37 + 16j + 4e and +0x38 + ... (0xFB6618,
+;   0xFB6626), and 0x40 into the 12 x 2 bytes from +0x76 (0xFB665F).  It also
+;   calls nine setters with a zero argument -- sub_FC7E10, three
+;   Rec8644_Store3Bytes_AndFlagChanged, sub_FC589E, sub_FC59EF, sub_FC5EFB,
+;   sub_FC6175, sub_FC63EC, sub_FC654F, sub_FC65EC.
+;   GRADE STRONG: the verb (write constants), the object (this part's record) and
+;   every offset are decoded; what the fields hold is not.  Its five call sites
+;   are all resets -- PartRec_InitAllParts, MidiProgram_SelectToneForPart,
+;   MidiCtrl_Dispatch and Dev10C_QuiesceListedChans_0800_0840.
+; PartRec_ResetToDefaults -- 0xFB6500..0xFB6680 (385 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFAFF67 in MidiCtrl_Dispatch__FAFF63, 0xFB020C in Dev10C_QuiesceListedChans_0800_0840__FB0208
@@ -11902,7 +12579,7 @@ sub_FB64C8:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6500:
+PartRec_ResetToDefaults:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB6500  link XIZ,0xfffc
 	push	xhl                                   ; FB6504  push XHL
 	pushw	de                                   ; FB6505  push DE
@@ -12036,7 +12713,22 @@ sub_FB6500__FB6657:
 	unlk32 xiz                                 ; FB667E  unlk XIZ
 	ret                                        ; FB6680  ret
 ; --------------------------------------------------------------------------
-; sub_FB6681 -- 0xFB6681..0xFB68DC (604 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6681 is now `Part_RestageVoiceParams_Melodic`.
+;   GRADE STRONG.  WHY `Part_RestageVoiceParams_Melodic`:
+;   args (part).  The arm MidiProgram_SelectToneForPart takes when ToneRec +0x10
+;   & 0xC0 is 0x00 or 0xC0 (0xFB6C95-0xFB6CB7) -- the same two values
+;   Part_LoadToneRecordAndPointers routes to its element/wave-select/descriptor
+;   loop.  It runs Part_StageDspAlgoParams, PartRec_StageByte0075_FromDspParam00D7,
+;   PartRec_RecomputeWord0006_FromToneRec and sub_FB4D45 (0xFB6690-0xFB66A8),
+;   then a 3 x 4 pass over the 4-byte records at part record +0x35 followed by
+;   sub_FB53C5 per element (0xFB66C4-0xFB6847), then
+;   PartElement_StageAlgoDescBytes_0024 (0xFB684F), then for each element sub_FC6803
+;   with that element's WAVE-SELECT pointer from +0x8C and a bit tested against
+;   BitMask_Table_FDE695 (0xFB687C-0xFB68AA), and finally sub_FC7481 and
+;   sub_FC81F8.
+;   GRADE STRONG: the arm selector is prom_d's `kind` and every callee above is
+;   named, but three of its own steps are still `sub_`.
+; Part_RestageVoiceParams_Melodic -- 0xFB6681..0xFB68DC (604 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFB030D in sub_FB029E__FB0308, 0xFB872D in sub_FB86BB__FB8728
@@ -12045,9 +12737,9 @@ sub_FB6500__FB6657:
 ;          0xFB6CB7
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB4A9F = sub_FB4A9F, 0xFB4D45 = sub_FB4D45
-;          0xFB53C5 = sub_FB53C5, 0xFB5636 = sub_FB5636
-;          0xFB639A = sub_FB639A, 0xFB6487 = sub_FB6487
+; Calls:   0xFB4A9F = PartRec_RecomputeWord0006_FromToneRec, 0xFB4D45 = sub_FB4D45
+;          0xFB53C5 = sub_FB53C5, 0xFB5636 = Part_StageDspAlgoParams
+;          0xFB639A = PartElement_StageAlgoDescBytes_0024, 0xFB6487 = PartRec_StageByte0075_FromDspParam00D7
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
 ;          0xFC81F8 = sub_FC81F8
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6681-0xFB68DC
@@ -12058,7 +12750,7 @@ sub_FB6500__FB6657:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6681:
+Part_RestageVoiceParams_Melodic:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB6681  link XIZ,0xfff0
 	push	xhl                                   ; FB6685  push XHL
 	pushw	de                                   ; FB6686  push DE
@@ -12301,7 +12993,20 @@ sub_FB6681__FB6891:
 	unlk32 xiz                                 ; FB68DA  unlk XIZ
 	ret                                        ; FB68DC  ret
 ; --------------------------------------------------------------------------
-; sub_FB68DD -- 0xFB68DD..0xFB6B59 (637 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB68DD is now `Part_RestageVoiceParams_Drawbar`.
+;   GRADE STRONG.  WHY `Part_RestageVoiceParams_Drawbar`:
+;   args (part).  The arm MidiProgram_SelectToneForPart takes when ToneRec +0x10
+;   & 0xC0 is 0x40 (0xFB6CBD-0xFB6CCB) -- and 0x40 is the arm
+;   Part_LoadToneRecordAndPointers routes to
+;   PartElement_SetWaveSelectPointer_ToRomDefault and DrawbarPreset_GetDescriptor,
+;   which is what makes it the DRAWBAR kind.  Same shape as
+;   Part_RestageVoiceParams_Melodic and the same closing sequence (sub_FC6803 per
+;   element, sub_FC7481, sub_FC81F8), with sub_FC2CD5 inserted at 0xFB68FC, an
+;   extra 0x0010 step of the outer index at 0xFB6AB9, and no
+;   PartRec_RecomputeWord0006_FromToneRec.
+;   ⚠ prom_d says `0x80 is the DRUM path`; 0x80 is the third arm here
+;   (0xFB6CD1) and calls neither of these two.  The three arms are disjoint.
+; Part_RestageVoiceParams_Drawbar -- 0xFB68DD..0xFB6B59 (637 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFB0318 in sub_FB029E__FB0313, 0xFB8739 in sub_FB86BB__FB8734
@@ -12311,8 +13016,8 @@ sub_FB6681__FB6891:
 ; Inputs:  frame `link XIZ,-23`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFB4D45 = sub_FB4D45, 0xFB53C5 = sub_FB53C5
-;          0xFB5636 = sub_FB5636, 0xFB639A = sub_FB639A
-;          0xFB6487 = sub_FB6487, 0xFC2CD5 = sub_FC2CD5
+;          0xFB5636 = Part_StageDspAlgoParams, 0xFB639A = PartElement_StageAlgoDescBytes_0024
+;          0xFB6487 = PartRec_StageByte0075_FromDspParam00D7, 0xFC2CD5 = sub_FC2CD5
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
 ;          0xFC81F8 = sub_FC81F8
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB68DD-0xFB6B59
@@ -12323,7 +13028,7 @@ sub_FB6681__FB6891:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB68DD:
+Part_RestageVoiceParams_Drawbar:
 	link32 0xEE, 0x0C, 0xE9, 0xFF              ; FB68DD  link XIZ,0xffe9
 	push	xhl                                   ; FB68E1  push XHL
 	pushw	de                                   ; FB68E2  push DE
@@ -12576,7 +13281,21 @@ sub_FB68DD__FB6B0F:
 	unlk32 xiz                                 ; FB6B57  unlk XIZ
 	ret                                        ; FB6B59  ret
 ; --------------------------------------------------------------------------
-; sub_FB6B5A -- 0xFB6B5A..0xFB6BA7 (78 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6B5A is now `ExtBoard_RemapBankSelector`.
+;   GRADE STRONG.  WHY `ExtBoard_RemapBankSelector`:
+;   args (program, bank selector).  Returns the selector unchanged unless it is
+;   exactly 0x10 (0xFB6B5F).  For 0x10 it requires an expansion board -- the
+;   0x00D80D base non-zero (0xFB6B65) -- bounds the program against the board's
+;   byte at 0x00C00031 (0xFB6B73/0xFB6B76) and reads the board's table at
+;   0x00C00000 + byte 0x00C00018 + program (0xFB6B7B-0xFB6B93); the answer is
+;   0x30 when that byte is 1 and 0 otherwise.
+;   ★ 0x30 IS THE EXPANSION-BOARD ARM of ToneDB_ResolveToneRecord (`cp HL,0x0030`
+;   0xFB4131), and its caller MidiProgram_SelectToneForPart stores the result in
+;   part record +0x1C, the BANK selector.  So the routine promotes a board tone
+;   from bank 0x10 to bank 0x30.
+;   GRADE STRONG: the board's own record format is undumped, so `byte == 1 means
+;   present` is read off this code alone.
+; ExtBoard_RemapBankSelector -- 0xFB6B5A..0xFB6BA7 (78 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -12592,7 +13311,7 @@ sub_FB68DD__FB6B0F:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6B5A:
+ExtBoard_RemapBankSelector:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB6B5A  link XIZ,0x0000
 	push	xix                                   ; FB6B5E  push XIX
 	cp (xiz+10), 0x10                          ; FB6B5F  cp (XIZ+0x0a),0x10
@@ -12634,7 +13353,7 @@ sub_FB6B5A__FB6BA4:
 ;   hands it the literal packet `C0 00 00 00 00` -- 0xC0 is the MIDI status for
 ;   PROGRAM CHANGE.  Body: bounds the part index with `cp H,0x21`, stores msg[2]
 ;   in part[+0x1B] and a derived byte in part[+0x1C], and then reloads that
-;   part's tone object through sub_FB47C4(part, msg[2], msg[3]).
+;   part's tone object through Part_LoadToneRecordAndPointers(part, msg[2], msg[3]).
 ;   ⚠ GRADE STRONG, not PROVEN: `0xC0 = program change` is the MIDI standard's
 ;   meaning, and this message format is MIDI-DERIVED rather than MIDI (the 0x80
 ;   arm consumes six bytes and is not note-off).  What the ROM settles on its own
@@ -12645,10 +13364,10 @@ sub_FB6B5A__FB6BA4:
 ;          0xFB08D3 in MidiIn_ParseRingAndDispatch__FB086A, 0xFB0A37 in MidiMsg_SendBootSequence
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB47C4 = sub_FB47C4
-;          0xFB64C8 = sub_FB64C8, 0xFB6500 = sub_FB6500
-;          0xFB6681 = sub_FB6681, 0xFB68DD = sub_FB68DD
-;          0xFB6B5A = sub_FB6B5A, 0xFC28B5 = sub_FC28B5
+; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB47C4 = Part_LoadToneRecordAndPointers
+;          0xFB64C8 = PartRec_Word0004_ClearStagedSetBit2, 0xFB6500 = PartRec_ResetToDefaults
+;          0xFB6681 = Part_RestageVoiceParams_Melodic, 0xFB68DD = Part_RestageVoiceParams_Drawbar
+;          0xFB6B5A = ExtBoard_RemapBankSelector, 0xFC28B5 = sub_FC28B5
 ;          0xFC7A1F = sub_FC7A1F, 0xFC81F8 = sub_FC81F8
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6BA8-0xFB6CED
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -12792,13 +13511,25 @@ sub_FB6BA8__FB6CE8:
 	unlk32 xiz                                 ; FB6CEB  unlk XIZ
 	ret                                        ; FB6CED  ret
 ; --------------------------------------------------------------------------
-; sub_FB6CEE -- 0xFB6CEE..0xFB6E09 (284 bytes)
+; ★ NAMED (wave 18): the routine at 0xFB6CEE is now `PartRec_InitAllParts`.
+;   GRADE STRONG.  WHY `PartRec_InitAllParts`:
+;   no arguments.  For every one of the 33 parts (`cp (XIZ+0xf5),0x21` 0xFB6D78)
+;   it zeroes the 4 x 3 bytes at +0x35 + 16j + 41e and the words at +0xA6 + 41e +
+;   2j (0xFB6D36, 0xFB6D44) and calls PartRec_ResetToDefaults (0xFB6D71); then it
+;   calls sub_FA78E8 for all 64 x 3 (chan, slot) pairs (0xFB6D8D); then it writes
+;   0xFF to 0x00D733 and 0x11 to 0x1509 (0xFB6DA1, 0xFB6DA7); then it writes 1
+;   into +0x17, +0x18 and +0x19 of every part record, stepping 0x012C until
+;   0x26AC (0xFB6DC2-0xFB6E02).  0x26AC = 300 * 33 EXACTLY, which is what fixes
+;   the loop as `all parts` rather than a span.
+;   GRADE STRONG: the verb and the object are decoded; the fields are not.  Its
+;   two callers are ExtBoard_ProbeAndInstallBases and sub_FADA7C -- an init path.
+; PartRec_InitAllParts -- 0xFB6CEE..0xFB6E09 (284 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFADAA5 in sub_FADA7C__FADAA1, 0xFB05DC in ExtBoard_ProbeAndInstallBases__FB05CD
 ; Inputs:  frame `link XIZ,-17`; no positive frame slot is read
 ; Outputs: writes 0x001509, 0x00D733
-; Calls:   0xFA78E8 = sub_FA78E8, 0xFB6500 = sub_FB6500
+; Calls:   0xFA78E8 = sub_FA78E8, 0xFB6500 = PartRec_ResetToDefaults
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB6CEE-0xFB6E09
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -12807,7 +13538,7 @@ sub_FB6BA8__FB6CE8:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB6CEE:
+PartRec_InitAllParts:
 	link32 0xEE, 0x0C, 0xEF, 0xFF              ; FB6CEE  link XIZ,0xffef
 	pushw	hl                                   ; FB6CF2  push HL
 	pushw	de                                   ; FB6CF3  push DE
