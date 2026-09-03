@@ -104,6 +104,11 @@
 ;  -----------  ----  -------------------------------------------  ------------
 ;  chan+0x0000  0x00  (R[+0x07] << 8) | P[+0x07], then bit 7        PROVEN as
 ;                     CLEARED (0xFC51E6) when bits 6..4 are         arithmetic;
+;                     ⚠ P[+0x07] is a WORD and R[+0x07] a BYTE, so
+;                     the OR overlaps: P[+0x07]'s own high byte
+;                     survives underneath R[+0x07].  Read off
+;                     0xFC4DD1 (ld IY,(XBC+0x07)) and 0xFC4DE3
+;                     (ld A,(XBC+0x07), extz, sll 8, or).
 ;                     non-zero.  Written LAST by the full writer,   MEANING
 ;                     FIRST by the two multi-register accessors.    UNIDENTIFIED
 ;                     Its own bits 6..4 gate register 0x0300.
@@ -133,9 +138,23 @@
 ;       i1 = clampU8( 0xCF - g(v1) + (int8)(0x00E08C) ),  g(v) = v<48 ? v/2+24 : v
 ;       v1 = clamp( Q5(LinCoef_FE0116, Q[+0x17]) + P[+0x16], 0 .. PART[+0x11] )
 ;       i2, v2: the same with Q[+0x22] and P[+0x18].
-;  chan+0x01C0  0x0E  high 16 bits of                               PROVEN /
+;  chan+0x01C0  0x0E  the TOP HALF of the 32-bit product           PROVEN /
 ;                       fold(word 16) * Curve_Exp2Rise_128[         UNIDENTIFIED
 ;                         clamp(v1, 0..PART[+0x11]) ]
+;                     ⚠ "top half" reads `srl 0x00,XIY` (0xFC5361)
+;                     as a shift of 16, which is the TLCS-900
+;                     encoding rule that a shift count of 0 means
+;                     16 -- a CPU-manual fact, not something this
+;                     image states.  If that rule were wrong the
+;                     shift would be by 0 and the register would be
+;                     the product's LOW half instead.  ⚠ THE
+;                     TOOLCHAIN IS NOT A WITNESS EITHER: `llvm-mc
+;                     --arch=tlcs900` encodes `srl xiy,0` as
+;                     ed ef 00 and `srl xiy,16` as ed ef 10, i.e.
+;                     it passes the immediate through and does not
+;                     implement the rule.  The same
+;                     instruction ends the 0x0200 and 0x0240 chains
+;                     (0xFC54D7, 0xFC4ACC).
 ;                     fold(x) = (x & 0x8000) ? 0x8000-(x & 0x7FFF)
 ;                                            : x + 0x8000
 ;                     -- so register 0x01C0 is register 0x0400's
@@ -237,7 +256,7 @@
 ;   struct Part104Voice {                         /* register it feeds */
 ;     u8   _pad00[3];            /* +0x00  UNIDENTIFIED */
 ;     u32  tone;                 /* +0x03  -> Q, the tone record        (all of them) */
-;     u16  reg0000_low;          /* +0x07  low byte of chan+0x0000      0x0000 */
+;     u16  reg0000_word;         /* +0x07  OR'd under (R[+0x07] << 8)   0x0000 */
 ;     u16  base_A;               /* +0x0A  base   of chan+0x0040        0x0040 */
 ;     u16  base_B;               /* +0x0C  base   of chan+0x0080        0x0080 */
 ;     u8   _pad0E[4];            /* +0x0E  UNIDENTIFIED */
