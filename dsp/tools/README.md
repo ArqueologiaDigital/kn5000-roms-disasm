@@ -71,3 +71,12 @@ error.log` returns nothing, and that is indistinguishable from "the instrument w
 Until 2026-09-04 the vehicle lived only as prose in the register and the prose did not mention the
 flag. It does now, and so does this script — which **fails loudly** rather than producing an empty
 log.
+
+## `SRC 0x00` — the static half (BUILD-LANE-QUEUE item 0 as replaced by 232 sect. 7.2)
+
+| script | question it answers | how to run it |
+|---|---|---|
+| `src00_corpus.py` | **How many `SRC 0x00` words does the corpus actually hold, in which programs, paired with which ACTIONs and classes?** The encoding census that has to come before any reading of the code (standing rule 13). It reproduces the 3057-word corpus total as a self-test, and it reconciles 232's `648`/`605` — which include **26 C-format words that have no `src` field at all** — down to the correct **622 non-C-format words, 580 paired with `ACTION 0x00`**. It also prints the `SRC 0x00` words of the two known-mathematics programs (PARAMETRIC EQ, SINGLE DELAY), which is what makes their harnesses live falsifiers here rather than notional. | `python3 dsp/tools/src00_corpus.py` |
+
+⚠ Partial pass — see `dsp/analysis/SRC00-HANDOFF-2026-09-04.md` for what is done, what is not, and
+what was ruled out. No MAME run was taken and no falsifier requiring one was checked.
