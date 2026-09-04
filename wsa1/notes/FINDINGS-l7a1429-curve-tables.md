@@ -347,6 +347,24 @@ would have missed.
 
 ---
 
+
+⚠ **CORRECTED 2026-09-04: `D` IS THE TOUCH LEVEL, NOT THE KEY.**  `(0x00E088)` is
+`voice[+0x0C] & 0x7F`, and `voice[+0x0C]` is the **VELOCITY** — the voice record's own field
+comment says so, and the note is held separately at `voice[+0x05]` as `note\|0x80`.  The UI
+settles it six for six: the six depth bytes these four tables consume are exactly the six
+fields of the page captioned `TOUCH DEPTH` (`0xF02D13`), plus `TOUCH` on `P0SITI0N M0VEMENT`
+(`0xF02983`).  The tables are now spelled `LinCoef_*_TouchRamp_Q5_128` in
+`prom_c/data_tables/tail_data_zone.s`.
+
+**Every fit, law, range and slope in §6 and in §8's table is unchanged**; what changes is the
+variable's name.  Read "per key" as **per touch step**, and the ★★ box's "100 % key follow"
+as **100 % TOUCH follow** — a depth byte of 64 gives one semitone of cutoff per touch step.
+★ The box's second sentence is still exactly right as written: the `ks(Q, o)` stage **is**
+keyed on the note, at 32 = 100 %.  So `i3`/`i4` carry one touch-scaled term and one
+key-scaled term, differing in their variable as well as in their constant — which is why an
+implementation must not share a constant between them.
+(`FINDINGS-l7a1429-editor-pages.md` §1b; `FINDINGS-l7a1429-gate-and-keyscaling.md` §2.)
+
 ## 7. `Table_FDFF96`: a minimum cutoff per key zone
 
 256 `u8`, 27 distinct values, `0x22..0x3C` (34..60).  Indexed by the key-zone byte at
@@ -375,6 +393,12 @@ keeps the filter above the zone's own band.  No closed form; the values are data
 | `LinCoef_FE0116` | 128 | `65k//128 − 32` exact | −32 → +32 | Q5 key ramp ±1.0, bipolar | PROVEN fit / STRONG unit |
 | `LinCoef_FE0196` | 128 | `k//2 − 64`, `T[127]=0` | −64 → −1, then 0 | Q5 key ramp −2.0..0; **depth 64 = 100% cutoff key follow** | PROVEN fit / STRONG unit |
 | `LinCoef_FE0216` | 128 | byte-identical to `FE0196` | same | same | PROVEN |
+
+
+⚠ **CORRECTED 2026-09-04.**  The four `LinCoef_*` rows above say "Q5 key ramp"; they are
+**Q5 TOUCH ramps** — see the ⚠ note at the end of §6.  `LinCoef_FE0196`'s "depth 64 = 100 %
+cutoff key follow" reads **100 % cutoff TOUCH follow**.  No number in the table changes.
+⚠ `Table_FDFF96` is genuinely indexed by a **key zone** and is not affected.
 
 ### The registers this puts a physical quantity on
 

@@ -17,6 +17,24 @@ This lane edited no `.s` file, and no `.s` file is an input to either script.
 
 ---
 
+## ★ CORRECTIONS CARRIED IN, 2026-09-04
+
+⚠ This note is wave 19.  Waves 20 and 21 closed everything it left open and overturned one
+of its names.  Nothing below this heading is edited; the corrections are ADDED, here and
+beside the claims they touch.  **§4's table is historical** — the current register-name table
+is `FINDINGS-l7a1429-editor-pages.md` §4, and the guide's §5.3 mirrors it.
+
+| this note says | where | what is true now | authority |
+|---|---|---|---|
+| `+0x0B` bits 7:6 = **`RESO MODE`**, STRONG | §2d, §4 footer | they are the MODELING top page's **`GROUP`**.  Its editor at `0xFD422B` is a five-state control that can emit only `0x00`, `0x40` and `0x80`; the factory data contains exactly those three and never `0xC0`; prom_b switches a bracket graphic on it; and the page's own legend reads `ON/OFF  GROUP  DRIVER  RESONATOR  INTERACTION`.  ★ The real `RESO MODE` is **p21/p31 bit 7** — `PAGE3/3`'s first column — which sets register `0x0000` bits 15/14 and adds one octave to that resonator's tuning | editor-pages §1a, §4e |
+| `0x0240`, `0x0300`, `0x03C0`, `0x0480` are a `3!` six-way choice between `DEPTH`, `FORMANT` and `INTERACTION GAIN` | §4, §5e, §6 | **a false dilemma, and all four are resolved.**  `DEPTH` = p14 bits 0-6 → `0x0240` (STRONG).  `INTERACTION GAIN` = p19 → `0x0300` (STRONG).  `FORMANT` = p14 **bit 7**, drawn `FIX`/`MOVE`, which the packer tests at `0xFC4A09` to switch `0x00C0`'s key-follow term on or off — it is a gate, not a register.  `0x03C0`/`0x0480` are RESOLVED **NEGATIVELY**: their only input p15 is never an editor parameter (1 of 258 sender call sites passes `0x0F`, and that one is arm 1) | editor-pages §3a, §4, §4a, §4d |
+| `SCALE`, the fifth column, is **not** located | §5d, §7.1 | **found.**  The column stacks as `RESO`/`SCALE`, not `TUNE`/`SCALE`: `PAGE1/3`'s five headers are `FIT`/`TING`, `MUT`/`ING`, `KEY`/`SHIFT`, `DE`/`TUNE`, `RESO`/`SCALE`.  `RESO SCALE` is drawn `OFF`/`ON` and is **bit 7 of p22 (MAIN) / p32 (SUB)**; so column 4 is `DETUNE`, not `TUNE`.  ⚠ What the packer does with that bit is still open — it reaches `R[+0x1A]`, whose writer was not found | editor-pages §5.3 |
+| the bits 6:4 that gate `0x0300` are written by `0xFC4D27` and `0xFC7DE9` — retracted in §7.1, leaving the producer **UNLOCATED** | §6, §7.1, §7.2 | **located.**  Fifteen sites in seven routines write `P[+0x07]` bits 6..4, all with the idiom `and (Xrr+0x07),0xFF8F` and all downstream of one test on `Q[+0x0B] & 0xC0`.  The census that says nothing else writes the field enumerates the forms it searched, so the negative can be attacked.  §7.1's retraction of the two routines is right; §7.2 is answered | `FINDINGS-l7a1429-gate-and-keyscaling.md` §1.3, §1.6 |
+| §4's count: **12 STRONG · 2 constants · 4 WEAK · 1 UNIDENTIFIED** | §0, §4 | **14 named** (12 of them PROVEN), 2 constants, 2 refused a name with a reason, 1 (`0x0000`) named only in its fields | editor-pages §4 |
+| §7.1: "one hop on the CPU 1 side ... this single hop is the whole remaining job" | §7.1 | ★ **it was, and it was made.**  It did not need `(0x207C)` or `DispatchTable_FCF000`: each MODELING page's read-back order *is* the map, pinned by eight (index, parameter) pairs the per-field editors name directly.  §7.3 and §7.4 are also done — the curve lane printed the tables, and the MAME driver decodes `0x0040`/`0x0080` in its `LOG_DECODE` view | editor-pages, whole |
+
+---
+
 ## 0. The answer in one paragraph
 
 The route worked. **Twelve of the nineteen registers now carry a name in the
@@ -206,6 +224,16 @@ preset.** That is what a resonator-type control does, and it is measured.
 two bits, which is the field `sub_FC7481` reads and which PAGE3/3 draws as two
 bit-7 flags. `+0x0B` bits 7:6 = **`RESO MODE`**, grade STRONG.
 
+
+⚠ **CORRECTED 2026-09-04: those bits are `GROUP`, not `RESO MODE`.**  The two bit-7 flags
+`PAGE3/3` draws are `(0x27A7)` and `(0x27A8)`, and on that page those bytes hold **p21 and
+p31**, not p11 — so they are not this field.  `0xFD434D`'s screen is the MODELING top
+(dispatch code `0xC0`, screen `0xA0`), field 6, a five-state control over 0..4 that ORs
+`0x40`/`0x80` into p11 for pairs of layers, and the page's legend names that column
+**`GROUP`**.  The 392 melodic wave-select records carry only `{0x00, 0x40, 0x80}` and never
+`0xC0` — exactly what that encoder can emit.  `RESO MODE` is a real caption; it belongs to
+p21/p31 bit 7.  (`FINDINGS-l7a1429-editor-pages.md` §1a, §4e.)
+
 ### 2e. The arm-4 jump table partitions the tail — GRADE PROVEN
 
 The 43 entries at `0xFBCA5D` collapse into case groups; `--selftest` asserts the
@@ -284,6 +312,13 @@ And one parameter, not a register, at **PROVEN**: `p11` = `RESONATOR TYPE`
 (bits 5:0) + `RESO MODE` (bits 7:6).
 
 ---
+
+
+⚠ **SUPERSEDED 2026-09-04.**  The table above is left exactly as wave 19 wrote it.  The
+current register-name table is `FINDINGS-l7a1429-editor-pages.md` §4, mirrored in
+`HLE-GUIDE-l7a1429.md` §5.3 — the table `notes/l7a1429_crosscheck.py` reads.  Four rows here
+name the wrong thing and the closing count is out of date; see the corrections at the head of
+this note.
 
 ## 5. The argument, step by step, each with its null
 
@@ -378,6 +413,15 @@ the packer folds them into `0x0040` as a 16-bit value only when `p25`'s bit 7 is
 SET, i.e. only when the MUTING key follow is off. That is a plausible home and
 is **not** evidence.
 
+
+⚠ **CORRECTED 2026-09-04: `SCALE` is found, and column 4 is `DETUNE`.**  The five headers
+are two-line stacks — `FIT`/`TING`, `MUT`/`ING`, `KEY`/`SHIFT`, `DE`/`TUNE`, `RESO`/`SCALE` —
+so reading them as five words was reading two of them in halves.  `RESO SCALE` is drawn
+`OFF`/`ON ` from the 2x3 table `0xF034D8` at pixel x 208 under a header at x 210, and it is
+**bit 7 of p22 / p32**: one byte carries the `MUTING` number in bits 0-6 and the `RESO SCALE`
+flag in bit 7.  The `p26`/`p27` guess in the paragraph above was correctly graded *not
+evidence*, and it was wrong.  (`FINDINGS-l7a1429-editor-pages.md` §3c, §5.3.)
+
 ### 5e. `0x00C0` is the resonator POSITION — STRONG
 
 Group `12..20` has exactly seven live parameters: `p12` and `p20` are read by
@@ -422,6 +466,15 @@ whole of the argument, and it does not extend to the other three.
   bits that gate `0x0300`.
 
 ---
+
+
+⚠ **CORRECTED 2026-09-04: none of §6 survives, and that is a result, not a loss.**  The
+six-way choice was a false dilemma — `DEPTH` is p14 bits 0-6, `FORMANT` is p14 bit 7 (a gate
+on `0x00C0`, not a register), `INTERACTION GAIN` is p19.  The two "soft arguments" both
+pointed the right way and neither was the reason: what settled `0x0300` is that its caption
+is drawn on p19's own row *and* that it is mode-gated, and what settles `0x03C0`/`0x0480` is
+that **p15 has no editor field at all**, so the ROM cannot name them.  And `0x0000`'s bits
+6:4 have a located producer.  See the corrections at the head of this note.
 
 ## 7. What would settle the rest
 
