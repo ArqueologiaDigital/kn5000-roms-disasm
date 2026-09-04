@@ -31,6 +31,23 @@ proposes measuring the instrument, and §5 says where that costs us an answer.
 
 ---
 
+## ★ CORRECTIONS CARRIED IN, 2026-09-04
+
+⚠ Lane `w21/cpu1-hop` (`FINDINGS-l7a1429-editor-pages.md`) landed after this note and
+overturned two of its **names**.  Nothing below this heading is edited; the corrections are
+ADDED here and beside the sections they touch.  ★ **No measurement in this note changes.**
+
+| this note says | where | what is true now |
+|---|---|---|
+| `Q[+0x0B]` bits 7:6 are the tone editor's **`RESO MODE`** | §0, §1.4, §1.7, §1.9, §3, §5.3 | they are the MODELING top page's **`GROUP`** — a five-state control whose own editor at `0xFD422B` can emit only `0x00`, `0x40` and `0x80`, whose bracket graphic changes with it, and which is the second column of that page's own `ON/OFF GROUP DRIVER RESONATOR INTERACTION` legend.  ★ **The MECHANISM in §1 is untouched**: those bits are still the selector, the fifteen writers are still the writers, and `0x0300` is still gated by them.  Read every `RESO MODE` in §1 and §3 as **`GROUP`** |
+| the real `RESO MODE` | — | is **p21/p31 bit 7**, a different field on a different page (`PAGE3/3`).  It sets register `0x0000` bits 15/14 **and** adds `0x0C00` = one octave to that resonator's tuning (`Pack104_UnpackWaveSelRec_ToSubRecord`, `0xFC4884`/`0xFC4897`).  ⚠ So §1.7's factory count — eight tones, all pads — is a count of **`GROUP`** users, not of `RESO MODE` users |
+| register `0x0300` is `INTERACTION GAIN`: **still WEAK** | §1.9, §3 | **STRONG.**  Two independent arguments now stand: the caption `INTERACTION` / `GAIN` is drawn on p19's own row on `PAGE1/2` (five of five values on a caption's row against a null mean of 0.19 of 5), and this note's own result — the gain is MODE-GATED, and `DEPTH` and `FORMANT` have no reason to be.  ★ §1.9's *"a mode-gated gain ... a reason rather than a position"* is exactly the argument that carried; what it lacked was the caption, and the caption is now measured |
+| `DEPTH` and `FORMANT` are the rival candidates for `0x0300`, and `FORMANT` has "a better candidate in the `i5` chain" | §1.9 | both are placed elsewhere and neither was ever a candidate.  `DEPTH` = p14 bits 0-6 → register `0x0240`; `FORMANT` = p14 **bit 7**, `FIX`/`MOVE`, which gates `0x00C0`'s key-follow term at `0xFC4A09` and is not a register.  The `i5` chain's registers `0x03C0`/`0x0480` are **refused a name**: p15 is written by the RESONATOR TYPE preset and by no editor field |
+| §2 is "the four **KEY**-scaling ramps", indexed by "the key, 0..127" | §2, throughout | the index `(0x00E088)` is `voice[+0x0C] & 0x7F`, and `voice[+0x0C]` is the **VELOCITY** — see the ⚠ note at the head of §2 |
+| §5.3: "one hop on the CPU 1 side ... would turn `INTERACTION GAIN` from WEAK to PROVEN" | §5.3 | the hop was made.  It turned the name **STRONG**, not PROVEN, and it did not need `(0x207C)`; and it answered the second half of that item — the values 1 and 2 are `GROUP` codes, drawn as bracket graphics rather than as words |
+
+---
+
 ## 0. THE ANSWER, IN ONE PARAGRAPH
 
 Register `chan+0x0000`'s bits 6..4 come from **`P[+0x07]` of the 42-byte sub-record**, not
@@ -271,6 +288,14 @@ That is a real narrowing, and it moves the name argument without settling it:
 and the 3! choice is not closed.  What is now **PROVEN** is the enable condition, and an HLE
 should implement that and leave the name open.
 
+
+⚠ **CORRECTED 2026-09-04.**  The name is no longer WEAK: it is **STRONG**, on this note's
+mechanism plus a drawn caption on p19's own row (`FINDINGS-l7a1429-editor-pages.md` §3a,
+§4c).  The *"3! choice is not closed"* sentence is superseded — there never was a three-way
+choice, because `DEPTH` and `FORMANT` belong to p14 and its bit 7.  What this note calls
+`RESO MODE` in the comment block below is the `GROUP` field; the bit numbering and the value
+set are right as written.
+
 **What an HLE should do**, replacing the guide's §5 row for `0x0000` and its §7.3
 *"do not model 0x0000"*:
 
@@ -289,6 +314,30 @@ should implement that and leave the name open.
 ---
 
 ## 2. TASK 2 -- THE FOUR KEY-SCALING RAMPS, FOR AN IMPLEMENTER
+
+⚠ **CORRECTED 2026-09-04: THESE ARE TOUCH RAMPS, NOT KEY RAMPS.**  Everything in §2 is
+arithmetically right and semantically misnamed.  The index `(0x00E088)` is
+`voice[+0x0C] & 0x7F`, and `voice[+0x0C]` is the **VELOCITY**: the voice record's own field
+comment says so, and the note lives separately at `voice[+0x05]` as `note\|0x80`.  The UI
+confirms it six for six — the six depth bytes below are exactly the six fields of the page
+captioned `TOUCH DEPTH` (`0xF02D13`), plus `TOUCH` on `P0SITI0N M0VEMENT` (`0xF02983`).  The
+four tables are now spelled `LinCoef_*_TouchRamp_Q5_128` in
+`prom_c/data_tables/tail_data_zone.s`.
+
+**So, reading §2:** every "key" is a **touch level**, every "per key" is **per touch step**,
+"full-keyboard excursion" is **full touch-range excursion**, and "100 % key follow" is
+**100 % touch follow**.  Every number — the closed forms, the slopes, the pivots, the
+mirror, the `sra` floor, the factory resolutions — is unchanged.
+
+★ **And this sharpens §2.3's two-stage warning rather than blunting it.**  `i3`/`i4` carry
+BOTH stages: `Q5(LinCoef_Muting_TouchRamp, ...)` scaled by **touch** at 64 = 100 %, and
+`ks(Q, o)` scaled by the **note** (`note = pitch >> 8`) at 32 = 100 %.  The two stages differ
+in their VARIABLE as well as in their constant.  An implementation that folds them together
+is wrong twice over.  §2.3's `POSITION` paragraph is the one place the distinction already
+mattered: the `- R[+0x0C]` term that makes 100 % key follow "hard-wired" is genuinely keyed,
+and the ramp on top of it is a touch deviation — so the last table of §2.3 is
+**touch-depth per semitone of key**, a cross-modulation, and the `+27.7 %` figures are
+relative to the hard-wired key follow exactly as written.
 
 ### 2.1 The one reader, six call sites -- PROVEN
 
@@ -459,6 +508,15 @@ records the `p20` invariant rejects.  Reported, not smoothed away.
 
 ---
 
+
+⚠ **CORRECTED 2026-09-04, three rows of the table above.**  *"that field is called `RESO
+MODE`"* — it is called **`GROUP`**, grade STRONG, and the name is no longer inherited from
+`FINDINGS-l7a1429-parameter-names.md` §2d, which was wrong; it comes from the MODELING top
+page's own legend and its five-state editor.  *"eight factory tones open the gate"* stands,
+but they are eight `GROUP` users.  *"register `0x0300` is `INTERACTION GAIN` — still WEAK"* —
+**STRONG**, on this note's gate plus the drawn caption.  Everything else in the table is
+untouched.
+
 ## 4. ⚠ CORRECTIONS OWED TO FILES THIS LANE DOES NOT OWN
 
 Reported, not edited.
@@ -485,6 +543,16 @@ Reported, not edited.
 ---
 
 ## 5. WHAT THE NEXT PASS SHOULD DO
+
+
+⚠ **CORRECTED 2026-09-04: item 3 is DONE.**  Lane `w21/cpu1-hop` made the hop, from a
+narrower place than `(0x207C)`: each MODELING page's read-back order *is* the map from
+parameter to drawn field, pinned by eight independent (index, parameter) bindings in the
+per-field editors.  `INTERACTION GAIN` came out **STRONG**, `SCALE` was found (`RESO SCALE` =
+bit 7 of p22/p32), and the `Q[+0x0B]` bits 7:6 values 1 and 2 turned out to be `GROUP` codes
+drawn as bracket graphics, not words.  Items 1, 2, 4 and 5 stand.  ★ A NEW cheapest item
+joins them: the writer of `R[+0x1A]`, which is where `RESO SCALE` reaches the coefficients —
+until it is found, `RESO SCALE` is a named control with no traced effect.
 
 1. **`0x00E093` and `0x00E095`.**  Still the cheapest item, and §1.8 now says what is in the
    array: both gains and both tuning words, per element.  Its reader must exist; the eleven
