@@ -47,7 +47,12 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > * ★ Corpus (`act0d0e_corpus.py`, 11 of 11 vs §232): `0x0D` is followed by `0x0E` at **157 of 202**
 >   (×9.87) — a fact about `0x0E`'s operand, not `0x0D`'s destination; the consumer census's null
 >   has no power. **The corpus cannot separate the seven readings.**
-> * ⟨A10-LEDGER⟩
+> * ⚠ **a10 MULTI TAP DELAY (`sd_rerun.py multitap`) RAN TO COMPLETION AND GRADES NOTHING**: no pair
+>    reproduces its three descriptor taps (best **1 of 4** for 42 pairs; **0 of 4** for 7, **the shipped pair
+>    among them**, no non-zero output in 27085 frames) — rule 20's known-good case fails, so the harness is
+>    evidence for or against nothing. Declared gaps: two ALT words run as no-ops, three coefficient fetches
+>    beyond the 15-cell upload. ★ The seven at 0 of 4 are set-identical to the seven the PEQ pre-load
+>    control lists at 999. OPEN residue, filed with Q4. `data/S_234_sd_multitap.log.gz`; re-run byte-identical.
 > * ⛔ **Neither code is ANCHORED**: confirmed in one context (PEQ, device §133 + model §234); its
 >   consequence in the other (delay programs) is a lag only the chip can confirm. Anchoring waits on
 >   Q4, not on more static work.

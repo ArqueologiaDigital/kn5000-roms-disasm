@@ -47,7 +47,12 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > * ★ Corpus (`act0d0e_corpus.py`, 11 of 11 vs §232): `0x0D` is followed by `0x0E` at **157 of 202**
 >   (×9.87) — a fact about `0x0E`'s operand, not `0x0D`'s destination; the consumer census's null
 >   has no power. **The corpus cannot separate the seven readings.**
-> * ⟨A10-LEDGER⟩
+> * ⚠ **a10 MULTI TAP DELAY (`sd_rerun.py multitap`) RAN TO COMPLETION AND GRADES NOTHING**: no pair
+>    reproduces its three descriptor taps (best **1 of 4** for 42 pairs; **0 of 4** for 7, **the shipped pair
+>    among them**, no non-zero output in 27085 frames) — rule 20's known-good case fails, so the harness is
+>    evidence for or against nothing. Declared gaps: two ALT words run as no-ops, three coefficient fetches
+>    beyond the 15-cell upload. ★ The seven at 0 of 4 are set-identical to the seven the PEQ pre-load
+>    control lists at 999. OPEN residue, filed with Q4. `data/S_234_sd_multitap.log.gz`; re-run byte-identical.
 > * ⛔ **Neither code is ANCHORED**: confirmed in one context (PEQ, device §133 + model §234); its
 >   consequence in the other (delay programs) is a lag only the chip can confirm. Anchoring waits on
 >   Q4, not on more static work.
@@ -1162,7 +1167,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-126 sections, §97..§233.  **Read the tail first** — later sections retract earlier ones *in place*.
+127 sections, §97..§234.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -1292,4 +1297,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §231 | SHIPPED | ★★★★★ `f31 ∈ {3,6,7}` IS **DECODED AS FAR AS IT CAN BE, AND IT IS A DEAD LEVER**: the bit-5 rule is **OFF BY ONE** and a |  |
 | §232 | SHIPPED | ★★★★★ THE UNANCHORED `SRC`/`ACTION` CENSUS: **16 CODES ARE CLOSED, 8 STAY OPEN, 9 ARE NOT RESIDENT** — AND §231's OWN FU |  |
 | §233 | CONFIRMED 1 of 7 (+ retracts §232 §7.2's PEQ falsifier) | ★★★★★ `SRC 0x00` IS DECIDED **FROM DISK**, AND THE READING THE DEVICE SHIPS **SURVIVES**: SINGLE DELAY's lag-1001 ROM PR |  |
+| §234 | CONFIRMED 1 of 49 (+ retracts three-codes.md item A and the lag-1001 criterion's independence from this pair) | ★★★★★ `ACT 0x0D`/`0x0E`: THE SHIPPED PAIR IS **CONFIRMED FROM DISK, 1 of 49** — BY PARAMETRIC EQ's *ENTRY WINDOW*, ONCE  |  |
 

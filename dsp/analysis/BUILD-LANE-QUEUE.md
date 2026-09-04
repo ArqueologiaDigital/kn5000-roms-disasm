@@ -85,7 +85,12 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 >   values 2/3/4) never held the shipped reading. Repaired, ungraded; the graded command is `act0d0e`.
 > * ★ Corpus (`act0d0e_corpus.py`, 11 of 11 vs §232): `0x0D→0x0E` adjacency 157 of 202 (×9.87);
 >   the consumer census's null has no power. **The corpus cannot separate the seven readings.**
-> * ⟨A10-QUEUE⟩
+> * ⚠ **a10 MULTI TAP DELAY (`sd_rerun.py multitap`) RAN TO COMPLETION AND GRADES NOTHING**: no pair
+>    reproduces its three descriptor taps (best **1 of 4** for 42 pairs; **0 of 4** for 7, **the shipped pair
+>    among them**, no non-zero output in 27085 frames) — rule 20's known-good case fails, so the harness is
+>    evidence for or against nothing. Declared gaps: two ALT words run as no-ops, three coefficient fetches
+>    beyond the 15-cell upload. ★ The seven at 0 of 4 are set-identical to the seven the PEQ pre-load
+>    control lists at 999. OPEN residue, filed with Q4. `data/S_234_sd_multitap.log.gz`; re-run byte-identical.
 > * ⛔ **NEITHER CODE IS ANCHORED.** Confirmed in one context (PEQ: device §133 + model §234); in
 >   the delay context its consequence is a lag only hardware can confirm. Anchoring waits on Q4.
 > * ⚠ Falsifiers: a **CANNOT-FAIL row** (no executed line changed; `upd6383.cpp` edit comment-only,

@@ -47,9 +47,13 @@ at `w45` overwrites P one word before the head write `w46` reloads `acc <- P`. E
 number since §230 was taken with the pair inert (`tA<-bus`, a no-op at all eight sites), on a menu
 that could not execute the shipped reading; `sd_rerun.py scan` had crashed since §230. §230's VALUE
 control survives at either lag; the lag is **hardware question Q4**. ⛔ **Neither code is anchored.**
-⟨A10-HANDOFF⟩
+⚠ **The fourth arm, a10 MULTI TAP DELAY (`sd_rerun.py multitap`), ran to completion and GRADES NOTHING**:
+no pair reproduces its three descriptor taps (best **1 of 4** for 42 pairs, **0 of 4** for 7 — the shipped
+pair among them), so rule 20's known-good case fails and the harness is evidence for or against nothing;
+its declared gaps are two ALT words run as no-ops and three coefficient fetches beyond the upload. The
+seven at 0 of 4 are set-identical to the seven the PEQ pre-load control lists. OPEN residue, filed with Q4.
 Reproduce: `python3 dsp/tools/gate_settle.py act0d0e` · `python3 dsp/tools/sd_rerun.py act0d0e` ·
-`python3 dsp/tools/act0d0e_corpus.py`.
+`python3 dsp/tools/sd_rerun.py multitap` · `python3 dsp/tools/act0d0e_corpus.py`.
 
 **The single next action when this resumes** — **`SRC 0x11` (+49), AT `iw11/16/17/19/92`** (§234
 §4.2): corpus census with its null first; both known-mathematics harnesses are BLIND to it by
