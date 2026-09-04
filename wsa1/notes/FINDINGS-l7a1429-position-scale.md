@@ -323,6 +323,22 @@ Two things follow:
 | 66 is the middle key of the 61-key C2..C7 compass whose bottom key is the `MUTING` index's 36 | **STRONG** — three operands (`add C,0x24`, two `cp …,0x003D`) plus the `MUTING` fit |
 | `R[+0x0C]` is the zone tuning word, so `reg(0x00C0) = T[k] + 0x4280 − voice[+0x0A]` | **PROVEN** (operands) |
 | `FORMANT = FIX` in 103 of 133 factory melodic records | **PROVEN** (data) |
+
+★ **DENOMINATOR CHECKED, 2026-09-04.** The 133-record set is the filtered
+population whose bias was found earlier the same day — it drops every tone
+setting the upper bits of `Q[+0x0B]`, and a rate quoted through it once
+overstated a uniformity (`RESONATOR TYPE`, 133/133 filtered against 455/459
+real). So this rate was recomputed over the full set:
+
+    strict 133   FORMANT = FIX in 103 of 133 = 77.4%   ->  MOVE 30  = 22.6%
+    loose  459   FORMANT = FIX in 347 of 459 = 75.6%   ->  MOVE 112 = 24.4%
+
+**The finding is robust**: 1.8 points apart, and the conclusion — that the
+pitch-tracking `MOVE` arm is the MINORITY of the factory set — holds either way.
+Recorded because "we used the biased denominator and it did not matter" is worth
+knowing precisely, and is not the same statement as "the denominator was fine".
+Re-derive with `notes/resonator_type_population_check.py`'s loader.
+
 | `delay = g·P(note)/POSITION`, one dimensionless unknown | **STRONG** — it assumes only that the chip's converter is `2^(v/3072)`, which the unit and the −1 slope already fix |
 | `g = 1` | **WEAK.**  Canonical, self-consistent, and unsupported |
 | **the absolute scale** (`C`, or equivalently `g`) | **UNIDENTIFIED** |
