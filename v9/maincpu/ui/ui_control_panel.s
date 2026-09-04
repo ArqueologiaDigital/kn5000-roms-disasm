@@ -2147,9 +2147,9 @@ RefreshApTask:
 	ld (0xe3e4:16), 255
 	ld (0xe3e6:16), 255
 	lds32 xwa, 0
-	stl_da (0x02749a), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x0274a2), xwa
+	ld (0x02749a:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2181,9 +2181,9 @@ RefreshApTask:
 
 RefreshSwEvent:
 	lds32 xwa, 0
-	stl_da (0x02749a), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x0274a2), xwa
+	ld (0x02749a:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2702,9 +2702,9 @@ MainTitleControl:
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
-	stl_da (0x0274a2), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x02749a), xwa
+	ld (0x0274a2:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x02749a:24), xwa
 	jrl UIWidget_ReturnZero
 
 ; =============================================================================
@@ -2737,9 +2737,9 @@ MainTitleCtrl_SaveAndTransition:
 MainTitleCtrl_SetIndicatorAndClear:
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
-	stl_da (0x0274a2), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x02749a), xwa
+	ld (0x0274a2:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x02749a:24), xwa
 	call AudioMode_ResetVoiceState
 	jrl UIWidget_ReturnZero
 
@@ -3831,7 +3831,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da (0x03ef6a), xwa
+	ld (0x03ef6a:24), xwa
 	lda xde, (0x0274e8:24)
 	lda xbc, (xde + 15)
 	ld xwa, xbc

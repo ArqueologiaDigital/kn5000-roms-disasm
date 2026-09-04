@@ -802,7 +802,7 @@ WndScroll_CopyFromSource:
 
 WndScroll_StoreCallerPtr:
 	ld xwa, (xsp + 42)
-	stl_da (0x0274d2), xwa
+	ld (0x0274d2:24), xwa
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_HandleIndexChange:
@@ -7056,8 +7056,8 @@ ChangeWall_Impl:
 	ld xwa, Str_No_0xB4C
 	add xwa, xbc
 	ld xwa, (xwa)
-	stl_da (0x03ef98), xwa
-	stl_da (0x030452), xwa
+	ld (0x03ef98:24), xwa
+	ld (0x030452:24), xwa
 	ret
 
 ChangeWallPalette:
@@ -7176,7 +7176,7 @@ ChangePalette_Impl:
 	lda xwa, (Str_No_0xB50:24)
 	add xwa, xbc
 	ld xwa, (xwa)
-	stl_da (0x03ef94), xwa
+	ld (0x03ef94:24), xwa
 	ldi_erpw 0xfa, 0x20, 0x00
 
 UIRender_IterateCallbacks:

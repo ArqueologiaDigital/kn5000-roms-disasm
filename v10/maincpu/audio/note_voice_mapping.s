@@ -28155,7 +28155,7 @@ Sprintf_Locked:
 	lds wa, 7
 	call Audio_Lock_Acquire
 	ld xwa, (xsp + 10)
-	stl_da (0x03c21c), xwa
+	ld (0x03c21c:24), xwa
 	ld xwa, (xsp + 10)
 	ld (xwa), 0x0
 	lda xwa, (xsp + 14)
@@ -28180,7 +28180,7 @@ Sprintf_Locked:
 
 Sprintf_Unlocked:
 	ld	xwa, (xsp+4)
-	stl_da	(0x3c21c), xwa
+	ld	(0x3c21c:24), xwa
 	ld	xwa, (xsp+4)
 	ld	(xwa), 0
 	pushw	0xff		; Sprintf_OutputCallback >> 16
@@ -28216,7 +28216,7 @@ Free:
 	jr nz, Free_Block
 	lds32 xwa, 0
 	ld (xbc), xwa
-	stl_da (0x03d52c), xbc
+	ld (0x03d52c:24), xbc
 	lds wa, 1
 	jp TaskSched_SignalEvent
 
@@ -28264,7 +28264,7 @@ Free_Block2:
 	ld (xbc), xwa
 
 Free_Block3:
-	stl_da (0x03d52c), xbc
+	ld (0x03d52c:24), xbc
 	lds wa, 1
 	jp TaskSched_SignalEvent
 
@@ -28812,7 +28812,7 @@ Malloc_Block:
 	cp xiz, (0x3d52c:24)
 	jr nz, Malloc_LoadParam
 	ld xwa, (xiz)
-	stl_da (0x03d52c), xwa
+	ld (0x03d52c:24), xwa
 	jr Malloc_DoSignalEv
 
 Malloc_LoadParam:

@@ -10047,7 +10047,7 @@ AcWelcomScreenProc:
 	ld xwa, Bitmap_DigitD_0x22
 
 AcWelcomScreen_Init_StoreData:
-	stl_da (0x024786), xwa
+	ld (0x024786:24), xwa
 	ld xwa, (xsp + 20)
 	ld xbc, xiz
 	ld xde, (xsp + 16)
@@ -11855,7 +11855,7 @@ Util_SignExtendAndDouble:
 	ret
 
 Util_StorePartArrayBase:
-	stl_da (0x03ea30), xwa
+	ld (0x03ea30:24), xwa
 	ret
 
 PsMixer_ReadWordArrayEntry:
@@ -11866,7 +11866,7 @@ PsMixer_ReadWordArrayEntry:
 	ret
 
 Util_StoreGridArrayBase:
-	stl_da (0x03ea34), xwa
+	ld (0x03ea34:24), xwa
 	ret
 
 AudioCtrl_DataBlock:

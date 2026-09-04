@@ -2966,7 +2966,7 @@ FileOpen:
 	or xwa, xwa
 	jrl z, FileOpen_ErrorNoFile
 	lda xwa, (FileClose:24)
-	stl_da (0x0210f6), xwa
+	ld (0x0210f6:24), xwa
 	ld (xsp + 4), 0x4
 	cp (xbc), 0x0
 	jr z, FileOpen_AllocBuffer
@@ -10418,7 +10418,7 @@ SndTable_ByteBlock_ReadOps:
 	push	xiz
 	ld	(0x2357e:24), 1
 	ld	xwa, (0x3e3e8:24)
-	stl_da	(0x2272e), xwa
+	ld	(0x2272e:24), xwa
 	ld	xwa, (0x3e3ee:24)
 	ldw	(xwa+2), 0
 	ld	xwa, (0x3e3ee:24)
@@ -10520,12 +10520,12 @@ TaskBuf_ReadNextByte:
 	jr nz, TaskBuf_CheckPendingData
 	lds wa, 3
 	call TaskMsg_Receive
-	stl_da (0x023582), xhl
+	ld (0x023582:24), xhl
 	ld wa, (xhl)
 	ld (0x023580:24), wa
 	ld xwa, (0x023582:24)
 	inc 4, xwa
-	stl_da (0x023586), xwa
+	ld (0x023586:24), xwa
 
 TaskBuf_CheckPendingData:
 	ld xwa, (0x023582:24)
@@ -10639,13 +10639,13 @@ SndTable_LookupA:
 	ldw (0x023580:24), 0x0000
 	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
-	stl_da (0x03e3ee), xbc
+	ld (0x03e3ee:24), xbc
 	pushw 0xe4
 	pushw 0x5132
 	push xwa
 	call FileOpen
 	inc 8, xsp
-	stl_da (0x02357a), xhl
+	ld (0x02357a:24), xhl
 	ld xwa, (0x02357a:24)
 	or xwa, xwa
 	jr nz, SndTable_LookupA_GotFile
@@ -10656,7 +10656,7 @@ SndTable_LookupA:
 SndTable_LookupA_GotFile:
 	ld xwa, (0x02357a:24)
 	ld xwa, (xwa + 71)
-	stl_da (0x03e3e8), xwa
+	ld (0x03e3e8:24), xwa
 	lds wa, 2
 	call Show_ScreenGroup
 	lds hl, 0
@@ -10750,7 +10750,7 @@ SndTable_LookupD_CalcAddr:
 	ld wa, (0x02474e:24)
 	extz xwa
 	sll xwa, 9
-	stl_da (0x03e3e8), xwa
+	ld (0x03e3e8:24), xwa
 	lds hl, 0
 	ret
 
@@ -10759,7 +10759,7 @@ SndTable_LookupD:
 	ldw (0x023580:24), 0x0000
 	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
-	stl_da (0x03e3ee), xbc
+	ld (0x03e3ee:24), xbc
 	calr SndTable_LookupD_CalcAddr
 	cps l, 0
 	jr z, SndTable_LookupD_ShowScreen

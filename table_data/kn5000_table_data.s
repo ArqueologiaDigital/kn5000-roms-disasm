@@ -2113,13 +2113,13 @@ Flash_ReadID_32bit:
 
 	; Send ID read command sequence
 	ld xwa, 0xAA00AA	; Unlock 1
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	ld xwa, 0x550055	; Unlock 2
-	stl_da (0x80aaa8), xwa; LD (80AAA8h), XWA
+	ld (0x80aaa8:24), xwa; LD (80AAA8h), XWA
 
 	ld xwa, 0x900090	; ID read command
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	; Read manufacturer ID from base address
 	ld xwa, (0x800000:24); LD XWA, (800000h)
@@ -2187,13 +2187,13 @@ Flash_ProgramWord_32bit__wait_ready:
 
 	; Send program command sequence
 	ld xwa, 0xAA00AA	; Unlock 1
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	ld xwa, 0x550055	; Unlock 2
-	stl_da (0x80aaa8), xwa; LD (80AAA8h), XWA
+	ld (0x80aaa8:24), xwa; LD (80AAA8h), XWA
 
 	ld xwa, 0xA000A0	; Program command
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	; Write data to destination
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h) - get dest addr

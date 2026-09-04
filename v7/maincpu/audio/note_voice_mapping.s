@@ -13272,7 +13272,7 @@ TmFlash_WriteRoutine:
 	jr	nz, 15
 	lds32	xwa, 0
 	ld	(xbc), xwa
-	stl_da	251180, xbc
+	ld	(251180:24), xbc
 	lds	wa, 1
 	jp	15670698
 	ld	xix, (251180:24)
@@ -13308,7 +13308,7 @@ TmFlash_WriteRoutine:
 	jr	7
 	ld	xwa, (251180:24)
 	ld	(xbc), xwa
-	stl_da	251180, xbc
+	ld	(251180:24), xbc
 	lds	wa, 1
 	jp	15670698
 	or	xix, xix

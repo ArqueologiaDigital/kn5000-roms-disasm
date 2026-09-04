@@ -203,19 +203,19 @@ ExtBoard_ProbeAndInstallBases__FB0518:
 	extpfx6 0xD1, 0xFF, 0x14, 0x3E, 0x04, 0x00 ; FB0518  or (0x14ff),0x0004
 ExtBoard_ProbeAndInstallBases__FB051E:
 	ld	xbc, 0xF00000                           ; FB051E  ld XBC,0x00f00000
-	stl_da	(0xD7ED), xbc                       ; FB0523  ld (0x00d7ed),XBC
-	stl_da	(0xD7F1), xbc                       ; FB0528  ld (0x00d7f1),XBC
+	ld	(0xD7ED:24), xbc                       ; FB0523  ld (0x00d7ed),XBC
+	ld	(0xD7F1:24), xbc                       ; FB0528  ld (0x00d7f1),XBC
 	ld	xwa, 0xE80000                           ; FB052D  ld XWA,0x00e80000
-	stl_da	(0xD7F5), xwa                       ; FB0532  ld (0x00d7f5),XWA
+	ld	(0xD7F5:24), xwa                       ; FB0532  ld (0x00d7f5),XWA
 	ld	xbc, 0xE90000                           ; FB0537  ld XBC,0x00e90000
-	stl_da	(0xD7F9), xbc                       ; FB053C  ld (0x00d7f9),XBC
+	ld	(0xD7F9:24), xbc                       ; FB053C  ld (0x00d7f9),XBC
 	ld	xbc, 0xEA0000                           ; FB0541  ld XBC,0x00ea0000
-	stl_da	(0xD7FD), xbc                       ; FB0546  ld (0x00d7fd),XBC
+	ld	(0xD7FD:24), xbc                       ; FB0546  ld (0x00d7fd),XBC
 	ld	xbc, 0xEB0000                           ; FB054B  ld XBC,0x00eb0000
-	stl_da	(0xD801), xbc                       ; FB0550  ld (0x00d801),XBC
+	ld	(0xD801:24), xbc                       ; FB0550  ld (0x00d801),XBC
 	ld	xbc, 0x10000                            ; FB0555  ld XBC,0x00010000
-	stl_da	(0xD805), xbc                       ; FB055A  ld (0x00d805),XBC
-	stl_da	(0xD809), xbc                       ; FB055F  ld (0x00d809),XBC
+	ld	(0xD805:24), xbc                       ; FB055A  ld (0x00d805),XBC
+	ld	(0xD809:24), xbc                       ; FB055F  ld (0x00d809),XBC
 	ld	xix, 0xC00000                           ; FB0564  ld XIX,0x00c00000
 	ldw	hl, 0                                  ; FB0569  ld HL,0x0000
 ExtBoard_ProbeAndInstallBases__FB056C:
@@ -236,7 +236,7 @@ ExtBoard_ProbeAndInstallBases__FB058E:
 	cp	hl, 10                                  ; FB058E  cp HL,0x000a
 	jr c, ExtBoard_ProbeAndInstallBases__FB05B0 ; FB0592  jr C,0xfb05b0
 	ld	xbc, 0xC00000                           ; FB0594  ld XBC,0x00c00000
-	stl_da	(0xD80D), xbc                       ; FB0599  ld (0x00d80d),XBC
+	ld	(0xD80D:24), xbc                       ; FB0599  ld (0x00d80d),XBC
 	add	xix, 16                                ; FB059E  add XIX,0x00000010
 	ld	xwa, (xix)                              ; FB05A4  ld XWA,(XIX)
 	ld	xix, xwa                                ; FB05A6  ld XIX,XWA
@@ -244,14 +244,14 @@ ExtBoard_ProbeAndInstallBases__FB058E:
 	jr nz, ExtBoard_ProbeAndInstallBases__FB05C0 ; FB05AE  jr NZ,0xfb05c0
 ExtBoard_ProbeAndInstallBases__FB05B0:
 	sub	xbc, xbc                               ; FB05B0  sub XBC,XBC
-	stl_da	(0xD80D), xbc                       ; FB05B2  ld (0x00d80d),XBC
+	ld	(0xD80D:24), xbc                       ; FB05B2  ld (0x00d80d),XBC
 	sub	xwa, xwa                               ; FB05B7  sub XWA,XWA
-	stl_da	(0xD811), xwa                       ; FB05B9  ld (0x00d811),XWA
+	ld	(0xD811:24), xwa                       ; FB05B9  ld (0x00d811),XWA
 	jr ExtBoard_ProbeAndInstallBases__FB05CD   ; FB05BE  jr T,0xfb05cd
 ExtBoard_ProbeAndInstallBases__FB05C0:
 	ld	xbc, xix                                ; FB05C0  ld XBC,XIX
 	add	xbc, 0xC00000                          ; FB05C2  add XBC,0x00c00000
-	stl_da	(0xD811), xbc                       ; FB05C8  ld (0x00d811),XBC
+	ld	(0xD811:24), xbc                       ; FB05C8  ld (0x00d811),XBC
 ExtBoard_ProbeAndInstallBases__FB05CD:
 	call	0xFB80E1                              ; FB05CD  call 0xfb80e1
 	pushw	0                                    ; FB05D1  push 0x0000

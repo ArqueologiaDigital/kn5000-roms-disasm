@@ -346,7 +346,7 @@ INTRX0_HANDLER:
 	jr INTRX0_HANDLER__exit
 INTRX0_HANDLER__no_error:
 	ld xbc, (0x00F2F3:24)
-	stl_da 0x007ED6, xbc
+	ld (0x007ED6:24), xbc
 	cp (xiz-1), 0xfe
 	jr nz, INTRX0_HANDLER__range_check
 	ld (0x00F2F8:24), 0x01
@@ -407,7 +407,7 @@ INTTX0_HANDLER:
 	exts xbc
 	ld (xbc), a
 	ld xbc, (0x00F2F3:24)
-	stl_da 0x007ED2, xbc
+	ld (0x007ED2:24), xbc
 	jr INTTX0_HANDLER__exit
 INTTX0_HANDLER__empty:
 	ldw (0x00F2F9:24), 0x0002
@@ -571,7 +571,7 @@ MIDI_Tx_PutByte:
 	ld	a, (xiz+8)                          ; F992DB  ld A,(XIZ+0x08)
 	ld	(xbc), a                            ; F992DE  ld (XBC),A
 	ld	xbc, (0xF2F3:24)                   ; F992E0  ld XBC,(0x00f2f3)
-	stl_da	(0x7ED2), xbc                   ; F992E5  ld (0x007ed2),XBC
+	ld	(0x7ED2:24), xbc                   ; F992E5  ld (0x007ed2),XBC
 	ldw	(0xF2F9:24), 1                    ; F992EA  ld (0x00f2f9),0x0001
 	ldw (xiz-2), 0x0000                    ; F992F1  ld (XIZ+0xfe),0x0000   [llvm-mc cannot encode this]
 	jr MIDI_Tx_PutByte__F9930B                           ; F992F6  jr T,0xf9930b
@@ -961,7 +961,7 @@ MIDI_Watchdogs_And_TransportSwitch:
 	cp	xbc, 0x87                           ; F994F5  cp XBC,0x00000087
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F9950E                      ; F994FB  jr ULE,0xf9950e
 	ld	xwa, (0xF2F3:24)                   ; F994FD  ld XWA,(0x00f2f3)
-	stl_da	(0x7ED2), xwa                   ; F99502  ld (0x007ed2),XWA
+	ld	(0x7ED2:24), xwa                   ; F99502  ld (0x007ed2),XWA
 	pushw	0xFE                             ; F99507  push 0x00fe
 	calr (0xF992C6 - 0xF9950D)             ; F9950A  calr 0xf992c6
 	popw	bc                                ; F9950D  pop BC

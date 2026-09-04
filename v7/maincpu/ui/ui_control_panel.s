@@ -2155,9 +2155,9 @@ RefreshApTask:
 	ld	(58142:16), 255
 	ld	(58144:16), 255
 	lds32	xwa, 0
-	stl_da	(160922), xwa
-	stl_da	(160926), xwa
-	stl_da	(160930), xwa
+	ld	(160922:24), xwa
+	ld	(160926:24), xwa
+	ld	(160930:24), xwa
 	ld	xwa, 4294967295
 	ld	xbc, 29360136
 	call	16421979
@@ -2188,9 +2188,9 @@ RefreshApTask:
 	jp	16423243
 RefreshSwEvent:
 	lds32 xwa, 0
-	stl_da (0x02749a), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x0274a2), xwa
+	ld (0x02749a:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2637,9 +2637,9 @@ MainTitleControl:
 	ldw	wa, 72
 	call	16544114
 	lds32	xwa, 0
-	stl_da	160930, xwa
-	stl_da	160926, xwa
-	stl_da	160922, xwa
+	ld	(160930:24), xwa
+	ld	(160926:24), xwa
+	ld	(160922:24), xwa
 	jrl	201
 SeqState_TransitionMode:
 	ld	(35995:16), a
@@ -2655,9 +2655,9 @@ MainTitleCtrl_SaveAndTransition:
 MainTitleCtrl_SetIndicatorAndClear:
 	call	16544114
 	lds32	xwa, 0
-	stl_da	(160930), xwa
-	stl_da	(160926), xwa
-	stl_da	(160922), xwa
+	ld	(160930:24), xwa
+	ld	(160926:24), xwa
+	ld	(160922:24), xwa
 	call	16635862
 	jrl	137
 SeqState_DemoModeHandler:
@@ -3743,7 +3743,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da (0x03ef6a), xwa
+	ld (0x03ef6a:24), xwa
 	lda xde, (0x0274e8:24)
 	lda xbc, (xde + 15)
 	ld xwa, xbc

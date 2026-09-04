@@ -112,7 +112,7 @@ Boot_malloc__unlink:
 	cp xhl, (0x0099a0)	; is the chosen block the list head?
 	jr nz, Boot_malloc__unlink_mid
 	ld xwa, (xhl)
-	stl_da (0x0099a0), xwa	; head = block->next
+	ld (0x0099a0:24), xwa	; head = block->next
 	jr t, Boot_malloc__return_data
 Boot_malloc__unlink_mid:
 	ld xwa, (xhl)
@@ -423,7 +423,7 @@ Boot_free__scan_done:
 Boot_free__insert_head:
 	ld (xde), xwa		; block->next = old head (or 0)
 Boot_free__set_head:
-	stl_da (0x0099a0), xde
+	ld (0x0099a0:24), xde
 	jr t, Boot_free__exit
 Boot_free__mid_list:
 	or xiz, xiz		; at list end: nothing after to merge with
@@ -492,7 +492,7 @@ Boot_free_DeadTail9998:
 Boot_free_DeadTail9998__insert_head:
 	ld (xde), xwa
 Boot_free_DeadTail9998__set_head:
-	stl_da (0x009998), xde
+	ld (0x009998:24), xde
 	jr t, Boot_free_DeadTail9998__exit
 Boot_free_DeadTail9998__mid_list:
 	or xiz, xiz

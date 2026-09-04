@@ -2160,8 +2160,8 @@ Seq_InitVoiceStructures:
 	ldw (0x025b7c:24), 0x0000
 	lda xwa, (0x0248c8:24)
 	ld (xwa), 0x0
-	stl_da (0x0248c4), xwa
-	stl_da (0x0249c8), xwa
+	ld (0x0248c4:24), xwa
+	ld (0x0249c8:24), xwa
 	ldiw_erp 0xfa, 0
 Seq_InitVoiceLoop:
 	.byte 0x0b, 0xea, 0x00, 0x0b, 0x04, 0x00
@@ -2215,16 +2215,16 @@ Seq_CopyPtrLoop:
 	sll xbc, 2
 	add xbc, 0x880000
 	ld xwa, (xbc + 4)
-	stl_da (0x0249cc), xwa
+	ld (0x0249cc:24), xwa
 	jr Seq_StoreResultAddr
 
 Seq_UseFallbackAddr:
 	ld xwa, (0x0249d0:24)
-	stl_da (0x0249cc), xwa
+	ld (0x0249cc:24), xwa
 
 Seq_StoreResultAddr:
 	ld xwa, (0x0249cc:24)
-	stl_da (0x0249d4), xwa
+	ld (0x0249d4:24), xwa
 	ret
 
 Seq_InitializeAndStart:
@@ -2351,7 +2351,7 @@ Seq_FillBufferLoop:
 	ld	xwa, xiz
 	calr	395
 	ld	xwa, xhl
-	stl_da	(149968), xwa
+	ld	(149968:24), xwa
 	pushw	234
 	pushw	92
 	ld	xbc, xiz
@@ -2373,7 +2373,7 @@ FDemoText_ProcessMarkupLoop:
 	pushw iz
 	ld iz, wa
 	ld xwa, (0x0249cc:24)
-	stl_da (0x0249d4), xwa
+	ld (0x0249d4:24), xwa
 	cp (xwa), 0x0
 	jr z, FDemoText_MarkupDone
 
@@ -2381,7 +2381,7 @@ FDemoText_MarkupLoop:
 	ld xwa, (0x0249d4:24)
 	ld bc, iz
 	calr FDemoText_ProcessTextMarkup
-	stl_da (0x0249d4), xhl
+	ld (0x0249d4:24), xhl
 	ld xwa, (0x0249d4:24)
 	cp (xwa), 0x0
 	jr nz, FDemoText_MarkupLoop

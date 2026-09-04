@@ -41115,11 +41115,11 @@ DSP_System_Init_SetBit:
 ; Installs the three long pointers and runs the six-call init chain.
 DSP_System_Init_Continue:
 	ld xwa, 0x50000
-	stl_da 0x045310, xwa
+	ld (0x045310:24), xwa
 	ld xwa, 0x50000
-	stl_da 0x045314, xwa
+	ld (0x045314:24), xwa
 	lda xwa, (0x0a0000:24)
-	stl_da 0x045318, xwa
+	ld (0x045318:24), xwa
 	call DSP_Config_Init
 	call DSP_Reset
 	lds wa, 0
@@ -42269,9 +42269,9 @@ DSP_VoiceState_Dispatch_Epilogue:
 ; hardware touched. No inputs, no outputs.
 DSP_ResetWriteBufferPtr:
 	lda xwa, (0x007800:24)
-	stl_da 0x045320, xwa
+	ld (0x045320:24), xwa
 	lda xwa, (0x007800:24)
-	stl_da 0x04531c, xwa
+	ld (0x04531c:24), xwa
 	ret
 
 ; Bare `ret`. One of three consecutive 1-byte stubs; all three are still referenced by

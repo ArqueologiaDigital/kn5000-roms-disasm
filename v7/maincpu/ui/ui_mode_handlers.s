@@ -2234,7 +2234,7 @@ SystemInitOkFunc:
 	lds32 xde, 0
 	call SendEvent
 	exts xhl
-	stl_da (0x0340de), xhl
+	ld (0x0340de:24), xhl
 	cp (0x0340ea:24), 0x00
 	jr nz, SystemInitOk_PostEvent
 	ld xwa, 0x142000a
@@ -3707,7 +3707,7 @@ MstStyle1_EventDispatch:
 	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
-	stl_da (0x0340d2), xde
+	ld (0x0340d2:24), xde
 	ldb c, 0x0
 
 MstStyle1Sub_CountEntries_Loop:
@@ -3785,7 +3785,7 @@ MstStyle1Sub_HandleSubSelect:
 	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
-	stl_da (0x0340d2), xde
+	ld (0x0340d2:24), xde
 	ldb c, 0x0
 
 MstStyle1Sub_SubSel_CountLoop:
@@ -4368,7 +4368,7 @@ MstStyle1Page_EventDispatch:
 	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
-	stl_da (0x0340d2), xde
+	ld (0x0340d2:24), xde
 	ldb c, 0x0
 
 MstStyle2_CountEntries_Loop:
@@ -4417,7 +4417,7 @@ MstStyle2_CountEntries_Adjust:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_CountSubEntries_LoopA:
@@ -4451,7 +4451,7 @@ MstStyle2_CountSubEntries_AdjA:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340da), xde
+	ld (0x0340da:24), xde
 	ldb c, 0x0
 
 MstStyle2_CountSubEntries_LoopB:
@@ -4492,7 +4492,7 @@ MstStyle2_InitOdd_Setup:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340d6), xde
+	ld (0x0340d6:24), xde
 	ldb c, 0x0
 
 MstStyle2_InitOdd_CountLoopA:
@@ -4521,7 +4521,7 @@ MstStyle2_InitOdd_CountAdjA:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340da), xde
+	ld (0x0340da:24), xde
 	ldb c, 0x0
 
 MstStyle2_InitOdd_CountLoopB:
@@ -4644,7 +4644,7 @@ MstStyle2_DialDown_PageDec:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageDec_CountLoop:
@@ -4681,7 +4681,7 @@ MstStyle2_PageDec_CountAdj:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340da), xhl
+	ld (0x0340da:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageDec_CountLoop2:
@@ -4774,7 +4774,7 @@ MstStyle2_DialUp_PageInc:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageInc_CountLoop:
@@ -4816,7 +4816,7 @@ MstStyle2_PageInc_CountAdj:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340da), xhl
+	ld (0x0340da:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageInc_CountLoop2:
@@ -4913,7 +4913,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_DialScrollDown_CountLoop:
@@ -4950,7 +4950,7 @@ MstStyle2_DialScrollDown_CountAdj:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340da), xde
+	ld (0x0340da:24), xde
 	ldb c, 0x0
 
 MstStyle2_DialScrollDown_Count2Loop:
@@ -5145,7 +5145,7 @@ MstStyle2_DialScrollUp_NextPage:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xiy, (xwa + 4)
-	stl_da (0x0340d6), xiy
+	ld (0x0340d6:24), xiy
 	ldb c, 0x0
 
 MstStyle2_DialScroll_CountLoopD:
@@ -5182,7 +5182,7 @@ MstStyle2_DialScroll_CountAdjD:
 	sll xwa, 3
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340da), xhl
+	ld (0x0340da:24), xhl
 	ldb c, 0x0
 
 MstStyle2_DialScroll_CountLoopE:

@@ -187,7 +187,7 @@ CtrlPanel_CheckButtonRelease:
 CtrlPanel_DispatchCombinedState:
 	ld xwa, (0x02749e:24)
 	and xwa, (0x02749a:24)
-	stl_da (0x0274a2), xwa
+	ld (0x0274a2:24), xwa
 	cp xwa, 0x1100
 	jr z, CtrlPanel_HandleFirmwareCheck
 	cp xwa, 0xa1
@@ -304,7 +304,7 @@ CtrlPanel_EventType_AA:
 	.byte 0xf2, 0x23, 0xec, 0xfa, 0xe6
 CtrlPanel_ClearStateVar:
 	lds32 xwa, 0
-	stl_da (0x027490), xwa
+	ld (0x027490:24), xwa
 
 CtrlPanel_AA_Epilogue:
 	jrl UIEvent_Epilogue

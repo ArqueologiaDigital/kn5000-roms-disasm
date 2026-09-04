@@ -5396,7 +5396,7 @@ AcFreeSplit_ValueChanged:
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)
-	stl_da (0x0340c0), xwa
+	ld (0x0340c0:24), xwa
 	cp xwa, 0x4180
 	jr nz, AcFreeSplit_CheckSecondKey
 	cpw (xiz + 4), 0x0

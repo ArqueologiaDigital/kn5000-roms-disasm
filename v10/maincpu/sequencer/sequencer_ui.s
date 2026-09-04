@@ -3780,7 +3780,7 @@ AcMuteToggle_HandleInit:
 	lds32 xde, 0
 	call ApFuncCall
 	ld xde, xhl
-	stl_da (0x02108c), xde
+	ld (0x02108c:24), xde
 	ld xwa, xiz
 	ld xbc, 0x1e0003b
 	call SendEvent
@@ -13887,7 +13887,7 @@ Sqedt_ParamDispatch:
 	.long FmtStr_pct3d_4B5E
 	jr	31
 	.byte 0xd1
-	stl_da	(0x4004f1), xix
+	ld	(0x4004f1:24), xix
 	popw	hl
 	.byte 0xe3
 	nop

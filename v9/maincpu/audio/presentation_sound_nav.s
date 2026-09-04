@@ -267,7 +267,7 @@ GroupBox_NavUpDown:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da (0x03ef6a), xwa
+	ld (0x03ef6a:24), xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1e000b4
@@ -356,7 +356,7 @@ SetDialFocus:
 	ld xde, xwa
 	cp (0x03ef6a:24), xde
 	ret z
-	stl_da (0x03ef6a), xde
+	ld (0x03ef6a:24), xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0002c
 	call SendEvent
@@ -373,15 +373,15 @@ GetDialFocus_Active:
 	ret
 
 SetDialUp:
-	stl_da (0x03ef52), xwa
-	stl_da (0x03ef5a), xbc
-	stl_da (0x03ef62), xde
+	ld (0x03ef52:24), xwa
+	ld (0x03ef5a:24), xbc
+	ld (0x03ef62:24), xde
 	jr SetDialFocus
 
 SetDialDown:
-	stl_da (0x03ef56), xwa
-	stl_da (0x03ef5e), xbc
-	stl_da (0x03ef66), xde
+	ld (0x03ef56:24), xwa
+	ld (0x03ef5e:24), xbc
+	ld (0x03ef66:24), xde
 	jr SetDialFocus
 
 SetAutoIncDefault:
@@ -1849,7 +1849,7 @@ AcNaming_CheckDefaultWidget:
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
-	stl_da (0x0274d2), xwa
+	ld (0x0274d2:24), xwa
 
 AcNaming_InitScrollState:
 	ldw (0x0274d8:24), 0x0000
@@ -1875,7 +1875,7 @@ AcNaming_QueryCharSet:
 	ld xbc, Data_SoundEditorCharsLayout_0x18
 	add xbc, xwa
 	ld xwa, (xbc)
-	stl_da (0x0274e4), xwa
+	ld (0x0274e4:24), xwa
 	cps hl, 0
 	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17

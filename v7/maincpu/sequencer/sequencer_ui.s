@@ -4530,7 +4530,7 @@ AcMuteToggle_HandleInit:
 	lds32 xde, 0
 	call ApFuncCall
 	ld xde, xhl
-	stl_da (0x02108c), xde
+	ld (0x02108c:24), xde
 	ld xwa, xiz
 	ld xbc, 0x1e0003b
 	call SendEvent
@@ -15401,7 +15401,7 @@ Sqedt_ParamDispatch:
 	.byte 0x00	; v10 does not spell this byte either
 	jr	31
 	.byte 0xd1	; v10 does not spell this byte either
-	stl_da	(4195569), xix
+	ld	(4195569:24), xix
 	popw	hl
 	.byte 0xe3	; v10 does not spell this byte either
 	nop

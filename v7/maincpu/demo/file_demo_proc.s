@@ -9,7 +9,7 @@
 FDemo_DisplayResourceData:
 	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head_head.bin"
 	lda xwa, (0x0ab000:24)
-	stl_da (0x025b7e), xwa
+	ld (0x025b7e:24), xwa
 	ret
 	lda xhl, (0x0ab000:24)
 	lda xbc, (0x0fd800:24)
@@ -23,7 +23,7 @@ FDemo_DisplayResourceData:
 	jr nc, .Lc_f861f4
 	ld XHL,XDE
 	add XDE,XWA
-	stl_da (0x025b7e), xde
+	ld (0x025b7e:24), xde
 	jr t, .Lc_f861f6
 .Lc_f861f4:
 	lds32 xhl, 0
@@ -1169,7 +1169,7 @@ Demo_RecordChainReturn:
 	ret
 
 Demo_StoreRecordChainParams:
-	stl_da (0x025b8a), xwa
+	ld (0x025b8a:24), xwa
 	ld (0x03ec4e:24), bc
 	ld (0x025b8e:24), de
 	ret
@@ -5093,7 +5093,7 @@ FileIO_GetDiskFreeSpace:
 
 FileIO_ResetCurrentRecord:
 	ld xwa, (SeqFileTypeCode_Lsw_0x4:24)
-	stl_da (0x025d6c), xwa
+	ld (0x025d6c:24), xwa
 	ret
 
 FileIO_GetDiskRecordPtr:
@@ -7575,7 +7575,7 @@ ControlState_ProcessCommand:
 	push xiz
 	ld xiz, xwa
 	ld xwa, 0xffffffff
-	stl_da (0x027416), xwa
+	ld (0x027416:24), xwa
 	ld (0x027414:24), 0x00
 	cp (xiz), 0x2
 	jr nz, CtrlCmd_Return
@@ -7664,7 +7664,7 @@ FindFirst_StoreFileSize:
 	ld (xwa), xbc
 
 FindFirst_StoreResult:
-	stl_da (0x027416), xiz
+	ld (0x027416:24), xiz
 	ld wa, (xsp + 4)
 	ld (0x027414:24), a
 	lds hl, 0
@@ -7679,7 +7679,7 @@ FindFirst_NextIndex:
 
 FindFirst_NotFound:
 	ld xwa, 0xffffffff
-	stl_da (0x027416), xwa
+	ld (0x027416:24), xwa
 	ldw hl, 0xffff
 
 FindFirst_Return:
@@ -7704,7 +7704,7 @@ FileIO_FindNextMatch:
 	ld xwa, (0x027416:24)
 	call _findclose
 	ld xwa, 0xffffffff
-	stl_da (0x027416), xwa
+	ld (0x027416:24), xwa
 	ldw hl, 0xffff
 	jr FindNext_Return
 

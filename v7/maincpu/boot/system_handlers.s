@@ -6518,11 +6518,11 @@ HDAE5000_Detect:
 	ld (xsp + 8), xwa
 	ei 6
 	ld xwa, 0xaa00aa
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, 0x550055
-	stl_da (0x80aaa8), xwa
+	ld (0x80aaa8:24), xwa
 	ld xwa, 0x900090
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, (0x800000:24)
 	ld (xsp + 4), xwa
 	ld xwa, 0x800000
@@ -6565,11 +6565,11 @@ Flash_ProgramByte_WaitReady:
 	jr z, Flash_ProgramByte_WaitReady
 	ei 6
 	ld xwa, 0xaa00aa
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, 0x550055
-	stl_da (0x80aaa8), xwa
+	ld (0x80aaa8:24), xwa
 	ld xwa, 0xa000a0
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
 	ei 0

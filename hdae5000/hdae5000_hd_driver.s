@@ -695,13 +695,13 @@ HDAE5000_HDAETitleFunc:
 
 	; Set initial disk status
 	ld xwa, 0x007f0000			; 40 00 00 7f 00
-	stl_da (0x23a09a), xwa; f2 9a a0 23 60
+	ld (0x23a09a:24), xwa; f2 9a a0 23 60
 	cp (0x22ad9a:24), 0x01; c2 9a ad 22 3f 01
 	jrl nz, .Lri_done			; 7e xx xx
 	cp (0x22ad9b:24), 0x01; c2 9b ad 22 3f 01
 	jrl nz, .Lri_done			; 7e xx xx
 	ld xwa, 0x007f013a			; 40 3a 01 7f 00
-	stl_da (0x23a09a), xwa; f2 9a a0 23 60
+	ld (0x23a09a:24), xwa; f2 9a a0 23 60
 	jrl t, .Lri_done			; 78 xx xx
 
 	; === Case 9: check cylinder count, set disk capacity ===
@@ -714,17 +714,17 @@ HDAE5000_HDAETitleFunc:
 	cps a, 1				; c9 d9
 	jrl nz, .Lri_done			; 7e xx xx
 	ld xwa, 0x007f0018			; 40 18 00 7f 00
-	stl_da (0x23a09a), xwa; f2 9a a0 23 60
+	ld (0x23a09a:24), xwa; f2 9a a0 23 60
 	jrl t, .Lri_done			; 78 xx xx
 
 .Lri_case9_cyl2:				; 0x283668
 	ld xwa, 0x007f008f			; 40 8f 00 7f 00
-	stl_da (0x23a09a), xwa; f2 9a a0 23 60
+	ld (0x23a09a:24), xwa; f2 9a a0 23 60
 	jrl t, .Lri_done			; 78 xx xx
 
 .Lri_case9_cyl3:				; 0x283675
 	ld xwa, 0x007f013a			; 40 3a 01 7f 00
-	stl_da (0x23a09a), xwa; f2 9a a0 23 60
+	ld (0x23a09a:24), xwa; f2 9a a0 23 60
 	jrl t, .Lri_done			; 78 xx xx
 
 	; === Case 8: dispatch event to sub-device ===
@@ -771,7 +771,7 @@ HDAE5000_HDAETitleFunc:
 	sla wa, 2				; d8 ec 02
 	lda xbc, (0x2e2388:24); f2 88 23 2e 31
 	ld_sril3 xwa, 0x07, 0xe4, 0xe0		; e3 07 e4 e0 20 — ld xwa, (xbc+wa)
-	stl_da (0x23a09a), xwa; f2 9a a0 23 60
+	ld (0x23a09a:24), xwa; f2 9a a0 23 60
 
 	; === Common exit ===
 .Lri_done:					; 0x28370B

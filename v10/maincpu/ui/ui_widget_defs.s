@@ -1617,12 +1617,12 @@ MainLswPartGet:
 
 SetLswFilter:
 	add xwa, xbc
-	stl_da (0x0276c6), xwa
+	ld (0x0276c6:24), xwa
 	ret
 
 ResetLswFilter:
 	add xwa, xbc
-	stl_da (0x0276c6), xwa
+	ld (0x0276c6:24), xwa
 	ret
 
 AcRamEditBoxProc:
@@ -8879,7 +8879,7 @@ InheritedProc:
 	ld xiy, (xiy + 4)
 	cp xiy, 0xffffffff
 	jr z, TitleWidget_Init
-	stl_da (0x02bc14), xiy
+	ld (0x02bc14:24), xiy
 	ld xhl, xiy
 	srl xhl, 0
 	and xhl, 0xfff
@@ -8906,7 +8906,7 @@ InheritedProc:
 	call (xhl)
 	ld xwa, xhl
 	ld xbc, (xsp + 4)
-	stl_da (0x02bc14), xbc
+	ld (0x02bc14:24), xbc
 	jr RootObject_GetterBlock
 
 TitleWidget_Init:
@@ -8932,15 +8932,15 @@ GetRootParam:
 	ret
 
 SetRootObject:
-	stl_da (0x02bc18), xwa
+	ld (0x02bc18:24), xwa
 	ret
 
 SetRootEvent:
-	stl_da (0x02bc1c), xwa
+	ld (0x02bc1c:24), xwa
 	ret
 
 SetRootParam:
-	stl_da (0x02bc20), xwa
+	ld (0x02bc20:24), xwa
 	ret
 
 GetFocusObject:
@@ -9695,9 +9695,9 @@ ObjectEnum_Paint:
 	ld (xsp + 4), xwa
 
 ObjectEnum_OK:
-	stl_da (0x03ef86), xde
+	ld (0x03ef86:24), xde
 	ld xwa, (0x03ef8a:24)
-	stl_da (0x03ef8e), xwa
+	ld (0x03ef8e:24), xwa
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xde, xwa
@@ -9710,16 +9710,16 @@ ObjectEnum_OK:
 	cp xwa, 0xffffffff
 	jr z, ObjectEnum_OK_Dispatch
 	ld xwa, (xsp + 10)
-	stl_da (0x03ef82), xwa
+	ld (0x03ef82:24), xwa
 	ld xwa, (xde)
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 	jr ObjectEnum_OK_DispatchInline
 
 ObjectEnum_OK_Dispatch:
 	ld xwa, 0x1800000
-	stl_da (0x03ef82), xwa
+	ld (0x03ef82:24), xwa
 	ld xwa, 0x1a00000
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 
 ObjectEnum_OK_DispatchInline:
 	ld xwa, (0x03ef8a:24)
@@ -10053,7 +10053,7 @@ EventDispatch_SelectDone:
 
 EventDispatch_ConfirmHandler:
 	ld xwa, (0x03ef8a:24)
-	stl_da (0x03ef8e), xwa
+	ld (0x03ef8e:24), xwa
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
@@ -10063,12 +10063,12 @@ EventDispatch_ConfirmHandler:
 	cp xwa, 0xffffffff
 	jr z, EventDispatch_ConfirmSetup
 	ld xwa, (xsp + 30)
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 	jr EventDispatch_ConfirmForward
 
 EventDispatch_ConfirmSetup:
 	ld xwa, 0x1a00000
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 
 EventDispatch_ConfirmForward:
 	ldw (xhl + 18), 0xffff
@@ -10158,7 +10158,7 @@ EventDispatch_OKDone:
 	ld xwa, (xwa)
 	ld (xsp + 4), xwa
 	ld xwa, (0x03ef8a:24)
-	stl_da (0x03ef8e), xwa
+	ld (0x03ef8e:24), xwa
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
@@ -10168,12 +10168,12 @@ EventDispatch_OKDone:
 	cp xwa, 0xffffffff
 	jr z, EventDispatch_Default
 	ld xwa, (xsp + 30)
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 	jr EventDispatch_DefaultProc
 
 EventDispatch_Default:
 	ld xwa, 0x1a00000
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 
 EventDispatch_DefaultProc:
 	ld xwa, (0x03ef8e:24)
@@ -10242,11 +10242,11 @@ EventDispatch_Return:
 	cp wa, 0xffff
 	jrl z, TitleProc_ReturnZero
 	ld xwa, (0x03ef8a:24)
-	stl_da (0x03ef8e), xwa
+	ld (0x03ef8e:24), xwa
 	ld wa, (xbc)
 	exts xwa
 	add xwa, 0x1a00000
-	stl_da (0x03ef8a), xwa
+	ld (0x03ef8a:24), xwa
 	ld xde, xwa
 	ld xwa, 0x1400001
 	ld xbc, 0x1c00028
@@ -10742,9 +10742,9 @@ EnumList_HitTest_Match:
 	cp xwa, 0x8
 	jr nz, TitleProc_ReturnZero
 	ld xwa, (0x03ef82:24)
-	stl_da (0x03ef86), xwa
+	ld (0x03ef86:24), xwa
 	ld xwa, (0x03ef8a:24)
-	stl_da (0x03ef8e), xwa
+	ld (0x03ef8e:24), xwa
 	jr TitleProc_ReturnZero
 
 EnumList_HitTest_NoMatch:
@@ -17554,20 +17554,20 @@ EventHandler_ObjectDispatch:
 	or xhl, xhl
 	jrl z, EventHandler_ContinueProc
 	ld xwa, (xsp + 8)
-	stl_da (0x02bc24), xwa
-	stl_da (0x02bc18), xwa
+	ld (0x02bc24:24), xwa
+	ld (0x02bc18:24), xwa
 	ld xwa, (xsp + 4)
-	stl_da (0x02bc28), xwa
-	stl_da (0x02bc1c), xwa
+	ld (0x02bc28:24), xwa
+	ld (0x02bc1c:24), xwa
 	ld xwa, (xsp)
-	stl_da (0x02bc2c), xwa
-	stl_da (0x02bc20), xwa
+	ld (0x02bc2c:24), xwa
+	ld (0x02bc20:24), xwa
 	ld xwa, (xsp + 8)
 	ld xix, xhl
 	ld xbc, 0x1e00000
 	lds32 xde, 0
 	call (xix)
-	stl_da (0x02bc14), xhl
+	ld (0x02bc14:24), xhl
 	ld xwa, xhl
 	srl xwa, 0
 	and xwa, 0xfff
@@ -17638,11 +17638,11 @@ EventRoute_ObjectDispatch:
 	ld (xsp + 16), xwa
 	ld xwa, (0x02bc2c:24)
 	ld (xsp + 8), xwa
-	stl_da (0x02bc24), xiz
+	ld (0x02bc24:24), xiz
 	ld xwa, (xsp + 24)
-	stl_da (0x02bc28), xwa
+	ld (0x02bc28:24), xwa
 	ld xwa, (xsp + 20)
-	stl_da (0x02bc2c), xwa
+	ld (0x02bc2c:24), xwa
 	ld xwa, (0x02bc14:24)
 	ld (xsp + 4), xwa
 	ld xix, xhl
@@ -17650,7 +17650,7 @@ EventRoute_ObjectDispatch:
 	ld xbc, 0x1e00000
 	lds32 xde, 0
 	call (xix)
-	stl_da (0x02bc14), xhl
+	ld (0x02bc14:24), xhl
 	ld xwa, xhl
 	srl xwa, 0
 	and xwa, 0xfff
@@ -17676,13 +17676,13 @@ EventRoute_ObjectDispatch:
 	call (xhl)
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
-	stl_da (0x02bc14), xwa
+	ld (0x02bc14:24), xwa
 	ld xwa, (xsp + 12)
-	stl_da (0x02bc24), xwa
+	ld (0x02bc24:24), xwa
 	ld xwa, (xsp + 16)
-	stl_da (0x02bc28), xwa
+	ld (0x02bc28:24), xwa
 	ld xwa, (xsp + 8)
-	stl_da (0x02bc2c), xwa
+	ld (0x02bc2c:24), xwa
 	cpw (0x03ef4e:24), 0
 	jr z, EventRoute_DispatchJump
 	lds wa, 3
@@ -18083,7 +18083,7 @@ GetCurrentTarget:
 SetCurrentTarget:
 	cp xwa, 0xffffffff
 	ret z
-	stl_da (0x02f83c), xwa
+	ld (0x02f83c:24), xwa
 	ret
 
 MainDispatchEvent:
@@ -18578,7 +18578,7 @@ ApTimer_Deliver:
 
 InitializeTimer:
 	lds32 xwa, 0
-	stl_da (0x030444), xwa
+	ld (0x030444:24), xwa
 	ldw (0x030448:24), 0xffff
 	lda xwa, (0x02f844:24)
 	lda xbc, (xwa + 8)
@@ -18681,20 +18681,20 @@ SetApTimer_Allocate:
 
 ; RootContext setup handler
 RootContext_Setup:
-	stl_da (0x02bc24), xiz
-	stl_da (0x02bc18), xiz
+	ld (0x02bc24:24), xiz
+	ld (0x02bc18:24), xiz
 	ld xwa, (xsp + 4)
-	stl_da (0x02bc28), xwa
-	stl_da (0x02bc1c), xwa
+	ld (0x02bc28:24), xwa
+	ld (0x02bc1c:24), xwa
 	ld xwa, (xsp + 8)
-	stl_da (0x02bc2c), xwa
-	stl_da (0x02bc20), xwa
+	ld (0x02bc2c:24), xwa
+	ld (0x02bc20:24), xwa
 	ld xix, xde
 	ld xwa, xiz
 	ld xbc, 0x1e00000
 	lds32 xde, 0
 	call (xix)
-	stl_da (0x02bc14), xhl
+	ld (0x02bc14:24), xhl
 	ld xwa, xhl
 	srl xwa, 0
 	and xwa, 0xfff
@@ -19073,8 +19073,8 @@ DisplayCmd_ScanQueue_Continue:
 	ldw (xde - 6), 0x0
 	ldw (xde - 2), 0x7f
 	lda xwa, (0x030466:24)
-	stl_da (0x032466), xwa
-	stl_da (0x03246a), xwa
+	ld (0x032466:24), xwa
+	ld (0x03246a:24), xwa
 	ret
 
 DisplayCmd_Execute:
@@ -19160,13 +19160,13 @@ DrawQueue_Alloc:
 	jr ge, DrawFunc_Prologue
 	ld xiz, xbc
 	add xbc, xde
-	stl_da (0x03246a), xbc
+	ld (0x03246a:24), xbc
 	jr DrawFunc_CallHandler
 
 DrawFunc_Prologue:
 	ld xiz, xhl
 	add xhl, xde
-	stl_da (0x03246a), xhl
+	ld (0x03246a:24), xhl
 
 ; DrawFunc handler with audio lock release
 DrawFunc_CallHandler:
