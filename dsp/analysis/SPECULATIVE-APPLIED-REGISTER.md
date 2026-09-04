@@ -18251,8 +18251,15 @@ CANNOT-FAIL row (§231 §5's rule, unchanged).
 2. **`dsp/tools/routing_census.py`** — the static corpus tool: the independent guard mirror and its
    seven self-tests, the routing population by responsible field, the **per-code price**, the sites
    and consumer profile, and the per-site verdict when given `--log`.
-3. **`dsp/analysis/data/A_232.log.gz`** — arm A.
-4. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT, NO NEW ENV GATE.** `alu_decoded()` is
+3. **`dsp/tools/run_dsp_arm.sh`** — the vehicle, as a script, with the build flag in it and three
+   loud failures for the ways an empty census is produced silently.
+   ⚠ **It archives the run's STDOUT as well as `error.log`, and that is not a detail:**
+   `coldnotes2.lua` reports `located=`, `NOTE ON` and `NOTE OFF` through `emu.print_error`, which
+   goes to the process's **stderr, not the `-log` file**. Every arm archived as `error.log` alone —
+   which is all of them before this one — **cannot prove its own stimulus ever happened**, and
+   rule 12 says a DSP test with no notes playing is not a test.
+4. **`dsp/analysis/data/A_232.log.gz`** — arm A, both streams.
+5. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT, NO NEW ENV GATE.** `alu_decoded()` is
    untouched; not one code was anchored.
 
 ---

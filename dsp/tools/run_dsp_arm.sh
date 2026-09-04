@@ -69,8 +69,17 @@ DISPLAY="${DISPLAY:-:0}" timeout 1800 ./kn7000 kn5000 \
     -rompath ./roms -pluginspath ./plugins -skip_gameinfo \
     -cfg_directory "$RIG/cfg" -nvram_directory "$RIG/nvram" \
     -autoboot_script "$OVERLAY/scratchpad/coldnotes2.lua" \
-    -seconds_to_run 30 -window -nomaximize -log
-grep -q 'NOTE ON' "$EMU/error.log" || echo "⚠ NO NOTE ON IN THE LOG -- rule 12"
-grep -q 'upd6383:' "$EMU/error.log" || { echo "NO upd6383 OUTPUT"; exit 1; }
-gzip -c "$EMU/error.log" > "$OUT"
+    -seconds_to_run 30 -window -nomaximize -log 2>&1 | tee "$RIG/stdout.txt"
+
+# ⚠ THE LUA SCRIPT'S OUTPUT DOES NOT GO INTO error.log.  `emu.print_error' writes
+# to the process's stderr, so `located=' and the two NOTE events -- the ONLY
+# evidence that rule 12 was satisfied, i.e. that notes actually played -- exist
+# nowhere in the -log file.  Archiving error.log alone loses them, which is how
+# an arm ends up unable to prove its own stimulus.  Both streams are archived.
+grep -q 'NOTE ON' "$RIG/stdout.txt" || { echo "⚠⚠ NO NOTE ON -- rule 12: this is NOT a test"; exit 1; }
+grep -q 'upd6383:' "$EMU/error.log"  || { echo "NO upd6383 OUTPUT"; exit 1; }
+{ echo "==== run_dsp_arm.sh STDOUT (the Lua vehicle's own report -- rule 12) ===="
+  cat "$RIG/stdout.txt"
+  echo "==== MAME -log (error.log) ===="
+  cat "$EMU/error.log"; } | gzip -c > "$OUT"
 echo "wrote $OUT"
