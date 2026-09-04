@@ -581,3 +581,52 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   EQUIVALENCE rather than by identity, an identical sha never having been
 #   available: this commit contains the features that tree was mid-way through
 #   adding. notes/TOOLCHAIN-PROVENANCE-2026-09-02.md carries the argument.
+
+# UPDATE 15 (2026-09-04): the ENCODING SELECTORS `:i3` / `:opc` / `:io`, backend
+# half only (notes/SPEC-encoding-selectors-2026-09-04.md, steps 0-3), on
+# tlcs900_backend at 3a0635ee2c65 -- five commits on top of 86332721969d:
+#   2743224e1aa1  matchAndEmitInstruction gains a default arm            (step 0)
+#   b56d4c58d11b  llvm/utils/tlcs900-ambiguity-baseline.sh, 1 pair      (step 1)
+#   adfbb55cf835  the parser: parseEncodingSelector and its predicates  (step 2)
+#   8b2c062f83b4  WIP that DOES NOT BUILD (lane killed mid-step) -- never pin it
+#   3a0635ee2c65  the .td table, nine defs retyped, nine parse-only aliases (step 3)
+#
+# Binary: llvm-mc sha256 6d3e9621dd573ed8a53e52a8a8e22cb57d98e95a60d34bf6dcff82862c5b882e
+#         built from a CLEAN tree at 3a0635ee2c65 (re-linked after the commit:
+#         same hash).  llvm-objdump, which the decode sweeps use, is
+#         e04413e8ace3bb4c058830f375b9f4fc17599b981b16d61223ffb249e4f79226.
+#
+# ⚠ THE HEADER PIN AND toolchain-snapshot/llvm-mc.snap ARE NOT MOVED BY THIS
+#   ENTRY.  Every other lane gates against the snapshot (850b013e = 86332721969d)
+#   and the lane that produced this build is forbidden to overwrite it; promoting
+#   the pin is the coordinator's call.  Both binaries certify the same 13 images.
+#
+# ★ THE NULL RUN, the headline result of the backend half: `make gate-all` with
+#   LLVM_MC=<the 6d3e9621 binary> on the UNCONVERTED tree -- all 71,667 sites
+#   still spelled cps/lds/lds32/ldb/ldio/ldwio -- is 13/13 byte-identical
+#   (9 KN5000 + 4 SX-WSA1R), 8/8 assert_images_assemble.py, 8/8 + 4/4
+#   assert_toolchain_is_a_prerequisite.py.  The expected delta was ZERO, and
+#   zero is the finding: nine retyped defs plus nine aliases moved no byte.
+#
+# ⚠ WHAT THAT GREEN PROVES: non-regression, nothing else.  No source writes a
+#   selector yet, so the byte gate cannot see the feature (spec, validation
+#   plan, point 1).  The instruments that can are llvm-lit (MC 30/30, CodeGen
+#   51/51 at this commit; the byte-pins of every family's UNTAGGED DEFAULT land
+#   as step 5) and the four step-8 foils, which must go RED first.
+#
+# What the assembler accepts at this binary (spec "Final syntax", all re-run):
+#   cp a, 4  -> c9 cf 04  UNCHANGED      cp a, 4:i3  -> c9 dc     (was cps a, 4)
+#   ld d, 4  -> cc 03 04  UNCHANGED      ld d, 4:i3  -> cc ac     ld d, 4:opc -> 24 04
+#   ld (7:8), 255 -> f0 07 00 ff         ld (7:8), 255:io -> 08 07 ff   (was ldio 7, 255)
+#   ldw (237:8), 36352 -> f0 ed 02 00 8e ldw (237:8), 36352:io -> 0a ed 00 8e
+#   cp a, 4:3 | 4:s | 4:zz | 9:i3 | SYM:i3, ld (7), v:io, ld (0x1ff:8), v:io -> named ERRORS
+# The retired spellings still assemble (EmitPriority-0 aliases) and are no
+# longer PRINTED: `c9 dc` disassembles to `cp a, 4:i3`, never `cps a, 4`.
+# `f0 07 00 ff` still prints `stib_d8 7, 255` until step 7 re-points the decoder.
+#
+# mnemonic_census.py at this commit: SYNTHETIC 136,863 sites / 350 names,
+# unchanged -- as it must be, since it reads SOURCE mnemonics and none moved.
+# notes/syntax-convergence-probes/encoding_selector_exposure.py re-run at the
+# snapshot: Q1 71,667 / Q2 3,043 / Q3 85 macro operands, 0 literals outside
+# 0..7 / Q5 10 and 0 untagged io defaults / Q6 152 ldio symbolic addresses, all
+# .equ-defined and folded by the parser / Q7 14 stib_d8, 18 stiw_d8.
