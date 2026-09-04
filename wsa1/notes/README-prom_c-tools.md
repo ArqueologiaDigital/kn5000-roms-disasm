@@ -1188,6 +1188,15 @@ that drift fail loudly instead of sitting there.
 python3 wsa1/notes/l7a1429_crosscheck.py
 python3 wsa1/notes/l7a1429_crosscheck.py --selftest
 python3 wsa1/notes/l7a1429_crosscheck.py --docs-root DIR --mame-root DIR
+
+---
+
+## Wave 22 — lane `w22/position-scale`: is `POSITION`'s absolute scale in the ROM?
+
+```
+python3 notes/l7a1429_position_scale.py            # 9 sections, printed
+python3 notes/l7a1429_position_scale.py --selftest # FAILURES: 0
+python3 notes/l7a1429_position_scale.py --table    # the 251 entries and their ratios
 ```
 
 | script | the question it answers |
@@ -1218,3 +1227,14 @@ extractor that reads nothing agrees with everything.
 the notes' name column does not carry them and this tree does not reword a note. So two
 blocks sharing one caption could be swapped in a document that names neither, and this check
 would pass. The driver names every variant, so a swap there is caught.
+
+| `notes/l7a1429_position_scale.py` | *Do the four ROM images contain the constant that turns register `chan+0x00C0` into a time?* **No** — and the probe says so with a stated tolerance and a null for every roundness claim, plus a POSITIVE CONTROL (the `POSITION MOVEMENT` `SPEED` table, which *is* in real hertz, 0.0000–10.0136 Hz) proving the search would have found an absolute unit if one were there. Reads bytes only, never a `.s` file. |
+
+★ **The result:** the scale stays **UNIDENTIFIED**, but the missing number shrinks from "an
+unknown scale in samples" to **one dimensionless constant `g`** in
+`tap delay = g · P(note) / POSITION`. On the way: the table is
+`round(3072·log2(500/k))` with residual **zero**, the editor's `POSITION` runs 0.0–50.0 so
+the ratio is `100/POSITION`, `0x4280` is MIDI note **66 exactly** (the middle key of the
+61-key C2..C7 compass whose bottom key is `MUTING`'s `−36`), and `FORMANT = FIX` — which
+switches the pitch term OFF — is **103 of 133** factory melodic records. Findings:
+`notes/FINDINGS-l7a1429-position-scale.md`.
