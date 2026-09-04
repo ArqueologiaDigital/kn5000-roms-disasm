@@ -25,7 +25,21 @@ actual path, not on `/` — a misread of that cost a day of shared-toolchain pai
 * **WSA1R MAME driver** — schematic facts applied; `l7a1429_device` logs a named register trace.
 * **KN5000 DSP** — queue item 0 consumed as §232: 16 unanchored codes closed, 8 open, 9 not resident.
 
-## The one lane that was still running
+## The lane that was still running — it landed
+
+`w25/src00` committed before stopping. It measured that §232's "648 corpus words, 605 paired with
+`ACTION 0x00`" is **C-format-contaminated** — 26 have no `src` field at all; correct is **622 / 580**
+— while the **+348 price is unaffected**, because `guard_fail()` refuses C-format before reading
+`src`. Seventh occurrence of that conflation. Both live falsifiers are shown not blind by
+construction (PEQ carries 8 `SRC 0x00` words, SINGLE DELAY 9).
+
+**Resume at** `dsp/analysis/SRC00-HANDOFF-2026-09-04.md` §4, which pre-registers the next action and
+its pass condition — including the case where all seven readings agree, which would make both
+harnesses blind and is itself the finding. It also lists what NOT to redo: `action00-discriminator`
+item I is VOIDED by `adjudication-round6` §14, so `mem[ptr]` and `zero` are both unrefuted and the
+device ships one; `peq_tf.py` is not the 0.198 dB harness; `sd_rerun.py` hard-codes `src00="mem"`.
+
+## The original entry for that lane
 
 `w25/src00` — the DSP queue's new item 0, `SRC 0x00` alone (+348 words = 46 % of the routing
 ceiling; the device's own reading is graded "1 of 6 enumerated, no independent support"). It was
