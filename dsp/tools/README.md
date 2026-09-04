@@ -72,11 +72,15 @@ Until 2026-09-04 the vehicle lived only as prose in the register and the prose d
 flag. It does now, and so does this script — which **fails loudly** rather than producing an empty
 log.
 
-## `SRC 0x00` — the static half (BUILD-LANE-QUEUE item 0 as replaced by 232 sect. 7.2)
+## `SRC 0x00` — the corpus discrimination (BUILD-LANE-QUEUE item 0 as replaced by 232 sect. 7.2)
 
 | script | question it answers | how to run it |
 |---|---|---|
 | `src00_corpus.py` | **How many `SRC 0x00` words does the corpus actually hold, in which programs, paired with which ACTIONs and classes?** The encoding census that has to come before any reading of the code (standing rule 13). It reproduces the 3057-word corpus total as a self-test, and it reconciles 232's `648`/`605` — which include **26 C-format words that have no `src` field at all** — down to the correct **622 non-C-format words, 580 paired with `ACTION 0x00`**. It also prints the `SRC 0x00` words of the two known-mathematics programs (PARAMETRIC EQ, SINGLE DELAY), which is what makes their harnesses live falsifiers here rather than notional. | `python3 dsp/tools/src00_corpus.py` |
 
-⚠ Partial pass — see `dsp/analysis/SRC00-HANDOFF-2026-09-04.md` for what is done, what is not, and
-what was ruled out. No MAME run was taken and no falsifier requiring one was checked.
+| `gate_settle.py src00` | **Does PARAMETRIC EQ's 0.198 dB criterion separate the seven `SRC 0x00` readings?** 232 sect. 7.2 pre-registered it as a LIVE falsifier for this code, because a39 carries 8 `SRC 0x00` words. **It does not: the criterion executes 9 of a39's 105 words (its biquad section, `a39 w5..w13`, ×10) and NOT ONE of them carries the code** — the section prints an UNCONDITIONAL fired count of **0** and all seven readings score **0.198 dB**. ★ The two-sided control rewrites one executed word's SOURCE field `0x07 → 0x00` and re-scores: 6 of 6 non-`mem` readings then MOVE, over 4 distinct values, so the sweep is live and the blindness is the excerpt's. Signal read: `worst_db(M(...), banks, 512)` against the firmware's own bilinear designer; PASS = < 0.5 dB. | `python3 dsp/tools/gate_settle.py src00` |
+| `sd_rerun.py src00` | **Does SINGLE DELAY's lag-1001 ROM product separate the seven `SRC 0x00` readings?** **It does, 1 of 7, and the survivor is the shipped `mem`.** a09 carries 9 `SRC 0x00` words and one of them is the HEAD WRITE `w46`, so the reading decides what enters the delay line at all. ⚠ Run naively the harness is CIRCULAR — `derive_p0()` places the head write's pointer on the driven cell, i.e. it injects the audio where `mem[ptr]` would read it. The command removes that by SWEEPING the injection cell over all 256 (p0 fixed at `0x08`; the walk is p0-invariant mod 256, so this covers every relative placement, `0x03` being the published one). Under the six rivals **no cell anywhere puts a non-zero datum into the delay line** — a statement that assumes nothing about where the output is read. Signal read: an impulse must return at the cascade lag **1001** carrying **45074**, the ROM's own `((c·c)>>23)·h>>23` product; PASS = bit-exact equality. Controls 4 of 4 (accept · refuse-on-absence · refuse-on-value with the echo present · relocation). | `python3 dsp/tools/sd_rerun.py src00` |
+
+★ Both were run in 233; the discrimination is `1 of 7` and the device's shipped reading SURVIVES.
+See `dsp/analysis/SPECULATIVE-APPLIED-REGISTER.md` §233. `SRC00-HANDOFF-2026-09-04.md` records the
+partial pass that produced `src00_corpus.py`; its sect. 4 is now CONSUMED.
