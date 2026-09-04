@@ -1168,3 +1168,53 @@ part has a non-zero `RESO MODE`, which in the factory set is eight tones, all of
 And `MUTING` depth 64 = 100% cutoff key follow, `SUB GAIN` depth 64 = one percentage point
 per semitone, `FITTING` depth 64 = 0.382 dB per semitone. Findings:
 `notes/FINDINGS-l7a1429-gate-and-keyscaling.md`.
+
+⚠ **CORRECTED 2026-09-04.** `Q[+0x0B]` bits 7:6 are the MODELING top page's **`GROUP`**, not
+`RESO MODE` — the mechanism above is untouched, only the name of the selector. The four
+ramps are indexed by **TOUCH** (`voice[+0x0C]` is the velocity), so they are now spelled
+`LinCoef_*_TouchRamp_Q5_128` and every "per key" above reads *per touch step*. See
+`notes/FINDINGS-l7a1429-editor-pages.md` §1a and §1b.
+
+---
+
+## The L7A1429 cross-repository check
+
+The acoustic-modelling LSI is documented in four artefacts across three repositories, and in
+September 2026 a run of late corrections left them out of step — the MAME driver still
+printed `(unidentified)` for two blocks the notes had named. This is the check that makes
+that drift fail loudly instead of sitting there.
+
+```
+python3 wsa1/notes/l7a1429_crosscheck.py
+python3 wsa1/notes/l7a1429_crosscheck.py --selftest
+python3 wsa1/notes/l7a1429_crosscheck.py --docs-root DIR --mame-root DIR
+```
+
+| script | the question it answers |
+|---|---|
+| `notes/l7a1429_crosscheck.py` | *Do the four L7A1429 artefacts agree, and does the curve lane's headline unit derivation reproduce?* Checks (1) every register block appears in both the sequencing and the curve document; (2) every block carries the **same name** in `FINDINGS-l7a1429-editor-pages.md` §4, `HLE-GUIDE-l7a1429.md` §5.3, the docs site's `wsa1-modeling-lsi.md`, and the MAME driver's `block_name()` **and** its header register list — failing if one names a block differently, names a block the others leave unidentified, or drops a row; (3) each artefact's own "*N* of the nineteen … are named" sentence matches how many are; (4) the sample rate from the crystal and the semitone claim from equal temperament. |
+
+★ **How it finds the right table.** Two of the three markdown artefacts hold more than one
+register table on purpose — this tree leaves a superseded table as its lane wrote it and adds
+the correction beside — so each carries a visible `CROSSCHECK-NAME-TABLE` sentinel on the
+line before the table that is current. Names are compared as ATOM SETS, because the four
+artefacts spell one caption four ways on purpose (a driver needs `MAIN MUTING Q16` in a bus
+trace; the docs quote the editor's `MAIN MUTING, Q16 form`).
+
+⚠ **It reads three repositories and never skips.** A repository that is not beside the
+disassembly is a FAILURE naming the path and the flag that overrides it — `--disasm-root`,
+`--docs-root`, `--mame-root`, or `KN5000_DISASM_ROOT` / `KN5000_DOCS_ROOT` /
+`KN7000_MAME_ROOT`. A check that silently skips a file is worse than no check.
+
+★ **`--selftest` proves it can go red**: sixteen mutations, each of which it must reject —
+a block renamed in one artefact, a named block un-named, an unnamed block given a name, MAIN
+and SUB swapped, the Q13/Q16 disambiguator swapped, a row deleted, the old
+`candidate DEPTH / FORMANT / INTERACTION GAIN` cell restored, a name outside the vocabulary,
+a stale count, the count sentence deleted, the driver's two surfaces disagreeing, and the two
+arithmetic nulls. It also asserts each extractor found at least fourteen names, because an
+extractor that reads nothing agrees with everything.
+
+⚠ **The stated limit.** `DECAY`/`RISE` and `Q13`/`Q16` are optional disambiguators, because
+the notes' name column does not carry them and this tree does not reword a note. So two
+blocks sharing one caption could be swapped in a document that names neither, and this check
+would pass. The driver names every variant, so a swap there is caught.

@@ -334,6 +334,14 @@ mask `0x3F`.  Field 6 is the **`GROUP`** control of section 1a.
 
 ## 4. THE REGISTER TABLE, RE-GRADED
 
+⚠ **`CROSSCHECK-NAME-TABLE`.**  `notes/l7a1429_crosscheck.py` reads the name column of the
+table below as this artefact's answer, and fails if it disagrees with `HLE-GUIDE-l7a1429.md`
+§5.3, the docs site's `wsa1-modeling-lsi.md` register table, or the MAME driver's
+`block_name()` in `src/mame/matsushita/acoustic_modeling.{h,cpp}`.  Two rows are declared
+exceptions there and the script prints the reason for each rather than skipping them
+silently: `0x0000`, whose FIELDS are named but whose word is not, and the global `0x0800`,
+which has no channel and no editor page and so has no row here.
+
 The arithmetic column is prom_c's, unchanged.  The name column is what the machine
 draws; **it is not a claim about the physical quantity**.
 
