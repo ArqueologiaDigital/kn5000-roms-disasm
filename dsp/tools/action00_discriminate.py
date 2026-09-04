@@ -180,6 +180,30 @@ def hi_op(f, mode):
 #  Every published "1 of 6" for SRC 0x00 is therefore a statement about six.
 SRC00_MENU = ("mem", "P", "acc", "zero", "DR", "tA", "coef")
 
+#  ★ 234 -- THE `ACT 0x0D' / `ACT 0x0E' MENU, IN ONE PLACE, AND IT NOW HOLDS THE
+#  READINGS THE DEVICE SHIPS.  `upd6383.cpp' resolves both codes through 133's
+#  3-bit selector: 1 = acc load, 2 = tempA, 3 = tempB, 4 = mem[ptr], 5 = P raw,
+#  6 = acc add, 7 = P at the multiply's scale (0 = no effect).  The shipped pair
+#  is (1, 7).  This model's menu was {tA<-bus, tB<-bus, tA<-acc, tB<-acc,
+#  mem<-bus} -- selector values 2/3/4 and nothing that writes the accumulator
+#  or P -- so no harness built on it has ever executed the shipped reading.
+#  "nop" is an explicit no-effect reading (selector 0), distinct from None,
+#  which REFUSES the word.  ⚠ "P<-bus" is selector 7 (bus << ash); selector 5
+#  ("P raw", = bus) coincides with it whenever ash == 0, i.e. in the DATUM
+#  regime every delay harness runs in, and is listed separately as
+#  "P<-bus_raw" for the ACC regime only.
+ACT0D0E_MENU = ("nop", "acc<-bus", "acc+=bus", "tA<-bus", "tB<-bus",
+                "mem<-bus", "P<-bus")
+ACT0D0E_SEL = {"nop": 0, "acc<-bus": 1, "tA<-bus": 2, "tB<-bus": 3,
+               "mem<-bus": 4, "P<-bus_raw": 5, "acc+=bus": 6, "P<-bus": 7}
+
+#  ★ 234, rule 8 (sharpened, 220): UNCONDITIONAL fired counts for the two codes,
+#  incremented whenever a word carrying the code is EXECUTED by step(), before
+#  any refusal.  Without them "the reading was never exercised" and "the reading
+#  was exercised and made no difference" print the same table.
+ACT0D_FIRED = [0]
+ACT0E_FIRED = [0]
+
 
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
@@ -320,6 +344,10 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
         return True
     hi, cl = DIS.hi12(w), DIS.class4(w)
     src, act = DIS.lo_src(w), DIS.lo_act(w)
+    if act == 0x0D:
+        ACT0D_FIRED[0] += 1               # ★ 234, rule 8: UNCONDITIONAL
+    elif act == 0x0E:
+        ACT0E_FIRED[0] += 1
     f, b7 = DIS.hi_f31(hi), (hi >> 7) & 1
     isA = DIS.coeff_consumer(w)
     nxt = (st.p + (s8(DIS.addr8(w)) if DIS.ptr_postinc(w) else 0)) & 0xff
@@ -503,6 +531,19 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
             elif r == "out":
                 if obs is not None:
                     obs.append(("OUT", st.p, bus & MASK24))
+            #  ★ 234: the device's own readings (ACT0D0E_MENU).  `busa' is the
+            #  bus in accumulator units, assigned in the enclosing scope before
+            #  capture() is ever called.
+            elif r == "nop":
+                pass
+            elif r == "acc<-bus":
+                st.acc = busa
+            elif r == "acc+=bus":
+                st.acc = st.acc + busa
+            elif r == "P<-bus":
+                st.P = busa                    # selector 7: the multiply's scale
+            elif r == "P<-bus_raw":
+                st.P = bus                     # selector 5: == P<-bus iff ash == 0
 
     busa = bus << ash                          # the bus, in accumulator units
 

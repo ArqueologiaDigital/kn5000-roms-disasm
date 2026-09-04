@@ -18543,3 +18543,275 @@ G **MEASURED**, half of it by §146's device arm; J **MEASURED by §232 arm A an
 — and the reason it is not re-run is printed with it. §4.2 **pre-registered, unrun.**
 ⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
 established it cannot see `upd6383.cpp` at all.
+
+---
+
+## §234 — ★★★★★ `ACT 0x0D`/`0x0E`: THE SHIPPED PAIR IS **CONFIRMED FROM DISK, 1 of 49** — BY PARAMETRIC EQ's *ENTRY WINDOW*, ONCE THE HARNESS'S OWN PRE-LOAD IS REMOVED (three-codes.md item A's *"the biquad's first word discards everything upstream"* was that pre-load). ⛔ AND THE PRE-REGISTERED SINGLE DELAY FALSIFIER **REACHES** THE PAIR (fired **9208/9208**) BUT ITS **LAG IS THE QUANTITY THE PAIR DECIDES**: under the shipped pair a09 returns the **SAME ROM PRODUCT 45074 at lag 500**, not §230's 1001 — every SINGLE DELAY number since §230 was taken with these two codes **INERT**, on a menu that could not execute the shipped reading, and `sd_rerun.py scan` had been **CRASHING** since §230
+
+<!-- LEDGER-VERDICT: CONFIRMED 1 of 49 (+ retracts three-codes.md item A and the lag-1001 criterion's independence from this pair) -->
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-09-04**. Register head **§234**.
+Static lane. **NO BUILD. NO MAME RUN. NO DEFAULT BEHAVIOUR CHANGE. NO DECODE CHANGE. NO MASK BIT.
+NO NEW ENV GATE.** One source edit, **comment-only and mechanically verified as such**
+(`git diff -U0 | grep '^[+-]' | grep -v '^+++\|^---' | grep -v '^[+-]\s*//'` is empty; `kn7000_mame`
+`246a5f3`). Source of the task: `BUILD-LANE-QUEUE.md` **item 0** as replaced by §233 §4.2.
+⚠ **Provenance of this write-up.** The lane that ran this pass was terminated by a session rate
+limit after committing its tools (`dfcf9b2f`, `d2faef80`) and a draft of the handover files
+(`33406258`), while its fourth arm was finishing. The resuming lane completed the section from those
+commits and the lane's own logs, **re-ran `sd_rerun.py multitap` (byte-identical to the killed
+lane's log; 9 min wall, 7 workers) and `sd_rerun.py scan` (20 of 36 — the one number below that had
+no archive)**, and ran no MAME. Every number below is in a committed archive or is printed by one
+command named beside it.
+
+| arm | what | archive |
+|---|---|---|
+| **STATIC-C** | `act0d0e_corpus.py` — the encoding, self-tested against §232's census (11 of 11) | — |
+| **STATIC-P** | `gate_settle.py act0d0e` — the 0.198 dB excerpt's reach test, then the ENTRY WINDOW over 49 pairs | `data/S_234_peq_act0d0e.log.gz` |
+| **STATIC-D** | `sd_rerun.py act0d0e` — the lag-1001 ROM product over 49 pairs, 256 cells, and a path trace | `data/S_234_sd_act0d0e.log.gz` |
+| **STATIC-M** | `sd_rerun.py multitap` — a10 MULTI TAP DELAY, the pair in a second delay context | `data/S_234_sd_multitap.log.gz` |
+
+★ **THE PASS CONDITION, QUOTED FROM §233 §4.2:** *"corpus/static first (rule 13) ... SINGLE DELAY's
+45074 is LIVE — a09's `ACT 0x0D`/`0x0E` words are inside the delay path, so unlike `SRC 0x00` at
+PARAMETRIC EQ this one must be shown to reach the criterion **before** it is quoted ... PARAMETRIC
+EQ's 0.198 dB: check its executed-word list first, it is 9 words."*
+⇒ Both reach tests ran first. PARAMETRIC EQ's excerpt: **fired 0** (blind, as predicted). SINGLE
+DELAY: **fired 9208/9208** and **5 distinct outcomes over 49 pairs** — live. And the reach test's
+constructive half found what neither pre-registration foresaw: the criterion's *lag* is not
+independent of the codes, and the context that decides the pair is the one §233 called blind —
+PARAMETRIC EQ — once its **entry window** is executed with the input where the program reads it.
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ★★★★★ **THE SHIPPED PAIR — §133's selector `(1, 7)` = `ACT 0x0D: acc ← bus`, `ACT 0x0E: P ← bus` at the multiply's scale — IS CONFIRMED FROM DISK, `1 of 49`.** a39's bank-1 entry `w0..w4` and bank-2 entry `w53..w57` were run in front of the designer's own biquad section with **acc = P = 0 at frame start and the sample in the D-RAM cell the entry READS** (`0x05` for bank 1 via `w0`'s `SRC 0x07`; `0x0F` for bank 2 via `w54`'s — §125 §2/3, §133 §3). Exactly **2 of 49** pairs deliver **both** channels to the biquad at the published **0.198 dB** *and* keep them apart (bank 2 with the sample in `0x05` must **not** filter it — it scores 999 dB under both): `(acc<-bus, P<-bus)` and `(acc+=bus, P<-bus)`. A **junk pre-load** control (random acc/P at frame start, which a real entry must overwrite) kills the second at **44.876 dB** and leaves the shipped pair at **0.198**. `f31hi`-invariant (`w3`'s `f31 = 5`: 4 of 4 modes 0.198). The pointer walk lands the sections on `0x50` and `0x64`, §125's private ranges, **derived not told**. | **MEASURED**, from disk |
+| **B** | ★★★★ **three-codes.md ITEM A IS RETRACTED — the "144 of 144 machines identical at 0.113 dB" WAS THE HARNESS's PRE-LOAD.** `peq_ir()` sets `st.acc = st.P = x << ASH` at the top of **every frame**, so the entry words had nothing to deliver and *no* reading could matter; the sentence *"the biquad's first word is `f31 = 0` (`acc ← P`) and discards everything upstream"* is true and irrelevant — **P is exactly what the entry writes**. Reproduced here as a control: with the pre-load in place the 49 pairs collapse to **0.198 ×42 / 999 ×7** — and the seven at 999 are every pair whose `0x0E` half (or `0x0D = P<-bus`) overwrites the pre-load with the *empty* cell, **the shipped pair among them**: a pre-loaded harness would have REJECTED the right answer had its menu contained it. **§233 item E's shape, in the other harness** (rule 22's inverted-control clause): an injection that presupposes the answer grades every reading alike. | **FORCED**, then **MEASURED** |
+| **C** | ⛔⛔ **THE 0.198 dB EXCERPT IS BLIND FOR THIS PAIR, AS §233 §4.2 PREDICTED — fired count 0.** The criterion executes a39 `w5..w13`; the pair sits at `w0/w1/w53/w54`; intersection **EMPTY**; all 49 pairs score one value. A patched-excerpt control (`x1`'s ACTION `0x12 → 0x0D`, then `→ 0x0E`) moves **3 of 6** non-nop readings (`acc<-bus` 51.075, `acc+=bus` 51.090, `tA<-bus` 48.254; `tB`/`mem`/`P` write registers `x1`'s successors never read), **4 distinct values, fired 5632** — for `0x0D` and identically for `0x0E` — the sweep is live, the blindness is the excerpt's. | **MEASURED** |
+| **D** | ★★★★★ **SINGLE DELAY REACHES THE PAIR AND SEPARATES THE READINGS — AND ITS PRE-REGISTERED ACCEPTANCE VALUE PRESUPPOSES THEM.** a09 carries the pair **four times, in four adjacent `0D→0E` pairs** (`w1/w2`, `w21/w22`, `w23/w24`, `w44/w45`), the last **immediately before the head write `w46`** (`f31 = 0`, `acc ← P + bus`) and the output store `w47 → mem[0x0E]`. One 2302-frame scoring pass fires each code **9208** times. At the published placement the 49 pairs give **5 distinct outcomes**: `1001:45074` ×35, `NONE` ×10 (every `act0e = mem<-bus`: `w45` at pointer `0x03` overwrites the input cell before `w46` reads it; and `act0d = P<-bus` with an inert `0x0E`), **`500:45074` ×2 — the SHIPPED pair and `(P<-bus, acc<-bus)`**, `500 + 1001` ×1 `(acc+=bus, P<-bus)`, a 1798-sample smear ×1 `(P<-bus, acc+=bus)`. ⇒ **37 of 49 pairs pass the pre-registered criterion (lag 1001, sample 45074), and the shipped pair is not among them — it puts the identical ROM product at lag 500.** The 256-cell sweep changes nothing: cell `0x03` is the unique placement for every pair that reaches the line; **no placement moves the shipped pair to 1001** (36 pairs → 1001 — the 37th, the smear pair, carries its 1001 sample inside a 1798-sample smear; 3 → 500). | **MEASURED**, from disk |
+| **E** | ★★★★★ **THE MECHANISM IS NAMED, NOT INFERRED.** The path trace (`traced_run`) shows **both lines live and identical under every informative pair** — `lineA` write @0 / return @500, `lineB` write @500 / return @1001 — and the **stage-1 product reaching `acc` at `w45` @1001 under all of them**. What differs is **P at `w46`**: under the shipped pair `0x0E` at `w45` has written `mem[0x08]` (the stage-0 chain's value) into P, and `w46`'s `f31 = 0` **reloads `acc ← P`**, discarding the stage-1 value `acc` held one word earlier. Under an inert pair P at `w46` is still `w40`'s product — the stage-1 chain — and the cascade appears. ⇒ **the lag is decided by what `w46` finds in P, and that is exactly what this pair writes.** §230 derived 1001 with `(tA<-bus, tA<-bus)`, which at a09's eight sites is a **NO-OP** (no `SRC 0x19` reader follows any of them before an `ACT 0x19` rewrites tempA — printed by the tool). ⚠ `mem[0x0B]` (the `w43` store) stays non-zero on **1297** frames after the echo under every informative pair, while the OUTPUT is non-zero on **2** frames only and **no second echo appears at 2 × 1001** — the scoring pass is **2302** frames (`NSCORE = 2·1001 + 300`) precisely so that one would show. It is not a feedback path the output presents, and `programs.tsv`'s *"0.15/0.3 feedback"* is analyst metadata (`gen_dsp_disasm.py` line 80), not an anchor. (The killed lane's 3600-frame scratch run said the same; it is not quoted because no committed tool produces it.) | **MEASURED** |
+| **F** | ⛔⛔ **SO THE SINGLE DELAY CRITERION CANNOT ADJUDICATE THIS PAIR, AND EVERY NUMBER IT HAS PUBLISHED IS MODEL-CONDITIONAL ON THE PAIR BEING INERT.** The VALUE half still bites at the other lag — under the shipped pair the three coefficient scrambles give `500:34892 / 85909 / −32511`, reversed polarity gives `NONE`, and relocation to `p0 = 0x40` keeps `500:45074` — so §230's *value* control survives at either lag; only the **lag** separates the shipped pair from the inert one, and the lag is the quantity under test. §230's `1 accepted / 7 rejected` and §233's `1 of 7` **survive as statements about the cursor, the polarity, the coefficients and `SRC 0x00`** (none of those moves under the pair), but *"an impulse returns at the cascade lag 1001"* is now *"... under an inert `ACT 0x0D`/`0x0E`"*. **Under the shipped pair SINGLE DELAY is a 500-sample delay whose second line is written, read, filtered through nine multiplies and then discarded at `w46`.** Whether the chip presents 500 or 1001 is **hardware question Q4** (`kn7000_mame/notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md`); neither reading is refuted by this program. | **MEASURED**; the residue **OPEN** |
+| **G** | ⚠⚠ **`sd_rerun.py scan` HAD CRASHED ON EVERY INVOCATION SINCE §230** (`derive_p0` `KeyError: 46` — its `none` reading refuses `w1`, so the head write never gets a pointer), **AND ITS MENU NEVER HELD THE SHIPPED READING.** §233 §4.2's *"`sd_rerun.py scan` already enumerates `act0d × act0e`"* described a command that had not run since `57f4399d`; §230's commit touched the function it broke. The old menu `{tA<-bus, tB<-bus, tA<-acc, tB<-acc, mem<-bus}` is §133's selector values **2/3/4 only** — nothing that writes the accumulator or P — so no harness built on `action00_discriminate.step()` has ever executed the pair `upd6383.cpp` ships. Repaired (it runs — **20 of 36** machines pass its presence test; re-run by the resuming lane in 25 s, not archived) and left ungraded; `ACT0D0E_MENU` now holds all seven readings (selector 5 ≡ 7 when `ash == 0`), with an explicit `nop` distinct from *refuse*, and both codes carry **unconditional fired counters** (rule 8). | **MEASURED**, from the repo |
+| **H** | ★★★ **THE CORPUS CANNOT SEPARATE THE SEVEN READINGS, AND SAYS SO WITH ITS NULL.** `act0d0e_corpus.py` reproduces §232's census **11 of 11** (203/227 words, 79/53 encodings, 39/40 images, both SRC profiles). `0x0D` is immediately followed by `0x0E` at **157 of 202** sites (**77.7 %, ×9.87** over the 7.9 % base) and that `0x0E` half reads the accumulator 80 times and `mem[ptr]` 76 — the motif §133 built on, but it constrains **`0x0E`'s operand**, not **`0x0D`'s destination** (under `nop` the accumulator `0x0E` reads is the one `f31 = 0` just loaded from P). The consumer census's null rows kill it: `acc`/`P` are read within 6 words after **every** code (`ACT 0x00`'s known `acc` scores 52 % against `P` at 87 %; `ACT 0x07`'s known `mem` 63 % against `P` at 87 %; `ACT 0x13`'s known tempA scores **0 %**), so a high `acc`/`P` score after `0x0D`/`0x0E` is what any word gets. three-codes.md item E stands. | **MEASURED**, from disk |
+| **I** | ★★ **a10 MULTI TAP DELAY RAN TO COMPLETION AND GRADES NOTHING — ITS KNOWN-GOOD CASE FAILS UNDER EVERY PAIR (rule 20).** a10 is **one** real delay WRITE (`w8`, cell 32685) read at **four** descriptor-fixed lags (**26685 / 20685 / 14685 / 8685** samples = 605.1 / 469.0 / 333.0 / 196.9 ms at 44.1 kHz), tap gains `+0.5 / +0.35 / +0.15 / +0.0` (`w27..w30`) — so **three** taps are expected. The pair sits at `w5/w6`, `w59/w60`, `w64/w65`; fired **600 / 600** in 200 frames under `(nop, nop)` — reach established. Over a **27085**-frame run at every candidate input cell, the BEST any of the 49 pairs presents is **1 of 4** descriptor taps: **42 pairs at 1 of 4** (`8685:4315` ×28, `8685:8630`/`8631` ×9, `8685:17262` ×5 — never the 14685, 20685 or 26685 tap) and **7 pairs at 0 of 4 — the SHIPPED pair among them**, with **no non-zero output at all** at cell `0x03` in 27085 frames. ⇒ **No reading reproduces the program's own descriptor**, so the instrument has no accepting control and cannot grade the pair — rule 20, and rule 15's inverse: a criterion NO arm passes is not a test either. Its gaps are DECLARED in the tool: `w26` (`040.0.00.864`) and `w33` (`050.0.00.921`) are lo12-bit-11 (ALT) words run as no-ops (effect OPEN, `bit11-family.md`), and `w52..w54` fetch cursor 15..17 beyond the 15-cell upload (they take `w46..w48`'s coefficients). ★ One fact stands regardless of grade: **the seven pairs at 0 of 4 are SET-IDENTICAL to the seven the PEQ circular-pre-load control lists at 999** (§1.3) — the shipped pair plus the six `(P<-bus, X)` with `X ≠ P<-bus` — the same set in two programs and two harnesses. ⚠ `_mt_long` prints one cell per pair (the best), so where the impulse goes under the shipped pair at `0x08`/`0x12` — the cells the 160-frame probe says reach the line — is **not printed**; that is the first thing to add before this harness is graded. **Not a refutation, not a confirmation; the a10 half of Q4.** | **MEASURED**; **UNGRADED** as a discriminator (rule 20 self-test FAILED, printed); residue **OPEN** |
+| **J** | ⛔ **THE FOUR STANDING FALSIFIERS ARE A CANNOT-FAIL ROW FOR THIS PASS, AND ARE QUOTED FROM THE RUN, NOT RE-RUN.** No executed line of `upd6383.cpp` changed (the one edit is comment-only, verified mechanically), so a MAME arm would reproduce §232's arm A by construction — §231 §5's rule, applied by §232 and §233. From **`data/A_232.log.gz`** (`kn7000_mame` `9b9b180`; stimulus proved: `coldnotes2: NOTE ON t=21.02`): line 3049 `§S1 TOTALS quiet 6589975 clip / 133826616 conversions (4.924 %) | loud ... (4.923 %)` — **did not fall**; line 3325 `8D=009B26`; line 2528 `§54 TRACKING: quiet-in 626920 frames -> 626920 silent / 0 LOUD (peak 0)` — graded first; lines 2533–2534 `§70 ACCA@w73 quiet mean 0.0 span 0 | loud mean 0.0 span 0` / `§211 ACCB@w78 ...` — **ONE ROW**. **The emulated chip is still silent.** | **MEASURED** (§232 arm A), **cited not re-run** |
+
+**VERDICT — `THE READING THE DEVICE SHIPS IS CONFIRMED 1 of 49, FROM DISK, IN THE CONTEXT §233 CALLED BLIND; THE CONTEXT §233 PRE-REGISTERED AS LIVE REACHES THE PAIR AND CANNOT JUDGE IT; THE FOURTH ARM (a10) RAN AND GRADES NOTHING; NO DEFAULT MOVES; NO AUDIO CLAIM; NEITHER CODE IS ANCHORED.`**
+★★ **Item 0 is CONSUMED for the third time.** ⛔ **Neither code CLOSES in the queue's sense**: the
+reading is confirmed in one context (PARAMETRIC EQ — the device in §133, the model in §234), and
+in the other context that reaches it (delay programs) its consequence is a lag the chip alone can
+confirm. Anchoring `ACT 0x0D`/`0x0E` in `alu_decoded()` (+124/+110) waits on **Q4**, not on more
+static work. ⛔ **THE BLOCKER IS STILL *WHAT THE COEFFICIENT BASE `0x90` MEANS*** (§227, queue
+item 12).
+
+---
+
+## 1. RULE 20 — THE SELF-TESTS AND CONTROLS, PRINTED FIRST
+
+### 1.1 The harnesses still reproduce what they reproduced before being widened
+
+```
+   sd_rerun.py selftest                     13 of 13 PASS   (synthetic, two-sided)
+   sd_rerun.py act0d0e   known-GOOD (nop, nop)   1001:45074 = 233's `mem' row, cells {0x03}   EXTERNAL
+   gate_settle.py act0d0e   shipped model on the excerpt   0.198 dB (published 0.198)
+   act0d0e_corpus.py     11 of 11 against routing_census.py (an independent tool)
+   sd_rerun.py multitap  known-GOOD = SOME pair reproduces a10's THREE descriptor taps   ⛔ FAILED (best 1 of 4, 42 pairs) -- REPORTED, harness UNGRADED
+```
+
+### 1.2 The addressing control — 49 pairs, one pointer map
+
+```
+   pointer map over the 49 (act0d, act0e) pairs : 1 distinct    ✔ INVARIANT
+```
+
+### 1.3 The entry window's own controls
+
+```
+   pointer walk from 0x05: bank 1 section lands at 0x50, bank 2 at 0x64   ✔ = 125's private ranges, DERIVED
+   circular pre-load (acc = P = x) reproduced          **0.198 ×42 / 999 ×7** — and the seven at 999 are every pair whose `0x0E` half (or `0x0D = P<-bus`) overwrites the pre-load with the *empty* cell, **the shipped pair among them**: a pre-loaded harness would have REJECTED the right answer had its menu contained it
+   known-BAD (nop, nop)                                 bank1 999 / bank2 999   ✔ refused: the entry delivered nothing
+   two channels: bank 1 with the sample in 0x0F         999   ✔ not filtered (shipped pair)
+   junk pre-load, shipped pair                          0.198 ✔ overwritten   |  (acc+=bus, P<-bus)  44.876  ⛔ -> refused
+   f31hi over w3's f31 = 5, shipped pair                base/negP/hold/prod all 0.198   ✔ invariant
+```
+
+### 1.4 The delay harness's own controls, under the SHIPPED pair
+
+```
+   coefficients SCRAMBLED #1/#2/#3   500:34892 / 500:85909 / 500:-32511   the VALUE half bites at 500 too
+   round-6 reversed                  NONE
+   RELOCATED p0 = 0x40, cell 0x3B    500:45074                             the lag does not move with p0
+```
+
+---
+
+## 2. THE MEASUREMENT
+
+### 2.1 PARAMETRIC EQ — the excerpt (blind), then the entry window (decides)
+
+```
+   the 0.198 dB criterion executes a39 w5..w13; ACT codes executed: 07 12 13 14 15
+   a39's ACT 0x0D/0x0E words: [0, 1, 53, 54]      INTERSECTION: EMPTY
+   fired in one scoring pass, UNCONDITIONAL : ACT 0x0D 0   ACT 0x0E 0
+   49 pairs on the excerpt                  : 1 distinct value (0.198)
+   patched-excerpt control                  : **3 of 6** non-nop readings (`acc<-bus` 51.075, `acc+=bus` 51.090, `tA<-bus` 48.254; `tB`/`mem`/`P` write registers `x1`'s successors never read), **4 distinct values, fired 5632** — for `0x0D` and identically for `0x0E`
+
+   THE ENTRY WINDOW  (acc = P = 0 at frame start; sample in the cell the entry reads)
+   0D        0E        | bank1@05   bank2@0F   bank2@05   | verdict
+   nop       P<-bus    |  999.000      0.198    999.000   | rejected
+   acc<-bus  P<-bus    |    0.198      0.198    999.000   | ★ ACCEPTED (two channels)   <-- SHIPPED
+   acc+=bus  P<-bus    |    0.198      0.198    999.000   | ★ ACCEPTED -> refused by the JUNK control (44.876)
+   P<-bus    *         |    0.198    999.000      0.198   | rejected: bank 2 filters the WRONG cell (x6)
+   P<-bus    P<-bus    |  999.000      0.198    999.000   | rejected
+   every other pair    |  999.000    999.000    999.000   | rejected: the entry delivers nothing
+   fired per bank-1 pass, UNCONDITIONAL : ACT 0x0D **5632** / ACT 0x0E **5632** (11 coefficient banks × 512 frames × 1 site each)
+   ⇒ 1 of 49.
+```
+
+### 2.2 SINGLE DELAY — the reach test, the 49 pairs, the sweep, the trace
+
+```
+   a09's pair sites (p0 = 0x08, input cell 0x03):
+      w1  0D <- mem[0x08]   w2  0E <- acc   |  w21 0D <- mem[0x08]   w22 0E <- acc
+      w23 0D <- mem[0x08] (store)   w24 0E <- mem[0x12]   |  w44 0D <- mem[0x08]   w45 0E <- acc @0x03  <-- before the head write
+   tempA / tempB read after any site before rewrite : NO SITE  (the old menu was a no-op here)
+   fired in one 2302-frame pass, UNCONDITIONAL : ACT 0x0D 9208   ACT 0x0E 9208
+
+   THE 49 PAIRS AT THE PUBLISHED PLACEMENT (lag:sample)
+   0D \ 0E   | nop        acc<-bus   acc+=bus   tA<-bus    tB<-bus    mem<-bus   P<-bus
+   nop       | 1001:45074 1001:45074 1001:45074 1001:45074 1001:45074 NONE       1001:45074
+   acc<-bus  | 1001:45074 1001:45074 1001:45074 1001:45074 1001:45074 NONE       500:45074      <-- SHIPPED
+   acc+=bus  | 1001:45074 1001:45074 1001:45074 1001:45074 1001:45074 NONE       500:45074 1001:45074
+   tA<-bus   | 1001:45074 1001:45074 1001:45074 1001:45074 1001:45074 NONE       1001:45074
+   tB<-bus   | 1001:45074 1001:45074 1001:45074 1001:45074 1001:45074 NONE       1001:45074
+   mem<-bus  | 1001:45074 1001:45074 1001:45074 1001:45074 1001:45074 NONE       1001:45074
+   P<-bus    | NONE       500:45074  smear x1798 NONE       NONE       NONE       1001:45074
+   DISTINCT OUTCOMES 5; pre-registered criterion (1001, 45074) accepts 37 of 49 -- not the shipped pair
+
+   THE 256-CELL SWEEP: cell 0x03 is the unique placement for every pair that reaches the line;
+   36 pairs have SOME placement giving 1001:45074, 3 have one giving 500:45074, none has both sets swapped.
+
+   WHERE THE IMPULSE GOES (first non-zero frame relative to the impulse)
+   signal                         nop/nop      SHIPPED      acc+/P<-b    P<-b/acc<    P<-b/nop
+   lineA WRITE / RETURN           @0 / @500    @0 / @500    @0 / @500    @0 / @500    @0 / @500
+   lineB WRITE / RETURN           @500 / @1001 @500 / @1001 @500 / @1001 @500 / @1001 @500 / @1001
+   P after w40 (stage-1 chain)    @1001        @1001        @1001        @1001        @1001
+   acc after w45 (0E)             @1001        @1001        @1001        @1001        -
+   P after w45 (0E)               @1001        @500         @500 x2      @500         -
+   OUTPUT mem[0x0E]               @0 x2 (1001) @0 x2 (500)  @0 x3        @0 x2 (500)  @0 x1
+   => w46 (f31 = 0) reloads acc from P; the pair decides what P holds there.
+```
+
+### 2.3 a10 MULTI TAP DELAY — the pair in a context whose lags cannot be argued about
+
+```
+   a10: 68 words; ONE real delay WRITE w8 cell 32685; taps by descriptor:
+      read w20 cell 24000 -> lag  8685 (196.9 ms)    read w16 cell 18000 -> lag 14685 (333.0 ms)
+      read w12 cell 12000 -> lag 20685 (469.0 ms)    read w0  cell  6000 -> lag 26685 (605.1 ms)
+   tap gains (w27..w30): +0.500000 +0.350000 +0.150000 +0.000000      -> THREE taps expected
+   ACT 0x0D/0x0E at w5(0D) w6(0E) w59(0D) w60(0E) w64(0D) w65(0E)
+   DECLARED model gaps: w26 `040.0.00.864' / w33 `050.0.00.921' are lo12-bit-11 (ALT) words, effect OPEN, run as nop;
+                        w52/w53/w54 fetch cursor 15..17 of a 15-cell upload -> they take w46/w47/w48's coefficients
+   the model RUNS a10 under (nop, nop); fired 0D 600 / 0E 600 in 200 frames   (3 sites x 200)   <-- reach
+   input-cell probe (160 frames): nop/nop {0x03, 0x12} | SHIPPED {0x03, 0x08, 0x12} | (nop, mem<-bus) {0x12}
+
+   THE LONG RUN (27085 frames), best cell per pair, taps counted at their DESCRIPTOR lags:
+      1 of 4  x42    8685:4315 x28 | 8685:8630/8631 x9 | 8685:17262 x5     (14685 / 20685 / 26685: never)
+      0 of 4  x7     (acc<-bus, P<-bus) <-- SHIPPED, cell 0x03, NO non-zero output in 27085 frames;
+                     (P<-bus, nop) (P<-bus, acc<-bus) (P<-bus, acc+=bus) (P<-bus, tA<-bus) (P<-bus, tB<-bus) (P<-bus, mem<-bus)
+      SUMMARY over 49 pairs: 1 of 4 x42, 0 of 4 x7
+   => the known-GOOD case (three taps under SOME reading) FAILS: this harness grades nothing (rule 20).
+   => the seven at 0 of 4 are the seven the PEQ pre-load control lists at 999 (sect. 1.3): set-identical.
+   => re-run by the resuming lane 2026-09-04 23:40-23:49: byte-identical to the killed lane's log.
+```
+⚠ Only tap PRESENCE at a descriptor lag is read off a10, never a value: the second damping block runs
+on the first's coefficients by declaration. The `4315 / 8630 / 17262` samples are printed for the
+record and are not graded.
+
+---
+
+## 3. WHAT SHIPPED
+
+1. **`dsp/tools/action00_discriminate.py`** — `ACT0D0E_MENU` (seven readings, the device's own,
+   with an explicit `nop`), `ACT0D_FIRED`/`ACT0E_FIRED` unconditional counters. Defaults unchanged.
+2. **`dsp/tools/act0d0e_corpus.py`** — the static half, 11 self-tests, the motif, the consumer
+   census with its null.
+3. **`dsp/tools/sd_rerun.py act0d0e`** — reach test, 49-pair table, VALUE/relocation controls, the
+   path trace, the 256-cell sweep; **`sd_rerun.py multitap`** — a10; and **`scan` repaired** (it
+   crashed since §230) and marked ungraded.
+4. **`dsp/tools/gate_settle.py act0d0e`** — the excerpt's reach test and patched control; the ENTRY
+   WINDOW with the sample injected where the program reads it, the circular pre-load reproduced
+   as a control, the two-channel limb, the junk pre-load, the `f31hi` sweep.
+5. **`dsp/analysis/data/S_234_{peq_act0d0e,sd_act0d0e,sd_multitap}.log.gz`**.
+6. **`upd6383.cpp` `case 0x0d:` — COMMENT ONLY** (`kn7000_mame` `246a5f3`): the §234 confirmation
+   and the SINGLE DELAY consequence. **`notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md` Q4** parked.
+7. **`three-codes.md` item A and §1.1 carry the §234 retraction in place** (the LFO half of item A
+   stands); `dsp/tools/README.md`'s `multitap` row records the result and the measured runtime.
+8. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT, NO NEW ENV GATE, NO BUILD, NO MAME RUN.**
+   The published binary is untouched and is still the DEFAULT (DSP-off) build.
+
+---
+
+## 4. WHAT THIS PASS IS BLIND TO, AND THE NEXT EXPERIMENT
+
+* **The entry-window result is one context, twice** — §133 in the device and §234 in the model
+  agree at PARAMETRIC EQ. The second context (delay programs) reaches the pair and its
+  consequence there is a lag only hardware can confirm (**Q4**). ⛔ **Do not anchor the pair in
+  `alu_decoded()` on §234 alone**; do not re-derive the PEQ result either — it is `1 of 49`
+  with its controls printed.
+* **The model's `act00`, `f31hi` and store-gate readings are held at the shipped values** in both
+  harnesses; a09 has no `f31 > 2` word, a39's entry has one (`w3`, invariant 4 of 4).
+* **`ACT 0x0D` with `SRC 0x13`/`0x11`/`0x08` (50 of its 203 words) is never executed here** — a09
+  and a39 carry only `SRC 0x07`/`0x10` at the pair. A reading that depends on the operand's source
+  is not addressed.
+* **`I-RAM[154..199]` is still never uploaded** (§229), and every §232 §7 / §233 §4 blindness holds.
+
+### 4.1 ⛔ CLOSED BY THIS PASS — DO NOT RE-OPEN
+
+1. ⛔ **Do not re-run three-codes.md item A's extended-window sweep with `peq_ir()`'s pre-load**;
+   it grades every reading alike by construction. The entry window is `gate_settle.py act0d0e`.
+2. ⛔ **Do not quote SINGLE DELAY's lag 1001 as a falsifier for `ACT 0x0D`/`0x0E`.** It fires
+   (9208), it separates readings, and its lag is what the pair decides. Its VALUE half (45074 at
+   whichever lag) remains a falsifier for the cursor, the polarity, the coefficients and `SRC 0x00`.
+3. ⛔ **Do not quote the 0.198 dB excerpt for this pair** — fired 0. Same as §233 §4.1 item 2.
+4. ⛔ **Do not re-derive the corpus** — `act0d0e_corpus.py`, 157 of 202, and the null has no power.
+5. ⛔ **Do not read `programs.tsv`'s "0.15/0.3 feedback" as measured** — it is `gen_dsp_disasm.py`
+   metadata; the 2302-frame pass shows no second echo under any reading.
+6. ⛔ **Do not quote `sd_rerun.py multitap` for or against any pair** until its known-good case
+   passes (some reading reproduces a10's three descriptor taps). Its declared gaps — the ALT words
+   `w26`/`w33` and the cursor-15..17 fetches — are where that work is; the shipped pair's 0 of 4 is
+   an OPEN residue filed with Q4, not a result.
+
+### 4.2 ★★★★ WHERE THE NEXT PASS SHOULD GO — PRE-REGISTERED
+
+**`SRC 0x11` (+49), the last of §232's top four, at its five varying sites `iw11/16/17/19/92`.**
+It is read as `ACCB` (§27); §113's `mem[ptr]` rival is mask bit 18, tested in §168 and **refuted at
+`iw11`** by §121 (it turns the K6 input word into a self-copy and un-feeds the audio deposit). ⚠
+**Reach-test first, and expect both known-mathematics harnesses to be BLIND**: a09 carries no
+`SRC 0x11` word and the PEQ excerpt executes none (`SRC 07 10 19 1A`) — `act0d0e_corpus.py`'s
+pattern prints that in one line. The evidence for this code is therefore in the **KERNEL** (`iw11`
+is the audio deposit, `iw19` is one of the two varying `ACT 0x0D` sites — `0x0D <- src11`), i.e. a
+**device arm** on the §228 vehicle, two-sided, `default OFF`, graded by provenance (rule 17) and by
+`§104`'s `D-I` split (rule 21), **after** a corpus census with its null. Falsifiers: `m_rf[0x8D] =
+0x009B26`; `§S1`'s 4.924 % must not **fall**; `§54` graded first; `§70`/`§211` as **ONE ROW**.
+⛔ It is +49 words; if the census shows every site's operand constant, **rule 4 closes it** and
+the pass is one command long.
+
+### 4.3 The rest, unchanged
+
+1. ⛔ **THE BLOCKER IS UNMOVED: *what does the coefficient base `0x90` MEAN*** (queue item 12).
+2. ★★★ **Q4** — the one measurement that decides what SINGLE DELAY *is*; parked, not inferred.
+   ★★ **And a10's harness, before anyone grades it**: print every candidate cell per pair (not the
+   best), bound or decode the two ALT words `w26`/`w33`, supply cursor 15..17 — then ask again
+   whether SOME reading gives three taps. Until then it is a printed failed control.
+3. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS** (queue item 13), one command each, no build.
+4. ★★ **SHIP THE FIVE QUEUED CONTROL REPAIRS** (§230 §7) when the lane is uncontested.
+5. ★ **STATE THE BUILD FLAG IN EVERY BRIEF.** `build.sh` alone yields a binary with **no uPD6383
+   device at all**; the DSP build is `dsp/tools/run_dsp_arm.sh`.
+
+**GRADES.** §0 items A, C, D, E, G, H **MEASURED from disk**; B **FORCED then MEASURED**;
+F **MEASURED, residue OPEN**; I **MEASURED, UNGRADED** (its rule-20 known-good case FAILED and is
+printed), residue **OPEN**; J **MEASURED by §232 arm A and CITED, not re-run** —
+and the reason it is not re-run is printed with it. §4.2 **pre-registered, unrun.**
+⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
+established it cannot see `upd6383.cpp` at all.

@@ -4,10 +4,10 @@
 stopped. Everything below remains valid; nothing here is superseded by the park.
 
 **Where everything is**
-- Running record: `SPECULATIVE-APPLIED-REGISTER.md`, §§1–233. **Later sections retract earlier ones
+- Running record: `SPECULATIVE-APPLIED-REGISTER.md`, §§1–234. **Later sections retract earlier ones
   in place — trust the tail.**
 - Index, dead ends and standing rules 1–23: `LEDGER.md` (**dead-ends tier first**).
-- Ready work with grades and sources: `BUILD-LANE-QUEUE.md` — ⚠ **item 0 is CONSUMED (§232, then §233); its replacement is named below.**
+- Ready work with grades and sources: `BUILD-LANE-QUEUE.md` — ⚠ **item 0 is CONSUMED (§232, §233, then §234); its replacement is named below.**
 - Findings files: `dsp/analysis/*_findings.md`. Archived arm logs: `dsp/analysis/data/`.
 - The 22-page reverb+kernel dossier, regenerable from `dsp/analysis/dossier/`; rendered PDF and the
   1989/1992 NEC DSP data books are in `~/compartilhado/KN7000/`.
@@ -37,7 +37,34 @@ not a harness's reach: print a criterion's FIRED COUNT before quoting it.**
 invisible at a09 and stays open. ⚠ Corpus: **580 of 622**, not 605 of 648 and not 572 of 599.
 Reproduce: `python3 dsp/tools/sd_rerun.py src00` · `python3 dsp/tools/gate_settle.py src00`.
 
-**The single next action when this resumes** — **`ACT 0x0D` + `ACT 0x0E`, TOGETHER, AT
+**⇒⇒⇒ AND `ACT 0x0D` + `ACT 0x0E` ARE DECIDED — §234, the same day. THE SHIPPED PAIR (§133's
+selector `(1, 7)`) IS CONFIRMED FROM DISK, `1 of 49`, BY PARAMETRIC EQ's ENTRY WINDOW** — the sample
+injected in the cell the entry reads (`0x05` / `0x0F`) instead of `peq_ir()`'s pre-load into acc and
+P, which is what made three-codes.md item A's 144 machines identical (**retracted**). ⛔⛔ **AND THE
+SINGLE DELAY FALSIFIER §233 PRE-REGISTERED REACHES THE PAIR (fired 9208/9208) BUT ITS LAG IS WHAT THE
+PAIR DECIDES**: under the shipped pair a09 returns the same ROM product **45074 at lag 500** — `0x0E`
+at `w45` overwrites P one word before the head write `w46` reloads `acc <- P`. Every SINGLE DELAY
+number since §230 was taken with the pair inert (`tA<-bus`, a no-op at all eight sites), on a menu
+that could not execute the shipped reading; `sd_rerun.py scan` had crashed since §230. §230's VALUE
+control survives at either lag; the lag is **hardware question Q4**. ⛔ **Neither code is anchored.**
+⚠ **The fourth arm, a10 MULTI TAP DELAY (`sd_rerun.py multitap`), ran to completion and GRADES NOTHING**:
+no pair reproduces its three descriptor taps (best **1 of 4** for 42 pairs, **0 of 4** for 7 — the shipped
+pair among them), so rule 20's known-good case fails and the harness is evidence for or against nothing;
+its declared gaps are two ALT words run as no-ops and three coefficient fetches beyond the upload. The
+seven at 0 of 4 are set-identical to the seven the PEQ pre-load control lists. OPEN residue, filed with Q4.
+Reproduce: `python3 dsp/tools/gate_settle.py act0d0e` · `python3 dsp/tools/sd_rerun.py act0d0e` ·
+`python3 dsp/tools/sd_rerun.py multitap` · `python3 dsp/tools/act0d0e_corpus.py`.
+
+**The single next action when this resumes** — **`SRC 0x11` (+49), AT `iw11/16/17/19/92`** (§234
+§4.2): corpus census with its null first; both known-mathematics harnesses are BLIND to it by
+construction (a09 carries no `SRC 0x11`, the PEQ excerpt executes none), so the evidence is in the
+KERNEL and needs a **device arm** on the §228 vehicle, two-sided, `default OFF`, graded by provenance
+(rule 17) and `§104`'s `D-I` split (rule 21). If the census finds every site's operand constant,
+rule 4 closes it in one command.
+
+<details><summary>the action §234 consumed, as it stood</summary>
+
+**`ACT 0x0D` + `ACT 0x0E`, TOGETHER, AT
 `iw19`/`iw21`, IN SINGLE DELAY** (§233 §4.2). They are the largest remaining OPEN codes (**+124**
 and **+110**), the census found a **varying** index at both, and §232 §4 measured why they are one
 question and not two: their resident sites are **ADJACENT in the kernel**. `sd_rerun.py scan`
@@ -45,6 +72,8 @@ already enumerates `act0d × act0e` and a09 carries 4 of each; `three-codes.md` 
 *"unconstrained by anything in the corpus"* was reached by checking PARAMETRIC EQ and the LFO and
 **never checking the third context**. **Corpus discrimination FIRST** (rule 13 — §218, §226 and
 §233 each decided a rival with zero MAME runs). ⚠ **Reach-test every criterion before quoting it.**
+
+</details>
 
 <details><summary>the action §233 consumed, as it stood</summary>
 

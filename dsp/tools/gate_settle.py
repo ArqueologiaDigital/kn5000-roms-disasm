@@ -2013,11 +2013,341 @@ def sec_src00():
     return vals, pv
 
 
+# ===========================================================================
+#  SECTION `act0d0e' -- 234.  `ACT 0x0D' x `ACT 0x0E' AT PARAMETRIC EQ:
+#  the reach test on the 9-word excerpt, and then the ENTRY WINDOW with the
+#  input injected WHERE THE PROGRAM READS IT.
+#
+#  THE REACH TEST (rule 15, 233's lesson).  a39 carries the pair at w0/w1
+#  (bank 1) and w53/w54 (bank 2).  The 0.198 dB criterion executes w5..w13.
+#  Intersection EMPTY -> fired count 0 -> blind, printed rather than assumed.
+#
+#  THE ENTRY WINDOW.  three-codes.md item A extended the window to w0 and
+#  found 144 machines identical at 0.113 dB, and concluded the biquad's first
+#  word discards everything upstream.  It does not: `peq_ir' PRE-LOADS the
+#  sample into acc AND P at every frame (`st.acc = st.P = x << ASH'), so the
+#  entry words had nothing to deliver -- the injection presupposed the answer,
+#  the same shape 233 item E found in sd_rerun's derive_p0.  Remove it: start
+#  every frame with acc = P = 0 (and, as a control, with JUNK), put the sample
+#  in the D-RAM cell the entry word READS (bank 1: mem[0x05] via w0's SRC 0x07;
+#  bank 2: mem[0x0F] via w54's SRC 0x07 -- 125 sect. 2/3, 133 sect. 3), and ask
+#  which (act0d, act0e) pairs deliver it to the designer's biquad.  That is
+#  133's device experiment, run from disk, with 133's two-channel discriminator
+#  as the second limb: bank 2 must filter 0x0F and must NOT filter 0x05.
+#
+#      python3 dsp/tools/gate_settle.py act0d0e
+# ===========================================================================
+ACT0D0E_MENU = A.ACT0D0E_MENU
+SHIPPED = ("acc<-bus", "P<-bus")
+
+
+def _patch_act(w, act):
+    """the same word with lo12's ACTION field (lo12[4:0], rule 18) replaced."""
+    return (w & ~0x1F) | (act & 0x1F)
+
+
+def _a39():
+    import delayline as DL
+    return list(DL.program(39).words)
+
+
+def peq_ir_entry(m, coefs, n, words, p_entry, incell, amp=1 << 22,
+                 preload=None, seed=0):
+    """peq_ir() with the sample injected into D-RAM cell `incell' and the
+    pointer at `p_entry' when the window starts -- NOT pre-loaded into acc/P.
+    `preload' = None -> acc = P = 0 at frame start; "junk" -> random values
+    (the entry must overwrite them or the control fails)."""
+    import random
+    rng = random.Random(seed)
+    st = A.State()
+    out = []
+    for t in range(n):
+        x = amp if t == 0 else 0
+        if preload == "junk":
+            st.acc = rng.randrange(-(1 << 39), 1 << 39)
+            st.P = rng.randrange(-(1 << 39), 1 << 39)
+        else:
+            st.acc = st.P = 0
+        st.ta = st.tb = 0
+        st.p = p_entry
+        st.mem[incell] = x & MASK24
+        cur = 0
+        for w in words:
+            c = coefs[cur % len(coefs)] if DIS.cursor_fetch(w) else None
+            if not A.step(m, st, w, c, None, ash=ASH, psh=PSH, unknown=lambda: 0):
+                return None
+            if DIS.coeff_consumer(w):
+                cur += 1
+        out.append(max(-(1 << 23), min(MASK23, st.acc >> ASH)))
+    return out
+
+
+def worst_db_entry(m, banks, n, words, p_entry, incell, amp=1 << 22, preload=None):
+    worst = 0.0
+    for name, cram in banks:
+        ir = peq_ir_entry(m, cram, n, words, p_entry, incell, amp, preload)
+        if ir is None:
+            return None
+        for f in A.FREQS:
+            want = A.ideal_H(cram, f)
+            if abs(want) < 1e-9:
+                continue
+            got = A.dft_at(ir, f) / amp
+            if abs(got) == 0.0:
+                return 999.0
+            worst = max(worst, abs(20 * math.log10(abs(got) / abs(want))))
+    return worst
+
+
+def _AM(**kw):
+    """the shipped model in A's machine space (the one that reproduces 0.198)."""
+    d = dict(order="adder", act00="load", sttime="before", stgate="b7_f31_1_off")
+    d.update(kw)
+    return A.Machine(**d)
+
+
+def sec_act0d0e():
+    hdr("act0d0e -- 234: the pair at PARAMETRIC EQ, reach test then entry window")
+    banks = A.peq_banks()
+    a39 = _a39()
+
+    #  --- 1. THE REACH TEST ON THE PUBLISHED EXCERPT ---
+    print("   ★ REACH TEST FIRST (rule 15).  The words the 0.198 dB criterion")
+    print("     EXECUTES (A.PEQ = a39 w5..w13), and their ACTION codes:")
+    for i, w in enumerate(PEQ):
+        print("      x%-2d %010X  SRC %02X  ACT %02X" % (i, w, DIS.lo_src(w), DIS.lo_act(w)))
+    ex = sorted({DIS.lo_act(w) for w in PEQ})
+    sites = [k for k, w in enumerate(a39)
+             if not DIS.c_format(w) and DIS.lo_act(w) in (0x0D, 0x0E)]
+    print("      ACT codes executed : %s" % " ".join("%02X" % c for c in ex))
+    print("      a39's ACT 0x0D/0x0E words are at %s" % sites)
+    print("      INTERSECTION with the executed slots : %s"
+          % (sorted(set(sites) & set(range(5, 14))) or "EMPTY"))
+    A.ACT0D_FIRED[0] = A.ACT0E_FIRED[0] = 0
+    base = A.worst_db(_AM(), banks, 512)
+    print("\n   ⇒ in one full scoring pass: ACT 0x0D fired %d, ACT 0x0E fired %d"
+          "  (UNCONDITIONAL)" % (A.ACT0D_FIRED[0], A.ACT0E_FIRED[0]))
+    print("      the shipped model scores %.3f dB (published 0.198)   %s"
+          % (base, "OK" if abs(base - 0.198) < 0.01 else "MISMATCH"))
+    print("\n   THE 49 PAIRS ON THE EXCERPT (233's shape -- expect one value):")
+    import multiprocessing
+    jobs = max(1, multiprocessing.cpu_count() - 1)
+    PAIRS = [(d, e) for d in ACT0D0E_MENU for e in ACT0D0E_MENU]
+    with multiprocessing.Pool(jobs) as pool:
+        vals = dict(zip(PAIRS, pool.map(_job_excerpt, PAIRS)))
+    distinct = len({None if v is None else round(v, 6) for v in vals.values()})
+    print("      %d DISTINCT dB value%s over 49 pairs: %s"
+          % (distinct, "" if distinct == 1 else "s",
+             sorted({round(v, 3) for v in vals.values() if v is not None})))
+
+    #  --- 2. THE TWO-SIDED CONTROL: put the code INTO the excerpt ---
+    #  ⚠ x1 is `0212A01412' -- ACT 0x12 (none) reading SRC 0x10.  Rewriting its
+    #  ACTION to 0x0D/0x0E makes the word write the accumulator's own value
+    #  somewhere; the `nop' row is then true BY CONSTRUCTION (0x12 = no effect)
+    #  and is not counted -- the evidence is whether the other six move.
+    k = next(i for i, w in enumerate(PEQ) if DIS.lo_act(w) == 0x12)
+    print("\n   ★ TWO-SIDED CONTROL -- rewrite executed word x%d's ACTION 0x12 -> 0x0D"
+          "\n     (%010X -> %010X) and sweep act0d; then the same for 0x0E."
+          % (k, PEQ[k], _patch_act(PEQ[k], 0x0D)))
+    for code, key in ((0x0D, "act0d"), (0x0E, "act0e")):
+        patched = tuple(_patch_act(w, code) if i == k else w for i, w in enumerate(PEQ))
+        moved, seen = 0, set()
+        for r in ACT0D0E_MENU:
+            A.ACT0D_FIRED[0] = A.ACT0E_FIRED[0] = 0
+            #  score through A's model so the reading is executable
+            v = _worst_db_words(_AM(**{key: r}), banks, 512, patched)
+            fired = A.ACT0D_FIRED[0] if code == 0x0D else A.ACT0E_FIRED[0]
+            seen.add(None if v is None else round(v, 6))
+            if r != "nop" and (v is None or abs(v - base) > 1e-9):
+                moved += 1
+            print("      ACT %02X = %-9s %-10s %s   (fired %d)"
+                  % (code, r, "refused" if v is None else "%8.3f" % v,
+                     "-- (by construction)" if r == "nop" else
+                     ("MOVED" if (v is None or abs(v - base) > 1e-9) else "same"),
+                     fired))
+        print("      CONTROL ACT %02X: %d of 6 non-nop readings move, %d distinct values   %s"
+              % (code, moved, len(seen),
+                 "✔ the sweep is LIVE" if moved >= 1 and len(seen) >= 2
+                 else "⛔ CONTROL BROKEN"))
+
+    #  --- 3. THE ENTRY WINDOW, INPUT INJECTED WHERE THE PROGRAM READS IT ---
+    W1 = a39[0:14]                      # bank 1: entry w0..w4 + section w5..w13
+    W2 = a39[53:58] + a39[59:68]        # bank 2: entry w53..w57 + section w59..w67
+    #  w58 `rstcur' (class 0, ACT 0x01) is a cursor control word; this harness
+    #  drives the cursor itself (peq_ir's `cur'), so it is OMITTED, not modelled.
+    assert [DIS.lo_act(w) for w in W1[:2]] == [0x0D, 0x0E]
+    assert [DIS.lo_act(w) for w in W2[:2]] == [0x0D, 0x0E]
+    assert W1[5:14] == list(PEQ) and W2[5:14] == list(PEQ), "the sections must be the excerpt"
+    print("""
+   ★ THE ENTRY WINDOW.  three-codes.md item A: "extended to w0 ... 144 machines
+     ... 0.113 dB for every one of them".  Its harness PRE-LOADED the sample
+     into acc and P every frame, so the entry had nothing to deliver -- the
+     injection presupposed the answer (233 item E's shape).  Here the sample is
+     put in the CELL the entry reads and acc = P = 0 at frame start.
+
+     bank 1 window = a39 w0..w13   (w0 reads mem[0x05], 125 sect. 2)
+     bank 2 window = a39 w53..w57 + w59..w67   (w54 reads mem[0x0F], 133 sect. 3;
+                     w58 `rstcur' omitted -- the harness drives the cursor)""")
+    #  the pointer derivations, as a self-check against 125's private ranges
+    def walk(words, p):
+        out = []
+        for w in words:
+            out.append(p)
+            p = (p + (A.s8(DIS.addr8(w)) if DIS.ptr_postinc(w) else 0)) & 0xff
+        return out
+    p1, p2 = walk(W1, 0x05), walk(W2, 0x05)
+    print("\n      pointer walk, bank 1 from 0x05: w0 0x%02X w1 0x%02X w4 0x%02X -> section at 0x%02X   %s"
+          % (p1[0], p1[1], p1[4], p1[5],
+             "✔ 125's bank-1 private range starts at 0x50" if p1[5] == 0x50 else "⛔"))
+    print("      pointer walk, bank 2 from 0x05: w53 0x%02X w54 0x%02X w57 0x%02X -> section at 0x%02X   %s"
+          % (p2[0], p2[1], p2[4], p2[5],
+             "✔ 125's bank-2 private range starts at 0x64" if p2[5] == 0x64 else "⛔"))
+
+    #  the CIRCULAR form reproduced first, so the reader sees why 144 == 144
+    print("\n   ★ CONTROL -- the CIRCULAR injection (acc = P = x pre-loaded) reproduced:")
+    with multiprocessing.Pool(jobs) as pool:
+        circ = dict(zip(PAIRS, pool.map(_job_circular, PAIRS)))
+    cc = collections.Counter("refused" if v is None else "%.3f" % v for v in circ.values())
+    print("      bank-1 window, 49 pairs, f31hi=base: %s"
+          % ", ".join("%s x%d" % kv for kv in cc.most_common()))
+    print("      the pairs NOT at the shipped 0.198: %s"
+          % ([k for k, v in circ.items() if v is None or abs(v - 0.198) > 0.01] or "none"))
+    print("      ⇒ with the sample pre-loaded, every pair whose 0x0E half does not")
+    print("        DESTROY the pre-load scores the same 0.198 -- three-codes' 144/144")
+    print("        was the six-reading menu, none of which writes P or the memory")
+    print("        cell the section reads.")
+
+    A.ACT0D_FIRED[0] = A.ACT0E_FIRED[0] = 0
+    worst_db_entry(_AM(act0d=SHIPPED[0], act0e=SHIPPED[1], f31hi="base"), banks, 512,
+                   W1, 0x05, 0x05)
+    print("\n   ⇒ in one bank-1 entry-window scoring pass: ACT 0x0D fired %d, ACT 0x0E"
+          " fired %d  (UNCONDITIONAL)" % (A.ACT0D_FIRED[0], A.ACT0E_FIRED[0]))
+    print("\n   ★ THE MEASUREMENT -- acc = P = 0 at frame start, sample in the cell:")
+    print("      %-9s %-9s | %-10s %-10s %-10s | %s"
+          % ("0D", "0E", "bank1@05", "bank2@0F", "bank2@05", "verdict"))
+    with multiprocessing.Pool(jobs) as pool:
+        res = dict(zip(PAIRS, pool.map(_job_entry, PAIRS)))
+
+    def f(v):
+        return "refused" if v is None else "%8.3f" % v
+    acc = []
+    for (d, e), (v1, v2, v3, ok) in res.items():
+        if ok:
+            acc.append((d, e))
+        if ok or (d, e) == SHIPPED or (v1 is not None and v1 < 0.5) \
+                or (v2 is not None and v2 < 0.5):
+            print("      %-9s %-9s | %-10s %-10s %-10s | %s%s"
+                  % (d, e, f(v1), f(v2), f(v3),
+                     "★ ACCEPTED (two channels)" if ok else "rejected",
+                     "   <-- SHIPPED" if (d, e) == SHIPPED else ""))
+    print("      (%d of 49 pairs shown: the accepted ones, the shipped one, and any"
+          "\n       that passes either bank alone)" % sum(
+              1 for (d, e), (v1, v2, v3, ok) in res.items()
+              if ok or (d, e) == SHIPPED or (v1 is not None and v1 < 0.5)
+              or (v2 is not None and v2 < 0.5)))
+    print("\n      ⇒ %d of 49 pairs deliver BOTH channels to the designer's biquad AND"
+          "\n        keep them apart: %s" % (len(acc), acc or "NONE"))
+
+    #  --- 4. CONTROLS ON THE SURVIVORS ---
+    print("\n   ★ CONTROLS on the survivors (rule 20):")
+    for d, e in acc:
+        m = _AM(act0d=d, act0e=e, f31hi="base")
+        vj = worst_db_entry(m, banks, 512, W1, 0x05, 0x05, preload="junk")
+        modes = {fm: round(worst_db_entry(_AM(act0d=d, act0e=e, f31hi=fm), banks, 512,
+                                          W1, 0x05, 0x05) or 999, 3)
+                 for fm in A.F31HI}
+        vs = worst_db_entry(m, banks, 512, W1, 0x05, 0x0F)
+        print("      (%s, %s): JUNK pre-load %s -> %s | f31hi %s | bank1 with the"
+              " sample in 0x0F %s -> %s"
+              % (d, e, f(vj), "✔ overwritten" if vj is not None and vj < 0.5 else "⛔",
+                 modes, f(vs), "✔ not filtered" if not (vs is not None and vs < 0.5)
+                 else "⛔ channels not separated"))
+    #  a known-BAD: the inert pair must FAIL (it delivered nothing)
+    v = res[("nop", "nop")]
+    print("      known-BAD (nop, nop): bank1 %s bank2 %s   %s"
+          % (f(v[0]), f(v[1]), "✔ refused -- the entry delivered nothing"
+             if not v[3] else "⛔ CONTROL BROKEN"))
+    print("""
+   ⇒ VERDICT.  On the 9-word excerpt the pair is INVISIBLE (fired 0 -- the
+      0.198 dB number cannot speak to it, exactly as for SRC 0x00).  On the
+      entry window with the sample injected where the program reads it, the
+      pairs that deliver both channels to the designer's biquad and keep them
+      apart are listed above.  This is 133's device result re-derived from
+      disk with its circular pre-load removed.""")
+    return res
+
+
+def _windows():
+    a39 = _a39()
+    return a39[0:14], a39[53:58] + a39[59:68]
+
+
+def _job_excerpt(pair):
+    d, e = pair
+    return A.worst_db(_AM(act0d=d, act0e=e), A.peq_banks(), 512)
+
+
+def _job_circular(pair):
+    d, e = pair
+    W1, _W2 = _windows()
+    return _worst_db_words(_AM(act0d=d, act0e=e, f31hi="base"), A.peq_banks(), 512, W1)
+
+
+def _job_entry(pair):
+    d, e = pair
+    W1, W2 = _windows()
+    banks = A.peq_banks()
+    m = _AM(act0d=d, act0e=e, f31hi="base")
+    v1 = worst_db_entry(m, banks, 512, W1, 0x05, 0x05)
+    v2 = worst_db_entry(m, banks, 512, W2, 0x05, 0x0F)
+    v3 = worst_db_entry(m, banks, 512, W2, 0x05, 0x05)
+    ok = (v1 is not None and v1 < 0.5) and (v2 is not None and v2 < 0.5) \
+        and not (v3 is not None and v3 < 0.5)
+    return (v1, v2, v3, ok)
+
+
+def _worst_db_words(m, banks, n, words, amp=1 << 22):
+    """A.worst_db with an explicit word list (A.peq_ir hard-codes PEQ)."""
+    worst = 0.0
+    for name, cram in banks:
+        st = A.State()
+        ir = []
+        bad = False
+        for t in range(n):
+            x = amp if t == 0 else 0
+            st.acc = x << ASH
+            st.P = x << ASH
+            st.p = 0
+            cur = 0
+            for w in words:
+                c = cram[cur % len(cram)] if DIS.cursor_fetch(w) else None
+                if not A.step(m, st, w, c, None, ash=ASH, psh=PSH, unknown=lambda: 0):
+                    bad = True
+                    break
+                if DIS.coeff_consumer(w):
+                    cur += 1
+            if bad:
+                break
+            ir.append(max(-(1 << 23), min(MASK23, st.acc >> ASH)))
+        if bad:
+            return None
+        for fq in A.FREQS:
+            want = A.ideal_H(cram, fq)
+            if abs(want) < 1e-9:
+                continue
+            got = A.dft_at(ir, fq) / amp
+            if abs(got) == 0.0:
+                return 999.0
+            worst = max(worst, abs(20 * math.log10(abs(got) / abs(want))))
+    return worst
+
+
 SECTIONS = [("enum", sec_enum), ("price", sec_price), ("census", sec_census),
             ("control", sec_control),
             ("condition", sec_condition), ("hostmix", sec_hostmix),
             ("dead", sec_dead), ("vacuity", sec_vacuity),
             ("biquad", sec_biquad), ("src00", sec_src00),
+            ("act0d0e", sec_act0d0e),
             ("mirror", sec_mirror),
             ("lfo", sec_lfo), ("joint", sec_joint)]
 

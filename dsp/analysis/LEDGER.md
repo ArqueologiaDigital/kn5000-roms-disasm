@@ -20,7 +20,47 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230/§231/§232/§233, 2026-09-04)
+## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230/§231/§232/§233/§234, 2026-09-04)
+
+> ### ★★★★★ §234 — READ THIS BEFORE QUOTING SINGLE DELAY's LAG, AND BEFORE RE-OPENING `ACT 0x0D`/`0x0E`
+>
+> **THE PAIR THE DEVICE SHIPS — §133's selector `(1, 7)`, `ACT 0x0D: acc <- bus`, `ACT 0x0E: P <- bus`
+> at the multiply's scale — IS CONFIRMED FROM DISK, `1 of 49`. AND THE FALSIFIER §233 PRE-REGISTERED
+> AS LIVE REACHES IT AND CANNOT JUDGE IT.**
+>
+> * ✔ **PARAMETRIC EQ's ENTRY WINDOW decides it** (`gate_settle.py act0d0e`): a39 `w0..w13` and
+>   `w53..w67` run with **acc = P = 0 at frame start and the sample in the cell the entry READS**
+>   (`0x05` / `0x0F`). 2 of 49 pairs deliver BOTH channels to the designer's biquad at 0.198 dB and
+>   keep them apart; a junk-pre-load control kills the runner-up (44.876 dB). ★ **three-codes.md
+>   item A is RETRACTED**: its "144 machines identical" was `peq_ir()`'s pre-load of the sample into
+>   acc and P every frame — the injection presupposed the answer (§233 item E's shape, other harness).
+> * ⛔⛔ **SINGLE DELAY's lag 1001 is NOT independent of this pair.** The criterion fires (9208/9208)
+>   and separates readings (5 outcomes over 49), but under the shipped pair a09 returns the **SAME
+>   ROM product 45074 at lag 500**: `0x0E` at `w45` overwrites P with the stage-0 value one word
+>   before the head write `w46` reloads `acc <- P`. Both lines are live under both readings; the
+>   stage-1 product reaches `acc` at `w45` and is discarded at `w46`. **Every SINGLE DELAY number
+>   since §230 was taken with the pair INERT** — `(tA<-bus, tA<-bus)`, a no-op at all eight sites —
+>   on a menu that could not execute the shipped reading. §230's VALUE control survives at either
+>   lag; the lag is **hardware question Q4** (`kn7000_mame/notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md`).
+> * ⚠ **`sd_rerun.py scan` had CRASHED on every invocation since §230** (`KeyError: 46`); §233's
+>   "already enumerates `act0d × act0e`" described a command that had not run. Repaired, ungraded.
+> * ★ Corpus (`act0d0e_corpus.py`, 11 of 11 vs §232): `0x0D` is followed by `0x0E` at **157 of 202**
+>   (×9.87) — a fact about `0x0E`'s operand, not `0x0D`'s destination; the consumer census's null
+>   has no power. **The corpus cannot separate the seven readings.**
+> * ⚠ **a10 MULTI TAP DELAY (`sd_rerun.py multitap`) RAN TO COMPLETION AND GRADES NOTHING**: no pair
+>    reproduces its three descriptor taps (best **1 of 4** for 42 pairs; **0 of 4** for 7, **the shipped pair
+>    among them**, no non-zero output in 27085 frames) — rule 20's known-good case fails, so the harness is
+>    evidence for or against nothing. Declared gaps: two ALT words run as no-ops, three coefficient fetches
+>    beyond the 15-cell upload. ★ The seven at 0 of 4 are set-identical to the seven the PEQ pre-load
+>    control lists at 999. OPEN residue, filed with Q4. `data/S_234_sd_multitap.log.gz`; re-run byte-identical.
+> * ⛔ **Neither code is ANCHORED**: confirmed in one context (PEQ, device §133 + model §234); its
+>   consequence in the other (delay programs) is a lag only the chip can confirm. Anchoring waits on
+>   Q4, not on more static work.
+> * Reproduce: `python3 dsp/tools/act0d0e_corpus.py` · `python3 dsp/tools/gate_settle.py act0d0e` ·
+>   `python3 dsp/tools/sd_rerun.py act0d0e` · `python3 dsp/tools/sd_rerun.py multitap`.
+> ⇒ **THE QUEUE'S TOP ITEM IS NOW `SRC 0x11` (+49), AT `iw11/16/17/19/92` — CORPUS FIRST, THEN A
+> DEVICE ARM** (both known-mathematics harnesses are blind to it by construction; §234 §4.2).
+> ⛔ **THE BLOCKER IS UNCHANGED: *what does the coefficient base `0x90` MEAN?***
 
 > ### ★★★★★ §233 — READ THIS BEFORE QUOTING A FALSIFIER, AND BEFORE RE-OPENING `SRC 0x00`
 >
@@ -1093,9 +1133,9 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | 32 | off | §114 |  |
 | 33 | **ON** | §114, §116 | WRAP mod 2^23 instead of saturating |
 | 34 | **ON** | §119 | THE MEMORY-TO-MEMORY MOVE |
-| 35 | off | §113, §121 |  |
-| 36 | off | §113, §121 |  |
-| 37 | off | §113, §121 |  |
+| 35 | off | §113, §234 |  |
+| 36 | off | §113, §234 |  |
+| 37 | off | §113, §234 |  |
 | 38 | **ON** | §73, §86 | SEED THE COEFFICIENT CURSOR WITH THE PER-UNIT BASE AT THE CALL |
 | 39 | off | §121 |  |
 | 40 | off | §121 |  |
@@ -1127,7 +1167,7 @@ can belong to the neighbour. Use this table to find the section, then read the s
 
 ## TIER 2 — the section index  (generated from the register headings)
 
-126 sections, §97..§233.  **Read the tail first** — later sections retract earlier ones *in place*.
+127 sections, §97..§234.  **Read the tail first** — later sections retract earlier ones *in place*.
 
 | § | verdict | claim | grade |
 |--:|---|---|---|
@@ -1257,4 +1297,5 @@ can belong to the neighbour. Use this table to find the section, then read the s
 | §231 | SHIPPED | ★★★★★ `f31 ∈ {3,6,7}` IS **DECODED AS FAR AS IT CAN BE, AND IT IS A DEAD LEVER**: the bit-5 rule is **OFF BY ONE** and a |  |
 | §232 | SHIPPED | ★★★★★ THE UNANCHORED `SRC`/`ACTION` CENSUS: **16 CODES ARE CLOSED, 8 STAY OPEN, 9 ARE NOT RESIDENT** — AND §231's OWN FU |  |
 | §233 | CONFIRMED 1 of 7 (+ retracts §232 §7.2's PEQ falsifier) | ★★★★★ `SRC 0x00` IS DECIDED **FROM DISK**, AND THE READING THE DEVICE SHIPS **SURVIVES**: SINGLE DELAY's lag-1001 ROM PR |  |
+| §234 | CONFIRMED 1 of 49 (+ retracts three-codes.md item A and the lag-1001 criterion's independence from this pair) | ★★★★★ `ACT 0x0D`/`0x0E`: THE SHIPPED PAIR IS **CONFIRMED FROM DISK, 1 of 49** — BY PARAMETRIC EQ's *ENTRY WINDOW*, ONCE  |  |
 

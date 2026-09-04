@@ -37,6 +37,15 @@ total and typically 8.** ⇒ ★ **The lever is the ROUTING guard**, and it is t
 §229's fabricated-zero census counts. **File routing/anchoring work above operation-field work.**
 See **§231** and `LEDGER-HEAD.md` TIER 0a.
 
+**⇒ §234 CONSUMED item 0's SECOND REPLACEMENT — `ACT 0x0D` + `ACT 0x0E` ARE DECIDED, `1 of 49`, AND
+THE SHIPPED PAIR SURVIVES — by PARAMETRIC EQ's ENTRY WINDOW, the context §233 called blind, once
+`peq_ir()`'s pre-load of the sample into acc and P is removed (three-codes.md item A retracted).
+⛔ **And the SINGLE DELAY falsifier §233 pre-registered REACHES the pair (fired 9208/9208) but its
+LAG is what the pair decides**: under the shipped pair a09 returns the same 45074 at lag **500**, not
+1001; every SINGLE DELAY number since §230 was taken with the pair inert, and `sd_rerun.py scan` had
+crashed since §230. Neither code is anchored; the lag is hardware **Q4**. **The top of the queue is
+now `SRC 0x11` (+49).** See **§234**.
+
 **⇒ §233 CONSUMED item 0's REPLACEMENT — `SRC 0x00` IS DECIDED, `1 of 7`, AND THE SHIPPED READING
 SURVIVES.** SINGLE DELAY's lag-1001 ROM product (**45074**) accepts `mem[ptr]` and refutes all six
 rivals over **all 256 injection cells**; the null-routing rival finally has a refutation that is not
@@ -51,7 +60,57 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 
 ---
 
-## 0. ~~THE UNANCHORED SRC/ACTION CENSUS~~ / ~~`SRC 0x00` ALONE~~ — ✅✅ **BOTH CONSUMED — §232 then §233, 2026-09-04**
+## 0. ~~THE UNANCHORED SRC/ACTION CENSUS~~ / ~~`SRC 0x00` ALONE~~ / ~~`ACT 0x0D` + `ACT 0x0E`~~ — ✅✅✅ **ALL THREE CONSUMED — §232, §233, §234, 2026-09-04**
+
+> ### ★★★★★ **`ACT 0x0D` + `ACT 0x0E` ARE DECIDED. `1 of 49`, AND THE PAIR THE DEVICE SHIPS SURVIVES.** (§234)
+>
+> **From disk. Zero MAME runs, zero builds, no default flipped, no decode change.**
+> * **PARAMETRIC EQ's ENTRY WINDOW decides it** — a39 `w0..w13` / `w53..w67` in front of the
+>   designer's biquad, **acc = P = 0 at frame start and the sample in the cell the entry READS**
+>   (`0x05` bank 1 / `0x0F` bank 2). 2 of 49 pairs deliver both channels at 0.198 dB and keep them
+>   apart; the junk-pre-load control kills the runner-up `(acc+=bus, P<-bus)` at 44.876 dB and leaves
+>   **§133's `(acc<-bus, P<-bus)`** — the shipped selector `(1, 7)`. `f31hi` 4 of 4, pointer walk
+>   lands on §125's `0x50`/`0x64` derived, known-BAD `(nop, nop)` refused.
+> * ⛔ **three-codes.md item A is RETRACTED**: "144 machines identical at 0.113 dB" was `peq_ir()`
+>   pre-loading the sample into acc and P every frame — the injection presupposed the answer.
+> * ⛔⛔ **SINGLE DELAY's lag-1001 REACHES the pair and CANNOT judge it.** Fired 9208/9208 per pass,
+>   5 distinct outcomes over 49 pairs — live. But 1001 was derived with the pair INERT
+>   (`tA<-bus`, a no-op at all eight a09 sites), and under the shipped pair the same ROM product
+>   **45074 lands at lag 500**: `0x0E` at `w45` overwrites P with the stage-0 value one word before
+>   the head write `w46` reloads `acc <- P`; line B is written, read, filtered and discarded. The
+>   VALUE control (scrambles 34892/85909/−32511) bites at 500 too; relocation keeps 500. **Which
+>   lag the chip presents is hardware Q4.** No placement in the 256-cell sweep changes this.
+> * ⚠ **`sd_rerun.py scan` crashed on every invocation since §230** (`KeyError: 46`); §233's
+>   "already enumerates" described a command that had not run, and its menu (§133's selector
+>   values 2/3/4) never held the shipped reading. Repaired, ungraded; the graded command is `act0d0e`.
+> * ★ Corpus (`act0d0e_corpus.py`, 11 of 11 vs §232): `0x0D→0x0E` adjacency 157 of 202 (×9.87);
+>   the consumer census's null has no power. **The corpus cannot separate the seven readings.**
+> * ⚠ **a10 MULTI TAP DELAY (`sd_rerun.py multitap`) RAN TO COMPLETION AND GRADES NOTHING**: no pair
+>    reproduces its three descriptor taps (best **1 of 4** for 42 pairs; **0 of 4** for 7, **the shipped pair
+>    among them**, no non-zero output in 27085 frames) — rule 20's known-good case fails, so the harness is
+>    evidence for or against nothing. Declared gaps: two ALT words run as no-ops, three coefficient fetches
+>    beyond the 15-cell upload. ★ The seven at 0 of 4 are set-identical to the seven the PEQ pre-load
+>    control lists at 999. OPEN residue, filed with Q4. `data/S_234_sd_multitap.log.gz`; re-run byte-identical.
+> * ⛔ **NEITHER CODE IS ANCHORED.** Confirmed in one context (PEQ: device §133 + model §234); in
+>   the delay context its consequence is a lag only hardware can confirm. Anchoring waits on Q4.
+> * ⚠ Falsifiers: a **CANNOT-FAIL row** (no executed line changed; `upd6383.cpp` edit comment-only,
+>   `kn7000_mame` `246a5f3`), cited from **`data/A_232.log.gz`**: `§S1` **4.924 %** did not fall ·
+>   `m_rf[0x8D] = 0x009B26` · `§54` graded first · `§70`/`§211` **ONE ROW**. **The chip is still silent.**
+>
+> **Reproduce:** `python3 dsp/tools/act0d0e_corpus.py` · `python3 dsp/tools/gate_settle.py act0d0e`
+> · `python3 dsp/tools/sd_rerun.py act0d0e` · `python3 dsp/tools/sd_rerun.py multitap`.
+> Archives `data/S_234_{peq_act0d0e,sd_act0d0e,sd_multitap}.log.gz`.
+>
+> **⇒ THE REPLACEMENT AT THE TOP OF THE QUEUE IS `SRC 0x11` (+49), AT `iw11/16/17/19/92`** — see
+> §234 §4.2. Corpus census with its null first; **both known-mathematics harnesses are BLIND to it
+> by construction** (a09 has no `SRC 0x11` word; the PEQ excerpt executes `SRC 07 10 19 1A`), so the
+> evidence is in the KERNEL (`iw11` = the audio deposit; `iw19` = the varying `ACT 0x0D` site whose
+> operand IS `SRC 0x11`) and needs a **device arm**, two-sided, `default OFF`, graded by provenance
+> (rule 17) and `§104`'s `D-I` split (rule 21). If every site's operand is constant, rule 4 closes it
+> in one command. Falsifiers: `m_rf[0x8D] = 0x009B26`; `§S1`'s 4.924 % must not fall; `§54` first;
+> `§70`/`§211` one row. ⚠ **Reach-test first — print the fired count** (§233, §234).
+
+<details><summary>§233's entry, which §234 consumed</summary>
 
 > ### ★★★★★ **`SRC 0x00` IS DECIDED. `1 of 7`, AND THE READING THE DEVICE SHIPS SURVIVES.** (§233)
 >
@@ -93,6 +152,8 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 > `three-codes.md` item E's *"unconstrained by anything in the corpus"* was reached by checking
 > PARAMETRIC EQ and the LFO and **never checking the third context**. ⚠ **Reach-test the criterion
 > before quoting it** — that is the whole lesson of §233.
+
+</details>
 
 <details><summary>§232's entry, which §233 consumed</summary>
 
