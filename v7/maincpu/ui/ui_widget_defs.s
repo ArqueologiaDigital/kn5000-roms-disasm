@@ -6969,6 +6969,12 @@ DbMemDump_Confirm_SanitizeNext:
 	jrl c, DbMemDump_Confirm_RowLoop
 	jrl UI_NameCapture_ReturnSuccess
 
+; DbMemDump_StepTable -- the memory-dump debugger's step-size table.  Six u32
+; entries at Str_No + 0x3E4 (v10: 0xEAA6FA), the hex-digit weights
+; 0x100000, 0x10000, 0x1000, 0x100, 0x10, 0x1, indexed 0..5 by the
+; `cp xwa, 0x5` / `sll xwa, 2` below.  The positional alias Str_No_0x3E4 is
+; auto-generated and kept; this name says what the bytes ARE.  Not a string.
+	.set DbMemDump_StepTable, Str_No + 996
 DbMemDump_OK:
 	ld xwa, 0x2600024
 	ld xbc, 0x1e00029
@@ -6983,7 +6989,7 @@ DbMemDump_OK:
 	cp xwa, 0x5
 	jr ugt, DbMemDump_OK_DefaultFallthrough
 	sll xwa, 2
-	add xwa, Str_No_0x3E4
+	add xwa, DbMemDump_StepTable
 	ld xwa, (xwa)
 	ld xiz, xwa
 
