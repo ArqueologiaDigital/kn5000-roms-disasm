@@ -35,3 +35,31 @@ structure* which array is the widget-name pointer list, and re-run the script's 
 **Consequence to state plainly: the gate-H0 table and the "12 of 12 effects are stubs" figure are
 currently unreproducible.** The claim may well be right — it was measured once — but nothing on
 disk can re-derive it today.
+
+## §232 — the unanchored `SRC`/`ACTION` census
+
+| script | question it answers | how to run it |
+|---|---|---|
+| `routing_census.py` | **Per unanchored `SRC`/`ACTION` code: its sites, its INDEX RANGE, its consumer.** A code whose index is constant at every site is **CLOSED** (dead end 4 / standing rule 4 forbid implementing a consumer whose index is measured constant). It also prices each code — how many corpus words would newly decode if that one code were anchored — which is the honest payoff of the routing guard §231 named as the bottleneck. | `python3 dsp/tools/routing_census.py` for the static half (corpus only, no build); `python3 dsp/tools/routing_census.py --log dsp/analysis/data/A_232.log.gz` for the verdict, which needs the device's `§232 ROUTING CENSUS` block |
+
+**What each half measures, and why neither alone is enough.** The *price* is a property of the
+ROM and is computed from the 3057-word corpus by an **independent** mirror of
+`upd6383d.h`'s `alu_guard_fail()` — deliberately not imported from `dsp_disasm`, so its seven
+self-tests against §231's published breakdown (`DECODED 1178 / ROUTING 1139 / CLASS 546 /
+OPERATION 106 / FORMAT 68 / GUARD 7 20`) can actually fail. The *index range* is a property of a
+run and cannot be computed from the ROM at all: it comes from the device instrument
+(`upd6383.h rc_record`, hooked at the single point where the operand `L` is final), which records
+`m_dp`, `m_cursor`, `m_dsc` and the accumulator **per site, per `§54` bucket**.
+
+⚠⚠ **The verdict is per SITE and rolled up — never pooled.** Four sites each holding a
+*different* constant index pool into a range, and a pooled range is indistinguishable from a
+varying one. `SRC 0x13` is the worked example: pooled it prints `dp 80..83 | cur 3..16` and reads
+OPEN; per site it is `dp 80/81/82/83`, `cur 3/5/14/16`, every one degenerate in both buckets —
+which is what §162 closed it on. (Standing rule 10.)
+
+**Controls, printed before the finding.** Two-sided, in the device: the ANCHORED `SRC 0x07` and
+`SRC 0x10` rows, whose indices are known to move — if they came out degenerate the census would
+not be reading the pointers at all and every `CLOSED` would be void. External, in the tool: nine
+checks against answers produced by four *other* instruments (§229's fabricated-zero sites, §231
+item G's `SRC 0x0A@iw78 → store`, §224's `iw33 = 6 039 795` ladder value, §162's `acc 0..0` at the
+class-6 word).
