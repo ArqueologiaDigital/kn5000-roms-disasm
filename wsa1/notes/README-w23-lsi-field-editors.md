@@ -22,3 +22,23 @@ reports `FAILURES: 0`.
 page map with `MAIN FITTING` and `SUB FITTING` deliberately swapped and
 requires exactly 2 clashes to appear. An agreement from an instrument that
 cannot register a disagreement is not evidence.
+
+## The source edits
+
+Two kinds, both in `prom_a/wsa1_prom_a.s`.
+
+**24 new labels.** One per MODELING field editor, each with a header giving its
+dispatch table and slot, its `(RAM index, parameter)` bindings, its
+mask/shift/limits and its step. These addresses had no label before, because
+nothing in the image calls them — they are only ever reached through a table.
+
+**15 renames.** `notes/w23-lsi-field-editor-renames.map` is the explicit
+`old=new` list: the seven MODELING key dispatchers, the row-focus toggle, and
+the seven shared edit helpers. Pass it to both halves of the gate:
+
+```
+python3 ../scripts/converters/sync_comments_to_renamed_labels.py \
+    --map notes/w23-lsi-field-editor-renames.map --apply prom_a/wsa1_prom_a.s
+python3 ../scripts/analysis/assert_comments_preserved.py --base main \
+    --rename-map wsa1/notes/w23-lsi-field-editor-renames.map wsa1/prom_a/wsa1_prom_a.s
+```

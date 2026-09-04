@@ -1,0 +1,15 @@
+sub_FD3DA7 = ToneEditPage_A0_KeyDispatch
+sub_FD3DFA = ToneEditPage_A3_KeyDispatch
+sub_FD3E4B = ToneEditPage_A4_KeyDispatch
+sub_FD3E9C = ToneEditPage_A5_KeyDispatch
+sub_FD3EED = ToneEditPage_A6_KeyDispatch
+sub_FD3F3E = ToneEditPage_A7_KeyDispatch
+sub_FD3F8F = ToneEditPage_A8_KeyDispatch
+sub_FD4FE0 = ToneEditPage_ToggleRowFocus
+sub_FD6CE1 = ToneEdit_ApplyStep
+sub_FD6D21 = ToneEdit_ApplyStep_Unsigned
+sub_FD6DD4 = ToneEdit_ApplyStep_Signed
+sub_FD7435 = ToneEdit_CommitField
+sub_FD7905 = PanelEvent_ToFieldIndex
+sub_FD7C2D = ToneEdit_StepFromEvent
+sub_FDA3E2 = ToneEdit_CommitNoteField

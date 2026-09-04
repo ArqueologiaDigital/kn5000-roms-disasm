@@ -618,6 +618,51 @@ def main(argv):
           % (len(agree), len(clash), len(unmapped)))
     print()
 
+    print("=" * 74)
+    print("5. WHICH tone-edit PARAMETERS THE MODELING PAGES CAN EDIT AT ALL")
+    print("=" * 74)
+    # Table 0xFCFB24 is screen 0xA8, whose two editors pass selector 0 -- the
+    # 300-byte PART record, not the arm-4 wave-select record -- so its p10/p11
+    # are different bytes and it is left out of this census.
+    edited = set()
+    for (table, i), (h, edits, sends, navs) in allfacts.items():
+        if table not in MODELING_TABLES[:6]:
+            continue
+        for e in edits + sends:
+            if isinstance(e.get("param"), int):
+                edited.add(e["param"])
+    print("   edited:     " + " ".join("%02X" % p for p in sorted(edited)))
+    gap = [p for p in range(0x00, 0x2B) if p not in edited]
+    print("   NOT edited: " + " ".join("%02X" % p for p in gap))
+    print()
+    print("   0x0F is in the second list.  That is this pass's independent")
+    print("   confirmation of FINDINGS-l7a1429-editor-pages.md section 4a: no")
+    print("   MODELING editor writes wave-select byte +0x0F, so registers")
+    print("   0x03C0 / 0x0480 have no editor name.  The old argument censused")
+    print("   the twenty MESSAGE BUILDERS' call sites; this one censuses the")
+    print("   EDITORS themselves, reached through their dispatch tables.")
+    print()
+
+    print("=" * 74)
+    print("6. NEGATIVE CONTROL: who else repaints the MODELING screens")
+    print("=" * 74)
+    stray = []
+    for (table, i), (h, edits, sends, navs) in sorted(allfacts.items()):
+        if table in MODELING_TABLES:
+            continue
+        for e in edits + sends:
+            if e.get("screen") in (0xC0, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8):
+                stray.append((table, i, h, e))
+    if stray:
+        for table, i, h, e in stray:
+            print("   %06X slot %2d (table %06X) edits on screen 0x%02X"
+                  % (h, i, table, e["screen"]))
+    else:
+        print("   none.  Across all %d dispatch tables, an editor that repaints"
+              % len(rows))
+        print("   a MODELING screen code is in one of the seven MODELING tables.")
+    print()
+
     if "--raw" in argv:
         print("=" * 74)
         print("4. RAW CALL TRACES")
@@ -663,6 +708,17 @@ def selftest():
     for _, t in disp:
         checks.append(("row %06X ends in a NULL sentinel" % t,
                        read_row(d, t)[17] == 0, read_row(d, t)[17]))
+
+    # every parameter the six real MODELING tables can edit
+    ed = set()
+    for (t, i), (h, e, sn, _) in facts.items():
+        if t in MODELING_TABLES[:6]:
+            ed |= {r["param"] for r in e + sn if isinstance(r["param"], int)}
+    checks.append(("wave-select byte +0x0F has NO editor anywhere in the six "
+                   "MODELING dispatch tables", 0x0F not in ed, None))
+    checks.append(("+0x14 and +0x0C have none either",
+                   0x14 not in ed and 0x0C not in ed, None))
+    checks.append(("29 distinct parameters ARE edited", len(ed) == 29, len(ed)))
 
     agree, clash, unmapped = crosscheck(facts)
     checks.append(("33 editor bindings agree with the page map",

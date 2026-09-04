@@ -116325,7 +116325,7 @@ sub_FCFDA7:
 	push XWA                                             ; FCFDB2  38
 	m_push MWD+r6, 0x0a                                  ; FCFDB3  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FCFDB6  9e 08 04
-	call sub_FD7905                                      ; FCFDB9  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FCFDB9  1d 05 79 fd
 	inc 0,XSP                                            ; FCFDBD  ef 60
 	inc 4,XSP                                            ; FCFDBF  ef 64
 	cp WA,0xffff                                         ; FCFDC1  d8 cf ff ff
@@ -116577,7 +116577,7 @@ sub_FCFDA7:
 	ld BC,(XIZ+0x08)                                     ; FD0019  9e 08 21
 	extz BC                                              ; FD001C  d9 12
 	pushw bc                                             ; FD001E  29
-	call sub_FD7C2D                                      ; FD001F  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD001F  1d 2d 7c fd
 	push XIX                                             ; FD0023  3c
 	sub XBC,XBC                                          ; FD0024  e9 a1
 	ld (xiz-20), xbc                                     ; FD0026  be ec 61
@@ -116591,7 +116591,7 @@ sub_FCFDA7:
 	pushw 0x00                                           ; FD0037  0b 00 00
 	pushw de                                             ; FD003A  2a
 	pushw 0x80                                           ; FD003B  0b 80 00
-	call sub_FD7435                                      ; FD003E  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD003E  1d 35 74 fd
 	add XSP,0x0000001e                                   ; FD0042  ef c8 1e 00 00 00
 	cps a, 0x01                                          ; FD0048  c9 d9
 	jr nz, .LFD005D                                      ; FD004A  6e 11
@@ -116646,7 +116646,7 @@ sub_FCFDA7:
 	ld BC,(XIZ+0x08)                                     ; FD00B9  9e 08 21
 	extz BC                                              ; FD00BC  d9 12
 	pushw bc                                             ; FD00BE  29
-	call sub_FD7C2D                                      ; FD00BF  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD00BF  1d 2d 7c fd
 	push XIX                                             ; FD00C3  3c
 	sub XBC,XBC                                          ; FD00C4  e9 a1
 	ld (xiz-20), xbc                                     ; FD00C6  be ec 61
@@ -116660,7 +116660,7 @@ sub_FCFDA7:
 	pushw 0x00                                           ; FD00D7  0b 00 00
 	pushw de                                             ; FD00DA  2a
 	pushw 0x80                                           ; FD00DB  0b 80 00
-	call sub_FD7435                                      ; FD00DE  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD00DE  1d 35 74 fd
 	pushw 0x05                                           ; FD00E2  0b 05 00
 	call sub_FD7C01                                      ; FD00E5  1d 01 7c fd
 	add XSP,0x00000020                                   ; FD00E9  ef c8 20 00 00 00
@@ -116703,7 +116703,7 @@ sub_FCFDA7:
 	ld BC,(XIZ+0x08)                                     ; FD0143  9e 08 21
 	extz BC                                              ; FD0146  d9 12
 	pushw bc                                             ; FD0148  29
-	call sub_FD7C2D                                      ; FD0149  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD0149  1d 2d 7c fd
 	push XIX                                             ; FD014D  3c
 	sub XBC,XBC                                          ; FD014E  e9 a1
 	ld (xiz-20), xbc                                     ; FD0150  be ec 61
@@ -116716,7 +116716,7 @@ sub_FCFDA7:
 	pushw 0x00                                           ; FD015F  0b 00 00
 	pushw de                                             ; FD0162  2a
 	pushw 0x80                                           ; FD0163  0b 80 00
-	call sub_FD7435                                      ; FD0166  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD0166  1d 35 74 fd
 	pushw 0x06                                           ; FD016A  0b 06 00
 	call sub_FD7C01                                      ; FD016D  1d 01 7c fd
 	add XSP,0x00000020                                   ; FD0171  ef c8 20 00 00 00
@@ -116747,7 +116747,7 @@ sub_FCFDA7:
 	ld WA,(XIZ+0x08)                                     ; FD01A8  9e 08 20
 	extz WA                                              ; FD01AB  d8 12
 	pushw wa                                             ; FD01AD  28
-	call sub_FD7C2D                                      ; FD01AE  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD01AE  1d 2d 7c fd
 	ld L,(XIZ+0x08)                                      ; FD01B2  8e 08 27
 	res 0x07,L                                           ; FD01B5  cf 30 07
 	lda xbc, (xiz-8)                                     ; FD01B8  be f8 31
@@ -116843,13 +116843,13 @@ sub_FCFDA7:
 	ld BC,(XIZ+0x08)                                     ; FD029F  9e 08 21
 	extz BC                                              ; FD02A2  d9 12
 	pushw bc                                             ; FD02A4  29
-	call sub_FD7C2D                                      ; FD02A5  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD02A5  1d 2d 7c fd
 	push XIX                                             ; FD02A9  3c
 	pushw 0x11                                           ; FD02AA  0b 11 00
 	pushw 0x00                                           ; FD02AD  0b 00 00
 	pushw 0x0b                                           ; FD02B0  0b 0b 00
 	pushw 0x80                                           ; FD02B3  0b 80 00
-	call sub_FD7435                                      ; FD02B6  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD02B6  1d 35 74 fd
 	pushw 0x08                                           ; FD02BA  0b 08 00
 	call sub_FD7C01                                      ; FD02BD  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD02C1  ef c8 1a 00 00 00
@@ -117132,7 +117132,7 @@ sub_FD053D:
 	push XWA                                             ; FD0548  38
 	m_push MWD+r6, 0x0a                                  ; FD0549  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD054C  9e 08 04
-	call sub_FD7905                                      ; FD054F  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD054F  1d 05 79 fd
 	inc 0,XSP                                            ; FD0553  ef 60
 	inc 4,XSP                                            ; FD0555  ef 64
 	cp WA,0xffff                                         ; FD0557  d8 cf ff ff
@@ -117166,7 +117166,7 @@ sub_FD058E:
 	push XWA                                             ; FD0599  38
 	m_push MWD+r6, 0x0a                                  ; FD059A  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD059D  9e 08 04
-	call sub_FD7905                                      ; FD05A0  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD05A0  1d 05 79 fd
 	inc 0,XSP                                            ; FD05A4  ef 60
 	inc 4,XSP                                            ; FD05A6  ef 64
 	cp WA,0xffff                                         ; FD05A8  d8 cf ff ff
@@ -117723,7 +117723,7 @@ sub_FD0AA5:
 	push XWA                                             ; FD0AB0  38
 	m_push MWD+r6, 0x0a                                  ; FD0AB1  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD0AB4  9e 08 04
-	call sub_FD7905                                      ; FD0AB7  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD0AB7  1d 05 79 fd
 	inc 0,XSP                                            ; FD0ABB  ef 60
 	inc 4,XSP                                            ; FD0ABD  ef 64
 	cp WA,0xffff                                         ; FD0ABF  d8 cf ff ff
@@ -117757,7 +117757,7 @@ sub_FD0AF6:
 	push XWA                                             ; FD0B01  38
 	m_push MWD+r6, 0x0a                                  ; FD0B02  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD0B05  9e 08 04
-	call sub_FD7905                                      ; FD0B08  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD0B08  1d 05 79 fd
 	inc 0,XSP                                            ; FD0B0C  ef 60
 	inc 4,XSP                                            ; FD0B0E  ef 64
 	cp WA,0xffff                                         ; FD0B10  d8 cf ff ff
@@ -117791,7 +117791,7 @@ sub_FD0B47:
 	push XWA                                             ; FD0B52  38
 	m_push MWD+r6, 0x0a                                  ; FD0B53  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD0B56  9e 08 04
-	call sub_FD7905                                      ; FD0B59  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD0B59  1d 05 79 fd
 	inc 0,XSP                                            ; FD0B5D  ef 60
 	inc 4,XSP                                            ; FD0B5F  ef 64
 	cp WA,0xffff                                         ; FD0B61  d8 cf ff ff
@@ -117829,7 +117829,7 @@ sub_FD0BA7:
 	push XWA                                             ; FD0BB2  38
 	m_push MWD+r6, 0x0a                                  ; FD0BB3  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD0BB6  9e 08 04
-	call sub_FD7905                                      ; FD0BB9  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD0BB9  1d 05 79 fd
 	inc 0,XSP                                            ; FD0BBD  ef 60
 	inc 4,XSP                                            ; FD0BBF  ef 64
 	cp WA,0xffff                                         ; FD0BC1  d8 cf ff ff
@@ -117867,7 +117867,7 @@ sub_FD0C07:
 	push XWA                                             ; FD0C12  38
 	m_push MWD+r6, 0x0a                                  ; FD0C13  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD0C16  9e 08 04
-	call sub_FD7905                                      ; FD0C19  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD0C19  1d 05 79 fd
 	inc 0,XSP                                            ; FD0C1D  ef 60
 	inc 4,XSP                                            ; FD0C1F  ef 64
 	cp WA,0xffff                                         ; FD0C21  d8 cf ff ff
@@ -118052,7 +118052,7 @@ sub_FD0C07:
 	ld BC,(XIZ+0x08)                                     ; FD0DD4  9e 08 21
 	extz BC                                              ; FD0DD7  d9 12
 	pushw bc                                             ; FD0DD9  29
-	call sub_FD7C2D                                      ; FD0DDA  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD0DDA  1d 2d 7c fd
 	push XIX                                             ; FD0DDE  3c
 	ld C,L                                               ; FD0DDF  cf 8b
 	extz BC                                              ; FD0DE1  d9 12
@@ -118062,7 +118062,7 @@ sub_FD0C07:
 	pushw bc                                             ; FD0DE8  29
 	m_push MWD+r6, 0xee                                  ; FD0DE9  9e ee 04
 	pushw 0x82                                           ; FD0DEC  0b 82 00
-	call sub_FD7435                                      ; FD0DEF  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD0DEF  1d 35 74 fd
 	add XSP,0x00000018                                   ; FD0DF3  ef c8 18 00 00 00
 	cps a, 0x01                                          ; FD0DF9  c9 d9
 	jr nz, .LFD0E0E                                      ; FD0DFB  6e 11
@@ -118136,7 +118136,7 @@ sub_FD0E49:
 	ld BC,(XIZ+0x08)                                     ; FD0E96  9e 08 21
 	extz BC                                              ; FD0E99  d9 12
 	pushw bc                                             ; FD0E9B  29
-	call sub_FD7C2D                                      ; FD0E9C  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD0E9C  1d 2d 7c fd
 	push XIX                                             ; FD0EA0  3c
 	ld C,H                                               ; FD0EA1  ce 8b
 	extz BC                                              ; FD0EA3  d9 12
@@ -118148,7 +118148,7 @@ sub_FD0E49:
 	extz BC                                              ; FD0EAE  d9 12
 	pushw bc                                             ; FD0EB0  29
 	pushw 0x82                                           ; FD0EB1  0b 82 00
-	call sub_FD7435                                      ; FD0EB4  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD0EB4  1d 35 74 fd
 	pushw 0x06                                           ; FD0EB8  0b 06 00
 	call sub_FD7C01                                      ; FD0EBB  1d 01 7c fd
 	add XSP,0x00000014                                   ; FD0EBF  ef c8 14 00 00 00
@@ -118203,7 +118203,7 @@ sub_FD0E49:
 	ld BC,(XIZ+0x08)                                     ; FD0F37  9e 08 21
 	extz BC                                              ; FD0F3A  d9 12
 	pushw bc                                             ; FD0F3C  29
-	call sub_FD7C2D                                      ; FD0F3D  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD0F3D  1d 2d 7c fd
 	push XIX                                             ; FD0F41  3c
 	ld C,H                                               ; FD0F42  ce 8b
 	extz BC                                              ; FD0F44  d9 12
@@ -118213,7 +118213,7 @@ sub_FD0E49:
 	pushw bc                                             ; FD0F4C  29
 	pushw de                                             ; FD0F4D  2a
 	pushw 0x82                                           ; FD0F4E  0b 82 00
-	call sub_FD7435                                      ; FD0F51  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD0F51  1d 35 74 fd
 	pushw 0x07                                           ; FD0F55  0b 07 00
 	call sub_FD7C01                                      ; FD0F58  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD0F5C  ef c8 1a 00 00 00
@@ -118462,7 +118462,7 @@ sub_FD0E49:
 	ld BC,(XIZ+0x08)                                     ; FD11A8  9e 08 21
 	extz BC                                              ; FD11AB  d9 12
 	pushw bc                                             ; FD11AD  29
-	call sub_FD7C2D                                      ; FD11AE  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD11AE  1d 2d 7c fd
 	push XIX                                             ; FD11B2  3c
 	pushw 0x00                                           ; FD11B3  0b 00 00
 	ld bc, (xiz-4)                                       ; FD11B6  9e fc 21
@@ -118470,7 +118470,7 @@ sub_FD0E49:
 	pushw bc                                             ; FD11BB  29
 	pushw de                                             ; FD11BC  2a
 	pushw 0x83                                           ; FD11BD  0b 83 00
-	call sub_FD7435                                      ; FD11C0  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD11C0  1d 35 74 fd
 	pushw 0x04                                           ; FD11C4  0b 04 00
 	call sub_FD7C01                                      ; FD11C7  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD11CB  ef c8 1e 00 00 00
@@ -118500,7 +118500,7 @@ sub_FD0E49:
 	ld WA,(XIZ+0x08)                                     ; FD1202  9e 08 20
 	extz WA                                              ; FD1205  d8 12
 	pushw wa                                             ; FD1207  28
-	call sub_FD7C2D                                      ; FD1208  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD1208  1d 2d 7c fd
 	ld L,(XIZ+0x08)                                      ; FD120C  8e 08 27
 	res 0x07,L                                           ; FD120F  cf 30 07
 	lda xbc, (xiz-8)                                     ; FD1212  be f8 31
@@ -118691,7 +118691,7 @@ sub_FD1221:
 	ld BC,(XIZ+0x08)                                     ; FD13DF  9e 08 21
 	extz BC                                              ; FD13E2  d9 12
 	pushw bc                                             ; FD13E4  29
-	call sub_FDA3E2                                      ; FD13E5  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD13E5  1d e2 a3 fd
 	inc 0,XSP                                            ; FD13E9  ef 60
 	inc 6,XSP                                            ; FD13EB  ef 66
 	cps a, 0x01                                          ; FD13ED  c9 d9
@@ -118754,7 +118754,7 @@ sub_FD1221:
 	ld BC,(XIZ+0x08)                                     ; FD1480  9e 08 21
 	extz BC                                              ; FD1483  d9 12
 	pushw bc                                             ; FD1485  29
-	call sub_FDA3E2                                      ; FD1486  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD1486  1d e2 a3 fd
 	add XSP,0x00000014                                   ; FD148A  ef c8 14 00 00 00
 	cps a, 0x01                                          ; FD1490  c9 d9
 	jr nz, .LFD14DF                                      ; FD1492  6e 4b
@@ -118819,7 +118819,7 @@ sub_FD1221:
 	ld BC,(XIZ+0x08)                                     ; FD1528  9e 08 21
 	extz BC                                              ; FD152B  d9 12
 	pushw bc                                             ; FD152D  29
-	call sub_FDA3E2                                      ; FD152E  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD152E  1d e2 a3 fd
 	add XSP,0x00000014                                   ; FD1532  ef c8 14 00 00 00
 	cps a, 0x01                                          ; FD1538  c9 d9
 	jr nz, .LFD1587                                      ; FD153A  6e 4b
@@ -118871,7 +118871,7 @@ sub_FD1221:
 	ld BC,(XIZ+0x08)                                     ; FD15B1  9e 08 21
 	extz BC                                              ; FD15B4  d9 12
 	pushw bc                                             ; FD15B6  29
-	call sub_FDA3E2                                      ; FD15B7  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD15B7  1d e2 a3 fd
 	inc 0,XSP                                            ; FD15BB  ef 60
 	inc 6,XSP                                            ; FD15BD  ef 66
 	cps a, 0x01                                          ; FD15BF  c9 d9
@@ -119035,7 +119035,7 @@ sub_FD173D:
 	ld BC,(XIZ+0x08)                                     ; FD174A  9e 08 21
 	extz BC                                              ; FD174D  d9 12
 	pushw bc                                             ; FD174F  29
-	call sub_FD7C2D                                      ; FD1750  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD1750  1d 2d 7c fd
 	push XIX                                             ; FD1754  3c
 	pushw 0x23                                           ; FD1755  0b 23 00
 	ld bc, (xiz-4)                                       ; FD1758  9e fc 21
@@ -119043,7 +119043,7 @@ sub_FD173D:
 	pushw bc                                             ; FD175D  29
 	pushw 0x02                                           ; FD175E  0b 02 00
 	pushw 0x85                                           ; FD1761  0b 85 00
-	call sub_FD7435                                      ; FD1764  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD1764  1d 35 74 fd
 	add XSP,0x00000022                                   ; FD1768  ef c8 22 00 00 00
 	cps a, 0x01                                          ; FD176E  c9 d9
 	jr nz, .LFD1784                                      ; FD1770  6e 12
@@ -119093,7 +119093,7 @@ sub_FD17B1:
 	ld BC,(XIZ+0x08)                                     ; FD17E1  9e 08 21
 	extz BC                                              ; FD17E4  d9 12
 	pushw bc                                             ; FD17E6  29
-	call sub_FD7C2D                                      ; FD17E7  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD17E7  1d 2d 7c fd
 	push XIX                                             ; FD17EB  3c
 	pushw 0x22                                           ; FD17EC  0b 22 00
 	ld bc, (xiz-6)                                       ; FD17EF  9e fa 21
@@ -119101,7 +119101,7 @@ sub_FD17B1:
 	pushw bc                                             ; FD17F4  29
 	pushw 0x01                                           ; FD17F5  0b 01 00
 	pushw 0x85                                           ; FD17F8  0b 85 00
-	call sub_FD7435                                      ; FD17FB  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD17FB  1d 35 74 fd
 	add XSP,0x00000028                                   ; FD17FF  ef c8 28 00 00 00
 	cps a, 0x01                                          ; FD1805  c9 d9
 	jr nz, .LFD181B                                      ; FD1807  6e 12
@@ -119150,7 +119150,7 @@ sub_FD17B1:
 	ld BC,(XIZ+0x08)                                     ; FD1878  9e 08 21
 	extz BC                                              ; FD187B  d9 12
 	pushw bc                                             ; FD187D  29
-	call sub_FD7C2D                                      ; FD187E  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD187E  1d 2d 7c fd
 	push XIX                                             ; FD1882  3c
 	pushw 0x24                                           ; FD1883  0b 24 00
 	ld bc, (xiz-6)                                       ; FD1886  9e fa 21
@@ -119158,7 +119158,7 @@ sub_FD17B1:
 	pushw bc                                             ; FD188B  29
 	pushw 0x03                                           ; FD188C  0b 03 00
 	pushw 0x85                                           ; FD188F  0b 85 00
-	call sub_FD7435                                      ; FD1892  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD1892  1d 35 74 fd
 	add XSP,0x00000028                                   ; FD1896  ef c8 28 00 00 00
 	cps a, 0x01                                          ; FD189C  c9 d9
 	jr nz, .LFD18B2                                      ; FD189E  6e 12
@@ -119201,7 +119201,7 @@ sub_FD17B1:
 	ld BC,(XIZ+0x08)                                     ; FD18FF  9e 08 21
 	extz BC                                              ; FD1902  d9 12
 	pushw bc                                             ; FD1904  29
-	call sub_FD7C2D                                      ; FD1905  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD1905  1d 2d 7c fd
 	push XIX                                             ; FD1909  3c
 	pushw 0x25                                           ; FD190A  0b 25 00
 	ld bc, (xiz-4)                                       ; FD190D  9e fc 21
@@ -119209,7 +119209,7 @@ sub_FD17B1:
 	pushw bc                                             ; FD1912  29
 	pushw 0x04                                           ; FD1913  0b 04 00
 	pushw 0x85                                           ; FD1916  0b 85 00
-	call sub_FD7435                                      ; FD1919  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD1919  1d 35 74 fd
 	add XSP,0x00000022                                   ; FD191D  ef c8 22 00 00 00
 	cps a, 0x01                                          ; FD1923  c9 d9
 	jr nz, .LFD1939                                      ; FD1925  6e 12
@@ -120746,7 +120746,7 @@ sub_FD2751:
 	push XWA                                             ; FD275C  38
 	m_push MWD+r6, 0x0a                                  ; FD275D  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD2760  9e 08 04
-	call sub_FD7905                                      ; FD2763  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD2763  1d 05 79 fd
 	inc 0,XSP                                            ; FD2767  ef 60
 	inc 4,XSP                                            ; FD2769  ef 64
 	cp WA,0xffff                                         ; FD276B  d8 cf ff ff
@@ -120780,7 +120780,7 @@ sub_FD27A2:
 	push XWA                                             ; FD27AD  38
 	m_push MWD+r6, 0x0a                                  ; FD27AE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD27B1  9e 08 04
-	call sub_FD7905                                      ; FD27B4  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD27B4  1d 05 79 fd
 	inc 0,XSP                                            ; FD27B8  ef 60
 sub_FD27BA:
 	inc 4,XSP                                            ; FD27BA  ef 64
@@ -120813,7 +120813,7 @@ sub_FD27F2:
 	push XWA                                             ; FD27FD  38
 	m_push MWD+r6, 0x0a                                  ; FD27FE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD2801  9e 08 04
-	call sub_FD7905                                      ; FD2804  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD2804  1d 05 79 fd
 	inc 0,XSP                                            ; FD2808  ef 60
 	inc 4,XSP                                            ; FD280A  ef 64
 	cp WA,0xffff                                         ; FD280C  d8 cf ff ff
@@ -120852,7 +120852,7 @@ sub_FD2852:
 	m_push MWD+r6, 0x0a                                  ; FD285E  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD2861  9e 08 04
 sub_FD2864:
-	call sub_FD7905                                      ; FD2864  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD2864  1d 05 79 fd
 	inc 0,XSP                                            ; FD2868  ef 60
 	inc 4,XSP                                            ; FD286A  ef 64
 	cp WA,0xffff                                         ; FD286C  d8 cf ff ff
@@ -120890,7 +120890,7 @@ sub_FD28B2:
 	push XWA                                             ; FD28BD  38
 	m_push MWD+r6, 0x0a                                  ; FD28BE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD28C1  9e 08 04
-	call sub_FD7905                                      ; FD28C4  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD28C4  1d 05 79 fd
 	inc 0,XSP                                            ; FD28C8  ef 60
 	inc 4,XSP                                            ; FD28CA  ef 64
 	cp WA,0xffff                                         ; FD28CC  d8 cf ff ff
@@ -120945,7 +120945,7 @@ sub_FD28F8:
 	ld BC,(XIZ+0x08)                                     ; FD293E  9e 08 21
 	extz BC                                              ; FD2941  d9 12
 	pushw bc                                             ; FD2943  29
-	call sub_FD7C2D                                      ; FD2944  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD2944  1d 2d 7c fd
 	ld (XIX+0x06),0x3f                                   ; FD2948  bc 06 00 3f
 	ld (XIX+0x07),0x00                                   ; FD294C  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD2950  bc 08 00 32
@@ -120963,7 +120963,7 @@ sub_FD28F8:
 	pushw 0x00                                           ; FD296C  0b 00 00
 	pushw de                                             ; FD296F  2a
 	pushw 0x8b                                           ; FD2970  0b 8b 00
-	call sub_FD7435                                      ; FD2973  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2973  1d 35 74 fd
 	pushw 0x02                                           ; FD2977  0b 02 00
 	call sub_FD7C01                                      ; FD297A  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD297E  ef c8 1e 00 00 00
@@ -121016,7 +121016,7 @@ sub_FD28F8:
 	ld BC,(XIZ+0x08)                                     ; FD29E4  9e 08 21
 	extz BC                                              ; FD29E7  d9 12
 	pushw bc                                             ; FD29E9  29
-	call sub_FD7C2D                                      ; FD29EA  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD29EA  1d 2d 7c fd
 	ld (XIX+0x06),0x7f                                   ; FD29EE  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD29F2  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD29F6  bc 08 00 7f
@@ -121030,7 +121030,7 @@ sub_FD28F8:
 	pushw bc                                             ; FD2A08  29
 	m_push MWD+r6, 0xee                                  ; FD2A09  9e ee 04
 	pushw 0x8b                                           ; FD2A0C  0b 8b 00
-	call sub_FD7435                                      ; FD2A0F  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2A0F  1d 35 74 fd
 	add XSP,0x00000018                                   ; FD2A13  ef c8 18 00 00 00
 	cps a, 0x01                                          ; FD2A19  c9 d9
 	jr nz, .LFD2A2E                                      ; FD2A1B  6e 11
@@ -121094,7 +121094,7 @@ sub_FD28F8:
 	ld BC,(XIZ+0x08)                                     ; FD2A97  9e 08 21
 	extz BC                                              ; FD2A9A  d9 12
 	pushw bc                                             ; FD2A9C  29
-	call sub_FD7C2D                                      ; FD2A9D  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD2A9D  1d 2d 7c fd
 	ld (XIX+0x06),0xff                                   ; FD2AA1  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD2AA5  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD2AA9  bc 08 00 32
@@ -121108,7 +121108,7 @@ sub_FD28F8:
 	pushw bc                                             ; FD2ABC  29
 	pushw de                                             ; FD2ABD  2a
 	pushw 0x8b                                           ; FD2ABE  0b 8b 00
-	call sub_FD7435                                      ; FD2AC1  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2AC1  1d 35 74 fd
 	pushw 0x04                                           ; FD2AC5  0b 04 00
 	call sub_FD7C01                                      ; FD2AC8  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2ACC  ef c8 1a 00 00 00
@@ -121165,7 +121165,7 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2B43  9e 08 21
 	extz BC                                              ; FD2B46  d9 12
 	pushw bc                                             ; FD2B48  29
-	call sub_FD7C2D                                      ; FD2B49  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD2B49  1d 2d 7c fd
 	push XIX                                             ; FD2B4D  3c
 	ld C,H                                               ; FD2B4E  ce 8b
 	extz BC                                              ; FD2B50  d9 12
@@ -121175,7 +121175,7 @@ sub_FD2B23:
 	pushw bc                                             ; FD2B58  29
 	pushw de                                             ; FD2B59  2a
 	pushw 0x8b                                           ; FD2B5A  0b 8b 00
-	call sub_FD7435                                      ; FD2B5D  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2B5D  1d 35 74 fd
 	pushw 0x05                                           ; FD2B61  0b 05 00
 	call sub_FD7C01                                      ; FD2B64  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2B68  ef c8 1a 00 00 00
@@ -121206,13 +121206,13 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2BAC  9e 08 21
 	extz BC                                              ; FD2BAF  d9 12
 	pushw bc                                             ; FD2BB1  29
-	call sub_FD7C2D                                      ; FD2BB2  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD2BB2  1d 2d 7c fd
 	push XIX                                             ; FD2BB6  3c
 	pushw 0x0e                                           ; FD2BB7  0b 0e 00
 	pushw 0x00                                           ; FD2BBA  0b 00 00
 	pushw 0x01                                           ; FD2BBD  0b 01 00
 	pushw 0x8b                                           ; FD2BC0  0b 8b 00
-	call sub_FD7435                                      ; FD2BC3  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2BC3  1d 35 74 fd
 	pushw 0x07                                           ; FD2BC7  0b 07 00
 	call sub_FD7C01                                      ; FD2BCA  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2BCE  ef c8 1a 00 00 00
@@ -121242,13 +121242,13 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2C10  9e 08 21
 	extz BC                                              ; FD2C13  d9 12
 	pushw bc                                             ; FD2C15  29
-	call sub_FD7C2D                                      ; FD2C16  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD2C16  1d 2d 7c fd
 	push XIX                                             ; FD2C1A  3c
 	pushw 0x0e                                           ; FD2C1B  0b 0e 00
 	pushw 0x00                                           ; FD2C1E  0b 00 00
 	pushw 0x01                                           ; FD2C21  0b 01 00
 	pushw 0x8b                                           ; FD2C24  0b 8b 00
-	call sub_FD7435                                      ; FD2C27  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2C27  1d 35 74 fd
 	pushw 0x08                                           ; FD2C2B  0b 08 00
 	call sub_FD7C01                                      ; FD2C2E  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2C32  ef c8 1a 00 00 00
@@ -121394,7 +121394,7 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2D90  9e 08 21
 	extz BC                                              ; FD2D93  d9 12
 	pushw bc                                             ; FD2D95  29
-	call sub_FD7C2D                                      ; FD2D96  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD2D96  1d 2d 7c fd
 	push XIX                                             ; FD2D9A  3c
 	pushw 0x1d                                           ; FD2D9B  0b 1d 00
 	ld bc, (xiz-2)                                       ; FD2D9E  9e fe 21
@@ -121402,7 +121402,7 @@ sub_FD2B23:
 	pushw bc                                             ; FD2DA3  29
 	pushw 0x03                                           ; FD2DA4  0b 03 00
 	pushw 0x8c                                           ; FD2DA7  0b 8c 00
-	call sub_FD7435                                      ; FD2DAA  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD2DAA  1d 35 74 fd
 	add XSP,0x0000001c                                   ; FD2DAE  ef c8 1c 00 00 00
 	cps a, 0x01                                          ; FD2DB4  c9 d9
 	jr nz, .LFD2DDE                                      ; FD2DB6  6e 26
@@ -121441,7 +121441,7 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2E08  9e 08 21
 	extz BC                                              ; FD2E0B  d9 12
 	pushw bc                                             ; FD2E0D  29
-	call sub_FDA3E2                                      ; FD2E0E  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD2E0E  1d e2 a3 fd
 	inc 0,XSP                                            ; FD2E12  ef 60
 	inc 6,XSP                                            ; FD2E14  ef 66
 	cps a, 0x01                                          ; FD2E16  c9 d9
@@ -121501,7 +121501,7 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2EA3  9e 08 21
 	extz BC                                              ; FD2EA6  d9 12
 	pushw bc                                             ; FD2EA8  29
-	call sub_FDA3E2                                      ; FD2EA9  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD2EA9  1d e2 a3 fd
 	add XSP,0x00000014                                   ; FD2EAD  ef c8 14 00 00 00
 	cps a, 0x01                                          ; FD2EB3  c9 d9
 	jr nz, .LFD2EFC                                      ; FD2EB5  6e 45
@@ -121550,7 +121550,7 @@ sub_FD2B23:
 	ld BC,(XIZ+0x08)                                     ; FD2F26  9e 08 21
 	extz BC                                              ; FD2F29  d9 12
 	pushw bc                                             ; FD2F2B  29
-	call sub_FDA3E2                                      ; FD2F2C  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD2F2C  1d e2 a3 fd
 	inc 0,XSP                                            ; FD2F30  ef 60
 	inc 6,XSP                                            ; FD2F32  ef 66
 	cps a, 0x01                                          ; FD2F34  c9 d9
@@ -121715,7 +121715,7 @@ sub_FD3023:
 	ld BC,(XIZ+0x08)                                     ; FD30BA  9e 08 21
 	extz BC                                              ; FD30BD  d9 12
 	pushw bc                                             ; FD30BF  29
-	call sub_FD7C2D                                      ; FD30C0  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD30C0  1d 2d 7c fd
 	ldb h, 0x27                                          ; FD30C4  26 27
 	inc 0,XSP                                            ; FD30C6  ef 60
 	inc 4,XSP                                            ; FD30C8  ef 64
@@ -121742,7 +121742,7 @@ sub_FD3023:
 	extz BC                                              ; FD30F4  d9 12
 	pushw bc                                             ; FD30F6  29
 	pushw 0x8d                                           ; FD30F7  0b 8d 00
-	call sub_FD7435                                      ; FD30FA  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD30FA  1d 35 74 fd
 	call sub_FD89FA                                      ; FD30FE  1d fa 89 fd
 	pushw 0x01                                           ; FD3102  0b 01 00
 	call sub_FD7C01                                      ; FD3105  1d 01 7c fd
@@ -121783,7 +121783,7 @@ sub_FD3023:
 	ld BC,(XIZ+0x08)                                     ; FD315A  9e 08 21
 	extz BC                                              ; FD315D  d9 12
 	pushw bc                                             ; FD315F  29
-	call sub_FD7C2D                                      ; FD3160  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3160  1d 2d 7c fd
 	ldb h, 0x28                                          ; FD3164  26 28
 	inc 0,XSP                                            ; FD3166  ef 60
 	inc 4,XSP                                            ; FD3168  ef 64
@@ -121811,7 +121811,7 @@ sub_FD3191:
 	extz BC                                              ; FD3194  d9 12
 	pushw bc                                             ; FD3196  29
 	pushw 0x8d                                           ; FD3197  0b 8d 00
-	call sub_FD7435                                      ; FD319A  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD319A  1d 35 74 fd
 	call sub_FD89FA                                      ; FD319E  1d fa 89 fd
 	pushw 0x02                                           ; FD31A2  0b 02 00
 	call sub_FD7C01                                      ; FD31A5  1d 01 7c fd
@@ -121852,7 +121852,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD31FA  9e 08 21
 	extz BC                                              ; FD31FD  d9 12
 	pushw bc                                             ; FD31FF  29
-	call sub_FD7C2D                                      ; FD3200  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3200  1d 2d 7c fd
 	ldb h, 0x29                                          ; FD3204  26 29
 	inc 0,XSP                                            ; FD3206  ef 60
 	inc 4,XSP                                            ; FD3208  ef 64
@@ -121879,7 +121879,7 @@ sub_FD3191:
 	extz BC                                              ; FD3234  d9 12
 	pushw bc                                             ; FD3236  29
 	pushw 0x8d                                           ; FD3237  0b 8d 00
-	call sub_FD7435                                      ; FD323A  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD323A  1d 35 74 fd
 	call sub_FD89FA                                      ; FD323E  1d fa 89 fd
 	pushw 0x03                                           ; FD3242  0b 03 00
 	call sub_FD7C01                                      ; FD3245  1d 01 7c fd
@@ -121920,7 +121920,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD329A  9e 08 21
 	extz BC                                              ; FD329D  d9 12
 	pushw bc                                             ; FD329F  29
-	call sub_FD7C2D                                      ; FD32A0  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD32A0  1d 2d 7c fd
 	ldb h, 0x2a                                          ; FD32A4  26 2a
 	inc 0,XSP                                            ; FD32A6  ef 60
 	inc 4,XSP                                            ; FD32A8  ef 64
@@ -121947,7 +121947,7 @@ sub_FD3191:
 	extz BC                                              ; FD32D4  d9 12
 	pushw bc                                             ; FD32D6  29
 	pushw 0x8d                                           ; FD32D7  0b 8d 00
-	call sub_FD7435                                      ; FD32DA  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD32DA  1d 35 74 fd
 	call sub_FD89FA                                      ; FD32DE  1d fa 89 fd
 	pushw 0x04                                           ; FD32E2  0b 04 00
 	call sub_FD7C01                                      ; FD32E5  1d 01 7c fd
@@ -121998,7 +121998,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD3352  9e 08 21
 	extz BC                                              ; FD3355  d9 12
 	pushw bc                                             ; FD3357  29
-	call sub_FD7C2D                                      ; FD3358  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3358  1d 2d 7c fd
 	ldb h, 0x2b                                          ; FD335C  26 2b
 	inc 0,XSP                                            ; FD335E  ef 60
 	inc 4,XSP                                            ; FD3360  ef 64
@@ -122025,7 +122025,7 @@ sub_FD3191:
 	extz BC                                              ; FD338C  d9 12
 	pushw bc                                             ; FD338E  29
 	pushw 0x8d                                           ; FD338F  0b 8d 00
-	call sub_FD7435                                      ; FD3392  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD3392  1d 35 74 fd
 	call sub_FD89FA                                      ; FD3396  1d fa 89 fd
 	pushw 0x05                                           ; FD339A  0b 05 00
 	call sub_FD7C01                                      ; FD339D  1d 01 7c fd
@@ -122077,7 +122077,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD340A  9e 08 21
 	extz BC                                              ; FD340D  d9 12
 	pushw bc                                             ; FD340F  29
-	call sub_FD7C2D                                      ; FD3410  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3410  1d 2d 7c fd
 	ldb h, 0x2c                                          ; FD3414  26 2c
 	inc 0,XSP                                            ; FD3416  ef 60
 	inc 4,XSP                                            ; FD3418  ef 64
@@ -122104,7 +122104,7 @@ sub_FD3191:
 	extz BC                                              ; FD3448  d9 12
 	pushw bc                                             ; FD344A  29
 	pushw 0x8d                                           ; FD344B  0b 8d 00
-	call sub_FD7435                                      ; FD344E  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD344E  1d 35 74 fd
 	call sub_FD89FA                                      ; FD3452  1d fa 89 fd
 	pushw 0x06                                           ; FD3456  0b 06 00
 	call sub_FD7C01                                      ; FD3459  1d 01 7c fd
@@ -122165,7 +122165,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD34E1  9e 08 21
 	extz BC                                              ; FD34E4  d9 12
 	pushw bc                                             ; FD34E6  29
-	call sub_FD7C2D                                      ; FD34E7  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD34E7  1d 2d 7c fd
 	push XIX                                             ; FD34EB  3c
 	ld C,H                                               ; FD34EC  ce 8b
 	extz BC                                              ; FD34EE  d9 12
@@ -122175,7 +122175,7 @@ sub_FD3191:
 	pushw bc                                             ; FD34F5  29
 	m_push MWD+r6, 0xee                                  ; FD34F6  9e ee 04
 	pushw 0x8d                                           ; FD34F9  0b 8d 00
-	call sub_FD7435                                      ; FD34FC  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD34FC  1d 35 74 fd
 	add XSP,0x00000018                                   ; FD3500  ef c8 18 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD3506  8e fe 3f 00
 	jr nz, .LFD3510                                      ; FD350A  6e 04
@@ -122214,7 +122214,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD355E  9e 08 21
 	extz BC                                              ; FD3561  d9 12
 	pushw bc                                             ; FD3563  29
-	call sub_FD7C2D                                      ; FD3564  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3564  1d 2d 7c fd
 	push XIX                                             ; FD3568  3c
 	sub XBC,XBC                                          ; FD3569  e9 a1
 	ld (xiz-20), xbc                                     ; FD356B  be ec 61
@@ -122228,7 +122228,7 @@ sub_FD3191:
 	pushw 0x00                                           ; FD3580  0b 00 00
 	pushw 0x08                                           ; FD3583  0b 08 00
 	pushw 0x8d                                           ; FD3586  0b 8d 00
-	call sub_FD7435                                      ; FD3589  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD3589  1d 35 74 fd
 	pushw 0x08                                           ; FD358D  0b 08 00
 	call sub_FD7C01                                      ; FD3590  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD3594  ef c8 1e 00 00 00
@@ -122419,7 +122419,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD375A  9e 08 21
 	extz BC                                              ; FD375D  d9 12
 	pushw bc                                             ; FD375F  29
-	call sub_FD7C2D                                      ; FD3760  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3760  1d 2d 7c fd
 	push XIX                                             ; FD3764  3c
 	pushw 0x33                                           ; FD3765  0b 33 00
 	ld bc, (xiz-2)                                       ; FD3768  9e fe 21
@@ -122427,7 +122427,7 @@ sub_FD3191:
 	pushw bc                                             ; FD376D  29
 	pushw 0x05                                           ; FD376E  0b 05 00
 	pushw 0x8e                                           ; FD3771  0b 8e 00
-	call sub_FD7435                                      ; FD3774  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD3774  1d 35 74 fd
 	lda xbc, (xiz-4)                                     ; FD3778  be fc 31
 	push XBC                                             ; FD377B  39
 	pushw 0x05                                           ; FD377C  0b 05 00
@@ -122480,7 +122480,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD3804  9e 08 21
 	extz BC                                              ; FD3807  d9 12
 	pushw bc                                             ; FD3809  29
-	call sub_FD7C2D                                      ; FD380A  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD380A  1d 2d 7c fd
 	push XIX                                             ; FD380E  3c
 	pushw 0x34                                           ; FD380F  0b 34 00
 	ld bc, (xiz-2)                                       ; FD3812  9e fe 21
@@ -122488,7 +122488,7 @@ sub_FD3191:
 	pushw bc                                             ; FD3817  29
 	pushw 0x06                                           ; FD3818  0b 06 00
 	pushw 0x8e                                           ; FD381B  0b 8e 00
-	call sub_FD7435                                      ; FD381E  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD381E  1d 35 74 fd
 	lda xbc, (xiz-4)                                     ; FD3822  be fc 31
 	push XBC                                             ; FD3825  39
 	pushw 0x06                                           ; FD3826  0b 06 00
@@ -122541,7 +122541,7 @@ sub_FD3191:
 	ld BC,(XIZ+0x08)                                     ; FD38AE  9e 08 21
 	extz BC                                              ; FD38B1  d9 12
 	pushw bc                                             ; FD38B3  29
-	call sub_FD7C2D                                      ; FD38B4  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD38B4  1d 2d 7c fd
 	push XIX                                             ; FD38B8  3c
 	pushw 0x35                                           ; FD38B9  0b 35 00
 	ld bc, (xiz-2)                                       ; FD38BC  9e fe 21
@@ -122549,7 +122549,7 @@ sub_FD3191:
 	pushw bc                                             ; FD38C1  29
 	pushw 0x07                                           ; FD38C2  0b 07 00
 	pushw 0x8e                                           ; FD38C5  0b 8e 00
-	call sub_FD7435                                      ; FD38C8  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD38C8  1d 35 74 fd
 	lda xbc, (xiz-4)                                     ; FD38CC  be fc 31
 	push XBC                                             ; FD38CF  39
 	pushw 0x07                                           ; FD38D0  0b 07 00
@@ -122598,7 +122598,7 @@ sub_FD392E:
 	ld BC,(XIZ+0x08)                                     ; FD3945  9e 08 21
 	extz BC                                              ; FD3948  d9 12
 	pushw bc                                             ; FD394A  29
-	call sub_FDA3E2                                      ; FD394B  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD394B  1d e2 a3 fd
 	inc 0,XSP                                            ; FD394F  ef 60
 	inc 6,XSP                                            ; FD3951  ef 66
 	cps a, 0x01                                          ; FD3953  c9 d9
@@ -122659,7 +122659,7 @@ sub_FD3955:
 	ld BC,(XIZ+0x08)                                     ; FD39E0  9e 08 21
 	extz BC                                              ; FD39E3  d9 12
 	pushw bc                                             ; FD39E5  29
-	call sub_FDA3E2                                      ; FD39E6  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD39E6  1d e2 a3 fd
 	add XSP,0x00000014                                   ; FD39EA  ef c8 14 00 00 00
 	cps a, 0x01                                          ; FD39F0  c9 d9
 	jr nz, .LFD3A39                                      ; FD39F2  6e 45
@@ -122709,7 +122709,7 @@ sub_FD3A40:
 	ld BC,(XIZ+0x08)                                     ; FD3A63  9e 08 21
 	extz BC                                              ; FD3A66  d9 12
 	pushw bc                                             ; FD3A68  29
-	call sub_FDA3E2                                      ; FD3A69  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD3A69  1d e2 a3 fd
 	inc 0,XSP                                            ; FD3A6D  ef 60
 	inc 6,XSP                                            ; FD3A6F  ef 66
 	cps a, 0x01                                          ; FD3A71  c9 d9
@@ -122762,7 +122762,7 @@ sub_FD3AE1:
 	ld BC,(XIZ+0x08)                                     ; FD3AF2  9e 08 21
 	extz BC                                              ; FD3AF5  d9 12
 	pushw bc                                             ; FD3AF7  29
-	call sub_FD7C2D                                      ; FD3AF8  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3AF8  1d 2d 7c fd
 	push XIX                                             ; FD3AFC  3c
 	pushw 0x2e                                           ; FD3AFD  0b 2e 00
 	ld bc, (xiz-2)                                       ; FD3B00  9e fe 21
@@ -122770,7 +122770,7 @@ sub_FD3AE1:
 	pushw bc                                             ; FD3B05  29
 	pushw 0x00                                           ; FD3B06  0b 00 00
 	pushw 0x8e                                           ; FD3B09  0b 8e 00
-	call sub_FD7435                                      ; FD3B0C  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD3B0C  1d 35 74 fd
 	pushw 0x07                                           ; FD3B10  0b 07 00
 	call sub_FD7C01                                      ; FD3B13  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD3B17  ef c8 1e 00 00 00
@@ -122796,7 +122796,7 @@ sub_FD3AE1:
 	ld BC,(XIZ+0x08)                                     ; FD3B52  9e 08 21
 	extz BC                                              ; FD3B55  d9 12
 	pushw bc                                             ; FD3B57  29
-	call sub_FD7C2D                                      ; FD3B58  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD3B58  1d 2d 7c fd
 	push XIX                                             ; FD3B5C  3c
 	pushw 0x2f                                           ; FD3B5D  0b 2f 00
 	ld bc, (xiz-2)                                       ; FD3B60  9e fe 21
@@ -122804,7 +122804,7 @@ sub_FD3AE1:
 	pushw bc                                             ; FD3B65  29
 	pushw 0x01                                           ; FD3B66  0b 01 00
 	pushw 0x8e                                           ; FD3B69  0b 8e 00
-	call sub_FD7435                                      ; FD3B6C  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD3B6C  1d 35 74 fd
 	pushw 0x08                                           ; FD3B70  0b 08 00
 	call sub_FD7C01                                      ; FD3B73  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD3B77  ef c8 1e 00 00 00
@@ -123044,7 +123044,7 @@ sub_FD3C94:
 .LFD3DA4:
 	unlk XIZ                                             ; FD3DA4  ee 0d
 	ret                                                  ; FD3DA6  0e
-sub_FD3DA7:
+ToneEditPage_A0_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3DA7  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3DAB  be fe 31
 	push XBC                                             ; FD3DAE  39
@@ -123052,7 +123052,7 @@ sub_FD3DA7:
 	push XWA                                             ; FD3DB2  38
 	m_push MWD+r6, 0x0a                                  ; FD3DB3  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3DB6  9e 08 04
-	call sub_FD7905                                      ; FD3DB9  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3DB9  1d 05 79 fd
 	inc 0,XSP                                            ; FD3DBD  ef 60
 	inc 4,XSP                                            ; FD3DBF  ef 64
 	cp WA,0xffff                                         ; FD3DC1  d8 cf ff ff
@@ -123082,7 +123082,7 @@ sub_FD3DF8:
 	ret                                                  ; FD3DF8  0e
 sub_FD3DF9:
 	ret                                                  ; FD3DF9  0e
-sub_FD3DFA:
+ToneEditPage_A3_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3DFA  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3DFE  be fe 31
 	push XBC                                             ; FD3E01  39
@@ -123090,7 +123090,7 @@ sub_FD3DFA:
 	push XWA                                             ; FD3E05  38
 	m_push MWD+r6, 0x0a                                  ; FD3E06  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3E09  9e 08 04
-	call sub_FD7905                                      ; FD3E0C  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3E0C  1d 05 79 fd
 	inc 0,XSP                                            ; FD3E10  ef 60
 	inc 4,XSP                                            ; FD3E12  ef 64
 	cp WA,0xffff                                         ; FD3E14  d8 cf ff ff
@@ -123116,7 +123116,7 @@ sub_FD3DFA:
 .LFD3E48:
 	unlk XIZ                                             ; FD3E48  ee 0d
 	ret                                                  ; FD3E4A  0e
-sub_FD3E4B:
+ToneEditPage_A4_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3E4B  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3E4F  be fe 31
 	push XBC                                             ; FD3E52  39
@@ -123124,7 +123124,7 @@ sub_FD3E4B:
 	push XWA                                             ; FD3E56  38
 	m_push MWD+r6, 0x0a                                  ; FD3E57  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3E5A  9e 08 04
-	call sub_FD7905                                      ; FD3E5D  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3E5D  1d 05 79 fd
 	inc 0,XSP                                            ; FD3E61  ef 60
 	inc 4,XSP                                            ; FD3E63  ef 64
 	cp WA,0xffff                                         ; FD3E65  d8 cf ff ff
@@ -123150,7 +123150,7 @@ sub_FD3E4B:
 .LFD3E99:
 	unlk XIZ                                             ; FD3E99  ee 0d
 	ret                                                  ; FD3E9B  0e
-sub_FD3E9C:
+ToneEditPage_A5_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3E9C  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3EA0  be fe 31
 	push XBC                                             ; FD3EA3  39
@@ -123158,7 +123158,7 @@ sub_FD3E9C:
 	push XWA                                             ; FD3EA7  38
 	m_push MWD+r6, 0x0a                                  ; FD3EA8  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3EAB  9e 08 04
-	call sub_FD7905                                      ; FD3EAE  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3EAE  1d 05 79 fd
 	inc 0,XSP                                            ; FD3EB2  ef 60
 	inc 4,XSP                                            ; FD3EB4  ef 64
 	cp WA,0xffff                                         ; FD3EB6  d8 cf ff ff
@@ -123184,7 +123184,7 @@ sub_FD3E9C:
 .LFD3EEA:
 	unlk XIZ                                             ; FD3EEA  ee 0d
 	ret                                                  ; FD3EEC  0e
-sub_FD3EED:
+ToneEditPage_A6_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3EED  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3EF1  be fe 31
 	push XBC                                             ; FD3EF4  39
@@ -123192,7 +123192,7 @@ sub_FD3EED:
 	push XWA                                             ; FD3EF8  38
 	m_push MWD+r6, 0x0a                                  ; FD3EF9  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3EFC  9e 08 04
-	call sub_FD7905                                      ; FD3EFF  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3EFF  1d 05 79 fd
 	inc 0,XSP                                            ; FD3F03  ef 60
 	inc 4,XSP                                            ; FD3F05  ef 64
 	cp WA,0xffff                                         ; FD3F07  d8 cf ff ff
@@ -123218,7 +123218,7 @@ sub_FD3EED:
 .LFD3F3B:
 	unlk XIZ                                             ; FD3F3B  ee 0d
 	ret                                                  ; FD3F3D  0e
-sub_FD3F3E:
+ToneEditPage_A7_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3F3E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3F42  be fe 31
 	push XBC                                             ; FD3F45  39
@@ -123226,7 +123226,7 @@ sub_FD3F3E:
 	push XWA                                             ; FD3F49  38
 	m_push MWD+r6, 0x0a                                  ; FD3F4A  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3F4D  9e 08 04
-	call sub_FD7905                                      ; FD3F50  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3F50  1d 05 79 fd
 	inc 0,XSP                                            ; FD3F54  ef 60
 	inc 4,XSP                                            ; FD3F56  ef 64
 	cp WA,0xffff                                         ; FD3F58  d8 cf ff ff
@@ -123252,7 +123252,7 @@ sub_FD3F3E:
 .LFD3F8C:
 	unlk XIZ                                             ; FD3F8C  ee 0d
 	ret                                                  ; FD3F8E  0e
-sub_FD3F8F:
+ToneEditPage_A8_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3F8F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD3F93  be fe 31
 	push XBC                                             ; FD3F96  39
@@ -123260,7 +123260,7 @@ sub_FD3F8F:
 	push XWA                                             ; FD3F9A  38
 	m_push MWD+r6, 0x0a                                  ; FD3F9B  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD3F9E  9e 08 04
-	call sub_FD7905                                      ; FD3FA1  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FD3FA1  1d 05 79 fd
 	inc 0,XSP                                            ; FD3FA5  ef 60
 	inc 4,XSP                                            ; FD3FA7  ef 64
 	cp WA,0xffff                                         ; FD3FA9  d8 cf ff ff
@@ -123439,6 +123439,30 @@ sub_FD40B6:
 .LFD414B:
 	unlk XIZ                                             ; FD414B  ee 0d
 	ret                                                  ; FD414D  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A0_ResonatorType -- the tone editor's MODELING top page's RESONATOR TYPE editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCF974, which
+;          ToneEditPage_A0_KeyDispatch reaches with `add XBC,0x00FCF974 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 5.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   parameter 0x0B (wave-select byte +0x0B) bits 0-5, the index into the
+;          64-name resonator table at prom_b 0x00F03241.  Its value is kept in
+;          ((u8 *)0x2808)[layer], not in the 0x27A6 field array.
+; Limits:  MASK 0x3F, SHIFT 0, 0..63, STEP +/-1.
+; Evidence: the parameter number and the MASK/SHIFT/MAX/MIN are immediates
+;          in this routine.  Unlike the other field editors it does not
+;          repaint through T_Dispatch_Code80; it re-requests the field.
+;          The immediates are re-read from the ROM by
+;          notes/wsa1_toneedit_field_editors.py, which lists this routine
+;          as one of its five declared cross-check exceptions, with the
+;          reason printed.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A0_ResonatorType:
 	link XIZ,0xffee                                      ; FD414E  ee 0c ee ff
 	pushw hl                                             ; FD4152  2b
 	pushw de                                             ; FD4153  2a
@@ -123466,9 +123490,9 @@ sub_FD40B6:
 	ld BC,(XIZ+0x08)                                     ; FD418F  9e 08 21
 	extz BC                                              ; FD4192  d9 12
 	pushw bc                                             ; FD4194  29
-	call sub_FD7C2D                                      ; FD4195  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4195  1d 2d 7c fd
 	push XIX                                             ; FD4199  3c
-	call sub_FD6CE1                                      ; FD419A  1d e1 6c fd
+	call ToneEdit_ApplyStep                                      ; FD419A  1d e1 6c fd
 	add XSP,0x00000016                                   ; FD419E  ef c8 16 00 00 00
 	cps a, 0x01                                          ; FD41A4  c9 d9
 	jrl nz, .LFD4225                                     ; FD41A6  7e 7c 00
@@ -123528,6 +123552,30 @@ sub_FD40B6:
 	popw hl                                              ; FD4227  4b
 	unlk XIZ                                             ; FD4228  ee 0d
 	ret                                                  ; FD422A  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A0_Group -- the tone editor's MODELING top page's GROUP editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCF974, which
+;          ToneEditPage_A0_KeyDispatch reaches with `add XBC,0x00FCF974 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 6.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[6] over 0..4, then ORs bits 7:6 of parameter 0x0B for
+;          all four layers: 1 or 3 sets 0x40 on layers 1-2, 2 or 3 sets 0x40 on
+;          layers 3-4, 4 sets 0x80 on all four.
+; Limits:  0..4.  Not an edit descriptor -- a bespoke five-state encoder.
+; Note:    the three byte values it can emit are 0x00, 0x40 and 0x80, and
+;          those are exactly the three the factory melodic tones carry.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC0 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A0_Group:
 	link XIZ,0xffee                                      ; FD422B  ee 0c ee ff
 	pushw hl                                             ; FD422F  2b
 	pushw de                                             ; FD4230  2a
@@ -123814,6 +123862,27 @@ sub_FD42A5:
 .LFD44C4:
 	unlk XIZ                                             ; FD44C4  ee 0d
 	ret                                                  ; FD44C6  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A3_Position -- the tone editor's P0SITI0N PARAMETER page's P0SITI0N editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCF9BC, which
+;          ToneEditPage_A3_KeyDispatch reaches with `add XBC,0x00FCF9BC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 1.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[0] <- parameter 0x0D, then writes the DISPLAYED split
+;          p13/5 and 2*(p13%5) into indices 4 and 5.
+; Limits:  MASK 0xFF, SHIFT 0, 0..250, STEP +/-1 -- i.e. 0.0 to 50.0 in 0.2.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC3 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A3_Position:
 	link XIZ,0xfff0                                      ; FD44C7  ee 0c f0 ff
 	pushw hl                                             ; FD44CB  2b
 	pushw de                                             ; FD44CC  2a
@@ -123831,10 +123900,10 @@ sub_FD42A5:
 	ld BC,(XIZ+0x08)                                     ; FD44ED  9e 08 21
 	extz BC                                              ; FD44F0  d9 12
 	pushw bc                                             ; FD44F2  29
-	call sub_FD7C2D                                      ; FD44F3  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD44F3  1d 2d 7c fd
 	lda xbc, (xiz-16)                                    ; FD44F7  be f0 31
 	push XBC                                             ; FD44FA  39
-	call sub_FD6CE1                                      ; FD44FB  1d e1 6c fd
+	call ToneEdit_ApplyStep                                      ; FD44FB  1d e1 6c fd
 	inc 0,XSP                                            ; FD44FF  ef 60
 	inc 0,XSP                                            ; FD4501  ef 60
 	cps a, 0x01                                          ; FD4503  c9 d9
@@ -123911,6 +123980,26 @@ sub_FD42A5:
 	popw hl                                              ; FD45AC  4b
 	unlk XIZ                                             ; FD45AD  ee 0d
 	ret                                                  ; FD45AF  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A3_Depth -- the tone editor's P0SITI0N PARAMETER page's DEPTH editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCF9BC, which
+;          ToneEditPage_A3_KeyDispatch reaches with `add XBC,0x00FCF9BC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 2.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[1] <- parameter 0x0E bits 0-6.
+; Limits:  MASK 0x7F, SHIFT 0, 0..127, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC3 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A3_Depth:
 	link XIZ,0xfff0                                      ; FD45B0  ee 0c f0 ff
 	push XIX                                             ; FD45B4  3c
 	lda xix, (xiz-16)                                    ; FD45B5  be f0 34
@@ -123941,7 +124030,7 @@ sub_FD42A5:
 	ld BC,(XIZ+0x08)                                     ; FD45F7  9e 08 21
 	extz BC                                              ; FD45FA  d9 12
 	pushw bc                                             ; FD45FC  29
-	call sub_FD7C2D                                      ; FD45FD  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD45FD  1d 2d 7c fd
 	push XIX                                             ; FD4601  3c
 	pushw 0x0e                                           ; FD4602  0b 0e 00
 	ld bc, (xiz-4)                                       ; FD4605  9e fc 21
@@ -123949,13 +124038,33 @@ sub_FD42A5:
 	pushw bc                                             ; FD460A  29
 	pushw 0x01                                           ; FD460B  0b 01 00
 	pushw 0xc3                                           ; FD460E  0b c3 00
-	call sub_FD7435                                      ; FD4611  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4611  1d 35 74 fd
 	pushw 0x03                                           ; FD4615  0b 03 00
 	call sub_FD7C01                                      ; FD4618  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD461C  ef c8 1a 00 00 00
 	pop XIX                                              ; FD4622  5c
 	unlk XIZ                                             ; FD4623  ee 0d
 	ret                                                  ; FD4625  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A3_Formant -- the tone editor's P0SITI0N PARAMETER page's FORMANT editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCF9BC, which
+;          ToneEditPage_A3_KeyDispatch reaches with `add XBC,0x00FCF9BC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 3.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[1] <- parameter 0x0E bit 7, drawn FIX / MOVE.
+; Limits:  MASK 0x01, SHIFT 7, 0..1, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC3 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A3_Formant:
 	link XIZ,0xfff0                                      ; FD4626  ee 0c f0 ff
 	push XIX                                             ; FD462A  3c
 	lda xix, (xiz-16)                                    ; FD462B  be f0 34
@@ -123986,7 +124095,7 @@ sub_FD42A5:
 	ld BC,(XIZ+0x08)                                     ; FD466D  9e 08 21
 	extz BC                                              ; FD4670  d9 12
 	pushw bc                                             ; FD4672  29
-	call sub_FD7C2D                                      ; FD4673  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4673  1d 2d 7c fd
 	push XIX                                             ; FD4677  3c
 	pushw 0x0e                                           ; FD4678  0b 0e 00
 	ld bc, (xiz-4)                                       ; FD467B  9e fc 21
@@ -123994,7 +124103,7 @@ sub_FD42A5:
 	pushw bc                                             ; FD4680  29
 	pushw 0x01                                           ; FD4681  0b 01 00
 	pushw 0xc3                                           ; FD4684  0b c3 00
-	call sub_FD7435                                      ; FD4687  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4687  1d 35 74 fd
 	pushw 0x04                                           ; FD468B  0b 04 00
 	call sub_FD7C01                                      ; FD468E  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD4692  ef c8 1a 00 00 00
@@ -124002,6 +124111,26 @@ sub_FD42A5:
 	unlk XIZ                                             ; FD4699  ee 0d
 sub_FD469B:
 	ret                                                  ; FD469B  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A3_InteractionGain -- the tone editor's P0SITI0N PARAMETER page's INTERACTION GAIN editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCF9BC, which
+;          ToneEditPage_A3_KeyDispatch reaches with `add XBC,0x00FCF9BC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 5.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[2] <- parameter 0x13.
+; Limits:  MASK 0x7F, SHIFT 0, 0..127, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC3 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A3_InteractionGain:
 	link XIZ,0xfff0                                      ; FD469C  ee 0c f0 ff
 	push XIX                                             ; FD46A0  3c
 	lda xix, (xiz-16)                                    ; FD46A1  be f0 34
@@ -124032,7 +124161,7 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD46E3  9e 08 21
 	extz BC                                              ; FD46E6  d9 12
 	pushw bc                                             ; FD46E8  29
-	call sub_FD7C2D                                      ; FD46E9  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD46E9  1d 2d 7c fd
 	push XIX                                             ; FD46ED  3c
 	pushw 0x13                                           ; FD46EE  0b 13 00
 	ld bc, (xiz-4)                                       ; FD46F1  9e fc 21
@@ -124040,7 +124169,7 @@ sub_FD469B:
 	pushw bc                                             ; FD46F6  29
 	pushw 0x02                                           ; FD46F7  0b 02 00
 	pushw 0xc3                                           ; FD46FA  0b c3 00
-	call sub_FD7435                                      ; FD46FD  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD46FD  1d 35 74 fd
 	pushw 0x06                                           ; FD4701  0b 06 00
 	call sub_FD7C01                                      ; FD4704  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD4708  ef c8 1a 00 00 00
@@ -124150,6 +124279,26 @@ sub_FD469B:
 .LFD47FD:
 	unlk XIZ                                             ; FD47FD  ee 0d
 	ret                                                  ; FD47FF  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A4_Width -- the tone editor's P0SITI0N M0VEMENT page's WIDTH editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA04, which
+;          ToneEditPage_A4_KeyDispatch reaches with `add XBC,0x00FCFA04 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 1.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[1] <- parameter 0x11.
+; Limits:  MASK 0x7F, SHIFT 0, 0..50, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC4 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A4_Width:
 	link XIZ,0xfff0                                      ; FD4800  ee 0c f0 ff
 	push XIX                                             ; FD4804  3c
 	lda xix, (xiz-16)                                    ; FD4805  be f0 34
@@ -124180,7 +124329,7 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD4847  9e 08 21
 	extz BC                                              ; FD484A  d9 12
 	pushw bc                                             ; FD484C  29
-	call sub_FD7C2D                                      ; FD484D  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD484D  1d 2d 7c fd
 	push XIX                                             ; FD4851  3c
 	pushw 0x11                                           ; FD4852  0b 11 00
 	ld bc, (xiz-4)                                       ; FD4855  9e fc 21
@@ -124188,13 +124337,33 @@ sub_FD469B:
 	pushw bc                                             ; FD485A  29
 	pushw 0x01                                           ; FD485B  0b 01 00
 	pushw 0xc4                                           ; FD485E  0b c4 00
-	call sub_FD7435                                      ; FD4861  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4861  1d 35 74 fd
 	pushw 0x02                                           ; FD4865  0b 02 00
 	call sub_FD7C01                                      ; FD4868  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD486C  ef c8 1a 00 00 00
 	pop XIX                                              ; FD4872  5c
 	unlk XIZ                                             ; FD4873  ee 0d
 	ret                                                  ; FD4875  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A4_Speed -- the tone editor's P0SITI0N M0VEMENT page's SPEED editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA04, which
+;          ToneEditPage_A4_KeyDispatch reaches with `add XBC,0x00FCFA04 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 2.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[2] <- parameter 0x12 bits 0-6.
+; Limits:  MASK 0x7F, SHIFT 0, 0..50, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC4 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A4_Speed:
 	link XIZ,0xfff0                                      ; FD4876  ee 0c f0 ff
 	push XIX                                             ; FD487A  3c
 	lda xix, (xiz-16)                                    ; FD487B  be f0 34
@@ -124225,7 +124394,7 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD48BD  9e 08 21
 	extz BC                                              ; FD48C0  d9 12
 	pushw bc                                             ; FD48C2  29
-	call sub_FD7C2D                                      ; FD48C3  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD48C3  1d 2d 7c fd
 	push XIX                                             ; FD48C7  3c
 	pushw 0x12                                           ; FD48C8  0b 12 00
 	ld bc, (xiz-4)                                       ; FD48CB  9e fc 21
@@ -124233,13 +124402,33 @@ sub_FD469B:
 	pushw bc                                             ; FD48D0  29
 	pushw 0x02                                           ; FD48D1  0b 02 00
 	pushw 0xc4                                           ; FD48D4  0b c4 00
-	call sub_FD7435                                      ; FD48D7  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD48D7  1d 35 74 fd
 	pushw 0x03                                           ; FD48DB  0b 03 00
 	call sub_FD7C01                                      ; FD48DE  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD48E2  ef c8 1a 00 00 00
 	pop XIX                                              ; FD48E8  5c
 	unlk XIZ                                             ; FD48E9  ee 0d
 	ret                                                  ; FD48EB  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A4_SampleHold -- the tone editor's P0SITI0N M0VEMENT page's S/H editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA04, which
+;          ToneEditPage_A4_KeyDispatch reaches with `add XBC,0x00FCFA04 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 3.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[2] <- parameter 0x12 bit 7, drawn OFF / ON.
+; Limits:  MASK 0x01, SHIFT 7, 0..1, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC4 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A4_SampleHold:
 	link XIZ,0xfff0                                      ; FD48EC  ee 0c f0 ff
 	push XIX                                             ; FD48F0  3c
 	lda xix, (xiz-16)                                    ; FD48F1  be f0 34
@@ -124270,7 +124459,7 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD4933  9e 08 21
 	extz BC                                              ; FD4936  d9 12
 	pushw bc                                             ; FD4938  29
-	call sub_FD7C2D                                      ; FD4939  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4939  1d 2d 7c fd
 	push XIX                                             ; FD493D  3c
 	pushw 0x12                                           ; FD493E  0b 12 00
 	ld bc, (xiz-4)                                       ; FD4941  9e fc 21
@@ -124278,13 +124467,33 @@ sub_FD469B:
 	pushw bc                                             ; FD4946  29
 	pushw 0x02                                           ; FD4947  0b 02 00
 	pushw 0xc4                                           ; FD494A  0b c4 00
-	call sub_FD7435                                      ; FD494D  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD494D  1d 35 74 fd
 	pushw 0x04                                           ; FD4951  0b 04 00
 	call sub_FD7C01                                      ; FD4954  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD4958  ef c8 1a 00 00 00
 	pop XIX                                              ; FD495E  5c
 	unlk XIZ                                             ; FD495F  ee 0d
 	ret                                                  ; FD4961  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A4_Touch -- the tone editor's P0SITI0N M0VEMENT page's TOUCH editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA04, which
+;          ToneEditPage_A4_KeyDispatch reaches with `add XBC,0x00FCFA04 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 5.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[0] <- parameter 0x10, signed.
+; Limits:  MASK 0xFF, SHIFT 0, -50..+50, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC4 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A4_Touch:
 	link XIZ,0xfff0                                      ; FD4962  ee 0c f0 ff
 	push XIX                                             ; FD4966  3c
 	lda xix, (xiz-16)                                    ; FD4967  be f0 34
@@ -124315,7 +124524,7 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD49A9  9e 08 21
 	extz BC                                              ; FD49AC  d9 12
 	pushw bc                                             ; FD49AE  29
-	call sub_FD7C2D                                      ; FD49AF  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD49AF  1d 2d 7c fd
 	push XIX                                             ; FD49B3  3c
 	pushw 0x10                                           ; FD49B4  0b 10 00
 	ld bc, (xiz-4)                                       ; FD49B7  9e fc 21
@@ -124323,7 +124532,7 @@ sub_FD469B:
 	pushw bc                                             ; FD49BC  29
 	pushw 0x00                                           ; FD49BD  0b 00 00
 	pushw 0xc4                                           ; FD49C0  0b c4 00
-	call sub_FD7435                                      ; FD49C3  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD49C3  1d 35 74 fd
 	pushw 0x06                                           ; FD49C7  0b 06 00
 	call sub_FD7C01                                      ; FD49CA  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD49CE  ef c8 1a 00 00 00
@@ -124433,6 +124642,31 @@ sub_FD469B:
 .LFD4AC3:
 	unlk XIZ                                             ; FD4AC3  ee 0d
 	ret                                                  ; FD4AC5  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A5_Fitting -- the tone editor's PAGE1/3 FITTING editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA4C, which
+;          ToneEditPage_A5_KeyDispatch reaches with `add XBC,0x00FCFA4C /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 1.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[1] <- parameter 0x15  (MAIN)
+;          ((u8 *)0x27A6)[5] <- parameter 0x1F  (SUB)
+; Limits:  MASK 0x7F, SHIFT 0, 0..127, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC5 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A5_Fitting:
 	link XIZ,0xffec                                      ; FD4AC6  ee 0c ec ff
 	pushw hl                                             ; FD4ACA  2b
 	pushw de                                             ; FD4ACB  2a
@@ -124486,7 +124720,7 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD4B39  9e 08 21
 	extz BC                                              ; FD4B3C  d9 12
 	pushw bc                                             ; FD4B3E  29
-	call sub_FD7C2D                                      ; FD4B3F  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4B3F  1d 2d 7c fd
 	push XIX                                             ; FD4B43  3c
 	ld C,E                                               ; FD4B44  cd 8b
 	extz BC                                              ; FD4B46  d9 12
@@ -124496,7 +124730,7 @@ sub_FD469B:
 	pushw bc                                             ; FD4B4E  29
 	m_push MWD+r6, 0xec                                  ; FD4B4F  9e ec 04
 	pushw 0xc5                                           ; FD4B52  0b c5 00
-	call sub_FD7435                                      ; FD4B55  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4B55  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD4B59  be fe 31
 	push XBC                                             ; FD4B5C  39
 	pushw 0x0f                                           ; FD4B5D  0b 0f 00
@@ -124519,7 +124753,7 @@ sub_FD469B:
 	pushw bc                                             ; FD4B87  29
 	pushw de                                             ; FD4B88  2a
 	pushw 0xc5                                           ; FD4B89  0b c5 00
-	call sub_FD7435                                      ; FD4B8C  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4B8C  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD4B90  ef c8 12 00 00 00
 .LFD4B96:
 	pushw 0x02                                           ; FD4B96  0b 02 00
@@ -124530,6 +124764,32 @@ sub_FD469B:
 	popw hl                                              ; FD4BA0  4b
 	unlk XIZ                                             ; FD4BA1  ee 0d
 	ret                                                  ; FD4BA3  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A5_Muting -- the tone editor's PAGE1/3 MUTING editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA4C, which
+;          ToneEditPage_A5_KeyDispatch reaches with `add XBC,0x00FCFA4C /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 2.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[2] <- parameter 0x16 bits 0-6  (MAIN)
+;          ((u8 *)0x27A6)[6] <- parameter 0x20 bits 0-6  (SUB)
+;          and writes the drawn value (v & 0x7F) - 0x7F into indices 10 and 11.
+; Limits:  MASK 0x7F, SHIFT 0, 0..127, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC5 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A5_Muting:
 	link XIZ,0xffe6                                      ; FD4BA4  ee 0c e6 ff
 	pushw hl                                             ; FD4BA8  2b
 	pushw de                                             ; FD4BA9  2a
@@ -124587,9 +124847,9 @@ sub_FD469B:
 	ld BC,(XIZ+0x08)                                     ; FD4C2E  9e 08 21
 	extz BC                                              ; FD4C31  d9 12
 	pushw bc                                             ; FD4C33  29
-	call sub_FD7C2D                                      ; FD4C34  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4C34  1d 2d 7c fd
 	push XIX                                             ; FD4C38  3c
-	call sub_FD6CE1                                      ; FD4C39  1d e1 6c fd
+	call ToneEdit_ApplyStep                                      ; FD4C39  1d e1 6c fd
 	inc 0,XSP                                            ; FD4C3D  ef 60
 	inc 0,XSP                                            ; FD4C3F  ef 60
 	cps a, 0x01                                          ; FD4C41  c9 d9
@@ -124651,7 +124911,7 @@ sub_FD4CBB:
 	pushw hl                                             ; FD4CBB  2b
 	call Arr27A6_Get                                      ; FD4CBC  1d 7b 6c fd
 	push XIX                                             ; FD4CC0  3c
-	call sub_FD6CE1                                      ; FD4CC1  1d e1 6c fd
+	call ToneEdit_ApplyStep                                      ; FD4CC1  1d e1 6c fd
 	inc 0,XSP                                            ; FD4CC5  ef 60
 	inc 2,XSP                                            ; FD4CC7  ef 62
 	cps a, 0x01                                          ; FD4CC9  c9 d9
@@ -124707,6 +124967,31 @@ sub_FD4CBB:
 	popw hl                                              ; FD4D35  4b
 	unlk XIZ                                             ; FD4D36  ee 0d
 	ret                                                  ; FD4D38  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A5_KeyShift -- the tone editor's PAGE1/3 KEY SHIFT editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA4C, which
+;          ToneEditPage_A5_KeyDispatch reaches with `add XBC,0x00FCFA4C /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 3.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[3] <- parameter 0x1D  (MAIN)
+;          ((u8 *)0x27A6)[7] <- parameter 0x29  (SUB)
+; Limits:  MASK 0xFF, SHIFT 0, -60..+60, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC5 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A5_KeyShift:
 	link XIZ,0xffec                                      ; FD4D39  ee 0c ec ff
 	pushw hl                                             ; FD4D3D  2b
 	pushw de                                             ; FD4D3E  2a
@@ -124760,7 +125045,7 @@ sub_FD4CBB:
 	ld BC,(XIZ+0x08)                                     ; FD4DAC  9e 08 21
 	extz BC                                              ; FD4DAF  d9 12
 	pushw bc                                             ; FD4DB1  29
-	call sub_FD7C2D                                      ; FD4DB2  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4DB2  1d 2d 7c fd
 	push XIX                                             ; FD4DB6  3c
 	ld C,H                                               ; FD4DB7  ce 8b
 	extz BC                                              ; FD4DB9  d9 12
@@ -124770,7 +125055,7 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4DC1  29
 	m_push MWD+r6, 0xec                                  ; FD4DC2  9e ec 04
 	pushw 0xc5                                           ; FD4DC5  0b c5 00
-	call sub_FD7435                                      ; FD4DC8  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4DC8  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD4DCC  be fe 31
 	push XBC                                             ; FD4DCF  39
 	pushw 0x0f                                           ; FD4DD0  0b 0f 00
@@ -124793,7 +125078,7 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4DFB  29
 	m_push MWD+r6, 0xec                                  ; FD4DFC  9e ec 04
 	pushw 0xc5                                           ; FD4DFF  0b c5 00
-	call sub_FD7435                                      ; FD4E02  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4E02  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD4E06  ef c8 12 00 00 00
 .LFD4E0C:
 	pushw 0x04                                           ; FD4E0C  0b 04 00
@@ -124804,6 +125089,31 @@ sub_FD4CBB:
 	popw hl                                              ; FD4E16  4b
 	unlk XIZ                                             ; FD4E17  ee 0d
 	ret                                                  ; FD4E19  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A5_Detune -- the tone editor's PAGE1/3 DETUNE editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA4C, which
+;          ToneEditPage_A5_KeyDispatch reaches with `add XBC,0x00FCFA4C /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 4.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[4] <- parameter 0x1E  (MAIN)
+;          ((u8 *)0x27A6)[8] <- parameter 0x2A  (SUB)
+; Limits:  MASK 0xFF, SHIFT 0, -128..+127, STEP +/-1 -- the whole signed byte.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC5 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A5_Detune:
 	link XIZ,0xffec                                      ; FD4E1A  ee 0c ec ff
 	pushw hl                                             ; FD4E1E  2b
 	pushw de                                             ; FD4E1F  2a
@@ -124857,7 +125167,7 @@ sub_FD4CBB:
 	ld BC,(XIZ+0x08)                                     ; FD4E8D  9e 08 21
 	extz BC                                              ; FD4E90  d9 12
 	pushw bc                                             ; FD4E92  29
-	call sub_FD7C2D                                      ; FD4E93  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4E93  1d 2d 7c fd
 	push XIX                                             ; FD4E97  3c
 	ld C,H                                               ; FD4E98  ce 8b
 	extz BC                                              ; FD4E9A  d9 12
@@ -124867,7 +125177,7 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4EA2  29
 	m_push MWD+r6, 0xec                                  ; FD4EA3  9e ec 04
 	pushw 0xc5                                           ; FD4EA6  0b c5 00
-	call sub_FD7435                                      ; FD4EA9  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4EA9  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD4EAD  be fe 31
 	push XBC                                             ; FD4EB0  39
 	pushw 0x0f                                           ; FD4EB1  0b 0f 00
@@ -124890,7 +125200,7 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4EDC  29
 	m_push MWD+r6, 0xec                                  ; FD4EDD  9e ec 04
 	pushw 0xc5                                           ; FD4EE0  0b c5 00
-	call sub_FD7435                                      ; FD4EE3  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4EE3  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD4EE7  ef c8 12 00 00 00
 .LFD4EED:
 	pushw 0x05                                           ; FD4EED  0b 05 00
@@ -124901,6 +125211,31 @@ sub_FD4CBB:
 	popw hl                                              ; FD4EF7  4b
 	unlk XIZ                                             ; FD4EF8  ee 0d
 	ret                                                  ; FD4EFA  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A5_ResoScale -- the tone editor's PAGE1/3 RESO SCALE editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA4C, which
+;          ToneEditPage_A5_KeyDispatch reaches with `add XBC,0x00FCFA4C /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 5.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[2] <- parameter 0x16 bit 7  (MAIN)
+;          ((u8 *)0x27A6)[6] <- parameter 0x20 bit 7  (SUB), drawn OFF / ON.
+; Limits:  MASK 0x01, SHIFT 7, 0..1, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC5 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A5_ResoScale:
 	link XIZ,0xffec                                      ; FD4EFB  ee 0c ec ff
 	pushw hl                                             ; FD4EFF  2b
 	pushw de                                             ; FD4F00  2a
@@ -124954,7 +125289,7 @@ sub_FD4CBB:
 	ld BC,(XIZ+0x08)                                     ; FD4F6E  9e 08 21
 	extz BC                                              ; FD4F71  d9 12
 	pushw bc                                             ; FD4F73  29
-	call sub_FD7C2D                                      ; FD4F74  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD4F74  1d 2d 7c fd
 	push XIX                                             ; FD4F78  3c
 	ld C,H                                               ; FD4F79  ce 8b
 	extz BC                                              ; FD4F7B  d9 12
@@ -124964,7 +125299,7 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4F83  29
 	m_push MWD+r6, 0xec                                  ; FD4F84  9e ec 04
 	pushw 0xc5                                           ; FD4F87  0b c5 00
-	call sub_FD7435                                      ; FD4F8A  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4F8A  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD4F8E  be fe 31
 	push XBC                                             ; FD4F91  39
 	pushw 0x0f                                           ; FD4F92  0b 0f 00
@@ -124987,7 +125322,7 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4FBD  29
 	m_push MWD+r6, 0xec                                  ; FD4FBE  9e ec 04
 	pushw 0xc5                                           ; FD4FC1  0b c5 00
-	call sub_FD7435                                      ; FD4FC4  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD4FC4  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD4FC8  ef c8 12 00 00 00
 .LFD4FCE:
 	pushw 0x06                                           ; FD4FCE  0b 06 00
@@ -124998,9 +125333,9 @@ sub_FD4CBB:
 	popw hl                                              ; FD4FD8  4b
 	unlk XIZ                                             ; FD4FD9  ee 0d
 	ret                                                  ; FD4FDB  0e
-	calr sub_FD4FE0                                      ; FD4FDC  1e 01 00
+	calr ToneEditPage_ToggleRowFocus                                      ; FD4FDC  1e 01 00
 	ret                                                  ; FD4FDF  0e
-sub_FD4FE0:
+ToneEditPage_ToggleRowFocus:
 	link XIZ,0xfffe                                      ; FD4FE0  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD4FE4  be fe 31
 	push XBC                                             ; FD4FE7  39
@@ -125172,6 +125507,31 @@ sub_FD50C0:
 .LFD516E:
 	unlk XIZ                                             ; FD516E  ee 0d
 	ret                                                  ; FD5170  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A6_FittingTouchDepth -- the tone editor's TOUCH DEPTH page's FITTING column editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA94, which
+;          ToneEditPage_A6_KeyDispatch reaches with `add XBC,0x00FCFA94 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 1.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[1] <- parameter 0x17  (MAIN)
+;          ((u8 *)0x27A6)[4] <- parameter 0x22  (SUB)
+; Limits:  MASK 0xFF, SHIFT 0, -50..+50, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC6 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A6_FittingTouchDepth:
 	link XIZ,0xffec                                      ; FD5171  ee 0c ec ff
 	pushw hl                                             ; FD5175  2b
 	pushw de                                             ; FD5176  2a
@@ -125225,7 +125585,7 @@ sub_FD50C0:
 	ld BC,(XIZ+0x08)                                     ; FD51E4  9e 08 21
 	extz BC                                              ; FD51E7  d9 12
 	pushw bc                                             ; FD51E9  29
-	call sub_FD7C2D                                      ; FD51EA  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD51EA  1d 2d 7c fd
 	push XIX                                             ; FD51EE  3c
 	ld C,H                                               ; FD51EF  ce 8b
 	extz BC                                              ; FD51F1  d9 12
@@ -125235,7 +125595,7 @@ sub_FD50C0:
 	pushw bc                                             ; FD51F9  29
 	m_push MWD+r6, 0xec                                  ; FD51FA  9e ec 04
 	pushw 0xc6                                           ; FD51FD  0b c6 00
-	call sub_FD7435                                      ; FD5200  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD5200  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD5204  be fe 31
 	push XBC                                             ; FD5207  39
 	pushw 0x0f                                           ; FD5208  0b 0f 00
@@ -125258,7 +125618,7 @@ sub_FD50C0:
 	pushw bc                                             ; FD5233  29
 	m_push MWD+r6, 0xec                                  ; FD5234  9e ec 04
 	pushw 0xc6                                           ; FD5237  0b c6 00
-	call sub_FD7435                                      ; FD523A  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD523A  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD523E  ef c8 12 00 00 00
 .LFD5244:
 	pushw 0x02                                           ; FD5244  0b 02 00
@@ -125269,6 +125629,31 @@ sub_FD50C0:
 	popw hl                                              ; FD524E  4b
 	unlk XIZ                                             ; FD524F  ee 0d
 	ret                                                  ; FD5251  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A6_MutingTouchDepth -- the tone editor's TOUCH DEPTH page's MUTING column editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA94, which
+;          ToneEditPage_A6_KeyDispatch reaches with `add XBC,0x00FCFA94 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 2.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[2] <- parameter 0x18  (MAIN)
+;          ((u8 *)0x27A6)[5] <- parameter 0x23  (SUB)
+; Limits:  MASK 0xFF, SHIFT 0, -50..+50, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC6 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A6_MutingTouchDepth:
 	link XIZ,0xffec                                      ; FD5252  ee 0c ec ff
 	pushw hl                                             ; FD5256  2b
 	pushw de                                             ; FD5257  2a
@@ -125322,7 +125707,7 @@ sub_FD50C0:
 	ld BC,(XIZ+0x08)                                     ; FD52C5  9e 08 21
 	extz BC                                              ; FD52C8  d9 12
 	pushw bc                                             ; FD52CA  29
-	call sub_FD7C2D                                      ; FD52CB  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD52CB  1d 2d 7c fd
 	push XIX                                             ; FD52CF  3c
 	ld C,H                                               ; FD52D0  ce 8b
 	extz BC                                              ; FD52D2  d9 12
@@ -125332,7 +125717,7 @@ sub_FD50C0:
 	pushw bc                                             ; FD52DA  29
 	m_push MWD+r6, 0xec                                  ; FD52DB  9e ec 04
 	pushw 0xc6                                           ; FD52DE  0b c6 00
-	call sub_FD7435                                      ; FD52E1  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD52E1  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD52E5  be fe 31
 	push XBC                                             ; FD52E8  39
 	pushw 0x0f                                           ; FD52E9  0b 0f 00
@@ -125355,7 +125740,7 @@ sub_FD50C0:
 	pushw bc                                             ; FD5314  29
 	m_push MWD+r6, 0xec                                  ; FD5315  9e ec 04
 	pushw 0xc6                                           ; FD5318  0b c6 00
-	call sub_FD7435                                      ; FD531B  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD531B  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD531F  ef c8 12 00 00 00
 .LFD5325:
 	pushw 0x03                                           ; FD5325  0b 03 00
@@ -125366,6 +125751,26 @@ sub_FD50C0:
 	popw hl                                              ; FD532F  4b
 	unlk XIZ                                             ; FD5330  ee 0d
 	ret                                                  ; FD5332  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A6_SubGainTouchDepth -- the tone editor's TOUCH DEPTH page's SUB-GAIN touch column editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA94, which
+;          ToneEditPage_A6_KeyDispatch reaches with `add XBC,0x00FCFA94 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 4.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[6] <- parameter 0x24.  SUB row only.
+; Limits:  MASK 0xFF, SHIFT 0, -50..+50, STEP +/-1.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC6 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A6_SubGainTouchDepth:
 	link XIZ,0xffee                                      ; FD5333  ee 0c ee ff
 	push XIX                                             ; FD5337  3c
 	lda xix, (xiz-18)                                    ; FD5338  be ee 34
@@ -125412,7 +125817,7 @@ sub_FD5377:
 	ld BC,(XIZ+0x08)                                     ; FD53A0  9e 08 21
 	extz BC                                              ; FD53A3  d9 12
 	pushw bc                                             ; FD53A5  29
-	call sub_FD7C2D                                      ; FD53A6  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD53A6  1d 2d 7c fd
 	push XIX                                             ; FD53AA  3c
 	pushw 0x24                                           ; FD53AB  0b 24 00
 	ld bc, (xiz-4)                                       ; FD53AE  9e fc 21
@@ -125420,7 +125825,7 @@ sub_FD5377:
 	pushw bc                                             ; FD53B3  29
 	pushw 0x06                                           ; FD53B4  0b 06 00
 	pushw 0xc6                                           ; FD53B7  0b c6 00
-	call sub_FD7435                                      ; FD53BA  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD53BA  1d 35 74 fd
 	pushw 0x05                                           ; FD53BE  0b 05 00
 	call sub_FD7C01                                      ; FD53C1  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD53C5  ef c8 1a 00 00 00
@@ -125428,6 +125833,28 @@ sub_FD5377:
 	pop XIX                                              ; FD53CB  5c
 	unlk XIZ                                             ; FD53CC  ee 0d
 	ret                                                  ; FD53CE  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A6_SubGain -- the tone editor's TOUCH DEPTH page's SUB GAIN editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFA94, which
+;          ToneEditPage_A6_KeyDispatch reaches with `add XBC,0x00FCFA94 /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 5.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[3] <- parameter 0x21.  SUB row only.
+; Limits:  MASK 0xFF, SHIFT 0, -100..+100, STEP +/-1.
+; Note:    the control is SIGNED, which is what makes prom_c's
+;          `register 0x0000 bit 7 <- sign(p33)` a reachable state.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC6 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A6_SubGain:
 	link XIZ,0xffee                                      ; FD53CF  ee 0c ee ff
 	push XIX                                             ; FD53D3  3c
 	lda xix, (xiz-18)                                    ; FD53D4  be ee 34
@@ -125473,7 +125900,7 @@ sub_FD5377:
 	ld BC,(XIZ+0x08)                                     ; FD543C  9e 08 21
 	extz BC                                              ; FD543F  d9 12
 	pushw bc                                             ; FD5441  29
-	call sub_FD7C2D                                      ; FD5442  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD5442  1d 2d 7c fd
 	push XIX                                             ; FD5446  3c
 	pushw 0x21                                           ; FD5447  0b 21 00
 	ld bc, (xiz-4)                                       ; FD544A  9e fc 21
@@ -125481,7 +125908,7 @@ sub_FD5377:
 	pushw bc                                             ; FD544F  29
 	pushw 0x03                                           ; FD5450  0b 03 00
 	pushw 0xc6                                           ; FD5453  0b c6 00
-	call sub_FD7435                                      ; FD5456  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD5456  1d 35 74 fd
 	pushw 0x06                                           ; FD545A  0b 06 00
 	call sub_FD7C01                                      ; FD545D  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD5461  ef c8 1a 00 00 00
@@ -125489,7 +125916,7 @@ sub_FD5377:
 	pop XIX                                              ; FD5467  5c
 	unlk XIZ                                             ; FD5468  ee 0d
 	ret                                                  ; FD546A  0e
-	calr sub_FD4FE0                                      ; FD546B  1e 72 fb
+	calr ToneEditPage_ToggleRowFocus                                      ; FD546B  1e 72 fb
 	ret                                                  ; FD546E  0e
 	link XIZ,0x0000                                      ; FD546F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5473  8e 08 3f 00
@@ -125607,6 +126034,31 @@ sub_FD5486:
 .LFD5571:
 	unlk XIZ                                             ; FD5571  ee 0d
 	ret                                                  ; FD5573  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A7_ResoMode -- the tone editor's PAGE3/3 RESO MODE editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFADC, which
+;          ToneEditPage_A7_KeyDispatch reaches with `add XBC,0x00FCFADC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 1.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[1] <- parameter 0x15 bit 7  (MAIN)
+;          ((u8 *)0x27A6)[2] <- parameter 0x1F bit 7  (SUB), drawn OFF / ON.
+; Limits:  MASK 0x01, SHIFT 7, 0..1, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC7 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A7_ResoMode:
 	link XIZ,0xffec                                      ; FD5574  ee 0c ec ff
 	pushw hl                                             ; FD5578  2b
 	pushw de                                             ; FD5579  2a
@@ -125660,7 +126112,7 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD55E7  9e 08 21
 	extz BC                                              ; FD55EA  d9 12
 	pushw bc                                             ; FD55EC  29
-	call sub_FD7C2D                                      ; FD55ED  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD55ED  1d 2d 7c fd
 	push XIX                                             ; FD55F1  3c
 	ld C,H                                               ; FD55F2  ce 8b
 	extz BC                                              ; FD55F4  d9 12
@@ -125670,7 +126122,7 @@ sub_FD5486:
 	pushw bc                                             ; FD55FC  29
 	m_push MWD+r6, 0xec                                  ; FD55FD  9e ec 04
 	pushw 0xc7                                           ; FD5600  0b c7 00
-	call sub_FD7435                                      ; FD5603  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD5603  1d 35 74 fd
 	lda xbc, (xiz-6)                                     ; FD5607  be fa 31
 	push XBC                                             ; FD560A  39
 	pushw 0x0f                                           ; FD560B  0b 0f 00
@@ -125693,7 +126145,7 @@ sub_FD5486:
 	pushw bc                                             ; FD5636  29
 	m_push MWD+r6, 0xec                                  ; FD5637  9e ec 04
 	pushw 0xc7                                           ; FD563A  0b c7 00
-	call sub_FD7435                                      ; FD563D  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD563D  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD5641  ef c8 12 00 00 00
 .LFD5647:
 	pushw 0x02                                           ; FD5647  0b 02 00
@@ -125704,6 +126156,31 @@ sub_FD5486:
 	popw hl                                              ; FD5651  4b
 	unlk XIZ                                             ; FD5652  ee 0d
 	ret                                                  ; FD5654  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A7_MutingSlope -- the tone editor's PAGE3/3 MUTING SLOPE editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFADC, which
+;          ToneEditPage_A7_KeyDispatch reaches with `add XBC,0x00FCFADC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 2.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[6]  <- parameter 0x1C  (MAIN)
+;          ((u8 *)0x27A6)[10] <- parameter 0x28  (SUB)
+; Limits:  MASK 0xFF, SHIFT 0, -50..+50, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Evidence: the (RAM index, parameter) pair and the MASK/SHIFT/MAX/MIN
+;          are immediates in this routine; the screen code 0xC7 it
+;          repaints with is a literal too.  All of them are re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A7_MutingSlope:
 	link XIZ,0xffec                                      ; FD5655  ee 0c ec ff
 	pushw hl                                             ; FD5659  2b
 	pushw de                                             ; FD565A  2a
@@ -125753,7 +126230,7 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD56C4  9e 08 21
 	extz BC                                              ; FD56C7  d9 12
 	pushw bc                                             ; FD56C9  29
-	call sub_FD7C2D                                      ; FD56CA  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD56CA  1d 2d 7c fd
 	push XIX                                             ; FD56CE  3c
 	ld C,H                                               ; FD56CF  ce 8b
 	extz BC                                              ; FD56D1  d9 12
@@ -125763,7 +126240,7 @@ sub_FD5486:
 	pushw bc                                             ; FD56D9  29
 	m_push MWD+r6, 0xec                                  ; FD56DA  9e ec 04
 	pushw 0xc7                                           ; FD56DD  0b c7 00
-	call sub_FD7435                                      ; FD56E0  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD56E0  1d 35 74 fd
 	lda xbc, (xiz-2)                                     ; FD56E4  be fe 31
 	push XBC                                             ; FD56E7  39
 	pushw 0x0f                                           ; FD56E8  0b 0f 00
@@ -125786,7 +126263,7 @@ sub_FD5486:
 	pushw bc                                             ; FD5713  29
 	m_push MWD+r6, 0xec                                  ; FD5714  9e ec 04
 	pushw 0xc7                                           ; FD5717  0b c7 00
-	call sub_FD7435                                      ; FD571A  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD571A  1d 35 74 fd
 	add XSP,0x00000012                                   ; FD571E  ef c8 12 00 00 00
 .LFD5724:
 	pushw 0x03                                           ; FD5724  0b 03 00
@@ -125798,6 +126275,37 @@ sub_FD5486:
 	popw hl                                              ; FD572E  4b
 	unlk XIZ                                             ; FD572F  ee 0d
 	ret                                                  ; FD5731  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A7_KeyFollowLow -- the tone editor's PAGE3/3 KEY FOLLOW low note editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFADC, which
+;          ToneEditPage_A7_KeyDispatch reaches with `add XBC,0x00FCFADC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 3.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[4] <- parameter 0x1A  (MAIN)
+;          ((u8 *)0x27A6)[8] <- parameter 0x26  (SUB)
+; Limits:  MASK 0x7F, SHIFT 0, 0 .. the BREAK note, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Note:    the three KEY FOLLOW notes bound EACH OTHER through
+;          ToneEdit_CommitNoteField, whose MIN and MAX are two of its
+;          arguments rather than immediates.  That is what orders them:
+;          low <= break <= high, enforced by the editors themselves.
+; Evidence: the (RAM index, parameter) pair is a pair of immediates in this
+;          routine and the screen code 0xC7 it repaints with is a literal;
+;          the MASK 0x7F and SHIFT 0 are immediates in
+;          ToneEdit_CommitNoteField (0xFDA400, 0xFDA3F5), and the bounds
+;          are two of the arguments this routine passes it.  Re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A7_KeyFollowLow:
 	link XIZ,0xfff4                                      ; FD5732  ee 0c f4 ff
 	pushw hl                                             ; FD5736  2b
 	pushw de                                             ; FD5737  2a
@@ -125856,7 +126364,7 @@ sub_FD5486:
 	ld WA,(XIZ+0x08)                                     ; FD57B6  9e 08 20
 	extz WA                                              ; FD57B9  d8 12
 	pushw wa                                             ; FD57BB  28
-	call sub_FDA3E2                                      ; FD57BC  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD57BC  1d e2 a3 fd
 	inc 0,XSP                                            ; FD57C0  ef 60
 	inc 6,XSP                                            ; FD57C2  ef 66
 	cps a, 0x01                                          ; FD57C4  c9 d9
@@ -125909,7 +126417,7 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD5831  9e 08 21
 	extz BC                                              ; FD5834  d9 12
 	pushw bc                                             ; FD5836  29
-	call sub_FDA3E2                                      ; FD5837  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD5837  1d e2 a3 fd
 	inc 0,XSP                                            ; FD583B  ef 60
 	inc 6,XSP                                            ; FD583D  ef 66
 	cps a, 0x01                                          ; FD583F  c9 d9
@@ -125944,6 +126452,37 @@ sub_FD5486:
 	popw hl                                              ; FD587F  4b
 	unlk XIZ                                             ; FD5880  ee 0d
 	ret                                                  ; FD5882  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A7_KeyFollowBreak -- the tone editor's PAGE3/3 KEY FOLLOW break note editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFADC, which
+;          ToneEditPage_A7_KeyDispatch reaches with `add XBC,0x00FCFADC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 4.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[3] <- parameter 0x19  (MAIN)
+;          ((u8 *)0x27A6)[7] <- parameter 0x25  (SUB)
+; Limits:  MASK 0x7F, SHIFT 0, the LOW note .. the HIGH note, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Note:    the three KEY FOLLOW notes bound EACH OTHER through
+;          ToneEdit_CommitNoteField, whose MIN and MAX are two of its
+;          arguments rather than immediates.  That is what orders them:
+;          low <= break <= high, enforced by the editors themselves.
+; Evidence: the (RAM index, parameter) pair is a pair of immediates in this
+;          routine and the screen code 0xC7 it repaints with is a literal;
+;          the MASK 0x7F and SHIFT 0 are immediates in
+;          ToneEdit_CommitNoteField (0xFDA400, 0xFDA3F5), and the bounds
+;          are two of the arguments this routine passes it.  Re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A7_KeyFollowBreak:
 	link XIZ,0xfff2                                      ; FD5883  ee 0c f2 ff
 	pushw hl                                             ; FD5887  2b
 	pushw de                                             ; FD5888  2a
@@ -126016,7 +126555,7 @@ sub_FD5486:
 	ld WA,(XIZ+0x08)                                     ; FD5927  9e 08 20
 	extz WA                                              ; FD592A  d8 12
 	pushw wa                                             ; FD592C  28
-	call sub_FDA3E2                                      ; FD592D  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD592D  1d e2 a3 fd
 	add XSP,0x00000014                                   ; FD5931  ef c8 14 00 00 00
 	cps a, 0x01                                          ; FD5937  c9 d9
 	jr nz, .LFD596D                                      ; FD5939  6e 32
@@ -126078,7 +126617,7 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD59BA  9e 08 21
 	extz BC                                              ; FD59BD  d9 12
 	pushw bc                                             ; FD59BF  29
-	call sub_FDA3E2                                      ; FD59C0  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD59C0  1d e2 a3 fd
 	add XSP,0x00000014                                   ; FD59C4  ef c8 14 00 00 00
 	cps a, 0x01                                          ; FD59CA  c9 d9
 	jr nz, .LFD5A00                                      ; FD59CC  6e 32
@@ -126112,6 +126651,37 @@ sub_FD5486:
 	popw hl                                              ; FD5A0A  4b
 	unlk XIZ                                             ; FD5A0B  ee 0d
 	ret                                                  ; FD5A0D  0e
+; ---------------------------------------------------------------------
+; ToneEditField_A7_KeyFollowHigh -- the tone editor's PAGE3/3 KEY FOLLOW high note editor.
+;
+; Shape:   an entry in the 17-pointer table at 0x00FCFADC, which
+;          ToneEditPage_A7_KeyDispatch reaches with `add XBC,0x00FCFADC /
+;          ld XBC,(XBC) / jp (XBC)` after PanelEvent_ToFieldIndex has turned
+;          the panel event code into slot 5.  Its one argument is that
+;          routine's direction byte: bit 0 clear = up, set = down, bit 7 set
+;          for the coarse key group.  ToneEdit_StepFromEvent turns it into
+;          the descriptor's STEP, +/-1 or +/-3.
+; Edits:   ((u8 *)0x27A6)[5] <- parameter 0x1B  (MAIN)
+;          ((u8 *)0x27A6)[9] <- parameter 0x27  (SUB)
+; Limits:  MASK 0x7F, SHIFT 0, the BREAK note .. 127, STEP +/-1.
+; Rows:    the MAIN row when ((u8 *)0x27A6)[0] == 0, the SUB row when it is
+;          1; and when ((u8 *)0x27A6)[15] == 0 -- no row focused, the state
+;          ToneEditPage_ToggleRowFocus clears -- it applies the same step to
+;          BOTH rows, one commit after the other.
+; Note:    the three KEY FOLLOW notes bound EACH OTHER through
+;          ToneEdit_CommitNoteField, whose MIN and MAX are two of its
+;          arguments rather than immediates.  That is what orders them:
+;          low <= break <= high, enforced by the editors themselves.
+; Evidence: the (RAM index, parameter) pair is a pair of immediates in this
+;          routine and the screen code 0xC7 it repaints with is a literal;
+;          the MASK 0x7F and SHIFT 0 are immediates in
+;          ToneEdit_CommitNoteField (0xFDA400, 0xFDA3F5), and the bounds
+;          are two of the arguments this routine passes it.  Re-read from
+;          the ROM by notes/wsa1_toneedit_field_editors.py --selftest,
+;          which also checks them against the read-back-order page map.
+; Detail:  notes/FINDINGS-l7a1429-field-editors.md.
+; ---------------------------------------------------------------------
+ToneEditField_A7_KeyFollowHigh:
 	link XIZ,0xfff4                                      ; FD5A0E  ee 0c f4 ff
 	pushw hl                                             ; FD5A12  2b
 	pushw de                                             ; FD5A13  2a
@@ -126170,7 +126740,7 @@ sub_FD5486:
 	ld WA,(XIZ+0x08)                                     ; FD5A92  9e 08 20
 	extz WA                                              ; FD5A95  d8 12
 	pushw wa                                             ; FD5A97  28
-	call sub_FDA3E2                                      ; FD5A98  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD5A98  1d e2 a3 fd
 	inc 0,XSP                                            ; FD5A9C  ef 60
 	inc 6,XSP                                            ; FD5A9E  ef 66
 	cps a, 0x01                                          ; FD5AA0  c9 d9
@@ -126223,7 +126793,7 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD5B0D  9e 08 21
 	extz BC                                              ; FD5B10  d9 12
 	pushw bc                                             ; FD5B12  29
-	call sub_FDA3E2                                      ; FD5B13  1d e2 a3 fd
+	call ToneEdit_CommitNoteField                                      ; FD5B13  1d e2 a3 fd
 	inc 0,XSP                                            ; FD5B17  ef 60
 	inc 6,XSP                                            ; FD5B19  ef 66
 	cps a, 0x01                                          ; FD5B1B  c9 d9
@@ -126258,7 +126828,7 @@ sub_FD5486:
 	popw hl                                              ; FD5B5B  4b
 	unlk XIZ                                             ; FD5B5C  ee 0d
 	ret                                                  ; FD5B5E  0e
-	calr sub_FD4FE0                                      ; FD5B5F  1e 7e f4
+	calr ToneEditPage_ToggleRowFocus                                      ; FD5B5F  1e 7e f4
 	ret                                                  ; FD5B62  0e
 	link XIZ,0x0000                                      ; FD5B63  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5B67  8e 08 3f 00
@@ -126389,13 +126959,13 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD5C8C  9e 08 21
 	extz BC                                              ; FD5C8F  d9 12
 	pushw bc                                             ; FD5C91  29
-	call sub_FD7C2D                                      ; FD5C92  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD5C92  1d 2d 7c fd
 	push XIX                                             ; FD5C96  3c
 	pushw 0x10                                           ; FD5C97  0b 10 00
 	pushw 0x00                                           ; FD5C9A  0b 00 00
 	pushw 0x00                                           ; FD5C9D  0b 00 00
 	pushw 0xc8                                           ; FD5CA0  0b c8 00
-	call sub_FD7435                                      ; FD5CA3  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD5CA3  1d 35 74 fd
 	pushw 0x02                                           ; FD5CA7  0b 02 00
 	call sub_FD7C01                                      ; FD5CAA  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD5CAE  ef c8 1a 00 00 00
@@ -126447,13 +127017,13 @@ sub_FD5486:
 	ld BC,(XIZ+0x08)                                     ; FD5D2A  9e 08 21
 	extz BC                                              ; FD5D2D  d9 12
 	pushw bc                                             ; FD5D2F  29
-	call sub_FD7C2D                                      ; FD5D30  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD5D30  1d 2d 7c fd
 	push XIX                                             ; FD5D34  3c
 	pushw 0x11                                           ; FD5D35  0b 11 00
 	pushw 0x00                                           ; FD5D38  0b 00 00
 	pushw 0x01                                           ; FD5D3B  0b 01 00
 	pushw 0xc8                                           ; FD5D3E  0b c8 00
-	call sub_FD7435                                      ; FD5D41  1d 35 74 fd
+	call ToneEdit_CommitField                                      ; FD5D41  1d 35 74 fd
 	pushw 0x04                                           ; FD5D45  0b 04 00
 	call sub_FD7C01                                      ; FD5D48  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD5D4C  ef c8 1a 00 00 00
@@ -126687,7 +127257,7 @@ sub_FD5F52:
 	ld WA,(XIZ+0x08)                                     ; FD5F82  9e 08 20
 	extz WA                                              ; FD5F85  d8 12
 	pushw wa                                             ; FD5F87  28
-	call sub_FD7C2D                                      ; FD5F88  1d 2d 7c fd
+	call ToneEdit_StepFromEvent                                      ; FD5F88  1d 2d 7c fd
 	ld C,(XIZ+0x08)                                      ; FD5F8C  8e 08 23
 	res 0x07,C                                           ; FD5F8F  cb 30 07
 	ld (xiz-8), c                                        ; FD5F92  be f8 43
@@ -128416,7 +128986,7 @@ sub_FD6CBA:
 	popw hl                                              ; FD6CDD  4b
 	unlk XIZ                                             ; FD6CDE  ee 0d
 	ret                                                  ; FD6CE0  0e
-sub_FD6CE1:
+ToneEdit_ApplyStep:
 	link XIZ,0x0000                                      ; FD6CE1  ee 0c 00 00
 	pushw hl                                             ; FD6CE5  2b
 	push XIX                                             ; FD6CE6  3c
@@ -128438,11 +129008,11 @@ sub_FD6CE1:
 	push XIX                                             ; FD6D06  3c
 	cps h, 0x00                                          ; FD6D07  ce d8
 	jr lt, .LFD6D12                                      ; FD6D09  61 07
-	calr sub_FD6D21                                      ; FD6D0B  1e 13 00
+	calr ToneEdit_ApplyStep_Unsigned                                      ; FD6D0B  1e 13 00
 	ld HL,WA                                             ; FD6D0E  d8 8b
 	jr .LFD6D17                                          ; FD6D10  68 05
 .LFD6D12:
-	calr sub_FD6DD4                                      ; FD6D12  1e bf 00
+	calr ToneEdit_ApplyStep_Signed                                      ; FD6D12  1e bf 00
 	ld HL,WA                                             ; FD6D15  d8 8b
 .LFD6D17:
 	pop XIY                                              ; FD6D17  5d
@@ -128453,7 +129023,7 @@ sub_FD6CE1:
 	popw hl                                              ; FD6D1D  4b
 	unlk XIZ                                             ; FD6D1E  ee 0d
 	ret                                                  ; FD6D20  0e
-sub_FD6D21:
+ToneEdit_ApplyStep_Unsigned:
 	link XIZ,0xfff6                                      ; FD6D21  ee 0c f6 ff
 	pushw hl                                             ; FD6D25  2b
 	pushw de                                             ; FD6D26  2a
@@ -128544,7 +129114,7 @@ sub_FD6D21:
 	popw hl                                              ; FD6DD0  4b
 	unlk XIZ                                             ; FD6DD1  ee 0d
 	ret                                                  ; FD6DD3  0e
-sub_FD6DD4:
+ToneEdit_ApplyStep_Signed:
 	link XIZ,0xfff6                                      ; FD6DD4  ee 0c f6 ff
 	pushw hl                                             ; FD6DD8  2b
 	pushw de                                             ; FD6DD9  2a
@@ -129340,7 +129910,7 @@ sub_FD724B:
 	popw hl                                              ; FD7431  4b
 	unlk XIZ                                             ; FD7432  ee 0d
 	ret                                                  ; FD7434  0e
-sub_FD7435:
+ToneEdit_CommitField:
 	link XIZ,0xfffe                                      ; FD7435  ee 0c fe ff
 	pushw hl                                             ; FD7439  2b
 	push XIX                                             ; FD743A  3c
@@ -130034,7 +130604,7 @@ sub_FD785C:
 	popw hl                                              ; FD7901  4b
 	unlk XIZ                                             ; FD7902  ee 0d
 	ret                                                  ; FD7904  0e
-sub_FD7905:
+PanelEvent_ToFieldIndex:
 	link XIZ,0xfffa                                      ; FD7905  ee 0c fa ff
 	pushw hl                                             ; FD7909  2b
 	pushw de                                             ; FD790A  2a
@@ -130430,7 +131000,7 @@ sub_FD7C01:
 	popw hl                                              ; FD7C29  4b
 	unlk XIZ                                             ; FD7C2A  ee 0d
 	ret                                                  ; FD7C2C  0e
-sub_FD7C2D:
+ToneEdit_StepFromEvent:
 	link XIZ,0x0000                                      ; FD7C2D  ee 0c 00 00
 	push XIX                                             ; FD7C31  3c
 	ld XIX,(XIZ+0x0a)                                    ; FD7C32  ae 0a 24
@@ -130763,7 +131333,7 @@ sub_FD7E66:
 	ld BC,(XIZ+0x08)                                     ; FD7EAA  9e 08 21
 	extz BC                                              ; FD7EAD  d9 12
 	pushw bc                                             ; FD7EAF  29
-	calr sub_FD7C2D                                      ; FD7EB0  1e 7a fd
+	calr ToneEdit_StepFromEvent                                      ; FD7EB0  1e 7a fd
 	push XIX                                             ; FD7EB3  3c
 	ld bc, (xiz-4)                                       ; FD7EB4  9e fc 21
 	extz BC                                              ; FD7EB7  d9 12
@@ -130772,7 +131342,7 @@ sub_FD7E66:
 	pushw 0x00                                           ; FD7EBC  0b 00 00
 	pushw 0x04                                           ; FD7EBF  0b 04 00
 	pushw 0x8a                                           ; FD7EC2  0b 8a 00
-	calr sub_FD7435                                      ; FD7EC5  1e 6d f5
+	calr ToneEdit_CommitField                                      ; FD7EC5  1e 6d f5
 	pushw 0x03                                           ; FD7EC8  0b 03 00
 	calr sub_FD7C01                                      ; FD7ECB  1e 33 fd
 	add XSP,0x00000028                                   ; FD7ECE  ef c8 28 00 00 00
@@ -130811,7 +131381,7 @@ sub_FD7ED9:
 	ld BC,(XIZ+0x08)                                     ; FD7F1D  9e 08 21
 	extz BC                                              ; FD7F20  d9 12
 	pushw bc                                             ; FD7F22  29
-	calr sub_FD7C2D                                      ; FD7F23  1e 07 fd
+	calr ToneEdit_StepFromEvent                                      ; FD7F23  1e 07 fd
 	push XIX                                             ; FD7F26  3c
 	ld bc, (xiz-4)                                       ; FD7F27  9e fc 21
 	extz BC                                              ; FD7F2A  d9 12
@@ -130820,7 +131390,7 @@ sub_FD7ED9:
 	pushw 0x00                                           ; FD7F2F  0b 00 00
 	pushw 0x04                                           ; FD7F32  0b 04 00
 	pushw 0x8a                                           ; FD7F35  0b 8a 00
-	calr sub_FD7435                                      ; FD7F38  1e fa f4
+	calr ToneEdit_CommitField                                      ; FD7F38  1e fa f4
 	pushw 0x04                                           ; FD7F3B  0b 04 00
 	calr sub_FD7C01                                      ; FD7F3E  1e c0 fc
 	add XSP,0x00000028                                   ; FD7F41  ef c8 28 00 00 00
@@ -130859,7 +131429,7 @@ sub_FD7F4C:
 	ld BC,(XIZ+0x08)                                     ; FD7F90  9e 08 21
 	extz BC                                              ; FD7F93  d9 12
 	pushw bc                                             ; FD7F95  29
-	calr sub_FD7C2D                                      ; FD7F96  1e 94 fc
+	calr ToneEdit_StepFromEvent                                      ; FD7F96  1e 94 fc
 	push XIX                                             ; FD7F99  3c
 	ld bc, (xiz-4)                                       ; FD7F9A  9e fc 21
 	extz BC                                              ; FD7F9D  d9 12
@@ -130868,7 +131438,7 @@ sub_FD7F4C:
 	pushw 0x00                                           ; FD7FA2  0b 00 00
 	pushw 0x02                                           ; FD7FA5  0b 02 00
 	pushw 0x8a                                           ; FD7FA8  0b 8a 00
-	calr sub_FD7435                                      ; FD7FAB  1e 87 f4
+	calr ToneEdit_CommitField                                      ; FD7FAB  1e 87 f4
 	pushw 0x05                                           ; FD7FAE  0b 05 00
 	calr sub_FD7C01                                      ; FD7FB1  1e 4d fc
 	add XSP,0x00000028                                   ; FD7FB4  ef c8 28 00 00 00
@@ -130907,7 +131477,7 @@ sub_FD7FBF:
 	ld BC,(XIZ+0x08)                                     ; FD8003  9e 08 21
 	extz BC                                              ; FD8006  d9 12
 	pushw bc                                             ; FD8008  29
-	calr sub_FD7C2D                                      ; FD8009  1e 21 fc
+	calr ToneEdit_StepFromEvent                                      ; FD8009  1e 21 fc
 	push XIX                                             ; FD800C  3c
 	ld bc, (xiz-4)                                       ; FD800D  9e fc 21
 	extz BC                                              ; FD8010  d9 12
@@ -130915,7 +131485,7 @@ sub_FD7FBF:
 	pushw 0x00                                           ; FD8013  0b 00 00
 	pushw 0x01                                           ; FD8016  0b 01 00
 	pushw 0x8a                                           ; FD8019  0b 8a 00
-	calr sub_FD7435                                      ; FD801C  1e 16 f4
+	calr ToneEdit_CommitField                                      ; FD801C  1e 16 f4
 	pushw 0x06                                           ; FD801F  0b 06 00
 	calr sub_FD7C01                                      ; FD8022  1e dc fb
 	add XSP,0x00000028                                   ; FD8025  ef c8 28 00 00 00
@@ -130954,7 +131524,7 @@ sub_FD8030:
 	ld BC,(XIZ+0x08)                                     ; FD8074  9e 08 21
 	extz BC                                              ; FD8077  d9 12
 	pushw bc                                             ; FD8079  29
-	calr sub_FD7C2D                                      ; FD807A  1e b0 fb
+	calr ToneEdit_StepFromEvent                                      ; FD807A  1e b0 fb
 	push XIX                                             ; FD807D  3c
 	ld bc, (xiz-4)                                       ; FD807E  9e fc 21
 	extz BC                                              ; FD8081  d9 12
@@ -130963,7 +131533,7 @@ sub_FD8030:
 	pushw 0x00                                           ; FD8086  0b 00 00
 	pushw 0x03                                           ; FD8089  0b 03 00
 	pushw 0x8a                                           ; FD808C  0b 8a 00
-	calr sub_FD7435                                      ; FD808F  1e a3 f3
+	calr ToneEdit_CommitField                                      ; FD808F  1e a3 f3
 	pushw 0x07                                           ; FD8092  0b 07 00
 	calr sub_FD7C01                                      ; FD8095  1e 69 fb
 	add XSP,0x00000028                                   ; FD8098  ef c8 28 00 00 00
@@ -131002,7 +131572,7 @@ sub_FD80A3:
 	ld BC,(XIZ+0x08)                                     ; FD80E7  9e 08 21
 	extz BC                                              ; FD80EA  d9 12
 	pushw bc                                             ; FD80EC  29
-	calr sub_FD7C2D                                      ; FD80ED  1e 3d fb
+	calr ToneEdit_StepFromEvent                                      ; FD80ED  1e 3d fb
 	push XIX                                             ; FD80F0  3c
 	ld bc, (xiz-4)                                       ; FD80F1  9e fc 21
 	extz BC                                              ; FD80F4  d9 12
@@ -131011,7 +131581,7 @@ sub_FD80A3:
 	pushw 0x00                                           ; FD80F9  0b 00 00
 	pushw 0x03                                           ; FD80FC  0b 03 00
 	pushw 0x8a                                           ; FD80FF  0b 8a 00
-	calr sub_FD7435                                      ; FD8102  1e 30 f3
+	calr ToneEdit_CommitField                                      ; FD8102  1e 30 f3
 	pushw 0x08                                           ; FD8105  0b 08 00
 	calr sub_FD7C01                                      ; FD8108  1e f6 fa
 	add XSP,0x00000028                                   ; FD810B  ef c8 28 00 00 00
@@ -131073,7 +131643,7 @@ sub_FD8155:
 	ld BC,(XIZ+0x08)                                     ; FD8196  9e 08 21
 	extz BC                                              ; FD8199  d9 12
 	pushw bc                                             ; FD819B  29
-	calr sub_FD7C2D                                      ; FD819C  1e 8e fa
+	calr ToneEdit_StepFromEvent                                      ; FD819C  1e 8e fa
 	push XIX                                             ; FD819F  3c
 	ld BC,(XIZ+0x0a)                                     ; FD81A0  9e 0a 21
 	extz BC                                              ; FD81A3  d9 12
@@ -131083,7 +131653,7 @@ sub_FD8155:
 	pushw bc                                             ; FD81AB  29
 	pushw 0x03                                           ; FD81AC  0b 03 00
 	pushw 0x97                                           ; FD81AF  0b 97 00
-	calr sub_FD7435                                      ; FD81B2  1e 80 f2
+	calr ToneEdit_CommitField                                      ; FD81B2  1e 80 f2
 	calr sub_FD8DAF                                      ; FD81B5  1e f7 0b
 	pushw 0x01                                           ; FD81B8  0b 01 00
 	calr sub_FD7C01                                      ; FD81BB  1e 43 fa
@@ -131119,7 +131689,7 @@ sub_FD81C8:
 	ld BC,(XIZ+0x08)                                     ; FD8209  9e 08 21
 	extz BC                                              ; FD820C  d9 12
 	pushw bc                                             ; FD820E  29
-	calr sub_FD7C2D                                      ; FD820F  1e 1b fa
+	calr ToneEdit_StepFromEvent                                      ; FD820F  1e 1b fa
 	push XIX                                             ; FD8212  3c
 	ld BC,(XIZ+0x0a)                                     ; FD8213  9e 0a 21
 	extz BC                                              ; FD8216  d9 12
@@ -131129,7 +131699,7 @@ sub_FD81C8:
 	pushw bc                                             ; FD821E  29
 	pushw 0x04                                           ; FD821F  0b 04 00
 	pushw 0x97                                           ; FD8222  0b 97 00
-	calr sub_FD7435                                      ; FD8225  1e 0d f2
+	calr ToneEdit_CommitField                                      ; FD8225  1e 0d f2
 	calr sub_FD8DAF                                      ; FD8228  1e 84 0b
 	pushw 0x02                                           ; FD822B  0b 02 00
 	calr sub_FD7C01                                      ; FD822E  1e d0 f9
@@ -131182,7 +131752,7 @@ sub_FD823B:
 	ld BC,(XIZ+0x08)                                     ; FD82A4  9e 08 21
 	extz BC                                              ; FD82A7  d9 12
 	pushw bc                                             ; FD82A9  29
-	calr sub_FD7C2D                                      ; FD82AA  1e 80 f9
+	calr ToneEdit_StepFromEvent                                      ; FD82AA  1e 80 f9
 	push XIX                                             ; FD82AD  3c
 	ld C,H                                               ; FD82AE  ce 8b
 	extz BC                                              ; FD82B0  d9 12
@@ -131194,7 +131764,7 @@ sub_FD823B:
 	extz BC                                              ; FD82BB  d9 12
 	pushw bc                                             ; FD82BD  29
 	pushw 0x97                                           ; FD82BE  0b 97 00
-	calr sub_FD7435                                      ; FD82C1  1e 71 f1
+	calr ToneEdit_CommitField                                      ; FD82C1  1e 71 f1
 	calr sub_FD8DAF                                      ; FD82C4  1e e8 0a
 	pushw 0x03                                           ; FD82C7  0b 03 00
 	calr sub_FD7C01                                      ; FD82CA  1e 34 f9
@@ -131230,7 +131800,7 @@ sub_FD82D8:
 	ld BC,(XIZ+0x08)                                     ; FD8319  9e 08 21
 	extz BC                                              ; FD831C  d9 12
 	pushw bc                                             ; FD831E  29
-	calr sub_FD7C2D                                      ; FD831F  1e 0b f9
+	calr ToneEdit_StepFromEvent                                      ; FD831F  1e 0b f9
 	push XIX                                             ; FD8322  3c
 	ld BC,(XIZ+0x0a)                                     ; FD8323  9e 0a 21
 	extz BC                                              ; FD8326  d9 12
@@ -131240,7 +131810,7 @@ sub_FD82D8:
 	pushw bc                                             ; FD832E  29
 	pushw 0x06                                           ; FD832F  0b 06 00
 	pushw 0x97                                           ; FD8332  0b 97 00
-	calr sub_FD7435                                      ; FD8335  1e fd f0
+	calr ToneEdit_CommitField                                      ; FD8335  1e fd f0
 	calr sub_FD8DAF                                      ; FD8338  1e 74 0a
 	pushw 0x04                                           ; FD833B  0b 04 00
 	calr sub_FD7C01                                      ; FD833E  1e c0 f8
@@ -131293,7 +131863,7 @@ sub_FD834B:
 	ld BC,(XIZ+0x08)                                     ; FD83B4  9e 08 21
 	extz BC                                              ; FD83B7  d9 12
 	pushw bc                                             ; FD83B9  29
-	calr sub_FD7C2D                                      ; FD83BA  1e 70 f8
+	calr ToneEdit_StepFromEvent                                      ; FD83BA  1e 70 f8
 	push XIX                                             ; FD83BD  3c
 	ld C,H                                               ; FD83BE  ce 8b
 	extz BC                                              ; FD83C0  d9 12
@@ -131305,7 +131875,7 @@ sub_FD834B:
 	extz BC                                              ; FD83CB  d9 12
 	pushw bc                                             ; FD83CD  29
 	pushw 0x97                                           ; FD83CE  0b 97 00
-	calr sub_FD7435                                      ; FD83D1  1e 61 f0
+	calr ToneEdit_CommitField                                      ; FD83D1  1e 61 f0
 	calr sub_FD8DAF                                      ; FD83D4  1e d8 09
 	pushw 0x05                                           ; FD83D7  0b 05 00
 	calr sub_FD7C01                                      ; FD83DA  1e 24 f8
@@ -131342,7 +131912,7 @@ sub_FD83ED:
 	ld BC,(XIZ+0x08)                                     ; FD8429  9e 08 21
 	extz BC                                              ; FD842C  d9 12
 	pushw bc                                             ; FD842E  29
-	calr sub_FD7C2D                                      ; FD842F  1e fb f7
+	calr ToneEdit_StepFromEvent                                      ; FD842F  1e fb f7
 	push XIX                                             ; FD8432  3c
 	ld BC,(XIZ+0x0a)                                     ; FD8433  9e 0a 21
 	extz BC                                              ; FD8436  d9 12
@@ -131352,7 +131922,7 @@ sub_FD83ED:
 	pushw bc                                             ; FD843E  29
 	pushw 0x08                                           ; FD843F  0b 08 00
 	pushw 0x97                                           ; FD8442  0b 97 00
-	calr sub_FD7435                                      ; FD8445  1e ed ef
+	calr ToneEdit_CommitField                                      ; FD8445  1e ed ef
 	calr sub_FD8DAF                                      ; FD8448  1e 64 09
 	pushw 0x06                                           ; FD844B  0b 06 00
 	calr sub_FD7C01                                      ; FD844E  1e b0 f7
@@ -131406,7 +131976,7 @@ sub_FD8488:
 	ld BC,(XIZ+0x08)                                     ; FD84C4  9e 08 21
 	extz BC                                              ; FD84C7  d9 12
 	pushw bc                                             ; FD84C9  29
-	calr sub_FD7C2D                                      ; FD84CA  1e 60 f7
+	calr ToneEdit_StepFromEvent                                      ; FD84CA  1e 60 f7
 	push XIX                                             ; FD84CD  3c
 	ld C,H                                               ; FD84CE  ce 8b
 	extz BC                                              ; FD84D0  d9 12
@@ -131418,7 +131988,7 @@ sub_FD8488:
 	extz BC                                              ; FD84DB  d9 12
 	pushw bc                                             ; FD84DD  29
 	pushw 0x97                                           ; FD84DE  0b 97 00
-	calr sub_FD7435                                      ; FD84E1  1e 51 ef
+	calr ToneEdit_CommitField                                      ; FD84E1  1e 51 ef
 	calr sub_FD8DAF                                      ; FD84E4  1e c8 08
 	pushw 0x07                                           ; FD84E7  0b 07 00
 	calr sub_FD7C01                                      ; FD84EA  1e 14 f7
@@ -131447,7 +132017,7 @@ sub_FD84F8:
 	ld BC,(XIZ+0x08)                                     ; FD8527  9e 08 21
 	extz BC                                              ; FD852A  d9 12
 	pushw bc                                             ; FD852C  29
-	calr sub_FD7C2D                                      ; FD852D  1e fd f6
+	calr ToneEdit_StepFromEvent                                      ; FD852D  1e fd f6
 	push XIX                                             ; FD8530  3c
 	ld BC,(XIZ+0x0a)                                     ; FD8531  9e 0a 21
 	extz BC                                              ; FD8534  d9 12
@@ -131457,7 +132027,7 @@ sub_FD84F8:
 	pushw bc                                             ; FD853C  29
 	pushw 0x03                                           ; FD853D  0b 03 00
 	pushw 0x89                                           ; FD8540  0b 89 00
-	calr sub_FD7435                                      ; FD8543  1e ef ee
+	calr ToneEdit_CommitField                                      ; FD8543  1e ef ee
 	lda xbc, (xiz-4)                                     ; FD8546  be fc 31
 	push XBC                                             ; FD8549  39
 	pushw 0x03                                           ; FD854A  0b 03 00
@@ -131512,7 +132082,7 @@ sub_FD859B:
 	ld BC,(XIZ+0x08)                                     ; FD85CA  9e 08 21
 	extz BC                                              ; FD85CD  d9 12
 	pushw bc                                             ; FD85CF  29
-	calr sub_FD7C2D                                      ; FD85D0  1e 5a f6
+	calr ToneEdit_StepFromEvent                                      ; FD85D0  1e 5a f6
 	push XIX                                             ; FD85D3  3c
 	ld BC,(XIZ+0x0a)                                     ; FD85D4  9e 0a 21
 	extz BC                                              ; FD85D7  d9 12
@@ -131522,7 +132092,7 @@ sub_FD859B:
 	pushw bc                                             ; FD85DF  29
 	pushw 0x04                                           ; FD85E0  0b 04 00
 	pushw 0x89                                           ; FD85E3  0b 89 00
-	calr sub_FD7435                                      ; FD85E6  1e 4c ee
+	calr ToneEdit_CommitField                                      ; FD85E6  1e 4c ee
 	lda xbc, (xiz-4)                                     ; FD85E9  be fc 31
 	push XBC                                             ; FD85EC  39
 	pushw 0x04                                           ; FD85ED  0b 04 00
@@ -131576,7 +132146,7 @@ sub_FD863E:
 	ld BC,(XIZ+0x08)                                     ; FD866D  9e 08 21
 	extz BC                                              ; FD8670  d9 12
 	pushw bc                                             ; FD8672  29
-	calr sub_FD7C2D                                      ; FD8673  1e b7 f5
+	calr ToneEdit_StepFromEvent                                      ; FD8673  1e b7 f5
 	push XIX                                             ; FD8676  3c
 	ld BC,(XIZ+0x0a)                                     ; FD8677  9e 0a 21
 	extz BC                                              ; FD867A  d9 12
@@ -131586,7 +132156,7 @@ sub_FD863E:
 	pushw bc                                             ; FD8682  29
 	pushw 0x05                                           ; FD8683  0b 05 00
 	pushw 0x89                                           ; FD8686  0b 89 00
-	calr sub_FD7435                                      ; FD8689  1e a9 ed
+	calr ToneEdit_CommitField                                      ; FD8689  1e a9 ed
 	lda xbc, (xiz-4)                                     ; FD868C  be fc 31
 	push XBC                                             ; FD868F  39
 	pushw 0x05                                           ; FD8690  0b 05 00
@@ -131629,7 +132199,7 @@ sub_FD86E1:
 	ld BC,(XIZ+0x08)                                     ; FD86EE  9e 08 21
 	extz BC                                              ; FD86F1  d9 12
 	pushw bc                                             ; FD86F3  29
-	calr sub_FDA3E2                                      ; FD86F4  1e eb 1c
+	calr ToneEdit_CommitNoteField                                      ; FD86F4  1e eb 1c
 	inc 0,XSP                                            ; FD86F7  ef 60
 	cps a, 0x01                                          ; FD86F9  c9 d9
 	jr nz, .LFD873D                                      ; FD86FB  6e 40
@@ -131683,7 +132253,7 @@ sub_FD8747:
 	ld BC,(XIZ+0x08)                                     ; FD8776  9e 08 21
 	extz BC                                              ; FD8779  d9 12
 	pushw bc                                             ; FD877B  29
-	calr sub_FD7C2D                                      ; FD877C  1e ae f4
+	calr ToneEdit_StepFromEvent                                      ; FD877C  1e ae f4
 	push XIX                                             ; FD877F  3c
 	ld BC,(XIZ+0x0a)                                     ; FD8780  9e 0a 21
 	extz BC                                              ; FD8783  d9 12
@@ -131694,7 +132264,7 @@ sub_FD8789:
 	pushw bc                                             ; FD878B  29
 	pushw 0x00                                           ; FD878C  0b 00 00
 	pushw 0x89                                           ; FD878F  0b 89 00
-	calr sub_FD7435                                      ; FD8792  1e a0 ec
+	calr ToneEdit_CommitField                                      ; FD8792  1e a0 ec
 	pushw 0x07                                           ; FD8795  0b 07 00
 	calr sub_FD7C01                                      ; FD8798  1e 66 f4
 	add XSP,0x0000001e                                   ; FD879B  ef c8 1e 00 00 00
@@ -131721,7 +132291,7 @@ sub_FD87A5:
 	ld BC,(XIZ+0x08)                                     ; FD87D4  9e 08 21
 	extz BC                                              ; FD87D7  d9 12
 	pushw bc                                             ; FD87D9  29
-	calr sub_FD7C2D                                      ; FD87DA  1e 50 f4
+	calr ToneEdit_StepFromEvent                                      ; FD87DA  1e 50 f4
 	push XIX                                             ; FD87DD  3c
 	ld BC,(XIZ+0x0a)                                     ; FD87DE  9e 0a 21
 	extz BC                                              ; FD87E1  d9 12
@@ -131731,7 +132301,7 @@ sub_FD87A5:
 	pushw bc                                             ; FD87E9  29
 	pushw 0x01                                           ; FD87EA  0b 01 00
 	pushw 0x89                                           ; FD87ED  0b 89 00
-	calr sub_FD7435                                      ; FD87F0  1e 42 ec
+	calr ToneEdit_CommitField                                      ; FD87F0  1e 42 ec
 	pushw 0x08                                           ; FD87F3  0b 08 00
 	calr sub_FD7C01                                      ; FD87F6  1e 08 f4
 	add XSP,0x0000001e                                   ; FD87F9  ef c8 1e 00 00 00
@@ -131824,7 +132394,7 @@ sub_FD884C:
 	ld BC,(XIZ+0x08)                                     ; FD88B9  9e 08 21
 	extz BC                                              ; FD88BC  d9 12
 	pushw bc                                             ; FD88BE  29
-	calr sub_FD7C2D                                      ; FD88BF  1e 6b f3
+	calr ToneEdit_StepFromEvent                                      ; FD88BF  1e 6b f3
 	push XIX                                             ; FD88C2  3c
 	calr 0xe41b                                          ; FD88C3  1e 1b e4
 	inc 0,XSP                                            ; FD88C6  ef 60
@@ -131912,7 +132482,7 @@ sub_FD895A:
 	ld WA,(XIZ+0x08)                                     ; FD896C  9e 08 20
 	extz WA                                              ; FD896F  d8 12
 	pushw wa                                             ; FD8971  28
-	calr sub_FD7C2D                                      ; FD8972  1e b8 f2
+	calr ToneEdit_StepFromEvent                                      ; FD8972  1e b8 f2
 	ld bc, (xiz-4)                                       ; FD8975  9e fc 21
 	exts BC                                              ; FD8978  d9 13
 	pushw bc                                             ; FD897A  29
@@ -135039,7 +135609,7 @@ Var27FE_Set:
 	pop XHL                                              ; FDA3DE  5b
 	unlk XIZ                                             ; FDA3DF  ee 0d
 	ret                                                  ; FDA3E1  0e
-sub_FDA3E2:
+ToneEdit_CommitNoteField:
 	link XIZ,0xfff4                                      ; FDA3E2  ee 0c f4 ff
 	pushw hl                                             ; FDA3E6  2b
 	push XIX                                             ; FDA3E7  3c
@@ -135061,7 +135631,7 @@ sub_FDA3E2:
 	ld BC,(XIZ+0x08)                                     ; FDA412  9e 08 21
 	extz BC                                              ; FDA415  d9 12
 	pushw bc                                             ; FDA417  29
-	calr sub_FD7C2D                                      ; FDA418  1e 12 d8
+	calr ToneEdit_StepFromEvent                                      ; FDA418  1e 12 d8
 	push XIX                                             ; FDA41B  3c
 	calr 0xc8c2                                          ; FDA41C  1e c2 c8
 	inc 0,XSP                                            ; FDA41F  ef 60
@@ -142487,7 +143057,7 @@ sub_FDE3BE:
 	push XWA                                             ; FDE3C9  38
 	m_push MWD+r6, 0x0a                                  ; FDE3CA  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE3CD  9e 08 04
-	call sub_FD7905                                      ; FDE3D0  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE3D0  1d 05 79 fd
 	inc 0,XSP                                            ; FDE3D4  ef 60
 	inc 4,XSP                                            ; FDE3D6  ef 64
 	cp WA,0xffff                                         ; FDE3D8  d8 cf ff ff
@@ -142525,7 +143095,7 @@ sub_FDE41E:
 	push XWA                                             ; FDE429  38
 	m_push MWD+r6, 0x0a                                  ; FDE42A  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE42D  9e 08 04
-	call sub_FD7905                                      ; FDE430  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE430  1d 05 79 fd
 	inc 0,XSP                                            ; FDE434  ef 60
 	inc 4,XSP                                            ; FDE436  ef 64
 	cp WA,0xffff                                         ; FDE438  d8 cf ff ff
@@ -142563,7 +143133,7 @@ sub_FDE47E:
 	push XWA                                             ; FDE489  38
 	m_push MWD+r6, 0x0a                                  ; FDE48A  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE48D  9e 08 04
-	call sub_FD7905                                      ; FDE490  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE490  1d 05 79 fd
 	inc 0,XSP                                            ; FDE494  ef 60
 	inc 4,XSP                                            ; FDE496  ef 64
 	cp WA,0xffff                                         ; FDE498  d8 cf ff ff
@@ -142601,7 +143171,7 @@ sub_FDE4DE:
 	push XWA                                             ; FDE4E9  38
 	m_push MWD+r6, 0x0a                                  ; FDE4EA  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE4ED  9e 08 04
-	call sub_FD7905                                      ; FDE4F0  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE4F0  1d 05 79 fd
 	inc 0,XSP                                            ; FDE4F4  ef 60
 	inc 4,XSP                                            ; FDE4F6  ef 64
 	cp WA,0xffff                                         ; FDE4F8  d8 cf ff ff
@@ -142640,7 +143210,7 @@ sub_FDE53E:
 	push XWA                                             ; FDE549  38
 	m_push MWD+r6, 0x0a                                  ; FDE54A  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE54D  9e 08 04
-	call sub_FD7905                                      ; FDE550  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE550  1d 05 79 fd
 	inc 0,XSP                                            ; FDE554  ef 60
 	inc 4,XSP                                            ; FDE556  ef 64
 	cp WA,0xffff                                         ; FDE558  d8 cf ff ff
@@ -142678,7 +143248,7 @@ sub_FDE59E:
 	push XWA                                             ; FDE5A9  38
 	m_push MWD+r6, 0x0a                                  ; FDE5AA  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE5AD  9e 08 04
-	call sub_FD7905                                      ; FDE5B0  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE5B0  1d 05 79 fd
 	inc 0,XSP                                            ; FDE5B4  ef 60
 	inc 4,XSP                                            ; FDE5B6  ef 64
 	cp WA,0xffff                                         ; FDE5B8  d8 cf ff ff
@@ -142712,7 +143282,7 @@ sub_FDE5EF:
 	push XWA                                             ; FDE5FA  38
 	m_push MWD+r6, 0x0a                                  ; FDE5FB  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE5FE  9e 08 04
-	call sub_FD7905                                      ; FDE601  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE601  1d 05 79 fd
 	inc 0,XSP                                            ; FDE605  ef 60
 	inc 4,XSP                                            ; FDE607  ef 64
 	cp WA,0xffff                                         ; FDE609  d8 cf ff ff
@@ -142750,7 +143320,7 @@ sub_FDE64F:
 	push XWA                                             ; FDE65A  38
 	m_push MWD+r6, 0x0a                                  ; FDE65B  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE65E  9e 08 04
-	call sub_FD7905                                      ; FDE661  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE661  1d 05 79 fd
 	inc 0,XSP                                            ; FDE665  ef 60
 	inc 4,XSP                                            ; FDE667  ef 64
 	cp WA,0xffff                                         ; FDE669  d8 cf ff ff
@@ -142788,7 +143358,7 @@ sub_FDE6AF:
 	push XWA                                             ; FDE6BA  38
 	m_push MWD+r6, 0x0a                                  ; FDE6BB  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FDE6BE  9e 08 04
-	call sub_FD7905                                      ; FDE6C1  1d 05 79 fd
+	call PanelEvent_ToFieldIndex                                      ; FDE6C1  1d 05 79 fd
 	inc 0,XSP                                            ; FDE6C5  ef 60
 	inc 4,XSP                                            ; FDE6C7  ef 64
 	cp WA,0xffff                                         ; FDE6C9  d8 cf ff ff
