@@ -76,9 +76,22 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 > words, 46 % of the entire routing ceiling**, more than 3× the whole operation field; its reading
 > is graded *"1 of 6 enumerated, no independent support"* by the source itself; and the census names
 > **three sites where its index varies** (`iw13`/`iw14`/`iw36`), so rule 4 does not block it.
-> Corpus discrimination FIRST (rule 13). ⚠ Because it is 605-of-648 paired with `ACTION 0x00` —
+> Corpus discrimination FIRST (rule 13). ⚠ Because it is paired with `ACTION 0x00` —
 > the adder's bus term — **PARAMETRIC EQ's 0.198 dB and SINGLE DELAY's `+0.02149296` become live
 > falsifiers there** and must both be run.
+>
+> ⚠⚠ **PART-STARTED 2026-09-04 AND STOPPED FOR QUOTA — read
+> `dsp/analysis/SRC00-HANDOFF-2026-09-04.md` before re-opening.** Step 1 of the corpus
+> discrimination is **DONE** (`dsp/tools/src00_corpus.py`); step 2 and both live falsifiers are
+> **NOT RUN**; no build, no MAME run, no default flipped, no register section written.
+> **Two corrections it already earned:** (1) *"605 of 648"* above counts **26 C-format words with
+> no `src` field at all** — correct form **622 non-C-format words, 580 paired with `ACTION 0x00`**
+> (the **+348 price is unaffected**); (2) ⛔ the device's own refutation of the **null-routing**
+> rival cites `action00-discriminator.md` **item I**, which `adjudication-round6.md` §14 **VOIDED**
+> — so `mem[ptr]` and `zero` are **both currently unrefuted** and the device ships one of them.
+> ★ Next action: parameterise `gate_settle.py`'s biquad scorer and `sd_rerun.py` (which hard-codes
+> `src00="mem"`) over the **seven** readings — the menu is `{mem, P, acc, zero, DR, tA}` **plus
+> §145's `coef`**, never enumerated for this code.
 
 <details><summary>original entry</summary>
 
