@@ -23,6 +23,7 @@ the assessment is a line of it.
 | `diff_causes.py` | When re-assembling unidasm's text gives different bytes, what did unidasm's text fail to say? |
 | `native_convergence.py` | How much of that is recovered by the one annotation UPDATE 7 already supports — the address width, `(0x2075:16)`? |
 | `decoder_disagreements.py` | Where are the sites unidasm refuses, in the sources? |
+| `xname_slot_convention.py` | When a 32-bit register NAME is written against a narrower form, which register does the assembler encode? ★ The answer is per instruction CLASS: `ldb_da xbc` is C (the pair's low byte), `cpda8 xbc` is A (the same index). Run it before trusting any x-name rename in a new family. |
 | `size_family_convert.py` | For each size/form mnemonic: is the name a spelling the operand syntax can already express, or a selector between two legal encodings? And, for the spellings, rewrite every site — but only after assembling both spellings at all of them. |
 
 ## What the signals mean
