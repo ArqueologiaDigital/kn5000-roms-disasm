@@ -20,6 +20,32 @@ giving its arithmetic, its destination register and its grade.
 
 ---
 
+## ★ CORRECTIONS CARRIED IN, 2026-09-04
+
+⚠ Wave 21's CPU-1 hop (`FINDINGS-l7a1429-editor-pages.md`) landed after this note.
+It changes **two inherited names and one grade** and nothing this lane measured.
+Nothing below is edited.
+
+* **`Q[+0x0B]` bits 7:6 are `GROUP`, not `RESO MODE`.**  Every "RESO MODE
+  dispatcher", "RESO MODE arms" and "RESO MODE code" below is right about the
+  field, the dispatch and the six arms; only the field's NAME was inherited
+  wrong.  The real `RESO MODE` is p21/p31 bit 7, on a different page, and it adds
+  an octave to that resonator's tuning.  (editor-pages §1a, §4e.)
+* **`0x0240`'s parameter name is no longer WEAK: it is STRONG.**  `0x0240` is the
+  register the editor's `DEPTH` control scales — p14 bits 0-6, which this lane's
+  own `PartRec_SetPositionOffset_0003` takes with `res 7,C` at `0xFC5B32`, while
+  p14's bit 7 is `FORMANT` and gates `0x00C0`'s key-follow term.  ★ So §3's last
+  row is answered by a routine this lane named.  (editor-pages §3a, §4, §4d.)
+* **§3's "two points of failure" clause is superseded.**  Both the MAIN/SUB
+  direction and the `FITTING`/`MUTING` split now have a second, independent route
+  through `PAGE1/3`'s row labels and column headers.  (editor-pages §3c, §5.4.)
+* **§4.1 is confirmed at the instruction encoding, and the question it reopened is
+  closed**: the producer of the bits that gate `0x0300` is fifteen sites in seven
+  routines writing `P[+0x07]` bits 6..4.  (`FINDINGS-l7a1429-gate-and-keyscaling.md`
+  §1.3, §1.6.)
+
+---
+
 ## 0. The answer in one paragraph
 
 **24 of the 57 `sub_XXXXXX` routines in `prom_c/field_accessors.s` are named; 33
