@@ -1643,7 +1643,7 @@ SMF_ResolveGlobalChannel:
 
 SMF_GlobalCh_DrumMode:
 	cp (4324:16), 255
-	jp_24 nz, SMF_GlobalCh_DrumCh15
+	jp nz, (SMF_GlobalCh_DrumCh15:24)
 	ld (6881:16), 9
 	jp SMF_GlobalCh_Return
 
@@ -1653,14 +1653,14 @@ SMF_GlobalCh_DrumCh15:
 
 SMF_GlobalCh_NoDrum:
 	cp (4324:16), 255
-	jp_24 nz, SMF_GlobalCh_NonDrumCh15
+	jp nz, (SMF_GlobalCh_NonDrumCh15:24)
 	cp iy, 0x9
-	jp_24 z, SMF_GlobalCh_FreeSearch
+	jp z, (SMF_GlobalCh_FreeSearch:24)
 	jp SMF_GlobalCh_Found
 
 SMF_GlobalCh_NonDrumCh15:
 	cp iy, 0xf
-	jp_24 z, SMF_GlobalCh_FreeSearch
+	jp z, (SMF_GlobalCh_FreeSearch:24)
 	jp SMF_GlobalCh_Found
 
 SMF_GlobalCh_FreeSearch:
@@ -1989,9 +1989,9 @@ SMF_ConfigSlot_ReadDataLoop:
 	cps a, 3
 	jr z, SMF_Config_Format3
 	cps a, 4
-	jp_24 z, SMF_Config_Format4or5
+	jp z, (SMF_Config_Format4or5:24)
 	cps a, 5
-	jp_24 z, SMF_Config_Format4or5
+	jp z, (SMF_Config_Format4or5:24)
 	jrl SMF_ConfigSlot_Return
 
 SMF_Config_Format1:

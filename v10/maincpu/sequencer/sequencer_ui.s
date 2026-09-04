@@ -922,7 +922,7 @@ LyricsFile_CheckLinefeed:
 LyricsFile_InsertNormalChar:
 	add wa, (xbc)
 	cpib_sri 0x07, 0xec, 0xe0, 0x0d
-	call_24 z, LyricsTrack_ResetAllBuffers
+	call z, (LyricsTrack_ResetAllBuffers:24)
 	pushw 0x2
 	pushw 0xf4e
 	call Strlen
@@ -5648,7 +5648,7 @@ StsAtPunchCheck_ReturnZero:
 
 MsgToTtlProc:
 	cp xbc, 0x1c00001
-	jp_24 nz, InheritedProc
+	jp nz, (InheritedProc:24)
 	call InheritedProc
 	call GetTitleOld
 	cp xhl, 0x1a000ee

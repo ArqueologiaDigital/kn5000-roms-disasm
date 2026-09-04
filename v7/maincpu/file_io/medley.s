@@ -1680,7 +1680,7 @@ NavDoc_WrapToEnd:
 	.byte 0xd1, 0x6c, 0x84, 0xf0, 0x61, 0x02, 0xd8, 0xa8
 NavDoc_CheckEnd:
 	cp hl, wa
-	call_24 nz, FileIO_SelectFileByIndex
+	call nz, (FileIO_SelectFileByIndex:24)
 
 NavDoc_Exit:
 	popw iz
@@ -1704,7 +1704,7 @@ NavPd_WrapToEnd:
 	.byte 0xd1, 0x6a, 0x84, 0xf0, 0x61, 0x02, 0xd8, 0xa8
 NavPd_CheckEnd:
 	cp hl, wa
-	call_24 nz, SetCurrentFileIndex
+	call nz, (SetCurrentFileIndex:24)
 
 NavPd_Exit:
 	popw iz

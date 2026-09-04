@@ -1366,7 +1366,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	nop                                     ; nop
 	ld	e, (xwa+2)
 	or	e, (xwa+2)
-	jp_24	nz, 0x29B830
+	jp	nz, (0x29B830:24)
 	push xiz
 	push xwa
 	ld16_src_rid8 xbc, 0x00, hl		; ld HL,(XBC+0x00)

@@ -170,7 +170,7 @@ AudioInit_PushAndConfigVoice:
 	dec 2, xsp
 	ld (xsp), a
 	cp (xsp), 0x1
-	call_24 z, AudioInit_RefreshToneBank
+	call z, (AudioInit_RefreshToneBank:24)
 	orw (0xc594:16), 2
 	ld a, (xsp)
 	extz wa
@@ -182,7 +182,7 @@ AudioInit_PushAndConfigVoiceAlt:
 	dec 2, xsp
 	ld (xsp), a
 	cp (xsp), 0x1
-	call_24 z, AudioInit_RefreshToneBank
+	call z, (AudioInit_RefreshToneBank:24)
 	ld a, (0x8d36:16)
 	cp a, 0xc9
 	jr nz, AudioInit_LoadStackAndConfig
@@ -1230,10 +1230,10 @@ AudioInit_RefreshToneBank:
 	andw (0xc596:16), 0xffef
 	call Voice_UpdatePlayModeState
 	cp l, 0xff
-	call_24 nz, VoiceEvent_AllocAllLayers
+	call nz, (VoiceEvent_AllocAllLayers:24)
 	call NoteMap_FindBestMatch
 	cp l, 0xff
-	call_24 nz, VoiceEvent_DispatchTable
+	call nz, (VoiceEvent_DispatchTable:24)
 	ld (0xc596:16), iz
 	popw iz
 	ret
@@ -1622,10 +1622,10 @@ AudioInit_DispatchChanges:
 	ldw (0xc4ca:16), 0
 	ld wa, (0xc59c:16)
 	and wa, 0x188
-	call_24 nz, AudioInit_ComparePartStates
+	call nz, (AudioInit_ComparePartStates:24)
 	ld wa, (0xc59c:16)
 	and wa, 0x1c0
-	call_24 nz, AudioInit_CompareChannelMappings
+	call nz, (AudioInit_CompareChannelMappings:24)
 	ld wa, (0xc59c:16)
 	and wa, 0x102
 	jr z, AudioInit_Dispatch_CheckVoiceChange
@@ -1657,16 +1657,16 @@ AudioInit_Dispatch_SendPartChange:
 AudioInit_Dispatch_CheckMisc:
 	ld wa, (0xc59c:16)
 	bit 2, wa
-	call_24 nz, AudioInit_ComparePartAssignment
+	call nz, (AudioInit_ComparePartAssignment:24)
 	ld wa, (0xc59c:16)
 	bit 3, wa
-	call_24 nz, AudioInit_ComparePartConfig
+	call nz, (AudioInit_ComparePartConfig:24)
 	ld wa, (0xc59c:16)
 	bit 6, wa
-	call_24 nz, AudioInit_CompareChannelConfig
+	call nz, (AudioInit_CompareChannelConfig:24)
 	ld wa, (0xc59c:16)
 	bit 4, wa
-	call_24 nz, AudioInit_CompareVolumeTable
+	call nz, (AudioInit_CompareVolumeTable:24)
 	ld wa, (0xc59a:16)
 	bit 13, wa
 	jr z, AudioInit_Dispatch_CheckToneRefresh
@@ -1682,7 +1682,7 @@ AudioInit_Dispatch_CheckToneRefresh:
 AudioInit_Dispatch_RefreshTone:
 	call Voice_UpdatePlayModeState
 	cp l, 0xff
-	call_24 nz, VoiceEvent_AllocAllLayers
+	call nz, (VoiceEvent_AllocAllLayers:24)
 
 AudioInit_Dispatch_CheckVoiceAssign:
 	ld wa, (0xc59a:16)
@@ -1690,7 +1690,7 @@ AudioInit_Dispatch_CheckVoiceAssign:
 	jr z, AudioInit_Dispatch_Finalize
 	call NoteMap_FindBestMatch
 	cp l, 0xff
-	call_24 nz, VoiceEvent_DispatchTable
+	call nz, (VoiceEvent_DispatchTable:24)
 
 AudioInit_Dispatch_Finalize:
 	call VoiceEvent_HandlerTable

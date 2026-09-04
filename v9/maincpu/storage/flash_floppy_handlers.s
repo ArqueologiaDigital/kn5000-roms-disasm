@@ -3852,7 +3852,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -3863,7 +3863,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -3874,7 +3874,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -3885,7 +3885,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jrl c, DualVoice_ScanColumnLoop
@@ -3929,7 +3929,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -3940,7 +3940,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -3951,7 +3951,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -3962,7 +3962,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jrl c, DualVoice_ScanColumnLoopAlt

@@ -1349,8 +1349,8 @@ DrawText_ExtLayout_Variant1:
 	extz	xbc
 	lda	xwa, (xsp+276)
 	push	xbc
-	pushdi_24	(0x03efa4)
-	pushdi_24	(0x03efa2)
+	pushw	(0x03efa4:24)
+	pushw	(0x03efa2:24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
 	calr	60994

@@ -1712,7 +1712,7 @@ AccompSeq_SeqParse_Dispatch:
 	cp a, 0xc0
 	jr z, AccompSeq_SeqParse_MidiEvent
 	cp a, 0x84
-	jp_24 z, AccompSeq_SeqParse_TempoReset
+	jp z, (AccompSeq_SeqParse_TempoReset:24)
 	calr AccompSeq_AdvancePosition
 	jr AccompSeq_SeqParse_Loop
 

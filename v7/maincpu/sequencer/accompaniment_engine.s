@@ -9137,7 +9137,7 @@ AccDir_AdjustDirection:
 	ld a, (0x3403:16)
 	and A,0x09
 	cps a, 0
-	jp_24 z, (AccDir_Adjust_Ret)
+	jp z, (AccDir_Adjust_Ret:24)
 	bit 0, (0x3403:16)
 	jr z, AccDir_Adjust_LeftHand
 	and (0x3403:16), 0xfe
@@ -31798,7 +31798,7 @@ StylCnvCnvt_HandleScroll:
 
 StylCnvCnvt_HandleRedraw:
 	cp (0x8c98:16), 0x06
-	call_24 nz, (Display_RestoreEntry)
+	call nz, (Display_RestoreEntry:24)
 	lds wa, 0
 	jr t, StylCnvCnvt_CallReturnAction
 StylCnvCnvt_HandleClose:

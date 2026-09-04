@@ -1541,7 +1541,7 @@ FP_DP_ShiftDecode_Zero:
 FP_DP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3EA06
+	jp nz, (0x3EA06:24)
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	add xde, (xbc + 4)
@@ -1572,7 +1572,7 @@ FP_DP_AddMantissa_Store:
 FP_SP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3EA02
+	jp nz, (0x3EA02:24)
 	ld xix, (xwa + 4)
 	add xix, (xbc + 4)
 	bit_erpw 0xF2, 0x08
@@ -2305,7 +2305,7 @@ FP_SP_AlignMantissa_MaxShift:
 FP_DP_Mul_Outer:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3E884
+	jp nz, (0x3E884:24)
 	ld l, (xbc + 3)
 	xor (xwa + 3), l
 	ld hl, (xbc + 256)
@@ -2390,7 +2390,7 @@ FP_SP_Mul_Outer_Pad:
 FP_SP_Mul_Outer:
 	ld e, (xwa + 2)
 	or e, (xwa + 2)
-	jp_24 nz, 0x3E884
+	jp nz, (0x3E884:24)
 	push xiz
 	push xwa
 	ld hl, (xbc + 256)
@@ -2489,7 +2489,7 @@ FP_SP_MulMantissaCore_Divisor1:
 FP_DP_SubMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3EE3A
+	jp nz, (0x3EE3A:24)
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	sub xde, (xbc + 4)
@@ -2584,7 +2584,7 @@ FP_DP_SubMantissa_Zero:
 FP_SP_SubMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3EE36
+	jp nz, (0x3EE36:24)
 	ld xiy, xwa
 	ld de, (xwa + 256)
 	ld xix, (xwa + 4)
@@ -3380,7 +3380,7 @@ FP_DP_MulAdd_Pad:
 FP_DP_MulAdd:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3EE70
+	jp nz, (0x3EE70:24)
 	push xiz
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
@@ -3467,7 +3467,7 @@ FP_DP_MulAdd_Store:
 FP_SP_MulAdd:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp_24 nz, 0x3EE70
+	jp nz, (0x3EE70:24)
 	push xiz
 	ld xiz, xwa
 	ld xhl, (xbc)

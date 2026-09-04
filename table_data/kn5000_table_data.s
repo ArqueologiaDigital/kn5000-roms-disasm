@@ -1274,7 +1274,7 @@ __jrt_nop_9FB652:
 	; === Get Boot Mode and Check FDC ===
 	calr Get_Region_Code
 	cps l, 4
-	call_24 nz, 0xFFC6B2	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
+	call nz, (0xFFC6B2:24)	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
 
 Boot_SkipFDCCheck:
 	call 0xFFEC63	; Boot_CheckDiskPresent: L=1 disk present (PD6 low)
@@ -1993,7 +1993,7 @@ Flash_Init_Custom_And_Table:
 	; Check region and reset Table Data ROM if not region 4
 	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
 	cps l, 4	; cf dc
-	call_24 nz, 0xFFBC2D	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
+	call nz, (0xFFBC2D:24)	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
 
 	; Read Custom Data device ID
 	lds wa, 1	; d8 a9
@@ -3588,7 +3588,7 @@ HDAE5000_InitializeParallelPort__erase_flash:
 	ld xbc, 0xA00000	; table-data flash end
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl	; XHL != 0 -> data present, needs erase
-	call_24 nz, 0xFFBD17	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
+	call nz, (0xFFBD17:24)	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
 	lda xwa, (0x300000:24)	; custom-data flash start
 	ld xbc, xwa	; LD XBC, XWA
 	add xbc, 0x100000	; custom-data flash end = 0x400000
@@ -3627,14 +3627,14 @@ HDAE5000_InitializeParallelPort__program_flash:
 	lds de, 0	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call_24 nz, 0xFFC54B	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 	pushw 0x1	; last bank to verify = 1
 	ld xwa, 0x300000	; reference: custom-data flash
 	ld xbc, 0x200000	; source window
 	lds de, 0	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call_24 nz, 0xFFC55A	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
+	call nz, (0xFFC55A:24)	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
 
 	; === Check "hkt_" signature, remap CS2 and jump into the Program ROM ===
 	ld (0x160000:24), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
@@ -3706,7 +3706,7 @@ HDAE5000_ProgramPayloadOnly__program_flash:
 	lds de, 4	; LD DE, 4 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call_24 nz, 0xFFC54B	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 HDAE5000_ProgramPayloadOnly__done_halt:
 	jr HDAE5000_ProgramPayloadOnly__done_halt	; 68 fe - done, halt
 

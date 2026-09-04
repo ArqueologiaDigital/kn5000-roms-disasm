@@ -701,7 +701,7 @@ Demo_SelectEntry_ProcessSongList:
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
 	cp (0x8d38:16), 228
-	call_24 nz, SeqInit_FinalEvent
+	call nz, (SeqInit_FinalEvent:24)
 	jrl Demo_SelectEntry_AfterSongLoad
 
 Demo_SelectEntry_ManualSelect:
@@ -712,7 +712,7 @@ Demo_SelectEntry_ManualSelect:
 	cp a, (4439:16)
 	jr z, Demo_SelectEntry_StartAutoPlay
 	cp (0x8d38:16), 228
-	call_24 nz, SeqInit_FinalEvent
+	call nz, (SeqInit_FinalEvent:24)
 
 Demo_SelectEntry_ToCountdown:
 	jrl Demo_ResetCountdownTimer
@@ -720,7 +720,7 @@ Demo_SelectEntry_ToCountdown:
 Demo_SelectEntry_StartAutoPlay:
 	ld (0x8f4e:16), 4
 	cp (0x8d38:16), 228
-	call_24 nz, SeqInit_FinalEvent
+	call nz, (SeqInit_FinalEvent:24)
 	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType6
@@ -729,7 +729,7 @@ Demo_SelectEntry_StartAutoPlay:
 Demo_SelectEntry_TimerTick:
 	calr Demo_SelectEntry_CheckCPanel
 	cpw (0x25b84:24), 0
-	call_24 nz, Banner_Loop_Check
+	call nz, (Banner_Loop_Check:24)
 	ld a, (3375:16)
 	cps a, 0
 	ret z
@@ -767,7 +767,7 @@ Demo_SelectEntry_Debounce:
 	ret nz
 	set 3, (0x28ad:16)
 	cp (0x8d38:16), 228
-	call_24 nz, CDlikeSwTtl_SetRecordAndNotify
+	call nz, (CDlikeSwTtl_SetRecordAndNotify:24)
 	pushw 0x1
 	ldw wa, 0xa8
 	lds bc, 1
@@ -777,7 +777,7 @@ Demo_SelectEntry_Debounce:
 
 Demo_SelectEntry_AfterSongLoad:
 	cp (0x8d38:16), 228
-	call_24 nz, SeqInit_FinalEvent
+	call nz, (SeqInit_FinalEvent:24)
 	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType6
@@ -5297,7 +5297,7 @@ FileIO_GetDiskRecordPtr:
 	lda xbc, (xwa + 4)
 	ld xde, (SeqFileTypeCode_Lsw_0x8:24)
 	cp xde, (xbc)
-	call_24 z, GetDiskFreeSpace
+	call z, (GetDiskFreeSpace:24)
 	ld xhl, (0x025d70:24)
 	ret
 
@@ -7711,7 +7711,7 @@ GetEntryRefresh_ComputeOffset:
 	lda xwa, (0x025ec0:24)
 	add xwa, xhl
 	cp (xwa), 0x0
-	call_24 z, FileIO_RefreshFileNames
+	call z, (FileIO_RefreshFileNames:24)
 	ld wa, (0x0271ee:24)
 	ld bc, iz
 	sub bc, wa

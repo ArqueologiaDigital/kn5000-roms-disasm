@@ -4930,7 +4930,7 @@ SndParam_ApplyAndFetch:
 	jr	8
 SndParam_CheckRhythm:
 	cp c, 0x48
-	call_24 z, Rhythm_LookupTempoVelocity_Wrap
+	call z, (Rhythm_LookupTempoVelocity_Wrap:24)
 
 SndParam_ApplyDone:
 	inc 6, xsp
@@ -4985,7 +4985,7 @@ SndParam_FetchAndStore:
 	jr	8
 SndParam_FetchCheckRhythm:
 	cp c, 0x48
-	call_24 z, Rhythm_DispatchNote_Finalize
+	call z, (Rhythm_DispatchNote_Finalize:24)
 
 SndParam_FetchDone:
 	inc 6, xsp

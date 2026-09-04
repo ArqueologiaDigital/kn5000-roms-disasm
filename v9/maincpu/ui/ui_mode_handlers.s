@@ -1756,9 +1756,9 @@ EffectMode_ResetDiagMode:
 
 EffectMode_DispatchUpdate:
 	cp (0x8d36:16), 248
-	call_24 z, EffectMode_HandleTimerEvents
+	call z, (EffectMode_HandleTimerEvents:24)
 	cp (0x8d36:16), 247
-	call_24 z, EffectMode_ModeChangeTransition
+	call z, (EffectMode_ModeChangeTransition:24)
 	cp (0x8d36:16), 251
 	ret nz
 	calr EffectMode_RunDiagSequence

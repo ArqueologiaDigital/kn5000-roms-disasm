@@ -7003,7 +7003,7 @@ SndParam_ApplyAndFetch:
 
 SndParam_CheckRhythm:
 	cp c, 0x48
-	call_24 z, Rhythm_LookupTempoVelocity_Wrap
+	call z, (Rhythm_LookupTempoVelocity_Wrap:24)
 
 SndParam_ApplyDone:
 	inc 6, xsp
@@ -7060,7 +7060,7 @@ SndParam_FetchAndStore:
 
 SndParam_FetchCheckRhythm:
 	cp c, 0x48
-	call_24 z, Rhythm_DispatchNote_Finalize
+	call z, (Rhythm_DispatchNote_Finalize:24)
 
 SndParam_FetchDone:
 	inc 6, xsp
@@ -7243,7 +7243,7 @@ SndParamUpdate_DispatchWrite:
 	calr ToneGen_ApplyVoiceParams
 	ld a, (0x912a:16)
 	and a, 0x48
-	call_24 nz, SwbtWr_FlushAndAppendParams
+	call nz, (SwbtWr_FlushAndAppendParams:24)
 
 SndParamUpdate_Done:
 	popw_erp 0xfa

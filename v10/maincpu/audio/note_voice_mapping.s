@@ -1863,7 +1863,7 @@ VoiceEvtHandler_Type11:
 VoiceEvtHandler_Type12:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
-	call_24 nz, VoiceEvent_DispatchTable
+	call nz, (VoiceEvent_DispatchTable:24)
 
 AudioInit_FlushQueue_LoopNext:
 	inc 1, iz
@@ -8133,7 +8133,7 @@ MIDI_SendVoiceData_CheckCount:
 	cp iz, wa
 	jrl lt, MIDI_SendVoiceData_Loop
 	cps iz, 0
-	call_24 gt, MIDI_PostSendStub
+	call gt, (MIDI_PostSendStub:24)
 
 MIDI_SendVoiceData_Return:
 	popw iz
@@ -21210,7 +21210,7 @@ SeqFile_ParseHeader_Block2:
 SeqFile_ParseHeader_Block3:
 	calr SysexRingBuf_GetFreeSpace
 	cps hl, 0
-	call_24 gt, Audio_SendEventPostCmd
+	call gt, (Audio_SendEventPostCmd:24)
 	ld wa, iz
 	cp wa, 0xfffd
 	jr z, SeqFile_ParseHeader_LoadReg
@@ -23805,7 +23805,7 @@ SysexRingBuf_WriteBytes:
 
 SysexRingBuf_WriteNonZero:
 	cp iz, (0xd8b2:16)
-	call_24 ugt, SysexRingBuf_Init
+	call ugt, (SysexRingBuf_Init:24)
 	ldw (xsp + 2), 0x0
 	lds wa, 0
 	cp wa, iz
@@ -23949,7 +23949,7 @@ StoreAndAdvance_Prologue2:
 
 StoreAndAdvance_Block:
 	cp iz, (0xe0b8:16)
-	call_24 ugt, MidiRingBuf_Init
+	call ugt, (MidiRingBuf_Init:24)
 	ldw (xsp + 2), 0x0
 	lds wa, 0
 	cp wa, iz

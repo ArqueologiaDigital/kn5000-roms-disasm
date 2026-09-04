@@ -477,7 +477,7 @@ FloppyIO_WaitReadComplete:
 	ld xbc, (6883:16)
 	lds32 xwa, 0
 	cp xbc, xwa
-	jp_24 z, SMF_AfterFloppyWait
+	jp z, (SMF_AfterFloppyWait:24)
 	call FloppyIO_ReadNextByte
 	nop
 	nop

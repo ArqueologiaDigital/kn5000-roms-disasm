@@ -280,7 +280,7 @@ CtrlPanel_PostCombinedEvent:
 CtrlPanel_HandleFirmwareCheck:
 	call Get_Firmware_Version
 	cp l, 0xff
-	call_24 z, CaptureLcd
+	call z, (CaptureLcd:24)
 
 CtrlPanel_HandlePortCommands:
 	cp (0xc07d:16), 32
@@ -367,7 +367,7 @@ CtrlPanel_EventType_AA:
 	jrl nz, UIEvent_Epilogue
 	call Get_Firmware_Version
 	cp l, 0xff
-	call_24 z, CaptureLcd
+	call z, (CaptureLcd:24)
 
 CtrlPanel_ClearStateVar:
 	lds32 xwa, 0

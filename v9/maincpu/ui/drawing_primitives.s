@@ -4029,7 +4029,7 @@ DrawString_Impl_ClampDirtyRight2:
 DrawString_Impl_FillBackground:
 	ldw_sri0 BC, (xsp + 0x0144)
 	cp bc, 0xf7
-	call_24 nz, DrawBox_Impl
+	call nz, (DrawBox_Impl:24)
 	lda xwa, (xsp + 40)
 	ld (xsp + 24), xwa
 	cp (xwa), 0x0

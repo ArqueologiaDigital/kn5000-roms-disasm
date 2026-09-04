@@ -19,7 +19,7 @@ NoteEditSy_UpdateAllWidgets:
 	call NoteEditSy_SendWidgetCmd3or4
 	call NoteEditSy_UpdateNoteDisplay
 	bit 0, (0x295f:16)
-	call_24 nz, BmDrEdit_PrepareSecondaryNoteDisplay
+	call nz, (BmDrEdit_PrepareSecondaryNoteDisplay:24)
 	jp NoteEditSy_UpdateEditModeGrid
 
 NoteEditSy_ScanAndSortEntries:
@@ -836,7 +836,7 @@ SeqPlay_ProcessCurrentPart_Return:
 	extz wa
 	call SeqVoice_CountEventsInBar
 	cp (0x287a:16), 0
-	call_24 z, SeqData_ScanForBarPosition
+	call z, (SeqData_ScanForBarPosition:24)
 	ldmm16 0x2955, 0x28af
 	ld wa, (9830:16)
 	ld (0x2957:16), a
@@ -2470,7 +2470,7 @@ SeqPlay_PreparePlaybackState:
 	res 2, (0x347a:16)
 	ld a, (7558:16)
 	cps a, 1
-	call_24 z, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call z, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	lds wa, 0
 	call UI_PostDialEnable
 	ld wa, (8980:16)
@@ -3816,7 +3816,7 @@ SeqNote_SpecialChan_ComparePos:
 SeqNote_SpecialChan_ClearAndStore:
 	ld a, (0xfc5f:16)
 	and a, 0x30
-	call_24 z, BitMapOut_PrepareAndDisplay
+	call z, (BitMapOut_PrepareAndDisplay:24)
 	ldw (7574:16), 0xffff
 
 SeqNote_SpecialChan_LoadAddr:
@@ -3827,9 +3827,9 @@ SeqNote_SpecialChan_LoadAddr:
 
 SeqNote_ProcessSpecialChannels:
 	cp (7556:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_NoteEvents
+	call nz, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	cp (7558:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call nz, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 
 SeqNote_LoadNoteParam_Return:
 	ld l, (xsp + 6)
@@ -3951,9 +3951,9 @@ SeqNote_StreamAdvanceJoin:
 
 SeqRepeat_ProcessSpecialChan:
 	cp (7556:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_NoteEvents
+	call nz, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	cp (7558:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call nz, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 
 SeqRepeat_LoadResult:
 	ld l, (xsp + 8)
@@ -3970,10 +3970,10 @@ SeqNote_FlushPartEventToBuffer:
 	extz wa
 	call NoteMap_RemoveAndRelink
 	cp (7558:16), 1
-	call_24 z, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call z, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	call SeqBuf_GetWritePos
 	cp hl, 0xf
-	call_24 lt, SeqBuf_FlushAndReinit_NoteEvents
+	call lt, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	ld a, (xsp)
 	extz wa
 	muls wa, 0x9
@@ -6400,7 +6400,7 @@ SeqReassign_UpdateAndNotify:
 	cpw (xsp + 4), 0x1
 	jr nz, SeqReassign_ReturnOK
 	bit 1, (0x28b1:16)
-	call_24 z, SeqPlay_PrepareDrumVoice
+	call z, (SeqPlay_PrepareDrumVoice:24)
 
 SeqReassign_ReturnOK:
 	ldb l, 0x0
@@ -7300,7 +7300,7 @@ SeqPlay_ReconfigureVoices:
 	ldw wa, 0x32
 	call SeqBuf_WriteNoteOffEntry
 	cp (xsp + 18), 0x0
-	call_24 nz, SeqChanAssign_InitLoop
+	call nz, (SeqChanAssign_InitLoop:24)
 	cp (xsp + 18), 0x0
 	jr z, SeqPlay_Reconfig_CheckActive
 	ld bc, (8998:16)
@@ -8055,7 +8055,7 @@ SeqPlay_ReallocateAndReconfig:
 	calr SeqChanAssignExt_InitLoop
 	call PartCtrl_DeallocAndWriteEnd
 	cp (7522:16), 1
-	call_24 z, SeqPlay_ScanAndStoreChannelPos
+	call z, (SeqPlay_ScanAndStoreChannelPos:24)
 	call SeqPart_ScanAndBuildVoiceData
 	lda xwa, (xsp + 20)
 	calr SeqCh_CountEventsAndCalcPos
@@ -8805,10 +8805,10 @@ SeqBuf_WriteMidiEvent:
 	cp a, 0x90
 	jr nz, SeqBufMidi_HandleNonNoteOn
 	cp (7558:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call nz, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	call SeqBuf_GetWritePos
 	cp hl, 0xf
-	call_24 lt, SeqBuf_FlushAndReinit_NoteEvents
+	call lt, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -8820,10 +8820,10 @@ SeqBuf_WriteMidiEvent:
 
 SeqBufMidi_HandleNonNoteOn:
 	cp (7556:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_NoteEvents
+	call nz, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	call SeqBuf_GetWritePos
 	cp hl, 0xf
-	call_24 lt, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call lt, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -8847,10 +8847,10 @@ SeqBuf_WriteMidiEventDirect:
 	cp a, 0x90
 	jr nz, SeqBufDirect_HandleNonNoteOn
 	cp (7558:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call nz, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	call SeqBuf_GetWritePos
 	cp hl, 0xf
-	call_24 lt, SeqBuf_FlushAndReinit_NoteEvents
+	call lt, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -8862,10 +8862,10 @@ SeqBuf_WriteMidiEventDirect:
 
 SeqBufDirect_HandleNonNoteOn:
 	cp (7556:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_NoteEvents
+	call nz, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	call SeqBuf_GetWritePos
 	cp hl, 0xf
-	call_24 lt, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call lt, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	push xiz
 	ld a, (xsp + 8)
 	extz wa
@@ -8992,7 +8992,7 @@ VoiceAlloc_FindPartShiftDone:
 	jr z, VoiceAlloc_StartProcessing
 	ld a, (3431:16)
 	cps a, 4
-	call_24 nz, SeqBuf_FlushAndReinit_NoteEvents
+	call nz, (SeqBuf_FlushAndReinit_NoteEvents:24)
 	jrl VoiceAlloc_Return
 
 VoiceAlloc_FindPartNext:
@@ -9491,7 +9491,7 @@ SeqBuf_WriteNoteOffEntry:
 	lda xsp, (xsp - 10)
 	ld (xsp + 8), a
 	cp (7558:16), 0
-	call_24 nz, SeqBuf_FlushAndReinit_VoiceCCEvents
+	call nz, (SeqBuf_FlushAndReinit_VoiceCCEvents:24)
 	lda xde, (xsp)
 	ld (xde), 0x90
 	ld (xde + 1), 0x7f
@@ -9551,7 +9551,7 @@ PartDetect_CheckCount:
 
 PartDetect_SingleVoiceFound:
 	cps l, 1
-	jp_24 nz, PartSelect_UpdateDisplayState
+	jp nz, (PartSelect_UpdateDisplayState:24)
 	extz de
 	lds wa, 0
 	ld bc, de
@@ -10006,7 +10006,7 @@ NotePool_CopySlotDataLoop:
 	ld c, (xde + 4)
 	inc 1, c
 	cp c, (xsp + 10)
-	call_24 z, NoteMap_RemoveAndRelink
+	call z, (NoteMap_RemoveAndRelink:24)
 	stb_erp A, 0xfb
 	extz wa
 	muls wa, 0x9
@@ -10956,7 +10956,7 @@ SeqVoiceSingle_CountCheck:
 
 SeqVoiceSingle_FoundOrDone:
 	cps l, 1
-	jp_24 nz, PartSelect_UpdateDisplayState
+	jp nz, (PartSelect_UpdateDisplayState:24)
 	extz de
 	lds wa, 0
 	ld bc, de
@@ -10993,7 +10993,7 @@ SeqNotify_CheckAndClearStart:
 	cp a, 0x87
 	jr z, SeqNotify_ClearStartFlag
 	cp a, 0x88
-	call_24 nz, BitMapOut_ComputeRegionDelta
+	call nz, (BitMapOut_ComputeRegionDelta:24)
 
 SeqNotify_ClearStartFlag:
 	res 0, (0x28b3:16)
@@ -11047,7 +11047,7 @@ SeqModeTransit_UpdateParts:
 	cps wa, 0
 	jr z, SeqModeTransit_ClearPartState
 	cp wa, (0x2838:16)
-	call_24 nz, SeqAcc_InitPlaybackState
+	call nz, (SeqAcc_InitPlaybackState:24)
 	ld a, (1075:16)
 	cp a, (0x286a:16)
 	ret z
@@ -12313,7 +12313,7 @@ SeqDispatch_ParamOK:
 	calr Part_ReadVoiceWord
 	ld wa, hl
 	cp wa, 0xffff
-	call_24 nz, Part_StealAndReallocVoices
+	call nz, (Part_StealAndReallocVoices:24)
 
 SeqTempo_CheckAndClamp:
 	inc1b_erp 0xf9
@@ -19166,7 +19166,7 @@ SeqPlay_FindAfterReset:
 	call Audio_CheckSubsystemReady
 	ld a, (1056:16)
 	and a, 0x5
-	call_24 z, AccWrap_PlayModeDispatch
+	call z, (AccWrap_PlayModeDispatch:24)
 	calr Part_DetectSingleVoiceType
 
 SeqPlay_FindReturn:
@@ -19320,7 +19320,7 @@ SeqNoteOff_ShiftDone3:
 	ld wa, (0xf19e:16)
 	ld bc, (0x28b4:16)
 	and wa, bc
-	call_24 z, SeqPlay_StopAndResetAll
+	call z, (SeqPlay_StopAndResetAll:24)
 
 SeqVoice_PopRetFA:
 	popw_erp 0xfa
@@ -19339,9 +19339,9 @@ SeqSave_JumpCheckSubsys:
 
 SeqPlay_CheckAndStartPlayback:
 	cp (9508:16), 0
-	jp_24 nz, TempoRingBuf_Init
+	jp nz, (TempoRingBuf_Init:24)
 	bit 0, (0x28c5:16)
-	jp_24 nz, SeqPlay_CheckAndReactivate
+	jp nz, (SeqPlay_CheckAndReactivate:24)
 	ld a, (1057:16)
 	and a, 0x5
 	ret nz
@@ -23859,7 +23859,7 @@ NoteEditSy_InitCommon:
 	calr NoteEditSy_SendModeWidgetCmd
 	calr NoteEditSy_UpdateChordDisplay
 	bit 0, (0x2742:16)
-	call_24 z, NoteEditSy_UpdateEditModeGrid
+	call z, (NoteEditSy_UpdateEditModeGrid:24)
 	calr NoteEditSy_UpdateNoteDisplay
 	bit 0, (0x295f:16)
 	jrl z, NoteEditSy_ReturnZero
@@ -24723,7 +24723,7 @@ SqNoteEdtTitleFunc:
 	cp xbc, 0x1c00013
 	jr nz, SqNoteEdt_ReturnZero
 	cp xde, 0x3
-	call_24 z, BmDrEdit_CleanupMelodicMode
+	call z, (BmDrEdit_CleanupMelodicMode:24)
 
 SqNoteEdt_ReturnZero:
 	lds32 xhl, 0
@@ -24747,7 +24747,7 @@ SqDrmEdtTitleFunc:
 	cp xbc, 0x1c00013
 	jr nz, SqDrmEdt_ReturnZero
 	cp xde, 0x3
-	call_24 z, BmDrEdit_CleanupDrumMode
+	call z, (BmDrEdit_CleanupDrumMode:24)
 
 SqDrmEdt_ReturnZero:
 	lds32 xhl, 0
@@ -24802,7 +24802,7 @@ SqNoteCycpTitleFunc:
 	cp xbc, 0x1c00013
 	jr nz, SqNoteCycp_ReturnZero
 	cp xde, 0x3
-	call_24 z, BmDrEdit_ExitPlayMode
+	call z, (BmDrEdit_ExitPlayMode:24)
 
 SqNoteCycp_ReturnZero:
 	lds32 xhl, 0
@@ -24812,7 +24812,7 @@ SqDrmCycpTitleFunc:
 	cp xbc, 0x1c00013
 	jr nz, SqDrmCycp_ReturnZero
 	cp xde, 0x3
-	call_24 z, BmDrEdit_ExitPlayMode
+	call z, (BmDrEdit_ExitPlayMode:24)
 
 SqDrmCycp_ReturnZero:
 	lds32 xhl, 0
@@ -24824,7 +24824,7 @@ HelpModeFunc:
 	cp xde, 0x1
 	jr z, HelpMode_ReturnZero
 	or xde, xde
-	call_24 z, AccWrap_PlayModeDispatch
+	call z, (AccWrap_PlayModeDispatch:24)
 
 HelpMode_ReturnZero:
 	lds32 xhl, 0
@@ -28834,14 +28834,14 @@ Portamento_ScanCheckPartMask:
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xf
-	call_24 z, SeqSearch_InitAndAdvance
+	call z, (SeqSearch_InitAndAdvance:24)
 	ld a, (9696:16)
 	extz wa
 	lda xbc, (0xf1a0:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x10
-	call_24 z, Portamento_ScanInitPosition
+	call z, (Portamento_ScanInitPosition:24)
 
 Portamento_ScanNextPart:
 	ld a, (9696:16)
@@ -29634,7 +29634,7 @@ SeqPart_SetupWithDispatch:
 	ld (0x2879:16), a
 	call SeqVoice_SetDefaultParams
 	cp (3301:16), 15
-	jp_24 ugt, SeqVoice_InitReturnZero
+	jp ugt, (SeqVoice_InitReturnZero:24)
 	ld a, (0x2877:16)
 	dec 1, a
 	extz wa
@@ -33195,7 +33195,7 @@ SeqPart_TransposeStartWalk:
 	cp a, 0xf
 	jr z, SeqPart_TransposeFinish
 	cp a, 0x10
-	call_24 nz, SeqPart_TransposeWalker
+	call nz, (SeqPart_TransposeWalker:24)
 
 SeqPart_TransposeFinish:
 	ld a, (0x287a:16)
@@ -34044,7 +34044,7 @@ SeqPart_PartSelectProcess:
 	cp a, 0xf
 	jr z, SeqPart_PartSelectFinish
 	cp a, 0x10
-	call_24 nz, SeqPart_InnerProcess
+	call nz, (SeqPart_InnerProcess:24)
 
 SeqPart_PartSelectFinish:
 	ld a, (0x287a:16)
@@ -34236,7 +34236,7 @@ SeqPart_VoiceCheckMultiLoop:
 	cp a, 0xf
 	jr z, SeqPart_VoiceCheckMultiNext
 	cp a, 0x10
-	call_24 nz, SeqPart_VoiceCheckSetup
+	call nz, (SeqPart_VoiceCheckSetup:24)
 
 SeqPart_VoiceCheckMultiNext:
 	ld a, (0x287a:16)
@@ -34414,7 +34414,7 @@ SeqPart_VoiceCheckFinish:
 	cp a, 0xf
 	jr z, SeqPart_VoiceCheckWalk
 	cp a, 0x10
-	call_24 nz, SeqPart_VoiceCheckWalkReturn
+	call nz, (SeqPart_VoiceCheckWalkReturn:24)
 
 SeqPart_VoiceCheckWalk:
 	ld a, (0x287a:16)

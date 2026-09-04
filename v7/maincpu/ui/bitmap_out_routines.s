@@ -275,7 +275,7 @@ BitMapOut_ByteData_RenderE:
 	ret
 BitMapOut_CheckDiskAndApply:
 	cp (0x8c9c:16), 0x8a
-	jp_24 z, (Interrupt_ModeGuardCheck)
+	jp z, (Interrupt_ModeGuardCheck:24)
 	ld XWA,0xffffffff
 	ld XBC,0x01c20000
 	.byte 0xea, 0xa8, 0x1b, 0x4b, 0x99, 0xfa
@@ -1911,15 +1911,15 @@ BitMapOut_DeltaEncode_Return:
 
 BitMapOut_DispatchIOChanges:
 	bit 7, (0xf9c4:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port0
+	call z, (BitMapOut_ApplyIOChange_Port0:24)
 	bit 7, (0xf9c7:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port3
+	call z, (BitMapOut_ApplyIOChange_Port3:24)
 	bit 7, (0xf9de:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port1
+	call z, (BitMapOut_ApplyIOChange_Port1:24)
 	bit 7, (0xf9e1:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port4
+	call z, (BitMapOut_ApplyIOChange_Port4:24)
 	bit 7, (0xf9f8:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port2
+	call z, (BitMapOut_ApplyIOChange_Port2:24)
 	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5

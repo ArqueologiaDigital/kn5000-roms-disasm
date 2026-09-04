@@ -8396,7 +8396,7 @@ IvMessage_Paint:
 	muls wa, 0xe
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
-	call_24 nz, DrawWall
+	call nz, (DrawWall:24)
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
 	lds32 xde, 0

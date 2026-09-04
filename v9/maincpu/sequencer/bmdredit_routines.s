@@ -111,7 +111,7 @@ BmDrEdit_ScanForward_CheckNote:
 	cp a, (0x0210a8:24)
 	jr c, BmDrEdit_ScanForward_NextByte
 	cp a, (0x0210aa:24)
-	call_24 ule, BmDrEdit_RenderNoteBlock
+	call ule, (BmDrEdit_RenderNoteBlock:24)
 
 BmDrEdit_ScanForward_NextByte:
 	calr BmDrEdit_AdvanceStreamPos
@@ -215,7 +215,7 @@ BmDrEdit_ScanBackward_ReadNoteParams:
 	cp a, (0x0210a8:24)
 	jr c, BmDrEdit_ScanBackward_NextByte
 	cp a, (0x0210aa:24)
-	call_24 ule, BmDrEdit_RenderNoteBlock
+	call ule, (BmDrEdit_RenderNoteBlock:24)
 
 BmDrEdit_ScanBackward_NextByte:
 	calr BmDrEdit_AdvanceStreamPos
@@ -816,7 +816,7 @@ BmDrEdit_IncrementVelocity:
 	inc 1, a
 	ld (0x2786:16), a
 	bit 0, (0x2742:16)
-	call_24 nz, BmDrEdit_DrumVoiceUp
+	call nz, (BmDrEdit_DrumVoiceUp:24)
 	calr BmDrEdit_UpdateVelocityDisplay
 	call NoteEditSy_SendScrollCmd3
 	calr BmDrEdit_NullReturn
@@ -831,7 +831,7 @@ BmDrEdit_DecrementVelocity:
 	dec 1, a
 	ld (0x2786:16), a
 	bit 0, (0x2742:16)
-	call_24 nz, BmDrEdit_DrumVoiceDown
+	call nz, (BmDrEdit_DrumVoiceDown:24)
 	calr BmDrEdit_UpdateVelocityDisplay
 	call NoteEditSy_SendScrollCmd3
 	calr BmDrEdit_NullReturn
@@ -2438,7 +2438,7 @@ BmDrEdit_AdjustViewAndInsert:
 	ld a, (0x2774:16)
 	mul a, 0x60
 	cp (0x279a:16), wa
-	call_24 c, BmDrEdit_CalcBeatMeasure
+	call c, (BmDrEdit_CalcBeatMeasure:24)
 	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_WalkTrackLoop
 	calr BmDrEdit_LoadAndCheckNote

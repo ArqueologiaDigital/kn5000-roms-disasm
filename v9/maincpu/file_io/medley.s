@@ -1844,7 +1844,7 @@ NavDoc_WrapToEnd:
 
 NavDoc_CheckEnd:
 	cp hl, wa
-	call_24 nz, FileIO_SelectFileByIndex
+	call nz, (FileIO_SelectFileByIndex:24)
 
 NavDoc_Exit:
 	popw iz
@@ -1879,7 +1879,7 @@ NavPd_WrapToEnd:
 
 NavPd_CheckEnd:
 	cp hl, wa
-	call_24 nz, SetCurrentFileIndex
+	call nz, (SetCurrentFileIndex:24)
 
 NavPd_Exit:
 	popw iz

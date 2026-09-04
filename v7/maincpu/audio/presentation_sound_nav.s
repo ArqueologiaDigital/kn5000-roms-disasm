@@ -559,7 +559,7 @@ Screen_Init_ClearStoredValue:
 Screen_Init_SetWall:
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, SleepMainTask
+	call nz, (SleepMainTask:24)
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000b1
 	lds32 xde, 0
@@ -574,7 +574,7 @@ Screen_Init_SetWall:
 	calr SetWallColor
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, WakeUpMainTask
+	call nz, (WakeUpMainTask:24)
 	call GetTitleNow
 	ld xwa, xhl
 	ld xde, (xsp + 12)
@@ -1384,9 +1384,9 @@ DirmdEmu_CheckSoundCtrl:
 DirmdEmu_CheckBit4:
 .Lc_f9ab69:
 	bit 4, (0xe318:16)
-	call_24 nz, (UI_PostRefreshEvent)
+	call nz, (UI_PostRefreshEvent:24)
 	bit 4, (0xe31a:16)
-	call_24 nz, (UI_PostTimerResetEvent)
+	call nz, (UI_PostTimerResetEvent:24)
 	bit 3, (0xe31c:16)
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1

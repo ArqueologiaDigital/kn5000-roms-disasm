@@ -276,7 +276,7 @@ BitMapOut_ByteData_RenderE:
 
 BitMapOut_CheckDiskAndApply:
 	cp (0x8d38:16), 138
-	jp_24 z, Interrupt_ModeGuardCheck
+	jp z, (Interrupt_ModeGuardCheck:24)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c20000
 	lds32 xde, 0
@@ -679,7 +679,7 @@ BitMapOut_Snapshot_PostProcess:
 	bit 4, (0xfd50:16)
 	jr nz, BitMapOut_Snapshot_CheckActive
 	bit 1, (0xfd2c:16)
-	call_24 nz, BitMapOut_DispatchIOChanges
+	call nz, (BitMapOut_DispatchIOChanges:24)
 
 BitMapOut_Snapshot_CheckActive:
 	ld xwa, 0x302
@@ -687,7 +687,7 @@ BitMapOut_Snapshot_CheckActive:
 	cps hl, 1
 	jr nz, BitMapOut_Snapshot_SetFlags
 	bit 6, (0xfd9e:16)
-	call_24 z, MidiSysEx_SendAllParams
+	call z, (MidiSysEx_SendAllParams:24)
 
 BitMapOut_Snapshot_SetFlags:
 	ld a, (0x8d52:16)
@@ -937,7 +937,7 @@ BitMapOut_RestoreVoiceFields:
 
 BitMapOut_RestoreFields_PostCheck:
 	cp (xsp + 16), 0x50
-	call_24 nz, BitMapOut_SelectiveFieldRestore
+	call nz, (BitMapOut_SelectiveFieldRestore:24)
 	push xde
 	push xhl
 	push xix
@@ -2638,15 +2638,15 @@ BitMapOut_DeltaEncode_Return:
 
 BitMapOut_DispatchIOChanges:
 	bit 7, (0xf9c4:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port0
+	call z, (BitMapOut_ApplyIOChange_Port0:24)
 	bit 7, (0xf9c7:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port3
+	call z, (BitMapOut_ApplyIOChange_Port3:24)
 	bit 7, (0xf9de:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port1
+	call z, (BitMapOut_ApplyIOChange_Port1:24)
 	bit 7, (0xf9e1:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port4
+	call z, (BitMapOut_ApplyIOChange_Port4:24)
 	bit 7, (0xf9f8:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port2
+	call z, (BitMapOut_ApplyIOChange_Port2:24)
 	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5

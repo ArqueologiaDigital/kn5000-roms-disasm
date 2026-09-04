@@ -7269,7 +7269,7 @@ StsAtPunchCheck_ReturnZero:
 
 MsgToTtlProc:
 	cp xbc, 0x1c00001
-	jp_24 nz, InheritedProc
+	jp nz, (InheritedProc:24)
 	call InheritedProc
 	call GetTitleOld
 	cp xhl, 0x1a000ee

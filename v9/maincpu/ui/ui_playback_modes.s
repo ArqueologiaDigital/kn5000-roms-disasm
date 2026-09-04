@@ -2398,7 +2398,7 @@ CDlikeSwTtl_ShowSongTitle:
 	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cps wa, 0
-	jp_24 nz, SongMode_VoiceStateDisp
+	jp nz, (SongMode_VoiceStateDisp:24)
 	calr SeqRecPlay_EnableRecordOnly
 	ld (4437:16), 0
 	ret
@@ -2422,7 +2422,7 @@ CDlikeSwTtl_ShowDocTitle:
 	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cps wa, 0
-	jp_24 nz, SongMode_VoiceStateDisp
+	jp nz, (SongMode_VoiceStateDisp:24)
 	calr SeqRecPlay_EnableRecordOnly
 	ld (4437:16), 0
 	ret
@@ -2446,7 +2446,7 @@ CDlikeSwTtl_ShowPdTitle:
 	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cps wa, 0
-	jp_24 nz, SongMode_VoiceStateDisp
+	jp nz, (SongMode_VoiceStateDisp:24)
 	calr SeqRecPlay_EnableRecordOnly
 	ld (4437:16), 0
 	ret

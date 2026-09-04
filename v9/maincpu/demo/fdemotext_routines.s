@@ -135,7 +135,7 @@ FDemoText_ProcessVoiceFlags_ReadState:
 
 FDemoText_ProcessVoiceFlags_CheckBits:
 	and a, 0x7
-	call_24 nz, FDemoText_ScanMIDIChannels
+	call nz, (FDemoText_ScanMIDIChannels:24)
 	bit 7, (0x0247ee:24)
 	jr z, FDemoText_ProcessChannels
 	ld (0x0247f2:24), 0x00
@@ -211,7 +211,7 @@ FDemoText_ProcessChannel_CheckMask:
 	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	and c, (0x0247f2:24)
-	call_24 nz, FDemoText_CheckAndSetTimer
+	call nz, (FDemoText_CheckAndSetTimer:24)
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
 	jr ule, FDemoText_ProcessChannels_Loop
@@ -249,7 +249,7 @@ FDemoText_ProcessOutput_CheckFlags:
 FDemoText_ProcessOutput_AltUpdate:
 	ldb_sri C, 0x07, 0xec, 0xe0
 	and c, e
-	call_24 nz, FDemoText_UpdatePartialVoice
+	call nz, (FDemoText_UpdatePartialVoice:24)
 
 FDemoText_ProcessOutput_NextCh:
 	inc1b_erp 0xfb
@@ -1151,7 +1151,7 @@ FDemoText_Rescan_SendUpdates:
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	and c, (0x0247ee:24)
-	call_24 nz, FDemoText_SendVoiceParams
+	call nz, (FDemoText_SendVoiceParams:24)
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
 	jr ule, FDemoText_Rescan_SendUpdates
@@ -1773,7 +1773,7 @@ FDemoText_TextDispatch:
 	cps bc, 1
 	jr z, FDemoText_TextDispatch_Return
 	cps bc, 0
-	call_24 z, FDemoText_RenderTextLine
+	call z, (FDemoText_RenderTextLine:24)
 
 FDemoText_TextDispatch_Return:
 	lds hl, 0

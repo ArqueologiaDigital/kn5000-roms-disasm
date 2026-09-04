@@ -205,7 +205,7 @@ SeqStep_EventPosManage:
 	bit 0, (9824:16)
 	jr z, SeqStep_EventPosCheck
 	bit 0, (9826:16)
-	call_24 z, SeqStep_DecrementPos
+	call z, (SeqStep_DecrementPos:24)
 
 SeqStep_EventPosCheck:
 	ld xwa, (0x2722:16)
@@ -325,7 +325,7 @@ SeqStep_EventPosExit:
 	bit 0, (9824:16)
 	jr z, SeqStep_EventPosComplete
 	bit 0, (9826:16)
-	call_24 z, SeqStep_DecrementPos
+	call z, (SeqStep_DecrementPos:24)
 
 SeqStep_EventPosComplete:
 	stb_erp A, 0xf9

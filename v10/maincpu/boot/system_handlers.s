@@ -6453,7 +6453,7 @@ Flash_InitAllBanks:
 	calr Flash_IdentifyChip
 	call Get_Region_Code
 	cps l, 4
-	call_24 nz, TableDataROM_IdentifyChip
+	call nz, (TableDataROM_IdentifyChip:24)
 	lds wa, 1
 	calr Flash_IdentifyAndValidateChip
 	ld (0x0205e0:24), hl
@@ -8313,7 +8313,7 @@ HDAE5000_Init_TransferData:
 	lds de, 4
 	calr HDAE5000_ROM_Transfer
 	or xhl, xhl
-	call_24 nz, LED_Toggle_Bit2_Loop
+	call nz, (LED_Toggle_Bit2_Loop:24)
 
 HDAE5000_Init_HaltLoop:
 	jr HDAE5000_Init_HaltLoop

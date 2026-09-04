@@ -573,7 +573,7 @@ Boot_FlashAndExtensions:
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
 	cps l, 4
-	call_24 nz, HDAE5000_Parport_Setup	; if it is present (and this unit was sold in
+	call nz, (HDAE5000_Parport_Setup:24)	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
 
@@ -2092,7 +2092,7 @@ TextRender_ClampGlyphRight:
 TextRender_ClampGlyphBottom:
 	ldw_sri0 BC, (xsp + 0x0142)
 	cp bc, 0xf7
-	call_24 nz, ColorBlit2_Impl
+	call nz, (ColorBlit2_Impl:24)
 	lda xwa, (xsp + 38)
 	ld (xsp + 30), xwa
 	cp (xwa), 0x0

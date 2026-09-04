@@ -153,9 +153,9 @@ FloppyIO_ReadNextByte_StorePtr:
 	lds32 xbc, 0
 	ld xwa, (6883:16)
 	cp xwa, xbc
-	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
+	jp z, (FloppyIO_ReadNextByte_UpdateRemaining:24)
 	cp (6887:16), 1
-	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
+	jp z, (FloppyIO_ReadNextByte_UpdateRemaining:24)
 	dec 1, xwa
 
 FloppyIO_ReadNextByte_UpdateRemaining:
@@ -1276,7 +1276,7 @@ SMF_VoiceData_DrainRemaining:
 	ld xbc, (6883:16)
 	lds32 xwa, 0
 	cp xbc, xwa
-	jp_24 z, SMF_VoiceData_DrainDone
+	jp z, (SMF_VoiceData_DrainDone:24)
 	call FloppyIO_ReadNextByte
 	nop
 	nop
@@ -1761,9 +1761,9 @@ Sequencer_Advance_StorePtr:
 	lds32 xbc, 0
 	ld xwa, (6883:16)
 	cp xwa, xbc
-	jp_24 z, Sequencer_Advance_UpdateRemaining
+	jp z, (Sequencer_Advance_UpdateRemaining:24)
 	cp (6887:16), 1
-	jp_24 z, Sequencer_Advance_UpdateRemaining
+	jp z, (Sequencer_Advance_UpdateRemaining:24)
 	sub xwa, (4211:16)
 
 Sequencer_Advance_UpdateRemaining:

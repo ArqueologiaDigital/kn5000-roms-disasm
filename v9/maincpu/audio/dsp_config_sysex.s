@@ -990,9 +990,9 @@ PreLswLoad:
 
 PostLswLoad:
 	cps wa, 0
-	jp_24 lt, Voice_CopyFromScratch
+	jp lt, (Voice_CopyFromScratch:24)
 	cp (0x0340f6:24), 0x00
-	call_24 z, VoiceParam_RestoreReverbChorus
+	call z, (VoiceParam_RestoreReverbChorus:24)
 	call ToneGen_DispatchByMode
 	call SwbtWr_NullRet
 	call ToneGen_Config_InitAllEntries
@@ -5314,7 +5314,7 @@ Audio_CheckSubsystemReady:
 	call Audio_CheckInitStatus
 	ld wa, (0xc598:16)
 	and wa, 0x60
-	call_24 z, AudioInit_RefreshToneBank
+	call z, (AudioInit_RefreshToneBank:24)
 	bit 1, (0xfc67:16)
 	jr z, AudioSubsystem_Callback
 	ld wa, (0xc594:16)
@@ -5496,7 +5496,7 @@ AudioMode_ConfigExternal_NoStereo:
 	andw (0xc596:16), 0xffdf
 	ld wa, (0xc596:16)
 	and wa, 0x7
-	call_24 z, AudioInit_RefreshToneBank
+	call z, (AudioInit_RefreshToneBank:24)
 
 AudioMode_ConfigExternal_MergeFlags:
 	res 2, (0xc1fe:16)

@@ -1841,7 +1841,7 @@ FDC_CmdFormat__check_more_tracks:
 	jr ule, FDC_CmdFormat__track_loop	; jr ULE,0xffe674
 FDC_CmdFormat__finish:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
-	call_24 nz, 0xffd8a5	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
+	call nz, (0xffd8a5:24)	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
 	calr FDC_CmdRecalibrate	; calr 0xffe2d6
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	ret	; ret

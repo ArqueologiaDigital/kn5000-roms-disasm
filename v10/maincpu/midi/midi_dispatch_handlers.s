@@ -15219,7 +15219,7 @@ VoiceParam_StoreToBuffer_NoShift:
 	cp (xiz + 9), l
 	jr ugt, VoiceParam_StoreToBuffer_Ret
 	cp l, (xiz + 10)
-	call_24 ule, MidiStream_ApplyPendingCC
+	call ule, (MidiStream_ApplyPendingCC:24)
 
 VoiceParam_StoreToBuffer_Ret:
 	pop xiz

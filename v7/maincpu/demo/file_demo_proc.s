@@ -578,7 +578,7 @@ Demo_SelectEntry_StartAutoPlay:
 Demo_SelectEntry_TimerTick:
 	calr Demo_SelectEntry_CheckCPanel
 	cpw (0x25b84:24), 0
-	call_24 nz, Banner_Loop_Check
+	call nz, (Banner_Loop_Check:24)
 	ld a, (3375:16)
 	cps a, 0
 	ret z
@@ -5101,7 +5101,7 @@ FileIO_GetDiskRecordPtr:
 	lda xbc, (xwa + 4)
 	ld xde, (SeqFileTypeCode_Lsw_0x8:24)
 	cp xde, (xbc)
-	call_24 z, GetDiskFreeSpace
+	call z, (GetDiskFreeSpace:24)
 	ld xhl, (0x025d70:24)
 	ret
 

@@ -9852,7 +9852,7 @@ AccKbdTiming_TableScan:
 
 AccKbdTiming_TableScan_Loop:
 	cp iz, (0x337e:16)
-	jp_24 nc, AccKbdTiming_TableScan_Done
+	jp nc, (AccKbdTiming_TableScan_Done:24)
 	bit_dri 7, 0x07, 0xe4, 0xf8
 	jr z, AccKbdTiming_TableScan_NextSlot
 	ld ix, iz
@@ -10261,7 +10261,7 @@ AccAccTiming_TableScan:
 
 AccAccTiming_TableScan_Loop:
 	cp iz, (0x337e:16)
-	jp_24 nc, AccAccTiming_TableScan_Done
+	jp nc, (AccAccTiming_TableScan_Done:24)
 	bit_dri 7, 0x07, 0xe4, 0xf8
 	jr z, AccAccTiming_TableScan_NextSlot
 	ld ix, iz
@@ -10455,7 +10455,7 @@ AccDir_AdjustDirection:
 	ld a, (0x349f:16)
 	and a, 0x9
 	cps a, 0
-	jp_24 z, AccDir_Adjust_Ret
+	jp z, (AccDir_Adjust_Ret:24)
 	bit 0, (0x349f:16)
 	jr z, AccDir_Adjust_LeftHand
 	and (0x349f:16), 254
@@ -37795,7 +37795,7 @@ StylCnvTxtTtlFunc:
 
 StylCnvTxt_HandleClose:
 	cp (0x8d34:16), 6
-	call_24 nz, Display_RestoreEntry
+	call nz, (Display_RestoreEntry:24)
 
 StylCnvTxt_ReturnZero:
 	lds32 xhl, 0
@@ -38325,7 +38325,7 @@ StylCnvCnvt_HandleScroll:
 
 StylCnvCnvt_HandleRedraw:
 	cp (0x8d34:16), 6
-	call_24 nz, Display_RestoreEntry
+	call nz, (Display_RestoreEntry:24)
 	lds wa, 0
 	jr StylCnvCnvt_CallReturnAction
 
@@ -38538,7 +38538,7 @@ StylCnvSel_HandleScroll:
 
 StylCnvSel_HandleRedraw:
 	cp (0x8d34:16), 6
-	call_24 nz, Display_RestoreEntry
+	call nz, (Display_RestoreEntry:24)
 	lds wa, 0
 	jr StylCnvSel_CallReturnAction
 
@@ -38769,7 +38769,7 @@ StylCnvStorTtlFunc:
 
 StylCnvStor_HandleClose:
 	cp (0x8d34:16), 6
-	call_24 nz, Display_RestoreEntry
+	call nz, (Display_RestoreEntry:24)
 
 StylCnvStor_ReturnZero:
 	lds32 xhl, 0
