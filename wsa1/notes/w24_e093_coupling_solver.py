@@ -312,6 +312,39 @@ def sec4_constants():
     return T
 
 
+def sec4b_units():
+    say("")
+    say("=== 4b. THE TWO INPUT ARRAYS ARE UNIT-SCALED GAINS, AND MODE NORMALISES BY N ===")
+    say("   Array A holds `Curve_Exp2Gain_U8_128[p19] << 8`, which the solver reads back")
+    say("   as `A >>u 4`.  The curve's own maximum is 128, and 128 << 4 = 2048 = 1.0 in")
+    say("   Q11 -- so array A is INTERACTION GAIN normalised to [0, 1]:")
+    g = [cb(0xFDF760 + k)[0] for k in range(128)]
+    check("Curve_Exp2Gain_U8_128 range", (min(g), max(g)), (0, 128))
+    check("  (max << 8) >>u 4 == 1.0 in Q11", (128 << 8) >> 4, 0x800)
+    say("")
+    say("   Array B holds 0x8000 for MAIN and Curve_Exp2Gain_Percent_101[|p33|] for SUB,")
+    say("   read back the same way.  ★ 0x8000 IS THAT CURVE'S OWN TOP ENTRY -- the arm")
+    say("   writes the literal the curve would return for SUB GAIN = 100 %.  So array B")
+    say("   is a LEVEL array in the SUB GAIN curve's units, and MAIN's level is pinned")
+    say("   to full scale rather than being a different kind of number:")
+    check("Curve_Exp2Gain_Percent_101[100]", u16(0xFDFECC + 200), 0x8000)
+    check("  which is the literal the arms store for MAIN (0xFC6EAD)",
+          u16(0xFC6EAD + 2), 0x8000)
+    check("  and 0x8000 >>u 4 == 1.0 in Q11", 0x8000 >> 4, 0x800)
+    say("")
+    say("   So the damping factor is  damp_n = 1 - (MODE/2048) * GAIN * LEVEL_n,")
+    say("   with GAIN and LEVEL_n both in [0, 1].  ★ AND MODE NORMALISES BY THE GROUP")
+    say("   SIZE: the 4-element arm passes 0x0200 and the 2-element arms pass 0x0400,")
+    say("   and in both cases MODE x (elements in the group) is exactly 1.0:")
+    check("0x0200 * 4", 0x200 * 4, 0x800)
+    check("0x0400 * 2", 0x400 * 2, 0x800)
+    check("  so damp is confined to", ("%.3f" % (1 - 0.25 * 1.0), "%.3f" % 1.0),
+          ("0.750", "1.000"))
+    say("      for the N=8 arm, and 0.500 .. 1.000 for the N=4 arms.  A number in")
+    say("      [0.5, 1.0] multiplying one term of a resonance condition is a POLE")
+    say("      RADIUS, and 1.0 -- no coupling -- is exactly the null of section 5.")
+
+
 # ============================================================ section 5
 # ---- a bit-exact re-implementation of the ROM's fixed-point primitives -------
 SIN = [s16(0xFE06C9 + 2 * k) for k in range(256)]
@@ -833,6 +866,7 @@ def main():
     sec2_layout()
     sec3_where_the_result_goes()
     sec4_constants()
+    sec4b_units()
     sec5_simulator()
     sec6_factory()
     if "--reach" in sys.argv:

@@ -44,6 +44,7 @@ ADDED here and beside the sections they touch.  ★ **No measurement in this not
 | register `0x0300` is `INTERACTION GAIN`: **still WEAK** | §1.9, §3 | **STRONG.**  Two independent arguments now stand: the caption `INTERACTION` / `GAIN` is drawn on p19's own row on `PAGE1/2` (five of five values on a caption's row against a null mean of 0.19 of 5), and this note's own result — the gain is MODE-GATED, and `DEPTH` and `FORMANT` have no reason to be.  ★ §1.9's *"a mode-gated gain ... a reason rather than a position"* is exactly the argument that carried; what it lacked was the caption, and the caption is now measured |
 | `DEPTH` and `FORMANT` are the rival candidates for `0x0300`, and `FORMANT` has "a better candidate in the `i5` chain" | §1.9 | both are placed elsewhere and neither was ever a candidate.  `DEPTH` = p14 bits 0-6 → register `0x0240`; `FORMANT` = p14 **bit 7**, `FIX`/`MOVE`, which gates `0x00C0`'s key-follow term at `0xFC4A09` and is not a register.  The `i5` chain's registers `0x03C0`/`0x0480` are **refused a name**: p15 is written by the RESONATOR TYPE preset and by no editor field |
 | §2 is "the four **KEY**-scaling ramps", indexed by "the key, 0..127" | §2, throughout | the index `(0x00E088)` is `voice[+0x0C] & 0x7F`, and `voice[+0x0C]` is the **VELOCITY** — see the ⚠ note at the head of §2 |
+| **`0x00E093` has no located reader**, grade UNIDENTIFIED | §1.8 | ★★ **it has one.**  All three arms end with `lda XBC,0x00e093 / push XBC / calr 0xFC4269`, so the block is `sub_FC4269`'s ARGUMENT and no instruction ever names it as an operand.  The block is a coupled-resonator DETUNE SOLVER; its result lands in `P[+0x12]`/`P[+0x14]` and thence in registers `chan+0x0040`/`0x0080`.  ★ Every clause of §1.8 is TRUE — there are no reads — and the conclusion still fell, because a census over ACCESS SHAPE cannot see a shared worker handed the address.  See `FINDINGS-l7a1429-e093-block.md` |
 | §5.3: "one hop on the CPU 1 side ... would turn `INTERACTION GAIN` from WEAK to PROVEN" | §5.3 | the hop was made.  It turned the name **STRONG**, not PROVEN, and it did not need `(0x207C)`; and it answered the second half of that item — the values 1 and 2 are `GROUP` codes, drawn as bracket graphics rather than as words |
 
 ---
@@ -256,6 +257,27 @@ is the shape of a mix or coupling matrix over the four elements.
 and no other spelling of that address exists in either image.  Wave 20 already named this the
 cheapest remaining item in `field_accessors.s`; this lane agrees and adds the contents.
 **Recorded as a lead, grade UNIDENTIFIED.**
+
+⚠ **CORRECTED 2026-09-04, lane `w24/e093-block`.**  The lead is closed and the grade is wrong.
+`0x00E093` **has** a reader: `sub_FC4269`, which all three arms call four instructions after
+the last fill, passing the block's address on the stack —
+
+```
+   FC6F8A  lda XBC,0x00e093
+   FC6F8F  push XBC
+   FC6F90  calr 0xfc4269
+```
+
+so the address is never an operand at the reader, and the sentence above is TRUE as written
+while its conclusion is not.  ★ **The block is a 68-byte argument struct** — `MODE`, `N`, and
+four parallel eight-slot arrays (gain, level, tuning in, result) — and `sub_FC4269` is a
+fixed-point **coupled-resonator detune solver**: it evaluates the loop characteristic function
+of the group's `2 × elements` resonators at each one's own nominal frequency and returns a
+pitch offset in 1/256 semitone, which the arms read back into `P[+0x12]` and `P[+0x14]` and
+`Dev104_PackStagingStruct` adds to registers `chan+0x0040` and `chan+0x0080`.  ★ So this
+section's own observation — *"both gains plus both tunings, per element, is the shape of a mix
+or coupling matrix"* — was right about the shape and right to refuse to name it.  Full decode,
+nulls and factory evaluation: `FINDINGS-l7a1429-e093-block.md`.
 
 ### 1.9 ★ What register `0x0300`'s ROLE becomes
 
