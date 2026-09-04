@@ -2574,7 +2574,7 @@ HDAE5000_AcHddNamingWindowProc:
 .LRF_1b80:
 	cpw	(0x22A02E:24), 13
 	jrl c, .LRF_21da                       ; [77 50 06] jrl C,0x2821da
-	subdi16_24	(0x22A02E), 13
+	subw	(0x22A02E:24), 13
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02

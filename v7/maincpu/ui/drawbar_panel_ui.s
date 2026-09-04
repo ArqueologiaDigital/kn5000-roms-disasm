@@ -12461,7 +12461,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+70)
 	srl	xwa, 0
 	.byte 0xd7	; v10 does not spell this byte either
-	subdm32_24	(9033896), xsp
+	sub	(9033896:24), xsp
 	popw	de
 	ldb	w, 232
 	set	0, l

@@ -14442,7 +14442,7 @@ SoundFX_Handler_2:
 	cp a, 0xff
 	jr z, SoundFX_Handler_2_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -14488,7 +14488,7 @@ SoundFX_Handler_3:
 	cp a, 0xff
 	jr z, SoundFX_Handler_3_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -14534,7 +14534,7 @@ SoundFX_Handler_4:
 	cp a, 0xff
 	jr z, SoundFX_Handler_4_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -14598,7 +14598,7 @@ SoundFX_Handler_5:
 	cp a, 0xff
 	jrl z, SoundFX_Handler_5_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -14678,7 +14678,7 @@ SoundFX_Handler_6:
 	cp a, 0xff
 	jrl z, SoundFX_Handler_6_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -14774,7 +14774,7 @@ SoundFX_Handler_7:
 	cp a, 0xff
 	jrl z, SoundFX_Handler_7_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -14854,7 +14854,7 @@ SoundFX_Handler_8:
 	cp a, 0xff
 	jrl z, SoundFX_Handler_8_ClearWord
 	ld a, (0xceaa:16)
-	subda8 a, 0xcee0
+	sub a, (0xcee0:16)
 	add a, l
 	inc 1, a
 	ld l, a
@@ -20185,7 +20185,7 @@ AccWrap_PlayModeStateMachine:
 PlayModeStateMachine_Block:
 	cpw (0xd09a:16), 0
 	ret le
-	subdi16 0xd09a, 1
+	subw (0xd09a:16), 1
 	ret nz
 	res 1, (0x28b2:16)
 	res 2, (0x28b2:16)
@@ -23605,7 +23605,7 @@ RingBuffer_ReadByte_Return:
 
 Seq_CalcAddrOffset:
 	ldw hl, 0x7ff
-	subda16 xhl, 0xd0ac
+	sub hl, (0xd0ac:16)
 	ret
 
 CalcAddrOffset_Data:
@@ -23756,7 +23756,7 @@ SysexRingBuf_ReadReturn:
 
 SysexRingBuf_GetFreeSpace:
 	ldw hl, 0x7ff
-	subda16 xhl, 0xd8b2
+	sub hl, (0xd8b2:16)
 	ret
 
 SysexRingBuf_ReadBytes:
@@ -28928,7 +28928,7 @@ Heap_Alloc_Block:
 Heap_Grow:
 	ld xhl, (0x03d524:24)
 	add (0x03d524:24), xwa
-	subdm32_24 (0x3d528), xwa
+	sub (0x3d528:24), xwa
 	ret
 
 ; ============================================================================

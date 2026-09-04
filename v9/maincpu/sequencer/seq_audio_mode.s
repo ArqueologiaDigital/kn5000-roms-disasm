@@ -910,7 +910,7 @@ RhythmAccent_CopyAndUpdateRingBuf:
 RhythmAccent_UpdateRingBufPosition:
 	ld a, (0x342e:16)
 	ei 6
-	subda8 a, 1124
+	sub a, (1124:16)
 	jr ugt, RhythmAccent_StorePosition
 	ldb a, 0x1
 	ld (0x342e:16), a

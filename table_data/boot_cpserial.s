@@ -468,7 +468,7 @@ BootSerial_TickWait2:
 	ld	(0x0f73:16), wa
 BootSerial_TickWait2__loop:
 	ld	wa, (0x0c00:16)
-	subda16	xwa, 0x0f73
+	sub	wa, (0x0f73:16)
 	cps	wa, 2
 	jr	lt, BootSerial_TickWait2__loop
 	ret
@@ -478,7 +478,7 @@ BootSerial_TickWait6:
 	ld	(0x0f73:16), wa
 BootSerial_TickWait6__loop:
 	ld	wa, (0x0c00:16)
-	subda16	xwa, 0x0f73
+	sub	wa, (0x0f73:16)
 	cps	wa, 6
 	jr	lt, BootSerial_TickWait6__loop
 	ret
@@ -488,7 +488,7 @@ BootSerial_TickWait51:
 	ld	(0x0f73:16), wa
 BootSerial_TickWait51__loop:
 	ld	wa, (0x0c00:16)
-	subda16	xwa, 0x0f73
+	sub	wa, (0x0f73:16)
 	cp	wa, 51
 	jr	lt, BootSerial_TickWait51__loop
 	ret

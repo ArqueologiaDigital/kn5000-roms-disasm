@@ -13063,7 +13063,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+70)
 	srl	xwa, 0
 	.byte 0xd7
-	subdm32_24	(0x89d8a8), xsp
+	sub	(0x89d8a8:24), xsp
 	popw	de
 	ldb	w, 232
 	set	0, l

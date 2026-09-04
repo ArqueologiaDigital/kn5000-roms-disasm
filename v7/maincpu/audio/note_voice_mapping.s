@@ -6416,7 +6416,7 @@ VoiceMap_AllocateSlot:
 	cp	a, 255
 	jr	z, 66
 	ld	a, (52750:16)
-	subda8	a, (52804)
+	sub	a, (52804:16)
 VoiceMap_AllocateSlo_SetByteFF:
 	add	a, l
 	inc	1, a
@@ -6446,7 +6446,7 @@ NoteMap_FindBestMatch:
 	cp	a, 255
 	jr	z, 116
 	ld	a, (52750:16)
-	subda8	a, (52804)
+	sub	a, (52804:16)
 	add	a, l
 	inc	1, a
 	ld	l, a
@@ -10974,7 +10974,7 @@ SoundParam_InitDefaultBanks:
 .Lc_feda76:
 	ret
 	ldw HL, 0x07ff
-	subda16 xhl, 0xd816
+	sub hl, (0xd816:16)
 	ret
 	.byte 0xef, 0x6e, 0x2e, 0xbf, 0x02, 0x61
 SoundParam_InitDefau_LoadReg:
@@ -13592,7 +13592,7 @@ Free_Block3:
 	ld	xhl, (251172:24)
 	add	(251172:24), xwa
 Free_OrBits:
-	subdm32_24	(251176), xwa
+	sub	(251176:24), xwa
 	ret
 	push	xiz
 	pushw	65535

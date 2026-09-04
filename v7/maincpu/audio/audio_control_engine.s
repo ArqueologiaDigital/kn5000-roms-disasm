@@ -687,7 +687,7 @@ Encoder_TimingAndOutput:
 	ld	(36396:16), wa
 Encoder_CheckTimerDelta:
 	ld	wa, (1033:16)
-	subda16	xwa, (36390)
+	sub	wa, (36390:16)
 	cp	wa, 16
 	jr	c, 7	; -> 0xFC61F3
 	ld	(36394:16), 0

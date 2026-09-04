@@ -727,7 +727,7 @@ AccompSeq_NoteOn5_Return:
 AccompSeq_ResolveChannel:
 	ld a, (0x7e55:16)
 	ei 6
-	subda8 a, 1131
+	sub a, (1131:16)
 	jr ugt, AccompSeq_ResolveCh_Store
 	ldb a, 0x1
 	ld (0x7e55:16), a

@@ -70313,7 +70313,7 @@ sub_F37E1C:		; <- T_F41264
 	push	xbc	; F37EFC  push XBC
 	call	15993104	; F37EFD  call 0xf40910
 	ld	bc, (2569:24)	; F37F01  ld BC,(0x000a09)
-	subdm16_24	(2567), bc	; F37F06  sub (0x000a07),BC
+	sub	(2567:24), bc	; F37F06  sub (0x000a07),BC
 	exts	xbc	; F37F0B  exts XBC
 	add	(2563:24), xbc	; F37F0D  add (0x000a03),XBC
 	inc	8, xsp	; F37F12  inc 0,XSP
@@ -129367,8 +129367,8 @@ sub_F63280:
 	add	xhl, xiy	; F63293  add XHL,XIY
 	add	xde, xix	; F63295  add XDE,XIX
 	.byte 0x83, 0x13	; F63297  lddr   [llvm-mc cannot encode this]
-	subda32	xhl, (3171)	; F63299  sub XHL,(0x0c63)
-	subda32	xde, (3161)	; F6329D  sub XDE,(0x0c59)
+	sub	xhl, (3171:16)	; F63299  sub XHL,(0x0c63)
+	sub	xde, (3161:16)	; F6329D  sub XDE,(0x0c59)
 	ld	iy, hl	; F632A1  ld IY,HL
 	ld	ix, de	; F632A3  ld IX,DE
 	pop	xhl	; F632A5  pop XHL
@@ -130308,8 +130308,8 @@ BStore_CopyAcrossBlocks:		; <- T_BStore_CopyAcrossBlocks
 	add	xiy, xhl	; F63BD3  add XIY,XHL
 	add	xix, xde	; F63BD5  add XIX,XDE
 	m_ldir MBI+r5	; F63BD7  ldir
-	subda32	xiy, (3171)	; F63BD9  sub XIY,(0x0c63)
-	subda32	xix, (3161)	; F63BDD  sub XIX,(0x0c59)
+	sub	xiy, (3171:16)	; F63BD9  sub XIY,(0x0c63)
+	sub	xix, (3161:16)	; F63BDD  sub XIX,(0x0c59)
 	pop	xhl	; F63BE1  pop XHL
 	pop	xde	; F63BE2  pop XDE
 	popw	wa	; F63BE3  pop WA
@@ -139125,7 +139125,7 @@ sub_F69240:
 	jr	c, -30	; F6926E  jr C,0xf69252
 	xor	b, b	; F69270  xor B,B
 	ld	c, (3922:16)	; F69272  ld C,(0x0f52)
-	subda8	c, (3923)	; F69276  sub C,(0x0f53)
+	sub	c, (3923:16)	; F69276  sub C,(0x0f53)
 	calr	8154	; F6927A  calr 0xf6b257
 	djnz16	bc, -6	; F6927D  djnz BC,0xf6927a
 	jr	-54	; F69280  jr T,0xf6924c
@@ -139185,7 +139185,7 @@ sub_F6929C:
 	inc	1, (3925:16)	; F692D2  inc 1,(0x0f55)
 	calr	64367	; F692D6  calr 0xf68e48
 	ld	a, (3923:16)	; F692D9  ld A,(0x0f53)
-	subda8	a, (3922)	; F692DD  sub A,(0x0f52)
+	sub	a, (3922:16)	; F692DD  sub A,(0x0f52)
 	m_cp_rm MB16, 0x0f55, 1	; F692E1  cp A,(0x0f55)
 	jr	ugt, -57	; F692E5  jr UGT,0xf692ae
 	xor	b, b	; F692E7  xor B,B
@@ -139373,7 +139373,7 @@ sub_F69442:
 	cp	w, 255	; F6944A  cp W,0xff
 	jr	z, 31	; F6944D  jr Z,0xf6946e
 	ld	l, (3673:16)	; F6944F  ld L,(0x0e59)
-	subda8	l, (3672)	; F69453  sub L,(0x0e58)
+	sub	l, (3672:16)	; F69453  sub L,(0x0e58)
 	xor	h, h	; F69457  xor H,H
 	ld	(3791:16), hl	; F69459  ld (0x0ecf),HL
 	ld	(3792:16), 0	; F6945D  ld (0x0ed0),0x00
@@ -167022,7 +167022,7 @@ sub_F76B9B:
 	pop	xix	; F76BC5  pop XIX
 	cp	wa, (4522:16)	; F76BC6  cp WA,(0x11aa)
 	jr	ule, 20	; F76BCA  jr ULE,0xf76be0
-	subda16	xwa, (4522)	; F76BCC  sub WA,(0x11aa)
+	sub	wa, (4522:16)	; F76BCC  sub WA,(0x11aa)
 	push	xix	; F76BD0  push XIX
 	ld	xix, 12378	; F76BD1  ld XIX,0x0000305a
 	extz	xhl	; F76BD6  extz XHL
@@ -167129,7 +167129,7 @@ sub_F76C97:
 	ld	(4522:16), wa	; F76CC7  ld (0x11aa),WA
 	jr	10	; F76CCB  jr T,0xf76cd7
 	ld	de, wa	; F76CCD  ld DE,WA
-	subda16	xde, (4226)	; F76CCF  sub DE,(0x1082)
+	sub	de, (4226:16)	; F76CCF  sub DE,(0x1082)
 	ld	(4522:16), de	; F76CD3  ld (0x11aa),DE
 	pushw	wa	; F76CD7  push WA
 	push	xhl	; F76CD8  push XHL

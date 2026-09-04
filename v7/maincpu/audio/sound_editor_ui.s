@@ -6621,14 +6621,14 @@ SeMenu_ShowConfirmDialog_Data:
 	ld (0x06cc:16), ix
 	ld (0x06d0:16), ix
 	ld (0x06ce:16), iy
-	subdi16 (0x06ce), 0x0005
+	subw (0x06ce:16), 0x0005
 	ld (0x06d2:16), iy
-	subdi16 (0x06d2), 0x0001
+	subw (0x06d2:16), 0x0001
 	call SeMenu_NameEditor_ChangeCase_Data
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
 	ld (0x06cc:16), ix
-	subdi16 (0x06cc), 0x0008
+	subw (0x06cc:16), 0x0008
 	ld (0x06d0:16), ix
 	ld (0x06ce:16), iy
 	ld (0x06d2:16), iy
@@ -6637,9 +6637,9 @@ SeMenu_ShowConfirmDialog_Data:
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
 	ld (0x06cc:16), ix
-	subdi16 (0x06cc), 0x0005
+	subw (0x06cc:16), 0x0005
 	ld (0x06d0:16), ix
-	subdi16 (0x06d0), 0x0003
+	subw (0x06d0:16), 0x0003
 	ld (0x06ce:16), iy
 	addw (0x06ce:16), 0x0001
 	ld (0x06d2:16), iy
@@ -6670,9 +6670,9 @@ SeMenu_ShowConfirmDialog_Data:
 	ld (0x06cc:16), ix
 	ld (0x06d0:16), ix
 	ld (0x06ce:16), iy
-	subdi16 (0x06ce), 0x0005
+	subw (0x06ce:16), 0x0005
 	ld (0x06d2:16), iy
-	subdi16 (0x06d2), 0x0001
+	subw (0x06d2:16), 0x0001
 	pushw ix
 	pushw iy
 	call SeMenu_NameEditor_InsertChar

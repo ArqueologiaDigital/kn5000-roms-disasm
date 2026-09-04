@@ -1026,7 +1026,7 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	; Handle 0x01EA0001: page up
 	cpw (0x23a08e:24), 0x0018
 	jr lt, .Lfd_done		; already at minimum
-	subdi16_24 (0x23a08e), 0x0018; subtract 24 from offset
+	subw (0x23a08e:24), 0x0018; subtract 24 from offset
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	; Calculate new entry index

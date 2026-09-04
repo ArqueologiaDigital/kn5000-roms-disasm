@@ -7109,7 +7109,7 @@ DirScan_ProcessEntry:
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	exts xwa
@@ -7117,7 +7117,7 @@ DirScan_ProcessEntry:
 	ld xbc, 0xb
 	call FileIO_ReadBlock
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	exts xwa
@@ -7172,7 +7172,7 @@ DirScan_AltReadLoop:
 	ldw de, 0xb
 	calr FileIO_CopyString_WriteNull
 	stw_erp WA, 0xfa
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	exts xwa
@@ -7280,7 +7280,7 @@ FileIO_RefreshFileNames:
 
 RefreshNames_FallbackLoop:
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
@@ -7306,7 +7306,7 @@ RefreshNames_ReadLoop:
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	ld bc, wa
 	lda xwa, (0x025ec0:24)
@@ -7314,7 +7314,7 @@ RefreshNames_ReadLoop:
 	ld xbc, 0x30
 	call FileIO_ReadBlock
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	ld bc, wa
 	lda xwa, (0x025ec0:24)
@@ -7326,7 +7326,7 @@ RefreshNames_ReadLoop:
 	cps hl, 0
 	jr ge, RefreshNames_NextEntry
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
@@ -7352,7 +7352,7 @@ RefreshNames_AltMediaPath:
 
 RefreshNames_AltFallbackLoop:
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
@@ -7375,7 +7375,7 @@ RefreshNames_AltReadLoop:
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	ld bc, wa
 	lda xwa, (0x025ec0:24)
@@ -7383,7 +7383,7 @@ RefreshNames_AltReadLoop:
 	ld xbc, 0x10
 	call FileIO_ReadBlock
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	ld bc, wa
 	lda xwa, (0x025ec0:24)
@@ -7395,7 +7395,7 @@ RefreshNames_AltReadLoop:
 	cps hl, 0
 	jr ge, RefreshNames_AltNextEntry
 	ld wa, iz
-	subda16_24 xwa, (0x271ee)
+	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0

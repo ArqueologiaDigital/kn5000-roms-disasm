@@ -2036,7 +2036,7 @@ HDAE5000_SelectFlsScreen:
 .LFWF_87ac:
 	cpw	(0x23A090:24), 24
 	jr lt, .LFWF_881e                      ; [61 69] jr LT,0x28881e
-	subdi16_24	(0x23A090), 24
+	subw	(0x23A090:24), 24
 	calr	0xf796
 	ld	xwa, xiz
 	add	xwa, 0x00000018
@@ -2892,7 +2892,7 @@ HDAE5000_FlsDirSelScreen:
 .LFWF_92de:
 	cpw	(0x23A08E:24), 24
 	jr lt, .LFWF_935a                      ; [61 73] jr LT,0x28935a
-	subdi16_24	(0x23A08E), 24
+	subw	(0x23A08E:24), 24
 	ld	xwa, 0x007f0151
 	calr	0xa418
 	ld	xwa, xiz
@@ -3932,7 +3932,7 @@ HDAE5000_CopyToHDDirSelScreen:
 .LFSD__hA_scroll_up:			; Event 0x01EA0001: scroll up
 	cpw (0x23a08e:24), 0x0018
 	jr lt, .LFSD__hA_exit
-	subdi16_24	(0x23A08E), 24
+	subw	(0x23A08E:24), 24
 	ld xwa, 0x007f00e6
 	calr HDAE5000_HD_Format_Params
 	ld xwa, xiz

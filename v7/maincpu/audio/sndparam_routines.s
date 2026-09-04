@@ -1298,7 +1298,7 @@ SndParam_Widget1_CallType3:
 	ld	(1077:16), 0
 	ld	a, (1045:16)
 	ld	w, a
-	subda8	a, 1111
+	sub	a, (1111:16)
 	jr	z, 37
 	jr	ugt, 3
 	add	a, 96

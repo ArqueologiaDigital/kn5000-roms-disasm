@@ -760,7 +760,7 @@ INTTR4_SeqAccum_Update:
 	ei 6
 	ld a, (1045:16)
 	ld w, a
-	subda8 a, 1111
+	sub a, (1111:16)
 	jr z, INTTR4_SeqAccum_Done
 	jr ugt, INTTR4_SeqAccum_PositiveDelta
 	add a, 0x60
@@ -829,7 +829,7 @@ INTTR4_SyncAccum_Update:
 	ei 6
 	ld a, (1130:16)
 	ld w, a
-	subda8 a, 1138
+	sub a, (1138:16)
 	jr z, INTTR4_SyncAccum_Done
 	jr ugt, INTTR4_SyncAccum_PositiveDelta
 	add a, 0x60

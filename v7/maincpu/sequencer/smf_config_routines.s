@@ -814,7 +814,7 @@ SMF_ProcessCh_Loop:
 	pop xix
 	cp wa, (4229:16)
 	jr ule, SMF_ProcessCh_MoveToOutput
-	subda16 xwa, 4229
+	sub wa, (4229:16)
 	push xix
 	ld xix, 0x11f9
 	extz xhl
@@ -1545,7 +1545,7 @@ SMF_UpdateTempo_Loop:
 
 SMF_UpdateTempo_SubtractBase:
 	ld de, wa
-	subda16 xde, 3942
+	sub de, (3942:16)
 	cps de, 0
 	jr ge, SMF_UpdateTempo_ClampZero
 	lds de, 0

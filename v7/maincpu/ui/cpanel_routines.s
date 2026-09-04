@@ -998,7 +998,7 @@ CPanel_UpdateLEDs__check_next:
 
 LEDs_CheckTXSpace:
 	ld	wa, (36195:16)
-	subda16	xwa, (36193)
+	sub	wa, (36193:16)
 	jr	nc, 6	; -> 0xFC4393
 	neg	wa
 	ld	hl, wa

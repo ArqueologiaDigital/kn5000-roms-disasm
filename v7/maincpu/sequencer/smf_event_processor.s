@@ -6134,7 +6134,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+10)
 	.byte 0xa8	; v10 does not spell this byte either
 	ex_ff
-	subdm8	(10350), l
+	sub	(10350:16), l
 	ldwio	32, 1688
 	push	xsp
 	ldb	c, 0
@@ -6315,7 +6315,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+10)
 	.byte 0xa8	; v10 does not spell this byte either
 	ex_ff
-	subdm8	(4462), l
+	sub	(4462:16), l
 	ldwio	32, 8872
 	ldb	w, 184
 	ex_ff
@@ -6395,7 +6395,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+12)
 	.byte 0xa8	; v10 does not spell this byte either
 	ex_ff
-	subdm8	(10350), l
+	sub	(10350:16), l
 	incf
 	ldb	w, 152
 	ei	63
@@ -6629,7 +6629,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+12)
 	.byte 0xa8	; v10 does not spell this byte either
 	ex_ff
-	subdm8	(4462), l
+	sub	(4462:16), l
 	incf
 	ldb	w, 168
 	ldb	b, 32
@@ -9260,7 +9260,7 @@ TaskBuf_ReadAndDecrement:
 	ld a, (xbc)
 	ldb_erp A, 0xf8
 	extz iz
-	subdi16_24 (0x23580), 1
+	subw (0x23580:24), 1
 	jr nz, TaskBuf_ReturnByte
 	ld xwa, (0x023582:24)
 	cpw (xwa), 0x400

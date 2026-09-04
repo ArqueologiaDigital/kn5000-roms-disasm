@@ -2368,7 +2368,7 @@ AccSlot_CheckAndUpdate:
 	xor w, w
 	ei 6
 	add wa, (1120:16)
-	subda8 a, 1124
+	sub a, (1124:16)
 	jr pl, AccSlot_CompareAndUpdate
 	cps w, 0
 	jr z, AccSlot_TimingZero
@@ -4241,7 +4241,7 @@ AccTempo_BarChanged:
 
 AccTempo_ComputeSubDelta:
 	ld wa, (0x32e3:16)
-	subda8 a, 0x327f
+	sub a, (0x327f:16)
 	jr nc, AccTempo_StoreDelta
 	add a, 0x60
 
@@ -9008,7 +9008,7 @@ AccTiming_AlignTo8Tick:
 
 AccTiming_Align_Compute:
 	ld hl, wa
-	subda16 xhl, 1033
+	sub hl, (1033:16)
 	cps hl, 0
 	jr le, AccTiming_Align_Return
 	jr AccTiming_Align_Compute
@@ -9235,7 +9235,7 @@ AccReplay_Stop_ResetPosition:
 	ld a, (1079:16)
 	cp a, (1075:16)
 	jr c, AccReplay_Stop_Rebuild
-	subda8 a, 1075
+	sub a, (1075:16)
 	ld (1079:16), a
 	ld a, (1075:16)
 	ld (0x3479:16), a
@@ -9756,7 +9756,7 @@ AccKbdTiming_TimestampOverflow:
 	ld (0x3a78:16), 0
 
 AccKbdTiming_Overflow_SubBase:
-	subda8 a, 1117
+	sub a, (1117:16)
 	cp a, (0x3377:16)
 	jr nc, AccKbdTiming_Overflow_CalcSkip
 	ld (0x3377:16), a
@@ -9880,7 +9880,7 @@ AccKbdTiming_TableScan_Loop:
 	jr AccKbdTiming_TableScan_NextSlot
 
 AccKbdTiming_TableScan_Decrement:
-	subda16 xwa, 1118
+	sub wa, (1118:16)
 	bit 7, a
 	jr z, AccKbdTiming_TableScan_StoreTiming
 	add a, 0x60
@@ -10229,7 +10229,7 @@ AccAccTiming_TimestampOverflow:
 	ld (0x3a7a:16), 0
 
 AccAccTiming_Overflow_SubBase:
-	subda8 a, 1117
+	sub a, (1117:16)
 	cp a, (0x3377:16)
 	jr nc, AccAccTiming_Overflow_CalcSkip
 	ld (0x3377:16), a
@@ -10289,7 +10289,7 @@ AccAccTiming_TableScan_Loop:
 	jr AccAccTiming_TableScan_NextSlot
 
 AccAccTiming_TableScan_Decrement:
-	subda16 xwa, 1118
+	sub wa, (1118:16)
 	bit 7, a
 	jr z, AccAccTiming_TableScan_StoreTiming
 	add a, 0x60
@@ -17392,7 +17392,7 @@ AccPatch_UpdateEntry_CheckDE:
 	jr AccPatch_NullRet
 
 AccPatch_UpdateEntry_AdjustOffset:
-	subda16 xde, 0x360a
+	sub de, (0x360a:16)
 	cps de, 6
 	jr z, AccPatch_UpdateEntry_StoreDirect
 	jr ugt, AccPatch_UpdateEntry_StoreDirect
@@ -17447,7 +17447,7 @@ AccPatch_AdjustTableEntryPos:
 	sub de, 0x6
 	cp de, (0x360a:16)
 	jr c, AccPatch_AdjustEntry_Overflow
-	subda16 xde, 0x360a
+	sub de, (0x360a:16)
 	add de, 0x6
 	ld (xix), de
 	jr AccPatch_AdjustEntry_Return
@@ -17867,7 +17867,7 @@ AccPatch_TransposeNote:
 	calr AccPatch_ReadTransposeAmount
 	cp a, (0x3a4e:16)
 	jr ugt, AccPatch_Transpose_AddBack
-	subdm8 0x36ec, a
+	sub (0x36ec:16), a
 	jr nc, AccPatch_Transpose_Done
 	ldb a, 0xc
 	add (0x36ec:16), a
@@ -18208,7 +18208,7 @@ AccPatch_InitSlot_CrossBlock:
 	calr AccPatch_GetEntryAddr
 	ld (0x364c:16), xix
 	ld wa, (0x360a:16)
-	subda16 xwa, 0x3702
+	sub wa, (0x3702:16)
 	add wa, 0x5
 	ld (0x3660:16), wa
 
@@ -18228,7 +18228,7 @@ AccPatch_InitSlot_StoreAddrs:
 	ld xiy, 0x366a
 	lds32 xbc, 0
 	ldw bc, 0xfe
-	subda16 xbc, 0x3604
+	sub bc, (0x3604:16)
 	inc 1, bc
 	cp bc, (0x360a:16)
 	jr c, AccPatch_InitSlot_SplitCopy
@@ -18628,7 +18628,7 @@ AccPatch_CalcBlockCopy_Done:
 
 __pad_F60E86:
 	ld wa, (0x3660:16)
-	subda16 xwa, 0x365e
+	sub wa, (0x365e:16)
 	ld (0x3654:16), wa
 	ldw bc, 0xff
 	sub bc, 0x6
@@ -18775,7 +18775,7 @@ DSP_NullRet:
 
 BlockCopy_IXFirst_Reverse:
 	ld wa, (0x365e:16)
-	subda16 xwa, 0x3660
+	sub wa, (0x3660:16)
 	ld (0x3654:16), wa
 	ldw bc, 0xff
 	sub bc, 0x6
@@ -18857,7 +18857,7 @@ BlockCopyBounds_UseSmaller:
 
 BlockCopyBounds_CopyRemainder:
 	ld bc, (0x3668:16)
-	subda16 xbc, 0x3666
+	sub bc, (0x3666:16)
 	calr DSP_BlockCopyReverse
 
 BlockCopyBounds_Return:
@@ -18910,12 +18910,12 @@ AccPatch_SetupBlockCopyDispatch:
 	jr nz, BlockCopyDisp_CompareOffsets
 	lds32 xiy, 0
 	ldw iy, 0xff
-	subda16 xiy, 0x365e
+	sub iy, (0x365e:16)
 	ld (0x3664:16), iy
 	ld iy, (0x365e:16)
 	lds32 xix, 0
 	ldw ix, 0xff
-	subda16 xix, 0x3660
+	sub ix, (0x3660:16)
 	ld (0x3666:16), ix
 	ld ix, (0x3660:16)
 	calr AccPatch_ForwardBlockCopy
@@ -18950,9 +18950,9 @@ BlockCopyDisp_Return:
 
 BlockCopy_FwdIYSmaller:
 	ldw wa, 0xff
-	subda16 xwa, 0x3660
+	sub wa, (0x3660:16)
 	ldw bc, 0xff
-	subda16 xbc, 0x365e
+	sub bc, (0x365e:16)
 	sub wa, bc
 	ld (0x3654:16), wa
 	ldw bc, 0xff
@@ -18964,7 +18964,7 @@ BlockCopy_FwdIYSmaller:
 	lds32 xix, 0
 	ld ix, (0x3660:16)
 	ldw bc, 0xff
-	subda16 xbc, 0x365e
+	sub bc, (0x365e:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cp (0x7f42:16), 0
@@ -19004,7 +19004,7 @@ DSP_CopyDone:
 
 BlockCopy_FwdEqual:
 	ldw bc, 0xff
-	subda16 xbc, 0x365e
+	sub bc, (0x365e:16)
 	lds32 xiy, 0
 	ld iy, (0x365e:16)
 	lds32 xix, 0
@@ -19052,9 +19052,9 @@ AccPatch_NullRet2:
 
 BlockCopy_FwdIXSmaller:
 	ldw wa, 0xff
-	subda16 xwa, 0x365e
+	sub wa, (0x365e:16)
 	ldw bc, 0xff
-	subda16 xbc, 0x3660
+	sub bc, (0x3660:16)
 	sub wa, bc
 	ld (0x3654:16), wa
 	ldw bc, 0xff
@@ -19066,7 +19066,7 @@ BlockCopy_FwdIXSmaller:
 	lds32 xix, 0
 	ld ix, (0x3660:16)
 	ldw bc, 0xff
-	subda16 xbc, 0x3660
+	sub bc, (0x3660:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
 	cp (0x7f42:16), 0
@@ -19116,7 +19116,7 @@ AccPatch_ForwardBlockCopy:
 	cp (0x7f42:16), 0
 	jr nz, AccPatch_DoneBlockCopy
 	ldw wa, 0xfe
-	subda16 xwa, 0x3662
+	sub wa, (0x3662:16)
 	ld bc, (0x3664:16)
 	sub bc, wa
 	ld (0x3668:16), bc
@@ -19138,7 +19138,7 @@ FwdBlockCopy_UseSmaller:
 
 FwdBlockCopy_CopyRemainder:
 	ld bc, (0x3668:16)
-	subda16 xbc, 0x3666
+	sub bc, (0x3666:16)
 	calr DSP_BlockCopyForward
 
 AccPatch_DoneBlockCopy:
@@ -19362,7 +19362,7 @@ AccTiming_ComputeOffset:
 	add h, a
 	inc 1, h
 	ld a, (0x34fa:16)
-	subda8 a, 0x3746
+	sub a, (0x3746:16)
 	ldb w, 0x20
 	cp (0x34d9:16), 5
 	jr c, AccTiming_UseFullBar
@@ -22521,7 +22521,7 @@ AccPlayback_PartAssign_Check3:
 
 AccPlayback_PartAssign_LargeMeasure:
 	ld a, (0x34d7:16)
-	subda8 a, 0x3746
+	sub a, (0x3746:16)
 	cps a, 2
 	jr gt, AccPlayback_PartAssign_FullSetup
 	jrl RhythmFunc_NullRet
@@ -22557,7 +22557,7 @@ AccPlayback_PartAssign_LargeBeat:
 
 AccPlayback_PartAssign_LargeBeat2:
 	ld a, (0x34d7:16)
-	subda8 a, 0x3746
+	sub a, (0x3746:16)
 	cps a, 0
 	jr le, RhythmFunc_NullRet
 	ld (0x373e:16), 4
@@ -28102,7 +28102,7 @@ Tempo_FormatBPMPad:
 
 Tempo_DisplayBPMValue:
 	ld wa, (0x398c:16)
-	subda16 xwa, 0x398a
+	sub wa, (0x398a:16)
 	inc 1, a
 	ldb_erp A, 0xfa
 	mul_sd16b 1, 0x86, 0x39
@@ -28194,7 +28194,7 @@ Tempo_DisplayBPMReturn:
 
 Tempo_DisplayMeasureRange:
 	ld wa, (0x398c:16)
-	subda16 xwa, 0x398a
+	sub wa, (0x398a:16)
 	ld (xiz + 13), a
 	resm 7, (xiz + 15)
 	lda xde, (xsp + 6)
@@ -30278,7 +30278,7 @@ AccVoice_SetupSlots_DataBlock:
 	ld	wa, (0x3614:16)
 	add	xix, xwa
 	ldw	de, 255
-	subda16 xde, (13844)
+	sub de, (13844:16)
 	cp bc, de
 	jr	gt, 12
 	.byte 0xd1
@@ -36670,7 +36670,7 @@ AccPatch_VoiceAssignDataBlock:
 	xor	xbc, xbc
 	xor	xiz, xiz
 	ldw	wa, 1024
-	subda16 xwa, (14714)
+	sub wa, (14714:16)
 	ld	bc, wa
 	sub	bc, 12
 	ld	xiy, 0x069800

@@ -1888,7 +1888,7 @@ CompIface_PostProcess:
 	bit 6, (0xc1f0:16)
 	ret z
 	ld wa, (1033:16)
-	subda16 xwa, 0xc1ea
+	sub wa, (0xc1ea:16)
 	cp wa, (0xc1fc:16)
 	ret ule
 	ld xwa, 0x40c1
@@ -1903,7 +1903,7 @@ CompIface_PostProcess:
 CompIface_RampControl:
 	ld wa, (1033:16)
 	ld bc, wa
-	subda16 xbc, 0xc1ea
+	sub bc, (0xc1ea:16)
 	bit 0, (0xc1f0:16)
 	jr z, CompIface_RampDown_Apply
 	cp bc, 0xf
@@ -3979,7 +3979,7 @@ DSPCfg_Data_ParamDispatch:
 	cpl	a
 	.byte 0x8f
 	push	sr
-	subdm8	0x8bc9, l
+	sub	(0x8bc9:16), l
 	calr	45088
 	ld	xhl, 0xbf4e8bde
 	push_f

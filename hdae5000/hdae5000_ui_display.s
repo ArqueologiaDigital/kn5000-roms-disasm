@@ -14290,7 +14290,7 @@ HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
 	jrl .Lds301_exit
 .Lds301_compute:
 	lda xwa, (0x238f1c:24); XWA = 0x238F1C (base address)
-	sub32_24 xwa, (0x238f24); XWA -= (0x238F24) => remaining space
+	sub xwa, (0x238f24:24); XWA -= (0x238F24) => remaining space
 	ld (xsp + 4), xwa		; save remaining
 	ld xwa, (xsp + 10)		; reload arg1 (requested size)
 	cp xwa, (xsp + 4)		; compare requested vs remaining

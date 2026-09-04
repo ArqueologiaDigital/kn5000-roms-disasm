@@ -958,7 +958,7 @@ CompIface_FilterBySource:
 	.byte 0x53, 0xd1
 CompIface_FromSource2:
 	pop	xde
-	subdm8	(55329), a
+	sub	(55329:16), a
 	calr	64807
 	ld	(49504:16), hl
 	ret

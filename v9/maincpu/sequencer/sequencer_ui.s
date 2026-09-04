@@ -7526,7 +7526,7 @@ SndParam_Dispatch:
 	ld	xwa, (xsp+58)
 	srl	xwa, 0
 	.byte 0xd7
-	subdm32_24	(0x50b1a8), xsp
+	sub	(0x50b1a8:24), xsp
 	push	xde
 	ldb	b, 185
 	push	sr
@@ -7588,7 +7588,7 @@ SndParam_Dispatch:
 	ld	xwa, (xsp+58)
 	srl	xwa, 0
 	.byte 0xd7
-	subdm32_24	(0x50b1a8), xsp
+	sub	(0x50b1a8:24), xsp
 	push	xde
 	ldb	c, 185
 	push	sr

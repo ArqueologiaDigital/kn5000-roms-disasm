@@ -48,7 +48,7 @@ Boot_sbrk__alloc:
 Boot_sbrk__fits:
 	ld	xhl, (0x009998:24)		; XHL = current pointer
 	add	(0x009998:24), xwa
-	subdm32_24 (0x00999c), xwa
+	sub (0x00999c:24), xwa
 	ret
 
 ; -----------------------------------------------------------------------------

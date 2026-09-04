@@ -337,7 +337,7 @@ DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
 
 DELAY_2_TICKS__loop:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8d9b
+	sub wa, (0x8d9b:16)
 	cps wa, 2
 	jr lt, DELAY_2_TICKS__loop
 	ret
@@ -349,7 +349,7 @@ DELAY_6_TICKS:
 
 Delay6T_Loop:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8d9b
+	sub wa, (0x8d9b:16)
 	cps wa, 6
 	jr lt, Delay6T_Loop
 	ret
@@ -361,7 +361,7 @@ DELAY_51_TICKS:
 
 Delay51T_Loop:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8d9b
+	sub wa, (0x8d9b:16)
 	cp wa, 0x33
 	jr lt, Delay51T_Loop
 	ret
@@ -910,7 +910,7 @@ CPanel_SM_TXComplete:
 	ld (0x8d8b:16), 0
 	ld (0x8d8a:16), 0; ROUTINE_0
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	cps wa, 2
 	jr c, TXComplete_BufferEmpty
 	ld (0x8d8a:16), 4; ROUTINE_1
@@ -960,7 +960,7 @@ CPanel_SM_RXByte1:
 	add iy, (0x8d9f:16)
 	ld (xiy), a
 	ld hl, (0x8d9f:16)
-	subda16 xhl, 0x8d9d
+	sub hl, (0x8d9d:16)
 	jr nc, RXByte1_ForwardDist
 	neg hl
 	ld iy, hl
@@ -1060,7 +1060,7 @@ CPanel_InterruptPoll_MainLoop:
 	jr ule, PollLoop_DispatchWork
 	ei 6
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	jr nc, PollLoop_TXForwardDist
 	neg wa
 	ld hl, wa
@@ -1124,7 +1124,7 @@ PollLoop_CheckTXReady:
 
 	; Only reaches here when (CPANEL_TX_RX_FLAGS), CP_Flags_A.10 == 00:
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	jr nc, PollLoop_StartTX
 	neg wa
 	ex8 a, w
@@ -1194,7 +1194,7 @@ CPanel_RX_ParseNext:
 	jrl c, CPanel_RX_Done
 
 	ld wa, (0x8d9f:16)
-	subda16 xwa, 0x8d9d
+	sub wa, (0x8d9d:16)
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
 	ex8 a, w
@@ -1432,7 +1432,7 @@ CPanel_UpdateLEDs__check_next:
 
 LEDs_CheckTXSpace:
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	jr nc, LEDs_TXForwardDist
 	neg wa
 	ld hl, wa

@@ -1767,7 +1767,7 @@ Sequencer_Advance_StorePtr:
 	jp_24 z, Sequencer_Advance_UpdateRemaining
 	cp (6887:16), 1
 	jp_24 z, Sequencer_Advance_UpdateRemaining
-	subda32 xwa, 4211
+	sub xwa, (4211:16)
 
 Sequencer_Advance_UpdateRemaining:
 	ld (6883:16), xwa

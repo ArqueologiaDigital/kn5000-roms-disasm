@@ -379,7 +379,7 @@ SeqEvt_SaveReadPosAndRet:
 	ret
 
 SeqEvt_CalcTempoOffset:
-	subda8 a, 1132
+	sub a, (1132:16)
 	cp a, (0x7dfd:16)
 	jr nc, SeqEvt_UpdateMinTempo
 	ld (0x7dfd:16), a
@@ -500,7 +500,7 @@ Voice_ReadSlotParams:
 	jr Voice_ParamComplete
 
 Voice_SubtractBaseFreq:
-	subda16 xwa, 1134
+	sub wa, (1134:16)
 	bit 7, a
 	jr z, Voice_StoreMetricValue
 	add a, 0x60

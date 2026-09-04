@@ -956,7 +956,7 @@ Queue_FreeSlots:
 MIDI_Watchdogs_And_TransportSwitch:
 	link32 0xEE, 0x0C, 0xFC, 0xFF          ; F994E4  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	ld	xbc, (0xF2F3:24)                   ; F994E8  ld XBC,(0x00f2f3)
-	sub32_24	xbc, (0x7ED2)                 ; F994ED  sub XBC,(0x007ed2)
+	sub	xbc, (0x7ED2:24)                 ; F994ED  sub XBC,(0x007ed2)
 	ld	(xiz-4), xbc                        ; F994F2  ld (XIZ+0xfc),XBC
 	cp	xbc, 0x87                           ; F994F5  cp XBC,0x00000087
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F9950E                      ; F994FB  jr ULE,0xf9950e
@@ -969,7 +969,7 @@ MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	cp (0x00F2F8:24), 0x00                 ; F9950E  cp (0x00f2f8),0x00   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99543                        ; F99514  jr Z,0xf99543
 	ld	xbc, (0xF2F3:24)                   ; F99516  ld XBC,(0x00f2f3)
-	sub32_24	xbc, (0x7ED6)                 ; F9951B  sub XBC,(0x007ed6)
+	sub	xbc, (0x7ED6:24)                 ; F9951B  sub XBC,(0x007ed6)
 	ld	(xiz-4), xbc                        ; F99520  ld (XIZ+0xfc),XBC
 	cp	xbc, 0xA5                           ; F99523  cp XBC,0x000000a5
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F99543                      ; F99529  jr ULE,0xf99543

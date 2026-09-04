@@ -203,7 +203,7 @@ BootSerial_State18_TxFrameDone:
 	ld	(0x0f63:16), 0
 	ld	(0x0f62:16), 0
 	ld	wa, (0x0fd7:16)		; pending count
-	subda16	xwa, 0x0fd5		; - send index
+	sub	wa, (0x0fd5:16)		; - send index
 	cps	wa, 2
 	jr	c, BootSerial_State18_TxFrameDone__go_idle
 	ld	(0x0f62:16), 0x04		; next frame: state 0x04
@@ -257,7 +257,7 @@ BootSerial_State20_RxFirstByte:
 	add	iy, (0x0f77:16)		; + head index
 	ld	(xiy), a
 	ld	hl, (0x0f77:16)
-	subda16	xhl, 0x0f75		; head - tail
+	sub	hl, (0x0f75:16)		; head - tail
 	jr	nc, BootSerial_State20_RxFirstByte__fwd
 	neg	hl
 	ld	iy, hl			; wrapped: free = -(head - tail)
@@ -385,7 +385,7 @@ BootSerial_PollTX__inject_sync:
 	jr	ule, BootSerial_PollTX__inject_done
 	ei	6
 	ld	wa, (0x0fd7:16)
-	subda16	xwa, 0x0fd5
+	sub	wa, (0x0fd5:16)
 	jr	nc, BootSerial_PollTX__inject_fwd
 	neg	wa
 	ld	hl, wa
@@ -420,7 +420,7 @@ BootSerial_PollTX__encode:
 	bit	0, (0x0f64:16)		; RX-active flag clear?
 	jr	nz, BootSerial_PollTX__line_busy
 	ld	wa, (0x0fd7:16)
-	subda16	xwa, 0x0fd5		; pending - sent
+	sub	wa, (0x0fd5:16)		; pending - sent
 	jr	nc, BootSerial_PollTX__have_count
 	neg	wa
 	ex8	a, w
@@ -499,7 +499,7 @@ BootSerial_RX_ParsePackets__next:
 	cpw	(xiz - 2), 4		; >= 4 free control-ring slots?
 	jrl	c, BootSerial_RxParseDone
 	ld	wa, (0x0f77:16)
-	subda16	xwa, 0x0f75		; head - tail
+	sub	wa, (0x0f75:16)		; head - tail
 	jr	nc, BootSerial_RX_ParsePackets__have_avail
 	neg	wa
 	ex8	a, w
@@ -777,7 +777,7 @@ BootSerial_TX_EncodePackets__next:
 	jrl	nz, BootSerial_TxEncodeDone
 BootSerial_TX_EncodePackets__have_data:
 	ld	wa, (0x0fd7:16)
-	subda16	xwa, 0x0fd5
+	sub	wa, (0x0fd5:16)
 	jr	nc, BootSerial_TX_EncodePackets__fwd
 	neg	wa
 	ld	hl, wa

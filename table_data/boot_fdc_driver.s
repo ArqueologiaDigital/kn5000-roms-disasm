@@ -2298,7 +2298,7 @@ FDC_PIO_ReadTransfer:
 	inc 1, xhl	; inc 1,XHL
 	ld (0x0c7c:16), xhl	; ld (0x0c7c),XHL
 FDC_PIO_CountAndFinish:
-	subdi16 (0x0c4a), 1	; sub (0x0c4a),0x0001
+	subw (0x0c4a:16), 1	; sub (0x0c4a),0x0001
 	ret nz	; ret NZ
 	calr FDC_PulseTC	; calr 0xffdd17 - transfer complete: pulse TC and refresh the display
 	calr Boot_UpdateDisplay	; calr 0xffdd26

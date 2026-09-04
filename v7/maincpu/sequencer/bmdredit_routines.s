@@ -274,7 +274,7 @@ BmDrEdit_CalcNotePosition:
 	sub bc, wa
 	ld (0x2808:16), bc
 	ld a, (0x0210a8:24)
-	subdm8 0x2806, a
+	sub (0x2806:16), a
 	call GetTitleNow
 	cp xhl, 0x1a00095
 	jr nz, BmDrEdit_CalcNotePos_VerticalMode
@@ -285,7 +285,7 @@ BmDrEdit_CalcNotePosition:
 
 BmDrEdit_CalcNotePos_VerticalMode:
 	ldb a, 0xb
-	subda8 a, 0x2806
+	sub a, (0x2806:16)
 	ld (0x2806:16), a
 
 BmDrEdit_CalcNotePos_ReadFields:
@@ -450,7 +450,7 @@ BmDrEdit_CalcSecondaryPosition:
 	sub bc, wa
 	ld (0x281e:16), bc
 	ld a, (0x2826:16)
-	subdm8_24 (0x0210b0), a
+	sub (0x0210b0:24), a
 	call GetTitleNow
 	cp xhl, 0x1a00095
 	jr nz, BmDrEdit_CalcSecondaryPos_Vert
@@ -461,7 +461,7 @@ BmDrEdit_CalcSecondaryPosition:
 
 BmDrEdit_CalcSecondaryPos_Vert:
 	ldb a, 0xb
-	subda8_24 a, (0x0210b0)
+	sub a, (0x0210b0:24)
 	ld (0x0210b0:24), a
 
 BmDrEdit_CalcSecondaryPos_ClampSize:
@@ -1274,7 +1274,7 @@ BmDrEdit_WalkTrackForward:
 	ld (0x275e:16), bc
 	ld a, (0x2774:16)
 	extz wa
-	subda16 xbc, 0x276a
+	sub bc, (0x276a:16)
 	cp bc, wa
 	jr nc, BmDrEdit_WalkTrack_CountExceeded
 
@@ -1299,7 +1299,7 @@ BmDrEdit_WalkTrack_CheckNoteCount:
 	ld (0x275e:16), bc
 	ld a, (0x2774:16)
 	extz wa
-	subda16 xbc, 0x276a
+	sub bc, (0x276a:16)
 	cp bc, wa
 	jr c, BmDrEdit_WalkTrack_CheckNoteOn
 
@@ -2716,7 +2716,7 @@ BmDrEdit_AlignGridBackward_AccumLoop:
 	jr c, BmDrEdit_AlignGridBackward_AccumLoop
 
 BmDrEdit_AlignGridBackward_Store:
-	subda16 xde, 0x2792
+	sub de, (0x2792:16)
 	ld (0x279a:16), de
 	ret
 
@@ -3541,7 +3541,7 @@ BmDrEdit_ScanChannel_ClearSlot:
 
 BmDrEdit_BuildVoiceList:
 	ld bc, (0x2744:16)
-	subda16 xbc, 0x27b2
+	sub bc, (0x27b2:16)
 	inc 1, bc
 	ld h, c
 	lds ix, 0
@@ -3575,7 +3575,7 @@ BmDrEdit_BuildVoice_NullReturn:
 
 BmDrEdit_FindNextPageEntry:
 	ld hl, (0x2744:16)
-	subda16 xhl, 0x27b2
+	sub hl, (0x27b2:16)
 	inc 1, l
 	ldb e, 0x0
 	lda xbc, (0x27a4:16)
@@ -4020,7 +4020,7 @@ BmDrEdit_CalcSongPos_Store:
 
 BmDrEdit_CalcEventPosition:
 	ld de, (0x2744:16)
-	subda16 xde, 0x27b2
+	sub de, (0x27b2:16)
 	inc 1, de
 	lds hl, 0
 	lda xbc, (0x27a4:16)

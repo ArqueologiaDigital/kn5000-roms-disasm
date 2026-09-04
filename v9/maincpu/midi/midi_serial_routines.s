@@ -357,7 +357,7 @@ ClkTick_Src2CoarseOverflow:
 ClkTick_Src2ErrorDelta:
 	ld a, (1045:16)
 	ld w, a
-	subda8 a, 1111
+	sub a, (1111:16)
 	jr z, ClkTick_Src3ClickCheck
 	jr ugt, ClkTick_Src2ErrorAccumulate
 	add a, 0x60

@@ -1764,7 +1764,7 @@ Encoder_TimingAndOutput:
 
 Encoder_CheckTimerDelta:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8ec2
+	sub wa, (0x8ec2:16)
 	cp wa, 0x10
 	jr c, Encoder_CheckBitAndProcess
 	ld (0x8ec6:16), 0

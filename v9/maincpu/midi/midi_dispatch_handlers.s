@@ -1096,7 +1096,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	e, (0x966f:16)
 	ld	(xiy), e
 	ld	xde, xiy
-	subda32	xde, 0x9664
+	sub	xde, (0x9664:16)
 	ld	(xix), e
 	add	xiy, xhl
 	inc	1, xix
@@ -2125,7 +2125,7 @@ Periodic_TimestampCompare:
 	pushw de
 	ld wa, (1033:16)
 	ld de, wa
-	subda16 xwa, 0xb7e3
+	sub wa, (0xb7e3:16)
 	cp wa, 0x96
 	jr c, Periodic_TimestampCompare_Done
 	ld (0xb7e3:16), de
@@ -12293,7 +12293,7 @@ ArpQueue_ProcessAndSort_Data:
 	retd	0xaad9
 	calr	65359
 	lds32	xwa, 1
-	subdm32	0xbcc4, xwa
+	sub	(0xbcc4:16), xwa
 	lda	xbc, (0xbcd4:16)
 	ld	xwa, (xbc)
 	dec	1, xwa

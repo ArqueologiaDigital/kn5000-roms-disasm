@@ -4023,7 +4023,7 @@ ToneParam_HandlerTable_BC:
 	jrl c, -35
 	xor	b, b
 	ld	c, (3648:16)
-	subda8	c, 3649
+	sub	c, (3649:16)
 	call	SysInit_BytecodeBlock_0xFF
 	djnz16	bc, -7
 	jp	ToneParam_HandlerTable_BC_0x2F8
@@ -4072,7 +4072,7 @@ ToneParam_HandlerTable_BC:
 	inc	1, (3651:16)
 	call	MemConfig_Handler_5_0xE4
 	ld	a, (3649:16)
-	subda8	a, 3648
+	sub	a, (3648:16)
 	cp a, (3651:16)
 	jrl ugt, -72
 	xor	b, b
@@ -4226,7 +4226,7 @@ ToneParam_HandlerTable_BC:
 	add	xsp, 0x2576ffcf
 	nop
 	ld	l, (3421:16)
-	subda8	l, 3420
+	sub	l, (3420:16)
 	xor	h, h
 	ld	(3533:16), hl
 	ld	(3534:16), 0
@@ -8082,7 +8082,7 @@ MemConfig_Handler_1:
 	ldb	a, 3
 	call	VoiceSlot_SaveState
 	ld	a, (3421:16)
-	subda8	a, 3420
+	sub	a, (3420:16)
 	call	MemConfig_Handler_1_0x1C6
 	ldb	a, 4
 	call	VoiceSlot_SaveState
@@ -13559,7 +13559,7 @@ OscScope_UpdateDisplay:
 	ld	c, a
 	ldb	l, 96
 	muls8rr	a, l
-	subdm16 (3778), xwa
+	sub (3778:16), wa
 	ld a, c
 	dec	1, a
 	cps	a, 0
@@ -13584,7 +13584,7 @@ OscScope_RefreshLoop:
 	jrl	z, 29
 	ldb	a, 96
 	muls8rr	a, c
-	subdm16 (3778), xwa
+	sub (3778:16), wa
 	xor b, b
 	pushw	bc
 	pushw	de
@@ -13925,7 +13925,7 @@ DisplayStr_BytecodeBlock_A:
 	ld	(4372:16), xwa
 	ld	(3782:16), l
 	xor	b, b
-	subdm16 (3780), xbc
+	sub (3780:16), bc
 	ret
 	ld	(3830:16), 0
 	ld	c, (3777:16)
@@ -13996,7 +13996,7 @@ DisplayStr_BytecodeBlock_A:
 	ld	(4372:16), xwa
 	ld	(3782:16), l
 	xor	b, b
-	subdm16 (3780), xbc
+	sub (3780:16), bc
 	ret
 	popw	ix
 	ret
@@ -17267,7 +17267,7 @@ Scoop_Scroll_Boundary3:
 	jrl Scoop_CategorySelect_UpdateDisplay
 
 Scoop_Scroll_Apply:
-	subda16 xwa, 0x28bc
+	sub wa, (0x28bc:16)
 	ld (9870:16), wa
 	ldw bc, 0x100
 	sub bc, 0x5
@@ -17343,7 +17343,7 @@ Scoop_CategorySelect_End:
 
 Scoop_CategorySelect_UpdateDisplay:
 	ld wa, (0x28bc:16)
-	subda16 xwa, 0x28b6
+	sub wa, (0x28b6:16)
 	ld (9870:16), wa
 	ldw bc, 0x100
 	sub bc, 0x5
@@ -17407,7 +17407,7 @@ Scoop_ButtonGrid_End:
 	cp (0x287a:16), 0
 	jr nz, Scoop_ButtonGrid_Data
 	ld bc, (9880:16)
-	subda16 xbc, 9876
+	sub bc, (9876:16)
 	call Scoop_SpecialMode_Setup
 
 Scoop_ButtonGrid_Data:
@@ -17428,11 +17428,11 @@ Scoop_EventHandler_SpecialMode:
 	.byte 0xba
 	pushw	wa
 	ld	(0x35216e:24), 1
-	subda16 xiy, (10428)
+	sub iy, (10428:16)
 	ld	(9874:16), iy
 	ld	iy, (0x28bc:16)
 	ldw	ix, 256
-	subda16 xix, (10422)
+	sub ix, (10422:16)
 	ld	(9876:16), ix
 	ld	ix, (0x28b6:16)
 	jrl	431
@@ -17445,9 +17445,9 @@ Scoop_EventHandler_SpecialMode:
 	jrl	143
 	jrl	252
 	ldw	wa, 256
-	subda16 xwa, (10422)
+	sub wa, (10422:16)
 	ldw	bc, 256
-	subda16 xbc, (10428)
+	sub bc, (10428:16)
 	sub wa, bc
 	ld	(9870:16), wa
 	ldw	bc, 256
@@ -17457,7 +17457,7 @@ Scoop_EventHandler_SpecialMode:
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
-	subda16 xbc, (10428)
+	sub bc, (10428:16)
 	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
@@ -17491,7 +17491,7 @@ Scoop_EventHandler_SpecialMode:
 	ld	(9874:16), bc
 	jrl	269
 	ldw	bc, 256
-	subda16 xbc, (10428)
+	sub bc, (10428:16)
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
 	call	Scoop_SpecialMode_UpdateParams_0x70
@@ -17531,9 +17531,9 @@ Scoop_EventHandler_SpecialMode:
 	ld	(9874:16), bc
 	jrl	157
 	ldw	wa, 256
-	subda16 xwa, (10428)
+	sub wa, (10428:16)
 	ldw	bc, 256
-	subda16 xbc, (10422)
+	sub bc, (10422:16)
 	sub wa, bc
 	ld	(9870:16), wa
 	ldw	bc, 256
@@ -17543,7 +17543,7 @@ Scoop_EventHandler_SpecialMode:
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
-	subda16 xbc, (10422)
+	sub bc, (10422:16)
 	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
@@ -17584,7 +17584,7 @@ Scoop_EventHandler_SpecialMode:
 	sub	wa, 5
 	ld	(9874:16), wa
 	ldw	wa, 255
-	subda16 xwa, (10424)
+	sub wa, (10424:16)
 	ld	bc, (9874:16)
 	sub	bc, wa
 	ld	(9880:16), bc
@@ -17602,7 +17602,7 @@ Scoop_EventHandler_SpecialMode:
 	jr	z, 2
 	jr	12
 	ld	bc, (9880:16)
-	subda16 xbc, (9876)
+	sub bc, (9876:16)
 	call	Scoop_SpecialMode_UpdateParams_0x70
 	ret
 
@@ -17619,8 +17619,8 @@ Scoop_SpecialMode_Setup:
 	add xhl, xiy
 	add xde, xix
 	lddr83
-	subda32 xhl, 9854
-	subda32 xde, 9850
+	sub xhl, (9854:16)
+	sub xde, (9850:16)
 	ld iy, hl
 	ld ix, de
 
@@ -17733,8 +17733,8 @@ Scoop_SpecialMode_UpdateParams:
 	add	xix, xde
 	.byte 0x85
 	scf
-	subda32	xiy, 9854
-	subda32	xix, 9850
+	sub	xiy, (9854:16)
+	sub	xix, (9850:16)
 	pop	xhl
 	pop	xde
 	popw	wa

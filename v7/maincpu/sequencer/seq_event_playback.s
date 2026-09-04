@@ -334,7 +334,7 @@ SeqEvt_SaveReadPosAndRet:
 	ld	(xhl+6), ix
 	ret
 SeqEvt_CalcTempoOffset:
-	subda8 a, (0x046c)
+	sub a, (0x046c:16)
 	cp a, (0x7d61:16)
 	jr nc, .Lc_f70aef
 	ld (0x7d61:16), a
@@ -435,7 +435,7 @@ Voice_ReadSlotParams:
 	.byte 0x00, 0x1e, 0x36, 0xff, 0xde, 0xbd, 0xc3, 0x07
 	.byte 0xec, 0xf4, 0x3c, 0x7f, 0x68, 0x1b
 Voice_SubtractBaseFreq:
-	subda16 xwa, 1134
+	sub wa, (1134:16)
 	bit 7, a
 	jr z, Voice_StoreMetricValue
 	add a, 0x60
