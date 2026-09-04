@@ -10723,7 +10723,7 @@ TitleProc_SetResourceDirtyFlag:
 
 TitleProc_ClearResourceDirtyFlag:
 	cpl wa
-	anddm16_24 (0x02bc30), xwa
+	and (0x02bc30:24), wa
 	ld de, (0x02bc30:24)
 	extz xde
 	ld xwa, 0x1400001

@@ -2533,7 +2533,7 @@ SMF_SlotParam_VolumeCalc:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x7
 	ld a, (4395:16)
-	andda8 a, 3310
+	and a, (3310:16)
 	bit 7, a
 	jr nz, SMF_SlotParam_VolumeScale
 	xor w, w

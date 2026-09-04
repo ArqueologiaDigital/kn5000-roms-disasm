@@ -67,7 +67,7 @@ EffectMode_ByteData_Block2:
 	push	sr
 	ret	nz
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	bit	0, a
 	jrl	z, 145
 	.byte 0xc1

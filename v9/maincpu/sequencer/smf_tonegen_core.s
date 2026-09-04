@@ -4651,7 +4651,7 @@ VoiceChannel_NoteOnByChannel:
 	ld c, (4011:16)
 	and c, 0xf
 	ld wa, (4239:16)
-	andda16 xwa, 4241
+	and wa, (4241:16)
 	ldw_erp WA, 0x3e
 	ld a, c
 	scf
@@ -4706,7 +4706,7 @@ VoiceChannel_NoteOffByChannel:
 	ld c, (4011:16)
 	and c, 0xf
 	ld wa, (4239:16)
-	andda16 xwa, 4241
+	and wa, (4241:16)
 	ldw_erp WA, 0x3e
 	ld a, c
 	scf

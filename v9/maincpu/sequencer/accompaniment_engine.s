@@ -1451,7 +1451,7 @@ AccVoice_BarEnd_NextPage:
 
 AccVoice_BarEnd_CheckChord94:
 	ld a, (0x33d4:16)
-	andda8 a, 0x3326
+	and a, (0x3326:16)
 	jr nz, AccVoice_SetChordChangeFlags
 
 AccVoice_BarEnd_CheckChord65:
@@ -1464,7 +1464,7 @@ AccVoice_BarEnd_CheckChord65:
 
 AccVoice_BarEnd_CheckChord95:
 	ld a, (0x33d4:16)
-	andda8 a, 0x3327
+	and a, (0x3327:16)
 	jr nz, AccVoice_SetChordChangeFlags
 
 AccVoice_BarEnd_CheckSync69:
@@ -1497,7 +1497,7 @@ AccVoice_SetChordChangeFlags:
 	and (0x330e:16), 252
 	or (0x330e:16), 1
 	ld a, (0x33d4:16)
-	andda8 a, 0x3312
+	and a, (0x3312:16)
 	jr z, AccVoice_NullRet
 	or (0x330e:16), 2
 
@@ -1542,7 +1542,7 @@ AccVoice_HandleMarker83:
 	and w, a
 	jr nz, AccVoice_Marker83_Activate
 	ld a, (0x33d4:16)
-	andda8 a, 0x3328
+	and a, (0x3328:16)
 	jr z, AccVoice_Marker83_CheckDeact
 
 AccVoice_Marker83_Activate:
@@ -1551,7 +1551,7 @@ AccVoice_Marker83_Activate:
 
 AccVoice_Marker83_CheckDeact:
 	calr AccPart_CheckAnyActive
-	andda8 a, 0x33d4
+	and a, (0x33d4:16)
 	jr z, AccVoice_Marker83_NextPart
 	calr AccPart_Deactivate
 	jr AccVoice_Marker83_Return
@@ -1582,17 +1582,17 @@ AccVoice_ActivateByteData:
 	and	a, 192
 	jr	nz, 10
 	ld	a, (0x33d4:16)
-	andda8	a, 0x3329
+	and	a, (0x3329:16)
 	jr	z, 16
 	calr	278
 	ld	a, (0x33d4:16)
 	xor	a, 255
-	anddm8	0x3329, a
+	and	(0x3329:16), a
 	jr	104
 	ld	a, (0x3316:16)
 	orda8	a, 0x3317
 	orda8	a, 0x3318
-	andda8	a, 0x33d4
+	and	a, (0x33d4:16)
 	jr	nz, 43
 	.byte 0xf1, 0x01
 	ldw	hl, 0x66c8
@@ -1603,7 +1603,7 @@ AccVoice_ActivateByteData:
 	ret
 	ldw	hl, 318
 	ld	a, (0x33d4:16)
-	andda8	a, 0x3312
+	and	a, (0x3312:16)
 	jr	z, 5
 	.byte 0xc1
 	ret
@@ -1617,11 +1617,11 @@ AccVoice_ActivateByteData:
 	calr	102
 	ld	a, (0x33d4:16)
 	xor	a, 255
-	anddm8	0x3312, a
-	anddm8	0x3313, a
-	anddm8	0x3316, a
-	anddm8	0x3317, a
-	anddm8	0x3318, a
+	and	(0x3312:16), a
+	and	(0x3313:16), a
+	and	(0x3316:16), a
+	and	(0x3317:16), a
+	and	(0x3318:16), a
 	ld	(0x33db:16), 0
 	ld	(0x33ea:16), 0
 	ret
@@ -1644,13 +1644,13 @@ AccPart_SelectSource_Done:
 AccPart_AdvanceAndResolve:
 	calr AccPart_IncrementIndex
 	ld a, (0x33d4:16)
-	andda8 a, 0x335d
+	and a, (0x335d:16)
 	jr z, AccPart_AdvanceResolve_Done
 	call AccVoice_InitPerChannel
 	calr AccPart_LoadParamOffsetTable
 	ld a, (0x33d4:16)
 	xor a, 0xff
-	anddm8 0x335d, a
+	and (0x335d:16), a
 	call AccVoice_AssignPerPart
 
 AccPart_AdvanceResolve_Done:
@@ -1779,7 +1779,7 @@ AccPart_NullRet:
 AccPart_GetFreeVoiceAddr:
 	ld a, (0x33d4:16)
 	xor a, 0xff
-	anddm8 0x33e0, a
+	and (0x33e0:16), a
 	cp (0x33d4:16), 1
 	jr nz, AccPart_FreeAddr_Kbd2
 	ld wa, (xiy + 256)
@@ -1834,7 +1834,7 @@ AccPart_FreeAddr_Return:
 AccPart_GetParamAddr:
 	ld a, (0x33d4:16)
 	xor a, 0xff
-	anddm8 0x33e0, a
+	and (0x33e0:16), a
 	cp (0x33d4:16), 1
 	jr nz, AccPart_ParamAddr_Kbd2
 	add hl, 0x118
@@ -1985,7 +1985,7 @@ AccPedal_DirB_CheckBit0:
 AccPedal_DirB_InvertAndStore:
 	ld a, w
 	xor w, 0xff
-	anddm8 0x3312, w
+	and (0x3312:16), w
 	ld w, (1075:16)
 	cp w, (0x336a:16)
 	jr nz, AccPedal_DirB_DefaultStyle
@@ -1996,7 +1996,7 @@ AccPedal_DirB_InvertAndStore:
 AccPedal_DirB_Alternate:
 	ld a, w
 	xor w, 0xff
-	anddm8 0x3313, w
+	and (0x3313:16), w
 	ld w, (1075:16)
 	cp w, (0x3368:16)
 	jr nz, AccPedal_DirB_DefaultStyle
@@ -2098,15 +2098,15 @@ AccMidi_ParseCommon_ExtraFields:
 AccMidi_SelectVelocitySource:
 	ld a, (0x33d4:16)
 	ld w, (0x333f:16)
-	andda8 a, 0x3316
+	and a, (0x3316:16)
 	jr nz, AccMidi_VelSource_Active
-	andda8 a, 0x3317
+	and a, (0x3317:16)
 	jr nz, AccMidi_VelSource_Active
-	andda8 a, 0x3318
+	and a, (0x3318:16)
 	jr nz, AccMidi_VelSource_Active
-	andda8 a, 0x3314
+	and a, (0x3314:16)
 	jr nz, AccMidi_VelSource_Active
-	andda8 a, 0x3315
+	and a, (0x3315:16)
 	jr z, AccMidi_VelSource_Store
 
 AccMidi_VelSource_Active:
@@ -2455,7 +2455,7 @@ AccBuf_NoteEvent_Return:
 
 AccKbd2_CheckActive:
 	ld	a, (0x33d4:16)
-	andda8	a, 0x33e0
+	and	a, (0x33e0:16)
 	jr	z, 76
 	ld	a, (0x33d4:16)
 	ld	w, (0x3314:16)
@@ -2467,13 +2467,13 @@ AccKbd2_CheckActive:
 	jr	50
 	ld	a, (0x33d4:16)
 	xor	a, 255
-	anddm8	0x3312, a
-	anddm8	0x3313, a
-	anddm8	0x3316, a
-	anddm8	0x3317, a
-	anddm8	0x3318, a
-	anddm8	0x335d, a
-	anddm8	0x3329, a
+	and	(0x3312:16), a
+	and	(0x3313:16), a
+	and	(0x3316:16), a
+	and	(0x3317:16), a
+	and	(0x3318:16), a
+	and	(0x335d:16), a
+	and	(0x3329:16), a
 	ld	(0x33ea:16), 0
 	ld	(0x33d6:16), 254
 	ld	(0x33d8:16), 6
@@ -3771,21 +3771,21 @@ AccPart_Deactivate:
 	and a, 0xc0
 	jr nz, AccPart_Deactivate_WithPedal
 	ld a, (0x33d4:16)
-	andda8 a, 0x3329
+	and a, (0x3329:16)
 	jr z, AccPart_Deactivate_NoPedal
 
 AccPart_Deactivate_WithPedal:
 	calr AccPart_ResolveWithPedal
 	ld a, (0x33d4:16)
 	xor a, 0xff
-	anddm8 0x3329, a
+	and (0x3329:16), a
 	jrl AccPart_DeactivateReturn
 
 AccPart_Deactivate_NoPedal:
 	ld a, (0x3316:16)
 	orda8 a, 0x3317
 	orda8 a, 0x3318
-	andda8 a, 0x33d4
+	and a, (0x33d4:16)
 	jr nz, AccPart_Deactivate_ActiveNote
 	bit 0, (0x3301:16)
 	jr nz, AccPart_Deactivate_WithSync
@@ -3797,7 +3797,7 @@ AccPart_Deactivate_WithSync:
 	and (0x330e:16), 252
 	or (0x330e:16), 1
 	ld a, (0x33d4:16)
-	andda8 a, 0x3312
+	and a, (0x3312:16)
 	jr z, AccPart_Deactivate_SetDone
 	or (0x330e:16), 2
 	jr AccPart_Deactivate_SetDone
@@ -3818,11 +3818,11 @@ AccPart_Deactivate_SendOff:
 AccPart_Deactivate_ClearMasks:
 	ld a, (0x33d4:16)
 	xor a, 0xff
-	anddm8 0x3312, a
-	anddm8 0x3313, a
-	anddm8 0x3316, a
-	anddm8 0x3317, a
-	anddm8 0x3318, a
+	and (0x3312:16), a
+	and (0x3313:16), a
+	and (0x3316:16), a
+	and (0x3317:16), a
+	and (0x3318:16), a
 	ld (0x33db:16), 0
 	ld (0x33ea:16), 0
 
@@ -3831,7 +3831,7 @@ AccPart_DeactivateReturn:
 
 AccPart_Reactivate:
 	ld a, (0x33d4:16)
-	andda8 a, 0x33e0
+	and a, (0x33e0:16)
 	jr z, AccPart_ReactivateReturn
 	ld a, (0x33d4:16)
 	ld w, (0x3314:16)
@@ -3847,13 +3847,13 @@ AccPart_Reactivate:
 AccPart_Reactivate_Inactive:
 	ld a, (0x33d4:16)
 	xor a, 0xff
-	anddm8 0x3312, a
-	anddm8 0x3313, a
-	anddm8 0x3316, a
-	anddm8 0x3317, a
-	anddm8 0x3318, a
-	anddm8 0x335d, a
-	anddm8 0x3329, a
+	and (0x3312:16), a
+	and (0x3313:16), a
+	and (0x3316:16), a
+	and (0x3317:16), a
+	and (0x3318:16), a
+	and (0x335d:16), a
+	and (0x3329:16), a
 	ld (0x33ea:16), 0
 	ld (0x33d6:16), 254
 	ld (0x33d8:16), 6
@@ -5360,7 +5360,7 @@ AccVoice_SelectByMask:
 	cp (0x32e5:16), 128
 	jr c, AccVoice_SelectByMask_Default
 	ldb_erp W, 0x31
-	andda8 w, 0x3317
+	and w, (0x3317:16)
 	jr nz, AccVoice_SelectByMask_Default
 	bit 0, (0x3363:16)
 	jr nz, AccVoice_SelectByMask_Direct
@@ -6510,7 +6510,7 @@ AccPedal_SustainHandler:
 	cp (0x348a:16), 5
 	jrl nz, AccPedal_SustainReturn
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 0, a
 	jr nz, AccPedal_Sustain_CallReset
 	jp AccPedal_SustainReturn
@@ -6663,7 +6663,7 @@ AccPedal_ExprToggle:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_ExprReturn
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 1, a
 	jr z, AccPedal_ExprReturn
 	ldb a, 0x2
@@ -6742,7 +6742,7 @@ AccPedal_DistributePadding:
 AccPedal_SendEvents:
 	ld a, (0x3480:16)
 	xor a, 0xff
-	andda8 a, 0x3481
+	and a, (0x3481:16)
 	cps a, 0
 	jr z, AccPedal_SendEvents_Group2
 	ldb b, 0x5
@@ -6754,7 +6754,7 @@ AccPedal_SendEvents:
 AccPedal_SendEvents_Group2:
 	ld a, (0x3484:16)
 	xor a, 0xff
-	andda8 a, 0x3485
+	and a, (0x3485:16)
 	cps a, 0
 	jr z, AccPedal_SendEvents_OnSustain
 	ldb b, 0x6
@@ -6765,7 +6765,7 @@ AccPedal_SendEvents_Group2:
 
 AccPedal_SendEvents_OnSustain:
 	ld a, (0x3480:16)
-	andda8 a, 0x3481
+	and a, (0x3481:16)
 	cps a, 0
 	jr z, AccPedal_SendEvents_OnExpr
 	ldb b, 0x5
@@ -6776,7 +6776,7 @@ AccPedal_SendEvents_OnSustain:
 
 AccPedal_SendEvents_OnExpr:
 	ld a, (0x3484:16)
-	andda8 a, 0x3485
+	and a, (0x3485:16)
 	cps a, 0
 	jr z, AccPedal_SendEventsReturn
 	ldb b, 0x6
@@ -6806,7 +6806,7 @@ AccPedal_Bit2_Sustain:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_Bit2_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 2, a
 	jr z, AccPedal_Bit2_Off
 	ordi16 4360, 4
@@ -6850,7 +6850,7 @@ AccPedal_Bit2_Expression:
 	cp (0x348a:16), 6
 	jr nz, AccPedal_Expr_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 2, a
 	jr z, AccPedal_Expr_Off
 	lds de, 4
@@ -6896,7 +6896,7 @@ AccPedal_Bit7_Portamento:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_Bit7_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 7, a
 	jr z, AccPedal_Bit7_Off
 	ordi16 4360, 128
@@ -6928,7 +6928,7 @@ AccPedal_Bit6_Hold:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_Bit6_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 6, a
 	jr z, AccPedal_Bit6_HoldOff
 	ordi16 4360, 64
@@ -6954,7 +6954,7 @@ AccPedal_Bit4_Sostenuto:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_Bit4_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 4, a
 	jr z, AccPedal_Bit4_Off
 	bit 2, (1054:16)
@@ -6977,7 +6977,7 @@ AccPedal_Bit5_Soft:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_Bit5_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 5, a
 	jr z, AccPedal_Bit5_Off
 	bit 2, (1054:16)
@@ -7000,7 +7000,7 @@ AccPedal_Bit3_Damper:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_Bit3_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 3, a
 	jr z, AccPedal_Bit3_Off
 	calr AccPedal_DamperOn
@@ -7038,7 +7038,7 @@ AccPedal_Sync_Return:
 AccPedal_SendCtrl1:
 	ld a, (0x3482:16)
 	xor a, 0xff
-	andda8 a, 0x3483
+	and a, (0x3483:16)
 	cps a, 0
 	jr z, AccPedal_SendCtrl1_Return
 	bit 3, (0xfd56:16)
@@ -7068,7 +7068,7 @@ AccPedal_SendCtrl1_CheckPort:
 AccPedal_SendCtrl1_UpdateMask:
 	ld a, (0x3482:16)
 	xor a, 0xff
-	andda8 a, 0x3483
+	and a, (0x3483:16)
 	ldb b, 0x5
 	ldb c, 0x48
 	ld d, a
@@ -7081,7 +7081,7 @@ AccPedal_SendCtrl1_Return:
 AccPedal_SendCtrl2:
 	ld a, (0x3486:16)
 	xor a, 0xff
-	andda8 a, 0x3487
+	and a, (0x3487:16)
 	cps a, 0
 	jr z, AccPedal_SendCtrl2_Return
 	bit 3, (0xfd56:16)
@@ -7111,7 +7111,7 @@ AccPedal_SendCtrl2_CheckPort:
 AccPedal_SendCtrl2_UpdateMask:
 	ld a, (0x3486:16)
 	xor a, 0xff
-	andda8 a, 0x3487
+	and a, (0x3487:16)
 	ldb b, 0x6
 	ldb c, 0x48
 	ld d, a
@@ -7123,7 +7123,7 @@ AccPedal_SendCtrl2_Return:
 
 AccPedal_SendCtrl3:
 	ld a, (0x3482:16)
-	andda8 a, 0x3483
+	and a, (0x3483:16)
 	cps a, 0
 	jr z, AccPedal_SendCtrl3_Return
 	bit 3, (0xfd56:16)
@@ -7152,7 +7152,7 @@ AccPedal_SendCtrl3_CheckPort:
 
 AccPedal_SendCtrl3_UpdateMask:
 	ld a, (0x3482:16)
-	andda8 a, 0x3483
+	and a, (0x3483:16)
 	ldb b, 0x5
 	ldb c, 0x48
 	ld d, a
@@ -7164,7 +7164,7 @@ AccPedal_SendCtrl3_Return:
 
 AccPedal_SendCtrl4:
 	ld a, (0x3486:16)
-	andda8 a, 0x3487
+	and a, (0x3487:16)
 	cps a, 0
 	jr z, AccPedal_SendCtrl4_Return
 	bit 3, (0xfd56:16)
@@ -7193,7 +7193,7 @@ AccPedal_SendCtrl4_CheckPort:
 
 AccPedal_SendCtrl4_UpdateMask:
 	ld a, (0x3486:16)
-	andda8 a, 0x3487
+	and a, (0x3487:16)
 	ldb b, 0x6
 	ldb c, 0x48
 	ld d, a
@@ -7207,7 +7207,7 @@ AccPedal_MapToAcc:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_MapToAcc_Send
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 6, a
 	jr z, AccPedal_MapToAcc_Send
 	call AccPedal_ScanVoiceSlots
@@ -7220,7 +7220,7 @@ AccPedal_MapToAcc_Send:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_MapToAcc_UpdateMask
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 7, a
 	jr z, AccPedal_MapToAcc_UpdateMask
 	call AccPedal_ScanVoiceSlots
@@ -7238,7 +7238,7 @@ AccPedal_MapToAcc_UpdateMask:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_MapToAcc_SetMask
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 2, a
 	jr z, AccPedal_MapToAcc_SetMask
 	call AccPedal_ScanVoiceSlots
@@ -7256,7 +7256,7 @@ AccPedal_MapToAcc_SetMask:
 	cp (0x348a:16), 6
 	jr nz, AccPedal_MapToAcc_Return
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 2, a
 	jr z, AccPedal_MapToAcc_Return
 	call AccPedal_ScanVoiceSlots
@@ -7274,7 +7274,7 @@ AccPedal_MapToAcc_Return:
 	cp (0x348a:16), 5
 	jr nz, AccPedal_MapPadding
 	ld a, (0x347e:16)
-	andda8 a, 0x347f
+	and a, (0x347f:16)
 	bit 5, a
 	jr z, AccPedal_MapPadding
 	call AccPedal_ScanVoiceSlots
@@ -9869,7 +9869,7 @@ AccKbdTiming_TableScan_Loop:
 	cp wa, (1118:16)
 	jr gt, AccKbdTiming_TableScan_Decrement
 	ldb a, 0xf0
-	andda8 a, 0x3381
+	and a, (0x3381:16)
 	or a, 0x8
 	calr AccSeq_WriteByte
 	ld a, (0x3382:16)
@@ -10278,7 +10278,7 @@ AccAccTiming_TableScan_Loop:
 	cp wa, (1118:16)
 	jr gt, AccAccTiming_TableScan_Decrement
 	ldb a, 0xf0
-	andda8 a, 0x3381
+	and a, (0x3381:16)
 	orda8 a, 0x338c
 	calr AccSeq_WriteByte
 	ld a, (0x3382:16)
@@ -10582,7 +10582,7 @@ AccProcess_InlinedCode:
 	.byte 0xf2, 0xe1, 0xbf, 0xf5
 	and	bc, iz
 	jrl	nz, 8640
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and	a, 1
 	cps	a, 1
 	.byte 0xf2, 0xe1, 0xbf, 0xf5
@@ -11538,7 +11538,7 @@ AccStyle_ToggleBit0_CheckC07D:
 	cp	(0xc07d:16), 6
 	jr nz, AccStyle_ToggleBit0_Ret
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	bit 0, a
 	jr z, AccStyle_ToggleBit0_Ret
 	xordi8	0x3391, 1
@@ -34533,7 +34533,7 @@ AccScreen_DataBlock:
 	nop
 	.byte 0xc1, 0xa6, 0xf6
 	nop
-	andda8_24	c, (0xf6a6)
+	and	c, (0xf6a6:24)
 	.byte 0xa6, 0xf6
 	nop
 	cp_spiw	iz, 166

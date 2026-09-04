@@ -488,7 +488,7 @@ Voice_ReadSlotParams:
 	ex16 iy, iz
 	ld iy, (xhl + 4)
 	ldb a, 0xf0
-	andda8 a, 0x7e0b
+	and a, (0x7e0b:16)
 	orda8 a, 0x7e07
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, (0x7e0c:16)

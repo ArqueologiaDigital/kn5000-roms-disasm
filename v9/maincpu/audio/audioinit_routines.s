@@ -718,7 +718,7 @@ Audio_CheckInitStatus:
 	jr AudioInit_CheckGroupB_Presence
 
 AudioInit_ClearStatusBit8:
-	anddi16 0xc598, 0xfeff
+	andw (0xc598:16), 0xfeff
 
 AudioInit_CheckGroupB_Presence:
 	ld bc, (0x28a8:16)
@@ -730,7 +730,7 @@ AudioInit_CheckGroupB_Presence:
 	jr AudioInit_ChannelLoop_Init
 
 AudioInit_ClearStatusBit9:
-	anddi16 0xc598, 0xfdff
+	andw (0xc598:16), 0xfdff
 
 AudioInit_ChannelLoop_Init:
 	ldb e, 0x0
@@ -750,7 +750,7 @@ AudioInit_ChannelLoop_Body:
 	add wa, wa
 	lda xix, (SystemConfig_PointerTable_0x56:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	andda16 xwa, 0xf290
+	and wa, (0xf290:16)
 	jr z, AudioInit_VoiceNotAssigned
 	ld a, e
 	extz wa
@@ -889,7 +889,7 @@ AudioInit_GroupA_OtherType:
 	add wa, wa
 	lda xix, (SystemConfig_PointerTable_0x56:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	andda16 xwa, 3928
+	and wa, (3928:16)
 	jr z, AudioInit_GroupA_NoAuxMapping
 	ld a, e
 	extz wa
@@ -931,7 +931,7 @@ AudioInit_GroupA_DefaultMapping:
 	add wa, wa
 	lda xix, (SystemConfig_PointerTable_0x56:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	andda16 xwa, 0xf1d0
+	and wa, (0xf1d0:16)
 	jr z, AudioInit_GroupA_NoSecondary
 	ld a, e
 	extz wa
@@ -1097,7 +1097,7 @@ AudioInit_ChannelLoop_Done:
 AudioInit_SetChangedFlag:
 	bit 3, (0x28b3:16)
 	jr z, AudioInit_CheckExternalBit3
-	anddi16 0xc598, 0xfdff
+	andw (0xc598:16), 0xfdff
 
 AudioInit_CheckExternalBit3:
 	ld wa, (0xc598:16)
@@ -1140,7 +1140,7 @@ AudioInit_DefaultOutputRouting:
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 
 AudioInit_ApplyOutputRouting:
-	anddi16 0xc596, 0xffe8
+	andw (0xc596:16), 0xffe8
 	orddm16 0xc596, xde
 	inc 2, xsp
 	ret
@@ -1227,7 +1227,7 @@ AudioInit_MIDIDisabled:
 AudioInit_RefreshToneBank:
 	pushw iz
 	ld iz, (0xc596:16)
-	anddi16 0xc596, 0xffef
+	andw (0xc596:16), 0xffef
 	call Voice_UpdatePlayModeState
 	cp l, 0xff
 	call_24 nz, VoiceEvent_AllocAllLayers
@@ -1272,7 +1272,7 @@ AudioInit_VoiceRoutingTable:
 	.byte 0x61, 0xda, 0xcf, 0x20, 0x00, 0x67, 0x81, 0x0e
 
 AudioInit_ConfigureVoiceRouting:
-	anddi16 0xc596, 0xfeff
+	andw (0xc596:16), 0xfeff
 	ld wa, (0xc596:16)
 	and wa, 0x3
 	jrl z, AudioInit_Routing_NoActiveVoices
@@ -1927,7 +1927,7 @@ AudioInit_VoiceCompare_LayerLoop:
 
 AudioInit_VoiceCompare_LayerChanged:
 	ld a, (0xc1fe:16)
-	andda8 a, 0xc364
+	and a, (0xc364:16)
 	and a, d
 	jr z, AudioInit_VoiceCompare_LayerNext
 	or e, d

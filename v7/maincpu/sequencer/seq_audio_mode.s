@@ -103,7 +103,7 @@ AccPedal_ApplyChangeMask:
 	jr z, AccPedal_CheckAuxBit2
 	ld w, a
 	xor w, 0xff
-	anddm8 0xfc5f, w
+	and (0xfc5f:16), w
 	ldb e, 0x48
 	ldb d, 0x5
 	ldb w, 0x0
@@ -438,7 +438,7 @@ RhythmPart_ProcessBit1:
 	jr z, AccChord_CheckExtraDirtyBit3
 	ldb w, 0x0
 	xor a, 0xff
-	anddm8 0xfc5f, a
+	and (0xfc5f:16), a
 	ldb a, 0x0
 	ldb e, 0x48
 	ldb d, 0x5

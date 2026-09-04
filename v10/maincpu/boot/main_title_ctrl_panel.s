@@ -172,7 +172,7 @@ SndParam_SendDiskMenuEvents:
 	ld xwa, (xbc)
 	ordm32_24 (0x02749a), xwa
 	ld xwa, (xbc)
-	andda32_24 xwa, (0x02749e)
+	and xwa, (0x02749e:24)
 	jr z, CtrlPanel_ProcessButtonPress
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00030
@@ -192,7 +192,7 @@ CtrlPanel_CheckDiskMenuRelease:
 	ld xwa, (xbc)
 	cpl wa
 	cplw_erp 0xe2
-	anddm32_24 (0x02749a), xwa
+	and (0x02749a:24), xwa
 
 CtrlPanel_ProcessButtonPress:
 	ld c, (0xc07f:16)
@@ -223,7 +223,7 @@ CtrlPanel_ProcessButtonPress:
 	ld xwa, (xbc)
 	ordm32_24 (0x02749e), xwa
 	ld xwa, (xbc)
-	andda32_24 xwa, (0x02749a)
+	and xwa, (0x02749a:24)
 	jr z, CtrlPanel_DispatchCombinedState
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00030
@@ -243,11 +243,11 @@ CtrlPanel_CheckButtonRelease:
 	ld xwa, (xbc)
 	cpl wa
 	cplw_erp 0xe2
-	anddm32_24 (0x02749e), xwa
+	and (0x02749e:24), xwa
 
 CtrlPanel_DispatchCombinedState:
 	ld xwa, (0x02749e:24)
-	andda32_24 xwa, (0x02749a)
+	and xwa, (0x02749a:24)
 	stl_da (0x0274a2), xwa
 	cp xwa, 0x1100
 	jr z, CtrlPanel_HandleFirmwareCheck
@@ -320,7 +320,7 @@ CtrlPanel_EventType_A8:
 	jrl nz, CtrlPanel_AA_Epilogue
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 0, a
 	jr z, CtrlPanel_A8_CheckRelease
 	ld xwa, 0xffffffff
@@ -341,7 +341,7 @@ CtrlPanel_EventType_AA:
 	jrl z, CtrlPanel_AA_PanelEvent_11
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	cps e, 1
 	jrl z, CtrlPanel_AA_PanelEvent_01_Bit1
 	cp e, 0x15
@@ -357,7 +357,7 @@ CtrlPanel_EventType_AA:
 	cps e, 5
 	jrl nz, UIEvent_Epilogue
 	ld a, (0xc07f:16)
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 0, a
 	jrl z, UIEvent_Epilogue
 	bit 1, a
@@ -429,7 +429,7 @@ CtrlPanel_AA_0E_PostAndContinue:
 CtrlPanel_AA_PanelEvent_0E_Bit2:
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 2, a
 	jr z, CtrlPanel_AA_0E_Bit2Release
 	ld xwa, 0xffffffff
@@ -450,7 +450,7 @@ CtrlPanel_AA_0E_Bit2Post:
 CtrlPanel_AA_PanelEvent_0E_Bit4:
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 4, a
 	jr z, CtrlPanel_AA_0E_Bit4Release
 	ld xwa, 0xffffffff
@@ -487,7 +487,7 @@ CtrlPanel_AA_04_PostAndContinue:
 CtrlPanel_AA_PanelEvent_04_Bit5:
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 5, a
 	jr z, CtrlPanel_AA_04_Bit5Release
 	ld xwa, 0xffffffff
@@ -558,7 +558,7 @@ CtrlPanel_AA_01_PostAndContinue:
 CtrlPanel_AA_PanelEvent_01_Bit5:
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 5, a
 	jr z, CtrlPanel_AA_01_Bit5Release
 	ld xwa, 0xffffffff
@@ -579,7 +579,7 @@ CtrlPanel_AA_01_Bit5Post:
 CtrlPanel_AA_PanelEvent_01_Bit6:
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	bit 6, a
 	jr z, CtrlPanel_AA_01_Bit6Release
 	ld xwa, 0xffffffff
@@ -598,7 +598,7 @@ CtrlPanel_AA_01_Bit6Release:
 CtrlPanel_AA_PanelEvent_11:
 	ld c, (0xc07f:16)
 	ld a, c
-	andda8 a, 0xc07e
+	and a, (0xc07e:16)
 	jr z, CtrlPanel_AA_11_Release
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5

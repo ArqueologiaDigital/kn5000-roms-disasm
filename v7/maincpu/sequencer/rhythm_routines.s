@@ -183,7 +183,7 @@ RhythmEvt_ProcessNote:
 	orda8 a, (0x3277)
 	orda8 a, (0x3278)
 	orda8 a, (0x3279)
-	andda8 a, (0x3338)
+	and a, (0x3338:16)
 	jr nz, RhythmEvt_AlternateProcess
 	ld a, (0x3243:16)
 	ld (0x3387:16), a
@@ -855,7 +855,7 @@ Rhythm_ValidateAndSend:
 	orda8 a, (0x3277)
 	orda8 a, (0x3278)
 	orda8 a, (0x3279)
-	andda8 a, (0x3338)
+	and a, (0x3338:16)
 	jr nz, Rhythm_Validate_Mismatch
 	ld a, (0x3243:16)
 	ld (0x3387:16), a

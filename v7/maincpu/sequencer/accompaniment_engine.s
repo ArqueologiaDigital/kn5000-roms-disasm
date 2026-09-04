@@ -1323,7 +1323,7 @@ AccVoice_BarEnd_NextPage:
 	.byte 0xcc, 0x03, 0x66, 0x0a
 AccVoice_BarEnd_CheckChord94:
 	ld	a, (13112:16)
-	andda8	a, (12938)
+	and	a, (12938:16)
 	jr	nz, 51
 AccVoice_BarEnd_CheckChord65:
 	ld	a, (12909:16)
@@ -1334,7 +1334,7 @@ AccVoice_BarEnd_CheckChord65:
 	jr	z, 10
 AccVoice_BarEnd_CheckChord95:
 	ld	a, (13112:16)
-	andda8	a, (12939)
+	and	a, (12939:16)
 	jr	nz, 23
 AccVoice_BarEnd_CheckSync69:
 	.byte 0xf1, 0x71, 0x32, 0xc8, 0x6e, 0x11, 0xc1, 0xc0
@@ -1387,7 +1387,7 @@ AccVoice_HandleMarker83:
 	and	w, a
 	jr	nz, 10
 	ld	a, (13112:16)
-	andda8	a, (12940)
+	and	a, (12940:16)
 	jr	z, 5
 AccVoice_Marker83_Activate:
 	calr AccVoice_ActivatePart
@@ -1395,7 +1395,7 @@ AccVoice_Marker83_Activate:
 
 AccVoice_Marker83_CheckDeact:
 	calr	899
-	andda8	a, (13112)
+	and	a, (13112:16)
 	jr	z, 5
 	calr	5377
 	jr	3
@@ -1453,13 +1453,13 @@ AccPart_SelectSource_Done:
 AccPart_AdvanceAndResolve:
 	calr	89
 	ld	a, (13112:16)
-	andda8	a, (12993)
+	and	a, (12993:16)
 	jr	z, 22
 	call	16088341
 	calr	185
 	ld	a, (13112:16)
 	xor	a, 255
-	anddm8	(12993), a
+	and	(12993:16), a
 	call	16085410
 AccPart_AdvanceResolve_Done:
 	calr AccPart_ResolveStyleAddr
@@ -1579,7 +1579,7 @@ AccPart_NullRet:
 AccPart_GetFreeVoiceAddr:
 	ld a, (0x3338:16)
 	xor A,0xff
-	anddm8 0x3344, a
+	and (0x3344:16), a
 	cp (0x3338:16), 0x01
 	jr nz, .Lc_f56880
 	ld16_src_rid8 xiy, 0x00, wa
@@ -1632,7 +1632,7 @@ AccPart_FreeAddr_Return:
 AccPart_GetParamAddr:
 	ld a, (0x3338:16)
 	xor A,0xff
-	anddm8 0x3344, a
+	and (0x3344:16), a
 	cp (0x3338:16), 0x01
 	jr nz, .Lc_f568e9
 	add HL,0x0118
@@ -1769,7 +1769,7 @@ AccPedal_DirB_InvertAndStore:
 .Lc_f56a2b:
 	ld A,W
 	xor W,0xff
-	anddm8 0x3276, w
+	and (0x3276:16), w
 	ld w, (0x0433:16)
 	cp w, (0x32ce:16)
 	jr nz, AccPedal_DirB_DefaultStyle
@@ -1780,7 +1780,7 @@ AccPedal_DirB_Alternate:
 .Lc_f56a48:
 	ld A,W
 	xor W,0xff
-	anddm8 0x3277, w
+	and (0x3277:16), w
 	ld w, (0x0433:16)
 	cp w, (0x32cc:16)
 	jr nz, AccPedal_DirB_DefaultStyle
@@ -1876,15 +1876,15 @@ AccMidi_ParseCommon_ExtraFields:
 AccMidi_SelectVelocitySource:
 	ld	a, (13112:16)
 	ld	w, (12963:16)
-	andda8	a, (12922)
+	and	a, (12922:16)
 	jr	nz, 24
-	andda8	a, (12923)
+	and	a, (12923:16)
 	jr	nz, 18
-	andda8	a, (12924)
+	and	a, (12924:16)
 	jr	nz, 12
-	andda8	a, (12920)
+	and	a, (12920:16)
 	jr	nz, 6
-	andda8	a, (12921)
+	and	a, (12921:16)
 	jr	z, 4
 AccMidi_VelSource_Active:
 	ld	w, (12964:16)
@@ -2210,7 +2210,7 @@ AccBuf_NoteEvent_Return:
 
 AccKbd2_CheckActive:
 	ld	a, (13112:16)
-	andda8	a, (13124)
+	and	a, (13124:16)
 	jr	z, 76
 	ld	a, (13112:16)
 	ld	w, (12920:16)
@@ -2222,13 +2222,13 @@ AccKbd2_CheckActive:
 	jr	50
 	ld	a, (13112:16)
 	xor	a, 255
-	anddm8	(12918), a
-	anddm8	(12919), a
-	anddm8	(12922), a
-	anddm8	(12923), a
-	anddm8	(12924), a
-	anddm8	(12993), a
-	anddm8	(12941), a
+	and	(12918:16), a
+	and	(12919:16), a
+	and	(12922:16), a
+	and	(12923:16), a
+	and	(12924:16), a
+	and	(12993:16), a
+	and	(12941:16), a
 	ld	(13134:16), 0
 	ld	(13114:16), 254
 	ld	(13116:16), 6
@@ -3417,13 +3417,13 @@ AccPart_Deactivate:
 	and	a, 192
 	jr	nz, 10
 	ld	a, (13112:16)
-	andda8	a, (12941)
+	and	a, (12941:16)
 	jr	z, 17
 AccPart_Deactivate_WithPedal:
 	calr	60483
 	ld	a, (13112:16)
 	xor	a, 255
-	anddm8	(12941), a
+	and	(12941:16), a
 	jrl	120
 AccPart_Deactivate_NoPedal:
 	.byte 0xc1, 0x7a, 0x32, 0x21, 0xc1, 0x7b, 0x32, 0xe1
@@ -3447,11 +3447,11 @@ AccPart_Deactivate_SendOff:
 AccPart_Deactivate_ClearMasks:
 	ld	a, (13112:16)
 	xor	a, 255
-	anddm8	(12918), a
-	anddm8	(12919), a
-	anddm8	(12922), a
-	anddm8	(12923), a
-	anddm8	(12924), a
+	and	(12918:16), a
+	and	(12919:16), a
+	and	(12922:16), a
+	and	(12923:16), a
+	and	(12924:16), a
 	ld	(13119:16), 0
 	ld	(13134:16), 0
 AccPart_DeactivateReturn:
@@ -3459,7 +3459,7 @@ AccPart_DeactivateReturn:
 
 AccPart_Reactivate:
 	ld	a, (13112:16)
-	andda8	a, (13124)
+	and	a, (13124:16)
 	jr	z, 86
 	ld	a, (13112:16)
 	ld	w, (12920:16)
@@ -3474,13 +3474,13 @@ AccPart_Reactivate:
 AccPart_Reactivate_Inactive:
 	ld	a, (13112:16)
 	xor	a, 255
-	anddm8	(12918), a
-	anddm8	(12919), a
-	anddm8	(12922), a
-	anddm8	(12923), a
-	anddm8	(12924), a
-	anddm8	(12993), a
-	anddm8	(12941), a
+	and	(12918:16), a
+	and	(12919:16), a
+	and	(12922:16), a
+	and	(12923:16), a
+	and	(12924:16), a
+	and	(12993:16), a
+	and	(12941:16), a
 	ld	(13134:16), 0
 	ld	(13114:16), 254
 	ld	(13116:16), 6
@@ -4755,7 +4755,7 @@ AccVoice_SelectByMask:
 	cp (0x3249:16), 0x80
 	jr c, AccVoice_SelectByMask_Default
 	ldb_erp w, 0x31
-	andda8 w, (0x327b)
+	and w, (0x327b:16)
 	jr nz, AccVoice_SelectByMask_Default
 	bit 0, (0x32c7:16)
 	jr nz, AccVoice_SelectByMask_Direct
@@ -5697,7 +5697,7 @@ AccPedal_SustainHandler:
 	cp (0x33ee:16), 0x05
 	jrl nz, AccPedal_SustainReturn
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x00,A
 	jr nz, .Lc_f597aa
 	jp AccPedal_SustainReturn
@@ -5835,7 +5835,7 @@ AccPedal_ExprToggle:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_ExprReturn
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x01,A
 	jr z, AccPedal_ExprReturn
 	ldb A, 0x02
@@ -5887,7 +5887,7 @@ AccPedal_DistributePadding:
 AccPedal_SendEvents:
 	ld	a, (13284:16)
 	xor	a, 255
-	andda8	a, (13285)
+	and	a, (13285:16)
 	cps	a, 0
 	jr	z, 14
 	ldb	b, 5
@@ -5898,7 +5898,7 @@ AccPedal_SendEvents:
 AccPedal_SendEvents_Group2:
 	ld	a, (13288:16)
 	xor	a, 255
-	andda8	a, (13289)
+	and	a, (13289:16)
 	cps	a, 0
 	jr	z, 14
 	ldb	b, 6
@@ -5908,7 +5908,7 @@ AccPedal_SendEvents_Group2:
 	call	16556753
 AccPedal_SendEvents_OnSustain:
 	ld	a, (13284:16)
-	andda8	a, (13285)
+	and	a, (13285:16)
 	cps	a, 0
 	jr	z, 14
 	ldb	b, 5
@@ -5918,7 +5918,7 @@ AccPedal_SendEvents_OnSustain:
 	call	16556753
 AccPedal_SendEvents_OnExpr:
 	ld	a, (13288:16)
-	andda8	a, (13289)
+	and	a, (13289:16)
 	cps	a, 0
 	jr	z, 14
 	ldb	b, 6
@@ -5947,7 +5947,7 @@ AccPedal_Bit2_Sustain:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_Bit2_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x02,A
 	jr z, AccPedal_Bit2_Off
 	ordi16 (0x1108), 0x0004
@@ -5984,7 +5984,7 @@ AccPedal_Bit2_Expression:
 	cp (0x33ee:16), 0x06
 	jr nz, AccPedal_Expr_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x02,A
 	jr z, AccPedal_Expr_Off
 	lds de, 4
@@ -6020,7 +6020,7 @@ AccPedal_Bit7_Portamento:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_Bit7_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x07,A
 	jr z, AccPedal_Bit7_Off
 	ordi16 (0x1108), 0x0080
@@ -6045,7 +6045,7 @@ AccPedal_Bit6_Hold:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_Bit6_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x06,A
 	jr z, .Lc_f59b49
 	ordi16 (0x1108), 0x0040
@@ -6070,7 +6070,7 @@ AccPedal_Bit4_Sostenuto:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_Bit4_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x04,A
 	jr z, .Lc_f59b7e
 	bit 2, (0x041e:16)
@@ -6092,7 +6092,7 @@ AccPedal_Bit5_Soft:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_Bit5_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x05,A
 	jr z, .Lc_f59bb1
 	bit 2, (0x041e:16)
@@ -6114,7 +6114,7 @@ AccPedal_Bit3_Damper:
 	cp (0x33ee:16), 0x05
 	jr nz, AccPedal_Bit3_Return
 	ld a, (0x33e2:16)
-	andda8 a, (0x33e3)
+	and a, (0x33e3:16)
 	bit 0x03,A
 	jr z, .Lc_f59bde
 	calr AccPedal_DamperOn
@@ -6157,7 +6157,7 @@ AccPedal_SendCtrl1_CheckPort:
 AccPedal_SendCtrl1_UpdateMask:
 	ld	a, (13286:16)
 	xor	a, 255
-	andda8	a, (13287)
+	and	a, (13287:16)
 	ldb	b, 5
 	ldb	c, 72
 	ld	d, a
@@ -6182,7 +6182,7 @@ AccPedal_SendCtrl2_CheckPort:
 AccPedal_SendCtrl2_UpdateMask:
 	ld	a, (13290:16)
 	xor	a, 255
-	andda8	a, (13291)
+	and	a, (13291:16)
 	ldb	b, 6
 	ldb	c, 72
 	ld	d, a
@@ -6206,7 +6206,7 @@ AccPedal_SendCtrl3_CheckPort:
 	.byte 0xc1, 0x49, 0x90, 0x3c, 0x7f
 AccPedal_SendCtrl3_UpdateMask:
 	ld	a, (13286:16)
-	andda8	a, (13287)
+	and	a, (13287:16)
 	ldb	b, 5
 	ldb	c, 72
 	ld	d, a
@@ -6230,7 +6230,7 @@ AccPedal_SendCtrl4_CheckPort:
 	.byte 0xc1, 0x49, 0x90, 0x3c, 0x7f
 AccPedal_SendCtrl4_UpdateMask:
 	ld	a, (13290:16)
-	andda8	a, (13291)
+	and	a, (13291:16)
 	ldb	b, 6
 	ldb	c, 72
 	ld	d, a
@@ -9255,7 +9255,7 @@ AccProcess_InlinedCode:
 	.byte 0xf5	; v10 does not spell this byte either
 	and	bc, iz
 	.byte 0xe2, 0xbf, 0x21	; differs from v10 here and llvm-objdump cannot read it
-	andda8	xbc, (49123)
+	and	a, (49123:16)
 	and	a, 1
 	cps	a, 1
 	.byte 0xf2	; v10 does not spell this byte either

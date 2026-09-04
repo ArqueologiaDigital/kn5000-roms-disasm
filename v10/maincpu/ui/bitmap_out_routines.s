@@ -324,7 +324,7 @@ BitMapOut_ByteData_TransitionSeq:
 	jrl	pl, 16320
 	pushw	0xfeb0
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and	a, 192
 	cp	a, 64
 	jr	z, 30
@@ -3627,7 +3627,7 @@ BitMapOut_ByteData_RenderState:
 	max
 	jrl	nz, 179
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and	a, 3
 	cps	a, 1
 	jr	z, 29
@@ -3831,7 +3831,7 @@ BitMapOut_UpdateWidget_Done:
 	halt
 	ret	nz
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	bit	5, a
 	ret	z
 	ld	xwa, 0xffffffff
@@ -3847,7 +3847,7 @@ BitMapOut_UpdateWidget_Done:
 	halt
 	ret	nz
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	bit	5, a
 	ret	z
 	ld	xwa, 0xffffffff

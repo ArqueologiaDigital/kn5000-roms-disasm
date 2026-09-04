@@ -2524,7 +2524,7 @@ PerfMode_Handler_EvtB:
 	call	15686412
 	ret
 	ld	a, (49122:16)
-	andda8	a, 49123
+	and	a, (49123:16)
 	ldb_erp	a, 60
 	and	a, 3
 	stb_erp	a, 60
@@ -2548,7 +2548,7 @@ PerfMode_Handler_EvtB:
 	.byte 0xc7, 0x3d, 0x2c
 	stb_erp	a, 60
 	stb_erp	a, 61
-	andda8	a, 49123
+	and	a, (49123:16)
 	ld	(3520:16), a
 	push	xhl
 	call	15706801
@@ -8298,7 +8298,7 @@ VoiceState_DataBlock2:
 	ld	xix, 15718033
 	ld_rrw	bc, xix, iy
 	pop	xix
-	andda16_24	xbc, (65516)
+	and	bc, (65516:24)
 	cps	bc, 0
 	jrl	z, 52
 	pushw	wa

@@ -321,7 +321,7 @@ BitMapOut_ByteData_TransitionSeq:
 	.byte 0xe1, 0xbf, 0x3f	; differs from v10 here and llvm-objdump cannot read it
 	pushw	65200
 	ld	a, (49122:16)
-	andda8	xbc, (49123)
+	and	a, (49123:16)
 	and	a, 192
 	cp	a, 64
 	jr	z, 30
@@ -2891,7 +2891,7 @@ BitMapOut_ByteData_RenderState:
 	cp	(49121:16), 4
 	jrl	nz, 179
 	ld	a, (49122:16)
-	andda8	a, 49123
+	and	a, (49123:16)
 	and	a, 3
 	cps	a, 1
 	jr	z, 29

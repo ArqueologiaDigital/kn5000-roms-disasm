@@ -882,7 +882,7 @@ Demo_ScanPartLoop:
 	add bc, bc
 	lda xde, (Presentation_TagStrTable_0xD2:24)
 	ldw_sri BC, 0x07, 0xe8, 0xe4
-	andda16 xbc, 0xf19e
+	and bc, (0xf19e:16)
 	jr z, Demo_ScanPartSkipToEnd
 	muls wa, 0x3
 	lda xbc, (0xf250:16)
@@ -4829,7 +4829,7 @@ FileIO_FormatName_Copy:
 
 FileIO_FormatName_CopyLoop:
 	xor bc, 0xffff
-	anddm16_24 (0x272cc), xbc
+	and (0x272cc:24), bc
 	ret
 
 FileIO_FormatName_Done:
@@ -4884,7 +4884,7 @@ FileIO_BuildRecordPath_Return:
 
 FileIO_GetRecordAttr:
 	xor bc, 0xffff
-	anddm16_24 (0x272ce), xbc
+	and (0x272ce:24), bc
 	ret
 
 FileIO_GetRecordAttr_Check:

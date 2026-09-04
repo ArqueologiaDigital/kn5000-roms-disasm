@@ -1088,7 +1088,7 @@ AccompSeq_LargeCodeBlock2:
 	cps	a, 0
 	jr	z, 122
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and	a, 63
 	cps	a, 0
 	jr	z, 107
@@ -1575,7 +1575,7 @@ AccompSeq_GuardedNoteOff:
 	cp a, 0x1c
 	jr nz, AccompSeq_GuardedNote_Return
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and a, 0x03
 	cps	a, 0
 	jr z, AccompSeq_GuardedNote_Return

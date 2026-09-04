@@ -1113,7 +1113,7 @@ SeMenu_PartMask_Data:
 	jr	nz, 10
 	ld	a, l
 	cpl	a
-	anddm8	1630, a
+	and	(1630:16), a
 	jr	4
 	orddm8	1630, l
 	.byte 0xbf

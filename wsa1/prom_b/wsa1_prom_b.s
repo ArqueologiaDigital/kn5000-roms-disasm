@@ -308,7 +308,7 @@ sub_F0003C:
 	m_cp_mi8 MB16, 0x20b8, 0x11	; F0003C  cp (0x20b8),0x11
 	jrl	nz, 82	; F00041  jrl NZ,0xf00096
 	ld	a, (8377:16)	; F00044  ld A,(0x20b9)
-	andda8	a, (8378)	; F00048  and A,(0x20ba)
+	and	a, (8378:16)	; F00048  and A,(0x20ba)
 	bit	0, a	; F0004C  bit 0x00,A
 	jr	nz, 2	; F0004F  jr NZ,0xf00053
 	jr	67	; F00051  jr T,0xf00096
@@ -95958,7 +95958,7 @@ sub_F4C3F2:		; <- T_F434F0
 	m_cp_mi8 MB16, 0x20b8, 0x05	; F4C3F7  cp (0x20b8),0x05
 	jr	nz, 46	; F4C3FC  jr NZ,0xf4c42c
 	ld	c, (8377:16)	; F4C3FE  ld C,(0x20b9)
-	andda8	c, (8378)	; F4C402  and C,(0x20ba)
+	and	c, (8378:16)	; F4C402  and C,(0x20ba)
 	and	c, 4	; F4C406  and C,0x04
 	jr	z, 33	; F4C409  jr Z,0xf4c42c
 	m_cp_mi8 MB16, 0x207c, 0xad	; F4C40B  cp (0x207c),0xad
@@ -137664,7 +137664,7 @@ sub_F687EC:		; <- T_F42EEC
 ; --------------------------------------------------------------------------
 sub_F687ED:
 	ld	a, (8377:16)	; F687ED  ld A,(0x20b9)
-	andda8	a, (8378)	; F687F1  and A,(0x20ba)
+	and	a, (8378:16)	; F687F1  and A,(0x20ba)
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F687F5  ld RL3,A
 	and	a, 3	; F687F8  and A,0x03
 	m_rd_ld_rrx RBX, 0x3C, r1	; F687FB  ld A,RL3
@@ -137688,7 +137688,7 @@ sub_F687ED:
 	m_rd_stcf_ax RBX, 0x3D	; F68829  stcf A,RH3
 	m_rd_ld_rrx RBX, 0x3C, r1	; F6882C  ld A,RL3
 	m_rd_ld_rrx RBX, 0x3D, r1	; F6882F  ld A,RH3
-	andda8	a, (8378)	; F68832  and A,(0x20ba)
+	and	a, (8378:16)	; F68832  and A,(0x20ba)
 	ld	(3775:16), a	; F68836  ld (0x0ebf),A
 	push	xhl	; F6883A  push XHL
 	calr	60402	; F6883B  calr 0xf67430

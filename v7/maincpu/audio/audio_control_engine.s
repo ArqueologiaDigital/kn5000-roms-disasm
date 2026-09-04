@@ -1118,7 +1118,7 @@ MIDI_ProcessChangedChannels:
 	calr Audio_CheckAndFlagChanges
 	ld wa, (0x8ea0:16)
 	cpl WA
-	andda16 xwa, 0x8e9e
+	and wa, (0x8e9e:16)
 	jr z, .Lc_fc6863
 	ld XBC,ENCODER_LUT_MODWHEEL_0x3C6
 	calr DispatchBitmaskHandlers
@@ -1127,7 +1127,7 @@ MidiChanged_ProcessGroup2:
 .Lc_fc6863:
 	ld wa, (0x8ea4:16)
 	cpl WA
-	andda16 xwa, 0x8ea2
+	and wa, (0x8ea2:16)
 	jr z, .Lc_fc687d
 	ld XBC,ENCODER_LUT_MODWHEEL_0x3FC
 	calr DispatchBitmaskHandlers
@@ -1136,7 +1136,7 @@ MidiChanged_ProcessGroup3:
 .Lc_fc687d:
 	ld wa, (0x8ea8:16)
 	cpl WA
-	andda16 xwa, 0x8ea6
+	and wa, (0x8ea6:16)
 	jr z, .Lc_fc6897
 	ld XBC,ENCODER_LUT_MODWHEEL_0x43E
 	calr DispatchBitmaskHandlers
@@ -1145,7 +1145,7 @@ MidiChanged_ProcessGroup4:
 .Lc_fc6897:
 	ld wa, (0x8eac:16)
 	cpl WA
-	andda16 xwa, 0x8eaa
+	and wa, (0x8eaa:16)
 	ret Z
 	ld XBC,ENCODER_LUT_MODWHEEL_0x48C
 	calr DispatchBitmaskHandlers
@@ -1209,7 +1209,7 @@ AudioChange_UpdatePreviousSelect:
 .Lc_fc6948:
 	cp (0x8ec4:16), 0x02
 	jr nz, .Lc_fc6955
-	anddi16 (0x8ea8), 0xfffb
+	andw (0x8ea8:16), 0xfffb
 AudioChange_SetChannelFlag:
 .Lc_fc6955:
 	ordi16 (0x8ea6), 0x0004
@@ -1976,7 +1976,7 @@ CtrlPanelGuard_PassedCheck:
 	ld	a, (36530:16)
 	extz	wa
 	call	16544856
-	andda8	l, (36526)
+	and	l, (36526:16)
 	lda	xwa, (xiz+14)
 	cps	l, 0
 	jr	z, 12
@@ -3700,7 +3700,7 @@ ExtData_ToneParam_MultiChannel:
 	ld	c, (37011:16)
 	extz	bc
 	ld	a, (37012:16)
-	andda8	a, 37013
+	and	a, (37013:16)
 	.byte 0xc3, 0x07, 0xec, 0xe4, 0xe9
 	ld	c, (xhl)
 	cps	c, 0
@@ -3870,7 +3870,7 @@ ExtData_Voice_MixedHandler:
 	cp	(50476:16), 255
 	ret	nz
 	ld	a, (37012:16)
-	andda8	a, 37013
+	and	a, (37013:16)
 	bit	0, a
 	jr	z, 23
 	ld	a, (64770:16)
@@ -3960,7 +3960,7 @@ ExtData_Voice_FullHandler:
 	calr	2612
 	jrl	2425
 	ld	a, (37012:16)
-	andda8	xbc, (37013)
+	and	a, (37013:16)
 	ret	z
 	lds	wa, 1
 	calr	2505

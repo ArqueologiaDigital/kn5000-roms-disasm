@@ -2542,7 +2542,7 @@ DSPCfg_EventType51:
 	bit 0, (0x28b2:16)
 	jr z, .Lc_fdd756
 .Lc_fdd741:
-	anddi16 (0xc4fa), 0xfdff
+	andw (0xc4fa:16), 0xfdff
 	res 0, (0x31e8:16)
 	call 0xfdee26
 	ld (0xc504:16), 0x00

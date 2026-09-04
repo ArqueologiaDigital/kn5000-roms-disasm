@@ -15135,15 +15135,15 @@ ProcessControllers_R_LoadDRAM:
 	jr PlayMode_UpdateAndReturn
 
 PlayMode_ClearBit6:
-	anddi8_24 (0xcede), 191
+	and (0xcede:24), 191
 	jr PlayMode_UpdateAndReturn
 
 PlayMode_UpdateAndReturn:
 	calr Voice_DispatchByTimingState
 	calr VoiceSlot_CheckAndApply_LoadReg
-	anddi8_24 (0xcede), 191
+	and (0xcede:24), 191
 	ld hl, (0x00cf01:24)
-	anddi16_24 0xcf01, 255
+	andw (0xcf01:24), 255
 	cp h, 0xff
 	jr z, PlayMode_SetZeroResult
 	ldw hl, 0xff
@@ -15177,14 +15177,14 @@ PlayMode_CheckModes23:
 	jr PlayMode_CheckSlotAndReturn
 
 PlayMode_ClearBit6_Alt:
-	anddi8_24 (0xcede), 191
+	and (0xcede:24), 191
 	jr PlayMode_CheckSlotAndReturn
 
 PlayMode_CheckSlotAndReturn:
 	calr Voice_CheckAndResetSlotState
-	anddi8_24 (0xcede), 191
+	and (0xcede:24), 191
 	ld hl, (0x00cf01:24)
-	anddi16_24 0xcf01, 255
+	andw (0xcf01:24), 255
 	cp h, 0xff
 	jr z, PlayMode_SetZero_Alt
 	ldw hl, 0xff
@@ -15371,7 +15371,7 @@ NullRet2_Block:
 	ld (0x00cee0:24), 0x00
 	ld (0x00cedf:24), 0x00
 	ordi8_24 (0xcede), 128
-	anddi8_24 (0xcede), 249
+	and (0xcede:24), 249
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee4:24), 0x00
 	calr VoiceSlot_Epilogue_Block2
@@ -15429,7 +15429,7 @@ VoiceSlot_StoreParams_Block:
 	ld (0x00cedf:24), a
 	ld (0x00cee0:24), w
 	ld (0x00cee1:24), 0x00
-	anddi8_24 (0xcede), 249
+	and (0xcede:24), 249
 	ret
 
 VoiceSlot_StoreParams_Block2:
@@ -15522,8 +15522,8 @@ VoiceSlot_StoreParams_LoadReg5:
 	ld l, (0x00cee6:24)
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ldb_sri W, 0x07, 0xf8, 0xec
-	anddi8_24 (0xcede), 127
-	anddi8_24 (0xcede), 239
+	and (0xcede:24), 127
+	and (0xcede:24), 239
 	ret
 
 VoiceSlot_StoreParams_Data:
@@ -15769,7 +15769,7 @@ Voice_UpdateNoteBitmap:
 	cps a, 0
 	jr z, UpdateNoteBitmap_ClearByte
 	ordi8_24 (0xcede), 16
-	anddi8_24 (0xcede), 127
+	and (0xcede:24), 127
 	jr VoiceSlot_LoadResult_LoadReg
 
 UpdateNoteBitmap_ClearByte:
@@ -15824,7 +15824,7 @@ VoiceSlot_LoadResult_SetByte:
 	ldb_sri W, 0x07, 0xf8, 0xec
 
 VoiceSlot_LoadResult_Block2:
-	anddi8_24 (0xcede), 127
+	and (0xcede:24), 127
 	ordi8_24 (0xcede), 16
 	ret
 
@@ -16003,7 +16003,7 @@ Voice_ProcessSlotEntry:
 	stw_erp DE, 0x3e
 	jr z, ProcessSlotEntry_Block
 	ldw (0x00cf2f:24), 0x0000
-	anddi8_24 (0xcede), 253
+	and (0xcede:24), 253
 	ld (0x00cee5:24), 0x07
 	ld de, (0x00ceff:24)
 	calr VoiceSlot_CheckPitchIntervals
@@ -16012,7 +16012,7 @@ Voice_ProcessSlotEntry:
 
 ProcessSlotEntry_Block:
 	ldw (0x00cf2f:24), 0x0000
-	anddi8_24 (0xcede), 253
+	and (0xcede:24), 253
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee5:24), 0x07
 	ld de, (0x00ceff:24)
@@ -16057,7 +16057,7 @@ VoiceSlot_CheckPitch_LoadReg2:
 VoiceSlot_CheckPitch_Compare:
 	cps hl, 0
 	jr nz, VoiceSlot_CheckPitch_Compare2
-	anddi8_24 (0xcede), 223
+	and (0xcede:24), 223
 	jr NoteBuffer_CompactEntries
 
 VoiceSlot_CheckPitch_Compare2:
@@ -16077,12 +16077,12 @@ VoiceSlot_CheckPitch_Compare3:
 
 VoiceSlot_CheckPitch_OrBits:
 	xor hl, hl
-	anddi8_24 (0xcede), 223
+	and (0xcede:24), 223
 	jr NoteBuffer_CompactEntries
 
 VoiceSlot_CheckPitch_OrBits2:
 	xor hl, hl
-	anddi8_24 (0xcede), 223
+	and (0xcede:24), 223
 	jr NoteBuffer_CompactEntries
 
 NoteBuffer_CompactEntries:
@@ -16324,9 +16324,9 @@ NoteDisplay_ClearAndSetUpdate:
 	push xiz
 	cp (0x00cee1:24), 0x00
 	jr nz, NoteDisplay_ClearReturn
-	anddi8_24 (0xcede), 249
+	and (0xcede:24), 249
 	ordi8_24 (0xcede), 16
-	anddi8_24 (0xcede), 254
+	and (0xcede:24), 254
 
 NoteDisplay_ClearReturn:
 	pop xiz
@@ -16340,10 +16340,10 @@ NoteDisplay_InitState:
 	ld (0x00cee0:24), w
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee4:24), 0x00
-	anddi8_24 (0xcede), 253
-	anddi8_24 (0xcede), 251
-	anddi8_24 (0xcede), 254
-	anddi8_24 (0xcede), 127
+	and (0xcede:24), 253
+	and (0xcede:24), 251
+	and (0xcede:24), 254
+	and (0xcede:24), 127
 	ordi8_24 (0xcede), 16
 	pop xiz
 	pop xix
@@ -16382,10 +16382,10 @@ NoteDisplay_StoreNoCurrent:
 	ld (0x00cee4:24), 0x00
 
 NoteDisplay_SetUpdateFlags:
-	anddi8_24 (0xcede), 251
+	and (0xcede:24), 251
 	ordi8_24 (0xcede), 2
-	anddi8_24 (0xcede), 254
-	anddi8_24 (0xcede), 127
+	and (0xcede:24), 254
+	and (0xcede:24), 127
 	ordi8_24 (0xcede), 16
 	jr VoiceSlot_Epilogue_Epilogue
 
@@ -16402,9 +16402,9 @@ NoteDisplay_ClearBoth:
 
 NoteDisplay_SetOverlayFlags:
 	ordi8_24 (0xcede), 4
-	anddi8_24 (0xcede), 253
-	anddi8_24 (0xcede), 254
-	anddi8_24 (0xcede), 127
+	and (0xcede:24), 253
+	and (0xcede:24), 254
+	and (0xcede:24), 127
 	ordi8_24 (0xcede), 16
 	jr VoiceSlot_Epilogue
 VoiceSlot_Epilogue:
@@ -16420,8 +16420,8 @@ VoiceSlot_Epilogue_Block:
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee4:24), w
 	ordi8_24 (0xcede), 4
-	anddi8_24 (0xcede), 253
-	anddi8_24 (0xcede), 127
+	and (0xcede:24), 253
+	and (0xcede:24), 127
 	ordi8_24 (0xcede), 16
 	ret
 
@@ -19999,14 +19999,14 @@ Acc_TransitionPlayMode:
 	ordi16 0xe9e5, 2
 
 TransitionPlayMode_Block:
-	anddi16 0xe9e5, 0xfffb
+	andw (0xe9e5:16), 0xfffb
 	ret
 
 Acc_StopPlayMode:
 	lds wa, 3
 	calr AccWrap_PlayModeStateMachine
-	anddi16 0xe9e5, 0xfffd
-	anddi16 0xe9e5, 0xfffb
+	andw (0xe9e5:16), 0xfffd
+	andw (0xe9e5:16), 0xfffb
 	ret
 
 Acc_StartFillIn:

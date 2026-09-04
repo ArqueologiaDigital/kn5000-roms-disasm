@@ -2947,7 +2947,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64865
 	cpl	hl
-	anddm16	(61904), xhl
+	and	(61904:16), hl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -2964,7 +2964,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64813
 	cpl	hl
-	anddm16	(62096), xhl
+	and	(62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -2974,7 +2974,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64784
 	cpl	hl
-	anddm16	(62096), xhl
+	and	(62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3056,7 +3056,7 @@ TrAsGridChk_Part2_Start:
 	dec 2, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf1d0
+	and hl, (0xf1d0:16)
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E4
 	cps hl, 0
@@ -3099,7 +3099,7 @@ TrAsGridChk_Part2_UpDir:
 	inc 6, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf1d0
+	and hl, (0xf1d0:16)
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F4
 	cps hl, 0
@@ -3157,7 +3157,7 @@ TrAsGridChk_Part3_Start:
 	dec 2, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf290
+	and hl, (0xf290:16)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2404
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_PushCmd
@@ -3200,7 +3200,7 @@ TrAsGridChk_Part3_UpDir:
 	inc 6, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf290
+	and hl, (0xf290:16)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2414
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_UpPushCmd
@@ -3862,7 +3862,7 @@ Rt1MuteFunc:
 	jr Rt1Mute_PostCall
 
 Rt1Mute_ClearAndPost:
-	anddi16_24 0x021086, 0xfffe
+	andw (0x021086:24), 0xfffe
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -3884,7 +3884,7 @@ Rt2MuteFunc:
 	jr Rt2Mute_PostCall
 
 Rt2Mute_ClearAndPost:
-	anddi16_24 0x021086, 0xfffd
+	andw (0x021086:24), 0xfffd
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -3906,7 +3906,7 @@ DocOrchMuteFunc:
 	jr DocOrchMute_PostCall
 
 DocOrchMute_ClearAndPost:
-	anddi16_24 0x021086, 3
+	andw (0x021086:24), 3
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -3928,7 +3928,7 @@ PdOrchMuteFunc:
 	jr PdOrchMute_PostCall
 
 PdOrchMute_ClearAndPost:
-	anddi16_24 0x021086, 1
+	andw (0x021086:24), 1
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0

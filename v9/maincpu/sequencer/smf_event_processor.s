@@ -11275,7 +11275,7 @@ AccKey_ScanLoop:
 	jr AccKey_ScanLoop
 
 AccKey_FoundActiveKey:
-	andda16 xwa, 0xf19e
+	and wa, (0xf19e:16)
 	jr z, AccKey_ScanDone
 	or (0x3284:16), 2
 

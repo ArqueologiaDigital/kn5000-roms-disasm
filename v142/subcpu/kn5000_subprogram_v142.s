@@ -8530,7 +8530,7 @@ WaveSel_StageB_Store_Reg040:
 	ld wa, (0x0451ce:24)
 	and wa, 0xF000
 	add wa, wa
-	anddi16_24 283086, 4095
+	andw (283086:24), 4095
 	ordm16_24 283086, xwa
 
 ; Restore and return.
@@ -11045,7 +11045,7 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	ld xwa, xiz
 	calr EnvDepth_Cap
 	sub xiz, xhl
-	anddi16_24 283150, 57344
+	andw (283150:24), 57344
 	ld wa, iz
 	ordm16_24 283150, xwa
 	ld xwa, (xsp + 4)
@@ -14819,7 +14819,7 @@ Voice_UpdateAllLFO_Loop1:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283148, 57344
+	andw (283148:24), 57344
 	srl xhl, 8
 	ordm16_24 283148, xhl
 
@@ -14871,7 +14871,7 @@ Voice_UpdateAllLFO_Loop2_Body:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283140, 57344
+	andw (283140:24), 57344
 	srl xhl, 8
 	ordm16_24 283140, xhl
 
@@ -14924,7 +14924,7 @@ Voice_UpdateAllLFO_Loop3_Body:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283140, 57344
+	andw (283140:24), 57344
 	srl xhl, 8
 	ordm16_24 283140, xhl
 	jr Voice_UpdateAllLFO_DispatchVoice3
@@ -14939,7 +14939,7 @@ Voice_UpdateAllLFO_DispatchGroup3_High:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283150, 57344
+	andw (283150:24), 57344
 	srl xhl, 8
 	ordm16_24 283150, xhl
 
@@ -15412,7 +15412,7 @@ Pitch_Bend_Ramp_Tick:
 	exts wa
 	add wa, wa
 	ld (0x04135a:24), wa
-	anddi16_24 267075, 63487
+	andw (267075:24), 63487
 	ordi16_24 267075, 5120
 	ret
 
@@ -15435,7 +15435,7 @@ Pitch_Bend_Ramp_Tick_Bit12:
 	bit 12, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit13Check
 	incw 1, (267100:24)
-	anddi16_24 267075, 64511
+	andw (267075:24), 64511
 	ret
 
 ; bit 13 clear -> ClearMode; set -> choose the +2 (bit 14) or +1 (bit 15) step.
@@ -15486,14 +15486,14 @@ Pitch_Bend_Ramp_Tick_ZeroPitch:
 Pitch_Bend_Ramp_Tick_CheckCounter:
 	cpw (267098:24), 0
 	ret nz
-	anddi16_24 267075, 8191
+	andw (267075:24), 8191
 	ldw (0x04135c:24), 0x0000
 	ordi16_24 267075, 1024
 	ret
 
 ; Ramp inactive: clear bit 10 and return.
 Pitch_Bend_Ramp_Tick_ClearMode:
-	anddi16_24 267075, 64511
+	andw (267075:24), 64511
 	ret
 
 ; Voice_InitVoiceState(WA = channel index). Loads the whole 22-word tone-generator shadow
@@ -18455,7 +18455,7 @@ Voice_SetPolyphonyMode:
 
 ; Else of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_Else:
-	anddi16_24 267075, 65534
+	andw (267075:24), 65534
 	lds wa, 0
 	call Voice_Reset_Engine
 
@@ -18617,7 +18617,7 @@ Voice_SetCCMaxFlag:
 
 ; Clear of Voice_SetCCMaxFlag.
 Voice_SetCCMaxFlag_Clear:
-	anddi16_24 267075, 65533
+	andw (267075:24), 65533
 	ret
 
 ; WA = index, C = value.  Stores (C - 0x80) at 0x041342 + (index + 0x0C), i.e. into the
@@ -18766,7 +18766,7 @@ ScaleTune_Set_Global_Enabled:
 
 ; Clear of ScaleTune_Set_Global_Enabled.
 ScaleTune_Set_Global_Enabled_Clear:
-	anddi16_24 267075, 65023
+	andw (267075:24), 65023
 	ret
 
 ; Returns HL = 0x041343 & 0x0200.  Getter for the bit the routine above writes.
@@ -41105,7 +41105,7 @@ DSP_System_Init_Vars:
 	ld (11021:16), wa	; Clear control variable
 	bit_dd8 3, 0x44	; Check hardware config pin
 	jr z, DSP_System_Init_SetBit
-	anddi16_24 267075, 65527	; Clear bit 3 of DSP config
+	andw (267075:24), 65527	; Clear bit 3 of DSP config
 	jr DSP_System_Init_Continue
 
 ; Strap clear: sets bit 3 of the global word at 0x041343.

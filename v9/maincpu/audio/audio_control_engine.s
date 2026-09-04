@@ -2294,7 +2294,7 @@ MIDI_ProcessChangedChannels:
 	calr Audio_CheckAndFlagChanges
 	ld wa, (0x8f3c:16)
 	cpl wa
-	andda16 xwa, 0x8f3a
+	and wa, (0x8f3a:16)
 	jr z, MidiChanged_ProcessGroup2
 	ld xbc, ENCODER_LUT_MODWHEEL_0x3C6
 	calr DispatchBitmaskHandlers
@@ -2303,7 +2303,7 @@ MIDI_ProcessChangedChannels:
 MidiChanged_ProcessGroup2:
 	ld wa, (0x8f40:16)
 	cpl wa
-	andda16 xwa, 0x8f3e
+	and wa, (0x8f3e:16)
 	jr z, MidiChanged_ProcessGroup3
 	ld xbc, ENCODER_LUT_MODWHEEL_0x3FC
 	calr DispatchBitmaskHandlers
@@ -2312,7 +2312,7 @@ MidiChanged_ProcessGroup2:
 MidiChanged_ProcessGroup3:
 	ld wa, (0x8f44:16)
 	cpl wa
-	andda16 xwa, 0x8f42
+	and wa, (0x8f42:16)
 	jr z, MidiChanged_ProcessGroup4
 	ld xbc, ENCODER_LUT_MODWHEEL_0x43E
 	calr DispatchBitmaskHandlers
@@ -2321,7 +2321,7 @@ MidiChanged_ProcessGroup3:
 MidiChanged_ProcessGroup4:
 	ld wa, (0x8f48:16)
 	cpl wa
-	andda16 xwa, 0x8f46
+	and wa, (0x8f46:16)
 	ret z
 	ld xbc, ENCODER_LUT_MODWHEEL_0x48C
 	calr DispatchBitmaskHandlers
@@ -2392,7 +2392,7 @@ AudioChange_CheckSelectionState:
 AudioChange_UpdatePreviousSelect:
 	cp (0x8f60:16), 2
 	jr nz, AudioChange_SetChannelFlag
-	anddi16 0x8f44, 0xfffb
+	andw (0x8f44:16), 0xfffb
 
 AudioChange_SetChannelFlag:
 	ordi16 0x8f42, 4
@@ -3205,7 +3205,7 @@ CtrlPanel_SetResBit0_ViaLookup4:
 	ld	a, (0x8f54:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup4_ResBit0
@@ -3223,7 +3223,7 @@ CtrlPanel_SetResBit1_ViaLookup56:
 	ld	a, (0x8f56:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup56_ResBit1
@@ -3241,7 +3241,7 @@ CtrlPanel_SetResBit2_ViaLookup50:
 	ld	a, (0x8f50:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup50_ResBit2
@@ -3259,7 +3259,7 @@ CtrlPanel_SetResBit3_ViaLookup52:
 	ld	a, (0x8f52:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup52_ResBit3
@@ -3288,7 +3288,7 @@ CtrlPanelGuard_PassedCheck:
 	ld	a, (0x8f4e:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	lda	xwa, (xiz+14)
 	cps	l, 0
 	jr z, CtrlPanelGuard_ClearNibble
@@ -3311,7 +3311,7 @@ CtrlPanel_SetResBit0_ViaLookup4C:
 	ld	a, (0x8f4c:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	lda	xwa, (xiz+13)
 	cps	l, 0
 	jr z, CtrlPanelLookup4C_ResBit0
@@ -3329,7 +3329,7 @@ CtrlPanel_SetResBit7_ViaLookup4C:
 	ld	a, (0x8f4c:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	jr z, CtrlPanelBit7_Res
 	setm	7, (xiz)
 	jr t, CtrlPanelBit7_Done
@@ -3345,7 +3345,7 @@ CtrlPanel_SetResBit5_ViaLookup4C:
 	ld	a, (0x8f4c:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	jr z, CtrlPanelBit5_Res
 	setm	5, (xiz)
 	jr t, CtrlPanelBit5_Done
@@ -3361,7 +3361,7 @@ CtrlPanel_SetResBit6_ViaLookup4C:
 	ld	a, (0x8f4c:16)
 	extz wa
 	call CtrlPanel_LookupIndicatorEntry
-	andda8	l, 0x8f4a
+	and	l, (0x8f4a:16)
 	jr z, CtrlPanelBit6_Res
 	setm	6, (xiz)
 	jr t, CtrlPanelBit6_Done
@@ -3463,17 +3463,17 @@ CtrlPanel_SetIndicatorLED:
 	jr z, CtrlPanel_SetLED_Group2
 	cpib_erp 0xfb, 0
 	jr nz, MidiChOutState_Return
-	anddm16 0x8f3c, xwa
+	and (0x8f3c:16), wa
 	orddm16 0x8f3a, xhl
 	jr MidiChOutState_Return
 
 CtrlPanel_SetLED_Group2:
-	anddm16 0x8f40, xwa
+	and (0x8f40:16), wa
 	orddm16 0x8f3e, xhl
 	jr MidiChOutState_Return
 
 CtrlPanel_SetLED_Group3:
-	anddm16 0x8f44, xwa
+	and (0x8f44:16), wa
 	orddm16 0x8f42, xhl
 
 MidiChOutState_Return:
@@ -5242,7 +5242,7 @@ ExtData_ToneParam_MultiChannel:
 	ld	hl, (xbc)
 	extz	bc
 	ld	a, (0x9130:16)
-	andda8	a, 0x9131
+	and	a, (0x9131:16)
 	.byte 0xc3
 	reti
 	or	xix, xix
@@ -5423,7 +5423,7 @@ ExtData_Voice_MixedHandler:
 	swi	7
 	ret	nz
 	ld	a, (0x9130:16)
-	andda8	a, 0x9131
+	and	a, (0x9131:16)
 	bit	0, a
 	jr	z, 23
 	ld	a, (0xfd02:16)
@@ -5522,7 +5522,7 @@ ExtData_Voice_FullHandler:
 	calr	2612
 	jrl	2425
 	ld	a, (0x9130:16)
-	andda8	a, 0x9131
+	and	a, (0x9131:16)
 	ret	z
 	lds	wa, 1
 	calr	2505
@@ -6624,7 +6624,7 @@ SwbtWr_WriteParamBlock_Body:
 	extz wa
 	lda_dri XHL, 0x07, 0xec, 0xe0
 	ld a, (0x9130:16)
-	andda8 a, 0x9131
+	and a, (0x9131:16)
 	xor (xhl), a
 	ld c, (0x9132:16)
 	cp (xhl), c
@@ -6645,10 +6645,10 @@ VoiceParam_CompareAndUpdate:
 	ld	(xsp), a
 	ld	a, (0x9131:16)
 	.byte 0x87
-	andda8	a, 0x4866
+	and	a, (0x4866:16)
 	ldw	wa, 8593
 	.byte 0x87
-	andda8	a, 0x4066
+	and	a, (0x4066:16)
 	ldb	l, 145
 	ldb	a, 216
 	ccf
@@ -6677,7 +6677,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(xsp), a
 	ld	a, (0x9131:16)
 	.byte 0x87
-	andda8	a, 0x4066
+	and	a, (0x4066:16)
 	ldb	l, 145
 	ldb	a, 216
 	ccf
@@ -6706,10 +6706,10 @@ VoiceParam_CompareAndUpdate:
 	ld	(xsp), a
 	ld	a, (0x9131:16)
 	.byte 0x87
-	andda8	a, 0x4a66
+	and	a, (0x4a66:16)
 	ldw	wa, 8593
 	.byte 0x87
-	andda8	a, 0x4266
+	and	a, (0x4266:16)
 	ldb	l, 145
 	ldb	a, 216
 	ccf
@@ -6739,7 +6739,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(xsp), a
 	ld	a, (0x9131:16)
 	.byte 0x87
-	andda8	a, 0x4266
+	and	a, (0x4266:16)
 	ldb	l, 145
 	ldb	a, 216
 	ccf
@@ -6794,7 +6794,7 @@ VoiceParam_CompareAndUpdate:
 	ld	a, (xsp)
 	cpl	a
 	.byte 0x83
-	andda8	a, 0xe5c9
+	and	a, (0xe5c9:16)
 	ldw	de, 8593
 	cp	e, a
 	jr	z, 16
@@ -6809,7 +6809,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(xsp), a
 	ld	a, (0x9131:16)
 	.byte 0x87
-	andda8	a, 0x3c66
+	and	a, (0x3c66:16)
 	ldb	l, 145
 	ldb	a, 216
 	ccf
@@ -6822,7 +6822,7 @@ VoiceParam_CompareAndUpdate:
 	ld a, (xsp)
 	cpl	a
 	.byte 0x83
-	andda8	a, 0x8bc9
+	and	a, (0x8bc9:16)
 	ldw	wa, 8593
 	.byte 0x87, 0xc1
 	or	a, c

@@ -2696,7 +2696,7 @@ PerfMode_Handler_EvtB:
 	call	Display_UpdateDirtyRegions
 	ret
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	ldb_erp a, 60
 	and a, 3
 	stb_erp a, 60
@@ -2728,7 +2728,7 @@ PerfMode_Handler_EvtB:
 	pushw	ix
 	stb_erp a, 60
 	stb_erp a, 61
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	ld	(3520:16), a
 	push	xhl
 	call	SysEx_BytecodeDispatcher
@@ -11826,7 +11826,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ld	xix, VoiceState_DataBlock2_0x541
 	ld_rrw bc, xix, iy
 	pop xix
-	andda16_24	bc, (0xffec)
+	and	bc, (0xffec:24)
 	cps	bc, 0
 	jrl	z, 52
 	pushw	wa

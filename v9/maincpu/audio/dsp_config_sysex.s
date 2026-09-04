@@ -5272,7 +5272,7 @@ AudioInit_ProcessModeChange:
 	bit 2, wa
 	ret z
 	call Audio_CheckInitStatus
-	anddi16 0xc594, 0xfffb
+	andw (0xc594:16), 0xfffb
 	bit 1, (0xfc67:16)
 	jr z, AudioModeChange_Handler
 	ld wa, (0xc594:16)
@@ -5370,7 +5370,7 @@ Audio_InitDispatchReturn:
 	jr z, AudioDispatch_SetAccMode
 
 AudioDispatch_ClearAccFlags:
-	anddi16 0xc596, 0xfdff
+	andw (0xc596:16), 0xfdff
 	res 0, (0x3284:16)
 	call AudioInit_RefreshToneBank
 	ld (0xc5a0:16), 0
@@ -5449,7 +5449,7 @@ AudioVoiceReset_Handler:
 	ld (0xc200:16), 255
 	ld (0xc201:16), 255
 	ordi16 0xc59c, 257
-	anddi16 0xc594, 0xfffd
+	andw (0xc594:16), 0xfffd
 	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
@@ -5476,7 +5476,7 @@ AudioMode_ConfigureExternal:
 	jr AudioMode_ConfigExternal_Apply
 
 AudioMode_ConfigExternal_Off:
-	anddi16 0xc594, 0xffef
+	andw (0xc594:16), 0xffef
 	bit 0, (0xfc66:16)
 	jr z, AudioMode_ConfigExternal_CheckBit1
 	set 0, (0xc1fe:16)
@@ -5493,7 +5493,7 @@ AudioMode_ConfigExternal_CheckStereo:
 	jr AudioMode_ConfigExternal_MergeFlags
 
 AudioMode_ConfigExternal_NoStereo:
-	anddi16 0xc596, 0xffdf
+	andw (0xc596:16), 0xffdf
 	ld wa, (0xc596:16)
 	and wa, 0x7
 	call_24 z, AudioInit_RefreshToneBank
@@ -5996,7 +5996,7 @@ UIStateEvt_VolumeMixer_Data:
 	jr	z, 22
 	.byte 0xc1
 	swi	6
-	andda8	a, 0xfc3c
+	and	a, (0xfc3c:16)
 	jrl	nz, 8640
 	and	a, 3
 	orddm8	0xc1fe, a
@@ -6279,7 +6279,7 @@ UIStateEvt_PlayModeGuard_Data:
 	ordi16	0xc596, 8192
 	ret
 UIStateEvt_PlayModeGuard_ClearBit:
-	anddi16	0xc596, 0xdfff
+	andw	(0xc596:16), 0xdfff
 	call Voice_UpdatePlayModeState
 	cp hl, 0x00ff
 	.byte 0xf2, 0xb8
@@ -6483,7 +6483,7 @@ UIStateEvt_MuteToggle_Data:
 	jr	z, 8
 	ordi16	0xc594, 1
 	jr	6
-	anddi16	0xc594, 0xfffe
+	andw	(0xc594:16), 0xfffe
 	ordi16	0xc594, 4
 	ret
 	ret

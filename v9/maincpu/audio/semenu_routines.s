@@ -1120,7 +1120,7 @@ SeMenu_PartMask_Data:
 	jr	nz, 10
 	ld	a, l
 	cpl	a
-	anddm8	1630, a
+	and	(1630:16), a
 	jr	4
 	orddm8	1630, l
 	.byte 0xbf
@@ -6334,7 +6334,7 @@ SeMenu_OrPartConfig:
 SeMenu_OrPartConfig_Data:
 	.long Pad_BeforeBitmap_Dredt0d
 	chgm	2, (xhl+14)
-	anddm32_24	(0x2700e3), xsp
+	and	(0x2700e3:24), xsp
 	mul	d, 14
 
 SeMenu_StoreParamByte:

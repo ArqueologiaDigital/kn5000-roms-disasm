@@ -31,7 +31,7 @@ AudioInit_CheckGroupA:
 	ret
 	pushw iz
 	ld iz, (0xc4fa:16)
-	anddi16 (0xc4fa), 0xffef
+	andw (0xc4fa:16), 0xffef
 	call 0xfe8d01
 	.byte 0xcf
 AudioInit_GroupA_TypeE:

@@ -152,7 +152,7 @@ FDemoText_ProbeVoice_Loop:
 	jr z, FDemoText_ProbeVoice_SetActive
 	stb_erp A, 0xfa
 	cpl a
-	anddm8_24 (0x0247ee), a
+	and (0x0247ee:24), a
 	jr FDemoText_ProbeVoice_ClearActive
 
 FDemoText_ProbeVoice_SetActive:
@@ -210,7 +210,7 @@ FDemoText_ProcessChannel_CheckMask:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	andda8_24 c, (0x0247f2)
+	and c, (0x0247f2:24)
 	call_24 nz, FDemoText_CheckAndSetTimer
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
@@ -226,7 +226,7 @@ FDemoText_ProcessOutputChannels:
 	extz de
 	lda xwa, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe0, 0xe8
-	andda8_24 a, (0x0247ee)
+	and a, (0x0247ee:24)
 	jr z, FDemoText_ProcessOutput_CheckFlags
 	or_srib_rm C, 0x07, 0xec, 0xe8
 	ld (0x0247ec:24), c
@@ -236,7 +236,7 @@ FDemoText_ProcessOutput_CheckFlags:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	andda8_24 c, (0x0247ee)
+	and c, (0x0247ee:24)
 	jr z, FDemoText_ProcessOutput_NextCh
 	lda xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
@@ -259,7 +259,7 @@ FDemoText_ProcessOutput_NextCh:
 FDemoText_ProcessOutput_ClearAll:
 	ld (0x0247ec:24), 0x00
 	ld (0x0247f2:24), 0x00
-	anddi8_24 (0x0247ee), 120
+	and (0x0247ee:24), 120
 
 FDemoText_ProcessVoiceFlags_Return:
 	popw_erp 0xfa
@@ -286,7 +286,7 @@ FDemoText_DeactivateVoice:
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	cpl c
-	anddm8_24 (0x0247ee), c
+	and (0x0247ee:24), c
 	jr FDemoText_UpdateVoiceDisplay
 
 FDemoText_ActivateVoiceAlt:
@@ -376,7 +376,7 @@ FDemoText_SyncPreset_ActiveLoop:
 	ld bc, wa
 	lda xde, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri A, 0x07, 0xe8, 0xe0
-	andda8_24 a, (0x0247ee)
+	and a, (0x0247ee:24)
 	jr z, FDemoText_SyncPreset_NextActive
 	ld wa, bc
 
@@ -938,7 +938,7 @@ FDemoText_CheckVoice_MaskedActive:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
-	andda8_24 a, (0x0247f0)
+	and a, (0x0247f0:24)
 	jr z, FDemoText_CheckVoice_Inactive
 
 FDemoText_CheckVoice_Active:
@@ -1097,7 +1097,7 @@ FDemoText_ScanMIDI_SetActive:
 FDemoText_ScanMIDI_ClearActive:
 	ld a, (xwa)
 	cpl a
-	anddm8_24 (0x0247f0), a
+	and (0x0247f0:24), a
 
 FDemoText_ScanMIDI_NextChannel:
 	incm8 1, (xsp + 4)
@@ -1132,7 +1132,7 @@ FDemoText_Rescan_Loop:
 	jr z, FDemoText_Rescan_SetFlag
 	stb_erp A, 0xfa
 	cpl a
-	anddm8_24 (0x0247ee), a
+	and (0x0247ee:24), a
 	jr FDemoText_Rescan_NextVoice
 
 FDemoText_Rescan_SetFlag:
@@ -1150,7 +1150,7 @@ FDemoText_Rescan_SendUpdates:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	andda8_24 c, (0x0247ee)
+	and c, (0x0247ee:24)
 	call_24 nz, FDemoText_SendVoiceParams
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2

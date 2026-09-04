@@ -1100,7 +1100,7 @@ BmDrEdit_CheckChannelActive_Loop:
 	slaa bc
 
 BmDrEdit_CheckChannelActive_TestBit:
-	andda16_24 xbc, (0xffec)
+	and bc, (0xffec:24)
 	jr z, BmDrEdit_CheckChannelActive_None
 	ld (0x2776:16), 1
 	ret
@@ -1133,7 +1133,7 @@ BmDrEdit_SelectChannel_Loop:
 	slaa bc
 
 BmDrEdit_SelectChannel_TestBit:
-	andda16_24 xbc, (0xffec)
+	and bc, (0xffec:24)
 	jr z, BmDrEdit_SelectChannel_NotFound
 	bit 0, (0x2776:16)
 	jr z, BmDrEdit_SelectChannel_NotFound

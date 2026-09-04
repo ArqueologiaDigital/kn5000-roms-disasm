@@ -1058,7 +1058,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	jr	z, 33
 	ld	a, (xiz+13)
 	pushw	wa
-	andda8	a, 0x966d
+	and	a, (0x966d:16)
 	popw	wa
 	jr	nz, 22
 	and	a, 31
