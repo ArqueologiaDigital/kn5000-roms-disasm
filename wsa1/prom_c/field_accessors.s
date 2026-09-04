@@ -4222,6 +4222,35 @@ Pack104_SetInputs_Rec0E_E08D:
 ;          0xFC4D27 and 0xFC7DE9 write those bits -- they write R[+0x07], which
 ;          lands in bits 15:8 (notes/FINDINGS-l7a1429-packer-routines.md 4.1).
 ; GRADE: PROVEN (operands; notes/w21_lsi_gate_and_keyscaling.py sections 1 and 2).
+; ★ WAVE 23 (lane w23/reso-scale) ----------------------------------------
+; ★★ Q[+0x16] BIT 7 AND Q[+0x20] BIT 7 ARE THE TONE EDITOR'S `RESO SCALE`,
+;          MAIN and SUB -- a drawn OFF/ON control (notes/FINDINGS-l7a1429-editor-
+;          pages.md section 3c) whose editor is prom_a's ToneEditField_A5_ResoScale
+;          at 0xFD4EFB, MASK 0x01, SHIFT 7, limits 0..1 (notes/FINDINGS-l7a1429-
+;          field-editors.md section 2d).  And
+;          0xFC4E2B and 0xFC4EDA are the ONLY two instructions in the whole of
+;          prom_c that can see them -- a byte-level census over all four images
+;          partitions every other site as a store, a non-Q base, or a `res 0x07`.
+;          Each of the two selects the delta term of one TUNING register:
+;            0xFC4E28  ld A,(XBC+0x16) / and A,0x80   p22, RESO SCALE MAIN
+;              set   -> d1 = (0x00E08A) - (0x00E08D)  = voice[+0x08] - voice[+0x0A]
+;              clear -> d1 = -R[+0x0C]
+;              0xFC4E9F  ld (XBC+0x02),HL             -> register chan+0x0040
+;            0xFC4ED7  the same on p32, staging word 2 -> register chan+0x0080
+;          voice[+0x08] is the pitch BEFORE Voice_ComputePitch's last stage (its
+;          store is 0xFA8078), voice[+0x0A] is Sat16(voice[+0x06] + (0x005A4F)),
+;          and R[+0x0C] is that SAME key-zone word -- 0xFA7490 stores it to
+;          0x005A4F and 0xFA7494 pushes it to Pack104_SetInputs_Rec0C_E08C.  So
+;          the two arms differ by exactly voice[+0x08] - voice[+0x06], the whole
+;          last stage of Voice_ComputePitch: RESO SCALE ON tunes the resonator
+;          from the RAW note, OFF from the pitch the wave is played at.
+;          ⚠ Q is reached only through the frame slot (XIZ-4) this routine fills
+;          at 0xFC4DCB/0xFC4DCE, which is why a census keyed on a base register
+;          rather than on the displacement would find neither site.
+; GRADE: PROVEN for the arithmetic and for every term's own writer; STRONG for
+;          that last sentence, which reads a meaning out of an identity.
+;          notes/FINDINGS-l7a1429-reso-scale.md sections 1-3;
+;          notes/w23_reso_scale_and_group_chain.py (--selftest: FAILURES: 0).
 ; --------------------------------------------------------------------------
 Dev104_PackStagingStruct:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC4DBD  link XIZ,0xffee

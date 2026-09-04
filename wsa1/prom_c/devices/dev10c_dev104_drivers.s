@@ -311,6 +311,36 @@
 ;   what that shape is.  Nothing here decides what they generate.
 ;
 ; ------------------------------------------------------------------------------
+; ★ WAVE 23 (lane w23/reso-scale) -- TWO FIELDS ABOVE NEEDED ONE MORE LINE EACH
+; ------------------------------------------------------------------------------
+; ADDED, not replacing.  Every line above stands exactly as written.
+;
+; * `delta_sel_A` (+0x16) and `delta_sel_B` (+0x20) bit 7 HAVE A UI NAME: they are
+;   the tone editor's `RESO SCALE`, MAIN and SUB, drawn OFF/ON in the fifth column
+;   of PAGE1/3 (notes/FINDINGS-l7a1429-editor-pages.md section 3c) and edited by
+;   prom_a's ToneEditField_A5_ResoScale (0xFD4EFB, MASK 0x01, SHIFT 7, limits
+;   0..1 -- notes/FINDINGS-l7a1429-field-editors.md section 2d).  "bit 7 picks
+;   d1's form" is right; the two forms are
+;       bit 7 set    d1 = voice[+0x08] - voice[+0x0A]
+;       bit 7 clear  d1 = -R[+0x0C]
+;   which differ by voice[+0x08] - voice[+0x06] -- the last stage of
+;   Voice_ComputePitch.  ON tunes the resonator from the raw note, OFF from the
+;   pitch the wave is played at.  Read at 0xFC4E2B and 0xFC4EDA, and nowhere else
+;   in prom_c.
+;
+; * ⚠ `index_bias_A` is P[+0x1A] and NOT R[+0x1A].  BOTH records have a +0x1A and
+;   notes/FINDINGS-l7a1429-editor-pages.md section 6 named the wrong one: R[+0x1A]
+;   is where `reg0480` (P[+0x26]) is copied, at 0xFC567F.  P[+0x1A]'s nine writers
+;   are located -- 0xFC64A2/0xFC64E9/0xFC651F in PartRec_SetMutingOffset_000B,
+;   0xFC6B9F/0xFC6BE6/0xFC6C1E in Pack104_LoadElementWaveSelRec and
+;   0xFC78FF/0xFC7946/0xFC797C in Pack104_DispatchByResoMode_ForPart -- and every
+;   one of the nine applies `res 0x07` to p22 before using it, so `RESO SCALE`
+;   never reaches this field or the 0x0340/0x0400 chain it feeds.
+;
+; GRADE: PROVEN for both, from operands alone.
+;   notes/FINDINGS-l7a1429-reso-scale.md sections 1, 2 and 4;
+;   probe notes/w23_reso_scale_and_group_chain.py.
+; ------------------------------------------------------------------------------
 ; 4. THE STAGING STRUCT, AND WHO FILLS IT
 ; ------------------------------------------------------------------------------
 ;   struct Dev104Staging { u16 w[19]; };   /* RAM 0x00D7A2, 38 bytes */

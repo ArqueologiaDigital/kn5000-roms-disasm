@@ -8788,6 +8788,36 @@ ToneStage_ApplyPercWaveSelTailPreset__FBC945:
 ;           costs nothing to state without inventing a name.
 ;           Nothing above this line was changed; the routine keeps its
 ;           address name. notes/tone_db_apply_w17.py
+; ★ WAVE 23 (lane w23/reso-scale) ------------------------------------------
+; ★★ WHAT THIS ROUTINE IS: the WRITE receiver for arm 4, the 43-byte WAVE-SELECT
+;          records.  ToneMsg_Dispatch's write table entry 4 (0xFC2754+16 ->
+;          0xFC26E9) stages the part and then calls it with the six-byte message.
+;          It decodes and stores, in its first sixteen instructions:
+;            FBC960  part      = msg[1]
+;            FBC966  element   = msg[2] bits 7:6      (and W,0xC0 / srl 6)
+;            FBC994  parameter = msg[2] bits 5:0      (and A,0x3F)
+;            FBC97A  mul C,0x2B                       43, the record stride
+;            FBC97F  add XBC,0x0000021D               the wave-select block
+;            FBC985  add XBC,0x000087D2               the RAM tone staging image
+;            FBC9A3  ld (XBC),A                       *(0x87D2+0x21D+43*e+p) = msg[4]
+;          ⚠ msg[5], the MASK, is NOT applied here -- prom_a sends the whole byte.
+;          Its only use is the parameter-11 arm at 0xFBCA17, which calls
+;          ToneStage_ApplyWaveSelTailPreset only when the mask is 0x3F or 0xFF
+;          (0xFBCA1D, 0xFBCA25).  So a RESONATOR TYPE write reloads the thirty
+;          coefficients and a GROUP write (mask 0xC0, the same parameter 0x0B)
+;          does not -- which is how one byte carries two independent controls.
+;          Then, on EVERY parameter, the tail at 0xFBCB09 reloads the element
+;          (0xFBCB59/0xFBCB8E -> Pack104_LoadElementWaveSelRec, with the pointer
+;          from part[+0x8C+41*e]) and calls Pack104_DispatchByResoMode_ForPart
+;          (0xFBCB9E), which is the hop that turns Q[+0x0B] bits 7:6 into
+;          P[+0x07] bits 6:4 and thus into register chan+0x0000's gate on 0x0300.
+;          ★ The pointer at part[+0x8C+41*e] IS the address stored above:
+;          Part_GetWaveSelectRecord returns 0x0087D2+0x21D+43*e whenever the
+;          part's `staged` bit is set (0xFB450A, 0xFB4510-0xFB451D), and this
+;          arm sets that bit through ToneStage_EnsurePartLoaded first.
+;          The label is left as an address: the name is now earned, but renaming a
+;          591-byte routine reaches three .s files and is a separate change.
+;          notes/FINDINGS-l7a1429-reso-scale.md section 5, hops 2-7.
 ; --------------------------------------------------------------------------
 ; --------------------------------------------------------------------------
 sub_FBC958:

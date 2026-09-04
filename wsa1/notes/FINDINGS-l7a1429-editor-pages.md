@@ -575,3 +575,31 @@ consumers); **PROVEN** for the arithmetic.
   `PAGE2/2`'s three-way split is graded **STRONG**, not PROVEN.
 * **The eight remaining 43-byte-record parameters** -- p0, p1, p2 (read by the
   MODELING top with count 3), p12 and p20 -- still do nothing this image reads.
+
+---
+
+## ★ CORRECTIONS AND CLOSURES CARRIED IN, 2026-09-04 (lane `w23/reso-scale`)
+
+⚠ Nothing above this heading is edited.  Both items §6 left open are now answered,
+and one sentence of §5 item 3 is RETRACTED.  Full argument, censuses and nulls:
+`notes/FINDINGS-l7a1429-reso-scale.md`; probe
+`notes/w23_reso_scale_and_group_chain.py` (`--selftest`: FAILURES: 0).
+
+| this note says | where | what is true now |
+|---|---|---|
+| "the `0x0340`/`0x0400` index chain reads p22 only through `R[+0x1A]`, and this lane did not find that field's writer" | §5 item 3, §6 | ⚠ **RETRACTED.**  Two different records have a `+0x1A`: `index_bias_A` is **`P[+0x1A]`**, not `R[+0x1A]`.  Its writers are nine sites in three routines, and **all nine apply `res 0x07` to p22 before using it** — so `RESO SCALE` never reaches the muting index at all.  A struct field name is not an address |
+| "`RESO SCALE` is a named control with no traced effect" | §6 | **TRACED.**  Bit 7 of `Q[+0x16]`/`Q[+0x20]` is read at exactly two instructions in the whole of prom_c, `0xFC4E2B` and `0xFC4EDA`, and it selects the delta term of registers **`chan+0x0040`** and **`chan+0x0080`** — the MAIN/SUB resonator TUNING words.  `ON` adds back `voice[+0x08] − voice[+0x06]`, the last stage of `Voice_ComputePitch`, so the resonator tracks the RAW key; `OFF` leaves it on the pitch the wave is played at.  PROVEN for the arithmetic, STRONG for that reading |
+| "what is still missing is the instruction that carries [p11 bits 7:6] into word 0 bits 6:4" | §6 | **CLOSED**, eight hops, every one an asserted instruction: `ToneMsg_Dispatch` write arm 4 → `sub_FBC958` stores the byte at `0x0087D2+0x21D+43*elem+param` → `Part_GetWaveSelectRecord`'s staged arm returns that same address → `Pack104_LoadElementWaveSelRec` binds it as `P[+0x03]` → `Pack104_DispatchByResoMode_ForPart` folds `Q[+0x0B] & 0xC0` → `P[+0x07]` bits 6:4 → staging word 0 → the `and WA,0x0070` gate |
+| §4b quotes `346 of 392` for `RESO SCALE` | §4b | still correct **for that population**.  Over the loose 459-record set it is **403 / 459 = 87.8 %**, and over the strict 133 it is 128 / 133.  ★ MAIN and SUB disagree in only **3 of 459**, so in the factory bank the control is almost a per-tone switch even though the register path is per-resonator |
+
+★ **The register NAME table in §4 is unchanged**, and `notes/l7a1429_crosscheck.py`
+PASSes: this lane adds a mechanism to `0x0040`/`0x0080` and a producer chain to
+`0x0000` bits 6:4, and renames nothing.
+
+★ **The third §6 item — where the DATA-dial editors live — was closed in parallel
+by the sibling lane `w23/dial-editors`** (`notes/FINDINGS-l7a1429-field-editors.md`).
+`RESO SCALE`'s is `ToneEditField_A5_ResoScale` at `0xFD4EFB`, parameter `0x16`/`0x20`
+with MASK `0x01` and SHIFT 7, limits 0..1 — so this note's identification of the
+field is now confirmed by the editor's own descriptor as well as by the caption and
+the column geometry.  ⚠ That lane also corrects §6's *reason*: `ld (XIX+0x06),0x7f`
+at `0xFD4C15` is the descriptor's MASK, not a clamp; the bounds are at `+0x08`/`+0x09`.
