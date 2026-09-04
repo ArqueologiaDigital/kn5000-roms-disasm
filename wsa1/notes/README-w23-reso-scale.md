@@ -42,6 +42,15 @@ instructions. Twenty-four qualify; twenty are the two that test the bit and the
 eighteen that clear it, three more take their base from the routine's own frame
 pointer, and the last is a raw-byte `bit 7,(XIX+0x16)` on the 23-byte slot record.
 
+**Two forms are RUN, not asserted.** The absolute form: the eight staged byte
+addresses are scanned for as LE16/LE24 literals over the whole image, and the one
+hit is adjudicated to a data table. The `base advanced past the field` form — a
+shared worker handed `record + 0x1A`, storing through a generic `(Xrr)`, which the
+displacement scan cannot see: every `add`/`inc` in prom_c with immediate `0x16`,
+`0x20` or `0x1A` (50 sites) is listed with the object literal beside it, and the
+literal set is `{0x1523, 0x856E, 0x85BC, 0xDC0E, 0xFDF4F1, XSP}` — neither the tone
+staging image `0x0087D2` nor the part base `0x5D23`.
+
 **The negative, and the forms it searched.** Section 3 prints the list of forms
 before it states any negative: a literal displacement, a base spilled to a frame
 and reloaded, a base held across a call, a base advanced past the field, an

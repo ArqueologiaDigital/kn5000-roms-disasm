@@ -394,6 +394,30 @@ def sec3_census_bit7():
     say("       0xFE0940 straddles two entries of the monotone 16-bit table at 0xFE0939")
     say("       (`0x0FA9, 0x0C8A` -> the bytes `0f 8a`).  There is no absolute reader.")
     say("")
+    say("   ★ THE `BASE ADVANCED PAST THE FIELD` FORM, ALSO RUN.  A shared worker that")
+    say("   takes a POINTER as an argument writes through a generic `(Xrr)`, and the")
+    say("   identity lives in the CALLER -- the displacement scan is blind to it.  So:")
+    say("   every `add`/`inc` in prom_c whose immediate is 0x16, 0x20 or 0x1A, with what")
+    say("   the next three instructions say the base is:")
+    sites, lits = _base_advance_census()
+    check("such sites in prom_c", len(sites), 50)
+    say("      the object literals that appear next to them: " + ", ".join(lits))
+    check("the literal set, in full",
+          lits, ["0x1523", "0x856e", "0x85bc", "0xdc0e", "0xfdf4f1", "XSP"])
+    check("  neither the tone staging image 0x0087D2 nor the part base 0x5D23 is in it",
+          ("0x87d2" in lits, "0x5d23" in lits), (False, False))
+    say("       The bases are the RAM arrays at 0x00856E and 0x0085BC, the 300-byte part")
+    say("       record array at 0x1523, the 23-byte slot array at 0x00DC0E, a ROM table,")
+    say("       or XSP being unwound.  Three sites -- 0xFBB7F5, 0xFBCDA1 and the pair at")
+    say("       0xFBB82B -- push `base + 0x1A` to the shared worker")
+    say("       Voice_ApplyParamChange_Dispatch (0xFAF031), which is exactly the shape")
+    say("       that hides a writer; their base is `part[+0x00]`, the 713-byte TONE")
+    say("       RECORD, not the 42-byte sub-record:")
+    spells(0xFBCD2E, "ld XIY,(XWA+0x1523)")
+    spells(0xFBCD33, "ld (XIZ+0xfc),XIY")
+    say("       so their +0x1A is offset 26 of the tone record head.  ADJUDICATED, not")
+    say("       assumed.")
+    say("")
     say("   ⚠ THE FORMS THIS NEGATIVE SEARCHED, so it can be attacked:")
     for line in FORMS:
         say("     " + line)
@@ -463,6 +487,34 @@ def _classify_reads():
                     suspects.append(a)
                     break
     return cls, suspects
+
+
+def _base_advance_census():
+    """Every `add`/`inc <reg>,{0x16,0x20,0x1A}` in prom_c, and the literals beside it.
+
+    The `base advanced past the field` form, which the displacement scan cannot see:
+    a shared worker handed `record + 0x1A` writes through a generic `(Xrr)` and the
+    identity lives in the caller.  Returns the sites and the set of object literals
+    naming what each base is, read off the next three instructions.
+    """
+    ia = instr_addrs("prom_c")
+    keys = sorted(ia)
+    pat = re.compile(r"^(add|inc)\s+(X?[A-Z]{2}),0x0*(16|20|1a)$")
+    lit = re.compile(r"0x0*([0-9a-f]{4,6})")
+    sites, lits = [], set()
+    for i, a in enumerate(keys):
+        if not pat.match(ia[a]):
+            continue
+        sites.append(a)
+        if ia[a].split(",")[0].endswith("XSP"):
+            lits.add("XSP")
+        for j in range(i + 1, min(i + 4, len(keys))):
+            if re.match(r"(jr|jrl|jp|call|calr|djnz)\b", ia[keys[j]]):
+                continue        # a branch target is not an object literal
+            for v in lit.findall(ia[keys[j]]):
+                if int(v, 16) > 0x100:
+                    lits.add("0x%x" % int(v, 16))
+    return sites, sorted(lits)
 
 def _absolute_literal_scan():
     """Any LE16/LE24 literal in prom_c equal to a staged wave-select +0x16/+0x20 byte."""

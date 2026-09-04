@@ -596,7 +596,10 @@ and one sentence of §5 item 3 is RETRACTED.  Full argument, censuses and nulls:
 PASSes: this lane adds a mechanism to `0x0040`/`0x0080` and a producer chain to
 `0x0000` bits 6:4, and renames nothing.
 
-⚠ **STILL OPEN from §6, and untouched by that lane**: where the DATA-dial editors
-for `RESO SCALE`, `RESO MODE`, `DEPTH`, `FORMANT`, `INTERACTION GAIN`, `WIDTH`,
-`SPEED`, `S/H`, `TOUCH`, `FITTING`, `KEY SHIFT` and `DETUNE` live.  The `w23` lane
-worked from the CPU-2 side and did not look for them.
+★ **The third §6 item — where the DATA-dial editors live — was closed in parallel
+by the sibling lane `w23/dial-editors`** (`notes/FINDINGS-l7a1429-field-editors.md`).
+`RESO SCALE`'s is `ToneEditField_A5_ResoScale` at `0xFD4EFB`, parameter `0x16`/`0x20`
+with MASK `0x01` and SHIFT 7, limits 0..1 — so this note's identification of the
+field is now confirmed by the editor's own descriptor as well as by the caption and
+the column geometry.  ⚠ That lane also corrects §6's *reason*: `ld (XIX+0x06),0x7f`
+at `0xFD4C15` is the descriptor's MASK, not a clamp; the bounds are at `+0x08`/`+0x09`.

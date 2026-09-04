@@ -13,6 +13,7 @@ It closes the two items `FINDINGS-l7a1429-editor-pages.md` §6 left open:
 | `FINDINGS-l7a1429-packer-routines.md` (w20) | which routine computes each value |
 | `FINDINGS-l7a1429-gate-and-keyscaling.md` (w21) | what switches register `0x0300` on |
 | `FINDINGS-l7a1429-editor-pages.md` (w21) | which editor page and caption each register belongs to |
+| `FINDINGS-l7a1429-field-editors.md` (w23, sibling lane) | which routine edits each field, with its mask, shift and limits |
 | **this note** | **what `RESO SCALE` does**, and **how `GROUP` reaches register `0x0000` bits 6:4** |
 
 Everything asserted here is re-derived from
@@ -41,6 +42,16 @@ a register NAME or the count of fourteen named blocks.
 ---
 
 ## 0. THE ANSWER, IN ONE PARAGRAPH
+
+★ **The field identification this lane starts from is now PROVEN at both ends.**
+The sibling lane `w23/dial-editors` found the editor itself —
+`ToneEditField_A5_ResoScale` at prom_a `0xFD4EFB`, parameter `0x16`/`0x20`, MASK
+`0x01`, SHIFT **7**, limits **0..1**, step 1, writing RAM indices 2 (MAIN) and 6
+(SUB) — so `RESO SCALE` is a two-state control over bit 7 of p22/p32 by the
+editor's own descriptor, not only by a drawn caption and a column position
+(`FINDINGS-l7a1429-field-editors.md` §1a and §2d).  That lane's own "still open"
+list ends with *"what p22 bit 7 does to the coefficients — the editor is now
+known, the consumer is still not"*.  This is the consumer.
 
 **`RESO SCALE` is read in exactly two places in the whole of prom_c, and they are
 registers `chan+0x0040` and `chan+0x0080` — the MAIN and SUB resonator TUNING
@@ -212,6 +223,8 @@ One more row is worth naming because it looks like a p22 read and is not:
 | an address minus an index (`TABLE − 4*k`) | the literal scan above; the records are RAM, not a table | none |
 | a pointer stored in **another table** | `P[+0x03]`, and the part record's `+0x8C + 41*e` slot — both walked instruction by instruction in §5 | the two of §1 |
 | a raw-byte `extpfx*` pseudo-instruction | the scan is over BYTES, so these match | `0xFC3600` is one, and it is in the census |
+| ★ a handler reached **only through a pointer table**, with no call site and possibly no label | the scan is over bytes and does not use labels or call graphs at all, so such a handler is indistinguishable from any other code to it | none new.  ⚠ This is the shape that hid all 24 field editors from the sibling lane's first census, and it is worth naming as a searched form even where it changes nothing |
+| ★ a **shared worker** taking the field as an ARGUMENT — `record + 0x1A` pushed, a generic `(Xrr)` store inside | ★ **RUN**: every `add`/`inc` in prom_c whose immediate is `0x16`, `0x20` or `0x1A` — 50 sites — with the object literal beside each | the whole literal set is `{0x1523, 0x856E, 0x85BC, 0xDC0E, 0xFDF4F1, XSP}`; **neither `0x0087D2` nor `0x5D23` appears**.  Three sites do push `base + 0x1A` to the shared `Voice_ApplyParamChange_Dispatch` (`0xFAF031`) — exactly the dangerous shape — and their base is `part[+0x00]`, the 713-byte TONE record (`0xFBCD2E`/`0xFBCD33`), not the 42-byte sub-record |
 
 ⇒ **In the whole of prom_c, exactly two instructions can see p22/p32 bit 7.**
 
@@ -269,6 +282,9 @@ word with a different producer.  ★ *A struct field name is not an address.*
 | `0xFC6B9F` `0xFC6BE6` `0xFC6C1E` | `Pack104_LoadElementWaveSelRec`, three arms |
 | `0xFC78FF` `0xFC7946` `0xFC797C` | `Pack104_DispatchByResoMode_ForPart`, three arms |
 
+(a displacement scan finds these regardless of who called the routine or how it
+was reached, which is why neither the pointer-table shape nor the shared-worker
+shape can hide one — and the shared-worker shape is separately run in §3.1),
 and the other four are named by their own base: `0xFAC318` (an init loop),
 `0xFC52FB` (the 19-word staging struct — word 13 *is* register `0x0340`, which is
 how the two `+0x1A`s came to be confused a third way), `0xFC567F` (`R`), and
@@ -455,11 +471,14 @@ change nothing structurally: it needs the correct `d`, and the flag that picks i
 
 * **What `RESO SCALE` sounds like.**  §2 says what the firmware computes; only the
   instrument says what the chip does with it.  ⚠ Not available.
-* **Where the DATA-dial edit for `RESO SCALE` lives.**  `FINDINGS-l7a1429-editor-pages.md`
-  §6 records that the two `MUTING` editors clamp to `0..0x7F` and so cannot set
-  bit 7 of p22/p32, and that the region `0xFD40B6`-`0xFD5B5E` holds editors for only
-  six fields.  This lane did not look for the missing editors — it worked from
-  `RESO SCALE`'s CPU-2 side — so that hole is **unchanged and still open**.
+* ~~Where the DATA-dial edit for `RESO SCALE` lives.~~  **CLOSED by the sibling
+  lane** while this one was running: `ToneEditField_A5_ResoScale` at `0xFD4EFB`,
+  reached only through the 17-pointer table at `0xFCF974 + 0x48*k`, which is why a
+  census keyed on `call`/`calr` found nothing.  ⚠ `FINDINGS-l7a1429-editor-pages.md`
+  §6's *reason* was also wrong: `ld (XIX+0x06),0x7f` at `0xFD4C15` is the
+  descriptor's MASK, not a clamp, and the bounds live at `+0x08`/`+0x09` — which is
+  precisely what makes a bit-field editor possible.  The conclusion survived; the
+  reading did not.
 * **`0x00E093`** — the per-element block the three gate-opening arms fill, still with
   no located reader (`FINDINGS-l7a1429-gate-and-keyscaling.md` §1.8).  Untouched.
 * **The eight remaining 43-byte-record parameters** — p0, p1, p2, p12, p20 — still do
