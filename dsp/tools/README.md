@@ -63,3 +63,11 @@ not be reading the pointers at all and every `CLOSED` would be void. External, i
 checks against answers produced by four *other* instruments (§229's fabricated-zero sites, §231
 item G's `SRC 0x0A@iw78 → store`, §224's `iw33 = 6 039 795` ladder value, §162's `acc 0..0` at the
 class-6 word).
+
+| `run_dsp_arm.sh` | **the §228/§229/§231/§232 vehicle, as a script**: the DSP research build (`CPPFLAGS=-DKN5000_ENABLE_DSP1=1`, which `build.sh` does **not** pass), an isolated `-cfg_directory` carrying `:DSPCFG value="3"`, an isolated NVRAM, `coldnotes2.lua`, `-seconds_to_run 30`, visible video, `timeout`-wrapped. It checks the three things that silently produce an empty census: compile errors behind a zero exit, a binary under 70 MB, and **a binary with no uPD6383 device in it at all** | `dsp/tools/run_dsp_arm.sh dsp/analysis/data/<arm>.log.gz` |
+
+⚠⚠ **`KN5000_ENABLE_DSP1` defaults to 0.** With it 0 the device is not instantiated, `grep upd6383
+error.log` returns nothing, and that is indistinguishable from "the instrument was never reached".
+Until 2026-09-04 the vehicle lived only as prose in the register and the prose did not mention the
+flag. It does now, and so does this script — which **fails loudly** rather than producing an empty
+log.
