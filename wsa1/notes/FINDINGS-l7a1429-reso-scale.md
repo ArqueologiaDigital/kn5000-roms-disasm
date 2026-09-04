@@ -217,7 +217,7 @@ One more row is worth naming because it looks like a p22 read and is not:
 | a literal displacement `(Xrr+0x16)`/`(Xrr+0x20)` on any base | the byte scan, all four images | the 122 |
 | a base **spilled to a frame** and reloaded | the scan matches the displacement, which no spill can hide | ★ **the reader FOUND is exactly this shape** — `Dev104_PackStagingStruct` reads Q only through `(XIZ-4)` |
 | a base held in a register across a call | same argument | none new |
-| a base **advanced past** the field, then `(Xrr)` | provenance: every wave-select pointer comes from `Part_GetWaveSelectRecord` (§5 hop 5) or `PartElement_SetWaveSelectPointer_ToRomDefault`, both asserted | none |
+| a base **advanced past** the field, then `(Xrr)` | two ways: provenance — every wave-select pointer comes from `Part_GetWaveSelectRecord` (§5 hop 5) or `PartElement_SetWaveSelectPointer_ToRomDefault`, both asserted — **and** the 50-site `add`/`inc` census of the last row | none |
 | an **absolute** access to a staged record byte | ★ **RUN, not asserted**: the eight staged addresses are `0x8A05/0x8A30/0x8A5B/0x8A86` (`+0x16`) and `0x8A0F/0x8A3A/0x8A65/0x8A90` (`+0x20`); prom_c scanned for each as an LE16 **and** an LE24 literal | **one** hit, `0xFE0940`, not at an instruction start — it straddles two entries of the monotone 16-bit table at `0xFE0939` (`0x0FA9, 0x0C8A` → the bytes `0f 8a`).  No absolute reader exists |
 | a **block move** over the record | `ToneStage_ApplyWaveSelTailPreset` overwrites bytes 13..42 | it **writes** both bytes; it reads neither |
 | an address minus an index (`TABLE − 4*k`) | the literal scan above; the records are RAM, not a table | none |
