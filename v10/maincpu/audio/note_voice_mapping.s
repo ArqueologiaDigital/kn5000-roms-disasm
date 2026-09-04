@@ -15131,7 +15131,7 @@ ProcessControllers_R_LoadDRAM:
 	ld de, (0xc598:16)
 	and de, 0x20
 	jr z, PlayMode_UpdateAndReturn
-	ordi8_24 (0xcede), 64
+	or (0xcede:24), 64
 	jr PlayMode_UpdateAndReturn
 
 PlayMode_ClearBit6:
@@ -15173,7 +15173,7 @@ PlayMode_CheckModes23:
 	ld de, (0xc598:16)
 	and de, 0x20
 	jr z, PlayMode_CheckSlotAndReturn
-	ordi8_24 (0xcede), 64
+	or (0xcede:24), 64
 	jr PlayMode_CheckSlotAndReturn
 
 PlayMode_ClearBit6_Alt:
@@ -15331,7 +15331,7 @@ Voice_CheckAndResetSlotState:
 	jr Voice_NullRet2
 
 CheckAndResetSlotSta_Block:
-	ordi8_24 (0xcede), 128
+	or (0xcede:24), 128
 	ld (0x00cee4:24), 0x00
 	ld e, (0xfc5f:16)
 	and e, 0x30
@@ -15370,7 +15370,7 @@ NullRet2_Block:
 	ld (0x00cef1:24), 0x00
 	ld (0x00cee0:24), 0x00
 	ld (0x00cedf:24), 0x00
-	ordi8_24 (0xcede), 128
+	or (0xcede:24), 128
 	and (0xcede:24), 249
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee4:24), 0x00
@@ -15768,7 +15768,7 @@ Voice_UpdateNoteBitmap:
 	calr ComputeNoteBitPositi_StoreDRAM
 	cps a, 0
 	jr z, UpdateNoteBitmap_ClearByte
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	and (0xcede:24), 127
 	jr VoiceSlot_LoadResult_LoadReg
 
@@ -15825,7 +15825,7 @@ VoiceSlot_LoadResult_SetByte:
 
 VoiceSlot_LoadResult_Block2:
 	and (0xcede:24), 127
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	ret
 
 VoiceSlot_LoadResult_Data2:
@@ -15965,7 +15965,7 @@ Audio_NullRet2_LoopBody:
 	add xiz, xhl
 	ld wa, (xiz + 4)
 	ld (0x00cf33:24), wa
-	ordi8_24 (0xcede), 2
+	or (0xcede:24), 2
 	ld (0x00cee5:24), 0x07
 	dec 1, de
 	calr VoiceSlot_CheckPitchIntervals
@@ -15986,7 +15986,7 @@ Audio_NullRet2_LoopCheck:
 	add xiz, xhl
 	ld wa, (xiz + 4)
 	ld (0x00cf33:24), wa
-	ordi8_24 (0xcede), 2
+	or (0xcede:24), 2
 	ld (0x00cee5:24), 0x07
 	dec 1, de
 	dec 1, de
@@ -16064,7 +16064,7 @@ VoiceSlot_CheckPitch_Compare2:
 	cps hl, 2
 	jr nz, VoiceSlot_CheckPitch_Compare3
 	ld (0xceb5:16), 2
-	ordi8_24 (0xcede), 32
+	or (0xcede:24), 32
 	jr NoteBuffer_CompactEntries
 
 VoiceSlot_CheckPitch_Compare3:
@@ -16171,7 +16171,7 @@ NoteBuffer_CompactEn_Increment:
 	cps a, 7
 	jr c, NoteBuffer_NullRet
 	ldw (0x00cf2f:24), 0x0001
-	ordi8_24 (0xcede), 2
+	or (0xcede:24), 2
 
 NoteBuffer_NullRet:
 	ret
@@ -16325,7 +16325,7 @@ NoteDisplay_ClearAndSetUpdate:
 	cp (0x00cee1:24), 0x00
 	jr nz, NoteDisplay_ClearReturn
 	and (0xcede:24), 249
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	and (0xcede:24), 254
 
 NoteDisplay_ClearReturn:
@@ -16344,7 +16344,7 @@ NoteDisplay_InitState:
 	and (0xcede:24), 251
 	and (0xcede:24), 254
 	and (0xcede:24), 127
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	pop xiz
 	pop xix
 	ret
@@ -16383,10 +16383,10 @@ NoteDisplay_StoreNoCurrent:
 
 NoteDisplay_SetUpdateFlags:
 	and (0xcede:24), 251
-	ordi8_24 (0xcede), 2
+	or (0xcede:24), 2
 	and (0xcede:24), 254
 	and (0xcede:24), 127
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	jr VoiceSlot_Epilogue_Epilogue
 
 NoteDisplay_SameNote:
@@ -16401,11 +16401,11 @@ NoteDisplay_ClearBoth:
 	ld (0x00cee4:24), 0x00
 
 NoteDisplay_SetOverlayFlags:
-	ordi8_24 (0xcede), 4
+	or (0xcede:24), 4
 	and (0xcede:24), 253
 	and (0xcede:24), 254
 	and (0xcede:24), 127
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	jr VoiceSlot_Epilogue
 VoiceSlot_Epilogue:
 
@@ -16419,16 +16419,16 @@ VoiceSlot_Epilogue_Block:
 	ld (0x00cee0:24), w
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee4:24), w
-	ordi8_24 (0xcede), 4
+	or (0xcede:24), 4
 	and (0xcede:24), 253
 	and (0xcede:24), 127
-	ordi8_24 (0xcede), 16
+	or (0xcede:24), 16
 	ret
 
 VoiceSlot_Epilogue_Block2:
 	calr Voice_InitPartAllocState
 	calr VoiceSlot_IterateAlloc_TestBit24
-	ordi16_24 (0xcf01), 0xff00
+	orw (0xcf01:24), 0xff00
 	ld a, (0x00cedf:24)
 	ld (0x00cee2:24), a
 	ld a, (0x00cee0:24)
@@ -19842,7 +19842,7 @@ LoadAndStartPlayback_LoadParam3:
 	inc 8, xsp
 	lds wa, 6
 	calr AccWrap_PlayModeStateMachine
-	ordi16 0xe9e5, 1
+	orw (0xe9e5:16), 1
 	lds hl, 0
 
 SeqVoice_PopIzReturn:
@@ -19996,7 +19996,7 @@ Acc_TransitionPlayMode:
 	lds wa, 4
 	calr AccWrap_PlayModeStateMachine
 	calr MIDI_ResetAllChannels
-	ordi16 0xe9e5, 2
+	orw (0xe9e5:16), 2
 
 TransitionPlayMode_Block:
 	andw (0xe9e5:16), 0xfffb
@@ -20013,7 +20013,7 @@ Acc_StartFillIn:
 	ld wa, (0xe9e5:16)
 	bit 2, wa
 	ret nz
-	ordi16 0xe9e5, 4
+	orw (0xe9e5:16), 4
 	lds wa, 4
 	calr AccWrap_PlayModeStateMachine
 	ret
@@ -21392,7 +21392,7 @@ DecodeMidiEvent_LoadParam3:
 	incw 1, (xsp + 10)
 	lda xbc, (xsp + 12)
 	stb_dri L, 0x07, 0xe4, 0xe0
-	ordi16 0xe9e5, 16
+	orw (0xe9e5:16), 16
 	jrl SeqPlay_ReadRecord_Entry
 
 DecodeMidiEvent_LoadAddr:
@@ -22813,7 +22813,7 @@ MidiRealtime_DispatchStatus:
 	jr z, MidiRealtime_SysExStart
 	cp c, 0xfc
 	jrl nz, MidiRealtime_NonSysExHandler
-	ordi16 0xe9e5, 16
+	orw (0xe9e5:16), 16
 	jrl MidiRealtime_StopAndReturn
 
 MidiRealtime_SysExStart:

@@ -4816,7 +4816,7 @@ FileIO_FormatName_Loop:
 	slla bc
 
 FileIO_FormatName_NoPrefix:
-	ordm16_24 (0x272cc), xbc
+	or (0x272cc:24), bc
 	ret
 
 FileIO_FormatName_Copy:
@@ -4871,7 +4871,7 @@ FileIO_BuildRecordPath_Done:
 	slla bc
 
 FileIO_BuildRecordPath_Error:
-	ordm16_24 (0x272ce), xbc
+	or (0x272ce:24), bc
 	ret
 
 FileIO_BuildRecordPath_Return:

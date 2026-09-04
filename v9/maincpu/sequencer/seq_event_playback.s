@@ -166,7 +166,7 @@ SeqEvt_WriteNoteOff:
 	ldb_sri A, 0x07, 0xec, 0xf0
 	and_srib_im 0x07, 0xec, 0xf0, 0x7f
 	and a, 0xf0
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, w
 	calr SeqEvtBuf_WriteBytePreserve
@@ -190,7 +190,7 @@ SeqEvt_WriteNoteOnRotating:
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	and a, 0xf0
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, w
 	calr SeqEvtBuf_WriteBytePreserve
@@ -210,7 +210,7 @@ SeqEvt_RotateIndexDone:
 	ret
 
 SeqEvt_WriteVoiceParams:
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
@@ -328,7 +328,7 @@ SeqEvt_UpdateReadPosition:
 
 SeqEvt_HandleControlEvent:
 	ld w, a
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld ix, (0x7e0f:16)
 	cp w, 0xd0
@@ -359,7 +359,7 @@ SeqEvt_SetExtendedFlag:
 	popw bc
 	calr SeqEvtBuf_WriteBytePreserve
 	ldb a, 0xd0
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ldb a, 0x7
 	calr SeqEvtBuf_WriteBytePreserve
@@ -489,7 +489,7 @@ Voice_ReadSlotParams:
 	ld iy, (xhl + 4)
 	ldb a, 0xf0
 	and a, (0x7e0b:16)
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, (0x7e0c:16)
 	calr SeqEvtBuf_WriteBytePreserve
@@ -3071,30 +3071,30 @@ AccPlay_SaveMuteStates:
 	ld w, (0xfc19:16)
 	ld (0x7f32:16), wa
 	ldb a, 0xc0
-	orddm8 0xf9c3, a
-	orddm8 0xf9dd, a
-	orddm8 0xf9f7, a
-	orddm8 0xfa11, a
-	orddm8 0xfa2b, a
-	orddm8 0xfa45, a
-	orddm8 0xfa5f, a
-	orddm8 0xfa79, a
-	orddm8 0xfa93, a
-	orddm8 0xfaad, a
-	orddm8 0xfac7, a
-	orddm8 0xfae1, a
-	orddm8 0xfafb, a
-	orddm8 0xfb15, a
-	orddm8 0xfb2f, a
-	orddm8 0xfb49, a
-	orddm8 0xfb63, a
-	orddm8 0xfb7d, a
-	orddm8 0xfb97, a
-	orddm8 0xfbb1, a
-	orddm8 0xfbcb, a
-	orddm8 0xfbe5, a
-	orddm8 0xfbff, a
-	orddm8 0xfc19, a
+	or (0xf9c3:16), a
+	or (0xf9dd:16), a
+	or (0xf9f7:16), a
+	or (0xfa11:16), a
+	or (0xfa2b:16), a
+	or (0xfa45:16), a
+	or (0xfa5f:16), a
+	or (0xfa79:16), a
+	or (0xfa93:16), a
+	or (0xfaad:16), a
+	or (0xfac7:16), a
+	or (0xfae1:16), a
+	or (0xfafb:16), a
+	or (0xfb15:16), a
+	or (0xfb2f:16), a
+	or (0xfb49:16), a
+	or (0xfb63:16), a
+	or (0xfb7d:16), a
+	or (0xfb97:16), a
+	or (0xfbb1:16), a
+	or (0xfbcb:16), a
+	or (0xfbe5:16), a
+	or (0xfbff:16), a
+	or (0xfc19:16), a
 	ld a, (0xfd6f:16)
 	and a, 0x3f
 	and a, 0xf0

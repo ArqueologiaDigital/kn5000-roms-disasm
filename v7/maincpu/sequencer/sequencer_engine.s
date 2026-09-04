@@ -3027,7 +3027,7 @@ SeqNote_LoadPos_Channel1:
 	ld wa, (1052:16)
 	cp wa, (9024:16)
 	jr c, SeqNote_LoadPos_Channel2
-	ordi16 7586, 2
+	orw (7586:16), 2
 
 SeqNote_LoadPos_Channel2:
 	ld wa, (8982:16)
@@ -3036,7 +3036,7 @@ SeqNote_LoadPos_Channel2:
 	ld wa, (1052:16)
 	cp wa, (9032:16)
 	jr c, SeqNote_LoadPos_Channel3
-	ordi16 7586, 4
+	orw (7586:16), 4
 
 SeqNote_LoadPos_Channel3:
 	ld wa, (8982:16)
@@ -3045,7 +3045,7 @@ SeqNote_LoadPos_Channel3:
 	ld wa, (1052:16)
 	cp wa, (9040:16)
 	jr c, SeqNote_LoadPos_Channel4
-	ordi16 7586, 8
+	orw (7586:16), 8
 
 SeqNote_LoadPos_Channel4:
 	ld wa, (8982:16)
@@ -3054,7 +3054,7 @@ SeqNote_LoadPos_Channel4:
 	ld wa, (1052:16)
 	cp wa, (9048:16)
 	jr c, SeqNote_LoadPos_Channel5
-	ordi16 7586, 16
+	orw (7586:16), 16
 
 SeqNote_LoadPos_Channel5:
 	ld wa, (8982:16)
@@ -3063,7 +3063,7 @@ SeqNote_LoadPos_Channel5:
 	ld wa, (1052:16)
 	cp wa, (9056:16)
 	jr c, SeqNote_LoadPos_Channel6
-	ordi16 7586, 32
+	orw (7586:16), 32
 
 SeqNote_LoadPos_Channel6:
 	ld wa, (8982:16)
@@ -3072,7 +3072,7 @@ SeqNote_LoadPos_Channel6:
 	ld wa, (1052:16)
 	cp wa, (9064:16)
 	jr c, SeqNote_LoadPos_Channel7
-	ordi16 7586, 64
+	orw (7586:16), 64
 
 SeqNote_LoadPos_Channel7:
 	ld wa, (8982:16)
@@ -3081,7 +3081,7 @@ SeqNote_LoadPos_Channel7:
 	ld wa, (1052:16)
 	cp wa, (9072:16)
 	jr c, SeqNote_LoadPos_Channel8
-	ordi16 7586, 128
+	orw (7586:16), 128
 
 SeqNote_LoadPos_Channel8:
 	ld wa, (8982:16)
@@ -3090,7 +3090,7 @@ SeqNote_LoadPos_Channel8:
 	ld wa, (1052:16)
 	cp wa, (9080:16)
 	jr c, SeqNote_LoadPos_Channel9
-	ordi16 7586, 256
+	orw (7586:16), 256
 
 SeqNote_LoadPos_Channel9:
 	ld wa, (8982:16)
@@ -3099,7 +3099,7 @@ SeqNote_LoadPos_Channel9:
 	ld wa, (1052:16)
 	cp wa, (9088:16)
 	jr c, SeqNote_LoadPos_Channel10
-	ordi16 7586, 512
+	orw (7586:16), 512
 
 SeqNote_LoadPos_Channel10:
 	ld wa, (8982:16)
@@ -3108,7 +3108,7 @@ SeqNote_LoadPos_Channel10:
 	ld wa, (1052:16)
 	cp wa, (9096:16)
 	jr c, SeqNote_LoadPos_Channel11
-	ordi16 7586, 1024
+	orw (7586:16), 1024
 
 SeqNote_LoadPos_Channel11:
 	ld wa, (8982:16)
@@ -3117,7 +3117,7 @@ SeqNote_LoadPos_Channel11:
 	ld wa, (1052:16)
 	cp wa, (9104:16)
 	jr c, SeqNote_LoadPos_Channel12
-	ordi16 7586, 2048
+	orw (7586:16), 2048
 
 SeqNote_LoadPos_Channel12:
 	ld wa, (8982:16)
@@ -3126,7 +3126,7 @@ SeqNote_LoadPos_Channel12:
 	ld wa, (1052:16)
 	cp wa, (9112:16)
 	jr c, SeqNote_LoadPos_Channel13
-	ordi16 7586, 4096
+	orw (7586:16), 4096
 
 SeqNote_LoadPos_Channel13:
 	ld wa, (8982:16)
@@ -3135,7 +3135,7 @@ SeqNote_LoadPos_Channel13:
 	ld wa, (1052:16)
 	cp wa, (9120:16)
 	jr c, SeqNote_LoadPos_Channel14
-	ordi16 7586, 8192
+	orw (7586:16), 8192
 
 SeqNote_LoadPos_Channel14:
 	ld wa, (8982:16)
@@ -3144,7 +3144,7 @@ SeqNote_LoadPos_Channel14:
 	ld wa, (1052:16)
 	cp wa, (9128:16)
 	jr c, SeqNote_LoadPos_Channel15
-	ordi16 7586, 0x4000
+	orw (7586:16), 0x4000
 
 SeqNote_LoadPos_Channel15:
 	ld wa, (8982:16)
@@ -3154,7 +3154,7 @@ SeqNote_LoadPos_Channel15:
 	ld wa, (1052:16)
 	cp wa, (9136:16)
 	ret c
-	ordi16 7586, 0x8000
+	orw (7586:16), 0x8000
 	ret
 
 SeqNote_ProcessNoteOn:
@@ -3325,7 +3325,7 @@ SeqNote_AllocateBassChannel:
 	slaa bc
 
 SeqNote_AllocBass_SetBitAndFlags:
-	orddm16 8982, xbc
+	or (8982:16), bc
 	ld (7530:16), 1
 	ld (0x2864:16), 1
 
@@ -3368,7 +3368,7 @@ SeqNote_AllocateSubChannel:
 	slaa bc
 
 SeqNote_AllocSub_SetBitAndFlags:
-	orddm16 8982, xbc
+	or (8982:16), bc
 	ld (7530:16), 1
 	ld (0x2866:16), 1
 
@@ -6174,9 +6174,9 @@ SeqReassign_SetVoiceBitAndWrite:
 	slaa de
 
 SeqReassign_OrPartBits:
-	orddm16 8982, xde
-	orddm16 0x28b4, xde
-	orddm16 8980, xde
+	or (8982:16), de
+	or (0x28b4:16), de
+	or (8980:16), de
 	lds wa, 0
 	ld de, iz
 	call Part_WriteWord_Indexed
@@ -14649,7 +14649,7 @@ Chan_SetActiveBit:
 Chan_ShiftComplete:
 	cps c, 0
 	jr z, Chan_ClearBit
-	orddm16 0xf19e, xde
+	or (0xf19e:16), de
 	jr Chan_CheckSubsystem
 
 Chan_ClearBit:
@@ -14668,7 +14668,7 @@ SeqVoice_SetOrClearBitMask:
 SeqVoiceBit_ShiftComplete:
 	cps c, 0
 	jr z, SeqVoiceBit_ClearBit
-	orddm16 0x28a8, xde
+	or (0x28a8:16), de
 	jr SeqVoiceBit_CheckSubsystem
 
 SeqVoiceBit_ClearBit:
@@ -16442,7 +16442,7 @@ SeqMIDI_FlushBuffer:
 	jrl SeqScan_AdvancePartIndex
 
 SeqScan_PartEntry:
-	orddm16 8982, xbc
+	or (8982:16), bc
 	ldw (9614:16), 0
 	calr SeqData_SeekToPartStart
 	ld a, (9696:16)
@@ -23205,7 +23205,7 @@ SqMcpy_ClearBit3:
 
 SqMcpy_HandleExitState:
 	ld wa, (0x2875:16)
-	ordm16_24 (0xffec), xwa
+	or (0xffec:24), wa
 
 SqMcpyTtl_ReturnZero:
 	lds32 xhl, 0
@@ -23275,7 +23275,7 @@ SqTrmgTitleFunc:
 	cp xde, 0x3
 	jr nz, SqTrmg_ReturnZero
 	ld wa, (0x2875:16)
-	ordm16_24 (0xffec), xwa
+	or (0xffec:24), wa
 
 SqTrmg_ReturnZero:
 	lds32 xhl, 0
@@ -23665,7 +23665,7 @@ MainExe_ClearPartMask4:
 	slaa bc
 
 MainExe_SetPartMask:
-	orddm16 0x2875, xbc
+	or (0x2875:16), bc
 	ld a, (9860:16)
 	dec 1, a
 	lds bc, 1
@@ -23674,7 +23674,7 @@ MainExe_SetPartMask:
 	slaa bc
 
 MainExe_SetPartMaskFFE0:
-	ordm16_24	(65516), bc
+	or	(65516:24), bc
 	ld	a, (32422:16)
 	cp	a, 255
 	jr	nz, 6
@@ -23864,7 +23864,7 @@ MainExe_SetPartBitMask:
 	slaa bc
 
 MainExe_OrPartMask:
-	orddm16 0x2875, xbc
+	or (0x2875:16), bc
 
 MainExe_ReturnZero:
 	lds32 xhl, 0

@@ -11779,8 +11779,8 @@ GmOnOff_GetBoundsRect:
 
 GmOnOff_CheckDesign:
 	ld c, (0x8d40:16)
-	orda8 c, 0x8d42
-	orda8 c, 0x8d44
+	or c, (0x8d42:16)
+	or c, (0x8d44:16)
 	jr nz, GmOnOff_SendHideEvent
 	ldw bc, 0xf5
 	call DrawBox

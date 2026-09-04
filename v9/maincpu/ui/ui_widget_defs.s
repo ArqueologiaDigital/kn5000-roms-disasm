@@ -10845,7 +10845,7 @@ EnumList_Reset_Send:
 	jr TitleProc_ClearResourceDirtyFlag
 
 TitleProc_SetResourceDirtyFlag:
-	ordm16_24 (0x02bc30), xwa
+	or (0x02bc30:24), wa
 	ld de, (0x02bc30:24)
 	extz xde
 	ld xwa, 0x1400001

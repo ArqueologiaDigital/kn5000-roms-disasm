@@ -7713,7 +7713,7 @@ SysEx_ControllerBitCheck:
 	ld c, (3925:16)
 	add c, 0x5
 	ld xwa, (0x02749a:24)
-	orda32_24 xwa, (0x02749e)
+	or xwa, (0x02749e:24)
 	ld (4560:16), xwa
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
@@ -9282,7 +9282,7 @@ SysInit_BytecodeBlock:
 	lds	de, 4
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
-	orda8	a, 3528
+	or	a, (3528:16)
 	cps	a, 0
 	jrl	nz, 24
 	ldb	a, 2
@@ -13395,7 +13395,7 @@ SubCPU_ToneParamRet:
 	jrl	nz, 76
 	ld	a, (3769:16)
 	and	a, 127
-	orda8	a, 4461
+	or	a, (4461:16)
 	xor	bc, bc
 	.byte 0xc7
 	push	xix

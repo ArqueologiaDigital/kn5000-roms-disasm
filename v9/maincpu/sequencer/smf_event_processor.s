@@ -11352,7 +11352,7 @@ AccChord_CheckUIStateExit:
 
 AccChord_CheckModeAndUpdate:
 	ld a, (0x3314:16)
-	orda8 a, 0x3315
+	or a, (0x3315:16)
 	and a, 0x3f
 	jrl z, AccChord_ReadKeysRet
 	ld a, (0x32d8:16)

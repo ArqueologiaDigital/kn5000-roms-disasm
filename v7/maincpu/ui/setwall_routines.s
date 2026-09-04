@@ -1162,7 +1162,7 @@ SetWall_ParseB0ControlChange:
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
 	and a, 0x7f
-	orddm8 4340, a
+	or (4340:16), a
 	ld a, (4340:16)
 	cp a, 0x48
 	jr z, SetWall_B0CC_Type48
@@ -1230,7 +1230,7 @@ SetWall_B0CC_Type48:
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
 	and a, 0x7f
-	orda8 a, 3310
+	or a, (3310:16)
 	ldb_erp A, 0x3c
 	and a, 0xfc
 	stb_erp A, 0x3c

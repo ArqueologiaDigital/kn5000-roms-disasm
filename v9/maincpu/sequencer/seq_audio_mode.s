@@ -152,7 +152,7 @@ AccVoice_StoreBankAssign:
 
 AccChannel_CompareAndMarkDirty:
 	ld a, (0x3314:16)
-	orda8 a, 0x3315
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, AccChannel_StoreCurrentState
 	ld a, (0x32f5:16)
@@ -204,10 +204,10 @@ AccChannel_SetDirtyDone:
 
 AccChannel_CheckActivitySetDirty:
 	ld a, (0x3312:16)
-	orda8 a, 0x3313
-	orda8 a, 0x3316
-	orda8 a, 0x3317
-	orda8 a, 0x3318
+	or a, (0x3313:16)
+	or a, (0x3316:16)
+	or a, (0x3317:16)
+	or a, (0x3318:16)
 	and a, 0x3f
 	jr z, AccChannel_ActivityCheckDone
 	cp (0x32f5:16), 128
@@ -329,7 +329,7 @@ AccVoice_LeftPedal1_Done:
 
 AccVoice_CheckChannelSetActive:
 	ld a, (0x3314:16)
-	orda8 a, 0x3315
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr z, AccVoice_ChannelActiveDone
 	or (0x330f:16), 1
@@ -562,7 +562,7 @@ AccentVoice_DetectAndMarkChange:
 	cp a, (0x3306:16)
 	jr z, AccentVoice_UpdateParamIndex
 	ld a, (0x3314:16)
-	orda8 a, 0x3315
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, AccentVoice_UpdateParamIndex
 	cp (0x32e5:16), 240
@@ -572,7 +572,7 @@ AccentVoice_DetectAndMarkChange:
 	bit 0, (0x3301:16)
 	jr z, AccentVoice_CheckModeChange
 	ld a, (0x3312:16)
-	orda8 a, 0x3313
+	or a, (0x3313:16)
 	and a, 0x3f
 	jr nz, AccentVoice_UpdateParamIndex
 

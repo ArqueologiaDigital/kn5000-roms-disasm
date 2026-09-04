@@ -957,7 +957,7 @@ SeqStep_TrackChangeRecoverLoop:
 	slaa bc
 
 SeqStep_TrackChangeRecoverExit:
-	ordm16_24 (0xffec), xbc
+	or (0xffec:24), bc
 
 SeqStep_TrackChangeExit:
 	pop xiz

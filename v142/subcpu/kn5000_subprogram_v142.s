@@ -8531,7 +8531,7 @@ WaveSel_StageB_Store_Reg040:
 	and wa, 0xF000
 	add wa, wa
 	andw (283086:24), 4095
-	ordm16_24 283086, xwa
+	or (283086:24), wa
 
 ; Restore and return.
 WaveSel_StageB_Store_Reg040_Return:
@@ -11047,7 +11047,7 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	sub xiz, xhl
 	andw (283150:24), 57344
 	ld wa, iz
-	ordm16_24 283150, xwa
+	or (283150:24), wa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 89)
 	ld (0x04520a:24), wa
@@ -11467,7 +11467,7 @@ Voice2_UpdatePitch_ChanEntry:
 	ld wa, (xwa + 30)
 	and wa, 0x3300
 	or wa, iz
-	ordm16_24 283104, xwa
+	or (283104:24), wa
 	ld wa, (xsp + 14)
 	bit 15, wa
 	jr z, Voice2_UpdatePitch_WritePBend
@@ -14821,7 +14821,7 @@ Voice_UpdateAllLFO_Loop1:
 	call FP_MulAccum64
 	andw (283148:24), 57344
 	srl xhl, 8
-	ordm16_24 283148, xhl
+	or (283148:24), hl
 
 ; Push the group-1 result for this slot with ToneGen_WriteExtParam_600.
 Voice_UpdateAllLFO_DispatchVoice1:
@@ -14873,7 +14873,7 @@ Voice_UpdateAllLFO_Loop2_Body:
 	call FP_MulAccum64
 	andw (283140:24), 57344
 	srl xhl, 8
-	ordm16_24 283140, xhl
+	or (283140:24), hl
 
 ; Push the group-2 result with ToneGen_WriteExtParam_1C0_Single.
 Voice_UpdateAllLFO_DispatchVoice2:
@@ -14926,7 +14926,7 @@ Voice_UpdateAllLFO_Loop3_Body:
 	call FP_MulAccum64
 	andw (283140:24), 57344
 	srl xhl, 8
-	ordm16_24 283140, xhl
+	or (283140:24), hl
 	jr Voice_UpdateAllLFO_DispatchVoice3
 
 ; Slots 0x40..0x7F of group 3 fold their result into scratch 0x04520E instead of
@@ -14941,7 +14941,7 @@ Voice_UpdateAllLFO_DispatchGroup3_High:
 	call FP_MulAccum64
 	andw (283150:24), 57344
 	srl xhl, 8
-	ordm16_24 283150, xhl
+	or (283150:24), hl
 
 ; Push the group-3 result with ToneGen_WriteExtParam_TypeDispatch_Single.
 Voice_UpdateAllLFO_DispatchVoice3:
@@ -15413,7 +15413,7 @@ Pitch_Bend_Ramp_Tick:
 	add wa, wa
 	ld (0x04135a:24), wa
 	andw (267075:24), 63487
-	ordi16_24 267075, 5120
+	orw (267075:24), 5120
 	ret
 
 ; Body of Pitch_Bend_Ramp_Tick (entry 0x0271BC, already named -- left alone). That
@@ -15455,7 +15455,7 @@ Pitch_Bend_Ramp_Tick_Bit13Check:
 	exts wa
 	add wa, wa
 	ld (0x04135a:24), wa
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 	jr Pitch_Bend_Ramp_Tick_CheckCounter
 
 ; bit 14 clear: if bit 15 is set take the +1 step, otherwise zero the offset.
@@ -15473,13 +15473,13 @@ Pitch_Bend_Ramp_Tick_Bit14Clear:
 	exts wa
 	add wa, wa
 	ld (0x04135a:24), wa
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 	jr Pitch_Bend_Ramp_Tick_CheckCounter
 
 ; No direction bit set: force the global pitch offset 0x04135A to 0 and raise bit 10.
 Pitch_Bend_Ramp_Tick_ZeroPitch:
 	ldw (0x04135a:24), 0x0000
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 
 ; Termination test: return unless the offset word 0x04135A is now zero; when it is, clear
 ; bits 13..15 of 0x041343, reset the step index 0x04135C and raise bit 10 one last time.
@@ -15488,7 +15488,7 @@ Pitch_Bend_Ramp_Tick_CheckCounter:
 	ret nz
 	andw (267075:24), 8191
 	ldw (0x04135c:24), 0x0000
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 	ret
 
 ; Ramp inactive: clear bit 10 and return.
@@ -18448,7 +18448,7 @@ Voice_SetPolyphonyMode:
 	pushw_erp 0xFA
 	cps a, 1
 	jr nz, Voice_SetPolyphonyMode_Else
-	ordi16_24 267075, 1
+	orw (267075:24), 1
 	lds wa, 1
 	call Voice_Reset_Engine
 	jr Voice_SetPolyphonyMode_Apply
@@ -18513,7 +18513,7 @@ Voice_SetKeyShiftEnable:
 	ld wa, (0x041343:24)
 	bit 12, wa
 	ret nz
-	ordi16_24 267075, 2048
+	orw (267075:24), 2048
 	ldw (0x04135c:24), 0x0000
 	ret
 
@@ -18612,7 +18612,7 @@ Voice_SetParam_04134B:
 Voice_SetCCMaxFlag:
 	cp a, 0x7F
 	jr nz, Voice_SetCCMaxFlag_Clear
-	ordi16_24 267075, 2
+	orw (267075:24), 2
 	ret
 
 ; Clear of Voice_SetCCMaxFlag.
@@ -18761,7 +18761,7 @@ Voice_AllVoices_UpdateVelocity_Exit:
 ScaleTune_Set_Global_Enabled:
 	cps a, 0
 	jr nz, ScaleTune_Set_Global_Enabled_Clear
-	ordi16_24 267075, 512
+	orw (267075:24), 512
 	ret
 
 ; Clear of ScaleTune_Set_Global_Enabled.
@@ -41110,7 +41110,7 @@ DSP_System_Init_Vars:
 
 ; Strap clear: sets bit 3 of the global word at 0x041343.
 DSP_System_Init_SetBit:
-	ordi16_24 267075, 8	; Set bit 3 of DSP config
+	orw (267075:24), 8	; Set bit 3 of DSP config
 
 ; Installs the three long pointers and runs the six-call init chain.
 DSP_System_Init_Continue:
@@ -42381,9 +42381,9 @@ ToneGen_SetupPolyVoice_Path:
 	ld a, (xsp + 8)
 	extz wa
 	calr DSP_VelocityToVolume
-	orddm16 15136, xhl
+	or (15136:16), hl
 	calr DSP_GetEffectRouting
-	orddm16 15138, xhl
+	or (15138:16), hl
 	ld a, (xsp)
 	extz wa
 	div a, 0xC
@@ -42427,16 +42427,16 @@ ToneGen_SetupPercussionVoice:
 	ld a, e
 	extz wa
 	sll wa, 8
-	orddm16 15146, xwa
+	or (15146:16), wa
 	ld a, c
 	extz wa
 	add wa, wa
 	lda xbc, (0x012195:24)
 	ldw_sri WA, 0x07, 0xE4, 0xE0
-	orddm16 15132, xwa
+	or (15132:16), wa
 	calr DSP_GetEffectRouting
-	orddm16 15138, xhl
-	ordi16 15136, 4095
+	or (15138:16), hl
+	orw (15136:16), 4095
 	ld wa, (0x01217d:24)
 	ld (15134:16), wa
 	ld a, (xsp)

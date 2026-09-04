@@ -1383,7 +1383,7 @@ AccBuf_AdvanceNoPage:
 AccVoice_HandleMarker83:
 	ld	w, (13112:16)
 	ld	a, (12920:16)
-	orda8	a, (12921)
+	or	a, (12921:16)
 	and	w, a
 	jr	nz, 10
 	ld	a, (13112:16)
@@ -1407,8 +1407,8 @@ AccVoice_Marker83_Return:
 
 AccVoice_ActivatePart:
 	ld a, (0x3338:16)
-	orddm8 0x328e, a
-	orddm8 0x328c, a
+	or (0x328e:16), a
+	or (0x328c:16), a
 	or (0x3258:16), 0x01
 	ld a, (0x328e:16)
 	and A,0x3f
@@ -1617,7 +1617,7 @@ AccPart_CheckEndOfDataMarker:
 	cp	wa, 65534
 	jr	nz, 11
 	ld	a, (13112:16)
-	orddm8	(13124), a
+	or	(13124:16), a
 	ldw	wa, 65534
 AccPart_FreeAddr_Return:
 	ret
@@ -1711,7 +1711,7 @@ AccPart_CopyData:
 
 	ld a, (13112:16)
 
-	orddm8 (12944), xbc
+	or (12944:16), a
 
 	ret
 
@@ -1719,10 +1719,10 @@ AccPart_CopyData:
 
 AccPart_CheckAnyActive:
 	ld	a, (12922:16)
-	orda8	a, (12923)
-	orda8	a, (12924)
-	orda8	a, (12918)
-	orda8	a, (12919)
+	or	a, (12923:16)
+	or	a, (12924:16)
+	or	a, (12918:16)
+	or	a, (12919:16)
 	ret
 AccPedal_DirectionA:
 	ld a, (0x33d4:16)
@@ -1773,7 +1773,7 @@ AccPedal_DirB_InvertAndStore:
 	ld w, (0x0433:16)
 	cp w, (0x32ce:16)
 	jr nz, AccPedal_DirB_DefaultStyle
-	orddm8 0x3277, a
+	or (0x3277:16), a
 	ld a, (0x32cf:16)
 	jr t, AccPedal_DirB_Return
 AccPedal_DirB_Alternate:
@@ -1784,7 +1784,7 @@ AccPedal_DirB_Alternate:
 	ld w, (0x0433:16)
 	cp w, (0x32cc:16)
 	jr nz, AccPedal_DirB_DefaultStyle
-	orddm8 0x3276, a
+	or (0x3276:16), a
 	ld a, (0x32cd:16)
 	jr t, AccPedal_DirB_Return
 AccPedal_DirB_DefaultStyle:
@@ -2214,11 +2214,11 @@ AccKbd2_CheckActive:
 	jr	z, 76
 	ld	a, (13112:16)
 	ld	w, (12920:16)
-	orda8	w, (12921)
+	or	w, (12921:16)
 	and	w, a
 	jr	z, 10
-	orddm8	(12942), a
-	orddm8	(12940), a
+	or	(12942:16), a
+	or	(12940:16), a
 	jr	50
 	ld	a, (13112:16)
 	xor	a, 255
@@ -3463,11 +3463,11 @@ AccPart_Reactivate:
 	jr	z, 86
 	ld	a, (13112:16)
 	ld	w, (12920:16)
-	orda8	w, (12921)
+	or	w, (12921:16)
 	and	w, a
 	jr	z, 20
-	orddm8	(12942), a
-	orddm8	(12940), a
+	or	(12942:16), a
+	or	(12940:16), a
 	ld	(13114:16), 254
 	ld	(13116:16), 6
 	jr	50
@@ -3722,7 +3722,7 @@ AccTick_ByteData:
 	call	16072706
 	calr	3214
 	ld	a, (12918:16)
-	orda8	a, 12919
+	or	a, (12919:16)
 	and	a, 63
 	jr	z, 44
 	.byte 0xf1, 0x65, 0x32, 0xc8
@@ -4760,12 +4760,12 @@ AccVoice_SelectByMask:
 	bit 0, (0x32c7:16)
 	jr nz, AccVoice_SelectByMask_Direct
 	ld a, (0x327a:16)
-	orda8 a, (0x327c)
-	orda8 a, (0x3276)
-	orda8 a, (0x3277)
-	orda8 a, (0x3278)
-	orda8 a, (0x3279)
-	orda8 a, (0x328c)
+	or a, (0x327c:16)
+	or a, (0x3276:16)
+	or a, (0x3277:16)
+	or a, (0x3278:16)
+	or a, (0x3279:16)
+	or a, (0x328c:16)
 	.byte 0xc7, 0x31, 0xc1, 0x6e, 0x05
 AccVoice_SelectByMask_Direct:
 	calr AccWave_BankResolve
@@ -5207,7 +5207,7 @@ AccInit_FullReInit:
 	call Rhythm_SendChanPressure
 	calr AccBuf_ResetAll4
 	ld a, (0x3276:16)
-	orda8 a, (0x3277)
+	or a, (0x3277:16)
 	and A,0x3f
 	jr z, .Lc_f592f0
 	bit 0, (0x3265:16)
@@ -5380,7 +5380,7 @@ AccTuning_ApplyChange_ClearBit:
 
 AccTuning_ApplyChange_SelectMode:
 	ld	a, (12922:16)
-	orda8	a, (12923)
+	or	a, (12923:16)
 	and	a, 63
 	jrl	nz, 51
 	ld	a, (12924:16)
@@ -5389,11 +5389,11 @@ AccTuning_ApplyChange_SelectMode:
 	ld	a, (12920:16)
 	and	a, 63
 	jr	nz, 41
-	orda8	a, (12921)
+	or	a, (12921:16)
 	and	a, 63
 	jr	nz, 36
 	ld	a, (12918:16)
-	orda8	a, (12919)
+	or	a, (12919:16)
 	and	a, 63
 	jr	nz, 27
 	ld	a, (12993:16)
@@ -5950,7 +5950,7 @@ AccPedal_Bit2_Sustain:
 	and a, (0x33e3:16)
 	bit 0x02,A
 	jr z, AccPedal_Bit2_Off
-	ordi16 (0x1108), 0x0004
+	orw (0x1108:16), 0x0004
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_Bit2_CheckPlay
 	calr AccPedal_SustainOn
@@ -6023,7 +6023,7 @@ AccPedal_Bit7_Portamento:
 	and a, (0x33e3:16)
 	bit 0x07,A
 	jr z, AccPedal_Bit7_Off
-	ordi16 (0x1108), 0x0080
+	orw (0x1108:16), 0x0080
 	bit 2, (0x041e:16)
 	jr z, AccPedal_Bit7_Damper
 	calr AccPedal_PortamentoOn
@@ -6048,7 +6048,7 @@ AccPedal_Bit6_Hold:
 	and a, (0x33e3:16)
 	bit 0x06,A
 	jr z, .Lc_f59b49
-	ordi16 (0x1108), 0x0040
+	orw (0x1108:16), 0x0040
 	bit 2, (0x041e:16)
 	jr z, .Lc_f59b49
 	calr AccPedal_HoldOn
@@ -8605,7 +8605,7 @@ AccKbdTiming_Catchup_Loop:
 	cp	w, 192
 	jr	nz, 72	; -> 0xF5B4EF
 	ld	a, w
-	orda8	xbc, (14816)
+	or	a, (14816:16)
 	calr	218
 	calr	73
 	calr	70
@@ -9157,7 +9157,7 @@ AccDir_AdjustDirection:
 AccDir_Adjust_RightDec:
 	sll a, 4
 	and (0xfc61:16), 207
-	orddm8 0xfc61, a
+	or (0xfc61:16), a
 	calr AccDir_DispatchEvent
 
 AccDir_Adjust_LeftHand:
@@ -9170,7 +9170,7 @@ AccDir_Adjust_LeftHand:
 AccDir_Adjust_LeftInc:
 	sll a, 4
 	and (0xfc61:16), 207
-	orddm8 0xfc61, a
+	or (0xfc61:16), a
 	calr AccDir_DispatchEvent
 
 AccDir_Adjust_SetChanged:
@@ -9972,7 +9972,7 @@ AccVoiceReg_WritePart3_StoreBit4:
 
 	and (0xfb57:16), 128
 
-	orddm8 0xfb57, w
+	or (0xfb57:16), w
 
 	ld a, (12677:16)
 
@@ -9982,7 +9982,7 @@ AccVoiceReg_WritePart3_StoreBit4:
 
 	and (0xfb5a:16), 191
 
-	orddm8 0xfb5a, a
+	or (0xfb5a:16), a
 
 	ldb l, 0x4
 
@@ -10012,7 +10012,7 @@ AccVoiceReg_WritePart4_StoreBit4:
 
 	and (0xfb71:16), 128
 
-	orddm8 0xfb71, w
+	or (0xfb71:16), w
 
 	ld a, (12682:16)
 
@@ -10022,7 +10022,7 @@ AccVoiceReg_WritePart4_StoreBit4:
 
 	and (0xfb74:16), 191
 
-	orddm8 0xfb74, a
+	or (0xfb74:16), a
 
 	ldb l, 0x8
 
@@ -10052,7 +10052,7 @@ AccVoiceReg_WritePart5_StoreBit4:
 
 	and (0xfb8b:16), 128
 
-	orddm8 0xfb8b, w
+	or (0xfb8b:16), w
 
 	ld a, (12687:16)
 
@@ -10062,7 +10062,7 @@ AccVoiceReg_WritePart5_StoreBit4:
 
 	and (0xfb8e:16), 191
 
-	orddm8 0xfb8e, a
+	or (0xfb8e:16), a
 
 	ldb l, 0x10
 
@@ -10092,7 +10092,7 @@ AccVoiceReg_WritePart2_StoreBit4:
 
 	and (0xfba5:16), 128
 
-	orddm8 0xfba5, w
+	or (0xfba5:16), w
 
 	ld a, (12672:16)
 
@@ -10102,7 +10102,7 @@ AccVoiceReg_WritePart2_StoreBit4:
 
 	and (0xfba8:16), 191
 
-	orddm8 0xfba8, a
+	or (0xfba8:16), a
 
 	ldb l, 0x2
 
@@ -10125,7 +10125,7 @@ AccVoiceReg_WritePart1:
 	and W,0x7f
 	ld (0xfbbe:16), a
 	and (0xfbbf:16), 0x80
-	orddm8 0xfbbf, w
+	or (0xfbbf:16), w
 	ldb L, 0x01
 	calr AccVoiceState_DispatchChange
 AccVoiceReg_WritePart1_Ret:
@@ -21100,7 +21100,7 @@ DrumKit_InlineCode1:
 	ldb	d, 3
 	call	16624705
 	ldb	a, 8
-	orddm8 (64605), xbc
+	or (64605:16), a
 	ldb	w, 8
 	ldb	e, 72
 	ldb	d, 3
@@ -22423,7 +22423,7 @@ TimeSig_DisplayStrings:
 	push	xwa
 	ld	xwa, 16145482
 	ld_rr8b	a, xwa, h
-	orddm8 (14449), xbc
+	or (14449:16), a
 	pop	xwa
 	ret
 	normal
@@ -24136,7 +24136,7 @@ VoiceTable_InitEntry_Store:
 	ldb_spi	a, 240
 	cp_spib	a, 244
 	jr	z, 4
-	orddm8	(14124), w
+	or	(14124:16), w
 VoiceTable_InitEntry_Return:
 	sll	w, 1
 	inc	1, bc
@@ -24150,7 +24150,7 @@ MultiVoice_SetupChannel:
 	ldb_spi	a, 240
 	cp_spib	a, 244
 	jr	z, 4
-	orddm8	(14124), w
+	or	(14124:16), w
 MultiVoice_Setup_Loop:
 	sll	w, 1
 	inc	1, bc

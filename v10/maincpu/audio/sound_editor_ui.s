@@ -11115,7 +11115,7 @@ SeBitmap_EnvCurve5:
 	ldwio	146, 8983
 	halt
 	pop	xsp
-	ordm16_24	(0x0a1b1d), ix
+	or	(0x0a1b1d:24), ix
 	nop
 	.byte 0x1f
 	nop
@@ -14360,7 +14360,7 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0xc2, 0x00, 0x0a, 0x0a, 0x05
 	nop
-	ordm16_24	(8704), xde
+	or	(8704:24), de
 	nop
 	.byte 0x0a, 0x0a, 0x2d, 0x00, 0xd2, 0x00, 0x4a, 0x00
 	.byte 0xea
@@ -14381,7 +14381,7 @@ TuningSystem_Handler_Table:
 	.byte 0xea
 	nop
 	ldwio	10, 285
-	ordm16_24	(80384), xde
+	or	(80384:24), de
 	nop
 	normal
 	ldwio	245, 0xde00

@@ -156,7 +156,7 @@ SeqEvt_WriteNoteOff:
 
 	and a, 0xf0
 
-	orda8 xbc, (32107)
+	or a, (32107:16)
 
 	calr 640
 
@@ -195,7 +195,7 @@ SeqEvt_RotateIndexDone:
 	ret
 
 SeqEvt_WriteVoiceParams:
-	orda8 a, (0x7d6b)
+	or a, (0x7d6b:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld (0x7d77:16), xhl
 	ld XHL,XBC
@@ -286,7 +286,7 @@ SeqEvt_UpdateReadPosition:
 	ret
 SeqEvt_HandleControlEvent:
 	ld W,A
-	orda8 a, (0x7d6b)
+	or a, (0x7d6b:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld ix, (0x7d73:16)
 	cp W,0xd0
@@ -316,7 +316,7 @@ SeqEvt_SetExtendedFlag:
 	popw	bc
 	calr	101
 	ldb	a, 208
-	orda8	a, 32107
+	or	a, (32107:16)
 	calr	92
 	ldb	a, 7
 	calr	87
@@ -2877,30 +2877,30 @@ AccPlay_SaveMuteStates:
 	ld	w, (64537:16)
 	ld	(32406:16), wa
 	ldb	a, 192
-	orddm8	(63939), a
-	orddm8	(63965), a
-	orddm8	(63991), a
-	orddm8	(64017), a
-	orddm8	(64043), a
-	orddm8	(64069), a
-	orddm8	(64095), a
-	orddm8	(64121), a
-	orddm8	(64147), a
-	orddm8	(64173), a
-	orddm8	(64199), a
-	orddm8	(64225), a
-	orddm8	(64251), a
-	orddm8	(64277), a
-	orddm8	(64303), a
-	orddm8	(64329), a
-	orddm8	(64355), a
-	orddm8	(64381), a
-	orddm8	(64407), a
-	orddm8	(64433), a
-	orddm8	(64459), a
-	orddm8	(64485), a
-	orddm8	(64511), a
-	orddm8	(64537), a
+	or	(63939:16), a
+	or	(63965:16), a
+	or	(63991:16), a
+	or	(64017:16), a
+	or	(64043:16), a
+	or	(64069:16), a
+	or	(64095:16), a
+	or	(64121:16), a
+	or	(64147:16), a
+	or	(64173:16), a
+	or	(64199:16), a
+	or	(64225:16), a
+	or	(64251:16), a
+	or	(64277:16), a
+	or	(64303:16), a
+	or	(64329:16), a
+	or	(64355:16), a
+	or	(64381:16), a
+	or	(64407:16), a
+	or	(64433:16), a
+	or	(64459:16), a
+	or	(64485:16), a
+	or	(64511:16), a
+	or	(64537:16), a
 	ld	a, (64879:16)
 	and	a, 63
 	and	a, 240

@@ -37,7 +37,7 @@ FDemoText_ByteData_VoiceProbeA:
 	ret	nz
 	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb a, xbc, wa
-	ordm8_24 (149486), xbc
+	or (149486:24), a
 	ret
 	calr 65479
 	inc	5, xhl
@@ -47,7 +47,7 @@ FDemoText_ByteData_VoiceProbeA:
 	extz	wa
 	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb a, xbc, wa
-	ordm8_24 (149490), xbc
+	or (149490:24), a
 	ret
 FDemoText_ByteData_VoiceProbeB:
 	.byte 0xc1
@@ -96,14 +96,14 @@ FDemoText_ByteData_VoiceProbeC:
 	extz	wa
 	lda	xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ld_rrb a, xbc, wa
-	ordm8_24 (149484), xbc
+	or (149484:24), a
 	ld a, (49279:16)
 	and a, 48
 	ret z
 	ld	xwa, DemoDiskPrompt_English1_0x92
 	extz	de
 	ld_rrb a, xwa, de
-	ordm8_24 (149484), xbc
+	or (149484:24), a
 	ret
 
 FDemoText_ProcessVoiceFlags:
@@ -157,7 +157,7 @@ FDemoText_ProbeVoice_Loop:
 
 FDemoText_ProbeVoice_SetActive:
 	stb_erp A, 0xfa
-	ordm8_24 (0x0247ee), a
+	or (0x0247ee:24), a
 
 FDemoText_ProbeVoice_ClearActive:
 	inc1b_erp 0xfb
@@ -302,7 +302,7 @@ FDemoText_ActivateVoiceAlt:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
-	ordm8_24 (0x0247ee), a
+	or (0x0247ee:24), a
 	inc 2, xsp
 	ret
 
@@ -1087,7 +1087,7 @@ FDemoText_ScanMIDI_UpdateFlags:
 	cpib_erp 0xfb, 1
 	jr nz, FDemoText_ScanMIDI_ClearActive
 	ld a, (xwa)
-	ordm8_24 (0x0247f0), a
+	or (0x0247f0:24), a
 	jr FDemoText_ScanMIDI_NextChannel
 
 FDemoText_ScanMIDI_SetActive:
@@ -1137,7 +1137,7 @@ FDemoText_Rescan_Loop:
 
 FDemoText_Rescan_SetFlag:
 	stb_erp A, 0xfa
-	ordm8_24 (0x0247ee), a
+	or (0x0247ee:24), a
 
 FDemoText_Rescan_NextVoice:
 	inc1b_erp 0xfb
@@ -1195,7 +1195,7 @@ FDemoText_NotifyUI_Done:
 	ret
 
 FDemoText_RefreshFullDisplay:
-	ordi8_24 (0x0247ee), 7
+	or (0x0247ee:24), 7
 	calr FDemoText_ProcessVoiceFlags
 	push xde
 	push xhl

@@ -1061,7 +1061,7 @@ SMF_Event_NoteOn:
 	ldb a, 0x90
 
 SMF_Event_OutputByte:
-	orda8 a, 4008
+	or a, (4008:16)
 	pushw wa
 	calr SMF_LookupSongBank
 	popw wa
@@ -2433,11 +2433,11 @@ SMF_SlotChain_ExtendedVoice:
 	cp (4394:16), 3
 	jr z, SMF_SlotChain_ExtVoiceReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x20
 	jr nz, SMF_SlotChain_ExtVoiceReturn
 	ld w, (xiy + 4)
-	orda8 w, 4395
+	or w, (4395:16)
 	and a, w
 	and a, 0x20
 	cps a, 0
@@ -2682,9 +2682,9 @@ SMF_SlotParam_ModWheelCalc:
 	ld (xiy + 3), 0x3
 	or (4411:16), 1
 	ld a, (xiy + 4)
-	orda8 a, 4395
+	or a, (4395:16)
 	ld w, (xiy + 5)
-	orda8 w, 3310
+	or w, (3310:16)
 	cps w, 4
 	jr z, SMF_SlotParam_ModWheelStore
 	cps w, 3
@@ -2786,7 +2786,7 @@ SMF_SlotParam_Aftertouch:
 	cp (xiy + 3), 0x3
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x80
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld (xiy + 2), 0x60
@@ -2797,7 +2797,7 @@ SMF_SlotParam_AftertouchImpl:
 	cp (xiy + 3), 0x3
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0xc0
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld (xiy + 2), 0x60
@@ -2849,7 +2849,7 @@ SMF_SlotParam_Sustain:
 	cp (xiy + 3), 0x0
 	jr nz, SMF_SlotParam_SustainReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cps a, 3
 	jr nz, SMF_SlotParam_SustainReturn
 	ld a, (xiy + 2)
@@ -2935,7 +2935,7 @@ SMF_SlotParam_Format5Impl:
 	cp (xiy + 3), 0x1
 	jr nz, SMF_SlotParam_Format5Return
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x3f
 	jr z, SMF_SlotParam_Format5Check
 	cp a, 0x40
@@ -2973,7 +2973,7 @@ SMF_SlotParam_ReverbTypeImpl:
 	cp (xiy + 3), 0x1
 	jr nz, SMF_SlotParam_ReverbTypeReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x1f
 	jr z, SMF_SlotParam_ReverbTypeCalc
 	cp a, 0x40

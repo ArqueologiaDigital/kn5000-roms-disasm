@@ -3610,7 +3610,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65181
-	orddm16 (61904), xhl
+	or (61904:16), hl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -3626,7 +3626,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65130
-	orddm16 (62096), xhl
+	or (62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3635,7 +3635,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65103
-	orddm16 (62096), xhl
+	or (62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -4605,7 +4605,7 @@ Rt1MuteFunc:
 	jr z, SMFMute_GetBit0Status
 	cp xde, 0x1
 	jr nz, Rt1Mute_ClearAndPost
-	ordi16_24 (0x021086), 1
+	orw (0x021086:24), 1
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4627,7 +4627,7 @@ Rt2MuteFunc:
 	jr z, SMFMute_GetBit1Status
 	cp xde, 0x1
 	jr nz, Rt2Mute_ClearAndPost
-	ordi16_24 (0x021086), 2
+	orw (0x021086:24), 2
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4649,7 +4649,7 @@ DocOrchMuteFunc:
 	jrl z, SMFMute_GetUpperBits
 	cp xde, 0x1
 	jr nz, DocOrchMute_ClearAndPost
-	ordi16_24 (0x021086), 0xfffc
+	orw (0x021086:24), 0xfffc
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4671,7 +4671,7 @@ PdOrchMuteFunc:
 	jrl z, SMFMute_ClearBit0
 	cp xde, 0x1
 	jr nz, PdOrchMute_ClearAndPost
-	ordi16_24 (0x021086), 0xfffe
+	orw (0x021086:24), 0xfffe
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0

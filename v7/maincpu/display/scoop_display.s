@@ -5940,7 +5940,7 @@ SysEx_ControllerBitCheck:
 	ld c, (3925:16)
 	add c, 0x5
 	ld xwa, (0x02749a:24)
-	orda32_24 xwa, (0x02749e)
+	or xwa, (0x02749e:24)
 	ld (4560:16), xwa
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e

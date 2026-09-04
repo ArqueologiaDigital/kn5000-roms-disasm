@@ -11061,8 +11061,8 @@ GmOnOff_GetBoundsRect:
 
 GmOnOff_CheckDesign:
 	ld	c, (36004:16)
-	orda8	c, (36006)
-	orda8	c, (36008)
+	or	c, (36006:16)
+	or	c, (36008:16)
 	jr	nz, 7
 	ldw	bc, 245
 	call	16428646

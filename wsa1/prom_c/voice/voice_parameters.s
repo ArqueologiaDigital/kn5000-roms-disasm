@@ -3933,7 +3933,7 @@ Voice_StageRegs_0500_08C0_AB__FA9676:
 Voice_StageRegs_0500_08C0_AB__FA96CE:
 	ld	bc, ix                                  ; FA96CE  ld BC,IX
 	and	bc, 0xFF                               ; FA96D0  and BC,0x00ff
-	ordm16_24	(0xD774), bc                     ; FA96D4  or (0x00d774),BC
+	or	(0xD774:24), bc                     ; FA96D4  or (0x00d774),BC
 	ld	bc, (0xD77E:24)                        ; FA96D9  ld BC,(0x00d77e)
 	ld	hl, bc                                  ; FA96DE  ld HL,BC
 	sll	hl, 8                                  ; FA96E0  sll 0x08,HL
@@ -4016,7 +4016,7 @@ Voice_StageRegs_CD:
 	call	0xFC7FCA                              ; FA9760  call 0xfc7fca
 	ld	bc, (0xD77E:24)                        ; FA9764  ld BC,(0x00d77e)
 	sll	bc, 8                                  ; FA9769  sll 0x08,BC
-	ordm16_24	(0xD77C), bc                     ; FA976C  or (0x00d77c),BC
+	or	(0xD77C:24), bc                     ; FA976C  or (0x00d77c),BC
 	inc	6, xsp                                 ; FA9771  inc 6,XSP
 Voice_StageRegs_CD__FA9773:
 	ldw	(0xD76E:24), 0                        ; FA9773  ld (0x00d76e),0x0000
@@ -5073,7 +5073,7 @@ Voice_StageChanSel_Reg04C0__FA9FB4:
 	ld	wa, (xbc+34)                            ; FA9FE5  ld WA,(XBC+0x22)
 	and	wa, 0x3300                             ; FA9FE8  and WA,0x3300
 	or	wa, ix                                  ; FA9FEC  or WA,IX
-	ordm16_24	(0xD772), wa                     ; FA9FEE  or (0x00d772),WA
+	or	(0xD772:24), wa                     ; FA9FEE  or (0x00d772),WA
 	ld	bc, (xiz-2)                             ; FA9FF3  ld BC,(XIZ+0xfe)
 	and	bc, 0x8000                             ; FA9FF6  and BC,0x8000
 	jr z, Voice_StageChanSel_Reg04C0__FAA00A                   ; FA9FFA  jr Z,0xfaa00a

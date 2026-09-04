@@ -2237,7 +2237,7 @@ DSPCfg_CompParam_SubType7:
 	and hl, 0x1
 	sla hl, 4
 	and (0xc1f0:16), 239
-	orddm16 0xc1f0, xhl
+	or (0xc1f0:16), hl
 
 DSPCfg_CompParam_Bit1:
 	bit 1, (0xc07f:16)
@@ -2247,7 +2247,7 @@ DSPCfg_CompParam_Bit1:
 	and hl, 0x1
 	sla hl, 5
 	and (0xc1f0:16), 223
-	orddm16 0xc1f0, xhl
+	or (0xc1f0:16), hl
 
 DSPCfg_CompParam_Bit2:
 	bit 2, (0xc07f:16)
@@ -2257,7 +2257,7 @@ DSPCfg_CompParam_Bit2:
 	and hl, 0x1
 	sla hl, 6
 	and (0xc1f0:16), 191
-	orddm16 0xc1f0, xhl
+	or (0xc1f0:16), hl
 	ret
 
 DSPCfg_ScaleFactor_Dispatch:
@@ -5289,7 +5289,7 @@ AudioModeChange_Handler:
 	ld (0xc2bc:16), 255
 	ld (0xc200:16), 255
 	ld (0xc201:16), 255
-	ordi16 0xc59c, 257
+	orw (0xc59c:16), 257
 	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
@@ -5331,7 +5331,7 @@ AudioSubsystem_Callback:
 	ld (0xc2bc:16), 255
 	ld (0xc200:16), 255
 	ld (0xc201:16), 255
-	ordi16 0xc59c, 257
+	orw (0xc59c:16), 257
 	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
@@ -5375,7 +5375,7 @@ AudioDispatch_ClearAccFlags:
 	jr AudioDispatch_CheckStereoMode
 
 AudioDispatch_SetAccMode:
-	ordi16 0xc596, 512
+	orw (0xc596:16), 512
 	call AccAutoPlay_PeriodicCheck
 	ld wa, (0xc596:16)
 	and wa, 0x7
@@ -5399,7 +5399,7 @@ AudioDispatch_ClearVoiceFlags:
 	ld (0xc1fe:16), 0
 
 AudioDispatch_SetBusyFlag:
-	ordi16 0xc59c, 1
+	orw (0xc59c:16), 1
 
 ; Audio voice callback dispatch
 AudioVoice_Callback:
@@ -5422,8 +5422,8 @@ AudioVoice_SkipToDispatch:
 AudioMode_SetStereoFlags:
 	bit 0, (0xfc69:16)
 	ret z
-	ordi16 0xc596, 128
-	ordi16 0xc594, 4
+	orw (0xc596:16), 128
+	orw (0xc594:16), 4
 	calr AudioInit_ProcessModeChange
 	ret
 
@@ -5446,7 +5446,7 @@ AudioVoiceReset_Handler:
 	ld (0xc2bc:16), 255
 	ld (0xc200:16), 255
 	ld (0xc201:16), 255
-	ordi16 0xc59c, 257
+	orw (0xc59c:16), 257
 	andw (0xc594:16), 0xfffd
 	ld a, (0x8d34:16)
 	extz wa
@@ -5470,7 +5470,7 @@ AudioMode_ConfigureExternal:
 	ld (0xc1fe:16), 0
 	cps a, 0
 	jr z, AudioMode_ConfigExternal_Off
-	ordi16 0xc594, 16
+	orw (0xc594:16), 16
 	jr AudioMode_ConfigExternal_Apply
 
 AudioMode_ConfigExternal_Off:
@@ -5487,7 +5487,7 @@ AudioMode_ConfigExternal_CheckBit1:
 AudioMode_ConfigExternal_CheckStereo:
 	bit 1, (0xfc67:16)
 	jr z, AudioMode_ConfigExternal_NoStereo
-	ordi16 0xc596, 32
+	orw (0xc596:16), 32
 	jr AudioMode_ConfigExternal_MergeFlags
 
 AudioMode_ConfigExternal_NoStereo:
@@ -5502,10 +5502,10 @@ AudioMode_ConfigExternal_MergeFlags:
 	and a, 0x2
 	ld c, a
 	add a, c
-	orddm8 0xc1fe, a
+	or (0xc1fe:16), a
 
 AudioMode_ConfigExternal_Apply:
-	ordi16 0xc594, 4
+	orw (0xc594:16), 4
 	jrl AudioInit_ProcessModeChange
 ; ============================================================================
 ; UIState_ProcessMidiEvent - Process an incoming MIDI event in UI state
@@ -5539,7 +5539,7 @@ UIState_ProcessMidiEvent:
 	ld a, e
 	and a, 0xff
 	ret z
-	ordi16 0xc594, 4
+	orw (0xc594:16), 4
 	ret
 
 UIStateEvt_PartRouting:
@@ -5564,7 +5564,7 @@ UIStateEvt_PartRouting:
 	sla a, 1
 	and_srib_im 0x07, 0xf0, 0xec, 0xf1
 	or_srib_mr A, 0x07, 0xf0, 0xec
-	ordi16 0xc594, 4
+	orw (0xc594:16), 4
 	ret
 
 UIStateEvt_VoiceAssign:
@@ -5599,8 +5599,8 @@ UIStateEvt_VoiceAssign_Reset:
 	ld (xwa), 0xff
 
 UIStateEvt_VoiceAssign_Notify:
-	ordi16 0xc59c, 2048
-	ordi16 0xc594, 4
+	orw (0xc59c:16), 2048
+	orw (0xc594:16), 4
 
 UIStateEvt_ToneChange:
 	bit 5, e
@@ -5641,8 +5641,8 @@ UIStateEvt_ToneChange_Set:
 	ld (0xc218:16), 22
 
 Tone_WriteEndMarker:
-	ordi16 0xc59c, 4
-	ordi16 0xc594, 4
+	orw (0xc59c:16), 4
+	orw (0xc594:16), 4
 
 UIStateEvt_DrumAssign:
 	bit 6, e
@@ -5680,8 +5680,8 @@ UIStateEvt_DrumAssign_Set:
 	ld (xde), a
 
 UIStateEvt_DrumAssign_Notify:
-	ordi16 0xc59c, 8
-	ordi16 0xc594, 4
+	orw (0xc59c:16), 8
+	orw (0xc594:16), 4
 	ret
 
 UIStateEvt_TransposeUpdate:
@@ -5716,7 +5716,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	stib_ind 0x07, 0xe4, 0xe0, 0x00
 
 UIStateEvt_TransposeUpdate_Apply:
-	ordi16 0xc594, 4
+	orw (0xc594:16), 4
 	ret
 
 UIStateEvt_ParamEdit_Data:
@@ -5997,7 +5997,7 @@ UIStateEvt_VolumeMixer_Data:
 	and	a, (0xfc3c:16)
 	jrl	nz, 8640
 	and	a, 3
-	orddm8	0xc1fe, a
+	or	(0xc1fe:16), a
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6036,7 +6036,7 @@ UIStateEvt_VolumeMixer_Data:
 	and	a, 2
 	ld	c, a
 	add	a, c
-	orddm8	0xc1fe, a
+	or	(0xc1fe:16), a
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6274,7 +6274,7 @@ UIStateEvt_PlayModeGuard_Data:
 	ret nz
 	bit	6, (0xc07e:16)
 	jr z, UIStateEvt_PlayModeGuard_ClearBit
-	ordi16	0xc596, 8192
+	orw	(0xc596:16), 8192
 	ret
 UIStateEvt_PlayModeGuard_ClearBit:
 	andw	(0xc596:16), 0xdfff
@@ -6479,10 +6479,10 @@ UIStateEvt_MuteToggle_Data:
 	ret	z
 	bit	0, (0xc07e:16)
 	jr	z, 8
-	ordi16	0xc594, 1
+	orw	(0xc594:16), 1
 	jr	6
 	andw	(0xc594:16), 0xfffe
-	ordi16	0xc594, 4
+	orw	(0xc594:16), 4
 	ret
 	ret
 

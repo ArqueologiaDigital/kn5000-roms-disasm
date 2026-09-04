@@ -10022,7 +10022,7 @@ AccChord_CheckUIStateExit:
 	.byte 0x00
 AccChord_CheckModeAndUpdate:
 	ld	a, (12920:16)
-	orda8	xbc, (12921)
+	or	a, (12921:16)
 	and	a, 63
 	jrl	z, 132	; -> 0xF5331C
 	ld	a, (12860:16)

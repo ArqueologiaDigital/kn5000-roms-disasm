@@ -1195,7 +1195,7 @@ Audio_CheckAndFlagChanges:
 	call GetDialEnableState
 	cp l, (0x8ec2:16)
 	jr z, .Lc_fc6934
-	ordi16 (0x8ea6), 0x0040
+	orw (0x8ea6:16), 0x0040
 	ld (0x8ec2:16), l
 AudioChange_CheckSelectionState:
 .Lc_fc6934:
@@ -1204,7 +1204,7 @@ AudioChange_CheckSelectionState:
 	ret Z
 	cps l, 2
 	jr nz, .Lc_fc6948
-	ordi16 (0x8ea8), 0x0004
+	orw (0x8ea8:16), 0x0004
 AudioChange_UpdatePreviousSelect:
 .Lc_fc6948:
 	cp (0x8ec4:16), 0x02
@@ -1212,7 +1212,7 @@ AudioChange_UpdatePreviousSelect:
 	andw (0x8ea8:16), 0xfffb
 AudioChange_SetChannelFlag:
 .Lc_fc6955:
-	ordi16 (0x8ea6), 0x0004
+	orw (0x8ea6:16), 0x0004
 	ld (0x8ec4:16), l
 	ret
 DispatchBitmaskHandlers:
@@ -4789,7 +4789,7 @@ VoiceParam_CompareAndUpdate:
 	ld A,(XSP)
 	cpl A
 	and A,(XHL)
-	orda8 a, (0x9094)
+	or a, (0x9094:16)
 	ld C,A
 	ld a, (0x9096:16)
 	cp C,A
@@ -4798,7 +4798,7 @@ VoiceParam_CompareAndUpdate:
 	ld (0x9096:16), c
 	ld (0x908d:16), c
 	ld A,(XSP)
-	orddm8 0x908e, a
+	or (0x908e:16), a
 .Lc_fc8ff3:
 	inc 2,XSP
 	ret

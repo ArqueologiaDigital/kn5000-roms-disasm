@@ -11256,7 +11256,7 @@ SeBitmap_EnvCurve5:
 	ldwio	146, 8983
 	halt
 	pop	xsp
-	ordm16_24	(0x0a1b1d), ix
+	or	(0x0a1b1d:24), ix
 	nop
 	.byte 0x1f
 	nop

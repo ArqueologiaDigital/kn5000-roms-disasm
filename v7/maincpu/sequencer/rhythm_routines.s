@@ -177,12 +177,12 @@ RhythmEvt_ProcessNote:
 	cp (0x3249:16), 0xf0
 	jr c, RhythmEvt_AlternateProcess
 	ld a, (0x327a:16)
-	orda8 a, (0x327b)
-	orda8 a, (0x327c)
-	orda8 a, (0x3276)
-	orda8 a, (0x3277)
-	orda8 a, (0x3278)
-	orda8 a, (0x3279)
+	or a, (0x327b:16)
+	or a, (0x327c:16)
+	or a, (0x3276:16)
+	or a, (0x3277:16)
+	or a, (0x3278:16)
+	or a, (0x3279:16)
 	and a, (0x3338:16)
 	jr nz, RhythmEvt_AlternateProcess
 	ld a, (0x3243:16)
@@ -367,8 +367,8 @@ Rhythm_CrossVoiceCorrect:
 	bit 1, (0x323b:16)
 	jr nz, .Lc_f54bfa
 	ld w, (0x327a:16)
-	orda8 w, (0x327b)
-	orda8 w, (0x327c)
+	or w, (0x327b:16)
+	or w, (0x327c:16)
 	and W,0x3f
 	jr nz, .Lc_f54c26
 	bit 5, (0x3257:16)
@@ -849,12 +849,12 @@ Rhythm_ValidateAndSend:
 	cp (0x3249:16), 0xf0
 	jr c, Rhythm_Validate_Mismatch
 	ld a, (0x327a:16)
-	orda8 a, (0x327b)
-	orda8 a, (0x327c)
-	orda8 a, (0x3276)
-	orda8 a, (0x3277)
-	orda8 a, (0x3278)
-	orda8 a, (0x3279)
+	or a, (0x327b:16)
+	or a, (0x327c:16)
+	or a, (0x3276:16)
+	or a, (0x3277:16)
+	or a, (0x3278:16)
+	or a, (0x3279:16)
 	and a, (0x3338:16)
 	jr nz, Rhythm_Validate_Mismatch
 	ld a, (0x3243:16)

@@ -1937,7 +1937,7 @@ BmDrEdit_CleanupCommon:
 
 	ld wa, (3407:16)
 
-	ordm16_24 (0xffec), xwa
+	or (0xffec:24), wa
 
 	ldw (3407:16), 0
 

@@ -115,7 +115,7 @@ BootSerial_ModeSwitch__not80:
 	calr	BootSerial_ResetAndIdent	; 0xc0: full reset + re-ident
 	jr	BootSerial_ModeSwitch__ret
 BootSerial_ModeSwitch__apply:
-	orddm8	0x0f64, a		; merge new mode into flags
+	or	(0x0f64:16), a		; merge new mode into flags
 	ld	xhl, 0x988a		; RX transfer-control block
 	ldw	(xhl - 4), 0		; head (0x9886) = 0
 	ldw	(xhl - 8), 0		; tail (0x9882) = 0

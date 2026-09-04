@@ -170,7 +170,7 @@ SndParam_SendDiskMenuEvents:
 	ld xbc, DiskWarning_ConfirmStrings_0xCBA
 	add xbc, xwa
 	ld xwa, (xbc)
-	ordm32_24 (0x02749a), xwa
+	or (0x02749a:24), xwa
 	ld xwa, (xbc)
 	and xwa, (0x02749e:24)
 	jr z, CtrlPanel_ProcessButtonPress
@@ -221,7 +221,7 @@ CtrlPanel_ProcessButtonPress:
 	ld xbc, DiskWarning_ConfirmStrings_0xCBA
 	add xbc, xwa
 	ld xwa, (xbc)
-	ordm32_24 (0x02749e), xwa
+	or (0x02749e:24), xwa
 	ld xwa, (xbc)
 	and xwa, (0x02749a:24)
 	jr z, CtrlPanel_DispatchCombinedState
@@ -328,7 +328,7 @@ CtrlPanel_EventType_A8:
 	lds32 xde, 0
 	call ApPostEvent
 	lds32 xwa, 1
-	ordm32_24 (0x027490), xwa
+	or (0x027490:24), xwa
 	jrl UIEvent_Epilogue
 
 CtrlPanel_A8_CheckRelease:

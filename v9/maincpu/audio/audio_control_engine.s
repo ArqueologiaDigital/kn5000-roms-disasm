@@ -2285,7 +2285,7 @@ MidiParam_DeltaDone:
 
 Audio_UpdateLEDsAndChannels:
 	calr Audio_InitChannelTimers
-	ordi16 0x8f42, 2
+	orw (0x8f42:16), 2
 	ret
 
 MIDI_ProcessChangedChannels:
@@ -2378,7 +2378,7 @@ Audio_CheckAndFlagChanges:
 	call GetDialEnableState
 	cp l, (0x8f5e:16)
 	jr z, AudioChange_CheckSelectionState
-	ordi16 0x8f42, 64
+	orw (0x8f42:16), 64
 	ld (0x8f5e:16), l
 
 AudioChange_CheckSelectionState:
@@ -2387,7 +2387,7 @@ AudioChange_CheckSelectionState:
 	ret z
 	cps l, 2
 	jr nz, AudioChange_UpdatePreviousSelect
-	ordi16 0x8f44, 4
+	orw (0x8f44:16), 4
 
 AudioChange_UpdatePreviousSelect:
 	cp (0x8f60:16), 2
@@ -2395,7 +2395,7 @@ AudioChange_UpdatePreviousSelect:
 	andw (0x8f44:16), 0xfffb
 
 AudioChange_SetChannelFlag:
-	ordi16 0x8f42, 4
+	orw (0x8f42:16), 4
 	ld (0x8f60:16), l
 	ret
 
@@ -2795,7 +2795,7 @@ SndParam_MaskShiftMerge_8F58:
 	and a, 0x07
 	sla	a, 4
 	and	(0x8f1c:16), 143
-	orddm8	0x8f1c, a
+	or	(0x8f1c:16), a
 	ret
 SndParam_DecrLookup_Via0300:
 	; --- Routine 4: FCD437(0x300), decrement+mask+lookup via FC7C23 (40 bytes) ---
@@ -3395,19 +3395,19 @@ CtrlPanel_SetIndicatorBit:
 	jr z, CtrlPanel_SetIndicator_Group2
 	cpib_erp 0xfb, 0
 	jr nz, CtrlPanel_PopRetFA
-	orddm16 0x8f3a, xhl
+	or (0x8f3a:16), hl
 	jr CtrlPanel_PopRetFA
 
 CtrlPanel_SetIndicator_Group2:
-	orddm16 0x8f3e, xhl
+	or (0x8f3e:16), hl
 	jr CtrlPanel_PopRetFA
 
 CtrlPanel_SetIndicator_Group3:
-	orddm16 0x8f42, xhl
+	or (0x8f42:16), hl
 	jr CtrlPanel_PopRetFA
 
 CtrlPanel_SetIndicator_Group4:
-	orddm16 0x8f46, xhl
+	or (0x8f46:16), hl
 
 CtrlPanel_PopRetFA:
 	popw_erp 0xfa
@@ -3429,19 +3429,19 @@ CtrlPanel_IndicatorDispatch:
 	jr z, CtrlPanel_DispIndicator_Group2
 	cpib_erp 0xfb, 0
 	jr nz, CtrlPanel_PopRetFA2
-	orddm16 0x8f3c, xhl
+	or (0x8f3c:16), hl
 	jr CtrlPanel_PopRetFA2
 
 CtrlPanel_DispIndicator_Group2:
-	orddm16 0x8f40, xhl
+	or (0x8f40:16), hl
 	jr CtrlPanel_PopRetFA2
 
 CtrlPanel_DispIndicator_Group3:
-	orddm16 0x8f44, xhl
+	or (0x8f44:16), hl
 	jr CtrlPanel_PopRetFA2
 
 CtrlPanel_DispIndicator_Group4:
-	orddm16 0x8f48, xhl
+	or (0x8f48:16), hl
 
 CtrlPanel_PopRetFA2:
 	popw_erp 0xfa
@@ -3464,17 +3464,17 @@ CtrlPanel_SetIndicatorLED:
 	cpib_erp 0xfb, 0
 	jr nz, MidiChOutState_Return
 	and (0x8f3c:16), wa
-	orddm16 0x8f3a, xhl
+	or (0x8f3a:16), hl
 	jr MidiChOutState_Return
 
 CtrlPanel_SetLED_Group2:
 	and (0x8f40:16), wa
-	orddm16 0x8f3e, xhl
+	or (0x8f3e:16), hl
 	jr MidiChOutState_Return
 
 CtrlPanel_SetLED_Group3:
 	and (0x8f44:16), wa
-	orddm16 0x8f42, xhl
+	or (0x8f42:16), hl
 
 MidiChOutState_Return:
 	popw_erp 0xfa
@@ -3545,7 +3545,7 @@ MidiChOut_DetectChanges:
 	xorda8 a, 0x347b
 	bit 2, a
 	ret z
-	ordi16 0x8f3e, 4
+	orw (0x8f3e:16), 4
 	ldmm8 0x347b, 1056
 	ret
 
@@ -3641,16 +3641,16 @@ UIState_SwitchOnDisplayMode:
 	jr z, UIState_Mode0or1
 	cp a, 0x10
 	ret nz
-	ordi16	0x8f3a, 107
+	orw	(0x8f3a:16), 107
 	ret
 UIState_Mode0or1:
-	ordi16	0x8f3a, 111
+	orw	(0x8f3a:16), 111
 	ret
 UIState_Mode3:
-	ordi16	0x8f42, 512
+	orw	(0x8f42:16), 512
 	ret
 UIState_Mode4:
-	ordi16	0x8f42, 0x8000
+	orw	(0x8f42:16), 0x8000
 	ret
 
 
@@ -3716,16 +3716,16 @@ UIState_SwitchForMidiFlags:
 	cps	a, 6
 	ret nz
 UIState_MidiMode6:
-	ordi16	0x8f42, 1024
+	orw	(0x8f42:16), 1024
 	ret
 UIState_MidiMode3F:
-	ordi16	0x8f42, 2048
+	orw	(0x8f42:16), 2048
 	ret
 UIState_MidiMode4:
-	ordi16	0x8f42, 2
+	orw	(0x8f42:16), 2
 	ret
 UIState_MidiMode14:
-	ordi16	0x8f42, 4096
+	orw	(0x8f42:16), 4096
 	ret
 UIState_NullReturn:
 	ret
@@ -6632,7 +6632,7 @@ SwbtWr_WriteParamBlock_Body:
 	ld a, (xhl)
 	xor a, c
 	and a, (xsp)
-	orddm8 0x912a, a
+	or (0x912a:16), a
 	mrib4 0x83, 0x19, 0x32, 0x91
 	mrib4 0x83, 0x19, 0x29, 0x91
 
@@ -6661,7 +6661,7 @@ VoiceParam_CompareAndUpdate:
 	ld a, (xsp)
 	cpl	a
 	.byte 0x83, 0xc1
-	orda8	a, 0x9130
+	or	a, (0x9130:16)
 	ld	c, a
 	ld	a, (0x9132:16)
 	cp	c, a
@@ -6670,7 +6670,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(0x9132:16), c
 	ld	(0x9129:16), c
 	ld	a, (xsp)
-	orddm8	0x912a, a
+	or	(0x912a:16), a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -6690,7 +6690,7 @@ VoiceParam_CompareAndUpdate:
 	ld a, (xsp)
 	cpl	a
 	.byte 0x83, 0xc1
-	orda8	a, 0x9130
+	or	a, (0x9130:16)
 	ld	c, a
 	ld	a, (0x9132:16)
 	cp	c, a
@@ -6699,7 +6699,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(0x9132:16), c
 	ld	(0x9129:16), c
 	ld	a, (xsp)
-	orddm8	0x912a, a
+	or	(0x912a:16), a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -6723,7 +6723,7 @@ VoiceParam_CompareAndUpdate:
 	cpl	c
 	ld	e, c
 	.byte 0x83, 0xc5
-	orda8	e, 0x9130
+	or	e, (0x9130:16)
 	ld	a, (0x9132:16)
 	cp	e, a
 	jr	nz, 2
@@ -6732,7 +6732,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(0x9132:16), e
 	ld	(0x9129:16), e
 	ld	a, (xsp)
-	orddm8	0x912a, a
+	or	(0x912a:16), a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -6753,7 +6753,7 @@ VoiceParam_CompareAndUpdate:
 	cpl	c
 	ld	e, c
 	.byte 0x83, 0xc5
-	orda8	e, 0x9130
+	or	e, (0x9130:16)
 	ld	a, (0x9132:16)
 	cp	e, a
 	jr	nz, 2
@@ -6762,7 +6762,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(0x9132:16), e
 	ld	(0x9129:16), e
 	ld	a, (xsp)
-	orddm8	0x912a, a
+	or	(0x912a:16), a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -6802,7 +6802,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(0x9132:16), e
 	ld	(0x9129:16), e
 	ld	a, (xsp)
-	orddm8	0x912a, a
+	or	(0x912a:16), a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -6830,7 +6830,7 @@ VoiceParam_CompareAndUpdate:
 	ld	(0x9132:16), a
 	ld	(0x9129:16), a
 	ld	a, (xsp)
-	orddm8	0x912a, a
+	or	(0x912a:16), a
 	inc	2, xsp
 	ret
 
@@ -9588,7 +9588,7 @@ MidiVoice_DataBlockHandler:
 	swi	5
 	dec	6, d
 	ex_ff
-	orddm8	0x90e4, a
+	or	(0x90e4:16), a
 	.byte 0xc1, 0xe4, 0x90
 	push	xiz
 	ld_sd8b	w, 149

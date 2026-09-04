@@ -1960,7 +1960,7 @@ BmDrEdit_CleanupCommon:
 	res 2, (0x28a7:16)
 	ld (0x295c:16), 0
 	ld wa, (3407:16)
-	ordm16_24 (0xffec), xwa
+	or (0xffec:24), wa
 	ldw (3407:16), 0
 	ldw (3409:16), 0
 	ldmm16 9832, 0x2744

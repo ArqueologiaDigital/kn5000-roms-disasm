@@ -32168,7 +32168,7 @@ sub_F11C30:		; <- T_F434A0
 	and	(xwa), h	; F12143  and (XWA),H
 	ld	xbc, (xiz-10)	; F12145  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)	; F12148  ld A,(XBC)
-	orda8	a, (10139)	; F1214A  or A,(0x279b)
+	or	a, (10139:16)	; F1214A  or A,(0x279b)
 	ld	(xbc), a	; F1214E  ld (XBC),A
 	ld	c, (xix+2)	; F12150  ld C,(XIX+0x02)
 	pushw	bc	; F12153  push BC
@@ -104719,7 +104719,7 @@ sub_F53E04:		; <- T_F42E64
 	and	c, 15	; F53EC2  and C,0x0f
 	and	c, 15	; F53EC5  and C,0x0f
 	m_and_mi8 MB16, 0x2895, 0xf0	; F53EC8  and (0x2895),0xf0
-	orddm8	(10389), c	; F53ECD  or (0x2895),C
+	or	(10389:16), c	; F53ECD  or (0x2895),C
 	ld	c, (xix+6)	; F53ED1  ld C,(XIX+0x06)
 	ld	(10386:16), c	; F53ED4  ld (0x2892),C
 	m_cp_mi8 MB16, 0x207c, 0xa3	; F53ED8  cp (0x207c),0xa3
@@ -104744,20 +104744,20 @@ sub_F53E04:		; <- T_F42E64
 	and	c, 15	; F53F14  and C,0x0f
 	and	c, 15	; F53F17  and C,0x0f
 	m_and_mi8 MB16, 0x2896, 0xf0	; F53F1A  and (0x2896),0xf0
-	orddm8	(10390), c	; F53F1F  or (0x2896),C
+	or	(10390:16), c	; F53F1F  or (0x2896),C
 	ld	c, (xix+6)	; F53F23  ld C,(XIX+0x06)
 	srl	c, 4	; F53F26  srl 0x04,C
 	and	c, 15	; F53F29  and C,0x0f
 	sll	c, 4	; F53F2C  sll 0x04,C
 	and	c, 240	; F53F2F  and C,0xf0
 	m_and_mi8 MB16, 0x2894, 0x0f	; F53F32  and (0x2894),0x0f
-	orddm8	(10388), c	; F53F37  or (0x2894),C
+	or	(10388:16), c	; F53F37  or (0x2894),C
 	ld	c, (xix+6)	; F53F3B  ld C,(XIX+0x06)
 	and	c, 15	; F53F3E  and C,0x0f
 	sll	c, 4	; F53F41  sll 0x04,C
 	and	c, 240	; F53F44  and C,0xf0
 	m_and_mi8 MB16, 0x2893, 0x0f	; F53F47  and (0x2893),0x0f
-	orddm8	(10387), c	; F53F4C  or (0x2893),C
+	or	(10387:16), c	; F53F4C  or (0x2893),C
 	m_cp_mi8 MB16, 0x207c, 0xa3	; F53F50  cp (0x207c),0xa3
 	jr	nz, 57	; F53F55  jr NZ,0xf53f90
 	lda	xbc, (16071363:24)	; F53F57  lda XBC,0xf53ac3
@@ -104792,18 +104792,18 @@ sub_F53E04:		; <- T_F42E64
 	sll	c, 4	; F53FAD  sll 0x04,C
 	and	c, 240	; F53FB0  and C,0xf0
 	m_and_mi8 MB16, 0x2895, 0x0f	; F53FB3  and (0x2895),0x0f
-	orddm8	(10389), c	; F53FB8  or (0x2895),C
+	or	(10389:16), c	; F53FB8  or (0x2895),C
 	ld	c, (xix+6)	; F53FBC  ld C,(XIX+0x06)
 	srl	c, 4	; F53FBF  srl 0x04,C
 	and	c, 15	; F53FC2  and C,0x0f
 	and	c, 15	; F53FC5  and C,0x0f
 	m_and_mi8 MB16, 0x2894, 0xf0	; F53FC8  and (0x2894),0xf0
-	orddm8	(10388), c	; F53FCD  or (0x2894),C
+	or	(10388:16), c	; F53FCD  or (0x2894),C
 	ld	c, (xix+6)	; F53FD1  ld C,(XIX+0x06)
 	and	c, 15	; F53FD4  and C,0x0f
 	and	c, 15	; F53FD7  and C,0x0f
 	m_and_mi8 MB16, 0x2893, 0xf0	; F53FDA  and (0x2893),0xf0
-	orddm8	(10387), c	; F53FDF  or (0x2893),C
+	or	(10387:16), c	; F53FDF  or (0x2893),C
 	m_cp_mi8 MB16, 0x207c, 0xa3	; F53FE3  cp (0x207c),0xa3
 	jr	nz, 101	; F53FE8  jr NZ,0xf5404f
 	lda	xbc, (16071104:24)	; F53FEA  lda XBC,0xf539c0
@@ -130778,7 +130778,7 @@ sub_F63F90:
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F640D6  ld A,(XDE+IY)
 	pop	xde	; F640DB  pop XDE
 	and	a, 127	; F640DC  and A,0x7f
-	orda8	a, (3401)	; F640DF  or A,(0x0d49)
+	or	a, (3401:16)	; F640DF  or A,(0x0d49)
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F640E3  ld RL3,A
 	and	a, 252	; F640E6  and A,0xfc
 	m_rd_ld_rrx RBX, 0x3C, r1	; F640E9  ld A,RL3
@@ -161528,7 +161528,7 @@ sub_F73664:
 	ldb	a, 160	; F736F9  ld A,0xa0
 	jr	2	; F736FB  jr T,0xf736ff
 	ldb	a, 144	; F736FD  ld A,0x90
-	orda8	a, (4298)	; F736FF  or A,(0x10ca)
+	or	a, (4298:16)	; F736FF  or A,(0x10ca)
 	pushw	wa	; F73703  push WA
 	calr	288	; F73704  calr 0xf73827
 	popw	wa	; F73707  pop WA

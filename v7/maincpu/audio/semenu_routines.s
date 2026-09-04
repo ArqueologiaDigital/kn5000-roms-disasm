@@ -1115,7 +1115,7 @@ SeMenu_PartMask_Data:
 	cpl	a
 	and	(1630:16), a
 	jr	4
-	orddm8	1630, l
+	or	(1630:16), l
 	.byte 0xbf
 	push	sr
 	push_a
@@ -5674,7 +5674,7 @@ SeMenu_SetEditEnable_Clear:
 	ret
 
 SeMenu_OrPartConfig:
-	ordm8_24 (0x0205f2), a
+	or (0x0205f2:24), a
 	ret
 
 SeMenu_OrPartConfig_Data:
