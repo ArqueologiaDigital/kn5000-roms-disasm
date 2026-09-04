@@ -732,6 +732,24 @@ def cmd_src00():
     print("      %d of %d words carry the code, and the HEAD WRITE w%d is one"
           " of them." % (len(s00), len(words), head_write_iw()))
 
+    #  ⚠ WHICH `coef' IS ON TRIAL.  `upd6383.cpp' has THREE forms of 145's
+    #  reading: mask bit 57 = `coef' on EVERY SRC 0x00 word (146 measured it
+    #  railing unit 1, 98.9 % at full scale), bit 58 = only on a
+    #  coefficient-consuming word, bit 59 = only when f98 == 1 as well.  The
+    #  menu entry swept below is the GLOBAL form, bit 57's shape.  Print, from
+    #  the program itself, whether the two GATED forms are even distinguishable
+    #  here -- if no SRC 0x00 word in a09 satisfies their predicate they fall
+    #  back to mem[ptr] and this criterion is BLIND to them (rule 15).
+    cc = [i for i in s00 if DIS.coeff_consumer(words[i])]
+    f98 = [i for i in cc if ((DIS.hi12(words[i]) >> 8) & 3) == 1]
+    print("      ⚠ of those %d: %d are coefficient consumers (mask bit 58's"
+          " predicate)\n        and %d of THOSE have f98 == 1 (bit 59's)."
+          % (len(s00), len(cc), len(f98)))
+    print("        ⇒ the `coef' row below is the GLOBAL form (bit 57).  The two"
+          " GATED forms\n          are %s here."
+          % ("IDENTICAL to `mem' and therefore INVISIBLE to this criterion"
+             if not cc else "distinguishable at w%s" % cc))
+
     #  --- 2. THE ADDRESSING CONTROL: the walk must not depend on the reading ---
     print("\n   ★ CONTROL -- the pointer walk must be reading-INVARIANT, or the"
           "\n     sweep below is comparing different address maps:")
