@@ -14,11 +14,25 @@ stopped. Everything below remains valid; nothing here is superseded by the park.
 - The scratchpad (`/tmp`, a **tmpfs — lost on reboot**) is mirrored to
   `~/compartilhado/KN7000/tmp-dir/`. **Refresh that mirror before any reboot.**
 
-**The single next action when this resumes** — `BUILD-LANE-QUEUE.md` item 0, the unanchored
-`SRC`/`ACTION` census. §231 measured that the **routing guard blocks 1139 words, 60.6 % of everything
-undecoded**, against **106** for the entire operation field; and that population is **the same set of
-codes** as §229's fabricated-zero census (28.492 % of the output stage's operands). Census first, no
-reading — a constant index *closes* a code.
+**⇒ ITEM 0 IS CONSUMED BY §232 (2026-09-04), AND IT REFUTED THE SENTENCE THAT USED TO STAND HERE.**
+The unanchored `SRC`/`ACTION` census ran. Of **33** unanchored codes: **16 CLOSED** by a
+measured-constant index (dead end 4), **8 OPEN**, **9 NOT RESIDENT** (⚠ *unmeasured*, not
+measured-constant). ⛔⛔ **The claim that the routing guard's population is *"the same set of codes"*
+as §229's fabricated-zero census is HALF WRONG**: §229's six are a **SUBSET**, **173 corpus words**,
+worth **ZERO** of the guard's 754 — and all six are now closed. **The silence population and the
+coverage population overlap in NAME and are DISJOINT IN VALUE.**
+
+**The single next action when this resumes** — **`SRC 0x00`, ALONE** (§232 §7.2). It is **+348
+corpus words = 46 % of the entire routing ceiling** (`1178 → 1932`, `38.53 % → 63.20 %`), more than
+3× the whole operation field; its reading `mem[ptr]` is graded *"1 of 6 enumerated, no independent
+support"* by `upd6383.cpp` itself; and the census names **three sites where its index varies**
+(`iw13`/`iw14`/`iw36`), so rule 4 does not block it. **Corpus discrimination FIRST** (rule 13).
+⚠ It is **605 of 648 paired with `ACTION 0x00`**, the adder's bus term, so **PARAMETRIC EQ's
+0.198 dB and SINGLE DELAY's `+0.02149296` are LIVE falsifiers there** and must both be run.
+⚠⚠ **`KN5000_ENABLE_DSP1` NOW DEFAULTS TO 0**: `build.sh` alone produces a binary with **no uPD6383
+device at all** and an empty `upd6383:` log section — indistinguishable from "the instrument was
+never reached". The DSP build is `make ... CPPFLAGS=-DKN5000_ENABLE_DSP1=1`, which `build.sh` does
+not pass.
 
 **State of the machine:** the emulated chip is **silent**; the one silence criterion plus
 `m_rf[0x8D] = 0x009B26` are the checks to quote (§230: the other five are the same measurement).

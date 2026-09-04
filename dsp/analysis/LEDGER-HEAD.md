@@ -43,10 +43,22 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 > ⇒ ★★★★★ **Solving `f31 ∈ {3,6,7}` COMPLETELY moves coverage `1178 → 1186` = `38.53 % → 38.80 %`
 > — EIGHT WORDS.** 41 of the 53 are refused earlier by the ROUTING guard, 4 by CLASS. `f31 4/5`
 > (§133's alias) is worth 23. **The entire operation field, all codes, is worth at most 106.**
-> ⇒ ★★ **And the routing guard's population is the SAME ONE §229's fabricated-zero census counts**
-> (`SRC 0x01/05/06/0A/13/1C`, 28.492 % of the epilogue's operands). Two instruments, arrived at
-> independently, name **one** bottleneck. ⛔ Rule 4 still governs: **census the unanchored codes'
-> INDEX RANGES first**; a constant index CLOSES a code rather than opening it.
+> ⛔⛔ **AND THE SENTENCE THAT USED TO FOLLOW HERE IS REFUTED — §232, 2026-09-04.** It read
+> *"the routing guard's population is the SAME ONE §229's fabricated-zero census counts"*, and it
+> steered this queue for a month. **It is a SUBSET, and it is the half with no coverage in it.**
+> §229's six codes `SRC 0x01/05/06/0A/13/1C` are **173 corpus words**, and anchoring **all six
+> together** is worth **0 NEWLY DECODED WORDS** (86 are refused earlier by CLASS; of the 87 that
+> reach the guard, 41 keep an unanchored `ACT 0x08` and the other 46 walk into GUARD 7).
+> ⇒ **the silence population and the coverage population overlap in NAME and are DISJOINT IN
+> VALUE.** Reproduce: `python3 dsp/tools/routing_census.py`.
+> ★★★★★ **WHERE THE ROUTING PAYOFF ACTUALLY IS (§232):** the ceiling is `1178 → 1932` =
+> `38.53 % → 63.20 %`, **+754**, and **97 % of it sits in EIGHT codes** — `SRC 0x00` **+348**,
+> `ACT 0x0D` **+124**, `ACT 0x0E` **+110**, `SRC 0x11` **+49**, `ACT 0x0B` +19, `SRC 0x08` +10,
+> `ACT 0x08` +9, `SRC 0x0B` +7. ⚠ The top four are exactly the codes `upd6383.cpp` **already reads
+> SPECULATIVELY**, so "unanchored" there means *modelled on a guess*, not unmodelled.
+> ⛔ **Rule 4 still governs, and §232 applied it: of 33 unanchored codes, 16 are CLOSED by a
+> measured-constant index (worth 13 words), 8 are OPEN (worth 668), 9 are NOT RESIDENT in the
+> vehicle and are UNMEASURED, not measured-constant.**
 >
 > ⛔ **`f31 ∈ {3,6,7}` IS DEAD END 44** — off by one, a spandrel of base `0x020`, and measured
 > **not load-bearing** (discarded product `min 0 max 0 nz 0` at all four sites, 3 611 996

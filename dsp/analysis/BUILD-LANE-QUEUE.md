@@ -37,9 +37,52 @@ total and typically 8.** ⇒ ★ **The lever is the ROUTING guard**, and it is t
 §229's fabricated-zero census counts. **File routing/anchoring work above operation-field work.**
 See **§231** and `LEDGER-HEAD.md` TIER 0a.
 
+**⇒ §232 CONSUMED item 0 — and corrected the sentence the re-pricing above rests on.** §229's six
+fabricated-zero SRC codes are a **SUBSET** of the routing guard's 33 unanchored codes, 173 of its
+words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant index (13 words);
+8 are OPEN and carry 668.** The ceiling is `1178 → 1932 = 38.53 % → 63.20 %`. See **§232**.
+
 ---
 
-## 0. ★★★★ THE UNANCHORED SRC/ACTION CENSUS — **READY, NOT STARTED, TOP OF THE QUEUE**
+## 0. ~~THE UNANCHORED SRC/ACTION CENSUS~~ — ✅ **CONSUMED by §232, 2026-09-04**
+
+> **DONE, and it corrected the premise it was filed on.** `dsp/tools/routing_census.py` (7 self-tests
+> against §231's whole published breakdown, by an INDEPENDENT guard mirror) + the device's
+> `§232 ROUTING CENSUS` (`upd6383.h rc_record`, two-sided control **PASS 2 of 2**, external control
+> **PASS 9 of 9**). Arm `data/A_232.log.gz`.
+> **VERDICT: of 33 unanchored codes — 16 CLOSED, 8 OPEN, 9 NOT RESIDENT.**
+> * **CLOSED** (constant index at every site, both buckets ⇒ dead end 4) `SRC 01 02 03 04 05 06 0A
+>   13 1C` + `ACT 01 03 04 08 0C 1A 1B` — **worth 13 corpus words.**
+> * **OPEN** `SRC 00 08 0B 11` + `ACT 0B 0D 0E 17` — **worth 668**, i.e. **97 % of the whole
+>   routing payoff sits in 8 codes**, four of which the device already reads SPECULATIVELY.
+> * **NOT RESIDENT** `SRC 0D 1B` + `ACT 02 05 06 11 16 1C 1D` — ⚠ **UNMEASURED, not
+>   measured-constant.**
+>
+> ⛔⛔ **AND THE PREMISE IS HALF WRONG.** This item, §231 §7.2, `LEDGER.md` TIER 0a and
+> `HANDOFF-NEXT.md` §1 all say the routing guard's population *"is the SAME set of codes"* as §229's
+> fabricated-zero census. **It is a SUBSET, it is 173 of the guard's words, and it is worth ZERO of
+> its 754.** The silence population and the coverage population **overlap in name and are disjoint
+> in value**. ⇒ **item 4 of §232 §7.3**: correct the sentence in four files.
+>
+> ⚠ Falsifiers, all checked: `§S1` **4.924 %** — did **not** fall (§227's guard); `m_rf[0x8D] =
+> 0x009B26`; `§54` graded first (`626 920 → 626 920 silent / 0 loud, peak 0`); `§70`/`§211` as
+> **ONE ROW**, mean 0.0 span 0 both buckets. **The chip is still silent.**
+> ⚠⚠ **`KN5000_ENABLE_DSP1` NOW DEFAULTS TO 0** — `build.sh` alone yields a binary with **no
+> uPD6383 device at all** and an empty `upd6383:` log section, which is indistinguishable from
+> "the instrument was never reached". The DSP build is
+> `make ... CPPFLAGS=-DKN5000_ENABLE_DSP1=1`, which `build.sh` does not pass.
+>
+> **⇒ THE REPLACEMENT AT THE TOP OF THE QUEUE IS `SRC 0x00` ALONE** — see §232 §7.2. It is **+348
+> words, 46 % of the entire routing ceiling**, more than 3× the whole operation field; its reading
+> is graded *"1 of 6 enumerated, no independent support"* by the source itself; and the census names
+> **three sites where its index varies** (`iw13`/`iw14`/`iw36`), so rule 4 does not block it.
+> Corpus discrimination FIRST (rule 13). ⚠ Because it is 605-of-648 paired with `ACTION 0x00` —
+> the adder's bus term — **PARAMETRIC EQ's 0.198 dB and SINGLE DELAY's `+0.02149296` become live
+> falsifiers there** and must both be run.
+
+<details><summary>original entry</summary>
+
+### THE UNANCHORED SRC/ACTION CENSUS — **READY, NOT STARTED, TOP OF THE QUEUE**
 
 > **Filed by §231.** The single largest decode population in the corpus (**1139 words, 60.6 % of
 > everything undecoded**) and the single largest fabricated-operand population in the device
@@ -52,6 +95,8 @@ See **§231** and `LEDGER-HEAD.md` TIER 0a.
 > **Falsifiers:** `m_rf[0x8D] = 0x009B26`; `§S1`'s `4.924 %` must not **fall** (§227's guard);
 > `§54` graded first; `§70`/`§211` as **ONE ROW** (§230).
 > **Cost:** one build, one 30 s run on the §228 vehicle. Read-only, no default flip.
+
+</details>
 
 ---
 
