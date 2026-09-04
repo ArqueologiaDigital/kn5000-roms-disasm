@@ -18000,3 +18000,312 @@ source**; E, F, G, H, I, J, K **MEASURED**; §4's *"base `0x020` is a mode/contr
 **SPECULATIVE, unrun, and not implementable from this vehicle**; §7.2 **pre-registered, unrun**.
 ⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
 established it cannot see `upd6383.cpp` at all.
+
+## §232 — ★★★★★ THE UNANCHORED `SRC`/`ACTION` CENSUS: **16 CODES ARE CLOSED, 8 STAY OPEN, 9 ARE NOT RESIDENT** — AND §231's OWN FUSION OF THE TWO POPULATIONS IS **HALF WRONG**. §229's SIX FABRICATED-ZERO CODES ARE **173 CORPUS WORDS WORTH EXACTLY ZERO DECODE COVERAGE**, AND ALL SIX ARE **CLOSED BY A CONSTANT INDEX**. THE 754-WORD CEILING LIVES IN **FOUR CODES THE DEVICE ALREADY READS SPECULATIVELY** — `SRC 0x00` (+348), `ACT 0x0D` (+124), `ACT 0x0E` (+110), `SRC 0x11` (+49)
+
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-09-04**. Register head **§232**.
+Build lane. **NO DEFAULT BEHAVIOUR CHANGE. NO DECODE CHANGE. NO MASK BIT. NO NEW ENV GATE.**
+One read-only unconditional instrument + one read-only corpus tool. Source of the task:
+`BUILD-LANE-QUEUE.md` **item 0**, pre-registered by §231 §7.2.
+
+| arm | what | log |
+|---|---|---|
+| **STATIC** | `dsp/tools/routing_census.py` — the corpus, from the ROM, no build | — |
+| **A** | the `§232` ROUTING CENSUS, shipped build + instrument | `data/A_232.log.gz` |
+
+Vehicle unchanged from §228/§229/§231 (`coldnotes2.lua`, cold boot, isolated NVRAM and isolated
+`-cfg_directory` carrying `:DSPCFG value="3"`, triad C4/E4/G4 21.02–27.51 s, `-seconds_to_run 30`,
+`-log`, visible video, one run at a time, the §228 44 100 Hz clock). Lane verified clean
+(`git status --porcelain` empty in both repos) before the first edit.
+
+⚠⚠ **AND ONE THING ABOUT THE VEHICLE HAS CHANGED SINCE §231, THROUGH NO ACT OF THIS PASS.**
+`KN5000_ENABLE_DSP1` now **defaults to 0** in `kn5000.cpp` — the uPD6383 device is not
+instantiated at all — so `build.sh` alone produces a binary in which **`grep upd6383 error.log`
+returns nothing** and the census looks like it never ran. The DSP build is
+`make ... CPPFLAGS=-DKN5000_ENABLE_DSP1=1`, which `build.sh` does **not** pass. ★ **State this in
+every future brief: an empty `upd6383:` section is now the DEFAULT outcome, and it is
+indistinguishable from "the instrument was never reached".** (Standing rule 8, and a new instance
+of rule 11: the *build* is a measurement too, and it expired.)
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ★★★★★ **§231's ONE-BOTTLENECK CLAIM IS HALF WRONG, AND THE HALF THAT IS WRONG IS THE ONE THAT MATTERED.** §231 (and the queue, and `HANDOFF-NEXT.md` §1) say the routing guard's population *"is the SAME set of codes"* as §229's fabricated-zero census. It is a **SUBSET** — and, priced, it is the subset with **NO COVERAGE IN IT**. §229's six codes `{01,05,06,0A,13,1C}` carry **173 corpus words**, and anchoring **all six together** moves decode coverage by **0 words**. And the *reason* is printed rather than asserted: of the 173, **86 are refused earlier, by CLASS**; of the 87 that do reach the routing guard, **41 keep an unanchored `ACTION 0x08` beside them** and **the other 46 (`SRC 0x1C`) walk straight into GUARD 7**. ⇒ **the silence population and the coverage population overlap in NAME and are DISJOINT IN VALUE.** | **MEASURED**, from disk |
+| **B** | ★★★★★ **AND ALL SIX ARE NOW CLOSED, BY THE TEST THE QUEUE PRE-REGISTERED.** At every one of their nine resident sites, in **both** buckets, `m_dp`, `m_cursor`, `m_dsc` and the accumulator are all **degenerate**: `SRC 0x01@iw61`, `0x05@iw60`, `0x06@iw68`, `0x0A@iw78`, `0x13@iw99/108/140/149`, `0x1C@iw111`. Dead end 4 / rule 4 forbid implementing a consumer whose index is measured constant ⇒ **six codes closed, and `SRC 0x13`'s closure is now on the shipped default rather than on §162's private mask.** | **MEASURED** |
+| **C** | ★★★★★ **THE FULL DISPOSITION: 16 CLOSED, 8 OPEN, 9 NOT RESIDENT — of 33 unanchored codes.** **CLOSED** `SRC 01 02 03 04 05 06 0A 13 1C` + `ACT 01 03 04 08 0C 1A 1B`. **OPEN** `SRC 00 08 0B 11` + `ACT 0B 0D 0E 17`. **NOT RESIDENT** `SRC 0D 1B` + `ACT 02 05 06 11 16 1C 1D` — ⚠ **UNMEASURED, not measured-constant**; rule 4 forbids implementing them from here too, but for the other reason. | **MEASURED** |
+| **D** | ★★★★★ **AND THE DISPOSITION IS PRICED, WHICH IS WHAT DECIDES WHERE THE NEXT PASS GOES.** In corpus words newly decoded if the group were anchored: **CLOSED 16 codes → 13 words. OPEN 8 codes → 668 words. NOT RESIDENT 9 codes → 5 words.** ⇒ **97 % of the routing guard's whole payoff sits in EIGHT codes, and every one of them is OPEN** — an index genuinely varies at at least one site, so rule 4 does **not** forbid work on them. ⚠ **NOT ADDITIVE**: 76 of the 1139 routing-refused words carry an unanchored `SRC` *and* an unanchored `ACTION`, so anchoring either alone frees none of them. Read each figure as a per-group LOWER BOUND. | **MEASURED**, from disk |
+| **E** | ★★★★ **THE ROUTING GUARD'S CEILING IS `1178 → 1932 = 38.53 % → 63.20 %`, `+754` WORDS — AND ITS TOP FOUR CODES ARE ALREADY READ BY THE DEVICE.** Per-code price: `SRC 0x00` **+348**, `ACT 0x0D` **+124**, `ACT 0x0E` **+110**, `SRC 0x11` **+49**, `ACT 0x0B` **+19**, `SRC 0x08` **+10**, `ACT 0x08` **+9**, `SRC 0x0B` **+7**; everything else ≤ 4. ⚠ **385 of the 1139 do NOT reach DECODED even with all routing anchored** — a later guard takes them. ⇒ ★★ **The four biggest are exactly the codes `upd6383.cpp` already resolves SPECULATIVELY** (`SRC 0x00 = mem[ptr]`, `SRC 0x11 = ACCB`, `ACT 0x0D`/`0x0E` = §121/§133's enumerated selector). **The device models them; the DISASSEMBLER's anchored set does not.** So the 754 words are not *undecoded* in the same sense the fabricated-zero six are: they are **UNANCHORED, i.e. modelled on a guess**. | **MEASURED**, from disk + source |
+| **F** | ★★★★ **RULE 20, TWO-SIDED, IN THE DEVICE: PASS 2 of 2, AND IT COULD HAVE FAILED.** The census keeps two ANCHORED reference rows on the same hook and the same buckets: `SRC 0x07` (`n = 46 955 948`, `dp 0..255`, `cur 0..177`) and `SRC 0x10` (`n = 44 246 951`, `dp 0..210`, `cur 0..177`). **Both MOVE.** Had they come out degenerate the census would not be reading the pointers at all and every `CLOSED` above would be void — which is precisely the failure mode a census that reports "constant" cannot otherwise distinguish from a broken probe. | **MEASURED** |
+| **G** | ★★★★ **RULE 20, EXTERNAL: PASS 9 of 9, AGAINST FOUR INSTRUMENTS THAT DO NOT KNOW THIS ONE EXISTS.** §229's fabricated-zero census named its six codes' sites from the `default:` arm of the SRC switch; this census hooks at `m_last_l` instead and reproduces **6 of 6 site sets exactly**. §231 item G said *"`w78`'s ACTION is `0x07`, not `0x00`"* — this census independently reports `SRC 0x0A@iw78 consumer = store-mem`. §224's ladder literal `6 039 795 = C-RAM[0x9B]² >> 6 = 0.720 × FS` reappears as `SRC 0x08@iw33 acc 6039795..6039795`, degenerate in both buckets. §162's `acc 0..0` at the class-6 word reproduces at **all four** class-6 sites. | **MEASURED** |
+| **H** | ⚠⚠ **A POOLED INDEX RANGE IS INDISTINGUISHABLE FROM A VARYING ONE, AND THIS PASS ALMOST PUBLISHED THAT ERROR.** The first roll-up pooled a code's sites and printed `SRC 0x13: dp 80..83 | cur 3..16` — **OPEN**, contradicting §162. Per site it is `dp 80/81/82/83` and `cur 3/5/14/16`, every one degenerate: **CLOSED**. Four sites each holding a *different* constant pool into a range that reads exactly like a live one. ⇒ **standing rule 10, fifth occurrence, and the constructive form: a per-code verdict must be computed PER SITE and then rolled up, never from a pooled range.** | **FORCED** |
+| **I** | ★ **THE PASS IS PROVABLY INERT ON EVERY PUBLISHED CONTROL.** `§S1` quiet **4.924 %** (`6 589 975 / 133 826 616`) — **it did not fall**, §227's guard holds; loud **4.923 %**. `m_rf[0x8D] = 0x009B26 = 39 718` ✔. `§54` `626 920 → 626 920 SILENT / 0 LOUD (peak 0)`, graded first. `§70 ACCA@w73` and `§211 ACCB@w78` **mean 0.0 span 0, both buckets — ONE ROW** (§230). `§41 unit0 0x400000 / unit1 0x178D0B`. **The emulated chip is still SILENT.** | **MEASURED** |
+| **J** | ⚠ **THE BUCKET SPLIT MOVED AND THE TOTAL DID NOT — DO NOT READ THE SPLIT AS A RESULT.** §231 arm A: `quiet 614 548 / loud 288 451`. This run: `quiet 506 919 / loud 396 080`. **Both total 902 999 exactly**, and `§54`'s pair totals `1 022 999` in both. The split is the note's *release tail* landing differently on a fresh NVRAM, not a property of any machine (standing rule 5: an absolute event count is not a falsifier across runs; pre-register the RELATION). **Compare ratios and totals, never the per-bucket counts.** | **MEASURED** |
+
+**VERDICT — `ONE INSTRUMENT AND ONE TOOL SHIP; 16 CODES CLOSE; NO DECODE MOVES; NO DEFAULT FLIPS; NO AUDIO CLAIM.`**
+★★ **Item 0 is CONSUMED.** The census it asked for exists, is reproducible, and its answer is
+that **the population §231 pointed at is two populations**: one that is closed and worth nothing,
+and one that is open and worth 668 words. ⛔ **THE BLOCKER IS STILL *WHAT THE COEFFICIENT BASE
+`0x90` MEANS*** (§227, queue item 12).
+
+---
+
+## 1. RULE 20 — THE SELF-TESTS AND CONTROLS, PRINTED FIRST
+
+### 1.1 The static tool, against §231's whole published breakdown — by an INDEPENDENT mirror
+
+```
+   §232  RULE 20 SELF-TESTS  (an independent mirror of alu_guard_fail(), NOT dsp_disasm's)
+      corpus words                                   3057   published   3057   PASS
+      guard DECODED                                  1178   published   1178   PASS
+      guard ROUTING (SRC-or-ACTION not anchored)     1139   published   1139   PASS
+      guard CLASS                                     546   published    546   PASS
+      guard OPERATION                                 106   published    106   PASS
+      guard FORMAT (C-format)                          68   published     68   PASS
+      guard GUARD 7                                    20   published     20   PASS
+      SELF-TEST TOTAL                                                    PASS 7 of 7
+```
+
+★ `routing_census.py` re-implements the conjunction **in its own file, with its own anchored-code
+constants**, precisely so that agreement is evidence. Importing `dsp_disasm.guard_fail` — the path
+§231's numbers came through — would have made all seven true by construction, which rule 20 names
+as *not a self-test*.
+
+### 1.2 The device instrument, two-sided, on ANCHORED codes whose indices are KNOWN to move
+
+```
+   §232 ROUTING CENSUS -- RULE 20 CONTROL
+     ANCHORED SRC 0x07  n=46955948  dp 0..255  cur 0..177   ✔ the indices MOVE
+     ANCHORED SRC 0x10  n=44246951  dp 0..210  cur 0..177   ✔ the indices MOVE
+   CONTROL: PASS 2 of 2
+```
+
+★★ **This is the control a "constant index" census needs and nothing else supplies.** A probe that
+reads the wrong variable, or reads it after the post-increment, or never fires, reports
+`min == max` on *everything* — and "every code is closed" would look like a triumph. The reference
+rows are the only rows that can tell that apart, and they are on the **same hook, same buckets,
+same run**.
+
+### 1.3 External — four other instruments' answers, re-derived from this census's rows
+
+```
+   §229 fabricated-zero sites, SRC 0x01   want iw61                got iw61                PASS
+   §229 fabricated-zero sites, SRC 0x05   want iw60                got iw60                PASS
+   §229 fabricated-zero sites, SRC 0x06   want iw68                got iw68                PASS
+   §229 fabricated-zero sites, SRC 0x0A   want iw78                got iw78                PASS
+   §229 fabricated-zero sites, SRC 0x13   want iw99,108,140,149    got iw99,108,140,149    PASS
+   §229 fabricated-zero sites, SRC 0x1C   want iw111               got iw111               PASS
+   §231 item G: SRC 0x0A@iw78 consumer    want store-mem           got store-mem           PASS
+   §224 ladder: SRC 0x08@iw33 acc         want 6039795..6039795    got 6039795..6039795    PASS
+   §162: SRC 0x13 acc at every class-6 site  want 0..0             got 0..0                PASS
+   EXTERNAL CONTROL: PASS 9 of 9
+```
+
+---
+
+## 2. THE MEASUREMENT — THE VERDICT TABLE
+
+```
+   §232 ROUTING CENSUS, armed at frame 420 000 (§S1/§104/§231 population -- NOT §54's)
+   quiet 506 919 / loud 396 080 per site   (146 of 768 slots used, 0 OVERFLOW)
+
+   CLOSED -- every site's index degenerate in BOTH buckets (dead end 4 / rule 4)
+     SRC 0x01  iw61                  dp 0   cur 177  dsc 37  acc 39718      consumer DROPPED
+     SRC 0x02  iw72                  dp 0   cur 144  dsc 38  acc 0          consumer store-mem
+     SRC 0x03  iw70                  dp 0   cur 144  dsc 38  acc 0          consumer store-mem
+     SRC 0x04  iw66                  dp 0   cur 177  dsc 38  acc 0          consumer store-mem
+     SRC 0x05  iw60                  dp 0   cur 177  dsc 37  acc 39718      consumer DROPPED
+     SRC 0x06  iw68                  dp 0   cur 177  dsc 38  acc 0          consumer DROPPED
+     SRC 0x0A  iw78                  dp 0   cur 144  dsc 38  acc 0          consumer store-mem
+     SRC 0x13  iw99/108/140/149      dp 80/81/82/83  cur 3/5/14/16  acc 0   consumer tempA
+     SRC 0x1C  iw111                 dp 5   cur 8    dsc 37  acc 0          consumer adder-bus
+     ACT 0x01  iw65                  dp 0   cur 177  dsc 38  acc 39718      consumer tempA
+     ACT 0x03  iw63                  dp 0   cur 177  dsc 38  acc 39718      consumer DROPPED
+     ACT 0x04  iw73                  dp 0   cur 144  dsc 38  acc 0          consumer DROPPED
+     ACT 0x08  iw5/7/99/108/140/149  dp 3/4/80/81/82/83                     consumer tempA
+     ACT 0x0C  iw45/53               dp 5/252  cur 112/80                   consumer tempA
+     ACT 0x1A  iw41/211/259/301      dp 5/208/148/139                       consumer tempB
+     ACT 0x1B  iw60/61/68            dp 0   cur 177                         consumer DROPPED
+
+   OPEN -- an index genuinely VARIES at >= 1 site
+     SRC 0x00  39 sites, varies at iw13/14/36     price +348   DROPPED,adder-bus,store-mem
+     ACT 0x0D   8 sites, varies at iw19           price +124   sel0D/0E
+     ACT 0x0E  14 sites, varies at iw21           price +110   sel0D/0E
+     SRC 0x11   8 sites, varies at iw11/16/17/19/92  price +49 DROPPED,sel0D/0E,store-mem,tempA
+     ACT 0x0B  17 sites, varies at iw26           price  +19   DROPPED
+     SRC 0x08   9 sites, varies at iw30/32/91     price  +10   adder-bus,sel0D/0E,store,tA,tB
+     SRC 0x0B  20 sites, varies at iw12/25        price   +7   DROPPED,store-mem,tempB
+     ACT 0x17   1 site,  varies at iw10           price   +1   DROPPED
+
+   NOT RESIDENT -- UNMEASURED, not measured-constant
+     SRC 0x0D 0x1B | ACT 0x02 0x05 0x06 0x11 0x16 0x1C 0x1D          price total +5
+```
+
+⚠ **`addr8` is printed per row and is CONSTANT BY CONSTRUCTION** at a fixed `iw` — it is a field of
+the word. It must never be counted as evidence that an index is constant (rule 8: a column that
+cannot vary is not a measurement). The four candidates that *can* vary are `m_dp`, `m_cursor`,
+`m_dsc` and the accumulator.
+
+⚠ **The accumulator is taken as `sext(m_acc,44) >> ACC_SHIFT`, NOT through `acc_to_datum()`** —
+that function feeds `§S1`'s clip counter, and a read-only census must not move the falsifier it is
+graded against.
+
+---
+
+## 3. THE PRICE — WHERE THE ROUTING GUARD'S 754 WORDS ACTUALLY ARE
+
+```
+   BASELINE decoded                       1178 / 3057 = 38.53 %
+   CEILING, every SRC code anchored       1593 / 3057 = 52.11 %   (+415)
+   CEILING, every ACTION code anchored    1449 / 3057 = 47.40 %   (+271)
+   CEILING, ALL routing anchored          1932 / 3057 = 63.20 %   (+754)
+   ⚠ 385 of the 1139 routing-refused words do NOT reach DECODED even then.
+   ⚠ the WHOLE operation field, all eight codes, is worth at most 106 (§231).
+
+   THE ROUTING POPULATION, BY WHICH FIELD IS UNANCHORED
+     SRC unanchored only     694 | ACTION unanchored only 369 | BOTH 76
+     ⇒ the per-code payoffs are NOT ADDITIVE: for those 76, anchoring one frees nothing.
+
+   §229's SIX FABRICATED-ZERO CODES {01,05,06,0A,13,1C} AS A GROUP
+     173 corpus words -- anchoring ALL SIX together is worth 0 NEWLY DECODED WORDS.
+     before : CLASS 86 | ROUTING 87
+     after  : CLASS 86 | ROUTING 41 (ACT 0x08 still unanchored) | GUARD 7 46 (SRC 0x1C)
+```
+
+⇒ ★★★★★ **The sentence to correct wherever it is quoted** — `LEDGER.md` TIER 0a, `HANDOFF-NEXT.md`
+§1, `BUILD-LANE-QUEUE.md` item 0 and §231 §7.2 all say the routing guard's population *"is the
+same set of codes"* as §229's fabricated-zero census. **Correct form: §229's six are a SUBSET of
+the routing guard's 33, they are 173 of its words, and they are worth ZERO of its 754.** The two
+instruments do not name one bottleneck; they name two, and only one of them is about coverage.
+
+---
+
+## 4. WHAT THE OPEN CODES ARE, AND WHY "OPEN" IS NOT "READY"
+
+The four codes carrying 631 of the 668 open words are **already read by `upd6383.cpp`** — as
+SPECULATIVE readings, each an enumerated parameter rather than a decode:
+
+* **`SRC 0x00 = mem[ptr]`** — the source's own comment grades it *"⛔ 1 of 6 enumerated, no
+  independent support"*. 648 corpus words, 39 resident sites, price **+348**.
+* **`SRC 0x11 = ACCB`** (§27; §113's `mem[ptr]` rival is mask bit 18, tested and recorded in §168).
+  167 words, 8 resident sites, price **+49**.
+* **`ACT 0x0D` / `ACT 0x0E`** — §121/§133's **3-bit destination selector**, seven enumerated
+  destinations, `m_bx_sel0d` **FROZEN at 1 globally** because the regression from moving it is
+  §221's −59 dB DC (rule 19). 203 + 227 words, price **+124** and **+110**.
+
+⇒ **So "OPEN" here means *modelled on a guess*, not *unmodelled*.** Widening `alu_decoded()` to
+admit them would not add arithmetic the device does not already perform — it would promote four
+guesses to decodes, which is the opposite of what this project's grading requires. **The work these
+codes need is EVIDENCE, not a guard change**, and the census says which sites can supply it: the
+ones where the index varies (`SRC 0x00` at `iw13/14/36`, `ACT 0x0D` at `iw19`, `ACT 0x0E` at
+`iw21`, `SRC 0x11` at `iw11/16/17/19/92`).
+
+★ And one structural fact the census hands over: **`ACT 0x0D`'s and `ACT 0x0E`'s resident sites are
+adjacent in the kernel** (`iw19`/`iw20`/`iw21`, `iw3`/`iw4`) — which is §125 point 4's constraint,
+now measured rather than argued: whatever `0x0D` writes at `iw19`, `0x0E` can overwrite at `iw21`.
+
+---
+
+## 5. THE ARM, QUOTED — `§54` FIRST, THEN RULE 19
+
+⚠ **`§54` GRADED FIRST. A NULL:**
+
+```
+   §54  quiet-in 626 920 -> 626 920 SILENT / 0 LOUD (peak 0)
+        loud-in  396 079 -> 396 079 silent / 0 loud (peak 0)
+```
+
+```
+   RULE 19, mean AND AC span, both buckets:
+   §70  ACCA@w73   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   §211 ACCB@w78   quiet mean 0.0 span 0  |  loud mean 0.0 span 0
+   ⚠ §230: §54, §70, §211, the rule-19 line, §61 and the epilogue D-I tally are ONE CRITERION.
+   ⚠ §229/§231: and only §70's is a statement about the chip -- w78's operand is ours.
+```
+
+```
+   THE FALSIFIERS THE QUEUE PRE-REGISTERED, EACH CHECKED:
+   §S1's 4.924 %   quiet 6 589 975/133 826 616 = 4.924 %   DID NOT FALL   PASS (§227's guard)
+                   loud  5 147 386/104 565 120 = 4.923 %
+   m_rf[0x8D]      0x009B26 = 39 718   (2 235 839 stores, 1 114 848 non-zero)   PASS
+   §54             graded FIRST, above                                          PASS
+   §70 / §211      ONE ROW, mean AND AC span, both buckets                      PASS
+   §41             unit0 0x400000  unit1 0x178D0B   (⛔ struck from the list, §227)
+```
+
+⛔ **SINGLE DELAY's `+0.02149296` and PARAMETRIC EQ's 0.198 dB are NOT re-quoted**: this pass
+changed no decode, no coefficient and no default, so re-running their vehicles would be a
+CANNOT-FAIL row (§231 §5's rule, unchanged).
+
+---
+
+## 6. WHAT SHIPPED
+
+1. **`§232` ROUTING CENSUS** (`upd6383.h` `rc_record` + `RC_SLOTS = 768`, hook in `upd6383.cpp` at
+   `m_last_l = L` — the single point where the operand is final and *before* the post-increment).
+   Read-only, unconditional, `§54`-bucketed, armed at `S1_ARM_FRAME`. Per unanchored code per
+   resident slot: `m_dp`, `m_cursor`, `m_dsc`, the accumulator, `addr8`, the modelled consumer and
+   `L`. Plus **two ANCHORED reference rows** whose degeneracy would void the census.
+2. **`dsp/tools/routing_census.py`** — the static corpus tool: the independent guard mirror and its
+   seven self-tests, the routing population by responsible field, the **per-code price**, the sites
+   and consumer profile, and the per-site verdict when given `--log`.
+3. **`dsp/analysis/data/A_232.log.gz`** — arm A.
+4. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT, NO NEW ENV GATE.** `alu_decoded()` is
+   untouched; not one code was anchored.
+
+---
+
+## 7. WHAT THIS PASS IS BLIND TO, AND THE NEXT EXPERIMENT
+
+* **One vehicle, one boot, one effect pair (CHORUS + CONCERT REVERB 1).** **9 of 33** unanchored
+  codes never execute here. They are **UNMEASURED**; do not fold them into either verdict.
+* **`I-RAM[154..199]` is still never uploaded** (§229) — body 0's 116-slot region holds a 70-word
+  image, and the census's body-0 sites inherit that 46-slot tail.
+* **The census measures the indices AT the operand resolution.** A consumer that indexes with a
+  quantity computed *later* in the same word would not be visible in these columns.
+* **`m_ta`/`m_tb` are not among the four index candidates.** They are data registers here, but if a
+  code turns out to index with a temporary this census would report it CLOSED wrongly. Stated as a
+  known hole, not a result.
+
+### 7.1 ⛔ CLOSED BY THIS PASS — DO NOT RE-OPEN
+
+**The sixteen codes in §2's CLOSED list.** Each has a constant index at every resident site in
+both buckets, and dead end 4 / rule 4 forbid implementing a consumer from that position. ★ In
+particular **`SRC 0x13`'s closure no longer rests on §162's private mask** (`0x3910E446A39B440F`)
+— it is now measured on the shipped default, at all four class-6 sites (rule 11).
+⛔ And do **not** re-derive *"the routing guard and the fabricated-zero census are one
+population"*: it is a subset relation worth zero words (§0 item A).
+
+### 7.2 ★★★★ WHERE THE NEXT PASS SHOULD GO — PRE-REGISTERED
+
+**`SRC 0x00`, ALONE, AT `iw13`/`iw14`/`iw36`.** It is **+348 words = 46 % of the entire routing
+ceiling**, more than three times the whole operation field, and it is the *only* code whose price
+exceeds 124. Its reading (`mem[ptr]`) is graded *"1 of 6 enumerated, no independent support"* by
+the source itself, and the census names **three sites where its index varies** — so rule 4 does
+not block it and rule 15's reach-test trap can be avoided by asking which of the six enumerated
+readings the three live sites **separate**.
+**Required shape:** a corpus/static discrimination FIRST (rule 13 — §218 decided a rival with zero
+MAME runs), then, only if the corpus cannot decide, a two-sided arm.
+**Falsifiers, pre-registered:** `m_rf[0x8D]` must stay `0x009B26`; `§S1`'s **4.924 %** must not
+**fall** (§227's guard); `§54` graded first; `§70`/`§211` as **ONE ROW** (§230); and — because
+`SRC 0x00` is 605-of-648 paired with `ACTION 0x00`, the adder's bus term — **PARAMETRIC EQ's
+0.198 dB and SINGLE DELAY's `+0.02149296` DO become live falsifiers here** and must both be run
+(§230's repaired `sd_rerun.py control`, 1 of 7).
+
+### 7.3 The rest
+
+1. ⛔ **THE BLOCKER IS UNMOVED: *what does the coefficient base `0x90` MEAN*** (queue item 12).
+2. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS** (queue item 13), one command each, no build.
+3. ★★ **SHIP THE FIVE QUEUED CONTROL REPAIRS** (§230 §7) when the lane is uncontested.
+4. ★★ **CORRECT THE "SAME SET OF CODES" SENTENCE** in `LEDGER.md` TIER 0a, `HANDOFF-NEXT.md` §1 and
+   `BUILD-LANE-QUEUE.md` item 0 — §0 item A. It is quoted in four places and it has been steering
+   the queue.
+5. ★ **STATE THE BUILD FLAG IN EVERY BRIEF.** `build.sh` alone now yields a binary with **no
+   uPD6383 device at all**; the DSP build is `make ... CPPFLAGS=-DKN5000_ENABLE_DSP1=1`.
+
+**GRADES.** §0 items A, D, E **MEASURED from disk**; B, C, F, G, I, J **MEASURED**; H **FORCED**;
+§4's *"OPEN means modelled on a guess"* **FORCED from source**; §7.2 **pre-registered, unrun**.
+⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
+established it cannot see `upd6383.cpp` at all.
