@@ -18,7 +18,7 @@ Labels: **MEASURED** / **PROVEN BY CONSTRUCTION** / **CONSISTENT** / **INFERRED*
 
 | # | statement | label |
 |---|---|---|
-| **A** | ★★★ **NEITHER known-mathematics context on this chip can decide any of the three.** PARAMETRIC EQ *carries* `0x0D` and `0x0E` — and scoring **144 machines** over `act0d × act0e × f31hi` against the designer gives **0.113 dB for every one of them**, because the biquad's first word is `f31 = 0` (`acc ← P`) and discards everything upstream. The LFO: **0 of its 29 block windows** contains any of the three. | **MEASURED** |
+| **A** | ⛔ **THE PARAMETRIC EQ HALF IS RETRACTED — §234 (2026-09-04).** The 144 identical machines were `peq_ir()` **pre-loading the sample into acc and P every frame**, so the entry words had nothing to deliver; with the sample in the cell the entry READS (`0x05` / `0x0F`) and acc = P = 0 at frame start, the same window separates the 49 `act0d × act0e` pairs and leaves the shipped `(acc<-bus, P<-bus)` **1 of 49** (`dsp/tools/gate_settle.py act0d0e`). The LFO half below stands. *Original text:* ★★★ **NEITHER known-mathematics context on this chip can decide any of the three.** PARAMETRIC EQ *carries* `0x0D` and `0x0E` — and scoring **144 machines** over `act0d × act0e × f31hi` against the designer gives **0.113 dB for every one of them**, because the biquad's first word is `f31 = 0` (`acc ← P`) and discards everything upstream. The LFO: **0 of its 29 block windows** contains any of the three. | **MEASURED** |
 | **B** | ★★ **`ACT 0x0E` shares a word-shape with `ACT 0x07` (`mem[ptr] ← bus`) in 8 distinct shapes** — more than all its other anchored pairings combined (`0x15` ×2, `0x19` ×1, `0x13` ×1). Same `hi12`, `class4`, `addr8`, `SRC` and mode; differing **only** in the ACTION field. | **MEASURED** |
 | **C** | ★★★ **And that independently corroborates the speculative result.** [`SPECULATIVE-reverb-run.md`](SPECULATIVE-reverb-run.md) §2 found *functionally* that `0x0E = mem[ptr] ← bus` was **the only reading of six** that let any energy reach the delay lines — 30 of 36 combinations eliminated. **Two unrelated arguments, one distributional and one functional, reaching the same answer.** | **CONSISTENT**, two routes |
 | **D** | ★ **`ACT 0x1A` pairs with `0x14` (`tempB ← bus`) and `0x19`, one shape each** — and the pair sites are the reverb's own **BLOCK A `.0`** (`880.1.60.2D4`, ACT `0x14`) and **BLOCK B `.0`** (`880.1.60.2DA`, ACT `0x1A`): byte-identical but for the ACTION. With `0x1A = 0x14 + 6` exactly as `0x19 = 0x13 + 6`. | **INFERRED** (weak — one shape) |
@@ -45,6 +45,16 @@ Extended, the window **reproduces the designer at 0.113 dB**, tighter than the
 **Every machine identical.** The window is blind to all three fields, for the
 reason already on record: the biquad's first word discards the accumulator, and
 whatever these codes write is not read at the pointer the biquad uses.
+
+⛔ **RETRACTED §234 (2026-09-04).** The identity was the harness's: `peq_ir()` sets
+`acc = P = x << ASH` at the top of every frame, so P — which is exactly what the
+entry writes and what the biquad's first word (`f31 = 0`, `acc ← P`) reloads — was
+supplied by the injection, not by the program. With the sample placed in the cell
+`w0`/`w54` read and acc = P = 0 at frame start, the window is NOT blind: 2 of 49
+pairs deliver both channels at 0.198 dB, a junk-pre-load control leaves 1, and it
+is the pair the device ships. Reproduced as a control there: the pre-loaded harness
+scores 0.198 ×42 / 999 ×7, and the seven at 999 include the right answer.
+See `SPECULATIVE-APPLIED-REGISTER.md` §234 items A and B.
 
 ### 1.2 The LFO does not contain them
 
