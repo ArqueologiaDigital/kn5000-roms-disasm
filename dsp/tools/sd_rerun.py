@@ -114,6 +114,7 @@ gain it constructed, so it does not depend on any defect this pass repaired and
 survives the repair.
 """
 import argparse
+import collections
 import os
 import sys
 
@@ -223,9 +224,18 @@ def head_write_iw():
 
 
 def derive_p0(m, incell):
-    """p0 such that the HEAD WRITE word's pointer lands on `incell'."""
+    """p0 such that the HEAD WRITE word's pointer lands on `incell'.
+
+    ★ 234: returns None when the machine REFUSES a word before the head write
+    (ptr_offsets() then has no entry for it).  `scan' crashed here with
+    KeyError 46 on every invocation since 230 introduced this derivation --
+    its `none' reading refuses w1 -- so 233's "sd_rerun.py scan already
+    enumerates act0d x act0e" described a command that had not run."""
     off = ptr_offsets(m)
-    return (incell - off[head_write_iw()]) & 0xff
+    hw = head_write_iw()
+    if hw not in off:
+        return None
+    return (incell - off[hw]) & 0xff
 
 
 #  ★★★ 230.  THE PREDICTION, IN FIXED POINT, FROM THE ROM's OWN COEFFICIENTS.
@@ -269,6 +279,8 @@ def run(m, nsamp=1400, polarity="correct", sign=+1, seed=20260727, incell=0x00,
     #  p0 explicitly is still allowed -- that is how the defect is reproduced.
     if p0 is None:
         p0 = derive_p0(m, incell)
+        if p0 is None:
+            return None                        # ★ 234: the machine refuses
     rng = random.Random(seed)
     dram = DelayDRAM(sign)
     st = A.State(rng)
@@ -454,6 +466,11 @@ def cmd_control():
     return okall
 def cmd_scan():
     hdr("scan -- enumerate act0d x act0e against the descriptor delay")
+    print("""   ⚠ 234: this is the ORIGINAL presence test over the old six-reading menu,
+   kept so its numbers stay reproducible.  It crashed (KeyError 46) from 230
+   until 234 and its menu never held the reading the device ships.  The
+   graded command is `act0d0e' below; do not quote this one.
+""")
     want = set(d for *_, d in taps())
     print("   %d x %d = %d machines; a machine PASSES only if an impulse returns\n"
           "   from the line at a lag the descriptors predict %s.\n"
@@ -517,6 +534,8 @@ def out_run(m, nsamp=2600, polarity="correct", sign=+1, incell=0x03, p0=None,
     #  value leg had a live datapath and the control leg did not.  Derive it.
     if p0 is None:
         p0 = derive_p0(m, incell)
+        if p0 is None:
+            return None                        # ★ 234: the machine refuses
     words, cells, cons, coefs = descriptors()
     if coef_scramble is not None:
         coefs = list(coefs)
@@ -905,6 +924,526 @@ def cmd_src00():
     return verdict
 
 
+# ---------------------------------------------------------------------------
+#  5. ★★★ 234 -- `ACT 0x0D' x `ACT 0x0E' OVER THE DEVICE'S OWN MENU, AGAINST
+#     THE lag-1001 ROM PRODUCT.  Pre-registered by 233 sect. 4.2, which also
+#     required the reach test to come FIRST: "a09's ACT 0x0D/0x0E words are
+#     inside the delay path, so ... this one must be shown to reach the
+#     criterion BEFORE it is quoted".
+#
+#  THREE THINGS ABOUT THE HARNESS, FOUND BEFORE ANY NUMBER WAS READ:
+#   (i)   `scan' -- the command 233 said "already enumerates act0d x act0e" --
+#         crashed on every invocation since 230 (derive_p0 KeyError 46: its
+#         `none' reading refuses w1).  Repaired above; it is a PRESENCE test
+#         over the old menu and is not graded.
+#   (ii)  that old menu {tA<-bus, tB<-bus, tA<-acc, tB<-acc, mem<-bus} is
+#         133's selector values 2/3/4 only.  The reading the device SHIPS --
+#         0x0D = 1 (acc <- bus), 0x0E = 7 (P <- bus at the multiply's scale)
+#         -- was never executable by this model.  A.ACT0D0E_MENU now holds all
+#         seven (selector 5 coincides with 7 in this regime, ash == 0).
+#   (iii) every published SINGLE DELAY number -- 230's 1 accepted / 7 rejected,
+#         233's 1 of 7 -- was taken under (tA<-bus, tA<-bus), which at a09's
+#         eight sites is a NO-OP: no SRC 0x19 reader follows any of them
+#         before an ACT 0x19 rewrites tempA.  So the lag the criterion demands,
+#         1001, was itself derived with these two codes INERT.  Whether that
+#         lag is an anchor INDEPENDENT of the codes is exactly what this
+#         section has to print, not assume.
+#
+#      python3 dsp/tools/sd_rerun.py act0d0e
+# ---------------------------------------------------------------------------
+ACT0D0E_MENU = A.ACT0D0E_MENU
+SHIPPED = ("acc<-bus", "P<-bus")        # 133's selector (1, 7), upd6383.cpp
+NSCORE = 2 * 1001 + 300                 # room for a SECOND echo (feedback)
+P0_PUB, CELL_PUB = 0x08, 0x03           # the published placement (230 D1)
+
+
+def echo_class(ev):
+    """a short label for an echo list: which lags carry which values."""
+    if ev is None:
+        return "refused"
+    if not ev:
+        return "NONE"
+    if len(ev) > 8:
+        return "smear x%d from %d" % (len(ev), ev[0][0])
+    return " ".join("%d:%d" % (e[0], int(e[1])) for e in ev)
+
+
+def traced_run(m, nsamp=NSCORE, incell=CELL_PUB, p0=P0_PUB):
+    """out_run with probes on the signal path: for each named signal, the
+    FIRST frame (relative to the impulse) at which it is non-zero, and how
+    many frames it is non-zero.  This is what names WHERE an impulse dies
+    under a reading -- rule 17's shape: a wrong path reports a wrong lag."""
+    import random
+    words, cells, cons, coefs = descriptors()
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+    stages, _D = cascade()
+    tag = {}
+    for stg, wi, wc, ri, rc, d in stages:
+        tag[wi] = "line%s WRITE" % "AB"[stg]
+        tag[ri] = "line%s RETURN" % "AB"[stg]
+    for i in cell_of:
+        tag.setdefault(i, "marker w%d %s" % (i, DIS.dram_dir(words[i])))
+    rng = random.Random(20260727)
+    dram = DelayDRAM(+1)
+    st = A.State(rng)
+    n0 = 4
+    first, count = {}, {}
+
+    def hit(name, v, n):
+        if v:
+            count[name] = count.get(name, 0) + 1
+            first.setdefault(name, n - n0)
+
+    for n in range(nsamp):
+        st.acc = st.P = 0
+        st.ta = st.tb = 0
+        st.p = p0
+        st.dr = 0
+        st.mem[incell] = (1 << 21) if n == n0 else 0
+
+        def port(w, bus, s, _n=n):
+            c = cell_of[port.idx]
+            if DIS.dram_dir(w) == "WRITE":
+                dram.write(c, bus)
+                hit(tag[port.idx], int(bus) & A.MASK24, _n)
+            else:
+                v = int(dram.read(c)) & A.MASK24
+                s.dr = v
+                hit(tag[port.idx], v, _n)
+
+        for k, w in enumerate(words):
+            port.idx = k
+            if not A.step(m, st, w, coefs[k], rng, dram=port, unknown=lambda: 0):
+                return None
+            if k == 40:
+                hit("P after w40 (stage-1 chain)", st.P & A.MASK24, n)
+            if k == 17:
+                hit("P after w17 (stage-0 chain)", st.P & A.MASK24, n)
+            if k == 45:
+                hit("acc after w45 (0E)", st.acc & A.MASK24, n)
+                hit("P after w45 (0E)", st.P & A.MASK24, n)
+        hit("mem[0x0B] (w43 store)", st.mem.get(0x0B, 0), n)
+        hit("mem[0x08] (w23 store)", st.mem.get(0x08, 0), n)
+        hit("OUTPUT mem[0x0E]", st.mem.get(0x0E, 0), n)
+        dram.advance()
+    return first, count
+
+
+def _pair_score(args):
+    d, e, kw = args
+    m = machine(act0d=d, act0e=e)
+    r = out_run(m, nsamp=NSCORE, **kw)
+    return (d, e, None if r is None else echoes(*r))
+
+
+def _pair_sweep(args):
+    d, e = args
+    m = machine(act0d=d, act0e=e)
+    line, out, cands = 0, 0, []
+    for c in range(256):
+        pr = inject_probe(m, c, P0_PUB)
+        if not pr:
+            continue
+        line += bool(pr[0])
+        out += bool(pr[1])
+        if pr[0] or pr[1]:
+            cands.append(c)
+    #  the long run on every candidate, keeping the distinct echo classes
+    classes = {}
+    for c in cands:
+        r = out_run(m, nsamp=NSCORE, incell=c, p0=P0_PUB)
+        classes.setdefault(echo_class(None if r is None else echoes(*r)), []).append(c)
+    return (d, e, line, out, cands, classes)
+
+
+def _pair_trace(args):
+    d, e = args
+    return (d, e, traced_run(machine(act0d=d, act0e=e)))
+
+
+def cmd_act0d0e(jobs=None):
+    import multiprocessing
+    hdr("act0d0e -- 234: the device's 7 x 7 readings against the ROM product")
+    stages, D = cascade()
+    amp = 1 << 21
+    want = predicted_echo_sample(amp)
+    words, cells, cons, coefs = descriptors()
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+    jobs = jobs or max(1, multiprocessing.cpu_count() - 1)
+
+    #  --- 1. THE REACH TEST (rule 15), before any score ---
+    print("   ★ REACH TEST FIRST (rule 15) -- a09's own ACT 0x0D / 0x0E words,")
+    print("     with the pointer each one sees under the published placement")
+    print("     (p0 = 0x%02X, input cell 0x%02X):\n" % (P0_PUB, CELL_PUB))
+    m0 = machine(act0d="nop", act0e="nop")
+    #  the pointer at every word, from one traced frame under `nop'
+    import random
+    st = A.State(random.Random(1))
+    st.p = P0_PUB
+    pat = {}
+    for k, w in enumerate(words):
+        pat[k] = st.p
+        A.step(m0, st, w, coefs[k], random.Random(1), dram=lambda *a: None,
+               unknown=lambda: 0)
+    sites = [i for i, w in enumerate(words)
+             if not DIS.c_format(w) and DIS.lo_act(w) in (0x0D, 0x0E)]
+    for i in sites:
+        w = words[i]
+        print("      w%-3d %010X  ACT %02X  SRC %02X (%s)  f31 %d  store %d  ptr 0x%02X%s"
+              % (i, w, DIS.lo_act(w), DIS.lo_src(w),
+                 {0x07: "mem[ptr]", 0x10: "acc"}.get(DIS.lo_src(w), "?"),
+                 DIS.hi_f31(DIS.hi12(w)), (DIS.hi12(w) >> 4) & 1, pat[i],
+                 "   <-- the word BEFORE the head write w%d" % head_write_iw()
+                 if i + 1 == head_write_iw() else ""))
+    pairs = [(a, b) for a, b in zip(sites, sites[1:])
+             if DIS.lo_act(words[a]) == 0x0D and DIS.lo_act(words[b]) == 0x0E and b == a + 1]
+    print("      %d ACT 0x0D + %d ACT 0x0E words, in %d ADJACENT 0D->0E pairs: %s"
+          % (sum(1 for i in sites if DIS.lo_act(words[i]) == 0x0D),
+             sum(1 for i in sites if DIS.lo_act(words[i]) == 0x0E),
+             len(pairs), ", ".join("w%d/w%d" % p for p in pairs)))
+    print("      the last pair sits IMMEDIATELY before the head write (w46) and the")
+    print("      output store (w47 -> mem[0x0E]); whatever they leave in acc and P")
+    print("      is what w46 adds to the input and w47 presents.")
+    #  which of the old menu's destinations is ever READ after a site?
+    print("\n      is the destination READ before it is rewritten?  (static, this program)")
+    for nm, rd, wr in (("tempA", lambda f: DIS.lo_src(f) == 0x19,
+                        lambda f: DIS.lo_act(f) in (0x13, 0x19)),
+                       ("tempB", lambda f: DIS.lo_src(f) == 0x1A,
+                        lambda f: DIS.lo_act(f) == 0x14)):
+        live = []
+        for i in sites:
+            for j in range(i + 1, len(words)):
+                if rd(words[j]):
+                    live.append(i)
+                    break
+                if wr(words[j]):
+                    break
+        print("      %-6s read after: %s" % (nm, ["w%d" % i for i in live] or "NO SITE"))
+    print("      ⇒ every reading in the OLD menu (tA/tB/mem<-self) is a NO-OP at all")
+    print("        eight sites; the numbers 230 and 233 published were taken with")
+    print("        these two codes INERT.  Only acc / P / mem writes can reach the")
+    print("        criterion here, and acc / P are the two the device ships.")
+
+    A.ACT0D_FIRED[0] = A.ACT0E_FIRED[0] = 0
+    r = out_run(m0, nsamp=NSCORE, incell=CELL_PUB, p0=P0_PUB)
+    print("\n   ⇒ in ONE scoring pass (%d frames): ACT 0x0D fired %d, ACT 0x0E fired %d"
+          "  (UNCONDITIONAL)" % (NSCORE, A.ACT0D_FIRED[0], A.ACT0E_FIRED[0]))
+    ev0 = echoes(*r)
+    print("      known-GOOD (nop, nop): %s   %s"
+          % (echo_class(ev0),
+             "✔ = 233's `mem' row (lag %d, sample %d), EXTERNAL" % (D, want)
+             if any(e[0] == D and int(e[1]) == want for e in ev0)
+             else "⛔ CONTROL BROKEN"))
+
+    #  --- 2. THE ADDRESSING CONTROL ---
+    offs = {(d, e): tuple(sorted(ptr_offsets(machine(act0d=d, act0e=e)).items()))
+            for d in ACT0D0E_MENU for e in ACT0D0E_MENU}
+    print("\n   ★ CONTROL -- pointer map over the 49 pairs: %d distinct   %s"
+          % (len(set(offs.values())),
+             "✔ INVARIANT" if len(set(offs.values())) == 1 else "⛔ CONFOUNDED"))
+
+    #  --- 3. THE TABLE AT THE PUBLISHED PLACEMENT ---
+    print("""
+   ★ THE 49 PAIRS AT THE PUBLISHED PLACEMENT (%d frames, so a second echo at
+     2 x %d would show).  Each cell: the echo lags and their sample values.
+     The pre-registered criterion is lag %d carrying %d.\n""" % (NSCORE, D, D, want))
+    with multiprocessing.Pool(jobs) as pool:
+        rows = pool.map(_pair_score, [(d, e, dict(incell=CELL_PUB, p0=P0_PUB))
+                                      for d in ACT0D0E_MENU for e in ACT0D0E_MENU])
+    tab = {(d, e): ev for d, e, ev in rows}
+    print("      %-9s | %s" % ("0D \\ 0E", " ".join("%-14s" % e for e in ACT0D0E_MENU)))
+    for d in ACT0D0E_MENU:
+        print("      %-9s | %s" % (d, " ".join("%-14s" % echo_class(tab[(d, e)])[:14]
+                                                for e in ACT0D0E_MENU)))
+    classes = collections.Counter(echo_class(v) for v in tab.values())
+    print("\n      DISTINCT OUTCOMES: %d" % len(classes))
+    for c, n in classes.most_common():
+        print("         %-34s x%2d  %s" % (c, n, ", ".join(
+            "(%s,%s)" % k for k, v in tab.items() if echo_class(v) == c)[:120]))
+    ship = echo_class(tab[SHIPPED])
+    acc = [k for k, v in tab.items() if any(e[0] == D and int(e[1]) == want for e in v or [])]
+    print("\n      pre-registered criterion (lag %d, sample %d): %d of 49 pairs ACCEPTED"
+          % (D, want, len(acc)))
+    print("      THE SHIPPED PAIR %s: %s" % (SHIPPED, ship))
+
+    #  --- 4. THE VALUE CRITERION STILL BITES AT THE OTHER LAG ---
+    print("\n   ★ CONTROL -- the VALUE half of the criterion under the SHIPPED pair:")
+    ms = machine(act0d=SHIPPED[0], act0e=SHIPPED[1])
+    for sd in (1, 2, 3):
+        rr = out_run(ms, nsamp=NSCORE, incell=CELL_PUB, p0=P0_PUB, coef_scramble=sd)
+        print("      coefficients SCRAMBLED #%d : %s" % (sd, echo_class(echoes(*rr))))
+    rr = out_run(ms, nsamp=NSCORE, incell=CELL_PUB, p0=P0_PUB, polarity="reversed")
+    print("      round-6 reversed          : %s" % echo_class(echoes(*rr)))
+    p0b = 0x40
+    cb = (p0b + ptr_offsets(ms)[head_write_iw()]) & 0xff
+    rr = out_run(ms, nsamp=NSCORE, incell=cb, p0=p0b)
+    print("      RELOCATED p0 = 0x%02X, cell 0x%02X : %s   (lags must not move)"
+          % (p0b, cb, echo_class(echoes(*rr))))
+
+    #  --- 5. WHERE THE IMPULSE GOES, PER PAIR ---
+    print("""
+   ★ WHERE THE IMPULSE GOES -- first non-zero frame (relative to the impulse)
+     of each signal on the path, at the published placement.  A path that the
+     output never presents is named here rather than inferred.\n""")
+    show = [("nop", "nop"), SHIPPED, ("acc+=bus", "P<-bus"), ("P<-bus", "acc<-bus"),
+            ("P<-bus", "nop"), ("nop", "mem<-bus")]
+    with multiprocessing.Pool(jobs) as pool:
+        traces = pool.map(_pair_trace, show)
+    names = ["lineA WRITE", "lineA RETURN", "lineB WRITE", "lineB RETURN",
+             "P after w17 (stage-0 chain)", "mem[0x08] (w23 store)",
+             "P after w40 (stage-1 chain)", "mem[0x0B] (w43 store)",
+             "acc after w45 (0E)", "P after w45 (0E)", "OUTPUT mem[0x0E]"]
+    print("      %-30s %s" % ("signal", " ".join("%-12s" % ("%s/%s" % (d[:4], e[:4]))
+                                                for d, e, _t in traces)))
+    for nm in names:
+        print("      %-30s %s" % (nm, " ".join(
+            "%-12s" % ("-" if t is None or nm not in t[0]
+                       else "@%d x%d" % (t[0][nm], t[1][nm]))
+            for _d, _e, t in traces)))
+
+    #  --- 6. THE 256-CELL SWEEP, EVERY PAIR (233's de-circularised form) ---
+    print("""
+   ★ THE INJECTION SWEEP -- 256 cells x 49 pairs, p0 fixed at 0x%02X, then the
+     long run on every candidate cell.  Per pair: how many cells reach a delay
+     line at all, how many reach the output, and every DISTINCT echo class any
+     placement produces.  (233's form of the two-sided question: is there ANY
+     placement under which this pair delays the signal, and how?)\n""" % P0_PUB)
+    with multiprocessing.Pool(jobs) as pool:
+        sw = pool.map(_pair_sweep, [(d, e) for d in ACT0D0E_MENU for e in ACT0D0E_MENU])
+    print("      %-9s %-9s %-11s %-11s %s" % ("0D", "0E", "cells->LINE", "cells->OUT",
+                                              "echo classes over all placements"))
+    for d, e, line, out, cands, ecls in sw:
+        print("      %-9s %-9s %-11s %-11s %s"
+              % (d, e, "%d of 256" % line, "%d of 256" % out,
+                 " | ".join("%s @%s" % (c, ",".join("0x%02X" % x for x in cs[:4])
+                                        + ("..." if len(cs) > 4 else ""))
+                            for c, cs in sorted(ecls.items()))))
+    n1001 = sum(1 for d, e, _l, _o, _c, cl in sw
+                if any(("%d:%d" % (D, want)) in c for c in cl))
+    print("\n      pairs with SOME placement putting %d at lag %d : %d of 49"
+          % (want, D, n1001))
+    print("      pairs with SOME placement putting %d at lag 500  : %d of 49"
+          % (want, sum(1 for d, e, _l, _o, _c, cl in sw
+                        if any(("500:%d" % want) in c for c in cl))))
+
+    print("""
+   ⇒ VERDICT.  The criterion REACHES both codes (fired counts above) and
+      SEPARATES the readings (%d distinct outcomes over 49 pairs) -- unlike
+      PARAMETRIC EQ's 0.198 dB, this one is live.  But its LAG is not an anchor
+      independent of the codes: 1001 was derived under readings that make
+      w44/w45 inert, and the shipped pair puts the SAME ROM product at lag 500
+      -- the stage-0 tap -- with the stage-1 chain's product discarded at w45.
+      A presence-and-value test passes both; only the lag separates them, and
+      the lag is the quantity these two codes decide.  So SINGLE DELAY says:
+      the shipped pair and the inert pair are DIFFERENT programs (a 500-sample
+      delay whose second line is dead, versus a 1001-sample cascade), and the
+      corpus, the descriptors and the ROM product cannot say which is the
+      chip's.  That is the reach test's constructive form, and the honest
+      residue of THIS harness; the context that can decide the pair without
+      presupposing it is PARAMETRIC EQ's entry window (gate_settle.py
+      act0d0e), and the register (234) does the synthesis.""" % len(classes))
+    return tab, sw
+
+
+# ---------------------------------------------------------------------------
+#  6. ★★ 234 -- A SECOND DELAY CONTEXT: a10 MULTI TAP DELAY.  ONE delay-line
+#     WRITE (cell 32685) and FOUR READS (6000/12000/18000/24000), so every
+#     tap's lag is fixed by its own descriptor -- write - read = 26685, 20685,
+#     14685, 8685 -- with no stage-order derivation in the way.  The pair sits
+#     at w5/w6, w59/w60 and w64/w65 (the last, as in a09, immediately before
+#     the closing write and the output store).  Under a reading, which of the
+#     four descriptor lags does the output present?  A multi-tap delay that
+#     presents fewer taps than it allocates is the same shape as a09's dead
+#     second line, and that is what this section is for: consistency, in a
+#     context whose lags cannot be argued about.
+#
+#     The input cell is NOT assumed: it is swept over all 256 (233's method)
+#     for the representative pairs, and the long run is taken at every cell
+#     that reaches the line.
+#
+#      python3 dsp/tools/sd_rerun.py multitap
+# ---------------------------------------------------------------------------
+MT_ALGO = 10
+MT_REP = [("nop", "nop"), SHIPPED, ("acc+=bus", "P<-bus"), ("P<-bus", "acc<-bus"),
+          ("P<-bus", "acc+=bus"), ("nop", "mem<-bus")]
+
+
+def descriptors_of(algo):
+    p = L.program(algo)
+    words = list(p.words)
+    coefs = list(L.coefs_of(algo, words))
+    #  ★ a10's C-RAM upload is 15 cells (0x00..0x0E) and the program fetches 18
+    #  (cursor 0..17): w52/w53/w54 -- its SECOND damping block -- read cells the
+    #  upload does not supply.  DECLARED SUBSTITUTION: they take the FIRST
+    #  block's three (w46/w47/w48), which is the a09 pattern (a09's two blocks
+    #  are byte-identical).  Only tap PRESENCE and LAG are graded from this
+    #  program, never a sample value.  ⚠ cram[6] = 0 is NOT a gap: it is the
+    #  fourth tap's gain in this preset, so THREE taps are expected, not four.
+    if algo == MT_ALGO:
+        for i, c in enumerate(coefs):
+            if c is None and DIS.cursor_fetch(words[i]):
+                coefs[i] = coefs[i - 6]
+    return words, list(p.cells), list(p.cons), coefs
+
+
+def mt_lags():
+    """{read_iw: lag} for every read against the single real write."""
+    words, cells, cons, _ = descriptors_of(MT_ALGO)
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+    wr = [(i, c) for i, c in cell_of.items() if DIS.dram_dir(words[i]) == "WRITE" and c]
+    assert len(wr) == 1, wr
+    wc = wr[0][1]
+    return {i: wc - c for i, c in cell_of.items()
+            if DIS.dram_dir(words[i]) == "READ" and 0 < wc - c < REGION}, wr[0]
+
+
+def mt_run(m, nsamp, incell, p0=P0_PUB, probe_only=False):
+    """a10 under `m': (line_write_nz, out_nz) if probe_only, else the output."""
+    import random
+    words, cells, cons, coefs = descriptors_of(MT_ALGO)
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+    rng = random.Random(20260727)
+    dram = DelayDRAM(+1)
+    st = A.State(rng)
+    x = [0.0] * nsamp
+    x[4] = float(1 << 21)
+    out = [0.0] * nsamp
+    hit = [0, 0]
+    for n in range(nsamp):
+        st.acc = st.P = 0
+        st.ta = st.tb = 0
+        st.p = p0
+        st.dr = 0
+        st.mem[incell] = int(x[n]) & A.MASK24
+
+        def port(w, bus, s):
+            c = cell_of[port.idx]
+            if DIS.dram_dir(w) == "WRITE":
+                dram.write(c, bus)
+                if c and (int(bus) & A.MASK24):
+                    hit[0] += 1
+            else:
+                s.dr = int(dram.read(c)) & A.MASK24
+
+        for k, w in enumerate(words):
+            port.idx = k
+            if not A.step(m, st, w, coefs[k], rng, dram=port, unknown=lambda: 0):
+                return None
+        v = st.mem.get(0x0E, 0)
+        out[n] = float(v - (1 << 24)) if v >= (1 << 23) else float(v)
+        if v:
+            hit[1] += 1
+        dram.advance()
+    return tuple(hit) if probe_only else (x, out)
+
+
+def _mt_probe(args):
+    d, e = args
+    m = machine(act0d=d, act0e=e, altlo12="nop")
+    cands = []
+    for c in range(256):
+        pr = mt_run(m, 160, c, probe_only=True)
+        if pr and (pr[0] or pr[1]):
+            cands.append(c)
+    return (d, e, cands)
+
+
+def _mt_long(args):
+    d, e, c, nsamp = args
+    m = machine(act0d=d, act0e=e, altlo12="nop")
+    r = mt_run(m, nsamp, c)
+    return (d, e, c, None if r is None else echoes(*r))
+
+
+def cmd_multitap(jobs=None):
+    import multiprocessing
+    hdr("multitap -- 234: a10 MULTI TAP DELAY, the pair in a second delay context")
+    jobs = jobs or max(1, multiprocessing.cpu_count() - 1)
+    words, cells, cons, coefs = descriptors_of(MT_ALGO)
+    lags, (wi, wc) = mt_lags()
+    print("   a10: %d words; ONE real delay WRITE w%d cell %d; taps by descriptor:"
+          % (len(words), wi, wc))
+    for i, lag in sorted(lags.items(), key=lambda kv: kv[1]):
+        print("      read w%-3d cell %6d  ->  lag %5d  (%6.1f ms)"
+              % (i, wc - lag, lag, 1000.0 * lag / 44100.0))
+    sites = [i for i, w in enumerate(words)
+             if not DIS.c_format(w) and DIS.lo_act(w) in (0x0D, 0x0E)]
+    print("   ACT 0x0D/0x0E at %s" % ", ".join("w%d(%02X)" % (i, DIS.lo_act(words[i])) for i in sites))
+    print("   ⚠ w26 `040.0.00.864' and w33 `050.0.00.921' are lo12-bit-11 (ALT) words")
+    print("     whose effect is OPEN (bit11-family.md); they run as NO-OPs here")
+    print("     (altlo12 = nop) so the program runs at all.")
+    print("   ⚠ a10's upload is 15 C-RAM cells; w52/w53/w54 fetch cursor 15..17, which")
+    print("     it does not supply.  They take w46/w47/w48's coefficients (the a09")
+    print("     pattern -- its two damping blocks are identical).  DECLARED; only tap")
+    print("     PRESENCE and LAG are read off this program.  And C-RAM[0x06] = 0 is the")
+    print("     fourth tap's gain in this preset: THREE taps expected, not four.")
+    print("   tap gains (w27..w30): %s" % ["%+.6f" % (A.s24(c) / 2.0 ** 23) for c in coefs[27:31]])
+    nsamp = max(lags.values()) + 400
+    A.ACT0D_FIRED[0] = A.ACT0E_FIRED[0] = 0
+    r = mt_run(machine(act0d="nop", act0e="nop", altlo12="nop"), 200, 0x03)
+    print("   the model %s a10 under (nop, nop); fired 0D %d / 0E %d in 200 frames"
+          % ("RUNS" if r is not None else "⛔ REFUSES", A.ACT0D_FIRED[0], A.ACT0E_FIRED[0]))
+    if r is None:
+        #  find the refusing word
+        import random
+        st = A.State(random.Random(1)); st.p = P0_PUB
+        m = machine(act0d="nop", act0e="nop", altlo12="nop")
+        for k, w in enumerate(words):
+            if not A.step(m, st, w, coefs[k], random.Random(1), dram=lambda *a: None,
+                          unknown=lambda: 0):
+                print("      first refusal at w%d %010X (src %02X act %02X f31 %d coef %s)"
+                      % (k, w, DIS.lo_src(w), DIS.lo_act(w), DIS.hi_f31(DIS.hi12(w)), coefs[k]))
+                break
+        return None
+
+    print("\n   ★ THE INPUT-CELL SWEEP, representative pairs (160-frame probe):")
+    with multiprocessing.Pool(jobs) as pool:
+        pr = pool.map(_mt_probe, MT_REP)
+    cand = {}
+    for d, e, cs in pr:
+        cand[(d, e)] = cs
+        print("      %-9s %-9s cells reaching the line/output: %s"
+              % (d, e, ", ".join("0x%02X" % c for c in cs) or "NONE"))
+    allc = sorted(set().union(*[set(cs) for _d, _e, cs in pr]))
+    print("\n   ★ THE LONG RUN (%d frames) at every candidate cell, ALL 49 pairs:"
+          % nsamp)
+    jobs_ = [(d, e, c, nsamp) for d in ACT0D0E_MENU for e in ACT0D0E_MENU for c in allc]
+    with multiprocessing.Pool(jobs) as pool:
+        res = pool.map(_mt_long, jobs_)
+    want = set(lags.values())
+    by = collections.defaultdict(dict)
+    for d, e, c, ev in res:
+        by[(d, e)][c] = ev
+    print("      %-9s %-9s %-6s %-10s %s" % ("0D", "0E", "cell", "taps hit", "echoes (lag:sample)"))
+    summary = collections.Counter()
+    for d in ACT0D0E_MENU:
+        for e in ACT0D0E_MENU:
+            best = None
+            for c, ev in by[(d, e)].items():
+                if ev is None:
+                    continue
+                hitl = sorted({x[0] for x in ev} & want)
+                if best is None or len(hitl) > len(best[1]):
+                    best = (c, hitl, ev)
+            if best is None:
+                summary["refused"] += 1
+                print("      %-9s %-9s %-6s %-10s %s" % (d, e, "-", "-", "refused"))
+                continue
+            c, hitl, ev = best
+            key = "%d of %d" % (len(hitl), len(want))
+            summary[key] += 1
+            if len(ev) > 12:
+                txt = "%d non-zero outputs from %d (first %s)" % (
+                    len(ev), ev[0][0], " ".join("%d:%d" % (x[0], int(x[1])) for x in ev[:4]))
+            else:
+                txt = " ".join("%d:%d" % (x[0], int(x[1])) for x in ev)
+            print("      %-9s %-9s 0x%02X   %-10s %s%s"
+                  % (d, e, c, key, txt, "   <-- SHIPPED" if (d, e) == SHIPPED else ""))
+    print("\n      SUMMARY over 49 pairs (taps presented at their descriptor lags): %s"
+          % ", ".join("%s x%d" % kv for kv in summary.most_common()))
+    return by
+
+
 #  ★★★ 230 -- THE SYNTHETIC SELF-TEST (RULE 20, with 228's clause).
 #
 #  228 recorded that a control which IS the open defect is validated exactly
@@ -981,13 +1520,13 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", nargs="?", default="all",
                     choices=["selftest", "taps", "control", "scan", "value",
-                             "src00", "all"])
+                             "src00", "act0d0e", "multitap", "all"])
     a = ap.parse_args()
     #  ★ RULE 20: the self-test is printed FIRST, on every invocation that can
     #  produce a graded number.  It is synthetic, so it cannot be retired by a
     #  repair (228's clause).
     if a.cmd in ("selftest", "control", "value", "scan", "src00",
-                 "all"):
+                 "act0d0e", "all"):
         ok = cmd_selftest()
         if not ok:
             print("\n  ⛔ SELF-TEST FAILED -- every number below is UNGRADED.\n")
@@ -1008,6 +1547,12 @@ def main():
     if a.cmd in ("src00", "all"):
         print()
         cmd_src00()
+    if a.cmd == "act0d0e":
+        print()
+        cmd_act0d0e()
+    if a.cmd == "multitap":
+        print()
+        cmd_multitap()
 
 
 if __name__ == "__main__":
