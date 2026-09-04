@@ -330,9 +330,9 @@ with mask `0xC0`.  INHERITED, grade **PROVEN**, from
 
 **HOP 2 — `ToneMsg_Dispatch` picks write arm 4.**  Bit 3 of `byte[0]` selects the
 write table at `0xFC2754`; bits 0:2 index it.  Entry 4 is `0xFC26E9`, which calls
-`ToneStage_EnsurePartLoaded(msg[1])` (`0xFC26F0`) and then `sub_FBC958` (`0xFC26F8`).
+`ToneStage_EnsurePartLoaded(msg[1])` (`0xFC26F0`) and then `ToneMsg_WriteWaveSelectParam` (`0xFC26F8`).
 
-**HOP 3 — `sub_FBC958` stores the byte.**
+**HOP 3 — `ToneMsg_WriteWaveSelectParam` stores the byte.**
 
 ```
    FBC966  ld  W,(XBC+0x02)          the parameter byte

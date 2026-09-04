@@ -8760,7 +8760,7 @@ ToneStage_ApplyPercWaveSelTailPreset__FBC945:
 	unlk32 xiz                                 ; FBC955  unlk XIZ
 	ret                                        ; FBC957  ret
 ; --------------------------------------------------------------------------
-; sub_FBC958 -- 0xFBC958..0xFBCBA6 (591 bytes)
+; ToneMsg_WriteWaveSelectParam -- 0xFBC958..0xFBCBA6 (591 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -8820,7 +8820,7 @@ ToneStage_ApplyPercWaveSelTailPreset__FBC945:
 ;          notes/FINDINGS-l7a1429-reso-scale.md section 5, hops 2-7.
 ; --------------------------------------------------------------------------
 ; --------------------------------------------------------------------------
-sub_FBC958:
+ToneMsg_WriteWaveSelectParam:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FBC958  link XIZ,0xfff6
 	pushw	hl                                   ; FBC95C  push HL
 	ld	xbc, (xiz+8)                            ; FBC95D  ld XBC,(XIZ+0x08)
@@ -8854,10 +8854,10 @@ sub_FBC958:
 	ld	(xiz-7), a                              ; FBC9B1  ld (XIZ+0xf9),A
 	extz	wa                                    ; FBC9B4  extz WA
 	ld	(xiz-10), wa                            ; FBC9B6  ld (XIZ+0xf6),WA
-	jrl sub_FBC958__FBCA44                     ; FBC9B9  jrl T,0xfbca44
-sub_FBC958__FBC9BC:
-	jrl sub_FBC958__FBCB09                     ; FBC9BC  jrl T,0xfbcb09
-sub_FBC958__FBC9BF:
+	jrl ToneMsg_WriteWaveSelectParam__FBCA44                     ; FBC9B9  jrl T,0xfbca44
+ToneMsg_WriteWaveSelectParam__FBC9BC:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9BC  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBC9BF:
 	pushw	0                                    ; FBC9BF  push 0x0000
 	push	0                                     ; FBC9C2  push 0x00
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBC9C4  push (XIZ+0xfa)
@@ -8865,8 +8865,8 @@ sub_FBC958__FBC9BF:
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBC9C9  push (XIZ+0xfb)
 	call	0xFB477B                              ; FBC9CC  call 0xfb477b
 	inc	6, xsp                                 ; FBC9D0  inc 6,XSP
-	jrl sub_FBC958__FBCB09                     ; FBC9D2  jrl T,0xfbcb09
-sub_FBC958__FBC9D5:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9D2  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBC9D5:
 	pushw	1                                    ; FBC9D5  push 0x0001
 	push	0                                     ; FBC9D8  push 0x00
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBC9DA  push (XIZ+0xfa)
@@ -8874,8 +8874,8 @@ sub_FBC958__FBC9D5:
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBC9DF  push (XIZ+0xfb)
 	call	0xFB477B                              ; FBC9E2  call 0xfb477b
 	inc	6, xsp                                 ; FBC9E6  inc 6,XSP
-	jrl sub_FBC958__FBCB09                     ; FBC9E8  jrl T,0xfbcb09
-sub_FBC958__FBC9EB:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9E8  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBC9EB:
 	pushw	2                                    ; FBC9EB  push 0x0002
 	push	0                                     ; FBC9EE  push 0x00
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBC9F0  push (XIZ+0xfa)
@@ -8883,8 +8883,8 @@ sub_FBC958__FBC9EB:
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBC9F5  push (XIZ+0xfb)
 	call	0xFB477B                              ; FBC9F8  call 0xfb477b
 	inc	6, xsp                                 ; FBC9FC  inc 6,XSP
-	jrl sub_FBC958__FBCB09                     ; FBC9FE  jrl T,0xfbcb09
-sub_FBC958__FBCA01:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9FE  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBCA01:
 	pushw	3                                    ; FBCA01  push 0x0003
 	push	0                                     ; FBCA04  push 0x00
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBCA06  push (XIZ+0xfa)
@@ -8892,35 +8892,35 @@ sub_FBC958__FBCA01:
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCA0B  push (XIZ+0xfb)
 	call	0xFB477B                              ; FBCA0E  call 0xfb477b
 	inc	6, xsp                                 ; FBCA12  inc 6,XSP
-	jrl sub_FBC958__FBCB09                     ; FBCA14  jrl T,0xfbcb09
-sub_FBC958__FBCA17:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA14  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBCA17:
 	ld	xbc, (xiz+8)                            ; FBCA17  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+5)                              ; FBCA1A  ld A,(XBC+0x05)
 	cp	a, 63                                   ; FBCA1D  cp A,0x3f
-	jr z, sub_FBC958__FBCA2A                   ; FBCA20  jr Z,0xfbca2a
+	jr z, ToneMsg_WriteWaveSelectParam__FBCA2A                   ; FBCA20  jr Z,0xfbca2a
 	ld	a, (xbc+5)                              ; FBCA22  ld A,(XBC+0x05)
 	cp	a, 0xFF                                 ; FBCA25  cp A,0xff
-	jr nz, sub_FBC958__FBCA38                  ; FBCA28  jr NZ,0xfbca38
-sub_FBC958__FBCA2A:
+	jr nz, ToneMsg_WriteWaveSelectParam__FBCA38                  ; FBCA28  jr NZ,0xfbca38
+ToneMsg_WriteWaveSelectParam__FBCA2A:
 	push	0                                     ; FBCA2A  push 0x00
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBCA2C  push (XIZ+0xfa)
 	push	0                                     ; FBCA2F  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCA31  push (XIZ+0xfb)
 	calr (0xFBC725 - 0xFBCA37)                 ; FBCA34  calr 0xfbc725
 	pop	xiy                                    ; FBCA37  pop XIY
-sub_FBC958__FBCA38:
-	jrl sub_FBC958__FBCB09                     ; FBCA38  jrl T,0xfbcb09
-sub_FBC958__FBCA3B:
-	jrl sub_FBC958__FBCB09                     ; FBCA3B  jrl T,0xfbcb09
-sub_FBC958__FBCA3E:
-	jrl sub_FBC958__FBCB09                     ; FBCA3E  jrl T,0xfbcb09
-sub_FBC958__FBCA41:
-	jrl sub_FBC958__FBCB09                     ; FBCA41  jrl T,0xfbcb09
-sub_FBC958__FBCA44:
+ToneMsg_WriteWaveSelectParam__FBCA38:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA38  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBCA3B:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA3B  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBCA3E:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA3E  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBCA41:
+	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA41  jrl T,0xfbcb09
+ToneMsg_WriteWaveSelectParam__FBCA44:
 	sub	xbc, xbc                               ; FBCA44  sub XBC,XBC
 	ld	bc, (xiz-10)                            ; FBCA46  ld BC,(XIZ+0xf6)
 	cp	bc, 42                                  ; FBCA49  cp BC,0x002a
-	jrl ugt, sub_FBC958__FBCB09                ; FBCA4D  jrl UGT,0xfbcb09
+	jrl ugt, ToneMsg_WriteWaveSelectParam__FBCB09                ; FBCA4D  jrl UGT,0xfbcb09
 	sll	bc, 2                                  ; FBCA50  sll 0x02,BC
 	add	xbc, 0xFBCA5D                          ; FBCA53  add XBC,0x00fbca5d
 	ld	xbc, (xbc)                              ; FBCA59  ld XBC,(XBC)
@@ -8976,7 +8976,7 @@ sub_FBC958__FBCA44:
 	.long 0x00FBCA41	; 0xFBCAFD  entry 40 -> 0xFBCA41
 	.long 0x00FBCA41	; 0xFBCB01  entry 41 -> 0xFBCA41
 	.long 0x00FBCA41	; 0xFBCB05  entry 42 -> 0xFBCA41
-sub_FBC958__FBCB09:
+ToneMsg_WriteWaveSelectParam__FBCB09:
 	ld	bc, (xiz-5)                             ; FBCB09  ld BC,(XIZ+0xfb)
 	extz	bc                                    ; FBCB0C  extz BC
 	mul	bc, 0x12C                              ; FBCB0E  mul BC,0x012c
@@ -8989,7 +8989,7 @@ sub_FBC958__FBCB09:
 	add	xbc, 0xFDE695                          ; FBCB22  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FBCB28  ld BC,(XBC)
 	and	bc, hl                                 ; FBCB2A  and BC,HL
-	jr z, sub_FBC958__FBCB63                   ; FBCB2C  jr Z,0xfbcb63
+	jr z, ToneMsg_WriteWaveSelectParam__FBCB63                   ; FBCB2C  jr Z,0xfbcb63
 	pushw	1                                    ; FBCB2E  push 0x0001
 	ldb	c, 41                                  ; FBCB31  ld C,0x29
 	extpfx3 0x8E, 0xFA, 0x43                   ; FBCB33  mul BC,(XIZ+0xfa)
@@ -9009,8 +9009,8 @@ sub_FBC958__FBCB09:
 	call	0xFC6803                              ; FBCB59  call 0xfc6803
 	inc	8, xsp                                 ; FBCB5D  inc 0,XSP
 	inc	2, xsp                                 ; FBCB5F  inc 2,XSP
-	jr sub_FBC958__FBCB96                      ; FBCB61  jr T,0xfbcb96
-sub_FBC958__FBCB63:
+	jr ToneMsg_WriteWaveSelectParam__FBCB96                      ; FBCB61  jr T,0xfbcb96
+ToneMsg_WriteWaveSelectParam__FBCB63:
 	pushw	0                                    ; FBCB63  push 0x0000
 	ldb	c, 41                                  ; FBCB66  ld C,0x29
 	extpfx3 0x8E, 0xFA, 0x43                   ; FBCB68  mul BC,(XIZ+0xfa)
@@ -9030,7 +9030,7 @@ sub_FBC958__FBCB63:
 	call	0xFC6803                              ; FBCB8E  call 0xfc6803
 	inc	8, xsp                                 ; FBCB92  inc 0,XSP
 	inc	2, xsp                                 ; FBCB94  inc 2,XSP
-sub_FBC958__FBCB96:
+ToneMsg_WriteWaveSelectParam__FBCB96:
 	pushw	0                                    ; FBCB96  push 0x0000
 	push	0                                     ; FBCB99  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCB9B  push (XIZ+0xfb)
@@ -19529,7 +19529,7 @@ sub_FC24F6__FC25E0:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFBAAA2 = ToneStage_EnsurePartLoaded, 0xFBAC24 = ToneEdit_Dispatch
 ;          0xFBB793 = sub_FBB793, 0xFBC39D = sub_FBC39D
-;          0xFBC958 = sub_FBC958, 0xFBCD17 = sub_FBCD17
+;          0xFBC958 = ToneMsg_WriteWaveSelectParam, 0xFBCD17 = sub_FBCD17
 ;          0xFBD46B = sub_FBD46B, 0xFBD6FC = sub_FBD6FC
 ;          0xFC1BDE = ToneQuery_Dispatch, 0xFC1FC7 = LinkQuery_ReplyPartRecordBytes
 ;          0xFC206F = LinkQuery_ReplyElementBlockBytes_Elements01, 0xFC2160 = LinkQuery_ReplyElementBlockBytes_Elements23
@@ -19559,7 +19559,7 @@ sub_FC24F6__FC25E0:
 ;           Two 8-entry tables, at 0xFC2754 (write) and 0xFC27EA (query),
 ;           each guarded by `cp BC,7`. The WRITE arms are ToneEdit_Dispatch,
 ;           sub_FBB793, sub_FBC39D (twice, with a literal 0/1 and 2/3 chosen
-;           by request[2] bit 7), sub_FBC958, sub_FBCD17, sub_FBD46B and
+;           by request[2] bit 7), ToneMsg_WriteWaveSelectParam, sub_FBCD17, sub_FBD46B and
 ;           sub_FBD6FC; all but the first call ToneStage_EnsurePartLoaded on
 ;           request[+0x01] first, which is what makes request[+0x01] the
 ;           part index for the whole protocol. The QUERY arms are

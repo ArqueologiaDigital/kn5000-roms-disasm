@@ -611,7 +611,7 @@ def sec5_group_chain():
     say("   FINDINGS-l7a1429-editor-pages.md 1a.  Not re-derived here.")
     say("")
     say("   HOP 2 -- ToneMsg_Dispatch: bit 3 of byte[0] picks the WRITE table at 0xFC2754,")
-    say("   bits 0:2 pick the arm.  Arm 4 stages the part, then calls sub_FBC958.")
+    say("   bits 0:2 pick the arm.  Arm 4 stages the part, then calls ToneMsg_WriteWaveSelectParam.")
     check("write-table entry 4", "0x%06X" % (u32(0xFC2754 + 16) & 0xFFFFFF), "0xFC26E9")
     spells(0xFC26EC, "ld A,(XBC+0x01)")
     spells(0xFC26F0, "calr 0xfbaaa2")

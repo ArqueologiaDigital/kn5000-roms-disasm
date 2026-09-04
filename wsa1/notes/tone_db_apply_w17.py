@@ -488,6 +488,10 @@ REFUSALS_REAL = [
  "wave-select path, but its four arguments are unconstrained by anything in "
  "this module and its one caller (sub_FBC39D) is itself unnamed."),
 
+# ⚠ NOTE 2026-09-04: `sub_FBC958` below, and in the prose above, has since been
+# named ToneMsg_WriteWaveSelectParam (wave 23). BOTH ARE LEFT AS WRITTEN: this
+# file records what WAVE 17 REFUSED to name and why, and rewriting it to match
+# the current tree would falsify that record. Do not "fix" it.
 ("sub_FBC10A", "sub_FBC31B", "sub_FBC39D", "sub_FBC958", "sub_FBCBA7",
  "sub_FBCD17", "sub_FBD0A2", "sub_FBD1D3", "sub_FBD3E8", "sub_FBD46B",
  "sub_FBD6FC"),

@@ -162,7 +162,7 @@ destination as `base + parameter`:
 
 | arm | routine | destination | guard |
 |---|---|---|---|
-| 4 | `sub_FBC958` `0xFBC958` | `0x0087D2 + 0x21D + 43*((req[2]>>6)&3) + (req[2]&0x3F)` | `cp BC,0x002a` `0xFBCA49` → 43 arms |
+| 4 | `ToneMsg_WriteWaveSelectParam` `0xFBC958` | `0x0087D2 + 0x21D + 43*((req[2]>>6)&3) + (req[2]&0x3F)` | `cp BC,0x002a` `0xFBCA49` → 43 arms |
 | 2,3 | `sub_FBC39D` `0xFBC39D` | `0x0087D2 + 0xD9 + 81*element + (req[2]&0x7F)` | `cp BC,0x0050` `0xFBC5C8` → 81 arms |
 
 For arm 4: `and W,0xc0` / `srl 0x06,W` (`0xFBC96C`, `0xFBC972`) take the element

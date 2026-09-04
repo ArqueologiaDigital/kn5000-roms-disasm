@@ -42,7 +42,7 @@ THE THREE FACTS IT RESTS ON, each re-read from a ROM here
    (0xFC0303) sets its loop bound to 0x11 at 0xFC0322 and copies
    (tone_record + i) for i = 0..16.  So a record BEGINS with its name, which
    is what lets this script find the records at all.
-3a. The tone-editor's WAVE-SELECT-record parameter write arm sub_FBC958
+3a. The tone-editor's WAVE-SELECT-record parameter write arm ToneMsg_WriteWaveSelectParam
    (0xFBC958, ToneMsg_Dispatch write arm 4) stores the message's value byte at
    `0x0087D2 + 0x21D + 43*((param >> 6) & 3) + (param & 0x3F)` and then
    dispatches a 43-entry computed goto guarded by `cp BC,0x002a`.  So for that

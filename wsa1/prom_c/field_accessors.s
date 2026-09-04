@@ -7489,7 +7489,7 @@ Pack104_RestageReg_0280_ForVoice__FC67FD:
 ;          0xFBBB34 in sub_FBB793__FBBAE4, 0xFBBB69 in sub_FBB793__FBBB3E
 ;          0xFBBD6F in sub_FBB793__FBBD1F, 0xFBBDA4 in sub_FBB793__FBBD79
 ;          0xFBC0BC in sub_FBBFFB__FBC06C, 0xFBC0F1 in sub_FBBFFB__FBC0C6
-;          0xFBCB59 in sub_FBC958__FBCB09, 0xFBCB8E in sub_FBC958__FBCB63
+;          0xFBCB59 in ToneMsg_WriteWaveSelectParam__FBCB09, 0xFBCB8E in ToneMsg_WriteWaveSelectParam__FBCB63
 ;          0xFBCCE0 in sub_FBCBA7__FBCC95, 0xFBCCFB in sub_FBCBA7__FBCCEA
 ;          0xFBD19D in sub_FBD0A2__FBD15A, 0xFBD1B8 in sub_FBD0A2__FBD1A7
 ;          0xFBD520 in sub_FBD46B__FBD4DB, 0xFBD556 in sub_FBD46B__FBD52A
@@ -8985,7 +8985,7 @@ sub_FC723F__FC741F:
 ;          0xFB68C8 in sub_FB6681__FB6891, 0xFB6B45 in sub_FB68DD__FB6B0F
 ;          0xFB9278 in ToneDB_SourceNameList1_SelectEntry__FB9270, 0xFB9409 in ToneDB_SourceNameList2_SelectEntry__FB9401
 ;          0xFBBB7C in sub_FBB793__FBBB74, 0xFBBDB7 in sub_FBB793__FBBDAF
-;          0xFBC101 in sub_FBBFFB__FBC0F9, 0xFBCB9E in sub_FBC958__FBCB96
+;          0xFBC101 in sub_FBBFFB__FBC0F9, 0xFBCB9E in ToneMsg_WriteWaveSelectParam__FBCB96
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Calls:   0xFC46A8 = Pack104_ComputeTuningWords_0040_0080, 0xFC6CA8 = sub_FC6CA8

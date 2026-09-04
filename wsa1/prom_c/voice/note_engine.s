@@ -8540,9 +8540,9 @@ WaveSelRec_ResolveEnvDescriptor:
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFB91DB in ToneDB_SourceNameList1_SelectEntry__FB91CD, 0xFB936E in ToneDB_SourceNameList2_SelectEntry__FB92D2
-;          0xFBC064 in sub_FBBFFB__FBC055, 0xFBC9CC in sub_FBC958__FBC9BF
-;          0xFBC9E2 in sub_FBC958__FBC9D5, 0xFBC9F8 in sub_FBC958__FBC9EB
-;          0xFBCA0E in sub_FBC958__FBCA01
+;          0xFBC064 in sub_FBBFFB__FBC055, 0xFBC9CC in ToneMsg_WriteWaveSelectParam__FBC9BF
+;          0xFBC9E2 in ToneMsg_WriteWaveSelectParam__FBC9D5, 0xFBC9F8 in ToneMsg_WriteWaveSelectParam__FBC9EB
+;          0xFBCA0E in ToneMsg_WriteWaveSelectParam__FBCA01
 ;          1 site(s) inside this module:
 ;          0xFB4880
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
