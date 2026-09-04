@@ -41155,7 +41155,7 @@ Audio_Process_Init_BranchA:
 
 ; The shared tail: xor (0x041342),0xFF.
 Audio_Process_Init_BranchB:
-	xordi8_24 267074, 255
+	xor (267074:24), 255
 	ret
 
 ; ===========================================================================

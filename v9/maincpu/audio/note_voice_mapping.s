@@ -9132,10 +9132,10 @@ MarkEntriesAboveThre_InitIdx:
 
 MarkEntriesAboveThre_LoadIdx:
 	stb_erp A, 0xfa
-	xorda8 a, 0xcd2e
+	xor a, (0xcd2e:16)
 	ld e, a
 	stb_erp A, 0xf9
-	xorda8 a, 0xcd2f
+	xor a, (0xcd2f:16)
 	ldb_erp A, 0xfb
 	cps e, 0
 	jr z, MarkEntriesAboveThre_Block
@@ -18064,7 +18064,7 @@ HdaeRom_AltCheckResult:
 	ld	a, (xsp+3)
 	.byte 0x8f
 	push	sr
-	xordm8	0x8bc9, a
+	xor	(0x8bc9:16), a
 	ccf
 	ld	wa, de
 	ld	de, bc

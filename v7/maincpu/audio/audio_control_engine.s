@@ -2170,7 +2170,7 @@ MidiChOut_DetectChanges:
 
 	ld a, (1056:16)
 
-	xorda8 xbc, (13279)
+	xor a, (13279:16)
 
 	bit 2, a
 

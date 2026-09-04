@@ -11427,7 +11427,7 @@ SeBitmap_EnvCurve5:
 	exts	c
 	.byte 0xf1
 	nop
-	xordm16_24	(0xf113), bc
+	xor	(0xf113:24), bc
 	zcf
 	.byte 0xf1
 	nop

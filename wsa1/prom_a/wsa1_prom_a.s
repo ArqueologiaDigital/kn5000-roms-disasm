@@ -67387,7 +67387,7 @@ sub_FA7DCA:   ; entry: call from 0xFA7DA6
 	jr nz, .LFA7DF6                               ; FA7DF0  6e 04
 	m_set 0, MD16, 0x0922                         ; FA7DF2  f1 22 09 b8   set 0,(0x0922)
 .LFA7DF6:
-	xorda8 w, (0x0922)                            ; FA7DF6  c1 22 09 d0   xor W,(0x0922)
+	xor w, (0x0922:16)                            ; FA7DF6  c1 22 09 d0   xor W,(0x0922)
 	jr z, .LFA7E09                                ; FA7DFA  66 0d
 	ldw de, 0x10a8                                ; FA7DFC  32 a8 10   ld DE,0x10a8
 	ld a, (0x0922:16)                            ; FA7DFF  c1 22 09 21   ld A,(0x0922)
@@ -70342,7 +70342,7 @@ Queue2C00_PublishStagedIfPending_StaleCopy:
 	and E,D                                              ; FAA1DC  cc c5
 	or A,E                                               ; FAA1DE  cd e1
 	ld W,A                                               ; FAA1E0  c9 88
-	xorda8_24 w, (0x60f08b)                              ; FAA1E2  c2 8b f0 60 d0
+	xor w, (0x60f08b:24)                              ; FAA1E2  c2 8b f0 60 d0
 	and W,D                                              ; FAA1E7  cc c0
 	jr z, .LFAA1FA                                       ; FAA1E9  66 0f
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FAA1EB  f3 07 f0 ec 41
@@ -70904,7 +70904,7 @@ ParamRecord_WriteFieldIfChanged:
 	and E,D                                              ; FAA5DC  cc c5
 	or A,E                                               ; FAA5DE  cd e1
 	ld W,A                                               ; FAA5E0  c9 88
-	xorda8_24 w, (0x60f08b)                              ; FAA5E2  c2 8b f0 60 d0
+	xor w, (0x60f08b:24)                              ; FAA5E2  c2 8b f0 60 d0
 	and W,D                                              ; FAA5E7  cc c0
 	jr z, .LFAA5FA                                       ; FAA5E9  66 0f
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FAA5EB  f3 07 f0 ec 41
@@ -72379,7 +72379,7 @@ sub_FAB253:
 	m_cp_rm MB24, 0x60f08b, r3                           ; FAB2A0  c2 8b f0 60 f3
 	jr z, .LFAB2C2                                       ; FAB2A5  66 1b
 	ld C,(XIX)                                           ; FAB2A7  84 23
-	xorda8_24 c, (0x60f08b)                              ; FAB2A9  c2 8b f0 60 d3
+	xor c, (0x60f08b:24)                              ; FAB2A9  c2 8b f0 60 d3
 	and C,(XIZ+0x08)                                     ; FAB2AE  8e 08 c3
 	or (0x60f083:24), c                               ; FAB2B1  c2 83 f0 60 eb
 	ld H,(XIX)                                           ; FAB2B6  84 26

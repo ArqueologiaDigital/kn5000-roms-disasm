@@ -1311,7 +1311,7 @@ VariationStr_V1:
 	nop
 	push	sr
 	nop
-	xorda8_24	e, (0x011600)
+	xor	e, (0x011600:24)
 	nop
 ParamStr_Table_05:
 	.long TransposeNoteStr_C
@@ -3733,7 +3733,7 @@ ErrorDialog_RecoveryLine3:
 	and	(0xc6c4c3:24), w
 	and	b, 205
 	xor	w, h
-	xordm16_24	(0xd8d6d4), de
+	xor	(0xd8d6d4:24), de
 	cps	ix, 5
 	or	wa, iz
 	.byte 0xe2, 0xe4, 0xe6, 0xe8

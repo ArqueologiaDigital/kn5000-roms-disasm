@@ -244,7 +244,7 @@ AccStyle_Compare_VariationDone:
 
 AccStyle_Compare_RegistrationFlag:
 	ld a, (0x3335:16)
-	xorda8 a, 0x32f2
+	xor a, (0x32f2:16)
 	and a, 0x2
 	cps a, 0
 	jr z, AccStyle_Compare_SplitA
@@ -277,7 +277,7 @@ AccStyle_Compare_LayerADone:
 
 AccStyle_Compare_TuningState:
 	ld a, (0x33e8:16)
-	xorda8 a, 0x33e9
+	xor a, (0x33e9:16)
 	bit 0, a
 	jr z, AccStyle_Compare_TuningDone
 	or (0x333b:16), 1
@@ -5950,7 +5950,7 @@ AccTuning_CheckChange:
 	cp (0x32e5:16), 128
 	jr nc, AccTuning_ChangeReturn
 	ld a, (0x3391:16)
-	xorda8 a, 0x3392
+	xor a, (0x3392:16)
 	bit 0, a
 	jr z, AccTuning_ChangeReturn
 	or (0x3393:16), 1
@@ -6177,7 +6177,7 @@ AccTuning_Toggle:
 	cp (0x32e5:16), 128
 	jr nc, AccTuning_Toggle_NoStyle
 	ld a, (0x3391:16)
-	xorda8 a, 0x3392
+	xor a, (0x3392:16)
 	bit 0, a
 	jr z, AccTuning_Toggle_CheckDirty
 	call AccHelper_ComputeVoiceOffset
@@ -6592,7 +6592,7 @@ AccPedal_ExprToggle:
 	bit 1, a
 	jr z, AccPedal_ExprReturn
 	ldb a, 0x2
-	xordm8 0xfc5f, a
+	xor (0xfc5f:16), a
 	cp (0x90f8:16), 255
 	jr z, AccPedal_ExprReturn
 	bit 3, (0xfd56:16)
@@ -9304,7 +9304,7 @@ AccFlags_SyncTo64607:
 
 AccFlags_Sync_Process:
 	ld a, e
-	xorda8 a, 0x347b
+	xor a, (0x347b:16)
 	bit 2, a
 	jr z, AccFlags_Sync_UpdateLED
 	ldb a, 0x22
@@ -11025,7 +11025,7 @@ AccStyle_ToggleBit0_CheckC07D:
 	and	a, (0xc07f:16)
 	bit 0, a
 	jr z, AccStyle_ToggleBit0_Ret
-	xordi8	0x3391, 1
+	xor	(0x3391:16), 1
 	bit	0, (0x3391:16)
 	jr nz, AccStyle_ToggleBit0_CallOn
 	call AccTuning_LEDOff
@@ -22582,7 +22582,7 @@ RhythmROM_LoadPattern:
 	xor xwa, xwa
 	ldw_sri WA, 0x07, 0xf0, 0xec
 	jr RhythmROM_PatternDisp_ReadByte
-	xorda16_24 xde, (0x03d803)
+	xor de, (0x03d803:24)
 	reti
 RhythmROM_PatternDisp_InitLoop:
 	neg	wa
@@ -22599,7 +22599,7 @@ RhythmROM_PatternDisp_InitLoop:
 	.byte 0xd2
 	pop	sr
 	ld	wa, 984
-	xordm16_24	(0x07d207), wa
+	xor	(0x07d207:24), wa
 	reti
 	neg	wa
 

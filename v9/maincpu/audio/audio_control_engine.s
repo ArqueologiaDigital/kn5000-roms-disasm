@@ -3542,7 +3542,7 @@ MidiChOut_DetectChanges:
 	bit 2, (1054:16)
 	ret nz
 	ld a, (1056:16)
-	xorda8 a, 0x347b
+	xor a, (0x347b:16)
 	bit 2, a
 	ret z
 	orw (0x8f3e:16), 4

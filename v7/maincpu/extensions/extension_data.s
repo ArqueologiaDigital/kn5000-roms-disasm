@@ -1091,7 +1091,7 @@ VariationStr_V1:
 	nop
 	push	sr
 	nop
-	xorda8_24	e, (0x011600)
+	xor	e, (0x011600:24)
 	nop
 ParamStr_Table_05:
 	.long TransposeNoteStr_C

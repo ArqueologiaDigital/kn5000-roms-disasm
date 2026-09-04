@@ -5287,7 +5287,7 @@ AccTuning_CheckChange:
 	cp (0x3249:16), 0x80
 	jr nc, AccTuning_ChangeReturn
 	ld a, (0x32f5:16)
-	xorda8 a, (0x32f6)
+	xor a, (0x32f6:16)
 	bit 0x00,A
 	jr z, AccTuning_ChangeReturn
 	or (0x32f7:16), 0x01
@@ -5453,7 +5453,7 @@ AccTuning_Toggle:
 	cp (0x3249:16), 0x80
 	jr nc, AccTuning_Toggle_NoStyle
 	ld a, (0x32f5:16)
-	xorda8 a, (0x32f6)
+	xor a, (0x32f6:16)
 	bit 0x00,A
 	jr z, AccTuning_Toggle_CheckDirty
 	call AccHelper_ComputeVoiceOffset
@@ -8266,7 +8266,7 @@ AccFlags_SyncTo64607:
 
 AccFlags_Sync_Process:
 	ld	a, e
-	xorda8	a, (13279)
+	xor	a, (13279:16)
 	bit	2, a
 	jr	z, 6
 	ldb	a, 34
@@ -19387,7 +19387,7 @@ RhythmROM_PatternDisp_InitLoop:
 	.byte 0xd2
 	pop	sr
 	ld	wa, 984
-	xordm16_24	(0x07d207), wa
+	xor	(0x07d207:24), wa
 	reti
 	neg	wa
 

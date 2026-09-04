@@ -85648,7 +85648,7 @@ sub_F44964:
 	m_bit 0, MD16, 0x34d9	; F449B7  bit 0,(0x34d9)
 	jr	z, 5	; F449BB  jr Z,0xf449c2
 	m_or_mi8 MB16, 0x34d9, 0x02	; F449BD  or (0x34d9),0x02
-	xorda8	a, (13529)	; F449C2  xor A,(0x34d9)
+	xor	a, (13529:16)	; F449C2  xor A,(0x34d9)
 	bit	1, a	; F449C6  bit 0x01,A
 	jr	z, 31	; F449C9  jr Z,0xf449ea
 	m_bit 1, MD16, 0x360b	; F449CB  bit 1,(0x360b)
@@ -106192,7 +106192,7 @@ sub_F550A6:
 	push	xix	; F550AC  push XIX
 	ld	xix, (xiz+12)	; F550AD  ld XIX,(XIZ+0x0c)
 	ld	c, (xix+7)	; F550B0  ld C,(XIX+0x07)
-	xordm8	(10416), c	; F550B3  xor (0x28b0),C
+	xor	(10416:16), c	; F550B3  xor (0x28b0),C
 	m_set 3, MD16, 0x2075	; F550B7  set 3,(0x2075)
 	ld	xbc, (xiz+8)	; F550BB  ld XBC,(XIZ+0x08)
 	ld	e, (xbc)	; F550BE  ld E,(XBC)
@@ -106302,7 +106302,7 @@ sub_F5517B:
 	ld	xix, (xiz+8)	; F55182  ld XIX,(XIZ+0x08)
 	ld	xbc, (xiz+12)	; F55185  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+2)	; F55188  ld A,(XBC+0x02)
-	xordm8	(10416), a	; F5518B  xor (0x28b0),A
+	xor	(10416:16), a	; F5518B  xor (0x28b0),A
 	ld	l, (xix)	; F5518F  ld L,(XIX)
 	ld	a, (10416:16)	; F55191  ld A,(0x28b0)
 	and	a, 1	; F55195  and A,0x01
@@ -106367,7 +106367,7 @@ sub_F551E7:
 	pushw	ix	; F551ED  push IX
 	ld	xbc, (xiz+12)	; F551EE  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+7)	; F551F1  ld A,(XBC+0x07)
-	xordm8	(10416), a	; F551F4  xor (0x28b0),A
+	xor	(10416:16), a	; F551F4  xor (0x28b0),A
 	ld	xwa, (xiz+8)	; F551F8  ld XWA,(XIZ+0x08)
 	ld	ix, (xwa)	; F551FB  ld IX,(XWA)
 	ld	de, ix	; F551FD  ld DE,IX
@@ -106625,7 +106625,7 @@ IndexedParam_AdjustField:
 	ld	xix, (xiz+10)	; F55362  ld XIX,(XIZ+0x0a)
 	m_set 3, MD16, 0x2075	; F55365  set 3,(0x2075)
 	ld	c, (xix+7)	; F55369  ld C,(XIX+0x07)
-	xordm8	(10416), c	; F5536C  xor (0x28b0),C
+	xor	(10416:16), c	; F5536C  xor (0x28b0),C
 	ld	c, (10416:16)	; F55370  ld C,(0x28b0)
 	and	c, 16	; F55374  and C,0x10
 	jr	z, 4	; F55377  jr Z,0xf5537d
@@ -106786,7 +106786,7 @@ IndexedParam_SetBit:
 	ld	xix, (xiz+10)	; F55482  ld XIX,(XIZ+0x0a)
 	ld	e, (xiz+8)	; F55485  ld E,(XIZ+0x08)
 	ld	c, (xix+2)	; F55488  ld C,(XIX+0x02)
-	xordm8	(10416), c	; F5548B  xor (0x28b0),C
+	xor	(10416:16), c	; F5548B  xor (0x28b0),C
 	ld	c, (10416:16)	; F5548F  ld C,(0x28b0)
 	and	c, 16	; F55493  and C,0x10
 	jr	z, 3	; F55496  jr Z,0xf5549b
@@ -106998,7 +106998,7 @@ IndexedParam_SetFieldFromAsciiEntry:		; <- T_IndexedParam_SetFieldFromAsciiEntry
 	jrl	116	; F5556A  jrl T,0xf555e1
 	ld	xbc, (xiz+10)	; F5556D  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+7)	; F55570  ld A,(XBC+0x07)
-	xordm8	(10416), a	; F55573  xor (0x28b0),A
+	xor	(10416:16), a	; F55573  xor (0x28b0),A
 	ld	a, (10416:16)	; F55577  ld A,(0x28b0)
 	and	a, 16	; F5557B  and A,0x10
 	jr	z, 4	; F5557E  jr Z,0xf55584

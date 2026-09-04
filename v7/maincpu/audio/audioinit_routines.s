@@ -384,7 +384,7 @@ AudioInit_Pan_Reverb_CheckMode1:
 	swi	0
 	ld	e, a
 	ld	a, (49864:16)
-	xorda8	a, (49506)
+	xor	a, (49506:16)
 	ld	c, a
 AudioInit_Pan_Reverb_CheckMode1b:
 	.byte 0xc1, 0xc8, 0xc2, 0x21, 0xcb, 0xc1, 0xc9

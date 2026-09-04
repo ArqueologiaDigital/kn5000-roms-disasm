@@ -1867,13 +1867,13 @@ AudioInit_VoiceCompare_BothFF:
 	cp (0xc365:16), 255
 	jrl nz, AudioInit_VoiceCompare_NotBothFF
 	ld a, (0xc364:16)
-	xorda8 a, 0xc1fe
+	xor a, (0xc1fe:16)
 	ld c, a
 	ld a, (0xc1fe:16)
 	and a, c
 	ld e, a
 	ld a, (0xc364:16)
-	xorda8 a, 0xc1fe
+	xor a, (0xc1fe:16)
 	ld c, a
 	ld a, (0xc364:16)
 	and a, c
@@ -1946,14 +1946,14 @@ AudioInit_VoiceCompare_NotBothFF:
 	cp (0xc365:16), 255
 	jr z, AudioInit_VoiceCompare_BuildCmd
 	ld a, (0xc364:16)
-	xorda8 a, 0xc1fe
+	xor a, (0xc1fe:16)
 	ld c, a
 	ld a, (0xc1fe:16)
 	and a, c
 	and a, 0xf8
 	ld e, a
 	ld a, (0xc364:16)
-	xorda8 a, 0xc1fe
+	xor a, (0xc1fe:16)
 	ld c, a
 	ld a, (0xc364:16)
 	and a, c
