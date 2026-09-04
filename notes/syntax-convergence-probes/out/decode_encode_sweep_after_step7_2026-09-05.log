@@ -1,0 +1,74 @@
+toolchain: tlcs900_backend@12a32aba2583
+  v10         343020 instructions   OK   342079   ASYM    93   LENGTH     0   NODECODE   848
+  v9          366191 instructions   OK   365210   ASYM   112   LENGTH     0   NODECODE   869
+  v7          270368 instructions   OK   269699   ASYM    65   LENGTH     0   NODECODE   604
+  v142         45478 instructions   OK    45244   ASYM     1   LENGTH     0   NODECODE   233
+  subboot       1358 instructions   OK     1330   ASYM     0   LENGTH     0   NODECODE    28
+  hdae5000     35285 instructions   OK    35024   ASYM   188   LENGTH     0   NODECODE    73
+  table         6282 instructions   OK     6264   ASYM     0   LENGTH     0   NODECODE    18
+  custom           0 instructions   OK        0   ASYM     0   LENGTH     0   NODECODE     0
+  prom_a      116943 instructions   OK   114992   ASYM    15   LENGTH     0   NODECODE  1936
+  prom_b       62408 instructions   OK    62402   ASYM     0   LENGTH     0   NODECODE     6
+  prom_c       76647 instructions   OK    76579   ASYM     1   LENGTH     0   NODECODE    67
+  prom_d           0 instructions   OK        0   ASYM     0   LENGTH     0   NODECODE     0
+
+TOTAL 1323980 real instructions swept
+  OK         1318823  (99.6105%)
+  ASYM           475  (0.0359%)  wrong text, right length -- SILENT
+  LENGTH           0  (0.0000%)  wrong length -- DESYNCHRONISES a sweep
+  NODECODE      4682  (0.3536%)  refused outright -- loud
+
+DISTINCT BROKEN FORMS: 47  (by site count)
+class    rom bytes              objdump prints                     re-encodes to    sites
+ASYM     e3 e5 00 01 23         ld xhl, (xbc+256)                  a9 00 23             94   (hdae5000: ld_sril	xhl, (xbc+256))
+ASYM     f3 fd 00 01 37         lda xsp, (xsp+256)                 bf 00 37             66   (v10: lda_dri	xsp, 253, 0, 1)
+ASYM     e3 e1 00 01 23         ld xhl, (xwa+256)                  a8 00 23             63   (hdae5000: ld_sril	xhl, (xwa+256))
+ASYM     06 0c                  ei 4                               06 04                31   (v10: ei	12)
+ASYM     e3 e1 00 01 24         ld xix, (xwa+256)                  a8 00 24             30   (hdae5000: ld_sril	xix, (xwa+256))
+ASYM     06 08                  di                                 06 00                25   (v10: ei	8)
+ASYM     f3 e1 00 01 30         lda xwa, (xwa+256)                 b8 00 30             15   (v10: lda_dri	xwa, 225, 0, 1)
+ASYM     06 0a                  ei 2                               06 02                14   (v10: ei	10)
+ASYM     06 09                  ei 1                               06 01                12   (v10: ei	9)
+ASYM     cf e9 02               rrc l                              cf e9 01             12   (v10: rrc_i_8	l, 2)
+ASYM     06 0d                  ei 5                               06 05                11   (v9: ei	13)
+ASYM     c8 e8 02               rlc w                              c8 e8 01             10   (v10: rlc_i_8	w, 2)
+ASYM     06 0e                  ei 6                               06 06                 9   (v10: ei	14)
+ASYM     f3 e5 00 01 31         lda xbc, (xbc+256)                 b9 00 31              8   (v10: lda_dri	xbc, 229, 0, 1)
+ASYM     ce e9 02               rrc h                              ce e9 01              6   (v10: rrc_i_8	h, 2)
+ASYM     06 3f                  ei 7                               06 07                 5   (v10: ei	63)
+ASYM     f3 fd 00 01 32         lda xde, (xsp+256)                 bf 00 32              5   (v10: lda_dri	xde, 253, 0, 1)
+ASYM     06 0b                  ei 3                               06 03                 4   (v10: ei	11)
+ASYM     d3 f9 00 01 19 04 04   ldw (1028), (xiz+256)              9e 00 19 04 04        3   (v10: ldmm_sriw	249, 0, 1, 4, 4)
+ASYM     06 3b                  ei 3                               06 03                 3   (v10: ei	59)
+ASYM     c9 e9 02               rrc a                              c9 e9 01              3   (v10: rrc_i_8	a, 2)
+ASYM     cf e8 02               rlc l                              cf e8 01              3   (v10: rlc_i_8	l, 2)
+ASYM     ce e8 02               rlc h                              ce e8 01              3   (v10: rlc_i_8	h, 2)
+ASYM     d3 e9 00 01 20         ld wa, (xde+256)                   9a 00 20              3   (v10: ldw_sri0	wa, (xde+256))
+ASYM     f3 e9 00 01 32         lda xde, (xde+256)                 ba 00 32              3   (v10: lda_dri	xde, 233, 0, 1)
+ASYM     06 f1                  ei 1                               06 01                 2   (v10: ei	241)
+ASYM     06 1d                  ei 5                               06 05                 2   (v10: ei	29)
+ASYM     06 13                  ei 3                               06 03                 2   (v10: ei	19)
+ASYM     06 10                  di                                 06 00                 2   (v10: ei	16)
+ASYM     f3 e1 00 01 33         lda xhl, (xwa+256)                 b8 00 33              2   (v10: lda_dri	xhl, 225, 0, 1)
+ASYM     f3 e1 00 01 32         lda xde, (xwa+256)                 b8 00 32              2   (v10: lda_dri	xde, 225, 0, 1)
+ASYM     f3 fd 00 01 33         lda xhl, (xsp+256)                 bf 00 33              2   (v10: lda_dri	xhl, 253, 0, 1)
+ASYM     06 fd                  ei 5                               06 05                 2   (v10: ei	253)
+ASYM     06 29                  ei 1                               06 01                 2   (v9: ei	41)
+ASYM     06 2d                  ei 5                               06 05                 2   (v9: ei	45)
+ASYM     06 16                  ei 6                               06 06                 2   (v9: ei	22)
+ASYM     06 28                  di                                 06 00                 2   (v7: ei	40)
+ASYM     cf e9 13               rrc l                              cf e9 01              1   (v10: rrc_i_8	l, 19)
+ASYM     06 9b                  ei 3                               06 03                 1   (v9: ei	155)
+ASYM     06 4a                  ei 2                               06 02                 1   (v9: ei	74)
+ASYM     06 1f                  ei 7                               06 07                 1   (v9: ei	31)
+ASYM     06 bf                  ei 7                               06 07                 1   (v9: ei	191)
+ASYM     cf e9 03               rrc l                              cf e9 01              1   (v7: rrc_i_8	l, 3)
+ASYM     06 41                  ei 1                               06 01                 1   (v7: ei	65)
+ASYM     e3 fd 00 01 20         ld xwa, (xsp+256)                  af 00 20              1   (v142: ld_sril	xwa, (xsp+256))
+ASYM     e3 e5 00 01 24         ld xix, (xbc+256)                  a9 00 24              1   (hdae5000: ld_sril	xix, (xbc+256))
+ASYM     f3 e1 00 01 51         ld (xwa+256), bc                   b8 00 51              1   (prom_c: extpfx5	243, 225, 0, 1, 81)
+
+real	3m54.896s
+user	2m32.905s
+sys	0m24.356s
+DONE

@@ -630,3 +630,61 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # snapshot: Q1 71,667 / Q2 3,043 / Q3 85 macro operands, 0 literals outside
 # 0..7 / Q5 10 and 0 untagged io defaults / Q6 152 ldio symbolic addresses, all
 # .equ-defined and folded by the parser / Q7 14 stib_d8, 18 stiw_d8.
+#
+# UPDATE 15, CONTINUED (2026-09-05): spec steps 5-7 are on tlcs900_backend at
+# 7a7a3fd6318b, five commits on top of 3a0635ee2c65:
+#   3369a7097158  lit: encoding-selector.s pins EVERY family member, the
+#                 untagged defaults included, in both directions;
+#                 encoding-selector-errors.s; TableGen/tlcs900-no-new-
+#                 ambiguity.td (REQUIRES: asserts) pinned at 1 pair   (step 5)
+#   34048ba78e45  emitter backstops: PrefixSmallImm refuses a symbol or a value
+#                 outside 0..7, LdIoImm/LdIoImm16 refuse a symbolic address or
+#                 value and an address beyond 0xFF.  Measured FIRST with
+#                 encoding_selector_exposure.py (0 literals outside 0..7, all
+#                 152 symbolic ldio addresses fold), then gate-all 13/13 with
+#                 no source edit: the diagnostics are free, and that they are
+#                 free is the finding.  llvm-mc sha256 12fd9928f18a  (step 6)
+#   12a32aba2583  disassembler tests: retired spellings -> selected forms.
+#                 ⚠ ITS MESSAGE CLAIMS 3/3 AND IS FALSE (was 1/3, see next).
+#   8753036ea560  the correction: MC/Disassembler/TLCS900 basic.txt and
+#                 roundtrip.txt were RED BEFORE THIS WORK BEGAN -- measured at
+#                 the snapshot binary with the pre-change test files: `scc8 t,
+#                 a` has printed as `scc t, a` since 6c3c6d755ba2, and
+#                 roundtrip.txt asserted `call_rr 0, xbc, wa` for f3 07 e4 e0
+#                 08, bytes UPDATE 14 showed are not an instruction.  Now 3/3.
+#   7a7a3fd6318b  decoder: f0 nn 00 ii / f0 nn 02 iiii decode as LD8mi_dst /
+#                 LD16mi_dst_02 with the DirectAddrW8 sentinel, printing
+#                 `ld (7:8), 255` / `ldw (237:8), 36352` instead of
+#                 `stib_d8 7, 255` / `stiw_d8 237, 0, 142`.  Decoder-only;
+#                 gate-all 13/13.  llvm-mc sha256 35829d3c7f57, llvm-objdump
+#                 65b8d2e43086                                          (step 7)
+#
+# llvm-lit at 7a7a3fd6318b: MC/TLCS900 32/32 (30 + 2 new), MC/Disassembler/
+# TLCS900 3/3 (was 1/3 at the snapshot), CodeGen/TLCS900 51/51, TableGen
+# tlcs900-no-new-ambiguity 1/1.  Ambiguity report: 1 pair (LINK/LINK32r),
+# unchanged through every step.
+#
+# THE DECODE/ENCODE SWEEP, before and after step 7 (scripts/analysis/
+# decode_encode_asymmetry_sweep.py; transcripts in notes/syntax-convergence-
+# probes/out/decode_encode_sweep_{before,after}_step7_2026-09-05.log):
+#   before (llvm-objdump e04413e8, tree 3a0635ee2c65): 1,323,980 swept,
+#     475 ASYM, 0 LENGTH, 4,682 NODECODE
+#   after  (llvm-objdump 65b8d2e4):                     IDENTICAL, and the
+#     47 distinct broken forms are the same list -- none is in a family this
+#     work touches ((Xrr+256), `ei` masking, rrc/rlc counts).
+#   ⚠ The sweep is BLIND to the step-7 change by construction: `stib_d8 7, 255`
+#     re-assembled to its own bytes, so it was never ASYM.  The spec's "should
+#     fall by the io rows" is wrong for this instrument; the lit tests
+#     d8-direct.txt and encoding-selector.s are what see it.  The recorded
+#     472 ASYM + 16 LENGTH baseline predates UPDATE 14's decoder fixes (which
+#     removed the 16 LENGTH errors by its own account) and a smaller tree.
+#   ⚠ The after-log's "toolchain:" line reads git HEAD at launch (12a32aba2583
+#     with step 7 uncommitted); the objdump hash above is what identifies it.
+#
+# TOOLS THAT GREP FRESH DISASSEMBLY for cps/lds/lds32/ldb/ldio/ldwio/stib_d8/
+# stiw_d8, which step 7 says must move in the same commit: NONE.  `git grep`
+# over scripts/, notes/, tools/, wsa1/scripts/ finds those names only in the
+# exposure probe (source census), size_family_convert.py (a spelling table),
+# find_free_wins.py (candidate spellings it generates) and
+# l2_name_vs_return_value.py (parses SOURCE lines); mnemonic_census.py reads
+# source mnemonics and the backend's MnemonicTable, both unchanged.
