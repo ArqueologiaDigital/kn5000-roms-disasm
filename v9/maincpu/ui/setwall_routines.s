@@ -1346,7 +1346,7 @@ SetWall_StreamIndexResolve:
 	dec 1, hl
 	extz xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
@@ -1813,7 +1813,7 @@ SetWall_ResolveStreamPtr:
 	extz xhl
 	dec 1, hl
 	sla xhl, 8
-	addda32 xhl, 4362
+	add xhl, (4362:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret

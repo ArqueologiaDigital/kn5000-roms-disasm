@@ -1578,7 +1578,7 @@ FDC_CmdReadSectors__count_burst:
 	lds iz, 1	; ld IZ,1
 FDC_CmdReadSectors__burst_loop:
 	ld wa, (0x0c4c:16)	; ld WA,(0x0c4c)
-	adddm16 (0x0c4a), xwa	; add (0x0c4a),WA
+	add (0x0c4a:16), wa	; add (0x0c4a),WA
 	lda xwa, (0x0c78:16)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
@@ -1687,7 +1687,7 @@ FDC_CmdWriteSectors__count_burst:
 	lds iz, 1	; ld IZ,1
 FDC_CmdWriteSectors__burst_loop:
 	ld wa, (0x0c4c:16)	; ld WA,(0x0c4c)
-	adddm16 (0x0c4a), xwa	; add (0x0c4a),WA
+	add (0x0c4a:16), wa	; add (0x0c4a),WA
 	lda xwa, (0x0c78:16)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
@@ -1955,7 +1955,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 FDC_BuildFormatFieldBuffer__offset_numbering:
 	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	srl wa, 1	; srl 0x01,WA
-	addda8 a, (0x0c5b)	; add A,(0x0c5b)
+	add a, (0x0c5b:16)	; add A,(0x0c5b)
 	ld l, a	; ld L,A
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E

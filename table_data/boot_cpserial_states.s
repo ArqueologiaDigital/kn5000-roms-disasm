@@ -133,7 +133,7 @@ BootSerial_State08_TxFirstByte:
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0xd0		; INTES1
 	ld	xiy, 0x0fd9		; TX serial ring
-	addda16	xiy, 0x0fd5		; + send index
+	add	iy, (0x0fd5:16)		; + send index
 	ld	a, (xiy)
 	st_dd8b	a, 0xd4			; frame byte -> SC1BUF
 	incw	1, (0x0fd5:16)
@@ -172,7 +172,7 @@ BootSerial_State10_TxNextByte:
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0xd0		; INTES1
 	ld	xiy, 0x0fd9		; TX serial ring
-	addda16	xiy, 0x0fd5
+	add	iy, (0x0fd5:16)
 	ld	a, (xiy)
 	st_dd8b	a, 0xd4			; frame byte -> SC1BUF
 	incw	1, (0x0fd5:16)
@@ -254,7 +254,7 @@ BootSerial_State20_RxFirstByte:
 	ldio	0xeb, 0x0d		; INTES1: RX enabled
 	ld_sd8b	a, 0xd4			; A = SC1BUF (received byte)
 	ld	xiy, 0x0f79		; RX serial ring
-	addda16	xiy, 0x0f77		; + head index
+	add	iy, (0x0f77:16)		; + head index
 	ld	(xiy), a
 	ld	hl, (0x0f77:16)
 	subda16	xhl, 0x0f75		; head - tail
@@ -300,7 +300,7 @@ BootSerial_State20_RxFirstByte__count_set:
 BootSerial_State24_RxNextByte:
 	ld_sd8b	a, 0xd4			; A = SC1BUF
 	ld	xiy, 0x0f79		; RX serial ring
-	addda16	xiy, 0x0f77
+	add	iy, (0x0f77:16)
 	ld	(xiy), a
 	bit	0, (0x0f6a:16)		; overflow latched?
 	jr	nz, BootSerial_State24_RxNextByte__no_advance

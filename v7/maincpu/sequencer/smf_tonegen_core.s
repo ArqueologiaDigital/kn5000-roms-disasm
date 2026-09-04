@@ -496,7 +496,7 @@ SeqTrack_ComputeTempoScaling:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	popw wa
 	ldiw_erp 0xea, 0
 	ldiw_erp 0xe6, 0
@@ -510,7 +510,7 @@ SeqTrack_ComputeTempoScaling:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	popw wa
 
 SeqTrack_ComputeTempo_Phase2:
@@ -523,7 +523,7 @@ SeqTrack_ComputeTempo_Phase2:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -546,7 +546,7 @@ SeqTrack_ComputeTempo_Phase3:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	ld wa, de
 
 SeqTrack_ComputeTempo_Phase3Store:
@@ -576,7 +576,7 @@ SeqTrack_ComputeTempo_NoDelta:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -598,7 +598,7 @@ SeqTrack_ComputeTempo_NoDeltaDirect:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -1675,7 +1675,7 @@ SeqTrack_ComputeScaledDelta:
 	ld a, (4213:16)
 	mul xwa, xhl
 	stw_erp DE, 0xe2
-	addda16 xwa, 4335
+	add wa, (4335:16)
 	ld de, wa
 	ld wa, (4333:16)
 	ld hl, (3936:16)
@@ -1729,7 +1729,7 @@ Sequencer_Validate_Done:
 
 Sequencer_AdvanceBlockPosition:
 	ld xix, (4376:16)
-	addda32 xix, 4211
+	add xix, (4211:16)
 	cp xix, 0x17f9
 	jrl ule, Sequencer_Advance_StorePtr
 	push xix
@@ -4217,7 +4217,7 @@ ToneGen_WriteParamToBlock:
 	ld iy, (9830:16)
 	and iy, 0xff
 	extz xiy
-	addda32 xiy, 4349
+	add xiy, (4349:16)
 	ld (xiy), a
 	ret
 

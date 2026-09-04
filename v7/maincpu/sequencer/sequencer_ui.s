@@ -8351,7 +8351,7 @@ NoteEdit_GateTimeNumeric:
 NoteEdit_FormatChordType:
 	ld xiz, xde
 	ld a, (0x279e:16)
-	addda8_24 a, (0x021096)
+	add a, (0x021096:24)
 	extz wa
 	pushw wa
 	ld xwa, ExtDevice_ModeDispatch_Table_0x1FC
@@ -8375,7 +8375,7 @@ NoteEdit_FormatChordNotes:
 	add	xwa, xbc
 	ld	xbc, 13
 	call	16712319
-	addda32	xhl, (7508)
+	add	xhl, (7508:16)
 	push	xhl
 	jrl	196
 NoteEdit_GetParamValue:

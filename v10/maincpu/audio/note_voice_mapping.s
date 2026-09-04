@@ -15857,7 +15857,7 @@ VoiceSlot_LoadResult_Data2:
 VoiceSlot_LoadResult_Block3:
 	calr Audio_NullRet2_Prologue
 	ld wa, (0x00cf2f:24)
-	addda8_24 a, (0xcee5)
+	add a, (0xcee5:24)
 	cps a, 2
 	jr ugt, VoiceSlot_LoadResult_TestBit24
 	jrl Audio_NullRet2
@@ -20610,7 +20610,7 @@ SeqFile_StoreTempoByte1:
 SeqFile_ReadTempoByte2:
 	ld a, l
 	extz wa
-	adddm16 0xe9f1, xwa
+	add (0xe9f1:16), wa
 	call TaskBuf_ReadNextByte
 	ld wa, hl
 	cps wa, 0
@@ -20633,7 +20633,7 @@ SeqFile_ReadDivisionByte1:
 SeqFile_StoreDivisionByte1:
 	ld a, l
 	extz wa
-	adddm16 0xe9ef, xwa
+	add (0xe9ef:16), wa
 	stiw_ind 0xfd, 0x8e, 0x00, 0x00, 0x00
 	cpiw_sri 0xfd, 0x8e, 0x00, 0x03, 0x00
 	jr ugt, SeqFile_ValidateTrackMagic
@@ -20694,7 +20694,7 @@ SeqFile_ReadTrackLength:
 	jr SeqFile_Epilogue
 
 SeqFile_AccumulateLength:
-	adddm32 0xe9e7, xhl
+	add (0xe9e7:16), xhl
 	lds hl, 0
 
 SeqFile_Epilogue:
@@ -20762,7 +20762,7 @@ ConfigureBanks_LoadReg:
 	ret
 
 ConfigureBanks_Block:
-	adddm32 0xe9e7, xhl
+	add (0xe9e7:16), xhl
 	jr ConfigureBanks_InitVal
 
 ConfigureBanks_Block2:
@@ -20778,7 +20778,7 @@ ConfigureBanks_Block2:
 	ret
 
 ConfigureBanks_Block3:
-	adddm32 0xe9e7, xhl
+	add (0xe9e7:16), xhl
 	jr ConfigureBanks_InitVal
 
 ConfigureBanks_Extend:
@@ -20791,7 +20791,7 @@ ConfigureBanks_Extend:
 	ld xwa, xhl
 	cp xwa, 0x0
 	ret lt
-	adddm32 0xe9e7, xhl
+	add (0xe9e7:16), xhl
 
 ConfigureBanks_InitVal:
 	lds hl, 0
@@ -21603,7 +21603,7 @@ SeqPlay_ReadRecord_Entry:
 
 SeqPlay_AccumulateDelta:
 	ld xwa, (xsp + 2)
-	adddm32 0xe9f5, xwa
+	add (0xe9f5:16), xwa
 
 SeqPlay_CheckSysExMarker:
 	cp (xsp + 12), 0xff
@@ -21651,7 +21651,7 @@ SeqPlay_CopyToMidiBuffer:
 	call Mem_Copy
 	lda xsp, (xsp + 20)
 	ldw_sri0 WA, (xsp + 0x010e)
-	adddm16 0xebfb, xwa
+	add (0xebfb:16), wa
 	cpw (0xeaf9:16), 0
 	jr z, SeqPlay_CheckMidiBuffer
 	ld wa, (0xeaf9:16)
@@ -22404,7 +22404,7 @@ MidiSysMsg_Dispatch:
 	ld	xbc, xwa
 	ldw	wa, 243
 	calr	252
-	adddm32	0xe9e7, xhl
+	add	(0xe9e7:16), xhl
 	jrl	238
 	lds	iz, 0
 	cps	iz, 2
@@ -22424,7 +22424,7 @@ MidiSysMsg_Dispatch:
 	ld	xbc, xwa
 	ldw	wa, 244
 	calr	199
-	adddm32	0xe9e7, xhl
+	add	(0xe9e7:16), xhl
 	jrl	185
 	lds	iz, 0
 	cps	iz, 2
@@ -22760,7 +22760,7 @@ ToneGen_SignExtendDelta:
 	exts xiz
 
 ToneGen_AccumulateDelta:
-	adddm32 0xe9e7, xiz
+	add (0xe9e7:16), xiz
 	lds hl, 0
 
 ToneGen_PopIzReturn:
@@ -22887,7 +22887,7 @@ MidiRealtime_SysExOv_LoadReg3:
 MidiRealtime_SysExOv_LoadIter:
 	ld wa, iz
 	extz xwa
-	adddm32 0xe9e7, xwa
+	add (0xe9e7:16), xwa
 	jr MidiRealtime_StopAndReturn
 
 MidiRealtime_NonSysExHandler:
@@ -22944,7 +22944,7 @@ MidiRealtime_NonSysE_LoadReg3:
 MidiRealtime_NonSysE_LoadIter:
 	ld wa, iz
 	extz xwa
-	adddm32 0xe9e7, xwa
+	add (0xe9e7:16), xwa
 
 MidiRealtime_StopAndReturn:
 	lds hl, 0
@@ -22987,7 +22987,7 @@ ProcessMidiConverge_Block:
 	ld a, l
 	sll xwa, 8
 	and xwa, 0xff00
-	adddm32 0xebfd, xwa
+	add (0xebfd:16), xwa
 	calr RingBuffer_ReadByte
 	ld wa, hl
 	cps wa, 0
@@ -22996,7 +22996,7 @@ ProcessMidiConverge_Block:
 	ld a, l
 	sll xwa, 0
 	and xwa, 0xff0000
-	adddm32 0xebfd, xwa
+	add (0xebfd:16), xwa
 	calr RingBuffer_ReadByte
 	ld wa, hl
 	cps wa, 0
@@ -23006,7 +23006,7 @@ ProcessMidiConverge_Block:
 	sll xwa, 8
 	sll xwa, 0
 	and xwa, 0xff000000
-	adddm32 0xebfd, xwa
+	add (0xebfd:16), xwa
 	calr RingBuffer_ReadByte
 	ld wa, hl
 	cps wa, 0
@@ -28196,7 +28196,7 @@ Sprintf_Unlocked:
 Sprintf_OutputCallback:
 	ld	xbc, (0x3c21c:24)
 	lds32	xwa, 1
-	addl_da	0x3c21c, xwa
+	add	(0x3c21c:24), xwa
 	ld	wa, (xsp+4)
 	ld	(xbc), a
 	ld	xwa, (0x3c21c:24)
@@ -28927,7 +28927,7 @@ Heap_Alloc_Block:
 ; ============================================================================
 Heap_Grow:
 	ld xhl, (0x03d524:24)
-	addl_da 0x03d524, xwa
+	add (0x03d524:24), xwa
 	subdm32_24 (0x3d528), xwa
 	ret
 

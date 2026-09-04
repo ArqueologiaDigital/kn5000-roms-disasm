@@ -61,7 +61,7 @@ MainTitle_UpdateAndRefresh:
 
 MainTitle_EventLoop:
 	lds32 xwa, 1
-	addl_da 0x027496, xwa
+	add (0x027496:24), xwa
 	lds wa, 2
 	call TaskSched_WaitForEvent
 	lds wa, 0

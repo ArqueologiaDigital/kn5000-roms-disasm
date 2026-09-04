@@ -4219,7 +4219,7 @@ Voice_GetOctaveShift:
 	extz	bc                                    ; FA731C  extz BC
 	extz	xbc                                   ; FA731E  extz XBC
 	add	xwa, xbc                               ; FA7320  add XWA,XBC
-	addda32_24	xwa, (0xD7ED)                   ; FA7322  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FA7322  add XWA,(0x00d7ed)
 	ld	c, (xwa)                                ; FA7327  ld C,(XWA)
 	extz	bc                                    ; FA7329  extz BC
 	ld	de, bc                                  ; FA732B  ld DE,BC
@@ -4238,7 +4238,7 @@ Voice_GetOctaveShift:
 	sll	bc, 7                                  ; FA7351  sll 0x07,BC
 	extz	xbc                                   ; FA7354  extz XBC
 	add	xiy, xbc                               ; FA7356  add XIY,XBC
-	addda32_24	xiy, (0xD7ED)                   ; FA7358  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FA7358  add XIY,(0x00d7ed)
 	ld	bc, (xiy)                               ; FA735D  ld BC,(XIY)
 	sll	bc, 8                                  ; FA735F  sll 0x08,BC
 	ld	wa, bc                                  ; FA7362  ld WA,BC

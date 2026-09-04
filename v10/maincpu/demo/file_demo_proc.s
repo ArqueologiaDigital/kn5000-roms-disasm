@@ -1334,7 +1334,7 @@ RecordChain_ReadAdvance:
 	sub wa, 0x100
 	ld de, wa
 	extz xde
-	addda32_24 xde, (0x25b8a)
+	add xde, (0x25b8a:24)
 	ld wa, (0x025b8e:24)
 	ld bc, wa
 	extz xbc

@@ -796,7 +796,7 @@ NoteEvent_CopySlotData_Loop:
 
 NoteEvent_CopySlotData_Body:
 	ld xix, xwa
-	addda32 xix, 3186
+	add xix, (3186:16)
 	lda xiy, (xsp + 16)
 	ldw bc, 0x80
 	ldirw
@@ -1325,7 +1325,7 @@ PartGrid_DefaultLoop_Outer:
 	add xbc, xwa
 	sll xbc, 5
 	add xbc, 0x60
-	addda32 xbc, 3186
+	add xbc, (3186:16)
 	ld wa, (xbc)
 	ld c, (xsp + 4)
 	extz bc
@@ -1338,7 +1338,7 @@ PartGrid_DefaultLoop_Outer:
 	add xde, xbc
 	sll xde, 5
 	add xde, 0x60
-	addda32 xde, 3186
+	add xde, (3186:16)
 	ld (xde), wa
 	lds iz, 2
 
@@ -1353,7 +1353,7 @@ PartGrid_DefaultLoop_Inner:
 	add xde, xwa
 	sll xde, 5
 	add xde, xbc
-	addda32 xde, 3186
+	add xde, (3186:16)
 	ld wa, (xde + 96)
 	ld c, (xsp + 4)
 	extz bc
@@ -1369,7 +1369,7 @@ PartGrid_DefaultLoop_Inner:
 	add xhl, xbc
 	sll xhl, 5
 	add xhl, xde
-	addda32 xhl, 3186
+	add xhl, (3186:16)
 	ld (xhl + 96), wa
 	inc 1, iz
 	cps iz, 5
@@ -1385,7 +1385,7 @@ NoteEvent_CopyToSlot:
 	extz xwa
 	sll xwa, 8
 	add xwa, 0x1400
-	addda32 xwa, 3186
+	add xwa, (3186:16)
 	ld wa, (xwa + 1)
 	ld c, (xsp + 4)
 	extz bc
@@ -1396,9 +1396,9 @@ NoteEvent_CopyToSlot:
 	sll xbc, 8
 	add xbc, 0x1400
 	ld xde, xbc
-	addda32 xde, 3186
+	add xde, (3186:16)
 	ld (xde + 1), wa
-	addda32 xbc, 3186
+	add xbc, (3186:16)
 	ld wa, (xbc + 3)
 	ld c, (xsp + 4)
 	extz bc
@@ -1408,7 +1408,7 @@ NoteEvent_CopyToSlot:
 	extz xbc
 	sll xbc, 8
 	add xbc, 0x1400
-	addda32 xbc, 3186
+	add xbc, (3186:16)
 	ld (xbc + 3), wa
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x53, 0x01

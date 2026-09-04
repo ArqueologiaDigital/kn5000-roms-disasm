@@ -267,10 +267,10 @@ BmDrEdit_CalcNotePosition:
 	pushw_erp 0xfa
 	ld bc, (0x0210a0:24)
 	mul bc, 0x60
-	addda16_24 xbc, (0x0210a2)
+	add bc, (0x0210a2:24)
 	ld wa, (0x27f6:16)
 	mul wa, 0x60
-	addda16 xwa, 0x27f8
+	add wa, (0x27f8:16)
 	sub bc, wa
 	ld (0x2808:16), bc
 	ld a, (0x0210a8:24)
@@ -343,7 +343,7 @@ BmDrEdit_RenderHorizontal:
 	ld (0x27ba:16), wa
 	ld wa, (0x280a:16)
 	srl wa, 2
-	addda16 xwa, 0x27ba
+	add wa, (0x27ba:16)
 	ld (0x27bc:16), wa
 	ld a, (0x2806:16)
 	extz wa
@@ -362,7 +362,7 @@ BmDrEdit_RenderVertical:
 	ld (0x27ba:16), wa
 	ld wa, (0x280a:16)
 	srl wa, 2
-	addda16 xwa, 0x27ba
+	add wa, (0x27ba:16)
 	ld (0x27bc:16), wa
 	ld a, (0x2806:16)
 	extz wa
@@ -407,7 +407,7 @@ BmDrEdit_RenderSecondaryHoriz:
 	ld (0x27c2:16), wa
 	ld wa, (0x0210b2:24)
 	srl wa, 2
-	addda16 xwa, 0x27c2
+	add wa, (0x27c2:16)
 	ld (0x27c4:16), wa
 	ld a, (0x0210b0:24)
 	extz wa
@@ -426,7 +426,7 @@ BmDrEdit_RenderSecondaryVert:
 	ld (0x27c2:16), wa
 	ld wa, (0x0210b2:24)
 	srl wa, 2
-	addda16 xwa, 0x27c2
+	add wa, (0x27c2:16)
 	ld (0x27c4:16), wa
 	ld a, (0x0210b0:24)
 	extz wa
@@ -443,10 +443,10 @@ BmDrEdit_RenderSecondaryVert:
 BmDrEdit_CalcSecondaryPosition:
 	ld bc, (0x2814:16)
 	mul bc, 0x60
-	addda16 xbc, 0x2816
+	add bc, (0x2816:16)
 	ld wa, (0x280c:16)
 	mul wa, 0x60
-	addda16 xwa, 0x280e
+	add wa, (0x280e:16)
 	sub bc, wa
 	ld (0x281e:16), bc
 	ld a, (0x2826:16)
@@ -470,7 +470,7 @@ BmDrEdit_CalcSecondaryPos_ClampSize:
 	dec 1, de
 	ld wa, (0x281e:16)
 	ld bc, wa
-	addda16_24 xbc, (0x0210b2)
+	add bc, (0x0210b2:24)
 	cp bc, de
 	ret ule
 	sub de, wa
@@ -1523,7 +1523,7 @@ BmDrEdit_CalcBeatFromGridPos:
 	div wa, 0x60
 	ld (0x275e:16), wa
 	ld wa, (0x276a:16)
-	adddm16 0x275e, xwa
+	add (0x275e:16), wa
 	ret
 
 BmDrEdit_ByteData_NoteCoordTable:
@@ -2995,7 +2995,7 @@ BmDrEdit_CalcTrackPosition:
 	bit 0, (0x2742:16)
 	ret z
 	ld wa, (0x279e:16)
-	addda16 xwa, 0x27a0
+	add wa, (0x27a0:16)
 	ld (0x2786:16), a
 	ret
 
@@ -4144,7 +4144,7 @@ BmDrEdit_SyncSeek_CheckStepMark:
 
 BmDrEdit_SyncSeek_StorePosition:
 	ld wa, (0x2782:16)
-	adddm16 0x275e, xwa
+	add (0x275e:16), wa
 	ldmm8 0x2760, 0x2784
 
 BmDrEdit_SyncSeek_PopIzRet:
@@ -4279,7 +4279,7 @@ BmDrEdit_SeekFwd_ClearAndCalcStore:
 
 BmDrEdit_CalcStorePos:
 	ld wa, (0x2782:16)
-	adddm16 0x275e, xwa
+	add (0x275e:16), wa
 	ldmm8 0x2760, 0x2784
 
 BmDrEdit_PopIzRet:

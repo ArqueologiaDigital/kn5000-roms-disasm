@@ -1866,7 +1866,7 @@ SMF_MetaTiming_ApplyMultiplier:
 	ldw de, 0x60
 	mul xwa, xde
 	stw_erp DE, 0xe2
-	adddm16 3938, xwa
+	add (3938:16), wa
 	ld (3940:16), de
 	ldw (3946:16), 0
 	jrl SMF_ProcessEventLoop
@@ -9256,7 +9256,7 @@ TaskBuf_EmptyAndReturn:
 TaskBuf_ReadAndDecrement:
 	ld xbc, (0x023586:24)
 	lds32 xwa, 1
-	addl_da 0x023586, xwa
+	add (0x023586:24), xwa
 	ld a, (xbc)
 	ldb_erp A, 0xf8
 	extz iz

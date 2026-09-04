@@ -94,7 +94,7 @@ INTT1_HANDLER:
 	link32	0xEE, 0x0C, 0xFE, 0xFF
 	sub	xbc, xbc
 	inc	1, xbc
-	addl_da	0x00F2F3, xbc
+	add	(0x00F2F3:24), xbc
 	ld	wa, (0x00E2E3:24)
 	extz	wa
 	ld	(xiz-2), wa

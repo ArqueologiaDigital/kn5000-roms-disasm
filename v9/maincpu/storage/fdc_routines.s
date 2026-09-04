@@ -1476,7 +1476,7 @@ FDC_CMD_EXEC:
 	ccf
 	sub	(xhl-34), a
 	ld	wa, (0x8a1e:16)
-	adddm16	(35356), xwa
+	add	(35356:16), wa
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1619,7 +1619,7 @@ FDC_CMD_EXEC:
 	ccf
 	sub	(xhl-34), a
 	ld	wa, (0x8a1e:16)
-	adddm16	(35356), xwa
+	add	(35356:16), wa
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1912,7 +1912,7 @@ FDC_MC_EXIT:
 	jr	29
 	ld	wa, (0x8b0a:16)
 	srl	wa, 1
-	addda8	a, 0x8a2d
+	add	a, (0x8a2d:16)
 	ld	l, a
 	ld	a, e
 	inc	1, e

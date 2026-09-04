@@ -402,7 +402,7 @@ Rhythm_CrossVoiceCorrect:
 Rhythm_CrossVoice_Apply:
 	push xiy
 	ld w, a
-	addda8 w, 0x32cb
+	add w, (0x32cb:16)
 	inc 1, w
 	sub w, 0xc
 	ld (0x332e:16), w

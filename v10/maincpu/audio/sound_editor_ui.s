@@ -953,7 +953,7 @@ UpdSeSel_ExtendedOps_Data:
 	jr	lt, -57
 	swi	2
 	inc	3, ix
-	addl_da	0x1da9d8, xix
+	add	(0x1da9d8:24), xix
 	jrl	lt, 7664
 	.byte 0x97
 	jrl	lt, -28688
@@ -5242,7 +5242,7 @@ SeMenu_CopyWriteUpdate_Data:
 	sub	a, w
 	ld	w, a
 	.byte 0xc7
-	addl_da	0x81c889, xsp
+	add	(0x81c889:24), xsp
 	.byte 0x04
 	swi	1
 	jr	nc, 71
@@ -5274,7 +5274,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, b
 	jr	nc, 13
 	.byte 0xc7
-	addl_da	0x08689a, xsp
+	add	(0x08689a:24), xsp
 	.byte 0x04
 	swi	2
 	jr	nc, 3

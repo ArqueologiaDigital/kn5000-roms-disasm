@@ -3262,7 +3262,7 @@ HDAE5000_LyricBoxProc:
 .LUIH_cf73:
 	ld	wa, hl
 	muls	wa, 0x0012
-	addda16_24	wa, (0x22A08E)
+	add	wa, (0x22A08E:24)
 	add	a, 0x0f
 	ld	c, a
 	lda xwa, (0x230808:24)
@@ -3636,7 +3636,7 @@ HDAE5000_LyricBoxProc:
 .LUIH_d470:
 	incw	1, (0x230874:24)
 	lds32	xwa, 1
-	addl_da	0x230876, xwa
+	add	(0x230876:24), xwa
 	jrl t, .LUIH_d311                      ; [78 92 fe] jrl T,0x28d311
 	incw	1, (0x2307AC:24)
 	ld	a, (0x2307A6:24)
@@ -3862,7 +3862,7 @@ HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 
 	; --- Result > 0: advance offset, dispatch on type ---
 	ld wa, iz
-	adddm16_24 (2295916), xwa; (0x23086C) += IZ
+	add (2295916:24), wa; (0x23086C) += IZ
 	incw 1, (xsp + 6)		; iteration counter++
 	ld wa, (0x230430:24); WA = (0x230430) — file type
 	cp wa, 126			; type 0x7E?
@@ -3948,7 +3948,7 @@ HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	inc 0, xsp			; pop stack frame
 	; Check cumulative length
 	ld wa, (xsp + 4)		; WA = strlen result
-	addda16_24 xwa, (2295012); WA += (0x2304E4)
+	add wa, (2295012:24); WA += (0x2304E4)
 	cp wa, 39			; cp WA, 0x27
 	jr ule, .Lfo_after_trunc	; if <= 39, no overflow
 	; Overflow: reset and try file delete
@@ -4006,7 +4006,7 @@ HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	ld (0x23087c:24), wa; (0x23087C) = WA
 	; Update position
 	ld wa, (xsp + 4)		; WA = strlen
-	adddm16_24 (2295012), xwa; (0x2304E4) += strlen
+	add (2295012:24), wa; (0x2304E4) += strlen
 	ld (0x2304f0:24), 0x01; (0x2304F0) = 1
 	; Optional vtable call
 	cp (xsp + 8), 1		; check display flag
@@ -4972,8 +4972,8 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 
 .Lff_skip_backup_copy:			; 0x28E212
 	ld xwa, (0x230860:24); XWA = (0x230860)
-	addl_da 0x230440, xwa                ; (0x230440) += XWA
-	addda16_24 xiz, (2295902); IZ += (0x23085E)
+	add (0x230440:24), xwa                ; (0x230440) += XWA
+	add iz, (2295902:24); IZ += (0x23085E)
 	ld wa, iz
 	inc 1, iz			; IZ++
 	; Read sector type byte: table[sector + 22]
@@ -5017,11 +5017,11 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	jrl t, .Lff_epilogue
 
 .Lff_after_format_calc:			; 0x28E29B
-	addda16_24 xiz, (2295902); IZ += (0x23085E)
+	add iz, (2295902:24); IZ += (0x23085E)
 	ld (0x230436:24), hl; (0x230436) = HL — file length
 	; Check combined length
 	ld wa, iz
-	addda16_24 xwa, (2294838); WA += (0x230436)
+	add wa, (2294838:24); WA += (0x230436)
 	cp wa, 20457			; cp WA, 0x4FE9
 	jr ule, .Lff_after_limit2
 	ldw (0x2307b6:24), 0xfffb; (0x2307B6) = 0xFFFB — error
@@ -5030,11 +5030,11 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 
 .Lff_after_limit2:			; 0x28E2BE
 	ld wa, iz
-	addda16_24 xwa, (2294838); WA += (0x230436)
+	add wa, (2294838:24); WA += (0x230436)
 	ld (0x23043a:24), wa; (0x23043A) = WA — end position
 	; Compute free space for remaining
 	ld wa, iz
-	addda16_24 xwa, (2294838); WA += (0x230436)
+	add wa, (2294838:24); WA += (0x230436)
 	calr HDAE5000_Calc_Disk_Space
 	stl_da (0x230450), xhl; (0x230450) = XHL
 	cp xhl, 4294967295
@@ -5046,8 +5046,8 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 .Lff_after_error3:			; 0x28E2ED
 	; Read terminator byte
 	ld wa, iz
-	addda16_24 xwa, (2294838); WA += (0x230436)
-	addda16_24 xwa, (2295902); WA += (0x23085E)
+	add wa, (2294838:24); WA += (0x230436)
+	add wa, (2295902:24); WA += (0x23085E)
 	inc 4, wa			; WA += 4
 	extz xwa
 	add xwa, 22
@@ -5101,7 +5101,7 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 .Lff_after_copy1:			; 0x28E387
 	; Compute total allocation
 	ld xwa, (0x230440:24); XWA = (0x230440)
-	addda32_24 xwa, (2294864); XWA += (0x230450)
+	add xwa, (2294864:24); XWA += (0x230450)
 	stl_da (0x230444), xwa; (0x230444) = XWA — total
 
 	; --- Copy string block 2 (if flag bit 1 set) ---
@@ -14332,7 +14332,7 @@ HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
 	lda xsp, (xsp + 10)		; cleanup 10 bytes of args
 .Lds301_update:
 	add (xsp + 14), xiz		; advance arg0 by transferred size
-	addl_da 0x238f24, xiz                ; advance current position
+	add (0x238f24:24), xiz                ; advance current position
 	sub (xsp + 4), xiz		; decrease remaining
 	ld xwa, (xsp + 4)		; check if remaining > 0
 	or xwa, xwa
@@ -14806,7 +14806,7 @@ HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
 	ld	xwa, (xwa + 0x0e88)
 	ld xix, (xwa + 0x34)                    ; ld XIX,(XWA+0x34)
 	call	(xix)
-	addl_da	0x238F93, xhl
+	add	(0x238F93:24), xhl
 	ld	(0x238F97:24), 0
 	lda	xwa, (xsp+68)
 	ld	xbc, xwa
@@ -17760,7 +17760,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	nop
 	xor xhl, xhl				; XHL = 0
 	ld l, w					; L = W (zero-extend byte to 32-bit)
-	addl_da 0x2390fc, xhl                ; add (0x2390FC), XHL — accumulate checksum
+	add (0x2390fc:24), xhl                ; add (0x2390FC), XHL — accumulate checksum
 	nop
 	inc 1, bc				; BC++
 	jr t, .Lrdr2_loop1			; loop
@@ -17807,7 +17807,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	nop
 	xor xhl, xhl
 	ld l, w					; L = W (zero-extend to 32-bit)
-	addl_da 0x2390fc, xhl                ; add (0x2390FC), XHL — accumulate
+	add (0x2390fc:24), xhl                ; add (0x2390FC), XHL — accumulate
 	nop
 	call .Lpsb_write_byte			; send byte via PPORT
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error?
@@ -20121,8 +20121,8 @@ HDAE5000_Display_Restore:	; 0x297FD1 (9217 bytes)
 	xor	xwa, xwa
 	ld	(0x229cac), xwa
 	ld	a, (0x229D96:24)
-	addl_da	0x229CB0, xwa
-	addl_da	0x229CB4, xwa
+	add	(0x229CB0:24), xwa
+	add	(0x229CB4:24), xwa
 	ld	(0x229D96:24), 1
 	ld	xwa, (0x229c70)
 	cp	(0x229cb0), xwa
@@ -24011,7 +24011,7 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 .Lppi_callback:				; 0x29AC21
 	ld xbc, (0x239482:24); XBC = [0x239482] (current buffer ptr)
 	lds32 xwa, 1			; XWA = 1
-	addl_da 0x239482, xwa                ; [0x239482]++ (advance ptr)
+	add (0x239482:24), xwa                ; [0x239482]++ (advance ptr)
 	ld wa, (xsp + 4)		; WA = character to write
 	ld (xbc), a			; store character at buffer
 	ld xwa, (0x239482:24); XWA = new buffer ptr

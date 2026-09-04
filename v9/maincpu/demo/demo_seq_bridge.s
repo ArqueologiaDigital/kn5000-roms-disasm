@@ -853,7 +853,7 @@ SeqNodeInsert_Finalize:
 	ld xhl, (4349:16)
 	ld (xhl + 1), ix
 	inc 1, wa
-	adddm16 0xf231, xwa
+	add (0xf231:16), wa
 	ret
 
 SeqNodeInsert_EmptyList:
@@ -873,7 +873,7 @@ SeqNode_ResolveSlotPtr:
 	extz xhl
 	dec 1, hl
 	sla xhl, 8
-	addda32 xhl, 4362
+	add xhl, (4362:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret

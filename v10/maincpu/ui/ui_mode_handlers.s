@@ -4623,7 +4623,7 @@ MstStyle1SubGrid_CellSelect:
 	add hl, wa
 	exts xhl
 	sll xhl, 3
-	addda32_24 xhl, (0x340d2)
+	add xhl, (0x340d2:24)
 	ld xwa, (xhl)
 	push xwa
 	push xde
@@ -4651,7 +4651,7 @@ MstStyle1SubGrid_PadLeft_Check:
 	add wa, (xsp + 28)
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xwa, (xwa)
 	push xwa
 	call Strlen
@@ -4676,7 +4676,7 @@ MstStyle1SubGrid_BottomSection:
 	add hl, (xbc)
 	exts xhl
 	sll xhl, 3
-	addda32_24 xhl, (0x340d2)
+	add xhl, (0x340d2:24)
 	ld xwa, (xhl)
 	push xwa
 	push xde
@@ -4704,7 +4704,7 @@ MstStyle1SubGrid_PadLeft_CheckB:
 	add wa, (xsp + 28)
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xwa, (xwa)
 	push xwa
 	call Strlen
@@ -4866,7 +4866,7 @@ MstStyle2_CountEntries_Adjust:
 	jrl nz, MstStyle2_InitOdd_Setup
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340d6), xhl
 	ldb c, 0x0
@@ -4900,7 +4900,7 @@ MstStyle2_CountSubEntries_AdjA:
 	inc 1, wa
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	stl_da (0x0340da), xde
 	ldb c, 0x0
@@ -4941,7 +4941,7 @@ MstStyle2_InitOdd_Setup:
 	dec 1, wa
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	stl_da (0x0340d6), xde
 	ldb c, 0x0
@@ -4970,7 +4970,7 @@ MstStyle2_InitOdd_CountAdjA:
 	ld wa, (0x0340c6:24)
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	stl_da (0x0340da), xde
 	ldb c, 0x0
@@ -5093,7 +5093,7 @@ MstStyle2_DialDown_PageDec:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340d6), xhl
 	ldb c, 0x0
@@ -5130,7 +5130,7 @@ MstStyle2_PageDec_CountAdj:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340da), xhl
 	ldb c, 0x0
@@ -5223,7 +5223,7 @@ MstStyle2_DialUp_PageInc:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340d6), xhl
 	ldb c, 0x0
@@ -5265,7 +5265,7 @@ MstStyle2_PageInc_CountAdj:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340da), xhl
 	ldb c, 0x0
@@ -5362,7 +5362,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340d6), xhl
 	ldb c, 0x0
@@ -5399,7 +5399,7 @@ MstStyle2_DialScrollDown_CountAdj:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	stl_da (0x0340da), xde
 	ldb c, 0x0
@@ -5594,7 +5594,7 @@ MstStyle2_DialScrollUp_NextPage:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xiy, (xwa + 4)
 	stl_da (0x0340d6), xiy
 	ldb c, 0x0
@@ -5631,7 +5631,7 @@ MstStyle2_DialScroll_CountAdjD:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	stl_da (0x0340da), xhl
 	ldb c, 0x0
@@ -5776,7 +5776,7 @@ MstStyle2_GetNameB_DrawString:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xwa, (xwa)
 	push xwa
 	pushw 0xed
@@ -5816,7 +5816,7 @@ MstStyle2_GetNameB_DrawString:
 MstStyle2_NameB_DrawCurrent:
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xwa, (xwa)
 	push xwa
 	pushw 0xed
@@ -5833,7 +5833,7 @@ MstStyle2_NameB_DrawLower:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xwa, (xwa)
 	push xwa
 	pushw 0xed
@@ -5995,7 +5995,7 @@ MstGrid2_ScrollJumpTable:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (0x340d6)
+	add	xbc, (0x340d6:24)
 	ld	de, (xbc+4)
 	extz	xde
 	ld	xwa, 0x142000d
@@ -6013,7 +6013,7 @@ MstGrid2_ScrollJumpTable:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (0x340da)
+	add	xbc, (0x340da:24)
 	ld	de, (xbc+4)
 	extz	xde
 	ld	xwa, 0x142000d
@@ -6053,7 +6053,7 @@ MstGrid2_CellSelect:
 	add xiy, xiy
 	add xiy, xwa
 	add xiy, xiy
-	addda32_24 xiy, (0x340d6)
+	add xiy, (0x340d6:24)
 	ld xwa, xbc
 	add xwa, xwa
 	add xwa, xbc
@@ -6099,7 +6099,7 @@ MstGrid2_PadLeft_CheckA:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	addda32_24 xbc, (0x340d6)
+	add xbc, (0x340d6:24)
 	ld xwa, (xbc)
 	push xwa
 	call Strlen
@@ -6147,7 +6147,7 @@ MstGrid2_PadLeft_CheckB:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	addda32_24 xbc, (0x340da)
+	add xbc, (0x340da:24)
 	ld xwa, (xbc)
 	push xwa
 	call Strlen
@@ -6195,7 +6195,7 @@ MstGrid2_PadLeft_CheckC:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	addda32_24 xbc, (0x340d6)
+	add xbc, (0x340d6:24)
 	ld xwa, (xbc)
 	push xwa
 	call Strlen
@@ -6252,7 +6252,7 @@ MstGrid2_PadLeft_CheckD:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	addda32_24 xbc, (0x340da)
+	add xbc, (0x340da:24)
 	ld xwa, (xbc)
 	push xwa
 	call Strlen

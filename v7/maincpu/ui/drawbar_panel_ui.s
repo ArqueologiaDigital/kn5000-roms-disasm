@@ -10194,7 +10194,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	addda32_24	xbc, (0x24786)
+	add	xbc, (0x24786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
 	.byte 0x95
@@ -10214,7 +10214,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xiy, xiy
 	add	xiy, xbc
 	sll	xiy, 2
-	addda32_24	xiy, (0x24786)
+	add	xiy, (0x24786:24)
 	lda_rr xix, xwa, iz
 	lds bc, 6
 	.byte 0x95
@@ -10354,7 +10354,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	addda32_24	xbc, (0x24786)
+	add	xbc, (0x24786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
 	.byte 0x95
@@ -10369,7 +10369,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10388,7 +10388,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10407,7 +10407,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10426,7 +10426,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10478,7 +10478,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10491,7 +10491,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xiy, xiy
 	add	xiy, xwa
 	sll	xiy, 2
-	addda32_24	xiy, (0x24786)
+	add	xiy, (0x24786:24)
 	ld	xix, 0x3ea24
 	lds	bc, 6
 	.byte 0x95
@@ -10516,7 +10516,7 @@ AcWelcomScreen_Select_NextStep:
 	add xbc, xbc
 	add xbc, xwa
 	sll xbc, 2
-	addda32_24 xbc, (0x24786)
+	add xbc, (0x24786:24)
 	ld xwa, (xbc)
 	or xwa, xwa
 	jrl z, AcWelcomScreen_Select
@@ -11851,7 +11851,7 @@ Util_SignExtendAndDouble:
 	add xhl, xhl
 	add xhl, xwa
 	sll xhl, 2
-	addda32_24 xhl, (0x3ea30)
+	add xhl, (0x3ea30:24)
 	ret
 
 Util_StorePartArrayBase:
@@ -11861,7 +11861,7 @@ Util_StorePartArrayBase:
 PsMixer_ReadWordArrayEntry:
 	exts xwa
 	add xwa, xwa
-	addda32_24 xwa, (0x3ea34)
+	add xwa, (0x3ea34:24)
 	ld hl, (xwa)
 	ret
 
@@ -12014,7 +12014,7 @@ AudioCtrl_DataBlock:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	addda32_24	xbc, (256560)
+	add	xbc, (256560:24)
 	ld	wa, (xbc+4)
 	ld	(xsp+4), wa
 	ldw	wa, 136
@@ -16885,11 +16885,11 @@ DemoMenu_DescriptorReturn:
 DemoDesc_BuildCompactParams:
 	ld bc, (0x0247e6:24)
 	sla bc, 4
-	addda16_24 xbc, (0x247e4)
+	add bc, (0x247e4:24)
 	ld (xwa), c
 	ld bc, (0x0247ea:24)
 	sla bc, 4
-	addda16_24 xbc, (0x247e8)
+	add bc, (0x247e8:24)
 	ld (xwa + 1), c
 	lda xbc, (0x0247ce:24)
 	ld de, (xbc + 4)

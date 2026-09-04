@@ -377,7 +377,7 @@ Rhythm_CrossVoice_Apply:
 .Lc_f54bfa:
 	push XIY
 	ld W,A
-	addda8 w, (0x322f)
+	add w, (0x322f:16)
 	inc 1,W
 	sub W,0x0c
 	ld (0x3292:16), w

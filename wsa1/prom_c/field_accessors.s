@@ -4074,7 +4074,7 @@ Pack104_SetInputs_SubRecordPair:
 	mul8rr	c, l                                ; FC4C96  mul BC,L
 	add	bc, 19                                 ; FC4C98  add BC,0x0013
 	ld	de, bc                                  ; FC4C9C  ld DE,BC
-	addda16_24	de, (0xE082)                    ; FC4C9E  add DE,(0x00e082)
+	add	de, (0xE082:24)                    ; FC4C9E  add DE,(0x00e082)
 	ld	(0xE084:24), de                        ; FC4CA3  ld (0x00e084),DE
 	ldb	c, 37                                  ; FC4CA8  ld C,0x25
 	extpfx3 0x8E, 0x0A, 0x43                   ; FC4CAA  mul BC,(XIZ+0x0a)

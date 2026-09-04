@@ -403,7 +403,7 @@ DrawLine_Impl_PatternVertLoop:
 	muls wa, 0x140
 	add wa, (xix)
 	extz xwa
-	addda32_24 xwa, (0x030452)
+	add xwa, (0x030452:24)
 	ld a, (xwa)
 	ld (xiz), a
 	add (xde), hl
@@ -428,7 +428,7 @@ DrawLine_Impl_PatternNonVert:
 	ld xde, (xsp + 42)
 	add bc, (xde)
 	extz xbc
-	addda32_24 xbc, (0x030452)
+	add xbc, (0x030452:24)
 	push xbc
 	ld wa, (xsp + 52)
 	exts xwa
@@ -451,7 +451,7 @@ DrawLine_Impl_PatternHorzNegDir:
 	ld xwa, (xsp + 42)
 	add bc, (xwa)
 	extz xbc
-	addda32_24 xbc, (0x030452)
+	add xbc, (0x030452:24)
 	push xbc
 	ld xwa, (xsp + 68)
 	ld bc, (xwa)
@@ -510,7 +510,7 @@ DrawLine_Impl_PatternSteepLoop:
 	add de, (xhl)
 	ld wa, de
 	extz xwa
-	addda32_24 xwa, (0x030452)
+	add xwa, (0x030452:24)
 	ld xde, (xsp + 28)
 	ld a, (xwa)
 	ld (xde), a
@@ -569,7 +569,7 @@ DrawLine_Impl_PatternShallowLoop:
 	add de, (xhl)
 	ld wa, de
 	extz xwa
-	addda32_24 xwa, (0x030452)
+	add xwa, (0x030452:24)
 	ld xde, (xsp + 28)
 	ld a, (xwa)
 	ld (xde), a
@@ -1426,7 +1426,7 @@ DrawFrame_Impl_PatternSetup:
 	exts xwa
 	ld xbc, (xsp + 40)
 	add xbc, xwa
-	addda32_24 xbc, (0x030452)
+	add xbc, (0x030452:24)
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
@@ -1449,7 +1449,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	exts xwa
 	ld xbc, (xsp + 40)
 	add xbc, xwa
-	addda32_24 xbc, (0x030452)
+	add xbc, (0x030452:24)
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
@@ -1473,7 +1473,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	sll xbc, 6
 	ld xwa, xbc
 	add xwa, xde
-	addda32_24 xwa, (0x030452)
+	add xwa, (0x030452:24)
 	push xwa
 	ld wa, (xhl)
 	exts xwa
@@ -1538,7 +1538,7 @@ DrawFrame_Impl_PatternOneSideLoop:
 	exts xwa
 	ld xiy, xde
 	add xiy, xwa
-	addda32_24 xiy, (0x030452)
+	add xiy, (0x030452:24)
 	ld a, (xiy)
 	ld (xiz), a
 	inc 1, xbc
@@ -1578,7 +1578,7 @@ DrawFrame_Impl_PatternTwoSideLoop:
 	exts xwa
 	ld xhl, xde
 	add xhl, xwa
-	addda32_24 xhl, (0x030452)
+	add xhl, (0x030452:24)
 	ld a, (xhl)
 	ld (xix), a
 	ld xwa, (xsp + 30)
@@ -1592,7 +1592,7 @@ DrawFrame_Impl_PatternTwoSideLoop:
 	exts xwa
 	ld xhl, xde
 	add xhl, xwa
-	addda32_24 xhl, (0x030452)
+	add xhl, (0x030452:24)
 	ld a, (xhl)
 	ld (xix), a
 	inc 1, xbc

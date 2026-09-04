@@ -9398,7 +9398,7 @@ PlayModeStateMachine_Prologue:
 	jr ge, 5
 	ldw hl, 65535
 	jr 6
-	adddm32 (59681), xhl
+	add (59681:16), xhl
 	lds hl, 0
 	popw iz
 	lda XSP,(XSP+0x008e)
@@ -10591,7 +10591,7 @@ Dispatch_InitVal:
 	nop
 	and	xwa, 16711680
 Dispatch_Block3:
-	adddm32	(60215), xwa
+	add	(60215:16), xwa
 	calr	1300
 	ld	wa, hl
 	cps	wa, 0
@@ -11221,7 +11221,7 @@ SysexRingBuf_ReadByte:
 	.byte 0x10, 0x31, 0xc5, 0xec, 0x21, 0xf5, 0xe8, 0x41
 	.byte 0xe9, 0xf2, 0x67, 0xf6, 0x0e, 0xf2, 0x98
 SysexRingBuf_ReadAndAdvance:
-	adddm16_24	(15216878), de
+	add	(15216878:24), de
 	lda	xhl, (xwa+16)
 	ldb_spi	a, 232
 	lda_dpi	xbc, 228
@@ -13590,7 +13590,7 @@ Free_Block2:
 Free_Block3:
 	ret
 	ld	xhl, (251172:24)
-	addl_da	(251172), xwa
+	add	(251172:24), xwa
 Free_OrBits:
 	subdm32_24	(251176), xwa
 	ret

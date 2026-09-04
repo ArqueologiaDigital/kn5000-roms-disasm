@@ -18451,7 +18451,7 @@ SetApTimer_Return:
 
 ApTimer_IncrementCounter:
 	lds32 xwa, 1
-	addl_da 0x030444, xwa
+	add (0x030444:24), xwa
 	pop xiz
 	inc 8, xsp
 	ret
@@ -19355,7 +19355,7 @@ ModifyPixel:
 	muls bc, 0x140
 	add bc, (xwa)
 	extz xbc
-	addda32_24 xbc, (0x030452)
+	add xbc, (0x030452:24)
 	ld a, (xbc)
 	ldb_erp A, 0xf8
 	extz iz
@@ -19429,7 +19429,7 @@ ModifyPixelEx:
 	muls bc, 0x140
 	add bc, (xwa)
 	extz xbc
-	addda32_24 xbc, (0x030452)
+	add xbc, (0x030452:24)
 	ld a, (xbc)
 	ldb_erp A, 0xf8
 	extz iz

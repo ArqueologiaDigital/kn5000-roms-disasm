@@ -397,7 +397,7 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	ld	wa, (0x0274e2:24)
 	mul	wa, 3
-	addda16_24	wa, (0x0274da)
+	add	wa, (0x0274da:24)
 	extz	xwa
 	add	xwa, xwa
 	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
@@ -992,7 +992,7 @@ WndScroll_HandleDialPage:
 	call SendEvent
 	ld wa, (0x0274e2:24)
 	mul wa, 0x3
-	addda16_24 xwa, (0x0274da)
+	add wa, (0x0274da:24)
 	ld bc, wa
 	extz xbc
 	add xbc, xbc
@@ -6907,7 +6907,7 @@ CaptureLcd:
 	call Sprintf_Locked
 	lda xsp, (xsp + 20)
 	lds32 xwa, 1
-	addl_da 0x03044a, xwa
+	add (0x03044a:24), xwa
 	call GetDiskSizeInfo
 	call GetEncodedFileSizeData
 	lda xwa, (xsp + 2)
@@ -7184,7 +7184,7 @@ UIRender_IterateCallbacks:
 	stw_erp BC, 0xfa
 	extz xbc
 	sll xbc, 2
-	addda32_24 xbc, (0x03ef94)
+	add xbc, (0x03ef94:24)
 	ld xbc, (xbc)
 	call SetPaletteRGB
 	inc1w_erp 0xfa
@@ -7734,7 +7734,7 @@ ColorBlit_ModeF5_RowLoop:
 	exts xbc
 	ld xiz, xde
 	add xiz, xbc
-	addda32_24 xiz, (0x030452)
+	add xiz, (0x030452:24)
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
 	cp ix, (xbc)
@@ -8036,7 +8036,7 @@ ColorBlit2_ModeF5_RowLoop:
 	exts xbc
 	ld xiz, xde
 	add xiz, xbc
-	addda32_24 xiz, (0x030452)
+	add xiz, (0x030452:24)
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
 	cp ix, (xbc)
@@ -8824,7 +8824,7 @@ ColorBlit2_LargeCodeBlock:
 	exts	xwa
 	ld	xix, xbc
 	add	xix, xwa
-	addda32_24	xix, (0x030452)
+	add	xix, (0x030452:24)
 	lds32	xbc, 0
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
@@ -8910,7 +8910,7 @@ ColorBlit2_LargeCodeBlock:
 	exts	xwa
 	ld	xix, xbc
 	add	xix, xwa
-	addda32_24	xix, (0x030452)
+	add	xix, (0x030452:24)
 	lds32	xbc, 0
 	ld	xwa, (xsp+4)
 	cp	xwa, 0

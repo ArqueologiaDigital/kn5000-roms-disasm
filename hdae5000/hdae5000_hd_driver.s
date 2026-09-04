@@ -815,7 +815,7 @@ HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	call HDAE5000_MemCopy
 	; Format entry number
 	ld wa, iz
-	addda16_24 xwa, (0x23a08e); WA += base offset
+	add wa, (0x23a08e:24); WA += base offset
 	inc 1, wa
 	pushw wa                                ; push wa (compact 1-byte)
 	pushw 0x002e
@@ -1046,7 +1046,7 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	; Handle 0x01EA0000: page down
 	cpw (0x23a08e:24), 0x0060
 	jr ge, .Lfd_done		; already at maximum
-	adddi16_24 (0x23a08e), 0x0018; add 24 to offset
+	addw (0x23a08e:24), 0x0018; add 24 to offset
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	; Calculate new entry index
@@ -5900,7 +5900,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 .Lsw_case1:					; 0x286EA4
 	ld wa, bc				; d9 88
 	mul wa, 0x000a				; d8 08 0a 00
-	adddm16_24 (0x22aa5e), xwa; d2 5e aa 22 88
+	add (0x22aa5e:24), wa; d2 5e aa 22 88
 	ldw (0x22aa5c:24), 0x0002; f2 5c aa 22 02 02 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
@@ -5912,7 +5912,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 
 	; === Case 2: add BC to cylinder, set state=3 ===
 .Lsw_case2:					; 0x286ED1
-	adddm16_24 (0x22aa5e), xbc; d2 5e aa 22 89
+	add (0x22aa5e:24), bc; d2 5e aa 22 89
 	ldw (0x22aa5c:24), 0x0003; f2 5c aa 22 02 03 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
@@ -5938,7 +5938,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 
 	; === Case 4: add BC to head, set state=5, then process ===
 .Lsw_case4:					; 0x286F25
-	adddm16_24 (0x22aa60), xbc; d2 60 aa 22 89
+	add (0x22aa60:24), bc; d2 60 aa 22 89
 	ldw (0x22aa5c:24), 0x0005; f2 5c aa 22 02 05 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20

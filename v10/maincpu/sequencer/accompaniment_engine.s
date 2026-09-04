@@ -2305,7 +2305,7 @@ AccSlot_CheckAndUpdate:
 	ld a, (0x343b:16)
 	xor w, w
 	ei 6
-	addda16 xwa, 1120
+	add wa, (1120:16)
 	subda8 a, 1124
 	jr pl, AccSlot_CompareAndUpdate
 	cps w, 0
@@ -2369,8 +2369,8 @@ AccBuf_NoteEvent_WrapPos:
 	popw iy
 	ld a, (0x343b:16)
 	ei 6
-	addda8 a, 1122
-	addda8 w, 1124
+	add a, (1122:16)
+	add w, (1124:16)
 	sub a, w
 	jr pl, AccBuf_NoteEvent_StoreTiming
 	ldb a, 0x0
@@ -5383,7 +5383,7 @@ AccVoice_TableLookup_Compute:
 	sll xhl, 2
 	add xhl, AccVoice_OffsetTable
 	ld xhl, (xhl)
-	addda32 xhl, 0x3277
+	add xhl, (0x3277:16)
 	ret
 
 AccVoice_OffsetTable:
@@ -9150,7 +9150,7 @@ AccReplay_Stop_ClearPedals:
 	cp (0x3479:16), 0
 	jr z, AccReplay_Stop_ResetPosition
 	ld a, (0x3479:16)
-	adddm8 1079, a
+	add (1079:16), a
 	ld (0x3479:16), 0
 
 AccReplay_Stop_ResetPosition:
@@ -9507,7 +9507,7 @@ AccKbdTiming_SlotLoop:
 	jr nc, AccKbdTiming_SlotOverflow
 	bit_dri 7, 0x07, 0xe4, 0xf8
 	jr z, AccKbdTiming_WriteNoteEvent
-	addda16 xiz, 0x337c
+	add iz, (0x337c:16)
 	jr AccKbdTiming_SlotLoop
 
 AccKbdTiming_SlotOverflow:
@@ -9592,7 +9592,7 @@ AccKbdTiming_WriteNote_ClampTiming:
 	ldw wa, 0xa
 
 AccKbdTiming_WriteNote_AddBase:
-	addda16 xwa, 1118
+	add wa, (1118:16)
 	cp a, 0x60
 	jr c, AccKbdTiming_WriteNote_StoreTiming
 	inc 1, w
@@ -9815,7 +9815,7 @@ AccKbdTiming_TableScan_StoreTiming:
 	ld (0x3374:16), wa
 
 AccKbdTiming_TableScan_NextSlot:
-	addda16 xiz, 0x337c
+	add iz, (0x337c:16)
 	jrl AccKbdTiming_TableScan_Loop
 
 AccKbdTiming_TableScan_Done:
@@ -9925,7 +9925,7 @@ AccAccTiming_NoteSlot_Loop:
 	jr z, AccAccTiming_NoteSlot_SendNoteOff
 
 AccAccTiming_NoteSlot_NextSlot:
-	addda16 xiz, 0x337c
+	add iz, (0x337c:16)
 	jr AccAccTiming_NoteSlot_Loop
 
 AccAccTiming_NoteSlot_SendNoteOff:
@@ -9956,7 +9956,7 @@ AccAccTiming_NoteSlot_FreeLoop:
 	jr nc, AccAccTiming_SlotOverflow
 	bit_dri 7, 0x07, 0xe4, 0xf8
 	jr z, AccAccTiming_WriteNoteEvent
-	addda16 xiz, 0x337c
+	add iz, (0x337c:16)
 	jr AccAccTiming_NoteSlot_FreeLoop
 
 AccAccTiming_SlotOverflow:
@@ -10037,7 +10037,7 @@ AccAccTiming_WriteNote_ReadTimingLo:
 	ld ix, (xhl + 256)
 
 AccAccTiming_WriteNote_ReadTimingHi:
-	addda16 xwa, 1118
+	add wa, (1118:16)
 	cp a, 0x60
 	jr c, AccAccTiming_WriteNote_StoreTiming
 	inc 1, w
@@ -10224,7 +10224,7 @@ AccAccTiming_TableScan_StoreTiming:
 	ld (0x3374:16), wa
 
 AccAccTiming_TableScan_NextSlot:
-	addda16 xiz, 0x337c
+	add iz, (0x337c:16)
 	jrl AccAccTiming_TableScan_Loop
 
 AccAccTiming_TableScan_Done:
@@ -14801,7 +14801,7 @@ AccPatch_ComputeSeqPosition:
 	ld a, (0x32b3:16)
 	ld c, (0x34d9:16)
 	mul8rr a, c
-	addda8 a, 0x3280
+	add a, (0x3280:16)
 	ld l, a
 	ld a, (0x327f:16)
 	add a, 0x18
@@ -16687,7 +16687,7 @@ AccPatch_ResumeSeq_Skip3:
 	lds bc, 3
 
 AccPatch_ResumeSeq_AddAndAdvance:
-	adddm16 0x360a, xbc
+	add (0x360a:16), bc
 
 AccPatch_ResumeSeq_AdvLoop:
 	calr AccPatch_AdvanceSeqIndex
@@ -17308,7 +17308,7 @@ AccPatch_TransposeNote:
 	subdm8 0x36ec, a
 	jr nc, AccPatch_Transpose_Done
 	ldb a, 0xc
-	adddm8 0x36ec, a
+	add (0x36ec:16), a
 
 AccPatch_Transpose_Done:
 	jr AccPatch_Transpose_LookupTable
@@ -17316,7 +17316,7 @@ AccPatch_Transpose_Done:
 AccPatch_Transpose_AddBack:
 	ldb w, 0xc
 	sub w, a
-	adddm8 0x36ec, w
+	add (0x36ec:16), w
 
 AccPatch_Transpose_LookupTable:
 	lds32 xhl, 0
@@ -17537,7 +17537,7 @@ AccPatch_TransposeCopy_DoCopy:
 	add xix, xbc
 	lds bc, 6
 	ldir85
-	adddi16 0x360e, 6
+	addw (0x360e:16), 6
 	ret
 
 __pad_F60A51:
@@ -17600,7 +17600,7 @@ AccPatch_SlotCopyDataBlock:
 	ret
 	ldw	(0x3610:16), 0
 	ld	xix, 0x36aa
-	addda16 xix, (13840)
+	add ix, (13840:16)
 	calr 664
 	ld	wa, (0x3610:16)
 	add	wa, 6
@@ -17635,7 +17635,7 @@ AccPatch_InitSlot_SameBlock:
 	calr AccPatch_GetEntryAddr
 	ld (0x364c:16), xix
 	ld wa, (0x3608:16)
-	addda16 xwa, 0x360a
+	add wa, (0x360a:16)
 	ld (0x3660:16), wa
 	jr AccPatch_InitSlot_StoreAddrs
 
@@ -17752,7 +17752,7 @@ AccPatch_AdvPlayPos_CheckDE:
 	jr AccPatch_StoreEntryPtr
 
 AccPatch_AdvPlayPos_AddAndCheck:
-	addda16 xde, 0x360a
+	add de, (0x360a:16)
 	cp de, 0xfe
 	jr z, AccPatch_AdvPlayPos_StoreDirect
 	jr c, AccPatch_AdvPlayPos_StoreDirect
@@ -19942,7 +19942,7 @@ AccPlayback_NoteOn_WritePan:
 	jr z, AccPlayback_NoteOn_Return
 	ld l, e
 	dec 1, l
-	adddi16 0x360a, 6
+	addw (0x360a:16), 6
 	ld (xiy), 0x90
 	inc 1, xiy
 	calr ToneGen_WriteVoiceEventEntry
@@ -19997,14 +19997,14 @@ AccPlayback_AdvPattern_Check81:
 	calr AccPlayback_AdvanceRingBuffer
 	bit 0, (0x3431:16)
 	jr nz, AccPlayback_AdvPattern_Check90
-	adddi16 0x360a, 6
+	addw (0x360a:16), 6
 	ld (xiy), 0x90
 	inc 1, xiy
 	calr ToneGen_WriteVoiceEventEntry
 	jr AccPlayback_AdvPattern_Done
 
 AccPlayback_AdvPattern_Check90:
-	adddi16 0x360a, 8
+	addw (0x360a:16), 8
 	ld (xiy), 0x91
 	inc 1, xiy
 	calr ToneGen_WriteVoiceEventEntry
@@ -20791,7 +20791,7 @@ ToneGen_CalcTempo_DataTable:
 ToneGen_AdvanceByTempo:
 	ld a, (0x342f:16)
 	ld w, (0x3430:16)
-	addda8 a, 0x34fc
+	add a, (0x34fc:16)
 	cp a, 0x60
 	jr c, ToneGen_AdvTempo_StoreNote
 	sub a, 0x60
@@ -20799,7 +20799,7 @@ ToneGen_AdvanceByTempo:
 
 ToneGen_AdvTempo_StoreNote:
 	ld (0x34fc:16), a
-	addda8 w, 0x34fb
+	add w, (0x34fb:16)
 	ld l, (0x34d9:16)
 	ld h, (0x34d7:16)
 	and h, 0x7
@@ -22249,7 +22249,7 @@ AccPat_DualVoice_ClampIndex:
 	xor h, h
 	ld xix, RhythmTiming_OffsetTable
 	ld_sril3 XIY, 0x07, 0xf0, 0xec
-	addda32 xiy, 0x39ae
+	add xiy, (0x39ae:16)
 	add xiy, 0x60
 	ld (0x355c:16), xiy
 	ld l, (0x39ad:16)
@@ -22262,7 +22262,7 @@ AccPat_DualVoice_ClampIndex2:
 	xor h, h
 	ld xix, RhythmTiming_OffsetTable
 	ld_sril3 XIY, 0x07, 0xf0, 0xec
-	addda32 xiy, 0x39b2
+	add xiy, (0x39b2:16)
 	add xiy, 0x60
 	ld (0x3560:16), xiy
 	ld xiy, (0x355c:16)
@@ -22705,7 +22705,7 @@ RhythmROM_CalcPatternAddr:
 	and xwa, 0xff00
 	sla xwa, 8
 	ld xix, 0x400000
-	addda32 xix, 0x3277
+	add xix, (0x3277:16)
 	add xix, xwa
 	ret
 
@@ -23556,7 +23556,7 @@ StyleConvert_Reload_Loop:
 	ldw	ix, 0x883f
 	jr	c, 3
 	add	a, 6
-	addda8	a, 0x34ef
+	add	a, (0x34ef:16)
 	ld	(0x34ed:16), a
 	ret
 	nop
@@ -23574,7 +23574,7 @@ AccPat_CalcAccentVelocity:
 	add a, 0x6
 
 StyleConvert_Reload_CheckEnd:
-	addda8 a, 0x34ef
+	add a, (0x34ef:16)
 	ld (0x34ed:16), a
 	jr StyleConvert_Reload_Done
 
@@ -23590,7 +23590,7 @@ StyleConvert_Reload_Return:
 	add a, 0x4
 
 StyleConvert_Reload_Fallback:
-	addda8 a, 0x34ef
+	add a, (0x34ef:16)
 	ld (0x34ed:16), a
 
 StyleConvert_Reload_Done:
@@ -28826,7 +28826,7 @@ VoiceAssign_Process_Return:
 	and xwa, 0xff00
 	sll xwa, 8
 	ld xix, 0x400000
-	addda32 xix, 0x3277
+	add xix, (0x3277:16)
 	add xix, xwa
 	add xix, xde
 	jr VoiceAssign_StoreFinal
@@ -28998,7 +28998,7 @@ MIDIChan_DispatchTable:
 	and xwa, 0xff00
 	sll xwa, 8
 	ld xiy, 0x400000
-	addda32 xix, 0x3277
+	add xix, (0x3277:16)
 	add xiy, xwa
 	ret
 
@@ -34734,7 +34734,7 @@ AccPatch_IterateSlot_Advance:
 
 AccPatch_IterateSlot_NextBlock:
 	ld xiz, 0x100
-	adddm32 0x376e, xiz
+	add (0x376e:16), xiz
 	ld xiz, (0x376e:16)
 	ld wa, (xiz + 3)
 	ld (0x377e:16), wa
@@ -34829,7 +34829,7 @@ AccPatch_CalcSlotBufferAddr:
 	xor xiz, xiz
 	ld xiz, 0x100
 	mul xiz, xhl
-	addda32 xiz, 0x39ae
+	add xiz, (0x39ae:16)
 	add xiz, 0x1400
 	ret
 
@@ -35832,7 +35832,7 @@ AccBankData_InitSlot_OuterLoop:
 
 AccBankData_InitSlot_InnerLoop:
 	lda_dri XBC, 0x07, 0xe8, 0xe0
-	addda32 xbc, 0x55dc
+	add xbc, (0x55dc:16)
 	lda_dri XBC, 0xe5, 0xa0, 0x00
 	cp (xbc), 0x0
 	jr nz, AccBankData_InitSlot_NonZero
@@ -35852,7 +35852,7 @@ AccBankData_InitSlot_PadSpaces:
 
 AccBankData_PadSpaces_Loop:
 	lda_dri XBC, 0x07, 0xe8, 0xe0
-	addda32 xbc, 0x55dc
+	add xbc, (0x55dc:16)
 	stib_ind 0xe5, 0xa0, 0x00, 0x20
 	inc 1, xde
 	cp xde, 0x10
@@ -38033,7 +38033,7 @@ StylCnv_Type6_AppendName:
 	ld xwa, (0x3d60:16)
 	ld (xbc), xwa
 	ld xwa, (0x3d64:16)
-	adddm32 0x3d60, xwa
+	add (0x3d60:16), xwa
 
 StylCnv_Type6_AdvanceEntry:
 	incw 1, (xsp + 4)

@@ -63,7 +63,7 @@ SMF_IncrementPosition:
 	ldw de, 0x60
 	mul xwa, xde
 	stw_erp DE, 0xe2
-	adddm16 3938, xwa
+	add (3938:16), wa
 	ld (3940:16), de
 	ldw (3946:16), 0
 	pop xde
@@ -778,7 +778,7 @@ SMF_TimeDelta_CheckFirst:
 	jr nz, SMF_TimeDelta_Store
 	cp (6710:16), 0
 	jr z, SMF_TimeDelta_Store
-	adddi16 4229, 384
+	addw (4229:16), 384
 	ld (4344:16), 1
 
 SMF_TimeDelta_Store:
@@ -1398,7 +1398,7 @@ SMF_LookupSongBank:
 	extz xhl
 	dec 1, xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld iy, (9830:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	ret
@@ -1589,9 +1589,9 @@ SMF_UpdateTempo_Encode:
 
 SMF_UpdateTempo_Finalize:
 	ld wa, (3942:16)
-	addda16 xwa, 3952
+	add wa, (3952:16)
 	ld (3942:16), bc
-	addda16 xbc, 3938
+	add bc, (3938:16)
 	sub bc, wa
 	ld (4229:16), bc
 	calr SMF_EncodeTimeDelta
@@ -2353,7 +2353,7 @@ SMF_CalcPageAddress:
 	dec 1, hl
 	extz xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret

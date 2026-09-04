@@ -587,8 +587,8 @@ ParamDigit_Div10Done:
 ; -----------------------------------------------------------------------------
 
 ParamUpdate_AddAndStore:
-	adddi8 4481, 48
-	adddi16 4482, 0x3030
+	add (4481:16), 48
+	addw (4482:16), 0x3030
 	pop c
 	ret
 
@@ -4661,7 +4661,7 @@ DisplayMode_Handler_3:
 	call	ScoopParam_ValueTable_0x29
 	ld	l, (3533:16)
 	xor	h, h
-	addda16 xhl, (3418)
+	add hl, (3418:16)
 	cp hl, (3418:16)
 	jrl	z, 18
 	push	xhl
@@ -4736,7 +4736,7 @@ DisplayMode_Handler_3:
 	call	DisplayMode_Handler_3_0x435
 	ld	w, a
 	ld	l, w
-	addda8	a, 3570
+	add	a, (3570:16)
 	bit	7, a
 	jrl	z, 2
 	ld	a, w
@@ -4857,7 +4857,7 @@ DisplayMode_Handler_3:
 	or	a, c
 	and	w, 1
 	ld	bc, wa
-	addda16 xwa, (3824)
+	add wa, (3824:16)
 	cp wa, 40
 	jrl	nc, 6
 	ld	wa, bc
@@ -5008,7 +5008,7 @@ DisplayMode_Handler_3:
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
 	ld	w, a
-	addda8	a, 3570
+	add	a, (3570:16)
 	bit	7, a
 	jrl	z, 2
 	ld	a, w
@@ -6567,7 +6567,7 @@ SerialPort_ModeHandler_0:
 	ret
 	ld	c, (3533:16)
 	xor	b, b
-	adddm16 (3418), xbc
+	add (3418:16), bc
 	cps c, 0
 	jrl	z, 25
 	push	xwa
@@ -6679,7 +6679,7 @@ ScoopParam_ValueTable:
 	ret
 	ld	w, (13359:16)
 	ld	a, (13360:16)
-	addda8	w, 3415
+	add	w, (3415:16)
 	cp	w, 96
 	jrl	c, 5
 	sub	w, 96
@@ -8163,7 +8163,7 @@ MemConfig_Handler_1:
 	ldb	a, 3
 	call	VoiceSlot_SaveState
 	ld	a, (3420:16)
-	addda8	a, 3421
+	add	a, (3421:16)
 	call	MemConfig_Handler_1_0x295
 	call	AccPedal_CheckBitAndUpdate
 	.byte 0xc1
@@ -8640,7 +8640,7 @@ SndDispatch_ProcessCommand:
 	ld	(3580:16), 1
 	ld	a, (3579:16)
 	exts	wa
-	adddm16 (3416), xwa
+	add (3416:16), wa
 	ld de, wa
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
@@ -8694,7 +8694,7 @@ SndDispatch_ProcessCommand:
 	ld	a, (3576:16)
 	ld	(3579:16), a
 	ld	a, (3521:16)
-	addda8	a, 3575
+	add	a, (3575:16)
 	cp	a, 96
 	jrl	c, 7
 	inc	1, (3579:16)
@@ -9703,7 +9703,7 @@ VoiceSlot_ProcessEntry:
 	add xhl, xix
 	ld xix, xhl
 	ld xiy, (4353:16)
-	adddm16 4353, xbc
+	add (4353:16), bc
 	ldir85
 	ld bc, de
 	sub bc, 0xfb
@@ -10061,7 +10061,7 @@ VoiceSlot_FlagCheckDone:
 	pop xde
 	sla iz, 1
 	and iy, 0xff
-	addda16 xiy, 3573
+	add iy, (3573:16)
 	cp iy, 0xff
 	jrl ugt, VoiceSlot_FinalCheck
 	ldb_sri A, 0x07, 0xec, 0xf4
@@ -10331,7 +10331,7 @@ VoiceSlot_FinalRetZ:
 	ld	xhl, (4349:16)
 	ld	(xhl+1), ix
 	inc	1, wa
-	adddm16 (62001), xwa
+	add (62001:16), wa
 	jp	VoiceSlot_FinalRetZ_0x286
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	ix, iy
@@ -10352,7 +10352,7 @@ VoiceSlot_UpdateCurrentPointer:
 	dec 1, hl
 	extz xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
@@ -13109,7 +13109,7 @@ SubCPU_ToneParamRet:
 	jp	SubCPU_ToneParamRet_0x5E9
 	ld	a, (3766:16)
 	ld	l, (3778:16)
-	addda8	l, 3952
+	add	l, (3952:16)
 	cp	l, 96
 	jrl	c, 3
 	sub	l, 96
@@ -13354,7 +13354,7 @@ SubCPU_ToneParamRet:
 	cps	bc, 0
 	jrl	z, 14
 	extz	xix
-	addda32	xix, 4372
+	add	xix, (4372:16)
 	xor	a, a
 	.byte 0xf5, 0xf0
 	ld	xbc, 0x1bfa1cd9
@@ -14033,7 +14033,7 @@ DisplayStr_ComputeTableAddr:
 	dec 1, hl
 	extz xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
@@ -14542,7 +14542,7 @@ Display_BytecodeBlock_F:
 	.byte 0x85
 	scf
 	.byte 0xd7
-	addda32_24	xix, (0x1d3c88)
+	add	xix, (0x1d3c88:24)
 	pop	xiz
 	.byte 0xef
 	pop	xix
@@ -15949,7 +15949,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	StringData_APCModeNames_0x9C1
 	ld	a, (4463:16)
 	exts	wa
-	adddm16 (3778), xwa
+	add (3778:16), wa
 	xor h, h
 	ldb	l, 96
 	.byte 0xc1, 0xb5
@@ -17554,7 +17554,7 @@ Scoop_SpecialMode_Data:
 	extz xwa
 	dec 1, xwa
 	sla xwa, 8
-	addda32 xwa, 7514
+	add xwa, (7514:16)
 	ld (4349:16), xwa
 	bitm 7, (xwa)
 	jr nz, Scoop_SpecialMode_Toggle
@@ -17578,7 +17578,7 @@ Scoop_SpecialMode_Draw:
 	extz xwa
 	dec 1, xwa
 	sla xwa, 8
-	addda32 xwa, 7514
+	add xwa, (7514:16)
 	ld (4349:16), xwa
 	bitm 7, (xwa)
 	jr nz, Scoop_SpecialMode_DrawAlt
@@ -17602,7 +17602,7 @@ Scoop_SpecialMode_UpdateParams:
 	extz	xwa
 	dec	1, xwa
 	sla	xwa, 8
-	addda32	xwa, 7514
+	add	xwa, (7514:16)
 	ld	(4349:16), xwa
 	.byte 0xb0
 	dec	6, l
@@ -17623,7 +17623,7 @@ Scoop_SpecialMode_UpdateParams:
 	extz	xwa
 	dec	1, xwa
 	sla	xwa, 8
-	addda32	xwa, 7514
+	add	xwa, (7514:16)
 	ld	(4349:16), xwa
 	.byte 0xb4
 	sbc	w, l
@@ -17770,7 +17770,7 @@ Scoop_SpecialMode_CurveUpdate:
 	ld xhl, (4349:16)
 	ld (xhl + 1), ix
 	inc 1, wa
-	adddm16 0xf231, xwa
+	add (0xf231:16), wa
 	ret
 
 Scoop_CurveUpdate_DrawSegment:

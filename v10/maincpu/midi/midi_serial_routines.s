@@ -364,10 +364,10 @@ ClkTick_Src2ErrorDelta:
 
 ClkTick_Src2ErrorAccumulate:
 	ld (1111:16), w
-	adddm8 1124, a
-	adddm8 1122, a
+	add (1124:16), a
+	add (1122:16), a
 	xor w, w
-	addda16 xwa, 1120
+	add wa, (1120:16)
 	cp a, 0x60
 	jr c, ClkTick_Src2ErrorWriteback
 	sub a, 0x60
@@ -516,23 +516,23 @@ MIDI_APPLY_STARTUP_TIMING:
 	ld a, (1108:16)
 	dec 1, a
 	sll a, 2
-	adddm8 1047, a
+	add (1047:16), a
 	bit 0, (1055:16)
 	jr z, StartTiming_Src1Adjust
 	ld (1055:16), 6
-	adddm8 1130, a
+	add (1130:16), a
 
 StartTiming_Src1Adjust:
 	bit 0, (1054:16)
 	jr z, StartTiming_Src2Adjust
 	ld (1054:16), 6
-	adddm8 1045, a
+	add (1045:16), a
 
 StartTiming_Src2Adjust:
 	bit 0, (1057:16)
 	jr z, StartTiming_ClearAndReturn
 	ld (1057:16), 6
-	adddm8 1051, a
+	add (1051:16), a
 
 StartTiming_ClearAndReturn:
 	ld (1108:16), 0

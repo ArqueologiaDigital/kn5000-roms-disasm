@@ -1303,8 +1303,8 @@ SndParam_Widget1_CallType3:
 	jr	ugt, 3
 	add	a, 96
 	ld	(1111:16), w
-	adddm8	1124, a
-	adddm8	1122, a
+	add	(1124:16), a
+	add	(1122:16), a
 	xor	w, w
 	.byte 0xd1, 0x60, 0x04, 0x80
 	cp	a, 96

@@ -67,7 +67,7 @@ NMI_StorePayloadChecksums_Entry:
 	call Seq_IsMelodyActive
 	cps hl, 0
 	jr z, NMI_CopyPayloadToSRAM
-	adddi16_24 (0xffd4), 1000
+	addw (0xffd4:24), 1000
 
 NMI_CopyPayloadToSRAM:
 	lda xde, (0x00066e:24)
@@ -399,7 +399,7 @@ INTT1_HANDLER:
 	push xhl
 	xor xhl, xhl
 	inc 1, xhl
-	adddm32 1033, xhl
+	add (1033:16), xhl
 	incw 1, (1037:16)
 	push	sr
 	ei 6
@@ -849,10 +849,10 @@ INTTR4_SeqAccum_Update:
 
 INTTR4_SeqAccum_PositiveDelta:
 	ld (1111:16), w
-	adddm8 1124, a
-	adddm8 1122, a
+	add (1124:16), a
+	add (1122:16), a
 	xor w, w
-	addda16 xwa, 1120
+	add wa, (1120:16)
 	cp a, 0x60
 	jr c, INTTR4_SeqAccum_NoWrap
 	sub a, 0x60
@@ -919,10 +919,10 @@ INTTR4_SyncAccum_Update:
 
 INTTR4_SyncAccum_PositiveDelta:
 	ld (1138:16), w
-	adddm8 1131, a
-	adddm8 1133, a
+	add (1131:16), a
+	add (1133:16), a
 	xor w, w
-	addda16 xwa, 1136
+	add wa, (1136:16)
 	cp a, 0x60
 	jr c, INTTR4_SyncAccum_NoWrap
 	sub a, 0x60
@@ -1481,7 +1481,7 @@ RhythmBuf_Dispatch_UpdateReadPos:
 	add wa, 0x200
 
 RhythmBuf_Dispatch_NoWrap:
-	adddm16_24 (0x1ef5b), xwa
+	add (0x1ef5b:24), wa
 	ret
 
 RhythmBuf_ScanForNoteOn:
@@ -3304,7 +3304,7 @@ TaskSched_TCBTemplate:	.ascii "(<=;"
 
 TaskSched_DelayTicks:
 	srl wa, 1
-	addda16 xwa, 1033
+	add wa, (1033:16)
 
 TaskSched_DelayTicks_SpinLoop:
 	cp wa, (1033:16)
@@ -7022,7 +7022,7 @@ SLIDE_Decompress_4K_CheckLiteral:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0xfff
 	jr SLIDE_Decompress_4K_Continue
@@ -7055,7 +7055,7 @@ SLIDE_Decompress_4K_CopyLoop:
 	add wa, iy
 	and wa, 0xfff
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld a, (xwa)
 	extz wa
 	ld e, a
@@ -7064,7 +7064,7 @@ SLIDE_Decompress_4K_CopyLoop:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0xfff
 	inc 1, iy
@@ -7145,7 +7145,7 @@ SLIDE_Decompress_8K_CheckLiteral:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0x1fff
 	jr SLIDE_Decompress_8K_Continue
@@ -7178,7 +7178,7 @@ SLIDE_Decompress_8K_CopyLoop:
 	add wa, iy
 	and wa, 0x1fff
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld a, (xwa)
 	extz wa
 	ld e, a
@@ -7187,7 +7187,7 @@ SLIDE_Decompress_8K_CopyLoop:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0x1fff
 	inc 1, iy
@@ -8365,7 +8365,7 @@ Parport_RefillBuffer_Loop:
 	add xde, xbc
 	ldw bc, 0x12
 	calr FDC_ReadSectors
-	adddi16 1618, 18
+	addw (1618:16), 18
 	inc 1, iz
 	cps iz, 4
 	jr c, Parport_RefillBuffer_Loop
@@ -8406,7 +8406,7 @@ Flash_AccumWrite_Byte:
 
 Flash_AccumWrite_ByteDone:
 	lds32 xwa, 1
-	adddm32 1602, xwa
+	add (1602:16), xwa
 	ret
 
 Flash_AccumWrite_Word:
@@ -8432,7 +8432,7 @@ Flash_AccumWrite_Word:
 
 Flash_AccumWrite_WordDone:
 	lds32 xwa, 1
-	adddm32 1602, xwa
+	add (1602:16), xwa
 	ret
 
 LZSS_Decompress_ToFlash:
@@ -8443,7 +8443,7 @@ LZSS_Decompress_ToFlash:
 	add xwa, 0xe0000
 	ld (1622:16), xwa
 	ld xwa, 0x20000
-	adddm32 1598, xwa
+	add (1598:16), xwa
 	lds iz, 0
 
 LZSS_Decompress_ReadHeader:
@@ -8556,7 +8556,7 @@ LZ_Decompress_ReadTracks:
 	add xde, xbc
 	ldw bc, 0x12
 	calr FDC_ReadSectors
-	adddi16 1618, 18
+	addw (1618:16), 18
 	inc1w_erp 0xfa
 	cpiw_erp 0xfa, 4
 	jr c, LZ_Decompress_ReadTracks
@@ -8574,7 +8574,7 @@ LZ_Decompress_ReadSizeField:
 	calr Parport_ReadNextByte
 	sll hl, 8
 	extz xhl
-	adddm32 1598, xhl
+	add (1598:16), xhl
 	calr Parport_ReadNextByte
 	extz xhl
 	ld xwa, (1598:16)

@@ -875,7 +875,7 @@ SwbtWr_DispatchLoop_Init:
 
 SwbtWr_DispatchLoop:
 	ld xiy, (0xc089:16)
-	addda16 xiy, 0xc07b
+	add iy, (0xc07b:16)
 	cp (xiy), 0xff
 	jr z, SwbtWr_DispatchLoop_PostCallbacks
 	ld xix, (0xc081:16)
@@ -926,7 +926,7 @@ SwbtWr_DispatchLoop_ExecuteCallback:
 	jr SwbtWr_DispatchLoop_ScanCallbacks
 
 SwbtWr_DispatchLoop_NextEvent:
-	adddi16 0xc07b, 4
+	addw (0xc07b:16), 4
 	jrl SwbtWr_DispatchLoop
 
 SwbtWr_DispatchLoop_PostCallbacks:
@@ -949,11 +949,11 @@ SwbtWr_QueueMainEvent:
 	cpw (0x90de:16), 507
 	jr ugt, SwbtWr_QueueMainEvent_Done
 	ld xhl, 0xbd3c
-	addda16 xhl, 0x90de
+	add hl, (0x90de:16)
 	ld (xhl), de
 	ld (xhl + 2), wa
 	ld (xhl + 4), 0xff
-	adddi8 0x90de, 4
+	add (0x90de:16), 4
 
 SwbtWr_QueueMainEvent_Done:
 	ret
@@ -962,11 +962,11 @@ SwbtWr_QueuePostEvent:
 	cpw (0x90e2:16), 251
 	jr ugt, SwbtWr_QueuePostEvent_Done
 	ld xhl, 0xbf39
-	addda16 xhl, 0x90e2
+	add hl, (0x90e2:16)
 	ld (xhl), de
 	ld (xhl + 2), wa
 	ld (xhl + 4), 0xff
-	adddi16 0x90e2, 4
+	addw (0x90e2:16), 4
 
 SwbtWr_QueuePostEvent_Done:
 	ret
@@ -3960,7 +3960,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	a, (xsp+2)
 	.byte 0x8f
 	incf
-	adddm8	0xa066, l
+	add	(0xa066:16), l
 	ldwio	33, 4239
 	.byte 0xf1
 	jr	ule, 20

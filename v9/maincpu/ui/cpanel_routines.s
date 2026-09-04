@@ -222,14 +222,14 @@ CPanel_InitLEDBuffer:
 	ldio 0xf8, 0x22
 	ldio 0xf8, 0x23
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
 	incw 1, (0x8dfd:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
 	incw 1, (0x8dfd:16)
 	st_dd8b A, 0xd4
@@ -643,7 +643,7 @@ CPanel_SendCommand:
 	ldw (0x8dfd:16), 0
 	ldw (0x8dff:16), 0
 	ld (0x8e01:16), wa
-	adddi16 0x8dff, 2
+	addw (0x8dff:16), 2
 	or (0x8d8c:16), 2
 	and (0x8d8c:16), 254; CP_Flags_A.10 = 2
 	ld (0x8d8a:16), 4; ROUTINE_1
@@ -847,7 +847,7 @@ CPanel_SM_SendByte1:
 	ldio 0xe3, 0x05
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
 	st_dd8b A, 0xd4
 	incw 1, (0x8dfd:16)
@@ -884,7 +884,7 @@ CPanel_SM_SendByteN:
 	ldio 0xe3, 0x05
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
 	st_dd8b A, 0xd4
 	incw 1, (0x8dfd:16)
@@ -957,7 +957,7 @@ CPanel_SM_RXByte1:
 	ldio 0xeb, 0x0d
 	ld_sd8b A, 0xd4
 	ld xiy, 0x8da1
-	addda16 xiy, 0x8d9f
+	add iy, (0x8d9f:16)
 	ld (xiy), a
 	ld hl, (0x8d9f:16)
 	subda16 xhl, 0x8d9d
@@ -1000,7 +1000,7 @@ RXByte1_AdvanceState:
 CPanel_SM_RXByteN:
 	ld_sd8b A, 0xd4
 	ld xiy, 0x8da1
-	addda16 xiy, 0x8d9f
+	add iy, (0x8d9f:16)
 	ld (xiy), a
 	bit 0, (0x8d92:16); CP_Flags_B.0
 	jr nz, RXByteN_CheckDone
@@ -1099,7 +1099,7 @@ PollLoop_DispatchWork:
 						; }
 
 
-	adddi8 0x8d8c, 64
+	add (0x8d8c:16), 64
 	cp a, 0xc0
 	jr nz, PollLoop_DoLEDUpdate	; if (CP_Flags_A.76++ == 3) {
 

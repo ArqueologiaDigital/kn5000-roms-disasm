@@ -356,14 +356,14 @@ BootSerial_SendTwoBytes_Bitbang:
 	ldio	0xf8, 0x22
 	ldio	0xf8, 0x23
 	ld	xiy, 0x0fd9		; TX ring
-	addda16	xiy, 0x0fd5		; + send index
+	add	iy, (0x0fd5:16)		; + send index
 	ld	a, (xiy)
 	incw	1, (0x0fd5:16)
 	st_dd8b	a, 0xd4			; first byte -> SC1BUF
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
 	ld	xiy, 0x0fd9
-	addda16	xiy, 0x0fd5
+	add	iy, (0x0fd5:16)
 	ld	a, (xiy)
 	incw	1, (0x0fd5:16)
 	st_dd8b	a, 0xd4			; second byte -> SC1BUF
@@ -792,7 +792,7 @@ BootSerial_SendFrame:
 	ldw	(0x0fd5:16), 0		; TX send index = 0
 	ldw	(0x0fd7:16), 0		; TX pending count = 0
 	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
-	adddi16	(0x0fd7), 2		; two bytes pending
+	addw	(0x0fd7:16), 2		; two bytes pending
 	or	(0x0f64:16), 2		; TX-pending flag
 	and	(0x0f64:16), 0xfe		; clear RX-active flag
 	ld	(0x0f62:16), 4		; state machine -> state 0x04

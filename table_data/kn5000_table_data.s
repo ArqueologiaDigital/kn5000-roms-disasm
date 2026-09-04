@@ -1459,7 +1459,7 @@ Boot_ClearRAM__copy2_done:
 BootCode_INTT1_Handler:
 	push xwa	; 38
 	lds32 xwa, 1	; e8 a9
-	adddm32 3072, xwa	; e1 00 0c 88
+	add (3072:16), xwa	; e1 00 0c 88
 	pop xwa	; 58
 	reti	; 07
 
@@ -3809,7 +3809,7 @@ LZSS_ReadByte__read_sectors:
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92 (read sector data)
-	adddi16 3124, 18	; ADD (0x0C34), 0x0012
+	addw (3124:16), 18	; ADD (0x0C34), 0x0012
 	inc 1, iz	; INC 1, IZ
 	cps iz, 4	; CP IZ, 4
 	jr c, LZSS_ReadByte__read_sectors	; JR C, .read_sectors
@@ -3856,7 +3856,7 @@ LZSS_OutputByte:
 	ld (3126:16), 0; LD (0x0C36), 0x00 - reset index
 LZSS_OutputByte__not_full:
 	lds32 xwa, 1	; LD XWA, 1
-	adddm32 3108, xwa	; ADD (0x0C24), XWA - increment output pos
+	add (3108:16), xwa	; ADD (0x0C24), XWA - increment output pos
 	ret	; RET
 
 ; -----------------------------------------------------------------------------
@@ -3886,7 +3886,7 @@ LZSS_OutputByte_Alt:
 	ld (3126:16), 0; LD (0x0C36), 0x00
 LZSS_OutputByte_Alt__not_full:
 	lds32 xwa, 1	; LD XWA, 1
-	adddm32 3108, xwa	; ADD (0x0C24), XWA
+	add (3108:16), xwa	; ADD (0x0C24), XWA
 	ret	; RET
 
 ; -----------------------------------------------------------------------------
@@ -3902,7 +3902,7 @@ LZSS_ParseHeader:
 	add xwa, 0xE0000	; ADD XWA, 0x000E0000 (XWA = 0x3E0000)
 	ld (3128:16), xwa	; LD (0x0C38), XWA - store source ptr
 	ld xwa, 0x20000	; LD XWA, 0x00020000
-	adddm32 3104, xwa	; ADD (0x0C20), XWA
+	add (3104:16), xwa	; ADD (0x0C20), XWA
 	lds iz, 0	; LD IZ, 0
 LZSS_ParseHeader__read_header:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
@@ -4033,7 +4033,7 @@ LZSS_Decompress__preread_loop:
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92
-	adddi16 3124, 18	; ADD (0x0C34), 0x0012
+	addw (3124:16), 18	; ADD (0x0C34), 0x0012
 	inc1w_erp 0xFA	; INC 1, QIZ
 	cpiw_erp 0xFA, 4	; CP QIZ, 4
 	jr c, LZSS_Decompress__preread_loop	; JR C, .preread_loop
@@ -4054,7 +4054,7 @@ LZSS_Decompress__read_header_loop:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	sll hl, 8	; SLL 8, HL
 	extz xhl	; EXTZ XHL
-	adddm32 3104, xhl	; ADD (0x0C20), XHL
+	add (3104:16), xhl	; ADD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	extz xhl	; EXTZ XHL
 	ld xwa, (3104:16); LD XWA, (0x0C20)
