@@ -20,7 +20,38 @@ section or mask-bit change**; do not hand-edit `LEDGER.md`.
 
 ---
 
-## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230/§231, 2026-07-31)
+## TIER 0a — THE CURRENT BLOCKER  (§227, unmoved by §228/§229/§230/§231/§232/§233, 2026-09-04)
+
+> ### ★★★★★ §233 — READ THIS BEFORE QUOTING A FALSIFIER, AND BEFORE RE-OPENING `SRC 0x00`
+>
+> **`SRC 0x00` IS DECIDED — `1 of 7`, AND THE READING THE DEVICE SHIPS SURVIVES. AND ONE OF THE
+> TWO FALSIFIERS THAT DECIDED IT WAS NEVER LOOKING AT THE CODE AT ALL.**
+>
+> * ✔ **`SRC 0x00 = mem[ptr]`.** SINGLE DELAY's lag-**1001** ROM product accepts it with sample
+>   **45074** and refutes `P`, `acc`, `zero`, `DR`, `tA` and the **global** `coef`: under all six,
+>   **no injection cell in the entire 256-cell pointer space** puts a non-zero datum into the
+>   delay line. a09 carries 9 `SRC 0x00` words and one is the **HEAD WRITE `w46`**.
+>   ⛔ **The null-routing rival is now REFUTED BY EVIDENCE**, not by `action00-discriminator.md`
+>   item I — which `adjudication-round6.md` §14 voided and which `upd6383.cpp` was still citing.
+> * ⛔⛔ **PARAMETRIC EQ's `0.198 dB` IS NOT A FALSIFIER FOR EVERY CODE a39 CONTAINS.** §232 §7.2
+>   pre-registered it for `SRC 0x00` because a39 carries 8 such words. The harness executes a
+>   **9-word EXCERPT** (a39 `w5..w13`, ×10) and the intersection is **EMPTY**: unconditional fired
+>   count **0**, all seven readings **0.198 dB**. ⇒ ★★★★ **A PROGRAM'S WORD COUNT IS NOT A
+>   HARNESS'S REACH. Reach-test a criterion — print its FIRED COUNT — before quoting it.** A
+>   patched-excerpt control moves 6 of 6, so the sweep is live and the blindness is the excerpt's.
+> * ⚠ **A HARNESS CAN PRESUPPOSE THE ANSWER IN ITS INPUT INJECTION.** `sd_rerun.py`'s `derive_p0`
+>   places the head write's pointer on the driven cell — i.e. it injects the audio exactly where
+>   `mem[ptr]` would read it, so every rival is silent by construction. Removed by sweeping the
+>   injection cell over all 256 (the walk is `p0`-invariant mod 256). **Rule 22, and the reason
+>   the refutation is a statement about all 256 placements rather than about one.**
+> * ⚠ **LIMIT: only the GLOBAL `coef` (mask bit 57, which §146 measured railing unit 1 at 98.9 %)
+>   is refuted.** None of a09's nine `SRC 0x00` words is a coefficient consumer, so bits **58/59**
+>   — §145/§148's **gated** `coef` — fall back to `mem[ptr]` here and are invisible. Still open.
+> * ★ Corpus: **580 of 622** non-C-format words, not `572/599` and not `605/648`. Eighth C-format
+>   contamination. The **+348 price is unaffected**.
+> * Reproduce: `python3 dsp/tools/sd_rerun.py src00` · `python3 dsp/tools/gate_settle.py src00`.
+> ⇒ **THE QUEUE'S TOP ITEM IS NOW `ACT 0x0D` + `ACT 0x0E`, TOGETHER, IN SINGLE DELAY** (§233 §4.2).
+> ⛔ **THE BLOCKER IS UNCHANGED: *what does the coefficient base `0x90` MEAN?***
 
 > ### ⛔⛔ §231 — READ THIS BEFORE SPENDING A PASS ON DECODE COVERAGE
 >
