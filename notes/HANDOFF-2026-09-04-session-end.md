@@ -113,3 +113,25 @@ Landed and merged in the same resumed stretch, all gated: `SRC 0x00` decided (§
 converted (SYNTHETIC 147,842 → 136,863; the backend has TWO register-name rules split by
 instruction class; the branch verifier had a latent false green); docs site de-changelogged with
 ~20 stale figures corrected; `DbMemDump_StepTable` named.
+
+## ⚠ FINAL STATE, 2026-09-05 ~00:35 — both remaining lanes STOPPED BY FELIPE; everything preserved
+
+* **Backend, encoding selectors — steps 3-7 LANDED.** `llvm-project` `tlcs900_backend` was
+  fast-forwarded by the lane to `7a7a3fd6318b` ("Decode the io family's long forms as ld/ldw
+  (n:8), imm"), on top of `3a0635ee2c65` (the .td table: nine defs, nine legacy aliases),
+  `3369a7097158` (lit pins every family, DEFAULTS INCLUDED), `34048ba78e45` (the 3-bit and I/O
+  immediate-field refusals), and two disassembler-test commits. Zero uncommitted.
+  ⚠ NOT YET DONE: the spec's **step 4 null run** (build from a CLEAN checkout, record the binary
+  sha256 as TOOLCHAIN_VERSION UPDATE 15, `gate-all` 13/13 under it) and **step 8's four foils**
+  (each RED then GREEN). Until step 4 runs, `toolchain-snapshot/llvm-mc.snap` (850b013e) is STILL the
+  pinned reference and the new backend is UNGATED. Do step 4 before anything else touches this.
+  Then steps 9 (71,667-site conversion, six commits) and 10 (delete the nine aliases).
+* **DSP `SRC 0x11` (§235) — PARTIAL.** On `w28/src11`: the corpus census with its nulls
+  (`dd7c05a7`), the pre-registered device-arm prediction (`1bad13ad`, PREDICT_235), and an UNRUN
+  grader (WIP commit). The device instrumentation is on `kn7000_mame` branch
+  `wip/src11-device-arm`, compiled at 00:28 but never executed. Resume: `run_dsp_arm.sh`, arm A0
+  first; A1-A5 only if A0's regression row passes. ⚠ Check whether the PUBLISHED binary at
+  `~/compartilhado/kn7000-emulator/kn7000` is the 00:28 DSP-ON build; if so, rebuild DSP-off and
+  republish before anyone uses it for anything else.
+
+Nothing was pushed anywhere. All four repos are clean on `main`.
