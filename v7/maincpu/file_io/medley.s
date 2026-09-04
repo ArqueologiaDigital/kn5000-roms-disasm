@@ -360,7 +360,7 @@ IntMed_FindCurrentSong:
 	stb_erp	a, 248
 	extz	wa
 	call	15862692
-	incdi8	1, (34816)
+	inc	1, (34816:16)
 	ld	xwa, (33346:16)
 	or	xwa, xwa
 	jrl	z, 913
@@ -392,7 +392,7 @@ IntMed_PlayFromStart:
 	stb_erp	a, 248
 	extz	wa
 	call	15862692
-	incdi8	1, (34816)
+	inc	1, (34816:16)
 	ld	xwa, (33346:16)
 	or	xwa, xwa
 	jrl	z, 824
@@ -493,7 +493,7 @@ IntMed_AssignOrderLoop:
 	jr	nz, 58
 	ld	a, (34814:16)
 	ld	(xbc), a
-	incdi8	1, (34814)
+	inc	1, (34814:16)
 	ld	wa, iz
 	sll	wa, 3
 	lda	xde, (33350:16)
@@ -529,7 +529,7 @@ IntMed_UnmarkSlotLoop:
 	cp	a, 253
 	jr	ugt, 55
 	ld	(xbc), 254
-	decdi8	1, (34814)
+	dec	1, (34814:16)
 	ld	wa, iz
 	sll	wa, 3
 	lda	xde, (33350:16)
@@ -577,7 +577,7 @@ IntMed_HandleSelectToggle:
 	jr nz, .Lc_f91c70
 	ld c, (0x87fe:16)
 	ld (XDE),C
-	incdi8 1, 0x87fe
+	inc 1, (0x87fe:16)
 	ld C,(XDE)
 	extz BC
 	ld DE,IZ
@@ -597,7 +597,7 @@ IntMed_RemoveFromOrder:
 	jrl ugt, IntMed_Exit
 	ld (XSP+0x04),C
 	ld (XDE),0xfe
-	decdi8 1, 0x87fe
+	dec 1, (0x87fe:16)
 	ld C,(XDE)
 	extz BC
 	ld DE,IZ
@@ -671,7 +671,7 @@ IntMed_StartPlayLoop:
 	stb_erp	a, 248
 	extz	wa
 	call	15862692
-	incdi8	1, (34816)
+	inc	1, (34816:16)
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
@@ -895,7 +895,7 @@ DiskMed_FindFirstLoop:
 	extz	wa
 DiskMed_PlaySong:
 	call	15862692
-	incdi8	1, (34816)
+	inc	1, (34816:16)
 	lds32	xhl, 1
 	jr	10
 DiskMed_NextFindFirst:
@@ -1110,7 +1110,7 @@ DiskSel_SendFileInfo:
 	ldw	wa, 238
 	jrl	1272
 DiskSel_PlayNext:
-	incdi8	1, (34976)
+	inc	1, (34976:16)
 	ld	xwa, (xsp+14)
 	ld	xbc, 29360151
 	ld	xde, 13
@@ -1217,7 +1217,7 @@ DiskSel_RepeatSendInfo:
 	ldw	wa, 238
 	jrl	936
 DiskSel_RepeatPlayNext:
-	incdi8	1, (34976)
+	inc	1, (34976:16)
 	ld	xwa, (xsp+14)
 	ld	xbc, 29360151
 	ld	xde, 13
@@ -1419,7 +1419,7 @@ DiskSel_UnmarkLoop:
 	cp	a, 253
 	jr	ugt, 7
 	ld	(xhl), 254
-	decdi8	1, (34974)
+	dec	1, (34974:16)
 DiskSel_NextUnmark:
 	inc 1, xhl
 	cp xhl, xde
@@ -1448,7 +1448,7 @@ DiskSel_RemoveSelect:
 	cp	de, 20
 	jr	ge, 7
 	ld	(xbc), 254
-	decdi8	1, (34974)
+	dec	1, (34974:16)
 DiskSel_ReorderSlots:
 	ld xde, xix
 	lda xhl, (xix + 20)
@@ -1879,7 +1879,7 @@ SmfMed_PlayError3F:
 	ldw	wa, 238
 SmfMed_ShowPlayError:
 	call	16355504
-	incdi8	1, (33696)
+	inc	1, (33696:16)
 SmfMed_SetPlaying:
 	ld	(33890:16), 1
 	ld	a, (34950:16)
@@ -1904,7 +1904,7 @@ SmfMed_FindSongLoop:
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
 	calr	65016
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	wa, iz
 	call	16292978
 	ld	xwa, (33688:16)
@@ -1944,7 +1944,7 @@ SmfMed_RepeatFindLoop:
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
 	calr	-635
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	wa, iz
 	call	16292978
 	ld	xwa, (33688:16)
@@ -2095,7 +2095,7 @@ SmfMed_UnmarkLoop:
 	cp	a, 253
 	jr	ugt, 7
 	ld	(xbc), 255
-	decdi8	1, (34948)
+	dec	1, (34948:16)
 SmfMed_NextUnmark:
 	.byte 0xde, 0x61, 0xd1, 0x9c, 0x83, 0xf6, 0x67, 0xe4
 SmfMed_RefreshAfterToggle:
@@ -2182,7 +2182,7 @@ SmfMed_PlayFindLoop:
 	ld	xwa, (xsp+2)
 	ld	xbc, 31784962
 	calr	-20882
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	wa, iz
 	call	16292978
 	ld	xwa, 4294967295
@@ -2611,7 +2611,7 @@ PdMed_FindSongLoop:
 	ld	xwa, (33784:16)
 	ld	bc, (33792:16)
 	calr	65115
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	xwa, (33788:16)
 	or	xwa, xwa
 	jrl	z, 807
@@ -2764,7 +2764,7 @@ PdMed_UnmarkLoop:
 	cp	a, 253
 	jr	ugt, 7
 	ld	(xbc), 255
-	decdi8	1, (34948)
+	dec	1, (34948:16)
 PdMed_NextUnmark:
 	.byte 0xdb, 0x61, 0xd1, 0x00, 0x84, 0xf3, 0x67, 0xe4
 PdMed_RefreshAfterToggle:
@@ -2859,7 +2859,7 @@ PdMed_PlayFindLoop:
 	ld	xbc, 31784962
 	ld	xde, xhl
 	calr	-1651
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
@@ -3327,7 +3327,7 @@ DocMed_FindSongLoop:
 	ld	xwa, (33880:16)
 	ld	bc, (33888:16)
 	calr	65115
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	xwa, (33884:16)
 	or	xwa, xwa
 	jrl	z, 833
@@ -3492,7 +3492,7 @@ DocMed_UnmarkLoop:
 	cp	a, 253
 	jr	ugt, 7
 	ld	(xbc), 255
-	decdi8	1, (34948)
+	dec	1, (34948:16)
 DocMed_NextUnmark:
 	.byte 0xdb, 0x61, 0xd1, 0x60, 0x84, 0xf3, 0x67, 0xe4
 DocMed_RefreshAfterToggle:
@@ -3587,7 +3587,7 @@ DocMed_PlayFindLoop:
 	ld	xbc, 31784962
 	ld	xde, xhl
 	calr	-1665
-	incdi8	1, (34950)
+	inc	1, (34950:16)
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
@@ -4431,7 +4431,7 @@ WakeUp_HandleOk:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x8c
 	jr nz, WakeUp_ClearCounter
-	incdi8_24 1, (0x02741a)
+	inc 1, (0x02741a:24)
 	cpib_da (0x02741a), 0x07
 	jr nz, WakeUp_ReturnZero
 	ld (0x02741a:24), 0x00

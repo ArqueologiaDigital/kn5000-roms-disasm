@@ -2290,7 +2290,7 @@ HDAE5000_FlsLoadScreen:
 	jr nz, .LFWF_8b4d                      ; [6e 45] jr NZ,0x288b4d
 	cpw_da	(0x23A096), 0
 	jrl z, .LFWF_8c1a                      ; [76 08 01] jrl Z,0x288c1a
-	decdi16_24	1, (0x23A096)
+	decw	1, (0x23A096:24)
 	ldw	(0x22B272:24), 16
 	lds	wa, 0
 	lds	bc, 0
@@ -2325,7 +2325,7 @@ HDAE5000_FlsLoadScreen:
 	jr z, .LFWF_8bd0                       ; [66 44] jr Z,0x288bd0
 	cpw_da	(0x23A096), 119
 	jrl nc, .LFWF_8c1a                     ; [7f 84 00] jrl NC,0x288c1a
-	incdi16_24	1, (0x23A096)
+	incw	1, (0x23A096:24)
 	ldw	(0x22B272:24), 0
 	lds	wa, 0
 	lds	bc, 0
@@ -2998,7 +2998,7 @@ HDAE5000_FlsFileSelScreen:
 .LFWF_9468:
 	cpw_da	(0x23A092), 0
 	jrl z, .LFWF_952a                      ; [76 b8 00] jrl Z,0x28952a
-	decdi16_24	1, (0x23A092)
+	decw	1, (0x23A092:24)
 	lds	wa, 1
 	lds	bc, 0
 	calr	0xa6ea
@@ -3015,7 +3015,7 @@ HDAE5000_FlsFileSelScreen:
 .LFWF_94a6:
 	cpw_da	(0x23A092), 119
 	jr nc, .LFWF_952a                      ; [6f 7b] jr NC,0x28952a
-	incdi16_24	1, (0x23A092)
+	incw	1, (0x23A092:24)
 	lds	wa, 1
 	lds	bc, 0
 	calr	0xa6ad

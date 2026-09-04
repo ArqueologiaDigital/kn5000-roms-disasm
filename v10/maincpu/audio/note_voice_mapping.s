@@ -2862,7 +2862,7 @@ VoiceLinks_SlotLoop:
 	add xbc, (xsp + 6)
 	ld a, (xbc + 1)
 	stb_dri A, 0x07, 0xec, 0xe8
-	incdi16 1, (0xe9ba)
+	incw 1, (0xe9ba:16)
 	jr MidiEvent_NoteLoopAdvance
 
 VoiceLinks_SkipEmpty:
@@ -2898,7 +2898,7 @@ VoiceLinks_SkipEmpty:
 	muls wa, 0x3
 	lda xbc, (0xc5cc:16)
 	stib_ind 0x07, 0xe4, 0xe0, 0xff
-	decdi16 1, 0xe9ba
+	decw 1, (0xe9ba:16)
 	jr MidiEvent_NoteLoopAdvance
 
 VoiceLinks_SkipEmpty_LoadIter:
@@ -15087,19 +15087,19 @@ Audio_NullRet1_Data:
 Voice_UpdateNoteState:
 	cp (0xceb5:16), 0
 	jr z, UpdateNoteState_CheckDRAM
-	decdi8 1, 0xceb5
+	dec 1, (0xceb5:16)
 	jr z, Voice_CheckAndUpdateMode
 
 UpdateNoteState_CheckDRAM:
 	cp (0xceb4:16), 0
 	jr z, UpdateNoteState_CheckDRAM2
-	decdi8 1, 0xceb4
+	dec 1, (0xceb4:16)
 	jr z, Voice_CheckAndUpdateMode
 
 UpdateNoteState_CheckDRAM2:
 	cp (0xceb3:16), 0
 	jr z, Voice_ProcessControllers_Return
-	decdi8 1, 0xceb3
+	dec 1, (0xceb3:16)
 	jr z, Voice_CheckAndUpdateMode
 
 Voice_CheckAndUpdateMode:
@@ -15705,9 +15705,9 @@ PitchCalc_Return_Block2:
 	calr Voice_UpdateNoteBitmap
 	cps w, 0
 	jr nz, VoiceSlot_CompareAndUpdate_Compare
-	decdi8_24 1, (0xcee5)
+	dec 1, (0xcee5:24)
 	calr Voice_UpdateNoteBitmap
-	incdi8_24 1, (0xcee5)
+	inc 1, (0xcee5:24)
 	jr VoiceSlot_CompareAndUpdate_Compare
 
 PitchCalc_Return_Block3:
@@ -15884,9 +15884,9 @@ VoiceSlot_LoadResult_TestBit24:
 	jr Audio_NullRet2
 
 VoiceSlot_LoadResult_Block4:
-	decdi8_24 1, (0xcee5)
+	dec 1, (0xcee5:24)
 	calr Voice_LookupNoteAndComputePitch
-	incdi8_24 1, (0xcee5)
+	inc 1, (0xcee5:24)
 	stb_erp C, 0x34
 	ldto_lerp XIZ, 0x30
 	ld (xiz), c
@@ -16231,7 +16231,7 @@ NoteDisplay_LookupEntry:
 	ld l, (0x00cee5:24)
 	ld xiz, 0xcee6
 	stb_dri W, 0x07, 0xf8, 0xec
-	incdi8_24 1, (0xcee5)
+	inc 1, (0xcee5:24)
 
 NoteDisplay_SetBounds:
 	ld l, (0x00cee5:24)
@@ -16561,7 +16561,7 @@ VoiceSlot_SetPitchParams_TestBit24:
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ldb_sri C, 0x07, 0xf8, 0xec
 	ld (0x00cef1:24), c
-	incdi8_24 1, (0xcef1)
+	inc 1, (0xcef1:24)
 	xor b, b
 	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
 	ld xix, 0xcef2
@@ -16592,7 +16592,7 @@ VoiceSlot_SetPitchParams_Compare:
 	jr VoiceSlot_IterateAlloc_NextIter
 
 VoiceSlot_SetPitchParams_Block:
-	decdi8_24 1, (0xcef1)
+	dec 1, (0xcef1:24)
 	jr VoiceSlot_IterateAlloc
 VoiceSlot_IterateAlloc:
 
@@ -16880,9 +16880,9 @@ VoiceSlot_CheckAndApply_Data2:
 	calr	62522
 	cps	w, 0
 	jr	nz, 29
-	decdi8_24	1, (0xcee5)
+	dec	1, (0xcee5:24)
 	calr	62510
-	incdi8_24	1, (0xcee5)
+	inc	1, (0xcee5:24)
 	jr	14
 	cps	w, 0
 	jr	nz, 10
@@ -17058,9 +17058,9 @@ NoteDisplay_StoreAnd_LoadDRAM:
 	call Voice_UpdateNoteBitmap
 	cps hl, 0
 	jr nz, NoteDisplay_StoreAnd_DoLookupBi
-	decdi8 1, 0xcee5
+	dec 1, (0xcee5:16)
 	call Voice_UpdateNoteBitmap
-	incdi8 1, (0xcee5)
+	inc 1, (0xcee5:16)
 
 NoteDisplay_StoreAnd_DoLookupBi:
 	call NoteDisplay_LookupBitmap
@@ -20276,7 +20276,7 @@ PlayModeStateMachine_Prologue:
 	bit 2, wa
 	jr z, PlayModeStateMachine_LoadParam
 	ld wa, (0xec0e:16)
-	decdi16 1, 0xec0e
+	decw 1, (0xec0e:16)
 	cps wa, 0
 	jr ge, PlayModeStateMachine_LoadParam
 	ldw (0xec0e:16), 6
@@ -23562,14 +23562,14 @@ InitTrackSlots_LoadDRAM:
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
-	decdi16 1, 0xd0ac
+	decw 1, (0xd0ac:16)
 	cpw (0xd0a8:16), 2047
 	jr nz, InitTrackSlots_IncDRAM
 	ldw (0xd0a8:16), 0
 	jr InitTrackSlots_InitVal
 
 InitTrackSlots_IncDRAM:
-	incdi16 1, (0xd0a8)
+	incw 1, (0xd0a8:16)
 
 InitTrackSlots_InitVal:
 	lds hl, 0
@@ -23591,14 +23591,14 @@ RingBuffer_ReadByte_LoadDRAM:
 	add xwa, xbc
 	ld l, (xwa)
 	extz hl
-	incdi16 1, (0xd0ac)
+	incw 1, (0xd0ac:16)
 	cpw (0xd0aa:16), 2047
 	jr nz, RingBuffer_ReadByte_IncDRAM
 	ldw (0xd0aa:16), 0
 	jr RingBuffer_ReadByte_Return
 
 RingBuffer_ReadByte_IncDRAM:
-	incdi16 1, (0xd0aa)
+	incw 1, (0xd0aa:16)
 
 RingBuffer_ReadByte_Return:
 	ret
@@ -23713,14 +23713,14 @@ SysexRingBuf_StoreAndAdvance:
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
-	decdi16 1, 0xd8b2
+	decw 1, (0xd8b2:16)
 	cpw (0xd8ae:16), 2047
 	jr nz, SysexRingBuf_IncrementWrite
 	ldw (0xd8ae:16), 0
 	jr SysexRingBuf_WriteSuccess
 
 SysexRingBuf_IncrementWrite:
-	incdi16 1, (0xd8ae)
+	incw 1, (0xd8ae:16)
 
 SysexRingBuf_WriteSuccess:
 	lds hl, 0
@@ -23742,14 +23742,14 @@ SysexRingBuf_ReadAndAdvance:
 	add xwa, xbc
 	ld l, (xwa)
 	extz hl
-	incdi16 1, (0xd8b2)
+	incw 1, (0xd8b2:16)
 	cpw (0xd8b0:16), 2047
 	jr nz, SysexRingBuf_IncrementRead
 	ldw (0xd8b0:16), 0
 	jr SysexRingBuf_ReadReturn
 
 SysexRingBuf_IncrementRead:
-	incdi16 1, (0xd8b0)
+	incw 1, (0xd8b0:16)
 
 SysexRingBuf_ReadReturn:
 	ret
@@ -23862,14 +23862,14 @@ MidiRingBuf_StoreAndAdvance:
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
-	decdi16 1, 0xe0b8
+	decw 1, (0xe0b8:16)
 	cpw (0xe0b4:16), 127
 	jr nz, StoreAndAdvance_IncDRAM
 	ldw (0xe0b4:16), 0
 	jr StoreAndAdvance_InitVal
 
 StoreAndAdvance_IncDRAM:
-	incdi16 1, (0xe0b4)
+	incw 1, (0xe0b4:16)
 
 StoreAndAdvance_InitVal:
 	lds hl, 0
@@ -23891,14 +23891,14 @@ StoreAndAdvance_LoadDRAM2:
 	add xwa, xbc
 	ld l, (xwa)
 	extz hl
-	incdi16 1, (0xe0b8)
+	incw 1, (0xe0b8:16)
 	cpw (0xe0b6:16), 127
 	jr nz, StoreAndAdvance_IncDRAM2
 	ldw (0xe0b6:16), 0
 	jr StoreAndAdvance_Return2
 
 StoreAndAdvance_IncDRAM2:
-	incdi16 1, (0xe0b6)
+	incw 1, (0xe0b6:16)
 
 StoreAndAdvance_Return2:
 	ret
@@ -25575,7 +25575,7 @@ Param_SignExtendRetu_Block3:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
@@ -25596,7 +25596,7 @@ Param_SignExtendRetu_Block4:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
@@ -25617,7 +25617,7 @@ Param_SignExtendRetu_Block5:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
@@ -25638,7 +25638,7 @@ SndParam_LookupPartIndex:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
@@ -25717,7 +25717,7 @@ CommPacket_WriteMeasureCount:
 	call sendCOMM
 
 CommPacket_WriteMeas_Block:
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ret
@@ -25778,7 +25778,7 @@ COMM_BuildAndSendPacket:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
@@ -25797,7 +25797,7 @@ BuildAndSendPacket_Block:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
@@ -25816,7 +25816,7 @@ TmFlash_Return:
 	ld (xde + 4), 0x0
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x1
-	incdi8 1, (0xe197)
+	inc 1, (0xe197:16)
 	ld a, (0xe197:16)
 	res 7, a
 	ld (xde + 7), a

@@ -4908,7 +4908,7 @@ MainMssSetUp:
 	cp	xbc, 31588376
 	jr	nz, 20
 	ld	(36026:16), de
-	incdi16	1, (36026)
+	incw	1, (36026:16)
 	ld	(36018:16), 7
 	jr	5
 MainMssSetUp_ClearMode:

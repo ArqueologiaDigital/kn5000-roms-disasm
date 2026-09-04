@@ -1259,7 +1259,7 @@ Encoder_ReadNextEntry:
 	ld xix, 0x8e78
 	ldi85
 	ldiw
-	incdi8 1, (0x8e8c)
+	inc 1, (0x8e8c:16)
 	ret
 
 Encoder_PrepareCallback:

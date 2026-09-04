@@ -885,7 +885,7 @@ MAIN__bit4:
 MAIN__no_wrap:
 	cpw_da	0x00F2F1, 0x0000
 	jr	z, MAIN__timer_expired
-	decdi16_24 1, 0x00F2F1
+	decw 1, (0x00F2F1:24)
 	jr	MAIN__bit5
 MAIN__timer_expired:
 	ei	6

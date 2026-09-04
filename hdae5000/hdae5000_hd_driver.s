@@ -1501,7 +1501,7 @@ HDAE5000_FILE_LOAD_Screen:
 	jrl t, .LHRW_3f7b                      ; [78 c2 00] jrl T,0x283f7b
 	cpw_da	(0x23A092), 0
 	jrl z, .LHRW_3f7b                      ; [76 b8 00] jrl Z,0x283f7b
-	decdi16_24	1, (0x23A092)
+	decw	1, (0x23A092:24)
 	lds	wa, 0
 	lds	bc, 0
 	calr	0xfc99
@@ -1517,7 +1517,7 @@ HDAE5000_FILE_LOAD_Screen:
 	jrl t, .LHRW_3f7b                      ; [78 84 00] jrl T,0x283f7b
 	cpw_da	(0x23A092), 119
 	jr nc, .LHRW_3f7b                      ; [6f 7b] jr NC,0x283f7b
-	incdi16_24	1, (0x23A092)
+	incw	1, (0x23A092:24)
 	lds	wa, 0
 	lds	bc, 0
 	calr	0xfc5c
@@ -5118,7 +5118,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	lda xde, (0x22ad9c:24); XDE = buffer base
 	ld a, (xsp + 0x02)		; A = digit param
 	stb_dri a, 0x07, 0xE8, 0xE4	; ld (XDE+BC), A
-	incdi8_24	1, (0x22AD9C)
+	inc	1, (0x22AD9C:24)
 	cpib_da (0x22ad9c), 0x06; count == 6?
 	jr nz, .LCHSC__not_full
 	; 6 digits entered — match against patterns

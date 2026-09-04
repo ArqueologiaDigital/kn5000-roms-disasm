@@ -1753,7 +1753,7 @@ Audio_NullHandler_C:
 	ret
 
 Encoder_TimingAndOutput:
-	incdi8 1, (0x8ec6)
+	inc 1, (0x8ec6:16)
 	ld wa, (0x8ec8:16)
 	cps wa, 0
 	jr z, Encoder_CheckTimerDelta
@@ -2369,7 +2369,7 @@ Audio_InitChannelTimers:
 	ret
 
 Audio_IncrementUpdateCounter:
-	incdi8 1, (0x8f4a)
+	inc 1, (0x8f4a:16)
 	ret
 
 Audio_CheckAndFlagChanges:
@@ -8661,7 +8661,7 @@ MidiStream_ProcessorDispatchC:
 
 TempoRing_UpdateAndContinue:
 	ld (0x91d2:16), 255
-	incdi8 1, (0x91c7)
+	inc 1, (0x91c7:16)
 	cp (0x91c7:16), 15
 	jr ule, TempoRing_InitAndScan
 	jr TempoRing_NextEvent
@@ -8800,7 +8800,7 @@ TempoCC_TransmitBytecodeBlock:
 	calr	291
 	ret
 	.byte 0xf2
-	incdi8_24	6, (0xc800ff)
+	inc	6, (0xc800ff:24)
 	ldb	d, 68
 	.byte 0xad, 0x91
 	nop
@@ -9034,7 +9034,7 @@ PartReinit_ProcessNextPart:
 	calr PartReinit_CheckSpecialPart15
 
 PartReinit_AdvancePart:
-	incdi8 1, (0x91c8)
+	inc 1, (0x91c8:16)
 	cp (0x91c8:16), 16
 	jr c, PartReinit_ProcessNextPart
 	calr PendingParam_ScanAllTables
@@ -10988,7 +10988,7 @@ MidiStream_DispatchLoop:
 	call (xiy)
 
 MidiStream_AdvanceRxPtr:
-	incdi8 4, (0x9133)
+	inc 4, (0x9133:16)
 	jr MidiStream_DispatchLoop
 
 MidiStream_ProcessDone:

@@ -150,7 +150,7 @@ MidiSerial_HandleDefault_Data:
 	jr z, 62
 	ld	(0x9669:16), a
 	ld	(0x966b:16), a
-	incdi8	1, (0x9668)
+	inc	1, (0x9668:16)
 	xor	h, h
 	ld	l, (0x9668:16)
 	ld	xix, 0x9514
@@ -163,7 +163,7 @@ MidiSerial_HandleDefault_Data:
 	ld	xix, MidiCC_LowRange_Table
 	ld_rrl xix, xix, hl
 	call (xix)
-	decdi8 1, (38507)
+	dec 1, (38507:16)
 	jr nz, -54
 	ret
 	swi	7
@@ -1083,8 +1083,8 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	d, (0x9670:16)
 	st_rrb d, xiy, hl
 	inc 1, xhl
-	incdi8 1, (38511)
-	incdi8	1, (0x9670)
+	inc 1, (38511:16)
+	inc	1, (0x9670:16)
 	.byte 0xc1
 	jrl	f, 0x3f96
 	ldb	w, 110
@@ -1101,7 +1101,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	add	xiy, xhl
 	inc	1, xix
 	inc	1, w
-	incdi8	1, (0x966e)
+	inc	1, (0x966e:16)
 	.byte 0xc1
 	jr	nz, -106
 	push	xsp

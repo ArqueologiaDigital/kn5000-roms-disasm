@@ -6741,17 +6741,17 @@ SoundFX_Handler_5:
 	ret
 	cp (0xce19:16), 0x00
 	jr z, .Lc_fe8c6a
-	decdi8 1, 0xce19
+	dec 1, (0xce19:16)
 	jr z, .Lc_fe8c84
 .Lc_fe8c6a:
 	cp (0xce18:16), 0x00
 	jr z, .Lc_fe8c77
-	decdi8 1, 0xce18
+	dec 1, (0xce18:16)
 	jr z, .Lc_fe8c84
 .Lc_fe8c77:
 	cp (0xce17:16), 0x00
 	jr z, .Lc_fe8c9b
-	decdi8 1, 0xce17
+	dec 1, (0xce17:16)
 	jr z, .Lc_fe8c84
 .Lc_fe8c84:
 	ld de, (0xc4fa:16)
@@ -7021,7 +7021,7 @@ VoiceTiming_CompareThreshold:
 	.byte 0x69, 0x1e, 0x61
 VoiceTiming_EqualThreshold:
 	nop
-	incdi8_24	1, (52809)
+	inc	1, (52809:24)
 	jr	5
 	calr	187
 VoiceTiming_BelowThreshold:
@@ -10941,13 +10941,13 @@ SoundParam_InitDefaultBanks:
 	extz XBC
 	add XBC,XDE
 	ld (XBC),A
-	decdi16 1, 0xd816
+	decw 1, (0xd816:16)
 	cpw (0xd812:16), 0x07ff
 	jr nz, .Lc_feda38
 	ldw (0xd812:16), 0x0000
 	jr t, .Lc_feda3c
 .Lc_feda38:
-	incdi16 1, 0xd812
+	incw 1, (0xd812:16)
 .Lc_feda3c:
 	lds hl, 0
 .Lc_feda3e:
@@ -10964,13 +10964,13 @@ SoundParam_InitDefaultBanks:
 	add XWA,XBC
 	ld L,(XWA)
 	extz HL
-	incdi16 1, 0xd816
+	incw 1, (0xd816:16)
 	cpw (0xd814:16), 0x07ff
 	jr nz, .Lc_feda72
 	ldw (0xd814:16), 0x0000
 	jr t, .Lc_feda76
 .Lc_feda72:
-	incdi16 1, 0xd814
+	incw 1, (0xd814:16)
 .Lc_feda76:
 	ret
 	ldw HL, 0x07ff
@@ -12087,7 +12087,7 @@ Param_SignExtendRetu_Return:
 	ld (XDE+0x04),0x00
 	ld (XDE+0x05),0x00
 	ld (XDE+0x06),0x02
-	incdi8	1, (57595)
+	inc	1, (57595:16)
 	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
@@ -12106,7 +12106,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+4), 0
 	ld	(xde+5), 0
 	ld	(xde+6), 2
-	incdi8	1, (57595)
+	inc	1, (57595:16)
 	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
@@ -12125,7 +12125,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+4), 0
 	ld	(xde+5), 0
 	ld	(xde+6), 2
-	incdi8	1, (57595)
+	inc	1, (57595:16)
 	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
@@ -12144,7 +12144,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+4), 0
 	ld	(xde+5), 0
 	ld	(xde+6), 2
-	incdi8	1, (57595)
+	inc	1, (57595:16)
 	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
@@ -12207,7 +12207,7 @@ Param_SignExtendRetu_Return:
 	extz	bc
 	lds	wa, 3
 	call	15676106
-	incdi8	1, (57595)
+	inc	1, (57595:16)
 	ld	l, (57595:16)
 	res	7, l
 	ret

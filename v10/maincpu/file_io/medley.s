@@ -343,7 +343,7 @@ IntMed_CheckSlotLoop:
 	extz xbc
 	add xbc, xwa
 	ldmi16 (xbc), 0x889a
-	incdi8 1, (0x889a)
+	inc 1, (0x889a:16)
 	jr IntMed_NextSlot
 
 IntMed_MarkSlotEmpty:
@@ -386,7 +386,7 @@ IntMed_FindCurrentSong:
 	stb_erp A, 0xf8
 	extz wa
 	call SongBank_SwitchAndUpdateTempo
-	incdi8 1, (0x889c)
+	inc 1, (0x889c:16)
 	ld xwa, (0x82de:16)
 	or xwa, xwa
 	jrl z, IntMed_Exit
@@ -421,7 +421,7 @@ IntMed_PlayFromStart:
 	stb_erp A, 0xf8
 	extz wa
 	call SongBank_SwitchAndUpdateTempo
-	incdi8 1, (0x889c)
+	inc 1, (0x889c:16)
 	ld xwa, (0x82de:16)
 	or xwa, xwa
 	jrl z, IntMed_Exit
@@ -526,7 +526,7 @@ IntMed_AssignOrderLoop:
 	jr nz, IntMed_NextAssignSlot
 	ld a, (0x889a:16)
 	ld (xbc), a
-	incdi8 1, (0x889a)
+	inc 1, (0x889a:16)
 	ld wa, iz
 	sll wa, 3
 	lda xde, (0x82e2:16)
@@ -563,7 +563,7 @@ IntMed_UnmarkSlotLoop:
 	cp a, 0xfd
 	jr ugt, IntMed_NextUnmark
 	ld (xbc), 0xfe
-	decdi8 1, 0x889a
+	dec 1, (0x889a:16)
 	ld wa, iz
 	sll wa, 3
 	lda xde, (0x82e2:16)
@@ -612,7 +612,7 @@ IntMed_HandleSelectToggle:
 	jr nz, IntMed_RemoveFromOrder
 	ld c, (0x889a:16)
 	ld (xde), c
-	incdi8 1, (0x889a)
+	inc 1, (0x889a:16)
 	ld c, (xde)
 	extz bc
 	ld de, iz
@@ -632,7 +632,7 @@ IntMed_RemoveFromOrder:
 	jrl ugt, IntMed_Exit
 	ld (xsp + 4), c
 	ld (xde), 0xfe
-	decdi8 1, 0x889a
+	dec 1, (0x889a:16)
 	ld c, (xde)
 	extz bc
 	ld de, iz
@@ -725,7 +725,7 @@ IntMed_StartPlayLoop:
 	stb_erp A, 0xf8
 	extz wa
 	call SongBank_SwitchAndUpdateTempo
-	incdi8 1, (0x889c)
+	inc 1, (0x889c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
 	lds32 xde, 0
@@ -927,7 +927,7 @@ DiskMed_AssignOrder:
 	cp a, 0xfe
 	jr nz, DiskMed_NextAssign
 	ldmi16 (xbc), 0x889a
-	incdi8 1, (0x889a)
+	inc 1, (0x889a:16)
 
 DiskMed_NextAssign:
 	inc 1, xbc
@@ -957,7 +957,7 @@ DiskMed_SingleSlotCheck:
 	cp (xbc), 0xfe
 	jr nz, DiskMed_SingleSlotInit
 	ldmi16 (xbc), 0x889a
-	incdi8 1, (0x889a)
+	inc 1, (0x889a:16)
 
 DiskMed_SingleSlotInit:
 	lds iz, 0
@@ -974,7 +974,7 @@ DiskMed_FindFirstLoop:
 
 DiskMed_PlaySong:
 	call SongBank_SwitchAndUpdateTempo
-	incdi8 1, (0x889c)
+	inc 1, (0x889c:16)
 	lds32 xhl, 1
 	jr DiskMed_HelperExit
 
@@ -1065,7 +1065,7 @@ DiskSel_CheckFileLoop:
 DiskSel_FileAvailable:
 	lda xwa, (0x8926:16)
 	ldmmb_dri 0x07, 0xe0, 0xf8, 0x3a, 0x89
-	incdi8 1, (0x893a)
+	inc 1, (0x893a:16)
 	jr DiskSel_NextFile
 
 DiskSel_MarkUnavail:
@@ -1199,7 +1199,7 @@ DiskSel_SendFileInfo:
 	jrl DiskSel_ShowErrorAndExit
 
 DiskSel_PlayNext:
-	incdi8 1, (0x893c)
+	inc 1, (0x893c:16)
 	ld xwa, (xsp + 14)
 	ld xbc, 0x1c00017
 	ld xde, 0xd
@@ -1311,7 +1311,7 @@ DiskSel_RepeatSendInfo:
 	jrl DiskSel_ShowErrorAndExit
 
 DiskSel_RepeatPlayNext:
-	incdi8 1, (0x893c)
+	inc 1, (0x893c:16)
 	ld xwa, (xsp + 14)
 	ld xbc, 0x1c00017
 	ld xde, 0xd
@@ -1527,7 +1527,7 @@ DiskSel_AssignLoop:
 	cp a, 0xfe
 	jr nz, DiskSel_NextAssign
 	ldmi16 (xhl), 0x893a
-	incdi8 1, (0x893a)
+	inc 1, (0x893a:16)
 
 DiskSel_NextAssign:
 	inc 1, xhl
@@ -1540,7 +1540,7 @@ DiskSel_UnmarkLoop:
 	cp a, 0xfd
 	jr ugt, DiskSel_NextUnmark
 	ld (xhl), 0xfe
-	decdi8 1, 0x893a
+	dec 1, (0x893a:16)
 
 DiskSel_NextUnmark:
 	inc 1, xhl
@@ -1569,7 +1569,7 @@ DiskSel_HandleSelect:
 	cp a, 0xfe
 	jr nz, DiskSel_RemoveSelect
 	ldmi16 (xbc), 0x893a
-	incdi8 1, (0x893a)
+	inc 1, (0x893a:16)
 	jr DiskSel_RefreshAfterSelect
 
 DiskSel_RemoveSelect:
@@ -1578,7 +1578,7 @@ DiskSel_RemoveSelect:
 	cp de, 0x14
 	jr ge, DiskSel_ReorderSlots
 	ld (xbc), 0xfe
-	decdi8 1, 0x893a
+	dec 1, (0x893a:16)
 
 DiskSel_ReorderSlots:
 	ld xde, xix
@@ -1687,7 +1687,7 @@ DiskSel_ShowErrorAndExit:
 
 DiskSel_PlayNextSong:
 	ldmw2 (xsp + 4), 0x83de
-	incdi8 1, (0x893c)
+	inc 1, (0x893c:16)
 	ld xwa, (xsp + 14)
 	ld xbc, (xsp + 10)
 	ld xde, (xsp + 6)
@@ -2064,7 +2064,7 @@ SmfMed_PlayError3F:
 
 SmfMed_ShowPlayError:
 	call SoundCtrl_SendCommand
-	incdi8 1, (0x843c)
+	inc 1, (0x843c:16)
 
 SmfMed_SetPlaying:
 	ld (0x84fe:16), 1
@@ -2091,7 +2091,7 @@ SmfMed_FindSongLoop:
 	ld xwa, (0x8430:16)
 	ld bc, (0x8438:16)
 	calr SmfMed_FormatSlotList
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld wa, iz
 	call GetFileEntryByIndex
 	ld xwa, (0x8434:16)
@@ -2134,7 +2134,7 @@ SmfMed_RepeatFindLoop:
 	ld xwa, (0x8430:16)
 	ld bc, (0x8438:16)
 	calr SmfMed_FormatSlotList
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld wa, iz
 	call GetFileEntryByIndex
 	ld xwa, (0x8434:16)
@@ -2286,7 +2286,7 @@ SmfMed_AssignOrderLoop:
 	cp a, 0xff
 	jr nz, SmfMed_NextAssign
 	ldmi16 (xbc), 0x8920
-	incdi8 1, (0x8920)
+	inc 1, (0x8920:16)
 
 SmfMed_NextAssign:
 	inc 1, iz
@@ -2308,7 +2308,7 @@ SmfMed_UnmarkLoop:
 	cp a, 0xfd
 	jr ugt, SmfMed_NextUnmark
 	ld (xbc), 0xff
-	decdi8 1, 0x8920
+	dec 1, (0x8920:16)
 
 SmfMed_NextUnmark:
 	inc 1, iz
@@ -2338,7 +2338,7 @@ SmfMed_HandleSelectToggle:
 	cp c, 0xff
 	jr nz, SmfMed_RemoveFromOrder
 	ldmi16 (xwa), 0x8920
-	incdi8 1, (0x8920)
+	inc 1, (0x8920:16)
 	jr SmfMed_RefreshAfterSelect
 
 SmfMed_RemoveFromOrder:
@@ -2417,7 +2417,7 @@ SmfMed_PlayFindLoop:
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1e50002
 	calr FmmSmfFileNameFunc
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld wa, iz
 	call GetFileEntryByIndex
 	ld xwa, 0xffffffff
@@ -2874,7 +2874,7 @@ PdMed_FindSongLoop:
 	ld xwa, (0x8494:16)
 	ld bc, (0x849c:16)
 	calr PdMed_FormatSlotList
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld xwa, (0x8498:16)
 	or xwa, xwa
 	jrl z, PdMed_Exit
@@ -2911,7 +2911,7 @@ PdMed_RepeatFindLoop:
 	ld xwa, (0x8494:16)
 	ld bc, (0x849c:16)
 	calr PdMed_FormatSlotList
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld xwa, (0x8498:16)
 	or xwa, xwa
 	jrl z, PdMed_Exit
@@ -3053,7 +3053,7 @@ PdMed_AssignOrderLoop:
 	cp a, 0xff
 	jr nz, PdMed_NextAssign
 	ldmi16 (xbc), 0x8920
-	incdi8 1, (0x8920)
+	inc 1, (0x8920:16)
 
 PdMed_NextAssign:
 	inc 1, hl
@@ -3075,7 +3075,7 @@ PdMed_UnmarkLoop:
 	cp a, 0xfd
 	jr ugt, PdMed_NextUnmark
 	ld (xbc), 0xff
-	decdi8 1, 0x8920
+	dec 1, (0x8920:16)
 
 PdMed_NextUnmark:
 	inc 1, hl
@@ -3103,7 +3103,7 @@ PdMed_HandleSelectToggle:
 	cp c, 0xff
 	jr nz, PdMed_RemoveFromOrder
 	ldmi16 (xhl), 0x8920
-	incdi8 1, (0x8920)
+	inc 1, (0x8920:16)
 	jr PdMed_RefreshAfterSelect
 
 PdMed_RemoveFromOrder:
@@ -3182,7 +3182,7 @@ PdMed_PlayFindLoop:
 	ld xbc, 0x1e50002
 	ld xde, xhl
 	calr FmmPdFileNameFunc
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
 	lds32 xde, 0
@@ -3681,7 +3681,7 @@ DocMed_FindSongLoop:
 	ld xwa, (0x84f4:16)
 	ld bc, (0x84fc:16)
 	calr DocMed_FormatSlotList
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld xwa, (0x84f8:16)
 	or xwa, xwa
 	jrl z, DocMed_Exit
@@ -3718,7 +3718,7 @@ DocMed_RepeatFindLoop:
 	ld xwa, (0x84f4:16)
 	ld bc, (0x84fc:16)
 	calr DocMed_FormatSlotList
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld xwa, (0x84f8:16)
 	or xwa, xwa
 	jrl z, DocMed_Exit
@@ -3865,7 +3865,7 @@ DocMed_AssignOrderLoop:
 	cp a, 0xff
 	jr nz, DocMed_NextAssign
 	ldmi16 (xbc), 0x8920
-	incdi8 1, (0x8920)
+	inc 1, (0x8920:16)
 
 DocMed_NextAssign:
 	inc 1, hl
@@ -3887,7 +3887,7 @@ DocMed_UnmarkLoop:
 	cp a, 0xfd
 	jr ugt, DocMed_NextUnmark
 	ld (xbc), 0xff
-	decdi8 1, 0x8920
+	dec 1, (0x8920:16)
 
 DocMed_NextUnmark:
 	inc 1, hl
@@ -3915,7 +3915,7 @@ DocMed_HandleSelectToggle:
 	cp c, 0xff
 	jr nz, DocMed_RemoveFromOrder
 	ldmi16 (xhl), 0x8920
-	incdi8 1, (0x8920)
+	inc 1, (0x8920:16)
 	jr DocMed_RefreshAfterSelect
 
 DocMed_RemoveFromOrder:
@@ -3994,7 +3994,7 @@ DocMed_PlayFindLoop:
 	ld xbc, 0x1e50002
 	ld xde, xhl
 	calr FmmDocFileNameFunc
-	incdi8 1, (0x8922)
+	inc 1, (0x8922:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
 	lds32 xde, 0
@@ -4350,7 +4350,7 @@ WakeUp_HandleOk:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x8c
 	jr nz, WakeUp_ClearCounter
-	incdi8_24 1, (0x02741a)
+	inc 1, (0x02741a:24)
 	cpib_da (0x02741a), 0x07
 	jr nz, WakeUp_ReturnZero
 	ld (0x02741a:24), 0x00

@@ -1422,7 +1422,7 @@ Voice_ReleaseChainLoop:
 	ldw (xix + 1), 0xffff
 	ldw (xix + 3), 0xffff
 	andmi8 (xix), 0x7f
-	incdi16 1, (0x7e18)
+	incw 1, (0x7e18:16)
 	cp hl, 0xffff
 	jr z, Voice_ReleaseChainDone
 	jr Voice_ReleaseChainLoop
@@ -1528,7 +1528,7 @@ AccPlay_AllocateVoiceSlot:
 	ld hl, wa
 	calr Util_ExtractAndShiftBits
 	ormi8 (xix), 0x80
-	decdi16 1, 0x7e18
+	decw 1, (0x7e18:16)
 	pop xiy
 	ld (xiy + 3), wa
 	ldb l, 0x1
@@ -2509,7 +2509,7 @@ MidiSeqBuf_AdvancePosition:
 	calr Util_ExtractAndShiftBits
 	ld (xix + 1), de
 	ormi8 (xix), 0x80
-	decdi16 1, 0x7e18
+	decw 1, (0x7e18:16)
 	lds wa, 6
 	pop xhl
 	pop xde

@@ -1262,7 +1262,7 @@ SoundPatch_NullRet:
 
 AccVoice_AdvanceAndCheckEnd:
 	calr AccBuf_AdvanceNoPage
-	incdi8 1, 0x3251
+	inc 1, (0x3251:16)
 	cp (0x3251:16), 0x20
 	jr nz, AccVoice_AdvanceAndCheck_Return
 	call AccWrap_PlayModeDispatch
@@ -1488,7 +1488,7 @@ AccPart_IncrementIndex:
 	cp (0x3249:16), 0x80
 	jr nc, AccPart_IncrementIndex_Return
 	ld xiy, (0x3232:16)
-	incdi8	1, (13113)
+	inc	1, (13113:16)
 	xor	xhl, xhl
 	ld	w, (13113:16)
 	call	16081303
@@ -2397,7 +2397,7 @@ AccSeq_NextBarPage:
 	and	w, 240
 	add	w, 16
 	ld	(12821:16), w
-	incdi8	1, (12831)
+	inc	1, (12831:16)
 	ld	xhl, 14969785
 	add	xhl, 6
 	ld	(12791:16), xhl
@@ -3733,11 +3733,11 @@ AccTick_ByteData:
 	jr	z, 13
 	cp	(12958:16), 0
 	jr	z, 17
-	decdi8	1, (12958)
+	dec	1, (12958:16)
 	jr	11
 	cp	(12958:16), 3
 	jr	z, 4
-	incdi8	1, (12958)
+	inc	1, (12958:16)
 	.byte 0xf1, 0x73, 0x32, 0xc8
 	jr	nz, 15
 	.byte 0xf1, 0x70, 0x32, 0xc8
@@ -5040,13 +5040,13 @@ AccFlags_Aggregate:
 	jr z, .Lc_f59099
 	cp (0x329e:16), 0x00
 	jr z, AccFlags_BuildIndex
-	decdi8 1, 0x329e
+	dec 1, (0x329e:16)
 	jr t, AccFlags_BuildIndex
 AccFlags_CheckDecay:
 .Lc_f59099:
 	cp (0x329e:16), 0x03
 	jr z, AccFlags_BuildIndex
-	incdi8 1, 0x329e
+	inc 1, (0x329e:16)
 AccFlags_BuildIndex:
 	xor	w, w
 	ld	a, (12910:16)
@@ -5218,13 +5218,13 @@ AccInit_FullReInit:
 	jr z, .Lc_f592e5
 	cp (0x329e:16), 0x00
 	jr z, .Lc_f592f0
-	decdi8 1, 0x329e
+	dec 1, (0x329e:16)
 	jr t, .Lc_f592f0
 AccInit_ReInit_AdjustDecay:
 .Lc_f592e5:
 	cp (0x329e:16), 0x03
 	jr z, .Lc_f592f0
-	incdi8 1, 0x329e
+	inc 1, (0x329e:16)
 AccInit_ReInit_CheckNoteOn:
 .Lc_f592f0:
 	bit 0, (0x3270:16)
@@ -6952,7 +6952,7 @@ AccAutoPlay_ZoneTrack_Clear:
 	ld_rr8b	a, xix, e
 	cp	l, a
 	jr	c, 4
-	incdi16	1, (14412)
+	incw	1, (14412:16)
 AccAutoPlay_ZoneTrack_Finalize:
 	inc 2, e
 	dec 1, bc
@@ -9215,7 +9215,7 @@ AccDir_PeriodicCheck:
 	jr z, AccDir_Periodic_Ret
 	cp (0x340a:16), 0x00
 	jr z, .Lc_f5bb1a
-	decdi8 1, 0x340a
+	dec 1, (0x340a:16)
 AccDir_Periodic_CheckCountdown:
 .Lc_f5bb1a:
 	cp (0x340a:16), 0x00
@@ -11578,7 +11578,7 @@ AccPatch_SlotConfigByteData:
 	calr	23
 	ld	(14079:16), 4
 	calr	15
-	incdi8	1, (13370)
+	inc	1, (13370:16)
 	jr	-53
 	.byte 0xf1	; v10 does not spell this byte either
 	.byte 0x3a	; v10 does not spell this byte either
@@ -14597,7 +14597,7 @@ AccPatch_ParseResolve_ParseHdr:
 	ld	wa, (13688:16)
 	ld	(13672:16), wa
 AccPatch_ParseResolve_IncStep:
-	incdi8	1, (13667)
+	inc	1, (13667:16)
 	ld	a, (13916:16)
 	ld	(13668:16), a
 	ret
@@ -15077,7 +15077,7 @@ AccPatch_FindFreeSlot_Found:
 
 	ldw (xix + 3), 0xffff
 
-	decdi16 1, (13368)
+	decw 1, (13368:16)
 
 	ret
 
@@ -16140,13 +16140,13 @@ ToneGen_ParseAllEvents:
 	ld	(13426:16), 0
 	ld	c, (13986:16)
 	calr	69
-	incdi8	1, (13426)
+	inc	1, (13426:16)
 	ld	c, (13987:16)
 	calr	58
-	incdi8	1, (13426)
+	inc	1, (13426:16)
 	ld	c, (13988:16)
 	calr	47
-	incdi8	1, (13426)
+	inc	1, (13426:16)
 	ld	c, (13989:16)
 	calr	36
 	ld	a, (35994:16)
@@ -16187,7 +16187,7 @@ EventBuffer_ReadByte:
 	cp	a, 129
 	jr	nz, 11
 	dec	1, c
-	incdi8	1, (13427)
+	inc	1, (13427:16)
 	calr	5860
 	jr	-25
 EventBuffer_CheckNoteType:
@@ -17790,7 +17790,7 @@ ToneGen_AdvTempo_WrapLoop:
 	cp	w, l
 	jr	c, 19	; -> 0xF6221E
 	sub	w, l
-	incdi8	1, (13406)
+	inc	1, (13406:16)
 	cpda8	xiz, (13406)
 	jr	nz, 5	; -> 0xF6221C
 	ld	(13406:16), 0
@@ -18355,7 +18355,7 @@ ToneGen_StepToNextVoiceSlot:
 	push XHL
 	ld iy, (0x33ad:16)
 	inc 1,IY
-	incdi8	1, (13209)
+	inc	1, (13209:16)
 	ld	hl, (13263:16)
 	calr	-6096
 	ld_rrb	a, xhl, iy
@@ -18399,7 +18399,7 @@ ToneGen_StepToNextStereoSlot:
 	.byte 0xc9, 0xcf, 0x87, 0x6e, 0x03, 0x1e, 0x23, 0x00
 ToneGen_Interp_Return:
 	inc	1, iy
-	incdi8	1, (13209)
+	inc	1, (13209:16)
 	ld	hl, (13263:16)
 	calr	59322
 	ld_rrb	a, xhl, iy
@@ -18463,7 +18463,7 @@ ToneGen_StepVoiceForward:
 	push	xhl
 	ld	iy, (13229:16)
 	dec	1, iy
-	decdi8	1, (13209)
+	dec	1, (13209:16)
 	ld	hl, (13263:16)
 	calr	-6331
 	ld_rrb	a, xhl, iy
@@ -21300,7 +21300,7 @@ RhythmMute_Toggle:
 
 RhythmMute_StateMachine:
 	or (0xe31c:16), 0x08
-	incdi8 1, 0x343f
+	inc 1, (0x343f:16)
 	cp (0x343f:16), 0x04
 	jr nz, .Lc_f64bab
 	ld (0x343f:16), 0x00
@@ -21484,12 +21484,12 @@ RhythmVariation_InlineCode:
 	jr	41
 	bit	7, w
 	jr	nz, 18
-	incdi8	1, (13944)
+	inc	1, (13944:16)
 	cp	(13944:16), 13
 	jr	ule, 23
 	ld	(13944:16), 13
 	jr	16
-	decdi8	1, (13944)
+	dec	1, (13944:16)
 	cp	(13944:16), 1
 	jr	ge, 5
 	ld	(13944:16), 1
@@ -21503,12 +21503,12 @@ RhythmVariation_InlineCode:
 	jr	nz, 41
 	bit	7, w
 	jr	nz, 18
-	incdi8	1, (13945)
+	inc	1, (13945:16)
 	cp	(13945:16), 13
 	jr	ule, 23
 	ld	(13945:16), 13
 	jr	16
-	decdi8	1, (13945)
+	dec	1, (13945:16)
 	cp	(13945:16), 255
 	jr	nz, 5
 	ld	(13945:16), 0
@@ -21523,12 +21523,12 @@ RhythmVariation_InlineCode:
 	jr	41
 	bit	7, w
 	jr	nz, 18
-	incdi8	1, (13946)
+	inc	1, (13946:16)
 	cp	(13946:16), 3
 	jr	ule, 23
 	ld	(13946:16), 3
 	jr	16
-	decdi8	1, (13946)
+	dec	1, (13946:16)
 	cp	(13946:16), 255
 	jr	nz, 5
 	ld	(13946:16), 0
@@ -22348,7 +22348,7 @@ TimeSig_DisplayStrings:
 	jr	nz, 34
 	cp	(14444:16), 11
 	jr	nc, 6
-	incdi8	1, (14444)
+	inc	1, (14444:16)
 	jr	19
 	cp	(14444:16), 255
 	jr	nz, 7
@@ -22358,7 +22358,7 @@ TimeSig_DisplayStrings:
 	jr	32
 	cp	(14444:16), 0
 	jr	le, 6
-	decdi8	1, (14444)
+	dec	1, (14444:16)
 	jr	19
 	cp	(14447:16), 0
 	jr	nz, 7
@@ -22445,7 +22445,7 @@ TimeSig_DisplayStrings:
 	calr	-175
 	pop	xix
 	calr	20
-	incdi8	1, (14446)
+	inc	1, (14446:16)
 	jr	-26
 	.byte 0xf1, 0x6f, 0x38, 0x04, 0xf1, 0x6e, 0x38, 0x04
 	ld	(14449:16), 0
@@ -24040,7 +24040,7 @@ VoiceSlot_Dispatch_Return:
 	jr	nz, 20
 	cp	(13370:16), 11
 	jr	ge, 6
-	incdi8	1, (13370)
+	inc	1, (13370:16)
 	jr	5
 	ld	(13370:16), 11
 	jr	18
@@ -24048,7 +24048,7 @@ VoiceSlot_Dispatch_Return:
 	jr	gt, 7
 	ld	(13370:16), 0
 	jr	4
-	decdi8	1, (13370)
+	dec	1, (13370:16)
 	calr	4
 	calr	174
 	ret
@@ -25181,7 +25181,7 @@ AccVoice_SetupSlots_DataBlock:
 	lds	de, 3
 	popw	hl
 	st_rrw	hl, xwa, de
-	decdi16	1, (13368)
+	decw	1, (13368:16)
 	ld	(13686:16), hl
 	lds	wa, 6
 	ld	(13688:16), wa
@@ -29858,7 +29858,7 @@ AccPatch_IterateSlot_Advance:
 	ld	xiz, (14030:16)
 	ld	wa, (xiz+3)
 	ld	(14050:16), wa
-	incdi16	1, (14066)
+	incw	1, (14066:16)
 	ld	hl, (14066:16)
 	calr	269
 	ld	(14030:16), xiz
@@ -30042,9 +30042,9 @@ AccPatch_VoiceAssignDataBlock:
 	jr	nz, 31
 	.byte 0x9d, 0x03, 0x3f, 0xff, 0xff
 	jr	nz, 6
-	incdi8	1, (14497)
+	inc	1, (14497:16)
 	jr	30
-	incdi8	1, (14497)
+	inc	1, (14497:16)
 	add	xiy, 256
 	dec	1, c
 	cps	c, 0
@@ -30063,7 +30063,7 @@ AccPatch_VoiceAssignDataBlock:
 	ldb	c, 190
 	.byte 0x85, 0x3f, 0x80
 	jr	nz, 13
-	incdi8	1, (14502)
+	inc	1, (14502:16)
 	add	xiy, 256
 	djnz8	c, -18
 	ret
@@ -30081,7 +30081,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	de, (14512:16)
 	cps	de, 0
 	jr	nz, 25
-	incdi16	1, (14506)
+	incw	1, (14506:16)
 	ld	de, (14506:16)
 	ld	(xix+3), de
 	add	xix, 256
@@ -30090,7 +30090,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	de, (14506:16)
 	dec	1, de
 	ld	(xix+1), de
-	incdi16	1, (14506)
+	incw	1, (14506:16)
 	ld	de, (14506:16)
 	ld	(xix+3), de
 	add	xix, 256
@@ -30101,9 +30101,9 @@ AccPatch_VoiceAssignDataBlock:
 	ld	de, (14506:16)
 	dec	1, de
 	ld	(xix+1), de
-	incdi16	1, (14506)
+	incw	1, (14506:16)
 	add	xix, 256
-	incdi16	1, (14504)
+	incw	1, (14504:16)
 	add	xiy, 256
 	dec	1, c
 	cps	c, 0
@@ -30582,7 +30582,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	hl, wa
 	calr	-1508
 	.byte 0x86, 0x3e, 0x80
-	decdi16	1, (13368)
+	decw	1, (13368:16)
 	ld	wa, (14556:16)
 	ld	(xiz+1), wa
 	xor	xiy, xiy
@@ -31340,7 +31340,7 @@ StylCnvModl_ScanMatchingModels:
 	call	16296648
 	cps	hl, 0
 	jr	nz, 12
-	incdi16	1, (14822)
+	incw	1, (14822:16)
 	inc	1, iz
 	cp	iz, 256
 	jr	c, -40
@@ -31749,7 +31749,7 @@ StylCnvCnvt_ScanMatchingStyles:
 	call	16296648
 	cps	hl, 0
 	jr	nz, 12
-	incdi16	1, (14822)
+	incw	1, (14822:16)
 	inc	1, iz
 	cp	iz, 256
 	jr	c, -40
@@ -32352,7 +32352,7 @@ StylCnv_ParseEntry_ScanChar:
 	ld	a, (xwa)
 	cp	a, 44
 	jr	nz, 6
-	incdi16	1, (18492)
+	incw	1, (18492:16)
 	jr	35
 StylCnv_ParseEntry_StoreChar:
 	.byte 0xd1, 0x3c, 0x48, 0x21, 0xd9, 0xee, 0x05, 0x9f
@@ -33266,7 +33266,7 @@ StylCnv_Multi_ParseLoop:
 	push XWA
 	call Free_Compare2
 	inc 0,XSP
-	incdi16 1, 0x39e6
+	incw 1, (0x39e6:16)
 	jr t, StylCnv_Multi_Finalize
 StylCnv_Multi_HandleSeparator:
 .Lc_f6d3d7:
@@ -33294,7 +33294,7 @@ StylCnv_Multi_ClearSubLoop:
 	stib_dsp	224, 0
 	cp	xwa, xbc
 	jr	c, -8
-	incdi16	1, (14822)
+	incw	1, (14822:16)
 	jr	18
 StylCnv_Multi_CopyChar:
 	cps iz, 0

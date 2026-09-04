@@ -1610,7 +1610,7 @@ FDC_CmdReadSectors__recover:
 	calr FDC_CmdSeek	; calr 0xffe31a
 FDC_CmdReadSectors__next_retry:
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
-	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
+	dec 1, (0x0c96:16)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdReadSectors__check_remaining	; jr NZ,0xffe49f
@@ -1721,7 +1721,7 @@ FDC_CmdWriteSectors__recover:
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	calr FDC_CmdSeek	; calr 0xffe31a
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
-	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
+	dec 1, (0x0c96:16)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdWriteSectors__check_remaining	; jr NZ,0xffe5d8
@@ -1888,7 +1888,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1898,7 +1898,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1908,7 +1908,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5b:16)	; ld A,(0x0c5b)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1918,7 +1918,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1928,7 +1928,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1938,10 +1938,10 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	cpw (0x0c74:16), 0	; cp (0x0c74),0x0000
 	jr nz, FDC_BuildFormatFieldBuffer__offset_numbering	; jr NZ,0xffe7c8
-	incdi8 1, (0x0c5b)	; inc 1,(0x0c5b)
+	inc 1, (0x0c5b:16)	; inc 1,(0x0c5b)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1965,7 +1965,7 @@ FDC_BuildFormatFieldBuffer__offset_numbering:
 	add xwa, xbc	; add XWA,XBC
 	ld (xwa), l	; ld (XWA),L
 FDC_BuildFormatFieldBuffer__next_pair:
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1975,8 +1975,8 @@ FDC_BuildFormatFieldBuffer__next_pair:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
-	incdi8 1, (0x0c5b)	; inc 1,(0x0c5b)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
+	inc 1, (0x0c5b:16)	; inc 1,(0x0c5b)
 	inc 1, iy	; inc 1,IY
 	cp iy, ix	; cp IY,IX
 	jrl c, FDC_BuildFormatFieldBuffer__pair_loop	; jrl C,0xffe708
@@ -1993,7 +1993,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -2003,7 +2003,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -2013,7 +2013,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xhl, xbc	; add XHL,XBC
 	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -2023,7 +2023,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xde, xbc	; add XDE,XBC
 	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xde), a	; ld (XDE),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ret	; ret
 
 ; -----------------------------------------------------------------------------

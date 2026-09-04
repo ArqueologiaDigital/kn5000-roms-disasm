@@ -1636,7 +1636,7 @@ SeqStep_InsertEventInner:
 	jr z, SeqStep_InsertValidate
 	ldw wa, 0x81
 	call PartCtrl_WriteByte_Indexed
-	incdi16 1, (9830)
+	incw 1, (9830:16)
 	ldw wa, 0x82
 	call PartCtrl_WriteByte_Indexed
 	ld c, (9780:16)
@@ -2973,7 +2973,7 @@ SeqStep_RebuildLoop:
 	lds bc, 5
 	ldw de, 0x82
 	call PartCtrl_WriteByteToBuf
-	incdi16 1, (0xf231)
+	incw 1, (0xf231:16)
 	ld iz, (xsp + 2)
 	inc 1, iz
 	cp iz, 0x4d8
@@ -2995,7 +2995,7 @@ SeqStep_RebuildCheck:
 	lds bc, 5
 	ldw de, 0x82
 	call PartCtrl_WriteByteToBuf
-	incdi16 1, (0xf231)
+	incw 1, (0xf231:16)
 	inc 1, iz
 	cp iz, 0x4d8
 	jr c, SeqStep_RebuildCheck
@@ -3018,7 +3018,7 @@ SeqStep_RebuildDone:
 	lds bc, 5
 	ldw de, 0x82
 	call PartCtrl_WriteByteToBuf
-	incdi16 1, (0xf231)
+	incw 1, (0xf231:16)
 
 SeqStep_RebuildReturn:
 	popw iz

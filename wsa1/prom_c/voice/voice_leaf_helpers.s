@@ -2837,7 +2837,7 @@ Dev10C_PollBankAndRetire:
 	pushw	hl                                   ; FA68E0  push HL
 	pushw	de                                   ; FA68E1  push DE
 	push	xix                                   ; FA68E2  push XIX
-	incdi8_24	1, (0x87CF)                      ; FA68E3  inc 1,(0x0087cf)
+	inc	1, (0x87CF:24)                      ; FA68E3  inc 1,(0x0087cf)
 	ld	h, (0x87CF:24)                         ; FA68E8  ld H,(0x0087cf)
 	and	h, 3                                   ; FA68ED  and H,0x03
 	ld	(0x87CF:24), h                         ; FA68F0  ld (0x0087cf),H

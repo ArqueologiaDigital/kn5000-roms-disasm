@@ -1311,7 +1311,7 @@ FDC_Reset_BuildParams:
 	lda	xsp, (xsp+20)
 	ldw	wa, 200
 	calr	62998
-	incdi16	1, (58132)
+	incw	1, (58132:16)
 	ret
 Check_for_Floppy_Disk_Change:
 	bit_dd8 6, 0x34

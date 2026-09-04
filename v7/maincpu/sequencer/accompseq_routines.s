@@ -123,7 +123,7 @@ AccompSeq_IncrementTickCounter:
 	inc	1, hl
 	ld	(1128:16), hl
 	ld	(1130:16), a
-	incdi8	1, (1132)
+	inc	1, (1132:16)
 	call	SeqEvt_EntryPoint1
 	call	SeqEvt_EntryPoint2
 	ret
@@ -1724,7 +1724,7 @@ AccompSeq_SeqParse_TimeAdvance:
 	.byte 0xcb, 0xd3, 0xd9, 0xf2, 0x6f, 0x07, 0xc1, 0xb7
 	.byte 0x7d, 0x3e, 0x01, 0x68, 0x8e
 AccompSeq_SeqParse_TimeStore:
-	incdi16	1, (32170)
+	incw	1, (32170:16)
 	calr	61490
 	jr	-123
 AccompSeq_SeqParse_MidiEvent:

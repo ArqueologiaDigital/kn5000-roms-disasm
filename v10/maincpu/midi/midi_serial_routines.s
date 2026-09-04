@@ -56,7 +56,7 @@ INTRX0_CLEAR_ERROR_STATE:
 	and (1063:16), 189
 	set 3, (1063:16)
 	ld (1074:16), 0
-	incdi8 1, (0xb7de)
+	inc 1, (0xb7de:16)
 	popw wa
 	reti
 
@@ -253,7 +253,7 @@ SysMsg_ClockTransportDispatch:
 	jr nz, ClkTick_PerClockCounters
 	bit 5, (0x28ac:16)
 	jr z, ClkTick_TempoThresholdCheck
-	incdi8 1, (1108)
+	inc 1, (1108:16)
 
 ClkTick_TempoThresholdCheck:
 	ld a, (1066:16)
@@ -284,11 +284,11 @@ ClkTick_BeatSubdivCheck:
 	bit 2, (1055:16)
 	jr z, ClkTick_PerClockCounters
 	and (1130:16), 252
-	incdi8 4, (1130)
+	inc 4, (1130:16)
 	cp (1130:16), 96
 	jr nz, ClkTick_PerClockCounters
 	ld (1130:16), 0
-	incdi16 1, (1128)
+	incw 1, (1128:16)
 	cp (0x7f0b:16), 0
 	jr z, ClkTick_PerClockCounters
 	calr MIDI_QUEUE_TRACK_EVENT
@@ -320,21 +320,21 @@ ClkTick_Src2ClickIncrement:
 	bit 2, a
 	jr z, ClkTick_Src2FineBeatCheck
 	and (1047:16), 252
-	incdi8 4, (1047)
+	inc 4, (1047:16)
 	cp (1047:16), 96
 	jr nz, ClkTick_Src2FineBeatCheck
 	ld (1047:16), 0
-	incdi16 1, (1048)
+	incw 1, (1048:16)
 
 ClkTick_Src2FineBeatCheck:
 	bit 2, (1054:16)
 	jr z, ClkTick_Src2ErrorDelta
 	and (1045:16), 252
-	incdi8 4, (1045)
+	inc 4, (1045:16)
 	cp (1045:16), 96
 	jr nz, ClkTick_Src2ErrorDelta
 	ld (1045:16), 0
-	incdi8 1, (1046)
+	inc 1, (1046:16)
 	ld a, (0x379b:16)
 	and a, 0x1f
 	jr z, ClkTick_Src2CoarseOverflow
@@ -347,8 +347,8 @@ ClkTick_Src2CoarseOverflow:
 	cp a, w
 	jr c, ClkTick_Src2ErrorDelta
 	ld (1046:16), 0
-	incdi8 1, (1076)
-	incdi8 1, (1077)
+	inc 1, (1076:16)
+	inc 1, (1077:16)
 	ld a, (1077:16)
 	cpda8 a, 0x34d7
 	jr ule, ClkTick_Src2ErrorDelta
@@ -380,7 +380,7 @@ ClkTick_Src3ClickCheck:
 	bit 2, (1057:16)
 	jr z, Transport_StopHandler
 	and (1051:16), 252
-	incdi8 4, (1051)
+	inc 4, (1051:16)
 	ld a, (1051:16)
 	bit 0, (1073:16)
 	jr z, ClkTick_Src3LowerSyncCheck
@@ -409,7 +409,7 @@ ClkTick_Src3OverflowQueue:
 	cp (1051:16), 96
 	jr nz, Transport_Return
 	ld (1051:16), 0
-	incdi16 1, (1052)
+	incw 1, (1052:16)
 	cpw (0x28aa:16), 0
 	jr z, Transport_StopHandler
 	calr MIDI_QUEUE_TRACK_EVENT
@@ -728,7 +728,7 @@ MIDI_QUEUE_EVENT_TO_SEQUENCER:
 
 QueueToSeq_OverflowFlag:
 	set 2, (1063:16)
-	incdi8 1, (0xb7dd)
+	inc 1, (0xb7dd:16)
 	ret
 
 ChanDisp_QueueOverflow:
@@ -774,7 +774,7 @@ ChanDisp_NoteOnZeroReturn:
 
 ChanDisp_QueueOverflowSet:
 	set 2, (1063:16)
-	incdi8 1, (0xb7dd)
+	inc 1, (0xb7dd:16)
 	ret
 
 MIDI_SYSTEM_EXCLUSIVE_HANDLER:

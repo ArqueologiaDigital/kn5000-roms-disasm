@@ -793,7 +793,7 @@ SysEx_ReadBytes_FileUnderflow:
 
 SysEx_ReadBytes_StoreByte:
 	ld (xix), a
-	decdi8 1, 4211
+	dec 1, (4211:16)
 	inc 1, xix
 	jp SysEx_ReadBytesLoop
 
@@ -1762,7 +1762,7 @@ SMF_WriteRPN_FileUnderflow13:
 	jp SMF_FlushAndFinalize
 
 SMF_AdvanceChannelScan:
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	cp (0x2877:16), 15
 	jrl ule, SMF_ScanAndProcessChannel
 
@@ -1851,13 +1851,13 @@ SMF_EventLoop_ReadDataBytes:
 	jrl SMF_ProcessEventLoop
 
 SMF_MetaTiming_IncrementCount:
-	incdi16 1, (3946)
+	incw 1, (3946:16)
 
 SMF_MetaTiming_GetNextLoop:
 	call SMF_GetNextEvent
 	cp a, 0x81
 	jr nz, SMF_MetaTiming_ApplyMultiplier
-	incdi16 1, (3946)
+	incw 1, (3946:16)
 	call SMF_AdvancePosition
 	jr SMF_MetaTiming_GetNextLoop
 
@@ -3128,7 +3128,7 @@ FileOpen_CheckPermission:
 	jrl FileOpen_Return
 
 FileOpen_FindFreeSlot:
-	incdi8_24 1, (0x210f4)
+	inc 1, (0x210f4:24)
 	ld (xsp + 14), 0x0
 	cp (xsp + 14), 0x10
 	jr nc, FileOpen_SlotExhausted
@@ -3535,7 +3535,7 @@ SeqStep_FileCloseProcess:
 	ld (0x01e53c:24), wa
 
 SeqStep_FileCloseReturn:
-	incdi8_24 1, (0x210f4)
+	inc 1, (0x210f4:24)
 	ld a, (xiz + 5)
 	extz wa
 	ld bc, wa
@@ -7189,7 +7189,7 @@ SeqChan_ByteBlockD:
 	jr	nz, 5
 	lds	hl, 0
 	jrl	220
-	incdi16_24	1, (0x2271e)
+	incw	1, (0x2271e:24)
 	ld	wa, (xbc)
 	cp	wa, 49
 	jr	z, 116
@@ -9427,7 +9427,7 @@ FDC_SectorCmd_ByteBlock:
 	ld	wa, (0x2358c:24)
 	ld	xbc, xiz
 	calr	65445
-	incdi16_24	1, (0x2358c)
+	incw	1, (0x2358c:24)
 	cps	hl, 0
 	jr	nz, 22
 	ld	de, (0x2358c:24)
@@ -9435,7 +9435,7 @@ FDC_SectorCmd_ByteBlock:
 	ld	xbc, xwa
 	ld	wa, de
 	calr	65419
-	incdi16_24	1, (0x2358c)
+	incw	1, (0x2358c:24)
 	pop	xiz
 	ret
 

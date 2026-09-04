@@ -285,17 +285,17 @@ RunTestCounters_Entry:
 	cps l, 2
 	jr nz, RunTestCounters_BadStatus
 RunTestCounters_RunTest:
-	incdi16_24 1, (0x03dcfe)
+	incw 1, (0x03dcfe:24)
 	calr FDLoadSaveTest
 	cps hl, 0
 	jr nz, RunTestCounters_IncrNG
-	incdi16_24 1, (0x03dd00)
+	incw 1, (0x03dd00:24)
 	jr RunTestCounters_Display
 RunTestCounters_BadStatus:
 	ldb l, 0xff
 	ret
 RunTestCounters_IncrNG:
-	incdi16_24 1, (0x03dd02)
+	incw 1, (0x03dd02:24)
 RunTestCounters_Display:
 	lda xwa, (FDTest_String_TestTitleFunc_0xEA:24)
 	calr FDTest_PrintDiag

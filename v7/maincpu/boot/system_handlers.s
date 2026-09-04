@@ -378,20 +378,20 @@ Boot_InitWorkRAM_Trailer:
 	ret
 
 INTT1_HANDLER:
-	incdi16 1, (1475)
+	incw 1, (1475:16)
 	pushw wa
 	push xhl
 	xor xhl, xhl
 	inc 1, xhl
 	adddm32 1033, xhl
-	incdi16 1, (1037)
+	incw 1, (1037:16)
 	push	sr
 	ei 6
 	ld a, (1063:16)
 	ld w, (1062:16)
 	bit 7, a
 	jr z, INTT1_NoOverflow
-	incdi8 1, (1061)
+	inc 1, (1061:16)
 	cp (1061:16), 165
 	jr ule, INTT1_NoOverflow
 	and a, 0x7f
@@ -414,7 +414,7 @@ INTT1_CheckScanFlag:
 	ld (1066:16), a
 	bit 2, (0xfd50:16)
 	jrl nz, INTT1_UpdateAlternateTimers
-	incdi8 1, (1050)
+	inc 1, (1050:16)
 	bit 0, (1056:16)
 	jr nz, INTT1_CheckTickOverflow
 	bit 5, (1056:16)
@@ -507,7 +507,7 @@ UIStateMachine_ClearBit3:
 	cps a, 2
 	jr ule, UIStateMachine_PrimaryDispatch
 	sub a, a
-	incdi8 1, (1042)
+	inc 1, (1042:16)
 
 ; UI state machine primary dispatch
 ; Index: DRAM[1041] (0-2), entries: 3
@@ -648,7 +648,7 @@ INTTR4_CheckMetroEnable:
 	cp a, 0x60
 	jr lt, INTTR4_MetroCounter_Store
 	xor a, a
-	incdi16 1, (1048)
+	incw 1, (1048:16)
 
 INTTR4_MetroCounter_Store:
 	ld (1047:16), a
@@ -670,11 +670,11 @@ INTTR4_SeqTick_CheckBeat:
 INTTR4_CheckAltSeqEnable:
 	bit 2, (1057:16)
 	jr z, INTTR4_MetroPhaseSync
-	incdi8 1, (1051)
+	inc 1, (1051:16)
 	cp (1051:16), 96
 	jr lt, INTTR4_MetroPhaseSync
 	ld (1051:16), 0
-	incdi16 1, (1052)
+	incw 1, (1052:16)
 	cpw (0x28aa:16), 0
 	jr z, INTTR4_MetroPhaseSync
 	calr TempoRingBuf_Write
@@ -820,7 +820,7 @@ INTTR4_AltSeqSync_Check:
 INTTR4_FadeDelay_Check:
 	cp (1126:16), 0
 	jr z, INTTR4_SyncAccum_Update
-	decdi8 1, 1126
+	dec 1, (1126:16)
 
 INTTR4_SyncAccum_Update:
 	bit 2, (1055:16)
@@ -942,7 +942,7 @@ INTTR4_SubTick_Mode:
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_MetroInc
-	incdi8 1, (1051)
+	inc 1, (1051:16)
 
 INTTR4_SubTick_MetroInc:
 	bit 2, (1056:16)
@@ -951,7 +951,7 @@ INTTR4_SubTick_MetroInc:
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_SeqInc
-	incdi8 1, (1047)
+	inc 1, (1047:16)
 
 INTTR4_SubTick_SeqInc:
 	bit 2, (1054:16)
@@ -960,7 +960,7 @@ INTTR4_SubTick_SeqInc:
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_PhaseSync
-	incdi8 1, (1045)
+	inc 1, (1045:16)
 
 INTTR4_SubTick_PhaseSync:
 	bit 2, (1056:16)
@@ -1826,8 +1826,8 @@ INTT3_PriorityAdjust_Active:
 	ret
 
 INTT3_HANDLER:
-	incdi16 1, (1475)
-	incdi8 1, (1158)
+	incw 1, (1475:16)
+	inc 1, (1158:16)
 	pushw wa
 	pushw bc
 	calr INTT3_PriorityAdjust
@@ -3169,7 +3169,7 @@ Stop_and_Clear_8bit_Timer_3:
 	ret
 
 SeqBuf_BytecodeSnippet:
-	incdi16	1, (1475)
+	incw	1, (1475:16)
 	ret
 	.byte 0xd1, 0xc3
 	halt
@@ -5909,7 +5909,7 @@ E1DMA_ISR_BytecodeBlock:
 	pushw	sp
 	ld	xwa, 4175611601
 	jr	nz, 6
-	incdi16	1, (58052)
+	incw	1, (58052:16)
 	jr	6
 	ldw	(58052:16), 0
 	ld	(58054:16), wa
@@ -5922,7 +5922,7 @@ E1DMA_ISR_BytecodeBlock:
 	ld	(256:16), 0
 	ld	(1506:16), 0
 	set_dd8	1, 104
-	incdi8	1, (58050)
+	inc	1, (58050:16)
 	ret
 	ld	de, (1033:16)
 	.byte 0xf1	; v10 does not spell this byte either
@@ -5943,7 +5943,7 @@ E1DMA_ISR_BytecodeBlock:
 	.byte 0xf1	; v10 does not spell this byte either
 	ldb	w, 6
 	.byte 0xb7	; v10 does not spell this byte either
-	incdi8	1, (58056)
+	inc	1, (58056:16)
 	ldw	hl, 65535
 	ret
 Flash_IdentifyChip:
@@ -7796,7 +7796,7 @@ BusyWait_Loop:
 	ret
 
 LED_CyclePattern:
-	incdi8 1, (1574)
+	inc 1, (1574:16)
 	ld a, (1574:16)
 	and a, 0x3
 	cps a, 3
@@ -8074,7 +8074,7 @@ Parport_ReadByte_FromBuffer:
 	add xwa, 0x9000
 	cpda32 xwa, 1610
 	jr nz, Parport_ReadByte_Emit
-	incdi16 8, (1614)
+	incw 8, (1614:16)
 	ld wa, (1614:16)
 	ld bc, (1616:16)
 	lds de, 6

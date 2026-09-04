@@ -2904,7 +2904,7 @@ Timer_ParamCompareAlt:
 	jrl	nz, 32
 	cp	(3415:16), 0
 	jrl	z, 8
-	incdi8	1, (3522)
+	inc	1, (3522:16)
 	jp	15694545
 	add	xsp, 4
 	ldb	w, 104
@@ -2913,7 +2913,7 @@ Timer_ParamCompareAlt:
 	call	15713087
 	cp	a, 129
 	jrl	nz, 4
-	incdi8	1, (3522)
+	inc	1, (3522:16)
 	call	15695041
 	cp	(3522:16), 0
 	jrl	z, 12
@@ -2928,7 +2928,7 @@ Timer_ParamCompareAlt:
 	jrl	le, 4
 	jp	15694953
 	jp	15694976
-	decdi16	1, (3418)
+	decw	1, (3418:16)
 	add	xsp, 4
 	pushw	de
 	call	15701395
@@ -2994,7 +2994,7 @@ Timer_ParamCompareAlt:
 	jrl	nz, 4
 	call	15710728
 	ld	(3415:16), 0
-	incdi16	1, (3418)
+	incw	1, (3418:16)
 	push	xwa
 	push	xhl
 	push	xbc
@@ -3556,7 +3556,7 @@ ToneParam_HandlerTable_BC:
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
 	jrl nz, .Lc_ef848b
-	incdi8 1, 0x0e43
+	inc 1, (0x0e43:16)
 	call VoiceSlot_DispatchRet
 	cp W,0xff
 	jrl z, .Lc_ef849e
@@ -3616,7 +3616,7 @@ ToneParam_HandlerTable_BC:
 	jrl z, .Lc_ef8549
 	jp ToneParam_HandlerTable_BC_0x36A
 .Lc_ef84f0:
-	incdi8 1, 0x0e43
+	inc 1, (0x0e43:16)
 	call MemConfig_Handler_5_0xE4
 	ld a, (0x0e41:16)
 	subda8 a, (0x0e40)
@@ -4068,7 +4068,7 @@ DisplayMode_Handler_3:
 	jp	15698697
 	cp	h, 96
 	jrl	nz, 14
-	decdi16	1, (3418)
+	decw	1, (3418:16)
 	push	xhl
 	call	15712720
 	call	15701395
@@ -4344,7 +4344,7 @@ VoiceSlot_TableSetup:
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
 	jrl nz, .Lc_ef906a
-	decdi8 1, 0x0de7
+	dec 1, (0x0de7:16)
 	jp VoiceSlot_TableSetup_0x66
 .Lc_ef904e:
 	call VoiceSlot_ReadCurrentParams
@@ -4354,7 +4354,7 @@ VoiceSlot_TableSetup:
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
 	jrl nz, .Lc_ef906a
-	decdi8 1, 0x0de7
+	dec 1, (0x0de7:16)
 .Lc_ef906a:
 	ld a, (0x0eee:16)
 	dec 1,A
@@ -4998,7 +4998,7 @@ VoiceCtrl_ParamSetupBytecode:
 	cp	a, 96
 	jrl	c, 7
 	sub	a, 96
-	incdi8	1, (3533)
+	inc	1, (3533:16)
 	ld	(3534:16), a
 	.byte 0xd1, 0x8f, 0x0d, 0x04, 0xd1, 0x91, 0x0d, 0x04, 0xd1, 0x93, 0x0d, 0x04
 	ld	(32422:16), 255
@@ -5988,7 +5988,7 @@ SysEx_FlagClearAndCompare:
 SysEx_DecrementCounter:
 	cp (3393:16), 0
 	jrl z, SubCPU_CmdCountdownRet
-	decdi8 1, 3393
+	dec 1, (3393:16)
 
 SubCPU_CmdCountdownRet:
 	ret
@@ -6516,7 +6516,7 @@ SndDispatch_ProcessCommand:
 	ld	(3581:16), a
 	cp	a, 129
 	jrl	nz, 9
-	incdi16	1, (3416)
+	incw	1, (3416:16)
 	ld	(3580:16), 1
 	call	15713087
 	cp	a, 129
@@ -6645,7 +6645,7 @@ SndDispatch_ProcessCommand:
 	addda8	a, 3575
 	cp	a, 96
 	jrl	c, 7
-	incdi8	1, (3579)
+	inc	1, (3579:16)
 	sub	a, 96
 	ld	(3415:16), a
 	ret
@@ -6745,7 +6745,7 @@ MemConfig_Handler_4:
 	cp	a, 129
 	jrl	z, 4
 	jp	15709976
-	incdi16	1, (3416)
+	incw	1, (3416:16)
 	jp	15709976
 	ldb	w, 255
 	ld	(3434:16), w
@@ -7249,7 +7249,7 @@ VoiceSlot_CopyBlockDone:
 	jrl z, VoiceSlot_LoadFromTable
 	cp a, 0x82
 	jrl z, VoiceSlot_LoadFromTable
-	incdi16 1, (3416)
+	incw 1, (3416:16)
 
 VoiceSlot_LoadFromTable:
 	pop xiz
@@ -7675,7 +7675,7 @@ VoiceSlot_IndexDone:
 	jrl	nz, 14
 	lds	de, 1
 	call	15713447
-	incdi16	1, (3426)
+	incw	1, (3426:16)
 	jp	15713980
 	ld	xiy, 3426
 	ld	xix, 13964
@@ -9346,7 +9346,7 @@ DisplayStr_BytecodeBlock_A:
 	call	15723516
 	ret
 	ld	(3830:16), 0
-	incdi16	1, (3780)
+	incw	1, (3780:16)
 	ld	c, (3777:16)
 	sla	c, 1
 	cpdm8	3780, c

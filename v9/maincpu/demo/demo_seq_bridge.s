@@ -775,7 +775,7 @@ DispatchResolve_MarkCurrent:
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
 	ormi8 (xhl), 0x80
-	decdi16 1, 0xf231
+	decw 1, (0xf231:16)
 	pop xde
 	ld (4349:16), xde
 	ldb w, 0x0

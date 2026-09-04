@@ -8006,7 +8006,7 @@ PleaseWait_Confirm:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 20)
 	call SetApTimer
-	incdi16_24 1, (0x2477a)
+	incw 1, (0x2477a:24)
 	jrl LanguageStringcpyReturn
 
 PleaseWait_GetText:

@@ -358,14 +358,14 @@ BootSerial_SendTwoBytes_Bitbang:
 	ld	xiy, 0x0fd9		; TX ring
 	addda16	xiy, 0x0fd5		; + send index
 	ld	a, (xiy)
-	incdi16	1, (0x0fd5)
+	incw	1, (0x0fd5:16)
 	st_dd8b	a, 0xd4			; first byte -> SC1BUF
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
 	ld	xiy, 0x0fd9
 	addda16	xiy, 0x0fd5
 	ld	a, (xiy)
-	incdi16	1, (0x0fd5)
+	incw	1, (0x0fd5:16)
 	st_dd8b	a, 0xd4			; second byte -> SC1BUF
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
@@ -749,7 +749,7 @@ BootSerial_WaitTxIdle__outer:
 	jr	nz, BootSerial_WaitTxIdle__busy
 	jr	BootSerial_WaitTxIdle__check_tx
 BootSerial_WaitTxIdle__busy:
-	decdi8	1, (0x0f6f)
+	dec	1, (0x0f6f:16)
 	cp	(0x0f6f:16), 0
 	jr	z, BootSerial_WaitTxIdle__exit	; timed out
 	ei	0

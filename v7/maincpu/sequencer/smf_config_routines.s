@@ -58,7 +58,7 @@ SMF_ProcessEventLoop_Entry:
 SMF_IncrementPosition:
 	push xwa
 	push xde
-	incdi16 1, (3946)
+	incw 1, (3946:16)
 	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, xde
@@ -232,7 +232,7 @@ SMF_ScanChannels_Loop:
 
 SMF_ScanChannels_Inactive:
 	ld (0x2877:16), c
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	push xhl
 	pushw bc
 	call Scoop_SpecialMode_ParamCheckBound
@@ -307,7 +307,7 @@ SMF_FindFree_CheckPart:
 	jr z, SMF_FindFree_Next
 	inc 1, c
 	ld (0x2877:16), l
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 
 SMF_AssignRemainingChannels:
 	ld de, (0x00ffec:24)
@@ -323,7 +323,7 @@ SMF_AssignRemainingChannels:
 	pop xix
 	jr z, SMF_AssignRemaining_Next
 	ld (9858:16), c
-	incdi8 1, (9858)
+	inc 1, (9858:16)
 	ld a, (0x2877:16)
 	ld (9860:16), a
 	push xhl
@@ -566,7 +566,7 @@ SMF_WriteByte_SectorOK:
 
 SMF_WriteByte_NewSector:
 	ld c, a
-	incdi16 1, (4327)
+	incw 1, (4327:16)
 	pushw wa
 	push xhl
 	pushw bc
@@ -604,7 +604,7 @@ SMF_WriteByte_AlignError:
 	jp SMF_WriteByte_Done
 
 SMF_WriteByte_AllocSector:
-	incdi16 1, (4347)
+	incw 1, (4347:16)
 	ld xwa, 0x13fa
 	ld (4376:16), xwa
 	ld xix, xwa
@@ -1734,7 +1734,7 @@ SMF_LoadBank_EventLoop:
 	calr SMF_SetupReadPointers
 	calr SMF_ResetPlaybackState
 	call SMF_SetupRead_Return
-	incdi8_24 1, (0xffe3)
+	inc 1, (0xffe3:24)
 	cpib_da (0x00ffe3), 0x0a
 	jr c, SMF_LoadBank_EventLoop
 
@@ -1795,7 +1795,7 @@ SMF_Parse_NextChannel:
 	and (4393:16), 254
 	and (4393:16), 251
 	ld (4419:16), 0
-	incdi8 1, (3301)
+	inc 1, (3301:16)
 	jr SMF_ParseEvents
 
 SMF_Parse_Complete:
@@ -2248,7 +2248,7 @@ SMF_ConfigSlot_CodeBlock:
 	ld	wa, (10375:16)
 	ld	(4415:16), wa
 	ld	(4417:16), iy
-	incdi16	1, (4417)
+	incw	1, (4417:16)
 	cpw	(4417:16), 255
 	jr	ule, 47
 	ld	xhl, (10369:16)

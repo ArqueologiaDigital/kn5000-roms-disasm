@@ -431,7 +431,7 @@ SMF_ReadMThd_ByteLoop:
 	popw bc
 	cp_spib A, 0xf4
 	jrl z, SMF_ReadMThd_Matched
-	incdi8 1, (4343)
+	inc 1, (4343:16)
 	cp (4343:16), 1
 	jrl nz, SMF_ReadMThd_Mismatch
 	ld xwa, 0x13fa

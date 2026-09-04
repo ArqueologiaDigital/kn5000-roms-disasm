@@ -584,8 +584,8 @@ Task_DequeueDispatch_Prio3:
 
 
 INT16_TaskSwitch_Handler:
-	incdi16 1, 4306
-	incdi8 1, 4165
+	incw 1, (4306:16)
+	inc 1, (4165:16)
 	pushw wa
 	pushw bc
 	calr Task_DequeueDispatch_Prio3
@@ -1954,11 +1954,11 @@ IntMask_ClearBit3:
 ; (0x01FFD0) merely counts down. Unlike TASKSCHED_SOFTTIMER_SERVICE this pair does NOT
 ; mirror the new depth into control register 0x7C.
 RingBuf_Control_Opaque:
-	incdi16	1, (4306)
+	incw	1, (4306:16)
 	ret
 ; decw 1,(0x10D2) -- release the scheduler lock. Nesting-safe, no reschedule on release.
 TaskSched_Unlock:
-	decdi16	1, (4306)
+	decw	1, (4306:16)
 	ret
 ; Pop one byte from the 1 KB FIFO whose descriptor base is 0x040C2E.
 ; Thin wrapper: pushes IX/XDE, XDE = 0x040C2E, calls the 1K engine's GET (0x020B9D).
@@ -2929,7 +2929,7 @@ Cmd_Check_DMA_Timeout:	; 020FD9h
 	ldc_16_cr wa, 0x40	; Get current DMA byte count
 	cpdm16 61468, xwa	; Compare with previous
 	jr nz, Cmd_DMA_Reset_Counter
-	incdi16 1, 61466	; Increment stuck counter
+	incw 1, (61466:16)	; Increment stuck counter
 	jr Cmd_DMA_Save_Count
 
 Cmd_DMA_Reset_Counter:	; 020FEFh
@@ -2951,7 +2951,7 @@ Cmd_DMA_Check_Stuck:	; 021001h
 	ld (256:16), 0	; Stop DMA
 	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
-	incdi8 1, 61464	; Increment error counter
+	inc 1, (61464:16)	; Increment error counter
 	ret
 
 ; ===========================================================================
@@ -4866,7 +4866,7 @@ AudioState_Init_Return:
 Voice_Manager_PollBank:
 	dec 6, xsp
 	push xiz
-	incdi8 1, 4392
+	inc 1, (4392:16)
 	and (4392:16), 3
 	ld a, (4392:16)
 	extz wa
@@ -15407,7 +15407,7 @@ Pitch_Bend_Ramp_Tick:
 	ld wa, (0x041343:24)
 	bit 11, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit12
-	incdi16_24 1, 267100
+	incw 1, (267100:24)
 	ld a, (0x011c7c:24)
 	exts wa
 	add wa, wa
@@ -15434,7 +15434,7 @@ Pitch_Bend_Ramp_Tick_Bit12:
 	ld wa, (0x041343:24)
 	bit 12, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit13Check
-	incdi16_24 1, 267100
+	incw 1, (267100:24)
 	anddi16_24 267075, 64511
 	ret
 
@@ -15446,7 +15446,7 @@ Pitch_Bend_Ramp_Tick_Bit13Check:
 	ld wa, (0x041343:24)
 	bit 14, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit14Clear
-	incdi16_24 2, 267100
+	incw 2, (267100:24)
 	ld wa, (0x04135c:24)
 	extz xwa
 	ld xbc, 0x11C7C
@@ -15464,7 +15464,7 @@ Pitch_Bend_Ramp_Tick_Bit14Clear:
 	extz xwa
 	bit 15, wa
 	jr z, Pitch_Bend_Ramp_Tick_ZeroPitch
-	incdi16_24 1, 267100
+	incw 1, (267100:24)
 	ld wa, (0x04135c:24)
 	extz xwa
 	ld xbc, 0x11C7C
@@ -15555,7 +15555,7 @@ Voice_TickNoteDecay:
 	pushw_erp 0xFA
 	cpib_da 0x04135e, 0x00
 	jr z, Voice_TickNoteDecay_Done
-	decdi8_24 1, 267103
+	dec 1, (267103:24)
 	cpib_da 0x04135f, 0x00
 	jr nz, Voice_TickNoteDecay_Done
 	lda xwa, (xsp + 2)
@@ -15584,7 +15584,7 @@ Voice_TickNoteDecay:
 
 ; Reload the divider: decrement the counter at 0x04135E and reset 0x04135F to 4.
 Voice_TickNoteDecay_Reload:
-	decdi8_24 1, 267102
+	dec 1, (267102:24)
 	ld (0x04135f:24), 0x04
 
 ; Restore and return.
@@ -41300,7 +41300,7 @@ Audio_CmdHandler_00_1F_Loop:
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	ld (xbc), a
-	incdi16 1, 11025
+	incw 1, (11025:16)
 	dec 1, de
 	lds32 xwa, 1
 	add (xsp + 6), xwa
@@ -42789,7 +42789,7 @@ CmdHandler60_StreamSizeA:
 	cpda16 xwa, 17544
 	jr nc, CmdHandler60_StreamSizeB
 	adddm16 17546, xde
-	incdi16 1, 17548
+	incw 1, (17548:16)
 	jr DSP_EnqueueOrReturn
 
 ; Stream complete: (0x448A) = 0, (0x448C) = 0, then enqueue. One of the two clear sites.
@@ -42843,7 +42843,7 @@ DSP_RingBuf_Enqueue:
 	add xbc, xwa
 	ldb_spi A, 0xEC
 	ld (xbc), a
-	incdi16 1, 15204
+	incw 1, (15204:16)
 	inc 1, ix
 	cp ix, de
 	jr c, DSP_RingBuf_Enqueue

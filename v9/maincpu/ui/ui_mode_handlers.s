@@ -1931,7 +1931,7 @@ EffectMode_RunDiagSequence:
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	incdi8 1, (0x8d7a)
+	inc 1, (0x8d7a:16)
 	ret
 
 EffectMode_DiagSeq_AnimFrame:
@@ -3668,7 +3668,7 @@ MstStyle_EventDispatch:
 	jr MstStyle_DialDown_PostEvent
 
 MstStyle_DialDown_Decrement:
-	decdi16_24 1, (0x340c4)
+	decw 1, (0x340c4:24)
 	ld wa, iy
 	dec 1, wa
 	ld de, wa
@@ -3758,7 +3758,7 @@ MstStyle_FallbackEvent:
 	jrl MstStyle_DialUp_PostEvent
 
 MstStyle_DialUp_Increment:
-	incdi16_24 1, (0x340c4)
+	incw 1, (0x340c4:24)
 	ld de, bc
 	extz xde
 	add xde, 0xffff0000
@@ -3789,7 +3789,7 @@ MstStyle_DialUp_CheckLimit:
 	ld wa, bc
 	cp bc, de
 	jrl ge, SeqFileAlt_ReturnZeroJmp
-	incdi16_24 1, (0x340c4)
+	incw 1, (0x340c4:24)
 	ld de, wa
 	extz xde
 	add xde, 0xffff0000

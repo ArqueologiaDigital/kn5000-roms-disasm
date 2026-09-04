@@ -78,7 +78,7 @@ Handler_INTA__rx_pacing:
 	jr	nz, Handler_INTA__count_ok
 	ldw	(0x0f77:16), 0x005c	; reload with the RX ring size
 Handler_INTA__count_ok:
-	decdi16	1, (0x0f77)
+	decw	1, (0x0f77:16)
 	or	(0x0f6a:16), 0x40		; status: INTA seen mid-transfer
 	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 Handler_INTA__exit:

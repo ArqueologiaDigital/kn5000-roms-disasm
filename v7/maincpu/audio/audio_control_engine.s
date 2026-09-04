@@ -679,7 +679,7 @@ Audio_NullHandler_C:
 	ret
 
 Encoder_TimingAndOutput:
-	incdi8	1, (36394)
+	inc	1, (36394:16)
 	ld	wa, (36396:16)
 	cps	wa, 0
 	jr	z, 6
@@ -1189,7 +1189,7 @@ Audio_InitChannelTimers:
 	ld	(36538:16), 5
 	ret
 Audio_IncrementUpdateCounter:
-	incdi8	1, (36526)
+	inc	1, (36526:16)
 	ret
 Audio_CheckAndFlagChanges:
 	call GetDialEnableState
@@ -6472,7 +6472,7 @@ MidiStream_ProcessorDispatchC:
 
 TempoRing_UpdateAndContinue:
 	ld	(37174:16), 255
-	incdi8	1, (37163)
+	inc	1, (37163:16)
 	cp	(37163:16), 15
 	jr	ule, -78
 	jr	-115
@@ -6718,7 +6718,7 @@ PartReinit_ProcessNextPart:
 	calr	80
 	calr	164
 PartReinit_AdvancePart:
-	incdi8	1, (37164)
+	inc	1, (37164:16)
 	cp	(37164:16), 16
 	jr	c, -74
 	calr	3127
@@ -7923,7 +7923,7 @@ MidiStream_DispatchLoop:
 	ld (0x90c1:16), de
 	call (XIY)
 MidiStream_AdvanceRxPtr:
-	incdi8	4, (37015)
+	inc	4, (37015:16)
 	jr	-75
 MidiStream_ProcessDone:
 	ret

@@ -532,7 +532,7 @@ INTTC3_HANDLER__state8_block_banked:
 INTTC3_HANDLER__state9:
 	ld (0x00F32D:24), 0x00                     ; F99E43  f2 2d f3 00 00 00
 	set 5, (0x00852C:24)                       ; F99E49  f2 2c 85 00 bd
-	incdi8_24 1, 0x008535                      ; F99E4E  c2 35 85 00 61   a counter, incremented only here
+	inc 1, (0x008535:24)                      ; F99E4E  c2 35 85 00 61   a counter, incremented only here
 	set_dd8 1, PA                              ; F99E53  f0 1e b9
 INTTC3_HANDLER__return:
 	popw_erp 0xE2                              ; F99E56  d7 e2 05   pop QWA -- matches the pushw_erp in the prologue

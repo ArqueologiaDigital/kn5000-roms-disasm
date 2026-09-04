@@ -17415,7 +17415,7 @@ EventRoute_OwnerMatch:
 	jr EventRoute_OwnerMatch
 
 EventRoute_OwnerMatchDone:
-	incdi16_24 1, (0x02f840)
+	incw 1, (0x02f840:24)
 	ld bc, de
 	muls bc, 0xc
 	lda xwa, (0x02bc34:24)
@@ -17432,7 +17432,7 @@ EventRoute_OwnerMatchDone:
 	jr PostEvent_AllocSlot
 
 PostEvent_Prologue:
-	incdi16_24 1, (0x02ec36)
+	incw 1, (0x02ec36:24)
 
 PostEvent_AllocSlot:
 	lds wa, 4
@@ -17460,7 +17460,7 @@ GetEvent:
 	jr GetEvent_Prologue
 
 PostEvent_FillSlot:
-	decdi16_24 1, (0x02f840)
+	decw 1, (0x02f840:24)
 	ld wa, (0x02ec34:24)
 	ld (xsp + 4), wa
 	ld bc, (xsp + 4)
@@ -17490,7 +17490,7 @@ PostEvent_LinkSlot:
 	jr PostEvent_Return
 
 PostEvent_ReturnOne:
-	incdi16_24 1, (0x02ec34)
+	incw 1, (0x02ec34:24)
 
 PostEvent_Return:
 	lds wa, 4
@@ -17907,7 +17907,7 @@ MainPostEvent_Allocate:
 	sub wa, 0xff
 	cp wa, bc
 	jr z, MainPostEvent_VirtDispatch_Prologue
-	incdi16_24 1, (0x02f842)
+	incw 1, (0x02f842:24)
 	ld wa, (0x02f83a:24)
 	muls wa, 0xc
 	lda xbc, (0x02ec38:24)
@@ -17958,7 +17958,7 @@ MainGetEvent:
 	jr MainGetEvent_Return
 
 MainGetEvent_ScanDone:
-	decdi16_24 1, (0x02f842)
+	decw 1, (0x02f842:24)
 	ld de, (0x02f838:24)
 	ld bc, de
 	muls bc, 0xc
@@ -17978,7 +17978,7 @@ MainGetEvent_ScanDone:
 	jr MainGetEvent_ReturnOneAlt
 
 MainGetEvent_ReturnOne:
-	incdi16_24 1, (0x02f838)
+	incw 1, (0x02f838:24)
 
 MainGetEvent_ReturnOneAlt:
 	lds wa, 7
@@ -18138,7 +18138,7 @@ ObjectSearch_Continue:
 	sub wa, 0x3ff
 	cp wa, bc
 	jr z, ObjectSearch_CheckLoop
-	incdi16_24 1, (0x02f840)
+	incw 1, (0x02f840:24)
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda xbc, (0x02bc34:24)
@@ -18225,7 +18225,7 @@ ApDeliveryEvent_ReturnZero:
 	ld (xsp + 4), xwa
 
 ApDeliveryEvent_Return:
-	incdi16_24 1, (0x02f840)
+	incw 1, (0x02f840:24)
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda xbc, (0x02bc34:24)

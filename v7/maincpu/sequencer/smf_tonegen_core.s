@@ -127,7 +127,7 @@ FloppyIO_ReadNextByte:
 	call FileIO_ReadBlockToFilePos
 	popw hl
 	ld a, l
-	incdi16 1, (4327)
+	incw 1, (4327:16)
 	pushw wa
 	push xhl
 	pushw de
@@ -322,7 +322,7 @@ SeqPlay_InitTrackLoop:
 
 SeqPlay_InitTrackLoop_Continue:
 	call SeqTrack_InitScoopAndSetWall
-	incdi16 1, (4237)
+	incw 1, (4237:16)
 	ld wa, (4237:16)
 	cpda16 xwa, 3934
 	jrl c, SeqPlay_InitTrackLoop
@@ -382,7 +382,7 @@ SeqTrack_AssignChannel_Loop:
 	pop xiy
 	add iy, 0x3
 	add ix, 0x2
-	incdi8 1, (5113)
+	inc 1, (5113:16)
 	cp (5113:16), 16
 	jrl c, SeqTrack_AssignChannel_Loop
 	jrl SeqTrack_AssignChannels_Done
@@ -864,7 +864,7 @@ SoundGen_ScanBitmap_Loop:
 	xorcf_a_16 de
 	jrl nc, SoundGen_ScanBitmap_Next
 	ld (0x2877:16), c
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	pushw bc
 	call Scoop_SpecialMode_ParamCheckBound
 	popw bc
@@ -1367,9 +1367,9 @@ SeqTrack_InitScoopAndSetWall:
 	xor a, a
 	lds hl, 1
 	ld (0x2877:16), a
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	ld (9858:16), l
-	incdi8 1, (9858)
+	inc 1, (9858:16)
 	ld a, (0x2877:16)
 	ld (9860:16), a
 	pushw wa
@@ -1735,7 +1735,7 @@ Sequencer_AdvanceBlockPosition:
 	push xix
 	call FileIO_ReadBlockToFilePos
 	pop xix
-	incdi16 1, (4327)
+	incw 1, (4327:16)
 	pushw wa
 	push xhl
 	pushw de

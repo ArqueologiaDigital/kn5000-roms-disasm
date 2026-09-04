@@ -2225,7 +2225,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld	wa, (0x025b3e:24)
 	dec	1, wa
 	ld	(0x025b3e:24), wa
-	decdi16_24	1, (0x025b60)
+	decw	1, (0x025b60:24)
 	cps	wa, 0
 	jr	ge, 14
 	ldw	(0x025b3e:24), 0

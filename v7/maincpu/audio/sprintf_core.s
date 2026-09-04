@@ -525,7 +525,7 @@ Sprintf_Octal_DigitLoop:
 Sprintf_Octal_PadRightSpace:
 	ldb	w, 176
 	srl	xwa, 98
-	incdi16_24	1, (246306)
+	incw	1, (246306:24)
 Sprintf_Octal_PadRightLoop:
 	.byte 0xde, 0xa8, 0x68, 0x19, 0xaf, 0x16, 0x20, 0xc3
 	.byte 0x07, 0xe0, 0xf8, 0x21, 0xd8, 0x13, 0x28, 0xaf
@@ -654,7 +654,7 @@ Sprintf_FFixed_CheckDefaults:
 Sprintf_FFixed_CheckLongDouble:
 	ldb	w, 176
 	srl	xwa, 98
-	incdi16_24	1, (246306)
+	incw	1, (246306:24)
 	decm	1, (xsp+18)
 Sprintf_FFixed_CheckLongDoubleLimit:
 	.byte 0x9f, 0x12, 0x3f, 0x00, 0x00, 0x6a, 0xe7, 0xde
@@ -709,7 +709,7 @@ Sprintf_FFixed_CaseApplied:
 	call	(xwa)
 	inc	2, xsp
 Sprintf_FFixed_StripZeroLoop:
-	incdi16_24	1, (246306)
+	incw	1, (246306:24)
 Sprintf_FFixed_StripZeroCheck:
 	.byte 0xd7, 0xfa, 0xa9, 0x9f, 0x14, 0x3f, 0x00, 0x00
 	.byte 0x6e, 0x08, 0x9f
@@ -788,7 +788,7 @@ Sprintf_FFixed_IntDigitOutput:
 	ld	xwa, (xsp+14)
 	call	(xwa)
 	inc	2, xsp
-	incdi16_24	1, (246306)
+	incw	1, (246306:24)
 	ld	qiz, iz
 	jr	15
 	pushw	48
@@ -796,7 +796,7 @@ Sprintf_FFixed_IntDigitOutput:
 	call	(xwa)
 Sprintf_FFixed_IntDigitLoop:
 	inc	2, xsp
-	incdi16_24	1, (246306)
+	incw	1, (246306:24)
 	ld	wa, qiz
 	inc	1, qiz
 	cps	wa, 3
@@ -808,7 +808,7 @@ Sprintf_FFixed_IntZeroFill:
 	.byte 0xd8, 0x13, 0x28, 0xaf, 0x0e, 0x20, 0xb0
 Sprintf_FFixed_IntZeroLoop:
 	srl	xwa, 98
-	incdi16_24	1, (246306)
+	incw	1, (246306:24)
 	cps	iz, 0
 	jr	nz, -29
 	ld	wa, (xsp+16)

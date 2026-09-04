@@ -224,14 +224,14 @@ CPanel_InitLEDBuffer:
 	ld xiy, 0x8e01
 	addda16 xiy, 0x8dfd
 	ld a, (xiy)
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	ld xiy, 0x8e01
 	addda16 xiy, 0x8dfd
 	ld a, (xiy)
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
@@ -613,7 +613,7 @@ CPanel_WaitTXReady_Poll:
 	jr CPanel_WaitTXReady_BufferCheck
 
 CPanel_WaitTXReady_Timeout:
-	decdi8 1, 0x8d97
+	dec 1, (0x8d97:16)
 	cp (0x8d97:16), 0
 	jr z, WaitTX_ConfigAndReturn
 	ei 0
@@ -695,7 +695,7 @@ INTA_HandleCountdown:
 	ldw (0x8d9f:16), 92
 
 INTA_DecrementRXCount:
-	decdi16 1, 0x8d9f
+	decw 1, (0x8d9f:16)
 	or (0x8d92:16), 64	; CP_Flags_B.6 = 1  ; UNUSED
 	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
 
@@ -775,7 +775,7 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	incdi8 4, (0x8d8a); next = ROUTINE_2
+	inc 4, (0x8d8a:16); next = ROUTINE_2
 	mul a, 0x1
 	mul a, 0x1
 	bit_dd8 6, 0x3c	; PF.6 = state of SCLK1 pin
@@ -809,7 +809,7 @@ CPanel_SM_TXDelay1:
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -829,7 +829,7 @@ CPanel_SM_TXDelay2:
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -850,7 +850,7 @@ CPanel_SM_SendByte1:
 	addda16 xiy, 0x8dfd
 	ld a, (xiy)
 	st_dd8b A, 0xd4
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	cpw (0x8dfd:16), 60
 	jr c, SendByte1_InspectByte
 	ldw (0x8dfd:16), 0
@@ -866,7 +866,7 @@ SendByte1_InspectByte:
 	ld (0x8d8b:16), a
 
 SendByte1_AdvanceState:
-	incdi8 4, (0x8d8a); next = ROUTINE_3
+	inc 4, (0x8d8a:16); next = ROUTINE_3
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -887,22 +887,22 @@ CPanel_SM_SendByteN:
 	addda16 xiy, 0x8dfd
 	ld a, (xiy)
 	st_dd8b A, 0xd4
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	cpw (0x8dfd:16), 60
 	jr c, SendByteN_CheckDone
 	ldw (0x8dfd:16), 0
 
 SendByteN_CheckDone:
-	decdi8 1, 0x8d8b
+	dec 1, (0x8d8b:16)
 	cp (0x8d8b:16), 1
 	jr z, SendByteN_AdvanceState
 	cp (0x8d8b:16), 0
 	jr z, SendByteN_AdvanceState
-	decdi8 4, 0x8d8a	; previous routine
+	dec 4, (0x8d8a:16)	; previous routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 SendByteN_AdvanceState:
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -978,7 +978,7 @@ RXByte1_CheckThreshold:
 
 RXByte1_AdvanceWritePtr:
 	and (0x8d92:16), 254; CP_Flags_B.0 = 0
-	incdi16 1, (0x8d9f)
+	incw 1, (0x8d9f:16)
 	cpw (0x8d9f:16), 92
 	jr c, RXByte1_InspectByte
 	ldw (0x8d9f:16), 0
@@ -993,7 +993,7 @@ RXByte1_InspectByte:
 	ld (0x8d8b:16), a
 
 RXByte1_AdvanceState:
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -1004,13 +1004,13 @@ CPanel_SM_RXByteN:
 	ld (xiy), a
 	bit 0, (0x8d92:16); CP_Flags_B.0
 	jr nz, RXByteN_CheckDone
-	incdi16 1, (0x8d9f)
+	incw 1, (0x8d9f:16)
 	cpw (0x8d9f:16), 92
 	jr c, RXByteN_CheckDone
 	ldw (0x8d9f:16), 0
 
 RXByteN_CheckDone:
-	decdi8 1, 0x8d8b
+	dec 1, (0x8d8b:16)
 	cp (0x8d8b:16), 1
 	jr nz, RXByteN_ContinueRX
 	ld (0x8d8b:16), 0
@@ -1055,7 +1055,7 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 
 
 CPanel_InterruptPoll_MainLoop:
-	incdi8 1, (0x8d9a)
+	inc 1, (0x8d9a:16)
 	cp (0x8d9a:16), 42; =42 ;-)
 	jr ule, PollLoop_DispatchWork
 	ei 6
@@ -1160,7 +1160,7 @@ PollLoop_Return:
 
 
 PollLoop_BusyRetry:
-	incdi8 1, (0x8d98)
+	inc 1, (0x8d98:16)
 	cp (0x8d98:16), 20
 	jr ule, PollLoop_Return
 

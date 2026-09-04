@@ -1011,7 +1011,7 @@ SeqPlay_CheckAndReactivate_CopyPos:
 	pushw 0x81
 	call TempoRingBuf_WriteByte_Ext
 	inc 2, xsp
-	decdi16 1, 0x28c9
+	decw 1, (0x28c9:16)
 
 SeqPlay_CheckAndReactivate_Activate:
 	ldmm16 8998, 0x28c9
@@ -3176,7 +3176,7 @@ SeqNote_NoteOn_HasParts:
 	cp a, 0x60
 	jr c, SeqNote_NoteOn_TickDone
 	ld (1051:16), 0
-	incdi16 1, (1052)
+	incw 1, (1052:16)
 
 SeqNote_NoteOn_TickDone:
 	ei 0
@@ -5997,7 +5997,7 @@ SeqPart_ReadEvent_MainLoop:
 	ld a, (xhl)
 	cp a, 0x81
 	jr nz, SeqPart_ReadEvent_NotEndMark
-	incdi16 1, (9152)
+	incw 1, (9152:16)
 	ld (xbc), 0x0
 	cp (xsp + 12), 0x0
 	jr nz, SeqPart_ReadEvent_MainLoop
@@ -16546,7 +16546,7 @@ SeqMIDI_DispatchProgramChange:
 	ldb_erp L, 0xfb
 	cp_erpb 0xfb, 0x81
 	jr nz, SeqMIDI_DispatchReturn
-	incdi16 1, (9614)
+	incw 1, (9614:16)
 	calr PartCtrl_RefreshWordPeriodic
 	jrl SeqData_ContinuePos
 
@@ -16916,7 +16916,7 @@ PartCtrlRd_ProcessAndRelink:
 	calr PartCtrl_WriteWord_Off1
 
 PartCtrlRd_DecrementCount:
-	decdi16 1, 0xf231
+	decw 1, (0xf231:16)
 	ld hl, iz
 
 PartCtrlRd_Return:
@@ -24503,7 +24503,7 @@ FileIO_WriteVoiceChainLoop:
 	cpw (xsp + 6), 0x0
 	jr lt, FileIO_WriteEpilogue
 	stw_erp IZ, 0xfa
-	incdi16 1, (0x29f4)
+	incw 1, (0x29f4:16)
 	cp iz, 0xffff
 	jr nz, FileIO_WriteVoiceChainLoop
 
@@ -25581,7 +25581,7 @@ SeqNote_QueueReturn:
 
 SeqEvent_AccumulateQueue:
 	call PartCtrl_RefreshWordPeriodic
-	incdi16 1, (9614)
+	incw 1, (9614:16)
 	ld wa, (9614:16)
 	cpda16 xwa, 1052
 	scc8 ugt, l
@@ -26252,7 +26252,7 @@ SeqEvt_CheckIncrementOp:
 	ld a, (xde)
 	cp a, 0x81
 	jr nz, SeqEvt_ExtractEventType
-	incdi16 1, (9620)
+	incw 1, (9620:16)
 	jr SeqEvt_ReadAndDispatchLoop
 
 SeqEvt_ExtractEventType:
@@ -26432,7 +26432,7 @@ SeqEvt_SecondTrackExtract:
 	ld l, (xde)
 	cp l, 0x81
 	jr nz, SeqEvt_SecondTrackCheckC0
-	incdi16 1, (9622)
+	incw 1, (9622:16)
 	jrl SeqEvt_ReadAndDispatchLoop
 
 SeqEvt_SecondTrackCheckC0:

@@ -5333,7 +5333,7 @@ MainMssSetUp:
 	cp xbc, 0x1e20018
 	jr nz, MainMssSetUp_ReturnZero
 	ld (0x8d56:16), de
-	incdi16 1, (0x8d56)
+	incw 1, (0x8d56:16)
 	ld (0x8d4e:16), 7
 	jr MainMssSetUp_ReturnZero
 

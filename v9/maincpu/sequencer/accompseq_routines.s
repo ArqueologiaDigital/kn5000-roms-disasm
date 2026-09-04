@@ -127,7 +127,7 @@ AccompSeq_IncrementTickCounter:
 	inc	1, hl
 	ld	(1128:16), hl
 	ld	(1130:16), a
-	incdi8	1, (1132)
+	inc	1, (1132:16)
 	call	SeqEvt_EntryPoint1
 	call	SeqEvt_EntryPoint2
 	ret
@@ -1017,7 +1017,7 @@ AccompSeq_LargeCodeBlock1:
 	ld	a, (0x7e24:16)
 	.byte 0xc0
 	pop	sr
-	decdi8	6, 0xd8c9
+	dec	6, (0xd8c9:16)
 	.byte 0x06
 	call	AccompSeq_InitPartFull
 	jr	4
@@ -2008,7 +2008,7 @@ AccompSeq_SeqParse_TimeAdvance:
 	jr AccompSeq_SeqParse_Loop
 
 AccompSeq_SeqParse_TimeStore:
-	incdi16 1, (0x7e46)
+	incw 1, (0x7e46:16)
 	calr AccompSeq_AdvancePosition
 	jr AccompSeq_SeqParse_Loop
 

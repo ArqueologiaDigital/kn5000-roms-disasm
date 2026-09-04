@@ -1745,7 +1745,7 @@ AudioInit_QueueCommand_Write:
 	add xde, xbc
 	ld a, (xsp + 10)
 	ld (xde), a
-	incdi16 1, (0xc4ca)
+	incw 1, (0xc4ca:16)
 	inc 6, xsp
 	retd 0x2
 

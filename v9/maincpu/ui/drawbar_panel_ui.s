@@ -8507,7 +8507,7 @@ PleaseWait_Confirm:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 20)
 	call SetApTimer
-	incdi16_24 1, (0x2477a)
+	incw 1, (0x2477a:24)
 	jrl LanguageStringcpyReturn
 
 PleaseWait_GetText:
@@ -11643,8 +11643,8 @@ AudioCtrl_PageHandler:
 	ld xwa, (xsp + 82)
 	cp xwa, 0x8f
 	jrl nz, AudioCtrl_CheckEventF
-	incdi16_24 8, (0x24790)
-	incdi16_24 1, (0x24794)
+	incw 8, (0x24790:24)
+	incw 1, (0x24794:24)
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
 	ldw_erp HL, 0xfa

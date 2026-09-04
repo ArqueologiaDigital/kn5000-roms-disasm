@@ -810,7 +810,7 @@ Demo_SelectEntry_UpdateDisplay:
 	calr Demo_SelectEntry_LoadPattern
 	calr Demo_SelectEntry_DrawSecondary
 	calr Demo_ResetCountdownTimer
-	incdi8 1, (4440)
+	inc 1, (4440:16)
 	ret
 
 Demo_SelectEntry_LoadPattern:
@@ -7813,7 +7813,7 @@ FileIO_StoreIndexedEntry:
 	addw_erp WA, 0xfa
 	lda xbc, (0x027312:24)
 	stib_ind 0x07, 0xe4, 0xe0, 0x00
-	incdi8_24 1, (0x27412)
+	inc 1, (0x27412:24)
 	inc 1, iz
 	cp iz, 0x80
 	jrl lt, BuildIndex_ScanLoop
@@ -8029,7 +8029,7 @@ SearchMatch_HasHandle:
 	calr FileIO_FindNextMatch
 	cps hl, 0
 	jr ge, SearchMatch_Return
-	incdi8_24 1, (0x27414)
+	inc 1, (0x27414:24)
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
 

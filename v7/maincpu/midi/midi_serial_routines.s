@@ -171,7 +171,7 @@ ClkTick_Src1CoarseUpdate:
 	inc	2, xsp
 	ret
 	.byte 0xf1, 0x27, 0x04, 0xba
-	incdi8	1, (46913)
+	inc	1, (46913:16)
 	ret
 	.byte 0xf1, 0x27, 0x04, 0xbe
 	ld	c, e
@@ -205,7 +205,7 @@ ClkTick_Src1CoarseUpdate:
 	.byte 0xc1, 0x27, 0x04, 0x3c, 0xbd
 	ret
 	.byte 0xf1, 0x27, 0x04, 0xba
-	incdi8	1, (46913)
+	inc	1, (46913:16)
 	ret
 	ld	(1059:16), 0
 	cp	d, 240

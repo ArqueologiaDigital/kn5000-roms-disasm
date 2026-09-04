@@ -2838,7 +2838,7 @@ SndParam_WidgetAppendType2:
 
 SndParam_WidgetAppendTail:
 	ld (xde), 0xff
-	incdi16 4, (0x90de)
+	incw 4, (0x90de:16)
 	jr SndParam_WidgetDispatchDone
 
 SndParam_WidgetCallType3:
@@ -2925,7 +2925,7 @@ SndParam_Widget1_AppendType2:
 
 SndParam_Widget1_AppendTail:
 	ld (xde), 0xff
-	incdi16 8, (0x90de)
+	incw 8, (0x90de:16)
 	jr SndParam_Widget1_Done
 
 SndParam_Widget1_CallType3:

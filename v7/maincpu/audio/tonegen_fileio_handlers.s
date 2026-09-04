@@ -1225,7 +1225,7 @@ Encoder_ReadNextEntry:
 
 	ldiw
 
-	incdi8 1, (36336)
+	inc 1, (36336:16)
 
 	ret
 

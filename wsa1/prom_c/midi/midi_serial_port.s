@@ -157,7 +157,7 @@ sub_F9915C__armed:
 	jr	nz, sub_F9915C__counting
 	jr	sub_F9915C__exit
 sub_F9915C__counting:
-	decdi8_24 1, 0x00E2E4
+	dec 1, (0x00E2E4:24)
 	ldw	bc, 0xFFF8
 	extz	xbc
 	ld	a, (xbc)

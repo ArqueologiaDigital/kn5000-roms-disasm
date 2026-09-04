@@ -132,7 +132,7 @@ FDC_ProbeDiskFormat__recal_done:
 	lda	xsp, (xsp + 20)		; drop the five pushed block pointers
 	ldw	wa, 200
 	calr	Boot_Delay
-	incdi16	1, (0x104c)		; probe-pass counter
+	incw	1, (0x104c:16)		; probe-pass counter
 	ret
 
 ; -----------------------------------------------------------------------------

@@ -3285,7 +3285,7 @@ Boot_DelayLoop__delay_loop:
 ; Controls LED at 0x160004 (HDAE5000 PPI port)
 ; =============================================================================
 Boot_BlinkLED:
-	incdi8 1, (3080); INC 1, (0x0C08) - LED counter
+	inc 1, (3080:16); INC 1, (0x0C08) - LED counter
 	ld a, (3080:16); LD A, (0x0C08)
 	and a, 0x3	; AND A, 0x03 - mask to 0-3
 	cps a, 3	; CP A, 3
@@ -3794,7 +3794,7 @@ LZSS_ReadByte__not_eof:
 	cpda32 xwa, 3116	; CP XWA, (0x0C2C) - buffer limit
 	jr nz, LZSS_ReadByte__read_byte	; JR NZ, .read_byte
 	; Need to read next sector
-	incdi16 8, (3120); INCW 0, (0x0C30) - next sector X
+	incw 8, (3120:16); INCW 0, (0x0C30) - next sector X
 	ld wa, (3120:16); LD WA, (0x0C30)
 	ld bc, (3122:16); LD BC, (0x0C32)
 	lds de, 6	; LD DE, 6 - sector size index

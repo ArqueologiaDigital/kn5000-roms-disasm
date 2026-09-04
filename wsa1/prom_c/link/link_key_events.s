@@ -132,7 +132,7 @@ KeyEvents_ToLink__F98CC8:
 	jr z, KeyEvents_ToLink__F98CE2                        ; F98CDE  jr Z,0xf98ce2
 	jr KeyEvents_ToLink__F98CC8                           ; F98CE0  jr T,0xf98cc8
 KeyEvents_ToLink__F98CE2:
-	decdi16_24	1, (0xE2E1)                 ; F98CE2  decw 1,(0x00e2e1)
+	decw	1, (0xE2E1:24)                 ; F98CE2  decw 1,(0x00e2e1)
 	jrl KeyEvents_ToLink__F98D4E                          ; F98CE7  jrl T,0xf98d4e
 KeyEvents_ToLink__F98CEA:
 	ld	(xiz-35), 0                         ; F98CEA  ld (XIZ+0xdd),0x00
@@ -283,8 +283,8 @@ Link_Ch0_AppendToRing__F98DB5:
 	inc	6, xwa                             ; F98DC5  inc 6,XWA
 	add	xwa, 0xE2EB                        ; F98DC7  add XWA,0x0000e2eb
 	ld	(xwa), h                            ; F98DCD  ld (XWA),H
-	incdi16_24	1, (0xE2EB)                 ; F98DCF  incw 1,(0x00e2eb)
-	incdi16_24	1, (0xE2EF)                 ; F98DD4  incw 1,(0x00e2ef)
+	incw	1, (0xE2EB:24)                 ; F98DCF  incw 1,(0x00e2eb)
+	incw	1, (0xE2EF:24)                 ; F98DD4  incw 1,(0x00e2ef)
 	sub	xbc, xbc                           ; F98DD9  sub XBC,XBC
 	inc	1, xbc                             ; F98DDB  inc 1,XBC
 	add	(xiz+10), xbc                      ; F98DDD  add (XIZ+0x0a),XBC

@@ -76,7 +76,7 @@ BmDrEdit_ScanForwardLoop:
 	cp a, 0x81
 	jr nz, BmDrEdit_ScanForward_CheckNote
 	inc 1, iz
-	incdi16_24 1, (0x0210a0)
+	incw 1, (0x0210a0:24)
 	jr BmDrEdit_ScanForward_NextByte
 
 BmDrEdit_ScanForward_CheckNote:
@@ -172,7 +172,7 @@ BmDrEdit_ScanBackwardLoop:
 	cp a, 0x81
 	jr nz, BmDrEdit_ScanBackward_CheckNote
 	inc 1, iz
-	incdi16 1, (0x27fe)
+	incw 1, (0x27fe:16)
 	jr BmDrEdit_ScanBackward_NextByte
 
 BmDrEdit_ScanBackward_CheckNote:
@@ -280,7 +280,7 @@ BmDrEdit_CalcNotePosition:
 	jr nz, BmDrEdit_CalcNotePos_VerticalMode
 	cp (0x2798:16), 0
 	jr nz, BmDrEdit_CalcNotePos_ReadFields
-	incdi8 3, (0x2806)
+	inc 3, (0x2806:16)
 	jr BmDrEdit_CalcNotePos_ReadFields
 
 BmDrEdit_CalcNotePos_VerticalMode:
@@ -436,8 +436,8 @@ BmDrEdit_RenderSecondaryVert:
 	ld (0x27c6:16), wa
 	inc 3, wa
 	ld (0x27c8:16), wa
-	decdi16 2, 0x27c6
-	incdi16 2, (0x27c8)
+	decw 2, (0x27c6:16)
+	incw 2, (0x27c8:16)
 	ret
 
 BmDrEdit_CalcSecondaryPosition:
@@ -456,7 +456,7 @@ BmDrEdit_CalcSecondaryPosition:
 	jr nz, BmDrEdit_CalcSecondaryPos_Vert
 	cp (0x2798:16), 0
 	jr nz, BmDrEdit_CalcSecondaryPos_ClampSize
-	incdi8_24 3, (0x0210b0)
+	inc 3, (0x0210b0:24)
 	jr BmDrEdit_CalcSecondaryPos_ClampSize
 
 BmDrEdit_CalcSecondaryPos_Vert:
@@ -1596,7 +1596,7 @@ BmDrEdit_PitchWrapPrevPage:
 	cpda16 xwa, 0x27b2
 	jr z, BmDrEdit_PitchWrap_CheckEnd
 	calr BmDrEdit_CalcEventPosition
-	decdi16 1, 0x2744
+	decw 1, (0x2744:16)
 	ld (0x2784:16), 95
 	call NoteEditSy_SendScrollCmd0
 
@@ -1697,7 +1697,7 @@ BmDrEdit_NavigatePrevPage:
 	calr BmDrEdit_SelectChannelAndLoadPos
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_ScanChannelEvents
-	incdi16 1, (0x2744)
+	incw 1, (0x2744:16)
 	ldw (0x2782:16), 0
 	ld (0x2784:16), 0
 	calr BmDrEdit_LoadAlternatePosition
@@ -1891,7 +1891,7 @@ BmDrEdit_InitFirstStep:
 	ld (0x28af:16), iz
 	ldw (9830:16), 5
 	calr BmDrEdit_InsertStepEntry
-	incdi16 1, (9830)
+	incw 1, (9830:16)
 	calr BmDrEdit_InsertStepEntry
 
 BmDrEdit_InitPlayback:
@@ -2051,7 +2051,7 @@ BmDrEdit_WalkToGrid_ReadNext:
 	cp l, 0x81
 	jr nz, BmDrEdit_WalkToGrid_CheckEvent
 	ld (0x2760:16), 0
-	incdi16 1, (0x275e)
+	incw 1, (0x275e:16)
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupCoordinates
@@ -2261,7 +2261,7 @@ BmDrEdit_SkipToEvent_ReadLoop:
 	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr nz, BmDrEdit_SkipToEvent_EndOfTrack
-	decdi16 1, 0x2772
+	decw 1, (0x2772:16)
 
 BmDrEdit_SkipToEvent_SkipAndCheck:
 	call SeqData_SkipToNextEvent
@@ -2284,7 +2284,7 @@ BmDrEdit_NavigateToPrevAndDisplay:
 	calr BmDrEdit_SelectChannelAndLoadPos
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_ScanChannelEvents
-	incdi16 1, (0x2744)
+	incw 1, (0x2744:16)
 	ldw (0x2782:16), 0
 	ld (0x2784:16), 0
 	calr BmDrEdit_LoadAlternatePosition
@@ -2405,12 +2405,12 @@ BmDrEdit_PitchOverflow_CheckNextPage:
 
 BmDrEdit_PitchOverflow_IncrementBeat:
 	ld (0x2784:16), 0
-	incdi16 1, (0x2782)
+	incw 1, (0x2782:16)
 	jr BmDrEdit_PitchOverflow_UpdateDisplay
 
 BmDrEdit_PitchOverflow_NextPage:
 	ldw (0x2782:16), 0
-	incdi16 1, (0x2744)
+	incw 1, (0x2744:16)
 	ld (0x2784:16), 0
 	call NoteEditSy_SendScrollCmd0
 
@@ -2761,7 +2761,7 @@ BmDrEdit_CountMeasures_Loop:
 	jr z, BmDrEdit_CheckAndReportScanError
 	cp l, 0x81
 	jr nz, BmDrEdit_CountMeasures_SkipEvent
-	incdi16 1, (0x2772)
+	incw 1, (0x2772:16)
 
 BmDrEdit_CountMeasures_SkipEvent:
 	call SeqData_SkipToNextEvent
@@ -3439,7 +3439,7 @@ BmDrEdit_DeleteNote_EndOfTrack:
 BmDrEdit_DeleteNote_CheckStep:
 	cp l, 0x81
 	jr nz, BmDrEdit_DeleteNote_ReadNextEvent
-	incdi16 1, (0x275e)
+	incw 1, (0x275e:16)
 	jr NoteEdit_FinalizeAndRefreshDisplay
 
 BmDrEdit_DeleteNote_ReadNextEvent:
@@ -3544,7 +3544,7 @@ BmDrEdit_ScanChannel_RestoreAndReturn:
 BmDrEdit_ScanChannel_AdvanceSong:
 	cps l, 1
 	jr nz, BmDrEdit_ScanChannel_ClearSlot
-	incdi16 1, (0x287f)
+	incw 1, (0x287f:16)
 	jrl BmDrEdit_ScanChannel_SelectLoop
 
 BmDrEdit_ScanChannel_ClearSlot:
@@ -3740,12 +3740,12 @@ BmDrEdit_CheckAndAdvancePage:
 	add xwa, xbc
 	cp (xwa), 0x0
 	jr z, BmDrEdit_AdvancePage_IncrementBeat
-	incdi16 1, (0x2744)
+	incw 1, (0x2744:16)
 	ldw (0x2782:16), 0
 	jr BmDrEdit_AdvancePage_CalcOffset
 
 BmDrEdit_AdvancePage_IncrementBeat:
-	incdi16 1, (0x2782)
+	incw 1, (0x2782:16)
 
 BmDrEdit_AdvancePage_CalcOffset:
 	ld bc, (0x279a:16)
@@ -3842,7 +3842,7 @@ BmDrEdit_MultiSong_InsertLoop:
 	calr BmDrEdit_InsertStepEntry
 	cp (0x287a:16), 0
 	jr nz, BmDrEdit_MultiSong_Return
-	incdi16 1, (0x275e)
+	incw 1, (0x275e:16)
 	ld wa, (0x2772:16)
 	dec 1, wa
 	ld (0x2772:16), wa
@@ -4047,7 +4047,7 @@ BmDrEdit_CalcBeatMeasure_IncrementCount:
 	ld (0x2772:16), wa
 	cps wa, 0
 	jr z, BmDrEdit_ComputeMeasureAndBeat
-	incdi8 1, (9688)
+	inc 1, (9688:16)
 	jr BmDrEdit_CalcBeatMeasure_ScanLoop
 
 BmDrEdit_ComputeMeasureAndBeat:
@@ -4079,7 +4079,7 @@ BmDrEdit_CalcSongPos_ScanLoop:
 	add xwa, xbc
 	cp (xwa), 0x0
 	jr z, BmDrEdit_CalcSongPos_IncrementCount
-	incdi8 1, (9688)
+	inc 1, (9688:16)
 
 BmDrEdit_CalcSongPos_IncrementCount:
 	inc 1, de
