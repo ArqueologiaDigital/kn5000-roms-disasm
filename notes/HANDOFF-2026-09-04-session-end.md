@@ -101,9 +101,12 @@ Their uncommitted work was committed as explicitly-marked WIP so a resume cannot
   `8b2c062f83b4`. ⚠ Do not pin or merge that WIP commit until it compiles and lit passes. Resume
   from spec step 3; steps 4-8 follow; step 9 (71,667-site conversion) and step 10 (delete the nine
   legacy aliases) are dispatched separately after step 8's four foils go red-then-green.
-* **DSP `ACT 0x0D + 0x0E`** — tools committed and self-tested on `w27/act0d0e`
-  (`d2faef80`, `dfcf9b2f`); the §234 write-up is a DRAFT at `33406258`. The lane was waiting on its
-  a10 arm when killed — check `dsp/analysis/data/` for a10's log before trusting any ⟨A10⟩ row.
+* **DSP `ACT 0x0D + 0x0E`** — ✅ FINISHED and MERGED (§234). Verdict CONFIRMED 1 of 49: the shipped
+  pair survives, confirmed from disk by PARAMETRIC EQ's entry window; both codes stay OPEN because
+  the delay-context consequence is a lag only hardware settles (parked as Q4). ★ "a10" was DSP
+  PROGRAM a10 (MULTI TAP DELAY), a static arm that had completed — NOT a MAME run. Name arms
+  unambiguously. Queue item 0 is now `SRC 0x11` (+49), and a lane (`w28/src11`) is on it: corpus
+  census first, then a device arm, because both known-mathematics harnesses are blind to it.
 
 Landed and merged in the same resumed stretch, all gated: `SRC 0x00` decided (§233, 1 of 7,
 `mem[ptr]` survives; PEQ falsifier found BLIND, fired count 0); 11,840 direct-address sites
