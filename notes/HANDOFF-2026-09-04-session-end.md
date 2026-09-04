@@ -89,3 +89,24 @@ All in `notes/lanes/BRIEF-2026-09-01.md`, and each cost something:
   State the denominator's definition next to the rate.
 * **A rename's blast radius reaches the probes**, which no gate sees — and a stale name in a record
   of what a PAST pass refused is history, to be annotated, not corrected.
+
+## ⚠ RESUMED, then cut by a session rate limit — two lanes preserved as WIP (late 2026-09-04)
+
+The quota was reset, four efforts ran, and then a session limit killed the two still running.
+Their uncommitted work was committed as explicitly-marked WIP so a resume cannot lose it:
+
+* **Backend, encoding selectors** — spec `notes/SPEC-encoding-selectors-2026-09-04.md`. Step 2
+  (parser) is COMPLETE on `llvm-project` branch `tlcs900_backend` at `adfbb55cf835`. Step 3 (the
+  `.td` table + printer) is PARTIAL and UNBUILT on branch `tlcs900_backend-wip-selectors-step3` at
+  `8b2c062f83b4`. ⚠ Do not pin or merge that WIP commit until it compiles and lit passes. Resume
+  from spec step 3; steps 4-8 follow; step 9 (71,667-site conversion) and step 10 (delete the nine
+  legacy aliases) are dispatched separately after step 8's four foils go red-then-green.
+* **DSP `ACT 0x0D + 0x0E`** — tools committed and self-tested on `w27/act0d0e`
+  (`d2faef80`, `dfcf9b2f`); the §234 write-up is a DRAFT at `33406258`. The lane was waiting on its
+  a10 arm when killed — check `dsp/analysis/data/` for a10's log before trusting any ⟨A10⟩ row.
+
+Landed and merged in the same resumed stretch, all gated: `SRC 0x00` decided (§233, 1 of 7,
+`mem[ptr]` survives; PEQ falsifier found BLIND, fired count 0); 11,840 direct-address sites
+converted (SYNTHETIC 147,842 → 136,863; the backend has TWO register-name rules split by
+instruction class; the branch verifier had a latent false green); docs site de-changelogged with
+~20 stale figures corrected; `DbMemDump_StepTable` named.
