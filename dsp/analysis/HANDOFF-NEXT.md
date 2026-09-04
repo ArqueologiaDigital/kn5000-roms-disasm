@@ -4,10 +4,10 @@
 stopped. Everything below remains valid; nothing here is superseded by the park.
 
 **Where everything is**
-- Running record: `SPECULATIVE-APPLIED-REGISTER.md`, §§1–231. **Later sections retract earlier ones
+- Running record: `SPECULATIVE-APPLIED-REGISTER.md`, §§1–233. **Later sections retract earlier ones
   in place — trust the tail.**
 - Index, dead ends and standing rules 1–23: `LEDGER.md` (**dead-ends tier first**).
-- Ready work with grades and sources: `BUILD-LANE-QUEUE.md` — **item 0 is the top of the queue.**
+- Ready work with grades and sources: `BUILD-LANE-QUEUE.md` — ⚠ **item 0 is CONSUMED (§232, then §233); its replacement is named below.**
 - Findings files: `dsp/analysis/*_findings.md`. Archived arm logs: `dsp/analysis/data/`.
 - The 22-page reverb+kernel dossier, regenerable from `dsp/analysis/dossier/`; rendered PDF and the
   1989/1992 NEC DSP data books are in `~/compartilhado/KN7000/`.
@@ -22,13 +22,43 @@ as §229's fabricated-zero census is HALF WRONG**: §229's six are a **SUBSET**,
 worth **ZERO** of the guard's 754 — and all six are now closed. **The silence population and the
 coverage population overlap in NAME and are DISJOINT IN VALUE.**
 
-**The single next action when this resumes** — **`SRC 0x00`, ALONE** (§232 §7.2). It is **+348
+**⇒⇒ AND `SRC 0x00` IS NOW DECIDED TOO — §233, the same day. `1 of 7`, AND THE READING THE DEVICE
+SHIPS SURVIVES.** SINGLE DELAY's lag-**1001** ROM product accepts `mem[ptr]` with sample **45074**
+and refutes `P`, `acc`, `zero`, `DR`, `tA` and the **global** `coef`: under all six, **no injection
+cell in the entire 256-cell pointer space** puts a non-zero datum into the delay line (a09 carries
+9 `SRC 0x00` words and one is the **HEAD WRITE `w46`**). ⛔ **The null-routing rival is REFUTED BY
+EVIDENCE** — `upd6383.cpp` had been citing `action00-discriminator.md` item I, which
+`adjudication-round6.md` §14 voided; the comment is corrected.
+⛔⛔ **AND PARAMETRIC EQ's `0.198 dB` IS *NOT* A FALSIFIER FOR THIS CODE.** Its harness executes a
+**9-word EXCERPT** of a39 (`w5..w13`, ×10) and **none of those words carries `SRC 0x00`** —
+unconditional fired count **0**, all seven readings 0.198 dB. ⇒ ★★★★ **a program's word count is
+not a harness's reach: print a criterion's FIRED COUNT before quoting it.**
+⚠ LIMIT: only the **global** `coef` (mask bit 57) is refuted; bits **58/59**'s gated form is
+invisible at a09 and stays open. ⚠ Corpus: **580 of 622**, not 605 of 648 and not 572 of 599.
+Reproduce: `python3 dsp/tools/sd_rerun.py src00` · `python3 dsp/tools/gate_settle.py src00`.
+
+**The single next action when this resumes** — **`ACT 0x0D` + `ACT 0x0E`, TOGETHER, AT
+`iw19`/`iw21`, IN SINGLE DELAY** (§233 §4.2). They are the largest remaining OPEN codes (**+124**
+and **+110**), the census found a **varying** index at both, and §232 §4 measured why they are one
+question and not two: their resident sites are **ADJACENT in the kernel**. `sd_rerun.py scan`
+already enumerates `act0d × act0e` and a09 carries 4 of each; `three-codes.md` item E's
+*"unconstrained by anything in the corpus"* was reached by checking PARAMETRIC EQ and the LFO and
+**never checking the third context**. **Corpus discrimination FIRST** (rule 13 — §218, §226 and
+§233 each decided a rival with zero MAME runs). ⚠ **Reach-test every criterion before quoting it.**
+
+<details><summary>the action §233 consumed, as it stood</summary>
+
+**`SRC 0x00`, ALONE** (§232 §7.2). It is **+348
 corpus words = 46 % of the entire routing ceiling** (`1178 → 1932`, `38.53 % → 63.20 %`), more than
 3× the whole operation field; its reading `mem[ptr]` is graded *"1 of 6 enumerated, no independent
 support"* by `upd6383.cpp` itself; and the census names **three sites where its index varies**
 (`iw13`/`iw14`/`iw36`), so rule 4 does not block it. **Corpus discrimination FIRST** (rule 13).
 ⚠ It is **605 of 648 paired with `ACTION 0x00`**, the adder's bus term, so **PARAMETRIC EQ's
 0.198 dB and SINGLE DELAY's `+0.02149296` are LIVE falsifiers there** and must both be run.
+⛔ §233: the denominators are C-format-contaminated (**580 of 622**) and **only SINGLE DELAY is
+live** — PARAMETRIC EQ's harness never executes a `SRC 0x00` word.
+
+</details>
 ⚠⚠ **`KN5000_ENABLE_DSP1` NOW DEFAULTS TO 0**: `build.sh` alone produces a binary with **no uPD6383
 device at all** and an empty `upd6383:` log section — indistinguishable from "the instrument was
 never reached". The DSP build is `make ... CPPFLAGS=-DKN5000_ENABLE_DSP1=1`, which `build.sh` does

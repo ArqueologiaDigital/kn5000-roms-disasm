@@ -18316,3 +18316,230 @@ MAME runs), then, only if the corpus cannot decide, a two-sided arm.
 §4's *"OPEN means modelled on a guess"* **FORCED from source**; §7.2 **pre-registered, unrun**.
 ⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
 established it cannot see `upd6383.cpp` at all.
+
+---
+
+## §233 — ★★★★★ `SRC 0x00` IS DECIDED **FROM DISK**, AND THE READING THE DEVICE SHIPS **SURVIVES**: SINGLE DELAY's lag-1001 ROM PRODUCT ACCEPTS `mem[ptr]` AND **REFUTES ALL SIX RIVALS**, THE NULL-ROUTING ONE INCLUDED — SO THE VOIDED CITATION IN `upd6383.cpp` IS REPLACED BY A LIVE REFUTATION. ⛔ AND THE **OTHER** FALSIFIER §232 §7.2 PRE-REGISTERED IS **BLIND BY CONSTRUCTION**: PARAMETRIC EQ's 0.198 dB CRITERION EXECUTES **9 OF a39's 105 WORDS** AND **NOT ONE CARRIES THE CODE** — UNCONDITIONAL FIRED COUNT **0**
+
+<!-- LEDGER-VERDICT: CONFIRMED 1 of 7 (+ retracts §232 §7.2's PEQ falsifier) -->
+NEC **uPD6383GF-3BA** (Technics SX-KN5000, IC311). Date **2026-09-04**. Register head **§233**.
+Static lane. **NO BUILD. NO MAME RUN. NO DEFAULT BEHAVIOUR CHANGE. NO DECODE CHANGE. NO MASK BIT.
+NO NEW ENV GATE.** One source edit, **comment-only and mechanically verified as such**
+(`git diff -U0 | grep -v '^[+-]\s*//'` is empty). Source of the task: `BUILD-LANE-QUEUE.md`
+**item 0** as replaced by §232 §7.2, and `SRC00-HANDOFF-2026-09-04.md` **§4**, which pre-registered
+this pass's shape and its pass condition.
+
+| arm | what | archive |
+|---|---|---|
+| **STATIC-P** | `gate_settle.py src00` — the 0.198 dB biquad criterion over the seven readings | `data/S_233_peq_src00.log.gz` |
+| **STATIC-D** | `sd_rerun.py src00` — the lag-1001 ROM product over the seven readings | `data/S_233_sd_src00.log.gz` |
+
+★ **THE PASS CONDITION, QUOTED FROM `SRC00-HANDOFF-2026-09-04.md` §4:** *"the shipped `mem` must
+reproduce **0.198 dB** and **45074**, and the census is only informative if **at least one** other
+reading gives a different answer — if all seven agree, both harnesses are **blind by construction**
+for this code (rule 15's reach test) and that is itself the pass's finding, to be reported as such
+rather than as support."*
+⇒ **Both branches fired, one per harness.** `mem` reproduces both published numbers; SINGLE DELAY
+separates the readings **1 of 7**; PARAMETRIC EQ does **not**, and its reason is measured rather
+than inferred.
+
+---
+
+## 0. RESULT
+
+| # | statement | grade |
+|---|---|---|
+| **A** | ★★★★★ **SINGLE DELAY SEPARATES THE SEVEN READINGS, `1 of 7`, AND THE SURVIVOR IS THE SHIPPED `mem[ptr]`.** An impulse returns at the cascade lag **1001** carrying **45074** — the ROM's own `((c·c) >> 23)·h >> 23` product (§230) — under `mem` and under nothing else. The six rivals `P`, `acc`, `zero`, `DR`, `tA`, `coef` do not merely miss the value: **no injection cell anywhere in the 256-cell pointer space puts a single non-zero datum into the delay line**. a09 carries **9** `SRC 0x00` words and one of them is the **HEAD WRITE `w46`**, so this code decides what enters the line at all. | **MEASURED**, from disk |
+| **B** | ★★★★★ **THE NULL-ROUTING RIVAL IS REFUTED — BY EVIDENCE THAT EXISTS, NOT BY THE VOIDED ITEM `upd6383.cpp` WAS CITING.** The source's `case 0x00:` called that reading *"attractive and **WRONG**"* on `action00-discriminator.md` **item I**, which `adjudication-round6.md` §14 had **VOIDED** — the file says so itself two paragraphs later. Under `zero` the head write's bus is literally `0`, so a delay program can never delay: **0 of 256 cells reach the line.** ⇒ **The device's conclusion was right and its reason was not; the reason is now supplied.** | **MEASURED** |
+| **C** | ⛔⛔ **AND §232 §7.2's OTHER PRE-REGISTERED FALSIFIER IS BLIND BY CONSTRUCTION.** It made PARAMETRIC EQ's **0.198 dB** live for this code because a39 carries **8** `SRC 0x00` words. It does not follow: the criterion executes a **9-word EXCERPT** — a39's biquad section `w5..w13`, which recurs 10× and covers 88 of the 105 — and the intersection of the executed slots with a39's `SRC 0x00` slots `{2, 3, 50, 52, 55, 56, 58, 104}` is **EMPTY**. The section prints an **UNCONDITIONAL fired count of 0** and all seven readings score **0.198 dB**. ⇒ **a statement about the harness, not about the chip** — and `action00_discriminate.py`'s own comment had already said half of it (*"NO ACTION-0x00 WORD, so `act00` and `order` are INVISIBLE here BY CONSTRUCTION"*); nobody extended it to the SOURCE field. **Rule 15, and the constructive form of it: a program's word count is not a harness's reach.** | **MEASURED** |
+| **D** | ★★★★ **THE BLINDNESS IS PROVED TWO-SIDED, NOT ASSUMED.** Seven identical rows are equally consistent with *"the sweep does not work"*. Rewrite ONE executed word's SOURCE field `0x07 → 0x00` (`0000A001D3 → 0000A00013`, ACTION untouched) and re-score: **6 of 6 non-`mem` readings MOVE**, over **4 distinct values** (`P`/`acc` 48.236, `zero`/`DR`/`tA` 51.090, `coef` 53.474), with the fired count going `0 → 5632`. ⚠ The `mem` row of that control is **true by construction** (`SRC 0x00 = mem[ptr]` is what the `SRC 0x07` word it replaces already did) and rule 20 says that is not a self-test; **the evidence is the other six**. | **MEASURED** |
+| **E** | ⚠⚠ **THE SINGLE DELAY HARNESS IS CIRCULAR IF RUN AS WRITTEN, AND THE CIRCULARITY IS REMOVED RATHER THAN NOTED.** `out_run` derives `p0` with `derive_p0(m, incell)`, which places the **head write's pointer on the driven cell** — i.e. it injects the audio exactly where `mem[ptr]` would read it. Run that way every rival is silent **by the harness's own input-injection assumption** (rule 22's inverted-control clause). ⇒ The pointer walk is `p0`-invariant mod 256, so `(p0, incell)` matters only through `incell − p0`: fixing `p0 = 0x08` and **sweeping the injection cell over all 256** covers every relative placement of the kernel's input, `0x03` being the published one. **The refutation is a statement about all 256 placements.** ★ And the `cells→LINE` column assumes nothing about where the output is read. | **FORCED**, then **MEASURED** |
+| **F** | ★★★★ **RULE 20, FOUR CONTROLS ON THE SWEEP, `4 of 4`, AND ONE OF THEM FAILED FIRST AND IS REPORTED.** (1) **known-GOOD** — the sweep returns exactly `{0x03}`, and it **derives** that cell rather than being told it. (2) **known-BAD, absence** — the round-6 reversed machine reaches the line from **5** cells and **0 of the 5** survive the echo test. ⚠ **This limb was first written as *"reversed must find no cell"* and it FAILED**: the probe is a *necessary* condition and is deliberately **permissive** — which is exactly why the rivals' `0 of 256` is a strong statement and not a stingy probe. (3) **known-BAD, value** — a coefficient scramble puts an echo at 1001 with sample **60 691 ≠ 45 074**; a presence test passes it, this one does not. (4) **relocation** — at `p0 = 0x40` the unique surviving cell moves to `0x3B`, the head write's pointer, so `0x03` is not something the sweep knows. | **MEASURED** |
+| **G** | ★★★ **EXTERNAL CONTROL, `1 of 1`: A DEVICE ARM TAKEN LONG BEFORE THIS SWEEP AGREES WITH IT ON `coef`.** §146 ran mask bit **57** — 145's `coef` applied to every `SRC 0x00` word, which is exactly the menu entry swept here — and measured it **railing unit 1, 98.9 % at full scale, DC leak 99.94 %**. §233 refutes the same reading statically at SINGLE DELAY. **Two instruments, two vehicles, one verdict.** | **MEASURED** (§146) + **MEASURED** |
+| **H** | ⚠ **AND THE LIMIT OF THAT, STATED BEFORE ANYONE READS IT WIDER: THE *GATED* `coef` IS UNTOUCHED.** `upd6383.cpp` carries three forms — bit 57 (every `SRC 0x00` word), bit **58** (only a coefficient-consuming word), bit **59** (only that **and** `f98 == 1`). **None of a09's nine `SRC 0x00` words is a coefficient consumer**, so bits 58 and 59 fall back to `mem[ptr]` here and this criterion **cannot see them**. §233 refutes the **GLOBAL** form only. The gated forms are neither confirmed nor refuted and remain §145/§148's open question. | **MEASURED** |
+| **I** | ★★ **THE CORPUS FIGURE THE SOURCE QUOTES IS A THIRD, OLDER DENOMINATOR, AND IT IS CORRECTED IN PLACE.** `case 0x00:` said *"572 of 599"*; `src00_corpus.py` (self-test 3057/3057) gives **580 of 622** non-C-format words — the same C-format contamination that produced §232's *"605 of 648"* and, before it, §229's. **Eighth occurrence.** ⚠ The **+348 price is unaffected** — `guard_fail()` refuses C-format before it reads `src`. | **MEASURED**, from disk |
+| **J** | ⛔ **THE FOUR STANDING FALSIFIERS ARE A CANNOT-FAIL ROW FOR THIS PASS, AND ARE QUOTED FROM THE RUN, NOT RE-RUN.** This pass changed no executed line of `upd6383.cpp` — the one source edit is comment-only and was verified so mechanically — so a MAME arm would reproduce §232's arm A by construction, which is §231 §5's rule and the one §232 §5 itself applied when it declined to re-quote these two harnesses. Their last measurement is **`data/A_232.log.gz`, taken 2026-09-04 on this same tree** (`kn7000_mame` at `9b9b180`, working tree clean before and after): `§S1` quiet **4.924 %** (`6 589 975 / 133 826 616`, loud 4.923 %) — **did not fall**; `m_rf[0x8D] = 0x009B26 = 39 718`; `§54` `626 920 → 626 920 SILENT / 0 LOUD (peak 0)`, graded first; `§70`/`§211` **ONE ROW**, mean 0.0 span 0 both buckets. **The emulated chip is still silent.** | **MEASURED** (§232 arm A), **cited not re-run** |
+
+**VERDICT — `THE READING THE DEVICE SHIPS IS CONFIRMED 1 of 7; ONE OF THE TWO PRE-REGISTERED FALSIFIERS IS RETIRED AS BLIND; NO DEFAULT MOVES; NO AUDIO CLAIM.`**
+★★ **Item 0 is CONSUMED for the second and last time.** §232 consumed the census and handed on
+`SRC 0x00` alone; §233 has decided it, from disk, with zero MAME runs — the third time this project
+has settled a decode question that way (§218, §226, §233). ⛔ **THE BLOCKER IS STILL *WHAT THE
+COEFFICIENT BASE `0x90` MEANS*** (§227, queue item 12).
+
+---
+
+## 1. RULE 20 — THE SELF-TESTS AND CONTROLS, PRINTED FIRST
+
+### 1.1 The harnesses still reproduce what they reproduced before being widened
+
+```
+   sd_rerun.py selftest                     13 of 13 PASS   (synthetic, two-sided)
+   sd_rerun.py control                      1 ACCEPTED / 7 REJECTED, all 8 as expected
+   gate_settle.py biquad   shipped model    0.198 dB;  12 of 396 triples < 0.5 dB
+   action00_discriminate.py biquad          0.198 dB;  24 of 216 models  < 0.5 dB
+```
+
+★ The widening is a **menu entry** (`coef`) plus an optional word list; `mem` is still every
+harness's default, which is why the four rows above are the right regression to demand.
+
+### 1.2 The addressing control — the sweep must not be comparing different address maps
+
+```
+   pointer map over the SEVEN readings : 1 distinct    ✔ INVARIANT
+      w0:+0  w5:+75  w9:+75  w28:+77  w32:+77  w46:-5
+```
+
+⇒ the walk is a function of `ptr_postinc`/`addr8`, not of the bus, so every reading is scored on
+**the same** address map. Had this printed 2 the sweep below would be void.
+
+### 1.3 The sweep's own four controls
+
+```
+   known-GOOD   (dram_dir, +1)             cells {0x03}          ✔ DERIVED, not told
+   known-BAD    (round-6 reversed)         5 cells reach the line, 0 survive the ECHO test
+   known-BAD    (coefficients scrambled)   echo at 1001, sample 60691 != 45074  -> refused on VALUE
+   RELOCATED    (p0 = 0x40)                cells {0x3B}          ✔ tracks the head write
+   CONTROL: 4 of 4
+```
+
+⚠ **The second limb is a REPORTED FAILURE turned into a calibration.** Written first as *"reversed
+must yield no candidate cells"*, it failed — and the failure is informative: the stage-1 probe is a
+**necessary** condition and admits machines the criterion then rejects. **A permissive probe is
+what makes `0 of 256` mean something.**
+
+---
+
+## 2. THE MEASUREMENT
+
+### 2.1 PARAMETRIC EQ — the reach test, then the score
+
+```
+   the words the criterion EXECUTES (A.PEQ), and their SRC:
+      x0 0000A001D3 SRC 07 | x1 0212A01412 SRC 10 | x2 0202A011D5 SRC 07
+      x3 0202A011D4 SRC 07 | x4 0202A001D5 SRC 07 | x5 01022FF687 SRC 1A
+      x6 0804816415 SRC 10 | x7 0212AFF407 SRC 10 | x8 0000203647 SRC 19
+      SRC codes executed : 07 10 19 1A                    <-- 0x00 IS NOT AMONG THEM
+
+   a39 PARAMETRIC EQ is 105 words; the excerpt is its biquad section, a39 w5..w13,
+   which occurs 10 times and covers 88 of them.
+   a39's SRC 0x00 words are at [2, 3, 50, 52, 55, 56, 58, 104]
+   INTERSECTION with the executed slots : EMPTY
+
+   SRC 0x00 evaluations in one full scoring pass, UNCONDITIONAL count : 0
+
+   src00   worst dB    verdict                      src00   worst dB   moved?
+   mem        0.198    accepted   (fired 0)         mem        0.198   -- by construction
+   P          0.198    accepted   (fired 0)         P         48.236   MOVED   (fired 5632)
+   acc        0.198    accepted   (fired 0)         acc       48.236   MOVED
+   zero       0.198    accepted   (fired 0)         zero      51.090   MOVED
+   DR         0.198    accepted   (fired 0)         DR        51.090   MOVED
+   tA         0.198    accepted   (fired 0)         tA        51.090   MOVED
+   coef       0.198    accepted   (fired 0)         coef      53.474   MOVED
+   1 DISTINCT VALUE                                 4 distinct values, 6 of 6 moved
+        ^ THE REAL EXCERPT                               ^ ONE WORD's SRC 07 -> 00
+```
+
+### 2.2 SINGLE DELAY — the reach test, then the 256-cell sweep, then the score
+
+```
+   a09's own SRC 0x00 words -- 9 of 48, and one is the HEAD WRITE:
+      w0  088013000B class 1 ACT 0B   delay READ  cell 15435
+      w7  w14 w19 w30 w37 w42         class 2 ACT 00 lo12 000
+      w46 0880160000 class 1 ACT 00   delay WRITE cell 15935   <-- THE HEAD WRITE
+      w47 061210E000 class 1 ACT 00
+      of those 9: 0 are coefficient consumers (bit 58's predicate), 0 have f98 == 1 (bit 59's)
+      => the swept `coef' is the GLOBAL form; the GATED forms are IDENTICAL to `mem' here
+
+   THE INJECTION SWEEP -- 256 cells x 7 readings, p0 fixed at 0x08
+      src00   cells->LINE    cells->OUT     candidates
+      mem     1 of 256       1 of 256       0x03          <- the published configuration
+      P       0 of 256       0 of 256       NONE
+      acc     0 of 256       0 of 256       NONE
+      zero    0 of 256       0 of 256       NONE
+      DR      0 of 256       0 of 256       NONE
+      tA      0 of 256       0 of 256       NONE
+      coef    0 of 256       0 of 256       NONE
+
+   THE SCORE -- lag 1001, predicted sample 45074, BIT-EXACT
+      mem     cell 0x03  lag 1001  sample 45074  gain +0.02149296   ★ the ROM product
+      P acc zero DR tA coef   REFUTED -- no cell in the whole pointer space puts an echo at 1001
+   => 1 of 7 ACCEPTED.
+```
+
+⇒ ★★★★ **`45074` and `0.198` are not the same kind of number for this code.** Both are published
+acceptance criteria of equal standing elsewhere; here one is a discriminator with a six-way null
+and the other **cannot fail**. Rule 15's reach test is not a formality — **it changed which of two
+equally-pre-registered falsifiers is evidence.**
+
+---
+
+## 3. WHAT SHIPPED
+
+1. **`dsp/tools/sd_rerun.py src00`** — the seven-reading sweep, its reach test, its `coef`-gating
+   note, the 256-cell injection sweep that removes `derive_p0`'s circularity, and four controls.
+2. **`dsp/tools/gate_settle.py src00`** — the seven-reading biquad sweep, an **unconditional**
+   `SRC00_FIRED` counter, and the patched-excerpt two-sided control. `peq_ir`/`worst_db` take an
+   explicit word list; `step`'s `src00` menu is widened to seven.
+3. **`dsp/tools/action00_discriminate.py`** — `SRC00_MENU` in one place, and the same widening.
+   ⛔ The two hard-coded 6-tuples that reproduce **published** spaces are deliberately left at six.
+4. **`dsp/analysis/data/S_233_{peq,sd}_src00.log.gz`** — both sweeps' output.
+5. **`upd6383.cpp` `case 0x00:` — COMMENT ONLY.** The `1 of 6 enumerated, no independent support`
+   grade is replaced; the VOIDED item-I citation is replaced by §233's refutation; `572 of 599` is
+   corrected to `580 of 622`; and PARAMETRIC EQ is recorded as **not** a falsifier here.
+6. ⛔ **NO DEFAULT FLIP, NO DECODE CHANGE, NO MASK BIT, NO NEW ENV GATE, NO BUILD, NO MAME RUN.**
+   The published binary is untouched and is still the DEFAULT (DSP-off) build.
+
+---
+
+## 4. WHAT THIS PASS IS BLIND TO, AND THE NEXT EXPERIMENT
+
+* **One program decides it.** a09 SINGLE DELAY is one of only three contexts on this chip whose
+  arithmetic is known independently of the DSP. The other two are PARAMETRIC EQ — **shown blind
+  here** — and the LFO, whose words carry `SRC 0x08`, not `SRC 0x00`. There is no second
+  independent context for this code, and that is a property of the ROM, not of this pass.
+* **The GATED `coef` (mask bits 58/59) is invisible here** — §0 item H. It is not refuted.
+* **The refutation is of a reading applied UNIFORMLY.** A reading that is `mem[ptr]` at a09's nine
+  sites and something else elsewhere is not addressed; the corpus offers no handle on it.
+* **`I-RAM[154..199]` is still never uploaded** (§229), and every §232 §7 blindness still holds.
+
+### 4.1 ⛔ CLOSED BY THIS PASS — DO NOT RE-OPEN
+
+1. ⛔ **`SRC 0x00`'s reading.** `mem[ptr]` is `1 of 7`, the six rivals are refuted at SINGLE DELAY
+   over all 256 injection cells, and the device already ships the survivor. **Do not re-derive the
+   null-routing rival from the corpus** — §122 did that once and §233 has now killed it with
+   evidence rather than with a voided citation.
+2. ⛔ **Do not quote PARAMETRIC EQ's `0.198 dB` as a falsifier for `SRC 0x00`.** Fired count 0.
+   ★ It remains a falsifier for everything it *does* reach — the store gate, `op2`, `wrap`.
+3. ⛔ **Do not re-derive the `SRC 0x00` corpus counts.** `580 of 622`; run `src00_corpus.py`.
+
+### 4.2 ★★★★ WHERE THE NEXT PASS SHOULD GO — PRE-REGISTERED
+
+**`ACT 0x0D` (+124) and `ACT 0x0E` (+110), TOGETHER, AT `iw19`/`iw21`.** With `SRC 0x00` settled
+they are the largest remaining OPEN codes (§232 item E), they are the two the census found with a
+**varying** index, and §232 §4 measured the structural constraint that makes them one question and
+not two: **their resident sites are ADJACENT in the kernel** (`iw19`/`iw20`/`iw21`), so whatever
+`0x0D` writes at `iw19`, `0x0E` can overwrite at `iw21`. ★ And SINGLE DELAY is the context to do
+it in: `sd_rerun.py scan` already enumerates `act0d × act0e`, a09 carries **4 of each**, and
+`three-codes.md` item E's *"unconstrained by anything in the corpus"* was reached by checking
+PARAMETRIC EQ and the LFO and **never checking the third context**.
+**Required shape:** corpus/static first (rule 13 — §218, §226 and now §233 have each decided a
+rival with zero MAME runs); a two-sided arm only if the corpus cannot decide.
+**Falsifiers, pre-registered:** `m_rf[0x8D] = 0x009B26`; `§S1`'s **4.924 %** must not **fall**;
+`§54` graded first; `§70`/`§211` as **ONE ROW**; and **SINGLE DELAY's 45074 is LIVE** — a09's
+`ACT 0x0D`/`0x0E` words are inside the delay path, so unlike `SRC 0x00` at PARAMETRIC EQ this one
+must be shown to reach the criterion **before** it is quoted (`sd_rerun.py src00`'s reach test is
+the template). ⛔ PARAMETRIC EQ's 0.198 dB: check its executed-word list first, it is 9 words.
+
+### 4.3 The rest, unchanged
+
+1. ⛔ **THE BLOCKER IS UNMOVED: *what does the coefficient base `0x90` MEAN*** (queue item 12).
+2. ★★★ **SWEEP THE OTHER TWELVE REVERB PRESETS** (queue item 13), one command each, no build.
+3. ★★ **SHIP THE FIVE QUEUED CONTROL REPAIRS** (§230 §7) when the lane is uncontested.
+4. ★ **STATE THE BUILD FLAG IN EVERY BRIEF.** `build.sh` alone yields a binary with **no uPD6383
+   device at all**; the DSP build is `dsp/tools/run_dsp_arm.sh`.
+
+**GRADES.** §0 items A, B, C, D, F, H, I **MEASURED from disk**; E **FORCED then MEASURED**;
+G **MEASURED**, half of it by §146's device arm; J **MEASURED by §232 arm A and CITED, not re-run**
+— and the reason it is not re-run is printed with it. §4.2 **pre-registered, unrun.**
+⛔ `dsp/verify.py` **NOT RUN AS A GATE** — no ROM and no `.dsm` changed, and §230's audit item C1
+established it cannot see `upd6383.cpp` at all.

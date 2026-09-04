@@ -226,6 +226,13 @@ WRAP = A.WRAP
 #  replaced by the function G and the store generalised.  `mirror' proves the
 #  two agree wherever the spaces overlap.
 # ===========================================================================
+#  ★ 233.  An UNCONDITIONAL fired count for the code under test.  Rule 8's
+#  sharpened form: without it, "the reading was never exercised" and "the reading
+#  was exercised and made no difference" print the same table, and which of those
+#  two it is IS this section's whole finding.
+SRC00_FIRED = [0]
+
+
 def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None, obs=None):
     hi, cl = DIS.hi12(w), DIS.class4(w)
     src, act = DIS.lo_src(w), DIS.lo_act(w)
@@ -249,9 +256,15 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None, obs=None):
     elif src == 0x0B:
         bus = s24(st.dr)
     elif src == 0x00:
+        SRC00_FIRED[0] += 1               # ★ 233, rule 8: UNCONDITIONAL
+        #  ★ 233: the menu is SEVEN.  145's `coef' (C-RAM[cursor]) sits in the
+        #  `src08' menu beside this one and was never enumerated for SRC 0x00,
+        #  so every published "1 of 6" for this code is a statement about six.
+        #  Widening the MENU changes no default: `mem' is still BASE's value.
         bus = {"mem": lambda: s24(st.mem[st.p]), "P": lambda: datum(st.P),
                "acc": lambda: datum(st.acc), "zero": lambda: 0,
-               "DR": lambda: s24(st.dr), "tA": lambda: s24(st.ta)}[m.src00]()
+               "DR": lambda: s24(st.dr), "tA": lambda: s24(st.ta),
+               "coef": lambda: s24(coef) if coef is not None else 0}[m.src00]()
     elif src == 0x08:
         bus = {"unity": lambda: MASK23, "zero": lambda: 0,
                "acc": lambda: datum(st.acc), "mem": lambda: s24(st.mem[st.p]),
@@ -903,7 +916,7 @@ PEQ = A.PEQ
 ASH, PSH = A.ASH, A.PSH
 
 
-def peq_ir(m, coefs, n, amp=1 << 22):
+def peq_ir(m, coefs, n, amp=1 << 22, words=None):
     st = A.State()
     out = []
     for t in range(n):
@@ -912,7 +925,7 @@ def peq_ir(m, coefs, n, amp=1 << 22):
         st.P = x << ASH
         st.p = 0
         cur = 0
-        for w in PEQ:
+        for w in (PEQ if words is None else words):
             c = coefs[cur % len(coefs)] if DIS.cursor_fetch(w) else None
             if not step(m, st, w, c, None, ash=ASH, psh=PSH):
                 return None
@@ -922,10 +935,10 @@ def peq_ir(m, coefs, n, amp=1 << 22):
     return out
 
 
-def worst_db(m, banks, n, amp=1 << 22):
+def worst_db(m, banks, n, amp=1 << 22, words=None):
     worst = 0.0
     for name, cram in banks:
-        ir = peq_ir(m, cram, n, amp)
+        ir = peq_ir(m, cram, n, amp, words=words)
         if ir is None:
             return None
         for f in A.FREQS:
@@ -1861,11 +1874,151 @@ have nothing to do with bit 7.""")
     return only7
 
 
+# ===========================================================================
+#  SECTION `src00' -- 233.  THE SEVEN `SRC 0x00' READINGS, SCORED BY THE
+#  0.198 dB BIQUAD CRITERION.  Pre-registered by 232 sect. 7.2 and by
+#  SRC00-HANDOFF-2026-09-04.md sect. 4.
+#
+#  THE QUESTION IT ANSWERS.  `upd6383.cpp' resolves `SRC 0x00' to `mem[ptr]'
+#  on a reading its own comment grades "1 of 6 enumerated, no independent
+#  support", and 232 priced the code at +348 corpus words = 46 % of the whole
+#  routing ceiling.  232 sect. 7.2 pre-registered PARAMETRIC EQ's 0.198 dB as a
+#  LIVE falsifier for it, on the ground that a39 carries 8 `SRC 0x00' words.
+#  Does the 0.198 dB harness SEPARATE the seven readings?
+#
+#  ⚠ THE REACH TEST COMES FIRST (rule 15).  a39 the PROGRAM is 105 words; the
+#  criterion executes an EXCERPT of 9 of them.  A code that is absent from the
+#  excerpt is invisible to the criterion no matter how many times it occurs in
+#  the program, and "all seven readings score 0.198 dB" would then be a
+#  statement about this harness, not about the chip.
+#
+#      python3 dsp/tools/gate_settle.py src00
+# ===========================================================================
+SRC00_MENU = A.SRC00_MENU
+
+
+def _patch_src(w, src):
+    """the same word with lo12's SOURCE field (lo12[10:6], rule 18) replaced."""
+    return (w & ~0xFFF) | ((w & 0xFFF) & ~(0x1F << 6)) | ((src & 0x1F) << 6)
+
+
+def sec_src00():
+    hdr("src00 -- 233: the SEVEN readings against the 0.198 dB biquad criterion")
+    banks = A.peq_banks()
+    ship = M("adder", "load", uniform_gate(NORMAL))
+
+    print("""   ★ REACH TEST FIRST (rule 15).  Count, in the control, how many of the
+   seven readings could possibly move this criterion.  If the answer is `all of
+   them score the same', the criterion is not a test of this code.\n""")
+    print("   the words the criterion actually EXECUTES (A.PEQ), and their SRC:")
+    for i, w in enumerate(PEQ):
+        print("      x%-2d %010X  class %X  SRC %02X  ACT %02X  lo12 %03X"
+              % (i, w, DIS.class4(w), DIS.lo_src(w), DIS.lo_act(w), w & 0xFFF))
+    execsrc = sorted({DIS.lo_src(w) for w in PEQ})
+    print("      SRC codes executed : %s"
+          % " ".join("%02X" % c for c in execsrc))
+
+    #  Where the excerpt sits inside the program, and where the program's own
+    #  SRC 0x00 words sit.  Both read off the ROM, neither written down.
+    import delayline as DL
+    a39 = list(DL.program(39).words)
+    occ = [[k for k, v in enumerate(a39) if v == w] for w in PEQ]
+    s00 = [k for k, w in enumerate(a39)
+           if ((DIS.hi12(w) >> 8) & 0xF) != 0xC and DIS.lo_src(w) == 0x00]
+    covered = sorted(set().union(*[set(o) for o in occ]))
+    print("\n   a39 PARAMETRIC EQ is %d words; the excerpt is its biquad section,"
+          "\n   which occurs %d times, covering %d of them: %s"
+          % (len(a39), len(occ[0]), len(covered),
+             "a39 w%d..w%d and its 9 repeats"
+             % (covered[0], covered[0] + len(PEQ) - 1)))
+    print("   a39's SRC 0x00 words are at %s" % s00)
+    print("   INTERSECTION with the executed slots : %s"
+          % (sorted(set(s00) & set(covered)) or "EMPTY"))
+
+    SRC00_FIRED[0] = 0
+    base = worst_db(ship, banks, 512)
+    fired = SRC00_FIRED[0]
+    print("\n   ⇒ SRC 0x00 evaluations in one full scoring pass, UNCONDITIONAL"
+          " count : %d" % fired)
+    print("      the shipped model scores %.3f dB (published 0.198)   %s"
+          % (base, "OK" if abs(base - 0.198) < 0.01 else "MISMATCH"))
+
+    print("\n   THE SEVEN READINGS (232 sect. 7.2's pre-registered falsifier):")
+    print("      %-6s %-10s %s" % ("src00", "worst dB", "verdict"))
+    vals = {}
+    for r in SRC00_MENU:
+        SRC00_FIRED[0] = 0
+        v = worst_db(M("adder", "load", uniform_gate(NORMAL), src00=r),
+                     banks, 512)
+        vals[r] = v
+        print("      %-6s %-10s %s   (SRC 0x00 fired %d)"
+              % (r, "refused" if v is None else "%8.3f" % v,
+                 "accepted" if (v is not None and v < 0.5) else "REJECTED",
+                 SRC00_FIRED[0]))
+    distinct = len({None if v is None else round(v, 6) for v in vals.values()})
+    print("\n   ⇒ %d DISTINCT dB value%s over the seven readings."
+          % (distinct, "" if distinct == 1 else "s"))
+
+    #  ---------------------------------------------------------------------
+    #  THE TWO-SIDED CONTROL.  Everything above could equally be produced by a
+    #  scorer that ignores `src00' altogether -- a broken sweep and a blind
+    #  criterion print the same table.  Distinguish them: put ONE `SRC 0x00'
+    #  word into the executed excerpt and re-score.  ⚠ The `mem' leg of this
+    #  control is TRUE BY CONSTRUCTION (SRC 0x00 = mem[ptr] IS what the SRC 0x07
+    #  word it replaces already did) and rule 20 says that is not a self-test;
+    #  the leg that carries the evidence is whether the OTHER SIX MOVE.
+    #  ---------------------------------------------------------------------
+    k = next(i for i, w in enumerate(PEQ) if DIS.lo_src(w) == 0x07)
+    patched = tuple(_patch_src(w, 0x00) if i == k else w
+                    for i, w in enumerate(PEQ))
+    print("""
+   ★ TWO-SIDED CONTROL -- can this sweep report a difference AT ALL?
+      Rewrite executed word x%d's SOURCE field 0x07 -> 0x00, ACTION untouched
+      (%010X -> %010X), and re-score.  ⚠ the `mem' row is true BY
+      CONSTRUCTION and is not counted; the evidence is the other six.
+      %-6s %-10s %s""" % (k, PEQ[k], patched[k], "src00", "worst dB", "moved?"))
+    pv = {}
+    for r in SRC00_MENU:
+        SRC00_FIRED[0] = 0
+        v = worst_db(M("adder", "load", uniform_gate(NORMAL), src00=r),
+                     banks, 512, words=patched)
+        pv[r] = v
+        print("      %-6s %-10s %s   (SRC 0x00 fired %d)"
+              % (r, "refused" if v is None else "%8.3f" % v,
+                 "-- (by construction)" if r == "mem" else
+                 ("MOVED" if (v is None) != (vals[r] is None)
+                  or (v is not None and abs(v - vals[r]) > 1e-9) else "same"),
+                 SRC00_FIRED[0]))
+    moved = sum(1 for r in SRC00_MENU if r != "mem"
+                and ((pv[r] is None) != (vals[r] is None)
+                     or (pv[r] is not None and abs(pv[r] - vals[r]) > 1e-9)))
+    pdistinct = len({None if v is None else round(v, 6) for v in pv.values()})
+    print("      CONTROL: %d of 6 non-`mem' readings move; %d distinct values"
+          % (moved, pdistinct))
+    print("      %s" % ("✔ the sweep is LIVE -- it separates readings whenever an"
+                        " executed word carries the code"
+                        if moved >= 1 and pdistinct >= 2 else
+                        "⛔ CONTROL BROKEN -- the sweep cannot report a"
+                        " difference even with the code present"))
+    print("""
+   ⇒ VERDICT.  %s""" % (
+        "the 0.198 dB criterion is BLIND BY CONSTRUCTION for `SRC 0x00': the\n"
+        "      code is executed %d times in a scoring pass, so all seven readings\n"
+        "      score identically and 232 sect. 7.2's pre-registration of it as a\n"
+        "      LIVE falsifier for this code is REFUTED.  a39 carries 8 SRC 0x00\n"
+        "      words; the harness executes none of them." % fired
+        if fired == 0 else
+        "the criterion DOES reach `SRC 0x00' (%d evaluations) and reports %d\n"
+        "      distinct values." % (fired, distinct)))
+    return vals, pv
+
+
 SECTIONS = [("enum", sec_enum), ("price", sec_price), ("census", sec_census),
             ("control", sec_control),
             ("condition", sec_condition), ("hostmix", sec_hostmix),
             ("dead", sec_dead), ("vacuity", sec_vacuity),
-            ("biquad", sec_biquad), ("mirror", sec_mirror),
+            ("biquad", sec_biquad), ("src00", sec_src00),
+            ("mirror", sec_mirror),
             ("lfo", sec_lfo), ("joint", sec_joint)]
 
 if __name__ == "__main__":

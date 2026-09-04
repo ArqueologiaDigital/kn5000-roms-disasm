@@ -620,6 +620,291 @@ def cmd_value():
         row("dest07 = %s" % d, machine(act0d="tA<-bus", act0e="tA<-bus", dest07=d))
 
 
+# ---------------------------------------------------------------------------
+#  4. ★★★ 233 -- THE SEVEN `SRC 0x00' READINGS, SCORED BY THE lag-1001 SAMPLE.
+#
+#  Pre-registered by 232 sect. 7.2 and by SRC00-HANDOFF-2026-09-04.md sect. 4.
+#  `upd6383.cpp' resolves `SRC 0x00' to `mem[ptr]' on a reading its own comment
+#  grades "1 of 6 enumerated, no independent support"; 232 priced the code at
+#  +348 corpus words = 46 % of the entire routing ceiling.  a09 SINGLE DELAY
+#  carries NINE `SRC 0x00' words, and one of them is the HEAD WRITE.
+#
+#  ⚠⚠ AND THAT IS EXACTLY WHERE THIS HARNESS IS CIRCULAR IF IT IS RUN AS
+#  WRITTEN.  `out_run' derives p0 with `derive_p0(m, incell)', which places the
+#  HEAD WRITE's pointer on the driven cell -- i.e. the harness injects the audio
+#  into whatever cell w46 would read IF `SRC 0x00' WERE `mem[ptr]'.  Under any
+#  other reading the input is then poured into a cell the program never looks
+#  at, and the silence that results is the HARNESS's input-injection assumption
+#  and not a property of the machine.  Rule 15, and rule 22's inverted-control
+#  clause: a control built around the answer cannot grade it.
+#
+#  ⇒ THE CIRCULARITY IS REMOVED BY SWEEPING THE INJECTION CELL.  The pointer
+#  walk is p0-invariant modulo 256 (230 D1), so (p0, incell) matters only
+#  through incell - p0: fixing p0 = 0x08 and sweeping incell over all 256 cells
+#  covers EVERY relative placement of the input, including the published one
+#  (incell 0x03).  A reading is refuted only if NO cell in the whole pointer
+#  space lets the ROM's own three-factor product come back at the cascade lag.
+#
+#      python3 dsp/tools/sd_rerun.py src00
+# ---------------------------------------------------------------------------
+SRC00_MENU = A.SRC00_MENU
+
+
+def inject_probe(m, incell, p0, nsamp=120, polarity="correct", sign=+1,
+                 coef_scramble=None):
+    """Cheap NECESSARY condition, and it is reported in TWO parts because they
+    rest on different assumptions:
+
+       line_write_nz  how many times a delay-DRAM WRITE carried a non-zero
+                      datum.  ★ This one assumes NOTHING about where the output
+                      is read: a delay program that never writes a non-zero
+                      sample into its line cannot delay anything, full stop.
+       out_nz         how many frames the output cell 0x0E was non-zero.
+
+    120 frames is longer than any path that does not go through the delay line
+    itself (the line's own latency is 500), and `st.mem' persists across frames,
+    so a chain that hops one memory cell per frame has 120 hops to show itself.
+    Returns (line_write_nz, out_nz), or None if the machine refuses a word."""
+    import random
+    words, cells, cons, coefs = descriptors()
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+    if coef_scramble is not None:
+        coefs = list(coefs)
+        rr = random.Random(coef_scramble)
+        idx = [i for i, c in enumerate(coefs) if c]
+        vals = [coefs[i] for i in idx]
+        rr.shuffle(vals)
+        for i, v in zip(idx, vals):
+            coefs[i] = v
+    rng = random.Random(20260727)
+    dram = DelayDRAM(sign)
+    st = A.State(rng)
+    hit = [0, 0]
+    for n in range(nsamp):
+        st.acc = st.P = 0
+        st.ta = st.tb = 0
+        st.p = p0
+        st.dr = 0
+        st.mem[incell] = (1 << 21) if n == 4 else 0
+
+        def port(w, bus, s):
+            c = cell_of[port.idx]
+            d = DIS.dram_dir(w)
+            if polarity == "reversed":
+                d = "WRITE" if d == "READ" else "READ"
+            if d == "WRITE":
+                dram.write(c, bus)
+                if int(bus) & A.MASK24:
+                    hit[0] += 1
+            else:
+                s.dr = int(dram.read(c)) & A.MASK24
+
+        for k, w in enumerate(words):
+            port.idx = k
+            if not A.step(m, st, w, coefs[k], rng, dram=port,
+                          unknown=lambda: 0):
+                return None
+        if st.mem.get(0x0E, 0):
+            hit[1] += 1
+        dram.advance()
+    return tuple(hit)
+
+
+def cmd_src00():
+    hdr("src00 -- 233: the SEVEN readings against the lag-1001 ROM product")
+    stages, D = cascade()
+    amp = 1 << 21
+    want = predicted_echo_sample(amp)
+    words, cells, cons, coefs = descriptors()
+    cell_of = {i: c for (i, _), c in zip(cons, cells)}
+
+    #  --- 1. THE REACH TEST (rule 15), before any score ---
+    s00 = [i for i, w in enumerate(words)
+           if ((DIS.hi12(w) >> 8) & 0xF) != 0xC and DIS.lo_src(w) == 0x00]
+    print("   ★ REACH TEST FIRST (rule 15) -- a09's own SRC 0x00 words:\n")
+    for i in s00:
+        w = words[i]
+        role = ("delay %s cell %d" % (DIS.dram_dir(w), cell_of[i])
+                if i in cell_of else "-")
+        print("      w%-3d %010X  class %X  ACT %02X  lo12 %03X  %s%s"
+              % (i, w, DIS.class4(w), DIS.lo_act(w), w & 0xFFF, role,
+                 "   <-- THE HEAD WRITE" if i == head_write_iw() else ""))
+    print("      %d of %d words carry the code, and the HEAD WRITE w%d is one"
+          " of them." % (len(s00), len(words), head_write_iw()))
+
+    #  ⚠ WHICH `coef' IS ON TRIAL.  `upd6383.cpp' has THREE forms of 145's
+    #  reading: mask bit 57 = `coef' on EVERY SRC 0x00 word (146 measured it
+    #  railing unit 1, 98.9 % at full scale), bit 58 = only on a
+    #  coefficient-consuming word, bit 59 = only when f98 == 1 as well.  The
+    #  menu entry swept below is the GLOBAL form, bit 57's shape.  Print, from
+    #  the program itself, whether the two GATED forms are even distinguishable
+    #  here -- if no SRC 0x00 word in a09 satisfies their predicate they fall
+    #  back to mem[ptr] and this criterion is BLIND to them (rule 15).
+    cc = [i for i in s00 if DIS.coeff_consumer(words[i])]
+    f98 = [i for i in cc if ((DIS.hi12(words[i]) >> 8) & 3) == 1]
+    print("      ⚠ of those %d: %d are coefficient consumers (mask bit 58's"
+          " predicate)\n        and %d of THOSE have f98 == 1 (bit 59's)."
+          % (len(s00), len(cc), len(f98)))
+    print("        ⇒ the `coef' row below is the GLOBAL form (bit 57).  The two"
+          " GATED forms\n          are %s here."
+          % ("IDENTICAL to `mem' and therefore INVISIBLE to this criterion"
+             if not cc else "distinguishable at w%s" % cc))
+
+    #  --- 2. THE ADDRESSING CONTROL: the walk must not depend on the reading ---
+    print("\n   ★ CONTROL -- the pointer walk must be reading-INVARIANT, or the"
+          "\n     sweep below is comparing different address maps:")
+    offs = {r: tuple(sorted(ptr_offsets(machine(act0d="tA<-bus",
+                                                act0e="tA<-bus",
+                                                src00=r)).items()))
+            for r in SRC00_MENU}
+    same = len(set(offs.values())) == 1
+    print("      %d distinct pointer maps over the seven readings   %s"
+          % (len(set(offs.values())),
+             "✔ INVARIANT" if same else "⛔ CONFOUNDED -- stop here"))
+    print("      map: %s" % ", ".join("w%d:%+d" % (k, (v ^ 0x80) - 0x80)
+                                      for k, v in offs["mem"]))
+
+    #  --- 2b. THE SWEEP's OWN CONTROLS.  Rule 20: a sweep that reports NONE
+    #      for six of seven readings is indistinguishable from a sweep that
+    #      cannot find anything.  Three limbs, on machines whose answer is known
+    #      independently of `src00': one that must be ACCEPTED, one that must be
+    #      refused on ABSENCE, and one that must be refused on VALUE while the
+    #      echo is PRESENT (230's point -- a presence test passes that one). ---
+    P0 = 0x08
+
+    def sweep(m, **kw):
+        return [c for c in range(256)
+                if (lambda pr: pr and (pr[0] or pr[1]))(
+                    inject_probe(m, c, P0, **kw))]
+
+    mm = machine(act0d="tA<-bus", act0e="tA<-bus", src00="mem")
+    print("\n   ★ CONTROL -- the sweep must ACCEPT, must refuse on ABSENCE, and"
+          "\n     must refuse on VALUE with the echo PRESENT:")
+    ctl = []
+    good = sweep(mm)
+    ok = (good == [0x03])
+    ctl.append(ok)
+    print("      known-GOOD   (dram_dir, +1)          cells %-14s %s"
+          % (["0x%02X" % c for c in good],
+             "✔ and it is the head write's cell, DERIVED" if ok
+             else "⛔ CONTROL BROKEN"))
+    #  ⚠ REPORTED FAILURE, AND IT IS A CALIBRATION, NOT A DEFECT.  The first
+    #  form of this limb demanded `no candidate cells' from the reversed
+    #  machine, and it FAILED: reversed reaches the line from FIVE cells.  The
+    #  probe is a NECESSARY condition and is deliberately PERMISSIVE -- which
+    #  is exactly why the six rivals' `0 of 256' below is a strong statement
+    #  and not a stingy probe.  The limb belongs at the ECHO test, where the
+    #  reversed machine is in fact refused from every one of its five cells.
+    bad = sweep(mm, polarity="reversed")
+    badv = [c for c in bad
+            if (lambda r: r and any(e[0] == D and int(e[1]) == want
+                                    for e in echoes(*r)))(
+                out_run(mm, nsamp=D + 120, incell=c, p0=P0,
+                        polarity="reversed"))]
+    ctl.append(badv == [])
+    print("      known-BAD    (round-6 reversed)      cells %-14s %s"
+          % ("%d reach the line" % len(bad),
+             "✔ and 0 of those %d survive the ECHO test -- refused" % len(bad)
+             if badv == [] else "⛔ CONTROL BROKEN"))
+    sc = sweep(mm, coef_scramble=1)
+    res = out_run(mm, nsamp=D + 120, incell=0x03, p0=P0, coef_scramble=1)
+    ev = [e for e in echoes(*res) if e[0] == D] if res else []
+    ctl.append(bool(ev) and int(ev[0][1]) != want)
+    print("      known-BAD    (coefficients scrambled) cells %-13s %s"
+          % (["0x%02X" % c for c in sc],
+             "✔ echo PRESENT at %d, sample %d != %d -- refused on VALUE"
+             % (D, int(ev[0][1]), want) if ev else "⛔ no echo, wrong reason"))
+    #  RELOCATION: the sweep must find the head write's cell wherever it is, so
+    #  that "0x03" is not something the sweep knows.  p0 = 0x40 => cell 0x3B.
+    P0b = 0x40
+    rel = [c for c in range(256)
+           if (lambda pr: pr and (pr[0] or pr[1]))(inject_probe(mm, c, P0b))]
+    wantrel = (P0b + ptr_offsets(mm)[head_write_iw()]) & 0xff
+    ctl.append(rel == [wantrel])
+    print("      RELOCATED    (p0 = 0x%02X)             cells %-14s %s"
+          % (P0b, ["0x%02X" % c for c in rel],
+             "✔ it tracks the head write, it does not know `0x03'"
+             if rel == [wantrel] else "⛔ CONTROL BROKEN"))
+    print("      CONTROL: %d of %d" % (sum(1 for c in ctl if c), len(ctl)))
+
+    #  --- 3. THE INJECTION SWEEP: remove the harness's own circularity ---
+    print("""
+   ★ THE INJECTION SWEEP -- 256 cells x 7 readings, p0 fixed at 0x%02X.
+     `out_run' normally DERIVES p0 so the head write lands on the driven cell,
+     which presupposes the very reading under test.  Sweeping the cell instead
+     asks the two-sided question: is there ANY placement of the kernel's input
+     under which this reading delays the signal?  incell 0x%02X reproduces the
+     published configuration exactly.\n""" % (P0, 0x03))
+    print("      %-6s %-14s %-14s %s"
+          % ("src00", "cells->LINE", "cells->OUT", "candidates"))
+    cands = {}
+    for r in SRC00_MENU:
+        m = machine(act0d="tA<-bus", act0e="tA<-bus", src00=r)
+        hits, line, out = [], 0, 0
+        for c in range(256):
+            pr = inject_probe(m, c, P0)
+            if not pr:
+                continue
+            if pr[0]:
+                line += 1
+            if pr[1]:
+                out += 1
+            if pr[0] or pr[1]:
+                hits.append(c)
+        cands[r] = hits
+        print("      %-6s %-14s %-14s %s"
+              % (r, "%d of 256" % line, "%d of 256" % out,
+                 (", ".join("0x%02X" % c for c in hits[:8])
+                  + (" ..." if len(hits) > 8 else "")) if hits else "NONE"))
+    print("      ⚠ the `cells->LINE' column assumes NOTHING about where the"
+          " output is read.")
+
+    #  --- 4. THE SCORE: the ROM's own three-factor product at the cascade lag --
+    print("""
+   ★ THE SCORE.  For every candidate cell, the full %d-frame run; a reading is
+     ACCEPTED if an impulse returns at lag %d carrying the sample the ROM's own
+     coefficients predict, %d (230's bit-exact criterion).\n""" % (D + 120, D, want))
+    print("      %-6s %-8s %-8s %-12s %-13s %s"
+          % ("src00", "cell", "lag", "sample", "gain", "verdict"))
+    verdict = {}
+    for r in SRC00_MENU:
+        m = machine(act0d="tA<-bus", act0e="tA<-bus", src00=r)
+        best = None
+        for c in cands[r]:
+            res = out_run(m, nsamp=D + 120, incell=c, p0=P0)
+            if res is None:
+                continue
+            ev = [e for e in echoes(*res) if e[0] == D]
+            if not ev:
+                continue
+            lag, samp, g = ev[0]
+            if best is None or int(samp) == want:
+                best = (c, lag, int(samp), g)
+            if int(samp) == want:
+                break
+        if best is None:
+            verdict[r] = False
+            print("      %-6s %-8s %-8s %-12s %-13s %s"
+                  % (r, "-", "-", "-", "-",
+                     "REFUTED -- no cell in the whole pointer space puts an"
+                     " echo at %d" % D))
+        else:
+            c, lag, samp, g = best
+            ok = (samp == want)
+            verdict[r] = ok
+            print("      %-6s 0x%02X     %-8d %-12d %-13.8f %s"
+                  % (r, c, lag, samp, g,
+                     "★ = the ROM three-factor product" if ok
+                     else "echo present, VALUE differs from the ROM product"))
+    n = sum(1 for v in verdict.values() if v)
+    print("\n   ⇒ %d of %d readings ACCEPTED." % (n, len(SRC00_MENU)))
+    print("""   ⚠ NULL, so the row above is not a reach test: `cmd_control' shows the
+     SAME criterion rejects 7 defective machines including three coefficient
+     scrambles that DO put an echo at %d.  The criterion can say NO, and here
+     it says NO to %d of 7 readings.""" % (D, len(SRC00_MENU) - n))
+    return verdict
+
+
 #  ★★★ 230 -- THE SYNTHETIC SELF-TEST (RULE 20, with 228's clause).
 #
 #  228 recorded that a control which IS the open defect is validated exactly
@@ -695,12 +980,14 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", nargs="?", default="all",
-                    choices=["selftest", "taps", "control", "scan", "value", "all"])
+                    choices=["selftest", "taps", "control", "scan", "value",
+                             "src00", "all"])
     a = ap.parse_args()
     #  ★ RULE 20: the self-test is printed FIRST, on every invocation that can
     #  produce a graded number.  It is synthetic, so it cannot be retired by a
     #  repair (228's clause).
-    if a.cmd in ("selftest", "control", "value", "scan", "all"):
+    if a.cmd in ("selftest", "control", "value", "scan", "src00",
+                 "all"):
         ok = cmd_selftest()
         if not ok:
             print("\n  ⛔ SELF-TEST FAILED -- every number below is UNGRADED.\n")
@@ -718,6 +1005,9 @@ def main():
     if a.cmd == "scan":
         print()
         cmd_scan()
+    if a.cmd in ("src00", "all"):
+        print()
+        cmd_src00()
 
 
 if __name__ == "__main__":

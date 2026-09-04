@@ -37,6 +37,13 @@ total and typically 8.** ⇒ ★ **The lever is the ROUTING guard**, and it is t
 §229's fabricated-zero census counts. **File routing/anchoring work above operation-field work.**
 See **§231** and `LEDGER-HEAD.md` TIER 0a.
 
+**⇒ §233 CONSUMED item 0's REPLACEMENT — `SRC 0x00` IS DECIDED, `1 of 7`, AND THE SHIPPED READING
+SURVIVES.** SINGLE DELAY's lag-1001 ROM product (**45074**) accepts `mem[ptr]` and refutes all six
+rivals over **all 256 injection cells**; the null-routing rival finally has a refutation that is not
+a voided citation. ⛔ **PARAMETRIC EQ's 0.198 dB is BLIND for this code** — fired count **0**, its
+harness executes 9 of a39's 105 words. **The top of the queue is now `ACT 0x0D` + `ACT 0x0E`,
+together, in SINGLE DELAY.** See **§233**.
+
 **⇒ §232 CONSUMED item 0 — and corrected the sentence the re-pricing above rests on.** §229's six
 fabricated-zero SRC codes are a **SUBSET** of the routing guard's 33 unanchored codes, 173 of its
 words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant index (13 words);
@@ -44,7 +51,52 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 
 ---
 
-## 0. ~~THE UNANCHORED SRC/ACTION CENSUS~~ — ✅ **CONSUMED by §232, 2026-09-04**
+## 0. ~~THE UNANCHORED SRC/ACTION CENSUS~~ / ~~`SRC 0x00` ALONE~~ — ✅✅ **BOTH CONSUMED — §232 then §233, 2026-09-04**
+
+> ### ★★★★★ **`SRC 0x00` IS DECIDED. `1 of 7`, AND THE READING THE DEVICE SHIPS SURVIVES.** (§233)
+>
+> **From disk. Zero MAME runs, zero builds, no default flipped.**
+> * **SINGLE DELAY's lag-1001 ROM product ACCEPTS `mem[ptr]` and ONLY `mem[ptr]`** — sample
+>   **45074**, gain `+0.02149296`. The six rivals `P acc zero DR tA coef` do not merely miss the
+>   value: **no injection cell in the whole 256-cell pointer space puts a non-zero datum into the
+>   delay line.** a09 carries 9 `SRC 0x00` words and one is the **HEAD WRITE `w46`**.
+> * ⚠ **The harness is CIRCULAR if run as written** (`derive_p0` puts the head write's pointer on
+>   the driven cell, presupposing `mem[ptr]`). Removed by **sweeping the injection cell over all
+>   256**; `0x03` is the published one. Controls **4 of 4**, and one limb **failed first and is
+>   reported** — the stage-1 probe is deliberately permissive, which is what makes `0 of 256` mean
+>   something.
+> * ⛔⛔ **PARAMETRIC EQ's 0.198 dB IS *NOT* A FALSIFIER FOR THIS CODE.** §232 §7.2 pre-registered
+>   it because a39 carries 8 `SRC 0x00` words; the criterion executes a **9-word EXCERPT**
+>   (a39 `w5..w13`, ×10) whose intersection with those 8 slots is **EMPTY** — **unconditional
+>   fired count 0**, all seven readings **0.198 dB**. A patched-excerpt control moves 6 of 6, so
+>   the sweep is live and the blindness is the excerpt's. **Rule 15: a program's word count is not
+>   a harness's reach.**
+> * ★ **The VOIDED citation in `upd6383.cpp` is replaced by a live refutation** — `case 0x00:`
+>   cited `action00-discriminator.md` item I, which `adjudication-round6.md` §14 had voided.
+>   Comment-only source edit; `572 of 599` also corrected to **580 of 622**.
+> * ⚠ **LIMIT: only the GLOBAL `coef` is refuted.** None of a09's nine `SRC 0x00` words is a
+>   coefficient consumer, so mask bits **58/59** (§145/§148's GATED `coef`) fall back to `mem[ptr]`
+>   here and are **invisible to this criterion**. They stay open.
+> * ⚠ Falsifiers: the four standing ones are a **CANNOT-FAIL row** for a pass that changed no
+>   executed line (§231 §5's rule), and are cited from **`data/A_232.log.gz`**, same tree, same
+>   day: `§S1` **4.924 %** did not fall · `m_rf[0x8D] = 0x009B26` · `§54` graded first · `§70`/`§211`
+>   **ONE ROW**. **The chip is still silent.**
+>
+> **Reproduce:** `python3 dsp/tools/sd_rerun.py src00` · `python3 dsp/tools/gate_settle.py src00`
+> · `python3 dsp/tools/src00_corpus.py`. Archives `data/S_233_{sd,peq}_src00.log.gz`.
+>
+> **⇒ THE REPLACEMENT AT THE TOP OF THE QUEUE IS `ACT 0x0D` + `ACT 0x0E`, TOGETHER, AT
+> `iw19`/`iw21`** — see §233 §4.2. They are the largest remaining OPEN codes (**+124** and
+> **+110**), the census found a **varying** index at both, and §232 §4 measured why they are one
+> question: their resident sites are **ADJACENT in the kernel**. ★ Do it in **SINGLE DELAY** —
+> `sd_rerun.py scan` already enumerates `act0d × act0e`, a09 carries 4 of each, and
+> `three-codes.md` item E's *"unconstrained by anything in the corpus"* was reached by checking
+> PARAMETRIC EQ and the LFO and **never checking the third context**. ⚠ **Reach-test the criterion
+> before quoting it** — that is the whole lesson of §233.
+
+<details><summary>§232's entry, which §233 consumed</summary>
+
+### ~~THE UNANCHORED SRC/ACTION CENSUS~~ — ✅ **CONSUMED by §232, 2026-09-04**
 
 > **DONE, and it corrected the premise it was filed on.** `dsp/tools/routing_census.py` (7 self-tests
 > against §231's whole published breakdown, by an INDEPENDENT guard mirror) + the device's
@@ -79,6 +131,10 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 > Corpus discrimination FIRST (rule 13). ⚠ Because it is paired with `ACTION 0x00` —
 > the adder's bus term — **PARAMETRIC EQ's 0.198 dB and SINGLE DELAY's `+0.02149296` become live
 > falsifiers there** and must both be run.
+> ⛔⛔ **§233 REFUTED HALF OF THAT SENTENCE.** SINGLE DELAY is live and decides the code `1 of 7`;
+> **PARAMETRIC EQ's 0.198 dB is BLIND BY CONSTRUCTION** — its harness executes 9 of a39's 105
+> words and none carries `SRC 0x00`, fired count **0**. Being paired with `ACTION 0x00` in the
+> CORPUS says nothing about which words a HARNESS runs.
 >
 > ⚠⚠ **PART-STARTED 2026-09-04 AND STOPPED FOR QUOTA — read
 > `dsp/analysis/SRC00-HANDOFF-2026-09-04.md` before re-opening.** Step 1 of the corpus
@@ -89,9 +145,14 @@ words, worth **0** of its 754. **16 codes are now CLOSED by a measured-constant 
 > (the **+348 price is unaffected**); (2) ⛔ the device's own refutation of the **null-routing**
 > rival cites `action00-discriminator.md` **item I**, which `adjudication-round6.md` §14 **VOIDED**
 > — so `mem[ptr]` and `zero` are **both currently unrefuted** and the device ships one of them.
+> ⛔ **SETTLED BY §233: `zero` is REFUTED and `mem[ptr]` SURVIVES**, on SINGLE DELAY's lag-1001 ROM
+> product over all 256 injection cells. The source's citation is replaced by that refutation.
 > ★ Next action: parameterise `gate_settle.py`'s biquad scorer and `sd_rerun.py` (which hard-codes
 > `src00="mem"`) over the **seven** readings — the menu is `{mem, P, acc, zero, DR, tA}` **plus
 > §145's `coef`**, never enumerated for this code.
+> ✅ **DONE by §233** — both harnesses parameterised and run; see the banner at the top of item 0.
+
+</details>
 
 <details><summary>original entry</summary>
 
