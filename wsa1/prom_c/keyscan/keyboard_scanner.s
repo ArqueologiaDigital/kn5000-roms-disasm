@@ -179,7 +179,7 @@
 ; --------------------------------------------------------------------------
 KeyScan_ReadEvent:
 	link32 0xEE, 0x0C, 0xFA, 0xFF          ; F9973D  link XIZ,0xfffa   [llvm-mc cannot encode this]
-	cpib_da 0x00F329, 0x00                 ; F99741  cp (0x00f329),0x00   [llvm-mc cannot encode this]
+	cp (0x00F329:24), 0x00                 ; F99741  cp (0x00f329),0x00   [llvm-mc cannot encode this]
 	jr nz, KeyScan_ReadEvent__F99762                       ; F99747  jr NZ,0xf99762
 	ld	xbc, (0xF2F3:24)                   ; F99749  ld XBC,(0x00f2f3)
 	cp	xbc, 0x3E8                          ; F9974E  cp XBC,0x000003e8
@@ -412,7 +412,7 @@ KeyScan_InitKeyStateBitmap__F998A3:
 	ld	bc, (xiz-7)                         ; F998A3  ld BC,(XIZ+0xf9)
 	extz	bc                                ; F998A6  extz BC
 	extz	xbc                               ; F998A8  extz XBC
-	addda32_24	xbc, (0xFCC81A)             ; F998AA  add XBC,(0xfcc81a)
+	add	xbc, (0xFCC81A:24)             ; F998AA  add XBC,(0xfcc81a)
 	ld	(xbc), 0                            ; F998AF  ld (XBC),0x00
 	jr KeyScan_InitKeyStateBitmap__F9989E                           ; F998B2  jr T,0xf9989e
 KeyScan_InitKeyStateBitmap__F998B4:
@@ -451,7 +451,7 @@ KeyScan_InitKeyStateBitmap__F998C6:
 	ld	bc, (xiz-3)                         ; F99909  ld BC,(XIZ+0xfd)
 	extz	bc                                ; F9990C  extz BC
 	extz	xbc                               ; F9990E  extz XBC
-	addda32_24	xbc, (0xFCC81A)             ; F99910  add XBC,(0xfcc81a)
+	add	xbc, (0xFCC81A:24)             ; F99910  add XBC,(0xfcc81a)
 	or	(xbc), a                            ; F99915  or (XBC),A
 	jr KeyScan_InitKeyStateBitmap__F99937                           ; F99917  jr T,0xf99937
 KeyScan_InitKeyStateBitmap__F99919:
@@ -464,7 +464,7 @@ KeyScan_InitKeyStateBitmap__F99919:
 	ld	bc, (xiz-3)                         ; F99929  ld BC,(XIZ+0xfd)
 	extz	bc                                ; F9992C  extz BC
 	extz	xbc                               ; F9992E  extz XBC
-	addda32_24	xbc, (0xFCC81A)             ; F99930  add XBC,(0xfcc81a)
+	add	xbc, (0xFCC81A:24)             ; F99930  add XBC,(0xfcc81a)
 	and	(xbc), a                           ; F99935  and (XBC),A
 KeyScan_InitKeyStateBitmap__F99937:
 	jr KeyScan_InitKeyStateBitmap__F998C1                           ; F99937  jr T,0xf998c1
@@ -684,7 +684,7 @@ Link_SendChunk__F99A1A:
 	set_dd8	2, TRUN                        ; F99A2D  set 2,(0x20)
 	inc	6, xsp                             ; F99A30  inc 6,XSP
 Link_SendChunk__F99A32:
-	cpib_da 0x00F32C, 0x00                 ; F99A32  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x00                 ; F99A32  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendChunk__F99A32                       ; F99A38  jr NZ,0xf99a32
 Link_SendChunk__F99A3A:
 	popw	ix                                ; F99A3A  pop IX
@@ -756,7 +756,7 @@ Link_SendCmdE2_MemRead__F99A51:
 	cp	de, 0x4E20                          ; F99A55  cp DE,0x4e20
 	jrl ugt, Link_SendCmdE2_MemRead__F99ABD                     ; F99A59  jrl UGT,0xf99abd
 Link_SendCmdE2_MemRead__F99A5C:
-	cpib_da 0x00F32C, 0x00                 ; F99A5C  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x00                 ; F99A5C  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE2_MemRead__F99A51                       ; F99A62  jr NZ,0xf99a51
 	res_dd8	0, PA                          ; F99A64  res 0,(0x1e)
 	ld	(0xF32C:24), 1                    ; F99A67  ld (0x00f32c),0x01
@@ -785,10 +785,10 @@ Link_SendCmdE2_MemRead__F99A8C:
 	call	0xF9A005                          ; F99AA4  call 0xf9a005
 	ldio	DMA2V, 18                         ; F99AA8  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99AAB  set 2,(0x20)
-	setda_24 7, 0x00852B                   ; F99AAE  set 7,(0x00852b)   [llvm-mc cannot encode this]
+	set 7, (0x00852B:24)                   ; F99AAE  set 7,(0x00852b)   [llvm-mc cannot encode this]
 	inc	6, xsp                             ; F99AB3  inc 6,XSP
 Link_SendCmdE2_MemRead__F99AB5:
-	cpib_da 0x00F32C, 0x00                 ; F99AB5  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x00                 ; F99AB5  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE2_MemRead__F99AB5                       ; F99ABB  jr NZ,0xf99ab5
 Link_SendCmdE2_MemRead__F99ABD:
 	pop	xix                                ; F99ABD  pop XIX
@@ -847,7 +847,7 @@ Link_SendCmdByte__F99ACE:
 	cp	de, 0x4E20                          ; F99AD2  cp DE,0x4e20
 	jr ugt, Link_SendCmdByte__F99B08                      ; F99AD6  jr UGT,0xf99b08
 Link_SendCmdByte__F99AD8:
-	cpib_da 0x00F32C, 0x00                 ; F99AD8  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x00                 ; F99AD8  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdByte__F99ACE                       ; F99ADE  jr NZ,0xf99ace
 	res_dd8	0, PA                          ; F99AE0  res 0,(0x1e)
 	ld	(0xF32C:24), 1                    ; F99AE3  ld (0x00f32c),0x01
@@ -935,7 +935,7 @@ Link_SendCmdE1__F99B1E:
 	cp	de, 0x4E20                          ; F99B22  cp DE,0x4e20
 	jrl ugt, Link_SendCmdE1__F99BB8                     ; F99B26  jrl UGT,0xf99bb8
 Link_SendCmdE1__F99B29:
-	cpib_da 0x00F32C, 0x00                 ; F99B29  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x00                 ; F99B29  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE1__F99B1E                       ; F99B2F  jr NZ,0xf99b1e
 	res_dd8	0, PA                          ; F99B31  res 0,(0x1e)
 	ld	(0xF32C:24), 2                    ; F99B34  ld (0x00f32c),0x02
@@ -956,7 +956,7 @@ Link_SendCmdE1__F99B5A:
 	ld	xbc, (xiz+8)                        ; F99B5D  ld XBC,(XIZ+0x08)
 	ld	(xix), xbc                          ; F99B60  ld (XIX),XBC
 	ld	xbc, (xiz+14)                       ; F99B62  ld XBC,(XIZ+0x0e)
-	stl_da	(0x8542), xbc                   ; F99B65  ld (0x008542),XBC
+	ld	(0x8542:24), xbc                   ; F99B65  ld (0x008542),XBC
 	ld	bc, (xiz+12)                        ; F99B6A  ld BC,(XIZ+0x0c)
 	ld	(xix+4), bc                         ; F99B6D  ld (XIX+0x04),BC
 	ld	bc, (xiz+12)                        ; F99B70  ld BC,(XIZ+0x0c)
@@ -969,7 +969,7 @@ Link_SendCmdE1__F99B5A:
 	set_dd8	2, TRUN                        ; F99B88  set 2,(0x20)
 	inc	6, xsp                             ; F99B8B  inc 6,XSP
 Link_SendCmdE1__F99B8D:
-	cpib_da 0x00F32C, 0x01                 ; F99B8D  cp (0x00f32c),0x01   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x01                 ; F99B8D  cp (0x00f32c),0x01   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE1__F99B8D                       ; F99B93  jr NZ,0xf99b8d
 	ldb	h, 0xC8                            ; F99B95  ld H,0xc8
 Link_SendCmdE1__F99B97:
@@ -985,7 +985,7 @@ Link_SendCmdE1__F99B97:
 	set_dd8	2, TRUN                        ; F99BAB  set 2,(0x20)
 	inc	6, xsp                             ; F99BAE  inc 6,XSP
 Link_SendCmdE1__F99BB0:
-	cpib_da 0x00F32C, 0x00                 ; F99BB0  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
+	cp (0x00F32C:24), 0x00                 ; F99BB0  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE1__F99BB0                       ; F99BB6  jr NZ,0xf99bb0
 Link_SendCmdE1__F99BB8:
 	pop	xix                                ; F99BB8  pop XIX

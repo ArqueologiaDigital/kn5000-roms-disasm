@@ -1,0 +1,472 @@
+######## bit
+  verified 1850/1850 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 1850   refused before assembly: 0
+
+mnemonic    convert   refuse
+resda           867        0
+setda           703        0
+bitda_24        154        0
+setda_24         90        0
+resda_24         28        0
+chgda_24          0        8
+TOTAL          1842        8
+
+register spelling resolved by:
+   no-register                      1842
+
+refusal reasons:
+   new-does-not-assemble               8
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_bit.csv
+
+rewrote 89 files, 1842 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_bit.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## incdec
+  verified 1394/1394 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 1394   refused before assembly: 0
+
+mnemonic    convert   refuse
+incdi8          494        0
+incdi16         379        0
+incdi16_24      192        0
+decdi8          132        0
+decdi16          75        0
+incdi8_24        68        0
+decdi16_24       40        0
+decdi8_24        14        0
+TOTAL          1394        0
+
+register spelling resolved by:
+   no-register                      1394
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_incdec.csv
+
+rewrote 109 files, 1394 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_incdec.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## cp
+  verified 4000/11650 candidate spellings  verified 8000/11650 candidate spellings  verified 11650/11650 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 3341   refused before assembly: 0
+
+mnemonic    convert   refuse
+cpda8           804        0
+cpda16          666        0
+cpib_da         468        0
+cpw_da          442        0
+cpdm8           266        0
+cpda16_24       243        0
+cpda8_24        171        0
+cpdm16          119        0
+cpdm16_24        52        0
+cpdm8_24         29        0
+cpda32           23        0
+cpda32_24        21        0
+cpdm32           20        0
+cpdm32_24        17        0
+TOTAL          3341        0
+
+register spelling resolved by:
+   as-written                       1244
+   index-preserving                 1187
+   no-register                       910
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_cp.csv
+
+rewrote 183 files, 3341 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_cp.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## add
+  verified 3161/3161 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 1068   refused before assembly: 0
+
+mnemonic    convert   refuse
+addda32_24      295        0
+addda16         167        0
+addda32         147        0
+adddm16          93        0
+adddm32          70        0
+addda8           66        0
+addda16_24       61        0
+adddi16          47        0
+addl_da          40        0
+adddm8           39        0
+adddm16_24       20        0
+adddi8            9        0
+adddi16_24        8        0
+addda8_24         6        0
+TOTAL          1068        0
+
+register spelling resolved by:
+   as-written                        705
+   index-preserving                  299
+   no-register                        64
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_add.csv
+
+rewrote 99 files, 1068 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_add.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## sub
+  verified 2851/2851 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 527   refused before assembly: 0
+
+mnemonic    convert   refuse
+subda16         284        0
+subda8           82        0
+subda16_24       42        0
+subda32          26        0
+subdm8           21        0
+subdm32_24       21        0
+subdm16          15        0
+subdi16          10        0
+subdi16_24        8        0
+subdm32           5        0
+subda8_24         3        0
+sub32_24          3        0
+subdm8_24         3        0
+subdi8            3        0
+subdm16_24        1        0
+TOTAL           527        0
+
+register spelling resolved by:
+   index-preserving                  332
+   as-written                        174
+   no-register                        21
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_sub.csv
+
+rewrote 71 files, 527 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_sub.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## and
+  verified 3816/3816 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 960   refused before assembly: 0
+
+mnemonic    convert   refuse
+andda16         295        0
+andda8          257        0
+anddm8          100        0
+anddm16          85        0
+anddi8_24        61        0
+anddi16          37        0
+andda8_24        34        0
+anddi16_24       30        0
+anddm16_24       20        0
+anddm8_24        15        0
+andda16_24       11        0
+anddm32_24        8        0
+andda32_24        7        0
+TOTAL           960        0
+
+register spelling resolved by:
+   as-written                        424
+   index-preserving                  408
+   no-register                       128
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_and.csv
+
+rewrote 72 files, 960 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_and.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## or
+  verified 2069/2069 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 1019   refused before assembly: 0
+
+mnemonic    convert   refuse
+orda8           276        0
+ordi16          255        0
+orddm8          233        0
+orddm16          92        0
+ordm16_24        46        0
+ordi8_24         39        0
+ordm8_24         35        0
+ordi16_24        24        0
+ordm32_24         6        0
+orda32_24         5        0
+orda8_24          4        0
+orda16            4        0
+TOTAL          1019        0
+
+register spelling resolved by:
+   as-written                        551
+   no-register                       318
+   index-preserving                  150
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_or.csv
+
+rewrote 72 files, 1019 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_or.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## xor
+  verified 78/78 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 57   refused before assembly: 0
+
+mnemonic    convert   refuse
+xorda8           31        0
+xordm8           10        0
+xordm16_24        6        0
+xorda8_24         5        0
+xorda16_24        2        0
+xordi8            2        0
+xordi8_24         1        0
+TOTAL            57        0
+
+register spelling resolved by:
+   as-written                         51
+   no-register                         3
+   index-preserving                    3
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_xor.csv
+
+rewrote 18 files, 57 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_xor.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## ld
+  verified 792/792 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 792   refused before assembly: 0
+
+mnemonic    convert   refuse
+stl_da          792        0
+TOTAL           792        0
+
+register spelling resolved by:
+   as-written                        792
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_ld.csv
+
+rewrote 55 files, 792 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_ld.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+
+######## flow
+  verified 867/867 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 867   refused before assembly: 0
+
+mnemonic    convert   refuse
+jp_24           463        0
+call_24         357        0
+pushdi_24        20        0
+lda_24            0       27
+TOTAL           840       27
+
+register spelling resolved by:
+   no-register                       840
+
+refusal reasons:
+   old-does-not-assemble              27
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/refused_flow.csv
+
+rewrote 94 files, 840 lines
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/manifest_flow.txt
+---- comments ----
+
+PASS: every comment survives, in order, unaltered.
+---- gate ----
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+

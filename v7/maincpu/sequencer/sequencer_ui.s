@@ -3401,7 +3401,7 @@ TrAsGrid_HandleSelectEvent:
 	ldw wa, 0x8
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
-	setda 0, 3296
+	set 0, (3296:16)
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
@@ -3424,7 +3424,7 @@ TrAsGrid_DeselectCell:
 	lds wa, 0
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
-	resda 0, 3296
+	res 0, (3296:16)
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
@@ -3610,7 +3610,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65181
-	orddm16 (61904), xhl
+	or (61904:16), hl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -3626,7 +3626,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65130
-	orddm16 (62096), xhl
+	or (62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3635,7 +3635,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65103
-	orddm16 (62096), xhl
+	or (62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3715,7 +3715,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64865
 	cpl	hl
-	anddm16 (61904), xhl
+	and (61904:16), hl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -3732,7 +3732,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64813
 	cpl	hl
-	anddm16 (62096), xhl
+	and (62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3742,7 +3742,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64784
 	cpl	hl
-	anddm16 (62096), xhl
+	and (62096:16), hl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3823,7 +3823,7 @@ TrAsGridChk_Part2_Start:
 	dec 2, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf1d0
+	and hl, (0xf1d0:16)
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E4
 	cps hl, 0
@@ -3865,7 +3865,7 @@ TrAsGridChk_Part2_UpDir:
 	inc 6, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf1d0
+	and hl, (0xf1d0:16)
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F4
 	cps hl, 0
@@ -3921,7 +3921,7 @@ TrAsGridChk_Part3_Start:
 	dec 2, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf290
+	and hl, (0xf290:16)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2404
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_PushCmd
@@ -3963,7 +3963,7 @@ TrAsGridChk_Part3_UpDir:
 	inc 6, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xf290
+	and hl, (0xf290:16)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2414
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_UpPushCmd
@@ -4164,7 +4164,7 @@ AcDemoSong_HandleResize:
 	jr nz, AcCurrentSongBox_RetZero
 	bit 3, (0x28ad:16)
 	jr z, AcDemoSong_SetupDisplay
-	cpdm8 4439, l
+	cp (4439:16), l
 	jr nz, AcCurrentSongBox_RetZero
 
 AcDemoSong_SetupDisplay:
@@ -4491,7 +4491,7 @@ MuteChSet_Dispatch:
 	lda	xhl, (135306:24)
 	jr	36
 MuteChSet_ParamCheck:
-	cpib_da (0x021088), 0x01
+	cp (0x021088:24), 0x01
 	jr nz, MuteChSetFunc_Exit
 	ld a, (0x02108a:24)
 	extz wa
@@ -4530,7 +4530,7 @@ AcMuteToggle_HandleInit:
 	lds32 xde, 0
 	call ApFuncCall
 	ld xde, xhl
-	stl_da (0x02108c), xde
+	ld (0x02108c:24), xde
 	ld xwa, xiz
 	ld xbc, 0x1e0003b
 	call SendEvent
@@ -4605,14 +4605,14 @@ Rt1MuteFunc:
 	jr z, SMFMute_GetBit0Status
 	cp xde, 0x1
 	jr nz, Rt1Mute_ClearAndPost
-	ordi16_24 (0x021086), 1
+	orw (0x021086:24), 1
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr Rt1Mute_PostCall
 
 Rt1Mute_ClearAndPost:
-	anddi16_24 0x021086, 0xfffe
+	andw (0x021086:24), 0xfffe
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4627,14 +4627,14 @@ Rt2MuteFunc:
 	jr z, SMFMute_GetBit1Status
 	cp xde, 0x1
 	jr nz, Rt2Mute_ClearAndPost
-	ordi16_24 (0x021086), 2
+	orw (0x021086:24), 2
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr Rt2Mute_PostCall
 
 Rt2Mute_ClearAndPost:
-	anddi16_24 0x021086, 0xfffd
+	andw (0x021086:24), 0xfffd
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4649,14 +4649,14 @@ DocOrchMuteFunc:
 	jrl z, SMFMute_GetUpperBits
 	cp xde, 0x1
 	jr nz, DocOrchMute_ClearAndPost
-	ordi16_24 (0x021086), 0xfffc
+	orw (0x021086:24), 0xfffc
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr DocOrchMute_PostCall
 
 DocOrchMute_ClearAndPost:
-	anddi16_24 0x021086, 3
+	andw (0x021086:24), 3
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4671,14 +4671,14 @@ PdOrchMuteFunc:
 	jrl z, SMFMute_ClearBit0
 	cp xde, 0x1
 	jr nz, PdOrchMute_ClearAndPost
-	ordi16_24 (0x021086), 0xfffe
+	orw (0x021086:24), 0xfffe
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr PdOrchMute_PostCall
 
 PdOrchMute_ClearAndPost:
-	anddi16_24 0x021086, 1
+	andw (0x021086:24), 1
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4774,7 +4774,7 @@ AcDemoMedley_HandleScrollEvent:
 	call InheritedProc
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x26D6
-	cpib_da (0x021090), 0x01
+	cp (0x021090:24), 0x01
 	jr nz, DPPlayDsp_CheckEntry
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x26CA
 
@@ -6161,19 +6161,19 @@ AcPanicEditSw_HandleFocus:
 	jr z, AcPanicEditSw_SetMode1
 	cp xiz, 0x80
 	jr nz, UI_CheckDisplayModeAndDispatch
-	setda_24 0, (0x02109e)
+	set 0, (0x02109e:24)
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode1:
-	setda_24 1, (0x02109e)
+	set 1, (0x02109e:24)
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode2:
-	setda_24 2, (0x02109e)
+	set 2, (0x02109e:24)
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode3:
-	setda_24 3, (0x02109e)
+	set 3, (0x02109e:24)
 
 UI_CheckDisplayModeAndDispatch:
 	ld c, (0x02109e:24)
@@ -6210,19 +6210,19 @@ AcPanicEditSw_HandleLostInherited:
 	jr z, AcPanicEditSw_ClearMode1
 	cp xiz, 0x80
 	jr nz, EventHandler_FinalizeAndReturn
-	resda_24 0, (0x02109e)
+	res 0, (0x02109e:24)
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode1:
-	resda_24 1, (0x02109e)
+	res 1, (0x02109e:24)
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode2:
-	resda_24 2, (0x02109e)
+	res 2, (0x02109e:24)
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode3:
-	resda_24 3, (0x02109e)
+	res 3, (0x02109e:24)
 
 EventHandler_FinalizeAndReturn:
 	ld xwa, (xsp + 8)
@@ -7132,7 +7132,7 @@ AcIndexToggleFunc_ReturnZero:
 	ret
 
 AcIndexToggleFunc_CheckMatch:
-	cpda8_24 a, (0x0340e4)
+	cp a, (0x0340e4:24)
 	scc16 z, hl
 	extz xhl
 	ret
@@ -7269,7 +7269,7 @@ StsAtPunchCheck_ReturnZero:
 
 MsgToTtlProc:
 	cp xbc, 0x1c00001
-	jp_24 nz, InheritedProc
+	jp nz, (InheritedProc:24)
 	call InheritedProc
 	call GetTitleOld
 	cp xhl, 0x1a000ee
@@ -7998,7 +7998,7 @@ NoteEditBox_EventDispatch2:
 	call	16401834
 	lda	xbc, (xsp+24)
 	ld	a, (135318:24)
-	cpda8	a, 10144
+	cp	a, (10144:16)
 	jr	nz, 17
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
@@ -8351,7 +8351,7 @@ NoteEdit_GateTimeNumeric:
 NoteEdit_FormatChordType:
 	ld xiz, xde
 	ld a, (0x279e:16)
-	addda8_24 a, (0x021096)
+	add a, (0x021096:24)
 	extz wa
 	pushw wa
 	ld xwa, ExtDevice_ModeDispatch_Table_0x1FC
@@ -8375,7 +8375,7 @@ NoteEdit_FormatChordNotes:
 	add	xwa, xbc
 	ld	xbc, 13
 	call	16712319
-	addda32	xhl, (7508)
+	add	xhl, (7508:16)
 	push	xhl
 	jrl	196
 NoteEdit_GetParamValue:
@@ -15401,7 +15401,7 @@ Sqedt_ParamDispatch:
 	.byte 0x00	; v10 does not spell this byte either
 	jr	31
 	.byte 0xd1	; v10 does not spell this byte either
-	stl_da	(4195569), xix
+	ld	(4195569:24), xix
 	popw	hl
 	.byte 0xe3	; v10 does not spell this byte either
 	nop
@@ -16094,23 +16094,23 @@ SeqFormat_DispatchA:
 	ld_rrw	wa, xix, wa
 	lda	xix, (SeqFormat_DispatchA_0x70:24)
 	jp_rr	8, xix, wa
-	cpib_da	(0x03e2e0), 0
+	cp	(0x03e2e0:24), 0
 	jrl	nz, -433
 	ld	xwa, 15
 	jr	62
-	cpib_da	(0x03e2e0), 1
+	cp	(0x03e2e0:24), 1
 	jrl	nz, -449
 	ld	xwa, 18
 	jr	80
-	cpib_da	(0x03e2e0), 0
+	cp	(0x03e2e0:24), 0
 	jrl	nz, -465
 	ld	xwa, 21
 	jr	30
-	cpib_da	(0x03e2e0), 1
+	cp	(0x03e2e0:24), 1
 	jrl	nz, -481
 	ld	xwa, 24
 	jr	48
-	cpib_da	(0x03e2e0), 0
+	cp	(0x03e2e0:24), 0
 	jrl	nz, -497
 	ld	xwa, 27
 	ld	xbc, (xsp+8)
@@ -16121,7 +16121,7 @@ SeqFormat_DispatchA:
 	scc16	z, hl
 	extz	xhl
 	jr	42
-	cpib_da	(0x03e2e0), 1
+	cp	(0x03e2e0:24), 1
 	jrl	nz, -531
 	ld	xwa, 29
 	ld	xbc, (xsp+8)
@@ -16898,7 +16898,7 @@ Equalizer_FormatValue:
 SureJudgeFunc:
 	cp xbc, 0x1c00007
 	jrl nz, ParamCmd_ReturnZero
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr nz, Equalizer_CmdDispatch
 	ld xwa, 0x1480001
 	call MainPostEvent

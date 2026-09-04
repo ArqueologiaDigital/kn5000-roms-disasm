@@ -187,13 +187,13 @@ RhythmEvt_ProcessNote:
 	cp (0x32e5:16), 240
 	jr c, RhythmEvt_AlternateProcess
 	ld a, (0x3316:16)
-	orda8 a, 0x3317
-	orda8 a, 0x3318
-	orda8 a, 0x3312
-	orda8 a, 0x3313
-	orda8 a, 0x3314
-	orda8 a, 0x3315
-	andda8 a, 0x33d4
+	or a, (0x3317:16)
+	or a, (0x3318:16)
+	or a, (0x3312:16)
+	or a, (0x3313:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
+	and a, (0x33d4:16)
 	jr nz, RhythmEvt_AlternateProcess
 	ld a, (0x32df:16)
 	ld (0x3423:16), a
@@ -204,7 +204,7 @@ RhythmEvt_ProcessNote:
 	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
-	cpdm8 0x3424, a
+	cp (0x3424:16), a
 	jr nz, RhythmEvt_AlternateProcess
 	call RhythmEvt_IterateNoteOn
 	jr RhythmEvt_Return
@@ -392,8 +392,8 @@ Rhythm_CrossVoiceCorrect:
 	bit 1, (0x32d7:16)
 	jr nz, Rhythm_CrossVoice_Apply
 	ld w, (0x3316:16)
-	orda8 w, 0x3317
-	orda8 w, 0x3318
+	or w, (0x3317:16)
+	or w, (0x3318:16)
 	and w, 0x3f
 	jr nz, Rhythm_CrossVoice_ClearFlag
 	bit 5, (0x32f3:16)
@@ -402,7 +402,7 @@ Rhythm_CrossVoiceCorrect:
 Rhythm_CrossVoice_Apply:
 	push xiy
 	ld w, a
-	addda8 w, 0x32cb
+	add w, (0x32cb:16)
 	inc 1, w
 	sub w, 0xc
 	ld (0x332e:16), w
@@ -529,7 +529,7 @@ Rhythm_Transp_CheckZero:
 
 Rhythm_Transp_Apply:
 	dec 1, a
-	cpda8 a, 0x32cb
+	cp a, (0x32cb:16)
 	jr ugt, Rhythm_Transp_NegativeOctave
 	add w, a
 	bit 7, w
@@ -551,7 +551,7 @@ Rhythm_Transp_WrapCheck:
 	jr c, Rhythm_Transp_FinalCheck
 
 Rhythm_Transp_WrapLoop:
-	cpda8 w, 0x32cc
+	cp w, (0x32cc:16)
 	jr c, Rhythm_Transp_FinalCheck
 	sub w, 0xc
 	jr Rhythm_Transp_WrapLoop
@@ -560,7 +560,7 @@ Rhythm_Transp_FinalCheck:
 	ld a, w
 	bit 0, (0x332d:16)
 	jr z, Rhythm_Transp_Done
-	cpda8 a, 0x332e
+	cp a, (0x332e:16)
 	jr nc, Rhythm_Transp_Done
 	add a, 0xc
 
@@ -913,13 +913,13 @@ Rhythm_ValidateAndSend:
 	cp (0x32e5:16), 240
 	jr c, Rhythm_Validate_Mismatch
 	ld a, (0x3316:16)
-	orda8 a, 0x3317
-	orda8 a, 0x3318
-	orda8 a, 0x3312
-	orda8 a, 0x3313
-	orda8 a, 0x3314
-	orda8 a, 0x3315
-	andda8 a, 0x33d4
+	or a, (0x3317:16)
+	or a, (0x3318:16)
+	or a, (0x3312:16)
+	or a, (0x3313:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
+	and a, (0x33d4:16)
 	jr nz, Rhythm_Validate_Mismatch
 	ld a, (0x32df:16)
 	ld (0x3423:16), a
@@ -930,7 +930,7 @@ Rhythm_ValidateAndSend:
 	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
-	cpdm8 0x3424, a
+	cp (0x3424:16), a
 	jr nz, Rhythm_Validate_Mismatch
 	calr Rhythm_MatchedPhrase
 	jr Rhythm_Validate_Done
@@ -1219,7 +1219,7 @@ Rhythm_AdvanceTick:
 	jr c, Rhythm_AdvanceTick_Store
 	sub a, 0x60
 	inc 1, w
-	cpda8 w, 1112
+	cp w, (1112:16)
 	jr c, Rhythm_AdvanceTick_Store
 	xor w, w
 
@@ -1331,11 +1331,11 @@ Rhythm_VoiceAssign_PartAOn:
 	and (0x32fc:16), 254
 	and (0x332b:16), 253
 	ld a, (0x3313:16)
-	orda8 a, 0x3316
-	orda8 a, 0x3317
-	orda8 a, 0x3318
-	orda8 a, 0x3314
-	orda8 a, 0x3315
+	or a, (0x3316:16)
+	or a, (0x3317:16)
+	or a, (0x3318:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_PartBDetect
 	or (0x3284:16), 16
@@ -1364,11 +1364,11 @@ Rhythm_VoiceAssign_PartBOn:
 	and (0x32fc:16), 253
 	and (0x332b:16), 251
 	ld a, (0x3312:16)
-	orda8 a, 0x3316
-	orda8 a, 0x3317
-	orda8 a, 0x3318
-	orda8 a, 0x3314
-	orda8 a, 0x3315
+	or a, (0x3316:16)
+	or a, (0x3317:16)
+	or a, (0x3318:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext1Detect
 	or (0x3284:16), 16
@@ -1389,11 +1389,11 @@ Rhythm_VoiceAssign_Ext1Detect:
 	calr Rhythm_QueuePartChangeEvent
 	and (0x3300:16), 254
 	ld a, (0x3317:16)
-	orda8 a, 0x3318
-	orda8 a, 0x3312
-	orda8 a, 0x3313
-	orda8 a, 0x3314
-	orda8 a, 0x3315
+	or a, (0x3318:16)
+	or a, (0x3312:16)
+	or a, (0x3313:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext2Detect
 	or (0x3284:16), 8
@@ -1413,11 +1413,11 @@ Rhythm_VoiceAssign_Ext2Detect:
 	calr Rhythm_QueuePartChangeEvent
 	and (0x3300:16), 253
 	ld a, (0x3316:16)
-	orda8 a, 0x3318
-	orda8 a, 0x3312
-	orda8 a, 0x3313
-	orda8 a, 0x3314
-	orda8 a, 0x3315
+	or a, (0x3318:16)
+	or a, (0x3312:16)
+	or a, (0x3313:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext3Detect
 	or (0x3284:16), 8
@@ -1437,11 +1437,11 @@ Rhythm_VoiceAssign_Ext3Detect:
 	calr Rhythm_QueuePartChangeEvent
 	and (0x3300:16), 251
 	ld a, (0x3316:16)
-	orda8 a, 0x3317
-	orda8 a, 0x3312
-	orda8 a, 0x3313
-	orda8 a, 0x3314
-	orda8 a, 0x3315
+	or a, (0x3317:16)
+	or a, (0x3312:16)
+	or a, (0x3313:16)
+	or a, (0x3314:16)
+	or a, (0x3315:16)
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Perc1Detect
 	or (0x3284:16), 8

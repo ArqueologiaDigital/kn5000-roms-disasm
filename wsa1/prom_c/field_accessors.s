@@ -4074,7 +4074,7 @@ Pack104_SetInputs_SubRecordPair:
 	mul8rr	c, l                                ; FC4C96  mul BC,L
 	add	bc, 19                                 ; FC4C98  add BC,0x0013
 	ld	de, bc                                  ; FC4C9C  ld DE,BC
-	addda16_24	de, (0xE082)                    ; FC4C9E  add DE,(0x00e082)
+	add	de, (0xE082:24)                    ; FC4C9E  add DE,(0x00e082)
 	ld	(0xE084:24), de                        ; FC4CA3  ld (0x00e084),DE
 	ldb	c, 37                                  ; FC4CA8  ld C,0x25
 	extpfx3 0x8E, 0x0A, 0x43                   ; FC4CAA  mul BC,(XIZ+0x0a)
@@ -5458,7 +5458,7 @@ sub_FC578C:
 	push	xix                                   ; FC578E  push XIX
 	ld	ix, (0xE082:24)                        ; FC578F  ld IX,(0x00e082)
 	sub	bc, bc                                 ; FC5794  sub BC,BC
-	cpdm16_24	(0xE086), bc                     ; FC5796  cp (0x00e086),BC
+	cp	(0xE086:24), bc                     ; FC5796  cp (0x00e086),BC
 	jr z, sub_FC578C__FC57BE                   ; FC579B  jr Z,0xfc57be
 	ld	bc, (0xE086:24)                        ; FC579D  ld BC,(0x00e086)
 	extz	xbc                                   ; FC57A2  extz XBC

@@ -379,11 +379,11 @@ DSPCfg_InitDispatchData:
 	ldw	de, 649
 	ldb	l, 207
 	.byte 0x89, 0x82
-	cpdm8	905, a
+	cp	(905:16), a
 	jr	ugt, 9
 	ld	a, l
 	.byte 0x82
-	cpdm8	1161, a
+	cp	(1161:16), a
 	jr	nc, 9
 	cpl	l
 	and	(xde), l
@@ -400,11 +400,11 @@ DSPCfg_InitDispatchData:
 	ldw	de, 649
 	ldb	l, 207
 	.byte 0x89, 0x82
-	cpdm8	905, a
+	cp	(905:16), a
 	jr	ugt, 18
 	ld	a, l
 	.byte 0x82
-	cpdm8	1161, a
+	cp	(1161:16), a
 	jr	c, 9
 	cpl	l
 	and	(xde), l
@@ -854,13 +854,13 @@ ToneGen_FileIO_RestoreFromBackup:
 	pushw 0xf9a0
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	setda 5, 0x8e76
+	set 5, (0x8e76:16)
 	calr SoundParam_NotifyMultipleChanges
 	call SwbtWr_ReinitOutputBank
 	call ToneGen_DispatchByMode
 	call CtrlPanel_RefreshIndicatorState
 	call SwbtWr_NullRet
-	resda 5, 0x8e76
+	res 5, (0x8e76:16)
 	ret
 
 ToneGen_FlashVerify:
@@ -1259,7 +1259,7 @@ Encoder_ReadNextEntry:
 	ld xix, 0x8e78
 	ldi85
 	ldiw
-	incdi8 1, (0x8e8c)
+	inc 1, (0x8e8c:16)
 	ret
 
 Encoder_PrepareCallback:

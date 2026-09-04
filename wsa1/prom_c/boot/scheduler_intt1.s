@@ -94,30 +94,30 @@ INTT1_HANDLER:
 	link32	0xEE, 0x0C, 0xFE, 0xFF
 	sub	xbc, xbc
 	inc	1, xbc
-	addl_da	0x00F2F3, xbc
+	add	(0x00F2F3:24), xbc
 	ld	wa, (0x00E2E3:24)
 	extz	wa
 	ld	(xiz-2), wa
 	jr	INTT1_HANDLER__dispatch
 INTT1_HANDLER__phase0:
-	setda_24 7, 0x007ED1
-	setda_24 4, 0x007ED1
+	set 7, (0x007ED1:24)
+	set 4, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase1:
-	setda_24 6, 0x007ED1
+	set 6, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase2:
-	setda_24 5, 0x007ED1
+	set 5, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase3:
-	setda_24 7, 0x007ED1
-	setda_24 3, 0x007ED1
+	set 7, (0x007ED1:24)
+	set 3, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase4:
-	setda_24 6, 0x007ED1
+	set 6, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase5:
-	setda_24 5, 0x007ED1
+	set 5, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__dispatch:
 	sub	xbc, xbc
@@ -143,8 +143,8 @@ INTT1_PHASE_TABLE:
 	.long	0x00F990A4
 	.long	0x00F990AB
 INTT1_HANDLER__advance:
-	incdi8_24 1, 0x00E2E3
-	cpib_da	0x00E2E3, 0x06
+	inc 1, (0x00E2E3:24)
+	cp	(0x00E2E3:24), 0x06
 	jr	nc, INTT1_HANDLER__wrap
 	jr	INTT1_HANDLER__exit
 INTT1_HANDLER__wrap:

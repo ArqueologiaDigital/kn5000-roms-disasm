@@ -341,7 +341,7 @@ FDC_ValidateTrack:
 	ld (0x8a2b:16), a
 	ld (0x8a36:16), a
 	extz wa
-	cpda16 xwa, 0x8b08
+	cp wa, (0x8b08:16)
 	jr c, FDC_HandleCmd2
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
@@ -1374,7 +1374,7 @@ FDC_CmdRecalibrate:
 	pop qiz
 	ret
 	ld	a, (0x8a36:16)
-	cpda8	a, 35588
+	cp	a, (35588:16)
 	ret	z
 	.byte 0xc1
 	ldw	iz, 6538
@@ -1476,7 +1476,7 @@ FDC_CMD_EXEC:
 	ccf
 	sub	(xhl-34), a
 	ld	wa, (0x8a1e:16)
-	adddm16	(35356), xwa
+	add	(35356:16), wa
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1619,7 +1619,7 @@ FDC_CMD_EXEC:
 	ccf
 	sub	(xhl-34), a
 	ld	wa, (0x8a1e:16)
-	adddm16	(35356), xwa
+	add	(35356:16), wa
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1793,7 +1793,7 @@ FDC_MODE_CONFIG:
 	ld	(0x8a12:16), a
 	ld	a, (0x8a36:16)
 	extz	wa
-	cpda16 xwa, (35592)
+	cp wa, (35592:16)
 	jr	ule, -66
 ; --- FDC_MC_EXIT: FORMAT command execution and sector fill ---
 ; Calls cleanup, sets up FORMAT command (command byte 0x4d).
@@ -1845,7 +1845,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2b:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1855,7 +1855,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2c:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1865,7 +1865,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2d:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1875,7 +1875,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2e:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1885,7 +1885,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2b:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1895,11 +1895,11 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2c:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	.byte 0xd1
 	ld	xiz, 0x3f8a
 	jr	nz, 28
-	incdi8	1, (0x8a2d)
+	inc	1, (0x8a2d:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1912,7 +1912,7 @@ FDC_MC_EXIT:
 	jr	29
 	ld	wa, (0x8b0a:16)
 	srl	wa, 1
-	addda8	a, 0x8a2d
+	add	a, (0x8a2d:16)
 	ld	l, a
 	ld	a, e
 	inc	1, e
@@ -1921,7 +1921,7 @@ FDC_MC_EXIT:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), l
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1931,8 +1931,8 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2e:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
-	incdi8	1, (0x8a2d)
+	incw	1, (0x8a1c:16)
+	inc	1, (0x8a2d:16)
 	inc	1, iy
 	cp	iy, ix
 	jrl	c, -262
@@ -1948,7 +1948,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2b:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1958,7 +1958,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2c:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1968,7 +1968,7 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	wa, (0x8b0a:16)
 	ld	(xhl), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1978,7 +1978,7 @@ FDC_MC_EXIT:
 	add	xde, xbc
 	ld	a, (0x8a2e:16)
 	ld	(xde), a
-	incdi16	1, (0x8a1c)
+	incw	1, (0x8a1c:16)
 	ret
 	ld	(0x8a28:16), 77
 	calr	62532
@@ -2471,7 +2471,7 @@ FDC_Reset_BuildParams:
 	lda xsp, (xsp + 20)
 	ldw wa, 0xc8
 	calr SOME_DELAY
-	incdi16 1, (0xe3da)
+	incw 1, (0xe3da:16)
 	ret
 
 Check_for_Floppy_Disk_Change:

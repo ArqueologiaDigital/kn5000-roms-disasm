@@ -243,10 +243,10 @@ Link_ServiceTask__F99F3D:
 	jr c, Link_ServiceTask__F99F2D                        ; F99F44  jr C,0xf99f2d
 	jr Link_ServiceTask__F99F6C                           ; F99F46  jr T,0xf99f6c
 Link_ServiceTask__F99F48:
-	setda_24 5, 0x00852C                   ; F99F48  set 5,(0x00852c)   [llvm-mc cannot encode this]
+	set 5, (0x00852C:24)                   ; F99F48  set 5,(0x00852c)   [llvm-mc cannot encode this]
 	jr Link_ServiceTask__F99F6C                           ; F99F4D  jr T,0xf99f6c
 Link_ServiceTask__F99F4F:
-	cpib_da 0x008537, 0x01                 ; F99F4F  cp (0x008537),0x01   [llvm-mc cannot encode this]
+	cp (0x008537:24), 0x01                 ; F99F4F  cp (0x008537),0x01   [llvm-mc cannot encode this]
 	jr nz, Link_ServiceTask__F99F6C                       ; F99F55  jr NZ,0xf99f6c
 	jr Link_ServiceTask__F99F63                           ; F99F57  jr T,0xf99f63
 Link_ServiceTask__F99F59:
@@ -264,9 +264,9 @@ Link_ServiceTask__F99F6C:
 	bit_dd8	1, PA                          ; F99F6E  bit 1,(0x1e)
 	jr nz, Link_ServiceTask__F99F97                       ; F99F71  jr NZ,0xf99f97
 	call	0xF9A030                          ; F99F73  call 0xf9a030
-	cpdm16_24	(0xF331), wa                 ; F99F77  cp (0x00f331),WA
+	cp	(0xF331:24), wa                 ; F99F77  cp (0x00f331),WA
 	jr nz, Link_ServiceTask__F99F85                       ; F99F7C  jr NZ,0xf99f85
-	incdi16_24	1, (0xF32F)                 ; F99F7E  incw 1,(0x00f32f)
+	incw	1, (0xF32F:24)                 ; F99F7E  incw 1,(0x00f32f)
 	jr Link_ServiceTask__F99F8C                           ; F99F83  jr T,0xf99f8c
 Link_ServiceTask__F99F85:
 	ldw	(0xF32F:24), 0                    ; F99F85  ld (0x00f32f),0x0000
@@ -283,7 +283,7 @@ Link_ServiceTask__F99F9E:
 	ldio	DMA3V, 0                          ; F99FAE  ld (0x7f),0x00
 	ld	(0xF32D:24), 0                    ; F99FB1  ld (0x00f32d),0x00
 	set_dd8	1, PA                          ; F99FB7  set 1,(0x1e)
-	incdi8_24	1, (0xF32E)                  ; F99FBA  inc 1,(0x00f32e)
+	inc	1, (0xF32E:24)                  ; F99FBA  inc 1,(0x00f32e)
 Link_ServiceTask__F99FBF:
 	pop	xix                                ; F99FBF  pop XIX
 	ret                                    ; F99FC0  ret
@@ -407,7 +407,7 @@ Link_WaitBlockDone:
 	pushw hl                                   ; F99FC1  2b
 	ld hl, (0xF2F3:16)                         ; F99FC2  d1 f3 f2 23   HL := the INTT1 tick count at entry (low 16 bits)
 Link_WaitBlockDone__poll:
-	bitda_24 7, 0x00852B                       ; F99FC6  f2 2b 85 00 cf   still outstanding?
+	bit 7, (0x00852B:24)                       ; F99FC6  f2 2b 85 00 cf   still outstanding?
 	jr z, Link_WaitBlockDone__ok               ; F99FCB  66 27
 	ld bc, (0xF2F3:16)                         ; F99FCD  d1 f3 f2 21
 	sub bc, hl                                 ; F99FD1  db a1
@@ -416,8 +416,8 @@ Link_WaitBlockDone__poll:
 	ldio DMA3V, 0x00                           ; F99FD9  08 7f 00   timed out: stop INT0 feeding the DMA engine
 	ld (0x00F32D:24), 0x00                     ; F99FDC  f2 2d f3 00 00 00   transfer state := idle
 	set_dd8 1, PA                              ; F99FE2  f0 1e b9   raise the handshake line
-	resda_24 7, 0x00852B                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves
-	incdi8_24 1, 0x00F333                      ; F99FEA  c2 33 f3 00 61   the timeout counter
+	res 7, (0x00852B:24)                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves
+	inc 1, (0x00F333:24)                      ; F99FEA  c2 33 f3 00 61   the timeout counter
 	ldw wa, 0xffff                             ; F99FEF  30 ff ff   return -1
 	jr Link_WaitBlockDone__ret                 ; F99FF2  68 02
 Link_WaitBlockDone__ok:

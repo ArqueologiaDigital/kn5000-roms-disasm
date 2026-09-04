@@ -871,7 +871,7 @@ MAIN__bit4:
 	srl	c, 4
 	cps	c, 0
 	jr	z, MAIN__bit5
-	resda_24 4, 0x007ED1
+	res 4, (0x007ED1:24)
 	call	0xF99E5F
 	call	0xFB05EC
 	ld	hl, (0x00E2DF:24)
@@ -883,13 +883,13 @@ MAIN__bit4:
 	jr	le, MAIN__no_wrap
 	ldw	(0x00E2DF:24), 0x0000
 MAIN__no_wrap:
-	cpw_da	0x00F2F1, 0x0000
+	cpw	(0x00F2F1:24), 0x0000
 	jr	z, MAIN__timer_expired
-	decdi16_24 1, 0x00F2F1
+	decw 1, (0x00F2F1:24)
 	jr	MAIN__bit5
 MAIN__timer_expired:
 	ei	6
-	cpib_da	0x007ECC, 0x00
+	cp	(0x007ECC:24), 0x00
 	jr	z, MAIN__reenable
 	ei	0
 	ld	(0x007ECC:24), 0x00
@@ -905,7 +905,7 @@ MAIN__bit5:
 	srl	c, 5
 	cps	c, 0
 	jr	z, MAIN__bit3
-	resda_24 5, 0x007ED1
+	res 5, (0x007ED1:24)
 	calr	(0xF98A75 - 0xF98C8A)
 MAIN__bit3:
 	ld	c, (0x007ED1:24)
@@ -913,7 +913,7 @@ MAIN__bit3:
 	srl	c, 3
 	cps	c, 0
 	jr	z, MAIN__tail
-	resda_24 3, 0x007ED1
+	res 3, (0x007ED1:24)
 	calr	(0xF9915C - 0xF98CA1)
 MAIN__tail:
 	calr	(0xF98CB9 - 0xF98CA4)

@@ -222,16 +222,16 @@ CPanel_InitLEDBuffer:
 	ldio 0xf8, 0x22
 	ldio 0xf8, 0x23
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
@@ -337,7 +337,7 @@ DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
 
 DELAY_2_TICKS__loop:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8d9b
+	sub wa, (0x8d9b:16)
 	cps wa, 2
 	jr lt, DELAY_2_TICKS__loop
 	ret
@@ -349,7 +349,7 @@ DELAY_6_TICKS:
 
 Delay6T_Loop:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8d9b
+	sub wa, (0x8d9b:16)
 	cps wa, 6
 	jr lt, Delay6T_Loop
 	ret
@@ -361,7 +361,7 @@ DELAY_51_TICKS:
 
 Delay51T_Loop:
 	ld wa, (1033:16)
-	subda16 xwa, 0x8d9b
+	sub wa, (0x8d9b:16)
 	cp wa, 0x33
 	jr lt, Delay51T_Loop
 	ret
@@ -531,7 +531,7 @@ CPanel_ButtonPollLoop:
 	ldb w, 0xc	; Third mode if bit 6 set
 
 CPanel_EncoderCheck:
-	cpdm8 0x8e6a, w
+	cp (0x8e6a:16), w
 	ld (0x8e6a:16), w
 	jr nz, CPanel_ButtonPollLoop
 	ld (0x8e6a:16), w
@@ -613,7 +613,7 @@ CPanel_WaitTXReady_Poll:
 	jr CPanel_WaitTXReady_BufferCheck
 
 CPanel_WaitTXReady_Timeout:
-	decdi8 1, 0x8d97
+	dec 1, (0x8d97:16)
 	cp (0x8d97:16), 0
 	jr z, WaitTX_ConfigAndReturn
 	ei 0
@@ -624,7 +624,7 @@ CPanel_WaitTXReady_BufferCheck:
 	; Only reaches here when CP_Flags_A.10 == 00, and I think only CPanel_SM_Idle sets that value...
 
 	ld wa, (0x8dff:16)
-	cpda16 xwa, 0x8dfd
+	cp wa, (0x8dfd:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 
 WaitTX_ConfigAndReturn:
@@ -643,7 +643,7 @@ CPanel_SendCommand:
 	ldw (0x8dfd:16), 0
 	ldw (0x8dff:16), 0
 	ld (0x8e01:16), wa
-	adddi16 0x8dff, 2
+	addw (0x8dff:16), 2
 	or (0x8d8c:16), 2
 	and (0x8d8c:16), 254; CP_Flags_A.10 = 2
 	ld (0x8d8a:16), 4; ROUTINE_1
@@ -695,7 +695,7 @@ INTA_HandleCountdown:
 	ldw (0x8d9f:16), 92
 
 INTA_DecrementRXCount:
-	decdi16 1, 0x8d9f
+	decw 1, (0x8d9f:16)
 	or (0x8d92:16), 64	; CP_Flags_B.6 = 1  ; UNUSED
 	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
 
@@ -775,7 +775,7 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	incdi8 4, (0x8d8a); next = ROUTINE_2
+	inc 4, (0x8d8a:16); next = ROUTINE_2
 	mul a, 0x1
 	mul a, 0x1
 	bit_dd8 6, 0x3c	; PF.6 = state of SCLK1 pin
@@ -809,7 +809,7 @@ CPanel_SM_TXDelay1:
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -829,7 +829,7 @@ CPanel_SM_TXDelay2:
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -847,10 +847,10 @@ CPanel_SM_SendByte1:
 	ldio 0xe3, 0x05
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
 	st_dd8b A, 0xd4
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	cpw (0x8dfd:16), 60
 	jr c, SendByte1_InspectByte
 	ldw (0x8dfd:16), 0
@@ -866,7 +866,7 @@ SendByte1_InspectByte:
 	ld (0x8d8b:16), a
 
 SendByte1_AdvanceState:
-	incdi8 4, (0x8d8a); next = ROUTINE_3
+	inc 4, (0x8d8a:16); next = ROUTINE_3
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -884,25 +884,25 @@ CPanel_SM_SendByteN:
 	ldio 0xe3, 0x05
 	ldio 0xeb, 0xd0	; INTTX1: M=5
 	ld xiy, 0x8e01
-	addda16 xiy, 0x8dfd
+	add iy, (0x8dfd:16)
 	ld a, (xiy)
 	st_dd8b A, 0xd4
-	incdi16 1, (0x8dfd)
+	incw 1, (0x8dfd:16)
 	cpw (0x8dfd:16), 60
 	jr c, SendByteN_CheckDone
 	ldw (0x8dfd:16), 0
 
 SendByteN_CheckDone:
-	decdi8 1, 0x8d8b
+	dec 1, (0x8d8b:16)
 	cp (0x8d8b:16), 1
 	jr z, SendByteN_AdvanceState
 	cp (0x8d8b:16), 0
 	jr z, SendByteN_AdvanceState
-	decdi8 4, 0x8d8a	; previous routine
+	dec 4, (0x8d8a:16)	; previous routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 SendByteN_AdvanceState:
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -910,7 +910,7 @@ CPanel_SM_TXComplete:
 	ld (0x8d8b:16), 0
 	ld (0x8d8a:16), 0; ROUTINE_0
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	cps wa, 2
 	jr c, TXComplete_BufferEmpty
 	ld (0x8d8a:16), 4; ROUTINE_1
@@ -957,10 +957,10 @@ CPanel_SM_RXByte1:
 	ldio 0xeb, 0x0d
 	ld_sd8b A, 0xd4
 	ld xiy, 0x8da1
-	addda16 xiy, 0x8d9f
+	add iy, (0x8d9f:16)
 	ld (xiy), a
 	ld hl, (0x8d9f:16)
-	subda16 xhl, 0x8d9d
+	sub hl, (0x8d9d:16)
 	jr nc, RXByte1_ForwardDist
 	neg hl
 	ld iy, hl
@@ -978,7 +978,7 @@ RXByte1_CheckThreshold:
 
 RXByte1_AdvanceWritePtr:
 	and (0x8d92:16), 254; CP_Flags_B.0 = 0
-	incdi16 1, (0x8d9f)
+	incw 1, (0x8d9f:16)
 	cpw (0x8d9f:16), 92
 	jr c, RXByte1_InspectByte
 	ldw (0x8d9f:16), 0
@@ -993,24 +993,24 @@ RXByte1_InspectByte:
 	ld (0x8d8b:16), a
 
 RXByte1_AdvanceState:
-	incdi8 4, (0x8d8a); next routine
+	inc 4, (0x8d8a:16); next routine
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_RXByteN:
 	ld_sd8b A, 0xd4
 	ld xiy, 0x8da1
-	addda16 xiy, 0x8d9f
+	add iy, (0x8d9f:16)
 	ld (xiy), a
 	bit 0, (0x8d92:16); CP_Flags_B.0
 	jr nz, RXByteN_CheckDone
-	incdi16 1, (0x8d9f)
+	incw 1, (0x8d9f:16)
 	cpw (0x8d9f:16), 92
 	jr c, RXByteN_CheckDone
 	ldw (0x8d9f:16), 0
 
 RXByteN_CheckDone:
-	decdi8 1, 0x8d8b
+	dec 1, (0x8d8b:16)
 	cp (0x8d8b:16), 1
 	jr nz, RXByteN_ContinueRX
 	ld (0x8d8b:16), 0
@@ -1055,12 +1055,12 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 
 
 CPanel_InterruptPoll_MainLoop:
-	incdi8 1, (0x8d9a)
+	inc 1, (0x8d9a:16)
 	cp (0x8d9a:16), 42; =42 ;-)
 	jr ule, PollLoop_DispatchWork
 	ei 6
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	jr nc, PollLoop_TXForwardDist
 	neg wa
 	ld hl, wa
@@ -1099,7 +1099,7 @@ PollLoop_DispatchWork:
 						; }
 
 
-	adddi8 0x8d8c, 64
+	add (0x8d8c:16), 64
 	cp a, 0xc0
 	jr nz, PollLoop_DoLEDUpdate	; if (CP_Flags_A.76++ == 3) {
 
@@ -1124,7 +1124,7 @@ PollLoop_CheckTXReady:
 
 	; Only reaches here when (CPANEL_TX_RX_FLAGS), CP_Flags_A.10 == 00:
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	jr nc, PollLoop_StartTX
 	neg wa
 	ex8 a, w
@@ -1160,7 +1160,7 @@ PollLoop_Return:
 
 
 PollLoop_BusyRetry:
-	incdi8 1, (0x8d98)
+	inc 1, (0x8d98:16)
 	cp (0x8d98:16), 20
 	jr ule, PollLoop_Return
 
@@ -1194,7 +1194,7 @@ CPanel_RX_ParseNext:
 	jrl c, CPanel_RX_Done
 
 	ld wa, (0x8d9f:16)
-	subda16 xwa, 0x8d9d
+	sub wa, (0x8d9d:16)
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
 	ex8 a, w
@@ -1432,7 +1432,7 @@ CPanel_UpdateLEDs__check_next:
 
 LEDs_CheckTXSpace:
 	ld wa, (0x8dff:16)
-	subda16 xwa, 0x8dfd
+	sub wa, (0x8dfd:16)
 	jr nc, LEDs_TXForwardDist
 	neg wa
 	ld hl, wa

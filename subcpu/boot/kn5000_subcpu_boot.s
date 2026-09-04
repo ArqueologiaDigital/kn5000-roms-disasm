@@ -653,7 +653,7 @@ BOOT_INIT__clock_done:
 	ld (357:16), 113
 	ld (354:16), 139
 	ld (355:16), 88
-	resda 4, 358
+	res 4, (358:16)
 
 	; More timer configuration
 	ld (320:16), 102
@@ -701,7 +701,7 @@ __jrt_nop_FF840C:
 ; ==============================================================================
 
 MAIN_LOOP:
-	resda 6, 1278	; Clear ready flag
+	res 6, (1278:16)	; Clear ready flag
 MAIN_LOOP__wait_loop:
 	bit 6, (1278:16); Check if payload ready
 	jr z, MAIN_LOOP__check_status
@@ -742,7 +742,7 @@ RESET_ENTRY:
 
 TONE_GEN_CHANNEL_INIT:
 	pushw_erp 0xFA	; Save QIZ (QIZH used as loop counter)
-	cpw_da (16776942), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
+	cpw (16776942:24), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
 	jr nz, TONE_GEN_CHANNEL_INIT__done	; Skip if memory not 0xFFFF (already initialized)
 	ldib_erp 0xFB, 0	; Clear loop counter (QIZH = 0)
 TONE_GEN_CHANNEL_INIT__loop:
@@ -1298,7 +1298,7 @@ SendParams_E2__wait_cpu_ready:
 	ldc_cr16 wa, 0x48	; DMA count = 10
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
-	setda 7, 1278	; Set DMA ready flag
+	set 7, (1278:16)	; Set DMA ready flag
 	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
 SendParams_E2__wait_dma_done:
@@ -1498,7 +1498,7 @@ InterCPU_RX_Handler__not_e2:
 	cp a, 0xE3	; Command E3?
 	jr nz, InterCPU_RX_Handler__default_cmd
 	; E3: Signal payload ready
-	setda 6, 1278
+	set 6, (1278:16)
 	jr InterCPU_RX_Handler__clear_flag
 InterCPU_RX_Handler__default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
@@ -1621,12 +1621,12 @@ CMD_Dispatch_Handler__state3:
 	ld (1308:16), 255
 	ld (1304:16), 0
 	set_dd8 1, 0x34
-	setda 7, 1364
+	set 7, (1364:16)
 	jr CMD_Dispatch_Handler__check_watchdog
 CMD_Dispatch_Handler__state4:
 	; State 4: Final state, clear ready flag
 	ld (1304:16), 0
-	resda 7, 1278
+	res 7, (1278:16)
 CMD_Dispatch_Handler__set_flag_exit:
 	set_dd8 1, 0x34
 CMD_Dispatch_Handler__check_watchdog:
@@ -1669,7 +1669,7 @@ INIT_MEMORY_TEST:
 	calr HARDWARE_CALIBRATION_SEQUENCE	; 0xFF8C80 (3-byte relative call)
 	cp hl, 0xFFFF
 	jr nz, INIT_MEMORY_TEST__no_error
-	setda 3, 1366
+	set 3, (1366:16)
 INIT_MEMORY_TEST__no_error:
 	ld a, (1366:16)
 	extz wa

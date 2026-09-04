@@ -115,7 +115,7 @@ Boot_Init__pause2:
 	ld (357:16), 113
 	ld (354:16), 139
 	ld (355:16), 88
-	resda 4, 358
+	res 4, (358:16)
 
 	; === Block Chip Select Low Configuration ===
 	ld (320:16), 17

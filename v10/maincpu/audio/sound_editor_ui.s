@@ -953,7 +953,7 @@ UpdSeSel_ExtendedOps_Data:
 	jr	lt, -57
 	swi	2
 	inc	3, ix
-	addl_da	0x1da9d8, xix
+	add	(0x1da9d8:24), xix
 	jrl	lt, 7664
 	.byte 0x97
 	jrl	lt, -28688
@@ -5242,7 +5242,7 @@ SeMenu_CopyWriteUpdate_Data:
 	sub	a, w
 	ld	w, a
 	.byte 0xc7
-	addl_da	0x81c889, xsp
+	add	(0x81c889:24), xsp
 	.byte 0x04
 	swi	1
 	jr	nc, 71
@@ -5274,7 +5274,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, b
 	jr	nc, 13
 	.byte 0xc7
-	addl_da	0x08689a, xsp
+	add	(0x08689a:24), xsp
 	.byte 0x04
 	swi	2
 	jr	nc, 3
@@ -7445,7 +7445,7 @@ SeMenu_PopupDialog_Close:
 
 SeMenu_PopupDialog_Close_Data:
 	ld a, (0x8d38:16)
-	cpdm8_24 (0x020c38), a
+	cp (0x020c38:24), a
 	jr nz, SeMenu_ValueEditor_Init
 	cp a, 0x20
 	jr c, SeMenu_ValueEditor_Init
@@ -7461,7 +7461,7 @@ SeMenu_PopupDialog_Close_Data:
 SeMenu_ValueEditor_Init:
 	cp (0x8d38:16), 32
 	jrl nz, SeMenu_ValueEditor_Data3
-	cpib_da (0x020c38), 0x10
+	cp (0x020c38:24), 0x10
 	jrl nz, SeMenu_ValueEditor_Data3
 	calr SeMenu_NameEditor_Init
 	jrl SeMenu_ListSelector_ScrollDown
@@ -11115,7 +11115,7 @@ SeBitmap_EnvCurve5:
 	ldwio	146, 8983
 	halt
 	pop	xsp
-	ordm16_24	(0x0a1b1d), ix
+	or	(0x0a1b1d:24), ix
 	nop
 	.byte 0x1f
 	nop
@@ -11269,7 +11269,7 @@ SeBitmap_EnvCurve5:
 	exts	c
 	.byte 0xf1
 	nop
-	xordm16_24	(0xf113), bc
+	xor	(0xf113:24), bc
 	zcf
 	.byte 0xf1
 	nop
@@ -14360,7 +14360,7 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0xc2, 0x00, 0x0a, 0x0a, 0x05
 	nop
-	ordm16_24	(8704), xde
+	or	(8704:24), de
 	nop
 	.byte 0x0a, 0x0a, 0x2d, 0x00, 0xd2, 0x00, 0x4a, 0x00
 	.byte 0xea
@@ -14381,7 +14381,7 @@ TuningSystem_Handler_Table:
 	.byte 0xea
 	nop
 	ldwio	10, 285
-	ordm16_24	(80384), xde
+	or	(80384:24), de
 	nop
 	normal
 	ldwio	245, 0xde00

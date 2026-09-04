@@ -11505,7 +11505,7 @@ INTTX1_HANDLER:	; 01F765h
 	push xwa
 	bit 0, (4148:16)	; Check sync flag
 	jr z, Serial1_TX_Normal
-	resda 0, 4148
+	res 0, (4148:16)
 	ldio 0xD4, 0xFE	; Send sync byte
 	jr Serial1_TX_CheckEmpty
 
@@ -11634,7 +11634,7 @@ Serial1_CommandHandler_RX_F4F5:
 	cp a, 0xF4
 	ret nz
 	ld (4152:16), 3
-	setda 2, 4148
+	set 2, (4148:16)
 	ei 6
 	ldio 0xD6, 0x2B
 	ei 0
@@ -11642,7 +11642,7 @@ Serial1_CommandHandler_RX_F4F5:
 
 Serial1_F5_BaudRate_Switch:
 	ld (4152:16), 2
-	setda 2, 4148
+	set 2, (4148:16)
 	ret
 
 Audio_CheckQueuedData_Send:
@@ -11653,7 +11653,7 @@ Audio_CheckQueuedData_Send:
 	cp xde, 0x87
 	ret c
 	ld (4140:16), xbc
-	setda 0, 4148
+	set 0, (4148:16)
 	calr Serial1_Enable_TX_Interrupt
 	ret
 
@@ -11733,7 +11733,7 @@ Audio_Process_Final:
 
 INIT_RING_BUFFERS:
 	ld (4148:16), 0
-	setda 0, 4148
+	set 0, (4148:16)
 	ld (4152:16), 0
 	ld xiy, 0xF434
 	ld xix, 0xE00

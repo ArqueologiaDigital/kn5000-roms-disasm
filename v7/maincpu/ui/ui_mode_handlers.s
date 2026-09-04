@@ -758,9 +758,9 @@ EffectMode_ReinitSound_CallNotify:
 	call	16566832
 	jp	15668425
 EffectMode_ReinitWithFlag:
-	setda 5, (0x8cb6)
+	set 5, (0x8cb6:16)
 	calr EffectMode_CheckModeAndReinit
-	resda 5, (0x8cb6)
+	res 5, (0x8cb6:16)
 
 	ret
 
@@ -1351,21 +1351,21 @@ Test_Video_RAM_IC207:
 	call (xhl)
 	ldw (0x1a0000:24), 0x5a5a; VRAM self-test pattern 1
 	calr DramTest_Loop
-	cpw_da (0x1a0000), 0x5a5a
+	cpw (0x1a0000:24), 0x5a5a
 	jr z, VramTest_Pattern2
 	setm 3, (xsp)
 
 VramTest_Pattern2:
 	ldw (0x1a0004:24), 0xa5a5; VRAM self-test pattern 2
 	calr DramTest_Loop
-	cpw_da (0x1a0004), 0xa5a5
+	cpw (0x1a0004:24), 0xa5a5
 	jr z, VramTest_Pattern3
 	setm 3, (xsp)
 
 VramTest_Pattern3:
 	ldw (0x1a0008:24), 0x5a5a
 	calr DramTest_Loop
-	cpw_da (0x1a0008), 0x5a5a
+	cpw (0x1a0008:24), 0x5a5a
 	jr z, VramTest_Done
 	setm 3, (xsp)
 
@@ -1798,7 +1798,7 @@ EffectMode_RunDiagSequence:
 	call	16423243
 	calr	63535
 	calr	63532
-	incdi8	1, (36062)
+	inc	1, (36062:16)
 	ret
 EffectMode_DiagSeq_AnimFrame:
 	ld	c, (36060:16)
@@ -1864,7 +1864,7 @@ Voice_EmitNoteWithVelocity:
 	.byte 0x01, 0xea, 0xa8, 0x1d, 0x4b, 0x99, 0xfa, 0x0e
 EffectMode_ModeChangeTransition:
 	ld a, (0x8c9b:16)
-	cpda8 a, (0x8c9a)
+	cp a, (0x8c9a:16)
 	jrl z, EffectMode_MidiParseLoop
 	calr EffectMode_SetAllLEDs
 	push XDE
@@ -2105,7 +2105,7 @@ BitmapFinpic_ByteData:
 	cps	hl, 0
 	ret	z
 	ld	a, (49124:16)
-	cpda8	a, 35998
+	cp	a, (35998:16)
 	ret	nz
 	cp	(49121:16), 0
 	ret	nz
@@ -2234,8 +2234,8 @@ SystemInitOkFunc:
 	lds32 xde, 0
 	call SendEvent
 	exts xhl
-	stl_da (0x0340de), xhl
-	cpib_da (0x0340ea), 0x00
+	ld (0x0340de:24), xhl
+	cp (0x0340ea:24), 0x00
 	jr nz, SystemInitOk_PostEvent
 	ld xwa, 0x142000a
 	ld xbc, 0x1e20013
@@ -3289,7 +3289,7 @@ MstStyle_EventDispatch:
 	jr MstStyle_DialDown_PostEvent
 
 MstStyle_DialDown_Decrement:
-	decdi16_24 1, (0x340c4)
+	decw 1, (0x340c4:24)
 	ld wa, iy
 	dec 1, wa
 	ld de, wa
@@ -3379,7 +3379,7 @@ MstStyle_FallbackEvent:
 	jrl MstStyle_DialUp_PostEvent
 
 MstStyle_DialUp_Increment:
-	incdi16_24 1, (0x340c4)
+	incw 1, (0x340c4:24)
 	ld de, bc
 	extz xde
 	add xde, 0xffff0000
@@ -3410,7 +3410,7 @@ MstStyle_DialUp_CheckLimit:
 	ld wa, bc
 	cp bc, de
 	jrl ge, SeqFileAlt_ReturnZeroJmp
-	incdi16_24 1, (0x340c4)
+	incw 1, (0x340c4:24)
 	ld de, wa
 	extz xde
 	add xde, 0xffff0000
@@ -3707,7 +3707,7 @@ MstStyle1_EventDispatch:
 	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
-	stl_da (0x0340d2), xde
+	ld (0x0340d2:24), xde
 	ldb c, 0x0
 
 MstStyle1Sub_CountEntries_Loop:
@@ -3785,7 +3785,7 @@ MstStyle1Sub_HandleSubSelect:
 	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
-	stl_da (0x0340d2), xde
+	ld (0x0340d2:24), xde
 	ldb c, 0x0
 
 MstStyle1Sub_SubSel_CountLoop:
@@ -4191,7 +4191,7 @@ MstStyle1SubGrid_CellSelect:
 	add	hl, wa
 	exts	xhl
 	sll	xhl, 3
-	addda32_24	xhl, (213202)
+	add	xhl, (213202:24)
 	ld	xwa, (xhl)
 	push	xwa
 	push	xde
@@ -4368,7 +4368,7 @@ MstStyle1Page_EventDispatch:
 	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
-	stl_da (0x0340d2), xde
+	ld (0x0340d2:24), xde
 	ldb c, 0x0
 
 MstStyle2_CountEntries_Loop:
@@ -4415,9 +4415,9 @@ MstStyle2_CountEntries_Adjust:
 	jrl nz, MstStyle2_InitOdd_Setup
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_CountSubEntries_LoopA:
@@ -4449,9 +4449,9 @@ MstStyle2_CountSubEntries_AdjA:
 	inc 1, wa
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340da), xde
+	ld (0x0340da:24), xde
 	ldb c, 0x0
 
 MstStyle2_CountSubEntries_LoopB:
@@ -4490,9 +4490,9 @@ MstStyle2_InitOdd_Setup:
 	dec 1, wa
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340d6), xde
+	ld (0x0340d6:24), xde
 	ldb c, 0x0
 
 MstStyle2_InitOdd_CountLoopA:
@@ -4519,9 +4519,9 @@ MstStyle2_InitOdd_CountAdjA:
 	ld wa, (0x0340c6:24)
 	extz xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340da), xde
+	ld (0x0340da:24), xde
 	ldb c, 0x0
 
 MstStyle2_InitOdd_CountLoopB:
@@ -4642,9 +4642,9 @@ MstStyle2_DialDown_PageDec:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageDec_CountLoop:
@@ -4679,9 +4679,9 @@ MstStyle2_PageDec_CountAdj:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340da), xhl
+	ld (0x0340da:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageDec_CountLoop2:
@@ -4772,9 +4772,9 @@ MstStyle2_DialUp_PageInc:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageInc_CountLoop:
@@ -4806,7 +4806,7 @@ MstStyle2_PageInc_CountAdj:
 	sla wa, 1
 	dec 2, wa
 	ld (0x0340be:24), wa
-	cpdm16_24 (0x340bc), xwa
+	cp (0x340bc:24), wa
 	jr le, MstStyle2_DialUp_UpdateAndPost
 	ld xwa, (xiy)
 	ld wa, (xwa)
@@ -4814,9 +4814,9 @@ MstStyle2_PageInc_CountAdj:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340da), xhl
+	ld (0x0340da:24), xhl
 	ldb c, 0x0
 
 MstStyle2_PageInc_CountLoop2:
@@ -4911,9 +4911,9 @@ MstStyle2_DialUp_UpdateAndPost:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340d6), xhl
+	ld (0x0340d6:24), xhl
 	ldb c, 0x0
 
 MstStyle2_DialScrollDown_CountLoop:
@@ -4948,9 +4948,9 @@ MstStyle2_DialScrollDown_CountAdj:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
-	stl_da (0x0340da), xde
+	ld (0x0340da:24), xde
 	ldb c, 0x0
 
 MstStyle2_DialScrollDown_Count2Loop:
@@ -5133,7 +5133,7 @@ MstStyle2_DialScrollUp_NextPage:
 	ld xwa, (xbc + 78)
 	ld wa, (xwa)
 	ld (0x0340be:24), wa
-	cpdm16_24 (0x340bc), xwa
+	cp (0x340bc:24), wa
 	jrl ge, MstStyle2_DialScroll_AutoInc
 	ld xwa, (xix)
 	incw 1, (xwa)
@@ -5143,9 +5143,9 @@ MstStyle2_DialScrollUp_NextPage:
 	dec 2, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xiy, (xwa + 4)
-	stl_da (0x0340d6), xiy
+	ld (0x0340d6:24), xiy
 	ldb c, 0x0
 
 MstStyle2_DialScroll_CountLoopD:
@@ -5180,9 +5180,9 @@ MstStyle2_DialScroll_CountAdjD:
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
-	addda32_24 xwa, (0x340d2)
+	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
-	stl_da (0x0340da), xhl
+	ld (0x0340da:24), xhl
 	ldb c, 0x0
 
 MstStyle2_DialScroll_CountLoopE:
@@ -5324,7 +5324,7 @@ MstStyle2_GetNameB_DrawString:
 	dec 2,WA
 	exts XWA
 	sll XWA, 0x03
-	addda32_24	xwa, (213202)
+	add	xwa, (213202:24)
 	ld	xwa, (xwa)
 	push	xwa
 	pushw 237
@@ -5363,7 +5363,7 @@ MstStyle2_GetNameB_DrawString:
 MstStyle2_NameB_DrawCurrent:
 	exts	xwa
 	sll	xwa, 3
-	addda32_24	xwa, (213202)
+	add	xwa, (213202:24)
 	ld	xwa, (xwa)
 	push	xwa
 	pushw	237
@@ -5379,7 +5379,7 @@ MstStyle2_NameB_DrawLower:
 	dec	1, wa
 	exts	xwa
 	sll	xwa, 3
-	addda32_24	xwa, (213202)
+	add	xwa, (213202:24)
 	ld	xwa, (xwa)
 	push	xwa
 	pushw	237
@@ -5539,7 +5539,7 @@ MstGrid2_ScrollJumpTable:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (0x340d6)
+	add	xbc, (0x340d6:24)
 	ld	de, (xbc+4)
 	extz	xde
 	ld	xwa, 0x142000d
@@ -5557,7 +5557,7 @@ MstGrid2_ScrollJumpTable:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (0x340da)
+	add	xbc, (0x340da:24)
 	ld	de, (xbc+4)
 	extz	xde
 	ld	xwa, 0x142000d
@@ -5597,7 +5597,7 @@ MstGrid2_CellSelect:
 	add XIY,XIY
 	add XIY,XWA
 	add XIY,XIY
-	addda32_24	xiy, (213206)
+	add	xiy, (213206:24)
 	ld	xwa, xbc
 	add	xwa, xwa
 	add	xwa, xbc
@@ -5641,7 +5641,7 @@ MstGrid2_PadLeft_CheckA:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (213206)
+	add	xbc, (213206:24)
 	ld	xwa, (xbc)
 	push	xwa
 	call	16713667
@@ -5686,7 +5686,7 @@ MstGrid2_PadLeft_CheckB:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (213210)
+	add	xbc, (213210:24)
 	ld	xwa, (xbc)
 	push	xwa
 	call	16713667
@@ -5723,7 +5723,7 @@ MstGrid2_PadLeft_CheckC:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (213206)
+	add	xbc, (213206:24)
 	ld	xwa, (xbc)
 	push	xwa
 	call	16713667
@@ -5764,7 +5764,7 @@ MstGrid2_PadLeft_CheckD:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	addda32_24	xbc, (213210)
+	add	xbc, (213210:24)
 	ld	xwa, (xbc)
 	push	xwa
 	call	16713667
@@ -7536,7 +7536,7 @@ PmemPageCtl_OK_PageSwitch:
 	jr SeqLoad_PostEvent
 
 PmemPageCtl_OK_AdvanceTo2:
-	cpib_da (0x0340e2), 0x01
+	cp (0x0340e2:24), 0x01
 	jr nz, PmemPageCtl_OK_ResetTo1
 	ld (0x0340e2:24), 0x02
 	ld xwa, 0x45000d
@@ -7579,7 +7579,7 @@ SeqLoad_PostEvent:
 	jr SeqLoad_ReturnZeroJmp2
 
 PmemPageCtl_OK_RotateReverse:
-	cpib_da (0x0340e2), 0x01
+	cp (0x0340e2:24), 0x01
 	jr nz, PmemPageCtl_OK_RotatePost
 	decm 1, (xwa)
 	ld xwa, 0x45000d
@@ -7739,7 +7739,7 @@ PmExpFilter_Repaint:
 	ld xde, ParamStr02_Vocalist_0x20
 	call DrawString
 	ld (xsp + 10), 0x0
-	cpib_da (0x0340e2), 0x01
+	cp (0x0340e2:24), 0x01
 	jrl nz, PmExpFilter_DrawCellBank2
 PmExpFilter_DrawCellBank1:
 	lda	xbc, (xsp+280)
@@ -7890,7 +7890,7 @@ PmExpFilter_DrawCentered:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	cpib_da (0x0340e2), 0x02
+	cp (0x0340e2:24), 0x02
 	jr nz, PmExpFilter_DecAndUpdate
 	cps hl, 2
 	jr nz, PmExpFilter_DecAndUpdate
@@ -11061,8 +11061,8 @@ GmOnOff_GetBoundsRect:
 
 GmOnOff_CheckDesign:
 	ld	c, (36004:16)
-	orda8	c, (36006)
-	orda8	c, (36008)
+	or	c, (36006:16)
+	or	c, (36008:16)
 	jr	nz, 7
 	ldw	bc, 245
 	call	16428646

@@ -1991,7 +1991,7 @@ IvMpst_InheritAndCheck:
 	exts xwa
 	cp xwa, (xsp + 4)
 	jr nz, IvMpst_ReturnZero
-	cpib_da (0x024756), 0x00
+	cp (0x024756:24), 0x00
 	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00001
@@ -2018,7 +2018,7 @@ MdPresetWithoutFunc:
 	push xiz
 	cp xbc, 0x1c00007
 	jr nz, MdPresetWith_ReturnSuccess
-	cpib_da (0x024756), 0x00
+	cp (0x024756:24), 0x00
 	jr z, MdPresetWith_ReturnSuccess
 	ld (0x024756:24), 0x00
 	ld xwa, 0x560001
@@ -2065,7 +2065,7 @@ MdPresetWithFunc:
 	push xiz
 	cp xbc, 0x1c00007
 	jr nz, MdPreset_ReturnSuccess
-	cpib_da (0x024756), 0x01
+	cp (0x024756:24), 0x01
 	jr z, MdPreset_ReturnSuccess
 	ld (0x024756:24), 0x01
 	ld xwa, 0x560001
@@ -2273,7 +2273,7 @@ TtMdExc:
 	jr nz, TtMdExc_ReturnZero
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
-	setda 6, 0xb7e2
+	set 6, (0xb7e2:16)
 	ld xwa, 0x570003
 	call GetViewInstance
 	ld xwa, (xhl + 38)
@@ -2283,7 +2283,7 @@ TtMdExc:
 TtMdExc_HandleClose:
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
-	resda 6, 0xb7e2
+	res 6, (0xb7e2:16)
 
 TtMdExc_ReturnZero:
 	lds32 xhl, 0

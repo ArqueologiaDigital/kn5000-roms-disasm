@@ -796,7 +796,7 @@ NoteEvent_CopySlotData_Loop:
 
 NoteEvent_CopySlotData_Body:
 	ld xix, xwa
-	addda32 xix, 3186
+	add xix, (3186:16)
 	lda xiy, (xsp + 16)
 	ldw bc, 0x80
 	ldirw
@@ -1325,7 +1325,7 @@ PartGrid_DefaultLoop_Outer:
 	add xbc, xwa
 	sll xbc, 5
 	add xbc, 0x60
-	addda32 xbc, 3186
+	add xbc, (3186:16)
 	ld wa, (xbc)
 	ld c, (xsp + 4)
 	extz bc
@@ -1338,7 +1338,7 @@ PartGrid_DefaultLoop_Outer:
 	add xde, xbc
 	sll xde, 5
 	add xde, 0x60
-	addda32 xde, 3186
+	add xde, (3186:16)
 	ld (xde), wa
 	lds iz, 2
 
@@ -1353,7 +1353,7 @@ PartGrid_DefaultLoop_Inner:
 	add xde, xwa
 	sll xde, 5
 	add xde, xbc
-	addda32 xde, 3186
+	add xde, (3186:16)
 	ld wa, (xde + 96)
 	ld c, (xsp + 4)
 	extz bc
@@ -1369,7 +1369,7 @@ PartGrid_DefaultLoop_Inner:
 	add xhl, xbc
 	sll xhl, 5
 	add xhl, xde
-	addda32 xhl, 3186
+	add xhl, (3186:16)
 	ld (xhl + 96), wa
 	inc 1, iz
 	cps iz, 5
@@ -1385,7 +1385,7 @@ NoteEvent_CopyToSlot:
 	extz xwa
 	sll xwa, 8
 	add xwa, 0x1400
-	addda32 xwa, 3186
+	add xwa, (3186:16)
 	ld wa, (xwa + 1)
 	ld c, (xsp + 4)
 	extz bc
@@ -1396,9 +1396,9 @@ NoteEvent_CopyToSlot:
 	sll xbc, 8
 	add xbc, 0x1400
 	ld xde, xbc
-	addda32 xde, 3186
+	add xde, (3186:16)
 	ld (xde + 1), wa
-	addda32 xbc, 3186
+	add xbc, (3186:16)
 	ld wa, (xbc + 3)
 	ld c, (xsp + 4)
 	extz bc
@@ -1408,7 +1408,7 @@ NoteEvent_CopyToSlot:
 	extz xbc
 	sll xbc, 8
 	add xbc, 0x1400
-	addda32 xbc, 3186
+	add xbc, (3186:16)
 	ld (xbc + 3), wa
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x53, 0x01
@@ -2216,7 +2216,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -2227,7 +2227,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -2238,7 +2238,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -2249,7 +2249,7 @@ DualVoice_ScanRow1:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1748
+	call nc, (SlotTable_Insert1748:24)
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jrl c, DualVoice_ScanColumnLoop
@@ -2293,7 +2293,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -2304,7 +2304,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -2315,7 +2315,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
 	stb_erp C, 0xfb
@@ -2326,7 +2326,7 @@ DualVoice_ScanRow1Alt:
 	ld bc, wa
 	and bc, 0xff
 	cp bc, 0x80
-	call_24 nc, SlotTable_Insert1850
+	call nc, (SlotTable_Insert1850:24)
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jrl c, DualVoice_ScanColumnLoopAlt
@@ -3526,7 +3526,7 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xef, 0x66, 0x0e
 	pushw iz
 	lds iz, 0
-	resda 0, (0x3514)
+	res 0, (0x3514:16)
 	call DualVoice_ParamLoadDone
 	ld a, (0x3514:16)
 	extz WA
@@ -3616,7 +3616,7 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0x43, 0x5e, 0x0e
 	pushw iz
 	ld IZ,WA
-	setda 0, (0x3435)
+	set 0, (0x3435:16)
 	call 0xf62d45
 	ld a, (0x3514:16)
 	extz WA

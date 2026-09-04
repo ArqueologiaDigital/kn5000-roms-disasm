@@ -1218,7 +1218,7 @@ SndParam_Widget1_CallType3:
 	jr	nz, 104
 	.byte 0xf1, 0xac, 0x28, 0xcd
 	jr	z, 4
-	incdi8	1, (1108)
+	inc	1, (1108:16)
 	ld	a, (1066:16)
 	cp	a, 112
 	jr	ugt, 20
@@ -1239,11 +1239,11 @@ SndParam_Widget1_CallType3:
 	.byte 0xf1, 0x1f, 0x04, 0xca
 	jr	z, 35
 	.byte 0xc1, 0x6a, 0x04, 0x3c, 0xfc
-	incdi8	4, (1130)
+	inc	4, (1130:16)
 	cp	(1130:16), 96
 	jr	nz, 19
 	ld	(1130:16), 0
-	incdi16	1, (1128)
+	incw	1, (1128:16)
 	cp	(32367:16), 0
 	jr	z, 3
 	calr	845
@@ -1267,19 +1267,19 @@ SndParam_Widget1_CallType3:
 	bit	2, a
 	jr	z, 25
 	.byte 0xc1, 0x17, 0x04, 0x3c, 0xfc
-	incdi8	4, (1047)
+	inc	4, (1047:16)
 	cp	(1047:16), 96
 	jr	nz, 9
 	ld	(1047:16), 0
-	incdi16	1, (1048)
+	incw	1, (1048:16)
 	.byte 0xf1, 0x1e, 0x04, 0xca
 	jr	z, 81
 	.byte 0xc1, 0x15, 0x04, 0x3c, 0xfc
-	incdi8	4, (1045)
+	inc	4, (1045:16)
 	cp	(1045:16), 96
 	jr	nz, 65
 	ld	(1045:16), 0
-	incdi8	1, (1046)
+	inc	1, (1046:16)
 	ld	a, (14079:16)
 	and	a, 31
 	jr	z, 3
@@ -1290,21 +1290,21 @@ SndParam_Widget1_CallType3:
 	cp	a, w
 	jr	c, 28
 	ld	(1046:16), 0
-	incdi8	1, (1076)
-	incdi8	1, (1077)
+	inc	1, (1076:16)
+	inc	1, (1077:16)
 	ld	a, (1077:16)
-	cpda8	a, 13371
+	cp	a, (13371:16)
 	jr	ule, 5
 	ld	(1077:16), 0
 	ld	a, (1045:16)
 	ld	w, a
-	subda8	a, 1111
+	sub	a, (1111:16)
 	jr	z, 37
 	jr	ugt, 3
 	add	a, 96
 	ld	(1111:16), w
-	adddm8	1124, a
-	adddm8	1122, a
+	add	(1124:16), a
+	add	(1122:16), a
 	xor	w, w
 	.byte 0xd1, 0x60, 0x04, 0x80
 	cp	a, 96
@@ -1315,11 +1315,11 @@ SndParam_Widget1_CallType3:
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, 108
 	.byte 0xc1, 0x1b, 0x04, 0x3c, 0xfc
-	incdi8	4, (1051)
+	inc	4, (1051:16)
 	ld	a, (1051:16)
 	.byte 0xf1, 0x31, 0x04, 0xc8
 	jr	z, 28
-	cpda8	a, 1071
+	cp	a, (1071:16)
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb0
 	ld	(1054:16), 1
@@ -1329,7 +1329,7 @@ SndParam_Widget1_CallType3:
 	calr	643
 	.byte 0xf1, 0x31, 0x04, 0xcb
 	jr	z, 28
-	cpda8	a, 1072
+	cp	a, (1072:16)
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb3
 	ld	(1054:16), 8
@@ -1340,7 +1340,7 @@ SndParam_Widget1_CallType3:
 	cp	(1051:16), 96
 	jr	nz, 99
 	ld	(1051:16), 0
-	incdi16	1, (1052)
+	incw	1, (1052:16)
 	cpw	(10410:16), 0
 	jr	z, 3
 	calr	512

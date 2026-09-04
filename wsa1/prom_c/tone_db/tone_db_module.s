@@ -2262,14 +2262,14 @@ ToneDB_SourceNameList1_SelectEntry:
 	jr nc, ToneDB_SourceNameList1_SelectEntry__FB90E7                  ; FB90D5  jr NC,0xfb90e7
 	ld	xiy, (xbc+80)                           ; FB90D7  ld XIY,(XBC+0x50)
 	ld	(xiz-12), xiy                           ; FB90DA  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FB90DD  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB90DD  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FB90E2  ld (XIZ+0xfc),XIY
 	jr ToneDB_SourceNameList1_SelectEntry__FB9102                      ; FB90E5  jr T,0xfb9102
 ToneDB_SourceNameList1_SelectEntry__FB90E7:
 	ld	xbc, (0xD811:24)                       ; FB90E7  ld XBC,(0x00d811)
 	ld	xwa, (xbc+80)                           ; FB90EC  ld XWA,(XBC+0x50)
 	ld	(xiz-12), xwa                           ; FB90EF  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FB90F2  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB90F2  add XWA,(0x00d80d)
 	ld	(xiz-4), xwa                            ; FB90F7  ld (XIZ+0xfc),XWA
 	ld	xiy, (xiz-8)                            ; FB90FA  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FB90FD  ld BC,(XIY)
@@ -2463,14 +2463,14 @@ ToneDB_SourceNameList2_SelectEntry:
 	jr nc, ToneDB_SourceNameList2_SelectEntry__FB92B7                  ; FB92A5  jr NC,0xfb92b7
 	ld	xiy, (xbc+0x64)                         ; FB92A7  ld XIY,(XBC+0x64)
 	ld	(xiz-12), xiy                           ; FB92AA  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FB92AD  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB92AD  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FB92B2  ld (XIZ+0xfc),XIY
 	jr ToneDB_SourceNameList2_SelectEntry__FB92D2                      ; FB92B5  jr T,0xfb92d2
 ToneDB_SourceNameList2_SelectEntry__FB92B7:
 	ld	xbc, (0xD811:24)                       ; FB92B7  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x64)                         ; FB92BC  ld XWA,(XBC+0x64)
 	ld	(xiz-12), xwa                           ; FB92BF  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FB92C2  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB92C2  add XWA,(0x00d80d)
 	ld	(xiz-4), xwa                            ; FB92C7  ld (XIZ+0xfc),XWA
 	ld	xiy, (xiz-8)                            ; FB92CA  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FB92CD  ld BC,(XIY)
@@ -2792,14 +2792,14 @@ ToneDB_DrumSourceNameList_SelectEntry:
 	jr nc, ToneDB_DrumSourceNameList_SelectEntry__FB9596                  ; FB9582  jr NC,0xfb9596
 	ld	xbc, (xwa+0x80)                         ; FB9584  ld XBC,(XWA+0x0080)
 	ld	(xiz-32), xbc                           ; FB9589  ld (XIZ+0xe0),XBC
-	addda32_24	xbc, (0xD7ED)                   ; FB958C  add XBC,(0x00d7ed)
+	add	xbc, (0xD7ED:24)                   ; FB958C  add XBC,(0x00d7ed)
 	ld	(xiz-24), xbc                           ; FB9591  ld (XIZ+0xe8),XBC
 	jr ToneDB_DrumSourceNameList_SelectEntry__FB95B3                      ; FB9594  jr T,0xfb95b3
 ToneDB_DrumSourceNameList_SelectEntry__FB9596:
 	ld	xbc, (0xD811:24)                       ; FB9596  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x80)                         ; FB959B  ld XWA,(XBC+0x0080)
 	ld	(xiz-32), xwa                           ; FB95A0  ld (XIZ+0xe0),XWA
-	addda32_24	xwa, (0xD80D)                   ; FB95A3  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB95A3  add XWA,(0x00d80d)
 	ld	(xiz-24), xwa                           ; FB95A8  ld (XIZ+0xe8),XWA
 	ld	xiy, (xiz-28)                           ; FB95AB  ld XIY,(XIZ+0xe4)
 	ld	bc, (xiy)                               ; FB95AE  ld BC,(XIY)
@@ -3026,14 +3026,14 @@ ToneDB_PercSourceNameList1_SelectEntry:
 	jr nc, ToneDB_PercSourceNameList1_SelectEntry__FB97CB                  ; FB97B7  jr NC,0xfb97cb
 	ld	xiy, (xbc+0x8C)                         ; FB97B9  ld XIY,(XBC+0x008c)
 	ld	(xiz-20), xiy                           ; FB97BE  ld (XIZ+0xec),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FB97C1  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB97C1  add XIY,(0x00d7ed)
 	ld	(xiz-12), xiy                           ; FB97C6  ld (XIZ+0xf4),XIY
 	jr ToneDB_PercSourceNameList1_SelectEntry__FB97E8                      ; FB97C9  jr T,0xfb97e8
 ToneDB_PercSourceNameList1_SelectEntry__FB97CB:
 	ld	xbc, (0xD811:24)                       ; FB97CB  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x8C)                         ; FB97D0  ld XWA,(XBC+0x008c)
 	ld	(xiz-20), xwa                           ; FB97D5  ld (XIZ+0xec),XWA
-	addda32_24	xwa, (0xD80D)                   ; FB97D8  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB97D8  add XWA,(0x00d80d)
 	ld	(xiz-12), xwa                           ; FB97DD  ld (XIZ+0xf4),XWA
 	ld	xiy, (xiz-16)                           ; FB97E0  ld XIY,(XIZ+0xf0)
 	ld	bc, (xiy)                               ; FB97E3  ld BC,(XIY)
@@ -3213,14 +3213,14 @@ ToneDB_PercSourceNameList2_SelectEntry:
 	jr nc, ToneDB_PercSourceNameList2_SelectEntry__FB998F                  ; FB997B  jr NC,0xfb998f
 	ld	xiy, (xbc+0x94)                         ; FB997D  ld XIY,(XBC+0x0094)
 	ld	(xiz-16), xiy                           ; FB9982  ld (XIZ+0xf0),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FB9985  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB9985  add XIY,(0x00d7ed)
 	ld	(xiz-8), xiy                            ; FB998A  ld (XIZ+0xf8),XIY
 	jr ToneDB_PercSourceNameList2_SelectEntry__FB99AC                      ; FB998D  jr T,0xfb99ac
 ToneDB_PercSourceNameList2_SelectEntry__FB998F:
 	ld	xbc, (0xD811:24)                       ; FB998F  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x94)                         ; FB9994  ld XWA,(XBC+0x0094)
 	ld	(xiz-16), xwa                           ; FB9999  ld (XIZ+0xf0),XWA
-	addda32_24	xwa, (0xD80D)                   ; FB999C  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB999C  add XWA,(0x00d80d)
 	ld	(xiz-8), xwa                            ; FB99A1  ld (XIZ+0xf8),XWA
 	ld	xiy, (xiz-12)                           ; FB99A4  ld XIY,(XIZ+0xf4)
 	ld	bc, (xiy)                               ; FB99A7  ld BC,(XIY)
@@ -15622,7 +15622,7 @@ ToneQuery_ReplySourceName1_ByRow:
 	jr nc, ToneQuery_ReplySourceName1_ByRow__FC06AF                  ; FC069D  jr NC,0xfc06af
 	ld	xiy, (xbc+80)                           ; FC069F  ld XIY,(XBC+0x50)
 	ld	(xiz-12), xiy                           ; FC06A2  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC06A5  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC06A5  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC06AA  ld (XIZ+0xfc),XIY
 	jr ToneQuery_ReplySourceName1_ByRow__FC0702                      ; FC06AD  jr T,0xfc0702
 ToneQuery_ReplySourceName1_ByRow__FC06AF:
@@ -15632,7 +15632,7 @@ ToneQuery_ReplySourceName1_ByRow__FC06AF:
 	ld	xbc, (0xD811:24)                       ; FC06BC  ld XBC,(0x00d811)
 	ld	xwa, (xbc+80)                           ; FC06C1  ld XWA,(XBC+0x50)
 	ld	(xiz-12), xwa                           ; FC06C4  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FC06C7  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FC06C7  add XWA,(0x00d80d)
 	ld	(xiz-4), xwa                            ; FC06CC  ld (XIZ+0xfc),XWA
 	ld	xiy, (xiz-8)                            ; FC06CF  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC06D2  ld BC,(XIY)
@@ -15643,12 +15643,12 @@ ToneQuery_ReplySourceName1_ByRow__FC06D9:
 	ld	xwa, (xbc+68)                           ; FC06DE  ld XWA,(XBC+0x44)
 	ld	(xiz-12), xwa                           ; FC06E1  ld (XIZ+0xf4),XWA
 	add	xwa, 0xFE                              ; FC06E4  add XWA,0x000000fe
-	addda32_24	xwa, (0xD7ED)                   ; FC06EA  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC06EA  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC06EF  ld IY,(XWA)
 	ld	(xiz+8), iy                             ; FC06F1  ld (XIZ+0x08),IY
 	ld	xwa, (xbc+80)                           ; FC06F4  ld XWA,(XBC+0x50)
 	ld	(xiz-12), xwa                           ; FC06F7  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC06FA  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC06FA  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC06FF  ld (XIZ+0xfc),XWA
 ToneQuery_ReplySourceName1_ByRow__FC0702:
 	ldw (xiz-14), 0x000D                       ; FC0702  ld (XIZ+0xf2),0x000d
@@ -15726,7 +15726,7 @@ ToneQuery_ReplySourceName2_ByRow:
 	jr nc, ToneQuery_ReplySourceName2_ByRow__FC077B                  ; FC0769  jr NC,0xfc077b
 	ld	xiy, (xbc+0x64)                         ; FC076B  ld XIY,(XBC+0x64)
 	ld	(xiz-12), xiy                           ; FC076E  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC0771  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC0771  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC0776  ld (XIZ+0xfc),XIY
 	jr ToneQuery_ReplySourceName2_ByRow__FC07D3                      ; FC0779  jr T,0xfc07d3
 ToneQuery_ReplySourceName2_ByRow__FC077B:
@@ -15736,7 +15736,7 @@ ToneQuery_ReplySourceName2_ByRow__FC077B:
 	ld	xbc, (0xD811:24)                       ; FC0788  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x64)                         ; FC078D  ld XWA,(XBC+0x64)
 	ld	(xiz-12), xwa                           ; FC0790  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FC0793  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FC0793  add XWA,(0x00d80d)
 	ld	(xiz-4), xwa                            ; FC0798  ld (XIZ+0xfc),XWA
 	ld	xiy, (xiz-8)                            ; FC079B  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC079E  ld BC,(XIY)
@@ -15747,12 +15747,12 @@ ToneQuery_ReplySourceName2_ByRow__FC07A5:
 	ld	xwa, (xbc+88)                           ; FC07AA  ld XWA,(XBC+0x58)
 	ld	(xiz-12), xwa                           ; FC07AD  ld (XIZ+0xf4),XWA
 	add	xwa, 0xFE                              ; FC07B0  add XWA,0x000000fe
-	addda32_24	xwa, (0xD7ED)                   ; FC07B6  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC07B6  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC07BB  ld IY,(XWA)
 	ld	(xiz+8), iy                             ; FC07BD  ld (XIZ+0x08),IY
 	ld	xwa, (xbc+0x64)                         ; FC07C0  ld XWA,(XBC+0x64)
 	ld	(xiz-12), xwa                           ; FC07C3  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC07C6  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC07C6  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC07CB  ld (XIZ+0xfc),XWA
 	ldw (xiz+8), 0x0000                        ; FC07CE  ld (XIZ+0x08),0x0000
 ToneQuery_ReplySourceName2_ByRow__FC07D3:
@@ -16202,7 +16202,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0BE1:
 	ld	xiy, (0xD7F1:24)                       ; FC0BFE  ld XIY,(0x00d7f1)
 	ld	xbc, (xiy+0x68)                         ; FC0C03  ld XBC,(XIY+0x68)
 	ld	(xiz-12), xbc                           ; FC0C06  ld (XIZ+0xf4),XBC
-	addda32_24	xbc, (0xD7ED)                   ; FC0C09  add XBC,(0x00d7ed)
+	add	xbc, (0xD7ED:24)                   ; FC0C09  add XBC,(0x00d7ed)
 	ld	(xiz-8), xbc                            ; FC0C0E  ld (XIZ+0xf8),XBC
 	ld	wa, (xbc)                               ; FC0C11  ld WA,(XBC)
 	ld	(xiz-28), wa                            ; FC0C13  ld (XIZ+0xe4),WA
@@ -16846,7 +16846,7 @@ DrumKit_ResolveSourceNameRow:
 	extpfx3 0x9E, 0x08, 0x81                   ; FC1101  add BC,(XIZ+0x08)
 	mul	bc, 2                                  ; FC1104  mul BC,0x0002
 	add	xiy, xbc                               ; FC1108  add XIY,XBC
-	addda32_24	xiy, (0xD7ED)                   ; FC110A  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC110A  add XIY,(0x00d7ed)
 	ld	bc, (xiy)                               ; FC110F  ld BC,(XIY)
 	ld	(xiz-16), bc                            ; FC1111  ld (XIZ+0xf0),BC
 	cp	bc, 0xFFFF                              ; FC1114  cp BC,0xffff
@@ -16854,7 +16854,7 @@ DrumKit_ResolveSourceNameRow:
 	ld	xwa, (0xD7F1:24)                       ; FC111A  ld XWA,(0x00d7f1)
 	ld	xiy, (xwa+0x80)                         ; FC111F  ld XIY,(XWA+0x0080)
 	ld	(xiz-12), xiy                           ; FC1124  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC1127  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC1127  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC112C  ld (XIZ+0xfc),XIY
 	ldw (xiz-18), 0x0000                       ; FC112F  ld (XIZ+0xee),0x0000
 	jrl DrumKit_ResolveSourceNameRow__FC11BF                     ; FC1134  jrl T,0xfc11bf
@@ -16870,17 +16870,17 @@ DrumKit_ResolveSourceNameRow__FC1137:
 	extpfx3 0x9E, 0x08, 0x85                   ; FC1155  add IY,(XIZ+0x08)
 	mul	iy, 2                                  ; FC1158  mul IY,0x0002
 	extpfx3 0xAE, 0xF4, 0x85                   ; FC115C  add XIY,(XIZ+0xf4)
-	addda32_24	xiy, (0xD80D)                   ; FC115F  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FC115F  add XIY,(0x00d80d)
 	ld	wa, (xiy)                               ; FC1164  ld WA,(XIY)
 	ld	(xiz-16), wa                            ; FC1166  ld (XIZ+0xf0),WA
 	ld	xiy, (xbc+0x80)                         ; FC1169  ld XIY,(XBC+0x0080)
 	ld	(xiz-12), xiy                           ; FC116E  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD80D)                   ; FC1171  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FC1171  add XIY,(0x00d80d)
 	ld	(xiz-4), xiy                            ; FC1176  ld (XIZ+0xfc),XIY
 	ld	xbc, (0xD7F1:24)                       ; FC1179  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x84)                         ; FC117E  ld XWA,(XBC+0x0084)
 	ld	(xiz-12), xwa                           ; FC1183  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC1186  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC1186  add XWA,(0x00d7ed)
 	ld	(xiz-8), xwa                            ; FC118B  ld (XIZ+0xf8),XWA
 	ld	bc, (xwa)                               ; FC118E  ld BC,(XWA)
 	ld	(xiz-18), bc                            ; FC1190  ld (XIZ+0xee),BC
@@ -16889,12 +16889,12 @@ DrumKit_ResolveSourceNameRow__FC1195:
 	ld	xbc, (0xD7F1:24)                       ; FC1195  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x7C)                         ; FC119A  ld XWA,(XBC+0x7c)
 	ld	(xiz-12), xwa                           ; FC119D  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC11A0  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC11A0  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC11A5  ld IY,(XWA)
 	ld	(xiz-16), iy                            ; FC11A7  ld (XIZ+0xf0),IY
 	ld	xwa, (xbc+0x80)                         ; FC11AA  ld XWA,(XBC+0x0080)
 	ld	(xiz-12), xwa                           ; FC11AF  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC11B2  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC11B2  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC11B7  ld (XIZ+0xfc),XWA
 	ldw (xiz-18), 0x0000                       ; FC11BA  ld (XIZ+0xee),0x0000
 DrumKit_ResolveSourceNameRow__FC11BF:
@@ -17095,14 +17095,14 @@ ToneQuery_ReplyDrumSourceName_ByRow:
 	ld	xbc, (0xD7F1:24)                       ; FC12F3  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x84)                         ; FC12F8  ld XWA,(XBC+0x0084)
 	ld	(xiz-12), xwa                           ; FC12FD  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC1300  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC1300  add XWA,(0x00d7ed)
 	ld	(xiz-8), xwa                            ; FC1305  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FC1308  ld IY,(XWA)
 	cp	(xiz+8), iy                             ; FC130A  cp (XIZ+0x08),IY
 	jr nc, ToneQuery_ReplyDrumSourceName_ByRow__FC1321                  ; FC130D  jr NC,0xfc1321
 	ld	xiy, (xbc+0x80)                         ; FC130F  ld XIY,(XBC+0x0080)
 	ld	(xiz-12), xiy                           ; FC1314  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC1317  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC1317  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC131C  ld (XIZ+0xfc),XIY
 	jr ToneQuery_ReplyDrumSourceName_ByRow__FC1372                      ; FC131F  jr T,0xfc1372
 ToneQuery_ReplyDrumSourceName_ByRow__FC1321:
@@ -17112,7 +17112,7 @@ ToneQuery_ReplyDrumSourceName_ByRow__FC1321:
 	ld	xbc, (0xD811:24)                       ; FC132E  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x80)                         ; FC1333  ld XWA,(XBC+0x0080)
 	ld	(xiz-12), xwa                           ; FC1338  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FC133B  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FC133B  add XWA,(0x00d80d)
 	ld	(xiz-4), xwa                            ; FC1340  ld (XIZ+0xfc),XWA
 	ld	xiy, (xiz-8)                            ; FC1343  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC1346  ld BC,(XIY)
@@ -17122,12 +17122,12 @@ ToneQuery_ReplyDrumSourceName_ByRow__FC134D:
 	ld	xbc, (0xD7F1:24)                       ; FC134D  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x7C)                         ; FC1352  ld XWA,(XBC+0x7c)
 	ld	(xiz-12), xwa                           ; FC1355  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC1358  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC1358  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC135D  ld IY,(XWA)
 	ld	(xiz+8), iy                             ; FC135F  ld (XIZ+0x08),IY
 	ld	xwa, (xbc+0x80)                         ; FC1362  ld XWA,(XBC+0x0080)
 	ld	(xiz-12), xwa                           ; FC1367  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC136A  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC136A  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC136F  ld (XIZ+0xfc),XWA
 ToneQuery_ReplyDrumSourceName_ByRow__FC1372:
 	ldw (xiz-14), 0x000D                       ; FC1372  ld (XIZ+0xf2),0x000d
@@ -17295,7 +17295,7 @@ ToneQuery_ReplyDrumSourceNameAndIndex__FC14C4:
 	ld	xbc, (0xD7F1:24)                       ; FC14C4  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x84)                         ; FC14C9  ld XWA,(XBC+0x0084)
 	ld	(xiz-16), xwa                           ; FC14CE  ld (XIZ+0xf0),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC14D1  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC14D1  add XWA,(0x00d7ed)
 	ld	(xiz-12), xwa                           ; FC14D6  ld (XIZ+0xf4),XWA
 	ld	iy, (xwa)                               ; FC14D9  ld IY,(XWA)
 	cp	(xiz-24), iy                            ; FC14DB  cp (XIZ+0xe8),IY
@@ -17385,7 +17385,7 @@ ToneDB_PercSourceIndexMapB_Lookup:
 	extpfx3 0x9E, 0x08, 0x81                   ; FC1576  add BC,(XIZ+0x08)
 	mul	bc, 2                                  ; FC1579  mul BC,0x0002
 	add	xiy, xbc                               ; FC157D  add XIY,XBC
-	addda32_24	xiy, (0xD7ED)                   ; FC157F  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC157F  add XIY,(0x00d7ed)
 	ld	bc, (xiy)                               ; FC1584  ld BC,(XIY)
 	ld	(xiz-16), bc                            ; FC1586  ld (XIZ+0xf0),BC
 	cp	bc, 0xFFFF                              ; FC1589  cp BC,0xffff
@@ -17393,7 +17393,7 @@ ToneDB_PercSourceIndexMapB_Lookup:
 	ld	xwa, (0xD7F1:24)                       ; FC158F  ld XWA,(0x00d7f1)
 	ld	xiy, (xwa+0x8C)                         ; FC1594  ld XIY,(XWA+0x008c)
 	ld	(xiz-12), xiy                           ; FC1599  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC159C  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC159C  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC15A1  ld (XIZ+0xfc),XIY
 	ldw (xiz-18), 0x0000                       ; FC15A4  ld (XIZ+0xee),0x0000
 	jrl ToneDB_PercSourceIndexMapB_Lookup__FC1634                     ; FC15A9  jrl T,0xfc1634
@@ -17409,17 +17409,17 @@ ToneDB_PercSourceIndexMapB_Lookup__FC15AC:
 	extpfx3 0x9E, 0x08, 0x85                   ; FC15CA  add IY,(XIZ+0x08)
 	mul	iy, 2                                  ; FC15CD  mul IY,0x0002
 	extpfx3 0xAE, 0xF4, 0x85                   ; FC15D1  add XIY,(XIZ+0xf4)
-	addda32_24	xiy, (0xD80D)                   ; FC15D4  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FC15D4  add XIY,(0x00d80d)
 	ld	wa, (xiy)                               ; FC15D9  ld WA,(XIY)
 	ld	(xiz-16), wa                            ; FC15DB  ld (XIZ+0xf0),WA
 	ld	xiy, (xbc+0x8C)                         ; FC15DE  ld XIY,(XBC+0x008c)
 	ld	(xiz-12), xiy                           ; FC15E3  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD80D)                   ; FC15E6  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FC15E6  add XIY,(0x00d80d)
 	ld	(xiz-4), xiy                            ; FC15EB  ld (XIZ+0xfc),XIY
 	ld	xbc, (0xD7F1:24)                       ; FC15EE  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x90)                         ; FC15F3  ld XWA,(XBC+0x0090)
 	ld	(xiz-12), xwa                           ; FC15F8  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC15FB  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC15FB  add XWA,(0x00d7ed)
 	ld	(xiz-8), xwa                            ; FC1600  ld (XIZ+0xf8),XWA
 	ld	bc, (xwa)                               ; FC1603  ld BC,(XWA)
 	ld	(xiz-18), bc                            ; FC1605  ld (XIZ+0xee),BC
@@ -17428,12 +17428,12 @@ ToneDB_PercSourceIndexMapB_Lookup__FC160A:
 	ld	xbc, (0xD7F1:24)                       ; FC160A  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+76)                           ; FC160F  ld XWA,(XBC+0x4c)
 	ld	(xiz-12), xwa                           ; FC1612  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC1615  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC1615  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC161A  ld IY,(XWA)
 	ld	(xiz-16), iy                            ; FC161C  ld (XIZ+0xf0),IY
 	ld	xwa, (xbc+0x8C)                         ; FC161F  ld XWA,(XBC+0x008c)
 	ld	(xiz-12), xwa                           ; FC1624  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC1627  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC1627  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC162C  ld (XIZ+0xfc),XWA
 	ldw (xiz-18), 0x0000                       ; FC162F  ld (XIZ+0xee),0x0000
 ToneDB_PercSourceIndexMapB_Lookup__FC1634:
@@ -17495,14 +17495,14 @@ ToneQuery_ReplyPercSourceName1_ByRow:
 	ld	xbc, (0xD7F1:24)                       ; FC1653  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x90)                         ; FC1658  ld XWA,(XBC+0x0090)
 	ld	(xiz-12), xwa                           ; FC165D  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC1660  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC1660  add XWA,(0x00d7ed)
 	ld	(xiz-8), xwa                            ; FC1665  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FC1668  ld IY,(XWA)
 	cp	(xiz+8), iy                             ; FC166A  cp (XIZ+0x08),IY
 	jr nc, ToneQuery_ReplyPercSourceName1_ByRow__FC1681                  ; FC166D  jr NC,0xfc1681
 	ld	xiy, (xbc+0x8C)                         ; FC166F  ld XIY,(XBC+0x008c)
 	ld	(xiz-12), xiy                           ; FC1674  ld (XIZ+0xf4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC1677  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC1677  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC167C  ld (XIZ+0xfc),XIY
 	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16D2                      ; FC167F  jr T,0xfc16d2
 ToneQuery_ReplyPercSourceName1_ByRow__FC1681:
@@ -17512,7 +17512,7 @@ ToneQuery_ReplyPercSourceName1_ByRow__FC1681:
 	ld	xbc, (0xD811:24)                       ; FC168E  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x8C)                         ; FC1693  ld XWA,(XBC+0x008c)
 	ld	(xiz-12), xwa                           ; FC1698  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FC169B  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FC169B  add XWA,(0x00d80d)
 	ld	(xiz-4), xwa                            ; FC16A0  ld (XIZ+0xfc),XWA
 	ld	xiy, (xiz-8)                            ; FC16A3  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC16A6  ld BC,(XIY)
@@ -17522,12 +17522,12 @@ ToneQuery_ReplyPercSourceName1_ByRow__FC16AD:
 	ld	xbc, (0xD7F1:24)                       ; FC16AD  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+76)                           ; FC16B2  ld XWA,(XBC+0x4c)
 	ld	(xiz-12), xwa                           ; FC16B5  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC16B8  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC16B8  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC16BD  ld IY,(XWA)
 	ld	(xiz+8), iy                             ; FC16BF  ld (XIZ+0x08),IY
 	ld	xwa, (xbc+0x8C)                         ; FC16C2  ld XWA,(XBC+0x008c)
 	ld	(xiz-12), xwa                           ; FC16C7  ld (XIZ+0xf4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC16CA  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC16CA  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC16CF  ld (XIZ+0xfc),XWA
 ToneQuery_ReplyPercSourceName1_ByRow__FC16D2:
 	ldw (xiz-14), 0x000D                       ; FC16D2  ld (XIZ+0xf2),0x000d
@@ -17655,7 +17655,7 @@ ToneQuery_ReplyPercSourceName1AndIndex__FC17B4:
 	ld	xbc, (0xD7F1:24)                       ; FC17B4  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x90)                         ; FC17B9  ld XWA,(XBC+0x0090)
 	ld	(xiz-24), xwa                           ; FC17BE  ld (XIZ+0xe8),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC17C1  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC17C1  add XWA,(0x00d7ed)
 	ld	(xiz-20), xwa                           ; FC17C6  ld (XIZ+0xec),XWA
 	ld	iy, (xwa)                               ; FC17C9  ld IY,(XWA)
 	cp	(xiz-30), iy                            ; FC17CB  cp (XIZ+0xe2),IY
@@ -17814,12 +17814,12 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC18FF:
 	extpfx3 0x9E, 0xE2, 0x85                   ; FC1910  add IY,(XIZ+0xe2)
 	mul	iy, 2                                  ; FC1913  mul IY,0x0002
 	extpfx3 0xAE, 0xE4, 0x85                   ; FC1917  add XIY,(XIZ+0xe4)
-	addda32_24	xiy, (0xD7ED)                   ; FC191A  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC191A  add XIY,(0x00d7ed)
 	ld	wa, (xiy)                               ; FC191F  ld WA,(XIY)
 	ld	(xiz-34), wa                            ; FC1921  ld (XIZ+0xde),WA
 	ld	xiy, (xbc+0x94)                         ; FC1924  ld XIY,(XBC+0x0094)
 	ld	(xiz-28), xiy                           ; FC1929  ld (XIZ+0xe4),XIY
-	addda32_24	xiy, (0xD7ED)                   ; FC192C  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FC192C  add XIY,(0x00d7ed)
 	ld	(xiz-20), xiy                           ; FC1931  ld (XIZ+0xec),XIY
 	ldw (xiz-42), 0x0000                       ; FC1934  ld (XIZ+0xd6),0x0000
 	ld	(xiz-45), 0                             ; FC1939  ld (XIZ+0xd3),0x00
@@ -17847,25 +17847,25 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC1940:
 	extpfx3 0x9E, 0xE2, 0x81                   ; FC1983  add BC,(XIZ+0xe2)
 	mul	bc, 2                                  ; FC1986  mul BC,0x0002
 	extpfx3 0xAE, 0xE4, 0x81                   ; FC198A  add XBC,(XIZ+0xe4)
-	addda32_24	xbc, (0xD80D)                   ; FC198D  add XBC,(0x00d80d)
+	add	xbc, (0xD80D:24)                   ; FC198D  add XBC,(0x00d80d)
 	ld	wa, (xbc)                               ; FC1992  ld WA,(XBC)
 	ld	(xiz-34), wa                            ; FC1994  ld (XIZ+0xde),WA
 	ld	xbc, (0xD811:24)                       ; FC1997  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x94)                         ; FC199C  ld XWA,(XBC+0x0094)
 	ld	(xiz-28), xwa                           ; FC19A1  ld (XIZ+0xe4),XWA
-	addda32_24	xwa, (0xD80D)                   ; FC19A4  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FC19A4  add XWA,(0x00d80d)
 	ld	(xiz-20), xwa                           ; FC19A9  ld (XIZ+0xec),XWA
 	jr ToneQuery_ReplyPercSourceName2AndIndex__FC19DC                      ; FC19AC  jr T,0xfc19dc
 ToneQuery_ReplyPercSourceName2AndIndex__FC19AE:
 	ld	xbc, (0xD7F1:24)                       ; FC19AE  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+96)                           ; FC19B3  ld XWA,(XBC+0x60)
 	ld	(xiz-28), xwa                           ; FC19B6  ld (XIZ+0xe4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC19B9  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC19B9  add XWA,(0x00d7ed)
 	ld	iy, (xwa)                               ; FC19BE  ld IY,(XWA)
 	ld	(xiz-34), iy                            ; FC19C0  ld (XIZ+0xde),IY
 	ld	xwa, (xbc+0x94)                         ; FC19C3  ld XWA,(XBC+0x0094)
 	ld	(xiz-28), xwa                           ; FC19C8  ld (XIZ+0xe4),XWA
-	addda32_24	xwa, (0xD7ED)                   ; FC19CB  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FC19CB  add XWA,(0x00d7ed)
 	ld	(xiz-20), xwa                           ; FC19D0  ld (XIZ+0xec),XWA
 	ldw (xiz-42), 0x0000                       ; FC19D3  ld (XIZ+0xd6),0x0000
 	ld	(xiz-45), 0                             ; FC19D8  ld (XIZ+0xd3),0x00
@@ -20143,7 +20143,7 @@ DrawbarPreset_GetDescriptor:
 	mul	xbc, xhl                               ; FC299F  mul XBC,HL
 	add	xiy, xbc                               ; FC29A1  add XIY,XBC
 	ld	xix, xiy                                ; FC29A3  ld XIX,XIY
-	addda32_24	xix, (0xD7ED)                   ; FC29A5  add XIX,(0x00d7ed)
+	add	xix, (0xD7ED:24)                   ; FC29A5  add XIX,(0x00d7ed)
 	ld	hl, de                                  ; FC29AA  ld HL,DE
 	add	hl, 0x90                               ; FC29AC  add HL,0x0090
 	ldw	bc, 0x1523                             ; FC29B0  ld BC,0x1523

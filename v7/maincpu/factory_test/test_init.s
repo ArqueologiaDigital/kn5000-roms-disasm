@@ -418,17 +418,17 @@ RunTestCounters_Entry:
 	cps l, 2
 	jr nz, RunTestCounters_BadStatus
 RunTestCounters_RunTest:
-	incdi16_24 1, (0x03dcfe)
+	incw 1, (0x03dcfe:24)
 	calr FDLoadSaveTest
 	cps hl, 0
 	jr nz, RunTestCounters_IncrNG
-	incdi16_24 1, (0x03dd00)
+	incw 1, (0x03dd00:24)
 	jr RunTestCounters_Display
 RunTestCounters_BadStatus:
 	ldb l, 0xff
 	ret
 RunTestCounters_IncrNG:
-	incdi16_24 1, (0x03dd02)
+	incw 1, (0x03dd02:24)
 RunTestCounters_Display:
 	lda xwa, (FDTest_String_TestTitleFunc_0xEA:24)
 	calr FDTest_PrintDiag
@@ -624,7 +624,7 @@ HamaStub3_Entry:
 	ret
 
 CallExtIfActive_Entry:
-	cpib_da (0x03dd04), 0x00
+	cp (0x03dd04:24), 0x00
 	ret z
 	ld xhl, 0x280010
 	call (xhl)
@@ -646,7 +646,7 @@ LoadAndRunXapr_ClearFlag:
 	ld (0x03dd04:24), 0x00
 
 LoadAndRunXapr_CallIfActive:
-	cpib_da (0x03dd04), 0x00
+	cp (0x03dd04:24), 0x00
 	ret z
 	ld xhl, 0x280008
 	lda xwa, (0x027ed2:24)

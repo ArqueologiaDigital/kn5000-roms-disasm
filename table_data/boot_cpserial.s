@@ -115,7 +115,7 @@ BootSerial_ModeSwitch__not80:
 	calr	BootSerial_ResetAndIdent	; 0xc0: full reset + re-ident
 	jr	BootSerial_ModeSwitch__ret
 BootSerial_ModeSwitch__apply:
-	orddm8	0x0f64, a		; merge new mode into flags
+	or	(0x0f64:16), a		; merge new mode into flags
 	ld	xhl, 0x988a		; RX transfer-control block
 	ldw	(xhl - 4), 0		; head (0x9886) = 0
 	ldw	(xhl - 8), 0		; tail (0x9882) = 0
@@ -356,16 +356,16 @@ BootSerial_SendTwoBytes_Bitbang:
 	ldio	0xf8, 0x22
 	ldio	0xf8, 0x23
 	ld	xiy, 0x0fd9		; TX ring
-	addda16	xiy, 0x0fd5		; + send index
+	add	iy, (0x0fd5:16)		; + send index
 	ld	a, (xiy)
-	incdi16	1, (0x0fd5)
+	incw	1, (0x0fd5:16)
 	st_dd8b	a, 0xd4			; first byte -> SC1BUF
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
 	ld	xiy, 0x0fd9
-	addda16	xiy, 0x0fd5
+	add	iy, (0x0fd5:16)
 	ld	a, (xiy)
-	incdi16	1, (0x0fd5)
+	incw	1, (0x0fd5:16)
 	st_dd8b	a, 0xd4			; second byte -> SC1BUF
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
@@ -468,7 +468,7 @@ BootSerial_TickWait2:
 	ld	(0x0f73:16), wa
 BootSerial_TickWait2__loop:
 	ld	wa, (0x0c00:16)
-	subda16	xwa, 0x0f73
+	sub	wa, (0x0f73:16)
 	cps	wa, 2
 	jr	lt, BootSerial_TickWait2__loop
 	ret
@@ -478,7 +478,7 @@ BootSerial_TickWait6:
 	ld	(0x0f73:16), wa
 BootSerial_TickWait6__loop:
 	ld	wa, (0x0c00:16)
-	subda16	xwa, 0x0f73
+	sub	wa, (0x0f73:16)
 	cps	wa, 6
 	jr	lt, BootSerial_TickWait6__loop
 	ret
@@ -488,7 +488,7 @@ BootSerial_TickWait51:
 	ld	(0x0f73:16), wa
 BootSerial_TickWait51__loop:
 	ld	wa, (0x0c00:16)
-	subda16	xwa, 0x0f73
+	sub	wa, (0x0f73:16)
 	cp	wa, 51
 	jr	lt, BootSerial_TickWait51__loop
 	ret
@@ -652,7 +652,7 @@ BootSerial_WaitDeviceIdent__poll:
 	jr	nz, BootSerial_WaitDeviceIdent__have
 	ldb	w, 0x0c
 BootSerial_WaitDeviceIdent__have:
-	cpdm8	0x1042, w		; same as previous poll?
+	cp	(0x1042:16), w		; same as previous poll?
 	ld	(0x1042:16), w
 	jr	nz, BootSerial_WaitDeviceIdent__poll
 	ld	(0x1042:16), w		; stable: store (again) and clean up
@@ -749,7 +749,7 @@ BootSerial_WaitTxIdle__outer:
 	jr	nz, BootSerial_WaitTxIdle__busy
 	jr	BootSerial_WaitTxIdle__check_tx
 BootSerial_WaitTxIdle__busy:
-	decdi8	1, (0x0f6f)
+	dec	1, (0x0f6f:16)
 	cp	(0x0f6f:16), 0
 	jr	z, BootSerial_WaitTxIdle__exit	; timed out
 	ei	0
@@ -757,7 +757,7 @@ BootSerial_WaitTxIdle__busy:
 	jr	BootSerial_WaitTxIdle__outer
 BootSerial_WaitTxIdle__check_tx:
 	ld	wa, (0x0fd7:16)		; TX pending count
-	cpda16	xwa, 0x0fd5		; == send index -> drained
+	cp	wa, (0x0fd5:16)		; == send index -> drained
 	jr	nz, BootSerial_WaitTxIdle__busy
 BootSerial_WaitTxIdle__exit:
 	ei	6
@@ -792,7 +792,7 @@ BootSerial_SendFrame:
 	ldw	(0x0fd5:16), 0		; TX send index = 0
 	ldw	(0x0fd7:16), 0		; TX pending count = 0
 	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
-	adddi16	(0x0fd7), 2		; two bytes pending
+	addw	(0x0fd7:16), 2		; two bytes pending
 	or	(0x0f64:16), 2		; TX-pending flag
 	and	(0x0f64:16), 0xfe		; clear RX-active flag
 	ld	(0x0f62:16), 4		; state machine -> state 0x04

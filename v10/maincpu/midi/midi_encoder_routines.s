@@ -85,7 +85,7 @@ Encoder_ProcessVolume:
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
 	calr Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	ld a, l
-	cpda8 a, 0x8ef4	; Compare with current
+	cp a, (0x8ef4:16)	; Compare with current
 	jr z, Encoder_ProcessVolume_NoChange
 	ld (0x8ef4:16), a; Store new value
 	ldb_erp A, 0xf8
@@ -171,7 +171,7 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	jr Encoder_ProcessBreath_Return
 
 Encoder_ProcessBreath_SimplePassthrough:
-	cpdm8 0x8ee8, a	; Compare with current
+	cp (0x8ee8:16), a	; Compare with current
 	ret z	; Return if unchanged
 	ld (0x8ee8:16), a; Store new value
 	ld l, a

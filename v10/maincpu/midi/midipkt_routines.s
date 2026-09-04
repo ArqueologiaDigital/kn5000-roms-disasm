@@ -1101,7 +1101,7 @@ MidiPkt_EnqueueExtended2_Data:
 	ld	a, (xde+8)
 	.byte 0x89
 	push	sr
-	adddm8	0x8bc9, b
+	add	(0x8bc9:16), b
 	pushw	0xc921
 	.byte 0xcc
 	retd	614

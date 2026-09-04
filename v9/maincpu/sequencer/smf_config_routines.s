@@ -58,12 +58,12 @@ SMF_ProcessEventLoop_Entry:
 SMF_IncrementPosition:
 	push xwa
 	push xde
-	incdi16 1, (3946)
+	incw 1, (3946:16)
 	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, xde
 	stw_erp DE, 0xe2
-	adddm16 3938, xwa
+	add (3938:16), wa
 	ld (3940:16), de
 	ldw (3946:16), 0
 	pop xde
@@ -232,7 +232,7 @@ SMF_ScanChannels_Loop:
 
 SMF_ScanChannels_Inactive:
 	ld (0x2877:16), c
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	push xhl
 	pushw bc
 	call Scoop_SpecialMode_ParamCheckBound
@@ -307,7 +307,7 @@ SMF_FindFree_CheckPart:
 	jr z, SMF_FindFree_Next
 	inc 1, c
 	ld (0x2877:16), l
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 
 SMF_AssignRemainingChannels:
 	ld de, (0x00ffec:24)
@@ -323,7 +323,7 @@ SMF_AssignRemainingChannels:
 	pop xix
 	jr z, SMF_AssignRemaining_Next
 	ld (9858:16), c
-	incdi8 1, (9858)
+	inc 1, (9858:16)
 	ld a, (0x2877:16)
 	ld (9860:16), a
 	push xhl
@@ -566,7 +566,7 @@ SMF_WriteByte_SectorOK:
 
 SMF_WriteByte_NewSector:
 	ld c, a
-	incdi16 1, (4327)
+	incw 1, (4327:16)
 	pushw wa
 	push xhl
 	pushw bc
@@ -604,7 +604,7 @@ SMF_WriteByte_AlignError:
 	jp SMF_WriteByte_Done
 
 SMF_WriteByte_AllocSector:
-	incdi16 1, (4347)
+	incw 1, (4347:16)
 	ld xwa, 0x13fa
 	ld (4376:16), xwa
 	ld xix, xwa
@@ -778,7 +778,7 @@ SMF_TimeDelta_CheckFirst:
 	jr nz, SMF_TimeDelta_Store
 	cp (6710:16), 0
 	jr z, SMF_TimeDelta_Store
-	adddi16 4229, 384
+	addw (4229:16), 384
 	ld (4344:16), 1
 
 SMF_TimeDelta_Store:
@@ -812,9 +812,9 @@ SMF_ProcessCh_Loop:
 	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld wa, (xix + 3)
 	pop xix
-	cpda16 xwa, 4229
+	cp wa, (4229:16)
 	jr ule, SMF_ProcessCh_MoveToOutput
-	subda16 xwa, 4229
+	sub wa, (4229:16)
 	push xix
 	ld xix, 0x11f9
 	extz xhl
@@ -1061,7 +1061,7 @@ SMF_Event_NoteOn:
 	ldb a, 0x90
 
 SMF_Event_OutputByte:
-	orda8 a, 4008
+	or a, (4008:16)
 	pushw wa
 	calr SMF_LookupSongBank
 	popw wa
@@ -1398,7 +1398,7 @@ SMF_LookupSongBank:
 	extz xhl
 	dec 1, xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld iy, (9830:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	ret
@@ -1545,7 +1545,7 @@ SMF_UpdateTempo_Loop:
 
 SMF_UpdateTempo_SubtractBase:
 	ld de, wa
-	subda16 xde, 3942
+	sub de, (3942:16)
 	cps de, 0
 	jr ge, SMF_UpdateTempo_ClampZero
 	lds de, 0
@@ -1589,9 +1589,9 @@ SMF_UpdateTempo_Encode:
 
 SMF_UpdateTempo_Finalize:
 	ld wa, (3942:16)
-	addda16 xwa, 3952
+	add wa, (3952:16)
 	ld (3942:16), bc
-	addda16 xbc, 3938
+	add bc, (3938:16)
 	sub bc, wa
 	ld (4229:16), bc
 	calr SMF_EncodeTimeDelta
@@ -1643,7 +1643,7 @@ SMF_ResolveGlobalChannel:
 
 SMF_GlobalCh_DrumMode:
 	cp (4324:16), 255
-	jp_24 nz, SMF_GlobalCh_DrumCh15
+	jp nz, (SMF_GlobalCh_DrumCh15:24)
 	ld (6881:16), 9
 	jp SMF_GlobalCh_Return
 
@@ -1653,14 +1653,14 @@ SMF_GlobalCh_DrumCh15:
 
 SMF_GlobalCh_NoDrum:
 	cp (4324:16), 255
-	jp_24 nz, SMF_GlobalCh_NonDrumCh15
+	jp nz, (SMF_GlobalCh_NonDrumCh15:24)
 	cp iy, 0x9
-	jp_24 z, SMF_GlobalCh_FreeSearch
+	jp z, (SMF_GlobalCh_FreeSearch:24)
 	jp SMF_GlobalCh_Found
 
 SMF_GlobalCh_NonDrumCh15:
 	cp iy, 0xf
-	jp_24 z, SMF_GlobalCh_FreeSearch
+	jp z, (SMF_GlobalCh_FreeSearch:24)
 	jp SMF_GlobalCh_Found
 
 SMF_GlobalCh_FreeSearch:
@@ -1734,8 +1734,8 @@ SMF_LoadBank_EventLoop:
 	calr SMF_SetupReadPointers
 	calr SMF_ResetPlaybackState
 	call SMF_SetupRead_Return
-	incdi8_24 1, (0xffe3)
-	cpib_da (0x00ffe3), 0x0a
+	inc 1, (0xffe3:24)
+	cp (0x00ffe3:24), 0x0a
 	jr c, SMF_LoadBank_EventLoop
 
 SMF_LoadBank_Return:
@@ -1795,7 +1795,7 @@ SMF_Parse_NextChannel:
 	and (4393:16), 254
 	and (4393:16), 251
 	ld (4419:16), 0
-	incdi8 1, (3301)
+	inc 1, (3301:16)
 	jr SMF_ParseEvents
 
 SMF_Parse_Complete:
@@ -1970,7 +1970,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
 	stb_dri A, 0x07, 0xf4, 0xec
-	cpda16 xhl, 4402
+	cp hl, (4402:16)
 	jr c, SMF_ConfigSlot_ReadDataLoop
 	popw hl
 	pop xiy
@@ -1989,9 +1989,9 @@ SMF_ConfigSlot_ReadDataLoop:
 	cps a, 3
 	jr z, SMF_Config_Format3
 	cps a, 4
-	jp_24 z, SMF_Config_Format4or5
+	jp z, (SMF_Config_Format4or5:24)
 	cps a, 5
-	jp_24 z, SMF_Config_Format4or5
+	jp z, (SMF_Config_Format4or5:24)
 	jrl SMF_ConfigSlot_Return
 
 SMF_Config_Format1:
@@ -2125,7 +2125,7 @@ SMF_Config_WriteLoop:
 	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
-	cpda16 xhl, 4402
+	cp hl, (4402:16)
 	jr c, SMF_Config_WriteLoop
 	pop xhl
 	pop xix
@@ -2247,7 +2247,7 @@ SMF_ConfigSlot_CodeBlock:
 	ld	wa, (10375:16)
 	ld	(4415:16), wa
 	ld	(4417:16), iy
-	incdi16	1, (4417)
+	incw	1, (4417:16)
 	cpw	(4417:16), 255
 	jr	ule, 47
 	ld	xhl, (10369:16)
@@ -2351,7 +2351,7 @@ SMF_CalcPageAddress:
 	dec 1, hl
 	extz xhl
 	sla xhl, 8
-	addda32 xhl, 7514
+	add xhl, (7514:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
@@ -2433,11 +2433,11 @@ SMF_SlotChain_ExtendedVoice:
 	cp (4394:16), 3
 	jr z, SMF_SlotChain_ExtVoiceReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x20
 	jr nz, SMF_SlotChain_ExtVoiceReturn
 	ld w, (xiy + 4)
-	orda8 w, 4395
+	or w, (4395:16)
 	and a, w
 	and a, 0x20
 	cps a, 0
@@ -2531,7 +2531,7 @@ SMF_SlotParam_VolumeCalc:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x7
 	ld a, (4395:16)
-	andda8 a, 3310
+	and a, (3310:16)
 	bit 7, a
 	jr nz, SMF_SlotParam_VolumeScale
 	xor w, w
@@ -2682,9 +2682,9 @@ SMF_SlotParam_ModWheelCalc:
 	ld (xiy + 3), 0x3
 	or (4411:16), 1
 	ld a, (xiy + 4)
-	orda8 a, 4395
+	or a, (4395:16)
 	ld w, (xiy + 5)
-	orda8 w, 3310
+	or w, (3310:16)
 	cps w, 4
 	jr z, SMF_SlotParam_ModWheelStore
 	cps w, 3
@@ -2786,7 +2786,7 @@ SMF_SlotParam_Aftertouch:
 	cp (xiy + 3), 0x3
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x80
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld (xiy + 2), 0x60
@@ -2797,7 +2797,7 @@ SMF_SlotParam_AftertouchImpl:
 	cp (xiy + 3), 0x3
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0xc0
 	jr nz, SMF_SlotParam_AftertouchReturn
 	ld (xiy + 2), 0x60
@@ -2849,7 +2849,7 @@ SMF_SlotParam_Sustain:
 	cp (xiy + 3), 0x0
 	jr nz, SMF_SlotParam_SustainReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cps a, 3
 	jr nz, SMF_SlotParam_SustainReturn
 	ld a, (xiy + 2)
@@ -2935,7 +2935,7 @@ SMF_SlotParam_Format5Impl:
 	cp (xiy + 3), 0x1
 	jr nz, SMF_SlotParam_Format5Return
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x3f
 	jr z, SMF_SlotParam_Format5Check
 	cp a, 0x40
@@ -2973,7 +2973,7 @@ SMF_SlotParam_ReverbTypeImpl:
 	cp (xiy + 3), 0x1
 	jr nz, SMF_SlotParam_ReverbTypeReturn
 	ld a, (xiy + 5)
-	orda8 a, 3310
+	or a, (3310:16)
 	cp a, 0x1f
 	jr z, SMF_SlotParam_ReverbTypeCalc
 	cp a, 0x40

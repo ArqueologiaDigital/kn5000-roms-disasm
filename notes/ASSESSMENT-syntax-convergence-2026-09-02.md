@@ -368,6 +368,13 @@ Measured by `notes/syntax-convergence-probes/mnemonic_census.py`.
    `cpw_da`. `scripts/converters/run_direct_address_convergence.sh` converts
    them once their entries are added to `MAP`. This is the next slice and it is
    mechanical.
+   ✅ **DONE 2026-09-04, lane `w26/conv-alu`.** The estimate was low: the real
+   set is **11,881 sites over 95 names** (it was read off the name's shape, and
+   missed `jp_24`/`call_24`/`lda_24`/`pushdi_24`/`chgda_24`). **11,840
+   converted**, 13/13 gates green after each of ten families; 35 refused — 27
+   macro bodies and 8 `chgda_24` waiting on a `chg` -> `chgm` backend alias.
+   SYNTHETIC 147,842 -> 136,863 sites, 438 -> 350 names. See
+   `notes/lanes/conv-alu-2026-09-04.md`.
 2. **~78,364 need a backend feature, not a rename** — the three named in
    `notes/TRIAGE-size-form-mnemonics-2026-09-02.md`: an immediate field width
    (52,064 sites), a way to name the shorter alternative encoding (19,603), and

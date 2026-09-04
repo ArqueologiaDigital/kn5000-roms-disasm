@@ -203,19 +203,19 @@ ExtBoard_ProbeAndInstallBases__FB0518:
 	extpfx6 0xD1, 0xFF, 0x14, 0x3E, 0x04, 0x00 ; FB0518  or (0x14ff),0x0004
 ExtBoard_ProbeAndInstallBases__FB051E:
 	ld	xbc, 0xF00000                           ; FB051E  ld XBC,0x00f00000
-	stl_da	(0xD7ED), xbc                       ; FB0523  ld (0x00d7ed),XBC
-	stl_da	(0xD7F1), xbc                       ; FB0528  ld (0x00d7f1),XBC
+	ld	(0xD7ED:24), xbc                       ; FB0523  ld (0x00d7ed),XBC
+	ld	(0xD7F1:24), xbc                       ; FB0528  ld (0x00d7f1),XBC
 	ld	xwa, 0xE80000                           ; FB052D  ld XWA,0x00e80000
-	stl_da	(0xD7F5), xwa                       ; FB0532  ld (0x00d7f5),XWA
+	ld	(0xD7F5:24), xwa                       ; FB0532  ld (0x00d7f5),XWA
 	ld	xbc, 0xE90000                           ; FB0537  ld XBC,0x00e90000
-	stl_da	(0xD7F9), xbc                       ; FB053C  ld (0x00d7f9),XBC
+	ld	(0xD7F9:24), xbc                       ; FB053C  ld (0x00d7f9),XBC
 	ld	xbc, 0xEA0000                           ; FB0541  ld XBC,0x00ea0000
-	stl_da	(0xD7FD), xbc                       ; FB0546  ld (0x00d7fd),XBC
+	ld	(0xD7FD:24), xbc                       ; FB0546  ld (0x00d7fd),XBC
 	ld	xbc, 0xEB0000                           ; FB054B  ld XBC,0x00eb0000
-	stl_da	(0xD801), xbc                       ; FB0550  ld (0x00d801),XBC
+	ld	(0xD801:24), xbc                       ; FB0550  ld (0x00d801),XBC
 	ld	xbc, 0x10000                            ; FB0555  ld XBC,0x00010000
-	stl_da	(0xD805), xbc                       ; FB055A  ld (0x00d805),XBC
-	stl_da	(0xD809), xbc                       ; FB055F  ld (0x00d809),XBC
+	ld	(0xD805:24), xbc                       ; FB055A  ld (0x00d805),XBC
+	ld	(0xD809:24), xbc                       ; FB055F  ld (0x00d809),XBC
 	ld	xix, 0xC00000                           ; FB0564  ld XIX,0x00c00000
 	ldw	hl, 0                                  ; FB0569  ld HL,0x0000
 ExtBoard_ProbeAndInstallBases__FB056C:
@@ -236,7 +236,7 @@ ExtBoard_ProbeAndInstallBases__FB058E:
 	cp	hl, 10                                  ; FB058E  cp HL,0x000a
 	jr c, ExtBoard_ProbeAndInstallBases__FB05B0 ; FB0592  jr C,0xfb05b0
 	ld	xbc, 0xC00000                           ; FB0594  ld XBC,0x00c00000
-	stl_da	(0xD80D), xbc                       ; FB0599  ld (0x00d80d),XBC
+	ld	(0xD80D:24), xbc                       ; FB0599  ld (0x00d80d),XBC
 	add	xix, 16                                ; FB059E  add XIX,0x00000010
 	ld	xwa, (xix)                              ; FB05A4  ld XWA,(XIX)
 	ld	xix, xwa                                ; FB05A6  ld XIX,XWA
@@ -244,14 +244,14 @@ ExtBoard_ProbeAndInstallBases__FB058E:
 	jr nz, ExtBoard_ProbeAndInstallBases__FB05C0 ; FB05AE  jr NZ,0xfb05c0
 ExtBoard_ProbeAndInstallBases__FB05B0:
 	sub	xbc, xbc                               ; FB05B0  sub XBC,XBC
-	stl_da	(0xD80D), xbc                       ; FB05B2  ld (0x00d80d),XBC
+	ld	(0xD80D:24), xbc                       ; FB05B2  ld (0x00d80d),XBC
 	sub	xwa, xwa                               ; FB05B7  sub XWA,XWA
-	stl_da	(0xD811), xwa                       ; FB05B9  ld (0x00d811),XWA
+	ld	(0xD811:24), xwa                       ; FB05B9  ld (0x00d811),XWA
 	jr ExtBoard_ProbeAndInstallBases__FB05CD   ; FB05BE  jr T,0xfb05cd
 ExtBoard_ProbeAndInstallBases__FB05C0:
 	ld	xbc, xix                                ; FB05C0  ld XBC,XIX
 	add	xbc, 0xC00000                          ; FB05C2  add XBC,0x00c00000
-	stl_da	(0xD811), xbc                       ; FB05C8  ld (0x00d811),XBC
+	ld	(0xD811:24), xbc                       ; FB05C8  ld (0x00d811),XBC
 ExtBoard_ProbeAndInstallBases__FB05CD:
 	call	0xFB80E1                              ; FB05CD  call 0xfb80e1
 	pushw	0                                    ; FB05D1  push 0x0000
@@ -7561,7 +7561,7 @@ ToneDB_ResolveToneRecord__FB418D:
 	ld	iy, hl                                  ; FB4198  ld IY,HL
 	extz	xiy                                   ; FB419A  extz XIY
 	add	xwa, xiy                               ; FB419C  add XWA,XIY
-	addda32_24	xwa, (0xD80D)                   ; FB419E  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB419E  add XWA,(0x00d80d)
 	ld	c, (xwa)                                ; FB41A3  ld C,(XWA)
 	extz	bc                                    ; FB41A5  extz BC
 	ld	hl, bc                                  ; FB41A7  ld HL,BC
@@ -7573,7 +7573,7 @@ ToneDB_ResolveToneRecord__FB418D:
 	add	bc, bc                                 ; FB41B9  add BC,BC
 	extz	xbc                                   ; FB41BB  extz XBC
 	add	xiy, xbc                               ; FB41BD  add XIY,XBC
-	addda32_24	xiy, (0xD80D)                   ; FB41BF  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FB41BF  add XIY,(0x00d80d)
 	ld	hl, (xiy)                               ; FB41C4  ld HL,(XIY)
 	ld	xbc, (0xD811:24)                       ; FB41C6  ld XBC,(0x00d811)
 	ld	xwa, (xbc+8)                            ; FB41CB  ld XWA,(XBC+0x08)
@@ -7582,9 +7582,9 @@ ToneDB_ResolveToneRecord__FB418D:
 	sll	iy, 2                                  ; FB41D3  sll 0x02,IY
 	extz	xiy                                   ; FB41D6  extz XIY
 	extpfx3 0xAE, 0xF4, 0x85                   ; FB41D8  add XIY,(XIZ+0xf4)
-	addda32_24	xiy, (0xD80D)                   ; FB41DB  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FB41DB  add XIY,(0x00d80d)
 	ld	xwa, (xiy)                              ; FB41E0  ld XWA,(XIY)
-	addda32_24	xwa, (0xD80D)                   ; FB41E2  add XWA,(0x00d80d)
+	add	xwa, (0xD80D:24)                   ; FB41E2  add XWA,(0x00d80d)
 	ld	xix, xwa                                ; FB41E7  ld XIX,XWA
 	jrl ToneDB_ResolveToneRecord__FB42A6                     ; FB41E9  jrl T,0xfb42a6
 ToneDB_ResolveToneRecord__FB41EC:
@@ -7626,7 +7626,7 @@ ToneDB_ResolveToneRecord__FB424A:
 	ld	iy, hl                                  ; FB4255  ld IY,HL
 	extz	xiy                                   ; FB4257  extz XIY
 	add	xwa, xiy                               ; FB4259  add XWA,XIY
-	addda32_24	xwa, (0xD7ED)                   ; FB425B  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FB425B  add XWA,(0x00d7ed)
 	ld	c, (xwa)                                ; FB4260  ld C,(XWA)
 	extz	bc                                    ; FB4262  extz BC
 	ld	hl, bc                                  ; FB4264  ld HL,BC
@@ -7638,7 +7638,7 @@ ToneDB_ResolveToneRecord__FB424A:
 	add	bc, bc                                 ; FB4276  add BC,BC
 	extz	xbc                                   ; FB4278  extz XBC
 	add	xiy, xbc                               ; FB427A  add XIY,XBC
-	addda32_24	xiy, (0xD7ED)                   ; FB427C  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB427C  add XIY,(0x00d7ed)
 	ld	hl, (xiy)                               ; FB4281  ld HL,(XIY)
 	ld	xbc, (0xD7F1:24)                       ; FB4283  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+8)                            ; FB4288  ld XWA,(XBC+0x08)
@@ -7647,9 +7647,9 @@ ToneDB_ResolveToneRecord__FB424A:
 	sll	iy, 2                                  ; FB4290  sll 0x02,IY
 	extz	xiy                                   ; FB4293  extz XIY
 	extpfx3 0xAE, 0xF4, 0x85                   ; FB4295  add XIY,(XIZ+0xf4)
-	addda32_24	xiy, (0xD7ED)                   ; FB4298  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB4298  add XIY,(0x00d7ed)
 	ld	xwa, (xiy)                              ; FB429D  ld XWA,(XIY)
-	addda32_24	xwa, (0xD7ED)                   ; FB429F  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FB429F  add XWA,(0x00d7ed)
 	ld	xix, xwa                                ; FB42A4  ld XIX,XWA
 ToneDB_ResolveToneRecord__FB42A6:
 	ld	xbc, xix                                ; FB42A6  ld XBC,XIX
@@ -8822,11 +8822,11 @@ DrumKit_ResolveInstrumentRecord__FB4931:
 	add	bc, de                                 ; FB494A  add BC,DE
 	mul	bc, 2                                  ; FB494C  mul BC,0x0002
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB4950  add XBC,(XIZ+0xf8)
-	addda32_24	xbc, (0xD7ED)                   ; FB4953  add XBC,(0x00d7ed)
+	add	xbc, (0xD7ED:24)                   ; FB4953  add XBC,(0x00d7ed)
 	ld	wa, (xbc)                               ; FB4958  ld WA,(XBC)
 	mul	xiy, xwa                               ; FB495A  mul XIY,WA
 	extpfx3 0xAE, 0xF4, 0x85                   ; FB495C  add XIY,(XIZ+0xf4)
-	addda32_24	xiy, (0xD7ED)                   ; FB495F  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FB495F  add XIY,(0x00d7ed)
 	jrl DrumKit_ResolveInstrumentRecord__FB49E5                     ; FB4964  jrl T,0xfb49e5
 DrumKit_ResolveInstrumentRecord__FB4967:
 	ldb	c, 0x96                                ; FB4967  ld C,0x96
@@ -8858,18 +8858,18 @@ DrumKit_ResolveInstrumentRecord__FB498C:
 	add	bc, de                                 ; FB49B3  add BC,DE
 	mul	bc, 2                                  ; FB49B5  mul BC,0x0002
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB49B9  add XBC,(XIZ+0xf8)
-	addda32_24	xbc, (0xD80D)                   ; FB49BC  add XBC,(0x00d80d)
+	add	xbc, (0xD80D:24)                   ; FB49BC  add XBC,(0x00d80d)
 	ld	wa, (xbc)                               ; FB49C1  ld WA,(XBC)
 	extpfx3 0x9E, 0xF2, 0x40                   ; FB49C3  mul XWA,(XIZ+0xf2)
 	add	xiy, xwa                               ; FB49C6  add XIY,XWA
-	addda32_24	xiy, (0xD80D)                   ; FB49C8  add XIY,(0x00d80d)
+	add	xiy, (0xD80D:24)                   ; FB49C8  add XIY,(0x00d80d)
 	jr DrumKit_ResolveInstrumentRecord__FB49E5                      ; FB49CD  jr T,0xfb49e5
 DrumKit_ResolveInstrumentRecord__FB49CF:
 	ld	xbc, (xix+0x78)                         ; FB49CF  ld XBC,(XIX+0x78)
 	ld	(xiz-8), xbc                            ; FB49D2  ld (XIZ+0xf8),XBC
 	sub	xwa, xwa                               ; FB49D5  sub XWA,XWA
 	add	xbc, xwa                               ; FB49D7  add XBC,XWA
-	addda32_24	xbc, (0xD7ED)                   ; FB49D9  add XBC,(0x00d7ed)
+	add	xbc, (0xD7ED:24)                   ; FB49D9  add XBC,(0x00d7ed)
 	ld	xiy, xbc                                ; FB49DE  ld XIY,XBC
 	jr DrumKit_ResolveInstrumentRecord__FB49E5                      ; FB49E0  jr T,0xfb49e5
 DrumKit_ResolveInstrumentRecord__FB49E2:

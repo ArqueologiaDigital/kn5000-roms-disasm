@@ -2837,7 +2837,7 @@ Dev10C_PollBankAndRetire:
 	pushw	hl                                   ; FA68E0  push HL
 	pushw	de                                   ; FA68E1  push DE
 	push	xix                                   ; FA68E2  push XIX
-	incdi8_24	1, (0x87CF)                      ; FA68E3  inc 1,(0x0087cf)
+	inc	1, (0x87CF:24)                      ; FA68E3  inc 1,(0x0087cf)
 	ld	h, (0x87CF:24)                         ; FA68E8  ld H,(0x0087cf)
 	and	h, 3                                   ; FA68ED  and H,0x03
 	ld	(0x87CF:24), h                         ; FA68F0  ld (0x0087cf),H
@@ -3230,7 +3230,7 @@ sub_FA6BB5__FA6BCE:
 	ld	h, a                                    ; FA6BDA  ld H,A
 	cp	a, 33                                   ; FA6BDC  cp A,0x21
 	jrl nc, sub_FA6BB5__FA6E7C                 ; FA6BDF  jrl NC,0xfa6e7c
-	cpib_da 0x008677, 0x00                     ; FA6BE2  cp (0x008677),0x00
+	cp (0x008677:24), 0x00                     ; FA6BE2  cp (0x008677),0x00
 	jr z, sub_FA6BB5__FA6BFE                   ; FA6BE8  jr Z,0xfa6bfe
 	extpfx7 0xD2, 0x78, 0x86, 0x00, 0x3F, 0x30, 0x00 ; FA6BEA  cp (0x008678),0x0030
 	jr nc, sub_FA6BB5__FA6C07                  ; FA6BF1  jr NC,0xfa6c07
@@ -3376,7 +3376,7 @@ sub_FA6BB5__FA6D43:
 	sub	bc, bc                                 ; FA6D5D  sub BC,BC
 	inc	8, xsp                                 ; FA6D5F  inc 0,XSP
 	inc	4, xsp                                 ; FA6D61  inc 4,XSP
-	cpdm16_24	(0x87D0), bc                     ; FA6D63  cp (0x0087d0),BC
+	cp	(0x87D0:24), bc                     ; FA6D63  cp (0x0087d0),BC
 	jr z, sub_FA6BB5__FA6DBB                   ; FA6D68  jr Z,0xfa6dbb
 	ld	hl, (0x87D0:24)                        ; FA6D6A  ld HL,(0x0087d0)
 	extz	xde                                   ; FA6D6F  extz XDE
@@ -4219,7 +4219,7 @@ Voice_GetOctaveShift:
 	extz	bc                                    ; FA731C  extz BC
 	extz	xbc                                   ; FA731E  extz XBC
 	add	xwa, xbc                               ; FA7320  add XWA,XBC
-	addda32_24	xwa, (0xD7ED)                   ; FA7322  add XWA,(0x00d7ed)
+	add	xwa, (0xD7ED:24)                   ; FA7322  add XWA,(0x00d7ed)
 	ld	c, (xwa)                                ; FA7327  ld C,(XWA)
 	extz	bc                                    ; FA7329  extz BC
 	ld	de, bc                                  ; FA732B  ld DE,BC
@@ -4238,7 +4238,7 @@ Voice_GetOctaveShift:
 	sll	bc, 7                                  ; FA7351  sll 0x07,BC
 	extz	xbc                                   ; FA7354  extz XBC
 	add	xiy, xbc                               ; FA7356  add XIY,XBC
-	addda32_24	xiy, (0xD7ED)                   ; FA7358  add XIY,(0x00d7ed)
+	add	xiy, (0xD7ED:24)                   ; FA7358  add XIY,(0x00d7ed)
 	ld	bc, (xiy)                               ; FA735D  ld BC,(XIY)
 	sll	bc, 8                                  ; FA735F  sll 0x08,BC
 	ld	wa, bc                                  ; FA7362  ld WA,BC

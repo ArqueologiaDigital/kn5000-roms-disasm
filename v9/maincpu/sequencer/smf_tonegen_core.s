@@ -128,7 +128,7 @@ FloppyIO_ReadNextByte:
 	call FileIO_ReadBlockToFilePos
 	popw hl
 	ld a, l
-	incdi16 1, (4327)
+	incw 1, (4327:16)
 	pushw wa
 	push xhl
 	pushw de
@@ -154,9 +154,9 @@ FloppyIO_ReadNextByte_StorePtr:
 	lds32 xbc, 0
 	ld xwa, (6883:16)
 	cp xwa, xbc
-	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
+	jp z, (FloppyIO_ReadNextByte_UpdateRemaining:24)
 	cp (6887:16), 1
-	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
+	jp z, (FloppyIO_ReadNextByte_UpdateRemaining:24)
 	dec 1, xwa
 
 FloppyIO_ReadNextByte_UpdateRemaining:
@@ -325,9 +325,9 @@ SeqPlay_InitTrackLoop:
 
 SeqPlay_InitTrackLoop_Continue:
 	call SeqTrack_InitScoopAndSetWall
-	incdi16 1, (4237)
+	incw 1, (4237:16)
 	ld wa, (4237:16)
-	cpda16 xwa, 3934
+	cp wa, (3934:16)
 	jrl c, SeqPlay_InitTrackLoop
 	call FloppyIO_ReturnReady
 	cp (3830:16), 0
@@ -385,7 +385,7 @@ SeqTrack_AssignChannel_Loop:
 	pop xiy
 	add iy, 0x3
 	add ix, 0x2
-	incdi8 1, (5113)
+	inc 1, (5113:16)
 	cp (5113:16), 16
 	jrl c, SeqTrack_AssignChannel_Loop
 	jrl SeqTrack_AssignChannels_Done
@@ -499,7 +499,7 @@ SeqTrack_ComputeTempoScaling:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	popw wa
 	ldiw_erp 0xea, 0
 	ldiw_erp 0xe6, 0
@@ -513,7 +513,7 @@ SeqTrack_ComputeTempoScaling:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	popw wa
 
 SeqTrack_ComputeTempo_Phase2:
@@ -526,7 +526,7 @@ SeqTrack_ComputeTempo_Phase2:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -543,13 +543,13 @@ SeqTrack_ComputeTempo_Phase2:
 	jrl SeqTrack_UpdateVolumesExit
 
 SeqTrack_ComputeTempo_Phase3:
-	cpda16 xwa, 3936
+	cp wa, (3936:16)
 	jrl c, SeqTrack_ComputeTempo_Phase3Store
 	xor de, de
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	ld wa, de
 
 SeqTrack_ComputeTempo_Phase3Store:
@@ -579,7 +579,7 @@ SeqTrack_ComputeTempo_NoDelta:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -601,7 +601,7 @@ SeqTrack_ComputeTempo_NoDeltaDirect:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	adddm16 3946, xwa
+	add (3946:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -867,7 +867,7 @@ SoundGen_ScanBitmap_Loop:
 	xorcf_a_16 de
 	jrl nc, SoundGen_ScanBitmap_Next
 	ld (0x2877:16), c
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	pushw bc
 	call Scoop_SpecialMode_ParamCheckBound
 	popw bc
@@ -1279,7 +1279,7 @@ SMF_VoiceData_DrainRemaining:
 	ld xbc, (6883:16)
 	lds32 xwa, 0
 	cp xbc, xwa
-	jp_24 z, SMF_VoiceData_DrainDone
+	jp z, (SMF_VoiceData_DrainDone:24)
 	call FloppyIO_ReadNextByte
 	nop
 	nop
@@ -1370,9 +1370,9 @@ SeqTrack_InitScoopAndSetWall:
 	xor a, a
 	lds hl, 1
 	ld (0x2877:16), a
-	incdi8 1, (0x2877)
+	inc 1, (0x2877:16)
 	ld (9858:16), l
-	incdi8 1, (9858)
+	inc 1, (9858:16)
 	ld a, (0x2877:16)
 	ld (9860:16), a
 	pushw wa
@@ -1678,7 +1678,7 @@ SeqTrack_ComputeScaledDelta:
 	ld a, (4213:16)
 	mul xwa, xhl
 	stw_erp DE, 0xe2
-	addda16 xwa, 4335
+	add wa, (4335:16)
 	ld de, wa
 	ld wa, (4333:16)
 	ld hl, (3936:16)
@@ -1732,13 +1732,13 @@ Sequencer_Validate_Done:
 
 Sequencer_AdvanceBlockPosition:
 	ld xix, (4376:16)
-	addda32 xix, 4211
+	add xix, (4211:16)
 	cp xix, 0x17f9
 	jrl ule, Sequencer_Advance_StorePtr
 	push xix
 	call FileIO_ReadBlockToFilePos
 	pop xix
-	incdi16 1, (4327)
+	incw 1, (4327:16)
 	pushw wa
 	push xhl
 	pushw de
@@ -1764,10 +1764,10 @@ Sequencer_Advance_StorePtr:
 	lds32 xbc, 0
 	ld xwa, (6883:16)
 	cp xwa, xbc
-	jp_24 z, Sequencer_Advance_UpdateRemaining
+	jp z, (Sequencer_Advance_UpdateRemaining:24)
 	cp (6887:16), 1
-	jp_24 z, Sequencer_Advance_UpdateRemaining
-	subda32 xwa, 4211
+	jp z, (Sequencer_Advance_UpdateRemaining:24)
+	sub xwa, (4211:16)
 
 Sequencer_Advance_UpdateRemaining:
 	ld (6883:16), xwa
@@ -2183,19 +2183,19 @@ SetWall_ValidateAndApply:
 	ld a, (0x2877:16)
 	cps a, 1
 	jrl c, SetWall_ParamOutOfRange
-	cpda8 a, 0x28a1
+	cp a, (0x28a1:16)
 	jrl ugt, SetWall_ParamOutOfRange
-	cpda8 a, 9858
+	cp a, (9858:16)
 	jrl z, SetWall_ParamOutOfRange
 	ld a, (9858:16)
 	cps a, 1
 	jrl c, SetWall_ParamOutOfRange
-	cpda8 a, 0x28a1
+	cp a, (0x28a1:16)
 	jrl ugt, SetWall_ParamOutOfRange
 	ld a, (9860:16)
 	cps a, 1
 	jrl c, SetWall_ParamOutOfRange
-	cpda8 a, 0x28a1
+	cp a, (0x28a1:16)
 	jrl ule, SetWall_ParamsValid
 
 SetWall_ParamOutOfRange:
@@ -2222,9 +2222,9 @@ SetWall_SlotResolved:
 	ld wa, (0x28af:16)
 	ld (0x27d8:16), wa
 	ld a, (9860:16)
-	cpda8 a, 0x2877
+	cp a, (0x2877:16)
 	jrl z, SetWall_InitVoiceSlots
-	cpda8 a, 9858
+	cp a, (9858:16)
 	jrl z, SetWall_InitVoiceSlots
 	ld a, (0x2877:16)
 	pushw wa
@@ -4315,7 +4315,7 @@ VoiceChannel_AdvancePosition:
 	jr VoiceChannel_StorePosition_Continue
 
 VoiceChannel_AdvPos_CheckBounds:
-	cpda16 xwa, 0x286d
+	cp wa, (0x286d:16)
 	jr ule, VoiceChannel_AdvPos_LoadBlock
 	ld (0x287a:16), 10
 	jr VoiceChannel_StorePosition_Continue
@@ -4345,7 +4345,7 @@ ToneGen_WriteParamToBlock:
 	ld iy, (9830:16)
 	and iy, 0xff
 	extz xiy
-	addda32 xiy, 4349
+	add xiy, (4349:16)
 	ld (xiy), a
 	ret
 
@@ -4651,7 +4651,7 @@ VoiceChannel_NoteOnByChannel:
 	ld c, (4011:16)
 	and c, 0xf
 	ld wa, (4239:16)
-	andda16 xwa, 4241
+	and wa, (4241:16)
 	ldw_erp WA, 0x3e
 	ld a, c
 	scf
@@ -4706,7 +4706,7 @@ VoiceChannel_NoteOffByChannel:
 	ld c, (4011:16)
 	and c, 0xf
 	ld wa, (4239:16)
-	andda16 xwa, 4241
+	and wa, (4241:16)
 	ldw_erp WA, 0x3e
 	ld a, c
 	scf
@@ -5533,7 +5533,7 @@ ToneGen_ValidateVoice_CheckLink:
 	jr ToneGen_SaveVoiceState_Continue
 
 ToneGen_ValidateVoice_CheckBounds:
-	cpda16 xwa, 0x286d
+	cp wa, (0x286d:16)
 	jr ule, ToneGen_ValidateVoice_LoadBlock
 	ld (0x287a:16), 10
 	jr ToneGen_SaveVoiceState_Continue

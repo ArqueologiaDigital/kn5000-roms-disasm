@@ -368,7 +368,7 @@ FDC_Validate_DriveTrackSector__check_track:
 	ld (0x0c59:16), a	; ld (0x0c59),A
 	ld (0x0c64:16), a	; ld (0x0c64),A
 	extz wa	; extz WA
-	cpda16 xwa, (0x0d36)	; cp WA,(0x0d36)
+	cp wa, (0x0d36:16)	; cp WA,(0x0d36)
 	jr c, FDC_Validate_DriveTrackSector__track_ok	; jr C,0xffdb11
 	ldw wa, 0xfe	; ld WA,0x00fe
 	jrl FDC_Error	; jrl T,0xffe231
@@ -1498,7 +1498,7 @@ FDC_CmdRecalibrate__restore:
 ; -----------------------------------------------------------------------------
 FDC_CmdSeek:
 	ld a, (0x0c64:16)	; ld A,(0x0c64) - cmd 2 entry
-	cpda8 a, (0x0d32)	; cp A,(0x0d32)
+	cp a, (0x0d32:16)	; cp A,(0x0d32)
 	ret z	; ret Z
 	ldmm8 (0x0d32), (0x0c64)	; ld (0x0d32),(0x0c64)
 	lds wa, 2	; ld WA,2
@@ -1561,7 +1561,7 @@ FDC_CmdReadSectors__retry:
 	jrl FDC_CmdReadSectors__done	; jrl T,0xffe4a8
 FDC_CmdReadSectors__seek_ok:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
-	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
+	cp wa, (0x0d3a:16)	; cp WA,(0x0d3a)
 	jr ule, FDC_CmdReadSectors__save_position	; jr ULE,0xffe3b5
 	ldw (0x0c76:16), 1	; ld (0x0c76),0x0001
 FDC_CmdReadSectors__save_position:
@@ -1578,7 +1578,7 @@ FDC_CmdReadSectors__count_burst:
 	lds iz, 1	; ld IZ,1
 FDC_CmdReadSectors__burst_loop:
 	ld wa, (0x0c4c:16)	; ld WA,(0x0c4c)
-	adddm16 (0x0c4a), xwa	; add (0x0c4a),WA
+	add (0x0c4a:16), wa	; add (0x0c4a),WA
 	lda xwa, (0x0c78:16)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
@@ -1587,7 +1587,7 @@ FDC_CmdReadSectors__burst_loop:
 	lda xwa, (0x0c76:16)	; lda XWA,0x0c76
 	incw 1, (xwa)	; incw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
-	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
+	cp wa, (0x0d3a:16)	; cp WA,(0x0d3a)
 	jr ugt, FDC_CmdReadSectors__submit	; jr UGT,0xffe404
 	inc 1, iz	; inc 1,IZ
 	jr FDC_CmdReadSectors__burst_loop	; jr T,0xffe3de
@@ -1610,7 +1610,7 @@ FDC_CmdReadSectors__recover:
 	calr FDC_CmdSeek	; calr 0xffe31a
 FDC_CmdReadSectors__next_retry:
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
-	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
+	dec 1, (0x0c96:16)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdReadSectors__check_remaining	; jr NZ,0xffe49f
@@ -1670,7 +1670,7 @@ FDC_CmdWriteSectors__retry:
 	jrl FDC_CmdWriteSectors__done	; jrl T,0xffe5e1
 FDC_CmdWriteSectors__seek_ok:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
-	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
+	cp wa, (0x0d3a:16)	; cp WA,(0x0d3a)
 	jr ule, FDC_CmdWriteSectors__save_position	; jr ULE,0xffe4e8
 	ldw (0x0c76:16), 1	; ld (0x0c76),0x0001
 FDC_CmdWriteSectors__save_position:
@@ -1687,7 +1687,7 @@ FDC_CmdWriteSectors__count_burst:
 	lds iz, 1	; ld IZ,1
 FDC_CmdWriteSectors__burst_loop:
 	ld wa, (0x0c4c:16)	; ld WA,(0x0c4c)
-	adddm16 (0x0c4a), xwa	; add (0x0c4a),WA
+	add (0x0c4a:16), wa	; add (0x0c4a),WA
 	lda xwa, (0x0c78:16)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
@@ -1696,7 +1696,7 @@ FDC_CmdWriteSectors__burst_loop:
 	lda xwa, (0x0c76:16)	; lda XWA,0x0c76
 	incw 1, (xwa)	; incw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
-	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
+	cp wa, (0x0d3a:16)	; cp WA,(0x0d3a)
 	jr ugt, FDC_CmdWriteSectors__submit	; jr UGT,0xffe537
 	inc 1, iz	; inc 1,IZ
 	jr FDC_CmdWriteSectors__burst_loop	; jr T,0xffe511
@@ -1721,7 +1721,7 @@ FDC_CmdWriteSectors__recover:
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	calr FDC_CmdSeek	; calr 0xffe31a
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
-	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
+	dec 1, (0x0c96:16)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdWriteSectors__check_remaining	; jr NZ,0xffe5d8
@@ -1837,11 +1837,11 @@ FDC_CmdFormat__track_loop:
 FDC_CmdFormat__check_more_tracks:
 	ld a, (0x0c64:16)	; ld A,(0x0c64)
 	extz wa	; extz WA
-	cpda16 xwa, (0x0d36)	; cp WA,(0x0d36)
+	cp wa, (0x0d36:16)	; cp WA,(0x0d36)
 	jr ule, FDC_CmdFormat__track_loop	; jr ULE,0xffe674
 FDC_CmdFormat__finish:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
-	call_24 nz, 0xffd8a5	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
+	call nz, (0xffd8a5:24)	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
 	calr FDC_CmdRecalibrate	; calr 0xffe2d6
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	ret	; ret
@@ -1888,7 +1888,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1898,7 +1898,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1908,7 +1908,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5b:16)	; ld A,(0x0c5b)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1918,7 +1918,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1928,7 +1928,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1938,10 +1938,10 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	cpw (0x0c74:16), 0	; cp (0x0c74),0x0000
 	jr nz, FDC_BuildFormatFieldBuffer__offset_numbering	; jr NZ,0xffe7c8
-	incdi8 1, (0x0c5b)	; inc 1,(0x0c5b)
+	inc 1, (0x0c5b:16)	; inc 1,(0x0c5b)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1955,7 +1955,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 FDC_BuildFormatFieldBuffer__offset_numbering:
 	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	srl wa, 1	; srl 0x01,WA
-	addda8 a, (0x0c5b)	; add A,(0x0c5b)
+	add a, (0x0c5b:16)	; add A,(0x0c5b)
 	ld l, a	; ld L,A
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
@@ -1965,7 +1965,7 @@ FDC_BuildFormatFieldBuffer__offset_numbering:
 	add xwa, xbc	; add XWA,XBC
 	ld (xwa), l	; ld (XWA),L
 FDC_BuildFormatFieldBuffer__next_pair:
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -1975,8 +1975,8 @@ FDC_BuildFormatFieldBuffer__next_pair:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
-	incdi8 1, (0x0c5b)	; inc 1,(0x0c5b)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
+	inc 1, (0x0c5b:16)	; inc 1,(0x0c5b)
 	inc 1, iy	; inc 1,IY
 	cp iy, ix	; cp IY,IX
 	jrl c, FDC_BuildFormatFieldBuffer__pair_loop	; jrl C,0xffe708
@@ -1993,7 +1993,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -2003,7 +2003,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xhl, xbc	; add XHL,XBC
 	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -2013,7 +2013,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xhl, xbc	; add XHL,XBC
 	ld wa, (0x0d38:16)	; ld WA,(0x0d38)
 	ld (xhl), a	; ld (XHL),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
 	inc 1, e	; inc 1,E
 	extz wa	; extz WA
@@ -2023,7 +2023,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	add xde, xbc	; add XDE,XBC
 	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xde), a	; ld (XDE),A
-	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
+	incw 1, (0x0c4a:16)	; incw 1,(0x0c4a)
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -2298,7 +2298,7 @@ FDC_PIO_ReadTransfer:
 	inc 1, xhl	; inc 1,XHL
 	ld (0x0c7c:16), xhl	; ld (0x0c7c),XHL
 FDC_PIO_CountAndFinish:
-	subdi16 (0x0c4a), 1	; sub (0x0c4a),0x0001
+	subw (0x0c4a:16), 1	; sub (0x0c4a),0x0001
 	ret nz	; ret NZ
 	calr FDC_PulseTC	; calr 0xffdd17 - transfer complete: pulse TC and refresh the display
 	calr Boot_UpdateDisplay	; calr 0xffdd26

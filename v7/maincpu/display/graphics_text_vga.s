@@ -1349,8 +1349,8 @@ DrawText_ExtLayout_Variant1:
 	extz	xbc
 	lda	xwa, (xsp+276)
 	push	xbc
-	pushdi_24	(0x03efa4)
-	pushdi_24	(0x03efa2)
+	pushw	(0x03efa4:24)
+	pushw	(0x03efa2:24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
 	calr	60994
@@ -4364,7 +4364,7 @@ MainWallFlash_ReturnZero:
 	ret
 
 WallUsrIniFunc:
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr nz, WallUsrIni_PostBootEvent
 	ld xwa, 0x142000f
 	ld xbc, 0x1e20016
@@ -4908,7 +4908,7 @@ MainMssSetUp:
 	cp	xbc, 31588376
 	jr	nz, 20
 	ld	(36026:16), de
-	incdi16	1, (36026)
+	incw	1, (36026:16)
 	ld	(36018:16), 7
 	jr	5
 MainMssSetUp_ClearMode:

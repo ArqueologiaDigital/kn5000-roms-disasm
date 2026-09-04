@@ -78,7 +78,7 @@ FCopy_HandleScroll:
 
 FCopy_ScrollDown_CheckMin:
 	ld wa, (0x7f66:16)
-	cpda16 xwa, 0x7f64
+	cp wa, (0x7f64:16)
 	jr nz, FCopy_ScrollDown_Reload
 	cps wa, 0
 	jr le, FCopy_ScrollDown_RestoreOld
@@ -120,7 +120,7 @@ FCopy_ScrollUp_Adjust:
 
 FCopy_ScrollUp_CheckMax:
 	ld wa, (0x7f66:16)
-	cpda16 xwa, 0x7f64
+	cp wa, (0x7f64:16)
 	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
 	jr ge, FCopy_ScrollDown_RestoreOld
@@ -138,7 +138,7 @@ FCopy_HandleCopyContext:
 	call FileIO_GetRecordFlags
 	cps hl, 0
 	jr z, FCopy_CopyConfirm_Execute
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, FCopy_CopyConfirm_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000

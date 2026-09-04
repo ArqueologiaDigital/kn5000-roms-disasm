@@ -71,7 +71,7 @@ Password_Delete_CheckLoadOnly:
 	call CheckSlotIsSelected
 	cps l, 0
 	jr z, Password_Delete_CheckSaveOnly
-	setda 7, 0x8a0d
+	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
 	lds32 xde, 4
@@ -84,7 +84,7 @@ Password_Delete_CheckSaveOnly:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_ShowErrorStatus
-	setda 6, 0x8a0d
+	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
 	lds32 xde, 4
@@ -123,7 +123,7 @@ Password_Save_CheckLoadOnly:
 	call CheckSlotIsSelected
 	cps l, 0
 	jr z, Password_Save_CheckSaveOnly
-	setda 7, 0x8a0d
+	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
 	ld xde, 0xa
@@ -136,7 +136,7 @@ Password_Save_CheckSaveOnly:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_SaveErrorStatus
-	setda 6, 0x8a0d
+	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
 	ld xde, 0xa
@@ -154,7 +154,7 @@ Password_HandleLoadEvent:
 	call CheckSlotIsSelected
 	cps l, 0
 	jr z, Password_LoadErrorStatus
-	setda 7, 0x8a0d
+	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
 	lds32 xde, 4
@@ -446,7 +446,7 @@ FileName_OpLoad_NoPwd:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, FileName_OpLoad_Execute
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, FileName_OpLoad_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -533,7 +533,7 @@ FileName_OpDelete:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, FileName_OpFormatVariant
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, FileName_OpDelete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -625,7 +625,7 @@ FileName_Navigate_ScrollUp:
 
 FileName_Navigate_CheckChanged:
 	ld wa, (xsp + 6)
-	cpda16 xwa, 0x7f7a
+	cp wa, (0x7f7a:16)
 	jr z, FileName_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001

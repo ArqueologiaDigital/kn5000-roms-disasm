@@ -177,13 +177,13 @@ RhythmEvt_ProcessNote:
 	cp (0x3249:16), 0xf0
 	jr c, RhythmEvt_AlternateProcess
 	ld a, (0x327a:16)
-	orda8 a, (0x327b)
-	orda8 a, (0x327c)
-	orda8 a, (0x3276)
-	orda8 a, (0x3277)
-	orda8 a, (0x3278)
-	orda8 a, (0x3279)
-	andda8 a, (0x3338)
+	or a, (0x327b:16)
+	or a, (0x327c:16)
+	or a, (0x3276:16)
+	or a, (0x3277:16)
+	or a, (0x3278:16)
+	or a, (0x3279:16)
+	and a, (0x3338:16)
 	jr nz, RhythmEvt_AlternateProcess
 	ld a, (0x3243:16)
 	ld (0x3387:16), a
@@ -367,8 +367,8 @@ Rhythm_CrossVoiceCorrect:
 	bit 1, (0x323b:16)
 	jr nz, .Lc_f54bfa
 	ld w, (0x327a:16)
-	orda8 w, (0x327b)
-	orda8 w, (0x327c)
+	or w, (0x327b:16)
+	or w, (0x327c:16)
 	and W,0x3f
 	jr nz, .Lc_f54c26
 	bit 5, (0x3257:16)
@@ -377,7 +377,7 @@ Rhythm_CrossVoice_Apply:
 .Lc_f54bfa:
 	push XIY
 	ld W,A
-	addda8 w, (0x322f)
+	add w, (0x322f:16)
 	inc 1,W
 	sub W,0x0c
 	ld (0x3292:16), w
@@ -497,7 +497,7 @@ Rhythm_Transp_CheckZero:
 
 Rhythm_Transp_Apply:
 	dec	1, a
-	cpda8	xbc, (12847)
+	cp	a, (12847:16)
 	jr	ugt, 12	; -> 0xF54D83
 	add	w, a
 	bit	7, w
@@ -849,13 +849,13 @@ Rhythm_ValidateAndSend:
 	cp (0x3249:16), 0xf0
 	jr c, Rhythm_Validate_Mismatch
 	ld a, (0x327a:16)
-	orda8 a, (0x327b)
-	orda8 a, (0x327c)
-	orda8 a, (0x3276)
-	orda8 a, (0x3277)
-	orda8 a, (0x3278)
-	orda8 a, (0x3279)
-	andda8 a, (0x3338)
+	or a, (0x327b:16)
+	or a, (0x327c:16)
+	or a, (0x3276:16)
+	or a, (0x3277:16)
+	or a, (0x3278:16)
+	or a, (0x3279:16)
+	and a, (0x3338:16)
 	jr nz, Rhythm_Validate_Mismatch
 	ld a, (0x3243:16)
 	ld (0x3387:16), a
@@ -866,7 +866,7 @@ Rhythm_ValidateAndSend:
 	ld (0x3387:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3386:16)
-	cpdm8	13192, a
+	cp	(13192:16), a
 	jr	nz, 5
 	calr	6
 	jr	3
@@ -1127,7 +1127,7 @@ Rhythm_AdvanceTick:
 	jr c, Rhythm_AdvanceTick_Store
 	sub A,0x60
 	inc 1,W
-	cpda8 w, (0x0458)
+	cp w, (0x0458:16)
 	jr c, Rhythm_AdvanceTick_Store
 	xor W,W
 Rhythm_AdvanceTick_Store:

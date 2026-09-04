@@ -324,7 +324,7 @@ SMF_SelectBank_AfterReset:
 	push xde
 	call SetWall_LoadBankToToneGen
 	ld a, (4599:16)
-	cpda8_24 a, (0xffe3)
+	cp a, (0xffe3:24)
 	jrl z, SMF_SelectBank_AfterToneLoad
 	ld a, (4599:16)
 	ld (0x00ffe3:24), a
@@ -431,7 +431,7 @@ SMF_ReadMThd_ByteLoop:
 	popw bc
 	cp_spib A, 0xf4
 	jrl z, SMF_ReadMThd_Matched
-	incdi8 1, (4343)
+	inc 1, (4343:16)
 	cp (4343:16), 1
 	jrl nz, SMF_ReadMThd_Mismatch
 	ld xwa, 0x13fa
@@ -478,7 +478,7 @@ FloppyIO_WaitReadComplete:
 	ld xbc, (6883:16)
 	lds32 xwa, 0
 	cp xbc, xwa
-	jp_24 z, SMF_AfterFloppyWait
+	jp z, (SMF_AfterFloppyWait:24)
 	call FloppyIO_ReadNextByte
 	nop
 	nop

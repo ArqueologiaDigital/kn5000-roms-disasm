@@ -2147,9 +2147,9 @@ RefreshApTask:
 	ld (0xe3e4:16), 255
 	ld (0xe3e6:16), 255
 	lds32 xwa, 0
-	stl_da (0x02749a), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x0274a2), xwa
+	ld (0x02749a:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2181,9 +2181,9 @@ RefreshApTask:
 
 RefreshSwEvent:
 	lds32 xwa, 0
-	stl_da (0x02749a), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x0274a2), xwa
+	ld (0x02749a:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00008
 	call DeleteEvent
@@ -2702,9 +2702,9 @@ MainTitleControl:
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
-	stl_da (0x0274a2), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x02749a), xwa
+	ld (0x0274a2:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x02749a:24), xwa
 	jrl UIWidget_ReturnZero
 
 ; =============================================================================
@@ -2737,16 +2737,16 @@ MainTitleCtrl_SaveAndTransition:
 MainTitleCtrl_SetIndicatorAndClear:
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
-	stl_da (0x0274a2), xwa
-	stl_da (0x02749e), xwa
-	stl_da (0x02749a), xwa
+	ld (0x0274a2:24), xwa
+	ld (0x02749e:24), xwa
+	ld (0x02749a:24), xwa
 	call AudioMode_ResetVoiceState
 	jrl UIWidget_ReturnZero
 
 SeqState_DemoModeHandler:
 	cp xde, 0x8
 	jrl nz, UIWidget_ReturnZero
-	cpdm8 0x8d38, a
+	cp (0x8d38:16), a
 	jr nz, SeqDemo_SaveCurrentState
 	ld (0x8d37:16), a
 
@@ -2784,13 +2784,13 @@ MainTitleCtrl_CheckSecondTimer:
 	ld (0x0274ae:24), wa
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
-	cpw_da (0x274ac), 0
+	cpw (0x274ac:24), 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
-	setda 0, 0x8f5c
+	set 0, (0x8f5c:16)
 	jr MainTitleCtrl_SetIndicator60
 
 MainTitleCtrl_ClearIndicatorBit:
-	resda 0, 0x8f5c
+	res 0, (0x8f5c:16)
 
 MainTitleCtrl_SetIndicator60:
 	ldw wa, 0x60
@@ -2900,7 +2900,7 @@ UI_PostTimerResetEvent:
 
 SeqState_HasModeChanged:
 	ld a, (0x8d36:16)
-	cpda8 a, 0x8d38
+	cp a, (0x8d38:16)
 	scc16 nz, hl
 	ret
 
@@ -3831,7 +3831,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da (0x03ef6a), xwa
+	ld (0x03ef6a:24), xwa
 	lda xde, (0x0274e8:24)
 	lda xbc, (xde + 15)
 	ld xwa, xbc
@@ -3856,7 +3856,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
-	cpw_da (0x3ef50), 0
+	cpw (0x3ef50:24), 0
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive

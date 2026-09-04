@@ -1274,7 +1274,7 @@ __jrt_nop_9FB652:
 	; === Get Boot Mode and Check FDC ===
 	calr Get_Region_Code
 	cps l, 4
-	call_24 nz, 0xFFC6B2	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
+	call nz, (0xFFC6B2:24)	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
 
 Boot_SkipFDCCheck:
 	call 0xFFEC63	; Boot_CheckDiskPresent: L=1 disk present (PD6 low)
@@ -1459,7 +1459,7 @@ Boot_ClearRAM__copy2_done:
 BootCode_INTT1_Handler:
 	push xwa	; 38
 	lds32 xwa, 1	; e8 a9
-	adddm32 3072, xwa	; e1 00 0c 88
+	add (3072:16), xwa	; e1 00 0c 88
 	pop xwa	; 58
 	reti	; 07
 
@@ -1469,7 +1469,7 @@ BootCode_INTT1_Handler:
 ; Fatal error - disables DRAM refresh and halts
 ; -----------------------------------------------------------------------------
 BootCode_NMI_Handler:
-	resda 7, 354	; f1 62 01 b7 - Disable DRAM refresh
+	res 7, (354:16)	; f1 62 01 b7 - Disable DRAM refresh
 BootCode_NMI_Handler__halt_loop:
 	halt	; 05
 	jr BootCode_NMI_Handler__halt_loop	; 68 fd
@@ -1852,7 +1852,7 @@ Flash_SectorErase_16bit__check_non_region4:
 
 	; Custom Data (target 1) - check if AM29LV800B (0x2258)
 	lda xwa, (0x300000:24); f2 00 00 30 30
-	cpw_da (39316), 8792; CP (009994h), 2258h
+	cpw (39316:24), 8792; CP (009994h), 2258h
 	jr nz, Flash_SectorErase_16bit__custom_check_f0000	; 6e 1c
 
 	; AM29LV800B: Check if base sector needs boot block erase
@@ -1893,7 +1893,7 @@ Flash_SectorErase_16bit__custom_check_f0000:
 Flash_SectorErase_16bit__check_hdae:
 	; HDAE5000 (target 0) - check if AM29F400B (0x22AB)
 	lda xwa, (0x280000:24); f2 00 00 28 30
-	cpw_da (39318), 8875; CP (009996h), 22ABh
+	cpw (39318:24), 8875; CP (009996h), 22ABh
 	jr nz, Flash_SectorErase_16bit__hdae_check_top	; 6e 1a
 
 	; AM29F400B on HDAE: Check base sector
@@ -1993,7 +1993,7 @@ Flash_Init_Custom_And_Table:
 	; Check region and reset Table Data ROM if not region 4
 	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
 	cps l, 4	; cf dc
-	call_24 nz, 0xFFBC2D	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
+	call nz, (0xFFBC2D:24)	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
 
 	; Read Custom Data device ID
 	lds wa, 1	; d8 a9
@@ -2113,13 +2113,13 @@ Flash_ReadID_32bit:
 
 	; Send ID read command sequence
 	ld xwa, 0xAA00AA	; Unlock 1
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	ld xwa, 0x550055	; Unlock 2
-	stl_da (0x80aaa8), xwa; LD (80AAA8h), XWA
+	ld (0x80aaa8:24), xwa; LD (80AAA8h), XWA
 
 	ld xwa, 0x900090	; ID read command
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	; Read manufacturer ID from base address
 	ld xwa, (0x800000:24); LD XWA, (800000h)
@@ -2187,13 +2187,13 @@ Flash_ProgramWord_32bit__wait_ready:
 
 	; Send program command sequence
 	ld xwa, 0xAA00AA	; Unlock 1
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	ld xwa, 0x550055	; Unlock 2
-	stl_da (0x80aaa8), xwa; LD (80AAA8h), XWA
+	ld (0x80aaa8:24), xwa; LD (80AAA8h), XWA
 
 	ld xwa, 0xA000A0	; Program command
-	stl_da (0x815554), xwa; LD (815554h), XWA
+	ld (0x815554:24), xwa; LD (815554h), XWA
 
 	; Write data to destination
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h) - get dest addr
@@ -3285,7 +3285,7 @@ Boot_DelayLoop__delay_loop:
 ; Controls LED at 0x160004 (HDAE5000 PPI port)
 ; =============================================================================
 Boot_BlinkLED:
-	incdi8 1, (3080); INC 1, (0x0C08) - LED counter
+	inc 1, (3080:16); INC 1, (0x0C08) - LED counter
 	ld a, (3080:16); LD A, (0x0C08)
 	and a, 0x3	; AND A, 0x03 - mask to 0-3
 	cps a, 3	; CP A, 3
@@ -3564,14 +3564,14 @@ HDAE5000_InitializeParallelPort__ppi_wait_loop:
 	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__probe_16bit	; 6e 08
-	setda_24 2, (0x160004)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
+	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
 	ldib_erp 0xFB, 1	; LD QIZH, 1 - record probe failure
 HDAE5000_InitializeParallelPort__probe_16bit:
 	lds wa, 1	; LD WA, 1 - custom-data flash bank
 	call 0xFFB888	; CALL Flash_ReadID_16bit (boot-time alias of 0x9FB888)
 	cp hl, 0xFFFF	; CP HL, 0xFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__check_probe_result	; 6e 0a
-	setda_24 3, (0x160004)	; SET 3, (0x160004) - LED bit 3 = custom flash probe failed
+	set 3, (0x160004:24)	; SET 3, (0x160004) - LED bit 3 = custom flash probe failed
 	ldib_erp 0xFB, 1	; LD QIZH, 1
 	jr HDAE5000_InitializeParallelPort__probe_fail_halt	; 68 08
 HDAE5000_InitializeParallelPort__check_probe_result:
@@ -3588,7 +3588,7 @@ HDAE5000_InitializeParallelPort__erase_flash:
 	ld xbc, 0xA00000	; table-data flash end
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl	; XHL != 0 -> data present, needs erase
-	call_24 nz, 0xFFBD17	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
+	call nz, (0xFFBD17:24)	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
 	lda xwa, (0x300000:24)	; custom-data flash start
 	ld xbc, xwa	; LD XBC, XWA
 	add xbc, 0x100000	; custom-data flash end = 0x400000
@@ -3610,31 +3610,31 @@ HDAE5000_InitializeParallelPort__erase_blink:
 	; === Program initialization image + custom flash (LED bit 0 while busy) ===
 HDAE5000_InitializeParallelPort__program_flash:
 	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
-	setda_24 0, (0x160004)	; SET 0, (0x160004)
+	set 0, (0x160004:24)	; SET 0, (0x160004)
 	calr Flash_ProgramHDAE_Initialization	; program HDAE5000 banks 0-3
-	resda_24 0, (0x160004)	; RES 0, (0x160004)
+	res 0, (0x160004:24)	; RES 0, (0x160004)
 	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
 	calr Boot_DelayLoop
-	setda_24 0, (0x160004)	; SET 0, (0x160004)
+	set 0, (0x160004:24)	; SET 0, (0x160004)
 	calr Boot_ProgramCustomFlash	; program custom-data flash (2 banks)
-	resda_24 0, (0x160004)	; RES 0, (0x160004)
+	res 0, (0x160004:24)	; RES 0, (0x160004)
 
 	; === Verify both devices (LED bit 1; on mismatch toggle bit 2/3 forever) ===
-	setda_24 1, (0x160004)	; SET 1, (0x160004)
+	set 1, (0x160004:24)	; SET 1, (0x160004)
 	pushw 0x3	; last bank to verify = 3
 	ld xwa, 0x800000	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
 	lds de, 0	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call_24 nz, 0xFFC54B	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 	pushw 0x1	; last bank to verify = 1
 	ld xwa, 0x300000	; reference: custom-data flash
 	ld xbc, 0x200000	; source window
 	lds de, 0	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call_24 nz, 0xFFC55A	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
+	call nz, (0xFFC55A:24)	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
 
 	; === Check "hkt_" signature, remap CS2 and jump into the Program ROM ===
 	ld (0x160000:24), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
@@ -3676,7 +3676,7 @@ HDAE5000_ProgramPayloadOnly:
 	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_ProgramPayloadOnly__erase_flash	; 6e 07
-	setda_24 2, (0x160004)	; SET 2, (0x160004) - LED bit 2 = probe failed
+	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = probe failed
 HDAE5000_ProgramPayloadOnly__probe_fail_halt:
 	jr HDAE5000_ProgramPayloadOnly__probe_fail_halt	; 68 fe
 HDAE5000_ProgramPayloadOnly__erase_flash:
@@ -3696,17 +3696,17 @@ HDAE5000_ProgramPayloadOnly__erase_blink:
 	cp hl, 0xFFFF
 	jr z, HDAE5000_ProgramPayloadOnly__erase_blink	; 66 ed
 HDAE5000_ProgramPayloadOnly__program_flash:
-	setda_24 0, (0x160004)	; SET 0, (0x160004) - LED bit 0 while programming
+	set 0, (0x160004:24)	; SET 0, (0x160004) - LED bit 0 while programming
 	calr Flash_ProgramHDAE_Payload	; program HDAE5000 banks 4-7
-	resda_24 0, (0x160004)	; RES 0, (0x160004)
-	setda_24 1, (0x160004)	; SET 1, (0x160004) - LED bit 1 while verifying
+	res 0, (0x160004:24)	; RES 0, (0x160004)
+	set 1, (0x160004:24)	; SET 1, (0x160004) - LED bit 1 while verifying
 	pushw 0x7	; last bank to verify = 7
 	ld xwa, 0x800000	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
 	lds de, 4	; LD DE, 4 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call_24 nz, 0xFFC54B	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 HDAE5000_ProgramPayloadOnly__done_halt:
 	jr HDAE5000_ProgramPayloadOnly__done_halt	; 68 fe - done, halt
 
@@ -3783,7 +3783,7 @@ HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop:
 LZSS_ReadByte:
 	pushw iz	; PUSH IZ
 	ld xwa, (3108:16); LD XWA, (0x0C24) - current position
-	cpda32 xwa, 3104	; CP XWA, (0x0C20) - compare with expected size
+	cp xwa, (3104:16)	; CP XWA, (0x0C20) - compare with expected size
 	jr c, LZSS_ReadByte__not_eof	; JR C, .not_eof
 	ldw hl, 0xFFFF	; LD HL, 0xFFFF - return EOF
 	jr LZSS_ReadByte__exit	; JR T, .exit
@@ -3791,10 +3791,10 @@ LZSS_ReadByte__not_eof:
 	; Check if need to read next sector
 	lda xwa, (0x0099a4:24); LDA XWA, 0x0099A4
 	add xwa, 0x9000	; ADD XWA, 0x00009000
-	cpda32 xwa, 3116	; CP XWA, (0x0C2C) - buffer limit
+	cp xwa, (3116:16)	; CP XWA, (0x0C2C) - buffer limit
 	jr nz, LZSS_ReadByte__read_byte	; JR NZ, .read_byte
 	; Need to read next sector
-	incdi16 8, (3120); INCW 0, (0x0C30) - next sector X
+	incw 8, (3120:16); INCW 0, (0x0C30) - next sector X
 	ld wa, (3120:16); LD WA, (0x0C30)
 	ld bc, (3122:16); LD BC, (0x0C32)
 	lds de, 6	; LD DE, 6 - sector size index
@@ -3809,7 +3809,7 @@ LZSS_ReadByte__read_sectors:
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92 (read sector data)
-	adddi16 3124, 18	; ADD (0x0C34), 0x0012
+	addw (3124:16), 18	; ADD (0x0C34), 0x0012
 	inc 1, iz	; INC 1, IZ
 	cps iz, 4	; CP IZ, 4
 	jr c, LZSS_ReadByte__read_sectors	; JR C, .read_sectors
@@ -3856,7 +3856,7 @@ LZSS_OutputByte:
 	ld (3126:16), 0; LD (0x0C36), 0x00 - reset index
 LZSS_OutputByte__not_full:
 	lds32 xwa, 1	; LD XWA, 1
-	adddm32 3108, xwa	; ADD (0x0C24), XWA - increment output pos
+	add (3108:16), xwa	; ADD (0x0C24), XWA - increment output pos
 	ret	; RET
 
 ; -----------------------------------------------------------------------------
@@ -3886,7 +3886,7 @@ LZSS_OutputByte_Alt:
 	ld (3126:16), 0; LD (0x0C36), 0x00
 LZSS_OutputByte_Alt__not_full:
 	lds32 xwa, 1	; LD XWA, 1
-	adddm32 3108, xwa	; ADD (0x0C24), XWA
+	add (3108:16), xwa	; ADD (0x0C24), XWA
 	ret	; RET
 
 ; -----------------------------------------------------------------------------
@@ -3902,7 +3902,7 @@ LZSS_ParseHeader:
 	add xwa, 0xE0000	; ADD XWA, 0x000E0000 (XWA = 0x3E0000)
 	ld (3128:16), xwa	; LD (0x0C38), XWA - store source ptr
 	ld xwa, 0x20000	; LD XWA, 0x00020000
-	adddm32 3104, xwa	; ADD (0x0C20), XWA
+	add (3104:16), xwa	; ADD (0x0C20), XWA
 	lds iz, 0	; LD IZ, 0
 LZSS_ParseHeader__read_header:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
@@ -3945,7 +3945,7 @@ LZSS_ParseHeader__read_more:
 	ldw (3122:16), 200; LD (0x0C32), 0x00C8
 	; Check if already at target size
 	ld xwa, (3108:16); LD XWA, (0x0C24)
-	cpda32 xwa, 3104	; CP XWA, (0x0C20)
+	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jr nc, LZSS_ParseHeader__done	; JR NC, .exit (already done)
 	; Copy remaining raw bytes
 LZSS_ParseHeader__decompress_loop:
@@ -3954,7 +3954,7 @@ LZSS_ParseHeader__decompress_loop:
 	ld wa, hl	; LD WA, HL
 	calr LZSS_OutputByte_Alt	; CALR LZSS_OutputByte_Alt
 	ld xwa, (3108:16); LD XWA, (0x0C24)
-	cpda32 xwa, 3104	; CP XWA, (0x0C20)
+	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jr c, LZSS_ParseHeader__decompress_loop	; JR C, .decompress_loop
 LZSS_ParseHeader__done:
 	lds hl, 0	; LD HL, 0 (success)
@@ -4033,7 +4033,7 @@ LZSS_Decompress__preread_loop:
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92
-	adddi16 3124, 18	; ADD (0x0C34), 0x0012
+	addw (3124:16), 18	; ADD (0x0C34), 0x0012
 	inc1w_erp 0xFA	; INC 1, QIZ
 	cpiw_erp 0xFA, 4	; CP QIZ, 4
 	jr c, LZSS_Decompress__preread_loop	; JR C, .preread_loop
@@ -4054,13 +4054,13 @@ LZSS_Decompress__read_header_loop:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	sll hl, 8	; SLL 8, HL
 	extz xhl	; EXTZ XHL
-	adddm32 3104, xhl	; ADD (0x0C20), XHL
+	add (3104:16), xhl	; ADD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	extz xhl	; EXTZ XHL
 	ld xwa, (3104:16); LD XWA, (0x0C20)
 	add xwa, xhl	; ADD XWA, XHL
 	ld (3104:16), xwa	; LD (0x0C20), XWA
-	cpdm32 3108, xwa	; CP (0x0C24), XWA
+	cp (3108:16), xwa	; CP (0x0C24), XWA
 	jrl nc, LZSS_Decompress__done	; JRL NC, .done - already past size
 
 ; -----------------------------------------------------------------------------
@@ -4169,7 +4169,7 @@ LZSS_Decompress__copy_loop:
 LZSS_Decompress__check_done:
 	; === Check if decompression complete ===
 	ld xwa, (3108:16); LD XWA, (0x0C24)
-	cpda32 xwa, 3104	; CP XWA, (0x0C20)
+	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jrl c, LZSS_Decompress__decompress_loop	; JRL C, .decompress_loop
 
 LZSS_Decompress__done:

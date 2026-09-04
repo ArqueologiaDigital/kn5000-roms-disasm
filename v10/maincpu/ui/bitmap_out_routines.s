@@ -276,7 +276,7 @@ BitMapOut_ByteData_RenderE:
 
 BitMapOut_CheckDiskAndApply:
 	cp (0x8d38:16), 138
-	jp_24 z, Interrupt_ModeGuardCheck
+	jp z, (Interrupt_ModeGuardCheck:24)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c20000
 	lds32 xde, 0
@@ -324,7 +324,7 @@ BitMapOut_ByteData_TransitionSeq:
 	jrl	pl, 16320
 	pushw	0xfeb0
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and	a, 192
 	cp	a, 64
 	jr	z, 30
@@ -679,7 +679,7 @@ BitMapOut_Snapshot_PostProcess:
 	bit 4, (0xfd50:16)
 	jr nz, BitMapOut_Snapshot_CheckActive
 	bit 1, (0xfd2c:16)
-	call_24 nz, BitMapOut_DispatchIOChanges
+	call nz, (BitMapOut_DispatchIOChanges:24)
 
 BitMapOut_Snapshot_CheckActive:
 	ld xwa, 0x302
@@ -687,7 +687,7 @@ BitMapOut_Snapshot_CheckActive:
 	cps hl, 1
 	jr nz, BitMapOut_Snapshot_SetFlags
 	bit 6, (0xfd9e:16)
-	call_24 z, MidiSysEx_SendAllParams
+	call z, (MidiSysEx_SendAllParams:24)
 
 BitMapOut_Snapshot_SetFlags:
 	ld a, (0x8d52:16)
@@ -937,7 +937,7 @@ BitMapOut_RestoreVoiceFields:
 
 BitMapOut_RestoreFields_PostCheck:
 	cp (xsp + 16), 0x50
-	call_24 nz, BitMapOut_SelectiveFieldRestore
+	call nz, (BitMapOut_SelectiveFieldRestore:24)
 	push xde
 	push xhl
 	push xix
@@ -2445,7 +2445,7 @@ BitMapOut_DetectChanges_UseShortList:
 	ld hl, (0x90de:16)
 	lda xwa, (0xbd3c:16)
 	ld (xsp + 8), xwa
-	setda 2, 0x8d46
+	set 2, (0x8d46:16)
 	jr BitMapOut_DeltaEncode_Init
 
 BitMapOut_DetectChanges_FullScan:
@@ -2455,7 +2455,7 @@ BitMapOut_DetectChanges_FullScan:
 	ld hl, (0x90e2:16)
 	lda xwa, (0xbf39:16)
 	ld (xsp + 8), xwa
-	resda 2, 0x8d46
+	res 2, (0x8d46:16)
 
 BitMapOut_DeltaEncode_Init:
 	lds iz, 0
@@ -2638,15 +2638,15 @@ BitMapOut_DeltaEncode_Return:
 
 BitMapOut_DispatchIOChanges:
 	bit 7, (0xf9c4:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port0
+	call z, (BitMapOut_ApplyIOChange_Port0:24)
 	bit 7, (0xf9c7:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port3
+	call z, (BitMapOut_ApplyIOChange_Port3:24)
 	bit 7, (0xf9de:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port1
+	call z, (BitMapOut_ApplyIOChange_Port1:24)
 	bit 7, (0xf9e1:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port4
+	call z, (BitMapOut_ApplyIOChange_Port4:24)
 	bit 7, (0xf9f8:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port2
+	call z, (BitMapOut_ApplyIOChange_Port2:24)
 	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5
@@ -2922,7 +2922,7 @@ BitMapOut_DeltaEncode_TypeDefaultB:
 	jr BitMapOut_DeltaEncode_HelperCheckEnd
 
 BitMapOut_DeltaEncode_TypeDefaultC:
-	setda 0, 0x8d46
+	set 0, (0x8d46:16)
 	ld bc, hl
 	inc 1, hl
 	extz xbc
@@ -2975,7 +2975,7 @@ BitMapOut_DeltaEncode_HelperCheckEnd:
 	ld (xwa), 0xff
 
 BitMapOut_DeltaEncode_HelperReturn:
-	setda 6, 0x8d46
+	set 6, (0x8d46:16)
 	pop xiz
 	inc 8, xsp
 	retd 0x6
@@ -3123,7 +3123,7 @@ BitMapOut_DeltaEncode_Type48Loop:
 	jr BitMapOut_DeltaEncode_Type48Epilog
 
 BitMapOut_DeltaEncode_Type48End:
-	setda 0, 0x8d46
+	set 0, (0x8d46:16)
 	ld bc, hl
 	inc 1, hl
 	extz xbc
@@ -3627,7 +3627,7 @@ BitMapOut_ByteData_RenderState:
 	max
 	jrl	nz, 179
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	and	a, 3
 	cps	a, 1
 	jr	z, 29
@@ -3831,7 +3831,7 @@ BitMapOut_UpdateWidget_Done:
 	halt
 	ret	nz
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	bit	5, a
 	ret	z
 	ld	xwa, 0xffffffff
@@ -3847,7 +3847,7 @@ BitMapOut_UpdateWidget_Done:
 	halt
 	ret	nz
 	ld	a, (0xc07e:16)
-	andda8	a, 0xc07f
+	and	a, (0xc07f:16)
 	bit	5, a
 	ret	z
 	ld	xwa, 0xffffffff
@@ -3904,7 +3904,7 @@ OneTchFUNC:
 	lda xix, (BitMapOut_ByteData_WidgetTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 BitMapOut_ByteData_WidgetTable:
-	resda	7, 0xb7e2
+	res	7, (0xb7e2:16)
 	push	xde
 	push	xhl
 	push	xix
@@ -3945,7 +3945,7 @@ BitMapOut_ApplyPatch_Loop:
 	inc 1, iz
 	inc1b_erp 0xfb
 	stb_erp A, 0xfb
-	cpda8 a, 0x8d5c
+	cp a, (0x8d5c:16)
 	jr c, BitMapOut_ApplyPatch_Loop
 
 BitMapOut_ApplyPatch_Store:

@@ -60,7 +60,7 @@ MainTitle_UpdateAndRefresh:
 
 MainTitle_EventLoop:
 	lds32 xwa, 1
-	addl_da 0x027496, xwa
+	add (0x027496:24), xwa
 	lds wa, 2
 	call TaskSched_WaitForEvent
 	lds wa, 0
@@ -151,7 +151,7 @@ CtrlPanel_CheckDiskMenuRelease:
 	ld xwa, (xbc)
 	cpl wa
 	cplw_erp 0xe2
-	anddm32_24 (0x02749a), xwa
+	and (0x02749a:24), xwa
 
 CtrlPanel_ProcessButtonPress:
 	.byte 0xc1, 0xe3, 0xbf, 0x23, 0xc1, 0xe2, 0xbf, 0x21
@@ -182,12 +182,12 @@ CtrlPanel_CheckButtonRelease:
 	ld xwa, (xbc)
 	cpl wa
 	cplw_erp 0xe2
-	anddm32_24 (0x02749e), xwa
+	and (0x02749e:24), xwa
 
 CtrlPanel_DispatchCombinedState:
 	ld xwa, (0x02749e:24)
-	andda32_24 xwa, (0x02749a)
-	stl_da (0x0274a2), xwa
+	and xwa, (0x02749a:24)
+	ld (0x0274a2:24), xwa
 	cp xwa, 0x1100
 	jr z, CtrlPanel_HandleFirmwareCheck
 	cp xwa, 0xa1
@@ -219,7 +219,7 @@ CtrlPanel_PostCombinedEvent:
 CtrlPanel_HandleFirmwareCheck:
 	call Get_Firmware_Version
 	cp l, 0xff
-	call_24 z, CaptureLcd
+	call z, (CaptureLcd:24)
 CtrlPanel_HandlePortCommands:
 	cp	(49121:16), 32
 	jr	nz, 47
@@ -256,7 +256,7 @@ CtrlPanel_EventType_A8:
 	jrl	nz, 155
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, 49122
+	and	a, (49122:16)
 	bit	0, a
 	jr	z, 26
 	ld	xwa, 4294967295
@@ -275,7 +275,7 @@ CtrlPanel_EventType_AA:
 	jrl	z, 666
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, 49122
+	and	a, (49122:16)
 	cps	e, 1
 	jrl	z, 501
 	cp	e, 21
@@ -291,7 +291,7 @@ CtrlPanel_EventType_AA:
 	cps	e, 5
 	jrl	nz, 671
 	ld	a, (49123:16)
-	andda8	a, 49122
+	and	a, (49122:16)
 	bit	0, a
 	jrl	z, 657
 	bit	1, a
@@ -304,7 +304,7 @@ CtrlPanel_EventType_AA:
 	.byte 0xf2, 0x23, 0xec, 0xfa, 0xe6
 CtrlPanel_ClearStateVar:
 	lds32 xwa, 0
-	stl_da (0x027490), xwa
+	ld (0x027490:24), xwa
 
 CtrlPanel_AA_Epilogue:
 	jrl UIEvent_Epilogue
@@ -362,7 +362,7 @@ CtrlPanel_AA_0E_PostAndContinue:
 CtrlPanel_AA_PanelEvent_0E_Bit2:
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, (49122)
+	and	a, (49122:16)
 	bit	2, a
 	jr	z, 14
 	ld	xwa, 4294967295
@@ -382,7 +382,7 @@ CtrlPanel_AA_0E_Bit2Post:
 CtrlPanel_AA_PanelEvent_0E_Bit4:
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, (49122)
+	and	a, (49122:16)
 	bit	4, a
 	jr	z, 18
 	ld	xwa, 4294967295
@@ -418,7 +418,7 @@ CtrlPanel_AA_04_PostAndContinue:
 CtrlPanel_AA_PanelEvent_04_Bit5:
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, (49122)
+	and	a, (49122:16)
 	bit	5, a
 	jr	z, 15
 	ld	xwa, 4294967295
@@ -488,7 +488,7 @@ CtrlPanel_AA_01_PostAndContinue:
 CtrlPanel_AA_PanelEvent_01_Bit5:
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, (49122)
+	and	a, (49122:16)
 	bit	5, a
 	jr	z, 17
 	ld	xwa, 4294967295
@@ -508,7 +508,7 @@ CtrlPanel_AA_01_Bit5Post:
 CtrlPanel_AA_PanelEvent_01_Bit6:
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, (49122)
+	and	a, (49122:16)
 	bit	6, a
 	jr	z, 17
 	ld	xwa, 4294967295
@@ -526,7 +526,7 @@ CtrlPanel_AA_01_Bit6Release:
 CtrlPanel_AA_PanelEvent_11:
 	ld	c, (49123:16)
 	ld	a, c
-	andda8	a, (49122)
+	and	a, (49122:16)
 	jr	z, 17
 	ld	xwa, 4294967295
 	ld	xbc, 31457445

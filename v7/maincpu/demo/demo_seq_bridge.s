@@ -825,7 +825,7 @@ DispatchResolve_MarkCurrent:
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
 	ormi8 (xhl), 0x80
-	decdi16 1, 0xf231
+	decw 1, (0xf231:16)
 	pop xde
 	ld (4349:16), xde
 	ldb w, 0x0
@@ -872,7 +872,7 @@ SeqNodeInsert_UnmarkAndCount:
 	andmi8 (xhl), 0x7f
 	ld (xhl + 5), 0x82
 	inc 1, wa
-	cpda16 xwa, 3302
+	cp wa, (3302:16)
 	jr nz, SeqNodeInsert_TraverseNext
 	dec 1, wa
 
@@ -903,7 +903,7 @@ SeqNodeInsert_Finalize:
 	ld xhl, (4349:16)
 	ld (xhl + 1), ix
 	inc 1, wa
-	adddm16 0xf231, xwa
+	add (0xf231:16), wa
 	ret
 
 SeqNodeInsert_EmptyList:
@@ -923,7 +923,7 @@ SeqNode_ResolveSlotPtr:
 	extz xhl
 	dec 1, hl
 	sla xhl, 8
-	addda32 xhl, 4362
+	add xhl, (4362:16)
 	ld (4349:16), xhl
 	xor xhl, xhl
 	ret

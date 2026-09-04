@@ -99,7 +99,7 @@ RESET:	; 01F924
 	ld (357:16), 113
 	ld (354:16), 139
 	ld (355:16), 88
-	resda 4, 358
+	res 4, (358:16)
 	ld (320:16), 85
 	ld (324:16), 85
 	ld (328:16), 34
@@ -153,7 +153,7 @@ Audio_System_Init:	; 01FACBh
 Audio_Main_Loop:
 	bit 5, (4158:16)
 	jr z, AudioLoop_UnmuteAfterBoot
-	resda 5, 4158
+	res 5, (4158:16)
 
 ; One-shot post-boot UNMUTE, not a watchdog (it was called AudioLoop_CheckWatchdog).
 ; The 32-bit tick counter at 0x1040 only ever counts up -- nothing resets it and nothing is
@@ -168,7 +168,7 @@ AudioLoop_UnmuteAfterBoot:
 AudioLoop_CheckPeriodicReinit:
 	bit 1, (4158:16)
 	jr z, AudioLoop_CallProcessors
-	resda 1, 4158
+	res 1, (4158:16)
 	call Cmd_Check_E2_Pending
 	call Audio_Process_Init
 	ld wa, (61458:16)
@@ -197,7 +197,7 @@ Timer_AudioTick_Handler:
 	push xwa
 	push xix
 	lds32 xwa, 1
-	adddm32 4160, xwa
+	add (4160:16), xwa
 	ld a, (61460:16)
 	ld c, a
 	inc 1, a
@@ -215,7 +215,7 @@ Timer_AudioTick_Handler:
 
 
 Audio_PlayNote_Variant_1:
-	setda 4, 4158
+	set 4, (4158:16)
 	ldb a, 0x1
 	jr AudioTick_StoreTick
 
@@ -228,7 +228,7 @@ Audio_PlayNote_Variant_3:
 	jr AudioTick_StoreTick
 
 AudioTick_Variant_4:
-	setda 4, 4158
+	set 4, (4158:16)
 	ldb a, 0x0
 	jr AudioTick_StoreTick
 
@@ -241,14 +241,14 @@ AudioTick_StoreTick:
 	jr AudioTick_Done
 
 AudioTick_Variant_6:
-	setda 2, 4158
+	set 2, (4158:16)
 	ld (61460:16), 0
 	ld a, (61462:16)
 	inc 1, a
 	ld (61462:16), a
 	cp a, 0x8
 	jr c, AudioTick_Done
-	setda 5, 4158
+	set 5, (4158:16)
 	ld (61462:16), 0
 
 AudioTick_Done:
@@ -269,7 +269,7 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 
 PrevBank_RegHelper:
 	push qiz
-	cpib_da	16776942, 255
+	cp	(16776942:24), 255
 	jr	nz, 36
 	ldib_erp	251, 0
 	stb_erp	a, 251
@@ -584,8 +584,8 @@ Task_DequeueDispatch_Prio3:
 
 
 INT16_TaskSwitch_Handler:
-	incdi16 1, 4306
-	incdi8 1, 4165
+	incw 1, (4306:16)
+	inc 1, (4165:16)
 	pushw wa
 	pushw bc
 	calr Task_DequeueDispatch_Prio3
@@ -745,7 +745,7 @@ TaskSched_Dispatch:
 	or wa, wa
 	jr nz, TaskSched_ContextRestore
 	xor wa, wa
-	cpdm16 4166, xwa
+	cp (4166:16), wa
 	jr z, TaskSched_Dispatch_ScanQueues
 	ld iy, (4166:16)
 	extz xiy
@@ -1936,8 +1936,8 @@ RingBuf_Access_Opaque_A:
 ; entirely on Timer_AudioTick_Handler (0x01FB41) still running.
 Timer_Delay_Ticks:
 	srl	wa, 1
-	addda16	xwa, (4160)
-	cpda16	xwa, (4160)
+	add	wa, (4160:16)
+	cp	wa, (4160:16)
 	jr	gt, -6
 	ret
 
@@ -1954,11 +1954,11 @@ IntMask_ClearBit3:
 ; (0x01FFD0) merely counts down. Unlike TASKSCHED_SOFTTIMER_SERVICE this pair does NOT
 ; mirror the new depth into control register 0x7C.
 RingBuf_Control_Opaque:
-	incdi16	1, (4306)
+	incw	1, (4306:16)
 	ret
 ; decw 1,(0x10D2) -- release the scheduler lock. Nesting-safe, no reschedule on release.
 TaskSched_Unlock:
-	decdi16	1, (4306)
+	decw	1, (4306:16)
 	ret
 ; Pop one byte from the 1 KB FIFO whose descriptor base is 0x040C2E.
 ; Thin wrapper: pushes IX/XDE, XDE = 0x040C2E, calls the 1K engine's GET (0x020B9D).
@@ -1991,7 +1991,7 @@ FIFO1K_Put_Block:
 ; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
 FIFO1K_Is_Empty:
 	ld	hl, (265258:24)
-	cpda16_24	xhl, (265254)
+	cp	hl, (265254:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -2076,7 +2076,7 @@ FIFO256_Put_Block:
 ; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
 FIFO256_Is_Empty:
 	ld	hl, (266292:24)
-	cpda16_24	xhl, (266288)
+	cp	hl, (266288:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -2158,7 +2158,7 @@ FIFO512_Put_Block:
 ; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
 FIFO512_Is_Empty:
 	ld	hl, (266558:24)
-	cpda16_24	xhl, (266554)
+	cp	hl, (266554:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -2755,7 +2755,7 @@ INT0_Check_E2:	; 020EB1h
 INT0_Check_E3:	; 020ECEh
 	cp a, 0xE3
 	jr nz, INT0_Standard_Cmd
-	setda 6, 1278	; E3 = payload ready
+	set 6, (1278:16)	; E3 = payload ready
 	jr INT0_Ack
 
 INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
@@ -2874,12 +2874,12 @@ CH0_State3_E2:	; 020F88h - E2 command complete
 	ld (4334:16), 255
 	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - set to signal ready for next command from Main CPU
-	setda 7, 4390	; Set E2 pending flag
+	set 7, (4390:16)	; Set E2 pending flag
 	jr CH0_Timer_Reset
 
 CH0_State4_E1_Done:	; 020F9Bh - E1 two-phase transfer complete
 	ld (4330:16), 0
-	resda 7, 1278
+	res 7, (1278:16)
 
 CH0_Ack:	; 020FA4h
 	set_dd8 1, 0x34	; SSTAT1 - set to signal E1 transfer complete, ready for next
@@ -2927,9 +2927,9 @@ Cmd_Check_DMA_Timeout:	; 020FD9h
 	bit_dd8 1, 0x34	; SSTAT1 - test own status: if set, no DMA transfer in progress
 	jr nz, Cmd_DMA_Idle
 	ldc_16_cr wa, 0x40	; Get current DMA byte count
-	cpdm16 61468, xwa	; Compare with previous
+	cp (61468:16), wa	; Compare with previous
 	jr nz, Cmd_DMA_Reset_Counter
-	incdi16 1, 61466	; Increment stuck counter
+	incw 1, (61466:16)	; Increment stuck counter
 	jr Cmd_DMA_Save_Count
 
 Cmd_DMA_Reset_Counter:	; 020FEFh
@@ -2951,7 +2951,7 @@ Cmd_DMA_Check_Stuck:	; 021001h
 	ld (256:16), 0	; Stop DMA
 	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
-	incdi8 1, 61464	; Increment error counter
+	inc 1, (61464:16)	; Increment error counter
 	ret
 
 ; ===========================================================================
@@ -4866,7 +4866,7 @@ AudioState_Init_Return:
 Voice_Manager_PollBank:
 	dec 6, xsp
 	push xiz
-	incdi8 1, 4392
+	inc 1, (4392:16)
 	and (4392:16), 3
 	ld a, (4392:16)
 	extz wa
@@ -7780,7 +7780,7 @@ Voice_Env_VelocityDispatch_c1:
 	jr z, Voice_Env_VelocityDispatch_c1_Bit1
 	cps c, 0
 	jrl nz, Voice_Env_VelocityDispatch_ClearFlag
-	bitda_24 3, 267083
+	bit 3, (267083:24)
 	jr z, Voice_Env_VelocityDispatch_c0_NoBit3
 	ldb l, 0x0
 	jrl Voice_Env_VelocityDispatch_Gate
@@ -7794,7 +7794,7 @@ Voice_Env_VelocityDispatch_c0_NoBit3:
 
 ; Case 1: test bit3 of the 0x04134B config byte.
 Voice_Env_VelocityDispatch_c1_Bit1:
-	bitda_24 3, 267083
+	bit 3, (267083:24)
 	jr z, Voice_Env_VelocityDispatch_c1_NoBit3
 	ldb l, 0x0
 	jr Voice_Env_VelocityDispatch_Gate
@@ -7876,7 +7876,7 @@ Voice_Env_ApplyVelocity_Type2:
 	jr z, Voice_Env_Type2_c1
 	cps c, 0
 	jrl nz, Voice_Env_Type2_ClearFlag
-	bitda_24 4, 267083
+	bit 4, (267083:24)
 	jr z, Voice_Env_Type2_c0_NoBit4
 	ldb l, 0x0
 	jrl Voice_Env_Type2_Gate
@@ -7890,7 +7890,7 @@ Voice_Env_Type2_c0_NoBit4:
 
 ; Case 1: test bit4 of the 0x04134B config byte.
 Voice_Env_Type2_c1:
-	bitda_24 4, 267083
+	bit 4, (267083:24)
 	jr z, Voice_Env_Type2_c1_NoBit4
 	ldb l, 0x0
 	jr Voice_Env_Type2_Gate
@@ -7994,7 +7994,7 @@ Voice_Pitch_Compute:
 	sla iz, 8
 	and iz, 0x7F00
 	add iz, 0x80
-	addda16_24 xiz, 267081
+	add iz, (267081:24)
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 35)
 	ld a, (xwa + 22)
@@ -8060,7 +8060,7 @@ Voice_Pitch_BendType_Octave:
 
 ; Bend type 0x40: add the fixed global offset word at 0x041366.
 Voice_Pitch_BendType_Fixed:
-	addda16_24 xiz, 267110
+	add iz, (267110:24)
 	jrl Voice_Pitch_ApplyPortamento
 
 ; Bend type 0x41: add the u16 from the ROM table at 0x00FCE4 indexed by key.
@@ -8110,7 +8110,7 @@ Voice_Pitch_Compute_Inactive:
 
 ; Inactive, type 0x40: add the fixed offset word at 0x041366.
 Voice_Pitch_Inactive_BendType_Fixed:
-	addda16_24 xiz, 267110
+	add iz, (267110:24)
 	jr Voice_Pitch_ApplyPortamento
 
 ; Inactive, type 0x41: 0x00FCE4 table lookup by key.
@@ -8347,15 +8347,15 @@ WaveSel_StageB_Build_Reg040:
 	ld xwa, (xsp + 12)
 	ld xiz, (xwa + 31)
 	ld xwa, (xiz + 1)
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld (xsp + 4), xwa
 	ld xwa, (xiz + 5)
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa)
 	ld xde, xwa
-	addda32_24 xde, 283408
+	add xde, (283408:24)
 	ld xwa, (xsp + 12)
 	ld bc, (xwa + 6)
 	ld xwa, xde
@@ -8441,7 +8441,7 @@ WaveSel_StageB_Build_Reg040_Footage:
 	ld xiz, xwa
 	ld xwa, (xiz + 31)
 	ld xwa, (xwa + 5)
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld (xsp + 4), xwa
 	cp (xiz + 3), 0x0
 	jr nz, WaveSel_StageB_Build_Reg040_Footage_StateB
@@ -8530,8 +8530,8 @@ WaveSel_StageB_Store_Reg040:
 	ld wa, (0x0451ce:24)
 	and wa, 0xF000
 	add wa, wa
-	anddi16_24 283086, 4095
-	ordm16_24 283086, xwa
+	andw (283086:24), 4095
+	or (283086:24), wa
 
 ; Restore and return.
 WaveSel_StageB_Store_Reg040_Return:
@@ -8565,7 +8565,7 @@ Voice_Vol_ScaleVelocityWord:
 ; Callers 0x02B504, 0x02BCF7.
 Pitch_Apply_Partial_Detune:
 	ld de, (xwa + 6)
-	addda16 xde, 10558
+	add de, (10558:16)
 	ld xbc, (xwa + 23)
 	ld c, (xbc + 5)
 	exts bc
@@ -8601,7 +8601,7 @@ Pitch_Apply_Partial_Detune_ClearBit:
 ; word at 0x0451DA. Callers 0x028D90, 0x02B50A, 0x02BCFD.
 Pitch_Emit_Reg400:
 	ld de, (xwa + 10)
-	addda16_24 xde, 267079
+	add de, (267079:24)
 	ld xbc, (xwa + 39)
 	ld bc, (xbc + 24)
 	bit 4, bc
@@ -8624,7 +8624,7 @@ Voice_Pitch_Legato_StoreOutput:
 	ld wa, (xwa + 1)
 	bit 10, wa
 	jr z, Voice_Pitch_Legato_StoreOutput_Return
-	addda16_24 xde, 267098
+	add de, (267098:24)
 
 ; Saturate and store to the staging word 0x0451DA.
 Voice_Pitch_Legato_StoreOutput_Return:
@@ -8637,7 +8637,7 @@ Voice_Pitch_Legato_StoreOutput_Return:
 ; register write. Callers 0x02C0D7, 0x02C3F6.
 Pitch_Apply_Zone_Trim:
 	ld bc, (xwa + 6)
-	addda16 xbc, 10558
+	add bc, (10558:16)
 	ld (xwa + 10), bc
 	ret
 
@@ -8646,7 +8646,7 @@ Pitch_Apply_Zone_Trim:
 ; to 0x0451DA. Callers 0x028DA4, 0x02C0DD, 0x02C3FC.
 Voice_Pitch_WriteOutputReg_Secondary:
 	ld de, (xwa + 10)
-	addda16_24 xde, 267079
+	add de, (267079:24)
 	ld xbc, (xwa + 39)
 	ld bc, (xbc + 24)
 	bit 4, bc
@@ -10600,7 +10600,7 @@ Voice_OpSlot_WriteParams:
 	jr z, Voice_OpSlot_WriteParams_Direct
 	cps e, 0
 	jr nz, Voice_OpSlot_WriteParams_Direct
-	cpib_da 0x0451a7, 0xf5
+	cp (0x0451a7:24), 0xf5
 	jr z, Voice_OpSlot_WriteParams_Direct
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 104)
@@ -11045,9 +11045,9 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	ld xwa, xiz
 	calr EnvDepth_Cap
 	sub xiz, xhl
-	anddi16_24 283150, 57344
+	andw (283150:24), 57344
 	ld wa, iz
-	ordm16_24 283150, xwa
+	or (283150:24), wa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 89)
 	ld (0x04520a:24), wa
@@ -11467,7 +11467,7 @@ Voice2_UpdatePitch_ChanEntry:
 	ld wa, (xwa + 30)
 	and wa, 0x3300
 	or wa, iz
-	ordm16_24 283104, xwa
+	or (283104:24), wa
 	ld wa, (xsp + 14)
 	bit 15, wa
 	jr z, Voice2_UpdatePitch_WritePBend
@@ -13795,7 +13795,7 @@ Voice_ComputePitch_ApplyLFO:
 	add iz, wa
 	ld xwa, (0x045314:24)
 	add_sriw_rm IZ, 0xE1, 0xE0, 0x00
-	addda16 xiz, 10560
+	add iz, (10560:16)
 	ld xwa, (xsp + 6)
 	ld xbc, (xsp + 2)
 	calr Voice_InterpolatePanCurve
@@ -13958,7 +13958,7 @@ Voice_ComputePitch_Mono_ApplyLFO:
 	add hl, wa
 	ld xwa, (0x045314:24)
 	add_sriw_rm HL, 0xE1, 0xE0, 0x00
-	addda16 xhl, 10560
+	add hl, (10560:16)
 	ld xwa, (xsp + 4)
 	ld (xwa + 13), hl
 	ld xwa, (xsp + 4)
@@ -14819,9 +14819,9 @@ Voice_UpdateAllLFO_Loop1:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283148, 57344
+	andw (283148:24), 57344
 	srl xhl, 8
-	ordm16_24 283148, xhl
+	or (283148:24), hl
 
 ; Push the group-1 result for this slot with ToneGen_WriteExtParam_600.
 Voice_UpdateAllLFO_DispatchVoice1:
@@ -14871,9 +14871,9 @@ Voice_UpdateAllLFO_Loop2_Body:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283140, 57344
+	andw (283140:24), 57344
 	srl xhl, 8
-	ordm16_24 283140, xhl
+	or (283140:24), hl
 
 ; Push the group-2 result with ToneGen_WriteExtParam_1C0_Single.
 Voice_UpdateAllLFO_DispatchVoice2:
@@ -14924,9 +14924,9 @@ Voice_UpdateAllLFO_Loop3_Body:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283140, 57344
+	andw (283140:24), 57344
 	srl xhl, 8
-	ordm16_24 283140, xhl
+	or (283140:24), hl
 	jr Voice_UpdateAllLFO_DispatchVoice3
 
 ; Slots 0x40..0x7F of group 3 fold their result into scratch 0x04520E instead of
@@ -14939,9 +14939,9 @@ Voice_UpdateAllLFO_DispatchGroup3_High:
 	extz xbc
 	ld xwa, xhl
 	call FP_MulAccum64
-	anddi16_24 283150, 57344
+	andw (283150:24), 57344
 	srl xhl, 8
-	ordm16_24 283150, xhl
+	or (283150:24), hl
 
 ; Push the group-3 result with ToneGen_WriteExtParam_TypeDispatch_Single.
 Voice_UpdateAllLFO_DispatchVoice3:
@@ -15407,13 +15407,13 @@ Pitch_Bend_Ramp_Tick:
 	ld wa, (0x041343:24)
 	bit 11, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit12
-	incdi16_24 1, 267100
+	incw 1, (267100:24)
 	ld a, (0x011c7c:24)
 	exts wa
 	add wa, wa
 	ld (0x04135a:24), wa
-	anddi16_24 267075, 63487
-	ordi16_24 267075, 5120
+	andw (267075:24), 63487
+	orw (267075:24), 5120
 	ret
 
 ; Body of Pitch_Bend_Ramp_Tick (entry 0x0271BC, already named -- left alone). That
@@ -15434,8 +15434,8 @@ Pitch_Bend_Ramp_Tick_Bit12:
 	ld wa, (0x041343:24)
 	bit 12, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit13Check
-	incdi16_24 1, 267100
-	anddi16_24 267075, 64511
+	incw 1, (267100:24)
+	andw (267075:24), 64511
 	ret
 
 ; bit 13 clear -> ClearMode; set -> choose the +2 (bit 14) or +1 (bit 15) step.
@@ -15446,7 +15446,7 @@ Pitch_Bend_Ramp_Tick_Bit13Check:
 	ld wa, (0x041343:24)
 	bit 14, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit14Clear
-	incdi16_24 2, 267100
+	incw 2, (267100:24)
 	ld wa, (0x04135c:24)
 	extz xwa
 	ld xbc, 0x11C7C
@@ -15455,7 +15455,7 @@ Pitch_Bend_Ramp_Tick_Bit13Check:
 	exts wa
 	add wa, wa
 	ld (0x04135a:24), wa
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 	jr Pitch_Bend_Ramp_Tick_CheckCounter
 
 ; bit 14 clear: if bit 15 is set take the +1 step, otherwise zero the offset.
@@ -15464,7 +15464,7 @@ Pitch_Bend_Ramp_Tick_Bit14Clear:
 	extz xwa
 	bit 15, wa
 	jr z, Pitch_Bend_Ramp_Tick_ZeroPitch
-	incdi16_24 1, 267100
+	incw 1, (267100:24)
 	ld wa, (0x04135c:24)
 	extz xwa
 	ld xbc, 0x11C7C
@@ -15473,27 +15473,27 @@ Pitch_Bend_Ramp_Tick_Bit14Clear:
 	exts wa
 	add wa, wa
 	ld (0x04135a:24), wa
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 	jr Pitch_Bend_Ramp_Tick_CheckCounter
 
 ; No direction bit set: force the global pitch offset 0x04135A to 0 and raise bit 10.
 Pitch_Bend_Ramp_Tick_ZeroPitch:
 	ldw (0x04135a:24), 0x0000
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 
 ; Termination test: return unless the offset word 0x04135A is now zero; when it is, clear
 ; bits 13..15 of 0x041343, reset the step index 0x04135C and raise bit 10 one last time.
 Pitch_Bend_Ramp_Tick_CheckCounter:
-	cpw_da 267098, 0
+	cpw (267098:24), 0
 	ret nz
-	anddi16_24 267075, 8191
+	andw (267075:24), 8191
 	ldw (0x04135c:24), 0x0000
-	ordi16_24 267075, 1024
+	orw (267075:24), 1024
 	ret
 
 ; Ramp inactive: clear bit 10 and return.
 Pitch_Bend_Ramp_Tick_ClearMode:
-	anddi16_24 267075, 64511
+	andw (267075:24), 64511
 	ret
 
 ; Voice_InitVoiceState(WA = channel index). Loads the whole 22-word tone-generator shadow
@@ -15553,10 +15553,10 @@ Voice_InitVoiceState:
 Voice_TickNoteDecay:
 	lda xsp, (xsp - 14)
 	pushw_erp 0xFA
-	cpib_da 0x04135e, 0x00
+	cp (0x04135e:24), 0x00
 	jr z, Voice_TickNoteDecay_Done
-	decdi8_24 1, 267103
-	cpib_da 0x04135f, 0x00
+	dec 1, (267103:24)
+	cp (0x04135f:24), 0x00
 	jr nz, Voice_TickNoteDecay_Done
 	lda xwa, (xsp + 2)
 	call Voice_SetPanning
@@ -15584,7 +15584,7 @@ Voice_TickNoteDecay:
 
 ; Reload the divider: decrement the counter at 0x04135E and reset 0x04135F to 4.
 Voice_TickNoteDecay_Reload:
-	decdi8_24 1, 267102
+	dec 1, (267102:24)
 	ld (0x04135f:24), 0x04
 
 ; Restore and return.
@@ -18448,14 +18448,14 @@ Voice_SetPolyphonyMode:
 	pushw_erp 0xFA
 	cps a, 1
 	jr nz, Voice_SetPolyphonyMode_Else
-	ordi16_24 267075, 1
+	orw (267075:24), 1
 	lds wa, 1
 	call Voice_Reset_Engine
 	jr Voice_SetPolyphonyMode_Apply
 
 ; Else of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_Else:
-	anddi16_24 267075, 65534
+	andw (267075:24), 65534
 	lds wa, 0
 	call Voice_Reset_Engine
 
@@ -18513,7 +18513,7 @@ Voice_SetKeyShiftEnable:
 	ld wa, (0x041343:24)
 	bit 12, wa
 	ret nz
-	ordi16_24 267075, 2048
+	orw (267075:24), 2048
 	ldw (0x04135c:24), 0x0000
 	ret
 
@@ -18528,7 +18528,7 @@ Voice_SetKeyShiftRange:
 	extz xwa
 	and xwa, 0xFFFF2FFF
 	set 13, wa
-	cpw_da 267100, 20
+	cpw (267100:24), 20
 	jr ule, Voice_SetKeyShiftRange_BranchA
 	set 15, wa
 	jr Voice_SetKeyShiftRange_BranchB
@@ -18612,12 +18612,12 @@ Voice_SetParam_04134B:
 Voice_SetCCMaxFlag:
 	cp a, 0x7F
 	jr nz, Voice_SetCCMaxFlag_Clear
-	ordi16_24 267075, 2
+	orw (267075:24), 2
 	ret
 
 ; Clear of Voice_SetCCMaxFlag.
 Voice_SetCCMaxFlag_Clear:
-	anddi16_24 267075, 65533
+	andw (267075:24), 65533
 	ret
 
 ; WA = index, C = value.  Stores (C - 0x80) at 0x041342 + (index + 0x0C), i.e. into the
@@ -18761,12 +18761,12 @@ Voice_AllVoices_UpdateVelocity_Exit:
 ScaleTune_Set_Global_Enabled:
 	cps a, 0
 	jr nz, ScaleTune_Set_Global_Enabled_Clear
-	ordi16_24 267075, 512
+	orw (267075:24), 512
 	ret
 
 ; Clear of ScaleTune_Set_Global_Enabled.
 ScaleTune_Set_Global_Enabled_Clear:
-	anddi16_24 267075, 65023
+	andw (267075:24), 65023
 	ret
 
 ; Returns HL = 0x041343 & 0x0200.  Getter for the bit the routine above writes.
@@ -22208,7 +22208,7 @@ Voice_PortamentoTarget_ComputePitch:
 	ld wa, de
 	mul xwa, xix
 	add xwa, xhl
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld (xbc + 8), xwa
 	ret
 
@@ -23307,7 +23307,7 @@ Voice_Slot_ComputePitch:
 	sla iz, 8
 	add iz, 0x80
 	add_sriw_rm IZ, 0xE5, 0x12, 0x01
-	addda16_24 xiz, 267081
+	add iz, (267081:24)
 	ld a, (xbc + 22)
 	exts wa
 	sla wa, 8
@@ -29333,11 +29333,11 @@ VoiceParam_FullSetup_SetRoutingBit:
 	extz xwa
 	bit 15, wa
 	jr z, VoiceParam_FullSetup_ClearRoutingBit
-	setda_24 7, 282667
+	set 7, (282667:24)
 	jr VoiceParam_FullSetup_CopyLUT
 
 VoiceParam_FullSetup_ClearRoutingBit:
-	resda_24 7, 282667
+	res 7, (282667:24)
 
 VoiceParam_FullSetup_CopyLUT:
 	ldib_erp 0xFB, 0
@@ -29848,7 +29848,7 @@ VoiceParam_CustomTone_Select:
 	ld	xbc, 21
 	call	252106
 	lda_rr	xhl, xhl, iz
-	addda32_24	xhl, 283420
+	add	xhl, (283420:24)
 	lda	xhl, (xhl+19127)
 	ld	wa, qiz
 	extz	xwa
@@ -31155,12 +31155,12 @@ VoiceAlloc_WithRoutingFlag:
 	calr VoiceAlloc_CheckAndInit
 	cp (xsp), 0x0
 	jr z, VoiceAlloc_WithRoutingFlag_Clear
-	setda_24 7, 282667
+	set 7, (282667:24)
 	jr VoiceAlloc_WithRoutingFlag_Return
 
 ; C == 0 -> res 7,(0x04502B).
 VoiceAlloc_WithRoutingFlag_Clear:
-	resda_24 7, 282667
+	res 7, (282667:24)
 
 ; Pop the frame and return.
 VoiceAlloc_WithRoutingFlag_Return:
@@ -33282,7 +33282,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 
 ; After all four slots: the 0x0451A7 pair, skipped entirely when 0x0451A7 == 0xF5.
 DSP_AdjustVoiceParams_Vibrato:
-	cpib_da 0x0451a7, 0xf5
+	cp (0x0451a7:24), 0xf5
 	jr z, DSP_AdjustVoiceParams_Filter
 	ld a, (0x0451a7:24)
 	sla a, 1
@@ -33567,7 +33567,7 @@ DSP_RouteCoeffs_TypeA_Fetch:
 	ld	wa, bc
 	extz	xwa
 	add	xwa, xhl
-	addda32_24	xwa, (283408)
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	ix, wa
 	ld	xwa, (283412:24)
@@ -33648,7 +33648,7 @@ DSP_RouteCoeffs_TypeB_Fetch:
 	ld	wa, bc
 	extz	xwa
 	add	xwa, xhl
-	addda32_24	xwa, (283408)
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	ix, wa
 	ld	xwa, (283412:24)
@@ -33864,7 +33864,7 @@ DSP_VoiceCoeffRoute_Fetch:
 	ld	wa, iy
 	extz	xwa
 	add	xwa, xhl
-	addda32_24	xwa, (283408)
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	de, wa
 	ld	xwa, (283412:24)
@@ -34049,7 +34049,7 @@ DSP_VoiceCoeffRoute2_Fetch:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xix
-	addda32_24	xwa, (283408)
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	de, wa
 	ld	xwa, (283412:24)
@@ -34371,7 +34371,7 @@ DSP_VoiceParam_Dispatch_ComputeRow:
 	ld	wa, bc
 	extz	xwa
 	add	xwa, xde
-	addda32_24	xwa, (283408)
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	bc, wa
 	ld	xwa, (283412:24)
@@ -34508,7 +34508,7 @@ DSP_SetCoeff_ComputeIndex:
 	add wa, wa
 	extz xwa
 	add xwa, (xsp + 4)
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xwa, (xwa)
 	ld bc, wa
 	ld xwa, (0x045314:24)
@@ -34659,7 +34659,7 @@ DSP_SetCoeff_RouteComplex:
 	add	wa, wa
 	extz	xwa
 	add	xwa, xhl
-	addda32_24	xwa, 283408
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	de, wa
 	ld	xwa, (283412:24)
@@ -34857,7 +34857,7 @@ LABEL_03148B:
 	add	wa, wa
 	extz	xwa
 	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
-	addda32_24	xwa, (283408)
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	de, wa
 	ld	xwa, (283412:24)
@@ -35025,7 +35025,7 @@ DSP_SetCoeff_FullPipeline:
 	add	wa, wa
 	extz	xwa
 	add	xwa, (xsp+4)
-	addda32_24	xwa, 283408
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	de, wa
 	ld	xwa, (283412:24)
@@ -35121,7 +35121,7 @@ DSP_SetCoeff_WithDispatch:
 	ld	wa, bc
 	extz	xwa
 	add	xwa, xhl
-	addda32_24	xwa, 283408
+	add	xwa, (283408:24)
 	ld	xwa, (xwa)
 	ld	ix, wa
 	ld	xwa, (283412:24)
@@ -35668,7 +35668,7 @@ VoiceParam_Query_Case1_PatchRec:
 	.byte 0xe8, 0x8a, 0xdb, 0x88, 0x1e, 0xc5, 0xfe, 0x8e
 	.byte 0x02
 	.ascii "?]n("
-	resda_24	7, 283158
+	res	7, (283158:24)
 	lda	xhl, (283158:24)
 	ldb	e, 0
 	ld	a, (xiz+1)
@@ -36068,7 +36068,7 @@ ToneDB_Find_ToneRecord_CoeffPath:
 	ld xbc, (0x045314:24)
 	ld xbc, (xbc + 108)
 	add xbc, xde
-	addda32_24 xbc, 283408
+	add xbc, (283408:24)
 	ld c, (xbc)
 	extz bc
 	ld xde, (0x045314:24)
@@ -36080,7 +36080,7 @@ ToneDB_Find_ToneRecord_CoeffPath:
 	ld wa, bc
 	extz xwa
 	add xwa, xhl
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld bc, (xwa)
 	ld xwa, (0x045314:24)
 	ld xhl, (xwa + 8)
@@ -36088,7 +36088,7 @@ ToneDB_Find_ToneRecord_CoeffPath:
 	sll wa, 2
 	extz xwa
 	add xwa, xhl
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xhl, (xwa)
 	ld xwa, (0x045310:24)
 	add xwa, xhl
@@ -36111,7 +36111,7 @@ ToneDB_Find_PatchRecord_Preset:
 	ld xbc, (0x045314:24)
 	ld xbc, (xbc + 4)
 	add xbc, xde
-	addda32_24 xbc, 283408
+	add xbc, (283408:24)
 	ld c, (xbc)
 	extz bc
 	ld xde, (0x045314:24)
@@ -36123,7 +36123,7 @@ ToneDB_Find_PatchRecord_Preset:
 	ld wa, bc
 	extz xwa
 	add xwa, xhl
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld bc, (xwa)
 	ld xwa, (0x045314:24)
 	ld xhl, (xwa + 8)
@@ -36131,7 +36131,7 @@ ToneDB_Find_PatchRecord_Preset:
 	sll wa, 2
 	extz xwa
 	add xwa, xhl
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xhl, (xwa)
 	ld xwa, (0x045310:24)
 	add xwa, xhl
@@ -36145,7 +36145,7 @@ ToneDB_Find_PatchRecord_UserA:
 	ld xbc, 0x1D6
 	call FP_MulAccum64
 	add xhl, 0x10
-	addda32_24 xhl, 283420
+	add xhl, (283420:24)
 	jr ToneDB_Find_PatchRecord_Return
 
 ToneDB_Find_PatchRecord_UserB:
@@ -36155,7 +36155,7 @@ ToneDB_Find_PatchRecord_UserB:
 	ld xbc, 0x1D6
 	call FP_MulAccum64
 	add xhl, 0x10
-	addda32_24 xhl, 283416
+	add xhl, (283416:24)
 	jr ToneDB_Find_PatchRecord_Return
 
 ToneDB_Find_PatchRecord_KitA:
@@ -36173,7 +36173,7 @@ ToneDB_Find_PatchRecord_KitB:
 	ld xbc, 0x2927
 	call FP_MulAccum64
 	add xhl, 0x4980
-	addda32_24 xhl, 283416
+	add xhl, (283416:24)
 	jr ToneDB_Find_PatchRecord_Return
 
 ToneDB_Find_PatchRecord_Default:
@@ -36640,13 +36640,13 @@ WaveSel_StageA1_IndexLookup:
 	ld wa, bc
 	extz xwa
 	add xwa, xhl
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xwa, (xwa)
 	ld bc, iy
 	mul xbc, xwa
 	add xbc, xix
 	ld xhl, xbc
-	addda32_24 xhl, 283408
+	add xhl, (283408:24)
 	ret
 
 WaveSel_StageA1_FindVelSplit:
@@ -36786,7 +36786,7 @@ SlotParam_WriteType7:
 	call FP_MulAccum64
 	lda_dri XWA, 0x07, 0xEC, 0xF8
 	ld xbc, xwa
-	addda32_24 xbc, 283416
+	add xbc, (283416:24)
 	ld a, (xsp + 2)
 	extz wa
 	muls wa, 0xB
@@ -37032,14 +37032,14 @@ WaveSel_StageA2_IndexLookup:
 	ld wa, de
 	extz xwa
 	add xwa, xix
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xwa, (xwa)
 	ld hl, wa
 	ld wa, iz
 	mul xwa, xhl
 	add xwa, xiy
 	ld xhl, xwa
-	addda32_24 xhl, 283408
+	add xhl, (283408:24)
 	popw iz
 	ret
 
@@ -37275,13 +37275,13 @@ ToneDB_Resolve_NamedToneRecord:
 	add wa, wa
 	extz xwa
 	add xwa, xde
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xwa, (xwa)
 	ld iy, wa
 	ld wa, hl
 	mul xwa, xiy
 	add xwa, xbc
-	addda32_24 xwa, 283408
+	add xwa, (283408:24)
 	ld xix, xwa
 	jr ToneDB_Resolve_NamedToneRecord_Return
 
@@ -37324,7 +37324,7 @@ VoiceBuf_Lookup_Common:
 	ld xbc, 0x2927
 	call FP_MulAccum64
 	lda_dri XIX, 0x07, 0xEC, 0xF8
-	addda32_24 xix, 283416
+	add xix, (283416:24)
 	lda_dri XIX, 0xF1, 0xA7, 0x4A
 
 ToneDB_Resolve_NamedToneRecord_Return:
@@ -40217,7 +40217,7 @@ Voice_ProgChange_TableData:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
-	cpib_da	0x0451a7, 0xf5	; cp (0x0451a7),0xf5
+	cp	(0x0451a7:24), 0xf5	; cp (0x0451a7),0xf5
 	jr	z, LABEL_034590
 	lds	iz, 0
 	cps	iz, 4
@@ -40338,7 +40338,7 @@ DSP_SlotParam_Write_Slot0:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot0_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot0_Path
 	extz wa
 	muls wa, 0x11F
@@ -40366,7 +40366,7 @@ DSP_SlotParam_Write_Slot1:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot1_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot1_Path
 	extz wa
 	muls wa, 0x11F
@@ -40394,7 +40394,7 @@ DSP_SlotParam_Write_Slot2:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot2_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot2_Path
 	extz wa
 	muls wa, 0x11F
@@ -40422,7 +40422,7 @@ DSP_SlotParam_Write_Slot3:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot3_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot3_Path
 	extz wa
 	muls wa, 0x11F
@@ -40450,7 +40450,7 @@ DSP_SlotParam_Write_Slot4:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot4_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot4_Path
 	extz wa
 	muls wa, 0x11F
@@ -41105,21 +41105,21 @@ DSP_System_Init_Vars:
 	ld (11021:16), wa	; Clear control variable
 	bit_dd8 3, 0x44	; Check hardware config pin
 	jr z, DSP_System_Init_SetBit
-	anddi16_24 267075, 65527	; Clear bit 3 of DSP config
+	andw (267075:24), 65527	; Clear bit 3 of DSP config
 	jr DSP_System_Init_Continue
 
 ; Strap clear: sets bit 3 of the global word at 0x041343.
 DSP_System_Init_SetBit:
-	ordi16_24 267075, 8	; Set bit 3 of DSP config
+	orw (267075:24), 8	; Set bit 3 of DSP config
 
 ; Installs the three long pointers and runs the six-call init chain.
 DSP_System_Init_Continue:
 	ld xwa, 0x50000
-	stl_da 0x045310, xwa
+	ld (0x045310:24), xwa
 	ld xwa, 0x50000
-	stl_da 0x045314, xwa
+	ld (0x045314:24), xwa
 	lda xwa, (0x0a0000:24)
-	stl_da 0x045318, xwa
+	ld (0x045318:24), xwa
 	call DSP_Config_Init
 	call DSP_Reset
 	lds wa, 0
@@ -41142,7 +41142,7 @@ Audio_Process_Init_Data:
 ; Note the toggle is an XOR with 0xFF, not an increment, so the alternation only holds while
 ; nothing else writes 0x041342.  DSP_System_Init sets it back to 0.
 Audio_Process_Init:
-	cpib_da 0x041342, 0x00
+	cp (0x041342:24), 0x00
 	jr nz, Audio_Process_Init_BranchA
 	call Audio_Tick_ServiceVoices_A
 	call DSP_SlotState_DisplayRestore
@@ -41155,7 +41155,7 @@ Audio_Process_Init_BranchA:
 
 ; The shared tail: xor (0x041342),0xFF.
 Audio_Process_Init_BranchB:
-	xordi8_24 267074, 255
+	xor (267074:24), 255
 	ret
 
 ; ===========================================================================
@@ -41300,7 +41300,7 @@ Audio_CmdHandler_00_1F_Loop:
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	ld (xbc), a
-	incdi16 1, 11025
+	incw 1, (11025:16)
 	dec 1, de
 	lds32 xwa, 1
 	add (xsp + 6), xwa
@@ -41655,7 +41655,7 @@ DSP_InitChannelSlot:
 	sll xbc, 4
 	add xbc, 0x4AA7
 	ld xde, xbc
-	addda32_24 xde, 283420
+	add xde, (283420:24)
 	ld xwa, (xsp + 4)
 	ld xiy, xwa
 	ld xix, xde
@@ -41668,7 +41668,7 @@ DSP_InitChannelSlot:
 	add xbc, xwa
 	sll xbc, 4
 	add xbc, 0x4AA7
-	addda32_24 xbc, 283420
+	add xbc, (283420:24)
 	ld (xsp + 4), xbc
 	ld xwa, xbc
 	lda xwa, (xwa + 16)
@@ -41688,7 +41688,7 @@ DSP_InitChannelSlot:
 	sll xbc, 4
 	add xbc, 0x4AA7
 	ld xwa, xbc
-	addda32_24 xwa, 283420
+	add xwa, (283420:24)
 	ld xiy, xhl
 	lda xix, (xwa + 58)
 	lds bc, 5
@@ -41714,7 +41714,7 @@ DSP_InitChannelSlot:
 	sll xbc, 4
 	add xbc, 0x4AA7
 	ld xwa, xbc
-	addda32_24 xwa, 283420
+	add xwa, (283420:24)
 	ld xiy, xhl
 	lda xix, (xwa + 69)
 	lds bc, 5
@@ -41758,13 +41758,13 @@ DSP_FlushAllSlots_Loop1:
 	extz xwa
 	add xwa, xwa
 	add xwa, 0x49A7
-	addda32_24 xwa, 283420
+	add xwa, (283420:24)
 	resm 5, (xwa + 1)
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
 	add xwa, 0x49A7
-	addda32_24 xwa, 283420
+	add xwa, (283420:24)
 	setm 5, (xwa + 1)
 	inc 1, iz
 	cp iz, 0x80
@@ -41797,7 +41797,7 @@ DSP_FlushAllSlots_Loop3:
 	extz xwa
 	add xwa, 0x4980
 	ld xde, xwa
-	addda32_24 xde, 283420
+	add xde, (283420:24)
 	ld wa, iz
 	extz xwa
 	ld xbc, 0x120F4
@@ -41872,7 +41872,7 @@ DSP_ResetAlgoDefaults_Loop:
 	ld wa, hl
 	extz xwa
 	ld xde, xwa
-	addda32_24 xde, 283420
+	add xde, (283420:24)
 	ld wa, hl
 	extz xwa
 	ld xbc, 0x120E3
@@ -42028,7 +42028,7 @@ DSP_Reinit_VoiceSlots:
 	ld xbc, 0x1D6
 	call FP_MulAccum64
 	add xhl, 0x10
-	addda32_24 xhl, 283420
+	add xhl, (283420:24)
 	ld xwa, (xsp + 4)
 	ld xiy, xwa
 	ld xix, xhl
@@ -42060,7 +42060,7 @@ DSP_Reinit_VoiceSlots_Loop1Next:
 	ld xbc, 0x1D6
 	call FP_MulAccum64
 	add xhl, 0x10
-	addda32_24 xhl, 283420
+	add xhl, (283420:24)
 	ld xwa, (xsp + 4)
 	ld xiy, xwa
 	ld xix, xhl
@@ -42132,7 +42132,7 @@ DSP_Reinit_VoiceSlots_Loop3Next:
 	ld xbc, 0x1D6
 	call FP_MulAccum64
 	add xhl, 0x10
-	addda32_24 xhl, 283420
+	add xhl, (283420:24)
 	ld xwa, (xsp + 4)
 	ld xiy, xwa
 	ld xix, xhl
@@ -42269,9 +42269,9 @@ DSP_VoiceState_Dispatch_Epilogue:
 ; hardware touched. No inputs, no outputs.
 DSP_ResetWriteBufferPtr:
 	lda xwa, (0x007800:24)
-	stl_da 0x045320, xwa
+	ld (0x045320:24), xwa
 	lda xwa, (0x007800:24)
-	stl_da 0x04531c, xwa
+	ld (0x04531c:24), xwa
 	ret
 
 ; Bare `ret`. One of three consecutive 1-byte stubs; all three are still referenced by
@@ -42311,7 +42311,7 @@ DSP_VelocityToVolume:
 ; `c2 77 13 04 21`, and both toolchains reproduce it. See [UNCERTAIN].
 DSP_GetEffectRouting:
 	lds hl, 0
-	cpib_da 0x041377, 0x00
+	cp (0x041377:24), 0x00
 	jr z, DSP_GetEffectRouting_Path
 	ld a, (0x041377:24)
 	extz wa
@@ -42320,7 +42320,7 @@ DSP_GetEffectRouting:
 
 ; Second half of the above: the low-byte send, gated on 0x04137A.
 DSP_GetEffectRouting_Path:
-	cpib_da 0x04137a, 0x00
+	cp (0x04137a:24), 0x00
 	ret z
 	ld a, (0x041377:24)
 	extz wa
@@ -42381,9 +42381,9 @@ ToneGen_SetupPolyVoice_Path:
 	ld a, (xsp + 8)
 	extz wa
 	calr DSP_VelocityToVolume
-	orddm16 15136, xhl
+	or (15136:16), hl
 	calr DSP_GetEffectRouting
-	orddm16 15138, xhl
+	or (15138:16), hl
 	ld a, (xsp)
 	extz wa
 	div a, 0xC
@@ -42427,16 +42427,16 @@ ToneGen_SetupPercussionVoice:
 	ld a, e
 	extz wa
 	sll wa, 8
-	orddm16 15146, xwa
+	or (15146:16), wa
 	ld a, c
 	extz wa
 	add wa, wa
 	lda xbc, (0x012195:24)
 	ldw_sri WA, 0x07, 0xE4, 0xE0
-	orddm16 15132, xwa
+	or (15132:16), wa
 	calr DSP_GetEffectRouting
-	orddm16 15138, xhl
-	ordi16 15136, 4095
+	or (15138:16), hl
+	orw (15136:16), 4095
 	ld wa, (0x01217d:24)
 	ld (15134:16), wa
 	ld a, (xsp)
@@ -42786,10 +42786,10 @@ Audio_CmdHandler_60_7F:
 CmdHandler60_StreamSizeA:
 	ld wa, (17546:16)
 	add wa, de
-	cpda16 xwa, 17544
+	cp wa, (17544:16)
 	jr nc, CmdHandler60_StreamSizeB
-	adddm16 17546, xde
-	incdi16 1, 17548
+	add (17546:16), de
+	incw 1, (17548:16)
 	jr DSP_EnqueueOrReturn
 
 ; Stream complete: (0x448A) = 0, (0x448C) = 0, then enqueue. One of the two clear sites.
@@ -42814,7 +42814,7 @@ CmdHandler60_StreamSizeC:
 	add wa, bc
 	inc 8, wa
 	ld (17544:16), wa
-	adddi16 17546, 32
+	addw (17546:16), 32
 	ldw (17548:16), 1
 	jr DSP_EnqueueOrReturn
 
@@ -42843,7 +42843,7 @@ DSP_RingBuf_Enqueue:
 	add xbc, xwa
 	ldb_spi A, 0xEC
 	ld (xbc), a
-	incdi16 1, 15204
+	incw 1, (15204:16)
 	inc 1, ix
 	cp ix, de
 	jr c, DSP_RingBuf_Enqueue
@@ -44252,16 +44252,16 @@ DSP_WaitForDelay:
 	extz xwa
 	inc 1, xwa
 	srl xwa, 1
-	addda32 xwa, 4160
+	add xwa, (4160:16)
 	ld xiz, xwa
-	cpdm32 4160, xiz
+	cp (4160:16), xiz
 	jr nc, DSP_WaitForTaskSlot_Epilogue
 
 ; TaskSched_PreemptiveYield(3); re-test.
 DSP_WaitForTaskSlot_Loop:
 	lds wa, 3
 	call TaskSched_PreemptiveYield
-	cpdm32 4160, xiz
+	cp (4160:16), xiz
 	jr c, DSP_WaitForTaskSlot_Loop
 
 ; pop; ret.
@@ -46556,7 +46556,7 @@ DSP_StateTable_Reset:
 ; [UNCERTAIN].
 DSP_AlgoChange_CheckAndFlag:
 	ld bc, (xwa + 6)
-	cpda16 xbc, 17872
+	cp bc, (17872:16)
 	jr nz, DSP_AlgoChange_NoChange
 	cpw (xwa + 2), 0x1
 	jr z, DSP_AlgoChange_NoChange
@@ -47009,7 +47009,7 @@ DSP_Config_ClampNext:
 ; unreachable routine tail, not a data table.
 DSP_Config_ClampData:
 	ld	hl, (284006:24)
-	addda16_24	hl, (283716)
+	add	hl, (283716:24)
 	ret
 
 ; ALREADY NAMED -- doc header only. Entry WA = index. Returns HL = (0x45BC + index*2) and
@@ -57920,7 +57920,7 @@ ToneGen_Poll_Init:	; 03D1FBh
 ToneGen_Clear_Voice_Loop:	; 03D203h
 	ld wa, hl
 	extz xwa
-	addda32_24 xwa, 128028	; Voice status buffer base
+	add xwa, (128028:24)	; Voice status buffer base
 	ld (xwa), 0x0	; Clear voice status
 	inc 1, hl
 	cp hl, 0x8

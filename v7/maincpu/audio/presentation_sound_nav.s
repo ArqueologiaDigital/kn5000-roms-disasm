@@ -255,7 +255,7 @@ GroupBox_NavUpDown:
 	lds wa, 0
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	stl_da (0x03ef6a), xwa
+	ld (0x03ef6a:24), xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1e000b4
@@ -342,16 +342,16 @@ GetDialEnableState:
 
 SetDialFocus:
 	ld xde, xwa
-	cpdm32_24 (0x03ef6a), xde
+	cp (0x03ef6a:24), xde
 	ret z
-	stl_da (0x03ef6a), xde
+	ld (0x03ef6a:24), xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0002c
 	call SendEvent
 	ret
 
 GetDialFocus:
-	cpw_da (0x03ef50), 0
+	cpw (0x03ef50:24), 0
 	jr nz, GetDialFocus_Active
 	ld xhl, 0xffffffff
 	ret
@@ -361,15 +361,15 @@ GetDialFocus_Active:
 	ret
 
 SetDialUp:
-	stl_da (0x03ef52), xwa
-	stl_da (0x03ef5a), xbc
-	stl_da (0x03ef62), xde
+	ld (0x03ef52:24), xwa
+	ld (0x03ef5a:24), xbc
+	ld (0x03ef62:24), xde
 	jr SetDialFocus
 
 SetDialDown:
-	stl_da (0x03ef56), xwa
-	stl_da (0x03ef5e), xbc
-	stl_da (0x03ef66), xde
+	ld (0x03ef56:24), xwa
+	ld (0x03ef5e:24), xbc
+	ld (0x03ef66:24), xde
 	jr SetDialFocus
 
 SetAutoIncDefault:
@@ -559,7 +559,7 @@ Screen_Init_ClearStoredValue:
 Screen_Init_SetWall:
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, SleepMainTask
+	call nz, (SleepMainTask:24)
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000b1
 	lds32 xde, 0
@@ -574,7 +574,7 @@ Screen_Init_SetWall:
 	calr SetWallColor
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, WakeUpMainTask
+	call nz, (WakeUpMainTask:24)
 	call GetTitleNow
 	ld xwa, xhl
 	ld xde, (xsp + 12)
@@ -813,18 +813,18 @@ SetWallPaper:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
-	cpw_da	(0x0340fe), 0
+	cpw	(0x0340fe:24), 0
 	jr	nz, 28
 
 SetWallPaper_Default:
 	lds wa, 0
 	jp ChangeWall
 SetWallPaper_CaseData:
-	cpw_da	(0x0340fa), 0
+	cpw	(0x0340fa:24), 0
 	jr	nz, 13
 	lds	wa, 1
 	jr	-17
-	cpw_da	(0x0340fc), 0
+	cpw	(0x0340fc:24), 0
 	jr	z, -13
 	lds	wa, 2
 	jr	t, 0xe2
@@ -1244,7 +1244,7 @@ DirmdTitleFunc:
 	ret
 DirmdEmu_CaseF:
 	ld	a, (35996:16)
-	cpda8	a, 35997
+	cp	a, (35997:16)
 	jr	z, 25
 	ldw	wa, 255
 	call	16453699
@@ -1384,9 +1384,9 @@ DirmdEmu_CheckSoundCtrl:
 DirmdEmu_CheckBit4:
 .Lc_f9ab69:
 	bit 4, (0xe318:16)
-	call_24 nz, (UI_PostRefreshEvent)
+	call nz, (UI_PostRefreshEvent:24)
 	bit 4, (0xe31a:16)
-	call_24 nz, (UI_PostTimerResetEvent)
+	call nz, (UI_PostTimerResetEvent:24)
 	bit 3, (0xe31c:16)
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
@@ -1822,7 +1822,7 @@ AcNaming_CheckDefaultWidget:
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
-	stl_da (0x0274d2), xwa
+	ld (0x0274d2:24), xwa
 
 AcNaming_InitScrollState:
 	ldw (0x0274d8:24), 0x0000
@@ -1848,7 +1848,7 @@ AcNaming_QueryCharSet:
 	ld xbc, Data_SoundEditorCharsLayout_0x18
 	add xbc, xwa
 	ld xwa, (xbc)
-	stl_da (0x0274e4), xwa
+	ld (0x0274e4:24), xwa
 	cps hl, 0
 	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17
@@ -1874,7 +1874,7 @@ AcNaming_ShowNavButtons:
 AcNaming_SetVisibleAndInit:
 	call SetVisible
 	lds iz, 0
-	cpw_da (0x0274d6), 0
+	cpw (0x0274d6:24), 0
 	jr ule, WndScroll_InitBuffer
 
 ; --- UI Window Procs, Graphics & Mode Screens ---

@@ -7439,7 +7439,7 @@ P7Block_Seek__F9E146:
 	ld	wa, (xiz-2)                             ; F9E178  ld WA,(XIZ+0xfe)
 	exts	xwa                                   ; F9E17B  exts XWA
 	add	xbc, xwa                               ; F9E17D  add XBC,XWA
-	stl_da	(0x861E), xbc                       ; F9E17F  ld (0x00861e),XBC
+	ld	(0x861E:24), xbc                       ; F9E17F  ld (0x00861e),XBC
 	sub	xwa, xwa                               ; F9E184  sub XWA,XWA
 	inc	2, xwa                                 ; F9E186  inc 2,XWA
 	add	(xiz+8), xwa                           ; F9E188  add (XIZ+0x08),XWA
@@ -9840,13 +9840,13 @@ P7Unit_SendValueTable__F9F8DE:
 P7Stream_StageAndSend:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9F8E1  link XIZ,0xfff0
 	ld	xbc, (xiz+12)                           ; F9F8E5  ld XBC,(XIZ+0x0c)
-	stl_da	(0x862E), xbc                       ; F9F8E8  ld (0x00862e),XBC
+	ld	(0x862E:24), xbc                       ; F9F8E8  ld (0x00862e),XBC
 	ld	xwa, (xiz+8)                            ; F9F8ED  ld XWA,(XIZ+0x08)
-	stl_da	(0x8632), xwa                       ; F9F8F0  ld (0x008632),XWA
+	ld	(0x8632:24), xwa                       ; F9F8F0  ld (0x008632),XWA
 	ld	xiy, (xiz+22)                           ; F9F8F5  ld XIY,(XIZ+0x16)
-	stl_da	(0x8636), xiy                       ; F9F8F8  ld (0x008636),XIY
+	ld	(0x8636:24), xiy                       ; F9F8F8  ld (0x008636),XIY
 	ld	xbc, (xiz+28)                           ; F9F8FD  ld XBC,(XIZ+0x1c)
-	stl_da	(0x863A), xbc                       ; F9F900  ld (0x00863a),XBC
+	ld	(0x863A:24), xbc                       ; F9F900  ld (0x00863a),XBC
 	ld	bc, (xiz+34)                            ; F9F905  ld BC,(XIZ+0x22)
 	ld	(0x863E:24), bc                        ; F9F908  ld (0x00863e),BC
 	ld	bc, (xiz+16)                            ; F9F90D  ld BC,(XIZ+0x10)
@@ -14199,7 +14199,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 	ld	(xbc), a                                ; FA26B6  ld (XBC),A
 	ei	6                                       ; FA26B8  ei 0x06
 	ldw	(0xF2F1:24), 0                        ; FA26BA  ld (0x00f2f1),0x0000
-	setda_24 5, 0x007ECC                       ; FA26C1  set 5,(0x007ecc)
+	set 5, (0x007ECC:24)                       ; FA26C1  set 5,(0x007ecc)
 	ei	0                                       ; FA26C6  ei 0x00
 	unlk32 xiz                                 ; FA26C8  unlk XIZ
 	ret                                        ; FA26CA  ret
@@ -15806,7 +15806,7 @@ P7Units_ReloadFixedStreams:
 	call	0xF9A646                              ; FA3391  call 0xf9a646
 	inc	8, xsp                                 ; FA3395  inc 0,XSP
 	inc	2, xsp                                 ; FA3397  inc 2,XSP
-	cpib_da 0x00F35F, 0x02                     ; FA3399  cp (0x00f35f),0x02
+	cp (0x00F35F:24), 0x02                     ; FA3399  cp (0x00f35f),0x02
 	jr z, P7Units_ReloadFixedStreams__FA33D1                   ; FA339F  jr Z,0xfa33d1
 	lda	xbc, (0xFD4B97:24)                     ; FA33A1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33A6  push XBC
@@ -18043,43 +18043,43 @@ P7Unit_SelectStreamsForRecord:
 	jrl P7Unit_SelectStreamsForRecord__FA48FA                     ; FA4825  jrl T,0xfa48fa
 P7Unit_SelectStreamsForRecord__FA4828:
 	lda	xbc, (0xFD28C7:24)                     ; FA4828  lda XBC,0xfd28c7
-	stl_da	(0x8622), xbc                       ; FA482D  ld (0x008622),XBC
+	ld	(0x8622:24), xbc                       ; FA482D  ld (0x008622),XBC
 	lda	xwa, (0xFD4E13:24)                     ; FA4832  lda XWA,0xfd4e13
-	stl_da	(0x8626), xwa                       ; FA4837  ld (0x008626),XWA
+	ld	(0x8626:24), xwa                       ; FA4837  ld (0x008626),XWA
 	lda	xiy, (0xFD3B60:24)                     ; FA483C  lda XIY,0xfd3b60
-	stl_da	(0x862A), xiy                       ; FA4841  ld (0x00862a),XIY
+	ld	(0x862A:24), xiy                       ; FA4841  ld (0x00862a),XIY
 	ldw	(0xF365:24), 99                       ; FA4846  ld (0x00f365),0x0063
 	ldw	(0xF367:24), 99                       ; FA484D  ld (0x00f367),0x0063
 	ldw	(0xF369:24), 99                       ; FA4854  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA485B  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA485E:
 	lda	xbc, (0xFD28C7:24)                     ; FA485E  lda XBC,0xfd28c7
-	stl_da	(0x8622), xbc                       ; FA4863  ld (0x008622),XBC
-	stl_da	(0x8626), xbc                       ; FA4868  ld (0x008626),XBC
+	ld	(0x8622:24), xbc                       ; FA4863  ld (0x008622),XBC
+	ld	(0x8626:24), xbc                       ; FA4868  ld (0x008626),XBC
 	ld	xwa, (0x8622:24)                       ; FA486D  ld XWA,(0x008622)
-	stl_da	(0x862A), xwa                       ; FA4872  ld (0x00862a),XWA
+	ld	(0x862A:24), xwa                       ; FA4872  ld (0x00862a),XWA
 	ldw	(0xF365:24), 99                       ; FA4877  ld (0x00f365),0x0063
 	ldw	(0xF367:24), 99                       ; FA487E  ld (0x00f367),0x0063
 	ldw	(0xF369:24), 99                       ; FA4885  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA488C  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA488F:
 	lda	xbc, (0xFD06FA:24)                     ; FA488F  lda XBC,0xfd06fa
-	stl_da	(0x8622), xbc                       ; FA4894  ld (0x008622),XBC
+	ld	(0x8622:24), xbc                       ; FA4894  ld (0x008622),XBC
 	lda	xwa, (0xFD06FA:24)                     ; FA4899  lda XWA,0xfd06fa
-	stl_da	(0x8626), xwa                       ; FA489E  ld (0x008626),XWA
+	ld	(0x8626:24), xwa                       ; FA489E  ld (0x008626),XWA
 	lda	xiy, (0xFD06FA:24)                     ; FA48A3  lda XIY,0xfd06fa
-	stl_da	(0x862A), xiy                       ; FA48A8  ld (0x00862a),XIY
+	ld	(0x862A:24), xiy                       ; FA48A8  ld (0x00862a),XIY
 	ldw	(0xF365:24), 99                       ; FA48AD  ld (0x00f365),0x0063
 	ldw	(0xF367:24), 99                       ; FA48B4  ld (0x00f367),0x0063
 	ldw	(0xF369:24), 99                       ; FA48BB  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA48C2  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA48C5:
 	lda	xbc, (0xFDA4E7:24)                     ; FA48C5  lda XBC,0xfda4e7
-	stl_da	(0x8622), xbc                       ; FA48CA  ld (0x008622),XBC
+	ld	(0x8622:24), xbc                       ; FA48CA  ld (0x008622),XBC
 	lda	xwa, (0xFDA5C1:24)                     ; FA48CF  lda XWA,0xfda5c1
-	stl_da	(0x8626), xwa                       ; FA48D4  ld (0x008626),XWA
+	ld	(0x8626:24), xwa                       ; FA48D4  ld (0x008626),XWA
 	lda	xiy, (0xFDA554:24)                     ; FA48D9  lda XIY,0xfda554
-	stl_da	(0x862A), xiy                       ; FA48DE  ld (0x00862a),XIY
+	ld	(0x862A:24), xiy                       ; FA48DE  ld (0x00862a),XIY
 	ldw	(0xF365:24), 0x6C                     ; FA48E3  ld (0x00f365),0x006c
 	ldw	(0xF367:24), 0x6C                     ; FA48EA  ld (0x00f367),0x006c
 	ldw	(0xF369:24), 0x6C                     ; FA48F1  ld (0x00f369),0x006c
@@ -18599,7 +18599,7 @@ sub_FA4CE5__FA4D3A:
 	add	xsp, 20                                ; FA4D73  add XSP,0x00000014
 	jrl sub_FA4CE5__FA4E13                     ; FA4D79  jrl T,0xfa4e13
 sub_FA4CE5__FA4D7C:
-	cpib_da 0x00F35D, 0x00                     ; FA4D7C  cp (0x00f35d),0x00
+	cp (0x00F35D:24), 0x00                     ; FA4D7C  cp (0x00f35d),0x00
 	jr nz, sub_FA4CE5__FA4DC5                  ; FA4D82  jr NZ,0xfa4dc5
 	pushw	1                                    ; FA4D84  push 0x0001
 	lda	xbc, (0xFD4B97:24)                     ; FA4D87  lda XBC,0xfd4b97
@@ -19379,7 +19379,7 @@ P7Units_ServiceTask__FA5509:
 	calr (0xFA5535 - 0xFA550E)                 ; FA550B  calr 0xfa5535
 	calr (0xFA2DEC - 0xFA5511)                 ; FA550E  calr 0xfa2dec
 	calr (0xFA26CB - 0xFA5514)                 ; FA5511  calr 0xfa26cb
-	cpib_da 0x00F35C, 0x00                     ; FA5514  cp (0x00f35c),0x00
+	cp (0x00F35C:24), 0x00                     ; FA5514  cp (0x00f35c),0x00
 	jr z, P7Units_ServiceTask__FA552E                   ; FA551A  jr Z,0xfa552e
 	ld	(0xF35C:24), 0                        ; FA551C  ld (0x00f35c),0x00
 	calr (0xFA336B - 0xFA5525)                 ; FA5522  calr 0xfa336b
@@ -19586,7 +19586,7 @@ P7Units_ResolveProgramsAndReload__FA56EB:
 	ld	c, (0xF361:24)                         ; FA5709  ld C,(0x00f361)
 	ld	(0xF35D:24), c                         ; FA570E  ld (0x00f35d),C
 	ei	0                                       ; FA5713  ei 0x00
-	cpib_da 0x00F35D, 0x01                     ; FA5715  cp (0x00f35d),0x01
+	cp (0x00F35D:24), 0x01                     ; FA5715  cp (0x00f35d),0x01
 	jr ule, P7Units_ResolveProgramsAndReload__FA5723                 ; FA571B  jr ULE,0xfa5723
 	ld	(0xF35D:24), 1                        ; FA571D  ld (0x00f35d),0x01
 P7Units_ResolveProgramsAndReload__FA5723:

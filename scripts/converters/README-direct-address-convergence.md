@@ -150,3 +150,113 @@ Six `ldw_da xwa, (\ParamC)` sites inside `.macro` bodies (v7/v9/v10
 `display/scoop_display.s` and `factory_test/test_init.s`). A macro parameter
 cannot be assembled in isolation, so the per-site guard cannot certify them and
 they are left alone — which is also what this lane's brief requires.
+
+---
+
+# UPDATE 2026-09-04 (lane `w26/conv-alu`): the ALU-direct remainder
+
+The same question, asked of the ninety-four synthetic direct-address mnemonics
+the 2026-09-03 lane left behind — the ALU forms, the bit forms, inc/dec, and
+`stl_da` / `cpib_da` / `cpw_da` / `jp_24` / `call_24` / `pushdi_24`.
+
+**11,840 of 11,875 sites in 220 files converted; 35 refused.** Both byte gates
+green after each of the ten families. Driver:
+`scripts/converters/run_alu_direct_convergence.sh`.
+
+## How the set was chosen — not by the name's shape
+
+Every mnemonic in `TLCS900InstrInfo.td` whose `(ins ...)` list contains
+`directaddr`, intersected with what the tree actually writes: **95 names,
+11,881 sites** (`ldw_da`'s 6 macro bodies are one of them and were already
+refused by the earlier lane). That is larger than the "9,748 sites over 66
+names" the 2026-09-03 note predicted, which was read off the census by name
+shape. Reading the OPERAND LIST rather than the name is what found the extra
+29 — `jp_24`, `call_24`, `lda_24`, `pushdi_24`, `chgda_24` and the `_24`
+siblings do not look like the others but take the same operand.
+
+## The map — the finding
+
+The address WIDTH is `AddrWidth` in the `.td` (0 => a 16-bit field, 1 => a
+24-bit one), never an inference from the address value. The `w` suffix appears
+only where there is no register operand to carry the 16-bit data size, exactly
+as `ldw`/`cpw` above.
+
+| shape | synthetic names | native spelling |
+|---|---|---|
+| ALU reg,(addr) | `addda8/16/32`, `subda8/16/32`, `sub32_24`, `andda*`, `orda*`, `xorda*`, `cpda8/16/32` (+ `_24`) | `add`/`sub`/`and`/`or`/`xor`/`cp` `r, (addr:16\|24)` |
+| ALU (addr),reg | `adddm*`, `addl_da`, `subdm*`, `anddm*`, `orddm*`/`ordm*_24`, `xordm*`, `cpdm*` | same op, `(addr:16\|24), r` |
+| ALU (addr),imm | `adddi8/16`, `subdi8/16`, `anddi8_24`/`anddi16`, `ordi8_24`/`ordi16`, `xordi8`, `cpib_da`, `cpw_da` (+ `_24`) | `add`/`addw`/… `(addr:16\|24), imm` |
+| INC/DEC n,(addr) | `incdi8/16`, `decdi8/16` (+ `_24`) | `inc`/`incw`/`dec`/`decw` `n, (addr:16\|24)` |
+| bit n,(addr) | `resda`, `setda`, `bitda_24` (+ `_24`) | `res`/`set`/`bit` `n, (addr:16\|24)` |
+| store 32 | `stl_da` | `ld (addr:24), r32` |
+| flow | `jp_24`, `call_24`, `pushdi_24` | `jp cc, (addr:24)`, `call cc, (addr:24)`, `pushw (addr:24)` |
+
+## ★ THE BACKEND HAS TWO RULES FOR A 32-BIT NAME IN A NARROWER SLOT
+
+The 2026-09-03 lane established that `ldb_da xwa` means **A**, the pair's LOW
+BYTE, and mapped `xwa->a xbc->c xde->e xhl->l` accordingly. That is right —
+**for the LD-direct class only.** Measured here, on the same assembler:
+
+    ldb_da xbc, (0x120000)   ->  ...,0x23   LD base 0x20 + 3  =  C   low byte
+    cpda8  xbc, (0x1000)     ->  ...,0xf1   CP base 0xf0 + 1  =  A   same index
+
+The ALU-direct class encodes the x-name INDEX-PRESERVINGLY
+(`xwa->w xbc->a xde->b xhl->c xix->d xiy->e xiz->h xsp->l`). Applying the
+LD rule to the ALU forms produced 161 `BYTES-DIFFER` refusals and 17
+`x-name-with-no-8bit-half`, and applying it *silently* would have been a wrong
+register name at 2,379 sites.
+
+**So the converter no longer asserts a rule.** `reg_candidates()` returns every
+name of the right class — the rule-based guesses first, then the rest — and the
+per-site check keeps the one whose encoding equals the line being replaced.
+Each 8-bit name has a distinct sub-opcode, so at most one candidate can match:
+a match is a MEASUREMENT of what the ROM byte says, not a guess. Which rule won
+is counted and printed:
+
+    no-register       5520      (the other operand is an immediate or a cc)
+    as-written        3941      (already the right class)
+    index-preserving  2379      (an x-name, resolved by the ALU rule)
+    low-byte             0
+    byte-search          0
+
+★ **Byte-identity is per instruction CLASS, not per register file.** Two
+conventions live in one backend. Measure the class you are converting; a rule
+carried over from a neighbouring family is a guess wearing evidence's clothes.
+
+## The controls
+
+`--foil op` is new and is the sharp one for this lane: it substitutes a sibling
+operation of the SAME encoding class (add<->sub, and<->or, cp->and, res<->set,
+inc<->dec, jp<->call, bit->res), so the foil spelling always parses and must be
+rejected on BYTES, not on a syntax error.
+
+    --foil op      convert 0 / 11,875   BYTES-DIFFER 11,848 + 27 macro bodies
+    --foil width   convert 0 / 11,875   BYTES-DIFFER 8,344, new-won't-assemble 3,504
+    --foil reg     convert 9,461        BYTES-DIFFER 2,379
+
+`--foil reg` is the one that must reject *some* and accept the rest: 2,379 is
+exactly the number of sites the real run resolved by renaming a register, and
+every one of the 9,461 that never needed a rename still passes.
+
+## Refused: 35 sites, and why
+
+* **27 × `lda_24 xwa, (\ParamB|\ParamD)`** — inside `.macro` bodies in v7/v9/v10
+  `display/scoop_display.s` and `factory_test/test_init.s`. A macro parameter
+  cannot be assembled in isolation, so the per-site guard cannot certify it.
+  Same class as the six `ldw_da` bodies the earlier lane refused, in the same
+  two files.
+* **8 × `chgda_24 n, (0x160004)`** — `chg` has no memory-operand form in the
+  backend at all: `chg 2, (0x160004)` is *invalid operand*, and
+  `chg 2, (0x160004:24)` does not even parse. Only the synthetic `chgm`
+  accepts it, and respelling one synthetic name as another is not convergence.
+  ⚠ This wants a one-line `chg` -> `chgm` alias in `TLCS900InstrInfo.td`,
+  which is a BACKEND change and out of this lane's scope.
+
+## What did NOT reach a native name
+
+861 of the 11,840 land on a size-suffixed name that unidasm's table does not
+contain, so the census still calls them SYNTHETIC: `cpw` 442, `orw` 279,
+`andw` 67, `addw` 55, `subw` 18. The address width did leave the mnemonic —
+that is the conversion — but the DATA size cannot, because those forms have an
+immediate on the other side and no register to carry it. This is the tree's
+established `ldw`/`cpw` convention, not a new one.

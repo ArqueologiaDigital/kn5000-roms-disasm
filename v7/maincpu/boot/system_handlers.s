@@ -29,7 +29,7 @@ NMI_SetPowerOffCode_A5A5:
 
 NMI_ClearGuardAndHalt:
 	ld (1024:16), 0
-	resda 7, 354
+	res 7, (354:16)
 	set_dd8 2, 0x3c
 	halt
 NMI_HaltLoop:
@@ -67,7 +67,7 @@ NMI_StorePayloadChecksums_Entry:
 	call Seq_IsMelodyActive
 	cps hl, 0
 	jr z, NMI_CopyPayloadToSRAM
-	adddi16_24 (0xffd4), 1000
+	addw (0xffd4:24), 1000
 
 NMI_CopyPayloadToSRAM:
 	lda xde, (0x00066e:24)
@@ -100,12 +100,12 @@ SubCPU_Payload_Verify_Entry:
 	ldw bc, 0x800	; Size: 0x800 words
 	call Checksum_ComputeComplement	; Compute checksum -> HL
 	lda xwa, (0x00f980:24)
-	cpda16_24 xhl, (0xffd4); Compare with expected checksum
+	cp hl, (0xffd4:24); Compare with expected checksum
 	jr nz, SubCPU_Payload_Verify_Fail	; First region checksum failed
 	ld (0x01e53e:24), 0x00; Mark as success (so far)
 	ldw bc, 0x280	; Size of second region
 	call Checksum_ComputeComplement	; Compute second checksum
-	cpda16_24 xhl, (0xffd2); Compare with expected
+	cp hl, (0xffd2:24); Compare with expected
 	ret z	; Both match -> success
 	ld (0x01e53e:24), 0xff; Second region failed
 	ret
@@ -115,7 +115,7 @@ SubCPU_Payload_Verify_Fail_Entry:
 	ld (0x01e53e:24), 0xff; Mark as failed
 	ldw bc, 0x280
 	call Checksum_ComputeComplement
-	cpda16_24 xhl, (0xffd2)
+	cp hl, (0xffd2:24)
 	ret nz	; Both checksums wrong
 	ld (0x01e53e:24), 0x01; First wrong, second correct (partial)
 	ret
@@ -145,7 +145,7 @@ SubCPU_PayloadErrorStore:
 	ret
 
 Sys_CheckPowerStableFlag:
-	cpw_da (0xffcc), 0x5a5a
+	cpw (0xffcc:24), 0x5a5a
 	scc16 z, hl
 	ret
 
@@ -378,20 +378,20 @@ Boot_InitWorkRAM_Trailer:
 	ret
 
 INTT1_HANDLER:
-	incdi16 1, (1475)
+	incw 1, (1475:16)
 	pushw wa
 	push xhl
 	xor xhl, xhl
 	inc 1, xhl
-	adddm32 1033, xhl
-	incdi16 1, (1037)
+	add (1033:16), xhl
+	incw 1, (1037:16)
 	push	sr
 	ei 6
 	ld a, (1063:16)
 	ld w, (1062:16)
 	bit 7, a
 	jr z, INTT1_NoOverflow
-	incdi8 1, (1061)
+	inc 1, (1061:16)
 	cp (1061:16), 165
 	jr ule, INTT1_NoOverflow
 	and a, 0x7f
@@ -414,7 +414,7 @@ INTT1_CheckScanFlag:
 	ld (1066:16), a
 	bit 2, (0xfd50:16)
 	jrl nz, INTT1_UpdateAlternateTimers
-	incdi8 1, (1050)
+	inc 1, (1050:16)
 	bit 0, (1056:16)
 	jr nz, INTT1_CheckTickOverflow
 	bit 5, (1056:16)
@@ -446,17 +446,17 @@ INTT1_CheckTickOverflow:
 	cp (1050:16), 1
 	jr ule, UIStateMachine_DispatchEntry
 	ld (1056:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 	bit 0, (1054:16)
 	jr z, INTT1_CheckAltSeqOverflow
 	ld (1054:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTT1_CheckAltSeqOverflow:
 	bit 0, (1057:16)
 	jr z, INTT1_CheckMidiSyncGate
 	ld (1057:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTT1_CheckMidiSyncGate:
 	.byte 0xc1, 0x98, 0x8c, 0x3f, 0x13, 0x66, 0x0d, 0x02
@@ -493,7 +493,7 @@ UIStateMachine_DispatchEntry:
 	bit 0, a
 	jr z, UIStateMachine_CheckPending
 	ld (xhl), 0x6
-	resda 0, 1139
+	res 0, (1139:16)
 
 UIStateMachine_CheckPending:
 	bit 3, a
@@ -501,13 +501,13 @@ UIStateMachine_CheckPending:
 	ld (xhl), 0x10
 
 UIStateMachine_ClearBit3:
-	resda 2, 1043
+	res 2, (1043:16)
 	ld a, (1041:16)
 	inc 1, a
 	cps a, 2
 	jr ule, UIStateMachine_PrimaryDispatch
 	sub a, a
-	incdi8 1, (1042)
+	inc 1, (1042:16)
 
 ; UI state machine primary dispatch
 ; Index: DRAM[1041] (0-2), entries: 3
@@ -574,35 +574,35 @@ UI_SUBSTATE_TABLE:
 	.long UI_SUBSTATE_CLEAR_BIT3
 
 UI_SUBSTATE_CLEAR_FLAGS:
-	resda 6, 1058
-	resda 0, 1043
+	res 6, (1058:16)
+	res 0, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_PROCESS_A:
-	resda 1, 1043
-	resda 0, 1044
+	res 1, (1043:16)
+	res 0, (1044:16)
 	ldb a, 0x2
 	call TaskSched_SignalEvent_NoBlock
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_CLEAR_BIT3:
-	resda 3, 1043
+	res 3, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_0:
-	resda 4, 1043
+	res 4, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_1:
-	resda 5, 1043
+	res 5, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_2:
-	resda 6, 1043
+	res 6, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_3:
-	resda 7, 1043
+	res 7, (1043:16)
 
 UIStateMachine_ExitToScheduler:
 	pop xhl
@@ -648,7 +648,7 @@ INTTR4_CheckMetroEnable:
 	cp a, 0x60
 	jr lt, INTTR4_MetroCounter_Store
 	xor a, a
-	incdi16 1, (1048)
+	incw 1, (1048:16)
 
 INTTR4_MetroCounter_Store:
 	ld (1047:16), a
@@ -670,11 +670,11 @@ INTTR4_SeqTick_CheckBeat:
 INTTR4_CheckAltSeqEnable:
 	bit 2, (1057:16)
 	jr z, INTTR4_MetroPhaseSync
-	incdi8 1, (1051)
+	inc 1, (1051:16)
 	cp (1051:16), 96
 	jr lt, INTTR4_MetroPhaseSync
 	ld (1051:16), 0
-	incdi16 1, (1052)
+	incw 1, (1052:16)
 	cpw (0x28aa:16), 0
 	jr z, INTTR4_MetroPhaseSync
 	calr TempoRingBuf_Write
@@ -685,13 +685,13 @@ INTTR4_MetroPhaseSync:
 	bit 0, (1054:16)
 	jr z, INTTR4_MetroSync_CheckAltSeq
 	ld (1054:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_MetroSync_CheckAltSeq:
 	bit 0, (1057:16)
 	jr z, INTTR4_MetroSync_Done
 	ld (1057:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_MetroSync_Done:
 	jr INTTR4_MetroBeat_Check
@@ -760,17 +760,17 @@ INTTR4_SeqAccum_Update:
 	ei 6
 	ld a, (1045:16)
 	ld w, a
-	subda8 a, 1111
+	sub a, (1111:16)
 	jr z, INTTR4_SeqAccum_Done
 	jr ugt, INTTR4_SeqAccum_PositiveDelta
 	add a, 0x60
 
 INTTR4_SeqAccum_PositiveDelta:
 	ld (1111:16), w
-	adddm8 1124, a
-	adddm8 1122, a
+	add (1124:16), a
+	add (1122:16), a
 	xor w, w
-	addda16 xwa, 1120
+	add wa, (1120:16)
 	cp a, 0x60
 	jr c, INTTR4_SeqAccum_NoWrap
 	sub a, 0x60
@@ -796,7 +796,7 @@ INTTR4_AltSeqAccum_Update:
 	ld a, (1051:16)
 	bit 3, (1073:16)
 	jr z, INTTR4_AltSeqSync_Check
-	cpdm8 1072, a
+	cp (1072:16), a
 	jr nz, INTTR4_AltSeqSync_Check
 	ld (1054:16), 8
 	and (1073:16), 247
@@ -808,7 +808,7 @@ INTTR4_AltSeqAccum_Update:
 INTTR4_AltSeqSync_Check:
 	bit 0, (1073:16)
 	jr z, INTTR4_FadeDelay_Check
-	cpdm8 1071, a
+	cp (1071:16), a
 	jr nz, INTTR4_FadeDelay_Check
 	ld (1054:16), 1
 	and (1073:16), 254
@@ -820,7 +820,7 @@ INTTR4_AltSeqSync_Check:
 INTTR4_FadeDelay_Check:
 	cp (1126:16), 0
 	jr z, INTTR4_SyncAccum_Update
-	decdi8 1, 1126
+	dec 1, (1126:16)
 
 INTTR4_SyncAccum_Update:
 	bit 2, (1055:16)
@@ -829,17 +829,17 @@ INTTR4_SyncAccum_Update:
 	ei 6
 	ld a, (1130:16)
 	ld w, a
-	subda8 a, 1138
+	sub a, (1138:16)
 	jr z, INTTR4_SyncAccum_Done
 	jr ugt, INTTR4_SyncAccum_PositiveDelta
 	add a, 0x60
 
 INTTR4_SyncAccum_PositiveDelta:
 	ld (1138:16), w
-	adddm8 1131, a
-	adddm8 1133, a
+	add (1131:16), a
+	add (1133:16), a
 	xor w, w
-	addda16 xwa, 1136
+	add wa, (1136:16)
 	cp a, 0x60
 	jr c, INTTR4_SyncAccum_NoWrap
 	sub a, 0x60
@@ -899,7 +899,7 @@ TempoRingBuf_Write_Return:
 TempoRingBuf_WritePair:
 	bit 0, (1113:16)
 	jr nz, TempoRingBuf_WritePair_Enqueue
-	cpw_da (0x1e751), 2
+	cpw (0x1e751:24), 2
 	jr c, TempoRingBuf_WritePair_ClearPending
 	push	sr
 	ei 6
@@ -942,7 +942,7 @@ INTTR4_SubTick_Mode:
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_MetroInc
-	incdi8 1, (1051)
+	inc 1, (1051:16)
 
 INTTR4_SubTick_MetroInc:
 	bit 2, (1056:16)
@@ -951,7 +951,7 @@ INTTR4_SubTick_MetroInc:
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_SeqInc
-	incdi8 1, (1047)
+	inc 1, (1047:16)
 
 INTTR4_SubTick_SeqInc:
 	bit 2, (1054:16)
@@ -960,7 +960,7 @@ INTTR4_SubTick_SeqInc:
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_PhaseSync
-	incdi8 1, (1045)
+	inc 1, (1045:16)
 
 INTTR4_SubTick_PhaseSync:
 	bit 2, (1056:16)
@@ -968,13 +968,13 @@ INTTR4_SubTick_PhaseSync:
 	bit 0, (1054:16)
 	jr z, INTTR4_SubTick_PhaseSync_AltSeq
 	ld (1054:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_SubTick_PhaseSync_AltSeq:
 	bit 0, (1057:16)
 	jr z, INTTR4_SubTick_ToAccum
 	ld (1057:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_SubTick_ToAccum:
 	jp INTTR4_SeqAccum_Update
@@ -1341,7 +1341,7 @@ RhythmBuf_ProcessEvents:
 
 RhythmBuf_ProcessLoop:
 	ld wa, (0x01ef59:24)
-	cpda16_24 xwa, (0x1ef55)
+	cp wa, (0x1ef55:24)
 	jr z, RhythmBuf_ProcessLoop_Done
 	calr RhythmBuf_DispatchEvent
 	jr RhythmBuf_ProcessLoop
@@ -1366,7 +1366,7 @@ RhythmBuf_Dispatch_UpdateReadPos:
 	add wa, 0x200
 
 RhythmBuf_Dispatch_NoWrap:
-	adddm16_24 (0x1ef5b), xwa
+	add (0x1ef5b:24), wa
 	ret
 
 RhythmBuf_ScanForNoteOn:
@@ -1530,7 +1530,7 @@ TempoRingBuf_Consume:
 	ei 6
 
 TempoRingBuf_Consume_Loop:
-	cpda16 xhl, 1141
+	cp hl, (1141:16)
 	jr nc, TempoRingBuf_Consume_Done
 	ldb_sri E, 0x07, 0xf0, 0xec
 	calr TempoRingBuf_DequeueOne
@@ -1538,7 +1538,7 @@ TempoRingBuf_Consume_Loop:
 	jr TempoRingBuf_Consume_Loop
 
 TempoRingBuf_Consume_Done:
-	resda 0, 1113
+	res 0, (1113:16)
 	ldw (1141:16), 0
 	ei 0
 	popw hl
@@ -1616,7 +1616,7 @@ SeqTiming_Snapshot_CheckFrac:
 	.byte 0x04, 0x00, 0x00
 SeqTiming_Snapshot_PostSnap:
 	di
-	cpda16	xwa, (13014)
+	cp	wa, (13014:16)
 	jr	c, 12	; -> 0xEF1724
 	push	xhl
 	call	AccTiming_InitAllParts
@@ -1642,7 +1642,7 @@ SyncTiming_Snapshot_CheckFrac:
 	.byte 0x04, 0x00, 0x00
 SyncTiming_Snapshot_PostSnap:
 	di
-	cpda16	xwa, (32098)
+	cp	wa, (32098:16)
 	jr	c, 12	; -> 0xEF176C
 	push	xhl
 	call	SeqEvt_EntryPoint2
@@ -1826,8 +1826,8 @@ INTT3_PriorityAdjust_Active:
 	ret
 
 INTT3_HANDLER:
-	incdi16 1, (1475)
-	incdi8 1, (1158)
+	incw 1, (1475:16)
+	inc 1, (1158:16)
 	pushw wa
 	pushw bc
 	calr INTT3_PriorityAdjust
@@ -1986,7 +1986,7 @@ TaskSched_Dispatch:
 	or wa, wa
 	jr nz, TaskSched_ReturnToDispatch
 	xor wa, wa
-	cpdm16 1159, xwa
+	cp (1159:16), wa
 	jr z, TaskSched_ScanPriorityQueues
 	ld iy, (1159:16)
 	extz xiy
@@ -3153,10 +3153,10 @@ TaskSched_TCBTemplate:	.ascii "(<=;"
 
 TaskSched_DelayTicks:
 	srl wa, 1
-	addda16 xwa, 1033
+	add wa, (1033:16)
 
 TaskSched_DelayTicks_SpinLoop:
-	cpda16 xwa, 1033
+	cp wa, (1033:16)
 	jr gt, TaskSched_DelayTicks_SpinLoop
 	ret
 
@@ -3169,7 +3169,7 @@ Stop_and_Clear_8bit_Timer_3:
 	ret
 
 SeqBuf_BytecodeSnippet:
-	incdi16	1, (1475)
+	incw	1, (1475:16)
 	ret
 	.byte 0xd1, 0xc3
 	halt
@@ -3318,7 +3318,7 @@ TempoRingBuf_WriteBytes_Loop:
 
 TempoRingBuf_CheckEmpty:
 	ld hl, (0x01e74f:24)
-	cpda16_24 xhl, (0x1e74b)
+	cp hl, (0x1e74b:24)
 	lds hl, 0
 	jr z, TempoRingBuf_CheckEmpty_Return
 	ldw hl, 0xffff
@@ -3415,7 +3415,7 @@ RhythmBuf_InlineBytecode:
 
 RhythmBuf_CheckEmpty:
 	ld hl, (0x01ef59:24)
-	cpda16_24 xhl, (0x1ef55)
+	cp hl, (0x1ef55:24)
 	lds hl, 0
 	jr z, RhythmBuf_CheckEmpty_Return
 	ldw hl, 0xffff
@@ -3597,7 +3597,7 @@ SeqEvtBuf_InlineBytecode:
 	unlk	xiz
 	ret
 	ld	hl, (0x1f26d:24)
-	cpda16_24	hl, (0x1f269)
+	cp	hl, (0x1f269:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -3700,7 +3700,7 @@ SeqMain_WriteBytes_Loop:
 
 Seq_CheckSongEnd:
 	ld hl, (0x01f377:24)
-	cpda16_24 xhl, (0x1f373)
+	cp hl, (0x1f373:24)
 	lds hl, 0
 	jr z, Seq_CheckSongEnd_Return
 	ldw hl, 0xffff
@@ -3799,7 +3799,7 @@ SeqBuf_MidiOut_WriteBytes_Loop:
 
 SeqBuf_MidiOut_CheckEmpty:
 	ld hl, (0x01f781:24)
-	cpda16_24 xhl, (0x1f77d)
+	cp hl, (0x1f77d:24)
 	lds hl, 0
 	jr z, SeqBuf_MidiOut_CheckEmpty_Return
 	ldw hl, 0xffff
@@ -4104,7 +4104,7 @@ SeqBuf_DspSysEx_WriteBytes_Loop:
 
 SeqBuf_DspSysEx_CheckSongEnd:
 	ld hl, (0x01fc9f:24)
-	cpda16_24 xhl, (0x1fc9b)
+	cp hl, (0x1fc9b:24)
 	lds hl, 0
 	jr z, SeqBuf_DspSysEx_CheckSongEnd_Return
 	ldw hl, 0xffff
@@ -4195,7 +4195,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	unlk	xiz
 	ret
 	ld	hl, (0x200a9:24)
-	cpda16_24 xhl, (131237)
+	cp hl, (131237:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4372,7 +4372,7 @@ SeqBuf_VoiceMap_WriteBlock_Loop:
 
 SeqBuf_VoiceMap_CheckEmpty:
 	ld hl, (0x0201bd:24)
-	cpda16_24 xhl, (0x201b9)
+	cp hl, (0x201b9:24)
 	lds hl, 0
 	jr z, SeqBuf_VoiceMap_CheckEmpty_Done
 	ldw hl, 0xffff
@@ -4473,7 +4473,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	unlk	xiz
 	ret
 	ld	hl, (0x202c7:24)
-	cpda16_24 xhl, (131779)
+	cp hl, (131779:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4557,7 +4557,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	unlk	xiz
 	ret
 	ld	hl, (0x203d1:24)
-	cpda16_24 xhl, (132045)
+	cp hl, (132045:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4654,7 +4654,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 
 SeqBuf_NoteEvent_CheckSongEnd:
 	ld hl, (0x0204db:24)
-	cpda16_24 xhl, (0x204d7)
+	cp hl, (0x204d7:24)
 	lds hl, 0
 	jr z, SeqBuf_NoteEvent_CheckSongEnd_Return
 	ldw hl, 0xffff
@@ -5413,7 +5413,7 @@ InterCPU_E2_WaitAck:
 	ldw (1502:16), 10
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
-	setda 7, 1568
+	set 7, (1568:16)
 	cp (1504:16), 0
 	ret z
 
@@ -5868,12 +5868,12 @@ INTTC0_E2_Complete:
 	ld (1510:16), 255
 	ld (1506:16), 0
 	set_dd8 1, 0x68	; MSTAT1 - set to signal E2 command complete
-	setda 7, 1566
+	set 7, (1566:16)
 	jr E1DMA_ISR_Epilogue
 
 INTTC0_E1_Phase2_Complete:
 	ld (1506:16), 0
-	resda 7, 1568
+	res 7, (1568:16)
 
 INTTC0_SetTransferDone:
 	set_dd8 1, 0x68	; MSTAT1 - set to signal E1 transfer complete
@@ -5909,7 +5909,7 @@ E1DMA_ISR_BytecodeBlock:
 	pushw	sp
 	ld	xwa, 4175611601
 	jr	nz, 6
-	incdi16	1, (58052)
+	incw	1, (58052:16)
 	jr	6
 	ldw	(58052:16), 0
 	ld	(58054:16), wa
@@ -5922,7 +5922,7 @@ E1DMA_ISR_BytecodeBlock:
 	ld	(256:16), 0
 	ld	(1506:16), 0
 	set_dd8	1, 104
-	incdi8	1, (58050)
+	inc	1, (58050:16)
 	ret
 	ld	de, (1033:16)
 	.byte 0xf1	; v10 does not spell this byte either
@@ -5943,7 +5943,7 @@ E1DMA_ISR_BytecodeBlock:
 	.byte 0xf1	; v10 does not spell this byte either
 	ldb	w, 6
 	.byte 0xb7	; v10 does not spell this byte either
-	incdi8	1, (58056)
+	inc	1, (58056:16)
 	ldw	hl, 65535
 	ret
 Flash_IdentifyChip:
@@ -6211,7 +6211,7 @@ Flash_EraseSector_CheckRegion:
 	cp (xsp + 12), 0x1
 	jr nz, Flash_EraseSector_Bank2Check
 	lda xwa, (0x300000:24)
-	cpw_da (0x205e0), 8792
+	cpw (0x205e0:24), 8792
 	jr nz, Flash_EraseSector_TopSector
 	cp xwa, (xsp + 4)
 	jrl nz, FlashOp_Epilogue10
@@ -6242,7 +6242,7 @@ Flash_EraseSector_TopSector:
 
 Flash_EraseSector_Bank2Check:
 	lda xwa, (0x280000:24)
-	cpw_da (0x205e2), 8875
+	cpw (0x205e2:24), 8875
 	jr nz, Flash_EraseSector_Bank2TopSector
 	cp xwa, (xsp + 4)
 	jr nz, FlashOp_Epilogue10
@@ -6304,7 +6304,7 @@ Flash_InitAllBanks:
 	calr Flash_IdentifyChip
 	call Get_Region_Code
 	cps l, 4
-	call_24 nz, TableDataROM_IdentifyChip
+	call nz, (TableDataROM_IdentifyChip:24)
 	lds wa, 1
 	calr Flash_IdentifyAndValidateChip
 	ld (0x0205e0:24), hl
@@ -6518,11 +6518,11 @@ HDAE5000_Detect:
 	ld (xsp + 8), xwa
 	ei 6
 	ld xwa, 0xaa00aa
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, 0x550055
-	stl_da (0x80aaa8), xwa
+	ld (0x80aaa8:24), xwa
 	ld xwa, 0x900090
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, (0x800000:24)
 	ld (xsp + 4), xwa
 	ld xwa, 0x800000
@@ -6565,11 +6565,11 @@ Flash_ProgramByte_WaitReady:
 	jr z, Flash_ProgramByte_WaitReady
 	ei 6
 	ld xwa, 0xaa00aa
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, 0x550055
-	stl_da (0x80aaa8), xwa
+	ld (0x80aaa8:24), xwa
 	ld xwa, 0xa000a0
-	stl_da (0x815554), xwa
+	ld (0x815554:24), xwa
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
 	ei 0
@@ -6866,7 +6866,7 @@ SLIDE_Decompress_4K_CheckLiteral:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0xfff
 	jr SLIDE_Decompress_4K_Continue
@@ -6899,7 +6899,7 @@ SLIDE_Decompress_4K_CopyLoop:
 	add wa, iy
 	and wa, 0xfff
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld a, (xwa)
 	extz wa
 	ld e, a
@@ -6908,7 +6908,7 @@ SLIDE_Decompress_4K_CopyLoop:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0xfff
 	inc 1, iy
@@ -6998,7 +6998,7 @@ SLIDE_Decompress_8K_CheckLiteral:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0x1fff
 	jr SLIDE_Decompress_8K_Continue
@@ -7031,7 +7031,7 @@ SLIDE_Decompress_8K_CopyLoop:
 	add wa, iy
 	and wa, 0x1fff
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld a, (xwa)
 	extz wa
 	ld e, a
@@ -7040,7 +7040,7 @@ SLIDE_Decompress_8K_CopyLoop:
 	ld wa, bc
 	inc 1, bc
 	extz xwa
-	addda32 xwa, 1570
+	add xwa, (1570:16)
 	ld (xwa), e
 	and bc, 0x1fff
 	inc 1, iy
@@ -7796,7 +7796,7 @@ BusyWait_Loop:
 	ret
 
 LED_CyclePattern:
-	incdi8 1, (1574)
+	inc 1, (1574:16)
 	ld a, (1574:16)
 	and a, 0x3
 	cps a, 3
@@ -8004,7 +8004,7 @@ HDAE5000_Init_DetectAndVerify:
 	call HDAE5000_Detect
 	cp xhl, 0xffffffff
 	jr nz, HDAE5000_Init_VerifyROM
-	setda_24 2, (0x160004)
+	set 2, (0x160004:24)
 
 Infinite_Loop_FlashVerifyFail:
 	jr Infinite_Loop_FlashVerifyFail
@@ -8028,17 +8028,17 @@ HDAE5000_Init_WaitFlashReady:
 	jr z, HDAE5000_Init_WaitFlashReady
 
 HDAE5000_Init_TransferData:
-	setda_24 0, (0x160004)
+	set 0, (0x160004:24)
 	calr HDAE5000_TableData_Write
-	resda_24 0, (0x160004)
-	setda_24 1, (0x160004)
+	res 0, (0x160004:24)
+	set 1, (0x160004:24)
 	pushw 0x7
 	ld xwa, 0x800000
 	ld xbc, 0x280000
 	lds de, 4
 	calr HDAE5000_ROM_Transfer
 	or xhl, xhl
-	call_24 nz, LED_Toggle_Bit2_Loop
+	call nz, (LED_Toggle_Bit2_Loop:24)
 
 HDAE5000_Init_HaltLoop:
 	jr HDAE5000_Init_HaltLoop
@@ -8064,7 +8064,7 @@ Parport_WaitDataReady:
 Parport_ReadNextByte:
 	pushw iz
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jr c, Parport_ReadByte_FromBuffer
 	ldw hl, 0xffff
 	jr Parport_ReadByte_Return
@@ -8072,9 +8072,9 @@ Parport_ReadNextByte:
 Parport_ReadByte_FromBuffer:
 	lda xwa, (0x069800:24)
 	add xwa, 0x9000
-	cpda32 xwa, 1610
+	cp xwa, (1610:16)
 	jr nz, Parport_ReadByte_Emit
-	incdi16 8, (1614)
+	incw 8, (1614:16)
 	ld wa, (1614:16)
 	ld bc, (1616:16)
 	lds de, 6
@@ -8090,7 +8090,7 @@ Parport_RefillBuffer_Loop:
 	add xde, xbc
 	ldw bc, 0x12
 	calr FDC_ReadSectors
-	adddi16 1618, 18
+	addw (1618:16), 18
 	inc 1, iz
 	cps iz, 4
 	jr c, Parport_RefillBuffer_Loop
@@ -8131,7 +8131,7 @@ Flash_AccumWrite_Byte:
 
 Flash_AccumWrite_ByteDone:
 	lds32 xwa, 1
-	adddm32 1602, xwa
+	add (1602:16), xwa
 	ret
 
 Flash_AccumWrite_Word:
@@ -8157,7 +8157,7 @@ Flash_AccumWrite_Word:
 
 Flash_AccumWrite_WordDone:
 	lds32 xwa, 1
-	adddm32 1602, xwa
+	add (1602:16), xwa
 	ret
 
 LZSS_Decompress_ToFlash:
@@ -8168,7 +8168,7 @@ LZSS_Decompress_ToFlash:
 	add xwa, 0xe0000
 	ld (1622:16), xwa
 	ld xwa, 0x20000
-	adddm32 1598, xwa
+	add (1598:16), xwa
 	lds iz, 0
 
 LZSS_Decompress_ReadHeader:
@@ -8209,7 +8209,7 @@ LZSS_Decompress_StreamHeaderBytes:
 	ldw (1614:16), 42
 	ldw (1616:16), 200
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jr nc, LZSS_Decompress_ReturnOK
 
 LZSS_Decompress_StreamData:
@@ -8218,7 +8218,7 @@ LZSS_Decompress_StreamData:
 	ld wa, hl
 	calr Flash_AccumWrite_Word
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jr c, LZSS_Decompress_StreamData
 
 LZSS_Decompress_ReturnOK:
@@ -8279,7 +8279,7 @@ LZ_Decompress_ReadTracks:
 	add xde, xbc
 	ldw bc, 0x12
 	calr FDC_ReadSectors
-	adddi16 1618, 18
+	addw (1618:16), 18
 	inc1w_erp 0xfa
 	cpiw_erp 0xfa, 4
 	jr c, LZ_Decompress_ReadTracks
@@ -8297,13 +8297,13 @@ LZ_Decompress_ReadSizeField:
 	calr Parport_ReadNextByte
 	sll hl, 8
 	extz xhl
-	adddm32 1598, xhl
+	add (1598:16), xhl
 	calr Parport_ReadNextByte
 	extz xhl
 	ld xwa, (1598:16)
 	add xwa, xhl
 	ld (1598:16), xwa
-	cpdm32 1602, xwa
+	cp (1602:16), xwa
 	jrl nc, LZ_Decompress_Done
 
 LZ_Decompress_MainLoop:
@@ -8385,7 +8385,7 @@ LZ_Decompress_CopyMatchLoop:
 
 LZ_Decompress_LoopCheck:
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jrl c, LZ_Decompress_MainLoop
 
 LZ_Decompress_Done:

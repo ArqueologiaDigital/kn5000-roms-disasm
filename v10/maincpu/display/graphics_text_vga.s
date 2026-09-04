@@ -1349,8 +1349,8 @@ DrawText_ExtLayout_Variant1:
 	extz	xbc
 	lda	xwa, (xsp+276)
 	push	xbc
-	pushdi_24	(0x03efa4)
-	pushdi_24	(0x03efa2)
+	pushw	(0x03efa4:24)
+	pushw	(0x03efa2:24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
 	calr	60994
@@ -4762,7 +4762,7 @@ MainWallFlash_ReturnZero:
 	ret
 
 WallUsrIniFunc:
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr nz, WallUsrIni_PostBootEvent
 	ld xwa, 0x142000f
 	ld xbc, 0x1e20016
@@ -5333,7 +5333,7 @@ MainMssSetUp:
 	cp xbc, 0x1e20018
 	jr nz, MainMssSetUp_ReturnZero
 	ld (0x8d56:16), de
-	incdi16 1, (0x8d56)
+	incw 1, (0x8d56:16)
 	ld (0x8d4e:16), 7
 	jr MainMssSetUp_ReturnZero
 
@@ -5396,7 +5396,7 @@ AcFreeSplit_ValueChanged:
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)
-	stl_da (0x0340c0), xwa
+	ld (0x0340c0:24), xwa
 	cp xwa, 0x4180
 	jr nz, AcFreeSplit_CheckSecondKey
 	cpw (xiz + 4), 0x0

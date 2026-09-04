@@ -117,7 +117,7 @@ BitMapOut_ByteData_RenderB:
 	cp	xhl, 27263222
 	jrl	z, 145
 	ld	a, (49124:16)
-	cpda8	a, 35998
+	cp	a, (35998:16)
 	jrl	nz, 134
 	cp	(49121:16), 0
 	jr	nz, 127
@@ -275,7 +275,7 @@ BitMapOut_ByteData_RenderE:
 	ret
 BitMapOut_CheckDiskAndApply:
 	cp (0x8c9c:16), 0x8a
-	jp_24 z, (Interrupt_ModeGuardCheck)
+	jp z, (Interrupt_ModeGuardCheck:24)
 	ld XWA,0xffffffff
 	ld XBC,0x01c20000
 	.byte 0xea, 0xa8, 0x1b, 0x4b, 0x99, 0xfa
@@ -321,7 +321,7 @@ BitMapOut_ByteData_TransitionSeq:
 	.byte 0xe1, 0xbf, 0x3f	; differs from v10 here and llvm-objdump cannot read it
 	pushw	65200
 	ld	a, (49122:16)
-	andda8	xbc, (49123)
+	and	a, (49123:16)
 	and	a, 192
 	cp	a, 64
 	jr	z, 30
@@ -1707,7 +1707,7 @@ BitMapOut_DetectChanges_UseShortList:
 	ld hl, (0x9042:16)
 	lda xwa, (0xbca0:16)
 	ld (XSP+0x08),XWA
-	setda 2, (0x8caa)
+	set 2, (0x8caa:16)
 	jr t, BitMapOut_DeltaEncode_Init
 BitMapOut_DetectChanges_FullScan:
 .Lc_fb4e45:
@@ -1717,7 +1717,7 @@ BitMapOut_DetectChanges_FullScan:
 	ld hl, (0x9046:16)
 	lda xwa, (0xbe9d:16)
 	ld (XSP+0x08),XWA
-	resda 2, (0x8caa)
+	res 2, (0x8caa:16)
 BitMapOut_DeltaEncode_Init:
 	lds iz, 0
 	jrl BitMapOut_DeltaEncode_CheckBounds
@@ -1911,15 +1911,15 @@ BitMapOut_DeltaEncode_Return:
 
 BitMapOut_DispatchIOChanges:
 	bit 7, (0xf9c4:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port0
+	call z, (BitMapOut_ApplyIOChange_Port0:24)
 	bit 7, (0xf9c7:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port3
+	call z, (BitMapOut_ApplyIOChange_Port3:24)
 	bit 7, (0xf9de:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port1
+	call z, (BitMapOut_ApplyIOChange_Port1:24)
 	bit 7, (0xf9e1:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port4
+	call z, (BitMapOut_ApplyIOChange_Port4:24)
 	bit 7, (0xf9f8:16)
-	call_24 z, BitMapOut_ApplyIOChange_Port2
+	call z, (BitMapOut_ApplyIOChange_Port2:24)
 	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5
@@ -2891,7 +2891,7 @@ BitMapOut_ByteData_RenderState:
 	cp	(49121:16), 4
 	jrl	nz, 179
 	ld	a, (49122:16)
-	andda8	a, 49123
+	and	a, (49123:16)
 	and	a, 3
 	cps	a, 1
 	jr	z, 29
@@ -3181,7 +3181,7 @@ BitMapOut_ApplyPatch_Loop:
 	inc	1, iz
 	inc1b_erp	251
 	stb_erp	a, 251
-	cpda8	a, 36032
+	cp	a, (36032:16)
 	jr	c, -27
 BitMapOut_ApplyPatch_Store:
 	ld	a, (36034:16)

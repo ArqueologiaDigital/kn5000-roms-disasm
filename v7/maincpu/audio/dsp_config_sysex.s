@@ -233,11 +233,11 @@ SysEx_ApplyVoiceParam_49:
 	cpw (0x9046:16), 0x00fb
 	jr ugt, .Lc_fdac40
 	ld XHL,0x0000be9d
-	addda16 xhl, 0x9046
+	add hl, (0x9046:16)
 	ld (XHL),DE
 	ld (XHL+0x02),WA
 	ld (XHL+0x04),0xff
-	adddi16 (0x9046), 0x0004
+	addw (0x9046:16), 0x0004
 .Lc_fdac40:
 	ret
 	.byte 0x43, 0x9d, 0xbf, 0x00, 0x00, 0x83, 0x3f, 0xff
@@ -633,13 +633,13 @@ BitMapOut_MergeOutputFields:
 .Lc_fdb297:
 	cp IZ,0x0108
 	jrl nc, .Lc_fdb347
-	resda 4, (0x0429)
+	res 4, (0x0429:16)
 	ld a, (0x0429:16)
 	and A,0x1f
 	jr z, .Lc_fdb329
 	bit 0, (0x0429:16)
 	jr z, .Lc_fdb2cc
-	resda 0, (0x0429)
+	res 0, (0x0429:16)
 	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld WA,IZ
@@ -653,7 +653,7 @@ BitMapOut_MergeOutputFields:
 	lda xwa, (0xc036:16)
 	bit 1, (0x0429:16)
 	jr z, .Lc_fdb2ed
-	resda 1, (0x0429)
+	res 1, (0x0429:16)
 	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld BC,IZ
@@ -665,7 +665,7 @@ BitMapOut_MergeOutputFields:
 .Lc_fdb2ed:
 	bit 2, (0x0429:16)
 	jr z, .Lc_fdb30a
-	resda 2, (0x0429)
+	res 2, (0x0429:16)
 	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld BC,IZ
@@ -677,7 +677,7 @@ BitMapOut_MergeOutputFields:
 .Lc_fdb30a:
 	bit 3, (0x0429:16)
 	jr z, .Lc_fdb297
-	resda 3, (0x0429)
+	res 3, (0x0429:16)
 	bit 4, (0xfd50:16)
 	jrl nz, .Lc_fdb297
 	ld BC,IZ
@@ -786,7 +786,7 @@ MidiSeq_SendMultiByte_PC2NextByte:
 	bit 2, (0xc154:16)
 MidiSeq_SendMultiByte_SerialCountInit:
 	ret Z
-	resda 2, (0xc154)
+	res 2, (0xc154:16)
 	.byte 0x30, 0x4d
 MidiSeq_SendMultiByte_SerialSendLoop:
 	.byte 0x00, 0x1d, 0xfc, 0x71, 0xfc, 0xf1, 0x54, 0xc1
@@ -958,7 +958,7 @@ CompIface_FilterBySource:
 	.byte 0x53, 0xd1
 CompIface_FromSource2:
 	pop	xde
-	subdm8	(55329), a
+	sub	(55329:16), a
 	calr	64807
 	ld	(49504:16), hl
 	ret
@@ -2542,8 +2542,8 @@ DSPCfg_EventType51:
 	bit 0, (0x28b2:16)
 	jr z, .Lc_fdd756
 .Lc_fdd741:
-	anddi16 (0xc4fa), 0xfdff
-	resda 0, (0x31e8)
+	andw (0xc4fa:16), 0xfdff
+	res 0, (0x31e8:16)
 	call 0xfdee26
 	ld (0xc504:16), 0x00
 	jr t, .Lc_fdd776

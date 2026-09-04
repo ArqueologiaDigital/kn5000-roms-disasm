@@ -352,11 +352,11 @@ DSPCfg_InitDispatchData:
 	ldw	de, 649
 	ldb	l, 207
 	.byte 0x89, 0x82
-	cpdm8	905, a
+	cp	(905:16), a
 	jr	ugt, 9
 	ld	a, l
 	.byte 0x82
-	cpdm8	1161, a
+	cp	(1161:16), a
 	jr	nc, 9
 	cpl	l
 	and	(xde), l
@@ -373,11 +373,11 @@ DSPCfg_InitDispatchData:
 	ldw	de, 649
 	ldb	l, 207
 	.byte 0x89, 0x82
-	cpdm8	905, a
+	cp	(905:16), a
 	jr	ugt, 18
 	ld	a, l
 	.byte 0x82
-	cpdm8	1161, a
+	cp	(1161:16), a
 	jr	c, 9
 	cpl	l
 	and	(xde), l
@@ -821,13 +821,13 @@ ToneGen_FileIO_RestoreFromBackup:
 	pushw 0xf9a0
 	call 0xff05bc
 	lda xsp, (xsp + 0x0a)
-	setda 5, (0x8dda)
+	set 5, (0x8dda:16)
 	calr SoundParam_NotifyMultipleChanges
 	call SwbtWr_ReinitOutputBank
 	call ToneGen_DispatchByMode
 	call CtrlPanel_RefreshIndicatorState
 	call SwbtWr_NullRet
-	resda 5, (0x8dda)
+	res 5, (0x8dda:16)
 	ret
 ToneGen_FlashVerify:
 	lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)
@@ -1225,7 +1225,7 @@ Encoder_ReadNextEntry:
 
 	ldiw
 
-	incdi8 1, (36336)
+	inc 1, (36336:16)
 
 	ret
 

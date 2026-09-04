@@ -337,7 +337,7 @@ SLSrcBankList_FuncBody:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	cpda8_24 xbc, (15337812)
+	cp a, (15337812:24)
 	jr	nc, 25
 	add	c, l
 	ld	(35168:16), c
@@ -383,7 +383,7 @@ SLSrcBankList_FuncBody:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	cpda8_24 xbc, (15337812)
+	cp a, (15337812:24)
 	jr	nc, 36
 	ld	e, (15337810:24)
 	ld	l, e
@@ -700,7 +700,7 @@ SLSrcBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cpda8_24 xbc, (15337846)
+	cp a, (15337846:24)
 	jr	nc, 25
 	add	c, e
 	ld	(35170:16), c
@@ -745,7 +745,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337846)
+	cp a, (15337846:24)
 	jr	nc, 36
 	ld	e, (15337844:24)
 	ld	l, e
@@ -898,7 +898,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xwa
 	ld	a, c
 	add	a, c
-	cpdm8	35172, a
+	cp	(35172:16), a
 	jr	c, 49
 	lda	xwa, (34994:16)
 	ld	(xwa+21), 1
@@ -1125,7 +1125,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337876)
+	cp a, (15337876:24)
 	jr	nc, 105
 	ld	e, (15337874:24)
 	ld	a, e
@@ -1585,7 +1585,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cpda8_24 xbc, (15337930)
+	cp a, (15337930:24)
 	jr	nc, 25
 	add	c, e
 	ld	(35174:16), c
@@ -1633,7 +1633,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337930)
+	cp a, (15337930:24)
 	jr	nc, 36
 	ld	e, (15337928:24)
 	ld	l, e
@@ -1806,7 +1806,7 @@ SLDstBankList_FuncBody:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	cpda8_24 xbc, (15337936)
+	cp a, (15337936:24)
 	jr	nc, 15
 	inc	1, c
 	ld	(35176:16), c
@@ -1975,7 +1975,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cpda8_24 xbc, (15337966)
+	cp a, (15337966:24)
 	jr	nc, 25
 	add	c, e
 	ld	(35178:16), c
@@ -2023,7 +2023,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337966)
+	cp a, (15337966:24)
 	jr	nc, 36
 	ld	e, (15337964:24)
 	ld	l, e
@@ -2184,7 +2184,7 @@ SLDstBankList_FuncBody:
 	lda	xbc, (35078:16)
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
-	cpdm8	35180, l
+	cp	(35180:16), l
 	jr	c, 101
 	ld	c, (35164:16)
 	extz	bc
@@ -2362,7 +2362,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15338004)
+	cp a, (15338004:24)
 	jr	nc, 105
 	ld	e, (15338002:24)
 	ld	a, e

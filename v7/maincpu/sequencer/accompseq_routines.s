@@ -123,7 +123,7 @@ AccompSeq_IncrementTickCounter:
 	inc	1, hl
 	ld	(1128:16), hl
 	ld	(1130:16), a
-	incdi8	1, (1132)
+	inc	1, (1132:16)
 	call	SeqEvt_EntryPoint1
 	call	SeqEvt_EntryPoint2
 	ret
@@ -356,7 +356,7 @@ AccompSeq_DispatchReturn:
 AccompSeq_CalcDeltaTime:
 	ld E,A
 	ld wa, (0x7daa:16)
-	cpda16 xwa, 0x7d80
+	cp wa, (0x7d80:16)
 	jr nz, AccompSeq_DeltaCompare
 	ld a, (0x7d82:16)
 	cp A,E
@@ -692,7 +692,7 @@ AccompSeq_NoteOn5_Return:
 AccompSeq_ResolveChannel:
 	ld a, (0x7db9:16)
 	ei 0x06
-	subda8 a, (0x046b)
+	sub a, (0x046b:16)
 	jr ugt, AccompSeq_ResolveCh_Store
 	ldb A, 0x01
 	ld (0x7db9:16), a
@@ -1036,7 +1036,7 @@ AccompSeq_LargeCodeBlock2:
 	cps	a, 0
 	jr	z, 122
 	ld	a, (49122:16)
-	andda8	a, 49123
+	and	a, (49123:16)
 	and	a, 63
 	cps	a, 0
 	jr	z, 107
@@ -1452,7 +1452,7 @@ AccompSeq_GuardedNoteOff:
 	cp A,0x1c
 	jr nz, AccompSeq_GuardedNote_Return
 	ld a, (0xbfe2:16)
-	andda8 a, (0xbfe3)
+	and a, (0xbfe3:16)
 	and A,0x03
 	cps a, 0
 	jr z, AccompSeq_GuardedNote_Return
@@ -1712,7 +1712,7 @@ AccompSeq_SeqParse_Dispatch:
 	cp a, 0xc0
 	jr z, AccompSeq_SeqParse_MidiEvent
 	cp a, 0x84
-	jp_24 z, AccompSeq_SeqParse_TempoReset
+	jp z, (AccompSeq_SeqParse_TempoReset:24)
 	calr AccompSeq_AdvancePosition
 	jr AccompSeq_SeqParse_Loop
 
@@ -1724,7 +1724,7 @@ AccompSeq_SeqParse_TimeAdvance:
 	.byte 0xcb, 0xd3, 0xd9, 0xf2, 0x6f, 0x07, 0xc1, 0xb7
 	.byte 0x7d, 0x3e, 0x01, 0x68, 0x8e
 AccompSeq_SeqParse_TimeStore:
-	incdi16	1, (32170)
+	incw	1, (32170:16)
 	calr	61490
 	jr	-123
 AccompSeq_SeqParse_MidiEvent:

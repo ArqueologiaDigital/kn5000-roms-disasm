@@ -3403,7 +3403,7 @@ MidiPart_AutoDec_StorePart:
 	jrl MidiPartAutoIncReturn
 
 MidiPart_Part2ColumnNav:
-	cpib_da (0x024778), 0x02
+	cp (0x024778:24), 0x02
 	jr nz, MidiPart_GenericColumnNav
 	ld wa, iz
 	add wa, wa
@@ -3548,7 +3548,7 @@ MidiPart_AutoInc_StorePart:
 	jrl MidiPartAutoIncReturn
 
 MidiPart_Part2ColumnNavUp:
-	cpib_da (0x024778), 0x02
+	cp (0x024778:24), 0x02
 	jr nz, MidiPart_GenericColumnNavUp
 	ld wa, iz
 	add wa, wa
@@ -4600,7 +4600,7 @@ IvSdpart_ShowHide:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	cpw_da (0x3e99e), 18
+	cpw (0x3e99e:24), 18
 	jr ge, IvSdpart_ShowHide_UpdateUI
 	call GetPartSelect
 	ld xwa, MixerPartTable_Start_0x12C
@@ -4751,7 +4751,7 @@ IvSdpart_Refresh:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	cpw_da (0x3e99e), 18
+	cpw (0x3e99e:24), 18
 	jrl ge, IvSdpart_ReturnHandled
 	call GetPartSelect
 	ld xwa, MixerPartTable_Start_0x12C
@@ -4760,7 +4760,7 @@ IvSdpart_Refresh:
 	ld de, hl
 	cp de, 0xffff
 	jrl z, IvSdpart_ReturnHandled
-	cpdm16_24 (0x3e99e), xde
+	cp (0x3e99e:24), de
 	jrl z, IvSdpart_ReturnHandled
 	ld (0x03e99e:24), de
 	calr SdpartUpdatePartUI
@@ -8396,7 +8396,7 @@ IvMessage_Paint:
 	muls wa, 0xe
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
-	call_24 nz, DrawWall
+	call nz, (DrawWall:24)
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -8507,7 +8507,7 @@ PleaseWait_Confirm:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 20)
 	call SetApTimer
-	incdi16_24 1, (0x2477a)
+	incw 1, (0x2477a:24)
 	jrl LanguageStringcpyReturn
 
 PleaseWait_GetText:
@@ -8913,7 +8913,7 @@ IvAccordion_ShowHide:
 	call GetModeNow
 	cp xhl, 0x1800013
 	jr nz, IvAccordion_ShowHide_UpdatePart
-	cpw_da (0x24782), 0
+	cpw (0x24782:24), 0
 	jr z, IvAccordion_ShowHide_NoBellows
 	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, 0x1c00002
@@ -8969,7 +8969,7 @@ IvAccordion_Scroll:
 	jrl z, IvAccordion_ReturnHandled
 	or xiz, xiz
 	jrl nz, IvAccordion_ReturnHandled
-	cpw_da (0x24780), 0
+	cpw (0x24780:24), 0
 	jr nz, IvAccordion_Scroll_SetOff
 	ldw (0x024780:24), 0x0001
 	ld xwa, WidgetName_PtrBlock_A_0x1
@@ -8984,7 +8984,7 @@ IvAccordion_Scroll:
 	ld xbc, 0x1c0001b
 	lds32 xde, 1
 	call PostEvent
-	cpw_da (0x2477c), 1
+	cpw (0x2477c:24), 1
 	jrl nz, IvAccordion_ReturnHandled
 	ld wa, (0x02477e:24)
 	calr SndParam_ResolveOscEntry
@@ -9007,7 +9007,7 @@ IvAccordion_Scroll_SetOff:
 	ld xbc, 0x1c0001b
 	lds32 xde, 1
 	call PostEvent
-	cpw_da (0x2477c), 0
+	cpw (0x2477c:24), 0
 	jrl nz, IvAccordion_ReturnHandled
 	ld wa, (0x02477e:24)
 	calr SndParam_ResolveOscEntry
@@ -9057,7 +9057,7 @@ IvAccordion_Update:
 	jrl nz, IvAccordion_Update_NonNote
 	cp a, 0xa
 	jr nc, IvAccordion_Update_BellowsOn
-	cpw_da (0x2477c), 0
+	cpw (0x2477c:24), 0
 	jr z, IvAccordion_Update_SendPartParam
 	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, 0x1c00002
@@ -9071,7 +9071,7 @@ IvAccordion_Update:
 	jr IvAccordion_Update_CommitToggle
 
 IvAccordion_Update_BellowsOn:
-	cpw_da (0x2477c), 1
+	cpw (0x2477c:24), 1
 	jr z, IvAccordion_Update_SendPartParam
 	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, 0x1c00002
@@ -10631,7 +10631,7 @@ AcWelcomScreenProc:
 	ld xwa, Bitmap_DigitD_0x22
 
 AcWelcomScreen_Init_StoreData:
-	stl_da (0x024786), xwa
+	ld (0x024786:24), xwa
 	ld xwa, (xsp + 20)
 	ld xbc, xiz
 	ld xde, (xsp + 16)
@@ -10778,7 +10778,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	addda32_24	xbc, (0x24786)
+	add	xbc, (0x24786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
 	.byte 0x95
@@ -10798,7 +10798,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xiy, xiy
 	add	xiy, xbc
 	sll	xiy, 2
-	addda32_24	xiy, (0x24786)
+	add	xiy, (0x24786:24)
 	lda_rr xix, xwa, iz
 	lds bc, 6
 	.byte 0x95
@@ -10938,7 +10938,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	addda32_24	xbc, (0x24786)
+	add	xbc, (0x24786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
 	.byte 0x95
@@ -10953,7 +10953,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10972,7 +10972,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -10991,7 +10991,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -11010,7 +11010,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -11062,7 +11062,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	addda32_24	xde, (0x24786)
+	add	xde, (0x24786:24)
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
@@ -11075,7 +11075,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xiy, xiy
 	add	xiy, xwa
 	sll	xiy, 2
-	addda32_24	xiy, (0x24786)
+	add	xiy, (0x24786:24)
 	ld	xix, 0x3ea24
 	lds	bc, 6
 	.byte 0x95
@@ -11100,7 +11100,7 @@ AcWelcomScreen_Select_NextStep:
 	add xbc, xbc
 	add xbc, xwa
 	sll xbc, 2
-	addda32_24 xbc, (0x24786)
+	add xbc, (0x24786:24)
 	ld xwa, (xbc)
 	or xwa, xwa
 	jrl z, AcWelcomScreen_Select
@@ -11483,7 +11483,7 @@ PsMixer_ControlCase5:
 	ld wa, (0x024794:24)
 	sla wa, 3
 	add iz, wa
-	cpda16_24 xiz, (0x24790)
+	cp iz, (0x24790:24)
 	jrl z, PsMixer_Case5_DialSetup
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
@@ -11577,7 +11577,7 @@ AudioCtrl_DispatchHandler:
 	submi16 (xsp + 8), 0x88
 	add (xsp + 8), wa
 	ld wa, (xsp + 8)
-	cpda16_24 xwa, (0x24792)
+	cp wa, (0x24792:24)
 	jrl z, AudioCtrl_ReturnToCallerExit
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
@@ -11643,8 +11643,8 @@ AudioCtrl_PageHandler:
 	ld xwa, (xsp + 82)
 	cp xwa, 0x8f
 	jrl nz, AudioCtrl_CheckEventF
-	incdi16_24 8, (0x24790)
-	incdi16_24 1, (0x24794)
+	incw 8, (0x24790:24)
+	incw 1, (0x24794:24)
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
 	ldw_erp HL, 0xfa
@@ -11654,7 +11654,7 @@ AudioCtrl_PageHandler:
 	call SndParam_LookupReadOnly
 	cps hl, 1
 	scc16 z, bc
-	cpw_da (0x24794), 2
+	cpw (0x24794:24), 2
 	scc16 z, wa
 	and wa, bc
 	jr z, AudioCtrl_SetupPartDisplay
@@ -12464,22 +12464,22 @@ Util_SignExtendAndDouble:
 	add xhl, xhl
 	add xhl, xwa
 	sll xhl, 2
-	addda32_24 xhl, (0x3ea30)
+	add xhl, (0x3ea30:24)
 	ret
 
 Util_StorePartArrayBase:
-	stl_da (0x03ea30), xwa
+	ld (0x03ea30:24), xwa
 	ret
 
 PsMixer_ReadWordArrayEntry:
 	exts xwa
 	add xwa, xwa
-	addda32_24 xwa, (0x3ea34)
+	add xwa, (0x3ea34:24)
 	ld hl, (xwa)
 	ret
 
 Util_StoreGridArrayBase:
-	stl_da (0x03ea34), xwa
+	ld (0x03ea34:24), xwa
 	ret
 
 AudioCtrl_DataBlock:
@@ -12626,7 +12626,7 @@ AudioCtrl_DataBlock:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	addda32_24	xbc, (0x3ea30)
+	add	xbc, (0x3ea30:24)
 	ld	wa, (xbc+4)
 	ld	(xsp+4), wa
 	ldw	wa, 136
@@ -12808,7 +12808,7 @@ AudioCtrl_DataBlock:
 	ld_rrl xde, xwa, de
 	lda xwa, (xsp+20)
 	ld hl, (xsp+14)
-	cpda16_24 xhl, (149392)
+	cp hl, (149392:24)
 	jr nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13063,7 +13063,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+70)
 	srl	xwa, 0
 	.byte 0xd7
-	subdm32_24	(0x89d8a8), xsp
+	sub	(0x89d8a8:24), xsp
 	popw	de
 	ldb	w, 232
 	set	0, l
@@ -13177,10 +13177,10 @@ AudioCtrl_DataBlock:
 	lda	xde, (xsp+14)
 	lda	xbc, (xsp+58)
 	ld	hl, (xsp+10)
-	cpda16_24 xhl, (149394)
+	cp hl, (149394:24)
 	jr nz, 27
 	ld	hl, (xsp+12)
-	cpda16_24 xhl, (149392)
+	cp hl, (149392:24)
 	jr nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13499,10 +13499,10 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+60)
 	lda	xde, (xsp+16)
 	ld	hl, (xsp+12)
-	cpda16_24 xhl, (149394)
+	cp hl, (149394:24)
 	jr nz, 27
 	ld	hl, (xsp+14)
-	cpda16_24 xhl, (149392)
+	cp hl, (149392:24)
 	jr nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13771,10 +13771,10 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+62)
 	lda	xde, (xsp+14)
 	ld	hl, (xsp+10)
-	cpda16_24 xhl, (149394)
+	cp hl, (149394:24)
 	jr nz, 27
 	ld	hl, (xsp+12)
-	cpda16_24 xhl, (149392)
+	cp hl, (149392:24)
 	jr nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -14005,10 +14005,10 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+64)
 	lda	xbc, (xsp+60)
 	ld	hl, (xsp+12)
-	cpda16_24 xhl, (149394)
+	cp hl, (149394:24)
 	jr nz, 27
 	ld	hl, (xsp+14)
-	cpda16_24 xhl, (149392)
+	cp hl, (149392:24)
 	jr nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -14661,10 +14661,10 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+82)
 	lda	xde, (xsp+22)
 	ld	hl, (xsp+10)
-	cpda16_24 xhl, (149394)
+	cp hl, (149394:24)
 	jr nz, 27
 	ld	hl, (xsp+12)
-	cpda16_24 xhl, (149392)
+	cp hl, (149392:24)
 	jr nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -15183,7 +15183,7 @@ IvDrawbar_DrawbarUpdate:
 	jr z, IvDrawbar_DrawbarUpdate_Lower
 	cp xwa, 0x2
 	jrl nz, IvDrawbar_ReturnHandled
-	cpw_da (0x247c2), 0
+	cpw (0x247c2:24), 0
 	jr z, IvDrawbar_DrawbarUpdate_UpperOff
 	ld xwa, Presentation_RootEntry_0x3
 	ld xbc, 0x1e0003b
@@ -15215,7 +15215,7 @@ IvDrawbar_OK:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xf
 	jr nz, IvDrawbar_OK_Forward
-	cpw_da (0x24798), 0
+	cpw (0x24798:24), 0
 	jr nz, IvDrawbar_OK_PageChange
 	call GetTitleNow
 	ld xwa, xhl
@@ -15267,7 +15267,7 @@ IvDrawbar_Release:
 	jr z, IvDrawbar_Release_Upper
 	cp xwa, 0x1
 	jrl nz, IvDrawbar_ReturnHandled
-	cpw_da (0x24798), 0
+	cpw (0x24798:24), 0
 	scc16 z, wa
 	ld (0x024798:24), wa
 	inc 1, wa
@@ -15293,7 +15293,7 @@ IvDrawbar_Release_Upper:
 	jr IvDrawbar_Release_WriteValue
 
 IvDrawbar_Release_Upper_DualMode:
-	cpw_da (0x247c2), 0
+	cpw (0x247c2:24), 0
 	scc16 z, de
 	extz xde
 	add xde, 0x90000
@@ -15315,7 +15315,7 @@ IvDrawbar_Release_WriteValue:
 	jrl IvDrawbar_ReturnHandled
 
 IvDrawbar_Release_Lower_DualMode:
-	cpw_da (0x247c4), 0
+	cpw (0x247c4:24), 0
 	scc16 z, de
 	extz xde
 	add xde, 0xa0000
@@ -16079,7 +16079,7 @@ Lsw_PercDecay_DialScroll:
 	ld bc, hl
 	ld wa, (0x0247c6:24)
 	calr SdpartClampSignedScrollDelta
-	cpda16_24 xhl, (0x247c6)
+	cp hl, (0x247c6:24)
 	jr z, LswPercDecay_Return
 	extz xhl
 	add xhl, 0xb0000
@@ -16196,7 +16196,7 @@ Lsw_PercLevel_DialScroll:
 	ld bc, hl
 	ld wa, (0x0247c8:24)
 	calr SdpartClampSignedScrollDelta
-	cpda16_24 xhl, (0x247c8)
+	cp hl, (0x247c8:24)
 	jr z, LswPercLevel_Return
 	extz xhl
 	add xhl, 0xc0000
@@ -16283,7 +16283,7 @@ Lsw_DrawAttack_DialScroll:
 	ld bc, hl
 	ld wa, (0x0247cc:24)
 	calr SdpartClampSignedScrollDelta
-	cpda16_24 xhl, (0x247cc)
+	cp hl, (0x247cc:24)
 	jr z, LswDrawAttack_Return
 	extz xhl
 	add xhl, 0xe0000
@@ -16370,7 +16370,7 @@ Lsw_DrawRelease_DialScroll:
 	ld bc, hl
 	ld wa, (0x0247ca:24)
 	calr SdpartClampSignedScrollDelta
-	cpda16_24 xhl, (0x247ca)
+	cp hl, (0x247ca:24)
 	jr z, LswDrawRelease_Return
 	extz xhl
 	add xhl, 0xd0000
@@ -16982,7 +16982,7 @@ IvDrawbar2_OKHandler:
 	jr z, IvDrawbar_ReturnZeroJmp
 	ld bc, (0x02479a:24)
 	extz xbc
-	cpw_da (0x2479c), 0
+	cpw (0x2479c:24), 0
 	scc16 z, wa
 	extz wa
 	add wa, 0xc00
@@ -17480,11 +17480,11 @@ DemoMenu_DescriptorReturn:
 DemoDesc_BuildCompactParams:
 	ld bc, (0x0247e6:24)
 	sla bc, 4
-	addda16_24 xbc, (0x247e4)
+	add bc, (0x247e4:24)
 	ld (xwa), c
 	ld bc, (0x0247ea:24)
 	sla bc, 4
-	addda16_24 xbc, (0x247e8)
+	add bc, (0x247e8:24)
 	ld (xwa + 1), c
 	lda xbc, (0x0247ce:24)
 	ld de, (xbc + 4)

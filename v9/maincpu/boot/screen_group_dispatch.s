@@ -75,7 +75,7 @@ ScreenGroup_WidgetLoop:
 	or xwa, xwa
 	jr nz, VoiceInit_Dispatch
 	cps iz, 0
-	call_24 z, ScreenGroup_ReInit
+	call z, (ScreenGroup_ReInit:24)
 	pop xiz
 	ret
 

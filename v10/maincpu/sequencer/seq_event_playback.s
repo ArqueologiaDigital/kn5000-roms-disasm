@@ -86,7 +86,7 @@ SeqEvt_ReadAndDispatchEntry:
 	ld (0x7e11:16), ix
 	calr SeqEvtBuf_AdvanceReadPos
 	ld (0x7e0f:16), ix
-	cpda8 a, 1132
+	cp a, (1132:16)
 	jr ule, SeqEvt_DispatchByChannel
 	jp SeqEvt_ProcessTempoEvent
 
@@ -106,7 +106,7 @@ SeqEvt_ProcessNoteOn:
 	xor ix, ix
 
 SeqEvt_SlotScanLoop:
-	cpda16 xix, 0x7e04
+	cp ix, (0x7e04:16)
 	jr c, SeqEvt_CheckSlotActive
 	jr SeqEvt_AfterSlotScan
 
@@ -120,7 +120,7 @@ SeqEvt_CheckSlotActive:
 	jr z, SeqEvt_SlotMatchFound
 
 SeqEvt_AdvanceSlotIndex:
-	addda16 xix, 0x7e02
+	add ix, (0x7e02:16)
 	jr SeqEvt_SlotScanLoop
 
 SeqEvt_SlotMatchFound:
@@ -131,7 +131,7 @@ SeqEvt_AfterSlotScan:
 	xor ix, ix
 
 SeqEvt_FindFreeSlotLoop:
-	cpda16 xix, 0x7e04
+	cp ix, (0x7e04:16)
 	jr nc, SeqEvt_AllocateNewSlot
 	bit_dri 7, 0x07, 0xec, 0xf0
 	jr nz, SeqEvt_AdvanceFreeSlotIdx
@@ -141,7 +141,7 @@ SeqEvt_FindFreeSlotLoop:
 	jr SeqEvt_WriteEventAndContinue
 
 SeqEvt_AdvanceFreeSlotIdx:
-	addda16 xix, 0x7e02
+	add ix, (0x7e02:16)
 	jr SeqEvt_FindFreeSlotLoop
 
 SeqEvt_AllocateNewSlot:
@@ -166,7 +166,7 @@ SeqEvt_WriteNoteOff:
 	ldb_sri A, 0x07, 0xec, 0xf0
 	and_srib_im 0x07, 0xec, 0xf0, 0x7f
 	and a, 0xf0
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, w
 	calr SeqEvtBuf_WriteBytePreserve
@@ -190,7 +190,7 @@ SeqEvt_WriteNoteOnRotating:
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	and a, 0xf0
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, w
 	calr SeqEvtBuf_WriteBytePreserve
@@ -198,9 +198,9 @@ SeqEvt_WriteNoteOnRotating:
 	calr SeqEvtBuf_WriteBytePreserve
 	ld ix, iz
 	pop xwa
-	adddi8 0x7e0a, 2
+	add (0x7e0a:16), 2
 	ld a, (0x7e0a:16)
-	cpda8 a, 0x7e06
+	cp a, (0x7e06:16)
 	jr c, SeqEvt_RotateIndexDone
 	ld (0x7e0a:16), 0
 
@@ -210,7 +210,7 @@ SeqEvt_RotateIndexDone:
 	ret
 
 SeqEvt_WriteVoiceParams:
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
@@ -258,7 +258,7 @@ SeqEvt_WriteVoiceParams:
 	ldb_sri W, 0x07, 0xec, 0xf0
 	calr SeqEvtBuf_AdvanceReadPos
 	ex16 iz, ix
-	addda16 xwa, 1134
+	add wa, (1134:16)
 	cp a, 0x60
 	jr c, SeqEvt_AdjustNoteOctave
 	inc 1, w
@@ -273,7 +273,7 @@ SeqEvt_AdjustNoteOctave:
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	cpda16 xwa, 0x7dfe
+	cp wa, (0x7dfe:16)
 	jr nc, SeqEvt_WriteRemainingParams
 	ld (0x7dfe:16), wa
 
@@ -328,7 +328,7 @@ SeqEvt_UpdateReadPosition:
 
 SeqEvt_HandleControlEvent:
 	ld w, a
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld ix, (0x7e0f:16)
 	cp w, 0xd0
@@ -359,7 +359,7 @@ SeqEvt_SetExtendedFlag:
 	popw bc
 	calr SeqEvtBuf_WriteBytePreserve
 	ldb a, 0xd0
-	orda8 a, 0x7e07
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ldb a, 0x7
 	calr SeqEvtBuf_WriteBytePreserve
@@ -379,8 +379,8 @@ SeqEvt_SaveReadPosAndRet:
 	ret
 
 SeqEvt_CalcTempoOffset:
-	subda8 a, 1132
-	cpda8 a, 0x7dfd
+	sub a, (1132:16)
+	cp a, (0x7dfd:16)
 	jr nc, SeqEvt_UpdateMinTempo
 	ld (0x7dfd:16), a
 
@@ -389,7 +389,7 @@ SeqEvt_UpdateMinTempo:
 	stb_dri A, 0x07, 0xec, 0xf4
 	xor wa, wa
 	ld a, (0x7e0e:16)
-	addda16 xwa, 0x7e0f
+	add wa, (0x7e0f:16)
 	ld (0x7e0f:16), wa
 	ld ix, wa
 	cp ix, (xhl + 2)
@@ -462,7 +462,7 @@ Voice_ScanSlotMetric:
 	xor iy, iy
 
 Voice_ScanLoop:
-	cpda16 xiy, 0x7e04
+	cp iy, (0x7e04:16)
 	jr c, Voice_CheckSlotBit
 	jp Voice_ScanLoopDone
 
@@ -483,13 +483,13 @@ Voice_ReadSlotParams:
 	ld (0x7e0d:16), a
 	inc 1, ix
 	ldw_sri WA, 0x07, 0xec, 0xf0
-	cpda16 xwa, 1134
+	cp wa, (1134:16)
 	jr gt, Voice_SubtractBaseFreq
 	ex16 iy, iz
 	ld iy, (xhl + 4)
 	ldb a, 0xf0
-	andda8 a, 0x7e0b
-	orda8 a, 0x7e07
+	and a, (0x7e0b:16)
+	or a, (0x7e07:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, (0x7e0c:16)
 	calr SeqEvtBuf_WriteBytePreserve
@@ -500,19 +500,19 @@ Voice_ReadSlotParams:
 	jr Voice_ParamComplete
 
 Voice_SubtractBaseFreq:
-	subda16 xwa, 1134
+	sub wa, (1134:16)
 	bit 7, a
 	jr z, Voice_StoreMetricValue
 	add a, 0x60
 
 Voice_StoreMetricValue:
 	stw_dri WA, 0x07, 0xec, 0xf0
-	cpda16 xwa, 0x7e00
+	cp wa, (0x7e00:16)
 	jr nc, Voice_ParamComplete
 	ld (0x7e00:16), wa
 
 Voice_ParamComplete:
-	addda16 xiy, 0x7e02
+	add iy, (0x7e02:16)
 	jp Voice_ScanLoop
 
 Voice_ScanLoopDone:
@@ -1422,7 +1422,7 @@ Voice_ReleaseChainLoop:
 	ldw (xix + 1), 0xffff
 	ldw (xix + 3), 0xffff
 	andmi8 (xix), 0x7f
-	incdi16 1, (0x7e18)
+	incw 1, (0x7e18:16)
 	cp hl, 0xffff
 	jr z, Voice_ReleaseChainDone
 	jr Voice_ReleaseChainLoop
@@ -1528,7 +1528,7 @@ AccPlay_AllocateVoiceSlot:
 	ld hl, wa
 	calr Util_ExtractAndShiftBits
 	ormi8 (xix), 0x80
-	decdi16 1, 0x7e18
+	decw 1, (0x7e18:16)
 	pop xiy
 	ld (xiy + 3), wa
 	ldb l, 0x1
@@ -2248,30 +2248,30 @@ AccPlay_SaveMuteStates:
 	ld w, (0xfc19:16)
 	ld (0x7f32:16), wa
 	ldb a, 0xc0
-	orddm8 0xf9c3, a
-	orddm8 0xf9dd, a
-	orddm8 0xf9f7, a
-	orddm8 0xfa11, a
-	orddm8 0xfa2b, a
-	orddm8 0xfa45, a
-	orddm8 0xfa5f, a
-	orddm8 0xfa79, a
-	orddm8 0xfa93, a
-	orddm8 0xfaad, a
-	orddm8 0xfac7, a
-	orddm8 0xfae1, a
-	orddm8 0xfafb, a
-	orddm8 0xfb15, a
-	orddm8 0xfb2f, a
-	orddm8 0xfb49, a
-	orddm8 0xfb63, a
-	orddm8 0xfb7d, a
-	orddm8 0xfb97, a
-	orddm8 0xfbb1, a
-	orddm8 0xfbcb, a
-	orddm8 0xfbe5, a
-	orddm8 0xfbff, a
-	orddm8 0xfc19, a
+	or (0xf9c3:16), a
+	or (0xf9dd:16), a
+	or (0xf9f7:16), a
+	or (0xfa11:16), a
+	or (0xfa2b:16), a
+	or (0xfa45:16), a
+	or (0xfa5f:16), a
+	or (0xfa79:16), a
+	or (0xfa93:16), a
+	or (0xfaad:16), a
+	or (0xfac7:16), a
+	or (0xfae1:16), a
+	or (0xfafb:16), a
+	or (0xfb15:16), a
+	or (0xfb2f:16), a
+	or (0xfb49:16), a
+	or (0xfb63:16), a
+	or (0xfb7d:16), a
+	or (0xfb97:16), a
+	or (0xfbb1:16), a
+	or (0xfbcb:16), a
+	or (0xfbe5:16), a
+	or (0xfbff:16), a
+	or (0xfc19:16), a
 	ld a, (0xfd6f:16)
 	and a, 0x3f
 	and a, 0xf0
@@ -2509,7 +2509,7 @@ MidiSeqBuf_AdvancePosition:
 	calr Util_ExtractAndShiftBits
 	ld (xix + 1), de
 	ormi8 (xix), 0x80
-	decdi16 1, 0x7e18
+	decw 1, (0x7e18:16)
 	lds wa, 6
 	pop xhl
 	pop xde

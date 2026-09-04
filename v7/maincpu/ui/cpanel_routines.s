@@ -414,7 +414,7 @@ CPanel_SendCommand:
 	ldw (0x8d61:16), 0x0000
 	ldw (0x8d63:16), 0x0000
 	ld (0x8d65:16), wa
-	adddi16 (0x8d63), 0x0002
+	addw (0x8d63:16), 0x0002
 	or (0x8cf0:16), 0x02
 	and (0x8cf0:16), 0xfe
 	ld (0x8cee:16), 0x04
@@ -554,7 +554,7 @@ SendByte1_InspectByte:
 	add	a, 3
 	ld	(36079:16), a
 SendByte1_AdvanceState:
-	incdi8	4, (36078)
+	inc	4, (36078:16)
 	jrl	-323
 CPanel_SM_SendByteN:
 	.byte 0x08, 0xd7, 0x14, 0xc1, 0xf3, 0x8c, 0x3e, 0x50
@@ -572,7 +572,7 @@ SendByteN_CheckDone:
 	.byte 0x66, 0x07, 0xc1, 0xee, 0x8c, 0x6c, 0x78, 0x5f
 	.byte 0xfe
 SendByteN_AdvanceState:
-	incdi8	4, (36078)
+	inc	4, (36078:16)
 	jrl	-424
 CPanel_SM_TXComplete:
 	.byte 0xf1, 0xef, 0x8c, 0x00, 0x00, 0xf1, 0xee, 0x8c
@@ -644,7 +644,7 @@ RXByte1_InspectByte:
 	add	a, 3
 	ld	(36079:16), a
 RXByte1_AdvanceState:
-	incdi8	4, (36078)
+	inc	4, (36078:16)
 	jrl	-635
 CPanel_SM_RXByteN:
 	.byte 0xc0, 0xd4, 0x21, 0x45, 0x05, 0x8d, 0x00, 0x00
@@ -714,7 +714,7 @@ CPanel_SM_Idle:
 
 
 CPanel_InterruptPoll_MainLoop:
-	incdi8 1, 0x8cfe
+	inc 1, (0x8cfe:16)
 	cp (0x8cfe:16), 0x2a
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
@@ -998,7 +998,7 @@ CPanel_UpdateLEDs__check_next:
 
 LEDs_CheckTXSpace:
 	ld	wa, (36195:16)
-	subda16	xwa, (36193)
+	sub	wa, (36193:16)
 	jr	nc, 6	; -> 0xFC4393
 	neg	wa
 	ld	hl, wa

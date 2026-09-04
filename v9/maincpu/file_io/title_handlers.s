@@ -46,7 +46,7 @@ SaveSmfTtl_Return:
 
 DirectPlayTtlJgFunc:
 	cp xbc, 0x1c00007
-	call_24 z, FileIO_DetectFileTypeAndPost
+	call z, (FileIO_DetectFileTypeAndPost:24)
 	lds32 xhl, 0
 	ret
 

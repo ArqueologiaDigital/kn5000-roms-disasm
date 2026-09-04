@@ -153,22 +153,22 @@ sub_F9915C:
 	jr	nc, sub_F9915C__armed
 	jr	sub_F9915C__exit
 sub_F9915C__armed:
-	cpib_da	0x00E2E4, 0x00
+	cp	(0x00E2E4:24), 0x00
 	jr	nz, sub_F9915C__counting
 	jr	sub_F9915C__exit
 sub_F9915C__counting:
-	decdi8_24 1, 0x00E2E4
+	dec 1, (0x00E2E4:24)
 	ldw	bc, 0xFFF8
 	extz	xbc
 	ld	a, (xbc)
 	and	a, 1
 	jr	z, sub_F9915C__bit0_clear
 	ld	(0x00F35F:24), 1
-	setda_24 7, 0x007ECC
+	set 7, (0x007ECC:24)
 	jr	sub_F9915C__exit
 sub_F9915C__bit0_clear:
 	ld	(0x00F35F:24), 2
-	setda_24 7, 0x007ECC
+	set 7, (0x007ECC:24)
 sub_F9915C__exit:
 	ret
 
@@ -346,7 +346,7 @@ INTRX0_HANDLER:
 	jr INTRX0_HANDLER__exit
 INTRX0_HANDLER__no_error:
 	ld xbc, (0x00F2F3:24)
-	stl_da 0x007ED6, xbc
+	ld (0x007ED6:24), xbc
 	cp (xiz-1), 0xfe
 	jr nz, INTRX0_HANDLER__range_check
 	ld (0x00F2F8:24), 0x01
@@ -407,7 +407,7 @@ INTTX0_HANDLER:
 	exts xbc
 	ld (xbc), a
 	ld xbc, (0x00F2F3:24)
-	stl_da 0x007ED2, xbc
+	ld (0x007ED2:24), xbc
 	jr INTTX0_HANDLER__exit
 INTTX0_HANDLER__empty:
 	ldw (0x00F2F9:24), 0x0002
@@ -571,7 +571,7 @@ MIDI_Tx_PutByte:
 	ld	a, (xiz+8)                          ; F992DB  ld A,(XIZ+0x08)
 	ld	(xbc), a                            ; F992DE  ld (XBC),A
 	ld	xbc, (0xF2F3:24)                   ; F992E0  ld XBC,(0x00f2f3)
-	stl_da	(0x7ED2), xbc                   ; F992E5  ld (0x007ed2),XBC
+	ld	(0x7ED2:24), xbc                   ; F992E5  ld (0x007ed2),XBC
 	ldw	(0xF2F9:24), 1                    ; F992EA  ld (0x00f2f9),0x0001
 	ldw (xiz-2), 0x0000                    ; F992F1  ld (XIZ+0xfe),0x0000   [llvm-mc cannot encode this]
 	jr MIDI_Tx_PutByte__F9930B                           ; F992F6  jr T,0xf9930b
@@ -956,20 +956,20 @@ Queue_FreeSlots:
 MIDI_Watchdogs_And_TransportSwitch:
 	link32 0xEE, 0x0C, 0xFC, 0xFF          ; F994E4  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	ld	xbc, (0xF2F3:24)                   ; F994E8  ld XBC,(0x00f2f3)
-	sub32_24	xbc, (0x7ED2)                 ; F994ED  sub XBC,(0x007ed2)
+	sub	xbc, (0x7ED2:24)                 ; F994ED  sub XBC,(0x007ed2)
 	ld	(xiz-4), xbc                        ; F994F2  ld (XIZ+0xfc),XBC
 	cp	xbc, 0x87                           ; F994F5  cp XBC,0x00000087
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F9950E                      ; F994FB  jr ULE,0xf9950e
 	ld	xwa, (0xF2F3:24)                   ; F994FD  ld XWA,(0x00f2f3)
-	stl_da	(0x7ED2), xwa                   ; F99502  ld (0x007ed2),XWA
+	ld	(0x7ED2:24), xwa                   ; F99502  ld (0x007ed2),XWA
 	pushw	0xFE                             ; F99507  push 0x00fe
 	calr (0xF992C6 - 0xF9950D)             ; F9950A  calr 0xf992c6
 	popw	bc                                ; F9950D  pop BC
 MIDI_Watchdogs_And_TransportSwitch__F9950E:
-	cpib_da 0x00F2F8, 0x00                 ; F9950E  cp (0x00f2f8),0x00   [llvm-mc cannot encode this]
+	cp (0x00F2F8:24), 0x00                 ; F9950E  cp (0x00f2f8),0x00   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99543                        ; F99514  jr Z,0xf99543
 	ld	xbc, (0xF2F3:24)                   ; F99516  ld XBC,(0x00f2f3)
-	sub32_24	xbc, (0x7ED6)                 ; F9951B  sub XBC,(0x007ed6)
+	sub	xbc, (0x7ED6:24)                 ; F9951B  sub XBC,(0x007ed6)
 	ld	(xiz-4), xbc                        ; F99520  ld (XIZ+0xfc),XBC
 	cp	xbc, 0xA5                           ; F99523  cp XBC,0x000000a5
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F99543                      ; F99529  jr ULE,0xf99543
@@ -987,7 +987,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 	srl	c, 2                               ; F9954C  srl 0x02,C
 	cps	c, 0                               ; F9954F  cp C,0
 	jr nz, MIDI_Watchdogs_And_TransportSwitch__F99575                       ; F99551  jr NZ,0xf99575
-	cpib_da 0x00F328, 0x00                 ; F99553  cp (0x00f328),0x00   [llvm-mc cannot encode this]
+	cp (0x00F328:24), 0x00                 ; F99553  cp (0x00f328),0x00   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99573                        ; F99559  jr Z,0xf99573
 	lda	xbc, (0xFCC5C4:24)                 ; F9955B  lda XBC,0xfcc5c4
 	push	xbc                               ; F99560  push XBC
@@ -999,7 +999,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 MIDI_Watchdogs_And_TransportSwitch__F99573:
 	jr MIDI_Watchdogs_And_TransportSwitch__F99595                           ; F99573  jr T,0xf99595
 MIDI_Watchdogs_And_TransportSwitch__F99575:
-	cpib_da 0x00F328, 0x01                 ; F99575  cp (0x00f328),0x01   [llvm-mc cannot encode this]
+	cp (0x00F328:24), 0x01                 ; F99575  cp (0x00f328),0x01   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99595                        ; F9957B  jr Z,0xf99595
 	lda	xbc, (0xFCC5C3:24)                 ; F9957D  lda XBC,0xfcc5c3
 	push	xbc                               ; F99582  push XBC
