@@ -22,6 +22,26 @@ python3 notes/dev104_topology_probe.py --selftest  # FAILURES: 0
 which reads bytes and never a `.s` file.  Where a claim comes from another lane it is cited at
 the claim, and the probe reproduces it from the ROM rather than quoting it.
 
+## ★ CORRECTIONS CARRIED IN, 2026-09-04
+
+⚠ **This note is wave 19.  Waves 20 and 21 overturned eight things in it.  Nothing below
+this heading is edited** — the corrections are ADDED here and beside the sections they
+touch, newest last, in this tree's usual way.  Read this table first, then the sections it
+names.  The register table's NAME column is superseded by §5.3, which is the table
+`notes/l7a1429_crosscheck.py` reads.
+
+| what this note says | where | what is true now | authority |
+|---|---|---|---|
+| `0x0240` / `0x0300` / `0x03C0` / `0x0480` are a `3!` six-way choice between `DEPTH`, `FORMANT` and `INTERACTION GAIN` | §0, §3, §5, §8.3 | **a false dilemma.**  `DEPTH` = p14 bits 0-6 → `0x0240`.  `FORMANT` = p14 **bit 7**, `FIX`/`MOVE`, and it is not a register of its own: the packer tests that exact bit at `0xFC4A09` to switch `0x00C0`'s key-follow term on or off.  `INTERACTION GAIN` = p19 → `0x0300`.  `0x03C0`/`0x0480` are RESOLVED **NEGATIVELY**: their only input `p15` is never an editor parameter — 1 of 258 sender call sites passes `0x0F`, and that one is arm 1, not the wave-select record | `FINDINGS-l7a1429-editor-pages.md` §3a, §4, §4a, §4d |
+| `INTERACTION GAIN` is "a caption looking for a register" | §3, §8.2 | it has one: register `0x0300`, grade **STRONG**.  Two independent arguments: the caption sits on p19's own drawn row (five of five values on a caption's row, against a null mean of 0.19 of 5), and `0x0300` is a **MODE-GATED** gain — which `DEPTH` and `FORMANT` have no reason to be | editor-pages §3a, §4c; `FINDINGS-l7a1429-gate-and-keyscaling.md` §1.9 |
+| register `0x0000` bits 6..4 have an UNLOCATED producer; `0xFC4D27`/`0xFC7DE9` are undecoded | §5 row `0x0000`, §8.5 | **located.**  Fifteen sites in seven routines write `P[+0x07]` bits 6..4 with one idiom, all downstream of one test, and the census that says nothing else does enumerates the forms it searched.  `0xFC4D27`/`0xFC7DE9` write `R[+0x07]` — the OTHER half of the same word — and wave 20 decoded them as the slot allocator's store | gate-and-keyscaling §1.3, §1.6; `FINDINGS-l7a1429-packer-routines.md` §1.5, §4.1 |
+| the field that gates `0x0300` is the tone editor's `RESO MODE` | inherited by §5's `0x0000` row | `Q[+0x0B]` bits 7:6 are the MODELING top page's **`GROUP`**, the second column of its own `ON/OFF GROUP DRIVER RESONATOR INTERACTION` legend.  ★ **The MECHANISM is unchanged** — those bits still gate `0x0300`; only the name was wrong.  The real `RESO MODE` is **p21/p31 bit 7**, which sets `0x0000` bits 15/14 *and* adds `0x0C00` = one octave to that resonator's tuning | editor-pages §1a, §4e |
+| the two single points of failure in §3.3 | §3.3, §8.9 | **both corroborated by a second, independent route.**  MAIN/SUB: on `PAGE1/3` the two value rows sit `+4` display rows under the `MAIN RESONATOR` and `SUB RESONATOR` labels the *same* paint routine draws, with equal offsets; `SUB GAIN`, p33 and p36 play no part in that argument.  `FITTING`/`MUTING`: `PAGE1/3`'s own column headers stand over their own fields, without the `0xF02DFB` caption block the old argument rested on | editor-pages §3c, §5.4 |
+| `SCALE` is not located | §8.8 | **found.**  It is `RESO SCALE`, the fifth column of `PAGE1/3`, drawn `OFF`/`ON`, and it is **bit 7 of p22 (MAIN) / p32 (SUB)**.  ⚠ What the packer does with that bit is still not traced — it reaches `R[+0x1A]`, whose writer was not found | editor-pages §5.3 |
+| §5.2 calls `(0x00E088)` "the 0..127 LinCoef index" from `voice[+0x0C]`, and grades `LinCoef_FE0196` a **key**-follow ramp | §5.2 | `voice[+0x0C]` is the **VELOCITY**; the note is at `voice[+0x05]` as `note\|0x80`.  So all four `LinCoef_*` tables are **TOUCH** ramps — renamed `*_TouchRamp_Q5_128` in `prom_c/data_tables/tail_data_zone.s`.  The `ks(Q, o)` stage in the same expression **is** keyed on the note, so the two stages differ in their VARIABLE as well as in their scaling | editor-pages §1b; `prom_c/devices/dev10c_dev104_drivers.s` §7.2 |
+| "84 is the value of `p15` in 123 of 133 factory records"; "`ORIGINAL` in 133 of 133" | §2.3, §3.4 | both are rates over `dev104_topology_probe.py`'s **filtered** 133-record set, which selects on a property of ELEMENT BLOCKS and so drops every tone that uses the mode field.  Over the 392 melodic wave-select records `p15` takes six values, `{51, 53, 65, 67, 70, 84}`; over the whole factory set `ORIGINAL` is 455 of 459.  ★ §3.4's conclusion — *implement the coefficients, not the families* — is **untouched**: it rests on the packer, not on the count | editor-pages §4a, §4b; gate-and-keyscaling §4.3 |
+| "the cheapest thing that would close most of §8 is one hop on the CPU 1 side" | §8, closing | ★ **that hop was made**, by lane `w21/cpu1-hop`, and it did not need the screen id in `(0x207C)`: each page's read-back order *is* the map, pinned by eight editor bindings.  It resolved all four WEAK rows and found `SCALE`.  What it did **not** close is §8.1 (the absolute scale of `P0SITI0N`) and §8.2 (the internal signal path) | editor-pages, whole |
+
 ---
 
 ## 0. THE ANSWER, IN ONE PARAGRAPH
@@ -272,6 +292,15 @@ What is named and what is not:
 | the **excitation source** | — | **not on this device.**  The editor's `DRIVER` pages select a waveform out of prom_d's wave catalogue (`DRIVER WAVEFORM`, element bytes +0x02/+0x03, PROVEN by the UI lane) — so the driver is a *sample*, and this chip is the resonator it is fed into |
 | **series or parallel**; whether `MUTING`'s two coefficients are two cascaded poles or one biquad | — | **not decided** |
 
+⚠ **CORRECTED 2026-09-04, beside the table above and not in it.**  Three rows are stale.
+*The third coefficient instance* is not a `3!` choice: `0x0240` is what the `DEPTH` control
+(p14 bits 0-6) scales — `PartRec_SetPositionOffset_0003` does `res 7,C` on p14 before
+storing there — and `0x03C0`/`0x0480` have **no editor name at all**, because their only
+input p15 is a RESONATOR TYPE preset byte that no editor writes.  *The coupling between MAIN
+and SUB* row's parenthesis, `INTERACTION GAIN` *is a caption looking for a register*, is
+wrong: the caption belongs to p19 and p19 is register `0x0300`.  And the `0x0000` row's
+mode/enable word now has a located producer for its bits 6..4.
+
 ### 3.1  ★ A correction this lane owes to its own earlier draft
 
 An earlier revision of this note argued that the physical-modelling reading should stay WEAK
@@ -312,6 +341,15 @@ The parameter-names lane states both, and they must travel with every name in §
   at `0xF02DFB` is headed `MUTING`.  If that is wrong, **a whole column of names swaps**.
 
 Each is one fact from a drawn caption rather than from adjacency.  One fact is one fact.
+
+⚠ **CORRECTED 2026-09-04: neither is a single point of failure any more.**  Lane
+`w21/cpu1-hop` reached both from a second direction.  `PAGE1/3`'s ten values land on two
+display rows that sit `+4` rows under the `MAIN RESONATOR` and `SUB RESONATOR` labels drawn
+by the *same* paint routine, with the **same** offset — swapped, the offsets are `+35` and
+`-27`, and one value would sit above its own label.  That argument never mentions `SUB
+GAIN`.  And `PAGE1/3`'s own column headers stand over the `FITTING` and `MUTING` fields
+directly, so the split no longer rests on the `0xF02DFB` caption block.  Both directions
+survive; what changes is that they are no longer one fact each.
 
 ### 3.4  ★ RESONATOR TYPE is a UI preset selector, and the chip never sees it
 
@@ -416,6 +454,10 @@ parameter `N` = wave-select byte `+0x0N` in hex.  Names come from
 | **0x0480** | `Curve_FE04C9[i5]`, cached in `P[+0x26]` | candidate `FORMANT` | **section C's** cutoff, clamped 44..96 = **831 Hz .. 16.7 kHz** | fit **PROVEN**, name **WEAK** | as above |
 | **0x0800** *(no channel)* | the literal **0x1100**, once, at power-on | — | — | **UNIDENTIFIED** | accept the write; model nothing |
 
+⚠ **The NAME column above is SUPERSEDED by §5.3** (2026-09-04).  The table is left exactly
+as wave 19 wrote it; four of its rows name the wrong thing, and §5.3 is where the current
+names live and where `notes/l7a1429_crosscheck.py` reads them.
+
 ### 5.1  ⚠ The one place where the two lanes' readings differ, and it is not resolved
 
 `0x01C0` carries `b0 × r`, where `b0` is section A's own bilinear coefficient (register `0x0400`)
@@ -457,6 +499,60 @@ the device to either.
 ★ **`LinCoef_FE0196` gives the cutoff key-follow an exact unit**: its slope is 1/64 of a Q5 unit
 per key and its destination is in semitones of cutoff, so **a depth byte of 64 is exactly 100%
 key follow** and the signed range is ±198%.
+
+⚠ **CORRECTED 2026-09-04: `key` in the block above is the VELOCITY.**  `voice[+0x0C]` is
+the touch byte — the voice record's own field comment says so, and the note is at `+0x05` as
+`note\|0x80` — so `Q5(T, d)` is a **TOUCH** ramp and the four tables are now spelled
+`LinCoef_*_TouchRamp_Q5_128` in `prom_c/data_tables/tail_data_zone.s`.  Their six depth
+bytes are exactly the six fields of the page captioned `TOUCH DEPTH`, plus `TOUCH` on
+`P0SITI0N M0VEMENT`; six for six.  ★ `ks(Q, o)` in the same two expressions is genuinely
+keyed on the **note** (`note = pitch >> 8`), so `i3`/`i4` carry one touch-scaled term and one
+key-scaled term, with different slopes — 64 = 100 % in the ramp, 32 = 100 % in `ks`.  An
+implementation that reuses one variable or one constant for both is wrong twice.  So the
+★ paragraph's "cutoff key-follow" reads **cutoff TOUCH-follow**; the arithmetic is unchanged.
+(`FINDINGS-l7a1429-editor-pages.md` §1b; `FINDINGS-l7a1429-gate-and-keyscaling.md` §2.)
+
+### 5.3  ★ THE NAME COLUMN, AS OF 2026-09-04 — `CROSSCHECK-NAME-TABLE`
+
+This table supersedes §5's NAME and grade columns and nothing else: every value expression,
+role and *what an HLE should DO* cell in §5 stands, subject to the corrections carried in at
+the head of this note.  Names are the tone editor's own captions, from
+`FINDINGS-l7a1429-editor-pages.md` §4, which is where the grading rule is stated.
+
+⚠ `notes/l7a1429_crosscheck.py` reads **this** table for this artefact and fails if its name
+column disagrees with the editor-pages note, the docs site's register table or the MAME
+driver's `block_name()`.  Do not add a fourth register table to this file without telling
+that script which one is current.
+
+| reg | NAME | grade |
+|---|---|---|
+| `0x0000` | — a mode / enable word.  ⚠ Its FIELDS are named (bits 15/14 = MAIN / SUB `RESO MODE`, bits 6..4 = the part-level `GROUP` enable, bit 7 = sign of `SUB GAIN`); the word itself is not | **UNIDENTIFIED** |
+| `0x0040` | **MAIN RESONATOR `KEY SHIFT` + `DETUNE`** | **PROVEN** |
+| `0x0080` | **SUB RESONATOR `KEY SHIFT` + `DETUNE`** | **PROVEN** |
+| `0x00C0` | **resonator `P0SITI0N`**, with its `TOUCH` and its `P0SITI0N M0VEMENT`; the key-follow term is gated by `FORMANT` | **PROVEN** for `P0SITI0N`; STRONG for the movement fields |
+| `0x0100` | — a constant | (constant) |
+| `0x0140` | **MAIN `FITTING`**, decay form | **PROVEN** |
+| `0x0180` | **SUB `FITTING`**, decay form | **PROVEN** |
+| `0x01C0` | **MAIN `FITTING`**, rise form | **PROVEN** |
+| `0x0200` | **SUB `FITTING`**, rise form | **PROVEN** |
+| `0x0240` | the register **`DEPTH`** scales | **STRONG** |
+| `0x0280` | **`SUB GAIN`** | **PROVEN** |
+| `0x02C0` | — the literal `0xFF00` | (constant) |
+| `0x0300` | **`INTERACTION GAIN`** | **STRONG** |
+| `0x0340` | **MAIN `MUTING`**, Q13 form | **PROVEN** |
+| `0x0380` | **SUB `MUTING`**, Q13 form | **PROVEN** |
+| `0x03C0` | — ⚠ **NO EDITOR NAME EXISTS** | **RESOLVED, negatively** |
+| `0x0400` | **MAIN `MUTING`**, Q16 form | **PROVEN** |
+| `0x0440` | **SUB `MUTING`**, Q16 form | **PROVEN** |
+| `0x0480` | — ⚠ **NO EDITOR NAME EXISTS** | **RESOLVED, negatively** |
+| `0x0800` | — the global, no channel | **UNIDENTIFIED** |
+
+**Fourteen of the nineteen per-channel blocks carry a name**; two are constants, two are
+refused a name with a reason, and one — `0x0000` — is named only in its fields.  ⚠ The two
+`RESOLVED, negatively` rows are an ANSWER, not a gap: `p15` is written by the RESONATOR TYPE
+preset and by no editor field, so there is no caption for the ROM to give them.  A future
+lane must not re-open them as a naming question; the open question there is what the chip
+does with a coefficient the user cannot reach.
 
 ---
 
@@ -549,6 +645,15 @@ static double cutoff_hz(uint16_t w, double fs) {   // registers 0x0400 / 0x0440 
   debugger, leave inert.
 * Put every stand-in behind one switch so it is drop-in replaceable.
 
+
+⚠ **CORRECTED 2026-09-04.**  *"Do not model registers `0x0000` ... `0x0300`"* still holds for
+the audio path, but both are now decoded far enough to be worth exposing properly:
+`0x0000`'s bits 6..4 are a two-bit part-level enable taking only `{0x00, 0x10, 0x20}`, and
+`0x0300` is `Curve_Exp2Gain_U8_128[p19]` in both halves, zeroed unless that enable is
+non-zero.  The gate note's §1.9 gives the decode as a comment block to lift.  And the third
+coefficient set is no longer nameless: `0x0240` is what `DEPTH` scales.  Routing it in inert
+is still the right first move — what is decoded is the number, not its destination.
+
 **7.4  ⚠ Name the record correctly.**  `Q` is the **43-byte `WaveSelRec`**, not a tone record;
 the wave-17 header's `struct Tone104` is a misnaming of the object, not of the arithmetic
 (`FINDINGS-l7a1429-parameter-names.md` §1a, PROVEN).  ★ That also explains this lane's own
@@ -609,6 +714,20 @@ view** — §7.1 and §7.2.
    way round.  §3.3 — one drawn caption each.
 10. **What selects the Stage_B path**, on which the nineteen registers are a ROM image rather than
     a computation.
+
+⚠ **CORRECTED 2026-09-04 — items 3, 5, 8 and 9 are answered, and the closing paragraph is
+overtaken by events.**  Item **3** was a false dilemma: `DEPTH` = p14 bits 0-6 → `0x0240`,
+`FORMANT` = p14 bit 7 → `0x00C0`'s key-follow gate, `INTERACTION GAIN` = p19 → `0x0300`, and
+`0x03C0`/`0x0480` are refused a name because p15 is not an editor parameter.  Item **5**'s
+writers are found (fifteen sites; `0xFC4D27`/`0xFC7DE9` write the other half of the word).
+Item **8**, `SCALE`, is `RESO SCALE` = bit 7 of p22/p32 — though what the packer does with
+that bit is still open, so the register-level question survives as a *new* item.  Item **9**
+is corroborated twice over and is no longer two single facts.  Items **1**, **2**, **4**,
+**6**, **7** and **10** stand exactly as written, and item **1** is still the single most
+valuable missing number.  ★ **The hop the closing paragraph asks for HAS BEEN MADE** —
+`FINDINGS-l7a1429-editor-pages.md` — so the cheapest remaining things are instead: what
+`R[+0x1A]` (and hence `RESO SCALE`) does to the coefficients; where the DATA-dial editors for
+a dozen named fields live; and `(0x00E093)`, which has writers and no located reader.
 
 ★ **The cheapest thing that would close most of §8 is not the instrument.**  The parameter-names
 lane names it: **one hop on the CPU 1 side** — correlate `sub_FD616A`'s 29 call sites with the
