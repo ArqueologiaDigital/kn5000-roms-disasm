@@ -565,6 +565,43 @@
 ;   `struct Tone104` above should be read as `struct WaveSelRec`, its field names
 ;   still correct as ROLE names in the arithmetic.
 ;
+; ⚠ (d) THE NAMING RULE AND THE SYMBOL TABLE'S WEAK ROWS ARE OUT OF DATE, 2026-09-04.
+;   Wave 21's CPU-1 hop (notes/FINDINGS-l7a1429-editor-pages.md) resolved all four.
+;   The rule itself stands -- a block carries an editor name only where the name is
+;   earned -- but four rows have changed and the symbols have NOT been renamed, so
+;   read the table with this beside it:
+;
+;     DEV104_BLK_0240   0x0240   the register the editor's `DEPTH` control scales:
+;                                p14 bits 0-6, which PartRec_SetPositionOffset_0003
+;                                takes with `res 7,C` at 0xFC5B32.        STRONG
+;     DEV104_BLK_0300   0x0300   `INTERACTION GAIN`, p19.  Two arguments: the
+;                                caption is drawn on p19's own screen row, and the
+;                                register is MODE-GATED, which DEPTH and FORMANT
+;                                have no reason to be.                    STRONG
+;     DEV104_BLK_03C0   0x03C0   ★ NO EDITOR NAME EXISTS.  Resolved NEGATIVELY:
+;     DEV104_BLK_0480   0x0480   their only input p15 is never an editor parameter
+;                                -- 1 of 258 sender call sites passes 0x0F, and
+;                                that one is arm 1, not the wave-select record.
+;                                p15 is written by the RESONATOR TYPE preset.
+;                                So the firmware has no caption to give them, and
+;                                the block-number symbol is the RIGHT name, not a
+;                                placeholder.                             refused
+;
+;   ★ THE `3!` SIX-WAY CHOICE IN THE NAMING RULE WAS A FALSE DILEMMA.  `FORMANT` is
+;   not a register at all: it is p14 BIT 7, drawn `FIX`/`MOVE`, and the packer tests
+;   that exact bit at 0xFC4A09 to switch DEV104_POSITION's key-follow term on or
+;   off.  So the three captions belong to p14 bits 0-6, p14 bit 7 and p19, and none
+;   of them was ever a candidate for the i5 section.
+;
+; ⚠ (e) MAIN vs SUB NO LONGER HAS ONE POINT OF FAILURE, 2026-09-04.  On the editor's
+;   PAGE1/3 the two value rows sit +4 display rows under the `MAIN RESONATOR` and
+;   `SUB RESONATOR` labels the SAME paint routine draws, with equal offsets --
+;   swapped they are +35 and -27, and one value would sit above its own label.
+;   That argument never mentions block 0x0280.  The FITTING/MUTING split likewise
+;   has a second route: that page's own column headers stand over their own fields.
+;   The paragraph above stays as written; both directions survive it.
+;   notes/FINDINGS-l7a1429-editor-pages.md sections 3c and 5.4.
+;
 ; ------------------------------------------------------------------------------
 ; 7.3 THE FOUR sub_ ROUTINES IN THIS FILE -- THE REFUSAL STILL HOLDS
 ; ------------------------------------------------------------------------------

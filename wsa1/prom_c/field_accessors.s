@@ -3278,6 +3278,14 @@ Pack104_ComputeTuningWords_0040_0080__FC47EA:
 ; GRADE: PROVEN for every line above -- all operands.  The parameter NAMES are
 ;          STRONG (parameter-names note section 4); `FORMANT` for the i5 section
 ;          stays WEAK there and is not asserted here.
+;          ★ CORRECTED 2026-09-04: `FORMANT` was never a candidate for the i5
+;          section.  It is p14 BIT 7, drawn `FIX`/`MOVE`, and it gates
+;          Pack104_StageRegs_00C0_0100_0240's key-follow term at 0xFC4A09 -- not a
+;          register.  Registers 0x03C0 and 0x0480 have NO EDITOR NAME AT ALL: no
+;          sender ever passes parameter 0x0F on the arm-4 selector, so p15 is a
+;          RESONATOR TYPE preset byte and the firmware has no caption for them.
+;          That is an ANSWER, not a WEAK grade.
+;          notes/FINDINGS-l7a1429-editor-pages.md sections 4 and 4a.
 ; --------------------------------------------------------------------------
 Pack104_UnpackWaveSelRec_ToSubRecord:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC47EE  link XIZ,0xfffc
@@ -3518,6 +3526,13 @@ Pack104_UnpackWaveSelRec_ToSubRecord__FC497F:
 ;          `P0SITI0N` (0x00C0) and its table-pair companion (0x0100) are STRONG;
 ;          0x0240's name is WEAK -- a 3! choice among DEPTH / FORMANT /
 ;          INTERACTION GAIN with no measurement (guide sections 3 and 8.3).
+;          ★ CORRECTED 2026-09-04: 0x0240's name is STRONG, not WEAK, and there
+;          was no 3! choice.  It is the register the editor's `DEPTH` control
+;          scales -- p14 bits 0-6, which PartRec_SetPositionOffset_0003 takes with
+;          `res 7,C` at 0xFC5B32 -- while p14's bit 7 is `FORMANT`, a gate on this
+;          same routine's key-follow term, and `INTERACTION GAIN` is p19 into
+;          register 0x0300.  notes/FINDINGS-l7a1429-editor-pages.md sections 3a,
+;          4 and 4d.
 ; --------------------------------------------------------------------------
 Pack104_StageRegs_00C0_0100_0240:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC49AD  link XIZ,0xfffc
@@ -3840,6 +3855,11 @@ sub_FC4B2E__FC4BB0:
 ;          whether register chan+0x0300 gets a value or 0x0000.
 ;          Q[+0x0B] bits 7:6 are `RESO MODE`
 ;          (notes/FINDINGS-l7a1429-parameter-names.md section 2d, STRONG).
+;          ★ CORRECTED 2026-09-04: those bits are `GROUP`, the MODELING top
+;          screen's second legend column, not `RESO MODE` -- see
+;          Pack104_DispatchByResoMode_ForPart's header and
+;          notes/FINDINGS-l7a1429-editor-pages.md section 1a.  The gate mechanism
+;          on this line is untouched; only the field's name was wrong.
 ;          It also sets P0[+0x09] and P1[+0x09] to an element index, 0/1 or 0/0
 ;          depending on bit 7 of P0[+0x00] (0xFC4C45).
 ; GRADE: PROVEN for the arithmetic and for the destination field -- every line is
@@ -8993,6 +9013,28 @@ sub_FC723F__FC741F:
 ;          (their records pass the parameter-names lane's p20 and p25 invariants
 ;          and beat a shuffle null at p < 0.001, but they fail the element-block
 ;          filter dev104_topology_probe.py uses).
+; ★ CORRECTED 2026-09-04 (lane w21/cpu1-hop) ------------------------------------
+; ⚠ `Q[+0x0B]` BITS 7:6 ARE `GROUP`, NOT `RESO MODE`.  Everything above is right
+;          except that one name, and the routine label keeps it -- it is not
+;          renamed here, so read `Pack104_DispatchByResoMode_ForPart` as
+;          dispatching on the part's GROUP field.  The evidence: the editor for
+;          those bits lives on the MODELING top screen (prom_a 0xFD422B, dispatch
+;          code 0xC0 = screen 0xA0, field 6), is a five-state control over 0..4
+;          that ORs 0x40 into layers 1-2 and 0x80 into layers 3-4 and 0x80 into all
+;          four, and can therefore never emit 0xC0; prom_b switches a bracket
+;          graphic on the same byte; and that screen's own bottom legend reads
+;          `ON/OFF  GROUP  DRIVER  RESONATOR  INTERACTION`, GROUP being the second
+;          column.  The 392 melodic factory wave-select records carry exactly
+;          {0x00, 0x40, 0x80} and never 0xC0.
+;          ★ The real `RESO MODE` is p21/p31 BIT 7, on PAGE3/3 -- a different
+;          field on a different page, which sets register 0x0000 bits 15/14 and
+;          adds 0x0C00 = one octave to that resonator's tuning
+;          (Pack104_UnpackWaveSelRec_ToSubRecord, 0xFC4884 and 0xFC4897).
+;          ⚠ So the eight factory tones above are eight GROUP users, and the
+;          two-bit enumeration reads 0 = nothing grouped, 1 = some element
+;          grouped, 2 = all four grouped.  Nothing else changes: the dispatch,
+;          the six arms, the field and the null are untouched.
+;          notes/FINDINGS-l7a1429-editor-pages.md sections 1a and 4e.
 ;          Findings: notes/FINDINGS-l7a1429-gate-and-keyscaling.md.
 ; --------------------------------------------------------------------------
 Pack104_DispatchByResoMode_ForPart:
