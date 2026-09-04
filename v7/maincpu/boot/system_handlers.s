@@ -100,12 +100,12 @@ SubCPU_Payload_Verify_Entry:
 	ldw bc, 0x800	; Size: 0x800 words
 	call Checksum_ComputeComplement	; Compute checksum -> HL
 	lda xwa, (0x00f980:24)
-	cpda16_24 xhl, (0xffd4); Compare with expected checksum
+	cp hl, (0xffd4:24); Compare with expected checksum
 	jr nz, SubCPU_Payload_Verify_Fail	; First region checksum failed
 	ld (0x01e53e:24), 0x00; Mark as success (so far)
 	ldw bc, 0x280	; Size of second region
 	call Checksum_ComputeComplement	; Compute second checksum
-	cpda16_24 xhl, (0xffd2); Compare with expected
+	cp hl, (0xffd2:24); Compare with expected
 	ret z	; Both match -> success
 	ld (0x01e53e:24), 0xff; Second region failed
 	ret
@@ -115,7 +115,7 @@ SubCPU_Payload_Verify_Fail_Entry:
 	ld (0x01e53e:24), 0xff; Mark as failed
 	ldw bc, 0x280
 	call Checksum_ComputeComplement
-	cpda16_24 xhl, (0xffd2)
+	cp hl, (0xffd2:24)
 	ret nz	; Both checksums wrong
 	ld (0x01e53e:24), 0x01; First wrong, second correct (partial)
 	ret
@@ -145,7 +145,7 @@ SubCPU_PayloadErrorStore:
 	ret
 
 Sys_CheckPowerStableFlag:
-	cpw_da (0xffcc), 0x5a5a
+	cpw (0xffcc:24), 0x5a5a
 	scc16 z, hl
 	ret
 
@@ -796,7 +796,7 @@ INTTR4_AltSeqAccum_Update:
 	ld a, (1051:16)
 	bit 3, (1073:16)
 	jr z, INTTR4_AltSeqSync_Check
-	cpdm8 1072, a
+	cp (1072:16), a
 	jr nz, INTTR4_AltSeqSync_Check
 	ld (1054:16), 8
 	and (1073:16), 247
@@ -808,7 +808,7 @@ INTTR4_AltSeqAccum_Update:
 INTTR4_AltSeqSync_Check:
 	bit 0, (1073:16)
 	jr z, INTTR4_FadeDelay_Check
-	cpdm8 1071, a
+	cp (1071:16), a
 	jr nz, INTTR4_FadeDelay_Check
 	ld (1054:16), 1
 	and (1073:16), 254
@@ -899,7 +899,7 @@ TempoRingBuf_Write_Return:
 TempoRingBuf_WritePair:
 	bit 0, (1113:16)
 	jr nz, TempoRingBuf_WritePair_Enqueue
-	cpw_da (0x1e751), 2
+	cpw (0x1e751:24), 2
 	jr c, TempoRingBuf_WritePair_ClearPending
 	push	sr
 	ei 6
@@ -1341,7 +1341,7 @@ RhythmBuf_ProcessEvents:
 
 RhythmBuf_ProcessLoop:
 	ld wa, (0x01ef59:24)
-	cpda16_24 xwa, (0x1ef55)
+	cp wa, (0x1ef55:24)
 	jr z, RhythmBuf_ProcessLoop_Done
 	calr RhythmBuf_DispatchEvent
 	jr RhythmBuf_ProcessLoop
@@ -1530,7 +1530,7 @@ TempoRingBuf_Consume:
 	ei 6
 
 TempoRingBuf_Consume_Loop:
-	cpda16 xhl, 1141
+	cp hl, (1141:16)
 	jr nc, TempoRingBuf_Consume_Done
 	ldb_sri E, 0x07, 0xf0, 0xec
 	calr TempoRingBuf_DequeueOne
@@ -1616,7 +1616,7 @@ SeqTiming_Snapshot_CheckFrac:
 	.byte 0x04, 0x00, 0x00
 SeqTiming_Snapshot_PostSnap:
 	di
-	cpda16	xwa, (13014)
+	cp	wa, (13014:16)
 	jr	c, 12	; -> 0xEF1724
 	push	xhl
 	call	AccTiming_InitAllParts
@@ -1642,7 +1642,7 @@ SyncTiming_Snapshot_CheckFrac:
 	.byte 0x04, 0x00, 0x00
 SyncTiming_Snapshot_PostSnap:
 	di
-	cpda16	xwa, (32098)
+	cp	wa, (32098:16)
 	jr	c, 12	; -> 0xEF176C
 	push	xhl
 	call	SeqEvt_EntryPoint2
@@ -1986,7 +1986,7 @@ TaskSched_Dispatch:
 	or wa, wa
 	jr nz, TaskSched_ReturnToDispatch
 	xor wa, wa
-	cpdm16 1159, xwa
+	cp (1159:16), wa
 	jr z, TaskSched_ScanPriorityQueues
 	ld iy, (1159:16)
 	extz xiy
@@ -3156,7 +3156,7 @@ TaskSched_DelayTicks:
 	addda16 xwa, 1033
 
 TaskSched_DelayTicks_SpinLoop:
-	cpda16 xwa, 1033
+	cp wa, (1033:16)
 	jr gt, TaskSched_DelayTicks_SpinLoop
 	ret
 
@@ -3318,7 +3318,7 @@ TempoRingBuf_WriteBytes_Loop:
 
 TempoRingBuf_CheckEmpty:
 	ld hl, (0x01e74f:24)
-	cpda16_24 xhl, (0x1e74b)
+	cp hl, (0x1e74b:24)
 	lds hl, 0
 	jr z, TempoRingBuf_CheckEmpty_Return
 	ldw hl, 0xffff
@@ -3415,7 +3415,7 @@ RhythmBuf_InlineBytecode:
 
 RhythmBuf_CheckEmpty:
 	ld hl, (0x01ef59:24)
-	cpda16_24 xhl, (0x1ef55)
+	cp hl, (0x1ef55:24)
 	lds hl, 0
 	jr z, RhythmBuf_CheckEmpty_Return
 	ldw hl, 0xffff
@@ -3597,7 +3597,7 @@ SeqEvtBuf_InlineBytecode:
 	unlk	xiz
 	ret
 	ld	hl, (0x1f26d:24)
-	cpda16_24	hl, (0x1f269)
+	cp	hl, (0x1f269:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -3700,7 +3700,7 @@ SeqMain_WriteBytes_Loop:
 
 Seq_CheckSongEnd:
 	ld hl, (0x01f377:24)
-	cpda16_24 xhl, (0x1f373)
+	cp hl, (0x1f373:24)
 	lds hl, 0
 	jr z, Seq_CheckSongEnd_Return
 	ldw hl, 0xffff
@@ -3799,7 +3799,7 @@ SeqBuf_MidiOut_WriteBytes_Loop:
 
 SeqBuf_MidiOut_CheckEmpty:
 	ld hl, (0x01f781:24)
-	cpda16_24 xhl, (0x1f77d)
+	cp hl, (0x1f77d:24)
 	lds hl, 0
 	jr z, SeqBuf_MidiOut_CheckEmpty_Return
 	ldw hl, 0xffff
@@ -4104,7 +4104,7 @@ SeqBuf_DspSysEx_WriteBytes_Loop:
 
 SeqBuf_DspSysEx_CheckSongEnd:
 	ld hl, (0x01fc9f:24)
-	cpda16_24 xhl, (0x1fc9b)
+	cp hl, (0x1fc9b:24)
 	lds hl, 0
 	jr z, SeqBuf_DspSysEx_CheckSongEnd_Return
 	ldw hl, 0xffff
@@ -4195,7 +4195,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	unlk	xiz
 	ret
 	ld	hl, (0x200a9:24)
-	cpda16_24 xhl, (131237)
+	cp hl, (131237:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4372,7 +4372,7 @@ SeqBuf_VoiceMap_WriteBlock_Loop:
 
 SeqBuf_VoiceMap_CheckEmpty:
 	ld hl, (0x0201bd:24)
-	cpda16_24 xhl, (0x201b9)
+	cp hl, (0x201b9:24)
 	lds hl, 0
 	jr z, SeqBuf_VoiceMap_CheckEmpty_Done
 	ldw hl, 0xffff
@@ -4473,7 +4473,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	unlk	xiz
 	ret
 	ld	hl, (0x202c7:24)
-	cpda16_24 xhl, (131779)
+	cp hl, (131779:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4557,7 +4557,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	unlk	xiz
 	ret
 	ld	hl, (0x203d1:24)
-	cpda16_24 xhl, (132045)
+	cp hl, (132045:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4654,7 +4654,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 
 SeqBuf_NoteEvent_CheckSongEnd:
 	ld hl, (0x0204db:24)
-	cpda16_24 xhl, (0x204d7)
+	cp hl, (0x204d7:24)
 	lds hl, 0
 	jr z, SeqBuf_NoteEvent_CheckSongEnd_Return
 	ldw hl, 0xffff
@@ -6211,7 +6211,7 @@ Flash_EraseSector_CheckRegion:
 	cp (xsp + 12), 0x1
 	jr nz, Flash_EraseSector_Bank2Check
 	lda xwa, (0x300000:24)
-	cpw_da (0x205e0), 8792
+	cpw (0x205e0:24), 8792
 	jr nz, Flash_EraseSector_TopSector
 	cp xwa, (xsp + 4)
 	jrl nz, FlashOp_Epilogue10
@@ -6242,7 +6242,7 @@ Flash_EraseSector_TopSector:
 
 Flash_EraseSector_Bank2Check:
 	lda xwa, (0x280000:24)
-	cpw_da (0x205e2), 8875
+	cpw (0x205e2:24), 8875
 	jr nz, Flash_EraseSector_Bank2TopSector
 	cp xwa, (xsp + 4)
 	jr nz, FlashOp_Epilogue10
@@ -8064,7 +8064,7 @@ Parport_WaitDataReady:
 Parport_ReadNextByte:
 	pushw iz
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jr c, Parport_ReadByte_FromBuffer
 	ldw hl, 0xffff
 	jr Parport_ReadByte_Return
@@ -8072,7 +8072,7 @@ Parport_ReadNextByte:
 Parport_ReadByte_FromBuffer:
 	lda xwa, (0x069800:24)
 	add xwa, 0x9000
-	cpda32 xwa, 1610
+	cp xwa, (1610:16)
 	jr nz, Parport_ReadByte_Emit
 	incw 8, (1614:16)
 	ld wa, (1614:16)
@@ -8209,7 +8209,7 @@ LZSS_Decompress_StreamHeaderBytes:
 	ldw (1614:16), 42
 	ldw (1616:16), 200
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jr nc, LZSS_Decompress_ReturnOK
 
 LZSS_Decompress_StreamData:
@@ -8218,7 +8218,7 @@ LZSS_Decompress_StreamData:
 	ld wa, hl
 	calr Flash_AccumWrite_Word
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jr c, LZSS_Decompress_StreamData
 
 LZSS_Decompress_ReturnOK:
@@ -8303,7 +8303,7 @@ LZ_Decompress_ReadSizeField:
 	ld xwa, (1598:16)
 	add xwa, xhl
 	ld (1598:16), xwa
-	cpdm32 1602, xwa
+	cp (1602:16), xwa
 	jrl nc, LZ_Decompress_Done
 
 LZ_Decompress_MainLoop:
@@ -8385,7 +8385,7 @@ LZ_Decompress_CopyMatchLoop:
 
 LZ_Decompress_LoopCheck:
 	ld xwa, (1602:16)
-	cpda32 xwa, 1598
+	cp xwa, (1598:16)
 	jrl c, LZ_Decompress_MainLoop
 
 LZ_Decompress_Done:

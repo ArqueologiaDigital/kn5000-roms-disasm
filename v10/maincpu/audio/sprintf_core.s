@@ -439,7 +439,7 @@ Sprintf_Decimal_FinalWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Decimal_OutputSign
-	cpw_da (0x3c220), 32
+	cpw (0x3c220:24), 32
 	jr z, Sprintf_Decimal_PadLeftLoop
 	bit 4, wa
 	jr nz, Sprintf_Decimal_PadLeftLoop
@@ -487,7 +487,7 @@ Sprintf_Decimal_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Decimal_PrecZeroLoop
-	cpw_da (0x3c220), 48
+	cpw (0x3c220:24), 48
 	jr z, Sprintf_Decimal_ZeroFillLoop
 	jr Sprintf_Decimal_PrecZeroLoop
 
@@ -761,7 +761,7 @@ Sprintf_Hex_ComputeWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Hex_EmitPrefix
-	cpw_da (0x3c220), 32
+	cpw (0x3c220:24), 32
 	jr z, Sprintf_Hex_PadLeftLoop
 	jr Sprintf_Hex_EmitPrefix
 
@@ -794,7 +794,7 @@ Sprintf_Hex_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Hex_PrecZeroLoop
-	cpw_da (0x3c220), 48
+	cpw (0x3c220:24), 48
 	jr z, Sprintf_Hex_ZeroFillLoop
 	jr Sprintf_Hex_PrecZeroLoop
 
@@ -932,7 +932,7 @@ Sprintf_Octal_ComputeWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Octal_EmitPrefix
-	cpw_da (0x3c220), 32
+	cpw (0x3c220:24), 32
 	jr z, Sprintf_Octal_PadLeftLoop
 	jr Sprintf_Octal_EmitPrefix
 
@@ -962,7 +962,7 @@ Sprintf_Octal_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Octal_PrecZeroLoop
-	cpw_da (0x3c220), 48
+	cpw (0x3c220:24), 48
 	jr z, Sprintf_Octal_ZeroFillLoop
 	jr Sprintf_Octal_PrecZeroLoop
 
@@ -1442,7 +1442,7 @@ Sprintf_FFixed_PadLeftCheck:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_FFixed_EmitSign
-	cpw_da (0x3c220), 32
+	cpw (0x3c220:24), 32
 	jr z, Sprintf_FFixed_PadLeftLoop
 	jr Sprintf_FFixed_EmitSign
 
@@ -1488,7 +1488,7 @@ Sprintf_FFixed_ZeroFill:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_FFixed_LeadDigit
-	cpw_da (0x3c220), 48
+	cpw (0x3c220:24), 48
 	jr z, Sprintf_FFixed_ZeroFillLoop
 	jr Sprintf_FFixed_LeadDigit
 
@@ -1818,7 +1818,7 @@ Sprintf_ESci_PadLeftCheck:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_ESci_EmitSign
-	cpw_da (0x3c220), 32
+	cpw (0x3c220:24), 32
 	jr z, Sprintf_ESci_PadLeftLoop
 	jr Sprintf_ESci_EmitSign
 
@@ -1863,7 +1863,7 @@ Sprintf_ESci_ZeroFill:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_ESci_LeadDigit
-	cpw_da (0x3c220), 48
+	cpw (0x3c220:24), 48
 	jr z, Sprintf_ESci_ZeroFillLoop
 	jr Sprintf_ESci_LeadDigit
 

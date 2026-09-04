@@ -652,7 +652,7 @@ BootSerial_WaitDeviceIdent__poll:
 	jr	nz, BootSerial_WaitDeviceIdent__have
 	ldb	w, 0x0c
 BootSerial_WaitDeviceIdent__have:
-	cpdm8	0x1042, w		; same as previous poll?
+	cp	(0x1042:16), w		; same as previous poll?
 	ld	(0x1042:16), w
 	jr	nz, BootSerial_WaitDeviceIdent__poll
 	ld	(0x1042:16), w		; stable: store (again) and clean up
@@ -757,7 +757,7 @@ BootSerial_WaitTxIdle__busy:
 	jr	BootSerial_WaitTxIdle__outer
 BootSerial_WaitTxIdle__check_tx:
 	ld	wa, (0x0fd7:16)		; TX pending count
-	cpda16	xwa, 0x0fd5		; == send index -> drained
+	cp	wa, (0x0fd5:16)		; == send index -> drained
 	jr	nz, BootSerial_WaitTxIdle__busy
 BootSerial_WaitTxIdle__exit:
 	ei	6

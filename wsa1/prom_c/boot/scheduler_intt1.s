@@ -144,7 +144,7 @@ INTT1_PHASE_TABLE:
 	.long	0x00F990AB
 INTT1_HANDLER__advance:
 	inc 1, (0x00E2E3:24)
-	cpib_da	0x00E2E3, 0x06
+	cp	(0x00E2E3:24), 0x06
 	jr	nc, INTT1_HANDLER__wrap
 	jr	INTT1_HANDLER__exit
 INTT1_HANDLER__wrap:

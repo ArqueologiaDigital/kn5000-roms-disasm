@@ -156,7 +156,7 @@ AccChannel_CompareAndMarkDirty:
 	and a, 0x3f
 	jr nz, AccChannel_StoreCurrentState
 	ld a, (0x32f5:16)
-	cpda8 a, 0x32f6
+	cp a, (0x32f6:16)
 	jr nz, AccChannel_MarkDirtyAndSync
 	ld a, (0x32f7:16)
 	and a, 0x7f
@@ -341,7 +341,7 @@ AccVoice_CheckBitsAndSetFlags:
 	ld de, (0x32e3:16)
 	and d, 0x7
 	inc 1, d
-	cpda8 d, 1075
+	cp d, (1075:16)
 	jr nz, AccVoice_BitsCheckDone
 	or (0x3327:16), 63
 
@@ -355,7 +355,7 @@ AccPitch_CheckTransposeFlags:
 	jr z, AccPitch_UpdateCheck
 	ld a, (0x3280:16)
 	inc 1, a
-	cpda8 a, 1075
+	cp a, (1075:16)
 	jr nz, AccPitch_UpdateCheck
 	or (0x3329:16), 63
 
@@ -366,7 +366,7 @@ AccPitch_UpdateCheck:
 	jr z, AccPitch_FinalReturn
 	ld a, (0x3280:16)
 	inc 1, a
-	cpda8 a, 1075
+	cp a, (1075:16)
 	jr nz, AccPitch_FinalReturn
 	or (0x3329:16), 63
 
@@ -428,7 +428,7 @@ AccChord_DispatchVoiceChange:
 	xor a, a
 	bit 0, (0x330a:16)
 	jr z, AccChord_CheckVoiceBit2
-	cpda8 c, 0x3364
+	cp c, (0x3364:16)
 	jr z, AccChord_CheckVoiceBit2
 	and (0x330a:16), 254
 	and (0x3327:16), 192
@@ -449,7 +449,7 @@ AccChord_CheckVoiceBit2:
 AccChord_CheckLeftPedal0:
 	bit 0, (0x3309:16)
 	jr z, AccChord_CheckLeftPedal1
-	cpda8 c, 0x3368
+	cp c, (0x3368:16)
 	jr z, AccChord_CheckLeftPedal1
 	and (0x3309:16), 254
 	and (0x3327:16), 192
@@ -459,7 +459,7 @@ AccChord_CheckLeftPedal0:
 AccChord_CheckLeftPedal1:
 	bit 1, (0x3309:16)
 	jr z, AccChord_CheckKeyChange0
-	cpda8 c, 0x336a
+	cp c, (0x336a:16)
 	jr z, AccChord_CheckKeyChange0
 	and (0x3309:16), 253
 	and (0x3327:16), 192
@@ -469,7 +469,7 @@ AccChord_CheckLeftPedal1:
 AccChord_CheckKeyChange0:
 	bit 0, (0x330b:16)
 	jr z, RhythmPart_ProcessBit0
-	cpda8 c, 0x336c
+	cp c, (0x336c:16)
 	jr z, RhythmPart_ProcessBit0
 	and (0x330b:16), 254
 	and (0x32fd:16), 254
@@ -481,7 +481,7 @@ AccChord_CheckKeyChange0:
 RhythmPart_ProcessBit0:
 	bit 1, (0x330b:16)
 	jr z, RhythmPart_ProcessBit1
-	cpda8 c, 0x336e
+	cp c, (0x336e:16)
 	jr z, RhythmPart_ProcessBit1
 	and (0x330b:16), 253
 	and (0x32fd:16), 253
@@ -504,7 +504,7 @@ RhythmPart_ProcessBit1:
 AccChord_CheckExtraDirtyBit3:
 	bit 3, (0x330a:16)
 	jr z, AccChord_CheckPitchDirty
-	cpda8 c, 0x3366
+	cp c, (0x3366:16)
 	jr z, AccChord_CheckPitchDirty
 	and (0x330a:16), 247
 	and (0x3327:16), 192
@@ -522,7 +522,7 @@ AccChord_CheckPitchDirty:
 	jr z, AccChord_NullRet
 	bit 0, (0x32fb:16)
 	jr z, AccChord_CheckPitchLeftPedal1
-	cpda8 c, 0x3368
+	cp c, (0x3368:16)
 	jr z, AccChord_NullRet
 	and (0x3329:16), 192
 	jr AccChord_NullRet
@@ -540,10 +540,10 @@ AccChord_NullRet:
 
 AccChord_CompareAndSetDirty:
 	ld a, (0x32d8:16)
-	cpda8 a, 0x32dc
+	cp a, (0x32dc:16)
 	jr nz, AccChord_SetDirtyBit5
 	ld a, (0x32da:16)
-	cpda8 a, 0x32de
+	cp a, (0x32de:16)
 	jr z, AccChord_CheckZeroChord
 
 AccChord_SetDirtyBit5:
@@ -559,7 +559,7 @@ AccChord_CompareDone:
 
 AccentVoice_DetectAndMarkChange:
 	ld a, (0x3305:16)
-	cpda8 a, 0x3306
+	cp a, (0x3306:16)
 	jr z, AccentVoice_UpdateParamIndex
 	ld a, (0x3314:16)
 	orda8 a, 0x3315
@@ -579,7 +579,7 @@ AccentVoice_DetectAndMarkChange:
 AccentVoice_CheckModeChange:
 	ld a, (0x3305:16)
 	and a, 0x3
-	cpda8 a, 0x3338
+	cp a, (0x3338:16)
 	jr z, AccentVoice_UpdateParamIndex
 	or (0x330d:16), 1
 
@@ -1348,7 +1348,7 @@ AccVoice_BytecodeBlock3:
 RhythmROM_CheckValid:
 	ldb c, 0x0
 	ld xwa, 0xffffffff
-	cpda32 xwa, 0x3277
+	cp xwa, (0x3277:16)
 	jr z, RhythmROM_InvalidIncrement
 	jr RhythmROM_CheckDone
 

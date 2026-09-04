@@ -1852,7 +1852,7 @@ Flash_SectorErase_16bit__check_non_region4:
 
 	; Custom Data (target 1) - check if AM29LV800B (0x2258)
 	lda xwa, (0x300000:24); f2 00 00 30 30
-	cpw_da (39316), 8792; CP (009994h), 2258h
+	cpw (39316:24), 8792; CP (009994h), 2258h
 	jr nz, Flash_SectorErase_16bit__custom_check_f0000	; 6e 1c
 
 	; AM29LV800B: Check if base sector needs boot block erase
@@ -1893,7 +1893,7 @@ Flash_SectorErase_16bit__custom_check_f0000:
 Flash_SectorErase_16bit__check_hdae:
 	; HDAE5000 (target 0) - check if AM29F400B (0x22AB)
 	lda xwa, (0x280000:24); f2 00 00 28 30
-	cpw_da (39318), 8875; CP (009996h), 22ABh
+	cpw (39318:24), 8875; CP (009996h), 22ABh
 	jr nz, Flash_SectorErase_16bit__hdae_check_top	; 6e 1a
 
 	; AM29F400B on HDAE: Check base sector
@@ -3783,7 +3783,7 @@ HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop:
 LZSS_ReadByte:
 	pushw iz	; PUSH IZ
 	ld xwa, (3108:16); LD XWA, (0x0C24) - current position
-	cpda32 xwa, 3104	; CP XWA, (0x0C20) - compare with expected size
+	cp xwa, (3104:16)	; CP XWA, (0x0C20) - compare with expected size
 	jr c, LZSS_ReadByte__not_eof	; JR C, .not_eof
 	ldw hl, 0xFFFF	; LD HL, 0xFFFF - return EOF
 	jr LZSS_ReadByte__exit	; JR T, .exit
@@ -3791,7 +3791,7 @@ LZSS_ReadByte__not_eof:
 	; Check if need to read next sector
 	lda xwa, (0x0099a4:24); LDA XWA, 0x0099A4
 	add xwa, 0x9000	; ADD XWA, 0x00009000
-	cpda32 xwa, 3116	; CP XWA, (0x0C2C) - buffer limit
+	cp xwa, (3116:16)	; CP XWA, (0x0C2C) - buffer limit
 	jr nz, LZSS_ReadByte__read_byte	; JR NZ, .read_byte
 	; Need to read next sector
 	incw 8, (3120:16); INCW 0, (0x0C30) - next sector X
@@ -3945,7 +3945,7 @@ LZSS_ParseHeader__read_more:
 	ldw (3122:16), 200; LD (0x0C32), 0x00C8
 	; Check if already at target size
 	ld xwa, (3108:16); LD XWA, (0x0C24)
-	cpda32 xwa, 3104	; CP XWA, (0x0C20)
+	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jr nc, LZSS_ParseHeader__done	; JR NC, .exit (already done)
 	; Copy remaining raw bytes
 LZSS_ParseHeader__decompress_loop:
@@ -3954,7 +3954,7 @@ LZSS_ParseHeader__decompress_loop:
 	ld wa, hl	; LD WA, HL
 	calr LZSS_OutputByte_Alt	; CALR LZSS_OutputByte_Alt
 	ld xwa, (3108:16); LD XWA, (0x0C24)
-	cpda32 xwa, 3104	; CP XWA, (0x0C20)
+	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jr c, LZSS_ParseHeader__decompress_loop	; JR C, .decompress_loop
 LZSS_ParseHeader__done:
 	lds hl, 0	; LD HL, 0 (success)
@@ -4060,7 +4060,7 @@ LZSS_Decompress__read_header_loop:
 	ld xwa, (3104:16); LD XWA, (0x0C20)
 	add xwa, xhl	; ADD XWA, XHL
 	ld (3104:16), xwa	; LD (0x0C20), XWA
-	cpdm32 3108, xwa	; CP (0x0C24), XWA
+	cp (3108:16), xwa	; CP (0x0C24), XWA
 	jrl nc, LZSS_Decompress__done	; JRL NC, .done - already past size
 
 ; -----------------------------------------------------------------------------
@@ -4169,7 +4169,7 @@ LZSS_Decompress__copy_loop:
 LZSS_Decompress__check_done:
 	; === Check if decompression complete ===
 	ld xwa, (3108:16); LD XWA, (0x0C24)
-	cpda32 xwa, 3104	; CP XWA, (0x0C20)
+	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jrl c, LZSS_Decompress__decompress_loop	; JRL C, .decompress_loop
 
 LZSS_Decompress__done:

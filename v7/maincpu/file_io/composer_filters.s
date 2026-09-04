@@ -759,7 +759,7 @@ SaveFilter_Save_NoPwd:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, SaveFilter_Save_Execute
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SaveFilter_Save_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000

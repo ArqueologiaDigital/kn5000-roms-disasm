@@ -246,7 +246,7 @@ Link_ServiceTask__F99F48:
 	set 5, (0x00852C:24)                   ; F99F48  set 5,(0x00852c)   [llvm-mc cannot encode this]
 	jr Link_ServiceTask__F99F6C                           ; F99F4D  jr T,0xf99f6c
 Link_ServiceTask__F99F4F:
-	cpib_da 0x008537, 0x01                 ; F99F4F  cp (0x008537),0x01   [llvm-mc cannot encode this]
+	cp (0x008537:24), 0x01                 ; F99F4F  cp (0x008537),0x01   [llvm-mc cannot encode this]
 	jr nz, Link_ServiceTask__F99F6C                       ; F99F55  jr NZ,0xf99f6c
 	jr Link_ServiceTask__F99F63                           ; F99F57  jr T,0xf99f63
 Link_ServiceTask__F99F59:
@@ -264,7 +264,7 @@ Link_ServiceTask__F99F6C:
 	bit_dd8	1, PA                          ; F99F6E  bit 1,(0x1e)
 	jr nz, Link_ServiceTask__F99F97                       ; F99F71  jr NZ,0xf99f97
 	call	0xF9A030                          ; F99F73  call 0xf9a030
-	cpdm16_24	(0xF331), wa                 ; F99F77  cp (0x00f331),WA
+	cp	(0xF331:24), wa                 ; F99F77  cp (0x00f331),WA
 	jr nz, Link_ServiceTask__F99F85                       ; F99F7C  jr NZ,0xf99f85
 	incw	1, (0xF32F:24)                 ; F99F7E  incw 1,(0x00f32f)
 	jr Link_ServiceTask__F99F8C                           ; F99F83  jr T,0xf99f8c

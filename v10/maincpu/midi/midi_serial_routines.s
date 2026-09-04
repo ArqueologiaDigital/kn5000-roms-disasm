@@ -350,7 +350,7 @@ ClkTick_Src2CoarseOverflow:
 	inc 1, (1076:16)
 	inc 1, (1077:16)
 	ld a, (1077:16)
-	cpda8 a, 0x34d7
+	cp a, (0x34d7:16)
 	jr ule, ClkTick_Src2ErrorDelta
 	ld (1077:16), 0
 
@@ -384,7 +384,7 @@ ClkTick_Src3ClickCheck:
 	ld a, (1051:16)
 	bit 0, (1073:16)
 	jr z, ClkTick_Src3LowerSyncCheck
-	cpda8 a, 1071
+	cp a, (1071:16)
 	jr nz, ClkTick_Src3LowerSyncCheck
 	res 0, (1073:16)
 	ld (1054:16), 1
@@ -396,7 +396,7 @@ ClkTick_Src3ClickCheck:
 ClkTick_Src3LowerSyncCheck:
 	bit 3, (1073:16)
 	jr z, ClkTick_Src3OverflowQueue
-	cpda8 a, 1072
+	cp a, (1072:16)
 	jr nz, ClkTick_Src3OverflowQueue
 	res 3, (1073:16)
 	ld (1054:16), 8
@@ -657,7 +657,7 @@ QueueTrack_LinearBufWrite:
 MIDI_QUEUE_EVENT_PAIR:
 	bit 0, (1113:16)
 	jr nz, QueuePair_LinearBufWrite
-	cpw_da (0x01e751), 2
+	cpw (0x01e751:24), 2
 	jr c, QueuePair_FifoFullReturn
 	push	sr
 	ei 6

@@ -883,13 +883,13 @@ MAIN__bit4:
 	jr	le, MAIN__no_wrap
 	ldw	(0x00E2DF:24), 0x0000
 MAIN__no_wrap:
-	cpw_da	0x00F2F1, 0x0000
+	cpw	(0x00F2F1:24), 0x0000
 	jr	z, MAIN__timer_expired
 	decw 1, (0x00F2F1:24)
 	jr	MAIN__bit5
 MAIN__timer_expired:
 	ei	6
-	cpib_da	0x007ECC, 0x00
+	cp	(0x007ECC:24), 0x00
 	jr	z, MAIN__reenable
 	ei	0
 	ld	(0x007ECC:24), 0x00

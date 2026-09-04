@@ -689,7 +689,7 @@ SmfFN_Save_WriteSlot:
 	ldw	de, 16
 	call	16288997
 	ld	a, (65507:24)
-	cpda8	a, 34988
+	cp	a, (34988:16)
 	jr	nz, 20
 	lda	xwa, (61824:24)
 	.byte 0xf3, 0xe1, 0x00, 0x01, 0x30
@@ -737,7 +737,7 @@ SmfFN_HandleOpen:
 	call FileIO_CheckFileExists
 	cps l, 0
 	jr z, SmfFN_Open_Execute
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -831,7 +831,7 @@ SmfFN_HandleOpen2:
 SmfFN_HandleDelete:
 	cp xiz, 0x5
 	jrl nz, SmfFN_HandleDelete2
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Delete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -863,7 +863,7 @@ SmfFN_Delete_Execute:
 	lds32	xde, 0
 	call	16423243
 	ld	wa, (33040:16)
-	cpda16 xwa, (33896)
+	cp wa, (33896:16)
 	jr	lt, 13
 	cps	wa, 0
 	jr	le, 9
@@ -1109,7 +1109,7 @@ SmfFN_UpdateFilenameField:
 	jr	nz, 74
 	lda	xiz, (34740:16)
 	ld	wa, (33040:16)
-	cpda16 xwa, (33896)
+	cp wa, (33896:16)
 	jr	lt, 17
 	cps	wa, 0
 	jr	le, 13

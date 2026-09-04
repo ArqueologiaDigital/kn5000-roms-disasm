@@ -41,7 +41,7 @@ Boot_sbrk:
 	ld	xhl, (0x00999c:24)		; size 0: report bytes remaining
 	ret
 Boot_sbrk__alloc:
-	cpdm32_24 (0x00999c), xwa	; enough left?
+	cp (0x00999c:24), xwa	; enough left?
 	jr	nc, Boot_sbrk__fits
 	ld	xhl, 0xffffffff		; arena exhausted
 	ret

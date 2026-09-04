@@ -2663,7 +2663,7 @@ MainTitleCtrl_SetIndicatorAndClear:
 SeqState_DemoModeHandler:
 	cp	xde, 8
 	jrl	nz, 128
-	cpdm8	(35996), a
+	cp	(35996:16), a
 	jr	nz, 4
 	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
@@ -2808,7 +2808,7 @@ UI_PostTimerResetEvent:
 SeqState_HasModeChanged:
 	ld a, (35994:16)
 
-	cpda8 xbc, (35996)
+	cp a, (35996:16)
 
 	scc16 nz, hl
 
@@ -3768,7 +3768,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
-	cpw_da (0x3ef50), 0
+	cpw (0x3ef50:24), 0
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive

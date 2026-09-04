@@ -3403,7 +3403,7 @@ AcDemoSong_HandleResize:
 	jr nz, AcCurrentSongBox_RetZero
 	bit 3, (0x28ad:16)
 	jr z, AcDemoSong_SetupDisplay
-	cpdm8 4439, l
+	cp (4439:16), l
 	jr nz, AcCurrentSongBox_RetZero
 
 AcDemoSong_SetupDisplay:
@@ -3741,7 +3741,7 @@ MuteChSet_Dispatch:
 
 ; MuteChSetFunc parameter check
 MuteChSet_ParamCheck:
-	cpib_da (0x021088), 0x01
+	cp (0x021088:24), 0x01
 	jr nz, MuteChSetFunc_Exit
 	ld a, (0x02108a:24)
 	extz wa
@@ -4025,7 +4025,7 @@ AcDemoMedley_HandleScrollEvent:
 	call InheritedProc
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x26D6
-	cpib_da (0x021090), 0x01
+	cp (0x021090:24), 0x01
 	jr nz, DPPlayDsp_CheckEntry
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x26CA
 
@@ -5511,7 +5511,7 @@ AcIndexToggleFunc_ReturnZero:
 	ret
 
 AcIndexToggleFunc_CheckMatch:
-	cpda8_24 a, (0x0340e4)
+	cp a, (0x0340e4:24)
 	scc16 z, hl
 	extz xhl
 	ret
@@ -6403,7 +6403,7 @@ NoteEditBox_EventDispatch2:
 	call	ApFuncCall
 	lda	xbc, (xsp+24)
 	ld	a, (0x021096:24)
-	cpda8 xbc, (10144)
+	cp a, (10144:16)
 	jr	nz, 17
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
@@ -14559,23 +14559,23 @@ SeqFormat_DispatchA:
 	ld_rrw	wa, xix, wa
 	lda	xix, (SeqFormat_DispatchA_0x70:24)
 	jp_rr	8, xix, wa
-	cpib_da	(0x03e2e0), 0
+	cp	(0x03e2e0:24), 0
 	jrl	nz, -433
 	ld	xwa, 15
 	jr	62
-	cpib_da	(0x03e2e0), 1
+	cp	(0x03e2e0:24), 1
 	jrl	nz, -449
 	ld	xwa, 18
 	jr	80
-	cpib_da	(0x03e2e0), 0
+	cp	(0x03e2e0:24), 0
 	jrl	nz, -465
 	ld	xwa, 21
 	jr	30
-	cpib_da	(0x03e2e0), 1
+	cp	(0x03e2e0:24), 1
 	jrl	nz, -481
 	ld	xwa, 24
 	jr	48
-	cpib_da	(0x03e2e0), 0
+	cp	(0x03e2e0:24), 0
 	jrl	nz, -497
 	ld	xwa, 27
 	ld	xbc, (xsp+8)
@@ -14586,7 +14586,7 @@ SeqFormat_DispatchA:
 	scc16	z, hl
 	extz	xhl
 	jr	42
-	cpib_da	(0x03e2e0), 1
+	cp	(0x03e2e0:24), 1
 	jrl	nz, -531
 	ld	xwa, 29
 	ld	xbc, (xsp+8)
@@ -15435,7 +15435,7 @@ Equalizer_FormatValue:
 SureJudgeFunc:
 	cp xbc, 0x1c00007
 	jrl nz, ParamCmd_ReturnZero
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr nz, Equalizer_CmdDispatch
 	ld xwa, 0x1480001
 	call MainPostEvent

@@ -164,7 +164,7 @@ WPLoad_HandleScroll:
 	jr nz, WPLoad_ScrollUp
 	ld wa, hl
 	inc 1, wa
-	cpda16 xwa, 0x850a
+	cp wa, (0x850a:16)
 	jrl ge, WPLoad_GetSelection
 	inc 1, hl
 	jr WPLoad_StorePosition

@@ -73,7 +73,7 @@ FCopy_HandleScroll:
 	ld	(32458:16), wa
 FCopy_ScrollDown_CheckMin:
 	ld	wa, (32458:16)
-	cpda16	xwa, (32456)
+	cp	wa, (32456:16)
 	jr	nz, 16	; -> 0xF8B862
 	cps	wa, 0
 	jr	le, 8	; -> 0xF8B85E
@@ -110,7 +110,7 @@ FCopy_ScrollUp_Adjust:
 	ld	(32458:16), wa
 FCopy_ScrollUp_CheckMax:
 	ld	wa, (32458:16)
-	cpda16	xwa, (32456)
+	cp	wa, (32456:16)
 	jr	nz, -90	; -> 0xF8B862
 	cp	wa, 19
 	jr	ge, -100	; -> 0xF8B85E

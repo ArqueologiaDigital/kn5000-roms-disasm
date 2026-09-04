@@ -1653,7 +1653,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	retd	0xfbb0
 	nop
 	.byte 0x37
-	cpdm8	251, b
+	cp	(251:16), b
 	.byte 0xc6
 	swi	3
 	nop
@@ -1686,7 +1686,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0xd1
 	jrl	nz, 251
 	.byte 0x01
-	cpdm32	251, xwa
+	cp	(251:16), xwa
 	.byte 0xcc
 	swi	3
 	nop
@@ -2590,7 +2590,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	nop
 	nop
 	reti
@@ -2614,7 +2614,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	normal
 	nop
 	di
@@ -2639,7 +2639,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	push	sr
 	nop
 	halt
@@ -2664,7 +2664,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	zcf
 	nop
 	max
@@ -2688,7 +2688,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	rcf
 	nop
 	pop	sr
@@ -2713,7 +2713,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	scf
 	nop
 	push	sr
@@ -2740,7 +2740,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	ccf
 	nop
 	normal
@@ -2768,7 +2768,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	push_a
 	nop
 	nop
@@ -2812,7 +2812,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_I2
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	pop_a
 	nop
 	max
@@ -2834,7 +2834,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_F2
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	ex_ff
 	nop
 	pop	sr
@@ -2856,7 +2856,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_E
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	ldf 0
 	push	sr
 	nop
@@ -2877,7 +2877,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_D
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	.byte 0x1a
 	nop
 	.byte 0x01
@@ -2900,7 +2900,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_C
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	jp	0
 
 
@@ -2946,7 +2946,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	nop
 	nop
 	nop
@@ -2973,7 +2973,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	normal
 	nop
 	normal
@@ -2998,7 +2998,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	push	sr
 	nop
 	push	sr
@@ -3023,7 +3023,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	pop	sr
 	nop
 	pop	sr
@@ -3050,7 +3050,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	max
 	nop
 	max
@@ -3077,7 +3077,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	halt
 	nop
 	halt
@@ -3103,7 +3103,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	di
 	di
 
@@ -3126,7 +3126,7 @@ NakaInstTable8_NullTerm:
 	nop
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	reti
 	nop
 	reti
@@ -3170,7 +3170,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_C
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	ldio	0, 0
 	nop
 
@@ -3189,7 +3189,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_D
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	push	0
 	normal
 	nop
@@ -3209,7 +3209,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_E
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	ldwio	0, 2
 
 
@@ -3227,7 +3227,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_F2
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	pushw	768
 	nop
 
@@ -3246,7 +3246,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_I2
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	incf
 	nop
 	max
@@ -3267,7 +3267,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_L
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	decf
 	nop
 	halt
@@ -3290,7 +3290,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_M2
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	ret
 	nop
 	di
@@ -3311,7 +3311,7 @@ NakaInstTable8_NullTerm:
 	.long WidgetName_PtrBlock_N1
 	reti
 	nop
-	cpdm8	0xff00, l
+	cp	(0xff00:16), l
 	retd	1792
 	nop
 

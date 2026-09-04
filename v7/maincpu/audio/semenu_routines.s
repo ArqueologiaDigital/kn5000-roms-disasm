@@ -1943,14 +1943,14 @@ SeMenu_ReadObjParam:
 
 SeMenu_CheckObjEnabled:
 	ldw hl, 0xffff
-	cpdm8_24 (0x020c33), a
+	cp (0x020c33:24), a
 	ret nz
 	lds hl, 0
 	ret
 
 SeMenu_CheckObjValid:
 	ldw hl, 0xffff
-	cpdm8_24 (0x020c35), a
+	cp (0x020c35:24), a
 	ret nz
 	lds hl, 0
 	ret

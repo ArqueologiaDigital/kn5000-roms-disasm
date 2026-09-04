@@ -391,7 +391,7 @@ AudioInit_CheckBit2VoiceParam:
 	or c, 0x18
 
 AudioInit_CompareAndSendMIDI:
-	cpdm8 0xc5a8, c
+	cp (0xc5a8:16), c
 	jr z, AudioInit_VoiceParamDone
 	ld (0xc5a8:16), c
 	ld (xsp + 256), 0x4	; LD (XSP + 000h), 004h - explicit displacement encoding
@@ -458,7 +458,7 @@ AudioInit_ClearStoredVoice:
 AudioInit_UpdateVoiceBank0:
 	ld a, (0xc2c3:16)
 	srl a, 1
-	cpda8 a, 0xc5a2
+	cp a, (0xc5a2:16)
 	jr z, AudioInit_UpdateVoiceBank1
 	set 7, (0xc2c2:16)
 	ld a, (0xc5a2:16)
@@ -471,7 +471,7 @@ AudioInit_UpdateVoiceBank0:
 AudioInit_UpdateVoiceBank1:
 	ld a, (0xc2c7:16)
 	srl a, 1
-	cpda8 a, 0xc5a2
+	cp a, (0xc5a2:16)
 	jr z, AudioInit_UpdateVoiceBank2
 	set 7, (0xc2c6:16)
 	ld a, (0xc5a2:16)
@@ -526,7 +526,7 @@ AudioInit_ClearStereoRouting:
 AudioInit_VoiceStereoCheck:
 	ld a, (0xc2d3:16)
 	srl a, 1
-	cpda8 a, 0xc5a2
+	cp a, (0xc5a2:16)
 	jrl z, AudioInit_UpdateIndicators
 	set 7, (0xc2d2:16)
 	ld a, (0xc5a2:16)
@@ -1813,7 +1813,7 @@ AudioInit_ComparePanState:
 	bit 8, wa
 	jr z, AudioInit_PartCompare_Return
 	ld a, (0xc41a:16)
-	cpda8 a, 0xc2b4
+	cp a, (0xc2b4:16)
 	jr z, AudioInit_PartCompare_Return
 	ld a, (0xc2b4:16)
 	ld c, a
@@ -1838,7 +1838,7 @@ AudioInit_CompareVoiceConfig:
 	bit 1, wa
 	jr z, AudioInit_VoiceCompare_BothFF
 	ld a, (0xc365:16)
-	cpda8 a, 0xc1ff
+	cp a, (0xc1ff:16)
 	jr z, AudioInit_VoiceCompare_BothFF
 	ld a, (0xc1ff:16)
 	ld c, a
@@ -1997,7 +1997,7 @@ AudioInit_VoiceCompare_QueueCmd:
 
 AudioInit_VoiceCompare_PanCheck:
 	ld a, (0xc41a:16)
-	cpda8 a, 0xc2b4
+	cp a, (0xc2b4:16)
 	ret z
 	ld a, (0xc2b4:16)
 	ld c, a
@@ -2098,7 +2098,7 @@ AudioInit_ChannelMap_CheckPan:
 	bit 8, wa
 	jr z, AudioInit_ChannelMap_Return
 	ld a, (0xc41a:16)
-	cpda8 a, 0xc2b4
+	cp a, (0xc2b4:16)
 	jr z, AudioInit_ChannelMap_Return
 	ld a, (0xc2b4:16)
 	ld c, a

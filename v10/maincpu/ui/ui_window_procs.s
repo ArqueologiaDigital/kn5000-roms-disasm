@@ -20,7 +20,7 @@ WndScroll_CopyLoop:
 	ld (xix), a
 	inc 1, iz
 	inc 1, xbc
-	cpda16_24 xiz, (0x0274d6)
+	cp iz, (0x0274d6:24)
 	jr c, WndScroll_CopyLoop
 
 WndScroll_InitBuffer:
@@ -73,7 +73,7 @@ WndScroll_BasicWindowProc:
 
 WndScroll_HandleSelectionChange:
 	ld (0x0274de:24), de
-	cpdm16_24 (0x0274e0), xde
+	cp (0x0274e0:24), de
 	jrl z, UIDialog_ReturnZeroJmp
 	ld xwa, (xsp + 50)
 	calr GetClientBox
@@ -180,7 +180,7 @@ WndScroll_DrawCurrentItem:
 
 WndScroll_RepaintAll:
 	ld wa, (0x0274dc:24)
-	cpda16_24 xwa, (0x0274da)
+	cp wa, (0x0274da:24)
 	jrl z, UIDialog_ReturnZeroJmp
 	ldw (0x0274e0:24), 0xffff
 	ld xwa, (xsp + 50)
@@ -283,7 +283,7 @@ WndEvt_EventCodeDispatch:
 	ld	wa, (0x0274d8:24)
 	ld	bc, wa
 	inc	1, bc
-	cpda16_24 xbc, (160982)
+	cp bc, (160982:24)
 	jrl	nc, 2200
 	inc	1, wa
 	ld	(0x0274d8:24), wa
@@ -542,7 +542,7 @@ WndEvt_EventCodeDispatch:
 	jrl	1389
 	ld	iz, (0x0274d6:24)
 	dec	1, iz
-	cpda16_24 xiz, (160984)
+	cp iz, (160984:24)
 	jr	ule, 47
 	lda	xde, (0x0274b0:24)
 	ld	bc, iz
@@ -561,7 +561,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	dec	1, iz
 	dec	1, xbc
-	cpda16_24 xiz, (160984)
+	cp iz, (160984:24)
 	jr	ugt, -31
 	ld	wa, (0x0274d8:24)
 	extz	xwa
@@ -580,7 +580,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01e00080
 	jrl	1267
 	ld	iz, (0x0274d8:24)
-	cpda16_24 xiz, (160982)
+	cp iz, (160982:24)
 	jr	nc, 47
 	lda	xde, (0x0274b0:24)
 	ld	bc, iz
@@ -599,7 +599,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	cpda16_24 xiz, (160982)
+	cp iz, (160982:24)
 	jr	c, -34
 	ld	wa, (0x0274d6:24)
 	dec	1, wa
@@ -737,7 +737,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	cpda16_24 xiz, (160982)
+	cp iz, (160982:24)
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
@@ -764,7 +764,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	cpda16_24 xiz, (160982)
+	cp iz, (160982:24)
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 0x01e00080
@@ -808,7 +808,7 @@ WndScroll_StoreCallerPtr:
 WndScroll_HandleIndexChange:
 	ld wa, de
 	ld (0x0274da:24), de
-	cpw_da (0x0274e2), 0
+	cpw (0x0274e2:24), 0
 	jr nz, WndScroll_SendSelectionEvents
 	ld de, wa
 	extz xde
@@ -870,7 +870,7 @@ WndScroll_CharIsUppercase:
 WndScroll_CharIsLowercase:
 	bit 2, c
 	jr z, WndScroll_CharIsSpace
-	cpw_da (0x0274da), 2
+	cpw (0x0274da:24), 2
 	jr nz, WndScroll_SetCategoryZero
 	ldw (0x0274da:24), 0x0000
 
@@ -890,9 +890,9 @@ WndScroll_ComputeCharOffset:
 WndScroll_CharIsSpace:
 	cp a, 0x20
 	jr nz, WndScroll_CharIsUnderscore
-	cpw_da (0x0274e2), 0
+	cpw (0x0274e2:24), 0
 	jrl nz, WndScroll_SendPageEvents
-	cpw_da (0x0274da), 2
+	cpw (0x0274da:24), 2
 	jr nz, WndScroll_SetSpaceOffset
 	ldw (0x0274da:24), 0x0000
 
@@ -903,7 +903,7 @@ WndScroll_SetSpaceOffset:
 WndScroll_CharIsUnderscore:
 	cp a, 0x5f
 	jr nz, WndScroll_SearchCharTable
-	cpw_da (0x0274da), 2
+	cpw (0x0274da:24), 2
 	jr nz, WndScroll_SetUnderscoreOffset
 	ldw (0x0274da:24), 0x0000
 
@@ -999,7 +999,7 @@ WndScroll_HandleDialPage:
 	ld xwa, Data_SoundEditorCharsLayout_0xC
 	add xwa, xbc
 	ld wa, (xwa)
-	cpdm16_24 (0x0274de), xwa
+	cp (0x0274de:24), wa
 	jr ule, WndScroll_ClampPageCount
 	ld (0x0274de:24), wa
 
@@ -3962,7 +3962,7 @@ DrawDesignBox_ByteData:
 	calr	54020
 	cps	hl, 0
 	jr	z, 22
-	cpw_da	(0x03044e), 0
+	cpw	(0x03044e:24), 0
 	jr	z, 58
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
@@ -3992,7 +3992,7 @@ DrawDesignBox_ByteData:
 	lda	xhl, (xwa+4)
 	lda	xbc, (xwa+8)
 	ld	de, (xwa+12)
-	cpw_da	(0x03044e), 0
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xwa, xhl
 	calr	1
@@ -4266,7 +4266,7 @@ DrawDesignBox:	; SysData_FAD559
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawDesignBox_QueuedPath
-	cpw_da (0x03044e), 0
+	cpw (0x03044e:24), 0
 	jr z, DrawDesignBox_DirectEpilogue
 	ld xwa, xiz
 	ld bc, (xsp + 6)
@@ -7575,7 +7575,7 @@ ColorBlit:
 	jr z, ColorBlit_Deferred
 	ld a, (0x03efa8:24)
 	ld (0x03efaa:24), a
-	cpw_da (0x03044e), 0
+	cpw (0x03044e:24), 0
 	jr z, ColorBlit_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -7877,7 +7877,7 @@ ColorBlit2:
 	jr z, ColorBlit2_Deferred
 	ld a, (0x03efa8:24)
 	ld (0x03efaa:24), a
-	cpw_da (0x03044e), 0
+	cpw (0x03044e:24), 0
 	jr z, ColorBlit2_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)

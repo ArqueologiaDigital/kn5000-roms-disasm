@@ -356,7 +356,7 @@ AccompSeq_DispatchReturn:
 AccompSeq_CalcDeltaTime:
 	ld E,A
 	ld wa, (0x7daa:16)
-	cpda16 xwa, 0x7d80
+	cp wa, (0x7d80:16)
 	jr nz, AccompSeq_DeltaCompare
 	ld a, (0x7d82:16)
 	cp A,E

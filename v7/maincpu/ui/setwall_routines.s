@@ -144,7 +144,7 @@ SetWall_EventHandler_Active:
 	ld xde, 0xf1a0
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
-	cpda8 a, 0x2873
+	cp a, (0x2873:16)
 	jr nz, SetWall_EventHandler_Dispatch
 	call CDlikeSwTtl_SendStartEvt
 	jrl SetWall_ToReturn
@@ -192,7 +192,7 @@ SetWall_SearchSelf:
 
 SetWall_SearchSelf_Loop:
 	ldb_sri A, 0x07, 0xec, 0xf4
-	cpda8 a, 0x2873
+	cp a, (0x2873:16)
 	jr z, SetWall_NewSlotSelected
 	inc 1, iy
 	cp iy, 0x10
@@ -257,7 +257,7 @@ SetWall_CopySlotData:
 	pop xde
 	ld (3297:16), a
 	ld (4438:16), a
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SetWall_DirectHandler
 	call CDlikeSwTtl_SendStopEvtD
 	jp SetWall_Return
@@ -343,7 +343,7 @@ SetWall_ACSlotChange:
 	cp (3391:16), 10
 	jr z, SetWall_ACSlot_CheckPanel
 	ld a, (3391:16)
-	cpda8_24 a, (0xffe3)
+	cp a, (0xffe3:24)
 	jr nz, SetWall_ACSlot_IndexChange
 
 SetWall_ACSlot_CheckPanel:
@@ -363,7 +363,7 @@ SetWall_ACSlot_NoPanel:
 	jp SetWall_ACSlot_NormalChange
 
 SetWall_ACSlot_Direct:
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SetWall_ACSlot_DirectLocal
 	call CDlikeSwTtl_SendEvent8C_A
 	jp SetWall_ACSlot_Return
@@ -373,7 +373,7 @@ SetWall_ACSlot_DirectLocal:
 	jp SetWall_ACSlot_Return
 
 SetWall_ACSlot_PanelChange:
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SetWall_ACSlot_PanelLocal
 	call CDlikeSwTtl_SendEvent8C_13
 	jp SetWall_ACSlot_Return
@@ -632,7 +632,7 @@ SetWall_InlineCodeBlock2:
 	ld	xde, 0xf1a0
 	ld_rrb a, xde, iy
 	pop xde
-	cpda8 xbc, (10355)
+	cp a, (10355:16)
 	jr	nz, 4
 	jp	SetWall_InlineCodeBlock2_0x5E
 	ld	a, (0x2873:16)
@@ -720,7 +720,7 @@ SetWall_CrossType_Validate:
 	ld xde, 0xf1a0
 	ldb_sri A, 0x07, 0xe8, 0xec
 	pop xde
-	cpda8 a, 0x2873
+	cp a, (0x2873:16)
 	jr z, SetWall_CrossType_Reset
 	ld l, (3301:16)
 	xor h, h
@@ -1295,7 +1295,7 @@ SetWall_EventAdvanceCheck:
 	ld (0x28af:16), wa
 	cp wa, 0xffff
 	jr z, SetWall_EventAdvance_Return
-	cpda16 xwa, 0x28a2
+	cp wa, (0x28a2:16)
 	jr ule, SetWall_EventAdvance_Sync
 	ld (0x287a:16), 10
 	jr SetWall_EventAdvance_Return
@@ -1338,7 +1338,7 @@ SetWall_SlotResolve_Init:
 	xor xix, xix
 
 SetWall_SlotResolve_CheckDone:
-	cpda16 xde, 0x287f
+	cp de, (0x287f:16)
 	jr nz, SetWall_SlotResolve_ScanNext
 	ld a, (0x288e:16)
 	jr SetWall_SlotResolve_Return
@@ -1552,7 +1552,7 @@ SetWall_SingleSlot_LoadPos:
 	jr SetWall_SingleSlot_Return
 
 SetWall_SingleSlot_InvalidPos:
-	cpda16 xwa, 0x28a2
+	cp wa, (0x28a2:16)
 	jr ule, SetWall_SingleSlot_CheckBounds
 	ld (0x287a:16), 10
 	jr SetWall_SingleSlot_Return
@@ -1875,7 +1875,7 @@ SetWall_StreamAdvanceBounded:
 	jr SetWall_StreamAdv_Return
 
 SetWall_StreamAdv_CheckBounds:
-	cpda16 xwa, 0x28a2
+	cp wa, (0x28a2:16)
 	jr ule, SetWall_StreamAdv_LoadNext
 	ld (0x287a:16), 10
 	jr SetWall_StreamAdv_Return
@@ -1900,7 +1900,7 @@ SetWall_ForwardSkip:
 	xor bc, bc
 
 SetWall_ForwardSkip_Loop:
-	cpdm8 0x288e, c
+	cp (0x288e:16), c
 	jr z, SetWall_ForwardSkip_TargetFound
 	ld xhl, (4349:16)
 	cpib_sri 0x07, 0xec, 0xf4, 0x82
@@ -2041,7 +2041,7 @@ SetWall_MiscDataAndCode:
 	push	xwa
 	xor	xwa, xwa
 	ld	a, (10347:16)
-	cpda8_24 xbc, (65507)
+	cp a, (65507:24)
 	jr	nz, 7
 	ld	xix, 62032
 	jr	16

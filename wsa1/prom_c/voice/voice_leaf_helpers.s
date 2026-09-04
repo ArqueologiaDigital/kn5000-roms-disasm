@@ -3230,7 +3230,7 @@ sub_FA6BB5__FA6BCE:
 	ld	h, a                                    ; FA6BDA  ld H,A
 	cp	a, 33                                   ; FA6BDC  cp A,0x21
 	jrl nc, sub_FA6BB5__FA6E7C                 ; FA6BDF  jrl NC,0xfa6e7c
-	cpib_da 0x008677, 0x00                     ; FA6BE2  cp (0x008677),0x00
+	cp (0x008677:24), 0x00                     ; FA6BE2  cp (0x008677),0x00
 	jr z, sub_FA6BB5__FA6BFE                   ; FA6BE8  jr Z,0xfa6bfe
 	extpfx7 0xD2, 0x78, 0x86, 0x00, 0x3F, 0x30, 0x00 ; FA6BEA  cp (0x008678),0x0030
 	jr nc, sub_FA6BB5__FA6C07                  ; FA6BF1  jr NC,0xfa6c07
@@ -3376,7 +3376,7 @@ sub_FA6BB5__FA6D43:
 	sub	bc, bc                                 ; FA6D5D  sub BC,BC
 	inc	8, xsp                                 ; FA6D5F  inc 0,XSP
 	inc	4, xsp                                 ; FA6D61  inc 4,XSP
-	cpdm16_24	(0x87D0), bc                     ; FA6D63  cp (0x0087d0),BC
+	cp	(0x87D0:24), bc                     ; FA6D63  cp (0x0087d0),BC
 	jr z, sub_FA6BB5__FA6DBB                   ; FA6D68  jr Z,0xfa6dbb
 	ld	hl, (0x87D0:24)                        ; FA6D6A  ld HL,(0x0087d0)
 	extz	xde                                   ; FA6D6F  extz XDE

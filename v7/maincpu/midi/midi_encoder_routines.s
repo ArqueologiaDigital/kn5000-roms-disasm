@@ -85,7 +85,7 @@ Encoder_ProcessVolume:
 	ld_rrb	a, xbc, wa
 	calr	21
 	ld	a, l
-	cpda8	xbc, (36440)
+	cp	a, (36440:16)
 	jr	z, 9	; -> 0xFC650B
 	ld	(36440:16), a
 	ldb_erp	a, 248
@@ -161,7 +161,7 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	ld	(36428:16), a
 	jr	14	; -> 0xFC65D3
 Encoder_ProcessBreath_SimplePassthrough:
-	cpdm8	(36428), a
+	cp	(36428:16), a
 	ret	z
 	ld	(36428:16), a
 	ld	l, a

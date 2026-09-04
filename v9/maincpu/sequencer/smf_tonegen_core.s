@@ -327,7 +327,7 @@ SeqPlay_InitTrackLoop_Continue:
 	call SeqTrack_InitScoopAndSetWall
 	incw 1, (4237:16)
 	ld wa, (4237:16)
-	cpda16 xwa, 3934
+	cp wa, (3934:16)
 	jrl c, SeqPlay_InitTrackLoop
 	call FloppyIO_ReturnReady
 	cp (3830:16), 0
@@ -543,7 +543,7 @@ SeqTrack_ComputeTempo_Phase2:
 	jrl SeqTrack_UpdateVolumesExit
 
 SeqTrack_ComputeTempo_Phase3:
-	cpda16 xwa, 3936
+	cp wa, (3936:16)
 	jrl c, SeqTrack_ComputeTempo_Phase3Store
 	xor de, de
 	ldw_erp DE, 0xe2
@@ -2183,19 +2183,19 @@ SetWall_ValidateAndApply:
 	ld a, (0x2877:16)
 	cps a, 1
 	jrl c, SetWall_ParamOutOfRange
-	cpda8 a, 0x28a1
+	cp a, (0x28a1:16)
 	jrl ugt, SetWall_ParamOutOfRange
-	cpda8 a, 9858
+	cp a, (9858:16)
 	jrl z, SetWall_ParamOutOfRange
 	ld a, (9858:16)
 	cps a, 1
 	jrl c, SetWall_ParamOutOfRange
-	cpda8 a, 0x28a1
+	cp a, (0x28a1:16)
 	jrl ugt, SetWall_ParamOutOfRange
 	ld a, (9860:16)
 	cps a, 1
 	jrl c, SetWall_ParamOutOfRange
-	cpda8 a, 0x28a1
+	cp a, (0x28a1:16)
 	jrl ule, SetWall_ParamsValid
 
 SetWall_ParamOutOfRange:
@@ -2222,9 +2222,9 @@ SetWall_SlotResolved:
 	ld wa, (0x28af:16)
 	ld (0x27d8:16), wa
 	ld a, (9860:16)
-	cpda8 a, 0x2877
+	cp a, (0x2877:16)
 	jrl z, SetWall_InitVoiceSlots
-	cpda8 a, 9858
+	cp a, (9858:16)
 	jrl z, SetWall_InitVoiceSlots
 	ld a, (0x2877:16)
 	pushw wa
@@ -4315,7 +4315,7 @@ VoiceChannel_AdvancePosition:
 	jr VoiceChannel_StorePosition_Continue
 
 VoiceChannel_AdvPos_CheckBounds:
-	cpda16 xwa, 0x286d
+	cp wa, (0x286d:16)
 	jr ule, VoiceChannel_AdvPos_LoadBlock
 	ld (0x287a:16), 10
 	jr VoiceChannel_StorePosition_Continue
@@ -5533,7 +5533,7 @@ ToneGen_ValidateVoice_CheckLink:
 	jr ToneGen_SaveVoiceState_Continue
 
 ToneGen_ValidateVoice_CheckBounds:
-	cpda16 xwa, 0x286d
+	cp wa, (0x286d:16)
 	jr ule, ToneGen_ValidateVoice_LoadBlock
 	ld (0x287a:16), 10
 	jr ToneGen_SaveVoiceState_Continue

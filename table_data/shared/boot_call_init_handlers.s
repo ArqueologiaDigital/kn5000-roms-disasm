@@ -43,7 +43,7 @@ Boot_CallInitHandlers:
 	; Compare init flag - encoding differs between ROMs
 	; IF INIT_FLAG_COMPARE_WORD (evaluated to true)
 	; table_data: CP (0xFFFEEE), 0xFFFF (7 bytes)
-	cpw_da	(16776942), 65535
+	cpw	(16776942:24), 65535
 	; ELSE
 	; ENDIF
 

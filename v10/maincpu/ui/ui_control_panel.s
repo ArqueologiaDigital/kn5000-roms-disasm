@@ -2747,7 +2747,7 @@ MainTitleCtrl_SetIndicatorAndClear:
 SeqState_DemoModeHandler:
 	cp xde, 0x8
 	jrl nz, UIWidget_ReturnZero
-	cpdm8 0x8d38, a
+	cp (0x8d38:16), a
 	jr nz, SeqDemo_SaveCurrentState
 	ld (0x8d37:16), a
 
@@ -2785,7 +2785,7 @@ MainTitleCtrl_CheckSecondTimer:
 	ld (0x0274ae:24), wa
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
-	cpw_da (0x274ac), 0
+	cpw (0x274ac:24), 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
 	set 0, (0x8f5c:16)
 	jr MainTitleCtrl_SetIndicator60
@@ -2901,7 +2901,7 @@ UI_PostTimerResetEvent:
 
 SeqState_HasModeChanged:
 	ld a, (0x8d36:16)
-	cpda8 a, 0x8d38
+	cp a, (0x8d38:16)
 	scc16 nz, hl
 	ret
 
@@ -3857,7 +3857,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
-	cpw_da (0x3ef50), 0
+	cpw (0x3ef50:24), 0
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive

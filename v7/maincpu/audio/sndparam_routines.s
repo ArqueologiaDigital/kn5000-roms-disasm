@@ -1293,7 +1293,7 @@ SndParam_Widget1_CallType3:
 	inc	1, (1076:16)
 	inc	1, (1077:16)
 	ld	a, (1077:16)
-	cpda8	a, 13371
+	cp	a, (13371:16)
 	jr	ule, 5
 	ld	(1077:16), 0
 	ld	a, (1045:16)
@@ -1319,7 +1319,7 @@ SndParam_Widget1_CallType3:
 	ld	a, (1051:16)
 	.byte 0xf1, 0x31, 0x04, 0xc8
 	jr	z, 28
-	cpda8	a, 1071
+	cp	a, (1071:16)
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb0
 	ld	(1054:16), 1
@@ -1329,7 +1329,7 @@ SndParam_Widget1_CallType3:
 	calr	643
 	.byte 0xf1, 0x31, 0x04, 0xcb
 	jr	z, 28
-	cpda8	a, 1072
+	cp	a, (1072:16)
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb3
 	ld	(1054:16), 8

@@ -328,7 +328,7 @@ EffectMode_CheckTransposeChanged:
 	bit 7, hl
 	jr nz, EffectMode_TransposeInvalid
 	calr SndParam_LoadTransposeValues
-	cpda16 xhl, 0x8d58
+	cp hl, (0x8d58:16)
 	ret z
 	ld (0x8d58:16), hl
 	jrl BitMapOut_ApplyPatch_SkipHeader
@@ -1494,21 +1494,21 @@ Test_Video_RAM_IC207:
 	call (xhl)
 	ldw (0x1a0000:24), 0x5a5a; VRAM self-test pattern 1
 	calr DramTest_Loop
-	cpw_da (0x1a0000), 0x5a5a
+	cpw (0x1a0000:24), 0x5a5a
 	jr z, VramTest_Pattern2
 	setm 3, (xsp)
 
 VramTest_Pattern2:
 	ldw (0x1a0004:24), 0xa5a5; VRAM self-test pattern 2
 	calr DramTest_Loop
-	cpw_da (0x1a0004), 0xa5a5
+	cpw (0x1a0004:24), 0xa5a5
 	jr z, VramTest_Pattern3
 	setm 3, (xsp)
 
 VramTest_Pattern3:
 	ldw (0x1a0008:24), 0x5a5a
 	calr DramTest_Loop
-	cpw_da (0x1a0008), 0x5a5a
+	cpw (0x1a0008:24), 0x5a5a
 	jr z, VramTest_Done
 	setm 3, (xsp)
 
@@ -2009,7 +2009,7 @@ EffectMode_ByteData_DiagEvents:
 	pop qiz
 	ret
 	ld	a, (0x8d37:16)
-	cpda8 xbc, (36150)
+	cp a, (36150:16)
 	ret	z
 	ld	xwa, 0x4002
 	ldw	bc, 128
@@ -2031,7 +2031,7 @@ Voice_EmitNoteWithVelocity:
 
 EffectMode_ModeChangeTransition:
 	ld a, (0x8d37:16)
-	cpda8 a, 0x8d36
+	cp a, (0x8d36:16)
 	jrl z, EffectMode_MidiParseLoop
 	calr EffectMode_SetAllLEDs
 	push xde
@@ -2275,7 +2275,7 @@ BitmapFinpic_ByteData:
 	cps	hl, 0
 	ret	z
 	ld	a, (0xc080:16)
-	cpda8 xbc, (36154)
+	cp a, (36154:16)
 	ret	nz
 	.byte 0xc1
 	jrl	pl, 0x3fc0
@@ -2408,7 +2408,7 @@ SystemInitOkFunc:
 	call SendEvent
 	exts xhl
 	stl_da (0x0340de), xhl
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr nz, SystemInitOk_PostEvent
 	ld xwa, 0x142000a
 	ld xbc, 0x1e20013
@@ -5257,7 +5257,7 @@ MstStyle2_PageInc_CountAdj:
 	sla wa, 1
 	dec 2, wa
 	ld (0x0340be:24), wa
-	cpdm16_24 (0x340bc), xwa
+	cp (0x340bc:24), wa
 	jr le, MstStyle2_DialUp_UpdateAndPost
 	ld xwa, (xiy)
 	ld wa, (xwa)
@@ -5584,7 +5584,7 @@ MstStyle2_DialScrollUp_NextPage:
 	ld xwa, (xbc + 78)
 	ld wa, (xwa)
 	ld (0x0340be:24), wa
-	cpdm16_24 (0x340bc), xwa
+	cp (0x340bc:24), wa
 	jrl ge, MstStyle2_DialScroll_AutoInc
 	ld xwa, (xix)
 	incw 1, (xwa)
@@ -8184,7 +8184,7 @@ PmemPageCtl_OK_PageSwitch:
 	jr SeqLoad_PostEvent
 
 PmemPageCtl_OK_AdvanceTo2:
-	cpib_da (0x0340e2), 0x01
+	cp (0x0340e2:24), 0x01
 	jr nz, PmemPageCtl_OK_ResetTo1
 	ld (0x0340e2:24), 0x02
 	ld xwa, 0x45000d
@@ -8227,7 +8227,7 @@ SeqLoad_PostEvent:
 	jr SeqLoad_ReturnZeroJmp2
 
 PmemPageCtl_OK_RotateReverse:
-	cpib_da (0x0340e2), 0x01
+	cp (0x0340e2:24), 0x01
 	jr nz, PmemPageCtl_OK_RotatePost
 	decm 1, (xwa)
 	ld xwa, 0x45000d
@@ -8387,7 +8387,7 @@ PmExpFilter_Repaint:
 	ld xde, ParamStr02_Vocalist_0x20
 	call DrawString
 	ld (xsp + 10), 0x0
-	cpib_da (0x0340e2), 0x01
+	cp (0x0340e2:24), 0x01
 	jrl nz, PmExpFilter_DrawCellBank2
 
 PmExpFilter_DrawCellBank1:
@@ -8542,7 +8542,7 @@ PmExpFilter_DrawCentered:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	cpib_da (0x0340e2), 0x02
+	cp (0x0340e2:24), 0x02
 	jr nz, PmExpFilter_DecAndUpdate
 	cps hl, 2
 	jr nz, PmExpFilter_DecAndUpdate
@@ -9969,7 +9969,7 @@ NormScreenProc:
 NormScreen_InitHandler:
 	ld xwa, xiz
 	call GetViewInstance
-	cpib_da (0x0340e6), 0x00
+	cp (0x0340e6:24), 0x00
 	jr z, NormScreen_ClearBit
 	ld a, (0x8d88:16)
 	extz wa

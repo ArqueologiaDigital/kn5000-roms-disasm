@@ -872,7 +872,7 @@ SeqNodeInsert_UnmarkAndCount:
 	andmi8 (xhl), 0x7f
 	ld (xhl + 5), 0x82
 	inc 1, wa
-	cpda16 xwa, 3302
+	cp wa, (3302:16)
 	jr nz, SeqNodeInsert_TraverseNext
 	dec 1, wa
 

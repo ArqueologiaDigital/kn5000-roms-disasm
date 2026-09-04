@@ -531,7 +531,7 @@ CPanel_ButtonPollLoop:
 	ldb w, 0xc	; Third mode if bit 6 set
 
 CPanel_EncoderCheck:
-	cpdm8 0x8e6a, w
+	cp (0x8e6a:16), w
 	ld (0x8e6a:16), w
 	jr nz, CPanel_ButtonPollLoop
 	ld (0x8e6a:16), w
@@ -624,7 +624,7 @@ CPanel_WaitTXReady_BufferCheck:
 	; Only reaches here when CP_Flags_A.10 == 00, and I think only CPanel_SM_Idle sets that value...
 
 	ld wa, (0x8dff:16)
-	cpda16 xwa, 0x8dfd
+	cp wa, (0x8dfd:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 
 WaitTX_ConfigAndReturn:

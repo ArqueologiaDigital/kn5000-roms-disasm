@@ -635,7 +635,7 @@ PcgOutCheck_SendPreset1:
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset2:
-	cpib_da (0x024770), 0xff
+	cp (0x024770:24), 0xff
 	jr nz, PcgOutCheck_SendPreset2Named
 	pushw 0xe7
 	pushw 0xffaa
@@ -696,7 +696,7 @@ PcgOutCheck_SendPreset2Named:
 
 PcgOutCheck_SendPreset3:
 	ldw (xwa), 0x2
-	cpib_da (0x024770), 0xff
+	cp (0x024770:24), 0xff
 	jr nz, PcgOutCheck_SendPreset3Named
 	pushw 0xe7
 	pushw 0xffc6

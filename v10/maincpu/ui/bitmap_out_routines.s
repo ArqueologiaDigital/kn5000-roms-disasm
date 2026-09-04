@@ -3945,7 +3945,7 @@ BitMapOut_ApplyPatch_Loop:
 	inc 1, iz
 	inc1b_erp 0xfb
 	stb_erp A, 0xfb
-	cpda8 a, 0x8d5c
+	cp a, (0x8d5c:16)
 	jr c, BitMapOut_ApplyPatch_Loop
 
 BitMapOut_ApplyPatch_Store:

@@ -497,7 +497,7 @@ Rhythm_Transp_CheckZero:
 
 Rhythm_Transp_Apply:
 	dec	1, a
-	cpda8	xbc, (12847)
+	cp	a, (12847:16)
 	jr	ugt, 12	; -> 0xF54D83
 	add	w, a
 	bit	7, w
@@ -866,7 +866,7 @@ Rhythm_ValidateAndSend:
 	ld (0x3387:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3386:16)
-	cpdm8	13192, a
+	cp	(13192:16), a
 	jr	nz, 5
 	calr	6
 	jr	3
@@ -1127,7 +1127,7 @@ Rhythm_AdvanceTick:
 	jr c, Rhythm_AdvanceTick_Store
 	sub A,0x60
 	inc 1,W
-	cpda8 w, (0x0458)
+	cp w, (0x0458:16)
 	jr c, Rhythm_AdvanceTick_Store
 	xor W,W
 Rhythm_AdvanceTick_Store:

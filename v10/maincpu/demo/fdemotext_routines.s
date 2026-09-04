@@ -343,7 +343,7 @@ FDemoText_UpdateVoiceDisplay_CheckSend:
 	and a, 0x38
 	jr nz, FDemoText_UpdateVoiceDisplay_Done
 	ld c, (0xfc26:16)
-	cpdm8 0xfc74, c
+	cp (0xfc74:16), c
 	jr z, FDemoText_UpdateVoiceDisplay_Done
 	extz bc
 	ldw wa, 0x61
@@ -503,7 +503,7 @@ FDemoText_CheckTimer_Done:
 FDemoText_ParseControlMessage:
 	lda xbc, (0x020c33:24)
 	ld a, (xbc + 1)
-	cpda8 a, 0x8d3a
+	cp a, (0x8d3a:16)
 	ret nz
 	cp (0x8d38:16), 234
 	ret nz

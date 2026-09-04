@@ -7445,7 +7445,7 @@ SeMenu_PopupDialog_Close:
 
 SeMenu_PopupDialog_Close_Data:
 	ld a, (0x8d38:16)
-	cpdm8_24 (0x020c38), a
+	cp (0x020c38:24), a
 	jr nz, SeMenu_ValueEditor_Init
 	cp a, 0x20
 	jr c, SeMenu_ValueEditor_Init
@@ -7461,7 +7461,7 @@ SeMenu_PopupDialog_Close_Data:
 SeMenu_ValueEditor_Init:
 	cp (0x8d38:16), 32
 	jrl nz, SeMenu_ValueEditor_Data3
-	cpib_da (0x020c38), 0x10
+	cp (0x020c38:24), 0x10
 	jrl nz, SeMenu_ValueEditor_Data3
 	calr SeMenu_NameEditor_Init
 	jrl SeMenu_ListSelector_ScrollDown

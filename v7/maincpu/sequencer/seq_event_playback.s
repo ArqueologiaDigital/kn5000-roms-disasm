@@ -79,7 +79,7 @@ SeqEvt_ReadAndDispatchEntry:
 	ld	(32117:16), ix
 	calr	826
 	ld	(32115:16), ix
-	cpda8	a, 1132
+	cp	a, (1132:16)
 	jr	ule, 4
 	jp	16189567
 SeqEvt_DispatchByChannel:
@@ -234,7 +234,7 @@ SeqEvt_AdjustNoteOctave:
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	cpda16	xwa, (32098)
+	cp	wa, (32098:16)
 	jr	nc, 4	; -> 0xF709D3
 	ld	(32098:16), wa
 SeqEvt_WriteRemainingParams:
@@ -335,7 +335,7 @@ SeqEvt_SaveReadPosAndRet:
 	ret
 SeqEvt_CalcTempoOffset:
 	subda8 a, (0x046c)
-	cpda8 a, (0x7d61)
+	cp a, (0x7d61:16)
 	jr nc, .Lc_f70aef
 	ld (0x7d61:16), a
 SeqEvt_UpdateMinTempo:

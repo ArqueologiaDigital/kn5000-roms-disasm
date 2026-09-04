@@ -624,7 +624,7 @@ HamaStub3_Entry:
 	ret
 
 CallExtIfActive_Entry:
-	cpib_da (0x03dd04), 0x00
+	cp (0x03dd04:24), 0x00
 	ret z
 	ld xhl, 0x280010
 	call (xhl)
@@ -646,7 +646,7 @@ LoadAndRunXapr_ClearFlag:
 	ld (0x03dd04:24), 0x00
 
 LoadAndRunXapr_CallIfActive:
-	cpib_da (0x03dd04), 0x00
+	cp (0x03dd04:24), 0x00
 	ret z
 	ld xhl, 0x280008
 	lda xwa, (0x027ed2:24)

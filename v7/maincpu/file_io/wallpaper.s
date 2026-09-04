@@ -132,7 +132,7 @@ WPLoad_HandleScroll:
 	jr	nz, 15	; -> 0xF8E70E
 	ld	wa, hl
 	inc	1, wa
-	cpda16	xwa, (33902)
+	cp	wa, (33902:16)
 	jrl	ge, 238	; -> 0xF8E7F8
 	inc	1, hl
 	jr	71	; -> 0xF8E755

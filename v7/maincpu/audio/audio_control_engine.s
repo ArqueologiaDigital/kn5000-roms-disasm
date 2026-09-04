@@ -351,7 +351,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	a, (xiz+3)
 	.byte 0x8e	; v10 does not spell this byte either
 	push	sr
-	cpda8	xbc, (16486)
+	cp	a, (16486:16)
 	pop	xiy
 	.byte 0x90	; v10 does not spell this byte either
 	.byte 0xb9	; v10 does not spell this byte either
@@ -1193,14 +1193,14 @@ Audio_IncrementUpdateCounter:
 	ret
 Audio_CheckAndFlagChanges:
 	call GetDialEnableState
-	cpda8 l, (0x8ec2)
+	cp l, (0x8ec2:16)
 	jr z, .Lc_fc6934
 	ordi16 (0x8ea6), 0x0040
 	ld (0x8ec2:16), l
 AudioChange_CheckSelectionState:
 .Lc_fc6934:
 	call CtrlPanel_GetSelectionState
-	cpda8 l, (0x8ec4)
+	cp l, (0x8ec4:16)
 	ret Z
 	cps l, 2
 	jr nz, .Lc_fc6948
@@ -3573,7 +3573,7 @@ ExtData_ToneParam_AltBody:
 	cp	(xbc), e
 	jr	nz, 8
 	ld	a, (xhl)
-	cpda8	a, 37013
+	cp	a, (37013:16)
 	jr	z, 40
 	ld	(xbc), e
 	.byte 0xb3, 0x14, 0x95, 0x90, 0x81, 0x19, 0x8d, 0x90
@@ -3725,7 +3725,7 @@ ExtData_ToneParam_MultiChannel:
 	extz	wa
 	extz	bc
 	add	bc, wa
-	cpda16 xbc, (37063)
+	cp bc, (37063:16)
 	ret	z
 	.byte 0xf1, 0x5d, 0x90, 0xb8
 	ret

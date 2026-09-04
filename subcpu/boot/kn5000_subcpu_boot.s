@@ -742,7 +742,7 @@ RESET_ENTRY:
 
 TONE_GEN_CHANNEL_INIT:
 	pushw_erp 0xFA	; Save QIZ (QIZH used as loop counter)
-	cpw_da (16776942), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
+	cpw (16776942:24), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
 	jr nz, TONE_GEN_CHANNEL_INIT__done	; Skip if memory not 0xFFFF (already initialized)
 	ldib_erp 0xFB, 0	; Clear loop counter (QIZH = 0)
 TONE_GEN_CHANNEL_INIT__loop:

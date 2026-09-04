@@ -269,7 +269,7 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 
 PrevBank_RegHelper:
 	push qiz
-	cpib_da	16776942, 255
+	cp	(16776942:24), 255
 	jr	nz, 36
 	ldib_erp	251, 0
 	stb_erp	a, 251
@@ -745,7 +745,7 @@ TaskSched_Dispatch:
 	or wa, wa
 	jr nz, TaskSched_ContextRestore
 	xor wa, wa
-	cpdm16 4166, xwa
+	cp (4166:16), wa
 	jr z, TaskSched_Dispatch_ScanQueues
 	ld iy, (4166:16)
 	extz xiy
@@ -1937,7 +1937,7 @@ RingBuf_Access_Opaque_A:
 Timer_Delay_Ticks:
 	srl	wa, 1
 	addda16	xwa, (4160)
-	cpda16	xwa, (4160)
+	cp	wa, (4160:16)
 	jr	gt, -6
 	ret
 
@@ -1991,7 +1991,7 @@ FIFO1K_Put_Block:
 ; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
 FIFO1K_Is_Empty:
 	ld	hl, (265258:24)
-	cpda16_24	xhl, (265254)
+	cp	hl, (265254:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -2076,7 +2076,7 @@ FIFO256_Put_Block:
 ; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
 FIFO256_Is_Empty:
 	ld	hl, (266292:24)
-	cpda16_24	xhl, (266288)
+	cp	hl, (266288:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -2158,7 +2158,7 @@ FIFO512_Put_Block:
 ; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
 FIFO512_Is_Empty:
 	ld	hl, (266558:24)
-	cpda16_24	xhl, (266554)
+	cp	hl, (266554:24)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -2927,7 +2927,7 @@ Cmd_Check_DMA_Timeout:	; 020FD9h
 	bit_dd8 1, 0x34	; SSTAT1 - test own status: if set, no DMA transfer in progress
 	jr nz, Cmd_DMA_Idle
 	ldc_16_cr wa, 0x40	; Get current DMA byte count
-	cpdm16 61468, xwa	; Compare with previous
+	cp (61468:16), wa	; Compare with previous
 	jr nz, Cmd_DMA_Reset_Counter
 	incw 1, (61466:16)	; Increment stuck counter
 	jr Cmd_DMA_Save_Count
@@ -10600,7 +10600,7 @@ Voice_OpSlot_WriteParams:
 	jr z, Voice_OpSlot_WriteParams_Direct
 	cps e, 0
 	jr nz, Voice_OpSlot_WriteParams_Direct
-	cpib_da 0x0451a7, 0xf5
+	cp (0x0451a7:24), 0xf5
 	jr z, Voice_OpSlot_WriteParams_Direct
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 104)
@@ -15484,7 +15484,7 @@ Pitch_Bend_Ramp_Tick_ZeroPitch:
 ; Termination test: return unless the offset word 0x04135A is now zero; when it is, clear
 ; bits 13..15 of 0x041343, reset the step index 0x04135C and raise bit 10 one last time.
 Pitch_Bend_Ramp_Tick_CheckCounter:
-	cpw_da 267098, 0
+	cpw (267098:24), 0
 	ret nz
 	anddi16_24 267075, 8191
 	ldw (0x04135c:24), 0x0000
@@ -15553,10 +15553,10 @@ Voice_InitVoiceState:
 Voice_TickNoteDecay:
 	lda xsp, (xsp - 14)
 	pushw_erp 0xFA
-	cpib_da 0x04135e, 0x00
+	cp (0x04135e:24), 0x00
 	jr z, Voice_TickNoteDecay_Done
 	dec 1, (267103:24)
-	cpib_da 0x04135f, 0x00
+	cp (0x04135f:24), 0x00
 	jr nz, Voice_TickNoteDecay_Done
 	lda xwa, (xsp + 2)
 	call Voice_SetPanning
@@ -18528,7 +18528,7 @@ Voice_SetKeyShiftRange:
 	extz xwa
 	and xwa, 0xFFFF2FFF
 	set 13, wa
-	cpw_da 267100, 20
+	cpw (267100:24), 20
 	jr ule, Voice_SetKeyShiftRange_BranchA
 	set 15, wa
 	jr Voice_SetKeyShiftRange_BranchB
@@ -33282,7 +33282,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 
 ; After all four slots: the 0x0451A7 pair, skipped entirely when 0x0451A7 == 0xF5.
 DSP_AdjustVoiceParams_Vibrato:
-	cpib_da 0x0451a7, 0xf5
+	cp (0x0451a7:24), 0xf5
 	jr z, DSP_AdjustVoiceParams_Filter
 	ld a, (0x0451a7:24)
 	sla a, 1
@@ -40217,7 +40217,7 @@ Voice_ProgChange_TableData:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
-	cpib_da	0x0451a7, 0xf5	; cp (0x0451a7),0xf5
+	cp	(0x0451a7:24), 0xf5	; cp (0x0451a7),0xf5
 	jr	z, LABEL_034590
 	lds	iz, 0
 	cps	iz, 4
@@ -40338,7 +40338,7 @@ DSP_SlotParam_Write_Slot0:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot0_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot0_Path
 	extz wa
 	muls wa, 0x11F
@@ -40366,7 +40366,7 @@ DSP_SlotParam_Write_Slot1:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot1_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot1_Path
 	extz wa
 	muls wa, 0x11F
@@ -40394,7 +40394,7 @@ DSP_SlotParam_Write_Slot2:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot2_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot2_Path
 	extz wa
 	muls wa, 0x11F
@@ -40422,7 +40422,7 @@ DSP_SlotParam_Write_Slot3:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot3_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot3_Path
 	extz wa
 	muls wa, 0x11F
@@ -40450,7 +40450,7 @@ DSP_SlotParam_Write_Slot4:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 0, bc
 	jr z, DSP_SlotParam_Write_Slot4_Path
-	cpdm8_24 283044, a
+	cp (283044:24), a
 	jr nz, DSP_SlotParam_Write_Slot4_Path
 	extz wa
 	muls wa, 0x11F
@@ -41142,7 +41142,7 @@ Audio_Process_Init_Data:
 ; Note the toggle is an XOR with 0xFF, not an increment, so the alternation only holds while
 ; nothing else writes 0x041342.  DSP_System_Init sets it back to 0.
 Audio_Process_Init:
-	cpib_da 0x041342, 0x00
+	cp (0x041342:24), 0x00
 	jr nz, Audio_Process_Init_BranchA
 	call Audio_Tick_ServiceVoices_A
 	call DSP_SlotState_DisplayRestore
@@ -42311,7 +42311,7 @@ DSP_VelocityToVolume:
 ; `c2 77 13 04 21`, and both toolchains reproduce it. See [UNCERTAIN].
 DSP_GetEffectRouting:
 	lds hl, 0
-	cpib_da 0x041377, 0x00
+	cp (0x041377:24), 0x00
 	jr z, DSP_GetEffectRouting_Path
 	ld a, (0x041377:24)
 	extz wa
@@ -42320,7 +42320,7 @@ DSP_GetEffectRouting:
 
 ; Second half of the above: the low-byte send, gated on 0x04137A.
 DSP_GetEffectRouting_Path:
-	cpib_da 0x04137a, 0x00
+	cp (0x04137a:24), 0x00
 	ret z
 	ld a, (0x041377:24)
 	extz wa
@@ -42786,7 +42786,7 @@ Audio_CmdHandler_60_7F:
 CmdHandler60_StreamSizeA:
 	ld wa, (17546:16)
 	add wa, de
-	cpda16 xwa, 17544
+	cp wa, (17544:16)
 	jr nc, CmdHandler60_StreamSizeB
 	adddm16 17546, xde
 	incw 1, (17548:16)
@@ -44254,14 +44254,14 @@ DSP_WaitForDelay:
 	srl xwa, 1
 	addda32 xwa, 4160
 	ld xiz, xwa
-	cpdm32 4160, xiz
+	cp (4160:16), xiz
 	jr nc, DSP_WaitForTaskSlot_Epilogue
 
 ; TaskSched_PreemptiveYield(3); re-test.
 DSP_WaitForTaskSlot_Loop:
 	lds wa, 3
 	call TaskSched_PreemptiveYield
-	cpdm32 4160, xiz
+	cp (4160:16), xiz
 	jr c, DSP_WaitForTaskSlot_Loop
 
 ; pop; ret.
@@ -46556,7 +46556,7 @@ DSP_StateTable_Reset:
 ; [UNCERTAIN].
 DSP_AlgoChange_CheckAndFlag:
 	ld bc, (xwa + 6)
-	cpda16 xbc, 17872
+	cp bc, (17872:16)
 	jr nz, DSP_AlgoChange_NoChange
 	cpw (xwa + 2), 0x1
 	jr z, DSP_AlgoChange_NoChange

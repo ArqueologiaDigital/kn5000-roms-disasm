@@ -8865,7 +8865,7 @@ MIDI_SendChannelPressure:
 	jr	nz, 5
 	ld	xwa, xiz
 	calr	7010
-	cpdm32	59681, xiz
+	cp	(59681:16), xiz
 	jr	ugt, 79
 	calr	8126
 	ld	wa, hl
@@ -10953,7 +10953,7 @@ SoundParam_InitDefaultBanks:
 .Lc_feda3e:
 	ret
 	ld wa, (0xd812:16)
-	cpda16 xwa, 0xd814
+	cp wa, (0xd814:16)
 	jr nz, .Lc_feda4e
 	ldw HL, 0xffff
 	jr t, .Lc_feda76
@@ -13294,9 +13294,9 @@ TmFlash_WriteRoutine:
 	ld	xwa, xbc
 	inc	6, xwa
 	add	xwa, xhl
-	cpda32_24	xix, (251180)
+	cp	xix, (251180:24)
 	jr	nz, 49
-	cpda32_24	xwa, (251180)
+	cp	xwa, (251180:24)
 	jr	nz, 24
 	ld	xwa, (251180:24)
 	ld	xwa, (xwa)
@@ -13583,7 +13583,7 @@ Free_LoadReg:
 	jr	nz, 6
 	ld	xhl, (251176:24)
 	ret
-	cpdm32_24	(251176), xwa
+	cp	(251176:24), xwa
 Free_Block2:
 	jr	nc, 6
 	ld	xhl, 4294967295

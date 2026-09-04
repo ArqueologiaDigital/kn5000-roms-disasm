@@ -111,7 +111,7 @@ SeqName_CheckDiskAvail:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, SeqName_LoadAndPlay
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SeqName_LoadAndPlay
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -367,7 +367,7 @@ IntMed_CheckPlaying:
 	jrl nz, IntMed_HandleError
 	ld (0x84fe:16), 1
 	ld a, (0x889c:16)
-	cpda8 a, 0x889a
+	cp a, (0x889a:16)
 	jr nc, IntMed_CheckRepeat
 	lds iz, 0
 	lda xbc, (0x8890:16)
@@ -863,7 +863,7 @@ DiskMed_PlayNextHelper:
 	cp (0x84fe:16), 0
 	jrl z, DiskMed_ReturnZero
 	ld a, (0x889c:16)
-	cpda8 a, 0x889a
+	cp a, (0x889a:16)
 	jr nc, DiskMed_ReturnFinished
 	lds iz, 0
 	lda xbc, (0x8890:16)
@@ -940,7 +940,7 @@ DiskMed_FindFirstSong:
 	extz xwa
 	add xwa, xhl
 	ld a, (xwa)
-	cpda8 a, 0x889c
+	cp a, (0x889c:16)
 	jr nz, DiskMed_NextFirst
 	stb_erp A, 0xf8
 	extz wa
@@ -967,7 +967,7 @@ DiskMed_FindFirstLoop:
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	cpda8 a, 0x889c
+	cp a, (0x889c:16)
 	jr nz, DiskMed_NextFindFirst
 	stb_erp A, 0xf8
 	extz wa
@@ -1113,7 +1113,7 @@ DiskSel_CheckFinished:
 	lds32 xde, 0
 	call ApPostEvent
 	ld a, (0x893c:16)
-	cpda8 a, 0x893a
+	cp a, (0x893a:16)
 	jrl nc, DiskSel_CheckRepeat
 	lds iz, 0
 
@@ -1129,7 +1129,7 @@ DiskSel_ClearSelections:
 DiskSel_FindSongLoop:
 	lda xwa, (0x8926:16)
 	ldb_sri A, 0x07, 0xe0, 0xf8
-	cpda8 a, 0x893c
+	cp a, (0x893c:16)
 	jrl nz, DiskSel_NextSongLoop
 	ld (0x83de:16), iz
 	ld wa, iz
@@ -1241,7 +1241,7 @@ DiskSel_RepeatClear:
 DiskSel_RepeatFindLoop:
 	lda xwa, (0x8926:16)
 	ldb_sri A, 0x07, 0xe0, 0xf8
-	cpda8 a, 0x893c
+	cp a, (0x893c:16)
 	jrl nz, DiskSel_RepeatNext
 	ld (0x83de:16), iz
 	ld wa, iz
@@ -1645,7 +1645,7 @@ DiskSel_PlayClearLoop:
 DiskSel_PlayFindLoop:
 	lda xwa, (0x8926:16)
 	ldb_sri A, 0x07, 0xe0, 0xf8
-	cpda8 a, 0x893c
+	cp a, (0x893c:16)
 	jrl nz, DiskSel_PlayNextLoop
 	ld (0x83de:16), iz
 	ld wa, iz
@@ -1798,7 +1798,7 @@ NavSong_CheckBounds:
 	jr NavSong_CheckEnd
 
 NavSong_WrapToEnd:
-	cpda16 xiz, 0x8504
+	cp iz, (0x8504:16)
 	jr lt, NavSong_CheckEnd
 	lds iz, 0
 
@@ -1838,7 +1838,7 @@ NavDoc_CheckBounds:
 	jr NavDoc_CheckEnd
 
 NavDoc_WrapToEnd:
-	cpda16 xwa, 0x8508
+	cp wa, (0x8508:16)
 	jr lt, NavDoc_CheckEnd
 	lds wa, 0
 
@@ -1873,7 +1873,7 @@ NavPd_CheckBounds:
 	jr NavPd_CheckEnd
 
 NavPd_WrapToEnd:
-	cpda16 xwa, 0x8506
+	cp wa, (0x8506:16)
 	jr lt, NavPd_CheckEnd
 	lds wa, 0
 
@@ -2069,7 +2069,7 @@ SmfMed_ShowPlayError:
 SmfMed_SetPlaying:
 	ld (0x84fe:16), 1
 	ld a, (0x8922:16)
-	cpda8 a, 0x8920
+	cp a, (0x8920:16)
 	jr nc, SmfMed_CheckRepeat
 	lds iz, 0
 	ld bc, (0x8438:16)
@@ -2110,7 +2110,7 @@ SmfMed_NextSong:
 SmfMed_CheckRepeat:
 	cp (0x8924:16), 0
 	jr z, SmfMed_ClearRepeatCount
-	cpdm8 0x843c, a
+	cp (0x843c:16), a
 	jr nc, SmfMed_ClearRepeatCount
 	ld (0x8922:16), 0
 	ld (0x843c:16), 0
@@ -2215,7 +2215,7 @@ SmfMed_ClearSlotsLoop:
 	add xbc, xwa
 	ld (xbc), 0xff
 	inc 1, iz
-	cpda16 xiz, 0x8438
+	cp iz, (0x8438:16)
 	jr c, SmfMed_ClearSlotsLoop
 
 SmfMed_FinishInit:
@@ -2290,7 +2290,7 @@ SmfMed_AssignOrderLoop:
 
 SmfMed_NextAssign:
 	inc 1, iz
-	cpda16 xiz, 0x8438
+	cp iz, (0x8438:16)
 	jr c, SmfMed_AssignOrderLoop
 	jr SmfMed_RefreshAfterToggle
 
@@ -2312,7 +2312,7 @@ SmfMed_UnmarkLoop:
 
 SmfMed_NextUnmark:
 	inc 1, iz
-	cpda16 xiz, 0x8438
+	cp iz, (0x8438:16)
 	jr c, SmfMed_UnmarkLoop
 
 SmfMed_RefreshAfterToggle:
@@ -2579,7 +2579,7 @@ PdName_HandleNavigation:
 	jr nz, PdName_CheckPrevKey
 	ld bc, wa
 	inc 1, bc
-	cpda16 xbc, 0x8506
+	cp bc, (0x8506:16)
 	jr ge, PdName_GetCurrentIndex
 	inc 1, wa
 	jr PdName_SaveIndex
@@ -2853,7 +2853,7 @@ PdMed_CheckPlayMode:
 	ld (0x84fe:16), 1
 	ld c, (0x8922:16)
 	lda xwa, (0x88a0:16)
-	cpda8 c, 0x8920
+	cp c, (0x8920:16)
 	jr nc, PdMed_CheckRepeat
 	lds hl, 0
 	ld de, (0x849c:16)
@@ -2987,7 +2987,7 @@ PdMed_ClearSlotsLoop:
 	add xbc, xwa
 	ld (xbc), 0xff
 	inc 1, hl
-	cpda16 xhl, 0x849c
+	cp hl, (0x849c:16)
 	jr c, PdMed_ClearSlotsLoop
 
 PdMed_FinishInit:
@@ -3057,7 +3057,7 @@ PdMed_AssignOrderLoop:
 
 PdMed_NextAssign:
 	inc 1, hl
-	cpda16 xhl, 0x849c
+	cp hl, (0x849c:16)
 	jr c, PdMed_AssignOrderLoop
 	jr PdMed_RefreshAfterToggle
 
@@ -3079,7 +3079,7 @@ PdMed_UnmarkLoop:
 
 PdMed_NextUnmark:
 	inc 1, hl
-	cpda16 xhl, 0x849c
+	cp hl, (0x849c:16)
 	jr c, PdMed_UnmarkLoop
 
 PdMed_RefreshAfterToggle:
@@ -3386,7 +3386,7 @@ DocName_HandleNavigation:
 	jr nz, DocName_CheckPrevKey
 	ld bc, wa
 	inc 1, bc
-	cpda16 xbc, 0x8508
+	cp bc, (0x8508:16)
 	jr ge, DocName_GetCurrentIndex
 	inc 1, wa
 	jr DocName_SaveIndex
@@ -3660,7 +3660,7 @@ DocMed_CheckPlayMode:
 	ld (0x84fe:16), 1
 	ld c, (0x8922:16)
 	lda xwa, (0x88a0:16)
-	cpda8 c, 0x8920
+	cp c, (0x8920:16)
 	jr nc, DocMed_CheckRepeat
 	lds hl, 0
 	ld de, (0x84fc:16)
@@ -3799,7 +3799,7 @@ DocMed_ClearSlotsLoop:
 	add xbc, xwa
 	ld (xbc), 0xff
 	inc 1, hl
-	cpda16 xhl, 0x84fc
+	cp hl, (0x84fc:16)
 	jr c, DocMed_ClearSlotsLoop
 
 DocMed_FinishInit:
@@ -3869,7 +3869,7 @@ DocMed_AssignOrderLoop:
 
 DocMed_NextAssign:
 	inc 1, hl
-	cpda16 xhl, 0x84fc
+	cp hl, (0x84fc:16)
 	jr c, DocMed_AssignOrderLoop
 	jr DocMed_RefreshAfterToggle
 
@@ -3891,7 +3891,7 @@ DocMed_UnmarkLoop:
 
 DocMed_NextUnmark:
 	inc 1, hl
-	cpda16 xhl, 0x84fc
+	cp hl, (0x84fc:16)
 	jr c, DocMed_UnmarkLoop
 
 DocMed_RefreshAfterToggle:
@@ -4351,7 +4351,7 @@ WakeUp_HandleOk:
 	cp xwa, 0x8c
 	jr nz, WakeUp_ClearCounter
 	inc 1, (0x02741a:24)
-	cpib_da (0x02741a), 0x07
+	cp (0x02741a:24), 0x07
 	jr nz, WakeUp_ReturnZero
 	ld (0x02741a:24), 0x00
 	ld xwa, 0xffffffff

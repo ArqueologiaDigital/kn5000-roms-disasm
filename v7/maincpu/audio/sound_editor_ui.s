@@ -5891,7 +5891,7 @@ SeMenu_PopupDialog_Close:
 
 SeMenu_PopupDialog_Close_Data:
 	ld	a, (35996:16)
-	cpdm8_24	(134200), xbc
+	cp	(134200:24), a
 	jr	nz, 30	; -> 0xF0E9F0
 	cp	a, 32
 	jr	c, 25	; -> 0xF0E9F0
@@ -5908,7 +5908,7 @@ SeMenu_ValueEditor_Init:
 
 	.byte 0x7e, 0xb5, 0x00	; jrl nz, SeMenu_ValueEditor_Data3 (v7 displacement)
 
-	cpib_da (0x020c38), 0x10
+	cp (0x020c38:24), 0x10
 
 	.byte 0x7e, 0xac, 0x00	; jrl nz, SeMenu_ValueEditor_Data3 (v7 displacement)
 

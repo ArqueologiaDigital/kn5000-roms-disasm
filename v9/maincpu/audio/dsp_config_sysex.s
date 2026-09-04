@@ -991,7 +991,7 @@ PreLswLoad:
 PostLswLoad:
 	cps wa, 0
 	jp_24 lt, Voice_CopyFromScratch
-	cpib_da (0x0340f6), 0x00
+	cp (0x0340f6:24), 0x00
 	call_24 z, VoiceParam_RestoreReverbChorus
 	call ToneGen_DispatchByMode
 	call SwbtWr_NullRet
@@ -1218,7 +1218,7 @@ BitMapOut_CopyRegion_Done:
 	lda xsp, (xsp + 20)
 	cp (4596:16), 1
 	jr nz, BitMapOut_SkipRestore
-	cpib_da (0x0340f7), 0x00
+	cp (0x0340f7:24), 0x00
 	jr nz, BitMapOut_MergeOutputFields
 
 BitMapOut_SkipRestore:
@@ -1889,7 +1889,7 @@ CompIface_PostProcess:
 	ret z
 	ld wa, (1033:16)
 	subda16 xwa, 0xc1ea
-	cpda16 xwa, 0xc1fc
+	cp wa, (0xc1fc:16)
 	ret ule
 	ld xwa, 0x40c1
 	lds bc, 0

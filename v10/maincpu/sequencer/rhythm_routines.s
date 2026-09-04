@@ -204,7 +204,7 @@ RhythmEvt_ProcessNote:
 	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
-	cpdm8 0x3424, a
+	cp (0x3424:16), a
 	jr nz, RhythmEvt_AlternateProcess
 	call RhythmEvt_IterateNoteOn
 	jr RhythmEvt_Return
@@ -529,7 +529,7 @@ Rhythm_Transp_CheckZero:
 
 Rhythm_Transp_Apply:
 	dec 1, a
-	cpda8 a, 0x32cb
+	cp a, (0x32cb:16)
 	jr ugt, Rhythm_Transp_NegativeOctave
 	add w, a
 	bit 7, w
@@ -551,7 +551,7 @@ Rhythm_Transp_WrapCheck:
 	jr c, Rhythm_Transp_FinalCheck
 
 Rhythm_Transp_WrapLoop:
-	cpda8 w, 0x32cc
+	cp w, (0x32cc:16)
 	jr c, Rhythm_Transp_FinalCheck
 	sub w, 0xc
 	jr Rhythm_Transp_WrapLoop
@@ -560,7 +560,7 @@ Rhythm_Transp_FinalCheck:
 	ld a, w
 	bit 0, (0x332d:16)
 	jr z, Rhythm_Transp_Done
-	cpda8 a, 0x332e
+	cp a, (0x332e:16)
 	jr nc, Rhythm_Transp_Done
 	add a, 0xc
 
@@ -930,7 +930,7 @@ Rhythm_ValidateAndSend:
 	ld (0x3423:16), a
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3422:16)
-	cpdm8 0x3424, a
+	cp (0x3424:16), a
 	jr nz, Rhythm_Validate_Mismatch
 	calr Rhythm_MatchedPhrase
 	jr Rhythm_Validate_Done
@@ -1219,7 +1219,7 @@ Rhythm_AdvanceTick:
 	jr c, Rhythm_AdvanceTick_Store
 	sub a, 0x60
 	inc 1, w
-	cpda8 w, 1112
+	cp w, (1112:16)
 	jr c, Rhythm_AdvanceTick_Store
 	xor w, w
 

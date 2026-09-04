@@ -172,7 +172,7 @@ StrFld_ParaList_Font:
 	.byte 0x00			; padding
 	.byte 0xff			; padding
 	.byte 0xb0, 0x6b
-	cpdm32	0, xsp
+	cp	(0:16), xsp
 StrDesc_PsSCTxtBox2:
 	.long StrVal_Empty_PsSCTxtBox2
 StrVal_Empty_PsSCTxtBox2:	aligned_string ""

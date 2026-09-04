@@ -4762,7 +4762,7 @@ MainWallFlash_ReturnZero:
 	ret
 
 WallUsrIniFunc:
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr nz, WallUsrIni_PostBootEvent
 	ld xwa, 0x142000f
 	ld xbc, 0x1e20016

@@ -290,12 +290,12 @@ INT0_HANDLER__return:
 ; --------------------------------------------------------------------------
 INTTC2_HANDLER:
 	res_dd8 2, TRUN
-	cpib_da 0x00F32C, 0x01
+	cp (0x00F32C:24), 0x01
 	jr nz, INTTC2_HANDLER__try2
 	ld (0x00F32C:24), 0x00
 	jr INTTC2_HANDLER__done
 INTTC2_HANDLER__try2:
-	cpib_da 0x00F32C, 0x02
+	cp (0x00F32C:24), 0x02
 	jr nz, INTTC2_HANDLER__done
 	ld (0x00F32C:24), 0x01
 INTTC2_HANDLER__done:

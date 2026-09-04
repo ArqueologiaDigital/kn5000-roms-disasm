@@ -370,7 +370,7 @@ SLSrcBankList_FuncBody:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	cpda8_24 xbc, (15337812)
+	cp a, (15337812:24)
 	jr	nc, 25
 	add	c, l
 	ld	(0x89fc:16), c
@@ -416,7 +416,7 @@ SLSrcBankList_FuncBody:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	cpda8_24 xbc, (15337812)
+	cp a, (15337812:24)
 	jr	nc, 36
 	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	l, e
@@ -765,7 +765,7 @@ SLSrcBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cpda8_24 xbc, (15337846)
+	cp a, (15337846:24)
 	jr	nc, 25
 	add	c, e
 	ld	(0x89fe:16), c
@@ -810,7 +810,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337846)
+	cp a, (15337846:24)
 	jr	nc, 36
 	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	l, e
@@ -969,7 +969,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xwa
 	ld	a, c
 	add	a, c
-	cpdm8	0x8a00, a
+	cp	(0x8a00:16), a
 	jr	c, 49
 	lda	xwa, (0x894e:16)
 	ld	(xwa+21), 1
@@ -1213,7 +1213,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337876)
+	cp a, (15337876:24)
 	jr	nc, 105
 	ld	e, (Str_AllOption_EA0980_0x12:24)
 	ld	a, e
@@ -1703,7 +1703,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cpda8_24 xbc, (15337930)
+	cp a, (15337930:24)
 	jr	nc, 25
 	add	c, e
 	ld	(0x8a02:16), c
@@ -1751,7 +1751,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337930)
+	cp a, (15337930:24)
 	jr	nc, 36
 	ld	e, (Str_AllOption_EA09B2_0x16:24)
 	ld	l, e
@@ -1932,7 +1932,7 @@ SLDstBankList_FuncBody:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	cpda8_24 xbc, (15337936)
+	cp a, (15337936:24)
 	jr	nc, 15
 	inc	1, c
 	ld	(0x8a04:16), c
@@ -2117,7 +2117,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cpda8_24 xbc, (15337966)
+	cp a, (15337966:24)
 	jr	nc, 25
 	add	c, e
 	ld	(0x8a06:16), c
@@ -2165,7 +2165,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24 xbc, (15337966)
+	cp a, (15337966:24)
 	jr	nc, 36
 	ld	e, (Str_AllOption_EA09B2_0x3A:24)
 	ld	l, e
@@ -2343,7 +2343,7 @@ SLDstBankList_FuncBody:
 	lda	xbc, (0x89a2:16)
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
-	cpdm8	0x8a08, l
+	cp	(0x8a08:16), l
 	jr	c, 101
 	ld	c, (0x89f8:16)
 	extz	bc

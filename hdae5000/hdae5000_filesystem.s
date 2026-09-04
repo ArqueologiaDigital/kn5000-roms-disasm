@@ -361,7 +361,7 @@ HDAE5000_FileLBNNameCheck:
 	lda xix, (0x287594:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
 	ld	xiz, xde
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_75c1                       ; [6e 22] jr NZ,0x2875c1
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
@@ -423,7 +423,7 @@ HDAE5000_LBNLswBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287635:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7661                       ; [6e 23] jr NZ,0x287661
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -452,10 +452,10 @@ HDAE5000_LBNLswBitCheck:
 	jrl t, .LFS_7703                       ; [78 88 00] jrl T,0x287703
 	lds32	xhl, 1
 	jrl t, .LFS_7703                       ; [78 83 00] jrl T,0x287703
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7697                       ; [6e 0e] jr NZ,0x287697
 	lds32	xhl, 2
-	cpib_da	(0x22AA4E), 0
+	cp	(0x22AA4E:24), 0
 	jr nz, .LFS_7699                       ; [6e 06] jr NZ,0x287699
 	lds32	xhl, 0
 	jr t, .LFS_7699                        ; [68 02] jr T,0x287699
@@ -463,10 +463,10 @@ HDAE5000_LBNLswBitCheck:
 	lds32	xhl, 0
 .LFS_7699:
 	jr t, .LFS_7703                        ; [68 68] jr T,0x287703
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_76b2                       ; [6e 0e] jr NZ,0x2876b2
 	lds32	xhl, 1
-	cpib_da	(0x22AA4E), 0
+	cp	(0x22AA4E:24), 0
 	jr nz, .LFS_76b4                       ; [6e 06] jr NZ,0x2876b4
 	lds32	xhl, 0
 	jr t, .LFS_76b4                        ; [68 02] jr T,0x2876b4
@@ -479,7 +479,7 @@ HDAE5000_LBNLswBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7703                        ; [68 42] jr T,0x287703
 .LFS_76c1:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_76ec                       ; [6e 22] jr NZ,0x2876ec
 	lda xwa, (0x22aa4c:24)
 	calr	0xdc6e
@@ -522,7 +522,7 @@ HDAE5000_LBNPmtBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x28773f:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_776b                       ; [6e 23] jr NZ,0x28776b
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -551,10 +551,10 @@ HDAE5000_LBNPmtBitCheck:
 	jrl t, .LFS_780d                       ; [78 88 00] jrl T,0x28780d
 	lds32	xhl, 1
 	jrl t, .LFS_780d                       ; [78 83 00] jrl T,0x28780d
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_77a1                       ; [6e 0e] jr NZ,0x2877a1
 	lds32	xhl, 2
-	cpib_da	(0x22AA4F), 0
+	cp	(0x22AA4F:24), 0
 	jr nz, .LFS_77a3                       ; [6e 06] jr NZ,0x2877a3
 	lds32	xhl, 0
 	jr t, .LFS_77a3                        ; [68 02] jr T,0x2877a3
@@ -562,10 +562,10 @@ HDAE5000_LBNPmtBitCheck:
 	lds32	xhl, 0
 .LFS_77a3:
 	jr t, .LFS_780d                        ; [68 68] jr T,0x28780d
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_77bc                       ; [6e 0e] jr NZ,0x2877bc
 	lds32	xhl, 1
-	cpib_da	(0x22AA4F), 0
+	cp	(0x22AA4F:24), 0
 	jr nz, .LFS_77be                       ; [6e 06] jr NZ,0x2877be
 	lds32	xhl, 0
 	jr t, .LFS_77be                        ; [68 02] jr T,0x2877be
@@ -578,7 +578,7 @@ HDAE5000_LBNPmtBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_780d                        ; [68 42] jr T,0x28780d
 .LFS_77cb:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_77f6                       ; [6e 22] jr NZ,0x2877f6
 	lda xwa, (0x22aa4c:24)
 	calr	0xdb64
@@ -621,7 +621,7 @@ HDAE5000_LBNSqtBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287849:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7875                       ; [6e 23] jr NZ,0x287875
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -650,10 +650,10 @@ HDAE5000_LBNSqtBitCheck:
 	jrl t, .LFS_7917                       ; [78 88 00] jrl T,0x287917
 	lds32	xhl, 1
 	jrl t, .LFS_7917                       ; [78 83 00] jrl T,0x287917
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_78ab                       ; [6e 0e] jr NZ,0x2878ab
 	lds32	xhl, 2
-	cpib_da	(0x22AA50), 0
+	cp	(0x22AA50:24), 0
 	jr nz, .LFS_78ad                       ; [6e 06] jr NZ,0x2878ad
 	lds32	xhl, 0
 	jr t, .LFS_78ad                        ; [68 02] jr T,0x2878ad
@@ -661,10 +661,10 @@ HDAE5000_LBNSqtBitCheck:
 	lds32	xhl, 0
 .LFS_78ad:
 	jr t, .LFS_7917                        ; [68 68] jr T,0x287917
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_78c6                       ; [6e 0e] jr NZ,0x2878c6
 	lds32	xhl, 1
-	cpib_da	(0x22AA50), 0
+	cp	(0x22AA50:24), 0
 	jr nz, .LFS_78c8                       ; [6e 06] jr NZ,0x2878c8
 	lds32	xhl, 0
 	jr t, .LFS_78c8                        ; [68 02] jr T,0x2878c8
@@ -677,7 +677,7 @@ HDAE5000_LBNSqtBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7917                        ; [68 42] jr T,0x287917
 .LFS_78d5:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7900                       ; [6e 22] jr NZ,0x287900
 	lda xwa, (0x22aa4c:24)
 	calr	0xda5a
@@ -720,7 +720,7 @@ HDAE5000_LBNCmpBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287953:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_797f                       ; [6e 23] jr NZ,0x28797f
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -749,10 +749,10 @@ HDAE5000_LBNCmpBitCheck:
 	jrl t, .LFS_7a21                       ; [78 88 00] jrl T,0x287a21
 	lds32	xhl, 1
 	jrl t, .LFS_7a21                       ; [78 83 00] jrl T,0x287a21
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_79b5                       ; [6e 0e] jr NZ,0x2879b5
 	lds32	xhl, 2
-	cpib_da	(0x22AA51), 0
+	cp	(0x22AA51:24), 0
 	jr nz, .LFS_79b7                       ; [6e 06] jr NZ,0x2879b7
 	lds32	xhl, 0
 	jr t, .LFS_79b7                        ; [68 02] jr T,0x2879b7
@@ -760,10 +760,10 @@ HDAE5000_LBNCmpBitCheck:
 	lds32	xhl, 0
 .LFS_79b7:
 	jr t, .LFS_7a21                        ; [68 68] jr T,0x287a21
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_79d0                       ; [6e 0e] jr NZ,0x2879d0
 	lds32	xhl, 1
-	cpib_da	(0x22AA51), 0
+	cp	(0x22AA51:24), 0
 	jr nz, .LFS_79d2                       ; [6e 06] jr NZ,0x2879d2
 	lds32	xhl, 0
 	jr t, .LFS_79d2                        ; [68 02] jr T,0x2879d2
@@ -776,7 +776,7 @@ HDAE5000_LBNCmpBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7a21                        ; [68 42] jr T,0x287a21
 .LFS_79df:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7a0a                       ; [6e 22] jr NZ,0x287a0a
 	lda xwa, (0x22aa4c:24)
 	calr	0xd950
@@ -819,7 +819,7 @@ HDAE5000_LBNTmBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287a5d:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7a89                       ; [6e 23] jr NZ,0x287a89
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -848,10 +848,10 @@ HDAE5000_LBNTmBitCheck:
 	jrl t, .LFS_7b2b                       ; [78 88 00] jrl T,0x287b2b
 	lds32	xhl, 1
 	jrl t, .LFS_7b2b                       ; [78 83 00] jrl T,0x287b2b
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7abf                       ; [6e 0e] jr NZ,0x287abf
 	lds32	xhl, 2
-	cpib_da	(0x22AA52), 0
+	cp	(0x22AA52:24), 0
 	jr nz, .LFS_7ac1                       ; [6e 06] jr NZ,0x287ac1
 	lds32	xhl, 0
 	jr t, .LFS_7ac1                        ; [68 02] jr T,0x287ac1
@@ -859,10 +859,10 @@ HDAE5000_LBNTmBitCheck:
 	lds32	xhl, 0
 .LFS_7ac1:
 	jr t, .LFS_7b2b                        ; [68 68] jr T,0x287b2b
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7ada                       ; [6e 0e] jr NZ,0x287ada
 	lds32	xhl, 1
-	cpib_da	(0x22AA52), 0
+	cp	(0x22AA52:24), 0
 	jr nz, .LFS_7adc                       ; [6e 06] jr NZ,0x287adc
 	lds32	xhl, 0
 	jr t, .LFS_7adc                        ; [68 02] jr T,0x287adc
@@ -875,7 +875,7 @@ HDAE5000_LBNTmBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7b2b                        ; [68 42] jr T,0x287b2b
 .LFS_7ae9:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7b14                       ; [6e 22] jr NZ,0x287b14
 	lda xwa, (0x22aa4c:24)
 	calr	0xd846
@@ -918,7 +918,7 @@ HDAE5000_LBNMspBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287b67:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7b93                       ; [6e 23] jr NZ,0x287b93
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -947,10 +947,10 @@ HDAE5000_LBNMspBitCheck:
 	jrl t, .LFS_7c35                       ; [78 88 00] jrl T,0x287c35
 	lds32	xhl, 1
 	jrl t, .LFS_7c35                       ; [78 83 00] jrl T,0x287c35
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7bc9                       ; [6e 0e] jr NZ,0x287bc9
 	lds32	xhl, 2
-	cpib_da	(0x22AA53), 0
+	cp	(0x22AA53:24), 0
 	jr nz, .LFS_7bcb                       ; [6e 06] jr NZ,0x287bcb
 	lds32	xhl, 0
 	jr t, .LFS_7bcb                        ; [68 02] jr T,0x287bcb
@@ -958,10 +958,10 @@ HDAE5000_LBNMspBitCheck:
 	lds32	xhl, 0
 .LFS_7bcb:
 	jr t, .LFS_7c35                        ; [68 68] jr T,0x287c35
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7be4                       ; [6e 0e] jr NZ,0x287be4
 	lds32	xhl, 1
-	cpib_da	(0x22AA53), 0
+	cp	(0x22AA53:24), 0
 	jr nz, .LFS_7be6                       ; [6e 06] jr NZ,0x287be6
 	lds32	xhl, 0
 	jr t, .LFS_7be6                        ; [68 02] jr T,0x287be6
@@ -974,7 +974,7 @@ HDAE5000_LBNMspBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7c35                        ; [68 42] jr T,0x287c35
 .LFS_7bf3:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7c1e                       ; [6e 22] jr NZ,0x287c1e
 	lda xwa, (0x22aa4c:24)
 	calr	0xd73c
@@ -1017,7 +1017,7 @@ HDAE5000_LBNRcmBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287c71:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7c9d                       ; [6e 23] jr NZ,0x287c9d
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -1046,10 +1046,10 @@ HDAE5000_LBNRcmBitCheck:
 	jrl t, .LFS_7d3f                       ; [78 88 00] jrl T,0x287d3f
 	lds32	xhl, 1
 	jrl t, .LFS_7d3f                       ; [78 83 00] jrl T,0x287d3f
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7cd3                       ; [6e 0e] jr NZ,0x287cd3
 	lds32	xhl, 2
-	cpib_da	(0x22AA54), 0
+	cp	(0x22AA54:24), 0
 	jr nz, .LFS_7cd5                       ; [6e 06] jr NZ,0x287cd5
 	lds32	xhl, 0
 	jr t, .LFS_7cd5                        ; [68 02] jr T,0x287cd5
@@ -1057,10 +1057,10 @@ HDAE5000_LBNRcmBitCheck:
 	lds32	xhl, 0
 .LFS_7cd5:
 	jr t, .LFS_7d3f                        ; [68 68] jr T,0x287d3f
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7cee                       ; [6e 0e] jr NZ,0x287cee
 	lds32	xhl, 1
-	cpib_da	(0x22AA54), 0
+	cp	(0x22AA54:24), 0
 	jr nz, .LFS_7cf0                       ; [6e 06] jr NZ,0x287cf0
 	lds32	xhl, 0
 	jr t, .LFS_7cf0                        ; [68 02] jr T,0x287cf0
@@ -1073,7 +1073,7 @@ HDAE5000_LBNRcmBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7d3f                        ; [68 42] jr T,0x287d3f
 .LFS_7cfd:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7d28                       ; [6e 22] jr NZ,0x287d28
 	lda xwa, (0x22aa4c:24)
 	calr	0xd632
@@ -1116,7 +1116,7 @@ HDAE5000_LBNMdBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287d7b:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7da7                       ; [6e 23] jr NZ,0x287da7
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -1145,10 +1145,10 @@ HDAE5000_LBNMdBitCheck:
 	jrl t, .LFS_7e49                       ; [78 88 00] jrl T,0x287e49
 	lds32	xhl, 1
 	jrl t, .LFS_7e49                       ; [78 83 00] jrl T,0x287e49
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7ddd                       ; [6e 0e] jr NZ,0x287ddd
 	lds32	xhl, 2
-	cpib_da	(0x22AA55), 0
+	cp	(0x22AA55:24), 0
 	jr nz, .LFS_7ddf                       ; [6e 06] jr NZ,0x287ddf
 	lds32	xhl, 0
 	jr t, .LFS_7ddf                        ; [68 02] jr T,0x287ddf
@@ -1156,10 +1156,10 @@ HDAE5000_LBNMdBitCheck:
 	lds32	xhl, 0
 .LFS_7ddf:
 	jr t, .LFS_7e49                        ; [68 68] jr T,0x287e49
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7df8                       ; [6e 0e] jr NZ,0x287df8
 	lds32	xhl, 1
-	cpib_da	(0x22AA55), 0
+	cp	(0x22AA55:24), 0
 	jr nz, .LFS_7dfa                       ; [6e 06] jr NZ,0x287dfa
 	lds32	xhl, 0
 	jr t, .LFS_7dfa                        ; [68 02] jr T,0x287dfa
@@ -1172,7 +1172,7 @@ HDAE5000_LBNMdBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7e49                        ; [68 42] jr T,0x287e49
 .LFS_7e07:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7e32                       ; [6e 22] jr NZ,0x287e32
 	lda xwa, (0x22aa4c:24)
 	calr	0xd528
@@ -1213,7 +1213,7 @@ HDAE5000_LBNMdBitCheck:
 	ld	wa, (xwa)
 	lda xix, (0x287e85:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7eb1                       ; [6e 23] jr NZ,0x287eb1
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -1242,10 +1242,10 @@ HDAE5000_LBNMdBitCheck:
 	jrl t, .LFS_7f53                       ; [78 88 00] jrl T,0x287f53
 	lds32	xhl, 1
 	jrl t, .LFS_7f53                       ; [78 83 00] jrl T,0x287f53
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7ee7                       ; [6e 0e] jr NZ,0x287ee7
 	lds32	xhl, 2
-	cpib_da	(0x22AA56), 0
+	cp	(0x22AA56:24), 0
 	jr nz, .LFS_7ee9                       ; [6e 06] jr NZ,0x287ee9
 	lds32	xhl, 0
 	jr t, .LFS_7ee9                        ; [68 02] jr T,0x287ee9
@@ -1253,10 +1253,10 @@ HDAE5000_LBNMdBitCheck:
 	lds32	xhl, 0
 .LFS_7ee9:
 	jr t, .LFS_7f53                        ; [68 68] jr T,0x287f53
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7f02                       ; [6e 0e] jr NZ,0x287f02
 	lds32	xhl, 1
-	cpib_da	(0x22AA56), 0
+	cp	(0x22AA56:24), 0
 	jr nz, .LFS_7f04                       ; [6e 06] jr NZ,0x287f04
 	lds32	xhl, 0
 	jr t, .LFS_7f04                        ; [68 02] jr T,0x287f04
@@ -1269,7 +1269,7 @@ HDAE5000_LBNMdBitCheck:
 	lds32	xhl, 1
 	jr t, .LFS_7f53                        ; [68 42] jr T,0x287f53
 .LFS_7f11:
-	cpw_da	(0x22AA5C), 5
+	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7f3c                       ; [6e 22] jr NZ,0x287f3c
 	lda xwa, (0x22aa4c:24)
 	calr	0xd41e
@@ -2034,7 +2034,7 @@ HDAE5000_SelectFlsScreen:
 	call	(xhl)
 	jr t, .LFWF_881e                       ; [68 72] jr T,0x28881e
 .LFWF_87ac:
-	cpw_da	(0x23A090), 24
+	cpw	(0x23A090:24), 24
 	jr lt, .LFWF_881e                      ; [61 69] jr LT,0x28881e
 	subdi16_24	(0x23A090), 24
 	calr	0xf796
@@ -2049,7 +2049,7 @@ HDAE5000_SelectFlsScreen:
 	call	(xhl)
 	jr t, .LFWF_881e                       ; [68 38] jr T,0x28881e
 .LFWF_87e6:
-	cpw_da	(0x23A090), 96
+	cpw	(0x23A090:24), 96
 	jr ge, .LFWF_881e                      ; [69 2f] jr GE,0x28881e
 	adddi16_24	(0x23A090), 24
 	calr	0xf75c
@@ -2112,7 +2112,7 @@ HDAE5000_FlsLoadScreen:
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 5b 03] jrl T,0x288c1a
 .LFWF_88bf:
-	cpib_da	(0x22AD9A), 1
+	cp	(0x22AD9A:24), 1
 	jrl nz, .LFWF_8c1a                     ; [7e 52 03] jrl NZ,0x288c1a
 	ld	iz, (0x22AD96:24)
 	ld	wa, (0x22AD98:24)
@@ -2158,7 +2158,7 @@ HDAE5000_FlsLoadScreen:
 	calr	0x25f6
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 d1 02] jrl Z,0x288c1a
-	cpib_da	(0x229DAC), 2
+	cp	(0x229DAC:24), 2
 	jr nz, .LFWF_897a                      ; [6e 29] jr NZ,0x28897a
 	ld	wa, iz
 	and	wa, 0x0100
@@ -2222,7 +2222,7 @@ HDAE5000_FlsLoadScreen:
 	calr	0x2520
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 fb 01] jrl Z,0x288c1a
-	cpib_da	(0x229DAC), 2
+	cp	(0x229DAC:24), 2
 	jr nz, .LFWF_8a50                      ; [6e 29] jr NZ,0x288a50
 	ld	wa, iz
 	and	wa, 0x0100
@@ -2286,9 +2286,9 @@ HDAE5000_FlsLoadScreen:
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 1b 01] jrl T,0x288c1a
 .LFWF_8aff:
-	cpw_da	(0x22B272), 0
+	cpw	(0x22B272:24), 0
 	jr nz, .LFWF_8b4d                      ; [6e 45] jr NZ,0x288b4d
-	cpw_da	(0x23A096), 0
+	cpw	(0x23A096:24), 0
 	jrl z, .LFWF_8c1a                      ; [76 08 01] jrl Z,0x288c1a
 	decw	1, (0x23A096:24)
 	ldw	(0x22B272:24), 16
@@ -2321,9 +2321,9 @@ HDAE5000_FlsLoadScreen:
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 97 00] jrl T,0x288c1a
 .LFWF_8b83:
-	cpw_da	(0x22B272), 0
+	cpw	(0x22B272:24), 0
 	jr z, .LFWF_8bd0                       ; [66 44] jr Z,0x288bd0
-	cpw_da	(0x23A096), 119
+	cpw	(0x23A096:24), 119
 	jrl nc, .LFWF_8c1a                     ; [7f 84 00] jrl NC,0x288c1a
 	incw	1, (0x23A096:24)
 	ldw	(0x22B272:24), 0
@@ -2613,7 +2613,7 @@ HDAE5000_FlsEditScreen:
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 90 00] jrl T,0x288fe9
 .LFWF_8f59:
-	cpw_da	(0x22B272), 0
+	cpw	(0x22B272:24), 0
 	jrl z, .LFWF_8fe9                      ; [76 86 00] jrl Z,0x288fe9
 	ldw	(0x22B272:24), 0
 	lds	wa, 1
@@ -2630,7 +2630,7 @@ HDAE5000_FlsEditScreen:
 	call	(xhl)
 	jr t, .LFWF_8fe9                       ; [68 51] jr T,0x288fe9
 .LFWF_8f98:
-	cpw_da	(0x22B272), 0
+	cpw	(0x22B272:24), 0
 	jr nz, .LFWF_8fe9                      ; [6e 48] jr NZ,0x288fe9
 	ldw	(0x22B272:24), 16
 	lds	wa, 1
@@ -2890,7 +2890,7 @@ HDAE5000_FlsDirSelScreen:
 	call	(xhl)
 	jr t, .LFWF_935a                       ; [68 7c] jr T,0x28935a
 .LFWF_92de:
-	cpw_da	(0x23A08E), 24
+	cpw	(0x23A08E:24), 24
 	jr lt, .LFWF_935a                      ; [61 73] jr LT,0x28935a
 	subdi16_24	(0x23A08E), 24
 	ld	xwa, 0x007f0151
@@ -2906,7 +2906,7 @@ HDAE5000_FlsDirSelScreen:
 	call	(xhl)
 	jr t, .LFWF_935a                       ; [68 3d] jr T,0x28935a
 .LFWF_931d:
-	cpw_da	(0x23A08E), 96
+	cpw	(0x23A08E:24), 96
 	jr ge, .LFWF_935a                      ; [69 34] jr GE,0x28935a
 	adddi16_24	(0x23A08E), 24
 	ld	xwa, 0x007f0151
@@ -2996,7 +2996,7 @@ HDAE5000_FlsFileSelScreen:
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 c2 00] jrl T,0x28952a
 .LFWF_9468:
-	cpw_da	(0x23A092), 0
+	cpw	(0x23A092:24), 0
 	jrl z, .LFWF_952a                      ; [76 b8 00] jrl Z,0x28952a
 	decw	1, (0x23A092:24)
 	lds	wa, 1
@@ -3013,7 +3013,7 @@ HDAE5000_FlsFileSelScreen:
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 84 00] jrl T,0x28952a
 .LFWF_94a6:
-	cpw_da	(0x23A092), 119
+	cpw	(0x23A092:24), 119
 	jr nc, .LFWF_952a                      ; [6f 7b] jr NC,0x28952a
 	incw	1, (0x23A092:24)
 	lds	wa, 1
@@ -3930,7 +3930,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	call (xhl)
 	jr t, .LFSD__hA_exit
 .LFSD__hA_scroll_up:			; Event 0x01EA0001: scroll up
-	cpw_da (0x23a08e), 0x0018
+	cpw (0x23a08e:24), 0x0018
 	jr lt, .LFSD__hA_exit
 	subdi16_24	(0x23A08E), 24
 	ld xwa, 0x007f00e6
@@ -3946,7 +3946,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	call (xhl)
 	jr t, .LFSD__hA_exit
 .LFSD__hA_scroll_down:			; Event 0x01EA0000: scroll down
-	cpw_da (0x23a08e), 0x0060
+	cpw (0x23a08e:24), 0x0060
 	jr ge, .LFSD__hA_exit
 	adddi16_24	(0x23A08E), 24
 	ld xwa, 0x007f00e6
@@ -4514,14 +4514,14 @@ HDAE5000_DelLswEditCheck:
 	jr t, .LDUO__hB_exit
 	; Case 3: conditional on (0x22abe8)
 	lds32 xhl, 2
-	cpib_da (0x22abe8), 0x00
+	cp (0x22abe8:24), 0x00
 	jr nz, .LDUO__hB_c3_nz
 	lds32 xhl, 0
 .LDUO__hB_c3_nz:
 	jr t, .LDUO__hB_exit
 	; Case 4: conditional on (0x22abe8)
 	lds32 xhl, 1
-	cpib_da (0x22abe8), 0x00
+	cp (0x22abe8:24), 0x00
 	jr nz, .LDUO__hB_c4_nz
 	lds32 xhl, 0
 .LDUO__hB_c4_nz:
@@ -4584,14 +4584,14 @@ HDAE5000_DelPmtEditCheck:
 	jr t, .LDUO__hC_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abe9), 0x00
+	cp (0x22abe9:24), 0x00
 	jr nz, .LDUO__hC_c3_nz
 	lds32 xhl, 0
 .LDUO__hC_c3_nz:
 	jr t, .LDUO__hC_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abe9), 0x00
+	cp (0x22abe9:24), 0x00
 	jr nz, .LDUO__hC_c4_nz
 	lds32 xhl, 0
 .LDUO__hC_c4_nz:
@@ -4654,14 +4654,14 @@ HDAE5000_DelSqtEditCheck:
 	jr t, .LDUO__hD_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abea), 0x00
+	cp (0x22abea:24), 0x00
 	jr nz, .LDUO__hD_c3_nz
 	lds32 xhl, 0
 .LDUO__hD_c3_nz:
 	jr t, .LDUO__hD_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abea), 0x00
+	cp (0x22abea:24), 0x00
 	jr nz, .LDUO__hD_c4_nz
 	lds32 xhl, 0
 .LDUO__hD_c4_nz:
@@ -4724,14 +4724,14 @@ HDAE5000_DelCmpEditCheck:
 	jr t, .LDUO__hE_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abeb), 0x00
+	cp (0x22abeb:24), 0x00
 	jr nz, .LDUO__hE_c3_nz
 	lds32 xhl, 0
 .LDUO__hE_c3_nz:
 	jr t, .LDUO__hE_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abeb), 0x00
+	cp (0x22abeb:24), 0x00
 	jr nz, .LDUO__hE_c4_nz
 	lds32 xhl, 0
 .LDUO__hE_c4_nz:
@@ -4794,14 +4794,14 @@ HDAE5000_DelTmEditCheck:
 	jr t, .LDUO__hF_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abec), 0x00
+	cp (0x22abec:24), 0x00
 	jr nz, .LDUO__hF_c3_nz
 	lds32 xhl, 0
 .LDUO__hF_c3_nz:
 	jr t, .LDUO__hF_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abec), 0x00
+	cp (0x22abec:24), 0x00
 	jr nz, .LDUO__hF_c4_nz
 	lds32 xhl, 0
 .LDUO__hF_c4_nz:
@@ -4864,14 +4864,14 @@ HDAE5000_DelMspEditCheck:
 	jr t, .LDUO__hG_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abed), 0x00
+	cp (0x22abed:24), 0x00
 	jr nz, .LDUO__hG_c3_nz
 	lds32 xhl, 0
 .LDUO__hG_c3_nz:
 	jr t, .LDUO__hG_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abed), 0x00
+	cp (0x22abed:24), 0x00
 	jr nz, .LDUO__hG_c4_nz
 	lds32 xhl, 0
 .LDUO__hG_c4_nz:
@@ -4934,14 +4934,14 @@ HDAE5000_DelRcmEditCheck:
 	jr t, .LDUO__hH_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abee), 0x00
+	cp (0x22abee:24), 0x00
 	jr nz, .LDUO__hH_c3_nz
 	lds32 xhl, 0
 .LDUO__hH_c3_nz:
 	jr t, .LDUO__hH_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abee), 0x00
+	cp (0x22abee:24), 0x00
 	jr nz, .LDUO__hH_c4_nz
 	lds32 xhl, 0
 .LDUO__hH_c4_nz:
@@ -5004,14 +5004,14 @@ HDAE5000_DelMdEditCheck:
 	jr t, .LDUO__hI_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abef), 0x00
+	cp (0x22abef:24), 0x00
 	jr nz, .LDUO__hI_c3_nz
 	lds32 xhl, 0
 .LDUO__hI_c3_nz:
 	jr t, .LDUO__hI_exit
 	; Case 4
 	lds32 xhl, 1
-	cpib_da (0x22abef), 0x00
+	cp (0x22abef:24), 0x00
 	jr nz, .LDUO__hI_c4_nz
 	lds32 xhl, 0
 .LDUO__hI_c4_nz:
@@ -5074,20 +5074,20 @@ HDAE5000_DelTlxEditCheck:
 	jr t, .LDUO__hJ_exit
 	; Case 3
 	lds32 xhl, 2
-	cpib_da (0x22abf0), 0x00
+	cp (0x22abf0:24), 0x00
 	jr nz, .LDUO__hJ_c3_nz
 	lds32 xhl, 0
 .LDUO__hJ_c3_nz:
 	jr t, .LDUO__hJ_exit
 	; Case 4: extra comparison vs 0x01
-	cpib_da (0x22abf0), 0x01
+	cp (0x22abf0:24), 0x01
 	jr nz, .LDUO__hJ_c4_ne1
 	lds32 xhl, 2
 	jr t, .LDUO__hJ_c4_chk
 .LDUO__hJ_c4_ne1:
 	lds32 xhl, 1
 .LDUO__hJ_c4_chk:
-	cpib_da (0x22abf0), 0x00
+	cp (0x22abf0:24), 0x00
 	jr nz, .LDUO__hJ_c4_nz
 	lds32 xhl, 0
 .LDUO__hJ_c4_nz:

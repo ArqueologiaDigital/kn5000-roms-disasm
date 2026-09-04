@@ -17591,7 +17591,7 @@ EventHandler_ObjectDispatch:
 	ld xbc, (xsp + 4)
 	ld xde, (xsp)
 	call (xhl)
-	cpw_da (0x03ef4e), 0
+	cpw (0x03ef4e:24), 0
 	jr z, EventHandler_ContinueProc
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -17683,7 +17683,7 @@ EventRoute_ObjectDispatch:
 	stl_da (0x02bc28), xwa
 	ld xwa, (xsp + 8)
 	stl_da (0x02bc2c), xwa
-	cpw_da (0x03ef4e), 0
+	cpw (0x03ef4e:24), 0
 	jr z, EventRoute_DispatchJump
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -17759,7 +17759,7 @@ GetEvent:
 	lds wa, 4
 	call TaskSched_WaitForEvent
 	ld wa, (0x02ec34:24)
-	cpda16_24 xwa, (0x02ec36)
+	cp wa, (0x02ec36:24)
 	jr nz, PostEvent_FillSlot
 	lds wa, 4
 	call TaskSched_SignalEvent
@@ -18257,7 +18257,7 @@ MainGetEvent:
 	lds wa, 7
 	call TaskSched_WaitForEvent
 	ld wa, (0x02f838:24)
-	cpda16_24 xwa, (0x02f83a)
+	cp wa, (0x02f83a:24)
 	jr nz, MainGetEvent_ScanDone
 	lds wa, 7
 	call TaskSched_SignalEvent
@@ -18602,7 +18602,7 @@ RootContext_InitEventQueue:
 ApTimer:
 	dec 8, xsp
 	push xiz
-	cpw_da (0x030448), 0xffff
+	cpw (0x030448:24), 0xffff
 	jrl nz, SetApTimer_Return
 	jrl ApTimer_IncrementCounter
 
@@ -18744,7 +18744,7 @@ ApTimer_VirtualDispatch:
 	ld xbc, (xsp + 4)
 	ld xde, (xsp + 8)
 	call (xhl)
-	cpw_da (0x030448), 0xffff
+	cpw (0x030448:24), 0xffff
 	jr z, ApTimer_IncrementCounter
 
 SetApTimer_Return:
@@ -18754,7 +18754,7 @@ SetApTimer_Return:
 	exts xbc
 	add xbc, xwa
 	ld xwa, (xbc + 4)
-	cpda32_24 xwa, (0x030444)
+	cp xwa, (0x030444:24)
 	jrl ule, ApTimer_VirtDispatch_Prologue
 
 ApTimer_IncrementCounter:
@@ -18839,7 +18839,7 @@ ResetApTimer_NotFound:
 	stw_dri BC, 0x07, 0xe0, 0xe8
 
 ResetApTimer_ReturnZero:
-	cpda16_24 xix, (0x030448)
+	cp ix, (0x030448:24)
 	jr nz, ResetApTimer_ReturnOneDone
 
 ResetApTimer_ReturnAlt:
@@ -18944,7 +18944,7 @@ KillApTimer_CheckNextEntry_Match:
 	ld (xiy + 2), wa
 
 KillApTimer_CheckNextEntry_Unlink:
-	cpda16_24 xix, (0x030448)
+	cp ix, (0x030448:24)
 	jr nz, KillApTimer_CheckNextEntry_Done
 	ld wa, (xbc)
 	ld (0x030448:24), wa
@@ -18974,7 +18974,7 @@ KillApTimer_CheckNextEntry_Epilogue:
 DrawTask_EventLoop:
 	calr DrawTask_Dispatch
 	ld xiz, xhl
-	cpw_da (0x03ef4e), 0
+	cpw (0x03ef4e:24), 0
 	jr z, DrawTask_FuncDispatch
 	lds wa, 5
 	lds bc, 3
@@ -18989,7 +18989,7 @@ DrawTask_FuncDispatch:
 	call (xhl)
 	ld xwa, xiz
 	calr DrawFunc_Return
-	cpw_da (0x03ef4e), 0
+	cpw (0x03ef4e:24), 0
 	jr z, DrawTask_EventLoop
 	lds wa, 5
 	lds bc, 3
@@ -19371,7 +19371,7 @@ LcdOn_Return:
 
 
 LcdOff_Done:
-	cpw_da (0x030464), 0
+	cpw (0x030464:24), 0
 	ret z
 
 	call VGA_ScreenUnblank
@@ -19379,7 +19379,7 @@ LcdOff_Done:
 
 
 LcdOff_Return:
-	cpw_da (0x030464), 0
+	cpw (0x030464:24), 0
 	ret z
 
 	call VGA_ScreenBlank
@@ -19437,16 +19437,16 @@ UpdateScreen_CheckDirty:
 Gfx_BlitDirtyRegions:
 	dec 8, xsp
 	pushw iz
-	cpw_da (0x03ef92), 0
+	cpw (0x03ef92:24), 0
 	jrl z, SetChangeRect_Prologue
-	cpw_da (0x03045e), 0
+	cpw (0x03045e:24), 0
 	jrl z, SetChangeRect_Prologue
-	cpw_da (0x030460), 0
+	cpw (0x030460:24), 0
 	jr z, Gfx_BlitDirty_ScanMatch
 	ld wa, (0x03ef9e:24)
 	cps wa, 4
 	jr nz, Gfx_BlitDirty_Prologue
-	cpw_da (0x03efa0), 4
+	cpw (0x03efa0:24), 4
 	jr z, Display_CheckScreenDimensions
 	cps wa, 4
 	jr nz, Display_CheckScreenDimensions
@@ -19471,7 +19471,7 @@ Gfx_BlitDirty_ScanLoop:
 	jr Display_CheckScreenDimensions
 
 Gfx_BlitDirty_ScanMatch:
-	cpw_da (0x030462), 0
+	cpw (0x030462:24), 0
 	jr z, Display_CheckScreenDimensions
 	lda xwa, (xsp + 6)
 	ld (xsp + 2), xwa
@@ -19506,7 +19506,7 @@ Display_CheckDim_Prologue:
 	call DisplayBuffer_Process
 
 Display_CheckDim_CheckWidth:
-	cpw_da (0x030460), 0
+	cpw (0x030460:24), 0
 	jr z, Display_CheckDim_CheckHeight
 	calr InitGraphics_SetupVRAM_Loop
 	ld wa, (0x03ef9e:24)
@@ -19515,7 +19515,7 @@ Display_CheckDim_CheckWidth:
 	jr Display_CheckDim_Done
 
 Display_CheckDim_CheckHeight:
-	cpw_da (0x030462), 0
+	cpw (0x030462:24), 0
 	jr z, Display_CheckDim_Return
 
 Display_CheckDim_Done:
@@ -19550,7 +19550,7 @@ SetNeedUpdate:
 SetChangeRect:
 	push xiz
 	ld xiz, xwa
-	cpw_da (0x03ef4e), 0
+	cpw (0x03ef4e:24), 0
 	jr z, SetChangeRect_ClampLeft
 	lds wa, 5
 	lds bc, 3

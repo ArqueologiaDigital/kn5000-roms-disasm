@@ -97,7 +97,7 @@ SeqName_CheckDiskAvail:
 	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, SeqName_LoadAndPlay
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SeqName_LoadAndPlay
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -342,7 +342,7 @@ IntMed_CheckPlaying:
 	jrl	nz, 193
 	ld	(33890:16), 1
 	ld	a, (34816:16)
-	cpda8	a, 34814
+	cp	a, (34814:16)
 	jr	nc, 76
 	lds	iz, 0
 	lda	xbc, (34804:16)
@@ -802,7 +802,7 @@ DiskMed_PlayNextHelper:
 	cp (0x8462:16), 0x00
 	jrl z, DiskMed_ReturnZero
 	ld a, (0x8800:16)
-	cpda8 a, (0x87fe)
+	cp a, (0x87fe:16)
 	jr nc, DiskMed_ReturnFinished
 	lds iz, 0
 	lda xbc, (0x87f4:16)
@@ -866,7 +866,7 @@ DiskMed_FindFirstSong:
 	extz	xwa
 	add	xwa, xhl
 	ld	a, (xwa)
-	cpda8	a, 34816
+	cp	a, (34816:16)
 	jr	nz, 7
 	stb_erp	a, 248
 	extz	wa
@@ -889,7 +889,7 @@ DiskMed_FindFirstLoop:
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
-	cpda8	xbc, (34816)
+	cp	a, (34816:16)
 	jr	nz, 17	; -> 0xF91FA6
 	stb_erp	a, 248
 	extz	wa
@@ -1027,7 +1027,7 @@ DiskSel_CheckFinished:
 	lds32	xde, 0
 	call	ApPostEvent
 	ld	a, (34976:16)
-	cpda8	xbc, (34974)
+	cp	a, (34974:16)
 	jrl	nc, 324	; -> 0xF92288
 	lds	iz, 0
 DiskSel_ClearSelections:
@@ -1042,7 +1042,7 @@ DiskSel_ClearSelections:
 DiskSel_FindSongLoop:
 	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
-	cpda8 a, (0x88a0)
+	cp a, (0x88a0:16)
 	jrl nz, DiskSel_NextSongLoop
 	ld (0x8342:16), iz
 	ld WA,IZ
@@ -1149,7 +1149,7 @@ DiskSel_RepeatClear:
 DiskSel_RepeatFindLoop:
 	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
-	cpda8 a, (0x88a0)
+	cp a, (0x88a0:16)
 	jrl nz, DiskSel_RepeatNext
 	ld (0x8342:16), iz
 	ld WA,IZ
@@ -1520,7 +1520,7 @@ DiskSel_PlayClearLoop:
 DiskSel_PlayFindLoop:
 	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
-	cpda8 a, (0x88a0)
+	cp a, (0x88a0:16)
 	jrl nz, DiskSel_PlayNextLoop
 	ld (0x8342:16), iz
 	ld WA,IZ
@@ -1883,7 +1883,7 @@ SmfMed_ShowPlayError:
 SmfMed_SetPlaying:
 	ld	(33890:16), 1
 	ld	a, (34950:16)
-	cpda8	xbc, (34948)
+	cp	a, (34948:16)
 	jr	nc, 91	; -> 0xF92B0B
 	lds	iz, 0
 	ld	bc, (33692:16)
@@ -1921,7 +1921,7 @@ SmfMed_NextSong:
 SmfMed_CheckRepeat:
 	cp	(34952:16), 0
 	jr	z, 113
-	cpdm8	33696, a
+	cp	(33696:16), a
 	jr	nc, 107
 	ld	(34950:16), 0
 	ld	(33696:16), 0
@@ -2019,7 +2019,7 @@ SmfMed_ClearSlotsLoop:
 	add	xbc, xwa
 	ld	(xbc), 255
 	inc	1, iz
-	cpda16	xiz, (33692)
+	cp	iz, (33692:16)
 	jr	c, -17	; -> 0xF92C26
 SmfMed_FinishInit:
 	call	15862435
@@ -2591,7 +2591,7 @@ PdMed_CheckPlayMode:
 	ld	(33890:16), 1
 	ld	c, (34950:16)
 	lda	xwa, (34820:16)
-	cpda8	xhl, (34948)
+	cp	c, (34948:16)
 	jr	nc, 80	; -> 0xF932AB
 	lds	hl, 0
 	ld	de, (33792:16)
@@ -2693,7 +2693,7 @@ PdMed_ClearSlotsLoop:
 	add	xbc, xwa
 	ld	(xbc), 255
 	inc	1, hl
-	cpda16	xhl, (33792)
+	cp	hl, (33792:16)
 	jr	c, -17	; -> 0xF933A2
 PdMed_FinishInit:
 	call	15862435
@@ -3307,7 +3307,7 @@ DocMed_CheckPlayMode:
 	ld	(33890:16), 1
 	ld	c, (34950:16)
 	lda	xwa, (34820:16)
-	cpda8	xhl, (34948)
+	cp	c, (34948:16)
 	jr	nc, 80	; -> 0xF93A56
 	lds	hl, 0
 	ld	de, (33888:16)
@@ -3421,7 +3421,7 @@ DocMed_ClearSlotsLoop:
 	add	xbc, xwa
 	ld	(xbc), 255
 	inc	1, hl
-	cpda16	xhl, (33888)
+	cp	hl, (33888:16)
 	jr	c, -17	; -> 0xF93B5B
 DocMed_FinishInit:
 	call	15862435
@@ -4432,7 +4432,7 @@ WakeUp_HandleOk:
 	cp xwa, 0x8c
 	jr nz, WakeUp_ClearCounter
 	inc 1, (0x02741a:24)
-	cpib_da (0x02741a), 0x07
+	cp (0x02741a:24), 0x07
 	jr nz, WakeUp_ReturnZero
 	ld (0x02741a:24), 0x00
 	ld xwa, 0xffffffff

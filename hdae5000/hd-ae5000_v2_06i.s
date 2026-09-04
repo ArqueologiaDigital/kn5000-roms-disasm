@@ -2093,7 +2093,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lds32	xde, 0
 	call	(xix)
 	ld	(0x22a026), hl
-	cpw_da	(0x22A026), 32
+	cpw	(0x22A026:24), 32
 	jr ule, .LRF_152b                      ; [63 07] jr ULE,0x28152b
 	ldw	(0x22A026:24), 32
 .LRF_152b:
@@ -2112,7 +2112,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld	(0x22a034), xwa
-	cpw_da	(0x22A032), 0
+	cpw	(0x22A032:24), 0
 	jr z, .LRF_15b8                        ; [66 4a] jr Z,0x2815b8
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -2154,7 +2154,7 @@ HDAE5000_AcHddNamingWindowProc:
 	call	(xhl)
 .LRF_1600:
 	lds	iz, 0
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr nc, .LRF_1626                       ; [6f 1d] jr NC,0x281626
 .LRF_1609:
 	ld	wa, iz
@@ -2165,7 +2165,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xwa)
 	ld	(xbc), a
 	inc	1, iz
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr c, .LRF_1609                        ; [67 e3] jr C,0x281609
 .LRF_1626:
 	ld	wa, iz
@@ -2245,7 +2245,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
 	ld	(0x22a02e), wa
 	ld	wa, (0x22A030:24)
-	cpda16_24	wa, (0x22A02E)
+	cp	wa, (0x22A02E:24)
 	jrl z, .LRF_18be                       ; [76 7d 01] jrl Z,0x2818be
 	lda	xwa, (xsp+32)
 	ld	xbc, xwa
@@ -2261,7 +2261,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
-	cpw_da	(0x22A030), 65535
+	cpw	(0x22A030:24), 65535
 	jrl z, .LRF_1817                       ; [76 9d 00] jrl Z,0x281817
 	ld	wa, (0x22A030:24)
 	extz xwa
@@ -2371,7 +2371,7 @@ HDAE5000_AcHddNamingWindowProc:
 	jrl t, .LRF_267c                       ; [78 b9 0d] jrl T,0x28267c
 .LRF_18c3:
 	ld	wa, (0x22A02C:24)
-	cpda16_24	wa, (0x22A02A)
+	cp	wa, (0x22A02A:24)
 	jrl z, .LRF_19b5                       ; [76 e5 00] jrl Z,0x2819b5
 	ldw	(0x22A030:24), 65535
 	lda	xwa, (xsp+32)
@@ -2470,7 +2470,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	wa, (xwa)
 	lda xix, (0x2819ff:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-	cpw_da	(0x22A028), 0
+	cpw	(0x22A028:24), 0
 	jrl z, .LRF_21da                       ; [76 d1 07] jrl Z,0x2821da
 	decw	1, (0x22A028:24)
 	ld	de, (0x22A028:24)
@@ -2491,7 +2491,7 @@ HDAE5000_AcHddNamingWindowProc:
 	jrl t, .LRF_21da                       ; [78 8f 07] jrl T,0x2821da
 	ld	wa, (0x22A028:24)
 	inc	1, wa
-	cpda16_24	wa, (0x22A026)
+	cp	wa, (0x22A026:24)
 	jrl nc, .LRF_21da                      ; [7f 80 07] jrl NC,0x2821da
 	incw	1, (0x22A028:24)
 	ld	de, (0x22A028:24)
@@ -2510,7 +2510,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 3e 07] jrl T,0x2821da
-	cpw_da	(0x22A02E), 0
+	cpw	(0x22A02E:24), 0
 	jrl z, .LRF_21da                       ; [76 34 07] jrl Z,0x2821da
 	ld	wa, (0x22A02A:24)
 	extz xwa
@@ -2572,7 +2572,7 @@ HDAE5000_AcHddNamingWindowProc:
 	cp	xwa, 0x01c00019
 	jrl nz, .LRF_21da                      ; [7e 5a 06] jrl NZ,0x2821da
 .LRF_1b80:
-	cpw_da	(0x22A02E), 13
+	cpw	(0x22A02E:24), 13
 	jrl c, .LRF_21da                       ; [77 50 06] jrl C,0x2821da
 	subdi16_24	(0x22A02E), 13
 	ld	wa, (0x22A02A:24)
@@ -2814,7 +2814,7 @@ HDAE5000_AcHddNamingWindowProc:
 	jrl t, .LRF_21da                       ; [78 26 03] jrl T,0x2821da
 	ld	iz, (0x22A026:24)
 	dec	1, iz
-	cpda16_24	iz, (0x22A028)
+	cp	iz, (0x22A028:24)
 	jr ule, .LRF_1ee7                      ; [63 25] jr ULE,0x281ee7
 .LRF_1ec2:
 	ld	wa, iz
@@ -2829,7 +2829,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xbc)
 	ld	(xde), a
 	dec	1, iz
-	cpda16_24	iz, (0x22A028)
+	cp	iz, (0x22A028:24)
 	jr ugt, .LRF_1ec2                      ; [6b db] jr UGT,0x281ec2
 .LRF_1ee7:
 	ld	wa, (0x22A028:24)
@@ -2857,7 +2857,7 @@ HDAE5000_AcHddNamingWindowProc:
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 97 02] jrl T,0x2821da
 	ld	iz, (0x22A028:24)
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr nc, .LRF_1f74                       ; [6f 25] jr NC,0x281f74
 .LRF_1f4f:
 	ld	wa, iz
@@ -2872,7 +2872,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xbc)
 	ld	(xde), a
 	inc	1, iz
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr c, .LRF_1f4f                        ; [67 db] jr C,0x281f4f
 .LRF_1f74:
 	ld	wa, (0x22A026:24)
@@ -2902,7 +2902,7 @@ HDAE5000_AcHddNamingWindowProc:
 	jrl t, .LRF_21da                       ; [78 08 02] jrl T,0x2821da
 	ldw (xsp + 0x04), 0
 	lds	iz, 0
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr nc, .LRF_2002                       ; [6f 22] jr NC,0x282002
 .LRF_1fe0:
 	ld	wa, iz
@@ -2915,15 +2915,15 @@ HDAE5000_AcHddNamingWindowProc:
 	jr nz, .LRF_2002                       ; [6e 0c] jr NZ,0x282002
 	incw	1, (xsp+4)
 	inc	1, iz
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr c, .LRF_1fe0                        ; [67 de] jr C,0x281fe0
 .LRF_2002:
 	ld	wa, (xsp+4)
-	cpda16_24	wa, (0x22A026)
+	cp	wa, (0x22A026:24)
 	jrl z, .LRF_21da                       ; [76 cd 01] jrl Z,0x2821da
 	ldw (xsp + 0x06), 0
 	lds	iz, 0
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr nc, .LRF_2044                       ; [6f 29] jr NC,0x282044
 .LRF_201b:
 	ld	wa, (0x22A026:24)
@@ -2938,7 +2938,7 @@ HDAE5000_AcHddNamingWindowProc:
 	jr nz, .LRF_2044                       ; [6e 0c] jr NZ,0x282044
 	incw	1, (xsp+6)
 	inc	1, iz
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr c, .LRF_201b                        ; [67 d7] jr C,0x28201b
 .LRF_2044:
 	ld	wa, (xsp+4)
@@ -3002,7 +3002,7 @@ HDAE5000_AcHddNamingWindowProc:
 	sub	wa, (xsp+8)
 	ld	iz, (0x22A026:24)
 	sub	iz, wa
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr nc, .LRF_2115                       ; [6f 1d] jr NC,0x282115
 .LRF_20f8:
 	ld	wa, iz
@@ -3013,7 +3013,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xwa)
 	ld	(xbc), a
 	inc	1, iz
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr c, .LRF_20f8                        ; [67 e3] jr C,0x2820f8
 .LRF_2115:
 	lda xwa, (0x22a000:24)
@@ -3034,7 +3034,7 @@ HDAE5000_AcHddNamingWindowProc:
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 80 00] jrl T,0x2821da
 	lds	iz, 0
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr nc, .LRF_2180                       ; [6f 1d] jr NC,0x282180
 .LRF_2163:
 	ld	wa, iz
@@ -3045,7 +3045,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xwa)
 	ld	(xbc), a
 	inc	1, iz
-	cpda16_24	iz, (0x22A026)
+	cp	iz, (0x22A026:24)
 	jr c, .LRF_2163                        ; [67 e3] jr C,0x282163
 .LRF_2180:
 	ld	xwa, (0x23a1a2)
@@ -3106,7 +3106,7 @@ HDAE5000_AcHddNamingWindowProc:
 .LRF_2231:
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
 	ld	(0x22a02a), wa
-	cpw_da	(0x22A032), 0
+	cpw	(0x22A032:24), 0
 	jr nz, .LRF_2264                       ; [6e 22] jr NZ,0x282264
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
 	extz xwa
@@ -3208,7 +3208,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lda xbc, (0x2f9362:24)
 	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
 	jr z, .LRF_23d2                        ; [66 2d] jr Z,0x2823d2
-	cpw_da	(0x22A02A), 2
+	cpw	(0x22A02A:24), 2
 	jr nz, .LRF_23b5                       ; [6e 07] jr NZ,0x2823b5
 	ldw	(0x22A02A:24), 0
 .LRF_23b5:
@@ -3228,9 +3228,9 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	cp	(xbc), 0x20
 	jr nz, .LRF_2409                       ; [6e 24] jr NZ,0x282409
-	cpw_da	(0x22A032), 0
+	cpw	(0x22A032:24), 0
 	jrl nz, .LRF_24a2                      ; [7e b3 00] jrl NZ,0x2824a2
-	cpw_da	(0x22A02A), 2
+	cpw	(0x22A02A:24), 2
 	jr nz, .LRF_23ff                       ; [6e 07] jr NZ,0x2823ff
 	ldw	(0x22A02A:24), 0
 .LRF_23ff:
@@ -3243,7 +3243,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	cp	(xbc), 0x5f
 	jr nz, .LRF_2435                       ; [6e 19] jr NZ,0x282435
-	cpw_da	(0x22A02A), 2
+	cpw	(0x22A02A:24), 2
 	jr nz, .LRF_242c                       ; [6e 07] jr NZ,0x28242c
 	ldw	(0x22A02A:24), 0
 .LRF_242c:

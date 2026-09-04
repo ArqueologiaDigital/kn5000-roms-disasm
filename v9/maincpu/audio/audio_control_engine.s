@@ -1435,7 +1435,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	a, (xiz+3)
 	.byte 0x8e
 	push	sr
-	cpda8 xbc, (16486)
+	cp a, (16486:16)
 	swi	1
 	.byte 0x90, 0xb9, 0xb6
 	push_a
@@ -1651,7 +1651,7 @@ ExtDev_SndParam_DispatchComplex:
 	ld	a, (xiz+3)
 	.byte 0x8e
 	push	sr
-	cpda8 xbc, (9830)
+	cp a, (9830:16)
 	swi	1
 	.byte 0x90
 	ld	(xbc-74), 152
@@ -2376,14 +2376,14 @@ Audio_IncrementUpdateCounter:
 
 Audio_CheckAndFlagChanges:
 	call GetDialEnableState
-	cpda8 l, 0x8f5e
+	cp l, (0x8f5e:16)
 	jr z, AudioChange_CheckSelectionState
 	ordi16 0x8f42, 64
 	ld (0x8f5e:16), l
 
 AudioChange_CheckSelectionState:
 	call CtrlPanel_GetSelectionState
-	cpda8 l, 0x8f60
+	cp l, (0x8f60:16)
 	ret z
 	cps l, 2
 	jr nz, AudioChange_UpdatePreviousSelect
@@ -5081,7 +5081,7 @@ ExtData_ToneParam_AltBody:
 	cp	(xbc), e
 	jr	nz, 8
 	ld	a, (xhl)
-	cpda8 xbc, (37169)
+	cp a, (37169:16)
 	jr	z, 40
 	ld	(xbc), e
 	.byte 0xb3
@@ -5274,7 +5274,7 @@ ExtData_ToneParam_MultiChannel:
 	ldio	216, 18
 	extz	bc
 	add	bc, wa
-	cpda16 xbc, (37219)
+	cp bc, (37219:16)
 	ret	z
 	.byte 0xf1
 	swi	1
@@ -6786,7 +6786,7 @@ VoiceParam_CompareAndUpdate:
 	ld	c, (0x9153:16)
 	ld	a, e
 	add	a, c
-	cpda8	a, 37204
+	cp	a, (37204:16)
 	jr	nc, 4
 	add	e, c
 	jr	4

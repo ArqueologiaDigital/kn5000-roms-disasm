@@ -41,7 +41,7 @@ Display_ResetDirtyFlags:
 ;=============================================================================
 Display_UpdateDirtyRegions:
 	ld (0x0205e6:24), 0x01
-	cpw_da (0x0205e4), 0
+	cpw (0x0205e4:24), 0
 	jr z, Display_MarkClean
 	call Display_UpdateRegion0	; Status bar area
 	call Display_UpdateRegion5	; Menu area
@@ -84,13 +84,13 @@ Display_UpdateRegion0_Check:
 	jr z, Display_UpdateRegion0_Done
 	pushw wa
 	ld a, (3429:16)
-	cpda8_24 a, (0x0205ea)
+	cp a, (0x0205ea:24)
 	jr nz, Display_UpdateRegion0_Changed
 	ld a, (3567:16)
-	cpda8_24 a, (0x0205e8)
+	cp a, (0x0205e8:24)
 	jr nz, Display_UpdateRegion0_Changed
 	ld a, (3424:16)
-	cpda8_24 a, (0x0205ec)
+	cp a, (0x0205ec:24)
 	jr z, Display_UpdateRegion0_NoChange
 
 Display_UpdateRegion0_Changed:
@@ -756,7 +756,7 @@ Display_CallMenuInit:
 Display_ConditionalCompare:
 	call Display_CallMenuConfig
 	ld a, (0x8c9a:16)
-	cpda8 a, (0x8c9b)
+	cp a, (0x8c9b:16)
 	jr z, Display_ConditionalCompare_Ret
 Display_ConditionalCompare_Ret:
 	ret
@@ -851,7 +851,7 @@ SoundEvt_LongPacketHandler:
 	pop	xhl
 	call (xiy)
 	ld	wa, (13950:16)
-	cpda16 xwa, (3816)
+	cp wa, (3816:16)
 	jrl	nz, 48
 	ld	a, (3420:16)
 	ld	w, (3821:16)
@@ -1886,7 +1886,7 @@ UIState_CallDecHandler:
 	call VoiceSlot_TableSetup_0x56D
 UIState_CheckValueChanged:
 	ld wa, (0x367e:16)
-	cpda16 xwa, 0x0ee8
+	cp wa, (0x0ee8:16)
 	jrl nz, UIState_UpdateAllRegions
 	call Display_UpdateRegion8
 	call Display_UpdateRegion10
@@ -2743,7 +2743,7 @@ Timer_ModeHandler_0:
 	call	15713280
 	ld	(3522:16), a
 	call	15713280
-	cpda8	a, 3522
+	cp	a, (3522:16)
 	jrl	z, 2
 	jr	106
 	call	15713356
@@ -3024,7 +3024,7 @@ Timer_ParamCompareAlt:
 	call	15699782
 	jp	15694952
 	ld	a, (3531:16)
-	cpda8	a, 3521
+	cp	a, (3521:16)
 	jrl	nz, 32
 	push	xwa
 	push	xhl
@@ -3151,7 +3151,7 @@ ToneParam_ModeGuardEntry:
 	cp	a, 130
 	jrl	z, 19
 	call	15713141
-	cpda8	a, 3415
+	cp	a, (3415:16)
 	jrl	ugt, 8
 	call	15699930
 	jp	15695228
@@ -3286,7 +3286,7 @@ MemConfig_Handler_5:
 	call	15713141
 	ld	(3523:16), a
 	call	15713141
-	cpda8	a, 3523
+	cp	a, (3523:16)
 	jrl	nz, 19
 	ldb	w, 6
 	call	15712412
@@ -3406,7 +3406,7 @@ ToneParam_Evt09_BytecodeHandler:
 	jrl nz, .Lc_ef80ea
 .Lc_ef80a7:
 	call VoiceSlot_FlagCheck
-	cpda8 a, (0x0d57)
+	cp a, (0x0d57:16)
 	jrl nz, .Lc_ef80e6
 	call ToneParam_HandlerTable_BC_0x4DC
 	ld (0x7ea6:16), 0xff
@@ -3427,7 +3427,7 @@ ToneParam_Evt09_BytecodeHandler:
 	jp ToneParam_Evt09_BytecodeHandler_0xCF
 .Lc_ef80ea:
 	call VoiceSlot_FlagCheck
-	cpda8 a, (0x0d57)
+	cp a, (0x0d57:16)
 	jrl nz, .Lc_ef80e6
 	ld A,B
 	and A,0x0f
@@ -3448,7 +3448,7 @@ ToneParam_Evt09_BytecodeHandler:
 	cp W,0xff
 	jrl z, .Lc_ef814a
 	popw bc
-	cpdm8 0x0dca, b
+	cp (0x0dca:16), b
 	jrl nz, .Lc_ef8115
 	xor A,A
 	call VoiceSlot_RestoreState
@@ -3488,16 +3488,16 @@ ToneParam_HandlerTable_BC:
 	call ToneParam_HandlerTable_BC_0x1A2
 	ld a, (0x0e3f:16)
 	ld (0x0e40:16), a
-	cpda8 a, (0x0e41)
+	cp a, (0x0e41:16)
 	jrl nz, .Lc_ef81b1
 	jp ToneParam_HandlerTable_BC_0x18
 .Lc_ef81b1:
 	ld wa, (0x0d5a:16)
-	cpda16 xwa, 0x0d6b
+	cp wa, (0x0d6b:16)
 	jrl c, .Lc_ef81dd
 	call ToneParam_HandlerTable_BC_0x4DC
 	ld a, (0x0e40:16)
-	cpda8 a, (0x0e41)
+	cp a, (0x0e41:16)
 	jrl c, .Lc_ef81d3
 	call ToneParam_HandlerTable_BC_0x2EB
 	jp ToneParam_HandlerTable_BC_0x82
@@ -3533,9 +3533,9 @@ ToneParam_HandlerTable_BC:
 	ldb W, 0xff
 	pushw de
 	xor DE,DE
-	cpdm16 0x0d5a, xde
+	cp (0x0d5a:16), de
 	jrl nz, .Lc_ef843e
-	cpda8 e, (0x0d57)
+	cp e, (0x0d57:16)
 	jrl nz, .Lc_ef843e
 	ldb W, 0x00
 .Lc_ef843e:
@@ -3561,7 +3561,7 @@ ToneParam_HandlerTable_BC:
 	cp W,0xff
 	jrl z, .Lc_ef849e
 	ld a, (0x0e43:16)
-	cpda8 a, (0x0e41)
+	cp a, (0x0e41:16)
 	jrl c, .Lc_ef8453
 	xor B,B
 	ld c, (0x0e40:16)
@@ -3620,7 +3620,7 @@ ToneParam_HandlerTable_BC:
 	call MemConfig_Handler_5_0xE4
 	ld a, (0x0e41:16)
 	subda8 a, (0x0e40)
-	cpda8 a, (0x0e43)
+	cp a, (0x0e43:16)
 	jrl ugt, .Lc_ef84bf
 	xor B,B
 	ld c, (0x0e40:16)
@@ -3755,7 +3755,7 @@ PeriphReg_CheckActiveSlot:
 PeriphReg_StoreAndUpdate:
 	ld	a, (3471:16)
 	ld	(3536:16), a
-	cpda8	a, 3537
+	cp	a, (3537:16)
 	jrl nz, PeriphReg_LoadWordAndCall
 	call ToneParam_HandlerTable_BC_0x4DC
 PeriphReg_LoadWordAndCall:
@@ -3811,7 +3811,7 @@ DisplayMode_Handler_3:
 	cp A,0x82
 	jrl z, .Lc_ef8807
 	call VoiceSlot_FlagCheck
-	cpda8 a, (0x0d57)
+	cp a, (0x0d57:16)
 	jrl ugt, .Lc_ef8807
 	call DMA_FlagCheckWithCalls
 	jp DisplayMode_Handler_3_0x3A
@@ -3843,7 +3843,7 @@ DisplayMode_Handler_3:
 	and	e, 240
 	cp	(3413:16), 255
 	jrl	z, 63
-	cpdm8	3413, a
+	cp	(3413:16), a
 	jrl	z, 68
 	cp	(3413:16), 210
 	jrl	z, 38
@@ -3860,7 +3860,7 @@ DisplayMode_Handler_3:
 	cp	a, 209
 	jrl	z, 16
 	jp	15698026
-	cpda8	a, 3536
+	cp	a, (3536:16)
 	jrl	z, -55
 	ld	(3536:16), 255
 	cp	a, 209
@@ -4025,7 +4025,7 @@ DisplayMode_Handler_3:
 	ldto_lerp	xiy, 56
 	inc	1, l
 	ld	(3540:16), l
-	cpda8	l, 3541
+	cp	l, (3541:16)
 	jrl	ule, 4
 	ld	(3541:16), l
 	pop	xiy
@@ -4044,7 +4044,7 @@ DisplayMode_Handler_3:
 	ld	l, (3533:16)
 	xor	h, h
 	addda16 xhl, (3418)
-	cpda16 xhl, (3418)
+	cp hl, (3418:16)
 	jrl	z, 18
 	push	xhl
 	call	15694322
@@ -4097,7 +4097,7 @@ DisplayMode_Handler_3:
 	cp	a, 144
 	jrl	nz, 125
 	call	15713141
-	cpda8	a, 3415
+	cp	a, (3415:16)
 	jrl	nz, 114
 	xor	a, a
 	call	15716493
@@ -4528,9 +4528,9 @@ VoiceSlot_ProcessedWordRet:
 	ld xix, 0xcbe
 	ldb_sri A, 0x07, 0xf0, 0xf8
 	pop xix
-	cpda16 xiy, 3583
+	cp iy, (3583:16)
 	jrl nz, AccPedal_RereadParams
-	cpda8 a, 3585
+	cp a, (3585:16)
 	jrl nc, AccPedal_RestoreAndReturn
 
 AccPedal_RereadParams:
@@ -5777,7 +5777,7 @@ PortConfig_Handler_0:
 	jrl z, .Lc_efa641
 	cp A,0x82
 	jrl z, .Lc_efa641
-	cpda8 a, (0x0d57)
+	cp a, (0x0d57:16)
 	jrl nz, .Lc_efa641
 	call SndDispatch_ProcessCommand_0x266
 	jp PortConfig_Handler_0_0x10A
@@ -6238,13 +6238,13 @@ MemConfig_Handler_3:
 	ret
 	call	AccPedal_CheckBitAndUpdate
 	ld	wa, (3816:16)
-	cpda16	xwa, (13950)
+	cp	wa, (13950:16)
 	jrl	nz, 73	; -> 0xEFB143
 	ld	wa, (3818:16)
-	cpda16	xwa, (3416)
+	cp	wa, (3416:16)
 	jrl	nz, 24	; -> 0xEFB11D
 	ld	a, (3820:16)
-	cpda8	xbc, (3415)
+	cp	a, (3415:16)
 	jrl	z, 68	; -> 0xEFB154
 	call	15722654
 	cps	w, 0
@@ -6446,13 +6446,13 @@ SndDispatch_ProcessCommand:
 	jrl	nz, 43
 	cp	(xiy), w
 	jrl	nz, 19
-	cpdm8	3526, w
+	cp	(3526:16), w
 	jrl	nz, 6
 	ldb	a, 3
 	jp	15709087
 	ldb	a, 4
 	jp	15709087
-	cpdm8	3526, w
+	cp	(3526:16), w
 	jrl	nz, 6
 	ldb	a, 5
 	jp	15709087
@@ -6462,13 +6462,13 @@ SndDispatch_ProcessCommand:
 	jrl	nz, 43
 	cp	(xiy), w
 	jrl	nz, 19
-	cpdm8	3526, w
+	cp	(3526:16), w
 	jrl	nz, 6
 	ldb	a, 7
 	jp	15709087
 	ldb	a, 8
 	jp	15709087
-	cpdm8	3526, w
+	cp	(3526:16), w
 	jrl	nz, 6
 	ldb	a, 9
 	jp	15709087
@@ -6572,7 +6572,7 @@ SndDispatch_ProcessCommand:
 	cp	a, 144
 	jrl	nz, 20
 	call	15713141
-	cpda8	a, 3526
+	cp	a, (3526:16)
 	jrl	z, -31
 	ld	(3415:16), 0
 	jp	15709536
@@ -6685,7 +6685,7 @@ MemConfig_Handler_4:
 	jrl	nz, -26
 	jp	15709792
 	ld	a, (3659:16)
-	cpda8	a, 3415
+	cp	a, (3415:16)
 	jrl	nz, 24
 	ldb	a, 2
 	call	15716594
@@ -6738,7 +6738,7 @@ MemConfig_Handler_4:
 	cp	a, 144
 	jrl	nz, 19
 	call	15713141
-	cpda8	a, 3522
+	cp	a, (3522:16)
 	jrl	z, -53
 	call	15712661
 	jp	15710012
@@ -7887,7 +7887,7 @@ VoiceState_DataBlock2:
 	add	xwa, 3583
 	ld	xhl, xwa
 	ld	hl, (xhl+4)
-	cpda16 xhl, (3416)
+	cp hl, (3416:16)
 	jrl	ule, 6
 	ldb	w, 3
 	jp	15716859
@@ -8191,9 +8191,9 @@ VoiceState_DataBlock2:
 	ld	xde, 3262
 	ld_rrb	a, xde, iz
 	pop	xde
-	cpda16 xiy, (3583)
+	cp iy, (3583:16)
 	jrl	nz, 7
-	cpda8	a, 3585
+	cp	a, (3585:16)
 	jrl	nc, 49
 	call	15713087
 	and	a, 240
@@ -8387,7 +8387,7 @@ VoiceState_DataBlock2:
 	popw	bc
 	jp	15718067
 	inc	1, c
-	cpda8	c, 3777
+	cp	c, (3777:16)
 	jrl	z, 6
 	inc	1, xix
 	jp	15718067
@@ -8486,7 +8486,7 @@ VoiceState_DataBlock2:
 	call	15718654
 	ret
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	z, 105
 	jrl	ugt, 56
 	ld	bc, (4357:16)
@@ -8503,7 +8503,7 @@ VoiceState_DataBlock2:
 	jrl	z, 63
 	dec	1, bc
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	nz, -46
 	jp	15718648
 	ld	bc, (4357:16)
@@ -8519,12 +8519,12 @@ VoiceState_DataBlock2:
 	popw	bc
 	dec	1, bc
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	nz, -38
 	.byte 0xc1, 0x57, 0x0f, 0x3c, 0xfe
 	ret
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	z, 63
 	jrl	ugt, 35
 	ld	bc, (4357:16)
@@ -8535,7 +8535,7 @@ VoiceState_DataBlock2:
 	cp	(32422:16), 1
 	jrl	z, 40
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	nz, -25
 	jp	15718728
 	ld	bc, (4357:16)
@@ -8545,11 +8545,11 @@ VoiceState_DataBlock2:
 	call	15701361
 	popw	bc
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	nz, -17
 	ret
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	z, 61
 	jrl	ugt, 30
 	ld	bc, (4357:16)
@@ -8558,7 +8558,7 @@ VoiceState_DataBlock2:
 	call	15707916
 	popw	bc
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	ge, 35
 	djnz16	bc, -20
 	jp	15718801
@@ -8569,7 +8569,7 @@ VoiceState_DataBlock2:
 	call	15708093
 	popw	bc
 	ld	wa, (13950:16)
-	cpda16 xwa, (4357)
+	cp wa, (4357:16)
 	jrl	le, 3
 	djnz16	bc, -20
 	ret
@@ -8766,7 +8766,7 @@ SubCPU_ToneDispatch:
 	bit	7, w
 	jrl	nz, 2
 	ldb	l, 3
-	cpdm8	4380, l
+	cp	(4380:16), l
 	jrl	z, 28
 	ld	a, (4380:16)
 	xor	l, l
@@ -9287,7 +9287,7 @@ DisplayStr_BytecodeBlock_A:
 	adddi16 (0x0ec4), 0x0002
 	ld c, (0x0ec1:16)
 	sla C, 0x01
-	cpdm8	3780, c
+	cp	(3780:16), c
 	jrl	c, 96
 	ld	l, (3782:16)
 	cps	l, 2
@@ -9349,7 +9349,7 @@ DisplayStr_BytecodeBlock_A:
 	incw	1, (3780:16)
 	ld	c, (3777:16)
 	sla	c, 1
-	cpdm8	3780, c
+	cp	(3780:16), c
 	jrl	c, 96
 	ld	l, (3782:16)
 	cps	l, 2
@@ -11118,7 +11118,7 @@ Scoop_TitleBar_End:
 Scoop_TitleBar_SelectPartRange:
 	xor xbc, xbc
 	ld c, (3667:16)
-	cpda8 c, 3668
+	cp c, (3668:16)
 	jr nc, Scoop_TitleBar_ClampParts
 	ld c, (3668:16)
 
@@ -11671,7 +11671,7 @@ Scoop_EventHandler_Scroll:
 	call SetWall_StreamIndexResolve
 	ld xwa, (4349:16)
 	ld (9850:16), xwa
-	cpda16 xde, 0x28ba
+	cp de, (0x28ba:16)
 	jr nz, Scoop_Scroll_ValidateRange
 	ld iy, (0x28bc:16)
 	sub iy, 0x5
@@ -11687,7 +11687,7 @@ Scoop_EventHandler_Scroll:
 
 Scoop_Scroll_ValidateRange:
 	ld wa, (0x28b6:16)
-	cpda16 xwa, 0x28bc
+	cp wa, (0x28bc:16)
 	jr ugt, Scoop_Scroll_Boundary1
 	jr z, Scoop_Scroll_Boundary2
 	jr Scoop_Scroll_Boundary3
@@ -11719,7 +11719,7 @@ Scoop_Scroll_Apply:
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_EventHandler_CategorySelect:
-	cpda16 xde, 0x28ba
+	cp de, (0x28ba:16)
 	jrl z, Scoop_CategorySelect_Pitch
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
@@ -11756,7 +11756,7 @@ Scoop_CategorySelect_Amplitude:
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_CategorySelect_Filter:
-	cpda16 xde, 0x28ba
+	cp de, (0x28ba:16)
 	jrl z, Scoop_CategorySelect_End
 	ldw bc, 0x100
 	sub bc, 0x5
@@ -11800,7 +11800,7 @@ Scoop_CategorySelect_UpdateDisplay:
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_EventHandler_ButtonGrid:
-	cpda16 xde, 0x28ba
+	cp de, (0x28ba:16)
 	jrl z, Scoop_ButtonGrid_CheckBounds
 	ld bc, (9872:16)
 	call Scoop_SpecialMode_Setup
@@ -11827,7 +11827,7 @@ Scoop_ButtonGrid_ProcessCell:
 	ld bc, (9874:16)
 	sub bc, wa
 	ld (9880:16), bc
-	cpdm16 9876, xbc
+	cp (9876:16), bc
 	jr nc, Scoop_ButtonGrid_UpdateValue
 	jr Scoop_ButtonGrid_End
 
@@ -11872,7 +11872,7 @@ Scoop_EventHandler_SpecialMode:
 	ld	ix, (0x28b6:16)
 	jrl	431
 	ld	wa, (0x28b6:16)
-	cpda16 xwa, (10428)
+	cp wa, (10428:16)
 	jr	c, 4
 	jr	z, 4
 	jr	ugt, 5
@@ -11900,7 +11900,7 @@ Scoop_EventHandler_SpecialMode:
 	nop
 	jr	z, 3
 	jrl	407
-	cpda16 xde, (10426)
+	cp de, (10426:16)
 	jr	nz, 2
 	jr	44
 	ld	bc, (9870:16)
@@ -11942,7 +11942,7 @@ Scoop_EventHandler_SpecialMode:
 	nop
 	jr	z, 3
 	jrl	286
-	cpda16 xde, (10426)
+	cp de, (10426:16)
 	jr	nz, 2
 	jr	39
 	ldw	bc, 256
@@ -11994,7 +11994,7 @@ Scoop_EventHandler_SpecialMode:
 	nop
 	jr	z, 3
 	jrl	133
-	cpda16 xde, (10426)
+	cp de, (10426:16)
 	jr	nz, 2
 	jr	42
 	ld	bc, (9872:16)
@@ -12023,7 +12023,7 @@ Scoop_EventHandler_SpecialMode:
 	ld	bc, (9874:16)
 	sub	bc, wa
 	ld	(9880:16), bc
-	cpdm16 (9876), xbc
+	cp (9876:16), bc
 	jr	nc, 2
 	jr	6
 	call	Scoop_SpecialMode_UpdateParams_0x70
@@ -12259,7 +12259,7 @@ Scoop_SpecialMode_ValueSend_Part2:
 	andmi8 (xhl), 0x7f
 	ld (xhl + 5), 0x82
 	inc 1, wa
-	cpda16 xwa, 3302
+	cp wa, (3302:16)
 	jr nz, Scoop_SpecialMode_ValueSend_Part1
 	dec 1, wa
 

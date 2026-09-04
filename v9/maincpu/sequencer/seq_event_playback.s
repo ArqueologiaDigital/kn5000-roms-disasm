@@ -86,7 +86,7 @@ SeqEvt_ReadAndDispatchEntry:
 	ld (0x7e11:16), ix
 	calr SeqEvtBuf_AdvanceReadPos
 	ld (0x7e0f:16), ix
-	cpda8 a, 1132
+	cp a, (1132:16)
 	jr ule, SeqEvt_DispatchByChannel
 	jp SeqEvt_ProcessTempoEvent
 
@@ -106,7 +106,7 @@ SeqEvt_ProcessNoteOn:
 	xor ix, ix
 
 SeqEvt_SlotScanLoop:
-	cpda16 xix, 0x7e04
+	cp ix, (0x7e04:16)
 	jr c, SeqEvt_CheckSlotActive
 	jr SeqEvt_AfterSlotScan
 
@@ -131,7 +131,7 @@ SeqEvt_AfterSlotScan:
 	xor ix, ix
 
 SeqEvt_FindFreeSlotLoop:
-	cpda16 xix, 0x7e04
+	cp ix, (0x7e04:16)
 	jr nc, SeqEvt_AllocateNewSlot
 	bit_dri 7, 0x07, 0xec, 0xf0
 	jr nz, SeqEvt_AdvanceFreeSlotIdx
@@ -200,7 +200,7 @@ SeqEvt_WriteNoteOnRotating:
 	pop xwa
 	adddi8 0x7e0a, 2
 	ld a, (0x7e0a:16)
-	cpda8 a, 0x7e06
+	cp a, (0x7e06:16)
 	jr c, SeqEvt_RotateIndexDone
 	ld (0x7e0a:16), 0
 
@@ -273,7 +273,7 @@ SeqEvt_AdjustNoteOctave:
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	cpda16 xwa, 0x7dfe
+	cp wa, (0x7dfe:16)
 	jr nc, SeqEvt_WriteRemainingParams
 	ld (0x7dfe:16), wa
 
@@ -380,7 +380,7 @@ SeqEvt_SaveReadPosAndRet:
 
 SeqEvt_CalcTempoOffset:
 	subda8 a, 1132
-	cpda8 a, 0x7dfd
+	cp a, (0x7dfd:16)
 	jr nc, SeqEvt_UpdateMinTempo
 	ld (0x7dfd:16), a
 
@@ -462,7 +462,7 @@ Voice_ScanSlotMetric:
 	xor iy, iy
 
 Voice_ScanLoop:
-	cpda16 xiy, 0x7e04
+	cp iy, (0x7e04:16)
 	jr c, Voice_CheckSlotBit
 	jp Voice_ScanLoopDone
 
@@ -483,7 +483,7 @@ Voice_ReadSlotParams:
 	ld (0x7e0d:16), a
 	inc 1, ix
 	ldw_sri WA, 0x07, 0xec, 0xf0
-	cpda16 xwa, 1134
+	cp wa, (1134:16)
 	jr gt, Voice_SubtractBaseFreq
 	ex16 iy, iz
 	ld iy, (xhl + 4)
@@ -507,7 +507,7 @@ Voice_SubtractBaseFreq:
 
 Voice_StoreMetricValue:
 	stw_dri WA, 0x07, 0xec, 0xf0
-	cpda16 xwa, 0x7e00
+	cp wa, (0x7e00:16)
 	jr nc, Voice_ParamComplete
 	ld (0x7e00:16), wa
 

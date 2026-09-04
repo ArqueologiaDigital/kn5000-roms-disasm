@@ -237,7 +237,7 @@ FDC_ValidateTrack:
 	ld	(35215:16), a
 	ld	(35226:16), a
 	extz	wa
-	cpda16	xwa, (35436)
+	cp	wa, (35436:16)
 	jr	c, 6	; -> 0xF96A2F
 	ldw	wa, 254
 	jrl	1905	; -> 0xF971A0
@@ -864,7 +864,7 @@ FDC_InitSequence_Full:
 FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_head.bin"
 	ld a, (0x899a:16)
-	cpda8 a, (0x8a68)
+	cp a, (0x8a68:16)
 	ret Z
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_tail.bin"
 FDC_CMD_EXEC:

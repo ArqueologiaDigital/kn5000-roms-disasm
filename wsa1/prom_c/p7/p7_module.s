@@ -15806,7 +15806,7 @@ P7Units_ReloadFixedStreams:
 	call	0xF9A646                              ; FA3391  call 0xf9a646
 	inc	8, xsp                                 ; FA3395  inc 0,XSP
 	inc	2, xsp                                 ; FA3397  inc 2,XSP
-	cpib_da 0x00F35F, 0x02                     ; FA3399  cp (0x00f35f),0x02
+	cp (0x00F35F:24), 0x02                     ; FA3399  cp (0x00f35f),0x02
 	jr z, P7Units_ReloadFixedStreams__FA33D1                   ; FA339F  jr Z,0xfa33d1
 	lda	xbc, (0xFD4B97:24)                     ; FA33A1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33A6  push XBC
@@ -18599,7 +18599,7 @@ sub_FA4CE5__FA4D3A:
 	add	xsp, 20                                ; FA4D73  add XSP,0x00000014
 	jrl sub_FA4CE5__FA4E13                     ; FA4D79  jrl T,0xfa4e13
 sub_FA4CE5__FA4D7C:
-	cpib_da 0x00F35D, 0x00                     ; FA4D7C  cp (0x00f35d),0x00
+	cp (0x00F35D:24), 0x00                     ; FA4D7C  cp (0x00f35d),0x00
 	jr nz, sub_FA4CE5__FA4DC5                  ; FA4D82  jr NZ,0xfa4dc5
 	pushw	1                                    ; FA4D84  push 0x0001
 	lda	xbc, (0xFD4B97:24)                     ; FA4D87  lda XBC,0xfd4b97
@@ -19379,7 +19379,7 @@ P7Units_ServiceTask__FA5509:
 	calr (0xFA5535 - 0xFA550E)                 ; FA550B  calr 0xfa5535
 	calr (0xFA2DEC - 0xFA5511)                 ; FA550E  calr 0xfa2dec
 	calr (0xFA26CB - 0xFA5514)                 ; FA5511  calr 0xfa26cb
-	cpib_da 0x00F35C, 0x00                     ; FA5514  cp (0x00f35c),0x00
+	cp (0x00F35C:24), 0x00                     ; FA5514  cp (0x00f35c),0x00
 	jr z, P7Units_ServiceTask__FA552E                   ; FA551A  jr Z,0xfa552e
 	ld	(0xF35C:24), 0                        ; FA551C  ld (0x00f35c),0x00
 	calr (0xFA336B - 0xFA5525)                 ; FA5522  calr 0xfa336b
@@ -19586,7 +19586,7 @@ P7Units_ResolveProgramsAndReload__FA56EB:
 	ld	c, (0xF361:24)                         ; FA5709  ld C,(0x00f361)
 	ld	(0xF35D:24), c                         ; FA570E  ld (0x00f35d),C
 	ei	0                                       ; FA5713  ei 0x00
-	cpib_da 0x00F35D, 0x01                     ; FA5715  cp (0x00f35d),0x01
+	cp (0x00F35D:24), 0x01                     ; FA5715  cp (0x00f35d),0x01
 	jr ule, P7Units_ResolveProgramsAndReload__FA5723                 ; FA571B  jr ULE,0xfa5723
 	ld	(0xF35D:24), 1                        ; FA571D  ld (0x00f35d),0x01
 P7Units_ResolveProgramsAndReload__FA5723:

@@ -323,7 +323,7 @@ SMF_SelectBank_AfterReset:
 	push xde
 	call SetWall_LoadBankToToneGen
 	ld a, (4599:16)
-	cpda8_24 a, (0xffe3)
+	cp a, (0xffe3:24)
 	jrl z, SMF_SelectBank_AfterToneLoad
 	ld a, (4599:16)
 	ld (0x00ffe3:24), a

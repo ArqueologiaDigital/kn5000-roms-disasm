@@ -117,7 +117,7 @@ BitMapOut_ByteData_RenderB:
 	cp	xhl, 27263222
 	jrl	z, 145
 	ld	a, (49124:16)
-	cpda8	a, 35998
+	cp	a, (35998:16)
 	jrl	nz, 134
 	cp	(49121:16), 0
 	jr	nz, 127
@@ -3181,7 +3181,7 @@ BitMapOut_ApplyPatch_Loop:
 	inc	1, iz
 	inc1b_erp	251
 	stb_erp	a, 251
-	cpda8	a, 36032
+	cp	a, (36032:16)
 	jr	c, -27
 BitMapOut_ApplyPatch_Store:
 	ld	a, (36034:16)

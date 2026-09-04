@@ -11234,7 +11234,7 @@ MidiChan_SetStateMode2:
 	ld a, (0xbd36:16)
 
 MidiChan_CompareAndFlag:
-	cpda8 a, 0xbd38
+	cp a, (0xbd38:16)
 	ret z
 	set 6, (0xbd1c:16)
 	ldmm8 0xbd38, 0xbd36
@@ -11296,7 +11296,7 @@ MidiSeq_UpdateToneParam:
 	ldb_sri C, 0x07, 0xe4, 0xec
 	ld a, c
 	ld (0xbd00:16), c
-	cpda8 c, 0xbd02
+	cp c, (0xbd02:16)
 	ret z
 	set 7, a
 	ld (0xbd00:16), a
@@ -11311,7 +11311,7 @@ MidiSeq_UpdateToneParam_Lower:
 	ldb_sri C, 0x07, 0xe4, 0xec
 	ld a, c
 	ld (0xbd0c:16), c
-	cpda8 c, 0xbd0e
+	cp c, (0xbd0e:16)
 	ret z
 	set 7, a
 	ld (0xbd0c:16), a
@@ -11361,7 +11361,7 @@ MidiSeq_ComputeExpression:
 	inc 1, xhl
 	ld a, l
 	ld (0xbd08:16), l
-	cpda8 l, 0xbd0a
+	cp l, (0xbd0a:16)
 	ret z
 	set 7, a
 	ld (0xbd08:16), a
@@ -11383,7 +11383,7 @@ MidiSeq_Expression_Lower:
 	inc 1, xhl
 	ld a, l
 	ld (0xbd14:16), l
-	cpda8 l, 0xbd16
+	cp l, (0xbd16:16)
 	ret z
 	set 7, a
 	ld (0xbd14:16), a
@@ -11394,25 +11394,25 @@ MidiSeq_CheckSyncDirty:
 	bit 6, (0xbd18:16)
 	jr z, MidiSeq_CheckSyncDirty_Lower
 	ld a, (0xbd00:16)
-	cpda8 a, 0xbd02
+	cp a, (0xbd02:16)
 	jr nz, DSP_Init_ErrorFlagSet
 	ld a, (0xbd04:16)
-	cpda8 a, 0xbd06
+	cp a, (0xbd06:16)
 	jr nz, DSP_Init_ErrorFlagSet
 	ld a, (0xbd08:16)
-	cpda8 a, 0xbd0a
+	cp a, (0xbd0a:16)
 	jr nz, DSP_Init_ErrorFlagSet
 	ret
 
 MidiSeq_CheckSyncDirty_Lower:
 	ld a, (0xbd0c:16)
-	cpda8 a, 0xbd0e
+	cp a, (0xbd0e:16)
 	jr nz, DSP_Init_ErrorFlagSet
 	ld a, (0xbd10:16)
-	cpda8 a, 0xbd12
+	cp a, (0xbd12:16)
 	jr nz, DSP_Init_ErrorFlagSet
 	ld a, (0xbd14:16)
-	cpda8 a, 0xbd16
+	cp a, (0xbd16:16)
 	ret z
 
 DSP_Init_ErrorFlagSet:

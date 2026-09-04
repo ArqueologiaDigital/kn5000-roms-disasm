@@ -138,7 +138,7 @@ AccChannel_CompareAndMarkDirty:
 	and A,0x3f
 	jr nz, AccChannel_StoreCurrentState
 	ld a, (0x3259:16)
-	cpda8 a, (0x325a)
+	cp a, (0x325a:16)
 	jr nz, .Lc_f534c3
 	ld a, (0x325b:16)
 	and A,0x7f
@@ -323,7 +323,7 @@ AccVoice_CheckBitsAndSetFlags:
 	ld de, (0x3247:16)
 	and D,0x07
 	inc 1,D
-	cpda8 d, (0x0433)
+	cp d, (0x0433:16)
 	jr nz, AccVoice_BitsCheckDone
 	or (0x328b:16), 0x3f
 AccVoice_BitsCheckDone:
@@ -336,7 +336,7 @@ AccPitch_CheckTransposeFlags:
 	jr z, .Lc_f536c0
 	ld a, (0x31e4:16)
 	inc 1,A
-	cpda8 a, (0x0433)
+	cp a, (0x0433:16)
 	jr nz, .Lc_f536c0
 	or (0x328d:16), 0x3f
 AccPitch_UpdateCheck:
@@ -347,7 +347,7 @@ AccPitch_UpdateCheck:
 	jr z, AccPitch_FinalReturn
 	ld a, (0x31e4:16)
 	inc 1,A
-	cpda8 a, (0x0433)
+	cp a, (0x0433:16)
 	jr nz, AccPitch_FinalReturn
 	or (0x328d:16), 0x3f
 AccPitch_FinalReturn:
@@ -465,10 +465,10 @@ AccChord_NullRet:
 
 AccChord_CompareAndSetDirty:
 	ld a, (0x323c:16)
-	cpda8 a, (0x3240)
+	cp a, (0x3240:16)
 	jr nz, .Lc_f538b4
 	ld a, (0x323e:16)
-	cpda8 a, (0x3242)
+	cp a, (0x3242:16)
 	jr z, .Lc_f538b9
 AccChord_SetDirtyBit5:
 .Lc_f538b4:
@@ -483,7 +483,7 @@ AccChord_CompareDone:
 
 AccentVoice_DetectAndMarkChange:
 	ld a, (0x3269:16)
-	cpda8 a, (0x326a)
+	cp a, (0x326a:16)
 	jr z, AccentVoice_UpdateParamIndex
 	ld a, (0x3278:16)
 	orda8 a, (0x3279)
@@ -503,7 +503,7 @@ AccentVoice_CheckModeChange:
 .Lc_f538fe:
 	ld a, (0x3269:16)
 	and A,0x03
-	cpda8 a, (0x329c)
+	cp a, (0x329c:16)
 	jr z, AccentVoice_UpdateParamIndex
 	or (0x3271:16), 0x01
 AccentVoice_UpdateParamIndex:
@@ -1428,7 +1428,7 @@ AccVoice_BytecodeBlock3:
 RhythmROM_CheckValid:
 	ldb C, 0x00
 	ld XWA,0xffffffff
-	cpda32 xwa, (0x31db)
+	cp xwa, (0x31db:16)
 	jr z, RhythmROM_InvalidIncrement
 	jr t, RhythmROM_CheckDone
 RhythmROM_InvalidIncrement:

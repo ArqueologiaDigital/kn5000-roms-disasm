@@ -354,7 +354,7 @@ GetDialEnableState:
 
 SetDialFocus:
 	ld xde, xwa
-	cpdm32_24 (0x03ef6a), xde
+	cp (0x03ef6a:24), xde
 	ret z
 	stl_da (0x03ef6a), xde
 	ld xwa, 0xffffffff
@@ -363,7 +363,7 @@ SetDialFocus:
 	ret
 
 GetDialFocus:
-	cpw_da (0x03ef50), 0
+	cpw (0x03ef50:24), 0
 	jr nz, GetDialFocus_Active
 	ld xhl, 0xffffffff
 	ret
@@ -838,18 +838,18 @@ SetWallPaper:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
-	cpw_da	(0x0340fe), 0
+	cpw	(0x0340fe:24), 0
 	jr	nz, 28
 
 SetWallPaper_Default:
 	lds wa, 0
 	jp ChangeWall
 SetWallPaper_CaseData:
-	cpw_da	(0x0340fa), 0
+	cpw	(0x0340fa:24), 0
 	jr	nz, 13
 	lds	wa, 1
 	jr	-17
-	cpw_da	(0x0340fc), 0
+	cpw	(0x0340fc:24), 0
 	jr	z, -13
 	lds	wa, 2
 	jr	t, 0xe2
@@ -1271,7 +1271,7 @@ DirmdTitleFunc:
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
 	ld	a, (0x8d38:16)
-	cpda8	a, 0x8d39
+	cp	a, (0x8d39:16)
 	jr	z, 25
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
@@ -1901,7 +1901,7 @@ AcNaming_ShowNavButtons:
 AcNaming_SetVisibleAndInit:
 	call SetVisible
 	lds iz, 0
-	cpw_da (0x0274d6), 0
+	cpw (0x0274d6:24), 0
 	jr ule, WndScroll_InitBuffer
 
 ; --- UI Window Procs, Graphics & Mode Screens ---

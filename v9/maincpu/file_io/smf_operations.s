@@ -618,7 +618,7 @@ SmfFN_NavSetup:
 	inc 1, bc
 	cp (0x8d36:16), 107
 	jr z, SmfFN_NavDown_WrapCheck
-	cpda16 xbc, 0x8504
+	cp bc, (0x8504:16)
 	jr lt, SmfFN_NavDown_Apply
 	jrl SmfFN_UpdateDisplay
 
@@ -760,7 +760,7 @@ SmfFN_Save_WriteSlot:
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
 	ld a, (0x00ffe3:24)
-	cpda8 a, 0x8948
+	cp a, (0x8948:16)
 	jr nz, SmfFN_Save_Finish
 	lda xwa, (0x00f180:24)
 	lda_dri XWA, 0xe1, 0x00, 0x01
@@ -810,7 +810,7 @@ SmfFN_HandleOpen:
 	call FileIO_CheckFileExists
 	cps l, 0
 	jr z, SmfFN_Open_Execute
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -906,7 +906,7 @@ SmfFN_HandleOpen2:
 SmfFN_HandleDelete:
 	cp xiz, 0x5
 	jrl nz, SmfFN_HandleDelete2
-	cpib_da (0x0340ea), 0x00
+	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Delete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
@@ -939,7 +939,7 @@ SmfFN_Delete_Execute:
 	lds32 xde, 0
 	call ApPostEvent
 	ld wa, (0x81ac:16)
-	cpda16 xwa, 0x8504
+	cp wa, (0x8504:16)
 	jr lt, SmfFN_Delete_AdjustIndex
 	cps wa, 0
 	jr le, SmfFN_Delete_AdjustIndex
@@ -975,7 +975,7 @@ SmfFN_HandleDelete2:
 	lds32 xde, 0
 	call ApPostEvent
 	ld wa, (0x81ac:16)
-	cpda16 xwa, 0x8504
+	cp wa, (0x8504:16)
 	jr lt, SmfFN_Delete2_AdjustIndex
 	cps wa, 0
 	jr le, SmfFN_Delete2_AdjustIndex
@@ -1215,7 +1215,7 @@ SmfFN_UpdateFilenameField:
 	jr nz, SmfFN_SendOkState
 	lda xiz, (0x8850:16)
 	ld wa, (0x81ac:16)
-	cpda16 xwa, 0x8504
+	cp wa, (0x8504:16)
 	jr lt, SmfFN_FetchFilename
 	cps wa, 0
 	jr le, SmfFN_FetchFilename

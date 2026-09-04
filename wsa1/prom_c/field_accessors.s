@@ -5458,7 +5458,7 @@ sub_FC578C:
 	push	xix                                   ; FC578E  push XIX
 	ld	ix, (0xE082:24)                        ; FC578F  ld IX,(0x00e082)
 	sub	bc, bc                                 ; FC5794  sub BC,BC
-	cpdm16_24	(0xE086), bc                     ; FC5796  cp (0x00e086),BC
+	cp	(0xE086:24), bc                     ; FC5796  cp (0x00e086),BC
 	jr z, sub_FC578C__FC57BE                   ; FC579B  jr Z,0xfc57be
 	ld	bc, (0xE086:24)                        ; FC579D  ld BC,(0x00e086)
 	extz	xbc                                   ; FC57A2  extz XBC

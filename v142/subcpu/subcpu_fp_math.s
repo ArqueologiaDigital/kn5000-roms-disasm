@@ -454,7 +454,7 @@ VoiceFloat_ConvergenceLoop:
 	push xwa
 	call VoiceAmp_ConvergeEngine
 	lda xsp, (xsp + 12)
-	cpw_da 265250, 33
+	cpw (265250:24), 33
 	jr nz, VoiceFloat_ConvergenceLoop_Body
 	ld xwa, (xsp + 62)
 	lda xbc, (0x01f67e:24)

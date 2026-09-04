@@ -812,7 +812,7 @@ SMF_ProcessCh_Loop:
 	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld wa, (xix + 3)
 	pop xix
-	cpda16 xwa, 4229
+	cp wa, (4229:16)
 	jr ule, SMF_ProcessCh_MoveToOutput
 	subda16 xwa, 4229
 	push xix
@@ -1735,7 +1735,7 @@ SMF_LoadBank_EventLoop:
 	calr SMF_ResetPlaybackState
 	call SMF_SetupRead_Return
 	inc 1, (0xffe3:24)
-	cpib_da (0x00ffe3), 0x0a
+	cp (0x00ffe3:24), 0x0a
 	jr c, SMF_LoadBank_EventLoop
 
 SMF_LoadBank_Return:
@@ -1970,7 +1970,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
 	stb_dri A, 0x07, 0xf4, 0xec
-	cpda16 xhl, 4402
+	cp hl, (4402:16)
 	jr c, SMF_ConfigSlot_ReadDataLoop
 	popw hl
 	pop xiy
@@ -2125,7 +2125,7 @@ SMF_Config_WriteLoop:
 	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
-	cpda16 xhl, 4402
+	cp hl, (4402:16)
 	jr c, SMF_Config_WriteLoop
 	pop xhl
 	pop xix

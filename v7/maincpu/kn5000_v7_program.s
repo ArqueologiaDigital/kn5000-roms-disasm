@@ -559,7 +559,7 @@ Boot_InitPeripherals:
 	or a, 0x3
 	ld (xbc), a
 	calr Detect_Region_Code
-	cpw_da (65482), 23205
+	cpw (65482:24), 23205
 	jr z, Boot_FlashAndExtensions
 	lda xde, (0x00066e:24)
 	srl xde, 1
@@ -698,7 +698,7 @@ Boot_ClearAllInterruptEnables:
 ; ===========================================================================
 SubCPU_Send_Payload:
 	push xiz
-	cpib_da (0xfffeef), 0xff
+	cp (0xfffeef:24), 0xff
 	jrl nz, SubCPU_Payload_Done
 	lds32 xiz, 0
 
@@ -727,7 +727,7 @@ SubCPU_Payload_DelayLoop_Short:
 	ld xde, 0x90000
 	call InterCPU_E1_Bulk_Transfer
 	ld xiz, 0x800000
-	cpib_da (0xfffeed), 0xff
+	cp (0xfffeed:24), 0xff
 	jr nz, SubCPU_Payload_TransferPart2
 	ld xiz, 0x50000
 	ld xwa, 0x3e0000
@@ -835,7 +835,7 @@ Boot_ParseSubCPUTimestamp:
 	inc	4, xsp
 	ret
 Boot_HandleFactoryReset:
-	cpw_da (65482), 23205; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
+	cpw (65482:24), 23205; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
 	ret z			; Yes -> checksums valid, skip reset
 	cps a, 1		; Combo code == 1 (Initial Setting)?
 	ret nz			; No -> not requesting reset, return
@@ -1705,7 +1705,7 @@ Voice_FactoryPresetData:
 	jr	z, 29
 	ld	a, (257960:24)
 	ld	(257962:24), a
-	cpw_da	(197710), 0
+	cpw	(197710:24), 0
 	jr	z, 51
 	ld	xwa, xiz
 	ld	bc, (xsp+4)
@@ -1733,7 +1733,7 @@ Voice_FactoryPresetData:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	ld	(257962:24), c
-	cpw_da	(197710), 0
+	cpw	(197710:24), 0
 	ret	z
 	ld	bc, de
 	calr	1
@@ -1841,7 +1841,7 @@ DrawText_QueueOrDirect:
 	jr z, DrawText_QueueDeferred
 	ld a, (0x03efa8:24)
 	ld (0x03efaa:24), a
-	cpw_da (197710), 0
+	cpw (197710:24), 0
 	jrl z, DrawText_PopAndReturn
 	ld xwa, (xsp + 28)
 	push xwa
@@ -1881,7 +1881,7 @@ DrawText_PopAndReturn:
 	ld de, (xiz + 26)
 	ld a, (xiz + 28)
 	ld (0x03efaa:24), a
-	cpw_da (197710), 0
+	cpw (197710:24), 0
 	jr z, DrawText_DeferredFreeAndReturn
 	push xiy
 	pushw ix

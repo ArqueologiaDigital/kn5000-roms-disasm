@@ -379,11 +379,11 @@ DSPCfg_InitDispatchData:
 	ldw	de, 649
 	ldb	l, 207
 	.byte 0x89, 0x82
-	cpdm8	905, a
+	cp	(905:16), a
 	jr	ugt, 9
 	ld	a, l
 	.byte 0x82
-	cpdm8	1161, a
+	cp	(1161:16), a
 	jr	nc, 9
 	cpl	l
 	and	(xde), l
@@ -400,11 +400,11 @@ DSPCfg_InitDispatchData:
 	ldw	de, 649
 	ldb	l, 207
 	.byte 0x89, 0x82
-	cpdm8	905, a
+	cp	(905:16), a
 	jr	ugt, 18
 	ld	a, l
 	.byte 0x82
-	cpdm8	1161, a
+	cp	(1161:16), a
 	jr	c, 9
 	cpl	l
 	and	(xde), l

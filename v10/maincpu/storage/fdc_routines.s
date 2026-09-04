@@ -341,7 +341,7 @@ FDC_ValidateTrack:
 	ld (0x8a2b:16), a
 	ld (0x8a36:16), a
 	extz wa
-	cpda16 xwa, 0x8b08
+	cp wa, (0x8b08:16)
 	jr c, FDC_HandleCmd2
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
@@ -1374,7 +1374,7 @@ FDC_CmdRecalibrate:
 	pop qiz
 	ret
 	ld	a, (0x8a36:16)
-	cpda8	a, 35588
+	cp	a, (35588:16)
 	ret	z
 	.byte 0xc1
 	ldw	iz, 6538
@@ -1793,7 +1793,7 @@ FDC_MODE_CONFIG:
 	ld	(0x8a12:16), a
 	ld	a, (0x8a36:16)
 	extz	wa
-	cpda16 xwa, (35592)
+	cp wa, (35592:16)
 	jr	ule, -66
 ; --- FDC_MC_EXIT: FORMAT command execution and sector fill ---
 ; Calls cleanup, sets up FORMAT command (command byte 0x4d).
