@@ -35,6 +35,13 @@ instead of just their counts.
   bit 7 — six of six in both directions. None of the 35 value fields is read that
   way.
 
+**The 122 census rows are partitioned mechanically**, not waved past: every hit is
+classified as a store/read-modify-write or as a byte / word / long / unsized READ,
+and every READ is checked for a bit-7 mask in its own spelling or in the next three
+instructions. Twenty-four qualify; twenty are the two that test the bit and the
+eighteen that clear it, three more take their base from the routine's own frame
+pointer, and the last is a raw-byte `bit 7,(XIX+0x16)` on the 23-byte slot record.
+
 **The negative, and the forms it searched.** Section 3 prints the list of forms
 before it states any negative: a literal displacement, a base spilled to a frame
 and reloaded, a base held across a call, a base advanced past the field, an

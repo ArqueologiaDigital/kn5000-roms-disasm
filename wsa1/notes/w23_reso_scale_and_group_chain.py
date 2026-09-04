@@ -330,7 +330,34 @@ def sec3_census_bit7():
         for a, d8, spl in rows["other"]:
             say("        other  %06X  d8=0x%02X  %s" % (a, d8, spl))
     say("")
-    say("   THE `other` ROWS.  A row matters only if its base can be a wave-select record.")
+    say("   ★ THE 102 `other` ROWS, PARTITIONED MECHANICALLY rather than waved past.")
+    say("   A row can only carry bit 7 of p22/p32 if it READS the byte (or a wider value")
+    say("   containing it) and something downstream masks that bit.  Classifying all 122")
+    say("   prom_c hits by what the instruction is, and, for every READ, by whether any")
+    say("   of the next three instructions applies a bit-7 mask:")
+    cls, suspects = _classify_reads()
+    for k in sorted(cls):
+        say("     %-34s %3d" % (k, cls[k]))
+    check("every prom_c hit is classified", sum(cls.values()), 122)
+    check("READS whose next three instructions mask bit 7 of the LOW byte",
+          sorted("%06X" % a for a in suspects),
+          sorted(["FC3600", "FC4E28", "FC4ED7",
+                  "FC64A5", "FC64CA", "FC64EC", "FC6483", "FC6510", "FC6522",
+                  "FC6B83", "FC6BA5", "FC6BCA", "FC6BEC", "FC6C10", "FC6C24",
+                  "FC78E0", "FC7902", "FC7927", "FC7949", "FC796D", "FC797F",
+                  "FB211C", "FB2A14", "FB312D"]))
+    say("       TWENTY-FOUR, and twenty are already accounted for: the two that TEST the")
+    say("       bit and the eighteen that CLEAR it.  The other four:")
+    spells(0xFB211C, "ld C,(XIZ+0x16)")
+    spells(0xFB211F, "set 0x07,C")
+    say("         0xFB211C, 0xFB2A14, 0xFB312D -- base XIZ, the routine's OWN FRAME.  A")
+    say("           wave-select pointer is never the frame pointer, and each of the three")
+    say("           SETS the bit in a stack local it then stores back to the frame.")
+    say("         0xFC3600 -- named below.")
+    say("       NO OTHER READ ANYWHERE IN prom_c -- byte, word or long -- puts a bit-7")
+    say("       mask on either byte.")
+    say("")
+    say("   THE ROWS THAT NEED NAMING.  A row matters only if its base can be a wave-select record.")
     say("   Every wave-select pointer in CPU 2 descends from Part_GetWaveSelectRecord")
     say("   (section 5, hop 5), so the qualifying bases are Dev104_PackStagingStruct's")
     say("   frame slot (XIZ-4), Pack104_LoadElementWaveSelRec's (XIZ+0x0C) argument, and")
@@ -404,6 +431,38 @@ FORMS = [
     "                                                            is in the census",
 ]
 
+
+
+def _classify_reads():
+    """Partition prom_c's (Xrr+0x16)/(Xrr+0x20) hits, and find every READ that masks bit 7.
+
+    A hit can carry p22/p32 bit 7 only if it READS the byte -- or a word/long value
+    containing it -- and something nearby masks that bit.  `suspects` is every read
+    whose next three instructions contain a bit-7 operation on the low byte, in any
+    spelling: `and r,0x80`, `and rr,0x0080`, `bit 7,`, `res 0x07,`, `set 0x07,`.
+    """
+    ia = instr_addrs("prom_c")
+    keys = sorted(ia)
+    cls, suspects = {}, []
+    BIT7 = re.compile(r"^(and [ABCDEHLW],0x80|and [A-Z]{2},0x0080|bit 7,|res 0x07,|set 0x07,)")
+    for d8 in (0x16, 0x20):
+        for a, spl, _n in scan(d8, "prom_c")[0]:
+            size = MEMPFX[C[a - 0xF80000]][1]
+            if spl.startswith("ld (X") or spl.startswith("or (X") or spl.startswith("add (X") \
+                    or spl.startswith("sub (X") or spl.startswith("xor (X") or spl.startswith("and (X"):
+                cls["store / read-modify-write"] = cls.get("store / read-modify-write", 0) + 1
+                continue
+            k = {"b": "byte read", "w": "word read", "l": "long read", "n": "unsized operand"}[size]
+            cls[k] = cls.get(k, 0) + 1
+            if BIT7.match(spl):
+                suspects.append(a)
+                continue
+            j = bisect.bisect_right(keys, a)
+            for t in range(j, min(j + 3, len(keys))):
+                if BIT7.match(ia[keys[t]]):
+                    suspects.append(a)
+                    break
+    return cls, suspects
 
 def _absolute_literal_scan():
     """Any LE16/LE24 literal in prom_c equal to a staged wave-select +0x16/+0x20 byte."""
