@@ -277,7 +277,8 @@ pitch offset in 1/256 semitone, which the arms read back into `P[+0x12]` and `P[
 `Dev104_PackStagingStruct` adds to registers `chan+0x0040` and `chan+0x0080`.  ★ So this
 section's own observation — *"both gains plus both tunings, per element, is the shape of a mix
 or coupling matrix"* — was right about the shape and right to refuse to name it.  Full decode,
-nulls and factory evaluation: `FINDINGS-l7a1429-e093-block.md`.
+nulls and factory evaluation: `FINDINGS-l7a1429-e093-block.md`, which also RENAMES `sub_FC4269` to
+`Pack104_SolveCoupledDetune`.
 
 ### 1.9 ★ What register `0x0300`'s ROLE becomes
 

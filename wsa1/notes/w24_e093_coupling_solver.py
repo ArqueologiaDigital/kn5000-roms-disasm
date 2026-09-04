@@ -20,7 +20,8 @@ and three of the eleven immediately push it.
 
 WHAT IT ESTABLISHES
 -------------------
- 1  THE READER (section 1).  sub_FC4269, 1087 bytes, called from exactly three
+ 1  THE READER (section 1).  Pack104_SolveCoupledDetune (0xFC4269, renamed by this lane from
+    `sub_FC4269`), 1087 bytes, called from exactly three
     sites, all three of them the gate-opening arms, all three passing &0x00E093.
  2  THE BLOCK'S LAYOUT (section 2).  A 68-byte argument struct: a 2-word header
     (MODE, N) and four parallel N=8 arrays -- gain, level, tuning IN, and a
@@ -30,7 +31,7 @@ WHAT IT ESTABLISHES
     P[+0x0C] on the way to registers chan+0x0040 (MAIN RESONATOR tuning) and
     chan+0x0080 (SUB RESONATOR tuning).  So the block's output is A DETUNE.
  4  WHAT THE SOLVER COMPUTES (sections 4 and 5).  Every magic constant in
-    sub_FC4269 is a Q11 rendering of a named quantity (2/3, pi, 2pi, 1/2pi), the
+    Pack104_SolveCoupledDetune is a Q11 rendering of a named quantity (2/3, pi, 2pi, 1/2pi), the
     output table is 3072*log2, and the whole routine evaluates the loop
     characteristic function of a network of N coupled delay resonators at each
     resonator's own nominal frequency, then converts the phase error into a pitch
@@ -171,7 +172,7 @@ def sec1_the_reader():
           (u16(0xFC73EA + 5), u16(0xFC73F1 + 5)), (0x0400, 4))
     say("      -> N is 2 x (number of elements): each element contributes TWO slots.")
     say("")
-    say("   sub_FC4269 reads its argument and immediately unpacks the two header words:")
+    say("   Pack104_SolveCoupledDetune reads its argument and unpacks the two header words:")
     spells(0xFC4270, "ld XBC,(XIZ+0x08)")
     spells(0xFC4273, "ld WA,(XBC+0x02)")     # N
     spells(0xFC4279, "ld IY,(XBC)")          # MODE
@@ -275,7 +276,7 @@ def sec3_where_the_result_goes():
 # ============================================================ section 4
 def sec4_constants():
     say("")
-    say("=== 4. EVERY MAGIC CONSTANT IN sub_FC4269 IS A NAMED QUANTITY IN Q11 ===")
+    say("=== 4. EVERY MAGIC CONSTANT IN Pack104_SolveCoupledDetune IS A NAMED QUANTITY IN Q11 ===")
     say("   Q11 here means 2048 = 1.0, the scale Math_Sin_Q11/Math_Cos_Q11/Math_Atan_Q11")
     say("   and Multiply16_Signed_Shr11 already carry (their headers, wave 7 / wave 19).")
     say("")
@@ -410,7 +411,7 @@ def exp2q(x):
 
 
 def div11sat(num, den):
-    """sub_FC4140, 0xFC4140: (num << 11) / den with the ROM's own saturation."""
+    """Divide16_Signed_Shl11_Sat, 0xFC4140: (num << 11) / den, ROM saturation."""
     ix, de = w16(num), w16(den)
     if de == 0:
         return 0x7FFF if ix >= 0 else -0x8000       # Divide32 traps; no live path
@@ -436,7 +437,7 @@ def div11sat(num, den):
 
 
 def solve(mode, n, A, B, Cc):
-    """A bit-exact re-implementation of sub_FC4269, 0xFC4269-0xFC46A7.
+    """A bit-exact re-implementation of Pack104_SolveCoupledDetune, 0xFC4269-0xFC46A7.
 
     A[n], B[n], Cc[n] are the three input arrays of the 0x00E093 block; the
     return value is D[n], the result array the arms read back into P[+0x12] and
@@ -522,7 +523,7 @@ def _reachable_index_range():
 def sec5_simulator():
     say("")
     say("=== 5. THE SOLVER, RE-IMPLEMENTED; ITS NULL, ITS RANGE AND ITS STEP ===")
-    say("   `solve()` above is sub_FC4269 line for line, on the ROM's own tables, with")
+    say("   `solve()` above is Pack104_SolveCoupledDetune line for line, on the ROM's own tables, with")
     say("   every loop annotated with the instruction range it stands for.")
     say("")
     say("   THE NULL, and it is a real one because it can fail: with INTERACTION GAIN")

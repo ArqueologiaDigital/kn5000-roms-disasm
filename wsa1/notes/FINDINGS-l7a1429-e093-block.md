@@ -37,10 +37,14 @@ proposes measuring the instrument, and §8 says where that costs us the last ans
 
 ## 0. THE ANSWER, IN ONE PARAGRAPH
 
+★ **`Pack104_SolveCoupledDetune` and `Divide16_Signed_Shl11_Sat` are this lane's renames** of
+`sub_FC4269` and `sub_FC4140`; the rename map is `notes/w24-e093-rename.map`, and earlier
+notes in this set still spell them as addresses.
+
 **The block has a reader, and the block is an argument struct.**  All three routines that
 open the gate on register `chan+0x0300` finish their fill loop with
 `lda XBC,0x00e093 / push XBC / calr 0xFC4269` — so the block's address never appears at the
-reader, because the reader is *handed* it.  `sub_FC4269` is a 1087-byte fixed-point solver
+reader, because the reader is *handed* it.  `Pack104_SolveCoupledDetune` is a 1087-byte fixed-point solver
 whose every magic constant is a Q11 rendering of a named quantity (`2/3`, `π`, `2π`,
 `1/2π`), which evaluates, for each of the group's resonators in turn, the **loop
 characteristic function of a network of coupled delay resonators at that resonator's own
@@ -79,7 +83,7 @@ Each gate-opening arm ends its per-element fill loop with the same four instruct
 `N` is **twice** the number of elements: each element contributes two slots, and §2 shows
 they are its `MAIN` and its `SUB` resonator.
 
-`sub_FC4269` reads the struct pointer out of `(XIZ+0x08)` at 0xFC4270 and immediately
+`Pack104_SolveCoupledDetune` reads the struct pointer out of `(XIZ+0x08)` at 0xFC4270 and immediately
 unpacks the two header words — `N` from `+0x02`, `MODE` from `+0x00` — and returns at once
 if `N <= 0`.  The block is this routine's argument and nothing else.
 
@@ -152,7 +156,7 @@ Element `k` owns slot `2k` (MAIN) and slot `2k+1` (SUB) of every array: each arm
 all six running offsets by 4 per element (`inc 4,XIY` at 0xFC6F65), and the read-back loop
 takes `D[2k]` to `P_k[+0x12]` and `D[2k+1]` to `P_k[+0x14]`.
 
-★ **A structural corroboration the addressing did not have to give.**  `sub_FC4269` uses
+★ **A structural corroboration the addressing did not have to give.**  `Pack104_SolveCoupledDetune` uses
 seven absolute scratch arrays — `0x00E012`, `0x00E022`, `0x00E032`, `0x00E042`, `0x00E052`,
 `0x00E062`, `0x00E072`.  Each is 8 words; they run **end to end** and stop exactly at
 `0x00E082`, the packer's `PART` pointer.  `N = 8` is the hard maximum the RAM map allows,
@@ -236,7 +240,7 @@ null is built into the table.
 
 ### 4.2 The arithmetic, per output slot `j` — PROVEN
 
-Probe §5 re-implements `sub_FC4269` line for line, every loop annotated with the instruction
+Probe §5 re-implements `Pack104_SolveCoupledDetune` line for line, every loop annotated with the instruction
 range it stands for.  In closed form:
 
 ```
@@ -389,7 +393,7 @@ says nothing about how they interact.  It now can:
 //   reso_scale_delta = the RESO SCALE arms (FINDINGS-l7a1429-reso-scale.md)
 //   second_term:
 //     GROUP off  ->  0
-//     GROUP on   ->  coupled-resonator detune, sub_FC4269 (this note, section 4.2)
+//     GROUP on   ->  coupled-resonator detune, Pack104_SolveCoupledDetune (this note, section 4.2)
 //     otherwise  ->  static (p26<<8)+p27 / (p38<<8)+p39 when p25/p37 bit 7 is set
 // The detune is quantised to ~13.28 cents and bounded to +1146 / -675 cents.
 // It is EXACTLY ZERO whenever INTERACTION GAIN is 0 or all grouped resonators
@@ -421,12 +425,12 @@ says nothing about how they interact.  It now can:
 
 | claim | grade |
 |---|---|
-| `sub_FC4269` is the block's reader; the address arrives as a call argument | **PROVEN** (probe §1, §7) |
+| `Pack104_SolveCoupledDetune` is the block's reader; the address arrives as a call argument | **PROVEN** (probe §1, §7) |
 | the block's layout: `MODE`, `N`, and four `N=8` arrays at `+4/+20/+36/+52` | **PROVEN** (§2) |
 | slot `2k` is element `k`'s MAIN, slot `2k+1` its SUB | **PROVEN** (§2, §3) |
 | `D[]` reaches registers `chan+0x0040` / `chan+0x0080` as an additive detune | **PROVEN** (§3) |
 | the not-grouped arms write the same fields as literal zero | **PROVEN** (§3) |
-| every constant in `sub_FC4269` is `2/3`, `π`, `2π`, `1/2π`, `1.0`, `2.0` in Q11 | **PROVEN** (§4.1) |
+| every constant in `Pack104_SolveCoupledDetune` is `2/3`, `π`, `2π`, `1/2π`, `1.0`, `2.0` in Q11 | **PROVEN** (§4.1) |
 | the output table is `3072·log₂`, so `D` is 1/256 semitone | **PROVEN** (§4.1) |
 | the arithmetic of §4.2, bit for bit | **PROVEN** (§4.2, `--selftest`) |
 | `damp = 1 − k·G·L` with `k × group size = 1` | **PROVEN** (§4.3, probe §4b) |
