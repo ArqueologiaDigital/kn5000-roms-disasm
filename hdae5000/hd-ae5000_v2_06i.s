@@ -3854,7 +3854,7 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	ld (0x160004:24), a; ld (0x160004), A — PPI port C
 	ld xwa, 0x000003E8		; timeout counter (1000)
 .Lppi_wait_high:
-	bitda_24 4, (1441792); bit 4, (0x160000) — check ACK
+	bit 4, (1441792:24); bit 4, (0x160000) — check ACK
 	jr z, .Lppi_wait_high		; wait until bit 4 set
 	ld a, (0x160000:24); ld A, (0x160000) — read port A
 	and a, 0x0f			; mask low nibble
@@ -3872,7 +3872,7 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	ld (0x160004:24), a; ld (0x160004), A — PPI port C
 	ld xwa, 0x000003E8		; timeout counter (1000)
 .Lppi_wait_low:
-	bitda_24 4, (1441792); bit 4, (0x160000) — check ACK
+	bit 4, (1441792:24); bit 4, (0x160000) — check ACK
 	jr nz, .Lppi_wait_low		; wait until bit 4 clear
 	; --- Reassemble and verify ---
 	ld c, e				; C = low nibble

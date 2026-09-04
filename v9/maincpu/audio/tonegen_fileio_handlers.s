@@ -854,13 +854,13 @@ ToneGen_FileIO_RestoreFromBackup:
 	pushw 0xf9a0
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	setda 5, 0x8e76
+	set 5, (0x8e76:16)
 	calr SoundParam_NotifyMultipleChanges
 	call SwbtWr_ReinitOutputBank
 	call ToneGen_DispatchByMode
 	call CtrlPanel_RefreshIndicatorState
 	call SwbtWr_NullRet
-	resda 5, 0x8e76
+	res 5, (0x8e76:16)
 	ret
 
 ToneGen_FlashVerify:

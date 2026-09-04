@@ -821,13 +821,13 @@ ToneGen_FileIO_RestoreFromBackup:
 	pushw 0xf9a0
 	call 0xff05bc
 	lda xsp, (xsp + 0x0a)
-	setda 5, (0x8dda)
+	set 5, (0x8dda:16)
 	calr SoundParam_NotifyMultipleChanges
 	call SwbtWr_ReinitOutputBank
 	call ToneGen_DispatchByMode
 	call CtrlPanel_RefreshIndicatorState
 	call SwbtWr_NullRet
-	resda 5, (0x8dda)
+	res 5, (0x8dda:16)
 	ret
 ToneGen_FlashVerify:
 	lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)

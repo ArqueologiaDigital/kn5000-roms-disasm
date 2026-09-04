@@ -2786,11 +2786,11 @@ MainTitleCtrl_CheckSecondTimer:
 	jr nz, UIWidget_ReturnZero
 	cpw_da (0x274ac), 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
-	setda 0, 0x8f5c
+	set 0, (0x8f5c:16)
 	jr MainTitleCtrl_SetIndicator60
 
 MainTitleCtrl_ClearIndicatorBit:
-	resda 0, 0x8f5c
+	res 0, (0x8f5c:16)
 
 MainTitleCtrl_SetIndicator60:
 	ldw wa, 0x60

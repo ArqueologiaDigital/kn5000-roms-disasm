@@ -89,7 +89,7 @@ Password_Save_CheckLoadOnly:
 	call CheckSlotIsSelected
 	cps l, 0
 	jr z, .Lc_f8c641
-	setda 7, (0x8971)
+	set 7, (0x8971:16)
 	ld XWA,(XSP+0x04)
 	ld XBC,0x01c00017
 	ld XDE,0x0000000a
@@ -102,7 +102,7 @@ Password_Save_CheckSaveOnly:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_SaveErrorStatus
-	setda 6, (0x8971)
+	set 6, (0x8971:16)
 	ld XWA,(XSP+0x04)
 	ld XBC,0x01c00017
 	ld XDE,0x0000000a
@@ -118,7 +118,7 @@ Password_HandleLoadEvent:
 	call CheckSlotIsSelected
 	cps l, 0
 	jr z, Password_LoadErrorStatus
-	setda 7, (0x8971)
+	set 7, (0x8971:16)
 	ld XWA,(XSP+0x04)
 	ld XBC,0x01c00017
 	lds32 xde, 4

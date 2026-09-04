@@ -243,7 +243,7 @@ Link_ServiceTask__F99F3D:
 	jr c, Link_ServiceTask__F99F2D                        ; F99F44  jr C,0xf99f2d
 	jr Link_ServiceTask__F99F6C                           ; F99F46  jr T,0xf99f6c
 Link_ServiceTask__F99F48:
-	setda_24 5, 0x00852C                   ; F99F48  set 5,(0x00852c)   [llvm-mc cannot encode this]
+	set 5, (0x00852C:24)                   ; F99F48  set 5,(0x00852c)   [llvm-mc cannot encode this]
 	jr Link_ServiceTask__F99F6C                           ; F99F4D  jr T,0xf99f6c
 Link_ServiceTask__F99F4F:
 	cpib_da 0x008537, 0x01                 ; F99F4F  cp (0x008537),0x01   [llvm-mc cannot encode this]
@@ -407,7 +407,7 @@ Link_WaitBlockDone:
 	pushw hl                                   ; F99FC1  2b
 	ld hl, (0xF2F3:16)                         ; F99FC2  d1 f3 f2 23   HL := the INTT1 tick count at entry (low 16 bits)
 Link_WaitBlockDone__poll:
-	bitda_24 7, 0x00852B                       ; F99FC6  f2 2b 85 00 cf   still outstanding?
+	bit 7, (0x00852B:24)                       ; F99FC6  f2 2b 85 00 cf   still outstanding?
 	jr z, Link_WaitBlockDone__ok               ; F99FCB  66 27
 	ld bc, (0xF2F3:16)                         ; F99FCD  d1 f3 f2 21
 	sub bc, hl                                 ; F99FD1  db a1
@@ -416,7 +416,7 @@ Link_WaitBlockDone__poll:
 	ldio DMA3V, 0x00                           ; F99FD9  08 7f 00   timed out: stop INT0 feeding the DMA engine
 	ld (0x00F32D:24), 0x00                     ; F99FDC  f2 2d f3 00 00 00   transfer state := idle
 	set_dd8 1, PA                              ; F99FE2  f0 1e b9   raise the handshake line
-	resda_24 7, 0x00852B                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves
+	res 7, (0x00852B:24)                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves
 	incdi8_24 1, 0x00F333                      ; F99FEA  c2 33 f3 00 61   the timeout counter
 	ldw wa, 0xffff                             ; F99FEF  30 ff ff   return -1
 	jr Link_WaitBlockDone__ret                 ; F99FF2  68 02

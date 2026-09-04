@@ -758,9 +758,9 @@ EffectMode_ReinitSound_CallNotify:
 	call	16566832
 	jp	15668425
 EffectMode_ReinitWithFlag:
-	setda 5, (0x8cb6)
+	set 5, (0x8cb6:16)
 	calr EffectMode_CheckModeAndReinit
-	resda 5, (0x8cb6)
+	res 5, (0x8cb6:16)
 
 	ret
 

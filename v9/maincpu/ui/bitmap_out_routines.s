@@ -2445,7 +2445,7 @@ BitMapOut_DetectChanges_UseShortList:
 	ld hl, (0x90de:16)
 	lda xwa, (0xbd3c:16)
 	ld (xsp + 8), xwa
-	setda 2, 0x8d46
+	set 2, (0x8d46:16)
 	jr BitMapOut_DeltaEncode_Init
 
 BitMapOut_DetectChanges_FullScan:
@@ -2455,7 +2455,7 @@ BitMapOut_DetectChanges_FullScan:
 	ld hl, (0x90e2:16)
 	lda xwa, (0xbf39:16)
 	ld (xsp + 8), xwa
-	resda 2, 0x8d46
+	res 2, (0x8d46:16)
 
 BitMapOut_DeltaEncode_Init:
 	lds iz, 0
@@ -2922,7 +2922,7 @@ BitMapOut_DeltaEncode_TypeDefaultB:
 	jr BitMapOut_DeltaEncode_HelperCheckEnd
 
 BitMapOut_DeltaEncode_TypeDefaultC:
-	setda 0, 0x8d46
+	set 0, (0x8d46:16)
 	ld bc, hl
 	inc 1, hl
 	extz xbc
@@ -2975,7 +2975,7 @@ BitMapOut_DeltaEncode_HelperCheckEnd:
 	ld (xwa), 0xff
 
 BitMapOut_DeltaEncode_HelperReturn:
-	setda 6, 0x8d46
+	set 6, (0x8d46:16)
 	pop xiz
 	inc 8, xsp
 	retd 0x6
@@ -3123,7 +3123,7 @@ BitMapOut_DeltaEncode_Type48Loop:
 	jr BitMapOut_DeltaEncode_Type48Epilog
 
 BitMapOut_DeltaEncode_Type48End:
-	setda 0, 0x8d46
+	set 0, (0x8d46:16)
 	ld bc, hl
 	inc 1, hl
 	extz xbc
@@ -3904,7 +3904,7 @@ OneTchFUNC:
 	lda xix, (BitMapOut_ByteData_WidgetTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 BitMapOut_ByteData_WidgetTable:
-	resda	7, 0xb7e2
+	res	7, (0xb7e2:16)
 	push	xde
 	push	xhl
 	push	xix

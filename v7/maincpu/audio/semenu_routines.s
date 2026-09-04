@@ -36,11 +36,11 @@ SeMenu_LoadRawAddr:
 SeMenu_TriggerNotification:
 	ld (0x7ea6:16), a
 	ld (0xe316:16), 0xee
-	setda 6, (0xe318)
+	set 6, (0xe318:16)
 	ret
 SeMenu_ClearNotification:
 	ld (0xe316:16), a
-	setda 1, (0xe318)
+	set 1, (0xe318:16)
 	ret
 SeMenu_StoreEventId:
 	ld (1688:16), a
@@ -5666,11 +5666,11 @@ SeMenu_PatchBank_Data:
 SeMenu_SetEditEnable:
 	cps a, 1
 	jr nz, SeMenu_SetEditEnable_Clear
-	setda 2, 0x28a7
+	set 2, (0x28a7:16)
 	ret
 
 SeMenu_SetEditEnable_Clear:
-	resda 2, 0x28a7
+	res 2, (0x28a7:16)
 	ret
 
 SeMenu_OrPartConfig:

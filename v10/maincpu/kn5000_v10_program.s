@@ -773,11 +773,11 @@ SubCPU_Payload_Done:
 	ret
 
 Boot_ClearConfigFlag7:
-	resda 7, 1030
+	res 7, (1030:16)
 	ret
 
 Boot_SetConfigFlag7:
-	setda 7, 1030
+	set 7, (1030:16)
 	ret
 
 Boot_CheckConfigFlag7:
@@ -1276,7 +1276,7 @@ PlayHalt:
 	call AccWrap_PlayModeDispatch
 	cp (xsp), 0x0
 	jr z, PlayHalt_SkipSetFlag
-	setda 2, 10407
+	set 2, (10407:16)
 
 PlayHalt_SkipSetFlag:
 	call AccompSeq_StopSequence
@@ -1293,10 +1293,10 @@ PlayHalt_SkipSetFlag:
 PlayStandBy:
 	bit 2, (10407:16)
 	jr z, PlayStandBy_SkipClearFlag
-	resda 2, 10407
+	res 2, (10407:16)
 
 PlayStandBy_SkipClearFlag:
-	resda 3, 10407
+	res 3, (10407:16)
 	call SeqAcc_InitPlaybackState
 	jp MidiThru_Disable
 

@@ -1109,7 +1109,7 @@ MIDI_DispatchCC:
 	call (xix)
 
 MidiCC_DispatchCleanupRet:
-	resda 7, 0x90e5
+	res 7, (0x90e5:16)
 	ret
 
 MidiCC_DispatchStubRet:
@@ -8180,7 +8180,7 @@ SndParam_UpdateSingleChannel:
 	dec 8, xsp
 	ld (xsp + 4), c
 	ld (xsp + 6), a
-	setda 0, 0xb7ee
+	set 0, (0xb7ee:16)
 	push xde
 	push xhl
 	push xix
@@ -8234,7 +8234,7 @@ SndParam_UpdateChan_CopyMemory:
 	push xbc
 	call Mem_Copy
 	lda xsp, (xsp + 20)
-	resda 0, 0xb7ee
+	res 0, (0xb7ee:16)
 	ld c, (xsp + 4)
 	extz bc
 	ld xwa, (xsp)
@@ -8827,7 +8827,7 @@ SeqBuf_WaitDone:
 MidiChan_ParseVoiceData:
 	push xiz
 	ldib_erp 0xfb, 0
-	resda 5, 0xbd18
+	res 5, (0xbd18:16)
 	ld iz, (1033:16)
 	jrl MidiChan_CheckSysExFlag
 
@@ -8895,7 +8895,7 @@ MidiChan_CheckSysExEnd:
 	ldib_erp 0xfb, 0
 	ld wa, bc
 	calr VoiceQueue_Append
-	setda 5, 0xbd18
+	set 5, (0xbd18:16)
 	jr MIDI_ProcessChannelPair
 
 MidiChan_SendFieldParam3:
@@ -8904,7 +8904,7 @@ MidiChan_SendFieldParam3:
 
 MidiChan_WriteAndSetFlag:
 	calr MIDI_ReadChannelParam
-	setda 5, 1074
+	set 5, (1074:16)
 
 MIDI_ProcessChannelPair:
 	calr MidiChan_CheckFlags
@@ -11236,7 +11236,7 @@ MidiChan_SetStateMode2:
 MidiChan_CompareAndFlag:
 	cpda8 a, 0xbd38
 	ret z
-	setda 6, 0xbd1c
+	set 6, (0xbd1c:16)
 	ldmm8 0xbd38, 0xbd36
 	ret
 
@@ -11268,20 +11268,20 @@ MidiSeq_UpdateAllParams:
 MidiSeq_SyncToneStates_Upper:
 	bit 6, (0xbd18:16)
 	jr z, MidiSeq_SyncToneStates_Lower
-	resda 7, 0xbd00
+	res 7, (0xbd00:16)
 	ldmm8 0xbd02, 0xbd00
-	resda 7, 0xbd04
+	res 7, (0xbd04:16)
 	ldmm8 0xbd06, 0xbd04
-	resda 7, 0xbd08
+	res 7, (0xbd08:16)
 	ldmm8 0xbd0a, 0xbd08
 	ret
 
 MidiSeq_SyncToneStates_Lower:
-	resda 7, 0xbd0c
+	res 7, (0xbd0c:16)
 	ldmm8 0xbd0e, 0xbd0c
-	resda 7, 0xbd10
+	res 7, (0xbd10:16)
 	ldmm8 0xbd12, 0xbd10
-	resda 7, 0xbd14
+	res 7, (0xbd14:16)
 	ldmm8 0xbd16, 0xbd14
 	ret
 
@@ -11487,7 +11487,7 @@ MidiSeq_ApplyParams_Lower:
 	call ParaLoadOpt_AudioFlagCheck_B
 
 MidiSeq_ClearSyncFlag:
-	resda 6, 0xbd1c
+	res 6, (0xbd1c:16)
 	ret
 
 MidiSeq_PartConfigure_Data:
@@ -11523,14 +11523,14 @@ MidiSeq_PartConfigure_Data:
 
 MidiPkt_ArpMultiPass:
 	pushw_erp 0xfa
-	resda 7, 0xbd18
+	res 7, (0xbd18:16)
 	ldib_erp 0xfb, 0
 
 MidiPkt_ArpPassLoop:
 	ld xwa, MidiPkt_EventType_Table_0x570
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
-	setda 2, 0xbd18
+	set 2, (0xbd18:16)
 	call SeqAlt_ProcessAndFinalize
 	ld xwa, (0xbcac:16)
 	lds bc, 0
@@ -11568,14 +11568,14 @@ MidiPkt_ArpSecondLoop:
 	ld xwa, MidiPkt_EventType_Table_0x578
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
-	setda 2, 0xbd18
+	set 2, (0xbd18:16)
 	call SeqAlt_ProcessAndFinalize
 	ld xwa, (0xbcac:16)
 	lds bc, 0
 	call SeqData_ReadFieldByIndex
 	cps l, 1
 	jr nz, MidiPkt_ArpSecondLoopNext
-	setda 7, 0xbd18
+	set 7, (0xbd18:16)
 	jr MidiPkt_ArpPopReturn
 
 MidiPkt_ArpSecondLoopNext:
@@ -11887,7 +11887,7 @@ MidiPkt_ArpChordHandler:
 	call SeqData_ReadFieldByIndex
 	cps	l, 7
 	jr c, ArpChord_ClearBitAndReturn
-	setda	4, 0xbd18
+	set	4, (0xbd18:16)
 	call MidiChan_ClearAllStates
 	jr t, ArpChord_DispatchAndLoop
 ArpChord_CheckPlaybackDone:
@@ -11896,7 +11896,7 @@ ArpChord_CheckPlaybackDone:
 	call SeqData_ReadFieldByIndex
 	cps	l, 0
 	jr z, ArpChord_ProcessAndDispatch
-	resda	4, 0xbd18
+	res	4, (0xbd18:16)
 	jr t, ArpChord_FinalizePass
 ArpChord_ProcessAndDispatch:
 	call SeqAlt_ProcessAndFinalize
@@ -11908,7 +11908,7 @@ ArpChord_FinalizePass:
 	calr	1913
 	call MidiSeq_PartLookup_Data
 ArpChord_ClearBitAndReturn:
-	resda	4, 0xbd18
+	res	4, (0xbd18:16)
 	ret
 ; MIDI table dispatch helper
 MidiTable_DispatchHelper:
@@ -11985,13 +11985,13 @@ MidiPkt_HandleCmdCode01:
 	ldw bc, 0x0008
 	call SeqData_ReadFieldByIndex
 	ld	(0xbc6a:16), l
-	setda	7, 0xbd18
+	set	7, (0xbd18:16)
 	ld	(0xbd20:16), 2
 	ret
 MidiPkt_SetSlot18:
 	ld	xwa, (0xbcac:16)
 	ld (xwa+4), 0x18
-	resda	4, 0xbd18
+	res	4, (0xbd18:16)
 	ret
 
 
@@ -12497,7 +12497,7 @@ MidiSysEx_ProcessBlock:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
-	resda	4, 0xbd18
+	res	4, (0xbd18:16)
 	calr	111
 	calr	161
 	calr	187
@@ -12545,12 +12545,12 @@ MidiSysEx_ProcessBlock:
 	push	xix
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
-	resda	0, 4330
+	res	0, (4330:16)
 	lds	wa, 3
 	call	BitMapOut_GetRenderMode_Return
-	setda	4, 0x90f9
+	set	4, (0x90f9:16)
 	call	SeqTimer_UpdateTempoReg
-	resda	4, 0x90f9
+	res	4, (0x90f9:16)
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -12564,11 +12564,11 @@ MidiSysEx_ProcessBlock:
 	calr	11
 	calr	65463
 	calr	5
-	resda	7, 0xbd1a
+	res	7, (0xbd1a:16)
 	ret
 	bit	4, (0xbd1a:16)
 	ret	z
-	setda	0, 4330
+	set	0, (4330:16)
 	ret
 	push	xde
 	push	xhl
@@ -12588,12 +12588,12 @@ MidiSysEx_ProcessBlock:
 	bit	6, (0xbd1a:16)
 	jr	z, 7
 	calr	65501
-	resda	6, 0xbd1a
+	res	6, (0xbd1a:16)
 	inc	6, xsp
 	ret
 	bit	5, (0xbd1a:16)
 	ret	z
-	resda	0, 0x32f3
+	res	0, (0x32f3:16)
 	push	xde
 	push	xhl
 	push	xix
@@ -12603,7 +12603,7 @@ MidiSysEx_ProcessBlock:
 	pop	xix
 	pop	xhl
 	pop	xde
-	resda	5, 0xbd1a
+	res	5, (0xbd1a:16)
 	ret
 	bit	4, (0xbd1a:16)
 	ret	z
@@ -12618,8 +12618,8 @@ MidiSysEx_ProcessBlock:
 	pop	xix
 	pop	xhl
 	pop	xde
-	setda	1, 0xbd18
-	resda	4, 0xbd1a
+	set	1, (0xbd18:16)
+	res	4, (0xbd1a:16)
 	ret
 	ret
 	bit	2, (0xbd1a:16)
@@ -12633,7 +12633,7 @@ MidiSysEx_ProcessBlock:
 	pop	xix
 	pop	xhl
 	pop	xde
-	resda	2, 0xbd1a
+	res	2, (0xbd1a:16)
 	ret
 	ret
 	ret
@@ -12664,7 +12664,7 @@ MidiSysEx_ProcessBlock:
 	jp	MidiSysEx_ProcessBlock_0x1CD
 	ret
 	jp	MidiSysEx_ProcessBlock_0x1EA
-	setda	4, 0x90f9
+	set	4, (0x90f9:16)
 	push	xde
 	push	xhl
 	push	xix
@@ -12677,7 +12677,7 @@ MidiSysEx_ProcessBlock:
 	pop	xix
 	pop	xhl
 	pop	xde
-	resda	4, 0x90f9
+	res	4, (0x90f9:16)
 	ret
 	push	xde
 	push	xhl
@@ -12695,7 +12695,7 @@ MidiSysEx_ProcessBlock:
 	push	xix
 	push	xiz
 	call	AccDemo_InitWithFlag
-	resda	0, 0x32f3
+	res	0, (0x32f3:16)
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -12706,7 +12706,7 @@ MidiSysEx_ProcessBlock:
 	push	xix
 	push	xiz
 	call	AccDemo_InitDone
-	resda	0, 0x32f3
+	res	0, (0x32f3:16)
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -12999,7 +12999,7 @@ SoundMode_SysExConfig_Data:
 SoundMode_DispatchRender:
 	dec 2, xsp
 	ld (xsp), a
-	setda 0, 0xb7ee
+	set 0, (0xb7ee:16)
 	push xde
 	push xhl
 	push xix
@@ -13047,7 +13047,7 @@ SoundMode_CopyBitmapLoop:
 	jr nz, SoundMode_CopyBitmapLoop
 
 SoundMode_CopyBitmapDone:
-	resda 0, 0xb7ee
+	res 0, (0xb7ee:16)
 	inc 2, xsp
 	ret
 
@@ -13177,7 +13177,7 @@ MidiCtrl_ApplyModeSwitch:
 	extz wa
 	calr MidiCtrl_SendControlPacket
 	calr MidiCtrl_FullReconfigure
-	resda 0, 0xb7ee
+	res 0, (0xb7ee:16)
 	ret
 
 MidiCtrl_CheckAltCommand:
@@ -13239,9 +13239,9 @@ SoundMode_ProcessToneAndParams:
 	call SwbtWr_CallProcessAll
 	lds wa, 3
 	call BitMapOut_GetRenderMode_Return
-	setda 4, 0x90f9
+	set 4, (0x90f9:16)
 	call SeqTimer_UpdateTempoReg
-	resda 4, 0x90f9
+	res 4, (0x90f9:16)
 	pop xiz
 	pop xix
 	pop xhl
@@ -13895,7 +13895,7 @@ SysEx_InitiateSend:
 	ld (0xbcfc:16), a
 	bit 7, a
 	jr z, SysEx_ResetAndReturn
-	setda 6, 0xbd18
+	set 6, (0xbd18:16)
 	call SeqAlt_CheckInitBuffer
 	call MidiChan_ClearAllStates
 	call MidiPkt_ArpMultiPass
@@ -15024,7 +15024,7 @@ SeqAlt_AssSwb_NoShift:
 	stb_erp A, 0xfb
 	cp a, (xiy + 10)
 	jr ugt, SeqAlt_AssSwb_Cleanup
-	setda 3, 0x8d52
+	set 3, (0x8d52:16)
 	ld (xbc), 0x98
 	ld (xde), 0x3
 	ld (xhl), 0x1

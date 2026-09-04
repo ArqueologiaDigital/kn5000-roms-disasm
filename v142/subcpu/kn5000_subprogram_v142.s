@@ -99,7 +99,7 @@ RESET:	; 01F924
 	ld (357:16), 113
 	ld (354:16), 139
 	ld (355:16), 88
-	resda 4, 358
+	res 4, (358:16)
 	ld (320:16), 85
 	ld (324:16), 85
 	ld (328:16), 34
@@ -153,7 +153,7 @@ Audio_System_Init:	; 01FACBh
 Audio_Main_Loop:
 	bit 5, (4158:16)
 	jr z, AudioLoop_UnmuteAfterBoot
-	resda 5, 4158
+	res 5, (4158:16)
 
 ; One-shot post-boot UNMUTE, not a watchdog (it was called AudioLoop_CheckWatchdog).
 ; The 32-bit tick counter at 0x1040 only ever counts up -- nothing resets it and nothing is
@@ -168,7 +168,7 @@ AudioLoop_UnmuteAfterBoot:
 AudioLoop_CheckPeriodicReinit:
 	bit 1, (4158:16)
 	jr z, AudioLoop_CallProcessors
-	resda 1, 4158
+	res 1, (4158:16)
 	call Cmd_Check_E2_Pending
 	call Audio_Process_Init
 	ld wa, (61458:16)
@@ -215,7 +215,7 @@ Timer_AudioTick_Handler:
 
 
 Audio_PlayNote_Variant_1:
-	setda 4, 4158
+	set 4, (4158:16)
 	ldb a, 0x1
 	jr AudioTick_StoreTick
 
@@ -228,7 +228,7 @@ Audio_PlayNote_Variant_3:
 	jr AudioTick_StoreTick
 
 AudioTick_Variant_4:
-	setda 4, 4158
+	set 4, (4158:16)
 	ldb a, 0x0
 	jr AudioTick_StoreTick
 
@@ -241,14 +241,14 @@ AudioTick_StoreTick:
 	jr AudioTick_Done
 
 AudioTick_Variant_6:
-	setda 2, 4158
+	set 2, (4158:16)
 	ld (61460:16), 0
 	ld a, (61462:16)
 	inc 1, a
 	ld (61462:16), a
 	cp a, 0x8
 	jr c, AudioTick_Done
-	setda 5, 4158
+	set 5, (4158:16)
 	ld (61462:16), 0
 
 AudioTick_Done:
@@ -2755,7 +2755,7 @@ INT0_Check_E2:	; 020EB1h
 INT0_Check_E3:	; 020ECEh
 	cp a, 0xE3
 	jr nz, INT0_Standard_Cmd
-	setda 6, 1278	; E3 = payload ready
+	set 6, (1278:16)	; E3 = payload ready
 	jr INT0_Ack
 
 INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
@@ -2874,12 +2874,12 @@ CH0_State3_E2:	; 020F88h - E2 command complete
 	ld (4334:16), 255
 	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - set to signal ready for next command from Main CPU
-	setda 7, 4390	; Set E2 pending flag
+	set 7, (4390:16)	; Set E2 pending flag
 	jr CH0_Timer_Reset
 
 CH0_State4_E1_Done:	; 020F9Bh - E1 two-phase transfer complete
 	ld (4330:16), 0
-	resda 7, 1278
+	res 7, (1278:16)
 
 CH0_Ack:	; 020FA4h
 	set_dd8 1, 0x34	; SSTAT1 - set to signal E1 transfer complete, ready for next
@@ -7780,7 +7780,7 @@ Voice_Env_VelocityDispatch_c1:
 	jr z, Voice_Env_VelocityDispatch_c1_Bit1
 	cps c, 0
 	jrl nz, Voice_Env_VelocityDispatch_ClearFlag
-	bitda_24 3, 267083
+	bit 3, (267083:24)
 	jr z, Voice_Env_VelocityDispatch_c0_NoBit3
 	ldb l, 0x0
 	jrl Voice_Env_VelocityDispatch_Gate
@@ -7794,7 +7794,7 @@ Voice_Env_VelocityDispatch_c0_NoBit3:
 
 ; Case 1: test bit3 of the 0x04134B config byte.
 Voice_Env_VelocityDispatch_c1_Bit1:
-	bitda_24 3, 267083
+	bit 3, (267083:24)
 	jr z, Voice_Env_VelocityDispatch_c1_NoBit3
 	ldb l, 0x0
 	jr Voice_Env_VelocityDispatch_Gate
@@ -7876,7 +7876,7 @@ Voice_Env_ApplyVelocity_Type2:
 	jr z, Voice_Env_Type2_c1
 	cps c, 0
 	jrl nz, Voice_Env_Type2_ClearFlag
-	bitda_24 4, 267083
+	bit 4, (267083:24)
 	jr z, Voice_Env_Type2_c0_NoBit4
 	ldb l, 0x0
 	jrl Voice_Env_Type2_Gate
@@ -7890,7 +7890,7 @@ Voice_Env_Type2_c0_NoBit4:
 
 ; Case 1: test bit4 of the 0x04134B config byte.
 Voice_Env_Type2_c1:
-	bitda_24 4, 267083
+	bit 4, (267083:24)
 	jr z, Voice_Env_Type2_c1_NoBit4
 	ldb l, 0x0
 	jr Voice_Env_Type2_Gate
@@ -29333,11 +29333,11 @@ VoiceParam_FullSetup_SetRoutingBit:
 	extz xwa
 	bit 15, wa
 	jr z, VoiceParam_FullSetup_ClearRoutingBit
-	setda_24 7, 282667
+	set 7, (282667:24)
 	jr VoiceParam_FullSetup_CopyLUT
 
 VoiceParam_FullSetup_ClearRoutingBit:
-	resda_24 7, 282667
+	res 7, (282667:24)
 
 VoiceParam_FullSetup_CopyLUT:
 	ldib_erp 0xFB, 0
@@ -31155,12 +31155,12 @@ VoiceAlloc_WithRoutingFlag:
 	calr VoiceAlloc_CheckAndInit
 	cp (xsp), 0x0
 	jr z, VoiceAlloc_WithRoutingFlag_Clear
-	setda_24 7, 282667
+	set 7, (282667:24)
 	jr VoiceAlloc_WithRoutingFlag_Return
 
 ; C == 0 -> res 7,(0x04502B).
 VoiceAlloc_WithRoutingFlag_Clear:
-	resda_24 7, 282667
+	res 7, (282667:24)
 
 ; Pop the frame and return.
 VoiceAlloc_WithRoutingFlag_Return:
@@ -35668,7 +35668,7 @@ VoiceParam_Query_Case1_PatchRec:
 	.byte 0xe8, 0x8a, 0xdb, 0x88, 0x1e, 0xc5, 0xfe, 0x8e
 	.byte 0x02
 	.ascii "?]n("
-	resda_24	7, 283158
+	res	7, (283158:24)
 	lda	xhl, (283158:24)
 	ldb	e, 0
 	ld	a, (xiz+1)

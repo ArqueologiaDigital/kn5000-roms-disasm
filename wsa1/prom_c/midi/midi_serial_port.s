@@ -164,11 +164,11 @@ sub_F9915C__counting:
 	and	a, 1
 	jr	z, sub_F9915C__bit0_clear
 	ld	(0x00F35F:24), 1
-	setda_24 7, 0x007ECC
+	set 7, (0x007ECC:24)
 	jr	sub_F9915C__exit
 sub_F9915C__bit0_clear:
 	ld	(0x00F35F:24), 2
-	setda_24 7, 0x007ECC
+	set 7, (0x007ECC:24)
 sub_F9915C__exit:
 	ret
 

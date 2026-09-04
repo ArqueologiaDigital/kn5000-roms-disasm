@@ -516,7 +516,7 @@ FDemo_FileOpen_Exit:
 
 
 DemoMode_Main_Operation:
-	resda 0, 0x28b1
+	res 0, (0x28b1:16)
 	call Voice_InitializeAll
 	lda xbc, (0xf9a0:16)
 	lda xwa, (0xffbe:16)
@@ -530,18 +530,18 @@ DemoMode_Main_Operation:
 	lda xsp, (xsp + 10)
 	call Audio_ConfigureDSP
 	calr Voice_LoadVoiceTable
-	setda 4, 0xfd50
-	resda 2, 0xfd50
-	resda 2, 0xfd52
+	set 4, (0xfd50:16)
+	res 2, (0xfd50:16)
+	res 2, (0xfd52:16)
 	calr Demo_PreSetup
-	resda 0, 1115
+	res 0, (1115:16)
 	call AccompSeq_StopSequence
 	calr Voice_CopyPreset
 	call MIDI_BroadcastPitchReset
 	calr Timer7_DisableInterrupt
 	call Audio_CheckSubsystemReady
-	setda 6, 0xb7e2
-	resda 3, 0x28ad
+	set 6, (0xb7e2:16)
+	res 3, (0x28ad:16)
 	call SeqInit_PostEventSequence
 	call SeqInit_FinalEvent
 	jp Seq_StartMainControl
@@ -559,12 +559,12 @@ DemoMode_Initialize:
 	ld (0x2966:16), 0
 	ld (3379:16), 0
 	ld (3375:16), 0
-	resda 7, 0x28ae
+	res 7, (0x28ae:16)
 	call MidiChannel_ResetAndConfigure
 	calr Audio_WaitForReady
 	call SeqStep_PlaybackStateMachine
 	calr Voice_SavePreset
-	resda 3, 0x28ad
+	res 3, (0x28ad:16)
 	call SeqInit_PostEventSequence
 	call ToneGen_FileIO_RestoreFromBackup
 	call SeqTimer_UpdateTempoReg
@@ -581,7 +581,7 @@ DemoMode_Initialize:
 FDemo_PostBannerCheck:
 	calr Banner_Loop_Check
 	call Audio_CheckSubsystemReady
-	resda 6, 0xb7e2
+	res 6, (0xb7e2:16)
 	ret
 
 Demo_SelectionEntryHandler:
@@ -591,7 +591,7 @@ Demo_SelectionEntryHandler:
 	ld (3375:16), 0
 	calr Audio_WaitForReady
 	call SeqStep_PlaybackStateMachine
-	resda 3, 0x28ad
+	res 3, (0x28ad:16)
 	call SeqInit_PostEventSequence
 	call TempoRingBuf_Init
 	call SeqBuf_Init
@@ -668,7 +668,7 @@ Demo_SelectEntry_ByteTable:
 	jr	nz, 6
 	bit	0, (0x3283:16)
 	jr	z, 52
-	resda	3, 0x28ad
+	res	3, (0x28ad:16)
 	cp	(0x8d38:16), 228
 	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
 	calr	827
@@ -680,7 +680,7 @@ Demo_SelectEntry_ByteTable:
 	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
-	setda	3, 0x28ad
+	set	3, (0x28ad:16)
 	cp	(0x8d38:16), 228
 	jr	z, 11
 	call	CDlikeSwTtl_SetRecordAndNotify
@@ -765,7 +765,7 @@ Demo_SelectEntry_Debounce:
 	ld (3379:16), a
 	cps a, 0
 	ret nz
-	setda 3, 0x28ad
+	set 3, (0x28ad:16)
 	cp (0x8d38:16), 228
 	call_24 nz, CDlikeSwTtl_SetRecordAndNotify
 	pushw 0x1
@@ -980,7 +980,7 @@ Banner_Loop_CheckEntry:
 	jr z, Banner_Loop_Exit
 	cp a, 0xd
 	jr z, Banner_Loop_Exit
-	setda 6, 0x28b3
+	set 6, (0x28b3:16)
 	lda xwa, (xsp + 2)
 	ld (xwa), 0xd3
 	ld (xwa + 1), 0x7e
@@ -1036,8 +1036,8 @@ Demo_ScanPartLoop:
 	ld a, l
 	inc 1, a
 	ld (3414:16), a
-	setda 0, 3412
-	setda 2, 0x287b
+	set 0, (3412:16)
+	set 2, (0x287b:16)
 	jr Demo_ScanPartDone
 
 Demo_ScanPartSkipToEnd:
@@ -1051,8 +1051,8 @@ Demo_ScanPartNext:
 Demo_ScanPartDone:
 	cp l, 0x10
 	ret nz
-	resda 0, 3412
-	resda 2, 0x287b
+	res 0, (3412:16)
+	res 2, (0x287b:16)
 	ret
 
 Voice_SavePreset:
@@ -8376,7 +8376,7 @@ InitializeOperationState:
 	call AccWrap_PlayModeDispatch
 	cp (xsp), 0x0
 	jr z, InitOp_SkipSetFlag
-	setda 2, 0x28a7
+	set 2, (0x28a7:16)
 
 InitOp_SkipSetFlag:
 	call AccompSeq_StopSequence
@@ -8398,7 +8398,7 @@ CancelOperationCleanup:
 	ld (0x28a7:16), a
 
 CancelOp_ClearSeq:
-	resda 3, 0x28a7
+	res 3, (0x28a7:16)
 	call SeqAcc_InitPlaybackState
 	jp MidiThru_Disable
 
@@ -8537,7 +8537,7 @@ DiskEvt_CheckMediaType:
 	jr nz, DiskEvt_Return
 
 DiskEvt_TypeIsFloppyOrHD:
-	bitda_24 0, (0x340f4)
+	bit 0, (0x340f4:24)
 	jr z, DiskEvt_UseAltChannel
 	ld a, (xsp)
 	extz wa

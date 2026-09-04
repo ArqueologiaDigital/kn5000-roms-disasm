@@ -11057,56 +11057,56 @@ AccTone_InlineBytecodeData:
 	ld HL,(XWA+0x02)
 	ret
 	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_mid1.bin"
-	resda 1, (0x3263)
-	resda 3, (0xfc5f)
+	res 1, (0x3263:16)
+	res 3, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 5
 	lds de, 0
 	call 0xfdaa53
 	ret
-	resda 0, (0x3263)
-	resda 2, (0xfc5f)
+	res 0, (0x3263:16)
+	res 2, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 5
 	lds de, 0
 	call 0xfdaa53
 	ret
-	resda 2, (0x3263)
-	resda 2, (0xfc60)
+	res 2, (0x3263:16)
+	res 2, (0xfc60:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 6
 	lds de, 0
 	call 0xfdaa53
 	ret
-	resda 0, (0x3261)
-	resda 4, (0xfc5f)
+	res 0, (0x3261:16)
+	res 4, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 5
 	lds de, 0
 	call 0xfdaa53
 	ret
-	resda 1, (0x3261)
-	resda 5, (0xfc5f)
+	res 1, (0x3261:16)
+	res 5, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 5
 	lds de, 0
 	call 0xfdaa53
 	ret
-	resda 0, (0x325f)
-	resda 6, (0xfc5f)
+	res 0, (0x325f:16)
+	res 6, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 5
 	lds de, 0
 	call 0xfdaa53
 	ret
-	resda 1, (0x325f)
-	resda 7, (0xfc5f)
+	res 1, (0x325f:16)
+	res 7, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
 	lds bc, 5
@@ -22677,7 +22677,7 @@ Tempo_IncrementTimeSigNum:
 	ret NC
 	inc 1,A
 	ld (0x38f3:16), a
-	setda 4, (0xe31a)
+	set 4, (0xe31a:16)
 	ret
 Tempo_DecrementTimeSigNum:
 	cps a, 0
@@ -22690,7 +22690,7 @@ Tempo_DecrementTimeSigNum:
 	ret Z
 	dec 1,A
 	ld (0x38f3:16), a
-	setda 4, (0xe31a)
+	set 4, (0xe31a:16)
 	ret
 Tempo_TimeSigCodeBlock:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 28 of 41 slots byte-identical
@@ -22738,7 +22738,7 @@ Tempo_TimeSigCodeBlock:
 Tempo_EditBPM:
 	cps a, 0
 	ret NZ
-	setda 0, (0x8cec)
+	set 0, (0x8cec:16)
 	calr Tempo_DisplayParamReturn
 	ld (0x38ec:16), l
 	cps l, 1
@@ -23432,10 +23432,10 @@ VoiceSlot_UpdateState:
 	ld (0x288d:16), a
 	cp (0x38fa:16), 0x00
 	jr nz, VoiceSlot_SetBit2
-	resda 2, (0x287b)
+	res 2, (0x287b:16)
 	jr t, VoiceSlot_ValidateAndResolve
 VoiceSlot_SetBit2:
-	setda 2, 0x287b
+	set 2, (0x287b:16)
 
 VoiceSlot_ValidateAndResolve:
 	call SeqVoice_ValidateAndProcessState
@@ -25671,7 +25671,7 @@ CmpMenuTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpMenuTtlFunc title dispatch
 CmpMenuTtl_Dispatch:
-	setda	2, 0x28a7
+	set	2, (0x28a7:16)
 	call	AccWrap_PlayModeDispatch
 	jr	t, 0x46
 
@@ -30759,7 +30759,7 @@ AccDisplay_FullInit:
 	.byte 0x1d, 0x46, 0x0a, 0xfe, 0x1d, 0x2d, 0xb7, 0xfe
 	.byte 0x1d, 0xc0, 0x09, 0xef, 0x68, 0x0a
 Display_RestoreEntry:
-	resda 2, 0x28a7
+	res 2, (0x28a7:16)
 	call Vga_RestoreMultiPlaneDisplay
 	jr AccDisplay_CopyToFrontBuffer
 

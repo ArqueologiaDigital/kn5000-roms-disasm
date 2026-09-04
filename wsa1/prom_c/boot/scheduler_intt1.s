@@ -100,24 +100,24 @@ INTT1_HANDLER:
 	ld	(xiz-2), wa
 	jr	INTT1_HANDLER__dispatch
 INTT1_HANDLER__phase0:
-	setda_24 7, 0x007ED1
-	setda_24 4, 0x007ED1
+	set 7, (0x007ED1:24)
+	set 4, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase1:
-	setda_24 6, 0x007ED1
+	set 6, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase2:
-	setda_24 5, 0x007ED1
+	set 5, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase3:
-	setda_24 7, 0x007ED1
-	setda_24 3, 0x007ED1
+	set 7, (0x007ED1:24)
+	set 3, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase4:
-	setda_24 6, 0x007ED1
+	set 6, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__phase5:
-	setda_24 5, 0x007ED1
+	set 5, (0x007ED1:24)
 	jr	INTT1_HANDLER__advance
 INTT1_HANDLER__dispatch:
 	sub	xbc, xbc

@@ -39,7 +39,7 @@ AudioInit_CheckVoiceMixFlags:
 	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearModeRegister
-	setda 3, 0xc1fe
+	set 3, (0xc1fe:16)
 	jr AudioInit_AfterModeSet
 
 AudioInit_ClearModeRegister:
@@ -85,7 +85,7 @@ AudioInit_CheckBit2Mode:
 	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearModeAlt
-	setda 3, 0xc1fe
+	set 3, (0xc1fe:16)
 	jr AudioInit_AfterModeSetAlt
 
 AudioInit_ClearModeAlt:
@@ -114,7 +114,7 @@ AudioInit_ConfigureVoiceFromFlags:
 	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearModeFromFlags
-	setda 3, 0xc1fe
+	set 3, (0xc1fe:16)
 	jr AudioInit_VoiceRouteJump
 
 AudioInit_ClearModeFromFlags:
@@ -223,7 +223,7 @@ AudioInit_LoadGroupVoice:
 	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearGroupMode
-	setda 3, 0xc1fe
+	set 3, (0xc1fe:16)
 	jr AudioInit_AfterGroupModeSet
 
 AudioInit_ClearGroupMode:
@@ -276,7 +276,7 @@ AudioInit_CheckSoundGroup51:
 	ld wa, (0xc594:16)
 	bit 4, wa
 	jr nz, AudioInit_ClearGroup51Mode
-	setda 3, 0xc1fe
+	set 3, (0xc1fe:16)
 	jr AudioInit_AfterGroup51ModeSet
 
 AudioInit_ClearGroup51Mode:
@@ -460,7 +460,7 @@ AudioInit_UpdateVoiceBank0:
 	srl a, 1
 	cpda8 a, 0xc5a2
 	jr z, AudioInit_UpdateVoiceBank1
-	setda 7, 0xc2c2
+	set 7, (0xc2c2:16)
 	ld a, (0xc5a2:16)
 	res 7, a
 	sla a, 1
@@ -473,7 +473,7 @@ AudioInit_UpdateVoiceBank1:
 	srl a, 1
 	cpda8 a, 0xc5a2
 	jr z, AudioInit_UpdateVoiceBank2
-	setda 7, 0xc2c6
+	set 7, (0xc2c6:16)
 	ld a, (0xc5a2:16)
 	res 7, a
 	sla a, 1
@@ -488,7 +488,7 @@ AudioInit_UpdateVoiceBank2:
 	res 7, c
 	cp c, a
 	jr z, AudioInit_CheckStereoRouting
-	setda 7, 0xc2ca
+	set 7, (0xc2ca:16)
 	ld a, (0xc5a2:16)
 	dec 1, a
 	res 7, a
@@ -505,7 +505,7 @@ AudioInit_CheckStereoRouting:
 	res 7, c
 	cp c, a
 	jr z, AudioInit_VoiceStereoCheck
-	setda 7, 0xc2ce
+	set 7, (0xc2ce:16)
 	ld a, (0xc5a2:16)
 	dec 1, a
 	res 7, a
@@ -519,7 +519,7 @@ AudioInit_ClearStereoRouting:
 	res 7, a
 	cps a, 0
 	jr z, AudioInit_VoiceStereoCheck
-	setda 7, 0xc2ce
+	set 7, (0xc2ce:16)
 	and (0xc2ce:16), 128
 	ordi16 0xc59a, 512
 
@@ -528,7 +528,7 @@ AudioInit_VoiceStereoCheck:
 	srl a, 1
 	cpda8 a, 0xc5a2
 	jrl z, AudioInit_UpdateIndicators
-	setda 7, 0xc2d2
+	set 7, (0xc2d2:16)
 	ld a, (0xc5a2:16)
 	res 7, a
 	sla a, 1
@@ -548,7 +548,7 @@ AudioInit_ClearAllVoiceBanks:
 	res 0, a
 	cps a, 0
 	jr z, AudioInit_ClearBank1Routing
-	setda 7, 0xc2c2
+	set 7, (0xc2c2:16)
 	and (0xc2c3:16), 1
 	ordi16 0xc59a, 512
 
@@ -557,7 +557,7 @@ AudioInit_ClearBank1Routing:
 	res 0, a
 	cps a, 0
 	jr z, AudioInit_ClearBank2Routing
-	setda 7, 0xc2c6
+	set 7, (0xc2c6:16)
 	and (0xc2c7:16), 1
 	ordi16 0xc59a, 512
 
@@ -566,7 +566,7 @@ AudioInit_ClearBank2Routing:
 	res 7, a
 	cps a, 0
 	jr z, AudioInit_CheckBit2Routing
-	setda 7, 0xc2ca
+	set 7, (0xc2ca:16)
 	and (0xc2ca:16), 128
 	ordi16 0xc59a, 512
 
@@ -578,7 +578,7 @@ AudioInit_CheckBit2Routing:
 	res 7, a
 	cp a, 0x7f
 	jr z, AudioInit_UpdateIndicators
-	setda 7, 0xc2ce
+	set 7, (0xc2ce:16)
 	or (0xc2ce:16), 127
 	ordi16 0xc59a, 512
 	jr AudioInit_UpdateIndicators
@@ -588,7 +588,7 @@ AudioInit_ClearBank3Routing:
 	res 7, a
 	cps a, 0
 	jr z, AudioInit_UpdateIndicators
-	setda 7, 0xc2ce
+	set 7, (0xc2ce:16)
 	and (0xc2ce:16), 128
 	ordi16 0xc59a, 512
 
@@ -668,39 +668,39 @@ AudioInit_SetPartMasks_Loop:
 AudioInit_CheckGlobalFlag6:
 	bit 6, (0xfd53:16)
 	jr z, AudioInit_ClearVoiceGroupFlags
-	setda 5, 0xc342
-	setda 5, 0xc344
-	setda 5, 0xc346
-	setda 5, 0xc348
-	setda 5, 0xc34c
+	set 5, (0xc342:16)
+	set 5, (0xc344:16)
+	set 5, (0xc346:16)
+	set 5, (0xc348:16)
+	set 5, (0xc34c:16)
 	jr AudioInit_CheckVoiceFlag6
 
 AudioInit_ClearVoiceGroupFlags:
-	resda 5, 0xc342
-	resda 5, 0xc344
-	resda 5, 0xc346
-	resda 5, 0xc348
-	resda 5, 0xc34c
+	res 5, (0xc342:16)
+	res 5, (0xc344:16)
+	res 5, (0xc346:16)
+	res 5, (0xc348:16)
+	res 5, (0xc34c:16)
 	ordi16 0xc59c, 8
 
 AudioInit_CheckVoiceFlag6:
 	bit 6, (0xfd50:16)
 	jr z, AudioInit_ClearAuxVoiceFlag
-	setda 5, 0xc34a
+	set 5, (0xc34a:16)
 	jr AudioInit_CheckReverbFlag
 
 AudioInit_ClearAuxVoiceFlag:
-	resda 5, 0xc34a
+	res 5, (0xc34a:16)
 	ordi16 0xc59c, 8
 
 AudioInit_CheckReverbFlag:
 	bit 7, (0xfd53:16)
 	jr z, AudioInit_ClearReverbFlag
-	setda 5, 0xc354
+	set 5, (0xc354:16)
 	ret
 
 AudioInit_ClearReverbFlag:
-	resda 5, 0xc354
+	res 5, (0xc354:16)
 	ordi16 0xc59c, 8
 	ret
 
@@ -1323,7 +1323,7 @@ AudioInit_ConfigureVoiceRouting:
 	and wa, 0xa0
 	cp wa, 0xa0
 	jrl nz, AudioInit_Routing_NoGroupAB
-	resda 2, 0xc1fe
+	res 2, (0xc1fe:16)
 	ordi16 0xc59c, 1
 	ld (0xc2ba:16), 2
 	ld (0xc2bb:16), 22

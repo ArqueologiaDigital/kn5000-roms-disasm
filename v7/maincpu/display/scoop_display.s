@@ -74,13 +74,13 @@ Display_Data_ScoopInit:
 ; If changed, calls the status bar redraw routine.
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion0:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion0_Check
-	setda_24 0, (0x0205e4)
+	set 0, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion0_Check:
-	bitda_24 0, (0x0205e4)
+	bit 0, (0x0205e4:24)
 	jr z, Display_UpdateRegion0_Done
 	pushw wa
 	ld a, (3429:16)
@@ -114,13 +114,13 @@ Display_UpdateRegion0_Done:
 ; Display_UpdateRegion1 - Update title bar region (bit 1)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion1:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion1_Check
-	setda_24 1, (0x0205e4)
+	set 1, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion1_Check:
-	bitda_24 1, (0x0205e4)
+	bit 1, (0x0205e4:24)
 	jr z, Display_UpdateRegion1_Done
 	call Display_RedrawTitleBar
 
@@ -135,13 +135,13 @@ Display_UpdateRegion1_Alt:
 ; Display_UpdateRegion3 - Update main content area (bit 3)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion3:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion3_Check
-	setda_24 3, (0x0205e4)
+	set 3, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion3_Check:
-	bitda_24 3, (0x0205e4)
+	bit 3, (0x0205e4:24)
 	jr z, Display_UpdateRegion3_Done
 	call Display_RedrawMainContent
 
@@ -152,13 +152,13 @@ Display_UpdateRegion3_Done:
 ; Display_UpdateRegion2 - Update selection highlight (bit 4)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion2:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion2_Check
-	setda_24 4, (0x0205e4)
+	set 4, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion2_Check:
-	bitda_24 4, (0x0205e4)
+	bit 4, (0x0205e4:24)
 	jr z, Display_UpdateRegion2_Done
 	call Display_RedrawSelection
 
@@ -169,13 +169,13 @@ Display_UpdateRegion2_Done:
 ; Display_UpdateRegion4 - Update side panel (bit 5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion4:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion4_Check
-	setda_24 5, (0x0205e4)
+	set 5, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion4_Check:
-	bitda_24 5, (0x0205e4)
+	bit 5, (0x0205e4:24)
 	jr z, Display_UpdateRegion4_Done
 	call Display_RedrawSidePanel
 
@@ -186,13 +186,13 @@ Display_UpdateRegion4_Done:
 ; Display_UpdateRegion5 - Update menu area (bit 6)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion5:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion5_Check
-	setda_24 6, (0x0205e4)
+	set 6, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion5_Check:
-	bitda_24 6, (0x0205e4)
+	bit 6, (0x0205e4:24)
 	jr z, Display_UpdateRegion5_Done
 	call Display_RedrawMenu
 
@@ -203,13 +203,13 @@ Display_UpdateRegion5_Done:
 ; Display_UpdateRegion6 - Update button labels (bit 7)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion6:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion6_Check
-	setda_24 7, (0x0205e4)
+	set 7, (0x0205e4:24)
 	ret
 
 Display_UpdateRegion6_Check:
-	bitda_24 7, (0x0205e4)
+	bit 7, (0x0205e4:24)
 	jr z, Display_UpdateRegion6_Done
 	call Display_RedrawButtonLabels
 
@@ -220,13 +220,13 @@ Display_UpdateRegion6_Done:
 ; Display_UpdateRegion7 - Update parameter display (bit 0 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion7:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion7_Check
-	setda_24 0, (0x0205e5)
+	set 0, (0x0205e5:24)
 	ret
 
 Display_UpdateRegion7_Check:
-	bitda_24 0, (0x0205e5)
+	bit 0, (0x0205e5:24)
 	jr z, Display_UpdateRegion7_Done
 	call Display_RedrawParameters
 
@@ -237,13 +237,13 @@ Display_UpdateRegion7_Done:
 ; Display_UpdateRegion8 - Update value display (bit 1 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion8:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion8_Check
-	setda_24 1, (0x0205e5)
+	set 1, (0x0205e5:24)
 	ret
 
 Display_UpdateRegion8_Check:
-	bitda_24 1, (0x0205e5)
+	bit 1, (0x0205e5:24)
 	jr z, Display_UpdateRegion8_Done
 	call Display_RedrawValues
 
@@ -254,13 +254,13 @@ Display_UpdateRegion8_Done:
 ; Display_UpdateRegion9 - Update indicator area (bit 2 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion9:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion9_Check
-	setda_24 2, (0x0205e5)
+	set 2, (0x0205e5:24)
 	ret
 
 Display_UpdateRegion9_Check:
-	bitda_24 2, (0x0205e5)
+	bit 2, (0x0205e5:24)
 	jr z, Display_UpdateRegion9_Done
 	call Display_RedrawIndicators
 
@@ -271,13 +271,13 @@ Display_UpdateRegion9_Done:
 ; Display_UpdateRegion10 - Update footer area (bit 3 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion10:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Display_UpdateRegion10_Check
-	setda_24 3, (0x0205e5)
+	set 3, (0x0205e5:24)
 	ret
 
 Display_UpdateRegion10_Check:
-	bitda_24 3, (0x0205e5)
+	bit 3, (0x0205e5:24)
 	jr z, Display_UpdateRegion10_Done
 	call Display_RedrawFooter
 
@@ -285,7 +285,7 @@ Display_UpdateRegion10_Done:
 	ret
 
 UIRender_SingleTable:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, UIRender_SingleTable_Body
 	ret
 
@@ -298,7 +298,7 @@ UIRender_SingleTable_Body:
 ; Render UI element from two ROM descriptor tables (general renderer)
 ; Input: XIY = descriptor table 1, XIX = descriptor table 2
 UIRender_TwoTableGeneral:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, UIRender_TwoTableGeneral_Body
 	ret
 
@@ -319,7 +319,7 @@ UIRender_TwoTableGeneral_Body:
 ; -----------------------------------------------------------------------------
 
 GraphicsRender_TwoTable:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, GraphicsRender_TwoTable_Body
 	ret
 
@@ -334,7 +334,7 @@ GraphicsRender_TwoTable_Body:
 	ret
 
 GraphicsRender_TwoTable_Alt:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, GraphicsRender_TwoTable_Alt_Body
 	ret
 
@@ -349,7 +349,7 @@ GraphicsRender_TwoTable_Alt_Body:
 	ret
 
 UIRender_TwoTableEvtCheck:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, UIRender_TwoTableEvtCheck_Body
 	ret
 
@@ -361,7 +361,7 @@ UIRender_TwoTableEvtCheck_Body:
 	ret
 
 UIRender_ConditionalDrawInit:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, UIRender_ConditionalDrawInit_Body
 	ret
 
@@ -373,7 +373,7 @@ UIRender_ConditionalDrawInit_Body:
 	ret
 
 Scoop_ConditionalCurveUpdate:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Scoop_ConditionalCurveUpdate_Body
 	ret
 
@@ -392,7 +392,7 @@ Scoop_CurveUpdate_Direct:
 	ret
 
 Scoop_ConditionalGlideSetup:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, Scoop_ConditionalGlideSetup_Body
 	ret
 
@@ -404,7 +404,7 @@ Scoop_ConditionalGlideSetup_Body:
 	ret
 
 UIRender_ConditionalFBCall:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, UIRender_ConditionalFBCall_Body
 	ret
 
@@ -416,7 +416,7 @@ UIRender_ConditionalFBCall_Body:
 	ret
 
 GraphicsRender_EventCheck:
-	bitda_24 0, (0x0205e6)
+	bit 0, (0x0205e6:24)
 	jr nz, GraphicsRender_EventCheck_Body
 	ret
 
@@ -2617,7 +2617,7 @@ ScoopDisp_DispatchTable_Extended:
 	ld a, (0x0eee:16)
 	ld (0x2877:16), a
 	call Scoop_SpecialMode_ParamCheckBound
-	resda 7, (0x0d54)
+	res 7, (0x0d54:16)
 	ld (0x0d6a:16), 0x00
 	ld (0x10fa:16), 0x01
 	call ScoopParam_ValueTable_0x1DD
@@ -2868,7 +2868,7 @@ Timer_ParamLoadAndCompare:
 .Lc_ef7a28:
 	ldb W, 0x00
 	call Timer_ParamCompareAlt_0x2A
-	resda 5, (0x0d54)
+	res 5, (0x0d54:16)
 	jp Timer_ParamLoadAndCompare_0x2D
 	ret
 Timer_ParamCompareAlt:
@@ -2882,7 +2882,7 @@ Timer_ParamCompareAlt:
 .Lc_ef7a52:
 	ldb W, 0x01
 	call Timer_ParamCompareAlt_0x2A
-	resda 5, (0x0d54)
+	res 5, (0x0d54:16)
 	jp Timer_ParamCompareAlt_0x12
 	ret
 	call	15704071
@@ -3421,7 +3421,7 @@ ToneParam_Evt09_BytecodeHandler:
 	pop XIX
 	call (XHL)
 	call PortConfig_Handler_0_0xD7
-	resda 2, (0x0d54)
+	res 2, (0x0d54:16)
 	or (0x8cec:16), 0x01
 .Lc_ef80e6:
 	jp ToneParam_Evt09_BytecodeHandler_0xCF
@@ -3687,7 +3687,7 @@ ToneParam_HandlerTable_BC:
 	ld (0x0dce:16), 0x00
 	ld (0x7ea6:16), 0xff
 	call DisplayMode_Handler_3_0x30C
-	resda 2, (0x0d54)
+	res 2, (0x0d54:16)
 	ld (0x0d55:16), 0xff
 .Lc_ef86bb:
 	ret
@@ -5426,7 +5426,7 @@ ScoopParam_ValueTable:
 	ld (0x0d69:16), 0x18
 	jp 0xefa2f3
 .Lc_efa1aa:
-	resda 7, (0x0d54)
+	res 7, (0x0d54:16)
 	call PortConfig_DataTable_B_0x20
 	call SeqBuf_Init
 	call 0xefa646
@@ -6934,7 +6934,7 @@ SysInit_BytecodeBlock:
 	call VoiceSlot_FlagCheck
 	cp A,0x84
 	jrl nz, .Lc_efb9fd
-	setda 7, (0x0d54)
+	set 7, (0x0d54:16)
 .Lc_efb9fd:
 	call SysInit_BytecodeBlock_0xFF
 	xor A,A

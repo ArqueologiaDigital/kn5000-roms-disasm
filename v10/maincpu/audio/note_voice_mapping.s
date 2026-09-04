@@ -8287,7 +8287,7 @@ Voice_BuildAndEmitNoteOnEvents:
 	ld (xsp + 4), c
 	ld (xsp + 6), xwa
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ldmi16 (xsp + 2), 0x41b
 	ei 0
 	lds bc, 0
@@ -8418,7 +8418,7 @@ SeqPart_EmitNoteOnMessages:
 	ld (xsp + 4), c
 	ld (xsp + 6), xwa
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ldmi16 (xsp + 2), 0x415
 	ei 0
 	lds bc, 0
@@ -8541,7 +8541,7 @@ Voice_EmitMidiNoteOnEvents:
 	ld (xsp + 4), c
 	ld (xsp + 6), xwa
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ldmi16 (xsp + 2), 0x46a
 	ei 0
 	lds bc, 0
@@ -15204,7 +15204,7 @@ Voice_DispatchByTimingState:
 	ld bc, (0x00ceff:24)
 	cps bc, 0
 	jr z, VoiceTiming_ResetSlot
-	bitda_24 0, (0xcede)
+	bit 0, (0xcede:24)
 	jr nz, VoiceTiming_ResetSlot
 	jr VoiceTiming_CheckBit6
 
@@ -15213,13 +15213,13 @@ VoiceTiming_ResetSlot:
 	jr Voice_AdjustTiming_Return
 
 VoiceTiming_CheckBit6:
-	bitda_24 6, (0xcede)
+	bit 6, (0xcede:24)
 	jr z, VoiceTiming_CheckBit7
 	calr Voice_CheckAndResetSlotState
 	jr Voice_AdjustTiming_Return
 
 VoiceTiming_CheckBit7:
-	bitda_24 7, (0xcede)
+	bit 7, (0xcede:24)
 	jr z, VoiceTiming_CompareThreshold
 	calr Voice_UpdateVelocity_Entry
 	jr Voice_AdjustTiming_Return
@@ -15243,18 +15243,18 @@ Voice_AdjustTiming_Return:
 	ret
 
 Voice_UpdateVelocity_Entry:
-	bitda_24 6, (0xcede)
+	bit 6, (0xcede:24)
 	jr nz, Voice_CheckAndUpdateSlot
 	cpw (0xcf17:16), 0
 	jr z, VelocityUpdate_CheckNoThreshold
-	bitda_24 7, (0xcede)
+	bit 7, (0xcede:24)
 	jr z, VelocityUpdate_CheckBit4
 	ld de, (0xc596:16)
 	and de, 0x2
 	jr nz, Voice_CheckAndUpdateSlot
 
 VelocityUpdate_CheckBit4:
-	bitda_24 4, (0xcede)
+	bit 4, (0xcede:24)
 	jr z, Voice_CheckAndUpdateSlot
 	jr VelocityUpdate_SetTimerValue
 
@@ -15262,7 +15262,7 @@ VelocityUpdate_CheckNoThreshold:
 	ld de, (0xc596:16)
 	and de, 0x2
 	jr z, Voice_CheckAndUpdateSlot
-	bitda_24 4, (0xcede)
+	bit 4, (0xcede:24)
 	jr z, Voice_CheckAndUpdateSlot
 	cpib_da (0x00cee0), 0x00
 	jr z, Voice_CheckAndUpdateSlot
@@ -15342,14 +15342,14 @@ CheckAndResetSlotSta_Block:
 	ld de, (0xc598:16)
 	and de, 0x2
 	jr nz, CheckAndResetSlotSta_LoadDRAM
-	bitda_24 6, (0xcede)
+	bit 6, (0xcede:24)
 	jr nz, CheckAndResetSlotSta_Block2
 
 CheckAndResetSlotSta_LoadDRAM:
 	ld de, (0xc598:16)
 	and de, 0x2
 	jr nz, CheckAndResetSlotSta_LoadDRAM2
-	bitda_24 6, (0xcede)
+	bit 6, (0xcede:24)
 	jr nz, CheckAndResetSlotSta_Block2
 
 CheckAndResetSlotSta_LoadDRAM2:
@@ -15386,7 +15386,7 @@ NullRet2_Data:
 	cp	xix, xwa
 
 NullRet2_TestBit24:
-	bitda_24 6, (0xcede)
+	bit 6, (0xcede:24)
 	jr nz, EffectState_Dispatch
 	ld de, (0xc596:16)
 	and de, 0x1
@@ -15723,7 +15723,7 @@ VoiceSlot_CompareAndUpdate_Compare:
 	jr VoiceSlot_CompareAndUpdate_Block2
 
 VoiceSlot_CompareAndUpdate_TestBit24:
-	bitda_24 6, (0xcede)
+	bit 6, (0xcede:24)
 	jr nz, VoiceSlot_CompareAndUpdate_Block
 	ldw_erp DE, 0x3e
 	ld de, (0xc596:16)
@@ -15863,7 +15863,7 @@ VoiceSlot_LoadResult_Block3:
 	jrl Audio_NullRet2
 
 VoiceSlot_LoadResult_TestBit24:
-	bitda_24 1, (0xcede)
+	bit 1, (0xcede:24)
 	jr nz, VoiceSlot_LoadResult_Block9
 	calr Voice_LookupNoteAndComputePitch
 	cps w, 0
@@ -16070,7 +16070,7 @@ VoiceSlot_CheckPitch_Compare2:
 VoiceSlot_CheckPitch_Compare3:
 	cps hl, 4
 	jr nz, VoiceSlot_CheckPitch_OrBits2
-	bitda_24 5, (0xcede)
+	bit 5, (0xcede:24)
 	jr z, VoiceSlot_CheckPitch_OrBits
 	cp (0xceb5:16), 0
 	jr z, NoteBuffer_CompactEntries
@@ -16451,7 +16451,7 @@ InitPartAllocState_Block:
 	and de, 0x2
 	stw_erp DE, 0x3e
 	jr z, InitPartAllocState_TestBit24
-	bitda_24 4, (0xcede)
+	bit 4, (0xcede:24)
 	jr z, InitPartAllocState_Block2
 	calr VoiceSlot_SetPitchParams_TestBit24
 	jr InitPartAllocState_TestBit24
@@ -16460,7 +16460,7 @@ InitPartAllocState_Block2:
 	calr VoiceSlot_IterateAlloc_Block2
 
 InitPartAllocState_TestBit24:
-	bitda_24 4, (0xcede)
+	bit 4, (0xcede:24)
 	jr z, InitPartAllocState_Block3
 	calr VoiceSlot_IterateAlloc_Block3
 	jr InitPartAllocState_Epilogue
@@ -16481,7 +16481,7 @@ InitPartAllocState_Block4:
 	ret
 
 InitPartAllocState_TestBit242:
-	bitda_24 4, (0xcede)
+	bit 4, (0xcede:24)
 	jrl nz, InitPartAllocState_Return
 	ld l, (0x00cedf:24)
 	xor h, h
@@ -16534,7 +16534,7 @@ InitPartAllocState_Return:
 
 InitPartAllocState_OrBits:
 	xor hl, hl
-	bitda_24 1, (0xcede)
+	bit 1, (0xcede:24)
 	jr z, InitPartAllocState_Block5
 	ld l, (0x00cee1:24)
 	jr VoiceSlot_SetPitchParams_LoadReg
@@ -16553,7 +16553,7 @@ VoiceSlot_SetPitchParams_LoadReg:
 	ret
 
 VoiceSlot_SetPitchParams_TestBit24:
-	bitda_24 1, (0xcede)
+	bit 1, (0xcede:24)
 	jr z, VoiceSlot_IterateAlloc_Block
 	ld l, (0x00cedf:24)
 	xor h, h
@@ -16693,7 +16693,7 @@ VoiceSlot_IterateAlloc_LoadReg2:
 	ret
 
 VoiceSlot_IterateAlloc_TestBit24:
-	bitda_24 0, (0xcede)
+	bit 0, (0xcede:24)
 	jr nz, VoiceSlot_IterateAlloc_Block6
 	ld a, (0x00cedf:24)
 	ld w, (0x00cee0:24)
@@ -16708,7 +16708,7 @@ VoiceSlot_IterateAlloc_TestBit24:
 VoiceSlot_IterateAlloc_StoreDRAM:
 	ld (0x8d42:16), a
 	ld (0x8d40:16), w
-	bitda_24 1, (0xcede)
+	bit 1, (0xcede:24)
 	jr nz, VoiceSlot_IterateAlloc_StoreDRAM2
 	ld (0x8d44:16), 0
 	jr VoiceSlot_IterateAlloc_Block5
@@ -20187,9 +20187,9 @@ PlayModeStateMachine_Block:
 	ret le
 	subdi16 0xd09a, 1
 	ret nz
-	resda 1, 0x28b2
-	resda 2, 0x28b2
-	resda 3, 0x28a7
+	res 1, (0x28b2:16)
+	res 2, (0x28b2:16)
+	res 3, (0x28a7:16)
 	ei 6
 	ldw (1052:16), 0
 	ld (1051:16), 0
@@ -20255,7 +20255,7 @@ PlayModeStateMachine_TestBit22:
 	ret
 
 PlayModeStateMachine_Block5:
-	resda 2, 0x28a7
+	res 2, (0x28a7:16)
 	ret
 
 PlayModeStateMachine_Prologue:
@@ -23262,7 +23262,7 @@ SoundParam_InitDefaultBanks:
 	push xiz
 	call SwbtWr_ReinitBothBanks
 	pop xiz
-	setda 2, 0xfdad
+	set 2, (0xfdad:16)
 	ld xwa, 0xc0
 	lds bc, 0
 	lds de, 1
@@ -23303,7 +23303,7 @@ SoundParam_InitDefau_Block:
 	push xiz
 	call SwbtWr_ReinitBothBanks
 	pop xiz
-	resda 2, 0xfdad
+	res 2, (0xfdad:16)
 	ld xwa, 0xc0
 	lds bc, 1
 	lds de, 1
@@ -23344,7 +23344,7 @@ SoundParam_InitDefau_Block2:
 	push xiz
 	call SwbtWr_ReinitBothBanks
 	pop xiz
-	resda 0, 0xfdad
+	res 0, (0xfdad:16)
 	ld xwa, 0xc1
 	lds bc, 1
 	lds de, 1

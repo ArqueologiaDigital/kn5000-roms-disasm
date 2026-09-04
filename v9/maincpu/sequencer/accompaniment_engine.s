@@ -27606,7 +27606,7 @@ Tempo_StartMeasureSyncFar:
 	ld (0x398c:16), wa
 
 Tempo_StartMeasureSetDirty:
-	setda 4, 0xe3e0
+	set 4, (0xe3e0:16)
 
 Tempo_StartMeasureReturn:
 	inc 2, xsp
@@ -27652,7 +27652,7 @@ Tempo_EndMeasureSyncFar:
 	ld (0x398a:16), wa
 
 Tempo_EndMeasureSetDirty:
-	setda 4, 0xe3e0
+	set 4, (0xe3e0:16)
 
 Tempo_EndMeasureReturn:
 	inc 2, xsp
@@ -27682,7 +27682,7 @@ Tempo_QuantizeDec:
 	ld (0x398e:16), c
 
 Tempo_QuantizeSetDirty:
-	setda 4, 0xe3e0
+	set 4, (0xe3e0:16)
 
 Tempo_QuantizeReturn:
 	inc 2, xsp
@@ -27714,7 +27714,7 @@ Tempo_EffectDec:
 
 Tempo_EffectStore:
 	ld (xbc), a
-	setda 4, 0xe3e0
+	set 4, (0xe3e0:16)
 
 Tempo_EffectReturn:
 	inc 2, xsp
@@ -27731,7 +27731,7 @@ Tempo_IncrementTimeSigNum:
 	ret nc
 	inc 1, a
 	ld (0x398f:16), a
-	setda 4, 0xe3e0
+	set 4, (0xe3e0:16)
 	ret
 
 Tempo_DecrementTimeSigNum:
@@ -27745,7 +27745,7 @@ Tempo_DecrementTimeSigNum:
 	ret z
 	dec 1, a
 	ld (0x398f:16), a
-	setda 4, 0xe3e0
+	set 4, (0xe3e0:16)
 	ret
 
 Tempo_TimeSigCodeBlock:
@@ -27789,7 +27789,7 @@ Tempo_TimeSigCodeBlock:
 Tempo_EditBPM:
 	cps a, 0
 	ret nz
-	setda 0, 0x8d88
+	set 0, (0x8d88:16)
 	calr Tempo_DisplayParamReturn
 	ld (0x3988:16), l
 	cps l, 1
@@ -27807,8 +27807,8 @@ Tempo_EditBPMDec:
 	call MIDI_SendSysExCmd
 
 Tempo_EditBPMClamp:
-	setda 7, 0x34cd
-	setda 7, 0x34cd
+	set 7, (0x34cd:16)
+	set 7, (0x34cd:16)
 	ret
 
 Tempo_EditBPMApply:
@@ -28085,20 +28085,20 @@ Tempo_FormatBPMDigit:
 	jr c, Tempo_FormatBPMDigit
 	cps a, 0
 	jr nz, Tempo_FormatBPMDone
-	setda 0, 0x3997
+	set 0, (0x3997:16)
 	jr Tempo_FormatBPMOutput
 
 Tempo_FormatBPMDone:
-	resda 0, 0x3997
+	res 0, (0x3997:16)
 
 Tempo_FormatBPMOutput:
 	cps a, 1
 	jr nz, Tempo_FormatBPMPad
-	setda 1, 0x3997
+	set 1, (0x3997:16)
 	jr Tempo_DisplayBPMValue
 
 Tempo_FormatBPMPad:
-	resda 1, 0x3997
+	res 1, (0x3997:16)
 
 Tempo_DisplayBPMValue:
 	ld wa, (0x398c:16)
@@ -28543,11 +28543,11 @@ VoiceSlot_UpdateState:
 	ld (0x288d:16), a
 	cp (0x3996:16), 0
 	jr nz, VoiceSlot_SetBit2
-	resda 2, 0x287b
+	res 2, (0x287b:16)
 	jr VoiceSlot_ValidateAndResolve
 
 VoiceSlot_SetBit2:
-	setda 2, 0x287b
+	set 2, (0x287b:16)
 
 VoiceSlot_ValidateAndResolve:
 	call SeqVoice_ValidateAndProcessState
@@ -30822,7 +30822,7 @@ CmpMenuTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpMenuTtlFunc title dispatch
 CmpMenuTtl_Dispatch:
-	setda	2, 0x28a7
+	set	2, (0x28a7:16)
 	call	AccWrap_PlayModeDispatch
 	jr	t, 0x46
 
@@ -31236,7 +31236,7 @@ CmpRealTtl_RhythmVar4:
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	jr CmpBk_DeliverEvent
-	setda 1, 0x34cf
+	set 1, (0x34cf:16)
 	jr CmpBk_ReturnZero
 	push xde
 	push xhl
@@ -31639,7 +31639,7 @@ CmpBkslSTtl_FillIn8:
 	jr nz, DisplayFunc_ReturnZero
 	cpib_da (0x0340ea), 0x00
 	jr nz, CmpBkslSTtl_EventPost
-	setda 2, 0x34cd
+	set 2, (0x34cd:16)
 	ld (0x7f42:16), 35
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
@@ -32214,8 +32214,8 @@ CmEsyTtl_Dispatch:
 	sll	a, 2
 	ld	(0x34d6:16), a
 	or	(0x37c8:16), 127
-	resda	2, 0x28a7
-	resda	6, 0x34cd
+	res	2, (0x28a7:16)
+	res	6, (0x34cd:16)
 	push	xde
 	push	xhl
 	push	xix
@@ -33215,7 +33215,7 @@ MiddleCmpClrFunc:
 	jr z, MiddleCmpClr_HandleEvent07
 	cp xbc, 0x1e40006
 	jr nz, MiddleCmpClr_ReturnZero
-	setda 2, 0x34cd
+	set 2, (0x34cd:16)
 	ld (0x350c:16), 0
 	ld xwa, 0xb20012
 	ld xbc, 0x1c00002
@@ -37232,7 +37232,7 @@ AccDisplay_FullInit:
 	call Part_ReinitAllActive
 	call AccompSeq_StopSequence
 	call AccWrap_PlayModeDispatch
-	setda 2, 0x28a7
+	set 2, (0x28a7:16)
 	call AudioInit_RefreshToneBank
 	call NoteMap_ProcessAndMerge
 	call Voice_InitializeAll
@@ -37243,7 +37243,7 @@ AccDisplay_FullInit:
 	jr AccDisplay_CopyToBackBuffer
 
 Display_RestoreEntry:
-	resda 2, 0x28a7
+	res 2, (0x28a7:16)
 	call Vga_RestoreMultiPlaneDisplay
 	jr AccDisplay_CopyToFrontBuffer
 
@@ -37313,7 +37313,7 @@ AccBankData_PadSpaces_Done:
 	cp_erpb 0xfb, 0x0c
 	jr c, AccBankData_InitSlot_OuterLoop
 	ld (0x48d6:16), 0
-	resda 0, 0x35b0
+	res 0, (0x35b0:16)
 	ldib_erp 0xfb, 0
 
 AccBankData_ProcessSlot:
@@ -37451,7 +37451,7 @@ AccBankData_CopyLoop_NonZero:
 
 AccBankData_InitSlotScan:
 	ld (0x48d6:16), 0
-	resda 0, 0x35b0
+	res 0, (0x35b0:16)
 	ldib_erp 0xfb, 0
 
 AccBankData_SlotScan_Loop:
@@ -40281,7 +40281,7 @@ AccStyle_TableDataEntry:
 	pop_f
 	.byte 0xad
 	push	xbc
-	resda	0, 0x35b0
+	res	0, (0x35b0:16)
 	call	DualVoice_ParamLoadDone
 	ld	a, (0x35b0:16)
 	extz	wa
@@ -40351,7 +40351,7 @@ AccStyle_TableDataEntry:
 	ld	xwa, (0x7ae8:16)
 	ld	(0x39b2:16), xwa
 	ld	(0x3950:16), 0
-	resda	0, 0x35b0
+	res	0, (0x35b0:16)
 	ldib_erp	251, 0
 	ld	e, (xsp+4)
 	sub	e, 30

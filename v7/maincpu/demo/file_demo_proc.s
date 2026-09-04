@@ -392,7 +392,7 @@ FDemo_FileOpen_Exit:
 
 
 DemoMode_Main_Operation:
-	resda 0, (0x28b1)
+	res 0, (0x28b1:16)
 	call 0xfe06a6
 	lda xbc, (0xf9a0:16)
 	lda xwa, (0xffbe:16)
@@ -406,18 +406,18 @@ DemoMode_Main_Operation:
 	lda xsp, (xsp + 0x0a)
 	call 0xfdb581
 	calr Voice_LoadVoiceTable
-	setda 4, (0xfd50)
-	resda 2, (0xfd50)
-	resda 2, (0xfd52)
+	set 4, (0xfd50:16)
+	res 2, (0xfd50:16)
+	res 2, (0xfd52:16)
 	calr Demo_PreSetup
-	resda 0, (0x045b)
+	res 0, (0x045b:16)
 	call AccompSeq_StopSequence
 	calr Voice_CopyPreset
 	call 0xfeb6a8
 	calr Timer7_DisableInterrupt
 	call 0xfdd69e
-	setda 6, (0xb746)
-	resda 3, (0x28ad)
+	set 6, (0xb746:16)
+	res 3, (0x28ad:16)
 	call SeqInit_PostEventSequence
 	call SeqInit_FinalEvent
 	jp Seq_StartMainControl
@@ -458,7 +458,7 @@ Demo_SelectionEntryHandler:
 	ld (0x0d2f:16), 0x00
 	calr Audio_WaitForReady
 	call SeqStep_PlaybackStateMachine
-	resda 3, (0x28ad)
+	res 3, (0x28ad:16)
 	call SeqInit_PostEventSequence
 	call TempoRingBuf_Init
 	call SeqBuf_Init
@@ -835,7 +835,7 @@ Banner_Loop_CheckEntry:
 	jr z, Banner_Loop_Exit
 	cp a, 0xd
 	jr z, Banner_Loop_Exit
-	setda 6, 0x28b3
+	set 6, (0x28b3:16)
 	lda xwa, (xsp + 2)
 	ld (xwa), 0xd3
 	ld (xwa + 1), 0x7e
@@ -891,8 +891,8 @@ Demo_ScanPartLoop:
 	ld a, l
 	inc 1, a
 	ld (3414:16), a
-	setda 0, 3412
-	setda 2, 0x287b
+	set 0, (3412:16)
+	set 2, (0x287b:16)
 	jr Demo_ScanPartDone
 
 Demo_ScanPartSkipToEnd:
@@ -906,8 +906,8 @@ Demo_ScanPartNext:
 Demo_ScanPartDone:
 	cp l, 0x10
 	ret nz
-	resda 0, 3412
-	resda 2, 0x287b
+	res 0, (3412:16)
+	res 2, (0x287b:16)
 	ret
 
 Voice_SavePreset:
@@ -8099,7 +8099,7 @@ InitializeOperationState:
 	call AccWrap_PlayModeDispatch
 	cp (XSP),0x00
 	jr z, InitOp_SkipSetFlag
-	setda 2, (0x28a7)
+	set 2, (0x28a7:16)
 InitOp_SkipSetFlag:
 	call	16179766
 	call	16641574
@@ -8247,7 +8247,7 @@ DiskEvt_CheckMediaType:
 	cps	wa, 3
 	jr	nz, 54
 DiskEvt_TypeIsFloppyOrHD:
-	bitda_24 0, (0x340f4)
+	bit 0, (0x340f4:24)
 	jr z, DiskEvt_UseAltChannel
 	ld a, (xsp)
 	extz wa

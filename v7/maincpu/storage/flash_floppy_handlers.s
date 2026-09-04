@@ -3526,7 +3526,7 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xef, 0x66, 0x0e
 	pushw iz
 	lds iz, 0
-	resda 0, (0x3514)
+	res 0, (0x3514:16)
 	call DualVoice_ParamLoadDone
 	ld a, (0x3514:16)
 	extz WA
@@ -3616,7 +3616,7 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0x43, 0x5e, 0x0e
 	pushw iz
 	ld IZ,WA
-	setda 0, (0x3435)
+	set 0, (0x3435:16)
 	call 0xf62d45
 	ld a, (0x3514:16)
 	extz WA

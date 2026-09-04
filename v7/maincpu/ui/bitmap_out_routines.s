@@ -1707,7 +1707,7 @@ BitMapOut_DetectChanges_UseShortList:
 	ld hl, (0x9042:16)
 	lda xwa, (0xbca0:16)
 	ld (XSP+0x08),XWA
-	setda 2, (0x8caa)
+	set 2, (0x8caa:16)
 	jr t, BitMapOut_DeltaEncode_Init
 BitMapOut_DetectChanges_FullScan:
 .Lc_fb4e45:
@@ -1717,7 +1717,7 @@ BitMapOut_DetectChanges_FullScan:
 	ld hl, (0x9046:16)
 	lda xwa, (0xbe9d:16)
 	ld (XSP+0x08),XWA
-	resda 2, (0x8caa)
+	res 2, (0x8caa:16)
 BitMapOut_DeltaEncode_Init:
 	lds iz, 0
 	jrl BitMapOut_DeltaEncode_CheckBounds

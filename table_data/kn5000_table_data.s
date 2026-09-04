@@ -1469,7 +1469,7 @@ BootCode_INTT1_Handler:
 ; Fatal error - disables DRAM refresh and halts
 ; -----------------------------------------------------------------------------
 BootCode_NMI_Handler:
-	resda 7, 354	; f1 62 01 b7 - Disable DRAM refresh
+	res 7, (354:16)	; f1 62 01 b7 - Disable DRAM refresh
 BootCode_NMI_Handler__halt_loop:
 	halt	; 05
 	jr BootCode_NMI_Handler__halt_loop	; 68 fd
@@ -3564,14 +3564,14 @@ HDAE5000_InitializeParallelPort__ppi_wait_loop:
 	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__probe_16bit	; 6e 08
-	setda_24 2, (0x160004)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
+	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
 	ldib_erp 0xFB, 1	; LD QIZH, 1 - record probe failure
 HDAE5000_InitializeParallelPort__probe_16bit:
 	lds wa, 1	; LD WA, 1 - custom-data flash bank
 	call 0xFFB888	; CALL Flash_ReadID_16bit (boot-time alias of 0x9FB888)
 	cp hl, 0xFFFF	; CP HL, 0xFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__check_probe_result	; 6e 0a
-	setda_24 3, (0x160004)	; SET 3, (0x160004) - LED bit 3 = custom flash probe failed
+	set 3, (0x160004:24)	; SET 3, (0x160004) - LED bit 3 = custom flash probe failed
 	ldib_erp 0xFB, 1	; LD QIZH, 1
 	jr HDAE5000_InitializeParallelPort__probe_fail_halt	; 68 08
 HDAE5000_InitializeParallelPort__check_probe_result:
@@ -3610,17 +3610,17 @@ HDAE5000_InitializeParallelPort__erase_blink:
 	; === Program initialization image + custom flash (LED bit 0 while busy) ===
 HDAE5000_InitializeParallelPort__program_flash:
 	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
-	setda_24 0, (0x160004)	; SET 0, (0x160004)
+	set 0, (0x160004:24)	; SET 0, (0x160004)
 	calr Flash_ProgramHDAE_Initialization	; program HDAE5000 banks 0-3
-	resda_24 0, (0x160004)	; RES 0, (0x160004)
+	res 0, (0x160004:24)	; RES 0, (0x160004)
 	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
 	calr Boot_DelayLoop
-	setda_24 0, (0x160004)	; SET 0, (0x160004)
+	set 0, (0x160004:24)	; SET 0, (0x160004)
 	calr Boot_ProgramCustomFlash	; program custom-data flash (2 banks)
-	resda_24 0, (0x160004)	; RES 0, (0x160004)
+	res 0, (0x160004:24)	; RES 0, (0x160004)
 
 	; === Verify both devices (LED bit 1; on mismatch toggle bit 2/3 forever) ===
-	setda_24 1, (0x160004)	; SET 1, (0x160004)
+	set 1, (0x160004:24)	; SET 1, (0x160004)
 	pushw 0x3	; last bank to verify = 3
 	ld xwa, 0x800000	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
@@ -3676,7 +3676,7 @@ HDAE5000_ProgramPayloadOnly:
 	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_ProgramPayloadOnly__erase_flash	; 6e 07
-	setda_24 2, (0x160004)	; SET 2, (0x160004) - LED bit 2 = probe failed
+	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = probe failed
 HDAE5000_ProgramPayloadOnly__probe_fail_halt:
 	jr HDAE5000_ProgramPayloadOnly__probe_fail_halt	; 68 fe
 HDAE5000_ProgramPayloadOnly__erase_flash:
@@ -3696,10 +3696,10 @@ HDAE5000_ProgramPayloadOnly__erase_blink:
 	cp hl, 0xFFFF
 	jr z, HDAE5000_ProgramPayloadOnly__erase_blink	; 66 ed
 HDAE5000_ProgramPayloadOnly__program_flash:
-	setda_24 0, (0x160004)	; SET 0, (0x160004) - LED bit 0 while programming
+	set 0, (0x160004:24)	; SET 0, (0x160004) - LED bit 0 while programming
 	calr Flash_ProgramHDAE_Payload	; program HDAE5000 banks 4-7
-	resda_24 0, (0x160004)	; RES 0, (0x160004)
-	setda_24 1, (0x160004)	; SET 1, (0x160004) - LED bit 1 while verifying
+	res 0, (0x160004:24)	; RES 0, (0x160004)
+	set 1, (0x160004:24)	; SET 1, (0x160004) - LED bit 1 while verifying
 	pushw 0x7	; last bank to verify = 7
 	ld xwa, 0x800000	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window

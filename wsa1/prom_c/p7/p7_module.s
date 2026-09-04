@@ -14199,7 +14199,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 	ld	(xbc), a                                ; FA26B6  ld (XBC),A
 	ei	6                                       ; FA26B8  ei 0x06
 	ldw	(0xF2F1:24), 0                        ; FA26BA  ld (0x00f2f1),0x0000
-	setda_24 5, 0x007ECC                       ; FA26C1  set 5,(0x007ecc)
+	set 5, (0x007ECC:24)                       ; FA26C1  set 5,(0x007ecc)
 	ei	0                                       ; FA26C6  ei 0x00
 	unlk32 xiz                                 ; FA26C8  unlk XIZ
 	ret                                        ; FA26CA  ret

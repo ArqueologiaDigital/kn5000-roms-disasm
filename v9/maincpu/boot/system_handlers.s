@@ -29,7 +29,7 @@ NMI_SetPowerOffCode_A5A5:
 
 NMI_ClearGuardAndHalt:
 	ld (1024:16), 0
-	resda 7, 354
+	res 7, (354:16)
 	set_dd8 2, 0x3c
 	halt
 NMI_HaltLoop:
@@ -467,17 +467,17 @@ INTT1_CheckTickOverflow:
 	cp (1050:16), 1
 	jr ule, UIStateMachine_DispatchEntry
 	ld (1056:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 	bit 0, (1054:16)
 	jr z, INTT1_CheckAltSeqOverflow
 	ld (1054:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTT1_CheckAltSeqOverflow:
 	bit 0, (1057:16)
 	jr z, INTT1_CheckMidiSyncGate
 	ld (1057:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTT1_CheckMidiSyncGate:
 	cp (0x8d34:16), 19
@@ -519,7 +519,7 @@ UIStateMachine_DispatchEntry:
 	bit 0, a
 	jr z, UIStateMachine_CheckPending
 	ld (xhl), 0x6
-	resda 0, 1139
+	res 0, (1139:16)
 
 UIStateMachine_CheckPending:
 	bit 3, a
@@ -527,7 +527,7 @@ UIStateMachine_CheckPending:
 	ld (xhl), 0x10
 
 UIStateMachine_ClearBit3:
-	resda 2, 1043
+	res 2, (1043:16)
 	ld a, (1041:16)
 	inc 1, a
 	cps a, 2
@@ -600,35 +600,35 @@ UI_SUBSTATE_TABLE:
 	.long UI_SUBSTATE_CLEAR_BIT3
 
 UI_SUBSTATE_CLEAR_FLAGS:
-	resda 6, 1058
-	resda 0, 1043
+	res 6, (1058:16)
+	res 0, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_PROCESS_A:
-	resda 1, 1043
-	resda 0, 1044
+	res 1, (1043:16)
+	res 0, (1044:16)
 	ldb a, 0x2
 	call TaskSched_SignalEvent_NoBlock
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_CLEAR_BIT3:
-	resda 3, 1043
+	res 3, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_0:
-	resda 4, 1043
+	res 4, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_1:
-	resda 5, 1043
+	res 5, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_2:
-	resda 6, 1043
+	res 6, (1043:16)
 	jr UIStateMachine_ExitToScheduler
 
 UI_SUBSTATE_ACTION_3:
-	resda 7, 1043
+	res 7, (1043:16)
 
 UIStateMachine_ExitToScheduler:
 	pop xhl
@@ -734,13 +734,13 @@ INTTR4_MetroPhaseSync:
 	bit 0, (1054:16)
 	jr z, INTTR4_MetroSync_CheckAltSeq
 	ld (1054:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_MetroSync_CheckAltSeq:
 	bit 0, (1057:16)
 	jr z, INTTR4_MetroSync_Done
 	ld (1057:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_MetroSync_Done:
 	jr INTTR4_MetroBeat_Check
@@ -1052,13 +1052,13 @@ INTTR4_SubTick_PhaseSync:
 	bit 0, (1054:16)
 	jr z, INTTR4_SubTick_PhaseSync_AltSeq
 	ld (1054:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_SubTick_PhaseSync_AltSeq:
 	bit 0, (1057:16)
 	jr z, INTTR4_SubTick_ToAccum
 	ld (1057:16), 6
-	resda 0, 1139
+	res 0, (1139:16)
 
 INTTR4_SubTick_ToAccum:
 	jp INTTR4_SeqAccum_Update
@@ -1660,7 +1660,7 @@ TempoRingBuf_Consume_Loop:
 	jr TempoRingBuf_Consume_Loop
 
 TempoRingBuf_Consume_Done:
-	resda 0, 1113
+	res 0, (1113:16)
 	ldw (1141:16), 0
 	ei 0
 	popw hl
@@ -5564,7 +5564,7 @@ InterCPU_E2_WaitAck:
 	ldw (1502:16), 10
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
-	setda 7, 1568
+	set 7, (1568:16)
 	cp (1504:16), 0
 	ret z
 
@@ -6018,12 +6018,12 @@ INTTC0_E2_Complete:
 	ld (1510:16), 255
 	ld (1506:16), 0
 	set_dd8 1, 0x68	; MSTAT1 - set to signal E2 command complete
-	setda 7, 1566
+	set 7, (1566:16)
 	jr E1DMA_ISR_Epilogue
 
 INTTC0_E1_Phase2_Complete:
 	ld (1506:16), 0
-	resda 7, 1568
+	res 7, (1568:16)
 
 INTTC0_SetTransferDone:
 	set_dd8 1, 0x68	; MSTAT1 - set to signal E1 transfer complete
@@ -8279,7 +8279,7 @@ HDAE5000_Init_DetectAndVerify:
 	call HDAE5000_Detect
 	cp xhl, 0xffffffff
 	jr nz, HDAE5000_Init_VerifyROM
-	setda_24 2, (0x160004)
+	set 2, (0x160004:24)
 
 Infinite_Loop_FlashVerifyFail:
 	jr Infinite_Loop_FlashVerifyFail
@@ -8303,10 +8303,10 @@ HDAE5000_Init_WaitFlashReady:
 	jr z, HDAE5000_Init_WaitFlashReady
 
 HDAE5000_Init_TransferData:
-	setda_24 0, (0x160004)
+	set 0, (0x160004:24)
 	calr HDAE5000_TableData_Write
-	resda_24 0, (0x160004)
-	setda_24 1, (0x160004)
+	res 0, (0x160004:24)
+	set 1, (0x160004:24)
 	pushw 0x7
 	ld xwa, 0x800000
 	ld xbc, 0x280000

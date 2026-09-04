@@ -5780,7 +5780,7 @@ DualVoice_AccPatchLoop:
 	ld (0x39ae:16), xwa
 	ld xwa, (3186:16)
 	ld (0x39b2:16), xwa
-	resda 0, 0x35b0
+	res 0, (0x35b0:16)
 	ldib_erp 0xfb, 0
 
 DualVoice_ParamCompareLoop:

@@ -3401,7 +3401,7 @@ TrAsGrid_HandleSelectEvent:
 	ldw wa, 0x8
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
-	setda 0, 3296
+	set 0, (3296:16)
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
@@ -3424,7 +3424,7 @@ TrAsGrid_DeselectCell:
 	lds wa, 0
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
-	resda 0, 3296
+	res 0, (3296:16)
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
@@ -6161,19 +6161,19 @@ AcPanicEditSw_HandleFocus:
 	jr z, AcPanicEditSw_SetMode1
 	cp xiz, 0x80
 	jr nz, UI_CheckDisplayModeAndDispatch
-	setda_24 0, (0x02109e)
+	set 0, (0x02109e:24)
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode1:
-	setda_24 1, (0x02109e)
+	set 1, (0x02109e:24)
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode2:
-	setda_24 2, (0x02109e)
+	set 2, (0x02109e:24)
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode3:
-	setda_24 3, (0x02109e)
+	set 3, (0x02109e:24)
 
 UI_CheckDisplayModeAndDispatch:
 	ld c, (0x02109e:24)
@@ -6210,19 +6210,19 @@ AcPanicEditSw_HandleLostInherited:
 	jr z, AcPanicEditSw_ClearMode1
 	cp xiz, 0x80
 	jr nz, EventHandler_FinalizeAndReturn
-	resda_24 0, (0x02109e)
+	res 0, (0x02109e:24)
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode1:
-	resda_24 1, (0x02109e)
+	res 1, (0x02109e:24)
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode2:
-	resda_24 2, (0x02109e)
+	res 2, (0x02109e:24)
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode3:
-	resda_24 3, (0x02109e)
+	res 3, (0x02109e:24)
 
 EventHandler_FinalizeAndReturn:
 	ld xwa, (xsp + 8)

@@ -111,7 +111,7 @@ FDemoText_ProcessVoiceFlags:
 	ld a, (0x8d46:16)
 	bit 6, a
 	jr z, FDemoText_ProcessVoiceFlags_ReadState
-	setda_24 6, (0x0247ee)
+	set 6, (0x0247ee:24)
 	ld a, (0x8d46:16)
 	res 6, a
 	ld (0x8d46:16), a
@@ -136,7 +136,7 @@ FDemoText_ProcessVoiceFlags_ReadState:
 FDemoText_ProcessVoiceFlags_CheckBits:
 	and a, 0x7
 	call_24 nz, FDemoText_ScanMIDIChannels
-	bitda_24 7, (0x0247ee)
+	bit 7, (0x0247ee:24)
 	jr z, FDemoText_ProcessChannels
 	ld (0x0247f2:24), 0x00
 	ldib_erp 0xfb, 0
@@ -271,7 +271,7 @@ FDemoText_ActivateVoice:
 	ld a, (xsp)
 	extz wa
 	calr FDemoText_SendVoiceParams
-	bitda_24 7, (0x0247ee)
+	bit 7, (0x0247ee:24)
 	jr nz, FDemoText_ActivateVoice_Done
 	ld a, (xsp)
 	extz wa

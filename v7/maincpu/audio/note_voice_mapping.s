@@ -7498,7 +7498,7 @@ NoteBuffer_CompactEn_Data:
 NoteBuffer_CompactEn_Block2:
 	.byte 0x45, 0xdd, 0x69, 0xd9, 0x1c, 0xf2, 0x0e
 	xor HL,HL
-	bitda_24 1, (0x00ce42)
+	bit 1, (0x00ce42:24)
 	jr z, .Lc_fe999b
 	ld l, (0x00ce45:24)
 	jr t, .Lc_fe99a2
@@ -7517,7 +7517,7 @@ NoteBuffer_CompactEn_Increment:
 	nop
 	ld (52959:24), wa
 	ret
-	bitda_24 1, (0x00ce42)
+	bit 1, (0x00ce42:24)
 	jr z, .Lc_fe9a32
 	ld l, (0x00ce43:24)
 	xor H,H
@@ -9161,7 +9161,7 @@ OutputFlush_InitVal:
 	cp xwa, 32766
 	jr ule, -16
 	ret
-	resda 2, (0x28a7)
+	res 2, (0x28a7:16)
 	ret
 	dec 4,XSP
 	push XIZ

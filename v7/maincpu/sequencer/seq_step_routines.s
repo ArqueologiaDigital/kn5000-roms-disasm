@@ -2234,7 +2234,7 @@ SeqStep_ParseRhythmStore:
 	jr nz, SeqStep_ParseRhythmReturn
 
 SeqStep_ParseRhythmDone:
-	setda 0, 0x289d
+	set 0, (0x289d:16)
 	jr SeqStep_ParseRhythmValidate
 
 SeqStep_ParseRhythmReturn:
@@ -2279,7 +2279,7 @@ SeqStep_ParseRhythmCleanup:
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmExit:
-	resda 0, 0x289d
+	res 0, (0x289d:16)
 	call PartCtrl_AdvanceReadPos
 	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
@@ -2290,11 +2290,11 @@ SeqStep_ParseRhythmExit:
 	ld a, (3310:16)
 	and a, 0xfc
 	jr z, SeqStep_ParseRhythmFinal
-	setda 2, 0x289d
+	set 2, (0x289d:16)
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmFinal:
-	resda 2, 0x289d
+	res 2, (0x289d:16)
 
 SeqStep_ParseRhythmComplete:
 	lds hl, 0

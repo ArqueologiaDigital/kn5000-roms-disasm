@@ -770,11 +770,11 @@ SubCPU_Payload_Done:
 	ret
 
 Boot_ClearConfigFlag7:
-	resda 7, 1030
+	res 7, (1030:16)
 	ret
 
 Boot_SetConfigFlag7:
-	setda 7, 1030
+	set 7, (1030:16)
 	ret
 
 Boot_CheckConfigFlag7:
@@ -1271,7 +1271,7 @@ PlayHalt_SkipSetFlag:
 PlayStandBy:
 	bit 2, (10407:16)
 	jr z, PlayStandBy_SkipClearFlag
-	resda 2, 10407
+	res 2, (10407:16)
 
 PlayStandBy_SkipClearFlag:
 	.byte 0xf1, 0xa7, 0x28, 0xb3, 0x1d, 0xd2, 0x93, 0xf3

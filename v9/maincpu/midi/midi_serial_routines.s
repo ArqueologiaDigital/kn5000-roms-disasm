@@ -54,7 +54,7 @@ INTRX0_CLEAR_ERROR_STATE:
 	ld a, (208:16)
 	ld (1059:16), 0
 	and (1063:16), 189
-	setda 3, 1063
+	set 3, (1063:16)
 	ld (1074:16), 0
 	incdi8 1, (0xb7de)
 	popw wa
@@ -74,35 +74,35 @@ INTTX0_HANDLER:
 	jr nz, IntTx0_FlagBit2Branch
 	bit 3, a
 	jr z, IntTx0_DequeueAndSend
-	resda 3, 1065
+	res 3, (1065:16)
 	bit 4, (0xfd50:16)
 	jr nz, IntTx0_SendHoldByte
 	ld (208:16), 252
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_FlagBit0Branch:
-	resda 0, 1065
+	res 0, (1065:16)
 	bit 4, (0xfd50:16)
 	jr nz, IntTx0_SendHoldByte
 	ld (208:16), 248
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_FlagBit4Branch:
-	resda 4, 1065
+	res 4, (1065:16)
 
 IntTx0_SendHoldByte:
 	ld (208:16), 254
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_FlagBit1Branch:
-	resda 1, 1065
+	res 1, (1065:16)
 	bit 4, (0xfd50:16)
 	jr nz, IntTx0_SendHoldByte
 	ld (208:16), 250
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_FlagBit2Branch:
-	resda 2, 1065
+	res 2, (1065:16)
 	bit 4, (0xfd50:16)
 	jr nz, IntTx0_SendHoldByte
 	ld (208:16), 251
@@ -221,7 +221,7 @@ RxDisp_SaveContextAndReturn:
 MIDI_SYSTEM_MESSAGE_HANDLER:
 	cp a, 0xfe
 	jr nz, SysMsg_NotActiveSense
-	setda 7, 1063
+	set 7, (1063:16)
 
 SysMsg_Return:
 	ret
@@ -243,7 +243,7 @@ SysMsg_NotActiveSense:
 SysMsg_CheckStop:
 	cp a, 0xfc
 	jr nz, SysMsg_ClockTransportDispatch
-	setda 0, 0x7f35
+	set 0, (0x7f35:16)
 
 SysMsg_ClockTransportDispatch:
 	ld d, a
@@ -386,7 +386,7 @@ ClkTick_Src3ClickCheck:
 	jr z, ClkTick_Src3LowerSyncCheck
 	cpda8 a, 1071
 	jr nz, ClkTick_Src3LowerSyncCheck
-	resda 0, 1073
+	res 0, (1073:16)
 	ld (1054:16), 1
 	cpw (0x28aa:16), 0
 	jr z, ClkTick_Src3LowerSyncCheck
@@ -398,7 +398,7 @@ ClkTick_Src3LowerSyncCheck:
 	jr z, ClkTick_Src3OverflowQueue
 	cpda8 a, 1072
 	jr nz, ClkTick_Src3OverflowQueue
-	resda 3, 1073
+	res 3, (1073:16)
 	ld (1054:16), 8
 	cpw (0x28aa:16), 0
 	jr z, ClkTick_Src3OverflowQueue
@@ -424,7 +424,7 @@ Transport_StopHandler:
 	jr z, Transport_StopSrc3Snapshot
 	bit 2, (1057:16)
 	jr z, Transport_StopSrc1QueueEvent
-	setda 2, 0x347a
+	set 2, (0x347a:16)
 
 Transport_StopSrc1QueueEvent:
 	ld (1054:16), 16
@@ -473,7 +473,7 @@ StartPlay_Return:
 	ret
 
 StartPlay_Body:
-	setda 5, 0x28ac
+	set 5, (0x28ac:16)
 	ld (1108:16), 0
 	cpw (0xf19e:16), 0
 	jr nz, ResetPlay_Return
@@ -490,7 +490,7 @@ MIDI_RESET_PLAYBACK_STATE:
 	ld (1076:16), a
 	ld (1077:16), a
 	ld (1054:16), 1
-	resda 0, 0x28a6
+	res 0, (0x28a6:16)
 	cpw (0x28aa:16), 0
 	jr z, ResetPlay_Src3Check
 	ldb a, 0x85
@@ -575,7 +575,7 @@ AltClk_DisabledClockPath:
 	jr z, AltClk_StopSrc3Snapshot
 	bit 2, (1057:16)
 	jr z, AltClk_StopSrc1Queue
-	setda 2, 0x347a
+	set 2, (0x347a:16)
 
 AltClk_StopSrc1Queue:
 	ld (1054:16), 12
@@ -612,14 +612,14 @@ AltClk_NoMatchReturn:
 	ret
 
 AltClk_StartArmTx:
-	setda 1, 1065
+	set 1, (1065:16)
 	ld (234:16), 221
 	jrl StartPlay_Body
 
 AltClk_ContinueArmTx:
 	bit 0, (0x28a7:16)
 	jr z, AltClk_Src3DisabledReturn
-	setda 2, 1065
+	set 2, (1065:16)
 	ld (234:16), 221
 	jrl Continue_SetRunning
 
@@ -727,12 +727,12 @@ MIDI_QUEUE_EVENT_TO_SEQUENCER:
 	ret
 
 QueueToSeq_OverflowFlag:
-	setda 2, 1063
+	set 2, (1063:16)
 	incdi8 1, (0xb7dd)
 	ret
 
 ChanDisp_QueueOverflow:
-	setda 6, 1063
+	set 6, (1063:16)
 	ld c, e
 	ret
 
@@ -773,7 +773,7 @@ ChanDisp_NoteOnZeroReturn:
 	ret
 
 ChanDisp_QueueOverflowSet:
-	setda 2, 1063
+	set 2, (1063:16)
 	incdi8 1, (0xb7dd)
 	ret
 
@@ -805,7 +805,7 @@ SysEx_StartByte:
 	jr nz, SysEx_Return
 
 SysEx_CaptureManufacturerId:
-	setda 1, 1074
+	set 1, (1074:16)
 	ld a, d
 	pushw wa
 	call SeqBuf2_WriteByte
@@ -850,7 +850,7 @@ MIDI_RX_CONTEXT_SAVE:
 	ret
 
 SC0Init_Entry:
-	resda 0, 0xb7e7
+	res 0, (0xb7e7:16)
 	ld (0xb7e1:16), 0
 	calr SC0Init_ClearContextSlots
 	calr SC0Init_StandardBaudTable

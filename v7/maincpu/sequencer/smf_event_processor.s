@@ -610,8 +610,8 @@ SoundGen_InitAllVoiceChannels:
 	jp SoundGen_InitLoopStart
 
 SoundGen_SetInitFlags:
-	setda 2, 6749
-	resda 7, 6750
+	set 2, (6749:16)
+	res 7, (6750:16)
 
 SoundGen_InitLoopStart:
 	xor iy, iy

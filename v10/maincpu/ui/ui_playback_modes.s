@@ -1224,7 +1224,7 @@ SQTR_DISPATCH_TABLE_2:
 	pop xix
 	pop xhl
 	pop xde
-	setda 0, 0x8f5c	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
+	set 0, (0x8f5c:16)	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
 	ldw wa, 0x60
 	call CtrlPanel_SetIndicatorBit
 	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28
@@ -1239,7 +1239,7 @@ SQTR_DISPATCH_TABLE_2_CASE1:
 	pop xix
 	pop xhl
 	pop xde
-	resda 0, 0x8f5c	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
+	res 0, (0x8f5c:16)	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
 	ldw wa, 0x60
 	call CtrlPanel_SetIndicatorBit
 	jr CDlikeSwTtl_ReturnZero2

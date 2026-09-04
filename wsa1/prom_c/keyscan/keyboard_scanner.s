@@ -785,7 +785,7 @@ Link_SendCmdE2_MemRead__F99A8C:
 	call	0xF9A005                          ; F99AA4  call 0xf9a005
 	ldio	DMA2V, 18                         ; F99AA8  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99AAB  set 2,(0x20)
-	setda_24 7, 0x00852B                   ; F99AAE  set 7,(0x00852b)   [llvm-mc cannot encode this]
+	set 7, (0x00852B:24)                   ; F99AAE  set 7,(0x00852b)   [llvm-mc cannot encode this]
 	inc	6, xsp                             ; F99AB3  inc 6,XSP
 Link_SendCmdE2_MemRead__F99AB5:
 	cpib_da 0x00F32C, 0x00                 ; F99AB5  cp (0x00f32c),0x00   [llvm-mc cannot encode this]

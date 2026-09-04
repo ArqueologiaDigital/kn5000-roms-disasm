@@ -315,11 +315,11 @@ EffectMode_TimerCountdown_CheckMode:
 	jr nz, EffectMode_TimerCountdown_SetBit7
 
 EffectMode_TimerCountdown_ResBit7:
-	resda 7, 0xb7e2
+	res 7, (0xb7e2:16)
 	ret
 
 EffectMode_TimerCountdown_SetBit7:
-	setda 7, 0xb7e2
+	set 7, (0xb7e2:16)
 	ret
 
 EffectMode_CheckTransposeChanged:
@@ -382,7 +382,7 @@ EffectMode_ProcessPresetChange_Apply:
 	calr EffectMode_ReinitSoundOutput
 
 EffectMode_ProcessPresetChange_Done:
-	resda 7, 0xb7e2
+	res 7, (0xb7e2:16)
 	pop xiz
 	inc 4, xsp
 	ret
@@ -879,7 +879,7 @@ EffectMode_ReinitSoundOutput:
 	ldw wa, 0x80
 	call BitMapOut_SnapshotFromROM
 	calr EffectMode_DisplayPresetName
-	resda 4, 0x8d52
+	res 4, (0x8d52:16)
 	cp (0x8d50:16), 1
 	jr z, EffectMode_ReinitSound_NotifyBank1
 	ld xwa, 0x302
@@ -897,9 +897,9 @@ EffectMode_ReinitSound_CallNotify:
 	jp SwbtWr_ReinitOutputBank
 
 EffectMode_ReinitWithFlag:
-	setda 5, 0x8d52
+	set 5, (0x8d52:16)
 	calr EffectMode_CheckModeAndReinit
-	resda 5, 0x8d52
+	res 5, (0x8d52:16)
 	ret
 
 EffectMode_CheckModeAndReinit:
@@ -9988,10 +9988,10 @@ NormScreen_InitHandler:
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call PostEvent
-	resda 0, 0x8d88
+	res 0, (0x8d88:16)
 
 NormScreen_ClearBit:
-	resda 0, 0x8d88
+	res 0, (0x8d88:16)
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

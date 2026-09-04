@@ -475,20 +475,20 @@ INTTC3_HANDLER__state3_packet:
 	ld (0x008519:24), 0xff                     ; F99DB5  f2 19 85 00 00 ff
 	ld (0x00F32D:24), 0x00                     ; F99DBB  f2 2d f3 00 00 00   transfer state := idle
 	set_dd8 1, PA                              ; F99DC1  f0 1e b9
-	setda_24 7, 0x00852A                       ; F99DC4  f2 2a 85 00 bf   post 'packet ready' to the service task at 0xF99E5F
+	set 7, (0x00852A:24)                       ; F99DC4  f2 2a 85 00 bf   post 'packet ready' to the service task at 0xF99E5F
 	jrl t, (0x00F99E56 - 0x00F99DCC)           ; F99DC9  78 8a 00   -> INTTC3_HANDLER__return
 
 ; ---- state 4: a payload transfer finished ----
 INTTC3_HANDLER__state4_blockdone:
 	ld (0x00F32D:24), 0x00                     ; F99DCC  f2 2d f3 00 00 00   transfer state := idle
-	resda_24 7, 0x00852B                       ; F99DD2  f2 2b 85 00 b7   release Link_WaitBlockDone (0xF99FC1)
+	res 7, (0x00852B:24)                       ; F99DD2  f2 2b 85 00 b7   release Link_WaitBlockDone (0xF99FC1)
 	set_dd8 1, PA                              ; F99DD7  f0 1e b9
 	jrl t, (0x00F99E56 - 0x00F99DDD)           ; F99DDA  78 79 00   -> INTTC3_HANDLER__return
 
 ; ---- state 5: the 0xE3 payload has landed ----
 INTTC3_HANDLER__state5:
 	ld (0x00F32D:24), 0x00                     ; F99DDD  f2 2d f3 00 00 00
-	setda_24 7, 0x00852C                       ; F99DE3  f2 2c 85 00 bf
+	set 7, (0x00852C:24)                       ; F99DE3  f2 2c 85 00 bf
 	set_dd8 1, PA                              ; F99DE8  f0 1e b9
 	jr INTTC3_HANDLER__return                  ; F99DEB  68 69
 
@@ -511,7 +511,7 @@ INTTC3_HANDLER__drop_args:
 ; ---- state 7: the 0xE5 payload has landed ----
 INTTC3_HANDLER__state7:
 	ld (0x00F32D:24), 0x00                     ; F99E11  f2 2d f3 00 00 00
-	setda_24 6, 0x00852C                       ; F99E17  f2 2c 85 00 be
+	set 6, (0x00852C:24)                       ; F99E17  f2 2c 85 00 be
 	set_dd8 1, PA                              ; F99E1C  f0 1e b9
 	jr INTTC3_HANDLER__return                  ; F99E1F  68 35
 
@@ -531,7 +531,7 @@ INTTC3_HANDLER__state8_block_banked:
 ; ---- state 9: the 0xE7 payload has landed ----
 INTTC3_HANDLER__state9:
 	ld (0x00F32D:24), 0x00                     ; F99E43  f2 2d f3 00 00 00
-	setda_24 5, 0x00852C                       ; F99E49  f2 2c 85 00 bd
+	set 5, (0x00852C:24)                       ; F99E49  f2 2c 85 00 bd
 	incdi8_24 1, 0x008535                      ; F99E4E  c2 35 85 00 61   a counter, incremented only here
 	set_dd8 1, PA                              ; F99E53  f0 1e b9
 INTTC3_HANDLER__return:

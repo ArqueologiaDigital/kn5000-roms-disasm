@@ -2273,7 +2273,7 @@ TtMdExc:
 	jr nz, TtMdExc_ReturnZero
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
-	setda 6, 0xb7e2
+	set 6, (0xb7e2:16)
 	ld xwa, 0x570003
 	call GetViewInstance
 	ld xwa, (xhl + 38)
@@ -2283,7 +2283,7 @@ TtMdExc:
 TtMdExc_HandleClose:
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
-	resda 6, 0xb7e2
+	res 6, (0xb7e2:16)
 
 TtMdExc_ReturnZero:
 	lds32 xhl, 0

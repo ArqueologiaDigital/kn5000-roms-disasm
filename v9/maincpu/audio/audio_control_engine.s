@@ -1284,7 +1284,7 @@ FileIO_BytecodeData:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block48_Var40:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -1298,7 +1298,7 @@ ExtDev_SndParam_Block48_Var40:
 	ld	(xhl), 64
 	jrl	-3333
 ExtDev_SndParam_Block48_Var80:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -1312,7 +1312,7 @@ ExtDev_SndParam_Block48_Var80:
 	ld	(xhl), 128
 	jrl	-3370
 ExtDev_SndParam_Block48_Var04:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -1326,7 +1326,7 @@ ExtDev_SndParam_Block48_Var04:
 	ld	(xhl), 4
 	jrl	-3407
 ExtDev_SndParam_Block48_Var04_B:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 6
 	lda	xde, (xwa+2)
@@ -1367,7 +1367,7 @@ ExtDev_SndParam_Write98_Block:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block98_Var40:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 152
 	ld	(xwa+1), 2
 	lda	xde, (xwa+2)
@@ -1402,7 +1402,7 @@ ExtDev_SndParam_BlockA9_Var02:
 	calr	61950
 	ret
 ExtDev_SndParam_Block98_Var80:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 152
 	ld	(xwa+1), 11
 	lda	xde, (xwa+2)
@@ -1416,7 +1416,7 @@ ExtDev_SndParam_Block98_Var80:
 	ld	(xhl), 128
 	jrl	-3624
 ExtDev_SndParam_Block98_Var40_B:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 152
 	ld	(xwa+1), 11
 	lda	xde, (xwa+2)
@@ -1509,7 +1509,7 @@ ExtDev_SndParam_Write48_Block:
 ExtDev_SndParam_Block48_Var02:
 	cp	(0x8d34:16), 16
 	ret	z
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -1523,7 +1523,7 @@ ExtDev_SndParam_Block48_Var02:
 	ld	(xhl), 2
 	jrl	-3875
 ExtDev_SndParam_Block70_Var04:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	ld	(xwa), 112
 	ld	(xwa+1), 0
 	lda	xde, (xwa+2)
@@ -1613,7 +1613,7 @@ ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	pop	xiz
 	ret
 ExtDev_SndParam_MultiReg_Iterate:
-	setda	1, 0x90f9
+	set	1, (0x90f9:16)
 	lda	xix, (xwa+2)
 	ld	l, (xwa+3)
 	ld	d, (xix)
@@ -3500,7 +3500,7 @@ MidiChOut_CheckHWState:
 	ld a, (1045:16)
 	and a, 0x60
 	jr nz, MidiChOut_CheckBit1Clear
-	setda 1, 0x8e76
+	set 1, (0x8e76:16)
 	ld a, (1075:16)
 	cps a, 6
 	jr z, MidiChOut_Mode6or3_Mask7
@@ -4358,8 +4358,8 @@ Display_SetupAndPrepareRender:
 	pushw 0xf9a0
 	call Mem_Copy
 	lda xsp, (xsp + 20)
-	resda_24 0, (0xffc2)
-	setda_24 1, (0xffc0)
+	res 0, (0xffc2:24)
+	set 1, (0xffc0:24)
 	call Get_Region_Code
 	cps l, 2
 	jr nz, Display_SetRegionNon2
@@ -4664,7 +4664,7 @@ Audio_InitSingleChannelParams:
 Audio_MainPeriodicUpdate:
 	cp (0xc039:16), 255
 	ret z
-	resda 0, 0x9165
+	res 0, (0x9165:16)
 	lda xwa, (SoundProgram_DispatchTable_0x400:24)
 	ld (0x90f2:16), xwa
 	calr Audio_SyncBufferPositions
@@ -4682,7 +4682,7 @@ Audio_MainPeriodicUpdate:
 	pop xix
 	pop xhl
 	pop xde
-	resda 1, 0x90f9
+	res 1, (0x90f9:16)
 	ret
 
 Audio_SyncBufferPositions:
@@ -5619,7 +5619,7 @@ ExtData_Voice_CompareAndDispatch:
 	jp	MIDI_LoadParamsAndDispatchCC
 
 MidiChannel_ResetAndConfigure:
-	resda 7, 0x28ae
+	res 7, (0x28ae:16)
 	ld a, (0x8ee4:16)
 	set 7, a
 	ld (0x8ee0:16), a
@@ -8303,7 +8303,7 @@ MidiStream_ProcessorDispatch:
 
 MidiStream_BufferDone:
 	call TempoRingBuf_Consume
-	resda 0, 1113
+	res 0, (1113:16)
 
 MidiStream_Return:
 	pop xiz
@@ -8412,7 +8412,7 @@ MidiStream_ProcessSeqBuffer:
 	cp (0x7f0b:16), 0
 	jrl z, MidiSeqBuf_Return
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ld a, (1130:16)
 	ld (0x91c9:16), a
 	ei 0
@@ -8467,7 +8467,7 @@ MidiStream_ProcessorDispatchB:
 
 MidiSeqBuf_Done:
 	call TempoRingBuf_Consume
-	resda 0, 1113
+	res 0, (1113:16)
 
 MidiSeqBuf_Return:
 	pop xiz
@@ -8515,7 +8515,7 @@ TempoExpr_FindActivePart:
 TempoExpr_StorePartIndex:
 	ld (0x91c7:16), l
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ld a, (1051:16)
 	ld (0x91c9:16), a
 	ei 0
@@ -8528,13 +8528,13 @@ TempoExpr_StorePartIndex:
 	bit 7, a
 	jr z, TempoExpr_CheckHighBitW
 	res 7, a
-	setda 0, 0x91ad
+	set 0, (0x91ad:16)
 
 TempoExpr_CheckHighBitW:
 	bit 7, w
 	jr z, TempoExpr_WriteAndProcess
 	res 7, w
-	setda 1, 0x91ad
+	set 1, (0x91ad:16)
 
 TempoExpr_WriteAndProcess:
 	stw_dpi WA, 0xf1
@@ -8544,7 +8544,7 @@ TempoExpr_WriteAndProcess:
 	ld (0x91ca:16), 7
 	calr TempoRingBuf_ProcessEntry
 	call TempoRingBuf_Consume
-	resda 0, 1113
+	res 0, (1113:16)
 
 TempoExpr_Done:
 	inc 2, xsp
@@ -8578,7 +8578,7 @@ TempoSrc_CheckAutoPlay:
 	bit 2, (1057:16)
 	jr z, Tempo_ExpressionStore
 	ld wa, (0x28a8:16)
-	setda 2, 0x90f9
+	set 2, (0x90f9:16)
 	jr Tempo_ExpressionStore
 
 Tempo_Expression_Bypass:
@@ -8589,7 +8589,7 @@ Tempo_Expression_Bypass:
 
 TempoSrc_DirectTempoMode:
 	ld wa, (3407:16)
-	setda 3, 0x90f9
+	set 3, (0x90f9:16)
 
 Tempo_ExpressionStore:
 	ld (0x91c5:16), wa
@@ -8615,7 +8615,7 @@ ModExpr_CheckAutoPlay:
 	cpw (0x28a8:16), 0
 	jr z, Mod_ExpressionStore
 	ld wa, (0x28a8:16)
-	setda 2, 0x90f9
+	set 2, (0x90f9:16)
 	jr Mod_ExpressionStore
 	bit 0, (0x28c5:16)
 	jr z, Mod_ExpressionStore
@@ -8624,7 +8624,7 @@ ModExpr_CheckAutoPlay:
 
 ModExpr_DirectMode:
 	ld wa, (3407:16)
-	setda 3, 0x90f9
+	set 3, (0x90f9:16)
 
 Mod_ExpressionStore:
 	ld (0x91c5:16), wa
@@ -8635,7 +8635,7 @@ MidiStream_ProcessTempoRingBuf:
 	cpw (0x91c5:16), 0
 	jrl z, TempoRing_Return
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ld a, (1051:16)
 	ld (0x91c9:16), a
 	ei 0
@@ -8698,7 +8698,7 @@ TempoRing_UpdateAndContinue:
 
 TempoRing_Done:
 	call TempoRingBuf_Consume
-	resda 0, 1113
+	res 0, (1113:16)
 
 TempoRing_Return:
 	pop xiz
@@ -8864,7 +8864,7 @@ MIDI_TransmitTempoCC:
 	cpw (0x91c5:16), 0
 	jr z, TempoCC_Return
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ld a, (1051:16)
 	ld (0x91c9:16), a
 	ei 0
@@ -8878,13 +8878,13 @@ MIDI_TransmitTempoCC:
 	bit 7, a
 	jr z, TempoCC_CheckHighBitW
 	res 7, a
-	setda 0, 0x91ad
+	set 0, (0x91ad:16)
 
 TempoCC_CheckHighBitW:
 	bit 7, w
 	jr z, TempoCC_WriteAndProcess
 	res 7, w
-	setda 1, 0x91ad
+	set 1, (0x91ad:16)
 
 TempoCC_WriteAndProcess:
 	stw_dpi WA, 0xf1
@@ -8893,7 +8893,7 @@ TempoCC_WriteAndProcess:
 	ld (0x91ca:16), 135
 	calr TempoRingBuf_ProcessEntry
 	call TempoRingBuf_Consume
-	resda 0, 1113
+	res 0, (1113:16)
 
 TempoCC_Return:
 	ret
@@ -8963,7 +8963,7 @@ Audio_ProcessPartExpressions:
 	cpw (0x91c5:16), 0
 	jrl z, PartExpr_Done
 	ei 6
-	setda 0, 1113
+	set 0, (1113:16)
 	ld a, (1051:16)
 	ld (0x91c9:16), a
 	ei 0
@@ -8992,7 +8992,7 @@ PartExpr_WriteToBuffer:
 	ldb a, 0x9a
 	bit 7, a
 	jr z, PartExpr_AddPartIndex
-	setda 2, 0x91ad
+	set 2, (0x91ad:16)
 	res 7, a
 
 PartExpr_AddPartIndex:
@@ -9002,7 +9002,7 @@ PartExpr_AddPartIndex:
 	ld a, (0xc5a8:16)
 	bit 7, a
 	jr z, PartExpr_ReadCurrentValue
-	setda 0, 0x91ad
+	set 0, (0x91ad:16)
 	res 7, a
 
 PartExpr_ReadCurrentValue:
@@ -9021,7 +9021,7 @@ PartExpr_AdvanceBit:
 	cp c, 0x10
 	jr c, PartExpr_ProcessNextBit
 	call TempoRingBuf_Consume
-	resda 0, 1113
+	res 0, (1113:16)
 
 PartExpr_Done:
 	pop xiz
@@ -9982,7 +9982,7 @@ VoiceNote_ApplyBankSelect:
 	call Audio_WriteBankSelectParams
 	bit 7, (0x28ad:16)
 	jr z, MIDI_VoiceNote_CtrlExit
-	resda 7, 0x28ad
+	res 7, (0x28ad:16)
 
 MIDI_VoiceNote_CtrlExit:
 	extz hl
@@ -10168,7 +10168,7 @@ SeqVoice_UpdateTempoParam:
 	ld wa, (0x9129:16)
 	ld (0x912a:16), 0
 	call SwbtWr_QueuePostEvent
-	setda 3, 0x8d52
+	set 3, (0x8d52:16)
 
 SeqVoice_TempoDone:
 	ret
