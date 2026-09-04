@@ -40,6 +40,14 @@ firmware writes `set 7,(0x00008a)` as a 24-bit field for an 8-bit address. The
 `width` column above is the prefix the mnemonic is *defined* to emit in
 `TLCS900InstrInfo.td` (C0/D0/E0/F0 = 8, C1/D1/E1/F1 = 16, C2/D2/E2/F2 = 24).
 
+⚠ **CORRECTED 2026-09-04: the 8-bit rule below holds for the LD-direct class
+ONLY.** The ALU-direct class encodes a 32-bit name written in an 8-bit slot
+index-preservingly instead — `ldb_da xbc` is C (the pair's low byte) but
+`cpda8 xbc` is A (the same index). Two conventions live in one backend, split by
+instruction class. The converter no longer asserts either: it offers candidate
+spellings and keeps the one whose encoding matches the line it replaces. See
+`notes/lanes/conv-alu-2026-09-04.md`.
+
 ⚠ **The 16-bit register rename is a correction, not cosmetics.**
 `stda16 (X), xwa` named a **32-bit** register for a **16-bit** store; the
 sub-opcode is `0x50 + index`, so the operand is really WA. The mapping is
@@ -84,6 +92,16 @@ the lane brief puts macro definitions out of scope. Listed in
 `scripts/converters/direct-address-convergence-runs/refused-2026-09-03.csv`.
 
 ## Residual — what is left of the direct-address shape
+
+⚠ **CORRECTED 2026-09-04 by lane `w26/conv-alu`, which converted this residue:
+the real figure is 11,881 sites over 95 names, not 9,748 over 66.** The count
+below was taken by grouping census names that *look* like direct-address forms;
+the actual set is every backend mnemonic whose `(ins ...)` list contains
+`directaddr`, intersected with tree usage, and the 29 names the name-shape rule
+missed are `jp_24`, `call_24`, `lda_24`, `pushdi_24`, `chgda_24` and their `_24`
+siblings — which take the same operand but do not look like the others. A census
+keyed on a naming convention measures the naming convention. The follow-up
+converted 11,840 of them; see `notes/lanes/conv-alu-2026-09-04.md`.
 
 `mnemonic_census.py` after this lane: **9,748 sites over 66 names** still spell a
 direct address in the mnemonic. None was in this lane's assignment. They are, in

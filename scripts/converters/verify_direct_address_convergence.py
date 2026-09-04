@@ -31,14 +31,25 @@ import argparse, collections, hashlib, os, re, subprocess, sys, tempfile
 MARK = "zzVerifyMark"
 ENCRX = re.compile(r'encoding: \[([^\]]*)\]')
 FIXRX = re.compile(r'fixup \w+ - (.*)$')
-# The seventeen synthetic spellings this branch retires, plus the natives they
-# become.  A changed line whose old text does not start with one of these is
-# not ours and is reported, not silently accepted.
-OLD_MNEMONICS = {
-    "stda16", "stda32", "stb_da", "stw_da", "stib_da", "stiw_da",
-    "stdi8", "stdi16", "cpdi8", "cpdi16", "anddi8", "ordi8", "bitda",
-    "ldb_da", "ldw_da", "ldl_da", "ldda32",
-}
+# The synthetic spellings this branch may retire.  A changed line whose old
+# text does not start with one of these is not ours and is reported, not
+# silently accepted.
+#
+# ⚠ READ FROM THE CONVERTER, never re-listed here.  When w26/conv-alu added 94
+# names to MAP, a hand-copied list in this file would have silently declared
+# all of them "foreign" -- i.e. it would have stopped checking exactly the
+# lines it was written to check, while still printing PASS for the rest.
+def _old_mnemonics():
+    import importlib.util
+    here = os.path.dirname(os.path.abspath(__file__))
+    spec = importlib.util.spec_from_file_location(
+        "cdaf", os.path.join(here, "convert_direct_address_family.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return set(mod.MAP)
+
+
+OLD_MNEMONICS = _old_mnemonics()
 
 
 def assemble(lines, mc):

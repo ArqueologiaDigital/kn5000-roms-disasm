@@ -44,3 +44,35 @@ That is the point of committing the driver: a mechanical, per-site-verified
 conversion is cheaper to re-run on a new base than to merge, and re-running it
 also re-verifies it against whatever the backend has become in the meantime.
 The two runs produced the same counts, mnemonic for mnemonic.
+
+---
+
+# ALU-direct convergence — the run of 2026-09-04 (lane `w26/conv-alu`)
+
+The remainder of the same shape, driven by
+`scripts/converters/run_alu_direct_convergence.sh`, which groups by BASE
+OPERATION rather than by mnemonic — ninety-four names in ten gates instead of
+ninety-four, because every mnemonic inside one group shares an encoding class,
+so a red gate still names one claim.
+
+| file | the question it answers |
+|---|---|
+| `RUN-alu-2026-09-04.log` | how many sites and files each of the ten operation families converted, which register-naming rule resolved each site, and what both byte gates said after each family |
+| `refused-alu-2026-09-04.csv` | every site the converter would NOT rewrite, with the reason — 35 of 11,875 |
+| `FOIL-alu-2026-09-04.log` | the three controls (`--foil op`, `--foil width`, `--foil reg`) on the same base, proving the check can go red |
+| `VERIFY-alu-2026-09-04.log` | `verify_direct_address_convergence.py --base df779dc0` — all 11,840 changed lines re-checked from git under ONE named assembler, after the fact |
+| `CENSUS-AFTER-alu-2026-09-04.json` | `mnemonic_census.py` totals with the lane applied |
+
+Regenerate with:
+
+    scripts/converters/run_alu_direct_convergence.sh /tmp/alu-out \
+        bit incdec cp add sub and or xor ld flow
+    python3 scripts/converters/verify_direct_address_convergence.py \
+        --base <the base it was run on> \
+        --llvm-mc ~/compartilhado/toolchain-snapshot/llvm-mc.snap
+
+The assembler did NOT move under this run: every number above — per-site check,
+gate, foils and after-the-fact verification — was taken with
+`~/compartilhado/toolchain-snapshot/llvm-mc.snap`, sha256
+`850b013e0e8f14d9a90b95ff1995a858ad8575b8c35a8749970b47ffc613f1a1`, the same
+binary the 2026-09-03 run finished on.

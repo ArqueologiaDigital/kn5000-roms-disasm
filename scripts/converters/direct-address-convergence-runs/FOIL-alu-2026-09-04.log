@@ -1,0 +1,343 @@
+# The three controls, run on base df779dc0 with the final converter.
+# llvm-mc.snap sha256 850b013e0e8f14d9a90b95ff1995a858ad8575b8c35a8749970b47ffc613f1a1
+
+######## --foil op
+  verified 4000/28528 candidate spellings  verified 8000/28528 candidate spellings  verified 12000/28528 candidate spellings  verified 16000/28528 candidate spellings  verified 20000/28528 candidate spellings  verified 24000/28528 candidate spellings  verified 28000/28528 candidate spellings  verified 28528/28528 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 11875   refused before assembly: 0
+
+mnemonic    convert   refuse
+addda16           0      167
+addda16_24        0       61
+addda32           0      147
+addda32_24        0      295
+addda8            0       66
+addda8_24         0        6
+adddi16           0       47
+adddi16_24        0        8
+adddi8            0        9
+adddm16           0       93
+adddm16_24        0       20
+adddm32           0       70
+adddm8            0       39
+addl_da           0       40
+andda16           0      295
+andda16_24        0       11
+andda32_24        0        7
+andda8            0      257
+andda8_24         0       34
+anddi16           0       37
+anddi16_24        0       30
+anddi8_24         0       61
+anddm16           0       85
+anddm16_24        0       20
+anddm32_24        0        8
+anddm8            0      100
+anddm8_24         0       15
+bitda_24          0      154
+call_24           0      357
+chgda_24          0        8
+cpda16            0      666
+cpda16_24         0      243
+cpda32            0       23
+cpda32_24         0       21
+cpda8             0      804
+cpda8_24          0      171
+cpdm16            0      119
+cpdm16_24         0       52
+cpdm32            0       20
+cpdm32_24         0       17
+cpdm8             0      266
+cpdm8_24          0       29
+cpib_da           0      468
+cpw_da            0      442
+decdi16           0       75
+decdi16_24        0       40
+decdi8            0      132
+decdi8_24         0       14
+incdi16           0      379
+incdi16_24        0      192
+incdi8            0      494
+incdi8_24         0       68
+jp_24             0      463
+lda_24            0       27
+orda16            0        4
+orda32_24         0        5
+orda8             0      276
+orda8_24          0        4
+orddm16           0       92
+orddm8            0      233
+ordi16            0      255
+ordi16_24         0       24
+ordi8_24          0       39
+ordm16_24         0       46
+ordm32_24         0        6
+ordm8_24          0       35
+pushdi_24         0       20
+resda             0      867
+resda_24          0       28
+setda             0      703
+setda_24          0       90
+stl_da            0      792
+sub32_24          0        3
+subda16           0      284
+subda16_24        0       42
+subda32           0       26
+subda8            0       82
+subda8_24         0        3
+subdi16           0       10
+subdi16_24        0        8
+subdi8            0        3
+subdm16           0       15
+subdm16_24        0        1
+subdm32           0        5
+subdm32_24        0       21
+subdm8            0       21
+subdm8_24         0        3
+xorda16_24        0        2
+xorda8            0       31
+xorda8_24         0        5
+xordi8            0        2
+xordi8_24         0        1
+xordm16_24        0        6
+xordm8            0       10
+TOTAL             0    11875
+
+register spelling resolved by:
+
+refusal reasons:
+   BYTES-DIFFER                    11848
+   old-does-not-assemble              27
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/foilfinal_op.csv
+
+FOIL RUN (--foil op): --apply is refused.
+
+######## --foil width
+  verified 4000/28528 candidate spellings  verified 8000/28528 candidate spellings  verified 12000/28528 candidate spellings  verified 16000/28528 candidate spellings  verified 20000/28528 candidate spellings  verified 24000/28528 candidate spellings  verified 28000/28528 candidate spellings  verified 28528/28528 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 11875   refused before assembly: 0
+
+mnemonic    convert   refuse
+addda16           0      167
+addda16_24        0       61
+addda32           0      147
+addda32_24        0      295
+addda8            0       66
+addda8_24         0        6
+adddi16           0       47
+adddi16_24        0        8
+adddi8            0        9
+adddm16           0       93
+adddm16_24        0       20
+adddm32           0       70
+adddm8            0       39
+addl_da           0       40
+andda16           0      295
+andda16_24        0       11
+andda32_24        0        7
+andda8            0      257
+andda8_24         0       34
+anddi16           0       37
+anddi16_24        0       30
+anddi8_24         0       61
+anddm16           0       85
+anddm16_24        0       20
+anddm32_24        0        8
+anddm8            0      100
+anddm8_24         0       15
+bitda_24          0      154
+call_24           0      357
+chgda_24          0        8
+cpda16            0      666
+cpda16_24         0      243
+cpda32            0       23
+cpda32_24         0       21
+cpda8             0      804
+cpda8_24          0      171
+cpdm16            0      119
+cpdm16_24         0       52
+cpdm32            0       20
+cpdm32_24         0       17
+cpdm8             0      266
+cpdm8_24          0       29
+cpib_da           0      468
+cpw_da            0      442
+decdi16           0       75
+decdi16_24        0       40
+decdi8            0      132
+decdi8_24         0       14
+incdi16           0      379
+incdi16_24        0      192
+incdi8            0      494
+incdi8_24         0       68
+jp_24             0      463
+lda_24            0       27
+orda16            0        4
+orda32_24         0        5
+orda8             0      276
+orda8_24          0        4
+orddm16           0       92
+orddm8            0      233
+ordi16            0      255
+ordi16_24         0       24
+ordi8_24          0       39
+ordm16_24         0       46
+ordm32_24         0        6
+ordm8_24          0       35
+pushdi_24         0       20
+resda             0      867
+resda_24          0       28
+setda             0      703
+setda_24          0       90
+stl_da            0      792
+sub32_24          0        3
+subda16           0      284
+subda16_24        0       42
+subda32           0       26
+subda8            0       82
+subda8_24         0        3
+subdi16           0       10
+subdi16_24        0        8
+subdi8            0        3
+subdm16           0       15
+subdm16_24        0        1
+subdm32           0        5
+subdm32_24        0       21
+subdm8            0       21
+subdm8_24         0        3
+xorda16_24        0        2
+xorda8            0       31
+xorda8_24         0        5
+xordi8            0        2
+xordi8_24         0        1
+xordm16_24        0        6
+xordm8            0       10
+TOTAL             0    11875
+
+register spelling resolved by:
+
+refusal reasons:
+   BYTES-DIFFER                     8344
+   new-does-not-assemble            3504
+   old-does-not-assemble              27
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/foilfinal_width.csv
+
+FOIL RUN (--foil width): --apply is refused.
+
+######## --foil reg
+  verified 4000/11875 candidate spellings  verified 8000/11875 candidate spellings  verified 11875/11875 candidate spellings
+llvm-mc sha256 850b013e0e8f14d9
+candidate sites: 11875   refused before assembly: 0
+
+mnemonic    convert   refuse
+resda           867        0
+stl_da          792        0
+setda           703        0
+cpda8           690      114
+incdi8          494        0
+cpib_da         468        0
+jp_24           463        0
+cpw_da          442        0
+incdi16         379        0
+call_24         357        0
+addda32_24      295        0
+orda8           273        3
+cpdm8           264        2
+ordi16          255        0
+andda8          254        3
+orddm8          226        7
+incdi16_24      192        0
+bitda_24        154        0
+addda32         147        0
+cpda8_24        136       35
+decdi8          132        0
+anddm8          100        0
+setda_24         90        0
+subda8           82        0
+decdi16          75        0
+adddm32          70        0
+incdi8_24        68        0
+addda8           66        0
+anddi8_24        61        0
+adddi16          47        0
+addl_da          40        0
+decdi16_24       40        0
+adddm8           39        0
+ordi8_24         39        0
+anddi16          37        0
+andda8_24        34        0
+addda16_24       30       31
+anddi16_24       30        0
+xorda8           30        1
+cpdm8_24         28        1
+resda_24         28        0
+subda32          26        0
+ordi16_24        24        0
+cpda32           23        0
+cpdm16_24        23       29
+ordm8_24         23       12
+cpda16_24        22      221
+cpda32_24        21        0
+subdm32_24       21        0
+subdm8           21        0
+cpdm32           20        0
+pushdi_24        20        0
+cpdm32_24        17        0
+anddm8_24        15        0
+decdi8_24        14        0
+ordm16_24        14       32
+adddm16_24       12        8
+subdi16          10        0
+xordm8           10        0
+adddi8            9        0
+subda16_24        9       33
+adddi16_24        8        0
+anddm32_24        8        0
+subdi16_24        8        0
+andda32_24        7        0
+addda8_24         6        0
+ordm32_24         6        0
+xordm16_24        6        0
+orda32_24         5        0
+subdm32           5        0
+xorda8_24         5        0
+andda16_24        4        7
+orda8_24          4        0
+sub32_24          3        0
+subda8_24         3        0
+subdi8            3        0
+subdm8_24         3        0
+anddm16_24        2       18
+xordi8            2        0
+subdm16_24        1        0
+xordi8_24         1        0
+addda16           0      167
+adddm16           0       93
+andda16           0      295
+anddm16           0       85
+chgda_24          0        8
+cpda16            0      666
+cpdm16            0      119
+lda_24            0       27
+orda16            0        4
+orddm16           0       92
+subda16           0      284
+subdm16           0       15
+xorda16_24        0        2
+TOTAL          9461     2414
+
+register spelling resolved by:
+   no-register                      7955
+   as-written                       1506
+
+refusal reasons:
+   BYTES-DIFFER                     2379
+   old-does-not-assemble              27
+   new-does-not-assemble               8
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/runs/foilfinal_reg.csv
+
+FOIL RUN (--foil reg): --apply is refused.
+
