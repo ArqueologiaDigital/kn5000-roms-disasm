@@ -2345,7 +2345,7 @@ Multiply16_Signed_Shr11:
 	unlk32 xiz                                 ; FC413D  unlk XIZ
 	ret                                        ; FC413F  ret
 ; --------------------------------------------------------------------------
-; sub_FC4140 -- 0xFC4140..0xFC419C (93 bytes)
+; Divide16_Signed_Shl11_Sat -- 0xFC4140..0xFC419C (93 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -2360,8 +2360,25 @@ Multiply16_Signed_Shr11:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★ A SATURATING Q11 DIVIDE.  (★ RENAMED from `sub_FC4140`.)  It is the exact
+;          counterpart of Multiply16_Signed_Shr11 two routines above: the numerator
+;          (XIZ+0x08) is sign-extended and shifted LEFT eleven (0xFC4151), divided
+;          by the sign-extended denominator (XIZ+0x0A) through Divide32_Signed, and
+;          the 16-bit quotient is returned -- so a Q11 numerator over a Q11
+;          denominator gives a Q11 ratio.  The 45 bytes after the call are a
+;          SATURATION: if the quotient's sign disagrees with the sign the two
+;          operands imply, the result is forced to 0x7FFF or 0x8000 instead of
+;          wrapping (0xFC4177, 0xFC4190).
+; ITS TWO CALL SITES are 0xFC463A and 0xFC4645 in Pack104_SolveCoupledDetune, each
+;          forming Im/Re of one accumulator so that Math_Atan_Q11 can turn it into
+;          an angle.  That is why saturation and not wrapping is the right
+;          behaviour here: a wrapped ratio would put the angle in the wrong
+;          quadrant, a saturated one pins it at +/- 90 degrees.
+; GRADE: PROVEN for the arithmetic (operands) and for the call sites;
+;          notes/w24_e093_coupling_solver.py section 5 re-implements it.
 ; --------------------------------------------------------------------------
-sub_FC4140:
+Divide16_Signed_Shl11_Sat:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC4140  link XIZ,0xfffc
 	pushw	hl                                   ; FC4144  push HL
 	pushw	de                                   ; FC4145  push DE
@@ -2379,37 +2396,37 @@ sub_FC4140:
 	call	0xFCB141                              ; FC415D  call 0xfcb141
 	ld	hl, iy                                  ; FC4161  ld HL,IY
 	cps	iy, 0                                  ; FC4163  cp IY,0
-	jr ge, sub_FC4140__FC417C                  ; FC4165  jr GE,0xfc417c
+	jr ge, Divide16_Signed_Shl11_Sat__FC417C                  ; FC4165  jr GE,0xfc417c
 	cps	ix, 0                                  ; FC4167  cp IX,0
-	jr le, sub_FC4140__FC416F                  ; FC4169  jr LE,0xfc416f
+	jr le, Divide16_Signed_Shl11_Sat__FC416F                  ; FC4169  jr LE,0xfc416f
 	cps	de, 0                                  ; FC416B  cp DE,0
-	jr gt, sub_FC4140__FC4177                  ; FC416D  jr GT,0xfc4177
-sub_FC4140__FC416F:
+	jr gt, Divide16_Signed_Shl11_Sat__FC4177                  ; FC416D  jr GT,0xfc4177
+Divide16_Signed_Shl11_Sat__FC416F:
 	cps	ix, 0                                  ; FC416F  cp IX,0
-	jr ge, sub_FC4140__FC4195                  ; FC4171  jr GE,0xfc4195
+	jr ge, Divide16_Signed_Shl11_Sat__FC4195                  ; FC4171  jr GE,0xfc4195
 	cps	de, 0                                  ; FC4173  cp DE,0
-	jr ge, sub_FC4140__FC4195                  ; FC4175  jr GE,0xfc4195
-sub_FC4140__FC4177:
+	jr ge, Divide16_Signed_Shl11_Sat__FC4195                  ; FC4175  jr GE,0xfc4195
+Divide16_Signed_Shl11_Sat__FC4177:
 	ldw	wa, 0x7FFF                             ; FC4177  ld WA,0x7fff
-	jr sub_FC4140__FC4197                      ; FC417A  jr T,0xfc4197
-sub_FC4140__FC417C:
+	jr Divide16_Signed_Shl11_Sat__FC4197                      ; FC417A  jr T,0xfc4197
+Divide16_Signed_Shl11_Sat__FC417C:
 	cps	hl, 0                                  ; FC417C  cp HL,0
-	jr le, sub_FC4140__FC4195                  ; FC417E  jr LE,0xfc4195
+	jr le, Divide16_Signed_Shl11_Sat__FC4195                  ; FC417E  jr LE,0xfc4195
 	cps	ix, 0                                  ; FC4180  cp IX,0
-	jr le, sub_FC4140__FC4188                  ; FC4182  jr LE,0xfc4188
+	jr le, Divide16_Signed_Shl11_Sat__FC4188                  ; FC4182  jr LE,0xfc4188
 	cps	de, 0                                  ; FC4184  cp DE,0
-	jr lt, sub_FC4140__FC4190                  ; FC4186  jr LT,0xfc4190
-sub_FC4140__FC4188:
+	jr lt, Divide16_Signed_Shl11_Sat__FC4190                  ; FC4186  jr LT,0xfc4190
+Divide16_Signed_Shl11_Sat__FC4188:
 	cps	ix, 0                                  ; FC4188  cp IX,0
-	jr le, sub_FC4140__FC4195                  ; FC418A  jr LE,0xfc4195
+	jr le, Divide16_Signed_Shl11_Sat__FC4195                  ; FC418A  jr LE,0xfc4195
 	cps	de, 0                                  ; FC418C  cp DE,0
-	jr ge, sub_FC4140__FC4195                  ; FC418E  jr GE,0xfc4195
-sub_FC4140__FC4190:
+	jr ge, Divide16_Signed_Shl11_Sat__FC4195                  ; FC418E  jr GE,0xfc4195
+Divide16_Signed_Shl11_Sat__FC4190:
 	ldw	wa, 0x8000                             ; FC4190  ld WA,0x8000
-	jr sub_FC4140__FC4197                      ; FC4193  jr T,0xfc4197
-sub_FC4140__FC4195:
+	jr Divide16_Signed_Shl11_Sat__FC4197                      ; FC4193  jr T,0xfc4197
+Divide16_Signed_Shl11_Sat__FC4195:
 	ld	wa, hl                                  ; FC4195  ld WA,HL
-sub_FC4140__FC4197:
+Divide16_Signed_Shl11_Sat__FC4197:
 	popw	ix                                    ; FC4197  pop IX
 	popw	de                                    ; FC4198  pop DE
 	popw	hl                                    ; FC4199  pop HL
@@ -2440,7 +2457,11 @@ sub_FC4140__FC4197:
 ;          its ONLY caller agrees about the scale independently: at 0xFC445B the
 ;          caller forms 0x1922 - 2*arg, and 0x1922 = 6434 is exactly the argument
 ;          that maps to index 128 -- half the table, i.e. pi radians.
-; Unknown:  ⚠ what the angle MEANS at the call sites (three, all in sub_FC4269).
+; Unknown:  ⚠ what the angle MEANS at the call sites (three, all in Pack104_SolveCoupledDetune).
+; ★ WAVE 24: ANSWERED.  The angle is a resonator's ROUND-TRIP PHASE.  Its caller
+;          builds sin(omega) at phase (pi/2 - omega), which is (1 - e^-2i*omega)/2
+;          identically -- one factor per resonator of a coupled network, evaluated
+;          at another resonator's nominal frequency.  See that routine's header.
 ; --------------------------------------------------------------------------
 Math_Sin_Q11:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC419D  link XIZ,0x0000
@@ -2476,6 +2497,9 @@ Math_Sin_Q11:
 ;          holds here unchanged.
 ; Evidence: MathTable_Cos_S16_256 matches round(32768*cos(2*pi*k/256)) mod 2^16 over
 ;          all 256 entries, err in [-3,+6] (notes/gen_prom_c_tail_tables.py --verify).
+; ★ WAVE 24: its ONE caller (0xFC456A, 0xFC45DC in Pack104_SolveCoupledDetune) passes an
+;          accumulated phase already reduced modulo 0x3244 = 2*pi, to turn a polar
+;          magnitude/phase pair back into a Cartesian one.
 ; Unknown:  ⚠ AND ONE REAL DEFECT IN THE ROM: entry 0 of the cosine table is 0x8000,
 ;          which this routine's `ld BC,(XIY) / sra 4,BC` reads as -32768/16 = -2048.
 ;          cos(0) therefore comes back as -1.0, not +1.0: +1.0 does not fit the s16
@@ -2519,6 +2543,12 @@ Math_Cos_Q11:
 ; Unknown:  ⚠ what its two call sites (0xFC464B, 0xFC4651) are computing: they take
 ;          the DIFFERENCE of two atan results, which is the shape of an angle
 ;          between two vectors, and hand it on with a 0x0146 constant.
+; ★ WAVE 24: ANSWERED, and the guess was right.  The two vectors are the same
+;          coupled-resonator accumulator computed WITH and WITHOUT the damping
+;          factor, so the difference is the phase shift the coupling introduces;
+;          and 0x0146 = round(2048/(2*pi)) converts radians to TURNS, after which
+;          MathTable_Log2_256 turns a fraction of a period into a pitch offset in
+;          1/256 semitone.  Pack104_SolveCoupledDetune's header has the whole chain.
 ; --------------------------------------------------------------------------
 Math_Atan_Q11:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC41E9  link XIZ,0x0000
@@ -2577,6 +2607,11 @@ Math_Atan_Q11__FC4222:
 ;          shifts are the operands at 0xFC4232, 0xFC4236, 0xFC4247 and 0xFC4252.
 ; Unknown:  ⚠ that the 2*pi factor makes it an ANGULAR FREQUENCY is a reading of the
 ;          constant, not something an instruction says.  ONE caller (0xFC435E).
+; ★ WAVE 24: the reading holds, and the caller says so.  Its argument is an OCTAVE
+;          difference between two resonator tunings (scaled by 0x0555 = 2/3, since
+;          the tuning unit is 1/256 semitone and 2048/3072 = 2/3), folded to [0,1)
+;          first -- so the result is pi * (frequency ratio), an angular frequency
+;          in exactly the sense above.  Pack104_SolveCoupledDetune, 0xFC4316-0xFC4364.
 ; --------------------------------------------------------------------------
 Math_Exp2_Q11:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC4227  link XIZ,0x0000
@@ -2610,14 +2645,14 @@ Math_Exp2_Q11__FC4264:
 	unlk32 xiz                                 ; FC4266  unlk XIZ
 	ret                                        ; FC4268  ret
 ; --------------------------------------------------------------------------
-; sub_FC4269 -- 0xFC4269..0xFC46A7 (1087 bytes)
+; Pack104_SolveCoupledDetune -- 0xFC4269..0xFC46A7 (1087 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
 ;          0xFC6F90 0xFC71BC 0xFC73FE
 ; Inputs:  frame `link XIZ,-80`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC412E = Multiply16_Signed_Shr11, 0xFC4140 = sub_FC4140
+; Calls:   0xFC412E = Multiply16_Signed_Shr11, 0xFC4140 = Divide16_Signed_Shl11_Sat
 ;          0xFC419D = Math_Sin_Q11, 0xFC41C3 = Math_Cos_Q11
 ;          0xFC41E9 = Math_Atan_Q11, 0xFC4227 = Math_Exp2_Q11
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC4269-0xFC46A7
@@ -2627,8 +2662,56 @@ Math_Exp2_Q11__FC4264:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★★ THE READER OF THE 0x00E093 BLOCK, AND A COUPLED-RESONATOR DETUNE
+;          SOLVER.  (★ RENAMED from `sub_FC4269`.)  Its one argument is a pointer to
+;          a 68-byte struct; all three call sites pass &0x00E093, which is why no
+;          instruction in the image ever names that address as an operand and why
+;          notes/FINDINGS-l7a1429-gate-and-keyscaling.md section 1.8 concluded the
+;          block had no reader.  The struct:
+;            +0x00  MODE   coupling scale, 0x0200 (4 elements) or 0x0400 (2)
+;            +0x02  N      slots, 8 or 4 -- TWICE the number of elements
+;            +0x04  A[N]   INTERACTION GAIN, Curve_Exp2Gain_U8_128[p19] << 8
+;            +0x14  B[N]   LEVEL, 0x8000 (MAIN) / Curve_Exp2Gain_Percent_101[|p33|]
+;            +0x24  C[N]   TUNING IN, P[+0x0E] (MAIN) / P[+0x10] (SUB)
+;            +0x34  D[N]   RESULT, this routine's output
+;          Slot 2k is element k's MAIN resonator, slot 2k+1 its SUB.
+; WHAT IT COMPUTES, per output slot j (every constant is Q11, 2048 = 1.0):
+;            omega_i = pi * 2^((C[j]-C[i]) * 2/3 / 2048), the octave difference
+;                      FOLDED to [0,1) at 0xFC4339, so 2*omega sweeps exactly one
+;                      round trip                                    0xFC435B
+;            a_i     = -(MODE/2048) * (A[i]/2048) * (B[i]/2048)
+;            damp    = 1 + a_j                                       0xFC439D
+;          then it accumulates, in polar form, one factor sin(omega_m) at phase
+;          (pi/2 - omega_m) per slot m != j -- which is (1 - e^-2i*omega_m)/2
+;          identically -- and subtracts a_i * e^-2i*omega_i * (the same product
+;          without slot i) for every i != j.  It does this TWICE, once with `damp`
+;          on the j term and once without, takes the ARCTANGENT DIFFERENCE of the
+;          two accumulators (0xFC463A-0xFC4656), scales it by 0x0146 = 1/2pi into
+;          TURNS, and looks up MathTable_Log2_256 at (0x0800 - turns) >> 4.
+;          That table is 3072*log2, and 3072 = 12*256, so
+;            D[j] = -3072 * log2(1 - dphi/2pi)   in 1/256 SEMITONE.
+; WHERE IT GOES: the caller reads D[2k] into P_k[+0x12] and D[2k+1] into
+;          P_k[+0x14], and Dev104_PackStagingStruct adds those to P[+0x0A] and
+;          P[+0x0C] (0xFC4DFA, 0xFC4EA9) on the way to registers chan+0x0040
+;          (MAIN RESONATOR tuning) and chan+0x0080 (SUB RESONATOR tuning).
+;          So the output is a DETUNE, and the block is how the resonators of a
+;          GROUPed part interact.  The three arms that do NOT group write the same
+;          two fields as literal zero.
+; NUMBERS an implementer needs: the correction is quantised to 13.28 cents (one
+;          index step) and bounded to +1146 / -675 cents (the output index can
+;          only reach 66..189, so the table's 0xFFFF sentinel at index 0 is
+;          UNREACHABLE).  It is EXACTLY 0 when p19 = 0 (damp = 0x0800 = 1.0, both
+;          accumulators coincide, T[128] = 0) and also when every grouped resonator
+;          shares one tuning word (all omega = pi, sin underflows the >>11).
+; GRADE: PROVEN for the arithmetic -- notes/w24_e093_coupling_solver.py section 5
+;          re-implements this routine bit for bit on the ROM's own tables and
+;          reproduces the factory data.  STRONG for reading the accumulator as a
+;          coupled-WAVEGUIDE loop characteristic function: that rests on five exact
+;          constants agreeing (2/3, pi, 2pi, 1/2pi, 3072) and is not a measurement.
+;          notes/FINDINGS-l7a1429-e093-block.md.
 ; --------------------------------------------------------------------------
-sub_FC4269:
+Pack104_SolveCoupledDetune:
 	link32 0xEE, 0x0C, 0xB0, 0xFF              ; FC4269  link XIZ,0xffb0
 	pushw	hl                                   ; FC426D  push HL
 	pushw	de                                   ; FC426E  push DE
@@ -2640,7 +2723,7 @@ sub_FC4269:
 	ld	(xiz-74), iy                            ; FC427B  ld (XIZ+0xb6),IY
 	ldw (xiz-76), 0x0000                       ; FC427E  ld (XIZ+0xb4),0x0000
 	cps	wa, 0                                  ; FC4283  cp WA,0
-	jrl le, sub_FC4269__FC46A2                 ; FC4285  jrl LE,0xfc46a2
+	jrl le, Pack104_SolveCoupledDetune__FC46A2                 ; FC4285  jrl LE,0xfc46a2
 	ld	xbc, 36                                 ; FC4288  ld XBC,0x00000024
 	ld	(xiz-66), xbc                           ; FC428D  ld (XIZ+0xbe),XBC
 	ld	xbc, 20                                 ; FC4290  ld XBC,0x00000014
@@ -2651,14 +2734,14 @@ sub_FC4269:
 	ld	(xiz-54), xbc                           ; FC42A2  ld (XIZ+0xca),XBC
 	ld	xbc, 52                                 ; FC42A5  ld XBC,0x00000034
 	ld	(xiz-58), xbc                           ; FC42AA  ld (XIZ+0xc6),XBC
-sub_FC4269__FC42AD:
+Pack104_SolveCoupledDetune__FC42AD:
 	ldw (xiz-50), 0x0000                       ; FC42AD  ld (XIZ+0xce),0x0000
 	ldw (xiz-48), 0x0000                       ; FC42B2  ld (XIZ+0xd0),0x0000
 	ldw (xiz-42), 0x0000                       ; FC42B7  ld (XIZ+0xd6),0x0000
 	ldw (xiz-40), 0x0000                       ; FC42BC  ld (XIZ+0xd8),0x0000
 	ldw (xiz-44), 0x0000                       ; FC42C1  ld (XIZ+0xd4),0x0000
 	cpw (xiz-72), 0x0000                       ; FC42C6  cp (XIZ+0xb8),0x0000
-	jrl le, sub_FC4269__FC4388                 ; FC42CB  jrl LE,0xfc4388
+	jrl le, Pack104_SolveCoupledDetune__FC4388                 ; FC42CB  jrl LE,0xfc4388
 	ld	xbc, (xiz-66)                           ; FC42CE  ld XBC,(XIZ+0xbe)
 	ld	(xiz-8), xbc                            ; FC42D1  ld (XIZ+0xf8),XBC
 	sub	xwa, xwa                               ; FC42D4  sub XWA,XWA
@@ -2673,7 +2756,7 @@ sub_FC4269__FC42AD:
 	ld	(xiz-12), xbc                           ; FC42F2  ld (XIZ+0xf4),XBC
 	lda	xbc, (0xE022:24)                       ; FC42F5  lda XBC,0x00e022
 	ld	(xiz-16), xbc                           ; FC42FA  ld (XIZ+0xf0),XBC
-sub_FC4269__FC42FD:
+Pack104_SolveCoupledDetune__FC42FD:
 	extpfx3 0x9E, 0xB6, 0x04                   ; FC42FD  pushw (XIZ+0xb6)
 	ld	xbc, (xiz+8)                            ; FC4300  ld XBC,(XIZ+0x08)
 	extpfx3 0xAE, 0xE8, 0x81                   ; FC4303  add XBC,(XIZ+0xe8)
@@ -2698,19 +2781,19 @@ sub_FC4269__FC42FD:
 	ld	xbc, (xiz-12)                           ; FC4331  ld XBC,(XIZ+0xf4)
 	ld	(xiz-4), xbc                            ; FC4334  ld (XIZ+0xfc),XBC
 	inc	8, xsp                                 ; FC4337  inc 0,XSP
-sub_FC4269__FC4339:
+Pack104_SolveCoupledDetune__FC4339:
 	lda	xbc, (0xE052:24)                       ; FC4339  lda XBC,0x00e052
 	extpfx3 0xAE, 0xFC, 0x81                   ; FC433E  add XBC,(XIZ+0xfc)
 	ld	hl, (xbc)                               ; FC4341  ld HL,(XBC)
 	cp	hl, 0x800                               ; FC4343  cp HL,0x0800
-	jr lt, sub_FC4269__FC435B                  ; FC4347  jr LT,0xfc435b
+	jr lt, Pack104_SolveCoupledDetune__FC435B                  ; FC4347  jr LT,0xfc435b
 	ld	bc, hl                                  ; FC4349  ld BC,HL
 	sub	bc, 0x800                              ; FC434B  sub BC,0x0800
 	lda	xwa, (0xE052:24)                       ; FC434F  lda XWA,0x00e052
 	extpfx3 0xAE, 0xFC, 0x80                   ; FC4354  add XWA,(XIZ+0xfc)
 	ld	(xwa), bc                               ; FC4357  ld (XWA),BC
-	jr sub_FC4269__FC4339                      ; FC4359  jr T,0xfc4339
-sub_FC4269__FC435B:
+	jr Pack104_SolveCoupledDetune__FC4339                      ; FC4359  jr T,0xfc4339
+Pack104_SolveCoupledDetune__FC435B:
 	ld	bc, (xix)                               ; FC435B  ld BC,(XIX)
 	pushw	bc                                   ; FC435D  push BC
 	calr (0xFC4227 - 0xFC4361)                 ; FC435E  calr 0xfc4227
@@ -2728,8 +2811,8 @@ sub_FC4269__FC435B:
 	popw	wa                                    ; FC437E  pop WA
 	ld	wa, (xiz-44)                            ; FC437F  ld WA,(XIZ+0xd4)
 	extpfx3 0x9E, 0xB8, 0xF0                   ; FC4382  cp WA,(XIZ+0xb8)
-	jrl lt, sub_FC4269__FC42FD                 ; FC4385  jrl LT,0xfc42fd
-sub_FC4269__FC4388:
+	jrl lt, Pack104_SolveCoupledDetune__FC42FD                 ; FC4385  jrl LT,0xfc42fd
+Pack104_SolveCoupledDetune__FC4388:
 	ld	xbc, (xiz+8)                            ; FC4388  ld XBC,(XIZ+0x08)
 	extpfx3 0xAE, 0xBA, 0x81                   ; FC438B  add XBC,(XIZ+0xba)
 	ld	wa, (xbc)                               ; FC438E  ld WA,(XBC)
@@ -2744,7 +2827,7 @@ sub_FC4269__FC4388:
 	ldw (xiz-44), 0x0000                       ; FC43A4  ld (XIZ+0xd4),0x0000
 	pop	xiy                                    ; FC43A9  pop XIY
 	cpw (xiz-72), 0x0000                       ; FC43AA  cp (XIZ+0xb8),0x0000
-	jrl le, sub_FC4269__FC4634                 ; FC43AF  jrl LE,0xfc4634
+	jrl le, Pack104_SolveCoupledDetune__FC4634                 ; FC43AF  jrl LE,0xfc4634
 	ld	xbc, (xiz-54)                           ; FC43B2  ld XBC,(XIZ+0xca)
 	ld	(xiz-38), xbc                           ; FC43B5  ld (XIZ+0xda),XBC
 	ld	xiy, 20                                 ; FC43B8  ld XIY,0x00000014
@@ -2759,7 +2842,7 @@ sub_FC4269__FC4388:
 	ld	(xiz-18), xbc                           ; FC43DD  ld (XIZ+0xee),XBC
 	sub	xbc, xbc                               ; FC43E0  sub XBC,XBC
 	ld	(xiz-14), xbc                           ; FC43E2  ld (XIZ+0xf2),XBC
-sub_FC4269__FC43E5:
+Pack104_SolveCoupledDetune__FC43E5:
 	lda	xbc, (0xE032:24)                       ; FC43E5  lda XBC,0x00e032
 	extpfx3 0xAE, 0xDA, 0x81                   ; FC43EA  add XBC,(XIZ+0xda)
 	extpfx4 0xB1, 0x02, 0x00, 0x10             ; FC43ED  ld (XBC),0x1000
@@ -2786,16 +2869,16 @@ sub_FC4269__FC43E5:
 	ldw	hl, 0                                  ; FC4425  ld HL,0x0000
 	pop	xiy                                    ; FC4428  pop XIY
 	cpw (xiz-72), 0x0000                       ; FC4429  cp (XIZ+0xb8),0x0000
-	jrl le, sub_FC4269__FC44C2                 ; FC442E  jrl LE,0xfc44c2
+	jrl le, Pack104_SolveCoupledDetune__FC44C2                 ; FC442E  jrl LE,0xfc44c2
 	ldw	bc, 2                                  ; FC4431  ld BC,0x0002
 	extpfx3 0x9E, 0xB4, 0x49                   ; FC4434  muls XBC,(XIZ+0xb4)
 	ld	(xiz-6), xbc                            ; FC4437  ld (XIZ+0xfa),XBC
 	ld	xwa, (xiz-14)                           ; FC443A  ld XWA,(XIZ+0xf2)
 	ld	(xiz-10), xwa                           ; FC443D  ld (XIZ+0xf6),XWA
 	lda	xix, (0xE022:24)                       ; FC4440  lda XIX,0x00e022
-sub_FC4269__FC4445:
+Pack104_SolveCoupledDetune__FC4445:
 	extpfx3 0x9E, 0xB4, 0xF3                   ; FC4445  cp HL,(XIZ+0xb4)
-	jrl z, sub_FC4269__FC44B9                  ; FC4448  jrl Z,0xfc44b9
+	jrl z, Pack104_SolveCoupledDetune__FC44B9                  ; FC4448  jrl Z,0xfc44b9
 	ld	bc, (xix)                               ; FC444B  ld BC,(XIX)
 	pushw	bc                                   ; FC444D  push BC
 	calr (0xFC419D - 0xFC4451)                 ; FC444E  calr 0xfc419d
@@ -2822,7 +2905,7 @@ sub_FC4269__FC4445:
 	add	(xbc), de                              ; FC448A  add (XBC),DE
 	inc	6, xsp                                 ; FC448C  inc 6,XSP
 	extpfx3 0x9E, 0xD4, 0xF3                   ; FC448E  cp HL,(XIZ+0xd4)
-	jr z, sub_FC4269__FC44B9                   ; FC4491  jr Z,0xfc44b9
+	jr z, Pack104_SolveCoupledDetune__FC44B9                   ; FC4491  jr Z,0xfc44b9
 	extpfx3 0x9E, 0xFE, 0x04                   ; FC4493  pushw (XIZ+0xfe)
 	lda	xbc, (0xE042:24)                       ; FC4496  lda XBC,0x00e042
 	extpfx3 0xAE, 0xF6, 0x81                   ; FC449B  add XBC,(XIZ+0xf6)
@@ -2836,75 +2919,75 @@ sub_FC4269__FC4445:
 	extpfx3 0xAE, 0xF6, 0x81                   ; FC44B3  add XBC,(XIZ+0xf6)
 	add	(xbc), de                              ; FC44B6  add (XBC),DE
 	pop	xiy                                    ; FC44B8  pop XIY
-sub_FC4269__FC44B9:
+Pack104_SolveCoupledDetune__FC44B9:
 	inc	2, xix                                 ; FC44B9  inc 2,XIX
 	inc	1, hl                                  ; FC44BB  inc 1,HL
 	extpfx3 0x9E, 0xB8, 0xF3                   ; FC44BD  cp HL,(XIZ+0xb8)
-	jr lt, sub_FC4269__FC4445                  ; FC44C0  jr LT,0xfc4445
-sub_FC4269__FC44C2:
+	jr lt, Pack104_SolveCoupledDetune__FC4445                  ; FC44C0  jr LT,0xfc4445
+Pack104_SolveCoupledDetune__FC44C2:
 	ldw	bc, 2                                  ; FC44C2  ld BC,0x0002
 	extpfx3 0x9E, 0xB4, 0x49                   ; FC44C5  muls XBC,(XIZ+0xb4)
 	ld	xix, xbc                                ; FC44C8  ld XIX,XBC
-sub_FC4269__FC44CA:
+Pack104_SolveCoupledDetune__FC44CA:
 	lda	xbc, (0xE062:24)                       ; FC44CA  lda XBC,0x00e062
 	add	xbc, xix                               ; FC44CF  add XBC,XIX
 	ld	hl, (xbc)                               ; FC44D1  ld HL,(XBC)
 	cps	hl, 0                                  ; FC44D3  cp HL,0
-	jr ge, sub_FC4269__FC44E8                  ; FC44D5  jr GE,0xfc44e8
+	jr ge, Pack104_SolveCoupledDetune__FC44E8                  ; FC44D5  jr GE,0xfc44e8
 	ld	bc, hl                                  ; FC44D7  ld BC,HL
 	add	bc, 0x3244                             ; FC44D9  add BC,0x3244
 	lda	xwa, (0xE062:24)                       ; FC44DD  lda XWA,0x00e062
 	add	xwa, xix                               ; FC44E2  add XWA,XIX
 	ld	(xwa), bc                               ; FC44E4  ld (XWA),BC
-	jr sub_FC4269__FC44CA                      ; FC44E6  jr T,0xfc44ca
-sub_FC4269__FC44E8:
+	jr Pack104_SolveCoupledDetune__FC44CA                      ; FC44E6  jr T,0xfc44ca
+Pack104_SolveCoupledDetune__FC44E8:
 	ldw	bc, 2                                  ; FC44E8  ld BC,0x0002
 	extpfx3 0x9E, 0xB4, 0x49                   ; FC44EB  muls XBC,(XIZ+0xb4)
 	ld	xix, xbc                                ; FC44EE  ld XIX,XBC
-sub_FC4269__FC44F0:
+Pack104_SolveCoupledDetune__FC44F0:
 	lda	xbc, (0xE062:24)                       ; FC44F0  lda XBC,0x00e062
 	add	xbc, xix                               ; FC44F5  add XBC,XIX
 	ld	hl, (xbc)                               ; FC44F7  ld HL,(XBC)
 	cp	hl, 0x3244                              ; FC44F9  cp HL,0x3244
-	jr lt, sub_FC4269__FC4510                  ; FC44FD  jr LT,0xfc4510
+	jr lt, Pack104_SolveCoupledDetune__FC4510                  ; FC44FD  jr LT,0xfc4510
 	ld	bc, hl                                  ; FC44FF  ld BC,HL
 	sub	bc, 0x3244                             ; FC4501  sub BC,0x3244
 	lda	xwa, (0xE062:24)                       ; FC4505  lda XWA,0x00e062
 	add	xwa, xix                               ; FC450A  add XWA,XIX
 	ld	(xwa), bc                               ; FC450C  ld (XWA),BC
-	jr sub_FC4269__FC44F0                      ; FC450E  jr T,0xfc44f0
-sub_FC4269__FC4510:
+	jr Pack104_SolveCoupledDetune__FC44F0                      ; FC450E  jr T,0xfc44f0
+Pack104_SolveCoupledDetune__FC4510:
 	ld	xix, (xiz-14)                           ; FC4510  ld XIX,(XIZ+0xf2)
-sub_FC4269__FC4513:
+Pack104_SolveCoupledDetune__FC4513:
 	lda	xbc, (0xE072:24)                       ; FC4513  lda XBC,0x00e072
 	add	xbc, xix                               ; FC4518  add XBC,XIX
 	ld	hl, (xbc)                               ; FC451A  ld HL,(XBC)
 	cps	hl, 0                                  ; FC451C  cp HL,0
-	jr ge, sub_FC4269__FC4531                  ; FC451E  jr GE,0xfc4531
+	jr ge, Pack104_SolveCoupledDetune__FC4531                  ; FC451E  jr GE,0xfc4531
 	ld	bc, hl                                  ; FC4520  ld BC,HL
 	add	bc, 0x3244                             ; FC4522  add BC,0x3244
 	lda	xwa, (0xE072:24)                       ; FC4526  lda XWA,0x00e072
 	add	xwa, xix                               ; FC452B  add XWA,XIX
 	ld	(xwa), bc                               ; FC452D  ld (XWA),BC
-	jr sub_FC4269__FC4513                      ; FC452F  jr T,0xfc4513
-sub_FC4269__FC4531:
+	jr Pack104_SolveCoupledDetune__FC4513                      ; FC452F  jr T,0xfc4513
+Pack104_SolveCoupledDetune__FC4531:
 	ld	xix, (xiz-14)                           ; FC4531  ld XIX,(XIZ+0xf2)
-sub_FC4269__FC4534:
+Pack104_SolveCoupledDetune__FC4534:
 	lda	xbc, (0xE072:24)                       ; FC4534  lda XBC,0x00e072
 	add	xbc, xix                               ; FC4539  add XBC,XIX
 	ld	hl, (xbc)                               ; FC453B  ld HL,(XBC)
 	cp	hl, 0x3244                              ; FC453D  cp HL,0x3244
-	jr lt, sub_FC4269__FC4554                  ; FC4541  jr LT,0xfc4554
+	jr lt, Pack104_SolveCoupledDetune__FC4554                  ; FC4541  jr LT,0xfc4554
 	ld	bc, hl                                  ; FC4543  ld BC,HL
 	sub	bc, 0x3244                             ; FC4545  sub BC,0x3244
 	lda	xwa, (0xE072:24)                       ; FC4549  lda XWA,0x00e072
 	add	xwa, xix                               ; FC454E  add XWA,XIX
 	ld	(xwa), bc                               ; FC4550  ld (XWA),BC
-	jr sub_FC4269__FC4534                      ; FC4552  jr T,0xfc4534
-sub_FC4269__FC4554:
+	jr Pack104_SolveCoupledDetune__FC4534                      ; FC4552  jr T,0xfc4534
+Pack104_SolveCoupledDetune__FC4554:
 	ld	bc, (xiz-44)                            ; FC4554  ld BC,(XIZ+0xd4)
 	extpfx3 0x9E, 0xB4, 0xF1                   ; FC4557  cp BC,(XIZ+0xb4)
-	jrl nz, sub_FC4269__FC45D6                 ; FC455A  jrl NZ,0xfc45d6
+	jrl nz, Pack104_SolveCoupledDetune__FC45D6                 ; FC455A  jrl NZ,0xfc45d6
 	ld	xix, (xiz-38)                           ; FC455D  ld XIX,(XIZ+0xda)
 	lda	xwa, (0xE062:24)                       ; FC4560  lda XWA,0x00e062
 	add	xwa, xix                               ; FC4565  add XWA,XIX
@@ -2956,8 +3039,8 @@ sub_FC4269__FC4554:
 	pushw	wa                                   ; FC45CD  push WA
 	calr (0xFC412E - 0xFC45D1)                 ; FC45CE  calr 0xfc412e
 	add	(xiz-48), wa                           ; FC45D1  add (XIZ+0xd0),WA
-	jr sub_FC4269__FC460E                      ; FC45D4  jr T,0xfc460e
-sub_FC4269__FC45D6:
+	jr Pack104_SolveCoupledDetune__FC460E                      ; FC45D4  jr T,0xfc460e
+Pack104_SolveCoupledDetune__FC45D6:
 	ld	xbc, (xiz-18)                           ; FC45D6  ld XBC,(XIZ+0xee)
 	ld	wa, (xbc)                               ; FC45D9  ld WA,(XBC)
 	pushw	wa                                   ; FC45DB  push WA
@@ -2983,7 +3066,7 @@ sub_FC4269__FC45D6:
 	sub	(xiz-40), wa                           ; FC4605  sub (XIZ+0xd8),WA
 	sub	(xiz-50), bc                           ; FC4608  sub (XIZ+0xce),BC
 	sub	(xiz-48), wa                           ; FC460B  sub (XIZ+0xd0),WA
-sub_FC4269__FC460E:
+Pack104_SolveCoupledDetune__FC460E:
 	inc	8, xsp                                 ; FC460E  inc 0,XSP
 	inc	4, xsp                                 ; FC4610  inc 4,XSP
 	sub	xbc, xbc                               ; FC4612  sub XBC,XBC
@@ -2997,8 +3080,8 @@ sub_FC4269__FC460E:
 	incw	1, (xiz-44)                           ; FC4628  incw 1,(XIZ+0xd4)
 	ld	wa, (xiz-44)                            ; FC462B  ld WA,(XIZ+0xd4)
 	extpfx3 0x9E, 0xB8, 0xF0                   ; FC462E  cp WA,(XIZ+0xb8)
-	jrl lt, sub_FC4269__FC43E5                 ; FC4631  jrl LT,0xfc43e5
-sub_FC4269__FC4634:
+	jrl lt, Pack104_SolveCoupledDetune__FC43E5                 ; FC4631  jrl LT,0xfc43e5
+Pack104_SolveCoupledDetune__FC4634:
 	extpfx3 0x9E, 0xCE, 0x04                   ; FC4634  pushw (XIZ+0xce)
 	extpfx3 0x9E, 0xD0, 0x04                   ; FC4637  pushw (XIZ+0xd0)
 	calr (0xFC4140 - 0xFC463D)                 ; FC463A  calr 0xfc4140
@@ -3040,8 +3123,8 @@ sub_FC4269__FC4634:
 	inc	8, xsp                                 ; FC4697  inc 0,XSP
 	ld	wa, (xiz-76)                            ; FC4699  ld WA,(XIZ+0xb4)
 	extpfx3 0x9E, 0xB8, 0xF0                   ; FC469C  cp WA,(XIZ+0xb8)
-	jrl lt, sub_FC4269__FC42AD                 ; FC469F  jrl LT,0xfc42ad
-sub_FC4269__FC46A2:
+	jrl lt, Pack104_SolveCoupledDetune__FC42AD                 ; FC469F  jrl LT,0xfc42ad
+Pack104_SolveCoupledDetune__FC46A2:
 	pop	xix                                    ; FC46A2  pop XIX
 	popw	de                                    ; FC46A3  pop DE
 	popw	hl                                    ; FC46A4  pop HL
@@ -3088,6 +3171,13 @@ sub_FC4269__FC46A2:
 ;          for the names MAIN/SUB RESONATOR, KEY SHIFT and TUNE, which come from
 ;          notes/FINDINGS-l7a1429-parameter-names.md section 4 and carry that
 ;          note's two points of failure (its section 5b).
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★ AND ITS TWO INPUTS ARE ALSO THE COUPLING SOLVER'S.  P[+0x0E] and P[+0x10]
+;          are what the three GROUP arms copy into the 0x00E093 block's tuning array
+;          (0xFC6F36/0xFC6F4C and the two siblings), so the solver sees the nominal
+;          MAIN and SUB tunings of every element of the group and returns a
+;          correction to them in P[+0x12]/P[+0x14] -- the `P[+0x12]` this header
+;          already names as the second term.  notes/FINDINGS-l7a1429-e093-block.md.
 ; --------------------------------------------------------------------------
 Pack104_ComputeTuningWords_0040_0080:
 	pushw	hl                                   ; FC46A8  push HL
@@ -3266,6 +3356,11 @@ Pack104_ComputeTuningWords_0040_0080__FC47EA:
 ;            p25 bit 7 -> P[+0x12] = (p26 << 8) + p27  0xFC490A, 0xFC4926
 ;            p37 bit 7 -> P[+0x14] = (p38 << 8) + p39  0xFC4942, 0xFC495E
 ;                       these are the second term of registers 0x0040 / 0x0080
+; ★ WAVE 24: and those two fields have a SECOND set of writers -- the six GROUP
+;          arms, which either clear them or fill them with Pack104_SolveCoupledDetune's
+;          coupled-resonator detune.  ⚠ Which write survives per note depends on the
+;          order this routine and Pack104_DispatchByResoMode_ForPart run in, and that
+;          is OPEN: notes/FINDINGS-l7a1429-e093-block.md section 8.1.
 ;            i5 = clamp(p15, 44..96)                   0xFC496B-0xFC497C
 ;            P[+0x26] = Curve_Muting_Cutoff_Q16_128[i5]   0xFC4987, 0xFC4993
 ;            P[+0x24] = Curve_Muting_Cutoff_Q13_128[i5]   0xFC4996, 0xFC49A4
@@ -4251,6 +4346,25 @@ Pack104_SetInputs_Rec0E_E08D:
 ;          that last sentence, which reads a meaning out of an identity.
 ;          notes/FINDINGS-l7a1429-reso-scale.md sections 1-3;
 ;          notes/w23_reso_scale_and_group_chain.py (--selftest: FAILURES: 0).
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★★ THE SECOND TERM OF BOTH TUNING REGISTERS IS THE RESONATOR COUPLING.
+;          0xFC4DFA reads P[+0x12] and 0xFC4EA9 reads P[+0x14], and each is added to
+;          P[+0x0A] / P[+0x0C] under the same asymmetric saturate before reaching
+;          staging words 1 and 2 -- registers chan+0x0040 (MAIN) and chan+0x0080
+;          (SUB).  Those two fields have exactly three producers:
+;            GROUP on   Pack104_SolveCoupledDetune's answer, read back by the three
+;                       arms at 0xFC6FC3/0xFC6FD9, 0xFC71F0/0xFC7205, 0xFC7432/
+;                       0xFC7447 -- a per-resonator DETUNE in 1/256 semitone,
+;                       quantised to 13.28 cents and bounded to +1146/-675 cents
+;            GROUP off  literal 0x0000, from the three clearing arms
+;            otherwise  the static (p26<<8)+p27 / (p38<<8)+p39 that
+;                       Pack104_UnpackWaveSelRec_ToSubRecord writes when p25/p37
+;                       bit 7 is set
+;          ⚠ WHICH OF THE THREE SURVIVES depends on the order the unpacker and
+;          Pack104_DispatchByResoMode_ForPart run in, and that order is NOT
+;          established -- notes/FINDINGS-l7a1429-e093-block.md section 8.1.
+; GRADE: PROVEN for the reads and the additions (operands);
+;          notes/w24_e093_coupling_solver.py section 3.
 ; --------------------------------------------------------------------------
 Dev104_PackStagingStruct:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC4DBD  link XIZ,0xffee
@@ -8067,6 +8181,12 @@ Pack104_LoadElementWaveSelRec__FC6CA2:
 ;            P[+0x09] = the element index
 ;            P[+0x07] &= 0xFF8F      bits 6:4 <- 0    (the gate on chan+0x0300)
 ;            P[+0x12] = 0x0000 ; P[+0x14] = 0x0000
+; ★ WAVE 24: and those two zeros are not housekeeping -- they are the NOT-COUPLED
+;          case of the detune Pack104_SolveCoupledDetune computes for the GROUPed
+;          arms.  P[+0x12] and P[+0x14] are the second term of registers
+;          chan+0x0040 and chan+0x0080 (Dev104_PackStagingStruct 0xFC4DFA,
+;          0xFC4EA9), so clearing them says `these resonators do not pull each
+;          other'.  notes/FINDINGS-l7a1429-e093-block.md section 3.
 ;          and then PART[+0x11] = PART[+0x12] = 0x7F -- the two clamp limits the
 ;          packer applies to v1/v2 and to i3/i4, opened wide.
 ;          Unlike the three arms that SET a bit it reads no curve at all.
@@ -8122,6 +8242,12 @@ sub_FC6CA8__FC6CB8:
 ;            P[+0x09] = the element index
 ;            P[+0x07] &= 0xFF8F      bits 6:4 <- 0    (the gate on chan+0x0300)
 ;            P[+0x12] = 0x0000 ; P[+0x14] = 0x0000
+; ★ WAVE 24: and those two zeros are not housekeeping -- they are the NOT-COUPLED
+;          case of the detune Pack104_SolveCoupledDetune computes for the GROUPed
+;          arms.  P[+0x12] and P[+0x14] are the second term of registers
+;          chan+0x0040 and chan+0x0080 (Dev104_PackStagingStruct 0xFC4DFA,
+;          0xFC4EA9), so clearing them says `these resonators do not pull each
+;          other'.  notes/FINDINGS-l7a1429-e093-block.md section 3.
 ;          and then PART[+0x11] = PART[+0x12] = 0x7F -- the two clamp limits the
 ;          packer applies to v1/v2 and to i3/i4, opened wide.
 ;          Unlike the three arms that SET a bit it reads no curve at all.
@@ -8178,6 +8304,12 @@ sub_FC6CEA__FC6CFA:
 ;            P[+0x09] = the element index
 ;            P[+0x07] &= 0xFF8F      bits 6:4 <- 0    (the gate on chan+0x0300)
 ;            P[+0x12] = 0x0000 ; P[+0x14] = 0x0000
+; ★ WAVE 24: and those two zeros are not housekeeping -- they are the NOT-COUPLED
+;          case of the detune Pack104_SolveCoupledDetune computes for the GROUPed
+;          arms.  P[+0x12] and P[+0x14] are the second term of registers
+;          chan+0x0040 and chan+0x0080 (Dev104_PackStagingStruct 0xFC4DFA,
+;          0xFC4EA9), so clearing them says `these resonators do not pull each
+;          other'.  notes/FINDINGS-l7a1429-e093-block.md section 3.
 ;          and then PART[+0x11] = PART[+0x12] = 0x7F -- the two clamp limits the
 ;          packer applies to v1/v2 and to i3/i4, opened wide.
 ;          Unlike the three arms that SET a bit it reads no curve at all.
@@ -8220,7 +8352,7 @@ sub_FC6D2C__FC6D3C:
 ; Inputs:  frame `link XIZ,-34`; no positive frame slot is read
 ; Outputs: writes 0x00E093, 0x00E095
 ;          reads 0x00E082
-; Calls:   0xFC4269 = sub_FC4269
+; Calls:   0xFC4269 = Pack104_SolveCoupledDetune
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC6D6E-0xFC6FFC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8250,6 +8382,27 @@ sub_FC6D2C__FC6D3C:
 ; GRADE: PROVEN for the gate write and for the curve citation
 ;          (notes/w21_lsi_gate_and_keyscaling.py sections 4, 5 and 5b);
 ;          UNIDENTIFIED for the 0x00E093 block's meaning.
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★★ CORRECTED: 0x00E093 DOES HAVE A READER, and this arm calls it.  Four
+;          instructions after the last fill, the arm writes the block's two header
+;          words and passes its ADDRESS to Pack104_SolveCoupledDetune (0xFC4269):
+;            ld  (0x00e093),MODE      0x0200 here (4 elements) / 0x0400 (2)
+;            ld  (0x00e095),N         8 here / 4 -- TWICE the elements filled
+;            lda XBC,0x00e093 / push XBC / calr 0xfc4269
+;          So the address is never an operand at the reader, which is exactly why a
+;          census over ACCESS SHAPE saw eleven `lda` sites and called them writes.
+; WHAT THE ARM IS THEREFORE DOING: it is marshalling this part's GROUPed
+;          resonators -- gain, level and tuning for each element's MAIN and SUB --
+;          into a coupled-resonator DETUNE SOLVER, and reading the answer back into
+;          P[+0x12] and P[+0x14] (the loop after the call).  Those two fields are
+;          the second term of registers chan+0x0040 and chan+0x0080, so the whole
+;          arm exists to retune the resonators for their interaction.
+;          The three arms that CLEAR the GROUP field write those same two fields as
+;          zero instead, which is the firmware's own control for this reading.
+; GRADE: PROVEN for the call and for where the result lands
+;          (notes/w24_e093_coupling_solver.py sections 1, 2 and 3);
+;          see Pack104_SolveCoupledDetune's header for what it computes and
+;          notes/FINDINGS-l7a1429-e093-block.md for the decode.
 ; --------------------------------------------------------------------------
 sub_FC6D6E:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FC6D6E  link XIZ,0xffde
@@ -8497,7 +8650,7 @@ sub_FC6D6E__FC6FB1:
 ; Inputs:  frame `link XIZ,-34`; no positive frame slot is read
 ; Outputs: writes 0x00E093, 0x00E095
 ;          reads 0x00E082
-; Calls:   0xFC4269 = sub_FC4269
+; Calls:   0xFC4269 = Pack104_SolveCoupledDetune
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC6FFD-0xFC723E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8527,6 +8680,27 @@ sub_FC6D6E__FC6FB1:
 ; GRADE: PROVEN for the gate write and for the curve citation
 ;          (notes/w21_lsi_gate_and_keyscaling.py sections 4, 5 and 5b);
 ;          UNIDENTIFIED for the 0x00E093 block's meaning.
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★★ CORRECTED: 0x00E093 DOES HAVE A READER, and this arm calls it.  Four
+;          instructions after the last fill, the arm writes the block's two header
+;          words and passes its ADDRESS to Pack104_SolveCoupledDetune (0xFC4269):
+;            ld  (0x00e093),MODE      0x0200 here (4 elements) / 0x0400 (2)
+;            ld  (0x00e095),N         8 here / 4 -- TWICE the elements filled
+;            lda XBC,0x00e093 / push XBC / calr 0xfc4269
+;          So the address is never an operand at the reader, which is exactly why a
+;          census over ACCESS SHAPE saw eleven `lda` sites and called them writes.
+; WHAT THE ARM IS THEREFORE DOING: it is marshalling this part's GROUPed
+;          resonators -- gain, level and tuning for each element's MAIN and SUB --
+;          into a coupled-resonator DETUNE SOLVER, and reading the answer back into
+;          P[+0x12] and P[+0x14] (the loop after the call).  Those two fields are
+;          the second term of registers chan+0x0040 and chan+0x0080, so the whole
+;          arm exists to retune the resonators for their interaction.
+;          The three arms that CLEAR the GROUP field write those same two fields as
+;          zero instead, which is the firmware's own control for this reading.
+; GRADE: PROVEN for the call and for where the result lands
+;          (notes/w24_e093_coupling_solver.py sections 1, 2 and 3);
+;          see Pack104_SolveCoupledDetune's header for what it computes and
+;          notes/FINDINGS-l7a1429-e093-block.md for the decode.
 ; --------------------------------------------------------------------------
 sub_FC6FFD:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FC6FFD  link XIZ,0xffde
@@ -8742,7 +8916,7 @@ sub_FC6FFD__FC71DD:
 ; Inputs:  frame `link XIZ,-34`; no positive frame slot is read
 ; Outputs: writes 0x00E093, 0x00E095
 ;          reads 0x00E082
-; Calls:   0xFC4269 = sub_FC4269
+; Calls:   0xFC4269 = Pack104_SolveCoupledDetune
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC723F-0xFC7480
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -8772,6 +8946,27 @@ sub_FC6FFD__FC71DD:
 ; GRADE: PROVEN for the gate write and for the curve citation
 ;          (notes/w21_lsi_gate_and_keyscaling.py sections 4, 5 and 5b);
 ;          UNIDENTIFIED for the 0x00E093 block's meaning.
+; ★ WAVE 24 (lane w24/e093-block) ------------------------------------------
+; ★★ CORRECTED: 0x00E093 DOES HAVE A READER, and this arm calls it.  Four
+;          instructions after the last fill, the arm writes the block's two header
+;          words and passes its ADDRESS to Pack104_SolveCoupledDetune (0xFC4269):
+;            ld  (0x00e093),MODE      0x0200 here (4 elements) / 0x0400 (2)
+;            ld  (0x00e095),N         8 here / 4 -- TWICE the elements filled
+;            lda XBC,0x00e093 / push XBC / calr 0xfc4269
+;          So the address is never an operand at the reader, which is exactly why a
+;          census over ACCESS SHAPE saw eleven `lda` sites and called them writes.
+; WHAT THE ARM IS THEREFORE DOING: it is marshalling this part's GROUPed
+;          resonators -- gain, level and tuning for each element's MAIN and SUB --
+;          into a coupled-resonator DETUNE SOLVER, and reading the answer back into
+;          P[+0x12] and P[+0x14] (the loop after the call).  Those two fields are
+;          the second term of registers chan+0x0040 and chan+0x0080, so the whole
+;          arm exists to retune the resonators for their interaction.
+;          The three arms that CLEAR the GROUP field write those same two fields as
+;          zero instead, which is the firmware's own control for this reading.
+; GRADE: PROVEN for the call and for where the result lands
+;          (notes/w24_e093_coupling_solver.py sections 1, 2 and 3);
+;          see Pack104_SolveCoupledDetune's header for what it computes and
+;          notes/FINDINGS-l7a1429-e093-block.md for the decode.
 ; --------------------------------------------------------------------------
 sub_FC723F:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FC723F  link XIZ,0xffde
