@@ -173,6 +173,14 @@ def hi_op(f, mode):
     return True, "-P"                       # base 3: the missing subtract
 
 
+#  ★ 233 -- THE `SRC 0x00' MENU, IN ONE PLACE, AND IT IS SEVEN.
+#  `upd6383.cpp' grades its shipped reading "1 of 6 enumerated, no independent
+#  support"; the sixth is `tA' and the seventh -- 145's `coef' = C-RAM[cursor]
+#  -- sits in the `src08' menu beside it and was never enumerated for THIS code.
+#  Every published "1 of 6" for SRC 0x00 is therefore a statement about six.
+SRC00_MENU = ("mem", "P", "acc", "zero", "DR", "tA", "coef")
+
+
 class Machine(object):
     __slots__ = ("order", "act00", "sttime", "stgate", "op2", "wrap",
                  "act19", "src00", "src08", "src11", "dest07", "act0b", "f31hi",
@@ -338,9 +346,14 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
     elif src == 0x0B:
         bus = s24(st.dr)
     elif src == 0x00:
+        #  ★ 233: the menu is SEVEN.  145's `coef' (C-RAM[cursor]) sits in the
+        #  `src08' menu beside this one and was never enumerated for SRC 0x00,
+        #  so every published "1 of 6" for this code is a statement about six.
+        #  Widening the MENU changes no default: `mem' is still BASE's value.
         bus = {"mem": lambda: s24(st.mem[st.p]), "P": lambda: datum(st.P),
                "acc": lambda: datum(st.acc), "zero": lambda: 0,
-               "DR": lambda: s24(st.dr), "tA": lambda: s24(st.ta)}[m.src00]()
+               "DR": lambda: s24(st.dr), "tA": lambda: s24(st.ta),
+               "coef": lambda: s24(coef) if coef is not None else 0}[m.src00]()
     elif src == 0x08:
         bus = {"unity": lambda: MASK23, "zero": lambda: 0,
                "acc": lambda: datum(st.acc), "mem": lambda: s24(st.mem[st.p]),
