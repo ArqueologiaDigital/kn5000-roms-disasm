@@ -130,8 +130,8 @@ instruction class; the branch verifier had a latent false green); docs site de-c
   (`dd7c05a7`), the pre-registered device-arm prediction (`1bad13ad`, PREDICT_235), and an UNRUN
   grader (WIP commit). The device instrumentation is on `kn7000_mame` branch
   `wip/src11-device-arm`, compiled at 00:28 but never executed. Resume: `run_dsp_arm.sh`, arm A0
-  first; A1-A5 only if A0's regression row passes. ⚠ Check whether the PUBLISHED binary at
-  `~/compartilhado/kn7000-emulator/kn7000` is the 00:28 DSP-ON build; if so, rebuild DSP-off and
-  republish before anyone uses it for anything else.
+  first; A1-A5 only if A0's regression row passes. ✅ VERIFIED: the PUBLISHED binary at
+  `~/compartilhado/kn7000-emulator/kn7000` is the 14:19 DSP-OFF build (75,567,576 B), NOT the 00:28
+  DSP-on build (75,567,512 B) sitting in `kn7000_mame_build/`. Nothing to republish.
 
 Nothing was pushed anywhere. All four repos are clean on `main`.
