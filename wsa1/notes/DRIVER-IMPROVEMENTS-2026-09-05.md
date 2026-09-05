@@ -283,6 +283,20 @@ to the KN7000 investigation, not this driver).
 
 ---
 
+## Summary counts
+
+| machine | PROVEN | STRONG | WEAK | NEEDS-HARDWARE |
+|---|---:|---:|---:|---:|
+| KN5000 | 2 (K1, K2) | 0 | 5 (K3-K7) | 3 (PD.6, MICSNS, sub-SC1) |
+| SX-WSA1R | 0 | 1 (W1) | 1 (W2) | ~5 (W3 + panel SC1 / keybed-status-2 / P8.2 / 0xD7 / P9.3-timing) |
+
+Only two proposals materially change what the emulator does today, both KN5000: **K1**
+(flash) and **K2** (`0x150000`). The next-strongest is **W1** (a WSA1R DSP transport
+device), which is well-evidenced but low-urgency because the boot stall it once fixed is
+already gone. No WSA1R read handler returns an undocumented divergent constant — the
+three return-constant sites (`wsa1.cpp:1049`, `:2215`, `:2290`) are all deliberate and
+documented.
+
 ## Reproducibility / provenance
 
 No number here was newly measured; each is cited to a committed disassembly script or note:
