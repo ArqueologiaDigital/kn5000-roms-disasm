@@ -212,3 +212,24 @@ only) on top of the pinned `7a7a3fd6318b`; both build llvm-mc 35829d3c.
 * Then re-run mnemonic_census.py / encoding_selector_exposure.py and report the
   SYNTHETIC residue as a split (spec step 10 target: 147,842 -> ~76,175, and 7
   distinct synthetic names retired). NOT DONE THIS SESSION.
+
+## ✅✅ CONTINUED 2026-09-05 (Opus 4.8, session 2): STEP 10 DONE — CONVERGENCE COMPLETE
+
+The encoding-selector convergence (SPEC steps 0-10) is finished.
+* llvm-project `da00420dba8d` deletes the nine legacy aliases; `4d7fa4f6b37c`
+  updates the four MC tests. Branch tip is 4d7fa4f6 (binary-defining commit is
+  da00420). New llvm-mc **a7ee33d53676**, deterministic.
+* ⚠⚠ **PIN PROMOTED AGAIN**: snapshot + trailer are now
+  `LLVM: tlcs900_backend@da00420dba8d (da00420dba8da43f8d4a25051ddc4df6b37f257d)`.
+  Prior snapshots kept beside llvm-mc.snap. USE THIS TRAILER on all new disasm
+  commits.
+* disasm `0304dffc`: TOOLCHAIN_VERSION UPDATE 16 + two label-prefixed
+  `ldb w, 0x20` sites (v7/v9 extension_data.s) the line-start census missed,
+  now `ld w, 0x20:opc`. gate-all 13/13, TLCS900 lit 87/87, foils green (foil b
+  retired). Census: SYNTHETIC 136,863 -> 65,196 sites (-71,667), 6 names retired;
+  exposure Q1 zero for all seven families.
+
+**No step 11 — the selector work is closed.** The remaining SYNTHETIC residue
+(65,196 sites / 344 names) needs the OTHER backend features (feature B/C:
+stb_erp/ldb_erp PrevGR8, the (Xrr+256) sentinel, register-only form selectors)
+or is refused; those are separate efforts, not part of this spec.
