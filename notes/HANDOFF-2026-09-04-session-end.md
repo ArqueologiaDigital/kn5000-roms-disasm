@@ -135,3 +135,44 @@ instruction class; the branch verifier had a latent false green); docs site de-c
   DSP-on build (75,567,512 B) sitting in `kn7000_mame_build/`. Nothing to republish.
 
 Nothing was pushed anywhere. All four repos are clean on `main`.
+
+## ⚠ CONTINUED 2026-09-05 (Opus 4.8): STEPS 4 & 8 DONE, step 9 scoped
+
+Both repos clean on their canonical branches. Committed this stretch:
+
+* **kn5000-docs 34c2f1f** — mame-emulation-gaps.md Gap 4 CLOSED. The driver now
+  binds main-CPU Port G to PEDALS and returns Port E bit 0 = 0 with a card
+  fitted (kn5000.cpp, 2026-09-02); removed Gap 4, its two table rows, and the
+  stale Port-E-bit-0 boot-gate entry. The sub-CPU DRAM strap (Port G bit 0)
+  stayed -- still unimplemented; full port detail already on cpu-subsystem.md.
+* **llvm-project tlcs900_backend cc2c09c7376e** — the encoding-selector
+  ambiguity-guard foils (llvm/utils/tlcs900-ambiguity-foils.sh), a new commit
+  ON TOP of the pin 7a7a3fd6318b (which stays immutable in history; binary
+  unchanged). Foil c corrected: the :i3 selector is TWO parts (FormI3.AsmTail
+  spelling + immi3_8 operand class); removing the tail alone keeps the report
+  at 1 pair, so the original tail-only foil was malformed.
+* **kn5000-roms-disasm 9310fb7d** — STEP 4 (null run re-certified at the tip
+  7a7a3fd6318b, binary 35829d3c reproduced deterministically, gate-all 13/13
+  zero-delta on the unconverted tree) and STEP 8 (four foils red-then-green).
+  Harness notes/syntax-convergence-probes/encoding_selector_foils.py +
+  transcripts committed. Full record: TOOLCHAIN_VERSION UPDATE 15 STEPS 4 & 8.
+
+**Step 9 (source conversion) is NOT started and needs real work, not just a
+run:**
+* size_family_convert.py has the machinery (--family per-site byte-equality via
+  -show-encoding, FOILS null, latin-1) but only the `incm` family. The six
+  selector families are NOT in FAMILIES, and the example rows at lines ~160-176
+  are STALE pre-selector spellings (`cps a,4 -> cp a,4`, the LONG form, wrong
+  bytes) -- do NOT trust them; the per-site probe would reject them anyway.
+  Correct spellings from TOOLCHAIN_VERSION "Final syntax": cps->`:i3`, and the
+  ld families split `:i3` vs `:opc` by encoding -- VERIFY each against the
+  assembler before writing, do not guess the family->selector map.
+* ldio/ldwio are a RESHAPE not a rename (`ldio 7, 255` -> `ld (7:8), 255:io`),
+  need a PARSER + assert_comments_preserved.py.
+* Step 9 REQUIRES promoting the header pin to 7a7a3fd6318b / binary 35829d3c in
+  lockstep with the first converted commit (snapshot llvm-mc.snap + the header
+  Commit/Binary lines + the LLVM: trailer all move together). This is the
+  "coordinator's call" the spec names; there is no lane contention now.
+* Order (largest first): cps 19,261 -> lds 18,564 -> ldb 16,138 ->
+  lds32 14,239 -> ldio 2,354 -> ldwio 1,111. gate-all + null after each.
+  Then step 10: delete the nine aliases, re-run steps 4/5/6/8.
