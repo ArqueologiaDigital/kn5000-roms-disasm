@@ -1705,7 +1705,7 @@ AccompSeq_MidiFilterCodeBlock:
 	jr	34
 	.byte 0xc1
 	.ascii "y~! "
-	ldwio	200, 0xc981
+	ldw	(200:8), 0xc981:io
 	inc	6, wa
 	push	sr
 	dec	1, a

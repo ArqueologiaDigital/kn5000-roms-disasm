@@ -6867,7 +6867,7 @@ ArpQueue_Flush_Return:
 	.byte 0x09, 0x21, 0xcf
 SeqData_FormatOutput_Dispatch:
 	ld	(38266:16), 142
-	ldwio	35, 63435
+	ldw	(35:8), 63435:io
 	jrl	gt, 141
 	lda	xbc, (xsp+4)
 	lda	xix, (xbc+2)

@@ -27300,7 +27300,7 @@ HdaeRom_DataDispatch:
 	ld	xiy, xhl
 	.byte 0xaf, 0x06
 	sub	(xiy), l
-	ldwio	36, 0x9031
+	ldw	(36:8), 0x9031:io
 	nop
 	ldirw
 	.byte 0x85
@@ -27339,7 +27339,7 @@ HdaeRom_DataDispatch:
 	ld	xiy, xbc
 	.byte 0xaf, 0x06
 	sub	(xiy), l
-	ldwio	36, 0x4831
+	ldw	(36:8), 0x4831:io
 	nop
 	ldirw
 	ld	xbc, 470

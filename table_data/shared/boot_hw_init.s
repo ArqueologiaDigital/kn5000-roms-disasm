@@ -76,8 +76,8 @@
 	ldio 0x98, 0x05
 	ldio 0x99, 0x00
 	ldio 0x9F, 0x00
-	ldwio 0x90, 0x0001	; LDW (TREG4L:24), 0001h (ASL unsupported)
-	ldwio 0x92, 0x3D09	; LDW (TREG5L:24), 3d09h (ASL unsupported)
+	ldw (0x90:8), 0x0001:io	; LDW (TREG4L:24), 0001h (ASL unsupported)
+	ldw (0x92:8), 0x3D09:io	; LDW (TREG5L:24), 3d09h (ASL unsupported)
 	set_dd8 7, 0x9E
 	set_dd8 0, 0x9E
 

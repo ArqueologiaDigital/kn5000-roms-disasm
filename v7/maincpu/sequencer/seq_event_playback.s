@@ -620,19 +620,19 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	ldwio	2, 0
-	ldwio	4, 0
-	ldwio	1, 0
+	ldw	(2:8), 0:io
+	ldw	(4:8), 0:io
+	ldw	(1:8), 0:io
 	nop
 	nop
 	nop
 	nop
-	ldwio	3, 0
+	ldw	(3:8), 0:io
 	nop
 	nop
 	nop
 	nop
-	ldwio	5, 0
+	ldw	(5:8), 0:io
 	.zero 72
 	nop
 	nop
@@ -1074,7 +1074,7 @@ Voice_NoteChannelTable1:
 	push	sr
 	.byte 0x04
 	push	sr
-	ldwio	1, 260
+	ldw	(1:8), 260:io
 	incf
 	push	sr
 	nop
@@ -1645,7 +1645,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	ldwio	0, 0
+	ldw	(0:8), 0:io
 	.zero 18
 
 Voice_DecodeBankIndex:

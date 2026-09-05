@@ -1039,7 +1039,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	jr	pl, -106
 	push	xsp
 	incm8	6, (xwa)
-	ldwio	68, 0x9594
+	ldw	(68:8), 0x9594:io
 	nop
 	nop
 	ld	xiy, 0x95b4
@@ -2834,7 +2834,7 @@ MidiCC_ChannelMappingData:
 	nop
 	ldio	0, 9
 	nop
-	ldwio	0, 11
+	ldw	(0:8), 11:io
 	incf
 	nop
 	decf
@@ -2868,7 +2868,7 @@ MidiCC_ChannelMappingData:
 	.byte 0xb1
 	ldio	177, 9
 	.byte 0xb1
-	ldwio	177, 0xb10b
+	ldw	(177:8), 0xb10b:io
 	incf
 	.byte 0xb1
 	decf
@@ -2903,7 +2903,7 @@ MidiCC_ChannelMappingData:
 	.byte 0xb4
 	ldio	180, 9
 	.byte 0xb4
-	ldwio	180, 0xb40b
+	ldw	(180:8), 0xb40b:io
 	incf
 	.byte 0xb4
 	decf
@@ -2945,7 +2945,7 @@ MidiCC_ChannelMappingData:
 	nop
 	ldio	0, 9
 	nop
-	ldwio	0, 11
+	ldw	(0:8), 11:io
 	incf
 	nop
 	decf
@@ -3662,7 +3662,7 @@ FileData_RawDataBlock:
 	add	xbc, 32
 	ld	xiz, xbc
 	.byte 0xaf
-	ldwio	134, 6721
+	ldw	(134:8), 6721:io
 	nop
 	nop
 	nop
@@ -3684,7 +3684,7 @@ FileData_RawDataBlock:
 	.byte 0xe8, 0x81, 0xe9, 0xee, 0x02, 0xe9, 0x88, 0xe8, 0xc8, 0x20, 0x03, 0x00
 	.byte 0x00
 	.byte 0xaf
-	ldwio	128, 0xc8e9
+	ldw	(128:8), 0xc8e9:io
 	.byte 0xa4
 	push	sr
 	nop
@@ -3728,7 +3728,7 @@ FileData_RawDataBlock:
 	add	xbc, 874
 	ld	xiz, xbc
 	.byte 0xaf
-	ldwio	134, 6721
+	ldw	(134:8), 6721:io
 	nop
 	nop
 	nop
@@ -3798,7 +3798,7 @@ FileData_RawDataBlock:
 	.byte 0xbf
 	incf
 	push	sr
-	ldwio	0, 0x901d
+	ldw	(0:8), 0x901d:io
 	.byte 0xb4
 	swi	5
 	ld	wa, (xsp+12)
@@ -3949,7 +3949,7 @@ FileData_RawDataBlock:
 	.byte 0xe5
 	jr	gt, 3
 	ldw	bc, 0x611e
-	ldwio	175, 8206
+	ldw	(175:8), 8206:io
 	lda	xwa, (xwa+732)
 	ld	xbc, (xsp+4)
 	lda	xbc, (xbc+890)
@@ -14592,7 +14592,7 @@ SeqAlt_DescriptorBlock_Data:
 	cp	(xiz+9), l
 	jr	ugt, 59
 	.byte 0x8e
-	ldwio	247, 0x366b
+	ldw	(247:8), 0x366b:io
 	extz	hl
 	lda	xbc, (xsp+4)
 	ld	a, (xiz+6)
@@ -14626,7 +14626,7 @@ SeqAlt_DescriptorBlock_Data:
 	cp	(xiz+9), l
 	jr	ugt, 47
 	.byte 0x8e
-	ldwio	247, 0x2a6b
+	ldw	(247:8), 0x2a6b:io
 	ld	a, (xiz+14)
 	cp	a, 1:i3
 	jr	nc, 35
@@ -14655,7 +14655,7 @@ SeqAlt_DescriptorBlock_Data:
 	cp	(xiz+9), l
 	jrl	ugt, 169
 	.byte 0x8e
-	ldwio	247, 0xa37b
+	ldw	(247:8), 0xa37b:io
 	nop
 	ld	a, (xiz+14)
 	cp	a, 255
@@ -14733,7 +14733,7 @@ SeqAlt_DescriptorBlock_Data:
 	ld	(0x857b:16), 143
 	max
 	ld	c, 138:opc
-	ldwio	243, 0x7d6b
+	ldw	(243:8), 0x7d6b:io
 	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	ldb_erp l, 248
@@ -14790,7 +14790,7 @@ SeqAlt_DescriptorBlock_Data:
 	nop
 	ld	a, (xsp+8)
 	.byte 0x8e
-	ldwio	241, 0xaf7b
+	ldw	(241:8), 0xaf7b:io
 	nop
 	ld	a, (xiz+14)
 	cp	a, 1:i3
@@ -14870,7 +14870,7 @@ SeqAlt_DescriptorBlock_Data:
 	cp	(xiz+9), l
 	jr	ugt, 110
 	.byte 0x8e
-	ldwio	247, 0x696b
+	ldw	(247:8), 0x696b:io
 	ld	a, (xiz+14)
 	cp	a, 255
 	jr	z, 97

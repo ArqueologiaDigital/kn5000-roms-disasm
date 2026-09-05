@@ -8231,7 +8231,7 @@ SeMenu_EqEdit_DrawInit:
 	pushw	de
 	.byte 0x55
 	ld	b, 1:opc
-	ldwio	4, 0x4102
+	ldw	(4:8), 0x4102:io
 	pushw	de
 	push_a
 	nop
@@ -8245,7 +8245,7 @@ SeMenu_EqEdit_DrawInit:
 	pushw	de
 	ld	xbc, 0x152a4122
 	max
-	ldwio	20, 5130
+	ldw	(20:8), 5130:io
 	ld	b, 85:opc
 	pushw	de
 	max
@@ -12816,7 +12816,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	5
 	ldw (xsp+8), 0
 	.byte 0xbf
-	ldwio	2, 1
+	ldw	(2:8), 1:io
 	lda	xhl, (xsp+24)
 	ld	bc, (xwa+2)
 	ld	(xhl), bc
@@ -12863,7 +12863,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
-	ldwio	4, 8863
+	ldw	(4:8), 8863:io
 	ld	b, 30:opc
 	.byte 0xd3
 	swi	6
@@ -12915,7 +12915,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
-	ldwio	4, 8863
+	ldw	(4:8), 8863:io
 	ld	b, 30:opc
 	pop	xde
 	swi	6
@@ -12951,7 +12951,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
-	ldwio	4, 8863
+	ldw	(4:8), 8863:io
 	ld	b, 30:opc
 	reti
 	swi	6

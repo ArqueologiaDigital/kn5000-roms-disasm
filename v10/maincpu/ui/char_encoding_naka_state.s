@@ -42,7 +42,7 @@ CharEncoding_ExtendedHi:
 	.byte 0x1f, 0x00
 	.asciz "!!\"\"##$$"
 	nop
-	ldwio 255, 65300
+	ldw (255:8), 65300:io
 	nop
 	swi 7
 	nop

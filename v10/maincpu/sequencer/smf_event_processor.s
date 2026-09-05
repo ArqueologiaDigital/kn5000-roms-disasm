@@ -4513,7 +4513,7 @@ SeqStep_FileBufferFinal:
 	ldw (xsp+6), 0
 	.byte 0x9f, 0x06
 	push	xsp
-	ldwio	0, 0x3a69
+	ldw	(0:8), 0x3a69:io
 	ld	a, (xiz+22)
 	and	a, 3
 	cp	a, 3:i3
@@ -4539,7 +4539,7 @@ SeqStep_FileBufferFinal:
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x06
 	push	xsp
-	ldwio	0, 0xc661
+	ldw	(0:8), 0xc661:io
 	ld	hl, (xsp+4)
 	pop	xiz
 	inc	4, xsp
@@ -7094,10 +7094,10 @@ SeqByteBlock_ChannelContainer:
 	jr	nz, 17
 	.byte 0xbe
 	ei	2
-	ldwio	0, 0x3cf2
+	ldw	(0:8), 0x3cf2:io
 	.byte 0xe5, 0x01
 	push	sr
-	ldwio	0, 0xa8db
+	ldw	(0:8), 0xa8db:io
 	jrl	202
 	ld	xbc, (xiz+34)
 	ld	xwa, (xsp+24)
@@ -7114,7 +7114,7 @@ SeqByteBlock_ChannelContainer:
 	lda	xbc, (xbc+16)
 	ld	wa, (xsp+4)
 	.byte 0x9f
-	ldwio	240, 1391
+	ldw	(240:8), 1391:io
 	ld	wa, (xsp+4)
 	jr	3
 	ld	wa, (xsp+10)
@@ -7243,7 +7243,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xa8
 	ex_ff
 	sub	(0x286e:16), l
-	ldwio	32, 1688
+	ldw	(32:8), 1688:io
 	push	xsp
 	ld	c, 0:opc
 	jr	z, 30
@@ -7423,7 +7423,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xa8
 	ex_ff
 	sub	(4462:16), l
-	ldwio	32, 8872
+	ldw	(32:8), 8872:io
 	ld	w, 184:opc
 	ex_ff
 	.byte 0xb3
@@ -7671,7 +7671,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+16)
 	.byte 0x80
 	push	xsp
-	ldwio	110, 0xf510
+	ldw	(110:8), 0xf510:io
 	.byte 0xe8
 	nop
 	decf
@@ -7791,7 +7791,7 @@ SeqChan_ValidateAndDispatch:
 	.byte 0xbe
 	pop	sr
 	inc	6, l
-	ldwio	62, 0x331e
+	ldw	(62:8), 0x331e:io
 	.byte 0xf1
 	inc	4, xsp
 	cp	hl, 0:i3
@@ -7885,7 +7885,7 @@ SeqChan_TraverseAndProcess:
 	nop
 	.byte 0x9f, 0x04
 	push	xsp
-	ldwio	0, 0x3169
+	ldw	(0:8), 0x3169:io
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+5)
 	.byte 0x8e, 0x17, 0xf1
@@ -7909,7 +7909,7 @@ SeqChan_TraverseAndProcess:
 	push	sr
 	ldw	iz, 1183
 	push	xsp
-	ldwio	0, 0xcf61
+	ldw	(0:8), 0xcf61:io
 	ld	hl, (xsp+6)
 	pop	xiz
 	inc	4, xsp
@@ -8484,7 +8484,7 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
 	.byte 0x9f
-	ldwio	166, 5807
+	ldw	(166:8), 5807:io
 	ld	w, 152:opc
 	rcf
 	swi	6
@@ -8535,7 +8535,7 @@ SeqChan_ByteBlockE:
 	.byte 0x98
 	ldw	de, 0x67f1
 	.byte 0x8b, 0xbf
-	ldwio	2, 0
+	ldw	(2:8), 0:io
 	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
@@ -8615,7 +8615,7 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
 	.byte 0x9f
-	ldwio	166, 5807
+	ldw	(166:8), 5807:io
 	ld	w, 152:opc
 	rcf
 	swi	6
@@ -8666,7 +8666,7 @@ SeqChan_ByteBlockF:
 	.byte 0x98
 	ldw	de, 0x67f1
 	.byte 0x8b, 0xbf
-	ldwio	2, 0
+	ldw	(2:8), 0:io
 	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)

@@ -331,7 +331,7 @@ SLSrcBankList_FuncBody:
 	cp	xbc, 0x01c0000b
 	jrl	nz, 534
 	.byte 0xc1
-	ldwio	138, 63
+	ldw	(138:8), 63:io
 	jr	z, 15
 	ld	a, (0x89fc:16)
 	extz	wa
@@ -361,7 +361,7 @@ SLSrcBankList_FuncBody:
 	cp	xwa, 5
 	jrl	nz, 154
 	.byte 0xc1
-	ldwio	138, 63
+	ldw	(138:8), 63:io
 	jr	nz, 108
 	ld	xix, xbc
 	cp	xbc, 0x01c00017
@@ -2532,10 +2532,10 @@ SLDstBankList_FuncBody:
 	inc	1, a
 	.byte 0xc2
 	push_a
-	ldwio	234, 0x6ff1
+	ldw	(234:8), 0x6ff1:io
 	jr	ge, -62
 	ccf
-	ldwio	234, 0xcd25
+	ldw	(234:8), 0xcd25:io
 	.byte 0x89
 	add	a, e
 	cp	c, a

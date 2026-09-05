@@ -34,11 +34,11 @@ FlashWrite_BlockHandler_Table:
 	.long FlashWrite_BlockRef_Type6
 FlashWrite_BlockData_Type0:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw	2
-	ldwio	98, 0xff06
+	ldw	(98:8), 0xff06:io
 	nop
 	ld	w, 100:opc
 	decf
@@ -50,13 +50,13 @@ FlashWrite_BlockData_Type0:
 	ld	w, 187:opc
 	retd	2
 	nop
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 20:opc
 	ccf
 	push	sr
 	nop
-	ldwio	101, 0xff06
+	ldw	(101:8), 0xff06:io
 	nop
 	ld	w, 107:opc
 	push_a
@@ -82,28 +82,28 @@ FlashWrite_BlockData_Type1:
 	nop
 FlashWrite_BlockData_Type2:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	.byte 0x0b
 	push	sr
 FlashRead_BlockData_Field2:
 	nop
-	ldwio	98, 0xff06
+	ldw	(98:8), 0xff06:io
 	nop
 	ld	w, 100:opc
 	decf
 	push	sr
 FlashRead_BlockData_Field3:
 	nop
-	ldwio	99, 0xff06
+	ldw	(99:8), 0xff06:io
 	nop
 	ld	w, 188:opc
 	.byte 0x0f
 	push	sr
 FlashRead_BlockData_Field4:
 	nop
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 20:opc
 	ccf
@@ -119,7 +119,7 @@ FlashRead_BlockData_Field5:
 	nop
 FlashRead_BlockData_Field6:
 	nop
-	ldwio 102, 65286
+	ldw (102:8), 65286:io
 	nop
 	ld	w, 196:opc
 	ex_ff
@@ -136,11 +136,11 @@ FlashRead_BlockHandler_Table:
 	.long FlashRead_BlockData_Field8
 FlashWrite_BlockData_Type3:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw 2
-	ldwio 98, 65286
+	ldw (98:8), 65286:io
 	nop
 	ld	w, 100:opc
 	decf
@@ -180,21 +180,21 @@ FlashWrite_BlockRef_Type3:
 	nop
 FlashWrite_BlockData_Type4:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw	2
-	ldwio	98, 0xff06
+	ldw	(98:8), 0xff06:io
 	nop
 	ld	w, 100:opc
 	decf
 	push	sr
 	nop
-	ldwio	99, 0xff06
+	ldw	(99:8), 0xff06:io
 	nop
 	ld	w, 188:opc
 	retd	2
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 20:opc
 	ccf
@@ -220,7 +220,7 @@ FlashWrite_BlockRef_Type4:
 	nop
 FlashWrite_BlockData_Type5:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw	1282
@@ -238,7 +238,7 @@ FlashWrite_BlockData_Type5:
 	ld	w, 187:opc
 	retd	2
 	nop
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 19:opc
 	ccf
@@ -272,7 +272,7 @@ FlashWrite_BlockData_Type6:
 	decf
 	push	sr
 	nop
-	ldwio	99, 0xff06
+	ldw	(99:8), 0xff06:io
 	nop
 	ld	w, 187:opc
 	.byte 0x0f
@@ -456,17 +456,17 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x04
 	nop
 	ld	xix, 0x9001000
-	ldwio	11, 7680
+	ldw	(11:8), 7680:io
 	nop
 	push	xiy
 	nop
 	ldw	hl, 2304
-	ldwio	13, 8192
+	ldw	(13:8), 8192:io
 	nop
 	push	xhl
 	nop
 	ldw	bc, 2304
-	ldwio	163, 0x3900
+	ldw	(163:8), 0x3900:io
 	nop
 	ldw	ix, 0x5901
 	nop
@@ -525,7 +525,7 @@ FlashWrite_BlockRef_Type6:
 	.byte 0xec
 	nop
 	.byte 0x01
-	ldwio	125, 0xe300
+	ldw	(125:8), 0xe300:io
 	nop
 	.byte 0x9a
 	nop
@@ -643,7 +643,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	ld	xsp, 0x50554f52
 	.byte 0x17
-	ldwio	88, 0xd100
+	ldw	(88:8), 0xd100:io
 	nop
 	.byte 0x54
 	popw	sp
@@ -722,7 +722,7 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x04
 	nop
 	ld	xix, 0x9001000
-	ldwio	18, 7681
+	ldw	(18:8), 7681:io
 	nop
 	ldw	iy, 0x3101
 	nop
@@ -761,7 +761,7 @@ FlashWrite_BlockRef_Type6:
 	ldw	iy, 0xaa01
 	nop
 	push	10
-	ldwio	0, 181
+	ldw	(0:8), 181:io
 	jr	nz, 0
 	.byte 0xca
 	nop
@@ -794,7 +794,7 @@ FlashWrite_BlockRef_Type6:
 	ldw	bc, 0xda00
 	nop
 	ld	xiz, 0x2200ee00
-	ldwio	89, 0xda00
+	ldw	(89:8), 0xda00:io
 	nop
 	jr	nz, 0
 	.byte 0xee
@@ -841,78 +841,78 @@ FlashWrite_BlockRef_Type6:
 	ldw	iz, 0xee01
 	nop
 	.byte 0x01
-	ldwio	11, 0x6f00
+	ldw	(11:8), 0x6f00:io
 	nop
 	ldw	iy, 0x6f01
 	nop
 	.byte 0x01
-	ldwio	11, 0x8c00
+	ldw	(11:8), 0x8c00:io
 	nop
 	pop_f
 	.byte 0x01, 0x8c
 	nop
 	.byte 0x01
-	ldwio	9, 0xe400
+	ldw	(9:8), 0xe400:io
 	nop
 	calr	58368
 	nop
 	.byte 0x01
-	ldwio	49, 0xe400
+	ldw	(49:8), 0xe400:io
 	nop
 	ld	xiz, 0x100e400
-	ldwio	89, 0xe400
+	ldw	(89:8), 0xe400:io
 	nop
 	jr	nz, 0
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	129, 0xe400
+	ldw	(129:8), 0xe400:io
 	nop
 	.byte 0x96
 	nop
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	169, 0xe400
+	ldw	(169:8), 0xe400:io
 	nop
 	.byte 0xbe
 	nop
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	209, 0xe400
+	ldw	(209:8), 0xe400:io
 	nop
 	.byte 0xe6
 	nop
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	249, 0xe400
+	ldw	(249:8), 0xe400:io
 	nop
 	ret
 	.byte 0x01, 0xe4
 	nop
 	.byte 0x01
-	ldwio	33, 0xe401
+	ldw	(33:8), 0xe401:io
 	nop
 	ldw	iz, 0xe401
 	nop
 	push	sr
-	ldwio	56, 0x5e00
+	ldw	(56:8), 0x5e00:io
 	nop
 	push	xwa
 	nop
 	.byte 0xaa
 	nop
 	push	sr
-	ldwio	157, 0x5e00
+	ldw	(157:8), 0x5e00:io
 	nop
 	.byte 0x9d
 	nop
 	.byte 0xaa
 	nop
 	push	sr
-	ldwio	25, 0x5e01
+	ldw	(25:8), 0x5e01:io
 	nop
 	pop_f
 	.byte 0x01, 0xaa
@@ -922,7 +922,7 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x01, 0xa8
 	nop
 	halt
-	ldwio	25, 0x7101
+	ldw	(25:8), 0x7101:io
 	nop
 	ldw	hl, 0xa801
 	nop
@@ -1607,7 +1607,7 @@ Flash_InitBytecodeBlock:
 	.byte 0x8f
 	incf
 	push	xsp
-	ldwio	127, 349
+	ldw	(127:8), 349:io
 	calr	5349
 	ld	a, (xsp+10)
 	extz	wa
@@ -1811,7 +1811,7 @@ Flash_InitBytecodeBlock:
 	or	xwa, xwa
 	pop_f
 	add	(xix+57), xsp
-	ldwio	33, 4824
+	ldw	(33:8), 4824:io
 	add	bc, wa
 	.byte 0xc3
 	reti
@@ -1869,7 +1869,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	jr	12
 	.byte 0x8f
-	ldwio	25, 3178
+	ldw	(25:8), 3178:io
 	.byte 0x8f, 0x06
 	pop_f
 	jr	nov, 12
@@ -1888,7 +1888,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	jr	12
 	.byte 0x8f
-	ldwio	25, 3178
+	ldw	(25:8), 3178:io
 	.byte 0x8f, 0x06
 	pop_f
 	jr	nov, 12
@@ -2098,7 +2098,7 @@ PartGrid_OperationsBlock:
 	.byte 0x8f
 	incf
 	push	xde
-	ldwio 143, 8460
+	ldw (143:8), 8460:io
 	extz	wa
 	div	a, 3
 	ld	(xsp+12), w
@@ -3268,7 +3268,7 @@ Flash_ExtendedOpsBlock:
 	cp w, 0:i3
 	jr z, 5
 	.byte 0x8f
-	ldwio	240, 0x2f6e
+	ldw	(240:8), 0x2f6e:io
 	ldb_erp	e, 240
 	extz	ix
 	sla	ix, 2
@@ -3316,7 +3316,7 @@ Flash_ExtendedOpsBlock:
 	cp w, b
 	jr	ule, 9
 	.byte 0x8f
-	ldwio	240, 1126
+	ldw	(240:8), 1126:io
 	ld	b, w
 	ld	d, c
 	inc	1, c

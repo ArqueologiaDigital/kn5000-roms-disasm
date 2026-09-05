@@ -572,7 +572,7 @@ DSPCfg_SyncBitmapData:
 	jr	c, 22
 	extz	xbc
 	.byte 0xaf
-	ldwio	129, 177
+	ldw	(129:8), 177:io
 	swi	7
 	push	xde
 	push	xhl
@@ -588,17 +588,17 @@ DSPCfg_SyncBitmapData:
 	inc	1, bc
 	extz	xde
 	.byte 0xaf
-	ldwio	130, 1167
+	ldw	(130:8), 1167:io
 	ld	a, 178:opc
 	ld	xbc, 0x61d98ad9
 	extz	xde
 	.byte 0xaf
-	ldwio	130, 1679
+	ldw	(130:8), 1679:io
 	ld	a, 178:opc
 	ld	xbc, 0x61d98ad9
 	extz	xde
 	.byte 0xaf
-	ldwio	130, 8582
+	ldw	(130:8), 8582:io
 	ld	(xde), a
 	ld	xwa, (xsp+18)
 	ld	e, (xwa)
@@ -607,7 +607,7 @@ DSPCfg_SyncBitmapData:
 	inc	1, bc
 	extz	xwa
 	.byte 0xaf
-	ldwio	128, 0x45b0
+	ldw	(128:8), 0x45b0:io
 	incm8	1, (xsp+6)
 	decm8	1, (xsp+8)
 	inc	1, xiz

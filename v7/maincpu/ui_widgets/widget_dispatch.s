@@ -2190,7 +2190,7 @@ DisplayScript_Node_AnimStep07_13:
 	jrl -4554
 	nop
 	pop sr
-	ldwio 120, 60982
+	ldw (120:8), 60982:io
 	nop
 	normal
 	call 15614146

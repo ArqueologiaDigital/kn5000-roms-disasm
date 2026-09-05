@@ -688,7 +688,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	jrl	le, -1337
 	cp	(xbc-57), xhl
 	cp	(xwa-57), xde
@@ -784,7 +784,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	push	xde
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -837,7 +837,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	iy
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -1006,7 +1006,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	ix
 	.byte 0x87
 	push	xsp
@@ -1137,7 +1137,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	iy
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -1295,7 +1295,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	iz
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -1694,7 +1694,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	iy
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -1752,7 +1752,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	push	xde
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -1805,7 +1805,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	iy
 	lda	xwa, (xsp+2)
 	call	SeMenu_ValidatePartNumber
@@ -2012,7 +2012,7 @@ SeMenu_AltUpdate_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	jrl	f, 8971
 	nop
 	ld	wa, 0:i3
@@ -2091,7 +2091,7 @@ SeMenu_AltUpdate_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	jr	mi, -65
 	push	sr
 	ldw	wa, 0x3a1d
@@ -2180,7 +2180,7 @@ SeMenu_AltUpdate_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	jr	mi, -65
 	push	sr
 	ldw	wa, 0x3a1d
@@ -2586,7 +2586,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+10)
 	call	SeMenu_ReadObjData
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pushw	de
 	ld	wa, 1:i3
 	call	SeMenu_SetDisplayState
@@ -5319,7 +5319,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+6)
 	.byte 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	ldw	hl, 0x6c1d
 	jrl	lt, -14352
 	swi	3
@@ -8601,7 +8601,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	e, 209:opc
 	.byte 0xc6, 0x06
 	ld	w, 201:opc
-	ldwio	8, 0xd0c8
+	ldw	(8:8), 0xd0c8:io
 	ld	hl, (1736:16)
 	mul	l, 40
 	add	hl, wa
@@ -10544,7 +10544,7 @@ SeMenu_EqEdit_DrawInit:
 	pushw	de
 	.byte 0x55
 	ld	b, 1:opc
-	ldwio	4, 0x4102
+	ldw	(4:8), 0x4102:io
 	pushw	de
 	push_a
 	nop
@@ -10558,7 +10558,7 @@ SeMenu_EqEdit_DrawInit:
 	pushw	de
 	ld	xbc, 0x152a4122
 	max
-	ldwio	20, 5130
+	ldw	(20:8), 5130:io
 	ld	b, 85:opc
 	pushw	de
 	max
@@ -11083,7 +11083,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x22, 0x0a, 0xae, 0x00, 0x3e, 0x00, 0x34, 0x01, 0x63
 	.byte 0x00
 	.byte 0x01
-	ldwio	15, 0x4100
+	ldw	(15:8), 0x4100:io
 	nop
 	.byte 0xae
 	nop
@@ -11108,11 +11108,11 @@ SeBitmap_EnvCurve5:
 	ld	a, 179:opc
 	call	0x620523
 	.byte 0xea
-	ldwio	35, 0x6405
+	ldw	(35:8), 0x6405:io
 	.byte 0xa2
 	scf
 	ld	c, 5:opc
-	ldwio	146, 8983
+	ldw	(146:8), 8983:io
 	halt
 	pop	xsp
 	or	(0x0a1b1d:24), ix
@@ -11280,7 +11280,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x91
 	pushw	3
-	ldwio	0, 3075
+	ldw	(0:8), 3075:io
 	ld	d, 12:opc
 	.byte 0xf1
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11402-0xF11419 (23 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=73% dist=11 near SeBitmap_EnvCurve5_0x40B+41
@@ -11339,7 +11339,7 @@ SeBitmap_EnvCurve5:
 	pushw	iz
 	nop
 	halt
-	ldwio	8, 8448
+	ldw	(8:8), 8448:io
 	nop
 	pushw	wa
 	nop
@@ -11456,7 +11456,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x04
 	nop
 	ld	xix, 0x09001000
-	ldwio	4, 0x4201
+	ldw	(4:8), 0x4201:io
 	nop
 	ldw	ix, 0x6001
 	nop
@@ -11471,21 +11471,21 @@ SeBitmap_EnvCurve5:
 	.byte 0xe9
 	nop
 	.byte 0x01
-	ldwio	69, 0xdb00
+	ldw	(69:8), 0xdb00:io
 	nop
 	swi	3
 	nop
 	.byte 0xdb
 	nop
 	push	sr
-	ldwio	156, 0xcc00
+	ldw	(156:8), 0xcc00:io
 	nop
 	.byte 0x9c
 	nop
 	.byte 0xe9
 	nop
 	halt
-	ldwio	70, 0xdc00
+	ldw	(70:8), 0xdc00:io
 	nop
 	.long NakaInst_LEFT_0x04
 	ld	c, 5:opc
@@ -11580,7 +11580,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ld	xsp, 0x50554f52
 	.byte 0x17
-	ldwio	88, 0xd100
+	ldw	(88:8), 0xd100:io
 	nop
 	.byte 0x54
 	popw	sp
@@ -11661,27 +11661,27 @@ SeBitmap_EnvCurve5:
 	ldw	iz, 0xee01
 	nop
 	.byte 0x01
-	ldwio	11, 0x4700
+	ldw	(11:8), 0x4700:io
 	nop
 	ldw	iy, 0x4701
 	nop
 	.byte 0x01
-	ldwio	11, 0x6700
+	ldw	(11:8), 0x6700:io
 	nop
 	ldw	iy, 0x6701
 	nop
 	.byte 0x01
-	ldwio	11, 0x8700
+	ldw	(11:8), 0x8700:io
 	nop
 	ldw	iy, 0x8701
 	nop
 	.byte 0x01
-	ldwio	11, 0xa700
+	ldw	(11:8), 0xa700:io
 	nop
 	ldw	iy, 0xa701
 	nop
 	.byte 0x01
-	ldwio	9, 0xe400
+	ldw	(9:8), 0xe400:io
 	nop
 	calr	58368
 	nop
@@ -11692,32 +11692,32 @@ SeBitmap_EnvCurve5:
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	209, 0xe400
+	ldw	(209:8), 0xe400:io
 	nop
 	.byte 0xe6
 	nop
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	249, 0xe400
+	ldw	(249:8), 0xe400:io
 	nop
 	ret
 	.byte 0x01, 0xe4
 	nop
 	.byte 0x01
-	ldwio	33, 0xe401
+	ldw	(33:8), 0xe401:io
 	nop
 	ldw	iz, 0xe401
 	nop
 	push	sr
-	ldwio	60, 0x3600
+	ldw	(60:8), 0x3600:io
 	nop
 	push	xix
 	nop
 	.byte 0xc7
 	nop
 	push	sr
-	ldwio	188, 0x3600
+	ldw	(188:8), 0x3600:io
 	nop
 	.byte 0xbc
 	nop
@@ -11769,7 +11769,7 @@ SeBitmap_EnvCurve5:
 	incf
 	pop	sr
 	nop
-	ldwio	0, 3075
+	ldw	(0:8), 3075:io
 	ld	d, 12:opc
 	.byte 0xf1
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF117DD-0xF117F4 (23 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=82% dist=10 near SeBitmap_EnvCurve5_0x7E6+41
@@ -11888,7 +11888,7 @@ SeBitmap_EnvCurve5:
 	incf
 	pop	sr
 	nop
-	ldwio	0, 3075
+	ldw	(0:8), 3075:io
 	.byte 0x96
 	incf
 	.byte 0xf1
@@ -11908,7 +11908,7 @@ SeBitmap_EnvCurve5:
 	scf
 	pop	sr
 	nop
-	ldwio	0, 3075
+	ldw	(0:8), 3075:io
 	.byte 0x96
 	incf
 	.byte 0xf1
@@ -12120,7 +12120,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xee
 	nop
 	.byte 0x01
-	ldwio	179, 0x4100
+	ldw	(179:8), 0x4100:io
 	nop
 	swi	3
 	nop
@@ -12133,40 +12133,40 @@ SeBitmap_EnvCurve5:
 	popw	de
 	nop
 	.byte 0x01
-	ldwio	179, 0x6900
+	ldw	(179:8), 0x6900:io
 	nop
 	swi	3
 	nop
 	jr	ge, 0
 	.byte 0x01
-	ldwio	11, 0x6a00
+	ldw	(11:8), 0x6a00:io
 	nop
 	.byte 0xa8
 	nop
 	jr	gt, 0
 	.byte 0x01
-	ldwio	11, 0x8a00
+	ldw	(11:8), 0x8a00:io
 	nop
 	.byte 0xa8
 	nop
 	.byte 0x8a
 	nop
 	.byte 0x01
-	ldwio	179, 0x9100
+	ldw	(179:8), 0x9100:io
 	nop
 	swi	3
 	nop
 	.byte 0x91
 	nop
 	.byte 0x01
-	ldwio	11, 0xaa00
+	ldw	(11:8), 0xaa00:io
 	nop
 	.byte 0xa8
 	nop
 	.byte 0xaa
 	nop
 	.byte 0x01
-	ldwio	179, 0xb900
+	ldw	(179:8), 0xb900:io
 	nop
 	swi	3
 	nop
@@ -12176,13 +12176,13 @@ SeBitmap_EnvCurve5:
 	.long Pad_NakaExternal_Block2
 	.long Pad_NakaExternal_Block3
 	.byte 0x01
-	ldwio	89, 0xe400
+	ldw	(89:8), 0xe400:io
 	nop
 	jr	nz, 0
 	.byte 0xe4
 	nop
 	.byte 0x01
-	ldwio	129, 0xe400
+	ldw	(129:8), 0xe400:io
 	nop
 	.long NakaData_ExternalPadBlock_A
 	.byte 0x01, 0x0a, 0xd1
@@ -12191,14 +12191,14 @@ SeBitmap_EnvCurve5:
 	.byte 0xe4
 	nop
 	push	sr
-	ldwio	44, 0x3300
+	ldw	(44:8), 0x3300:io
 	nop
 	pushw	ix
 	nop
 	.byte 0xca
 	nop
 	halt
-	ldwio	6, 0x4301
+	ldw	(6:8), 0x4301:io
 	nop
 	ldw	de, 0x5c01
 	nop
@@ -12209,7 +12209,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.ascii "START PITCH"
 	.byte 0x17
-	ldwio	146, 0xb200
+	ldw	(146:8), 0xb200:io
 	nop
 	.byte 0x53, 0x54
 	popw	sp
@@ -12229,7 +12229,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ld	xix, 0x48545045
 	push	sr
-	ldwio	213, 0xae00
+	ldw	(213:8), 0xae00:io
 	nop
 	.byte 0xd5
 	nop
@@ -12271,19 +12271,19 @@ SeBitmap_EnvCurve5:
 	ld	xbc, 0x5e013400
 	nop
 	.byte 0x01
-	ldwio	32, 0x3d01
+	ldw	(32:8), 0x3d01:io
 	nop
 	ld	l, 1:opc
 	push	xiy
 	nop
 	.byte 0x01
-	ldwio	33, 0x3e01
+	ldw	(33:8), 0x3e01:io
 	nop
 	ld	h, 1:opc
 	push	xiz
 	nop
 	.byte 0x01
-	ldwio	34, 0x3f01
+	ldw	(34:8), 0x3f01:io
 	nop
 	ld	e, 1:opc
 	push	xsp
@@ -12297,17 +12297,17 @@ SeBitmap_EnvCurve5:
 	.ascii "LF0 "
 	scf
 	.byte 0x01
-	ldwio	34, 0x6001
+	ldw	(34:8), 0x6001:io
 	nop
 	ld	e, 1:opc
 	jr	f, 0
 	.byte 0x01
-	ldwio	33, 0x6101
+	ldw	(33:8), 0x6101:io
 	nop
 	ld	h, 1:opc
 	jr	lt, 0
 	.byte 0x01
-	ldwio	32, 0x6201
+	ldw	(32:8), 0x6201:io
 	nop
 	ld	l, 1:opc
 	jr	le, 0
@@ -12331,7 +12331,7 @@ SeBitmap_EnvCurve5:
 	ld	xiz, 0x6c010600
 	nop
 	.byte 0x01
-	ldwio	214, 0x5a00
+	ldw	(214:8), 0x5a00:io
 	nop
 	.byte 0xe0
 	nop
@@ -12354,7 +12354,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x8c
 	nop
 	.byte 0x01
-	ldwio	214, 0x7a00
+	ldw	(214:8), 0x7a00:io
 	nop
 	.byte 0xe0
 	nop
@@ -12368,13 +12368,13 @@ SeBitmap_EnvCurve5:
 	.byte 0xbb
 	nop
 	.ascii "CURVE\""
-	ldwio	224, 0x8600
+	ldw	(224:8), 0x8600:io
 	nop
 	ei	1
 	.byte 0xac
 	nop
 	.byte 0x01
-	ldwio	214, 0x9a00
+	ldw	(214:8), 0x9a00:io
 	nop
 	.byte 0xe0
 	nop
@@ -12392,13 +12392,13 @@ SeBitmap_EnvCurve5:
 	.byte 0xdb
 	nop
 	.ascii "CURVE\""
-	ldwio	224, 0xa600
+	ldw	(224:8), 0xa600:io
 	nop
 	ei	1
 	.byte 0xcc
 	nop
 	.byte 0x01
-	ldwio	214, 0xba00
+	ldw	(214:8), 0xba00:io
 	nop
 	.byte 0xe0
 	nop
@@ -12417,7 +12417,7 @@ SeBitmap_EnvCurve5:
 	ld	xiz, 0x6c00ce00
 	nop
 	.byte 0x01
-	ldwio	158, 0x5a00
+	ldw	(158:8), 0x5a00:io
 	nop
 	.byte 0xa8
 	nop
@@ -12444,7 +12444,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x8c
 	nop
 	.byte 0x01
-	ldwio	158, 0x7a00
+	ldw	(158:8), 0x7a00:io
 	nop
 	.byte 0xa8
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11E53-0xF11E76 (35 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=74% dist=11 near SeBitmap_EnvCurve5_0xD8C+249
@@ -12510,38 +12510,38 @@ SeBitmap_EnvCurve5:
 	.byte 0xee
 	nop
 	.byte 0x01
-	ldwio	11, 0x4a00
+	ldw	(11:8), 0x4a00:io
 	nop
 	.byte 0xd4
 	nop
 	popw	de
 	nop
 	.byte 0x01
-	ldwio	11, 0x6a00
+	ldw	(11:8), 0x6a00:io
 	nop
 	.byte 0xd4
 	nop
 	jr	gt, 0
 	.byte 0x01
-	ldwio	11, 0x8a00
+	ldw	(11:8), 0x8a00:io
 	nop
 	.byte 0xd4
 	nop
 	.byte 0x8a
 	nop
 	.byte 0x01
-	ldwio	11, 0xaa00
+	ldw	(11:8), 0xaa00:io
 	nop
 	.byte 0xd4
 	nop
 	.byte 0xaa
 	nop
 	.byte 0x01
-	ldwio	81, 0xe400
+	ldw	(81:8), 0xe400:io
 	nop
 	.long NakaData_ExternalBase_0x66
 	.byte 0x01
-	ldwio	129, 0xe400
+	ldw	(129:8), 0xe400:io
 	nop
 	.byte 0x96
 	nop
@@ -12551,14 +12551,14 @@ SeBitmap_EnvCurve5:
 	.long NakaData_ExternalPadBlock_B
 	.long Pad_BeforeNakaData_UserMemoryConfig
 	push	sr
-	ldwio	46, 0x3500
+	ldw	(46:8), 0x3500:io
 	nop
 	pushw	iz
 	nop
 	.byte 0xca
 	nop
 	halt
-	ldwio	22, 0x4301
+	ldw	(22:8), 0x4301:io
 	nop
 	ldw	de, 0x5c01
 	nop
@@ -12573,23 +12573,23 @@ SeBitmap_EnvCurve5:
 	swi	7
 	nop
 	jrl	gt, 256
-	ldwio	82, 0xdb00
+	ldw	(82:8), 0xdb00:io
 	nop
 	.byte 0xeb
 	nop
 	.byte 0xdb
 	nop
 	push	sr
-	ldwio	119, 0xcd00
+	ldw	(119:8), 0xcd00:io
 	nop
 	.long Bitmap_TechnichordBackground_1
 	halt
-	ldwio	22, 0x4301
+	ldw	(22:8), 0x4301:io
 	nop
 	ldw	de, 0x5c01
 	nop
 	halt
-	ldwio	83, 0xdc00
+	ldw	(83:8), 0xdc00:io
 	nop
 	.byte 0xea
 	nop
@@ -12607,7 +12607,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.ascii "LEVEL KEY FOLLOW"
 	.byte 0x01
-	ldwio	47, 0x6100
+	ldw	(47:8), 0x6100:io
 	nop
 	swi	7
 	nop
@@ -12625,7 +12625,7 @@ SeBitmap_EnvCurve5:
 	jrl	nc, 12288
 	nop
 	.ascii "ENVELOPE\""
-	ldwio	50, 0x3a00
+	ldw	(50:8), 0x3a00:io
 	nop
 	.byte 0x01, 0x01, 0x91
 	nop
@@ -12690,16 +12690,16 @@ SeBitmap_EnvCurve5:
 	nop
 	.long NakaInst_2d_d
 	.byte 0x01
-	ldwio	3, 0xd900
+	ldw	(3:8), 0xd900:io
 	nop
 	call	0xd901
 	halt
-	ldwio	4, 0xda00
+	ldw	(4:8), 0xda00:io
 	nop
 	.byte 0x1c, 0x01, 0xe7
 	nop
 	halt
-	ldwio	22, 9985
+	ldw	(22:8), 9985:io
 	nop
 	ldw	de, 0x3401
 	nop
@@ -12836,20 +12836,20 @@ SeBitmap_EnvCurve5:
 	swi	7
 	nop
 	jrl	gt, 2304
-	ldwio	237, 0xcd00
+	ldw	(237:8), 0xcd00:io
 	nop
 	push	xiy
 	.byte 0x01, 0xe9
 	nop
 	.byte 0x01
-	ldwio	3, 0xda00
+	ldw	(3:8), 0xda00:io
 	nop
 	.byte 0xe6
 	nop
 	.byte 0xda
 	nop
 	.byte 0x01
-	ldwio	237, 0xda00
+	ldw	(237:8), 0xda00:io
 	nop
 	push	xiy
 	.byte 0x01, 0xda
@@ -12862,13 +12862,13 @@ SeBitmap_EnvCurve5:
 	.byte 0xe8
 	nop
 	halt
-	ldwio	238, 0xdb00
+	ldw	(238:8), 0xdb00:io
 	nop
 	push	xix
 	.byte 0x01, 0xe8
 	nop
 	.byte 0x01
-	ldwio	47, 0x6100
+	ldw	(47:8), 0x6100:io
 	nop
 	swi	7
 	nop
@@ -12907,7 +12907,7 @@ SeBitmap_EnvCurve5:
 	scf
 	ei	7
 	.byte 0xea
-	ldwio	70, 0x4c49
+	ldw	(70:8), 0x4c49:io
 	ei	5
 	.byte 0xdf
 	pushw	1553
@@ -12919,7 +12919,7 @@ SeBitmap_EnvCurve5:
 	scf
 	popw	ix
 	ld	xiz, 0x09112030
-	ldwio	20, 9473
+	ldw	(20:8), 9473:io
 	nop
 	ldw	ix, 0x3601
 	nop
@@ -12935,35 +12935,35 @@ SeBitmap_EnvCurve5:
 	ldw	ix, 0x7a01
 	nop
 	.byte 0x01
-	ldwio	32, 0x3d01
+	ldw	(32:8), 0x3d01:io
 	nop
 	ld	l, 1:opc
 	push	xiy
 	nop
 	.byte 0x01
-	ldwio	33, 0x3e01
+	ldw	(33:8), 0x3e01:io
 	nop
 	ld	h, 1:opc
 	push	xiz
 	nop
 	.byte 0x01
-	ldwio	34, 0x3f01
+	ldw	(34:8), 0x3f01:io
 	nop
 	ld	e, 1:opc
 	push	xsp
 	nop
 	.byte 0x01
-	ldwio	34, 0x6001
+	ldw	(34:8), 0x6001:io
 	nop
 	ld	e, 1:opc
 	jr	f, 0
 	.byte 0x01
-	ldwio	33, 0x6101
+	ldw	(33:8), 0x6101:io
 	nop
 	ld	h, 1:opc
 	jr	lt, 0
 	.byte 0x01
-	ldwio	32, 0x6201
+	ldw	(32:8), 0x6201:io
 	nop
 	ld	l, 1:opc
 	jr	le, 0
@@ -13011,29 +13011,29 @@ SeBitmap_EnvCurve5:
 	.byte 0x01, 0xe9
 	nop
 	.byte 0x01
-	ldwio	146, 0x7100
+	ldw	(146:8), 0x7100:io
 	nop
 	.byte 0x99
 	nop
 	jrl	lt, 256
-	ldwio	147, 0x7200
+	ldw	(147:8), 0x7200:io
 	nop
 	.byte 0x98
 	nop
 	jrl	le, 256
-	ldwio	148, 0x7300
+	ldw	(148:8), 0x7300:io
 	nop
 	.byte 0x97
 	nop
 	jrl	ule, 256
-	ldwio	2, 0xdb00
+	ldw	(2:8), 0xdb00:io
 	nop
 	.byte 0xa0
 	nop
 	.byte 0xdb
 	nop
 	.byte 0x01
-	ldwio	187, 0xdb00
+	ldw	(187:8), 0xdb00:io
 	nop
 	push	xix
 	.byte 0x01, 0xdb
@@ -13045,14 +13045,14 @@ SeBitmap_EnvCurve5:
 	.byte 0x96
 	nop
 	jrl	mi, 1280
-	ldwio	3, 0xdc00
+	ldw	(3:8), 0xdc00:io
 	nop
 	.byte 0x9f
 	nop
 	.byte 0xe8
 	nop
 	halt
-	ldwio	188, 0xdc00
+	ldw	(188:8), 0xdc00:io
 	nop
 	push	xhl
 	.byte 0x01, 0xe8
@@ -13081,7 +13081,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xe9
 	nop
 	.byte 0x01
-	ldwio	77, 0xdb00
+	ldw	(77:8), 0xdb00:io
 	nop
 	.byte 0xf0
 	nop
@@ -13154,7 +13154,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.ascii "CUTOFF"
 	.byte 0x17
-	ldwio	172, 0xd100
+	ldw	(172:8), 0xd100:io
 	nop
 	.byte 0x52
 	ld	xiy, 0x0b174f53
@@ -13213,12 +13213,12 @@ SeBitmap_EnvCurve5:
 	.byte 0x01, 0xe9
 	nop
 	.byte 0x01
-	ldwio	29, 0xdb00
+	ldw	(29:8), 0xdb00:io
 	nop
 	jrl	mi, -9472
 	nop
 	.byte 0x01
-	ldwio	122, 0xdb00
+	ldw	(122:8), 0xdb00:io
 	nop
 	push_f
 	.byte 0x01, 0xdb
@@ -13233,19 +13233,19 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x54
 	.ascii "HROUGH\""
-	ldwio	66, 0x4c00
+	ldw	(66:8), 0x4c00:io
 	nop
 	.byte 0xe9
 	nop
 	.byte 0x83
 	nop
 	scf
-	ldwio	50, 0x6600
+	ldw	(50:8), 0x6600:io
 	nop
 	.byte 0x01, 0x01
 	jr	z, 0
 	ccf
-	ldwio	213, 0x3a00
+	ldw	(213:8), 0x3a00:io
 	nop
 	.byte 0xd5
 	nop
@@ -13377,11 +13377,11 @@ SeBitmap_EnvCurve5:
 	.byte 0x01, 0xca
 	nop
 	.byte 0x01
-	ldwio	60, 0xbc00
+	ldw	(60:8), 0xbc00:io
 	nop
 	call	0xbc01
 	push	sr
-	ldwio	138, 0xae00
+	ldw	(138:8), 0xae00:io
 	nop
 	.byte 0x8a
 	nop
@@ -13394,11 +13394,11 @@ SeBitmap_EnvCurve5:
 	nop
 	call	0xe801
 	.byte 0x01
-	ldwio	3, 0xd900
+	ldw	(3:8), 0xd900:io
 	nop
 	call	0xd901
 	halt
-	ldwio	22, 9985
+	ldw	(22:8), 9985:io
 	nop
 	ldw	de, 0x3401
 	nop
@@ -13413,7 +13413,7 @@ SeBitmap_EnvCurve5:
 	popw	bc
 	popw	iz
 	.byte 0x54, 0x17
-	ldwio	142, 0xb200
+	ldw	(142:8), 0xb200:io
 	nop
 	.byte 0x53, 0x54
 	popw	sp
@@ -13436,7 +13436,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.ascii "ADJUST"
 	push	sr
-	ldwio	202, 0xae00
+	ldw	(202:8), 0xae00:io
 	nop
 	.byte 0xca
 	nop
@@ -13586,43 +13586,43 @@ SeBitmap_EnvCurve5:
 	.byte 0x01, 0xe9
 	nop
 	.byte 0x01
-	ldwio	30, 0xda00
+	ldw	(30:8), 0xda00:io
 	nop
 	.byte 0xce
 	nop
 	.byte 0xda
 	nop
 	.byte 0x01
-	ldwio	228, 0xda00
+	ldw	(228:8), 0xda00:io
 	nop
 	push	xiy
 	.byte 0x01, 0xda
 	nop
 	push	sr
-	ldwio	158, 0xcd00
+	ldw	(158:8), 0xcd00:io
 	nop
 	.byte 0x9e
 	nop
 	.byte 0xe9
 	nop
 	halt
-	ldwio	31, 0xdb00
+	ldw	(31:8), 0xdb00:io
 	nop
 	.byte 0xcd
 	nop
 	.byte 0xe8
 	nop
 	halt
-	ldwio	229, 0xdb00
+	ldw	(229:8), 0xdb00:io
 	nop
 	.long AlignedStr_ON
 	halt
-	ldwio	22, 9985
+	ldw	(22:8), 9985:io
 	nop
 	ldw	de, 0x3401
 	nop
 	.byte 0x01
-	ldwio	47, 0x6100
+	ldw	(47:8), 0x6100:io
 	nop
 	swi	7
 	nop
@@ -13769,7 +13769,7 @@ SeBitmap_EnvCurve5:
 	ld	b, 1:opc
 	pop	sr
 	nop
-	ldwio	97, 0x3f06
+	ldw	(97:8), 0x3f06:io
 	nop
 	ld	w, 158:opc
 	ld	b, 2:opc
@@ -13806,7 +13806,7 @@ SeBitmap_EnvCurve5:
 	ld	b, 1:opc
 	pop	sr
 	nop
-	ldwio	97, 0x3f06
+	ldw	(97:8), 0x3f06:io
 	nop
 	ld	w, 163:opc
 	ld	b, 2:opc
@@ -13872,7 +13872,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ld	w, 247:opc
 	call	2
-	ldwio	99, 0xff06
+	ldw	(99:8), 0xff06:io
 	nop
 	ld	w, 97:opc
 	ld	b, 3:opc
@@ -13884,7 +13884,7 @@ SeBitmap_EnvCurve5:
 	ld	b, 2:opc
 	nop
 	nop
-	ldwio	101, 0x7f06
+	ldw	(101:8), 0x7f06:io
 	nop
 	ld	w, 106:opc
 	ld	b, 3:opc
@@ -13896,7 +13896,7 @@ SeBitmap_EnvCurve5:
 	ld	b, 2:opc
 	nop
 	nop
-	ldwio	103, 0x7f06
+	ldw	(103:8), 0x7f06:io
 	nop
 	ld	w, 116:opc
 	ld	b, 3:opc
@@ -13908,7 +13908,7 @@ SeBitmap_EnvCurve5:
 	ld	b, 2:opc
 	nop
 	nop
-	ldwio	105, 0x7f06
+	ldw	(105:8), 0x7f06:io
 	nop
 	ld	w, 127:opc
 	ld	b, 3:opc
@@ -14112,22 +14112,22 @@ TuningSystem_Handler_Table:
 	nop
 	ld	de, (xix)
 	nop
-	ldwio	100, 7942
+	ldw	(100:8), 7942:io
 	nop
 	ld	w, 152:opc
 	ld	b, 3:opc
 	nop
-	ldwio	98, 0x7f06
+	ldw	(98:8), 0x7f06:io
 	nop
 	ld	w, 157:opc
 	ld	b, 3:opc
 	nop
-	ldwio	97, 0x7f06
+	ldw	(97:8), 0x7f06:io
 	nop
 	ld	w, 161:opc
 	ld	b, 3:opc
 	nop
-	ldwio	99, 0x3f06
+	ldw	(99:8), 0x3f06:io
 	nop
 	ld	w, 166:opc
 	ld	b, 2:opc
@@ -14158,7 +14158,7 @@ TuningSystem_Handler_Table:
 	ldw	iy, 241
 	normal
 	nop
-	ldwio	15, 3842
+	ldw	(15:8), 3842:io
 	jr	c, 6
 	rcf
 	max
@@ -14345,16 +14345,16 @@ TuningSystem_Handler_Table:
 	ei	5
 	swi	0
 	ld	b, 142:opc
-	ldwio	10, 277
+	ldw	(10:8), 277:io
 	call16	0x3200
 	normal
 	ldw	ix, 2560
-	ldwio	21, 0x4201
+	ldw	(21:8), 0x4201:io
 	nop
 	ldw	de, 0x5a01
 	nop
 	zcf
-	ldwio	15, 0x6200
+	ldw	(15:8), 0x6200:io
 	nop
 	pushw ix
 	normal
@@ -14380,11 +14380,11 @@ TuningSystem_Handler_Table:
 	.byte 0x0a, 0x0a, 0xf5, 0x00, 0xd2, 0x00, 0x12, 0x01
 	.byte 0xea
 	nop
-	ldwio	10, 285
+	ldw	(10:8), 285:io
 	or	(80384:24), de
 	nop
 	normal
-	ldwio	245, 0xde00
+	ldw	(245:8), 0xde00:io
 	nop
 	ccf
 	normal
@@ -14395,12 +14395,12 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0x51
 	nop
-	ldwio	10, 77
+	ldw	(10:8), 77:io
 	push xhl
 	nop
 	.byte 0xe5, 0x00, 0x51
 	nop
-	ldwio	10, 77
+	ldw	(10:8), 77:io
 	push xhl
 	nop
 	jr	po, 0
@@ -14615,20 +14615,20 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0xee, 0x00
 	normal
-	ldwio	11, 0x4a00
+	ldw	(11:8), 0x4a00:io
 	nop
 	.byte 0xe6
 	nop
 	popw	de
 	nop
 	normal
-	ldwio	11, 0x6a00
+	ldw	(11:8), 0x6a00:io
 	nop
 	.byte 0xe6
 	nop
 	jr	gt, 0
 	normal
-	ldwio	11, 0x8a00
+	ldw	(11:8), 0x8a00:io
 	nop
 	.byte 0xe6
 	nop
@@ -14641,13 +14641,13 @@ TuningSystem_Handler_Table:
 	.byte 0x00
 	.long NakaData_ExternalPadBlock_A
 	normal
-	ldwio	201, 0xe400
+	ldw	(201:8), 0xe400:io
 	nop
 	.byte 0xde, 0x00, 0xe4, 0x00, 0x01, 0x0a
 	.long Pad_AfterNakaData_UserMemoryConfig
 	.long Pad_BeforeNakaData_StyleBitmapPad
 	push	sr
-	ldwio	44, 0x3800
+	ldw	(44:8), 0x3800:io
 	nop
 	pushw	ix
 	nop
@@ -14658,7 +14658,7 @@ TuningSystem_Handler_Table:
 	and	(xiz+256), xde
 	nop
 	halt
-	ldwio	244, 0xb400
+	ldw	(244:8), 0xb400:io
 	nop
 	.byte 0x1f
 	normal
@@ -14692,7 +14692,7 @@ TuningSystem_Handler_Table:
 	.byte 0x6a, 0x00, 0xc3, 0x00
 	.ascii "FILTER KEY FOLLOW"
 	halt
-	ldwio	14, 0x4301
+	ldw	(14:8), 0x4301:io
 	nop
 	ldw	de, 0x5c01
 	nop
@@ -14765,7 +14765,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xe8, 0x00
 	scf
-	ldwio	24, 0x4400
+	ldw	(24:8), 0x4400:io
 	nop
 	pushw	ix
 	nop
@@ -14782,18 +14782,18 @@ TuningSystem_Handler_Table:
 	.byte 0x00, 0x82, 0x00, 0x2c, 0x00
 	.byte 0x82, 0x00
 	scf
-	ldwio	8, 0x9c00
+	ldw	(8:8), 0x9c00:io
 	nop
 	push_f
 	nop
 	.byte 0x9c, 0x00, 0x11
-	ldwio	31, 0xa200
+	ldw	(31:8), 0xa200:io
 	nop
 	pushw	ix
 	nop
 	.byte 0xa2, 0x00
 	scf
-	ldwio	8, 0xc200
+	ldw	(8:8), 0xc200:io
 	nop
 	.byte 0x1f
 	nop
@@ -14803,7 +14803,7 @@ TuningSystem_Handler_Table:
 	.byte 0x00, 0x18, 0x00, 0x75, 0x00, 0x12, 0x0a, 0x18, 0x00, 0x82, 0x00, 0x18
 	.byte 0x00
 	.byte 0x9c, 0x00, 0x12
-	ldwio	31, 0xa200
+	ldw	(31:8), 0xa200:io
 	nop
 	.byte 0x1f
 	nop
@@ -14814,12 +14814,12 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0xdb, 0x00
 	halt
-	ldwio	22, 0x6b01
+	ldw	(22:8), 0x6b01:io
 	nop
 	ldw	de, 0x7801
 	nop
 	halt
-	ldwio	90, 0xdc00
+	ldw	(90:8), 0xdc00:io
 	nop
 	.long AlignedStr_ON
 ; se_rhythm_transport_tables: 220 bytes (16 commands + 2 dispatch tables)
@@ -14949,7 +14949,7 @@ TuningSystem_Handler_Table:
 	.long Pad_BeforeNakaData_ExternalBase_0x66
 	.long Pad_AfterNakaData_ExternalBase_0x66
 	normal
-	ldwio	209, 0xe400
+	ldw	(209:8), 0xe400:io
 	nop
 	.byte 0xe6
 	nop
@@ -15342,7 +15342,7 @@ TuningSystem_Handler_Table:
 	.byte 0xd1, 0x00, 0x42, 0x41
 	popw ix
 	ld	xbc, 0x0645434e
-	ldwio	251, 0x440a
+	ldw	(251:8), 0x440a:io
 	ld	xiy, 0x31485450
 	ei	0x05
 	push 11
@@ -15424,7 +15424,7 @@ TuningSystem_Handler_Table:
 	nop
 	ld	xde, 0x4e414c41
 	ld	xhl, 0xfb090645
-	ldwio	83, 0x4550
+	ldw	(83:8), 0x4550:io
 	ld	xiy, 0x09050644
 	pushw 1594
 	push 83
@@ -19699,7 +19699,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	5
 	ldw (xsp+8), 0
 	.byte 0xbf
-	ldwio	2, 1
+	ldw	(2:8), 1:io
 	lda	xhl, (xsp+24)
 	ld	bc, (xwa+2)
 	ld	(xhl), bc
@@ -19746,7 +19746,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
-	ldwio	4, 8863
+	ldw	(4:8), 8863:io
 	ld	b, 30:opc
 	.byte 0xd3
 	swi	6
@@ -19798,7 +19798,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
-	ldwio	4, 8863
+	ldw	(4:8), 8863:io
 	ld	b, 30:opc
 	pop	xde
 	swi	6
@@ -19834,7 +19834,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
-	ldwio	4, 8863
+	ldw	(4:8), 8863:io
 	ld	b, 30:opc
 	reti
 	swi	6

@@ -1680,7 +1680,7 @@ FDemoText_ByteData_TextRenderer:
 	exts	xwa
 	sll	xwa, 2
 	.byte 0xaf
-	ldwio	128, 8352
+	ldw	(128:8), 8352:io
 	push	xwa
 	call	Strlen
 	inc	1, hl
@@ -2773,7 +2773,7 @@ FDemoText_ByteData_LayoutB:
 	reti
 	.byte 0xe4, 0xe0
 	ld	w, 29:opc
-	ldwio	38, 0xdbfb
+	ldw	(38:8), 0xdbfb:io
 	.byte 0x8e
 	ld	wa, (0x025b3e:24)
 	sla	wa, 2

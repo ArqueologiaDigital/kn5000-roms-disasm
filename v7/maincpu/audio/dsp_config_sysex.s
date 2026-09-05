@@ -1182,7 +1182,7 @@ DSPCfg_CompParam_SubType6:
 	.byte 0x0c, 0x63, 0x9f, 0x04, 0x61, 0x9f, 0x04, 0x20
 	.byte 0x9f
 DSPCfg_CompParam_SubType7:
-	ldwio	240, 50535
+	ldw	(240:8), 50535:io
 	ld	wa, (xsp+8)
 	add	(xsp+6), wa
 	lda	xde, (xsp+8)

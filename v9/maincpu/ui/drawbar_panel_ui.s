@@ -10899,7 +10899,7 @@ AcWelcomScreen_RenderBytecode:
 	jrl	510
 	lda	xhl, (0x3ea24:24)
 	.byte 0x9b
-	ldwio	63, 0xffff
+	ldw	(63:8), 0xffff:io
 	jr	z, 77
 	lda	xwa, (xsp+4)
 	lda	xde, (xwa+2)
@@ -10955,7 +10955,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	add	xde, (0x24786:24)
 	.byte 0x9a
-	ldwio	4, 0xf70b
+	ldw	(4:8), 0xf70b:io
 	nop
 	ld	xbc, NakaInst_TOTAL_0x34
 	ldw	de, 16
@@ -10974,7 +10974,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	add	xde, (0x24786:24)
 	.byte 0x9a
-	ldwio	4, 0xf70b
+	ldw	(4:8), 0xf70b:io
 	nop
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
@@ -10993,7 +10993,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	add	xde, (0x24786:24)
 	.byte 0x9a
-	ldwio	4, 0xf70b
+	ldw	(4:8), 0xf70b:io
 	nop
 	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
@@ -11012,7 +11012,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	add	xde, (0x24786:24)
 	.byte 0x9a
-	ldwio	4, 0xf70b
+	ldw	(4:8), 0xf70b:io
 	nop
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
@@ -11044,7 +11044,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	xbc, (0x24786:24)
 	add	xde, xbc
 	.byte 0x9a
-	ldwio	4, 0xf70b
+	ldw	(4:8), 0xf70b:io
 	nop
 	.byte 0x41
 	.long Bitmap_DigitD
@@ -11064,7 +11064,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	add	xde, (0x24786:24)
 	.byte 0x9a
-	ldwio	4, 0xf70b
+	ldw	(4:8), 0xf70b:io
 	nop
 	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
@@ -12784,7 +12784,7 @@ AudioCtrl_DataBlock:
 	.byte 0x98
 	push	sr
 	push	xwa
-	ldwio	0, 0xafd9
+	ldw	(0:8), 0xafd9:io
 	calr	64762
 	jrl	299
 	ld	wa, (xsp+14)
@@ -12797,7 +12797,7 @@ AudioCtrl_DataBlock:
 	.byte 0x98
 	push	sr
 	push	xwa
-	ldwio	0, 4287
+	ldw	(0:8), 4287:io
 	ldw	bc, 3743
 	ld	b, 30:opc
 	cp	(xwa), h
@@ -12953,7 +12953,7 @@ AudioCtrl_DataBlock:
 	.byte 0x99
 	push	sr
 	push	xwa
-	ldwio	0, 0x88f2
+	ldw	(0:8), 0x88f2:io
 	.byte 0xeb
 	pop	sr
 	ldw	wa, 3743
@@ -13862,7 +13862,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	swi	2
 	.byte 0x9b, 0x9f
-	ldwio	4, 0x88de
+	ldw	(4:8), 0x88de:io
 	ld bc, qiz
 	ld	de, (xsp+14)
 	call	MainLswPartAdd
@@ -14277,7 +14277,7 @@ AudioCtrl_DataBlock:
 	nop
 	jr	z, 63
 	.byte 0x9f
-	ldwio	4, 1695
+	ldw	(4:8), 1695:io
 	ld	w, 159:opc
 	rcf
 	ld	a, 218:opc
@@ -14357,11 +14357,11 @@ AudioCtrl_DataBlock:
 	call	ApFuncCall
 	ld	(xsp+14), hl
 	.byte 0x9f
-	ldwio	4, 1695
+	ldw	(4:8), 1695:io
 	ld	w, 159:opc
 	rcf
 	ld	a, 159:opc
-	ldwio	34, 0x951d
+	ldw	(34:8), 0x951d:io
 	swi	1
 	swi	1
 	jrl	-356
@@ -14401,7 +14401,7 @@ AudioCtrl_DataBlock:
 	call	ApFuncCall
 	ld	(xsp+14), hl
 	.byte 0x9f
-	ldwio	4, 1695
+	ldw	(4:8), 1695:io
 	ld	w, 159:opc
 	rcf
 	ld	a, 218:opc

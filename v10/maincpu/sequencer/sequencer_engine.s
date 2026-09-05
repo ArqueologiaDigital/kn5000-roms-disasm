@@ -17555,7 +17555,7 @@ PartCtrl_SwapAndRelinkBlock:
 	ld	iz, wa
 	ld	(xsp+8), bc
 	.byte 0xbf
-	ldwio	22, 0xf22f
+	ldw	(22:8), 0xf22f:io
 	ld	(0xf22f:16), iz
 	.byte 0xbf, 0x04
 	push	sr
@@ -30198,7 +30198,7 @@ SeqPart_ByteBlockA207:
 	jr	z, 9
 	cp_erpb 251, 16
 	.byte 0xf2, 0x51
-	ldwio	244, 7910
+	ldw	(244:8), 7910:io
 	.byte 0xde
 	nop
 	jrl	201

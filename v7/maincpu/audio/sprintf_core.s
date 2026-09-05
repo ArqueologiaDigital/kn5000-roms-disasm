@@ -8,7 +8,7 @@
 ; Stack frame: 74 bytes. Called exclusively by Sprintf_Locked.
 Sprintf_Core:
 	ldw	hl, 26114
-	ldwio	11, 32
+	ldw	(11:8), 32:io
 	ld	xwa, (xsp+92)
 	call	(xwa)
 Sprintf_OutputLiteral:

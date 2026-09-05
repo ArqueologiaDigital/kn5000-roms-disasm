@@ -457,7 +457,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xsp+4), bc
 	.byte 0xf3
 	swi	5
-	ldwio	1, 0xbf31
+	ldw	(1:8), 0xbf31:io
 	.byte 0x06
 	jr	lt, -37
 	.byte 0x8a
@@ -530,7 +530,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xsp+4), bc
 	.byte 0xf3
 	swi	5
-	ldwio	1, 0xbf31
+	ldw	(1:8), 0xbf31:io
 	.byte 0x06
 	jr	lt, -104
 	.byte 0x04
@@ -1048,7 +1048,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xhl), bc
 	ld	bc, (xde)
 	.byte 0x98
-	ldwio	129, 1723
+	ldw	(129:8), 1723:io
 	.byte 0x51
 	ld	bc, (xwa+8)
 	sll	bc, 3

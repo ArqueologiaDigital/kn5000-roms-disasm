@@ -584,7 +584,7 @@ SysEx_InProgressReturn:
 	sll	wa, 2
 	.byte 0x44
 SC0TxDisp_NonMidiPath:
-	ldwio	246, 252
+	ldw	(246:8), 252:io
 SC0TxDisp_RestoreAndReturn:
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x21, 0xd8, 0x62, 0xd3
 MIDI_SC0_ENABLE_TX:

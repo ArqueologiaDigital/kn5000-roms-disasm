@@ -764,7 +764,7 @@ AccVoice_ParamIndexData:
 	ldio	4, 12
 	nop
 	halt
-	ldwio	15, 6420
+	ldw	(15:8), 6420:io
 	calr	53795
 	pop	sr
 	.byte 0xd4
@@ -969,7 +969,7 @@ AccStyle_ByteDataBlock:
 	nop
 	ldio	0, 9
 	nop
-	ldwio	0, 11
+	ldw	(0:8), 11:io
 	incf
 	nop
 	decf
@@ -1001,7 +1001,7 @@ AccStyle_ByteDataBlock:
 	max
 	ldio	4, 9
 	max
-	ldwio	4, 1035
+	ldw	(4:8), 1035:io
 	incf
 	max
 	decf
@@ -1103,8 +1103,8 @@ AccTuning_ValueTable:
 	halt
 	halt
 	halt
-	ldwio	10, 2570
-	ldwio	15, 3855
+	ldw	(10:8), 2570:io
+	ldw	(15:8), 3855:io
 	retd	0x140f
 	push_a
 	push_a
@@ -9716,7 +9716,7 @@ AccVoice_CopyFromROM_DataBlock:
 	ret
 	push	1
 	ret
-	ldwio	1, 0xffff
+	ldw	(1:8), 0xffff:io
 	nop
 	swi	7
 	swi	7
@@ -18056,7 +18056,7 @@ __pad_F6288E:
 	.byte 0x1f
 	.ascii " )!+\"-#/0123456789:cd;<feABCDEJ`likMLUVW"
 	jp	0x09121d
-	ldwio	11, 3340
+	ldw	(11:8), 3340:io
 	ret
 	normal
 	push	sr

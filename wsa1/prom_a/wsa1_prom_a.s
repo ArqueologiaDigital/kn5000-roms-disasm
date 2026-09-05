@@ -4608,7 +4608,7 @@ sub_F82557:
 	jr .LF82562                                          ; F82571  68 ef
 .LF82573:
 	res_dd8 0x00, 0xaa                                   ; F82573  f0 aa b0
-	ldwio 0xac, 0x00                                     ; F82576  0a ac 00 00
+	ldw (0xac:8), 0x00:io                                     ; F82576  0a ac 00 00
 	ei 0x00                                              ; F8257A  06 00
 	popw hl                                              ; F8257C  4b
 	pop XIX                                              ; F8257D  5c
@@ -6348,7 +6348,7 @@ SeqBuf_AppendMarker:
 	ld (xiy-2), wa                                ; F83053  bd fe 50
 SeqBuf_AppendMarker__full:
 	popw wa                                       ; F83056  48
-	ldwio 0xac, 0x00                              ; F83057  0a ac 00 00
+	ldw (0xac:8), 0x00:io                              ; F83057  0a ac 00 00
 	jr SeqBuf_AppendMarker__done                                   ; F8305B  68 10
 SeqBuf_AppendMarker__trace:
 	m_ld_rm MW8, 0xac, r3                         ; F8305D  d0 ac 23
@@ -6575,7 +6575,7 @@ SeqBuf_AppendEvent:
 	ld (0x600a10:24), hl                                ; F830F8  f2 10 0a 60 53
 	pop XIY                                              ; F830FD  5d
 SeqBuf_AppendEvent__drop:
-	ldwio 0xac, 0x00                                     ; F830FE  0a ac 00 00
+	ldw (0xac:8), 0x00:io                                     ; F830FE  0a ac 00 00
 	ret                                                  ; F83102  0e
 SeqBuf_AppendEvent__trace:
 	m_ld_rm MW8, 0xac, r3                                ; F83103  d0 ac 23
@@ -61561,7 +61561,7 @@ SeqBuf_AppendMarker_XIX:
 	ld (xix-2), wa                                ; FA56EF  bc fe 50
 .LFA56F2:
 	popw wa                                       ; FA56F2  48
-	ldwio 0xac, 0x00                              ; FA56F3  0a ac 00 00
+	ldw (0xac:8), 0x00:io                              ; FA56F3  0a ac 00 00
 	ret                                           ; FA56F7  0e
 .LFA56F8:
 	ld XIX,0x000000ae                             ; FA56F8  44 ae 00 00 00
@@ -61615,7 +61615,7 @@ SeqBuf_AppendEvent_XIX:
 	decm 0x02, (xix-2)                                   ; FA573D  9c fe 6a
 	pop SR                                               ; FA5740  03
 SeqBuf_AppendEvent_XIX__drop:
-	ldwio 0xac, 0x00                                     ; FA5741  0a ac 00 00
+	ldw (0xac:8), 0x00:io                                     ; FA5741  0a ac 00 00
 	ret                                                  ; FA5745  0e
 SeqBuf_AppendEvent_XIX__trace:
 	ld XIX,0x000000ae                                    ; FA5746  44 ae 00 00 00
@@ -92159,7 +92159,7 @@ sub_FB90FE:
 	ret                                                  ; FB9169  0e
 sub_FB916A:
 	ei 0x06                                              ; FB916A  06 06
-	ldwio 0x91, 0x00                                     ; FB916C  0a 91 00 00
+	ldw (0x91:8), 0x00:io                                     ; FB916C  0a 91 00 00
 	ldio 0x93, 0x00                                      ; FB9170  08 93 00
 	ei 0x00                                              ; FB9173  06 00
 	ret                                                  ; FB9175  0e
@@ -160265,7 +160265,7 @@ sub_FE6F89:
 	ld c, 0x00:opc                                          ; FE7017  23 00
 	pushw 0x0929                                         ; FE7019  0b 29 09
 	ldio 0xff, 0xff                                      ; FE701C  08 ff ff
-	ldwio 0xff, 0xff23                                   ; FE701F  0a ff 23 ff
+	ldw (0xff:8), 0xff23:io                                   ; FE701F  0a ff 23 ff
 	pushw hl                                             ; FE7023  2b
 	swi 7                                                ; FE7024  ff
 	swi 7                                                ; FE7025  ff
@@ -183194,12 +183194,12 @@ sub_FF79DB:
 	swi 4                                                ; FF79EE  fc
 	call 0x20208e                                        ; FF79EF  1d 8e 20 20
 	scf                                                  ; FF79F3  11
-	ldwio 0x0a, 0x0b                                     ; FF79F4  0a 0a 0b 00
+	ldw (0x0a:8), 0x0b:io                                     ; FF79F4  0a 0a 0b 00
 	ldf 0x00                                             ; FF79F8  17 00
 	normal                                               ; FF79FA  01
 	normal                                               ; FF79FB  01
 	.byte 0xaf, 0x00, 0x0a                               ; FF79FC  af 00 0a
-	ldwio 0x0b, 0xb700                                   ; FF79FF  0a 0b 00 b7
+	ldw (0x0b:8), 0xb700:io                                   ; FF79FF  0a 0b 00 b7
 	nop                                                  ; FF7A03  00
 	normal                                               ; FF7A04  01
 	normal                                               ; FF7A05  01
@@ -183243,7 +183243,7 @@ sub_FF79DB:
 	normal                                               ; FF7A41  01
 	.byte 0xcb, 0x00                                     ; FF7A42  cb 00
 	push SR                                              ; FF7A44  02
-	ldwio 0x85, 0x1700                                   ; FF7A45  0a 85 00 17
+	ldw (0x85:8), 0x1700:io                                   ; FF7A45  0a 85 00 17
 	nop                                                  ; FF7A49  00
 	.byte 0x85, 0x00                                     ; FF7A4A  85 00
 	ld (XBC),0x00                                        ; FF7A4C  b1 00 00

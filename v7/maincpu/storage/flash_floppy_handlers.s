@@ -34,11 +34,11 @@ FlashWrite_BlockHandler_Table:
 	.long FlashWrite_BlockRef_Type6
 FlashWrite_BlockData_Type0:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw	2
-	ldwio	98, 0xff06
+	ldw	(98:8), 0xff06:io
 	nop
 	ld	w, 100:opc
 	decf
@@ -50,13 +50,13 @@ FlashWrite_BlockData_Type0:
 	ld	w, 187:opc
 	retd	2
 	nop
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 20:opc
 	ccf
 	push	sr
 	nop
-	ldwio	101, 0xff06
+	ldw	(101:8), 0xff06:io
 	nop
 	ld	w, 107:opc
 	push_a
@@ -67,28 +67,28 @@ FlashWrite_BlockData_Type1:
 	.byte 0xfc, 0x58, 0xf1, 0x00, 0x06, 0x59, 0xf1, 0x00
 FlashWrite_BlockData_Type2:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	.byte 0x0b
 	push	sr
 FlashRead_BlockData_Field2:
 	nop
-	ldwio	98, 0xff06
+	ldw	(98:8), 0xff06:io
 	nop
 	ld	w, 100:opc
 	decf
 	push	sr
 FlashRead_BlockData_Field3:
 	nop
-	ldwio	99, 0xff06
+	ldw	(99:8), 0xff06:io
 	nop
 	ld	w, 188:opc
 	.byte 0x0f
 	push	sr
 FlashRead_BlockData_Field4:
 	nop
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 20:opc
 	ccf
@@ -104,7 +104,7 @@ FlashRead_BlockData_Field5:
 	nop
 FlashRead_BlockData_Field6:
 	nop
-	ldwio 102, 65286
+	ldw (102:8), 65286:io
 	nop
 	ld	w, 196:opc
 	ex_ff
@@ -121,11 +121,11 @@ FlashRead_BlockHandler_Table:
 	.long FlashRead_BlockData_Field8
 FlashWrite_BlockData_Type3:
 	nop
-	ldwio	97, 65286
+	ldw	(97:8), 65286:io
 	nop
 	ld	w, 12:opc
 	pushw	2
-	ldwio	98, 65286
+	ldw	(98:8), 65286:io
 	nop
 	ld	w, 100:opc
 	decf
@@ -148,21 +148,21 @@ FlashWrite_BlockRef_Type3:
 	.incbin "includes/romslices/v7_transplant_FlashWrite_BlockRef_Type3.bin"
 FlashWrite_BlockData_Type4:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw	2
-	ldwio	98, 0xff06
+	ldw	(98:8), 0xff06:io
 	nop
 	ld	w, 100:opc
 	decf
 	push	sr
 	nop
-	ldwio	99, 0xff06
+	ldw	(99:8), 0xff06:io
 	nop
 	ld	w, 188:opc
 	retd	2
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 20:opc
 	ccf
@@ -171,7 +171,7 @@ FlashWrite_BlockRef_Type4:
 	.incbin "includes/romslices/v7_transplant_FlashWrite_BlockRef_Type4.bin"
 FlashWrite_BlockData_Type5:
 	nop
-	ldwio	97, 0xff06
+	ldw	(97:8), 0xff06:io
 	nop
 	ld	w, 12:opc
 	pushw	1282
@@ -189,7 +189,7 @@ FlashWrite_BlockData_Type5:
 	ld	w, 187:opc
 	retd	2
 	nop
-	ldwio	100, 0xff06
+	ldw	(100:8), 0xff06:io
 	nop
 	ld	w, 19:opc
 	ccf
@@ -214,7 +214,7 @@ FlashWrite_BlockData_Type6:
 	decf
 	push	sr
 	nop
-	ldwio	99, 65286
+	ldw	(99:8), 65286:io
 	nop
 	ld	w, 187:opc
 	.byte 0x0f	; llvm-mc cannot spell this byte
@@ -1245,7 +1245,7 @@ PartGrid_OperationsBlock:
 	.byte 0x8f
 	incf
 	push	xde
-	ldwio 143, 8460
+	ldw (143:8), 8460:io
 	extz	wa
 	div	a, 3
 	ld	(xsp+12), w

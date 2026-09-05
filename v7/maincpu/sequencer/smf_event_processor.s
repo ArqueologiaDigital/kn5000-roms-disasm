@@ -4486,7 +4486,7 @@ SeqStep_FileBufferFinal:
 	ldw (xsp+6), 0
 	.byte 0x9f, 0x06
 	push	xsp
-	ldwio	0, 0x3a69
+	ldw	(0:8), 0x3a69:io
 	ld	a, (xiz+22)
 	and	a, 3
 	cp	a, 3:i3
@@ -4512,7 +4512,7 @@ SeqStep_FileBufferFinal:
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x06
 	push	xsp
-	ldwio	0, 0xc661
+	ldw	(0:8), 0xc661:io
 	ld	hl, (xsp+4)
 	pop	xiz
 	inc	4, xsp
@@ -5984,11 +5984,11 @@ SeqByteBlock_ChannelContainer:
 	jr	nz, 17
 	.byte 0xbe	; v10 does not spell this byte either
 	ei	2
-	ldwio	0, 15602
+	ldw	(0:8), 15602:io
 	.byte 0xe5	; v10 does not spell this byte either
 	.byte 0x01	; v10 does not spell this byte either
 	push	sr
-	ldwio	0, 43227
+	ldw	(0:8), 43227:io
 	jrl	202
 	ld	xbc, (xiz+34)
 	ld	xwa, (xsp+24)
@@ -6005,7 +6005,7 @@ SeqByteBlock_ChannelContainer:
 	lda	xbc, (xbc+16)
 	ld	wa, (xsp+4)
 	.byte 0x9f	; v10 does not spell this byte either
-	ldwio	240, 1391
+	ldw	(240:8), 1391:io
 	ld	wa, (xsp+4)
 	jr	3
 	ld	wa, (xsp+10)
@@ -6135,7 +6135,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xa8	; v10 does not spell this byte either
 	ex_ff
 	sub	(10350:16), l
-	ldwio	32, 1688
+	ldw	(32:8), 1688:io
 	push	xsp
 	ld	c, 0:opc
 	jr	z, 30
@@ -6316,7 +6316,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xa8	; v10 does not spell this byte either
 	ex_ff
 	sub	(4462:16), l
-	ldwio	32, 8872
+	ldw	(32:8), 8872:io
 	ld	w, 184:opc
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
@@ -6572,7 +6572,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+16)
 	.byte 0x80	; v10 does not spell this byte either
 	push	xsp
-	ldwio	110, 62736
+	ldw	(110:8), 62736:io
 	.byte 0xe8	; v10 does not spell this byte either
 	nop
 	decf
@@ -6692,7 +6692,7 @@ SeqChan_ValidateAndDispatch:
 	.byte 0xbe
 	pop	sr
 	inc	6, l
-	ldwio	62, 0x331e
+	ldw	(62:8), 0x331e:io
 	.byte 0xf1
 	inc	4, xsp
 	cp	hl, 0:i3
@@ -7343,7 +7343,7 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
 	.byte 0x9f	; v10 does not spell this byte either
-	ldwio	166, 5807
+	ldw	(166:8), 5807:io
 	ld	w, 152:opc
 	rcf
 	swi	6
@@ -7396,7 +7396,7 @@ SeqChan_ByteBlockE:
 	ldw	de, 26609
 	.byte 0x8b	; v10 does not spell this byte either
 	.byte 0xbf	; v10 does not spell this byte either
-	ldwio	2, 0
+	ldw	(2:8), 0:io
 	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
@@ -7479,7 +7479,7 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
 	.byte 0x9f	; v10 does not spell this byte either
-	ldwio	166, 5807
+	ldw	(166:8), 5807:io
 	ld	w, 152:opc
 	rcf
 	swi	6
@@ -7532,7 +7532,7 @@ SeqChan_ByteBlockF:
 	ldw	de, 26609
 	.byte 0x8b	; v10 does not spell this byte either
 	.byte 0xbf	; v10 does not spell this byte either
-	ldwio	2, 0
+	ldw	(2:8), 0:io
 	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)

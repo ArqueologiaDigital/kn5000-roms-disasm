@@ -1217,7 +1217,7 @@ SeMenu_BitShiftMask_End:
 	reti
 	jr	ugt, 6
 	.byte 0x88
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	pop	sr
 	ld	l, 0:opc
 	ret
@@ -1283,7 +1283,7 @@ SeMenu_BitShiftMask_End:
 	add	(xiz), a
 	ld	a, (xiz)
 	.byte 0x8f
-	ldwio	193, 4824
+	ldw	(193:8), 4824:io
 	ld	c, (xsp+12)
 	extz	bc
 	calr	65327
@@ -1362,7 +1362,7 @@ SeMenu_BitShiftMask_End:
 	add	(xiz), a
 	ld	a, (xiz)
 	.byte 0x8f
-	ldwio	193, 4824
+	ldw	(193:8), 4824:io
 	ld	c, (xsp+12)
 	extz	bc
 	calr	65145
@@ -1838,7 +1838,7 @@ SeMenu_TransferPartValues_EndData:
 	.byte 0xc7
 	swi	2
 	.byte 0x99, 0x8f
-	ldwio	63, 0x6e00
+	ldw	(63:8), 0x6e00:io
 	ex_ff
 	cpib_erp 250, 0
 	jr z, 27
@@ -5231,7 +5231,7 @@ SeMenu_ApplySynthParam_Data:
 	.byte 0xc7
 	swi	3
 	.byte 0xa8, 0x8f
-	ldwio	63, 0x6300
+	ldw	(63:8), 0x6300:io
 	ld	w, 199:opc
 	swi	2
 	cp	(xbc-57), c
@@ -5247,7 +5247,7 @@ SeMenu_ApplySynthParam_Data:
 	jr	lt, -57
 	swi	3
 	.byte 0x89, 0x8f
-	ldwio	241, 0xe067
+	ldw	(241:8), 0xe067:io
 	ld	xwa, (xsp+6)
 	ld	(xwa), iz
 	pop	xiz

@@ -10279,7 +10279,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -10315,7 +10315,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -10354,7 +10354,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -10391,7 +10391,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -10928,7 +10928,7 @@ Scoop_GridDividerData:
 	nop
 	ld	l, 0:opc
 	ldw	de, 6912
-	ldwio	8, 0x5500
+	ldw	(8:8), 0x5500:io
 	nop
 	ld	l, 0:opc
 	pop	xsp
@@ -12496,7 +12496,7 @@ Scoop_EnvelopeCalc_Data:
 	.byte 0x01
 	jr	gt, -45
 	swi	5
-	ldwio	1, 0xf320
+	ldw	(1:8), 0xf320:io
 	swi	5
 	ret
 	.byte 0x01, 0x50

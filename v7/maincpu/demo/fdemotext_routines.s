@@ -1669,7 +1669,7 @@ FDemoText_ByteData_TextRenderer:
 	exts	xwa
 	sll	xwa, 2
 	.byte 0xaf	; v10 does not spell this byte either
-	ldwio	128, 8352
+	ldw	(128:8), 8352:io
 	push	xwa
 	call	16713667
 	inc	1, hl

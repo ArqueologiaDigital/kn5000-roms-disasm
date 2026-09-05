@@ -857,7 +857,7 @@ AccVoice_ParamIndexData:
 	ldio	4, 12
 	nop
 	halt
-	ldwio	15, 6420
+	ldw	(15:8), 6420:io
 	calr	53795
 	pop	sr
 	.byte 0xd4
@@ -1065,7 +1065,7 @@ AccStyle_ByteDataBlock:
 	nop
 	ldio	0, 9
 	nop
-	ldwio	0, 11
+	ldw	(0:8), 11:io
 	incf
 	nop
 	decf
@@ -1097,7 +1097,7 @@ AccStyle_ByteDataBlock:
 	max
 	ldio	4, 9
 	max
-	ldwio	4, 1035
+	ldw	(4:8), 1035:io
 	incf
 	max
 	decf
@@ -1202,8 +1202,8 @@ AccTuning_ValueTable:
 	halt
 	halt
 	halt
-	ldwio	10, 2570
-	ldwio	15, 3855
+	ldw	(10:8), 2570:io
+	ldw	(15:8), 3855:io
 	retd	0x140f
 	push_a
 	push_a
@@ -11457,7 +11457,7 @@ AccVoice_CopyFromROM_DataBlock:
 	ret
 	push	1
 	ret
-	ldwio	1, 0xffff
+	ldw	(1:8), 0xffff:io
 	nop
 	swi	7
 	swi	7
@@ -21723,7 +21723,7 @@ __pad_F6288E:
 	.byte 0x1f
 	.ascii " )!+\"-#/0123456789:cd;<feABCDEJ`likMLUVW"
 	jp	0x09121d
-	ldwio	11, 3340
+	ldw	(11:8), 3340:io
 	ret
 	normal
 	push	sr
@@ -25682,7 +25682,7 @@ RhythmVariation_InlineCode:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	ld	(xiz), xiz
-	ldwio	241, 0x3712
+	ldw	(241:8), 0x3712:io
 	nop
 	.byte 0x04, 0xc1, 0x88, 0x8d
 	push	xiz
@@ -26096,7 +26096,7 @@ DrumVoice_Handler5:
 	rcf
 	.byte 0xf1, 0xea
 	ldw	ix, 0x66cd
-	ldwio	193, 0x34ea
+	ldw	(193:8), 0x34ea:io
 	push	xix
 	.byte 0xdf, 0xc1, 0xd2
 	ldw	ix, 1086
@@ -26116,7 +26116,7 @@ DrumVoice_Handler4:
 	rcf
 	.byte 0xf1, 0xea
 	ldw	ix, 0x66ce
-	ldwio	193, 0x34ea
+	ldw	(193:8), 0x34ea:io
 	push	xix
 	.byte 0xbf, 0xc1, 0xd2
 	ldw	ix, 1086
@@ -26203,7 +26203,7 @@ DrumVoice_Handler7:
 	push	xiz
 	.byte 0xf1, 0xd3
 	ldw	ix, 0x6ec8
-	ldwio	193, 0x34d6
+	ldw	(193:8), 0x34d6:io
 	push	xsp
 	incf
 	jr	nc, 3
@@ -27368,11 +27368,11 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ret
 	ret
 	.byte 0xc1
-	ldwio	57, 0xc104
+	ldw	(57:8), 0xc104:io
 	pushw	1081
 	ld	(0x390a:16), 0
 	.byte 0xc1
-	ldwio	57, 1343
+	ldw	(57:8), 1343:io
 	jr	z, 19
 	calr	65120
 	ld	xix, xiy
@@ -27385,7 +27385,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	.byte 0xf1
 	pushw	1081
 	.byte 0xf1
-	ldwio	57, 0xf104
+	ldw	(57:8), 0xf104:io
 	decf
 	push	xbc
 	nop
@@ -35233,7 +35233,7 @@ AccScreen_UIDataBlock:
 	.byte 0xcb
 	scf
 	ld	xiy, 0x08065352
-	ldwio	24, 0x4552
+	ldw	(24:8), 0x4552:io
 	.byte 0x53, 0x54
 	reti
 	halt
@@ -35319,31 +35319,31 @@ AccScreen_UIDataBlock:
 	nop
 	ldw	iy, 0xa701
 	nop
-	ldwio	10, 12
+	ldw	(10:8), 12:io
 	cp (xde+256), xde
 	nop
 	.byte 0xc0
 	nop
-	ldwio	10, 5
+	ldw	(10:8), 5:io
 	or	(8960:24), ix
 	nop
-	ldwio	10, 205
+	ldw	(10:8), 205:io
 	or	(0xeb00:24), ix
 	nop
-	ldwio	10, 245
+	ldw	(10:8), 245:io
 	or	(0x011300:24), ix
 	nop
-	ldwio	10, 285
+	ldw	(10:8), 285:io
 	or	(0x013b00:24), ix
 	nop
 	normal
-	ldwio	5, 0xdf00
+	ldw	(5:8), 0xdf00:io
 	nop
 	ld	c, 0:opc
 	.byte 0xdf
 	nop
 	normal
-	ldwio	205, 0xdf00
+	ldw	(205:8), 0xdf00:io
 	nop
 	.byte 0xeb
 	nop
@@ -35378,39 +35378,39 @@ AccScreen_UIDataBlock:
 	ld	w, (xiz+32)
 	ld	w, 32:opc
 	.byte 0x8e
-	ldwio	10, 45
+	ldw	(10:8), 45:io
 	or	(0x4b00:24), ix
 	nop
-	ldwio	10, 85
+	ldw	(10:8), 85:io
 	or	(0x7300:24), ix
 	nop
-	ldwio	10, 125
+	ldw	(10:8), 125:io
 	or	(0x9b00:24), ix
 	nop
-	ldwio	10, 165
+	ldw	(10:8), 165:io
 	or	(0xc300:24), ix
 	nop
 	normal
-	ldwio	45, 0xdf00
+	ldw	(45:8), 0xdf00:io
 	nop
 	popw	hl
 	nop
 	.byte 0xdf
 	nop
 	normal
-	ldwio	85, 0xdf00
+	ldw	(85:8), 0xdf00:io
 	nop
 	jrl	ule, -8448
 	nop
 	normal
-	ldwio	125, 0xdf00
+	ldw	(125:8), 0xdf00:io
 	nop
 	.byte 0x9b
 	nop
 	.byte 0xdf
 	nop
 	normal
-	ldwio	165, 0xdf00
+	ldw	(165:8), 0xdf00:io
 	nop
 	.byte 0xc3
 	nop
@@ -35480,7 +35480,7 @@ AccScreen_UIDataBlock:
 	.byte 0x8b, 0xac, 0xf6
 	nop
 	nop
-	ldwio	192, 3897
+	ldw	(192:8), 3897:io
 	nop
 	.byte 0x06, 0x83
 	jp	0x0b0401
@@ -35530,7 +35530,7 @@ AccScreen_UIDataBlock:
 	jrl	ule, -2388
 	nop
 	.byte 0x51
-	ldwio	33, 2304
+	ldw	(33:8), 2304:io
 	nop
 	normal
 	retd	33
@@ -35694,32 +35694,32 @@ AccScreen_UIDataBlock:
 	pushw	de
 	pushw	de
 	normal
-	ldwio	7, 0x3000
+	ldw	(7:8), 0x3000:io
 	nop
 	ld	xiz, 0x02003000
-	ldwio	7, 0x3000
+	ldw	(7:8), 0x3000:io
 	nop
 	reti
 	nop
 	ldw	iy, 512
-	ldwio	70, 0x3000
+	ldw	(70:8), 0x3000:io
 	nop
 	ld	xiz, 0x06003500
 	halt
 	.byte 0xbd, 0x06
 	pop_a
 	normal
-	ldwio	74, 0x3000
+	ldw	(74:8), 0x3000:io
 	nop
 	.byte 0x86
 	nop
 	ldw	wa, 512
-	ldwio	74, 0x3000
+	ldw	(74:8), 0x3000:io
 	nop
 	popw	de
 	nop
 	ldw	iy, 512
-	ldwio	134, 0x3000
+	ldw	(134:8), 0x3000:io
 	nop
 	.byte 0x86
 	nop
@@ -35728,17 +35728,17 @@ AccScreen_UIDataBlock:
 	.byte 0xc5, 0x06
 	pop_a
 	normal
-	ldwio	138, 0x3000
+	ldw	(138:8), 0x3000:io
 	nop
 	.byte 0xc6
 	nop
 	ldw	wa, 512
-	ldwio	138, 0x3000
+	ldw	(138:8), 0x3000:io
 	nop
 	.byte 0x8a
 	nop
 	ldw	iy, 512
-	ldwio	198, 0x3000
+	ldw	(198:8), 0x3000:io
 	nop
 	.byte 0xc6
 	nop
@@ -35747,16 +35747,16 @@ AccScreen_UIDataBlock:
 	cpl	e
 	pop_a
 	normal
-	ldwio	202, 0x3000
+	ldw	(202:8), 0x3000:io
 	nop
 	push	1
 	ldw	wa, 512
-	ldwio	202, 0x3000
+	ldw	(202:8), 0x3000:io
 	nop
 	.byte 0xca
 	nop
 	ldw	iy, 512
-	ldwio	9, 0x3001
+	ldw	(9:8), 0x3001:io
 	nop
 	push	1
 	ldw	iy, 1536
@@ -35764,230 +35764,230 @@ AccScreen_UIDataBlock:
 	.byte 0xd5, 0x06
 	pop_a
 	push	sr
-	ldwio	7, 0x4500
+	ldw	(7:8), 0x4500:io
 	nop
 	reti
 	nop
 	popw	ix
 	nop
 	normal
-	ldwio	7, 0x4c00
+	ldw	(7:8), 0x4c00:io
 	nop
 	popw	wa
 	nop
 	popw	ix
 	nop
 	push	sr
-	ldwio	72, 0x4500
+	ldw	(72:8), 0x4500:io
 	nop
 	popw	wa
 	nop
 	popw	ix
 	nop
 	normal
-	ldwio	73, 0x4c00
+	ldw	(73:8), 0x4c00:io
 	nop
 	.byte 0x88
 	nop
 	popw	ix
 	nop
 	push	sr
-	ldwio	136, 0x4500
+	ldw	(136:8), 0x4500:io
 	nop
 	.byte 0x88
 	nop
 	popw	ix
 	nop
 	normal
-	ldwio	137, 0x4c00
+	ldw	(137:8), 0x4c00:io
 	nop
 	.byte 0xc8
 	nop
 	popw	ix
 	nop
 	push	sr
-	ldwio	200, 0x4500
+	ldw	(200:8), 0x4500:io
 	nop
 	.byte 0xc8
 	nop
 	popw	ix
 	nop
 	normal
-	ldwio	201, 0x4c00
+	ldw	(201:8), 0x4c00:io
 	nop
 	push	1
 	popw	ix
 	nop
 	push	sr
-	ldwio	9, 0x4501
+	ldw	(9:8), 0x4501:io
 	nop
 	push	1
 	popw	ix
 	nop
 	push	sr
-	ldwio	7, 0x6300
+	ldw	(7:8), 0x6300:io
 	nop
 	reti
 	nop
 	jr	gt, 0
 	normal
-	ldwio	7, 0x6a00
+	ldw	(7:8), 0x6a00:io
 	nop
 	popw	wa
 	nop
 	jr	gt, 0
 	push	sr
-	ldwio	72, 0x6300
+	ldw	(72:8), 0x6300:io
 	nop
 	popw	wa
 	nop
 	jr	gt, 0
 	normal
-	ldwio	73, 0x6a00
+	ldw	(73:8), 0x6a00:io
 	nop
 	decm8 2, (xwa+256)
 	nop
 	push	sr
-	ldwio	136, 0x6300
+	ldw	(136:8), 0x6300:io
 	nop
 	decm8 2, (xwa+256)
 	nop
 	normal
-	ldwio	137, 0x6a00
+	ldw	(137:8), 0x6a00:io
 	nop
 	.byte 0xc8
 	nop
 	jr	gt, 0
 	push	sr
-	ldwio	200, 0x6300
+	ldw	(200:8), 0x6300:io
 	nop
 	.byte 0xc8
 	nop
 	jr	gt, 0
 	normal
-	ldwio	201, 0x6a00
+	ldw	(201:8), 0x6a00:io
 	nop
 	push	1
 	jr	gt, 0
 	push	sr
-	ldwio	9, 0x6301
+	ldw	(9:8), 0x6301:io
 	nop
 	push	1
 	jr	gt, 0
 	push	sr
-	ldwio	7, 0x8100
+	ldw	(7:8), 0x8100:io
 	nop
 	reti
 	nop
 	.byte 0x88
 	nop
 	normal
-	ldwio	7, 0x8800
+	ldw	(7:8), 0x8800:io
 	nop
 	popw	wa
 	nop
 	.byte 0x88
 	nop
 	push	sr
-	ldwio	72, 0x8100
+	ldw	(72:8), 0x8100:io
 	nop
 	popw	wa
 	nop
 	.byte 0x88
 	nop
 	normal
-	ldwio	73, 0x8800
+	ldw	(73:8), 0x8800:io
 	nop
 	add (xwa+256), w
 	nop
 	push	sr
-	ldwio	136, 0x8100
+	ldw	(136:8), 0x8100:io
 	nop
 	add (xwa+256), w
 	nop
 	normal
-	ldwio	137, 0x8800
+	ldw	(137:8), 0x8800:io
 	nop
 	.byte 0xc8
 	nop
 	.byte 0x88
 	nop
 	push	sr
-	ldwio	200, 0x8100
+	ldw	(200:8), 0x8100:io
 	nop
 	.byte 0xc8
 	nop
 	.byte 0x88
 	nop
 	normal
-	ldwio	201, 0x8800
+	ldw	(201:8), 0x8800:io
 	nop
 	push	1
 	.byte 0x88
 	nop
 	push	sr
-	ldwio	9, 0x8101
+	ldw	(9:8), 0x8101:io
 	nop
 	push	1
 	.byte 0x88
 	nop
 	push	sr
-	ldwio	7, 0x9f00
+	ldw	(7:8), 0x9f00:io
 	nop
 	reti
 	nop
 	.byte 0xa6
 	nop
 	normal
-	ldwio	7, 0xa600
+	ldw	(7:8), 0xa600:io
 	nop
 	popw	wa
 	nop
 	.byte 0xa6
 	nop
 	push	sr
-	ldwio	72, 0x9f00
+	ldw	(72:8), 0x9f00:io
 	nop
 	popw	wa
 	nop
 	.byte 0xa6
 	nop
 	normal
-	ldwio	73, 0xa600
+	ldw	(73:8), 0xa600:io
 	nop
 	.byte 0x88
 	nop
 	.byte 0xa6
 	nop
 	push	sr
-	ldwio	136, 0x9f00
+	ldw	(136:8), 0x9f00:io
 	nop
 	.byte 0x88
 	nop
 	.byte 0xa6
 	nop
 	normal
-	ldwio	137, 0xa600
+	ldw	(137:8), 0xa600:io
 	nop
 	.byte 0xc8
 	nop
 	.byte 0xa6
 	nop
 	push	sr
-	ldwio	200, 0x9f00
+	ldw	(200:8), 0x9f00:io
 	nop
 	.byte 0xc8
 	nop
 	.byte 0xa6
 	nop
 	normal
-	ldwio	201, 0xa600
+	ldw	(201:8), 0xa600:io
 	nop
 	push	1
 	.byte 0xa6
 	nop
 	push	sr
-	ldwio	9, 0x9f01
+	ldw	(9:8), 0x9f01:io
 	nop
 	push	1
 	.byte 0xa6
@@ -36875,7 +36875,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xf1, 0x50
 	push	xbc
 	dec	6, l
-	ldwio	209, 0x3970
+	ldw	(209:8), 0x3970:io
 	push	xwa
 	max
 	nop

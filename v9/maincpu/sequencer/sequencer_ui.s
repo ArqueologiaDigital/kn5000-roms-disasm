@@ -6057,7 +6057,7 @@ NoteEditBox_EventDispatch2:
 	call	ApFuncCall
 	ld	(xsp+8), hl
 	.byte 0xbf
-	ldwio	2, 1
+	ldw	(2:8), 1:io
 	ldib_erp 251, 0
 	stb_erp a, 251
 	extz	wa
@@ -6081,7 +6081,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xc7
 	swi	3
 	dec	6, wa
-	ldwio	159, 1032
+	ldw	(159:8), 1032:io
 	.byte 0x40
 	.long FmtStr_pct3d
 	jr	21
@@ -6106,7 +6106,7 @@ NoteEditBox_EventDispatch2:
 	ldw (xwa+2), 33
 	ldw (xwa+6), 42
 	.byte 0x9f
-	ldwio	4, 0xe30b
+	ldw	(4:8), 0xe30b:io
 	nop
 	pushw	0x461c
 	lda	xwa, (xsp+42)
@@ -6150,7 +6150,7 @@ NoteEditBox_EventDispatch2:
 	call	ApFuncCall
 	ld	(xsp+8), hl
 	.byte 0xbf
-	ldwio	2, 1
+	ldw	(2:8), 1:io
 	ldib_erp 251, 0
 	stb_erp a, 251
 	extz	wa
@@ -6178,7 +6178,7 @@ NoteEditBox_EventDispatch2:
 	ldw	bc, 0xc700
 	swi	3
 	dec	6, wa
-	ldwio	159, 1032
+	ldw	(159:8), 1032:io
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x148
 	jr	21
 	ld	wa, (xsp+8)
@@ -6201,7 +6201,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xb4
 	push	sr
 	ldw	bc, 0x9f00
-	ldwio	4, 0xe30b
+	ldw	(4:8), 0xe30b:io
 	nop
 	pushw	0x4628
 	push	xde

@@ -7959,7 +7959,7 @@ MemConfig_Handler_0:
 	ld	xhl, 3412
 	.byte 0xb3
 	scc8	z, c
-	ldwio	0, 0xb3b3
+	ldw	(0:8), 0xb3b3:io
 	call	PortConfig_SetupBytecode_0x34
 	jp	MemConfig_Handler_0_0x63
 	call	VoiceCtrl_BytecodeHandler
@@ -11788,7 +11788,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	.byte 0xc1, 0xb8
 	ret
 	push	xsp
-	ldwio	126, 0xffea
+	ldw	(126:8), 0xffea:io
 	.byte 0xf1, 0xba
 	ret
 	scc8	z, d
@@ -14890,7 +14890,7 @@ StringData_KeyNames:	.ascii "  C D"
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -14931,7 +14931,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -14967,7 +14967,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -15006,7 +15006,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -15043,7 +15043,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldwio	118, 9
+	ldw	(118:8), 9:io
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
@@ -17984,7 +17984,7 @@ Scoop_EnvelopeCalc_Data:
 	.byte 0x01
 	jr	gt, -45
 	swi	5
-	ldwio	1, 0xf320
+	ldw	(1:8), 0xf320:io
 	swi	5
 	ret
 	.byte 0x01, 0x50
@@ -19394,7 +19394,7 @@ Scoop_EventLoop_36Entry_Data:
 	.byte 0xe4, 0xe0
 	ld	d, 243:opc
 	swi	5
-	ldwio	1, 0xe830
+	ldw	(1:8), 0xe830:io
 	.byte 0x8b
 	lda	xwa, (xsp+262)
 	ld	xbc, xwa

@@ -584,7 +584,7 @@ SndParam_ResolveWidgetEx_Data:
 	push	xsp
 	ld	(xbc), xiz
 	ld	b, 175:opc
-	ldwio	33, 8593
+	ldw	(33:8), 8593:io
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
@@ -1967,7 +1967,7 @@ SndParam_RegisterComplex_Data:
 	pop	sr
 	.byte 0xe4, 0xe0
 	ld	a, 159:opc
-	ldwio	63, 0
+	ldw	(63:8), 0:io
 	jr	lt, 9
 	ld	a, (xbc)
 	extz	wa
@@ -1977,7 +1977,7 @@ SndParam_RegisterComplex_Data:
 	extz	wa
 	sub	(xsp+10), wa
 	.byte 0x9f
-	ldwio	131, 3247
+	ldw	(131:8), 3247:io
 	ld	w, 136:opc
 	reti
 	ld	a, 216:opc
@@ -2252,7 +2252,7 @@ SndParam_RegisterOffset_Data:
 	ld	bc, iz
 	and	bc, 511
 	.byte 0x9f
-	ldwio	129, 0xcfd9
+	ldw	(129:8), 0xcfd9:io
 	pushw	wa
 	nop
 	jr	ge, 5

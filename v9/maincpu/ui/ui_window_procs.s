@@ -8282,7 +8282,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	bc, (xwa)
 	.byte 0x9f, 0x06
 	sub	(xbc), l
-	ldwio	32, 0xe1f5
+	ldw	(32:8), 0xe1f5:io
 	.byte 0x51
 	ld	(xsp+14), xwa
 	ld	bc, (xde)
@@ -8308,9 +8308,9 @@ ColorBlit2_LargeCodeBlock:
 	push	sr
 	inc	6, l
 	jr	nov, -81
-	ldwio	37, 5791
+	ldw	(37:8), 5791:io
 	ld	h, 175:opc
-	ldwio	32, 8336
+	ldw	(32:8), 8336:io
 	exts	xwa
 	add	xwa, xde
 	ld	xix, xbc
@@ -8358,11 +8358,11 @@ ColorBlit2_LargeCodeBlock:
 	push	xiy
 	jr	f, 104
 	jr	ugt, -81
-	ldwio	37, 0xa2d2
+	ldw	(37:8), 0xa2d2:io
 	.byte 0xef
 	pop	sr
 	ld	h, 175:opc
-	ldwio	32, 8336
+	ldw	(32:8), 8336:io
 	exts	xwa
 	add	xwa, xde
 	ld	xix, xbc

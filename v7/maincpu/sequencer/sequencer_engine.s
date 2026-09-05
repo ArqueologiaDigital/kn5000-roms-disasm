@@ -16818,7 +16818,7 @@ PartCtrl_SwapAndRelinkBlock:
 	ld	iz, wa
 	ld	(xsp+8), bc
 	.byte 0xbf
-	ldwio	22, 0xf22f
+	ldw	(22:8), 0xf22f:io
 	ld	(0xf22f:16), iz
 	.byte 0xbf, 0x04
 	push	sr

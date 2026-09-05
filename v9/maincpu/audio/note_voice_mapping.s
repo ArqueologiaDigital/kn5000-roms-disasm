@@ -16836,7 +16836,7 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.byte 0x04
 	reti
-	ldwio	0, 1796
+	ldw	(0:8), 1796:io
 	pushw	1024
 	ldio	0, 0
 	pop	sr
@@ -16845,14 +16845,14 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	pop	sr
 	reti
-	ldwio	0, 1539
+	ldw	(0:8), 1539:io
 	push	0
 	pop	sr
 	.byte 0x06
-	ldwio	0, 1795
+	ldw	(0:8), 1795:io
 	pushw	1280
 	reti
-	ldwio	0, 1796
+	ldw	(0:8), 1796:io
 	push	0
 	.byte 0x04
 	ldio	10, 0
@@ -16860,11 +16860,11 @@ VoiceSlot_CheckAndApply_Data:
 	di
 	nop
 	.byte 0x04, 0x06
-	ldwio	4, 2567
+	ldw	(4:8), 2567:io
 	push	sr
 	.byte 0x04
 	reti
-	ldwio	1, 1796
+	ldw	(1:8), 1796:io
 	pushw	1026
 	reti
 	push	2
@@ -16876,7 +16876,7 @@ VoiceSlot_CheckAndApply_Data:
 	di
 	pop	sr
 	reti
-	ldwio	2, 2307
+	ldw	(2:8), 2307:io
 	push	sr
 	reti
 	nop
@@ -16885,7 +16885,7 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.byte 0x04
 	reti
-	ldwio	3, 1024
+	ldw	(3:8), 1024:io
 	.byte 0x06
 	pushw	1024
 	ldio	11, 0
@@ -27464,7 +27464,7 @@ HdaeRom_DataDispatch:
 	ld	xiy, xhl
 	.byte 0xaf, 0x06
 	sub	(xiy), l
-	ldwio	36, 0x9031
+	ldw	(36:8), 0x9031:io
 	nop
 	ldirw
 	.byte 0x85
@@ -27505,7 +27505,7 @@ HdaeRom_DataDispatch:
 	ld	xiy, xbc
 	.byte 0xaf, 0x06
 	sub	(xiy), l
-	ldwio	36, 0x4831
+	ldw	(36:8), 0x4831:io
 	nop
 	ldirw
 	ld	xbc, 470

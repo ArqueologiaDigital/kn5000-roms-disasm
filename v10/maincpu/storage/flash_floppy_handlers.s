@@ -788,7 +788,7 @@ Flash_InitBytecodeBlock:
 	.byte 0x8f
 	incf
 	push	xsp
-	ldwio	127, 349
+	ldw	(127:8), 349:io
 	calr	5349
 	ld	a, (xsp+10)
 	extz	wa
@@ -992,7 +992,7 @@ Flash_InitBytecodeBlock:
 	or	xwa, xwa
 	pop_f
 	add	(xix+57), xsp
-	ldwio	33, 4824
+	ldw	(33:8), 4824:io
 	add	bc, wa
 	.byte 0xc3
 	reti
@@ -1050,7 +1050,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	jr	12
 	.byte 0x8f
-	ldwio	25, 3178
+	ldw	(25:8), 3178:io
 	.byte 0x8f, 0x06
 	pop_f
 	jr	nov, 12
@@ -1069,7 +1069,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	jr	12
 	.byte 0x8f
-	ldwio	25, 3178
+	ldw	(25:8), 3178:io
 	.byte 0x8f, 0x06
 	pop_f
 	jr	nov, 12
@@ -1279,7 +1279,7 @@ PartGrid_OperationsBlock:
 	.byte 0x8f
 	incf
 	push	xde
-	ldwio 143, 8460
+	ldw (143:8), 8460:io
 	extz	wa
 	div	a, 3
 	ld	(xsp+12), w
@@ -2449,7 +2449,7 @@ Flash_ExtendedOpsBlock:
 	cp w, 0:i3
 	jr z, 5
 	.byte 0x8f
-	ldwio	240, 0x2f6e
+	ldw	(240:8), 0x2f6e:io
 	ldb_erp	e, 240
 	extz	ix
 	sla	ix, 2
@@ -2497,7 +2497,7 @@ Flash_ExtendedOpsBlock:
 	cp w, b
 	jr	ule, 9
 	.byte 0x8f
-	ldwio	240, 1126
+	ldw	(240:8), 1126:io
 	ld	b, w
 	ld	d, c
 	inc	1, c

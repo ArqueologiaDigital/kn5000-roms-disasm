@@ -111,7 +111,7 @@ FDTest_Container_DebugHDAE1:
 	swi 7
 	swi 7
 	swi 7
-	ldwio 0, 0
+	ldw (0:8), 0:io
 	nop
 	nop
 	.long Naka_PresentationRootState
@@ -390,7 +390,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x4f, 0x4b
 	.byte 0x00, 0xff, 0x4e, 0x47, 0x00, 0xff
 	aligned_string "A:IMMUNITY.TST"
-	ldwio 70, 27753
+	ldw (70:8), 27753:io
 	jr mi, 32
 	jrl le, 28005
 	jr nc, 118
@@ -413,7 +413,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	aligned_string "File Read =>"
 	jrl le, 98
 	swi 7
-	ldwio 99, 28257
+	ldw (99:8), 28257:io
 	jr nz, 111
 	jrl ov, 28448
 	jrl f, 28261
@@ -428,7 +428,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	ld w, 79:opc
 	popw hl
 	nop
-	ldwio 68, 29793
+	ldw (68:8), 29793:io
 	jr lt, 32
 	ld xhl, 1634757999
 	jrl le, 8293

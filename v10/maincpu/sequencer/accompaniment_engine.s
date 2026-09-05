@@ -1016,7 +1016,7 @@ AccStyle_ByteDataBlock:
 	nop
 	ldio	0, 9
 	nop
-	ldwio	0, 11
+	ldw	(0:8), 11:io
 	incf
 	nop
 	decf
@@ -1048,7 +1048,7 @@ AccStyle_ByteDataBlock:
 	max
 	ldio	4, 9
 	max
-	ldwio	4, 1035
+	ldw	(4:8), 1035:io
 	incf
 	max
 	decf
@@ -10941,7 +10941,7 @@ AccVoice_CopyFromROM_DataBlock:
 	ret
 	push	1
 	ret
-	ldwio	1, 0xffff
+	ldw	(1:8), 0xffff:io
 	nop
 	swi	7
 	swi	7
@@ -21161,7 +21161,7 @@ __pad_F6288E:
 	.byte 0x1f
 	.ascii " )!+\"-#/0123456789:cd;<feABCDEJ`likMLUVW"
 	jp	0x09121d
-	ldwio	11, 3340
+	ldw	(11:8), 3340:io
 	ret
 	normal
 	push	sr
@@ -25064,7 +25064,7 @@ RhythmVariation_InlineCode:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	ld	(xiz), xiz
-	ldwio	241, 0x3712
+	ldw	(241:8), 0x3712:io
 	nop
 	.byte 0x04, 0xc1, 0x88, 0x8d
 	push	xiz
@@ -25478,7 +25478,7 @@ DrumVoice_Handler5:
 	rcf
 	.byte 0xf1, 0xea
 	ldw	ix, 0x66cd
-	ldwio	193, 0x34ea
+	ldw	(193:8), 0x34ea:io
 	push	xix
 	.byte 0xdf, 0xc1, 0xd2
 	ldw	ix, 1086
@@ -25498,7 +25498,7 @@ DrumVoice_Handler4:
 	rcf
 	.byte 0xf1, 0xea
 	ldw	ix, 0x66ce
-	ldwio	193, 0x34ea
+	ldw	(193:8), 0x34ea:io
 	push	xix
 	.byte 0xbf, 0xc1, 0xd2
 	ldw	ix, 1086
@@ -25585,7 +25585,7 @@ DrumVoice_Handler7:
 	push	xiz
 	.byte 0xf1, 0xd3
 	ldw	ix, 0x6ec8
-	ldwio	193, 0x34d6
+	ldw	(193:8), 0x34d6:io
 	push	xsp
 	incf
 	jr	nc, 3
@@ -26751,11 +26751,11 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ret
 	ret
 	.byte 0xc1
-	ldwio	57, 0xc104
+	ldw	(57:8), 0xc104:io
 	pushw	1081
 	ld	(0x390a:16), 0
 	.byte 0xc1
-	ldwio	57, 1343
+	ldw	(57:8), 1343:io
 	jr	z, 19
 	calr	65120
 	ld	xix, xiy
@@ -26768,7 +26768,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	.byte 0xf1
 	pushw	1081
 	.byte 0xf1
-	ldwio	57, 0xf104
+	ldw	(57:8), 0xf104:io
 	decf
 	push	xbc
 	nop
@@ -35426,7 +35426,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xf1, 0x50
 	push	xbc
 	dec	6, l
-	ldwio	209, 0x3970
+	ldw	(209:8), 0x3970:io
 	push	xwa
 	max
 	nop

@@ -3968,7 +3968,7 @@ DSPCfg_Data_ParamDispatch:
 	.byte 0x8f
 	incf
 	add	(0xa066:16), l
-	ldwio	33, 4239
+	ldw	(33:8), 4239:io
 	.byte 0xf1
 	jr	ule, 20
 	.byte 0x8f, 0x04
@@ -6385,7 +6385,7 @@ UIStateEvt_ChannelConfig_Data:
 	.byte 0xb4, 0xd1, 0x9c, 0xc5
 	push	xiz
 	ldio	0, 104
-	ldwio	241, 0xc322
+	ldw	(241:8), 0xc322:io
 	.byte 0xbc, 0xd1, 0x9c, 0xc5
 	push	xiz
 	ldio	0, 209

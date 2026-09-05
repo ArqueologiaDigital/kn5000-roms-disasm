@@ -1439,7 +1439,7 @@ ProcessNoteEntry_ReadBuf:
 ProcessNoteEntry_ReadBuf2:
 	or	(xbc), a
 	jr	ov, -81
-	ldwio	129, 1209
+	ldw	(129:8), 1209:io
 	nop
 	nop
 	ld	wa, (xsp+2)
@@ -9743,7 +9743,7 @@ ConfigureBanks_LoadReg2:
 	.byte 0xd8, 0x69, 0x06, 0x33, 0xff, 0xff, 0x78, 0x3f
 	.byte 0x03, 0x9f
 ConfigureBanks_Block4:
-	ldwio	32, 2719
+	ldw	(32:8), 2719:io
 	jr	lt, -65
 	incf
 ConfigureBanks_Block5:
@@ -9810,7 +9810,7 @@ ConfigureBanks_NextIter:
 FileIO_SeekRecord_LoopDone:
 	.byte 0x02, 0x9f
 FileIO_SeekRecord_Done:
-	ldwio	32, 2719
+	ldw	(32:8), 2719:io
 	jr	lt, -65
 	incf
 SeekRecord_Done_Prologue:
@@ -9907,7 +9907,7 @@ SeekRecord_PopReturn_LoadDRAM:
 	.byte 0x24, 0xaf, 0x06, 0x20, 0xe8, 0xe0, 0x66, 0x1d
 	.byte 0x9f
 SeekRecord_PopReturn_Block2:
-	ldwio	32, 48936
+	ldw	(32:8), 48936:io
 	ret
 SeekRecord_PopReturn_Block3:
 	ldw	wa, 61752

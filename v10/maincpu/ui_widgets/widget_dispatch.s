@@ -2328,7 +2328,7 @@ DisplayScript_Node_AnimStep07_13:
 	jrl -4554
 	nop
 	pop sr
-	ldwio 120, 60982
+	ldw (120:8), 60982:io
 	nop
 	normal
 	call 15614146
@@ -2922,7 +2922,7 @@ WidgetParam_Entry_018:
 	ld xwa, 3997762048
 	nop
 	swi 7
-	ldwio 120, 60982
+	ldw (120:8), 60982:io
 	nop
 	ccf
 	nop
@@ -2965,7 +2965,7 @@ WidgetParam_Entry_018:
 	reti
 	reti
 	ldio 9, 9
-	ldwio 11, 2827
+	ldw (11:8), 2827:io
 	incf
 	.ascii "#!!!!!!!\"\"\"!!!!!!!!!!!"
 	.byte 0x0f

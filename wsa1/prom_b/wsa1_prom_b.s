@@ -85792,7 +85792,7 @@ sub_F44AEE:		; <- T_F40AC4
 	djnz16	bc, -6	; F44B0A  djnz BC,0xf44b07
 	jr	29	; F44B0D  jr T,0xf44b2c
 	ld	(13403:16), 0	; F44B0F  ld (0x345b),0x00
-	ldwio	145, 0	; F44B14  ld (0x91),0x0000
+	ldw	(145:8), 0:io	; F44B14  ld (0x91),0x0000
 	ldio	147, 0	; F44B18  ld (0x93),0x00
 	xor	wa, wa	; F44B1B  xor WA,WA
 	ld	xix, 13290	; F44B1D  ld XIX,0x000033ea
@@ -85863,7 +85863,7 @@ sub_F44B2D:		; <- T_F40AAC
 ; --------------------------------------------------------------------------
 sub_F44B95:
 	ld	(13403:16), 0	; F44B95  ld (0x345b),0x00
-	ldwio	145, 0	; F44B9A  ld (0x91),0x0000
+	ldw	(145:8), 0:io	; F44B9A  ld (0x91),0x0000
 	ldio	147, 0	; F44B9E  ld (0x93),0x00
 	xor	wa, wa	; F44BA1  xor WA,WA
 	ld	xix, 13290	; F44BA3  ld XIX,0x000033ea
@@ -86613,7 +86613,7 @@ sub_F451E6:		; <- T_F409D0
 	ldw	(13398:16), 0	; F45222  ld (0x3456),0x0000
 	calr	3514	; F45228  calr 0xf45fe5
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4522B  and (0x34bb),0xf7
-	ldwio	145, 0	; F45230  ld (0x91),0x0000
+	ldw	(145:8), 0:io	; F45230  ld (0x91),0x0000
 	ldio	147, 0	; F45234  ld (0x93),0x00
 	ld	a, (6311936:24)	; F45237  ld A,(0x605000)
 	ld	(13400:16), a	; F4523C  ld (0x3458),A
@@ -87368,7 +87368,7 @@ sub_F456F0:
 	calr	2155	; F45740  calr 0xf45fae
 	m_or_mi8 MB16, 0x3614, 0x01	; F45743  or (0x3614),0x01
 	ei	6	; F45748  ei 0x06
-	ldwio	145, 0	; F4574A  ld (0x91),0x0000
+	ldw	(145:8), 0:io	; F4574A  ld (0x91),0x0000
 	ldio	147, 0	; F4574E  ld (0x93),0x00
 	di	; F45751  ei 0x00
 	call	15993268	; F45753  call 0xf409b4
@@ -87835,7 +87835,7 @@ sub_F45B0A:		; <- T_F40A14
 ; --------------------------------------------------------------------------
 sub_F45B1F:
 	ei	6	; F45B1F  ei 0x06
-	ldwio	145, 0	; F45B21  ld (0x91),0x0000
+	ldw	(145:8), 0:io	; F45B21  ld (0x91),0x0000
 	ldio	147, 0	; F45B25  ld (0x93),0x00
 	di	; F45B28  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B2A  bit 5,(0x34d0)
@@ -87862,7 +87862,7 @@ sub_F45B1F:
 ; --------------------------------------------------------------------------
 sub_F45B48:
 	ei	6	; F45B48  ei 0x06
-	ldwio	145, 0	; F45B4A  ld (0x91),0x0000
+	ldw	(145:8), 0:io	; F45B4A  ld (0x91),0x0000
 	ldio	147, 0	; F45B4E  ld (0x93),0x00
 	di	; F45B51  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B53  bit 5,(0x34d0)
@@ -155990,7 +155990,7 @@ sub_F70C3F:
 	halt	; F70C54  halt
 	ei	7	; F70C55  ei 0x07
 	ldio	15, 9	; F70C57  ld (0x0f),0x09
-	ldwio	11, 3340	; F70C5A  ld (0x0b),0x0d0c
+	ldw	(11:8), 3340:io	; F70C5A  ld (0x0b),0x0d0c
 	ret	; F70C5E  ret
 
 ; --------------------------------------------------------------------------
@@ -160480,7 +160480,7 @@ sub_F72F2D:
 	ld	c, 0:opc	; F72F4B  ld C,0x00
 	pushw	2345	; F72F4D  push 0x0929
 	ldio	255, 255	; F72F50  ld (0xff),0xff
-	ldwio	255, 65315	; F72F53  ld (0xff),0xff23
+	ldw	(255:8), 65315:io	; F72F53  ld (0xff),0xff23
 	pushw	hl	; F72F57  push HL
 	calr	1	; F72F58  calr 0xf72f5c
 	ret	; F72F5B  ret

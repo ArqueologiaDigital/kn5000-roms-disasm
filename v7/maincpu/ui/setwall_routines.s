@@ -65,7 +65,7 @@ SetWall_InlineCodeBlock:
 	nop
 	push	sr
 	nop
-	ldwio	3, 1284
+	ldw	(3:8), 1284:io
 	.byte 0x06
 	pushw	2312
 	.byte 0x01
