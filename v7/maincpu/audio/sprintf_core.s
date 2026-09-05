@@ -932,7 +932,7 @@ Sprintf_ESci_AdjustForSign2:
 
 
 Sprintf_ESci_ComputePadding:
-	lds	wa, 6
+	ld	wa, 6:i3
 	sub	wa, iz
 	pushw	wa
 	pushw	3
@@ -952,7 +952,7 @@ Sprintf_ESci_PadLeftLoop:
 	.byte 0xd7, 0xfa, 0x88, 0xda, 0xf0, 0x61, 0xd7, 0x9f
 	.byte 0x06, 0x04
 Sprintf_ESci_EmitSign:
-	lds	wa, 6
+	ld	wa, 6:i3
 	sub	wa, iz
 	pushw	wa
 	push	xbc
@@ -1019,8 +1019,8 @@ Sprintf_ESci_CheckGTrim:
 Sprintf_ESci_OutputMantissa:
 	dec	8, xsp
 	pushw	iz
-	lds	iz, 0
-	lds	wa, 0
+	ld	iz, 0:i3
+	ld	wa, 0:i3
 	ld	hl, (xsp+18)
 	cp	hl, 0:i3
 	jr	le, 11
@@ -1186,7 +1186,7 @@ Sprintf_GGen_PositiveExpDone:
 	ret
 	pushw	iz
 	ld	xde, (xsp+6)
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	bc, (xsp+10)
 	cp	bc, 0:i3
 	jr	le, 20

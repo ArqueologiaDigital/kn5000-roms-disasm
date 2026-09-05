@@ -90,7 +90,7 @@ BitMapOut_ByteData_RenderA:
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ea
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	72
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
@@ -99,7 +99,7 @@ BitMapOut_ByteData_RenderA:
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000eb
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
@@ -108,7 +108,7 @@ BitMapOut_ByteData_RenderA:
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000e8
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	480
 	ret
 BitMapOut_ByteData_RenderB:
@@ -135,7 +135,7 @@ BitMapOut_ByteData_RenderB:
 	jr	nz, 108
 	ld	a, (0x8d3a:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ld	a, (0x8d3a:16)
@@ -167,12 +167,12 @@ BitMapOut_ByteData_RenderB:
 	ld	xbc, 0x01c20007
 	lds32	xde, 0
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	310
 	inc	6, xsp
 	ret
 BitMapOut_ByteData_RenderC:
-	lds	wa, 0
+	ld	wa, 0:i3
 	jrl	302
 BitMapOut_ByteData_RenderD:
 	dec	6, xsp
@@ -192,7 +192,7 @@ BitMapOut_ByteData_RenderD:
 	jr	nz, 94
 	ld	a, (0x8d3a:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ld	a, (0x8d3a:16)
@@ -221,7 +221,7 @@ BitMapOut_ByteData_RenderD:
 	ld	xbc, 0x01c20007
 	lds32	xde, 0
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	172
 	inc	6, xsp
 	ret
@@ -242,7 +242,7 @@ BitMapOut_ByteData_RenderD:
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000e9
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	109
 	ret
 BitMapOut_ByteData_RenderE:
@@ -270,7 +270,7 @@ BitMapOut_ByteData_RenderE:
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	32
 	ret
 
@@ -309,7 +309,7 @@ BitMapOut_DecrementTimer:
 	ld de, hl
 	pushw 0xff
 	ldw wa, 0x70
-	lds bc, 2
+	ld bc, 2:i3
 	call AddswbWr
 	ret
 
@@ -538,7 +538,7 @@ BitMapOut_CopyPreset9_Execute:
 	ld a, (xiy)
 	ld (xix), a
 	ld xiz, (xbc)
-	lds iy, 0
+	ld iy, 0:i3
 	jr BitMapOut_CopyPreset9_CheckEnd
 
 BitMapOut_CopyPreset9_StoreLoop:
@@ -966,7 +966,7 @@ BitMapOut_RestoreFullVoice:
 	lda xwa, (0xf9a0:16)
 	ld (xsp + 12), xwa
 	ld xiy, xwa
-	lds ix, 0
+	ld ix, 0:i3
 	jr BitMapOut_RestoreFull_CheckEnd
 
 BitMapOut_RestoreFull_FieldLoop:
@@ -975,7 +975,7 @@ BitMapOut_RestoreFull_FieldLoop:
 	ldb_erp A, 0xe6
 	inc 1, xhl
 	inc 1, xhl
-	lds bc, 0
+	ld bc, 0:i3
 	stb_erp E, 0xe6
 	extz de
 	cp de, 0:i3
@@ -1102,7 +1102,7 @@ BitMapOut_RestoreFull_CheckEnd:
 	res 5, a
 	or c, a
 	ld (xde), c
-	lds bc, 0
+	ld bc, 0:i3
 	jr BitMapOut_CopyPresetTable_Check
 
 BitMapOut_CopyPresetTable_Loop:
@@ -1126,7 +1126,7 @@ BitMapOut_CopyPresetTable_Check:
 	extz xde
 	cp xde, xwa
 	jr le, BitMapOut_CopyPresetTable_Loop
-	lds bc, 0
+	ld bc, 0:i3
 	jr BitMapOut_CopyExtTable_Check
 
 BitMapOut_CopyExtTable_Loop:
@@ -1148,7 +1148,7 @@ BitMapOut_CopyExtTable_Check:
 	extz wa
 	cp bc, wa
 	jr c, BitMapOut_CopyExtTable_Loop
-	lds bc, 0
+	ld bc, 0:i3
 	jr BitMapOut_CopyAuxTable_Check
 
 BitMapOut_CopyAuxTable_Loop:
@@ -2095,7 +2095,7 @@ BitMapOut_RestoreVoiceChannels:
 	add xwa, xde
 	ld a, (xwa)
 	ld (xhl), a
-	lds hl, 0
+	ld hl, 0:i3
 	jr BitMapOut_RestoreChannels_CheckEnd
 
 BitMapOut_RestoreChannels_ByteLoop:
@@ -2122,11 +2122,11 @@ BitMapOut_RestoreChannels_CheckParts:
 	ld xwa, (xsp + 10)
 	bitm 1, (xwa)
 	jrl z, BitMapOut_RestoreExtra_CheckBit6
-	lds de, 0
+	ld de, 0:i3
 	ldw (xsp + 4), 0x0
 
 BitMapOut_RestoreParts_OuterLoop:
-	lds hl, 0
+	ld hl, 0:i3
 
 BitMapOut_RestoreParts_InnerLoop:
 	lda xbc, (0xf9a0:16)
@@ -2458,7 +2458,7 @@ BitMapOut_DetectChanges_FullScan:
 	res 2, (0x8d46:16)
 
 BitMapOut_DeltaEncode_Init:
-	lds iz, 0
+	ld iz, 0:i3
 	jrl BitMapOut_DeltaEncode_CheckBounds
 
 BitMapOut_DeltaEncode_ReadEntry:
@@ -2531,7 +2531,7 @@ BitMapOut_DeltaEncode_SlowTimeout:
 	pop xix
 	pop xhl
 	pop xde
-	lds hl, 0
+	ld hl, 0:i3
 
 BitMapOut_DeltaEncode_EncodeChange:
 	ld a, (xsp + 2)
@@ -3340,7 +3340,7 @@ BitMapOut_DeltaEncode_Type90Epilog:
 BitMapOut_DeltaEncode_Type90Return:
 	dec 6, xsp
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 BitMapOut_DeltaEncode_Type90Final:
 	lda xwa, (xsp + 2)
@@ -3931,7 +3931,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 	jr BitMapOut_ApplyPatch_Done
 
 BitMapOut_ApplyPatch_Execute:
-	lds iz, 0
+	ld iz, 0:i3
 	ldib_erp 0xfb, 0
 	cp a, 0:i3
 	jr ule, BitMapOut_ApplyPatch_Store

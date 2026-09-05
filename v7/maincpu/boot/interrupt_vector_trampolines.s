@@ -34,7 +34,7 @@
 	ld IX,HL
 	jr t, .Lc_fccce0
 .Lc_fcccb4:
-	lds bc, 0
+	ld bc, 0:i3
 	cp XIZ,XDE
 	jr z, .Lc_fcccbf
 	ldw BC, 0xffff

@@ -633,29 +633,29 @@ User_didnt_request_flash_mem_update:
 	di
 	calr	134
 	calr	804
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16634741
 	di
 	call	16477975
 	calr	867
 	cp	hl, 0:i3
 	jr	nz, 4
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	2
 Boot_PayloadError:
-	lds wa, 2	; Error: use screen group 2
+	ld wa, 2:i3	; Error: use screen group 2
 
 Boot_DisplayScreen:
 	call	16634741
 	ld	(1024:16), 6
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	16634741
 	ld	(1024:16), 128
 	ldw	(65492:24), 0
 	ld	a, (1026:16)
 	extz	wa
 	calr	350
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15670130
 	calr	325
 	jp	15667739
@@ -803,7 +803,7 @@ Boot_HandleComboDisplay:
 	lda xbc, (LED_patterns_indicating_firmware_version:24); LED_patterns_indicating_firmware_version table
 	ldb_sri C, 0x07, 0xe4, 0xec	; Read LED pattern from table
 	extz bc
-	lds wa, 7
+	ld wa, 7:i3
 	call Set_LEDs			; Display version on control panel LEDs
 	push xiz
 	call CPanel_Poll		; Poll control panel (keep LEDs updated)
@@ -1046,38 +1046,38 @@ SetSepaOutMode:
 	ld (xsp + 17), 0x14
 	lda xwa, (xsp + 16)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x14
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 17), 0x13
 	lda xwa, (xsp + 16)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x13
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 17), 0x16
 	lda xwa, (xsp + 16)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x16
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	jrl FileIO_SendCommand_Return
 
@@ -1085,38 +1085,38 @@ SetSepaOut_Mode1:
 	ld (xsp + 13), 0x14
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x14
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 17), 0x13
 	lda xwa, (xsp + 16)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x13
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 17), 0x16
 	lda xwa, (xsp + 16)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x16
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	jrl FileIO_SendCommand_Return
 
@@ -1124,38 +1124,38 @@ SetSepaOut_Mode2:
 	ld (xsp + 13), 0x14
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x14
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 13), 0x13
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x13
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 13), 0x16
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 9), 0x16
 	lda xwa, (xsp + 8)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	jr FileIO_SendCommand_Return
 
@@ -1163,38 +1163,38 @@ SetSepaOut_Mode3:
 	ld (xsp + 13), 0x14
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 1), 0x14
 	lda xwa, (xsp)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 13), 0x13
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 5), 0x13
 	lda xwa, (xsp + 4)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 13), 0x16
 	lda xwa, (xsp + 12)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 	ld (xsp + 5), 0x16
 	lda xwa, (xsp + 4)
 	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
+	ld wa, 0:i3
+	ld bc, 4:i3
 	call sendCOMM
 
 FileIO_SendCommand_Return:
@@ -1718,7 +1718,7 @@ Voice_FactoryPresetData:
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
@@ -2196,7 +2196,7 @@ TextRender_BitMask4_DrawPixel:
 	add xwa, xde
 	lda xix, (0x043c00:24)
 	add xix, xwa
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xsp + 24), 0x0
 	jr ule, TextRender_BitMask5_ProcessCharacter
 
@@ -2211,9 +2211,9 @@ TextRender_BitMask4_PixelLoop:
 	ld de, (xbc)
 	cp de, (xwa + 4)
 	jr gt, TextRender_BitMask5_ProcessCharacter
-	lds wa, 7
+	ld wa, 7:i3
 	sub wa, hl
-	lds iy, 1
+	ld iy, 1:i3
 	and a, 0xf
 	jr z, TextRender_BitMask4_ShiftAndTest
 	slaa iy
@@ -2285,7 +2285,7 @@ TextRender_BitMask5_DrawPixel:
 	add xwa, xbc
 	lda xiz, (0x043c00:24)
 	add xiz, xwa
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xsp + 24), 0x0
 	jr ule, TextRender_BitMask5_AdvancePointer
 
@@ -2299,9 +2299,9 @@ TextRender_BitMask5_PixelLoop:
 	ld wa, (xix)
 	cp wa, (xiy + 4)
 	jr gt, TextRender_BitMask5_AdvancePointer
-	lds wa, 7
+	ld wa, 7:i3
 	sub wa, hl
-	lds iy, 1
+	ld iy, 1:i3
 	and a, 0xf
 	jr z, TextRender_BitMask5_ShiftAndTest
 	slaa iy

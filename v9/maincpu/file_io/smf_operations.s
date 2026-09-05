@@ -24,7 +24,7 @@ FmmSmfLoadTitleFunc:
 	cp xde, 0x2
 	jrl nz, SmfLoad_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -168,7 +168,7 @@ FmmSmfSaveTitleFunc:
 	cp xde, 0x2
 	jr nz, SmfSave_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -203,7 +203,7 @@ SmfSave_Return:
 RenderSmfFilename:
 	extz bc
 	stib_ind 0x07, 0xe0, 0xe4, 0x00
-	lds ix, 0
+	ld ix, 0:i3
 	lda xhl, (CharMap_FullPermutation_0x660:24)
 	jr RenderSmf_LoopCheck
 
@@ -321,7 +321,7 @@ SeqToSong_BuildEntry:
 	ld a, (0x8948:16)
 	inc 1, a
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, xiz
@@ -354,7 +354,7 @@ SeqFromSong_BuildEntry:
 	ld a, (0x8948:16)
 	inc 1, a
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, xiz
@@ -380,8 +380,8 @@ SmfSeqSongNameFunc:
 SeqSongName_BuildEntry:
 	ld a, (0x8948:16)
 	extz wa
-	lds bc, 0
-	lds de, 0
+	ld bc, 0:i3
+	ld de, 0:i3
 	calr BuildSlotLabel
 	ld xde, xhl
 	ld xwa, (0x8198:16)
@@ -415,7 +415,7 @@ SmfLoadAs_Return:
 	ret
 
 TrimAndPadSmfFilename:
-	lds ix, 0
+	ld ix, 0:i3
 	ld xhl, xwa
 	jr TrimPad_LoopCheck
 
@@ -465,9 +465,9 @@ DisplaySmfFileList:
 	pushw iz
 	ld (xsp + 2), bc
 	ld (xsp + 4), xwa
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
-	lds iz, 0
+	ld iz, 0:i3
 
 DispFileList_LoopBody:
 	ld de, iz
@@ -483,7 +483,7 @@ DispFileList_LoopBody:
 	ld xbc, xhl
 	ld wa, iz
 	sll wa, 5
-	lds de, 1
+	ld de, 1:i3
 	add de, wa
 	lda xhl, (0x850c:16)
 	ld wa, de
@@ -511,8 +511,8 @@ DispFileList_LoopBody:
 	ret
 
 ValidateSmfFilename:
-	lds iy, 0
-	lds hl, 0
+	ld iy, 0:i3
+	ld hl, 0:i3
 	jr ValidateFN_LoopHead
 
 ValidateFN_CheckSpace:
@@ -717,7 +717,7 @@ SmfFN_HandleSave:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld a, (0x8948:16)
 	extz wa
@@ -783,12 +783,12 @@ SmfFN_Save_Finish:
 	jr SmfFN_Save_CallResult
 
 SmfFN_Save_NoAltSlot:
-	lds wa, 1
+	ld wa, 1:i3
 
 SmfFN_Save_CallResult:
 	call UI_PostPartChangeEvent
 	ld wa, (xsp + 6)
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	ld xwa, 0xffffffff
@@ -826,7 +826,7 @@ SmfFN_HandleOpen:
 	jrl SmfFN_DispatchEvent
 
 SmfFN_Open_Execute:
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld a, (0x8948:16)
 	extz wa
@@ -836,7 +836,7 @@ SmfFN_Open_Execute:
 	extz de
 	call LoadFileVariant
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
@@ -852,7 +852,7 @@ SmfFN_Open_Execute:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -868,7 +868,7 @@ SmfFN_HandleOpen2:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld a, (0x8948:16)
 	extz wa
@@ -878,7 +878,7 @@ SmfFN_HandleOpen2:
 	extz de
 	call LoadFileVariant
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
@@ -894,7 +894,7 @@ SmfFN_HandleOpen2:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -922,11 +922,11 @@ SmfFN_Delete_Execute:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call GetFirstRecordAndOpen
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -958,11 +958,11 @@ SmfFN_HandleDelete2:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call GetFirstRecordAndOpen
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -1280,9 +1280,9 @@ DisplaySmfSequenceList:
 	pushw iz
 	ld (xsp + 2), bc
 	ld (xsp + 4), xwa
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
-	lds iz, 0
+	ld iz, 0:i3
 
 DispSeqList_LoopBody:
 	ld de, iz
@@ -1298,7 +1298,7 @@ DispSeqList_LoopBody:
 	ld xbc, xhl
 	ld wa, iz
 	sll wa, 5
-	lds de, 1
+	ld de, 1:i3
 	add de, wa
 	lda xhl, (0x850c:16)
 	ld wa, de

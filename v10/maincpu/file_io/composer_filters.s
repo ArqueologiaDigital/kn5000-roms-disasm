@@ -27,7 +27,7 @@ FmmComposerLoadFunc:
 	cp xde, 0x2
 	jrl nz, CompLoad_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -75,7 +75,7 @@ CompLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -104,7 +104,7 @@ CompLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -141,7 +141,7 @@ CompLoad_Selection_Negative:
 	jrl CompLoad_DispatchWidget
 
 CompLoad_HandleShow:
-	lds iz, 0
+	ld iz, 0:i3
 
 CompLoad_DrawItemLoop:
 	ld wa, iz
@@ -152,7 +152,7 @@ CompLoad_DrawItemLoop:
 	add xhl, xde
 	stb_erp C, 0xf8
 	ld (xhl), c
-	lds bc, 3
+	ld bc, 3:i3
 	call FileIO_CheckRecordByFile
 	cp l, 0:i3
 	jr z, CompLoad_DrawItem_Empty
@@ -168,7 +168,7 @@ CompLoad_DrawItem_Continue:
 	ld de, iz
 	ld wa, de
 	sll wa, 5
-	lds hl, 1
+	ld hl, 1:i3
 	add hl, wa
 	lda xix, (0x850c:16)
 	extz xhl
@@ -242,7 +242,7 @@ CompLoad_OpLoad:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds iz, 0
+	ld iz, 0:i3
 
 CompLoad_HideButtons_Loop:
 	stb_erp A, 0xf8
@@ -251,13 +251,13 @@ CompLoad_HideButtons_Loop:
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, CompLoad_HideButtons_Loop
-	lds wa, 3
+	ld wa, 3:i3
 	call FileIO_FormatName_Loop
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry
 	ld wa, hl
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -269,7 +269,7 @@ CompLoad_HideButtons_Loop:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -338,11 +338,11 @@ RenderFilter_CheckType1:
 	call GetCurrentFileType
 	cp l, 0:i3
 	jr z, RenderFilter_CheckGeneric
-	lds wa, 0
+	ld wa, 0:i3
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, RenderFilter_Type1_Unavail
-	lds wa, 0
+	ld wa, 0:i3
 	call FileIO_WriteRecordName_Done
 	cp l, 0:i3
 	jr z, RenderFilter_Type1_Restricted
@@ -465,7 +465,7 @@ LoadFilter_HandleScroll:
 	call GetCurrentFileType
 	cp l, 0:i3
 	jr z, LoadFilter_ScrollUp_CheckZero
-	lds wa, 0
+	ld wa, 0:i3
 	jr LoadFilter_ShowButton
 
 LoadFilter_ScrollUp_CheckZero:
@@ -491,7 +491,7 @@ LoadFilter_ScrollDown:
 	call GetCurrentFileType
 	cp l, 0:i3
 	jr z, LoadFilter_ScrollDown_CheckZero
-	lds wa, 0
+	ld wa, 0:i3
 	jr LoadFilter_HideButton
 
 LoadFilter_ScrollDown_CheckZero:
@@ -547,11 +547,11 @@ LoadFilter_OpLoad:
 	extz hl
 	ld wa, hl
 	calr FileIO_MidiOutSendByte
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry
 	ld wa, hl
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -565,11 +565,11 @@ LoadFilter_OpLoad:
 	call ApPostEvent
 	cpw (0xf19e:16), 0
 	jr z, LoadFilter_Load_ShowCode1
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_WriteRecordName_Done
 	cp l, 0:i3
 	jr z, LoadFilter_Load_ShowCode1
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr nz, LoadFilter_Load_ShowCodeA
@@ -583,7 +583,7 @@ LoadFilter_Load_ShowCodeA:
 	jr LoadFilter_Load_CallHandler
 
 LoadFilter_Load_ShowCode1:
-	lds wa, 1
+	ld wa, 1:i3
 
 LoadFilter_Load_CallHandler:
 	call UI_PostPartChangeEvent
@@ -861,11 +861,11 @@ SaveFilter_Save_Execute:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_SaveAllRegions
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
@@ -881,7 +881,7 @@ SaveFilter_Save_Execute:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -898,11 +898,11 @@ SaveFilter_OpFormat:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_SaveAllRegions
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
@@ -918,7 +918,7 @@ SaveFilter_OpFormat:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e

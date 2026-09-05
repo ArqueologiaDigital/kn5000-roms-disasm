@@ -393,7 +393,7 @@ BootSerial_SendTwoBytes_Bitbang:
 ;          BootSerial_HandshakeSequence
 ; -----------------------------------------------------------------------------
 BootSerial_SpinWait2:
-	lds	wa, 2
+	ld	wa, 2:i3
 BootSerial_SpinWait2__loop:
 	dec	1, wa
 	cp	wa, 0:i3
@@ -403,7 +403,7 @@ BootSerial_SpinWait2__done:
 	ret
 
 BootSerial_SpinWait6:
-	lds	wa, 6
+	ld	wa, 6:i3
 BootSerial_SpinWait6__loop:
 	dec	1, wa
 	cp	wa, 0:i3
@@ -509,25 +509,25 @@ BootSerial_TickWait51__loop:
 Boot_ClassifyDeviceID:
 	cp	(0x1036:16), 0x6c
 	jr	nz, Boot_ClassifyDeviceID__not3
-	lds	hl, 3
+	ld	hl, 3:i3
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not3:
 	cp	(0x1023:16), 0x70
 	jr	nz, Boot_ClassifyDeviceID__not2
-	lds	hl, 2
+	ld	hl, 2:i3
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not2:
 	cp	(0x1038:16), 0x38
 	jr	nz, Boot_ClassifyDeviceID__not1
-	lds	hl, 1
+	ld	hl, 1:i3
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not1:
 	cp	(0x1028:16), 0x0f
 	jr	nz, Boot_ClassifyDeviceID__none
-	lds	hl, 4
+	ld	hl, 4:i3
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__none:
-	lds	hl, 0
+	ld	hl, 0:i3
 Boot_ClassifyDeviceID__ret:
 	ret
 

@@ -1296,7 +1296,7 @@ PerfMode_ParamHandler_1:
 	call	(xhl)
 	ret
 UIDisp_DefaultInputHandler:
-	lds	bc, 1
+	ld	bc, 1:i3
 	.ascii "8;9:<=>"
 	call	UIDisp_DefaultInputHandler_0x20
 	pop	xiz
@@ -1710,7 +1710,7 @@ PerfMode_VolumeParam_Process:
 	call	ParamDigit_ExtractAndFormat
 	pop	xix
 	ld	xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -2345,7 +2345,7 @@ Display_TitleString_BuildFromMode:
 
 Display_TitleString_Mode0:
 	ld xiy, StringData_Tempo
-	lds bc, 5
+	ld bc, 5:i3
 	jp String_CopyFromIY
 
 Display_TitleString_Mode1:
@@ -2355,17 +2355,17 @@ Display_TitleString_Mode1:
 
 Display_TitleString_Mode2:
 	ld xiy, StringData_Repeat
-	lds bc, 6
+	ld bc, 6:i3
 	jp String_CopyFromIY
 
 Display_TitleString_Mode3:
 	ld xiy, StringData_Start
-	lds bc, 5
+	ld bc, 5:i3
 	jp String_CopyFromIY
 
 Display_TitleString_Mode4:
 	ld xiy, StringData_Stop
-	lds bc, 4
+	ld bc, 4:i3
 	jp String_CopyFromIY
 
 Display_TitleString_Mode5:
@@ -2435,7 +2435,7 @@ TitleString_BuildFromBank:
 
 TitleString_LoadRhythmLabel:
 	ld xiy, StringData_Rhythm
-	lds bc, 6
+	ld bc, 6:i3
 
 String_CopyFromIY:
 	ldir85
@@ -3055,7 +3055,7 @@ Timer_ModeHandler_0:
 	push	xix
 	push	xiy
 	push	xiz
-	lds	de, 3
+	ld	de, 3:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	pop	xiz
 	pop	xiy
@@ -3541,7 +3541,7 @@ MemConfig_Handler_5:
 	jp	MemConfig_Handler_5_0x197
 	xor	a, a
 	call	VoiceSlot_SaveState
-	lds	de, 4
+	ld	de, 4:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
 	ld	(3575:16), a
@@ -4730,7 +4730,7 @@ DisplayMode_Handler_3:
 	jrl nz, 114
 	xor a, a
 	call	VoiceSlot_SaveState
-	lds	de, 2
+	ld	de, 2:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
 	call	DisplayMode_Handler_3_0x435
@@ -5313,7 +5313,7 @@ VoiceSlot_TableSetup:
 	sub	xwa, 0x3732
 	cp	wa, 1:i3
 	jrl	ugt, 2
-	lds	wa, 1
+	ld	wa, 1:i3
 	sla	wa, 3
 	cp	a, 1:i3
 	jrl	z, 2
@@ -5934,7 +5934,7 @@ VoiceCtrl_ParamSetupBytecode:
 	jrl	z, 4
 	call	VoiceState_DataBlock2_0x239
 	ld	xiy, 3471
-	lds	wa, 2
+	ld	wa, 2:i3
 	ld_rrw	wa, xiy, wa
 	cp	a, 72
 	jrl	nz, 44
@@ -6620,7 +6620,7 @@ SerialPort_ModeHandler_0:
 	sla	de, 2
 	ld	wa, de
 	xor	de, de
-	lds	hl, 5
+	ld	hl, 5:i3
 	ld	qwa, de
 	div	xwa, xhl
 	ld	de, qwa
@@ -7452,7 +7452,7 @@ ClockConfig_Handler_0:
 	push	xsp
 	pop	sr
 	jrl	nz, 139
-	lds	bc, 6
+	ld	bc, 6:i3
 	ld	xiy, ClockConfig_Handler_0_0x9F
 	ld	xix, 3471
 	push	xix
@@ -7493,7 +7493,7 @@ ClockConfig_Handler_0:
 	ldb	d, 7
 	ldb	w, 48
 	call	SwbtWr_QueuePostEvent
-	lds	bc, 6
+	ld	bc, 6:i3
 	ld	xiy, ClockConfig_Handler_0_0xA5
 	ld	xix, 3471
 	push	xix
@@ -7974,7 +7974,7 @@ MemConfig_Handler_0:
 	call	VoiceSlot_SaveState
 	ldb	w, 129
 	call	VoiceSlot_FinalRetZ_0x84
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	ldb	w, 130
 	call	VoiceSlot_FinalRetZ_0x84
@@ -8022,7 +8022,7 @@ MemConfig_Handler_1:
 	jrl	nz, 39
 	ldb	w, 132
 	call	VoiceSlot_FinalRetZ_0x84
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	ldb	w, 132
 	call	VoiceSlot_FinalRetZ_0x84
@@ -8682,7 +8682,7 @@ SndDispatch_ProcessCommand:
 	ret
 	xor	a, a
 	call	VoiceSlot_SaveState
-	lds	de, 4
+	ld	de, 4:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_FinalRetZ
 	ld	(3575:16), a
@@ -9204,7 +9204,7 @@ SysInit_BytecodeBlock:
 	call	VoiceSlot_SaveState
 	ldb	w, 132
 	call	VoiceSlot_FinalRetZ_0x84
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	ldb	w, 132
 	call	VoiceSlot_FinalRetZ_0x84
@@ -9279,7 +9279,7 @@ SysInit_BytecodeBlock:
 	jrl	nz, 55
 	ldb	a, 2
 	call	VoiceSlot_SaveState
-	lds	de, 4
+	ld	de, 4:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
 	or	a, (3528:16)
@@ -9287,7 +9287,7 @@ SysInit_BytecodeBlock:
 	jrl	nz, 24
 	ldb	a, 2
 	call	VoiceSlot_RestoreState
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
 	dec	1, a
@@ -9821,7 +9821,7 @@ VoiceSlot_RetZ:
 	ld	xbc, 0xde8c38e7
 	.byte 0xec, 0x01
 	ld	iy, (xhl+3)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	VoiceSlot_FinalRetZ_0x1B2
 	ret
 
@@ -9949,7 +9949,7 @@ VoiceSlot_LoadFromTableBody:
 	jrl z, VoiceSlot_SubrDone
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
-	lds ix, 4
+	ld ix, 4:i3
 	jp VoiceSlot_StoreAndAdvance
 
 VoiceSlot_DecCountLoop:
@@ -10073,7 +10073,7 @@ VoiceSlot_FinalCheck:
 	jrl z, VoiceSlot_FinalDone
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
-	lds iy, 5
+	ld iy, 5:i3
 	ldb_sri A, 0x07, 0xec, 0xf4
 	jp VoiceSlot_FinalRetNZ
 
@@ -10086,7 +10086,7 @@ VoiceSlot_FinalRetNZ:
 VoiceSlot_FinalRetZ:
 	call	VoiceSlot_ReadCurrentParams
 	pushw	wa
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	ld	d, w
 	popw	wa
@@ -10132,7 +10132,7 @@ VoiceSlot_FinalRetZ:
 	ld	(3524:16), a
 	ld	w, d
 	ld	a, e
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	.ascii "^]\\ZY[XÁ"
 	.byte 0xc4
@@ -10388,7 +10388,7 @@ VoiceSlot_IndexDone:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	nz, 14
-	lds	de, 1
+	ld	de, 1:i3
 	call	VoiceSlot_FinalRetZ_0xB8
 	incw	1, (3426:16)
 	jp	VoiceSlot_IndexDone_0xA
@@ -10952,7 +10952,7 @@ VoiceSlot_StatusRet:
 	push	xsp
 	pop	sr
 	jrl	nz, 94
-	lds	hl, 1
+	ld	hl, 1:i3
 	jp	VoiceSlot_StatusRet_0x5B7
 	.byte 0xc1, 0xf1
 	rcf
@@ -10964,7 +10964,7 @@ VoiceSlot_StatusRet:
 	push	xsp
 	pop	sr
 	jrl	nz, 72
-	lds	hl, 2
+	ld	hl, 2:i3
 	jp	VoiceSlot_StatusRet_0x5B7
 	.byte 0xc1, 0xf1
 	rcf
@@ -10976,7 +10976,7 @@ VoiceSlot_StatusRet:
 	push	xsp
 	pop	sr
 	jrl	nz, 50
-	lds	hl, 3
+	ld	hl, 3:i3
 	jp	VoiceSlot_StatusRet_0x5B7
 	.byte 0xc1, 0xf1
 	rcf
@@ -10988,7 +10988,7 @@ VoiceSlot_StatusRet:
 	push	xsp
 	pop	sr
 	jrl	nz, 28
-	lds	hl, 4
+	ld	hl, 4:i3
 	jp	VoiceSlot_StatusRet_0x5B7
 	.byte 0xc1, 0xf1
 	rcf
@@ -11000,7 +11000,7 @@ VoiceSlot_StatusRet:
 	push	xsp
 	pop	sr
 	jrl	nz, 6
-	lds	hl, 5
+	ld	hl, 5:i3
 	jp	VoiceSlot_StatusRet_0x5B7
 	jp	VoiceSlot_StatusRet_0x1C5
 	xor	hl, hl
@@ -11510,7 +11510,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	call	VoiceSlot_RestoreState
 	popw	wa
 	jp	VoiceState_DataBlock2_0x183
-	lds	bc, 2
+	ld	bc, 2:i3
 	pop	xhl
 	ret
 	push	xhl
@@ -11929,7 +11929,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	sub	xwa, 0x3736
 	cp	xwa, 0
 	jrl	nz, 6
-	lds	wa, 1
+	ld	wa, 1:i3
 	jp	VoiceState_DataBlock2_0x5A5
 	sla	wa, 3
 	cp	a, 1:i3
@@ -12310,7 +12310,7 @@ SubCPU_ToneParamDisplay:
 	call	ParamDigit_ExtractAndFormat
 	pop	xix
 	ld	xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -13239,7 +13239,7 @@ SubCPU_ToneParamRet:
 	ret
 	pushw	bc
 	xor	wa, wa
-	lds	bc, 3
+	ld	bc, 3:i3
 	ld	xix, 4457
 	stw_dpi	wa, 241
 	djnz16	bc, -6
@@ -13636,7 +13636,7 @@ OscScope_RenderBlock:
 	call	VoiceSlot_RestoreState
 	popw	wa
 	jp	OscScope_RenderBlock_0x20
-	lds	bc, 2
+	ld	bc, 2:i3
 	pop	xhl
 	ldb	w, 255
 	ret
@@ -13819,7 +13819,7 @@ VoiceBank_UpdateLerpState:
 	ld xhl, (4349:16)
 	ld hl, (xhl + 3)
 	ld (0x28bf:16), hl
-	lds wa, 5
+	ld wa, 5:i3
 	jp VoiceBank_StoreIndex
 
 VoiceBank_IncrementIndex:
@@ -14048,7 +14048,7 @@ DisplayStr_BytecodeBlock_B:
 	djnz16	bc, -6
 	ld	xiy, DisplayStr_BytecodeBlock_B_0x5C
 	ld	xix, 3791
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	ldb	a, 32
@@ -14061,7 +14061,7 @@ DisplayStr_BytecodeBlock_B:
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xiy, DisplayStr_BytecodeBlock_B_0x5C
 	ld	xix, 3791
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion5
@@ -14087,7 +14087,7 @@ DisplayStr_BytecodeBlock_B:
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xiy, DisplayStr_RhythmLabel_0x1
 	ld	xix, 3791
-	lds	bc, 6
+	ld	bc, 6:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion5
@@ -14109,7 +14109,7 @@ DisplayStr_RhythmLabel:
 	nop
 	ld	xiy, DisplayStr_RhythmLabel_0x42
 	ld	xix, 3791
-	lds	bc, 5
+	ld	bc, 5:i3
 	.byte 0x95
 	scf
 	popw	bc
@@ -14135,7 +14135,7 @@ DisplayStr_RhythmLabel:
 	call	ParamDigit_ExtractAndFormat
 	pop	xix
 	ld	xiy, DisplayStr_RhythmLabel_0x86
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	a, (4483:16)
@@ -14150,7 +14150,7 @@ DisplayStr_RhythmLabel:
 	ld	a, (0x3728:16)
 	sla	xwa, 3
 	add	xiy, xwa
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ret
@@ -14300,10 +14300,10 @@ DisplayStr_StyleSectionInit:
 	ldw wa, 0x2020
 	stw_dpi WA, 0xf1
 	stw_dpi WA, 0xf1
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ldb a, 0x20
-	lds bc, 3
+	ld bc, 3:i3
 
 DisplayStr_StyleClearLoop:
 	lda_dpi XBC, 0xf0
@@ -14320,7 +14320,7 @@ DisplayStr_BytecodeBlock_E:
 	.byte 0x45
 	.long DisplayStr_StyleSectionNames
 	lda_rr	xiy, xiy, hl
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	ldw	wa, 8224
 	stw_dpi	wa, 241
@@ -14402,7 +14402,7 @@ Display_BytecodeBlock_F:
 	cp	h, 3:i3
 	jrl	nz, 2
 	inc	4, xiy
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	jp	Display_BytecodeBlock_F_0xF3
@@ -14538,7 +14538,7 @@ Display_BytecodeBlock_F:
 	pop	xwa
 	ld	xix, 3807
 	ld	xiy, 4482
-	lds	bc, 2
+	ld	bc, 2:i3
 	.byte 0x85
 	scf
 	.byte 0xd7
@@ -14547,7 +14547,7 @@ Display_BytecodeBlock_F:
 	.byte 0xef
 	pop	xix
 	ld	xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	ret
@@ -14621,7 +14621,7 @@ Display_BytecodeBlock_F:
 	ret
 	call	Display_UpdateRegion0
 	ret
-	lds	bc, 7
+	ld	bc, 7:i3
 	ld	xix, 3796
 	.ascii "<0  õ"
 	.byte 0xf1, 0x50
@@ -14906,12 +14906,12 @@ StringData_KeyNames:	.ascii "  C D"
 	ret
 	nop
 	nop
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_KeyNames_0x399
 	inc	1, xix
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	ld	a, (4339:16)
@@ -14921,7 +14921,7 @@ StringData_KeyNames:	.ascii "  C D"
 	pop	xix
 	ld	xiy, 4481
 	inc	1, xix
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -14941,12 +14941,12 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3793
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_PartNames_0xAC
 	inc	1, xix
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	ld	a, (4339:16)
@@ -14956,7 +14956,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	pop	xix
 	ld	xiy, 4481
 	inc	1, xix
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -14977,7 +14977,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_PartNames_0x116
@@ -14995,7 +14995,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	a, (4480:16)
 	lda_dpi xbc, 240
 	ld xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15016,12 +15016,12 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_PartNames_0x182
 	inc	1, xix
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	ld	a, (4339:16)
@@ -15034,7 +15034,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	a, (4480:16)
 	lda_dpi xbc, 240
 	ld xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15059,7 +15059,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ret
 	nop
 	nop
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_PartNames_0x222
@@ -15074,7 +15074,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	pop	xix
 	inc	1, xix
 	ld	xiy, 4482
-	lds	bc, 2
+	ld	bc, 2:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15094,7 +15094,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_PartNames_0x287
@@ -15131,7 +15131,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_PartNames_0x2EB
@@ -15164,13 +15164,13 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	.byte 0x45
 	.long StringData_EffectLabel
 	inc	1, xix
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	.byte 0xdb
@@ -15201,7 +15201,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_EffectLabel_0x5C
@@ -15213,7 +15213,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	ld	a, (4339:16)
 	call	ParamDigit_ExtractAndFormat
 	ld	xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15233,19 +15233,19 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_EffectLabel_0xBB
 	inc	1, xix
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	xor	w, w
 	ld	a, (4339:16)
 	call	ParamDigit_ExtractAndFormat
 	ld	xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15319,7 +15319,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	ld	xiy, StringData_EffectLabel_0x187
 	jp	StringData_EffectLabel_0x176
 	ld	xiy, StringData_EffectLabel_0x18A
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15350,7 +15350,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	ld	xiy, StringData_EffectLabel_0x187
 	jp	StringData_EffectLabel_0x1CB
 	ld	xiy, StringData_EffectLabel_0x18A
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15412,7 +15412,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 14
 	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3802
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15448,7 +15448,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 14
 	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3804
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15479,7 +15479,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 14
 	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3806
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15506,7 +15506,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 14
 	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3804
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15586,7 +15586,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	ParamDigit_ExtractAndFormat
 	ld	xiy, 4481
 	ld	xix, 3807
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
@@ -15607,7 +15607,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3791
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	ld	xiy, StringData_APCModeNames_0x3F0
@@ -15685,7 +15685,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3793
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	inc	1, xix
@@ -15730,7 +15730,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_ClearRegion
 	ld	xiy, StringData_APCModeNames_0x537
 	ld	xix, 3793
-	lds	bc, 7
+	ld	bc, 7:i3
 	.byte 0x85
 	scf
 	ld	l, (4339:16)
@@ -15863,7 +15863,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	xiy, StringData_PartNames
 	lda_rr xiy, xiy, hl
 	ld xix, 3793
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x85
 	scf
 	xor	hl, hl
@@ -15890,7 +15890,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	ParamDigit_ExtractAndFormat
 	pop	xix
 	ld	xiy, 4481
-	lds	bc, 3
+	ld	bc, 3:i3
 	.byte 0x85
 	scf
 	jp	StringData_APCModeNames_0x6F0
@@ -15898,7 +15898,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	hl, hl
 	cp	c, 64
 	jrl	nc, 2
-	lds	hl, 4
+	ld	hl, 4:i3
 	ld	xiy, StringData_PartNames_0x28F
 	.byte 0xf3
 	reti
@@ -16191,7 +16191,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ret
 	ld	xix, 4462
 	xor	wa, wa
-	lds	bc, 3
+	ld	bc, 3:i3
 	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
@@ -16222,7 +16222,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	xhl, (4349:16)
 	ld	hl, (xhl+3)
 	ld	(4474:16), hl
-	lds	wa, 5
+	ld	wa, 5:i3
 	jp	StringData_APCModeNames_0xAA6
 	inc	1, wa
 	ld	(4472:16), wa
@@ -16565,7 +16565,7 @@ Scoop_TitleBar_ShowBPM_Part0:
 Scoop_TitleBar_Part1Check:
 	cpw (3662:16), 0
 	jr z, Scoop_TitleBar_Part2Check
-	lds bc, 1
+	ld bc, 1:i3
 	calr Scoop_TitleBar_GetPartConfig
 	cpw (3662:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part1
@@ -16582,7 +16582,7 @@ Scoop_TitleBar_ShowBPM_Part1:
 Scoop_TitleBar_Part2Check:
 	cpw (3664:16), 0
 	jr z, Scoop_TitleBar_End
-	lds bc, 2
+	ld bc, 2:i3
 	calr Scoop_TitleBar_GetPartConfig
 	cpw (3664:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part2
@@ -16609,7 +16609,7 @@ Scoop_TitleBar_SelectPartRange:
 Scoop_TitleBar_ClampParts:
 	cp c, 4:i3
 	jr ule, Scoop_TitleBar_DisplayPartTable
-	lds bc, 4
+	ld bc, 4:i3
 
 Scoop_TitleBar_DisplayPartTable:
 	ld xiy, StyleUI_ScreenData_Main
@@ -16784,7 +16784,7 @@ Scoop_SidePanel_DrawOneSlot:
 	pushw de
 	pushw bc
 	ld xiy, StyleUI_ScreenData_Main_0xB94
-	lds bc, 4
+	ld bc, 4:i3
 	ld (0x03efa8:24), 0x00
 	ld xwa, 0x11d4
 	ld (xwa), 0x6
@@ -16826,7 +16826,7 @@ Display_RedrawAltContent:
 	add xix, xwa
 	ld (0x03efa8:24), 0x02
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x20
-	lds bc, 3
+	ld bc, 3:i3
 	xor hl, hl
 	ld (4579:16), 6
 	ld (4580:16), 7
@@ -17613,7 +17613,7 @@ Scoop_SpecialMode_UpdateParams:
 	ld	xwa, (4349:16)
 	ld	(9854:16), xwa
 	pop	xwa
-	lds	iy, 5
+	ld	iy, 5:i3
 	ret
 	xor	xix, xix
 	ld	xix, (9850:16)
@@ -17633,7 +17633,7 @@ Scoop_SpecialMode_UpdateParams:
 	jr	10
 	ld	xwa, (4349:16)
 	ld	(9850:16), xwa
-	lds	ix, 5
+	ld	ix, 5:i3
 	ret
 	pushw	wa
 	push	xde
@@ -17790,7 +17790,7 @@ Scoop_CurveUpdate_DrawSegment:
 	extz wa
 	ld bc, de
 	ld de, wa
-	lds wa, 1
+	ld wa, 1:i3
 	jp Param_SignExtendReturn
 Scoop_CurveUpdate_NextSegment:
 	ld	e, a
@@ -17799,7 +17799,7 @@ Scoop_CurveUpdate_NextSegment:
 	extz	wa
 	ld	bc, de
 	ld	de, wa
-	lds	wa, 2
+	ld	wa, 2:i3
 	.byte 0x1b, 0xdc
 	slla	xhl
 
@@ -17833,7 +17833,7 @@ Scoop_CurveUpdate_Finalize:
 	sub hl, wa
 	sll hl, 3
 	stw_dri HL, 0xfd, 0x08, 0x01
-	lds iy, 0
+	ld iy, 0:i3
 	cp iy, de
 	jr nc, Scoop_EnvelopeCalc
 
@@ -17940,7 +17940,7 @@ Scoop_EnvelopeCalc_Data:
 	sub	hl, wa
 	sll	hl, 3
 	ld	(xsp+266), hl
-	lds	iy, 0
+	ld	iy, 0:i3
 	cp	iy, de
 	jr	nc, 49
 	ld	xiz, (xbc+7)
@@ -18138,7 +18138,7 @@ Scoop_EnvCalc_Handler1:
 	lda xsp, (xsp-268)
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x123
 	lda	xix, (xsp+260)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	hl, (xwa+2)
@@ -18161,7 +18161,7 @@ Scoop_EnvCalc_Handler1:
 	swi	5
 	nop
 	.byte 0x01, 0x53
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, de
 	jr	nc, 38
 	ld	bc, ix
@@ -18287,7 +18287,7 @@ Scoop_GlideParam_Setup:
 	sub hl, bc
 	sll hl, 3
 	stw_dri HL, 0xfd, 0x02, 0x01
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, de
 	jr nc, Scoop_GlideParam_End
 
@@ -18355,7 +18355,7 @@ Scoop_GlideParam_Data:
 	lda xsp, (xsp-268)
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x12B
 	lda	xix, (xsp+260)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	hl, (xwa+2)
@@ -18382,7 +18382,7 @@ Scoop_GlideParam_Data:
 	swi	5
 	nop
 	.byte 0x01, 0x53
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, de
 	jr	nc, 38
 	ld	bc, ix
@@ -18457,7 +18457,7 @@ Scoop_GlideCalc_Handler0:
 	swi	5
 	nop
 	.byte 0x01, 0x53
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, de
 	jr	nc, 26
 	ld	bc, ix
@@ -18694,7 +18694,7 @@ Scoop_EnvProcessor_Data:
 	ld	xiz, xwa
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x1CB
 	lda	xix, (xsp+264)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
@@ -18777,7 +18777,7 @@ Scoop_EnvProcessor_Data:
 	ld	xiz, xwa
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x1DF
 	lda	xix, (xsp+264)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
@@ -18916,7 +18916,7 @@ Scoop_EventLoop_36Entry:
 	stl_dri XWA, 0xfd, 0x12, 0x01
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x1FF
 	lda_dri XIX, 0xfd, 0x0a, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld XWA, (xsp + 0x0112)
 	ld de, (xwa + 2)
@@ -19023,7 +19023,7 @@ Scoop_EventLoop_36Entry_Data:
 	.byte 0xf3
 	swi	5
 	ldio	1, 52
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	wa, (xiz+2)
@@ -19115,7 +19115,7 @@ Scoop_EventLoop_36Entry_Data:
 	.byte 0xf3
 	swi	5
 	ldio	1, 52
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	wa, (xiz+2)
@@ -19260,7 +19260,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	xiz, xwa
 	ld	xiy, GUI_FormatStrings_0x20
 	lda	xix, (xsp+264)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	bc, (xiz+2)
@@ -19337,7 +19337,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	xde, xwa
 	ld	xiy, GUI_FormatStrings_0x34
 	lda	xix, (xsp+266)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	iz, (xde+2)
@@ -19359,7 +19359,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	wa, (xde+15)
 	ld	(xsp+264), wa
 	ld	iy, (xde+11)
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, iy
 	jr	nc, 37
 	ld	xiz, (xde+7)
@@ -19469,7 +19469,7 @@ Scoop_EventLoop_12Entry_Alt_End:
 	lda_24 xwa, (\ParamD)
 	ld (xbc + 10), xwa
 	.if \ParamE <= 7
-	lds wa, \ParamE
+	ld wa, \ParamE:i3
 	.else
 	ldw wa, \ParamE
 	.endif
@@ -19491,7 +19491,7 @@ Scoop_EventLoop_12Entry_Alt_End:
 	lda_24 xwa, (\ParamD)
 	ld (xbc + 10), xwa
 	.if \ParamE <= 7
-	lds wa, \ParamE
+	ld wa, \ParamE:i3
 	.else
 	ldw wa, \ParamE
 	.endif

@@ -78,7 +78,7 @@ ExcDotFunc_HandlerJumpTable:
 	ld	xix, (xde+18)
 	ld	xbc, (xde+14)
 	ld	l, c
-	lds	de, 0
+	ld	de, 0:i3
 	ld	c, (149340:24)
 	extz	bc
 	cp	bc, 0:i3

@@ -216,15 +216,15 @@ PsGridBox_ShowHide_ClassifyCell:
 	jr z, PsGridBox_ShowHide_CellDash
 	cpib_erp 0xee, 0
 	jr nz, PsGridBox_ShowHide_CellNormal
-	lds wa, 0
+	ld wa, 0:i3
 	jr PsGridBox_ShowHide_StoreType
 
 PsGridBox_ShowHide_CellDash:
-	lds wa, 1
+	ld wa, 1:i3
 	jr PsGridBox_ShowHide_StoreType
 
 PsGridBox_ShowHide_CellNormal:
-	lds wa, 2
+	ld wa, 2:i3
 
 PsGridBox_ShowHide_StoreType:
 	ld xbc, (xbc)
@@ -685,8 +685,8 @@ PsGridBox_Select:
 	inc 2, bc
 	ld (xwa + 6), bc
 	pushm (xix + 22)
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	calr DrawDesignFrame
 	jr PsGridBox_Select_Scroll
 
@@ -800,8 +800,8 @@ PsGridBox_Select_SendCurr:
 	inc 2, bc
 	ld (xwa + 6), bc
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	calr DrawDesignFrame
 	jrl PsGridBox_ReturnZero
 
@@ -841,7 +841,7 @@ PsGridBox_Scroll:
 	ld XWA, (xsp + 0x0146)
 	ld xiy, xwa
 	lda xix, (xsp + 24)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xde, (xsp + 24)
 	cpw (xde), 0xffff
@@ -918,11 +918,11 @@ PsGridBox_Scroll_CalcBounds:
 	ld wa, (xwa)
 	cp wa, (xbc)
 	jr nz, PsGridBox_Scroll_Unfocused
-	lds de, 1
+	ld de, 1:i3
 	jr PsGridBox_Scroll_Render
 
 PsGridBox_Scroll_Unfocused:
-	lds de, 0
+	ld de, 0:i3
 
 PsGridBox_Scroll_Render:
 	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x33, 0xf3, 0xfd, 0x32

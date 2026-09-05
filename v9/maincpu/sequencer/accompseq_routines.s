@@ -224,7 +224,7 @@ AccompSeq_CheckPatternEnd:
 	jr nz, AccompSeq_PatternEndReturn
 	calr AccompSeq_ReadBeatHeader
 	ldw_erp WA, 0xe2
-	lds wa, 6
+	ld wa, 6:i3
 	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
 
@@ -261,7 +261,7 @@ AccompSeq_AdvanceCheckPattern:
 	calr AccompSeq_ReadBeatHeader
 	ld (0x7e42:16), wa
 	ldw_erp WA, 0xe2
-	lds wa, 6
+	ld wa, 6:i3
 	ld (0x7e44:16), wa
 	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
@@ -593,7 +593,7 @@ AccompSeq_InlineCodeBlock:
 	push	xhl
 	calr	64814
 	pop	xhl
-	lds	iy, 6
+	ld	iy, 6:i3
 	ret
 
 AccompSeq_ProcessNoteOn6:
@@ -994,7 +994,7 @@ AccompSeq_LargeCodeBlock1:
 	di
 	popw	iy
 	ret
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	(1128:16), wa
 	ld	(1130:16), a
 	ld	(0x7e1c:16), wa
@@ -1026,7 +1026,7 @@ AccompSeq_LargeCodeBlock1:
 	ld	c, (1045:16)
 	ld	(1130:16), c
 	ld	(1138:16), c
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	a, (1046:16)
 	ld	(1128:16), wa
 	di
@@ -1224,7 +1224,7 @@ AccompSeq_LoadParams_Alt:
 	ld (0x7e27:16), a
 	ld wa, (xiy + 3)
 	ld (0x7e2c:16), wa
-	lds wa, 6
+	ld wa, 6:i3
 	ld (0x7e2e:16), wa
 
 AccompSeq_LoadParams_OverrideCheck:
@@ -1238,7 +1238,7 @@ AccompSeq_LoadParams_OverrideCheck:
 	ldw_erp WA, 0xe2
 	ld wa, (0x7e32:16)
 	ld (0x7e69:16), xwa
-	lds wa, 0
+	ld wa, 0:i3
 	ld a, (1075:16)
 	dec 1, a
 	and a, 0x7
@@ -1890,7 +1890,7 @@ AccompSeq_SetupChannels:
 	ei 6
 	ld c, (1045:16)
 	ld (0x7e63:16), c
-	lds wa, 0
+	ld wa, 0:i3
 	ld a, (1046:16)
 	ld (0x7e64:16), a
 	ld (1130:16), c
@@ -1952,7 +1952,7 @@ AccompSeq_SetupCh_Return:
 	ret
 
 AccompSeq_ParseSequenceData:
-	lds bc, 0
+	ld bc, 0:i3
 	ld d, (0x7e64:16)
 	ld e, (0x7e63:16)
 	and (0x7e53:16), 254

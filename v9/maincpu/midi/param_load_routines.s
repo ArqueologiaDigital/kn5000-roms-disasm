@@ -355,7 +355,7 @@ ParaLoadOpt_GridHandler:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl ParaLoadOpt_SetDialAndReturn
 
 ; ParaLoadOpt grid return
@@ -367,7 +367,7 @@ ParaLoadOpt_GridReturn:
 	ld xwa, (xsp + 12)
 	or xwa, xwa
 	jrl nz, AccFunc_ReturnZeroJmp
-	lds wa, 7
+	ld wa, 7:i3
 	call PanelDisplay_DispatchByMode
 	cp hl, 0:i3
 	jrl z, AccFunc_ReturnZeroJmp
@@ -445,7 +445,7 @@ ParaLoadOpt_GridDelegateProc:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl ParaLoadOpt_SetDialAndReturn
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -503,7 +503,7 @@ ParaLoadOpt_GridDelegateProc_B:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 ParaLoadOpt_SetDialAndReturn:
 	call SetDialEnable
@@ -576,7 +576,7 @@ ParaLoadOptGridCheck:
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 20)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld (xsp + 16), xde
 	lda xwa, (UserMemory_Config_Table:24)

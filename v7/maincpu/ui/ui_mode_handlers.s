@@ -235,7 +235,7 @@ EffectMode_CopyParamByte:
 EffectMode_ClampAndLookupPreset:
 	cp wa, 0x3e8
 	jr ule, EffectMode_ClampAndLookup_Clamped
-	lds wa, 1
+	ld wa, 1:i3
 
 EffectMode_ClampAndLookup_Clamped:
 	ld	c, (35996:16)
@@ -331,7 +331,7 @@ EffectMode_DisplayName_Done:
 	ret
 
 EffectMode_SearchPresetTableC2C5:
-	lds ix, 0
+	ld ix, 0:i3
 	lda xhl, (WidgetStyleDataTable_0x36E:24)
 
 EffectMode_SearchPresetTableC2C5_Loop:
@@ -356,7 +356,7 @@ EffectMode_SearchPresetTableC2C5_Next:
 	ret
 
 EffectMode_SearchPresetTableC0:
-	lds ix, 0
+	ld ix, 0:i3
 	lda xhl, (WidgetStyleDataTable_0x4FA:24)
 
 EffectMode_SearchPresetTableC0_Loop:
@@ -466,7 +466,7 @@ EffectMode_UpdateBitFlags:
 	ld	(xsp+6), a
 	ld	xwa, (36036:16)
 	ld	(xsp+8), xwa
-	lds	iy, 0
+	ld	iy, 0:i3
 	jr	40
 EffectMode_UpdateBitFlags_ProcessEntry:
 	ld a, (xix + 4)
@@ -651,7 +651,7 @@ EffectMode_CheckPedalType:
 	push	xhl
 	push	xix
 	push	xiz
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16100806
 	pop	xiz
 	pop	xix
@@ -667,7 +667,7 @@ EffectMode_SendPedalType_Bank1:
 	push	xhl
 	push	xix
 	push	xiz
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16100806
 	pop	xiz
 	pop	xix
@@ -733,8 +733,8 @@ EffectMode_ReinitSoundOutput:
 	call	16567398
 	ld	(36020:16), l
 	ld	xwa, 770
-	lds	bc, 1
-	lds	de, 0
+	ld	bc, 1:i3
+	ld	de, 0:i3
 	call	16566832
 	ldw	wa, 128
 	ld	xbc, 246468
@@ -746,13 +746,13 @@ EffectMode_ReinitSoundOutput:
 	cp	(36020:16), 1
 	jr	z, 11
 	ld	xwa, 770
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	jr	9
 EffectMode_ReinitSound_NotifyBank1:
 	ld xwa, 0x302
-	lds bc, 1
-	lds de, 0
+	ld bc, 1:i3
+	ld de, 0:i3
 
 EffectMode_ReinitSound_CallNotify:
 	call	16566832
@@ -827,7 +827,7 @@ SndOutput_ReinitByMode_NotifyParam:
 	inc	1, c
 	extz	bc
 	ld	xwa, 768
-	lds	de, 3
+	ld	de, 3:i3
 	call	16566832
 	ld	a, (36022:16)
 	bit	5, a
@@ -845,7 +845,7 @@ MainCPU_self_test_routines:
 	set_dd8 1, 0x30
 	bit_dd8 0, 0x30
 	ret nz
-	lds wa, 0
+	ld wa, 0:i3
 	calr Test_DRAM_IC10_and_IC9
 	extz hl
 	ld wa, hl
@@ -854,12 +854,12 @@ MainCPU_self_test_routines:
 	ld wa, hl
 	calr Report_test_result_by_blinking_LED
 	calr A_Short_Pause
-	lds wa, 0
+	ld wa, 0:i3
 	calr Test_PROGRAM_and_TABLE_DATA_ROMs
 	extz hl
 	ld wa, hl
 	calr Report_test_result_by_blinking_LED
-	lds wa, 0
+	ld wa, 0:i3
 	calr Test_Rhythm_data_ROM_IC14
 	extz hl
 	ld wa, hl
@@ -920,10 +920,10 @@ Report_BlinkLoop_OffDelayInner:
 
 
 A_Short_Pause:
-	lds bc, 0
+	ld bc, 0:i3
 
 ShortPause_OuterLoop:
-	lds wa, 0
+	ld wa, 0:i3
 
 ShortPause_InnerLoop:
 	inc 1, wa
@@ -935,7 +935,7 @@ ShortPause_InnerLoop:
 	ret
 
 DramTest_Loop:
-	lds wa, 0
+	ld wa, 0:i3
 
 DramTest_DelayLoop:
 	inc 1, wa
@@ -1249,7 +1249,7 @@ Test_Custom_data_ROM_IC19:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 6), a
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_IdentifyAndValidateChip
 	cp hl, 0xffff
 	jr nz, CustomRomTest_PrepareChecksum
@@ -1299,7 +1299,7 @@ Test_LCD_Controller_IC206:
 
 	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
 	ldw wa, 0x3c3
-	lds bc, 0
+	ld bc, 0:i3
 	call _Write_VGA_Register
 
 	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
@@ -1313,7 +1313,7 @@ Test_LCD_Controller_IC206:
 LcdTest_WriteOneVerify:
 	; equivalent to "_VGA_WRITE 3c3h, 1" but with CALL instead of CALR
 	ldw wa, 0x3c3
-	lds bc, 1
+	ld bc, 1:i3
 	call _Write_VGA_Register
 
 	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
@@ -1327,7 +1327,7 @@ LcdTest_WriteOneVerify:
 LcdTest_WriteZeroVerify:
 	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
 	ldw wa, 0x3c3
-	lds bc, 0
+	ld bc, 0:i3
 	call _Write_VGA_Register
 
 	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
@@ -1475,7 +1475,7 @@ SelfTest_Diagnostic_Skip:
 
 SelfTest_SramAndRom:
 	ldib_erp	250, 0
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	64548
 	cp	hl, 0:i3
 	jr	z, 68	; -> 0xFB7063
@@ -1611,19 +1611,19 @@ EffectMode_InitSwbWr_DiagMode:
 
 	pushw 0x7f
 
-	lds wa, 0
+	ld wa, 0:i3
 
-	lds bc, 1
+	ld bc, 1:i3
 
 	call	16624211
 
 	pushw 0xff
 
-	lds wa, 0
+	ld wa, 0:i3
 
-	lds bc, 0
+	ld bc, 0:i3
 
-	lds de, 0
+	ld de, 0:i3
 
 	call	16624211
 
@@ -1631,9 +1631,9 @@ EffectMode_InitSwbWr_DiagMode:
 
 	ldw wa, 0x93
 
-	lds bc, 0
+	ld bc, 0:i3
 
-	lds de, 6
+	ld de, 6:i3
 
 	call	16624211
 
@@ -1656,17 +1656,17 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	pushw 0x7f
 
-	lds wa, 0
+	ld wa, 0:i3
 
-	lds bc, 1
+	ld bc, 1:i3
 
 	call	16624211
 
 	pushw 0xff
 
-	lds wa, 0
+	ld wa, 0:i3
 
-	lds bc, 0
+	ld bc, 0:i3
 
 	ldw de, 0x40
 
@@ -1676,9 +1676,9 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	ldw wa, 0x93
 
-	lds bc, 0
+	ld bc, 0:i3
 
-	lds de, 0
+	ld de, 0:i3
 
 	call	16624211
 
@@ -1913,7 +1913,7 @@ LED_SetAll_WithBlank:
 
 LED_SetAll_BlankOne:
 	srl wa, 8
-	lds bc, 0
+	ld bc, 0:i3
 	call Set_LEDs
 	inc1b_erp 0xfb
 
@@ -2425,7 +2425,7 @@ MasterSetup_ScrollUp_UpdateView:
 	ld a, (xsp + 12)
 	extz wa
 	ld (xbc), wa
-	lds iz, 0
+	ld iz, 0:i3
 	jr MasterSetup_ScrollUp_Search_Check
 
 MasterSetup_ScrollUp_Search_Loop:
@@ -2691,7 +2691,7 @@ MasterSetup_FallbackEvent:
 	ld	xbc, 29360151
 	ld	xde, (xsp+66)
 	call	16359805
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	584
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
@@ -2777,7 +2777,7 @@ MstStyleAlp_UpdateFocusIndex:
 	ld a, (xsp + 12)
 	extz wa
 	ld (xbc), wa
-	lds iz, 0
+	ld iz, 0:i3
 	jr MstStyleAlp_CompareLoopCond
 
 MstStyleAlp_CompareEntry:
@@ -2914,7 +2914,7 @@ MstStyleAlp_FallbackDispatch:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 66)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 MasterSetup_SetDialEnable:
 	call SetDialEnable
@@ -3696,7 +3696,7 @@ MstStyle1_EventDispatch:
 	ld xwa, (xsp + 66)
 	ld xbc, 0x1c00017
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 58)
 	or xwa, xwa
@@ -3929,7 +3929,7 @@ MstStyle1Sub_FallbackEvent:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 58)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl MstStyle1Sub_SetDialEnable
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
@@ -4056,7 +4056,7 @@ MstStyle1Sub_DialUp_FallbackEvent:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 58)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 MstStyle1Sub_SetDialEnable:
 	call SetDialEnable
@@ -4353,7 +4353,7 @@ MstStyle1Page_EventDispatch:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1c00017
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 48)
 	cp xwa, 0x4
@@ -5067,7 +5067,7 @@ MstStyle2_FallbackEvent:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 48)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl MstStyle2_SetDialEnable
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
@@ -5278,7 +5278,7 @@ MstStyle2_DialScroll_FallbackUp:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 48)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 MstStyle2_SetDialEnable:
 	call SetDialEnable
@@ -5969,7 +5969,7 @@ MstStyle2_EventDispatch:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -6036,7 +6036,7 @@ TchSens_DialDown_Fallback:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -6103,7 +6103,7 @@ TchSens_DialUp_Fallback:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 TchSens_SetDialEnable:
 	call SetDialEnable
@@ -6193,32 +6193,32 @@ TchSensGrid_EventDispatch:
 	cp	de, 1:i3
 	jr	nz, 12
 	ld	xwa, 256
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jrl	190
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 16
 	cp	de, 4:i3
 	jr	nz, 12
 	ld	xwa, 260
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jrl	168
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 16
 	cp	de, 5:i3
 	jr	nz, 12
 	ld	xwa, 258
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jrl	146
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 652
 	cp	de, 6:i3
 	jrl	nz, 647
 	ld	xwa, 259
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	123
 	call	16400579
 	ld	xwa, xhl
@@ -6238,7 +6238,7 @@ TchSensGrid_EventDispatch:
 	jr	nz, 12
 	ld	xwa, 256
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	jr	66
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 16
@@ -6246,7 +6246,7 @@ TchSensGrid_EventDispatch:
 	jr	nz, 12
 	ld	xwa, 260
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	jr	44
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 16
@@ -6254,7 +6254,7 @@ TchSensGrid_EventDispatch:
 	jr	nz, 12
 	ld	xwa, 258
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	jr	22
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 528
@@ -6262,7 +6262,7 @@ TchSensGrid_EventDispatch:
 	jrl	nz, 523
 	ld	xwa, 259
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	call	16381237
 	jrl	506
 	lda	xix, (xde+4)
@@ -6478,7 +6478,7 @@ TchSens_EventDispatch:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -6532,7 +6532,7 @@ FSWAss_DialDown_Fallback:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -6586,7 +6586,7 @@ FSWAss_DialUp_Fallback:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 FSWAss_SetDialEnable:
 	call SetDialEnable
@@ -6693,7 +6693,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	997
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 68
@@ -6717,7 +6717,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	923
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 68
@@ -6741,7 +6741,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	849
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 68
@@ -6765,7 +6765,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	775
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 68
@@ -6789,7 +6789,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	701
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 68
@@ -6813,7 +6813,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	627
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 1794
@@ -6837,7 +6837,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	549
 	call	16400579
 	ld	xwa, xhl
@@ -6873,7 +6873,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	439
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 67
@@ -6897,7 +6897,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	366
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 67
@@ -6921,7 +6921,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	293
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 67
@@ -6945,7 +6945,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	220
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 67
@@ -6969,7 +6969,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	147
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jr	nz, 66
@@ -6993,7 +6993,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
-	lds	de, 2
+	ld	de, 2:i3
 	jr	75
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 1242
@@ -7017,7 +7017,7 @@ FSWAssGrid_EventDispatch:
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
-	lds	de, 2
+	ld	de, 2:i3
 	call	16381053
 	jrl	1167
 	lda	xix, (xde+4)
@@ -7448,8 +7448,8 @@ FSWAss_CheckAndNotify:
 	cp	hl, 1:i3
 	ret	nz
 	ld	xwa, 16512
-	lds	bc, 0
-	lds	de, 4
+	ld	bc, 0:i3
+	ld	de, 4:i3
 	call	16566832
 	ret
 FSWAss_RefreshAllVoices:
@@ -7677,7 +7677,7 @@ PmemPageCtl_EventDispatch:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl PmExpFilter_SetDialEnable
 
 PmExpFilter_ShowHide:
@@ -7945,7 +7945,7 @@ PmExpFilter_FallbackForward:
 	ld xbc, 0x1c00018
 	ld XDE, (xsp + 0x0120)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl PmExpFilter_SetDialEnable
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0124)
@@ -8023,7 +8023,7 @@ PmExpFilter_FallbackForward2:
 	ld xbc, 0x1c00018
 	ld XDE, (xsp + 0x0120)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 PmExpFilter_SetDialEnable:
 	call SetDialEnable
@@ -8163,7 +8163,7 @@ PmExpFilter_EventDispatch:
 	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	148
 	cp	de, 2:i3
 	jrl	lt, 563
@@ -8172,7 +8172,7 @@ PmExpFilter_EventDispatch:
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	jr	119
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -8206,8 +8206,8 @@ PmExpFilter_EventDispatch:
 	jrl	gt, 462
 	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	26
 	cp	de, 2:i3
 	jrl	lt, 441
@@ -8215,8 +8215,8 @@ PmExpFilter_EventDispatch:
 	jrl	gt, 434
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	call	MainLswAdd
 	jrl	413
 	ld	a, (213218:24)
@@ -8443,7 +8443,7 @@ PmExpFilter2_EventDispatch:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl DispTimeSet_SetDialEnabled
 
 DispTimeSet_SelectInit:
@@ -8454,7 +8454,7 @@ DispTimeSet_SelectInit:
 	ld	xwa, (xsp+12)
 	or	xwa, xwa
 	jrl	nz, 491
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	16535254
 	cp	hl, 0:i3
 	jrl	z, 480
@@ -8527,7 +8527,7 @@ DispTimeSet_DialFallback:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl DispTimeSet_SetDialEnabled
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -8581,7 +8581,7 @@ DispTimeSet_DialFallback2:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 DispTimeSet_SetDialEnabled:
 	call SetDialEnable
@@ -9175,7 +9175,7 @@ MainTimeFlashFunc:
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16423243
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	16535006
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
@@ -9184,7 +9184,7 @@ MainTimeFlashFunc:
 	call	16423243
 	jr	6
 MainTimeFlash_DispatchCmd:
-	lds wa, 5
+	ld wa, 5:i3
 	call Audio_DispatchCommand
 
 MainTimeFlash_ReturnZero:
@@ -9278,10 +9278,10 @@ IvWindowPgCtl_Init:
 	ld	xwa, 192
 	call	16567398
 	lda	xbc, (xiz+22)
-	lds	wa, 1
+	ld	wa, 1:i3
 	cp	hl, 1:i3
 	jr	nz, 2
-	lds	wa, 3
+	ld	wa, 3:i3
 IvWindowPgCtl_SetPageIndex:
 	ld xde, (xbc)
 	ld (xde), wa
@@ -9997,8 +9997,8 @@ MsaModeScreenProc:
 	cp	hl, 0:i3
 	jr	nz, 13
 	ld	xwa, 1024
-	lds	bc, 1
-	lds	de, 3
+	ld	bc, 1:i3
+	ld	de, 3:i3
 	call	16381053
 MsaMode_Init_Forward:
 	ld xwa, (xsp + 24)
@@ -10093,8 +10093,8 @@ MsaMode_Select_RightSide:
 
 MsaMode_Select_DrawHighlight1:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	call DrawDesignFrame
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 44)
@@ -10126,8 +10126,8 @@ MsaMode_Select_RightSide2:
 
 MsaMode_Select_DrawHighlight2:
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	call DrawDesignFrame
 	jrl MsaMode_ReturnZero
 
@@ -10163,20 +10163,20 @@ MsaMode_OK:
 
 MsaMode_OK_Cmd89:
 	ld xwa, 0x401
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	jr MsaMode_OK_ModeChange
 
 MsaMode_OK_Cmd8A:
 	ld xwa, 0x401
-	lds bc, 2
-	lds de, 1
+	ld bc, 2:i3
+	ld de, 1:i3
 	jr MsaMode_OK_ModeChange
 
 MsaMode_OK_Cmd8B:
 	ld xwa, 0x401
-	lds bc, 3
-	lds de, 1
+	ld bc, 3:i3
+	ld de, 1:i3
 
 MsaMode_OK_ModeChange:
 	call MainLswPut
@@ -10408,8 +10408,8 @@ PmemMode_Select_RightSide:
 
 PmemMode_Select_DrawHighlight1:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	call DrawDesignFrame
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 36)
@@ -10441,8 +10441,8 @@ PmemMode_Select_RightSide2:
 
 PmemMode_Select_DrawHighlight2:
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	call DrawDesignFrame
 	jr PmemMode_ReturnZero
 
@@ -10476,14 +10476,14 @@ PmemMode_OK:
 
 PmemMode_OK_Cmd89:
 	ld xwa, 0x302
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	jr PmemMode_OK_ModeChange
 
 PmemMode_OK_Cmd8B:
 	ld xwa, 0x302
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 
 PmemMode_OK_ModeChange:
 	call MainLswPut
@@ -11132,7 +11132,7 @@ VariScreen_HandleShow:
 	ld	(xsp+4), xwa
 	ld	a, (35998:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16567590
 	ld	(xsp+31), l
 	ld	a, (35998:16)
@@ -12346,7 +12346,7 @@ VariScreen_OK_Dispatch:
 	jr z, VariScreen_OK_HalfRange1
 	cp xbc, 0x88
 	jrl nz, VariScreen_OK_PageScroll
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12371,7 +12371,7 @@ VariScreen_OK_Dispatch:
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange1:
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12395,7 +12395,7 @@ VariScreen_OK_HalfRange1:
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange2:
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12419,7 +12419,7 @@ VariScreen_OK_HalfRange2:
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange3:
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12443,7 +12443,7 @@ VariScreen_OK_HalfRange3:
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange4:
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12467,7 +12467,7 @@ VariScreen_OK_HalfRange4:
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_CalcRow0:
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12478,7 +12478,7 @@ VariScreen_OK_CalcRow0:
 	ld (xbc), wa
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xbc, (xsp + 16)
@@ -12500,7 +12500,7 @@ VariScreen_OK_CalcRow0:
 VariScreen_OK_CalcRow1:
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12511,7 +12511,7 @@ VariScreen_OK_CalcRow1:
 	ld (xbc), wa
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xbc, (xsp + 16)
@@ -12533,7 +12533,7 @@ VariScreen_OK_CalcRow1:
 VariScreen_OK_CalcRow2:
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12544,7 +12544,7 @@ VariScreen_OK_CalcRow2:
 	ld (xbc), wa
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xbc, (xsp + 16)
@@ -12566,7 +12566,7 @@ VariScreen_OK_CalcRow2:
 VariScreen_OK_CalcRow3:
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jrl z, FileBrowser_ReturnZero
@@ -12577,7 +12577,7 @@ VariScreen_OK_CalcRow3:
 	ld (xbc), wa
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xbc, (xsp + 16)
@@ -12599,7 +12599,7 @@ VariScreen_OK_CalcRow3:
 VariScreen_OK_CalcRow4:
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, FileBrowser_ReturnZero
@@ -12610,7 +12610,7 @@ VariScreen_OK_CalcRow4:
 	ld (xbc), wa
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xbc, (xsp + 16)
@@ -13068,7 +13068,7 @@ RVari_Select_CheckSameBank:
 	ldw	(xwa), 163
 	ldw	(xwa+4), 311
 	ldw	bc, 193
-	lds	de, 7
+	ld	de, 7:i3
 	call	16437580
 	ld	xwa, (xiz+56)
 	ld	wa, (xwa)
@@ -13176,7 +13176,7 @@ RVari_Select_CheckSameBank:
 	ld	(xwa+6), bc
 	ldw	(xwa), 8
 	ldw	(xwa+4), 156
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldw	de, 245
 	call	16437580
 	lda	xwa, (xsp+536)
@@ -13222,7 +13222,7 @@ RVari_Select_CheckSameBank:
 	ldw	(xwa), 8
 	ldw	(xwa+4), 156
 	ldw	bc, 193
-	lds	de, 7
+	ld	de, 7:i3
 	call	16437580
 	lda	xwa, (xsp+536)
 	lda	xbc, (xsp+532)

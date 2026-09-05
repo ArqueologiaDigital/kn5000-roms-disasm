@@ -106,7 +106,7 @@ MainFlashFunc:
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16423243
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	16535006
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
@@ -115,7 +115,7 @@ MainFlashFunc:
 	call	16423243
 	jr	6
 MainFlash_AudioDispatch:
-	lds wa, 7
+	ld wa, 7:i3
 	call Audio_DispatchCommand
 
 MainFlash_ReturnZero:
@@ -832,7 +832,7 @@ VwTitle_HandleDestroy:
 	push xbc
 	pushm (xhl + 36)
 	ld xbc, (xhl + 32)
-	lds de, 0
+	ld de, 0:i3
 	call DrawTitleBar
 	lds32 xhl, 0
 
@@ -882,7 +882,7 @@ DrawProgressRectH:
 	ldw (xsp + 10), 0x0
 	ld xiy, xwa
 	lda xix, (xsp + 24)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 
 DrawProgH_CalcDimensions:
@@ -1084,7 +1084,7 @@ DrawProgressRectV:
 	ldw (xsp + 8), 0x0
 	ld xiy, xwa
 	lda xix, (xsp + 26)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 
 DrawProgV_CalcDimensions:
@@ -1358,11 +1358,11 @@ IvIndexSwCtrlProc:
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
-	lds wa, 0
+	ld wa, 0:i3
 	jrl Slider_ReturnZero
 
 Slider_Case1E00066:
-	lds wa, 0
+	ld wa, 0:i3
 	jrl Slider_ReturnZero
 
 Slider_Case1E00067:
@@ -1444,7 +1444,7 @@ Slider_Decrement:
 
 Slider_DecrDone:
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 Slider_ReturnZero:
 	call SetDialEnable
@@ -1871,7 +1871,7 @@ Edit_Return:
 
 EditControlProc:
 	ld	(xwa), 0
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 
 ; =============================================================================
@@ -2068,7 +2068,7 @@ ApTaskControl:
 	jr z, ApTaskCtrl_ReturnZero
 	cp xbc, 0x1e000ae
 	jr nz, ApTaskCtrl_ReturnZero
-	lds wa, 1
+	ld wa, 1:i3
 	call TaskSched_WakeBySlotID
 	jr ApTaskCtrl_ResumeTask
 
@@ -2081,7 +2081,7 @@ ApTaskCtrl_ResumeTask:
 	jr ApTaskCtrl_ReturnZero
 
 ApTaskCtrl_HandleAD:
-	lds wa, 1
+	ld wa, 1:i3
 	call TaskSched_WakeBySlotID
 
 ApTaskCtrl_ReturnZero:
@@ -2104,12 +2104,12 @@ MainTaskControl:
 	jr MainTaskCtrl_ResumeTask
 
 MainTaskCtrl_HandleAF:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_WakeBySlotID
 	jr MainTaskCtrl_ReturnZero
 
 MainTaskCtrl_HandleAC:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_WakeBySlotID
 
 MainTaskCtrl_ResumeTask:
@@ -2527,7 +2527,7 @@ BitCtrl_ReadBitDone:
 
 	ld xix, xwa
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldirw
 
@@ -2713,7 +2713,7 @@ CtrlPanel_GetSelectionState:
 	ld wa, (0x0274a6:24)
 	bit 0, wa
 	jr z, CtrlPanel_CheckBit1
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 CtrlPanel_CheckBit1:
@@ -2721,11 +2721,11 @@ CtrlPanel_CheckBit1:
 	jr z, CtrlPanel_SelectionReturnZero
 	and wa, 0x18
 	jr nz, CtrlPanel_SelectionReturnZero
-	lds hl, 2
+	ld hl, 2:i3
 	ret
 
 CtrlPanel_SelectionReturnZero:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 GetPartSelect:
@@ -2902,7 +2902,7 @@ GetClientBox:
 	call GetViewInstance
 	lda xiy, (xhl + 14)
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xbc, (xsp + 4)
 	ld wa, (xhl + 24)
@@ -2919,7 +2919,7 @@ GetClientBox2:
 	lds32 xde, 0
 	ld xiy, xbc
 	ld xix, xiz
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	cp wa, 0:i3
 	jr mi, CtrlPanel_InvalidIndexHandler
@@ -2955,7 +2955,7 @@ CtrlPanel_FrameDispatchTable:
 	jr	14
 	lds32	xde, 1
 	decm	2, (xiz+4)
-	lds	wa, 2
+	ld	wa, 2:i3
 
 CtrlPanel_SubFrameOffset:
 	sub (xiz + 6), wa
@@ -3031,7 +3031,7 @@ CtrlPanel_AfterLeftMargin:
 	jrl CtrlPanel_ApplyMarginLoop
 	lds32 xde, 1
 	decm 1, (xiz + 4)
-	lds wa, 1
+	ld wa, 1:i3
 	jrl CtrlPanel_SubFrameOffset
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
@@ -3142,7 +3142,7 @@ GetFrameColor:
 	jr gt, BoxCheck_ReturnZero
 
 BoxCheck_ReturnZero:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 BoxLeftCheck:
@@ -3150,11 +3150,11 @@ BoxLeftCheck:
 	jr gt, BoxLeftCheck_ReturnZero
 	cp wa, 0x80
 	jr lt, BoxLeftCheck_ReturnZero
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 BoxLeftCheck_ReturnZero:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 BoxRightCheck:
@@ -3162,11 +3162,11 @@ BoxRightCheck:
 	jr gt, BoxRightCheck_ReturnZero
 	cp wa, 0xa0
 	jr lt, BoxRightCheck_ReturnZero
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 BoxRightCheck_ReturnZero:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; =============================================================================
@@ -3735,12 +3735,12 @@ GroupBox_Nav_SendSuspend:
 
 GroupBox_Nav_SendEventAndUpdate:
 	call SendEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 	jrl GroupBox_DisableDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
 	ld (0x03ef6a:24), xwa
@@ -3793,14 +3793,14 @@ GroupBox_CursorNav_SendAndTitle:
 
 GroupBox_CursorNav_AddLsw:
 	lds32 xwa, 4
-	lds de, 4
+	ld de, 4:i3
 	calr MainLswAdd
 
 GroupBox_CursorNav_UpdateScreen:
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 	jrl GroupBox_DisableDisplay
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)

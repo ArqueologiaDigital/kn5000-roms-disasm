@@ -254,7 +254,7 @@ CPanel_InitLEDBuffer:
 ; between typical baudrates, but this is just a hunch for now...
 
 DELAY_2_LOOPS:
-	lds wa, 2
+	ld wa, 2:i3
 
 Delay2L_Loop:
 	dec 1, wa
@@ -267,7 +267,7 @@ Delay2L_Done:
 
 
 DELAY_6_LOOPS:
-	lds wa, 6
+	ld wa, 6:i3
 
 Delay6L_Loop:
 	dec 1, wa
@@ -387,14 +387,14 @@ CPanel_CheckSpecialCombos:
 	cp (0x8e5e:16), 108; CPL_SEG4 == 0x6c (0110 1100)?
 				; = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3
 	jr nz, CPanel_Combo_CheckAllInitSetting
-	lds hl, 3		; Combo 3: Software version / build numbers screen
+	ld hl, 3:i3		; Combo 3: Software version / build numbers screen
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_CheckAllInitSetting:
 	cp (0x8e4b:16), 112; CPR_SEG1 == 0x70 (0111 0000)?
 				; = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR
 	jr nz, CPanel_Combo_CheckFactoryReset
-	lds hl, 2		; Combo 2: "ALL INITIAL SETTING!" + LED version display
+	ld hl, 2:i3		; Combo 2: "ALL INITIAL SETTING!" + LED version display
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_CheckFactoryReset:
@@ -402,18 +402,18 @@ CPanel_Combo_CheckFactoryReset:
 				; = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ
 				; (three leftmost RHYTHM GROUP buttons)
 	jr nz, CPanel_Combo_CheckFlashUpdate
-	lds hl, 1		; Combo 1: Factory Reset (Initial Setting)
+	ld hl, 1:i3		; Combo 1: Factory Reset (Initial Setting)
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_CheckFlashUpdate:
 	cp (0x8e50:16), 15; CPR_SEG6 == 0x0f (0000 1111)?
 				; = PM 1 + PM 2 + PM 3 + PM 4 (all 4 Panel Memory buttons)
 	jr nz, CPanel_Combo_NormalBoot
-	lds hl, 4		; Combo 4: Flash Memory Update
+	ld hl, 4:i3		; Combo 4: Flash Memory Update
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_NormalBoot:
-	lds hl, 0		; No combo: normal boot
+	ld hl, 0:i3		; No combo: normal boot
 
 CPanel_CheckSpecialCombos_Return:
 	ret
@@ -1519,7 +1519,7 @@ CPanel_IncRXPtr:
 	inc 1, iy
 	cp iy, 0x5c
 	jr c, IncRX_NoWrap
-	lds iy, 0
+	ld iy, 0:i3
 
 IncRX_NoWrap:
 	ret
@@ -1529,7 +1529,7 @@ CPanel_IncLEDPtr:
 	inc 1, iy
 	cp iy, 0x3c
 	jr c, IncLED_NoWrap
-	lds iy, 0
+	ld iy, 0:i3
 
 IncLED_NoWrap:
 	ret
@@ -1539,7 +1539,7 @@ CPanel_IncEventPtr:
 	inc 1, ix
 	cp ix, 0x80
 	jr c, IncEvt_NoWrap
-	lds ix, 0
+	ld ix, 0:i3
 
 IncEvt_NoWrap:
 	ret

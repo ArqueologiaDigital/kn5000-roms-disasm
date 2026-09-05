@@ -563,7 +563,7 @@ VoiceParam_ListHandler:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl FadeGrid_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -623,7 +623,7 @@ FadeGrid_CheckFadeOut:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl FadeGrid_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -681,7 +681,7 @@ FadeGrid_CheckFadeOutAlt:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 FadeGrid_SetDialEnable:
 	call SetDialEnable
@@ -764,7 +764,7 @@ FadeSetGridCheck:
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xwa, xde
 	cp xde, 0x1e0008d
@@ -800,8 +800,8 @@ Data_FadeSetGridDispatch:
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 4294967295
 	jrl	z, 441
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	74
 	call	16400579
 	ld	xwa, xhl
@@ -824,7 +824,7 @@ Data_FadeSetGridDispatch:
 	cp	xwa, 4294967295
 	jrl	z, 366
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	call	16381237
 	jrl	354
 	lda	xhl, (xsp+4)
@@ -1032,7 +1032,7 @@ AcInOutGrid_Init:
 	ld	xwa, (xsp+16)
 	ld	xbc, 29360152
 	call	16359805
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	471
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+12)
@@ -1109,7 +1109,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	ld	xbc, 29360152
 	ld	xde, (xsp+8)
 	call	SetDialDown
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	232	; -> 0xF755FB
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+12)
@@ -1184,7 +1184,7 @@ AcInOutGrid_ScrollDown_CheckAlt:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcInOutGrid_SetScrollBounds:
 	call SetDialEnable
@@ -1266,7 +1266,7 @@ InOutGridCheck:
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xwa, xde
 	lda xbc, (xsp + 12)
@@ -1310,16 +1310,16 @@ Data_InOutGridDispatch:
 	lda	xix, (16209704:24)
 	jp_rr	8, xix, bc
 	ld	xwa, 8448
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	316
 	ld	xwa, 8449
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	304
 	ld	xwa, 20480
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	292
 	ld	xwa, 20480
 	call	16567398
@@ -1328,31 +1328,31 @@ Data_InOutGridDispatch:
 	cp	hl, 1:i3
 	jrl	nz, 1686
 	ld	xwa, 20481
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	262
 	ld	xwa, 20482
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	250
 	ld	xwa, 8577
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	238
 	ld	xwa, 8580
-	lds	bc, 1
+	ld	bc, 1:i3
 	.byte 0xda	; v10 does not spell this byte either
 	.byte 0xa9	; v10 does not spell this byte either
 	.byte 0x78	; v10 does not spell this byte either
 	.byte 0xe2	; v10 does not spell this byte either
 	.byte 0x00	; v10 does not spell this byte either
 	ld	xwa, 8578
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	214
 	ld	xwa, 8579
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	jrl	202
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1380,15 +1380,15 @@ Data_InOutGridDispatch:
 	jp_rr	8, xix, bc
 	ld	xwa, 8448
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	112
 	ld	xwa, 8449
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	100
 	ld	xwa, 20480
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	88
 	ld	xwa, 20480
 	call	16567398
@@ -1398,27 +1398,27 @@ Data_InOutGridDispatch:
 	jrl	nz, 1482
 	ld	xwa, 20481
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	58
 	ld	xwa, 20482
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	46
 	ld	xwa, 8577
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	34
 	ld	xwa, 8580
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	22
 	ld	xwa, 8578
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	jr	10
 	ld	xwa, 8579
 	ldw	bc, 65535
-	lds	de, 1
+	ld	de, 1:i3
 	call	MainLswAdd
 	jrl	1405
 	lda	xwa, (xsp+4)

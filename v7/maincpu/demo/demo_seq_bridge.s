@@ -196,12 +196,12 @@ SeqSongNameFunc:
 	jrl SongBank_ReturnZero
 
 SeqSongName_RefreshAll:
-	lds iz, 0
+	ld iz, 0:i3
 
 SeqSongName_RefreshLoop:
 	ld wa, iz
 	ld bc, iz
-	lds de, 1
+	ld de, 1:i3
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
@@ -242,7 +242,7 @@ SongBank_StoreCurrentSong:
 	call ApPostEvent
 	ld wa, iz
 	ld bc, iz
-	lds de, 1
+	ld de, 1:i3
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
@@ -250,7 +250,7 @@ SongBank_StoreCurrentSong:
 	call ApPostEvent
 	ld bc, (7120:16)
 	ld wa, bc
-	lds de, 1
+	ld de, 1:i3
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
@@ -350,12 +350,12 @@ SeqSongMemoryFunc:
 	jrl SeqSongMem_PostAndReturn
 
 SeqSongMem_RefreshAll:
-	lds iz, 0
+	ld iz, 0:i3
 
 SeqSongMem_RefreshLoop:
 	ld wa, iz
 	ld bc, iz
-	lds de, 0
+	ld de, 0:i3
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
@@ -396,7 +396,7 @@ SongBank_EventCompare:
 	call ApPostEvent
 	ld wa, iz
 	ld bc, iz
-	lds de, 0
+	ld de, 0:i3
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
@@ -404,7 +404,7 @@ SongBank_EventCompare:
 	call ApPostEvent
 	ld bc, (7196:16)
 	ld wa, bc
-	lds de, 0
+	ld de, 0:i3
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
@@ -735,12 +735,12 @@ DispatchHandler_InitAllSlots:
 	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
-	lds iy, 1
+	ld iy, 1:i3
 	call SeqNode_ResolveSlotPtr
 	ldw (0xf22f:16), 1
 	ld xiy, (4349:16)
 	xor xhl, xhl
-	lds de, 2
+	ld de, 2:i3
 	ld bc, (0x286d:16)
 	ld (0xf231:16), bc
 	dec 1, bc

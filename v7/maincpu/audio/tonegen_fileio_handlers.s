@@ -11,7 +11,7 @@ ToneGen_IncrementWrap128:
 	inc	1, ix
 	cp	ix, 128
 	jr	c, 2
-	lds	ix, 0
+	ld	ix, 0:i3
 	ret
 	cp	ix, 0:i3
 	jr	nz, 4
@@ -78,7 +78,7 @@ ToneGen_ApplyMaskLoop:
 	inc	5, xbc
 	cp	xde, xhl
 	jr	c, -14
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16472157
 	pushw	16
 	pushw	32
@@ -179,7 +179,7 @@ DSPCfg_ResetEntryByTable:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 DSPCfg_ResetEntryLoop:
 	ld bc, iz
@@ -203,7 +203,7 @@ DSPCfg_InitAllEntries:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 DSPCfg_InitEntryLoop:
 	.byte 0xde, 0x88, 0xe8, 0x12, 0xe8, 0x8a, 0xea, 0xee
@@ -227,7 +227,7 @@ DSPCfg_InitAuxEntries:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 ; DSPCfg_InitAllEntries handler: entry 0
 DSPCfg_Init_Entry0:
@@ -312,7 +312,7 @@ DSPCfg_InitDispatch:
 
 ; DSPCfg_InitAllEntries finalize after dispatch
 DSPCfg_Init_Finalize:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 DSPCfg_InitDispatchData:
@@ -332,7 +332,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xc3
 	reti
 	sla	xwa, 201
-	lds	hl, 3
+	ld	hl, 3:i3
 	ret
 	ld	xde, xbc
 	ld	l, (xde+1)
@@ -362,7 +362,7 @@ DSPCfg_InitDispatchData:
 	and	(xde), l
 	ld	a, (xbc+5)
 	or	(xde), a
-	lds	hl, 6
+	ld	hl, 6:i3
 	ret
 	ld	xde, xwa
 	ld	a, (xbc+1)
@@ -383,7 +383,7 @@ DSPCfg_InitDispatchData:
 	and	(xde), l
 	ld	a, (xbc+5)
 	or	(xde), a
-	lds	hl, 6
+	ld	hl, 6:i3
 	ret
 	dec	6, xsp
 	pushw	iz
@@ -391,7 +391,7 @@ DSPCfg_InitDispatchData:
 	ld	c, (xde+1)
 	extz	bc
 	lda_rr xwa, xwa, bc
-	lds ix, 0
+	ld ix, 0:i3
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
@@ -432,7 +432,7 @@ DSPCfg_InitDispatchData:
 	ld	c, (xde+1)
 	extz	bc
 	lda_rr xwa, xwa, bc
-	lds iy, 0
+	ld iy, 0:i3
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
@@ -480,7 +480,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xe0, 0xe4
 	nop
 	nop
-	lds	hl, 2
+	ld	hl, 2:i3
 	ret
 	lda	xwa, (0xf480:16)
 	jrl	-718
@@ -489,7 +489,7 @@ DSPCfg_ResetAuxEntries:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 DSPCfg_ResetAuxEntryLoop:
 	ld bc, iz
@@ -553,7 +553,7 @@ DSPCfg_SyncBitmapData:
 	pop	xix
 	pop	xhl
 	pop	xde
-	lds	bc, 0
+	ld	bc, 0:i3
 	ld	de, bc
 	inc	1, bc
 	extz	xde
@@ -638,17 +638,17 @@ SoundParam_NotifyMultipleChanges:
 	ld	c, (36304:16)
 	extz	bc
 	lds32	xwa, 0
-	lds	de, 0
+	ld	de, 0:i3
 	call	16566832
 	ld	c, (36306:16)
 	extz	bc
 	ld	xwa, 258
-	lds	de, 0
+	ld	de, 0:i3
 	call	16566832
 	ld	c, (36308:16)
 	extz	bc
 	ld	xwa, 259
-	lds	de, 0
+	ld	de, 0:i3
 	call	16566832
 	call	16469470
 	jr	0
@@ -659,7 +659,7 @@ ToneGen_DiffScanAndUpdate:
 	lda	xwa, (48288:16)
 	ld	(xsp+12), xwa
 	ld	(xsp+8), xwa
-	lds	iz, 0
+	ld	iz, 0:i3
 	jrl	202
 ToneGen_DiffScanOuter:
 	ld wa, iz
@@ -707,7 +707,7 @@ ToneGen_DiffScanInner:
 	pop xix
 	pop xhl
 	pop xde
-	lds bc, 0
+	ld bc, 0:i3
 
 ToneGen_DiffRecordChange:
 	ld de, bc
@@ -832,7 +832,7 @@ ToneGen_FileIO_RestoreFromBackup:
 ToneGen_FlashVerify:
 	lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)
 	ld xde, 0x3d3000
-	lds bc, 0
+	ld bc, 0:i3
 
 ToneGen_FlashVerifyLoop:
 	ldb_spi A, 0xec
@@ -847,20 +847,20 @@ ToneGen_FlashWriteAll:
 	push	xiz
 	ld	xwa, 4009984
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, 15569722
 	ldw	de, 250
 	call	15678482
 	lda	xbc, (15569972:24)
 	ld	xwa, 4010256
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ldw	de, 234
 	call	15678482
 	lda	xbc, (15570206:24)
 	ld	xwa, 4010512
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ldw	de, 234
 	call	15678482
 	pushw	80
@@ -906,7 +906,7 @@ ToneGen_FlashWriteAll:
 	lda	xsp, (xsp+30)
 	ld	xwa, 4011008
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, xiz
 	ldw	de, 80
 	call	15678482
@@ -962,7 +962,7 @@ ToneGen_FlashReadAndRestore:
 	lda	xsp, (xsp+30)
 	ld	xwa, 4011008
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, xiz
 	ldw	de, 80
 	call	15678482
@@ -1026,31 +1026,31 @@ DSPCfg_Param_CaseC:
 	ret
 	ld	xwa, 0x3d3400
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, 0x0340e4
-	lds	de, 2
+	ld	de, 2:i3
 	jr	67
 	ld	xwa, 0x3d3410
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, 0x0340e6
 	ldw	de, 12
 	.asciz "h1@ 4="
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, 0x0340f2
-	lds	de, 4
+	ld	de, 4:i3
 	.asciz "h @04="
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, 0x0340f6
-	lds	de, 4
+	ld	de, 4:i3
 	jr	15
 	ld	xwa, 0x3d3440
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	ld	xbc, 0x0340fa
-	lds	de, 6
+	ld	de, 6:i3
 	call	FlashWrite
 	ret
 
@@ -1114,7 +1114,7 @@ PanelDisplay_DispatchByMode:
 PanelDisplay_DispatchData:
 	ld	xde, 0x3d3400
 	lda	xhl, (0x0340e4:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldb_spi	a, 236
 	cp_spib a, 232
 	jr	nz, 114
@@ -1124,7 +1124,7 @@ PanelDisplay_DispatchData:
 	jr	115
 	ld	xde, 0x3d3410
 	lda	xhl, (0x0340e6:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldb_spi	a, 236
 	cp_spib a, 232
 	jr	nz, 86
@@ -1133,7 +1133,7 @@ PanelDisplay_DispatchData:
 	jr	c, -16
 	.asciz "hUB 4="
 	lda	xhl, (0x0340f2:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldb_spi a, 236
 	cp_spib a, 232
 	jr	nz, 56
@@ -1142,7 +1142,7 @@ PanelDisplay_DispatchData:
 	jr	c, -14
 	.asciz "h9B04="
 	lda	xhl, (0x0340f6:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldb_spi	a, 236
 	cp_spib a, 232
 	jr	nz, 28
@@ -1152,11 +1152,11 @@ PanelDisplay_DispatchData:
 	jr	t, 0x1d
 	.asciz "B@4="
 	lda	xhl, (0x0340fa:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldb_spi a, 236
 	cp_spib a, 232
 	jr	z, 3
-	lds	hl, 1
+	ld	hl, 1:i3
 	ret
 	inc	1, bc
 	cp	bc, 6:i3
@@ -1164,7 +1164,7 @@ PanelDisplay_DispatchData:
 
 ; DSP config parameter default handler
 DSPCfg_Param_Default:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 Encoder_MarkInvalid:

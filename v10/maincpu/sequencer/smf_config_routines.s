@@ -573,7 +573,7 @@ SMF_WriteByte_NewSector:
 	pushw de
 	ld wa, (4327:16)
 	xor de, de
-	lds hl, 4
+	ld hl, 4:i3
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
@@ -746,7 +746,7 @@ SMF_AdvancePosition:
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
 	ld (0x28af:16), wa
-	lds wa, 5
+	ld wa, 5:i3
 	jr SMF_AdvancePos_Store
 
 SMF_AdvancePos_Inc:
@@ -1404,7 +1404,7 @@ SMF_LookupSongBank:
 	ret
 
 SMF_AdvanceMultipleEvents:
-	lds bc, 2
+	ld bc, 2:i3
 
 SMF_AdvanceMulti_Loop:
 	pushw bc
@@ -1548,7 +1548,7 @@ SMF_UpdateTempo_SubtractBase:
 	sub de, (3942:16)
 	cp de, 0:i3
 	jr ge, SMF_UpdateTempo_ClampZero
-	lds de, 0
+	ld de, 0:i3
 
 SMF_UpdateTempo_ClampZero:
 	ld (4229:16), de
@@ -2263,7 +2263,7 @@ SMF_ConfigSlot_CodeBlock:
 	jr	12
 	ld	(10369:16), xhl
 	ldw	(4417:16), 5
-	lds	iy, 5
+	ld	iy, 5:i3
 	pop	xwa
 	pop	xhl
 	ret
@@ -2316,7 +2316,7 @@ SMF_AdvanceReadPtr:
 	jr SMF_AdvanceRead_Return
 
 SMF_AdvanceRead_NewPage:
-	lds ix, 5
+	ld ix, 5:i3
 
 SMF_AdvanceRead_Return:
 	ret
@@ -2340,7 +2340,7 @@ SMF_AdvanceWritePtr:
 
 SMF_AdvanceWrite_NewPage:
 	ld (0x2881:16), xhl
-	lds iy, 5
+	ld iy, 5:i3
 
 SMF_AdvanceWrite_Return:
 	pop xwa

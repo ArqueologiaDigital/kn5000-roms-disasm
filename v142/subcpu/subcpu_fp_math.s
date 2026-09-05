@@ -43,7 +43,7 @@ FP_SP_NegateInPlace4:
 ; NOTE: the name is a mechanical description of the body; the routine is fabs().
 FP_DP_CmpAndCopy:
 	lda xwa, (xsp + 8)
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_DP_CmpZero64
 	lda xbc, (xsp + 8)
 	ld xwa, (xsp + 4)
@@ -90,7 +90,7 @@ FP_SP_Decode_ReadSign_Pad:
 ; 6-byte result rows (equal / less / greater) and returns row[BC]. Called ~15 times
 ; inside this region (pow, exp, ldexp, frexp, sin, modf) and never from outside.
 FP_DP_CmpZero64:
-	lds hl, 0
+	ld hl, 0:i3
 	lds32 xde, 0
 	ld xiy, (xwa + 4)
 	cp xiy, xde
@@ -119,7 +119,7 @@ FP_DP_CmpZero64_Greater:
 ; 0.0 with relation BC, result in HL. Uses the same three 6-byte rows at 0x03D978.
 ; No caller inside this region; reached only from the DSP curve code.
 FP_SP_CmpZero32:
-	lds hl, 0
+	ld hl, 0:i3
 	ld xde, (xwa)
 	cp xde, 0x0
 	jr lt, FP_SP_CmpZero32_Less
@@ -215,13 +215,13 @@ VoiceFloat_CompareAndConvert:
 	pushw iz
 	lda xwa, (xsp + 74)
 	lda xbc, (0x01f646:24)
-	lds de, 1
+	ld de, 1:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
 	lda xwa, (xsp + 74)
 	lda xbc, (0x01f64e:24)
-	lds de, 3
+	ld de, 3:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
@@ -238,7 +238,7 @@ VoiceFloat_CompareAndConvert_Invalid:
 ; pow(): x < 0 branch - reject a non-integer exponent with EDOM.
 VoiceFloat_CompareAndConvert_AfterRange:
 	lda xwa, (xsp + 66)
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
@@ -247,7 +247,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	call FP_ScalarToDP
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
-	lds de, 4
+	ld de, 4:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
@@ -260,12 +260,12 @@ VoiceFloat_CompareAndConvert_AfterRange:
 ; pow(): x >= 0 branch - reject pow(0, y<=0) with EDOM.
 VoiceFloat_CompareAndConvert_AltPath:
 	lda xwa, (xsp + 74)
-	lds bc, 3
+	ld bc, 3:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
 	lda xwa, (xsp + 66)
-	lds bc, 5
+	ld bc, 5:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
@@ -283,7 +283,7 @@ VoiceFloat_CompareAndConvert_AltPath2:
 	call FP_ScalarToDP
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
-	lds de, 5
+	ld de, 5:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jrl nz, VoiceFloat_ConvergenceLoop
@@ -328,13 +328,13 @@ VoiceFloat_IterationLoop:
 	cp wa, 0xFC03
 	jr ge, VoiceFloat_IterationLoop_LargeStep
 	lda xwa, (xsp + 74)
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_LessPath
 	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	lda xbc, (0x00f420:24)
 	cp hl, 0:i3
@@ -369,7 +369,7 @@ VoiceFloat_IterationLoop_LargeStep:
 	jr le, VoiceFloat_IterationLoop_SmallStep
 	ldw (0x040c22:24), 0x0022
 	ld xwa, xde
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_LargeStep_NegPath
@@ -417,7 +417,7 @@ VoiceFloat_IterationLoop_CheckContinue:
 	or xwa, xwa
 	jrl nz, VoiceFloat_IterationLoop
 	lda xwa, (xsp + 74)
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_DifferentPath
@@ -498,7 +498,7 @@ VoiceFloat_ConvergenceLoop_SumCheck:
 	ld iz, (xsp + 36)
 	add iz, (xsp + 34)
 	lda xwa, (xsp + 74)
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_ConvergenceLoop_RangeCheck
@@ -512,7 +512,7 @@ VoiceFloat_ConvergenceLoop_RangeCheck:
 	jr le, VoiceFloat_ConvergenceLoop_Clamp
 	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	lda xwa, (xsp + 46)
 	lda xbc, (0x00f420:24)
@@ -578,7 +578,7 @@ VoiceFloat_MulAddVariant2:
 	push xiz
 	ld xiz, (xsp + 56)
 	lda xwa, (xsp + 60)
-	lds bc, 2
+	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceFloat_MulAddVariant2_AltPath
@@ -643,7 +643,7 @@ FP_MulAccum64:
 	mul xde, xwa
 	add xhl, xde
 	ldw_erp HL, 0xEE
-	lds hl, 0
+	ld hl, 0:i3
 	mul xwa, xbc
 	add xhl, xwa
 	ret
@@ -807,7 +807,7 @@ VoiceFloat_BlendAndMerge_InRange:
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 100)
 	lda xbc, (0x01f696:24)
-	lds de, 1
+	ld de, 1:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoiceFloat_BlendAndMerge_Phase2
@@ -841,7 +841,7 @@ VoiceFloat_BlendAndMerge_Phase3:
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 92)
 	lda_dri XBC, 0xFD, 0x94, 0x00
-	lds de, 4
+	ld de, 4:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoiceFloat_BlendAndMerge_Phase4
@@ -906,7 +906,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	lda xsp, (xsp + 28)
 	lda xbc, (0x00f3a6:24)
 	lda xwa, (xsp + 76)
-	lds de, 0
+	ld de, 0:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jrl nz, VoiceFloat_BlendAndMerge_FinalCheck
@@ -1417,7 +1417,7 @@ FP_DP_NormCore_Overflow:
 
 ; Store the exponent, then choose left shift, right shift or no shift against 23.
 FP_DP_NormCore_Shift:
-	lds hl, 0
+	ld hl, 0:i3
 	ld (xiy + 2), hl
 	ld l, a
 	ld (xiy + 256), hl
@@ -1442,7 +1442,7 @@ FP_DP_NormCore_ShiftLeft:
 	cp a, 0x10
 	jr lt, FP_DP_NormCore_ShiftLeftLoop
 	ldw_erp BC, 0xE6
-	lds bc, 0
+	ld bc, 0:i3
 	sub a, 0x10
 	jr z, FP_DP_NormCore_StoreResult
 
@@ -1691,7 +1691,7 @@ FP_SP_NormCore_Overflow:
 
 ; Store the exponent and select the shift direction against 20.
 FP_SP_NormCore_Shift:
-	lds hl, 0
+	ld hl, 0:i3
 	ld (xiy + 2), hl
 	ld l, a
 	ld (xiy + 256), hl
@@ -1716,7 +1716,7 @@ FP_SP_NormCore_ShiftLeft:
 	cp a, 0x10
 	jr lt, FP_SP_NormCore_ShiftLeftLoop
 	ldw_erp BC, 0xE6
-	lds bc, 0
+	ld bc, 0:i3
 	sub a, 0x10
 	jr z, FP_SP_NormCore_StoreResult
 
@@ -2004,7 +2004,7 @@ FP_DP_FreqAdjust:
 	ld xwa, (xsp + 26)
 	ldw (xwa), 0x0
 	lda xwa, (xsp + 18)
-	lds bc, 5
+	ld bc, 5:i3
 	call FP_DP_CmpZero64
 	ld xix, (xsp + 14)
 	cp hl, 0:i3
@@ -2033,7 +2033,7 @@ FP_DP_FreqAdjust_NonZeroExp:
 	sub iz, 0x3FE
 	ld xwa, (xsp + 26)
 	ld (xwa), iz
-	lds iz, 0
+	ld iz, 0:i3
 	cpw (xwa), 0x0
 	jr gt, FP_DP_FreqAdjust_DecCheck
 	jr FP_DP_FreqAdjust_IncCheck
@@ -2526,7 +2526,7 @@ FP_DP_SubMantissa_NormLoop:
 	ldw_erp HL, 0xEE
 	stw_erp HL, 0xEA
 	ldw_erp DE, 0xEA
-	lds de, 0
+	ld de, 0:i3
 	sub ix, 0x10
 	jr FP_DP_SubMantissa_NormLoop
 
@@ -2649,7 +2649,7 @@ VoicePitch_SlideEngine:
 	lda xwa, (xsp + 34)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
-	lds bc, 5
+	ld bc, 5:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoicePitch_SlideEngine_NonZero
@@ -2665,7 +2665,7 @@ VoicePitch_SlideEngine_NonZero:
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
 	lda xbc, (0x01f6c6:24)
-	lds de, 0
+	ld de, 0:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoicePitch_SlideEngine_LessPath
@@ -2679,7 +2679,7 @@ VoicePitch_SlideEngine_NonZero:
 VoicePitch_SlideEngine_LessPath:
 	lda xwa, (xsp + 58)
 	lda xbc, (0x01f6ce:24)
-	lds de, 2
+	ld de, 2:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoicePitch_SlideEngine_StartIter
@@ -2690,7 +2690,7 @@ VoicePitch_SlideEngine_LessPath:
 
 ; Seed the term index IZ = 1.
 VoicePitch_SlideEngine_StartIter:
-	lds iz, 1
+	ld iz, 1:i3
 
 ; Taylor pass: save the previous sum, term *= x/n, sum += term, stop when the sum stops
 ; changing or n exceeds 300.
@@ -2718,7 +2718,7 @@ VoicePitch_SlideEngine_IterLoop:
 	call FP_DP_Mul
 	lda xwa, (xsp + 26)
 	lda xbc, (xsp + 34)
-	lds de, 5
+	ld de, 5:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr z, VoicePitch_SlideEngine_Done
@@ -2758,7 +2758,7 @@ VoiceAmp_ConvergeEngine:
 	lda xsp, (xsp - 102)
 	push xiz
 	lda xwa, (xsp + 114)
-	lds bc, 3
+	ld bc, 3:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, VoiceAmp_ConvergeEngine_InRange
@@ -2815,7 +2815,7 @@ VoiceAmp_ConvergeEngine_InRange:
 	ld xbc, xde
 	lda xwa, (xsp + 96)
 	call FP_DP_Add_Outer
-	lds iz, 1
+	ld iz, 1:i3
 	lda xbc, (xsp + 114)
 	lda xwa, (xsp + 88)
 	call FP_DP_Raw8Copy
@@ -2847,7 +2847,7 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	call FP_DP_Mul
 	lda xwa, (xsp + 80)
 	lda xbc, (xsp + 88)
-	lds de, 5
+	ld de, 5:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, VoiceAmp_ConvergeEngine_IterLoop
@@ -2915,7 +2915,7 @@ DSP_VoiceRegUpdate:
 	push xiz
 	ld xiy, 0x1F706
 	lda xix, (xsp + 24)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 16)
 	lda xbc, (xsp + 40)
@@ -3013,7 +3013,7 @@ DSP_VoiceRegUpdate_ForwardScan:
 	ld a, (xhl)
 	sll a, 4
 	ld (xix + 6), a
-	lds wa, 6
+	ld wa, 6:i3
 	cp iy, 6:i3
 	jr ge, DSP_VoiceRegUpdate_BackScan
 
@@ -3221,7 +3221,7 @@ VoiceFreq_EnvelopeStep:
 	lda xbc, (xsp + 26)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 26)
-	lds bc, 5
+	ld bc, 5:i3
 	call FP_DP_CmpZero64
 	ld xde, (xsp + 22)
 	cp hl, 0:i3
@@ -3280,7 +3280,7 @@ VoiceFreq_EnvelopeStep_NibbleAdjust:
 	sla wa, 4
 	add wa, iy
 	ld iy, wa
-	lds iz, 0
+	ld iz, 0:i3
 	cp bc, 0:i3
 	jr le, VoiceFreq_EnvelopeStep_DecCheck
 	cp bc, 0:i3

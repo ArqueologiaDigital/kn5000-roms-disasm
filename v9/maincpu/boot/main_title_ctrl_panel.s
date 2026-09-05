@@ -50,10 +50,10 @@ MainTitle_TeardownAndLoop:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call PostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	call SetNeedUpdate
 	call DispatchEvent
-	lds wa, 1
+	ld wa, 1:i3
 
 MainTitle_UpdateAndRefresh:
 	call SetNeedUpdate
@@ -62,9 +62,9 @@ MainTitle_UpdateAndRefresh:
 MainTitle_EventLoop:
 	lds32 xwa, 1
 	add (0x027496:24), xwa
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskSched_WaitForEvent
-	lds wa, 0
+	ld wa, 0:i3
 	call SetNeedUpdate
 	call INTTR4_BytecodeSnippet
 	cp l, 0:i3
@@ -81,14 +81,14 @@ MainTitle_EventLoop:
 	ld xbc, 0x1c00000
 	lds32 xde, 0
 	call DirmdEmulator_Entry
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
 	calr WakeUpMainTask
 	jr MainTitle_EventLoop
 
 MainTitle_EventLoopSkipInit:
-	lds wa, 1
+	ld wa, 1:i3
 	jr MainTitle_UpdateAndRefresh
 
 MainTitle_PrepareAndDispatch:
@@ -122,8 +122,8 @@ MainTitle_PrepareAndDispatch:
 	cp a, 3:i3
 	jr nz, CtrlPanel_HandleSingleBit
 	lds32 xwa, 3
-	lds bc, 5
-	lds de, 4
+	ld bc, 5:i3
+	ld de, 4:i3
 	call SoundParam_NotifyChange
 	jr SndParam_SendDiskMenuEvents
 
@@ -132,8 +132,8 @@ CtrlPanel_HandleSingleBit:
 	bit 1, e
 	jr z, CtrlPanel_HandleBit1SndParam
 	lds32 xwa, 3
-	lds bc, 1
-	lds de, 4
+	ld bc, 1:i3
+	ld de, 4:i3
 	jr CtrlPanel_DispatchSndParamLookup
 
 CtrlPanel_HandleBit1SndParam:
@@ -141,7 +141,7 @@ CtrlPanel_HandleBit1SndParam:
 	jr z, SndParam_SendDiskMenuEvents
 	lds32 xwa, 3
 	ldw bc, 0xffff
-	lds de, 4
+	ld de, 4:i3
 
 CtrlPanel_DispatchSndParamLookup:
 	call SndParam_LookupByKey

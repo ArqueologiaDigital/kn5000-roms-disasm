@@ -284,7 +284,7 @@ AudioInit_Routing_CheckTypeEDFlags:
 	extz	wa
 	pushw	wa
 	ld	bc, de
-	lds	wa, 0
+	ld	wa, 0:i3
 AudioInit_Routing_TypeED_CheckAux:
 	ldw	de, 255
 	calr	65234
@@ -425,8 +425,8 @@ AudioInit_Stereo_Default:
 AudioInit_Stereo_CheckBit3:
 	pushw	wa
 	ld	de, bc
-	lds	wa, 2
-	lds	bc, 2
+	ld	wa, 2:i3
+	ld	bc, 2:i3
 	calr	64718
 	ret
 	pushw	iz

@@ -230,7 +230,7 @@ Encoder_PassthroughIdentity_End:
 ; Encoder_ReturnDefaultConstant - Returns constant 1
 ; Output: HL = 1
 Encoder_ReturnDefaultConstant:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 Encoder_ReturnDefaultConstant_End:
 

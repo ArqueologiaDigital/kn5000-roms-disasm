@@ -489,7 +489,7 @@ MidiPkt_SendBankSelect:
 	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, 63
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	qiz, 0
 MidiPkt_SendBankSelect_Send:
 	jr	le, 50

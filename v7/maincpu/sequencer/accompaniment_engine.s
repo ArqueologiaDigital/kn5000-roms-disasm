@@ -1705,7 +1705,7 @@ AccPart_CheckAcc4:
 	.byte 0xc8, 0x38, 0x00, 0x00, 0x00, 0x44, 0xc6, 0x31
 	.byte 0x00, 0x00
 AccPart_CopyData:
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -2082,7 +2082,7 @@ AccKbd1_ProcessNotes:
 	calr AccKbd1_DrainRingBuf
 	ld XIY,0x00003178
 	ld XIX,0x00003191
-	lds bc, 5
+	ld bc, 5:i3
 	ldir85
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
@@ -2820,7 +2820,7 @@ AccCh1_ProcessNotes:
 	calr AccCh1_InitProgChange
 	ld XIY,0x0000317d
 	ld XIX,0x00003196
-	lds bc, 5
+	ld bc, 5:i3
 	ldir85
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
@@ -2988,7 +2988,7 @@ AccCh2_ProcessNotes:
 	calr AccCh2_InitProgChange
 	ld XIY,0x00003182
 	ld XIX,0x0000319b
-	lds bc, 5
+	ld bc, 5:i3
 	ldir85
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
@@ -3156,7 +3156,7 @@ AccCh3_ProcessNotes:
 	calr AccCh3_InitProgChange
 	ld XIY,0x00003187
 	ld XIX,0x000031a0
-	lds bc, 5
+	ld bc, 5:i3
 	ldir85
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
@@ -3324,7 +3324,7 @@ AccCh4_ProcessNotes:
 	calr AccCh4_InitProgChange
 	ld XIY,0x0000318c
 	ld XIX,0x000031a5
-	lds bc, 5
+	ld bc, 5:i3
 	ldir85
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
@@ -3997,7 +3997,7 @@ AccBuf_Advance:
 	ld hl, (xhl + 3)
 	ld iz, hl
 	calr AccWave_BankResolve
-	lds iy, 6
+	ld iy, 6:i3
 
 AccBuf_AdvanceSimpleReturn:
 	ret
@@ -5987,7 +5987,7 @@ AccPedal_Bit2_Expression:
 	and a, (0x33e3:16)
 	bit 0x02,A
 	jr z, AccPedal_Expr_Off
-	lds de, 4
+	ld de, 4:i3
 	sla DE, 0x08
 	.byte 0xd1, 0x08, 0x11, 0xea, 0xc1, 0x5c, 0x90, 0x3f
 	.byte 0x7f, 0x66, 0x05, 0x1e, 0xc6, 0x04, 0x68, 0x0e
@@ -7984,11 +7984,11 @@ AccReplay_SavedPedal:
 	ld	(13273:16), a
 	ld	(13274:16), a
 	ld	(13292:16), a
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldb	d, 5
 	ldb	e, 72
 	call	16624672
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldb	d, 6
 	ldb	e, 72
 	call	16624672
@@ -8033,11 +8033,11 @@ AccReplay_SendPedal_Dispatch:
 	ld	(49123:16), a
 	popw	wa
 	ld	(49121:16), a
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldb	d, 5
 	ldb	e, 72
 	call	16624672
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldb	d, 6
 	ldb	e, 72
 	call	16624672
@@ -8074,11 +8074,11 @@ AccReplay_SavedExpression:
 	ld	(13280:16), a
 	ld	(13281:16), a
 	ld	(13293:16), a
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldb	d, 5
 	ldb	e, 72
 	call	16624672
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldb	d, 6
 	ldb	e, 72
 	call	16624672
@@ -8106,12 +8106,12 @@ AccReplay_FullStop:
 	cp a, 0:i3
 	jr z, .Lc_f5aef4
 	and (0xfc5f:16), 0xf3
-	lds wa, 0
+	ld wa, 0:i3
 	ldb D, 0x05
 	ldb E, 0x48
 	call SysEx_ApplyVoiceParam_49
 	and (0xfc60:16), 0xfb
-	lds wa, 0
+	ld wa, 0:i3
 	ldb D, 0x06
 	ldb E, 0x48
 	call SysEx_ApplyVoiceParam_49
@@ -8150,7 +8150,7 @@ AccReplay_Stop_Rebuild:
 	dec 1,D
 	cp D,0xff
 	jr nz, AccReplay_Stop_CheckMode
-	lds de, 0
+	ld de, 0:i3
 AccReplay_Stop_CheckMode:
 	xor bc, bc
 
@@ -10403,7 +10403,7 @@ AccDemo_LoadVariation:
 	ldb a, 0x0
 	ld xix, 0x94800
 	add xix, 0x60
-	lds hl, 0
+	ld hl, 0:i3
 
 AccDemo_LoadVariation_EntryLoop:
 	ld (xix), hl
@@ -10818,7 +10818,7 @@ AccTone_Process_UnderF0:
 	ld e, (xwa)
 	extz de
 	ld wa, de
-	lds bc, 0
+	ld bc, 0:i3
 
 AccTone_Process_CalcResult:
 	calr AccTone_ExtendAndDispatch
@@ -11061,56 +11061,56 @@ AccTone_InlineBytecodeData:
 	res 3, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	res 0, (0x3263:16)
 	res 2, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	res 2, (0x3263:16)
 	res 2, (0xfc60:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 6
-	lds de, 0
+	ld bc, 6:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	res 0, (0x3261:16)
 	res 4, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	res 1, (0x3261:16)
 	res 5, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	res 0, (0x325f:16)
 	res 6, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	res 1, (0x325f:16)
 	res 7, (0xfc5f:16)
 	pushw 0x0000
 	ldw WA, 0x0048
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call 0xfdaa53
 	ret
 	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_tail.bin"
@@ -12466,7 +12466,7 @@ AccPatch_SeqPosition_Store:
 	lds32	xbc, 0
 	ld	c, l
 	ld	hl, (13217:16)
-	lds	wa, 6
+	ld	wa, 6:i3
 	add	wa, bc
 	lds32	xhl, 0
 	ld	l, (13202:16)
@@ -13575,7 +13575,7 @@ AccPatch_SeqAdvance_CheckLimit:
 	.byte 0xd8, 0xcf, 0x54, 0x01, 0x61, 0x05, 0xc1, 0x7a
 	.byte 0x35, 0x3e, 0x01
 AccPatch_SeqAdvance_ResetBase:
-	lds wa, 6
+	ld wa, 6:i3
 	jr AccPatch_SeqAdvance_Store
 
 AccPatch_SeqAdvance_Inc:
@@ -13661,7 +13661,7 @@ AccPatch_AdvSeq_CheckLimit:
 	jr lt, AccPatch_AdvSeq_ResetBase
 	or (0x357a:16), 0x01
 AccPatch_AdvSeq_ResetBase:
-	lds wa, 6
+	ld wa, 6:i3
 	jr AccPatch_AdvSeq_Store
 
 AccPatch_AdvSeq_Inc:
@@ -13973,17 +13973,17 @@ AccPatch_ScanForActiveNote:
 	call	16125806
 	cp	wa, 0:i3
 	jr	z, 48
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	44
 	ld	w, a
 	and	w, 240
 	cp	w, 144
 	jr	nz, 31
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	29
 	ld	l, a
 	push	l
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	20
 	pop	l
 	cp	a, 0:i3
@@ -14126,7 +14126,7 @@ AccPatch_ResumeSeq_ReadByte:
 	jr AccPatch_ResumeSeq_Return
 
 AccPatch_ResumeSeq_Skip6:
-	lds bc, 6
+	ld bc, 6:i3
 	jr AccPatch_ResumeSeq_AddAndAdvance
 
 AccPatch_ResumeSeq_Skip8:
@@ -14134,7 +14134,7 @@ AccPatch_ResumeSeq_Skip8:
 	jr AccPatch_ResumeSeq_AddAndAdvance
 
 AccPatch_ResumeSeq_Skip3:
-	lds bc, 3
+	ld bc, 3:i3
 
 AccPatch_ResumeSeq_AddAndAdvance:
 	.byte 0xd1, 0x6e, 0x35, 0x89	; adddm16 0x360a, xbc (v7 patched)
@@ -14263,7 +14263,7 @@ AccPatch_UpdateEntry_AdjustOffset:
 	cp	de, 6:i3
 	jr	z, 29	; -> 0xF600AF
 	jr	ugt, 27	; -> 0xF600AF
-	lds	hl, 6
+	ld	hl, 6:i3
 	sub	hl, de
 	ld	de, hl
 	pushw	de
@@ -14369,10 +14369,10 @@ AccPatch_SkipNoteOff:
 	calr	-1870
 	calr	-1894
 	ld	(13662:16), a
-	lds	bc, 6
+	ld	bc, 6:i3
 	cp	(13917:16), 145
 	jr	z, 2
-	lds	bc, 4
+	ld	bc, 4:i3
 AccPatch_ProcessSeqEvt_AdvLoop:
 	calr	63645
 	djnz16	bc, -6
@@ -14397,7 +14397,7 @@ AccPatch_ProcessSeqEvt_HandleEnd:
 	jrl AccPatch_ProcessSequenceEvents
 
 AccPatch_ProcessSeqEvt_SkipD:
-	lds bc, 3
+	ld bc, 3:i3
 
 AccPatch_ProcessSeqEvt_SkipDLoop:
 	calr AccPatch_AdvanceSeqIndex
@@ -14473,7 +14473,7 @@ AccPatch_EventDispatch_CheckD5:
 	jr AccPatch_ContinueProcessing
 
 AccPatch_EventDispatch_NoteOn:
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	162
 	cp	(13905:16), 0
 	jr	nz, 5
@@ -14491,7 +14491,7 @@ AccPatch_EventDispatch_AdvSlots:
 	.byte 0x1e, 0x54, 0x00, 0xc1, 0xae, 0x35, 0x3c, 0xfd
 	.byte 0x68, 0x0d
 AccPatch_ProcessMarkerCommand:
-	lds bc, 3
+	ld bc, 3:i3
 	calr AccPatch_ReadRingBufBytes
 	calr AccPatch_ParseAndResolve
 	calr AccPatch_ProcessMarkerEvent
@@ -14904,7 +14904,7 @@ AccPatch_TransposeCopy_DoCopy:
 
 	add xix, xbc
 
-	lds bc, 6
+	ld bc, 6:i3
 
 	ldir85
 
@@ -15158,7 +15158,7 @@ AccPatch_AdvanceSingleStep:
 	pop xix
 	ld wa, (xiy + 3)
 	ld (xix + 3), wa
-	lds wa, 6
+	ld wa, 6:i3
 	jr AccPatch_AdvSingleStep_Store
 
 AccPatch_AdvSingleStep_Inc:
@@ -15850,7 +15850,7 @@ AccPatch_AdvancePrevEntry_IX:
 AdvPrevEntry_IX_StoreAndReset:
 	ld	(13744:16), xix
 	lds32	xix, 0
-	lds	ix, 6
+	ld	ix, 6:i3
 AdvPrevEntry_IX_Return:
 	ret
 
@@ -15867,7 +15867,7 @@ AccPatch_AdvancePrevEntry_IY:
 AdvPrevEntry_IY_StoreAndReset:
 	ld	(13748:16), xix
 	lds32	xiy, 0
-	lds	iy, 6
+	ld	iy, 6:i3
 AdvPrevEntry_IY_Return:
 	pop xix
 	ret
@@ -16076,7 +16076,7 @@ __pad_F61565:
 
 AccVoice_InitPatternBuffer:
 	ld XHL,0x00003692
-	lds wa, 0
+	ld wa, 0:i3
 	push XWA
 	push XHL
 	push XBC
@@ -16516,7 +16516,7 @@ ToneGen_EventDisp_EndOfBlock:
 	calr	457
 	ld	(13263:16), hl
 	calr	64283
-	lds	ix, 6
+	ld	ix, 6:i3
 	ld	(13229:16), ix
 	ld	(13209:16), 6
 	jr	-104
@@ -16670,7 +16670,7 @@ ToneGen_ScanRestored_EndBlock:
 	calr	66
 	ld	(13263:16), hl
 	calr	63892
-	lds	ix, 6
+	ld	ix, 6:i3
 	ld	(13229:16), ix
 	ld	(13209:16), 6
 	jr	-99
@@ -16936,7 +16936,7 @@ ToneGen_ClassifyMono_WriteNew:
 	xor D,D
 	ld C,W
 	xor B,B
-	lds wa, 1
+	ld wa, 1:i3
 	call 0xfee40d
 	pop XIY
 	pop XIX
@@ -17045,7 +17045,7 @@ AccPlayback_NoteOn_SetBit:
 	nop
 
 AccPlayback_NoteOn_Check91:
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	(13678:16), wa
 	ld	e, (13410:16)
 	xor	h, h
@@ -17109,7 +17109,7 @@ AccPlayback_AdvancePattern:
 	nop
 
 AccPlayback_AdvPattern_Loop:
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	(13678:16), wa
 	ld	e, (13410:16)
 	xor	h, h
@@ -17442,7 +17442,7 @@ AccPlayback_VoiceState_CalcOff:
 	ld	hl, (xhl+3)
 	ld	xix, (13484:16)
 	ld	(xix), hl
-	lds	ix, 6
+	ld	ix, 6:i3
 	sub	de, 255
 	add	ix, de
 	ld	xhl, (13488:16)
@@ -17578,7 +17578,7 @@ ToneGen_ScanVoicePosition:
 	ld	de, hl
 	calr	61640
 	ldb	c, 3
-	lds	iy, 3
+	ld	iy, 3:i3
 	ld	(13447:16), 0
 ToneGen_ScanPos_CompareLoop:
 	.byte 0xd1, 0xaf, 0x33, 0xf5, 0x6e, 0x0d, 0xd1, 0x94
@@ -17675,7 +17675,7 @@ ToneGen_AdvanceVoiceStep:
 	ld hl, (xhl + 3)
 	ld de, hl
 	calr ToneGen_CalcBufferAddr
-	lds iy, 6
+	ld iy, 6:i3
 	ldb c, 0x6
 
 ToneGen_AdvVoiceStep_Return:
@@ -17732,7 +17732,7 @@ ToneGen_CalcTempo_Lookup:
 	sla	de, 2
 	ld	wa, de
 	xor	de, de
-	lds	hl, 5
+	ld	hl, 5:i3
 	ld	qwa, de
 	div	xwa, xhl
 	jr	43	; -> 0xF621AC
@@ -18370,7 +18370,7 @@ ToneGen_Interp_StoreResult:
 	ld	hl, (xhl+3)
 	ld	(13263:16), hl
 	calr	59406
-	lds	iy, 6
+	ld	iy, 6:i3
 	ld	(13209:16), 6
 	jr	21
 ToneGen_Interp_CheckExit:
@@ -18378,7 +18378,7 @@ ToneGen_Interp_CheckExit:
 	calr	61093
 	ld	(13263:16), hl
 	calr	59383
-	lds	iy, 6
+	ld	iy, 6:i3
 	ld	(13209:16), 6
 ToneGen_Interp_WrapPoint:
 	ld	(13229:16), iy
@@ -18422,7 +18422,7 @@ ToneGen_StepToNextBuffer:
 	ld	hl, (xhl+3)
 	ld	(13263:16), hl
 	calr	59281
-	lds	iy, 6
+	ld	iy, 6:i3
 	ld	(13209:16), 6
 	ret
 ToneGen_AdvanceBeatCounter:
@@ -21115,7 +21115,7 @@ DrumSlot_DispatchWrapper:
 DrumSlot_Dispatch:
 	cp hl, 0xa
 	jr c, DrumSlot_ClampAndLookup
-	lds hl, 0
+	ld hl, 0:i3
 
 DrumSlot_ClampAndLookup:
 	ld xiy, DrumSlot_HandlerTable
@@ -22531,7 +22531,7 @@ Tempo_AdjustStartMeasure:
 	dec 2,XSP
 	ld (XSP),A
 	ldw WA, 0x0080
-	lds bc, 0
+	ld bc, 0:i3
 	calr Tempo_DisplayParamCommon
 	ld wa, (0x38ee:16)
 	cp (XSP),0x00
@@ -22573,7 +22573,7 @@ Tempo_AdjustEndMeasure:
 	dec 2,XSP
 	ld (XSP),A
 	ldw WA, 0x0081
-	lds bc, 1
+	ld bc, 1:i3
 	calr Tempo_DisplayParamCommon
 	ld wa, (0x38f0:16)
 	cp (XSP),0x00
@@ -22617,7 +22617,7 @@ Tempo_AdjustQuantize:
 	dec 2,XSP
 	ld (XSP),A
 	ldw WA, 0x0082
-	lds bc, 2
+	ld bc, 2:i3
 	calr Tempo_DisplayParamCommon
 	ld a, (0x38f2:16)
 	cp (XSP),0x00
@@ -22712,7 +22712,7 @@ Tempo_TimeSigCodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 132
-	lds	bc, 4
+	ld	bc, 4:i3
 	calr	360
 	ld	a, (14580:16)
 	.byte 0x87	; v10 does not spell this byte either
@@ -22831,7 +22831,7 @@ Tempo_EditBPMApply:
 	cp	bc, 10
 	jr	ugt, 10
 	ldw	(14576:16), 1
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	12
 	sub	bc, 10
 	ld	(14576:16), bc
@@ -22870,7 +22870,7 @@ Tempo_DisplayParamReturn:
 	calr MIDIChan_ScanForFree
 	calr VoiceSlot_UpdateState
 	calr Tempo_DisplayBPMReturn
-	lds wa, 0
+	ld wa, 0:i3
 	calr SeqRec_ValidateDone
 	ld a, (0x38f5:16)
 	cp a, 0:i3
@@ -22885,16 +22885,16 @@ Tempo_DisplayParamReturn:
 	calr SetWall_StoreAndResolve
 	cp (0x287a:16), 0x00
 	jr nz, .Lc_f661c5
-	lds wa, 0
+	ld wa, 0:i3
 	calr Part_StoreVoiceTableIndex
-	lds wa, 0
+	ld wa, 0:i3
 	calr Tempo_FormatBPM
 	ldb_erp l, 0xfb
 	cps_erpb 0xfb, 1
 	jrl z, Tempo_DisplayEffect
 Tempo_DisplayStartMeasure:
 .Lc_f661c5:
-	lds wa, 1
+	ld wa, 1:i3
 	calr SeqRec_ValidateDone
 	ld a, (0x38f6:16)
 	cp a, 0:i3
@@ -22909,16 +22909,16 @@ Tempo_DisplayStartMeasure:
 	calr SetWall_StoreAndResolve
 	cp (0x287a:16), 0x00
 	jr nz, .Lc_f66202
-	lds wa, 1
+	ld wa, 1:i3
 	calr Part_StoreVoiceTableIndex
-	lds wa, 1
+	ld wa, 1:i3
 	calr Tempo_FormatBPM
 	ldb_erp l, 0xfb
 	cps_erpb 0xfb, 1
 	jrl z, Tempo_DisplayEffect
 Tempo_DisplayEndMeasure:
 .Lc_f66202:
-	lds wa, 2
+	ld wa, 2:i3
 	calr SeqRec_ValidateDone
 	ld a, (0x38f7:16)
 	cp a, 0:i3
@@ -22933,16 +22933,16 @@ Tempo_DisplayEndMeasure:
 	calr SetWall_StoreAndResolve
 	cp (0x287a:16), 0x00
 	jr nz, .Lc_f6623e
-	lds wa, 2
+	ld wa, 2:i3
 	calr Part_StoreVoiceTableIndex
-	lds wa, 2
+	ld wa, 2:i3
 	calr Tempo_FormatBPM
 	ldb_erp l, 0xfb
 	cps_erpb 0xfb, 1
 	jr z, Tempo_DisplayEffect
 Tempo_DisplayQuantize:
 .Lc_f6623e:
-	lds wa, 3
+	ld wa, 3:i3
 	calr SeqRec_ValidateDone
 	ld a, (0x38f8:16)
 	cp a, 0:i3
@@ -22957,16 +22957,16 @@ Tempo_DisplayQuantize:
 	calr SetWall_StoreAndResolve
 	cp (0x287a:16), 0x00
 	jr nz, .Lc_f6627a
-	lds wa, 3
+	ld wa, 3:i3
 	calr Part_StoreVoiceTableIndex
-	lds wa, 3
+	ld wa, 3:i3
 	calr Tempo_FormatBPM
 	ldb_erp l, 0xfb
 	cps_erpb 0xfb, 1
 	jr z, Tempo_DisplayEffect
 Tempo_DisplayTimeSigNum:
 .Lc_f6627a:
-	lds wa, 4
+	ld wa, 4:i3
 	calr SeqRec_ValidateDone
 	ld a, (0x38f9:16)
 	cp a, 0:i3
@@ -22981,9 +22981,9 @@ Tempo_DisplayTimeSigNum:
 	calr SetWall_StoreAndResolve
 	cp (0x287a:16), 0x00
 	jr nz, Tempo_DisplayEffectLookup
-	lds wa, 4
+	ld wa, 4:i3
 	calr Part_StoreVoiceTableIndex
-	lds wa, 4
+	ld wa, 4:i3
 	calr Tempo_FormatBPM
 	ldb_erp l, 0xfb
 	cps_erpb 0xfb, 1
@@ -22997,15 +22997,15 @@ Tempo_DisplayEffectLookup:
 	ret
 
 Tempo_DisplayEffectRender:
-	lds wa, 0
+	ld wa, 0:i3
 	calr SeqRec_ValidateDone
-	lds wa, 1
+	ld wa, 1:i3
 	calr SeqRec_ValidateDone
-	lds wa, 2
+	ld wa, 2:i3
 	calr SeqRec_ValidateDone
-	lds wa, 3
+	ld wa, 3:i3
 	calr SeqRec_ValidateDone
-	lds wa, 4
+	ld wa, 4:i3
 	jrl SeqRec_ValidateDone
 
 Tempo_FormatBPM:
@@ -23215,7 +23215,7 @@ SeqRec_InitChannels:
 
 	extz bc
 
-	lds wa, 1
+	ld wa, 1:i3
 
 	.byte 0x1e, 0x71, 0x01	; calr SetWall_StoreAndResolve (v7 displacement)
 
@@ -23233,7 +23233,7 @@ SeqRec_InitChannels:
 
 	ldw_erp WA, 0xfa
 
-	lds iz, 0
+	ld iz, 0:i3
 
 
 
@@ -23538,7 +23538,7 @@ VoiceEvt_Size1:
 	ldiw_erp 0xfa, 1
 
 VoiceBuffer_CopyLoop:
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr ule, VoiceBuf_CopyDone
 
@@ -23599,7 +23599,7 @@ VoiceScan_Size0:
 	ldiw_erp 0xfa, 0
 
 Voice_ScanTableEntries:
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr ule, VoiceScan_NotFound
 
@@ -24376,10 +24376,10 @@ RegPreset_Load_Loop:
 	push xwa
 	call MIDIChan_DispatchTable
 	pop xwa
-	lds hl, 1
+	ld hl, 1:i3
 	cp wa, 0x400
 	jr nc, RegPreset_Load_Return
-	lds hl, 0
+	ld hl, 0:i3
 
 RegPreset_Load_Return:
 	lds32 xbc, 0
@@ -25172,21 +25172,21 @@ AccVoice_SetupSlots_DataBlock:
 	ld	c, (xwa)
 	or	c, 128
 	ld	(xwa), c
-	lds	de, 1
+	ld	de, 1:i3
 	ld	bc, (13686:16)
 	st_rrw	bc, xwa, de
 	pushw	hl
 	ld	hl, (13686:16)
 	calr	64958
-	lds	de, 3
+	ld	de, 3:i3
 	popw	hl
 	st_rrw	hl, xwa, de
 	decw	1, (13368:16)
 	ld	(13686:16), hl
-	lds	wa, 6
+	ld	wa, 6:i3
 	ld	(13688:16), wa
 	jr	11
-	lds	wa, 6
+	ld	wa, 6:i3
 	ld	(13688:16), wa
 	ld	(32422:16), 15
 	ret
@@ -25939,7 +25939,7 @@ CmpRealTtl_RhythmVar0:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 0
+	ld hl, 0:i3
 	call RhythmVariation_Wrapper
 	pop xiz
 	pop xix
@@ -25972,7 +25972,7 @@ CmpRealTtl_RhythmVar1:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 1
+	ld hl, 1:i3
 	call RhythmVariation_Wrapper
 	pop xiz
 	pop xix
@@ -26005,7 +26005,7 @@ CmpRealTtl_RhythmVar2:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 2
+	ld hl, 2:i3
 	call RhythmVariation_Wrapper
 	pop xiz
 	pop xix
@@ -26038,7 +26038,7 @@ CmpRealTtl_RhythmVar3:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 3
+	ld hl, 3:i3
 	call RhythmVariation_Wrapper
 	pop xiz
 	pop xix
@@ -26071,7 +26071,7 @@ CmpRealTtl_RhythmVar4:
 	push XHL
 	push XIX
 	push XIZ
-	lds hl, 4
+	ld hl, 4:i3
 	call RhythmVariation_Wrapper
 	pop XIZ
 	pop XIX
@@ -26167,7 +26167,7 @@ CmpBkslTtl_Mode1:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 1
+	ld hl, 1:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26181,7 +26181,7 @@ DrumSlot_Dispatch_Slot0:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 0
+	ld hl, 0:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26195,7 +26195,7 @@ DrumSlot_Dispatch_Slot3_WithMode:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 3
+	ld hl, 3:i3
 	call DrumSlot_DispatchWrapper
 	ldw wa, 0xb2
 	call UI_PostModeChangeEvent
@@ -26210,7 +26210,7 @@ DrumSlot_Dispatch_Slot2:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 2
+	ld hl, 2:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26224,7 +26224,7 @@ DrumSlot_Dispatch_Slot5:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 5
+	ld hl, 5:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26238,7 +26238,7 @@ DrumSlot_Dispatch_Slot4:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 4
+	ld hl, 4:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26252,7 +26252,7 @@ DrumSlot_Dispatch_Slot7:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 7
+	ld hl, 7:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26266,7 +26266,7 @@ DrumSlot_Dispatch_Slot6:
 	push xhl
 	push xix
 	push xiz
-	lds hl, 6
+	ld hl, 6:i3
 	call DrumSlot_DispatchWrapper
 	pop xiz
 	pop xix
@@ -26387,7 +26387,7 @@ CmpBkslSTtl_FillIn4:
 
 	push xiz
 
-	lds hl, 4
+	ld hl, 4:i3
 
 	call	16141083
 
@@ -26420,7 +26420,7 @@ CmpBkslSTtl_FillIn5:
 
 	push xiz
 
-	lds hl, 5
+	ld hl, 5:i3
 
 	.byte 0x1d, 0x1b, 0x4b, 0xf6	; call RhythmFillIn_Wrapper (v7 addr)
 
@@ -26453,7 +26453,7 @@ CmpBkslSTtl_FillIn6:
 
 	push xiz
 
-	lds hl, 6
+	ld hl, 6:i3
 
 	.byte 0x1d, 0x1b, 0x4b, 0xf6	; call RhythmFillIn_Wrapper (v7 addr)
 
@@ -26480,7 +26480,7 @@ CmpBkslSTtl_FillIn7:
 	push XHL
 	push XIX
 	push XIZ
-	lds hl, 7
+	ld hl, 7:i3
 	call RhythmFillIn_Wrapper
 	pop XIZ
 	pop XIX
@@ -26565,19 +26565,19 @@ CmpNcpTtl_Dispatch_Code:
 	jr	z, 22
 	cp	a, 0:i3
 	jrl	nz, 1482
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355608
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	16355680
 	ldw	wa, 130
 	jr	95
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355608
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	16355680
 	ldw	wa, 134
 	jr	78
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16355608
 	push	xde
 	push	xhl
@@ -26603,15 +26603,15 @@ CmpNcpTtl_Dispatch_Code:
 	jr	z, 22
 	cp	a, 0:i3
 	jrl	nz, 1402
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355608
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	16355680
 	ldw	wa, 130
 	jr	15
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355608
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	16355680
 	ldw	wa, 134
 	call	16355660
@@ -26635,7 +26635,7 @@ CmpNcpTtl_TableDispatch:
 ; CmpNcpTtlFunc title dispatch 2
 CmpNcpTtl_Dispatch2:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 297 of 450 slots byte-identical
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
 	push	xhl
@@ -26662,9 +26662,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 130
 	call	UI_PostDialRangeEvent
@@ -26680,7 +26680,7 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	1171
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	.byte 0x3a	; v10 does not spell this byte either
 	.byte 0x3b	; v10 does not spell this byte either
@@ -26708,9 +26708,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 130
 	call	UI_PostDialRangeEvent
@@ -26726,7 +26726,7 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	1041
-	lds	wa, 1
+	ld	wa, 1:i3
 	.byte 0x1d	; v10 does not spell this byte either
 	.byte 0x38	; v10 does not spell this byte either
 	cp	(xbc), bc
@@ -26756,9 +26756,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 130
 	call	UI_PostDialRangeEvent
@@ -26797,7 +26797,7 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	832
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	.byte 0x3a	; v10 does not spell this byte either
 	.byte 0x3b	; v10 does not spell this byte either
@@ -26825,9 +26825,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 130
 	call	UI_PostDialRangeEvent
@@ -26895,9 +26895,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 134
 	call	UI_PostDialRangeEvent
@@ -26939,9 +26939,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 134
 	call	UI_PostDialRangeEvent
@@ -26953,7 +26953,7 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	375
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
 	push	xhl
@@ -26984,9 +26984,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 134
 	call	UI_PostDialRangeEvent
@@ -27015,7 +27015,7 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	185
-	lds	wa, 1
+	ld	wa, 1:i3
 	.byte 0x1d	; v10 does not spell this byte either
 	.byte 0x38	; v10 does not spell this byte either
 	cp	(xbc), bc
@@ -27049,9 +27049,9 @@ CmpNcpTtl_Dispatch2:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	call	ApDeliveryEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 134
 	call	UI_PostDialRangeEvent
@@ -27168,7 +27168,7 @@ CmpEsyTtl_Mode2:
 ; CmEsyTtlFunc title dispatch 2
 CmEsyTtl_Dispatch2:
 	; --- Multi-branch dispatch subroutine (195 bytes) ---
-	lds	wa, 0
+	ld	wa, 0:i3
 	jrl t, CmpEsyTtl_SubModeD_Cont
 	push xde
 	push xhl
@@ -27183,7 +27183,7 @@ CmEsyTtl_Dispatch2:
 	ldw wa, 0x00b5
 	call UI_PostModeChangeEvent
 	jrl t, S2cTtl_ReturnZero
-	lds	wa, 1
+	ld	wa, 1:i3
 	call UI_PostEvent_0x6E
 	push xde
 	push xhl
@@ -27199,7 +27199,7 @@ CmEsyTtl_Dispatch2:
 	ld xbc, 0x01c0000b
 	lds32	xde, 0
 	jr t, CmpEsy_DeliverEventAndCheck
-	lds	wa, 1
+	ld	wa, 1:i3
 	call UI_PostEvent_0x6E
 	push xde
 	push xhl
@@ -27257,7 +27257,7 @@ CmpEsyTtl_SubModeC:
 	pop xde
 ; CmpEsyTtl sub-mode D entry
 CmpEsyTtl_SubModeD:
-	lds	wa, 0
+	ld	wa, 0:i3
 ; CmpEsyTtl sub-mode D continuation
 CmpEsyTtl_SubModeD_Cont:
 	call UI_PostDialEnable
@@ -27301,21 +27301,21 @@ S2cTtl_Dispatch:
 	jr	z, 22
 	cp	a, 0:i3
 	jrl	nz, 982
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 128
 	jr	32
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 129
 	jr	15
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 130
 	call	UI_PostDialRangeEvent
@@ -27342,15 +27342,15 @@ CmpEsyTtl_E_Var1:
 
 CmpEsy_E_DispatchDataBlock:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 26 of 37 slots byte-identical
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	UI_PostDialEnable
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	UI_PostDialValueEvent
 	ldw	wa, 128
 	call	UI_PostDialRangeEvent
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	Tempo_AdjustStartMeasure
 	.byte 0xc1, 0xdb, 0x39, 0x3f, 0x00	; differs from v10 here and llvm-objdump cannot read it
 	jr	nz, 31
@@ -27380,15 +27380,15 @@ CmpEsy_E_DispatchDataBlock:
 	lds32	xde, 0
 	jrl	701
 CmpEsyTtl_E_Var2:
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostEvent_0x6E
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialEnable
-	lds wa, 0
+	ld wa, 0:i3
 	call UI_PostDialValueEvent
 	ldw WA, 0x0080
 	call UI_PostDialRangeEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call Tempo_AdjustStartMeasure
 	cp (0x39db:16), 0x00
 	jr nz, .Lc_f68b9c
@@ -27419,15 +27419,15 @@ CmpEsy_E_Var2_StoreMeasure:
 	ld XBC,0x01e40031
 	lds32 xde, 0
 	jrl t, TtlFunc_SendEventAndReturn
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostEvent_0x6E
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialEnable
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialValueEvent
 	ldw WA, 0x0081
 	call UI_PostDialRangeEvent
-	lds wa, 0
+	ld wa, 0:i3
 	call Tempo_AdjustEndMeasure
 	cp (0x39db:16), 0x01
 	jr nz, CmpEsy_E_EndMeasure_Store
@@ -27458,15 +27458,15 @@ CmpEsy_E_EndMeasure_Store:
 	lds32	xde, 0
 	jrl	427
 S2cTtl_MainHandler:
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostEvent_0x6E
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialEnable
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialValueEvent
 	ldw WA, 0x0081
 	call UI_PostDialRangeEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call Tempo_AdjustEndMeasure
 	cp (0x39db:16), 0x01
 	jr nz, .Lc_f68cae
@@ -27497,15 +27497,15 @@ CmpEsy_Main_EndMeasure_Store:
 	ld XBC,0x01e40031
 	lds32 xde, 0
 	jrl t, TtlFunc_SendEventAndReturn
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostEvent_0x6E
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialEnable
-	lds wa, 2
+	ld wa, 2:i3
 	call UI_PostDialValueEvent
 	ldw WA, 0x0082
 	call UI_PostDialRangeEvent
-	lds wa, 0
+	ld wa, 0:i3
 	call Tempo_AdjustQuantize
 	cp (0x39db:16), 0x02
 	jr nz, CmpEsy_Quantize_Store
@@ -27532,15 +27532,15 @@ CmpEsy_Quantize_Store:
 	lds32	xde, 0
 	jrl	169
 S2cTtl_SecondaryHandler:
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostEvent_0x6E
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialEnable
-	lds wa, 2
+	ld wa, 2:i3
 	call UI_PostDialValueEvent
 	ldw WA, 0x0082
 	call UI_PostDialRangeEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call Tempo_AdjustQuantize
 	cp (0x39db:16), 0x02
 	jr nz, CmpEsy_SecQuantize_Store
@@ -27566,17 +27566,17 @@ CmpEsy_SecQuantize_Store:
 	ld	xbc, 31719473
 	lds32	xde, 0
 	jr	50
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16146304
 	ld	xwa, 12124190
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jr	24
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16146337
 	ld	xwa, 12124190
 	ld	xbc, 29360140
@@ -27584,7 +27584,7 @@ CmpEsy_SecQuantize_Store:
 TtlFunc_SendEventAndReturn:
 	call ApDeliveryEvent
 	jr CstmCp_ReturnZero
-	lds wa, 0
+	ld wa, 0:i3
 	call Tempo_EditBPM
 
 CstmCp_ReturnZero:
@@ -27779,7 +27779,7 @@ CstmCpTtl_Dispatch2:
 	.byte 0x41, 0x01, 0x00, 0xc0, 0x01, 0xea, 0xad
 	call ApPostEvent
 	jr t, CstmCp_ReturnZero2
-	lds wa, 2
+	ld wa, 2:i3
 	call Flash_InitBytecodeBlock_0x2BF
 	cp l, 1:i3
 	jr z, CstmCp_ReturnZero2
@@ -28021,7 +28021,7 @@ __pad_F6985D:
 	ld	xde, xbc
 	ld	xiy, 14991416
 	lda	xix, (xsp+10)
-	lds	bc, 6
+	ld	bc, 6:i3
 	.byte 0x95, 0x11
 	cp	xde, 31719427
 	jr	z, 113
@@ -28654,7 +28654,7 @@ MspNameTtl_Dispatch:
 
 	ld	xwa, 0x028800
 
-	lds	de, 0
+	ld	de, 0:i3
 
 	.byte 0x1d, 0x30, 0xca, 0xfc	; call	SoundParam_NotifyChange (v7 addr)
 
@@ -28714,8 +28714,8 @@ MspRecTtl_Dispatch:
 	.byte 0xc1, 0x9b, 0x8c, 0x3f, 0xc9	; differs from v10 here and llvm-objdump cannot read it
 	jr	z, 61
 	ld	xwa, 164099
-	lds	bc, 0
-	lds	de, 3
+	ld	bc, 0:i3
+	ld	de, 3:i3
 	call	16566832
 	ld	xwa, 165888
 	call	16567398
@@ -28732,7 +28732,7 @@ MspRecTtl_Dispatch:
 	and	a, 16
 	srl	a, 4
 	ld	(32419:16), a
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	UI_PostDialEnable
 	jr	71
 	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0xc9	; differs from v10 here and llvm-objdump cannot read it
@@ -29633,7 +29633,7 @@ AccScreen_DataBlock:
 	pushw	de
 	pushw	bc
 	ld	xiy, 16165513
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldb	a, 6
 	ld	xwa, 14640
 	ld	(xwa), 6
@@ -30460,7 +30460,7 @@ AccPatch_VoiceAssignDataBlock:
 	add	hl, 3
 	cp	wa, hl
 	jr	ugt, 4
-	lds	de, 0
+	ld	de, 0:i3
 	jr	3
 	ldw	de, 255
 	ret
@@ -30814,7 +30814,7 @@ AccBankData_InitAllSlots:
 
 	ldib_erp 0xfb, 0
 
-	lds wa, 0
+	ld wa, 0:i3
 
 
 
@@ -30923,7 +30923,7 @@ AccBankData_CopyToExtRAM:
 	inc	1, xde
 	cp	xde, 29350
 	jr	c, -16
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16710953
 AccBankData_Return:
 	popw_erp 0xfa
@@ -30958,7 +30958,7 @@ AccBankData_ProcessWithCopy:
 
 	ldib_erp 0xfb, 0
 
-	lds bc, 0
+	ld bc, 0:i3
 AccBankData_CopyLoop:
 	ld	de, bc
 	add	de, 160
@@ -30981,7 +30981,7 @@ AccBankData_CopyLoop_NonZero:
 	inc	7, c
 	extz	bc
 	ld	xde, (15552:16)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15831932
 	call	15665911
 	call	16114969
@@ -31053,7 +31053,7 @@ AccBankData_NotifyAndUpdateTempo:
 	add	xwa, 92160
 	ld	bc, (xwa)
 	lds32	xwa, 4
-	lds	de, 3
+	ld	de, 3:i3
 	call	16566832
 	call	16554829
 AccBankData_PostModeChange:
@@ -31118,7 +31118,7 @@ StyleConv_ClearEntry_Inner:
 
 StyleConv_InitEntryTable:
 	pushw iz
-	lds ix, 0
+	ld ix, 0:i3
 
 StyleConvInit_OuterLoop:
 	ld	hl, ix
@@ -31132,7 +31132,7 @@ StyleConvInit_OuterLoop:
 	div	wa, 20
 	ld	wa, qwa
 	ld	(xbc), a
-	lds	iz, 0
+	ld	iz, 0:i3
 StyleConvInit_InnerLoop:
 	ldib_erp 0xe2, 0
 	cp iz, 0xc
@@ -31188,11 +31188,11 @@ StyleFile_ClearTable_Inner:
 	ret
 
 DialUI_PostInitEvents:
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostDialEnable
 	ldw wa, 0x82
 	call UI_PostDialValueEvent
-	lds wa, 2
+	ld wa, 2:i3
 	jp UI_PostDialRangeEvent
 
 DialUI_CalcProlog:
@@ -31328,7 +31328,7 @@ StylCnvModlTtlFunc:
 	ld	xwa, 14991666
 	call	16296216
 	ldw	(14822:16), 0
-	lds	iz, 0
+	ld	iz, 0:i3
 StylCnvModl_ScanMatchingModels:
 	ld	bc, iz
 	mul	bc, 37
@@ -31354,7 +31354,7 @@ StylCnvModl_PadModelNames:
 	ld	bc, iz
 	mul	bc, 37
 StylCnvModl_PadOuterLoop:
-	lds iy, 0
+	ld iy, 0:i3
 	ld de, bc
 
 StylCnvModl_PadInnerLoop:
@@ -31406,7 +31406,7 @@ StylCnvModl_ClearDisplayBuf:
 	jr	z, 3
 	ld	(xhl), 0
 StylCnvModl_FormatFilename:
-	lds	iy, 0
+	ld	iy, 0:i3
 	lda	xde, (16076:16)
 StylCnvModl_FormatLoop:
 	ld bc, iy
@@ -31472,7 +31472,7 @@ StylCnvModl_RedrawDone:
 	calr Display_RestoreEntry
 
 StylCnvModl_RedrawReturnZero:
-	lds wa, 0
+	ld wa, 0:i3
 	jr StylCnvModl_CallReturnAction
 
 StylCnvModl_HandleClose:
@@ -31480,7 +31480,7 @@ StylCnvModl_HandleClose:
 	jrl StylCnvModl_Return
 
 StylCnvModl_HandleOpenItem:
-	lds wa, 0
+	ld wa, 0:i3
 
 StylCnvModl_CallReturnAction:
 	call UI_PostDialEnable
@@ -31552,7 +31552,7 @@ StylCnvModl_OK_UpdateDisplay:
 	call	16423243
 	jrl	432
 StylCnvModl_OK_ScrollUp:
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
 	ld	wa, (15464:16)
 	cp	wa, 0:i3
@@ -31562,7 +31562,7 @@ StylCnvModl_OK_ScrollUp:
 	ld	bc, wa
 	jrl	-142
 StylCnvModl_OK_ScrollDown:
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
 	ld	bc, (14822:16)
 	dec	1, bc
@@ -31655,7 +31655,7 @@ StylCnvModl_OK_Select_AlignSize:
 	ld	(1047550:24), 0
 	ld	wa, (15464:16)
 	ld	(18448:16), wa
-	lds	iz, 0
+	ld	iz, 0:i3
 	lda	xhl, (58116:16)
 	ld	wa, (15464:16)
 	mul	wa, 37
@@ -31737,7 +31737,7 @@ StylCnvCnvtTtlFunc:
 	ld	(18494:16), 0
 	calr	64013
 	ldw	(14822:16), 0
-	lds	iz, 0
+	ld	iz, 0:i3
 StylCnvCnvt_ScanMatchingStyles:
 	ld	bc, iz
 	mul	bc, 37
@@ -31760,7 +31760,7 @@ StylCnvCnvt_PadStyleNames:
 	ld	bc, iz
 	mul	bc, 37
 StylCnvCnvt_PadOuterLoop:
-	lds iy, 0
+	ld iy, 0:i3
 	ld de, bc
 
 StylCnvCnvt_PadInnerLoop:
@@ -31799,14 +31799,14 @@ StylCnvCnvt_HandleScroll:
 StylCnvCnvt_HandleRedraw:
 	cp (0x8c98:16), 0x06
 	call nz, (Display_RestoreEntry:24)
-	lds wa, 0
+	ld wa, 0:i3
 	jr t, StylCnvCnvt_CallReturnAction
 StylCnvCnvt_HandleClose:
 	calr DialUI_PostInitEvents
 	jrl StylCnvCnvt_Return
 
 StylCnvCnvt_HandleOpenItem:
-	lds wa, 0
+	ld wa, 0:i3
 
 StylCnvCnvt_CallReturnAction:
 	call UI_PostDialEnable
@@ -31878,7 +31878,7 @@ StylCnvCnvt_OK_UpdateDisplay:
 	call	16423243
 	jrl	205
 StylCnvCnvt_OK_ScrollUp:
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
 	ld	wa, (15464:16)
 	cp	wa, 0:i3
@@ -31888,7 +31888,7 @@ StylCnvCnvt_OK_ScrollUp:
 	ld	bc, wa
 	jrl	-142
 StylCnvCnvt_OK_ScrollDown:
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
 	ld	bc, (14822:16)
 	dec	1, bc
@@ -32006,7 +32006,7 @@ StylCnvSel_HandleClose:
 	jrl StylCnvSel_Return
 
 StylCnvSel_HandleOpenItem:
-	lds wa, 0
+	ld wa, 0:i3
 
 StylCnvSel_CallReturnAction:
 	call UI_PostDialEnable
@@ -32079,7 +32079,7 @@ StylCnvSel_OK_UpdateDisplay:
 	call	16423243
 	jrl	161
 StylCnvSel_OK_ScrollUp:
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
 	ld	wa, (15464:16)
 	cp	wa, 0:i3
@@ -32089,7 +32089,7 @@ StylCnvSel_OK_ScrollUp:
 	ld	bc, wa
 	jrl	-144
 StylCnvSel_OK_ScrollDown:
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355640
 	ld	bc, (14822:16)
 	dec	1, bc
@@ -32186,7 +32186,7 @@ StylCnvCont_HandleOK:
 	calr	65
 	jr	6
 StylCnvCont_NotifyPart:
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 
 AccRhythm_ReturnZero:
@@ -32232,7 +32232,7 @@ StyleConv_DispatchSoundMemState:
 	cpw (0x4810:16), 0x0001
 	jr nz, StylCnvDisp_PostMode13
 	calr AccBankData_InitAllSlots
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	jrl t, StylCnv_Epilogue114
 StylCnvDisp_PostMode13:
@@ -32397,7 +32397,7 @@ StylCnv_Type4_ClearLoop:
 	cp xwa, xbc
 	jr c, StylCnv_Type4_ClearLoop
 	ldw (xsp + 4), 0x0
-	lds iz, 0
+	ld iz, 0:i3
 
 StylCnv_Type4_MainLoop:
 	cpw (xsp + 4), 0x0
@@ -32649,7 +32649,7 @@ StylCnv_Type3_CopyBlockLoop:
 	call	16713148
 	lda	xsp, (xsp+10)
 	inc	4, qiz
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	bc, (xsp+16)
 	sll	bc, 5
 	lda	xde, (16108:16)
@@ -32706,7 +32706,7 @@ StylCnv_Type4_OpenFile:
 	cp	hl, 0:i3
 	jr	lt, 62
 	lds32	xwa, 0
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16288467
 	cp	hl, 0:i3
 	jr	lt, 46
@@ -32714,7 +32714,7 @@ StylCnv_Type4_OpenFile:
 	ld	(15560:16), xhl
 	call	16288515
 	ld	xwa, (18450:16)
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16288467
 	cp	hl, 0:i3
 	jr	lt, 20
@@ -32774,7 +32774,7 @@ StylCnv_Type6_ClearRegion:
 	.byte 0x60, 0xbf, 0x04, 0x02, 0x00, 0x00, 0xd1, 0x3c
 	.byte 0x48, 0x3f, 0x00, 0x00, 0x73, 0xae, 0x00
 StylCnv_Type6_MainLoop:
-	lds	iz, 0
+	ld	iz, 0:i3
 	lda	xbc, (18416:16)
 StylCnv_Type6_FindDot:
 	cpib_sri 0x07, 0xe4, 0xf8, 0x2e
@@ -32809,7 +32809,7 @@ StylCnv_Type6_AppendName:
 	cp	hl, 0:i3
 	jrl	lt, 322
 	lds32	xwa, 0
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16288467
 	cp	hl, 0:i3
 	jrl	lt, 280
@@ -32851,7 +32851,7 @@ StylCnv_Type6_BuildFfcBuffer:
 
 	ldw (xsp + 4), 0x0
 
-	lds iz, 0
+	ld iz, 0:i3
 
 	.byte 0xd1, 0x3c, 0x48, 0x3f, 0x00, 0x00	; cpdi16 0x48d8, 0 (v7 patched)
 
@@ -32974,7 +32974,7 @@ StylCnv_Type6_Case1_CopyName:
 	cp hl, 0:i3
 	jrl lt, StylCnv_AbortWithError
 	lds32 xwa, 0
-	lds bc, 2
+	ld bc, 2:i3
 	call FileIO_SeekAndReadBlock
 	cp hl, 0:i3
 	jrl lt, StylCnv_Epilogue114
@@ -33002,7 +33002,7 @@ StylCnv_Single_FindDot:
 	jr lt, StylCnv_Single_FindDot
 
 StylCnv_Single_CopyExtension:
-	lds iz, 0
+	ld iz, 0:i3
 	cpw (xsp + 4), 0x20
 	jr ge, StylCnv_Single_RenameTM
 
@@ -33038,7 +33038,7 @@ StylCnv_Single_WriteTMExtension:
 	cp	hl, 0:i3
 	jrl	lt, 143
 	lds32	xwa, 0
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16288467
 	cp	hl, 0:i3
 	jrl	lt, 130
@@ -33067,7 +33067,7 @@ StylCnv_LSW_FindDot:
 	jr lt, StylCnv_LSW_FindDot
 
 StylCnv_LSW_CopyExtension:
-	lds iz, 0
+	ld iz, 0:i3
 	cpw (xsp + 4), 0x20
 	jr ge, DRI_ParseFieldsAndOpenFile
 
@@ -33107,7 +33107,7 @@ StylCnv_LSW_WriteExtension:
 	cp	hl, 0:i3
 	jrl	lt, 154
 	lds32	xwa, 0
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16288467
 	cp	hl, 0:i3
 	jrl	lt, 141
@@ -33140,7 +33140,7 @@ StylCnv_LSW_FindDot3:
 	jr lt, StylCnv_LSW_FindDot3
 
 StylCnv_LSW_CopyExt3:
-	lds iz, 0
+	ld iz, 0:i3
 	cpw (xsp + 4), 0x20
 	jr ge, FileLoad_ResetAndStartProcessing
 
@@ -33156,7 +33156,7 @@ FileLoad_ResetAndStartProcessing:
 	ld (0x0ffc00:24), 0xff
 	ld (0x0ffc01:24), 0x00
 	ldw (xsp + 4), 0x0
-	lds iz, 0
+	ld iz, 0:i3
 	ld wa, (xsp + 8)
 	add wa, 0x1
 	jrl le, StylCnv_FinalizeAndCheckStatus
@@ -33242,7 +33242,7 @@ StylCnv_Multi_ClearLoop:
 	cp xwa, xbc
 	jr c, StylCnv_Multi_ClearLoop
 	ldw (xsp + 4), 0x0
-	lds iz, 0
+	ld iz, 0:i3
 
 StylCnv_Multi_ParseLoop:
 	lda xbc, (0x3ccc:16)

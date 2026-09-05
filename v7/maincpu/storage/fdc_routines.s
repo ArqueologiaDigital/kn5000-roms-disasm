@@ -74,7 +74,7 @@ FDC_WaitReady:
 .Lc_f96763:
 	cp QIZ,0
 	jr z, .Lc_f9676d
-	lds wa, 1
+	ld wa, 1:i3
 	calr FDC_Set_Status
 .Lc_f9676d:
 	pop XIZ
@@ -102,14 +102,14 @@ FDC_WaitReady:
 .Lc_f967a6:
 	cp QIZ,0
 	jr z, .Lc_f967b0
-	lds wa, 1
+	ld wa, 1:i3
 	calr FDC_Set_Status
 .Lc_f967b0:
 	pop XIZ
 	ret
 	ldw WA, 0x0036
 	calr FDC_Send_Command
-	lds wa, 2
+	ld wa, 2:i3
 	calr SOME_DELAY
 	ld (0x8a68:16), 0xff
 	ret
@@ -172,7 +172,7 @@ FDC_WaitReady:
 	.byte 0x89, 0x00, 0x00, 0x5e, 0x0e
 	ldw WA, 0x0036
 	calr FDC_Send_Command
-	lds wa, 2
+	ld wa, 2:i3
 	calr SOME_DELAY
 	calr FDC_Read_Status
 	cp L,0xff
@@ -180,7 +180,7 @@ FDC_WaitReady:
 	ldw WA, 0x00fc
 	calr FDC_Set_Status
 .Lc_f969a1:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 FDC_COMMAND_DISPATCHER:
 	ld	(35214:16), 0
@@ -479,7 +479,7 @@ FDC_WaitReady_LoopContinue:
 FDC_WaitReady_TimedOut:
 	cpiw_erp 0xfa, 0
 	jr z, FDC_WaitReady_Complete
-	lds wa, 2
+	ld wa, 2:i3
 	calr FDC_Set_Status
 
 FDC_WaitReady_Complete:
@@ -517,7 +517,7 @@ FDC_WaitStatus_TimeoutCheck:
 FDC_WaitStatus_TimedOut:
 	cpiw_erp 0xfa, 0
 	jr z, FDC_WaitStatus_Complete
-	lds wa, 2
+	ld wa, 2:i3
 	calr FDC_Set_Status
 
 FDC_WaitStatus_Complete:
@@ -771,7 +771,7 @@ FDC_HardwareSetup:
 	.byte 0xac, 0x89, 0x3f, 0x02, 0x00, 0x66, 0x08, 0xd1
 	.byte 0xac, 0x89, 0x3f, 0xff, 0x00, 0x6e, 0x04, 0x33
 	.byte 0xff, 0xff, 0x0e
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 	.byte 0xd1, 0xae, 0x89, 0x3f, 0xff, 0xff, 0x66, 0x03
 	.byte 0xdb, 0xa8, 0x0e, 0xd1, 0xa4, 0x89, 0x3f, 0x00
@@ -813,7 +813,7 @@ FDC_ClearStatus_InitTimer:
 	push XIZ
 	ldw QIZ, 0x01f4
 	ld iz, (0x0409:16)
-	lds bc, 0
+	ld bc, 0:i3
 .Lc_f971e1:
 	cp (0x89c4:16), 0xff
 	jr z, .Lc_f971eb
@@ -834,7 +834,7 @@ FDC_ClearStatus_InitTimer:
 SOME_DELAY:
 	srl wa, 1
 	ld de, (1033:16)
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 0xffff
 	ret nc
 
@@ -1176,7 +1176,7 @@ INT4_HANDLER:	; F97E50	"FDCINT"
 	push xde
 	push xbc
 	push xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 INT4_PollStatusLoop:
 	ld wa, iz

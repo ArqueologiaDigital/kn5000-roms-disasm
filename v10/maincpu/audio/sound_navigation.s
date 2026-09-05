@@ -40,7 +40,7 @@ MainGetSoundName:
 	jr ugt, GetSoundName_DefaultString
 
 GetSoundName_BuildString:
-	lds bc, 0
+	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ldb_erp L, 0xfb
 	ld xwa, (xsp + 20)
@@ -79,7 +79,7 @@ GetSoundName_DispatchResult:
 	jr SoundLookup_DispatchAndReturn
 
 SoundLookup_ByCategory:
-	lds bc, 0
+	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xsp + 17), l
 	ld xwa, (xsp + 20)
@@ -133,9 +133,9 @@ Sound_SetSelection:
 	extz de
 	extz bc
 	pushw bc
-	lds bc, 0
+	ld bc, 0:i3
 	call SwbtWr
-	lds wa, 1
+	ld wa, 1:i3
 	jrl Sound_Navigate_Notify
 
 Sound_Navigate_Entry:
@@ -154,7 +154,7 @@ Sound_Navigate_Init:
 	ldiw_erp 0xe2, 0
 	ld (xsp + 10), wa
 	ld wa, (xsp + 4)
-	lds bc, 0
+	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xsp + 17), l
 	ld wa, (xsp + 4)
@@ -216,7 +216,7 @@ Sound_Navigate_BackwardCheck:
 	jr Sound_Navigate_UpdateState
 
 Sound_Navigate_AtBottom:
-	lds iz, 0
+	ld iz, 0:i3
 	jrl Sound_Navigate_SetDone
 
 Sound_Navigate_ScanForward:
@@ -290,9 +290,9 @@ Sound_Navigate_ApplyChange:
 	stb_erp C, 0xf8
 	extz bc
 	pushw bc
-	lds bc, 0
+	ld bc, 0:i3
 	call SwbtWr
-	lds wa, 1
+	ld wa, 1:i3
 
 Sound_Navigate_Notify:
 	call BitMapOut_StorePresetValue
@@ -442,11 +442,11 @@ MainGetPmemName:
 	call BitMapOut_GetRenderMode
 	bit 7, l
 	jr z, MainGetPmemName_PageNotFirst
-	lds bc, 0
+	ld bc, 0:i3
 	jr MainGetPmemName_StoreResult
 
 MainGetPmemName_PageNotFirst:
-	lds bc, 1
+	ld bc, 1:i3
 	jr MainGetPmemName_StoreResult
 
 MainGetPmemName_CalcOffset:
@@ -455,7 +455,7 @@ MainGetPmemName_CalcOffset:
 	inc 1, a
 	extz wa
 	ld (xbc), wa
-	lds bc, 0
+	ld bc, 0:i3
 
 MainGetPmemName_StoreResult:
 	ld xwa, (xsp + 2)

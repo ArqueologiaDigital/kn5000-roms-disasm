@@ -34,7 +34,7 @@ SysEx_ApplyToSlot4B_Data:
 	ld qiz, hl
 	cp qiz, 0
 	jr lt, 63
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp qiz, 0
 	jr le, 50
 	ld wa, iz
@@ -94,7 +94,7 @@ SysEx_ApplyToSlot49_Data:
 	ld qiz, hl
 	cp qiz, 0
 	jr lt, 55
-	lds iz, 0
+	ld iz, 0:i3
 	cp qiz, 0
 	jr le, 42
 	ld	a, (xsp+4)
@@ -146,7 +146,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	ld qiz, hl
 	cp qiz, 0
 	jr lt, 63
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp qiz, 0
 	jr le, 50
 	ld wa, iz
@@ -398,7 +398,7 @@ SysEx_ApplyVoiceParam_4B_SkipRestore:
 	jr SysEx_ApplyVoiceParam_4B_Return
 
 SysEx_ApplyVoiceParam_4B_IterateSlots:
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_4B_RestoreSlotId
 
@@ -471,7 +471,7 @@ SysEx_ApplyVoiceParam_4B_128_SkipRestore:
 	jr SysEx_ApplyVoiceParam_4B_128_Return
 
 SysEx_ApplyVoiceParam_4B_128_IterateSlots:
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_4B_128_RestoreSlotId
 
@@ -556,7 +556,7 @@ SysEx_ApplyVoiceParam_49_SkipRestore:
 	jr SysEx_ApplyVoiceParam_49_Return
 
 SysEx_ApplyVoiceParam_49_IterateSlots:
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_49_RestoreSlotId
 
@@ -629,7 +629,7 @@ SysEx_ApplyVoiceParam_49_128_SkipRestore:
 	jr SysEx_ApplyVoiceParam_49_128_Return
 
 SysEx_ApplyVoiceParam_49_128_IterateSlots:
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr le, SysEx_ApplyVoiceParam_49_128_RestoreSlotId
 
@@ -691,7 +691,7 @@ SysEx_ApplyAndReloadPreset_Type61:
 	ldw_erp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jrl lt, AssswbWr_ReturnFail
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jrl le, AssswbWr_ReturnFail
 
@@ -722,7 +722,7 @@ SysEx_ApplyAndReloadPreset_Type63:
 	ldw_erp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr lt, AssswbWr_ReturnFail
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr le, AssswbWr_ReturnFail
 
@@ -742,7 +742,7 @@ SysEx_ApplyAndReloadPreset_Type63_Loop:
 	jr lt, SysEx_ApplyAndReloadPreset_Type63_Loop
 
 AssswbWr_ReturnFail:
-	lds hl, 0
+	ld hl, 0:i3
 
 AssswbWr_Return:
 	pop xiz
@@ -1006,10 +1006,10 @@ PostLswLoad:
 	call SwbtWr_NullRet
 	call ToneGen_Config_InitAllEntries
 	call ToneGen_DSPCfg_ResetAll
-	lds wa, 1
+	ld wa, 1:i3
 	call BitMapOut_GetRenderMode_CheckBit3
 	call SoundParam_NotifyMultipleChanges
-	lds wa, 1
+	ld wa, 1:i3
 	call BitMapOut_GetRenderMode_Return
 	push xde
 	push xhl
@@ -1164,7 +1164,7 @@ BitMapOut_PrepareAndRender:
 BitMapOut_RenderDisplay:
 	lda xsp, (xsp - 34)
 	push xiz
-	lds wa, 2
+	ld wa, 2:i3
 	call BitMapOut_GetRenderMode_CheckBit3
 	call BitMapOut_SaveDisplayToROM
 	lda xbc, (0xfc5a:16)
@@ -1199,7 +1199,7 @@ BitMapOut_RenderDisplay:
 	sub xwa, xbc
 	ld de, wa
 	srl de, 1
-	lds bc, 0
+	ld bc, 0:i3
 	cp de, 0:i3
 	jr ule, BitMapOut_CopyRegion_Done
 
@@ -1287,8 +1287,8 @@ BitMapOut_MergeOutputFields:
 	pop xde
 	pushw 0x0
 	ldw wa, 0x48
-	lds bc, 5
-	lds de, 0
+	ld bc, 5:i3
+	ld de, 0:i3
 	call AddswbWr
 	ld w, (xsp + 6)
 	and w, 0x80
@@ -1302,7 +1302,7 @@ BitMapOut_MergeOutputFields:
 	extz de
 	pushw 0x7f
 	ldw wa, 0x98
-	lds bc, 1
+	ld bc, 1:i3
 	call AddswbWr
 	ld e, (0xfda1:16)
 	ld c, e
@@ -1328,8 +1328,8 @@ BitMapOut_MergeOutputFields:
 	call SwbtWr_NullRet
 	pushw 0x0
 	ldw wa, 0x48
-	lds bc, 7
-	lds de, 0
+	ld bc, 7:i3
+	ld de, 0:i3
 	call AddswbWr
 	push xde
 	push xhl
@@ -1351,10 +1351,10 @@ BitMapOut_MergeOutputFields:
 	pop xde
 	pushw 0x0
 	ldw wa, 0x91
-	lds bc, 3
-	lds de, 4
+	ld bc, 3:i3
+	ld de, 4:i3
 	call AddswbWr
-	lds wa, 2
+	ld wa, 2:i3
 	call BitMapOut_GetRenderMode_Return
 	pop xiz
 	lda xsp, (xsp + 34)
@@ -1638,7 +1638,7 @@ MIDI_BroadcastControlChange:
 	pushw_erp 0xfa
 	ld xiy, WidgetParam_SelfRef_Table_0x19E
 	lda xix, (xsp + 2)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	ldi85
 	ldib_erp 0xfb, 0
@@ -1665,8 +1665,8 @@ MIDI_BroadcastCC_CommLoop:
 	stb_erp A, 0xfb
 	or a, 0xb0
 	ld (xde), a
-	lds wa, 4
-	lds bc, 7
+	ld wa, 4:i3
+	ld bc, 7:i3
 	call sendCOMM
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0f
@@ -1690,8 +1690,8 @@ CompIface_SendActiveSensing:
 CompIface_SendActiveSensing_PC1MAC:
 	push	sr
 	ei 0
-	lds wa, 4
-	lds bc, 1
+	ld wa, 4:i3
+	ld bc, 1:i3
 	ld xde, WidgetParam_SelfRef_Table_0x1A8	;	PC1 or MAC (0F5h)
 	call sendCOMM
 	pop	sr
@@ -1700,8 +1700,8 @@ CompIface_SendActiveSensing_PC1MAC:
 CompIface_SendActiveSensing_PC2:
 	push	sr
 	ei 0
-	lds wa, 4
-	lds bc, 1
+	ld wa, 4:i3
+	ld bc, 1:i3
 	ld xde, WidgetParam_SelfRef_Table_0x1A6	;	PC2 (0F4h)
 	call sendCOMM
 	pop	sr
@@ -1723,7 +1723,7 @@ MidiOut_RealtimeDispatch_Data:
 
 MidiOut_SerializeAndSend:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp (0xb7e0:16), 0; zero means MIDI
 	jrl z, MidiOut_SerializeAndSend_Exit
 
@@ -1804,7 +1804,7 @@ MidiOut_FlushBuffer:
 	cp iz, 0:i3
 	jr z, MidiOut_SerializeAndSend_Exit
 	ei 0
-	lds wa, 4
+	ld wa, 4:i3
 	ld bc, iz
 	ld xde, 0xc0d2
 	call sendCOMM
@@ -1899,8 +1899,8 @@ CompIface_PostProcess:
 	cp wa, (0xc1fc:16)
 	ret ule
 	ld xwa, 0x40c1
-	lds bc, 0
-	lds de, 3
+	ld bc, 0:i3
+	ld de, 3:i3
 	call SoundParam_NotifyChange
 	res 3, (0xc1f0:16)
 	ldw wa, 0x4e
@@ -1931,14 +1931,14 @@ CompIface_RampUp_Clamp:
 	ld (0xc1ec:16), c
 	extz bc
 	ld xwa, 0x4005
-	lds de, 1
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	cp (0xc1ec:16), 127
 	ret nz
 	res 0, (0xc1f0:16)
 	ld xwa, 0x40c0
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	ret
 
@@ -1962,15 +1962,15 @@ CompIface_RampDown_Clamp:
 	ld (0xc1ec:16), c
 	extz bc
 	ld xwa, 0x4005
-	lds de, 1
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	cp (0xc1ec:16), 0
 	ret nz
 	res 1, (0xc1f0:16)
 	set 3, (0xc1f0:16)
 	ldw wa, 0x4e
-	lds bc, 1
-	lds de, 0
+	ld bc, 1:i3
+	ld de, 0:i3
 	call CtrlPanel_IndicatorDispatch
 	ret
 
@@ -2041,7 +2041,7 @@ CompIface_WriteVolume:
 	ld c, a
 	extz bc
 	ld xwa, 0x4005
-	lds de, 3
+	ld de, 3:i3
 	call SoundParam_NotifyChange
 	ret
 
@@ -2049,14 +2049,14 @@ Audio_ConfigureDSP:
 	and (0xc1f0:16), 243
 	and (0xc1f0:16), 252
 	ld xwa, 0x40c0
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	ldw wa, 0x4d
 	call CtrlPanel_SetIndicatorLED
 	ld xwa, 0x40c1
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	ldw wa, 0x4e
 	call CtrlPanel_SetIndicatorLED
@@ -2164,10 +2164,10 @@ DSPCfg_Idle_EnableChorus:
 	jr z, DSPCfg_Idle_CheckSustain
 	set 2, (0xc1f0:16)
 	ldw wa, 0x4d
-	lds bc, 1
-	lds de, 0
+	ld bc, 1:i3
+	ld de, 0:i3
 	call CtrlPanel_IndicatorDispatch
-	lds wa, 0
+	ld wa, 0:i3
 	calr CompIface_WriteVolume
 
 DSPCfg_Idle_CheckSustain:
@@ -2189,7 +2189,7 @@ DSPCfg_UpdateOutputVolume:
 DSPCfg_CheckChorusMuted:
 	bit 2, (0xc1f0:16)
 	ret z
-	lds wa, 0
+	ld wa, 0:i3
 	calr CompIface_WriteVolume
 	ret
 
@@ -2226,7 +2226,7 @@ DSPCfg_CompParam_SubType6:
 	calr CompIface_ScaleAndNormalize
 	ld (0xc1fa:16), hl
 	ld bc, (0xc1f6:16)
-	lds wa, 1
+	ld wa, 1:i3
 	jrl DSPCfg_ScaleFactor_StoreResult
 
 DSPCfg_CompParam_SubType7:
@@ -2281,7 +2281,7 @@ DSPCfg_ScaleFactor_Update:
 	calr CompIface_ScaleAndNormalize
 	ld (0xc1fa:16), hl
 	ld bc, (0xc1f6:16)
-	lds wa, 1
+	ld wa, 1:i3
 
 DSPCfg_ScaleFactor_StoreResult:
 	calr CompIface_ScaleValue
@@ -2364,7 +2364,7 @@ DSPCfg_WriteParam_Exit:
 	ld (xwa), bc
 	ld xwa, (xsp + 18)
 	ld (xwa), e
-	lds hl, 0
+	ld hl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 10)
 	retd 0x8
@@ -2586,7 +2586,7 @@ DSPCfg_ReadField_Type76:
 	ld wa, (xsp + 10)
 	cp wa, 0x10
 	jr z, DSPCfg_ReadField_Type76_Width16
-	lds wa, 6
+	ld wa, 6:i3
 
 DSPCfg_ReadField_Type76_ShiftAndMask:
 	ld bc, iz
@@ -2629,7 +2629,7 @@ DSPCfg_WriteMultiField_Loop:
 	ld xwa, (xsp + 18)
 	ld xbc, xiz
 	calr DSPCfg_ReadField
-	lds bc, 0
+	ld bc, 0:i3
 	cpw (xsp + 10), 0x0
 	jr ule, DSPCfg_WriteMultiField_AdvanceAddr
 
@@ -2691,7 +2691,7 @@ DSPCfg_ReadMultiField_Loop:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	calr DSPCfg_ReadField
-	lds wa, 0
+	ld wa, 0:i3
 	cpw (xsp + 8), 0x0
 	jr ule, DSPCfg_ReadMultiField_PackAndNext
 
@@ -2749,7 +2749,7 @@ DSPCfg_ReadViaTableLookup:
 
 DSPCfg_StoreByte_ReturnZero:
 	ld (xbc), a
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 DSPCfg_WriteViaTableLookup:
@@ -2872,7 +2872,7 @@ DSPCfg_FindSlot63:
 	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xwa
 	ld xwa, (xbc)
-	lds iz, 0
+	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr le, DSPCfg_FindSlot63_Return
 
@@ -2920,7 +2920,7 @@ DSPCfg_Data_003:
 	push	xsp
 	normal
 	jr	nz, 2
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -2928,7 +2928,7 @@ DSPCfg_Data_003:
 	jr	ge, 8
 	cp	wa, 0:i3
 	jr	lt, 4
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	3
 	ldw	hl, 0xffff
 	ret
@@ -3015,7 +3015,7 @@ DSPCfg_ResolveParamToSlot_Range49:
 	cp xiz, 0x4a00
 	jr nc, DSPCfg_ResolveParamToSlot_Range4A
 	ldw (xsp + 8), 0x0
-	lds wa, 0
+	ld wa, 0:i3
 	calr DSPCfg_LookupMidiMap
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -3031,7 +3031,7 @@ DSPCfg_ResolveParamToSlot_Range4A:
 	cp xiz, 0x4b00
 	jr nc, DSPCfg_ResolveParamToSlot_Range4B
 	ldw (xsp + 8), 0x1
-	lds wa, 1
+	ld wa, 1:i3
 	calr DSPCfg_LookupMidiMap
 	ld (xsp + 4), xhl
 	ld xwa, xiz
@@ -3048,7 +3048,7 @@ DSPCfg_ResolveParamToSlot_Range4B:
 	cp xiz, 0x4c00
 	jr nc, DSPCfg_ResolveParamToSlot_Range4C
 	ldw (xsp + 8), 0x1
-	lds wa, 1
+	ld wa, 1:i3
 	calr DSPCfg_LookupMidiMap
 	ld (xsp + 4), xhl
 	ld xwa, xiz
@@ -3065,7 +3065,7 @@ DSPCfg_ResolveParamToSlot_Range4C:
 	cp xiz, 0x4d00
 	jr nc, DSPCfg_ResolveParamToSlot_Range4D
 	ldw (xsp + 8), 0x4
-	lds wa, 4
+	ld wa, 4:i3
 	calr DSPCfg_LookupMidiMap
 	ld (xsp + 4), xhl
 	ld xwa, xiz
@@ -3082,7 +3082,7 @@ DSPCfg_ResolveParamToSlot_Range4D:
 	cp xiz, 0x4e00
 	jr nc, DSPCfg_ResolveParamToSlot_Range4E
 	ldw (xsp + 8), 0x2
-	lds wa, 2
+	ld wa, 2:i3
 	calr DSPCfg_LookupMidiMap
 	ld (xsp + 4), xhl
 	ld xwa, xiz
@@ -3097,7 +3097,7 @@ DSPCfg_ResolveParamToSlot_Range4D:
 
 DSPCfg_ResolveParamToSlot_Range4E:
 	ldw (xsp + 8), 0x3
-	lds wa, 3
+	ld wa, 3:i3
 	calr DSPCfg_LookupMidiMap
 	ld (xsp + 4), xhl
 	ld xwa, xiz
@@ -3246,11 +3246,11 @@ DSPCfg_ResolveWithFallback_Return:
 	ret
 
 DSPCfg_ReadParam_Map0:
-	lds bc, 0
+	ld bc, 0:i3
 	jrl DSPCfg_ResolveWithFallback
 
 DSPCfg_ReadParam_Map1:
-	lds bc, 1
+	ld bc, 1:i3
 	jrl DSPCfg_ResolveWithFallback
 
 DSPCfg_ClampAndExtract:
@@ -3299,7 +3299,7 @@ DSPCfg_ClampAndExtract_CheckMax:
 	jr DSPCfg_ClampAndExtract_Return
 
 DSPCfg_ClampAndExtract_InRange:
-	lds hl, 0
+	ld hl, 0:i3
 	jr DSPCfg_ClampAndExtract_Return
 
 DSPCfg_ClampAndExtract_NoSlot:
@@ -3375,7 +3375,7 @@ DSPCfg_ValidateSlotForWrite_Slot4:
 	jr nz, DSPCfg_ValidateSlotForWrite_Invalid
 
 DSPCfg_ValidateSlotForWrite_Valid:
-	lds hl, 0
+	ld hl, 0:i3
 	jr DSPCfg_ValidateSlotForWrite_Ret
 
 DSPCfg_WriteParamFull:
@@ -3422,7 +3422,7 @@ DSPCfg_WriteParamFull:
 	ld e, c
 	extz de
 	pushw 0xff
-	lds bc, 0
+	ld bc, 0:i3
 	call AssswbWr
 	jrl DSPCfg_WriteParamFull_Return
 
@@ -3487,7 +3487,7 @@ DSPCfg_WriteParamFull_Check491D:
 DSPCfg_WriteParamFull_Notify4003:
 	ld bc, (xsp + 18)
 	ld xwa, 0x4003
-	lds de, 3
+	ld de, 3:i3
 	call SoundParam_NotifyChange
 	jr DSPCfg_WriteParamFull_Return
 
@@ -3579,7 +3579,7 @@ DSPCfg_WriteParamSimple_Check491D:
 DSPCfg_WriteParamSimple_Notify4003:
 	ld bc, (xsp + 22)
 	ld xwa, 0x4003
-	lds de, 3
+	ld de, 3:i3
 	call SoundParam_NotifyChange
 	jr DSPCfg_WriteParamSimple_Return
 
@@ -3654,7 +3654,7 @@ DSPCfg_WriteAllSlots_Direct:
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0x0
 	jrl z, DSPCfg_WriteAllSlots_Direct_Return
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, (xsp + 16)
 	calr DSPCfg_StoreByte_ReturnZero
 	ld wa, (xsp + 20)
@@ -3663,8 +3663,8 @@ DSPCfg_WriteAllSlots_Direct:
 	add xbc, xwa
 	ld a, (xbc)
 	pushw 0xff
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call AssswbWr
 	ld xwa, (xsp + 16)
 	calr DSPCfg_GetParamCount
@@ -3674,7 +3674,7 @@ DSPCfg_WriteAllSlots_Direct:
 	lda xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	jr DSPCfg_WriteAllSlots_Direct_CheckCount
 
 DSPCfg_WriteAllSlots_Direct_Loop:
@@ -3734,7 +3734,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	lda xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 6), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	jr DSPCfg_WriteAllSlots_Clamped_CheckCount
 
 DSPCfg_WriteAllSlots_Clamped_Loop:
@@ -3947,7 +3947,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	xwa, (xsp+38)
 	ld	xbc, (xsp+34)
 	calr	65185
-	lds	bc, 0
+	ld	bc, 0:i3
 	cpw	(xsp+14), 0
 	jr	ule, 12
 	lds32	xwa, 1
@@ -4009,21 +4009,21 @@ DSPCfg_Data_ParamDispatch:
 	lda xix, (16633555:24)
 	jp_rr 8, xix, wa
 	ld xiz, 18688
-	lds	wa, 0
+	ld	wa, 0:i3
 	jr	48
 	ld	xiz, 0x4a00
 	jr	5
 	ld	xiz, 0x4b00
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	32
 	ld	xiz, 0x4c00
-	lds	wa, 4
+	ld	wa, 4:i3
 	jr	23
 	ld	xiz, 0x4d00
-	lds	wa, 2
+	ld	wa, 2:i3
 	jr	14
 	ld	xiz, 0x4e00
-	lds	wa, 3
+	ld	wa, 3:i3
 	jr	5
 	ldw	(xsp+4), 65535
 	cp	(xsp+12), 1
@@ -4063,7 +4063,7 @@ DSPCfg_Data_ParamDispatch:
 	retd	4
 
 DSPCfg_CheckParamTableEntry:
-	lds hl, 0
+	ld hl, 0:i3
 	cp wa, 0x63
 	jr ugt, DSPCfg_CheckParamTableEntry_NotFound
 	extz xwa
@@ -4204,7 +4204,7 @@ DSPCfg_ApplyParamStruct_ReadLoop:
 	ld xwa, xiz
 	ld xbc, (xsp + 18)
 	calr DSPCfg_ReadFieldSimple
-	lds wa, 0
+	ld wa, 0:i3
 	cpw (xsp + 20), 0x0
 	jr ule, DSPCfg_ApplyParamStruct_PackNext
 
@@ -4293,7 +4293,7 @@ DSPCfg_ApplyParamStruct_WriteReadLoop:
 	ld (xiz + 1), l
 
 DSPCfg_ApplyParamStruct_WriteSkip2Byte:
-	lds wa, 0
+	ld wa, 0:i3
 	cpw (xsp + 20), 0x0
 	jr ule, DSPCfg_ApplyParamStruct_WritePackNext
 
@@ -5299,7 +5299,7 @@ AudioModeChange_Handler:
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
 	ret z
-	lds wa, 0
+	ld wa, 0:i3
 	call (xhl)
 	call AudioInit_DrumRoutingCheck
 	call AudioInit_DrumSaveReturn
@@ -5341,7 +5341,7 @@ AudioSubsystem_Callback:
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
 	ret z
-	lds wa, 0
+	ld wa, 0:i3
 	call (xhl)
 	call AudioInit_DrumRoutingCheck
 	call AudioInit_DrumSaveReturn
@@ -5412,7 +5412,7 @@ AudioVoice_Callback:
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
 	jr z, AudioVoice_SkipToDispatch
-	lds wa, 0
+	ld wa, 0:i3
 	call (xhl)
 	call AudioInit_ClearPartFlags_ByMode
 
@@ -5457,7 +5457,7 @@ AudioVoiceReset_Handler:
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
 	ret z
-	lds wa, 1
+	ld wa, 1:i3
 	call (xhl)
 	call AudioInit_DrumRoutingCheck
 	call AudioInit_DrumSaveReturn
@@ -5757,7 +5757,7 @@ UIStateEvt_ParamEdit_Data:
 	and	wa, 34
 	cp	wa, 32
 	jr	nz, 25
-	lds	iz, 2
+	ld	iz, 2:i3
 	ld	a, (0xfc5d:16)
 	and	a, 8
 	extz	wa
@@ -5890,7 +5890,7 @@ UIStateEvt_ParamEdit_Data:
 	ld	wa, (0xc598:16)
 	bit	5, wa
 	jr	z, 25
-	lds	iz, 2
+	ld	iz, 2:i3
 	ld	a, (0xfc5d:16)
 	and	a, 8
 	extz	wa
@@ -6089,7 +6089,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, 26
 	jr	ge, 79
 	ld	wa, de
@@ -6221,7 +6221,7 @@ UIStateEvt_EffectSelect_Data:
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x124:24)
 	ld_rrb e, xbc, wa
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 26
 	jr	nc, 37
 	ld	wa, hl
@@ -6323,7 +6323,7 @@ UIStateEvt_ChannelConfig_Data:
 	.byte 0xf1
 	jrl	nz, -12864
 	jr	z, 66
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, 26
 	jr	nc, 93
 	ld	wa, de
@@ -6350,7 +6350,7 @@ UIStateEvt_ChannelConfig_Data:
 	cp	de, 26
 	jr	c, -56
 	jr	35
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, 26
 	jr	nc, 27
 	ld	wa, de

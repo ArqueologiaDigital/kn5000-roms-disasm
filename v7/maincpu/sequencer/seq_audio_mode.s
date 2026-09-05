@@ -671,7 +671,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	ld xix, 12714
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -681,7 +681,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	ld xix, 12721
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -691,7 +691,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	ld xix, 12728
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -701,7 +701,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	ld xix, 12735
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -711,7 +711,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	ld xix, 12742
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -730,7 +730,7 @@ AccTuning_LoadAndApplyMaster:
 
 	ld xix, 12714
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -759,7 +759,7 @@ AccTuning_LoadCoarseFromStyle:
 
 	ld xix, 12721
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -792,7 +792,7 @@ AccTuning_LoadFineFromStyle:
 
 	ld xix, 12728
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -825,7 +825,7 @@ AccTuning_LoadOctaveFromStyle:
 
 	ld xix, 12735
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 
@@ -858,7 +858,7 @@ AccTuning_LoadTransposeFromStyle:
 
 	ld xix, 12742
 
-	lds bc, 7
+	ld bc, 7:i3
 
 	ldir85
 

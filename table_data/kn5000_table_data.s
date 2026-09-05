@@ -1479,19 +1479,19 @@ BootCode_NMI_Handler__halt_loop:
 ; Addresses: 0x9FB802-0x9FB80D
 ; -----------------------------------------------------------------------------
 BootStub_ReturnSuccessSlot1:
-	lds hl, 0	; db a8
+	ld hl, 0:i3	; db a8
 	ret	; 0e
 
 BootStub_ReturnSuccessSlot2:
-	lds hl, 0	; db a8
+	ld hl, 0:i3	; db a8
 	ret	; 0e
 
 BootStub_ReturnSuccessSlot3:
-	lds hl, 0	; db a8
+	ld hl, 0:i3	; db a8
 	ret	; 0e
 
 BootStub_ReturnSuccessSlot4:
-	lds hl, 0	; db a8
+	ld hl, 0:i3	; db a8
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------
@@ -1946,7 +1946,7 @@ Flash_SectorErase_16bit__sector_done:
 Flash_WaitComplete:
 	bit_dd8 5, 0x1C	; f0 1c cd
 	jr z, Flash_WaitComplete__not_ready	; 66 03
-	lds hl, 0	; db a8
+	ld hl, 0:i3	; db a8
 	ret	; 0e
 Flash_WaitComplete__not_ready:
 	ldw hl, 0xFFFF	; 33 ff ff
@@ -1985,9 +1985,9 @@ Flash_ChipErase_16bit_Wait__recheck:
 ;       (0x9996) = HDAE5000 device ID
 ; -----------------------------------------------------------------------------
 Flash_Init_Custom_And_Table:
-	lds wa, 1	; d8 a9 - Custom Data low bank
+	ld wa, 1:i3	; d8 a9 - Custom Data low bank
 	calr Flash_Reset_16bit	; CALR Flash_Reset_16bit (0x9FB812)
-	lds wa, 2	; d8 aa - Custom Data high bank
+	ld wa, 2:i3	; d8 aa - Custom Data high bank
 	calr Flash_Reset_16bit	; CALR Flash_Reset_16bit (0x9FB812)
 
 	; Check region and reset Table Data ROM if not region 4
@@ -1996,12 +1996,12 @@ Flash_Init_Custom_And_Table:
 	call nz, (0xFFBC2D:24)	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
 
 	; Read Custom Data device ID
-	lds wa, 1	; d8 a9
+	ld wa, 1:i3	; d8 a9
 	calr Flash_ReadID_16bit	; CALR Flash_ReadID_16bit (0x9FB888)
 	ld (0x009994:24), hl; LD (009994h), HL
 
 	; Read HDAE5000 device ID
-	lds wa, 2	; d8 aa
+	ld wa, 2:i3	; d8 aa
 	calr Flash_ReadID_16bit	; CALR Flash_ReadID_16bit (0x9FB888)
 	ld (0x009996:24), hl; LD (009996h), HL
 	ret	; 0e
@@ -2018,7 +2018,7 @@ Flash_Init_Custom_And_Table:
 ;       DE = BC (loop counter)
 ; -----------------------------------------------------------------------------
 MemBlock_FillWithZeros:
-	lds de, 0	; da a8
+	ld de, 0:i3	; da a8
 	cp bc, 0:i3	; d9 d8
 	ret ule	; b0 f3 - return if count <= 0
 MemBlock_FillWithZeros__fill_loop:
@@ -2404,7 +2404,7 @@ Flash_SectorErase_32bit:
 Flash_WaitComplete_32bit:
 	bit_dd8 5, 0x1C	; f0 1c cd
 	jr z, Flash_WaitComplete_32bit__not_ready	; 66 03
-	lds hl, 0	; db a8
+	ld hl, 0:i3	; db a8
 	ret	; 0e
 Flash_WaitComplete_32bit__not_ready:
 	ldw hl, 0xFFFF	; 33 ff ff
@@ -2496,7 +2496,7 @@ Flash_Update_TableData__program_loop:
 	cp xiz, 0x1F40	; ee cf 40 1f 00 00 - 8000 dwords
 	jr c, Flash_Update_TableData__program_loop	; 67 e6
 
-	lds hl, 0	; db a8 - success
+	ld hl, 0:i3	; db a8 - success
 Flash_Update_TableData__done:
 	pop xiz	; 5e
 	inc 4, xsp	; INC 4, XSP - deallocate 4 bytes
@@ -2653,7 +2653,7 @@ Boot_DetectDiskType:
 	inc 2, xsp	; INC 2, XSP - pop arg
 	ld xiz, xhl	; LD XIZ, XHL - save buffer ptr
 	ld xwa, 0x21	; 40 21 00 00 00 - sector 33 (boot sector)
-	lds bc, 1	; LD BC, 1 - read 1 sector
+	ld bc, 1:i3	; LD BC, 1 - read 1 sector
 	ld xde, xiz	; ee 8a - dest buffer
 	calr FDC_ReadSectorWrapper	; CALR FDC_ReadSectorWrapper
 
@@ -2782,7 +2782,7 @@ Boot_CopySectors:
 	extz xwa	; EXTZ XWA
 	div wa, 0x12	; DIV WA, 0x0012 - sectors per track
 	stw_erp WA, 0xE2	; LD WA, QWA - get remainder
-	lds iz, 0	; LD IZ, 0 - offset = 0
+	ld iz, 0:i3	; LD IZ, 0 - offset = 0
 	cp wa, 0:i3	; CP WA, 0
 	jr z, Boot_CopySectors__cs_skip_partial	; 66 48
 
@@ -2917,7 +2917,7 @@ Boot_CopySectorsEx:
 	extz xwa	; EXTZ XWA
 	div wa, 0x12	; DIV WA, 0x0012
 	stw_erp WA, 0xE2	; LD WA, QWA
-	lds iz, 0	; LD IZ, 0
+	ld iz, 0:i3	; LD IZ, 0
 	cp wa, 0:i3	; CP WA, 0
 	jr z, Boot_CopySectorsEx__cse_skip_partial	; 66 4d
 
@@ -3134,7 +3134,7 @@ Boot_WaitFDCReady__wfdc_timeout_check:
 	inc 8, iz	; INC 0, IZ - increment progress
 	ld wa, iz	; LD WA, IZ
 	ldw bc, 0xB4	; LD BC, 0x00B4 - X pos
-	lds de, 5	; LD DE, 5 - mode
+	ld de, 5:i3	; LD DE, 5 - mode
 	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
 	lds32 xwa, 0	; LD XWA, 0
 	ld (3072:16), xwa	; LD (0x0C00), XWA
@@ -3186,7 +3186,7 @@ Boot_LoadDiskData__ldd_type1:
 	ldw wa, 0x24	; LD WA, 0x0024 - start sector
 	ld xbc, 0x800000	; LD XBC, 0x00800000 - dest
 	calr Boot_CopySectors	; CALR Boot_CopySectors
-	lds wa, 2	; LD WA, 2 - disk 2
+	ld wa, 2:i3	; LD WA, 2 - disk 2
 	calr Boot_WaitDiskInsert	; CALR Boot_WaitDiskInsert
 	ldw wa, 0x24	; LD WA, 0x0024
 	ld xbc, 0x900000	; LD XBC, 0x00900000
@@ -3199,7 +3199,7 @@ Boot_LoadDiskData__ldd_type2:
 	ldw wa, 0x24	; LD WA, 0x0024
 	ld xbc, 0x800000	; LD XBC, 0x00800000
 	calr Boot_CopySectors	; CALR Boot_CopySectors
-	lds wa, 4	; LD WA, 4 - next is disk 4
+	ld wa, 4:i3	; LD WA, 4 - next is disk 4
 	calr Boot_WaitDiskInsert	; CALR Boot_WaitDiskInsert
 	ldw wa, 0x24	; LD WA, 0x0024
 	ld xbc, 0x900000	; LD XBC, 0x00900000
@@ -3210,22 +3210,22 @@ Boot_LoadDiskData__ldd_copy2:
 
 ; Type 3 handler (0x9FC48D): Custom data flash
 Boot_LoadDiskData__ldd_type3:
-	lds wa, 1	; LD WA, 1
+	ld wa, 1:i3	; LD WA, 1
 	call 0xFFBBDB	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	pushw 0x800	; PUSH 0x0800 - size
-	lds wa, 1	; LD WA, 1 - bank 1
+	ld wa, 1:i3	; LD WA, 1 - bank 1
 	ldw bc, 0x24	; LD BC, 0x0024 - start sector
 	ld xde, 0x300000	; LD XDE, 0x00300000 - dest
 	jr Boot_LoadDiskData__ldd_copy_ext	; 68 16
 
 ; Type 4 handler (0x9FC4A5): HDAE5000 firmware
 Boot_LoadDiskData__ldd_type4:
-	lds wa, 2	; LD WA, 2
+	ld wa, 2:i3	; LD WA, 2
 	call 0xFFBBDB	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	pushw 0x400	; PUSH 0x0400 - size
-	lds wa, 2	; LD WA, 2 - bank 2
+	ld wa, 2:i3	; LD WA, 2 - bank 2
 	ldw bc, 0x24	; LD BC, 0x0024
 	ld xde, 0x280000	; LD XDE, 0x00280000
 
@@ -3235,7 +3235,7 @@ Boot_LoadDiskData__ldd_copy_ext:
 
 ; Type 5 handler (0x9FC4C0): Erase and reprogram
 Boot_LoadDiskData__ldd_type5:
-	lds wa, 1	; LD WA, 1
+	ld wa, 1:i3	; LD WA, 1
 	ld xbc, 0x3FFFFF	; LD XBC, 0x003FFFFF - end addr
 	call 0xFFBA17	; CALL 0xFFBA17 (Flash_SectorErase)
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
@@ -3422,7 +3422,7 @@ Boot_ProgramCustomFlash__pcf_copy_loop:
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+0x04) - source ptr
 	ld_spiw DE, 0xE1	; LD DE, (XWA+)
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
-	lds wa, 1	; LD WA, 1 - bank 1
+	ld wa, 1:i3	; LD WA, 1 - bank 1
 	call 0xFFB903	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
 	inc 1, xiz	; INC 1, XIZ
 	cp xiz, 0x40000	; CP XIZ, 0x00040000 (256K)
@@ -3567,7 +3567,7 @@ HDAE5000_InitializeParallelPort__ppi_wait_loop:
 	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
 	ldib_erp 0xFB, 1	; LD QIZH, 1 - record probe failure
 HDAE5000_InitializeParallelPort__probe_16bit:
-	lds wa, 1	; LD WA, 1 - custom-data flash bank
+	ld wa, 1:i3	; LD WA, 1 - custom-data flash bank
 	call 0xFFB888	; CALL Flash_ReadID_16bit (boot-time alias of 0x9FB888)
 	cp hl, 0xFFFF	; CP HL, 0xFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__check_probe_result	; 6e 0a
@@ -3595,7 +3595,7 @@ HDAE5000_InitializeParallelPort__erase_flash:
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl
 	jr z, HDAE5000_InitializeParallelPort__wait_erase	; 66 06
-	lds wa, 1	; LD WA, 1
+	ld wa, 1:i3	; LD WA, 1
 	call 0xFFB968	; CALL Flash_ChipErase_16bit (boot-time alias of 0x9FB968)
 HDAE5000_InitializeParallelPort__wait_erase:
 	call 0xFFBE85	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
@@ -3624,14 +3624,14 @@ HDAE5000_InitializeParallelPort__program_flash:
 	pushw 0x3	; last bank to verify = 3
 	ld xwa, 0x800000	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
-	lds de, 0	; LD DE, 0 - first bank
+	ld de, 0:i3	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
 	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 	pushw 0x1	; last bank to verify = 1
 	ld xwa, 0x300000	; reference: custom-data flash
 	ld xbc, 0x200000	; source window
-	lds de, 0	; LD DE, 0 - first bank
+	ld de, 0:i3	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
 	call nz, (0xFFC55A:24)	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
@@ -3703,7 +3703,7 @@ HDAE5000_ProgramPayloadOnly__program_flash:
 	pushw 0x7	; last bank to verify = 7
 	ld xwa, 0x800000	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
-	lds de, 4	; LD DE, 4 - first bank
+	ld de, 4:i3	; LD DE, 4 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
 	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
@@ -3797,9 +3797,9 @@ LZSS_ReadByte__not_eof:
 	incw 8, (3120:16); INCW 0, (0x0C30) - next sector X
 	ld wa, (3120:16); LD WA, (0x0C30)
 	ld bc, (3122:16); LD BC, (0x0C32)
-	lds de, 6	; LD DE, 6 - sector size index
+	ld de, 6:i3	; LD DE, 6 - sector size index
 	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
-	lds iz, 0	; LD IZ, 0
+	ld iz, 0:i3	; LD IZ, 0
 LZSS_ReadByte__read_sectors:
 	ld wa, (3124:16); LD WA, (0x0C34)
 	extz xwa	; EXTZ XWA
@@ -3881,7 +3881,7 @@ LZSS_OutputByte_Alt:
 	stb_dpi A, 0xE1	; LDA XBC, XWA+
 	ld (3128:16), xwa	; LD (0x0C38), XWA
 	ld de, (xde)	; LD DE, (XDE)
-	lds wa, 1	; LD WA, 1
+	ld wa, 1:i3	; LD WA, 1
 	call 0xFFB903	; CALL 0xFFB903
 	ld (3126:16), 0; LD (0x0C36), 0x00
 LZSS_OutputByte_Alt__not_full:
@@ -3903,7 +3903,7 @@ LZSS_ParseHeader:
 	ld (3128:16), xwa	; LD (0x0C38), XWA - store source ptr
 	ld xwa, 0x20000	; LD XWA, 0x00020000
 	add (3104:16), xwa	; ADD (0x0C20), XWA
-	lds iz, 0	; LD IZ, 0
+	ld iz, 0:i3	; LD IZ, 0
 LZSS_ParseHeader__read_header:
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	ld bc, iz	; LD BC, IZ
@@ -3928,7 +3928,7 @@ LZSS_ParseHeader__read_header:
 	jr LZSS_ParseHeader__exit	; JR T, .exit
 LZSS_ParseHeader__valid:
 	; Output the 6 header bytes via OutputByte_Alt
-	lds iz, 0	; LD IZ, 0
+	ld iz, 0:i3	; LD IZ, 0
 LZSS_ParseHeader__read_more:
 	ld bc, iz	; LD BC, IZ
 	extz xbc	; EXTZ XBC
@@ -3957,7 +3957,7 @@ LZSS_ParseHeader__decompress_loop:
 	cp xwa, (3104:16)	; CP XWA, (0x0C20)
 	jr c, LZSS_ParseHeader__decompress_loop	; JR C, .decompress_loop
 LZSS_ParseHeader__done:
-	lds hl, 0	; LD HL, 0 (success)
+	ld hl, 0:i3	; LD HL, 0 (success)
 LZSS_ParseHeader__exit:
 	popw iz	; POP IZ
 	inc 6, xsp	; INC 6, XSP
@@ -4014,7 +4014,7 @@ LZSS_Decompress__prefill_loop:
 	ldw (3122:16), 180; LD (0x0C32), 0x00B4 - display Y
 	ldw wa, 0x32	; LD WA, 0x0032
 	ldw bc, 0xB4	; LD BC, 0x00B4
-	lds de, 6	; LD DE, 6
+	ld de, 6:i3	; LD DE, 6
 	call 0xFFCD9A	; CALL 0xFFCD9A (init display)
 
 	; === Read expected decompressed size (3 bytes, little-endian) ===
@@ -4286,7 +4286,7 @@ Boot_FlashUpdate_Main:
 
 Boot_FlashUpdate_Main__update_check_flash:
 	; Read flash ID with bank 2
-	lds wa, 2	; LD WA, 2
+	ld wa, 2:i3	; LD WA, 2
 	call 0xFFB888	; CALL 0xFFB888 (Flash_ReadID_16bit)
 	cp hl, 0xFFFF	; CP HL, 0xFFFF
 	jr z, Boot_FlashUpdate_Main__update_done	; 66 4c
@@ -4339,7 +4339,7 @@ DrawBitmap_UpdateDisplay:
 	ld iy, hl	; LD IY, HL - IY = X position
 	ld ix, de	; LD IX, DE - IX = Y position
 	inc 1, ix	; INC 1, IX - Y + 1
-	lds iz, 0	; LD IZ, 0 - row counter
+	ld iz, 0:i3	; LD IZ, 0 - row counter
 
 DrawBitmap_UpdateDisplay__db_row_loop:
 	ld wa, iz	; LD WA, IZ
@@ -4518,14 +4518,14 @@ InitProgressDisplay_FillRegion__idp_done:
 	; Turn screen on (RET_VGA_SEQUENCER 01h, 001h with JRL optimization)
 	VGA_WRITE VGA_SEQ_ADDR, 0x1
 	ldw wa, 0x3C5
-	lds bc, 1
+	ld bc, 1:i3
 	jrl Write_VGA_Register
 
 ; Small utility routine at 0x9FD7E2 (table_data specific, not in maincpu)
 ; Purpose unknown - possibly initialization/cleanup
 VGA_FinalizeInitialization:
 	ld (xwa), 0x0
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; =============================================================================
@@ -4621,7 +4621,7 @@ FDC_WaitReady__fwr_continue:
 FDC_WaitReady__fwr_check_result:
 	cpiw_erp 0xFA, 0	; CP QIZ, 0
 	jr z, FDC_WaitReady__fwr_done	; 66 05
-	lds wa, 1	; LD WA, 1 - error code
+	ld wa, 1:i3	; LD WA, 1 - error code
 	calr FDC_Error	; CALR FDC_Error
 
 FDC_WaitReady__fwr_done:
@@ -4663,7 +4663,7 @@ FDC_WaitComplete__fwc_continue:
 FDC_WaitComplete__fwc_check_result:
 	cpiw_erp 0xFA, 0	; CP QIZ, 0
 	jr z, FDC_WaitComplete__fwc_done	; 66 05
-	lds wa, 1	; LD WA, 1
+	ld wa, 1:i3	; LD WA, 1
 	calr FDC_Error	; CALR FDC_Error
 
 FDC_WaitComplete__fwc_done:
@@ -4680,7 +4680,7 @@ FDC_WaitComplete__fwc_done:
 FDC_Seek:
 	ldw wa, 0x36	; LD WA, 0x0036 - aux cmd 0x36 = software reset
 	calr FDC_WriteStatus	; CALR FDC_WriteStatus
-	lds wa, 2	; LD WA, 2 - delay parameter
+	ld wa, 2:i3	; LD WA, 2 - delay parameter
 	calr Boot_Delay	; CALR Boot_Delay
 	ld (3378:16), 255; LD (0x0D32), 0xFF - track cache = unknown
 	ret	; 0e
@@ -4746,7 +4746,7 @@ Handler_INT4:
 	push xde	; 3a
 	push xbc	; 39
 	push xwa	; 38
-	lds iz, 0	; LD IZ, 0 - timeout counter
+	ld iz, 0:i3	; LD IZ, 0 - timeout counter
 
 Handler_INT4__int4_check_timeout:
 	ld wa, iz	; LD WA, IZ - get current count

@@ -34,7 +34,7 @@
 	mri_d2 0xb7, 0x30
 	ld xbc, xwa
 	.if \ParamE <= 7
-	lds wa, \ParamE
+	ld wa, \ParamE:i3
 	.else
 	ldw wa, \ParamE
 	.endif
@@ -57,7 +57,7 @@
 	mri_d2 0xb7, 0x30
 	ld xbc, xwa
 	.if \ParamE <= 7
-	lds wa, \ParamE
+	ld wa, \ParamE:i3
 	.else
 	ldw wa, \ParamE
 	.endif
@@ -129,7 +129,7 @@ FDTest_PrintDiag:
 TestTitleFunc:
 	push xiz
 	ld xiz, xwa
-	lds wa, 0
+	ld wa, 0:i3
 	cp xbc, 0x1c00007
 	jr z, TitleFunc_LifecycleDispatch
 	cp xbc, 0x1c00013
@@ -198,7 +198,7 @@ TitleFunc_LifecycleTable:
 	call KillApTimer
 	lda xwa, (FDTest_String_TestTitleFunc_0x7C:24)
 	calr FDTest_PrintDiag
-	lds wa, 0
+	ld wa, 0:i3
 	jr TitleFunc_Return
 	lda xwa, (FDTest_String_TestTitleFunc_0x8C:24)
 	calr FDTest_PrintDiag
@@ -211,7 +211,7 @@ TitleFunc_LifecycleTable:
 	ld xwa, 0x53
 	ld xde, 0xffffffff
 	call SetApTimer
-	lds wa, 1
+	ld wa, 1:i3
 	jr TitleFunc_Return
 	lda xwa, (FDTest_String_TestTitleFunc_0xA2:24)
 	calr FDTest_PrintDiag
@@ -268,7 +268,7 @@ ListDir2_NextEntry:
 ListDir2_CloseDir:
 	ld xwa, xiz
 	call _findclose
-	lds hl, 0
+	ld hl, 0:i3
 ListDir2_Return:
 	pop xiz
 	lda xsp, (xsp + 266)
@@ -350,21 +350,21 @@ CreateRunFDOp_Return:
 ; RegisterHamaTitle1 -- Registers title with widget table 0x7f (FDD/HD test)
 ; Calls 0xf51e4f with WA=2, then 0xf5289c with string at 0xe1ff42
 RegHamaTitle1_Entry:
-	lds wa, 2
+	ld wa, 2:i3
 	call format_FD
 	lda xwa, (FDTest_String_TestTitleFunc_0x204:24)
 	call FileIO_CheckPathAndVolumeLabel
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; RegisterHamaTitle2 -- Registers title with widget table 0xfc (extension APR test)
 ; Calls 0xf51e4f with WA=3, then 0xf5289c with string at 0xe1ff4c
 RegHamaTitle2_Entry:
-	lds wa, 3
+	ld wa, 3:i3
 	call format_FD
 	lda xwa, (FDTest_String_TestTitleFunc_0x20E:24)
 	call FileIO_CheckPathAndVolumeLabel
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; SendEventWithParam -- Sends event 0x1c00025 with xwa as parameter via 0xfa9660

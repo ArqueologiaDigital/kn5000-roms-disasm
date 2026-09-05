@@ -806,27 +806,27 @@ HALT_LOOP__halt:
 ; ==============================================================================
 
 CmdHandler_Stub_Cmd0:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 CmdHandler_Stub_Cmd4:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 CmdHandler_Stub_Cmd3:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 CmdHandler_Stub_Cmd1:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 CmdHandler_Stub_Cmd2:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 CmdHandler_Stub_Cmd5:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ==============================================================================
@@ -841,19 +841,19 @@ INIT_TONE_GEN:
 	ld (xiz - 4), xwa
 	lda xwa, (xiz - 8)
 	push xwa
-	lds bc, 0
+	ld bc, 0:i3
 	calr TONE_GEN_WRITE	; Call relative (3-byte encoding)
 	pop xwa
 	push xwa
-	lds bc, 1
+	ld bc, 1:i3
 	calr TONE_GEN_WRITE
 	pop xwa
 	push xwa
-	lds bc, 2
+	ld bc, 2:i3
 	calr TONE_GEN_WRITE
 	pop xwa
 	push xwa
-	lds bc, 3
+	ld bc, 3:i3
 	calr TONE_GEN_WRITE
 	pop xwa
 
@@ -1004,7 +1004,7 @@ CHECKSUM_CALC__loop:
 ; ==============================================================================
 
 CmdHandler_Stub_Cmd6And7:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ==============================================================================
@@ -1161,7 +1161,7 @@ SendData_Chunked__send_final:
 SendData_Block:
 	cp c, 0:i3	; Is count zero?
 	ret z	; Yes - nothing to send
-	lds ix, 0	; IX = timeout counter
+	ld ix, 0:i3	; IX = timeout counter
 SendData_Block__wait_ready1:
 	bit_dd8 4, 0x34	; Check if other CPU ready
 	jr z, SendData_Block__timeout1	; Not ready - check timeout
@@ -1172,7 +1172,7 @@ SendData_Block__wait_ready1:
 	sll a, 5	; A = command << 5
 	or a, l	; A = (command << 5) | (count - 1)
 	ld (0x120000:24), a; Send command+count to main CPU
-	lds ix, 0	; Reset timeout counter
+	ld ix, 0:i3	; Reset timeout counter
 SendData_Block__wait_ready2:
 	bit_dd8 4, 0x34	; Check if main CPU acknowledged
 	jr nz, SendData_Block__timeout2	; Main CPU responded - check timeout
@@ -1221,7 +1221,7 @@ SendData_Block__timeout2:
 ; Timeout: 60000 iterations before giving up
 ; ------------------------------------------------------------------------------
 SendCmd_E3:
-	lds bc, 0	; BC = timeout counter
+	ld bc, 0:i3	; BC = timeout counter
 SendCmd_E3__wait_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr z, SendCmd_E3__timeout1	; Not ready - check timeout
@@ -1269,7 +1269,7 @@ SendCmd_E3__timeout2:
 ; Output: Parameter block sent to main CPU
 ; ------------------------------------------------------------------------------
 SendParams_E2:
-	lds ix, 0	; IX = timeout counter
+	ld ix, 0:i3	; IX = timeout counter
 SendParams_E2__wait_sync_clear:
 	cp (1302:16), 0; Is DMA sync flag clear?
 	jr z, SendParams_E2__sync_cleared	; Yes - proceed
@@ -1284,7 +1284,7 @@ SendParams_E2__sync_cleared:
 	res_dd8 0, 0x34	; Clear our ready flag
 	ld (1302:16), 1; Set DMA sync flag
 	ld (0x120000:24), 0xe2; Send E2 command to main CPU
-	lds ix, 0	; Reset timeout counter
+	ld ix, 0:i3	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr nz, SendParams_E2__timeout2	; Not ready yet - check timeout
@@ -1340,7 +1340,7 @@ SendParams_E2__timeout2:
 ; ------------------------------------------------------------------------------
 TwoPhase_Transfer:
 	pushw iz	; Save IZ
-	lds iz, 0	; IZ = timeout counter
+	ld iz, 0:i3	; IZ = timeout counter
 TwoPhase_Transfer__wait_sync:
 	cp (1302:16), 0; Is DMA sync clear?
 	jr z, TwoPhase_Transfer__sync_cleared	; Yes - proceed
@@ -1352,14 +1352,14 @@ TwoPhase_Transfer__timeout_sync:
 	cp (1302:16), 0; Check sync again
 	jr nz, TwoPhase_Transfer__timeout_sync	; Still not clear - keep waiting
 TwoPhase_Transfer__sync_cleared:
-	lds iz, 0	; Reset timeout counter
+	ld iz, 0:i3	; Reset timeout counter
 TwoPhase_Transfer__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if CPU ready
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
 	res_dd8 0, 0x34	; Clear our ready flag
 	ld (1302:16), 2; Set sync flag to E1 mode
 	ld (0x120000:24), 0xe1; Send E1 command
-	lds iz, 0	; Reset timeout counter
+	ld iz, 0:i3	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
 	bit_dd8 4, 0x34	; Check for acknowledgment
 	jrl nz, TwoPhase_Transfer__timeout_ack	; Not acknowledged - timeout handler
@@ -1372,7 +1372,7 @@ TwoPhase_Transfer__wait_ack:
 	ld (xhl + 4), bc	; Store BC to second buffer+4
 	ld (xwa + 4), bc	; Store BC to first buffer+4
 	ldc_cr32 xwa, 0x08	; DMA source = first buffer (0x050C)
-	lds wa, 6	; WA = 6 (DMA count)
+	ld wa, 6:i3	; WA = 6 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 6
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
@@ -1384,7 +1384,7 @@ TwoPhase_Transfer__wait_phase1:
 	jr nz, TwoPhase_Transfer__wait_phase1	; Wait until = 1
 TwoPhase_Transfer__phase1_done:
 	; Delay loop (200 iterations)
-	lds iz, 0	; IZ = delay counter
+	ld iz, 0:i3	; IZ = delay counter
 	cp iz, 0xC8	; Counter reached 200?
 	jr nc, TwoPhase_Transfer__delay1_done	; Yes - done
 TwoPhase_Transfer__delay1_loop:
@@ -1409,7 +1409,7 @@ TwoPhase_Transfer__wait_phase2:
 	jr nz, TwoPhase_Transfer__wait_phase2	; Wait until = 0
 TwoPhase_Transfer__phase2_done:
 	; Second delay loop (200 iterations)
-	lds iz, 0	; IZ = delay counter
+	ld iz, 0:i3	; IZ = delay counter
 	cp iz, 0xC8	; Counter reached 200?
 	jr nc, TwoPhase_Transfer__delay2_done	; Yes - skip to exit jump
 TwoPhase_Transfer__delay2_loop:
@@ -1480,7 +1480,7 @@ InterCPU_RX_Handler:
 	lda xwa, (1348:16)
 	ld (1298:16), xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
-	lds wa, 6
+	ld wa, 6:i3
 	ldc_cr16 wa, 0x40	; DMA channel 0 count = 6
 	jr InterCPU_RX_Handler__start_dma
 InterCPU_RX_Handler__not_e1:
@@ -1659,7 +1659,7 @@ INIT_MEMORY_TEST:
 	bit_dd8 0, 0x30
 	ret nz	; Return if bit set
 
-	lds wa, 0
+	ld wa, 0:i3
 	calr MEM_TEST_ROUTINE	; 0xFF89FC (3-byte relative call)
 	ld (1366:16), l
 	extz hl
@@ -1750,9 +1750,9 @@ DELAY_ROUTINE__delay2_inner:
 	.org 0xFF89E7 - 0xFE0000, 0xFF
 
 LONG_DELAY:
-	lds bc, 0
+	ld bc, 0:i3
 LONG_DELAY__outer:
-	lds wa, 0
+	ld wa, 0:i3
 LONG_DELAY__inner:
 	inc 1, wa
 	cp wa, 0x100
@@ -2001,7 +2001,7 @@ CONTROL_PANEL_BIT_SET_CLEAR__loop:
 	ld e, l	; E = byte offset
 	extz de	; Zero-extend DE (byte offset in DE)
 	lda xix, (1368:16); XIX = buffer base address
-	lds hl, 1	; HL = initial bit mask (1)
+	ld hl, 1:i3	; HL = initial bit mask (1)
 	and a, 0xF	; Mask bit position to 0-15
 	jr z, CONTROL_PANEL_BIT_SET_CLEAR__skip_shift	; If A=0, skip shift (bit already = 1)
 	slaa hl	; HL = HL << A (create bit mask)
@@ -2116,7 +2116,7 @@ INTER_CPU_LATCH_READ_DISPATCH__process_normal:
 	calr NOTE_VELOCITY_LOOKUP_CALCULATE	; Call processing routine
 
 INTER_CPU_LATCH_READ_DISPATCH__success:
-	lds hl, 0	; Return success
+	ld hl, 0:i3	; Return success
 	jr INTER_CPU_LATCH_READ_DISPATCH__done	; Jump to done (always)
 
 INTER_CPU_LATCH_READ_DISPATCH__error:
@@ -2307,13 +2307,13 @@ __jrt_nop_FF8CA9:
 	nop
 
 	; Call HARDWARE_PARAM_BLOCK_WRITE with ToneGen_ProbeVoice_ParamBlock (0xFF824C)
-	lds wa, 0
+	ld wa, 0:i3
 	ld xbc, 0xFF824C	; XBC = ToneGen_ProbeVoice_ParamBlock
 	calr HARDWARE_PARAM_BLOCK_WRITE	; Write parameters to hardware
 
 	; Read back and verify
 	ld bc, (0xff824c:24); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
-	lds wa, 0
+	ld wa, 0:i3
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 
 	; Check timeout counter
@@ -2321,13 +2321,13 @@ __jrt_nop_FF8CA9:
 	jr nc, HARDWARE_CALIBRATION_SEQUENCE__exit	; If >= 1000, exit (timeout)
 
 HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
-	lds wa, 0
+	ld wa, 0:i3
 	calr AUDIO_HW_WRITE_READ	; Read hardware status
 	cp hl, 0:i3	; Check result
 	jr z, HARDWARE_CALIBRATION_SEQUENCE__success	; If 0, hardware responded
 
 	; Hardware still busy, reset and retry
-	lds iz, 0	; Clear error flag (will succeed)
+	ld iz, 0:i3	; Clear error flag (will succeed)
 
 	; Repeat first hardware write sequence
 	ldw (0x100000:24), 0x0840

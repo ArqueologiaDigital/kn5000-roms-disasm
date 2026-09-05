@@ -258,7 +258,7 @@ SysEx_ApplyVoiceParam_49_IterateSlots:
 SysEx_ApplyVoiceParam_49_SlotLoop:
 	popw	de
 	swi	4
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16472176
 	push	xde
 	push	xhl
@@ -349,7 +349,7 @@ SysEx_ApplyAndReloadPreset_Type61:
 	ret
 	lda	xsp, (xsp-34)
 	push	xiz
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	16472167
 SysEx_ApplyAndReloadPreset_Type61_Loop:
 	.byte 0x1d, 0xc7, 0x4d, 0xfb, 0xf1, 0x5a, 0xfc, 0x31
@@ -372,7 +372,7 @@ SysEx_ApplyAndReloadPreset_Type63_Loop:
 	sub	xwa, xbc
 	ld	de, wa
 	srl	de, 1
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	de, 0:i3
 	jr	ule, 14
 	ld_spiw	wa, 241
@@ -595,7 +595,7 @@ BitMapOut_RenderDisplay:
 	max
 	ld XIY,WidgetParam_SelfRef_Table_0x19E
 	lda xix, (xsp + 0x02)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	.byte 0x85, 0x10, 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89
 	.byte 0xc9, 0xce, 0xb0, 0xbf, 0x02, 0x41, 0x06, 0x06
@@ -627,7 +627,7 @@ BitMapOut_MergeOutputFields:
 	.byte 0x21, 0xc9, 0xcc, 0x03, 0xf1, 0x48, 0xc1, 0x41
 	.byte 0x0e
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp (0xb744:16), 0x00
 	jrl z, .Lc_fdb35a
 .Lc_fdb297:
@@ -702,7 +702,7 @@ BitMapOut_MergeOutputFields:
 	cp iz, 0:i3
 	jr z, .Lc_fdb35a
 	ei 0x00
-	lds wa, 4
+	ld wa, 4:i3
 	ld BC,IZ
 	ld XDE,0x0000c036
 	call sendCOMM
@@ -915,7 +915,7 @@ MidiOut_ReadSysExByte:
 	swi 5
 	ld (49502:16), hl
 	ld bc, (49498:16)
-	lds wa, 1
+	ld wa, 1:i3
 	jrl 151
 	bit 0x00,C
 	jr z, .Lc_fdb774
@@ -1011,7 +1011,7 @@ CompIface_RampUp_Clamp:
 	ld	(xwa), bc
 	ld	xwa, (xsp+18)
 	ld	(xwa), e
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	8
@@ -1206,7 +1206,7 @@ DSPCfg_CompParam_Bit2:
 	.byte 0x21, 0xbe, 0x01, 0x30, 0x9f, 0x04, 0x22, 0x1e
 	.byte 0x60, 0xff, 0x5e, 0xef, 0x62, 0x0e
 	ld (XBC),A
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 	.byte 0xef, 0x6c, 0x3e, 0xea, 0x8e, 0xbf, 0x04, 0x51
 	.byte 0xbf, 0x06, 0x50, 0xee, 0x88
@@ -1377,7 +1377,7 @@ DSPCfg_ReadField_Type76_Mask5Bits:
 	ldb	e, 191
 	ldio	2, 4
 	nop
-	lds	wa, 4
+	ld	wa, 4:i3
 DSPCfg_ReadField_Type76_Width16:
 	calr	63844
 	ld	(xsp+4), xhl
@@ -1570,7 +1570,7 @@ DSPCfg_DecodeParamIdRange:
 	ld	e, c
 	extz	de
 	pushw	255
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16624162
 	jrl	152
 	ld	wa, (xsp+8)
@@ -1673,7 +1673,7 @@ DSPCfg_ResolveParamToSlot_Range4E:
 	jr	nz, 19
 	ld	bc, (xsp+22)
 	ld	xwa, 16387
-	lds	de, 3
+	ld	de, 3:i3
 	call	16566832
 	jr	3
 	ldw	iz, 65535
@@ -1908,7 +1908,7 @@ DSPCfg_WriteParamSimple_Return:
 	popw	iy
 	nop
 	nop
-	lds	wa, 2
+	ld	wa, 2:i3
 	jr	14
 DSPCfg_WriteParamDelta:
 	.byte 0x46, 0x00, 0x4e, 0x00, 0x00, 0xd8, 0xab, 0x68

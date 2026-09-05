@@ -22,7 +22,7 @@ MainGetSoundName:
 	.byte 0x91, 0x3f, 0x15, 0x00, 0x67, 0x32, 0x91, 0x3f
 	.byte 0x16, 0x00, 0x6b, 0x2c
 GetSoundName_BuildString:
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16567590
 	ldb_erp	l, 251
 	ld	xwa, (xsp+20)
@@ -59,7 +59,7 @@ GetSoundName_DispatchResult:
 	jr SoundLookup_DispatchAndReturn
 
 SoundLookup_ByCategory:
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16567590
 	ld	(xsp+17), l
 	ld	xwa, (xsp+20)
@@ -112,9 +112,9 @@ Sound_SetSelection:
 	extz	de
 	extz	bc
 	pushw	bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16624260
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	386
 Sound_Navigate_Entry:
 	ld (xsp + 4), wa
@@ -138,7 +138,7 @@ Sound_Navigate_Init:
 
 	ld wa, (xsp + 4)
 
-	lds bc, 0
+	ld bc, 0:i3
 
 	call	16567590
 
@@ -224,7 +224,7 @@ Sound_Navigate_BackwardCheck:
 	jr Sound_Navigate_UpdateState
 
 Sound_Navigate_AtBottom:
-	lds iz, 0
+	ld iz, 0:i3
 	jrl Sound_Navigate_SetDone
 
 Sound_Navigate_ScanForward:
@@ -313,11 +313,11 @@ Sound_Navigate_ApplyChange:
 
 	pushw bc
 
-	lds bc, 0
+	ld bc, 0:i3
 
 	call	16624260
 
-	lds wa, 1
+	ld wa, 1:i3
 
 
 
@@ -467,10 +467,10 @@ MainGetPmemName:
 	call	BitMapOut_GetRenderMode
 	bit	7, l
 	jr	z, 4	; -> 0xF98CDF
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	18	; -> 0xF98CF1
 MainGetPmemName_PageNotFirst:
-	lds bc, 1
+	ld bc, 1:i3
 	jr MainGetPmemName_StoreResult
 
 MainGetPmemName_CalcOffset:
@@ -479,7 +479,7 @@ MainGetPmemName_CalcOffset:
 	inc 1, a
 	extz wa
 	ld (xbc), wa
-	lds bc, 0
+	ld bc, 0:i3
 
 MainGetPmemName_StoreResult:
 	ld xwa, (xsp + 2)

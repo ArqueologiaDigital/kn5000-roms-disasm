@@ -66,7 +66,7 @@ NoteOn_VoiceLookupAndAssign:
 	.byte 0x46
 NoteOn_MergeLayer1:
 	ldx
-	lds	iz, 0
+	ld	iz, 0:i3
 	ldb	e, 127
 	jr	50
 	ld	wa, iz
@@ -625,7 +625,7 @@ VoiceInit_PartLoop:
 	ret
 	ret
 	lda xwa, (0xc162:16)
-	lds bc, 0
+	ld bc, 0:i3
 	call 0xfe37ea
 	.byte 0xf1
 VoiceInit_ChannelLoop:
@@ -638,10 +638,10 @@ VoiceInit_ChannelLoop:
 	.byte 0x62, 0xc1, 0x30, 0xd9, 0xa9, 0x1b, 0xd2, 0x36
 	.byte 0xfe
 	lda xwa, (0xc162:16)
-	lds bc, 2
+	ld bc, 2:i3
 	call 0xfe36d2
 	lda xwa, (0xc162:16)
-	lds bc, 2
+	ld bc, 2:i3
 	jp 0xfe355b
 	ret
 	.byte 0x2e, 0xde, 0xa8, 0xd1, 0x2e, 0xc4, 0xf6, 0x7f
@@ -843,11 +843,11 @@ VoiceEvent_AllocAllLayers:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16661695
 	cp	l, 0:i3
 	jrl	z, 1205
-	lds	de, 0
+	ld	de, 0:i3
 	jr	22
 	ld	wa, de
 	extz	xwa
@@ -899,7 +899,7 @@ VoiceEvtHandler_Type4:
 	ccf
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16661695
 	cp	l, 0:i3
 	jr	z, 55
@@ -1024,7 +1024,7 @@ VoiceClaim_Slot2_MarkLoop:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16661695
 	cp	l, 0:i3
 VoiceClaim_Slot2_MarkCheck:
@@ -1119,7 +1119,7 @@ VoiceClaimExt_Slot2_SetParam:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 VoiceClaimExt_Slot3_MarkLoop:
 	.byte 0x1d, 0xbf, 0x3c, 0xfe, 0xcf, 0xd8, 0x66, 0x4a
 	.byte 0xbf, 0x00, 0x00, 0x04, 0xbf, 0x01, 0x00, 0xb0
@@ -1142,14 +1142,14 @@ VoiceClaimExt_Slot6_MarkLoop:
 	cp	l, 255
 	ret	z
 	lda	xwa, (49506:16)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16660458
 	ret
 	ld	a, (52809:16)
 	extz	wa
 VoiceClaimExt_Slot6_MarkCheck:
 	ld	(52835:16), wa
-	lds	de, 0
+	ld	de, 0:i3
 	jr	48
 	ld	wa, de
 	add	wa, wa
@@ -1923,7 +1923,7 @@ AltCheckEmit_LoadParam:
 AltCheckEmit_LoadParam2:
 	pushw	2
 	ld	xbc, (xsp+174)
-	lds	de, 4
+	ld	de, 4:i3
 	call	16662931
 	cp	l, 0:i3
 	jr	z, 72
@@ -1934,7 +1934,7 @@ AltCheckEmit_LoadParam2:
 	ld	xbc, (xsp+168)
 	call	16667886
 	lda	xwa, (xsp+2)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp+2)
 	call	16667249
@@ -2176,11 +2176,11 @@ NoteMap_FallbackVoiceCheck:
 	cp	l, 255
 	jr	z, 16
 	ld	xwa, (xsp+4)
-	lds	bc, 2
+	ld	bc, 2:i3
 FallbackVoiceCheck_LoopBody:
 	calr	2565
 	ld	xwa, (xsp+4)
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	2182
 	ld	a, (xsp+2)
 	ld	c, a
@@ -2266,7 +2266,7 @@ NoteMap_CollectAndAllocVoice_Indirect:
 	.byte 0x31
 NoteMap_IndirectCollectEmit:
 	lda	xwa, (xsp+2)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp+2)
 	call	16667249
@@ -2420,7 +2420,7 @@ UpdateEntry_CheckLayerResult:
 	cp	l, 0:i3
 	jr	z, 74
 	lda	xwa, (xsp)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp)
 	call	16667249
@@ -2572,7 +2572,7 @@ AllocVoiceEntry_Cont_LoadParam2:
 	pushw	bc
 	ld	xbc, xwa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 NoteMap_UpdateVoiceSlots_Return:
 	call	16662359
 NoteMap_ProcessNoteEvent:
@@ -3456,7 +3456,7 @@ AllocNewVoiceEntry_LoadParam:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	qiz, 0
 	jrl	277
 	ld WA,QIZ
@@ -3570,7 +3570,7 @@ AllocNewVoiceEntry_LoadParam:
 	pushw iz
 	call 0xfdafa2
 	inc 6,XSP
-	lds iz, 0
+	ld iz, 0:i3
 .Lc_fe4a23:
 	inc 1,QIZ
 	ld XWA,(XSP+0x06)
@@ -3641,7 +3641,7 @@ AllocNewVoiceEntry_LoadParam4:
 	pushw	wa
 	call	15672481
 	inc	6, xsp
-	lds	bc, 0
+	ld	bc, 0:i3
 	inc	1, iz
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+1)
@@ -3660,8 +3660,8 @@ AllocNewVoiceEntry_LoadParam4:
 	ei	0x06
 	.byte 0xf1, 0x59, 0x04, 0xb8, 0xbf, 0x02, 0x14, 0x15, 0x04
 	ei	0x00
-	lds	bc, 0
-	lds	iz, 0
+	ld	bc, 0:i3
+	ld	iz, 0:i3
 	jrl	228
 	ld	wa, iz
 	extz	xwa
@@ -3741,7 +3741,7 @@ SetChannelParam_LoadParam5:
 	pushw	wa
 	call	15672481
 	inc	6, xsp
-	lds	bc, 0
+	ld	bc, 0:i3
 	inc	1, iz
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+1)
@@ -3759,8 +3759,8 @@ SetChannelParam_LoadParam5:
 	ei	0x06
 	.byte 0xf1, 0x59, 0x04, 0xb8, 0xbf, 0x02, 0x14, 0x6a, 0x04
 	ei	0x00
-	lds	bc, 0
-	lds	iz, 0
+	ld	bc, 0:i3
+	ld	iz, 0:i3
 	jrl	228
 	ld	wa, iz
 	extz	xwa
@@ -4839,12 +4839,12 @@ CheckControlCode_Tes_LoopCheck:
 CheckControlCode_Tes_TestBit0:
 	pushw	2
 	ld	xwa, xde
-	lds	de, 4
+	ld	de, 4:i3
 	call	16662359
 	cp	l, 0:i3
 	jr	z, 47
 	lda	xwa, (xsp+2)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp+2)
 	call	16667249
@@ -5110,12 +5110,12 @@ VoiceAssign_Finalize_LoopCheck:
 VoiceAssign_Finalize_TestBit0:
 	pushw	2
 	ld	xwa, xde
-	lds	de, 4
+	ld	de, 4:i3
 	call	16662359
 	cp	l, 0:i3
 	jr	z, 47
 	lda	xwa, (xsp+2)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp+2)
 	call	16667249
@@ -5320,7 +5320,7 @@ ReallocEnabledVoices_LoadAddr3:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 ReallocEnabledVoices_DoFindEntr2:
 	call	16661695
 	cp	l, 0:i3
@@ -5334,7 +5334,7 @@ ReallocEnabledVoices_DoFindEntr2:
 	ld	xwa, xhl
 	call	16668658
 	lda	xwa, (xsp)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp)
 	call	16667249
@@ -5439,7 +5439,7 @@ ReallocVoices_Exit_WriteReg4:
 	pushw	wa
 	ld	xwa, xhl
 	ld	xbc, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16662359
 NoteMap_StoreAndRet:
 	cp	l, 0:i3
@@ -5497,7 +5497,7 @@ VoiceRealloc_LookupVoice:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16661695
 	cp	l, 0:i3
 	jr	z, 63
@@ -5510,7 +5510,7 @@ VoiceRealloc_LookupVoice:
 	ld	xwa, xhl
 	call	16669056
 	lda	xwa, (xsp+2)
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16666008
 	lda	xwa, (xsp+2)
 	call	16667249
@@ -5666,7 +5666,7 @@ ProcessLayeredNoteOn_LoadIter:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16662359
 	cp	l, 0:i3
 	jr	z, 19
@@ -5687,7 +5687,7 @@ ProcessLayeredNoteOn_LoadIter:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16662359
 ProcessLayeredNoteOn_WriteReg5:
 	.byte 0xcf, 0xd8, 0x66, 0x13, 0xb7, 0x30, 0xe8, 0x8a
@@ -5731,7 +5731,7 @@ ProcessLayeredNoteOn_LoadIter2:
 	extz WA
 	pushw wa
 	ld XWA,XDE
-	lds de, 0
+	ld de, 0:i3
 	call 0xfe3cbf
 	cp l, 0:i3
 	jr z, .Lc_fe77d5
@@ -5901,7 +5901,7 @@ NoteMap_CrossChannelReassign:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16662359
 	cp	l, 0:i3
 	jr	z, 19
@@ -5923,7 +5923,7 @@ CrossChannelReassign_WriteReg:
 	extz	wa
 	pushw	wa
 	ld	xwa, xde
-	lds	de, 0
+	ld	de, 0:i3
 	call	16662359
 	cp	l, 0:i3
 	jr	z, 19
@@ -6026,13 +6026,13 @@ SeqPart_MelodicNote_Layer1Done:
 	cp	iz, 20
 	jrl	ge, -554
 	ld	wa, iz
-	lds	bc, 1
-	lds	de, 0
+	ld	bc, 1:i3
+	ld	de, 0:i3
 	call	16689430
 	ld	wa, iz
 	pushw	5
-	lds	bc, 1
-	lds	de, 0
+	ld	bc, 1:i3
+	ld	de, 0:i3
 	call	16567114
 	ld	wa, iz
 	ldw	bc, 432
@@ -6046,17 +6046,17 @@ SeqPart_MelodicNote_SingleLayer:
 	call	16567114
 	ld	wa, iz
 	ldw	bc, 64
-	lds	de, 0
+	ld	de, 0:i3
 	call	16689430
 	ld	wa, iz
 	pushw	5
 	ldw	bc, 64
-	lds	de, 0
+	ld	de, 0:i3
 	call	16567114
 	ld	wa, iz
 	pushw	3
 	ldw	bc, 64
-	lds	de, 0
+	ld	de, 0:i3
 	call	16567114
 	ld	wa, iz
 	ldw	bc, 11
@@ -8684,7 +8684,7 @@ SendPartDataBlocks_LoadDRAM:
 	.byte 0xac, 0x68
 SendPartDataBlocks_LoadDRAM2:
 	pushw	iz
-	lds	hl, 5
+	ld	hl, 5:i3
 	jr	42
 	ldw	hl, 16
 	jr	37
@@ -8710,7 +8710,7 @@ SendPartDataBlocks_Block2:
 	ret
 	ldw	wa, 80
 	ldw	bc, 133
-	lds	de, 0
+	ld	de, 0:i3
 SendPartDataBlocks_Block3:
 	.byte 0x1e, 0x68, 0xfe, 0x1b, 0xaa, 0xb7, 0xfe, 0xef
 	.byte 0x6c, 0xbf, 0x02, 0x41, 0x21, 0x01, 0x8f, 0x02
@@ -8769,8 +8769,8 @@ COMM_SendDataReturn:
 	ld	bc, iz
 	calr	64612
 	ld	wa, qiz
-	lds	bc, 1
-	lds	de, 0
+	ld	bc, 1:i3
+	ld	de, 0:i3
 	calr	64570
 	inc	1, qiz
 	cpw	qiz, 19
@@ -8780,17 +8780,17 @@ COMM_SendDataReturn:
 	ret
 	ldw	wa, 80
 	ldw	bc, 146
-	lds	de, 0
+	ld	de, 0:i3
 	calr	64830
 SendDataReturn_LoadReg:
 	jp	16693162
 	pushw	iz
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 24
 	jr	gt, 18
 	ld	wa, iz
 	ldw	bc, 120
-	lds	de, 0
+	ld	de, 0:i3
 	calr	64520
 	inc	1, iz
 	cp	iz, 24
@@ -8831,7 +8831,7 @@ MIDI_SendChannelPressure:
 	jr	z, 19
 	cp	wa, 65533
 	jr	nz, 22
-	lds	iz, 0
+	ld	iz, 0:i3
 	calr	382
 	ld	wa, iz
 	call	15861706
@@ -8844,7 +8844,7 @@ MIDI_SendChannelPressure:
 	push	xiz
 	cp	(59646:16), 0
 	jr	nz, 5
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	142
 	ld	wa, (59679:16)
 	and	wa, 2
@@ -8853,9 +8853,9 @@ MIDI_SendChannelPressure:
 	ld	wa, (59679:16)
 	bit	2, wa
 	jr	nz, 4
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	117
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	828
 	ld	wa, (59679:16)
 	ld	bc, (59689:16)
@@ -8905,7 +8905,7 @@ MIDI_SendChannelPressure:
 	.byte 0x68
 SeqVoice_CheckAndRet_RestoreReg:
 	push	sr
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	ret
 	dec	6, xsp
@@ -8952,7 +8952,7 @@ SeqVoice_CheckAndRet_Data:
 	ldw (XSP+0x02), 0x0001
 	ld WA,(XSP+0x0e)
 	ld (0xe92d:16), wa
-	lds iz, 0
+	ld iz, 0:i3
 	cp IZ,0x0010
 	jr ge, .Lc_feb9ef
 .Lc_feb976:
@@ -9399,7 +9399,7 @@ PlayModeStateMachine_Prologue:
 	ldw hl, 65535
 	jr 6
 	add (59681:16), xhl
-	lds hl, 0
+	ld hl, 0:i3
 	popw iz
 	lda XSP,(XSP+0x008e)
 	ret
@@ -9417,7 +9417,7 @@ PlayModeStateMachine_Prologue:
 PlayModeStateMachine_LoadParam:
 	nop
 	call	15903192
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ld	c, a
 	cp	c, 247
@@ -9540,7 +9540,7 @@ SeqFile_ReadMagicByte_Loop:
 	jr	c, -22
 	jrl	187
 	ld	(xsp+4), 240
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	wa, qiz
 SeqFile_CheckMagicByte:
 	cp	iz, wa
@@ -9628,17 +9628,17 @@ SeqFile_ValidateTrackMagic:
 SeqFile_SkipTrackPad_Init:
 	ld	wa, qiz
 	calr	63747
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	pushw	iz
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	(59646:16), 0
 	jr	nz, 31
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	79
 	calr	5372
 	cp	hl, 1920
@@ -9957,7 +9957,7 @@ SeqFile_ReadTrackData:
 	.byte 0x00
 SeqFile_ReadTrackDat_LoadIter:
 	nop
-	lds hl, 0
+	ld hl, 0:i3
 	popw iz
 	lda XSP,(XSP+0x0210)
 	ret
@@ -9977,7 +9977,7 @@ SeqFile_ValidateAndS_LoadIter:
 	push	sr
 	lds32	xwa, 0
 	ld	(59685:16), xwa
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 6:i3
 	jr	nc, 19
 	calr	3796
@@ -10038,7 +10038,7 @@ DecodeMidiEvent_LoadParam2:
 	inc	1, iz
 	cp	iz, 3:i3
 	jr	ule, -42
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 3:i3
 	jr	ugt, 19
 	calr	3574
@@ -10072,7 +10072,7 @@ DecodeMidiEvent_LoadAddr:
 	ldb	w, 0
 	extz	xwa
 	ld	(59685:16), xwa
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 1:i3
 	jr	ugt, 19
 	calr	3492
@@ -10106,7 +10106,7 @@ DecodeMidiEvent_LoadParam6:
 	ldb	w, 0
 	extz	xwa
 	ld	(59685:16), xwa
-	lds	iz, 0
+	ld	iz, 0:i3
 	jr	15
 	calr	3394
 	cp	hl, 0:i3
@@ -10169,13 +10169,13 @@ SeqPlay_ReadRemainingBytes:
 	nop
 	call	16567114
 	pushw	2
-	lds	wa, 1
+	ld	wa, 1:i3
 SeqPlay_ReadByte_Loop:
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	call	16567114
 	pushw	2
-	lds	wa, 1
+	ld	wa, 1:i3
 	ldw	bc, 32
 SeqPlay_StoreByte:
 	.byte 0xda, 0xa8, 0x1d, 0x4a, 0xcb, 0xfc, 0x0b, 0x02
@@ -10195,7 +10195,7 @@ SeqPlay_AccumulateDelta:
 	push	sr
 	nop
 	ldw	bc, 128
-	lds	de, 3
+	ld	de, 3:i3
 SeqPlay_CheckSysExMarker:
 	.byte 0x1d, 0x4a, 0xcb, 0xfc, 0xde, 0x61, 0xde, 0xcf
 	.byte 0x10, 0x00, 0x61, 0xea, 0xe8, 0xa8, 0xf1, 0x37
@@ -10232,12 +10232,12 @@ SeqPlay_CheckMidiBuffer:
 SeqPlay_ClearMidiCount:
 	swi	4
 	pushw	2
-	lds	wa, 5
+	ld	wa, 5:i3
 SeqPlay_SetSuccess:
 	.byte 0x31, 0x20
 SeqPlay_Epilogue:
 	nop
-	lds	de, 0
+	ld	de, 0:i3
 	call	16567114
 SeqPlay_ReadFileRecord:
 	.byte 0x0b, 0x02, 0x00, 0xd8, 0xae, 0xd9, 0xa8, 0xda
@@ -10262,19 +10262,19 @@ RecordReadOK_InitVal:
 	.byte 0x4a, 0xcb, 0xfc, 0x0b, 0x02, 0x00, 0x30, 0x09
 RecordReadOK_LoopBody2:
 	nop
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	call	16567114
 	pushw	2
 	ldw	wa, 9
 RecordReadOK_LoadIter:
 	ldw	bc, 32
-	lds	de, 0
+	ld	de, 0:i3
 	call	16567114
 	pushw	2
 	ldw	wa, 10
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 RecordReadOK_LoopCheck2:
 	.byte 0x1d, 0x4a, 0xcb, 0xfc, 0x0b, 0x02, 0x00, 0x30
 RecordReadOK_InitVal2:
@@ -10316,7 +10316,7 @@ RecordReadOK_Block5:
 RecordReadOK_InitVal5:
 	nop
 	ldw	bc, 32
-	lds	de, 0
+	ld	de, 0:i3
 RecordReadOK_Block6:
 	.byte 0x1d, 0x4a, 0xcb, 0xfc, 0x30, 0x63, 0x00, 0x31
 	.byte 0x14, 0x00, 0x1d, 0x5e, 0xa9
@@ -10428,7 +10428,7 @@ Epilogue_Prologue:
 	.byte 0x07, 0xe0, 0xf8, 0x47, 0xde, 0x61, 0xd7, 0xfa
 	.byte 0xf6, 0x61, 0xe3, 0xbf, 0x04, 0x30, 0x1e, 0xdc
 	.byte 0x00
-	lds hl, 0
+	ld hl, 0:i3
 Epilogue_LoadReg:
 	pop XIZ
 	lda xsp, (xsp + 0x0a)
@@ -10674,7 +10674,7 @@ ToneGen_CheckZeroVelocity:
 ToneGen_ResendPacket:
 	ld	wa, qiz
 	calr	59242
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 ToneGen_SendAndReturn:
 	lda	xsp, (xsp+10)
@@ -10724,8 +10724,8 @@ MidiRealtime_DispatchStatus:
 	.byte 0x00, 0x01, 0x40, 0xc1, 0x00, 0x00
 MidiRealtime_SysExStart:
 	nop
-	lds	bc, 0
-	lds	de, 1
+	ld	bc, 0:i3
+	ld	de, 1:i3
 	call	16566832
 	push	xiz
 MidiRealtime_SysExReadLoop:
@@ -10781,8 +10781,8 @@ MidiRealtime_NonSysE_LoadReg3:
 	nop
 	nop
 MidiRealtime_NonSysE_LoadIter:
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	call	16566832
 MidiRealtime_StopAndReturn:
 	.byte 0x4e, 0xbf
@@ -10848,7 +10848,7 @@ ProcessMidiConverge_LoadDRAM:
 	ldw (0xd00c:16), 0x0000
 	ldw (0xd00e:16), 0x0000
 	ldw (0xd010:16), 0x07ff
-	lds de, 0
+	ld de, 0:i3
 	jr t, .Lc_fed8d3
 	.byte 0xda
 ToneGen_ValidateRange_Loop:
@@ -10949,7 +10949,7 @@ SoundParam_InitDefaultBanks:
 .Lc_feda38:
 	incw 1, (0xd812:16)
 .Lc_feda3c:
-	lds hl, 0
+	ld hl, 0:i3
 .Lc_feda3e:
 	ret
 	ld wa, (0xd812:16)
@@ -11275,7 +11275,7 @@ SysexRingBuf_WriteBytesOK:
 	.byte 0x31, 0x39
 SysexRingBuf_WriteBytesReturn:
 	ld	wa, hl
-	lds	bc, 1
+	ld	bc, 1:i3
 MidiRingBuf_Init:
 	.byte 0x32, 0x00, 0x0e, 0x1e, 0x71, 0xfe, 0xc7, 0xfb
 	.byte 0x9f, 0xd8, 0xad, 0x1d, 0xaa, 0x1d, 0xef, 0xc7
@@ -11448,7 +11448,7 @@ SndParam_ApplyMaskClamp:
 	cp A,0x0f
 	jr z, .Lc_fee172
 	extz WA
-	lds bc, 0
+	ld bc, 0:i3
 	.byte 0x1d, 0x26
 ApplyMaskClamp_LoadParam:
 	.byte 0xcd, 0xfc, 0xbe, 0x02, 0x31, 0xdb, 0xcf, 0xf0
@@ -11748,7 +11748,7 @@ SndParam_StoreNoteValue:
 SndParam_SetDefaultKeyOff:
 	swi	7
 	swi	7
-	lds	de, 0
+	ld	de, 0:i3
 	jr	83
 	ld	a, (xsp)
 	exts	wa
@@ -11758,14 +11758,14 @@ SndParam_CheckAndApplyMode:
 	nop
 	pushw	0
 	ldw	bc, 127
-	lds	de, 0
+	ld	de, 0:i3
 	jr	66
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
 	pushw	0
 	ldw	bc, 65535
-	lds	de, 0
+	ld	de, 0:i3
 	jr	49
 	ld	a, (xsp)
 SndParam_LookupFromPointerTable:
@@ -11773,14 +11773,14 @@ SndParam_LookupFromPointerTable:
 	pushw	10
 	pushw	6
 	ldw	bc, 65535
-	lds	de, 0
+	ld	de, 0:i3
 	jr	32
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
 	pushw	0
 	ldw	bc, 127
-	lds	de, 0
+	ld	de, 0:i3
 	jr	15
 	ld	a, (xsp)
 	exts	wa
@@ -11813,7 +11813,7 @@ SndParam_ApplyMaskAndCheck:
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
-	lds	de, 0
+	ld	de, 0:i3
 	jrl	328
 	extz	hl
 	mul	hl, 80
@@ -11846,7 +11846,7 @@ SndParam_TypeDispatch:
 SndParam_TypeDispatch_Entry1:
 	swi	7
 	swi	7
-	lds	de, 0
+	ld	de, 0:i3
 	jrl	169
 	pushw	127
 TypeDispatch_Entry1_Extend:
@@ -11895,13 +11895,13 @@ OffsetDispatch_SetWord3:
 	ld	wa, (xsp+10)
 SndParam_LookupTableConverge:
 	ldw	bc, 127
-	lds	de, 0
+	ld	de, 0:i3
 	jr	14
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
-	lds	de, 0
+	ld	de, 0:i3
 	calr	64612
 	ld	(xsp+8), l
 LookupTableConverge_LoadReg:
@@ -11993,7 +11993,7 @@ Param_SignExtendRetu_Return:
 	jr	c, -46
 	ld	bc, (xsp+6)
 	inc	8, bc
-	lds	wa, 3
+	ld	wa, 3:i3
 	ld	xde, 57596
 	call	15676106
 	ldw	(xsp+18), 0
@@ -12021,7 +12021,7 @@ Param_SignExtendRetu_Return:
 	jr nz, .Lc_fee944
 .Lc_fee939:
 	ld (0xe0f7:16), xde
-	lds wa, 3
+	ld wa, 3:i3
 	ldw BC, 0x0015
 	jr t, .Lc_fee95b
 .Lc_fee944:
@@ -12033,14 +12033,14 @@ Param_SignExtendRetu_Return:
 	cp w, 2:i3
 	jr nc, .Lc_fee963
 	ld (0xe0f7:16), xde
-	lds wa, 3
+	ld wa, 3:i3
 	ldw BC, 0x0015
 .Lc_fee95b:
 	call sendCOMM
-	lds hl, 0
+	ld hl, 0:i3
 	jr t, .Lc_fee965
 .Lc_fee963:
-	lds hl, 1
+	ld hl, 1:i3
 .Lc_fee965:
 	ret
 	.byte 0xef, 0x6a, 0x3e, 0xf1, 0xf7, 0xe0, 0x60, 0xb0
@@ -12093,7 +12093,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+7), l
 	ld	(xde+8), a
 	ld	(xde+9), c
-	lds	wa, 3
+	ld	wa, 3:i3
 	ldw	bc, 10
 	call	15676106
 	ld	l, (57891:16)
@@ -12112,7 +12112,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+7), l
 	ld	(xde+8), a
 	ld	(xde+9), c
-	lds	wa, 3
+	ld	wa, 3:i3
 	ldw	bc, 10
 	call	15676106
 	ld	l, (57901:16)
@@ -12131,7 +12131,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+7), l
 	ld	(xde+8), a
 	ld	(xde+9), c
-	lds	wa, 3
+	ld	wa, 3:i3
 	ldw	bc, 10
 	call	15676106
 	ld	l, (57911:16)
@@ -12150,7 +12150,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+7), l
 	ld	(xde+8), a
 	ld	(xde+9), c
-	lds	wa, 3
+	ld	wa, 3:i3
 	ldw	bc, 10
 	call	15676106
 	ld	l, (57921:16)
@@ -12205,7 +12205,7 @@ Param_SignExtendRetu_Return:
 	ld	c, (xhl)
 	inc	8, c
 	extz	bc
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15676106
 	inc	1, (57595:16)
 	ld	l, (57595:16)
@@ -12394,7 +12394,7 @@ SendCOMM_VariableLen_LoadReg:
 	ld	xhl, 14859584
 	nop
 	ldw	bc, 36
-	lds	de, 1
+	ld	de, 1:i3
 	call	16706586
 	ret
 	ldb	c, 0
@@ -12835,7 +12835,7 @@ SendPartDataBlock_Data:
 	ldw DE, 0x24b8
 	lda xbc, (0x1e0000:24)
 	lda xwa, (xbc + 0x10)
-	lds hl, 0
+	ld hl, 0:i3
 	.byte 0xd5, 0xe1, 0x83, 0xda, 0x1c, 0xfa, 0xdb, 0x06
 	.byte 0xf3, 0xe5, 0xa8, 0x72, 0x53, 0x0e, 0xf3, 0xfd
 	.byte 0x48, 0xfe, 0x37, 0x3e, 0xf3, 0xfd, 0xb8, 0x01
@@ -12918,7 +12918,7 @@ SendPartDataBlock_Data4:
 	jr	ugt, 7
 	cp	l, 1:i3
 	jr	c, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ldw	hl, 65434
 	ret
@@ -13155,7 +13155,7 @@ PostTmSave:
 	.byte 0x63, 0x30, 0x90, 0x00, 0xaf, 0x0e, 0x21
 PostTmSave_ByteBlock:
 	ld	(xbc), wa
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	3
 	ldw	hl, 65434
 	popw	iz
@@ -13193,8 +13193,8 @@ TmFlashWrite_Block1_Entry:
 	.byte 0x61, 0xdb, 0x61, 0x81, 0x3f, 0x00, 0x6e, 0xe5
 	.byte 0x0e
 	ld XHL,(XSP+0x04)
-	lds iy, 0
-	lds ix, 0
+	ld iy, 0:i3
+	ld ix, 0:i3
 	lda xbc, (CharMap_FullPermutation_0x660:24)
 	jr t, .Lc_ff01d3
 .Lc_ff01d1:
@@ -13233,7 +13233,7 @@ TmFlashWrite_ValidateParams:
 	mul xde, xwa
 	add XHL,XDE
 	ld QHL,HL
-	lds hl, 0
+	ld hl, 0:i3
 	mul xwa, xbc
 	add XHL,XWA
 	ret
@@ -13263,7 +13263,7 @@ TmFlash_WriteRoutine:
 	ld XWA,(XSP+0x04)
 	or XWA,XWA
 	ret Z
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15670909
 	ld	xbc, (xsp+4)
 	dec	6, xbc
@@ -13273,7 +13273,7 @@ TmFlash_WriteRoutine:
 	lds32	xwa, 0
 	ld	(xbc), xwa
 	ld	(251180:24), xbc
-	lds	wa, 1
+	ld	wa, 1:i3
 	jp	15670698
 	ld	xix, (251180:24)
 	ld	xde, xix
@@ -13287,7 +13287,7 @@ TmFlash_WriteRoutine:
 	jr	nz, -12
 	cp	xbc, xix
 	jr	nz, 6
-	lds	wa, 1
+	ld	wa, 1:i3
 	jp	15670698
 	ld	hl, (xbc+4)
 	extz	xhl
@@ -13309,7 +13309,7 @@ TmFlash_WriteRoutine:
 	ld	xwa, (251180:24)
 	ld	(xbc), xwa
 	ld	(251180:24), xbc
-	lds	wa, 1
+	ld	wa, 1:i3
 	jp	15670698
 	or	xix, xix
 	jr	z, 21
@@ -13339,7 +13339,7 @@ TmFlash_BulkTransferToSubCPU:
 	ld	(xde+4), wa
 	jr	2
 	ld	(xde), xbc
-	lds	wa, 1
+	ld	wa, 1:i3
 	jp	15670698
 	ldb	e, 0
 	bit	15, qwa
@@ -13422,7 +13422,7 @@ VoiceParam_DispatchTable1:
 	.byte 0x68, 0x06, 0xf5, 0xf0, 0x00, 0x00, 0xd9, 0x69
 	.byte 0xd9, 0xd8, 0x6e, 0xf6, 0x0e
 	ld BC,(XSP+0x0c)
-	lds hl, 0
+	ld hl, 0:i3
 	cp bc, 0:i3
 	ret Z
 	.byte 0xaf, 0x04, 0x24, 0xaf, 0x08, 0x25, 0xed, 0xf4

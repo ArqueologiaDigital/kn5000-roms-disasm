@@ -22,7 +22,7 @@
 ; Notes: Includes 256-iteration delay loop before write for bus timing
 ; -----------------------------------------------------------------------------
 Write_VGA_Register:
-	lds de, 0	; Initialize delay counter
+	ld de, 0:i3	; Initialize delay counter
 
 Write_VGA_Register__delay:
 	inc 1, de	; Increment counter

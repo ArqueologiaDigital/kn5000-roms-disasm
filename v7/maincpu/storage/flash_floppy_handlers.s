@@ -672,25 +672,25 @@ NAKA_InitDataBlock:
 	ret
 	calr	371
 	calr	56
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	2205
 	calr	48
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	2197
 	calr	40
-	lds	wa, 3
+	ld	wa, 3:i3
 	calr	2189
 	calr	32
-	lds	wa, 4
+	ld	wa, 4:i3
 	calr	2181
 	calr	24
-	lds	wa, 5
+	ld	wa, 5:i3
 	calr	2173
 	calr	16
-	lds	wa, 6
+	ld	wa, 6:i3
 	calr	2165
 	calr	8
-	lds	wa, 7
+	ld	wa, 7:i3
 	calr	2157
 	jrl	5626
 
@@ -759,7 +759,7 @@ NoteEvent_CopyExtParamsInner:
 	lda xhl, (xwa + 10)
 	ld xwa, (3186:16)
 	lda xwa, (xwa + 96)
-	lds de, 4
+	ld de, 4:i3
 
 NoteEvent_WriteRegOffsets_Loop:
 	ld ix, de
@@ -786,7 +786,7 @@ NoteEvent_WriteRegOffsets_Loop:
 	lda xwa, (xwa + 96)
 	cp de, 0x95
 	jr ule, NoteEvent_WriteRegOffsets_Loop
-	lds de, 0
+	ld de, 0:i3
 	ld xwa, 0x1400
 
 NoteEvent_CopySlotData_Loop:
@@ -1307,7 +1307,7 @@ PartGrid_OperationsBlock:
 
 ; PartGrid column dispatch end
 PartGrid_ColumnDispatch_End:
-	lds wa, 0
+	ld wa, 0:i3
 	jr PartGrid_ColumnDispatch_Default
 
 ; PartGrid column dispatch default case
@@ -1340,7 +1340,7 @@ PartGrid_DefaultLoop_Outer:
 	add xde, 0x60
 	add xde, (3186:16)
 	ld (xde), wa
-	lds iz, 2
+	ld iz, 2:i3
 
 PartGrid_DefaultLoop_Inner:
 	ld bc, iz
@@ -1510,7 +1510,7 @@ Flash_SectorWriteExecute:
 	lda_dri XBC, 0xe1, 0x00, 0x68
 	ld xwa, (xsp + 4)
 	lda_dri XDE, 0xe1, 0x00, 0x68
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
 	ld xiy, (xsp + 4)
 	sub xiy, 0x9800
@@ -1532,7 +1532,7 @@ Flash_CopyMirrorLoop:
 	lda_dri XBC, 0xe1, 0x00, 0x68
 	ld xde, (xsp + 4)
 	sub xde, 0x9800
-	lds wa, 1
+	ld wa, 1:i3
 	jr Flash_EraseAndWriteFinal
 	ld xwa, (3198:16)
 	ld (xsp + 4), xwa
@@ -1556,7 +1556,7 @@ NoteEvent_StoreCommon:
 	jrl nz, Flash_SectorWriteExecute
 
 Flash_WriteSectorWithMirrorCopy:
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, (xsp)
 	ld xde, (xsp + 4)
 	call Flash_EraseSectorAndWrite
@@ -1580,7 +1580,7 @@ Flash_CopyReverseMirrorLoop:
 	jr c, Flash_CopyReverseMirrorLoop
 	ld xde, (xsp + 4)
 	add xde, 0x10000
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, (xsp)
 
 Flash_EraseAndWriteFinal:
@@ -1750,7 +1750,7 @@ Flash_ExtendedOpsBlock:
 	extz WA
 	ld_erpb_rr c, 0xfb
 	extz BC
-	lds de, 0
+	ld de, 0:i3
 	calr Util_FrameSetup10
 	lda xwa, (0x07a0:16)
 	cp HL,(XWA)
@@ -1761,7 +1761,7 @@ Flash_ExtendedOpsBlock:
 	ld_erpb_rr c, 0xfb
 	extz BC
 	pushw hl
-	lds de, 0
+	ld de, 0:i3
 	calr PartGrid_OperationsBlock
 .Lc_f17562:
 	incb_erp 0xf9, 1
@@ -2119,14 +2119,14 @@ Flash_ExtendedOpsBlock:
 	ldirw
 	ld xbc, (0x0c96:16)
 	ld xde, (0x0c92:16)
-	lds wa, 1
+	ld wa, 1:i3
 	jp Flash_EraseSectorAndWrite
 	ldb L, 0x00
 	ld xde, (0x0c92:16)
 	ldb B, 0x00
 	cp a, 0:i3
 	jr nz, .Lc_f17f68
-	lds wa, 0
+	ld wa, 0:i3
 .Lc_f17f48:
 	ld IX,WA
 	add IX,0x0010
@@ -2144,7 +2144,7 @@ Flash_ExtendedOpsBlock:
 	jr c, .Lc_f17f48
 	jr t, .Lc_f17f87
 .Lc_f17f68:
-	lds wa, 0
+	ld wa, 0:i3
 .Lc_f17f6a:
 	ld IX,WA
 	add IX,0x0050
@@ -2192,7 +2192,7 @@ DualVoice_ScanColumnLoop:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 0
+	ld de, 0:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2210,7 +2210,7 @@ DualVoice_ScanRow1:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 1
+	ld de, 1:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2221,7 +2221,7 @@ DualVoice_ScanRow1:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 2
+	ld de, 2:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2232,7 +2232,7 @@ DualVoice_ScanRow1:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 3
+	ld de, 3:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2243,7 +2243,7 @@ DualVoice_ScanRow1:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 4
+	ld de, 4:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2269,7 +2269,7 @@ DualVoice_ScanColumnLoopAlt:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 0
+	ld de, 0:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2287,7 +2287,7 @@ DualVoice_ScanRow1Alt:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 1
+	ld de, 1:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2298,7 +2298,7 @@ DualVoice_ScanRow1Alt:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 2
+	ld de, 2:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2309,7 +2309,7 @@ DualVoice_ScanRow1Alt:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 3
+	ld de, 3:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2320,7 +2320,7 @@ DualVoice_ScanRow1Alt:
 	extz wa
 	stb_erp C, 0xfb
 	extz bc
-	lds de, 4
+	ld de, 4:i3
 	calr Util_FrameSetup10
 	ld wa, hl
 	ld bc, wa
@@ -2338,7 +2338,7 @@ SlotTable_InitBank1748:
 	lda xbc, (1748:16)
 	ldw (xbc), 0xffff
 	ldb l, 0x0
-	lds wa, 0
+	ld wa, 0:i3
 
 SlotTable_InitBank1748_Loop:
 	ld de, wa
@@ -2354,7 +2354,7 @@ SlotTable_InitBank1850:
 	lda xbc, (1850:16)
 	ldw (xbc), 0xffff
 	ldb l, 0x0
-	lds wa, 0
+	ld wa, 0:i3
 
 SlotTable_InitBank1850_Loop:
 	ld de, wa
@@ -2401,7 +2401,7 @@ SlotTable_ExtendedOpsBlock:
 	lda	xbc, (xix+108)
 	ld	xwa, xbc
 	lda	xde, (xix+106)
-	lds	hl, 0
+	ld	hl, 0:i3
 	lda xbc, (xbc+200)
 	ld iy, hl
 	inc	6, iy
@@ -2424,7 +2424,7 @@ SlotTable_ExtendedOpsBlock:
 	lda	xbc, (xix+108)
 	ld	xwa, xbc
 	lda	xde, (xix+106)
-	lds	hl, 0
+	ld	hl, 0:i3
 	lda	xbc, (xbc+200)
 	ld	iy, hl
 	inc	6, iy
@@ -2440,7 +2440,7 @@ SlotTable_ExtendedOpsBlock:
 	lda	xbc, (3074:16)
 	ldw (xbc), 65535
 	ldb	l, 0
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	de, wa
 	inc	2, de
 	.byte 0xf3
@@ -2457,7 +2457,7 @@ SlotTable_ExtendedOpsBlock:
 	lda	xbc, (2972:16)
 	ldw (xbc), 65535
 	ldb	l, 0
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	de, wa
 	inc	2, de
 	.byte 0xf3
@@ -2533,7 +2533,7 @@ Flash_WriteBackSlotTable:
 	ldb w, 0x0
 	add a, 0x28
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VoiceParam_ComputeOffset
 
 Flash_WriteBackSlot_StartLoop:
@@ -2550,7 +2550,7 @@ Flash_WriteBackSlot_Loop:
 	jr z, Flash_WriteBackSlot_Erase
 	and wa, 0x7f
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VoiceParam_ComputeOffset
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x32
@@ -2559,7 +2559,7 @@ Flash_WriteBackSlot_Loop:
 Flash_WriteBackSlot_Erase:
 	ld xbc, (3222:16)
 	ld xde, (3218:16)
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
 	popw_erp 0xfa
 	ret
@@ -2594,7 +2594,7 @@ Flash_SlotUpdateOpsBlock:
 	extz WA
 	ld_erpb_rr c, 0xfb
 	extz BC
-	lds de, 0
+	ld de, 0:i3
 	calr Util_FrameSetup10
 	lds_erpb 0xfa, 1
 .Lc_f18401:
@@ -2721,7 +2721,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, .Lc_f187bb
-	lds wa, 1
+	ld wa, 1:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -2731,7 +2731,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, .Lc_f187bb
-	lds wa, 2
+	ld wa, 2:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -2741,7 +2741,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, .Lc_f187bb
-	lds wa, 3
+	ld wa, 3:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -2751,7 +2751,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, .Lc_f187bb
-	lds wa, 4
+	ld wa, 4:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -2761,7 +2761,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jr lt, .Lc_f187bb
-	lds wa, 5
+	ld wa, 5:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -2771,7 +2771,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jr lt, .Lc_f187bb
-	lds wa, 6
+	ld wa, 6:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -2781,7 +2781,7 @@ Flash_SlotUpdateOpsBlock:
 	ld IZ,HL
 	cp iz, 0:i3
 	jr lt, .Lc_f187bb
-	lds wa, 7
+	ld wa, 7:i3
 	calr NoteEventBuffer_Store
 	ld xix, (0x0c96:16)
 	ld xiy, (0x0c92:16)
@@ -2796,7 +2796,7 @@ Flash_SlotUpdateOpsBlock:
 	jr lt, .Lc_f187bb
 	ld xbc, (0x0c96:16)
 	ld xde, (0x0c92:16)
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
 	call 0xfefeaf
 .Lc_f187bb:
@@ -2930,7 +2930,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jrl	lt, 296
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-6169
 	ld	xwa, (3186:16)
 	lds32	xde, 0
@@ -2944,7 +2944,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jrl	lt, 256
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	-6209
 	ld	xwa, (3186:16)
 	lds32	xde, 0
@@ -2958,7 +2958,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jrl	lt, 216
-	lds	wa, 3
+	ld	wa, 3:i3
 	calr	-6249
 	ld	xwa, (3186:16)
 	lds32	xde, 0
@@ -2972,7 +2972,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jrl	lt, 176
-	lds	wa, 4
+	ld	wa, 4:i3
 	calr	-6289
 	ld	xwa, (3186:16)
 	lds32	xde, 0
@@ -2986,7 +2986,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jrl	lt, 136
-	lds	wa, 5
+	ld	wa, 5:i3
 	calr	-6329
 	ld	xhl, (3186:16)
 	lds32	xde, 0
@@ -3001,7 +3001,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jr	lt, 95
-	lds	wa, 6
+	ld	wa, 6:i3
 	calr	-6370
 	ld	xhl, (3186:16)
 	lds32	xde, 0
@@ -3016,7 +3016,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cp	hl, 0:i3
 	jr	lt, 54
-	lds	wa, 7
+	ld	wa, 7:i3
 	calr	-6411
 	ld	xhl, (3186:16)
 	lds32	xde, 0
@@ -3070,7 +3070,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 1
+	ld wa, 1:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -3082,7 +3082,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 2
+	ld wa, 2:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -3094,7 +3094,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 3
+	ld wa, 3:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -3106,7 +3106,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 4
+	ld wa, 4:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -3118,7 +3118,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 5
+	ld wa, 5:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -3130,7 +3130,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jr lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 6
+	ld wa, 6:i3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
 	ld xwa, (0x0c72:16)
@@ -3142,7 +3142,7 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cp iz, 0:i3
 	jr lt, FloppyCtrl_LoadIzAndContinue
-	lds wa, 7
+	ld wa, 7:i3
 	calr NoteEventBuffer_Store
 	ld xix, (0x0c96:16)
 	ld xiy, (0x0c92:16)
@@ -3159,7 +3159,7 @@ FloppyDisk_LoadNoteEvents:
 	jr lt, FloppyCtrl_LoadIzAndContinue
 	ld xbc, (0x0c96:16)
 	ld xde, (0x0c92:16)
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
 	call 0xfefeaf
 FloppyCtrl_LoadIzAndContinue:
@@ -3307,7 +3307,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 1
+	ld wa, 1:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
 	lds32 xde, 0
@@ -3323,7 +3323,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 2
+	ld wa, 2:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
 	lds32 xde, 0
@@ -3339,7 +3339,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 3
+	ld wa, 3:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
 	lds32 xde, 0
@@ -3355,7 +3355,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 4
+	ld wa, 4:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
 	lds32 xde, 0
@@ -3371,7 +3371,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 5
+	ld wa, 5:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xhl, (3186:16)
 	lds32 xde, 0
@@ -3388,7 +3388,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jr lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 6
+	ld wa, 6:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xhl, (3186:16)
 	lds32 xde, 0
@@ -3405,7 +3405,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jr lt, FloppyCtrl_PopIzStoreRet
-	lds wa, 7
+	ld wa, 7:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xhl, (3186:16)
 	lds32 xde, 0
@@ -3525,7 +3525,7 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0x66, 0x03, 0xbf, 0x04, 0x53, 0x9f, 0x04, 0x23
 	.byte 0xef, 0x66, 0x0e
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	res 0, (0x3514:16)
 	call DualVoice_ParamLoadDone
 	ld a, (0x3514:16)
@@ -3544,7 +3544,7 @@ ToneParam_ExtendedOpsBlock:
 	popw iz
 	ret
 	ldb L, 0x00
-	lds de, 0
+	ld de, 0:i3
 .Lc_f1919c:
 	ld WA,DE
 	add WA,0x0060
@@ -4847,7 +4847,7 @@ AcCmpMdBox_InheritAndRefresh:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, 0x94810
-	lds bc, 1
+	ld bc, 1:i3
 	call MainRamGet
 	jr GridBoxProc_Return
 
@@ -4970,7 +4970,7 @@ CmpSetP1_DialGrid:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl CmpSetP1_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -5028,7 +5028,7 @@ CmpSetP1_SendAndApplyFunc:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl CmpSetP1_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -5086,7 +5086,7 @@ CmpSetP1_DialDownSendApply:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 CmpSetP1_SetDialEnable:
 	call SetDialEnable
@@ -5270,10 +5270,10 @@ UI_COMPONENT_DISPATCH_CASE2_COMMON:
 	push xwa	; Push parameter
 	jr UI_COMPONENT_DISPATCH_PUSH_CALL	; Jump to push and call
 UI_COMPONENT_DISPATCH_CASE4:
-	lds wa, 6	; Load 6
+	ld wa, 6:i3	; Load 6
 	jr UI_COMPONENT_DISPATCH_CASE5_COMMON	; Jump to common code
 UI_COMPONENT_DISPATCH_CASE5:
-	lds wa, 5	; Load 5
+	ld wa, 5:i3	; Load 5
 UI_COMPONENT_DISPATCH_CASE5_COMMON:
 	.byte 0xc1, 0x4e, 0x34, 0x23, 0xc9, 0xcc, 0x0f, 0x66
 	.byte 0x02, 0xcb, 0xff
@@ -5408,12 +5408,12 @@ CmpSet_GridCheck_Dispatch:
 	jr z, GridCheck_SetMode1
 	cp de, 1:i3
 	jr nz, GridCheck_GetFocusAndSend
-	lds wa, 0
+	ld wa, 0:i3
 	ld xiz, 0x3da4e
 	jr GridCheck_LookupAndSend
 
 GridCheck_SetMode1:
-	lds wa, 1
+	ld wa, 1:i3
 	ld xiz, 0x3d9c6
 
 GridCheck_LookupAndSend:
@@ -5643,8 +5643,8 @@ ApcOnOffFunc:
 	cp xbc, 0x1e0003b
 	jr nz, ApcOnOff_ReturnZero
 	ld xwa, 0x28081
-	lds bc, 1
-	lds de, 4
+	ld bc, 1:i3
+	ld de, 4:i3
 	call MainLswPut
 
 ApcOnOff_ReturnZero:
@@ -5655,8 +5655,8 @@ ApcOnBasFunc:
 	cp xbc, 0x1e0003b
 	jr nz, ApcOnBas_ReturnZero
 	ld xwa, 0x28083
-	lds bc, 1
-	lds de, 4
+	ld bc, 1:i3
+	ld de, 4:i3
 	call MainLswPut
 
 ApcOnBas_ReturnZero:
@@ -5689,7 +5689,7 @@ AcApcMdBoxProc:
 	ld xwa, xiz
 	ld xbc, 0x28080
 	call SetLswFilter
-	lds wa, 0
+	ld wa, 0:i3
 	jrl AcApcMdBox_SetDialEnable
 
 AcApcMdBox_ResetFilter:
@@ -5763,9 +5763,9 @@ AcApcMdBox_HandleTitleDisp:
 	jr z, AcS2cMem_ReturnZeroJmp
 	ld XWA,0x00028080
 	ld BC,IZ
-	lds de, 4
+	ld de, 4:i3
 	call MainLswPut
-	lds wa, 0
+	ld wa, 0:i3
 AcApcMdBox_SetDialEnable:
 	call SetDialEnable
 
@@ -6094,7 +6094,7 @@ FdcFormat_DialGrid:
 	ld	xwa, (xsp+16)
 	ld	xbc, 29360152
 	call	16359805
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	349
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
@@ -6147,7 +6147,7 @@ S2cGrid_DialDownSendApply:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl S2cGrid_SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
@@ -6201,7 +6201,7 @@ S2cGrid_DialUpSendApply:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 S2cGrid_SetDialEnable:
 	call SetDialEnable

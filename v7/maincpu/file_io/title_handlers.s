@@ -68,14 +68,14 @@ SetupFlashFunc:
 	ld	(32422:16), 37
 	ldw	wa, 238
 	call	16355504
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	16535006
 	ld	(32422:16), 35
 	ldw	wa, 238
 	call	16355504
 	jr	6
 SetupFlash_HandleLoadEvent:
-	lds wa, 6
+	ld wa, 6:i3
 	call Audio_DispatchCommand
 
 SetupFlash_Return:
@@ -89,7 +89,7 @@ FmmUtilityTitleFunc:
 	cp	xde, 2
 	jrl	nz, 369
 	ld	(33890:16), 0
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-1702
 	ld	xwa, 8060947
 	ld	xbc, 31784965
@@ -214,7 +214,7 @@ FmmSmfUtilityTitleFunc:
 	cp	xde, 2
 	jrl	nz, 369
 	ld	(33890:16), 0
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-2101
 	ld	xwa, 8060970
 	ld	xbc, 31784965

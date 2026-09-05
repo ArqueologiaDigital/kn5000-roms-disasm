@@ -138,7 +138,7 @@ CPanel_InitLEDBuffer:
 	.byte 0xc1, 0xf3, 0x8c, 0x3c, 0xaf, 0xc1, 0xf3, 0x8c
 	.byte 0x21, 0xf0, 0x3f, 0x41, 0x0e
 DELAY_2_LOOPS:
-	lds wa, 2
+	ld wa, 2:i3
 
 Delay2L_Loop:
 	dec 1, wa
@@ -151,7 +151,7 @@ Delay2L_Done:
 
 
 DELAY_6_LOOPS:
-	lds wa, 6
+	ld wa, 6:i3
 
 Delay6L_Loop:
 	dec 1, wa
@@ -236,28 +236,28 @@ Delay51T_Loop:
 CPanel_CheckSpecialCombos:
 	cp (0x8dc2:16), 0x6c
 	jr nz, .Lc_fc39a5
-	lds hl, 3
+	ld hl, 3:i3
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckAllInitSetting:
 .Lc_fc39a5:
 	cp (0x8daf:16), 0x70
 	jr nz, .Lc_fc39b0
-	lds hl, 2
+	ld hl, 2:i3
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckFactoryReset:
 .Lc_fc39b0:
 	cp (0x8dc4:16), 0x38
 	jr nz, .Lc_fc39bb
-	lds hl, 1
+	ld hl, 1:i3
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckFlashUpdate:
 .Lc_fc39bb:
 	cp (0x8db4:16), 0x0f
 	jr nz, CPanel_Combo_NormalBoot
-	lds hl, 4
+	ld hl, 4:i3
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_NormalBoot:
-	lds hl, 0		; No combo: normal boot
+	ld hl, 0:i3		; No combo: normal boot
 
 CPanel_CheckSpecialCombos_Return:
 	ret
@@ -1095,7 +1095,7 @@ CPanel_IncRXPtr:
 	inc 1, iy
 	cp iy, 0x5c
 	jr c, IncRX_NoWrap
-	lds iy, 0
+	ld iy, 0:i3
 
 IncRX_NoWrap:
 	ret
@@ -1105,7 +1105,7 @@ CPanel_IncLEDPtr:
 	inc 1, iy
 	cp iy, 0x3c
 	jr c, IncLED_NoWrap
-	lds iy, 0
+	ld iy, 0:i3
 
 IncLED_NoWrap:
 	ret
@@ -1115,7 +1115,7 @@ CPanel_IncEventPtr:
 	inc 1, ix
 	cp ix, 0x80
 	jr c, IncEvt_NoWrap
-	lds ix, 0
+	ld ix, 0:i3
 
 IncEvt_NoWrap:
 	ret

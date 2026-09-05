@@ -1105,7 +1105,7 @@ FileIO_BytecodeData:
 	dec	6, xsp
 	ld	a, (36154:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16569591
 	ld	(xsp+3), l
 	ld	a, (36154:16)
@@ -1699,7 +1699,7 @@ ExtDev_SndParam_DispatchComplex:
 VoiceEntry_FindMasterVolume:
 	lda xde, (0xc039:16)
 	lds32 xbc, 0
-	lds wa, 0
+	ld wa, 0:i3
 	jr VoiceEntry_CheckTerminator
 
 VoiceEntry_CheckMatch:
@@ -2080,34 +2080,34 @@ MidiCC_ResetState:
 MidiParam_ForceResync:
 	ld (297:16), 131
 	ld (296:16), 7
-	lds wa, 0
+	ld wa, 0:i3
 	calr MidiChannel_GetParamByIndex
 	ld a, l
-	lds bc, 2
+	ld bc, 2:i3
 	call CPanel_EncoderDispatch
 	ld a, (0x8ee4:16)
 	cpl a
 	ld (0x8ee4:16), a
-	lds wa, 0
+	ld wa, 0:i3
 	calr MidiChannel_GetParamByIndex
 	ld a, l
-	lds bc, 2
+	ld bc, 2:i3
 	call CPanel_EncoderDispatch
 	lda xwa, (0x8f10:16)
 	ld (xwa), l
 	setm 7, (xwa + 1)
-	lds wa, 1
+	ld wa, 1:i3
 	calr MidiChannel_GetParamByIndex
 	ld a, l
-	lds bc, 5
+	ld bc, 5:i3
 	call CPanel_EncoderDispatch
 	ld a, (0x8ef4:16)
 	cpl a
 	ld (0x8ef4:16), a
-	lds wa, 1
+	ld wa, 1:i3
 	calr MidiChannel_GetParamByIndex
 	ld a, l
-	lds bc, 5
+	ld bc, 5:i3
 	call CPanel_EncoderDispatch
 	lda xwa, (0x8f16:16)
 	ld (xwa), l
@@ -2151,7 +2151,7 @@ MidiParam_ProcessChannel0:
 	dec 4, xsp
 	pushw_erp 0xfa
 	ld (xsp + 2), xwa
-	lds wa, 0
+	ld wa, 0:i3
 	calr MidiChannel_GetParamByIndex
 	ldb_erp L, 0xfb
 	stb_erp A, 0xfb
@@ -2168,7 +2168,7 @@ MidiParam_ProcessChannel0:
 	ld (0x8efc:16), a
 	stb_erp A, 0xfb
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	call CPanel_EncoderDispatch
 	cp hl, 0xffff
 	jr z, MidiParam_Ch0_Done
@@ -2185,7 +2185,7 @@ MidiParam_ProcessChannel1:
 	dec 4, xsp
 	pushw_erp 0xfa
 	ld (xsp + 2), xwa
-	lds wa, 1
+	ld wa, 1:i3
 	calr MidiChannel_GetParamByIndex
 	ldb_erp L, 0xfb
 	stb_erp A, 0xfb
@@ -2202,7 +2202,7 @@ MidiParam_ProcessChannel1:
 	ld (0x8efe:16), a
 	stb_erp A, 0xfb
 	extz wa
-	lds bc, 5
+	ld bc, 5:i3
 	call CPanel_EncoderDispatch
 	cp hl, 0xffff
 	jr z, MidiParam_Ch1_Done
@@ -2973,7 +2973,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	call	GetCurrentPartSelect
 	extz	hl
 	ld	wa, hl
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	SndParam_LookupViaEncode
 	ld	(xsp+11), l
 	call	GetCurrentPartSelect
@@ -3768,7 +3768,7 @@ CtrlPanel_LookupIndicatorEntry:
 	ret
 
 Util_FindLowestSetBit:
-	lds hl, 0
+	ld hl, 0:i3
 	or xwa, xwa
 	ret z
 	bit 0, wa
@@ -3821,8 +3821,8 @@ Audio_ResetAfterPayloadError:
 	cp hl, 1:i3
 	jr nz, Audio_ReinitDisplay
 	ld xwa, 0xc0
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	push xde
 	push xhl
@@ -3890,7 +3890,7 @@ Audio_ReinitToneGenAndOutput:
 	jr z, Audio_UpdateTempoAndReturn
 	pushw 0x7f
 	ldw wa, 0xb0
-	lds bc, 1
+	ld bc, 1:i3
 	ldw de, 0x7f
 	calr MIDI_WriteCommandToBuffer
 	push xde
@@ -3916,8 +3916,8 @@ Audio_FullReinitWithPreset:
 	cp hl, 0:i3
 	jr nz, Audio_CheckAndReinitReverb
 	ld xwa, 0xc0
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	push xde
 	push xhl
@@ -3936,7 +3936,7 @@ Audio_CheckAndReinitReverb:
 	ret nz
 	ld xwa, 0x4001
 	ldw bc, 0x7f
-	lds de, 2
+	ld de, 2:i3
 	call SoundParam_NotifyChange
 	push xde
 	push xhl
@@ -4038,7 +4038,7 @@ VoiceData_ExtendedParamSetup:
 	ld	(xsp+2), xwa
 	lda	xwa, (0xf9a0:16)
 	ld	(xsp+6), xwa
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 26
@@ -4200,7 +4200,7 @@ VoiceData_ExtendedParamSetup:
 	extz	de
 	pushw	4
 	ldw	wa, 145
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	799
 	push	xde
 	push	xhl
@@ -4370,7 +4370,7 @@ Display_SetRegionNon2:
 	ld (0x00ffc8:24), 0x02
 
 Display_RegionDone:
-	lds wa, 0
+	ld wa, 0:i3
 	call BitMapOut_PrepareRender_CheckBit2
 	jrl Audio_FillParamBuffer
 
@@ -4389,7 +4389,7 @@ Display_CopyAndRenderBitmaps:
 	pushw 0xd360
 	call Mem_Copy
 	lda xsp, (xsp + 20)
-	lds iz, 0
+	ld iz, 0:i3
 
 DisplayRender_Loop:
 	ld wa, iz
@@ -4433,7 +4433,7 @@ BitmapTable_ProcessEntry:
 	lda xix, (xwa + 5)
 	cpw (xwa), 0x50
 	jr nz, BitmapTable_CheckOffset
-	lds iy, 0
+	ld iy, 0:i3
 	ld e, (xde)
 	ld d, (xix)
 	ld l, (xhl)
@@ -4497,14 +4497,14 @@ MIDI_WriteMultiByteWithHeader:
 	ld e, (xiz + 1)
 	extz de
 	pushw 0xff
-	lds bc, 1
+	ld bc, 1:i3
 	calr MIDI_WriteCommandToBuffer
 	ld a, (xsp + 4)
 	extz wa
 	ld e, (xiz)
 	extz de
 	pushw 0xff
-	lds bc, 0
+	ld bc, 0:i3
 	calr MIDI_WriteCommandToBuffer
 	decm8 2, (xsp + 6)
 	ld (xsp + 8), 0x2
@@ -4876,7 +4876,7 @@ ExtData_ToneParam_DispatchHandler:
 	and	a, 7
 	cp	a, 7:i3
 	jr	nz, 7
-	lds	wa, 7
+	ld	wa, 7:i3
 	calr	4295
 	jr	60
 	and	c, 3
@@ -4887,16 +4887,16 @@ ExtData_ToneParam_DispatchHandler:
 	ld	(0x9153:16), 1
 	ld	(0x9154:16), 8
 	ld	(0x9155:16), 7
-	lds	wa, 2
-	lds	bc, 7
+	ld	wa, 2:i3
+	ld	bc, 7:i3
 	jr	23
 	cp	a, 1:i3
 	jr	nz, 22
 	ld	(0x9153:16), 255
 	ld	(0x9154:16), 255
 	ld	(0x9155:16), 0
-	lds	wa, 1
-	lds	bc, 7
+	ld	wa, 1:i3
+	ld	bc, 7:i3
 	calr	4482
 	calr	3959
 	inc	6, xsp
@@ -4924,7 +4924,7 @@ ExtData_ToneParam_DispatchHandler:
 	ldw	wa, 127
 	calr	4161
 	jrl	3887
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	3977
 	jrl	3879
 FileIO_AllocBuffer:
@@ -5046,7 +5046,7 @@ ExtData_ToneParam_AltBody:
 	ld	(0x912a:16), 255
 	calr	3571
 	ret
-	lds	wa, 7
+	ld	wa, 7:i3
 	calr	4004
 	ldw	wa, 8
 	calr	3654
@@ -5139,7 +5139,7 @@ ExtData_ToneParam_MultiChannel:
 	ld	(0x9153:16), 12
 	ld	(0x9154:16), 89
 	ld	(0x9155:16), 88
-	lds	wa, 2
+	ld	wa, 2:i3
 	ldw	bc, 255
 	calr	3847
 	jr	48
@@ -5199,7 +5199,7 @@ ExtData_ToneParam_MultiChannel:
 	push	xsp
 	normal
 	jr	nz, 29
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	3291
 	.byte 0xf1
 	pushw	de
@@ -5351,9 +5351,9 @@ MIDI_WriteResetSequence:
 	ret
 
 ExtData_Voice_UpdateFlags:
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	2926
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	3097
 	calr	2823
 	lda	xbc, (0xfc66:16)
@@ -5407,14 +5407,14 @@ ExtData_Voice_MixedHandler:
 	jr	4
 	calr	90
 	ret
-	lds	wa, 4
+	ld	wa, 4:i3
 	calr	2808
 	calr	2710
 	ld	(0x9153:16), 1
 	ld	(0x9154:16), 4
 	ld	(0x9155:16), 0
-	lds	wa, 1
-	lds	bc, 3
+	ld	wa, 1:i3
+	ld	bc, 3:i3
 	calr	3208
 	calr	2685
 	.byte 0xc1
@@ -5463,13 +5463,13 @@ ExtData_Voice_MixedHandler:
 	ld	(0x9153:16), 1
 	ld	(0x9154:16), 12
 	ld	(0x9155:16), 11
-	lds	wa, 2
+	ld	wa, 2:i3
 	ldw	bc, 255
 	jr	20
 	ld	(0x9153:16), 255
 	ld	(0x9154:16), 255
 	ld	(0x9155:16), 0
-	lds	wa, 1
+	ld	wa, 1:i3
 	ldw	bc, 255
 	calr	3056
 	jr	23
@@ -5524,7 +5524,7 @@ ExtData_Voice_FullHandler:
 	ld	a, (0x9130:16)
 	and	a, (0x9131:16)
 	ret	z
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	2505
 	calr	2407
 	ret
@@ -5636,7 +5636,7 @@ MidiChannel_ResetAndConfigure:
 	extz de
 	pushw 0x7f
 	ldw wa, 0xb0
-	lds bc, 1
+	ld bc, 1:i3
 	call AddswbWr
 	ldmm8 0x917e, 0x9127
 	ldmm8 0x917f, 0x9128
@@ -5703,7 +5703,7 @@ MidiCh_IterateVolume_Forward:
 	res	7, a
 	cp	a, 0:i3
 	jr	z, 114
-	lds	iz, 0
+	ld	iz, 0:i3
 	lda	xde, (0x90fb:16)
 	ld	bc, iz
 	extz	xbc
@@ -5760,7 +5760,7 @@ MidiCh_IterateVolume_Forward:
 	ret
 MidiCh_IterateVolume_Reverse:
 	pushw	iz
-	lds	iz, 0
+	ld	iz, 0:i3
 	lda	xde, (0x90fb:16)
 	ld	bc, iz
 	extz	xbc
@@ -5821,7 +5821,7 @@ MidiCh_IteratePan_Forward:
 	res	7, a
 	cp	a, 0:i3
 	jrl	z, 135
-	lds	iz, 0
+	ld	iz, 0:i3
 	lda	xbc, (0x90fb:16)
 	ld	wa, iz
 	extz	xwa
@@ -6000,12 +6000,12 @@ CtrlPanel_CompareAndUpdateIndicators:
 	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
-	lds wa, 0
+	ld wa, 0:i3
 	calr Audio_IteratePartsWithVolume
 	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
-	lds wa, 0
+	ld wa, 0:i3
 	calr Audio_IteratePartsWithPan
 	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
@@ -6128,10 +6128,10 @@ IndBitmask_ReturnResult:
 	ret
 
 Part_BitmaskToIndexList:
-	lds iy, 0
+	ld iy, 0:i3
 	lda xde, (0x90fb:16)
 	ld (xde), 0xff
-	lds hl, 0
+	ld hl, 0:i3
 
 BitmaskToIndex_ScanLoop:
 	or xwa, xwa
@@ -6164,7 +6164,7 @@ Audio_IteratePartsWithVolume:
 	pushw iz
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	lds iz, 0
+	ld iz, 0:i3
 
 VolumeIter_NextPart:
 	lda xwa, (0x90fb:16)
@@ -6238,7 +6238,7 @@ Audio_IteratePartsWithExpression:
 	ldi_erpb 0xfa, 0x7f
 
 ExprIter_Start:
-	lds iz, 0
+	ld iz, 0:i3
 
 ExprIter_NextPart:
 	lda xwa, (0x90fb:16)
@@ -6296,7 +6296,7 @@ Audio_IteratePartsWithPan:
 	pushw iz
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	lds iz, 0
+	ld iz, 0:i3
 
 PanIter_NextPart:
 	lda xbc, (0x90fb:16)
@@ -6361,7 +6361,7 @@ MIDI_DispatchVoiceParamCC:
 	ld (xsp + 2), a
 	cp (0xfd32:16), 183
 	jr nz, VoiceParamCC_Done
-	lds iz, 0
+	ld iz, 0:i3
 
 VoiceParamCC_NextPart:
 	lda xbc, (0x90fb:16)
@@ -6429,7 +6429,7 @@ UIState_CheckAndRenderBitmap:
 	jr	z, 32
 	cp	a, 182
 	jr	nz, 41
-	lds	iz, 0
+	ld	iz, 0:i3
 	pushw	3
 	ld	wa, iz
 	ldw	bc, 11
@@ -6441,7 +6441,7 @@ UIState_CheckAndRenderBitmap:
 	jr	14
 	ld	xwa, 0x4001
 	ldw	bc, 127
-	lds	de, 3
+	ld	de, 3:i3
 	call	SoundParam_NotifyChange
 	popw	iz
 	ret
@@ -6478,7 +6478,7 @@ UIState_RenderBitmapData:
 	extz	wa
 	pushw	3
 	ldw	bc, 434
-	lds	de, 0
+	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
 	.byte 0xc1
 	jrl	pl, 16320
@@ -6898,14 +6898,14 @@ ToneGen_DispatchStartVoice:
 	extz de
 	pushw 0x1f
 	ldw wa, 0x90
-	lds bc, 0
+	ld bc, 0:i3
 	call AddswbWr
 	ld xwa, (xsp + 2)
 	ld e, (xwa + 1)
 	extz de
 	pushw 0x1f
 	ldw wa, 0x90
-	lds bc, 1
+	ld bc, 1:i3
 	call AddswbWr
 
 ToneGen_Dispatch_Return:
@@ -6965,14 +6965,14 @@ UIWidget_MidiStreamControl:
 	swi	1
 	.byte 0x90, 0xb4
 	ret
-	lds	wa, 0
+	ld	wa, 0:i3
 	lda	xbc, (0x93d2:16)
 	stib_dsp 228, 0
 	stib_dsp 228, 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, -16
-	lds	wa, 0
+	ld	wa, 0:i3
 	lda	xbc, (0x9412:16)
 	stib_dsp 228, 0
 	inc	1, wa
@@ -7239,7 +7239,7 @@ SndParamUpdate_DispatchWrite:
 	ld c, (xsp + 2)
 	extz bc
 	pushw bc
-	lds bc, 4
+	ld bc, 4:i3
 	calr ToneGen_ApplyVoiceParams
 	ld a, (0x912a:16)
 	and a, 0x48
@@ -7444,7 +7444,7 @@ SoundPreset_FindMatch:
 
 SoundPreset_FindMatch_Reverb:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 ReverbPreset_SearchLoop:
 	pushw 0x18
@@ -7476,7 +7476,7 @@ ReverbPreset_SearchDone:
 
 EQPreset_FindMatch:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 EQPreset_SearchLoop:
 	pushw 0x18
@@ -7508,7 +7508,7 @@ EQPreset_SearchDone:
 
 SoundPreset_FindMatch_Combined:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 CombinedPreset_SearchLoop:
 	pushw 0x18
@@ -7602,7 +7602,7 @@ ReverbPreset_Load:
 	pushw 0xfc8e
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	lds iz, 0
+	ld iz, 0:i3
 
 ReverbPreset_SendLoop:
 	stb_erp C, 0xf8
@@ -7621,7 +7621,7 @@ ReverbPreset_SendLoop:
 	jr c, ReverbPreset_SendLoop
 	ld xwa, 0x4002
 	ldw bc, 0x7f
-	lds de, 1
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	popw iz
 	ret
@@ -7644,7 +7644,7 @@ EQPreset_Load:
 	pushw 0xfca8
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	lds iz, 0
+	ld iz, 0:i3
 
 EQPreset_SendLoop:
 	stb_erp C, 0xf8
@@ -7662,8 +7662,8 @@ EQPreset_SendLoop:
 	cp iz, 0x18
 	jr c, EQPreset_SendLoop
 	ld xwa, 0x4006
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	popw iz
 	ret
@@ -7689,7 +7689,7 @@ CombinedPreset_Load:
 	pushw 0xfc8e
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	lds iz, 0
+	ld iz, 0:i3
 
 CombinedPreset_SendReverbLoop:
 	stb_erp C, 0xf8
@@ -7714,7 +7714,7 @@ CombinedPreset_SendReverbLoop:
 	pushw 0xfca8
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	lds iz, 0
+	ld iz, 0:i3
 
 CombinedPreset_SendEQLoop:
 	stb_erp C, 0xf8
@@ -7733,11 +7733,11 @@ CombinedPreset_SendEQLoop:
 	jr c, CombinedPreset_SendEQLoop
 	ld xwa, 0x4002
 	ldw bc, 0x7f
-	lds de, 1
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	ld xwa, 0x4006
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	call SoundParam_NotifyChange
 	popw iz
 	inc 4, xsp
@@ -7756,15 +7756,15 @@ MIDI_MapCCToIndex:
 	jr	z, 4
 	ldw	hl, 0xffff
 	ret
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
-	lds	hl, 1
+	ld	hl, 1:i3
 	ret
-	lds	hl, 4
+	ld	hl, 4:i3
 	ret
-	lds	hl, 2
+	ld	hl, 2:i3
 	ret
-	lds	hl, 3
+	ld	hl, 3:i3
 	ret
 	cp	a, 4:i3
 	jr	z, 36
@@ -8155,7 +8155,7 @@ RegBitManip_Handler_0:
 	and	wa, 515
 	popw	wa
 	jr	nz, 2
-	lds	wa, 1
+	ld	wa, 1:i3
 RegBitManip_Handler_4:
 	ld	(0xfc66:16), wa
 	pop	xix
@@ -11210,7 +11210,7 @@ MidiStream_CmdPedalNotify:
 	jr z, MidiStream_CmdPedalDone
 	and e, 0x7f
 	jr z, MidiStream_CmdPedalDone
-	lds	bc, 0
+	ld	bc, 0:i3
 	ld	e, (0xfd97:16)
 	and e, 0x7f
 	dec 1, e

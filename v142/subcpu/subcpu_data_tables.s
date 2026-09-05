@@ -11541,7 +11541,7 @@ Serial1_TX_Exit:	; 01F7A3h
 ; HL = 0000h (False)
 ;
 RING_BUFFER_HAS_OVERRUN:	; 1F7AB
-	lds hl, 0
+	ld hl, 0:i3
 	ld xbc, (xwa + 12)	; current_read_pointer
 	cp xbc, (xwa + 8)	; current_write_pointer
 	ret nz
@@ -11659,7 +11659,7 @@ Audio_CheckQueuedData_Send:
 
 Audio_DMA_RingBuffer_To_Maincpu:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 Audio_DMA_RingBuf_ReadLoop:
 	ld xwa, 0xE00
@@ -11679,7 +11679,7 @@ Audio_DMA_RingBuf_CheckSend:
 	cp iz, 0:i3
 	jr z, Audio_DMA_RingBuf_Done
 	ei 0
-	lds wa, 4
+	ld wa, 4:i3
 	ld bc, iz
 	ld xde, 0x600
 	call InterCPU_DMA_Send
@@ -11721,7 +11721,7 @@ Serial1_TX_CheckNext:
 	jr nz, Serial1_TX_LoopBody
 
 Serial1_TX_Done:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 Audio_Process_Final:

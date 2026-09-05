@@ -68,7 +68,7 @@ SetupFlashFunc:
 	ld (0x7f42:16), 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
-	lds wa, 6
+	ld wa, 6:i3
 	call CtrlPanel_IndicatorJumpTable
 	ld (0x7f42:16), 35
 	ldw wa, 0xee
@@ -76,7 +76,7 @@ SetupFlashFunc:
 	jr SetupFlash_Return
 
 SetupFlash_HandleLoadEvent:
-	lds wa, 6
+	ld wa, 6:i3
 	call Audio_DispatchCommand
 
 SetupFlash_Return:
@@ -91,7 +91,7 @@ FmmUtilityTitleFunc:
 	cp xde, 0x2
 	jrl nz, FmmUtility_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50005
@@ -223,7 +223,7 @@ FmmSmfUtilityTitleFunc:
 	cp xde, 0x2
 	jrl nz, FmmSmfUtility_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50005

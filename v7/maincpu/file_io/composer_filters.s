@@ -51,7 +51,7 @@ CompLoad_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -79,7 +79,7 @@ CompLoad_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -113,7 +113,7 @@ CompLoad_Selection_Negative:
 	lds32	xde, 0
 	jrl	443
 CompLoad_HandleShow:
-	lds iz, 0
+	ld iz, 0:i3
 
 CompLoad_DrawItemLoop:
 	ld	wa, iz
@@ -124,7 +124,7 @@ CompLoad_DrawItemLoop:
 	add	xhl, xde
 	stb_erp	c, 248
 	ld	(xhl), c
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	16289787
 	cp	l, 0:i3
 	jr	z, 10
@@ -139,7 +139,7 @@ CompLoad_DrawItem_Continue:
 	ld	de, iz
 	ld	wa, de
 	sll	wa, 5
-	lds	hl, 1
+	ld	hl, 1:i3
 	add	hl, wa
 	lda	xix, (33904:16)
 	extz	xhl
@@ -210,7 +210,7 @@ CompLoad_OpLoad:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds iz, 0
+	ld iz, 0:i3
 CompLoad_HideButtons_Loop:
 	stb_erp	a, 248
 	extz	wa
@@ -218,13 +218,13 @@ CompLoad_HideButtons_Loop:
 	inc	1, iz
 	cp	iz, 8
 	jr	lt, -17
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	16289556
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	-8736
 	call	16283131
 	ld	wa, hl
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	-8097
 	ld	(32422:16), l
 	calr	-8662
@@ -236,7 +236,7 @@ CompLoad_HideButtons_Loop:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -302,11 +302,11 @@ RenderFilter_CheckType1:
 	call GetCurrentFileType
 	cp l, 0:i3
 	jr z, RenderFilter_CheckGeneric
-	lds wa, 0
+	ld wa, 0:i3
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, RenderFilter_Type1_Unavail
-	lds wa, 0
+	ld wa, 0:i3
 	call FileIO_WriteRecordName_Done
 	cp l, 0:i3
 	jr z, RenderFilter_Type1_Restricted
@@ -415,7 +415,7 @@ LoadFilter_HandleScroll:
 	call GetCurrentFileType
 	cp l, 0:i3
 	jr z, LoadFilter_ScrollUp_CheckZero
-	lds wa, 0
+	ld wa, 0:i3
 	jr LoadFilter_ShowButton
 
 LoadFilter_ScrollUp_CheckZero:
@@ -441,7 +441,7 @@ LoadFilter_ScrollDown:
 	call GetCurrentFileType
 	cp l, 0:i3
 	jr z, LoadFilter_ScrollDown_CheckZero
-	lds wa, 0
+	ld wa, 0:i3
 	jr LoadFilter_HideButton
 
 LoadFilter_ScrollDown_CheckZero:
@@ -496,11 +496,11 @@ LoadFilter_OpLoad:
 	extz HL
 	ld WA,HL
 	calr FileIO_MidiOutSendByte
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry
 	ld WA,HL
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7ea6:16), l
 	calr SignalProgressUpdate
@@ -514,11 +514,11 @@ LoadFilter_OpLoad:
 	call ApPostEvent
 	cpw (0xf19e:16), 0x0000
 	jr z, LoadFilter_Load_ShowCode1
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_WriteRecordName_Done
 	cp l, 0:i3
 	jr z, LoadFilter_Load_ShowCode1
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr nz, LoadFilter_Load_ShowCodeA
@@ -531,7 +531,7 @@ LoadFilter_Load_ShowCodeA:
 	jr LoadFilter_Load_CallHandler
 
 LoadFilter_Load_ShowCode1:
-	lds wa, 1
+	ld wa, 1:i3
 
 LoadFilter_Load_CallHandler:
 	call UI_PostPartChangeEvent
@@ -778,11 +778,11 @@ SaveFilter_Save_Execute:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	55275
 	call	16284320
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	55914
 	ld	(32422:16), l
 	call	16290139
@@ -798,7 +798,7 @@ SaveFilter_Save_Execute:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -814,11 +814,11 @@ SaveFilter_OpFormat:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	55150
 	call	16284320
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	55789
 	ld	(32422:16), l
 	call	16290139
@@ -834,7 +834,7 @@ SaveFilter_OpFormat:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438

@@ -365,7 +365,7 @@ Audio_InitRingBuffers:
 
 
 Audio_CmdHandler_20_3F:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 Audio_CmdHandler_40_5F:
@@ -382,7 +382,7 @@ AudioCmd_40_5F_SkipLoop:
 	jr nz, AudioCmd_40_5F_SkipLoop
 
 AudioCmd_40_5F_Done:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ----------------------------------------------------------------------------
@@ -401,19 +401,19 @@ DSP_Init_Channels:	; 01FC95h
 	ld (xiz - 4), xwa	; Local buffer[4-7]
 	lda xwa, (xiz - 8)	; Pointer to test data
 	push xwa
-	lds bc, 0	; Channel 0
+	ld bc, 0:i3	; Channel 0
 	calr DSP_Write_Channel
 	pop xwa
 	push xwa
-	lds bc, 1	; Channel 1
+	ld bc, 1:i3	; Channel 1
 	calr DSP_Write_Channel
 	pop xwa
 	push xwa
-	lds bc, 2	; Channel 2
+	ld bc, 2:i3	; Channel 2
 	calr DSP_Write_Channel
 	pop xwa
 	push xwa
-	lds bc, 3	; Channel 3
+	ld bc, 3:i3	; Channel 3
 	calr DSP_Write_Channel
 	pop xwa
 	ld xbc, 0x130000	; DSP register base
@@ -602,7 +602,7 @@ TaskSched_Init:
 	ld (4306:16), wa
 	ldw hl, 0x106C
 	extz xhl
-	lds de, 4
+	ld de, 4:i3
 	ldb b, 0x3
 
 TaskSched_Init_QueueHeaders:
@@ -633,7 +633,7 @@ TaskSched_Init_FreeList_A:
 	ld xhl, 0x1FDBC
 	ldw de, 0x1080
 	extz xde
-	lds bc, 2
+	ld bc, 2:i3
 	ldir83
 	ldw hl, 0x1078
 	extz xhl
@@ -647,7 +647,7 @@ TaskSched_Init_QueueGroup_B:
 	ld xhl, 0x1FDBE
 	ldw de, 0x1092
 	extz xde
-	lds bc, 4
+	ld bc, 4:i3
 	ldir83
 	ldw hl, 0x1082
 	extz xhl
@@ -1992,7 +1992,7 @@ FIFO1K_Put_Block:
 FIFO1K_Is_Empty:
 	ld	hl, (265258:24)
 	cp	hl, (265254:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 65535
 	ret
@@ -2077,7 +2077,7 @@ FIFO256_Put_Block:
 FIFO256_Is_Empty:
 	ld	hl, (266292:24)
 	cp	hl, (266288:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 65535
 	ret
@@ -2159,7 +2159,7 @@ FIFO512_Put_Block:
 FIFO512_Is_Empty:
 	ld	hl, (266558:24)
 	cp	hl, (266554:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 65535
 	ret
@@ -2338,7 +2338,7 @@ FIFO_Engine1K_Put:
 	.byte 0x69, 0x9a, 0xfe, 0x23, 0x0e
 
 Audio_CmdHandler_C0_FF:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ===========================================================================
@@ -2437,7 +2437,7 @@ DMA_Send_Final:
 InterCPU_DMA_Send_Chunk:
 	cp c, 0:i3
 	ret z
-	lds ix, 0
+	ld ix, 0:i3
 
 DMA_Chunk_Start:
 	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is requesting handshake
@@ -2449,7 +2449,7 @@ DMA_Chunk_Start:
 	sll a, 5
 	or a, l
 	ld (0x120000:24), a
-	lds ix, 0
+	ld ix, 0:i3
 
 DMA_Chunk_Transfer:
 	bit_dd8 4, 0x34	; MSTAT1 - wait for Main CPU to clear (data ready to receive)
@@ -2533,7 +2533,7 @@ InterCPU_E2_DMA_Transfer:
 	; instruction re-encoded and the whole run compared byte for byte.
 	; 9 instructions, of which 2 needed a spelling search because
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	(4328:16), 0
 	jr	z, 17
 
@@ -2551,7 +2551,7 @@ E2_DMA_Ready:
 	res_dd8	0, 52
 	ld	(4328:16), 1
 	ld	(1179648:24), 226
-	lds	ix, 0
+	ld	ix, 0:i3
 	bit_dd8	4, 52
 	jr	nz, 51
 
@@ -2593,7 +2593,7 @@ E2_Wait_MSTAT1_Set:
 ; ===========================================================================
 InterCPU_E1_DMA_Transfer:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp (4328:16), 0
 	jr z, E1_DMA_Ready
 
@@ -2606,7 +2606,7 @@ E1_Wait_DMA_Idle:
 	jr nz, E1_Wait_DMA_Idle
 
 E1_DMA_Ready:
-	lds iz, 0
+	ld iz, 0:i3
 
 E1_Check_MSTAT1:
 	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is initiating E1 transfer
@@ -2614,7 +2614,7 @@ E1_Check_MSTAT1:
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
 	ld (4328:16), 2
 	ld (0x120000:24), 0xe1
-	lds iz, 0
+	ld iz, 0:i3
 
 E1_Start_Transfer:
 	bit_dd8 4, 0x34	; MSTAT1 - wait for Main CPU to clear (header data ready)
@@ -2627,7 +2627,7 @@ E1_Start_Transfer:
 	ld (xhl + 4), bc
 	ld (xwa + 4), bc
 	ldc_cr32 xwa, 0x08
-	lds wa, 6
+	ld wa, 6:i3
 	ldc_cr16 wa, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
@@ -2639,7 +2639,7 @@ E1_Wait_State1:
 	jr nz, E1_Wait_State1
 
 E1_Delay_Loop1:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0xC8
 	jr nc, E1_Phase2_Setup
 
@@ -2665,7 +2665,7 @@ E1_Wait_Complete:
 	jr nz, E1_Wait_Complete
 
 E1_Delay_Loop2:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0xC8
 	jr nc, E1_Done
 
@@ -2737,7 +2737,7 @@ INT0_HANDLER:	; 20E86
 	lda xwa, (4374:16)	; E1 data buffer
 	ld (4324:16), xwa	; Save DMA target
 	ldc_cr32 xwa, 0x20
-	lds wa, 6	; 6 bytes for E1
+	ld wa, 6:i3	; 6 bytes for E1
 	ldc_cr16 wa, 0x40
 	jr INT0_Start_DMA
 
@@ -4481,12 +4481,12 @@ Voice_Retire_ToFreePool_InsertLists:
 	lda xwa, (4907:16)
 	ld xbc, xwa
 	ld xwa, xiz
-	lds de, 6
+	ld de, 6:i3
 	calr Voice_List_MoveToPool
 	lda xwa, (5249:16)
 	ld xbc, xwa
 	ld xwa, xiz
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_List_MoveToPartList
 	ld xwa, xiz
 	calr DList_Unlink_SelfLink_Offsets16
@@ -4514,7 +4514,7 @@ Voice_Demote_Decayed:
 	ld xde, (xwa + 29)
 	ld xwa, xbc
 	ld xbc, xde
-	lds de, 6
+	ld de, 6:i3
 	calr Voice_List_MoveToPool
 	ret
 
@@ -5187,7 +5187,7 @@ Voice_Allocate_Nodes_ActivateNode:
 	ld (xiz + 34), 0x88
 	ld a, (xsp + 14)
 	and a, 0xF
-	lds de, 1
+	ld de, 1:i3
 	and a, 0xF
 	jr z, Voice_Allocate_Nodes_RetriggerActive
 	slla de
@@ -5207,7 +5207,7 @@ Voice_Allocate_Nodes_Retrigger:
 	ld (xiz + 34), 0x8
 	ld a, (xsp + 14)
 	and a, 0xF
-	lds bc, 1
+	ld bc, 1:i3
 	and a, 0xF
 	jr z, Voice_Allocate_Nodes_RetriggerMask
 	slla bc
@@ -5225,7 +5225,7 @@ Voice_Allocate_Nodes_RetriggerMask:
 	and_sriw_mr DE, 0x07, 0xE4, 0xE0
 	ld a, (xsp + 14)
 	and a, 0xF
-	lds de, 1
+	ld de, 1:i3
 	and a, 0xF
 	jr z, Voice_Allocate_Nodes_RetriggerOrMask
 	slla de
@@ -5249,7 +5249,7 @@ Voice_Allocate_Nodes_UpdateLists:
 	calr Voice_List_MoveToPool
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
-	lds de, 0
+	ld de, 0:i3
 	calr Voice_List_MoveToPartList
 	ld xwa, (4393:16)
 	or xwa, xwa
@@ -5379,7 +5379,7 @@ Voice_Clear_HoldBit:
 	res_dri 7, 0x07, 0xE8, 0xE0
 	ld a, c
 	and a, 0xF
-	lds de, 1
+	ld de, 1:i3
 	and a, 0xF
 	jr z, Voice_Clear_HoldBit_ApplyMask
 	slla de
@@ -5420,7 +5420,7 @@ VoiceSlot_NoteOff:
 	lda_dri XIZ, 0x07, 0xE4, 0xE0
 	ld xwa, xiz
 	ld xbc, (xiz + 24)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_List_MoveToPartList
 	ld xwa, xiz
 	calr Voice_Reprioritise
@@ -5500,7 +5500,7 @@ OutputBuf_Flush_B_Loop:
 OutputBuf_Flush_B_Emit:
 	ld xwa, xiz
 	ld xbc, (xiz + 24)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_List_MoveToPartList
 	ld xwa, xiz
 	calr Voice_Reprioritise
@@ -5962,7 +5962,7 @@ Pitch_Get_Patch_Octave_Shift:
 	ld de, (0x041343:24)
 	bit 1, de
 	jr z, Pitch_Get_Patch_Octave_Shift_Dispatch
-	lds hl, 0
+	ld hl, 0:i3
 	jr Pitch_Get_Patch_Octave_Shift_Return
 
 ; Range-check the selector and dispatch through the 0x00F693 offset table.
@@ -5981,7 +5981,7 @@ Pitch_Get_Patch_Octave_Shift_Dispatch:
 
 ; Jump-table base AND the case body for offset 0: XHL = 0.
 Pitch_Get_Patch_Octave_Shift_JumpTable:
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	22
 
 ; Fallback case: signed semitone from the 0x011ACF table, scaled to 8.8.
@@ -6010,7 +6010,7 @@ Pitch_Clamp_Into_Range:
 	jr z, Pitch_Clamp_Into_Range_CompareLo
 	cp hl, 0xC000
 	jr le, Pitch_Clamp_Into_Range_Clamp7FFF
-	lds hl, 0
+	ld hl, 0:i3
 	jr Pitch_Clamp_Into_Range_CompareLo
 
 ; Wrapped-negative case: clamp to 0x7FFF.
@@ -6240,7 +6240,7 @@ Pitch_Saturate_15bit:
 	jr z, Pitch_Saturate_15bit_Return
 	cp wa, 0xC000
 	jr ule, Pitch_Saturate_15bit_Clamp7FFF
-	lds wa, 0
+	ld wa, 0:i3
 	jr Pitch_Saturate_15bit_Return
 
 ; Wrapped-positive case: 0x7FFF.
@@ -6406,7 +6406,7 @@ TVF_Clamp_Cutoff:
 TVF_Clamp_Cutoff_CheckLo:
 	cp wa, 0:i3
 	jr ge, TVF_Clamp_Cutoff_Return
-	lds wa, 0
+	ld wa, 0:i3
 
 ; Copy to XHL and return.
 TVF_Clamp_Cutoff_Return:
@@ -7238,7 +7238,7 @@ Voice_Clamp_Byte_WA:
 Voice_Clamp_Byte_WA_LowBound:
 	cp wa, 0:i3
 	jr ge, Voice_Clamp_Byte_WA_Return
-	lds wa, 0
+	ld wa, 0:i3
 
 ; Copy to XHL and return.
 Voice_Clamp_Byte_WA_Return:
@@ -7659,7 +7659,7 @@ Voice_Clamp_Byte_HL:
 Voice_Clamp_Byte_HL_LowBound:
 	cp wa, 0:i3
 	jr ge, Voice_Clamp_Byte_HL_Return
-	lds wa, 0
+	ld wa, 0:i3
 
 ; Copy to XHL and return.
 Voice_Clamp_Byte_HL_Return:
@@ -8771,7 +8771,7 @@ Voice_Level_Triplet_ModByEnv:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	cp (xiz + 9), 0x0
 	jr z, Voice_Level_Ch1_Unmodulated
@@ -8874,7 +8874,7 @@ Voice_Level_ApplyVelocityMod:
 	pushw wa
 	ld xwa, (xsp + 20)
 	ld wa, (xwa + 8)
-	lds de, 0
+	ld de, 0:i3
 	calr Pan_ScaleWithVelocity
 	add (xsp + 10), hl
 
@@ -8882,7 +8882,7 @@ Voice_Level_ApplyVelocityMod:
 Voice_Level_PackAndStore:
 	ld wa, (xsp + 10)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 4)
@@ -8905,19 +8905,19 @@ Voice_Level_PackAndStore:
 	pushw wa
 	ld xwa, (xsp + 20)
 	ld wa, (xwa + 8)
-	lds de, 0
+	ld de, 0:i3
 	calr Pan_ScaleWithVelocity
 	ld iz, hl
 	ld wa, (xsp + 12)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	ld wa, (xsp + 14)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 14), hl
 	jr Voice_Level_PackSideChannels
@@ -8926,12 +8926,12 @@ Voice_Level_PackAndStore:
 Voice_Level_PackAndStore_NoVelocityMod:
 	ld wa, (xsp + 12)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	ld wa, (xsp + 14)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 14), hl
 
@@ -10124,7 +10124,7 @@ Voice_StereoLevel_Compute:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ld xwa, (xsp + 2)
 	cp (xwa + 63), 0x0
@@ -10243,7 +10243,7 @@ Voice_StereoLevel_ApplyTremolo:
 	pushw wa
 	ld xwa, (xsp + 16)
 	ld wa, (xwa + 8)
-	lds de, 0
+	ld de, 0:i3
 	calr Pan_ScaleWithVelocity
 	add (xsp + 6), hl
 
@@ -10254,7 +10254,7 @@ Voice_StereoLevel_ApplyTremolo:
 Voice_StereoLevel_PackCh1:
 	ld wa, (xsp + 6)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 6), hl
 	ld xwa, (xsp + 2)
@@ -10289,19 +10289,19 @@ Voice_StereoLevel_PackCh1:
 	pushw wa
 	ld xwa, (xsp + 16)
 	ld wa, (xwa + 8)
-	lds de, 0
+	ld de, 0:i3
 	calr Pan_ScaleWithVelocity
 	ld iz, hl
 	ld wa, (xsp + 8)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 8), hl
 	ld wa, (xsp + 10)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	jr Voice_StereoLevel_PackCh23
@@ -10310,12 +10310,12 @@ Voice_StereoLevel_PackCh1:
 Voice_StereoLevel_ClampCh23_NoMod:
 	ld wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 8), hl
 	ld wa, (xsp + 10)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 
@@ -10420,12 +10420,12 @@ Voice_PortaLevel_ScaleAndPack:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 6
+	ld de, 6:i3
 	calr PitchBend_Scale
 	add (xsp + 8), hl
 	ld wa, (xsp + 8)
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 8), hl
 	ldw iz, 0x7F
@@ -10438,12 +10438,12 @@ Voice_PortaLevel_ScaleAndPack:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 6
+	ld de, 6:i3
 	calr PitchBend_Scale
 	add iz, hl
 	ld wa, iz
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	ld wa, iz
@@ -10611,7 +10611,7 @@ Voice_OpSlot_WriteParams:
 	extz wa
 	add wa, bc
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_Short
 	ld (xiz + 1), l
 	ld xwa, (xsp + 12)
@@ -10623,7 +10623,7 @@ Voice_OpSlot_WriteParams:
 	extz wa
 	add wa, bc
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_Short
 	ld (xiz + 3), l
 	ld xwa, (xsp + 12)
@@ -10636,7 +10636,7 @@ Voice_OpSlot_WriteParams:
 	extz wa
 	add wa, bc
 	ldw bc, 0x1E
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_Short
 	ld (xiz + 7), l
 	jr Voice_OpSlot_ApplySustainPedal
@@ -10924,7 +10924,7 @@ Voice_Chan_Fallback_NoWaveTable:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 1
+	ld de, 1:i3
 	call DSP_AlgoType_Dispatch3
 	ld (xsp + 20), hl
 	cpw (xsp + 20), 0x0
@@ -10948,7 +10948,7 @@ Voice_Chan_Fallback_NoWaveTable:
 	ld wa, (xsp + 14)
 	extz wa
 	ld bc, wa
-	lds wa, 0
+	ld wa, 0:i3
 	calr NoteState_ClearRecord
 	ld wa, (xsp + 12)
 	and wa, 0x7F
@@ -10990,7 +10990,7 @@ Voice_Chan_SecondaryPitch_Trigger:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 0
+	ld de, 0:i3
 	call DSP_AlgoType_Dispatch3
 	ld (xsp + 20), hl
 	cpw (xsp + 20), 0x0
@@ -11299,7 +11299,7 @@ Voice1_UpdatePitch_AltEntry:
 	stb_erp A, 0xF8
 	extz wa
 	ld bc, wa
-	lds wa, 1
+	ld wa, 1:i3
 	calr NoteState_ClearRecord
 	ld wa, iz
 	sll wa, 8
@@ -11581,7 +11581,7 @@ Level_Build_Reg0C0:
 	ld c, (0x04134c:24)
 	cp c, 6:i3
 	jr nz, Level_Build_Reg0C0_UseCoarse
-	lds de, 0
+	ld de, 0:i3
 	jr Level_Build_Reg0C0_ApplyDetune
 
 ; Global mode byte 0x04134C != 6: DE = zext(patchrec+15).
@@ -11615,7 +11615,7 @@ Level_Build_Reg0C0_ApplyDetune:
 	exts bc
 	add de, bc
 	jr ge, Level_Build_Reg0C0_ClampHigh
-	lds de, 0
+	ld de, 0:i3
 	jr Level_Build_Reg0C0_ShiftLeft
 
 ; Ceiling at 0x7F.
@@ -11679,7 +11679,7 @@ Voice_ComputePitchBend2:
 	ld c, (0x04134c:24)
 	cp c, 6:i3
 	jr nz, Voice_ComputePitchBend2_UseCoarse
-	lds de, 0
+	ld de, 0:i3
 	jr Voice_ComputePitchBend2_ApplyDetune
 
 ; As 0x02541D.
@@ -11706,7 +11706,7 @@ Voice_ComputePitchBend2_ApplyDetune:
 	sub bc, 0x40
 	add de, bc
 	jr ge, Voice_ComputePitchBend2_ClampHigh
-	lds de, 0
+	ld de, 0:i3
 	jr Voice_ComputePitchBend2_ShiftLeft
 
 ; As 0x025455.
@@ -12109,7 +12109,7 @@ Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack:
 	extz wa
 	add wa, bc
 	ldw bc, 0x64
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	stb_erp A, 0xF8
@@ -12153,14 +12153,14 @@ Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, iz
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_PatchAtk_CheckMax
@@ -12170,7 +12170,7 @@ Voice_Calc_LevelPair_PatchAtk_NoLFO:
 	ld wa, iz
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_PatchAtk_CheckMax
@@ -12189,13 +12189,13 @@ Voice_Calc_LevelPair_PatchAtk_NoOscLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, iz
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
@@ -12276,21 +12276,21 @@ Voice_Calc_LevelPair_PatchAtk_WriteDSP:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_PatchAtk_WriteChans
@@ -12300,13 +12300,13 @@ Voice_Calc_LevelPair_PatchAtk_NoModDepth:
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_PatchAtk_WriteChans
@@ -12325,19 +12325,19 @@ Voice_Calc_LevelPair_PatchAtk_NoDepth2:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 
@@ -12351,7 +12351,7 @@ Voice_Calc_LevelPair_PatchAtk_WriteChans:
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
-	lds wa, 4
+	ld wa, 4:i3
 	cp hl, 4:i3
 	jr lt, Voice_Calc_LevelPair_PatchAtk_ClampDepth
 	ld wa, hl
@@ -12466,12 +12466,12 @@ Voice_WriteChPanShift_AddShift:
 Voice_WriteChPanShift_ClampAndWrite:
 	ld wa, (xsp + 2)
 	ldw bc, 0x7F
-	lds de, 4
+	ld de, 4:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 2), hl
 	ld wa, iz
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	cp (xsp + 4), 0x0
@@ -12551,12 +12551,12 @@ Voice_Calc_LevelPair_FixedAtk:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	add iz, hl
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
@@ -12592,7 +12592,7 @@ Voice_Calc_LevelPair_FixedAtk_WriteLevel:
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld bc, wa
-	lds wa, 4
+	ld wa, 4:i3
 	cp bc, 4:i3
 	jr lt, Voice_Calc_LevelPair_FixedAtk_WriteChans
 	ld wa, bc
@@ -12718,12 +12718,12 @@ Voice_WriteChPanShift2_AddShift:
 Voice_WriteChPanShift2_ClampAndWrite:
 	ld wa, (xsp + 2)
 	ldw bc, 0x7F
-	lds de, 4
+	ld de, 4:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 2), hl
 	ld wa, iz
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	cp (xsp + 4), 0x0
@@ -12846,7 +12846,7 @@ Voice_Calc_LevelPair_Full_OscTablePath:
 	extz wa
 	add wa, bc
 	ldw bc, 0x64
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	stb_erp A, 0xF8
@@ -12890,14 +12890,14 @@ Voice_Calc_LevelPair_Full_OscTablePath:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, iz
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_Full_CheckMax
@@ -12907,7 +12907,7 @@ Voice_Calc_LevelPair_Full_NoDepth:
 	ld wa, iz
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_Full_CheckMax
@@ -12926,13 +12926,13 @@ Voice_Calc_LevelPair_Full_NoLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, iz
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
@@ -13015,21 +13015,21 @@ Voice_Calc_LevelPair_Full_WriteDSP:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Full_WriteChDepth
@@ -13039,13 +13039,13 @@ Voice_Calc_LevelPair_Full_NoModDepth:
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Full_WriteChDepth
@@ -13064,19 +13064,19 @@ Voice_Calc_LevelPair_Full_NoDepth2:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ldw_erp HL, 0xFA
 	ld wa, (xsp + 10)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 
@@ -13089,7 +13089,7 @@ Voice_Calc_LevelPair_Full_WriteChDepth:
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
-	lds wa, 4
+	ld wa, 4:i3
 	cp hl, 4:i3
 	jr lt, Voice_Calc_LevelPair_Full_WriteCh2
 	ld wa, hl
@@ -13202,14 +13202,14 @@ Voice_Calc_LevelPair_Mono_ComputeLevel:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ld iz, hl
 	stw_erp WA, 0xFA
 	add wa, (xsp + 8)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ldw_erp HL, 0xFA
 	jr Voice_Calc_LevelPair_Mono_CheckMax
@@ -13219,7 +13219,7 @@ Voice_Calc_LevelPair_Mono_NoDepth:
 	stw_erp WA, 0xFA
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ldw_erp HL, 0xFA
 	jr Voice_Calc_LevelPair_Mono_CheckMax
@@ -13238,13 +13238,13 @@ Voice_Calc_LevelPair_Mono_NoLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ld iz, hl
 	stw_erp WA, 0xFA
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ldw_erp HL, 0xFA
 
@@ -13285,7 +13285,7 @@ Voice_Calc_LevelPair_Mono_WriteDSP:
 	extz wa
 	add wa, bc
 	ldw bc, 0x64
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 10)
@@ -13304,7 +13304,7 @@ Voice_Calc_LevelPair_Mono_WriteDSP:
 	extz wa
 	add wa, bc
 	ldw bc, 0x64
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	ld wa, (xsp + 12)
@@ -13348,21 +13348,21 @@ Voice_Calc_LevelPair_Mono_WriteDSP:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ld iz, hl
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Mono_WriteChDepth
@@ -13372,13 +13372,13 @@ Voice_Calc_LevelPair_Mono_NoModDepth:
 	ld wa, (xsp + 10)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Mono_WriteChDepth
@@ -13397,19 +13397,19 @@ Voice_Calc_LevelPair_Mono_NoDepth2:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	ld iz, hl
 	ld wa, (xsp + 10)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld (xsp + 12), hl
 
@@ -13422,7 +13422,7 @@ Voice_Calc_LevelPair_Mono_WriteChDepth:
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	extz wa
 	ld hl, wa
-	lds wa, 4
+	ld wa, 4:i3
 	cp hl, 4:i3
 	jr lt, Voice_Calc_LevelPair_Mono_WriteCh2
 	ld wa, hl
@@ -13534,7 +13534,7 @@ Voice_InterpolatePanCurve_HighRange:
 
 ; Inside the plateau: return 0 (no correction).
 Voice_InterpolatePanCurve_Zero:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Common return.
 Voice_InterpolatePanCurve_Done:
@@ -13616,7 +13616,7 @@ Voice_InterpolateNoteCurve_HighRange:
 
 ; Inside the plateau: return 0.
 Voice_InterpolateNoteCurve_Zero:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Common return.
 Voice_InterpolateNoteCurve_Done:
@@ -14157,7 +14157,7 @@ Voice_Calc_LevelPair_EGA:
 	extz wa
 	add wa, bc
 	ldw bc, 0x64
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	stb_erp A, 0xF8
@@ -14319,7 +14319,7 @@ Voice_ComputeVolume_CappedLFO_UseOscMax:
 	extz wa
 	add wa, bc
 	ldw bc, 0x64
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	stb_erp A, 0xF8
@@ -14423,7 +14423,7 @@ Voice_Calc_LevelPair_EGB_ApplyLFO:
 	pushw wa
 	ld xwa, (xsp + 10)
 	ld wa, (xwa + 8)
-	lds de, 0
+	ld de, 0:i3
 	calr Pan_ScaleWithVelocity
 	add iz, hl
 	ld xwa, (xsp + 2)
@@ -14438,12 +14438,12 @@ Voice_Calc_LevelPair_EGB_ApplyLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	add iz, hl
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGB_WriteDSP
@@ -14452,7 +14452,7 @@ Voice_Calc_LevelPair_EGB_ApplyLFO:
 Voice_Calc_LevelPair_EGB_NoKeyTrack:
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGB_WriteDSP
@@ -14472,12 +14472,12 @@ Voice_Calc_LevelPair_EGB_NoLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	add iz, hl
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
@@ -14566,7 +14566,7 @@ Voice_Calc_LevelPair_EGC_ApplyLFO:
 	pushw wa
 	ld xwa, (xsp + 10)
 	ld wa, (xwa + 8)
-	lds de, 0
+	ld de, 0:i3
 	calr Pan_ScaleWithVelocity
 	add iz, hl
 	ld xwa, (xsp + 2)
@@ -14581,12 +14581,12 @@ Voice_Calc_LevelPair_EGC_ApplyLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	add iz, hl
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGC_WriteDSP
@@ -14595,7 +14595,7 @@ Voice_Calc_LevelPair_EGC_ApplyLFO:
 Voice_Calc_LevelPair_EGC_NoKeyTrack:
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGC_WriteDSP
@@ -14614,12 +14614,12 @@ Voice_Calc_LevelPair_EGC_NoLFO:
 	ld c, a
 	extz bc
 	ld wa, de
-	lds de, 4
+	ld de, 4:i3
 	calr PitchBend_Scale
 	add iz, hl
 	ld wa, iz
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	calr ClampS16_WA_To_DEBC
 	ld iz, hl
 
@@ -14727,7 +14727,7 @@ Voice_AdvanceLFOPhase:
 
 ; Ramp/hold mode still running: return 0.
 Voice_AdvanceLFOPhase_IncDone:
-	lds hl, 0
+	ld hl, 0:i3
 	jr Voice_AdvanceLFOPhase_Done
 
 ; Triangle mode: advance and return the scaled phase (phase<<8)/period.
@@ -14759,7 +14759,7 @@ Voice_AdvanceLFOPhase_TriangleReset:
 
 ; Unrecognised mode: return 0.
 Voice_AdvanceLFOPhase_Idle:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Common return.
 Voice_AdvanceLFOPhase_Done:
@@ -14786,7 +14786,7 @@ Voice_AdvanceLFOPhase_Done:
 ; 0x100000 / 0x100002.
 Voice_UpdateAllLFO:
 	push xiz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x80
 	jr nc, Voice_UpdateAllLFO_Loop2
 
@@ -14837,7 +14837,7 @@ Voice_UpdateAllLFO_NextSlot1:
 
 ; Group 2 preamble: reset the slot counter, bail out to group 3 if 0x40 slots is none.
 Voice_UpdateAllLFO_Loop2:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x40
 	jr nc, Voice_UpdateAllLFO_Loop3
 
@@ -14889,7 +14889,7 @@ Voice_UpdateAllLFO_NextSlot2:
 
 ; Group 3 preamble: reset the slot counter for the 128-slot pass.
 Voice_UpdateAllLFO_Loop3:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x80
 	jrl nc, Voice_UpdateAllLFO_Done
 
@@ -15612,7 +15612,7 @@ Voice_LoadPitchTable_Ch:
 	ld (xsp + 8), a
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_AlgoType_Dispatch2
 	extz xhl
 	ld a, (xsp + 6)
@@ -15645,7 +15645,7 @@ Voice_LoadPitchTable_Ch_NoClamp:
 Voice_LoadPitchTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_AlgoType_Dispatch1
 	extz xhl
 	ld a, (xsp + 6)
@@ -15667,10 +15667,10 @@ Voice_LoadPitchTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
 	extz wa
 	ldw bc, 0xD
-	lds de, 0
+	ld de, 0:i3
 	call Voice_BuildOutputList
 	ld (xsp + 2), xhl
-	lds iz, 0
+	ld iz, 0:i3
 	jr Voice_LoadPitchTable_Ch_LoopCheck
 
 ; Per-voice broadcast via ToneGen_WriteExtParams_56.
@@ -15709,18 +15709,18 @@ Voice_LoadPitchTable_All:
 	ld (xsp + 6), a
 	ld a, (xsp + 6)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_AlgoType_Dispatch2
 	ld (0x045208:24), hl
 	ld a, (xsp + 6)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_AlgoType_Dispatch1
 	ld (0x04520c:24), hl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0xD
-	lds de, 0
+	ld de, 0:i3
 	call Voice_BuildOutputList
 	ld (xsp), xhl
 	ldw (xsp + 4), 0x0
@@ -15764,7 +15764,7 @@ Voice_LoadFilterTable_Ch:
 	ld (xsp + 8), a
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	call DSP_AlgoType_Dispatch2
 	extz xhl
 	ld a, (xsp + 6)
@@ -15797,7 +15797,7 @@ Voice_LoadFilterTable_Ch_NoClamp:
 Voice_LoadFilterTable_Ch_ScanFilter:
 	ld a, (xsp + 8)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	call DSP_AlgoType_Dispatch1
 	extz xhl
 	ld a, (xsp + 6)
@@ -15819,10 +15819,10 @@ Voice_LoadFilterTable_Ch_ScanFilter:
 	ld a, (xsp + 8)
 	extz wa
 	ldw bc, 0xC
-	lds de, 0
+	ld de, 0:i3
 	call Voice_BuildOutputList
 	ld (xsp + 2), xhl
-	lds iz, 0
+	ld iz, 0:i3
 	jr Voice_LoadFilterTable_Ch_LoopCheck
 
 ; Per-voice broadcast via ToneGen_WriteExtParams_56b.
@@ -15859,18 +15859,18 @@ Voice_LoadFilterTable_All:
 	ld (xsp + 6), a
 	ld a, (xsp + 6)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	call DSP_AlgoType_Dispatch2
 	ld (0x04520a:24), hl
 	ld a, (xsp + 6)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	call DSP_AlgoType_Dispatch1
 	ld (0x04520e:24), hl
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0xC
-	lds de, 0
+	ld de, 0:i3
 	call Voice_BuildOutputList
 	ld (xsp), xhl
 	ldw (xsp + 4), 0x0
@@ -15945,7 +15945,7 @@ Voice_LoadToneTable_Ch_ScanLoop:
 	ld a, (xsp + 8)
 	extz wa
 	ldw bc, 0x10
-	lds de, 0
+	ld de, 0:i3
 	call Voice_BuildOutputList
 	ld (xsp), xhl
 	ldw (xsp + 4), 0x0
@@ -15988,7 +15988,7 @@ Voice_LoadToneTable_All:
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0x10
-	lds de, 0
+	ld de, 0:i3
 	call Voice_BuildOutputList
 	ld (xsp), xhl
 	ldw (xsp + 4), 0x0
@@ -16728,7 +16728,7 @@ Voice_DSP_OutputConfig:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
@@ -16772,7 +16772,7 @@ LABEL_027D61:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
@@ -16830,7 +16830,7 @@ Voice_DSP_OutputConfig2:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
@@ -16874,7 +16874,7 @@ LABEL_027E4E:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
@@ -16919,7 +16919,7 @@ Voice_DSP_SimpleCopy:
 	ld	a, (xsp+6)
 	extz	wa
 	ldw	bc, 16
-	lds	de, 0
+	ld	de, 0:i3
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
@@ -16962,7 +16962,7 @@ Voice_DSP_SimpleCopy2:
 	ld	a, (xsp+6)
 	extz	wa
 	ldw	bc, 16
-	lds	de, 0
+	ld	de, 0:i3
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
@@ -17968,7 +17968,7 @@ LABEL_0286BF:
 	jr	nz, LABEL_0286DD
 	cp	c, 0:i3
 	jr	z, LABEL_0286DD
-	lds	iy, 1
+	ld	iy, 1:i3
 LABEL_0286DD:
 	ld	c, w
 	extz	bc
@@ -18089,7 +18089,7 @@ LABEL_0287D8:
 	jr	nz, LABEL_0287F6
 	cp	c, 0:i3
 	jr	z, LABEL_0287F6
-	lds	iy, 1
+	ld	iy, 1:i3
 LABEL_0287F6:
 	ld	c, w
 	extz	bc
@@ -18449,14 +18449,14 @@ Voice_SetPolyphonyMode:
 	cp a, 1:i3
 	jr nz, Voice_SetPolyphonyMode_Else
 	orw (267075:24), 1
-	lds wa, 1
+	ld wa, 1:i3
 	call Voice_Reset_Engine
 	jr Voice_SetPolyphonyMode_Apply
 
 ; Else of Voice_SetPolyphonyMode.
 Voice_SetPolyphonyMode_Else:
 	andw (267075:24), 65534
-	lds wa, 0
+	ld wa, 0:i3
 	call Voice_Reset_Engine
 
 ; Apply of Voice_SetPolyphonyMode.
@@ -19160,7 +19160,7 @@ LABEL_02902A:
 	bit	7, (xbc+5)	; bit 7,(XBC+0x05)
 	jr	z, LABEL_029066
 	ld	xwa, xbc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	Voice_WriteChPanShift
 	ld	a, (xiz)
 	extz	wa
@@ -19175,7 +19175,7 @@ LABEL_029045:
 	jr	z, LABEL_029066
 LABEL_029052:
 	ld	xwa, xbc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	Voice_WriteChPanShift2
 	ld	a, (xiz)
 	extz	wa
@@ -19224,7 +19224,7 @@ LABEL_0290B6:
 	ld	xwa, xiz
 	call	Voice_Calc_LevelPair_FixedAtk
 	ld	xwa, xiz
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	Voice_WriteChPanShift2
 	ld	xwa, (xsp+8)
 	ld	a, (xwa)
@@ -19406,9 +19406,9 @@ AudioChannel_Handler_Cmd04_07:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	AlgoFlag_Write
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_02927A
 LABEL_02925E:
@@ -19419,7 +19419,7 @@ LABEL_02925E:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -19476,9 +19476,9 @@ LABEL_0292D7:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	AlgoFlag_Write
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_02932D
 LABEL_029311:
@@ -19489,7 +19489,7 @@ LABEL_029311:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -19605,9 +19605,9 @@ AudioChannel_Handler_Cmd10_13:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	AlgoFlag_Write_Bit3
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_02947C
 LABEL_029460:
@@ -19618,7 +19618,7 @@ LABEL_029460:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -19675,9 +19675,9 @@ LABEL_0294D9:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	AlgoFlag_Write_Bit3
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_02952F
 LABEL_029513:
@@ -19688,7 +19688,7 @@ LABEL_029513:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -19808,9 +19808,9 @@ AudioChannel_Handler_Cmd08_0B:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	AlgoFlag_Write
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_02968B
 LABEL_02966F:
@@ -19821,7 +19821,7 @@ LABEL_02966F:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 1
+	ld	de, 1:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -19878,9 +19878,9 @@ LABEL_0296E8:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	AlgoFlag_Write
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_02973E
 LABEL_029722:
@@ -19891,7 +19891,7 @@ LABEL_029722:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 1
+	ld	de, 1:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20008,9 +20008,9 @@ AudioChannel_Handler_Cmd14_17:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	AlgoFlag_Write_Bit3
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_029890
 LABEL_029874:
@@ -20021,7 +20021,7 @@ LABEL_029874:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 1
+	ld	de, 1:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20078,9 +20078,9 @@ LABEL_0298ED:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	AlgoFlag_Write_Bit3
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_029943
 LABEL_029927:
@@ -20091,7 +20091,7 @@ LABEL_029927:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 1
+	ld	de, 1:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20212,9 +20212,9 @@ AudioChannel_Handler_Cmd0C_0F:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	AlgoFlag_Write
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_029AA2
 LABEL_029A86:
@@ -20225,7 +20225,7 @@ LABEL_029A86:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 2
+	ld	de, 2:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20282,9 +20282,9 @@ LABEL_029AFF:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	AlgoFlag_Write
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_029B55
 LABEL_029B39:
@@ -20295,7 +20295,7 @@ LABEL_029B39:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 2
+	ld	de, 2:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20413,9 +20413,9 @@ AudioChannel_Handler_Cmd18_1B:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	AlgoFlag_Write_Bit3
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_029CA9
 LABEL_029C8D:
@@ -20426,7 +20426,7 @@ LABEL_029C8D:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 2
+	ld	de, 2:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20483,9 +20483,9 @@ LABEL_029D06:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	AlgoFlag_Write_Bit3
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_029D5C
 LABEL_029D40:
@@ -20496,7 +20496,7 @@ LABEL_029D40:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 2
+	ld	de, 2:i3
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -20949,7 +20949,7 @@ Voice_Portamento_OnHandler_C0Mode:
 	calr Voice_CC_SetSostenutoFlag
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	call AlgoType_StateWrite
 	ld a, (xsp + 2)
 	ld e, a
@@ -21260,7 +21260,7 @@ Voice_CC_Sustain:
 	extz wa
 	call Voice_AllocateForSustain
 	ld xwa, xhl
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_AllNotes_SustainRetrigger
 	jrl Voice_CC_Exit
 
@@ -21859,42 +21859,42 @@ Voice_SystemMsg_DispatchEntry2:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 0
+	ld wa, 0:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 1
+	ld wa, 1:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 2
+	ld wa, 2:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 3
+	ld wa, 3:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 4
+	ld wa, 4:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 5
+	ld wa, 5:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 6
+	ld wa, 6:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
-	lds wa, 7
+	ld wa, 7:i3
 	jrl ScaleTune_Set_User_Offset
 	ld a, (xwa + 3)
 	extz wa
@@ -21950,7 +21950,7 @@ Voice_ResetAllControllers:
 Voice_ResetAllControllers_LoopBody:
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_ModWheel_Apply
 	stb_erp A, 0xFB
 	extz wa
@@ -21966,19 +21966,19 @@ Voice_ResetAllControllers_LoopBody:
 	calr Voice_CC_SetExpression
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetSustain
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetSostenuto
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetSoftPedal
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_Portamento_OnHandler
 	stb_erp A, 0xFB
 	extz wa
@@ -21991,7 +21991,7 @@ Voice_ResetAllControllers_LoopBody:
 	call Voice_SetLFO_ActiveFlag
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr Voice_CC_SetPortamentoRate
 	stb_erp A, 0xFB
 	extz wa
@@ -22003,27 +22003,27 @@ Voice_ResetAllControllers_LoopBody:
 	calr Voice_CC_SetPortamentoTime
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetReverbDepth
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetChorusEnable
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 6
+	ld bc, 6:i3
 	calr Voice_CC_SetChorusDepth
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr Voice_CC_SetDelayDepth
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetDelayEnable
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr Voice_CC_SetDelayFeedback
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x1A
@@ -22031,7 +22031,7 @@ Voice_ResetAllControllers_LoopBody:
 
 ; PostLoop of Voice_ResetAllControllers.
 Voice_ResetAllControllers_PostLoop:
-	lds wa, 2
+	ld wa, 2:i3
 	calr Voice_SetPolyphonyMode
 	ldw wa, 0x7F
 	calr VoiceCC_Stub_Ret1
@@ -22039,18 +22039,18 @@ Voice_ResetAllControllers_PostLoop:
 	calr VoiceCC_Stub_Ret2
 	ldw wa, 0x40
 	calr Voice_SetPitchBendRangeAndApply
-	lds wa, 0
+	ld wa, 0:i3
 	calr Voice_SetPitchBendRange
-	lds wa, 0
+	ld wa, 0:i3
 	calr Voice_SetKeyShiftEnable
-	lds wa, 0
+	ld wa, 0:i3
 	calr ScaleTune_Set_Global_Mode
-	lds wa, 0
+	ld wa, 0:i3
 	calr Voice_SetRhythmMode
-	lds wa, 0
+	ld wa, 0:i3
 	calr Voice_SetParam_04134B
 	calr Voice_AllVoices_PortamentoUpdate
-	lds wa, 0
+	ld wa, 0:i3
 	calr Voice_SetCCMaxFlag
 	calr Voice_AllVoices_PortamentoReset
 	ldib_erp 0xFB, 0
@@ -22061,7 +22061,7 @@ Voice_ResetAllControllers_PostLoop:
 Voice_ResetAllControllers_ChanModeLoop:
 	stb_erp A, 0xFB
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr ScaleTune_Set_User_Offset
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x0C
@@ -22069,9 +22069,9 @@ Voice_ResetAllControllers_ChanModeLoop:
 
 ; ChanModeExit of Voice_ResetAllControllers.
 Voice_ResetAllControllers_ChanModeExit:
-	lds wa, 1
+	ld wa, 1:i3
 	calr Voice_AllVoices_UpdateVelocity
-	lds wa, 0
+	ld wa, 0:i3
 	calr ScaleTune_Set_Global_Enabled
 	popw_erp 0xFA
 	ret
@@ -22328,15 +22328,15 @@ Voice_Selector_FindBestSlot:
 	ld xiz, xwa
 	lda xwa, (xsp + 4)
 	ld bc, (xiz)
-	lds de, 0
+	ld de, 0:i3
 	calr Voice_Selector_Unpack3Groups
 	lda xwa, (xsp + 4)
 	ld bc, (xiz + 2)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_Selector_Unpack3Groups
 	lda xwa, (xsp + 4)
 	ld bc, (xiz + 4)
-	lds de, 2
+	ld de, 2:i3
 	calr Voice_Selector_Unpack3Groups
 	ldb e, 0xFF
 	ldb l, 0xFF
@@ -23213,7 +23213,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchB:
 ; Rate exceeded 0x64: use 0x64.
 Voice_Slot_ApplyPortamentoDelta_BranchC:
 	ld de, wa
-	lds wa, 0
+	ld wa, 0:i3
 	cp de, 0:i3
 	jr lt, Voice_Slot_ApplyPortamentoDelta_BranchD
 	ld wa, de
@@ -23476,7 +23476,7 @@ Voice_Build_Register_Set:
 	ld xwa, xiz
 	call Voice_Calc_LevelPair_PatchAtk
 	ld xwa, xiz
-	lds bc, 0
+	ld bc, 0:i3
 	call Voice_WriteChPanShift
 	ld xwa, xiz
 	call Voice_ComputePitch
@@ -23776,7 +23776,7 @@ Voice_Build_Partial_Descriptor:
 	ld xwa, (xsp + 20)
 	pushm (xwa + 12)
 	ld xwa, (xsp + 32)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_Allocate_Typed
 	jrl Voice_Build_Partial_Descriptor_ExitB
 
@@ -23824,7 +23824,7 @@ Voice_Build_Partial_Descriptor_BranchB:
 	add a, 0x28
 	extz wa
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr Voice_Pitch_ClampRange
 	ld (xsp + 32), l
 	jr Voice_Build_Partial_Descriptor_BranchD
@@ -23837,7 +23837,7 @@ Voice_Build_Partial_Descriptor_BranchC:
 	add a, 0xC
 	extz wa
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr Voice_Pitch_ClampRange
 	ld (xsp + 32), l
 
@@ -24026,7 +24026,7 @@ Voice_Build_Four_Partials:
 	pushw wa
 	pushw 0x0
 	ld xwa, (xsp + 20)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_Build_Partial_Descriptor
 	jr Voice_Build_Four_Partials_BranchB
 
@@ -24045,7 +24045,7 @@ Voice_Build_Four_Partials_BranchA:
 	pushw wa
 	pushw 0x0
 	ld xwa, (xsp + 20)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_Build_Partial_Descriptor
 
 ; Re-read the layer-enable mask and branch on bit 0x0F for the second layer pair.
@@ -24071,7 +24071,7 @@ Voice_Build_Four_Partials_BranchB:
 	pushw wa
 	pushw 0x1
 	ld xwa, (xsp + 20)
-	lds de, 2
+	ld de, 2:i3
 	calr Voice_Build_Partial_Descriptor
 	jr Voice_Build_Four_Partials_BranchD
 
@@ -24090,7 +24090,7 @@ Voice_Build_Four_Partials_BranchC:
 	pushw wa
 	pushw 0x1
 	ld xwa, (xsp + 20)
-	lds de, 2
+	ld de, 2:i3
 	calr Voice_Build_Partial_Descriptor
 
 ; Layers 2 and 3 (mask bits 4 and 8), then Voice_Allocate_Nodes and the commit loop.
@@ -24108,7 +24108,7 @@ Voice_Build_Four_Partials_BranchD:
 	pushw wa
 	pushw 0x5
 	ld xwa, (xsp + 20)
-	lds de, 4
+	ld de, 4:i3
 	calr Voice_Build_Partial_Descriptor
 	ld a, (xsp + 8)
 	ld c, a
@@ -24201,7 +24201,7 @@ Voice_Build_Four_Partials_AltSlotPath:
 
 ; staging+0x2F was zero: live+0x2F = 0.
 Voice_Build_Four_Partials_BranchE:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Store the packed +0x2F word into the live record (0x0430BD + slot*0x47).
 Voice_Build_Four_Partials_BranchF:
@@ -24563,7 +24563,7 @@ Voice_NoteOn_Type2_BranchB:
 	pushw wa
 	pushw 0x0
 	ld xwa, (xsp + 18)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_NoteOn_Type3
 	ld a, (xsp + 8)
 	ld c, a
@@ -24577,7 +24577,7 @@ Voice_NoteOn_Type2_BranchB:
 	pushw wa
 	pushw 0x1
 	ld xwa, (xsp + 18)
-	lds de, 2
+	ld de, 2:i3
 	calr Voice_NoteOn_Type3
 	ld a, (xsp + 8)
 	ld c, a
@@ -24591,7 +24591,7 @@ Voice_NoteOn_Type2_BranchB:
 	pushw wa
 	pushw 0x1
 	ld xwa, (xsp + 18)
-	lds de, 4
+	ld de, 4:i3
 	calr Voice_NoteOn_Type3
 	bitm 7, (xsp + 18)
 	jr z, Voice_NoteOn_Type2_BranchC
@@ -24607,7 +24607,7 @@ Voice_NoteOn_Type2_BranchB:
 	pushw wa
 	pushw 0x3
 	ld xwa, (xsp + 18)
-	lds de, 0
+	ld de, 0:i3
 	calr Voice_NoteOn_Type3
 	jr Voice_NoteOn_Type2_BranchD
 
@@ -24720,7 +24720,7 @@ Voice_Init_Type2:
 	ld xwa, xiz
 	call Voice_Calc_LevelPair_FixedAtk
 	ld xwa, xiz
-	lds bc, 0
+	ld bc, 0:i3
 	call Voice_WriteChPanShift2
 	ld xwa, xiz
 	call Voice_Level_ClearAllOutputRegs
@@ -24828,7 +24828,7 @@ Voice_Allocate_Type2:
 	add a, 0x10
 	extz wa
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	calr Voice_Pitch_ClampRange
 	ld (xsp + 36), l
 
@@ -24933,7 +24933,7 @@ Voice_NoteOn_Type1:
 	pushw wa
 	pushw 0x0
 	ld xwa, (xsp + 18)
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_Allocate_Type2
 	ld a, (xsp + 8)
 	ld c, a
@@ -24947,7 +24947,7 @@ Voice_NoteOn_Type1:
 	pushw wa
 	pushw 0x1
 	ld xwa, (xsp + 18)
-	lds de, 4
+	ld de, 4:i3
 	calr Voice_Allocate_Type2
 	ld xwa, (xsp + 10)
 	ld (xwa + 4), 0x0
@@ -25046,7 +25046,7 @@ Voice_Init_Type1:
 	ld xwa, xiz
 	call Voice_Calc_LevelPair_FixedAtk
 	ld xwa, xiz
-	lds bc, 0
+	ld bc, 0:i3
 	call Voice_WriteChPanShift2
 	ld xwa, xiz
 	call Voice_Level_ClearAllOutputRegs
@@ -25260,7 +25260,7 @@ Voice_NoteOn_Rhythm:
 	pushw wa
 	pushw 0x3
 	ld xwa, xiz
-	lds de, 1
+	ld de, 1:i3
 	calr Voice_Allocate_1of4
 	ld (xiz + 6), 0x40
 	ld (xiz + 3), 0x0
@@ -25285,7 +25285,7 @@ Voice_NoteOn_Rhythm_BranchA:
 	pushw wa
 	pushw 0x3
 	ld xwa, xiz
-	lds de, 4
+	ld de, 4:i3
 	calr Voice_Allocate_1of4
 	ld (xiz + 7), 0x0
 
@@ -26803,7 +26803,7 @@ ToneGen_WriteVoiceParams:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld iz, wa
-	lds wa, 0
+	ld wa, 0:i3
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x40
@@ -28766,7 +28766,7 @@ DSP_Config_Init:
 	ld xix, xwa
 	ldw bc, 0x22
 	ldirw
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x40
 	jrl nc, ToneGen_ConfigInit_Return
 
@@ -28927,19 +28927,19 @@ LABEL_02E0EB:
 	nop
 	lda	xwa, (63769:24)
 	ld	xbc, xwa
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	ToneGen_WriteVoiceParams
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldw	bc, 61440
 	calr	ToneGen_WriteSingleReg
 	cpw	qiz, 1000
 	jr	nc, LABEL_02E155
 LABEL_02E109:
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	ToneGen_Read_Register
 	cp	hl, 0:i3
 	jr	z, LABEL_02E14B
-	lds	iz, 0
+	ld	iz, 0:i3
 	res_dd8	7, 24
 	ldw	(1048576:24), 2112
 	nop
@@ -29120,7 +29120,7 @@ Voice_Part_Mode_Is_C0:
 ; the destination is XBC, not XHL. Used by all five VOICEPARAM_*_LOAD_* routines below.
 BlockCopy_Words_BC_to_HL:
 	ld xhl, xbc
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, de
 	ret nc
 
@@ -29790,7 +29790,7 @@ VoiceParam_Set_Tone_Option_Case0:
 	call	214534
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	VoiceAlloc_WithRoutingFlag_ExtData
 	jr	79
 	ld	a, (xsp+2)
@@ -29798,7 +29798,7 @@ VoiceParam_Set_Tone_Option_Case0:
 	call	214609
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	VoiceAlloc_WithRoutingFlag_ExtData
 	jr	58
 	ld	a, (xsp+2)
@@ -29806,7 +29806,7 @@ VoiceParam_Set_Tone_Option_Case0:
 	call	214684
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	VoiceAlloc_WithRoutingFlag_ExtData
 	jr	37
 	ld	a, (xsp+2)
@@ -29820,7 +29820,7 @@ VoiceParam_Set_Tone_Option_Case0:
 	extz	wa
 	call	183541
 	ld	xwa, xhl
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	167462
 	inc	4, xsp
 	ret
@@ -29861,7 +29861,7 @@ VoiceParam_CustomTone_Select:
 	ld	a, (xhl+15)
 	and	a, 7
 	ld	(xde), a
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	bc, 4:i3
 	jr	nc, 32
 	ld	wa, bc
@@ -30864,42 +30864,42 @@ DSP_EffParam_Apply_By_AlgoType:
 ; Algorithm type 0: DSP_EffParam_Copy_V0 with descriptor 0.
 DSP_EffParam_Apply_T0:
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	jrl	t, 0xfd30
 ; Algorithm type 1: DSP_EffParam_Copy_V0 with descriptor 1.
 DSP_EffParam_Apply_T1:
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	jrl	t, 0xfd29
 ; Algorithm type 2: DSP_EffParam_Copy_V0 with descriptor 2.
 DSP_EffParam_Apply_T2:
 	extz	wa
-	lds	bc, 2
+	ld	bc, 2:i3
 	jrl	t, 0xfd22
 ; Algorithm type 3: DSP_EffParam_Copy_V0 with descriptor 3.
 DSP_EffParam_Apply_T3:
 	extz	wa
-	lds	bc, 3
+	ld	bc, 3:i3
 	jrl	t, 0xfd1b
 ; Algorithm type 4: DSP_EffParam_Copy_V1 with descriptor 4.
 DSP_EffParam_Apply_T4:
 	extz	wa
-	lds	bc, 4
+	ld	bc, 4:i3
 	jrl	t, 0xfd61
 ; Algorithm type 5: DSP_EffParam_Copy_V1 with descriptor 5.
 DSP_EffParam_Apply_T5:
 	extz	wa
-	lds	bc, 5
+	ld	bc, 5:i3
 	jrl	t, 0xfd5a
 ; Algorithm type 6: DSP_EffParam_Copy_V2 with descriptor 6.
 DSP_EffParam_Apply_T6:
 	extz	wa
-	lds	bc, 6
+	ld	bc, 6:i3
 	jrl	t, 0xfda6
 ; Algorithm type 7: DSP_EffParam_Copy_V3 with descriptor 7.
 DSP_EffParam_Apply_T7:
 	extz	wa
-	lds	bc, 7
+	ld	bc, 7:i3
 	jrl	t, 0xfdef
 ; Algorithm type 8: DSP_EffParam_Copy_V4 with descriptor 8.
 DSP_EffParam_Apply_T8:
@@ -30950,18 +30950,18 @@ Voice_DSPOut_Apply_A:
 Voice_DSPOut_A_Type0To3:
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	163044
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	163044
 	jr	t, 55
 ; Algorithm types 4..5: Voice_DSP_OutputConfig(part, 0) only.
 Voice_DSPOut_A_Type4To5:
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	163044
 	jr	t, 43
 ; Algorithm type 6: Voice_DSP_SimpleCopy(part).
@@ -30981,7 +30981,7 @@ Voice_DSPOut_A_Type7:
 	jr	z, 10
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	163044
 ; Pop the one-word frame and return.
 Voice_DSPOut_A_Return:
@@ -31016,18 +31016,18 @@ Voice_DSPOut_Apply_B:
 Voice_DSPOut_B_Type0To3:
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	163281
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	163281
 	jr	t, 63
 ; Algorithm types 4..5: Voice_DSP_OutputConfig2(part, 0) only.
 Voice_DSPOut_B_Type4To5:
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	163281
 	jr	t, 51
 ; Algorithm type 6: Voice_DSP_SimpleCopy2(part).
@@ -31048,7 +31048,7 @@ Voice_DSPOut_B_Type7:
 	jr	z, 18
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	163281
 	ld	a, (xsp)
 	extz	wa
@@ -31084,7 +31084,7 @@ Voice_DSPOut_Second_A:
 ; Types 4..5: tail-jump Voice_DSP_OutputConfig(part, 1).
 Voice_DSPOut_Second_A_Slot1:
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	jp	163044
 ; Type 6: tail-jump Voice_DSP_SimpleCopy(part).
 Voice_DSPOut_Second_A_Simple:
@@ -31100,12 +31100,12 @@ Voice_DSPOut_Second_A_Gated:
 	bit	14, bc
 	ret	z
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	jp	163044
 ; Types 0x0A..0x0B: tail-jump Voice_DSP_OutputConfig(part, 0).
 Voice_DSPOut_Second_A_Slot0:
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	jp	163044
 ; Types 8..9: bare return.
 Voice_DSPOut_Second_A_None:
@@ -31130,7 +31130,7 @@ Voice_DSPOut_Second_B:
 ; Tail-jump Voice_DSP_OutputConfig2(part, 1).
 Voice_DSPOut_Second_B_Slot1:
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	jp	163281
 ; Algorithm type 7: gate on PART+0x0A bit 14 before the same call.
 Voice_DSPOut_Second_B_Gated:
@@ -31142,7 +31142,7 @@ Voice_DSPOut_Second_B_Gated:
 	bit	14, bc
 	ret	z
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	jp	163281
 
 ; Input A = part, C = flag.  Calls VoiceAlloc_CheckAndInit(part) and then sets or clears
@@ -31193,7 +31193,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	208853
 	ld	a, (xsp+12)
 	ld	e, a
@@ -31203,7 +31203,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	209109
 	ldib_erp	251, 0
 	cpib_erp	251, 4
@@ -31217,7 +31217,7 @@ VoiceAlloc_Apply_Grp0_RoutingLoop:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	209854
 	incb_erp	251, 1
 	cpib_erp	251, 4
@@ -31233,7 +31233,7 @@ VoiceAlloc_Apply_Grp0_BuildList:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	137870
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0
@@ -31309,7 +31309,7 @@ VoiceAlloc_Apply_Algo_Group1:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	208853
 	ld	a, (xsp+10)
 	ld	e, a
@@ -31319,7 +31319,7 @@ VoiceAlloc_Apply_Algo_Group1:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	209109
 	ldib_erp	251, 0
 	cpib_erp	251, 4
@@ -31333,7 +31333,7 @@ VoiceAlloc_Apply_Grp1_RoutingLoop:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 1
+	ld	de, 1:i3
 	call	209854
 	incb_erp	251, 1
 	cpib_erp	251, 4
@@ -31349,7 +31349,7 @@ VoiceAlloc_Apply_Grp1_BuildList:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	137870
 	ld	(xsp+4), xhl
 	ld	qiz, 0
@@ -31421,7 +31421,7 @@ VoiceAlloc_Apply_Algo_Group2:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	208853
 	ld	a, (xsp+10)
 	ld	e, a
@@ -31431,7 +31431,7 @@ VoiceAlloc_Apply_Algo_Group2:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	209109
 	ldib_erp	251, 0
 	cpib_erp	251, 4
@@ -31445,7 +31445,7 @@ VoiceAlloc_Apply_Grp2_RoutingLoop:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 2
+	ld	de, 2:i3
 	call	209854
 	incb_erp	251, 1
 	cpib_erp	251, 4
@@ -31461,7 +31461,7 @@ VoiceAlloc_Apply_Grp2_BuildList:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	137870
 	ld	(xsp+4), xhl
 	ld	qiz, 0
@@ -31553,7 +31553,7 @@ Audio_Cmd_EffParam_Grp0:
 	ld_rrl	xwa, xbc, wa
 	lda	xde, (xwa+20)
 	ld	wa, hl
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 258
 ; Opcode 0x18: AudioChannel_Dispatch(WA=part, XDE=&patch[0x17], BC=0).
@@ -31570,7 +31570,7 @@ Audio_Cmd_EffParam_Grp1:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 214
 ; Opcode 0x1B: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1A], BC=0).
@@ -31587,7 +31587,7 @@ Audio_Cmd_EffParam_Grp2:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 170
 ; Opcode 0x1E: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1D], BC=0).
@@ -31604,7 +31604,7 @@ Audio_Cmd_EffParam_Grp3:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jr	t, 127
 ; Opcode 0x21: AudioChannel_Dispatch(WA=part, XDE=&patch[0x20], BC=0).
@@ -31621,7 +31621,7 @@ Audio_Cmd_EffParam_Grp4:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jr	t, 84
 ; Opcode 0x24: AudioChannel_Dispatch(WA=part, XDE=&patch[0x23], BC=0).
@@ -31638,7 +31638,7 @@ Audio_Cmd_EffParam_Grp5:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jr	t, 41
 ; Opcode 0x27: AudioChannel_Dispatch(WA=part, XDE=&patch[0x26], BC=0).
@@ -31655,7 +31655,7 @@ Audio_Cmd_EffParam_Grp6:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 ; Common tail of stage 1 and the entry to stage 2.  Stores (rec+4) into the parameter shadow
 ; at UserTone_VelSplit_Base + opcode (0x044FCE + opcode), then range-checks the opcode:
@@ -31726,7 +31726,7 @@ Audio_Cmd_EffParam_Op14:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 812
 ; Opcode 0x17: AudioChannel_Dispatch(part, &patch[0x17], 0).
@@ -31743,7 +31743,7 @@ Audio_Cmd_EffParam_Op17:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 768
 ; Opcode 0x1A: AudioChannel_Dispatch(part, &patch[0x1A], 0).
@@ -31760,7 +31760,7 @@ Audio_Cmd_EffParam_Op1A:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 724
 ; Opcode 0x1D: AudioChannel_Dispatch(part, &patch[0x1D], 0).
@@ -31777,7 +31777,7 @@ Audio_Cmd_EffParam_Op1D:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 680
 ; Opcode 0x20: AudioChannel_Dispatch(part, &patch[0x20], 0).
@@ -31794,7 +31794,7 @@ Audio_Cmd_EffParam_Op20:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 636
 ; Opcode 0x23: AudioChannel_Dispatch(part, &patch[0x23], 0).
@@ -31811,7 +31811,7 @@ Audio_Cmd_EffParam_Op23:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 592
 ; Opcode 0x26: AudioChannel_Dispatch(part, &patch[0x26], 0).
@@ -31828,7 +31828,7 @@ Audio_Cmd_EffParam_Op26:
 	ld	xbc, xwa
 	ld	wa, de
 	ld	xde, xbc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	171569
 	jrl	t, 548
 ; Opcodes 0x2B..0x2E: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 0) -- group 0 apply.
@@ -31838,7 +31838,7 @@ Audio_Cmd_EffParam_Grp0_Slot0:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	63938
 	jrl	532
 ; Opcodes 0x2F..0x32: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 1).
@@ -31846,7 +31846,7 @@ Audio_Cmd_EffParam_Grp0_Slot1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	63922
 	jrl	516
 ; Opcodes 0x33..0x36: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 2).
@@ -31854,7 +31854,7 @@ Audio_Cmd_EffParam_Grp0_Slot2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	63906
 	jrl	500
 ; Opcodes 0x37..0x3A: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 3).
@@ -31862,7 +31862,7 @@ Audio_Cmd_EffParam_Grp0_Slot3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	63890
 	jrl	484
 ; Opcodes 0x3B..0x3E: VoiceAlloc_Apply_Algo_Group1(part, slot 0).
@@ -31870,7 +31870,7 @@ Audio_Cmd_EffParam_Grp1_Slot0:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	64136
 	jrl	468
 ; Opcodes 0x3F..0x42: VoiceAlloc_Apply_Algo_Group1(part, slot 1).
@@ -31878,7 +31878,7 @@ Audio_Cmd_EffParam_Grp1_Slot1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	64120
 	jrl	452
 ; Opcodes 0x43..0x46: VoiceAlloc_Apply_Algo_Group1(part, slot 2).
@@ -31886,7 +31886,7 @@ Audio_Cmd_EffParam_Grp1_Slot2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	64104
 	jrl	436
 ; Opcodes 0x47..0x4A: VoiceAlloc_Apply_Algo_Group1(part, slot 3).
@@ -31894,7 +31894,7 @@ Audio_Cmd_EffParam_Grp1_Slot3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	64088
 	jrl	420
 ; Opcodes 0x4B..0x4E: VoiceAlloc_Apply_Algo_Group2(part, slot 0).
@@ -31902,7 +31902,7 @@ Audio_Cmd_EffParam_Grp2_Slot0:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	64333
 	jrl	404
 ; Opcodes 0x4F..0x52: VoiceAlloc_Apply_Algo_Group2(part, slot 1).
@@ -31910,7 +31910,7 @@ Audio_Cmd_EffParam_Grp2_Slot1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	64317
 	jrl	388
 ; Opcodes 0x53..0x56: VoiceAlloc_Apply_Algo_Group2(part, slot 2).
@@ -31918,7 +31918,7 @@ Audio_Cmd_EffParam_Grp2_Slot2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	64301
 	jrl	372
 ; Opcodes 0x57..0x5A: VoiceAlloc_Apply_Algo_Group2(part, slot 3).
@@ -31926,7 +31926,7 @@ Audio_Cmd_EffParam_Grp2_Slot3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	64285
 	jrl	356
 ; Opcode 0x5D with (rec+5) == 0x0F: the heaviest case in the region.  In order:
@@ -31946,7 +31946,7 @@ Audio_Cmd_EffParam_Op5D_FullRebuild:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	210263
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
@@ -32108,7 +32108,7 @@ DSP_SlotParam_Write_From_Cache:
 	and	a, 7
 	cp	a, (xbc)
 	jr	nz, 39
-	lds	hl, 0
+	ld	hl, 0:i3
 	cp	hl, 4:i3
 	ret	nc
 ; Shapes agree: copy cache[1..4] to descriptor+0x4D..+0x50 in a 4-iteration loop.
@@ -32158,7 +32158,7 @@ DSP_SlotParam_Write_Shape1Or3:
 	ret
 ; Plain 4-byte copy fallback for the {1,3} branch.
 DSP_SlotParam_Write_Shape1Or3_Plain:
-	lds	hl, 0
+	ld	hl, 0:i3
 	cp	hl, 4:i3
 	ret	nc
 ; Loop body of that fallback.
@@ -32194,7 +32194,7 @@ DSP_SlotParam_Write_Shape2Or4:
 	ret
 ; Plain 4-byte copy fallback for the {2,4} branch.
 DSP_SlotParam_Write_Shape2Or4_Plain:
-	lds	hl, 0
+	ld	hl, 0:i3
 	cp	hl, 4:i3
 	ret	nc
 ; Loop body of that fallback.
@@ -32270,7 +32270,7 @@ DSP_SlotParam_Read_To_Cache:
 	and	a, 7
 	cp	a, (xhl)
 	ret	nz
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	bc, 4:i3
 	ret	nc
 ; 4-iteration copy loop.
@@ -32389,7 +32389,7 @@ Audio_Cmd_DSPUnit_Op02:
 	extz	bc
 	ld	wa, de
 	call	206518
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jrl	nc, 441
 ; Four-iteration slot loop of opcode 0x02/0x03.
@@ -32422,7 +32422,7 @@ Audio_Cmd_DSPUnit_Op05:
 ; Opcode 0x06: for slots 0..3 AlgoFlag_Write_Bit3(part, slot, 0) and
 ; AlgoFlag_Write(part, slot, 0), then EFF_RoutingInit(part, unit, 0).
 Audio_Cmd_DSPUnit_Op06:
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, 60
 ; Four-iteration slot loop of opcode 0x06.
@@ -32436,7 +32436,7 @@ Audio_Cmd_DSPUnit_Op06_SlotLoop:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	209109
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
@@ -32447,7 +32447,7 @@ Audio_Cmd_DSPUnit_Op06_SlotLoop:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	208853
 	inc	1, iz
 	cp	iz, 4:i3
@@ -32462,7 +32462,7 @@ Audio_Cmd_DSPUnit_Op06_Routing:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	call	209854
 	jrl	t, 287
 ; Opcode 0x17 (special-cased before the table): Voice_Query_PartVoices(part) then
@@ -32478,7 +32478,7 @@ Audio_Cmd_DSPUnit_Op17:
 ; Opcode 0x26: the opcode-0x06 sequence with group 1 -- AlgoFlag_Write_Bit3(...,1),
 ; AlgoFlag_Write(...,1) for four slots, then EFF_RoutingInit(part, unit, 1).
 Audio_Cmd_DSPUnit_Op26:
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, 60
 ; Four-iteration slot loop of opcode 0x26.
@@ -32492,7 +32492,7 @@ Audio_Cmd_DSPUnit_Op26_SlotLoop:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	209109
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
@@ -32503,7 +32503,7 @@ Audio_Cmd_DSPUnit_Op26_SlotLoop:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	208853
 	inc	1, iz
 	cp	iz, 4:i3
@@ -32518,7 +32518,7 @@ Audio_Cmd_DSPUnit_Op26_Routing:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 1
+	ld	de, 1:i3
 	call	209854
 	jrl	t, 172
 ; Opcode 0x2D: Voice_AllocateForSustain(part) then
@@ -32529,7 +32529,7 @@ Audio_Cmd_DSPUnit_Op2D:
 	extz	wa
 	call	183541
 	ld	xwa, xhl
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	167462
 	jrl	t, 149
 ; Opcode 0x36: only when (rec+5) == 7, DSP_SlotParam_Write_From_Cache(part, unit).
@@ -32549,7 +32549,7 @@ Audio_Cmd_DSPUnit_Op36:
 	jr	115
 ; Opcode 0x38: the opcode-0x06 sequence with group 2, then EFF_RoutingInit(part, unit, 2).
 Audio_Cmd_DSPUnit_Op38:
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, 60
 ; Four-iteration slot loop of opcode 0x38.
@@ -32563,7 +32563,7 @@ Audio_Cmd_DSPUnit_Op38_SlotLoop:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	209109
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
@@ -32574,7 +32574,7 @@ Audio_Cmd_DSPUnit_Op38_SlotLoop:
 	extz	bc
 	ld	wa, de
 	ld	de, bc
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	208853
 	inc	1, iz
 	cp	iz, 4:i3
@@ -32589,7 +32589,7 @@ Audio_Cmd_DSPUnit_Op38_Routing:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 2
+	ld	de, 2:i3
 	call	209854
 	jr	t, 22
 ; Opcodes 0x4D..0x50: DSP_SlotParam_Read_To_Cache(part, unit).  Read-back only.
@@ -32659,7 +32659,7 @@ Audio_Cmd_PatchByte_Write_And_Echo:
 	ld	xde, xwa
 	add	xde, xbc
 	ld	xwa, xhl
-	lds	bc, 1
+	ld	bc, 1:i3
 	jp	134579
 ; Bank-buffer flavour of DSP_SlotParam_Write_From_Cache.  Input A = record index.
 ; Target record = ToneDB_RamBankA + 0x4AB7 + (editIndex*0x50) + index*0x15, where editIndex
@@ -32690,7 +32690,7 @@ DSP_SlotParam_Write_From_Cache_B:
 	and	a, 7
 	cp	a, (xde)
 	jr	nz, 39
-	lds	hl, 0
+	ld	hl, 0:i3
 	cp	hl, 4:i3
 	ret	nc
 ; Shapes agree: copy cache[1..4] into record+0x11..+0x14.
@@ -32738,7 +32738,7 @@ DSP_SlotParam_Write_B_Shape1Or3:
 	ret
 ; Plain copy fallback.
 DSP_SlotParam_Write_B_Shape1Or3_Plain:
-	lds	hl, 0
+	ld	hl, 0:i3
 	cp	hl, 4:i3
 	ret	nc
 ; Loop body of that fallback.
@@ -32773,7 +32773,7 @@ DSP_SlotParam_Write_B_Shape2Or4:
 	ret
 ; Plain copy fallback.
 DSP_SlotParam_Write_B_Shape2Or4_Plain:
-	lds	hl, 0
+	ld	hl, 0:i3
 	cp	hl, 4:i3
 	ret	nc
 ; Loop body of that fallback.
@@ -32851,7 +32851,7 @@ DSP_SlotParam_Read_To_Cache_B:
 	and	a, 7
 	cp	a, (xhl)
 	ret	nz
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	bc, 4:i3
 	ret	nc
 ; 4-iteration copy loop.
@@ -32940,34 +32940,34 @@ Audio_Cmd_ToneEdit_Reply_Case_Sustain:
 	extz	wa
 	call	183541
 	ld	xwa, xhl
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	167462
 	jr	t, 46
 ; Only when (rec+5) == 7: DSP_SlotParam_Write_From_Cache_B(index 0).
 Audio_Cmd_ToneEdit_Reply_Case_Slot0:
 	cp	(xiz+5), 7
 	jr	nz, 40
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	64890
 	jr	33
 ; Only when (rec+5) == 7: DSP_SlotParam_Write_From_Cache_B(index 1).
 Audio_Cmd_ToneEdit_Reply_Case_Slot1:
 	cp	(xiz+5), 7
 	jr	nz, 27
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	64877
 	jr	20
 ; DSP_SlotParam_Read_To_Cache_B for indices 0 and 1.
 Audio_Cmd_ToneEdit_Reply_Case_ReadBack:
 	ld	a, (xiz+1)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	65206
 ; Table entry that enters the read-back pair at its second call only (index 1).
 Audio_Cmd_ToneEdit_Reply_Case_ReadBack1:
 	ld	a, (xiz+1)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	65196
 ; ★ The unconditional sub->main reply.  Builds
 ;   dst = 0x001E0000 + 0x4AA7 + editIndex*0x50   (editIndex = [ToneDB_RamBankA + 0x72A7])
@@ -33073,7 +33073,7 @@ Audio_Cmd_ToneEdit_Field_Write_And_Reply:
 	ld	xde, xwa
 	add	xde, xbc
 	ld	xwa, xhl
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	134579
 	pop qiz
 	inc	4, xsp
@@ -33101,7 +33101,7 @@ DSP_EffectStateQuery_WriteZero:
 
 ; Return HL = 1 (success).
 DSP_EffectStateQuery_SetResult:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 ; Input XWA = PART record base.  Applies the five global offset bytes at 0x0451A6..0x0451AC
@@ -33241,7 +33241,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	extz wa
 	add wa, (xsp + 6)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_To_DEBC
 	ld iz, hl
 	stw_erp WA, 0xFA
@@ -33264,7 +33264,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	extz wa
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_To_DEBC
 	ld iz, hl
 	stw_erp WA, 0xFA
@@ -33294,7 +33294,7 @@ DSP_AdjustVoiceParams_Vibrato:
 	extz wa
 	add wa, bc
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_Short
 	ld iz, hl
 	ld xwa, (xsp + 10)
@@ -33311,7 +33311,7 @@ DSP_AdjustVoiceParams_Vibrato:
 	extz wa
 	add wa, bc
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_Short
 	ld iz, hl
 	ld xwa, (xsp + 10)
@@ -33332,7 +33332,7 @@ DSP_AdjustVoiceParams_Filter:
 	extz wa
 	add wa, bc
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_Short
 	ld iz, hl
 	ld xwa, (xsp + 10)
@@ -33349,7 +33349,7 @@ DSP_AdjustVoiceParams_Filter:
 	extz wa
 	add wa, bc
 	ldw bc, 0x7F
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_Short
 	ld iz, hl
 	ld xwa, (xsp + 10)
@@ -33367,7 +33367,7 @@ DSP_AdjustVoiceParams_Filter:
 	exts wa
 	add wa, iz
 	ldw bc, 0x1E
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_Short
 	ld iz, hl
 	ld xwa, (xsp + 10)
@@ -33388,7 +33388,7 @@ DSP_AdjustVoiceParams_Filter:
 	exts wa
 	add wa, iz
 	ldw bc, 0x1E
-	lds de, 0
+	ld de, 0:i3
 	call ClampS16_WA_Short
 	ld iz, hl
 	ld xwa, (xsp + 10)
@@ -33479,7 +33479,7 @@ DSP_AlgoSelect_InvalidParam:
 
 ; HL = 1, restore XIZ, return.
 DSP_AlgoSelect_Return:
-	lds hl, 1
+	ld hl, 1:i3
 	pop xiz
 	inc 8, xsp
 	ret
@@ -33495,7 +33495,7 @@ DSP_MixSendConfig:
 	call ToneDB_Find_ToneRecord
 	ld xbc, xhl
 	ldw hl, 0x11
-	lds de, 0
+	ld de, 0:i3
 	cp de, hl
 	jr nc, DSP_MixSendConfig_Return
 
@@ -33575,7 +33575,7 @@ DSP_RouteCoeffs_TypeA_Fetch:
 	ld	xiy, (283408:24)
 	add	xiy, xhl
 	ldw	hl, 13
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, hl
 	jr	nc, 40
 ; 0x0D-byte copy into 0x045210+6.
@@ -33656,7 +33656,7 @@ DSP_RouteCoeffs_TypeB_Fetch:
 	ld	xiy, (283408:24)
 	add	xiy, xhl
 	ldw	hl, 13
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, hl
 	jr	nc, 40
 ; 0x0D-byte copy into 0x045210+6.
@@ -33698,7 +33698,7 @@ DSP_CopyCoeffs_TypeA:
 	ld	xiy, (283408:24)
 	add	xiy, xbc
 	ldw	hl, 13
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, hl
 	jr	nc, DSP_CopyCoeffs_TypeA_Return
 ; 0x0D-byte copy loop, counter in IX.
@@ -33739,7 +33739,7 @@ DSP_CopyCoeffs_TypeB:
 	ld	xiy, (283408:24)
 	add	xiy, xbc
 	ldw	hl, 13
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, hl
 	jr	nc, DSP_CopyCoeffs_TypeB_Return
 ; 0x0D-byte copy loop, counter in IX.
@@ -33872,7 +33872,7 @@ DSP_VoiceCoeffRoute_Fetch:
 	ld	xix, (283408:24)
 	add	xix, xhl
 	ldw	hl, 13
-	lds	iy, 0
+	ld	iy, 0:i3
 	cp	iy, hl
 	jr	nc, DSP_VoiceCoeffRoute_Epilogue
 ; 0x0D-byte copy into 0x045210+6, followed by three extra bytes: row+0x0D, then the row
@@ -34058,7 +34058,7 @@ DSP_VoiceCoeffRoute2_Fetch:
 	add	xwa, xix
 	ld	xix, xwa
 	ldw	hl, 13
-	lds	iy, 0
+	ld	iy, 0:i3
 	cp	iy, hl
 	jr	nc, DSP_VoiceCoeffRoute2_Epilogue
 ; 0x0D-byte copy into 0x045210+6.
@@ -34174,7 +34174,7 @@ DSP_AlgoCoeffLookup_CopyLoop:
 	inc	3, a
 	ld	l, a
 	extz	hl
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, hl
 	ret	nc
 	ld	wa, de
@@ -34317,7 +34317,7 @@ DSP_ReadVoiceParam5D:
 	call ToneDB_Find_ToneRecord
 	ld a, (xhl + 93)
 	ld (xiz), a
-	lds hl, 1
+	ld hl, 1:i3
 	pop xiz
 	ret
 
@@ -34391,7 +34391,7 @@ DSP_VoiceParam_Dispatch_UseVoiceBuffer:
 ; Copy 0x0D bytes from XHL to the caller's buffer (post-increment through XIZ).
 DSP_VoiceParam_Dispatch_Copy:
 	ldw	wa, 13
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, wa
 	jr	nc, DSP_VoiceParam_Dispatch_Return
 ; Loop body of that copy.
@@ -34534,7 +34534,7 @@ DSP_SetCoeff_DirectLookup:
 ; Set the 10-byte copy count in HL (this value is also the return value).
 DSP_SetCoeff_CopyLoop:
 	ldw hl, 0xA
-	lds de, 0
+	ld de, 0:i3
 	cp de, hl
 	jr nc, DSP_SetCoeff_Return
 
@@ -34572,7 +34572,7 @@ DSP_SetCoeff_CopyDirect:
 	ld	xiy, (283408:24)
 	add	xiy, xbc
 	ldw	hl, 13
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, hl
 	jr	nc, LABEL_031272
 LABEL_03124A:
@@ -34673,7 +34673,7 @@ DSP_SetCoeff_RouteComplex:
 	jr	z, 53
 	cp	wa, 0:i3
 	jr	nz, 108
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, hl
 	jr	nc, 102
 	ld	bc, ix
@@ -34695,7 +34695,7 @@ DSP_SetCoeff_RouteComplex:
 	cp	ix, hl
 	jr	c, -41
 	jr	t, 59
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, hl
 	jr	nc, 53
 	ld	a, c
@@ -34765,7 +34765,7 @@ DSP_SetCoeff_CopyDirect2:
 	ld	xiy, (283408:24)
 	add	xiy, xbc
 	ldw	hl, 13
-	lds	ix, 0
+	ld	ix, 0:i3
 	cp	ix, hl
 	jr	nc, LABEL_03140F
 LABEL_0313E7:
@@ -34866,7 +34866,7 @@ LABEL_03148B:
 	ld	xix, (283408:24)
 	add32_src_rid8	xsp, 0x04, xix	; add XIX,(XSP+0x04)
 	ldw	hl, 13
-	lds	iy, 0
+	ld	iy, 0:i3
 	cp	iy, hl
 	jr	nc, LABEL_0314E8
 LABEL_0314C0:
@@ -35034,7 +35034,7 @@ DSP_SetCoeff_FullPipeline:
 	ld	xix, (283408:24)
 	add	xix, (xsp+4)
 	ldw	hl, 13
-	lds	iy, 0
+	ld	iy, 0:i3
 	cp	iy, hl
 	jr	nc, 40
 	ld	bc, iy
@@ -35129,7 +35129,7 @@ DSP_SetCoeff_WithDispatch:
 	ld	xiy, (283408:24)
 	add	xiy, xhl
 	ldw	hl, 13
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, hl
 	jr	nc, 40
 	ld	bc, de
@@ -35164,7 +35164,7 @@ DSP_SetCoeff_WithDispatch:
 ; 0x045217 = patchrec[+0x5F] if (patchrec[+0x5D] & 0x0F) == 0x0C, else 0.
 ; Reached only from ToneDB_Query_Dispatch case 23 (0x031A44).
 DSP_SetCoeff_WriteParams:
-	lds	hl, 2
+	ld	hl, 2:i3
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -35226,7 +35226,7 @@ DSP_SetCoeff_MasterConfig:
 	pushw iz
 	ld	(xsp+4), xwa
 	ldw	(xsp+2), 0
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+2)
 	res	7, a
@@ -35501,7 +35501,7 @@ DSP_SetCoeff_MasterConfig:
 ; overwrites ToneDB_RelBase / ToneDB_RootPtr.
 DSP_ParamWrite_BlockCopy:
 	ld xhl, xbc
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, wa
 	ret nc
 
@@ -35588,11 +35588,11 @@ VoiceParam_Action_Case2:
 	cp	a, 0:i3
 	jrl	nz, 919
 	ld	xwa, xiz
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	58466
 	jrl	909
 	ld	xwa, xiz
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	58456
 	jrl	899
 ; Action case 3: same as case 2 but with BC = 2 or 3.
@@ -35607,11 +35607,11 @@ VoiceParam_Action_Case3:
 	cp	a, 0:i3
 	jrl	nz, 875
 	ld	xwa, xiz
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	58422
 	jrl	865
 	ld	xwa, xiz
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	58412
 	jrl	855
 ; Action case 4: VoiceAlloc_CheckAndInit then 0x0301E3.
@@ -35912,7 +35912,7 @@ VoiceParam_Query_Case7_PartialSlot:
 
 ; Common tail of the query family: copy the 6 request bytes to 0x045210.
 VoiceParamFinalize_CopyToWorkArea:
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, 6:i3
 	jr nc, VoiceParamFinalize_CallDispatch
 
@@ -36005,7 +36005,7 @@ DSP_WriteVoiceParam:
 
 ; Format byte 0x40: HL = 0, nothing copied.
 DSP_WriteVoiceParam_Mode40:
-	lds hl, 0
+	ld hl, 0:i3
 	jr DSP_WriteVoiceParam_Return
 
 ; Format byte 0x80: identical copy path to the 0x00 case.
@@ -36028,7 +36028,7 @@ DSP_WriteVoiceParam_Mode80:
 
 ; Format byte 0xC0: HL = 0, nothing copied.
 DSP_WriteVoiceParam_ModeC0:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Frame teardown and 'retd 0x0004'.
 DSP_WriteVoiceParam_Return:
@@ -36047,7 +36047,7 @@ DSP_ReadVoiceParam11:
 	call ToneDB_Find_ToneRecord
 	ld a, (xhl + 17)
 	ld (xiz), a
-	lds hl, 1
+	ld hl, 1:i3
 	pop xiz
 	ret
 
@@ -37585,7 +37585,7 @@ SignedClamp_Zero:
 SignedClamp_Max:
 	cp wa, 0:i3
 	jr ge, SignedClamp_InRange
-	lds wa, 0
+	ld wa, 0:i3
 
 ; HL = WA; ret.
 SignedClamp_InRange:
@@ -38647,19 +38647,19 @@ AlgoType_StateWrite_Type7:
 AlgoType_StateWrite_NonType7:
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr DSP_AlgoType_Dispatch1
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr DSP_AlgoType_Dispatch2
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr DSP_AlgoType_Dispatch1
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr DSP_AlgoType_Dispatch2
 	ld a, (xsp + 2)
 	extz wa
@@ -38723,19 +38723,19 @@ AlgoType_StateWrite_RefreshD:
 	or_sriw_im 0x07, 0xE4, 0xE0, 0x00, 0x80
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr DSP_AlgoType_Dispatch1
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr DSP_AlgoType_Dispatch2
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr DSP_AlgoType_Dispatch1
 	ld a, (xsp + 2)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr DSP_AlgoType_Dispatch2
 	ld a, (xsp + 2)
 	extz wa
@@ -38807,7 +38807,7 @@ AlgoType_StateWrite_Epilogue:
 ; (or [0x60] for the second channel), and optionally ORs in a word from 0x011511.
 ; Callers: AlgoType_StateWrite (four call sites, channels 0 and 1 on both paths).
 DSP_AlgoType_Dispatch1:
-	lds hl, 0
+	ld hl, 0:i3
 	ld e, a
 	extz de
 	muls de, 0x11F
@@ -38993,7 +38993,7 @@ DSP_AlgoType_Dispatch1_Store:
 ; descriptor[0x5F] (channel 0) / descriptor[0x61] (channel 1).
 ; Jump-offset table: 0x00FB7E, arm base 0x0339DE.
 DSP_AlgoType_Dispatch2:
-	lds hl, 0
+	ld hl, 0:i3
 	ld e, a
 	extz de
 	muls de, 0x11F
@@ -39164,7 +39164,7 @@ DSP_AlgoType_Dispatch2_Store:
 ; Used by callers outside the region to ask "is this part running one of the two multi-tap
 ; algorithms, and if so which variant".
 AlgoType_AB_Checker:
-	lds hl, 0
+	ld hl, 0:i3
 	ld c, a
 	extz bc
 	muls bc, 0x11F
@@ -39268,7 +39268,7 @@ DSP_ChanFreq_WritePacket1_Algo7:
 
 ; All other algorithm types: HL = 0.
 DSP_ChanFreq_WritePacket1_Zero:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Store to part+0x5F and return.
 DSP_ChanFreq_WritePacket1_Epilogue:
@@ -39322,7 +39322,7 @@ DSP_ChanFreq_WritePacket2_PathA:
 
 ; All other algorithm types: HL = 0.
 DSP_ChanFreq_WritePacket2_PathB:
-	lds hl, 0
+	ld hl, 0:i3
 
 ; Store to part+0x61 and return.
 DSP_ChanFreq_WritePacket2_Epilogue:
@@ -39469,7 +39469,7 @@ Voice_SecondaryParam_Epilogue:
 ; Every arm reads a flag byte out of the algorithm-descriptor sub-record at
 ; 0x011E16 + 0x27*type + 0x13 + 5*channel and combines it with descriptor[0x5D] bit 6.
 DSP_AlgoType_Dispatch3:
-	lds hl, 0
+	ld hl, 0:i3
 	ldb_erp A, 0xF0
 	extz ix
 	muls ix, 0x11F
@@ -39593,7 +39593,7 @@ DSP_AlgoType_D3_Return:
 ; descriptor[0x5D] bit 6 selects between "always 0x4000" and "0xC000 / 0x4000 on sub-record
 ; bit 1".
 Algo67_LUTOffset_Check:
-	lds hl, 0
+	ld hl, 0:i3
 	ld e, a
 	extz de
 	muls de, 0x11F
@@ -40219,7 +40219,7 @@ Voice_ProgChange_TableData:
 	ld	(xsp+2), a
 	cp	(0x0451a7:24), 0xf5	; cp (0x0451a7),0xf5
 	jr	z, LABEL_034590
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_034576
 LABEL_034517:
@@ -40257,17 +40257,17 @@ LABEL_034517:
 LABEL_034576:
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	calr	AlgoFlag_Write_Bit3
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	calr	AlgoFlag_Write
 	jr	LABEL_0345E1
 LABEL_034590:
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_0345C9
 LABEL_034596:
@@ -40291,16 +40291,16 @@ LABEL_034596:
 LABEL_0345C9:
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	calr	AlgoFlag_Write_Bit3
 	ld	a, (xsp+2)
 	extz	wa
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	calr	AlgoFlag_Write
 LABEL_0345E1:
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 4:i3
 	jr	nc, LABEL_034602
 LABEL_0345E7:
@@ -40311,7 +40311,7 @@ LABEL_0345E7:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	lds	de, 0
+	ld	de, 0:i3
 	calr	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
@@ -40525,13 +40525,13 @@ Voice_NoteState_Clear:
 	muls bc, 0x11F
 	lda xde, (0x041384:24)
 	stib_ind 0x07, 0xE8, 0xE4, 0x40
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, 4:i3
 	ret nc
 
 ; Outer (i) loop head of the 4x3 note-state clear.
 Voice_NoteState_InnerLoopA:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 3:i3
 	jr nc, Voice_NoteState_Epilogue
 
@@ -40595,7 +40595,7 @@ VoiceSlot_FullInit:
 	ld (xsp + 4), a
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr AlgoType_StateWrite
 	ld a, (xsp + 4)
 	extz wa
@@ -40627,7 +40627,7 @@ VoiceSlot_FullInit:
 
 ; Head of the inner (0..3) loop of the AlgoFlag_Write pass.
 VoiceSlot_FullInit_Loop1:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 4:i3
 	jr nc, VoiceSlot_FullInit_Loop2
 
@@ -40661,7 +40661,7 @@ VoiceSlot_FullInit_Loop1Next:
 
 ; Head of the inner (0..3) loop of the EFF_RoutingInit pass.
 VoiceSlot_FullInit_Loop2:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 4:i3
 	jr nc, VoiceSlot_FullInit_Loop3
 
@@ -40708,7 +40708,7 @@ VoiceSlot_AltInit:
 	ld (xsp + 4), a
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr AlgoType_StateWrite
 	ld a, (xsp + 4)
 	extz wa
@@ -41070,7 +41070,7 @@ VoiceSlot_ClearAll_Epilogue:
 ; DSP_ResetWriteBufferPtr (0x03555F), VoiceSlot_ClearAll, (0x041342) = 0, and tail-jumps to
 ; Voice_ResetAllControllers (0x02A8F3).
 DSP_System_Init:	; 034C45h
-	lds bc, 0
+	ld bc, 0:i3
 	lda xwa, (0x041342:24)                  ; DSP state buffer 1
 	cp bc, 0x26	; 38 bytes
 	jr nc, DSP_System_Init_Clear2
@@ -41084,7 +41084,7 @@ DSP_System_Init_Clear1:
 
 ; Head of the part-table zero-fill (0x1D26 bytes at 0x041368).
 DSP_System_Init_Clear2:
-	lds bc, 0
+	ld bc, 0:i3
 	lda xwa, (0x041368:24)                  ; DSP state buffer 2
 	cp bc, 0x1D26	; 7462 bytes
 	jr nc, DSP_System_Init_Vars
@@ -41100,7 +41100,7 @@ DSP_System_Init_Clear2_Loop:
 ; the SFR-0x44 bit-3 strap.
 DSP_System_Init_Vars:
 	ldw (11025:16), 0	; Clear DSP control variable
-	lds wa, 0
+	ld wa, 0:i3
 	ld (11023:16), wa	; Clear control variable
 	ld (11021:16), wa	; Clear control variable
 	bit_dd8 3, 0x44	; Check hardware config pin
@@ -41122,7 +41122,7 @@ DSP_System_Init_Continue:
 	ld (0x045318:24), xwa
 	call DSP_Config_Init
 	call DSP_Reset
-	lds wa, 0
+	ld wa, 0:i3
 	call Voice_Reset_Engine
 	call DSP_ResetWriteBufferPtr
 	call VoiceSlot_ClearAll
@@ -41309,7 +41309,7 @@ Audio_CmdHandler_00_1F_Loop:
 
 ; HL = 0, ret.
 Audio_CmdHandler_00_1F_Done:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ===========================================================================
@@ -41610,7 +41610,7 @@ DSP_WriteCount_Compute:
 	srl bc, 1
 	ld xwa, (0x04531c:24)
 	lda xwa, (xwa + 16)
-	lds de, 0
+	ld de, 0:i3
 	cp bc, 0:i3
 	jr z, DSP_WriteCount_Next
 
@@ -41678,7 +41678,7 @@ DSP_InitChannelSlot:
 	extz wa
 	pushw 0xFF
 	ld de, wa
-	lds wa, 0
+	ld wa, 0:i3
 	call WaveSel_StageA1_FromToneSlot
 	ld wa, (xsp + 8)
 	extz xwa
@@ -41691,7 +41691,7 @@ DSP_InitChannelSlot:
 	add xwa, (283420:24)
 	ld xiy, xhl
 	lda xix, (xwa + 58)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ldi85
 	andmi8 (xiz + 2), 0xCF
@@ -41704,7 +41704,7 @@ DSP_InitChannelSlot:
 	extz wa
 	pushw 0xFF
 	ld de, wa
-	lds wa, 1
+	ld wa, 1:i3
 	call WaveSel_StageA1_FromToneSlot
 	ld wa, (xsp + 8)
 	extz xwa
@@ -41717,7 +41717,7 @@ DSP_InitChannelSlot:
 	add xwa, (283420:24)
 	ld xiy, xhl
 	lda xix, (xwa + 69)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ldi85
 	andmi8 (xiz + 2), 0xCF
@@ -41748,7 +41748,7 @@ DSP_FlushAllSlots:
 	ldw bc, 0x93
 	ldirw
 	ldi85
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x80
 	jr nc, DSP_FlushAllSlots_Loop1Next
 
@@ -41772,7 +41772,7 @@ DSP_FlushAllSlots_Loop1:
 
 ; Head of the 128-channel DSP_InitChannelSlot loop.
 DSP_FlushAllSlots_Loop1Next:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x80
 	jr nc, DSP_FlushAllSlots_Loop2Next
 
@@ -41787,7 +41787,7 @@ DSP_FlushAllSlots_Loop2:
 
 ; Head of the 16-byte constant copy from 0x0120F4.
 DSP_FlushAllSlots_Loop2Next:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x10
 	jr nc, DSP_FlushAllSlots_Loop3Next
 
@@ -41863,7 +41863,7 @@ DSP1_ResolveStreamPtr:
 ; Copies the 16 default bytes at 0x0120E3 to the first 16 bytes of the DSP1 image at
 ; (0x04531C).  No arguments.  Sole caller: DSP_Reinit_VoiceSlots_Loop3A (0x035427).
 DSP_ResetAlgoDefaults:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 0x10
 	ret nc
 
@@ -41953,7 +41953,7 @@ DSP_WriteAlgoBuffer_Loop:
 	lda_dri XBC, 0x07, 0xE4, 0xF4
 	ld xiy, (xbc + 4)
 	lda_dri XIX, 0xF9, 0xBA, 0x01
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ldi85
 	ld c, l
@@ -42118,7 +42118,7 @@ DSP_Reinit_VoiceSlots_Loop3:
 ; A == 0xFF full rebuild: DSP_ResetAlgoDefaults then the 0x28-stream re-stage loop.
 DSP_Reinit_VoiceSlots_Loop3A:
 	calr DSP_ResetAlgoDefaults
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x28
 	jr nc, DSP_Reinit_VoiceSlots_OuterNext
 
@@ -42144,7 +42144,7 @@ DSP_Reinit_VoiceSlots_Loop3Next:
 
 ; Full-rebuild tail: DSP_FlushAllSlots(0, 0x40), then checksum + store.
 DSP_Reinit_VoiceSlots_OuterNext:
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0x40
 	calr DSP_FlushAllSlots
 	calr DSP_WriteCount_Compute
@@ -42310,7 +42310,7 @@ DSP_VelocityToVolume:
 ; The second load really is from 0x041377 -- verified at byte level, 0x0355A3 is
 ; `c2 77 13 04 21`, and both toolchains reproduce it. See [UNCERTAIN].
 DSP_GetEffectRouting:
-	lds hl, 0
+	ld hl, 0:i3
 	cp (0x041377:24), 0x00
 	jr z, DSP_GetEffectRouting_Path
 	ld a, (0x041377:24)
@@ -42660,7 +42660,7 @@ DSP_StoreBufferCount:
 ; is a slight misnomer -- the block is the ring for BOTH DSPs' command traffic, not DSP2 state.
 DSP2_Init:
 	ldw (15204:16), 0
-	lds wa, 0
+	ld wa, 0:i3
 	ld (15202:16), wa
 	ld (15200:16), wa
 	ret
@@ -42779,7 +42779,7 @@ Audio_CmdHandler_60_7F:
 	jr z, CmdHandler60_StreamSizeC
 	cpw (17548:16), 1
 	jr ule, CmdHandler60_StreamSizeA
-	lds ix, 0
+	ld ix, 0:i3
 
 ; Accumulate: if (0x448A) + count >= (0x4488) go to StreamSizeB (stream complete), else
 ; (0x448A) += count and ++(0x448C), then enqueue.
@@ -42825,7 +42825,7 @@ DSP_CmdHandler_StateReset:
 
 ; IX = 0; if count == 0 return HL = 0, else fall into the enqueue loop.
 DSP_EnqueueOrReturn:
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, de
 	jr nc, DSP_Enqueue_ReturnOK
 
@@ -42850,7 +42850,7 @@ DSP_RingBuf_Enqueue:
 
 ; HL = 0; ret.
 DSP_Enqueue_ReturnOK:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ALREADY NAMED -- doc header only.
@@ -42971,7 +42971,7 @@ DSP_Cmd_LoadEffectPreset:
 	call DSP_GetConfigBuffer
 	ld (xsp + 6), xhl
 	ldw (xsp + 4), 0x8
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, (xsp + 4)
 	jr nc, DSP_LoadEffPreset_Loop1Next
 
@@ -42998,7 +42998,7 @@ DSP_LoadEffPreset_Loop2:
 	stw_erp WA, 0xFA
 	call EFF_GetSlotBuffer
 	ld (xsp + 6), xhl
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, (xsp + 4)
 	jr nc, DSP_LoadEffPreset_Loop3
 
@@ -43025,7 +43025,7 @@ DSP_LoadEffPreset_Loop3A:
 	calr DSP_RingBuf_Read
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
-	lds hl, 0
+	ld hl, 0:i3
 	jr DSP_LoadEffPreset_Epilogue
 
 ; Size-guard failure: DSP_RingBuf_Skip, HL = 0xFFFF.
@@ -43054,7 +43054,7 @@ DSP_RingBuf_ReadAndCompare:
 	push xiz
 	ld (xsp + 4), xbc
 	ld (xsp + 8), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	jr DSP_RingBuf_Compare_MismatchPath
 
 ; Read one byte, compare with (XWA), bump the mismatch counter on inequality.
@@ -43306,7 +43306,7 @@ DSP_Cmd2B_ParamStub0:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 0
+	ld bc, 0:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. As above with BC = 1; sub-command 0x11.
@@ -43315,7 +43315,7 @@ DSP_Cmd2B_ParamStub1:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. BC = 2; sub-command 0x12.
@@ -43324,7 +43324,7 @@ DSP_Cmd2B_ParamStub2:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 2
+	ld bc, 2:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. BC = 3; sub-command 0x13.
@@ -43333,7 +43333,7 @@ DSP_Cmd2B_ParamStub3:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 3
+	ld bc, 3:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. BC = 4; sub-command 0x14.
@@ -43342,7 +43342,7 @@ DSP_Cmd2B_ParamStub4:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 4
+	ld bc, 4:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. BC = 5; sub-command 0x15.
@@ -43351,7 +43351,7 @@ DSP_Cmd2B_ParamStub5:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 5
+	ld bc, 5:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. BC = 6; sub-command 0x16.
@@ -43360,7 +43360,7 @@ DSP_Cmd2B_ParamStub6:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 6
+	ld bc, 6:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 ; ★ NEW NAME. BC = 7; sub-command 0x17.
@@ -43369,7 +43369,7 @@ DSP_Cmd2B_ParamStub7:
 	and a, 0xF
 	extz wa
 	ld xde, (xsp + 10)
-	lds bc, 7
+	ld bc, 7:i3
 	call DSP_VoiceParamReadWrite
 	jrl DSP_Cmd2B_PostProcess
 
@@ -43428,14 +43428,14 @@ DSP_Cmd2B_ReadParam11:
 
 ; Sub-command 0x30: HL = 0, i.e. accepted and silently ignored, and (HL == 0) means no reply.
 DSP_Cmd2B_Noop:
-	lds hl, 0
+	ld hl, 0:i3
 	jr DSP_Cmd2B_PostProcess
 
 ; Unrecognised sub-command: DSP_RingBuf_Skip (which resynchronises the WHOLE ring), HL = 0.
 DSP_Cmd2B_UnknownSkip:
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_Skip
-	lds hl, 0
+	ld hl, 0:i3
 	jr DSP_Cmd2B_PostProcess
 
 ; Taken when 0x436A != 0x7F: the message carries a 14-bit parameter index
@@ -43472,7 +43472,7 @@ DSP_Cmd2B_PostProcess:
 	inc 8, hl
 	lda xde, (17256:16)
 	ld bc, hl
-	lds wa, 3
+	ld wa, 3:i3
 	call InterCPU_DMA_Send
 	jrl DSP_Process_ReadNext
 
@@ -43975,7 +43975,7 @@ DSP_ApplyAlgoForVoiceType_Data:
 ; right after Audio_Tick_ServiceVoices_A -- i.e. this is the "re-announce the effect state
 ; after a mode change" path.
 DSP_SlotState_DisplayRestore:
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_SlotMuteState_ReadAndClear
 	cp hl, 3:i3
 	jr nz, DSP_SlotState_DisplayRestore_ActivePath
@@ -44056,7 +44056,7 @@ DSP_ApplyConfig_BufSelectA:
 ; slot-3 branch. That cross-check is what makes the 0x4496 + n*0x38 slot layout certain.
 DSP_ApplyConfig_BufSelectB:
 	lda xbc, (17738:16)
-	lds wa, 0
+	ld wa, 0:i3
 	cpw (17850:16), 0
 	jr z, DSP_ApplyConfig_Epilogue
 	ld wa, (17848:16)
@@ -44259,7 +44259,7 @@ DSP_WaitForDelay:
 
 ; TaskSched_PreemptiveYield(3); re-test.
 DSP_WaitForTaskSlot_Loop:
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_PreemptiveYield
 	cp (4160:16), xiz
 	jr c, DSP_WaitForTaskSlot_Loop
@@ -44278,7 +44278,7 @@ DSP_WaitForTaskSlot_Data:
 ; ALREADY NAMED -- doc header only. `TaskSched_Wait(1)` as a tail jump. Called at the top of
 ; DSP2_Send_Command so the bit-bang burst starts on a fresh scheduler slice.
 DSP_WakeAudioTask:
-	lds wa, 1
+	ld wa, 1:i3
 	jp TaskSched_Wait
 
 ; ----------------------------------------------------------------------------
@@ -46474,7 +46474,7 @@ DSP2_SendData_Epilogue_Nop16:
 ; this region.
 DSP_DispatchCommand:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	ld de, bc
 	cp de, 1:i3
 	jr z, DSP_DispatchCommand_DSP2Path
@@ -46507,7 +46507,7 @@ DSP_DispatchCommand_Epilogue:
 ; way.
 DSP_DispatchData:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	ld de, bc
 	cp de, 1:i3
 	jr z, DSP_DispatchData_DSP2Path
@@ -46578,7 +46578,7 @@ DSP_AlgoChange_FlagAndClear:
 ; against its shadow at 0x45D2 + n*0x38, and writes 1 (differs) or 0 (same) to the per-slot
 ; dirty word at 0x4940 + n*0x32. Pure comparison, nothing is copied.
 DSP_SlotParam_DiffAndFlag:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 5:i3
 	ret nc
 
@@ -46638,7 +46638,7 @@ DSP_SlotParam_DiffMismatch:
 ; 0x4958/0x495A/0x495C + n*0x32 + 0x10 for the slot.
 DSP_EFFParam_DiffAllAndFlag:
 	push xiz
-	lds de, 0
+	ld de, 0:i3
 	cp de, 5:i3
 	jrl nc, DSP_EFFParam_DiffEpilogue
 
@@ -46651,7 +46651,7 @@ DSP_EFFParam_DiffOuter:
 	extz xbc
 	add xbc, xhl
 	ldw (xbc), 0x0
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 1:i3
 	jrl nc, DSP_EFFParam_DiffInner
 
@@ -46719,7 +46719,7 @@ DSP_EFFParam_DiffMidNext:
 
 ; Sets up the 17-word coefficient loop.
 DSP_EFFParam_DiffInner:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 0x11
 	jrl nc, DSP_EFFParam_DiffLevel4
 
@@ -46787,7 +46787,7 @@ DSP_EFFParam_DiffInnerNext:
 
 ; Sets up the single-word +0x28 comparison.
 DSP_EFFParam_DiffLevel4:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 1:i3
 	jrl nc, DSP_EFFParam_DiffAlgoSection
 
@@ -46971,7 +46971,7 @@ DSP_Config_ClampLimits:
 
 ; Slot loop head, n = 0..4.
 DSP_Config_ClampLoop:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 5:i3
 	ret nc
 
@@ -47093,10 +47093,10 @@ DSP_State_ApplyAll:
 ; slot +0x1E doubled, and the words at 0x495A / 0x495C / 0x4960 (+ n*0x32 + 0x10) = 1, plus
 ; 0x4958 + n*0x32 + 0x10 = 1 unless slot +0x30 equals 0x63. Otherwise (0x4930 + n*2) = 0.
 EFF_SlotActive_UpdateFlags:
-	lds de, 0
+	ld de, 0:i3
 	cpw (18750:16), 1
 	jr nz, EFF_SlotActive_SlotActive
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 5:i3
 	ret nc
 
@@ -47115,7 +47115,7 @@ EFF_SlotActive_CheckSlot:
 
 ; Per-slot loop set-up (n = 0..4).
 EFF_SlotActive_SlotActive:
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 5:i3
 	ret nc
 
@@ -47141,7 +47141,7 @@ EFF_SlotActive_SlotInactive:
 
 ; One of those four algorithms: DE = 1.
 EFF_SlotActive_VoiceCheck:
-	lds de, 1
+	ld de, 1:i3
 
 ; The three-way "does this slot need a rewrite" test.
 EFF_SlotActive_VoiceInactive:
@@ -47266,7 +47266,7 @@ EFF_DSPLink_ResetFlags:
 	cpw (18750:16), 1
 	jr nz, EFF_DSPLink_ResetFlags_LoopNext
 	ldw (18746:16), 1
-	lds de, 1
+	ld de, 1:i3
 	cp de, 2:i3
 	ret nc
 
@@ -47285,7 +47285,7 @@ EFF_DSPLink_ResetFlags_ZeroPath:
 
 ; The (0x493E) != 1 branch: set up the i = 0..1 clear loop.
 EFF_DSPLink_ResetFlags_LoopNext:
-	lds de, 0
+	ld de, 0:i3
 	cp de, 2:i3
 	ret nc
 
@@ -47313,7 +47313,7 @@ EFF_DSPLink_ResetFlags_InnerBody:
 ;   ...continuing past this region's end at 0x0370BF (EFF_DspChannel_Init_MultiTableDirty).
 ; This is the "the algorithm changed, so re-send everything" hammer.
 EFF_DspChannel_InitFlags:
-	lds de, 0
+	ld de, 0:i3
 	cp de, 5:i3
 	ret nc
 
@@ -47337,7 +47337,7 @@ EFF_DspChannel_Init_SlotNext:
 	add xbc, xhl
 	cpw (xbc), 0x1
 	jrl nz, EFF_DspChannel_Init_OuterNext
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, 0x11
 	jr nc, EFF_DspChannel_Init_CoeffLoop
 
@@ -47358,7 +47358,7 @@ EFF_DspChannel_Init_FreqLoop:
 
 ; Sets up the single-iteration loop over 0x4942.
 EFF_DspChannel_Init_CoeffLoop:
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, 1:i3
 	jr nc, EFF_DspChannel_Init_Coeff2Loop
 
@@ -47379,7 +47379,7 @@ EFF_DspChannel_Init_CoeffNext:
 
 ; Sets up the single-iteration loop over 0x4966.
 EFF_DspChannel_Init_Coeff2Loop:
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, 1:i3
 	jr nc, EFF_DspChannel_Init_MultiTableDirty
 
@@ -48095,8 +48095,8 @@ EFF_StateLoad_Prepare:
 ; have to mute what is currently loaded, not what is about to be.
 EFF_MuteLoop:
 	pushw iz
-	lds de, 0
-	lds iz, 0
+	ld de, 0:i3
+	ld iz, 0:i3
 	cp iz, 5:i3
 	jr nc, EFF_MuteLoop_Epilogue
 
@@ -48141,7 +48141,7 @@ EFF_MuteLoop_SlotBody:
 EFF_MuteLoop_NoMute:
 	ld wa, iz
 	call EFF_Mute_WithDebug
-	lds de, 1
+	ld de, 1:i3
 
 ; Slot-loop step: IZ += 1, repeat while IZ < 5.
 EFF_MuteLoop_SlotNext:
@@ -48167,7 +48167,7 @@ EFF_MuteLoop_NoFlush:
 ; or full reload. Note that DSP_Reset_WithDebug ignores its argument for the pin sequence.
 DSP_ResetLoop:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 2:i3
 	jr nc, DSP_ResetLoop_Epilogue
 
@@ -48190,7 +48190,7 @@ DSP_ResetLoop_Epilogue:
 ; pointer table at 0x01F3D0.
 DSP_MuteLoop:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 2:i3
 	jr nc, DSP_MuteLoop_Epilogue
 
@@ -48222,7 +48222,7 @@ DSP_MuteLoop_Epilogue:
 ; The firmware's own debug string for this operation is "DSP %d antimute".
 DSP_UnmuteLoop:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 2:i3
 	jr nc, DSP_UnmuteLoop_Epilogue
 
@@ -48324,7 +48324,7 @@ EFF_ParamIterator_Process:
 ; The parameter count from record[+0x2C] has just been clamped to 0x11 = 17; start the
 ; generic loop with IZ = 0.
 EFF_ParamIter_CountClamp:
-	lds iz, 0
+	ld iz, 0:i3
 	cpw_erp IZ, 0xFA
 	jrl nc, EFF_ParamIter_Epilogue
 
@@ -48578,7 +48578,7 @@ EFF_HeaderChangeDataLoop:
 	push xiz
 	ld (xsp + 4), xwa
 	ldiw_erp 0xFA, 0
-	lds iz, 4
+	ld iz, 4:i3
 	cp iz, 0xFFFF
 	jr le, EFF_HeaderChangeLoop_Epilogue
 
@@ -48651,7 +48651,7 @@ EFF_LinkLoop:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 4
+	ld iz, 4:i3
 	cp iz, 0xFFFF
 	jr le, EFF_LinkLoop_Epilogue
 
@@ -48706,7 +48706,7 @@ EFF_SecondaryLinkPath:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	ldiw_erp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr le, EFF_SecLinkPath_Pass1Epilogue
@@ -48749,7 +48749,7 @@ EFF_SecLinkPath_Pass1Epilogue:
 
 ; Reset the accumulator and the QIZ slot counter for pass 2.
 EFF_SecLinkPath_Pass2Start:
-	lds iz, 0
+	ld iz, 0:i3
 	ldiw_erp 0xFA, 4
 	cp_erpw 0xFA, 0xFF, 0xFF
 	jr le, EFF_SecLinkPath_Pass2Epilogue
@@ -48826,7 +48826,7 @@ EFF_VolumeLoop:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 5:i3
 	jrl nc, EFF_VolumeLoop_Epilogue
 
@@ -48957,7 +48957,7 @@ EFF_DisconnectLoop:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
-	lds iz, 4
+	ld iz, 4:i3
 	cp iz, 0xFFFF
 	jr le, EFF_DisconnectLoop_Epilogue
 
@@ -49028,7 +49028,7 @@ DSP_StateDispatcher_PostMute:
 
 ; EFF_WriteHeader(0) followed by EFF_DisconnectLoop -- the chain teardown.
 DSP_StateDispatcher_DisconnectPath:
-	lds wa, 0
+	ld wa, 0:i3
 	call EFF_WriteHeader
 	ld xwa, xiz
 	calr EFF_DisconnectLoop
@@ -49045,7 +49045,7 @@ DSP_StateDispatcher_UnmutePath:
 	calr EFF_VolumeLoop
 	ld xwa, xiz
 	calr EFF_SecondaryLinkPath
-	lds de, 4
+	ld de, 4:i3
 	cp de, 0xFFFF
 	jr le, DSP_StateDispatcher_Epilogue
 
@@ -49362,7 +49362,7 @@ DSP_AlgorithmChange:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
 	call Debug_Print_Byte
-	lds iz, 0
+	ld iz, 0:i3
 	lda xwa, (0x01e63c:24)
 	ld xbc, xwa
 	ld wa, iz
@@ -49384,7 +49384,7 @@ EFF_LoadConfigs_ForChannel:
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
-	lds iz, 1
+	ld iz, 1:i3
 	lda xwa, (0x01e996:24)
 	ld xbc, xwa
 	ld wa, iz
@@ -49393,7 +49393,7 @@ EFF_LoadConfigs_ForChannel:
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_WaitForDelay
 	lda xwa, (0x01e7c5:24)
 	ld xbc, xwa
@@ -49744,7 +49744,7 @@ EFF_VolumeUpdate_Return:
 ; ----------------------------------------------------------------------------
 Debug_Print_String:	; 038365h
 	call 0xFFFEA1
-	lds wa, 0
+	ld wa, 0:i3
 	ret
 
 ; ----------------------------------------------------------------------------
@@ -49756,7 +49756,7 @@ Debug_Print_String:	; 038365h
 Debug_Print_Byte:	; 03836Ch
 	extz wa
 	call 0xFFFE86
-	lds wa, 0
+	ld wa, 0:i3
 	ret
 
 ; ----------------------------------------------------------------------------
@@ -49772,11 +49772,11 @@ Debug_Print_Word:	; 038375h
 	srl wa, 8	; Get high byte
 	extz wa
 	call 0xFFFE86
-	lds wa, 0
+	ld wa, 0:i3
 	stb_erp A, 0xF8	; Get low byte
 	extz wa
 	call 0xFFFE86
-	lds wa, 0
+	ld wa, 0:i3
 	popw iz
 	ret
 
@@ -49950,7 +49950,7 @@ DSP_WriteParamCmd30:
 	ldw wa, 0x30
 	call DSP_DispatchCommand
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld wa, (xsp + 6)
 	extz wa
@@ -49982,10 +49982,10 @@ DSP_WriteFreqParam_AlgoType:
 	cp wa, 1:i3
 	jrl z, DSP_WriteFreqParam_AlgoType_UseCmd30
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
@@ -50003,7 +50003,7 @@ DSP_WriteFreqParam_AlgoType:
 	ld bc, iz
 	call DSP_DispatchData
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0xA
@@ -50064,10 +50064,10 @@ DSP_WriteFreqParam:
 	cp wa, 1:i3
 	jrl z, DSP_WriteFreqParam_UseCmd30
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
@@ -50085,7 +50085,7 @@ DSP_WriteFreqParam:
 	ld bc, iz
 	call DSP_DispatchData
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0xA
@@ -50288,11 +50288,11 @@ DSP_WriteLUT_MainLoop_Body:
 	cpw (xsp + 4), 0x0
 	jr z, DSP_WriteLUT_MainLoop_FirstEntry
 	ld bc, (xsp + 26)
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchCommand
 	ld iz, hl
 	ld bc, (xsp + 26)
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchData
 	ld iz, hl
 	ld bc, (xsp + 26)
@@ -50337,7 +50337,7 @@ DSP_WriteLUT_MainLoop_FirstEntry:
 	calr DSP_WriteCoeffData_5B
 	ld iz, hl
 	ld bc, (xsp + 26)
-	lds wa, 3
+	ld wa, 3:i3
 	call DSP_DispatchCommand
 	incw 1, (xsp + 4)
 	ld wa, (xsp + 2)
@@ -50378,7 +50378,7 @@ DSP_WriteOscParam:
 	ldw wa, 0x8
 	call DSP_DispatchData
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
@@ -50497,7 +50497,7 @@ DSP_WriteOscParam_Offset:
 	ldw wa, 0x8
 	call DSP_DispatchData
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchData
 	ld wa, (xsp + 16)
 	add wa, (xsp + 6)
@@ -50587,11 +50587,11 @@ DSP_AlgoDescriptor_Emit:
 	add wa, bc
 	ld (xsp + 2), wa
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
@@ -50603,11 +50603,11 @@ DSP_AlgoDescriptor_Emit:
 	cpw (xsp + 18), 0x63
 	jr z, DSP_AlgoDescriptor_Emit_TypeEq63
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 16)
@@ -50627,7 +50627,7 @@ DSP_AlgoDescriptor_Emit:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	jr DSP_AlgoDescriptor_Emit_WriteHeader
@@ -50635,11 +50635,11 @@ DSP_AlgoDescriptor_Emit:
 ; The type == 0x63 arm: emit DATA 0x00, 0x00, 0x20, 0x00, 0x00 instead of the index pair.
 DSP_AlgoDescriptor_Emit_TypeEq63:
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
@@ -50647,11 +50647,11 @@ DSP_AlgoDescriptor_Emit_TypeEq63:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 
@@ -50664,7 +50664,7 @@ DSP_AlgoDescriptor_Emit_WriteHeader:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
@@ -50676,7 +50676,7 @@ DSP_AlgoDescriptor_Emit_WriteHeader:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 7
+	ld wa, 7:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	jr DSP_AlgoDescriptor_Emit_HeaderReturn
@@ -50705,11 +50705,11 @@ DSP_AlgoDescriptor_Emit_WriteHeaderNonZero:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 4
+	ld wa, 4:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 7
+	ld wa, 7:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 
@@ -50748,11 +50748,11 @@ DSP_OscAlgoSelect:
 	add wa, bc
 	ld (xsp + 2), wa
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
@@ -50766,7 +50766,7 @@ DSP_OscAlgoSelect:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 18)
@@ -50797,7 +50797,7 @@ DSP_OscAlgoSelect:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
@@ -50838,7 +50838,7 @@ DSP_OscAlgoSelect_WriteHeaderNonZero:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 4
+	ld wa, 4:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
@@ -50906,11 +50906,11 @@ DSP_TuneOffset_Increment:
 ; Falls in from DSP_TuneOffset_Increment (0x038CF6) and from the +/-1 adjustment above it.
 DSP_TuneOffset_WriteSequence:
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
@@ -50918,11 +50918,11 @@ DSP_TuneOffset_WriteSequence:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
@@ -50941,7 +50941,7 @@ DSP_TuneOffset_WriteSequence:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 0
+	ld wa, 0:i3
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
@@ -50979,7 +50979,7 @@ DSP_TuneOffset_WriteSequence:
 	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
-	lds wa, 3
+	ld wa, 3:i3
 	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld hl, (xsp + 4)
@@ -50996,15 +50996,15 @@ DSP_TuneOffset_WriteSequence:
 ; DSP_WaitForTaskSlot_Data (0x036327) = `jp 0x038E0F`.
 ; The pool size of two is the reason DSP_State_ApplyBuf can wedge -- see [UNCERTAIN].
 DSP_State_DmaLoadPresets:
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_SpawnTask
 	lda xwa, (0x045324:24)
 	ld xbc, xwa
-	lds wa, 1
+	ld wa, 1:i3
 	call TaskMsgQ_Send
 	lda xwa, (0x045446:24)
 	ld xbc, xwa
-	lds wa, 1
+	ld wa, 1:i3
 	jp TaskMsgQ_Send
 ; TASK BODY (task id 3), not data -- the name is wrong, see [UNCERTAIN].  Never returns:
 ;   forever {
@@ -51020,7 +51020,7 @@ DSP_State_InlineData:
 ; Top of the task's forever-loop; target of the `jr T,0x038E10` at 0x038E2F.  This is the only
 ; branch target in the whole region with no symbol in the LLVM build -- genuinely new.
 DSP_State_ApplyTask_Loop:
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	132674
 	ld	xiz, xhl
 	ld	xwa, xiz
@@ -51028,7 +51028,7 @@ DSP_State_ApplyTask_Loop:
 	ldw	(xiz+288), 0
 	ld	xwa, xiz
 	ld	xbc, xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	132305
 	jr	t, 0xdf
 
@@ -51045,12 +51045,12 @@ DSP_State_ApplyTask_Loop:
 DSP_State_ApplyBuf:
 	push xiz
 	ld xiz, xwa
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsgQ_TryReceive
 	ld (19002:16), xhl
 	or xhl, xhl
 	jr nz, DSP_State_ApplyBuf_DoCopy
-	lds wa, 1
+	ld wa, 1:i3
 	call TaskMsgQ_Receive
 	ld (19002:16), xhl
 
@@ -51063,7 +51063,7 @@ DSP_State_ApplyBuf_DoCopy:
 	ld xwa, (19002:16)
 	stiw_ind 0xE1, 0x20, 0x01, 0x01, 0x00
 	ld xbc, (19002:16)
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsgQ_Send
 	pop xiz
 	ret
@@ -52801,7 +52801,7 @@ DSP_ParamEQ_Curve_FP:
 	call FP_DP_NegMantissaLS
 	lda xwa, (xsp + 64)
 	lda xbc, (0x012e2f:24)
-	lds de, 1
+	ld de, 1:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, DSP_ParamEQ_Range1_NonzeroCoeff
@@ -53967,7 +53967,7 @@ DSP_BiquadCoeff_Compute:
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	call FP_SP_Mul
 	lda_dri XWA, 0xFD, 0xDE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo0_SignZero
@@ -54028,7 +54028,7 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	ld_sril XWA, (xsp + 0x00d2)
 	stl_dri XWA, 0xFD, 0xC6, 0x00
 	lda_dri XWA, 0xFD, 0xDE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo0_Sign2Zero
@@ -54087,7 +54087,7 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda_dri XWA, 0xFD, 0xC2, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_dri XWA, 0xFD, 0xDE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo0_NegBranch
@@ -54177,7 +54177,7 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	call VoiceFloat_SubSP
 	lda_dri XWA, 0xFD, 0x9E, 0x00
 	lda xbc, (0x012f9b:24)
-	lds de, 0
+	ld de, 0:i3
 	call ToneGen_Compare_Voice_32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo0_Fixup
@@ -54509,7 +54509,7 @@ DSP_BiquadCoeff_Algo2:
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	call FP_SP_Mul
 	lda_dri XWA, 0xFD, 0xDE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo2_Sign1Zero
@@ -54570,7 +54570,7 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	ld_sril XWA, (xsp + 0x00d2)
 	stl_dri XWA, 0xFD, 0xC6, 0x00
 	lda_dri XWA, 0xFD, 0xDE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo2_Sign2Zero
@@ -54629,7 +54629,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda_dri XWA, 0xFD, 0xC2, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_dri XWA, 0xFD, 0xDE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo2_NegBranch
@@ -54961,7 +54961,7 @@ DSP_SOS_Coeff_Compute:
 	lda_dri XWA, 0xFD, 0xB2, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_dri XWA, 0xFD, 0xCE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jrl nz, DSP_SOS_Algo0_NonzeroCoeff
@@ -55209,7 +55209,7 @@ DSP_SOS_Algo1:
 	lda_dri XWA, 0xFD, 0xB2, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_dri XWA, 0xFD, 0xCE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jrl nz, DSP_SOS_Algo1_NonzeroCoeff
@@ -55453,7 +55453,7 @@ DSP_SOS_Algo2:
 	lda_dri XWA, 0xFD, 0xB2, 0x00
 	call FP_DP_NormalizeMantissa
 	lda_dri XWA, 0xFD, 0xCE, 0x00
-	lds bc, 1
+	ld bc, 1:i3
 	call FP_SP_CmpZero32
 	cp hl, 0:i3
 	jrl nz, DSP_SOS_Algo2_NonzeroCoeff
@@ -55747,43 +55747,43 @@ DSP_MixerCoeff_Compute:
 	lda xwa, (xsp + 16)
 	call FP_SP_Decode_ReadSign
 	ldw wa, 0x30
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchCommand
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call DSP_DispatchData
 	ldw wa, 0xD0
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchData
 	ld xwa, (xsp + 8)
 	srl xwa, 8
 	srl xwa, 0
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchData
 	ld xwa, (xsp + 8)
 	srl xwa, 0
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchData
 	call DSP2_SPI_BusIdle
 	call DSP_Bytecode_NotifyStateChange
 	ldw wa, 0x30
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchCommand
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call DSP_DispatchData
 	ldw wa, 0xD3
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchData
 	ld xwa, (xsp + 16)
 	srl xwa, 9
 	srl xwa, 0
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchData
 	ld xwa, (xsp + 16)
 	srl xwa, 1
 	srl xwa, 0
-	lds bc, 1
+	ld bc, 1:i3
 	call DSP_DispatchData
 	call DSP2_SPI_BusIdle
 	call DSP_Bytecode_NotifyStateChange
@@ -55814,7 +55814,7 @@ DSP_WriteEFFConfig:
 ; Already named.  Runs program 0 of the descriptor table at 0x0147B3 on the chip in WA, with
 ; the caller's XBC as the bytecode stream.  Thirteen callers.
 DSP_WriteGlobalConfig:
-	lds de, 0
+	ld de, 0:i3
 	push xbc
 	ld bc, de
 	lda xde, (0x0147b3:24)
@@ -55924,7 +55924,7 @@ DSP_WriteParam_Return:
 ; interpreter, the translator and DSP_MixerCoeff_Compute -- i.e. the DSP write path
 ; deliberately yields between register groups.
 DSP_Bytecode_NotifyStateChange:
-	lds wa, 1
+	ld wa, 1:i3
 	jp TaskSched_PreemptiveYield_INT
 
 ; Already named.  Sets up and runs a canned DSP register-write program.
@@ -56777,11 +56777,11 @@ DSP_ParamLoop_Iterate:
 	cpw (xsp + 4), 0x0
 	jr nz, DSP_ParamLoop_CallTranslator
 	ld bc, (xsp + 4)
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchCommand
 	ld (xsp + 10), hl
 	ld bc, (xsp + 4)
-	lds wa, 1
+	ld wa, 1:i3
 	call DSP_DispatchData
 	ld (xsp + 10), hl
 	ld bc, (xsp + 4)
@@ -56817,7 +56817,7 @@ DSP_ParamLoop_PostCall:
 	cpw (xsp + 4), 0x0
 	jr nz, DSP_ParamLoop_SendEndCmd
 	ld bc, (xsp + 4)
-	lds wa, 3
+	ld wa, 3:i3
 	call DSP_DispatchCommand
 	ld (xsp + 10), hl
 
@@ -57426,12 +57426,12 @@ DSP_TableWalk_CheckEntry:
 	add xhl, xwa
 	cp xhl, xix
 	jr c, DSP_TableWalk_FoundInRange
-	lds bc, 4
+	ld bc, 4:i3
 	jr DSP_TableWalk_Return
 
 ; Match, field inside the record: status 0.
 DSP_TableWalk_FoundInRange:
-	lds bc, 0
+	ld bc, 0:i3
 	jr DSP_TableWalk_Return
 
 ; ID mismatch: XHL = next record.
@@ -57452,7 +57452,7 @@ DSP_TableWalk_ReadHeader:
 	srl wa, 8
 	cp wa, 0xF0
 	jr nz, DSP_TableWalk_CheckEntry
-	lds bc, 3
+	ld bc, 3:i3
 
 ; Stores the status through the pushed pointer and `retd 0x4`.
 DSP_TableWalk_Return:
@@ -57477,7 +57477,7 @@ DSP_TableWalk_SearchWithState:
 DSP_TableWalk_State_CheckEntry:
 	cp bc, 0:i3
 	jr nz, DSP_TableWalk_State_Advance
-	lds ix, 0
+	ld ix, 0:i3
 	ld xde, (xsp + 4)
 	ld bc, iy
 	extz xbc
@@ -57507,7 +57507,7 @@ DSP_TableWalk_State_ReadHeader:
 	srl de, 8
 	cp de, 0xF0
 	jr nz, DSP_TableWalk_State_CheckEntry
-	lds ix, 2
+	ld ix, 2:i3
 
 ; Stores the status through XDE(saved in XHL), returns XHL = XWA, `retd 0x4`.
 DSP_TableWalk_State_Return:
@@ -57552,7 +57552,7 @@ CmdA0BF_CheckSubByte:
 
 ; `lds hl,0 ; ret` -- the handler always reports success.
 CmdA0BF_Return:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ----------------------------------------------------------------------------
@@ -57599,7 +57599,7 @@ ToneGen_Init:	; 03D016h
 ; ★ Two properties matter for the open sub->main bug -- see the [UNCERTAIN] notes.
 ToneGen_Process_Notes:	; 03D01Eh
 	dec 2, xsp	; Allocate 2 bytes for result
-	lds wa, 0
+	ld wa, 0:i3
 	lda xwa, (xsp)
 	calr Keybed_Read_Event
 	cp hl, 0xFFFF
@@ -57623,8 +57623,8 @@ ToneGen_Note_Loop:	; 03D02Eh
 	cp (19018:16), 1	; Check if DMA enabled
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
-	lds wa, 2
-	lds bc, 3
+	ld wa, 2:i3
+	ld bc, 3:i3
 	call InterCPU_DMA_Send	; Send via DMA
 	jr ToneGen_Note_Continue
 
@@ -57652,8 +57652,8 @@ ToneGen_Note_Off_Slot:	; 03D06Dh
 	cp (19018:16), 1
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
-	lds wa, 2
-	lds bc, 3
+	ld wa, 2:i3
+	ld bc, 3:i3
 	call InterCPU_DMA_Send
 
 ; Already named.  Fetches the next event and loops while HL != 0xFFFF.
@@ -57749,7 +57749,7 @@ Keybed_Read_Event_Release:	; 03D100h
 	ld xwa, xiz
 	calr Keybed_Decode_Event
 	ld (xiz + 1), 0x0	; Clear velocity for note-off
-	lds hl, 0
+	ld hl, 0:i3
 	jr Keybed_Read_Event_Done
 
 ; Already named.  Runs the pitch/velocity mapping and keeps the velocity.
@@ -57757,7 +57757,7 @@ Keybed_Read_Event_NoteOn:	; 03D10Fh
 	ld c, l
 	ld xwa, xiz
 	calr Keybed_Decode_Event
-	lds hl, 0
+	ld hl, 0:i3
 	jr Keybed_Read_Event_Done
 
 ; Already named.  Status bit 0 clear -> HL = 0xFFFF, which is what ends the drain loop.
@@ -57912,7 +57912,7 @@ ToneGen_Poll_Padding:	; 03D1FAh
 ; from ToneGen_Init and never called again.  Clears 8 bytes of voice-status at 0x01F41C
 ; (address 128028 = 0x01F41C) then falls into ToneGen_Poll_All.
 ToneGen_Poll_Init:	; 03D1FBh
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 0x8
 	jr nc, ToneGen_Poll_All
 
@@ -57934,13 +57934,13 @@ ToneGen_Clear_Voice_Loop:	; 03D203h
 ; ----------------------------------------------------------------------------
 ; Already named.  16 polling iterations, one per keybed scan group.
 ToneGen_Poll_All:	; 03D217h
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 0x10	; 16 iterations (one per MIDI channel)
 	ret nc
 
 ; Already named.  Per-iteration entry; sets up the 10000-step settling delay.
 ToneGen_Poll_Channel:	; 03D21Fh
-	lds wa, 0
+	ld wa, 0:i3
 	cp wa, 0x2710	; 10000 delay cycles
 	jr nc, ToneGen_Poll_Read
 
@@ -57982,7 +57982,7 @@ ToneGen_Poll_Read:	; 03D230h
 	ldb_erp A, 0xF0
 	extz ix
 	ld xbc, (0x01f41c:24)                 ; Voice status buffer
-	lds de, 1
+	ld de, 1:i3
 	ld a, w
 	and a, 0xF
 	jr z, ToneGen_Poll_SetBit
@@ -57999,7 +57999,7 @@ ToneGen_Poll_NoteOff:	; 03D281h - Note OFF - clear voice bit
 	ldb_erp A, 0xF0
 	extz ix
 	ld xbc, (0x01f41c:24)
-	lds de, 1
+	ld de, 1:i3
 	ld a, w
 	and a, 0xF
 	jr z, ToneGen_Poll_ClearBit
@@ -58058,14 +58058,14 @@ ToneGen_Compare_Diff:	; 03D2C7h
 
 ; Already named.  The kind-4 / kind-5 early answers.
 ToneGen_Compare_Result:	; 03D2C9h
-	lds hl, 0
+	ld hl, 0:i3
 	cp de, 4:i3
 	ret z
-	lds hl, 1
+	ld hl, 1:i3
 	cp de, 5:i3
 	ret z
 	ld xwa, (xbc + 4)
-	lds hl, 0
+	ld hl, 0:i3
 	ldcf_erpw 0xF2, 0x0F
 	jr nc, ToneGen_Compare_Sign
 	xorcf_erpw 0xE2, 0x0F
@@ -58101,7 +58101,7 @@ ToneGen_Cmp_Greater:	; 03D2FBh - voice 1 > voice 2
 ; the same predicate; same three result tables at 0x03D978 / 0x03D97E / 0x03D984.
 ; Exactly one call site, at 0x03AD0C inside DSP_BiquadCoeff_Algo0_Assembly, testing a0 == 1.0.
 ToneGen_Compare_Voice_32:	; 03D306h
-	lds hl, 0
+	ld hl, 0:i3
 	ld xwa, (xwa)	; Load 32-bit value from voice 1
 	ld xbc, (xbc)	; Load 32-bit value from voice 2
 	cp xwa, xbc
@@ -58114,10 +58114,10 @@ ToneGen_Compare_Voice_32:	; 03D306h
 ToneGen_Cmp32_NotEqual:	; 03D31Bh
 	cp de, 4:i3
 	ret z
-	lds hl, 1
+	ld hl, 1:i3
 	cp de, 5:i3
 	ret z
-	lds hl, 0
+	ld hl, 0:i3
 	ldcf_erpw 0xE2, 0x0F	; Load carry from sign bit
 	jr nc, ToneGen_Cmp32_Sign
 	xorcf_erpw 0xE6, 0x0F

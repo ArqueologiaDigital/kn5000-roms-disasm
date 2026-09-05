@@ -47,7 +47,7 @@ SndParam_Epilogue:
 	.byte 0x00, 0x1d, 0x35, 0x04, 0xff, 0xdb, 0x8c, 0x68
 SndParam_DispatchTypeDE5:
 	pushw	ix
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	xiz, xde
 	jr	z, 5
 	ldw	bc, 65535
@@ -112,7 +112,7 @@ SndParam_Lkp2_Dispatch:
 	call	16712757
 	ld	ix, hl
 	jr	45
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	(xsp+6), xde
 SndParam_Lkp2_CallType1:
 	.byte 0x66, 0x05, 0x31, 0xff, 0xff, 0x68, 0x0c, 0xd9
@@ -945,7 +945,7 @@ SndParam_ClampDelayTime:
 	ld	e, (xde)
 	cp	a, e
 	jr	nz, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	cp	a, e
 	jr	ule, 6
@@ -1134,7 +1134,7 @@ SndParam_Widget1_AppendTail:
 	ld	(xsp), a
 	lda	xwa, (xsp)
 	push	xwa
-	lds	wa, 1
+	ld	wa, 1:i3
 SndParam_Widget1_CallType3:
 	pushw	wa
 	call	16625675

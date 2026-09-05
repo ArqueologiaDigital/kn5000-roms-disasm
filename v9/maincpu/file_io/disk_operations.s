@@ -157,12 +157,12 @@ FCopy_CopyConfirm_Execute:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld wa, (0x7f66:16)
 	call WriteFileWithVerify
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -194,12 +194,12 @@ FCopy_CopyExecute:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld wa, (0x7f66:16)
 	call WriteFileWithVerify
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -248,7 +248,7 @@ FileRenameFunc:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
-	lds iy, 0
+	ld iy, 0:i3
 	lda xix, (CharMap_FullPermutation_0x660:24)
 	lda xwa, (0x8870:16)
 	ld xhl, xwa
@@ -310,12 +310,12 @@ FRename_HandleApply:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld xwa, 0x8870
 	call ReadDualFile
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -351,7 +351,7 @@ FileRenameSmfFunc:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
-	lds iy, 0
+	ld iy, 0:i3
 	lda xix, (CharMap_FullPermutation_0x660:24)
 	lda xwa, (0x8870:16)
 	ld xhl, xwa
@@ -413,12 +413,12 @@ FRenameSmf_HandleApply:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld xwa, 0x8870
 	call SearchAndOpen
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -447,7 +447,7 @@ FmmFormatFunc:
 	jr z, FmmFmt_HandleCancel
 	cp xde, 0x2
 	jrl nz, FmmFmt_Return
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ldmm8 0x7f6a, 0x8d37
 	cpw (0x8500:16), 0
@@ -509,7 +509,7 @@ FmmFmt_HandleProgress:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld a, (0x7f68:16)
 	extz wa
@@ -629,7 +629,7 @@ FmmLoadTitleFunc:
 	jrl nz, FmmLoadTtl_Return
 	ld (0x84fe:16), 0
 	ldmm16 0x7f70, 0x8500
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -748,7 +748,7 @@ FmmLoadTtl_LoadSlots:
 	ld (0x8a04:16), 0
 	ld (0x8a06:16), 0
 	ld (0x8a08:16), 0
-	lds iz, 0
+	ld iz, 0:i3
 
 FmmLoadTtl_SlotLoop:
 	stb_erp A, 0xf8
@@ -812,7 +812,7 @@ FmmSaveTitleFunc:
 	cp xde, 0x2
 	jrl nz, FmmSaveTtl_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -829,7 +829,7 @@ FmmSaveTitleFunc:
 FmmSaveTtl_CheckFont:
 	cp (0x8d37:16), 102
 	jr z, FmmSaveTtl_CommitSave
-	lds iz, 0
+	ld iz, 0:i3
 
 FmmSaveTtl_SlotLoop:
 	stb_erp A, 0xf8
@@ -838,9 +838,9 @@ FmmSaveTtl_SlotLoop:
 	inc 1, iz
 	cp iz, 6:i3
 	jr lt, FmmSaveTtl_SlotLoop
-	lds wa, 6
+	ld wa, 6:i3
 	call FileIO_BuildRecordPath_Return
-	lds wa, 7
+	ld wa, 7:i3
 	call FileIO_BuildRecordPath_Return
 	call FileIO_SetModeFlag_Reading
 	ld xiy, BankStr_Memory_0xA
@@ -888,7 +888,7 @@ DiskNameFunc:
 	jr z, DiskName_TextChange
 	cp xbc, 0x1c0000b
 	jrl nz, DiskName_Return
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	lda xiz, (0x878c:16)
 	call FileIO_SearchAndLoadFile
@@ -901,14 +901,14 @@ DiskNameFunc:
 	jr DiskName_Dispatch
 
 DiskName_TextChange:
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	lda xiz, (0x878c:16)
 	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
-	lds iy, 0
+	ld iy, 0:i3
 	lda xix, (0x8870:16)
 	lda xiz, (CharMap_FullPermutation_0x660:24)
 	lda xde, (0x878c:16)
@@ -957,7 +957,7 @@ DiskName_HandleApply:
 	ld xwa, 0x878c
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld xwa, 0x878c
 	call FileIO_CheckPathAndVolumeLabel
@@ -978,7 +978,7 @@ DiskInfoFunc:
 	ld (xsp + 16), xde
 	cp xbc, 0x1c0000b
 	jrl nz, DiskInfo_Return
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	cpw (0x8500:16), 0
 	jr ge, DiskInfo_ReadDriveType
@@ -1053,7 +1053,7 @@ DiskInfo_RenderStrings:
 	lda xwa, (0x87ce:16)
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
@@ -1064,7 +1064,7 @@ DiskInfo_RenderStrings:
 	lda xwa, (0x87ce:16)
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	lds bc, 3
+	ld bc, 3:i3
 	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
@@ -1093,7 +1093,7 @@ SongNameFunc:
 	ld iz, hl
 	cp iz, 0:i3
 	jr lt, SongName_NoSlot
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	lda xwa, (0x880e:16)
 	ld (xsp + 2), xwa
@@ -1202,7 +1202,7 @@ SaveFileName_TextChange:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
-	lds iy, 0
+	ld iy, 0:i3
 	lda xix, (CharMap_FullPermutation_0x660:24)
 	lda xde, (0x8850:16)
 	ld xhl, xde

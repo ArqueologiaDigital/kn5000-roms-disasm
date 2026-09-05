@@ -81,7 +81,7 @@ RVari_SelectE_FirstItem_NotFirst:
 
 RVari_SelectE_FirstItem_Draw:
 	lda	xwa, (xsp+536)
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldw	de, 245
 	call	DrawDesignBox
 	ld	xwa, (xiz+56)
@@ -1791,7 +1791,7 @@ RVari_OK_TypeE_DispatchInput:
 	jrl nz, RVari_OK_PageScroll
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input88_Done
@@ -1826,7 +1826,7 @@ RVari_OK_TypeE_Input88_Done:
 RVari_OK_TypeE_Input89:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input89_Done
@@ -1861,7 +1861,7 @@ RVari_OK_TypeE_Input89_Done:
 RVari_OK_TypeE_Input8A:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8A_Done
@@ -1896,7 +1896,7 @@ RVari_OK_TypeE_Input8A_Done:
 RVari_OK_TypeE_Input8B:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8B_Done
@@ -1931,7 +1931,7 @@ RVari_OK_TypeE_Input8B_Done:
 RVari_OK_TypeE_Input8C:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8C_Done
@@ -1966,7 +1966,7 @@ RVari_OK_TypeE_Input8C_Done:
 RVari_OK_TypeE_Input8:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8_Done
@@ -1976,7 +1976,7 @@ RVari_OK_TypeE_Input8:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_CalcValidNoteRow
 	sll l, 2
 	extz hl
@@ -2008,7 +2008,7 @@ RVari_OK_TypeE_Input8_Done:
 RVari_OK_TypeE_Input9:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input9_Done
@@ -2018,7 +2018,7 @@ RVari_OK_TypeE_Input9:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_CalcValidNoteRow
 	sll l, 2
 	extz hl
@@ -2050,7 +2050,7 @@ RVari_OK_TypeE_Input9_Done:
 RVari_OK_TypeE_InputA:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_InputA_Done
@@ -2060,7 +2060,7 @@ RVari_OK_TypeE_InputA:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_CalcValidNoteRow
 	sll l, 2
 	extz hl
@@ -2092,7 +2092,7 @@ RVari_OK_TypeE_InputA_Done:
 RVari_OK_TypeE_InputB:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_InputB_Done
@@ -2102,7 +2102,7 @@ RVari_OK_TypeE_InputB:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_CalcValidNoteRow
 	sll l, 2
 	extz hl
@@ -2134,7 +2134,7 @@ RVari_OK_TypeE_InputB_Done:
 RVari_OK_TypeE_InputC:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeE_InputC_Done
@@ -2144,7 +2144,7 @@ RVari_OK_TypeE_InputC:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_CalcValidNoteRow
 	sll l, 2
 	extz hl
@@ -2198,7 +2198,7 @@ RVari_OK_TypeNE_DispatchInput:
 	jrl nz, RVari_OK_PageScroll
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input88_Done
@@ -2227,7 +2227,7 @@ RVari_OK_TypeNE_Input88_Done:
 RVari_OK_TypeNE_Input89:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input89_Done
@@ -2256,7 +2256,7 @@ RVari_OK_TypeNE_Input89_Done:
 RVari_OK_TypeNE_Input8A:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8A_Done
@@ -2285,7 +2285,7 @@ RVari_OK_TypeNE_Input8A_Done:
 RVari_OK_TypeNE_Input8B:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8B_Done
@@ -2314,7 +2314,7 @@ RVari_OK_TypeNE_Input8B_Done:
 RVari_OK_TypeNE_Input8C:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_IsHalfRangeAbove
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8C_Done
@@ -2343,7 +2343,7 @@ RVari_OK_TypeNE_Input8C_Done:
 RVari_OK_TypeNE_Input8:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8_Done
@@ -2353,7 +2353,7 @@ RVari_OK_TypeNE_Input8:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 0
+	ld bc, 0:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xwa, (xiz + 44)
@@ -2377,7 +2377,7 @@ RVari_OK_TypeNE_Input8_Done:
 RVari_OK_TypeNE_Input9:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input9_Done
@@ -2387,7 +2387,7 @@ RVari_OK_TypeNE_Input9:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 1
+	ld bc, 1:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xwa, (xiz + 44)
@@ -2411,7 +2411,7 @@ RVari_OK_TypeNE_Input9_Done:
 RVari_OK_TypeNE_InputA:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_InputA_Done
@@ -2421,7 +2421,7 @@ RVari_OK_TypeNE_InputA:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 2
+	ld bc, 2:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xwa, (xiz + 44)
@@ -2445,7 +2445,7 @@ RVari_OK_TypeNE_InputA_Done:
 RVari_OK_TypeNE_InputB:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_InputB_Done
@@ -2455,7 +2455,7 @@ RVari_OK_TypeNE_InputB:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 3
+	ld bc, 3:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xwa, (xiz + 44)
@@ -2479,7 +2479,7 @@ RVari_OK_TypeNE_InputB_Done:
 RVari_OK_TypeNE_InputC:
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_CalcValidNoteRow
 	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_InputC_Done
@@ -2489,7 +2489,7 @@ RVari_OK_TypeNE_InputC:
 	ld (xbc), wa
 	ld a, (xsp + 4)
 	extz wa
-	lds bc, 4
+	ld bc, 4:i3
 	calr VariScreen_CalcValidNoteRow
 	extz hl
 	ld xwa, (xiz + 44)

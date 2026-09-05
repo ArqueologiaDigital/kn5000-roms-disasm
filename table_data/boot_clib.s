@@ -164,7 +164,7 @@ Boot_memcmp:
 Boot_memcmp__bytes_equal:
 	cp (xix), 0x00		; equal AND NUL: stop, report equal
 	jr nz, Boot_memcmp__advance
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 Boot_memcmp__advance:
 	inc 1, xix

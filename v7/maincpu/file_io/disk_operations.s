@@ -141,12 +141,12 @@ FCopy_CopyConfirm_Execute:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	62671
 	ld	wa, (32458:16)
 	call	16287180
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	63306
 	ld	(32422:16), l
 	calr	62741
@@ -177,12 +177,12 @@ FCopy_CopyExecute:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	62544
 	ld	wa, (32458:16)
 	call	16287180
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	63179
 	ld	(32422:16), l
 	calr	62614
@@ -230,7 +230,7 @@ FileRenameFunc:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lds	iy, 0
+	ld	iy, 0:i3
 	lda	xix, (15652728:24)
 	lda	xwa, (34772:16)
 	ld	xhl, xwa
@@ -289,12 +289,12 @@ FRename_HandleApply:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	62245
 	ld	xwa, 34772
 	call	16286609
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	62879
 	ld	(32422:16), l
 	calr	62314
@@ -329,7 +329,7 @@ FileRenameSmfFunc:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lds	iy, 0
+	ld	iy, 0:i3
 	lda	xix, (15652728:24)
 	lda	xwa, (34772:16)
 	ld	xhl, xwa
@@ -388,12 +388,12 @@ FRenameSmf_HandleApply:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	61978
 	ld	xwa, 34772
 	call	16287533
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	62612
 	ld	(32422:16), l
 	calr	62047
@@ -420,7 +420,7 @@ FmmFormatFunc:
 	jr	z, 109
 	cp	xde, 2
 	jrl	nz, 448
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-3659
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xce, 0x7e
 	cpw	(33892:16), 0
@@ -476,7 +476,7 @@ FmmFmt_HandleProgress:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	-3843
 	ld	a, (32460:16)
 	extz	wa
@@ -588,7 +588,7 @@ FmmLoadTitleFunc:
 	jrl	nz, 512
 	ld	(33890:16), 0
 	.byte 0xd1, 0x64, 0x84, 0x19, 0xd4, 0x7e
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-4188
 	ld	xwa, 6291494
 	ld	xbc, 29360129
@@ -713,7 +713,7 @@ FmmLoadTtl_LoadSlots:
 	ld	(35176:16), 0
 	ld	(35178:16), 0
 	ld	(35180:16), 0
-	lds	iz, 0
+	ld	iz, 0:i3
 FmmLoadTtl_SlotLoop:
 	stb_erp	a, 248
 	extz	wa
@@ -765,7 +765,7 @@ FmmSaveTitleFunc:
 	cp	xde, 2
 	jrl	nz, 171
 	ld	(33890:16), 0
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-4735
 	ld	xwa, 6291494
 	ld	xbc, 29360129
@@ -781,7 +781,7 @@ FmmSaveTitleFunc:
 FmmSaveTtl_CheckFont:
 	cp	(35995:16), 102
 	jr	z, 45
-	lds	iz, 0
+	ld	iz, 0:i3
 FmmSaveTtl_SlotLoop:
 	stb_erp	a, 248
 	extz	wa
@@ -789,9 +789,9 @@ FmmSaveTtl_SlotLoop:
 	inc	1, iz
 	cp	iz, 6:i3
 	jr	lt, -15
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	16289670
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	16289670
 	call	16289725
 	ld	xiy, 15337066
@@ -838,7 +838,7 @@ DiskNameFunc:
 	jr	z, 45
 	cp	xbc, 29360139
 	jrl	nz, 193
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	60599
 	lda	xiz, (34544:16)
 	call	16290176
@@ -850,14 +850,14 @@ DiskNameFunc:
 	ld	xde, 34544
 	jr	112
 DiskName_TextChange:
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	60563
 	lda	xiz, (34544:16)
 	call	16290176
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lds	iy, 0
+	ld	iy, 0:i3
 	lda	xix, (34772:16)
 	lda	xiz, (15652728:24)
 	lda	xde, (34544:16)
@@ -905,7 +905,7 @@ DiskName_HandleApply:
 	ld	xwa, 34544
 	ld	xbc, (xsp+4)
 	call	16288975
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	60433
 	ld	xwa, 34544
 	call	16065688
@@ -925,7 +925,7 @@ DiskInfoFunc:
 	ld (XSP+0x10),XDE
 	cp XBC,0x01c0000b
 	jrl nz, DiskInfo_Return
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	cpw (0x8464:16), 0x0000
 	jr ge, DiskInfo_ReadDriveType
@@ -989,7 +989,7 @@ DiskInfo_RenderStrings:
 	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+4)
-	lds	bc, 4
+	ld	bc, 4:i3
 	calr	-4200
 	ld	xbc, xhl
 	ld	xwa, (xsp+12)
@@ -1000,7 +1000,7 @@ DiskInfo_RenderStrings:
 	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+8)
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	-4238
 	ld	xbc, xhl
 	ld	xwa, (xsp+12)
@@ -1028,7 +1028,7 @@ SongNameFunc:
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	lt, 67
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	60075
 	lda	xwa, (34674:16)
 	ld	(xsp+2), xwa
@@ -1130,7 +1130,7 @@ SaveFileName_TextChange:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lds	iy, 0
+	ld	iy, 0:i3
 	lda	xix, (15652728:24)
 	lda	xde, (34740:16)
 	ld	xhl, xde

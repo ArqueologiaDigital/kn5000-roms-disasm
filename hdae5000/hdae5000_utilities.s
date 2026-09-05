@@ -98,7 +98,7 @@ HDAE5000_MemCompare_Block:	; 0x29AFBE
 .Lmcmp_loop:
 	cp (xix), 0x00		; block A byte is null?
 	jr nz, .Lmcmp_advance
-	lds hl, 0			; return 0 (match up to null)
+	ld hl, 0:i3			; return 0 (match up to null)
 	ret
 .Lmcmp_advance:
 	inc 1, xix
@@ -202,7 +202,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 
 	lda	xsp, (xsp-16)
 	push xiz
-	lds	iz, 0
+	ld	iz, 0:i3
 	ldw (xsp + 0x06), 15
 	ldw (xsp + 0x08), 8
 	pushw 0x0020
@@ -248,10 +248,10 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	lda	xde, (xsp+10)
 	bitm	7, (xde)
 	jr z, .LMCR_b10f                       ; [66 04] jr Z,0x29b10f
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr t, .LMCR_b111                       ; [68 02] jr T,0x29b111
 .LMCR_b10f:
-	lds	wa, 0
+	ld	wa, 0:i3
 .LMCR_b111:
 	ld xbc, (xsp + 0x26)                    ; ld XBC,(XSP+0x26)
 	ld (xbc), wa                            ; ld (XBC),WA
@@ -279,7 +279,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	and l, 0xf0		; and L,0xf0
 	extz hl                                 ; extz HL
 	sra	hl, 0x04
-	lds	wa, 4
+	ld	wa, 4:i3
 	ldw	bc, 0x0400
 .LMCR_b150:
 	ld	e, (xde)
@@ -319,13 +319,13 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr lt, .LMCR_b17f                      ; [61 da] jr LT,0x29b17f
 	jr t, .LMCR_b1f9                       ; [68 52] jr T,0x29b1f9
 .LMCR_b1a7:
-	lds	ix, 0
+	ld	ix, 0:i3
 	ld	qiz, 0
 .LMCR_b1ac:
 	lda	xbc, (xsp+10)
 	cpib_sri 0x07, 0xE4, 0xFA, 0x00	; cp (XBC+QIZ),0x00
 	jr z, .LMCR_b1bb                       ; [66 04] jr Z,0x29b1bb
-	lds	ix, 1
+	ld	ix, 1:i3
 	jr t, .LMCR_b1c5                       ; [68 0a] jr T,0x29b1c5
 .LMCR_b1bb:
 	inc	1, qiz
@@ -376,7 +376,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr lt, .LMCR_b215                      ; [61 db] jr LT,0x29b215
 .LMCR_b23a:
 	pushm	(xsp+6)
-	lds	wa, 6
+	ld	wa, 6:i3
 	sub	wa, iz
 	pushw wa                                ; push WA
 	pushw 0x0023
@@ -400,7 +400,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	cp	wa, de
 	jr lt, .LMCR_b24a                      ; [61 d7] jr LT,0x29b24a
 	pushm	(xsp+6)
-	lds	wa, 6
+	ld	wa, 6:i3
 	sub	wa, iz
 	pushw wa                                ; push WA
 	push xbc
@@ -419,13 +419,13 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	inc	1, qiz
 	cpw	qiz, 0x0009
 	jr lt, .LMCR_b284                      ; [61 df] jr LT,0x29b284
-	lds	de, 0
+	ld	de, 0:i3
 	lda xbc, (0x2394aa:24)
 	ld xhl, (xsp + 0x1c)                    ; ld XHL,(XSP+0x1c)
 	ld	wa, (xbc)
 	cp	wa, 0x0009
 	jr ule, .LMCR_b2c4                     ; [63 0d] jr ULE,0x29b2c4
-	lds	de, 1
+	ld	de, 1:i3
 	extz xwa
 	div wa, 0x000a
 	ld	(xhl), a
@@ -497,8 +497,8 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 
 	dec 0, xsp                              ; dec 0,XSP
 	pushw iz                                ; push IZ
-	lds	iz, 0
-	lds	wa, 0
+	ld	iz, 0:i3
+	ld	wa, 0:i3
 	ld	hl, (xsp+18)
 	cp	hl, 0:i3
 	jr le, .LMCR_b37e                      ; [62 0b] jr LE,0x29b37e
@@ -564,7 +564,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 
 	ld xiy, (xsp + 0x04)                    ; ld XIY,(XSP+0x04)
 	and16_imm_ri xiy, 0xff, 0x00		; and (XIY),0x00ff
-	lds	ix, 1
+	ld	ix, 1:i3
 	ld	hl, (xsp+8)
 	add	hl, hl
 	jr t, .LMCR_b429                       ; [68 2f] jr T,0x29b429
@@ -606,7 +606,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr c, .LMCR_b439                       ; [67 f7] jr C,0x29b439
 	ld	wa, (xsp+6)
 	ld (xde + 0x10), wa                     ; ld (XDE+0x10),WA
-	lds	iz, 0
+	ld	iz, 0:i3
 .LMCR_b44a:
 	lda xwa, (0x2394ea:24)
 	cpw	(xwa), 0x0000
@@ -703,7 +703,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ret
 
 	pushw iz                                ; push IZ
-	lds	ix, 0
+	ld	ix, 0:i3
 	lds32	xbc, 0
 .LMCR_b543:
 	ld xhl, (xsp + 0x06)                    ; ld XHL,(XSP+0x06)
@@ -784,7 +784,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 
 	dec	2, xsp
 	pushw iz                                ; push IZ
-	lds	iz, 0
+	ld	iz, 0:i3
 	cpw	(xsp+12), 0x0000
 	jr le, .LMCR_b607                      ; [62 16] jr LE,0x29b607
 .LMCR_b5f1:
@@ -800,13 +800,13 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b607:
 	cp	iz, (xsp+12)
 	jr nz, .LMCR_b610                      ; [6e 04] jr NZ,0x29b610
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr t, .LMCR_b653                       ; [68 43] jr T,0x29b653
 .LMCR_b610:
 	ldw (xsp + 0x02), 0
 	jr t, .LMCR_b646                       ; [68 2f] jr T,0x29b646
 .LMCR_b617:
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld xbc, (xsp + 0x08)                    ; ld XBC,(XSP+0x08)
 	jr t, .LMCR_b625                       ; [68 07] jr T,0x29b625
 .LMCR_b61e:
@@ -843,7 +843,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 
 	pushw iz                                ; push IZ
 	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	bc, (xsp+10)
 	cp	bc, 0:i3
 	jr le, .LMCR_b678                      ; [62 14] jr LE,0x29b678
@@ -860,11 +860,11 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b678:
 	cp	iz, bc
 	jr nz, .LMCR_b680                      ; [6e 04] jr NZ,0x29b680
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr t, .LMCR_b6a7                       ; [68 27] jr T,0x29b6a7
 .LMCR_b680:
 	ld	hl, (xde)
-	lds	iz, 0
+	ld	iz, 0:i3
 	jr t, .LMCR_b68b                       ; [68 05] jr T,0x29b68b
 .LMCR_b686:
 	srl	hl, 0x01
@@ -956,7 +956,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	mul	xde, xwa
 	add	xhl, xde
 	ld	qhl, hl
-	lds	hl, 0
+	ld	hl, 0:i3
 	mul	xwa, xbc
 	add	xhl, xwa
 	ret
@@ -1298,7 +1298,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 .LDIV_b9d5:
 	bs1b16 bc		; bs1b A,BC
 .LDIV_b9d7:
-	lds	hl, 0
+	ld	hl, 0:i3
 	ld (xiy + 0x02), hl                     ; ld (XIY+0x02),HL
 	ld l, a		; ld L,A
 	ld_dst16_rid8 xiy, 0x00, hl		; ld (XIY+0x00),HL
@@ -1321,7 +1321,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	cp	a, 0x10
 	jr lt, .LDIV_ba14                      ; [61 0a] jr LT,0x29ba14
 	ld	qbc, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	sub	a, 0x10
 	jr z, .LDIV_ba16                       ; [66 02] jr Z,0x29ba16
 .LDIV_ba14:

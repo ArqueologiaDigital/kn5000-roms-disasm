@@ -105,7 +105,7 @@ ScreenGroup_InitState:
 	and (0xc2d3:16), 1
 	or (0xc2d4:16), 254
 	and (0xc2d5:16), 1
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0x20
 	jrl ge, ScreenGroup_InitParams16
 
@@ -164,7 +164,7 @@ ScreenGroup_InitVoiceLoop:
 	jrl lt, ScreenGroup_InitVoiceLoop
 
 ScreenGroup_InitParams16:
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0x10
 	jr ge, ScreenGroup_InitParams8
 
@@ -183,7 +183,7 @@ ScreenGroup_InitParam16Loop:
 	jr lt, ScreenGroup_InitParam16Loop
 
 ScreenGroup_InitParams8:
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0x8
 	jr ge, ScreenGroup_InitParams8Complex
 
@@ -199,7 +199,7 @@ ScreenGroup_InitParam8Loop:
 	jr lt, ScreenGroup_InitParam8Loop
 
 ScreenGroup_InitParams8Complex:
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0x8
 	jr ge, ScreenGroup_FinalInit
 
@@ -241,7 +241,7 @@ ScreenGroup_FinalInit:
 	ld xix, 0xc364
 	ldw bc, 0xb3
 	ldirw
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0xa1
 	jr ge, ScreenGroup_InitFinalize
 

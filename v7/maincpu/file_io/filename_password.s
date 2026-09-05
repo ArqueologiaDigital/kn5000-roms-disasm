@@ -140,7 +140,7 @@ SelectPasswordMode:
 	push XIZ
 	lds_erpb 0xfb, 0
 	lds_erpb 0xfa, 0
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_FormatName_Return
 	cp l, 0:i3
 	jr z, .Lc_f8c6c1
@@ -152,7 +152,7 @@ SelectPasswordMode:
 	lds_erpb 0xfa, 1
 SelectMode_CheckSaveAvail:
 .Lc_f8c6c1:
-	lds wa, 3
+	ld wa, 3:i3
 	call FileIO_FormatName_Return
 	cp l, 0:i3
 	jr z, SelectMode_DetermineMode
@@ -251,7 +251,7 @@ FileName_DrawItemLoop:
 	ld	de, (xsp+6)
 	ld	wa, de
 	sll	wa, 5
-	lds	hl, 1
+	ld	hl, 1:i3
 	add	hl, wa
 	lda	xix, (33904:16)
 	extz	xhl
@@ -332,11 +332,11 @@ FileName_OpSave:
 	ld	wa, (32478:16)
 	extz	wa
 	calr	-6531
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	-6843
 	call	16283131
 	ld	wa, hl
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	-6204
 	ld	(32422:16), l
 	calr	-6769
@@ -350,11 +350,11 @@ FileName_OpSave:
 	call	16423243
 	cpw	(61854:16), 0
 	jr	z, 36
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	16289512
 	cp	l, 0:i3
 	jr	z, 26
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	16289732
 	cp	l, 0:i3
 	jr	nz, 11
@@ -367,7 +367,7 @@ FileName_OpSave_ShowCodeA:
 	jr FileName_OpSave_CallHandler
 
 FileName_OpSave_ShowCode1:
-	lds wa, 1
+	ld wa, 1:i3
 
 FileName_OpSave_CallHandler:
 	call UI_PostPartChangeEvent
@@ -412,11 +412,11 @@ FileName_OpLoad_Execute:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	58459
 	call	16284320
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	59098
 	ld	(32422:16), l
 	call	16290139
@@ -432,7 +432,7 @@ FileName_OpLoad_Execute:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -447,11 +447,11 @@ FileName_OpFormat:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	58336
 	call	16284320
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	58975
 	ld	(32422:16), l
 	call	16290139
@@ -467,7 +467,7 @@ FileName_OpFormat:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -500,11 +500,11 @@ FileName_OpDelete_Execute:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	58161
 	call	16286496
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	58800
 	ld	(32422:16), l
 	calr	58235
@@ -525,11 +525,11 @@ FileName_OpFormatVariant:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	58076
 	call	16286496
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	58715
 	ld	(32422:16), l
 	calr	58150
@@ -575,12 +575,12 @@ FileName_Navigate_CheckChanged:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	-7615
 	ld	wa, (32478:16)
 	call	16286763
 	ld	wa, hl
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	-6980
 	ld	(32422:16), l
 	calr	-7545
@@ -649,7 +649,7 @@ FileName_UpdateButtons_Check:
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, FileName_CheckCallback
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_FormatName_Loop
 
 FileName_CheckCallback:

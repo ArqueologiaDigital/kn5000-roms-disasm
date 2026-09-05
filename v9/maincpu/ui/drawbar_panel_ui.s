@@ -17,7 +17,7 @@ AcSendEditSwProc:
 	ld (xsp + 22), xwa
 	ld xiy, NakaData_ModeConfig1_0x4
 	lda xix, (xsp + 4)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ld xwa, (xsp + 18)
 	cp xwa, 0x1c00009
@@ -164,11 +164,11 @@ ComSetGridCheck:
 	ld xde, xbc
 	ld xiy, NakaData_ModeConfig2_0x2C
 	lda xix, (xsp + 12)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xwa, xde
 	cp xde, 0x1e0008d
@@ -216,8 +216,8 @@ ComSetGridCheck_JumpTable:
 	sla	bc, 2
 	lda	xwa, (NakaData_ModeConfig2_0x8:24)
 	ld_rrl	xwa, xwa, bc
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	115
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -251,7 +251,7 @@ ComSetGridCheck_JumpTable:
 	lda	xwa, (NakaData_ModeConfig2_0x8:24)
 	ld_rrl	xwa, xwa, bc
 	ldw	bc, 0xffff
-	lds	de, 2
+	ld	de, 2:i3
 	call	MainLswAdd
 	jrl	546
 	lda	xhl, (xsp+4)
@@ -545,7 +545,7 @@ AcPmemOutL_Init_Cell01:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jr AcPmemOutL_Init_ScrollCommit
 
 AcPmemOutL_Init_Cell3:
@@ -572,7 +572,7 @@ AcPmemOutL_Init_Cell3:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcPmemOutL_Init_ScrollCommit:
 	call SetDialEnable
@@ -601,7 +601,7 @@ AcPmemOutL_Init_ForwardBase:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
@@ -648,7 +648,7 @@ AcPmemOutL_AutoIncUp_Cell2:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
@@ -695,7 +695,7 @@ AcPmemOutL_AutoIncDown_Cell3:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
@@ -855,7 +855,7 @@ AcPmemOutR_Init_Cell567:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 
 AcPmemOutR_Init_ForwardBase:
@@ -882,7 +882,7 @@ AcPmemOutR_Init_ForwardBase:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
@@ -929,7 +929,7 @@ AcPmemOutR_AutoIncUp_Cell6:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
@@ -976,7 +976,7 @@ AcPmemOutR_AutoIncDown_Cell7:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
@@ -1094,7 +1094,7 @@ PmemOutLGridCheck:
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 36)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xix, xde
 	lda xwa, (NakaInst_NEXT_E800E8_0x2:24)
@@ -1666,7 +1666,7 @@ PmemOutRGridCheck:
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 32)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xhl, xde
 	lda xbc, (xsp + 32)
@@ -2565,7 +2565,7 @@ AcCtlMsgGrid_Init:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcCtlMsgGrid_ScrollCommit
 
 AcCtlMsgGrid_Show:
@@ -2756,7 +2756,7 @@ AcCtlMsgGrid_ScrollUp_AutoScroll:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 24)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcCtlMsgGrid_ScrollCommit
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
@@ -2851,7 +2851,7 @@ AcCtlMsgGrid_ScrollDown_AutoScroll:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 24)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcCtlMsgGrid_ScrollCommit:
 	call SetDialEnable
@@ -2927,11 +2927,11 @@ CtlMsgGridCheck:
 	ld xde, xbc
 	ld xiy, NakaInst_ON_E80168_0x266
 	lda xix, (xsp + 20)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 12)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xix, xde
 	lda xhl, (xsp + 12)
@@ -2977,8 +2977,8 @@ CtlMsgGridCheck_JumpTable:
 	add	de, bc
 	lda	xwa, (NakaInst_ON_E80168_0x21E:24)
 	ld_rrl	xwa, xwa, de
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	82
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3005,7 +3005,7 @@ CtlMsgGridCheck_JumpTable:
 	lda	xwa, (NakaInst_ON_E80168_0x21E:24)
 	ld_rrl	xwa, xwa, de
 	ldw	bc, 0xffff
-	lds	de, 2
+	ld	de, 2:i3
 	.byte 0x1d, 0x42, 0xf9
 	.long Bitmap_AccompBitmapSpacer
 	ld	(xsp+4), xhl
@@ -3213,7 +3213,7 @@ MidiSetup_TtlCase3:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl MidiPart_SetDialEnable
 
 ; MidiSetup title case 4
@@ -3486,7 +3486,7 @@ MidiPart_SendShowQuery:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 24)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl MidiPart_SetDialEnable
 
 MidiPart_InitGridBox:
@@ -3632,7 +3632,7 @@ MidiPart_SendShowQueryUp:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 24)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 MidiPart_SetDialEnable:
 	call SetDialEnable
@@ -3720,11 +3720,11 @@ MidiPartGridCheck:
 	ld (xsp + 38), xbc
 	ld xiy, Transpose_String_Plus2_0x12
 	lda xix, (xsp + 24)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 16)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xix, (xsp + 38)
 	lda xhl, (xsp + 24)
@@ -3789,28 +3789,28 @@ MidiPartGridCheck_JumpTable:
 	jr	nz, 36
 	ld	xwa, (xsp+12)
 	inc	1, xwa
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	call	16382090
 	ld	xwa, (xsp+12)
 	inc	2, xwa
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	call	16382090
 	ld	xwa, (xsp+12)
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	jrl	304
 	ld	xwa, (xsp+38)
 	cp	xwa, 29360153
 	jr	nz, 10
 	ld	xwa, (xsp+12)
-	lds	bc, 4
-	lds	de, 2
+	ld	bc, 4:i3
+	ld	de, 2:i3
 	jrl	236
 	ld	xwa, (xsp+12)
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jrl	226
 	ld	xwa, (xsp+12)
 	call	16569399
@@ -3821,11 +3821,11 @@ MidiPartGridCheck_JumpTable:
 	cp	bc, hl
 	jrl	z, 924
 	ld	xwa, (xsp+12)
-	lds	de, 2
+	ld	de, 2:i3
 	jrl	239
 	ld	xwa, (xsp+12)
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jrl	229
 	call	16401616
 	ld	xwa, xhl
@@ -3874,24 +3874,24 @@ MidiPartGridCheck_JumpTable:
 	jr	nz, 24
 	ld	xwa, (xsp+12)
 	inc	1, xwa
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	call	16382090
 	ld	xwa, (xsp+12)
 	inc	2, xwa
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	jr	76
 	ld	xwa, (xsp+38)
 	cp	xwa, 29360154
 	jr	nz, 10
 	ld	xwa, (xsp+12)
 	ldw	bc, 65532
-	lds	de, 2
+	ld	de, 2:i3
 	jr	8
 	ld	xwa, (xsp+12)
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	call	16382274
 	jrl	717
 	ld	xwa, (xsp+12)
@@ -3903,11 +3903,11 @@ MidiPartGridCheck_JumpTable:
 	cp	bc, hl
 	jrl	z, 691
 	ld	xwa, (xsp+12)
-	lds	de, 2
+	ld	de, 2:i3
 	jr	7
 	ld	xwa, (xsp+12)
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	call	16382090
 	jrl	670
 	ld	xix, (xsp+34)
@@ -4359,7 +4359,7 @@ SndParam_ResolveOscEntry:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
-	lds bc, 0
+	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xsp + 5), l
 	ld wa, iz
@@ -4704,8 +4704,8 @@ IvSdpart_PageSelect:
 	cp xwa, 0x9
 	jrl nz, IvSdpart_ReturnHandled
 	ld xwa, xiz
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	calr SdpartScrollDelta
 	cp hl, 0:i3
 	jrl z, IvSdpart_ReturnHandled
@@ -5451,7 +5451,7 @@ AudioCtrl_HighPartOffset:
 	pushm (xsp + 6)
 	ld wa, (xsp + 30)
 	ld bc, (xsp + 28)
-	lds de, 1
+	ld de, 1:i3
 
 AudioCtrl_CallMainLswPartPut:
 	call MainLswPartPut
@@ -5482,7 +5482,7 @@ AudioCtrl_HighPartUnbounded:
 	call ApFuncCall
 	ld (xsp + 6), hl
 	ld xwa, xiz
-	lds bc, 1
+	ld bc, 1:i3
 	ld de, (xsp + 6)
 	jrl AudioCtrl_CallMainLswPut
 
@@ -5545,7 +5545,7 @@ AudioCtrl_DualPartHighOffset:
 	pushm (xsp + 6)
 	ld wa, (xsp + 30)
 	ld bc, (xsp + 28)
-	lds de, 0
+	ld de, 0:i3
 	call MainLswPartPut
 	jrl AudioCtrl_ReturnZeroEpilogue
 
@@ -5586,7 +5586,7 @@ AudioCtrl_DualPartResolve:
 	call ApFuncCall
 	ld (xsp + 6), hl
 	ld xwa, xiz
-	lds bc, 0
+	ld bc, 0:i3
 	ld de, (xsp + 6)
 
 AudioCtrl_CallMainLswPut:
@@ -6054,7 +6054,7 @@ AcLswPartPan_Confirm:
 	ld de, (xhl)
 	dec 4, de
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda xde, (xsp + 20)
 	ld bc, (xde + 6)
@@ -6070,7 +6070,7 @@ AcLswPartPan_Confirm:
 	inc 4, de
 	ld (xbc), de
 	ld (xwa), de
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda xbc, (xsp + 12)
 	ld de, (xsp + 24)
@@ -6078,7 +6078,7 @@ AcLswPartPan_Confirm:
 	ld (xbc), de
 	lda xwa, (xsp + 16)
 	ld (xwa), de
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda xbc, (xsp + 20)
 	ld wa, (xbc + 4)
@@ -6091,7 +6091,7 @@ AcLswPartPan_Confirm:
 	ld (xbc), de
 	lda xwa, (xsp + 16)
 	ld (xwa), de
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda xbc, (xsp + 20)
 	ld wa, (xbc + 4)
@@ -6104,7 +6104,7 @@ AcLswPartPan_Confirm:
 	ld (xbc), de
 	lda xwa, (xsp + 16)
 	ld (xwa), de
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda xwa, (xsp + 20)
 	ld bc, (xwa + 4)
@@ -6119,7 +6119,7 @@ AcLswPartPan_Confirm:
 	ld (xbc), de
 	lda xwa, (xsp + 16)
 	ld (xwa), de
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	ld de, (0x03e99e:24)
 	exts xde
@@ -6238,7 +6238,7 @@ AcLswPartPan_Return:
 	ret
 
 SdpartLookupPartId:
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xwa), 0xffff
 	jr z, SdpartLookupPartId_CheckEnd
 
@@ -6281,7 +6281,7 @@ SdpartScrollDelta_Negate:
 	ret
 
 SdpartScrollDelta_Zero:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SdpartUpdatePartUI:
@@ -8522,7 +8522,7 @@ PleaseWait_GetText:
 	call Strlen
 	inc 4, xsp
 	ld de, hl
-	lds hl, 0
+	ld hl, 0:i3
 	cp de, 0:i3
 	jr le, PleaseWait_BuildScrollStr
 
@@ -9287,7 +9287,7 @@ AccTab_DrawCentered:
 	ld bc, (xwa + 6)
 	dec 1, bc
 	ld (xwa + 2), bc
-	lds bc, 0
+	ld bc, 0:i3
 	call DrawBox
 	lda xbc, (xiz + 14)
 	lda xde, (xsp + 8)
@@ -9331,7 +9331,7 @@ AccTab_DrawSecondCentered:
 	ld bc, (xwa + 2)
 	inc 1, bc
 	ld (xwa + 6), bc
-	lds bc, 0
+	ld bc, 0:i3
 	call DrawBox
 	lds32 xhl, 0
 
@@ -9382,8 +9382,8 @@ Sdtecd_InitCase3:
 	cp hl, 0:i3
 	jr nz, Voice_InheritedProcCall
 	ld xwa, 0x4200
-	lds bc, 1
-	lds de, 3
+	ld bc, 1:i3
+	ld de, 3:i3
 	call MainLswPut
 
 Voice_InheritedProcCall:
@@ -9460,7 +9460,7 @@ IvSdtecd1Proc:
 	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
@@ -9474,7 +9474,7 @@ Sdtecd1_ScrollDown:
 	jrl nz, IvSdtecd1_ReturnDefault
 	ld xwa, 0x4202
 	ldw bc, 0xffff
-	lds de, 3
+	ld de, 3:i3
 	call MainLswAdd
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00019
@@ -9488,7 +9488,7 @@ Sdtecd1_ScrollDown:
 	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
@@ -9507,7 +9507,7 @@ Sdtecd1_ScrollDown_Lookup:
 	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
 	ldw_sri BC, 0x07, 0xe0, 0xec
 	ld xwa, 0x4202
-	lds de, 3
+	ld de, 3:i3
 	jrl Sdtecd1_PutAndReturn
 
 Sdtecd1_ScrollUp:
@@ -9519,8 +9519,8 @@ Sdtecd1_ScrollUp:
 	cp xiz, 0x1
 	jrl nz, IvSdtecd1_ReturnDefault
 	ld xwa, 0x4202
-	lds bc, 1
-	lds de, 3
+	ld bc, 1:i3
+	ld de, 3:i3
 	call MainLswAdd
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c0001a
@@ -9534,7 +9534,7 @@ Sdtecd1_ScrollUp:
 	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
@@ -9552,7 +9552,7 @@ Sdtecd1_ScrollUp_Lookup:
 	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
 	ldw_sri BC, 0x07, 0xe0, 0xec
 	ld xwa, 0x4202
-	lds de, 3
+	ld de, 3:i3
 
 Sdtecd1_PutAndReturn:
 	call MainLswPut
@@ -9864,7 +9864,7 @@ LswMasterTuning:
 	ld (xsp + 12), xwa
 	ld xiy, NakaInst_RIGHT_1_E9DB0C_0x64
 	lda xix, (xsp + 2)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	cp xde, 0x1e000b9
 	jrl z, StringOp_ReturnZero
@@ -9882,7 +9882,7 @@ LswMasterTuning:
 	jrl z, StringOp_ReturnZero
 	cp xde, 0x1e00042
 	jrl nz, StringOp_ReturnZero
-	lds iz, 1
+	ld iz, 1:i3
 	lda xde, (NakaInst_RIGHT_1_E9DB0C_0x14:24)
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 4)
@@ -10392,7 +10392,7 @@ LswScaleKeyX_LoadReturn:
 	jr LswEnd_PopIzSkip4Ret
 
 LswScaleKeyX_FindFocus:
-	lds iz, 0
+	ld iz, 0:i3
 	jr LswScaleKeyX_LoopCheck
 
 LswScaleKeyX_LoopBody:
@@ -10622,7 +10622,7 @@ AcWelcomScreenProc:
 	jr z, AcWelcomScreen_Close
 	cp xiz, 0x1c00001
 	jrl nz, AcWelcomScreen_ForwardToBase
-	lds wa, 1
+	ld wa, 1:i3
 	call ChangePalette
 	call Get_Region_Code
 	ld xwa, Bitmap_DigitD_0x8DA
@@ -10675,7 +10675,7 @@ AcWelcomScreen_Close:
 	ld xbc, xiz
 	ld xde, (xsp + 16)
 	call InheritedProc
-	lds wa, 2
+	ld wa, 2:i3
 	call ChangePalette
 	jrl AcWelcomScreen_ReturnHandled
 
@@ -10685,12 +10685,12 @@ AcWelcomScreen_Activate:
 	jr z, AcWelcomScreen_Activate_Setup
 	call LcdOff
 	ld xwa, Bitmap_DigitD_0x11CE
-	lds bc, 0
+	ld bc, 0:i3
 	call DrawBox
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 	call SetNeedUpdate
 	call LcdOn
 
@@ -10800,7 +10800,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xiy, 2
 	add	xiy, (0x24786:24)
 	lda_rr xix, xwa, iz
-	lds bc, 6
+	ld bc, 6:i3
 	.byte 0x95
 	scf
 	jrl	734
@@ -11077,7 +11077,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xiy, 2
 	add	xiy, (0x24786:24)
 	ld	xix, 0x3ea24
-	lds	bc, 6
+	ld	bc, 6:i3
 	.byte 0x95
 	scf
 	jr	36
@@ -11327,7 +11327,7 @@ PsMixer_ControlCase2:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	call GetPartSelect
 	extz xhl
@@ -11516,7 +11516,7 @@ PsMixer_ControlCase5:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld (0x024790:24), iz
 	ld xwa, (xsp + 90)
@@ -11632,7 +11632,7 @@ AudioCtrl_DispatchHandler:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1e000a7
@@ -11707,7 +11707,7 @@ AudioCtrl_SetupPartDisplay:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000d
@@ -11879,7 +11879,7 @@ PsMixer_ControlCase8:
 	ld xwa, (xsp + 82)
 	ld xiy, xwa
 	lda xix, (xsp + 70)
-	lds bc, 6
+	ld bc, 6:i3
 	ldirw
 	lda xwa, (xsp + 70)
 	lda xbc, (xsp + 68)
@@ -12131,8 +12131,8 @@ PsMixer_VolSel_SearchLoop:
 PsMixer_VolSel_CheckFound:
 	cpw (xsp + 10), 0x8
 	jr nz, PsMixer_VolumeSelect_Continue
-	lds iz, 0
-	lds wa, 0
+	ld iz, 0:i3
+	ld wa, 0:i3
 	calr PsMixer_ReadWordArrayEntry
 	cp hl, 0xff
 	jr z, PsMixer_VolumeSelect_Continue
@@ -12190,7 +12190,7 @@ PsMixer_VolumeSelect_Continue:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1e000a7
@@ -12356,7 +12356,7 @@ TrackMixer_Init:
 	calr Util_StorePartArrayBase
 	ld xwa, 0x3ebe8
 	calr Util_StoreGridArrayBase
-	lds iz, 0
+	ld iz, 0:i3
 
 TrackMixer_InitPartLoop:
 	ld de, iz
@@ -12493,7 +12493,7 @@ AudioCtrl_DataBlock:
 	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+16)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xwa, (xsp+16)
@@ -12514,7 +12514,7 @@ AudioCtrl_DataBlock:
 	ld	wa, (xbc+6)
 	dec	2, wa
 	ld	(xde+2), wa
-	lds	iz, 0
+	ld	iz, 0:i3
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+8)
 	ldw	de, 248
@@ -12548,7 +12548,7 @@ AudioCtrl_DataBlock:
 	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xwa, (xsp+8)
@@ -12589,7 +12589,7 @@ AudioCtrl_DataBlock:
 	call	DrawFrameSP
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xwa, (xsp+12)
@@ -12667,7 +12667,7 @@ AudioCtrl_DataBlock:
 	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	wa, (xsp+4)
@@ -12705,7 +12705,7 @@ AudioCtrl_DataBlock:
 	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xde, (xsp+8)
@@ -12923,7 +12923,7 @@ AudioCtrl_DataBlock:
 	calr	64679
 	lda	xwa, (xsp+20)
 	incw	7, (xwa+2)
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	64347
 	jrl	340
 	ld	wa, (xsp+14)
@@ -13088,7 +13088,7 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+10)
 	calr	64206
 	lda	xwa, (xsp+62)
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	63877
 	ld	wa, (xsp+10)
 	exts	xwa
@@ -13414,7 +13414,7 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+12)
 	calr	63242
 	lda	xwa, (xsp+64)
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	62913
 	ld	wa, (xsp+12)
 	exts	xwa
@@ -13677,7 +13677,7 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+10)
 	calr	62429
 	lda	xwa, (xsp+66)
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	62100
 	ld	wa, (xsp+10)
 	exts	xwa
@@ -13910,7 +13910,7 @@ AudioCtrl_DataBlock:
 	.byte 0x98, 0x06
 	push	xwa
 	ldb	w, 0
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	61412
 	ld	wa, (xsp+12)
 	exts	xwa
@@ -13986,7 +13986,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, xhl
 	call	SndParam_LookupReadOnly
 	jr	2
-	lds	hl, 0
+	ld	hl, 0:i3
 	ld	(xsp+52), hl
 	ld	bc, (xsp+4)
 	extz	xbc
@@ -14301,7 +14301,7 @@ AudioCtrl_DataBlock:
 	nop
 	jr	z, 11
 	ld	xwa, xiz
-	lds	bc, 0
+	ld	bc, 0:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
 	.byte 0x9f
@@ -14414,7 +14414,7 @@ AudioCtrl_DataBlock:
 	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
-	lds	bc, 1
+	ld	bc, 1:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
 	jrl	-516
@@ -14469,7 +14469,7 @@ AudioCtrl_DataBlock:
 	push	xde
 	ex_ff
 	nop
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	59937
 	ld	wa, (xsp+18)
 	exts	xwa
@@ -14756,7 +14756,7 @@ AudioCtrl_DataBlock:
 	push	xde
 	ex_ff
 	nop
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	59173
 	ld	wa, iz
 	exts	xwa
@@ -14932,19 +14932,19 @@ AudioCtrl_DataBlock:
 	ei	4
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
-	lds	de, 1
+	ld	de, 1:i3
 	call	MainLswPartPut
 	.byte 0x9f
 	ei	4
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
-	lds	de, 1
+	ld	de, 1:i3
 	call	MainLswPartPut
 	.byte 0x9f
 	ei	4
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
-	lds	de, 0
+	ld	de, 0:i3
 	jr	40
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
@@ -14955,13 +14955,13 @@ AudioCtrl_DataBlock:
 	ei	4
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
-	lds	de, 0
+	ld	de, 0:i3
 	call	MainLswPartPut
 	.byte 0x9f
 	ei	4
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
-	lds	de, 0
+	ld	de, 0:i3
 	call	MainLswPartPut
 	lds32	xhl, 0
 	jr	36
@@ -15289,7 +15289,7 @@ IvDrawbar_Release_Upper:
 	ld wa, (0x02479a:24)
 	pushw 0x4
 	ldw bc, 0x2c1
-	lds de, 1
+	ld de, 1:i3
 	jr IvDrawbar_Release_WriteValue
 
 IvDrawbar_Release_Upper_DualMode:
@@ -15308,7 +15308,7 @@ IvDrawbar_Release_Lower:
 	ld wa, (0x02479a:24)
 	pushw 0x4
 	ldw bc, 0x2c0
-	lds de, 1
+	ld de, 1:i3
 
 IvDrawbar_Release_WriteValue:
 	call MainLswPartPut
@@ -16073,8 +16073,8 @@ LswPercDecay_StoreDE:
 
 Lsw_PercDecay_DialScroll:
 	ld xwa, xbc
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld wa, (0x0247c6:24)
@@ -16108,7 +16108,7 @@ SdpartClamp_CheckUpper:
 	jr ge, SdpartClamp_Apply
 
 SdpartClamp_ReturnZero:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SdpartClamp_Apply:
@@ -16190,8 +16190,8 @@ LswPercLevel_StoreDE:
 
 Lsw_PercLevel_DialScroll:
 	ld xwa, xbc
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld wa, (0x0247c8:24)
@@ -16277,8 +16277,8 @@ LswDrawAttack_StoreDE:
 
 Lsw_DrawAttack_DialScroll:
 	ld xwa, xbc
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld wa, (0x0247cc:24)
@@ -16364,8 +16364,8 @@ LswDrawRelease_StoreDE:
 
 Lsw_DrawRelease_DialScroll:
 	ld xwa, xbc
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	calr SdpartScrollDelta
 	ld bc, hl
 	ld wa, (0x0247ca:24)
@@ -16461,7 +16461,7 @@ IvDrawbar1_LoadVals:
 	call GetModeNow
 	cp xhl, 0x1800003
 	jr z, IvDrawbar1_LoadVals_DualMode
-	lds iz, 0
+	ld iz, 0:i3
 
 IvDrawbar1_LoadVals_Loop:
 	ld wa, (0x02479a:24)
@@ -16494,7 +16494,7 @@ IvDrawbar1_DrawbarUpdate:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x8
 	jr ule, IvDrawbar1_DrawbarUpdate_OneSlider
-	lds iz, 0
+	ld iz, 0:i3
 
 IvDrawbar1_DrawbarUpdate_AllSliders:
 	ld de, iz
@@ -16533,10 +16533,10 @@ IvDrawbar1_DrawbarUpdate_Render:
 	ld xwa, (xsp + 4)
 	ld bc, (xde)
 	calr DrawbarBitmapHelper
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 	call SetNeedUpdate
 	ld xwa, (xsp + 4)
 	add xwa, xwa
@@ -17099,8 +17099,8 @@ DrawbarNorm_Notify:
 	or xwa, xwa
 	jr nz, IvDrawbarNorm_ReturnZeroJmp
 	ld xwa, 0x4003
-	lds bc, 1
-	lds de, 4
+	ld bc, 1:i3
+	ld de, 4:i3
 	call MainLswPut
 	jr IvDrawbarNorm_ReturnZeroJmp
 
@@ -17241,21 +17241,21 @@ MainMemDrawControl:
 	ld wa, hl
 	call FDemoText_SendResetMessage
 	ldw wa, 0xd
-	lds bc, 0
+	ld bc, 0:i3
 	calr DemoMenu_BuildItemWorkspace
 	ldw wa, 0xe
-	lds bc, 0
+	ld bc, 0:i3
 	calr DemoMenu_BuildItemWorkspace
 	ldw wa, 0xb
-	lds bc, 0
+	ld bc, 0:i3
 	calr DemoMenu_BuildItemWorkspace
 	ldw wa, 0xc
-	lds bc, 0
+	ld bc, 0:i3
 	calr DemoMenu_BuildItemWorkspace
 	jrl DemoMenu_ReturnZero
 
 MemDraw_InitParamLoop:
-	lds iz, 0
+	ld iz, 0:i3
 
 MemDraw_ParamLoopBody:
 	ld wa, iz
@@ -17299,7 +17299,7 @@ MemDraw_SendExtVoice:
 	jr DemoMenu_ReturnZero
 
 MemDraw_RestoreAll:
-	lds iz, 0
+	ld iz, 0:i3
 
 MemDraw_RestoreLoop:
 	ld wa, iz
@@ -17474,7 +17474,7 @@ DemoDesc_DispatchTable:
 
 ; DemoMenu descriptor return
 DemoMenu_DescriptorReturn:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 DemoDesc_BuildCompactParams:
@@ -18190,7 +18190,7 @@ AcPresCtrl_EventDispatch:
 	call GetModeNow				; additional processing
 	cp xhl, 0x01800013			; check return code
 	jrl z, AcPresent_ReturnZeroJmp			; matched -- exit
-	lds	wa, 2
+	ld	wa, 2:i3
 	jr AcPresCtrl_ChangePalette				; skip to call FAF2C7
 	ld xwa, 0x02600024			; workspace for SendEvent
 	ld xbc, 0x01e00029			; presentation control event
@@ -18211,7 +18211,7 @@ AcPresCtrl_EventDispatch:
 	ld xbc, 0x01c00015			; presentation state event
 	ld xde, 0x01a000e0			; event param
 	call PostEvent				; dispatch event
-	lds	wa, 2
+	ld	wa, 2:i3
 AcPresCtrl_ChangePalette:
 	call ChangePalette				; presentation helper
 	jrl AcPresent_ReturnZeroJmp			; exit
@@ -18239,7 +18239,7 @@ AcPresCtrl_Case5:
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call ApFuncCall
-	lds wa, 2
+	ld wa, 2:i3
 	call ChangePalette
 	ld xwa, NakaData_ExternalBase
 	ld xbc, 0x1c00001

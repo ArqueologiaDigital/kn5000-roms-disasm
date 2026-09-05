@@ -152758,7 +152758,7 @@ sub_FE370A:
 	cp hl, 0x00:i3                                         ; FE382E  db d8
 	jr nz, 0x04                                          ; FE3830  6e 04
 .LFE3832:
-	lds hl, 0x00                                         ; FE3832  db a8
+	ld hl, 0x00:i3                                         ; FE3832  db a8
 	jr 0x56                                              ; FE3834  68 56
 .LFE3836:
 	lda xbc, (0x605d22:24)                               ; FE3836  f2 22 5d 60 31
@@ -152784,7 +152784,7 @@ sub_FE370A:
 	inc 1,QIZ                                            ; FE386E  d7 fa 61
 	cp QIZ,3                                             ; FE3871  d7 fa db
 	jr c, -80                                            ; FE3874  67 b0
-	lds hl, 0x03                                         ; FE3876  db ab
+	ld hl, 0x03:i3                                         ; FE3876  db ab
 	jr 0x12                                              ; FE3878  68 12
 .LFE387A:
 	cp HL,0x0031                                         ; FE387A  db cf 31 00
@@ -152792,10 +152792,10 @@ sub_FE370A:
 	cp HL,0x0030                                         ; FE3880  db cf 30 00
 	jr nz, 0x04                                          ; FE3884  6e 04
 .LFE3886:
-	lds hl, 0x01                                         ; FE3886  db a9
+	ld hl, 0x01:i3                                         ; FE3886  db a9
 	jr 0x02                                              ; FE3888  68 02
 .LFE388A:
-	lds hl, 0x02                                         ; FE388A  db aa
+	ld hl, 0x02:i3                                         ; FE388A  db aa
 .LFE388C:
 	pop XIZ                                              ; FE388C  5e
 	inc 4,XSP                                            ; FE388D  ef 64
@@ -152806,7 +152806,7 @@ sub_FE370A:
 	ldw hl, 0xff                                         ; FE3897  33 ff 00
 	ret                                                  ; FE389A  0e
 .LFE389B:
-	lds hl, 0x00                                         ; FE389B  db a8
+	ld hl, 0x00:i3                                         ; FE389B  db a8
 	ret                                                  ; FE389D  0e
 sub_FE389E:
 	push XIZ                                             ; FE389E  3e
@@ -152874,7 +152874,7 @@ sub_FE389E:
 	m_ld_mi16 MDD+r0, 0x0c, 0x0000                       ; FE394A  b8 0c 02 00 00
 	ld XWA,(XSP+0x08)                                    ; FE394F  af 08 20
 	ld (XWA+0x20),0x00                                   ; FE3952  b8 20 00 00
-	lds hl, 0x00                                         ; FE3956  db a8
+	ld hl, 0x00:i3                                         ; FE3956  db a8
 .LFE3958:
 	pop XIZ                                              ; FE3958  5e
 	ret                                                  ; FE3959  0e
@@ -152914,7 +152914,7 @@ sub_FE3986:
 	decm 0x01, (xwa+0x1e)                                ; FE39A9  98 1e 69
 	ld XWA,(XSP+0x06)                                    ; FE39AC  af 06 20
 	ld BC,(XWA+0x1a)                                     ; FE39AF  98 1a 21
-	lds iz, 0x00                                         ; FE39B2  de a8
+	ld iz, 0x00:i3                                         ; FE39B2  de a8
 	jr 0x0a                                              ; FE39B4  68 0a
 .LFE39B6:
 	pushw bc                                             ; FE39B6  29
@@ -153027,7 +153027,7 @@ sub_FE3A4C:
 	ld (0x605d2a:24), wa                                ; FE3AB3  f2 2a 5d 60 50
 	ld WA,(XSP+0x04)                                     ; FE3AB8  9f 04 20
 	ld (0x605d5e:24), wa                                ; FE3ABB  f2 5e 5d 60 50
-	lds hl, 0x00                                         ; FE3AC0  db a8
+	ld hl, 0x00:i3                                         ; FE3AC0  db a8
 	jr 0x2a                                              ; FE3AC2  68 2a
 .LFE3AC4:
 	incw 0x01, (xsp+0x08)                                ; FE3AC4  9f 08 61
@@ -153118,7 +153118,7 @@ sub_FE3B3A:
 	push XWA                                             ; FE3B9D  38
 	calr 0x2c                                            ; FE3B9E  1e 2c 00
 	inc 0,XSP                                            ; FE3BA1  ef 60
-	lds hl, 0x00                                         ; FE3BA3  db a8
+	ld hl, 0x00:i3                                         ; FE3BA3  db a8
 	jr 0x21                                              ; FE3BA5  68 21
 .LFE3BA7:
 	incw 0x01, (xsp+0x08)                                ; FE3BA7  9f 08 61
@@ -153165,17 +153165,17 @@ sub_FE3BCD:
 sub_FE3C08:
 	ld XWA,(XSP+0x04)                                    ; FE3C08  af 04 20
 	inc 1,XWA                                            ; FE3C0B  e8 61
-	lds bc, 0x00                                         ; FE3C0D  d9 a8
+	ld bc, 0x00:i3                                         ; FE3C0D  d9 a8
 .LFE3C0F:
 	cp_spib_im 0xe0, 0x3f                                ; FE3C0F  c5 e0 3f 3f
 	jr nz, 0x03                                          ; FE3C13  6e 03
-	lds hl, 0x01                                         ; FE3C15  db a9
+	ld hl, 0x01:i3                                         ; FE3C15  db a9
 	ret                                                  ; FE3C17  0e
 .LFE3C18:
 	inc 1,BC                                             ; FE3C18  d9 61
 	cp BC,0x000b                                         ; FE3C1A  d9 cf 0b 00
 	jr lt, -17                                           ; FE3C1E  61 ef
-	lds hl, 0x00                                         ; FE3C20  db a8
+	ld hl, 0x00:i3                                         ; FE3C20  db a8
 	ret                                                  ; FE3C22  0e
 sub_FE3C23:
 	dec 4,XSP                                            ; FE3C23  ef 6c
@@ -153273,7 +153273,7 @@ sub_FE3CB1:
 	cp hl, 0x00:i3                                         ; FE3CEC  db d8
 	jr z, -14                                            ; FE3CEE  66 f2
 .LFE3CF0:
-	lds hl, 0x00                                         ; FE3CF0  db a8
+	ld hl, 0x00:i3                                         ; FE3CF0  db a8
 .LFE3CF2:
 	pop XIZ                                              ; FE3CF2  5e
 	ret                                                  ; FE3CF3  0e
@@ -153311,7 +153311,7 @@ sub_FE3CF4:
 	cp WA,(XSP+0x06)                                     ; FE3D42  9f 06 f0
 	jr c, -43                                            ; FE3D45  67 d5
 .LFE3D47:
-	lds hl, 0x00                                         ; FE3D47  db a8
+	ld hl, 0x00:i3                                         ; FE3D47  db a8
 .LFE3D49:
 	pop XIZ                                              ; FE3D49  5e
 	inc 4,XSP                                            ; FE3D4A  ef 64
@@ -153433,7 +153433,7 @@ sub_FE3DB2:
 	ldw hl, 0xff                                         ; FE3E8C  33 ff 00
 	jr 0x02                                              ; FE3E8F  68 02
 .LFE3E91:
-	lds hl, 0x00                                         ; FE3E91  db a8
+	ld hl, 0x00:i3                                         ; FE3E91  db a8
 .LFE3E93:
 	pop XIZ                                              ; FE3E93  5e
 	inc 4,XSP                                            ; FE3E94  ef 64
@@ -153441,12 +153441,12 @@ sub_FE3DB2:
 sub_FE3E97:
 	ld XWA,(XSP+0x04)                                    ; FE3E97  af 04 20
 	ld (0x605d2c:24), xwa                               ; FE3E9A  f2 2c 5d 60 60
-	lds hl, 0x00                                         ; FE3E9F  db a8
+	ld hl, 0x00:i3                                         ; FE3E9F  db a8
 	ret                                                  ; FE3EA1  0e
 sub_FE3EA2:
 	m_cp_mi16 MWD+r7, 0x04, 0x0001                       ; FE3EA2  9f 04 3f 01 00
 	jr nz, 0x03                                          ; FE3EA7  6e 03
-	lds hl, 0x00                                         ; FE3EA9  db a8
+	ld hl, 0x00:i3                                         ; FE3EA9  db a8
 	ret                                                  ; FE3EAB  0e
 .LFE3EAC:
 	lda xwa, (0x606f9b:24)                               ; FE3EAC  f2 9b 6f 60 30
@@ -153471,7 +153471,7 @@ sub_FE3EA2:
 	jr nz, 0x05                                          ; FE3EE6  6e 05
 	jr 0x07                                              ; FE3EE8  68 07
 .LFE3EEA:
-	lds hl, 0x01                                         ; FE3EEA  db a9
+	ld hl, 0x01:i3                                         ; FE3EEA  db a9
 	ret                                                  ; FE3EEC  0e
 .LFE3EED:
 	ldw hl, 0xff                                         ; FE3EED  33 ff 00
@@ -153529,7 +153529,7 @@ sub_FE3F6C:
 	cp (XWA),0xf7                                        ; FE3F7A  80 3f f7
 	jr nz, 0x02                                          ; FE3F7D  6e 02
 .LFE3F7F:
-	lds hl, 0x00                                         ; FE3F7F  db a8
+	ld hl, 0x00:i3                                         ; FE3F7F  db a8
 .LFE3F81:
 	ret                                                  ; FE3F81  0e
 sub_FE3F82:
@@ -153578,7 +153578,7 @@ sub_FE3FB0:
 	ld (XBC),WA                                          ; FE3FE4  b1 50
 	cp WA,0xffff                                         ; FE3FE6  d8 cf ff ff
 	jr nz, 0x05                                          ; FE3FEA  6e 05
-	lds hl, 0x01                                         ; FE3FEC  db a9
+	ld hl, 0x01:i3                                         ; FE3FEC  db a9
 	jrl 0xc6                                             ; FE3FEE  78 c6 00
 .LFE3FF1:
 	cp (XIZ),0x01                                        ; FE3FF1  86 3f 01
@@ -153657,7 +153657,7 @@ sub_FE3FB0:
 	ld XWA,0x00000200                                    ; FE40AB  40 00 02 00 00
 	sub (0x605d2c:24), xwa                           ; FE40B0  e2 2c 5d 60 a8
 .LFE40B5:
-	lds hl, 0x00                                         ; FE40B5  db a8
+	ld hl, 0x00:i3                                         ; FE40B5  db a8
 .LFE40B7:
 	pop XIZ                                              ; FE40B7  5e
 	ret                                                  ; FE40B8  0e
@@ -153791,7 +153791,7 @@ sub_FE40B9:
 	ldw hl, 0xff                                         ; FE420C  33 ff 00
 	jr 0x2b                                              ; FE420F  68 2b
 .LFE4211:
-	lds hl, 0x01                                         ; FE4211  db a9
+	ld hl, 0x01:i3                                         ; FE4211  db a9
 	jr 0x27                                              ; FE4213  68 27
 .LFE4215:
 	pushw iz                                             ; FE4215  2e
@@ -153809,7 +153809,7 @@ sub_FE40B9:
 	incw 0x01, (xwa+0x1e)                                ; FE4232  98 1e 61
 	ld (0x605d34:24), iz                                ; FE4235  f2 34 5d 60 56
 .LFE423A:
-	lds hl, 0x00                                         ; FE423A  db a8
+	ld hl, 0x00:i3                                         ; FE423A  db a8
 .LFE423C:
 	popw iz                                              ; FE423C  4e
 	ret                                                  ; FE423D  0e
@@ -153817,7 +153817,7 @@ sub_FE423E:
 	ld xwa, (0x605d22:24)                               ; FE423E  e2 22 5d 60 20
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                       ; FE4243  98 02 3f 01 00
 	jr nz, 0x03                                          ; FE4248  6e 03
-	lds hl, 0x00                                         ; FE424A  db a8
+	ld hl, 0x00:i3                                         ; FE424A  db a8
 	ret                                                  ; FE424C  0e
 .LFE424D:
 	ldw (0x605d6e:24), 0xffff                           ; FE424D  f2 6e 5d 60 02 ff ff
@@ -153947,7 +153947,7 @@ Disk_CommandDispatch:
 	ld XWA,(XSP+0x04)                                    ; FE434E  af 04 20
 	ld HL,(XWA)                                          ; FE4351  90 23
 	ld DE,(XWA+0x02)                                     ; FE4353  98 02 22
-	lds ix, 0x00                                         ; FE4356  dc a8
+	ld ix, 0x00:i3                                         ; FE4356  dc a8
 	ld BC,(XSP+0x08)                                     ; FE4358  9f 08 21
 	cp bc, 0x00:i3                                         ; FE435B  d9 d8
 	jr le, 0x16                                          ; FE435D  62 16
@@ -154107,7 +154107,7 @@ Disk_WriteSectors:
 	ldw hl, 0xff                                         ; FE447C  33 ff 00
 	ret                                                  ; FE447F  0e
 .LFE4480:
-	lds hl, 0x00                                         ; FE4480  db a8
+	ld hl, 0x00:i3                                         ; FE4480  db a8
 	ret                                                  ; FE4482  0e
 sub_FE4483:
 	dec 2,XSP                                            ; FE4483  ef 6a
@@ -154163,7 +154163,7 @@ sub_FE44BD:
 	ldw hl, 0xff                                         ; FE450B  33 ff 00
 	ret                                                  ; FE450E  0e
 .LFE450F:
-	lds hl, 0x00                                         ; FE450F  db a8
+	ld hl, 0x00:i3                                         ; FE450F  db a8
 	ret                                                  ; FE4511  0e
 sub_FE4512:
 	m_push MWD+r7, 0x04                                  ; FE4512  9f 04 04
@@ -154210,11 +154210,11 @@ sub_FE4563:
 	lda xsp, (xsp+0x0c)                                  ; FE457A  bf 0c 37
 	ret                                                  ; FE457D  0e
 sub_FE457E:
-	lds iy, 0x00                                         ; FE457E  dd a8
+	ld iy, 0x00:i3                                         ; FE457E  dd a8
 	ld DE,(XSP+0x0c)                                     ; FE4580  9f 0c 22
 	cp de, 0x00:i3                                         ; FE4583  da d8
 	jr ule, 0x18                                         ; FE4585  63 18
-	lds bc, 0x00                                         ; FE4587  d9 a8
+	ld bc, 0x00:i3                                         ; FE4587  d9 a8
 	ld XIX,(XSP+0x04)                                    ; FE4589  af 04 24
 	ld XHL,(XSP+0x08)                                    ; FE458C  af 08 23
 .LFE458F:
@@ -154229,7 +154229,7 @@ sub_FE457E:
 	ret                                                  ; FE459F  0e
 	ld XBC,(XSP+0x08)                                    ; FE45A0  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE45A3  af 04 22
-	lds hl, 0x00                                         ; FE45A6  db a8
+	ld hl, 0x00:i3                                         ; FE45A6  db a8
 .LFE45A8:
 	ldb_spi a, 0xe4                                      ; FE45A8  c5 e4 21
 	cp_spib a, 0xe8                                      ; FE45AB  c5 e8 f1
@@ -154240,12 +154240,12 @@ sub_FE457E:
 	inc 1,HL                                             ; FE45B4  db 61
 	cp HL,0x000b                                         ; FE45B6  db cf 0b 00
 	jr lt, -20                                           ; FE45BA  61 ec
-	lds hl, 0x00                                         ; FE45BC  db a8
+	ld hl, 0x00:i3                                         ; FE45BC  db a8
 	ret                                                  ; FE45BE  0e
 sub_FE45BF:
 	ld XBC,(XSP+0x08)                                    ; FE45BF  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE45C2  af 04 22
-	lds hl, 0x00                                         ; FE45C5  db a8
+	ld hl, 0x00:i3                                         ; FE45C5  db a8
 .LFE45C7:
 	cp (XBC),0xe5                                        ; FE45C7  81 3f e5
 	jr z, 0x18                                           ; FE45CA  66 18
@@ -154268,12 +154268,12 @@ sub_FE45BF:
 	inc 1,HL                                             ; FE45E8  db 61
 	cp HL,0x000b                                         ; FE45EA  db cf 0b 00
 	jr lt, -41                                           ; FE45EE  61 d7
-	lds hl, 0x00                                         ; FE45F0  db a8
+	ld hl, 0x00:i3                                         ; FE45F0  db a8
 	ret                                                  ; FE45F2  0e
 sub_FE45F3:
 	ld XBC,(XSP+0x08)                                    ; FE45F3  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE45F6  af 04 22
-	lds hl, 0x00                                         ; FE45F9  db a8
+	ld hl, 0x00:i3                                         ; FE45F9  db a8
 .LFE45FB:
 	ldb_spi a, 0xe4                                      ; FE45FB  c5 e4 21
 	lda_dpi xbc, 0xe8                                    ; FE45FE  f5 e8 41
@@ -154284,7 +154284,7 @@ sub_FE45F3:
 sub_FE460A:
 	ld XBC,(XSP+0x08)                                    ; FE460A  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE460D  af 04 22
-	lds hl, 0x00                                         ; FE4610  db a8
+	ld hl, 0x00:i3                                         ; FE4610  db a8
 .LFE4612:
 	ldb_spi a, 0xe4                                      ; FE4612  c5 e4 21
 	lda_dpi xbc, 0xe8                                    ; FE4615  f5 e8 41
@@ -154307,7 +154307,7 @@ sub_FE4621:
 	ldw hl, 0xff                                         ; FE4642  33 ff 00
 	ret                                                  ; FE4645  0e
 .LFE4646:
-	lds hl, 0x00                                         ; FE4646  db a8
+	ld hl, 0x00:i3                                         ; FE4646  db a8
 	ret                                                  ; FE4648  0e
 sub_FE4649:
 	ld WA,(XSP+0x04)                                     ; FE4649  9f 04 20
@@ -154324,7 +154324,7 @@ sub_FE4649:
 	ldw hl, 0xff                                         ; FE466A  33 ff 00
 	ret                                                  ; FE466D  0e
 .LFE466E:
-	lds hl, 0x00                                         ; FE466E  db a8
+	ld hl, 0x00:i3                                         ; FE466E  db a8
 	ret                                                  ; FE4670  0e
 sub_FE4671:
 	dec 6,XSP                                            ; FE4671  ef 6e
@@ -154342,7 +154342,7 @@ sub_FE4671:
 	inc 2,XSP                                            ; FE468F  ef 62
 	cp hl, 0x00:i3                                         ; FE4691  db d8
 	jr nz, 0x3e                                          ; FE4693  6e 3e
-	lds iz, 0x00                                         ; FE4695  de a8
+	ld iz, 0x00:i3                                         ; FE4695  de a8
 	jr 0x26                                              ; FE4697  68 26
 .LFE4699:
 	ld WA,IZ                                             ; FE4699  de 88
@@ -154378,7 +154378,7 @@ sub_FE4671:
 	ret                                                  ; FE46D9  0e
 sub_FE46DA:
 	push XIZ                                             ; FE46DA  3e
-	lds iz, 0x00                                         ; FE46DB  de a8
+	ld iz, 0x00:i3                                         ; FE46DB  de a8
 	jr 0x46                                              ; FE46DD  68 46
 .LFE46DF:
 	ld QIZ,0                                             ; FE46DF  d7 fa a8
@@ -154390,7 +154390,7 @@ sub_FE46DA:
 	cp hl, 0x00:i3                                         ; FE46EC  db d8
 	jr nz, 0x3c                                          ; FE46EE  6e 3c
 	lda xde, (0x605b12:24)                               ; FE46F0  f2 12 5b 60 32
-	lds hl, 0x00                                         ; FE46F5  db a8
+	ld hl, 0x00:i3                                         ; FE46F5  db a8
 	ld wa, (0x605d50:24)                                ; FE46F7  d2 50 5d 60 20
 	jr 0x16                                              ; FE46FC  68 16
 .LFE46FE:
@@ -154565,7 +154565,7 @@ sub_FE47BE:
 	or WA,HL                                             ; FE4896  db e0
 	ld (XBC),A                                           ; FE4898  b1 41
 .LFE489A:
-	lds hl, 0x00                                         ; FE489A  db a8
+	ld hl, 0x00:i3                                         ; FE489A  db a8
 .LFE489C:
 	pop XIZ                                              ; FE489C  5e
 	ret                                                  ; FE489D  0e
@@ -154590,7 +154590,7 @@ sub_FE489E:
 	exts XBC                                             ; FE48BD  e9 13
 	cp XBC,XWA                                           ; FE48BF  e8 f1
 	jr lt, -31                                           ; FE48C1  61 e1
-	lds hl, 0x00                                         ; FE48C3  db a8
+	ld hl, 0x00:i3                                         ; FE48C3  db a8
 .LFE48C5:
 	popw iz                                              ; FE48C5  4e
 	ret                                                  ; FE48C6  0e
@@ -154613,7 +154613,7 @@ sub_FE48C7:
 	inc 2,XSP                                            ; FE48E5  ef 62
 	cp hl, 0x00:i3                                         ; FE48E7  db d8
 	jr nz, 0x02                                          ; FE48E9  6e 02
-	lds hl, 0x00                                         ; FE48EB  db a8
+	ld hl, 0x00:i3                                         ; FE48EB  db a8
 .LFE48ED:
 	popw iz                                              ; FE48ED  4e
 	ret                                                  ; FE48EE  0e
@@ -154668,7 +154668,7 @@ sub_FE48EF:
 	m_ld_mi16 MDD+r7, 0x08, 0x0200                       ; FE498D  bf 08 02 00 02
 .LFE4992:
 	m_ld_mi16 MDD+r7, 0x06, 0x0000                       ; FE4992  bf 06 02 00 00
-	lds iz, 0x00                                         ; FE4997  de a8
+	ld iz, 0x00:i3                                         ; FE4997  de a8
 	cp QIZ,3                                             ; FE4999  d7 fa db
 	jr ge, 0x08                                          ; FE499C  69 08
 	ld WA,QIZ                                            ; FE499E  d7 fa 88
@@ -154735,7 +154735,7 @@ sub_FE48EF:
 .LFE4A42:
 	m_ld_mi16 MDI+r0, 0, 0x0000                          ; FE4A42  b0 02 00 00
 .LFE4A46:
-	lds hl, 0x00                                         ; FE4A46  db a8
+	ld hl, 0x00:i3                                         ; FE4A46  db a8
 	jr 0x07                                              ; FE4A48  68 07
 .LFE4A4A:
 	m_ld_mi16 MDI+r0, 0, 0x0000                          ; FE4A4A  b0 02 00 00
@@ -154828,7 +154828,7 @@ sub_FE4A55:
 	ldw (0x605d6e:24), 0x00                             ; FE4B39  f2 6e 5d 60 02 00 00
 	jr 0x04                                              ; FE4B40  68 04
 .LFE4B42:
-	lds hl, 0x00                                         ; FE4B42  db a8
+	ld hl, 0x00:i3                                         ; FE4B42  db a8
 	jr 0x03                                              ; FE4B44  68 03
 .LFE4B46:
 	ldw hl, 0xff                                         ; FE4B46  33 ff 00
@@ -154886,7 +154886,7 @@ sub_FE4B4B:
 	inc 1,XIZ                                            ; FE4BBC  ee 61
 	cp XIZ,0x00000400                                    ; FE4BBE  ee cf 00 04 00 00
 	jr lt, -23                                           ; FE4BC4  61 e9
-	lds hl, 0x00                                         ; FE4BC6  db a8
+	ld hl, 0x00:i3                                         ; FE4BC6  db a8
 .LFE4BC8:
 	pop XIZ                                              ; FE4BC8  5e
 	inc 2,XSP                                            ; FE4BC9  ef 62
@@ -154922,7 +154922,7 @@ sub_FE4BCC:
 .LFE4C12:
 	lds32 xwa, 0x00                                      ; FE4C12  e8 a8
 	ld (XSP+0x04),XWA                                    ; FE4C14  bf 04 60
-	lds iz, 0x00                                         ; FE4C17  de a8
+	ld iz, 0x00:i3                                         ; FE4C17  de a8
 	jr 0x28                                              ; FE4C19  68 28
 .LFE4C1B:
 	ld XWA,(XSP+0x04)                                    ; FE4C1B  af 04 20
@@ -155130,7 +155130,7 @@ Dev7E_SpinDelay:
 .LFE4D18:
 	cp wa, 0x00:i3                                         ; FE4D18  d8 d8
 	jr nz, -6                                            ; FE4D1A  6e fa
-	lds hl, 0x00                                         ; FE4D1C  db a8
+	ld hl, 0x00:i3                                         ; FE4D1C  db a8
 	ret                                                  ; FE4D1E  0e
 ; ---------------------------------------------------------------------
 ; Dev7E_WaitNotBusy -- polls the status register until bit 7 clears, giving up
@@ -155251,7 +155251,7 @@ Dev7E_WriteOneSector:
 	jr 0x59                                              ; FE4DEF  68 59
 .LFE4DF1:
 	ldio 0x68, 0x10                                      ; FE4DF1  08 68 10
-	lds iz, 0x00                                         ; FE4DF4  de a8
+	ld iz, 0x00:i3                                         ; FE4DF4  de a8
 .LFE4DF6:
 	ld WA,IZ                                             ; FE4DF6  de 88
 	inc 1,WA                                             ; FE4DF8  d8 61
@@ -155287,7 +155287,7 @@ Dev7E_WriteOneSector:
 	ldw hl, 0xfffc                                       ; FE4E43  33 fc ff
 	jr 0x02                                              ; FE4E46  68 02
 .LFE4E48:
-	lds hl, 0x00                                         ; FE4E48  db a8
+	ld hl, 0x00:i3                                         ; FE4E48  db a8
 .LFE4E4A:
 	popw iz                                              ; FE4E4A  4e
 	ret                                                  ; FE4E4B  0e
@@ -155338,7 +155338,7 @@ Unit1_Op4_WriteSectorRun:
 	ld BC,IZ                                             ; FE4E81  de 89
 	cp BC,WA                                             ; FE4E83  d8 f1
 	jr c, 0x16                                           ; FE4E85  67 16
-	lds iz, 0x00                                         ; FE4E87  de a8
+	ld iz, 0x00:i3                                         ; FE4E87  de a8
 	ld wa, (0x605d38:24)                                ; FE4E89  d2 38 5d 60 20
 	incw 0x01, (xsp+0x08)                                ; FE4E8E  9f 08 61
 	ld BC,(XSP+0x08)                                     ; FE4E91  9f 08 21
@@ -155357,7 +155357,7 @@ Unit1_Op4_WriteSectorRun:
 	decm 0x01, (xsp+0x0e)                                ; FE4EB1  9f 0e 69
 	m_cp_mi16 MWD+r7, 0x0e, 0x0000                       ; FE4EB4  9f 0e 3f 00 00
 	jr nz, -105                                          ; FE4EB9  6e 97
-	lds hl, 0x00                                         ; FE4EBB  db a8
+	ld hl, 0x00:i3                                         ; FE4EBB  db a8
 .LFE4EBD:
 	popw iz                                              ; FE4EBD  4e
 	inc 2,XSP                                            ; FE4EBE  ef 62
@@ -155468,7 +155468,7 @@ Dev7E_ReadOneSector:
 	ldw hl, 0xfffc                                       ; FE4FA9  33 fc ff
 	jr 0x02                                              ; FE4FAC  68 02
 .LFE4FAE:
-	lds hl, 0x00                                         ; FE4FAE  db a8
+	ld hl, 0x00:i3                                         ; FE4FAE  db a8
 .LFE4FB0:
 	pop XIZ                                              ; FE4FB0  5e
 	ret                                                  ; FE4FB1  0e
@@ -155508,7 +155508,7 @@ Unit1_Op3_ReadSectorRun:
 	ld BC,IZ                                             ; FE4FE7  de 89
 	cp BC,WA                                             ; FE4FE9  d8 f1
 	jr c, 0x16                                           ; FE4FEB  67 16
-	lds iz, 0x00                                         ; FE4FED  de a8
+	ld iz, 0x00:i3                                         ; FE4FED  de a8
 	ld wa, (0x605d38:24)                                ; FE4FEF  d2 38 5d 60 20
 	incw 0x01, (xsp+0x08)                                ; FE4FF4  9f 08 61
 	ld BC,(XSP+0x08)                                     ; FE4FF7  9f 08 21
@@ -155527,7 +155527,7 @@ Unit1_Op3_ReadSectorRun:
 	decm 0x01, (xsp+0x0e)                                ; FE5017  9f 0e 69
 	m_cp_mi16 MWD+r7, 0x0e, 0x0000                       ; FE501A  9f 0e 3f 00 00
 	jr nz, -105                                          ; FE501F  6e 97
-	lds hl, 0x00                                         ; FE5021  db a8
+	ld hl, 0x00:i3                                         ; FE5021  db a8
 .LFE5023:
 	popw iz                                              ; FE5023  4e
 	inc 2,XSP                                            ; FE5024  ef 62
@@ -155594,7 +155594,7 @@ Dev7E_IdentifyDevice:
 	jr 0x4c                                              ; FE5099  68 4c
 .LFE509B:
 	ldio 0x68, 0x10                                      ; FE509B  08 68 10
-	lds iz, 0x00                                         ; FE509E  de a8
+	ld iz, 0x00:i3                                         ; FE509E  de a8
 .LFE50A0:
 	pushw 0x00                                           ; FE50A0  0b 00 00
 	pushw 0x00                                           ; FE50A3  0b 00 00
@@ -155622,7 +155622,7 @@ Dev7E_IdentifyDevice:
 	ldw hl, 0xfffc                                       ; FE50E0  33 fc ff
 	jr 0x02                                              ; FE50E3  68 02
 .LFE50E5:
-	lds hl, 0x00                                         ; FE50E5  db a8
+	ld hl, 0x00:i3                                         ; FE50E5  db a8
 .LFE50E7:
 	popw iz                                              ; FE50E7  4e
 	ret                                                  ; FE50E8  0e
@@ -155675,7 +155675,7 @@ Unit1_Op0_SoftResetAndSetFeatures:
 	ldw hl, 0xfffe                                       ; FE5131  33 fe ff
 	ret                                                  ; FE5134  0e
 .LFE5135:
-	lds hl, 0x00                                         ; FE5135  db a8
+	ld hl, 0x00:i3                                         ; FE5135  db a8
 	ret                                                  ; FE5137  0e
 ; ---------------------------------------------------------------------
 ; Dev7E_SetDeviceParams -- issues command 0x91 with 0x3C in the sector-count register
@@ -155735,7 +155735,7 @@ Dev7E_SetDeviceParams:
 	ldw hl, 0xfffe                                       ; FE51A5  33 fe ff
 	ret                                                  ; FE51A8  0e
 .LFE51A9:
-	lds hl, 0x00                                         ; FE51A9  db a8
+	ld hl, 0x00:i3                                         ; FE51A9  db a8
 	ret                                                  ; FE51AB  0e
 ; ---------------------------------------------------------------------
 ; Unit1_Op5_FormatAndWriteDirBlocks -- the unit-1 arm of operation 5: after the transfer loop it
@@ -155954,7 +155954,7 @@ Unit1_Op5_FormatAndWriteDirBlocks:
 	ldw hl, 0xffff                                       ; FE53D8  33 ff ff
 	jr 0x02                                              ; FE53DB  68 02
 .LFE53DD:
-	lds hl, 0x00                                         ; FE53DD  db a8
+	ld hl, 0x00:i3                                         ; FE53DD  db a8
 .LFE53DF:
 	pop XIZ                                              ; FE53DF  5e
 	lda xsp, (xsp+0x0e)                                  ; FE53E0  bf 0e 37
@@ -156018,7 +156018,7 @@ Unit1_Op6_IssueCommandAndWaitReady:
 	ldw hl, 0xfffe                                       ; FE5446  33 fe ff
 	ret                                                  ; FE5449  0e
 .LFE544A:
-	lds hl, 0x00                                         ; FE544A  db a8
+	ld hl, 0x00:i3                                         ; FE544A  db a8
 	ret                                                  ; FE544C  0e
 	pushw 0xff                                           ; FE544D  0b ff 00
 	pushw 0x01                                           ; FE5450  0b 01 00
@@ -156056,7 +156056,7 @@ Unit1_Op6_IssueCommandAndWaitReady:
 	ldw hl, 0xfffe                                       ; FE54AF  33 fe ff
 	ret                                                  ; FE54B2  0e
 .LFE54B3:
-	lds hl, 0x00                                         ; FE54B3  db a8
+	ld hl, 0x00:i3                                         ; FE54B3  db a8
 	ret                                                  ; FE54B5  0e
 
 ; ==============================================================================
@@ -156564,7 +156564,7 @@ Fdc_Op10_TestControllerPresent:
 	calr 0x0773                                   ; FE570E  1e 73 07
 	inc 2,XSP                                     ; FE5711  ef 62
 .LFE5713:
-	lds hl, 0x00                                  ; FE5713  db a8
+	ld hl, 0x00:i3                                  ; FE5713  db a8
 	ret                                           ; FE5715  0e
 
 ; ---------------------------------------------------------------------
@@ -157236,7 +157236,7 @@ Fdc_WaitReadyForCommandByte:
 	ld QIZ,0                                      ; FE5AB0  d7 fa a8
 	jr .LFE5ACE                                   ; FE5AB3  68 19
 .LFE5AB5:
-	lds iz, 0x01                                  ; FE5AB5  de a9
+	ld iz, 0x01:i3                                  ; FE5AB5  de a9
 .LFE5AB7:
 	calr 0xfa02                                   ; FE5AB7  1e 02 fa
 	ld WA,IZ                                      ; FE5ABA  de 88
@@ -157932,7 +157932,7 @@ Fdc_RequestIsTrack0SectorProbe:
 	ldw hl, 0xffff                                ; FE5E61  33 ff ff
 	ret                                           ; FE5E64  0e
 .LFE5E65:
-	lds hl, 0x00                                  ; FE5E65  db a8
+	ld hl, 0x00:i3                                  ; FE5E65  db a8
 	ret                                           ; FE5E67  0e
 
 ; ---------------------------------------------------------------------
@@ -157952,7 +157952,7 @@ Fdc_RequestIsOp0WithCountFFFF:
 	m_cp_mi16 MWI+r0, 0, 0x0000                   ; FE5E76  90 3f 00 00
 	jr z, .LFE5E7F                                ; FE5E7A  66 03
 .LFE5E7C:
-	lds hl, 0x00                                  ; FE5E7C  db a8
+	ld hl, 0x00:i3                                  ; FE5E7C  db a8
 	ret                                           ; FE5E7E  0e
 .LFE5E7F:
 	ldw hl, 0xffff                                ; FE5E7F  33 ff ff
@@ -158072,7 +158072,7 @@ Fdc_MarkResultPending:
 Fdc_WaitResultFromInt5:
 .LFE5EC6:
 	ld bc, (0x605a00:24)                         ; FE5EC6  d2 00 5a 60 21
-	lds de, 0x00                                  ; FE5ECB  da a8
+	ld de, 0x00:i3                                  ; FE5ECB  da a8
 .LFE5ECD:
 	m_cp_mi8 MB24, 0x605a50, 0xff                 ; FE5ECD  c2 50 5a 60 3f ff
 	jr z, .LFE5ED8                                ; FE5ED3  66 03
@@ -158108,7 +158108,7 @@ Fdc_DelayTicks:
 	ld BC,(XSP+0x04)                              ; FE5EF3  9f 04 21
 	srl bc, 0x01                                  ; FE5EF6  d9 ef 01
 	ld de, (0x605a00:24)                         ; FE5EF9  d2 00 5a 60 22
-	lds hl, 0x00                                  ; FE5EFE  db a8
+	ld hl, 0x00:i3                                  ; FE5EFE  db a8
 .LFE5F00:
 	ld wa, (0x605a00:24)                         ; FE5F00  d2 00 5a 60 20
 	sub WA,DE                                     ; FE5F05  da a0
@@ -158360,7 +158360,7 @@ Fdc_Op3_ReadSectors__attempt:
 	lda xde, (xde+0x0a)                           ; FE60A1  ba 0a 32
 	ld WA,(XDE)                                   ; FE60A4  92 20
 	ld (0x605afb:24), wa                         ; FE60A6  f2 fb 5a 60 50
-	lds iz, 0x01                                  ; FE60AB  de a9
+	ld iz, 0x01:i3                                  ; FE60AB  de a9
 .LFE60AD:
 	ld wa, (0x605a10:24)                         ; FE60AD  d2 10 5a 60 20
 	add (0x605a0e:24), wa                     ; FE60B2  d2 0e 5a 60 88
@@ -158513,7 +158513,7 @@ Fdc_Op4_WriteSectors__attempt:
 	lda xde, (xde+0x0a)                           ; FE6214  ba 0a 32
 	ld WA,(XDE)                                   ; FE6217  92 20
 	ld (0x605afb:24), wa                         ; FE6219  f2 fb 5a 60 50
-	lds iz, 0x01                                  ; FE621E  de a9
+	ld iz, 0x01:i3                                  ; FE621E  de a9
 .LFE6220:
 	ld wa, (0x605a10:24)                         ; FE6220  d2 10 5a 60 20
 	add (0x605a0e:24), wa                     ; FE6225  d2 0e 5a 60 88
@@ -158983,7 +158983,7 @@ Fdc_Op6_PortA3_Off:
 	ld_sd8b a, 0x1e                               ; FE6607  c0 1e 21
 	and A,0xf7                                    ; FE660A  c9 cc f7
 	st_dd8b a, 0x1e                               ; FE660D  f0 1e 41
-	lds iz, 0x01                                  ; FE6610  de a9
+	ld iz, 0x01:i3                                  ; FE6610  de a9
 .LFE6612:
 	pushw 0x0a                                    ; FE6612  0b 0a 00
 	calr .LFE5EF3                                 ; FE6615  1e db f8
@@ -159451,7 +159451,7 @@ INT5_Dev7B_Receive:
 	push XDE                                      ; FE686A  3a
 	push XBC                                      ; FE686B  39
 	push XWA                                      ; FE686C  38
-	lds iz, 0x00                                  ; FE686D  de a8   IZ = the give-up counter
+	ld iz, 0x00:i3                                  ; FE686D  de a8   IZ = the give-up counter
 INT5_Dev7B__wait_first:
 	ld WA,IZ                                      ; FE686F  de 88
 	inc 1,IZ                                      ; FE6871  de 61
@@ -159568,7 +159568,7 @@ Int_Mul32:
 	mul xde, xwa                                  ; FE68E5  d8 42   cross term 2
 	add XHL,XDE                                   ; FE68E7  ea 83
 	ld QHL,HL                                     ; FE68E9  d7 ee 9b
-	lds hl, 0x00                                  ; FE68EC  db a8
+	ld hl, 0x00:i3                                  ; FE68EC  db a8
 	mul xwa, xbc                                  ; FE68EE  d9 40   low term
 	add XHL,XWA                                   ; FE68F0  e8 83
 	ret                                           ; FE68F2  0e

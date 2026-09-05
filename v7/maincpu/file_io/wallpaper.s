@@ -192,11 +192,11 @@ WPLoad_OpLoad:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	50767
 	call	16287614
 	ld	wa, hl
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	51406
 	ld	(32422:16), l
 	calr	50841
@@ -286,14 +286,14 @@ WP_ScanAvailability:
 	call	16289841
 	ld	qiz, hl
 	ldw	(35162:16), 0
-	lds	iz, 0
+	ld	iz, 0:i3
 WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
 	ld xwa, Str_SmfConvert_GmToGm_0x2A
 	add xwa, xbc
 	ld c, (xwa)
-	lds de, 1
+	ld de, 1:i3
 	ld a, c
 	and a, 0xf
 	jr z, WPScan_CheckAvail
@@ -311,7 +311,7 @@ WPScan_CheckAvail:
 	extz xwa
 	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
-	lds de, 1
+	ld de, 1:i3
 	ld a, (xbc)
 	and a, 0xf
 	jr z, WPScan_MarkAvailable
@@ -334,7 +334,7 @@ WPScan_TypeNotThree:
 	extz xwa
 	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
-	lds de, 1
+	ld de, 1:i3
 	ld a, (xbc)
 	and a, 0xf
 	jr z, WPScan_TypeTwo_Mark
@@ -351,7 +351,7 @@ WPScan_TypeGeneric:
 	extz xwa
 	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
-	lds de, 1
+	ld de, 1:i3
 	ld a, (xbc)
 	and a, 0xf
 	jr z, WPScan_Generic_Mark
@@ -377,7 +377,7 @@ WP_FindNextSlot:
 	ld	bc, (35162:16)
 	cp	bc, 0:i3
 	jr	z, 58
-	lds	iz, 1
+	ld	iz, 1:i3
 	extz	wa
 	ld	qbc, wa
 	lda	xde, (15337386:24)
@@ -389,7 +389,7 @@ WPFind_SearchLoop:
 	extz xwa
 	ld xix, xde
 	add xix, xwa
-	lds iy, 1
+	ld iy, 1:i3
 	ld a, (xix)
 	and a, 0xf
 	jr z, WPFind_CheckSlot

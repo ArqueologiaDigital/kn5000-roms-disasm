@@ -1351,7 +1351,7 @@ LyricsBox_ScrollAndDraw:
 	decm 2, (xiz + 6)
 	lda xiy, (xsp + 40)
 	lda xix, (xsp + 32)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 32)
 	addiw_da (xwa + 2), 0x12
@@ -1362,7 +1362,7 @@ LyricsBox_ScrollAndDraw:
 	ld (xde + 2), bc
 	lda xiy, (xsp + 40)
 	lda xix, (xsp + 24)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xhl, (xsp + 24)
 	ld bc, (xhl + 6)
@@ -1371,7 +1371,7 @@ LyricsBox_ScrollAndDraw:
 	ld xbc, xde
 	call MovePixels
 	lda xwa, (xsp + 24)
-	lds bc, 7
+	ld bc, 7:i3
 	call DrawBox
 
 SongEdit_ReturnZero:
@@ -1622,7 +1622,7 @@ LyricsTrack_JmpCheckBounds:
 
 LyricsTrack_ResetAllBuffers:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 LyricsTrack_ResetBufferLoop:
 	pushw 0x40
@@ -1908,7 +1908,7 @@ LyricsBoxFunc_SendEventB:
 	call SendEvent
 
 LyricsBoxFunc_ReadTrack:
-	lds wa, 0
+	ld wa, 0:i3
 	calr LyricsTrack_ReadAndParse
 	jr SongName_ReturnZeroJmp
 
@@ -2826,7 +2826,7 @@ IvNamingExit_ScreenData:
 	ld	xbc, 29360151
 	lds32	xde, 0
 	call	16359805
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16359726
 	jrl	587
 	ld	xwa, (xsp+178)
@@ -2872,7 +2872,7 @@ IvNamingExit_ScreenData:
 	lda	xbc, (xsp+162)
 	ld	de, (xwa)
 	ld	(xbc), de
-	lds	de, 7
+	ld	de, 7:i3
 	call	16426365
 	incw	1, (xsp+20)
 	ld	xwa, (xsp+22)
@@ -3067,11 +3067,11 @@ TrAsGrid_HandleInit:
 	cp	hl, 0:i3
 	jr	z, 9
 	ld	xwa, 9109513
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	7
 TrAsGrid_InitStateZero:
 	ld xwa, 0x8b0009
-	lds bc, 1
+	ld bc, 1:i3
 
 TrAsGrid_InitDispatch:
 	call SetVisible
@@ -3109,7 +3109,7 @@ TrAsGrid_InitDispatch:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl TrAsGrid_CallUpdateSorted
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e00050
@@ -3233,7 +3233,7 @@ TrAsGrid_HandleOtherEvent:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl TrAsGrid_CallUpdateSorted
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e00050
@@ -3357,7 +3357,7 @@ TrAsGrid_HandleOtherEvent2:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 TrAsGrid_CallUpdateSorted:
 	call SetDialEnable
@@ -3421,7 +3421,7 @@ TrAsGrid_HandleSelectEvent:
 	jr TrAsGrid_FinishCellUpdate
 
 TrAsGrid_DeselectCell:
-	lds wa, 0
+	ld wa, 0:i3
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
 	res 0, (3296:16)
@@ -3567,7 +3567,7 @@ TrAsGridChk_ByteData:
 	jrl	nz, 1197
 	ld	a, (0x2873:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	65318
 	ld	(0x2873:16), l
 	.byte 0xf2, 0x82
@@ -3671,7 +3671,7 @@ TrAsGridChk_ByteData:
 	jrl	nz, 881
 	ld	a, (0x2873:16)
 	extz	wa
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	65002
 	ld	(0x2873:16), l
 	.byte 0xf2, 0x82
@@ -3847,14 +3847,14 @@ TrAsGridChk_Part2_PushCmd:
 	extz	bc
 	cp	de, hl
 	jr	nz, 17
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	64564
 	cp	l, 1:i3
 	jrl	nz, 132
 	ld	xwa, 14836888
 	jr	114
 TrAsGridChk_Part2_CheckType0:
-	lds wa, 0
+	ld wa, 0:i3
 	calr TrAsGrid_CheckTrackType
 	cp l, 1:i3
 	jr nz, TrAsGridChk_Part2_Finish
@@ -3889,14 +3889,14 @@ TrAsGridChk_Part2_UpPushCmd:
 	extz	bc
 	cp	de, hl
 	jr	nz, 16
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	64463
 	cp	l, 1:i3
 	jr	nz, 32
 	ld	xwa, 14836904
 	jr	14
 TrAsGridChk_Part2_UpCheckType0:
-	lds wa, 0
+	ld wa, 0:i3
 	calr TrAsGrid_CheckTrackType
 	cp l, 1:i3
 	jr nz, TrAsGridChk_Part2_Finish
@@ -3945,14 +3945,14 @@ TrAsGridChk_Part3_PushCmd:
 	extz	bc
 	cp	de, hl
 	jr	nz, 17
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	64331
 	cp	l, 1:i3
 	jrl	nz, 132
 	ld	xwa, 14836920
 	jr	114
 TrAsGridChk_Part3_CheckType0:
-	lds wa, 0
+	ld wa, 0:i3
 	calr TrAsGrid_CheckTrackType
 	cp l, 1:i3
 	jr nz, TrAsGridChk_Part3_Finish
@@ -3987,14 +3987,14 @@ TrAsGridChk_Part3_UpPushCmd:
 	extz	bc
 	cp	de, hl
 	jr	nz, 16
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	64230
 	cp	l, 1:i3
 	jr	nz, 32
 	ld	xwa, 14836936
 	jr	14
 TrAsGridChk_Part3_UpCheckType0:
-	lds wa, 0
+	ld wa, 0:i3
 	calr TrAsGrid_CheckTrackType
 	cp l, 1:i3
 	jr nz, TrAsGridChk_Part3_Finish
@@ -6351,7 +6351,7 @@ HelpLangChk_CheckIzZero:
 	call	16405594
 	cp	xhl, 27263207
 	jr	z, 82
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	16535254
 	cp	hl, 0:i3
 	jr	z, 72
@@ -6423,7 +6423,7 @@ HelpFunc_CheckIzZero:
 	call	16405594
 	cp	xhl, 27263207
 	jr	z, 82
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	16535254
 	cp	hl, 0:i3
 	jr	z, 72
@@ -6504,7 +6504,7 @@ HelpTtlProc_HandleActivation:
 	push xbc
 	pushm (xde + 30)
 	ld xbc, 0x5b
-	lds de, 0
+	ld de, 0:i3
 	call DrawTitleBar
 	lds32 xhl, 0
 
@@ -6584,7 +6584,7 @@ IvSdrev_CheckParam:
 	jr	nz, 14
 	ld	xwa, 16386
 	ldw	bc, 127
-	lds	de, 3
+	ld	de, 3:i3
 	call	16381053
 MasterParam_Return:
 	ld xwa, (xsp + 8)
@@ -6723,8 +6723,8 @@ IvSdacc_CheckParam:
 	cp	hl, 0:i3
 	jr	nz, 13
 	ld	xwa, 16388
-	lds	bc, 1
-	lds	de, 3
+	ld	bc, 1:i3
+	ld	de, 3:i3
 	call	16381053
 OscillatorParam_Return:
 	ld xwa, (xsp + 8)
@@ -7346,7 +7346,7 @@ NoteEditBox_HandleFocusGained:
 	ld xbc, 0x1c00018
 	lds32 xde, 0
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jrl NoteEdit_ReturnZero
 
@@ -7520,7 +7520,7 @@ NoteEditBox_EventDispatch2:
 	ld	bc, (xhl)
 	.byte 0x9a, 0x06, 0x81
 	ld	(xwa+6), bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	ldw	de, 245
 	call	16437580
 	call	16405594
@@ -8115,7 +8115,7 @@ NoteEditGrid_LoadCoordinates:
 	ld bc, (xhl)
 	add bc, (xde + 6)
 	ld (xwa + 6), bc
-	lds bc, 0
+	ld bc, 0:i3
 	ldw de, 0xf5
 	call DrawDesignBox
 	jrl NoteEdit_ReturnZero
@@ -8850,7 +8850,7 @@ EntGrid_PostMainEvent:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld (0x02109e:24), 0x00
 	jrl Entertainer_ReturnZeroJmp
@@ -8910,7 +8910,7 @@ EntGrid_CheckOverflow1:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl EntGrid_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -8968,7 +8968,7 @@ EntGrid_CheckOverflow2:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 EntGrid_SetDialEnable:
 	call SetDialEnable
@@ -9052,11 +9052,11 @@ EntertainerGridCheck:
 	ld (xsp + 62), xbc
 	ld xiy, ExtDevice_ModeDispatch_Table_0x29C
 	lda xix, (xsp + 48)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ld xiy, Naka_Help_569_E30113_0x82B
 	lda xix, (xsp + 40)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xde, (xsp + 62)
 	ld (xsp + 20), xde
@@ -9127,13 +9127,13 @@ SndParam_Dispatch:
 	jr	nz, 16
 	lda	xbc, (14894928:24)
 	ld_rrl	xwa, xbc, de
-	lds	bc, 4
-	lds	de, 4
+	ld	bc, 4:i3
+	ld	de, 4:i3
 	jr	14
 	lda	xbc, (14894928:24)
 	ld_rrl	xwa, xbc, de
-	lds	bc, 1
-	lds	de, 4
+	ld	bc, 1:i3
+	ld	de, 4:i3
 	call	16381237
 	jrl	1244
 	ld	xwa, 21495810
@@ -9178,10 +9178,10 @@ SndParam_Dispatch:
 	cp	xde, 29360154
 	jr	nz, 7
 	ldw	bc, 65532
-	lds	de, 4
+	ld	de, 4:i3
 	jr	5
 	ldw	bc, 65535
-	lds	de, 4
+	ld	de, 4:i3
 	call	16381237
 	jrl	1080
 	ld	xwa, 21495810
@@ -9804,7 +9804,7 @@ SqplyVal_InitScrollAndRefresh:
 	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jr SqplyVal_DispatchUpdate
 
@@ -10019,7 +10019,7 @@ SqplyVal_ExtraParamsData:
 	ld	xbc, 0x01c00018
 	lds32	xde, 1
 	call	SetDialDown
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	391
 
 SqplyVal_HandleUpScrollEvent:
@@ -10081,7 +10081,7 @@ SqplyVal_UpScroll_Mode2:
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl SqplyVal_CallSortedUpdate
 
 SqplyVal_HandleDownScrollEvent:
@@ -10143,7 +10143,7 @@ SqplyVal_DownScroll_Mode2:
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 SqplyVal_CallSortedUpdate:
 	call SetDialEnable
@@ -10321,7 +10321,7 @@ SqedtVal_HandleInitEvent:
 	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl SqedtVal_DoSortedUpdate
 
 SqedtVal_HandleScrollEvent:
@@ -10490,7 +10490,7 @@ SqedtVal_DrawParamsData:
 	ld	xbc, 0x01c00018
 	lds32	xde, 1
 	call	SetDialDown
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	343
 
 SqedtVal_HandleUpScrollEvent:
@@ -10615,7 +10615,7 @@ SqedtVal_SetBerp6:
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_CallSortedUpdate:
-	lds wa, 0
+	ld wa, 0:i3
 
 SqedtVal_DoSortedUpdate:
 	call SetDialEnable
@@ -10710,7 +10710,7 @@ SqedtFixProc:
 	ld xiz, xwa
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3B2
 	lda xix, (xsp + 100)
-	lds bc, 2
+	ld bc, 2:i3
 	ldirw
 	ldi85
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3B8
@@ -10719,41 +10719,41 @@ SqedtFixProc:
 	ldiw
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3BC
 	lda xix, (xsp + 90)
-	lds bc, 2
+	ld bc, 2:i3
 	ldirw
 	ldi85
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3C2
 	lda xix, (xsp + 84)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3C8
 	lda xix, (xsp + 78)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3CE
 	lda xix, (xsp + 76)
 	ldiw
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3D0
 	lda xix, (xsp + 62)
-	lds bc, 7
+	ld bc, 7:i3
 	ldirw
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3DE
 	lda xix, (xsp + 48)
-	lds bc, 6
+	ld bc, 6:i3
 	ldirw
 	ldi85
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3EC
 	lda xix, (xsp + 34)
-	lds bc, 7
+	ld bc, 7:i3
 	ldirw
 	ld xiy, ExtDevice_ModeDispatch_Table_0x3FA
 	lda xix, (xsp + 26)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	ldi85
 	ld xiy, ExtDevice_ModeDispatch_Table_0x402
 	lda xix, (xsp + 20)
-	lds bc, 2
+	ld bc, 2:i3
 	ldirw
 	ldi85
 	cp xhl, 0x1c0000b
@@ -11590,7 +11590,7 @@ SqedtVal3_HandleInitEvent:
 	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jrl SqedtVal_ReturnZero2
 
@@ -11974,7 +11974,7 @@ SqedtVal2_SendCommonEvents:
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld (0x03e2e0:24), 0x00
 	jrl AccIll_ReturnZero2
@@ -12345,16 +12345,16 @@ SqedtVal2_DrawScrollFrame:
 	jr nz, SqedtVal2_DrawWithViewColors
 	lda xwa, (xsp + 58)
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	jr SqedtVal2_CallDrawDesignFrame
 
 SqedtVal2_DrawWithViewColors:
 	lda xwa, (xsp + 58)
 	ld xbc, (xsp + 8)
 	pushm (xbc + 24)
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 SqedtVal2_CallDrawDesignFrame:
 	call DrawDesignFrame
@@ -13155,7 +13155,7 @@ AccIllProc:
 	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AccIll_CallSortedUpdate
 
 AccIll_HandleLowerPanelEvent:
@@ -13355,7 +13355,7 @@ AccIll_UpScroll_Refresh:
 	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jr AccIll_CallSortedUpdate
 
 AccIll_HandleDownScroll:
@@ -13395,7 +13395,7 @@ AccIll_DownScroll_Refresh:
 	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AccIll_CallSortedUpdate:
 	call SetDialEnable
@@ -13477,7 +13477,7 @@ EffectBoxProc:
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl EffectBox_SetDialDownAndEnable
 
 EffectBox_HandleInitEvent:
@@ -13516,14 +13516,14 @@ EffectBox_HandleInitEvent:
 	cp xbc, 0x1
 	jr nz, EffectBox_DrawWithViewFrame
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	jr EffectBox_CallDrawDesignFrame
 
 EffectBox_DrawWithViewFrame:
 	pushm (xiz + 22)
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 EffectBox_CallDrawDesignFrame:
 	call DrawDesignFrame
@@ -13655,7 +13655,7 @@ EffectBox_FillBufferLoop2:
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e80000
 	call ApFuncCall
-	lds iz, 0
+	ld iz, 0:i3
 
 EffectBox_PostFillSetup:
 	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x32, 0xba, 0x02, 0x31
@@ -13682,7 +13682,7 @@ EffectBox_FillBufferLoop3:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop3
-	lds iz, 0
+	ld iz, 0:i3
 EffectBox_PostFill3Setup:
 	lda	xde, (xsp+318)
 	lda	xbc, (xde+2)
@@ -13832,7 +13832,7 @@ EffectBox_DrawField2:
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
-	lds iz, 0
+	ld iz, 0:i3
 
 EffectBox_DrawAndSendLoop:
 	ld de, iz
@@ -13976,7 +13976,7 @@ EffectBox_DrawStringAndSetDial:
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 EffectBox_SetDialDownAndEnable:
 	call SetDialEnable
@@ -14051,7 +14051,7 @@ EffectBox_RedrawAfterChange:
 	ld xbc, 0x1c80000
 	lds32 xde, 0
 	call SendEvent
-	lds iz, 0
+	ld iz, 0:i3
 
 EffectBox_SendLoopValue:
 	ld de, iz
@@ -14222,7 +14222,7 @@ EffectBox_RedrawFullLoop:
 	ld xbc, 0x1c80000
 	lds32 xde, 0
 	call SendEvent
-	lds iz, 0
+	ld iz, 0:i3
 
 EffectBox_SendMultipleValues:
 	ld de, iz
@@ -14350,7 +14350,7 @@ Equalizer_SendPanelEvent:
 	ld xbc, 0x1c80002
 	lds32 xde, 1
 	call SendEvent
-	lds iz, 0
+	ld iz, 0:i3
 
 Equalizer_SendChannelLoop:
 	ld de, iz
@@ -14509,7 +14509,7 @@ Equalizer_DrawStringDone:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 88)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
@@ -14537,7 +14537,7 @@ Equalizer_HandleEvent1:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 88)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
@@ -14565,7 +14565,7 @@ Equalizer_HandleScrollUpEvent:
 	ldw (xwa + 2), 0x24
 	ldw (xwa + 4), 0xf8
 	ldw (xwa + 6), 0x78
-	lds bc, 0
+	ld bc, 0:i3
 	ldw de, 0xf5
 	call DrawDesignBox
 	ld xwa, (xsp + 22)
@@ -16821,7 +16821,7 @@ Equalizer_ReturnParamAddr:
 	jr Equalizer_LookupParamString
 	ld xix, xde
 	pushw 0x5
-	lds wa, 2
+	ld wa, 2:i3
 	jr FormatEqParamValue
 	ld xix, xde
 	pushw 0x5
@@ -16829,7 +16829,7 @@ Equalizer_ReturnParamAddr:
 	jr Equalizer_LookupParamString
 	ld xix, xde
 	pushw 0x5
-	lds wa, 6
+	ld wa, 6:i3
 	jr FormatEqParamValue
 	ld xix, xde
 	pushw 0x5
@@ -16906,7 +16906,7 @@ SureJudgeFunc:
 
 ; Equalizer command dispatch
 Equalizer_CmdDispatch:
-	lds wa, 0
+	ld wa, 0:i3
 	call SetDialEnable
 	call GetTitleNow
 	ld xwa, xhl
@@ -17204,14 +17204,14 @@ EqInOutFunc:
 	or xde, xde
 	jr nz, EqInOut_SendEnable
 	ld xwa, 0x4006
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	jr EqInOut_CallLswPut
 
 EqInOut_SendEnable:
 	ld xwa, 0x4006
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 
 EqInOut_CallLswPut:
 	call MainLswPut

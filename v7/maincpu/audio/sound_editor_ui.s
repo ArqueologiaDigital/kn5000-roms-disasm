@@ -8,34 +8,34 @@
 ; =============================================================================
 
 InitializeSeMenuDefaults:
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetSoundBank
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetPatchBank
 	call AccWrap_PlayModeDispatch
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetEditEnable
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_OrPartConfig
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetConfirmState
 	jp SeMenu_ClearDisplayBuffer
 
 UpdateSeMenuSelection:
 	dec 2, xsp
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetSelectedRow
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetEditEnable
 	lda xwa, (xsp)
 	call SeMenu_LoadObjEntries
 	cp (xsp), 0x2
 	jr z, UpdSeSel_SkipMenuSetup
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetupMenuDisplay
 
 UpdSeSel_SkipMenuSetup:
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetConfirmState
 	call SeMenu_RefreshPartDisplay
 	inc 2, xsp
@@ -47,14 +47,14 @@ UpdSeSel_ProcessStep:
 	call SeMenu_ReadObjData
 	cp (xsp + 16), 0x0
 	jr nz, UpdSeSel_Step1_CheckEnabled
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetDisplayState
 	pushw 0x20
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0x10
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jrl UpdSeSel_ProcessStep_End
 
@@ -73,7 +73,7 @@ UpdSeSel_Step1_CheckEnabled:
 UpdSeSel_Step1_Disable:
 	ldw wa, 0x10
 	call SeMenu_SetCurrentStep
-	lds wa, 0
+	ld wa, 0:i3
 	jr UpdSeSel_Step1_SetDisplayState
 
 UpdSeSel_Step1_FillTable:
@@ -85,31 +85,31 @@ UpdSeSel_Step1_FillTable:
 	ld (xbc), a
 	cp a, 0x80
 	jr nz, UpdSeSel_Step1_Flag40
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetMode
-	lds wa, 2
+	ld wa, 2:i3
 	jr UpdSeSel_Step1_SetStep
 
 UpdSeSel_Step1_Flag40:
 	cp a, 0x40
 	jr nz, UpdSeSel_Step1_DefaultMode
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_SetMode
 	ldw wa, 0xea
-	lds bc, 0
+	ld bc, 0:i3
 	call SeMenu_SendEvent
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
-	lds wa, 0
+	ld wa, 0:i3
 
 UpdSeSel_Step1_SetDisplayState:
 	call SeMenu_SetDisplayState
 	jr UpdSeSel_ProcessStep_End
 
 UpdSeSel_Step1_DefaultMode:
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetMode
-	lds wa, 2
+	ld wa, 2:i3
 
 UpdSeSel_Step1_SetStep:
 	call SeMenu_SetCurrentStep
@@ -137,11 +137,11 @@ UpdSeSel_SimpleUpdate:
 	cp (xsp + 42), 0x2
 	jr nz, UpdSeSel_SimpleUpdate_Step3
 	pushw 0x20
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0x11
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 3
+	ld wa, 3:i3
 	jrl UpdSeSel_SimpleUpdate_SetStepAndJump
 
 UpdSeSel_SimpleUpdate_Step3:
@@ -154,7 +154,7 @@ UpdSeSel_SimpleUpdate_Step3:
 	call SeMenu_StorePartMask
 	ldw wa, 0x20
 	call SeMenu_SetDisplayValue
-	lds wa, 4
+	ld wa, 4:i3
 	jrl UpdSeSel_SimpleUpdate_SetStepAndJump
 
 UpdSeSel_SimpleUpdate_Step4:
@@ -164,27 +164,27 @@ UpdSeSel_SimpleUpdate_Step4:
 	call SeMenu_FillObjTable
 	ld c, (xsp + 7)
 	extz bc
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StoreEffectCoeff
 	ld c, (xsp + 8)
 	extz bc
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_StoreEffectCoeff
 	ld c, (xsp + 9)
 	extz bc
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_StoreEffectCoeff
 	lda xde, (xsp + 2)
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call SeMenu_TransferPartValues
 	ld c, (xsp + 2)
 	extz bc
 	pushw 0x20
-	lds wa, 0
-	lds de, 4
+	ld wa, 0:i3
+	ld de, 4:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 5
+	ld wa, 5:i3
 	jr UpdSeSel_SimpleUpdate_SetStepAndJump
 
 UpdSeSel_SimpleUpdate_Step5:
@@ -194,19 +194,19 @@ UpdSeSel_SimpleUpdate_Step5:
 	call SeMenu_FillEntryTable
 	ld c, (xsp + 6)
 	extz bc
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StoreEffectParam
 	ld c, (xsp + 7)
 	extz bc
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_StoreEffectParam
 	ld c, (xsp + 9)
 	extz bc
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_StoreEffectParam
 	ldw wa, 0x20
 	call SeMenu_RegisterParamDisplay
-	lds wa, 6
+	ld wa, 6:i3
 
 UpdSeSel_SimpleUpdate_SetStepAndJump:
 	call SeMenu_SetCurrentStep
@@ -222,7 +222,7 @@ UpdSeSel_SimpleUpdate_Step6:
 	ld (xbc), a
 	ld c, a
 	extz bc
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_StorePartParam
 	ldib_erp 0xfb, 1
 
@@ -231,12 +231,12 @@ UpdSeSel_SimpleUpdate_Step6_RegLoop:
 	extz wa
 	pushw 0x20
 	ldw bc, 0x17
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 4
 	jr ule, UpdSeSel_SimpleUpdate_Step6_RegLoop
-	lds wa, 7
+	ld wa, 7:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 	call SeMenu_AdvanceSubIndex
@@ -258,10 +258,10 @@ UpdSeSel_SimpleUpdate_Default:
 	pushw 0x20
 	call SeMenu_ShowPopupDialog
 	inc 2, xsp
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetDisplayState
 
 UpdSeSel_SimpleUpdate_End:
@@ -280,31 +280,31 @@ UpdSeSel_DetailedUpdate:
 	call SeMenu_ValidatePartNumber
 	ld c, (xsp + 6)
 	extz bc
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	lda xwa, (xsp + 14)
 	lda xbc, (xsp + 12)
 	call SeMenu_SetupSoundBankPair
 	cp (xsp + 12), 0xff
 	jr nz, UpdSeSel_DetailedUpdate_Step3_Store
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	ldw wa, 0x10
 	call SeMenu_SetCurrentStep
-	lds wa, 0
+	ld wa, 0:i3
 	jrl UpdSeSel_DetailedUpdate_SetDisplayState
 
 UpdSeSel_DetailedUpdate_Step3_Store:
 	ld c, (xsp + 14)
 	extz bc
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_StorePartParam
 	lda xwa, (xsp + 12)
 	call SeMenu_SetupDisplayObject
-	lds wa, 4
+	ld wa, 4:i3
 	call SeMenu_SetCurrentStep
 	ldw wa, 0x20
-	lds bc, 1
+	ld bc, 1:i3
 	jrl UpdSeSel_DetailedUpdate_SendEventAndEnd
 
 UpdSeSel_DetailedUpdate_Step2:
@@ -314,9 +314,9 @@ UpdSeSel_DetailedUpdate_Step2:
 	call SeMenu_LoadConfirmData
 	cp (xsp + 2), 0x1
 	jr nz, UpdSeSel_DetailedUpdate_Step2_CheckActive
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_ClearNotification
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetConfirmState
 	jrl UpdSeSel_DetailedUpdate_End
 
@@ -324,11 +324,11 @@ UpdSeSel_DetailedUpdate_Step2_CheckActive:
 	call SeMenu_ReturnZero
 	cp l, 0:i3
 	jr z, UpdSeSel_DetailedUpdate_Step2_ReadPatch
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetConfirmState
 	ldw wa, 0x2d
 	call SeMenu_TriggerNotification
-	lds wa, 0
+	ld wa, 0:i3
 	jrl UpdSeSel_DetailedUpdate_SetStepAndJump
 
 UpdSeSel_DetailedUpdate_Step2_ReadPatch:
@@ -337,16 +337,16 @@ UpdSeSel_DetailedUpdate_Step2_ReadPatch:
 	cp (xsp + 4), 0x0
 	jr nz, UpdSeSel_DetailedUpdate_Step2_SetStep3
 	pushw 0x20
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0x12
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetPatchBank
 	jrl UpdSeSel_DetailedUpdate_End
 
 UpdSeSel_DetailedUpdate_Step2_SetStep3:
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_SetCurrentStep
 	ldw wa, 0x86
 	call SeMenu_CheckObjEnabled
@@ -360,7 +360,7 @@ UpdSeSel_DetailedUpdate_Step2_SetStep3:
 UpdSeSel_DetailedUpdate_Step2_Disable:
 	ldw wa, 0x10
 	call SeMenu_SetCurrentStep
-	lds wa, 0
+	ld wa, 0:i3
 	jrl UpdSeSel_DetailedUpdate_SetDisplayState
 
 UpdSeSel_DetailedUpdate_Step2_FillTable:
@@ -378,10 +378,10 @@ UpdSeSel_DetailedUpdate_Step2_FillTable:
 	jrl UpdSeSel_DetailedUpdate_End
 
 UpdSeSel_DetailedUpdate_Step2_ClearPatch:
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetPatchBank
 	ldw wa, 0x20
-	lds bc, 1
+	ld bc, 1:i3
 
 UpdSeSel_DetailedUpdate_SendEventAndEnd:
 	call SeMenu_SendEvent
@@ -392,9 +392,9 @@ UpdSeSel_DetailedUpdate_Step4:
 	jrl nz, UpdSeSel_DetailedUpdate_Step5
 	call SeMenu_InitTrackInfo
 	pushw 0x20
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0xd
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
 	ldib_erp 0xfb, 0
 
@@ -407,8 +407,8 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop1:
 	inc 5, xwa
 	ld c, a
 	pushw 0x20
-	lds wa, 0
-	lds de, 1
+	ld wa, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
@@ -424,8 +424,8 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop2:
 	inc 3, xwa
 	ld c, a
 	pushw 0x20
-	lds wa, 0
-	lds de, 1
+	ld wa, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
@@ -441,8 +441,8 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop3:
 	inc 4, xwa
 	ld c, a
 	pushw 0x20
-	lds wa, 0
-	lds de, 1
+	ld wa, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
@@ -457,18 +457,18 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop4:
 	lda xwa, (xwa + 16)
 	ld c, a
 	pushw 0x20
-	lds wa, 0
-	lds de, 1
+	ld wa, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 2
 	jr c, UpdSeSel_DetailedUpdate_Step4_RegLoop4
 	pushw 0x20
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0xf
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
-	lds wa, 5
+	ld wa, 5:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	call SeMenu_AdvanceSubIndex
@@ -490,50 +490,50 @@ UpdSeSel_DetailedUpdate_Step5:
 	cp l, 0xb
 	jrl ule, UpdSeSel_DetailedUpdate_End
 	lda xbc, (xsp + 10)
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_LoadPartParam
 	ld a, (xsp + 10)
 	extz wa
 	call SeMenu_StorePartMask
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_ApplyPartEdit
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_ApplyPartEdit
 	lda xbc, (xsp + 16)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadPartParam
 	ld c, (xsp + 16)
 	extz bc
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_StoreParamByte
 	lda xbc, (xsp + 16)
-	lds wa, 4
+	ld wa, 4:i3
 	call SeMenu_LoadPartParam
 	ld c, (xsp + 16)
 	extz bc
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_StoreParamByte
-	lds wa, 1
+	ld wa, 1:i3
 	ldw bc, 0x20
 	call SeMenu_InitDisplayField
-	lds wa, 6
+	ld wa, 6:i3
 	jr UpdSeSel_DetailedUpdate_SetStepAndJump
 
 UpdSeSel_DetailedUpdate_Step6:
 	cp (xsp + 32), 0x6
 	jr nz, UpdSeSel_DetailedUpdate_Step7
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_ApplyFilter
-	lds wa, 2
+	ld wa, 2:i3
 	ldw bc, 0x20
 	call SeMenu_InitDisplayField
-	lds wa, 7
+	ld wa, 7:i3
 	jr UpdSeSel_DetailedUpdate_SetStepAndJump
 
 UpdSeSel_DetailedUpdate_Step7:
 	cp (xsp + 32), 0x7
 	jr nz, UpdSeSel_DetailedUpdate_Step8
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_ApplyFilter
 	lda xwa, (xsp + 12)
 	call SeMenu_LoadEditParam
@@ -548,7 +548,7 @@ UpdSeSel_DetailedUpdate_Step8:
 	cp (xsp + 32), 0x8
 	jr nz, UpdSeSel_DetailedUpdate_Step9
 	call SeMenu_ApplySynthParam
-	lds wa, 3
+	ld wa, 3:i3
 	ldw bc, 0x20
 	call SeMenu_InitDisplayColumn
 	ldw wa, 0x9
@@ -559,7 +559,7 @@ UpdSeSel_DetailedUpdate_Step9:
 	jr nz, UpdSeSel_DetailedUpdate_StepA
 	lds32 xwa, 3
 	call SeMenu_ProcessEffect
-	lds wa, 2
+	ld wa, 2:i3
 	ldw bc, 0x20
 	call SeMenu_InitDisplayColumn
 	ldw wa, 0xa
@@ -579,12 +579,12 @@ UpdSeSel_DetailedUpdate_StepA:
 	pushw 0x20
 	call SeMenu_ShowConfirmDialog
 	inc 6, xsp
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 	ldw wa, 0x10
 	call SeMenu_SetCurrentStep
-	lds wa, 0
+	ld wa, 0:i3
 
 UpdSeSel_DetailedUpdate_SetDisplayState:
 	call SeMenu_SetDisplayState
@@ -599,14 +599,14 @@ UpdSeSel_ExtendedOps_Data:
 	push QIZ
 	lda xwa, (xsp + 0x26)
 	call SeMenu_ReadObjData
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call SeMenu_StorePartParam
 	cp (XSP+0x26),0x00
 	jr nz, .Lc_f0a6a1
 	ldw WA, 0x0021
 	call SeMenu_SetDisplayValue
-	lds wa, 1
+	ld wa, 1:i3
 	jr t, .Lc_f0a70f
 .Lc_f0a6a1:
 	cp (XSP+0x26),0x01
@@ -628,11 +628,11 @@ UpdSeSel_ExtendedOps_Data:
 	cp_erpb 0xfb, 0x08
 	jr ule, .Lc_f0a6b1
 	pushw 0x0021
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x0029
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 2
+	ld wa, 2:i3
 	jr t, .Lc_f0a70f
 .Lc_f0a6e6:
 	lda xwa, (xsp + 0x02)
@@ -644,11 +644,11 @@ UpdSeSel_ExtendedOps_Data:
 	ldw WA, 0x0009
 	call SeMenu_StorePartParam
 	pushw 0x0021
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x005d
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 3
+	ld wa, 3:i3
 .Lc_f0a70f:
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0a755
@@ -659,7 +659,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldw WA, 0x000a
 	call SeMenu_StorePartParam
 	lda xbc, (xsp + 0x02)
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_LoadPartParam
 	lda xbc, (xsp + 0x02)
 	ld A,(XBC)
@@ -667,12 +667,12 @@ UpdSeSel_ExtendedOps_Data:
 	ld (XBC),A
 	ld C,A
 	extz BC
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_StorePartParam
 	pushw 0x0021
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0a755:
@@ -694,7 +694,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x04
 	addb_erp c, 0xfb
 	pushw 0x0027
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 3
@@ -703,28 +703,28 @@ UpdSeSel_ExtendedOps_Data:
 	cps_erpb 0xfa, 4
 	jr ule, .Lc_f0a772
 	pushw 0x0027
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x0013
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	pushw 0x0027
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x0029
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	pushw 0x0027
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x002a
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	lda xwa, (xsp + 0x04)
 	call SeMenu_ValidatePartNumber
 	ld C,(XSP+0x04)
 	extz BC
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	jrl t, .Lc_f0a86a
 .Lc_f0a7e1:
@@ -762,14 +762,14 @@ UpdSeSel_ExtendedOps_Data:
 	ldw WA, 0x000e
 	call SeMenu_StorePartParam
 	ldw WA, 0x000d
-	lds bc, 1
+	ld bc, 1:i3
 	call SeMenu_StorePartParam
 	pushw 0x0027
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0a86a:
@@ -791,16 +791,16 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x07
 	addb_erp c, 0xfb
 	pushw 0x0028
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cp_erpb 0xfb, 0x0a
 	jr c, .Lc_f0a88e
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call SeMenu_StorePartParam
 	jr t, .Lc_f0a900
 .Lc_f0a8be:
@@ -820,9 +820,9 @@ UpdSeSel_ExtendedOps_Data:
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
 	call SeMenu_ApplyPartEdit_Data2_0xDB3
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0a900:
@@ -844,12 +844,12 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x11
 	addb_erp c, 0xfb
 	pushw 0x0029
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 6
 	jr c, .Lc_f0a924
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0a9aa
 .Lc_f0a947:
@@ -866,24 +866,24 @@ UpdSeSel_ExtendedOps_Data:
 	cp l, 5:i3
 	jr ule, .Lc_f0a9aa
 	lda xbc, (xsp + 0x06)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadPartParam
 	ld C,(XSP+0x06)
 	extz BC
 	ldw WA, 0x000a
 	call SeMenu_StorePartParam
 	ldw WA, 0x0009
-	lds bc, 0
+	ld bc, 0:i3
 	call SeMenu_StorePartParam
 	pushw 0x0029
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 2
-	lds bc, 1
+	ld wa, 2:i3
+	ld bc, 1:i3
 	call SeMenu_ApplyPartEdit_Data2_0x13DE
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0a9aa:
@@ -922,8 +922,8 @@ UpdSeSel_ExtendedOps_Data:
 	ld A,(XSP+0x0e)
 	extz WA
 	pushw wa
-	lds wa, 0
-	lds de, 1
+	ld wa, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
@@ -941,17 +941,17 @@ UpdSeSel_ExtendedOps_Data:
 	ld E,(XSP+0x0e)
 	extz DE
 	pushw de
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
 	jr ule, .Lc_f0aa24
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	ld C,(XSP+0x04)
 	extz BC
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	jr t, .Lc_f0aab2
 .Lc_f0aa59:
@@ -982,9 +982,9 @@ UpdSeSel_ExtendedOps_Data:
 	pushw wa
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0aab2:
@@ -1003,14 +1003,14 @@ UpdSeSel_ExtendedOps_Data:
 	calr	197
 	jr	3
 	calr	240
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757666
 	call	15757677
 	lda	xwa, (xsp+4)
 	call	15755792
 	ld	c, (xsp+4)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756036
 	jrl	157
 	lda	xwa, (xsp+2)
@@ -1028,39 +1028,39 @@ UpdSeSel_ExtendedOps_Data:
 	cp	l, 12
 	jr	ule, 115
 	lda	xbc, (xsp+6)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15767749
 	ld	c, (xsp+6)
 	extz	bc
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756036
 	lda	xbc, (xsp+6)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15767749
 	ld	c, (xsp+6)
 	extz	bc
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756036
 	lda	xbc, (xsp+6)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15767749
 	ld	c, (xsp+6)
 	extz	bc
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756036
 	lda	xbc, (xsp+6)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15767749
 	ld	c, (xsp+6)
 	extz	bc
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756036
 	pushw 43
 	call	15789632
 	inc	2, xsp
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15755525
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
 	call	15757671
 	jr	8
@@ -1077,7 +1077,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldb	c, 23
 	addb_erp	c, 250
 	pushw 43
-	lds	de, 1
+	ld	de, 1:i3
 	call	15753743
 	inc1b_erp	251
 	cpib_erp	251, 4
@@ -1099,8 +1099,8 @@ UpdSeSel_ExtendedOps_Data:
 	addb_erp	a, 250
 	ld	c, a
 	pushw 43
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15754165
 	inc1b_erp	251
 	cpib_erp	251, 2
@@ -1125,12 +1125,12 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x1a
 	addb_erp c, 0xfb
 	pushw 0x002c
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 4
 	jr c, .Lc_f0ac26
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0aca3
 .Lc_f0ac49:
@@ -1150,18 +1150,18 @@ UpdSeSel_ExtendedOps_Data:
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
 	lda xbc, (xsp + 0x06)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadPartParam
 	ld C,(XSP+0x06)
 	extz BC
 	ldw WA, 0x000a
 	call SeMenu_StorePartParam
-	lds wa, 0
-	lds bc, 0
+	ld wa, 0:i3
+	ld bc, 0:i3
 	call SeMenu_ApplyPartEdit_Data2_0x13DE
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0aca3:
@@ -1180,7 +1180,7 @@ UpdSeSel_ExtendedOps_Data:
 	calr	97
 	jr	3
 	calr	140
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757666
 	jr	80
 	lda	xwa, (xsp+2)
@@ -1205,9 +1205,9 @@ UpdSeSel_ExtendedOps_Data:
 	call	15789632
 	inc	2, xsp
 	call	15761579
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15755525
 	call	15757671
 	lda	xsp, (xsp+10)
@@ -1222,7 +1222,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldb	c, 39
 	addb_erp	c, 251
 	pushw 45
-	lds	de, 1
+	ld	de, 1:i3
 	call	15753743
 	inc1b_erp	251
 	cpib_erp	251, 7
@@ -1235,9 +1235,9 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp+2)
 	call	15755792
 	pushw 45
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldw	bc, 13
-	lds	de, 1
+	ld	de, 1:i3
 	call	15754165
 	ldib_erp	251, 0
 	ld	a, (xsp+2)
@@ -1250,8 +1250,8 @@ UpdSeSel_ExtendedOps_Data:
 	addb_erp	a, 251
 	ld	c, a
 	pushw 45
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15754165
 	inc1b_erp	251
 	cpib_erp	251, 7
@@ -1274,12 +1274,12 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x2e
 	addb_erp c, 0xfb
 	pushw 0x002e
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cp_erpb 0xfb, 0x08
 	jr c, .Lc_f0adc3
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0ae4a
 .Lc_f0ade7:
@@ -1296,24 +1296,24 @@ UpdSeSel_ExtendedOps_Data:
 	cp l, 7:i3
 	jr ule, .Lc_f0ae4a
 	lda xbc, (xsp + 0x06)
-	lds wa, 5
+	ld wa, 5:i3
 	call SeMenu_LoadPartParam
 	ld C,(XSP+0x06)
 	extz BC
 	ldw WA, 0x000a
 	call SeMenu_StorePartParam
 	ldw WA, 0x0009
-	lds bc, 0
+	ld bc, 0:i3
 	call SeMenu_StorePartParam
 	pushw 0x002e
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 2
-	lds bc, 0
+	ld wa, 2:i3
+	ld bc, 0:i3
 	call SeMenu_ApplyPartEdit_Data2_0x13DE
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0ae4a:
@@ -1334,7 +1334,7 @@ UpdSeSel_ExtendedOps_Data:
 	calr	116
 	jr	3
 	calr	235
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757666
 	jr	99
 	lda	xwa, (xsp+2)
@@ -1350,7 +1350,7 @@ UpdSeSel_ExtendedOps_Data:
 	cp	l, 8
 	jr	ule, 62
 	lda	xbc, (xsp+4)
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	15756049
 	ld	c, (xsp+4)
 	extz	bc
@@ -1366,7 +1366,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw 59
 	call	15789632
 	inc	2, xsp
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
 	call	15757671
 	lda	xsp, (xsp+10)
@@ -1377,8 +1377,8 @@ UpdSeSel_ExtendedOps_Data:
 	add	a, 24
 	ld	c, a
 	pushw 59
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15753743
 	inc1b_erp	251
 	cpib_erp	251, 6
@@ -1393,14 +1393,14 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, c
 	extz	bc
 	pushw 59
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15753743
 	ld	c, (xsp+2)
 	extz	bc
 	pushw 59
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15753743
 	ld	c, (xsp+2)
 	extz	bc
@@ -1409,7 +1409,7 @@ UpdSeSel_ExtendedOps_Data:
 	call	15757677
 	ld	c, (xsp+4)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756036
 	pop qiz
 	inc	4, xsp
@@ -1420,8 +1420,8 @@ UpdSeSel_ExtendedOps_Data:
 	add	a, 22
 	ld	c, a
 	pushw 59
-	lds	wa, 3
-	lds	de, 1
+	ld	wa, 3:i3
+	ld	de, 1:i3
 	call	15754165
 	inc1b_erp	251
 	cpib_erp	251, 6
@@ -1436,14 +1436,14 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, c
 	extz	bc
 	pushw 59
-	lds	wa, 3
-	lds	de, 1
+	ld	wa, 3:i3
+	ld	de, 1:i3
 	call	15754165
 	ld	c, (xsp+2)
 	extz	bc
 	pushw 59
-	lds	wa, 3
-	lds	de, 1
+	ld	wa, 3:i3
+	ld	de, 1:i3
 	call	15754165
 	ld	c, (xsp+2)
 	extz	bc
@@ -1452,7 +1452,7 @@ UpdSeSel_ExtendedOps_Data:
 	call	15757677
 	ld	c, (xsp+4)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756036
 	pop qiz
 	inc	4, xsp
@@ -1463,22 +1463,22 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, 18
 	pushw 60
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldw	bc, 16
-	lds	de, 1
+	ld	de, 1:i3
 	call	15753743
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	28
 	lda	xwa, (xsp)
 	call	15757724
 	ld	c, (xsp+256)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756036
 	pushw 60
 	call	15789632
 	inc	2, xsp
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
 	inc	6, xsp
 	ret
@@ -1494,7 +1494,7 @@ UpdSeSel_ExtendedOps_Data:
 	calr	144
 	jr	3
 	calr	217
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757666
 	jr	127
 	lda	xwa, (xsp+2)
@@ -1510,10 +1510,10 @@ UpdSeSel_ExtendedOps_Data:
 	cp	l, 5:i3
 	jr	ule, 91
 	lda	xbc, (xsp+4)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	.byte 0x8f, 0x04, 0x3c, 0x07
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
 	call	15757671
 	lda	xbc, (xsp+4)
@@ -1526,22 +1526,22 @@ UpdSeSel_ExtendedOps_Data:
 	ld	(xbc), a
 	add	a, 48
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	9
 	cp	a, 0:i3
 	jr	nz, 11
 	ldw	wa, 53
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	jr	27
 	pushw 48
 	call	15789632
 	inc	2, xsp
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	call	15765079
 	call	15765503
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15755525
 	lda	xsp, (xsp+10)
 	ret
@@ -1555,7 +1555,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldb	c, 54
 	addb_erp c, 251
 	pushw 48
-	lds	de, 1
+	ld	de, 1:i3
 	call	15753743
 	inc1b_erp	251
 	cpib_erp	251, 2
@@ -1566,7 +1566,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldb	c, 77
 	addb_erp c, 251
 	pushw 48
-	lds	de, 1
+	ld	de, 1:i3
 	call	15753743
 	inc1b_erp 251
 	cpib_erp 251, 4
@@ -1589,8 +1589,8 @@ UpdSeSel_ExtendedOps_Data:
 	addb_erp a, 251
 	ld	c, a
 	pushw 48
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15754165
 	inc1b_erp 251
 	cpib_erp 251, 6
@@ -1601,38 +1601,38 @@ UpdSeSel_ExtendedOps_Data:
 	pushw 0x0031
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 1
-	lds bc, 0
+	ld wa, 1:i3
+	ld bc, 0:i3
 	call SeMenu_ApplyPartEdit_Data2_0x1815
 	call SeMenu_ApplyPartEdit_Data2_0x19BD
-	lds wa, 1
+	ld wa, 1:i3
 	jp SeMenu_SetupMenuDisplay
 	pushw 0x0032
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call SeMenu_ApplyPartEdit_Data2_0x1815
-	lds wa, 1
+	ld wa, 1:i3
 	jp SeMenu_SetupMenuDisplay
 	pushw 0x0033
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 1
-	lds bc, 1
+	ld wa, 1:i3
+	ld bc, 1:i3
 	call SeMenu_ApplyPartEdit_Data2_0x1815
-	lds wa, 1
+	ld wa, 1:i3
 	jp SeMenu_SetupMenuDisplay
 	pushw 0x0034
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
 	call SeMenu_ApplyPartEdit_Data2_0x1AAD
-	lds wa, 1
+	ld wa, 1:i3
 	jp SeMenu_SetupMenuDisplay
 	pushw 0x0035
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 1
+	ld wa, 1:i3
 	jp SeMenu_SetupMenuDisplay
 	lda xsp, (xsp - 0x0a)
 	push QIZ
@@ -1649,12 +1649,12 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x39
 	addb_erp c, 0xfb
 	pushw 0x0036
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 4
 	jr c, .Lc_f0b1e9
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0b266
 .Lc_f0b20c:
@@ -1671,7 +1671,7 @@ UpdSeSel_ExtendedOps_Data:
 	cp l, 3:i3
 	jr ule, .Lc_f0b266
 	lda xbc, (xsp + 0x06)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadPartParam
 	ld C,(XSP+0x06)
 	extz BC
@@ -1680,12 +1680,12 @@ UpdSeSel_ExtendedOps_Data:
 	pushw 0x0036
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 0
-	lds bc, 0
+	ld wa, 0:i3
+	ld bc, 0:i3
 	call SeMenu_ApplyPartEdit_Data2_0x13DE
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0b266:
@@ -1707,16 +1707,16 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x3d
 	addb_erp c, 0xfb
 	pushw 0x0037
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cp_erpb 0xfb, 0x0a
 	jr c, .Lc_f0b28a
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call SeMenu_StorePartParam
 	jr t, .Lc_f0b2fc
 .Lc_f0b2ba:
@@ -1736,9 +1736,9 @@ UpdSeSel_ExtendedOps_Data:
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
 	call SeMenu_ApplyPartEdit_Data2_0xDB3
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0b2fc:
@@ -1760,12 +1760,12 @@ UpdSeSel_ExtendedOps_Data:
 	ldb C, 0x47
 	addb_erp c, 0xfb
 	pushw 0x0038
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 6
 	jr c, .Lc_f0b320
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0b3a6
 .Lc_f0b343:
@@ -1782,24 +1782,24 @@ UpdSeSel_ExtendedOps_Data:
 	cp l, 5:i3
 	jr ule, .Lc_f0b3a6
 	lda xbc, (xsp + 0x06)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadPartParam
 	ld C,(XSP+0x06)
 	extz BC
 	ldw WA, 0x000a
 	call SeMenu_StorePartParam
 	ldw WA, 0x0009
-	lds bc, 0
+	ld bc, 0:i3
 	call SeMenu_StorePartParam
 	pushw 0x0038
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 2
-	lds bc, 1
+	ld wa, 2:i3
+	ld bc, 1:i3
 	call SeMenu_ApplyPartEdit_Data2_0x13DE
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0b3a6:
@@ -1822,31 +1822,31 @@ SeMenu_AltUpdate_RegLoop:
 	extz wa
 	pushw 0x22
 	ldw bc, 0x17
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	stb_erp A, 0xfb
 	extz wa
 	pushw 0x22
-	lds bc, 4
-	lds de, 1
+	ld bc, 4:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	stb_erp A, 0xfb
 	extz wa
 	pushw 0x22
-	lds bc, 5
-	lds de, 1
+	ld bc, 5:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 4
 	jr ule, SeMenu_AltUpdate_RegLoop
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	lda xwa, (xsp + 4)
 	call SeMenu_ValidatePartNumber
 	ld c, (xsp + 4)
 	extz bc
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	call SeMenu_AdvanceSubIndex
 	jrl SeMenu_AltUpdate_End
@@ -1874,7 +1874,7 @@ SeMenu_AltUpdate_Step1:
 	extz wa
 	ldw bc, 0x22
 	call SeMenu_InitDisplayField
-	lds wa, 2
+	ld wa, 2:i3
 	jr SeMenu_AltUpdate_SetStepAndJump
 
 SeMenu_AltUpdate_Step2:
@@ -1896,10 +1896,10 @@ SeMenu_AltUpdate_Step2:
 	jrl SeMenu_AltUpdate_End
 
 SeMenu_AltUpdate_Step2_InitCol:
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0x22
 	call SeMenu_InitDisplayColumn
-	lds wa, 3
+	ld wa, 3:i3
 
 SeMenu_AltUpdate_SetStepAndJump:
 	call SeMenu_SetCurrentStep
@@ -1909,28 +1909,28 @@ SeMenu_AltUpdate_Step3Plus:
 	lds32 xwa, 0
 	call SeMenu_ProcessEffect
 	lda xbc, (xsp + 6)
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_LoadParamByte
 	ld c, (xsp + 6)
 	extz bc
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_StorePartParam
 	lda xbc, (xsp + 6)
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_LoadParamByte
 	ld c, (xsp + 6)
 	extz bc
-	lds wa, 5
+	ld wa, 5:i3
 	call SeMenu_StorePartParam
 	lda xbc, (xsp + 6)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadParamByte
 	ld c, (xsp + 6)
 	extz bc
 	ldw wa, 0x8
 	call SeMenu_StorePartParam
 	lda xbc, (xsp + 6)
-	lds wa, 4
+	ld wa, 4:i3
 	call SeMenu_LoadParamByte
 	ld c, (xsp + 6)
 	extz bc
@@ -1939,9 +1939,9 @@ SeMenu_AltUpdate_Step3Plus:
 	pushw 0x22
 	call SeMenu_ShowPopupDialog
 	inc 2, xsp
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 
@@ -1958,17 +1958,17 @@ SeMenu_AltUpdate_Data:
 	cp (XSP+0x0a),0x00
 	jr nz, .Lc_f0b5ad
 	pushw 0x0023
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x0012
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	lds_erpb 0xfb, 1
 .Lc_f0b54e:
 	ld_erpb_rr a, 0xfb
 	extz WA
 	pushw 0x0023
-	lds bc, 0
-	lds de, 1
+	ld bc, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 4
@@ -1978,25 +1978,25 @@ SeMenu_AltUpdate_Data:
 	ld_erpb_rr a, 0xfb
 	extz WA
 	pushw 0x0023
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 4
 	jr ule, .Lc_f0b569
 	pushw 0x0023
-	lds wa, 0
+	ld wa, 0:i3
 	ldw BC, 0x005c
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	lda xwa, (xsp + 0x02)
 	call SeMenu_ValidatePartNumber
 	ld C,(XSP+0x02)
 	extz BC
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	jr t, .Lc_f0b5ff
 .Lc_f0b5ad:
@@ -2023,9 +2023,9 @@ SeMenu_AltUpdate_Data:
 	pushw 0x0023
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0b5ff:
@@ -2047,7 +2047,7 @@ SeMenu_AltUpdate_Data:
 	ldb C, 0x1e
 	addb_erp c, 0xfa
 	pushw 0x0024
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
@@ -2061,7 +2061,7 @@ SeMenu_AltUpdate_Data:
 	ldb C, 0x1e
 	addb_erp c, 0xfa
 	pushw 0x0024
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
@@ -2069,12 +2069,12 @@ SeMenu_AltUpdate_Data:
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 4
 	jr ule, .Lc_f0b641
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	ld C,(XSP+0x02)
 	extz BC
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	jr t, .Lc_f0b6de
 .Lc_f0b67e:
@@ -2102,14 +2102,14 @@ SeMenu_AltUpdate_Data:
 	inc 1,A
 	ld E,A
 	extz DE
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_ApplyPartEdit_Data2_0x162C
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
 	jr ule, .Lc_f0b6af
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0b6de:
@@ -2131,7 +2131,7 @@ SeMenu_AltUpdate_Data:
 	ldb C, 0x22
 	addb_erp c, 0xfa
 	pushw 0x0025
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
@@ -2145,7 +2145,7 @@ SeMenu_AltUpdate_Data:
 	ldb C, 0x22
 	addb_erp c, 0xfa
 	pushw 0x0025
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
@@ -2153,12 +2153,12 @@ SeMenu_AltUpdate_Data:
 	incb_erp 0xfb, 1
 	cps_erpb 0xfb, 4
 	jr ule, .Lc_f0b720
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
 	ld C,(XSP+0x02)
 	extz BC
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 	jr t, .Lc_f0b7bd
 .Lc_f0b75d:
@@ -2186,14 +2186,14 @@ SeMenu_AltUpdate_Data:
 	inc 1,A
 	ld E,A
 	extz DE
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_ApplyPartEdit_Data2_0x162C
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
 	jr ule, .Lc_f0b78e
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 .Lc_f0b7bd:
@@ -2223,7 +2223,7 @@ SeMenu_ControllerUpdate_Step1:
 	ldb c, 0x0
 	addb_erp C, 0xfb
 	pushw 0x26
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 3
@@ -2236,18 +2236,18 @@ SeMenu_ControllerUpdate_Step2:
 	ldb c, 0x0
 	addb_erp C, 0xfb
 	pushw 0x26
-	lds de, 1
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type2
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 3
 	jr c, SeMenu_ControllerUpdate_Step2
 
 SeMenu_ControllerUpdate_Step3:
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_AdvanceSubIndex
-	lds wa, 0
-	lds bc, 1
+	ld wa, 0:i3
+	ld bc, 1:i3
 	call SeMenu_StorePartParam
 	jrl SeMenu_ControllerData_End
 
@@ -2276,7 +2276,7 @@ SeMenu_ControllerUpdate_StoreValue:
 	extz bc
 	ldw de, 0x26
 	call SeMenu_InitDisplayField_Alt
-	lds wa, 2
+	ld wa, 2:i3
 	jr SeMenu_ControllerData_Offset3
 
 SeMenu_ControllerUpdate_End:
@@ -2302,17 +2302,17 @@ SeMenu_ControllerUpdate_End:
 SeMenu_ControllerData:
 	cp (xsp + 2), 0x0
 	jr nz, SeMenu_ControllerData_Offset1
-	lds wa, 1
+	ld wa, 1:i3
 	ldw bc, 0x26
 	jr SeMenu_ControllerData_Offset2
 
 SeMenu_ControllerData_Offset1:
-	lds wa, 4
+	ld wa, 4:i3
 	ldw bc, 0x26
 
 SeMenu_ControllerData_Offset2:
 	call SeMenu_InitDisplayColumn
-	lds wa, 3
+	ld wa, 3:i3
 
 SeMenu_ControllerData_Offset3:
 	call SeMenu_SetCurrentStep
@@ -2333,9 +2333,9 @@ SeMenu_ControllerData_Offset6:
 	pushw 0x26
 	call SeMenu_ShowPopupDialog
 	inc 2, xsp
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetupMenuDisplay
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
 
@@ -2347,60 +2347,60 @@ SeMenu_ControllerData_End:
 SeMenu_CopyWriteUpdate:
 	dec 2, xsp
 	lda xbc, (xsp)
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_LoadPartParam
 	cp (xsp), 0x7f
 	jr nz, SeMenu_CopyWriteUpdate_Step1
-	lds wa, 4
-	lds bc, 0
+	ld wa, 4:i3
+	ld bc, 0:i3
 	call SeMenu_StorePartParam
-	lds wa, 5
-	lds bc, 0
+	ld wa, 5:i3
+	ld bc, 0:i3
 	call SeMenu_StorePartParam
-	lds wa, 6
-	lds bc, 0
+	ld wa, 6:i3
+	ld bc, 0:i3
 	jr SeMenu_CopyWriteUpdate_End
 
 SeMenu_CopyWriteUpdate_Step1:
 	ld c, (xsp)
 	inc 1, c
 	extz bc
-	lds wa, 4
+	ld wa, 4:i3
 	call SeMenu_StorePartParam
 	lda xbc, (xsp)
-	lds wa, 2
+	ld wa, 2:i3
 	call SeMenu_LoadPartParam
 	cp (xsp), 0x7f
 	jr nz, SeMenu_CopyWriteUpdate_Step2
-	lds wa, 5
-	lds bc, 0
+	ld wa, 5:i3
+	ld bc, 0:i3
 	call SeMenu_StorePartParam
-	lds wa, 6
-	lds bc, 0
+	ld wa, 6:i3
+	ld bc, 0:i3
 	jr SeMenu_CopyWriteUpdate_End
 
 SeMenu_CopyWriteUpdate_Step2:
 	ld c, (xsp)
 	inc 1, c
 	extz bc
-	lds wa, 5
+	ld wa, 5:i3
 	call SeMenu_StorePartParam
 	lda xbc, (xsp)
-	lds wa, 3
+	ld wa, 3:i3
 	call SeMenu_LoadPartParam
 	cp (xsp), 0x7f
 	jr nz, SeMenu_CopyWriteUpdate_Step3
-	lds wa, 6
-	lds bc, 0
+	ld wa, 6:i3
+	ld bc, 0:i3
 	jr SeMenu_CopyWriteUpdate_End
 
 SeMenu_CopyWriteUpdate_Step3:
 	ld c, (xsp)
 	inc 1, c
 	extz bc
-	lds wa, 6
+	ld wa, 6:i3
 	call SeMenu_StorePartParam
-	lds wa, 7
+	ld wa, 7:i3
 	ldw bc, 0x7f
 
 SeMenu_CopyWriteUpdate_End:
@@ -2415,9 +2415,9 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15767349
 	.byte 0x8f, 0x02, 0x3f, 0x01
 	jr	nz, 15
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15753592
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15767354
 	jrl	209
 	lda	xwa, (xsp+24)
@@ -2425,11 +2425,11 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x18, 0x3f, 0x00
 	jr	nz, 23
 	pushw 62
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	ldw	de, 16
 	call	15753743
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757666
 	jrl	173
 	lda	xwa, (xsp+6)
@@ -2445,7 +2445,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp_erpb	251, 16
 	jr	c, -28
 	lda	xbc, (xsp+6)
-	lds	wa, 1
+	ld	wa, 1:i3
 	ldw	de, 16
 	call	15757801
 	lda	xwa, (xsp+4)
@@ -2467,29 +2467,29 @@ SeMenu_CopyWriteUpdate_Data:
 	incm8	1, (xbc)
 	ld	c, (xde)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756036
 	ld	c, (xsp+7)
 	extz	bc
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756036
 	pushw 62
 	call	15789632
 	inc	2, xsp
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15758419
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldw	bc, 11
-	lds	de, 0
+	ld	de, 0:i3
 	call	15758425
-	lds	wa, 1
+	ld	wa, 1:i3
 	ldw	bc, 12
-	lds	de, 0
+	ld	de, 0:i3
 	call	15758425
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
 	ldw	wa, 30
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15756036
 	call	15757671
 	pop qiz
@@ -2512,20 +2512,20 @@ SeMenu_CopyWriteUpdate_Data:
 	call SeMenu_ReadObjData
 	cp (XSP+0x0a),0x00
 	jr nz, .Lc_f0baeb
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetDisplayState
 	lds_erpb 0xfb, 0
 .Lc_f0baca:
 	ldb C, 0x5d
 	addb_erp c, 0xfb
 	pushw 0x003a
-	lds wa, 0
-	lds de, 1
+	ld wa, 0:i3
+	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
 	incb_erp 0xfb, 1
 	cp_erpb 0xfb, 0x09
 	jr c, .Lc_f0baca
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_SetCurrentStep
 	jr t, .Lc_f0bb4c
 .Lc_f0baeb:
@@ -2542,7 +2542,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp L,0x08
 	jr ule, .Lc_f0bb4c
 	lda xbc, (xsp + 0x02)
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_LoadPartParam
 	ld A,(XSP+0x02)
 	and A,0x0f
@@ -2551,16 +2551,16 @@ SeMenu_CopyWriteUpdate_Data:
 	and (XSP+0x02),0xf0
 	ld C,(XSP+0x02)
 	extz BC
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_StorePartParam
 .Lc_f0bb33:
 	pushw 0x003a
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	call SeMenu_ResetSubIndex
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetDisplayState
 .Lc_f0bb4c:
 	pop QIZ
@@ -2572,11 +2572,11 @@ SeMenu_CopyWriteUpdate_Data:
 	cp (XSP+0x12),0x00
 	jr nz, .Lc_f0bb75
 	pushw 0x003d
-	lds wa, 0
-	lds bc, 0
+	ld wa, 0:i3
+	ld bc, 0:i3
 	ldw DE, 0x000d
 	call SeMenu_RegisterElement_Type2
-	lds wa, 1
+	ld wa, 1:i3
 	jr t, .Lc_f0bba4
 .Lc_f0bb75:
 	lda XWA, (XSP)
@@ -2592,124 +2592,124 @@ SeMenu_CopyWriteUpdate_Data:
 	inc 1,XWA
 	cp XWA,XDE
 	jr c, .Lc_f0bb82
-	lds wa, 1
+	ld wa, 1:i3
 	ldw DE, 0x000d
 	call SeMenu_SetupPartDisplay
 	pushw 0x003d
 	call SeMenu_ShowPopupDialog
 	inc 2,XSP
-	lds wa, 0
+	ld wa, 0:i3
 .Lc_f0bba4:
 	call SeMenu_SetCurrentStep
 	lda xsp, (xsp + 0x14)
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
 	.byte 0xd8, 0xa8, 0x1d, 0x62, 0x71, 0xf0, 0x1b, 0x67
 	.byte 0x71, 0xf0, 0x0e
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
@@ -2717,15 +2717,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	ret
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_SetCurrentStep
 	jp SeMenu_ResetSubIndex
 	ret
@@ -2770,17 +2770,17 @@ SeMenu_CopyWriteUpdate_Data:
 	inc 4,XSP
 	ret
 	extz	wa
-	lds	bc, 2
+	ld	bc, 2:i3
 	jp	15761290
 	extz	wa
 	jp	15761503
 	ld	c, a
 	extz	bc
-	lds	wa, 1
+	ld	wa, 1:i3
 	jp	15761547
 	ld	c, a
 	extz	bc
-	lds	wa, 2
+	ld	wa, 2:i3
 	jp	15761547
 	dec	4, xsp
 	ld	(xsp+2), a
@@ -2790,7 +2790,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 11
 	ld	c, (xsp+2)
 	extz	bc
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15761547
 	inc	4, xsp
 	ret
@@ -2802,47 +2802,47 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 11
 	ld	c, (xsp+2)
 	extz	bc
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15761547
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	nz, 9
 	.byte 0x87, 0x3f, 0x02
 	jr	z, 24
-	lds	wa, 2
+	ld	wa, 2:i3
 	jr	7
 	.byte 0x87, 0x3f, 0x01
 	jr	z, 15
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756866
 	ldw	wa, 59
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	nz, 9
 	.byte 0x87, 0x3f, 0x06
 	jr	z, 24
-	lds	wa, 6
+	ld	wa, 6:i3
 	jr	7
 	.byte 0x87, 0x3f, 0x05
 	jr	z, 15
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	15756866
 	ldw	wa, 59
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	inc	4, xsp
 	ret
@@ -2855,7 +2855,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	nz, 9
 	ldw	wa, 60
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	inc	4, xsp
 	ret
@@ -2868,17 +2868,17 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x87, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	5
 	ldw	wa, 61
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-14)
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	lda	xbc, (xsp)
 	ld	(xbc+6), 1
@@ -2893,17 +2893,17 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 60
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	call	15757069
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15758447
 	lda	xsp, (xsp+14)
 	ret
 	lda	xsp, (xsp-14)
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	lda	xbc, (xsp)
 	ld	(xbc+6), 1
@@ -2918,23 +2918,23 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 60
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	call	15757069
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	lda	xsp, (xsp+14)
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 59
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	ret
 	lda xsp, (xsp - 0x0c)
@@ -2999,7 +2999,7 @@ SeMenu_CopyWriteUpdate_Data:
 	res	7, a
 	ldb_erp	a, 251
 	lda	xbc, (xsp+4)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+4)
 	extz	wa
@@ -3010,11 +3010,11 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 9
 	cpib_erp	251, 0
 	jr	z, 27
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	7
 	cpib_erp	251, 0
 	jr	nz, 18
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15755899
 	pushw 2
 	pushw 32
@@ -3034,12 +3034,12 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x06, 0x3f, 0x01
 	jr	z, 104
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	c, (xsp)
 	extz	bc
 	lda	xde, (xsp+4)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15766845
 	lda	xwa, (xsp+2)
 	call	15766214
@@ -3059,7 +3059,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+8)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15766762
 	ld	a, (xsp)
 	extz	wa
@@ -3069,7 +3069,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ldw	bc, 16
 	call	15753900
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15758447
 	lda	xsp, (xsp+12)
 	ret
@@ -3084,7 +3084,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x06, 0x3f, 0x01
 	jr	z, 91
 	lda	xbc, (xsp+4)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+4)
 	extz	wa
@@ -3113,7 +3113,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ldw	bc, 16
 	call	15753900
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15758447
 	lda	xsp, (xsp+10)
 	ret
@@ -3129,7 +3129,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x0e, 0x3f, 0x01
 	jr	z, 120
 	lda	xbc, (xsp+16)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+16)
 	inc	2, a
@@ -3160,7 +3160,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 32
-	lds	de, 0
+	ld	de, 0:i3
 	call	15757069
 	cp	l, 1:i3
 	jr	nz, 14
@@ -3169,7 +3169,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+5)
 	extz	bc
 	call	15767734
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+18)
@@ -3186,7 +3186,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x0e, 0x3f, 0x01
 	jr	z, 102
 	lda	xbc, (xsp+16)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+16)
 	inc	4, a
@@ -3217,9 +3217,9 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 32
-	lds	de, 0
+	ld	de, 0:i3
 	call	15757069
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+18)
@@ -3236,7 +3236,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x0e, 0x3f, 0x01
 	jr	z, 102
 	lda	xbc, (xsp+16)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+16)
 	inc	6, a
@@ -3267,9 +3267,9 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 32
-	lds	de, 0
+	ld	de, 0:i3
 	call	15757069
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+18)
@@ -3286,7 +3286,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x04, 0x3f, 0x01
 	jrl	z, 185
 	lda	xbc, (xsp+8)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+8)
 	inc	8, a
@@ -3335,7 +3335,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, a
 	lda	xde, (xsp+6)
 	pushw 127
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15754738
 	ld	a, (xsp+8)
 	extz	wa
@@ -3348,7 +3348,7 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw 32
 	call	15789873
 	inc	4, xsp
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+10)
@@ -3380,7 +3380,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 32
 	ldw	bc, 11
-	lds	de, 0
+	ld	de, 0:i3
 	call	15757069
 	ldw	wa, 8
 	call	15758447
@@ -3395,7 +3395,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x08, 0x3f, 0x00
 	jr	nz, 28
 	lda	xbc, (xsp)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	.byte 0x87, 0x3f, 0x00
 	scc	z, a
@@ -3404,10 +3404,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 16
 	call	15754282
 	jr	83
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15767354
 	ldw	wa, 62
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	jr	66
 	lda	xwa, (xsp+2)
@@ -3428,7 +3428,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	wa, (xsp+6)
 	call	15754651
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	call	15767719
 	lda	xsp, (xsp+10)
@@ -3442,10 +3442,10 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 33
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	35
 	ldw	wa, 34
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	28
 	lda	xwa, (xsp)
 	call	15767359
@@ -3453,10 +3453,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 23
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, 15
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15767364
 	ldw	wa, 32
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	jr	43
 	.byte 0x8f, 0x04, 0x3f, 0x00
@@ -3469,7 +3469,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	wa, (xsp+2)
 	call	15754651
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	call	15767719
 	inc	6, xsp
@@ -3483,10 +3483,10 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 36
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	5
 	ldw	wa, 43
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	jr	84
 	lda	xwa, (xsp+2)
@@ -3495,24 +3495,24 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 26
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, 18
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15767364
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15753592
 	jr	45
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	z, 39
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	.byte 0x87, 0x3f, 0x01
 	jr	z, 26
-	lds	wa, 0
-	lds	bc, 1
+	ld	wa, 0:i3
+	ld	bc, 1:i3
 	call	15756036
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15755773
 	pushw 0
 	pushw 32
@@ -3529,10 +3529,10 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 58
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	5
 	ldw	wa, 39
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	jr	58
 	lda	xwa, (xsp+2)
@@ -3542,14 +3542,14 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	z, 39
 	lda	xbc, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	.byte 0x87, 0x3f, 0x02
 	jr	z, 26
-	lds	wa, 0
-	lds	bc, 2
+	ld	wa, 0:i3
+	ld	bc, 2:i3
 	call	15756036
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15755773
 	pushw 0
 	pushw 32
@@ -3567,7 +3567,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 59
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	30
 	call	15767359
 	.byte 0x8f, 0x02, 0x3f, 0x01
@@ -3578,7 +3578,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	nz, 11
 	ldw	wa, 48
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	jr	79
 	call	15767359
@@ -3591,34 +3591,34 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15753611
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 0
-	lds	de, 1
+	ld	bc, 0:i3
+	ld	de, 1:i3
 	call	16670253
 	cp	l, 255
 	jr	nz, 17
 	ld	a, (xsp)
 	extz	wa
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	call	16670253
 	cp	l, 255
 	jr	z, 21
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15766968
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
 	inc	6, xsp
 	ret
 	cp	a, 0:i3
 	ret	nz
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15757666
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15767364
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15753592
 	ret
 	dec 4,XSP
@@ -3725,7 +3725,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+4), a
 	lda	xbc, (xsp+2)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+4)
 	res	7, a
@@ -3739,16 +3739,16 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 9
 	cpib_erp	251, 0
 	jr	z, 33
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	7
 	cpib_erp	251, 0
 	jr	nz, 24
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15755899
 	.byte 0x0b, 0x01, 0x00, 0x0b, 0x22, 0x00
 	call	15789873
 	inc	4, xsp
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15755525
 	pop qiz
 	inc	4, xsp
@@ -3756,12 +3756,12 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+2)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	c, (xsp+2)
 	extz	bc
 	lda	xde, (xsp+6)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15766845
 	lda	xwa, (xsp+4)
 	call	15766214
@@ -3781,7 +3781,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+6)
 	extz	bc
 	lda	xde, (xsp)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15766762
 	ld	a, (xsp+2)
 	extz	wa
@@ -3791,14 +3791,14 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ldw	bc, 16
 	call	15753900
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15758447
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+4)
 	extz	wa
@@ -3827,7 +3827,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ldw	bc, 16
 	call	15753900
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15758447
 	inc	8, xsp
 	ret
@@ -3835,7 +3835,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
 	lda	xbc, (xsp+14)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+14)
 	mul	a, 3
@@ -3870,7 +3870,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+5)
 	extz	bc
 	call	15767734
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+16)
@@ -3879,7 +3879,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
 	lda	xbc, (xsp+14)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+14)
 	mul	a, 3
@@ -3905,7 +3905,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 34
 	call	15757069
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+16)
@@ -3914,7 +3914,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
 	lda	xbc, (xsp+14)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	ld	a, (xsp+14)
 	mul	a, 3
@@ -3954,29 +3954,29 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
-	lds	bc, 1
-	lds	de, 0
+	ld	bc, 1:i3
+	ld	de, 0:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
-	lds	bc, 2
-	lds	de, 0
+	ld	bc, 2:i3
+	ld	de, 0:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
-	lds	bc, 3
-	lds	de, 0
+	ld	bc, 3:i3
+	ld	de, 0:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
-	lds	bc, 4
-	lds	de, 0
+	ld	bc, 4:i3
+	ld	de, 0:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
@@ -3988,7 +3988,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	nz
 	ldw	wa, 32
 	call	15758567
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15755525
 	ret
 	dec	8, xsp
@@ -3997,7 +3997,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+6)
 	call	15755792
 	lda	xbc, (xsp+4)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	ld	a, (xsp+6)
 	inc	1, a
@@ -4037,7 +4037,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	2, a
 	ld	c, a
 	extz	bc
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756065
 	ldb_erp	l, 251
 	stb_erp	a, 251
@@ -4055,13 +4055,13 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xde, (xsp+2)
 	pushw 128
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753648
 	lda	xde, (xsp+4)
 	stb_erp	a, 251
 	extz	wa
 	pushw	wa
-	lds	wa, 0
+	ld	wa, 0:i3
 	ldw	bc, 18
 	call	15753648
 	ld	a, (xsp+6)
@@ -4072,12 +4072,12 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756036
 	ld	c, (xsp+4)
 	extz	bc
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756036
 	.byte 0x0b, 0x01, 0x00, 0x0b, 0x23, 0x00
 	call	15789873
 	inc	4, xsp
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15758447
 	pop qiz
 	inc	8, xsp
@@ -4111,7 +4111,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 35
 	call	15757069
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+16)
@@ -4162,7 +4162,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xde, (xsp+6)
 	pushw 127
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753648
 	ld	a, (xsp+8)
 	extz	wa
@@ -4175,7 +4175,7 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw 35
 	call	15789873
 	inc	4, xsp
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+10)
@@ -4199,9 +4199,9 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 35
 	ldw	bc, 10
-	lds	de, 0
+	ld	de, 0:i3
 	call	15757069
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	15758447
 	lda	xsp, (xsp+14)
 	ret
@@ -4212,49 +4212,49 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
-	lds	bc, 1
-	lds	de, 1
+	ld	bc, 1:i3
+	ld	de, 1:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
-	lds	bc, 2
-	lds	de, 1
+	ld	bc, 2:i3
+	ld	de, 1:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
-	lds	bc, 3
-	lds	de, 1
+	ld	bc, 3:i3
+	ld	de, 1:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
-	lds	bc, 4
-	lds	de, 1
+	ld	bc, 4:i3
+	ld	de, 1:i3
 	call	15764995
 	ret
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 38
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	nz
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15755525
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	ret
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	.byte 0xbf, 0x04, 0xb7
 	ld	a, (xsp+6)
@@ -4262,15 +4262,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	pushw	bc
-	lds	bc, 2
-	lds	de, 0
+	ld	bc, 2:i3
+	ld	de, 0:i3
 	call	15767485
 	cp	l, 1:i3
 	jr	nz, 57
 	lda	xwa, (xsp+2)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756049
 	ld	a, (xsp+2)
 	extz	wa
@@ -4284,20 +4284,20 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15758447
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+6)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756049
 	lda	xbc, (xsp+4)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	.byte 0xbf, 0x06, 0xb7, 0xbf, 0x04, 0xb7
 	ld	a, (xsp+8)
@@ -4307,14 +4307,14 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	pushw	bc
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15767485
 	cp	l, 1:i3
 	jr	nz, 57
 	lda	xwa, (xsp+2)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	ld	a, (xsp+2)
 	extz	wa
@@ -4327,20 +4327,20 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15758447
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+6)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	lda	xbc, (xsp+4)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756049
 	.byte 0xbf, 0x06, 0xb7, 0xbf, 0x04, 0xb7
 	ld	a, (xsp+8)
@@ -4350,14 +4350,14 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	pushw	bc
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	15767485
 	cp	l, 1:i3
 	jr	nz, 57
 	lda	xwa, (xsp+2)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	ld	a, (xsp+2)
 	extz	wa
@@ -4371,17 +4371,17 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	15758447
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	.byte 0xbf, 0x04, 0xb7
 	ld	a, (xsp+6)
@@ -4389,14 +4389,14 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	e, (xsp+4)
 	extz	de
 	pushw 127
-	lds	bc, 4
+	ld	bc, 4:i3
 	call	15767485
 	cp	l, 1:i3
 	jr	nz, 57
 	lda	xwa, (xsp+2)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756049
 	ld	a, (xsp+2)
 	extz	wa
@@ -4409,10 +4409,10 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
-	lds	wa, 0
-	lds	de, 1
+	ld	wa, 0:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	inc	8, xsp
 	ret
@@ -4422,65 +4422,65 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 36
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 37
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	15
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 36
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 36
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 36
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	nz
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15755525
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xbc, (xsp+12)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	.byte 0xbf, 0x0c, 0xb7
 	lda	xwa, (xsp+14)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756049
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
@@ -4498,32 +4498,32 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 37
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	15757069
 	cp	l, 1:i3
 	jr	nz, 13
 	ld	c, (xsp+14)
 	extz	bc
-	lds	wa, 1
-	lds	de, 1
+	ld	wa, 1:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15758447
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756049
 	lda	xbc, (xsp+12)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	.byte 0xbf, 0x0e, 0xb7, 0xbf, 0x0c, 0xb7
 	lda	xwa, (xsp+16)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
@@ -4542,32 +4542,32 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 37
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15757069
 	cp	l, 1:i3
 	jr	nz, 13
 	ld	c, (xsp+16)
 	extz	bc
-	lds	wa, 1
-	lds	de, 1
+	ld	wa, 1:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15758447
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	lda	xbc, (xsp+12)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756049
 	.byte 0xbf, 0x0e, 0xb7, 0xbf, 0x0c, 0xb7
 	lda	xwa, (xsp+16)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
@@ -4586,29 +4586,29 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 37
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	15757069
 	cp	l, 1:i3
 	jr	nz, 13
 	ld	c, (xsp+16)
 	extz	bc
-	lds	wa, 1
-	lds	de, 1
+	ld	wa, 1:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	15758447
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xbc, (xsp+12)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	.byte 0xbf, 0x0c, 0xb7
 	lda	xwa, (xsp+14)
 	call	15755792
 	lda	xbc, (xsp)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756049
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
@@ -4626,16 +4626,16 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 37
-	lds	bc, 4
+	ld	bc, 4:i3
 	call	15757069
 	cp	l, 1:i3
 	jr	nz, 13
 	ld	c, (xsp+14)
 	extz	bc
-	lds	wa, 1
-	lds	de, 1
+	ld	wa, 1:i3
+	ld	de, 1:i3
 	call	15764590
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	lda	xsp, (xsp+18)
 	ret
@@ -4646,58 +4646,58 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 36
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	15
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 37
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 37
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 37
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 37
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	nz
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15755525
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	ret
 	dec	4, xsp
 	.byte 0xd7, 0xfa, 0x04, 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0x30, 0x07
 	lda	xbc, (xsp+4)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	cpib_erp 251, 0
 	jr	nz, 18
@@ -4706,7 +4706,7 @@ SeMenu_CopyWriteUpdate_Data:
 	decm8	1, (xsp+4)
 	ld	c, (xsp+4)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	jr	34
 	.byte 0x8f, 0x04, 0x3f, 0x04
 	jr	z, 44
@@ -4719,7 +4719,7 @@ SeMenu_CopyWriteUpdate_Data:
 	incm8	1, (xsp+4)
 	ld	c, (xsp+4)
 	extz	bc
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756036
 	pushw 0
 	pushw 38
@@ -4731,14 +4731,14 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-12)
 	ld	(xsp+10), a
 	lda	xbc, (xsp+2)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	lda	xwa, (xsp+4)
 	call	15755792
 	ld	c, (xsp+2)
 	extz	bc
 	lda	xde, (xsp+8)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15766845
 	lda	xwa, (xsp+6)
 	call	15766214
@@ -4758,7 +4758,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+8)
 	extz	bc
 	lda	xde, (xsp)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15766762
 	ld	a, (xsp+4)
 	extz	wa
@@ -4772,14 +4772,14 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	ldw	de, 16
 	call	15753989
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15758447
 	lda	xsp, (xsp+12)
 	ret
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+4)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	lda	xwa, (xsp+6)
 	call	15755792
@@ -4814,7 +4814,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	ldw	de, 16
 	call	15753989
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15758447
 	lda	xsp, (xsp+10)
 	ret
@@ -4822,32 +4822,32 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+22), a
 	lda	xbc, (xsp+8)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15756049
 	.byte 0x8f, 0x08, 0x3f, 0x04
 	jrl	z, 634
 	lda	xwa, (xsp+12)
 	ld	(xwa), 0
 	lda	xbc, (xwa+1)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756049
 	lda	xbc, (xsp+14)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756049
 	lda	xbc, (xsp+15)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756049
 	lda	xbc, (xsp+16)
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	15756049
 	lda	xbc, (xsp+17)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756049
 	lda	xbc, (xsp+18)
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15756049
 	lda	xbc, (xsp+19)
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	15756049
 	ld	l, (xsp+22)
 	res	7, l
@@ -4989,31 +4989,31 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xde), a
 	ld	c, (xhl+1)
 	extz	bc
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15756036
 	ld	c, (xsp+14)
 	extz	bc
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15756036
 	ld	c, (xsp+15)
 	extz	bc
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15756036
 	ld	c, (xsp+16)
 	extz	bc
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	15756036
 	ld	c, (xsp+17)
 	extz	bc
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15756036
 	ld	c, (xsp+18)
 	extz	bc
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15756036
 	ld	c, (xsp+19)
 	extz	bc
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	15756036
 	lda	xwa, (xsp+10)
 	call	15766913
@@ -5057,7 +5057,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x0b, 0x01, 0x00, 0x0b, 0x26, 0x00
 	call	15789873
 	inc	4, xsp
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	15758447
 	pop qiz
 	lda	xsp, (xsp+22)
@@ -5068,22 +5068,22 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 38
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	cp	a, 0:i3
 	ret	z
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	15757188
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 38
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	ret
 	dec	4, xsp
@@ -5094,12 +5094,12 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 25
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	z, 19
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	15757188
 	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 38
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	inc	4, xsp
 	ret
@@ -5111,12 +5111,12 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 25
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	z, 19
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	15757188
 	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 38
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	15753542
 	inc	4, xsp
 	ret
@@ -5129,27 +5129,27 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x02, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 35
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	5
 	ldw	wa, 34
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	inc	4, xsp
 	ret
 	dec	2, xsp
 	cp	a, 0:i3
 	jr	nz, 33
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	15755525
 	lda	xwa, (xsp)
 	call	15766913
 	.byte 0x87, 0x3f, 0x00
 	jr	nz, 7
 	ldw	wa, 32
-	lds	bc, 0
+	ld	bc, 0:i3
 	jr	5
 	ldw	wa, 61
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	15753542
 	inc	2, xsp
 	ret
@@ -5839,7 +5839,7 @@ SeMenu_PopupDialog_ShowBody_Data:
 	ld a, (xde + 2)
 	cp a, 4:i3
 	jr nz, SeMenu_PopupDialog_Confirm
-	lds iz, 0
+	ld iz, 0:i3
 	jr SeMenu_PopupDialog_HandleInput_Data
 
 SeMenu_PopupDialog_HandleInput:
@@ -6076,7 +6076,7 @@ SeMenu_ListSelector_Cancel:
 	lda xwa, (xsp)
 	call SeMenu_LoadObjEntries
 	lda xbc, (xsp + 2)
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_LoadPartParam
 	ld a, (xsp + 2)
 	extz wa
@@ -6105,7 +6105,7 @@ SeMenu_ListSelector_Data2:
 SeMenu_ListSelector_Data3:
 	dec 2, xsp
 	lda xbc, (xsp)
-	lds wa, 0
+	ld wa, 0:i3
 	call SeMenu_LoadPartParam
 	ld a, (xsp)
 	extz wa
@@ -6125,7 +6125,7 @@ SeMenu_NameEditor_Init:
 	call SeMenu_FillObjTable
 	ld c, (xsp + 256)
 	extz bc
-	lds wa, 1
+	ld wa, 1:i3
 	call SeMenu_StorePartParam
 	pushw 0x1
 	pushw 0x20
@@ -8978,13 +8978,13 @@ PsCmpCpFGrpBox_SendNotify:
 	cp	(14603:16), 0
 	jr	nz, 9
 	pushw 242
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	7
 PsCmpCpFGrpBox_PushF5:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 PsCmpCpFGrpBox_DrawFrame:
 	call DrawDesignFrame
@@ -9079,13 +9079,13 @@ PsCmpCpFVariBox_SendNotify:
 	cp	(14603:16), 1
 	jr	nz, 9
 	pushw 242
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	7
 PsCmpCpFVariBox_PushF5:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 PsCmpCpFVariBox_DrawFrame:
 	call DrawDesignFrame
@@ -9175,13 +9175,13 @@ PsCmpCpFPtnBox_SendNotify:
 	cp	(14603:16), 2
 	jr	nz, 9
 	pushw 242
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	7
 PsCmpCpFPtnBox_PushF5:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 PsCmpCpFPtnBox_DrawFrame:
 	call DrawDesignFrame
@@ -9533,13 +9533,13 @@ AcMemNoBox_SendNotify:
 	cp	(14604:16), 1
 	jr	nz, 9
 	pushw 242
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	7
 AcMemNoBox_PushF5:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 AcMemNoBox_DrawFrame:
 	call DrawDesignFrame
@@ -10042,13 +10042,13 @@ PsNameMemBox_SendNotify:
 	cp	(14604:16), 0
 	jr	nz, 9
 	pushw 242
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	7
 EasyCmp_TtlDispatch:
 	pushw 0xf5
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 ; EasyCmp title case 1
 EasyCmp_TtlCase1:
@@ -10128,7 +10128,7 @@ EasyCmp_DialGrid:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl EasyCmp_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -10182,7 +10182,7 @@ EasyCmp_SendEvt091:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl EasyCmp_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -10236,7 +10236,7 @@ EasyCmp_IncSendEvt091:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 EasyCmp_SetDialEnable:
 	call SetDialEnable
@@ -10909,7 +10909,7 @@ VwVariBox_OK:
 	ld C,(XHL+0x2a)
 	extz BC
 	ld XWA,0x00028800
-	lds de, 0
+	ld de, 0:i3
 	call MainLswPut
 	jrl t, VwVariBox_ReturnHandled
 VwVariBox_OK_Forward:
@@ -11121,7 +11121,7 @@ MspBnkSlBox_HandleEvt7:
 	ld C,(XHL+0x32)
 	extz BC
 	ld XWA,0x00028800
-	lds de, 0
+	ld de, 0:i3
 	call MainLswPut
 	ld XWA,0x00028800
 MspBnkSlBox_CallMainLswGet:
@@ -11508,7 +11508,7 @@ MspRGrpSetBnk_UpdateLsw:
 
 	ld xwa, 0x28800
 
-	lds de, 0
+	ld de, 0:i3
 
 	call	16381053
 
@@ -11571,12 +11571,12 @@ MspRgpShowHideFunc:
 	jr	nz, 26
 	ld	xwa, 165888
 	ldw	bc, 15
-	lds	de, 0
+	ld	de, 0:i3
 	jr	10
 MspRgpShowHide_BankSelect1:
 	ld xwa, 0x28800
 	ldw bc, 0x10
-	lds de, 0
+	ld de, 0:i3
 
 MspRgpShowHide_PutLsw:
 	call MainLswPut
@@ -11820,7 +11820,7 @@ MspPlayModeFunc:
 	ld (xsp + 12), xwa
 	ld xiy, StrCompileBank1_0x30
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xwa, xde
 	cp xde, 0x1e00082
@@ -11837,7 +11837,7 @@ MspPlayModeFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MspPlayModeFunc_DataBlock:
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16359726
 	ld	xwa, (xiz+14)
 	sll	xwa, 2
@@ -11883,7 +11883,7 @@ AcSndArgGridBoxProc:
 	ld (xsp + 22), xwa
 	ld xiy, StrInstantStart_0x26
 	lda xix, (xsp + 12)
-	lds bc, 2
+	ld bc, 2:i3
 	ldirw
 	ldi85
 	ld xwa, xiz
@@ -11946,7 +11946,7 @@ AcSndArgGrid_Init:
 	ld	xwa, (xsp+22)
 	ld	xbc, 29360152
 	call	16359805
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	441
 	ld	xwa, (xsp+22)
 	ld	xbc, xiz
@@ -12013,7 +12013,7 @@ AcSndArgGrid_ScrollUp_NoCanScroll:
 	ld	xbc, 29360152
 	ld	xde, (xsp+18)
 	call	16359805
-	lds	wa, 1
+	ld	wa, 1:i3
 	jrl	219
 	ld	xwa, (xsp+22)
 	ld	xbc, xiz
@@ -12080,7 +12080,7 @@ AcSndArgGrid_ScrollDown_NoCanScroll:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 18)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcSndArgGrid_ScrollCommit:
 	call SetDialEnable
@@ -12437,7 +12437,7 @@ ParaListBox_HandleEvtB:
 	ld wa, (xde + 6)
 	dec 1, wa
 	stw_dri WA, 0xfd, 0x98, 0x00
-	lds iz, 1
+	ld iz, 1:i3
 	jr ParaListBox_DrawLineLoop_Check
 
 ParaListBox_DrawLineLoop_Body:
@@ -12451,7 +12451,7 @@ ParaListBox_DrawLineLoop_Body:
 	lda_dri XBC, 0xfd, 0x96, 0x00
 	ld de, (xwa)
 	ld (xbc), de
-	lds de, 7
+	ld de, 7:i3
 	call DrawLine
 	inc 1, iz
 
@@ -12781,7 +12781,7 @@ StylCnvStorOkFunc_DataBlock:
 	ldw (xsp+10), 0
 	ld	xiy, xwa
 	lda	xix, (xsp+24)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	lda	xhl, (xsp+24)
 	ld	bc, (xhl+4)
@@ -12978,7 +12978,7 @@ StylCnvStorOkFunc_DataBlock:
 	ldw (xsp+8), 0
 	ld	xiy, xwa
 	lda	xix, (xsp+26)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	lda	xhl, (xsp+26)
 	lda	xix, (xhl+4)

@@ -138,7 +138,7 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	call (xhl)					; b3 e8
 .Lsd_post_loop:
 	; Format partition display table: loop over 20 entries
-	lds de, 0					; da a8
+	ld de, 0:i3					; da a8
 	cp de, 0x0014					; da cf 14 00
 	jr nc, .Lsd_display_done			; 6f 56
 .Lsd_display_loop:
@@ -206,7 +206,7 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	jr t, .Lsd_epilogue				; 68 0a
 .Lsd_not_ready:
 	; Disk not ready: call shutdown with error code 2
-	lds wa, 2					; d8 aa
+	ld wa, 2:i3					; d8 aa
 	calr HDAE5000_HD_Shutdown			; 1e fc 7b
 	ldw	(xsp+4), 0xffff
 .Lsd_epilogue:
@@ -247,9 +247,9 @@ HDAE5000_HDDTitleSwCatch:
 .Lsd_sub1_evt_0a:
 	; Event 0x0A: init filesystem
 	pushw 0x0000					; 0b 00 00
-	lds wa, 0					; d8 a8
-	lds bc, 0					; d9 a8
-	lds de, 6					; da ae
+	ld wa, 0:i3					; d8 a8
+	ld bc, 0:i3					; d9 a8
+	ld de, 6:i3					; da ae
 	calr HDAE5000_FS_Init				; 1e 5e 3f
 .Lsd_sub1_done:
 	lds32 xhl, 0					; eb a8
@@ -639,8 +639,8 @@ HDAE5000_HDAETitleFunc:
 	ld xwa, 0x007f000a			; 40 0a 00 7f 00
 	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
 	call (xhl)				; b3 e8
-	lds wa, 0				; d8 a8
-	lds bc, 0				; d9 a8
+	ld wa, 0:i3				; d8 a8
+	ld bc, 0:i3				; d9 a8
 	calr HDAE5000_HD_Read_Write		; 1e xx xx
 
 	ld (0x22aa4a:24), 0x00; f2 4a aa 22 00 00
@@ -652,8 +652,8 @@ HDAE5000_HDAETitleFunc:
 	ld xwa, 0x007f00fb			; 40 fb 00 7f 00
 	ld xbc, 0x01ea000a			; 41 0a 00 ea 01
 	call (xhl)				; b3 e8
-	lds wa, 0				; d8 a8
-	lds bc, 2				; d9 aa
+	ld wa, 0:i3				; d8 a8
+	ld bc, 2:i3				; d9 aa
 	calr HDAE5000_FS_Write_FSB		; 1e xx xx
 
 	ld (0x22a2c8:24), 0x00; f2 c8 a2 22 00 00
@@ -669,9 +669,9 @@ HDAE5000_HDAETitleFunc:
 	calr HDAE5000_HD_Format_Params		; 1e xx xx
 	calr HDAE5000_FS_Read_FSB		; 1e xx xx
 	pushw 0x0000
-	lds wa, 0				; d8 a8
-	lds bc, 0				; d9 a8
-	lds de, 6				; da ae
+	ld wa, 0:i3				; d8 a8
+	ld bc, 0:i3				; d9 a8
+	ld de, 6:i3				; da ae
 	calr HDAE5000_FS_Init			; 1e xx xx
 
 	; Copy volume label string
@@ -797,7 +797,7 @@ HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	inc 0, xsp			; (NOP — callee cleaned stack)
 
 	; --- Loop: format 24 (0x18) entries ---
-	lds iz, 0			; IZ = loop counter
+	ld iz, 0:i3			; IZ = loop counter
 	cp iz, 0x0018
 	jr ge, .Lfp_loop_done
 
@@ -981,8 +981,8 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	ld wa, iz
 	add wa, bc
 	ld (0x23a092:24), wa; store new position
-	lds wa, 0			; WA = 0
-	lds bc, 0			; BC = 0
+	ld wa, 0:i3			; WA = 0
+	ld bc, 0:i3			; BC = 0
 	calr HDAE5000_HD_Read_Write	; call HD read/write
 
 	; Notify UI
@@ -1319,7 +1319,7 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 .LHRW_3c5d:
 	cp	(xsp+24), 0x00
 	jrl nz, .LHRW_3d45                     ; [7e e1 00] jrl NZ,0x283d45
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	iz, 0x0010
 	jr ge, .LHRW_3ce5                      ; [69 79] jr GE,0x283ce5
 .LHRW_3c6c:
@@ -1481,7 +1481,7 @@ HDAE5000_FILE_LOAD_Screen:
 	ld	(0x23a094), iz
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	lds	de, 0
+	ld	de, 0:i3
 	calr	0x675a
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -1502,8 +1502,8 @@ HDAE5000_FILE_LOAD_Screen:
 	cpw	(0x23A092:24), 0
 	jrl z, .LHRW_3f7b                      ; [76 b8 00] jrl Z,0x283f7b
 	decw	1, (0x23A092:24)
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	calr	0xfc99
 	ld	xwa, xiz
 	add	xwa, 0x00000010
@@ -1518,8 +1518,8 @@ HDAE5000_FILE_LOAD_Screen:
 	cpw	(0x23A092:24), 119
 	jr nc, .LHRW_3f7b                      ; [6f 7b] jr NC,0x283f7b
 	incw	1, (0x23A092:24)
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	calr	0xfc5c
 	ld	xwa, xiz
 	sub	xwa, 0x00000010
@@ -1548,11 +1548,11 @@ HDAE5000_FILE_LOAD_Screen:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c96:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	0x1370
 .LHRW_3f74:
-	lds	wa, 0
-	lds	bc, 1
+	ld	wa, 0:i3
+	ld	bc, 1:i3
 	calr	0xfbed
 .LHRW_3f7b:
 	lds32	xhl, 0
@@ -1621,13 +1621,13 @@ HDAE5000_AttenDelDirSwCatch:
 	call	(xhl)
 	calr	0x71e4
 	ld	wa, (0x23A092:24)
-	lds	bc, 1
-	lds	de, 0
+	ld	bc, 1:i3
+	ld	de, 0:i3
 	call 0x29320d
 	ld	xwa, 0x007f0025
 	calr	0xf6b2
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	calr	0xfb05
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -1720,12 +1720,12 @@ HDAE5000_AttenDelFileSwCatch:
 	call HDAE5000_Workspace_Sub_29336B
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	lds	de, 1
+	ld	de, 1:i3
 	calr	0x643d
 	ld	xwa, 0x007f0025
 	calr	0xf570
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	calr	0xf9c3
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -1944,8 +1944,8 @@ HDAE5000_HDDNamingCheck:
 	ld	de, (0x22AA4C:24)
 	calr	0x6c8f
 .LHRW_4462:
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	calr	0xf6ff
 .LHRW_4469:
 	lds32	xhl, 0
@@ -2097,7 +2097,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2165,7 +2165,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2233,7 +2233,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2301,7 +2301,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2369,7 +2369,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 4
+	ld	wa, 4:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2437,7 +2437,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 5
+	ld	wa, 5:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2505,7 +2505,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2573,7 +2573,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x0080)
-	lds	wa, 7
+	ld	wa, 7:i3
 	call	(xhl)
 	pushw 0x0040
 	pushw 0x0000
@@ -2997,8 +2997,8 @@ HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2) — workspace ptr
 	ld xwa, (xwa + 0x0e88)             ; ld XWA, (XWA + 0x0E88)
 	ld xhl, (xwa + 0x0114)             ; ld XHL, (XWA + 0x0114)
-	lds wa, 0			; WA = 0
-	lds bc, 4			; BC = 4 (param count)
+	ld wa, 0:i3			; WA = 0
+	ld bc, 4:i3			; BC = 4 (param count)
 	call (xhl)			; call handler
 	; --- Second workspace call (stack base block) ---
 	lda xwa, (xsp)			; XWA = pointer to second param block
@@ -3006,8 +3006,8 @@ HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2) — workspace ptr
 	ld xwa, (xwa + 0x0e88)             ; ld XWA, (XWA + 0x0E88)
 	ld xhl, (xwa + 0x0114)             ; ld XHL, (XWA + 0x0114)
-	lds wa, 0			; WA = 0
-	lds bc, 4			; BC = 4
+	ld wa, 0:i3			; WA = 0
+	ld bc, 4:i3			; BC = 4
 	call (xhl)			; call handler
 .Lwr_exit:
 	inc 0, xsp			; deallocate 8 bytes
@@ -3027,8 +3027,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a0a2:24); ld A, (0x23A0A2)
 	dec 1, a
 	extz wa
-	lds bc, 0
-	lds de, 0
+	ld bc, 0:i3
+	ld de, 0:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld (0x23a0a2:24), 0x00; (0x23A0A2) = 0
 .LHD_SC__skip_a2:
@@ -3037,8 +3037,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a0a4:24); ld A, (0x23A0A4)
 	dec 1, a
 	extz wa
-	lds bc, 0
-	lds de, 0
+	ld bc, 0:i3
+	ld de, 0:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld (0x23a0a4:24), 0x00; (0x23A0A4) = 0
 .LHD_SC__dispatch:
@@ -3058,8 +3058,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a0a0:24)
 	dec 1, a
 	extz wa
-	lds bc, 1
-	lds de, 0
+	ld bc, 1:i3
+	ld de, 0:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a0a0:24)
 	ld (0x23a0a2:24), a; (0x23A0A2) = A
@@ -3070,8 +3070,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a0a0:24)
 	dec 1, a
 	extz wa
-	lds bc, 1
-	lds de, 0
+	ld bc, 1:i3
+	ld de, 0:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a0a0:24)
 	ld (0x23a0a2:24), a
@@ -3081,8 +3081,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a09e:24)
 	dec 1, a
 	extz wa
-	lds bc, 1
-	lds de, 0
+	ld bc, 1:i3
+	ld de, 0:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a09e:24)
 	ld (0x23a0a4:24), a
@@ -3093,8 +3093,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a0a0:24)
 	dec 1, a
 	extz wa
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a0a0:24)
 	ld (0x23a0a2:24), a
@@ -3104,8 +3104,8 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld a, (0x23a09e:24)
 	dec 1, a
 	extz wa
-	lds bc, 1
-	lds de, 1
+	ld bc, 1:i3
+	ld de, 1:i3
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a09e:24)
 	ld (0x23a0a4:24), a
@@ -3327,7 +3327,7 @@ HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
 	ld e, (xsp + 4)			; E = flag byte from stack
 	ld xiy, xix			; XIY = source
 	ld xix, xwa			; XIX = dest (for ldirw)
-	lds bc, 6			; count = 6 words (12 bytes)
+	ld bc, 6:i3			; count = 6 words (12 bytes)
 	mriw2 0x95, 0x11		; ldirw — copy 6 words
 	ld (xwa), hl			; store flags at dest[0..1]
 	bit 0, hl			; bit 0 set?
@@ -3664,8 +3664,8 @@ HDAE5000_SaveOptSwEventCatch:
 	ld	de, (0x22AA4C:24)
 	calr	0x59f7
 .LHCM_56fa:
-	lds	wa, 0
-	lds	bc, 0
+	ld	wa, 0:i3
+	ld	bc, 0:i3
 	calr	0xe467
 	jr t, .LHCM_5778                       ; [68 75] jr T,0x285778
 .LHCM_5703:
@@ -3688,7 +3688,7 @@ HDAE5000_SaveOptSwEventCatch:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c8a:24)
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	0xfb9f
 	calr	0xfcd4
 	jr t, .LHCM_5778                       ; [68 2e] jr T,0x285778
@@ -5061,7 +5061,7 @@ HDAE5000_SetupP2SwCatch:
 	ld xbc, 0x01c00001
 	lds32 xde, 5
 	call (xhl)
-	lds wa, 0
+	ld wa, 0:i3
 	call 0x293f3c
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
@@ -5130,7 +5130,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	inc 0, xsp
 	cp hl, 0:i3
 	jr nz, .LCHSC__try2
-	lds iz, 2			; match pattern 1 → IZ=2
+	ld iz, 2:i3			; match pattern 1 → IZ=2
 	jr t, .LCHSC__clear
 .LCHSC__try2:
 	pushw 0x002e
@@ -5141,10 +5141,10 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	inc 0, xsp
 	cp hl, 0:i3
 	jr nz, .LCHSC__no_match
-	lds iz, 3			; match pattern 2 → IZ=3
+	ld iz, 3:i3			; match pattern 2 → IZ=3
 	jr t, .LCHSC__clear
 .LCHSC__no_match:
-	lds iz, 1			; no match → IZ=1
+	ld iz, 1:i3			; no match → IZ=1
 .LCHSC__clear:
 	pushw 0x000a
 	pushw 0x0000
@@ -5154,7 +5154,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	inc 0, xsp
 	jr t, .LCHSC__return
 .LCHSC__not_full:
-	lds iz, 0			; not full → IZ=0
+	ld iz, 0:i3			; not full → IZ=0
 .LCHSC__return:
 	ld hl, iz			; return value in HL
 	popw iz                                 ; pop iz (compact)
@@ -5226,10 +5226,10 @@ HDAE5000_AttenHDFormatSwCatch:
 	; Case 0: bit test → call with 0/1
 	bit 0x07, iz
 	jr z, .LCHSC__c0_even
-	lds wa, 0
+	ld wa, 0:i3
 	jr t, .LCHSC__c0_call
 .LCHSC__c0_even:
-	lds wa, 1
+	ld wa, 1:i3
 .LCHSC__c0_call:
 	calr HDAE5000_HD_CHS_Calculate		; recursive
 	ld (xsp + 0x04), hl
@@ -5237,10 +5237,10 @@ HDAE5000_AttenHDFormatSwCatch:
 	; Case 1: bit test → call with 2/3
 	bit 0x07, iz
 	jr z, .LCHSC__c1_even
-	lds wa, 2
+	ld wa, 2:i3
 	jr t, .LCHSC__c1_call
 .LCHSC__c1_even:
-	lds wa, 3
+	ld wa, 3:i3
 .LCHSC__c1_call:
 	calr HDAE5000_HD_CHS_Calculate
 	ld (xsp + 0x04), hl
@@ -5248,10 +5248,10 @@ HDAE5000_AttenHDFormatSwCatch:
 	; Case 2: bit test → call with 4/5
 	bit 0x07, iz
 	jr z, .LCHSC__c2_even
-	lds wa, 4
+	ld wa, 4:i3
 	jr t, .LCHSC__c2_call
 .LCHSC__c2_even:
-	lds wa, 5
+	ld wa, 5:i3
 .LCHSC__c2_call:
 	calr HDAE5000_HD_CHS_Calculate
 	ld (xsp + 0x04), hl
@@ -5259,10 +5259,10 @@ HDAE5000_AttenHDFormatSwCatch:
 	; Case 3: bit test → call with 6/7
 	bit 0x07, iz
 	jr z, .LCHSC__c3_even
-	lds wa, 6
+	ld wa, 6:i3
 	jr t, .LCHSC__c3_call
 .LCHSC__c3_even:
-	lds wa, 7
+	ld wa, 7:i3
 .LCHSC__c3_call:
 	calr HDAE5000_HD_CHS_Calculate
 	ld (xsp + 0x04), hl
@@ -5341,7 +5341,7 @@ HDAE5000_AttenHDFormatSwCatch:
 	lds32 xde, 0
 	call (xhl)
 	calr HDAE5000_Wait_Callback_Loop
-	lds wa, 1
+	ld wa, 1:i3
 	call HDAE5000_Display_Init
 	cp hl, 0:i3
 	jr nz, .LCHSC__res2_err
@@ -5355,12 +5355,12 @@ HDAE5000_AttenHDFormatSwCatch:
 	call (xhl)
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
-	lds wa, 0
-	lds bc, 0
+	ld wa, 0:i3
+	ld bc, 0:i3
 	calr HDAE5000_HD_Read_Write
 	calr HDAE5000_FS_Read_FSB
-	lds wa, 0
-	lds bc, 2
+	ld wa, 0:i3
+	ld bc, 2:i3
 	calr HDAE5000_FS_Write_FSB
 	jrl t, .LCHSC__done
 .LCHSC__res2_err:			; Error: display error + two dialog boxes
@@ -5406,7 +5406,7 @@ HDAE5000_AttenHDFormatSwCatch:
 	lds32 xde, 0
 	call (xhl)
 	calr HDAE5000_Wait_Callback_Loop
-	lds wa, 0
+	ld wa, 0:i3
 	call 0x293f3c
 	cp hl, 0xffff
 	jr z, .LCHSC__res3_nomatch
@@ -5496,7 +5496,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 .LHD_SR__c1_lo:
 	cp de, 0:i3			; DE > 0?
 	jr gt, .LHD_SR__apply
-	lds de, 0			; clamp to 0
+	ld de, 0:i3			; clamp to 0
 	jr t, .LHD_SR__apply
 	; Case 2 (offset 0x001E): cylinder digit * 10
 	ld wa, hl
@@ -5509,7 +5509,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 .LHD_SR__c2_lo:
 	cp de, 1:i3			; DE > 1?
 	jr gt, .LHD_SR__apply
-	lds de, 0
+	ld de, 0:i3
 	jr t, .LHD_SR__apply
 	; Case 3 (offset 0x0039): cylinder unit digit
 	add de, hl
@@ -5520,7 +5520,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 .LHD_SR__c3_lo:
 	cp de, 0:i3
 	jr gt, .LHD_SR__apply
-	lds de, 1
+	ld de, 1:i3
 	jr t, .LHD_SR__apply
 	; Case 4 (offset 0x004E): head digit * 10
 	ld wa, hl
@@ -5533,7 +5533,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 .LHD_SR__c4_lo:
 	cp bc, 0:i3
 	jr gt, .LHD_SR__apply
-	lds bc, 0
+	ld bc, 0:i3
 	jr t, .LHD_SR__apply
 	; Case 5 (offset 0x0069): head unit digit
 	add bc, hl
@@ -5544,7 +5544,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 .LHD_SR__c5_lo:
 	cp bc, 0:i3
 	jr gt, .LHD_SR__apply
-	lds bc, 1
+	ld bc, 1:i3
 .LHD_SR__apply:				; store results
 	ld (0x22aa5e:24), de; store cylinder
 	ld (0x22aa60:24), bc; store head
@@ -5581,7 +5581,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c96:24)
-	lds bc, 0
+	ld bc, 0:i3
 	calr HDAE5000_HD_Data_Copy
 	pushw 0xffff		; push 0xFFFF
 	ld xwa, 0x007f0098
@@ -5652,16 +5652,16 @@ HDAE5000_LBNPage1SwCatch:
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
 	; Case 0: re-init FS
 	pushw 0x0001
-	lds wa, 0
-	lds bc, 0
-	lds de, 6
+	ld wa, 0:i3
+	ld bc, 0:i3
+	ld de, 6:i3
 	calr HDAE5000_FS_Init
 	jrl t, .LHD_SR__a_exit
 	; Case 1: toggle read/write direction
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa			; bit 7?
 	jr nz, .LHD_SR__a_c1_set
-	lds wa, 1
+	ld wa, 1:i3
 	jr t, .LHD_SR__a_c1_push
 .LHD_SR__a_c1_set:
 	ldw wa, 0xffff
@@ -5677,12 +5677,12 @@ HDAE5000_LBNPage1SwCatch:
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c2b
 	ld xwa, xiz
-	lds bc, 0
+	ld bc, 0:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 .LHD_SR__a_c2b:
 	ld xwa, xiz
-	lds bc, 1
+	ld bc, 1:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 	; Case 3: sector write (BC=2 or 3)
@@ -5690,12 +5690,12 @@ HDAE5000_LBNPage1SwCatch:
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c3b
 	ld xwa, xiz
-	lds bc, 2
+	ld bc, 2:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 .LHD_SR__a_c3b:
 	ld xwa, xiz
-	lds bc, 3
+	ld bc, 3:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 	; Case 4: sector write (BC=4 or 5)
@@ -5703,12 +5703,12 @@ HDAE5000_LBNPage1SwCatch:
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c4b
 	ld xwa, xiz
-	lds bc, 4
+	ld bc, 4:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 .LHD_SR__a_c4b:
 	ld xwa, xiz
-	lds bc, 5
+	ld bc, 5:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 	; Case 5: sector write (BC=6 or 7)
@@ -5716,12 +5716,12 @@ HDAE5000_LBNPage1SwCatch:
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c5b
 	ld xwa, xiz
-	lds bc, 6
+	ld bc, 6:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 .LHD_SR__a_c5b:
 	ld xwa, xiz
-	lds bc, 7
+	ld bc, 7:i3
 	calr HDAE5000_HD_Sector_Write
 	jr t, .LHD_SR__a_exit
 	; Case 6: sector write (BC=8 or 9)
@@ -5783,7 +5783,7 @@ HDAE5000_LBNLoadSwCatch:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c96:24)
-	lds bc, 0
+	ld bc, 0:i3
 	calr HDAE5000_HD_Data_Copy
 	jrl t, .LHD_SR__b_exit
 .LHD_SR__b_evt85:			; event 0x85: XHL = 1
@@ -5832,9 +5832,9 @@ HDAE5000_LBNLoadSwCatch:
 	ld de, (0x22aa4c:24)
 	calr HDAE5000_Display_Manager
 	pushw 0x0001
-	lds wa, 0
-	lds bc, 0
-	lds de, 6
+	ld wa, 0:i3
+	ld bc, 0:i3
+	ld de, 6:i3
 	calr HDAE5000_FS_Init
 	cp (0x229dac:24), 0x02
 	jr nz, .LHD_SR__b_exit
@@ -5987,7 +5987,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	lda xwa, (0x22aa4c:24); f2 4c aa 22 30
 	pushw 0x0002
 	lda xde, (0x2e1c96:24); f2 96 1c 2e 32
-	lds bc, 0				; d9 a8
+	ld bc, 0:i3				; d9 a8
 	calr HDAE5000_HD_Data_Copy		; 1e xx xx
 	pushw 0xffff
 	ld xwa, 0x007f0098			; 40 98 00 7f 00
@@ -6008,9 +6008,9 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	ld de, (0x22aa4c:24); d2 4c aa 22 22
 	calr HDAE5000_Display_Manager		; 1e xx xx
 	pushw 0x0001
-	lds wa, 0				; d8 a8
-	lds bc, 0				; d9 a8
-	lds de, 6				; da ae
+	ld wa, 0:i3				; d8 a8
+	ld bc, 0:i3				; d9 a8
+	ld de, 6:i3				; da ae
 	calr HDAE5000_FS_Init			; 1e xx xx
 	; Check second disk flag
 	cp (0x229dac:24), 0x02; c2 ac 9d 22 3f 02

@@ -419,7 +419,7 @@ AudioInit_VoiceParamDone:
 	ret
 
 AudioInit_DrumRoutingCheck:
-	lds de, 0
+	ld de, 0:i3
 	bit 2, (0xc1fe:16)
 	jr nz, AudioInit_ProcessVoiceAssign
 	ld wa, (0xc598:16)
@@ -632,7 +632,7 @@ AudioInit_ClearPartFlags_ByMode:
 	ld wa, (0xc594:16)
 	and wa, 0x3
 	jr z, AudioInit_SetPartMasks
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0x1a
 	ret nc
 
@@ -650,7 +650,7 @@ AudioInit_ClearPartFlags_Loop:
 	ret
 
 AudioInit_SetPartMasks:
-	lds de, 0
+	ld de, 0:i3
 	cp de, 0x10
 	jr nc, AudioInit_CheckGlobalFlag6
 
@@ -1122,7 +1122,7 @@ AudioInit_NoTypeE_CheckD:
 	and wa, 0x22
 	cp wa, 0x20
 	jr nz, AudioInit_DefaultOutputRouting
-	lds de, 2
+	ld de, 2:i3
 	ld a, (0xfc5d:16)
 	and a, 0x8
 	extz wa
@@ -1711,7 +1711,7 @@ AudioInit_ComparePartStates:
 	ld wa, (0xc59c:16)
 	bit 3, wa
 	jrl z, AudioInit_ComparePanState
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x1a
 	jrl nc, AudioInit_PartCompare_CheckGlobalBits
 
@@ -1746,7 +1746,7 @@ AudioInit_PartCompare_Loop:
 	extz wa
 	pushw wa
 	ld bc, hl
-	lds wa, 0
+	ld wa, 0:i3
 	calr AudioInit_QueueCommand
 	jr AudioInit_PartCompare_Next
 
@@ -1784,7 +1784,7 @@ AudioInit_PartCompare_SameVoice:
 	extz wa
 	pushw wa
 	ld bc, de
-	lds wa, 0
+	ld wa, 0:i3
 	ldw de, 0xff
 	calr AudioInit_QueueCommand
 
@@ -1803,8 +1803,8 @@ AudioInit_PartCompare_CheckGlobalBits:
 	ld a, (0xc222:16)
 	extz wa
 	pushw wa
-	lds wa, 0
-	lds bc, 0
+	ld wa, 0:i3
+	ld bc, 0:i3
 	ldw de, 0xff
 	calr AudioInit_QueueCommand
 
@@ -1822,8 +1822,8 @@ AudioInit_ComparePanState:
 	extz wa
 	pushw wa
 	ld de, bc
-	lds wa, 1
-	lds bc, 0
+	ld wa, 1:i3
+	ld bc, 0:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_PartCompare_Return:
@@ -1847,17 +1847,17 @@ AudioInit_CompareVoiceConfig:
 	extz wa
 	pushw wa
 	ld de, bc
-	lds wa, 2
-	lds bc, 1
+	ld wa, 2:i3
+	ld bc, 1:i3
 	calr AudioInit_QueueCommand
 	bit 3, (0xc364:16)
 	ret z
 	bit 3, (0xc1fe:16)
 	ret nz
 	pushw 0x8
-	lds wa, 2
-	lds bc, 0
-	lds de, 0
+	ld wa, 2:i3
+	ld bc, 0:i3
+	ld de, 0:i3
 	calr AudioInit_QueueCommand
 	ret
 
@@ -1878,7 +1878,7 @@ AudioInit_VoiceCompare_BothFF:
 	ld a, (0xc364:16)
 	and a, c
 	ld l, a
-	lds ix, 0
+	ld ix, 0:i3
 	cp ix, 6:i3
 	jrl nc, AudioInit_VoiceCompare_BuildCmd
 
@@ -1991,8 +1991,8 @@ AudioInit_VoiceCompare_QueueCmd:
 	extz wa
 	pushw wa
 	ld de, bc
-	lds wa, 2
-	lds bc, 0
+	ld wa, 2:i3
+	ld bc, 0:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_VoiceCompare_PanCheck:
@@ -2006,8 +2006,8 @@ AudioInit_VoiceCompare_PanCheck:
 	extz wa
 	pushw wa
 	ld de, bc
-	lds wa, 2
-	lds bc, 2
+	ld wa, 2:i3
+	ld bc, 2:i3
 	calr AudioInit_QueueCommand
 	ret
 
@@ -2016,7 +2016,7 @@ AudioInit_CompareChannelMappings:
 	ld wa, (0xc59c:16)
 	and wa, 0xc0
 	jrl z, AudioInit_ChannelMap_CheckPan
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x10
 	jrl nc, AudioInit_ChannelMap_CheckPan
 
@@ -2051,7 +2051,7 @@ AudioInit_ChannelMap_Loop:
 	extz wa
 	pushw wa
 	ld bc, hl
-	lds wa, 3
+	ld wa, 3:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_ChannelMap_CheckPrimary:
@@ -2085,7 +2085,7 @@ AudioInit_ChannelMap_CheckPrimary:
 	extz wa
 	pushw wa
 	ld bc, hl
-	lds wa, 4
+	ld wa, 4:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_ChannelMap_Next:
@@ -2107,8 +2107,8 @@ AudioInit_ChannelMap_CheckPan:
 	extz wa
 	pushw wa
 	ld de, bc
-	lds wa, 5
-	lds bc, 0
+	ld wa, 5:i3
+	ld bc, 0:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_ChannelMap_Return:
@@ -2117,7 +2117,7 @@ AudioInit_ChannelMap_Return:
 
 AudioInit_ComparePriorityTable:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 3:i3
 	jr nc, AudioInit_Priority_Return
 
@@ -2152,7 +2152,7 @@ AudioInit_Priority_Loop:
 	extz wa
 	pushw wa
 	ld bc, hl
-	lds wa, 6
+	ld wa, 6:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_Priority_Next:
@@ -2166,7 +2166,7 @@ AudioInit_Priority_Return:
 
 AudioInit_ComparePartAssignment:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x1a
 	jrl nc, AudioInit_PartAssign_Return
 
@@ -2243,7 +2243,7 @@ AudioInit_PartAssign_QueueChange:
 	extz wa
 	pushw wa
 	ld bc, hl
-	lds wa, 7
+	ld wa, 7:i3
 	calr AudioInit_QueueCommand
 
 AudioInit_PartAssign_Next:
@@ -2257,7 +2257,7 @@ AudioInit_PartAssign_Return:
 
 AudioInit_ComparePartConfig:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x1a
 	jrl nc, AudioInit_PartConfig_Return
 
@@ -2389,7 +2389,7 @@ AudioInit_PartConfig_Return:
 
 AudioInit_CompareChannelConfig:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x10
 	jr nc, AudioInit_ChannelConfig_Return
 
@@ -2438,7 +2438,7 @@ AudioInit_ChannelConfig_Return:
 
 AudioInit_CompareVolumeTable:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x1a
 	jr nc, AudioInit_Volume_Return
 
@@ -2486,7 +2486,7 @@ AudioInit_Volume_Return:
 	ret
 
 AudioInit_InitPartSendLevels:
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, 161
 	jr	nc, 38
 	ld	wa, de

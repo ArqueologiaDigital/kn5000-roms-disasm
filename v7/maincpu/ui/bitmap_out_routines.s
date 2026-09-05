@@ -87,7 +87,7 @@ BitMapOut_ByteData_RenderA:
 	ld	xbc, 29360150
 	ld	xde, 27263210
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
@@ -96,7 +96,7 @@ BitMapOut_ByteData_RenderA:
 	ld	xbc, 29360150
 	ld	xde, 27263211
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
@@ -105,7 +105,7 @@ BitMapOut_ByteData_RenderA:
 	ld	xbc, 29360150
 	ld	xde, 27263208
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	480
 	ret
 BitMapOut_ByteData_RenderB:
@@ -129,7 +129,7 @@ BitMapOut_ByteData_RenderB:
 	jr	nz, 108
 	ld	a, (35998:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16567590
 	ld	(xsp+3), l
 	ld	a, (35998:16)
@@ -157,12 +157,12 @@ BitMapOut_ByteData_RenderB:
 	ld	xbc, 29491207
 	lds32	xde, 0
 	call	16423243
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	310
 	inc	6, xsp
 	ret
 BitMapOut_ByteData_RenderC:
-	lds	wa, 0
+	ld	wa, 0:i3
 	jrl	302
 BitMapOut_ByteData_RenderD:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 49 of 76 slots byte-identical
@@ -189,7 +189,7 @@ BitMapOut_ByteData_RenderD:
 	jr	nz, 94
 	ld	a, (35998:16)
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16567590
 	ld	(xsp+3), l
 	ld	a, (35998:16)
@@ -218,7 +218,7 @@ BitMapOut_ByteData_RenderD:
 	ld	xbc, 29491207
 	lds32	xde, 0
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	172
 	inc	6, xsp
 	ret
@@ -239,7 +239,7 @@ BitMapOut_ByteData_RenderD:
 	ld	xbc, 29360150
 	ld	xde, 27263209
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	109
 	ret
 BitMapOut_ByteData_RenderE:
@@ -270,7 +270,7 @@ BitMapOut_ByteData_RenderE:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	ApPostEvent
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	32
 	ret
 BitMapOut_CheckDiskAndApply:
@@ -304,7 +304,7 @@ BitMapOut_DecrementTimer:
 	ld	de, hl
 	pushw	255
 	ldw	wa, 112
-	lds	bc, 2
+	ld	bc, 2:i3
 	call	16624211
 	ret
 BitMapOut_ByteData_TransitionSeq:
@@ -494,7 +494,7 @@ BitMapOut_CopyPreset9_Execute:
 	ld a, (xiy)
 	ld (xix), a
 	ld xiz, (xbc)
-	lds iy, 0
+	ld iy, 0:i3
 	jr BitMapOut_CopyPreset9_CheckEnd
 
 BitMapOut_CopyPreset9_StoreLoop:
@@ -597,7 +597,7 @@ BitMapOut_RestoreFull_FieldLoop:
 	ldb_erp A, 0xe6
 	inc 1, xhl
 	inc 1, xhl
-	lds bc, 0
+	ld bc, 0:i3
 	stb_erp E, 0xe6
 	extz de
 	cp de, 0:i3
@@ -703,7 +703,7 @@ BitMapOut_CopyPresetTable_Check:
 	extz xde
 	cp xde, xwa
 	jr le, BitMapOut_CopyPresetTable_Loop
-	lds bc, 0
+	ld bc, 0:i3
 	jr BitMapOut_CopyExtTable_Check
 
 BitMapOut_CopyExtTable_Loop:
@@ -1358,7 +1358,7 @@ BitMapOut_RestoreVoiceChannels:
 	add xwa, xde
 	ld a, (xwa)
 	ld (xhl), a
-	lds hl, 0
+	ld hl, 0:i3
 	jr BitMapOut_RestoreChannels_CheckEnd
 
 BitMapOut_RestoreChannels_ByteLoop:
@@ -1385,11 +1385,11 @@ BitMapOut_RestoreChannels_CheckParts:
 	ld xwa, (xsp + 10)
 	bitm 1, (xwa)
 	jrl z, BitMapOut_RestoreExtra_CheckBit6
-	lds de, 0
+	ld de, 0:i3
 	ldw (xsp + 4), 0x0
 
 BitMapOut_RestoreParts_OuterLoop:
-	lds hl, 0
+	ld hl, 0:i3
 
 BitMapOut_RestoreParts_InnerLoop:
 	lda xbc, (0xf9a0:16)
@@ -1719,7 +1719,7 @@ BitMapOut_DetectChanges_FullScan:
 	ld (XSP+0x08),XWA
 	res 2, (0x8caa:16)
 BitMapOut_DeltaEncode_Init:
-	lds iz, 0
+	ld iz, 0:i3
 	jrl BitMapOut_DeltaEncode_CheckBounds
 
 BitMapOut_DeltaEncode_ReadEntry:
@@ -1806,7 +1806,7 @@ BitMapOut_DeltaEncode_SlowTimeout:
 	pop xix
 	pop xhl
 	pop xde
-	lds hl, 0
+	ld hl, 0:i3
 
 BitMapOut_DeltaEncode_EncodeChange:
 	ld a, (xsp + 2)
@@ -2600,7 +2600,7 @@ BitMapOut_DeltaEncode_Type90Epilog:
 BitMapOut_DeltaEncode_Type90Return:
 	dec 6, xsp
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 
 BitMapOut_DeltaEncode_Type90Final:
 	lda xwa, (xsp + 2)
@@ -3167,7 +3167,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 	ldw	(36026:16), 0
 	jr	55
 BitMapOut_ApplyPatch_Execute:
-	lds iz, 0
+	ld iz, 0:i3
 	ldib_erp 0xfb, 0
 	cp a, 0:i3
 	jr ule, BitMapOut_ApplyPatch_Store

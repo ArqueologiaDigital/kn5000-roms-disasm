@@ -68,7 +68,7 @@ AcGridBox_Init:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c00018
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
@@ -122,7 +122,7 @@ AcGridBox_ScrollUp_Alt:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
@@ -176,7 +176,7 @@ AcGridBox_ScrollDown_Alt:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcGridBox_EnableDials:
 	calr SetDialEnable
@@ -360,7 +360,7 @@ PsEditBox_SetIndex_CheckDial:
 	ld XWA, (xsp + 0x021c)
 	ld xbc, 0x1c00018
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jr PsEditBox_Init_EnableDials
 
 PsEditBox_Init:
@@ -386,7 +386,7 @@ PsEditBox_Init:
 	ld XWA, (xsp + 0x021c)
 	ld xbc, 0x1c00018
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 PsEditBox_Init_EnableDials:
 	calr SetDialEnable
@@ -516,13 +516,13 @@ PsEditBox_Confirm_Render:
 	ld c, (xiy + 38)
 	extz bc
 	pushw bc
-	lds ix, 0
+	ld ix, 0:i3
 	ld xbc, (xiy + 46)
 	cpw (xbc), 0x0
 	jr z, PsEditBox_Confirm_SetFocus
 	cpw (xiy + 44), 0x0
 	jr z, PsEditBox_Confirm_SetFocus
-	lds ix, 1
+	ld ix, 1:i3
 
 PsEditBox_Confirm_SetFocus:
 	pushw ix
@@ -1406,7 +1406,7 @@ MainLswPut:
 	ld	xbc, 31457315
 	ld	xde, xiz
 	call	16402006
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -1442,7 +1442,7 @@ MainLswPartPut:
 	ld	xbc, 31457315
 	ld	xde, (xsp+2)
 	call	16402006
-	lds	hl, 0
+	ld	hl, 0:i3
 	popw	iz
 	inc	8, xsp
 	retd	2
@@ -1472,7 +1472,7 @@ MainLswAdd:
 	ld	xbc, 31457315
 	ld	xde, xiz
 	call	16402006
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -1508,7 +1508,7 @@ MainLswPartAdd:
 	ld	xbc, 31457315
 	ld	xde, (xsp+2)
 	call	16402006
-	lds	hl, 0
+	ld	hl, 0:i3
 	popw	iz
 	inc	8, xsp
 	retd	2
@@ -1555,7 +1555,7 @@ MainLswGet:
 
 	call	16401701
 
-	lds hl, 0
+	ld hl, 0:i3
 
 	pop xiz
 
@@ -1622,7 +1622,7 @@ MainLswPartGet:
 
 	call	16401701
 
-	lds hl, 0
+	ld hl, 0:i3
 
 	popw iz
 
@@ -2533,7 +2533,7 @@ AcTitleMenu_Confirm:
 	calr GetClientBox
 	lda_dri XIY, 0xfd, 0x1c, 0x01
 	lda_dri XIX, 0xfd, 0x14, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda_dri XBC, 0xfd, 0x28, 0x01
 	ld xwa, (xsp + 8)
@@ -2557,7 +2557,7 @@ AcTitleMenu_Confirm:
 	jr AcTitleMenu_Confirm_SetLeft
 
 AcTitleMenu_Confirm_NoIcon:
-	lds wa, 4
+	ld wa, 4:i3
 
 AcTitleMenu_Confirm_SetLeft:
 	ldw_sri0 HL, (xsp + 0x011c)
@@ -2576,7 +2576,7 @@ AcTitleMenu_Confirm_SetLeft:
 	jr AcTitleMenu_Confirm_SetRight
 
 AcTitleMenu_Confirm_NoIconRight:
-	lds wa, 4
+	ld wa, 4:i3
 
 AcTitleMenu_Confirm_SetRight:
 	.byte 0xd3, 0xfd, 0x20, 0x01, 0x22, 0xd8, 0xa2, 0xb1
@@ -2855,7 +2855,7 @@ VwMenuBox_Confirm:
 	calr GetClientBox
 	lda_dri XIY, 0xfd, 0x1a, 0x01
 	lda_dri XIX, 0xfd, 0x12, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda_dri XBC, 0xfd, 0x26, 0x01
 	ld xwa, (xsp + 6)
@@ -2877,7 +2877,7 @@ VwMenuBox_Confirm:
 	jr VwMenuBox_Confirm_SetLeft
 
 VwMenuBox_Confirm_NoIcon:
-	lds wa, 4
+	ld wa, 4:i3
 
 VwMenuBox_Confirm_SetLeft:
 	ldw_sri0 HL, (xsp + 0x011a)
@@ -2894,7 +2894,7 @@ VwMenuBox_Confirm_SetLeft:
 	jr VwMenuBox_Confirm_SetRight
 
 VwMenuBox_Confirm_NoIconRight:
-	lds wa, 4
+	ld wa, 4:i3
 
 VwMenuBox_Confirm_SetRight:
 	.byte 0xd3, 0xfd, 0x1e, 0x01, 0x22, 0xd8, 0xa2, 0xb1
@@ -3181,7 +3181,7 @@ PsEditSwBox_InlineData:
 	ldw	wa, 8
 	cp	hl, 0:i3
 	jr	z, 2
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld	(xiz), wa
 	ldw	(xiz+4), 38
 	lda	xwa, (xsp+4)
@@ -3259,7 +3259,7 @@ ButtonState_PaintProc:
 	calr GetClientBox
 	lda_dri XIY, 0xfd, 0x20, 0x01
 	lda_dri XIX, 0xfd, 0x18, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda_dri XHL, 0xfd, 0x10, 0x01
 	lda_dri XWA, 0xfd, 0x20, 0x01
@@ -3286,7 +3286,7 @@ ButtonState_PaintProc:
 	jrl z, ButtonState_Paint_EventConfirm
 	cpib_sri 0xfd, 0x28, 0x01, 0x03
 	jrl nz, ButtonState_DispatchDSP
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda_dri XWA, 0xfd, 0x18, 0x01
 	ldw_sri0 BC, (xsp + 0x0112)
@@ -3328,7 +3328,7 @@ ButtonState_PaintProc:
 	jrl ButtonState_Paint_DrawAndReturn
 
 ButtonState_Paint_EventConfirm:
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda_dri XWA, 0xfd, 0x18, 0x01
 	ldw_sri0 BC, (xsp + 0x0112)
@@ -4257,12 +4257,12 @@ PsToggleBox_Confirm_DrawOff:
 	cpw (xbc), 0x7
 	jr ugt, PsToggleBox_Confirm_OffLarge
 	ldw bc, 0xc9
-	lds de, 7
+	ld de, 7:i3
 	jr PsToggleBox_Confirm_DrawOffBox
 
 PsToggleBox_Confirm_OffLarge:
 	ldw bc, 0xc1
-	lds de, 7
+	ld de, 7:i3
 
 PsToggleBox_Confirm_DrawOffBox:
 	call DrawDesignBox
@@ -5578,7 +5578,7 @@ IvIntVariProc:
 	jr IvIntVari_Return
 
 IvIntVari_Init:
-	lds wa, 1
+	ld wa, 1:i3
 	call SetVariFlag
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5586,7 +5586,7 @@ IvIntVari_Init:
 	jr IvIntVari_ForwardToInterrupt
 
 IvIntVari_Close:
-	lds wa, 0
+	ld wa, 0:i3
 	call SetVariFlag
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5654,7 +5654,7 @@ IvIntWelcomeProc:
 	jr IvIntWelcome_Return
 
 IvIntWelcome_Init:
-	lds wa, 1
+	ld wa, 1:i3
 	call SetVariFlag
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5662,7 +5662,7 @@ IvIntWelcome_Init:
 	jr IvIntWelcome_ForwardToInterrupt
 
 IvIntWelcome_Close:
-	lds wa, 0
+	ld wa, 0:i3
 	call SetVariFlag
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -6444,7 +6444,7 @@ AcMixerVol_OK:
 	add XBC,XWA
 	ld XWA,(XBC+0x04)
 	ld DE,(XBC+0x08)
-	lds bc, 0
+	ld bc, 0:i3
 	calr MainLswPut
 	ld XWA,(XSP+0x2c)
 	ld XBC,0x01c00027
@@ -6469,7 +6469,7 @@ AcMixerVol_OK_Mute:
 
 AcMixerVol_OK_Increment:
 	ld xwa, (xbc)
-	lds bc, 1
+	ld bc, 1:i3
 
 AcMixerVol_OK_ApplyDelta:
 	calr MainLswAdd
@@ -6520,7 +6520,7 @@ AcMixerVol_FastScroll_Increment:
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
-	lds bc, 4
+	ld bc, 4:i3
 
 AcMixerVol_FastScroll_Apply:
 	calr MainLswAdd
@@ -6565,7 +6565,7 @@ AcMixerVol_Reset:
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)
-	lds bc, 1
+	ld bc, 1:i3
 	calr MainLswPut
 
 AcMixerVol_Reset_Fallthrough:
@@ -6576,7 +6576,7 @@ AcMixerVol_Reset_Fallthrough:
 
 AcMixerVol_EncoderUpdate:
 	ld	xwa, (xsp+36)
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16567590
 	ld	(xsp+15), l
 	ld	xwa, (xsp+36)
@@ -6637,7 +6637,7 @@ ScrollDelta_ComputeDirection:
 	jr	z, 8
 	mul	hl, 0xffff
 	jr	2
-	lds	hl, 0
+	ld	hl, 0:i3
 	retd	2
 
 DbMemoProc:
@@ -6663,11 +6663,11 @@ DbMemo_Paint:
 	ld xiz, xhl
 	lda xwa, (xiz + 14)
 	ldw bc, 0xc5
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	lda xiy, (xiz + 14)
 	lda xix, (xsp + 94)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 94)
 	incw 4, (xwa + 2)
@@ -6675,7 +6675,7 @@ DbMemo_Paint:
 	decm 4, (xwa + 4)
 	decm 4, (xwa + 6)
 	ldw bc, 0xc6
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	ld xwa, (xsp + 106)
 	ld xbc, 0x1c00025
@@ -6698,7 +6698,7 @@ DbMemo_DrawContent:
 	call GetViewInstance
 	lda xiy, (xhl + 14)
 	lda xix, (xsp + 94)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xhl, (xsp + 94)
 	lda xde, (xhl + 2)
@@ -6721,12 +6721,12 @@ DbMemo_DrawContent:
 	ld (xix + 2), wa
 	lda xiy, (xsp + 94)
 	lda xix, (xsp + 86)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	incw 8, (xsp + 88)
 	lda xiy, (xsp + 94)
 	lda xix, (xsp + 78)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xbc, (xsp + 78)
 	ld wa, (xbc + 6)
@@ -6744,7 +6744,7 @@ DbMemo_DrawContent_Loop:
 	lda	xbc, (xsp+70)
 	call	16430662
 	lda	xwa, (xsp+78)
-	lds	bc, 7
+	ld	bc, 7:i3
 	call	16428646
 	.byte 0x9f, 0x04, 0x04
 	ld	xwa, (xsp+8)
@@ -6843,11 +6843,11 @@ DbMemDump_Paint:
 	ld xiz, xhl
 	lda xwa, (xiz + 14)
 	ldw bc, 0xc5
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	lda xiy, (xiz + 14)
 	lda xix, (xsp + 104)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 104)
 	incw 4, (xwa + 2)
@@ -6855,7 +6855,7 @@ DbMemDump_Paint:
 	decm 4, (xwa + 4)
 	decm 4, (xwa + 6)
 	ldw bc, 0xc6
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	ld xwa, (xsp + 120)
 	ld xbc, 0x1c0000e
@@ -6885,7 +6885,7 @@ DbMemDump_Confirm:
 	ld xwa, (xsp + 6)
 	lda xiy, (xwa + 14)
 	lda xix, (xsp + 104)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 104)
 	incw 5, (xwa + 2)
@@ -7123,7 +7123,7 @@ PsCursorBox_Confirm_CheckCursor:
 	call GetBoxCenter
 	lda_dri XIY, 0xfd, 0x22, 0x02
 	lda_dri XIX, 0xfd, 0x1a, 0x02
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xbc, (xsp + 14)
 	ld xwa, (xbc + 28)
@@ -7479,7 +7479,7 @@ PsTrackSwitchProc:
 	ldirw
 	ld xiy, Str_No_0x504
 	lda xix, (xsp + 8)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	cp xde, 0x1e00053
 	jrl z, PsTrkSw_HitTest
@@ -7565,7 +7565,7 @@ PsTrkSw_Confirm_DrawGeometry:
 	call	16355826
 	lda	xiy, (xsp+158)
 	lda	xix, (xsp+150)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95, 0x11
 	lda	xix, (xsp+142)
 	lda	xwa, (xsp+158)
@@ -7614,11 +7614,11 @@ PsTrkSw_Confirm_DrawGeometry:
 	jr	z, 70
 	lda	xwa, (xsp+166)
 	ldw	bc, 203
-	lds	de, 0
+	ld	de, 0:i3
 	call	16437580
 	lda	xwa, (xsp+142)
 	lda	xbc, (xsp+138)
-	lds	de, 0
+	ld	de, 0:i3
 	call	16426365
 	lda	xwa, (xsp+158)
 	lda	xbc, (xsp+146)
@@ -7629,17 +7629,17 @@ PsTrkSw_Confirm_DrawGeometry:
 	pushw 247
 	call	16435871
 	lda	xwa, (xsp+150)
-	lds	bc, 7
+	ld	bc, 7:i3
 	call	16428646
 	jrl	181
 PsTrkSw_Confirm_DrawOff:
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ldw bc, 0xcb
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	lda_dri XWA, 0xfd, 0x8e, 0x00
 	lda_dri XBC, 0xfd, 0x8a, 0x00
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda_dri XWA, 0xfd, 0x9e, 0x00
 	lda_dri XBC, 0xfd, 0x92, 0x00
@@ -7655,14 +7655,14 @@ PsTrkSw_Confirm_Track8Plus:
 	jr z, PsTrkSw_Confirm_Track8PlusOff
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ldw bc, 0xcc
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	lda_dri XWA, 0xfd, 0x8e, 0x00
 	lda_dri XBC, 0xfd, 0x8a, 0x00
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda_dri XWA, 0xfd, 0x9e, 0x00
-	lds bc, 0
+	ld bc, 0:i3
 	call DrawBox
 	lda_dri XWA, 0xfd, 0x9e, 0x00
 	lda_dri XBC, 0xfd, 0x92, 0x00
@@ -7676,11 +7676,11 @@ PsTrkSw_Confirm_Track8Plus:
 PsTrkSw_Confirm_Track8PlusOff:
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ldw bc, 0xcc
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	lda_dri XWA, 0xfd, 0x8e, 0x00
 	lda_dri XBC, 0xfd, 0x8a, 0x00
-	lds de, 0
+	ld de, 0:i3
 	call DrawLine
 	lda_dri XWA, 0xfd, 0x9e, 0x00
 	lda_dri XBC, 0xfd, 0x92, 0x00
@@ -8368,7 +8368,7 @@ ExitWindow_Paint:
 ExitWindow_Confirm:
 	ld xiy, Str_No_0x5B6
 	ld xix, xwa
-	lds bc, 7
+	ld bc, 7:i3
 	ldirw
 	lda xwa, (xwa + 14)
 	cp xwa, xde
@@ -8415,7 +8415,7 @@ ExitWindow_OK:
 	ld (xbc + 10), xwa
 	ldw wa, 0x1a0
 	calr RegisterObjectTable
-	lds iz, 0
+	ld iz, 0:i3
 
 ExitWindow_Return:
 	lda xbc, (xsp + 2)
@@ -8487,7 +8487,7 @@ CountObject:
 	dec 6,XSP
 	push XIZ
 	ld (XSP+0x08),BC
-	lds iz, 0
+	ld iz, 0:i3
 	ld QIZ,WA
 	cp WA,(XSP+0x08)
 	jr ugt, InputDialog_GetText_CopyAndReturn
@@ -8527,7 +8527,7 @@ CheckViewObject:
 	ld xbc, (xbc)
 	or xbc, xbc
 	jr nz, InputDialog_Paint
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 InputDialog_Paint:
@@ -8558,7 +8558,7 @@ RegisterObjectTable:
 	ld xix, 0x27ed2
 	add xix, xde	; XIX = 27ed2h + 14 * XWA
 	ld xiy, xbc
-	lds bc, 7
+	ld bc, 7:i3
 	ldirw
 	ret
 
@@ -8582,7 +8582,7 @@ RegisterObject:
 	ld (xsp + 4), xhl
 	add xhl, xbc
 	ld xiz, (xhl + 10)
-	lds iy, 0
+	ld iy, 0:i3
 
 InputDialog_Confirm:
 	ld wa, iy
@@ -10040,11 +10040,11 @@ EventDispatch_DefaultProc:
 
 	calr	-1996
 
-	lds wa, 1
+	ld wa, 1:i3
 
 	calr	1599
 
-	lds wa, 2
+	ld wa, 2:i3
 
 	calr	1678
 
@@ -10400,7 +10400,7 @@ EnumList_Paint:
 	ld XDE,0xffffffff
 	call KillApTimer
 EnumList_Paint_DrawEntry:
-	lds wa, 1
+	ld wa, 1:i3
 	calr TitleProc_SetResourceDirtyFlag
 	jrl TitleProc_ReturnZero
 
@@ -10416,7 +10416,7 @@ EnumList_Paint_Loop:
 	.byte 0x21, 0x42, 0xff, 0xff, 0xff, 0xff, 0x1d, 0x28
 	.byte 0x9d, 0xfa
 EnumList_ReturnZero:
-	lds wa, 1
+	ld wa, 1:i3
 	jrl TitleProc_ClearAndReturn
 
 EnumList_Return:
@@ -10503,12 +10503,12 @@ EnumList_OK_ScrollDown:
 	ld xwa, (xsp + 30)
 	or xwa, xwa
 	jr z, EnumList_OK_ScrollDown_Wrap
-	lds wa, 4
+	ld wa, 4:i3
 	calr TitleProc_SetResourceDirtyFlag
 	jrl TitleProc_ReturnZero
 
 EnumList_OK_ScrollDown_Wrap:
-	lds wa, 4
+	ld wa, 4:i3
 	jrl TitleProc_ClearAndReturn
 
 EnumList_OK_ScrollDown_Done:
@@ -10678,7 +10678,7 @@ SetInterruptTime:
 	jr z, EnumList_Reset
 	cp iz, 2:i3
 	jr nz, EnumList_Reset
-	lds wa, 1
+	ld wa, 1:i3
 	calr TitleProc_SetResourceDirtyFlag
 
 EnumList_Reset:
@@ -10712,11 +10712,11 @@ EnumList_Reset_CheckPart:
 SetNotDrawFlag:
 	cp wa, 0:i3
 	jr z, EnumList_Reset_Send
-	lds wa, 4
+	ld wa, 4:i3
 	jr TitleProc_SetResourceDirtyFlag
 
 EnumList_Reset_Send:
-	lds wa, 4
+	ld wa, 4:i3
 	jr TitleProc_ClearResourceDirtyFlag
 
 TitleProc_SetResourceDirtyFlag:
@@ -11607,7 +11607,7 @@ DrawWidget_Hline_Return:
 	ld xwa, (xsp + 8)
 	ld (xhl + 8), wa
 	ld xwa, xiz
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	ld xwa, xiz
 	calr View_GetParentOffset
@@ -11619,7 +11619,7 @@ DrawWidget_Hline_Return:
 	ld xwa, (xsp + 4)
 	ld (xhl + 4), wa
 	ld xwa, (xsp + 8)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	pop xiz
 	inc 8, xsp
@@ -11642,13 +11642,13 @@ Unlink:
 	calr View_GetNextSibling
 	ld (xiz + 8), hl
 	ld xwa, (xsp + 8)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	ld xwa, (xsp + 12)
 	calr GetViewInstance
 	ldw (xhl + 10), 0xffff
 	ld xwa, (xsp + 12)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 
 FrameDraw_TopEdge:
@@ -11663,13 +11663,13 @@ FrameDraw_TopEdge:
 	ld xwa, (xsp + 8)
 	ld (xhl + 10), wa
 	ld xwa, (xsp + 4)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	ld xwa, (xsp + 12)
 	calr GetViewInstance
 	ldw (xhl + 8), 0xffff
 	ld xwa, (xsp + 12)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 
 FrameDraw_BottomEdge:
@@ -11689,7 +11689,7 @@ FrameDraw_BottomEdge:
 	ld xwa, (xsp + 8)
 	ld (xwa + 6), bc
 	ld xwa, (xsp + 12)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 
 FrameDraw_CheckInner:
@@ -11697,7 +11697,7 @@ FrameDraw_CheckInner:
 	calr GetViewInstance
 	ldw (xhl + 4), 0xffff
 	ld xwa, (xsp + 12)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 
 FrameDraw_InnerFill:
@@ -11734,14 +11734,14 @@ FrameDraw_ReturnZero:
 	ld xwa, (xsp + 8)
 	ld (xhl + 6), wa
 	ld xwa, xiz
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	ld xwa, (xsp + 8)
 	calr GetViewInstance
 	ld wa, iz
 	ld (xhl + 4), wa
 	ld xwa, (xsp + 8)
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	jr FrameDraw_DefaultInit_Alt
 
@@ -11837,7 +11837,7 @@ GetBox:
 	calr GetViewInstance
 	lda xiy, (xhl + 14)
 	ld xix, xiz
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	pop xiz
 	ret
@@ -11852,10 +11852,10 @@ SetBox:
 	ld xwa, (xsp + 4)
 	ld xiy, xwa
 	lda xix, (xhl + 14)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xwa, xiz
-	lds bc, 1
+	ld bc, 1:i3
 	calr SetChange
 	pop xiz
 	inc 4, xsp
@@ -13100,8 +13100,8 @@ EdgeDraw_TopLeft:
 	push	xwa
 	call	16713584
 	inc	8, xsp
-	lds	ix, 0
-	lds	iy, 0
+	ld	ix, 0:i3
+	ld	iy, 0:i3
 	lda	xhl, (xsp+4)
 	lds32	xde, 0
 	jr	51
@@ -13550,8 +13550,8 @@ EdgeVariant_B_CalcWidth:
 	push	xwa
 	call	16713584
 	inc	8, xsp
-	lds	iy, 0
-	lds	iz, 0
+	ld	iy, 0:i3
+	ld	iz, 0:i3
 	lda	xix, (xsp+2)
 	lds32	xbc, 0
 	jr	32
@@ -17042,7 +17042,7 @@ CommonIDProc_CheckAvail:
 	ld	xwa, (xsp+12)
 	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
 	jr	z, 52
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	xbc, (xwa+8)
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
@@ -17079,7 +17079,7 @@ CommonIDProc_ReturnZero:
 	ld (xsp + 4), xwa
 	cpw (xbc), 0x0
 	jr z, CommonIDProc_EnumSearch_Atoi
-	lds iz, 0
+	ld iz, 0:i3
 	jr CommonIDProc_EnumSearch_Check
 
 CommonIDProc_EnumSearch_Compare:
@@ -17150,7 +17150,7 @@ IDCountHelper:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
-	lds iz, 0
+	ld iz, 0:i3
 	ldiw_erp 0xfa, 0
 	cpiw_sri 0xfd, 0x08, 0x01, 0x00, 0x00
 	jr ule, IDCountHelper_Done
@@ -17190,7 +17190,7 @@ IDCursorAdvance:
 	call SendEvent
 	lds32 xwa, 0
 	ld (xsp + 6), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	jr IDCursorAdvance_Check
 
 IDCursorAdvance_Loop:
@@ -17292,7 +17292,7 @@ EventHandler_ObjectDispatch:
 	call (xhl)
 	cpw (0x03ef4e:24), 0
 	jr z, EventHandler_ContinueProc
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
 
 EventHandler_ContinueProc:
@@ -17384,7 +17384,7 @@ EventRoute_ObjectDispatch:
 	ld (0x02bc2c:24), xwa
 	cpw (0x03ef4e:24), 0
 	jr z, EventRoute_DispatchJump
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
 
 EventRoute_DispatchJump:
@@ -17398,7 +17398,7 @@ PostEvent:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xbc
 	ld xiz, xwa
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_WaitForEvent
 	ld bc, (0x02ec34:24)
 	ld de, (0x02ec36:24)
@@ -17412,7 +17412,7 @@ PostEvent:
 	jr nz, EventRoute_OwnerMatchDone
 
 EventRoute_CheckOwner:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
 	pop xiz
 	inc 8, xsp
@@ -17441,9 +17441,9 @@ PostEvent_Prologue:
 	incw 1, (0x02ec36:24)
 
 PostEvent_AllocSlot:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskSched_SignalEvent
 	pop xiz
 	inc 8, xsp
@@ -17455,14 +17455,14 @@ GetEvent:
 	ld (xsp + 6), xde
 	ld (xsp + 10), xbc
 	ld xiz, xwa
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_WaitForEvent
 	ld wa, (0x02ec34:24)
 	cp wa, (0x02ec36:24)
 	jr nz, PostEvent_FillSlot
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
-	lds hl, 0
+	ld hl, 0:i3
 	jr GetEvent_Prologue
 
 PostEvent_FillSlot:
@@ -17499,9 +17499,9 @@ PostEvent_ReturnOne:
 	incw 1, (0x02ec34:24)
 
 PostEvent_Return:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
-	lds hl, 1
+	ld hl, 1:i3
 
 GetEvent_Prologue:
 	pop xiz
@@ -17513,13 +17513,13 @@ DeleteEvent:
 	push xiz
 	ld (xsp + 4), xbc
 	ld xiz, xwa
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_WaitForEvent
 	ld bc, (0x02ec36:24)
 	ld wa, (0x02ec34:24)
 	cp wa, bc
 	jr nz, GetEvent_ScanLoop
-	lds wa, 4
+	ld wa, 4:i3
 	jr GetEvent_Return
 
 GetEvent_ScanLoop:
@@ -17546,7 +17546,7 @@ GetEvent_ScanDone:
 	jr z, GetEvent_ReturnOne
 	cp ix, 0x3ff
 	jr nz, GetEvent_ReturnZero
-	lds ix, 0
+	ld ix, 0:i3
 	jr GetEvent_ReturnZeroAlt
 
 GetEvent_ReturnZero:
@@ -17557,7 +17557,7 @@ GetEvent_ReturnZeroAlt:
 	jr nz, GetEvent_ScanMatch
 
 GetEvent_ReturnOne:
-	lds wa, 4
+	ld wa, 4:i3
 
 GetEvent_Return:
 	call TaskSched_SignalEvent
@@ -17571,13 +17571,13 @@ DeleteSpecificEvent:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xbc
 	ld xiz, xwa
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_WaitForEvent
 	ld bc, (0x02ec36:24)
 	ld wa, (0x02ec34:24)
 	cp wa, bc
 	jr nz, DeleteEvent_Prologue
-	lds wa, 4
+	ld wa, 4:i3
 	jr DeleteEvent_Epilogue
 
 DeleteEvent_Prologue:
@@ -17607,7 +17607,7 @@ ObjectSearch_ContinueLoop2:
 	jr z, DeleteEvent_Return
 	cp hl, 0x3ff
 	jr nz, DeleteEvent_Match
-	lds hl, 0
+	ld hl, 0:i3
 	jr DeleteEvent_CheckNext
 
 DeleteEvent_Match:
@@ -17618,7 +17618,7 @@ DeleteEvent_CheckNext:
 	jr nz, DeleteEvent_ScanLoop
 
 DeleteEvent_Return:
-	lds wa, 4
+	ld wa, 4:i3
 
 DeleteEvent_Epilogue:
 	call TaskSched_SignalEvent
@@ -17658,14 +17658,14 @@ EventDispatch_Direct:
 	ld (xsp + 16), xbc			; save event code
 	ld (xsp + 20), xwa			; save target workspace
 	; --- Check if ring buffer is empty ---
-	lds	wa, 4
+	ld	wa, 4:i3
 	call TaskSched_WaitForEvent				; acquire lock/semaphore (id=4)
 	ld	bc, (0x02ec36:24)
 	ld	de, (0x02ec34:24)
 	cp de, bc				; compare read/write positions
 	jr nz, DeleteSpecEvent_Prologue			; buffer not empty, process events
 	; --- Buffer empty: release lock, dispatch directly ---
-	lds	wa, 4
+	ld	wa, 4:i3
 	call TaskSched_SignalEvent				; release lock/semaphore (id=4)
 	ld xwa, (xsp + 20)			; restore target
 	ld xbc, (xsp + 16)			; restore event code
@@ -17700,7 +17700,7 @@ DeleteSpecEvent_ScanLoop:
 	; --- Event code matches: check filter ---
 	lda xde, (xwa + 8)			; XDE = pointer to entry+8 (filter)
 	ld xwa, (xde)				; XWA = registered filter value
-	lds	wa, 0
+	ld	wa, 0:i3
 	ld xiy, (xsp + 12)			; XIY = original event param
 	and xiy, 0xffff0000			; isolate upper 16 bits
 	cp xiy, xwa				; compare filter with event param upper bits
@@ -17731,7 +17731,7 @@ DeleteSpecEvent_Match:
 	jr z, DeleteSpecEvent_Epilogue			; yes, done scanning
 	cp ix, 0x03ff				; check for index wrap
 	jr nz, DeleteSpecEvent_CheckNext			; no wrap needed
-	lds	ix, 0
+	ld	ix, 0:i3
 	jr DeleteSpecEvent_Return				; skip increment
 DeleteSpecEvent_CheckNext:
 	inc 1, ix				; next entry index
@@ -17740,7 +17740,7 @@ DeleteSpecEvent_Return:
 	jr nz, DeleteSpecEvent_ScanLoop			; continue scanning
 DeleteSpecEvent_Epilogue:
 	; --- Done scanning: release lock and reassemble event param ---
-	lds	wa, 4
+	ld	wa, 4:i3
 	call TaskSched_SignalEvent				; release lock/semaphore
 	ld c, (xsp + 6)				; C = param byte 0
 	cpl c					; C = ~param byte 0
@@ -17889,18 +17889,18 @@ MainPostEvent:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xbc
 	ld xiz, xwa
-	lds wa, 7
+	ld wa, 7:i3
 	jr MainPostEvent_Allocate
 
 MainPostEvent_VirtDispatch_Prologue:
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_SignalEvent
 	call Boot_CheckConfigFlag7
 	cp hl, 0:i3
 	jrl z, MainGetEvent_ScanMatch
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
-	lds wa, 7
+	ld wa, 7:i3
 
 MainPostEvent_Allocate:
 	call TaskSched_WaitForEvent
@@ -17939,7 +17939,7 @@ MainGetEvent_Prologue:
 	ld (0x02f83a:24), wa
 
 MainGetEvent_ScanLoop:
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_SignalEvent
 
 MainGetEvent_ScanMatch:
@@ -17953,14 +17953,14 @@ MainGetEvent:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xbc
 	ld xiz, xwa
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_WaitForEvent
 	ld wa, (0x02f838:24)
 	cp wa, (0x02f83a:24)
 	jr nz, MainGetEvent_ScanDone
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_SignalEvent
-	lds hl, 0
+	ld hl, 0:i3
 	jr MainGetEvent_Return
 
 MainGetEvent_ScanDone:
@@ -17987,9 +17987,9 @@ MainGetEvent_ReturnOne:
 	incw 1, (0x02f838:24)
 
 MainGetEvent_ReturnOneAlt:
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_SignalEvent
-	lds hl, 1
+	ld hl, 1:i3
 
 MainGetEvent_Return:
 	pop xiz
@@ -18001,13 +18001,13 @@ MainDeleteEvent:
 	push xiz
 	ld (xsp + 4), xbc
 	ld xiz, xwa
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_WaitForEvent
 	ld bc, (0x02f83a:24)
 	ld wa, (0x02f838:24)
 	cp wa, bc
 	jr nz, MainDeleteEvent_Prologue
-	lds wa, 7
+	ld wa, 7:i3
 	jr MainDeleteEvent_Epilogue
 
 MainDeleteEvent_Prologue:
@@ -18034,7 +18034,7 @@ MainDeleteEvent_Match:
 	jr z, MainDeleteEvent_ReturnAlt
 	cp ix, 0x3ff
 	jr nz, MainDeleteEvent_CheckNext
-	lds ix, 0
+	ld ix, 0:i3
 	jr MainDeleteEvent_Return
 
 MainDeleteEvent_CheckNext:
@@ -18045,7 +18045,7 @@ MainDeleteEvent_Return:
 	jr nz, MainDeleteEvent_ScanLoop
 
 MainDeleteEvent_ReturnAlt:
-	lds wa, 7
+	ld wa, 7:i3
 
 MainDeleteEvent_Epilogue:
 	call TaskSched_SignalEvent
@@ -18059,13 +18059,13 @@ MainDeleteSpecificEvent:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xbc
 	ld xiz, xwa
-	lds wa, 7
+	ld wa, 7:i3
 	call TaskSched_WaitForEvent
 	ld bc, (0x02f83a:24)
 	ld wa, (0x02f838:24)
 	cp wa, bc
 	jr nz, MainDeleteSpecEvent_Prologue
-	lds wa, 7
+	ld wa, 7:i3
 	jr MainDeleteSpecEvent_Epilogue
 
 MainDeleteSpecEvent_Prologue:
@@ -18095,7 +18095,7 @@ ObjectSearch_ContinueLoop:
 	jr z, MainDeleteSpecEvent_Return
 	cp hl, 0x3ff
 	jr nz, MainDeleteSpecEvent_Match
-	lds hl, 0
+	ld hl, 0:i3
 	jr MainDeleteSpecEvent_CheckNext
 
 MainDeleteSpecEvent_Match:
@@ -18106,7 +18106,7 @@ MainDeleteSpecEvent_CheckNext:
 	jr nz, MainDeleteSpecEvent_ScanLoop
 
 MainDeleteSpecEvent_Return:
-	lds wa, 7
+	ld wa, 7:i3
 
 MainDeleteSpecEvent_Epilogue:
 	call TaskSched_SignalEvent
@@ -18120,18 +18120,18 @@ ApPostEvent:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xbc
 	ld xiz, xwa
-	lds wa, 4
+	ld wa, 4:i3
 	jr ObjectSearch_Continue
 
 ObjectSearch_CheckLoop:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
 	call Boot_CheckConfigFlag7
 	cp hl, 0:i3
 	jrl z, ApDeliveryEvent_Prologue
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
-	lds wa, 4
+	ld wa, 4:i3
 
 ObjectSearch_Continue:
 	call TaskSched_WaitForEvent
@@ -18170,9 +18170,9 @@ ApPostEvent_ReturnZero:
 	ld (0x02ec36:24), wa
 
 ApPostEvent_Return:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskSched_SignalEvent
 
 ApDeliveryEvent_Prologue:
@@ -18186,18 +18186,18 @@ ApDeliveryEvent:
 	ld (xsp + 8), xde
 	ld (xsp + 12), xbc
 	ld xiz, xwa
-	lds wa, 4
+	ld wa, 4:i3
 	jr ApDeliveryEvent_Deliver
 
 ApDeliveryEvent_ScanLoop:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
 	call Boot_CheckConfigFlag7
 	cp hl, 0:i3
 	jrl z, ApTimer_Deliver
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
-	lds wa, 4
+	ld wa, 4:i3
 
 ApDeliveryEvent_Deliver:
 	call	15670909
@@ -18257,9 +18257,9 @@ ApTimer_Prologue:
 	ld (0x02ec36:24), wa
 
 ApTimer_ScanLoop:
-	lds wa, 4
+	ld wa, 4:i3
 	call TaskSched_SignalEvent
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskSched_SignalEvent
 	ld xwa, (xsp + 4)
 	or xwa, xwa
@@ -18468,7 +18468,7 @@ SetApTimer:
 	ld (xsp + 8), xde
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
-	lds bc, 0
+	ld bc, 0:i3
 
 ResetApTimer_Prologue:
 	ld wa, bc
@@ -18586,11 +18586,11 @@ ResetApTimer:
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	calr SetApTimer
-	lds hl, 1
+	ld hl, 1:i3
 	jr KillApTimer_Return
 
 KillApTimer_ReturnZero:
-	lds hl, 0
+	ld hl, 0:i3
 
 KillApTimer_Return:
 	pop xiz
@@ -18652,7 +18652,7 @@ KillApTimer_CheckNextEntry_Done:
 	ld (xde), xwa
 	ldw (xbc), 0xffff
 	ldw (xhl), 0xffff
-	lds hl, 1
+	ld hl, 1:i3
 	jr KillApTimer_CheckNextEntry_Epilogue
 
 ApTimer_KillApTimer_CheckNextEntry:
@@ -18661,7 +18661,7 @@ ApTimer_KillApTimer_CheckNextEntry:
 	jrl nz, KillApTimer_CheckNextEntry_Loop
 
 KillApTimer_CheckNextEntry_Return:
-	lds hl, 0
+	ld hl, 0:i3
 
 KillApTimer_CheckNextEntry_Epilogue:
 	pop xiz
@@ -18674,8 +18674,8 @@ DrawTask_EventLoop:
 	ld xiz, xhl
 	cpw (0x03ef4e:24), 0
 	jr z, DrawTask_FuncDispatch
-	lds wa, 5
-	lds bc, 3
+	ld wa, 5:i3
+	ld bc, 3:i3
 	call TaskSched_ChangePriority
 
 ; DrawTask function dispatch with priority
@@ -18689,15 +18689,15 @@ DrawTask_FuncDispatch:
 	calr DrawFunc_Return
 	cpw (0x03ef4e:24), 0
 	jr z, DrawTask_EventLoop
-	lds wa, 5
-	lds bc, 3
+	ld wa, 5:i3
+	ld bc, 3:i3
 	call TaskSched_ChangePriority
 	jr DrawTask_EventLoop
 
 DrawTask_DequeueLoop:
 	ld wa, (0x030450:24)
 	ld (0x03044e:24), wa
-	lds wa, 1
+	ld wa, 1:i3
 	call Audio_Lock_Acquire
 	jr DrawTask_EventLoop
 
@@ -18705,19 +18705,19 @@ InitDrawTask:
 	jr DrawTask_DequeueLoop_Check
 
 DrawTask_DequeueLoop_Check:
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_WaitForEvent
 	calr DisplayCmd_ScanQueue_Continue
-	lds wa, 3
+	ld wa, 3:i3
 	jp TaskSched_SignalEvent
 
 DrawTask_Dispatch:
 	push xiz
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_WaitForEvent
 	calr DisplayCmd_Execute
 	ld xiz, xhl
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_SignalEvent
 	ld xhl, xiz
 	pop xiz
@@ -18739,17 +18739,17 @@ DisplayCmd_DequeueAndExecute:
 	ld (xsp + 4), xwa
 
 DisplayCmd_ScanQueue:
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_WaitForEvent
 	ld xwa, (xsp + 4)
 	calr DisplayCmd_Execute_Type2
 	ld xiz, xhl
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_SignalEvent
 	or xiz, xiz
 	jr nz, DisplayCmd_ScanQueue_Match
-	lds wa, 5
-	lds bc, 2
+	ld wa, 5:i3
+	ld bc, 2:i3
 	call TaskSched_ChangePriority
 
 DisplayCmd_ScanQueue_Match:
@@ -18843,7 +18843,7 @@ DrawQueue_Alloc_FindSlot:
 DrawQueue_Alloc:
 	push xiz
 	ld iz, wa
-	lds wa, 4
+	ld wa, 4:i3
 	call Audio_Lock_Acquire
 	ld de, iz
 	extz xde
@@ -18868,7 +18868,7 @@ DrawFunc_Prologue:
 
 ; DrawFunc handler with audio lock release
 DrawFunc_CallHandler:
-	lds wa, 4
+	ld wa, 4:i3
 	call Audio_Lock_Release
 	ld xhl, xiz
 	pop xiz
@@ -18890,7 +18890,7 @@ DrawFunc:
 	jr DrawFunc_StackSetup
 
 DrawFunc_CheckStack:
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_WaitForEvent
 	calr DisplayCmd_Return
 	jr DrawFunc_DispatchDone
@@ -18906,7 +18906,7 @@ DrawFunc_DispatchDone:
 	calr DrawQueue_Alloc_Prologue
 	or xhl, xhl
 	jr nz, DrawFunc_Dispatch
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_SignalEvent
 	ldw wa, 0x8
 	calr DrawQueue_Alloc
@@ -18994,15 +18994,15 @@ InitializeGraphics:
 	dec 0,XSP
 	push XIZ
 	calr InitDrawTask
-	lds wa, 5
+	ld wa, 5:i3
 	call Show_ScreenGroup
 	ldw (0x03ef92:24), 0x0001
 	call InitPaletteRGB
-	lds wa, 0
+	ld wa, 0:i3
 	calr ChangeWall
-	lds wa, 2
+	ld wa, 2:i3
 	calr ChangePalette
-	lds wa, 0
+	ld wa, 0:i3
 	calr ChangeWallPalette
 	lda xwa, (0x043c00:24)
 	ld XIZ,XWA
@@ -19031,7 +19031,7 @@ LcdOn:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp hl, 0:i3
 	jr nz, InitGraphics_SetupVRAM_Loop
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (InitGraphics_SetupVRAM:24)
@@ -19050,7 +19050,7 @@ LcdOff:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp hl, 0:i3
 	jr nz, LcdOn_Return
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (LcdOn_Done:24)
@@ -19117,7 +19117,7 @@ UpdateScreen:
 	ret
 
 UpdateScreen_Prologue:
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (UpdateScreen_CheckDirty:24)
@@ -19154,7 +19154,7 @@ Gfx_BlitDirty_Prologue:
 	calr LcdOn_Return
 	lda xwa, (xsp + 6)
 	ld (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 Gfx_BlitDirty_ScanLoop:
 	ld wa, iz
@@ -19251,8 +19251,8 @@ SetChangeRect:
 	ld xiz, xwa
 	cpw (0x03ef4e:24), 0
 	jr z, SetChangeRect_ClampLeft
-	lds wa, 5
-	lds bc, 3
+	ld wa, 5:i3
+	ld bc, 3:i3
 	call TaskSched_ChangePriority
 
 SetChangeRect_ClampLeft:
@@ -19324,7 +19324,7 @@ ReadPixel:
 	jr SetChangeRect_Return
 
 SetChangeRect_Done:
-	lds hl, 0
+	ld hl, 0:i3
 
 SetChangeRect_Return:
 	pop xiz

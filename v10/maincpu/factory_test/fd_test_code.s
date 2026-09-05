@@ -83,7 +83,7 @@ FDTest_AllocBuffer:
 
 FDTest_FillBuffer:
 	ld xwa, (xsp + 4)
-	lds bc, 0
+	ld bc, 0:i3
 	cp bc, 0x400
 	jr nc, FDTest_OpenForWrite
 
@@ -190,8 +190,8 @@ FDTest_VerifyData:
 	call FileClose
 	inc 4, xsp
 	ld xwa, (xsp + 4)
-	lds iz, 0
-	lds bc, 0
+	ld iz, 0:i3
+	ld bc, 0:i3
 	cp bc, 0x400
 	jr nc, FDTest_CompareResult
 
@@ -226,7 +226,7 @@ FDTest_Pass:
 	inc 4, xsp
 	lda xwa, (FDTest_String_TestTitleFunc_0x1D8:24)
 	calr FDTest_PrintDiag
-	lds hl, 0
+	ld hl, 0:i3
 
 FDTest_Return:
 	pop xiz
@@ -244,7 +244,7 @@ FDTest_Return:
 FDListDirectory:
 	lda xsp, (xsp - 266)
 	push xiz
-	lds wa, 0
+	ld wa, 0:i3
 	lda xwa, (FDTest_String_TestTitleFunc_0x1DC:24)
 	lda xbc, (xsp + 4)
 	call _findfirst
@@ -276,7 +276,7 @@ FDListDir_NextEntry:
 FDListDir_CloseDir:
 	ld xwa, xiz
 	call _findclose
-	lds hl, 0
+	ld hl, 0:i3
 
 FDListDir_Return:
 	pop xiz

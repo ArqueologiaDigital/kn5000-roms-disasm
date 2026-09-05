@@ -1025,7 +1025,7 @@ DrawBox_DeferredPath:
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
@@ -1172,7 +1172,7 @@ DrawFrame_DeferredPath:
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
@@ -1811,7 +1811,7 @@ MovePixels_DeferredPath:
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xbc, (xsp + 4)
 	ld xiy, xbc
@@ -1852,7 +1852,7 @@ MovePixels_Impl:
 	jr lt, MovePixels_Impl_SetChangeRect
 
 MovePixels_Impl_RowLoop:
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xsp + 4), 0x0
 	jr lt, MovePixels_Impl_RowAdvance
 
@@ -1939,9 +1939,9 @@ DrawWall_DirectPath:
 	jr z, DrawWall_SetCopyFlag
 
 DrawWall_WaitVblankBefore:
-	lds wa, 1
+	ld wa, 1:i3
 	call Audio_Lock_Release
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
 	cpw (0x03044e:24), 0
 	jr nz, DrawWall_WaitVblankBefore
@@ -1952,15 +1952,15 @@ DrawWall_SetCopyFlag:
 	jr nz, DrawWall_Deferred
 
 DrawWall_WaitVblankAfter:
-	lds wa, 1
+	ld wa, 1:i3
 	call Audio_Lock_Release
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskSched_YieldToQueue
 	cpw (0x03044e:24), 0
 	jr z, DrawWall_WaitVblankAfter
 
 DrawWall_Deferred:
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (DrawWall_Deferred_0x11:24)
@@ -2146,7 +2146,7 @@ DrawBitmap_Impl_RowLoop:
 	ld xde, xiz
 	add xde, xwa
 	ld (xsp + 6), xde
-	lds iy, 0
+	ld iy, 0:i3
 	jr DrawBitmap_Impl_ColLoop
 
 DrawBitmap_Impl_PixelPair:
@@ -2494,14 +2494,14 @@ DrawIcons_Impl:
 	add xwa, xbc
 	ld xhl, 0x43c00
 	add xhl, xwa
-	lds de, 0
+	ld de, 0:i3
 
 DrawIcons_Impl_RowLoop:
 	ld xwa, (xsp + 16)
 	cpw (xwa), 0xf0
 	jr ge, DrawIcons_Impl_BuildDirtyRect
 	ld xiz, xhl
-	lds iy, 0
+	ld iy, 0:i3
 
 DrawIcons_Impl_ColLoop:
 	stb_dpi D, 0xf9
@@ -2621,7 +2621,7 @@ DrawFrameSP_Impl_RowLoop:
 	ld (xwa), hl
 	cp hl, 0xf0
 	jrl ge, DrawFrameSP_Impl_BuildDirtyRect
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xbc), 0x0
 	jr le, DrawFrameSP_Impl_OddWidthPad
 
@@ -2807,7 +2807,7 @@ DrawBitmapSP_Impl_RowLoop:
 	lda xhl, (0x043c00:24)
 	ld xiy, xhl
 	add xiy, xwa
-	lds ix, 0
+	ld ix, 0:i3
 	jrl DrawBitmapSP_Impl_ColLoop
 
 DrawBitmapSP_Impl_PixelPair:
@@ -3123,7 +3123,7 @@ DrawBitmapSP2_Impl:
 	calr IsPointOnScreen
 	cp hl, 0:i3
 	jrl z, DrawBitmapSP2_Impl_Return
-	lds hl, 0
+	ld hl, 0:i3
 	ld bc, (xsp + 32)
 	ld de, bc
 	cp de, 0:i3
@@ -3156,7 +3156,7 @@ DrawBitmapSP2_Impl_RowLoop:
 	ldb w, 0x0
 	sll wa, 8
 	add iy, wa
-	lds iz, 0
+	ld iz, 0:i3
 	jr DrawBitmapSP2_Impl_MaskWordCheck
 
 DrawBitmapSP2_Impl_LoadMaskWord:
@@ -3586,7 +3586,7 @@ DrawBitmapFile_Impl_BuildDirtyRect:
 	add bc, (xsp + 42)
 	ld (xwa + 6), bc
 	calr SetChangeRect
-	lds wa, 3
+	ld wa, 3:i3
 	calr ChangePalette_Impl
 
 DrawBitmapFile_Impl_Return:
@@ -3950,7 +3950,7 @@ DrawString_Impl_RowLoop:
 	ld xix, (xsp + 28)
 	cp iy, (xwa + 6)
 	jr gt, DrawString_Impl_ColumnAdvance
-	lds iy, 0
+	ld iy, 0:i3
 	cp bc, 0:i3
 	jr ule, DrawString_Impl_RowAdvance
 
@@ -3965,9 +3965,9 @@ DrawString_Impl_PixelLoop:
 	ld wa, (xhl)
 	cp wa, (xiz + 4)
 	jr gt, DrawString_Impl_RowAdvance
-	lds wa, 7
+	ld wa, 7:i3
 	sub wa, iy
-	lds iz, 1
+	ld iz, 1:i3
 	and a, 0xf
 	jr z, DrawString_Impl_TestBit
 	slaa iz

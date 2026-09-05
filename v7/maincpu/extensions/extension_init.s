@@ -118,7 +118,7 @@ InitializeToshi:
 	ldw (XBC+0x08), 0x003f
 	lda xwa, (0xed77ce:24)
 	ld (XBC+0x0a),XWA
-	lds wa, 1
+	ld wa, 1:i3
 	call RegisterObjectTable
 	lda XBC, (XSP)
 	ld XWA,0x0160000f

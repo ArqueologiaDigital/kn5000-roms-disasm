@@ -44,7 +44,7 @@ ToneGen_StoreBlockAndLink:
 	ld (xhl + 1), wa
 	ldw (xhl + 3), 0xffff
 	ld (3308:16), ix
-	lds ix, 5
+	ld ix, 5:i3
 
 ToneGen_DispatchReturn:
 	ret
@@ -986,10 +986,10 @@ SMF_SetupActiveChannel:
 	ldw (9830:16), 5
 	ld xiy, SMF_HeaderConstants_0x4
 	ld xix, 0x13fa
-	lds bc, 7
+	ld bc, 7:i3
 	ldirw
 	ld xiy, SMF_HeaderConstants_0x12
-	lds bc, 4
+	ld bc, 4:i3
 	ldir85
 	xor wa, wa
 	ld (4002:16), wa
@@ -1002,7 +1002,7 @@ SMF_SetupActiveChannel:
 	ld (4376:16), xix
 	ld xix, (4376:16)
 	ld xiy, SMF_HeaderConstants
-	lds bc, 4
+	ld bc, 4:i3
 	ldir85
 	ld xiy, 0xf280
 	ldw bc, 0x10
@@ -3252,14 +3252,14 @@ FileRead:
 
 SeqStep_FileReadSetup:
 	ldw (0x01e53c:24), 0x0011
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SeqStep_FileReadCheck:
 	bitm 0, (xbc + 4)
 	jr nz, SeqStep_FileReadProcess
 	ldw (0x01e53c:24), 0x000d
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SeqStep_FileReadProcess:
@@ -3289,14 +3289,14 @@ FileWrite:
 
 SeqStep_FileReadAdvance:
 	ldw (0x01e53c:24), 0x0011
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SeqStep_FileReadLoop:
 	bitm 1, (xbc + 4)
 	jr nz, SeqStep_FileReadDone
 	ldw (0x01e53c:24), 0x000d
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SeqStep_FileReadDone:
@@ -3471,7 +3471,7 @@ SeqStep_ByteBlockF002:
 	nop
 	ldw	hl, 0xffff
 	ret
-	lds	hl, 0
+	ld	hl, 0:i3
 	ld	xwa, (xsp+4)
 	cp_spib_im 224, 0
 	jr	z, 8
@@ -3574,7 +3574,7 @@ SeqStep_FileCloseDone:
 	jr SeqStep_FileCloseFinal
 
 SeqStep_FileCloseComplete:
-	lds hl, 0
+	ld hl, 0:i3
 
 SeqStep_FileCloseFinal:
 	pop xiz
@@ -3585,7 +3585,7 @@ SeqStep_FileCloseExit:
 	dec	4, xsp
 	push	xiz
 	ld	xbc, (xsp+12)
-	lds	iz, 0
+	ld	iz, 0:i3
 	or	xbc, xbc
 	jr	z, 42
 	.byte 0x89, 0x04
@@ -3678,7 +3678,7 @@ SeqStep_FreeMemory:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 SeqStep_MallocWrapper:
 	ld	xwa, (xsp+6)
@@ -3782,7 +3782,7 @@ SeqStep_ByteBlockF245:
 	ld	xbc, (xsp+8)
 	ld	xwa, (xde+22)
 	ld	(xbc), xwa
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ldw	(0x1e53c:24), 18
 	ldw	hl, 18
@@ -4439,7 +4439,7 @@ SeqStep_FileBufferInit:
 SeqStep_FileBufferCheck:
 	cpw (xiz + 20), 0x0
 	jr nz, SeqStep_FileBufferDone
-	lds hl, 0
+	ld hl, 0:i3
 	jr SeqStep_FileBufferExit
 
 SeqStep_FileBufferDone:
@@ -5125,7 +5125,7 @@ SeqByteBlock_EffectsSeqEntry:
 	.byte 0xe8
 SeqByteBlock_MedleyPlaybackB:
 	add	(xbc-90), xwa
-	lds	de, 0
+	ld	de, 0:i3
 	cp	de, 11
 	jr	ge, 80
 	ld	xwa, (xiz)
@@ -5137,7 +5137,7 @@ SeqByteBlock_MedleyPlaybackB:
 	ld	xwa, (xiz)
 	cp	(xwa), 92
 	jr	nz, 4
-	lds	hl, 1
+	ld	hl, 1:i3
 SeqByteBlock_EffectsSeqDotExt:
 	jr	55
 	ld	xwa, (xiz)
@@ -5150,7 +5150,7 @@ SeqByteBlock_EffectsSeqDotExt:
 	ld	xwa, (xsp+8)
 	cp	(xwa), 46
 	jr	z, 8
-	lds	de, 7
+	ld	de, 7:i3
 	lds32	xwa, 1
 	add	(xiz), xwa
 	jr	16
@@ -5596,7 +5596,7 @@ SeqByteBlock_ChannelContainer:
 	nop
 	push	sr
 	jr	z, 5
-	lds	hl, 1
+	ld	hl, 1:i3
 	jrl	141
 	ld	xwa, (xsp+14)
 	ld	xbc, (xsp+6)
@@ -5661,7 +5661,7 @@ SeqByteBlock_ChannelContainer:
 	ld	(xbc+4), a
 	ld	xwa, (xsp+2)
 	incm8	1, (xwa+3)
-	lds	hl, 0
+	ld	hl, 0:i3
 	popw	iz
 	inc	8, xsp
 	ret
@@ -5698,7 +5698,7 @@ SeqByteBlock_ChannelContainer:
 	sub	xwa, xbc
 	ld	xbc, (xsp+26)
 	ld	(xbc), wa
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	363
 	ld	xwa, (xsp+16)
 	ld	xbc, (xwa+22)
@@ -5863,7 +5863,7 @@ SeqByteBlock_ChannelContainer:
 	sub	xhl, xwa
 	ld	xwa, (xsp+26)
 	ld	(xwa), hl
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -5911,7 +5911,7 @@ SeqByteBlock_ChannelContainer:
 	nop
 	nop
 	jr	nz, 5
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	372
 	ld	xwa, (xiz+30)
 	ld	(xsp+6), xwa
@@ -5957,7 +5957,7 @@ SeqByteBlock_ChannelContainer:
 	exts	wa
 	ld	(124220:24), wa
 	ld	(xiz+6), wa
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	269
 	ld	xwa, (xiz+34)
 	or	xwa, xwa
@@ -6054,7 +6054,7 @@ SeqByteBlock_ChannelContainer:
 	nop
 	nop
 	jr	z, 4
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	11
 	ld	bc, (xsp+4)
 	ld	xwa, (xsp+6)
@@ -6304,7 +6304,7 @@ SeqByteBlock_ChannelContainer:
 	nop
 	jr	z, 7
 	ldw	(xsp+18), 0
-	lds	iz, 1
+	ld	iz, 1:i3
 	ld	xwa, (xsp+10)
 	lds32	xde, 1
 	add	(xwa+22), xde
@@ -6567,7 +6567,7 @@ SeqChan_InitChannelState:
 	nop
 	jr	z, 95
 	ldw	(xsp+20), 0
-	lds	iz, 1
+	ld	iz, 1:i3
 	jr	86
 	ld	xwa, (xsp+16)
 	.byte 0x80	; v10 does not spell this byte either
@@ -6607,7 +6607,7 @@ SeqChan_InitChannelState:
 	nop
 	jr	z, 7
 	ldw	(xsp+20), 0
-	lds	iz, 1
+	ld	iz, 1:i3
 	ld	xwa, (xsp+12)
 	lds32	xbc, 1
 	add	(xwa+22), xbc
@@ -6687,7 +6687,7 @@ SeqChan_ValidateAndDispatch:
 	push	xsp
 	nop
 	jr	nz, 4
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	31
 	.byte 0xbe
 	pop	sr
@@ -6922,7 +6922,7 @@ SeqChan_WriteExtendedPatch:
 	.byte 0xbf, 0xb9
 	pop	sr
 	.byte 0xbf
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	25
 	push	xiz
 	calr	61237
@@ -6941,7 +6941,7 @@ SeqStep_CountValidSectors:
 	push xiz
 	ldiw_erp 0xfa, 0
 	ldw (0x01e53c:24), 0x0000
-	lds iz, 0
+	ld iz, 0:i3
 	jr SeqStep_CountLoop_Compare
 
 SeqStep_CountLoop_Body:
@@ -7050,7 +7050,7 @@ SeqStep_SectorCompareBlock:
 	dec	8, wa
 	cp	hl, wa
 	jr	ule, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	cp	hl, 0:i3
 	jr	z, 8
@@ -7099,10 +7099,10 @@ SeqStep_ParseHeaderContinue:
 	ret
 
 SeqChan_ByteBlockA:
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 SeqChan_ByteBlockB:
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 SeqChan_ByteBlockC:
 	push	xiz
@@ -7111,7 +7111,7 @@ SeqChan_ByteBlockC:
 	cp	hl, 0:i3
 	jr	z, 9
 	call	16063021
-	lds	hl, 6
+	ld	hl, 6:i3
 	jrl	136
 	call	16063045
 	cp	l, 2:i3
@@ -7136,7 +7136,7 @@ SeqChan_ByteBlockC:
 	cp	hl, 0:i3
 	jr	nz, 8
 	ld	(xiz+16), 2
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	52
 	pushw 512
 	pushw 228
@@ -7144,7 +7144,7 @@ SeqChan_ByteBlockC:
 	push	xiz
 	call	16713148
 	lda	xsp, (xsp+10)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	31
 	push	xiz
 	.byte 0x9f, 0x16, 0x04, 0x9f, 0x16, 0x04, 0x9f, 0x14, 0x04, 0x9f, 0x18, 0x04
@@ -7187,7 +7187,7 @@ SeqChan_ByteBlockD:
 	nop
 	cpw	(xbc), 0
 	jr	nz, 5
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	220
 	incw	1, (0x2271e:24)
 	ld	wa, (xbc)
@@ -7204,7 +7204,7 @@ SeqChan_ByteBlockD:
 	cp	wa, 47
 	jr	nz, 125
 	ldw (xbc), 31
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	170
 	ld	xwa, (xiz)
 	.byte 0xb8
@@ -7266,7 +7266,7 @@ SeqChan_ByteBlockD:
 	jr	z, 5
 	ld	(xiz+20), hl
 	jr	42
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	54
 	ld	xwa, (xiz)
 	.byte 0xb8
@@ -7295,7 +7295,7 @@ SeqChan_ByteBlockD:
 	normal
 	nop
 	jr	lt, 4
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	3
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -7578,7 +7578,7 @@ FDC_ReturnZeroLong:
 	ldw	(xwa), 0
 	ret
 FDC_ReturnAndPop:
-	lds	hl, 1
+	ld	hl, 1:i3
 	ret
 
 FDC_StoreDiskType:
@@ -7609,7 +7609,7 @@ format_FD:
 	jr FDC_Format2DD_Start
 
 FDC_Format_InvalidType:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ; ============================================================================
@@ -7656,7 +7656,7 @@ FDC_SectorLen_0x24:
 FDC_Format2DD_Start:
 	lda xsp, (xsp - 20)
 	pushw_erp 0xfa
-	lds wa, 0
+	ld wa, 0:i3
 	calr FDC_SetSectorLength
 	lda xwa, (Display_FontPalette_Table_0x21E:24)
 	push xwa
@@ -7668,7 +7668,7 @@ FDC_Format2DD_Start:
 	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
-	lds hl, 0
+	ld hl, 0:i3
 	jrl FDC_CmdFrame_Epilogue
 
 FDC_Format2DD_Step2:
@@ -7682,7 +7682,7 @@ FDC_Format2DD_Step2:
 	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
-	lds hl, 0
+	ld hl, 0:i3
 	jrl FDC_CmdFrame_Epilogue
 
 FDC_Format2DD_AllocBuf:
@@ -7693,7 +7693,7 @@ FDC_Format2DD_AllocBuf:
 	ld	xwa, xhl
 	or	xwa, xwa
 	jr	nz, 5
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	891
 FDC_Format2DD_WriteBoot:
 	pushw	512
@@ -7729,7 +7729,7 @@ FDC_Format2DD_WriteBoot:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	782	; -> 0xF51E86
 FDC_Format2DD_WriteFAT1:
 	pushw	512
@@ -7765,7 +7765,7 @@ FDC_Format2DD_WriteFAT1:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	673	; -> 0xF51E86
 FDC_Format2DD_WriteFAT2:
 	pushw	512
@@ -7788,7 +7788,7 @@ FDC_Format2DD_WriteFAT2:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	612	; -> 0xF51E86
 FDC_Format2DD_WriteRoot:
 	pushw	512
@@ -7811,7 +7811,7 @@ FDC_Format2DD_WriteRoot:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	551	; -> 0xF51E86
 FDC_Format2DD_WriteDataSec1:
 	pushw	512
@@ -7847,7 +7847,7 @@ FDC_Format2DD_WriteDataSec1:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	442	; -> 0xF51E86
 FDC_Format2DD_WriteDataSec2:
 	pushw	512
@@ -7870,7 +7870,7 @@ FDC_Format2DD_WriteDataSec2:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	381	; -> 0xF51E86
 FDC_Format2DD_WriteDataSec3:
 	pushw	512
@@ -7893,7 +7893,7 @@ FDC_Format2DD_WriteDataSec3:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	320	; -> 0xF51E86
 FDC_Format2DD_InitTrackLoop:
 	pushw	512
@@ -7926,7 +7926,7 @@ FDC_Format2DD_TrackBody:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	225	; -> 0xF51E86
 FDC_Format2DD_TrackInc:
 	incw 1, (xsp + 14)
@@ -7953,7 +7953,7 @@ FDC_Format2DD_Side1Body:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	162	; -> 0xF51E86
 FDC_Format2DD_Side1Inc:
 	incw 1, (xsp + 14)
@@ -7989,13 +7989,13 @@ FDC_Format2DD_FinalTrack:
 	inc	8, xsp
 	cpib_erp	251, 0
 	jr	nz, 4	; -> 0xF51E7C
-	lds	hl, 1
+	ld	hl, 1:i3
 	jr	10	; -> 0xF51E86
 FDC_Format2DD_SetSectorAndRet:
 	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
-	lds hl, 0
+	ld hl, 0:i3
 
 FDC_CmdFrame_Epilogue:
 	popw_erp 0xfa
@@ -8005,7 +8005,7 @@ FDC_CmdFrame_Epilogue:
 FDC_Format2HD_Start:
 	lda xsp, (xsp - 20)
 	pushw_erp 0xfa
-	lds wa, 0
+	ld wa, 0:i3
 	calr FDC_SetSectorLength
 	lda xwa, (Display_FontPalette_Table_0x23E:24)
 	push xwa
@@ -8017,7 +8017,7 @@ FDC_Format2HD_Start:
 	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
-	lds hl, 0
+	ld hl, 0:i3
 	jrl FdcOp_Epilogue20
 
 FDC_Format2HD_Step2:
@@ -8031,7 +8031,7 @@ FDC_Format2HD_Step2:
 	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
-	lds hl, 0
+	ld hl, 0:i3
 	jrl FdcOp_Epilogue20
 
 FDC_Format2HD_AllocBuf:
@@ -8042,7 +8042,7 @@ FDC_Format2HD_AllocBuf:
 	ld	xwa, xhl
 	or	xwa, xwa
 	jr	nz, 5
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	752
 FDC_Format2HD_WriteBoot:
 	pushw	512
@@ -8078,7 +8078,7 @@ FDC_Format2HD_WriteBoot:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	643	; -> 0xF521E1
 FDC_Format2HD_WriteFAT1:
 	pushw	512
@@ -8114,7 +8114,7 @@ FDC_Format2HD_WriteFAT1:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	534	; -> 0xF521E1
 FDC_Format2HD_InitTrackLoop:
 	pushw	512
@@ -8140,7 +8140,7 @@ FDC_Format2HD_TrackBody:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	470	; -> 0xF521E1
 FDC_Format2HD_TrackInc:
 	incw 1, (xsp + 14)
@@ -8185,7 +8185,7 @@ FDC_Format2HD_Side2Body:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	287	; -> 0xF521E1
 FDC_Format2HD_Side2Inc:
 	incw 1, (xsp + 14)
@@ -8223,7 +8223,7 @@ FDC_Format2HD_Side1Body:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds	hl, 0
+	ld	hl, 0:i3
 	jrl	162	; -> 0xF521E1
 FDC_Format2HD_Side1Inc:
 	incw 1, (xsp + 14)
@@ -8259,13 +8259,13 @@ FDC_Format2HD_FinalTrack:
 	inc	8, xsp
 	cpib_erp	251, 0
 	jr	nz, 4	; -> 0xF521D7
-	lds	hl, 1
+	ld	hl, 1:i3
 	jr	10	; -> 0xF521E1
 FDC_Format2HD_SetSectorAndRet:
 	stb_erp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
-	lds hl, 0
+	ld hl, 0:i3
 
 FdcOp_Epilogue20:
 	popw_erp 0xfa
@@ -8453,7 +8453,7 @@ GetDiskFreeSpace:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GetDiskFreeSpace_JumpTable:
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	72
 	ld	xwa, 0xb2400
 	ld	(xiz), xwa
@@ -8474,7 +8474,7 @@ FileIO_ReadFreeSpaceViaFAT:
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, GetDiskFreeSpace_ReadFAT
-	lds hl, 0
+	ld hl, 0:i3
 	jr GetDiskFreeSpace_Epilogue
 
 GetDiskFreeSpace_ReadFAT:
@@ -8485,7 +8485,7 @@ GetDiskFreeSpace_ReadFAT:
 	push xiz
 	call FileClose
 	inc 8, xsp
-	lds hl, 1
+	ld hl, 1:i3
 
 GetDiskFreeSpace_Epilogue:
 	pop xiz
@@ -8591,7 +8591,7 @@ FileIO_CheckPathAndVolumeLabel:
 	calr GetVolumeLabel
 	or xhl, xhl
 	jr z, PathInfo_BuildAndOpen
-	lds hl, 0
+	ld hl, 0:i3
 	jr PathInfo_RetVal
 
 PathInfo_BuildAndOpen:
@@ -8614,7 +8614,7 @@ PathInfo_BuildAndOpen:
 	add	xsp, 24
 	or	xhl, xhl
 	jr	nz, 4
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	31
 PathInfo_CheckAttrib:
 	ld (xhl + 64), 0x28
@@ -8626,11 +8626,11 @@ PathInfo_CheckAttrib:
 	and a, 0x8
 	cp a, 0x8
 	jr z, PathInfo_FoundSubdir
-	lds hl, 0
+	ld hl, 0:i3
 	jr PathInfo_RetVal
 
 PathInfo_FoundSubdir:
-	lds hl, 1
+	ld hl, 1:i3
 
 PathInfo_RetVal:
 	pop xiz
@@ -8642,7 +8642,7 @@ FileIO_ParsePathComponents:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 18), xwa
-	lds de, 0
+	ld de, 0:i3
 	ld xwa, (xsp + 18)
 	ld (xwa), 0x0
 	ld xhl, (xiz)
@@ -8661,7 +8661,7 @@ FileIO_ParseLoop_AppendSlash:
 	push	xwa
 	call	16713188
 	inc	8, xsp
-	lds	de, 0
+	ld	de, 0:i3
 	ld	xwa, (xiz)
 	inc	1, xwa
 	ld	xhl, xwa
@@ -8674,7 +8674,7 @@ FileIO_ParseLoop_Test:
 	cp (xwa), 0x0
 	jr nz, FileIO_ParseLoop_CheckChar
 	ld (xiz), xhl
-	lds hl, 0
+	ld hl, 0:i3
 	jr FileIO_ParsePath_Return
 
 FileIO_ParseLoop_CopyChar:
@@ -8841,7 +8841,7 @@ FindClose_FreeResources:
 	push	xwa
 	call	16712469
 	lda	xsp, (xsp+12)
-	lds	hl, 0
+	ld	hl, 0:i3
 FindClose_Return:
 	pop xiz
 	ret
@@ -8916,10 +8916,10 @@ FileIO_MatchWildcard:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 16), xwa
-	lds wa, 0
+	ld wa, 0:i3
 	cp (xiz), 0x0
 	jr nz, WildMatch_InitBuffer
-	lds hl, 0
+	ld hl, 0:i3
 	jrl WildMatch_Return
 
 WildMatch_InitBuffer:
@@ -8944,7 +8944,7 @@ WildMatch_CheckEnd:
 	jr nz, WildMatch_ScanLoop
 
 WildMatch_FillName:
-	lds bc, 0
+	ld bc, 0:i3
 	cp bc, 0x8
 	jr ge, WildMatch_FillExt
 
@@ -8992,7 +8992,7 @@ WildMatch_ExtNext:
 	jr lt, WildMatch_ExtLoop
 
 WildMatch_Compare:
-	lds hl, 1
+	ld hl, 1:i3
 	ld xde, (xsp + 16)
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
@@ -9005,7 +9005,7 @@ WildMatch_CompareLoop:
 	ld a, (xbc)
 	cp a, (xde)
 	jr z, WildMatch_CompareAdvance
-	lds hl, 0
+	ld hl, 0:i3
 	jr WildMatch_Return
 
 WildMatch_CompareAdvance:
@@ -9052,7 +9052,7 @@ FileIO_ValidateHandle:
 	ret
 
 FileIO_ValidateHandle_Ok:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 FileIO_ReadNextDirEntry:
@@ -9103,13 +9103,13 @@ SndTable_ByteBlock_ReadOps:
 	lda	xsp, (xsp+12)
 	cp	hl, 0:i3
 	jr	lt, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ld	xwa, (0x2357a:24)
 	ld	wa, (xwa+6)
 	and	wa, 0x7fff
 	jr	nz, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ldw	hl, 0xffff
 	ret
@@ -9138,12 +9138,12 @@ SndTable_ByteBlock_ReadOps:
 	nop
 	nop
 	ld	xbc, (0x3e3ee:24)
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	TaskMsg_Send
 	ld	xwa, (0x3e3ee:24)
 	lda	xwa, (xwa+1028)
 	ld	xbc, xwa
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	TaskMsg_Send
 	.byte 0xbf, 0x04
 	push	sr
@@ -9153,7 +9153,7 @@ SndTable_ByteBlock_ReadOps:
 	extz	xwa
 	cp xwa, (141102:24)
 	jrl	ugt, 134
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	TaskMsg_Receive
 	ld	xiz, xhl
 	.byte 0x9e
@@ -9165,7 +9165,7 @@ SndTable_ByteBlock_ReadOps:
 	ldw (xiz+2), 65534
 	ld	xwa, xiz
 	ld	xbc, xwa
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	TaskMsg_Send
 	jr	102
 	lda	xwa, (xiz+4)
@@ -9176,7 +9176,7 @@ SndTable_ByteBlock_ReadOps:
 	ldw (xiz+2), 65534
 	ld	xwa, xiz
 	ld	xbc, xwa
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	TaskMsg_Send
 	jr	71
 	.byte 0xb6
@@ -9197,7 +9197,7 @@ SndTable_ByteBlock_ReadOps:
 	ldw (xiz+2), 0
 	ld	xwa, xiz
 	ld	xbc, xwa
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	TaskMsg_Send
 	.byte 0x9f, 0x04
 	push	xwa
@@ -9228,7 +9228,7 @@ TaskBuf_ReadNextByte:
 	jrl nz, TaskBuf_Error
 	cpw (0x23580:24), 0
 	jr nz, TaskBuf_CheckPendingData
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskMsg_Receive
 	ld (0x023582:24), xhl
 	ld wa, (xhl)
@@ -9271,7 +9271,7 @@ TaskBuf_ReadAndDecrement:
 
 TaskBuf_SendBufferFull:
 	ld xbc, (0x023582:24)
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsg_Send
 
 TaskBuf_ReturnByte:
@@ -9286,13 +9286,13 @@ TaskBuf_PopIzRet:
 	ret
 
 FDC_DrainQueuesAndReset:
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsg_TryReceive
 	or xhl, xhl
 	jr z, FDC_DrainQueue2_Done
 
 FDC_DrainQueue2_Loop:
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsg_TryReceive
 	or xhl, xhl
 	jr nz, FDC_DrainQueue2_Loop
@@ -9301,7 +9301,7 @@ FDC_DrainQueue2_Done:
 	ld xwa, (0x023582:24)
 	ldw (xwa + 2), 0xffff
 	ld xbc, (0x023582:24)
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsg_Send
 	cp (0x02357e:24), 0x00
 	jr z, FDC_DrainQueue3_Start
@@ -9312,25 +9312,25 @@ FDC_WaitQueueEmpty_Loop:
 
 FDC_DrainQueue3_Start:
 	ld (0x02358a:24), 0x02
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskMsg_TryReceive
 	or xhl, xhl
 	jr z, FDC_DrainQueue2B_Start
 
 FDC_DrainQueue3_Loop:
-	lds wa, 3
+	ld wa, 3:i3
 	call TaskMsg_TryReceive
 	or xhl, xhl
 	jr nz, FDC_DrainQueue3_Loop
 
 FDC_DrainQueue2B_Start:
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsg_TryReceive
 	or xhl, xhl
 	jr z, FDC_DrainCloseFile
 
 FDC_DrainQueue2B_Loop:
-	lds wa, 2
+	ld wa, 2:i3
 	call TaskMsg_TryReceive
 	or xhl, xhl
 	jr nz, FDC_DrainQueue2B_Loop
@@ -9367,9 +9367,9 @@ SndTable_LookupA_GotFile:
 	ld xwa, (0x02357a:24)
 	ld xwa, (xwa + 71)
 	ld (0x03e3e8:24), xwa
-	lds wa, 2
+	ld wa, 2:i3
 	call Show_ScreenGroup
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SndTable_CalcSectorPosition:
@@ -9461,7 +9461,7 @@ SndTable_LookupD_CalcAddr:
 	extz xwa
 	sll xwa, 9
 	ld (0x03e3e8:24), xwa
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SndTable_LookupD:
@@ -9479,9 +9479,9 @@ SndTable_LookupD:
 	ret
 
 SndTable_LookupD_ShowScreen:
-	lds wa, 2
+	ld wa, 2:i3
 	call Show_ScreenGroup
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 FDC_DetectDiskFormat:
@@ -9494,15 +9494,15 @@ FDC_DetectDiskFormat:
 	jr z, FDC_DetectFormat_ReturnOneB
 	cp hl, 0xfc
 	jr nz, FDC_DetectFormat_ReturnOne
-	lds hl, 2
+	ld hl, 2:i3
 	ret
 
 FDC_DetectFormat_ReturnOne:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 FDC_DetectFormat_ReturnOneB:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 FDC_DetectFormat_ReadSector:
@@ -9522,19 +9522,19 @@ FDC_DetectFormat_ReadSector:
 	jr nz, FDC_DetectSector_Return1B
 
 FDC_DetectSector_Return1:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 FDC_DetectSector_Return2:
-	lds hl, 2
+	ld hl, 2:i3
 	ret
 
 FDC_DetectSector_Return3:
-	lds hl, 3
+	ld hl, 3:i3
 	ret
 
 FDC_DetectSector_Return1B:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 FDC_DetectSector_CheckPianoDisc:
@@ -9547,10 +9547,10 @@ FDC_DetectSector_CheckPianoDisc:
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 FDC_DetectSector_ReturnPD3:
-	lds hl, 3
+	ld hl, 3:i3
 	ret
 
 FDC_ResetHeadCommand:
@@ -9576,7 +9576,7 @@ FDC_RecalibrateCommand:
 
 FileIO_ReadAllDirEntries:
 	push xiz
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 7:i3
 	jr ge, FileIO_ReadDir_CopyEntries
 
@@ -9606,7 +9606,7 @@ FileIO_ReadDir_NextSector:
 	jr lt, FileIO_ReadDir_SectorLoop
 
 FileIO_ReadDir_CopyEntries:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0x50
 	jr ge, FileIO_FillRemainingEntries
 

@@ -95,7 +95,7 @@ PcgOutGridBoxEventDispatch:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl PcgOutGridDialConfirm
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -149,7 +149,7 @@ PcgOutGrid_CheckAltPrev:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl PcgOutGridDialConfirm
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -205,7 +205,7 @@ PcgOutGrid_CheckAltNext:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 PcgOutGridDialConfirm:
 	call SetDialEnable
@@ -269,11 +269,11 @@ PcgOutGridCheck:
 	ld (xsp + 44), xbc
 	ld xiy, UserMemory_FormatStrings_0x16
 	lda xix, (xsp + 12)
-	lds bc, 5
+	ld bc, 5:i3
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xix, (xsp + 44)
 	lda xiy, (xsp + 12)

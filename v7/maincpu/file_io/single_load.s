@@ -176,7 +176,7 @@ SLSrcBankList_FuncBody:
 	.byte 0x8f, 0x04, 0x51
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-14983
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -241,7 +241,7 @@ SLSrcBankList_FuncBody:
 	ld	a, w
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-15180
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -495,7 +495,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
-	lds	wa, 0
+	ld	wa, 0:i3
 	call	16293390
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -553,7 +553,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
-	lds	de, 1
+	ld	de, 1:i3
 	calr	-1950
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -885,7 +885,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	.byte 0x87, 0x53
 	extz	bc
-	lds	de, 1
+	ld	de, 1:i3
 	calr	-2853
 	lda	xde, (35015:16)
 	ld	xwa, (xsp+2)
@@ -947,7 +947,7 @@ SLSrcBankList_FuncBody:
 	inc	1, c
 	extz	bc
 	ld	wa, bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-17429
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -958,7 +958,7 @@ SLSrcBankList_FuncBody:
 	ld	a, b
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-17453
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1257,7 +1257,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+2), xwa
 	cp	xbc, 29360139
 	jr	nz, 72
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	de, iz
 	mul	de, 21
 	lda	xbc, (34994:16)
@@ -1266,7 +1266,7 @@ SLSrcBankList_FuncBody:
 	add	xhl, xbc
 	stb_erp	a, 248
 	ld	(xhl), a
-	lds	wa, 1
+	ld	wa, 1:i3
 	add	wa, de
 	extz	xwa
 	add	xwa, xbc
@@ -1462,7 +1462,7 @@ SLDstBankList_FuncBody:
 	.byte 0x8f, 0x04, 0x51
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-19011
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1475,7 +1475,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
-	lds	de, 1
+	ld	de, 1:i3
 	calr	-4886
 	lda	xwa, (35100:16)
 	ldw	bc, 16
@@ -1530,7 +1530,7 @@ SLDstBankList_FuncBody:
 	ld	a, w
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-19233
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1541,7 +1541,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35141:16)
 	ld	c, (35174:16)
 	extz	bc
-	lds	de, 3
+	ld	de, 3:i3
 	calr	-5057
 	lda	xde, (35120:16)
 	ld	xwa, (xsp+6)
@@ -1739,7 +1739,7 @@ SLDstBankList_FuncBody:
 	ld	a, (35176:16)
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-19889
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1750,8 +1750,8 @@ SLDstBankList_FuncBody:
 	lda	xiz, (35120:16)
 	ld	a, (35176:16)
 	extz	wa
-	lds	bc, 2
-	lds	de, 0
+	ld	bc, 2:i3
+	ld	de, 0:i3
 	calr	5520
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1868,7 +1868,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
-	lds	de, 1
+	ld	de, 1:i3
 	calr	-6036
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -2136,10 +2136,10 @@ SLDstBankList_FuncBody:
 	extz	bc
 	.byte 0x87, 0x53
 	extz	bc
-	lds	de, 1
+	ld	de, 1:i3
 	calr	-6741
 	jr	5
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	-6665
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
@@ -2202,7 +2202,7 @@ SLDstBankList_FuncBody:
 	sub	a, c
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-21353
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -2216,7 +2216,7 @@ SLDstBankList_FuncBody:
 	ld	c, (35180:16)
 	sub	c, e
 	extz	bc
-	lds	de, 3
+	ld	de, 3:i3
 	calr	-6885
 	jr	90
 	ld	c, (35164:16)
@@ -2235,7 +2235,7 @@ SLDstBankList_FuncBody:
 	ld	a, w
 	inc	1, a
 	extz	wa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	-21453
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -2246,7 +2246,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35141:16)
 	ld	c, (35180:16)
 	extz	bc
-	lds	de, 3
+	ld	de, 3:i3
 	calr	-7058
 	lda	xde, (35120:16)
 	ld	xwa, (xsp+6)
@@ -2496,7 +2496,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+2), xwa
 	cp	xbc, 29360139
 	jr	nz, 72
-	lds	iz, 0
+	ld	iz, 0:i3
 	ld	de, iz
 	mul	de, 21
 	lda	xbc, (35078:16)
@@ -2505,7 +2505,7 @@ SLDstBankList_FuncBody:
 	add	xhl, xbc
 	stb_erp	a, 248
 	ld	(xhl), a
-	lds	wa, 1
+	ld	wa, 1:i3
 	add	wa, de
 	extz	xwa
 	add	xwa, xbc
@@ -2548,7 +2548,7 @@ SingleLoadDstFunc:
 	jr	nz, 103
 	ld	xwa, (xsp+4)
 	ld	(33108:16), xwa
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	-23561
 	calr	-23472
 	calr	-8544
@@ -2752,7 +2752,7 @@ SLDst_ScrollDispatch:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16423243
-	lds	wa, 0
+	ld	wa, 0:i3
 	calr	-24213
 	ld	xwa, (33108:16)
 	ld	c, (35164:16)
@@ -2765,7 +2765,7 @@ SLDst_ScrollDispatch:
 	ld	xix, (xhl)
 	call (xix)
 	ld	wa, hl
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	-23603
 	ld	(32422:16), l
 	ld	xwa, 6291494
@@ -3154,7 +3154,7 @@ CmpDst_ScrollModeA:
 	ld XBC,0x01c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld xwa, (0x815c:16)
 	ld c, (0x895c:16)
@@ -3167,7 +3167,7 @@ CmpDst_ScrollModeA:
 	ld XIX,(XHL)
 	call (XIX)
 	ld WA,HL
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7ea6:16), l
 	ld XWA,0x00600026
@@ -3363,7 +3363,7 @@ CmpFile_ScrollRedraw:
 	ld	(34772:16), 0
 	lda	xiz, (15338066:24)
 	ld	(35164:16), 4
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	16289732
 	cp	l, 0:i3
 	jr	z, 23
@@ -3406,7 +3406,7 @@ FmmCmpSingleLoadFunc:
 	jrl	z, 285
 	cp	xde, 2
 	jrl	nz, 279
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	-26314
 	ld	xwa, 6357066
 	ld	xbc, 31457436
@@ -3439,7 +3439,7 @@ FmmCmpLoad_DispatchState:
 	calr	-26320
 FmmCmpLoad_ContinueLoad:
 	ld	(35164:16), 4
-	lds	wa, 3
+	ld	wa, 3:i3
 	call	16289732
 	cp	l, 0:i3
 	jr	z, 16

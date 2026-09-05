@@ -1089,7 +1089,7 @@ SetWall_AdvanceStreamPos:
 	jr SetWall_AdvanceStream_Return
 
 SetWall_AdvanceStream_Reset:
-	lds iy, 5
+	ld iy, 5:i3
 
 SetWall_AdvanceStream_Return:
 	ret
@@ -1113,7 +1113,7 @@ SetWall_AdvanceWritePos:
 
 SetWall_AdvanceWrite_Reset:
 	ld (0x2881:16), xhl
-	lds ix, 5
+	ld ix, 5:i3
 
 SetWall_AdvanceWrite_Return:
 	pop xwa
@@ -1317,7 +1317,7 @@ SetWall_SlotResolve:
 	jr SetWall_SlotResolve_Return
 
 SetWall_SlotResolve_Init:
-	lds iy, 5
+	ld iy, 5:i3
 	push xiz
 	ld xiz, (4349:16)
 	ldfr_lerp XIZ, 0x38
@@ -1394,12 +1394,12 @@ SetWall_BankInit:
 	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
-	lds iy, 1
+	ld iy, 1:i3
 	call SetWall_ResolveStreamPtr
 	ldw (0xf22f:16), 1
 	ld xiy, (4349:16)
 	xor xhl, xhl
-	lds de, 2
+	ld de, 2:i3
 	ld bc, (0x286d:16)
 	ld (0xf231:16), bc
 	dec 1, bc
@@ -1590,7 +1590,7 @@ SetWall_DualPass_InitLoop:
 	ld xwa, (4349:16)
 	ld (0x288f:16), xwa
 	pop xwa
-	lds iy, 5
+	ld iy, 5:i3
 
 SetWall_DualPass_MainLoop:
 	ld xhl, (4349:16)
@@ -1743,7 +1743,7 @@ SetWall_Replay_MainLoop:
 SetWall_Replay_Type84:
 	cp w, 0x84
 	jr nz, SetWall_Replay_CheckType81
-	lds iy, 5
+	ld iy, 5:i3
 	ld xhl, (0x288f:16)
 	jr SetWall_Replay_MainLoop
 
@@ -1891,7 +1891,7 @@ SetWall_StreamAdv_LoadNext:
 	jr SetWall_StreamAdv_Return
 
 SetWall_StreamAdv_Reset:
-	lds iy, 5
+	ld iy, 5:i3
 
 SetWall_StreamAdv_Return:
 	ret
@@ -1919,7 +1919,7 @@ SetWall_ForwardSkip_CheckType:
 	jr SetWall_ForwardSkip_Loop
 
 SetWall_ForwardSkip_Type84:
-	lds iy, 5
+	ld iy, 5:i3
 	ld xhl, (0x288f:16)
 	ld (4349:16), xhl
 	jr SetWall_ForwardSkip_Loop
@@ -1941,7 +1941,7 @@ SetWall_ForwardSkip_TargetFound:
 SetWall_ForwardSkip_Check84:
 	cpib_sri 0x07, 0xec, 0xf4, 0x84
 	jr nz, SetWall_ForwardSkip_SaveState
-	lds iy, 5
+	ld iy, 5:i3
 	ld xhl, (0x288f:16)
 
 SetWall_ForwardSkip_SaveState:
@@ -1971,7 +1971,7 @@ SetWall_InlineCodeBlock3:
 	push	xix
 	pushw	bc
 	ld	xix, 4421
-	lds	bc, 0
+	ld	bc, 0:i3
 	ld	(0x286b:16), c
 	push	xix
 	call	SetWall_MiscDataAndCode_0x52

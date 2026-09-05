@@ -147,7 +147,7 @@ INTRX0_HANDLER:
 	ld (xsp), a
 	lda xwa, (xsp)
 	push xwa
-	lds wa, 1
+	ld wa, 1:i3
 	pushw wa
 	call MidiSeq_ReceiveAndForward
 	inc 8, xsp

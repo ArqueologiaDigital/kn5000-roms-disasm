@@ -74,7 +74,7 @@ FDC_WaitReady:
 	jr	z, -41
 	cp qiz, 0
 	jr z, 5
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	2611
 	pop	xiz
 	ret
@@ -97,13 +97,13 @@ FDC_WaitReady:
 	jr	z, -38
 	cp qiz, 0
 	jr z, 5
-	lds	wa, 1
+	ld	wa, 1:i3
 	calr	2544
 	pop	xiz
 	ret
 	ldw	wa, 54
 	calr	65370
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	2632
 	ld	(0x8b04:16), 255
 	ret
@@ -124,7 +124,7 @@ FDC_WaitReady:
 	ld	(0x8a20:16), 255
 	ldw	wa, 54
 	calr	65313
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	2575
 	calr	2366
 	cp	hl, 0xffff
@@ -205,43 +205,43 @@ FDC_WaitReady:
 	ld (35436:16), 0
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
-	lds wa, 2
+	ld wa, 2:i3
 	calr	65093
 	jr	127
 	ld	(0x8a6c:16), 0
 	ldw	(0x8a22:16), 0
 	ldi_erpb 251, 192
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	65071
 	jr	105
 	ld	(0x8a6c:16), 2
 	ldw	(0x8a22:16), 0
 	ldi_erpb 251, 64
-	lds wa, 0
+	ld wa, 0:i3
 	calr 65049
 	jr	83
 	ld	(0x8a6c:16), 3
 	ldw	(0x8a22:16), 0
 	ldi_erpb 251, 64
-	lds wa, 0
+	ld wa, 0:i3
 	calr 65027
 	jr	61
 	ld	(0x8a6c:16), 4
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
-	lds wa, 2
+	ld wa, 2:i3
 	calr	65006
 	jr	40
 	ld	(0x8a6c:16), 5
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
-	lds wa, 2
+	ld wa, 2:i3
 	calr	64985
 	jr	19
 	ld	(0x8a6c:16), 0
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
-	lds wa, 2
+	ld wa, 2:i3
 	calr	64964
 	stb_erp a, 251
 	or a, 11
@@ -268,14 +268,14 @@ FDC_WaitReady:
 	ret
 	ldw	wa, 54
 	calr	64900
-	lds	wa, 2
+	ld	wa, 2:i3
 	calr	2162
 	calr	64880
 	cp	l, 255
 	jr	nz, 6
 	ldw	wa, 252
 	calr	2047
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 
 ; FDC command dispatcher
@@ -649,7 +649,7 @@ FDC_WaitReady_LoopContinue:
 FDC_WaitReady_TimedOut:
 	cpiw_erp 0xfa, 0
 	jr z, FDC_WaitReady_Complete
-	lds wa, 2
+	ld wa, 2:i3
 	calr FDC_Set_Status
 
 FDC_WaitReady_Complete:
@@ -687,7 +687,7 @@ FDC_WaitStatus_TimeoutCheck:
 FDC_WaitStatus_TimedOut:
 	cpiw_erp 0xfa, 0
 	jr z, FDC_WaitStatus_Complete
-	lds wa, 2
+	ld wa, 2:i3
 	calr FDC_Set_Status
 
 FDC_WaitStatus_Complete:
@@ -722,7 +722,7 @@ FDC_ResultPhase_Read:
 	jr	nz, 40
 	ld qiz, 0
 	jr 35
-	lds	iz, 1
+	ld	iz, 1:i3
 	ld qiz, 0
 	cp qiz, 0
 	jr nz, 25
@@ -747,7 +747,7 @@ FDC_ResultPhase_Read:
 	jr	z, -83
 	cp qiz, 0
 	jr z, 5
-	lds	wa, 3
+	ld	wa, 3:i3
 	calr	993
 	pop	xiz
 	inc	2, xsp
@@ -1132,17 +1132,17 @@ FDC_HardwareSetup:
 	.byte 0xd1
 	ld	xiz, 0x3f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	ld	xix, 0x3f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	ld	xwa, 0x033f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	popw	de
@@ -1151,14 +1151,14 @@ FDC_HardwareSetup:
 	normal
 	nop
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	rcf
 	cp	(xde+63), l
 	swi	7
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	popw	wa
@@ -1167,24 +1167,24 @@ FDC_HardwareSetup:
 	normal
 	nop
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ldw	hl, 0xffff
 	ret
 	.byte 0xd1
 	ld	xiz, 0x3f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	ld	xix, 0x3f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	ld	xwa, 0x033f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	popw	de
@@ -1193,14 +1193,14 @@ FDC_HardwareSetup:
 	normal
 	nop
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	rcf
 	cp	(xde+63), l
 	swi	7
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	popw	wa
@@ -1216,19 +1216,19 @@ FDC_HardwareSetup:
 	jr	nz, 4
 	ldw	hl, 0xffff
 	ret
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	popw	de
 	cp	(xde+63), l
 	swi	7
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	.byte 0xd1
 	ld	xwa, 0x3f8a
 	jr	z, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ldw	hl, 0xffff
 	ret
@@ -1279,7 +1279,7 @@ FDC_ClearStatus_InitTimer:
 	pop	sr
 	.byte 0xf4, 0x01
 	ld	iz, (1033:16)
-	lds	bc, 0
+	ld	bc, 0:i3
 	.byte 0xc1
 	jr	f, -118
 	push	xsp
@@ -1302,7 +1302,7 @@ FDC_ClearStatus_InitTimer:
 SOME_DELAY:
 	srl wa, 1
 	ld de, (1033:16)
-	lds hl, 0
+	ld hl, 0:i3
 	cp hl, 0xffff
 	ret nc
 
@@ -1358,7 +1358,7 @@ FDC_CmdRecalibrate:
 	calr	45
 	ld	(0x8b04:16), 0
 	calr	65387
-	lds	wa, 7
+	ld	wa, 7:i3
 	calr	64643
 	calr	65385
 	.byte 0xc1
@@ -1833,7 +1833,7 @@ FDC_MC_EXIT:
 	ld	ix, (0x8b0a:16)
 	srl	ix, 1
 	ldb	e, 0
-	lds	iy, 0
+	ld	iy, 0:i3
 	cp	iy, ix
 	jrl	nc, 262
 	ld	a, e
@@ -2003,7 +2003,7 @@ FDC_MC_EXIT:
 	ldw	wa, 49
 	calr	63861
 	jr	15
-	lds	iz, 1
+	ld	iz, 1:i3
 	cp	iz, 0:i3
 	jr	z, 9
 	ldw	wa, 10
@@ -2053,7 +2053,7 @@ FDC_INTERRUPT_HANDLER:
 	push	xsp
 	nop
 	jr	nz, 64
-	lds	wa, 4
+	ld	wa, 4:i3
 	calr	63086
 	.byte 0xc1
 	ldb	d, 138
@@ -2324,7 +2324,7 @@ INT4_HANDLER:	; F97E50	"FDCINT"
 	push xde
 	push xbc
 	push xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 INT4_PollStatusLoop:
 	ld wa, iz

@@ -10,7 +10,7 @@
 	add xwa, xbc
 	lda xiz, (0x043c00:24)
 	add xiz, xwa
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xsp + 24), 0x0
 	jr ule, TextRender_AdvancePointerAndUpdateLine
 
@@ -24,9 +24,9 @@ TextRender_PixelLoop:
 	ld wa, (xix)
 	cp wa, (xiy + 4)
 	jr gt, TextRender_AdvancePointerAndUpdateLine
-	lds wa, 7
+	ld wa, 7:i3
 	sub wa, hl
-	lds iy, 1
+	ld iy, 1:i3
 	and a, 0xf
 	jr z, TextRender_CheckBitMask
 	slaa iy
@@ -99,7 +99,7 @@ GraphicsRender_ByteData:
 	ld	wa, iz
 	calr	29
 	jr	20
-	lds	wa, 6
+	ld	wa, 6:i3
 	calr	36824
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x2D:24)
@@ -130,7 +130,7 @@ GraphicsRender_ByteData:
 	calr	36984
 	cp	hl, 0:i3
 	jr	nz, 19
-	lds	wa, 4
+	ld	wa, 4:i3
 	calr	36737
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x7F:24)
@@ -178,7 +178,7 @@ Display_DeferOrDrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp hl, 0:i3
 	jr nz, Display_DeferOrDrawWall_Direct
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (Display_DeferOrDrawWall_0x18:24)
@@ -188,7 +188,7 @@ Display_DeferOrDrawWall:
 
 Display_DeferOrDrawWall_Direct:
 	ldw (0x03ef92:24), 0x0000
-	lds wa, 0
+	ld wa, 0:i3
 	calr SetNeedUpdate
 	jrl DrawWall
 
@@ -196,7 +196,7 @@ Display_DeferOrUpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp hl, 0:i3
 	jr nz, Display_DeferOrUpdateScreen_Direct
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (Display_DeferOrUpdateScreen_0x18:24)
@@ -206,7 +206,7 @@ Display_DeferOrUpdateScreen:
 
 Display_DeferOrUpdateScreen_Direct:
 	ldw (0x03ef92:24), 0x0001
-	lds wa, 1
+	ld wa, 1:i3
 	calr SetNeedUpdate
 	jrl UpdateScreen
 	ret
@@ -311,7 +311,7 @@ DrawText_LayoutAndRender:
 	push xiz
 	ld xiy, Str_No_0xCBE
 	lda_dri XIX, 0xfd, 0x0e, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld hl, (xwa + 2)
 	ld c, (xwa + 1)
@@ -329,7 +329,7 @@ DrawText_LayoutAndRender:
 	sub hl, de
 	sll hl, 3
 	ld (xbc), hl
-	lds iy, 0
+	ld iy, 0:i3
 	cpw (xsp + 4), 0x0
 	jr ule, DrawText_NullTerminate
 	lda xhl, (xsp + 10)
@@ -373,7 +373,7 @@ DrawText_LayoutAndRender_Variant1:
 	push	xiz
 	ld	xiy, Str_No_0xCC6
 	lda	xix, (xsp+270)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	hl, (xwa+2)
@@ -392,7 +392,7 @@ DrawText_LayoutAndRender_Variant1:
 	sub	hl, de
 	sll	hl, 3
 	ld	(xbc), hl
-	lds	iy, 0
+	ld	iy, 0:i3
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -469,7 +469,7 @@ DrawText_LayoutAndRender_Variant1:
 	sub	hl, de
 	sll	hl, 3
 	ld	(xbc), hl
-	lds	iy, 0
+	ld	iy, 0:i3
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -521,7 +521,7 @@ DrawText_LayoutAndRender_Variant1:
 	push	xiz
 	ld	xiy, Str_No_0xCD6
 	lda	xix, (xsp+270)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	c, (xwa+1)
@@ -541,7 +541,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x52
 	ld	de, (xwa+2)
 	ld	(xbc), de
-	lds	iy, 0
+	ld	iy, 0:i3
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -610,7 +610,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc+2), de
 	ld	de, (xwa+2)
 	ld	(xbc), de
-	lds	iy, 0
+	ld	iy, 0:i3
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -659,7 +659,7 @@ DrawText_LayoutAndRender_Variant1:
 	push	xiz
 	ld	xiy, Str_No_0xCE6
 	lda	xix, (xsp+270)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	hl, (xwa+2)
@@ -678,7 +678,7 @@ DrawText_LayoutAndRender_Variant1:
 	sub	hl, de
 	sll	hl, 3
 	ld	(xbc), hl
-	lds	iy, 0
+	ld	iy, 0:i3
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -1189,7 +1189,7 @@ DrawText_ExtendedLayout:
 	stl_dri XWA, 0xfd, 0x1c, 0x01
 	ld xiy, Str_No_0xDFE
 	lda_dri XIX, 0xfd, 0x14, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld XDE, (xsp + 0x011c)
 	ld iy, (xde + 2)
@@ -1225,7 +1225,7 @@ DrawText_ExtLayout_SkipShift:
 	sub bc, wa
 	sll bc, 3
 	ld (xhl), bc
-	lds hl, 0
+	ld hl, 0:i3
 	cpw (xsp + 4), 0x0
 	jr ule, DrawText_ExtLayout_NullAndDraw
 	lda xwa, (xde + 7)
@@ -1282,7 +1282,7 @@ DrawText_ExtLayout_Variant1:
 	ld	(xsp+284), xwa
 	ld	xiy, Str_No_0xE06
 	lda	xix, (xsp+276)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	ld	xde, (xsp+284)
 	ld	iy, (xde+2)
@@ -1309,7 +1309,7 @@ DrawText_ExtLayout_Variant1:
 	ld	(xbc+2), wa
 	ld	wa, (xde+11)
 	ld	(xsp+4), wa
-	lds	hl, 0
+	ld	hl, 0:i3
 	cpw	(xsp+4), 0
 	jr	ule, 51
 	ld	xbc, xde
@@ -1364,7 +1364,7 @@ DrawFunc_Init:
 	ld xiz, xwa
 	ld xiy, Str_No_0xE0E
 	lda_dri XIX, 0xfd, 0x08, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld wa, (xiz + 2)
 	extz xwa
@@ -1424,7 +1424,7 @@ DrawFunc_Init_Variant1:
 	ld XIZ,XWA
 	ld XIY,Str_No_0xE42
 	lda xix, (xsp + 0x0108)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld IX,(XIZ+0x02)
 	extz XIX
@@ -1648,7 +1648,7 @@ GetCenteredDelta_RetNeg1:
 	jr GetCenteredDelta_Return
 
 GetCenteredDelta_RetZero:
-	lds hl, 0
+	ld hl, 0:i3
 
 GetCenteredDelta_Return:
 	ret
@@ -1801,9 +1801,9 @@ CalcTotalWidth:
 	jr nz, CalcTotalWidth_KerningLoop_Init
 	.byte 0x96, 0x4b, 0xdb, 0x8e, 0x68, 0x2d
 CalcTotalWidth_KerningLoop_Init:
-	lds iz, 0
+	ld iz, 0:i3
 	ld xix, xbc
-	lds de, 0
+	ld de, 0:i3
 	cp hl, 0:i3
 	jr le, CalcTotalWidth_FreeAndReturn
 
@@ -1931,7 +1931,7 @@ FontGlyph_ByteData:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ret
-	lds	de, 0
+	ld	de, 0:i3
 	lda	xhl, (Data_CharMapFormatBlock_0x14:24)
 	ld	a, (xwa)
 	.byte 0xc3
@@ -2025,12 +2025,12 @@ InitializeRoot:
 
 .macro _VGA_WRITE regnum, value
 	.if \regnum <= 7
-	lds wa, \regnum
+	ld wa, \regnum:i3
 	.else
 	ldw wa, \regnum
 	.endif
 	.if \value <= 7
-	lds bc, \value
+	ld bc, \value:i3
 	.else
 	ldw bc, \value
 	.endif
@@ -2040,7 +2040,7 @@ InitializeRoot:
 
 .macro _VGA_READ regnum
 	.if \regnum <= 7
-	lds wa, \regnum
+	ld wa, \regnum:i3
 	.else
 	ldw wa, \regnum
 	.endif
@@ -2051,19 +2051,19 @@ InitializeRoot:
 .macro _PALLETE_WRITE red, green, blue
 	ldw wa, 0x3c9
 	.if \red <= 7
-	lds bc, \red
+	ld bc, \red:i3
 	.else
 	ldw bc, \red
 	.endif
 	calr _Write_VGA_Register
 	.if \green <= 7
-	lds bc, \green
+	ld bc, \green:i3
 	.else
 	ldw bc, \green
 	.endif
 	calr _Write_VGA_Register
 	.if \blue <= 7
-	lds bc, \blue
+	ld bc, \blue:i3
 	.else
 	ldw bc, \blue
 	.endif
@@ -2175,7 +2175,7 @@ VGA_Initialize:
 	; are equivalent to: _VGA_SEQUENCER 0fh, 000h
 	_VGA_WRITE 0x3c4, 0xf
 	ldw wa, 0x3c5
-	lds bc, 0
+	ld bc, 0:i3
 	; but omitting the final "CALR _Write_VGA_Register"
 
 	jr VGA_Init_WriteExtSeq
@@ -2320,7 +2320,7 @@ VGA_ClearVRAM:
 	lda	xsp, (xsp+16)
 	ret
 _Write_VGA_Register:
-	lds de, 0
+	ld de, 0:i3
 
 VGA_WriteReg_Delay:
 	inc 1, de
@@ -2492,7 +2492,7 @@ VGA_ScreenUnblank:
 	;
 	_VGA_WRITE 0x3c4, 0x1
 	ldw wa, 0x3c5
-	lds bc, 1
+	ld bc, 1:i3
 	jrl _Write_VGA_Register
 
 ; =============================================================================
@@ -2616,16 +2616,16 @@ VGA_CRTCTiming_ByteData:
 	inc1b_erp 251
 	jr -21
 	ldw	wa, 964
-	lds	bc, 6
+	ld	bc, 6:i3
 	calr	65051
 	ldw	wa, 965
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	65043
 	ldw	wa, 964
 	ldw	bc, 9
 	calr	65034
 	ldw	wa, 965
-	lds	bc, 4
+	ld	bc, 4:i3
 	calr	65026
 	ldw	wa, 964
 	ldw	bc, 10
@@ -2643,13 +2643,13 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	64981
 	ldw	wa, 965
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	64973
 	ldw	wa, 964
 	ldw	bc, 9
 	calr	64964
 	ldw	wa, 965
-	lds	bc, 6
+	ld	bc, 6:i3
 	calr	64956
 	ldw	wa, 964
 	ldw	bc, 10
@@ -2673,7 +2673,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 9
 	calr	64893
 	ldw	wa, 965
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	64885
 	ldw	wa, 964
 	ldw	bc, 10
@@ -2691,19 +2691,19 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	64840
 	ldw	wa, 965
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	64832
 	ldw	wa, 964
 	ldw	bc, 9
 	calr	64823
 	ldw	wa, 965
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	64815
 	ldw	wa, 964
 	ldw	bc, 10
 	calr	64806
 	ldw	wa, 965
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	64798
 	ldw	wa, 964
 	ldw	bc, 11
@@ -2715,7 +2715,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	64771
 	ldw	wa, 965
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	64763
 	ldw	wa, 964
 	ldw	bc, 9
@@ -2751,7 +2751,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 10
 	calr	64664
 	ldw	wa, 965
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	64656
 	ldw	wa, 964
 	ldw	bc, 11
@@ -2763,7 +2763,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	64629
 	ldw	wa, 965
-	lds	bc, 6
+	ld	bc, 6:i3
 	calr	64621
 	ldw	wa, 964
 	ldw	bc, 9
@@ -2775,7 +2775,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 10
 	calr	64594
 	ldw	wa, 965
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	64586
 	ldw	wa, 964
 	ldw	bc, 9
@@ -2787,7 +2787,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 10
 	calr	64559
 	ldw	wa, 965
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	64551
 	ldw	wa, 964
 	ldw	bc, 11
@@ -2823,7 +2823,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 10
 	calr	64452
 	ldw	wa, 965
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	64444
 	ldw	wa, 964
 	ldw	bc, 11
@@ -2877,7 +2877,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 9
 	calr	64291
 	ldw	wa, 965
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	64283
 	ldw	wa, 964
 	ldw	bc, 12
@@ -2889,7 +2889,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 9
 	calr	64256
 	ldw	wa, 965
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	64248
 	ldw	wa, 964
 	ldw	bc, 12
@@ -2901,7 +2901,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 9
 	calr	64221
 	ldw	wa, 965
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	64213
 	ldw	wa, 964
 	ldw	bc, 12
@@ -2913,7 +2913,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 9
 	calr	64186
 	ldw	wa, 965
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	64178
 	ldw	wa, 964
 	ldw	bc, 12
@@ -2931,7 +2931,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	64133
 	ldw	wa, 965
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	64125
 	ldw	wa, 964
 	ldw	bc, 9
@@ -2943,7 +2943,7 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	64098
 	ldw	wa, 965
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	64090
 	ldw	wa, 964
 	ldw	bc, 9
@@ -2982,10 +2982,10 @@ VGA_CRTCTiming_ByteData:
 	ldw	bc, 12
 	calr	63982
 	ldw	wa, 964
-	lds	bc, 6
+	ld	bc, 6:i3
 	calr	63974
 	ldw	wa, 965
-	lds	bc, 0
+	ld	bc, 0:i3
 	jrl	-1570
 
 VGA_ConfigExtSequencer:
@@ -3080,7 +3080,7 @@ VGA_ConfigExtSequencer:
 	;
 	_VGA_WRITE 0x3c4, 0x6
 	ldw wa, 0x3c5
-	lds bc, 0
+	ld bc, 0:i3
 	jrl _Write_VGA_Register
 
 
@@ -3182,7 +3182,7 @@ VGA_ConfigExtSequencer_Alt:
 	;
 	_VGA_WRITE 0x3c4, 0x6
 	ldw wa, 0x3c5
-	lds bc, 0
+	ld bc, 0:i3
 	jrl _Write_VGA_Register
 
 
@@ -3198,7 +3198,7 @@ BitMapOut:
 	ld xwa, (xwa + 10)
 	add (xsp + 4), xwa
 	ldw wa, 0x3c8
-	lds bc, 0
+	ld bc, 0:i3
 	calr _Write_VGA_Register
 	lds32 xiz, 0
 
@@ -3313,7 +3313,7 @@ PmBank_Select_RightSide:
 	ldw (xbc), 0x137
 
 PmBank_Select_DrawFirstRow:
-	lds bc, 0
+	ld bc, 0:i3
 	ldw de, 0xf5
 	call DrawDesignBox
 	ld xwa, (xsp + 4)
@@ -3355,7 +3355,7 @@ PmBank_Select_SecondRightSide:
 
 PmBank_Select_DrawSecondRow:
 	ldw bc, 0xc1
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 48)
@@ -3853,10 +3853,10 @@ PmBank_OnSelect:
 	lda xbc, (VariationStr_V1_0x3C:24)
 	lda_dri XIY, 0x07, 0xe4, 0xe0
 	lda_dri XIX, 0xfd, 0x0c, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda_dri XWA, 0xfd, 0x0c, 0x01
-	lds bc, 0
+	ld bc, 0:i3
 	ldw de, 0xf5
 	call DrawDesignBox
 	ld xwa, (xsp + 4)
@@ -3871,16 +3871,16 @@ PmBank_OnSelect:
 	lda xbc, (VariationStr_V1_0x3C:24)
 	lda_dri XIY, 0x07, 0xe4, 0xe0
 	lda_dri XIX, 0xfd, 0x0c, 0x01
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda_dri XWA, 0xfd, 0x0c, 0x01
 	ldw bc, 0xc1
-	lds de, 7
+	ld de, 7:i3
 	call DrawDesignBox
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 44)
 	ld wa, (xwa)
-	lds bc, 0
+	ld bc, 0:i3
 	jr PmBank_WriteLastParam
 
 PmBank_OnConfirm:
@@ -3890,25 +3890,25 @@ PmBank_OnConfirm:
 	call InheritedProc
 	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	lds wa, 0
+	ld wa, 0:i3
 	ldw bc, 0xff
 	calr ToneGen_WriteParamByIndex
-	lds wa, 1
+	ld wa, 1:i3
 	ldw bc, 0xff
 	calr ToneGen_WriteParamByIndex
-	lds wa, 2
+	ld wa, 2:i3
 	ldw bc, 0xff
 	calr ToneGen_WriteParamByIndex
-	lds wa, 3
+	ld wa, 3:i3
 	ldw bc, 0xff
 	calr ToneGen_WriteParamByIndex
-	lds wa, 4
+	ld wa, 4:i3
 	ldw bc, 0xff
 	calr ToneGen_WriteParamByIndex
-	lds wa, 5
+	ld wa, 5:i3
 	ldw bc, 0xff
 	calr ToneGen_WriteParamByIndex
-	lds wa, 6
+	ld wa, 6:i3
 	ldw bc, 0xff
 
 PmBank_WriteLastParam:
@@ -3960,7 +3960,7 @@ ToneGen_WriteParamByIndex:
 ; ToneGen_WriteParamByIndex dispatch table
 ToneGen_ParamWriteDispatch:
 	lda	xix, (xsp+6)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldirw
 	lda	xde, (xsp+2)
 	lda	xbc, (xsp+6)
@@ -3994,7 +3994,7 @@ ToneGen_ParamWriteDispatch:
 	jrl	271
 	inc	8, xiy
 	lda	xix, (xsp+6)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xde, (xsp+2)
@@ -4029,7 +4029,7 @@ ToneGen_ParamWriteDispatch:
 	jrl	183
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xbc, (xsp+2)
@@ -4049,7 +4049,7 @@ ToneGen_ParamWriteDispatch:
 	jrl	136
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xbc, (xsp+2)
@@ -4069,7 +4069,7 @@ ToneGen_ParamWriteDispatch:
 	jr	90
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xbc, (xsp+2)
@@ -4089,7 +4089,7 @@ ToneGen_ParamWriteDispatch:
 	jr	44
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	lda	xbc, (xsp+2)
@@ -4464,9 +4464,9 @@ MainVariSet:
 	ld	c, (xiz+3)
 	extz	bc
 	pushw	bc
-	lds	bc, 0
+	ld	bc, 0:i3
 	call	16624260
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16465545
 MainVariSet_Done:
 	lds32 xhl, 0
@@ -4818,7 +4818,7 @@ MainSysControl:
 	lda	xix, (16524359:24)
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 MainSysCtrl_DispatchTable:
-	lds	wa, 2
+	ld	wa, 2:i3
 	call	16634741
 	jr	46
 MainSysCtrl_Entry1_AccDemo:
@@ -4849,10 +4849,10 @@ MainSysCtrl_Entry8:
 MainSysControl_PostDispatchFinalize:
 	call RefreshSwEvent
 	call CPanel_InitButtonState_SaveRegs
-	lds bc, 0
+	ld bc, 0:i3
 
 MainSysCtrl_DelayOuter:
-	lds wa, 0
+	ld wa, 0:i3
 
 MainSysCtrl_DelayInner:
 	inc	1, wa

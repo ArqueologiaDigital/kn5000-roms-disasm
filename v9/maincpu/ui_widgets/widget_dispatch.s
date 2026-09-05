@@ -5735,7 +5735,7 @@ UIState_ConfigB_060:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_061:
-	lds wa, 3
+	ld wa, 3:i3
 	swi 6
 	nop
 	.long UIState_KeyScan_Dispatch

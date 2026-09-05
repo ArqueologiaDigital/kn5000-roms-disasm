@@ -134,7 +134,7 @@ FloppyIO_ReadNextByte:
 	pushw de
 	ld wa, (4327:16)
 	xor de, de
-	lds hl, 4
+	ld hl, 4:i3
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
@@ -508,7 +508,7 @@ SeqTrack_ComputeTempoScaling:
 	jrl ule, SeqTrack_ComputeTempo_Phase2
 	pushw wa
 	ld wa, de
-	lds de, 1
+	ld de, 1:i3
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
 	div xwa, xhl
@@ -522,7 +522,7 @@ SeqTrack_ComputeTempo_Phase2:
 	add xwa, xde
 	cpiw_erp 0xe2, 0
 	jrl ule, SeqTrack_ComputeTempo_Phase3
-	lds de, 1
+	ld de, 1:i3
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
@@ -574,7 +574,7 @@ SeqTrack_ComputeTempo_NoDelta:
 	add xwa, xbc
 	cpiw_erp 0xe2, 0
 	jrl ule, SeqTrack_ComputeTempo_NoDeltaDirect
-	lds de, 1
+	ld de, 1:i3
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
 	div xwa, xhl
@@ -1121,7 +1121,7 @@ SeqTrack_ClearTempoAccum_Loop:
 	ret
 
 SMF_ReadAndValidateMTrkHeader:
-	lds bc, 4
+	ld bc, 4:i3
 	ld xiy, SMF_HeaderMagic_MTrk_Ref
 
 SMF_MTrk_ReadByteLoop:
@@ -1368,7 +1368,7 @@ SMF_HeaderMagic_MTrk_Ref:	.ascii "MTrk"
 
 SeqTrack_InitScoopAndSetWall:
 	xor a, a
-	lds hl, 1
+	ld hl, 1:i3
 	ld (0x2877:16), a
 	inc 1, (0x2877:16)
 	ld (9858:16), l
@@ -1394,7 +1394,7 @@ SeqTrack_AssignVoices_HaveDispatch:
 	call ToneGen_CopyBlockToVoiceBuffer
 	ld (0x27d6:16), iy
 	pushw de
-	lds hl, 1
+	ld hl, 1:i3
 
 SeqTrack_ClearVoiceSlots_Loop:
 	pushw hl
@@ -1465,7 +1465,7 @@ MidiSysEx_Cmd_NoteOn:
 	and (4211:16), 240
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 6
+	ld bc, 6:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1480,7 +1480,7 @@ MidiSysEx_Cmd_PolyPressure:
 	ld (4211:16), 128
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 4
+	ld bc, 4:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1493,7 +1493,7 @@ MidiSysEx_PolyPressure_Mode3:
 	ld (4211:16), 208
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 3
+	ld bc, 3:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1521,7 +1521,7 @@ MidiSysEx_CC_PartMapSelected:
 	ld iy, hl
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 6
+	ld bc, 6:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1544,7 +1544,7 @@ MidiSysEx_PgmChg_PartMapSelected:
 	ld iy, hl
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 6
+	ld bc, 6:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1557,7 +1557,7 @@ MidiSysEx_Cmd_ChannelPressure:
 	ld (4211:16), 209
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 3
+	ld bc, 3:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1570,7 +1570,7 @@ MidiSysEx_Cmd_PitchBend:
 	ld (4211:16), 210
 	pushw iy
 	call SoundGen_CaptureVoiceParams
-	lds bc, 4
+	ld bc, 4:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1583,7 +1583,7 @@ MidiSysEx_Cmd_SystemMessage:
 	ld (4211:16), 211
 	call SoundGen_CaptureVoiceParams
 	pushw iy
-	lds bc, 3
+	ld bc, 3:i3
 	call ToneGen_UpdateBlocks
 	popw iy
 	call ToneGen_SetChannelFlag
@@ -1744,7 +1744,7 @@ Sequencer_AdvanceBlockPosition:
 	pushw de
 	ld wa, (4327:16)
 	xor de, de
-	lds hl, 4
+	ld hl, 4:i3
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
@@ -1818,7 +1818,7 @@ SMF_SetTempo_ComputeBPM:
 	ld h, (3951:16)
 	ld l, (3948:16)
 	ldw wa, 0x9387
-	lds de, 3
+	ld de, 3:i3
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
@@ -1870,7 +1870,7 @@ SoundGen_UpdateTempoAndScale:
 	popw bc
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
-	lds iy, 7
+	ld iy, 7:i3
 	cpw (3932:16), 0
 	jrl z, SoundGen_ScaleAndWriteTempo
 	cpw (3934:16), 1
@@ -2273,7 +2273,7 @@ SetWall_InitVoiceSlots:
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld (0x2881:16), xhl
-	lds ix, 5
+	ld ix, 5:i3
 	ldw (xhl + 1), 0x0
 	ldw (xhl + 3), 0xffff
 	call VoiceChannel_UpdateParamSet
@@ -2351,7 +2351,7 @@ ToneGen_CopyBlockToVoiceBuffer:
 	pop xhl
 	popw bc
 	ld iy, hl
-	lds wa, 1
+	ld wa, 1:i3
 	pushw bc
 	push xhl
 	call DispatchHandler_JumpSub
@@ -2363,7 +2363,7 @@ ToneGen_CopyBlockToVoiceBuffer:
 	ld (4349:16), xiz
 	pop xiz
 	xor xiy, xiy
-	lds iy, 5
+	ld iy, 5:i3
 	ret
 
 VoiceChannel_ResetSlotByIndex:
@@ -2566,7 +2566,7 @@ SoundGen_UpdateAndRefresh:
 FloppyIO_ClearTrackParseBuffer:
 	xor wa, wa
 	ld xix, 0x106e
-	lds bc, 2
+	ld bc, 2:i3
 
 FloppyIO_ClearParseBuf_Loop:
 	stw_dpi WA, 0xf1
@@ -4078,7 +4078,7 @@ SoundGen_StoreVoiceToTables_Clamped:
 	push xix
 	cp hl, 1:i3
 	jr ule, SoundGen_StoreVoice_AfterClamp
-	lds hl, 1
+	ld hl, 1:i3
 
 SoundGen_StoreVoice_AfterClamp:
 	ld wa, (9830:16)
@@ -4124,7 +4124,7 @@ VoiceChannel_CopyParamBlock:
 	ldw bc, 0x100
 	ldir85
 	ld iy, (0x28af:16)
-	lds wa, 1
+	ld wa, 1:i3
 	call DispatchHandler_JumpSub
 	pop_lerp 0x38
 	push xiz
@@ -4133,7 +4133,7 @@ VoiceChannel_CopyParamBlock:
 	pop xiz
 	pop xhl
 	popw bc
-	lds iy, 5
+	ld iy, 5:i3
 	ret
 
 VoiceChannel_UpdateParamSet:
@@ -4295,7 +4295,7 @@ VoiceChannel_FindNext_StoreAndUpdate:
 VoiceChannel_ClearParamTable:
 	ld xix, 0x1073
 	xor wa, wa
-	lds bc, 4
+	ld bc, 4:i3
 
 VoiceChannel_ClearParam_Loop:
 	stw_dpi WA, 0xf1
@@ -4333,7 +4333,7 @@ VoiceChannel_AdvPos_LoadBlock:
 VoiceChannel_AdvPos_CopyBlock:
 	ld hl, (0x28af:16)
 	call ToneGen_CopyBlockToVoiceBuffer
-	lds iy, 5
+	ld iy, 5:i3
 
 VoiceChannel_StorePosition_Continue:
 	ld (0x27d6:16), iy
@@ -4420,7 +4420,7 @@ ToneGen_AdvanceBlockPosition:
 	ld (0x28af:16), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
-	lds wa, 5
+	ld wa, 5:i3
 	jr ToneGen_AdvBlock_StorePos
 
 ToneGen_AdvBlock_IncrementPos:

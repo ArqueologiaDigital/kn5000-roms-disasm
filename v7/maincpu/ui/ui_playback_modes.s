@@ -371,7 +371,7 @@ ScanVoice_NoneFound:
 	jr ScanVoice_Return
 
 ScanVoice_Found:
-	lds hl, 1
+	ld hl, 1:i3
 
 ScanVoice_Return:
 	ret
@@ -1499,7 +1499,7 @@ DkMdlyPly_ReturnZero:
 
 ; DkMdlyPly send audio command
 DkMdlyPly_SendAudioCmd:
-	lds hl, 0
+	ld hl, 0:i3
 	lda xde, (SepaOut_Config_0_0x6E:24)
 
 DkMdlyPly_VoiceScanLoop:
@@ -2279,7 +2279,7 @@ CDlikeSwTtl_ShowSongTitle:
 	lda	xsp, (xsp+10)
 	lda	xbc, (7198:16)
 	ld	(xbc+12), 0
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16693375
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -2723,7 +2723,7 @@ DpDoc_CaseD:
 
 ; DpDocTtl case E
 DpDoc_CaseE:
-	lds wa, 1
+	ld wa, 1:i3
 
 DpDoc_NavigateBackward:
 	calr CDlikeSwTtl_DocNavDispatch
@@ -2844,7 +2844,7 @@ DpPd_CaseD:
 
 ; DpPdTtl case E
 DpPd_CaseE:
-	lds wa, 1
+	ld wa, 1:i3
 
 DpPd_NavigateBackward:
 	calr CDlikeSwTtl_PdNavDispatch
@@ -2975,7 +2975,7 @@ DpSmf_CaseD:
 
 ; DpSmfTtl case E
 DpSmf_CaseE:
-	lds wa, 1
+	ld wa, 1:i3
 
 DpSmf_NavigateBackward:
 	calr CDlikeSwTtl_SongNavDispatch
@@ -3093,7 +3093,7 @@ DpSmfLyr_CheckSongBit1:
 	jr SeqStep_ReturnZero
 
 DpSmfLyr_NavigateForward:
-	lds wa, 1
+	ld wa, 1:i3
 
 DpSmfLyr_DispatchNavigation:
 	calr CDlikeSwTtl_SongNavDispatch

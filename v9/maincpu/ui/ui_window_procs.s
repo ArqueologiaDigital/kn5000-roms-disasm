@@ -47,7 +47,7 @@ WndScroll_InitWindowProc:
 	ld xbc, 0x1c00018
 	lds32 xde, 3
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	calr SetDialEnable
 	jrl UIDialog_ReturnZeroJmp
 
@@ -195,7 +195,7 @@ WndScroll_RepaintAll:
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	jr WndScroll_ItemCountCheck
 
 WndScroll_DrawSingleItem:
@@ -619,7 +619,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01e00080
 	jrl	1149
 	ld qiz, 0
-	lds iz, 0
+	ld iz, 0:i3
 	ld	de, (0x0274d6:24)
 	cp	de, 0:i3
 	jr	ule, 28
@@ -642,7 +642,7 @@ WndEvt_EventCodeDispatch:
 	push	sr
 	nop
 	nop
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp	de, 0:i3
 	jr	ule, 37
 	lda	xbc, (0x0274b0:24)
@@ -700,7 +700,7 @@ WndEvt_EventCodeDispatch:
 	push	xwa
 	call	Free
 	lda	xsp, (xsp+22)
-	lds	iz, 0
+	ld	iz, 0:i3
 	.byte 0x9f, 0x06
 	push	xsp
 	nop
@@ -748,7 +748,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
 	jrl	820
-	lds	iz, 0
+	ld	iz, 0:i3
 	.byte 0xd2, 0xd6
 	jrl	ov, 16130
 	nop
@@ -914,7 +914,7 @@ WndScroll_SetUnderscoreOffset:
 WndScroll_SearchCharTable:
 	lda xwa, (DiskWarning_ConfirmStrings_0x1154:24)
 	ld (xsp + 8), xwa
-	lds iz, 0
+	ld iz, 0:i3
 	jr WndScroll_CheckTableEnd
 
 WndScroll_CompareCharLoop:
@@ -1392,7 +1392,7 @@ Label_HandlePaint:
 	lda xwa, (xhl + 14)	; <-- pointer to bounding box(?), (x1, y1, x2, y2 - 16bits each)
 	ld xiy, xwa
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xbc, (xsp + 12)
 	ld wa, (xwa)
@@ -1582,7 +1582,7 @@ VwUserBitmapByName_DrawDefault:
 	jr VwUserBitmapByName_ReturnZero
 
 VwUserBitmapByName_HandleClose:
-	lds wa, 2
+	ld wa, 2:i3
 	call ChangePalette
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
@@ -1757,7 +1757,7 @@ GetClientFrame:
 	call GetViewInstance
 	lda xiy, (xhl + 14)
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xde, (xsp + 4)
 	push xiz
@@ -1776,7 +1776,7 @@ GetClientFrame2:
 	ld xiz, (xsp + 10)
 	ld xiy, xde
 	ld xix, xiz
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	cp wa, 0:i3
 	jr z, FrameLoop_Cleanup
@@ -1817,7 +1817,7 @@ DrawDesignFrame:
 	ld de, bc
 	ld xiy, xwa
 	lda xix, (xsp + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	cp de, 1:i3
 	jr nz, DesignFrame_Epilogue
@@ -2173,7 +2173,7 @@ TextBox_HandlePaint:
 	inc 6, xsp
 	ld (xsp + 22), xhl
 	ld xiz, (xsp + 22)
-	lds bc, 0
+	ld bc, 0:i3
 	ld wa, (xsp + 16)
 	add wa, 0x1
 	jr ule, TextBox_SetupWordwrap
@@ -2333,14 +2333,14 @@ VwBox_HandleGetFocus:
 	cp bc, 0:i3
 	jr z, VwBox_UseFocusColor
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	jr VwBox_CallDrawDesignFrame
 
 VwBox_UseFocusColor:
 	pushm (xhl + 22)
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 
 VwBox_CallDrawDesignFrame:
 	calr DrawDesignFrame
@@ -3530,8 +3530,8 @@ PsListBox_Select_CheckDone:
 	lda_dri XWA, 0xfd, 0x1e, 0x01
 	ld xbc, (xsp + 4)
 	pushm (xbc + 22)
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	calr DrawDesignFrame
 
 PsListBox_Select_UpdateCurrent:
@@ -3648,8 +3648,8 @@ PsListBox_SelectUpd_DrawUnfocused:
 	call DrawStringReverse
 	lda_dri XWA, 0xfd, 0x1e, 0x01
 	pushw 0xf2
-	lds bc, 1
-	lds de, 2
+	ld bc, 1:i3
+	ld de, 2:i3
 	calr DrawDesignFrame
 	jrl PsListBox_ReturnZero
 
@@ -3751,7 +3751,7 @@ AcListBoxProc:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c00017
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcListBox_EnableDials
 
 AcListBox_ScrollUpDown:
@@ -3792,7 +3792,7 @@ AcListBox_ScrollUpDown:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 8)
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jr AcListBox_EnableDials
 
 AcListBox_ScrollDownInc:
@@ -3833,7 +3833,7 @@ AcListBox_ScrollDownInc:
 	ld xbc, 0x1c00017
 	ld xde, (xsp + 8)
 	calr SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcListBox_EnableDials:
 	calr SetDialEnable
@@ -3918,11 +3918,11 @@ IsPointOnScreen:
 	jr lt, IsPointOnScreen_InBounds
 
 IsPointOnScreen_OutOfBounds:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 IsPointOnScreen_InBounds:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 IsColorValid:
@@ -3938,11 +3938,11 @@ IsColorValid_Check256:
 	jr gt, IsColorValid_Invalid
 
 IsColorValid_Valid:
-	lds hl, 1
+	ld hl, 1:i3
 	ret
 
 IsColorValid_Invalid:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 ClampColorToRange:
@@ -4282,7 +4282,7 @@ DrawDesignBox_QueuedPath:
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld bc, (xsp + 6)
 	ld (xwa + 12), bc
@@ -4322,7 +4322,7 @@ DrawDesignBox_Impl:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 62)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld wa, (xsp + 72)
 	cpw (xsp + 72), 0xa8
@@ -4378,7 +4378,7 @@ Draw_StyledBoxWithFrame:
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
 	lda xwa, (xsp + 62)
-	lds bc, 0
+	ld bc, 0:i3
 	calr DrawFrame_Impl
 	cpw (xsp + 72), 0x2
 	jr nz, DrawDesignBox_After2Frame
@@ -4387,7 +4387,7 @@ Draw_StyledBoxWithFrame:
 	decm 1, (xwa + 6)
 	incw 1, (xwa)
 	decm 1, (xwa + 4)
-	lds bc, 0
+	ld bc, 0:i3
 	calr DrawFrame_Impl
 
 DrawDesignBox_After2Frame:
@@ -4398,7 +4398,7 @@ DrawDesignBox_After2Frame:
 	decm 2, (xwa + 6)
 	incw 2, (xwa)
 	decm 2, (xwa + 4)
-	lds bc, 0
+	ld bc, 0:i3
 	calr DrawFrame_Impl
 
 DrawDesignBox_After3Frame:
@@ -4420,7 +4420,7 @@ DrawDesignBox_After3Frame:
 	ld de, (xhl + 6)
 	inc 1, de
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
@@ -4431,7 +4431,7 @@ DrawDesignBox_After3Frame:
 	inc 1, bc
 	ld (xwa + 2), bc
 	lda xbc, (xsp + 46)
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 
 DrawDesignBox_4FrameCross:
@@ -4439,7 +4439,7 @@ DrawDesignBox_4FrameCross:
 	jrl nz, DrawFunc_Epilogue74
 	lda xiy, (xsp + 62)
 	lda xix, (xsp + 54)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 62)
 	lda xhl, (xsp + 54)
@@ -4456,7 +4456,7 @@ DrawDesignBox_4FrameCross:
 	ld bc, (xhl + 6)
 	inc 2, bc
 	ld (xwa + 6), bc
-	lds bc, 0
+	ld bc, 0:i3
 	calr DrawFrame_Impl
 	lda xwa, (xsp + 62)
 	lda xde, (xsp + 54)
@@ -4466,7 +4466,7 @@ DrawDesignBox_4FrameCross:
 	ld bc, (xde + 6)
 	inc 1, bc
 	ld (xwa + 2), bc
-	lds bc, 0
+	ld bc, 0:i3
 	calr DrawFrame_Impl
 	jrl DrawFunc_Epilogue74
 	lds32 xwa, 1
@@ -4742,7 +4742,7 @@ DrawDesignBox_IconAdjustFrame:
 	decm 1, (xwa + 6)
 	cpw (xsp + 16), 0x0
 	jr nz, DrawDesignBox_IconLeftWidth
-	lds bc, 1
+	ld bc, 1:i3
 	jr DrawDesignBox_IconApplyAdjust
 
 DrawDesignBox_IconLeftWidth:
@@ -4778,7 +4778,7 @@ DrawDesignBox_IconComputeFill:
 	ld de, (xde)
 	dec 1, de
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 68)
@@ -4789,7 +4789,7 @@ DrawDesignBox_IconComputeFill:
 	ld de, (xde)
 	inc 1, de
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
 	lda xhl, (xsp + 62)
@@ -4806,7 +4806,7 @@ DrawDesignBox_IconComputeFill:
 	ld de, (xhl)
 	dec 1, de
 	ld (xbc), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 
 DrawDesignBox_IconLeftBorder:
@@ -4821,7 +4821,7 @@ DrawDesignBox_IconLeftBorder:
 	ld de, (xde)
 	inc 1, de
 	ld (xbc), de
-	lds de, 0
+	ld de, 0:i3
 	jrl DrawFunc_DrawLineAndReturn
 
 DrawDesignBox_PartGroupStyle:
@@ -4858,14 +4858,14 @@ DrawPartGroup_DispatchByType:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 DrawPartGroup_TableJump_DefaultCase:
-	lds iz, 0
+	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	jrl DrawPartGroup_Loop
 
 DrawPartGroup_Style8:
-	lds iz, 4
+	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
@@ -4891,25 +4891,25 @@ DrawPartGroup_StyleB:
 	ldw (xsp + 10), 0x12
 	ldi_erpw 0xfa, 0x13, 0x00
 	jrl DrawPartGroup_Loop
-	lds iz, 0
+	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x1a
 	jrl DrawPartGroup_WithAltFlag
-	lds iz, 0
+	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x15
 	jrl DrawPartGroup_WithFlag
-	lds iz, 4
+	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
 	ldw (xsp + 12), 0x1b
 	jrl DrawPartGroup_WithAltFlag
-	lds iz, 4
+	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
@@ -4939,13 +4939,13 @@ DrawPartGroup_StyleB:
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x18
 	jrl DrawPartGroup_WithFlag
-	lds iz, 0
+	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x1e
 	jr DrawPartGroup_WithAltFlag
-	lds iz, 4
+	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
@@ -4966,13 +4966,13 @@ DrawPartGroup_StyleB:
 DrawPartGroup_WithAltFlag:
 	ldw (xsp + 16), 0x1
 	jr DrawPartGroup_Loop
-	lds iz, 0
+	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x22
 	jr DrawPartGroup_WithFlag
-	lds iz, 4
+	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
@@ -5025,7 +5025,7 @@ DrawPartGroup_CopyBoxRect:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 54)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	cpw (xsp + 16), 0x0
 	jr nz, DrawPartGroup_NoLeftFlag
@@ -5213,7 +5213,7 @@ DrawPartGroup_DrawBorderLines:
 	lda xbc, (xsp + 46)
 	ld de, (xde)
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
 	ld xbc, (xsp + 74)
@@ -5223,7 +5223,7 @@ DrawPartGroup_DrawBorderLines:
 	lda xbc, (xsp + 46)
 	ld de, (xde)
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
 	ld xhl, (xsp + 74)
@@ -5242,7 +5242,7 @@ DrawPartGroup_DrawBorderLines:
 	ld (xwa), de
 	ld de, (xhl)
 	ld (xbc), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 
 DrawPartGroup_DrawLeftBorder:
@@ -5256,7 +5256,7 @@ DrawPartGroup_DrawLeftBorder:
 	lda xbc, (xsp + 46)
 	ld de, (xde)
 	ld (xbc), de
-	lds de, 0
+	ld de, 0:i3
 	jrl DrawFunc_DrawLineAndReturn
 	cpw (xsp + 72), 0xca
 	jr z, DrawPartGroup_StyleCA
@@ -5294,7 +5294,7 @@ DrawPartGroup_DrawCAFrames:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 54)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
@@ -5489,7 +5489,7 @@ DrawPartGroup_DrawCAFrames:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 54)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
@@ -5653,7 +5653,7 @@ DrawPartGroup_DrawCAFrames:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 54)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
@@ -5830,7 +5830,7 @@ DrawPartGroup_DrawCAFrames:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 54)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
@@ -5921,7 +5921,7 @@ DrawPartGroup_DrawCAFrames:
 	ld (xwa + 2), de
 	ld de, (xhl)
 	ld (xbc + 2), de
-	lds de, 7
+	ld de, 7:i3
 	calr DrawLine_Impl
 	lda xiy, (xsp + 50)
 	lda xix, (xsp + 42)
@@ -5945,7 +5945,7 @@ DrawPartGroup_DrawCAFrames:
 	lda xbc, (xsp + 46)
 	ld de, (xde)
 	ld (xbc + 2), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xiy, (xsp + 50)
 	lda xix, (xsp + 42)
@@ -5974,7 +5974,7 @@ DrawPartGroup_DrawCAFrames:
 	ld (xwa), de
 	ld de, (xhl)
 	ld (xbc), de
-	lds de, 7
+	ld de, 7:i3
 	calr DrawLine_Impl
 	lda xiy, (xsp + 50)
 	lda xix, (xsp + 42)
@@ -5998,7 +5998,7 @@ DrawPartGroup_DrawCAFrames:
 	lda xbc, (xsp + 46)
 	ld de, (xde)
 	ld (xbc), de
-	lds de, 0
+	ld de, 0:i3
 	calr DrawLine_Impl
 	lda xiy, (xsp + 50)
 	lda xix, (xsp + 42)
@@ -6386,9 +6386,9 @@ SplashBMP_PadCopyLoop:
 SplashBMP_Finish:
 	calr Gfx_DecodeImageToBuffer
 	calr Flash_SaveSplashScreen
-	lds wa, 2
+	ld wa, 2:i3
 	calr ChangePalette
-	lds hl, 1
+	ld hl, 1:i3
 
 SplashBMP_Return:
 	popw iz
@@ -6571,10 +6571,10 @@ ImageDecode_ClearPaletteLoop:
 	cp xbc, xwa
 	jr c, ImageDecode_ClearPaletteLoop
 	ld xhl, 0x56800
-	lds ix, 0
+	ld ix, 0:i3
 
 ImageDecode_RowLoop:
-	lds iy, 0
+	ld iy, 0:i3
 
 ImageDecode_PixelLoop:
 	ldb_spi C, 0xec
@@ -6816,10 +6816,10 @@ ImageDecode_PaletteCopyLoop:
 	cp xwa, 0xc0
 	jr lt, ImageDecode_PaletteCopyLoop
 	ld xhl, 0x56800
-	lds ix, 0
+	ld ix, 0:i3
 
 ImageDecode_ProcessRowsOuter:
-	lds iy, 0
+	ld iy, 0:i3
 	ld xbc, xhl
 
 ImageDecode_ProcessPixels:
@@ -6852,13 +6852,13 @@ ImageDecode_PixelNext:
 	ret
 
 Flash_SaveSplashScreen:
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, 0x56800
 	ld xde, 0x3c0000
 	call Flash_EraseSectorAndWrite
 	ld xwa, 0x3d0000
 	push xwa
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, 0x66800
 	ldw de, 0x3000
 	call FlashWrite
@@ -6925,7 +6925,7 @@ CaptureLcd:
 	call FileIO_WriteByte_Impl
 	cp xhl, 0x28
 	jrl nz, FileIO_ClosePath
-	lds iz, 0
+	ld iz, 0:i3
 	ld xwa, (0x03ef94:24)
 	or xwa, xwa
 	jr z, CaptureLcd_WritePaletteNoOr94
@@ -7005,14 +7005,14 @@ FileIO_ClosePath:
 	call FileIO_CloseHandle
 
 CaptureLcd_WriteFailed:
-	lds hl, 0
+	ld hl, 0:i3
 	jr CaptureLcd_Epilogue
 
 CaptureLcd_NextRow:
 	sub iz, 0x1
 	jr ge, CaptureLcd_WriteRowLoop
 	call FileIO_CloseHandle
-	lds hl, 1
+	ld hl, 1:i3
 
 CaptureLcd_Epilogue:
 	popw iz
@@ -7030,7 +7030,7 @@ ChangeWall:
 	jr ChangeWall_Epilogue
 
 ChangeWall_QueuedPath:
-	lds wa, 6
+	ld wa, 6:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (ChangeWall_QueueCallback:24)
@@ -7071,7 +7071,7 @@ ChangeWallPalette:
 	jr ChangeWallPalette_Epilogue
 
 ChangeWallPalette_QueuedPath:
-	lds wa, 6
+	ld wa, 6:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (ChangeWallPalette_QueueCallback:24)
@@ -7148,7 +7148,7 @@ ChangePalette:
 	jr ChangePalette_Epilogue
 
 ChangePalette_QueuedPath:
-	lds wa, 6
+	ld wa, 6:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (ChangePalette_QueueCallback:24)
@@ -7225,7 +7225,7 @@ PaletteBankRotate:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp hl, 0:i3
 	jr nz, PaletteBankRotate_Impl
-	lds wa, 4
+	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
 	lda xbc, (PaletteBankRotate_0x18:24)
@@ -7251,10 +7251,10 @@ PaletteBankRotate_Impl:
 	lda xsp, (xsp + 20)
 	lda xwa, (0x043c00:24)
 	ld xbc, xwa
-	lds de, 0
+	ld de, 0:i3
 
 PaletteBankRotate_RowLoop:
-	lds hl, 0
+	ld hl, 0:i3
 
 PaletteBankRotate_ColLoop:
 	cp (xbc), 0xe0
@@ -7359,7 +7359,7 @@ ClipBlit_Replace_ClipY:
 	sub iz, bc
 	jr ge, ClipBlit_Replace_ClipBottom
 	add (xsp + 6), iz
-	lds	iz, 0
+	ld	iz, 0:i3
 	jr t, ClipBlit_Replace_CalcVRAMAddr
 ClipBlit_Replace_ClipBottom:
 	ld wa, iz
@@ -7501,7 +7501,7 @@ ClipBlit_Direct_ClipY:
 	sub iz, bc
 	jr ge, ClipBlit_Direct_ClipBottom
 	add (xsp + 6), iz
-	lds	iz, 0
+	ld	iz, 0:i3
 	jr t, ClipBlit_Direct_CalcVRAMAddr
 ClipBlit_Direct_ClipBottom:
 	ld wa, iz
@@ -7590,7 +7590,7 @@ ColorBlit_Deferred:
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
@@ -7892,7 +7892,7 @@ ColorBlit2_Deferred:
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
@@ -8230,7 +8230,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
-	lds	bc, 4
+	ld	bc, 4:i3
 	.byte 0x95
 	scf
 	ld	xbc, (xsp+6)

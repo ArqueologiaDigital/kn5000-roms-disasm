@@ -722,27 +722,27 @@ AccTuning_CopyAllPartsFromStyle:
 	ld xhl, xiy
 	add xiy, 0x18
 	ld xix, 0x3246
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xiy, xhl
 	add xiy, 0x20
 	ld xix, 0x324d
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xiy, xhl
 	add xiy, 0x28
 	ld xix, 0x3254
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xiy, xhl
 	add xiy, 0x30
 	ld xix, 0x325b
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xiy, xhl
 	add xiy, 0x38
 	ld xix, 0x3262
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	pop xiy
 	ret
@@ -752,7 +752,7 @@ AccTuning_LoadAndApplyMaster:
 	add xhl, 0x248
 	add xiy, xhl
 	ld xix, 0x3246
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	call AccTuning_LoadMaster
 	pop xiy
@@ -767,7 +767,7 @@ AccTuning_LoadCoarseFromStyle:
 	add xhl, 0x24f
 	add xiy, xhl
 	ld xix, 0x324d
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xix, 0x324f
 	ld (xix), 0x40
@@ -784,7 +784,7 @@ AccTuning_LoadFineFromStyle:
 	add xhl, 0x256
 	add xiy, xhl
 	ld xix, 0x3254
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xix, 0x3256
 	ld (xix), 0xc
@@ -801,7 +801,7 @@ AccTuning_LoadOctaveFromStyle:
 	add xhl, 0x25d
 	add xiy, xhl
 	ld xix, 0x325b
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xix, 0x325d
 	ld (xix), 0x74
@@ -818,7 +818,7 @@ AccTuning_LoadTransposeFromStyle:
 	add xhl, 0x264
 	add xiy, xhl
 	ld xix, 0x3262
-	lds bc, 7
+	ld bc, 7:i3
 	ldir85
 	ld xix, 0x3264
 	ld (xix), 0x40

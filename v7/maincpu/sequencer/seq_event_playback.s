@@ -2173,7 +2173,7 @@ AccPlay_SetupSoundParams:
 	ld w, (0xfd63:16)
 	cp WA,0x01ff
 	jr nz, AccPlay_SetupJumpTarget
-	lds wa, 0
+	ld wa, 0:i3
 	ld (0xfd62:16), a
 	ld (0xfd63:16), w
 	ldb E, 0x17
@@ -2304,7 +2304,7 @@ AccPlay_ExtractVoiceSlot:
 
 
 AccPlay_ProcessNoteEvent:
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	1983
 	ld	a, (32413:16)
 	cp	a, 0:i3
@@ -2467,9 +2467,9 @@ AccPlay_NoteReleaseRet:
 	ret
 
 AccPlay_HandleEndMarkerEvt:
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	1526
-	lds	de, 1
+	ld	de, 1:i3
 	calr	1560
 	ld	xhl, 32223
 AccPlay_IncrementHoldLoop:
@@ -2488,7 +2488,7 @@ AccPlay_HoldLoopAdvance:
 	jr	nz, -34
 	ret
 MidiSeq_ProcessSustainEvent:
-	lds	bc, 4
+	ld	bc, 4:i3
 	calr	1476
 	ld	xhl, 32410
 	ld	a, (xhl)
@@ -2497,21 +2497,21 @@ MidiSeq_ProcessSustainEvent:
 	ldb	a, 213
 	ld	(xhl), a
 MidiSeq_SustainFixup:
-	lds de, 3
+	ld de, 3:i3
 	calr MidiSeqBuf_ProcessEntries
 	ret
 
 MidiSeq_HandleD2Event:
-	lds	bc, 5
+	ld	bc, 5:i3
 	calr	1449
 	ld	xhl, 32410
 	ld	a, (xhl+3)
 	ld	(xhl+2), a
-	lds	de, 3
+	ld	de, 3:i3
 	calr	1472
 	ret
 MidiSeq_HandleProgChange:
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	1427
 	ld	xhl, 32410
 	ld	a, (xhl+4)
@@ -2531,12 +2531,12 @@ MidiSeq_HandleProgChange:
 	or	w, 1
 MidiSeq_ProgChangeSetReverb:
 	ld (xhl + 5), w
-	lds de, 6
+	ld de, 6:i3
 	calr MidiSeqBuf_ProcessEntries
 	ret
 
 MidiSeq_HandleCtrlChange:
-	lds	bc, 7
+	ld	bc, 7:i3
 	calr	1367
 	ld	xhl, 32410
 	ld	a, (xhl+2)
@@ -2557,7 +2557,7 @@ MidiSeq_CtrlCheckType:
 	ld (xhl), a
 	and e, 0x7f
 	ld (xhl + 2), e
-	lds de, 3
+	ld de, 3:i3
 	calr MidiSeqBuf_ProcessEntries
 	jr MidiSeq_SustainRet
 
@@ -2577,7 +2577,7 @@ MidiSeq_CheckSostenuto:
 
 MidiSeq_SostenutoValue:
 	ld (xhl + 2), a
-	lds de, 3
+	ld de, 3:i3
 	calr MidiSeqBuf_ProcessEntries
 	jr MidiSeq_SustainRet
 
@@ -2597,7 +2597,7 @@ MidiSeq_SustainHandler:
 
 MidiSeq_SoftPedalValue:
 	ld (xhl + 2), a
-	lds de, 3
+	ld de, 3:i3
 	calr MidiSeqBuf_ProcessEntries
 	jr MidiSeq_SustainRet
 
@@ -3048,7 +3048,7 @@ Util_ExtractAndShiftBits:
 
 Voice_FindFreeSlot:
 	xor xix, xix
-	lds bc, 0
+	ld bc, 0:i3
 
 Voice_FindLoop:
 	ld hl, bc
@@ -3124,7 +3124,7 @@ MidiSeqBuf_AdvanceWritePos:
 	calr	65300
 	ld	wa, (xix+3)
 	ld	(32372:16), wa
-	lds	wa, 6
+	ld	wa, 6:i3
 	pop	xhl
 	pop	xde
 	pop	xix
@@ -3181,7 +3181,7 @@ AccPlay_CheckAndToggle:
 	bit 2, (0x041f:16)
 	jr nz, AccPlay_ToggleRestart
 	call AccWrap_PlayModeStartAccPlay
-	lds wa, 0
+	ld wa, 0:i3
 	ei 0x06
 	ld (0x046a:16), a
 	ld (0x0468:16), wa
@@ -3198,7 +3198,7 @@ AccPlay_ToggleRet:
 AccPlay_StopAndReset:
 	bit 2, (1056:16)
 	jr nz, AccPlay_StopResetRet
-	lds wa, 0
+	ld wa, 0:i3
 	ld (1047:16), a
 	ld (1048:16), wa
 	ld (1045:16), a
@@ -3946,7 +3946,7 @@ AcVocalGrid_DialSetup:
 	ld xwa, xiz
 	ld xbc, 0x1c00018
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcVocalGrid_SetDialAndRet
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -4004,7 +4004,7 @@ AcVocalGrid_CheckEvent91:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	jrl AcVocalGrid_SetDialAndRet
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -4062,7 +4062,7 @@ AcVocalGrid_CheckEvent91B:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 
 AcVocalGrid_SetDialAndRet:
 	call SetDialEnable
@@ -4133,7 +4133,7 @@ VocalistGridCheck:
 	ldirw
 	ld xiy, MidiPart_PageStr_1of3_0xA
 	lda xix, (xsp + 12)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xix, xhl
 	lda xbc, (xsp + 12)
@@ -4186,8 +4186,8 @@ VocalistGrid_DispatchData:
 	dec	4, wa
 	add	bc, wa
 	ld_rrl	xwa, xde, bc
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	102
 	call	16400579
 	ld	xwa, xhl
@@ -4222,7 +4222,7 @@ VocalistGrid_DispatchData:
 	add	bc, wa
 	ld_rrl	xwa, xde, bc
 	ldw	bc, 65535
-	lds	de, 2
+	ld	de, 2:i3
 	call	16381237
 	jrl	1442
 	ld	(xsp+4), xbc
@@ -4237,7 +4237,7 @@ VocalistGrid_DispatchData:
 	ld	xwa, (xiz)
 	.byte 0xe3, 0x07, 0xf0, 0xe6, 0xf0
 	jr	nz, 4
-	lds	bc, 1
+	ld	bc, 1:i3
 	jr	19
 	ld	wa, qbc
 	inc	4, wa
@@ -4245,7 +4245,7 @@ VocalistGrid_DispatchData:
 	ld	xwa, (xiy)
 	.byte 0xe3, 0x07, 0xf0, 0xe6, 0xf0
 	jr	nz, 9
-	lds	bc, 2
+	ld	bc, 2:i3
 	ld	xwa, (xsp+4)
 	ld	(xwa), bc
 	jr	12
@@ -4756,7 +4756,7 @@ PsHarmOnOffBoxProc:
 	ldiw
 	ld xiy, MidiPart_HarmLocalStr_0x1C
 	lda xix, (xsp + 8)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	cp xiz, 0x1c0000f
 	jr z, PsHarm_DrawHandler
@@ -4855,12 +4855,12 @@ PsHarm_InactiveCheck:
 	cpw (xbc), 0x7
 	jr ugt, PsHarm_InactiveColorA
 	ldw bc, 0xc9
-	lds de, 7
+	ld de, 7:i3
 	jr PsHarm_DrawInactiveBox
 
 PsHarm_InactiveColorA:
 	ldw bc, 0xc1
-	lds de, 7
+	ld de, 7:i3
 
 PsHarm_DrawInactiveBox:
 	call DrawDesignBox
@@ -4974,12 +4974,12 @@ VocalistPage1OK_Dispatch:
 	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 119808
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	9
 	ld	xwa, 119808
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	call	16566832
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
@@ -5005,12 +5005,12 @@ VocalistPage1_DispatchData:
 	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 98304
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	9
 	ld	xwa, 98304
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	call	16566832
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
@@ -5023,8 +5023,8 @@ VocalistPage1_DispatchData:
 	ld	(46928:16), 24
 	call	16600229
 	ld	xwa, 16897
-	lds	bc, 3
-	lds	de, 2
+	ld	bc, 3:i3
+	ld	de, 2:i3
 	call	16566832
 	ld	xwa, (xsp)
 	srl	xwa, 0
@@ -5032,12 +5032,12 @@ VocalistPage1_DispatchData:
 	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 101376
-	lds	bc, 1
-	lds	de, 2
+	ld	bc, 1:i3
+	ld	de, 2:i3
 	jr	9
 	ld	xwa, 101376
-	lds	bc, 0
-	lds	de, 2
+	ld	bc, 0:i3
+	ld	de, 2:i3
 	call	16566832
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
@@ -5049,7 +5049,7 @@ VocalistPage1_DispatchData:
 	call	16602124
 	ld	(46928:16), 1
 	call	16600229
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	16328715
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
@@ -5098,7 +5098,7 @@ RevSel_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	lds wa, 0
+	ld wa, 0:i3
 	call SoundPreset_FindMatch
 	cp hl, 0xffff
 	jr z, RevSel_NoPresetMatch
@@ -5179,7 +5179,7 @@ EqSel_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	lds wa, 1
+	ld wa, 1:i3
 	call SoundPreset_FindMatch
 	cp hl, 0xffff
 	jr z, EqSel_NoPresetMatch
@@ -5290,7 +5290,7 @@ RevEqSel_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	lds wa, 2
+	ld wa, 2:i3
 	call SoundPreset_FindMatch
 	cp hl, 0xffff
 	jr z, RevEqSel_NoPresetMatch
@@ -5381,7 +5381,7 @@ EqOnOffFunc:
 	call SendEvent
 	ld xwa, 0x4006
 	ld bc, hl
-	lds de, 1
+	ld de, 1:i3
 	call MainLswPut
 	lds32 xhl, 0
 	ret
@@ -5394,7 +5394,7 @@ RevEqOnOffFunc:
 	call SendEvent
 	ld xwa, 0x4006
 	ld bc, hl
-	lds de, 1
+	ld de, 1:i3
 	call MainLswPut
 	lds32 xhl, 0
 	ret
@@ -5408,17 +5408,17 @@ MainRevEqPresetLoad:
 	jr z, RevEqPreset_TypeEq
 	cp xhl, 0x1e30009
 	jr nz, RevEqPreset_ReturnZero
-	lds wa, 0
+	ld wa, 0:i3
 	ld bc, de
 	jr MainRevEqPresetLoad_DoLoad
 
 RevEqPreset_TypeEq:
-	lds wa, 1
+	ld wa, 1:i3
 	ld bc, de
 	jr MainRevEqPresetLoad_DoLoad
 
 RevEqPreset_TypeRevEq:
-	lds wa, 2
+	ld wa, 2:i3
 	ld bc, de
 
 MainRevEqPresetLoad_DoLoad:
@@ -5555,7 +5555,7 @@ GMYesFunc:
 	call	16421459
 	ld	xwa, 192
 	ld	bc, hl
-	lds	de, 1
+	ld	de, 1:i3
 	call	16381053
 	ld	xwa, 4294967295
 	ld	xbc, 29360130
@@ -5620,7 +5620,7 @@ SplitPoint_ClampToMiddle:
 	ldi_erpb 0xfb, 0x3c
 
 SplitPoint_StartDraw:
-	lds iz, 0
+	ld iz, 0:i3
 	jr Draw_keybed_maybe_for_indicating_split_point
 
 SplitPoint_DrawOctaveLoop:
@@ -5671,10 +5671,10 @@ SplitPoint_FillRemainingLoop:
 	jr c, SplitPoint_FillRemainingLoop
 
 SplitPoint_UpdateScreen:
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 	call SetNeedUpdate
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00078
@@ -5744,7 +5744,7 @@ AccWrap_SetMinVelocity:
 
 	ld xwa, 0x4181
 
-	lds de, 1
+	ld de, 1:i3
 
 	call	16566832
 

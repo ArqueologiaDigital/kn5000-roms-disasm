@@ -874,7 +874,7 @@ BootSerial_RxRingAdvanceIY:
 	inc	1, iy
 	cp	iy, 0x005c		; RX serial ring size
 	jr	c, BootSerial_RxRingAdvanceIY__done
-	lds	iy, 0
+	ld	iy, 0:i3
 BootSerial_RxRingAdvanceIY__done:
 	ret
 
@@ -882,7 +882,7 @@ BootSerial_TxRingAdvanceIY:
 	inc	1, iy
 	cp	iy, 0x003c		; TX serial ring size
 	jr	c, BootSerial_TxRingAdvanceIY__done
-	lds	iy, 0
+	ld	iy, 0:i3
 BootSerial_TxRingAdvanceIY__done:
 	ret
 
@@ -890,7 +890,7 @@ BootSerial_CtrlRingAdvanceIX:
 	inc	1, ix
 	cp	ix, 0x0080		; control ring size
 	jr	c, BootSerial_CtrlRingAdvanceIX__done
-	lds	ix, 0
+	ld	ix, 0:i3
 BootSerial_CtrlRingAdvanceIX__done:
 	ret
 
@@ -907,7 +907,7 @@ BootSerial_CtrlRingAdvanceIX_Dup:
 	inc	1, ix
 	cp	ix, 0x0080
 	jr	c, BootSerial_CtrlRingAdvanceIX_Dup__done
-	lds	ix, 0
+	ld	ix, 0:i3
 BootSerial_CtrlRingAdvanceIX_Dup__done:
 	ret
 
@@ -973,19 +973,19 @@ AudioMix_Init:
 	ld	(xiz - 4), xwa
 	lda	xwa, (xiz - 8)
 	push	xwa
-	lds	bc, 0
+	ld	bc, 0:i3
 	calr	AudioMix_WriteChannelGroup
 	pop	xwa
 	push	xwa
-	lds	bc, 1
+	ld	bc, 1:i3
 	calr	AudioMix_WriteChannelGroup
 	pop	xwa
 	push	xwa
-	lds	bc, 2
+	ld	bc, 2:i3
 	calr	AudioMix_WriteChannelGroup
 	pop	xwa
 	push	xwa
-	lds	bc, 3
+	ld	bc, 3:i3
 	calr	AudioMix_WriteChannelGroup
 	pop	xwa
 	ld	xbc, 0x150000		; peripheral base (subcpu twin: 0x130000)

@@ -110,7 +110,7 @@ SetupExitFunc:
 	call	16400380
 	or	xiz, xiz
 	jr	nz, 82
-	lds	wa, 6
+	ld	wa, 6:i3
 	call	16535254
 	cp	hl, 0:i3
 	jr	z, 72
@@ -430,7 +430,7 @@ DrawStr_LoopCheck:
 DrawStr_Epilogue:
 	ld xwa, (xsp + 10)
 	stib_ind 0x07, 0xe0, 0xe8, 0x00
-	lds hl, 0
+	ld hl, 0:i3
 	ld de, (xsp + 2)
 	inc 1, bc
 	cp bc, de
@@ -551,7 +551,7 @@ PsFileNameBox_Init_HideFirst:
 
 PsFileNameBox_Init_Configure:
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 
 PsFileNameBox_Init_Forward:
@@ -606,7 +606,7 @@ PsFileNameBox_DrawItem_Body:
 	lda_dri XBC, 0xfd, 0x9a, 0x00
 	ld de, (xwa)
 	ld (xbc), de
-	lds de, 7
+	ld de, 7:i3
 	call DrawLine
 	incw 1, (xsp + 12)
 
@@ -644,7 +644,7 @@ PsFileNameBox_Scroll_HideDown:
 
 PsFileNameBox_Scroll_Apply:
 	call SetDialDown
-	lds wa, 1
+	ld wa, 1:i3
 	call SetDialEnable
 	jrl PsFileNameBox_ReturnZero
 

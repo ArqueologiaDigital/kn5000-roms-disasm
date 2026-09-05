@@ -137,7 +137,7 @@ SoundBank_InitTrack_WordFields:
 	ld xix, 0x42
 	add xix, xde
 	xor wa, wa
-	lds bc, 6
+	ld bc, 6:i3
 
 SoundBank_InitTrack_ClearTail:
 	stw_dpi WA, 0xf1
@@ -207,7 +207,7 @@ SoundBank_CopyChData:
 	pushw bc
 	push xix
 	push xiy
-	lds bc, 6
+	ld bc, 6:i3
 	ld xix, 0x100
 	add xix, xde
 	ld xiy, 0xc1
@@ -225,7 +225,7 @@ SoundBank_CopyCh_InitRemaining:
 	ldw bc, 0xa
 	ld xiy, SoundBank_DefaultNamePadding
 	ldir85
-	lds bc, 6
+	ld bc, 6:i3
 	ld xix, 0xc1
 	add xix, xde
 	ld xiy, SoundBank_DefaultNamePadding
@@ -419,7 +419,7 @@ SMF_InitSequencerState:
 	pop xwa
 
 SMF_ReadMThd_Start:
-	lds bc, 4
+	ld bc, 4:i3
 	ld xiy, SMF_HeaderMagic_MThdMTrk
 
 SMF_ReadMThd_ByteLoop:
@@ -506,7 +506,7 @@ SMF_AfterFloppyWait:
 FloppyIO_ReadAndValidateHeader:
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
-	lds bc, 4
+	ld bc, 4:i3
 	ld xiy, SMF_HeaderMagic_MThdMTrk_0x4
 
 SMF_ReadMTrk_ByteLoop:
@@ -523,7 +523,7 @@ SMF_ReadMTrk_ByteLoop:
 SMF_ReadMTrk_Matched:
 	djnz xbc, SMF_ReadMTrk_ByteLoop
 	ld xix, 0xfa2
-	lds bc, 4
+	ld bc, 4:i3
 
 SMF_ReadTrackData_Loop:
 	pushw bc

@@ -150,7 +150,7 @@ Sys_CheckPowerStableFlag:
 	ret
 
 Vga_WritePortShortDelay:
-	lds de, 0
+	ld de, 0:i3
 
 Vga_WritePort_DelayLoop:
 	inc 1, de
@@ -166,10 +166,10 @@ Vga_SelectWritePlane:
 	dec 2, xsp
 	ld (xsp), a
 	ldw wa, 0x3c4
-	lds bc, 6
+	ld bc, 6:i3
 	calr Vga_WritePortShortDelay
 	ldw wa, 0x3c5
-	lds bc, 1
+	ld bc, 1:i3
 	calr Vga_WritePortShortDelay
 	ldw wa, 0x3c4
 	ldw bc, 0x8
@@ -182,10 +182,10 @@ Vga_SelectWritePlane:
 	ldw wa, 0x3c5
 	calr Vga_WritePortShortDelay
 	ldw wa, 0x3c4
-	lds bc, 6
+	ld bc, 6:i3
 	calr Vga_WritePortShortDelay
 	ldw wa, 0x3c5
-	lds bc, 0
+	ld bc, 0:i3
 	calr Vga_WritePortShortDelay
 	inc 2, xsp
 	ret
@@ -200,28 +200,28 @@ Vga_SetupMultiPlaneDisplay:
 	ld xbc, 0xab000
 	ld xde, 0x5c00
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 1
+	ld wa, 1:i3
 	calr Vga_SelectWritePlane
 	lda xbc, (0x0ab000:24)
 	add xbc, 0xb800
 	ld xwa, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 2
+	ld wa, 2:i3
 	calr Vga_SelectWritePlane
 	lda xbc, (0x0ab000:24)
 	add xbc, 0x2b800
 	ld xwa, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 3
+	ld wa, 3:i3
 	calr Vga_SelectWritePlane
 	lda xbc, (0x0ab000:24)
 	add xbc, 0x4b800
 	ld xwa, 0x1a0000
 	ldw de, 0x4c00
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 0
+	ld wa, 0:i3
 	calr Vga_SelectWritePlane
 	jp Start_8bit_Timer_3
 
@@ -235,52 +235,52 @@ Vga_RestoreMultiPlaneDisplay:
 	ld xbc, 0x1b4800
 	ld xde, 0x5c00
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 1
+	ld wa, 1:i3
 	calr Vga_SelectWritePlane
 	lda xwa, (0x0ab000:24)
 	add xwa, 0xb800
 	ld xbc, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 2
+	ld wa, 2:i3
 	calr Vga_SelectWritePlane
 	lda xwa, (0x0ab000:24)
 	add xwa, 0x2b800
 	ld xbc, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 3
+	ld wa, 3:i3
 	calr Vga_SelectWritePlane
 	lda xwa, (0x0ab000:24)
 	add xwa, 0x4b800
 	ld xbc, 0x1a0000
 	ldw de, 0x4c00
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 0
+	ld wa, 0:i3
 	calr Vga_SelectWritePlane
 	jp Start_8bit_Timer_3
 
 Vga_BackupPlane3ToBuffer:
 	call Stop_and_Clear_8bit_Timer_3
-	lds wa, 3
+	ld wa, 3:i3
 	calr Vga_SelectWritePlane
 	ld xwa, 0x1a9800
 	ld xbc, 0x69800
 	ld xde, 0xb400
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 0
+	ld wa, 0:i3
 	calr Vga_SelectWritePlane
 	jp Start_8bit_Timer_3
 
 Vga_RestorePlane3FromBuffer:
 	call Stop_and_Clear_8bit_Timer_3
-	lds wa, 3
+	ld wa, 3:i3
 	calr Vga_SelectWritePlane
 	ld xwa, 0x69800
 	ld xbc, 0x1a9800
 	ld xde, 0xb400
 	call Copy_DE_words_from_XBC_to_XWA
-	lds wa, 0
+	ld wa, 0:i3
 	calr Vga_SelectWritePlane
 	jp Start_8bit_Timer_3
 
@@ -1832,19 +1832,19 @@ AudioMix_Init:
 	ld (xiz - 4), xwa
 	lda xwa, (xiz - 8)
 	push xwa
-	lds bc, 0
+	ld bc, 0:i3
 	calr AudioMix_WriteChannelGroup
 	pop xwa
 	push xwa
-	lds bc, 1
+	ld bc, 1:i3
 	calr AudioMix_WriteChannelGroup
 	pop xwa
 	push xwa
-	lds bc, 2
+	ld bc, 2:i3
 	calr AudioMix_WriteChannelGroup
 	pop xwa
 	push xwa
-	lds bc, 3
+	ld bc, 3:i3
 	calr AudioMix_WriteChannelGroup
 	pop xwa
 	ld xbc, 0x150000
@@ -1994,7 +1994,7 @@ TaskSched_Init:
 	ld (1475:16), wa
 	ldw hl, 0x4c5
 	extz xhl
-	lds de, 4
+	ld de, 4:i3
 	ldb b, 0x3
 
 TaskSched_InitPriorityQueues:
@@ -3470,7 +3470,7 @@ TempoRingBuf_WriteBytes_Loop:
 TempoRingBuf_CheckEmpty:
 	ld hl, (0x01e74f:24)
 	cp hl, (0x1e74b:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, TempoRingBuf_CheckEmpty_Return
 	ldw hl, 0xffff
 
@@ -3567,7 +3567,7 @@ RhythmBuf_InlineBytecode:
 RhythmBuf_CheckEmpty:
 	ld hl, (0x01ef59:24)
 	cp hl, (0x1ef55:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, RhythmBuf_CheckEmpty_Return
 	ldw hl, 0xffff
 
@@ -3664,7 +3664,7 @@ AltEvtBuf_InlineBytecode:
 	.byte 0xd2
 	pop	xsp
 	.byte 0xf1, 0x01, 0xf3
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -3749,7 +3749,7 @@ SeqEvtBuf_InlineBytecode:
 	ret
 	ld	hl, (0x1f26d:24)
 	cp	hl, (0x1f269:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -3852,7 +3852,7 @@ SeqMain_WriteBytes_Loop:
 Seq_CheckSongEnd:
 	ld hl, (0x01f377:24)
 	cp hl, (0x1f373:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, Seq_CheckSongEnd_Return
 	ldw hl, 0xffff
 
@@ -3951,7 +3951,7 @@ SeqBuf_MidiOut_WriteBytes_Loop:
 SeqBuf_MidiOut_CheckEmpty:
 	ld hl, (0x01f781:24)
 	cp hl, (0x1f77d:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, SeqBuf_MidiOut_CheckEmpty_Return
 	ldw hl, 0xffff
 
@@ -4058,7 +4058,7 @@ SeqBuf2_InlineBytecode:
 	.byte 0xd2
 	cp	(xsp), w
 	.byte 0x01, 0xf3
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -4161,7 +4161,7 @@ SeqBuf3_InlineBytecode:
 	.byte 0xd2
 	cp	(xbc), de
 	.byte 0x01, 0xf3
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -4256,7 +4256,7 @@ SeqBuf_DspSysEx_WriteBytes_Loop:
 SeqBuf_DspSysEx_CheckSongEnd:
 	ld hl, (0x01fc9f:24)
 	cp hl, (0x1fc9b:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, SeqBuf_DspSysEx_CheckSongEnd_Return
 	ldw hl, 0xffff
 
@@ -4347,7 +4347,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ret
 	ld	hl, (0x200a9:24)
 	cp hl, (131237:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -4434,7 +4434,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	.byte 0x01
 	push	sr
 	.byte 0xf3
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -4524,7 +4524,7 @@ SeqBuf_VoiceMap_WriteBlock_Loop:
 SeqBuf_VoiceMap_CheckEmpty:
 	ld hl, (0x0201bd:24)
 	cp hl, (0x201b9:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, SeqBuf_VoiceMap_CheckEmpty_Done
 	ldw hl, 0xffff
 
@@ -4625,7 +4625,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ret
 	ld	hl, (0x202c7:24)
 	cp hl, (131779:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -4709,7 +4709,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	ret
 	ld	hl, (0x203d1:24)
 	cp hl, (132045:24)
-	lds	hl, 0
+	ld	hl, 0:i3
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
@@ -4806,7 +4806,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 SeqBuf_NoteEvent_CheckSongEnd:
 	ld hl, (0x0204db:24)
 	cp hl, (0x204d7:24)
-	lds hl, 0
+	ld hl, 0:i3
 	jr z, SeqBuf_NoteEvent_CheckSongEnd_Return
 	ldw hl, 0xffff
 
@@ -5225,7 +5225,7 @@ SeqDMA_MultiWrite_NoteEvent:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld (xsp + 6), a
-	lds iz, 0
+	ld iz, 0:i3
 	ld a, (xsp + 6)
 	extz wa
 	cp wa, 0:i3
@@ -5256,7 +5256,7 @@ SeqDMA_MultiWrite_VoiceMap:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld (xsp + 6), a
-	lds iz, 0
+	ld iz, 0:i3
 	ld a, (xsp + 6)
 	extz wa
 	cp wa, 0:i3
@@ -5286,7 +5286,7 @@ SeqDMA_MultiWrite_DspSysEx:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld (xsp + 6), a
-	lds iz, 0
+	ld iz, 0:i3
 	ld a, (xsp + 6)
 	extz wa
 	cp wa, 0:i3
@@ -5317,7 +5317,7 @@ SeqDMA_MultiWrite_SoundEdit:
 	pushw iz
 	ld (xsp + 2), xbc
 	ld (xsp + 6), a
-	lds iz, 0
+	ld iz, 0:i3
 	ld a, (xsp + 6)
 	extz wa
 	cp wa, 0:i3
@@ -5420,7 +5420,7 @@ sendCOMM:
 	ld (xsp + 2), xde
 	ld iz, bc
 	ld (xsp + 6), a
-	lds wa, 2
+	ld wa, 2:i3
 	call Audio_Lock_Acquire
 	cp iz, 0x20
 	jr ule, sendCOMM_FinalChunk
@@ -5444,7 +5444,7 @@ sendCOMM_FinalChunk:
 	extz bc
 	ld xde, (xsp + 2)
 	calr InterCPU_Send_Data_Block
-	lds wa, 2
+	ld wa, 2:i3
 	call Audio_Lock_Release
 	popw iz
 	inc 6, xsp
@@ -5473,7 +5473,7 @@ sendCOMM_FinalChunk:
 InterCPU_Send_Data_Block:
 	cp c, 0:i3
 	ret z
-	lds ix, 0
+	ld ix, 0:i3
 
 InterCPU_Send_WaitReady:
 	bit_dd8 3, 0x68	; SSTAT1 - test if Sub CPU is ready
@@ -5485,7 +5485,7 @@ InterCPU_Send_WaitReady:
 	sll a, 5
 	or a, l
 	ld (0x140000:24), a
-	lds ix, 0
+	ld ix, 0:i3
 
 InterCPU_Send_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
@@ -5534,7 +5534,7 @@ InterCPU_Send_AckTimeoutLoop:
 ;        Timeout: 60000 iterations (0xea60)
 ; ===========================================================================
 InterCPU_E2_Send:
-	lds ix, 0
+	ld ix, 0:i3
 	cp (1504:16), 0
 	jr z, InterCPU_E2_ClearAndSend
 
@@ -5550,7 +5550,7 @@ InterCPU_E2_ClearAndSend:
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E2 command handshake
 	ld (1504:16), 1
 	ld (0x140000:24), 0xe2
-	lds ix, 0
+	ld ix, 0:i3
 
 InterCPU_E2_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
@@ -5654,7 +5654,7 @@ Audio_DMA_Transfer_DelayLoop:
 ; ===========================================================================
 InterCPU_E1_Bulk_Transfer:
 	pushw iz
-	lds iz, 0
+	ld iz, 0:i3
 	cp (1504:16), 0
 	jr z, E1Bulk_ReadyCheck
 
@@ -5667,7 +5667,7 @@ E1Bulk_WaitIdle_Loop:
 	jr nz, E1Bulk_WaitIdle_Loop
 
 E1Bulk_ReadyCheck:
-	lds iz, 0
+	ld iz, 0:i3
 
 E1Bulk_WaitSubCPU_Ready:
 	bit_dd8 3, 0x68	; SSTAT1 - test if Sub CPU is ready for E1 transfer
@@ -5675,7 +5675,7 @@ E1Bulk_WaitSubCPU_Ready:
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E1 bulk transfer
 	ld (1504:16), 2
 	ld (0x140000:24), 0xe1
-	lds iz, 0
+	ld iz, 0:i3
 
 E1Bulk_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
@@ -5699,7 +5699,7 @@ E1Bulk_WaitPhase1_Loop:
 	jr nz, E1Bulk_WaitPhase1_Loop
 
 E1Bulk_Phase2_Init:
-	lds wa, 0
+	ld wa, 0:i3
 
 E1Bulk_Phase2_Delay:
 	inc 1, wa
@@ -5719,7 +5719,7 @@ E1Bulk_WaitPhase2_Loop:
 	jr nz, E1Bulk_WaitPhase2_Loop
 
 E1Bulk_PostTransfer_Delay_Init:
-	lds iz, 0
+	ld iz, 0:i3
 	cp iz, 0xc8
 	jr nc, E1Bulk_PostTransfer_Exit
 
@@ -5890,7 +5890,7 @@ INT0_ReadLatch:
 	lda xwa, (1550:16)
 	ld (1494:16), xwa
 	ldc_cr32 xwa, 0x20
-	lds wa, 6
+	ld wa, 6:i3
 	ldc_cr16 wa, 0x40
 	lda_dd8l XBC, (0xf0)
 	ld a, (xbc)
@@ -6077,7 +6077,7 @@ E1DMA_ISR_BytecodeBlock:
 	ldb	w, 6
 	dec	6, l
 	pop	sr
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	ld	wa, de
 	ld	bc, (1033:16)
@@ -6426,7 +6426,7 @@ FlashOp_Epilogue10:
 Flash_CheckReady:
 	bit_dd8 5, 0x1c
 	jr z, Flash_CheckReady_NotReady
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 Flash_CheckReady_NotReady:
@@ -6447,23 +6447,23 @@ Flash_WaitUntilReady_Loop:
 	ret
 
 Flash_InitAllBanks:
-	lds wa, 1
+	ld wa, 1:i3
 	calr Flash_IdentifyChip
-	lds wa, 2
+	ld wa, 2:i3
 	calr Flash_IdentifyChip
 	call Get_Region_Code
 	cp l, 4:i3
 	call nz, (TableDataROM_IdentifyChip:24)
-	lds wa, 1
+	ld wa, 1:i3
 	calr Flash_IdentifyAndValidateChip
 	ld (0x0205e0:24), hl
-	lds wa, 2
+	ld wa, 2:i3
 	calr Flash_IdentifyAndValidateChip
 	ld (0x0205e2:24), hl
 	ret
 
 Flash_FillBuffer:
-	lds de, 0
+	ld de, 0:i3
 	cp bc, 0:i3
 	ret ule
 
@@ -6489,7 +6489,7 @@ Flash_WriteBufferToChip:
 	ld (xsp + 2), xwa
 	and xbc, 0xff0000
 	ld (xsp + 6), xbc
-	lds iz, 0
+	ld iz, 0:i3
 
 Flash_WriteBufferToChip_Loop:
 	ld a, (xsp + 10)
@@ -6505,7 +6505,7 @@ Flash_WriteBufferToChip_Loop:
 	inc 1, iz
 	cp iz, 0x8000
 	jr c, Flash_WriteBufferToChip_Loop
-	lds iz, 0
+	ld iz, 0:i3
 
 Flash_WriteBufferToChip_Delay:
 	inc 1, iz
@@ -6526,7 +6526,7 @@ Flash_WriteFromMemory:
 	ld (xsp + 10), a
 	ld xwa, 0xff0000
 	and (xsp + 2), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 Flash_WriteFromMemory_Loop:
 	ld a, (xsp + 10)
@@ -6542,7 +6542,7 @@ Flash_WriteFromMemory_Loop:
 	inc 1, iz
 	cp iz, 0x8000
 	jr c, Flash_WriteFromMemory_Loop
-	lds iz, 0
+	ld iz, 0:i3
 
 Flash_WriteFromMemory_Delay:
 	inc 1, iz
@@ -6634,17 +6634,17 @@ FlashWrite_DoWrite:
 	ld xwa, 0x69800
 	ldw bc, 0x8000
 	calr Flash_FillBuffer
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, 0x69800
 	ld xde, 0x378700
 	calr Flash_EraseSectorAndWrite
 	ld xwa, 0x378700
 	push xwa
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, 0x800000
 	ldw de, 0x400
 	calr FlashWrite
-	lds wa, 1
+	ld wa, 1:i3
 	jrl Flash_IdentifyChip
 
 TableDataROM_IdentifyChip:
@@ -6910,7 +6910,7 @@ HDAE5000_Flash_Erase_AllSectors:
 HDAE5000_Status_Check:
 	bit_dd8 5, 0x1c
 	jr z, HDAE5000_Status_NotPresent
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 HDAE5000_Status_NotPresent:
@@ -6955,7 +6955,7 @@ HDAE5000_Status_DataBlock:
 	inc	1, xiz
 	cp	xiz, 8000
 	jr	c, -26
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -7046,7 +7046,7 @@ SLIDE_Decompress_4K_CopyMatch:
 	exw_erp WA, 0x32
 	and iz, 0xf
 	inc 2, iz
-	lds iy, 0
+	ld iy, 0:i3
 	cp iz, 0:i3
 	jr c, SLIDE_Decompress_4K_Continue
 
@@ -7169,7 +7169,7 @@ SLIDE_Decompress_8K_CopyMatch:
 	exw_erp WA, 0x32
 	and iz, 0x7
 	inc 2, iz
-	lds iy, 0
+	ld iy, 0:i3
 	cp iz, 0:i3
 	jr c, SLIDE_Decompress_8K_Continue
 
@@ -7213,7 +7213,7 @@ SLIDE_Parse_Header:
 	ld xiz, xwa
 	ld xiy, SLIDE_STRING	; "SLIDE"
 	lda xix, (xsp + 4)
-	lds bc, 3
+	ld bc, 3:i3
 	ldirw
 	pushw 0x5	; string length: 5 bytes
 	lda xwa, (xsp + 6)
@@ -7234,7 +7234,7 @@ SLIDE_Parse_Header:
 	calr SLIDE_Decompress_4K_Init
 
 SLIDE_Parse_ReturnOK:
-	lds hl, 0
+	ld hl, 0:i3
 	jr SLIDE_Parse_Return
 
 SLIDE_Parse_Check8K:
@@ -7338,7 +7338,7 @@ Detect_Disk_Type:
 	inc 2, xsp
 	ld xiz, xhl
 	ld xwa, 0x21
-	lds bc, 1
+	ld bc, 1:i3
 	ld xde, xiz
 	calr FDC_ReadSectors
 	pushw 0x26	; string length
@@ -7455,7 +7455,7 @@ FDC_WriteSectors:
 	extz xwa
 	div wa, 0x12
 	stw_erp WA, 0xe2
-	lds iz, 0
+	ld iz, 0:i3
 	cp wa, 0:i3
 	jr z, FDC_WriteSectors_FullTracks
 	ldw iz, 0x12
@@ -7581,7 +7581,7 @@ FDC_WriteSectors_Compressed:
 	extz xwa
 	div wa, 0x12
 	stw_erp WA, 0xe2
-	lds iz, 0
+	ld iz, 0:i3
 	cp wa, 0:i3
 	jr z, FDC_WriteCompressed_FullTracks
 	ldw iz, 0x12
@@ -7777,7 +7777,7 @@ FlashBurn_ProgressLoop:
 	inc 8, iz
 	ld wa, iz
 	ldw bc, 0xb4
-	lds de, 5
+	ld de, 5:i3
 	call VRAM_FillRect
 	lds32 xwa, 0
 	ld (1033:16), xwa
@@ -7821,7 +7821,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_001h:
 	ldw wa, 0x24
 	ld xbc, 0x800000
 	calr FDC_WriteSectors
-	lds wa, 2
+	ld wa, 2:i3
 	calr FirmwareUpdate_SaveDiskType
 	ldw wa, 0x24
 	ld xbc, 0x900000
@@ -7835,7 +7835,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_003h:
 	ldw wa, 0x24
 	ld xbc, 0x800000
 	calr FDC_WriteSectors
-	lds wa, 4
+	ld wa, 4:i3
 	calr FirmwareUpdate_SaveDiskType
 	ldw wa, 0x24
 	ld xbc, 0x900000
@@ -7847,11 +7847,11 @@ UpdateFile_WriteSectors_AndCleanup:
 
 ; "Technics KN5000 CMPCUSTOMDATA FILE"
 HANDLE_UPDATE_FILE_TYPE_ID_005h:
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_WaitUntilReady
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	pushw 0x800
-	lds wa, 1
+	ld wa, 1:i3
 	ldw bc, 0x24
 	ld xde, 0x300000	; "custom_data" 8MBit FLASH ROM @ IC19
 	jr UpdateFile_WriteCompressed_AndCleanup
@@ -7859,11 +7859,11 @@ HANDLE_UPDATE_FILE_TYPE_ID_005h:
 
 ; "Technics KN5000 HD-AEPRG DATA FILE"
 HANDLE_UPDATE_FILE_TYPE_ID_006h:
-	lds wa, 2
+	ld wa, 2:i3
 	call Flash_WaitUntilReady
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	pushw 0x400
-	lds wa, 2
+	ld wa, 2:i3
 	ldw bc, 0x24
 	ld xde, 0x280000
 
@@ -7874,10 +7874,10 @@ UpdateFile_WriteCompressed_AndCleanup:
 
 ; "Technics KN5000 Program DATA FILE PCK"
 HANDLE_UPDATE_FILE_TYPE_ID_007h:
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, 0x3e0000
 	call Flash_EraseSectorWithBankSelect
-	lds wa, 1
+	ld wa, 1:i3
 	ld xbc, 0x3f0000
 	call Flash_EraseSectorWithBankSelect
 	calr Flash_BurnWithProgress
@@ -8052,7 +8052,7 @@ HDAE5000_FlashWrite_WordLoop:
 	ld xwa, (xsp + 4)
 	ld_spiw DE, 0xe1
 	ld (xsp + 4), xwa
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_ProgramWord
 	inc 1, xiz
 	cp xiz, 0x40000
@@ -8195,7 +8195,7 @@ HDAE5000_Init_BytecodeBlock:
 	calr	65037
 	or	xhl, xhl
 	jr	z, 6
-	lds	wa, 1
+	ld	wa, 1:i3
 	call	Flash_ChipErase
 	call	HDAE5000_Status_Check
 	cp	hl, 0xffff
@@ -8233,7 +8233,7 @@ HDAE5000_Init_BytecodeBlock:
 	pushw	3
 	ld	xwa, 0x800000
 	ld	xbc, 0x280000
-	lds	de, 0
+	ld	de, 0:i3
 	calr	64974
 	or	xhl, xhl
 	.byte 0xf2, 0x90
@@ -8243,7 +8243,7 @@ HDAE5000_Init_BytecodeBlock:
 	nop
 	ld	xwa, 0x300000
 	ld	xbc, 0x200000
-	lds	de, 0
+	ld	de, 0:i3
 	calr	64949
 	or	xhl, xhl
 	.byte 0xf2, 0x9f
@@ -8310,7 +8310,7 @@ HDAE5000_Init_TransferData:
 	pushw 0x7
 	ld xwa, 0x800000
 	ld xbc, 0x280000
-	lds de, 4
+	ld de, 4:i3
 	calr HDAE5000_ROM_Transfer
 	or xhl, xhl
 	call nz, (LED_Toggle_Bit2_Loop:24)
@@ -8352,9 +8352,9 @@ Parport_ReadByte_FromBuffer:
 	incw 8, (1614:16)
 	ld wa, (1614:16)
 	ld bc, (1616:16)
-	lds de, 6
+	ld de, 6:i3
 	call VRAM_FillRect
-	lds iz, 0
+	ld iz, 0:i3
 
 Parport_RefillBuffer_Loop:
 	ld wa, (1618:16)
@@ -8426,7 +8426,7 @@ Flash_AccumWrite_Word:
 	stb_dpi A, 0xe1
 	ld (1622:16), xwa
 	ld de, (xde)
-	lds wa, 1
+	ld wa, 1:i3
 	call Flash_ProgramWord
 	ld (1620:16), 0
 
@@ -8444,7 +8444,7 @@ LZSS_Decompress_ToFlash:
 	ld (1622:16), xwa
 	ld xwa, 0x20000
 	add (1598:16), xwa
-	lds iz, 0
+	ld iz, 0:i3
 
 LZSS_Decompress_ReadHeader:
 	calr Parport_ReadNextByte
@@ -8469,7 +8469,7 @@ LZSS_Decompress_ReadHeader:
 	jr LZSS_Decompress_Return
 
 LZSS_Decompress_HeaderOK:
-	lds iz, 0
+	ld iz, 0:i3
 
 LZSS_Decompress_StreamHeaderBytes:
 	ld bc, iz
@@ -8498,7 +8498,7 @@ LZSS_Decompress_StreamData:
 	jr c, LZSS_Decompress_StreamData
 
 LZSS_Decompress_ReturnOK:
-	lds hl, 0
+	ld hl, 0:i3
 
 LZSS_Decompress_Return:
 	popw iz
@@ -8540,7 +8540,7 @@ LZ_Decompress_ClearRing:
 	ldw (1616:16), 180
 	ldw wa, 0x32
 	ldw bc, 0xb4
-	lds de, 6
+	ld de, 6:i3
 	call VRAM_FillRect
 	ld xwa, 0x3e8
 	ld (1598:16), xwa
@@ -8713,7 +8713,7 @@ FLASH_MEM_UPDATE:
 	call Draw_FlashMemUpdate_message_bitmap
 
 Flash_CheckAndValidate:
-	lds wa, 2
+	ld wa, 2:i3
 	call Flash_IdentifyAndValidateChip
 	cp hl, 0xffff
 	jr z, flash_update__not_today
@@ -8772,7 +8772,7 @@ Draw_FlashMemUpdate_message_bitmap:
 	ld iy, hl
 	ld ix, de
 	inc 1, ix
-	lds iz, 0
+	ld iz, 0:i3
 
 DrawBitmap_RowLoop:
 	ld wa, iz

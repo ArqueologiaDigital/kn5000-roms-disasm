@@ -7,7 +7,7 @@
 ; =============================================================================
 
 SndParam_ProbeCheckMatch:
-	lds bc, 0
+	ld bc, 0:i3
 	cp xiz, xde
 	jr z, SndParam_ProbeMatchFound
 	ldw bc, 0xffff
@@ -139,7 +139,7 @@ SndParam_LookupByKey:
 	jr SndParam_Lkp2_ProbeEntry
 
 SndParam_Lkp2_ProbeCheck:
-	lds bc, 0
+	ld bc, 0:i3
 	cp xiz, xde
 	jr z, SndParam_Lkp2_MatchFound
 	ldw bc, 0xffff
@@ -254,7 +254,7 @@ SndParam_LookupReadOnly:
 	jr SndParam_RO_ProbeEntry
 
 SndParam_RO_ProbeCheck:
-	lds bc, 0
+	ld bc, 0:i3
 	cp xiz, xde
 	jr z, SndParam_RO_MatchFound
 	ldw bc, 0xffff
@@ -401,7 +401,7 @@ SndParam_ResolveWidget:
 	jr z, SndParam_RW_CheckFirstMatch
 
 SndParam_RW_ExactMatch:
-	lds hl, 0
+	ld hl, 0:i3
 	jr SndParam_RW_FoundCallback
 
 SndParam_RW_CheckFirstMatch:
@@ -431,7 +431,7 @@ SndParam_RW_ChainNext:
 	jr z, SndParam_RW_ChainCheckFirst
 
 SndParam_RW_ChainExactMatch:
-	lds hl, 0
+	ld hl, 0:i3
 	jr SndParam_RW_FoundCallback
 
 SndParam_RW_ChainCheckFirst:
@@ -494,7 +494,7 @@ SndParam_RW_HandleB1Type:
 	ld (xwa), de
 
 SndParam_RW_Success:
-	lds hl, 0
+	ld hl, 0:i3
 	jr SndParam_RW_Epilogue
 
 SndParam_RW_Fail:
@@ -544,7 +544,7 @@ SndParam_ResolveWidgetEx_Data:
 	call	DivMod32
 	ld	ix, hl
 	jr	44
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	xiz, xde
 	jr	z, 5
 	ldw	bc, 0xffff
@@ -650,7 +650,7 @@ SndParam_DecodeMidiAddr:
 	jr SndParam_DMA_ProbeEntry
 
 SndParam_DMA_ProbeCheck:
-	lds bc, 0
+	ld bc, 0:i3
 	cp (xsp + 6), xde
 	jr z, SndParam_DMA_MatchFound
 	ldw bc, 0xffff
@@ -763,7 +763,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	call	DivMod32
 	ld	ix, hl
 	jr	44
-	lds	bc, 0
+	ld	bc, 0:i3
 	cp	xiz, xde
 	jr	z, 5
 	ldw	bc, 0xffff
@@ -935,7 +935,7 @@ SndParam_ReadRegWord:
 	sla a, 2
 	lda xbc, (Naka_SubDispatch_B_Table_0x4:24)
 	ld_sril3 XWA, 0x03, 0xe4, 0xe0
-	lds hl, 0
+	ld hl, 0:i3
 
 SndParam_ReadRegScanLoop:
 	cp_spiw DE, 0xe1
@@ -943,7 +943,7 @@ SndParam_ReadRegScanLoop:
 	inc 1, hl
 	cp hl, 5:i3
 	jr le, SndParam_ReadRegScanLoop
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 SndParam_ReadRegBitfield:
@@ -1008,7 +1008,7 @@ SndParam_ReadRegAddress:
 SndParam_ResetDefaultTable:
 	ld xiy, Naka_ToshiParam_Table_0x6BC
 	ld xix, 0x96d4
-	lds bc, 6
+	ld bc, 6:i3
 	ldirw
 	lda xhl, (0x96d4:16)
 	ldw (xhl), 0xffff
@@ -1044,7 +1044,7 @@ SndParam_RegisterEntry_Data:
 	ldb_erp	a, 230
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x96e0
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	ld	b, (xde+10)
 	stb_erp	c, 230
@@ -1135,7 +1135,7 @@ SndParam_RegisterEntryAlt_Data:
 	ldb_erp	a, 230
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x96ec
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	ld	b, (xde+10)
 	stb_erp	c, 230
@@ -1194,7 +1194,7 @@ SndParam_UpdateEntry_Data:
 	ld	de, bc
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x96f8
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xhl, (0x96f8:16)
 	lda	xiy, (xwa+4)
@@ -1244,7 +1244,7 @@ SndParam_RegisterMultiField_Data:
 	jrl	z, 177
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9704
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	ld	a, (xde+11)
 	sla	a, 2
@@ -1334,7 +1334,7 @@ SndParam_RegisterBitfield_Data:
 	jrl	z, 143
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9710
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xix, (0x9710:16)
 	ldw	(xix+2), 1
@@ -1425,7 +1425,7 @@ SndParam_RegisterLinked_Data:
 	ldb_erp	a, 230
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x971c
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xwa, (0x971c:16)
 	ld	(xsp+8), xwa
@@ -1548,7 +1548,7 @@ SndParam_RegisterLinked2_Data:
 	ld	xiy, (xbc)
 	extz	hl
 	ld	xix, xiy
-	lds	bc, 0
+	ld	bc, 0:i3
 	.byte 0x9d, 0x04
 	push	xsp
 	nop
@@ -1592,7 +1592,7 @@ SndParam_RegisterLinked2_Data:
 	.byte 0x97
 	nop
 	nop
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	ld	c, (xde+10)
 	ld	a, (xde+9)
@@ -1670,7 +1670,7 @@ SndParam_RegisterSimple_Data:
 	jr	z, 114
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9734
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	cp	de, 40
 	jr	ge, 5
@@ -1718,7 +1718,7 @@ SndParam_RegisterSimple_Data:
 SndParam_DeregisterEntry_Data:
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9740
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xhl, (0x9740:16)
 	ldw	(xhl), 0xffff
@@ -1740,7 +1740,7 @@ SndParam_RegisterChained_Data:
 	jrl	z, 222
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x974c
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xwa, (xhl+5)
 	ld	(xsp+10), xwa
@@ -1850,7 +1850,7 @@ SndParam_RegisterChained2_Data:
 	jrl	z, 212
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9758
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xwa, (xde+5)
 	ld	(xsp+8), xwa
@@ -1955,7 +1955,7 @@ SndParam_RegisterComplex_Data:
 	jrl	z, 251
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9764
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	ld	xwa, (xsp+12)
 	calr	62840
@@ -2116,7 +2116,7 @@ SndParam_RegisterDual_Data:
 	jrl	z, 275
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9774
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xwa, (xde+5)
 	ld	(xsp+8), xwa
@@ -2150,7 +2150,7 @@ SndParam_RegisterDual_Data:
 	extz	wa
 	ld	xix, xiy
 	ld	w, a
-	lds	de, 0
+	ld	de, 0:i3
 	.byte 0x9d, 0x04
 	push	xsp
 	nop
@@ -2245,7 +2245,7 @@ SndParam_RegisterOffset_Data:
 	jrl	z, 141
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9780
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xiy, (xwa+8)
 	ld	iz, (xiy)
@@ -2323,7 +2323,7 @@ SndParam_RegisterWide_Data:
 	jrl	z, 238
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x978c
-	lds	bc, 6
+	ld	bc, 6:i3
 	ldirw
 	lda	xwa, (xde+5)
 	ld	(xsp+14), xwa
@@ -2582,7 +2582,7 @@ SndParam_WriteFieldDirect_Data:
 	ld	(xbc+3), a
 	ld	xwa, xbc
 	calr	442
-	lds	hl, 0
+	ld	hl, 0:i3
 	inc	4, xsp
 	ret
 SndParam_WriteFieldSub_Data:
@@ -2623,7 +2623,7 @@ SndParam_WriteFieldSub_Data:
 	ld	(xbc+3), a
 	ld	xwa, xbc
 	calr	354
-	lds	hl, 0
+	ld	hl, 0:i3
 	inc	4, xsp
 	ret
 SndParam_PackAndWrite:
@@ -2641,7 +2641,7 @@ SndParam_PackAndWrite:
 	ld	(xhl+3), c
 	ld	xwa, xhl
 	calr	310
-	lds	hl, 0
+	ld	hl, 0:i3
 	inc	4, xsp
 	ret
 SndParam_WriteViaHash_Data:
@@ -2650,7 +2650,7 @@ SndParam_WriteViaHash_Data:
 	add	wa, wa
 	lda	xde, (0x9798:16)
 	st_rrw bc, xde, wa
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 SndParam_BatchUpdate_Data:
 	lda	xsp, (xsp-22)
@@ -2748,7 +2748,7 @@ SndParam_BatchUpdate_Data:
 	ld	(xwa+2), c
 	ld	(xwa+3), 255
 	calr	7
-	lds	hl, 0
+	ld	hl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
@@ -2969,7 +2969,7 @@ SndParam_Widget1_Done:
 	ret
 
 SndParam_BinarySearch:
-	lds	iy, 0
+	ld	iy, 0:i3
 	ld	ix, de
 	sub	ix, 1
 	jr	c, 40
@@ -2982,7 +2982,7 @@ SndParam_BinarySearch:
 	ld	e, (xde)
 	cp	a, e
 	jr	nz, 3
-	lds	hl, 0
+	ld	hl, 0:i3
 	ret
 	cp	a, e
 	jr	ule, 6
@@ -3019,7 +3019,7 @@ SndParam_InitHashTable:
 SndParam_InitHashFillLoop:
 	ld xiy, Naka_ToshiParam_Table_0x6CC
 	ld xix, xwa
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	inc 8, xwa
 	cp xwa, xde
@@ -3082,11 +3082,11 @@ SndParam_InsertProbe:
 	ld (xbc), xiz
 	ld xwa, (xsp + 6)
 	ld (xbc + 4), xwa
-	lds hl, 0
+	ld hl, 0:i3
 	jr SndParam_InsertReturn
 
 SndParam_InsertCheckKey:
-	lds wa, 0
+	ld wa, 0:i3
 	cp xiz, xde
 	jr z, SndParam_InsertKeyMatch
 	ldw wa, 0xffff
@@ -3272,7 +3272,7 @@ SndParam_AllocAppendToChain:
 	ld (xbc), xiy
 
 SndParam_AllocSuccess:
-	lds hl, 0
+	ld hl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 18)
 	retd 0x4

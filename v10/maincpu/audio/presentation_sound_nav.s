@@ -87,7 +87,7 @@ GroupBoxProc_SSFItemLoop:
 	; Each entry has: byte[0]=active, byte[1]=enabled, dword[2]=workspace,
 	; dword[6]=event(0x1c00007), dword[10]=focus_id, offset[14]=secondary.
 GroupBox_CancelBack:
-	lds iz, 0
+	ld iz, 0:i3
 
 GroupBox_CancelBack_Loop:
 	ld ix, iz
@@ -264,7 +264,7 @@ GroupBox_NavUpDown:
 	jrl GroupBox_ReturnZero
 	call UIRender_RetStub2
 	jrl GroupBox_ReturnZero
-	lds wa, 0
+	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
 	ld (0x03ef6a:24), xwa
@@ -276,7 +276,7 @@ GroupBox_NavUpDown:
 GroupBox_NavDispatch:
 	call SendEvent
 	jr GroupBox_ReturnZero
-	lds iz, 0
+	ld iz, 0:i3
 
 GroupBox_CloseAll_Loop:
 	ld de, iz
@@ -321,10 +321,10 @@ GroupBox_CloseAll_Next:
 	; --- Event 0x1c00036: Display Update ---
 	; Enables display (FAA761 with WA=1), calls UpdateScreen, then disables.
 GroupBox_DisplayUpdate:
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 
 GroupBox_DisableDisplay:
 	call SetNeedUpdate
@@ -643,10 +643,10 @@ Screen_Deactivate:
 	ld xbc, (xsp + 8)
 	ld xde, xiz
 	calr GroupBoxProc
-	lds wa, 1
+	ld wa, 1:i3
 	call SetNeedUpdate
 	call UpdateScreen
-	lds wa, 0
+	ld wa, 0:i3
 	call SetNeedUpdate
 	jr Screen_ReturnZero
 
@@ -745,7 +745,7 @@ GetEditSwPoint:
 
 ; GetEditSwPoint handler: mode 0 (value=0x2b)
 EditSwParam_Mode0:
-	lds wa, 0
+	ld wa, 0:i3
 	jr EditSwParam_StoreMode0
 	ldw wa, 0x13f
 
@@ -756,7 +756,7 @@ EditSwParam_StoreMode0:
 
 ; GetEditSwPoint handler: mode 1 (value=0x55)
 EditSwParam_Mode1:
-	lds wa, 0
+	ld wa, 0:i3
 	jr EditSwParam_StoreMode1
 	ldw wa, 0x13f
 
@@ -767,7 +767,7 @@ EditSwParam_StoreMode1:
 
 ; GetEditSwPoint handler: mode 2 (value=0x7f)
 EditSwParam_Mode2:
-	lds wa, 0
+	ld wa, 0:i3
 	jr EditSwParam_StoreMode2
 	ldw wa, 0x13f
 
@@ -778,7 +778,7 @@ EditSwParam_StoreMode2:
 
 ; GetEditSwPoint handler: mode 3 (value=0xa9)
 EditSwParam_Mode3:
-	lds wa, 0
+	ld wa, 0:i3
 	jr EditSwParam_Mode3_Store
 	ldw wa, 0x13f
 
@@ -790,7 +790,7 @@ EditSwParam_Mode3_Store:
 
 ; GetEditSwPoint handler: mode 4 (value=0xd3)
 EditSwParam_Mode4:
-	lds wa, 0
+	ld wa, 0:i3
 	jr EditSwParam_Mode4_Store
 	ldw wa, 0x13f
 
@@ -842,16 +842,16 @@ SetWallPaper_DispatchData:
 	jr	nz, 28
 
 SetWallPaper_Default:
-	lds wa, 0
+	ld wa, 0:i3
 	jp ChangeWall
 SetWallPaper_CaseData:
 	cpw	(0x0340fa:24), 0
 	jr	nz, 13
-	lds	wa, 1
+	ld	wa, 1:i3
 	jr	-17
 	cpw	(0x0340fc:24), 0
 	jr	z, -13
-	lds	wa, 2
+	ld	wa, 2:i3
 	jr	t, 0xe2
 
 SetWallColor:
@@ -863,19 +863,19 @@ SetWallColor:
 	jr z, SetWallColor_02
 	cp wa, 0xf8
 	jr z, SetWallColor_F8
-	lds wa, 0
+	ld wa, 0:i3
 	jr UI_ChangeWallPalette_Jump
 
 SetWallColor_F8:
-	lds wa, 2
+	ld wa, 2:i3
 	jr UI_ChangeWallPalette_Jump
 
 SetWallColor_02:
-	lds wa, 4
+	ld wa, 4:i3
 	jr UI_ChangeWallPalette_Jump
 
 SetWallColor_F9:
-	lds wa, 6
+	ld wa, 6:i3
 	jr UI_ChangeWallPalette_Jump
 
 SetWallColor_01:
@@ -909,7 +909,7 @@ TtlScreen_PaintHandler:
 	ld xwa, (xsp + 4)
 	lda xiy, (xwa + 14)
 	lda xix, (xsp + 8)
-	lds bc, 4
+	ld bc, 4:i3
 	ldirw
 	ld xwa, xiz
 	ld xbc, 0x1e00024
@@ -923,7 +923,7 @@ TtlScreen_PaintHandler:
 	push xbc
 	pushw de
 	ld xbc, (xhl + 38)
-	lds de, 0
+	ld de, 0:i3
 	calr DrawTitleBar
 	lds32 xhl, 0
 
@@ -958,11 +958,11 @@ DrawTitleBar_SetActiveOffset:
 	ld xwa, (xsp + 42)
 	or xwa, xwa
 	jr nz, DrawTitleBar_CalcLayout
-	lds iz, 0
+	ld iz, 0:i3
 
 DrawTitleBar_CalcLayout:
 	lda xde, (xsp + 24)
-	lds wa, 7
+	ld wa, 7:i3
 	calr GetClientBox2
 	lda xwa, (xsp + 24)
 	add (xwa), iz
@@ -1166,7 +1166,7 @@ DirmdEmu_CaseC:
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	calr ScreenProc
-	lds wa, 2
+	ld wa, 2:i3
 	call ChangePalette
 	jr TaskWake_ZeroReturn
 	ldw (0x0276c4:24), 0x0001
@@ -1414,7 +1414,7 @@ DirmdEmu_CheckBit4:
 	call nz, (UI_PostTimerResetEvent:24)
 	bit 3, (0xe3e2:16)
 	jr z, DirmdEmu_ClearAllFlags
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 
 DirmdEmu_ClearAllFlags:
@@ -1879,28 +1879,28 @@ AcNaming_QueryCharSet:
 	cp hl, 0:i3
 	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17
-	lds bc, 0
+	ld bc, 0:i3
 	call SetVisible
 	ld xwa, 0x18
-	lds bc, 0
+	ld bc, 0:i3
 	call SetVisible
 	ld xwa, 0x19
-	lds bc, 0
+	ld bc, 0:i3
 	jr AcNaming_SetVisibleAndInit
 
 AcNaming_ShowNavButtons:
 	ld xwa, 0x17
-	lds bc, 1
+	ld bc, 1:i3
 	call SetVisible
 	ld xwa, 0x18
-	lds bc, 1
+	ld bc, 1:i3
 	call SetVisible
 	ld xwa, 0x19
-	lds bc, 1
+	ld bc, 1:i3
 
 AcNaming_SetVisibleAndInit:
 	call SetVisible
-	lds iz, 0
+	ld iz, 0:i3
 	cpw (0x0274d6:24), 0
 	jr ule, WndScroll_InitBuffer
 

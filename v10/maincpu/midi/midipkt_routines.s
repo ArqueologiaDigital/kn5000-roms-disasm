@@ -180,7 +180,7 @@ MidiPkt_BuildControl:
 	jr	z, 4
 	ld	(xsp+6), 129
 	ld	xwa, MidiPkt_EventType_Table_0x590
-	lds	bc, 6
+	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	pushw 6
 	lda	xwa, (xsp+12)
@@ -193,7 +193,7 @@ MidiPkt_BuildControl:
 	ld	c, (xsp+4)
 	add	c, 32
 	ld	(xwa+1), c
-	lds	bc, 6
+	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	lda	xwa, (xsp+6)
 	ld	c, (xwa)
@@ -202,7 +202,7 @@ MidiPkt_BuildControl:
 	ld	c, (xwa)
 	srl	c, 4
 	ld	(xwa), c
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
 	ld	xwa, (0xbc5c:16)
@@ -547,7 +547,7 @@ MidiPkt_DispatchSpecialType:
 	cp a, 0x11
 	jr nz, MidiPkt_DispatchSpecialType_Type10
 	ld xwa, MidiPkt_EventType_Table_0x584
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (0xbc5c:16)
 	jr MidiPkt_DispatchSpecialType_SendAndUpdate
@@ -556,7 +556,7 @@ MidiPkt_DispatchSpecialType_Type10:
 	cp a, 0x10
 	jr nz, MidiPkt_DispatchSpecialType_Default
 	ld xwa, MidiPkt_EventType_Table_0x58A
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (0xbc5c:16)
 
@@ -628,10 +628,10 @@ MidiPkt_EnqueueControl_3354:
 	and a, (xbc + 3)
 	jr z, MidiPkt_EnqueueControl_3354_Return
 	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xbc, (xiz)
 	ld xde, (xiz + 4)
@@ -651,7 +651,7 @@ MidiPkt_EnqueueControl_3354_ShiftBits:
 	ld c, (xwa)
 	srl c, 4
 	ld (xwa), c
-	lds bc, 3
+	ld bc, 3:i3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
 	ld xwa, (0xbc5c:16)
@@ -686,10 +686,10 @@ MidiPkt_EnqueueExtended_Data:
 	nop
 	jr	z, 83
 	ld	xwa, MidiPkt_EventType_Table_0x590
-	lds	bc, 6
+	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (xiz+4)
-	lds	bc, 6
+	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (xiz)
 	ld	xbc, xwa
@@ -709,7 +709,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	c, (xwa)
 	srl	c, 4
 	ld	(xwa), c
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
 	ld	xwa, (0xbc5c:16)
@@ -740,10 +740,10 @@ MidiPkt_EnqueueControl_335C:
 	and a, (xbc + 3)
 	jr z, MidiPkt_EnqueueControl_335C_Return
 	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	lda xwa, (xsp + 4)
 	ld (xwa), 0x0
@@ -761,7 +761,7 @@ MidiPkt_EnqueueControl_335C_ZeroData:
 	ld c, (xwa)
 	srl c, 4
 	ld (xwa), c
-	lds bc, 3
+	ld bc, 3:i3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
 	ld xwa, (0xbc5c:16)
@@ -779,7 +779,7 @@ MidiPkt_EnqueueControl_3358:
 	ld xiz, xwa
 	ld xiy, MidiPkt_EventType_Table_0x30C
 	lda xix, (xsp + 4)
-	lds bc, 2
+	ld bc, 2:i3
 	ldirw
 	ldi85
 	ld xwa, (xiz + 4)
@@ -795,10 +795,10 @@ MidiPkt_EnqueueControl_3358:
 	and a, (xbc + 3)
 	jrl z, MidiPkt_EnqueueControl_3358_Return
 	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xhl, (0x90f2:16)
 	ld xwa, (xiz)
@@ -847,7 +847,7 @@ MidiPkt_EnqueueControl_3358_SplitNibbles:
 	ld c, (xde)
 	srl c, 4
 	ld (xde), c
-	lds bc, 5
+	ld bc, 5:i3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
 	ld xwa, (0xbc5c:16)
@@ -865,7 +865,7 @@ MidiPkt_EnqueueControl_335E:
 	ld xiz, xwa
 	ld xiy, MidiPkt_EventType_Table_0x312
 	lda xix, (xsp + 4)
-	lds bc, 2
+	ld bc, 2:i3
 	ldirw
 	ldi85
 	lda xbc, (xsp + 10)
@@ -876,10 +876,10 @@ MidiPkt_EnqueueControl_335E:
 	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_335E_Return
 	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (xsp + 14)
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	lda xwa, (xsp + 4)
 	ld c, (xiz)
@@ -909,7 +909,7 @@ MidiPkt_EnqueueControl_335E_SplitNibbles:
 	ld c, (xde)
 	srl c, 4
 	ld (xde), c
-	lds bc, 5
+	ld bc, 5:i3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
 	ld xwa, (0xbc5c:16)
@@ -939,10 +939,10 @@ MidiPkt_EnqueueControl_3364:
 	and a, (xbc + 3)
 	jr z, MidiPkt_EnqueueControl_3364_Return
 	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xbc, (xiz)
 	ld xde, (xiz + 4)
@@ -969,7 +969,7 @@ MidiPkt_EnqueueControl_3364_FormatData:
 	ld c, (xwa)
 	srl c, 4
 	ld (xwa), c
-	lds bc, 3
+	ld bc, 3:i3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
 	ld xwa, (0xbc5c:16)
@@ -999,14 +999,14 @@ MidiPkt_EnqueueControl_3368:
 	and a, (xbc + 3)
 	jrl z, MidiPkt_EnqueueControl_3368_Return
 	ld xwa, MidiPkt_EventType_Table_0x590
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld a, (0xfd99:16)
 	and a, 0x1
 	cp a, 1:i3
 	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
 	ld xwa, ToneKit_FrequencyTable_0xB2
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xbc, (xiz)
 	ld xde, (xiz + 4)
@@ -1024,7 +1024,7 @@ MidiPkt_EnqueueControl_3368_PedalNoShift:
 
 MidiPkt_EnqueueControl_3368_NoPedal:
 	ld xwa, (xiz + 4)
-	lds bc, 6
+	ld bc, 6:i3
 	call ArpQueue_Enqueue
 	ld xbc, (xiz)
 	ld xde, (xiz + 4)
@@ -1045,7 +1045,7 @@ MidiPkt_EnqueueControl_3368_FormatData:
 	ld c, (xwa)
 	srl c, 4
 	ld (xwa), c
-	lds bc, 3
+	ld bc, 3:i3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
 	ld xwa, (0xbc5c:16)
@@ -1080,7 +1080,7 @@ MidiPkt_EnqueueExtended2_Data:
 	and	a, (xbc+3)
 	jr	z, 111
 	ld	xwa, MidiPkt_EventType_Table_0x590
-	lds	bc, 6
+	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	pushw	6
 	lda	xwa, (xsp+10)
@@ -1094,7 +1094,7 @@ MidiPkt_EnqueueExtended2_Data:
 	ld	c, (xbc)
 	set	5, c
 	ld	(xwa+1), c
-	lds	bc, 6
+	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xbc, (xiz)
 	ld	xde, (xiz+4)
@@ -1114,7 +1114,7 @@ MidiPkt_EnqueueExtended2_Data:
 	ld	c, (xwa)
 	srl	c, 4
 	ld	(xwa), c
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
 	ld	xwa, (0xbc5c:16)
@@ -1157,7 +1157,7 @@ MidiPkt_CheckGateCondition_Blocked:
 	ret
 
 MidiPkt_CheckGateCondition_Pass:
-	lds hl, 0
+	ld hl, 0:i3
 	ret
 
 MidiPkt_DispatchViaTable_4DCE:
@@ -1223,18 +1223,18 @@ MidiPkt_DispatchData_Chan6:
 	jr	nz, 2
 	jr	-44
 	ld	xwa, (0xbcac:16)
-	lds	bc, 4
+	ld	bc, 4:i3
 	ldw	de, 17
 	jp	MIDI_ReadChannelParam
 
 MidiPkt_SendBankSelect:
 	ld xwa, (0xbcac:16)
-	lds bc, 4
+	ld bc, 4:i3
 	call SeqData_ReadFieldByIndex
 	cp l, 0:i3
 	ret z
 	ld xwa, (0xbcac:16)
-	lds bc, 5
+	ld bc, 5:i3
 	call SeqData_ReadFieldByIndex
 	cp l, 0x2b
 	jr z, MidiPkt_SendBankSelect_Send
@@ -1243,7 +1243,7 @@ MidiPkt_SendBankSelect:
 
 MidiPkt_SendBankSelect_Send:
 	ld xwa, MidiPkt_EventType_Table_0x560
-	lds bc, 5
+	ld bc, 5:i3
 	call ArpQueue_Enqueue
 	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
@@ -1274,7 +1274,7 @@ MidiPkt_SysExValidator_Data:
 	extz	de
 	pushw	4
 	ldw	wa, 145
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	AssswbWr
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
@@ -1307,7 +1307,7 @@ MidiPkt_SysExProcessor_Data:
 	extz	de
 	pushw	4
 	ldw	wa, 145
-	lds	bc, 3
+	ld	bc, 3:i3
 	call	AssswbWr
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
@@ -1315,7 +1315,7 @@ MidiPkt_SysExProcessor_Data:
 	ret
 MidiPkt_SysExBulkTransfer_Data:
 	ld	xwa, (0xbcac:16)
-	lds	bc, 1
+	ld	bc, 1:i3
 	call	SeqData_ReadFieldByIndex
 	extz	hl
 	dec	1, hl
@@ -1408,8 +1408,8 @@ MidiPkt_SysExBulkTransfer_Data:
 	cp	l, 0:i3
 	jr	z, 97
 	pushw	0
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
 	stb_erp a, 251
 	extz	wa
@@ -1448,14 +1448,14 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	(xwa), c
 	jr	94
 	pushw	0
-	lds	bc, 0
-	lds	de, 0
+	ld	bc, 0:i3
+	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
 	stb_erp a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
-	lds	de, 0
+	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
 	ld	xiy, MidiPkt_EventType_Table_0x34C
 	lda	xix, (xsp+10)
@@ -1511,7 +1511,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld qiz, hl
 	cp qiz, 0
 	jr lt, 55
-	lds	iz, 0
+	ld	iz, 0:i3
 	cp qiz, 0
 	jr le, 42
 	ld	a, (xsp+4)

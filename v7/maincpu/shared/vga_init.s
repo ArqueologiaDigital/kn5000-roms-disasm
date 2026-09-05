@@ -35,12 +35,12 @@
 
 .macro VGA_WRITE regnum, value
 	.if \regnum <= 7
-	lds wa, \regnum
+	ld wa, \regnum:i3
 	.else
 	ldw wa, \regnum
 	.endif
 	.if \value <= 7
-	lds bc, \value
+	ld bc, \value:i3
 	.else
 	ldw bc, \value
 	.endif
@@ -86,12 +86,12 @@
 ; This macro is used at the end - uses JRL for a tail-call optimization
 .macro RET_VGA_WRITE regnum, value
 	.if \regnum <= 7
-	lds wa, \regnum
+	ld wa, \regnum:i3
 	.else
 	ldw wa, \regnum
 	.endif
 	.if \value <= 7
-	lds bc, \value
+	ld bc, \value:i3
 	.else
 	ldw bc, \value
 	.endif
@@ -318,13 +318,13 @@ VGA_Setup:
 
 	; Color 0: Black (0, 0, 0)
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 
 	; Color 1: White (F, F, F)
@@ -343,29 +343,29 @@ VGA_Setup:
 	ldw bc, 0xf
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 
 	; Color 3: Green (0, F, 0)
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
 	ldw bc, 0xf
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 
 	; Color 4: Blue (0, 0, F)
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
 	ldw bc, 0xf
@@ -373,7 +373,7 @@ VGA_Setup:
 
 	; Color 5: Cyan (0, F, F)
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
 	ldw bc, 0xf
@@ -390,7 +390,7 @@ VGA_Setup:
 	ldw bc, 0xf
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 
 	; Color 7: Magenta (F, 0, F)
@@ -398,7 +398,7 @@ VGA_Setup:
 	ldw bc, 0xf
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
 	ldw bc, 0xf
@@ -406,13 +406,13 @@ VGA_Setup:
 
 	; Color 8: Dark Blue (0, 0, 4)
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 0
+	ld bc, 0:i3
 	calr Write_VGA_Register
 	ldw wa, 0x3c9
-	lds bc, 4
+	ld bc, 4:i3
 	calr Write_VGA_Register
 
 	; Call extended sequencer init

@@ -178,7 +178,7 @@ SelectPasswordMode:
 	push xiz
 	ldib_erp 0xfb, 0
 	ldib_erp 0xfa, 0
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_FormatName_Return
 	cp l, 0:i3
 	jr z, SelectMode_CheckSaveAvail
@@ -190,7 +190,7 @@ SelectPasswordMode:
 	ldib_erp 0xfa, 1
 
 SelectMode_CheckSaveAvail:
-	lds wa, 3
+	ld wa, 3:i3
 	call FileIO_FormatName_Return
 	cp l, 0:i3
 	jr z, SelectMode_DetermineMode
@@ -297,7 +297,7 @@ FileName_DrawItemLoop:
 	ld de, (xsp + 6)
 	ld wa, de
 	sll wa, 5
-	lds hl, 1
+	ld hl, 1:i3
 	add hl, wa
 	lda xix, (0x850c:16)
 	extz xhl
@@ -380,11 +380,11 @@ FileName_OpSave:
 	ld wa, (0x7f7a:16)
 	extz wa
 	calr FileIO_MidiOutSendByte
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry
 	ld wa, hl
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -398,11 +398,11 @@ FileName_OpSave:
 	call ApPostEvent
 	cpw (0xf19e:16), 0
 	jr z, FileName_OpSave_ShowCode1
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_WriteRecordName_Done
 	cp l, 0:i3
 	jr z, FileName_OpSave_ShowCode1
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr nz, FileName_OpSave_ShowCodeA
@@ -416,7 +416,7 @@ FileName_OpSave_ShowCodeA:
 	jr FileName_OpSave_CallHandler
 
 FileName_OpSave_ShowCode1:
-	lds wa, 1
+	ld wa, 1:i3
 
 FileName_OpSave_CallHandler:
 	call UI_PostPartChangeEvent
@@ -462,11 +462,11 @@ FileName_OpLoad_Execute:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_SaveAllRegions
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
@@ -482,7 +482,7 @@ FileName_OpLoad_Execute:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -498,11 +498,11 @@ FileName_OpFormat:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_SaveAllRegions
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	call FileIO_ResetCurrentRecord
@@ -518,7 +518,7 @@ FileName_OpFormat:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	lds wa, 1
+	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -552,11 +552,11 @@ FileName_OpDelete_Execute:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call ReadSingleFile
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -578,11 +578,11 @@ FileName_OpFormatVariant:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call ReadSingleFile
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -631,12 +631,12 @@ FileName_Navigate_CheckChanged:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	ld wa, (0x7f7a:16)
 	call ReadDualFileEx
 	ld wa, hl
-	lds bc, 5
+	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -708,7 +708,7 @@ FileName_UpdateButtons_Check:
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, FileName_CheckCallback
-	lds wa, 2
+	ld wa, 2:i3
 	call FileIO_FormatName_Loop
 
 FileName_CheckCallback:

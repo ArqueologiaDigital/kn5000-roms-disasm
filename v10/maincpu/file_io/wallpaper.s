@@ -29,7 +29,7 @@ FmmWallpaperLoadFunc:
 	cp xwa, 0x2
 	jrl nz, WPLoad_Return
 	ld (0x84fe:16), 0
-	lds wa, 1
+	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -228,11 +228,11 @@ WPLoad_OpLoad:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	lds wa, 0
+	ld wa, 0:i3
 	calr InitializeOperationState
 	call LoadFromSecondaryPage
 	ld wa, hl
-	lds bc, 1
+	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
@@ -326,7 +326,7 @@ WP_ScanAvailability:
 	call CheckFileSystemStatus
 	ldw_erp HL, 0xfa
 	ldw (0x89f6:16), 0
-	lds iz, 0
+	ld iz, 0:i3
 
 WPScan_LoopBody:
 	ld bc, iz
@@ -334,7 +334,7 @@ WPScan_LoopBody:
 	ld xwa, Str_SmfConvert_GmToGm_0x2A
 	add xwa, xbc
 	ld c, (xwa)
-	lds de, 1
+	ld de, 1:i3
 	ld a, c
 	and a, 0xf
 	jr z, WPScan_CheckAvail
@@ -352,7 +352,7 @@ WPScan_CheckAvail:
 	extz xwa
 	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
-	lds de, 1
+	ld de, 1:i3
 	ld a, (xbc)
 	and a, 0xf
 	jr z, WPScan_MarkAvailable
@@ -378,7 +378,7 @@ WPScan_TypeNotThree:
 	extz xwa
 	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
-	lds de, 1
+	ld de, 1:i3
 	ld a, (xbc)
 	and a, 0xf
 	jr z, WPScan_TypeTwo_Mark
@@ -398,7 +398,7 @@ WPScan_TypeGeneric:
 	extz xwa
 	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
-	lds de, 1
+	ld de, 1:i3
 	ld a, (xbc)
 	and a, 0xf
 	jr z, WPScan_Generic_Mark
@@ -428,7 +428,7 @@ WP_FindNextSlot:
 	ld bc, (0x89f6:16)
 	cp bc, 0:i3
 	jr z, WPFind_NotFound
-	lds iz, 1
+	ld iz, 1:i3
 	extz wa
 	ldw_erp WA, 0xe6
 	lda xde, (Str_SmfConvert_GmToGm_0x2A:24)
@@ -441,7 +441,7 @@ WPFind_SearchLoop:
 	extz xwa
 	ld xix, xde
 	add xix, xwa
-	lds iy, 1
+	ld iy, 1:i3
 	ld a, (xix)
 	and a, 0xf
 	jr z, WPFind_CheckSlot
