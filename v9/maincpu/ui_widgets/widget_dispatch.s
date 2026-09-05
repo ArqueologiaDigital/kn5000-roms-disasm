@@ -2979,7 +2979,7 @@ WidgetParam_Entry_018:
 	ei 7
 	reti
 	reti
-	ldio 9, 9
+	ld (9:8), 9:io
 	ldw (11:8), 2827:io
 	incf
 	.ascii "#!!!!!!!\"\"\"!!!!!!!!!!!"
@@ -4389,7 +4389,7 @@ WidgetParam_Config_057:
 	.byte 0x00, 0x06, 0x63, 0x00, 0x02, 0x7a, 0xf0, 0xff
 WidgetParam_Config_058:
 	nop
-	ldio 117, 0
+	ld (117:8), 0:io
 	.asciz "*^5z"
 	.byte 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
 	.byte 0x00, 0x0b, 0x76, 0x00, 0x12, 0x14, 0x76, 0x01
@@ -8464,7 +8464,7 @@ CharMap_Mode17:
 	max
 	halt
 	ei 7
-	ldio 9, 10
+	ld (9:8), 10:io
 	pushw 3340
 	ret
 	retd 4368

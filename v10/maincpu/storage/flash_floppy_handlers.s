@@ -871,7 +871,7 @@ Flash_InitBytecodeBlock:
 	jr c, -74
 	call	AccPatch_CountSlots_Wrapper
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jrl	nz, 128
 	lda	xwa, (1748:16)
 	.byte 0x90
@@ -1021,7 +1021,7 @@ Flash_InitBytecodeBlock:
 	swi	3
 	div	l, 103
 	add	(xix), xsp
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jrl	nz, -229
 	lda	xwa, (1748:16)
 	.byte 0x90
@@ -2175,7 +2175,7 @@ Flash_ExtendedOpsBlock:
 	jr	nz, 32
 	ld	hl, 0:i3
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	ule, 23
 	ld	xbc, 0:i3
@@ -2188,7 +2188,7 @@ Flash_ExtendedOpsBlock:
 	inc	1, hl
 	inc	1, xbc
 	.byte 0x9f
-	ldio	243, 103
+	ld	(243:8), 103:io
 	.byte 0xeb
 	ld	(xsp+6), 0
 	ld	c, (xsp+6)
@@ -2233,7 +2233,7 @@ Flash_ExtendedOpsBlock:
 	jr	nz, 32
 	ld	hl, 0:i3
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	ule, 23
 	ld	xbc, 0:i3
@@ -2246,7 +2246,7 @@ Flash_ExtendedOpsBlock:
 	inc	1, hl
 	inc	1, xbc
 	.byte 0x9f
-	ldio	243, 103
+	ld	(243:8), 103:io
 	ld	xsp, xhl
 	.byte 0x06
 	jr	lt, -113
@@ -2298,7 +2298,7 @@ Flash_ExtendedOpsBlock:
 	jr	nz, 32
 	ld	hl, 0:i3
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	ule, 23
 	ld	xbc, 0:i3
@@ -2311,7 +2311,7 @@ Flash_ExtendedOpsBlock:
 	inc	1, hl
 	inc	1, xbc
 	.byte 0x9f
-	ldio	243, 103
+	ld	(243:8), 103:io
 	.byte 0xeb
 	ld	(xsp+6), 0
 	ld	c, (xsp+6)
@@ -2355,7 +2355,7 @@ Flash_ExtendedOpsBlock:
 	jr	nz, 32
 	ld	hl, 0:i3
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	ule, 23
 	ld	xbc, 0:i3
@@ -2368,7 +2368,7 @@ Flash_ExtendedOpsBlock:
 	inc	1, hl
 	inc	1, xbc
 	.byte 0x9f
-	ldio	243, 103
+	ld	(243:8), 103:io
 	ld	xsp, xhl
 	.byte 0x06
 	jr	lt, -113
@@ -2436,7 +2436,7 @@ Flash_ExtendedOpsBlock:
 	swi	7
 	jrl	z, 277
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, 100
 	cp	c, 40
 	jr	nc, 82

@@ -1429,13 +1429,13 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	jrl	ule, -772
 	nop
 	.byte 0x93
-	ldio	253, 0
+	ld	(253:8), 0:io
 	jrl	ule, -772
 	nop
 	.byte 0xc7
-	ldio	253, 0
+	ld	(253:8), 0:io
 	.byte 0xc7
-	ldio	253, 0
+	ld	(253:8), 0:io
 	ld	a, (0x964f:16)
 	and	a, 7
 	.ascii "f!Dc"
@@ -2193,7 +2193,7 @@ MidiCC_ChannelMappingData:
 	normal
 	max
 	normal
-	ldio	1, 16
+	ld	(1:8), 16:io
 	normal
 	ld	w, 1:opc
 	ld	w, 1:opc
@@ -2204,7 +2204,7 @@ MidiCC_ChannelMappingData:
 	push	sr
 	ld	xwa, 0x8028001
 	push	sr
-	ldio	2, 16
+	ld	(2:8), 16:io
 	push	sr
 	rcf
 	push	sr
@@ -2231,21 +2231,21 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	max
-	ldio	1, 4
-	ldio	2, 4
-	ldio	3, 4
-	ldio	4, 4
-	ldio	5, 4
-	ldio	6, 4
-	ldio	7, 4
-	ldio	8, 4
-	ldio	9, 4
-	ldio	10, 4
-	ldio	11, 4
-	ldio	12, 4
-	ldio	13, 4
-	ldio	14, 4
-	ldio	255, 255
+	ld	(1:8), 4:io
+	ld	(2:8), 4:io
+	ld	(3:8), 4:io
+	ld	(4:8), 4:io
+	ld	(5:8), 4:io
+	ld	(6:8), 4:io
+	ld	(7:8), 4:io
+	ld	(8:8), 4:io
+	ld	(9:8), 4:io
+	ld	(10:8), 4:io
+	ld	(11:8), 4:io
+	ld	(12:8), 4:io
+	ld	(13:8), 4:io
+	ld	(14:8), 4:io
+	ld	(255:8), 255:io
 	swi	7
 	rcf
 	.byte 0x04
@@ -2431,28 +2431,28 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	ldio	127, 1
-	ldio	127, 2
-	ldio	127, 3
-	ldio	127, 4
-	ldio	127, 5
-	ldio	127, 6
-	ldio	127, 7
-	ldio	127, 8
-	ldio	127, 9
-	ldio	127, 10
-	ldio	127, 11
-	ldio	127, 12
-	ldio	127, 13
-	ldio	127, 14
-	ldio	127, 255
+	ld	(127:8), 1:io
+	ld	(127:8), 2:io
+	ld	(127:8), 3:io
+	ld	(127:8), 4:io
+	ld	(127:8), 5:io
+	ld	(127:8), 6:io
+	ld	(127:8), 7:io
+	ld	(127:8), 8:io
+	ld	(127:8), 9:io
+	ld	(127:8), 10:io
+	ld	(127:8), 11:io
+	ld	(127:8), 12:io
+	ld	(127:8), 13:io
+	ld	(127:8), 14:io
+	ld	(127:8), 255:io
 	swi	7
 	swi	7
 	rcf
-	ldio	127, 17
-	ldio	127, 18
-	ldio	127, 19
-	ldio	127, 255
+	ld	(127:8), 17:io
+	ld	(127:8), 18:io
+	ld	(127:8), 19:io
+	ld	(127:8), 255:io
 	swi	7
 	swi	7
 	swi	7
@@ -2774,7 +2774,7 @@ MidiCC_ChannelMappingData:
 	sub	(xiy+5), xiy
 	.byte 0x06
 	sub	(xiy+7), xiy
-	ldio	173, 9
+	ld	(173:8), 9:io
 	sub	(xiy+10), xiy
 	pushw	3245
 	sub	(xiy+13), xiy
@@ -2800,7 +2800,7 @@ MidiCC_ChannelMappingData:
 	sub	(xiz+5), xiz
 	.byte 0x06
 	sub	(xiz+7), xiz
-	ldio	174, 9
+	ld	(174:8), 9:io
 	sub	(xiz+10), xiz
 	pushw	3246
 	sub	(xiz+13), xiz
@@ -2832,7 +2832,7 @@ MidiCC_ChannelMappingData:
 	di
 	reti
 	nop
-	ldio	0, 9
+	ld	(0:8), 9:io
 	nop
 	ldw	(0:8), 11:io
 	incf
@@ -2866,7 +2866,7 @@ MidiCC_ChannelMappingData:
 	.byte 0xb1, 0x06, 0xb1
 	reti
 	.byte 0xb1
-	ldio	177, 9
+	ld	(177:8), 9:io
 	.byte 0xb1
 	ldw	(177:8), 0xb10b:io
 	incf
@@ -2901,7 +2901,7 @@ MidiCC_ChannelMappingData:
 	.byte 0xb4, 0x06, 0xb4
 	reti
 	.byte 0xb4
-	ldio	180, 9
+	ld	(180:8), 9:io
 	.byte 0xb4
 	ldw	(180:8), 0xb40b:io
 	incf
@@ -2922,7 +2922,7 @@ MidiCC_ChannelMappingData:
 	max
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	3340
 	ret
 	swi	7
@@ -2943,7 +2943,7 @@ MidiCC_ChannelMappingData:
 	di
 	reti
 	nop
-	ldio	0, 9
+	ld	(0:8), 9:io
 	nop
 	ldw	(0:8), 11:io
 	incf
@@ -3874,7 +3874,7 @@ FileData_RawDataBlock:
 	calr	808
 	incw	1, (xsp+8)
 	.byte 0x9f
-	ldio	63, 24
+	ld	(63:8), 24:io
 	nop
 	jr	c, -54
 	.byte 0xbf
@@ -3893,7 +3893,7 @@ FileData_RawDataBlock:
 	calr	1326
 	incw	1, (xsp+8)
 	.byte 0x9f
-	ldio	63, 3
+	ld	(63:8), 3:io
 	nop
 	jr	c, -47
 	ld	xwa, (xsp+14)
@@ -3933,7 +3933,7 @@ FileData_RawDataBlock:
 	calr	1956
 	incw	1, (xsp+8)
 	.byte 0x9f
-	ldio	63, 2
+	ld	(63:8), 2:io
 	nop
 	jr	c, -56
 	ld	xwa, (xsp+14)
@@ -10751,11 +10751,11 @@ SeqVoice_DispatchProcess_Data:
 	ld	(xwa), xbc
 	.byte 0xf3, 0xe5
 	nop
-	ldio	49, 184
+	ld	(49:8), 184:io
 	.byte 0x04
 	jr	lt, 65
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	ld	(xwa+8), xbc
 	ret
 	lda	xbc, (0xab000:24)
@@ -14785,7 +14785,7 @@ SeqAlt_DescriptorBlock_Data:
 	ld	(xsp+8), l
 	ld	a, (xiz+9)
 	.byte 0x8f
-	ldio	241, 123
+	ld	(241:8), 123:io
 	.byte 0xb8
 	nop
 	ld	a, (xsp+8)
@@ -14818,7 +14818,7 @@ SeqAlt_DescriptorBlock_Data:
 	lda	xhl, (xwa+2)
 	lda	xix, (xwa+3)
 	.byte 0x8f
-	ldio	63, 129
+	ld	(63:8), 129:io
 	jr	z, 51
 	ld	c, (xsp+10)
 	ld	(xwa), c
@@ -15551,7 +15551,7 @@ VoiceParam_MultiBlock_Epilogue_Data:
 	reti
 	or	xix, xwa
 	ld	c, 191:opc
-	ldio	50, 136
+	ld	(50:8), 136:io
 	.byte 0x06
 	ld	c, 178:opc
 	ld	xhl, 0xba230788

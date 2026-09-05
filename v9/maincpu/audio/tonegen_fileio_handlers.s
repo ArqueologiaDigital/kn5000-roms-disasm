@@ -562,7 +562,7 @@ DSPCfg_SyncBitmapData:
 	ld xwa, 2:i3
 	add	(xsp+18), xwa
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	z, 115
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
@@ -614,7 +614,7 @@ DSPCfg_SyncBitmapData:
 	ld	xwa, 1:i3
 	add	(xsp+18), xwa
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, -115
 	.byte 0xc5
 	swi	0

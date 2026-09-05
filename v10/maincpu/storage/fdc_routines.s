@@ -904,19 +904,19 @@ FDC_StatusDecode_UnknownIC:
 ; Returns: HL=0xffff on failure, 0 on success.
 ; Uses ldio, (R+d16) addressing. 460 bytes.
 FDC_HardwareSetup:
-	ldio	248, 11
+	ld	(248:8), 11:io
 	lda_dd8l xbc, 224
 	ld a, (xbc)
 	and	a, 248
 	set	2, a
 	ld	(xbc), a
-	ldio	248, 40
+	ld	(248:8), 40:io
 	lda_dd8l xbc, 237
 	ld a, (xbc)
 	and	a, 143
 	or	a, 80
 	ld	(xbc), a
-	ldio	248, 12
+	ld	(248:8), 12:io
 	lda_dd8l xbc, 224
 	ld a, (xbc)
 	and	a, 143
@@ -985,7 +985,7 @@ FDC_HardwareSetup:
 	jr	nz, 90
 	.byte 0x87
 	push	xsp
-	ldio	102, 85
+	ld	(102:8), 85:io
 	.byte 0x87
 	push	xsp
 	pop	sr
@@ -2401,7 +2401,7 @@ Reset_Floppy_Disk_Controller:
 
 	; then do a lot of other stuff I still don't undertsand:
 
-	ldio 0x47, 0x1e
+	ld (0x47:8), 0x1e:io
 	bit_dd8 6, 0x34	; Port D bit 6: "FD.I/O signal"
 	ret nz
 	ld a, 0x0:opc

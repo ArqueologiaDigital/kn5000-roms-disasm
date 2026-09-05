@@ -1630,7 +1630,7 @@ Data_InOutGridDispatch:
 	jrl	758
 	.byte 0xb1	; v10 does not spell this byte either
 	push	sr
-	ldio	0, 158
+	ld	(0:8), 158:io
 	.byte 0x04	; v10 does not spell this byte either
 	ld	a, 217:opc
 	.byte 0xec	; v10 does not spell this byte either

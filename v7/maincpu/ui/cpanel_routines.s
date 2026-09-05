@@ -391,11 +391,11 @@ CPanel_WaitTXReady_BufferCheck:
 WaitTX_ConfigAndReturn:
 	ei 6
 
-	ldio 0xf8, 0x22	; INTRX1: Serial receive 1
+	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 
-	ldio 0xf8, 0x23	; INTTX1: Serial send 1
+	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 
-	ldio 0xeb, 0xdd
+	ld (0xeb:8), 0xdd:io
 
 	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 
@@ -448,9 +448,9 @@ INTA_DecrementRXCount:
 
 INTA_HANDLER_END:
 	pop xwa
-	ldio 0xf8, 0x12	; INTA Pin
-	ldio 0xf8, 0x22	; INTRX1: Serial receive 1
-	ldio 0xf8, 0x23	; INTTX1: Serial send 1
+	ld (0xf8:8), 0x12:io	; INTA Pin
+	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -482,9 +482,9 @@ MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
-	ldio 0xf8, 0x12	; INTA Pin
-	ldio 0xf8, 0x22	; INTRX1: Serial receive 1
-	ldio 0xf8, 0x23	; INTTX1: Serial send 1
+	ld (0xf8:8), 0x12:io	; INTA Pin
+	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -502,9 +502,9 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
-	ldio 0xf8, 0x12	; INTA Pin
-	ldio 0xf8, 0x22	; INTRX1: Serial receive 1
-	ldio 0xf8, 0x23	; INTTX1: Serial send 1
+	ld (0xf8:8), 0x12:io	; INTA Pin
+	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -598,11 +598,11 @@ TXComplete_BufferEmpty:
 
 	st_dd8b A, 0x3f
 
-	ldio 0xe3, 0x05
+	ld (0xe3:8), 0x05:io
 
-	ldio 0xeb, 0xff	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
+	ld (0xeb:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
 
-	ldio 0xd7, 0x24	; Internal Clock T8 (64/fc)
+	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 
 	                 ; Divide by 4
 
@@ -672,9 +672,9 @@ RXByteN_ContinueRX:
 
 	and_sd8b_im 0xd5, 0xfd
 
-	ldio 0xe3, 0x05
+	ld (0xe3:8), 0x05:io
 
-	ldio 0xeb, 0x0d
+	ld (0xeb:8), 0x0d:io
 
 	.byte 0x78, 0x03, 0xfd	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
@@ -695,17 +695,17 @@ CPanel_SM_Idle:
 
 	.byte 0xc1, 0xf6, 0x8c, 0x3e, 0x04	; ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED (v7 patched)
 
-	ldio 0xf8, 0x23	; INTTX1: Serial send 1
+	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 
 	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 
-	ldio 0xeb, 0x0f
+	ld (0xeb:8), 0x0f:io
 
-	ldio 0xf8, 0x22	; INTRX1: Serial receive 1
+	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 
-	ldio 0xe3, 0x07
+	ld (0xe3:8), 0x07:io
 
-	ldio 0xf8, 0x12	; INTA Pin
+	ld (0xf8:8), 0x12:io	; INTA Pin
 
 	reti
 

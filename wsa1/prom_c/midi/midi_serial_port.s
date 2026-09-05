@@ -206,13 +206,13 @@ sub_F9915C__exit:
 ;          Why SC0MOD is 0x29 here and 0x09 in the boot block is also open.
 ; --------------------------------------------------------------------------
 Serial0_Init:
-	ldio	TRUN, 0x80
+	ld	(TRUN:8), 0x80:io
 	ld	c, (0x00FFFFEF:24)
 	srl	c, 1
 	and	c, 0x0F
 	st_dd8b	c, BR0CR
-	ldio	SC0CR, 0x00
-	ldio	SC0MOD, 0x29
+	ld	(SC0CR:8), 0x00:io
+	ld	(SC0MOD:8), 0x29:io
 	ei	6
 	ldw	(0x00F2F9:24), 0x0002
 	ld	c, (0x00F2F7:24)

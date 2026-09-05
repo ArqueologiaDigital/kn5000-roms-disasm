@@ -13,7 +13,7 @@ FDemo_DisplayResourceData:
 	ldw (xsp+6), 0
 	.byte 0xf3
 	swi	5
-	ldio	1, 49
+	ld	(1:8), 49:io
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 	stib_dsp 224, 32
@@ -41,7 +41,7 @@ FDemo_DisplayResourceData:
 	lda	xsp, (xsp+22)
 	.byte 0xf3
 	swi	5
-	ldio	1, 48
+	ld	(1:8), 48:io
 	ld	xbc, Presentation_TagStrTable_0x6E
 	call	FileIO_OpenWithMode
 	ld	(xsp+4), hl
@@ -3140,7 +3140,7 @@ FileIO_ByteBlock_DemoProc1:
 	lda	xwa, (0x1ed350:24)
 	.byte 0xaf, 0x04
 	sub	(xwa), l
-	ldio	33, 29
+	ld	(33:8), 29:io
 	jrl	ov, -1907
 	call	FileIO_ReturnError
 	ld	iz, hl
@@ -3237,7 +3237,7 @@ FileIO_ByteBlock_DemoProc1:
 	lda	xwa, (0x1ed350:24)
 	.byte 0xaf, 0x04
 	sub	(xwa), l
-	ldio	33, 29
+	ld	(33:8), 29:io
 	jrl	ov, -1907
 	call	FileIO_ReturnError
 	ld	iz, hl
@@ -6795,7 +6795,7 @@ FileIO_ByteBlock_DemoProc2:
 	sll	wa, 2
 	.byte 0x9f, 0x1a
 	xor	(xwa), w
-	ldio	96, 0
+	ld	(96:8), 0:io
 	add	wa, 160
 	extz	xwa
 	ld	bc, 0:i3

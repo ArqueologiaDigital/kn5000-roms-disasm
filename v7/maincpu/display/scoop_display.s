@@ -437,17 +437,17 @@ UIRender_LoadTwoDescriptors:
 
 UIRender_DescriptorTable1:
 	ret
-	ldio	18, 6
+	ld	(18:8), 6:io
 	di
 	zcf
 	nop
 	ret
-	ldio	82, 12
+	ld	(82:8), 12:io
 	di
 	zcf
 	nop
 	ret
-	ldio	146, 18
+	ld	(146:8), 18:io
 	di
 	zcf
 	nop
@@ -467,31 +467,31 @@ UIRender_DescriptorTable1:
 	.byte 0x17
 	.ascii "     "
 	ret
-	ldio	213, 32
+	ld	(213:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	218, 32
+	ld	(218:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	223, 32
+	ld	(223:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	228, 32
+	ld	(228:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	233, 32
+	ld	(233:8), 32:io
 	halt
 	nop
 	.byte 0xec
@@ -511,7 +511,7 @@ UIRender_DescriptorTable2:
 	.byte 0xf1, 0x85
 	scf
 	dec	6, w
-	ldio	209, 130
+	ld	(209:8), 130:io
 	scf
 	ld	w, 241:opc
 	.byte 0x81
@@ -942,7 +942,7 @@ ScoopDisp_FlagSetAndDispatch:
 	.byte 0xc1, 0x1c, 0xe3
 ScoopDisp_FlagSetAndDispatch_Code:
 	push	xiz
-	ldio	200, 51
+	ld	(200:8), 51:io
 	reti	
 	jrl	z, 8
 	call	15707916
@@ -1157,7 +1157,7 @@ PerfMode_Evt03_FlagHandler_B:
 	.byte 0xc1, 0x1c, 0xe3
 PerfMode_Evt03_FlagHandler_B_Code:
 	push	xiz
-	ldio	193, 121
+	ld	(193:8), 121:io
 	ldw	iz, 10017
 	nop	
 	ld	h, 12:opc
@@ -4284,7 +4284,7 @@ DMA_ChannelHandler_2:
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
-	ldio	126, 8
+	ld	(126:8), 8:io
 	nop
 	call	DisplayStr_TempoString_0x36
 	jp	DMA_ChannelHandler_2_0x19
@@ -4854,7 +4854,7 @@ VoiceCtrl_ParamSetupBytecode:
 	max
 	halt
 	ei	0x07
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw 3340
 	ret
 	retd	0x0000
@@ -5857,7 +5857,7 @@ PortConfig_DataTable_B:
 	push	sr
 	normal
 	reti
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	1284
 	ei	3
 	retd	0xffff
@@ -8326,7 +8326,7 @@ VoiceState_DataBlock2:
 	nop
 	max
 	nop
-	ldio	0, 16
+	ld	(0:8), 16:io
 	nop
 	ld	w, 0:opc
 	ld	xwa, 32768
@@ -8336,7 +8336,7 @@ VoiceState_DataBlock2:
 	nop
 	max
 	nop
-	ldio	0, 16
+	ld	(0:8), 16:io
 	nop
 	ld	w, 0:opc
 	ld	xwa, 3520692224
@@ -8756,12 +8756,12 @@ SubCPU_ToneDispatch:
 	swi	2
 	nop
 	nop
-	ldio	251, 0
+	ld	(251:8), 0:io
 	nop
 	ld	b, 251:opc
 	nop
 	nop
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	0xd7cf
 	bit	7, w
 	jrl	nz, 2
@@ -9721,7 +9721,7 @@ Display_BytecodeBlock_F:
 	max
 	halt
 	ei	0x07
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw 3340
 	ret
 	retd	0x5452
@@ -10833,7 +10833,7 @@ Scoop_CallDisplayHelper:
 
 Scoop_DisplayData_ButtonLayout:
 	ret
-	ldio	146, 18
+	ld	(146:8), 18:io
 	di
 	zcf
 	nop
@@ -10948,22 +10948,22 @@ Scoop_DrawFrameLines:
 
 Scoop_FrameData:
 	ret
-	ldio	18, 6
+	ld	(18:8), 6:io
 	di
 	zcf
 	nop
 	ret
-	ldio	82, 12
+	ld	(82:8), 12:io
 	di
 	zcf
 	nop
 	ret
-	ldio	146, 18
+	ld	(146:8), 18:io
 	di
 	zcf
 	nop
 	ret
-	ldio	209, 24
+	ld	(209:8), 24:io
 	reti
 	nop
 	zcf
@@ -10973,31 +10973,31 @@ Scoop_FrameData:
 	.byte 0x1f
 	.ascii "                                     "
 	ret
-	ldio	213, 32
+	ld	(213:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	218, 32
+	ld	(218:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	223, 32
+	ld	(223:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	228, 32
+	ld	(228:8), 32:io
 	halt
 	nop
 	.byte 0xec
 	nop
 	ret
-	ldio	233, 32
+	ld	(233:8), 32:io
 	halt
 	nop
 	.byte 0xec
@@ -12522,7 +12522,7 @@ Scoop_EnvelopeCalc_Data:
 	ld	wa, (xsp+268)
 	add	wa, hl
 	.byte 0x9f
-	ldio	160, 243
+	ld	(160:8), 243:io
 	swi	5
 	push_a
 	.byte 0x01, 0x50

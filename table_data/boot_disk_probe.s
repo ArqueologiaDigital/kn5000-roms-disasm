@@ -59,7 +59,7 @@ Boot_PulsePD0:
 ;          update path drives FDC_Request directly instead).
 ; -----------------------------------------------------------------------------
 FDC_ProbeDiskFormat:
-	ldio	0x47, 0x1e		; PHFC = 0x1e
+	ld	(0x47:8), 0x1e:io		; PHFC = 0x1e
 	bit_dd8	6, 0x34			; PD6: disk-change/no-disk strap
 	ret	nz			; no disk -> abort probe
 	ld	a, 0:opc

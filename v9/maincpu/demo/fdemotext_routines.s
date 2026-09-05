@@ -1297,7 +1297,7 @@ FDemoText_ByteData_DisplayRefresh:
 	inc	1, xiz
 	ld	xwa, xiz
 	.byte 0xaf
-	ldio	240, 103
+	ld	(240:8), 103:io
 	.byte 0xbb
 	ld	xwa, 1:i3
 	sub	(xsp+4), xwa
@@ -1411,7 +1411,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ldw	(xsp+2), 1
 	ld	xwa, (xsp+20)
 	.byte 0xaf
-	ldio	128, 176
+	ld	(128:8), 176:io
 	nop
 	nop
 	jr	-77
@@ -2117,7 +2117,7 @@ FDemoText_ByteData_LayoutEngine:
 	reti
 	.byte 0xe4, 0xe0
 	ld	w, 191:opc
-	ldio	80, 222
+	ld	(80:8), 222:io
 	cp	(xwa-45), xiy
 	.byte 0x94
 	nop

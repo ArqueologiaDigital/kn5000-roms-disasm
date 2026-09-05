@@ -472,7 +472,7 @@ SeqPlay_DataBlock_BBE:
 	.byte 0xf1, 0xb2
 	pushw	wa
 	inc	6, w
-	ldio	209, 56
+	ld	(209:8), 56:io
 	.byte 0xf2
 	push	xsp
 	push	sr
@@ -497,7 +497,7 @@ SeqPlay_DataBlock_BBE:
 	.byte 0xf1, 0xb2
 	pushw	wa
 	inc	6, w
-	ldio	209, 56
+	ld	(209:8), 56:io
 	.byte 0xf2
 	push	xsp
 	push	sr
@@ -17610,7 +17610,7 @@ PartCtrl_SwapAndRelinkBlock:
 	incw	1, (xsp+4)
 	ld	wa, (xsp+4)
 	.byte 0x9f
-	ldio	240, 110
+	ld	(240:8), 110:io
 	ex_ff
 	ld	(xsp+8), iz
 	ld	wa, iz
@@ -25830,7 +25830,7 @@ SeqLoad_ProcessDataBlock:
 	cp_erpb 251, 16
 	jr	ule, -77
 	.byte 0xbf
-	ldio	22, 206
+	ld	(22:8), 206:io
 	.byte 0xf1
 	ld	wa, (xsp+8)
 	srl	wa, 4
@@ -25841,7 +25841,7 @@ SeqLoad_ProcessDataBlock:
 	nop
 	nop
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	ule, 77
 	ld	wa, iz
@@ -25871,7 +25871,7 @@ SeqLoad_ProcessDataBlock:
 	incw	1, (xsp+4)
 	ld	wa, (xsp+4)
 	.byte 0x9f
-	ldio	240, 103
+	ld	(240:8), 103:io
 	.byte 0xb3
 	calr	866
 	ldw	(9832:16), 1
@@ -26568,7 +26568,7 @@ SeqLoad_ReadPartDataBlock:
 	ld	xwa, 1:i3
 	add	(xsp+4), xwa
 	.byte 0xbf
-	ldio	2, 1
+	ld	(2:8), 1:io
 	nop
 	jr	55
 	ld	xwa, (xsp+4)
@@ -26582,7 +26582,7 @@ SeqLoad_ReadPartDataBlock:
 	inc	2, xwa
 	ld	bc, (xsp+10)
 	.byte 0x9f
-	ldio	129, 217
+	ld	(129:8), 217:io
 	jr	lt, 30
 	popw	de
 	swi	7
@@ -26600,9 +26600,9 @@ SeqLoad_ReadPartDataBlock:
 	lda	xde, (0x29ce:16)
 	ld	bc, (xsp+10)
 	.byte 0x9f
-	ldio	129, 217
+	ld	(129:8), 217:io
 	jr	ge, -97
-	ldio	32, 211
+	ld	(32:8), 211:io
 	reti
 	sla	xwa, 240
 	jr	c, -84

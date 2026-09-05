@@ -585,16 +585,16 @@ sub_F001C9:
 	jr	z, 18	; F001DD  jr Z,0xf001f1
 	call	15993408	; F001DF  call 0xf40a40
 	call	15993220	; F001E3  call 0xf40984
-	ldio	148, 128	; F001E7  ld (0x94),0x80
+	ld	(148:8), 128:io	; F001E7  ld (0x94),0x80
 	m_or_mi8 MB16, 0x34d9, 0x04	; F001EA  or (0x34d9),0x04
 	jr	25	; F001EF  jr T,0xf0020a
-	ldio	149, 1	; F001F1  ld (0x95),0x01
+	ld	(149:8), 1:io	; F001F1  ld (0x95),0x01
 	calr	253	; F001F4  calr 0xf002f4
 	calr	294	; F001F7  calr 0xf00320
 	call	15993220	; F001FA  call 0xf40984
-	ldio	150, 1	; F001FE  ld (0x96),0x01
+	ld	(150:8), 1:io	; F001FE  ld (0x96),0x01
 	calr	271	; F00201  calr 0xf00313
-	ldio	148, 1	; F00204  ld (0x94),0x01
+	ld	(148:8), 1:io	; F00204  ld (0x94),0x01
 	calr	247	; F00207  calr 0xf00301
 	ret	; F0020A  ret
 	bit_dd8	2, 149	; F0020B  bit 2,(0x95)
@@ -626,14 +626,14 @@ sub_F001C9:
 	jr	z, 18	; F00258  jr Z,0xf0026c
 	call	15993408	; F0025A  call 0xf40a40
 	call	15993220	; F0025E  call 0xf40984
-	ldio	148, 128	; F00262  ld (0x94),0x80
+	ld	(148:8), 128:io	; F00262  ld (0x94),0x80
 	m_or_mi8 MB16, 0x34d9, 0x04	; F00265  or (0x34d9),0x04
 	jr	19	; F0026A  jr T,0xf0027f
-	ldio	149, 1	; F0026C  ld (0x95),0x01
+	ld	(149:8), 1:io	; F0026C  ld (0x95),0x01
 	calr	174	; F0026F  calr 0xf00320
 	call	15993220	; F00272  call 0xf40984
-	ldio	150, 1	; F00276  ld (0x96),0x01
-	ldio	148, 1	; F00279  ld (0x94),0x01
+	ld	(150:8), 1:io	; F00276  ld (0x96),0x01
+	ld	(148:8), 1:io	; F00279  ld (0x94),0x01
 	calr	130	; F0027C  calr 0xf00301
 	ret	; F0027F  ret
 
@@ -644,8 +644,8 @@ sub_F001C9:
 	jr	nz, 8	; F00283  jr NZ,0xf0028d
 	bit_dd8	2, 149	; F00285  bit 2,(0x95)
 	jr	z, 3	; F00288  jr Z,0xf0028d
-	ldio	149, 12	; F0028A  ld (0x95),0x0c
-	ldio	148, 12	; F0028D  ld (0x94),0x0c
+	ld	(149:8), 12:io	; F0028A  ld (0x95),0x0c
+	ld	(148:8), 12:io	; F0028D  ld (0x94),0x0c
 	ret	; F00290  ret
 	nop	; F00291  nop
 	nop	; F00292  nop
@@ -662,9 +662,9 @@ sub_F001C9:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F00293:
-	ldio	149, 1	; F00293  ld (0x95),0x01
+	ld	(149:8), 1:io	; F00293  ld (0x95),0x01
 	calr	135	; F00296  calr 0xf00320
-	ldio	150, 1	; F00299  ld (0x96),0x01
+	ld	(150:8), 1:io	; F00299  ld (0x96),0x01
 	ret	; F0029C  ret
 
 ; --- 0xF0029D-0xF002C8, 44 B, converted by lane promB6 (CODE).
@@ -674,19 +674,19 @@ sub_F00293:
 	jr	nz, 14	; F002A0  jr NZ,0xf002b0
 	bit_dd8	2, 149	; F002A2  bit 2,(0x95)
 	jr	nz, 9	; F002A5  jr NZ,0xf002b0
-	ldio	149, 1	; F002A7  ld (0x95),0x01
+	ld	(149:8), 1:io	; F002A7  ld (0x95),0x01
 	calr	71	; F002AA  calr 0xf002f4
 	calr	112	; F002AD  calr 0xf00320
 	ret	; F002B0  ret
 	nop	; F002B1  nop
 	nop	; F002B2  nop
-	ldio	148, 12	; F002B3  ld (0x94),0x0c
-	ldio	150, 12	; F002B6  ld (0x96),0x0c
+	ld	(148:8), 12:io	; F002B3  ld (0x94),0x0c
+	ld	(150:8), 12:io	; F002B6  ld (0x96),0x0c
 	bit_dd8	3, 149	; F002B9  bit 3,(0x95)
 	jr	nz, 8	; F002BC  jr NZ,0xf002c6
 	bit_dd8	2, 149	; F002BE  bit 2,(0x95)
 	jr	z, 3	; F002C1  jr Z,0xf002c6
-	ldio	149, 12	; F002C3  ld (0x95),0x0c
+	ld	(149:8), 12:io	; F002C3  ld (0x95),0x0c
 	ret	; F002C6  ret
 	nop	; F002C7  nop
 	nop	; F002C8  nop
@@ -703,7 +703,7 @@ sub_F00293:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F002C9:
-	ldio	150, 12	; F002C9  ld (0x96),0x0c
+	ld	(150:8), 12:io	; F002C9  ld (0x96),0x0c
 	ret	; F002CC  ret
 
 ; --- 0xF002CD-0xF002F3, 39 B, converted by lane promB6 (CODE).
@@ -711,20 +711,20 @@ sub_F002C9:
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	nop	; F002CD  nop
 	nop	; F002CE  nop
-	ldio	148, 1	; F002CF  ld (0x94),0x01
+	ld	(148:8), 1:io	; F002CF  ld (0x94),0x01
 	calr	44	; F002D2  calr 0xf00301
 	bit_dd8	0, 149	; F002D5  bit 0,(0x95)
 	jr	nz, 14	; F002D8  jr NZ,0xf002e8
 	bit_dd8	2, 149	; F002DA  bit 2,(0x95)
 	jr	nz, 9	; F002DD  jr NZ,0xf002e8
-	ldio	149, 1	; F002DF  ld (0x95),0x01
+	ld	(149:8), 1:io	; F002DF  ld (0x95),0x01
 	calr	15	; F002E2  calr 0xf002f4
 	calr	56	; F002E5  calr 0xf00320
 	ret	; F002E8  ret
 	nop	; F002E9  nop
 	nop	; F002EA  nop
-	ldio	150, 12	; F002EB  ld (0x96),0x0c
-	ldio	148, 12	; F002EE  ld (0x94),0x0c
+	ld	(150:8), 12:io	; F002EB  ld (0x96),0x0c
+	ld	(148:8), 12:io	; F002EE  ld (0x94),0x0c
 	ret	; F002F1  ret
 	nop	; F002F2  nop
 	nop	; F002F3  nop
@@ -1536,8 +1536,8 @@ sub_F00800:
 	ld	a, (6311936:24)	; F00B2F  ld A,(0x605000)
 	ld	(6311937:24), a	; F00B34  ld (0x605001),A
 	ld	(6311938:24), 0	; F00B39  ld (0x605002),0x00
-	ldio	140, 0	; F00B3F  ld (0x8c),0x00
-	ldio	139, 0	; F00B42  ld (0x8b),0x00
+	ld	(140:8), 0:io	; F00B3F  ld (0x8c),0x00
+	ld	(139:8), 0:io	; F00B42  ld (0x8b),0x00
 	di	; F00B45  ei 0x00
 	ret	; F00B47  ret
 
@@ -85341,7 +85341,7 @@ sub_F4466D:
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4476A  or (0x34d4),0x10
 	call	16007216	; F4476F  call 0xf44030
 	call	16007225	; F44773  call 0xf44039
-	ldio	168, 0	; F44777  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F44777  ld (0xa8),0x00
 	m_and_mi8 MB8, 0xa5, 0x7f	; F4477A  and (0xa5),0x7f
 	ret	; F4477E  ret
 
@@ -85464,7 +85464,7 @@ sub_F44809:
 	calr	19	; F4488D  calr 0xf448a3
 	calr	4748	; F44890  calr 0xf45b1f
 	calr	1041	; F44893  calr 0xf44ca7
-	ldio	168, 0	; F44896  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F44896  ld (0xa8),0x00
 	m_and_mi8 MB16, 0x34d8, 0x7f	; F44899  and (0x34d8),0x7f
 	call	15992708	; F4489E  call 0xf40784
 	ret	; F448A2  ret
@@ -85793,7 +85793,7 @@ sub_F44AEE:		; <- T_F40AC4
 	jr	29	; F44B0D  jr T,0xf44b2c
 	ld	(13403:16), 0	; F44B0F  ld (0x345b),0x00
 	ldw	(145:8), 0:io	; F44B14  ld (0x91),0x0000
-	ldio	147, 0	; F44B18  ld (0x93),0x00
+	ld	(147:8), 0:io	; F44B18  ld (0x93),0x00
 	xor	wa, wa	; F44B1B  xor WA,WA
 	ld	xix, 13290	; F44B1D  ld XIX,0x000033ea
 	xor	bc, bc	; F44B22  xor BC,BC
@@ -85841,7 +85841,7 @@ sub_F44B2D:		; <- T_F40AAC
 	ld	c, 17:opc	; F44B79  ld C,0x11
 	stw_dpi	wa, 241	; F44B7B  ld (XIX+),WA
 	djnz16	bc, -6	; F44B7E  djnz BC,0xf44b7b
-	ldio	168, 0	; F44B81  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F44B81  ld (0xa8),0x00
 	calr	3971	; F44B84  calr 0xf45b0a
 	m_or_mi8 MB16, 0x355a, 0x02	; F44B87  or (0x355a),0x02
 	calr	89	; F44B8C  calr 0xf44be8
@@ -85864,7 +85864,7 @@ sub_F44B2D:		; <- T_F40AAC
 sub_F44B95:
 	ld	(13403:16), 0	; F44B95  ld (0x345b),0x00
 	ldw	(145:8), 0:io	; F44B9A  ld (0x91),0x0000
-	ldio	147, 0	; F44B9E  ld (0x93),0x00
+	ld	(147:8), 0:io	; F44B9E  ld (0x93),0x00
 	xor	wa, wa	; F44BA1  xor WA,WA
 	ld	xix, 13290	; F44BA3  ld XIX,0x000033ea
 	xor	bc, bc	; F44BA8  xor BC,BC
@@ -85880,7 +85880,7 @@ sub_F44B95:
 	calr	5141	; F44BCD  calr 0xf45fe5
 	calr	3895	; F44BD0  calr 0xf45b0a
 	calr	4549	; F44BD3  calr 0xf45d9b
-	ldio	168, 0	; F44BD6  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F44BD6  ld (0xa8),0x00
 	m_or_mi8 MB16, 0x34d0, 0x10	; F44BD9  or (0x34d0),0x10
 	calr	3497	; F44BDE  calr 0xf4598a
 	calr	63794	; F44BE1  calr 0xf44516
@@ -85991,7 +85991,7 @@ sub_F44C51:
 	xor	xwa, xwa	; F44C96  xor XWA,XWA
 	ld	(12296:16), xwa	; F44C98  ld (0x3008),XWA
 	calr	8	; F44C9C  calr 0xf44ca7
-	ldio	168, 0	; F44C9F  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F44C9F  ld (0xa8),0x00
 	call	15995320	; F44CA2  call 0xf411b8
 	ret	; F44CA6  ret
 
@@ -86614,7 +86614,7 @@ sub_F451E6:		; <- T_F409D0
 	calr	3514	; F45228  calr 0xf45fe5
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4522B  and (0x34bb),0xf7
 	ldw	(145:8), 0:io	; F45230  ld (0x91),0x0000
-	ldio	147, 0	; F45234  ld (0x93),0x00
+	ld	(147:8), 0:io	; F45234  ld (0x93),0x00
 	ld	a, (6311936:24)	; F45237  ld A,(0x605000)
 	ld	(13400:16), a	; F4523C  ld (0x3458),A
 	ld	xwa, (6304798:24)	; F45240  ld XWA,(0x60341e)
@@ -87179,7 +87179,7 @@ sub_F455CC:
 	ld	(12300:16), xwa	; F455D6  ld (0x300c),XWA
 	calr	1325	; F455DA  calr 0xf45b0a
 	m_or_mi8 MB16, 0x34d2, 0x02	; F455DD  or (0x34d2),0x02
-	ldio	168, 0	; F455E2  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F455E2  ld (0xa8),0x00
 	ret	; F455E5  ret
 
 ; --------------------------------------------------------------------------
@@ -87369,7 +87369,7 @@ sub_F456F0:
 	m_or_mi8 MB16, 0x3614, 0x01	; F45743  or (0x3614),0x01
 	ei	6	; F45748  ei 0x06
 	ldw	(145:8), 0:io	; F4574A  ld (0x91),0x0000
-	ldio	147, 0	; F4574E  ld (0x93),0x00
+	ld	(147:8), 0:io	; F4574E  ld (0x93),0x00
 	di	; F45751  ei 0x00
 	call	15993268	; F45753  call 0xf409b4
 	m_bit 2, MD16, 0x7f32	; F45757  bit 2,(0x7f32)
@@ -87545,13 +87545,13 @@ sub_F45812:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F458EA:
-	ldio	149, 6	; F458EA  ld (0x95),0x06
+	ld	(149:8), 6:io	; F458EA  ld (0x95),0x06
 	bit_dd8	0, 148	; F458ED  bit 0,(0x94)
 	jr	z, 3	; F458F0  jr Z,0xf458f5
-	ldio	148, 6	; F458F2  ld (0x94),0x06
+	ld	(148:8), 6:io	; F458F2  ld (0x94),0x06
 	bit_dd8	0, 150	; F458F5  bit 0,(0x96)
 	jr	z, 3	; F458F8  jr Z,0xf458fd
-	ldio	150, 6	; F458FA  ld (0x96),0x06
+	ld	(150:8), 6:io	; F458FA  ld (0x96),0x06
 	ret	; F458FD  ret
 
 ; --------------------------------------------------------------------------
@@ -87836,7 +87836,7 @@ sub_F45B0A:		; <- T_F40A14
 sub_F45B1F:
 	ei	6	; F45B1F  ei 0x06
 	ldw	(145:8), 0:io	; F45B21  ld (0x91),0x0000
-	ldio	147, 0	; F45B25  ld (0x93),0x00
+	ld	(147:8), 0:io	; F45B25  ld (0x93),0x00
 	di	; F45B28  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B2A  bit 5,(0x34d0)
 	jr	nz, 10	; F45B2E  jr NZ,0xf45b3a
@@ -87863,7 +87863,7 @@ sub_F45B1F:
 sub_F45B48:
 	ei	6	; F45B48  ei 0x06
 	ldw	(145:8), 0:io	; F45B4A  ld (0x91),0x0000
-	ldio	147, 0	; F45B4E  ld (0x93),0x00
+	ld	(147:8), 0:io	; F45B4E  ld (0x93),0x00
 	di	; F45B51  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B53  bit 5,(0x34d0)
 	jr	nz, 10	; F45B57  jr NZ,0xf45b63
@@ -87979,7 +87979,7 @@ sub_F45BD3:		; <- T_F409DC
 	jr	3	; F45C0A  jr T,0xf45c0f
 	calr	65337	; F45C0C  calr 0xf45b48
 	calr	61589	; F45C0F  calr 0xf44ca7
-	ldio	168, 0	; F45C12  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F45C12  ld (0xa8),0x00
 	jrl	158	; F45C15  jrl T,0xf45cb6
 	calr	63947	; F45C18  calr 0xf455e6
 	ld	a, (13471:16)	; F45C1B  ld A,(0x349f)
@@ -87998,7 +87998,7 @@ sub_F45BD3:		; <- T_F409DC
 	ld	(13406:16), iy	; F45C48  ld (0x345e),IY
 	st_dd8w	ix, 145	; F45C4C  ld (0x91),IX
 	ld	(13398:16), ix	; F45C4F  ld (0x3456),IX
-	ldio	147, 0	; F45C53  ld (0x93),0x00
+	ld	(147:8), 0:io	; F45C53  ld (0x93),0x00
 	ld	c, (13471:16)	; F45C56  ld C,(0x349f)
 	cp	c, 16	; F45C5A  cp C,0x10
 	jr	nc, 15	; F45C5D  jr NC,0xf45c6e
@@ -88021,7 +88021,7 @@ sub_F45BD3:		; <- T_F409DC
 	jr	c, -115	; F45C8C  jr C,0xf45c1b
 	m_or_mi8 MB16, 0x34bb, 0x08	; F45C8E  or (0x34bb),0x08
 	calr	61457	; F45C93  calr 0xf44ca7
-	ldio	168, 0	; F45C96  ld (0xa8),0x00
+	ld	(168:8), 0:io	; F45C96  ld (0xa8),0x00
 	ld	xwa, (13466:16)	; F45C99  ld XWA,(0x349a)
 	cp	xwa, 0	; F45C9D  cp XWA,0x00000000
 	jr	z, 17	; F45CA3  jr Z,0xf45cb6
@@ -116366,12 +116366,12 @@ SC1_ConfigurePort:
 	st_dd8b	a, 26	; F5A8A4  ld (0x1a),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5A8A7  and (0x18),0xdf
 	m_and_mi8 MB8, 0x58, 0xfd	; F5A8AB  and (0x58),0xfd
-	ldio	86, 0	; F5A8AF  ld (0x56),0x00
-	ldio	87, 34	; F5A8B2  ld (0x57),0x22
-	ldio	85, 1	; F5A8B5  ld (0x55),0x01
-	ldio	120, 255	; F5A8B8  ld (0x78),0xff
-	ldio	114, 143	; F5A8BB  ld (0x72),0x8f
-	ldio	72, 2	; F5A8BE  ld (0x48),0x02
+	ld	(86:8), 0:io	; F5A8AF  ld (0x56),0x00
+	ld	(87:8), 34:io	; F5A8B2  ld (0x57),0x22
+	ld	(85:8), 1:io	; F5A8B5  ld (0x55),0x01
+	ld	(120:8), 255:io	; F5A8B8  ld (0x78),0xff
+	ld	(114:8), 143:io	; F5A8BB  ld (0x72),0x8f
+	ld	(72:8), 2:io	; F5A8BE  ld (0x48),0x02
 	m_or_mi8 MB16, 0x2a82, 0x08	; F5A8C1  or (0x2a82),0x08
 	ld	(10881:16), 0	; F5A8C6  ld (0x2a81),0x00
 	ld	(10883:16), 2	; F5A8CB  ld (0x2a83),0x02
@@ -116408,8 +116408,8 @@ SC1_ConfigurePort:
 	calr	279	; F5A93C  calr 0xf5aa56
 	calr	288	; F5A93F  calr 0xf5aa62
 	ei	6	; F5A942  ei 0x06
-	ldio	120, 85	; F5A944  ld (0x78),0x55
-	ldio	114, 133	; F5A947  ld (0x72),0x85
+	ld	(120:8), 85:io	; F5A944  ld (0x78),0x55
+	ld	(114:8), 133:io	; F5A947  ld (0x72),0x85
 	ldw	(10896:16), 0	; F5A94A  ld (0x2a90),0x0000
 	ldw	(10898:16), 0	; F5A950  ld (0x2a92),0x0000
 	m_and_mi8 MB8, 0x56, 0xdf	; F5A956  and (0x56),0xdf
@@ -116435,8 +116435,8 @@ SC1_SendWord_Polled:
 	m_and_mi8 MB16, 0x2a87, 0xdf	; F5A961  and (0x2a87),0xdf
 	ld	a, (10887:16)	; F5A966  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5A96A  ld (0x1b),A
-	ldio	120, 255	; F5A96D  ld (0x78),0xff
-	ldio	114, 143	; F5A970  ld (0x72),0x8f
+	ld	(120:8), 255:io	; F5A96D  ld (0x78),0xff
+	ld	(114:8), 143:io	; F5A970  ld (0x72),0x8f
 	m_and_mi8 MB8, 0x18, 0xdf	; F5A973  and (0x18),0xdf
 	m_or_mi8 MB16, 0x2a86, 0x20	; F5A977  or (0x2a86),0x20
 	ld	a, (10886:16)	; F5A97C  ld A,(0x2a86)
@@ -116463,7 +116463,7 @@ SC1_SendWord_Polled:
 	ld	a, (10886:16)	; F5A9C7  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5A9CB  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5A9CE  and (0x55),0xfe
-	ldio	120, 255	; F5A9D2  ld (0x78),0xff
+	ld	(120:8), 255:io	; F5A9D2  ld (0x78),0xff
 	ld	xiy, 10980	; F5A9D5  ld XIY,0x00002ae4
 	m_add_rm MW16, 0x2ae0, 5	; F5A9DA  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5A9DE  ld A,(XIY)
@@ -116738,8 +116738,8 @@ SC1_StartWordTx:
 	m_add_mi16 MW16, 0x2ae2, 0x0002	; F5ABC6  add (0x2ae2),0x0002
 	m_or_mi8 MB16, 0x2a82, 0x02	; F5ABCC  or (0x2a82),0x02
 	ld	(10880:16), 4	; F5ABD1  ld (0x2a80),0x04
-	ldio	114, 143	; F5ABD6  ld (0x72),0x8f
-	ldio	87, 40	; F5ABD9  ld (0x57),0x28
+	ld	(114:8), 143:io	; F5ABD6  ld (0x72),0x8f
+	ld	(87:8), 40:io	; F5ABD9  ld (0x57),0x28
 	m_and_mi8 MB16, 0x2a87, 0xdf	; F5ABDC  and (0x2a87),0xdf
 	ld	a, (10887:16)	; F5ABE1  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5ABE5  ld (0x1b),A
@@ -116749,7 +116749,7 @@ SC1_StartWordTx:
 	st_dd8b	a, 26	; F5ABF5  ld (0x1a),A
 	m_and_mi8 MB8, 0x56, 0xdf	; F5ABF8  and (0x56),0xdf
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ABFC  and (0x55),0xfe
-	ldio	120, 80	; F5AC00  ld (0x78),0x50
+	ld	(120:8), 80:io	; F5AC00  ld (0x78),0x50
 	st_dd8b	a, 84	; F5AC03  ld (0x54),A
 	di	; F5AC06  ei 0x00
 	nop	; F5AC08  nop
@@ -116782,8 +116782,8 @@ INT6_SC1_PeerRequest:
 	st_dd8b	a, 26	; F5AC1B  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AC1E  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AC22  and (0x55),0xfd
-	ldio	114, 133	; F5AC26  ld (0x72),0x85
-	ldio	120, 5	; F5AC29  ld (0x78),0x05
+	ld	(114:8), 133:io	; F5AC26  ld (0x72),0x85
+	ld	(120:8), 5:io	; F5AC29  ld (0x78),0x05
 	m_or_mi8 MB8, 0x56, 0x20	; F5AC2C  or (0x56),0x20
 	ld	(10880:16), 32	; F5AC30  ld (0x2a80),0x20
 	m_or_mi8 MB16, 0x2a82, 0x01	; F5AC35  or (0x2a82),0x01
@@ -117069,9 +117069,9 @@ SC1_State04_TxByte1:
 	m_and_mi8 MB16, 0x2a86, 0xdf	; F5ACE3  and (0x2a86),0xdf
 	ld	a, (10886:16)	; F5ACE8  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5ACEC  ld (0x1a),A
-	ldio	87, 36	; F5ACEF  ld (0x57),0x24
-	ldio	114, 143	; F5ACF2  ld (0x72),0x8f
-	ldio	120, 80	; F5ACF5  ld (0x78),0x50
+	ld	(87:8), 36:io	; F5ACEF  ld (0x57),0x24
+	ld	(114:8), 143:io	; F5ACF2  ld (0x72),0x8f
+	ld	(120:8), 80:io	; F5ACF5  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ACF8  and (0x55),0xfe
 	st_dd8b	a, 84	; F5ACFC  ld (0x54),A
 	inc	4, (10880:16)	; F5ACFF  inc 4,(0x2a80)
@@ -117082,9 +117082,9 @@ SC1_State04_TxByte1:
 	ld	(10881:16), 0	; F5AD0E  ld (0x2a81),0x00
 	ld	(10880:16), 0	; F5AD13  ld (0x2a80),0x00
 	m_or_mi8 MB16, 0x2a84, 0x02	; F5AD18  or (0x2a84),0x02
-	ldio	114, 133	; F5AD1D  ld (0x72),0x85
-	ldio	120, 255	; F5AD20  ld (0x78),0xff
-	ldio	87, 36	; F5AD23  ld (0x57),0x24
+	ld	(114:8), 133:io	; F5AD1D  ld (0x72),0x85
+	ld	(120:8), 255:io	; F5AD20  ld (0x78),0xff
+	ld	(87:8), 36:io	; F5AD23  ld (0x57),0x24
 	m_and_mi8 MB16, 0x2a82, 0xfd	; F5AD26  and (0x2a82),0xfd
 	jrl	-134	; F5AD2B  jrl T,0xf5aca8
 SC1_State0C:
@@ -117095,8 +117095,8 @@ SC1_State0C:
 	m_and_mi8 MB16, 0x2a87, 0xd7	; F5AD3D  and (0x2a87),0xd7
 	ld	a, (10887:16)	; F5AD42  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AD46  ld (0x1b),A
-	ldio	87, 36	; F5AD49  ld (0x57),0x24
-	ldio	120, 80	; F5AD4C  ld (0x78),0x50
+	ld	(87:8), 36:io	; F5AD49  ld (0x57),0x24
+	ld	(120:8), 80:io	; F5AD4C  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AD4F  and (0x55),0xfe
 	st_dd8b	a, 84	; F5AD53  ld (0x54),A
 	inc	4, (10880:16)	; F5AD56  inc 4,(0x2a80)
@@ -117109,16 +117109,16 @@ SC1_State14:
 	m_and_mi8 MB16, 0x2a87, 0xd7	; F5AD6C  and (0x2a87),0xd7
 	ld	a, (10887:16)	; F5AD71  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AD75  ld (0x1b),A
-	ldio	87, 36	; F5AD78  ld (0x57),0x24
+	ld	(87:8), 36:io	; F5AD78  ld (0x57),0x24
 	st_dd8b	a, 84	; F5AD7B  ld (0x54),A
-	ldio	114, 133	; F5AD7E  ld (0x72),0x85
-	ldio	120, 80	; F5AD81  ld (0x78),0x50
+	ld	(114:8), 133:io	; F5AD7E  ld (0x72),0x85
+	ld	(120:8), 80:io	; F5AD81  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AD84  and (0x55),0xfe
 	st_dd8b	a, 84	; F5AD88  ld (0x54),A
 	inc	4, (10880:16)	; F5AD8B  inc 4,(0x2a80)
 	jrl	-234	; F5AD8F  jrl T,0xf5aca8
 SC1_State08_TxFromRing:
-	ldio	87, 34	; F5AD92  ld (0x57),0x22
+	ld	(87:8), 34:io	; F5AD92  ld (0x57),0x22
 	m_or_mi8 MB16, 0x2a87, 0x28	; F5AD95  or (0x2a87),0x28
 	ld	a, (10887:16)	; F5AD9A  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AD9E  ld (0x1b),A
@@ -117126,8 +117126,8 @@ SC1_State08_TxFromRing:
 	ld	a, (10886:16)	; F5ADA6  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5ADAA  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ADAD  and (0x55),0xfe
-	ldio	114, 133	; F5ADB1  ld (0x72),0x85
-	ldio	120, 80	; F5ADB4  ld (0x78),0x50
+	ld	(114:8), 133:io	; F5ADB1  ld (0x72),0x85
+	ld	(120:8), 80:io	; F5ADB4  ld (0x78),0x50
 	ld	xiy, 10980	; F5ADB7  ld XIY,0x00002ae4
 	m_add_rm MW16, 0x2ae0, 5	; F5ADBC  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5ADC0  ld A,(XIY)
@@ -117147,7 +117147,7 @@ SC1_State08_TxFromRing:
 	inc	4, (10880:16)	; F5ADF0  inc 4,(0x2a80)
 	jrl	-335	; F5ADF4  jrl T,0xf5aca8
 SC1_State10_TxFromRing:
-	ldio	87, 34	; F5ADF7  ld (0x57),0x22
+	ld	(87:8), 34:io	; F5ADF7  ld (0x57),0x22
 	m_or_mi8 MB16, 0x2a87, 0x28	; F5ADFA  or (0x2a87),0x28
 	ld	a, (10887:16)	; F5ADFF  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AE03  ld (0x1b),A
@@ -117155,8 +117155,8 @@ SC1_State10_TxFromRing:
 	ld	a, (10886:16)	; F5AE0B  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AE0F  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AE12  and (0x55),0xfe
-	ldio	114, 133	; F5AE16  ld (0x72),0x85
-	ldio	120, 80	; F5AE19  ld (0x78),0x50
+	ld	(114:8), 133:io	; F5AE16  ld (0x72),0x85
+	ld	(120:8), 80:io	; F5AE19  ld (0x78),0x50
 	ld	xiy, 10980	; F5AE1C  ld XIY,0x00002ae4
 	m_add_rm MW16, 0x2ae0, 5	; F5AE21  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5AE25  ld A,(XIY)
@@ -117189,10 +117189,10 @@ SC1_State18_TxDone:
 	m_or_mi8 MB16, 0x2a86, 0x20	; F5AE87  or (0x2a86),0x20
 	ld	a, (10886:16)	; F5AE8C  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AE90  ld (0x1a),A
-	ldio	87, 40	; F5AE93  ld (0x57),0x28
-	ldio	114, 143	; F5AE96  ld (0x72),0x8f
+	ld	(87:8), 40:io	; F5AE93  ld (0x57),0x28
+	ld	(114:8), 143:io	; F5AE96  ld (0x72),0x8f
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AE99  and (0x55),0xfe
-	ldio	120, 80	; F5AE9D  ld (0x78),0x50
+	ld	(120:8), 80:io	; F5AE9D  ld (0x78),0x50
 	st_dd8b	a, 84	; F5AEA0  ld (0x54),A
 	m_or_mi8 MB16, 0x2a82, 0x02	; F5AEA3  or (0x2a82),0x02
 	jrl	-515	; F5AEA8  jrl T,0xf5aca8
@@ -117202,9 +117202,9 @@ SC1_State18_TxDone:
 	m_and_mi8 MB16, 0x2a87, 0xdf	; F5AEB7  and (0x2a87),0xdf
 	ld	a, (10887:16)	; F5AEBC  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AEC0  ld (0x1b),A
-	ldio	114, 133	; F5AEC3  ld (0x72),0x85
-	ldio	120, 255	; F5AEC6  ld (0x78),0xff
-	ldio	87, 36	; F5AEC9  ld (0x57),0x24
+	ld	(114:8), 133:io	; F5AEC3  ld (0x72),0x85
+	ld	(120:8), 255:io	; F5AEC6  ld (0x78),0xff
+	ld	(87:8), 36:io	; F5AEC9  ld (0x57),0x24
 	m_and_mi8 MB16, 0x2a82, 0xfd	; F5AECC  and (0x2a82),0xfd
 	jrl	-556	; F5AED1  jrl T,0xf5aca8
 SC1_State20_RxFirstByte:
@@ -117213,8 +117213,8 @@ SC1_State20_RxFirstByte:
 	st_dd8b	a, 26	; F5AEDD  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AEE0  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AEE4  and (0x55),0xfd
-	ldio	114, 133	; F5AEE8  ld (0x72),0x85
-	ldio	120, 5	; F5AEEB  ld (0x78),0x05
+	ld	(114:8), 133:io	; F5AEE8  ld (0x72),0x85
+	ld	(120:8), 5:io	; F5AEEB  ld (0x78),0x05
 	ld_sd8b	a, 84	; F5AEEE  ld A,(0x54)
 	ld	xiy, 10900	; F5AEF1  ld XIY,0x00002a94
 	m_add_rm MW16, 0x2a92, 5	; F5AEF6  add IY,(0x2a92)
@@ -117268,8 +117268,8 @@ SC1_State24_RxNextByte:
 	m_and_mi8 MB16, 0x2a87, 0xdf	; F5AF9D  and (0x2a87),0xdf
 	ld	a, (10887:16)	; F5AFA2  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AFA6  ld (0x1b),A
-	ldio	114, 133	; F5AFA9  ld (0x72),0x85
-	ldio	120, 5	; F5AFAC  ld (0x78),0x05
+	ld	(114:8), 133:io	; F5AFA9  ld (0x72),0x85
+	ld	(120:8), 5:io	; F5AFAC  ld (0x78),0x05
 	m_and_mi8 MB8, 0x56, 0xdf	; F5AFAF  and (0x56),0xdf
 	jrl	-742	; F5AFB3  jrl T,0xf5acd0
 	m_and_mi8 MB16, 0x2a86, 0xcf	; F5AFB6  and (0x2a86),0xcf
@@ -117277,8 +117277,8 @@ SC1_State24_RxNextByte:
 	st_dd8b	a, 26	; F5AFBF  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AFC2  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AFC6  and (0x55),0xfd
-	ldio	114, 133	; F5AFCA  ld (0x72),0x85
-	ldio	120, 5	; F5AFCD  ld (0x78),0x05
+	ld	(114:8), 133:io	; F5AFCA  ld (0x72),0x85
+	ld	(120:8), 5:io	; F5AFCD  ld (0x78),0x05
 	jrl	-771	; F5AFD0  jrl T,0xf5acd0
 ; ---------------------------------------------------------------------
 ; SC1_State_Unexpected -- an INTRX1/INTTX1 arrived in a state that has no work
@@ -117309,8 +117309,8 @@ SC1_AbortToIdle:
 	m_and_mi8 MB16, 0x2a82, 0xfc	; F5AFDB  and (0x2a82),0xfc
 	m_or_mi8 MB16, 0x2a84, 0x04	; F5AFE0  or (0x2a84),0x04
 	m_and_mi8 MB8, 0x56, 0xdf	; F5AFE5  and (0x56),0xdf
-	ldio	120, 15	; F5AFE9  ld (0x78),0x0f
-	ldio	114, 143	; F5AFEC  ld (0x72),0x8f
+	ld	(120:8), 15:io	; F5AFE9  ld (0x78),0x0f
+	ld	(114:8), 143:io	; F5AFEC  ld (0x72),0x8f
 	jr	0	; F5AFEF  jr T,0xf5aff1
 	reti	; F5AFF1  reti
 ; ---------------------------------------------------------------------
@@ -117348,8 +117348,8 @@ SC1_TxFlush_Body:
 	jr	c, 58	; F5B021  jr C,0xf5b05d
 	m_or_mi8 MB16, 0x2a82, 0x02	; F5B023  or (0x2a82),0x02
 	ld	(10880:16), 4	; F5B028  ld (0x2a80),0x04
-	ldio	114, 143	; F5B02D  ld (0x72),0x8f
-	ldio	87, 40	; F5B030  ld (0x57),0x28
+	ld	(114:8), 143:io	; F5B02D  ld (0x72),0x8f
+	ld	(87:8), 40:io	; F5B030  ld (0x57),0x28
 	m_and_mi8 MB16, 0x2a87, 0xdf	; F5B033  and (0x2a87),0xdf
 	ld	a, (10887:16)	; F5B038  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5B03C  ld (0x1b),A
@@ -117359,7 +117359,7 @@ SC1_TxFlush_Body:
 	st_dd8b	a, 26	; F5B04C  ld (0x1a),A
 	m_and_mi8 MB8, 0x56, 0xdf	; F5B04F  and (0x56),0xdf
 	m_and_mi8 MB8, 0x55, 0xfe	; F5B053  and (0x55),0xfe
-	ldio	120, 80	; F5B057  ld (0x78),0x50
+	ld	(120:8), 80:io	; F5B057  ld (0x78),0x50
 	st_dd8b	a, 84	; F5B05A  ld (0x54),A
 ; ---------------------------------------------------------------------
 ; SC1_TxFlush_Exit -- `ei 0x00 / ret`, a SHARED epilogue
@@ -117949,7 +117949,7 @@ SC1_DeadTail:
 	ld	(10886:16), a	; F5B37B  ld (0x2a86),A
 	st_dd8b	a, 26	; F5B37F  ld (0x1a),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5B382  and (0x18),0xdf
-	ldio	87, 34	; F5B386  ld (0x57),0x22
+	ld	(87:8), 34:io	; F5B386  ld (0x57),0x22
 	ldw	(10976:16), 0	; F5B389  ld (0x2ae0),0x0000
 	ldw	(10978:16), 0	; F5B38F  ld (0x2ae2),0x0000
 	calr	134	; F5B395  calr 0xf5b41e
@@ -117973,8 +117973,8 @@ SC1_DeadTail:
 	calr	63191	; F5B3CD  calr 0xf5aaa7
 	calr	63188	; F5B3D0  calr 0xf5aaa7
 	ei	7	; F5B3D3  ei 0x07
-	ldio	120, 85	; F5B3D5  ld (0x78),0x55
-	ldio	114, 5	; F5B3D8  ld (0x72),0x05
+	ld	(120:8), 85:io	; F5B3D5  ld (0x78),0x55
+	ld	(114:8), 5:io	; F5B3D8  ld (0x72),0x05
 	ldw	(10896:16), 0	; F5B3DB  ld (0x2a90),0x0000
 	ldw	(10898:16), 0	; F5B3E1  ld (0x2a92),0x0000
 	ld	xhl, 11072	; F5B3E7  ld XHL,0x00002b40
@@ -141977,7 +141977,7 @@ sub_F6A7EB:
 	ret	; F6A878  ret
 	nop	; F6A879  nop
 	nop	; F6A87A  nop
-	ldio	0, 12	; F6A87B  ld (0x00),0x0c
+	ld	(0:8), 12:io	; F6A87B  ld (0x00),0x0c
 	nop	; F6A87E  nop
 	rcf	; F6A87F  rcf
 	nop	; F6A880  nop
@@ -142711,7 +142711,7 @@ sub_F6AD40:
 	ret	; F6AD55  ret
 	nop	; F6AD56  nop
 	nop	; F6AD57  nop
-	ldio	12, 14	; F6AD58  ld (0x0c),0x0e
+	ld	(12:8), 14:io	; F6AD58  ld (0x0c),0x0e
 	max	; F6AD5B  max
 	push	sr	; F6AD5C  push SR
 	push	sr	; F6AD5D  push SR
@@ -146546,7 +146546,7 @@ RamPtrTable_F6CA63:
 	.long	0x00007E62	; F6CADB  [30] -> RAM 0x7E62
 	.long	0x00007EA2	; F6CADF  [31] -> RAM 0x7EA2
 
-	ldio	9, 10	; F6CAE3  ld (0x09),0x0a
+	ld	(9:8), 10:io	; F6CAE3  ld (0x09),0x0a
 	pushw	55247	; F6CAE6  push 0xd7cf
 	bit	7, w	; F6CAE9  bit 0x07,W
 	jr	nz, 2	; F6CAEC  jr NZ,0xf6caf0
@@ -155989,7 +155989,7 @@ sub_F70C3F:
 	max	; F70C53  max
 	halt	; F70C54  halt
 	ei	7	; F70C55  ei 0x07
-	ldio	15, 9	; F70C57  ld (0x0f),0x09
+	ld	(15:8), 9:io	; F70C57  ld (0x0f),0x09
 	ldw	(11:8), 3340:io	; F70C5A  ld (0x0b),0x0d0c
 	ret	; F70C5E  ret
 
@@ -160479,7 +160479,7 @@ sub_F72F2D:
 	pushw	wa	; F72F4A  push WA
 	ld	c, 0:opc	; F72F4B  ld C,0x00
 	pushw	2345	; F72F4D  push 0x0929
-	ldio	255, 255	; F72F50  ld (0xff),0xff
+	ld	(255:8), 255:io	; F72F50  ld (0xff),0xff
 	ldw	(255:8), 65315:io	; F72F53  ld (0xff),0xff23
 	pushw	hl	; F72F57  push HL
 	calr	1	; F72F58  calr 0xf72f5c

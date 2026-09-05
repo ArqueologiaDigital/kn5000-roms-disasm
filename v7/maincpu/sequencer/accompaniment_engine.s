@@ -761,7 +761,7 @@ AccVoice_ParamIndexData:
 	nop
 	push	sr
 	.zero 8
-	ldio	4, 12
+	ld	(4:8), 12:io
 	nop
 	halt
 	ldw	(15:8), 6420:io
@@ -934,7 +934,7 @@ AccStyle_ByteDataBlock:
 	.byte 0x38	; v10 does not spell this byte either
 	.byte 0x33	; v10 does not spell this byte either
 	push	xsp
-	ldio	110, 5
+	ld	(110:8), 5:io
 	ld	a, (xhl+100)
 	jr	26
 	.byte 0xc1	; v10 does not spell this byte either
@@ -967,7 +967,7 @@ AccStyle_ByteDataBlock:
 	di
 	reti
 	nop
-	ldio	0, 9
+	ld	(0:8), 9:io
 	nop
 	ldw	(0:8), 11:io
 	incf
@@ -999,7 +999,7 @@ AccStyle_ByteDataBlock:
 	ei	4
 	reti
 	max
-	ldio	4, 9
+	ld	(4:8), 9:io
 	max
 	ldw	(4:8), 1035:io
 	incf
@@ -1023,7 +1023,7 @@ AccStyle_ByteDataBlock:
 	max
 	nop
 	di
-	ldio	0, 10
+	ld	(0:8), 10:io
 	nop
 	incf
 	nop
@@ -1036,7 +1036,7 @@ AccStyle_ByteDataBlock:
 	max
 	max
 	ei	4
-	ldio	4, 10
+	ld	(4:8), 10:io
 	max
 	incf
 	max
@@ -9652,11 +9652,11 @@ AccVoice_CopyFromROM_DataBlock:
 	jr	-21
 	cp	c, 0:i3
 	jr	nz, 8
-	ldio	0, 0
-	ldio	1, 1
+	ld	(0:8), 0:io
+	ld	(1:8), 1:io
 	jr	6
-	ldio	11, 0
-	ldio	12, 1
+	ld	(11:8), 0:io
+	ld	(12:8), 1:io
 	ld	xiy, 0:i3
 	ret
 	nop
@@ -11863,8 +11863,8 @@ RhythmProc_ChannelMapTable:
 	max
 	max
 	max
-	ldio 8, 8
-	ldio 0, 0
+	ld (8:8), 8:io
+	ld (0:8), 0:io
 	nop
 	nop
 	nop
@@ -16228,7 +16228,7 @@ ToneGen_MapNoteToOctaveBitmask:
 	normal
 	push	sr
 	max
-	ldio	16, 32
+	ld	(16:8), 32:io
 	.byte 0x40, 0x80
 
 ToneGen_MapNote_OrMask:
@@ -18046,7 +18046,7 @@ __pad_F6288E:
 	retd	2576
 	pushw	0x4709
 	reti
-	ldio	59, 60
+	ld	(59:8), 60:io
 	ld	xwa, 0x4906053f
 	max
 	.ascii "JHmnopqrstuvwxyz{|}~"
@@ -20083,12 +20083,12 @@ __pad_F63EC6:
 	nop
 	push	sr
 	.byte 0x04, 0x06
-	ldio	1, 2
+	ld	(1:8), 2:io
 	pop	sr
 	max
 	halt
 	ei	7
-	ldio	1, 2
+	ld	(1:8), 2:io
 	pop	sr
 	max
 	halt
@@ -21401,12 +21401,12 @@ RhythmVariation_InlineCode:
 	calr	-1159
 	ret
 	nop
-	ldio	1, 0
+	ld	(1:8), 0:io
 	push	sr
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	nop
 	nop
@@ -21740,7 +21740,7 @@ TimeSig_DisplayStrings:
 	pushw	bc
 	pushw	hl
 	ldw	wa, 8224
-	ldio	40, 49
+	ld	(40:8), 49:io
 	pushw sp
 	ldw	ix, 11049
 	ldw	wa, 8224
@@ -21785,7 +21785,7 @@ TimeSig_DisplayStrings:
 	pushw sp
 	ldw	ix, 11049
 	ldw	wa, 8224
-	ldio	40, 50
+	ld	(40:8), 50:io
 	pushw sp
 	push	xwa
 	pushw	bc
@@ -21954,9 +21954,9 @@ TimeSig_DisplayStrings:
 	max
 	max
 	max
-	ldio	8, 8
-	ldio	8, 8
-	ldio	8, 0
+	ld	(8:8), 8:io
+	ld	(8:8), 8:io
+	ld	(8:8), 0:io
 	nop
 	nop
 	nop
@@ -22108,8 +22108,8 @@ TimeSig_DisplayStrings:
 	max
 	max
 	max
-	ldio	8, 8
-	ldio	0, 0
+	ld	(8:8), 8:io
+	ld	(0:8), 0:io
 	nop
 	nop
 	nop
@@ -22120,11 +22120,11 @@ TimeSig_DisplayStrings:
 	max
 	max
 	max
-	ldio	8, 8
-	ldio	8, 8
+	ld	(8:8), 8:io
+	ld	(8:8), 8:io
 	nop
 	max
-	ldio	200, 51
+	ld	(200:8), 51:io
 	reti
 	jr	nz, 58
 	.byte 0xf1, 0x31, 0x34, 0xcd
@@ -22429,8 +22429,8 @@ TimeSig_DisplayStrings:
 	normal
 	push	sr
 	max
-	ldio	8, 8
-	ldio	8, 62
+	ld	(8:8), 8:io
+	ld	(8:8), 62:io
 	call	16145497
 	pop	xiz
 	ret
@@ -24087,7 +24087,7 @@ PatIdx_Lookup_Return:
 	normal
 	push	sr
 	max
-	ldio	16, 32
+	ld	(16:8), 32:io
 	.byte 0x40
 
 __pad_F67013:
@@ -24626,8 +24626,8 @@ VoiceResolve_InitSearch:
 	ld	(xbc), a
 	ret
 VoiceResolve_SearchDone:
-	ldio	8, 8
-	ldio	8, 16
+	ld	(8:8), 8:io
+	ld	(8:8), 16:io
 	.byte 0x20
 
 __pad_F6742B:
@@ -25424,7 +25424,7 @@ AccVoice_SetupSlots_DataBlock:
 	normal
 	push	sr
 	max
-	ldio	16, 32
+	ld	(16:8), 32:io
 	ld	xwa, 4109049408
 	push	xbc
 	add	xbc, 13201
@@ -29328,7 +29328,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -29354,7 +29354,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -29380,7 +29380,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -29406,7 +29406,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop

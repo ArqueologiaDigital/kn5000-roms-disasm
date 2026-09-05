@@ -5857,7 +5857,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0xd1, 0x96, 0xc5
 	push	xiz
 	nop
-	ldio	104, 6
+	ld	(104:8), 6:io
 	.byte 0xd1, 0x96, 0xc5
 	push	xix
 	swi	7
@@ -6076,7 +6076,7 @@ UIStateEvt_VolumeMixer_Data:
 	jr	z, 8
 	.byte 0xd1, 0x96, 0xc5
 	push	xiz
-	ldio	0, 104
+	ld	(0:8), 104:io
 	.byte 0x06, 0xd1, 0x96, 0xc5
 	push	xix
 	ldx
@@ -6312,7 +6312,7 @@ UIStateEvt_ChannelConfig_Data:
 	jr	z, 12
 	.byte 0xd1, 0x9c, 0xc5
 	push	xiz
-	ldio	0, 209
+	ld	(0:8), 209:io
 	.byte 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6384,11 +6384,11 @@ UIStateEvt_ChannelConfig_Data:
 	ld	b, 195:opc
 	.byte 0xb4, 0xd1, 0x9c, 0xc5
 	push	xiz
-	ldio	0, 104
+	ld	(0:8), 104:io
 	ldw	(241:8), 0xc322:io
 	.byte 0xbc, 0xd1, 0x9c, 0xc5
 	push	xiz
-	ldio	0, 209
+	ld	(0:8), 209:io
 	.byte 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6421,7 +6421,7 @@ UIStateEvt_ChannelConfig_Data:
 	popw	ix
 	.byte 0xc3, 0xb6, 0xd1, 0x9c, 0xc5
 	push	xiz
-	ldio	0, 209
+	ld	(0:8), 209:io
 	.byte 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6431,7 +6431,7 @@ UIStateEvt_ChannelConfig_Data:
 	jr	z, 12
 	.byte 0xd1, 0x9c, 0xc5
 	push	xiz
-	ldio	0, 209
+	ld	(0:8), 209:io
 	.byte 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6441,7 +6441,7 @@ UIStateEvt_ChannelConfig_Data:
 	ret	z
 	.byte 0xd1, 0x9c, 0xc5
 	push	xiz
-	ldio	0, 209
+	ld	(0:8), 209:io
 	.byte 0x94, 0xc5
 	push	xiz
 	.byte 0x04

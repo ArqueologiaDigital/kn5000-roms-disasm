@@ -1602,7 +1602,7 @@ SeqTrack_ChannelMapIdentity:
 	max
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	3340
 	ret
 	retd	256
@@ -1611,7 +1611,7 @@ SeqTrack_ChannelMapIdentity:
 	max
 	halt
 	ei	7
-	ldio	15, 10
+	ld	(15:8), 10:io
 	pushw	3340
 	ret
 	.byte 0x09
@@ -3925,7 +3925,7 @@ VoiceParam_ChannelMapRemapped:
 	max
 	halt
 	ei	7
-	ldio	15, 10
+	ld	(15:8), 10:io
 	pushw	3340
 	ret
 	.byte 0x09

@@ -3691,7 +3691,7 @@ SeMenu_ApplyPartEdit_Data2:
 	cp	hl, 0:i3
 	jr	nz, 13
 	.byte 0x9f
-	ldio	56, 16
+	ld	(56:8), 16:io
 	ld	l, 159:opc
 	.byte 0x06
 	ld	w, 191:opc
@@ -3755,7 +3755,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div	xde, xhl
 	ld	bc, (xsp+4)
 	.byte 0x9f
-	ldio	129, 222
+	ld	(129:8), 222:io
 	or	(xbc), a
 	ccf
 	div	bc, 162
@@ -3784,7 +3784,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x9f, 0x04
 	push	xwa
 	ldw	hl, 0x9f00
-	ldio	32, 232
+	ld	(32:8), 232:io
 	ccf
 	div	xwa, xbc
 	ld	(xsp+8), wa
@@ -3795,7 +3795,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div	xwa, xbc
 	ld	iz, wa
 	.byte 0x9f
-	ldio	134, 48
+	ld	(134:8), 48:io
 	.byte 0x92
 	nop
 	.byte 0x9f, 0x06, 0xa0
@@ -3821,7 +3821,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x9f
 	ldw	(4:8), 1695:io
 	ld	w, 159:opc
-	ldio	33, 159
+	ld	(33:8), 159:io
 	ldw	(34:8), 0x6a1e:io
 	nop
 	ld	bc, hl
@@ -4013,7 +4013,7 @@ SeMenu_ApplyPartEdit_Data2:
 	cp	c, 0:i3
 	jr	nz, 13
 	.byte 0x9f
-	ldio	56, 16
+	ld	(56:8), 16:io
 	ld	l, 159:opc
 	.byte 0x06
 	ld	w, 191:opc
@@ -4231,7 +4231,7 @@ SeMenu_ApplyPartEdit_Data2:
 	divs	xwa, xbc
 	ld	(xsp+8), wa
 	.byte 0x9f
-	ldio	56, 51
+	ld	(56:8), 51:io
 	nop
 	ld	wa, (xsp+12)
 	exts	xwa
@@ -4440,13 +4440,13 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x9f, 0x06, 0xf0
 	jr	nz, 51
 	.byte 0x9f
-	ldio	63, 59
+	ld	(63:8), 59:io
 	nop
 	jr	nc, 7
 	ldw (xsp+8), 59
 	jr	12
 	.byte 0x9f
-	ldio	63, 146
+	ld	(63:8), 146:io
 	nop
 	jr	ule, 5
 	ldw (xsp+8), 146
@@ -4459,11 +4459,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw	iz, 146
 	jrl	202
 	.byte 0x9f
-	ldio	63, 59
+	ld	(63:8), 59:io
 	nop
 	jr	c, 20
 	.byte 0x9f
-	ldio	63, 146
+	ld	(63:8), 146:io
 	nop
 	jr	ugt, 13
 	cp	iz, 59
@@ -4471,13 +4471,13 @@ SeMenu_ApplyPartEdit_Data2:
 	cp	iz, 146
 	jrl	ule, 175
 	.byte 0x9f
-	ldio	63, 59
+	ld	(63:8), 59:io
 	nop
 	jr	nc, 7
 	cp	iz, 59
 	jrl	c, 177
 	.byte 0x9f
-	ldio	63, 146
+	ld	(63:8), 146:io
 	nop
 	jr	ule, 7
 	cp	iz, 146
@@ -4491,9 +4491,9 @@ SeMenu_ApplyPartEdit_Data2:
 	jr	ule, 25
 	ldw	bc, 146
 	.byte 0x9f
-	ldio	161, 222
+	ld	(161:8), 222:io
 	.byte 0x8a, 0x9f
-	ldio	162, 30
+	ld	(162:8), 30:io
 	.byte 0x8b
 	nop
 	ld	wa, (xsp+10)
@@ -4501,7 +4501,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+6), wa
 	ldw	iz, 146
 	.byte 0x9f
-	ldio	63, 59
+	ld	(63:8), 59:io
 	nop
 	jr	nc, 98
 	ld	wa, (xsp+6)
@@ -4509,9 +4509,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw	(160:8), 0x3b31:io
 	nop
 	.byte 0x9f
-	ldio	161, 222
+	ld	(161:8), 222:io
 	.byte 0x8a, 0x9f
-	ldio	162, 30
+	ld	(162:8), 30:io
 	jr	mi, 0
 	add	(xsp+10), hl
 	ldw (xsp+8), 59
@@ -4528,7 +4528,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+6), wa
 	ldw	iz, 59
 	.byte 0x9f
-	ldio	63, 146
+	ld	(63:8), 146:io
 	nop
 	jr	ule, 29
 	ld	wa, (xsp+6)
@@ -4544,7 +4544,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw (xsp+8), 146
 	pushw	iz
 	.byte 0x9f
-	ldio	4, 159
+	ld	(4:8), 159:io
 	incf
 	.byte 0x04, 0x9f
 	rcf
@@ -4715,7 +4715,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xsp, (xsp+24)
 	pushw	121
 	.byte 0x9f
-	ldio	4, 11
+	ld	(4:8), 11:io
 	jr	lt, 0
 	jrl	239
 	ld	a, (xsp+18)
@@ -4833,7 +4833,7 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	8, xsp
 	pushw	121
 	.byte 0x9f
-	ldio	4, 215
+	ld	(4:8), 215:io
 	swi	2
 	.byte 0x04, 0x9f
 	incf
@@ -5125,7 +5125,7 @@ SeMenu_ApplyPartEdit_Data2:
 	max
 	pushw	232
 	.byte 0x9f
-	ldio	4, 11
+	ld	(4:8), 11:io
 	ld	xhl, 0xf1491d00
 	.byte 0xf0
 	inc	8, xsp
@@ -5135,7 +5135,7 @@ SeMenu_ApplyPartEdit_Data2:
 	nop
 	jr	nz, 115
 	.byte 0x9f
-	ldio	4, 215
+	ld	(4:8), 215:io
 	swi	2
 	and	(xwa-40), b
 	ldw	(0:8), 0x9f28:io
@@ -5238,7 +5238,7 @@ SeMenu_ApplyPartEdit_Data2:
 	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+16)
 	.byte 0x9f
-	ldio	4, 11
+	ld	(4:8), 11:io
 	.byte 0xe8
 	nop
 	.byte 0x9f
@@ -5290,7 +5290,7 @@ SeMenu_ApplyPartEdit_Data2:
 	nop
 	ldw (xsp+8), 26
 	.byte 0x9f
-	ldio	56, 118
+	ld	(56:8), 118:io
 	nop
 	ld	a, (xsp+14)
 	extz	wa
@@ -5320,7 +5320,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x8f, 0x04, 0xc1
 	jr	z, 49
 	.byte 0x9f
-	ldio	4, 215
+	ld	(4:8), 215:io
 	swi	2
 	decm8	6, (xwa-40)
 	pushw	wa
@@ -5543,7 +5543,7 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	8, xsp
 	ldw	bc, 232
 	.byte 0x9f
-	ldio	161, 159
+	ld	(161:8), 159:io
 	rcf
 	swi	1
 	jr	ugt, 11

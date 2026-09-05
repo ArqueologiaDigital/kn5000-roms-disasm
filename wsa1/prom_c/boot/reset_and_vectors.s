@@ -29,57 +29,57 @@
 ;
 RESET:
 	; --- watchdog off ------------------------------------------------------
-	ldio WDMOD,0x00
-	ldio WDCR,0xB1
+	ld (WDMOD:8),0x00:io
+	ld (WDCR:8),0xB1:io
 
 	; --- stack, at the top of the 128 KiB CS3 DRAM block -------------------
 	ld XSP,0x0000FFF0
-	ldio IIMC,0x04
-	ldio INTETC01,0x00
+	ld (IIMC:8),0x04:io
+	ld (INTETC01:8),0x00:io
 
 	; --- ports -------------------------------------------------------------
-	ldio P2FC,0x7F
-	ldio P7FC,0x00
-	ldio P7CR,0xFF
-	ldio P6FC,0x1F		; the same five port-6 alternate functions CPU 1
+	ld (P2FC:8),0x7F:io
+	ld (P7FC:8),0x00:io
+	ld (P7CR:8),0xFF:io
+	ld (P6FC:8),0x1F:io		; the same five port-6 alternate functions CPU 1
 				; enables: RAS and REFOUT out (DRAM controller
 				; live) and the CS3 pin as LCAS, so the CS3 area
 				; is the DRAM area on this CPU too.
-	ldio P5,0x1D
-	ldio P5FC,0x04
-	ldio P5CR,0x3C
-	ldio PA,0xFF
-	ldio PAFC,0x00
-	ldio PACR,0x03		; PA bits 0 and 1 driven out -- MAME masks the
+	ld (P5:8),0x1D:io
+	ld (P5FC:8),0x04:io
+	ld (P5CR:8),0x3C:io
+	ld (PA:8),0xFF:io
+	ld (PAFC:8),0x00:io
+	ld (PACR:8),0x03:io		; PA bits 0 and 1 driven out -- MAME masks the
 				; port write with PnCR (tmp95c061.cpp:107).
 				; PA0 is the strobe and PA3 the busy input of the
 				; link to CPU 1 (0xF99AE0 res 0,(PA) /
 				; 0xF99AFF set 0,(PA); 0xF999D0 and 0xF99A06
 				; bit 3,(PA)).
-	ldio PB,0xFB
-	ldio PBFC,0x00
-	ldio PBCR,0x7E
+	ld (PB:8),0xFB:io
+	ld (PBFC:8),0x00:io
+	ld (PBCR:8),0x7E:io
 
 	; --- memory controller -------------------------------------------------
 	; MSARn = A23-A16 of the block start.  MSAR0 = 0x10 is the one place in
 	; either image where the meaning of MSAR is PROVEN rather than assumed:
 	; 0x2F bytes further down this same routine, `ld XIX,0x00100000` loads
 	; the base of the device cluster that CS0 must be selecting.
-	ldio MSAR0,0x10		; CS0 -> 0x100000: link port + three address/data
+	ld (MSAR0:8),0x10:io		; CS0 -> 0x100000: link port + three address/data
 				; device ports (0x104000, 0x108000, 0x10C000)
-	ldio MAMR0,0x07
-	ldio MSAR1,0xC0		; CS1 -> 0xC00000: the expansion board.  Its
+	ld (MAMR0:8),0x07:io
+	ld (MSAR1:8),0xC0:io		; CS1 -> 0xC00000: the expansion board.  Its
 				; header carries the ASCII signature "WSA1 EXTBD",
 				; which also appears twice in this ROM (file
 				; 0x6129E and 0x61EC9) as the string it is
 				; compared against.
-	ldio MAMR1,0x7F
-	ldio MSAR2,0xE0		; CS2 -> 0xE00000: an address/data register pair
+	ld (MAMR1:8),0x7F:io
+	ld (MSAR2:8),0xE0:io		; CS2 -> 0xE00000: an address/data register pair
 				; at 0xE00000, the 512 KiB flash at 0xE80000, and
 				; this EPROM at 0xF80000
-	ldio MAMR2,0x3F
-	ldio MSAR3,0x00		; CS3 -> 0x000000: work DRAM
-	ldio MAMR3,0x03	; MAMR = window size, 32 KB per unit.  See the long note
+	ld (MAMR2:8),0x3F:io
+	ld (MSAR3:8),0x00:io		; CS3 -> 0x000000: work DRAM
+	ld (MAMR3:8),0x03:io	; MAMR = window size, 32 KB per unit.  See the long note
 			; in prom_a/wsa1_prom_a.s and
 			; scripts/analysis/mamr_reading_elimination.py: eight
 			; candidate decoders are tested against this firmware's
@@ -94,13 +94,13 @@ RESET:
 			; ⚠ Still NOT ESTABLISHED: the BnCS/BEXCS bit layout and
 			; every DREFCR/DMEMCR field.
 
-	ldio B0CS,0x10
-	ldio B1CS,0x14
-	ldio B2CS,0x1B
-	ldio B3CS,0x1B
-	ldio BEXCS,0x00
-	ldio DREFCR,0x71	; refresh enabled, same value as CPU 1
-	ldio DMEMCR,0x89	; CPU 1 uses 0x8D.  Neither is decoded anywhere.
+	ld (B0CS:8),0x10:io
+	ld (B1CS:8),0x14:io
+	ld (B2CS:8),0x1B:io
+	ld (B3CS:8),0x1B:io
+	ld (BEXCS:8),0x00:io
+	ld (DREFCR:8),0x71:io	; refresh enabled, same value as CPU 1
+	ld (DMEMCR:8),0x89:io	; CPU 1 uses 0x8D.  Neither is decoded anywhere.
 
 	; --- first touch of the CS0 device cluster -----------------------------
 	; This is the pair that proves MSAR0: the base just programmed as 0x10
@@ -109,11 +109,11 @@ RESET:
 	ld XIX,0x00100000
 
 	; --- timers, ports, serial ---------------------------------------------
-	ldio T01MOD,0x0D
-	ldio P8CR,0x19
-	ldio P8FC,0x01
-	ldio TRUN,0x80		; prescaler run only (bit 7); no timer started here
-	ldio BR0CR,0x13	; boot value: divide by 768, the 24 MHz constant.
+	ld (T01MOD:8),0x0D:io
+	ld (P8CR:8),0x19:io
+	ld (P8FC:8),0x01:io
+	ld (TRUN:8),0x80:io		; prescaler run only (bit 7); no timer started here
+	ld (BR0CR:8),0x13:io	; boot value: divide by 768, the 24 MHz constant.
 			; ⚠ NOT the operative one.  0xF991A2, reached from the
 			; init chain at 0xF98B7D, recomputes it from the
 			; configuration byte at 0xFFFFEF (see CLOCK_CONFIG_MHZ
@@ -121,8 +121,8 @@ RESET:
 			; which for M = 0x1C gives 0x0E, i.e. divide by 896.
 			; The firmware's own rule makes the bit rate come out
 			; at 31250 for any M, so M is literally fc in MHz.
-	ldio SC0CR,0x00
-	ldio SC0MOD,0x09	; 8-bit UART, baud-rate generator; unlike CPU 1
+	ld (SC0CR:8),0x00:io
+	ld (SC0MOD:8),0x09:io	; 8-bit UART, baud-rate generator; unlike CPU 1
 				; the receiver is not enabled here
 	call 0xF99125		; ⚠ NOT a delay.  Earlier text here called it "a counted
 				; delay (loops to 0x40)".  It is

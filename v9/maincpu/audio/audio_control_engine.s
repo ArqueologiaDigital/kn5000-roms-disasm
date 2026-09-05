@@ -5271,7 +5271,7 @@ ExtData_ToneParam_MultiChannel:
 	ld	c, 178:opc
 	ld	xhl, 0xc921018a
 	.byte 0xee
-	ldio	216, 18
+	ld	(216:8), 18:io
 	extz	bc
 	add	bc, wa
 	cp bc, (37219:16)

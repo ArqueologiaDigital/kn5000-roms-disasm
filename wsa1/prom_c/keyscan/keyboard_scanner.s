@@ -533,15 +533,15 @@ Link_ChannelHandler_Ignore:
 ; --------------------------------------------------------------------------
 Link_Init:
 	push	xix                               ; F9993E  push XIX
-	ldio	INTET32, 0                        ; F9993F  ld (0x74),0x00
+	ld	(INTET32:8), 0:io                        ; F9993F  ld (0x74),0x00
 	res_dd8	2, TRUN                        ; F99942  res 2,(0x20)
-	ldio	T23MOD, 14                        ; F99945  ld (0x28),0x0e
-	ldio	INTETC23, 85                      ; F99948  ld (0x7a),0x55
+	ld	(T23MOD:8), 14:io                        ; F99945  ld (0x28),0x0e
+	ld	(INTETC23:8), 85:io                      ; F99948  ld (0x7a),0x55
 	ld	(0x8537:24), 0                    ; F9994B  ld (0x008537),0x00
 	ld	(0x8535:24), 0                    ; F99951  ld (0x008535),0x00
 	ld	(0x8536:24), 0                    ; F99957  ld (0x008536),0x00
-	ldio	INTE0AD, 1                        ; F9995D  ld (0x70),0x01
-	ldio	TREG2, 5                          ; F99960  ld (0x26),0x05
+	ld	(INTE0AD:8), 1:io                        ; F9995D  ld (0x70),0x01
+	ld	(TREG2:8), 5:io                          ; F99960  ld (0x26),0x05
 	pushw	8                                ; F99963  push 0x0008
 	ld	xix, 0x100000                       ; F99966  ld XIX,0x00100000
 	push	xix                               ; F9996B  push XIX
@@ -680,7 +680,7 @@ Link_SendChunk__F99A1A:
 	ld	xbc, (xiz+12)                       ; F99A22  ld XBC,(XIZ+0x0c)
 	push	xbc                               ; F99A25  push XBC
 	call	0xF9A005                          ; F99A26  call 0xf9a005
-	ldio	DMA2V, 18                         ; F99A2A  ld (0x7e),0x12
+	ld	(DMA2V:8), 18:io                         ; F99A2A  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99A2D  set 2,(0x20)
 	inc	6, xsp                             ; F99A30  inc 6,XSP
 Link_SendChunk__F99A32:
@@ -783,7 +783,7 @@ Link_SendCmdE2_MemRead__F99A8C:
 	pushw	10                               ; F99AA0  push 0x000a
 	push	xix                               ; F99AA3  push XIX
 	call	0xF9A005                          ; F99AA4  call 0xf9a005
-	ldio	DMA2V, 18                         ; F99AA8  ld (0x7e),0x12
+	ld	(DMA2V:8), 18:io                         ; F99AA8  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99AAB  set 2,(0x20)
 	set 7, (0x00852B:24)                   ; F99AAE  set 7,(0x00852b)   [llvm-mc cannot encode this]
 	inc	6, xsp                             ; F99AB3  inc 6,XSP
@@ -965,7 +965,7 @@ Link_SendCmdE1__F99B5A:
 	lda	xbc, (0x8542:24)                   ; F99B7B  lda XBC,0x008542
 	push	xbc                               ; F99B80  push XBC
 	call	0xF9A005                          ; F99B81  call 0xf9a005
-	ldio	DMA2V, 18                         ; F99B85  ld (0x7e),0x12
+	ld	(DMA2V:8), 18:io                         ; F99B85  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99B88  set 2,(0x20)
 	inc	6, xsp                             ; F99B8B  inc 6,XSP
 Link_SendCmdE1__F99B8D:
@@ -981,7 +981,7 @@ Link_SendCmdE1__F99B97:
 	ld	xbc, (xix)                          ; F99BA1  ld XBC,(XIX)
 	push	xbc                               ; F99BA3  push XBC
 	call	0xF9A005                          ; F99BA4  call 0xf9a005
-	ldio	DMA2V, 18                         ; F99BA8  ld (0x7e),0x12
+	ld	(DMA2V:8), 18:io                         ; F99BA8  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99BAB  set 2,(0x20)
 	inc	6, xsp                             ; F99BAE  inc 6,XSP
 Link_SendCmdE1__F99BB0:

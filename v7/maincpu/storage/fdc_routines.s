@@ -1243,7 +1243,7 @@ Reset_Floppy_Disk_Controller:
 	res_dd8	0, 52
 	ldw	wa, 10
 	jrl	-2249
-	ldio	71, 30
+	ld	(71:8), 30:io
 	bit_dd8	6, 52
 	ret	nz
 	ld	a, 0:opc

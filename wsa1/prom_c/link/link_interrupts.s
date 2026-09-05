@@ -177,7 +177,7 @@ INT0_HANDLER__cmd_E1:
 	push xiy                                   ; F99C26  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C27  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E1_armed:
-	ldio DMA3V, 0x0A                           ; F99C29  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	ld (DMA3V:8), 0x0A:io                           ; F99C29  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C2C  f0 1e b1   drop the handshake line
 	jrl t, (0x00F99CF6 - 0x00F99C32)           ; F99C2F  78 c4 00   -> INT0_HANDLER__drop_args
 ; ------------------------- command 0xE2 -------------------------------
@@ -190,7 +190,7 @@ INT0_HANDLER__cmd_E2:
 	push xiy                                   ; F99C46  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C47  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E2_armed:
-	ldio DMA3V, 0x0A                           ; F99C49  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	ld (DMA3V:8), 0x0A:io                           ; F99C49  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C4C  f0 1e b1   drop the handshake line
 	jrl t, (0x00F99CF6 - 0x00F99C52)           ; F99C4F  78 a4 00   -> INT0_HANDLER__drop_args
 ; ------------------------- command 0xE3 -------------------------------
@@ -203,7 +203,7 @@ INT0_HANDLER__cmd_E3:
 	push xiy                                   ; F99C66  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C67  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E3_armed:
-	ldio DMA3V, 0x0A                           ; F99C69  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	ld (DMA3V:8), 0x0A:io                           ; F99C69  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C6C  f0 1e b1   drop the handshake line
 	jrl t, (0x00F99CF6 - 0x00F99C72)           ; F99C6F  78 84 00   -> INT0_HANDLER__drop_args
 ; ------------------------- command 0xE4 -------------------------------
@@ -216,7 +216,7 @@ INT0_HANDLER__cmd_E4:
 	push xiy                                   ; F99C86  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99C87  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E4_armed:
-	ldio DMA3V, 0x0A                           ; F99C89  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	ld (DMA3V:8), 0x0A:io                           ; F99C89  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C8C  f0 1e b1   drop the handshake line
 	jr INT0_HANDLER__drop_args                 ; F99C8F  68 65
 ; ------------------------- command 0xE5 -------------------------------
@@ -229,7 +229,7 @@ INT0_HANDLER__cmd_E5:
 	push xiy                                   ; F99CA5  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99CA6  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E5_armed:
-	ldio DMA3V, 0x0A                           ; F99CA8  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	ld (DMA3V:8), 0x0A:io                           ; F99CA8  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99CAB  f0 1e b1   drop the handshake line
 	jr INT0_HANDLER__drop_args                 ; F99CAE  68 46
 ; ------------------------- command 0xE7 -------------------------------
@@ -242,7 +242,7 @@ INT0_HANDLER__cmd_E7:
 	push xiy                                   ; F99CC4  3d   return address for the tail-jump call
 	jp (xix)                                   ; F99CC5  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E7_armed:
-	ldio DMA3V, 0x0A                           ; F99CC7  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	ld (DMA3V:8), 0x0A:io                           ; F99CC7  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99CCA  f0 1e b1   drop the handshake line
 	jr INT0_HANDLER__drop_args                 ; F99CCD  68 27
 ; --------------- command 0xE6 AND every unlisted byte -----------------
@@ -259,7 +259,7 @@ INT0_HANDLER__cmd_E6_or_other:
 	push xiy                                   ; F99CED  3d
 	jp (xix)                                   ; F99CEE  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
 INT0_HANDLER__cmd_E6_armed:
-	ldio DMA3V, 0x0A                           ; F99CF0  08 7f 0a
+	ld (DMA3V:8), 0x0A:io                           ; F99CF0  08 7f 0a
 	res_dd8 1, PA                              ; F99CF3  f0 1e b1
 
 INT0_HANDLER__drop_args:
@@ -502,7 +502,7 @@ INTTC3_HANDLER__state6_block_banked:
 	push xbc                                   ; F99DFF  39
 INTTC3_HANDLER__arm_payload:
 	call 0x00F9A01F                            ; F99E00  1d 1f a0 f9   uDMA3_SetDest: DMAD3 := dest, DMAC3 := count
-	ldio DMA3V, 0x0A                           ; F99E04  08 7f 0a   re-point INT0 at the DMA engine
+	ld (DMA3V:8), 0x0A:io                           ; F99E04  08 7f 0a   re-point INT0 at the DMA engine
 	ld (0x00F32D:24), 0x04                     ; F99E07  f2 2d f3 00 00 04   transfer state := 4 (payload in flight)
 INTTC3_HANDLER__drop_args:
 	inc 6, xsp                                 ; F99E0D  ef 66   drop the 6 bytes of arguments -- caller-cleaned
@@ -524,7 +524,7 @@ INTTC3_HANDLER__state8_block_banked:
 	add xbc, 0x00010000                        ; F99E2D  e9 c8 00 00 01 00
 	push xbc                                   ; F99E33  39
 	call 0x00F9A01F                            ; F99E34  1d 1f a0 f9   uDMA3_SetDest
-	ldio DMA3V, 0x0A                           ; F99E38  08 7f 0a
+	ld (DMA3V:8), 0x0A:io                           ; F99E38  08 7f 0a
 	ld (0x00F32D:24), 0x09                     ; F99E3B  f2 2d f3 00 00 09   transfer state := 9, NOT 4
 	jr INTTC3_HANDLER__drop_args               ; F99E41  68 ca
 

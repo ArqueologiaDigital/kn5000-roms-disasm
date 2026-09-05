@@ -4080,7 +4080,7 @@ SeqStep_FileTellFinal:
 	cp	hl, 1:i3
 	jr	nz, 53
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	z, 47
 	cp	(xsp+8), 229
 	jr	z, 19
@@ -5158,7 +5158,7 @@ SeqByteBlock_TechnichordCfgA:
 	.byte 0xa6
 SeqByteBlock_PathNormalize:
 	ld	a, 175:opc
-	ldio	32, 129
+	ld	(32:8), 129:io
 	ld	c, 243:opc
 	reti
 	.byte 0xe0, 0xe8
@@ -5691,7 +5691,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xa8	; v10 does not spell this byte either
 	.byte 0x1c	; v10 does not spell this byte either
 	sub	(xbc), xsp
-	ldio	32, 152
+	ld	(32:8), 152:io
 	pushw	iz
 	ld	w, 232:opc
 	ccf
@@ -5842,7 +5842,7 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	ld	w, 176:opc
 	jr	lt, -81
-	ldio	32, 184
+	ld	(32:8), 184:io
 	ld	w, 49:opc
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+42)
@@ -6995,7 +6995,7 @@ SeqStep_CalcTotalSectors:
 SeqStep_SectorCompareBlock:
 	ld	xde, (xsp+4)
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	z, 40
 	ld	bc, (xsp+10)
@@ -7333,7 +7333,7 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+2)
 	.byte 0x98	; v10 does not spell this byte either
 	ldw	ix, 48979
-	ldio	83, 175
+	ld	(83:8), 175:io
 	ex_ff
 	ld	w, 168:opc
 	incf
@@ -7469,7 +7469,7 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+2)
 	.byte 0x98	; v10 does not spell this byte either
 	ldw	ix, 48979
-	ldio	83, 175
+	ld	(83:8), 175:io
 	ex_ff
 	ld	w, 168:opc
 	incf

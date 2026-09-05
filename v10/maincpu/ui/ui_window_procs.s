@@ -8287,7 +8287,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+14), xwa
 	ld	bc, (xde)
 	.byte 0x9f
-	ldio	129, 175
+	ld	(129:8), 175:io
 	ret
 	ld	w, 176:opc
 	.byte 0x51
@@ -8418,7 +8418,7 @@ ColorBlit2_LargeCodeBlock:
 	incm8	1, (xsp+4)
 	.byte 0x8f, 0x04
 	push	xsp
-	ldio	119, 244
+	ld	(119:8), 244:io
 	swi	6
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
@@ -8449,7 +8449,7 @@ ColorBlit2_LargeCodeBlock:
 	lda	xhl, (xde+2)
 	ld	wa, (xix)
 	.byte 0x9f
-	ldio	128, 179
+	ld	(128:8), 179:io
 	.byte 0x50
 	ld	xwa, (xsp+24)
 	ld	a, (xwa)
@@ -8491,7 +8491,7 @@ ColorBlit2_LargeCodeBlock:
 	incm8	1, (xsp+4)
 	.byte 0x8f, 0x04
 	push	xsp
-	ldio	103, 179
+	ld	(103:8), 179:io
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
@@ -8521,7 +8521,7 @@ ColorBlit2_LargeCodeBlock:
 	lda	xhl, (xde+2)
 	ld	wa, (xix)
 	.byte 0x9f
-	ldio	128, 179
+	ld	(128:8), 179:io
 	.byte 0x50
 	ld	xwa, (xsp+24)
 	ld	a, (xwa)
@@ -8562,7 +8562,7 @@ ColorBlit2_LargeCodeBlock:
 	incm8	1, (xsp+4)
 	.byte 0x8f, 0x04
 	push	xsp
-	ldio	103, 178
+	ld	(103:8), 178:io
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
@@ -8816,7 +8816,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xhl, xwa
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 98
+	ld	(241:8), 98:io
 	scc8	t, b
 	.byte 0x9d
 	halt
@@ -8856,7 +8856,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xix, xwa
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 98
+	ld	(241:8), 98:io
 	scc8	t, h
 	popw	iy
 	halt
@@ -9026,7 +9026,7 @@ ColorBlit2_LargeCodeBlock:
 	add	(xwa), hl
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 114
+	ld	(241:8), 114:io
 	jr	ov, -1
 	jrl	958
 	ld	xwa, (xsp+16)
@@ -9098,8 +9098,8 @@ ColorBlit2_LargeCodeBlock:
 	jr	f, -81
 	rcf
 	ld	w, 175:opc
-	ldio	136, 175
-	ldio	35, 235
+	ld	(136:8), 175:io
+	ld	(35:8), 235:io
 	.byte 0xed
 	nop
 	ld	xwa, (xsp+46)
@@ -9144,7 +9144,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xde, xwa
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 98
+	ld	(241:8), 98:io
 	.byte 0xe1
 	jrl	674
 	ld	xwa, (xsp+8)
@@ -9224,7 +9224,7 @@ ColorBlit2_LargeCodeBlock:
 	add	(xhl), wa
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 98
+	ld	(241:8), 98:io
 	.byte 0xc0
 	jrl	472
 	ld	xwa, (xsp+16)
@@ -9300,7 +9300,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xde, xwa
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 98
+	ld	(241:8), 98:io
 	.byte 0xe1
 	jrl	283
 	ld	xwa, (xsp+8)
@@ -9373,7 +9373,7 @@ ColorBlit2_LargeCodeBlock:
 	add	(xhl), wa
 	inc	1, xbc
 	.byte 0xaf
-	ldio	241, 98
+	ld	(241:8), 98:io
 	.byte 0xc0
 	jr	99
 	ld	xwa, (xsp+16)
@@ -9691,7 +9691,7 @@ ColorBlit2_LargeCodeBlock:
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	.byte 0xaf
-	ldio	240, 114
+	ld	(240:8), 114:io
 	.byte 0xea
 	swi	6
 	jrl	973

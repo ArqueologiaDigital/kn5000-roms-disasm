@@ -1644,7 +1644,7 @@ Data_InOutGridDispatch:
 	jrl	758
 	.byte 0xb1
 	push	sr
-	ldio	0, 158
+	ld	(0:8), 158:io
 	.byte 0x04
 	ld	a, 217:opc
 	.byte 0xec

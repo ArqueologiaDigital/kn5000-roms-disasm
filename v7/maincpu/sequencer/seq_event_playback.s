@@ -588,19 +588,19 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	ldio	2, 0
+	ld	(2:8), 0:io
 	nop
 	nop
 	nop
-	ldio	0, 8
+	ld	(0:8), 8:io
 	.byte 0x01
 	nop
 	nop
 	nop
 	nop
-	ldio	3, 8
+	ld	(3:8), 8:io
 	.byte 0x04
-	ldio	5, 0
+	ld	(5:8), 0:io
 	nop
 	nop
 	nop
@@ -1081,9 +1081,9 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	ldio	1, 3
+	ld	(1:8), 3:io
 	pop	sr
-	ldio	2, 13
+	ld	(2:8), 13:io
 	push	sr
 	reti
 	.byte 0x01
@@ -1639,7 +1639,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	nop
 	nop

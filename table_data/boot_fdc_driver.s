@@ -995,13 +995,13 @@ FDC_ProcessResults__unknown_st0:
 ; Twin: part of maincpu FDC_HardwareSetup (fdc_routines.s:972)
 ; -----------------------------------------------------------------------------
 FDC_EnableIntAndDMA:
-	ldio 0xf8, 0x0b	; ld (0xf8),0x0b - INTCLR = 0x0B: clear pending INT4 (FDC IRQ)
+	ld (0xf8:8), 0x0b:io	; ld (0xf8),0x0b - INTCLR = 0x0B: clear pending INT4 (FDC IRQ)
 	lda_dd8l xbc, 0xe0	; lda XBC,0xe0 - XBC = SFR 0xE0 = INTE45
 	ld a, (xbc)	; ld A,(XBC)
 	and a, 0xf8	; and A,0xf8
 	set 2, a	; set 0x02,A - INT4 priority level 4 (enables the FDC interrupt)
 	ld (xbc), a	; ld (XBC),A
-	ldio 0xf8, 0x28	; ld (0xf8),0x28 - INTCLR = 0x28: clear pending INTTC3 (DMA3 end)
+	ld (0xf8:8), 0x28:io	; ld (0xf8),0x28 - INTCLR = 0x28: clear pending INTTC3 (DMA3 end)
 	lda_dd8l xbc, 0xed	; lda XBC,0xed - XBC = SFR 0xED = INTETC23
 	ld a, (xbc)	; ld A,(XBC)
 	and a, 0x8f	; and A,0x8f

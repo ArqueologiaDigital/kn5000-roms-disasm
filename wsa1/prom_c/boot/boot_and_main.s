@@ -773,9 +773,9 @@ Serial0_SendByte_Blocking:
 ; --------------------------------------------------------------------------
 Timer3_Init:
 	res_dd8	3, TRUN
-	ldio	T23MOD, 0x0E
-	ldio	TREG3, 0x2E
-	ldio	INTET32, 0x20
+	ld	(T23MOD:8), 0x0E:io
+	ld	(TREG3:8), 0x2E:io
+	ld	(INTET32:8), 0x20:io
 	set_dd8	3, TRUN
 	ret
 

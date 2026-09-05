@@ -1958,7 +1958,7 @@ TaskSched_InitMsgQueues:
 TaskSched_PostInit:
 	call TaskTimer_Register
 	calr Stop_and_Clear_8bit_Timer_3
-	ldio 0x8b, 0x07
+	ld (0x8b:8), 0x07:io
 	ld_sd8b A, 0xe5
 	and a, 0xf
 	or a, 0x20
@@ -5245,7 +5245,7 @@ SubCPU_Init_DMA_Channels:
 	and a, 0xf8
 	set 0, a
 	ld (xbc), a
-	ldio 0x8a, 0x07
+	ld (0x8a:8), 0x07:io
 	lda xwa, (0x140000:24)
 	ldc_cr32 xwa, 0x28
 	ld a, 0x8:opc

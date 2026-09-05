@@ -154,7 +154,7 @@ SoundBank_InitTrack_ClearTail:
 
 SoundBank_DefaultTrackData:	.asciz "ZZZZ"
 	normal
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	nop
 	normal

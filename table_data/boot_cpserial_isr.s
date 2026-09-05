@@ -67,8 +67,8 @@ Handler_INTA:
 	st_dd8b	a, 0x3e			; PFCR
 	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
-	ldio	0xe3, 0x05		; INTEAB
-	ldio	0xeb, 0x0d		; INTES1: RX enabled
+	ld	(0xe3:8), 0x05:io		; INTEAB
+	ld	(0xeb:8), 0x0d:io		; INTES1: RX enabled
 	or_sd8b_im 0xd6, 0x20		; SC1MOD bit 5
 	ld	(0x0f62:16), 0x20		; state 0x20: RX first byte
 	or	(0x0f64:16), 0x01		; RX-active flag
@@ -83,9 +83,9 @@ Handler_INTA__count_ok:
 	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 Handler_INTA__exit:
 	pop	xwa
-	ldio	0xf8, 0x12		; INTCLR: INTA
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
+	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
 	reti
 
 ; -----------------------------------------------------------------------------
@@ -128,9 +128,9 @@ BootSerial_TxIsrEpilogue:
 	pop	xiy
 	pop	xhl
 	pop	xwa
-	ldio	0xf8, 0x12		; INTCLR: INTA
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
+	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
 	reti
 
 ; -----------------------------------------------------------------------------
@@ -153,7 +153,7 @@ BootSerial_RxIsrEpilogue:
 	pop	xiy
 	pop	xhl
 	pop	xwa
-	ldio	0xf8, 0x12		; INTCLR: INTA
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
+	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
 	reti

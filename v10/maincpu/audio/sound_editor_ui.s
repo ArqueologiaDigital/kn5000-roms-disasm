@@ -1194,7 +1194,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, 21
 	.byte 0x87
 	push	xsp
@@ -1357,7 +1357,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, 21
 	.byte 0x87
 	push	xsp
@@ -1532,7 +1532,7 @@ UpdSeSel_ExtendedOps_Data:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, 21
 	.byte 0x87
 	push	xsp
@@ -3555,7 +3555,7 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	jr	nz, 51
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, 28
 	lda	xbc, (xsp)
 	ld	wa, 1:i3
@@ -3583,7 +3583,7 @@ SeMenu_CopyWriteUpdate_Data:
 	normal
 	jr	z, 53
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	nz, 47
 	lda	xwa, (xsp+6)
 	call	SeMenu_SetMode_Data_0x5
@@ -4240,7 +4240,7 @@ SeMenu_CopyWriteUpdate_Data:
 	swi	2
 	cp	(xsp-57), de
 	ld	d, 143
-	ldio	33, 201
+	ld	(33:8), 201:io
 	ldw	wa, 0xc907
 	dec	6, wa
 	push_f
@@ -4252,7 +4252,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xc7
 	swi	2
 	dec	6, bc
-	ldio	191, 2
+	ld	(191:8), 2:io
 	.byte 0xbf, 0xc7
 	swi	2
 	.byte 0xa8
@@ -4262,7 +4262,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xbf
 	push	sr
 	inc	6, l
-	ldio	191, 2
+	ld	(191:8), 2:io
 	.byte 0xb7, 0xc7
 	swi	2
 	.byte 0xa9
@@ -5031,7 +5031,7 @@ SeMenu_CopyWriteUpdate_Data:
 	incm8	1, (xsp+8)
 	jr	9
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	z, 55
 	decm8	1, (xsp+8)
 	ld	c, (xsp+8)
@@ -5106,7 +5106,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
 	.byte 0x8f
-	ldio	63, 4
+	ld	(63:8), 4:io
 	jrl	z, 634
 	lda	xwa, (xsp+12)
 	ld	(xwa), 0
@@ -5135,7 +5135,7 @@ SeMenu_CopyWriteUpdate_Data:
 	res	7, l
 	ld	a, (xsp+8)
 	.byte 0x8f
-	ldio	129, 201
+	ld	(129:8), 201:io
 	jr	ge, -57
 	.byte 0xe2, 0x99
 	extz	wa
@@ -5263,7 +5263,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	b, 0:opc
 	jr	34
 	.byte 0x8f
-	ldio	160, 143
+	ld	(160:8), 143:io
 	max
 	ld	a, 200:opc
 	and	(xbc), b
@@ -5604,7 +5604,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f
 	ccf
 	push	xsp
-	ldio	118, 163
+	ld	(118:8), 163:io
 	nop
 	ld	a, (xsp+18)
 	extz	wa
@@ -5706,7 +5706,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f
 	ccf
 	push	xsp
-	ldio	126, 159
+	ld	(126:8), 159:io
 	nop
 	ld	(xsp+18), 10
 	ld	a, (xsp+20)
@@ -5904,7 +5904,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 12
 	.byte 0x87
 	push	xsp
-	ldio	102, 32
+	ld	(102:8), 32:io
 	ld	wa, 0:i3
 	ldw	bc, 8
 	jr	9
@@ -7965,7 +7965,7 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	push	xiz
 	ld	xiz, xsp
 	.ascii "89:;<=ž"
-	ldio	32, 241
+	ld	(32:8), 241:io
 	cpl	d
 	.byte 0x50
 	ld	wa, (xiz+10)
@@ -8311,7 +8311,7 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0xd1
 	cpl	d
 	push	xde
-	ldio	0, 241
+	ld	(0:8), 241:io
 	.byte 0xd0, 0x06, 0x54
 	ld	(1742:16), iy
 	ld	(1746:16), iy
@@ -10509,9 +10509,9 @@ SeMenu_EqEdit_DrawInit:
 	ret
 	.ascii "89:;<=>^]\\[ZYX"
 	ret
-	ldio	16, 40
+	ld	(16:8), 40:io
 	rcf
-	ldio	16, 8
+	ld	(16:8), 8:io
 	rcf
 	pushw	wa
 	push_a
@@ -10521,16 +10521,16 @@ SeMenu_EqEdit_DrawInit:
 	normal
 	pushw	de
 	.byte 0x54
-	ldio	16, 42
+	ld	(16:8), 42:io
 	.byte 0x54
-	ldio	16, 8
+	ld	(16:8), 8:io
 	rcf
-	ldio	4, 42
+	ld	(4:8), 42:io
 	.byte 0x55
 	ld	b, 1:opc
 	push	sr
 	max
-	ldio	16, 42
+	ld	(16:8), 42:io
 	.byte 0x55
 	nop
 	nop
@@ -10564,11 +10564,11 @@ SeMenu_EqEdit_DrawInit:
 	max
 	push	sr
 	rcf
-	ldio	84, 42
+	ld	(84:8), 42:io
 	rcf
-	ldio	16, 8
+	ld	(16:8), 8:io
 	push_a
-	ldio	64, 32
+	ld	(64:8), 32:io
 	.byte 0x40
 	.ascii "*U\"A\"A\""
 	reti
@@ -10591,8 +10591,8 @@ SeMenu_EqEdit_DrawInit:
 	incm8	8, (xwa)
 	rcf
 	rcf
-	ldio	8, 8
-	ldio	16, 16
+	ld	(8:8), 8:io
+	ld	(16:8), 16:io
 	jr	f, -128
 SeBitmap_EnvCurve1:
 	swi	7
@@ -10680,7 +10680,7 @@ SeBitmap_EnvCurve2:
 	.byte 0x01
 	push	sr
 	.byte 0x04
-	ldio	16, 32
+	ld	(16:8), 32:io
 	ld	xwa, 0x8040
 	nop
 	nop
@@ -10771,7 +10771,7 @@ SeBitmap_EnvCurve3:
 	normal
 	pop	sr
 	ei	12
-	ldio	24, 48
+	ld	(24:8), 48:io
 	jr	f, -64
 	.byte 0x80, 0x80
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF10E80-0xF10E96 (22 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=2 near SeBitmap_EnvCurve3+66
@@ -10959,7 +10959,7 @@ SeBitmap_EnvCurve5:
 	nop
 	nop
 	.byte 0x01, 0x06
-	ldio	16, 96
+	ld	(16:8), 96:io
 	.byte 0x80
 	nop
 	nop
@@ -10973,7 +10973,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x01, 0x01
 	push	sr
 	.byte 0x04, 0x04
-	ldio	16, 32
+	ld	(16:8), 32:io
 	ld	xwa, 128
 	nop
 	nop
@@ -11226,7 +11226,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x01
 	push	sr
 	.byte 0x04
-	ldio	16, 224
+	ld	(16:8), 224:io
 	nop
 	swi	0
 	.byte 0xf4, 0x1a
@@ -11367,12 +11367,12 @@ SeBitmap_EnvCurve5:
 	ld	b, 0:opc
 	.byte 0x56
 	nop
-	ldio	0, 73
+	ld	(0:8), 73:io
 	nop
 	ld	b, 0:opc
 	.byte 0x56
 	nop
-	ldio	0, 110
+	ld	(0:8), 110:io
 	nop
 	ld	b, 0:opc
 	jrl	ugt, 2048
@@ -11382,7 +11382,7 @@ SeBitmap_EnvCurve5:
 	ld	b, 0:opc
 	.byte 0xa0
 	nop
-	ldio	0, 184
+	ld	(0:8), 184:io
 	nop
 	ld	b, 0:opc
 	.byte 0xc5
@@ -13137,7 +13137,7 @@ SeBitmap_EnvCurve5:
 	ei	7
 	ldw	wa, 0x4c1e
 	ldw	wa, 1623
-	ldio	63, 30
+	ld	(63:8), 30:io
 	popw	wa
 	popw	bc
 	ld	xsp, 0x260c1748
@@ -19687,14 +19687,14 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xsp+4), wa
 	sub	(xsp+4), iz
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	z, 54
 	ld	(xsp+20), bc
 	ldw (xsp+6), 65535
 	jr	54
 	.byte 0xbf
-	ldio	2, 1
+	ld	(2:8), 1:io
 	nop
 	jr	5
 	ldw (xsp+8), 0
@@ -19759,7 +19759,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+24)
 	lda	xbc, (xsp+20)
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	z, 14
 	ld	wa, (xwa+4)
@@ -19903,7 +19903,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	5
 	ldw (xsp+6), 0
 	.byte 0xbf
-	ldio	2, 1
+	ld	(2:8), 1:io
 	nop
 	lda	xhl, (xsp+26)
 	ld	bc, (xwa+2)
@@ -19938,7 +19938,7 @@ StylCnvStorOkFunc_DataBlock:
 	ldiw
 	ldiw
 	.byte 0x9f
-	ldio	4, 234
+	ld	(4:8), 234:io
 	ld	d, (xbc-97)
 	ld	b, 30:opc
 	reti
@@ -19950,7 +19950,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	de, (xsp+28)
 	ld	(xwa+2), de
 	.byte 0x9f
-	ldio	4, 159
+	ld	(4:8), 159:io
 	ld	d, 34:opc
 	calr	64750
 	lda	xwa, (xsp+22)
@@ -19974,7 +19974,7 @@ StylCnvStorOkFunc_DataBlock:
 	ldiw
 	ldiw
 	.byte 0x9f
-	ldio	4, 234
+	ld	(4:8), 234:io
 	ld	d, (xbc-97)
 	ld	b, 30:opc
 	.byte 0xae
@@ -19986,7 +19986,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	de, (xsp+32)
 	ld	(xwa+2), de
 	.byte 0x9f
-	ldio	4, 159
+	ld	(4:8), 159:io
 	ld	d, 34:opc
 	calr	64661
 	lda	xiy, (xsp+14)
@@ -20000,7 +20000,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
 	.byte 0x9f
-	ldio	4, 159
+	ld	(4:8), 159:io
 	ld	d, 34:opc
 	calr	64626
 	lda	xwa, (xsp+26)
@@ -20040,7 +20040,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+18)
 	ld	(xbc+2), de
 	.byte 0x9f
-	ldio	4, 159
+	ld	(4:8), 159:io
 	ld	d, 34:opc
 	calr	64535
 	lda	xwa, (xsp+22)
@@ -20059,7 +20059,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+18)
 	ld	(xbc+2), de
 	.byte 0x9f
-	ldio	4, 159
+	ld	(4:8), 159:io
 	ld	d, 34:opc
 	calr	64491
 	pop	xiz

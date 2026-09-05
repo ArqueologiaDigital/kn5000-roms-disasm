@@ -11506,7 +11506,7 @@ INTTX1_HANDLER:	; 01F765h
 	bit 0, (4148:16)	; Check sync flag
 	jr z, Serial1_TX_Normal
 	res 0, (4148:16)
-	ldio 0xD4, 0xFE	; Send sync byte
+	ld (0xD4:8), 0xFE:io	; Send sync byte
 	jr Serial1_TX_CheckEmpty
 
 Serial1_TX_Normal:	; 01F77Bh
@@ -11523,7 +11523,7 @@ Serial1_TX_CheckEmpty:	; 01F78Ch
 	calr RING_BUFFER_HAS_OVERRUN
 	cp hl, 0xFFFF	; Buffer empty?
 	jr nz, Serial1_TX_Exit
-	ldio 0xEB, 0xFD	; Disable TX interrupt
+	ld (0xEB:8), 0xFD:io	; Disable TX interrupt
 
 Serial1_TX_Exit:	; 01F7A3h
 	pop xwa
@@ -11621,7 +11621,7 @@ RingBuf_Write_Update:	; 01F7F8h
 Serial1_Enable_TX_Interrupt:	; 01F801h
 	push	sr
 	ei 6
-	ldio 0xEB, 0xDD
+	ld (0xEB:8), 0xDD:io
 	pop	sr
 	ret
 
@@ -11636,7 +11636,7 @@ Serial1_CommandHandler_RX_F4F5:
 	ld (4152:16), 3
 	set 2, (4148:16)
 	ei 6
-	ldio 0xD6, 0x2B
+	ld (0xD6:8), 0x2B:io
 	ei 0
 	ret
 
@@ -11744,11 +11744,11 @@ INIT_RING_BUFFERS:
 	ldw bc, 0xB
 	ldirw
 	ei 6	; <-------  1f90b
-	ldio 0xD6, 0x29
-	ldio 0xD5, 0x00
-	ldio 0xD7, 0x0A
-	ldio 0xEB, 0x5D
-	ldio 0xD4, 0xFE
+	ld (0xD6:8), 0x29:io
+	ld (0xD5:8), 0x00:io
+	ld (0xD7:8), 0x0A:io
+	ld (0xEB:8), 0x5D:io
+	ld (0xD4:8), 0xFE:io
 	ei 0
 	ret
 

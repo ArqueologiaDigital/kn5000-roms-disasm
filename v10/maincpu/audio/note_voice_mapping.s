@@ -16141,7 +16141,7 @@ NoteBuffer_CompactEn_Data:
 	jr	8
 	.byte 0xc2
 	or	iz, 0x3e00
-	ldio	104, 0
+	ld	(104:8), 0:io
 	ret
 
 NoteBuffer_CompactEn_Block2:
@@ -16828,7 +16828,7 @@ VoiceSlot_CheckAndApply_Data2:
 	nop
 	max
 	nop
-	ldio 0, 16
+	ld (0:8), 16:io
 	nop
 	ld w, 0:opc
 	ld xwa, 32768
@@ -16838,7 +16838,7 @@ VoiceSlot_CheckAndApply_Data2:
 	nop
 	max
 	nop
-	ldio 0, 16
+	ld (0:8), 16:io
 	nop
 	ld w, 0:opc
 	ld xwa, 960004096
@@ -26567,7 +26567,7 @@ SendPartDataBlock_Data:
 	.byte 0x51
 	nop
 	.byte 0x9f
-	ldio	56, 62
+	ld	(56:8), 62:io
 	nop
 	.byte 0x8f, 0x04
 	push	xsp
@@ -26844,7 +26844,7 @@ SendPartDataBlock_Data:
 	jr	lt, -113
 	max
 	push	xsp
-	ldio	103, 217
+	ld	(103:8), 217:io
 	ld	xwa, (xsp+6)
 	ld	a, (xwa)
 	and	a, 15

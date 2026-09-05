@@ -1667,7 +1667,7 @@ AccompSeq_SendAllOff_Loop2:
 AccompSeq_MidiFilterCodeBlock:
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ldio	14, 14
+	ld	(14:8), 14:io
 	.byte 0xc1
 	pushw	0x3f7f
 	nop

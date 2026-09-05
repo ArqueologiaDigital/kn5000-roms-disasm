@@ -586,15 +586,15 @@ Kernel_InitRam__install:
 
 Kernel_Start:
 	res_dd8 3, TRUN                              ; F856EC/F98251  f0 20 b3   res 3,(0x20)   TRUN bit 3 = timer 3 off
-	ldio T23MOD, 14                              ; F856EF/F98254  08 28 0e   ld (0x28),0x0e   T23MOD
-	ldio TREG3, 54                               ; F856F2/F98257  08 27 36   ld (0x27),0x36   TREG3
-	ldio INTET32, 32                             ; F856F5/F9825A  08 74 20   ld (0x74),0x20   INTET32
+	ld (T23MOD:8), 14:io                              ; F856EF/F98254  08 28 0e   ld (0x28),0x0e   T23MOD
+	ld (TREG3:8), 54:io                               ; F856F2/F98257  08 27 36   ld (0x27),0x36   TREG3
+	ld (INTET32:8), 32:io                             ; F856F5/F9825A  08 74 20   ld (0x74),0x20   INTET32
 	ld a, 0x01:opc                                  ; F856F8/F9825D  21 01   ld A,0x01
 	call Kernel_StartTask                        ; F856FA/F9825F  a=1d d9 57 f8 c=1d 3e 83 f9   c: call 0xf9833e
 	ld a, 0x03:opc                                  ; F856FE/F98263  21 03   ld A,0x03
 	call Kernel_StartTask                        ; F85700/F98265  a=1d d9 57 f8 c=1d 3e 83 f9   c: call 0xf9833e
 	ei 0x06                                      ; F85704/F98269  06 06   ei 0x06
-	ldio KERNEL_PENDING_TICKS, 0x00              ; F85706/F9826B  a=08 be 00 c=08 90 00   c: ld (0x90),0x00
+	ld (KERNEL_PENDING_TICKS:8), 0x00:io              ; F85706/F9826B  a=08 be 00 c=08 90 00   c: ld (0x90),0x00
 	xor WA,WA                                    ; F85709/F9826E  d8 d0   xor WA,WA
 	m_ldc_cr_reg RW+r0, 0x3c                     ; F8570B/F98270  d8 2e 3c   ldc unknown,WA   the depth counter starts at 0
 	jrl Kernel_Dispatch                          ; F8570E/F98273  78 04 00   jrl T,0xf9827a

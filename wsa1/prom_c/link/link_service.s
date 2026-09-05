@@ -280,7 +280,7 @@ Link_ServiceTask__F99F9E:
 	extpfx7 0xD2, 0x2F, 0xF3, 0x00, 0x3F, 0x0A, 0x00 ; F99F9E  cp (0x00f32f),0x000a   [llvm-mc cannot encode this]
 	jr ule, Link_ServiceTask__F99FBF                      ; F99FA5  jr ULE,0xf99fbf
 	ldw	(0xF32F:24), 0                    ; F99FA7  ld (0x00f32f),0x0000
-	ldio	DMA3V, 0                          ; F99FAE  ld (0x7f),0x00
+	ld	(DMA3V:8), 0:io                          ; F99FAE  ld (0x7f),0x00
 	ld	(0xF32D:24), 0                    ; F99FB1  ld (0x00f32d),0x00
 	set_dd8	1, PA                          ; F99FB7  set 1,(0x1e)
 	inc	1, (0xF32E:24)                  ; F99FBA  inc 1,(0x00f32e)
@@ -413,7 +413,7 @@ Link_WaitBlockDone__poll:
 	sub bc, hl                                 ; F99FD1  db a1
 	cp bc, 0x01f4                              ; F99FD3  d9 cf f4 01   500 ticks
 	jr le, Link_WaitBlockDone__poll            ; F99FD7  62 ed
-	ldio DMA3V, 0x00                           ; F99FD9  08 7f 00   timed out: stop INT0 feeding the DMA engine
+	ld (DMA3V:8), 0x00:io                           ; F99FD9  08 7f 00   timed out: stop INT0 feeding the DMA engine
 	ld (0x00F32D:24), 0x00                     ; F99FDC  f2 2d f3 00 00 00   transfer state := idle
 	set_dd8 1, PA                              ; F99FE2  f0 1e b9   raise the handshake line
 	res 7, (0x00852B:24)                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves

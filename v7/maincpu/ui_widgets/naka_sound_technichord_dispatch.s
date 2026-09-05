@@ -213,7 +213,7 @@ NakaMenuItem_AcousticIllusion:
 	nop
 	ret
 	nop
-	ldio	0, 163
+	ld	(0:8), 163:io
 	.byte 0x00			; padding
 	.byte 0xc6
 	.byte 0x00			; padding
@@ -292,7 +292,7 @@ NakaMenuItem_TechniChord:
 	swi 7
 	ccf
 	nop
-	ldio	0, 163
+	ld	(0:8), 163:io
 	nop
 	jrl	le, 14080
 	normal

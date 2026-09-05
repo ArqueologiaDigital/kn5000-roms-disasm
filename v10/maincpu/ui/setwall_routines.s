@@ -52,7 +52,7 @@ SetWall_InlineCodeBlock:
 	.byte 0xc1, 0xdf
 	incf
 	push	xsp
-	ldio	102, 4
+	ld	(102:8), 4:io
 	call	CDlikeSwTtl_DispatchData_0x6
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
@@ -82,7 +82,7 @@ SetWall_InlineCodeBlock:
 	scf
 	push	10
 	pop	sr
-	ldio	13, 14
+	ld	(13:8), 14:io
 	retd	4112
 	ccf
 	zcf
@@ -656,7 +656,7 @@ SetWall_SlotTypeMap:
 	push	sr
 	normal
 	reti
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	1284
 	ei	3
 	retd	0xffff

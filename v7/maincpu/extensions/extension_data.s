@@ -705,7 +705,7 @@ CtrlAssignStr_Off:	aligned_string "      OFF       "
 	pushw	sp
 	push	sr
 	.byte 0xea
-	ldio	91, 4
+	ld	(91:8), 4:io
 	pop	xhl
 	.byte 0x04
 	di
@@ -820,7 +820,7 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	pushw	bc
 	nop
 	nop
-	ldio	41, 0
+	ld	(41:8), 0:io
 	nop
 	retd	41
 	nop
@@ -1248,16 +1248,16 @@ TransposeNoteStr_C:
 	nop
 	ldw	de, 6656
 	nop
-	ldio	0, 14
+	ld	(0:8), 14:io
 	nop
 	ld	w, 0:opc
 	push_a
 	nop
 	nop
 	nop
-	ldio	0, 8
+	ld	(0:8), 8:io
 	nop
-	ldio	0, 8
+	ld	(0:8), 8:io
 	nop
 	.byte 0x08
 	nop
@@ -1984,7 +1984,7 @@ EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
 EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
 EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
 	aligned_string "EV_CHORDSHOW"
-	ldio	0, 86
+	ld	(0:8), 86:io
 	pushw	sp
 	.byte 0xed
 	nop
@@ -2200,7 +2200,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	jp16 65280
 	swi	7
-	ldio	0, 21
+	ld	(0:8), 21:io
 	.byte 0x01, 0x80
 	nop
 	push	xhl
@@ -2223,7 +2223,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	jp	6400
-	ldio	0, 238
+	ld	(0:8), 238:io
 	nop
 	.byte 0x80
 	nop
@@ -2247,7 +2247,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	call16 6656
 	nop
-	ldio	0, 199
+	ld	(0:8), 199:io
 	nop
 	.byte 0x80
 	nop
@@ -2272,7 +2272,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	call	6912
-	ldio	0, 160
+	ld	(0:8), 160:io
 	nop
 	.byte 0x80
 	nop
@@ -2298,7 +2298,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	calr	7168
 	nop
-	ldio	0, 121
+	ld	(0:8), 121:io
 	nop
 	.byte 0x80
 	nop
@@ -2376,7 +2376,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	.byte 0x1f
 	nop
-	ldio	0, 4
+	ld	(0:8), 4:io
 	nop
 	.byte 0x80
 	nop
@@ -2402,7 +2402,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	jrl	nc, 16128
 	.byte 0x01, 0xef
@@ -2423,7 +2423,7 @@ NakaInstTable8_NullTerm:
 	ld	c, 0:opc
 	swi	7
 	swi	7
-	ldio	0, 160
+	ld	(0:8), 160:io
 	nop
 	.byte 0x80
 	nop
@@ -2445,7 +2445,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ld	d, 0:opc
 	ld	b, 0:opc
-	ldio	0, 121
+	ld	(0:8), 121:io
 	nop
 	.byte 0x80
 	nop
@@ -2467,7 +2467,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ld	e, 0:opc
 	ld	c, 0:opc
-	ldio	0, 82
+	ld	(0:8), 82:io
 	nop
 	.byte 0x80
 	nop
@@ -2488,7 +2488,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ld	h, 0:opc
 	ld	d, 0:opc
-	ldio	0, 43
+	ld	(0:8), 43:io
 	nop
 	.byte 0x80
 	nop
@@ -2511,7 +2511,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	ld	e, 0:opc
-	ldio	0, 4
+	ld	(0:8), 4:io
 	nop
 	.byte 0x80
 	nop
@@ -2532,7 +2532,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	.byte 0x7f
 	nop
@@ -2554,7 +2554,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	ldio	0, 4
+	ld	(0:8), 4:io
 	nop
 	.byte 0x80
 	nop
@@ -2581,7 +2581,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw	wa
 	nop
-	ldio	0, 43
+	ld	(0:8), 43:io
 	nop
 	.byte 0x80
 	nop
@@ -2608,7 +2608,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw	bc
 	nop
-	ldio	0, 82
+	ld	(0:8), 82:io
 	nop
 	.byte 0x80
 	nop
@@ -2633,7 +2633,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw	de
 	nop
-	ldio	0, 121
+	ld	(0:8), 121:io
 	nop
 	.byte 0x80
 	nop
@@ -2658,7 +2658,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw	hl
 	nop
-	ldio	0, 160
+	ld	(0:8), 160:io
 	nop
 	.byte 0x80
 	nop
@@ -2685,7 +2685,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw	ix
 	nop
-	ldio	0, 199
+	ld	(0:8), 199:io
 	nop
 	.byte 0x80
 	nop
@@ -2712,7 +2712,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw	iy
 	nop
-	ldio	0, 238
+	ld	(0:8), 238:io
 	nop
 	.byte 0x80
 	nop
@@ -2736,7 +2736,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	pushw	iz
 	nop
-	ldio	0, 21
+	ld	(0:8), 21:io
 	.byte 0x01, 0x80
 	nop
 	push	xhl
@@ -2759,7 +2759,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	jrl	nc, 16128
 	.byte 0x01, 0xef
@@ -2781,7 +2781,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw	de, 0xff00
 	swi	7
-	ldio	0, 4
+	ld	(0:8), 4:io
 	nop
 	.byte 0x80
 	nop
@@ -2789,7 +2789,7 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cp	(0xff00:16), l
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 
 
@@ -2800,7 +2800,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw	hl, 0x3100
 	nop
-	ldio	0, 43
+	ld	(0:8), 43:io
 	nop
 	.byte 0x80
 	nop
@@ -2820,7 +2820,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw	ix, 0x3200
 	nop
-	ldio	0, 82
+	ld	(0:8), 82:io
 	nop
 	.byte 0x80
 	nop
@@ -2838,7 +2838,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw	iy, 0x3300
 	nop
-	ldio	0, 121
+	ld	(0:8), 121:io
 	nop
 	.byte 0x80
 	nop
@@ -2857,7 +2857,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw	iz, 0x3400
 	nop
-	ldio	0, 160
+	ld	(0:8), 160:io
 	nop
 	.byte 0x80
 	nop
@@ -2878,7 +2878,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw sp, 13568
 	nop
-	ldio 0, 199
+	ld (0:8), 199:io
 	nop
 	.byte 0x80
 	nop
@@ -2944,7 +2944,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	ldio	0, 4
+	ld	(0:8), 4:io
 	nop
 	.byte 0xbe
 	nop
@@ -2972,7 +2972,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	ldio	0, 152
+	ld	(0:8), 152:io
 	nop
 	.byte 0xc8
 	nop
@@ -2994,7 +2994,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	push	xde
 	nop
-	ldio	0, 56
+	ld	(0:8), 56:io
 	nop
 	.byte 0xcc
 	nop
@@ -3016,7 +3016,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	ldio	0, 4
+	ld	(0:8), 4:io
 	nop
 	.byte 0xbe
 	nop
@@ -3042,7 +3042,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	ldio	0, 40
+	ld	(0:8), 40:io
 	nop
 	.byte 0xcc
 	nop
@@ -3065,7 +3065,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	push	xiy
 	nop
-	ldio	0, 160
+	ld	(0:8), 160:io
 	nop
 	.byte 0xc8
 	nop
@@ -3084,7 +3084,7 @@ NakaInstTable8_NullTerm:
 	push	0
 	swi	7
 	swi	7
-	ldio	0, 78
+	ld	(0:8), 78:io
 	nop
 	.byte 0x80
 	nop
@@ -3116,7 +3116,7 @@ ErrorDialog_CPUTransmissionError:
 	swi	7
 	swi	7
 	ldw	(0:8), 8:io
-	ldio	0, 14
+	ld	(0:8), 14:io
 	nop
 	.byte 0x96
 	nop
@@ -3149,7 +3149,7 @@ ErrorDialog_RecoveryLine1:
 	swi	7
 	pushw	2304
 	nop
-	ldio	0, 46
+	ld	(0:8), 46:io
 	nop
 	.byte 0xae
 	nop
@@ -3265,7 +3265,7 @@ Protocol_values_for_LED_rows:
 	push	sr
 	pop	sr
 	.byte 0x04
-	ldio	10, 11
+	ld	(10:8), 11:io
 	incf
 
 	swi	7
@@ -3299,7 +3299,7 @@ Protocol_values_for_LED_rows:
 	nop
 	push	xix
 	nop
-	ldio	0, 55
+	ld	(0:8), 55:io
 	nop
 	.byte 0x01
 	push	sr
@@ -3308,9 +3308,9 @@ Protocol_values_for_LED_rows:
 	.byte 0x04, 0x01
 	push	sr
 	.byte 0x04
-	ldio	1, 2
+	ld	(1:8), 2:io
 	.byte 0x04
-	ldio	0, 0
+	ld	(0:8), 0:io
 	ldw	ix, 0x3400
 	nop
 	ret
@@ -3334,7 +3334,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -3360,7 +3360,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -3386,7 +3386,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -3412,7 +3412,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldio	0, 0
+	ld	(0:8), 0:io
 	nop
 	rcf
 	nop
@@ -4353,13 +4353,13 @@ VoiceCtrlR1_Entry_002:
 	nop
 	nop
 	popw	wa
-	ldio	255, 40
+	ld	(255:8), 40:io
 	swi	7
 	nop
 	nop
 	nop
 	.byte 0x06
-	ldio	6, 2
+	ld	(6:8), 2:io
 	nop
 	swi	7
 VoiceCtrlR1_Entry_003:
@@ -4375,7 +4375,7 @@ VoiceCtrlR1_Entry_003:
 	nop
 	nop
 	.byte 0x06
-	ldio	6, 2
+	ld	(6:8), 2:io
 	nop
 	swi	7
 VoiceCtrlR1_Entry_004:
@@ -4720,7 +4720,7 @@ VoiceCtrlR1_Entry_024:
 	nop
 	.byte 0x80
 	nop
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -4783,7 +4783,7 @@ VoiceCtrlR1_Entry_027:
 	nop
 	nop
 	.byte 0x80, 0x01
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -4816,7 +4816,7 @@ VoiceCtrlR1_Entry_029:
 	nop
 	nop
 	.byte 0x80, 0x06
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -4880,7 +4880,7 @@ VoiceCtrlR1_Entry_033:
 	ld	b, 0:opc
 	nop
 	.byte 0x80
-	ldio	128, 0
+	ld	(128:8), 0:io
 	normal
 	reti
 	nop
@@ -4896,7 +4896,7 @@ VoiceCtrlR1_Entry_034:
 	ld	b, 0:opc
 	nop
 	.byte 0x80
-	ldio	4, 0
+	ld	(4:8), 0:io
 	normal
 	push	sr
 	nop
@@ -4912,7 +4912,7 @@ VoiceCtrlR1_Entry_035:
 	ld	b, 0:opc
 	nop
 	.byte 0x80
-	ldio	8, 0
+	ld	(8:8), 0:io
 	normal
 	pop	sr
 	nop
@@ -4928,7 +4928,7 @@ VoiceCtrlR1_Entry_036:
 	nop
 	nop
 	.byte 0x80
-	ldio	16, 0
+	ld	(16:8), 0:io
 	normal
 	max
 	nop
@@ -4944,7 +4944,7 @@ VoiceCtrlR1_Entry_037:
 	nop
 	nop
 	.byte 0x80
-	ldio	1, 0
+	ld	(1:8), 0:io
 	normal
 	nop
 	nop
@@ -4960,7 +4960,7 @@ VoiceCtrlR1_Entry_038:
 	nop
 	nop
 	.byte 0x80
-	ldio	32, 0
+	ld	(32:8), 0:io
 	normal
 	halt
 	nop
@@ -4976,7 +4976,7 @@ VoiceCtrlR1_Entry_039:
 	nop
 	nop
 	.byte 0x80
-	ldio	2, 0
+	ld	(2:8), 0:io
 	normal
 	normal
 	nop
@@ -5250,7 +5250,7 @@ VoiceCtrlR1_Entry_054:
 	nop
 	.byte 0x99
 	nop
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -5266,7 +5266,7 @@ VoiceCtrlR1_Entry_055:
 	nop
 	nop
 	.byte 0x99
-	ldio	255, 0
+	ld	(255:8), 0:io
 	.byte 0xc7
 	nop
 	nop
@@ -5530,7 +5530,7 @@ VoiceCtrlR1_Entry_070:
 	nop
 	nop
 	.byte 0x99, 0x01
-	ldio	0, 1
+	ld	(0:8), 1:io
 	push	sr
 	nop
 	swi	7
@@ -5604,7 +5604,7 @@ VoiceCtrlR1_Entry_074:
 	nop
 	.byte 0x98
 	reti
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -5684,10 +5684,10 @@ MidiChParam_Entry_003:
 	nop
 	swi	7
 MidiChParam_Entry_004:
-	ldio	41, 0
+	ld	(41:8), 0:io
 	nop
 	.byte 0x98
-	ldio	1, 0
+	ld	(1:8), 0:io
 	normal
 	nop
 	nop
@@ -5703,7 +5703,7 @@ MidiChParam_Entry_005:
 	nop
 	nop
 	.byte 0x98
-	ldio	2, 0
+	ld	(2:8), 0:io
 	normal
 	normal
 	nop
@@ -5717,7 +5717,7 @@ MidiChParam_Entry_005:
 MidiChParam_Entry_006:
 	ldw	(41:8), 0:io
 	.byte 0x98
-	ldio	4, 0
+	ld	(4:8), 0:io
 	normal
 	push	sr
 	nop
@@ -5732,7 +5732,7 @@ MidiChParam_Entry_007:
 	pushw	41
 	nop
 	.byte 0x98
-	ldio	8, 0
+	ld	(8:8), 0:io
 	normal
 	pop	sr
 	nop
@@ -5749,7 +5749,7 @@ MidiChParam_Entry_008:
 	nop
 	nop
 	.byte 0x98
-	ldio	16, 0
+	ld	(16:8), 0:io
 	normal
 	max
 	nop
@@ -5783,7 +5783,7 @@ MidiChParam_Entry_010:
 	nop
 	nop
 	.byte 0x98
-	ldio	64, 0
+	ld	(64:8), 0:io
 	normal
 	di
 	swi	7
@@ -5797,7 +5797,7 @@ MidiChParam_Entry_011:
 	retd	41
 	nop
 	.byte 0x98
-	ldio	128, 0
+	ld	(128:8), 0:io
 	normal
 	reti
 	nop
@@ -6068,7 +6068,7 @@ MidiChParam_Entry_027:
 	nop
 	swi	7
 MidiChParam_Entry_028:
-	ldio	45, 0
+	ld	(45:8), 0:io
 	nop
 	ld	xsp, 0x0300c004
 	di
@@ -6109,7 +6109,7 @@ MidiChParam_Entry_030:
 	max
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	3340
 	ret
 	retd	7709
@@ -6556,7 +6556,7 @@ MidiChParam_Entry_059:
 	max
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	3340
 	ret
 	swi	7
@@ -6573,7 +6573,7 @@ MidiChParam_Entry_060:
 	retd	3328
 	nop
 	nop
-	ldio	1, 7
+	ld	(1:8), 7:io
 	halt
 	nop
 	nop
@@ -6586,7 +6586,7 @@ MidiChParam_Entry_060:
 	max
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	.byte 0x0b
 	incf
 WidgetParam_MidiCC_Pan:
@@ -6595,7 +6595,7 @@ WidgetParam_MidiCC_Pan:
 	ret
 	nop
 	reti
-	ldio	0, 255
+	ld	(0:8), 255:io
 MidiChParam_Entry_061:
 	.byte 0x80
 	ld	xde, 0x01920000
@@ -6679,7 +6679,7 @@ MidiChParam_Entry_064:
 	max
 	halt
 	reti
-	ldio	9, 10
+	ld	(9:8), 10:io
 	incf
 	decf
 	ret
@@ -7057,7 +7057,7 @@ MidiChParam_Entry_084:
 	max
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	3340
 	ret
 	retd	4368
@@ -7147,7 +7147,7 @@ MidiChParam_Entry_088:
 	nop
 	swi	7
 MidiChParam_Entry_089:
-	ldio	128, 0
+	ld	(128:8), 0:io
 	nop
 	nop
 	pop	sr
@@ -7166,7 +7166,7 @@ MidiChParam_Entry_089:
 MidiChParam_Entry_090:
 	ldw	(128:8), 0:io
 	nop
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -7207,7 +7207,7 @@ MidiChParam_Entry_092:
 MidiChParam_Entry_093:
 	ld	xwa, 128
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -7648,7 +7648,7 @@ VoiceParamEx_Entry_009:
 	nop
 	swi	7
 VoiceParamEx_Entry_010:
-	ldio	132, 0
+	ld	(132:8), 0:io
 	nop
 	normal
 	pop	sr
@@ -7667,7 +7667,7 @@ VoiceParamEx_Entry_010:
 VoiceParamEx_Entry_011:
 	ldw	(132:8), 0:io
 	normal
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -7709,7 +7709,7 @@ VoiceParamEx_Entry_013:
 VoiceParamEx_Entry_014:
 	ld	xwa, 0x01000084
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -8128,7 +8128,7 @@ VoiceParamEx_Entry_042:
 	nop
 	swi	7
 VoiceParamEx_Entry_043:
-	ldio	136, 0
+	ld	(136:8), 0:io
 	nop
 	push	sr
 	pop	sr
@@ -8147,7 +8147,7 @@ VoiceParamEx_Entry_043:
 VoiceParamEx_Entry_044:
 	ldw	(136:8), 0:io
 	push	sr
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -8187,7 +8187,7 @@ VoiceParamEx_Entry_046:
 VoiceParamEx_Entry_047:
 	ld	xwa, 0x02000088
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -8606,7 +8606,7 @@ VoiceParamEx_Entry_075:
 	nop
 	swi	7
 VoiceParamEx_Entry_076:
-	ldio	140, 0
+	ld	(140:8), 0:io
 	nop
 	pop	sr
 	pop	sr
@@ -8625,7 +8625,7 @@ VoiceParamEx_Entry_076:
 VoiceParamEx_Entry_077:
 	ldw	(140:8), 0:io
 	pop	sr
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -8668,7 +8668,7 @@ VoiceParamEx_Entry_079:
 VoiceParamEx_Entry_080:
 	ld	xwa, 0x0300008c
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -8872,7 +8872,7 @@ PartParam_Entry_007:
 	nop
 	swi	7
 PartParam_Entry_008:
-	ldio	144, 0
+	ld	(144:8), 0:io
 	nop
 	max
 	pop	sr
@@ -8891,7 +8891,7 @@ PartParam_Entry_008:
 PartParam_Entry_009:
 	ldw	(144:8), 0:io
 	max
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -8933,7 +8933,7 @@ PartParam_Entry_011:
 PartParam_Entry_012:
 	ld	xwa, 0x04000090
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -9135,7 +9135,7 @@ PartParam_Entry_024:
 	nop
 	swi	7
 PartParam_Entry_025:
-	ldio	148, 0
+	ld	(148:8), 0:io
 	nop
 	halt
 	pop	sr
@@ -9154,7 +9154,7 @@ PartParam_Entry_025:
 PartParam_Entry_026:
 	ldw	(148:8), 0:io
 	halt
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -9197,7 +9197,7 @@ PartParam_Entry_028:
 PartParam_Entry_029:
 	ld	xwa, 0x05000094
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -9399,7 +9399,7 @@ PartParam_Entry_041:
 	nop
 	swi	7
 PartParam_Entry_042:
-	ldio	152, 0
+	ld	(152:8), 0:io
 	nop
 	ei	3
 	.byte 0x80
@@ -9417,7 +9417,7 @@ PartParam_Entry_042:
 PartParam_Entry_043:
 	ldw	(152:8), 0:io
 	.byte 0x06
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -9458,7 +9458,7 @@ PartParam_Entry_045:
 PartParam_Entry_046:
 	ld	xwa, 0x06000098
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -9657,7 +9657,7 @@ PartParam_Entry_058:
 	nop
 	swi	7
 PartParam_Entry_059:
-	ldio	156, 0
+	ld	(156:8), 0:io
 	nop
 	reti
 	pop	sr
@@ -9676,7 +9676,7 @@ PartParam_Entry_059:
 PartParam_Entry_060:
 	ldw	(156:8), 0:io
 	reti
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -9719,7 +9719,7 @@ PartParam_Entry_062:
 PartParam_Entry_063:
 	ld	xwa, 0x0700009c
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -9876,7 +9876,7 @@ PartParam_Entry_073:
 	.byte 0xa0
 	nop
 	nop
-	ldio	0, 255
+	ld	(0:8), 255:io
 	nop
 	swi	7
 	nop
@@ -9893,7 +9893,7 @@ PartParam_Entry_074:
 	nop
 	nop
 	.byte 0xb2
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	pop	sr
 	push	sr
@@ -9907,7 +9907,7 @@ PartParam_Entry_075:
 	.byte 0xa0
 	nop
 	nop
-	ldio	3, 127
+	ld	(3:8), 127:io
 	nop
 	jrl	nc, 0
 	swi	7
@@ -9918,9 +9918,9 @@ PartParam_Entry_075:
 	nop
 	swi	7
 PartParam_Entry_076:
-	ldio	160, 0
+	ld	(160:8), 0:io
 	nop
-	ldio	3, 128
+	ld	(3:8), 128:io
 	nop
 	normal
 	reti
@@ -9934,7 +9934,7 @@ PartParam_Entry_076:
 	swi	7
 PartParam_Entry_077:
 	ldw	(160:8), 0:io
-	ldio	8, 127
+	ld	(8:8), 127:io
 	nop
 	jrl	nc, 0
 	swi	7
@@ -9948,7 +9948,7 @@ PartParam_Entry_078:
 	pushw	160
 	nop
 	.byte 0xb3
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	push	sr
@@ -9961,7 +9961,7 @@ PartParam_Entry_079:
 	ld	w, 160:opc
 	nop
 	nop
-	ldio	1, 127
+	ld	(1:8), 127:io
 	nop
 	swi	7
 	nop
@@ -9976,7 +9976,7 @@ PartParam_Entry_079:
 PartParam_Entry_080:
 	ld	xwa, 0x080000a0
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -9991,7 +9991,7 @@ PartParam_Entry_081:
 	.byte 0xa0
 	nop
 	nop
-	ldio	7, 127
+	ld	(7:8), 127:io
 	nop
 	jrl	nc, 0
 	swi	7
@@ -10006,7 +10006,7 @@ PartParam_Entry_082:
 	.byte 0xa0
 	nop
 	nop
-	ldio	5, 127
+	ld	(5:8), 127:io
 	nop
 	jrl	nc, 0
 	swi	7
@@ -10021,7 +10021,7 @@ PartParam_Entry_083:
 	.byte 0xa0
 	nop
 	nop
-	ldio	4, 64
+	ld	(4:8), 64:io
 	nop
 	jrl	nc, 6
 	nop
@@ -10035,7 +10035,7 @@ PartParam_Entry_084:
 	jrl	160
 	nop
 	.byte 0xae
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	nop
@@ -10048,7 +10048,7 @@ PartParam_Entry_085:
 	.byte 0x80, 0xa0
 	nop
 	nop
-	ldio	11, 127
+	ld	(11:8), 127:io
 	nop
 	incf
 	nop
@@ -10064,7 +10064,7 @@ PartParam_Entry_086:
 	.byte 0x81, 0xa0
 	nop
 	nop
-	ldio	10, 255
+	ld	(10:8), 255:io
 	nop
 	swi	7
 	nop
@@ -10080,7 +10080,7 @@ PartParam_Entry_087:
 	.byte 0x82, 0xa0
 	nop
 	nop
-	ldio	9, 127
+	ld	(9:8), 127:io
 	ldw	ix, 76
 	nop
 	swi	7
@@ -10095,7 +10095,7 @@ PartParam_Entry_088:
 	nop
 	nop
 	.byte 0xb1
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	push	sr
 	push	sr
@@ -10109,7 +10109,7 @@ PartParam_Entry_089:
 	nop
 	nop
 	.byte 0xb4
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	.byte 0x04
 	push	sr
@@ -10168,7 +10168,7 @@ PartParam_Entry_092:
 	nop
 	swi	7
 PartParam_Entry_093:
-	ldio	164, 0
+	ld	(164:8), 0:io
 	nop
 	push	3
 	.byte 0x80
@@ -10228,7 +10228,7 @@ PartParam_Entry_096:
 PartParam_Entry_097:
 	ld	xwa, 0x090000a4
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -10421,7 +10421,7 @@ PartParam_Entry_109:
 	nop
 	swi	7
 PartParam_Entry_110:
-	ldio	168, 0
+	ld	(168:8), 0:io
 	nop
 	ldw	(3:8), 128:io
 	normal
@@ -10477,7 +10477,7 @@ PartParam_Entry_113:
 PartParam_Entry_114:
 	ld	xwa, 0x0a0000a8
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -10665,7 +10665,7 @@ PartParam_Entry_126:
 	nop
 	swi	7
 PartParam_Entry_127:
-	ldio	172, 0
+	ld	(172:8), 0:io
 	nop
 	pushw	0x8003
 	nop
@@ -10723,7 +10723,7 @@ PartParam_Entry_130:
 PartParam_Entry_131:
 	ld	xwa, 0x0b0000ac
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -10913,7 +10913,7 @@ PartParam_Entry_143:
 	nop
 	swi	7
 PartParam_Entry_144:
-	ldio	176, 0
+	ld	(176:8), 0:io
 	nop
 	incf
 	pop	sr
@@ -10932,7 +10932,7 @@ PartParam_Entry_144:
 PartParam_Entry_145:
 	ldw	(176:8), 0:io
 	incf
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -10975,7 +10975,7 @@ PartParam_Entry_147:
 PartParam_Entry_148:
 	ld	xwa, 0x0c0000b0
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -11164,7 +11164,7 @@ PartParam_Entry_160:
 	nop
 	swi	7
 PartParam_Entry_161:
-	ldio	180, 0
+	ld	(180:8), 0:io
 	nop
 	decf
 	pop	sr
@@ -11183,7 +11183,7 @@ PartParam_Entry_161:
 PartParam_Entry_162:
 	ldw	(180:8), 0:io
 	decf
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -11226,7 +11226,7 @@ PartParam_Entry_164:
 PartParam_Entry_165:
 	ld	xwa, 0x0d0000b4
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -11412,7 +11412,7 @@ PartParam_Entry_177:
 	nop
 	swi	7
 PartParam_Entry_178:
-	ldio	184, 0
+	ld	(184:8), 0:io
 	nop
 	ret
 	pop	sr
@@ -11431,7 +11431,7 @@ PartParam_Entry_178:
 PartParam_Entry_179:
 	ldw	(184:8), 0:io
 	ret
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -11474,7 +11474,7 @@ PartParam_Entry_181:
 PartParam_Entry_182:
 	ld	xwa, 0x0e0000b8
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -11660,7 +11660,7 @@ PartParam_Entry_194:
 	nop
 	swi	7
 PartParam_Entry_195:
-	ldio	188, 0
+	ld	(188:8), 0:io
 	nop
 	retd	0x8003
 	nop
@@ -11718,7 +11718,7 @@ PartParam_Entry_198:
 PartParam_Entry_199:
 	ld	xwa, 0x0f0000bc
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -11908,7 +11908,7 @@ PartParam_Entry_211:
 	nop
 	swi	7
 PartParam_Entry_212:
-	ldio	192, 0
+	ld	(192:8), 0:io
 	nop
 	rcf
 	pop	sr
@@ -11927,7 +11927,7 @@ PartParam_Entry_212:
 PartParam_Entry_213:
 	ldw	(192:8), 0:io
 	rcf
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -11970,7 +11970,7 @@ PartParam_Entry_215:
 PartParam_Entry_216:
 	ld	xwa, 0x100000c0
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -12175,7 +12175,7 @@ ExtPartParam_Entry_228:
 	nop
 	swi	7
 ExtPartParam_Entry_229:
-	ldio	196, 0
+	ld	(196:8), 0:io
 	nop
 	scf
 	pop	sr
@@ -12194,7 +12194,7 @@ ExtPartParam_Entry_229:
 ExtPartParam_Entry_230:
 	ldw	(196:8), 0:io
 	scf
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -12237,7 +12237,7 @@ ExtPartParam_Entry_232:
 ExtPartParam_Entry_233:
 	ld	xwa, 0x110000c4
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -12442,7 +12442,7 @@ ExtPartParam_Entry_245:
 	nop
 	swi	7
 ExtPartParam_Entry_246:
-	ldio	200, 0
+	ld	(200:8), 0:io
 	nop
 	ccf
 	pop	sr
@@ -12461,7 +12461,7 @@ ExtPartParam_Entry_246:
 ExtPartParam_Entry_247:
 	ldw	(200:8), 0:io
 	ccf
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -12504,7 +12504,7 @@ ExtPartParam_Entry_249:
 ExtPartParam_Entry_250:
 	ld	xwa, 0x120000c8
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -12709,7 +12709,7 @@ ExtPartParam_Entry_262:
 	nop
 	swi	7
 ExtPartParam_Entry_263:
-	ldio	204, 0
+	ld	(204:8), 0:io
 	nop
 	zcf
 	pop	sr
@@ -12728,7 +12728,7 @@ ExtPartParam_Entry_263:
 ExtPartParam_Entry_264:
 	ldw	(204:8), 0:io
 	zcf
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -12771,7 +12771,7 @@ ExtPartParam_Entry_266:
 ExtPartParam_Entry_267:
 	ld	xwa, 0x130000cc
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -12976,7 +12976,7 @@ ExtPartParam_Entry_279:
 	nop
 	swi	7
 ExtPartParam_Entry_280:
-	ldio	208, 0
+	ld	(208:8), 0:io
 	nop
 	push_a
 	pop	sr
@@ -12995,7 +12995,7 @@ ExtPartParam_Entry_280:
 ExtPartParam_Entry_281:
 	ldw	(208:8), 0:io
 	push_a
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -13038,7 +13038,7 @@ ExtPartParam_Entry_283:
 ExtPartParam_Entry_284:
 	ld	xwa, 0x140000d0
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -13243,7 +13243,7 @@ ExtPartParam_Entry_296:
 	nop
 	swi	7
 ExtPartParam_Entry_297:
-	ldio	212, 0
+	ld	(212:8), 0:io
 	nop
 	pop_a
 	pop	sr
@@ -13262,7 +13262,7 @@ ExtPartParam_Entry_297:
 ExtPartParam_Entry_298:
 	ldw	(212:8), 0:io
 	pop_a
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -13305,7 +13305,7 @@ ExtPartParam_Entry_300:
 ExtPartParam_Entry_301:
 	ld	xwa, 0x150000d4
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -13510,7 +13510,7 @@ ExtPartParam_Entry_313:
 	nop
 	swi	7
 ExtPartParam_Entry_314:
-	ldio	216, 0
+	ld	(216:8), 0:io
 	nop
 	ex_ff
 	pop	sr
@@ -13529,7 +13529,7 @@ ExtPartParam_Entry_314:
 ExtPartParam_Entry_315:
 	ldw	(216:8), 0:io
 	ex_ff
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -13572,7 +13572,7 @@ ExtPartParam_Entry_317:
 ExtPartParam_Entry_318:
 	ld	xwa, 0x160000d8
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -13774,7 +13774,7 @@ ExtPartParam_Entry_330:
 	nop
 	swi	7
 ExtPartParam_Entry_331:
-	ldio	220, 0
+	ld	(220:8), 0:io
 	nop
 	ldf 3
 	.byte 0x80
@@ -13834,7 +13834,7 @@ ExtPartParam_Entry_334:
 ExtPartParam_Entry_335:
 	ld	xwa, 0x170000dc
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -14034,7 +14034,7 @@ ExtPartParam_Entry_347:
 	nop
 	swi	7
 ExtPartParam_Entry_348:
-	ldio	224, 0
+	ld	(224:8), 0:io
 	nop
 	push_f
 	pop	sr
@@ -14053,7 +14053,7 @@ ExtPartParam_Entry_348:
 ExtPartParam_Entry_349:
 	ldw	(224:8), 0:io
 	push_f
-	ldio	127, 0
+	ld	(127:8), 0:io
 	jrl	nc, 0
 	swi	7
 	normal
@@ -14096,7 +14096,7 @@ ExtPartParam_Entry_351:
 ExtPartParam_Entry_352:
 	ld	xwa, 0x180000e0
 	max
-	ldio	0, 127
+	ld	(0:8), 127:io
 	pop	sr
 	nop
 	nop
@@ -14265,7 +14265,7 @@ ExtPartParam_Entry_362:
 	nop
 	swi	7
 ExtPartParam_Entry_363:
-	ldio	232, 0
+	ld	(232:8), 0:io
 	nop
 	.byte 0x98, 0x04, 0x80
 	nop
@@ -14415,7 +14415,7 @@ ExtPartParam_Entry_371:
 	nop
 	nop
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -14613,7 +14613,7 @@ ExtPartParam_Entry_383:
 	nop
 	normal
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -14811,7 +14811,7 @@ ExtPartParam_Entry_395:
 	nop
 	push	sr
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -15009,7 +15009,7 @@ ExtPartParam_Entry_407:
 	nop
 	pop	sr
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -15207,7 +15207,7 @@ ExtPartParam_Entry_419:
 	nop
 	max
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -15405,7 +15405,7 @@ ExtPartParam_Entry_431:
 	nop
 	halt
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -15595,7 +15595,7 @@ ExtPartParam_Entry_443:
 	.byte 0x9a, 0x01
 	nop
 	ei	12
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -15789,7 +15789,7 @@ SeqMixParam_Entry_001:
 	nop
 	reti
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -15871,7 +15871,7 @@ SeqMixParam_Entry_006:
 	nop
 	.byte 0xa0, 0x01
 	nop
-	ldio	13, 32
+	ld	(13:8), 32:io
 	nop
 	normal
 	halt
@@ -15886,7 +15886,7 @@ SeqMixParam_Entry_006:
 SeqMixParam_Entry_007:
 	.byte 0x01, 0xa0, 0x01
 	nop
-	ldio	13, 15
+	ld	(13:8), 15:io
 	nop
 	retd	0
 	swi	7
@@ -15900,7 +15900,7 @@ SeqMixParam_Entry_008:
 	push	sr
 	.byte 0xa0, 0x01
 	nop
-	ldio	13, 64
+	ld	(13:8), 64:io
 	nop
 	.byte 0x01, 0x06
 	swi	7
@@ -15915,7 +15915,7 @@ SeqMixParam_Entry_009:
 	pop	sr
 	.byte 0xa0, 0x01
 	nop
-	ldio	13, 128
+	ld	(13:8), 128:io
 	nop
 	normal
 	reti
@@ -15930,7 +15930,7 @@ SeqMixParam_Entry_009:
 SeqMixParam_Entry_010:
 	.byte 0x04, 0xa0, 0x01
 	nop
-	ldio	12, 7
+	ld	(12:8), 7:io
 	nop
 	jrl	nc, 0
 	push	sr
@@ -15944,7 +15944,7 @@ SeqMixParam_Entry_011:
 	nop
 	.byte 0xa2, 0x01
 	nop
-	ldio	4, 7
+	ld	(4:8), 7:io
 	nop
 	reti
 	nop
@@ -15959,7 +15959,7 @@ SeqMixParam_Entry_011:
 SeqMixParam_Entry_012:
 	.byte 0x01, 0xa2, 0x01
 	nop
-	ldio	4, 16
+	ld	(4:8), 16:io
 	nop
 	normal
 	max
@@ -15975,7 +15975,7 @@ SeqMixParam_Entry_013:
 	push	sr
 	.byte 0xa2, 0x01
 	nop
-	ldio	12, 8
+	ld	(12:8), 8:io
 	nop
 	normal
 	pop	sr
@@ -15991,7 +15991,7 @@ SeqMixParam_Entry_014:
 	pop	sr
 	.byte 0xa2, 0x01
 	nop
-	ldio	12, 32
+	ld	(12:8), 32:io
 	nop
 	normal
 	halt
@@ -16006,7 +16006,7 @@ SeqMixParam_Entry_014:
 SeqMixParam_Entry_015:
 	.byte 0x04, 0xa2, 0x01
 	nop
-	ldio	4, 32
+	ld	(4:8), 32:io
 	nop
 	normal
 	halt
@@ -16022,7 +16022,7 @@ SeqMixParam_Entry_016:
 	halt
 	.byte 0xa2, 0x01
 	nop
-	ldio	22, 1
+	ld	(22:8), 1:io
 	nop
 	normal
 	halt
@@ -16037,7 +16037,7 @@ SeqMixParam_Entry_016:
 SeqMixParam_Entry_017:
 	.byte 0x06, 0xa2, 0x01
 	nop
-	ldio	12, 16
+	ld	(12:8), 16:io
 	nop
 	normal
 	max
@@ -16161,7 +16161,7 @@ SeqMixParam_Entry_025:
 	.byte 0xa6, 0x01
 	nop
 	push	12
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -16707,7 +16707,7 @@ SeqMixParam_Entry_061:
 	nop
 	incf
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -16905,7 +16905,7 @@ SeqMixParam_Entry_073:
 	nop
 	decf
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -17090,7 +17090,7 @@ SeqMixParam_Entry_085:
 	push	sr
 	ld	(xde+1), 14
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -17269,7 +17269,7 @@ SeqMixParam_Entry_097:
 	push	sr
 	ld	(xiz+1), 15
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -17461,7 +17461,7 @@ SeqMixParam_Entry_109:
 	nop
 	rcf
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -17659,7 +17659,7 @@ SeqMixParam_Entry_121:
 	nop
 	scf
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -17857,7 +17857,7 @@ SeqMixParam_Entry_133:
 	nop
 	ccf
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -18055,7 +18055,7 @@ SeqMixParam_Entry_145:
 	nop
 	zcf
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -18253,7 +18253,7 @@ SeqMixParam_Entry_157:
 	nop
 	push_a
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -18451,7 +18451,7 @@ SeqMixParam_Entry_169:
 	nop
 	pop_a
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -18649,7 +18649,7 @@ SeqMixParam_Entry_181:
 	nop
 	ex_ff
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -18839,7 +18839,7 @@ SeqMixParam_Entry_193:
 	.byte 0xde, 0x01
 	nop
 	ldf	12
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -19033,7 +19033,7 @@ SeqMixParam_Entry_205:
 	nop
 	push_f
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -19231,7 +19231,7 @@ SeqMixParam_Entry_217:
 	nop
 	pop_f
 	incf
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7
@@ -19385,7 +19385,7 @@ SeqMixParam_Entry_226:
 	nop
 	popw	wa
 	pop	sr
-	ldio	0, 1
+	ld	(0:8), 1:io
 	pop	sr
 	nop
 	swi	7

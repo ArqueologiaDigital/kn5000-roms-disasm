@@ -16145,7 +16145,7 @@ NoteBuffer_CompactEn_Data:
 	jr	8
 	.byte 0xc2
 	or	iz, 0x3e00
-	ldio	104, 0
+	ld	(104:8), 0:io
 	ret
 
 NoteBuffer_CompactEn_Block2:
@@ -16745,77 +16745,77 @@ VoiceSlot_CheckAndApply_Data:
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	268
 	push	sr
 	pop	sr
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	780
 	.byte 0x04, 0x04
 	pop	sr
@@ -16838,7 +16838,7 @@ VoiceSlot_CheckAndApply_Data:
 	reti
 	ldw	(0:8), 1796:io
 	pushw	1024
-	ldio	0, 0
+	ld	(0:8), 0:io
 	pop	sr
 	reti
 	nop
@@ -16855,7 +16855,7 @@ VoiceSlot_CheckAndApply_Data:
 	ldw	(0:8), 1796:io
 	push	0
 	.byte 0x04
-	ldio	10, 0
+	ld	(10:8), 0:io
 	.byte 0x04
 	di
 	nop
@@ -16888,14 +16888,14 @@ VoiceSlot_CheckAndApply_Data:
 	ldw	(3:8), 1024:io
 	.byte 0x06
 	pushw	1024
-	ldio	11, 0
+	ld	(11:8), 0:io
 	pop	sr
 	.byte 0x06
 	pushw	1024
 	push	10
 	nop
 	.byte 0x04
-	ldio	10, 0
+	ld	(10:8), 0:io
 	.byte 0x04
 	push	10
 	nop
@@ -16926,7 +16926,7 @@ VoiceSlot_CheckAndApply_Data:
 	.byte 0x04
 	halt
 	ei	7
-	ldio	9, 10
+	ld	(9:8), 10:io
 	pushw	3340
 	ret
 	retd	4368
@@ -16949,12 +16949,12 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.byte 0x04
 	nop
-	ldio	1, 0
+	ld	(1:8), 0:io
 	push	sr
 	nop
 	.byte 0x04
 	nop
-	ldio	0, 16
+	ld	(0:8), 16:io
 	nop
 	ld	w, 0:opc
 	ld	xwa, 0x8000
@@ -16964,12 +16964,12 @@ VoiceSlot_CheckAndApply_Data:
 	nop
 	.byte 0x04
 	nop
-	ldio	1, 0
+	ld	(1:8), 0:io
 	push	sr
 	nop
 	.byte 0x04
 	nop
-	ldio	0, 16
+	ld	(0:8), 16:io
 	nop
 
 VoiceSlot_CheckAndApply_LoadReg:
@@ -16987,7 +16987,7 @@ VoiceSlot_CheckAndApply_Data2:
 	nop
 	max
 	nop
-	ldio	0, 16
+	ld	(0:8), 16:io
 	nop
 	ld	w, 0:opc
 	ld	xwa, 0x8000
@@ -16997,7 +16997,7 @@ VoiceSlot_CheckAndApply_Data2:
 	nop
 	max
 	nop
-	ldio	0, 16
+	ld	(0:8), 16:io
 	nop
 	ld	w, 0:opc
 	.byte 0x40
@@ -26728,7 +26728,7 @@ SendPartDataBlock_Data:
 	.byte 0x51
 	nop
 	.byte 0x9f
-	ldio	56, 62
+	ld	(56:8), 62:io
 	nop
 	.byte 0x8f, 0x04
 	push	xsp
@@ -27005,7 +27005,7 @@ SendPartDataBlock_Data:
 	jr	lt, -113
 	max
 	push	xsp
-	ldio	103, 217
+	ld	(103:8), 217:io
 	ld	xwa, (xsp+6)
 	ld	a, (xwa)
 	and	a, 15

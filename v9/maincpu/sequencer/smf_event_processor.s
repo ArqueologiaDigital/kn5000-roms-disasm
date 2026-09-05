@@ -4107,7 +4107,7 @@ SeqStep_FileTellFinal:
 	cp	hl, 1:i3
 	jr	nz, 53
 	.byte 0x8f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	jr	z, 47
 	cp	(xsp+8), 229
 	jr	z, 19
@@ -4726,7 +4726,7 @@ SeqStep_FileSectorReturn:
 	decf
 	ld	w, 216:opc
 	.byte 0xef
-	ldio	177, 65
+	ld	(177:8), 65:io
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0
 	ldw	bc, 1215
@@ -4740,7 +4740,7 @@ SeqStep_FileSectorReturn:
 	jr	f, -98
 	retd	0xd820
 	.byte 0xef
-	ldio	177, 65
+	ld	(177:8), 65:io
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0
 	ldw	bc, 1215
@@ -4756,7 +4756,7 @@ SeqStep_FileSectorReturn:
 	scf
 	ld	w, 216:opc
 	.byte 0xef
-	ldio	177, 65
+	ld	(177:8), 65:io
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0
 	ldw	bc, 1215
@@ -4776,7 +4776,7 @@ SeqStep_FileSectorReturn:
 	zcf
 	ld	w, 232:opc
 	.byte 0xef
-	ldio	232, 204
+	ld	(232:8), 204:io
 	swi	7
 	nop
 	nop
@@ -5220,17 +5220,17 @@ SeqStep_FileSectorPopReturn:
 	ld	xwa, (xsp+20)
 	.byte 0x98
 	ld	xiy, 0x6e00003f
-	ldio	175, 20
+	ld	(175:8), 20:io
 	ld	w, 184:opc
 	ld	xiy, 0x2e1a6856
 	.byte 0x9f
-	ldio	4, 175
+	ld	(4:8), 175:io
 	push_f
 	ld	w, 56:opc
 	calr	64780
 	inc	8, xsp
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	nz, 6
 	ld	xwa, (xsp+20)
@@ -5245,7 +5245,7 @@ SeqStep_FileSectorPopReturn:
 	jr	5
 	ldw (xsp+10), 0
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	nz, 20
 	ld	xwa, (xsp+20)
@@ -5378,7 +5378,7 @@ SeqByteBlock_TechnichordCfgA:
 	.byte 0xa6
 SeqByteBlock_PathNormalize:
 	ld	a, 175:opc
-	ldio	32, 129
+	ld	(32:8), 129:io
 	ld	c, 243:opc
 	reti
 	.byte 0xe0, 0xe8
@@ -6810,7 +6810,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+8)
 	.byte 0xa8, 0x1c
 	sub	(xbc), xsp
-	ldio	32, 152
+	ld	(32:8), 152:io
 	pushw	iz
 	ld	w, 232:opc
 	ccf
@@ -6953,7 +6953,7 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	ld	w, 176:opc
 	jr	lt, -81
-	ldio	32, 184
+	ld	(32:8), 184:io
 	ld	w, 49:opc
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+42)
@@ -7816,7 +7816,7 @@ SeqChan_TraverseAndProcess:
 	.byte 0xb8
 	pop	sr
 	dec	6, a
-	ldio	191, 6
+	ld	(191:8), 6:io
 	push	sr
 	push_a
 	nop
@@ -8128,7 +8128,7 @@ SeqStep_CalcTotalSectors:
 SeqStep_SectorCompareBlock:
 	ld	xde, (xsp+4)
 	.byte 0x9f
-	ldio	63, 0
+	ld	(63:8), 0:io
 	nop
 	jr	z, 40
 	ld	bc, (xsp+10)
@@ -8474,7 +8474,7 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+2)
 	.byte 0x98
 	ldw	ix, 0xbf53
-	ldio	83, 175
+	ld	(83:8), 175:io
 	ex_ff
 	ld	w, 168:opc
 	incf
@@ -8605,7 +8605,7 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+2)
 	.byte 0x98
 	ldw	ix, 0xbf53
-	ldio	83, 175
+	ld	(83:8), 175:io
 	ex_ff
 	ld	w, 168:opc
 	incf

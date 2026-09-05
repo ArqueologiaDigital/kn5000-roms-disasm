@@ -10339,7 +10339,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	xbc, (0x24786:24)
 	add	xde, xbc
 	.byte 0x9a
-	ldio	63, 12
+	ld	(63:8), 12:io
 	nop
 	jr	nz, 4
 	.byte 0x93
@@ -10442,7 +10442,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	xwa, (0x24786:24)
 	add	xbc, xwa
 	.byte 0x99
-	ldio	63, 12
+	ld	(63:8), 12:io
 	nop
 	jr	nz, 51
 	lda	xwa, (xsp+12)
@@ -11918,7 +11918,7 @@ AudioCtrl_DataBlock:
 	push	xwa
 	ld	e, 0:opc
 	.byte 0x9f	; v10 does not spell this byte either
-	ldio	56, 37
+	ld	(56:8), 37:io
 	nop
 	inc	1, iz
 	cp	iz, 7:i3
@@ -12033,7 +12033,7 @@ AudioCtrl_DataBlock:
 	ld	(xde), wa
 	.byte 0xb6	; v10 does not spell this byte either
 	push	sr
-	ldio	0, 190
+	ld	(0:8), 190:io
 	.byte 0x04	; v10 does not spell this byte either
 	push	sr
 	.byte 0x37	; v10 does not spell this byte either
@@ -12274,8 +12274,8 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	ApFuncCall
 	.byte 0x9f	; v10 does not spell this byte either
-	ldio	4, 159
-	ldio	32, 219
+	ld	(4:8), 159:io
+	ld	(32:8), 219:io
 	.byte 0x89	; v10 does not spell this byte either
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
@@ -12435,8 +12435,8 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	ApFuncCall
 	.byte 0x9f	; v10 does not spell this byte either
-	ldio	4, 159
-	ldio	32, 219
+	ld	(4:8), 159:io
+	ld	(32:8), 219:io
 	.byte 0x89	; v10 does not spell this byte either
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
@@ -13975,7 +13975,7 @@ AudioCtrl_DataBlock:
 	.byte 0x9f	; v10 does not spell this byte either
 	ccf
 	push	xsp
-	ldio	0, 97
+	ld	(0:8), 97:io
 	.byte 0xa4	; v10 does not spell this byte either
 	jrl	494
 	ld	wa, (xsp+18)
@@ -14043,7 +14043,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, MixerPartTable_Start_0x12C
 	calr	43567
 	.byte 0x9f	; v10 does not spell this byte either
-	ldio	243, 126
+	ld	(243:8), 126:io
 	.byte 0x90	; v10 does not spell this byte either
 	nop
 	lda	xwa, (xsp+82)
@@ -14108,7 +14108,7 @@ AudioCtrl_DataBlock:
 	.byte 0x9f	; v10 does not spell this byte either
 	push_a
 	push	xsp
-	ldio	0, 113
+	ld	(0:8), 113:io
 	ld	xiz, 1628086271
 	incw	1, (xsp+18)
 	.byte 0x9f	; v10 does not spell this byte either

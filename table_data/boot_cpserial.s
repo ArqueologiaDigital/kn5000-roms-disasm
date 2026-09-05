@@ -236,14 +236,14 @@ BootSerial_FullInit:
 	st_dd8b	a, 0x3b			; PEFC = 0x00
 	ld	a, 0x46:opc
 	st_dd8b	a, 0x3a			; PECR = 0x46
-	ldio	0xd6, 0x00		; SC1MOD
-	ldio	0xd7, 0x14		; BR1CR
-	ldio	0xd5, 0x01		; SC1CR
-	ldio	0xe3, 0x07		; INTEAB: enable INTA
-	ldio	0xf8, 0x12		; INTCLR
-	ldio	0xeb, 0xff		; INTES1: RX+TX enabled, max priority
-	ldio	0xf8, 0x22		; INTCLR: clear INTRX1
-	ldio	0xf8, 0x23		; INTCLR: clear INTTX1
+	ld	(0xd6:8), 0x00:io		; SC1MOD
+	ld	(0xd7:8), 0x14:io		; BR1CR
+	ld	(0xd5:8), 0x01:io		; SC1CR
+	ld	(0xe3:8), 0x07:io		; INTEAB: enable INTA
+	ld	(0xf8:8), 0x12:io		; INTCLR
+	ld	(0xeb:8), 0xff:io		; INTES1: RX+TX enabled, max priority
+	ld	(0xf8:8), 0x22:io		; INTCLR: clear INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: clear INTTX1
 	or_sd8b_im 0xc8, 0x10		; TAMOD |= 0x10
 	and_sd8b_im 0xc8, 0xf7		; TAMOD &= ~0x08
 	ld	(0x0f69:16), 0x7d
@@ -301,12 +301,12 @@ BootSerial_HandshakeSequence:
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
 	ei	6			; mask serial ints while re-arming
-	ldio	0xeb, 0xff		; INTES1
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
+	ld	(0xeb:8), 0xff:io		; INTES1
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
-	ldio	0xf8, 0x12		; INTCLR
-	ldio	0xe3, 0x05		; INTEAB
+	ld	(0xf8:8), 0x12:io		; INTCLR
+	ld	(0xe3:8), 0x05:io		; INTEAB
 	ldw	(0x0f75:16), 0
 	ldw	(0x0f77:16), 0
 	ei	0
@@ -329,11 +329,11 @@ BootSerial_SendTwoBytes_Bitbang:
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC with bit 6 low
-	ldio	0xeb, 0xff		; INTES1
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
-	ldio	0xe3, 0x07		; INTEAB
-	ldio	0xf8, 0x12		; INTCLR
+	ld	(0xeb:8), 0xff:io		; INTES1
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
+	ld	(0xe3:8), 0x07:io		; INTEAB
+	ld	(0xf8:8), 0x12:io		; INTCLR
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
 	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
@@ -352,9 +352,9 @@ BootSerial_SendTwoBytes_Bitbang:
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR likewise
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
-	ldio	0xeb, 0xff		; INTES1
-	ldio	0xf8, 0x22
-	ldio	0xf8, 0x23
+	ld	(0xeb:8), 0xff:io		; INTES1
+	ld	(0xf8:8), 0x22:io
+	ld	(0xf8:8), 0x23:io
 	ld	xiy, 0x0fd9		; TX ring
 	add	iy, (0x0fd5:16)		; + send index
 	ld	a, (xiy)
@@ -761,9 +761,9 @@ BootSerial_WaitTxIdle__check_tx:
 	jr	nz, BootSerial_WaitTxIdle__busy
 BootSerial_WaitTxIdle__exit:
 	ei	6
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
-	ldio	0xeb, 0xdd		; INTES1
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
+	ld	(0xeb:8), 0xdd:io		; INTES1
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
 	or	(0x0f6a:16), 0x80		; done/abort status bit
 	ei	0
@@ -796,7 +796,7 @@ BootSerial_SendFrame:
 	or	(0x0f64:16), 2		; TX-pending flag
 	and	(0x0f64:16), 0xfe		; clear RX-active flag
 	ld	(0x0f62:16), 4		; state machine -> state 0x04
-	ldio	0xd7, 0x28		; BR1CR
+	ld	(0xd7:8), 0x28:io		; BR1CR
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
@@ -804,13 +804,13 @@ BootSerial_SendFrame:
 	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high
-	ldio	0xe3, 0x07		; INTEAB
-	ldio	0xf8, 0x12		; INTCLR
+	ld	(0xe3:8), 0x07:io		; INTEAB
+	ld	(0xf8:8), 0x12:io		; INTCLR
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
-	ldio	0xf8, 0x23		; INTCLR: INTTX1
-	ldio	0xeb, 0xdf		; INTES1
-	ldio	0xf8, 0x22		; INTCLR: INTRX1
+	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
+	ld	(0xeb:8), 0xdf:io		; INTES1
+	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
 	st_dd8b	a, 0xd4			; dummy SC1BUF write (A = PFCR shadow)
 					; primes the INTTX1 state machine
 	ei	0

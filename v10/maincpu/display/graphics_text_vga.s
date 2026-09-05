@@ -1437,7 +1437,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, Str_No_0xE22
 	.byte 0xf3
 	swi	5
-	ldio	1, 52
+	ld	(1:8), 52:io
 	ld	bc, 4:i3
 	.byte 0x95
 	scf
@@ -1524,7 +1524,7 @@ DrawFunc_Init_Variant1:
 	.byte 0xe4, 0xe0
 	ld	c, 243:opc
 	swi	5
-	ldio	1, 48
+	ld	(1:8), 48:io
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
@@ -1548,7 +1548,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, Str_No_0xE42
 	.byte 0xf3
 	swi	5
-	ldio	1, 52
+	ld	(1:8), 52:io
 	ld	bc, 4:i3
 	.byte 0x95
 	scf
@@ -1614,7 +1614,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, Str_No_0xE56
 	.byte 0xf3
 	swi	5
-	ldio	1, 52
+	ld	(1:8), 52:io
 	ld	bc, 4:i3
 	.byte 0x95
 	scf
@@ -1762,7 +1762,7 @@ DrawFunc_Init_Variant1:
 	.byte 0xe4, 0xe0
 	ld	l, 243:opc
 	swi	5
-	ldio	1, 48
+	ld	(1:8), 48:io
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
@@ -1787,7 +1787,7 @@ DrawFunc_Init_Variant1:
 	.long Data_CharMapFormatBlock
 	.byte 0xf3
 	swi	5
-	ldio	1, 52
+	ld	(1:8), 52:io
 	ld	bc, 4:i3
 	.byte 0x95
 	scf

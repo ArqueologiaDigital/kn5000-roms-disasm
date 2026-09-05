@@ -2139,7 +2139,7 @@ CollectAllocVoice_EmitLoop:
 CollectAllocVoice_Em_Block:
 	push	sr
 	ld	xiy, 3210806463
-	ldio	96, 143
+	ld	(96:8), 143:io
 CollectAllocVoice_Em_LoadFromStack:
 	.byte 0x02, 0x3f, 0x15, 0x7e, 0x91, 0x00, 0xaf, 0x08
 	.byte 0x20, 0xd9, 0xa8, 0x1d, 0x98, 0x4d, 0xfe, 0xaf
@@ -11241,7 +11241,7 @@ SysexRingBuf_ReadReturn:
 SysexRingBuf_GetFreeSpace:
 	.byte 0xfe, 0xd8, 0xad, 0x1d, 0x7d, 0x1e, 0xef, 0x8f
 SysexRingBuf_ReadBytes:
-	ldio	33, 216
+	ld	(33:8), 216:io
 	ccf
 	ld	c, (xsp+6)
 	extz	bc
@@ -11882,7 +11882,7 @@ SndParam_OffsetHandler:
 	.byte 0xfe, 0x34, 0xf3, 0x07, 0xf0, 0xe4, 0xd8, 0x0b
 	.byte 0x7f, 0x00, 0x0b, 0x20, 0x00, 0x9f
 SndParam_OffsetDispatch:
-	ldio	32, 49
+	ld	(32:8), 49:io
 	swi	7
 	swi	7
 OffsetDispatch_SetWord:
@@ -12958,7 +12958,7 @@ SendPartDataBlock_Compare2:
 	.byte 0x23, 0xd9, 0x12, 0x8f, 0x02, 0x21, 0xd8, 0x12
 	.byte 0xd8
 SendPartDataBlock_InitVal5:
-	ldio	20, 0
+	ld	(20:8), 0:io
 	add	wa, bc
 	extz	xwa
 SendPartDataBlock_LoadReg3:
@@ -13011,7 +13011,7 @@ SendPartDataBlock_LoadReg6:
 	.byte 0x67, 0xeb, 0x1e, 0xce, 0xfd, 0x8f, 0x04, 0x21
 	.byte 0xc7, 0xf8, 0x99, 0xde, 0x12, 0xde
 SendPartDataBlock_Compare6:
-	ldio	20, 0
+	ld	(20:8), 0:io
 	ld	wa, iz
 	extz	xwa
 SendPartDataBlock_InitVal9:

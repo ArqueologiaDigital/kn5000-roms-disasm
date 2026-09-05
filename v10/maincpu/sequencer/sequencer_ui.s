@@ -13945,7 +13945,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, NakaInst_3d_0xC
 	jr	9
 	.byte 0xd1
-	ldio	38, 4
+	ld	(38:8), 4:io
 	ld	xwa, NakaInst_3d_0x12
 	jrl	1031
 	ld	xwa, (xsp+8)

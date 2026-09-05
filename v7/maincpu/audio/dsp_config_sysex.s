@@ -1375,7 +1375,7 @@ DSPCfg_ReadField_Type76_ShiftAndMask:
 	.byte 0x6f
 DSPCfg_ReadField_Type76_Mask5Bits:
 	ld	e, 191:opc
-	ldio	2, 4
+	ld	(2:8), 4:io
 	nop
 	ld	wa, 4:i3
 DSPCfg_ReadField_Type76_Width16:
@@ -1427,7 +1427,7 @@ DSPCfg_ReadMultiField_AdvancePtr:
 	.byte 0x0c
 DSPCfg_ReadMultiField_PackAndNext:
 	jr	f, -97
-	ldio	32, 232
+	ld	(32:8), 232:io
 	ccf
 	add	xwa, xwa
 	ld	xbc, 15623034
