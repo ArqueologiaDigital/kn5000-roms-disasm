@@ -1,0 +1,6 @@
+symbolic io addresses in tree: 80
+covered by this preamble: 65   deferred to gate-all: 15
+reshape byte-identical: 65/65 covered
+null (selector dropped) differs: 65/65 covered
+  deferred (undefined by the union SFR preamble; proven in context by gate-all): DMA0V DMA1V DMA2V DMA3V KERNEL_PENDING_TICKS MAMR0 MAMR1 MAMR2 MAMR3 MSAR0 MSAR1 MSAR2 MSAR3 WDCR WDMOD
+PASS
