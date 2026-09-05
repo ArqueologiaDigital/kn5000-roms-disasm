@@ -32314,10 +32314,44 @@ sub_F926E3:
 InstallPainter_SoundGroupMenu_Entry:
 	calr 0x93                                            ; F92710  1e 93 00
 	ret                                                  ; F92713  0e
-sub_F92714:
+; ---------------------------------------------------------------------
+; ScreenLeave_SoundGroupMenu -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xC0, i.e. SCREEN ID 0xA0 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC0 -> the screen object at
+;          0xF41540, whose +4 slot is `jp 0xF92714`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   SoundGroupMenu -- inherited from the +0 ENTER label
+;          InstallPainter_SoundGroupMenu_Entry, not from any text this pass
+;          read.
+; Was `sub_F92714`.
+; ---------------------------------------------------------------------
+ScreenLeave_SoundGroupMenu:
 	calr 0x033d                                          ; F92714  1e 3d 03
 	ret                                                  ; F92717  0e
-sub_F92718:
+; ---------------------------------------------------------------------
+; ScreenButton_SoundGroupMenu -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0xC0, i.e. SCREEN ID 0xA0 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC0 -> the screen object at
+;          0xF41540, whose +8 slot is `jp 0xF92718`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +8 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   SoundGroupMenu -- inherited from the +0 ENTER label
+;          InstallPainter_SoundGroupMenu_Entry, not from any text this pass
+;          read.
+; Was `sub_F92718`.
+; ---------------------------------------------------------------------
+ScreenButton_SoundGroupMenu:
 	ld XIX,0x00f92726                                    ; F92718  44 26 27 f9 00
 	call 0xf41b08                                        ; F9271D  1d 08 1b f4
 	ret                                                  ; F92721  0e
@@ -32865,10 +32899,44 @@ sub_F92C4F:
 InstallPainter_GroupSoundDisplayHold_Entry:
 	calr 0x94                                            ; F92C50  1e 94 00
 	ret                                                  ; F92C53  0e
-sub_F92C54:
+; ---------------------------------------------------------------------
+; ScreenLeave_GroupSoundDisplayHold -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0xC1, i.e. SCREEN ID 0xA1 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC1 -> the screen object at
+;          0xF41550, whose +4 slot is `jp 0xF92C54`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   GroupSoundDisplayHold -- inherited from the +0 ENTER label
+;          InstallPainter_GroupSoundDisplayHold_Entry, not from any text this
+;          pass read.
+; Was `sub_F92C54`.
+; ---------------------------------------------------------------------
+ScreenLeave_GroupSoundDisplayHold:
 	calr 0x02cc                                          ; F92C54  1e cc 02
 	ret                                                  ; F92C57  0e
-sub_F92C58:
+; ---------------------------------------------------------------------
+; ScreenButton_GroupSoundDisplayHold -- the BUTTON method of the screen
+;          object at PanelScreen_VtableTable entry 0xC1, i.e. SCREEN ID 0xA1
+;          through PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC1 -> the screen object at
+;          0xF41550, whose +8 slot is `jp 0xF92C58`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +8 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   GroupSoundDisplayHold -- inherited from the +0 ENTER label
+;          InstallPainter_GroupSoundDisplayHold_Entry, not from any text this
+;          pass read.
+; Was `sub_F92C58`.
+; ---------------------------------------------------------------------
+ScreenButton_GroupSoundDisplayHold:
 	ld XIX,0x00f92c66                                    ; F92C58  44 66 2c f9 00
 	call 0xf41b08                                        ; F92C5D  1d 08 1b f4
 	ret                                                  ; F92C61  0e
@@ -33944,10 +34012,44 @@ sub_F9352D:
 InstallPainter_CombinationGroupMenu_Entry:
 	calr 0x93                                            ; F93541  1e 93 00
 	ret                                                  ; F93544  0e
-sub_F93545:
+; ---------------------------------------------------------------------
+; ScreenLeave_CombinationGroupMenu -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0xC5, i.e. SCREEN ID 0xA5 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC5 -> the screen object at
+;          0xF41570, whose +4 slot is `jp 0xF93545`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   CombinationGroupMenu -- inherited from the +0 ENTER label
+;          InstallPainter_CombinationGroupMenu_Entry, not from any text this
+;          pass read.
+; Was `sub_F93545`.
+; ---------------------------------------------------------------------
+ScreenLeave_CombinationGroupMenu:
 	calr 0x01bf                                          ; F93545  1e bf 01
 	ret                                                  ; F93548  0e
-sub_F93549:
+; ---------------------------------------------------------------------
+; ScreenButton_CombinationGroupMenu -- the BUTTON method of the screen object
+;          at PanelScreen_VtableTable entry 0xC5, i.e. SCREEN ID 0xA5 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC5 -> the screen object at
+;          0xF41570, whose +8 slot is `jp 0xF93549`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +8 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   CombinationGroupMenu -- inherited from the +0 ENTER label
+;          InstallPainter_CombinationGroupMenu_Entry, not from any text this
+;          pass read.
+; Was `sub_F93549`.
+; ---------------------------------------------------------------------
+ScreenButton_CombinationGroupMenu:
 	ld XIX,0x00f93557                                    ; F93549  44 57 35 f9 00
 	call 0xf41b08                                        ; F9354E  1d 08 1b f4
 	ret                                                  ; F93552  0e
@@ -34259,10 +34361,44 @@ sub_F93822:
 InstallPainter_GroupCombiDisplayHold_Entry:
 	calr 0x93                                            ; F93823  1e 93 00
 	ret                                                  ; F93826  0e
-sub_F93827:
+; ---------------------------------------------------------------------
+; ScreenLeave_GroupCombiDisplayHold -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0xC6, i.e. SCREEN ID 0xA6 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC6 -> the screen object at
+;          0xF41580, whose +4 slot is `jp 0xF93827`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   GroupCombiDisplayHold -- inherited from the +0 ENTER label
+;          InstallPainter_GroupCombiDisplayHold_Entry, not from any text this
+;          pass read.
+; Was `sub_F93827`.
+; ---------------------------------------------------------------------
+ScreenLeave_GroupCombiDisplayHold:
 	calr 0x02b3                                          ; F93827  1e b3 02
 	ret                                                  ; F9382A  0e
-sub_F9382B:
+; ---------------------------------------------------------------------
+; ScreenButton_GroupCombiDisplayHold -- the BUTTON method of the screen
+;          object at PanelScreen_VtableTable entry 0xC6, i.e. SCREEN ID 0xA6
+;          through PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xC6 -> the screen object at
+;          0xF41580, whose +8 slot is `jp 0xF9382B`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +8 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   GroupCombiDisplayHold -- inherited from the +0 ENTER label
+;          InstallPainter_GroupCombiDisplayHold_Entry, not from any text this
+;          pass read.
+; Was `sub_F9382B`.
+; ---------------------------------------------------------------------
+ScreenButton_GroupCombiDisplayHold:
 	ld XIX,0x00f93839                                    ; F9382B  44 39 38 f9 00
 	call 0xf41b08                                        ; F93830  1d 08 1b f4
 	ret                                                  ; F93834  0e
@@ -142993,7 +143129,28 @@ sub_FDE34E:
 	ret                                                  ; FDE35A  0e
 sub_FDE35B:
 	ret                                                  ; FDE35B  0e
-sub_FDE35C:
+; ---------------------------------------------------------------------
+; ToneEditPage_A3_Leave -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xE3, i.e. SCREEN ID 0xC3 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xE3 -> the screen object at
+;          0xF41F9C, whose +4 slot is `jp 0xFDE35C`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   A3 -- inherited from the +0 ENTER label
+;          ToneEditPage_A3_PositionParameter, not from any text this pass
+;          read.
+; Family:   the tone-editor lane named this screen's +0
+;          (ToneEditPage_A3_PositionParameter) and +8
+;          (ToneEditPage_A3_KeyDispatch) but not its +4; this fills that one
+;          slot in its own spelling.
+; Was `sub_FDE35C`.
+; ---------------------------------------------------------------------
+ToneEditPage_A3_Leave:
 	pushw 0x00                                           ; FDE35C  0b 00 00
 	call Var27DA_Set                                      ; FDE35F  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE363  1d 13 77 fd
@@ -143001,7 +143158,28 @@ sub_FDE35C:
 	ret                                                  ; FDE368  0e
 sub_FDE369:
 	ret                                                  ; FDE369  0e
-sub_FDE36A:
+; ---------------------------------------------------------------------
+; ToneEditPage_A4_Leave -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xE4, i.e. SCREEN ID 0xC4 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xE4 -> the screen object at
+;          0xF41FAC, whose +4 slot is `jp 0xFDE36A`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   A4 -- inherited from the +0 ENTER label
+;          ToneEditPage_A4_PositionMovement, not from any text this pass
+;          read.
+; Family:   the tone-editor lane named this screen's +0
+;          (ToneEditPage_A4_PositionMovement) and +8
+;          (ToneEditPage_A4_KeyDispatch) but not its +4; this fills that one
+;          slot in its own spelling.
+; Was `sub_FDE36A`.
+; ---------------------------------------------------------------------
+ToneEditPage_A4_Leave:
 	pushw 0x00                                           ; FDE36A  0b 00 00
 	call Var27DA_Set                                      ; FDE36D  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE371  1d 13 77 fd
@@ -143009,7 +143187,28 @@ sub_FDE36A:
 	ret                                                  ; FDE376  0e
 sub_FDE377:
 	ret                                                  ; FDE377  0e
-sub_FDE378:
+; ---------------------------------------------------------------------
+; ToneEditPage_A5_Leave -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xE5, i.e. SCREEN ID 0xC5 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xE5 -> the screen object at
+;          0xF41FBC, whose +4 slot is `jp 0xFDE378`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   A5 -- inherited from the +0 ENTER label
+;          ToneEditPage_A5_FittingMutingTuning, not from any text this pass
+;          read.
+; Family:   the tone-editor lane named this screen's +0
+;          (ToneEditPage_A5_FittingMutingTuning) and +8
+;          (ToneEditPage_A5_KeyDispatch) but not its +4; this fills that one
+;          slot in its own spelling.
+; Was `sub_FDE378`.
+; ---------------------------------------------------------------------
+ToneEditPage_A5_Leave:
 	pushw 0x00                                           ; FDE378  0b 00 00
 	call Var27DA_Set                                      ; FDE37B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE37F  1d 13 77 fd
@@ -143017,7 +143216,26 @@ sub_FDE378:
 	ret                                                  ; FDE384  0e
 sub_FDE385:
 	ret                                                  ; FDE385  0e
-sub_FDE386:
+; ---------------------------------------------------------------------
+; ToneEditPage_A6_Leave -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xE6, i.e. SCREEN ID 0xC6 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xE6 -> the screen object at
+;          0xF41FCC, whose +4 slot is `jp 0xFDE386`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   A6 -- inherited from the +0 ENTER label
+;          ToneEditPage_A6_TouchDepth, not from any text this pass read.
+; Family:   the tone-editor lane named this screen's +0
+;          (ToneEditPage_A6_TouchDepth) and +8 (ToneEditPage_A6_KeyDispatch)
+;          but not its +4; this fills that one slot in its own spelling.
+; Was `sub_FDE386`.
+; ---------------------------------------------------------------------
+ToneEditPage_A6_Leave:
 	pushw 0x00                                           ; FDE386  0b 00 00
 	call Var27DA_Set                                      ; FDE389  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE38D  1d 13 77 fd
@@ -143025,7 +143243,28 @@ sub_FDE386:
 	ret                                                  ; FDE392  0e
 sub_FDE393:
 	ret                                                  ; FDE393  0e
-sub_FDE394:
+; ---------------------------------------------------------------------
+; ToneEditPage_A7_Leave -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xE7, i.e. SCREEN ID 0xC7 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0xE7 -> the screen object at
+;          0xF41FDC, whose +4 slot is `jp 0xFDE394`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   A7 -- inherited from the +0 ENTER label
+;          ToneEditPage_A7_ResoModeKeyFollow, not from any text this pass
+;          read.
+; Family:   the tone-editor lane named this screen's +0
+;          (ToneEditPage_A7_ResoModeKeyFollow) and +8
+;          (ToneEditPage_A7_KeyDispatch) but not its +4; this fills that one
+;          slot in its own spelling.
+; Was `sub_FDE394`.
+; ---------------------------------------------------------------------
+ToneEditPage_A7_Leave:
 	pushw 0x00                                           ; FDE394  0b 00 00
 	call Var27DA_Set                                      ; FDE397  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE39B  1d 13 77 fd
@@ -162350,7 +162589,25 @@ sub_FE803F:
 sub_FE8040:
 	call 0xf411b8                                        ; FE8040  1d b8 11 f4
 	ret                                                  ; FE8044  0e
-sub_FE8045:
+; ---------------------------------------------------------------------
+; ScreenLeave_DrumEditPartSelect -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x47, i.e. SCREEN ID 0x27 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x47 -> the screen object at
+;          0xF402DC, whose +4 slot is `jp 0xFE8045`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   DrumEditPartSelect -- inherited from the +0 ENTER label
+;          ShowScreen_DrumEditPartSelect, not from any text this pass read.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing on
+;          leave; the slot exists to keep the three-method shape.
+; Was `sub_FE8045`.
+; ---------------------------------------------------------------------
+ScreenLeave_DrumEditPartSelect:
 	ret                                                  ; FE8045  0e
 	jp sub_FE805E                                        ; FE8046  1b 5e 80 fe
 	jp sub_FE805E                                        ; FE804A  1b 5e 80 fe
@@ -163203,7 +163460,25 @@ PartLabels_FE84F5:
 	.byte 0x32, 0x32, 0x50, 0x32, 0x33, 0x50, 0x32, 0x34, 0x50, 0x32, 0x35, 0x50, 0x32, 0x36, 0x50, 0x32  ; FE8535
 	.byte 0x37, 0x50, 0x32, 0x38, 0x50, 0x32, 0x39, 0x50, 0x33, 0x30, 0x50, 0x33, 0x31, 0x50, 0x33, 0x32  ; FE8545
 	.byte 0x50, 0x20, 0x31, 0x50, 0x20, 0x31, 0x50, 0x20, 0x31, 0x50, 0x20, 0x31, 0x50, 0x20, 0x31  ; FE8555
-sub_FE8564:
+; ---------------------------------------------------------------------
+; ScreenLeave_NoteEditPartSelect -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x44, i.e. SCREEN ID 0x24 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x44 -> the screen object at
+;          0xF402BC, whose +4 slot is `jp 0xFE8564`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   NoteEditPartSelect -- inherited from the +0 ENTER label
+;          ShowScreen_NoteEditPartSelect, not from any text this pass read.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing on
+;          leave; the slot exists to keep the three-method shape.
+; Was `sub_FE8564`.
+; ---------------------------------------------------------------------
+ScreenLeave_NoteEditPartSelect:
 	ret                                                  ; FE8564  0e
 sub_FE8565:
 	cp HL,0x001f                                         ; FE8565  db cf 1f 00
@@ -174558,7 +174833,36 @@ sub_FF42C9:
 	calr sub_FF42C0                                      ; FF42C9  1e f4 ff
 	ret                                                  ; FF42CC  0e
 ; ---------------------------------------------------------------------
-; sub_FF42CD -- a screen painter this round REFUSED to name.
+; Paint_DiskMenu -- the ENTER method (painter) of the screen object at
+;          PanelScreen_VtableTable entry 0x60, i.e. SCREEN ID 0x40 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x60, +0 slot, called by
+;          PanelScreen_CallEnter_A/B with the id that has just become
+;          current.
+; Evidence: round 7 identified 0xFF42CD as "the DISK menu's INDEX" and
+;          refused to name it after a CAPTION (its header below); wave8's
+;          SCREEN_DECLARED then declared screen 0x60 = DiskMenu. This names
+;          it after the MENU, which both point at: it hands the interpreter
+;          the lists at 0xF58014 ("DISK"), 0xF580B0 ("MIDI FILE LOAD") and
+;          0xF58127 ("LOAD"), choosing on the model strap (0xC4) at 0xFF42EE
+;          -- the site this module's banner already calls the disk menu.
+;          wave8 named the screen's READER (PanelButtonDispatch_DiskMenu)
+;          from this same object.
+; See notes/FINDINGS-prom_a-panel-control-map.md and wave8's SCREEN_DECLARED.
+;          This name is the MENU, not a caption, so it does not fall to round
+;          7's refusal below -- it is what that refusal pointed at.
+; Was `sub_FF42CD`.
+;
+; ★ THIS ANSWERS THE HEADER BELOW, kept verbatim. Its refusal was of a
+;          CAPTION name ("naming it after one would claim a screen another
+;          routine paints") and it was right; this names the MENU the header
+;          itself identifies, which no caption does. Its opening line now
+;          carries the new label because the rename is file-wide; every other
+;          word, refusal included, is the record of how the gap closed.
+; ---------------------------------------------------------------------
+; ---------------------------------------------------------------------
+; Paint_DiskMenu -- a screen painter this round REFUSED to name.
 ;
 ; It hands 3 display list(s) to the interpreter ON THE STACK.
 ;     site 0xFF42D7  list 0xF58014-0xF580B0 (156 B, leaves by call)
@@ -174578,7 +174882,7 @@ sub_FF42C9:
 ;          sub_XXXXXX and states the gap.
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
-sub_FF42CD:
+Paint_DiskMenu:
 	calr sub_FF42B2                                      ; FF42CD  1e e2 ff
 	call sub_FF7604                                      ; FF42D0  1d 04 76 ff
 	pushw 0x00                                           ; FF42D4  0b 00 00
@@ -174608,7 +174912,25 @@ sub_FF42CD:
 	inc 0,XSP                                            ; FF4316  ef 60
 	inc 2,XSP                                            ; FF4318  ef 62
 	ret                                                  ; FF431A  0e
-sub_FF431B:
+; ---------------------------------------------------------------------
+; ScreenLeave_DiskMenu -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x60, i.e. SCREEN ID 0x40 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x60 -> the screen object at
+;          0xF42264, whose +4 slot is `jp 0xFF431B`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   DiskMenu -- inherited from the +0 ENTER label Paint_DiskMenu, not
+;          from any text this pass read.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing on
+;          leave; the slot exists to keep the three-method shape.
+; Was `sub_FF431B`.
+; ---------------------------------------------------------------------
+ScreenLeave_DiskMenu:
 	ret                                                  ; FF431B  0e
 ; ---------------------------------------------------------------------
 ; PanelButtonDispatch_DiskMenu -- run Dispatch_FF3800's handler for one PANEL
@@ -177528,7 +177850,23 @@ Paint_DiskSaveFile:
 	add XSP,0x0000001e                                   ; FF5717  ef c8 1e 00 00 00
 	pop XIX                                              ; FF571D  5c
 	ret                                                  ; FF571E  0e
-sub_FF571F:
+; ---------------------------------------------------------------------
+; ScreenLeave_DiskSaveFile -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x6C -> the screen object at
+;          0xF423B0, whose +4 slot is `jp 0xFF571F`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   DiskSaveFile -- inherited from the +0 ENTER label
+;          PageDispatch_DiskSaveFile, not from any text this pass read.
+; Was `sub_FF571F`.
+; ---------------------------------------------------------------------
+ScreenLeave_DiskSaveFile:
 	ld c, (0x207a:16)                                   ; FF571F  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; FF5723  c1 7b 20 f3
 	jr z, .LFF572D                                       ; FF5727  66 04
@@ -178698,7 +179036,23 @@ PageDispatch_MidiFileSave:
 	add XSP,0x0000001e                                   ; FF5EA6  ef c8 1e 00 00 00
 	pop XIX                                              ; FF5EAC  5c
 	ret                                                  ; FF5EAD  0e
-sub_FF5EAE:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiFileSave -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x6E -> the screen object at
+;          0xF423C0, whose +4 slot is `jp 0xFF5EAE`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   MidiFileSave -- inherited from the +0 ENTER label
+;          PageDispatch_MidiFileSave, not from any text this pass read.
+; Was `sub_FF5EAE`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiFileSave:
 	ld c, (0x207a:16)                                   ; FF5EAE  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; FF5EB2  c1 7b 20 f3
 	jr z, .LFF5ED0                                       ; FF5EB6  66 18
@@ -180325,7 +180679,23 @@ PageDispatch_L0adSingleS0und:
 	add XSP,0x0000002c                                   ; FF68C2  ef c8 2c 00 00 00
 	pop XIX                                              ; FF68C8  5c
 	ret                                                  ; FF68C9  0e
-sub_FF68CA:
+; ---------------------------------------------------------------------
+; ScreenLeave_L0adSingleS0und -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x74, i.e. SCREEN ID 0x54 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x74 -> the screen object at
+;          0xF423E0, whose +4 slot is `jp 0xFF68CA`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   L0adSingleS0und -- inherited from the +0 ENTER label
+;          PageDispatch_L0adSingleS0und, not from any text this pass read.
+; Was `sub_FF68CA`.
+; ---------------------------------------------------------------------
+ScreenLeave_L0adSingleS0und:
 	call sub_FF796C                                      ; FF68CA  1d 6c 79 ff
 	call 0xf42590                                        ; FF68CE  1d 90 25 f4
 	ld (0x21fa:16), 0x00                                 ; FF68D2  f1 fa 21 00 00
@@ -181085,7 +181455,24 @@ PageDispatch_L0adSingleC0mbination:
 	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF6F08  1d 15 76 ff
 	add XSP,0x00000022                                   ; FF6F0C  ef c8 22 00 00 00
 	ret                                                  ; FF6F12  0e
-sub_FF6F13:
+; ---------------------------------------------------------------------
+; ScreenLeave_L0adSingleC0mbination -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0x73, i.e. SCREEN ID 0x53 through
+;          PanelScreen_VtableTable_ViewB
+;
+; Reached from: PanelScreen_VtableTable entry 0x73 -> the screen object at
+;          0xF4241C, whose +4 slot is `jp 0xFF6F13`, and from no other live
+;          screen object's two callable slots.
+; Evidence: the +4 offset is PanelScreen_VtableTable's own (its header's
+;          checks V1-V6): +0 ENTER is called by PanelScreen_CallEnter_A/B, +4
+;          LEAVE by PanelScreen_CallLeave_A/B with the id that just STOPPED
+;          being current, +8 BUTTON by PanelButton_Route (0xF8621E).
+; Screen:   L0adSingleC0mbination -- inherited from the +0 ENTER label
+;          PageDispatch_L0adSingleC0mbination, not from any text this pass
+;          read.
+; Was `sub_FF6F13`.
+; ---------------------------------------------------------------------
+ScreenLeave_L0adSingleC0mbination:
 	call sub_FF796C                                      ; FF6F13  1d 6c 79 ff
 	call 0xf42590                                        ; FF6F17  1d 90 25 f4
 	ld (0x21fa:16), 0x00                                 ; FF6F1B  f1 fa 21 00 00
@@ -182049,7 +182436,7 @@ sub_FF7604:
 ; ---------------------------------------------------------------------
 ; LCD_ShowAllThreeLayers_SaveRegs -- service 0x0C with C = 7, with four registers preserved
 ;
-; Called from: prom_a sub_FF42CD (`call`) at 0xFF4312
+; Called from: prom_a Paint_DiskMenu (`call`) at 0xFF4312
 ;          prom_a Paint_MidiFileDirectPlay (`call`) at 0xFF4572
 ;          prom_a Paint_DiskL0adFile (`call`) at 0xFF48EA
 ;          prom_a PanelButtonDispatch_DiskL0adFile (`call`) at 0xFF4A77
