@@ -89,7 +89,7 @@ ExtData_ChordType_NullByte:
 	nop
 ChordTypeStr_Blank_0:	aligned_string "     "
 ChordTypeStr_Blank_1:	aligned_string "     "
-ChordTypeStr_Blank_2:	ldb	w, 0x20
+ChordTypeStr_Blank_2:	ld	w, 0x20:opc
 	ld	w, 32:opc
 	ld	w, 0:opc
 	aligned_string "     "

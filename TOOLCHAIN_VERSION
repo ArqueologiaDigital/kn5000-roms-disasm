@@ -7,20 +7,22 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 7a7a3fd6318b (7a7a3fd6318b2ab085eccc234e4a86cd6a5d56de)
+Commit: da00420dba8d (da00420dba8da43f8d4a25051ddc4df6b37f257d)
 Date: 2026-09-05
-Subject: [TLCS900] Decode the io family's long forms as ld/ldw (n:8), imm
+Subject: [TLCS900] Delete the nine encoding-selector legacy aliases
 
-Binary: llvm-mc sha256 35829d3c7f573fae5f8a32918bedc00f8cb38c59273eb1f12442bed9394741f3
+Binary: llvm-mc sha256 a7ee33d53676fa9ebb4360b5e72d1748f647f3b9e937d05f76691264d5875d5c
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
 
-⚠ PIN PROMOTED 2026-09-05 from 86332721969d / 850b013e to enable the encoding-
-  selector source conversion (SPEC-encoding-selectors-2026-09-04.md step 9): once
-  a source spells `:i3`/`:opc`/`:io`, only this backend can assemble it. The two
-  binaries certify the same 13 images byte-identically (the null run, UPDATE 15
-  STEPS 4 & 8); the old snapshot is kept at llvm-mc.snap.86332721969d-850b013e.
-  The LLVM: commit trailer moves to 7a7a3fd6318b from this promotion on.
-  86332721969d remains immutable in llvm-project history.
+⚠ PIN PROMOTED TWICE ON 2026-09-05: 86332721969d / 850b013e ->
+  7a7a3fd6318b / 35829d3c to enable the encoding-selector source conversion
+  (SPEC-encoding-selectors-2026-09-04.md step 9), then -> da00420dba8d / a7ee33d5
+  when step 10 deleted the nine legacy aliases.  With the aliases gone the
+  retired spellings (cps/lds/lds32/lds8/ldb/ldio/ldwio) no longer assemble at
+  all; the tree spells only the selector forms.  Prior snapshots kept at
+  llvm-mc.snap.86332721969d-850b013e and llvm-mc.snap.7a7a3fd6318b-35829d3c.
+  The LLVM: commit trailer is now da00420dba8d.  86332721969d and 7a7a3fd6318b
+  remain immutable in llvm-project history.
 
 ⚠ NAME THE BINARY, NOT ONLY THE COMMIT. On 2026-09-02 the shared llvm-mc was
 re-linked at least five times while `git rev-parse HEAD` reported an unchanged
@@ -748,3 +750,31 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # first (a coordinator call): once a source writes `:i3`/`:opc`/`:io`, only the
 # new backend can assemble it, so the snapshot and the LLVM: trailer must move
 # in lockstep with the first converted commit.
+#
+# UPDATE 16 (2026-09-05): STEP 10 -- the nine legacy aliases DELETED, the
+# selector convergence complete.
+#
+# llvm-project da00420dba8d deletes the nine EmitPriority-0 parse-only aliases
+# (cps/lds/lds32/lds8/ldb/ldio/ldwio); 4d7fa4f6b37c updates the four MC tests
+# that assembled them. New llvm-mc sha256 a7ee33d53676 (deterministic: an
+# incremental relink reproduced it). Pin + snapshot promoted from 7a7a3fd6318b
+# / 35829d3c to da00420dba8d / a7ee33d5; the LLVM: trailer moves with it.
+#
+# ⚠ TWO label-prefixed sites step 9's line-start census and converter both
+#   missed -- `ChordTypeStr_Blank_2:\tldb\tw, 0x20` in v7 and v9
+#   extension_data.s (a label and instruction on one line) -- surfaced only when
+#   the alias fell away. Converted to `ld w, 0x20:opc`, byte-verified [0x20,0x20]
+#   against the alias-present snapshot. The census regex `^\s*<mn>` cannot see a
+#   label-prefixed instruction; the gate can. These were the only two.
+#
+# gate-all after deletion: 9 KN5000 + 4 SX-WSA1R byte-identical, 8/8 + 4/4
+#   prerequisite. Foils re-run on the alias-free backend: foil a (byte gate)
+#   red-then-green, foils c/d (TableGen ambiguity) red, control green. Foil b is
+#   RETIRED -- it aliased `cps` to CP8ri, and that alias no longer exists.
+#   TLCS900 lit: 87/87 (MC + Disassembler + CodeGen + the ambiguity .td).
+#
+# CENSUS (notes/syntax-convergence-probes/): encoding_selector_exposure.py Q1 is
+#   now 0 sites for all seven families. mnemonic_census.py SYNTHETIC bucket
+#   136,863 -> 65,196 sites (-71,667), 350 -> 344 names (six retired; lds8 had
+#   no sites). The &7 immediate masking and the untagged path into the short
+#   encodings are gone. The selector convergence (SPEC steps 0-10) is COMPLETE.
