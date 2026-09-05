@@ -429,3 +429,30 @@ reaches the TG yet (the CPU2->CPU1 link wedges; a brief boot-init transient
 aside, the firmware gates no musical voice on its own). Making a note reach the
 TG -- the link, or a MIDI-in path into prom_c's ring -- is the next step toward
 hearing it play without an injected gate.
+
+## ✅ ENVELOPE + LINK + MIDI-IN, 2026-09-06
+
+Following the placeholder sine, three more landed in `kn7000_mame`:
+
+* **Amplitude envelope.** The sine is no longer fixed-level. Each voice's
+  amplitude follows the OUTPUT LEVEL register (`chan+0x0080`, base-2 log, 256
+  counts/octave, `0x0FF4`=unity, larger=louder) and a channel in its idle marker
+  (`chan+0x0800`==0xFF80 && `chan+0x0840`==0xFF00) is silent. Verified: a unity
+  A4, an idle-marked C#5 (silent), and a −2-octave E5 rendered at 2949 / 2.5 / 740
+  (idle 0.0008×, −2oct 0.2507× ≈ 0.25). The boot-init transient is now silent.
+* **Link wedge — confirmed already fixed** (OVERLAY FIX 6 in tmp95c061 +
+  `perfect_quantum`, 2026-08-27). Verified end to end below.
+* **MIDI IN wired.** tmp95c061 gained an SC0 receive engine (`sc0_rxd` →
+  `INTRX0`); `wsa1_midi_uart` bridges MAME's bit-serial `midiin` to CPU 1's SC0
+  (rear MIDI1 jack). **End-to-end verified**: a `.mid` file fed to `-midiin`
+  (MAME's midiin is a MIDI-in *image* device — plays a file, no host port
+  needed) is silent through boot and sounds from ~t=25 s. So the whole chain
+  works: MIDI → SC0 → link → CPU 2 note engine → tone generator → placeholder
+  sine. Machine flag is now `MACHINE_IMPERFECT_SOUND`.
+
+⚠ **Open (note-off / retirement).** A note-off does not stop a placeholder
+voice: the busy bit never falls (nothing runs the amplitude envelope to
+completion), so the firmware never retires the record and voices accumulate.
+Closing it needs the time-varying segment envelope (`0x0800..0x0A40`, rate/level
+semantics not established) and a voice-retirement model. MIDI OUT (SC0 TX) is
+also still a stub.
