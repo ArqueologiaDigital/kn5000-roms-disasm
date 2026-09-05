@@ -7,12 +7,20 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 86332721969d (86332721969de2d2b4c2ac16bc217b5cdee5cca5)
-Date: 2026-09-02
-Subject: [TLCS900] Model (Xrr+Rn) and the memory-to-memory loads
+Commit: 7a7a3fd6318b (7a7a3fd6318b2ab085eccc234e4a86cd6a5d56de)
+Date: 2026-09-05
+Subject: [TLCS900] Decode the io family's long forms as ld/ldw (n:8), imm
 
-Binary: llvm-mc sha256 850b013e0e8f14d9a90b95ff1995a858ad8575b8c35a8749970b47ffc613f1a1
+Binary: llvm-mc sha256 35829d3c7f573fae5f8a32918bedc00f8cb38c59273eb1f12442bed9394741f3
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
+
+⚠ PIN PROMOTED 2026-09-05 from 86332721969d / 850b013e to enable the encoding-
+  selector source conversion (SPEC-encoding-selectors-2026-09-04.md step 9): once
+  a source spells `:i3`/`:opc`/`:io`, only this backend can assemble it. The two
+  binaries certify the same 13 images byte-identically (the null run, UPDATE 15
+  STEPS 4 & 8); the old snapshot is kept at llvm-mc.snap.86332721969d-850b013e.
+  The LLVM: commit trailer moves to 7a7a3fd6318b from this promotion on.
+  86332721969d remains immutable in llvm-project history.
 
 ⚠ NAME THE BINARY, NOT ONLY THE COMMIT. On 2026-09-02 the shared llvm-mc was
 re-linked at least five times while `git rev-parse HEAD` reported an unchanged
