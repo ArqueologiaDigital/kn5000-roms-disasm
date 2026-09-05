@@ -147509,7 +147509,20 @@ sub_FE070C:
 	popw hl                                              ; FE0751  4b
 	unlk XIZ                                             ; FE0752  ee 0d
 	ret                                                  ; FE0754  0e
-sub_FE0755:
+
+; ---------------------------------------------------------------------
+; Disk_RequestSenseDriveStatus -- issue FDC operation 11 (SENSE DRIVE STATUS)
+;
+; Builds a request block at RAM 0x177E (operation 11 at +0, count 1) and calls
+; the register-preserving request entry Fdc_Request_SaveRegs_Entry.
+; Evidence: 0xFE075B writes 0x000B to block offset +0; op 11 = SENSE DRIVE
+;           STATUS (disk-format §4 census; Fdc_Op11_SenseDriveStatus is the
+;           in-core handler).  0xFE077E `call 0xf42d38` (T_F42D38 ->
+;           Fdc_Request_SaveRegs).  Reached by 5 calr sites.
+;           notes/prom_a_disk_cmd_layer_checks.py.
+; Was sub_FE0755.
+; ---------------------------------------------------------------------
+Disk_RequestSenseDriveStatus:
 	push XIX                                             ; FE0755  3c
 	lda xix, (0x177e:24)                                 ; FE0756  f2 7e 17 00 34
 	m_ld_mi16 MDI+r4, 0, 0x000b                          ; FE075B  b4 02 0b 00
@@ -151963,10 +151976,29 @@ sub_FE2FEA:
 	nop                                                  ; FE2FFD  00
 	nop                                                  ; FE2FFE  00
 	nop                                                  ; FE2FFF  00
-sub_FE3000:
-	jp sub_FE3020                                        ; FE3000  1b 20 30 fe
-sub_FE3004:
-	jp sub_FE3032                                        ; FE3004  1b 32 30 fe
+
+; ---------------------------------------------------------------------
+; Disk_CommandDispatch_Thunk_Entry -- published jp slot into
+;                                     Disk_CommandDispatch_Thunk
+;
+; Slot 0 of the module's entry table at 0xFE3000 (4-byte stride).
+; Evidence: 0xFE3000 `jp Disk_CommandDispatch_Thunk` (0xFE3020).
+; Was sub_FE3000.
+; ---------------------------------------------------------------------
+Disk_CommandDispatch_Thunk_Entry:
+	jp Disk_CommandDispatch_Thunk                                        ; FE3000  1b 20 30 fe
+
+; ---------------------------------------------------------------------
+; Fdc_Request_Thunk_Entry -- published jp slot (prom_b thunk T_F42D24) into
+;                            Fdc_Request_Thunk
+;
+; Slot 1 of the entry table at 0xFE3000 (4-byte stride).
+; Evidence: 0xFE3004 `jp Fdc_Request_Thunk` (0xFE3032).  T_F42D24 has no caller
+;           in either image (disk-format §4).
+; Was sub_FE3004.
+; ---------------------------------------------------------------------
+Fdc_Request_Thunk_Entry:
+	jp Fdc_Request_Thunk                                        ; FE3004  1b 32 30 fe
 ; ---------------------------------------------------------------------
 ; INT5_Dev7B_Receive_Alias -- a one-instruction jump slot that enters INT5_Dev7B_Receive
 ;
@@ -152006,22 +152038,61 @@ Fdc_ServiceDataByte_Isr_Entry:
 ; ---------------------------------------------------------------------
 INTTC0_uDMA0Done_Alias:
 	jp 0xfe6851                                          ; FE3010  1b 51 68 fe
-sub_FE3014:
-	jp sub_FE3042                                        ; FE3014  1b 42 30 fe
-sub_FE3018:
-	jp sub_FE308D                                        ; FE3018  1b 8d 30 fe
+
+; ---------------------------------------------------------------------
+; Disk_CommandDispatch_SaveRegs_Entry -- published jp slot (prom_b thunk
+;                        T_F42D34) into Disk_CommandDispatch_SaveRegs
+;
+; Evidence: 0xFE3014 `jp Disk_CommandDispatch_SaveRegs` (0xFE3042).  T_F42D34 =
+;           23 call sites, the busiest slot into the module (portb §2).
+; Was sub_FE3014.
+; ---------------------------------------------------------------------
+Disk_CommandDispatch_SaveRegs_Entry:
+	jp Disk_CommandDispatch_SaveRegs                                        ; FE3014  1b 42 30 fe
+
+; ---------------------------------------------------------------------
+; Fdc_Request_SaveRegs_Entry -- published jp slot (prom_b thunk T_F42D38) into
+;                               Fdc_Request_SaveRegs
+;
+; Evidence: 0xFE3018 `jp Fdc_Request_SaveRegs` (0xFE308D).  T_F42D38 = 17 call
+;           sites (disk-format §4).
+; Was sub_FE3018.
+; ---------------------------------------------------------------------
+Fdc_Request_SaveRegs_Entry:
+	jp Fdc_Request_SaveRegs                                        ; FE3018  1b 8d 30 fe
 	jp 0xfe6866                                          ; FE301C  1b 66 68 fe
-sub_FE3020:
+
+; ---------------------------------------------------------------------
+; Disk_CommandDispatch_Thunk -- thin wrapper that calls Disk_CommandDispatch
+;
+; Pushes arguments and calls Disk_CommandDispatch (0xFE426E), returning WA = HL;
+; does NOT save the caller's registers.  Reached through
+; Disk_CommandDispatch_Thunk_Entry.
+; Evidence: 0xFE3024 `call Disk_CommandDispatch`.
+; Was sub_FE3020.
+; ---------------------------------------------------------------------
+Disk_CommandDispatch_Thunk:
 	pushw hl                                             ; FE3020  2b
 	pushw bc                                             ; FE3021  29
 	push XHL                                             ; FE3022  3b
 	pushw wa                                             ; FE3023  28
-	call sub_FE426E                                      ; FE3024  1d 6e 42 fe
+	call Disk_CommandDispatch                                      ; FE3024  1d 6e 42 fe
 	ld WA,HL                                             ; FE3028  db 88
 	popw hl                                              ; FE302A  4b
 	add XSP,0x00000008                                   ; FE302B  ef c8 08 00 00 00
 	ret                                                  ; FE3031  0e
-sub_FE3032:
+
+; ---------------------------------------------------------------------
+; Fdc_Request_Thunk -- thin wrapper that calls Fdc_Request and returns WA = HL
+;
+; Pushes the request-block pointer and calls Fdc_Request (0xFE66C7); does NOT
+; save the caller's registers (unlike Fdc_Request_SaveRegs).  Reached through
+; Fdc_Request_Thunk_Entry (prom_b thunk T_F42D24, which has no caller in either
+; image -- disk-format §4).
+; Evidence: 0xFE3034 `call Fdc_Request`.
+; Was sub_FE3032.
+; ---------------------------------------------------------------------
+Fdc_Request_Thunk:
 	pushw hl                                             ; FE3032  2b
 	push XHL                                             ; FE3033  3b
 	call 0xfe66c7                                        ; FE3034  1d c7 66 fe
@@ -152029,7 +152100,20 @@ sub_FE3032:
 	popw hl                                              ; FE303A  4b
 	add XSP,0x00000004                                   ; FE303B  ef c8 04 00 00 00
 	ret                                                  ; FE3041  0e
-sub_FE3042:
+
+; ---------------------------------------------------------------------
+; Disk_CommandDispatch_SaveRegs -- call Disk_CommandDispatch preserving the
+;                                  caller's index/data registers
+;
+; Saves XIX/XIY/XBC/XDE/XHL to the scratch block at 0x605D70, calls
+; Disk_CommandDispatch (0xFE426E), and restores them.  Register-preserving
+; public entry to the command dispatcher; reached through
+; Disk_CommandDispatch_SaveRegs_Entry (prom_b thunk T_F42D34, 23 call sites).
+; Evidence: 0xFE3042-0xFE305A store the five registers to 0x605D70-0x605D80;
+;           0xFE3067 `jp Disk_CommandDispatch`; 0xFE306D-0xFE3087 reload them.
+; Was sub_FE3042.
+; ---------------------------------------------------------------------
+Disk_CommandDispatch_SaveRegs:
 	ld (0x605d70:24), xix                               ; FE3042  f2 70 5d 60 64
 	ld (0x605d74:24), xiy                               ; FE3047  f2 74 5d 60 65
 	ld (0x605d78:24), xbc                               ; FE304C  f2 78 5d 60 61
@@ -152039,7 +152123,7 @@ sub_FE3042:
 	ld (0x605b0a:24), xhl                               ; FE305C  f2 0a 5b 60 63
 	ld XDE,0x00fe306b                                    ; FE3061  42 6b 30 fe 00
 	push XDE                                             ; FE3066  3a
-	jp sub_FE426E                                        ; FE3067  1b 6e 42 fe
+	jp Disk_CommandDispatch                                        ; FE3067  1b 6e 42 fe
 	ld WA,HL                                             ; FE306B  db 88
 	ld xhl, (0x605b0a:24)                               ; FE306D  e2 0a 5b 60 23
 	push XHL                                             ; FE3072  3b
@@ -152049,7 +152133,20 @@ sub_FE3042:
 	ld xiy, (0x605d74:24)                               ; FE3082  e2 74 5d 60 25
 	ld xix, (0x605d70:24)                               ; FE3087  e2 70 5d 60 24
 	ret                                                  ; FE308C  0e
-sub_FE308D:
+
+; ---------------------------------------------------------------------
+; Fdc_Request_SaveRegs -- call Fdc_Request preserving the caller's index/data
+;                         registers
+;
+; Saves XIX/XIY/XBC/XDE/XHL to the scratch block at 0x605D84, calls Fdc_Request
+; (0xFE66C7), and restores them.  Register-preserving public entry to the FDC
+; operation core; reached through Fdc_Request_SaveRegs_Entry (prom_b thunk
+; T_F42D38, 17 call sites).
+; Evidence: 0xFE308D-0xFE30A5 store the five registers to 0x605D84-0x605D94;
+;           0xFE30B2 `jp Fdc_Request` (0xFE66C7); 0xFE30B8-0xFE30D2 reload them.
+; Was sub_FE308D.
+; ---------------------------------------------------------------------
+Fdc_Request_SaveRegs:
 	ld (0x605d84:24), xix                               ; FE308D  f2 84 5d 60 64
 	ld (0x605d88:24), xiy                               ; FE3092  f2 88 5d 60 65
 	ld (0x605d8c:24), xbc                               ; FE3097  f2 8c 5d 60 61
@@ -153733,7 +153830,26 @@ sub_FE423E:
 	ret                                                  ; FE426C  0e
 .LFE426D:
 	ret                                                  ; FE426D  0e
-sub_FE426E:
+
+; ---------------------------------------------------------------------
+; Disk_CommandDispatch -- the disk module's COMMAND dispatcher (published as
+;                         prom_b thunk T_F42D34)
+;
+; Reads a command code from (XSP+0x04) and routes it through a word-offset jump
+; table (offsets at 0xFE6DFE, base 0xFE42B4) to one of ~19 handlers, each of
+; which manipulates the disk state area at 0x605Axx and issues Fdc_Request-
+; family operations.  Arguments arrive in BC (XSP+0x0a) and XDE (XSP+0x06).
+; Evidence: 0xFE42A0 `lda XIX,0xFE6DFC` + `mx_ld_rm` + `lda XIX,0xFE42B4` +
+;           `mx_jp_cc` is the TLCS-900 word-offset dispatch idiom; the command
+;           is range-checked before indexing.  Entered via
+;           Disk_CommandDispatch_SaveRegs (0xFE3042) and _Thunk (0xFE3020);
+;           T_F42D34 has 23 call sites
+;           (notes/FINDINGS-prom_a-portb-and-blockdev-entry.md §2).
+; NOT established: the semantics of the individual command handlers -- they stay
+;           sub_XXXXXX.  Naming the dispatcher does not name what it dispatches.
+; Was sub_FE426E.
+; ---------------------------------------------------------------------
+Disk_CommandDispatch:
 	ld BC,(XSP+0x0a)                                     ; FE426E  9f 0a 21
 	ld XDE,(XSP+0x06)                                    ; FE4271  af 06 22
 	ld A,(XSP+0x04)                                      ; FE4274  8f 04 21
@@ -153865,7 +153981,23 @@ sub_FE4376:
 	add (XDE),BC                                         ; FE4396  92 89
 .LFE4398:
 	ret                                                  ; FE4398  0e
-sub_FE4399:
+
+; ---------------------------------------------------------------------
+; Disk_SetRequestGeometry -- fill the shared FDC request block's geometry
+;                            fields from a logical sector number
+;
+; Points the request-block pointer (0x605D22) at the block buffer (0x605D12),
+; then converts the caller's logical sector to the block's head/track/sector
+; fields by dividing by the drive-geometry constants at 0x605D54/0x605D68/
+; 0x605D6A/0x605D98, and stores the count (+0x0a) and buffer (+0x0c) from the
+; caller's arguments (XSP+0x18 / XSP+0x1a).
+; Evidence: 0xFE43E6 and 0xFE43F2 `div ..,XBC` with XBC = (0x605D68); the
+;           quotient/remainder stores land at request-block +0x06, +0x04, +0x08
+;           (the track/head/sector fields of the Fdc_Request block).  Called
+;           only by Disk_ReadSectors (0xFE4439) and Disk_WriteSectors (0xFE445D).
+; Was sub_FE4399.
+; ---------------------------------------------------------------------
+Disk_SetRequestGeometry:
 	lda xsp, (xsp-12)                                    ; FE4399  bf f4 37
 	push XIZ                                             ; FE439C  3e
 	lda xwa, (0x605d22:24)                               ; FE439D  f2 22 5d 60 30
@@ -153918,7 +154050,19 @@ sub_FE4399:
 	pop XIZ                                              ; FE4429  5e
 	lda xsp, (xsp+0x0c)                                  ; FE442A  bf 0c 37
 	ret                                                  ; FE442D  0e
-sub_FE442E:
+
+; ---------------------------------------------------------------------
+; Disk_ReadSectors -- issue FDC operation 3 (READ SECTORS) through Fdc_Request
+;
+; Calls Disk_SetRequestGeometry to fill the shared request block, writes
+; operation 3 into the block's +0x00 (operation) word, then calls Fdc_Request.
+; Evidence: 0xFE4443 writes 0x0003 to request-block offset +0; op 3 = READ
+;           SECTORS (notes/FINDINGS-prom_a-disk-format.md §4 census).
+;           0xFE444A `call Fdc_Request`.  Reached by 15 calr sites; both facts
+;           asserted by notes/prom_a_disk_cmd_layer_checks.py.
+; Was sub_FE442E.
+; ---------------------------------------------------------------------
+Disk_ReadSectors:
 	ld XWA,(XSP+0x0a)                                    ; FE442E  af 0a 20
 	push XWA                                             ; FE4431  38
 	m_push MWD+r7, 0x0c                                  ; FE4432  9f 0c 04
@@ -153933,7 +154077,18 @@ sub_FE442E:
 	call 0xfe66c7                                        ; FE444A  1d c7 66 fe
 	lda xsp, (xsp+0x0e)                                  ; FE444E  bf 0e 37
 	ret                                                  ; FE4451  0e
-sub_FE4452:
+
+; ---------------------------------------------------------------------
+; Disk_WriteSectors -- issue FDC operation 4 (WRITE SECTORS) through Fdc_Request
+;
+; Mirror of Disk_ReadSectors: Disk_SetRequestGeometry, then operation 4 in the
+; block's +0x00 word, then Fdc_Request; returns HL = 0 on success else 0xFF.
+; Evidence: 0xFE4467 writes 0x0004 to request-block offset +0; op 4 = WRITE
+;           SECTORS (disk-format §4 census).  0xFE446E `call Fdc_Request`.
+;           Reached by 9 calr sites.  notes/prom_a_disk_cmd_layer_checks.py.
+; Was sub_FE4452.
+; ---------------------------------------------------------------------
+Disk_WriteSectors:
 	ld XWA,(XSP+0x0a)                                    ; FE4452  af 0a 20
 	push XWA                                             ; FE4455  38
 	m_push MWD+r7, 0x0c                                  ; FE4456  9f 0c 04

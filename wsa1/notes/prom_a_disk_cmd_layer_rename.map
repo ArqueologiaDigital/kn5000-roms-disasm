@@ -1,0 +1,15 @@
+# w30 disk / block-device command-layer naming (prom_a 0xFE0000-0xFE54B6)
+# format: OLD then NEW per line, separated by the sign; evidence in FINDINGS-prom_a-disk-cmd-layer.md
+sub_FE442E=Disk_ReadSectors
+sub_FE4452=Disk_WriteSectors
+sub_FE4399=Disk_SetRequestGeometry
+sub_FE0755=Disk_RequestSenseDriveStatus
+sub_FE426E=Disk_CommandDispatch
+sub_FE308D=Fdc_Request_SaveRegs
+sub_FE3032=Fdc_Request_Thunk
+sub_FE3042=Disk_CommandDispatch_SaveRegs
+sub_FE3020=Disk_CommandDispatch_Thunk
+sub_FE3018=Fdc_Request_SaveRegs_Entry
+sub_FE3004=Fdc_Request_Thunk_Entry
+sub_FE3014=Disk_CommandDispatch_SaveRegs_Entry
+sub_FE3000=Disk_CommandDispatch_Thunk_Entry
