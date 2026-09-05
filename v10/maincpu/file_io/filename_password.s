@@ -209,10 +209,10 @@ SelectMode_DetermineMode:
 	call GetCurrentSlotIndex
 	ld iz, hl
 	call FindFirstEmptySlot
-	ldb a, 0x1
+	ld a, 0x1:opc
 	cp hl, iz
 	jr nz, SelectMode_SetBothMode
-	ldb a, 0x3
+	ld a, 0x3:opc
 
 SelectMode_SetBothMode:
 	ld (0x8a0c:16), a
@@ -226,10 +226,10 @@ SelectMode_SingleMode:
 	jr SelectMode_Return
 
 SelectMode_CheckSaveOnlyMode:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cpib_erp 0xfb, 0
 	jr z, SelectMode_StoreMode
-	ldb a, 0x2
+	ld a, 0x2:opc
 
 SelectMode_StoreMode:
 	ld (xbc), a

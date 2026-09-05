@@ -110,7 +110,7 @@ EEPROM_WriteEnable:
 	pushw	de                                   ; FC89C6  push DE
 	ldw	de, 0x130                              ; FC89C7  ld DE,0x0130
 	set_dd8	5, P6                              ; FC89CA  set 5,(0x12)
-	ldb	h, 9                                   ; FC89CD  ld H,0x09
+	ld	h, 9:opc                                   ; FC89CD  ld H,0x09
 EEPROM_WriteEnable__bit:
 	ld	bc, de                                  ; FC89CF  ld BC,DE
 	and	bc, 0x100                              ; FC89D1  and BC,0x0100
@@ -146,7 +146,7 @@ EEPROM_WriteDisable:
 	pushw	de                                   ; FC89F8  push DE
 	ldw	de, 0x100                              ; FC89F9  ld DE,0x0100
 	set_dd8	5, P6                              ; FC89FC  set 5,(0x12)
-	ldb	h, 9                                   ; FC89FF  ld H,0x09
+	ld	h, 9:opc                                   ; FC89FF  ld H,0x09
 EEPROM_WriteDisable__bit:
 	ld	bc, de                                  ; FC8A01  ld BC,DE
 	and	bc, 0x100                              ; FC8A03  and BC,0x0100
@@ -189,7 +189,7 @@ EEPROM_SendReadCommand:
 	ld	de, (xiz+8)                             ; FC8A2F  ld DE,(XIZ+0x08)
 	or	de, 0x180                               ; FC8A32  or DE,0x0180
 	set_dd8	5, P6                              ; FC8A36  set 5,(0x12)
-	ldb	h, 9                                   ; FC8A39  ld H,0x09
+	ld	h, 9:opc                                   ; FC8A39  ld H,0x09
 EEPROM_SendReadCommand__bit:
 	ld	bc, de                                  ; FC8A3B  ld BC,DE
 	and	bc, 0x100                              ; FC8A3D  and BC,0x0100
@@ -237,7 +237,7 @@ EEPROM_WriteWord:
 	ld	de, (xiz+8)                             ; FC8A69  ld DE,(XIZ+0x08)
 	or	de, 0x140                               ; FC8A6C  or DE,0x0140
 	set_dd8	5, P6                              ; FC8A70  set 5,(0x12)
-	ldb	h, 9                                   ; FC8A73  ld H,0x09
+	ld	h, 9:opc                                   ; FC8A73  ld H,0x09
 EEPROM_WriteWord__cmd_bit:
 	ld	bc, de                                  ; FC8A75  ld BC,DE
 	and	bc, 0x100                              ; FC8A77  and BC,0x0100
@@ -256,7 +256,7 @@ EEPROM_WriteWord__cmd_clock:
 	cp	h, 0:i3                                   ; FC8A93  cp H,0
 	jr nz, EEPROM_WriteWord__cmd_bit           ; FC8A95  jr NZ,0xfc8a75
 	ld	ix, (xiz+10)                            ; FC8A97  ld IX,(XIZ+0x0a)
-	ldb	h, 16                                  ; FC8A9A  ld H,0x10
+	ld	h, 16:opc                                  ; FC8A9A  ld H,0x10
 EEPROM_WriteWord__data_bit:
 	ld	bc, ix                                  ; FC8A9C  ld BC,IX
 	and	bc, 0x8000                             ; FC8A9E  and BC,0x8000
@@ -275,7 +275,7 @@ EEPROM_WriteWord__data_clock:
 	cp	h, 0:i3                                   ; FC8ABA  cp H,0
 	jr nz, EEPROM_WriteWord__data_bit          ; FC8ABC  jr NZ,0xfc8a9c
 	res_dd8	5, P6                              ; FC8ABE  res 5,(0x12)
-	ldb	h, 32                                  ; FC8AC1  ld H,0x20
+	ld	h, 32:opc                                  ; FC8AC1  ld H,0x20
 EEPROM_WriteWord__cs_low_delay:
 	dec	1, h                                   ; FC8AC3  dec 1,H
 	cp	h, 0:i3                                   ; FC8AC5  cp H,0
@@ -311,7 +311,7 @@ EEPROM_ShiftIn16:
 	pushw	hl                                   ; FC8ADA  push HL
 	push	xix                                   ; FC8ADB  push XIX
 	ld	xix, 0                                  ; FC8ADC  ld XIX,0x00000000
-	ldb	h, 16                                  ; FC8AE1  ld H,0x10
+	ld	h, 16:opc                                  ; FC8AE1  ld H,0x10
 EEPROM_ShiftIn16__bit:
 	set_dd8	3, P8                              ; FC8AE3  set 3,(0x18)
 	bit_dd8	5, P8                              ; FC8AE6  bit 5,(0x18)

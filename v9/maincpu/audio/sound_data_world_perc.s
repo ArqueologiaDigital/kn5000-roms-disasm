@@ -211,12 +211,12 @@ WorldPerc_PatchEntry_032:
 WorldPerc_PatchEntry_033:
 	.byte 0x21, 0x00, 0xff
 WorldPerc_PatchEntry_034:
-	ldb b, 0
+	ld b, 0:opc
 	swi	7
 WorldPerc_PatchEntry_035:
 	.byte 0x23, 0x00, 0xff
 WorldPerc_PatchEntry_036:
-	ldb d, 0
+	ld d, 0:opc
 	swi 7
 WorldPerc_PatchEntry_037:	aligned_string "%"
 WorldPerc_PatchEntry_038:

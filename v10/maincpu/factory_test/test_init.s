@@ -292,7 +292,7 @@ RunTestCounters_RunTest:
 	incw 1, (0x03dd00:24)
 	jr RunTestCounters_Display
 RunTestCounters_BadStatus:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	ret
 RunTestCounters_IncrNG:
 	incw 1, (0x03dd02:24)

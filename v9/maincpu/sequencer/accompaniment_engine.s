@@ -189,20 +189,20 @@ AccStyle_DetectChanges_Init:
 	and a, 0xfc
 	jr z, AccStyle_DetectChanges_QueueDone
 	and (0xfc5f:16), 3
-	ldb a, 0x0
-	ldb w, 0x0
-	ldb d, 0x5
-	ldb e, 0x48
+	ld a, 0x0:opc
+	ld w, 0x0:opc
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	call Rhythm_QueuePartChangeEvent
 
 AccStyle_DetectChanges_QueueDone:
 	bit 2, (0xfc60:16)
 	jr z, AccStyle_DetectChanges_MarkDirty
 	and (0xfc60:16), 251
-	ldb a, 0x0
-	ldb w, 0x0
-	ldb d, 0x6
-	ldb e, 0x48
+	ld a, 0x0:opc
+	ld w, 0x0:opc
+	ld d, 0x6:opc
+	ld e, 0x48:opc
 	call Rhythm_QueuePartChangeEvent
 
 AccStyle_DetectChanges_MarkDirty:
@@ -393,7 +393,7 @@ AccStyle_ApplyStandardStyle:
 AccStyle_ApplyStd_LoadTuning:
 	calr AccStyle_SetupPartAddresses
 	ld a, (0x32a3:16)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	calr AccPart_GetVoiceParamOffsetTable
 	call AccVoice_LoadTuningBlock
 	or (0x332c:16), 63
@@ -492,10 +492,10 @@ AccStyle_ApplyExt_CheckSplit:
 	jr z, AccStyle_ApplyExt_SelectPart
 	and (0x32ff:16), 253
 	and (0xfc5f:16), 247
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	jr Seq_ProcessAndContinue
 
@@ -507,10 +507,10 @@ AccStyle_ApplyExt_CheckBit0:
 	jr z, AccStyle_ApplyExt_UseSecondary
 	and (0x32ff:16), 254
 	and (0xfc5f:16), 251
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	jr Seq_ProcessAndContinue
 
@@ -520,10 +520,10 @@ AccStyle_ApplyExt_CheckBit1:
 	jr z, AccStyle_ApplyExt_UseSecondary
 	and (0x32ff:16), 251
 	and (0xfc60:16), 251
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	jr Seq_ProcessAndContinue
 
@@ -571,10 +571,10 @@ AccVoice_SelectPartOffset_Resolved:
 
 AccVoice_SelectPartOffset_Bound:
 	ld a, (0x32a3:16)
-	ldb w, 0x3
+	ld w, 0x3:opc
 	bit 2, (0x32ff:16)
 	jr z, AccVoice_SelectPartOffset_SetModeW
-	ldb w, 0x4
+	ld w, 0x4:opc
 
 AccVoice_SelectPartOffset_SetModeW:
 	calr AccPart_GetVoiceParamOffsetTable
@@ -719,9 +719,9 @@ AccBuf_InitKbd1WithMarkers:
 	ret
 
 Rhythm_SendResetMsg:
-	ldb a, 0xd8
-	ldb w, 0x10
-	ldb e, 0x0
+	ld a, 0xd8:opc
+	ld w, 0x10:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 	ret
 
@@ -759,8 +759,8 @@ Rhythm_LookupTuningRange:
 	jr Rhythm_StoreTuningRange
 
 Rhythm_LookupTuning_DefaultRange:
-	ldb a, 0x39
-	ldb w, 0x39
+	ld a, 0x39:opc
+	ld w, 0x39:opc
 
 Rhythm_StoreTuningRange:
 	ld (0x333f:16), a
@@ -801,7 +801,7 @@ AccVoice_ParamIndexData:
 	.byte 0x83, 0xc3
 	reti
 	.byte 0xf4, 0xec
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	swi	7
 	jr	nz, 12
@@ -930,7 +930,7 @@ AccPart_VoiceParamOffsets_BaseA:
 	jr	le, 0
 	ld_spdb h, 0
 	normal
-	ldb	h, 5
+	ld	h, 5:opc
 	.byte 0x57, 0x01, 0x57
 	halt
 AccPart_VoiceParamOffsets_BaseB:
@@ -938,8 +938,8 @@ AccPart_VoiceParamOffsets_BaseB:
 	nop
 	.byte 0xf5
 	nop
-	ldb	h, 1
-	ldb	h, 5
+	ld	h, 1:opc
+	ld	h, 5:opc
 	.byte 0x57, 0x01, 0x57
 	halt
 AccPart_VoiceParamOffsets_ChordA:
@@ -947,15 +947,15 @@ AccPart_VoiceParamOffsets_ChordA:
 	max
 	jr	le, 4
 	.byte 0xc4, 0x04
-	ldb	h, 1
-	ldb	h, 5
+	ld	h, 1:opc
+	ld	h, 5:opc
 	.byte 0x57, 0x01, 0x57
 	halt
 AccPart_VoiceParamOffsets_ChordB:
 	ldw	bc, 0x9304
 	.byte 0x04, 0xf5, 0x04
-	ldb	h, 1
-	ldb	h, 5
+	ld	h, 1:opc
+	ld	h, 5:opc
 	.byte 0x57, 0x01, 0x57
 	halt
 
@@ -1227,7 +1227,7 @@ AccVoice_ProcessAllSixParts:
 AccVoice_SavePartState1:
 	and (0x32f4:16), 252
 	ld (0x32ed:16), 0
-	ldb a, 0x1
+	ld a, 0x1:opc
 	ld (0x33d4:16), a
 	ld wa, (0x3297:16)
 	ld (0x33d6:16), wa
@@ -1596,7 +1596,7 @@ AccVoice_ActivateByteData:
 	jr	nz, 43
 	.byte 0xf1, 0x01
 	ldw	hl, 0x66c8
-	ldb	e, 193
+	ld	e, 193:opc
 	ret
 	ldw	hl, 0xfc3c
 	.byte 0xc1
@@ -1727,7 +1727,7 @@ AccPart_ResolveWithPedal_Return:
 AccPart_LoadParamOffsetTable:
 	ld xiy, (0x32ce:16)
 	ld a, (0x33d5:16)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	call AccPart_GetVoiceParamOffsetTable
 	calr AccPart_LoadTuningByChannel
 	ret
@@ -2045,7 +2045,7 @@ AccMidi_DispatchReturn:
 AccMidi_NormalizeVelocity:
 	cp a, 0:i3
 	jr nz, AccMidi_VelNonZero
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccMidi_VelNonZero:
 	ld e, a
@@ -2219,7 +2219,7 @@ AccBuf_WriteNoteEvent:
 	ld a, (0x3431:16)
 	cp a, 0:i3
 	jr nz, AccBuf_WriteNote_VelNonZero
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccBuf_WriteNote_VelNonZero:
 	stb_dri A, 0x07, 0xec, 0xf4
@@ -2260,7 +2260,7 @@ AccTempo_PositionCompare:
 	jr nz, AccTempo_DiffBar
 	cp bc, de
 	jr c, AccTempo_SameBar
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr AccTempo_Return
 
 AccTempo_SameBar:
@@ -2268,7 +2268,7 @@ AccTempo_SameBar:
 	ld a, e
 	cp d, 0:i3
 	jr z, AccTempo_Return
-	ldb a, 0x60
+	ld a, 0x60:opc
 	jr AccTempo_Return
 
 AccTempo_DiffBar:
@@ -2287,7 +2287,7 @@ AccTempo_BarZero:
 	jr z, AccTempo_ComputeDelta
 
 AccTempo_TooFar:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr AccTempo_Return
 
 AccTempo_ComputeDelta:
@@ -2300,7 +2300,7 @@ AccTempo_ComputeDelta:
 	ld a, e
 	cp d, 0:i3
 	jr z, AccTempo_Return
-	ldb a, 0x60
+	ld a, 0x60:opc
 
 AccTempo_Return:
 	ret
@@ -2324,7 +2324,7 @@ AccKbd1_ProcessReturn:
 	ret
 
 AccKbd1_TimingCheck:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld w, (0x33db:16)
 	calr AccVoice_LookupTableAddress
 	ld bc, (0x327d:16)
@@ -2337,7 +2337,7 @@ AccKbd1_TimingCheck:
 
 AccKbd1_TimingOK:
 	ld (0x343c:16), a
-	ldb a, 0x5f
+	ld a, 0x5f:opc
 	ld w, (1112:16)
 	dec 1, w
 	calr AccVoice_LookupTableAddress
@@ -2435,7 +2435,7 @@ AccBuf_NoteEvent_WrapPos:
 	add w, (1124:16)
 	sub a, w
 	jr pl, AccBuf_NoteEvent_StoreTiming
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 AccBuf_NoteEvent_StoreTiming:
 	xor w, w
@@ -2487,7 +2487,7 @@ AccKbd2_ProcessEntry:
 AccKbd2_SaveState:
 	and (0x32f4:16), 252
 	ld (0x32ed:16), 0
-	ldb a, 0x2
+	ld a, 0x2:opc
 	ld (0x33d4:16), a
 	ld wa, (0x3299:16)
 	ld (0x33d6:16), wa
@@ -2698,7 +2698,7 @@ AccSeq_ResetToStart:
 AccSeq_ParseNoteEvent:
 	cp a, 0:i3
 	jr nz, AccSeq_ParseNote_VelNonZero
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccSeq_ParseNote_VelNonZero:
 	ld e, a
@@ -2714,10 +2714,10 @@ AccSeq_ParseNote_VelNonZero:
 	ld a, (xhl)
 	ld (0x3430:16), a
 	calr AccSeq_AdvancePointer
-	ldb a, 0x1
+	ld a, 0x1:opc
 	ld (0x3431:16), a
 	calr AccSeq_AdvancePointer
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x3432:16), a
 	calr AccSeq_AdvancePointer
 	ld a, (0x379b:16)
@@ -2756,7 +2756,7 @@ AccCh1_ProcessEntry:
 AccCh1_SaveState:
 	and (0x32f4:16), 252
 	ld (0x32ed:16), 0
-	ldb a, 0x4
+	ld a, 0x4:opc
 	ld (0x33d4:16), a
 	ld wa, (0x329b:16)
 	ld (0x33d6:16), wa
@@ -2825,8 +2825,8 @@ AccVoice_ScanDone:
 AccVoice_SendProgChange:
 	cp (0x33d4:16), 4
 	jr nz, AccVoice_SendD4
-	ldb a, 0xd7
-	ldb w, 0x3
+	ld a, 0xd7:opc
+	ld w, 0x3:opc
 	ld e, (0x3333:16)
 	ld (0x332f:16), e
 	call Rhythm_Send3ByteMsg
@@ -2835,8 +2835,8 @@ AccVoice_SendProgChange:
 AccVoice_SendD4:
 	cp (0x33d4:16), 8
 	jr nz, AccVoice_SendD5
-	ldb a, 0xd4
-	ldb w, 0x3
+	ld a, 0xd4:opc
+	ld w, 0x3:opc
 	ld e, (0x3333:16)
 	ld (0x3330:16), e
 	call Rhythm_Send3ByteMsg
@@ -2845,16 +2845,16 @@ AccVoice_SendD4:
 AccVoice_SendD5:
 	cp (0x33d4:16), 16
 	jr nz, AccVoice_SendD6
-	ldb a, 0xd5
-	ldb w, 0x3
+	ld a, 0xd5:opc
+	ld w, 0x3:opc
 	ld e, (0x3333:16)
 	ld (0x3331:16), e
 	call Rhythm_Send3ByteMsg
 	jr AccCh_ReturnStub
 
 AccVoice_SendD6:
-	ldb a, 0xd6
-	ldb w, 0x3
+	ld a, 0xd6:opc
+	ld w, 0x3:opc
 	ld e, (0x3333:16)
 	ld (0x3332:16), e
 	call Rhythm_Send3ByteMsg
@@ -2949,7 +2949,7 @@ AccBuf_WriteExtendedEvent:
 	ld a, (0x3431:16)
 	cp a, 0:i3
 	jr nz, AccBuf_ExtEvt_VelNonZero
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccBuf_ExtEvt_VelNonZero:
 	stb_dri A, 0x07, 0xec, 0xf4
@@ -3095,12 +3095,12 @@ AccCh1_DTypeReturn:
 	ret
 
 AccCh_CheckOverlap:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bit 2, (0x34cf:16)
 	jr z, AccCh_OverlapReturn
 	bit 3, (0x379b:16)
 	jr z, AccCh_OverlapReturn
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccCh_OverlapReturn:
 	ret
@@ -3204,7 +3204,7 @@ AccCh2_ProcessEntry:
 AccCh2_SaveState:
 	and (0x32f4:16), 252
 	ld (0x32ed:16), 0
-	ldb a, 0x8
+	ld a, 0x8:opc
 	ld (0x33d4:16), a
 	ld wa, (0x329d:16)
 	ld (0x33d6:16), wa
@@ -3300,12 +3300,12 @@ AccCh2_DTypeReturn:
 	ret
 
 AccCh2_CheckOverlap:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bit 2, (0x34cf:16)
 	jr z, AccCh2_OverlapReturn
 	bit 0, (0x379b:16)
 	jr z, AccCh2_OverlapReturn
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccCh2_OverlapReturn:
 	ret
@@ -3379,7 +3379,7 @@ AccCh3_ProcessEntry:
 AccCh3_SaveState:
 	and (0x32f4:16), 252
 	ld (0x32ed:16), 0
-	ldb a, 0x10
+	ld a, 0x10:opc
 	ld (0x33d4:16), a
 	ld wa, (0x329f:16)
 	ld (0x33d6:16), wa
@@ -3475,12 +3475,12 @@ AccCh3_DTypeReturn:
 	ret
 
 AccCh3_CheckOverlap:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bit 2, (0x34cf:16)
 	jr z, AccCh3_OverlapReturn
 	bit 1, (0x379b:16)
 	jr z, AccCh3_OverlapReturn
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccCh3_OverlapReturn:
 	ret
@@ -3554,7 +3554,7 @@ AccCh4_ProcessEntry:
 AccCh4_SaveState:
 	and (0x32f4:16), 252
 	ld (0x32ed:16), 0
-	ldb a, 0x20
+	ld a, 0x20:opc
 	ld (0x33d4:16), a
 	ld wa, (0x32a1:16)
 	ld (0x33d6:16), wa
@@ -3650,12 +3650,12 @@ AccCh4_DTypeReturn:
 	ret
 
 AccCh4_CheckOverlap:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bit 2, (0x34cf:16)
 	jr z, AccCh4_OverlapReturn
 	bit 2, (0x379b:16)
 	jr z, AccCh4_OverlapReturn
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccCh4_OverlapReturn:
 	ret
@@ -3969,22 +3969,22 @@ AccVoice_InitCh1_D7:
 	push xiy
 	ld xhl, 0x2c94
 	calr AccBuf_DrainAndReset
-	ldb a, 0xd7
-	ldb w, 0x2
-	ldb e, 0x40
+	ld a, 0xd7:opc
+	ld w, 0x2:opc
+	ld e, 0x40:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd7
-	ldb w, 0x1
-	ldb e, 0x0
+	ld a, 0xd7:opc
+	ld w, 0x1:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd7
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd7:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 	ld (0x332f:16), 0
-	ldb a, 0xd7
-	ldb w, 0x5
-	ldb e, 0x7f
+	ld a, 0xd7:opc
+	ld w, 0x5:opc
+	ld e, 0x7f:opc
 	call Rhythm_Send3ByteMsg
 	pop xiy
 	popw hl
@@ -4011,22 +4011,22 @@ AccVoice_InitCh2_D4:
 	push xiy
 	ld xhl, 0x2d94
 	calr AccBuf_DrainAndReset
-	ldb a, 0xd4
-	ldb w, 0x2
-	ldb e, 0x40
+	ld a, 0xd4:opc
+	ld w, 0x2:opc
+	ld e, 0x40:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd4
-	ldb w, 0x1
-	ldb e, 0x0
+	ld a, 0xd4:opc
+	ld w, 0x1:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd4
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd4:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 	ld (0x3330:16), 0
-	ldb a, 0xd4
-	ldb w, 0x5
-	ldb e, 0x7f
+	ld a, 0xd4:opc
+	ld w, 0x5:opc
+	ld e, 0x7f:opc
 	call Rhythm_Send3ByteMsg
 	pop xiy
 	popw hl
@@ -4037,22 +4037,22 @@ AccVoice_InitCh3_D5:
 	push xiy
 	ld xhl, 0x2e94
 	calr AccBuf_DrainAndReset
-	ldb a, 0xd5
-	ldb w, 0x2
-	ldb e, 0x40
+	ld a, 0xd5:opc
+	ld w, 0x2:opc
+	ld e, 0x40:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd5
-	ldb w, 0x1
-	ldb e, 0x0
+	ld a, 0xd5:opc
+	ld w, 0x1:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd5
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd5:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 	ld (0x3331:16), 0
-	ldb a, 0xd5
-	ldb w, 0x5
-	ldb e, 0x7f
+	ld a, 0xd5:opc
+	ld w, 0x5:opc
+	ld e, 0x7f:opc
 	call Rhythm_Send3ByteMsg
 	pop xiy
 	popw hl
@@ -4063,22 +4063,22 @@ AccVoice_InitCh4_D6:
 	push xiy
 	ld xhl, 0x2f94
 	calr AccBuf_DrainAndReset
-	ldb a, 0xd6
-	ldb w, 0x2
-	ldb e, 0x40
+	ld a, 0xd6:opc
+	ld w, 0x2:opc
+	ld e, 0x40:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd6
-	ldb w, 0x1
-	ldb e, 0x0
+	ld a, 0xd6:opc
+	ld w, 0x1:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
-	ldb a, 0xd6
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd6:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 	ld (0x3332:16), 0
-	ldb a, 0xd6
-	ldb w, 0x5
-	ldb e, 0x7f
+	ld a, 0xd6:opc
+	ld w, 0x5:opc
+	ld e, 0x7f:opc
 	call Rhythm_Send3ByteMsg
 	pop xiy
 	popw hl
@@ -4236,7 +4236,7 @@ AccTempo_BarGreater:
 	jr nz, AccTempo_ComputeSubDelta
 
 AccTempo_BarChanged:
-	ldb a, 0x1
+	ld a, 0x1:opc
 	jr AccTempo_StoreDelta
 
 AccTempo_ComputeSubDelta:
@@ -4260,7 +4260,7 @@ AccSeq_DualPartScan:
 	ld (0x33db:16), a
 	ld iz, (0x3297:16)
 	ld (0x33d6:16), iz
-	ldb w, 0x1
+	ld w, 0x1:opc
 	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ld wa, (0x33d6:16)
@@ -4280,7 +4280,7 @@ AccSeq_DualPartScan:
 	ld (0x33db:16), a
 	ld iz, (0x3299:16)
 	ld (0x33d6:16), iz
-	ldb w, 0x2
+	ld w, 0x2:opc
 	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ld wa, (0x33d6:16)
@@ -4456,7 +4456,7 @@ AccSeq_FourChannelScan:
 	ld (0x33db:16), a
 	ld iz, (0x329b:16)
 	ld (0x33d6:16), iz
-	ldb w, 0x4
+	ld w, 0x4:opc
 	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ld wa, (0x33d6:16)
@@ -4478,7 +4478,7 @@ AccSeq_FourChannelScan:
 	ld (0x33db:16), a
 	ld iz, (0x329d:16)
 	ld (0x33d6:16), iz
-	ldb w, 0x8
+	ld w, 0x8:opc
 	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ld wa, (0x33d6:16)
@@ -4500,7 +4500,7 @@ AccSeq_FourChannelScan:
 	ld (0x33db:16), a
 	ld iz, (0x329f:16)
 	ld (0x33d6:16), iz
-	ldb w, 0x10
+	ld w, 0x10:opc
 	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ld wa, (0x33d6:16)
@@ -4522,7 +4522,7 @@ AccSeq_FourChannelScan:
 	ld (0x33db:16), a
 	ld iz, (0x32a1:16)
 	ld (0x33d6:16), iz
-	ldb w, 0x20
+	ld w, 0x20:opc
 	calr AccVoice_SelectByMask
 	calr AccSeq_PatternScanner
 	ld wa, (0x33d6:16)
@@ -4556,7 +4556,7 @@ AccStyle_Init:
 	ld (0x32ce:16), xiy
 	call Rhythm_UpdateTuningConfig
 	ld a, (0x32a3:16)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	call AccPart_GetVoiceParamOffsetTable
 	call AccVoice_LoadTuningBlock
 	or (0x332c:16), 63
@@ -4805,10 +4805,10 @@ AccVoice_Reset_LoadParams:
 
 AccVoice_Reset_Extended:
 	ld a, (0x32a3:16)
-	ldb w, 0x3
+	ld w, 0x3:opc
 	bit 3, (0x330a:16)
 	jr z, AccVoice_Reset_SetMode
-	ldb w, 0x4
+	ld w, 0x4:opc
 
 AccVoice_Reset_SetMode:
 	call AccPart_GetVoiceParamOffsetTable
@@ -4882,10 +4882,10 @@ AccVoice_Reassign:
 	cp a, (0x3364:16)
 	jr z, AccVoice_Reassign_MatchA
 	and (0xfc5f:16), 251
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_Reassign_Apply
@@ -4903,10 +4903,10 @@ AccVoice_Reassign_Mode2:
 	bit_dri 1, 0x03, 0xec, 0xe0
 	jr z, AccVoice_Reassign_Fallback
 	and (0xfc5f:16), 247
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_Reassign_Apply
@@ -4918,10 +4918,10 @@ AccVoice_Reassign_Mode3:
 	cp a, (0x3366:16)
 	jr z, AccVoice_Reassign_MatchB
 	and (0xfc60:16), 251
-	ldb e, 0x48
-	ldb d, 0x6
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x6:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_Reassign_Apply
@@ -4983,7 +4983,7 @@ AccVoice_Split_LoadAndApply:
 
 AccVoice_Split_StyleMode:
 	ld a, (0x32a3:16)
-	ldb w, 0x2
+	ld w, 0x2:opc
 	call AccPart_GetVoiceParamOffsetTable
 	call AccVoice_LoadTuningBlock
 
@@ -5035,10 +5035,10 @@ AccVoice_SplitReassign:
 	cp a, (0x3368:16)
 	jr z, AccVoice_SplitReassign_MatchFwd
 	and (0xfc5f:16), 191
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_SplitReassign_Apply
@@ -5055,10 +5055,10 @@ AccVoice_SplitReassign_Reverse:
 	cp a, (0x336a:16)
 	jr z, AccVoice_SplitReassign_MatchRev
 	and (0xfc5f:16), 127
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_SplitReassign_Apply
@@ -5168,10 +5168,10 @@ AccVoice_ThirdLayer_LoadParams:
 
 AccVoice_ThirdLayer_StyleMode:
 	ld a, (0x32a3:16)
-	ldb w, 0x5
+	ld w, 0x5:opc
 	bit 1, (0x330b:16)
 	jr z, AccVoice_ThirdLayer_SetModeW
-	ldb w, 0x6
+	ld w, 0x6:opc
 
 AccVoice_ThirdLayer_SetModeW:
 	call AccPart_GetVoiceParamOffsetTable
@@ -5219,10 +5219,10 @@ AccVoice_ThirdLayerReassign:
 	cp a, (0x336c:16)
 	jr z, AccVoice_ThirdReassign_MatchFwd
 	and (0xfc5f:16), 239
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_ThirdReassign_Apply
@@ -5239,10 +5239,10 @@ AccVoice_ThirdReassign_Reverse:
 	cp a, (0x336e:16)
 	jr z, AccVoice_ThirdReassign_MatchRev
 	and (0xfc5f:16), 223
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb w, 0x0
-	ldb a, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld w, 0x0:opc
+	ld a, 0x0:opc
 	call Rhythm_QueuePartChangeEvent
 	ld xiy, (0x32ce:16)
 	jr AccVoice_ThirdReassign_Apply
@@ -5266,7 +5266,7 @@ AccBuf_WriteAllNotesOff:
 	ld a, (0x32ea:16)
 	ld (0x342e:16), a
 	call RhythmAccent_UpdateRingBufPosition
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	stb_dri A, 0x07, 0xec, 0xf4
 	call RingBuf_AdvanceIndex
 	stb_dri A, 0x07, 0xec, 0xf4
@@ -5682,7 +5682,7 @@ AccVoice_SetupByteData:
 	ret
 	.byte 0xc3, 0xf5, 0xd1
 	pop	sr
-	ldb	a, 241
+	ld	a, 241:opc
 	.byte 0x85
 	ldw	de, 0xf141
 	.byte 0xd4
@@ -5867,7 +5867,7 @@ AccBuf_ResetOnePosition:
 	ret
 
 AccBuf_ResetByteData:
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	xhl, 0x30f4
 	xor	iy, iy
 	st_rrb a, xhl, iy
@@ -5900,7 +5900,7 @@ AccNote_FlushAll:
 	jr z, AccNote_FlushReturn
 	call RhythmPart_CopyData
 	call RhythmPart1_ProcessAccentData
-	ldb a, 0x1
+	ld a, 0x1:opc
 	ld (0x32ec:16), a
 	call RhythmPart2_ProcessAccentData
 	call AccVoice_LoadRhythmParams_Part3
@@ -5912,7 +5912,7 @@ AccNote_FlushReturn:
 	ret
 
 AccTempo_CalcPosition:
-	ldb a, 0x5f
+	ld a, 0x5f:opc
 	ld w, (1112:16)
 	dec 1, w
 	call AccVoice_LookupTableAddress
@@ -6210,31 +6210,31 @@ AccTuning_ApplyChange_SelectMode:
 	jr AccTuning_Mode_None
 
 AccTuning_Mode_078:
-	ldb w, 0x3
+	ld w, 0x3:opc
 	jr AccTuning_ApplyVoice
 
 AccTuning_Mode_080:
-	ldb w, 0x4
+	ld w, 0x4:opc
 	jr AccTuning_ApplyVoice
 
 AccTuning_Mode_076:
-	ldb w, 0x5
+	ld w, 0x5:opc
 	jr AccTuning_ApplyVoice
 
 AccTuning_Mode_077:
-	ldb w, 0x6
+	ld w, 0x6:opc
 	jr AccTuning_ApplyVoice
 
 AccTuning_Mode_074:
-	ldb w, 0x2
+	ld w, 0x2:opc
 	jr AccTuning_ApplyVoice
 
 AccTuning_Mode_149:
-	ldb w, 0x1
+	ld w, 0x1:opc
 	jr AccTuning_ApplyVoice
 
 AccTuning_Mode_None:
-	ldb w, 0x0
+	ld w, 0x0:opc
 
 AccTuning_ApplyVoice:
 	ld a, (0x32a3:16)
@@ -6325,13 +6325,13 @@ AccTuning_DisableReturn:
 
 AccTuning_LEDOn:
 	ld (0x3390:16), 1
-	ldb a, 0x4a
+	ld a, 0x4a:opc
 	call CtrlPanel_SetIndicatorBit
 	ret
 
 AccTuning_LEDOff:
 	ld (0x3390:16), 0
-	ldb a, 0x4a
+	ld a, 0x4a:opc
 	call CtrlPanel_SetIndicatorBit
 	ret
 
@@ -6559,10 +6559,10 @@ AccPedal_Sustain_CheckPlay:
 	cp (3429:16), 0
 	jr z, AccPedal_Sustain_PlayJump
 	call AccPedal_ScanVoiceSlots
-	ldb a, 0x86
+	ld a, 0x86:opc
 	bit 1, (3411:16)
 	jr nz, AccPedal_Sustain_WriteTempo
-	ldb a, 0x85
+	ld a, 0x85:opc
 
 AccPedal_Sustain_WriteTempo:
 	calr AccTempo_WriteStopMarker
@@ -6650,11 +6650,11 @@ AccPedal_StyleCheck_Match120:
 	jr AccPedal_StyleCheck_Ineligible
 
 AccPedal_StyleCheck_Eligible:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr AccPedal_StyleCheckReturn
 
 AccPedal_StyleCheck_Ineligible:
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 AccPedal_StyleCheckReturn:
 	ret
@@ -6666,7 +6666,7 @@ AccPedal_ExprToggle:
 	and a, (0x347f:16)
 	bit 1, a
 	jr z, AccPedal_ExprReturn
-	ldb a, 0x2
+	ld a, 0x2:opc
 	xor (0xfc5f:16), a
 	cp (0x90f8:16), 255
 	jr z, AccPedal_ExprReturn
@@ -6745,8 +6745,8 @@ AccPedal_SendEvents:
 	and a, (0x3481:16)
 	cp a, 0:i3
 	jr z, AccPedal_SendEvents_Group2
-	ldb b, 0x5
-	ldb c, 0x48
+	ld b, 0x5:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3480:16)
 	call MIDI_TransmitTempoCC
@@ -6757,8 +6757,8 @@ AccPedal_SendEvents_Group2:
 	and a, (0x3485:16)
 	cp a, 0:i3
 	jr z, AccPedal_SendEvents_OnSustain
-	ldb b, 0x6
-	ldb c, 0x48
+	ld b, 0x6:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3484:16)
 	call MIDI_TransmitTempoCC
@@ -6768,8 +6768,8 @@ AccPedal_SendEvents_OnSustain:
 	and a, (0x3481:16)
 	cp a, 0:i3
 	jr z, AccPedal_SendEvents_OnExpr
-	ldb b, 0x5
-	ldb c, 0x48
+	ld b, 0x5:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3480:16)
 	call MIDI_TransmitTempoCC
@@ -6779,8 +6779,8 @@ AccPedal_SendEvents_OnExpr:
 	and a, (0x3485:16)
 	cp a, 0:i3
 	jr z, AccPedal_SendEventsReturn
-	ldb b, 0x6
-	ldb c, 0x48
+	ld b, 0x6:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3484:16)
 	call MIDI_TransmitTempoCC
@@ -7043,7 +7043,7 @@ AccPedal_SendCtrl1:
 	jr z, AccPedal_SendCtrl1_Return
 	bit 3, (0xfd56:16)
 	jr z, AccPedal_SendCtrl1_CheckPort
-	ldb b, 0x5
+	ld b, 0x5:opc
 	ld d, a
 	ld e, (0x3482:16)
 	ld xix, 0x38e8
@@ -7069,8 +7069,8 @@ AccPedal_SendCtrl1_UpdateMask:
 	ld a, (0x3482:16)
 	xor a, 0xff
 	and a, (0x3483:16)
-	ldb b, 0x5
-	ldb c, 0x48
+	ld b, 0x5:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3482:16)
 	call MIDI_DispatchCC
@@ -7086,7 +7086,7 @@ AccPedal_SendCtrl2:
 	jr z, AccPedal_SendCtrl2_Return
 	bit 3, (0xfd56:16)
 	jr z, AccPedal_SendCtrl2_CheckPort
-	ldb b, 0x6
+	ld b, 0x6:opc
 	ld d, a
 	ld e, (0x3486:16)
 	ld xix, 0x38e8
@@ -7112,8 +7112,8 @@ AccPedal_SendCtrl2_UpdateMask:
 	ld a, (0x3486:16)
 	xor a, 0xff
 	and a, (0x3487:16)
-	ldb b, 0x6
-	ldb c, 0x48
+	ld b, 0x6:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3486:16)
 	call MIDI_DispatchCC
@@ -7128,7 +7128,7 @@ AccPedal_SendCtrl3:
 	jr z, AccPedal_SendCtrl3_Return
 	bit 3, (0xfd56:16)
 	jr z, AccPedal_SendCtrl3_CheckPort
-	ldb b, 0x5
+	ld b, 0x5:opc
 	ld d, a
 	ld e, (0x3482:16)
 	ld xix, 0x38e8
@@ -7153,8 +7153,8 @@ AccPedal_SendCtrl3_CheckPort:
 AccPedal_SendCtrl3_UpdateMask:
 	ld a, (0x3482:16)
 	and a, (0x3483:16)
-	ldb b, 0x5
-	ldb c, 0x48
+	ld b, 0x5:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3482:16)
 	call MIDI_DispatchCC
@@ -7169,7 +7169,7 @@ AccPedal_SendCtrl4:
 	jr z, AccPedal_SendCtrl4_Return
 	bit 3, (0xfd56:16)
 	jr z, AccPedal_SendCtrl4_CheckPort
-	ldb b, 0x6
+	ld b, 0x6:opc
 	ld d, a
 	ld e, (0x3486:16)
 	ld xix, 0x38e8
@@ -7194,8 +7194,8 @@ AccPedal_SendCtrl4_CheckPort:
 AccPedal_SendCtrl4_UpdateMask:
 	ld a, (0x3486:16)
 	and a, (0x3487:16)
-	ldb b, 0x6
-	ldb c, 0x48
+	ld b, 0x6:opc
+	ld c, 0x48:opc
 	ld d, a
 	ld e, (0x3486:16)
 	call MIDI_DispatchCC
@@ -7881,7 +7881,7 @@ AccAutoPlay_NoteDispatch_Return:
 	ret
 
 AccAutoPlay_SplitDetect:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	cpw (0x28a8:16), 0
 	jr z, AccAutoPlay_SplitDetect_Check
 	bit 3, (0x28b3:16)
@@ -7899,11 +7899,11 @@ AccAutoPlay_SplitDetect_Check:
 	pop_a
 	cp l, a
 	jr c, AccAutoPlay_SplitDetect_Upper
-	ldb c, 0x1
+	ld c, 0x1:opc
 	jr AccAutoPlay_SplitDetect_Return
 
 AccAutoPlay_SplitDetect_Upper:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	jr AccAutoPlay_SplitDetect_Return
 
 AccAutoPlay_SplitDetect_Process:
@@ -7920,7 +7920,7 @@ AccAutoPlay_SplitDetect_Process:
 	and l, 0xf
 	cp l, w
 	jr nz, AccAutoPlay_SplitDetect_Apply
-	ldb c, 0x1
+	ld c, 0x1:opc
 	jr AccAutoPlay_SplitDetect_Return
 
 AccAutoPlay_SplitDetect_Lower:
@@ -7929,11 +7929,11 @@ AccAutoPlay_SplitDetect_Lower:
 	pop_a
 	cp l, a
 	jr c, AccAutoPlay_SplitDetect_Apply
-	ldb c, 0x1
+	ld c, 0x1:opc
 	jr AccAutoPlay_SplitDetect_Return
 
 AccAutoPlay_SplitDetect_Apply:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	jr AccAutoPlay_SplitDetect_Return
 
 AccAutoPlay_SplitDetect_NoSplit:
@@ -7944,7 +7944,7 @@ AccAutoPlay_SplitDetect_NoSplit:
 	and l, 0xf
 	cp l, w
 	jr nz, AccAutoPlay_SplitDetect_Store
-	ldb c, 0x1
+	ld c, 0x1:opc
 	jr AccAutoPlay_SplitDetect_Return
 
 AccAutoPlay_SplitDetect_Store:
@@ -7954,7 +7954,7 @@ AccAutoPlay_SplitDetect_Store:
 	and l, 0xf
 	cp l, w
 	jr nz, AccAutoPlay_SplitDetect_Return
-	ldb c, 0x1
+	ld c, 0x1:opc
 
 AccAutoPlay_SplitDetect_Return:
 	ret
@@ -7982,24 +7982,24 @@ AccAutoPlay_ZoneTrack_Apply:
 	ld wa, (xix + 2)
 	cp wa, 0:i3
 	jr nz, AccAutoPlay_ZoneTrack_Check
-	ldb l, 0x80
+	ld l, 0x80:opc
 	jr AccAutoPlay_ZoneTrack_Store
 
 AccAutoPlay_ZoneTrack_Check:
 	cp wa, 1:i3
 	jr nz, AccAutoPlay_ZoneTrack_Upper
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr AccAutoPlay_ZoneTrack_Store
 
 AccAutoPlay_ZoneTrack_Upper:
-	ldb l, 0xf0
+	ld l, 0xf0:opc
 
 AccAutoPlay_ZoneTrack_Store:
 	ld w, l
 	calr AccAutoPlay_ZoneTrack_SetFlag
 	ldw (0x38e8:16), 0
 	ld bc, (xix + 256)
-	ldb e, 0x5
+	ld e, 0x5:opc
 
 AccAutoPlay_ZoneTrack_Clear:
 	cp bc, 0:i3
@@ -8019,7 +8019,7 @@ AccAutoPlay_ZoneTrack_Default:
 	ret
 
 AccAutoPlay_ZoneTrack_SetFlag:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	bit 7, w
 	jr z, AccAutoPlay_ZoneTrack_Done
 	calr AccAutoPlay_ModeAvail
@@ -8032,7 +8032,7 @@ AccAutoPlay_ZoneTrack_Done:
 	jr AccAutoPlay_ZoneTrack_Return2
 
 AccAutoPlay_ZoneTrack_Final:
-	ldb l, 0x7f
+	ld l, 0x7f:opc
 
 AccAutoPlay_ZoneTrack_Return2:
 	ret
@@ -8143,7 +8143,7 @@ AccAutoPlay_ModeAvail:
 	dec 1, l
 	cp l, 0xff
 	jr nz, AccAutoPlay_ModeAvail_Check
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 AccAutoPlay_ModeAvail_Check:
 	jr AccAutoPlay_ModeAvail_SetMode
@@ -8158,7 +8158,7 @@ AccAutoPlay_ModeAvail_Process:
 AccAutoPlay_ModeAvail_SetMode:
 	cp (0x8d34:16), 14
 	jr nz, AccAutoPlay_ModeAvail_Return
-	ldb l, 0x7f
+	ld l, 0x7f:opc
 
 AccAutoPlay_ModeAvail_Return:
 	ret
@@ -8308,10 +8308,10 @@ AccAutoPlay_Periodic_Return:
 
 AccAutoPlay_Disable:
 	and (0xfc5f:16), 253
-	ldb w, 0x2
-	ldb a, 0x0
-	ldb d, 0x5
-	ldb e, 0x48
+	ld w, 0x2:opc
+	ld a, 0x0:opc
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	ret
 
@@ -8751,7 +8751,7 @@ AccPlayMode_StartAccPlay:
 	ld (1054:16), 1
 	or (0x3474:16), 1
 	calr AccTempo_ClearPositions
-	ldb a, 0x85
+	ld a, 0x85:opc
 	calr AccTempo_WriteStartMarker
 
 AccPlayMode_StartAccPlay_Return:
@@ -8771,7 +8771,7 @@ AccPlayMode_StopToSync2:
 AccPlayMode_StartPlay2:
 	ld (1054:16), 12
 	ld (0x3470:16), 0
-	ldb a, 0x86
+	ld a, 0x86:opc
 	calr AccTempo_WriteStartMarker
 	ret
 
@@ -8814,7 +8814,7 @@ AccPlayMode_StopExprFull:
 	or (0x347a:16), 4
 
 AccPlayMode_StopExprFull_Process:
-	ldb a, 0x86
+	ld a, 0x86:opc
 	calr AccTempo_WriteStartMarker
 
 AccPlayMode_StopExprC:
@@ -8845,7 +8845,7 @@ AccPlayMode_StartAccPlayFull:
 	ld (1054:16), 1
 	or (0x3474:16), 1
 	calr AccTempo_ClearPositions
-	ldb a, 0x85
+	ld a, 0x85:opc
 	calr AccTempo_WriteStartMarker
 	bit 0, (1056:16)
 	jr nz, AccPlayMode_StartAccPlayFull_Return
@@ -9086,12 +9086,12 @@ AccReplay_SavedPedal:
 	ld (0x3476:16), a
 	ld (0x3488:16), a
 	ld wa, 0:i3
-	ldb d, 0x5
-	ldb e, 0x48
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	ld wa, 0:i3
-	ldb d, 0x6
-	ldb e, 0x48
+	ld d, 0x6:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	call AudioMode_SetStereoFlags
 	ret
@@ -9138,12 +9138,12 @@ AccReplay_SendPedal_Dispatch:
 	popw wa
 	ld (0xc07d:16), a
 	ld wa, 0:i3
-	ldb d, 0x5
-	ldb e, 0x48
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	ld wa, 0:i3
-	ldb d, 0x6
-	ldb e, 0x48
+	ld d, 0x6:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	call AudioMode_SetStereoFlags
 	ret
@@ -9180,12 +9180,12 @@ AccReplay_SavedExpression:
 	ld (0x347d:16), a
 	ld (0x3489:16), a
 	ld wa, 0:i3
-	ldb d, 0x5
-	ldb e, 0x48
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	ld wa, 0:i3
-	ldb d, 0x6
-	ldb e, 0x48
+	ld d, 0x6:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	call AudioMode_SetStereoFlags
 	ret
@@ -9213,13 +9213,13 @@ AccReplay_FullStop:
 	jr z, AccReplay_Stop_ClearPedals
 	and (0xfc5f:16), 243
 	ld wa, 0:i3
-	ldb d, 0x5
-	ldb e, 0x48
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 	and (0xfc60:16), 251
 	ld wa, 0:i3
-	ldb d, 0x6
-	ldb e, 0x48
+	ld d, 0x6:opc
+	ld e, 0x48:opc
 	call SwbtWr_QueuePostEvent
 
 AccReplay_Stop_ClearPedals:
@@ -9384,7 +9384,7 @@ AccFlags_Sync_Process:
 	xor a, (0x347b:16)
 	bit 2, a
 	jr z, AccFlags_Sync_UpdateLED
-	ldb a, 0x22
+	ld a, 0x22:opc
 	call CtrlPanel_SetIndicatorBit
 
 AccFlags_Sync_UpdateLED:
@@ -9570,7 +9570,7 @@ AccKbdTiming_CheckTimestamp:
 	cp (0x3a78:16), 0
 	jr nz, AccKbdTiming_NoteSlotScan
 	pushw wa
-	ldb a, 0x8
+	ld a, 0x8:opc
 	ld (0x3a7c:16), a
 	popw wa
 	calr AccKbdTiming_CatchupReplay
@@ -9604,7 +9604,7 @@ AccKbdTiming_SlotOverflow:
 	calr AccSeq_WriteByte
 	ld a, w
 	calr AccSeq_WriteByte
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccSeq_WriteByte
 	popw iz
 	popw wa
@@ -9627,7 +9627,7 @@ AccKbdTiming_WriteNoteEvent:
 	ld a, w
 	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
-	ldb a, 0x0
+	ld a, 0x0:opc
 	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb_sri A, 0x07, 0xec, 0xf0
@@ -9709,7 +9709,7 @@ AccKbdTiming_WriteNonNote_Byte3:
 	calr AccSeq_WriteByte
 	cp w, 0xdf
 	jr nz, AccKbdTiming_WriteNonNote_CheckType
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x332f:16), a
 	ld (0x3330:16), a
 	ld (0x3331:16), a
@@ -9868,13 +9868,13 @@ AccKbdTiming_TableScan_Loop:
 	ldw_sri WA, 0x07, 0xe4, 0xf0
 	cp wa, (1118:16)
 	jr gt, AccKbdTiming_TableScan_Decrement
-	ldb a, 0xf0
+	ld a, 0xf0:opc
 	and a, (0x3381:16)
 	or a, 0x8
 	calr AccSeq_WriteByte
 	ld a, (0x3382:16)
 	calr AccSeq_WriteByte
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccSeq_WriteByte
 	and_srib_im 0x07, 0xe4, 0xf8, 0x7f
 	jr AccKbdTiming_TableScan_NextSlot
@@ -10013,14 +10013,14 @@ AccAccTiming_NoteSlot_SendNoteOff:
 	calr AccSeq_WriteByte
 	ld a, w
 	calr AccSeq_WriteByte
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccSeq_WriteByte
 	bit 0, (0x338d:16)
 	jr nz, AccAccTiming_NoteSlot_FindFree
 	or (0x338d:16), 1
-	ldb a, 0x90
+	ld a, 0x90:opc
 	calr AccSeq_WriteByte
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccSeq_WriteByte
 	calr AccSeq_WriteByte
 
@@ -10053,7 +10053,7 @@ AccAccTiming_SlotOverflow:
 	calr AccSeq_WriteByte
 	ld a, w
 	calr AccSeq_WriteByte
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccSeq_WriteByte
 	popw iz
 	popw wa
@@ -10076,7 +10076,7 @@ AccAccTiming_WriteNoteEvent:
 	ld a, w
 	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
-	ldb a, 0x0
+	ld a, 0x0:opc
 	stb_dri A, 0x07, 0xe4, 0xf8
 	inc 1, iz
 	ldb_sri A, 0x07, 0xec, 0xf0
@@ -10277,13 +10277,13 @@ AccAccTiming_TableScan_Loop:
 	ldw_sri WA, 0x07, 0xe4, 0xf0
 	cp wa, (1118:16)
 	jr gt, AccAccTiming_TableScan_Decrement
-	ldb a, 0xf0
+	ld a, 0xf0:opc
 	and a, (0x3381:16)
 	or a, (0x338c:16)
 	calr AccSeq_WriteByte
 	ld a, (0x3382:16)
 	calr AccSeq_WriteByte
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccSeq_WriteByte
 	and_srib_im 0x07, 0xe4, 0xf8, 0x7f
 	jr AccAccTiming_TableScan_NextSlot
@@ -10329,7 +10329,7 @@ AccTiming_SlotOffsetTables:
 	nop
 	calr	0
 	nop
-	ldb	d, 0
+	ld	d, 0:opc
 	nop
 	nop
 	pushw	de
@@ -10348,7 +10348,7 @@ AccTiming_SlotOffsetTables:
 	nop
 	nop
 	jp	0
-	ldb	d, 0
+	ld	d, 0:opc
 	nop
 	nop
 	pushw	iy
@@ -10471,7 +10471,7 @@ AccDir_AdjustDirection:
 	dec 1, a
 	cp a, 0xff
 	jr nz, AccDir_Adjust_RightDec
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 AccDir_Adjust_RightDec:
 	sll a, 4
@@ -10495,7 +10495,7 @@ AccDir_Adjust_LeftHand:
 	inc 1, a
 	cp a, 4:i3
 	jr c, AccDir_Adjust_LeftInc
-	ldb a, 0x3
+	ld a, 0x3:opc
 
 AccDir_Adjust_LeftInc:
 	sll a, 4
@@ -10520,10 +10520,10 @@ AccDir_DispatchEvent:
 	jr z, AccDir_DispatchEvent_Ret
 	cp (0x34a4:16), 128
 	jr nc, AccDir_DispatchEvent_Ret
-	ldb e, 0x48
-	ldb d, 0x7
+	ld e, 0x48:opc
+	ld d, 0x7:opc
 	ld a, (0xfc61:16)
-	ldb w, 0x30
+	ld w, 0x30:opc
 	call SwbtWr_QueuePostEvent
 	ld a, (0xfd99:16)
 	and a, 0x70
@@ -10591,7 +10591,7 @@ AccProcess_InlinedCode:
 	ldw	ix, 0x6ec8
 	retd	2513
 	max
-	ldb	w, 241
+	ld	w, 241:opc
 	.byte 0x8e
 	ldw	ix, 0xc150
 	.byte 0x90
@@ -10641,8 +10641,8 @@ AccProcess_InlinedCode:
 	add	wa, bc
 	and	xwa, 0xffff
 	div	wa, 3
-	ldb	e, 72
-	ldb	d, 8
+	ld	e, 72:opc
+	ld	d, 8:opc
 	call	SwbtWr_TrailingBytecode
 	ret
 
@@ -11034,7 +11034,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11073,7 +11073,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11112,7 +11112,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11151,7 +11151,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11190,7 +11190,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11229,7 +11229,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11268,7 +11268,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	.byte 0xc0, 0x01
 	nop
 	nop
-	ldb	w, 2
+	ld	w, 2:opc
 	nop
 	nop
 	.byte 0x80
@@ -11567,9 +11567,9 @@ AccStyle_IndexedLookup:
 	cp	(0x8d3a:16), a
 	jr z, AccStyle_IndexedLookup_Ret
 	ld	(0x8d3a:16), a
-	ldb e, 0x90
-	ldb d, 0x10
-	ldb w, 0xff
+	ld e, 0x90:opc
+	ld d, 0x10:opc
+	ld w, 0xff:opc
 	call SwbtWr_QueuePostEvent
 AccStyle_IndexedLookup_Ret:
 	ret
@@ -11598,7 +11598,7 @@ AccStyle_ModeEnter:
 AccStyle_ModeEnter_SetFlags:
 	or (0x34cd:16), 8
 	or (0x33d3:16), 1
-	ldb a, 0x4b
+	ld a, 0x4b:opc
 	call CtrlPanel_SetIndicatorBit
 
 AccStyle_ModeEnter_Ret:
@@ -11645,7 +11645,7 @@ AccStyle_InlinedBlock:
 	incm8	7, (xwa)
 	.byte 0x17
 	ld	(0x339f:16), 1
-	ldb	a, 8
+	ld	a, 8:opc
 	call	MIDI_SendSysExCmd
 	ld	(0x7f42:16), 54
 	call	DrumVoice_NotifyEE
@@ -11730,17 +11730,17 @@ AccStyle_InlinedBlock:
 	calr	244
 	calr	317
 	ld	(0x338e:16), 1
-	ldb	a, 20
+	ld	a, 20:opc
 	ld	(0x8d3a:16), a
-	ldb	e, 144
-	ldb	d, 16
-	ldb	w, 255
+	ld	e, 144:opc
+	ld	d, 16:opc
+	ld	w, 255:opc
 	call	SwbtWr_QueuePostEvent
 	.byte 0xc1, 0x9f
 	ldw	hl, 319
 	jr	nz, 10
 	xor	wa, wa
-	ldb	a, 1
+	ld	a, 1:opc
 	call	UI_PostPartChangeEvent
 	jr	30
 	ld	a, (0x338e:16)
@@ -11836,7 +11836,7 @@ AccVoiceReg_WritePart3_StoreBit4:
 	and a, 0x40
 	and (0xfb5a:16), 191
 	or (0xfb5a:16), a
-	ldb l, 0x4
+	ld l, 0x4:opc
 	calr AccVoiceState_DispatchChange
 
 AccVoiceReg_WritePart3_Ret:
@@ -11865,7 +11865,7 @@ AccVoiceReg_WritePart4_StoreBit4:
 	and a, 0x40
 	and (0xfb74:16), 191
 	or (0xfb74:16), a
-	ldb l, 0x8
+	ld l, 0x8:opc
 	calr AccVoiceState_DispatchChange
 
 AccVoiceReg_WritePart4_Ret:
@@ -11894,7 +11894,7 @@ AccVoiceReg_WritePart5_StoreBit4:
 	and a, 0x40
 	and (0xfb8e:16), 191
 	or (0xfb8e:16), a
-	ldb l, 0x10
+	ld l, 0x10:opc
 	calr AccVoiceState_DispatchChange
 
 AccVoiceReg_WritePart5_Ret:
@@ -11923,7 +11923,7 @@ AccVoiceReg_WritePart2_StoreBit4:
 	and a, 0x40
 	and (0xfba8:16), 191
 	or (0xfba8:16), a
-	ldb l, 0x2
+	ld l, 0x2:opc
 	calr AccVoiceState_DispatchChange
 
 AccVoiceReg_WritePart2_Ret:
@@ -11942,7 +11942,7 @@ AccVoiceReg_WritePart1:
 	ld (0xfbbe:16), a
 	and (0xfbbf:16), 128
 	or (0xfbbf:16), w
-	ldb l, 0x1
+	ld l, 0x1:opc
 	calr AccVoiceState_DispatchChange
 
 AccVoiceReg_WritePart1_Ret:
@@ -12032,8 +12032,8 @@ AccVoiceState_DispatchChange:
 	stb_dri H, 0x03, 0xe0, 0xec
 	ld a, (xiy + 1)
 	and a, 0x7f
-	ldb w, 0x7f
-	ldb d, 0x1
+	ld w, 0x7f:opc
+	ld d, 0x1:opc
 	pushw wa
 	pushw de
 	push xhl
@@ -12043,8 +12043,8 @@ AccVoiceState_DispatchChange:
 	popw wa
 	ld a, (xiy + 256)
 	and a, 0xff
-	ldb w, 0xff
-	ldb d, 0x0
+	ld w, 0xff:opc
+	ld d, 0x0:opc
 	pushw wa
 	pushw de
 	push xhl
@@ -12288,7 +12288,7 @@ AccDemo_LoadRhythm:
 	ret
 
 AccDemo_LoadVariation:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld xix, 0x94800
 	add xix, 0x60
 	ld hl, 0:i3
@@ -12375,13 +12375,13 @@ AccDemo_LoadFillIn:
 AccDemo_LoadVariationData:
 	ld xix, 0x94800
 	add xix, 0x1400
-	ldb a, 0x1e
+	ld a, 0x1e:opc
 
 Demo_LoadVariationData:
 	ld xiy, Demo_StyleRhythmData_0x374
 	ldw bc, 0x100
 	ldir85
-	ldb l, 0x4
+	ld l, 0x4:opc
 
 Demo_LoadVariationData_Inner:
 	ld xiy, Demo_StyleRhythmData_0x474
@@ -12398,7 +12398,7 @@ Demo_LoadVariationData_Inner:
 Demo_LoadVariationC_Data:
 	ld xix, 0x94800
 	add xix, 0xaa00
-	ldb a, 0xbe
+	ld a, 0xbe:opc
 
 Demo_LoadVariationC_Loop:
 	ld xiy, Demo_StyleRhythmData_0x574
@@ -12448,7 +12448,7 @@ Demo_StyleRhythmData:
 	.ascii "a-variation1    a-variation2    a-variation3    a-variation4    b-variation1    b-variation2    b-variation3    b-variation4    c-variation1    c-variation2    c-variation3    c-variation4     a-intro 1       a-intro 2       a-fill in 1     a-fill in 2     a-ending 1      a-ending 2      b-intro 1       b-intro 2       b-fill in 1     b-fill in 2     b-ending 1      b-ending 2      c-intro 1       c-intro 2       c-fill in 1     c-fill in 2     c-ending 1      c-ending 2     "
 	reti
 	pop	sr
-	ldb	w, 0
+	ld	w, 0:opc
 	pop	xwa
 	push	sr
 	nop
@@ -12745,10 +12745,10 @@ AccTone_NoteLookup_ReadTable:
 
 AccTone_NoteLookup_CheckBit3:
 	and de, 0x8
-	ldb l, 0x0
+	ld l, 0x0:opc
 	cp de, 0x8
 	ret nz
-	ldb l, 0x1
+	ld l, 0x1:opc
 
 AccTone_NoteLookup_Ret:
 	ret
@@ -12799,7 +12799,7 @@ AccTone_ExtendAndDispatch_Body:
 	jr z, AccTone_FoundMatch_IncRet
 
 AccTone_SetupExit:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 AccTone_ExtendAndDispatch_PopRet:
 	pop xiz
@@ -12836,7 +12836,7 @@ AccTone_CheckBit3Flag:
 	lda xbc, (Display_FontPalette_Table_0x1D58:24)
 	bit_dri 0, 0x07, 0xe4, 0xe0
 	jr nz, AccTone_SetupExit
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr AccTone_ExtendAndDispatch_PopRet
 	dec 4, xsp
 	ld de, (4360:16)
@@ -12885,11 +12885,11 @@ AccTone_CheckDirectAddr:
 	jr z, AccTone_DirectAddr_Mode2
 
 AccTone_DirectAddr_Mode1:
-	ldb l, 0x2
+	ld l, 0x2:opc
 	jr AccTone_LookupDone
 
 AccTone_DirectAddr_Mode2:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr AccTone_LookupDone
 
 AccTone_ValidateAndWrite:
@@ -12906,7 +12906,7 @@ AccTone_ValidateAndWrite:
 	jr AccTone_LookupDone
 
 AccTone_LookupFailed:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 AccTone_LookupDone:
 	inc 4, xsp
@@ -12992,7 +12992,7 @@ AccTone_InlineBytecodeData:
 	sla	bc, 5
 	ld	hl, bc
 	add	hl, de
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 2
@@ -13007,7 +13007,7 @@ AccTone_InlineBytecodeData:
 	sla	bc, 5
 	ld	hl, bc
 	add	hl, de
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 2
@@ -14232,7 +14232,7 @@ AccTone_JumpTableData:
 	stb_dpi a, 0
 	cp xiy, xbc
 	nop
-	ldb	a, 233
+	ld	a, 233:opc
 	.byte 0xf5
 	nop
 
@@ -14358,7 +14358,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	ret
 	calr	367
 	calr	446
-	ldb	w, 0
+	ld	w, 0:opc
 	mul8rr	a, c
 	calr	38
 	.byte 0xd1
@@ -14381,8 +14381,8 @@ Not_sure_maybe_SOFT_VERSION_related:
 	ex_ff
 	ldw	iz, 0xfe3c
 	ret
-	ldb	w, 0
-	ldb	c, 0
+	ld	w, 0:opc
+	ld	c, 0:opc
 	cp	c, a
 	jr	z, 26
 	push	c
@@ -14427,14 +14427,14 @@ Not_sure_maybe_SOFT_VERSION_related:
 	ldw	ix, 63
 	nop
 	jr	nz, 4
-	ldb	b, 1
+	ld	b, 1:opc
 	jr	16
 	call	AccPatch_SeqAdvStep_WrapToNext
-	ldb	b, 0
+	ld	b, 0:opc
 	jr	8
 	inc	1, wa
 	ld	(0x3614:16), wa
-	ldb	b, 0
+	ld	b, 0:opc
 	ret
 	ld	hl, (0x3612:16)
 	calr	780
@@ -14450,7 +14450,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	.byte 0x84
 	push	xix
 	jrl	nc, 924
-	ldb	c, 188
+	ld	c, 188:opc
 	normal
 	push	sr
 	swi	7
@@ -14503,7 +14503,7 @@ AccPatch_SlotConfigByteData:
 	calr	62
 	calr	115
 	ld	e, c
-	ldb	c, 1
+	ld	c, 1:opc
 	cp	c, e
 	jr	z, 24
 	push	e
@@ -14530,7 +14530,7 @@ AccPatch_InitCurrentSlotPointer:
 	ret
 
 AccPatch_SlotScanByteData:
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	c, 8
 	jr	z, 11
 	push	c
@@ -14565,7 +14565,7 @@ AccPatch_SlotScanByteData:
 	ld	c, (xiy+13)
 	inc	1, c
 	ret
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	c, a
 	jr	z, 13
 	push	c
@@ -14578,7 +14578,7 @@ AccPatch_SlotScanByteData:
 	ret
 	push	c
 	ld	xwa, 0:i3
-	ldb	a, 160
+	ld	a, 160:opc
 	ld	c, (0x34d6:16)
 	mul8rr	a, c
 	ld	xbc, 0:i3
@@ -14791,7 +14791,7 @@ AccPatch_GetCurrentSlotAddr:
 	ld l, (0x34d6:16)
 	cp l, 0x1e
 	jr c, AccPatch_GetSlotAddr_Valid
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 AccPatch_GetSlotAddr_Valid:
 	mul hl, 0x60
@@ -14923,7 +14923,7 @@ AccPatch_CopyDefaults_Done:
 
 AccPatch_ClearSlot13ByIndex:
 	push xwa
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld w, (0x39ac:16)
 	cp w, 0xe
 	jr nz, AccPatch_ClearSlot13_Check0F
@@ -15032,7 +15032,7 @@ AccPatch_FillEntryWithVoiceData:
 	popw hl
 	calr AccPatch_GetEntryAddr
 	add xix, 0x6
-	ldb l, 0x81
+	ld l, 0x81:opc
 
 AccPatch_FillVoice_Loop:
 	ld (xix), l
@@ -15079,7 +15079,7 @@ AccPatch_CopyDefaults_InitDone:
 AccPatch_DefaultSlotData:
 	reti
 	normal
-	ldb	w, 128
+	ld	w, 128:opc
 	pop	xwa
 	push	sr
 	nop
@@ -15110,7 +15110,7 @@ AccPatch_DefaultSlotData:
 	.zero 15
 
 AccPatch_ClearSlot13BySlotIdx:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp (0x34d6:16), 14
 	jr nz, AccPatch_ClearSlot13_Idx0F
 	ld (xiy + 13), a
@@ -15341,19 +15341,19 @@ AccPatch_RebuildChannel_Done:
 	ret
 
 MapBitFlagsToChannelOffset:
-	ldb w, 0x0
+	ld w, 0x0:opc
 	bit 4, a
 	jr nz, MapBitFlags_NullRet
-	ldb w, 0x4
+	ld w, 0x4:opc
 	bit 3, a
 	jr nz, MapBitFlags_NullRet
-	ldb w, 0x6
+	ld w, 0x6:opc
 	bit 0, a
 	jr nz, MapBitFlags_NullRet
-	ldb w, 0x8
+	ld w, 0x8:opc
 	bit 1, a
 	jr nz, MapBitFlags_NullRet
-	ldb w, 0xa
+	ld w, 0xa:opc
 
 MapBitFlags_NullRet:
 	ret
@@ -15377,7 +15377,7 @@ AccPatch_ComputeSeqPosition:
 	mul8rr a, c
 	cp a, l
 	jr nz, AccPatch_SeqPosition_Store
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 AccPatch_SeqPosition_Store:
 	ld xbc, 0:i3
@@ -15442,7 +15442,7 @@ AccPatch_WriteRhythmParams:
 	push_a
 	ld xwa, 0:i3
 	pop_a
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 AccPatch_WriteRhythmParam_Loop:
 	cp c, 6:i3
@@ -15507,7 +15507,7 @@ AccPatch_FetchVolumeForChannel:
 	ld xix, 0x3a
 	cp a, 0xd6
 	jr z, ToneGen_FetchSelectRestore
-	ldb a, 0x40
+	ld a, 0x40:opc
 	jr AccPatch_FetchVolume_Default
 
 ToneGen_FetchSelectRestore:
@@ -15628,7 +15628,7 @@ AccPatch_MiscDataBlock:
 	div	xwa, xhl
 	cp	a, 100
 	jr	c, 2
-	ldb	a, 99
+	ld	a, 99:opc
 	ld	(0x39ab:16), a
 	ret
 
@@ -15676,9 +15676,9 @@ AccPatch_PartChanges_MapLookup:
 	cp w, a
 	jr z, AccPatch_PartChanges_Update
 	ld a, e
-	ldb e, 0x90
-	ldb d, 0x10
-	ldb w, 0xff
+	ld e, 0x90:opc
+	ld d, 0x10:opc
+	ld w, 0xff:opc
 	call SwbtWr_QueuePostEvent
 
 AccPatch_PartChanges_Update:
@@ -15779,16 +15779,16 @@ AccPatch_UpdateChain_Rhythm:
 	push d
 	push e
 	ld a, d
-	ldb d, 0x1
-	ldb w, 0x7f
-	ldb e, 0x13
+	ld d, 0x1:opc
+	ld w, 0x7f:opc
+	ld e, 0x13:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	push e
 	ld a, e
-	ldb d, 0x0
-	ldb w, 0xff
-	ldb e, 0x13
+	ld d, 0x0:opc
+	ld w, 0xff:opc
+	ld e, 0x13:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	pop d
@@ -15800,9 +15800,9 @@ AccPatch_UpdateChain_Rhythm:
 	stb_dri H, 0x03, 0xe4, 0xec
 	ld a, (xiy + 3)
 	sla a, 6
-	ldb d, 0x4
-	ldb w, 0x40
-	ldb e, 0x13
+	ld d, 0x4:opc
+	ld w, 0x40:opc
+	ld e, 0x13:opc
 	call SwbtWr_QueuePostEvent
 	pop xiy
 	ret
@@ -15835,16 +15835,16 @@ AccPatch_UpdateChain_Bass:
 	push d
 	push e
 	ld a, d
-	ldb d, 0x1
-	ldb w, 0x7f
-	ldb e, 0x14
+	ld d, 0x1:opc
+	ld w, 0x7f:opc
+	ld e, 0x14:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	push e
 	ld a, e
-	ldb d, 0x0
-	ldb w, 0xff
-	ldb e, 0x14
+	ld d, 0x0:opc
+	ld w, 0xff:opc
+	ld e, 0x14:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	pop d
@@ -15856,9 +15856,9 @@ AccPatch_UpdateChain_Bass:
 	stb_dri H, 0x03, 0xe4, 0xec
 	ld a, (xiy + 3)
 	sla a, 6
-	ldb d, 0x4
-	ldb w, 0x40
-	ldb e, 0x14
+	ld d, 0x4:opc
+	ld w, 0x40:opc
+	ld e, 0x14:opc
 	call SwbtWr_QueuePostEvent
 	pop xiy
 	ret
@@ -15890,16 +15890,16 @@ AccPatch_UpdateChain_Acc1:
 	push d
 	push e
 	ld a, d
-	ldb d, 0x1
-	ldb w, 0x7f
-	ldb e, 0x10
+	ld d, 0x1:opc
+	ld w, 0x7f:opc
+	ld e, 0x10:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	push e
 	ld a, e
-	ldb d, 0x0
-	ldb w, 0xff
-	ldb e, 0x10
+	ld d, 0x0:opc
+	ld w, 0xff:opc
+	ld e, 0x10:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	pop d
@@ -15911,9 +15911,9 @@ AccPatch_UpdateChain_Acc1:
 	stb_dri H, 0x03, 0xe4, 0xec
 	ld a, (xiy + 3)
 	sla a, 6
-	ldb d, 0x4
-	ldb w, 0x40
-	ldb e, 0x10
+	ld d, 0x4:opc
+	ld w, 0x40:opc
+	ld e, 0x10:opc
 	call SwbtWr_QueuePostEvent
 	pop xiy
 	ret
@@ -15945,16 +15945,16 @@ AccPatch_UpdateChain_Acc2:
 	push d
 	push e
 	ld a, d
-	ldb d, 0x1
-	ldb w, 0x7f
-	ldb e, 0x11
+	ld d, 0x1:opc
+	ld w, 0x7f:opc
+	ld e, 0x11:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	push e
 	ld a, e
-	ldb d, 0x0
-	ldb w, 0xff
-	ldb e, 0x11
+	ld d, 0x0:opc
+	ld w, 0xff:opc
+	ld e, 0x11:opc
 	call SwbtWr_QueuePostEvent
 	pop e
 	pop d
@@ -15966,9 +15966,9 @@ AccPatch_UpdateChain_Acc2:
 	stb_dri H, 0x03, 0xe4, 0xec
 	ld a, (xiy + 3)
 	sla a, 6
-	ldb d, 0x4
-	ldb w, 0x40
-	ldb e, 0x11
+	ld d, 0x4:opc
+	ld w, 0x40:opc
+	ld e, 0x11:opc
 	call SwbtWr_QueuePostEvent
 	pop xiy
 	ret
@@ -16000,18 +16000,18 @@ AccPatch_UpdateChain_Acc3:
 	push d
 	push e
 	ld a, d
-	ldb d, 0x1
-	ldb w, 0x7f
-	ldb e, 0x12
+	ld d, 0x1:opc
+	ld w, 0x7f:opc
+	ld e, 0x12:opc
 	push xiy
 	call SwbtWr_QueuePostEvent
 	pop xiy
 	pop e
 	push e
 	ld a, e
-	ldb d, 0x0
-	ldb w, 0xff
-	ldb e, 0x12
+	ld d, 0x0:opc
+	ld w, 0xff:opc
+	ld e, 0x12:opc
 	push xiy
 	call SwbtWr_QueuePostEvent
 	pop xiy
@@ -16027,9 +16027,9 @@ AccPatch_UpdateChain_Acc3:
 	stb_dri H, 0x03, 0xe4, 0xec
 	ld a, (xiy + 3)
 	sla a, 6
-	ldb d, 0x4
-	ldb w, 0x40
-	ldb e, 0x12
+	ld d, 0x4:opc
+	ld w, 0x40:opc
+	ld e, 0x12:opc
 	call SwbtWr_QueuePostEvent
 	pop xiy
 	ret
@@ -16053,7 +16053,7 @@ AccPatch_SyncVoice_Rhythm:
 	and a, 0x7f
 	bitm 6, (xix + 4)
 	jr z, AccPatch_SyncRhythm_HasBank
-	ldb h, 0x40
+	ld h, 0x40:opc
 	sll h, 1
 	or a, h
 
@@ -16091,7 +16091,7 @@ AccPatch_SyncVoice_Bass:
 	and a, 0x7f
 	bitm 6, (xix + 4)
 	jr z, AccPatch_SyncBass_HasBank
-	ldb h, 0x40
+	ld h, 0x40:opc
 	sll h, 1
 	or a, h
 
@@ -16128,7 +16128,7 @@ AccPatch_SyncVoice_Acc1:
 	and a, 0x7f
 	bitm 6, (xix + 4)
 	jr z, AccPatch_SyncAcc1_HasBank
-	ldb h, 0x40
+	ld h, 0x40:opc
 	sll h, 1
 	or a, h
 
@@ -16165,7 +16165,7 @@ AccPatch_SyncVoice_Acc2:
 	and a, 0x7f
 	bitm 6, (xix + 4)
 	jr z, AccPatch_SyncAcc2_HasBank
-	ldb h, 0x40
+	ld h, 0x40:opc
 	sll h, 1
 	or a, h
 
@@ -16202,7 +16202,7 @@ AccPatch_SyncVoice_Acc3:
 	and a, 0x7f
 	bitm 6, (xix + 4)
 	jr z, AccPatch_SyncAcc3_HasBank
-	ldb h, 0x40
+	ld h, 0x40:opc
 	sll h, 1
 	or a, h
 
@@ -16401,7 +16401,7 @@ AccPatch_ComplexDataBlock:
 	ld	xiy, 0x094800
 	add	xiy, 0
 	add	xiy, 0
-	ldb	a, 72
+	ld	a, 72:opc
 	.byte 0xbd
 	nop
 	ld	xbc, 0x01bd0021
@@ -16437,7 +16437,7 @@ AccPatch_ComplexDataBlock:
 	popw	hl
 	calr	61764
 	add	xix, 6
-	ldb	l, 129
+	ld	l, 129:opc
 	ld	(xix), l
 	dec	1, wa
 	inc	1, xix
@@ -16527,7 +16527,7 @@ AccPatch_FillSlotWithVoiceData:
 	popw hl
 	calr AccPatch_ResolveSlotAddr
 	add xix, 0x6
-	ldb l, 0x81
+	ld l, 0x81:opc
 
 AccPatch_FillSlot_Alt_Loop:
 	ld (xix), l
@@ -17588,7 +17588,7 @@ AccPatch_EventDispatch_ReadCmd:
 	call TempoRingBuf_PeekByte
 	cp a, 0x81
 	jr z, AccPatch_EventDispatch_EndMarker
-	ldb w, 0xf0
+	ld w, 0xf0:opc
 	and w, a
 	cp w, 0x90
 	jr z, AccPatch_EventDispatch_NoteOn
@@ -17777,7 +17777,7 @@ AccPatch_LookupStepByDrumParam:
 	call DrumParam_Wrapper
 	cp a, 0x7f
 	jr nz, AccPatch_LookupStep_StoreResult
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x36f8:16), a
 	ld (0x36eb:16), a
 	bit 1, (0x364a:16)
@@ -17834,10 +17834,10 @@ AccPatch_CopySteps_StartFetch:
 	ld a, (0x36ed:16)
 	calr AccPatch_FetchStepEntry
 	calr AccPatch_SeqAdvanceStep
-	ldb a, 0x10
+	ld a, 0x10:opc
 	calr AccPatch_FetchStepEntry
 	calr AccPatch_SeqAdvanceStep
-	ldb a, 0x0
+	ld a, 0x0:opc
 	calr AccPatch_FetchStepEntry
 	calr AccPatch_SeqAdvanceStep
 	bit 0, (0x3431:16)
@@ -17855,7 +17855,7 @@ AccPatch_CopyStepsDone:
 AccPatch_CopySteps_Overflow:
 	ld (0x7f42:16), 15
 	call DrumVoice_NotifyEE
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 	jr AccPatch_CopyStepsDone
 
@@ -17869,14 +17869,14 @@ AccPatch_TransposeNote:
 	jr ugt, AccPatch_Transpose_AddBack
 	sub (0x36ec:16), a
 	jr nc, AccPatch_Transpose_Done
-	ldb a, 0xc
+	ld a, 0xc:opc
 	add (0x36ec:16), a
 
 AccPatch_Transpose_Done:
 	jr AccPatch_Transpose_LookupTable
 
 AccPatch_Transpose_AddBack:
-	ldb w, 0xc
+	ld w, 0xc:opc
 	sub w, a
 	add (0x36ec:16), w
 
@@ -18112,19 +18112,19 @@ AccPatch_ProcessMarkerEvent:
 	ld a, (0x36ea:16)
 	cp a, 0xd4
 	jr nz, AccPatch_ProcessMarker_CheckD3
-	ldb a, 0xd3
+	ld a, 0xd3:opc
 	jr AccPatch_FetchSequence
 
 AccPatch_ProcessMarker_CheckD3:
 	cp a, 0xd3
 	jr nz, AccPatch_ProcessMarker_CheckD5
-	ldb a, 0xd5
+	ld a, 0xd5:opc
 	jr AccPatch_FetchSequence
 
 AccPatch_ProcessMarker_CheckD5:
 	cp a, 0xd5
 	jr nz, AccPatch_FetchSequence
-	ldb a, 0xd4
+	ld a, 0xd4:opc
 	jr AccPatch_FetchSequence
 
 AccPatch_FetchSequence:
@@ -19240,7 +19240,7 @@ AccPlayback_CheckBit4:
 	jr z, AccPlayback_CheckStateFlags
 
 AccPlayback_InitTimingVars:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x34fa:16), a
 	ld (0x34fc:16), a
 	ld (0x34fb:16), a
@@ -19343,7 +19343,7 @@ AccPlayback_CalcTimingPosition:
 	ld (0x371a:16), wa
 	calr ToneGen_StepFwd_Alternate
 	jr AccTiming_ComputeOffset
-	ldb a, 0x20
+	ld a, 0x20:opc
 	cp (0x34fb:16), 4
 	jr c, AccTiming_StorePartA
 
@@ -19352,21 +19352,21 @@ AccTiming_StorePartA:
 
 AccTiming_ComputeOffset:
 	ld w, (0x34fb:16)
-	ldb a, 0x8
+	ld a, 0x8:opc
 	muls8rr a, w
 	ld h, a
 	ld a, (0x34fc:16)
 	xor w, w
-	ldb l, 0xc
+	ld l, 0xc:opc
 	div8rr a, l
 	add h, a
 	inc 1, h
 	ld a, (0x34fa:16)
 	sub a, (0x3746:16)
-	ldb w, 0x20
+	ld w, 0x20:opc
 	cp (0x34d9:16), 5
 	jr c, AccTiming_UseFullBar
-	ldb w, 0x40
+	ld w, 0x40:opc
 
 AccTiming_UseFullBar:
 	muls8rr a, w
@@ -19400,7 +19400,7 @@ AccPlayback_AdjustBeatPosition:
 	inc 1, a
 	cp a, (0x34d7:16)
 	jr ule, AccBeatAdj_CheckBit6
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 AccBeatAdj_CheckBit6:
 	bit 6, (0x3713:16)
@@ -19564,7 +19564,7 @@ ToneGen_MapNoteToOctaveBitmask:
 	calr ToneGen_ReadBufferWithIndirection
 	ld a, (xix)
 	xor w, w
-	ldb l, 0xc
+	ld l, 0xc:opc
 	div8rr a, l
 	pushw bc
 	push xix
@@ -19623,7 +19623,7 @@ AccPlayback_ProcessStyleChanges:
 	pop xbc
 	pop xhl
 	pop xwa
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x34f7:16), a
 	ld (0x34fb:16), a
 	ld (0x34fc:16), a
@@ -19783,17 +19783,17 @@ ToneGen_ProcessRestore_CalcNote:
 	ld a, (0x34fc:16)
 	ld e, a
 	xor w, w
-	ldb l, 0xc
+	ld l, 0xc:opc
 	div8rr a, l
 	cp w, 0:i3
 	jr nz, ToneGen_ProcessRestore_AdjNote
-	ldb w, 0xc
+	ld w, 0xc:opc
 
 ToneGen_ProcessRestore_AdjNote:
 	calr ToneGen_AdjustNoteWrap
-	ldb a, 0x4
+	ld a, 0x4:opc
 	ld (0x3712:16), a
-	ldb w, 0xff
+	ld w, 0xff:opc
 	ld (0x3717:16), 255
 	jr ToneGen_ProcessRestore_Return
 
@@ -19855,7 +19855,7 @@ ToneGen_RestoreFromSavedPos:
 	ld (0x3449:16), iy
 	ld wa, (0x3514:16)
 	ld (0x346b:16), wa
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x3435:16), a
 	and (0x3522:16), 253
 	ld hl, (0x346b:16)
@@ -19943,7 +19943,7 @@ ToneGen_Velocity_HandleEnd:
 	jrl ToneGen_EventDispatchLoop
 
 ToneGen_Velocity_DefaultCalc:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	ld b, (0x34fb:16)
 	dec 1, b
 	cp b, 0xff
@@ -19970,7 +19970,7 @@ ToneGen_CalcNotePosition:
 	ld a, (0x34fc:16)
 	ld e, a
 	xor w, w
-	ldb l, 0xc
+	ld l, 0xc:opc
 	div8rr a, l
 	ld d, (0x34fb:16)
 	ld bc, wa
@@ -19981,7 +19981,7 @@ ToneGen_CalcNotePosition:
 	ld wa, bc
 	cp w, 0:i3
 	jr nz, ToneGen_CalcPos_SubOctave
-	ldb w, 0xc
+	ld w, 0xc:opc
 
 ToneGen_CalcPos_SubOctave:
 	ld a, e
@@ -20048,7 +20048,7 @@ ToneGen_ScanRestoredVoiceEvents:
 	ld (0x3449:16), iy
 	ld wa, (0x3514:16)
 	ld (0x346b:16), wa
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (0x3435:16), a
 
 ToneGen_ScanRestored_Loop:
@@ -20100,7 +20100,7 @@ ToneGen_CalcEventVelocity_Restored:
 	jr ToneGen_ScanRestored_Return
 
 ToneGen_ScanRestored_EndMarker:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	ld b, (0x34fb:16)
 	inc 1, b
 	ld a, (0x34d9:16)
@@ -20138,7 +20138,7 @@ ToneGen_CalcNoteWithWrap:
 	ld a, (0x34fc:16)
 	ld e, a
 	xor w, w
-	ldb l, 0xc
+	ld l, 0xc:opc
 	div8rr a, l
 	ld a, e
 	sub a, w
@@ -20146,7 +20146,7 @@ ToneGen_CalcNoteWithWrap:
 	ld w, (0x34fb:16)
 	cp a, 0x60
 	jr nz, ToneGen_CalcWrap_Store
-	ldb a, 0x0
+	ld a, 0x0:opc
 	inc 1, w
 
 ToneGen_CalcWrap_Store:
@@ -20166,7 +20166,7 @@ ToneGen_RecalcAndRestart:
 	ld a, (0x34fc:16)
 	ld e, a
 	xor w, w
-	ldb l, 0xc
+	ld l, 0xc:opc
 	div8rr a, l
 	ld a, e
 	sub a, w
@@ -20244,28 +20244,28 @@ __pad_F61C3F:
 	nop
 
 ToneGen_ClassifyStereoEvent:
-	ldb a, 0x5
+	ld a, 0x5:opc
 	ld (0x3712:16), a
 	ld hl, (0x346b:16)
 	calr ToneGen_CalcBufferAddr
 	ld wa, (0x3449:16)
 	ldb_sri A, 0x07, 0xec, 0xe0
-	ldb e, 0x1
+	ld e, 0x1:opc
 	cp a, 0xd2
 	jr z, ToneGen_ClassifyStereoSlot_Common
-	ldb e, 0x2
+	ld e, 0x2:opc
 	cp a, 0xd1
 	jr z, ToneGen_ClassifyStereoSlot_Common
-	ldb e, 0x3
+	ld e, 0x3:opc
 	cp a, 0xd3
 	jr z, ToneGen_ClassifyStereoSlot_Common
-	ldb e, 0x4
+	ld e, 0x4:opc
 	cp a, 0xd4
 	jr z, ToneGen_ClassifyStereoSlot_Common
-	ldb e, 0x5
+	ld e, 0x5:opc
 	cp a, 0xd5
 	jr z, ToneGen_ClassifyStereoSlot_Common
-	ldb e, 0x6
+	ld e, 0x6:opc
 
 ToneGen_ClassifyStereoSlot_Common:
 	ld (0x3720:16), e
@@ -20282,7 +20282,7 @@ __pad_F61C98:
 	nop
 
 ToneGen_ClassifyMonoEvent:
-	ldb a, 0x4
+	ld a, 0x4:opc
 	ld (0x3712:16), a
 	calr ToneGen_StepToNextStereoSlot
 	ld hl, (0x346b:16)
@@ -20322,7 +20322,7 @@ ToneGen_ClassifyMono_MapChannel:
 	pushw wa
 	call RhythmBuf_WriteByte
 	inc 2, xsp
-	ldb a, 0x0
+	ld a, 0x0:opc
 	pushw wa
 	call RhythmBuf_WriteByte
 	inc 2, xsp
@@ -20347,7 +20347,7 @@ ToneGen_ClassifyMono_WriteNew:
 	popw de
 	ld (0x3516:16), a
 	ld (0x3517:16), e
-	ldb a, 0x10
+	ld a, 0x10:opc
 	ld (0x3518:16), a
 	bit 4, (0x379b:16)
 	jr z, ToneGen_ClassifyMono_Return
@@ -20405,7 +20405,7 @@ AccPlayback_ReadEvt_CheckBit7:
 	ld (0xe3dc:16), 238
 	ld (0xe3de:16), 64
 	and (0x34d0:16), 127
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 	jr ToneGenSetup_Done
 
@@ -20598,14 +20598,14 @@ AccPlayback_AdvanceRingBuffer:
 	jr ugt, __pad_F61F65
 	sub_srib_mr A, 0x07, 0xf0, 0xec
 	jr nc, AccPlayback_AdvRingBuf_Return
-	ldb a, 0xc
+	ld a, 0xc:opc
 	add_srib_mr A, 0x07, 0xf0, 0xec
 
 AccPlayback_AdvRingBuf_Return:
 	jr AccPlayback_TrackPosition
 
 __pad_F61F65:
-	ldb w, 0xc
+	ld w, 0xc:opc
 	sub w, a
 	add_srib_mr W, 0x07, 0xf0, 0xec
 
@@ -21125,7 +21125,7 @@ ToneGen_ScanVoicePosition:
 	calr ToneGen_GetSlotIndex
 	ld de, hl
 	calr ToneGen_CalcBufferAddr
-	ldb c, 0x3
+	ld c, 0x3:opc
 	ld iy, 3:i3
 	ld (0x3523:16), 0
 
@@ -21248,7 +21248,7 @@ ToneGen_AdvanceVoiceStep:
 	ld de, hl
 	calr ToneGen_CalcBufferAddr
 	ld iy, 6:i3
-	ldb c, 0x6
+	ld c, 0x6:opc
 
 ToneGen_AdvVoiceStep_Return:
 	ret
@@ -21282,7 +21282,7 @@ ToneGen_CalcTempo:
 	ld l, (0x3714:16)
 	cp l, 0:i3
 	jr nz, ToneGen_CalcTempo_Lookup
-	ldb l, 0x6
+	ld l, 0x6:opc
 
 ToneGen_CalcTempo_Lookup:
 	sla l, 1
@@ -21296,7 +21296,7 @@ ToneGen_CalcTempo_Lookup:
 	add de, bc
 	pop xix
 	ld wa, de
-	ldb l, 0x60
+	ld l, 0x60:opc
 	div8rr a, l
 	ld (0x342f:16), w
 	ld (0x3430:16), a
@@ -21337,7 +21337,7 @@ ToneGen_CalcTempo_Mode3:
 	ld wa, de
 
 ToneGen_CalcTempoBeatsAndTicks:
-	ldb l, 0x60
+	ld l, 0x60:opc
 	div8rr a, l
 	ld (0x342d:16), w
 	ld (0x342e:16), a
@@ -21397,7 +21397,7 @@ AccPlayback_UpdateRhythmSustain:
 	jr nz, AccPlayback_RhythmSust_Return
 	ld a, (0x3516:16)
 	ld e, (0x3517:16)
-	ldb d, 0x0
+	ld d, 0x0:opc
 	pushw wa
 	call RhythmBuf_WriteByte
 	inc 2, xsp
@@ -21498,7 +21498,7 @@ ToneGen_AdjVel_CheckBit2:
 	inc 1, a
 	cp a, 0x80
 	jr c, ToneGen_AdjVel_ClampHigh
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 ToneGen_AdjVel_ClampHigh:
 	jr ToneGen_AdjVel_StoreAndParam
@@ -21507,7 +21507,7 @@ ToneGen_AdjVel_Decrement:
 	dec 1, a
 	cp a, 0xff
 	jr nz, ToneGen_AdjVel_StoreAndParam
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 ToneGen_AdjVel_StoreAndParam:
 	ld e, a
@@ -21579,7 +21579,7 @@ ToneGen_AdjustVolumePan:
 	inc 1, a
 	cp a, 0x80
 	jr c, ToneGen_AdjVol_ClampHigh
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 ToneGen_AdjVol_ClampHigh:
 	jr ToneGen_AdjVol_WriteToBuffer
@@ -21592,7 +21592,7 @@ ToneGen_AdjVol_Decrement:
 	jr nz, ToneGen_AdjVol_WriteToBuffer
 
 ToneGen_AdjVol_ClampLow:
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 ToneGen_AdjVol_WriteToBuffer:
 	ld hl, (0x346b:16)
@@ -21640,7 +21640,7 @@ ToneGen_ProcessStereoType:
 	inc 1, a
 	cp a, 0x80
 	jr c, ToneGen_Stereo_CheckInc
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 ToneGen_Stereo_CheckInc:
 	jr ToneGen_Stereo_Decrement
@@ -21649,7 +21649,7 @@ ToneGen_Stereo_Increment:
 	dec 1, a
 	cp a, 0xff
 	jr nz, ToneGen_Stereo_Decrement
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 ToneGen_Stereo_Decrement:
 	jr ToneGen_Stereo_WriteParam
@@ -21657,11 +21657,11 @@ ToneGen_Stereo_Decrement:
 ToneGen_Stereo_ClampLow:
 	bit 4, (0x372d:16)
 	jr z, ToneGen_Stereo_Store
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	jr ToneGen_Stereo_WriteParam
 
 ToneGen_Stereo_Store:
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 ToneGen_Stereo_WriteParam:
 	ld hl, (0x346b:16)
@@ -21752,7 +21752,7 @@ ToneGen_WriteMultiChanParam:
 	ld xix, Display_FontPalette_Table_0x12EA
 	ldb_sri A, 0x07, 0xf0, 0xec
 	pop xix
-	ldb e, 0x90
+	ld e, 0x90:opc
 	bit 6, (0x34ea:16)
 	jr z, ToneGen_MultiChan_Compare
 	bit 3, (0x379b:16)
@@ -21768,7 +21768,7 @@ ToneGen_MultiChan_Compare:
 ToneGen_MultiChan_AdjustVel:
 	cp a, 7:i3
 	jr nz, AccVoice_ResolveNoteOnOffType
-	ldb e, 0x91
+	ld e, 0x91:opc
 	jr ToneGen_MultiChan_CheckBit4
 
 AccVoice_ResolveNoteOnOffType:
@@ -21783,7 +21783,7 @@ AccVoice_ResolveNoteOnOffType:
 	pop xix
 	cp a, 0:i3
 	jr z, ToneGen_MultiChan_CheckBit4
-	ldb e, 0x91
+	ld e, 0x91:opc
 
 ToneGen_MultiChan_CheckBit4:
 	cp d, 0x90
@@ -22010,7 +22010,7 @@ ToneGen_SeqAdvanceMain:
 	ld (0x7f42:16), 15
 	ld (0xe3dc:16), 238
 	ld (0xe3de:16), 64
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 
 ToneGen_SeqAdv_Return:
@@ -22214,7 +22214,7 @@ ToneGen_StepFwd_Alternate:
 	jr ugt, ToneGen_StepAlt_Overflow
 	cp b, 3:i3
 	jr ugt, ToneGen_StepAlt_CheckBeat
-	ldb c, 0x0
+	ld c, 0x0:opc
 	jr ToneGen_StepAlt_Return
 
 ToneGen_StepAlt_CheckBeat:
@@ -22229,7 +22229,7 @@ ToneGen_StepAlt_Return:
 ToneGen_StepAlt_Overflow:
 	cp b, 1:i3
 	jr ugt, ToneGen_StepAlt_OverflowDone
-	ldb c, 0x0
+	ld c, 0x0:opc
 	jr ToneGen_StepAlt_StoreResult
 
 ToneGen_StepAlt_OverflowDone:
@@ -22325,7 +22325,7 @@ ChordDetect_CheckInversion1:
 	jr nz, RhythmParam_CheckExit4
 	cp e, 1:i3
 	jr nz, RhythmParam_CheckExit4
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 RhythmParam_CheckExit4:
 	ret
@@ -22409,7 +22409,7 @@ ChordDetect_CheckInversion2:
 	jr nz, RhythmParam_ValidExit
 	cp e, 1:i3
 	jr nz, RhythmParam_ValidExit
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 RhythmParam_ValidExit:
 	ret
@@ -22482,7 +22482,7 @@ AccPlayback_InitPartAssignment:
 	jr ule, AccPlayback_PartAssign_Store
 	cp (0x34fb:16), 4
 	jr nc, AccPlayback_PartAssign_Sub4
-	ldb a, 0x4
+	ld a, 0x4:opc
 	jr AccPlayback_PartAssign_Store
 
 AccPlayback_PartAssign_Sub4:
@@ -22665,7 +22665,7 @@ AccPat_InlineFunctions_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe0
-	ldb	d, 236
+	ld	d, 236:opc
 	.byte 0x83
 	pop	xix
 	pop	xwa
@@ -22775,7 +22775,7 @@ AccPat_Dispatch_InitSlot:
 	call AccPatch_InitCurrentSlot
 	ld (0x7f42:16), 23
 	call DrumVoice_NotifyEE
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 
 AccPat_CleanupAndFree:
@@ -22864,7 +22864,7 @@ AccPat_DualVoice_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
-	ldb	e, 237
+	ld	e, 237:opc
 	.byte 0xc8
 	nop
 	popw	wa
@@ -23181,10 +23181,10 @@ RhythmROM_PatternDisp_ReadByte:
 	pop xix
 	ld (xix), a
 	inc 1, xix
-	ldb a, 0x20
+	ld a, 0x20:opc
 	ld (xix), a
 	inc 1, xix
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (xix), a
 	inc 1, xix
 	ld a, (0x34ed:16)
@@ -23236,7 +23236,7 @@ RhythmROM_PatternDisp_Handle90:
 	add xiy, xwa
 	ld xix, (0x3560:16)
 	add xix, 0x18
-	ldb a, 0x5
+	ld a, 0x5:opc
 
 RhythmROM_PatternDisp_Check91:
 	ld bc, 7:i3
@@ -23311,11 +23311,11 @@ RhythmROM_InitPattern:
 	ld a, (xhl + 12)
 	ld xhl, __pad_F63EC6_0x2
 	ldb_sri L, 0x07, 0xec, 0xe0
-	ldb a, 0x7
+	ld a, 0x7:opc
 	cp l, (0x35b3:16)
 	jr nz, RhythmVoice_WriteParam_Return
 	or (0x35b0:16), 2
-	ldb a, 0x3
+	ld a, 0x3:opc
 
 RhythmVoice_WriteParam_Return:
 	jp RhythmROM_NullRet
@@ -23352,7 +23352,7 @@ RhythmROM_ProcessPattern:
 	dec 1, a
 	cp w, 0:i3
 	jr z, RhythmROM_NullRet
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 	jr RhythmROM_NullRet
 
@@ -23418,7 +23418,7 @@ RhythmVoice_WriteBuf_Done:
 __pad_F63813:
 	nop
 	nop
-	ldb	c, 16
+	ld	c, 16:opc
 	ld	a, (xiy)
 	jr	nz, 3
 	ld	(xiy), 32
@@ -24106,7 +24106,7 @@ RhythmBuf_FillEmptyPattern:
 	pop xwa
 	add xhl, 0x6
 	ld e, a
-	ldb a, 0x81
+	ld a, 0x81:opc
 
 StyleConvert_ReloadParams:
 	ld (xhl), a
@@ -24123,7 +24123,7 @@ StyleConvert_Reload_Loop:
 	.byte 0xc1, 0xef
 	ldw	ix, 4159
 	jr	ule, 30
-	ldb	a, 123
+	ld	a, 123:opc
 	.byte 0xc1, 0xed
 	ldw	ix, 0x843f
 	jr	c, 13
@@ -24141,7 +24141,7 @@ StyleConvert_Reload_Loop:
 AccPat_CalcAccentVelocity:
 	cp (0x34ef:16), 19
 	jr ule, StyleConvert_Reload_Return
-	ldb a, 0x78
+	ld a, 0x78:opc
 	cp (0x34ed:16), 132
 	jr c, StyleConvert_Reload_CheckEnd
 	add a, 0x6
@@ -24157,7 +24157,7 @@ StyleConvert_Reload_CheckEnd:
 StyleConvert_Reload_Return:
 	cp (0x34ef:16), 16
 	jr c, StyleConvert_Reload_Done
-	ldb a, 0x70
+	ld a, 0x70:opc
 	cp (0x34ed:16), 132
 	jr c, StyleConvert_Reload_Fallback
 	add a, 0x4
@@ -24186,9 +24186,9 @@ __pad_F63F8F:
 	jr	z, 6
 	add	hl, 2
 	jr	-21
-	ldb	a, 1
+	ld	a, 1:opc
 	jr	2
-	ldb	a, 0
+	ld	a, 0:opc
 	ret
 	nop
 	nop
@@ -24212,10 +24212,10 @@ __pad_F63F8F:
 	jr	nc, 42
 	cp	h, 12
 	jr	nc, 12
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	w, (0xfc61:16)
 	jr	z, 2
-	ldb	a, 1
+	ld	a, 1:opc
 	jr	48
 	ld	a, (0x34d6:16)
 	sub	a, 12
@@ -24228,7 +24228,7 @@ __pad_F63F8F:
 	jr	23
 	cp	h, 12
 	jr	nc, 4
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	14
 	ld	a, (0x34d6:16)
 	sub	a, 12
@@ -24639,7 +24639,7 @@ DrumKit_ErrorFallbackSlotIter:
 	jr c, DrumKit_ErrorFallbackSlotIter
 	ld (0x7f42:16), 23
 	call DrumVoice_NotifyEE
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 	jr DrumKit_RestoreRegisters
 
@@ -24795,7 +24795,7 @@ DrumKit_FallbackSlotLoop:
 	jr c, DrumKit_FallbackSlotLoop
 	ld (0x7f42:16), 23
 	call DrumVoice_NotifyEE
-	ldb a, 0x8
+	ld a, 0x8:opc
 	call MIDI_SendSysExCmd
 	jr DrumKit_Epilogue
 
@@ -24989,7 +24989,7 @@ DrumParam_PointerTableAndData:
 	push_f
 	push_f
 	push_f
-	ldb	w, 32
+	ld	w, 32:opc
 	.ascii "      ((((((((0000000088888888@@@@@@@@HHHHHHHHPPPPPPPPXXXXXXXX"
 	jrl	nc, 32639
 	.byte 0x7f
@@ -25001,7 +25001,7 @@ DrumKitInit_Wrapper:
 	ret
 
 DrumKitInit_Entry:
-	ldb a, 0x48
+	ld a, 0x48:opc
 	call CtrlPanel_SetIndicatorBit
 	cp (0x8d35:16), 14
 	jr nz, DrumKitInit_Setup
@@ -25032,8 +25032,8 @@ DrumKitInit_Setup:
 
 DrumKitInit_ClearAssignFlags:
 	and (0xfc5f:16), 243
-	ldb d, 0x5
-	ldb e, 0x48
+	ld d, 0x5:opc
+	ld e, 0x48:opc
 	xor wa, wa
 	call SwbtWr_QueuePostEvent
 
@@ -25041,8 +25041,8 @@ DrumKitInit_CheckExtAssign:
 	bit 2, (0xfc60:16)
 	jr z, DrumKitInit_FinalSetup
 	and (0xfc60:16), 251
-	ldb d, 0x6
-	ldb e, 0x48
+	ld d, 0x6:opc
+	ld e, 0x48:opc
 	xor wa, wa
 	call SwbtWr_QueuePostEvent
 
@@ -25070,9 +25070,9 @@ DrumKit_SendPC_MaskAndSend:
 	and l, 0x1f
 	add l, 0x80
 	ld xbc, 0xfc5a
-	ldb a, 0x0
+	ld a, 0x0:opc
 	stb_dri L, 0x03, 0xe4, 0xe0
-	ldb a, 0x1
+	ld a, 0x1:opc
 	ldb_sri H, 0x03, 0xe4, 0xe0
 	and h, 0x80
 	stb_dri H, 0x03, 0xe4, 0xe0
@@ -25086,7 +25086,7 @@ DrumKitExit_Wrapper:
 	ret
 
 DrumKitExit_Entry:
-	ldb a, 0x48
+	ld a, 0x48:opc
 	call CtrlPanel_SetIndicatorBit
 	cp (0x8d34:16), 14
 	jr nz, DrumKitExit_CheckState1
@@ -25166,17 +25166,17 @@ DrumKit_ValidateBank:
 	jr ule, DrumKit_ValidateBank_Return
 	cp a, 0x91
 	jr ugt, DrumKit_ValidateBank_Mid
-	ldb l, 0x80
+	ld l, 0x80:opc
 	jr DrumKit_ValidateBank_Apply
 
 DrumKit_ValidateBank_Mid:
 	cp a, 0x97
 	jr ugt, DrumKit_ValidateBank_High
-	ldb l, 0x84
+	ld l, 0x84:opc
 	jr DrumKit_ValidateBank_Apply
 
 DrumKit_ValidateBank_High:
-	ldb l, 0x88
+	ld l, 0x88:opc
 
 DrumKit_ValidateBank_Apply:
 	push l
@@ -25192,7 +25192,7 @@ DrumKit_ValidateBank_Return:
 DrumKit_StoreAndSendBank:
 	ld (0xfc5a:16), l
 	and (0xfc5b:16), 128
-	ldb h, 0x0
+	ld h, 0x0:opc
 	call PartCtrl_WriteProgramChange
 	ld xix, 0xff92
 	stb_dri H, 0x03, 0xf0, 0xec
@@ -25200,20 +25200,20 @@ DrumKit_StoreAndSendBank:
 	ret
 
 DrumKit_PostMidiEvents:
-	ldb e, 0x48
+	ld e, 0x48:opc
 	ld a, (0xfc5b:16)
 	and a, 0x7f
-	ldb d, 0x1
-	ldb w, 0x0
+	ld d, 0x1:opc
+	ld w, 0x0:opc
 	push_a
 	call SwbtWr_QueuePostEvent
 	pop_a
 	ld h, a
-	ldb e, 0x48
+	ld e, 0x48:opc
 	ld a, (0xfc5a:16)
 	and a, 0xff
-	ldb d, 0x0
-	ldb w, 0x0
+	ld d, 0x0:opc
+	ld w, 0x0:opc
 	push h
 	push_a
 	call SwbtWr_QueuePostEvent
@@ -25222,7 +25222,7 @@ DrumKit_PostMidiEvents:
 	ld l, a
 	ld (0x90f7:16), 72
 	call PartCtrl_WriteProgramChange
-	ldb c, 0x48
+	ld c, 0x48:opc
 	call MIDI_SetupChannelParams
 	ret
 
@@ -25294,13 +25294,13 @@ DrumKit_InlineCode1:
 	jr	z, 26
 	cp	e, 0:i3
 	jr	nz, 4
-	ldb	l, 0
+	ld	l, 0:opc
 	jr	11
 	cp	e, 32
 	jr	nz, 4
-	ldb	l, 4
+	ld	l, 4:opc
 	jr	2
-	ldb	l, 8
+	ld	l, 8:opc
 	ld	(0x34d6:16), l
 	calr	65007
 	ret
@@ -25308,8 +25308,8 @@ DrumKit_InlineCode1:
 	nop
 	nop
 	nop
-	ldb	w, 32
-	ldb	w, 32
+	ld	w, 32:opc
+	ld	w, 32:opc
 	rcf
 	rcf
 	rcf
@@ -25337,16 +25337,16 @@ DrumKit_InlineCode1:
 	and	a, 7
 	cp	a, 0:i3
 	jr	nz, 28
-	ldb	a, 2
-	ldb	w, 7
-	ldb	e, 72
-	ldb	d, 3
+	ld	a, 2:opc
+	ld	w, 7:opc
+	ld	e, 72:opc
+	ld	d, 3:opc
 	call	SwbtWr_TrailingBytecode
-	ldb	a, 8
+	ld	a, 8:opc
 	or	(0xfc5d:16), a
-	ldb	w, 8
-	ldb	e, 72
-	ldb	d, 3
+	ld	w, 8:opc
+	ld	e, 72:opc
+	ld	d, 3:opc
 	call	SwbtWr_QueuePostEvent
 	ret
 
@@ -25880,7 +25880,7 @@ RhythmVariation_InlineCode:
 	pushw	iy
 	.byte 0x37
 	push	xiz
-	ldb	w, 14
+	ld	w, 14:opc
 	push	xiz
 	call	RhythmVariation_InlineCode_0x182
 	pop	xiz
@@ -25922,14 +25922,14 @@ DrumTempo_Adjust:
 	ld a, (0x3540:16)
 	bit 7, w
 	jr nz, DrumTempo_Decrement
-	ldb l, 0x6
+	ld l, 0x6:opc
 	ld xix, 0x94800
 	add xix, 0x10
 	bitm 0, (xix)
 	jr nz, DrumTempo_CheckMax
 	cp (0x34d6:16), 11
 	jr ugt, DrumTempo_CheckMax
-	ldb l, 0x8
+	ld l, 0x8:opc
 
 DrumTempo_CheckMax:
 	cp a, l
@@ -25956,7 +25956,7 @@ DrumVoice_Select:
 	ld l, (0x3540:16)
 	cp l, 1:i3
 	jr nc, DrumVoice_ClampMin
-	ldb l, 0x1
+	ld l, 0x1:opc
 
 DrumVoice_ClampMin:
 	dec 1, l
@@ -26130,35 +26130,35 @@ DrumVoice_Handler4:
 	jr	nz, 35
 	cp	a, 0:i3
 	jr	nz, 4
-	ldb	a, 64
+	ld	a, 64:opc
 	jr	25
 	cp	a, 64
 	jr	nz, 4
-	ldb	a, 32
+	ld	a, 32:opc
 	jr	16
 	cp	a, 32
 	jr	nz, 4
-	ldb	a, 96
+	ld	a, 96:opc
 	jr	7
 	cp	a, 96
 	jr	nz, 2
-	ldb	a, 96
+	ld	a, 96:opc
 	jr	33
 	cp	a, 0:i3
 	jr	nz, 4
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	25
 	cp	a, 64
 	jr	nz, 4
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	16
 	cp	a, 32
 	jr	nz, 4
-	ldb	a, 64
+	ld	a, 64:opc
 	jr	7
 	cp	a, 96
 	jr	nz, 2
-	ldb	a, 32
+	ld	a, 32:opc
 	.byte 0xc1, 0xea
 	ldw	ix, 0x9f3c
 	or	(0x34ea:16), a
@@ -26316,7 +26316,7 @@ DrumVoice_Handler7:
 	.byte 0xd3
 	pop	sr
 	.byte 0xf0, 0xe0
-	ldb	c, 29
+	ld	c, 29:opc
 	ld	xbc, 0x0ef656
 	nop
 	normal
@@ -26349,7 +26349,7 @@ DrumVoice_Handler7:
 	.byte 0xd3
 	pop	sr
 	.byte 0xf0, 0xe0
-	ldb	c, 29
+	ld	c, 29:opc
 	ld	xbc, 0x030ef656
 	nop
 	max
@@ -26479,7 +26479,7 @@ DrumVoice_Handler7:
 	push	xiz
 	ldio	193, 186
 	swi	5
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	retd	0x88c9
 	cp	hl, 0:i3
@@ -26487,18 +26487,18 @@ DrumVoice_Handler7:
 	inc	1, a
 	cp	a, 13
 	jr	c, 13
-	ldb	a, 12
+	ld	a, 12:opc
 	jr	9
 	dec	1, a
 	cp	a, 255
 	jr	nz, 2
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0xfdba:16), a
 	cp	a, w
 	jr	z, 10
-	ldb	w, 15
-	ldb	e, 145
-	ldb	d, 4
+	ld	w, 15:opc
+	ld	e, 145:opc
+	ld	d, 4:opc
 	call	SwbtWr_QueuePostEvent
 	ret
 	ret
@@ -26510,7 +26510,7 @@ DrumVoice_Handler7:
 	and	l, 255
 	ld	h, (0xfc5b:16)
 	and	h, 127
-	ldb	a, 72
+	ld	a, 72:opc
 	ld	(0x90f7:16), a
 	call	PartCtrl_WriteProgramChange
 	pop	w
@@ -26519,15 +26519,15 @@ DrumVoice_Handler7:
 	inc	1, l
 	cp	l, 14
 	jr	c, 13
-	ldb	l, 13
+	ld	l, 13:opc
 	jr	9
 	dec	1, l
 	cp	l, 255
 	jr	nz, 2
-	ldb	l, 0
+	ld	l, 0:opc
 	ld	xix, 0xff92
 	ld_rr8b h, xix, l
-	ldb a, 72
+	ld a, 72:opc
 	ld	(0x90f6:16), a
 	call	SndParam_ApplyProgramChange_Safe
 	and	l, 255
@@ -26561,7 +26561,7 @@ DrumVoice_Handler7:
 	and	l, 255
 	ld	h, (0xfc5b:16)
 	and	h, 127
-	ldb	a, 72
+	ld	a, 72:opc
 	ld	(0x90f7:16), a
 	call	PartCtrl_WriteProgramChange
 	ld	a, h
@@ -26580,7 +26580,7 @@ DrumVoice_Handler7:
 	dec 1, a
 	cp a, 255
 	jr	nz, 2
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	h, a
 	ld	xwa, 0xff92
 	.byte 0xf3
@@ -26622,7 +26622,7 @@ DrumVoice_Handler7:
 	jr	14
 	ld	(0x7f42:16), 22
 	calr	7
-	ldb	a, 8
+	ld	a, 8:opc
 	call	MIDI_SendSysExCmd
 	ret
 
@@ -26635,7 +26635,7 @@ DrumVoice_NotifyEE:
 	push xiy
 	push xiz
 	xor wa, wa
-	ldb a, 0xee
+	ld a, 0xee:opc
 	call SoundCtrl_SendCommand
 	pop xiz
 	pop xiy
@@ -26719,7 +26719,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	and	l, 255
 	ld	h, (0xfc5b:16)
 	and	h, 127
-	ldb	a, 72
+	ld	a, 72:opc
 	ld	(0x90f7:16), a
 	call	PartCtrl_WriteProgramChange
 	pop	w
@@ -26728,25 +26728,25 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	inc	1, l
 	cp	l, 14
 	jr	nz, 4
-	ldb	l, 15
+	ld	l, 15:opc
 	jr	27
 	cp	l, 16
 	jr	c, 22
-	ldb	l, 15
+	ld	l, 15:opc
 	jr	18
 	dec	1, l
 	cp	l, 14
 	jr	nz, 4
-	ldb	l, 13
+	ld	l, 13:opc
 	jr	7
 	cp	l, 255
 	jr	nz, 2
-	ldb	l, 0
+	ld	l, 0:opc
 	ld	a, l
 	ld	xix, 0xff92
 	ld_rr8b h, xix, l
 	ld l, a
-	ldb	a, 72
+	ld	a, 72:opc
 	ld	(0x90f6:16), a
 	call	SndParam_ApplyProgramChange_Safe
 	and	l, 255
@@ -26777,7 +26777,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	and	l, 255
 	ld	h, (0xfc5b:16)
 	and	h, 127
-	ldb	a, 72
+	ld	a, 72:opc
 	ld	(0x90f7:16), a
 	call	PartCtrl_WriteProgramChange
 	ld	a, h
@@ -26797,7 +26797,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	.byte 0xf0, 0xe0
 	.ascii "!\\h*…a¡-"
 	ldw	ix, 0x63f1
-	ldb	b, 193
+	ld	b, 193:opc
 	pushw	iy
 	ldw	ix, 0x6821
 	.byte 0x1c
@@ -26811,7 +26811,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	dec	1, a
 	cp	a, 255
 	jr	nz, 2
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	h, a
 	ld	xwa, 0xff92
 	.byte 0xf3
@@ -26854,7 +26854,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	and	l, 255
 	cp	l, 240
 	jr	c, 11
-	ldb	l, 128
+	ld	l, 128:opc
 	ld	(0x34ed:16), l
 	ld	(0x34ee:16), 0
 	cp	l, 128
@@ -26920,7 +26920,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	and	l, 255
 	ld	h, (0xfc5b:16)
 	and	h, 127
-	ldb	a, 72
+	ld	a, 72:opc
 	ld	(0x90f7:16), a
 	call	PartCtrl_WriteProgramChange
 	pushw	hl
@@ -26947,7 +26947,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	.byte 0xc3
 	pop	sr
 	.byte 0xf0, 0xe0
-	ldb	a, 241
+	ld	a, 241:opc
 	.byte 0xd6
 	ldw	ix, 0x5c41
 	.byte 0xc1
@@ -26971,19 +26971,19 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld_rr8b a, xix, a
 	ld (13526:16), a
 	pop xix
-	ldb	a, 26
+	ld	a, 26:opc
 	jr	0
 	ld	(0x34ef:16), a
 	ret
 	calr	7710
 	calr	7967
 	.byte 0x1f, 0x1f
-	ldb	w, 32
-	ldb	w, 32
+	ld	w, 32:opc
+	ld	w, 32:opc
 	calr	7710
 	calr	7710
 	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f
-	ldb	w, 32
+	ld	w, 32:opc
 	.ascii "    "
 	calr	8223
 	nop
@@ -27073,34 +27073,34 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	cp	a, 31
 	jr	nz, 7
 	calr	65
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	17
 	cp	a, 4:i3
 	jr	nz, 4
-	ldb	a, 12
+	ld	a, 12:opc
 	jr	9
 	cp	a, 18
 	jr	lt, 4
-	ldb	a, 17
+	ld	a, 17:opc
 	jr	0
 	jr	41
 	dec	1, a
 	cp	a, 29
 	jr	nz, 4
-	ldb	a, 30
+	ld	a, 30:opc
 	jr	30
 	cp	a, 255
 	jr	nz, 9
-	ldb	a, 30
+	ld	a, 30:opc
 	ld	(0x34ef:16), 26
 	jr	16
 	cp	a, 11
 	jr	nz, 4
-	ldb	a, 3
+	ld	a, 3:opc
 	jr	7
 	cp	a, 18
 	jr	lt, 2
-	ldb	a, 17
+	ld	a, 17:opc
 	ret
 	ld	a, (0xfc5a:16)
 	and	a, 255
@@ -27116,33 +27116,33 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	cp	a, 32
 	jr	nz, 7
 	calr	65496
-	ldb	a, 4
+	ld	a, 4:opc
 	jr	16
 	cp	a, 8
 	jr	nz, 4
-	ldb	a, 18
+	ld	a, 18:opc
 	jr	7
 	cp	a, 24
 	jr	lt, 2
-	ldb	a, 23
+	ld	a, 23:opc
 	jr	40
 	dec	1, a
 	cp	a, 30
 	jr	nz, 4
-	ldb	a, 31
+	ld	a, 31:opc
 	jr	29
 	cp	a, 3:i3
 	jr	nz, 9
-	ldb	a, 31
+	ld	a, 31:opc
 	ld	(0x34ef:16), 26
 	jr	16
 	cp	a, 17
 	jr	nz, 4
-	ldb	a, 7
+	ld	a, 7:opc
 	jr	7
 	cp	a, 24
 	jr	lt, -40
-	ldb	a, 23
+	ld	a, 23:opc
 	ret
 	bit	7, w
 	jr	nz, 34
@@ -27150,34 +27150,34 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	cp	a, 33
 	jr	nz, 7
 	calr	65418
-	ldb	a, 8
+	ld	a, 8:opc
 	jr	18
 	cp	a, 12
 	jr	nz, 4
-	ldb	a, 24
+	ld	a, 24:opc
 	jr	9
 	cp	a, 30
 	jr	lt, 4
-	ldb	a, 29
+	ld	a, 29:opc
 	jr	0
 	jr	42
 	dec	1, a
 	cp	a, 31
 	jr	nz, 4
-	ldb	a, 32
+	ld	a, 32:opc
 	jr	31
 	cp	a, 7:i3
 	jr	nz, 9
-	ldb	a, 32
+	ld	a, 32:opc
 	ld	(0x34ef:16), 26
 	jr	18
 	cp	a, 23
 	jr	nz, 4
-	ldb	a, 11
+	ld	a, 11:opc
 	jr	9
 	cp	a, 30
 	jr	lt, -40
-	ldb	a, 29
+	ld	a, 29:opc
 	jr	0
 	ret
 	call	AccWrap_PlayModeDispatch
@@ -27193,7 +27193,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	add	xiy, 16
 	ld	(0x3922:16), xiy
 	.byte 0xf1
-	ldb	h, 57
+	ld	h, 57:opc
 	dec	6, w
 	ccf
 	ld	xbc, 4:i3
@@ -27203,7 +27203,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	scf
 	ld	(0x390d:16), 0
 	.byte 0xc1
-	ldb	h, 57
+	ld	h, 57:opc
 	push	xix
 	swi	6
 	ret
@@ -27211,7 +27211,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ret
 	ld	xwa, 0:i3
 	ld	xbc, 0:i3
-	ldb	a, 32
+	ld	a, 32:opc
 	ld	c, (0x390a:16)
 	mul8rr	a, c
 	add	xwa, 0x094800
@@ -27233,7 +27233,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	push	xix
 	swi	3
 	.byte 0xc1
-	ldb	h, 57
+	ld	h, 57:opc
 	push	xix
 	swi	6
 	ret
@@ -27244,17 +27244,17 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	jr	nc, 4
 	inc	1, a
 	jr	2
-	ldb	a, 4
+	ld	a, 4:opc
 	jr	10
 	cp	a, 0:i3
 	jr	ule, 4
 	dec	1, a
 	jr	2
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x390a:16), a
 	or	a, 240
 	ld	(0xfc5a:16), a
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0xfc5b:16), a
 	calr	60624
 	ld	(0x390d:16), 0
@@ -27298,16 +27298,16 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld xix, 14606
 	calr	6
 	.byte 0xc1
-	ldb	h, 57
+	ld	h, 57:opc
 	push	xiz
 	normal
 	ret
 	ld	(0x390d:16), 0
-	ldb	h, 0
+	ld	h, 0:opc
 	calr	63
 	ld	wa, bc
 	pushw	wa
-	ldb	h, 1
+	ld	h, 1:opc
 	calr	55
 	popw	wa
 	cp	bc, 0xffff
@@ -27316,7 +27316,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	jr	z, 3
 	calr	81
 	pushw	wa
-	ldb	h, 2
+	ld	h, 2:opc
 	calr	35
 	popw	wa
 	cp	bc, 0xffff
@@ -27325,7 +27325,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	jr	z, 3
 	calr	61
 	pushw	wa
-	ldb	h, 3
+	ld	h, 3:opc
 	calr	15
 	popw	wa
 	cp	bc, 0xffff
@@ -27397,21 +27397,21 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	inc	6, a
 	push	34
 	swi	7
-	ldb	a, 1
+	ld	a, 1:opc
 	.byte 0xf3
 	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xde, 0xca390df1
 	jr	z, 9
-	ldb	b, 255
-	ldb	a, 2
+	ld	b, 255:opc
+	ld	a, 2:opc
 	.byte 0xf3
 	pop	sr
 	.byte 0xf0, 0xe0
 	ld	xde, 0xcb390df1
 	jr	z, 9
-	ldb	b, 255
-	ldb	a, 3
+	ld	b, 255:opc
+	ld	a, 3:opc
 	st_rr8b b, xix, a
 	ret
 	ld xbc, 4:i3
@@ -27433,7 +27433,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	(0x379b:16), 1
 	.byte 0xf1, 0xc9, 0x37
 	dec	6, d
-	ldb	h, 241
+	ld	h, 241:opc
 	.byte 0x9b, 0x37
 	nop
 	push	sr
@@ -27506,7 +27506,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	dec	1, l
 	st_rr8b l, xiy, a
 	ret
-	ldb b, 42
+	ld b, 42:opc
 	ldw de, 15930
 	call	TimeSig_DisplayStrings_0x8AB
 	pop	xiz
@@ -27529,7 +27529,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	dec	1, l
 	st_rr8b l, xiy, a
 	ret
-	ldb e, 45
+	ld e, 45:opc
 	ldw iy, 49469
 	ldw iz, 8589
 	cp	a, (36151:16)
@@ -28149,7 +28149,7 @@ Tempo_DisplayBPMClean:
 	calr Voice_ScanTableByType
 	cp l, 1:i3
 	jr z, Tempo_DisplayBPMExit
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 Tempo_DisplayBPMExit:
 	popw_erp 0xfa
@@ -28415,13 +28415,13 @@ SeqRec_OverflowCleanup:
 	jr c, SeqRec_CommitData
 	cp e, 7:i3
 	jr nz, SeqRec_CommitData
-	ldb c, 0x58
+	ld c, 0x58:opc
 	jr SeqRec_CommitFinalize
 
 SeqRec_CommitData:
 	cp c, 0xf0
 	jr c, SeqRec_Validate
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 SeqRec_CommitFinalize:
 	ld (xwa), c
@@ -28518,7 +28518,7 @@ SetWall_StoreAndResolve:
 
 MIDIChan_ScanForFree:
 	ld xbc, 0xf1a0
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 MIDIChan_ScanLoop:
 	cp (xbc), 0x10
@@ -28608,11 +28608,11 @@ Part_IsPercussionType:
 	jr nz, PartType_NotPercussion
 
 EventCode_CheckExit:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr PartType_Return
 
 PartType_NotPercussion:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 PartType_Return:
 	ret
@@ -28730,7 +28730,7 @@ VoiceScan_WriteLoop:
 	ld xwa, xhl
 	cp xwa, 0xffffffff
 	jr nz, VoiceScan_NextEntry
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr VoiceScan_Return
 
 VoiceScan_NextEntry:
@@ -28739,7 +28739,7 @@ VoiceScan_NextEntry:
 	jr c, VoiceScan_WriteLoop
 
 VoiceScan_NotFound:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 VoiceScan_Return:
 	pop xiz
@@ -28919,7 +28919,7 @@ VoiceNote_SubtractOffset:
 	cp e, 0x19
 	jr nc, Voice_BoundaryCheck
 	ld xix, xbc
-	ldb a, 0x19
+	ld a, 0x19:opc
 	sub a, e
 	ld e, a
 	ld a, (xbc)
@@ -29035,12 +29035,12 @@ VoiceParam_D0Handler:
 
 ; Voice param downscale below 0x40
 VoiceParam_DownscaleBelow40:
-	ldb a, 0x40
+	ld a, 0x40:opc
 	sub a, e
 	extz wa
 	div a, 0x6
 	ld e, a
-	ldb a, 0x40
+	ld a, 0x40:opc
 	sub a, e
 	ld (xbc), a
 	ret
@@ -29114,26 +29114,26 @@ Voice_ResolveSlotAddr:
 	ret
 
 VoiceSlot_Dispatch_Type81:
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	ld (0x37c8:16), a
-	ldb a, 0xff
+	ld a, 0xff:opc
 	ld (0x37c7:16), a
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 VoiceSlot_Dispatch_Type90:
 	cp c, 7:i3
 	jr z, VoiceSlot_Dispatch_D0Type
 	ld xwa, 0x37ab
-	ldb e, 0x0
+	ld e, 0x0:opc
 	stb_dri E, 0x03, 0xe0, 0xe4
 	ld xwa, 0x37b2
-	ldb e, 0x1
+	ld e, 0x1:opc
 	stb_dri E, 0x03, 0xe0, 0xe4
 	ld xwa, 0x37b9
-	ldb e, 0xff
+	ld e, 0xff:opc
 	stb_dri E, 0x03, 0xe0, 0xe4
 	ld xwa, 0x37c0
-	ldb e, 0xff
+	ld e, 0xff:opc
 	stb_dri E, 0x03, 0xe0, 0xe4
 	inc 1, c
 	jr VoiceSlot_Dispatch_Type90
@@ -29183,19 +29183,19 @@ VoiceSlot_Dispatch_Return:
 	and	l, 31
 	add	l, 128
 	ld	xbc, 0xfc5a
-	ldb	a, 0
+	ld	a, 0:opc
 	.byte 0xf3
 	pop	sr
 	.byte 0xe4, 0xe0
 	ld	xsp, 0x03c30121
 	.byte 0xe4, 0xe0
-	ldb	h, 206
+	ld	h, 206:opc
 	add	w, d
 	st_rr8b h, xbc, a
 	ld a, (64602:16)
-	ldb	w, 0
-	ldb	e, 72
-	ldb	d, 0
+	ld	w, 0:opc
+	ld	e, 72:opc
+	ld	d, 0:opc
 	call	SwbtWr_QueuePostEvent
 	ret
 
@@ -29270,10 +29270,10 @@ VoiceTable_InitEntry_Done:
 	ret
 
 DrumParam_BuildActiveMask:
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld (0x37c8:16), w
 	xor bc, bc
-	ldb w, 0x1
+	ld w, 0x1:opc
 	ld xix, 0x37ab
 	ld xiy, 0x37b9
 
@@ -29289,7 +29289,7 @@ VoiceTable_InitEntry_Return:
 	cp bc, 7:i3
 	jr lt, VoiceTable_InitEntry_Store
 	xor bc, bc
-	ldb w, 0x1
+	ld w, 0x1:opc
 	ld xix, 0x37b2
 	ld xiy, 0x37c0
 
@@ -29307,7 +29307,7 @@ MultiVoice_Setup_Loop:
 	ld a, (0x34d6:16)
 	cp a, (0x37c7:16)
 	jr z, MultiVoice_Setup_WriteParam
-	ldb b, 0x7f
+	ld b, 0x7f:opc
 	ld (0x37c8:16), b
 
 MultiVoice_Setup_WriteParam:
@@ -29321,7 +29321,7 @@ Rhythm_MapChannelToDrumIndex:
 	ld c, (xbc)
 	cp c, 6:i3
 	jr le, MultiVoice_Setup_NextChan
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MultiVoice_Setup_NextChan:
 	push c
@@ -29742,17 +29742,17 @@ VoiceResolve_CheckAndStore:
 	and a, c
 	cp a, c
 	jr nz, VoiceResolve_Return
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr __pad_F67412
 
 VoiceResolve_Return:
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 __pad_F67412:
 	jr VoiceResolve_InitSearch
 
 Rhythm_ClearChannelDrumIndex:
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 VoiceResolve_InitSearch:
 	push_a
@@ -29839,7 +29839,7 @@ PartVoice_Update_Loop:
 	jr z, DrumParam_ClampVoiceCount
 	cp c, 1:i3
 	jr ge, DrumParam_ClampVoiceCount
-	ldb c, 0x1
+	ld c, 0x1:opc
 
 DrumParam_ClampVoiceCount:
 	cp c, w
@@ -29853,7 +29853,7 @@ PartVoice_Update_Return:
 	jr __pad_F674CB
 
 PartVoice_Update_Done:
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 __pad_F674CB:
 	ld (xix), c
@@ -29971,7 +29971,7 @@ ExtVoice_ProcessList:
 	inc	6, e
 	jp	0x37c9f1
 	nop
-	ldb	w, 30
+	ld	w, 30:opc
 	.byte 0x54
 	nop
 	calr	64199
@@ -30063,7 +30063,7 @@ Voice_ClearSlotBuffer:
 AccVoice_SetupSlots_StoreEntry:
 	cp bc, 0:i3
 	jr z, AccVoice_SetupSlots_Return
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ld (xix), a
 	inc 1, xix
 	dec 1, bc
@@ -30082,14 +30082,14 @@ __pad_F676C1:
 AccVoice_SetupSlots_CheckType:
 	cp bc, 0:i3
 	jr z, AccVoice_SetupSlots_Done
-	ldb e, 0x81
+	ld e, 0x81:opc
 	ld (xwa), e
 	inc 1, xwa
 	dec 1, bc
 	jr AccVoice_SetupSlots_CheckType
 
 AccVoice_SetupSlots_Done:
-	ldb c, 0x83
+	ld c, 0x83:opc
 	ld (xwa), c
 	ret
 
@@ -30098,7 +30098,7 @@ __pad_F676E6:
 	ld l, (0x34d6:16)
 	cp l, 0x1e
 	jr lt, AccVoice_SetupSlots_Write
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 AccVoice_SetupSlots_Write:
 	mul l, 0x60
@@ -30156,7 +30156,7 @@ AccVoice_SetupSlots_DataBlock:
 	ld (13842:16), hl
 	ldw (13844:16), 6
 	ret
-	ldb	c, 0
+	ld	c, 0:opc
 	ld	(0x38d1:16), c
 	ld	c, (0x34d7:16)
 	inc	1, c
@@ -30178,7 +30178,7 @@ AccVoice_SetupSlots_DataBlock:
 	sll	xbc, 2
 	add	xbc, 0x3898
 	ld	(xbc), xwa
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x38d0:16), a
 	ld	c, (0x34d9:16)
 	cp	(0x38d0:16), c
@@ -30212,7 +30212,7 @@ AccVoice_SetupSlots_DataBlock:
 	ld	xbc, 1:i3
 	calr	110
 	pop	xbc
-	ldb	a, 129
+	ld	a, 129:opc
 	jr	5
 	push_a
 	calr	101
@@ -30233,30 +30233,30 @@ AccVoice_SetupSlots_DataBlock:
 	jr	z, 4
 	ld	a, (xwa)
 	jr	2
-	ldb	a, 131
+	ld	a, 131:opc
 	ret
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	a, 144
 	jr	nz, 4
-	ldb	c, 6
+	ld	c, 6:opc
 	jr	46
 	cp	a, 145
 	jr	nz, 4
-	ldb	c, 8
+	ld	c, 8:opc
 	jr	37
 	cp	a, 129
 	jr	nz, 4
-	ldb	c, 1
+	ld	c, 1:opc
 	jr	28
 	cp	a, 131
 	jr	nz, 4
-	ldb	c, 1
+	ld	c, 1:opc
 	jr	19
 	ld	w, a
 	and	w, 208
 	cp	w, 208
 	jr	nz, 4
-	ldb	c, 3
+	ld	c, 3:opc
 	jr	5
 	cp	c, 0:i3
 	jr	nz, 1
@@ -30369,7 +30369,7 @@ AccVoice_SetupSlots_DataBlock:
 	add	xbc, 0x3898
 	ld	xwa, AccVoice_SetupSlots_DataBlock_0x26C
 	ld	(xbc), xwa
-	ldb	c, 1
+	ld	c, 1:opc
 	calr	65271
 	ret
 	ld	a, (xhl)
@@ -30382,10 +30382,10 @@ AccVoice_SetupSlots_DataBlock:
 	ret
 	calr	64844
 	ld	w, (0x34d8:16)
-	ldb	a, 12
+	ld	a, 12:opc
 	st_rr8b w, xix, a
 	ld w, (13527:16)
-	ldb	a, 13
+	ld	a, 13:opc
 	.byte 0xf3
 	pop	sr
 	.byte 0xf0, 0xe0
@@ -30404,11 +30404,11 @@ AccVoice_SetupSlots_DataBlock:
 	pop	xix
 	ld	xiy, 0x38d2
 	ld_rr8b w, xiy, c
-	ldb a, 16
+	ld a, 16:opc
 	st_rr8b w, xix, a
 	ld xiy, 14553
 	ld_rr8b w, xiy, c
-	ldb a, 17
+	ld a, 17:opc
 	st_rr8b w, xix, a
 	ld xiy, 16153090
 	add	xix, 64
@@ -30432,7 +30432,7 @@ AccVoice_SetupSlots_DataBlock:
 	jr	-25
 	calr	65327
 	ret
-	ldb	a, 1
+	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	calr	64907
 	push	xwa
@@ -30441,7 +30441,7 @@ AccVoice_SetupSlots_DataBlock:
 	sll	xbc, 2
 	add	xbc, 0x3898
 	ld	(xbc), xwa
-	ldb	a, 2
+	ld	a, 2:opc
 	ld	(0x37c9:16), a
 	calr	64882
 	push	xwa
@@ -30450,7 +30450,7 @@ AccVoice_SetupSlots_DataBlock:
 	sll	xbc, 2
 	add	xbc, 0x3898
 	ld	(xbc), xwa
-	ldb	a, 4
+	ld	a, 4:opc
 	ld	(0x37c9:16), a
 	calr	64857
 	push	xwa
@@ -30459,7 +30459,7 @@ AccVoice_SetupSlots_DataBlock:
 	sll	xbc, 2
 	add	xbc, 0x3898
 	ld	(xbc), xwa
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x38d0:16), a
 	ld	c, (0x34d9:16)
 	cp	(0x38d0:16), c
@@ -30472,13 +30472,13 @@ AccVoice_SetupSlots_DataBlock:
 	pop	c
 	jr	-25
 	ret
-	ldb	a, 1
+	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	calr	123
-	ldb	a, 2
+	ld	a, 2:opc
 	ld	(0x37c9:16), a
 	calr	114
-	ldb	a, 4
+	ld	a, 4:opc
 	ld	(0x37c9:16), a
 	calr	105
 	calr	329
@@ -30491,12 +30491,12 @@ AccVoice_SetupSlots_DataBlock:
 	ld	(0x37c9:16), l
 	calr	64923
 	jrl	-54
-	ldb	a, 1
+	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	ld	xbc, 0:i3
-	ldb	c, 1
+	ld	c, 1:opc
 	calr	64907
-	ldb	a, 2
+	ld	a, 2:opc
 	ld	(0x37c9:16), a
 	calr	62920
 	sll	xbc, 2
@@ -30506,7 +30506,7 @@ AccVoice_SetupSlots_DataBlock:
 	jr	z, 4
 	inc	1, xwa
 	ld	(xbc), xwa
-	ldb	a, 4
+	ld	a, 4:opc
 	ld	(0x37c9:16), a
 	calr	62888
 	sll	xbc, 2
@@ -30540,24 +30540,24 @@ AccVoice_SetupSlots_DataBlock:
 	ld	(xbc), xwa
 	calr	92
 	ret
-	ldb	a, 1
+	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	calr	40
 	cp	a, 129
 	jr	nz, 32
-	ldb	a, 2
+	ld	a, 2:opc
 	ld	(0x37c9:16), a
 	calr	26
 	cp	a, 129
 	jr	nz, 18
-	ldb	a, 4
+	ld	a, 4:opc
 	ld	(0x37c9:16), a
 	calr	12
 	cp	a, 129
 	jr	nz, 4
-	ldb	w, 0
+	ld	w, 0:opc
 	jr	2
-	ldb	w, 1
+	ld	w, 1:opc
 	ret
 	ld	xix, 0x342d
 	push	xix
@@ -30603,8 +30603,8 @@ AccVoice_SetupSlots_DataBlock:
 	ld	a, (xwa)
 	ld	(xix), a
 	ret
-	ldb	l, 0
-	ldb	a, 0
+	ld	l, 0:opc
+	ld	a, 0:opc
 	ld	xix, 0x342d
 	cp	l, 2:i3
 	jr	gt, 46
@@ -30613,7 +30613,7 @@ AccVoice_SetupSlots_DataBlock:
 	.byte 0xc3
 	pop	sr
 	.byte 0xf0, 0xec
-	ldb	h, 206
+	ld	h, 206:opc
 	ldw	hl, 0x6607
 	.byte 0x04
 	inc	1, l
@@ -30621,7 +30621,7 @@ AccVoice_SetupSlots_DataBlock:
 	.byte 0xc3
 	pop	sr
 	.byte 0xf0, 0xe0
-	ldb	w, 200
+	ld	w, 200:opc
 	ldw	hl, 0x6607
 	.byte 0x04
 	inc	1, a
@@ -30635,7 +30635,7 @@ AccVoice_SetupSlots_DataBlock:
 	jr	-50
 	cp	l, 2:i3
 	jr	le, 2
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 	calr	62568
 	ld	ix, bc
@@ -30674,7 +30674,7 @@ AccVoice_SetupSlots_DataBlock:
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	e, 205
+	ld	e, 205:opc
 	.byte 0x04
 	ld	xde, 0:i3
 	pop	e
@@ -30919,7 +30919,7 @@ VoiceSlot_ResolveFromMap:
 	push xhl
 	push xix
 	push xiz
-	ldb w, 0x0
+	ld w, 0x0:opc
 	call DrumTempo_Adjust
 	pop xiz
 	pop xix
@@ -30932,7 +30932,7 @@ VoiceSlot_Resolve_StoreMap:
 	push xhl
 	push xix
 	push xiz
-	ldb w, 0x80
+	ld w, 0x80:opc
 	call DrumTempo_Adjust
 	pop xiz
 	pop xix
@@ -30946,7 +30946,7 @@ CmpSetTtl_DrumVoice0:
 	push xhl
 	push xix
 	push xiz
-	ldb w, 0x0
+	ld w, 0x0:opc
 	call DrumVoice_Select
 	pop xiz
 	pop xix
@@ -30960,7 +30960,7 @@ CmpSetTtl_DrumVoice1:
 	push xhl
 	push xix
 	push xiz
-	ldb w, 0x80
+	ld w, 0x80:opc
 	call DrumVoice_Select
 	pop xiz
 	pop xix
@@ -31774,7 +31774,7 @@ CmpNcpTtl_Dispatch2:
 	push	xhl
 	push	xix
 	push	xiz
-	ldb	w, 0
+	ld	w, 0:opc
 	call	DrumVoice_Handler7_0x100
 	pop	xiz
 	pop	xix
@@ -31985,7 +31985,7 @@ CmpNcpTtl_Dispatch2:
 	push	xhl
 	push	xix
 	push	xiz
-	ldb	w, 0
+	ld	w, 0:opc
 	call	DrumVoice_Handler7_0x146
 	pop	xiz
 	pop	xix
@@ -32067,7 +32067,7 @@ CmpNcpTtl_Dispatch2:
 	push	xhl
 	push	xix
 	push	xiz
-	ldb	w, 0
+	ld	w, 0:opc
 	call	DrumVoice_Handler7_0x169
 	pop	xiz
 	pop	xix
@@ -32294,7 +32294,7 @@ CmEsyTtl_Dispatch2:
 	push xhl
 	push xix
 	push xiz
-	ldb a, 0x00
+	ld a, 0x00:opc
 	call VoiceSlot_Dispatch_Return
 	pop xiz
 	pop xix
@@ -32310,7 +32310,7 @@ CmEsyTtl_Dispatch2:
 	push xhl
 	push xix
 	push xiz
-	ldb a, 0x80
+	ld a, 0x80:opc
 	call VoiceSlot_Dispatch_Return
 	pop xiz
 	pop xix
@@ -32788,11 +32788,11 @@ CstmCpTtl_Dispatch2:
 	jrl	nz, 636
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
-	ldb	c, 29
+	ld	c, 29:opc
 	ld	a, (0x39b6:16)
 	cp	a, 10
 	jr	nc, 2
-	ldb	c, 2
+	ld	c, 2:opc
 	cp	a, c
 	jrl	nc, 612
 	inc	1, a
@@ -32809,11 +32809,11 @@ CstmCpTtl_Dispatch2:
 	jrl	nz, 567
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
-	ldb	c, 10
+	ld	c, 10:opc
 	ld	a, (0x39b6:16)
 	cp	a, 10
 	jr	nc, 2
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	a, c
 	jrl	ule, 543
 	dec	1, a
@@ -32860,11 +32860,11 @@ CstmCpTtl_Dispatch2:
 	jrl	nz, 379
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
-	ldb	c, 29
+	ld	c, 29:opc
 	ld	a, (0x39b7:16)
 	cp	a, 10
 	jr	nc, 2
-	ldb	c, 2
+	ld	c, 2:opc
 	cp	a, c
 	jrl	nc, 355
 	inc	1, a
@@ -32881,11 +32881,11 @@ CstmCpTtl_Dispatch2:
 	jrl	nz, 311
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
-	ldb	c, 10
+	ld	c, 10:opc
 	ld	a, (0x39b7:16)
 	cp	a, 10
 	jr	nc, 2
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	a, c
 	jrl	ule, 287
 	dec	1, a
@@ -33182,14 +33182,14 @@ MiddleName_HandleEvent01:
 	sll a, 4
 	cp c, 2:i3
 	jr nc, MiddleName_CalcROMAddr_High
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x1e8a80
 	jr MiddleName_CopyAndPost
 
 MiddleName_CalcROMAddr_High:
 	sub a, 0x20
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x1e8a40
 
@@ -33318,17 +33318,17 @@ MainCmpCp_HandleEvent03:
 	res 7, a
 	cp a, 4:i3
 	jr nc, MainCmpCp_ClampRange4
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr MainCmpCp_StoreClampResult
 
 MainCmpCp_ClampRange4:
 	cp a, 0x8
 	jr nc, MainCmpCp_ClampRange8
-	ldb a, 0x1
+	ld a, 0x1:opc
 	jr MainCmpCp_StoreClampResult
 
 MainCmpCp_ClampRange8:
-	ldb a, 0x2
+	ld a, 0x2:opc
 
 MainCmpCp_StoreClampResult:
 	pushw 0xd
@@ -33545,7 +33545,7 @@ MainEsCmpFunc:
 	push xhl
 	push xix
 	push xiz
-	ldb a, 0x0
+	ld a, 0x0:opc
 	call DrumParam_ProcessChannel
 	pop xiz
 	pop xix
@@ -33571,7 +33571,7 @@ EsCmp_HandleEvent28:
 	push xhl
 	push xix
 	push xiz
-	ldb a, 0x80
+	ld a, 0x80:opc
 	call DrumParam_ProcessChannel
 	pop xiz
 	pop xix
@@ -33598,7 +33598,7 @@ EsCmp_HandleEvent29:
 	push xhl
 	push xix
 	push xiz
-	ldb a, 0x0
+	ld a, 0x0:opc
 	call DrumParam_ProcessChannelAlt
 	pop xiz
 	pop xix
@@ -33618,7 +33618,7 @@ EsCmp_HandleEvent2A:
 	push xhl
 	push xix
 	push xiz
-	ldb a, 0x80
+	ld a, 0x80:opc
 	call DrumParam_ProcessChannelAlt
 	pop xiz
 	pop xix
@@ -33743,7 +33743,7 @@ __pad_F69D47:
 MainMspRgpSetFunc:
 	ld a, (0x7f3d:16)
 	sll a, 4
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x1e8a00
 	ld xiy, xwa
@@ -33850,7 +33850,7 @@ MspMenuTtl_Dispatch:
 	jr	c, 5
 	cp	l, 16
 	jr	ule, 4
-	ldb	l, 0
+	ld	l, 0:opc
 	jr	3
 	sub	l, 13
 	ld	(0x7f3e:16), l
@@ -33858,12 +33858,12 @@ MspMenuTtl_Dispatch:
 	sll	a, 4
 	cp	l, 2:i3
 	jr	nc, 12
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x1e8a80
 	jr	13
 	sub	a, 32
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x1e8a40
 	pushw	16
@@ -33963,7 +33963,7 @@ MspRecTtl_Dispatch:
 	jr	nz, 29
 	ld	a, (0x7f14:16)
 	sll	a, 4
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x1e8820
 	ld	a, (xwa)
@@ -33992,7 +33992,7 @@ MspRecTtl_SubA:
 MspRecTtl_SubA_CheckRange:
 	ld a, (0x7f14:16)
 	sll a, 4
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x1e8820
 	ld c, (0x7f3f:16)
@@ -34513,7 +34513,7 @@ AccScreen_DataBlock:
 	nop
 	.byte 0x04, 0xa6, 0xf6
 	nop
-	ldb	d, 166
+	ld	d, 166:opc
 	.byte 0xf6
 	nop
 	.byte 0x56, 0xa6, 0xf6
@@ -34559,7 +34559,7 @@ AccScreen_DataBlock:
 	.byte 0xe3
 	pop	sr
 	.byte 0xf0, 0xec
-	ldb	d, 180
+	ld	d, 180:opc
 	.byte 0xe8
 	ret
 	push	xix
@@ -34571,7 +34571,7 @@ AccScreen_DataBlock:
 	.byte 0xe3
 	pop	sr
 	.byte 0xf0, 0xe8
-	ldb	b, 92
+	ld	b, 92:opc
 	ret
 	nop
 	nop
@@ -34595,7 +34595,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -34621,7 +34621,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -34647,7 +34647,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -34673,7 +34673,7 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -34835,7 +34835,7 @@ AccScreen_DataBlock:
 	zcf
 	.byte 0x37
 	push	xiz
-	ldb	w, 14
+	ld	w, 14:opc
 	bit	7, w
 	jr	nz, 5
 	.byte 0xc1
@@ -34874,7 +34874,7 @@ AccScreen_DataBlock:
 	xor	wa, wa
 	ld	xiy, AccScreen_UIDataBlock_0x4F6
 	ld	xix, xiy
-	ldb	a, 35
+	ld	a, 35:opc
 	ld	c, (0x373e:16)
 	mul8rr	a, c
 	extz	xwa
@@ -34897,7 +34897,7 @@ AccScreen_DataBlock:
 	xor	wa, wa
 	ld	xix, xiy
 	add	xix, 10
-	ldb	a, 20
+	ld	a, 20:opc
 	mul8rr	a, c
 	cp	a, 0:i3
 	jr	z, 7
@@ -34924,7 +34924,7 @@ AccScreen_DataBlock:
 	.byte 0xc3
 	reti
 	.byte 0xf4, 0xec
-	ldb	l, 207
+	ld	l, 207:opc
 	.byte 0xcc
 	retd	0x541e
 	nop
@@ -34934,7 +34934,7 @@ AccScreen_DataBlock:
 	.byte 0xc3
 	reti
 	.byte 0xf4, 0xec
-	ldb	l, 207
+	ld	l, 207:opc
 	cp	w, d
 	srl	l, 4
 	calr	60
@@ -34955,7 +34955,7 @@ AccScreen_DataBlock:
 	cp	e, 4:i3
 	jr	ge, 23
 	add	xiy, 4
-	ldb	a, 8
+	ld	a, 8:opc
 	mul8rr	a, c
 	extz	xwa
 	sub	xix, xwa
@@ -34968,7 +34968,7 @@ AccScreen_DataBlock:
 	pushw	bc
 	ld	xiy, AccScreen_UIDataBlock_0x4B6
 	ld	bc, 4:i3
-	ldb	a, 6
+	ld	a, 6:opc
 	ld	xwa, 0x39cc
 	ld	(xwa), 6
 	ld	(xwa+1), 8
@@ -34978,7 +34978,7 @@ AccScreen_DataBlock:
 	sll	xhl, 2
 	add	xiy, xhl
 	.byte 0xc5, 0xf4
-	ldb	l, 184
+	ld	l, 184:opc
 	.byte 0x04
 	ld	xsp, 0xb827f4c5
 	halt
@@ -34997,7 +34997,7 @@ AccScreen_DataBlock:
 	jr	z, 2
 	dec	1, a
 	and	a, 127
-	ldb	c, 32
+	ld	c, 32:opc
 	div8rr	a, c
 	ld	(0x39b9:16), a
 	sla	wa, 1
@@ -35017,7 +35017,7 @@ AccScreen_DataBlock:
 	ld	(0x39c6:16), bc
 	add	bc, 8
 	ld	(0x39ca:16), bc
-	ldb	a, 5
+	ld	a, 5:opc
 	push	xwa
 	ld	xwa, 0x39c2
 	call	DrawText_LayoutAndRender_Variant1_0x6CA
@@ -35029,7 +35029,7 @@ AccScreen_DataBlock:
 	jr	z, 2
 	dec	1, a
 	and	a, 127
-	ldb	c, 32
+	ld	c, 32:opc
 	div8rr	a, c
 	ld	(0x39b9:16), a
 	ret
@@ -35068,7 +35068,7 @@ AccScreen_DrawTempoDisplay:
 AccScreen_CalcTempoParams:
 	xor wa, wa
 	ld a, (0x3718:16)
-	ldb l, 0xc
+	ld l, 0xc:opc
 	divs8rr a, l
 	ld (0x39b8:16), w
 	ld (0x39ba:16), a
@@ -35183,13 +35183,13 @@ AccScreen_UIDataBlock:
 
 ; Accompaniment step recording UI data: 698 bytes
 	ld	(0x03efa8:24), 0
-	ldb	c, 0
-	ldb	a, 12
-	ldb	a, 16
+	ld	c, 0:opc
+	ld	a, 12:opc
+	ld	a, 16:opc
 	call	Display_DeferOrDrawWall
 	ret
-	ldb	c, 7
-	ldb	a, 12
+	ld	c, 7:opc
+	ld	a, 12:opc
 	call	Display_DeferOrUpdateScreen
 	ret
 	xor	wa, wa
@@ -35202,7 +35202,7 @@ AccScreen_UIDataBlock:
 	jr	-9
 	ld	(0x39b8:16), w
 	ret
-	ldb	c, 5
+	ld	c, 5:opc
 	ldw	ix, 45
 	reti
 	ccf
@@ -35217,8 +35217,8 @@ AccScreen_UIDataBlock:
 	ld	xbc, 0x52455454
 	popw	iz
 	push	xde
-	ldb	w, 9
-	ldb	c, 4
+	ld	w, 9:opc
+	ld	c, 4:opc
 	.byte 0x50
 	ld	xbc, 0x063a5452
 	halt
@@ -35261,14 +35261,14 @@ AccScreen_UIDataBlock:
 	ld	xhl, 0x4f535255
 	.byte 0x52
 	ei	5
-	ldb	b, 33
+	ld	b, 33:opc
 	.byte 0x8d
 	ei	5
 	pushw	de
-	ldb	c, 142
+	ld	c, 142:opc
 	ei	5
 	push	xhl
-	ldb	a, 141
+	ld	a, 141:opc
 	ei	5
 	ld	xhl, 0x05068e23
 	ldw	wa, 0x3c22
@@ -35277,13 +35277,13 @@ AccScreen_UIDataBlock:
 	push	10
 	pop_a
 	normal
-	ldb	c, 0
+	ld	c, 0:opc
 	ldw	hl, 0x3201
 	nop
 	push	10
 	zcf
 	normal
-	ldb	a, 0
+	ld	a, 0:opc
 	ldw	iy, 0x3401
 	nop
 	push	10
@@ -35339,7 +35339,7 @@ AccScreen_UIDataBlock:
 	normal
 	ldwio	5, 0xdf00
 	nop
-	ldb	c, 0
+	ld	c, 0:opc
 	.byte 0xdf
 	nop
 	normal
@@ -35355,28 +35355,28 @@ AccScreen_UIDataBlock:
 	popw	sp
 	.byte 0x54
 	ld	xiy, 0x4c455620
-	ldb	w, 32
-	ldb	w, 76
+	ld	w, 32:opc
+	ld	w, 76:opc
 	ld	xiy, 0x4854474e
 	.byte 0x06
 	push_a
-	ldb	l, 33
+	ld	l, 33:opc
 	ld	w, (xiy+32)
-	ldb	w, 32
+	ld	w, 32:opc
 	ld	w, (xiy+32)
-	ldb	w, 32
+	ld	w, 32:opc
 	ld	w, (xiy+32)
-	ldb	w, 32
+	ld	w, 32:opc
 	.byte 0x8d, 0x06
 	push_a
 	pushw	sp
-	ldb	c, 142
-	ldb	w, 32
-	ldb	w, 32
+	ld	c, 142:opc
+	ld	w, 32:opc
+	ld	w, 32:opc
 	ld	w, (xiz+32)
-	ldb	w, 32
+	ld	w, 32:opc
 	ld	w, (xiz+32)
-	ldb	w, 32
+	ld	w, 32:opc
 	.byte 0x8e
 	ldwio	10, 45
 	or	(0x4b00:24), ix
@@ -35420,7 +35420,7 @@ AccScreen_UIDataBlock:
 	retd	0x39bb
 	swi	7
 	nop
-	ldb	w, 9
+	ld	w, 9:opc
 	.byte 0xb1, 0xf6
 	nop
 	reti
@@ -35430,7 +35430,7 @@ AccScreen_UIDataBlock:
 	retd	0x39b8
 	reti
 	nop
-	ldb	w, 92
+	ld	w, 92:opc
 	.byte 0xae, 0xf6
 	nop
 	ldio	0, 40
@@ -35443,7 +35443,7 @@ AccScreen_UIDataBlock:
 	nop
 	normal
 	nop
-	ldb	a, 8
+	ld	a, 8:opc
 	push	sr
 	retd	0x39bd
 	retd	1536
@@ -35519,7 +35519,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xf0
 	halt
-	ldb	b, 0
+	ld	b, 0:opc
 	.byte 0x88
 	nop
 	.byte 0x04
@@ -35537,10 +35537,10 @@ AccScreen_UIDataBlock:
 	push	0
 	.byte 0xb1
 	zcf
-	ldb	a, 0
+	ld	a, 0:opc
 	push	0
 	jr	lt, 24
-	ldb	a, 0
+	ld	a, 0:opc
 	push	0
 	.byte 0xb9, 0x1a, 0x1f
 	nop
@@ -35554,7 +35554,7 @@ AccScreen_UIDataBlock:
 	ld	xhl, 0x52544e4f
 	popw	sp
 	popw	ix
-	ldb	w, 80
+	ld	w, 80:opc
 	popw	bc
 	.byte 0x54
 	ld	xhl, 0x45422048
@@ -35564,42 +35564,42 @@ AccScreen_UIDataBlock:
 	.byte 0x54, 0x52
 	popw	sp
 	popw	ix
-	ldb	w, 77
+	ld	w, 77:opc
 	popw	sp
 	ld	xix, 0x54414c55
 	popw	bc
 	popw	sp
 	popw	iz
-	ldb	w, 61
+	ld	w, 61:opc
 	ld	xhl, 0x52544e4f
 	popw	sp
 	popw	ix
-	ldb	w, 83
+	ld	w, 83:opc
 	.byte 0x55, 0x53, 0x54
 	ld	xbc, 0x20204e49
-	ldb	w, 32
+	ld	w, 32:opc
 	push	xiy
 	ld	xhl, 0x52544e4f
 	popw	sp
 	popw	ix
-	ldb	w, 80
+	ld	w, 80:opc
 	ld	xbc, 0x544f504e
-	ldb	w, 32
-	ldb	w, 32
-	ldb	w, 61
+	ld	w, 32:opc
+	ld	w, 32:opc
+	ld	w, 61:opc
 	ld	xhl, 0x52544e4f
 	popw	sp
 	popw	ix
-	ldb	w, 69
+	ld	w, 69:opc
 	pop	xwa
 	.byte 0x50, 0x52
 	ld	xiy, 0x4f495353
 	popw	iz
-	ldb	w, 61
+	ld	w, 61:opc
 	ld	xhl, 0x52544e4f
 	popw	sp
 	popw	ix
-	ldb	w, 65
+	ld	w, 65:opc
 	ld	xiz, 0x20524554
 	.byte 0x54
 	popw	sp
@@ -35627,21 +35627,21 @@ AccScreen_UIDataBlock:
 	.byte 0x54
 	ld	xbc, 0x4d4f4343
 	.byte 0x50
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xbc, 0x4d4f4343
 	.byte 0x50
-	ldb	w, 50
+	ld	w, 50:opc
 	ld	xbc, 0x4d4f4343
 	.byte 0x50
-	ldb	w, 51
+	ld	w, 51:opc
 	ld	xde, 0x20535341
-	ldb	w, 32
-	ldb	w, 68
+	ld	w, 32:opc
+	ld	w, 68:opc
 	.byte 0x52, 0x55
 	popw	iy
-	ldb	w, 32
-	ldb	w, 32
-	ldb	w, 49
+	ld	w, 32:opc
+	ld	w, 32:opc
+	ld	w, 49:opc
 	ldw	de, 0x3433
 	ldw	iy, 0x3736
 	push	xwa
@@ -35997,7 +35997,7 @@ AccScreen_UIDataBlock:
 	nop
 	pop_f
 	nop
-	ldb	a, 0
+	ld	a, 0:opc
 	pushw	bc
 	nop
 	ldw	bc, 0x3900
@@ -36067,41 +36067,41 @@ AccScreen_UIDataBlock:
 	ld	xhl, 0x7261762d
 	jr	ge, 52
 	ld	xbc, 0x544e492d
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xbc, 0x544e492d
-	ldb	w, 50
+	ld	w, 50:opc
 	ld	xbc, 0x4c49462d
 	popw	ix
 	ldw	bc, 0x2d41
 	ld	xiz, 0x324c4c49
 	ld	xbc, 0x444e452d
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xbc, 0x444e452d
-	ldb	w, 50
+	ld	w, 50:opc
 	ld	xde, 0x544e492d
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xde, 0x544e492d
-	ldb	w, 50
+	ld	w, 50:opc
 	ld	xde, 0x4c49462d
 	popw	ix
 	ldw	bc, 0x2d42
 	ld	xiz, 0x324c4c49
 	ld	xde, 0x444e452d
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xde, 0x444e452d
-	ldb	w, 50
+	ld	w, 50:opc
 	ld	xhl, 0x544e492d
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xhl, 0x544e492d
-	ldb	w, 50
+	ld	w, 50:opc
 	ld	xhl, 0x4c49462d
 	popw	ix
 	ldw	bc, 0x2d43
 	ld	xiz, 0x324c4c49
 	ld	xhl, 0x444e452d
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xhl, 0x444e452d
-	ldb	w, 50
+	ld	w, 50:opc
 	push	xhl
 	ld	a, (0x353e:16)
 	pop	xhl
@@ -36341,7 +36341,7 @@ AccPatch_VoiceAssignDataBlock:
 	jr	ugt, -13
 	jr	38
 	push	d
-	ldb	d, 0
+	ld	d, 0:opc
 	ld	xbc, 0:i3
 	ldw	bc, 256
 	mul	xbc, xde
@@ -36369,7 +36369,7 @@ AccPatch_VoiceAssignDataBlock:
 	swi	7
 	swi	7
 	ldw (xiy+3), 65535
-	ldb	c, 249
+	ld	c, 249:opc
 	add	xiy, 6
 	stib_dsp 244, 0
 	dec	1, c
@@ -36415,7 +36415,7 @@ AccPatch_VoiceAssignDataBlock:
 	ret
 	ld	xiy, 0x09f200
 	xor	xbc, xbc
-	ldb	c, 190
+	ld	c, 190:opc
 	.byte 0x85
 	push	xsp
 	decm8	6, (xwa)
@@ -36538,7 +36538,7 @@ AccPatch_VoiceAssignDataBlock:
 	push	xsp
 	popw	hl
 	jr	nz, 4
-	ldb	w, 5
+	ld	w, 5:opc
 	jr	57
 	ld a, (xhl+256)
 	cp a, 103
@@ -36549,7 +36549,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	a, (xhl+2)
 	cp	a, 107
 	jr	nz, 4
-	ldb	w, 5
+	ld	w, 5:opc
 	jr	30
 	ld a, (xhl+256)
 	cp a, 76
@@ -36560,9 +36560,9 @@ AccPatch_VoiceAssignDataBlock:
 	ld	a, (xhl+2)
 	cp	a, 69
 	jr	nz, 4
-	ldb	w, 5
+	ld	w, 5:opc
 	jr	2
-	ldb	w, 255
+	ld	w, 255:opc
 	ret
 	ld	w, (0x34d6:16)
 	ld	(0x34d6:16), a
@@ -36575,14 +36575,14 @@ AccPatch_VoiceAssignDataBlock:
 	xor	xwa, xwa
 	call	AccScreen_UIDataBlock_0x829
 	ld	l, a
-	ldb	a, 96
+	ld	a, 96:opc
 	mul8rr	a, l
 	add	wa, 96
 	ld	(0x397a:16), wa
 	xor	xwa, xwa
 	call	AccScreen_UIDataBlock_0x804
 	ld	l, a
-	ldb	a, 96
+	ld	a, 96:opc
 	mul8rr	a, l
 	add	wa, 96
 	ld	(0x397c:16), wa
@@ -36726,7 +36726,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xd3
 	reti
 	cp	xix, xix
-	ldb	w, 241
+	ld	w, 241:opc
 	.asciz "R9PC"
 	.byte 0x98
 	di
@@ -36738,7 +36738,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xd3
 	reti
 	cp	xix, xix
-	ldb	w, 241
+	ld	w, 241:opc
 	.asciz "V9PC"
 	.byte 0x98
 	di
@@ -37057,7 +37057,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xf1
 	.ascii "x9Phâ—v"
 	push	xbc
-	ldb	c, 30
+	ld	c, 30:opc
 	.byte 0xda
 	swi	1
 	.byte 0xbe
@@ -37428,7 +37428,7 @@ AccBankData_CopyLoop:
 	ld e, (xwa)
 	cp e, 0:i3
 	jr nz, AccBankData_CopyLoop_NonZero
-	ldb e, 0x20
+	ld e, 0x20:opc
 
 AccBankData_CopyLoop_NonZero:
 	ld (xwa), e
@@ -37864,10 +37864,10 @@ StylCnvModl_PadOuterLoop:
 	ld de, bc
 
 StylCnvModl_PadInnerLoop:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp iy, 0xc
 	jr nc, StylCnvModl_PadStoreChar
-	ldb a, 0x20
+	ld a, 0x20:opc
 
 StylCnvModl_PadStoreChar:
 	ld ix, de
@@ -38290,10 +38290,10 @@ StylCnvCnvt_PadOuterLoop:
 	ld de, bc
 
 StylCnvCnvt_PadInnerLoop:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp iy, 0xc
 	jr nc, StylCnvCnvt_PadStoreChar
-	ldb a, 0x20
+	ld a, 0x20:opc
 
 StylCnvCnvt_PadStoreChar:
 	ld ix, de
@@ -40273,7 +40273,7 @@ AccStyle_TableDataEntry:
 	.byte 0xe4, 0xe0
 	pop_f
 	add (xix+57), xsp
-	ldb b, 33
+	ld b, 33:opc
 	extz	wa
 	.byte 0xc3
 	reti

@@ -346,7 +346,7 @@ Kernel_InitRam:
 	ldw hl, KERNEL_READY_HEADS                   ; F85615/F9817A  a=33 30 03 c=33 24 01   c: ld HL,0x0124   the THREE READY QUEUE heads
 	extz XHL                                     ; F85618/F9817D  eb 12   extz XHL
 	ldw de, 0x04                                 ; F8561A/F9817F  32 04 00   ld DE,0x0004   dead here -- DE is reloaded at 0xF85658
-	ldb b, KERNEL_READY_LEVELS                   ; F8561D/F98182  a=22 03 c=22 02   c: ld B,0x02
+	ld b, KERNEL_READY_LEVELS:opc                   ; F8561D/F98182  a=22 03 c=22 02   c: ld B,0x02
 Kernel_InitRam__ready_queues:
 	ld IX,HL                                     ; F8561F/F98184  db 8c   ld IX,HL
 	stw_dpi ix, 0xed                             ; F85621/F98186  f5 ed 54   ld (XHL+),IX   head->next = head
@@ -354,15 +354,15 @@ Kernel_InitRam__ready_queues:
 	djnz8 b, Kernel_InitRam__ready_queues        ; F85627/F9818C  ca 1c f5   djnz B,0xf98184
 	ldw ix, KERNEL_TCB_BASE                      ; F8562A/F9818F  a=34 00 03 c=34 00 01   c: ld IX,0x0100   the FOUR task control blocks
 	extz XIX                                     ; F8562D/F98192  ec 12   extz XIX
-	ldb b, KERNEL_TASK_COUNT                     ; F8562F/F98194  a=22 04 c=22 03   c: ld B,0x03
-	ldb a, 0x00                                  ; F85631/F98196  21 00   ld A,0x00
+	ld b, KERNEL_TASK_COUNT:opc                     ; F8562F/F98194  a=22 04 c=22 03   c: ld B,0x03
+	ld a, 0x00:opc                                  ; F85631/F98196  21 00   ld A,0x00
 Kernel_InitRam__tcbs:
 	ld (XIX+0x09),A                              ; F85633/F98198  bc 09 41   ld (XIX+0x09),A   +9 = state 0, which is what Kernel_StartTask requires
 	add IX,0x000c                                ; F85636/F9819B  dc c8 0c 00   add IX,0x000c   stride 12: 0x0300 0x030C 0x0318 0x0324
 	djnz8 b, Kernel_InitRam__tcbs                ; F8563A/F9819F  ca 1c f6   djnz B,0xf98198
 	ldw ix, KERNEL_TIMERS                        ; F8563D/F981A2  a=34 c8 03 c=34 74 01   c: ld IX,0x0174   the TWO software timers
 	extz XIX                                     ; F85640/F981A5  ec 12   extz XIX
-	ldb b, KERNEL_TIMER_COUNT                    ; F85642/F981A7  22 02   ld B,0x02
+	ld b, KERNEL_TIMER_COUNT:opc                    ; F85642/F981A7  22 02   ld B,0x02
 	ld XWA,0xffffffff                            ; F85644/F981A9  40 ff ff ff ff   ld XWA,0xffffffff
 Kernel_InitRam__soft_timers:
 	ld (XIX+0x04),XWA                            ; F85649/F981AE  bc 04 60   ld (XIX+0x04),XWA   +4 = no callback; Kernel_ServiceSoftTimers skips on this
@@ -375,7 +375,7 @@ Kernel_InitRam__soft_timers:
 	ldir83                                       ; F85660/F981C5  83 11   ldir   (XDE+) <- (XHL+), 8 bytes: RAM 0x035C-0x0363
 	ldw hl, KERNEL_SEMA_QUEUES                   ; F85662/F981C7  a=33 3c 03 c=33 2c 01   c: ld HL,0x012c   EIGHT more list heads
 	extz XHL                                     ; F85665/F981CA  eb 12   extz XHL
-	ldb b, KERNEL_SEMA_COUNT                     ; F85667/F981CC  a=22 08 c=22 04   c: ld B,0x04
+	ld b, KERNEL_SEMA_COUNT:opc                     ; F85667/F981CC  a=22 08 c=22 04   c: ld B,0x04
 Kernel_InitRam__sema_queues:
 Kernel_InitRam__heads_033C:   ; <- prom_a's name for this address.
 	ld IX,HL                                     ; F85669/F981CE  db 8c   ld IX,HL
@@ -384,7 +384,7 @@ Kernel_InitRam__heads_033C:   ; <- prom_a's name for this address.
 	djnz8 b, Kernel_InitRam__heads_033C          ; F85671/F981D6  ca 1c f5   djnz B,0xf981ce
 	ldw hl, KERNEL_NODE_POOL                     ; F85674/F981D9  a=33 84 03 c=33 50 01   c: ld HL,0x0150   EIGHT 8-byte nodes
 	extz XHL                                     ; F85677/F981DC  eb 12   extz XHL
-	ldb b, KERNEL_NODE_COUNT                     ; F85679/F981DE  a=22 08 c=22 04   c: ld B,0x04
+	ld b, KERNEL_NODE_COUNT:opc                     ; F85679/F981DE  a=22 08 c=22 04   c: ld B,0x04
 	ld XWA,0xffffffff                            ; F8567B/F981E0  40 ff ff ff ff   ld XWA,0xffffffff
 Kernel_InitRam__free_nodes:
 	ld (XHL+0x04),XWA                            ; F85680/F981E5  bb 04 60   ld (XHL+0x04),XWA   +4 = the payload, cleared to all-ones
@@ -395,7 +395,7 @@ Kernel_InitRam__free_nodes:
 	m_st_mr16 MDD+r5, 0x00, r5                   ; F8568F/F981F4  bd 00 55   ld (XIY+0x00),IY   ld (XIY+0x00),IY -- head->next = head
 	ld (XIY+0x02),IY                             ; F85692/F981F7  bd 02 55   ld (XIY+0x02),IY   head->prev = head
 	ldw ix, KERNEL_NODE_POOL                     ; F85695/F981FA  a=34 84 03 c=34 50 01   c: ld IX,0x0150
-	ldb b, KERNEL_NODE_COUNT                     ; F85698/F981FD  a=22 08 c=22 04   c: ld B,0x04
+	ld b, KERNEL_NODE_COUNT:opc                     ; F85698/F981FD  a=22 08 c=22 04   c: ld B,0x04
 Kernel_InitRam__free_append:
 	extz XIX                                     ; F8569A/F981FF  ec 12   extz XIX
 	extz XIY                                     ; F8569C/F98201  ed 12   extz XIY
@@ -409,7 +409,7 @@ Kernel_InitRam__free_append:
 	djnz8 b, Kernel_InitRam__free_append         ; F856B2/F98217  ca 1c e5   djnz B,0xf981ff
 	ldw hl, KERNEL_MSGQ_WAITQ                    ; F856B5/F9821A  a=33 64 03 c=33 40 01   c: ld HL,0x0140   FOUR heads -- the wait queues
 	extz XHL                                     ; F856B8/F9821D  eb 12   extz XHL
-	ldb b, KERNEL_MSGQ_COUNT                     ; F856BA/F9821F  a=22 04 c=22 02   c: ld B,0x02
+	ld b, KERNEL_MSGQ_COUNT:opc                     ; F856BA/F9821F  a=22 04 c=22 02   c: ld B,0x02
 Kernel_InitRam__wait_queues:
 	ld IX,HL                                     ; F856BC/F98221  db 8c   ld IX,HL
 	stw_dpi ix, 0xed                             ; F856BE/F98223  f5 ed 54   ld (XHL+),IX
@@ -417,7 +417,7 @@ Kernel_InitRam__wait_queues:
 	djnz8 b, Kernel_InitRam__wait_queues         ; F856C4/F98229  ca 1c f5   djnz B,0xf98221
 	ldw hl, KERNEL_MSGQ_HEADS                    ; F856C7/F9822C  a=33 74 03 c=33 48 01   c: ld HL,0x0148   FOUR heads -- the message queues
 	extz XHL                                     ; F856CA/F9822F  eb 12   extz XHL
-	ldb b, KERNEL_MSGQ_COUNT                     ; F856CC/F98231  a=22 04 c=22 02   c: ld B,0x02
+	ld b, KERNEL_MSGQ_COUNT:opc                     ; F856CC/F98231  a=22 04 c=22 02   c: ld B,0x02
 Kernel_InitRam__msg_queues:
 	ld IX,HL                                     ; F856CE/F98233  db 8c   ld IX,HL
 	stw_dpi ix, 0xed                             ; F856D0/F98235  f5 ed 54   ld (XHL+),IX
@@ -589,9 +589,9 @@ Kernel_Start:
 	ldio T23MOD, 14                              ; F856EF/F98254  08 28 0e   ld (0x28),0x0e   T23MOD
 	ldio TREG3, 54                               ; F856F2/F98257  08 27 36   ld (0x27),0x36   TREG3
 	ldio INTET32, 32                             ; F856F5/F9825A  08 74 20   ld (0x74),0x20   INTET32
-	ldb a, 0x01                                  ; F856F8/F9825D  21 01   ld A,0x01
+	ld a, 0x01:opc                                  ; F856F8/F9825D  21 01   ld A,0x01
 	call Kernel_StartTask                        ; F856FA/F9825F  a=1d d9 57 f8 c=1d 3e 83 f9   c: call 0xf9833e
-	ldb a, 0x03                                  ; F856FE/F98263  21 03   ld A,0x03
+	ld a, 0x03:opc                                  ; F856FE/F98263  21 03   ld A,0x03
 	call Kernel_StartTask                        ; F85700/F98265  a=1d d9 57 f8 c=1d 3e 83 f9   c: call 0xf9833e
 	ei 0x06                                      ; F85704/F98269  06 06   ei 0x06
 	ldio KERNEL_PENDING_TICKS, 0x00              ; F85706/F9826B  a=08 be 00 c=08 90 00   c: ld (0x90),0x00
@@ -706,7 +706,7 @@ Kernel_Dispatch__drain_ticks:
 	calr Kernel_ServiceSoftTimers                ; F85741/F982A6  1e 28 00   calr 0xf982d1
 	jr Kernel_Dispatch__drain_ticks              ; F85744/F982A9  68 ef   jr T,0xf9829a
 Kernel_Dispatch__pick_task:
-	ldb b, KERNEL_READY_LEVELS                   ; F85746/F982AB  a=22 03 c=22 02   c: ld B,0x02
+	ld b, KERNEL_READY_LEVELS:opc                   ; F85746/F982AB  a=22 03 c=22 02   c: ld B,0x02
 	ldw ix, KERNEL_READY_HEADS                   ; F85748/F982AD  a=34 30 03 c=34 24 01   c: ld IX,0x0124   the THREE ready-queue heads, 4 bytes each
 	extz XIX                                     ; F8574B/F982B0  ec 12   extz XIX
 Kernel_Dispatch__scan:
@@ -809,7 +809,7 @@ Kernel_ServiceSoftTimers:
 	ei 0x00                                      ; F85774/F982D9  06 00   ei 0x00
 	ldw ix, KERNEL_TIMERS                        ; F85776/F982DB  a=34 c8 03 c=34 74 01   c: ld IX,0x0174   the software timers: 2 x 8 bytes at 0x03C8
 	extz XIX                                     ; F85779/F982DE  ec 12   extz XIX
-	ldb b, 0x02                                  ; F8577B/F982E0  22 02   ld B,0x02
+	ld b, 0x02:opc                                  ; F8577B/F982E0  22 02   ld B,0x02
 Kernel_ServiceSoftTimers__next:
 	ld XWA,(XIX+0x04)                            ; F8577D/F982E2  ac 04 20   ld XWA,(XIX+0x04)
 	cp XWA,0xffffffff                            ; F85780/F982E5  e8 cf ff ff ff ff   cp XWA,0xffffffff   +4 = the callback, 0xFFFFFFFF = the slot is empty
@@ -1084,11 +1084,11 @@ Kernel_StartTask:
 	push XIX                                     ; F857E0/F98345  3c   push XIX
 	push XIY                                     ; F857E1/F98346  3d   push XIY
 	push XIZ                                     ; F857E2/F98347  3e   push XIZ   seven pushes: the same set Kernel_ResumeTask pops
-	ldb l, 0x0c                                  ; F857E3/F98348  27 0c   ld L,0x0c
+	ld l, 0x0c:opc                                  ; F857E3/F98348  27 0c   ld L,0x0c
 	mul8rr l, a                                  ; F857E5/F9834A  c9 47   mul HL,A   HL = 12 * A
 	extz XHL                                     ; F857E7/F9834C  eb 12   extz XHL
 	add XHL,KERNEL_TCB_TEMPLATE                  ; F857E9/F9834E  a=eb c8 7e 5e f8 ff c=eb c8 de 80 f9 ff   c: add XHL,0xfff980de   XHL = EntryPoint_Records + (A-1)*12; only the low 24 bits reach the bus
-	ldb c, 0x0c                                  ; F857EF/F98354  23 0c   ld C,0x0c
+	ld c, 0x0c:opc                                  ; F857EF/F98354  23 0c   ld C,0x0c
 	mul8rr c, a                                  ; F857F1/F98356  c9 43   mul BC,A   BC = 12 * A
 	add BC,KERNEL_TCB_BASE-12                    ; F857F3/F98358  a=d9 c8 f4 02 c=d9 c8 f4 00   c: add BC,0x00f4   XBC = 0x0300 + (A-1)*12, the task control block
 	extz XBC                                     ; F857F7/F9835C  e9 12   extz XBC

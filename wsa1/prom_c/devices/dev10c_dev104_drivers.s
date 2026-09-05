@@ -4148,7 +4148,7 @@ Dev10C_ResetAllChannels:
 	ld	(xiz-6), xbc                            ; FB810B  be fa 61          ld (XIZ+0xfa),XBC
 	ldw	hl, 0x0840                             ; FB810E  33 40 08          ld HL,0x0840
 	ldw (xiz-2), 0x0800                        ; FB8111  be fe 02 00 08    ld (XIZ+0xfe),0x0800
-	ldb	d, 64                                  ; FB8116  24 40             ld D,0x40
+	ld	d, 64:opc                                  ; FB8116  24 40             ld D,0x40
 	pop	xiy                                    ; FB8118  5d                pop XIY
 Dev10C_ResetAllChannels__FB8119:
 	ld	(xix), hl                               ; FB8119  b4 53             ld (XIX),HL

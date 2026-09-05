@@ -170,12 +170,12 @@ Rec0E3E_GroupOfIndex:
 	jr c, sub_FA5967__FA5986                   ; FA5972  jr C,0xfa5986
 	cp	h, 0x80                                 ; FA5974  cp H,0x80
 	jr nc, sub_FA5967__FA597D                  ; FA5977  jr NC,0xfa597d
-	ldb	a, 4                                   ; FA5979  ld A,0x04
+	ld	a, 4:opc                                   ; FA5979  ld A,0x04
 	jr sub_FA5967__FA5988                      ; FA597B  jr T,0xfa5988
 sub_FA5967__FA597D:
 	cp	h, 0xC0                                 ; FA597D  cp H,0xc0
 	jr nc, sub_FA5967__FA5986                  ; FA5980  jr NC,0xfa5986
-	ldb	a, 8                                   ; FA5982  ld A,0x08
+	ld	a, 8:opc                                   ; FA5982  ld A,0x08
 	jr sub_FA5967__FA5988                      ; FA5984  jr T,0xfa5988
 sub_FA5967__FA5986:
 	sub	a, a                                   ; FA5986  sub A,A
@@ -267,7 +267,7 @@ Rec11FE_UnlinkFromRing:
 	push	xix                                   ; FA59D4  push XIX
 	lda	xix, (0x11FE:16)                      ; FA59D5  lda XIX,0x11fe
 	ld	h, (xiz+8)                              ; FA59D9  ld H,(XIZ+0x08)
-	ldb	c, 12                                  ; FA59DC  ld C,0x0c
+	ld	c, 12:opc                                  ; FA59DC  ld C,0x0c
 	mul8rr	c, h                                ; FA59DE  mul BC,H
 	ld	de, bc                                  ; FA59E0  ld DE,BC
 	ld	wa, (xiz+10)                            ; FA59E2  ld WA,(XIZ+0x0a)
@@ -286,7 +286,7 @@ Rec11FE_UnlinkFromRing:
 	extz	xbc                                   ; FA5A07  extz XBC
 	add	bc, ix                                 ; FA5A09  add BC,IX
 	ld	(xbc), l                                ; FA5A0B  ld (XBC),L
-	ldb	c, 12                                  ; FA5A0D  ld C,0x0c
+	ld	c, 12:opc                                  ; FA5A0D  ld C,0x0c
 	mul8rr	c, l                                ; FA5A0F  mul BC,L
 	extpfx3 0x9E, 0xFE, 0x81                   ; FA5A11  add BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FA5A14  inc 4,BC
@@ -334,7 +334,7 @@ Rec11FE_InsertIntoRing:
 	push	xix                                   ; FA5A3C  push XIX
 	lda	xix, (0x11FE:16)                      ; FA5A3D  lda XIX,0x11fe
 	ld	h, (xiz+8)                              ; FA5A41  ld H,(XIZ+0x08)
-	ldb	l, 12                                  ; FA5A44  ld L,0x0c
+	ld	l, 12:opc                                  ; FA5A44  ld L,0x0c
 	ld	c, h                                    ; FA5A46  ld C,H
 	mul8rr	c, l                                ; FA5A48  mul BC,L
 	ld	de, bc                                  ; FA5A4A  ld DE,BC
@@ -421,7 +421,7 @@ Rec11FE_BindRingToSlot:
 	pushw	de                                   ; FA5ACF  push DE
 	pushw	ix                                   ; FA5AD0  push IX
 	ld	e, (xiz+8)                              ; FA5AD1  ld E,(XIZ+0x08)
-	ldb	c, 12                                  ; FA5AD4  ld C,0x0c
+	ld	c, 12:opc                                  ; FA5AD4  ld C,0x0c
 	mul8rr	c, e                                ; FA5AD6  mul BC,E
 	ld	(xiz-4), bc                             ; FA5AD8  ld (XIZ+0xfc),BC
 	ldw	wa, 0x11FE                             ; FA5ADB  ld WA,0x11fe
@@ -435,7 +435,7 @@ Rec11FE_BindRingToSlot:
 	extpfx5 0xC3, 0x07, 0xE0, 0xE4, 0x26       ; FA5AEE  ld H,(XWA+BC)
 	cp	h, 0xC0                                 ; FA5AF3  cp H,0xc0
 	jr nc, sub_FA5ACA__FA5B23                  ; FA5AF6  jr NC,0xfa5b23
-	ldb	c, 5                                   ; FA5AF8  ld C,0x05
+	ld	c, 5:opc                                   ; FA5AF8  ld C,0x05
 	mul8rr	c, h                                ; FA5AFA  mul BC,H
 	ld	(xiz-4), bc                             ; FA5AFC  ld (XIZ+0xfc),BC
 	ldw	hl, 0xE3E                              ; FA5AFF  ld HL,0x0e3e
@@ -454,7 +454,7 @@ sub_FA5ACA__FA5B1D:
 	extz	xhl                                   ; FA5B1D  extz XHL
 	ld	(xhl+4), 0xFF                           ; FA5B1F  ld (XHL+0x04),0xff
 sub_FA5ACA__FA5B23:
-	ldb	c, 5                                   ; FA5B23  ld C,0x05
+	ld	c, 5:opc                                   ; FA5B23  ld C,0x05
 	extpfx3 0x8E, 0x0C, 0x43                   ; FA5B25  mul BC,(XIZ+0x0c)
 	ld	ix, bc                                  ; FA5B28  ld IX,BC
 	ldw	hl, 0xE3E                              ; FA5B2A  ld HL,0x0e3e
@@ -519,7 +519,7 @@ Rec0E3E_UnlinkFromRing:
 	push	xix                                   ; FA5B76  push XIX
 	lda	xix, (0xE3E:16)                       ; FA5B77  lda XIX,0x0e3e
 	ld	h, (xiz+8)                              ; FA5B7B  ld H,(XIZ+0x08)
-	ldb	c, 5                                   ; FA5B7E  ld C,0x05
+	ld	c, 5:opc                                   ; FA5B7E  ld C,0x05
 	mul8rr	c, h                                ; FA5B80  mul BC,H
 	ld	de, bc                                  ; FA5B82  ld DE,BC
 	extz	xix                                   ; FA5B84  extz XIX
@@ -532,7 +532,7 @@ Rec0E3E_UnlinkFromRing:
 	extz	xwa                                   ; FA5B9B  extz XWA
 	add	wa, ix                                 ; FA5B9D  add WA,IX
 	ld	(xwa), l                                ; FA5B9F  ld (XWA),L
-	ldb	c, 5                                   ; FA5BA1  ld C,0x05
+	ld	c, 5:opc                                   ; FA5BA1  ld C,0x05
 	mul8rr	c, l                                ; FA5BA3  mul BC,L
 	inc	1, bc                                  ; FA5BA5  inc 1,BC
 	extz	xbc                                   ; FA5BA7  extz XBC
@@ -579,7 +579,7 @@ Rec0E3E_InsertBeforeInRing:
 	push	xix                                   ; FA5BCD  push XIX
 	lda	xix, (0xE3E:16)                       ; FA5BCE  lda XIX,0x0e3e
 	ld	h, (xiz+8)                              ; FA5BD2  ld H,(XIZ+0x08)
-	ldb	c, 5                                   ; FA5BD5  ld C,0x05
+	ld	c, 5:opc                                   ; FA5BD5  ld C,0x05
 	mul8rr	c, h                                ; FA5BD7  mul BC,H
 	ld	de, bc                                  ; FA5BD9  ld DE,BC
 	extz	xix                                   ; FA5BDB  extz XIX
@@ -592,19 +592,19 @@ Rec0E3E_InsertBeforeInRing:
 	extz	xwa                                   ; FA5BF2  extz XWA
 	add	wa, ix                                 ; FA5BF4  add WA,IX
 	ld	(xwa), l                                ; FA5BF6  ld (XWA),L
-	ldb	c, 5                                   ; FA5BF8  ld C,0x05
+	ld	c, 5:opc                                   ; FA5BF8  ld C,0x05
 	mul8rr	c, l                                ; FA5BFA  mul BC,L
 	inc	1, bc                                  ; FA5BFC  inc 1,BC
 	extz	xbc                                   ; FA5BFE  extz XBC
 	add	bc, ix                                 ; FA5C00  add BC,IX
 	ld	a, (xiz-4)                              ; FA5C02  ld A,(XIZ+0xfc)
 	ld	(xbc), a                                ; FA5C05  ld (XBC),A
-	ldb	c, 5                                   ; FA5C07  ld C,0x05
+	ld	c, 5:opc                                   ; FA5C07  ld C,0x05
 	extpfx3 0x8E, 0x0A, 0x43                   ; FA5C09  mul BC,(XIZ+0x0a)
 	inc	1, bc                                  ; FA5C0C  inc 1,BC
 	ld	(xiz-6), bc                             ; FA5C0E  ld (XIZ+0xfa),BC
 	extpfx5 0xC3, 0x07, 0xF0, 0xE4, 0x27       ; FA5C11  ld L,(XIX+BC)
-	ldb	a, 5                                   ; FA5C16  ld A,0x05
+	ld	a, 5:opc                                   ; FA5C16  ld A,0x05
 	mul8rr	a, l                                ; FA5C18  mul WA,L
 	extz	xwa                                   ; FA5C1A  extz XWA
 	add	wa, ix                                 ; FA5C1C  add WA,IX
@@ -656,7 +656,7 @@ Rec0E3E_MoveToList:
 	pushw	de                                   ; FA5C48  push DE
 	push	xix                                   ; FA5C49  push XIX
 	ld	e, (xiz+8)                              ; FA5C4A  ld E,(XIZ+0x08)
-	ldb	c, 5                                   ; FA5C4D  ld C,0x05
+	ld	c, 5:opc                                   ; FA5C4D  ld C,0x05
 	mul8rr	c, e                                ; FA5C4F  mul BC,E
 	ld	(xiz-4), bc                             ; FA5C51  ld (XIZ+0xfc),BC
 	ldw	wa, 0xE3E                              ; FA5C54  ld WA,0x0e3e
@@ -689,7 +689,7 @@ sub_FA5C43__FA5C8E:
 	add	bc, hl                                 ; FA5C92  add BC,HL
 	ld	(xbc), 0xFF                             ; FA5C94  ld (XBC),0xff
 sub_FA5C43__FA5C97:
-	ldb	c, 27                                  ; FA5C97  ld C,0x1b
+	ld	c, 27:opc                                  ; FA5C97  ld C,0x1b
 	extpfx3 0x8E, 0x0A, 0x43                   ; FA5C99  mul BC,(XIZ+0x0a)
 	ld	(xiz-4), bc                             ; FA5C9C  ld (XIZ+0xfc),BC
 	ldw	ix, 0xAA8                              ; FA5C9F  ld IX,0x0aa8
@@ -758,7 +758,7 @@ Rec11FE_ReleaseAllRings:
 	pushw	hl                                   ; FA5CED  push HL
 	pushw	de                                   ; FA5CEE  push DE
 	push	xix                                   ; FA5CEF  push XIX
-	ldb	c, 12                                  ; FA5CF0  ld C,0x0c
+	ld	c, 12:opc                                  ; FA5CF0  ld C,0x0c
 	extpfx3 0x8E, 0x08, 0x43                   ; FA5CF2  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA5CF5  ld HL,BC
 	ldw	wa, 0x11FE                             ; FA5CF7  ld WA,0x11fe
@@ -772,7 +772,7 @@ sub_FA5CE9__FA5D06:
 	extpfx5 0xC3, 0x07, 0xE4, 0xE8, 0x26       ; FA5D0B  ld H,(XBC+DE)
 	cp	h, 0xC0                                 ; FA5D10  cp H,0xc0
 	jr nc, sub_FA5CE9__FA5D73                  ; FA5D13  jr NC,0xfa5d73
-	ldb	a, 5                                   ; FA5D15  ld A,0x05
+	ld	a, 5:opc                                   ; FA5D15  ld A,0x05
 	mul8rr	a, h                                ; FA5D17  mul WA,H
 	ld	(xiz-5), wa                             ; FA5D19  ld (XIZ+0xfb),WA
 	ldw	ix, 0xE3E                              ; FA5D1C  ld IX,0x0e3e
@@ -853,7 +853,7 @@ VoiceSlots_InitAllTables:
 	ld	(xiz-1), 0                              ; FA5D8B  ld (XIZ+0xff),0x00
 	ldw	de, 0                                  ; FA5D8F  ld DE,0x0000
 sub_FA5D84__FA5D92:
-	ldb	h, 0                                   ; FA5D92  ld H,0x00
+	ld	h, 0:opc                                   ; FA5D92  ld H,0x00
 sub_FA5D84__FA5D94:
 	ld	ix, de                                  ; FA5D94  ld IX,DE
 	ld	c, h                                    ; FA5D96  ld C,H
@@ -912,7 +912,7 @@ sub_FA5D84__FA5DDA:
 	ldw	de, 0                                  ; FA5E28  ld DE,0x0000
 	ld	(xiz-1), 34                             ; FA5E2B  ld (XIZ+0xff),0x22
 sub_FA5D84__FA5E2F:
-	ldb	h, 0                                   ; FA5E2F  ld H,0x00
+	ld	h, 0:opc                                   ; FA5E2F  ld H,0x00
 	ld	ix, de                                  ; FA5E31  ld IX,DE
 sub_FA5D84__FA5E33:
 	ld	(xiz-3), ix                             ; FA5E33  ld (XIZ+0xfd),IX
@@ -1121,7 +1121,7 @@ Voice_LookupDev10CChanIndex__FA5EFC:
 	extz	xbc                                   ; FA5F11  extz XBC
 	add	xbc, 0xFE10E9                          ; FA5F13  add XBC,0x00fe10e9
 	ld	d, (xbc)                                ; FA5F19  ld D,(XBC)
-	ldb	c, 12                                  ; FA5F1B  ld C,0x0c
+	ld	c, 12:opc                                  ; FA5F1B  ld C,0x0c
 	extpfx3 0x8E, 0x0A, 0x43                   ; FA5F1D  mul BC,(XIZ+0x0a)
 	ld	ix, bc                                  ; FA5F20  ld IX,BC
 	ldw	wa, 0x11FE                             ; FA5F22  ld WA,0x11fe
@@ -1134,7 +1134,7 @@ Voice_LookupDev10CChanIndex__FA5EFC:
 	extpfx5 0xC3, 0x07, 0xE0, 0xE4, 0x26       ; FA5F32  ld H,(XWA+BC)
 	cp	h, 0xC0                                 ; FA5F37  cp H,0xc0
 	jr nc, Voice_LookupDev10CChanIndex__FA5F7D                  ; FA5F3A  jr NC,0xfa5f7d
-	ldb	c, 5                                   ; FA5F3C  ld C,0x05
+	ld	c, 5:opc                                   ; FA5F3C  ld C,0x05
 	mul8rr	c, h                                ; FA5F3E  mul BC,H
 	ld	(xiz-2), bc                             ; FA5F40  ld (XIZ+0xfe),BC
 	ldw	ix, 0xE3E                              ; FA5F43  ld IX,0x0e3e
@@ -1177,7 +1177,7 @@ Voice_LookupDev10CChanIndex__FA5F7D:
 	jrl nc, Voice_LookupDev10CChanIndex__FA600D                 ; FA5F92  jrl NC,0xfa600d
 	jr Voice_LookupDev10CChanIndex__FA5FE0                      ; FA5F95  jr T,0xfa5fe0
 Voice_LookupDev10CChanIndex__FA5F97:
-	ldb	c, 27                                  ; FA5F97  ld C,0x1b
+	ld	c, 27:opc                                  ; FA5F97  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA5F99  mul BC,(XIZ+0x08)
 	ld	ix, bc                                  ; FA5F9C  ld IX,BC
 	ld	a, d                                    ; FA5F9E  ld A,D
@@ -1234,7 +1234,7 @@ Voice_LookupDev10CChanIndex__FA5FE0:
 	inc	8, xsp                                 ; FA6009  inc 0,XSP
 	jr Voice_LookupDev10CChanIndex__FA600F                      ; FA600B  jr T,0xfa600f
 Voice_LookupDev10CChanIndex__FA600D:
-	ldb	h, 0xFF                                ; FA600D  ld H,0xff
+	ld	h, 0xFF:opc                                ; FA600D  ld H,0xff
 Voice_LookupDev10CChanIndex__FA600F:
 	ld	c, e                                    ; FA600F  ld C,E
 	extz	bc                                    ; FA6011  extz BC
@@ -1370,14 +1370,14 @@ VoiceSlots_ListSlotsOfChannel:
 	ld	(xiz-2), c                              ; FA6087  ld (XIZ+0xfe),C
 	extpfx3 0x8E, 0x0A, 0xC3                   ; FA608A  and C,(XIZ+0x0a)
 	ld	(xiz-3), c                              ; FA608D  ld (XIZ+0xfd),C
-	ldb	c, 12                                  ; FA6090  ld C,0x0c
+	ld	c, 12:opc                                  ; FA6090  ld C,0x0c
 	extpfx3 0x8E, 0x08, 0x43                   ; FA6092  mul BC,(XIZ+0x08)
 	ld	de, bc                                  ; FA6095  ld DE,BC
 	ldw	wa, 0x11FE                             ; FA6097  ld WA,0x11fe
 	add	wa, bc                                 ; FA609A  add WA,BC
 	ld	(xiz-6), wa                             ; FA609C  ld (XIZ+0xfa),WA
 	lda	xix, (0x86FC:24)                       ; FA609F  lda XIX,0x0086fc
-	ldb	h, 0                                   ; FA60A4  ld H,0x00
+	ld	h, 0:opc                                   ; FA60A4  ld H,0x00
 	ldw	de, 8                                  ; FA60A6  ld DE,0x0008
 sub_FA607B__FA60A9:
 	ld	bc, (xiz-6)                             ; FA60A9  ld BC,(XIZ+0xfa)
@@ -1385,7 +1385,7 @@ sub_FA607B__FA60A9:
 	extpfx5 0xC3, 0x07, 0xE4, 0xE8, 0x27       ; FA60AE  ld L,(XBC+DE)
 	cp	l, 0xC0                                 ; FA60B3  cp L,0xc0
 	jr nc, sub_FA607B__FA60F9                  ; FA60B6  jr NC,0xfa60f9
-	ldb	a, 5                                   ; FA60B8  ld A,0x05
+	ld	a, 5:opc                                   ; FA60B8  ld A,0x05
 	mul8rr	a, l                                ; FA60BA  mul WA,L
 	inc	3, wa                                  ; FA60BC  inc 3,WA
 	extz	xwa                                   ; FA60BE  extz XWA
@@ -1465,7 +1465,7 @@ VoiceSlots_ListSlotsOfPart:
 	ld	(xiz-3), c                              ; FA611C  ld (XIZ+0xfd),C
 	extpfx3 0x8E, 0x0A, 0xC3                   ; FA611F  and C,(XIZ+0x0a)
 	ld	(xiz-4), c                              ; FA6122  ld (XIZ+0xfc),C
-	ldb	c, 27                                  ; FA6125  ld C,0x1b
+	ld	c, 27:opc                                  ; FA6125  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA6127  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA612A  ld HL,BC
 	ldw	wa, 0xAA8                              ; FA612C  ld WA,0x0aa8
@@ -1509,7 +1509,7 @@ sub_FA6110__FA6187:
 	extpfx3 0x9E, 0xFE, 0xE0                   ; FA618E  or WA,(XIZ+0xfe)
 	ld	(xix), wa                               ; FA6191  ld (XIX),WA
 	inc	2, xix                                 ; FA6193  inc 2,XIX
-	ldb	c, 5                                   ; FA6195  ld C,0x05
+	ld	c, 5:opc                                   ; FA6195  ld C,0x05
 	mul8rr	c, l                                ; FA6197  mul BC,L
 	extz	xbc                                   ; FA6199  extz XBC
 	ld	l, (xbc+0xE3E)                          ; FA619B  ld L,(XBC+0x0e3e)
@@ -1560,14 +1560,14 @@ VoiceSlots_ListChannelsOfPart:
 	ld	(xiz-1), c                              ; FA61C9  ld (XIZ+0xff),C
 	extpfx3 0x8E, 0x0A, 0xC3                   ; FA61CC  and C,(XIZ+0x0a)
 	ld	(xiz-2), c                              ; FA61CF  ld (XIZ+0xfe),C
-	ldb	c, 27                                  ; FA61D2  ld C,0x1b
+	ld	c, 27:opc                                  ; FA61D2  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA61D4  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA61D7  ld HL,BC
 	ldw	wa, 0xAA8                              ; FA61D9  ld WA,0x0aa8
 	add	wa, bc                                 ; FA61DC  add WA,BC
 	ld	(xiz-4), wa                             ; FA61DE  ld (XIZ+0xfc),WA
 	lda	xix, (0x877E:24)                       ; FA61E1  lda XIX,0x00877e
-	ldb	e, 0                                   ; FA61E6  ld E,0x00
+	ld	e, 0:opc                                   ; FA61E6  ld E,0x00
 sub_FA61BD__FA61E8:
 	ld	c, e                                    ; FA61E8  ld C,E
 	extz	bc                                    ; FA61EA  extz BC
@@ -1585,7 +1585,7 @@ sub_FA61BD__FA61E8:
 	and	b, d                                   ; FA620C  and B,D
 	extpfx3 0x8E, 0xFE, 0xF2                   ; FA620E  cp B,(XIZ+0xfe)
 	jr nz, sub_FA61BD__FA6254                  ; FA6211  jr NZ,0xfa6254
-	ldb	c, 5                                   ; FA6213  ld C,0x05
+	ld	c, 5:opc                                   ; FA6213  ld C,0x05
 	mul8rr	c, h                                ; FA6215  mul BC,H
 	inc	4, bc                                  ; FA6217  inc 4,BC
 	extz	xbc                                   ; FA6219  extz XBC
@@ -1602,7 +1602,7 @@ sub_FA61BD__FA61E8:
 sub_FA61BD__FA6238:
 	ld	(xix), h                                ; FA6238  ld (XIX),H
 	inc	1, xix                                 ; FA623A  inc 1,XIX
-	ldb	c, 12                                  ; FA623C  ld C,0x0c
+	ld	c, 12:opc                                  ; FA623C  ld C,0x0c
 	mul8rr	c, l                                ; FA623E  mul BC,L
 	ld	(xiz-6), bc                             ; FA6240  ld (XIZ+0xfa),BC
 	ld	a, d                                    ; FA6243  ld A,D
@@ -1651,7 +1651,7 @@ VoiceSlots_ReapOrphansInBank:
 	push	xhl                                   ; FA626D  push XHL
 	push	xde                                   ; FA626E  push XDE
 	pushw	ix                                   ; FA626F  push IX
-	ldb	c, 48                                  ; FA6270  ld C,0x30
+	ld	c, 48:opc                                  ; FA6270  ld C,0x30
 	extpfx3 0x8E, 0x08, 0x43                   ; FA6272  mul BC,(XIZ+0x08)
 	ld	(xiz-2), bc                             ; FA6275  ld (XIZ+0xfe),BC
 	ld	ix, bc                                  ; FA6278  ld IX,BC
@@ -1768,7 +1768,7 @@ sub_FA62DA__FA631F:
 	add	bc, de                                 ; FA633D  add BC,DE
 	ld	(xbc), h                                ; FA633F  ld (XBC),H
 sub_FA62DA__FA6341:
-	ldb	c, 2                                   ; FA6341  ld C,0x02
+	ld	c, 2:opc                                   ; FA6341  ld C,0x02
 	extpfx3 0x8E, 0xFF, 0x43                   ; FA6343  mul BC,(XIZ+0xff)
 	ld	hl, bc                                  ; FA6346  ld HL,BC
 	inc	2, bc                                  ; FA6348  inc 2,BC
@@ -1793,7 +1793,7 @@ sub_FA62DA__FA636B:
 	add	wa, hl                                 ; FA6371  add WA,HL
 	ld	(xwa), bc                               ; FA6373  ld (XWA),BC
 sub_FA62DA__FA6375:
-	ldb	c, 2                                   ; FA6375  ld C,0x02
+	ld	c, 2:opc                                   ; FA6375  ld C,0x02
 	extpfx3 0x8E, 0x0C, 0x43                   ; FA6377  mul BC,(XIZ+0x0c)
 	ld	hl, bc                                  ; FA637A  ld HL,BC
 	inc	2, bc                                  ; FA637C  inc 2,BC
@@ -1936,7 +1936,7 @@ sub_FA643F__FA647E:
 	add	wa, de                                 ; FA6484  add WA,DE
 	ld	(xwa), bc                               ; FA6486  ld (XWA),BC
 sub_FA643F__FA6488:
-	ldb	c, 2                                   ; FA6488  ld C,0x02
+	ld	c, 2:opc                                   ; FA6488  ld C,0x02
 	extpfx3 0x8E, 0x0C, 0x43                   ; FA648A  mul BC,(XIZ+0x0c)
 	ld	hl, bc                                  ; FA648D  ld HL,BC
 	inc	2, bc                                  ; FA648F  inc 2,BC
@@ -2597,7 +2597,7 @@ VoiceSubsystem_Init__FA6716:
 	inc	1, bc                                  ; FA6718  inc 1,BC
 	extz	xbc                                   ; FA671A  extz XBC
 	ld	(xbc+0x200), 0                          ; FA671C  ld (XBC+0x0200),0x00
-	ldb	d, 0                                   ; FA6722  ld D,0x00
+	ld	d, 0:opc                                   ; FA6722  ld D,0x00
 	ldw	ix, 0                                  ; FA6724  ld IX,0x0000
 VoiceSubsystem_Init__FA6727:
 	ld	(xiz-9), ix                             ; FA6727  ld (XIZ+0xf7),IX
@@ -2653,7 +2653,7 @@ VoiceSubsystem_Init__FA67AB:
 VoiceSubsystem_Init__FA67BB:
 	ld	(xiz-2), hl                             ; FA67BB  ld (XIZ+0xfe),HL
 	ldw	ix, 0                                  ; FA67BE  ld IX,0x0000
-	ldb	d, 2                                   ; FA67C1  ld D,0x02
+	ld	d, 2:opc                                   ; FA67C1  ld D,0x02
 VoiceSubsystem_Init__FA67C3:
 	ld	(xiz-9), ix                             ; FA67C3  ld (XIZ+0xf7),IX
 	ld	bc, (xiz-2)                             ; FA67C6  ld BC,(XIZ+0xfe)
@@ -2850,7 +2850,7 @@ Dev10C_PollBankAndRetire:
 	inc	4, xbc                                 ; FA6905  inc 4,XBC
 	ld	(xiz-14), xbc                           ; FA6907  ld (XIZ+0xf2),XBC
 	ld	hl, (xbc)                               ; FA690A  ld HL,(XBC)
-	ldb	a, 2                                   ; FA690C  ld A,0x02
+	ld	a, 2:opc                                   ; FA690C  ld A,0x02
 	extpfx5 0xC2, 0xCF, 0x87, 0x00, 0x41       ; FA690E  mul WA,(0x0087cf)
 	extz	xwa                                   ; FA6913  extz XWA
 	ld	(xiz-20), xwa                           ; FA6915  ld (XIZ+0xec),XWA
@@ -3028,7 +3028,7 @@ sub_FA69FD__FA6A6D:
 	jr z, sub_FA69FD__FA6AC7                   ; FA6A7D  jr Z,0xfa6ac7
 	ld	h, l                                    ; FA6A7F  ld H,L
 	res	7, h                                   ; FA6A81  res 0x07,H
-	ldb	a, 2                                   ; FA6A84  ld A,0x02
+	ld	a, 2:opc                                   ; FA6A84  ld A,0x02
 	mul8rr	a, h                                ; FA6A86  mul WA,H
 	extz	xwa                                   ; FA6A88  extz XWA
 	extpfx3 0xAE, 0xF4, 0x80                   ; FA6A8A  add XWA,(XIZ+0xf4)
@@ -3043,7 +3043,7 @@ sub_FA69FD__FA6A6D:
 	ld	c, (xwa)                                ; FA6A9F  ld C,(XWA)
 	cp	c, 0:i3                                   ; FA6AA1  cp C,0
 	jr z, sub_FA69FD__FA6B06                   ; FA6AA3  jr Z,0xfa6b06
-	ldb	c, 2                                   ; FA6AA5  ld C,0x02
+	ld	c, 2:opc                                   ; FA6AA5  ld C,0x02
 	mul8rr	c, h                                ; FA6AA7  mul BC,H
 	extz	xbc                                   ; FA6AA9  extz XBC
 	extpfx3 0xAE, 0xF4, 0x81                   ; FA6AAB  add XBC,(XIZ+0xf4)
@@ -3061,7 +3061,7 @@ sub_FA69FD__FA6AB2:
 sub_FA69FD__FA6AC4:
 	jrl sub_FA69FD__FA6B3C                     ; FA6AC4  jrl T,0xfa6b3c
 sub_FA69FD__FA6AC7:
-	ldb	c, 2                                   ; FA6AC7  ld C,0x02
+	ld	c, 2:opc                                   ; FA6AC7  ld C,0x02
 	mul8rr	c, l                                ; FA6AC9  mul BC,L
 	extz	xbc                                   ; FA6ACB  extz XBC
 	add	xbc, xix                               ; FA6ACD  add XBC,XIX
@@ -3076,7 +3076,7 @@ sub_FA69FD__FA6AC7:
 	ld	a, (xbc)                                ; FA6AE0  ld A,(XBC)
 	cp	a, 0:i3                                   ; FA6AE2  cp A,0
 	jr z, sub_FA69FD__FA6B06                   ; FA6AE4  jr Z,0xfa6b06
-	ldb	c, 2                                   ; FA6AE6  ld C,0x02
+	ld	c, 2:opc                                   ; FA6AE6  ld C,0x02
 	mul8rr	c, l                                ; FA6AE8  mul BC,L
 	extz	xbc                                   ; FA6AEA  extz XBC
 	add	xbc, xix                               ; FA6AEC  add XBC,XIX
@@ -3146,7 +3146,7 @@ sub_FA69FD__FA6B63:
 	jr z, sub_FA69FD__FA6B8E                   ; FA6B72  jr Z,0xfa6b8e
 	ld	h, l                                    ; FA6B74  ld H,L
 	res	7, h                                   ; FA6B76  res 0x07,H
-	ldb	a, 2                                   ; FA6B79  ld A,0x02
+	ld	a, 2:opc                                   ; FA6B79  ld A,0x02
 	mul8rr	a, h                                ; FA6B7B  mul WA,H
 	extz	xwa                                   ; FA6B7D  extz XWA
 	extpfx3 0xAE, 0xF4, 0x80                   ; FA6B7F  add XWA,(XIZ+0xf4)
@@ -3157,7 +3157,7 @@ sub_FA69FD__FA6B63:
 	ld	wa, hl                                  ; FA6B8A  ld WA,HL
 	jr sub_FA69FD__FA6BAF                      ; FA6B8C  jr T,0xfa6baf
 sub_FA69FD__FA6B8E:
-	ldb	c, 2                                   ; FA6B8E  ld C,0x02
+	ld	c, 2:opc                                   ; FA6B8E  ld C,0x02
 	mul8rr	c, l                                ; FA6B90  mul BC,L
 	extz	xbc                                   ; FA6B92  extz XBC
 	add	xbc, xix                               ; FA6B94  add XBC,XIX
@@ -3253,7 +3253,7 @@ sub_FA6BB5__FA6C19:
 	ld	xbc, (xiz+8)                            ; FA6C20  ld XBC,(XIZ+0x08)
 	extpfx4 0x89, 0x05, 0x3C, 0x7F             ; FA6C23  and (XBC+0x05),0x7f
 sub_FA6BB5__FA6C27:
-	ldb	c, 6                                   ; FA6C27  ld C,0x06
+	ld	c, 6:opc                                   ; FA6C27  ld C,0x06
 	mul8rr	c, h                                ; FA6C29  mul BC,H
 	ld	de, bc                                  ; FA6C2B  ld DE,BC
 	ldw	wa, 0x41C                              ; FA6C2D  ld WA,0x041c
@@ -3441,7 +3441,7 @@ sub_FA6BB5__FA6E02:
 	ld	h, (xix)                                ; FA6E02  ld H,(XIX)
 	cp	h, 0xFF                                 ; FA6E04  cp H,0xff
 	jr z, sub_FA6BB5__FA6E22                   ; FA6E07  jr Z,0xfa6e22
-	ldb	c, 2                                   ; FA6E09  ld C,0x02
+	ld	c, 2:opc                                   ; FA6E09  ld C,0x02
 	mul8rr	c, h                                ; FA6E0B  mul BC,H
 	extz	xbc                                   ; FA6E0D  extz XBC
 	extpfx3 0xAE, 0xFC, 0x81                   ; FA6E0F  add XBC,(XIZ+0xfc)
@@ -3544,7 +3544,7 @@ ChanRec_ClearHoldAndRelease:
 	push	xix                                   ; FA6EAB  push XIX
 	lda	xix, (0x4E8:16)                       ; FA6EAC  lda XIX,0x04e8
 	ld	h, (xiz+8)                              ; FA6EB0  ld H,(XIZ+0x08)
-	ldb	c, 23                                  ; FA6EB3  ld C,0x17
+	ld	c, 23:opc                                  ; FA6EB3  ld C,0x17
 	mul8rr	c, h                                ; FA6EB5  mul BC,H
 	ld	de, bc                                  ; FA6EB7  ld DE,BC
 	add	bc, 18                                 ; FA6EB9  add BC,0x0012
@@ -3603,7 +3603,7 @@ ChanRec_ReleaseByChannel:
 	push	xix                                   ; FA6F00  push XIX
 	cp (xiz+8), 0x40                           ; FA6F01  cp (XIZ+0x08),0x40
 	jr nc, sub_FA6EFA__FA6F42                  ; FA6F05  jr NC,0xfa6f42
-	ldb	c, 23                                  ; FA6F07  ld C,0x17
+	ld	c, 23:opc                                  ; FA6F07  ld C,0x17
 	extpfx3 0x8E, 0x08, 0x43                   ; FA6F09  mul BC,(XIZ+0x08)
 	ld	ix, bc                                  ; FA6F0C  ld IX,BC
 	ldw	hl, 0x4E8                              ; FA6F0E  ld HL,0x04e8
@@ -3772,7 +3772,7 @@ VoiceQuery_Run:
 	and	bc, 0x1F00                             ; FA7007  and BC,0x1f00
 	jr z, sub_FA6FE0__FA703C                   ; FA700B  jr Z,0xfa703c
 	ldw	de, 0x4E8                              ; FA700D  ld DE,0x04e8
-	ldb	h, 64                                  ; FA7010  ld H,0x40
+	ld	h, 64:opc                                  ; FA7010  ld H,0x40
 sub_FA6FE0__FA7012:
 	extz	xde                                   ; FA7012  extz XDE
 	ld	c, (xde+18)                             ; FA7014  ld C,(XDE+0x12)
@@ -4095,13 +4095,13 @@ VelSplit_LayerFromVelocity:
 	ld	c, (xix+2)                              ; FA7299  ld C,(XIX+0x02)
 	cp	h, c                                    ; FA729C  cp H,C
 	jr ule, sub_FA727D__FA72A4                 ; FA729E  jr ULE,0xfa72a4
-	ldb	a, 3                                   ; FA72A0  ld A,0x03
+	ld	a, 3:opc                                   ; FA72A0  ld A,0x03
 	jr sub_FA727D__FA72AE                      ; FA72A2  jr T,0xfa72ae
 sub_FA727D__FA72A4:
-	ldb	a, 2                                   ; FA72A4  ld A,0x02
+	ld	a, 2:opc                                   ; FA72A4  ld A,0x02
 	jr sub_FA727D__FA72AE                      ; FA72A6  jr T,0xfa72ae
 sub_FA727D__FA72A8:
-	ldb	a, 1                                   ; FA72A8  ld A,0x01
+	ld	a, 1:opc                                   ; FA72A8  ld A,0x01
 	jr sub_FA727D__FA72AE                      ; FA72AA  jr T,0xfa72ae
 sub_FA727D__FA72AC:
 	sub	a, a                                   ; FA72AC  sub A,A
@@ -4149,13 +4149,13 @@ VelSplit_LayerFromVelocity_b:
 	ld	c, (xix+2)                              ; FA72CF  ld C,(XIX+0x02)
 	cp	h, c                                    ; FA72D2  cp H,C
 	jr ule, sub_FA72B3__FA72DA                 ; FA72D4  jr ULE,0xfa72da
-	ldb	a, 3                                   ; FA72D6  ld A,0x03
+	ld	a, 3:opc                                   ; FA72D6  ld A,0x03
 	jr sub_FA72B3__FA72E4                      ; FA72D8  jr T,0xfa72e4
 sub_FA72B3__FA72DA:
-	ldb	a, 2                                   ; FA72DA  ld A,0x02
+	ld	a, 2:opc                                   ; FA72DA  ld A,0x02
 	jr sub_FA72B3__FA72E4                      ; FA72DC  jr T,0xfa72e4
 sub_FA72B3__FA72DE:
-	ldb	a, 1                                   ; FA72DE  ld A,0x01
+	ld	a, 1:opc                                   ; FA72DE  ld A,0x01
 	jr sub_FA72B3__FA72E4                      ; FA72E0  jr T,0xfa72e4
 sub_FA72B3__FA72E2:
 	sub	a, a                                   ; FA72E2  sub A,A
@@ -4464,7 +4464,7 @@ KeyZone_Stage_Reg0040_Stride8:
 	push	xhl                                   ; FA746B  push XHL
 	push	xix                                   ; FA746C  push XIX
 	ld	hl, (xiz+8)                             ; FA746D  ld HL,(XIZ+0x08)
-	ldb	c, 8                                   ; FA7470  ld C,0x08
+	ld	c, 8:opc                                   ; FA7470  ld C,0x08
 	extpfx3 0x8E, 0x0E, 0x43                   ; FA7472  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FA7475  extz XBC
 	ld	xix, xbc                                ; FA7477  ld XIX,XBC
@@ -4518,7 +4518,7 @@ KeyZone_Stage_Reg0040_Stride6A:
 	push	xhl                                   ; FA74AF  push XHL
 	push	xix                                   ; FA74B0  push XIX
 	ld	hl, (xiz+8)                             ; FA74B1  ld HL,(XIZ+0x08)
-	ldb	c, 6                                   ; FA74B4  ld C,0x06
+	ld	c, 6:opc                                   ; FA74B4  ld C,0x06
 	extpfx3 0x8E, 0x0E, 0x43                   ; FA74B6  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FA74B9  extz XBC
 	ld	xix, xbc                                ; FA74BB  ld XIX,XBC
@@ -4570,7 +4570,7 @@ KeyZone_Stage_Reg0040_Stride6B:
 	push	xhl                                   ; FA74F1  push XHL
 	push	xix                                   ; FA74F2  push XIX
 	ld	hl, (xiz+8)                             ; FA74F3  ld HL,(XIZ+0x08)
-	ldb	c, 6                                   ; FA74F6  ld C,0x06
+	ld	c, 6:opc                                   ; FA74F6  ld C,0x06
 	extpfx3 0x8E, 0x0E, 0x43                   ; FA74F8  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FA74FB  extz XBC
 	ld	xix, xbc                                ; FA74FD  ld XIX,XBC
@@ -4622,7 +4622,7 @@ KeyZone_Stage_Reg0040_Stride4:
 	push	xhl                                   ; FA7533  push XHL
 	push	xix                                   ; FA7534  push XIX
 	ld	hl, (xiz+8)                             ; FA7535  ld HL,(XIZ+0x08)
-	ldb	c, 4                                   ; FA7538  ld C,0x04
+	ld	c, 4:opc                                   ; FA7538  ld C,0x04
 	extpfx3 0x8E, 0x0E, 0x43                   ; FA753A  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FA753D  extz XBC
 	ld	xix, xbc                                ; FA753F  ld XIX,XBC
@@ -5479,10 +5479,10 @@ EnvRec_ClearSlot:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA78E8  link XIZ,0x0000
 	push	xhl                                   ; FA78EC  push XHL
 	pushw	de                                   ; FA78ED  push DE
-	ldb	c, 9                                   ; FA78EE  ld C,0x09
+	ld	c, 9:opc                                   ; FA78EE  ld C,0x09
 	extpfx3 0x8E, 0x08, 0x43                   ; FA78F0  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA78F3  ld HL,BC
-	ldb	a, 27                                  ; FA78F5  ld A,0x1b
+	ld	a, 27:opc                                  ; FA78F5  ld A,0x1b
 	extpfx3 0x8E, 0x0A, 0x41                   ; FA78F7  mul WA,(XIZ+0x0a)
 	ld	de, wa                                  ; FA78FA  ld DE,WA
 	add	de, bc                                 ; FA78FC  add DE,BC
@@ -5598,7 +5598,7 @@ EGEnv_Eval_BaseCurveA:
 	push	xhl                                   ; FA7971  push XHL
 	pushw	de                                   ; FA7972  push DE
 	push	xix                                   ; FA7973  push XIX
-	ldb	c, 27                                  ; FA7974  ld C,0x1b
+	ld	c, 27:opc                                  ; FA7974  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA7976  mul BC,(XIZ+0x08)
 	ld	(xiz-2), bc                             ; FA7979  ld (XIZ+0xfe),BC
 	ldw	hl, 0x4CCF                             ; FA797C  ld HL,0x4ccf
@@ -5689,7 +5689,7 @@ EGEnv_Eval_ValueCurve_WithBaseCurveA:
 	pushw	hl                                   ; FA79F8  push HL
 	push	xde                                   ; FA79F9  push XDE
 	push	xix                                   ; FA79FA  push XIX
-	ldb	c, 27                                  ; FA79FB  ld C,0x1b
+	ld	c, 27:opc                                  ; FA79FB  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA79FD  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA7A00  ld HL,BC
 	ldw	wa, 0x4CCF                             ; FA7A02  ld WA,0x4ccf
@@ -5749,7 +5749,7 @@ EGEnv_Eval_BaseCurveB:
 	push	xhl                                   ; FA7A4F  push XHL
 	pushw	de                                   ; FA7A50  push DE
 	push	xix                                   ; FA7A51  push XIX
-	ldb	c, 27                                  ; FA7A52  ld C,0x1b
+	ld	c, 27:opc                                  ; FA7A52  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA7A54  mul BC,(XIZ+0x08)
 	add	bc, 9                                  ; FA7A57  add BC,0x0009
 	ld	(xiz-2), bc                             ; FA7A5B  ld (XIZ+0xfe),BC
@@ -5830,7 +5830,7 @@ EGEnv_Eval_ValueCurve_WithBaseCurveB:
 	pushw	hl                                   ; FA7ADA  push HL
 	push	xde                                   ; FA7ADB  push XDE
 	push	xix                                   ; FA7ADC  push XIX
-	ldb	c, 27                                  ; FA7ADD  ld C,0x1b
+	ld	c, 27:opc                                  ; FA7ADD  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA7ADF  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA7AE2  ld HL,BC
 	add	hl, 9                                  ; FA7AE4  add HL,0x0009
@@ -5899,7 +5899,7 @@ EGEnv_Eval_FreqWriteBaseCurve:
 	pushw	hl                                   ; FA7B35  push HL
 	push	xde                                   ; FA7B36  push XDE
 	push	xix                                   ; FA7B37  push XIX
-	ldb	c, 27                                  ; FA7B38  ld C,0x1b
+	ld	c, 27:opc                                  ; FA7B38  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA7B3A  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FA7B3D  ld HL,BC
 	add	hl, 18                                 ; FA7B3F  add HL,0x0012
@@ -6032,7 +6032,7 @@ EGEnv_Eval_ValueCurve_WithFreqWriteCurve:
 	push	xhl                                   ; FA7C3E  push XHL
 	pushw	de                                   ; FA7C3F  push DE
 	push	xix                                   ; FA7C40  push XIX
-	ldb	c, 27                                  ; FA7C41  ld C,0x1b
+	ld	c, 27:opc                                  ; FA7C41  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA7C43  mul BC,(XIZ+0x08)
 	ld	de, bc                                  ; FA7C46  ld DE,BC
 	add	de, 18                                 ; FA7C48  add DE,0x0012

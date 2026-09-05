@@ -1994,10 +1994,10 @@ KeyScan_CheckEmptyMarker:
 KeyScan_ScanLoop:
 	cp	(xix), bc
 	jr	nz, 49
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	xde
 	sll	xde, 8
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xde, xwa
 	sll	xde, 8
@@ -2596,7 +2596,7 @@ MainPmanCtrl_CheckSoundParam:
 	jr	nz, 9
 MainPmanCtrl_SetPartSelectOne:
 	ld	(35998:16), 1
-	ldb	e, 1
+	ld	e, 1:opc
 	jr	9
 MainPmanCtrl_SetPartSelectZero:
 	ld	(35998:16), 0
@@ -2818,7 +2818,7 @@ SeqState_HasModeChanged:
 
 UI_PostDialEnable:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0006f
@@ -2829,7 +2829,7 @@ UI_DialRangeData:
 
 UI_PostEvent_0x6E:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0006e
@@ -2837,7 +2837,7 @@ UI_PostEvent_0x6E:
 
 UI_PostDialRangeEvent:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00070
@@ -2845,7 +2845,7 @@ UI_PostDialRangeEvent:
 
 UI_PostDialValueEvent:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00071

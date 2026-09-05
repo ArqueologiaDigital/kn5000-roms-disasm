@@ -605,7 +605,7 @@ UpdSeSel_ExtendedOps_Data:
 	ld	bc, 1:i3
 	call	SeMenu_StorePartParam
 	.byte 0x8f
-	ldb	h, 63
+	ld	h, 63:opc
 	nop
 	jr	nz, 11
 	ldw	wa, 33
@@ -613,7 +613,7 @@ UpdSeSel_ExtendedOps_Data:
 	ld	wa, 1:i3
 	jr	110
 	.byte 0x8f
-	ldb	h, 63
+	ld	h, 63:opc
 	normal
 	jr	nz, 63
 	lda	xwa, (xsp+2)
@@ -640,7 +640,7 @@ UpdSeSel_ExtendedOps_Data:
 	jr	41
 	lda	xwa, (xsp+2)
 	.byte 0x8f
-	ldb	h, 63
+	ld	h, 63:opc
 	push	sr
 	jr	nz, 38
 	call	SeMenu_FillEntryTable
@@ -694,7 +694,7 @@ UpdSeSel_ExtendedOps_Data:
 	cp	(xwa-57), xde
 	.byte 0x89
 	extz	wa
-	ldb	c, 4
+	ld	c, 4:opc
 	addb_erp c, 251
 	pushw	39
 	ld	de, 1:i3
@@ -791,7 +791,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 7
+	ld	c, 7:opc
 	addb_erp c, 251
 	pushw	40
 	ld	de, 1:i3
@@ -844,7 +844,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 17
+	ld	c, 17:opc
 	addb_erp c, 251
 	pushw	41
 	ld	de, 1:i3
@@ -958,7 +958,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x97
 	jrl	lt, -28688
 	.byte 0x04
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	ld	wa, 0:i3
 	call	SeMenu_StorePartParam
@@ -1091,7 +1091,7 @@ UpdSeSel_ExtendedOps_Data:
 	cp	(xbc-57), xhl
 	.byte 0x89
 	extz	wa
-	ldb	c, 23
+	ld	c, 23:opc
 	addb_erp c, 250
 	pushw	43
 	ld	de, 1:i3
@@ -1144,7 +1144,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 26
+	ld	c, 26:opc
 	addb_erp c, 251
 	pushw	44
 	ld	de, 1:i3
@@ -1246,7 +1246,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 39
+	ld	c, 39:opc
 	addb_erp c, 251
 	pushw	45
 	ld	de, 1:i3
@@ -1302,7 +1302,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 46
+	ld	c, 46:opc
 	addb_erp c, 251
 	pushw	46
 	ld	de, 1:i3
@@ -1603,7 +1603,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 54
+	ld	c, 54:opc
 	addb_erp c, 251
 	pushw	48
 	ld	de, 1:i3
@@ -1614,7 +1614,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 77
+	ld	c, 77:opc
 	addb_erp c, 251
 	pushw	48
 	ld	de, 1:i3
@@ -1701,7 +1701,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 57
+	ld	c, 57:opc
 	addb_erp c, 251
 	pushw	54
 	ld	de, 1:i3
@@ -1759,7 +1759,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 61
+	ld	c, 61:opc
 	addb_erp c, 251
 	pushw	55
 	ld	de, 1:i3
@@ -1812,7 +1812,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp 251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 71
+	ld	c, 71:opc
 	addb_erp c, 251
 	pushw	56
 	ld	de, 1:i3
@@ -2099,7 +2099,7 @@ SeMenu_AltUpdate_Data:
 	ldib_erp 250, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 30
+	ld	c, 30:opc
 	addb_erp c, 250
 	pushw	36
 	ld	de, 1:i3
@@ -2111,7 +2111,7 @@ SeMenu_AltUpdate_Data:
 	ldib_erp 250, 0
 	stb_erp a, 251
 	extz	wa
-	ldb	c, 30
+	ld	c, 30:opc
 	addb_erp c, 250
 	pushw	36
 	ld	de, 1:i3
@@ -2132,7 +2132,7 @@ SeMenu_AltUpdate_Data:
 	.byte 0x97
 	jrl	lt, -28688
 	push	sr
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	ld	wa, 0:i3
 	call	SeMenu_StorePartParam
@@ -2188,7 +2188,7 @@ SeMenu_AltUpdate_Data:
 	ldib_erp 250, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 34
+	ld	c, 34:opc
 	addb_erp c, 250
 	pushw	37
 	ld	de, 1:i3
@@ -2200,7 +2200,7 @@ SeMenu_AltUpdate_Data:
 	ldib_erp 250, 0
 	stb_erp a, 251
 	extz	wa
-	ldb	c, 34
+	ld	c, 34:opc
 	addb_erp c, 250
 	pushw	37
 	ld	de, 1:i3
@@ -2221,7 +2221,7 @@ SeMenu_AltUpdate_Data:
 	.byte 0x97
 	jrl	lt, -28688
 	push	sr
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	ld	wa, 0:i3
 	call	SeMenu_StorePartParam
@@ -2283,7 +2283,7 @@ SeMenu_ControllerUpdate:
 SeMenu_ControllerUpdate_Step1:
 	ld a, (xsp + 6)
 	extz wa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	addb_erp C, 0xfb
 	pushw 0x26
 	ld de, 1:i3
@@ -2296,7 +2296,7 @@ SeMenu_ControllerUpdate_Step1:
 SeMenu_ControllerUpdate_Step2:
 	ld a, (xsp + 8)
 	extz wa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	addb_erp C, 0xfb
 	pushw 0x26
 	ld de, 1:i3
@@ -2569,12 +2569,12 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	2, xsp
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	ldb	a, 13
+	ld	a, 13:opc
 	.byte 0x87
 	push	xsp
 	normal
 	jr	z, 2
-	ldb	a, 16
+	ld	a, 16:opc
 	extz	wa
 	call	SeMenu_CopyWriteUpdate_Data_0x292E
 	inc	2, xsp
@@ -2591,7 +2591,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	wa, 1:i3
 	call	SeMenu_SetDisplayState
 	ldib_erp 251, 0
-	ldb	c, 93
+	ld	c, 93:opc
 	addb_erp c, 251
 	pushw	58
 	ld	wa, 0:i3
@@ -4273,7 +4273,7 @@ SeMenu_CopyWriteUpdate_Data:
 	swi	2
 	jr	ge, -113
 	.byte 0x06
-	ldb	a, 143
+	ld	a, 143:opc
 	.byte 0x06
 	and	(xbc), a
 	jr	gt, -55
@@ -5260,12 +5260,12 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8f, 0x04
 	push	xsp
 	jrl	nc, 1134
-	ldb	b, 0
+	ld	b, 0:opc
 	jr	34
 	.byte 0x8f
 	ldio	160, 143
 	max
-	ldb	a, 200
+	ld	a, 200:opc
 	and	(xbc), b
 	.byte 0xf1
 	jr	ule, 2
@@ -5330,7 +5330,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
-	ldb	c, 0
+	ld	c, 0:opc
 	.byte 0xc7
 	swi	3
 	and	(xhl), c
@@ -5351,7 +5351,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
-	ldb	c, 0
+	ld	c, 0:opc
 	.byte 0xc7
 	swi	3
 	and	(xhl), c
@@ -6337,7 +6337,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xix
 	stiw_d8 143, 233, 143
 	push sr
-	ldb c, 217
+	ld c, 217:opc
 	ccf
 	ld	wa, 0:i3
 	call	SeMenu_StorePartParam
@@ -6482,7 +6482,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_SetupPartDisplay_End_0x1AA
 	.byte 0x8f, 0x04
 	push	xsp
-	ldb	l, 111
+	ld	l, 111:opc
 	pop	xiy
 	incm8	1, (xsp+4)
 	ld	a, (xsp+4)
@@ -6700,7 +6700,7 @@ SeMenu_CopyWriteUpdate_Data:
 	and	c, 31
 	cp	c, 16
 	jr	ule, 2
-	ldb	c, 16
+	ld	c, 16:opc
 	extz	bc
 	ld	wa, 2:i3
 	call	SeMenu_StorePartParam
@@ -6833,7 +6833,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	.byte 0xe0, 0xe4
 	push	xsp
-	ldb	w, 126
+	ld	w, 126:opc
 	.byte 0x91
 	nop
 	lda	xbc, (xsp+24)
@@ -6872,7 +6872,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	.byte 0xe4, 0xe0
 	nop
-	ldb	w, 216
+	ld	w, 216:opc
 	.byte 0xa9
 	ldw	de, 16
 	call	SeMenu_SetupPartDisplay
@@ -6950,7 +6950,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	.byte 0xe4, 0xe0
 	nop
-	ldb	w, 216
+	ld	w, 216:opc
 	.byte 0xa9
 	ldw	de, 16
 	call	SeMenu_SetupPartDisplay
@@ -6987,7 +6987,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, 90
 	jr	ugt, 57
 	sub	a, 65
-	ldb	c, 97
+	ld	c, 97:opc
 	add	a, c
 	ld	(xde), a
 	ld	a, (xsp+4)
@@ -7105,7 +7105,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x87
 	.ascii "?_o:‡"
 	jr	lt, -121
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	ld	wa, 1:i3
 	call	SeMenu_StorePartParam
@@ -7192,7 +7192,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	or	xwa, xwa
 	push	xsp
-	ldb	w, 110
+	ld	w, 110:opc
 	ldf	0xc7
 	swi	1
 	jr	lt, -57
@@ -7222,7 +7222,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	or	xwa, xwa
 	push	xsp
-	ldb	w, 110
+	ld	w, 110:opc
 	decf
 	inc1b_erp 249
 	inc1b_erp 250
@@ -7251,7 +7251,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	or	xwa, xwa
 	nop
-	ldb	w, 199
+	ld	w, 199:opc
 	swi	2
 	jr	lt, -39
 	jr	lt, -57
@@ -7289,7 +7289,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	or	xwa, xix
 	nop
-	ldb	w, 199
+	ld	w, 199:opc
 	swi	2
 	jr	lt, -39
 	jr	lt, -57
@@ -7878,16 +7878,16 @@ SeMenu_DisplayPartValue:
 	push xix
 	push xiy
 	ld wa, (xiz + 10)
-	ldb w, 0xff
+	ld w, 0xff:opc
 	ld de, (xiz + 8)
-	ldb d, 0x0
+	ld d, 0x0:opc
 	push xiz
 	call SwbtWr_QueueMainEvent
 	pop xiz
 	ld wa, (xiz + 12)
-	ldb w, 0x7f
+	ld w, 0x7f:opc
 	ld de, (xiz + 8)
-	ldb d, 0x1
+	ld d, 0x1:opc
 	push xiz
 	call SwbtWr_QueueMainEvent
 	pop xiz
@@ -8170,13 +8170,13 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	xiy, SeBitmap_EnvCurve5_0x313
 	ld	xix, SeBitmap_EnvCurve5_0x31D
 	call	SeMenu_NameEditor_Setup
-	ldb	c, 2
+	ld	c, 2:opc
 	jr	22
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x313
 	ld	xix, SeBitmap_EnvCurve5_0x327
 	call	SeMenu_NameEditor_Setup
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
@@ -8192,14 +8192,14 @@ SeMenu_ShowConfirmDialog_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -8212,14 +8212,14 @@ SeMenu_ShowConfirmDialog_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -8255,7 +8255,7 @@ SeMenu_ShowConfirmDialog_Data:
 	pop	xiz
 	ret
 	ld	(0x03efa8:24), 0
-	ldb	c, 7
+	ld	c, 7:opc
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	pushw	ix
@@ -8422,7 +8422,7 @@ SeMenu_ShowConfirmDialog_Data:
 	call	SeMenu_NameEditor_ChangeCase_Data
 	popw	iy
 	popw	ix
-	ldb	c, 5
+	ld	c, 5:opc
 	ld	xiz, SeMenu_ShowConfirmDialog_Data_0x3F4
 	ld	hl, (xiz)
 	ld	de, (xiz+2)
@@ -8455,7 +8455,7 @@ SeMenu_ShowConfirmDialog_Data:
 	pop	c
 	dec	1, c
 	jr	nz, -65
-	ldb	c, 6
+	ld	c, 6:opc
 	add	ix, 4
 	ld	(1740:16), ix
 	ld	(1744:16), ix
@@ -8555,7 +8555,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
-	ldb	e, 0
+	ld	e, 0:opc
 	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
@@ -8565,7 +8565,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
-	ldb	e, 0
+	ld	e, 0:opc
 	call	SeMenu_NameEditor_Complete
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
@@ -8578,12 +8578,12 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
-	ldb	h, 0
+	ld	h, 0:opc
 	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
-	ldb	h, 0
+	ld	h, 0:opc
 	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
@@ -8598,9 +8598,9 @@ SeMenu_ShowConfirmDialog_Data:
 	reti
 	swi	0
 	.byte 0xe0
-	ldb	e, 209
+	ld	e, 209:opc
 	.byte 0xc6, 0x06
-	ldb	w, 201
+	ld	w, 201:opc
 	ldwio	8, 0xd0c8
 	ld	hl, (1736:16)
 	mul	l, 40
@@ -8627,15 +8627,15 @@ SeMenu_WaveformSelect_End:
 	ret
 
 SeMenu_WaveformSelect_Handler:
-	ldb c, 0x0
-	ldb a, 0xc
-	ldb a, 0x10
+	ld c, 0x0:opc
+	ld a, 0xc:opc
+	ld a, 0x10:opc
 	call Display_DeferOrDrawWall
 	ret
 
 SeMenu_WaveformSelect_Process:
-	ldb c, 0x7
-	ldb a, 0xc
+	ld c, 0x7:opc
+	ld a, 0xc:opc
 	call Display_DeferOrUpdateScreen
 	ret
 
@@ -8696,7 +8696,7 @@ SeMenu_WaveformSelect_Data:
 	call	SeMenu_NameEditor_Setup
 	ret
 	ld	(0x03efa8:24), 0
-	ldb	a, 13
+	ld	a, 13:opc
 	push_a
 	call	SeMenu_WaveformSelect_Data_0xAF
 	pop_a
@@ -8745,7 +8745,7 @@ SeMenu_PresetManager_Init:
 	ld	xiy, FlashWrite_BlockRef_Type6_0x690
 	ld	xix, FlashWrite_BlockRef_Type6_0x69A
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ld	(0x03efa8:24), 1
@@ -8842,13 +8842,13 @@ SeMenu_PresetManager_Data:
 	ld	xiy, SeBitmap_EnvCurve5_0x7B6
 	ld	xix, SeBitmap_EnvCurve5_0x7C0
 	call	SeMenu_NameEditor_Setup
-	ldb	c, 2
+	ld	c, 2:opc
 	jr	22
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x7B6
 	ld	xix, SeBitmap_EnvCurve5_0x7CA
 	call	SeMenu_NameEditor_Setup
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
@@ -8864,14 +8864,14 @@ SeMenu_PresetManager_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -8884,14 +8884,14 @@ SeMenu_PresetManager_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -8902,9 +8902,9 @@ SeMenu_PresetManager_Data:
 	push	xsp
 	normal
 	jr	nz, 4
-	ldb	c, 2
+	ld	c, 2:opc
 	jr	2
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
@@ -8920,14 +8920,14 @@ SeMenu_PresetManager_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -8940,21 +8940,21 @@ SeMenu_PresetManager_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
 	djnz8	c, -84
 	ret
 	ld	(0x03efa8:24), 0
-	ldb	c, 2
+	ld	c, 2:opc
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
@@ -8970,14 +8970,14 @@ SeMenu_PresetManager_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -8990,14 +8990,14 @@ SeMenu_PresetManager_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -9065,7 +9065,7 @@ SeMenu_PresetBrowser_Data:
 	call	SeMenu_NameEditor_Draw
 	ret
 	ld	(0x03efa8:24), 0
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
@@ -9081,14 +9081,14 @@ SeMenu_PresetBrowser_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -9101,14 +9101,14 @@ SeMenu_PresetBrowser_Data:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	e, 217
+	ld	e, 217:opc
 	push	w
 	nop
 	.byte 0xe3
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	pop	c
@@ -9129,7 +9129,7 @@ SeMenu_PresetBrowser_Data:
 	ld	xiy, TuningSystem_Handler_Table_0x187
 	ld	xix, TuningSystem_Handler_Table_0x191
 	call	SeMenu_NameEditor_Setup
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	xiy, 1637
 	ld	w, (xiy)
 	and	w, 32
@@ -9137,7 +9137,7 @@ SeMenu_PresetBrowser_Data:
 	push	w
 	push	c
 	push	xiy
-	ldb	d, 4
+	ld	d, 4:opc
 	sub	d, c
 	ld	e, d
 	xor	d, d
@@ -9150,7 +9150,7 @@ SeMenu_PresetBrowser_Data:
 	reti
 	swi	0
 	.byte 0xe8
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	popw	de
@@ -9589,7 +9589,7 @@ SeMenu_NameEdit_DataBlock1:
 	reti
 	swi	0
 	.byte 0xe4
-	ldb	d, 29
+	ld	d, 29:opc
 	nop
 	cp	xwa, xix
 	ld	a, (1648:16)
@@ -9639,7 +9639,7 @@ SeMenu_NameEdit_SetupPath:
 	ld xiy, 0x00f1659f
 	ld xix, 0x00f165a9
 	call SeMenu_NameEditor_Setup
-	ldb a, 0x00
+	ld a, 0x00:opc
 SeMenu_NameEdit_DefaultPath:
 	ld	(0x03efa8:24), 0
 	ld xiy, EffectParam_Edit_Table
@@ -9704,7 +9704,7 @@ SeMenu_PatchEdit_SetupPath:
 	ld xiy, 0x00f12b49
 	ld xix, 0x00f12b53
 	call SeMenu_NameEditor_Setup
-	ldb a, 0x00
+	ld a, 0x00:opc
 	jr t, SeMenu_PatchEdit_DefaultPath
 SeMenu_PatchEdit_CallHelper:
 	call SeMenu_PresetManager_Data_0xEA
@@ -9741,7 +9741,7 @@ SeMenu_BankEdit_LoopHelper:
 	ld xiy, 0x00f12b86
 	ld xix, 0x00f12bae
 	call SeMenu_NameEditor_Draw
-	ldb c, 0x00
+	ld c, 0x00:opc
 	ld xiz, 0x00000664
 SeMenu_BankEdit_LoopBody:
 	push c
@@ -9802,13 +9802,13 @@ SeMenu_DrumKit_Dispatch:
 	ld	xiy, TuningSys_Param_01_0x24A
 	ld	xix, TuningSys_Param_01_0x254
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	22
 	ld	(0x03efa8:24), 1
 	ld	xiy, TuningSys_Param_01_0x254
 	ld	xix, TuningSys_Param_01_0x25E
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 13
+	ld	a, 13:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, TuningSys_Param_01_0x25E
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -9888,7 +9888,7 @@ Data_UnknownBlock:
 	ld	xiy, DrumDetailEdit_Menu_Table_0x2C6
 	ld	xix, DrumDetailEdit_Menu_Table_0x2D0
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x03efa8:24), 0
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -9964,7 +9964,7 @@ Data_UnknownBlock:
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x10
 	ld	xix, SeMenu_CompareScreen_DataTable_0x24
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x24
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -9981,9 +9981,9 @@ Data_UnknownBlock:
 	ld	l, (1632:16)
 	cp	l, 1:i3
 	jr	z, 4
-	ldb	l, 17
+	ld	l, 17:opc
 	jr	2
-	ldb	l, 16
+	ld	l, 16:opc
 	ld	(0x90ea:16), l
 	ld	h, (1633:16)
 	dec	1, h
@@ -9996,7 +9996,7 @@ Data_UnknownBlock:
 	ld	c, (0x90ee:16)
 	ld	xde, 0x020c13
 	call	SndParam_ApplyProgramChangeAsync
-	ldb	c, 20
+	ld	c, 20:opc
 	xor	hl, hl
 	ldw	ix, 5889
 	ld	xiy, 0x020c13
@@ -10005,7 +10005,7 @@ Data_UnknownBlock:
 	push	d
 	ld	xwa, xiy
 	ld	xbc, xiy
-	ldb	d, 0
+	ld	d, 0:opc
 	cp	d, 16
 	jr	z, 29
 	push	xwa
@@ -10193,7 +10193,7 @@ SeMenu_PresetInit_Main:
 	ret
 SeMenu_PresetInit_Loop1:
 	; --- Loop 1: iterate A from 2 to 5, call table lookup (15 bytes) ---
-	ldb a, 0x02
+	ld a, 0x02:opc
 SeMenu_PresetInit_Loop1Body:
 	push_a
 	call SeMenu_PresetInit_TableLookup1
@@ -10219,7 +10219,7 @@ SeMenu_PresetInit_Lookup1Return:
 	ret
 SeMenu_PresetInit_Loop2:
 	; --- Loop 2: iterate A from 0x0c to 0x0f, call table lookup (16 bytes) ---
-	ldb a, 0x0c
+	ld a, 0x0c:opc
 SeMenu_PresetInit_Loop2Body:
 	push_a
 	call SeMenu_PresetInit_TableLookup2
@@ -10367,7 +10367,7 @@ SeMenu_FilterEdit_Dispatch:
 	ld	xiy, TuningSystem_Handler_Table_0x123D
 	ld	xix, TuningSystem_Handler_Table_0x1247
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	xiy, TuningSystem_Handler_Table_0x117D
 	ld	(0x03efa8:24), 0
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -10379,7 +10379,7 @@ SeMenu_FilterEdit_AltDispatch:
 	ld	xiy, TuningSystem_Handler_Table_0x12CA
 	ld	xix, TuningSystem_Handler_Table_0x12D4
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, TuningSystem_Handler_Table_0x12B6
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -10391,7 +10391,7 @@ SeMenu_FilterEdit_DataBlock3:
 	ld	xiy, TuningSystem_Handler_Table_0x12CA
 	ld	xix, TuningSystem_Handler_Table_0x12D4
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, TuningSystem_Handler_Table_0x132F
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -10482,10 +10482,10 @@ SeMenu_EqEdit_SetupPath:
 	ld xiy, 0x00f14dd2
 	ld xix, 0x00f14df0
 	call SeMenu_NameEditor_Setup
-	ldb a, 0x00
+	ld a, 0x00:opc
 	jr t, SeMenu_EqEdit_DefaultPath
 SeMenu_EqEdit_SetConstA:
-	ldb a, 0x07
+	ld a, 0x07:opc
 SeMenu_EqEdit_DefaultPath:
 	ld	(0x03efa8:24), 0
 	ld xiy, 0x00f14a66
@@ -10527,7 +10527,7 @@ SeMenu_EqEdit_DrawInit:
 	rcf
 	ldio	4, 42
 	.byte 0x55
-	ldb	b, 1
+	ld	b, 1:opc
 	push	sr
 	max
 	ldio	16, 42
@@ -10543,7 +10543,7 @@ SeMenu_EqEdit_DrawInit:
 	ld	xbc, 0x152a4122
 	pushw	de
 	.byte 0x55
-	ldb	b, 1
+	ld	b, 1:opc
 	ldwio	4, 0x4102
 	pushw	de
 	push_a
@@ -10559,7 +10559,7 @@ SeMenu_EqEdit_DrawInit:
 	ld	xbc, 0x152a4122
 	max
 	ldwio	20, 5130
-	ldb	b, 85
+	ld	b, 85:opc
 	pushw	de
 	max
 	push	sr
@@ -10702,7 +10702,7 @@ SeBitmap_EnvCurve2:
 	pop	sr
 	incf
 	rcf
-	ldb	w, 192
+	ld	w, 192:opc
 	.zero 24
 	nop
 	nop
@@ -10920,7 +10920,7 @@ SeBitmap_EnvCurve4:
 	pushw	2827
 	zcf
 	zcf
-	ldb	c, 35
+	ld	c, 35:opc
 	ld	xhl, 0x0383c343
 	pop	sr
 	pop	sr
@@ -10991,7 +10991,7 @@ SeBitmap_EnvCurve5:
 	pushw	2827
 	pushw	4883
 	zcf
-	ldb	c, 35
+	ld	c, 35:opc
 	ld	xhl, 0x03838343
 	pop	sr
 	pop	sr
@@ -11059,7 +11059,7 @@ SeBitmap_EnvCurve5:
 	pushw	2827
 	pushw	4883
 	zcf
-	ldb	c, 35
+	ld	c, 35:opc
 	ld	xhl, 0x03038343
 	pop	sr
 	pop	sr
@@ -11096,22 +11096,22 @@ SeBitmap_EnvCurve5:
 	.byte 0x00, 0x23, 0x05, 0x10
 	.byte 0x82
 	nop
-	ldb	c, 5
+	ld	c, 5:opc
 	jr	lt, -109
 	pushw	1315
 	jr	ule, -125
 	scf
-	ldb	c, 5
+	ld	c, 5:opc
 	reti
 	jrl	ule, 8983
 	halt
-	ldb	a, 179
+	ld	a, 179:opc
 	call	0x620523
 	.byte 0xea
 	ldwio	35, 0x6405
 	.byte 0xa2
 	scf
-	ldb	c, 5
+	ld	c, 5:opc
 	ldwio	146, 8983
 	halt
 	pop	xsp
@@ -11136,7 +11136,7 @@ SeBitmap_EnvCurve5:
 	push	10
 	.byte 0xee
 	nop
-	ldb	a, 0
+	ld	a, 0:opc
 	ldw	de, 0x3001
 	nop
 	.long NakaInst_Hard_Analogue_148_0x65
@@ -11160,7 +11160,7 @@ SeBitmap_EnvCurve5:
 	push	10
 	swi	6
 	nop
-	ldb	a, 0
+	ld	a, 0:opc
 	ldw	de, 0x3001
 	nop
 	ei	5
@@ -11240,7 +11240,7 @@ SeBitmap_EnvCurve5:
 	nop
 	nop
 	nop
-	ldb	w, 7
+	ld	w, 7:opc
 	.byte 0x91, 0x0b
 	.ascii "1ST "
 	reti
@@ -11281,7 +11281,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x91
 	pushw	3
 	ldwio	0, 3075
-	ldb	d, 12
+	ld	d, 12:opc
 	.byte 0xf1
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11402-0xF11419 (23 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=73% dist=11 near SeBitmap_EnvCurve5_0x40B+41
 	.byte 0x00, 0x59, 0x11, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c, 0x42, 0x0c, 0xf1
@@ -11306,7 +11306,7 @@ SeBitmap_EnvCurve5:
 	push_a
 	.byte 0xf1
 	nop
-	ldb	a, 20
+	ld	a, 20:opc
 	.byte 0xf1
 	nop
 	.byte 0x06
@@ -11327,7 +11327,7 @@ SeBitmap_EnvCurve5:
 	push	10
 	reti
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	pushw	bc
 	nop
 	pushw	iy
@@ -11346,7 +11346,7 @@ SeBitmap_EnvCurve5:
 	pushw	ix
 	nop
 	jp	2058
-	ldb	a, 0
+	ld	a, 0:opc
 	pushw	wa
 	nop
 	pushw	ix
@@ -11354,7 +11354,7 @@ SeBitmap_EnvCurve5:
 	jp	2058
 	popw	bc
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	.byte 0xc5
 	nop
 	pop	sr
@@ -11364,27 +11364,27 @@ SeBitmap_EnvCurve5:
 	push_a
 	ld	(2048:16), 73
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	.byte 0x56
 	nop
 	ldio	0, 73
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	.byte 0x56
 	nop
 	ldio	0, 110
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	jrl	ugt, 2048
 	nop
 	.byte 0x93
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	.byte 0xa0
 	nop
 	ldio	0, 184
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	.byte 0xc5
 	nop
 	.ascii "NORM 1/2 1/4 1/81/161/321/64 FIXOFF ONOFFON "
@@ -11437,19 +11437,19 @@ SeBitmap_EnvCurve5:
 	reti
 	halt
 	popw	hl
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x51
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x56
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	pop	xhl
-	ldb	d, 18
+	ld	d, 18:opc
 	push	10
 	.byte 0x04
 	nop
@@ -11488,7 +11488,7 @@ SeBitmap_EnvCurve5:
 	ldwio	70, 0xdc00
 	nop
 	.long NakaInst_LEFT_0x04
-	ldb	c, 5
+	ld	c, 5:opc
 	jr	ov, -125
 	nop
 	.byte 0x1c
@@ -11603,7 +11603,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x8d
 	ei	5
 	.byte 0x17
-	ldb	b, 141
+	ld	b, 141:opc
 	ei	5
 	.byte 0x1c
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11697-0xF116AC (21 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=75% dist=9 near SeBitmap_EnvCurve5_0x612+183
@@ -11617,19 +11617,19 @@ SeBitmap_EnvCurve5:
 	add	(xix+35), xiz
 	ei	5
 	.byte 0xbb
-	ldb	c, 142
+	ld	c, 142:opc
 	ei	5
 	.byte 0xc0
-	ldb	c, 142
+	ld	c, 142:opc
 	ei	5
 	.byte 0xc5
-	ldb	c, 142
-	ldb	b, 10
+	ld	c, 142:opc
+	ld	b, 10:opc
 	pushw	0x3600
 	nop
 	ldw	iy, 0xc701
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	push	0
 	.byte 0xda
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF116D5-0xF116EC (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near SeBitmap_EnvCurve5_0x612+245
@@ -11637,7 +11637,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x00, 0xee, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00
 	.byte 0xee
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0xd1
 	nop
 	.byte 0xda
@@ -11646,7 +11646,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xee
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	swi	1
 	nop
 	.byte 0xda
@@ -11654,8 +11654,8 @@ SeBitmap_EnvCurve5:
 	ret
 	.byte 0x01, 0xee
 	nop
-	ldb	b, 10
-	ldb	a, 1
+	ld	b, 10:opc
+	ld	a, 1:opc
 	.byte 0xda
 	nop
 	ldw	iz, 0xee01
@@ -11737,7 +11737,7 @@ SeBitmap_EnvCurve5:
 	pop	xde
 	incf
 	ldw	bc, 0x5453
-	ldb	w, 7
+	ld	w, 7:opc
 	pop	xde
 	scf
 	.ascii "2ND "
@@ -11770,7 +11770,7 @@ SeBitmap_EnvCurve5:
 	pop	sr
 	nop
 	ldwio	0, 3075
-	ldb	d, 12
+	ld	d, 12:opc
 	.byte 0xf1
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF117DD-0xF117F4 (23 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=82% dist=10 near SeBitmap_EnvCurve5_0x7E6+41
 	.byte 0x00, 0x5a, 0x11, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c, 0x42, 0x0c, 0xf1
@@ -11803,7 +11803,7 @@ SeBitmap_EnvCurve5:
 	nop
 	incf
 	nop
-	ldb	w, 7
+	ld	w, 7:opc
 	.byte 0xd4
 	incf
 	ldw	bc, 0x5453
@@ -11817,7 +11817,7 @@ SeBitmap_EnvCurve5:
 	nop
 	incf
 	nop
-	ldb	w, 7
+	ld	w, 7:opc
 	.byte 0xd4
 	scf
 	ldw	de, 0x444e
@@ -11831,7 +11831,7 @@ SeBitmap_EnvCurve5:
 	nop
 	incf
 	nop
-	ldb	w, 7
+	ld	w, 7:opc
 	.byte 0xd4
 	ex_ff
 	ldw	hl, 0x4452
@@ -11842,7 +11842,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd2
 	jp	0x0c0002
 	nop
-	ldb	w, 7
+	ld	w, 7:opc
 	.byte 0xd4
 	jp	0x485434
 	push_a
@@ -11853,7 +11853,7 @@ SeBitmap_EnvCurve5:
 	push_f
 	.byte 0xf1
 	nop
-	ldb	l, 24
+	ld	l, 24:opc
 	.byte 0xf1
 	nop
 	push	xde
@@ -11901,7 +11901,7 @@ SeBitmap_EnvCurve5:
 	nop
 	pop	sr
 	incf
-	ldb	d, 12
+	ld	d, 12:opc
 	.byte 0xf1
 	nop
 	.byte 0xd4
@@ -12054,14 +12054,14 @@ SeBitmap_EnvCurve5:
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11A18-0xF11A37 (31 B), unreached CODE-territory, was disassembled as 16 plausible-but-dead instruction lines; per=100% dist=13 near SeBitmap_EnvCurve5_0x986+196
-	ldb	b, 10
+	ld	b, 10:opc
 	pushw	0x3300
 	nop
 	.byte 0xa8
 	nop
 	.byte 0xca
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	(xhl), 51
 	nop
 	swi	3
@@ -12084,7 +12084,7 @@ SeBitmap_EnvCurve5:
 	pushw	iz
 	.byte 0x01, 0xa1
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	(xhl), 171
 	nop
 	swi	3
@@ -12107,13 +12107,13 @@ SeBitmap_EnvCurve5:
 	.byte 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00
 	.byte 0xee
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0x81
 	nop
 	.byte 0xda
 	nop
 	.long NakaInst_Param_Val7F
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0xd1
 	nop
 	.long NakaData_DescriptorPad_ZeroC
@@ -12273,23 +12273,23 @@ SeBitmap_EnvCurve5:
 	.byte 0x01
 	ldwio	32, 0x3d01
 	nop
-	ldb	l, 1
+	ld	l, 1:opc
 	push	xiy
 	nop
 	.byte 0x01
 	ldwio	33, 0x3e01
 	nop
-	ldb	h, 1
+	ld	h, 1:opc
 	push	xiz
 	nop
 	.byte 0x01
 	ldwio	34, 0x3f01
 	nop
-	ldb	e, 1
+	ld	e, 1:opc
 	push	xsp
 	nop
 	push	10
-	ldb	c, 1
+	ld	c, 1:opc
 	ldw	iz, 9216
 	.byte 0x01
 	ld	xbc, 0x2b090600
@@ -12299,23 +12299,23 @@ SeBitmap_EnvCurve5:
 	.byte 0x01
 	ldwio	34, 0x6001
 	nop
-	ldb	e, 1
+	ld	e, 1:opc
 	jr	f, 0
 	.byte 0x01
 	ldwio	33, 0x6101
 	nop
-	ldb	h, 1
+	ld	h, 1:opc
 	jr	lt, 0
 	.byte 0x01
 	ldwio	32, 0x6201
 	nop
-	ldb	l, 1
+	ld	l, 1:opc
 	jr	le, 0
 	push	10
-	ldb	c, 1
+	ld	c, 1:opc
 	pop	xiz
 	nop
-	ldb	d, 1
+	ld	d, 1:opc
 	jr	ge, 0
 	push	10
 	push_a
@@ -12346,7 +12346,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x9b
 	nop
 	ld	xhl, 0x45565255
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0xe0
 	nop
 	jr	z, 0
@@ -12435,7 +12435,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x9b
 	nop
 	ld	xhl, 0x45565255
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0xa8
 	nop
 	jr	z, 0
@@ -12476,14 +12476,14 @@ SeBitmap_EnvCurve5:
 ; se_setup_env: 107 bytes -- screen layout data, base 0xF11E96
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_env.c)
 	.incbin "includes/generated/se_setup_env.bin"
-	ldb	b, 10
+	ld	b, 10:opc
 	pushw	0x3500
 	nop
 	.byte 0xd4
 	nop
 	.byte 0xca
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0x51
 	nop
 	.byte 0xda
@@ -12491,7 +12491,7 @@ SeBitmap_EnvCurve5:
 	jr	z, 0
 	.byte 0xee
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0x81
 	nop
 	.byte 0xda
@@ -12500,7 +12500,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xee
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	.byte 0xa9
 	nop
 	.byte 0xda
@@ -12565,7 +12565,7 @@ SeBitmap_EnvCurve5:
 ; se_screen_f11f83: 130 bytes -- screen layout data, base 0xF11F83
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f11f83.c)
 	.incbin "includes/generated/se_screen_f11f83.bin"
-	ldb	b, 10
+	ld	b, 10:opc
 	pushw	sp
 	nop
 	popw	wa
@@ -12678,7 +12678,7 @@ SeBitmap_EnvCurve5:
 	reti
 	halt
 	.byte 0x1a
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x1f
@@ -12772,7 +12772,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd1
 	nop
 	ld	xbc, 0x0b174b54
-	ldb	e, 0
+	ld	e, 0:opc
 	.byte 0xd1
 	nop
 	ld	xix, 0x59414345
@@ -12802,7 +12802,7 @@ SeBitmap_EnvCurve5:
 	reti
 	halt
 	.byte 0xaa
-	ldb	a, 95
+	ld	a, 95:opc
 	reti
 	halt
 	.byte 0xb0
@@ -12811,15 +12811,15 @@ SeBitmap_EnvCurve5:
 	.byte 0x07, 0x05, 0x42, 0x24, 0x12, 0x07, 0x05, 0x47, 0x24, 0x12, 0x07, 0x05
 	.byte 0x4c, 0x24, 0x12, 0x07, 0x05
 	.byte 0x51
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x56
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	pop	xhl
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	jr	f, 36
@@ -12828,7 +12828,7 @@ SeBitmap_EnvCurve5:
 	halt
 	jr	z, 36
 	ccf
-	ldb	b, 10
+	ld	b, 10:opc
 	pushw	sp
 	nop
 	popw	wa
@@ -12937,45 +12937,45 @@ SeBitmap_EnvCurve5:
 	.byte 0x01
 	ldwio	32, 0x3d01
 	nop
-	ldb	l, 1
+	ld	l, 1:opc
 	push	xiy
 	nop
 	.byte 0x01
 	ldwio	33, 0x3e01
 	nop
-	ldb	h, 1
+	ld	h, 1:opc
 	push	xiz
 	nop
 	.byte 0x01
 	ldwio	34, 0x3f01
 	nop
-	ldb	e, 1
+	ld	e, 1:opc
 	push	xsp
 	nop
 	.byte 0x01
 	ldwio	34, 0x6001
 	nop
-	ldb	e, 1
+	ld	e, 1:opc
 	jr	f, 0
 	.byte 0x01
 	ldwio	33, 0x6101
 	nop
-	ldb	h, 1
+	ld	h, 1:opc
 	jr	lt, 0
 	.byte 0x01
 	ldwio	32, 0x6201
 	nop
-	ldb	l, 1
+	ld	l, 1:opc
 	jr	le, 0
 	push	10
-	ldb	c, 1
+	ld	c, 1:opc
 	ldw	iz, 9216
 	.byte 0x01
 	ld	xbc, 0x230a0900
 	.byte 0x01
 	pop	xiz
 	nop
-	ldb	d, 1
+	ld	d, 1:opc
 	jr	ge, 0
 ; se_setup_nav_full: 293 bytes -- screen layout data, base 0xF12341
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_nav_full.c)
@@ -12983,12 +12983,12 @@ SeBitmap_EnvCurve5:
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12440-0xF12454 (20 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=67% dist=9 near SeBitmap_EnvCurve5_0x13C3+175
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	xde, 0xe9002700
 	nop
 	pop	xiz
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	xde, 0xe9007500
 	nop
 	.byte 0xac
@@ -13066,7 +13066,7 @@ SeBitmap_EnvCurve5:
 ; se_setup_ctrl_list: 130 bytes -- screen layout data, base 0xF124F3
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_list.c)
 	.incbin "includes/generated/se_setup_ctrl_list.bin"
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	xde, 0xe9004c00
 	nop
 	.byte 0x83
@@ -13172,13 +13172,13 @@ SeBitmap_EnvCurve5:
 	ld	xhl, 0x45565255
 	ei	5
 	.byte 0x8f
-	ldb	b, 75
+	ld	b, 75:opc
 	ei	6
 	ld	de, (xix)
 	jr	ov, 66
 	ei	5
 	.byte 0x9b
-	ldb	b, 75
+	ld	b, 75:opc
 	ei	6
 	ld	xde, (xwa)
 	jr	ov, 66
@@ -13186,24 +13186,24 @@ SeBitmap_EnvCurve5:
 	halt
 	ld	xiz, 0x05071224
 	popw	hl
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x51
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x56
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	pop	xhl
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	jr	f, 36
 	ccf
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	xde, 0xe9004c00
 	nop
 	.byte 0x83
@@ -13280,7 +13280,7 @@ SeBitmap_EnvCurve5:
 	.ascii "KEYOFF"
 	ei	6
 	.byte 0xe6, 0x17, 0x8d
-	ldb	w, 23
+	ld	w, 23:opc
 	push	38
 	.byte 0x01, 0xaa
 	nop
@@ -13291,9 +13291,9 @@ SeBitmap_EnvCurve5:
 	popw	sp
 	.byte 0x52
 	ei	6
-	ldb	h, 30
+	ld	h, 30:opc
 	.byte 0x8e
-	ldb	w, 23
+	ld	w, 23:opc
 	push	11
 	nop
 	.byte 0xcf
@@ -13343,7 +13343,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x01, 0x01, 0x91
 	nop
 	push	10
-	ldb	h, 1
+	ld	h, 1:opc
 	.byte 0x96
 	nop
 	push	xsp
@@ -13363,7 +13363,7 @@ SeBitmap_EnvCurve5:
 	nop
 	call	0xcb01
 	push	10
-	ldb	h, 1
+	ld	h, 1:opc
 	.byte 0xbd
 	nop
 	push	xsp
@@ -13553,15 +13553,15 @@ SeBitmap_EnvCurve5:
 	halt
 	ld	xsp, 0x05071224
 	popw	ix
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x51
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	.byte 0x56
-	ldb	d, 18
+	ld	d, 18:opc
 	reti
 	halt
 	jr	f, 36
@@ -13570,7 +13570,7 @@ SeBitmap_EnvCurve5:
 	halt
 	jr	z, 36
 	ccf
-	ldb	b, 10
+	ld	b, 10:opc
 	pushw	sp
 	nop
 	popw	wa
@@ -13765,28 +13765,28 @@ SeBitmap_EnvCurve5:
 	pushw	1632
 	.byte 0xe0
 	halt
-	ldb	w, 162
-	ldb	b, 1
+	ld	w, 162:opc
+	ld	b, 1:opc
 	pop	sr
 	nop
 	ldwio	97, 0x3f06
 	nop
-	ldb	w, 158
-	ldb	b, 2
+	ld	w, 158:opc
+	ld	b, 2:opc
 	push	sr
 	retd	1634
 	jrl	nc, 8192
 	.byte 0xf2
 	push	xix
 	ld	(1280:16), 146
-	ldb	b, 2
+	ld	b, 2:opc
 	retd	1635
 	reti
 	nop
-	ldb	w, 230
+	ld	w, 230:opc
 	pushw	iy
 	ld	(768:16), 152
-	ldb	b, 34
+	ld	b, 34:opc
 	pushw	iz
 	.byte 0xf1
 	nop
@@ -13802,41 +13802,41 @@ SeBitmap_EnvCurve5:
 	pushw	1632
 	.byte 0xe0
 	halt
-	ldb	w, 167
-	ldb	b, 1
+	ld	w, 167:opc
+	ld	b, 1:opc
 	pop	sr
 	nop
 	ldwio	97, 0x3f06
 	nop
-	ldb	w, 163
-	ldb	b, 2
+	ld	w, 163:opc
+	ld	b, 2:opc
 	push	sr
 	retd	1634
 	jrl	nc, 8192
 	.byte 0xf2
 	push	xix
 	ld	(1280:16), 140
-	ldb	b, 2
+	ld	b, 2:opc
 	retd	1635
 	reti
 	nop
-	ldb	w, 218
+	ld	w, 218:opc
 	pushw	iy
 	ld	(512:16), 146
-	ldb	b, 2
+	ld	b, 2:opc
 	retd	1636
 	jrl	nc, 8192
 	.byte 0xf2
 	push	xix
 	ld	(1280:16), 152
-	ldb	b, 2
+	ld	b, 2:opc
 	retd	1637
 	reti
 	nop
-	ldb	w, 218
+	ld	w, 218:opc
 	pushw	iy
 	ld	(512:16), 158
-	ldb	b, 101
+	ld	b, 101:opc
 	pushw	iz
 	.byte 0xf1
 	nop
@@ -13860,58 +13860,58 @@ SeBitmap_EnvCurve5:
 	pushw	1634
 	swi	7
 	nop
-	ldb	w, 226
+	ld	w, 226:opc
 	call	0x050002
 	pushw	1642
 	swi	7
 	nop
-	ldb	w, 236
+	ld	w, 236:opc
 	call	0x050002
 	pushw	1633
 	swi	7
 	nop
-	ldb	w, 247
+	ld	w, 247:opc
 	call	2
 	ldwio	99, 0xff06
 	nop
-	ldb	w, 97
-	ldb	b, 3
+	ld	w, 97:opc
+	ld	b, 3:opc
 	halt
 	pushw	1636
 	swi	7
 	nop
-	ldb	w, 101
-	ldb	b, 2
+	ld	w, 101:opc
+	ld	b, 2:opc
 	nop
 	nop
 	ldwio	101, 0x7f06
 	nop
-	ldb	w, 106
-	ldb	b, 3
+	ld	w, 106:opc
+	ld	b, 3:opc
 	halt
 	pushw	1638
 	swi	7
 	nop
-	ldb	w, 111
-	ldb	b, 2
+	ld	w, 111:opc
+	ld	b, 2:opc
 	nop
 	nop
 	ldwio	103, 0x7f06
 	nop
-	ldb	w, 116
-	ldb	b, 3
+	ld	w, 116:opc
+	ld	b, 3:opc
 	halt
 	pushw	1640
 	swi	7
 	nop
-	ldb	w, 121
-	ldb	b, 2
+	ld	w, 121:opc
+	ld	b, 2:opc
 	nop
 	nop
 	ldwio	105, 0x7f06
 	nop
-	ldb	w, 127
-	ldb	b, 3
+	ld	w, 127:opc
+	ld	b, 3:opc
 	pop	sr
 	pushw	1632
 	.byte 0x01
@@ -14114,30 +14114,30 @@ TuningSystem_Handler_Table:
 	nop
 	ldwio	100, 7942
 	nop
-	ldb	w, 152
-	ldb	b, 3
+	ld	w, 152:opc
+	ld	b, 3:opc
 	nop
 	ldwio	98, 0x7f06
 	nop
-	ldb	w, 157
-	ldb	b, 3
+	ld	w, 157:opc
+	ld	b, 3:opc
 	nop
 	ldwio	97, 0x7f06
 	nop
-	ldb	w, 161
-	ldb	b, 3
+	ld	w, 161:opc
+	ld	b, 3:opc
 	nop
 	ldwio	99, 0x3f06
 	nop
-	ldb	w, 166
-	ldb	b, 2
+	ld	w, 166:opc
+	ld	b, 2:opc
 	push	sr
 	retd	0x0663
 	.byte 0x80, 0x07
-	ldb	w, 209
+	ld	w, 209:opc
 	push_a
 	ld	(768:16), 171
-	ldb	b, 3
+	ld	b, 3:opc
 	pushw 1632
 	reti
 	nop
@@ -14146,7 +14146,7 @@ TuningSystem_Handler_Table:
 	retd	0x0665
 	rcf
 	max
-	ldb	w, 16
+	ld	w, 16:opc
 	ldw	iy, 241
 	normal
 	nop
@@ -14154,7 +14154,7 @@ TuningSystem_Handler_Table:
 	retd	0x0666
 	rcf
 	max
-	ldb	w, 16
+	ld	w, 16:opc
 	ldw	iy, 241
 	normal
 	nop
@@ -14162,14 +14162,14 @@ TuningSystem_Handler_Table:
 	jr	c, 6
 	rcf
 	max
-	ldb	w, 16
+	ld	w, 16:opc
 	ldw	iy, 241
 	normal
 	nop
 	.byte 0xe2, 0x13, 0x02, 0x0f, 0x68
 	ei	0x10
 	max
-	ldb	w, 16
+	ld	w, 16:opc
 	ldw	iy, 241
 	normal
 	nop
@@ -14253,7 +14253,7 @@ TuningSystem_Handler_Table:
 	.byte 0x50
 	halt
 	rcf
-	ldb	w, 6
+	ld	w, 6:opc
 	jrl	gt, 12293
 	popw hl
 	reti
@@ -14339,12 +14339,12 @@ TuningSystem_Handler_Table:
 	.ascii "\"INS  DEL  A/a"
 	ei	5
 	pushw hl
-	ldb	b, 60
+	ld	b, 60:opc
 	ei	5
 	ldw	iy, 0x3e22
 	ei	5
 	swi	0
-	ldb	b, 142
+	ld	b, 142:opc
 	ldwio	10, 277
 	call16	0x3200
 	normal
@@ -14546,7 +14546,7 @@ TuningSystem_Handler_Table:
 	normal
 	popw sp
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	ldw	wa, 0x4000
 	nop
 	.byte 0x50
@@ -14576,13 +14576,13 @@ TuningSystem_Handler_Table:
 	ldw	de, 0x8842
 	pushw iy
 	ld	xde, 0xb043322d
-	ldb	w, 68
+	ld	w, 68:opc
 	.byte 0x88, 0xb0, 0x44, 0xb0, 0x20
 	ld	xiy, 0xb045b088
-	ldb	w, 70
+	ld	w, 70:opc
 	.byte 0xb0, 0x20
 	ld	xiz, 0xb047b08c
-	ldb	w, 65
+	ld	w, 65:opc
 	.byte 0x88, 0xb0, 0x41, 0xb0, 0x20
 	ld	xde, 0xb042b088
 	.ascii " C0 Dˆ0D0 E"
@@ -14607,7 +14607,7 @@ TuningSystem_Handler_Table:
 	.byte 0x22, 0x0a, 0x81, 0x00, 0xda, 0x00, 0x96, 0x00
 	.byte 0xee, 0x00, 0x22, 0x0a, 0xc9, 0x00, 0xda, 0x00
 	.long NakaInst_Param_Val01_07
-	ldb	b, 10
+	ld	b, 10:opc
 	normal
 	normal
 	.byte 0xda, 0x00
@@ -14759,7 +14759,7 @@ TuningSystem_Handler_Table:
 	.byte 0x09, 0x0a, 0xb4, 0x00, 0x9a, 0x00, 0xdc, 0x00
 	.byte 0xab, 0x00, 0x09, 0x0a, 0x59, 0x00, 0xcc, 0x00
 	.long NakaData_TechnichordBitmap2
-	ldb	b, 10
+	ld	b, 10:opc
 	call	0xcd00
 	.byte 0x52
 	nop
@@ -14839,19 +14839,19 @@ TuningSystem_Handler_Table:
 	.byte 0xf1, 0x00, 0x02, 0x0f
 	jr	le, 6
 	.byte 0x80, 0x07
-	ldb	w, 118
+	ld	w, 118:opc
 	ld	xiz, 0x0700f1
 	popw	sp
 	decf
 	push	sr
 	retd	0x0663
 	.byte 0x80, 0x07
-	ldb	w, 118
+	ld	w, 118:opc
 	ld	xiz, 0x0700f1
 	jrl	c, 530
 	retd	0x0664
 	.byte 0x80, 0x07
-	ldb	w, 118
+	ld	w, 118:opc
 	ld	xiz, 0x0700f1
 	popw	sp
 	ldf	2
@@ -15498,7 +15498,7 @@ TuningSystem_Handler_Table:
 	.byte 0x60, 0x06, 0x0f, 0x00, 0x20, 0x01, 0x5b, 0xf1, 0x00, 0x0d, 0x00, 0x09
 	.byte 0x08, 0x02, 0x0f, 0x60, 0x06
 	.byte 0x80, 0x07
-	ldb	w, 215
+	ld	w, 215:opc
 	push_a
 	ld	(768:16), 186
 	pushw 3842
@@ -15510,12 +15510,12 @@ TuningSystem_Handler_Table:
 	pushw 1640
 	swi	7
 	nop
-	ldb	w, 115
+	ld	w, 115:opc
 	jp	0x050002
 	pushw 1639
 	swi	7
 	nop
-	ldb	w, 27
+	ld	w, 27:opc
 	pop_f
 	push	sr
 	nop
@@ -18209,7 +18209,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld (xhl + 4), xde
 	ld a, (0x7f3d:16)
 	sll a, 4
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x1e8a00
 	ld xix, xwa
@@ -18831,7 +18831,7 @@ AcSndArgGrid_Init:
 	extz wa
 	lda xbc, (xsp + 12)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x8e, 0x33
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x144001b
 	ld xbc, 0x1e40024
@@ -18899,7 +18899,7 @@ AcSndArgGrid_ScrollUp_NoCanScroll:
 	extz wa
 	lda xbc, (xsp + 12)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x8e, 0x33
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x144001b
 	ld xbc, 0x1e40024
@@ -19747,7 +19747,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+16)
 	.byte 0x9f
 	ldwio	4, 8863
-	ldb	b, 30
+	ld	b, 30:opc
 	.byte 0xd3
 	swi	6
 	ld	wa, (xsp+6)
@@ -19799,7 +19799,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+16)
 	.byte 0x9f
 	ldwio	4, 8863
-	ldb	b, 30
+	ld	b, 30:opc
 	pop	xde
 	swi	6
 	ld	wa, (xsp+6)
@@ -19835,7 +19835,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+16)
 	.byte 0x9f
 	ldwio	4, 8863
-	ldb	b, 30
+	ld	b, 30:opc
 	reti
 	swi	6
 	ld	wa, (xsp+6)
@@ -19940,7 +19940,7 @@ StylCnvStorOkFunc_DataBlock:
 	.byte 0x9f
 	ldio	4, 234
 	ld	d, (xbc-97)
-	ldb	b, 30
+	ld	b, 30:opc
 	reti
 	swi	5
 	lda	xwa, (xsp+22)
@@ -19951,7 +19951,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64750
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+14)
@@ -19976,7 +19976,7 @@ StylCnvStorOkFunc_DataBlock:
 	.byte 0x9f
 	ldio	4, 234
 	ld	d, (xbc-97)
-	ldb	b, 30
+	ld	b, 30:opc
 	.byte 0xae
 	swi	4
 	lda	xwa, (xsp+22)
@@ -19987,7 +19987,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64661
 	lda	xiy, (xsp+14)
 	lda	xix, (xsp+22)
@@ -20001,7 +20001,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+18)
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64626
 	lda	xwa, (xsp+26)
 	lda	xbc, (xsp+22)
@@ -20041,7 +20041,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xbc+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64535
 	lda	xwa, (xsp+22)
 	lda	xhl, (xsp+26)
@@ -20060,7 +20060,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xbc+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64491
 	pop	xiz
 	lda	xsp, (xsp+32)

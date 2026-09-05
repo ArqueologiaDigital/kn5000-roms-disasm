@@ -935,14 +935,14 @@ WndScroll_HandleCharInput:
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
 	ldw (0x0274da:24), 0x0000
-	ldb c, 0x41
+	ld c, 0x41:opc
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsUppercase:
 	bit 1, c
 	jr z, WndScroll_CharIsLowercase
 	ldw (0x0274da:24), 0x0001
-	ldb c, 0x61
+	ld c, 0x61:opc
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsLowercase:
@@ -953,7 +953,7 @@ WndScroll_CharIsLowercase:
 	ldw (0x0274da:24), 0x0000
 
 WndScroll_SetCategoryZero:
-	ldb c, 0x15
+	ld c, 0x15:opc
 
 WndScroll_ComputeCharOffset:
 	ld wa, (0x0274d8:24)
@@ -1110,7 +1110,7 @@ WndScroll_ClampPageCount:
 	jr WndScroll_SendConfirmEvent
 
 WndScroll_CheckSPMarker:
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00081
@@ -6572,7 +6572,7 @@ ImageDecode_PixelLoop:
 	jr lt, ImageDecode_RowLoop
 	lda_dri XWA, 0xfd, 0x30, 0x01
 	ld (xsp + 28), xwa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	ld xde, (xsp + 28)
 	ld xwa, xde
 	lda_dri XWA, 0xe1, 0x00, 0x01
@@ -6682,7 +6682,7 @@ PaletteReduce_CheckDone:
 	jrl gt, ImageDecode_PaletteReduceLoop
 	lda xwa, (xsp + 48)
 	ld (xsp + 32), xwa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	ld xde, (xsp + 28)
 	ld xhl, (xsp + 44)
 

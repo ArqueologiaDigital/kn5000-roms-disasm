@@ -176,7 +176,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -242,7 +242,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -524,7 +524,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -584,7 +584,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -632,7 +632,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -933,7 +933,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -1002,7 +1002,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -1560,7 +1560,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -1618,7 +1618,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xix
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, -63
 	swi	2
 	.byte 0x89
@@ -1854,7 +1854,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -1983,7 +1983,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -2025,7 +2025,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -2267,7 +2267,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -2322,7 +2322,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -2351,7 +2351,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0
@@ -2388,7 +2388,7 @@ SLDstBankList_FuncBody:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	a, 233
+	ld	a, 233:opc
 	jr	lt, 29
 	adc	wa, ix
 	swi	0

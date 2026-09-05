@@ -118,7 +118,7 @@ Sound_SetSelection:
 	ldiw_erp 0xe6, 0
 	ld de, bc
 	srl bc, 8
-	ldb b, 0x0
+	ld b, 0x0:opc
 	extz bc
 	extz de
 	call MIDI_DistributeParamToChannels
@@ -129,7 +129,7 @@ Sound_SetSelection:
 	ldiw_erp 0xe6, 0
 	ld de, bc
 	srl de, 8
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz de
 	extz bc
 	pushw bc

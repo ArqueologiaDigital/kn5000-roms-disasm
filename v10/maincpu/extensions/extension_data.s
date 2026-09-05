@@ -407,7 +407,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	aligned_string "%c:%d/%d  "
 	.byte 0xef, 0x02, 0x1d, 0x05, 0xef, 0x02, 0x1d, 0x05, 0x27, 0x08, 0xfd, 0x07, 0xfd, 0x07, 0x20, 0x00
 	aligned_string "                                "
-	ldb w, 0
+	ld w, 0:opc
 	.zero 8
 	.byte 0xf1, 0x01, 0xf1, 0x01, 0xf1, 0x01, 0x59, 0x00, 0x65, 0x01, 0x59, 0x00, 0x65, 0x01, 0x10, 0x03
 	.byte 0xf8, 0x02, 0xf8, 0x02, 0x20, 0x00
@@ -416,7 +416,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	aligned_string "%d/%d"
 	.byte 0xcc, 0x01, 0xfa, 0x02, 0xcc, 0x01, 0xfa, 0x02, 0x29, 0x05, 0x11, 0x05, 0x11, 0x05, 0x20, 0x00
 	aligned_string "                "
-	ldb w, 0
+	ld w, 0:opc
 	nop
 	nop
 	nop
@@ -431,29 +431,29 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	nop
 	nop
 	nop
-	ldb e, 115
+	ld e, 115:opc
 	push xde
 	nop
 	aligned_string "                 "
-	ldb w, 32
-	ldb w, 32
-	ldb w, 0
-	ldb e, 115
+	ld w, 32:opc
+	ld w, 32:opc
+	ld w, 0:opc
+	ld e, 115:opc
 	push xde
 	nop
 	aligned_string "TEMPO"
-	ldb e, 115
+	ld e, 115:opc
 	push xde
 	nop
 	aligned_string "TEMPO"
 	.byte 0x25, 0x73, 0x00, 0xff, 0x5a, 0x05, 0x6a, 0x07, 0x5a, 0x05, 0x6a, 0x07, 0xae, 0x0b, 0x96, 0x0b
 	.byte 0x96, 0x0b, 0x20, 0x00
 	aligned_string "                                "
-	ldb w, 0
+	ld w, 0:opc
 	aligned_string "                                "
-	ldb w, 0
+	ld w, 0:opc
 	aligned_string "                                "
-	ldb w, 0
+	ld w, 0:opc
 	aligned_string "                                "
 	aligned_string "                                "
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xdb, 0x02, 0xdb, 0x02, 0xdb, 0x02, 0x6a, 0x00
@@ -652,19 +652,19 @@ VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
-	ldb e, 115
+	ld e, 115:opc
 	push xde
 	nop
-	ldb e, 115
+	ld e, 115:opc
 	push xde
 	nop
-	ldb e, 100
+	ld e, 100:opc
 	push xde
 	nop
-	ldb e, 100
+	ld e, 100:opc
 	push xde
 	nop
-	ldb e, 115
+	ld e, 115:opc
 	push xde
 	nop
 	aligned_string "PAGE %d/%d"

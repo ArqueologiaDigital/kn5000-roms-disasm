@@ -1534,11 +1534,11 @@ SongEdit_OverflowCheck:
 
 SongEdit_SendAndReturnOK:
 	call SendEvent
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr SongEdit_CheckBounds_Epilogue
 
 SongEdit_ReturnOverflow:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 SongEdit_CheckBounds_Epilogue:
 	inc 2, xsp
@@ -3495,7 +3495,7 @@ TrAsGrid_ByteData1:
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	l, 14
+	ld	l, 14:opc
 
 TrAsGrid_CheckTrackType:
 	cp a, 0:i3
@@ -3512,7 +3512,7 @@ TrAsGrid_CheckTrackType:
 	jr z, TrAsGrid_IsDrumType
 
 TrAsGrid_NotDrumType:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 TrAsGrid_CheckCurrentCell:
@@ -3523,7 +3523,7 @@ TrAsGrid_CheckCurrentCell:
 	jr nz, TrAsGrid_NotDrumType
 
 TrAsGrid_IsDrumType:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	ret
 
 TrAsGridCheck:
@@ -4115,7 +4115,7 @@ VoiceConfig_LoadTableB:
 	jr VoiceConfig_ReadFromTable
 
 VoiceConfig_ReturnZeroShort:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 VoiceConfig_PopIzRet:
 	pop xiz
@@ -4168,7 +4168,7 @@ AcDemoSong_HandleResize:
 	jr nz, AcCurrentSongBox_RetZero
 
 AcDemoSong_SetupDisplay:
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 4)
@@ -8469,7 +8469,7 @@ NoteEdit_RestoreAndReturn:
 
 NoteEdit_GetScreenId:
 	call GetTitleNow
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	jr NoteEdit_Epilogue
 
@@ -8702,7 +8702,7 @@ SngSelFunc_LoadTitleCount:
 
 SngSelFunc_GetTitleIndex:
 	call GetTitleNow
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 
 ReturnTitleOrZero:
@@ -12616,7 +12616,7 @@ SqedtVal2_HandleSelectCase2:
 	jr nz, SqedtVal2_SelectCase2_ModeA4
 	stb_erp E, 0xfb
 	add e, 0xf
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80014
@@ -12627,7 +12627,7 @@ SqedtVal2_SelectCase2_ModeA4:
 	jr nz, SqedtVal2_SelectCase2_Default
 	stb_erp E, 0xfb
 	add e, 0x15
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80014
@@ -12636,7 +12636,7 @@ SqedtVal2_SelectCase2_ModeA4:
 SqedtVal2_SelectCase2_Default:
 	stb_erp E, 0xfb
 	add e, 0x1b
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80014
@@ -12670,7 +12670,7 @@ SqedtVal2_HandleSelectCase4:
 	jr nz, SqedtVal2_SelectCase4_ModeA4
 	stb_erp E, 0xfb
 	add e, 0x12
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80014
@@ -12681,7 +12681,7 @@ SqedtVal2_SelectCase4_ModeA4:
 	jr nz, SqedtVal2_SelectCase4_Default
 	stb_erp E, 0xfb
 	add e, 0x18
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80014
@@ -12690,7 +12690,7 @@ SqedtVal2_SelectCase4_ModeA4:
 SqedtVal2_SelectCase4_Default:
 	stb_erp E, 0xfb
 	add e, 0x1d
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80014
@@ -13015,7 +13015,7 @@ SqedtVal2_HandleDownCase2:
 	jr nz, SqedtVal2_DownCase2_ModeA4
 	stb_erp E, 0xfb
 	add e, 0xf
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80015
@@ -13026,7 +13026,7 @@ SqedtVal2_DownCase2_ModeA4:
 	jr nz, SqedtVal2_DownCase2_Default
 	stb_erp E, 0xfb
 	add e, 0x15
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80015
@@ -13035,7 +13035,7 @@ SqedtVal2_DownCase2_ModeA4:
 SqedtVal2_DownCase2_Default:
 	stb_erp E, 0xfb
 	add e, 0x1b
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80015
@@ -13069,7 +13069,7 @@ SqedtVal2_HandleDownCase4:
 	jr nz, SqedtVal2_DownCase4_ModeA4
 	stb_erp E, 0xfb
 	add e, 0x12
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80015
@@ -13080,7 +13080,7 @@ SqedtVal2_DownCase4_ModeA4:
 	jr nz, SqedtVal2_DownCase4_Default
 	stb_erp E, 0xfb
 	add e, 0x18
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80015
@@ -13089,7 +13089,7 @@ SqedtVal2_DownCase4_ModeA4:
 SqedtVal2_DownCase4_Default:
 	stb_erp E, 0xfb
 	add e, 0x1d
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1e80015
@@ -14151,7 +14151,7 @@ EffectBox_HandleCase0_Post:
 	jr nc, EffectBox_RedrawFullLoop
 	stb_erp E, 0xfa
 	inc 1, e
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, (xbc)
 	ld xbc, 0x1e80009
@@ -14197,7 +14197,7 @@ EffectBox_RedrawFullLoop:
 	ldb_erp A, 0xfa
 	stb_erp E, 0xfa
 	inc 1, e
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
@@ -15206,15 +15206,15 @@ SqplyFunc_TrackMode82_86:
 	jr z, SqplyFunc_TrackPart2
 	cp c, 1:i3
 	jr nz, SqplyFunc_TrackTypeUnknown
-	ldb l, 0x4
+	ld l, 0x4:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackPart2:
-	ldb l, 0x5
+	ld l, 0x5:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackPart3:
-	ldb l, 0x6
+	ld l, 0x6:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackMode88:
@@ -15227,15 +15227,15 @@ SqplyFunc_TrackMode88:
 	jr z, SqplyFunc_TrackMode88_Part2
 	cp c, 1:i3
 	jr nz, SqplyFunc_TrackTypeUnknown
-	ldb l, 0x8
+	ld l, 0x8:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackMode88_Part2:
-	ldb l, 0x9
+	ld l, 0x9:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackMode88_Part3:
-	ldb l, 0xa
+	ld l, 0xa:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackMode96_99:
@@ -15252,11 +15252,11 @@ SqplyFunc_TrackModePerc:
 	jr z, SqplyFunc_TrackPart2
 	cp c, 1:i3
 	jr nz, SqplyFunc_TrackTypeUnknown
-	ldb l, 0xb
+	ld l, 0xb:opc
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackTypeUnknown:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 SqplyFunc_TrackTypeReturn:
 	exts hl
@@ -15277,20 +15277,20 @@ SqplyFunc_HandlePartQuery:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SqplyFunc_PartQueryDispatch:
-	ldb	l, 1
+	ld	l, 1:opc
 	ld	a, (0x02109c:24)
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
 	jr	16
-	ldb	l, 2
+	ld	l, 2:opc
 	jr	-17
-	ldb	l, 3
+	ld	l, 3:opc
 	jr	-21
 
 SqplyFunc_GetScreenId:
 	call GetTitleNow
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 
 SqplyFunc_Epilogue:
@@ -15378,7 +15378,7 @@ Sqedt_ParamDispatch:
 	jp_rr	8, xix, hl
 	.byte 0xd1	; v10 does not spell this byte either
 	rcf
-	ldb	h, 4
+	ld	h, 4:opc
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x674
 	jr	64
 	.byte 0xd1	; v10 does not spell this byte either
@@ -15414,7 +15414,7 @@ Sqedt_ParamDispatch:
 	jr	9
 	.byte 0xd1	; v10 does not spell this byte either
 	.byte 0x06	; v10 does not spell this byte either
-	ldb	h, 4
+	ld	h, 4:opc
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x698
 	jrl	1151
 	ld	xwa, (xsp+8)
@@ -15432,21 +15432,21 @@ Sqedt_ParamDispatch:
 	jp_rr	8, xix, hl
 	.byte 0xd1	; v10 does not spell this byte either
 	ccf
-	ldb	h, 4
+	ld	h, 4:opc
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
 	jr	64
 	.byte 0xd1	; v10 does not spell this byte either
-	ldb	w, 38
+	ld	w, 38:opc
 	max
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
 	jr	53
 	.byte 0xd1	; v10 does not spell this byte either
 	pushw	ix
-	ldb	h, 4
+	ld	h, 4:opc
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
 	jr	42
 	.byte 0xd1	; v10 does not spell this byte either
-	ldb	h, 38
+	ld	h, 38:opc
 	.byte 0x04	; v10 does not spell this byte either
 	.byte 0x40	; v10 does not spell this byte either
 	.byte 0x88	; v10 does not spell this byte either
@@ -15456,12 +15456,12 @@ Sqedt_ParamDispatch:
 	jr	31
 	.byte 0xd1	; v10 does not spell this byte either
 	swi	4
-	ldb	e, 4
+	ld	e, 4:opc
 	ld	xwa, NakaInst_3d_0x6
 	jr	20
 	.byte 0xd1	; v10 does not spell this byte either
 	swi	2
-	ldb	e, 4
+	ld	e, 4:opc
 	ld	xwa, NakaInst_3d_0xC
 	jr	9
 	.byte 0xd1	; v10 does not spell this byte either
@@ -15696,7 +15696,7 @@ Sqedt_ParamDispatch:
 	ld	(xsp+4), xwa
 	.byte 0xd1	; v10 does not spell this byte either
 	pushw	wa
-	ldb	h, 4
+	ld	h, 4:opc
 	ld	xwa, NakaInst_3d_0x9E
 	jrl	442
 	ld	xwa, (xsp+8)
@@ -15741,7 +15741,7 @@ Sqedt_ParamDispatch:
 	ld	(xsp+4), xwa
 	.byte 0xd1	; v10 does not spell this byte either
 	pushw	iz
-	ldb	h, 4
+	ld	h, 4:opc
 	ld	xwa, NakaInst_3d_0xB6
 	jrl	323
 	ld	xwa, (xsp+8)
@@ -15958,9 +15958,9 @@ Sqedt_ValueDispatch:
 	ld_rrw	hl, xix, hl
 	lda	xix, (Sqedt_ValueDispatch_0x28:24)
 	jp_rr	8, xix, hl
-	ldb	l, 0
+	ld	l, 0:opc
 	jrl	158
-	ldb	l, 12
+	ld	l, 12:opc
 	jrl	153
 	extz	hl
 	sub	hl, 156
@@ -15973,7 +15973,7 @@ Sqedt_ValueDispatch:
 	ld_rrw	hl, xix, hl
 	lda	xix, (Sqedt_ValueDispatch_0x58:24)
 	jp_rr	8, xix, hl
-	ldb	l, 1
+	ld	l, 1:opc
 	jr	111
 	extz	hl
 	sub	hl, 155
@@ -15986,9 +15986,9 @@ Sqedt_ValueDispatch:
 	ld_rrw	hl, xix, hl
 	lda	xix, (Sqedt_ValueDispatch_0x82:24)
 	jp_rr	8, xix, hl
-	ldb	l, 2
+	ld	l, 2:opc
 	jr	69
-	ldb	l, 13
+	ld	l, 13:opc
 	jr	65
 	cp	l, 156
 	jr	z, 36
@@ -16000,27 +16000,27 @@ Sqedt_ValueDispatch:
 	jr	z, 9
 	cp	l, 160
 	jr	nz, 38
-	ldb	l, 3
+	ld	l, 3:opc
 	jr	36
-	ldb	l, 4
+	ld	l, 4:opc
 	jr	32
-	ldb	l, 5
+	ld	l, 5:opc
 	jr	28
-	ldb	l, 6
+	ld	l, 6:opc
 	jr	24
-	ldb	l, 7
+	ld	l, 7:opc
 	jr	20
 	cp	l, 159
 	jr	z, 9
 	cp	l, 156
 	jr	nz, 8
-	ldb	l, 8
+	ld	l, 8:opc
 	jr	6
-	ldb	l, 10
+	ld	l, 10:opc
 	jr	2
 
 SqedtFunc_ReturnNegOne:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 SqedtFunc_SignExtendAndReturn:
 	exts hl
@@ -16032,17 +16032,17 @@ SqedtFunc_SignExtendAndReturn:
 	jr z, SqedtFunc_ReturnNeg1
 	cp l, 0x9c
 	jr nz, SqedtFunc_ReturnNegOne
-	ldb l, 0x9
+	ld l, 0x9:opc
 	jr SqedtFunc_SignExtendAndReturn
 
 ; SqedtFunc return -1
 SqedtFunc_ReturnNeg1:
-	ldb l, 0xb
+	ld l, 0xb:opc
 	jr SqedtFunc_SignExtendAndReturn
 
 ; SqedtFunc sign extend and return
 SqedtFunc_SignExtend:
-	ldb l, 0xe
+	ld l, 0xe:opc
 	jr SqedtFunc_SignExtendAndReturn
 	extz wa
 	cp wa, 0:i3
@@ -16057,21 +16057,21 @@ SqedtFunc_SignExtend:
 
 ; Sequencer format dispatch A
 SeqFormat_DispatchA:
-	ldb	l, 0
+	ld	l, 0:opc
 	ld	a, (0x02109c:24)
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
 	jrl	236
-	ldb	l, 1
+	ld	l, 1:opc
 	jr	-18
-	ldb	l, 2
+	ld	l, 2:opc
 	jr	-22
-	ldb	l, 3
+	ld	l, 3:opc
 	jr	-26
-	ldb	l, 5
+	ld	l, 5:opc
 	jr	-30
-	ldb	l, 6
+	ld	l, 6:opc
 	jr	-34
 	ld	xhl, 0:i3
 	ld	l, (0x03e2dc:24)
@@ -16136,7 +16136,7 @@ SeqFormat_DispatchA:
 ; SqedtFunc state chain A
 SqedtFunc_StateChainA:
 	call GetTitleNow
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 
 SqedtFunc_Epilogue12:
@@ -16679,7 +16679,7 @@ EffectEdit_ReturnZero:
 	jr DspItem0_Epilogue
 	ld (0x021098:24), e
 	jr EffectEdit_ReturnZero
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	jr DspItem0_Epilogue
 	ld xhl, 0:i3
@@ -16689,7 +16689,7 @@ EffectEdit_ReturnZero:
 ; DspItem0 dispatch target (calls GetTitleNow then falls through to epilogue)
 DspItem0_DispatchTarget:
 	call GetTitleNow
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 
 DspItem0_Epilogue:
@@ -16874,7 +16874,7 @@ FormatEqParam_CopyAndReturn:
 	ld	xhl, xiz
 	jr	12
 	call	16405594
-	ldb	h, 0
+	ld	h, 0:opc
 	extz	xhl
 	jr	2
 Equalizer_ParamString:

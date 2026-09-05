@@ -355,7 +355,7 @@ Scoop_SoundEditorData:
 	call SeMenu_SetupPartDisplay_End_0x219
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0505c
-	ldb C, 0x4d
+	ld C, 0x4d:opc
 	jr t, .Lc_f05075
 .Lc_f0505c:
 	ld A,(XSP+0x0e)
@@ -406,7 +406,7 @@ Scoop_SoundEditorData:
 	call SeMenu_SetupPartDisplay_End_0x219
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f050f5
-	ldb C, 0x4e
+	ld C, 0x4e:opc
 	jr t, .Lc_f0510e
 .Lc_f050f5:
 	ld A,(XSP+0x0e)
@@ -457,7 +457,7 @@ Scoop_SoundEditorData:
 	call SeMenu_SetupPartDisplay_End_0x219
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f05185
-	ldb C, 0x37
+	ld C, 0x37:opc
 	jr t, .Lc_f0519e
 .Lc_f05185:
 	ld A,(XSP+0x0e)
@@ -508,7 +508,7 @@ Scoop_SoundEditorData:
 	call SeMenu_SetupPartDisplay_End_0x219
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f05215
-	ldb C, 0x36
+	ld C, 0x36:opc
 	jr t, .Lc_f0522e
 .Lc_f05215:
 	ld A,(XSP+0x0e)
@@ -562,7 +562,7 @@ Scoop_SoundEditorData:
 .Lc_f05295:
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0529f
-	ldb A, 0x50
+	ld A, 0x50:opc
 	jr t, .Lc_f052b6
 .Lc_f0529f:
 	ld A,(XSP+0x0e)
@@ -608,7 +608,7 @@ Scoop_SoundEditorData:
 	call SeMenu_SetupPartDisplay_End_0x219
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0531d
-	ldb A, 0x4f
+	ld A, 0x4f:opc
 	jr t, .Lc_f05334
 .Lc_f0531d:
 	ld A,(XSP+0x0e)
@@ -655,7 +655,7 @@ Scoop_SoundEditorData:
 	call SeMenu_SetupPartDisplay_End_0x219
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0539e
-	ldb A, 0x50
+	ld A, 0x50:opc
 	jr t, .Lc_f053b5
 .Lc_f0539e:
 	ld A,(XSP+0x0e)

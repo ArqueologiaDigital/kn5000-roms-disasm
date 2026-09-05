@@ -3882,10 +3882,10 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	or a, c				; combine with low nibble
 	cp a, l				; compare with original byte
 	jr nz, .Lppi_fail		; if mismatch, fail
-	ldb l, 0x00			; success: L = 0
+	ld l, 0x00:opc			; success: L = 0
 	ret
 .Lppi_fail:
-	ldb l, 0xFF			; failure: L = 0xFF
+	ld l, 0xFF:opc			; failure: L = 0xFF
 	ret
 
 HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)

@@ -8521,7 +8521,7 @@ IvAccordion_Update:
 	ldiw_erp 0xe2, 0
 	ld bc, wa
 	srl bc, 8
-	ldb b, 0x0
+	ld b, 0x0:opc
 	cp c, 0xd
 	jrl nz, IvAccordion_Update_NonNote
 	cp a, 0xa
@@ -11916,7 +11916,7 @@ AudioCtrl_DataBlock:
 	.byte 0x9f	; v10 does not spell this byte either
 	incf
 	push	xwa
-	ldb	e, 0
+	ld	e, 0:opc
 	.byte 0x9f	; v10 does not spell this byte either
 	ldio	56, 37
 	nop
@@ -12194,7 +12194,7 @@ AudioCtrl_DataBlock:
 	push	xwa
 	ldwio	0, 4287
 	ldw	bc, 3743
-	ldb	b, 30
+	ld	b, 30:opc
 	cp	(xwa), h
 	lda	xbc, (xsp+16)
 	lda	xwa, (256688:24)
@@ -12233,11 +12233,11 @@ AudioCtrl_DataBlock:
 	reti
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 191
+	ld	w, 191:opc
 	incf
 	jr	f, -97
 	.byte 0x04	; v10 does not spell this byte either
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
@@ -12353,17 +12353,17 @@ AudioCtrl_DataBlock:
 	.byte 0xeb	; v10 does not spell this byte either
 	pop	sr
 	ldw	wa, 3743
-	ldb	b, 218
+	ld	b, 218:opc
 	.byte 0xec	; v10 does not spell this byte either
 	push	sr
 	.byte 0xe3	; v10 does not spell this byte either
 	reti
 	.byte 0xe0	; v10 does not spell this byte either
 	.byte 0xe8	; v10 does not spell this byte either
-	ldb	b, 191
+	ld	b, 191:opc
 	push_a
 	ldw	wa, 3743
-	ldb	c, 210
+	ld	c, 210:opc
 	.byte 0x90	; v10 does not spell this byte either
 	ld	xsp, 292483842
 	ld	xhl, 3:i3
@@ -12394,11 +12394,11 @@ AudioCtrl_DataBlock:
 	reti
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 191
+	ld	w, 191:opc
 	incf
 	jr	f, -97
 	.byte 0x04	; v10 does not spell this byte either
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
@@ -12463,7 +12463,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7	; v10 does not spell this byte either
 	sub	(9033896:24), xsp
 	popw	de
-	ldb	w, 232
+	ld	w, 232:opc
 	set	0, l
 	.byte 0xc0	; v10 does not spell this byte either
 	.byte 0x01	; v10 does not spell this byte either
@@ -12653,11 +12653,11 @@ AudioCtrl_DataBlock:
 	reti
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x06	; v10 does not spell this byte either
 	jr	f, -97
 	.byte 0x04	; v10 does not spell this byte either
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457342
@@ -12727,11 +12727,11 @@ AudioCtrl_DataBlock:
 	reti
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x06	; v10 does not spell this byte either
 	jr	f, -97
 	.byte 0x04	; v10 does not spell this byte either
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457464
@@ -13227,11 +13227,11 @@ AudioCtrl_DataBlock:
 	reti
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x06	; v10 does not spell this byte either
 	jr	f, -97
 	.byte 0x04	; v10 does not spell this byte either
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457342
@@ -13319,7 +13319,7 @@ AudioCtrl_DataBlock:
 	.byte 0x98	; v10 does not spell this byte either
 	.byte 0x06	; v10 does not spell this byte either
 	push	xwa
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	bc, 7:i3
 	calr	61412
 	ld	wa, (xsp+12)
@@ -13438,7 +13438,7 @@ AudioCtrl_DataBlock:
 	.byte 0x98	; v10 does not spell this byte either
 	.byte 0x06	; v10 does not spell this byte either
 	push	xwa
-	ldb	w, 0
+	ld	w, 0:opc
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
 	calr	61494
@@ -13695,9 +13695,9 @@ AudioCtrl_DataBlock:
 	jr	z, 63
 	.byte 0x9f	; v10 does not spell this byte either
 	ldwio	4, 1695
-	ldb	w, 159
+	ld	w, 159:opc
 	rcf
-	ldb	a, 218
+	ld	a, 218:opc
 	.byte 0xa8, 0x1d, 0xd0	; differs from v10 here and llvm-objdump cannot read it
 	.byte 0xf4	; differs from v10 here and llvm-objdump cannot read it
 	swi	1
@@ -13775,9 +13775,9 @@ AudioCtrl_DataBlock:
 	ld	(xsp+14), hl
 	.byte 0x9f	; v10 does not spell this byte either
 	ldwio	4, 1695
-	ldb	w, 159
+	ld	w, 159:opc
 	rcf
-	ldb	a, 159
+	ld	a, 159:opc
 	ldwio	34, 34845
 	.byte 0xf5	; differs from v10 here and llvm-objdump cannot read it
 	swi	1
@@ -13819,9 +13819,9 @@ AudioCtrl_DataBlock:
 	ld	(xsp+14), hl
 	.byte 0x9f	; v10 does not spell this byte either
 	ldwio	4, 1695
-	ldb	w, 159
+	ld	w, 159:opc
 	rcf
-	ldb	a, 218
+	ld	a, 218:opc
 	.byte 0xa9, 0x1d, 0xd0	; differs from v10 here and llvm-objdump cannot read it
 	.byte 0xf4	; differs from v10 here and llvm-objdump cannot read it
 	swi	1
@@ -13948,7 +13948,7 @@ AudioCtrl_DataBlock:
 	push	xde
 	ldw	ix, 40704
 	incf
-	ldb	w, 30
+	ld	w, 30:opc
 	.byte 0xef	; v10 does not spell this byte either
 	.byte 0xe8	; v10 does not spell this byte either
 	ld	(xsp+8), hl
@@ -14023,12 +14023,12 @@ AudioCtrl_DataBlock:
 	reti
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 191
+	ld	w, 191:opc
 	ret
 	jr	f, -24
 	.byte 0xcf	; v10 does not spell this byte either
-	ldb	l, 0
-	ldb	a, 1
+	ld	l, 0:opc
+	ld	a, 1:opc
 	jrl	nz, 205
 	ld	wa, (149396:24)
 	ld	(xsp+12), wa
@@ -14764,7 +14764,7 @@ IvDrawbar_Update:
 	ldiw_erp 0xe2, 0
 	ld bc, wa
 	srl bc, 8
-	ldb b, 0x0
+	ld b, 0x0:opc
 	cp c, 0xc
 	jr nz, IvDrawbar_Update_GenericParam
 	extz wa

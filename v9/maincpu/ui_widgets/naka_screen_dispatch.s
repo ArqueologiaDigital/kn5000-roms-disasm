@@ -46,7 +46,7 @@ Naka_SeqToComposer_Screens:
 	.long NakaLabel_SeqToComposer_LastLabel
 	.long NakaLabel_SeqToComposer_MeasLastLabel
 	.long NakaGroup_SeqToComposer_TransGroup
-	ldb	h, 0xd9
+	ld	h, 0xd9:opc
 	.byte 0x03, 0x00
 	.long NakaLabel_SeqToComposer_TrnLabel
 	.long NakaLabel_SeqToComposer_MemLabel
@@ -1214,7 +1214,7 @@ StrCmpSetTtlFunc:	aligned_string "CmpSetTtlFunc"
 StrCmpModeFunc:		aligned_string "CmpModeFunc"
 
 NoteStepDisplayData:
-	ldb	w, 0x31
+	ld	w, 0x31:opc
 	.byte 0x32, 0x00, 0x20, 0x31, 0x31, 0x00, 0x20, 0x31
 	.byte 0x30, 0x00, 0x20, 0x20, 0x39, 0x00, 0x20, 0x20
 	.byte 0x38, 0x00, 0x20, 0x20, 0x37, 0x00, 0x20, 0x20
@@ -1291,7 +1291,7 @@ StrTimeSig_2_2:
 StrTimeSig_1_2:
 	ldw	bc, 0x322f
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	nop
 	swi 7
 	aligned_string "%s (%s)"
@@ -1506,9 +1506,9 @@ StrStyleSect_A_Vari4:	aligned_string "A-vari4"
 StrStyleSect_A_Vari3:	aligned_string "A-vari3"
 StrStyleSect_A_Vari2:	aligned_string "A-vari2"
 StrStyleSect_A_Vari1:	aligned_string "A-vari1"
-	ldb	e, 51
+	ld	e, 51:opc
 	jr	pe, 0
-	ldb	e, 51
+	ld	e, 51:opc
 	jr	pe, 0
 	aligned_string "(SONG:%2d)"
 PtrTbl_TransposeStrs:
@@ -1684,20 +1684,20 @@ StrBeat10:
 	nop
 StrBeat09:	.asciz " 9 "
 StrBeat08:
-	ldb w, 56
-	ldb w, 0
+	ld w, 56:opc
+	ld w, 0:opc
 StrBeat07:	.asciz " 7 "
 StrBeat06:
-	ldb w, 54
-	ldb w, 0
+	ld w, 54:opc
+	ld w, 0:opc
 StrBeat05:	.asciz " 5 "
 StrBeat04:
-	ldb w, 52
-	ldb w, 0
+	ld w, 52:opc
+	ld w, 0:opc
 StrBeat03:	.asciz " 3 "
 StrBeat02:
-	ldb w, 50
-	ldb w, 0
+	ld w, 50:opc
+	ld w, 0:opc
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
@@ -1913,9 +1913,9 @@ PtrTbl_NotePositionStrs:
 	.long StrNotePos_FlatAlt
 	.long StrNotePos_Natural
 StrNotePos_Natural:
-	ldb	w, 0x7e
+	ld	w, 0x7e:opc
 	jr	lt, 97
-	ldb	w, 0
+	ld	w, 0:opc
 	aligned_string " ~ab "
 	aligned_string " ~ab~b8"
 	aligned_string " ~ac "
@@ -2140,7 +2140,7 @@ StrCompileBank2:	aligned_string "COMPILE BANK:2"
 StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	aligned_string "MEMORY = %2d"
-	ldb	e, 100
+	ld	e, 100:opc
 	.byte 0x00			; padding
 	.byte 0xff			; padding
 	.long StrInstantStart
@@ -2216,10 +2216,10 @@ MsgBox_AttentionHeader:
 	nop
 	pushw iy
 	nop
-	ldb w, 0
+	ld w, 0:opc
 	pushw iy
 	nop
-	ldb l, 0
+	ld l, 0:opc
 	call16 0
 	nop
 	; Localization: Attention (6 languages)

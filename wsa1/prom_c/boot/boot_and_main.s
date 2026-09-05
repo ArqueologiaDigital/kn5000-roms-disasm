@@ -166,7 +166,7 @@ EntryPoint_Records:
 ;          observed; prom_a's copy has the same dead `ret`.
 ; --------------------------------------------------------------------------
 SoftTimer_RotateLevel2:
-	ldb	a, 2
+	ld	a, 2:opc
 	calr	(0xF983DC - 0xF98117)
 	ret
 

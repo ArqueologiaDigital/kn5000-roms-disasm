@@ -43,7 +43,7 @@ UIStateEvt_VoiceParamHandler:
 	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
 	ldw	(61854:16), 0
 	.byte 0xc1, 0xa5, 0x28, 0x3c, 0xfe
-	ldb	a, 76
+	ld	a, 76:opc
 	call	16544114
 	jr	49
 	pushw	wa
@@ -62,14 +62,14 @@ UIStateEvt_VoiceParamHandler:
 	ret
 	ld	xix, 61856
 	xor	bc, bc
-	ldb	c, 16
-	ldb	a, 16
+	ld	c, 16:opc
+	ld	a, 16:opc
 	cp_spib	a, 240
 	jr	z, 5
 	djnz16	bc, -8
 	jr	68
 	xor	wa, wa
-	ldb	a, 16
+	ld	a, 16:opc
 	sub	wa, bc
 	ld	c, a
 	ld	b, a
@@ -81,7 +81,7 @@ UIStateEvt_VoiceParamHandler:
 	jr	c, 45
 	pushw	wa
 	ld	xhl, 62032
-	ldb	c, 3
+	ld	c, 3:opc
 	mul8rr	a, c
 	ld	iy, wa
 	.byte 0xf3, 0x07, 0xec, 0xf4, 0xcf
@@ -114,9 +114,9 @@ SeqTimer_PostTempoUpdate:
 	add	xhl, xwa
 	ld	wa, (xhl+8)
 	pushw	wa
-	ldb	e, 72
-	ldb	d, 8
-	ldb	w, 255
+	ld	e, 72:opc
+	ld	d, 8:opc
+	ld	w, 255:opc
 	call	16624672
 	popw	wa
 	ld	(64610:16), wa
@@ -143,82 +143,82 @@ PlayMode_TeardownAndRestore:
 PartLookup_NullRet:
 	ret
 PartParam_Handler_00:
-	ldb c, 0x00
+	ld c, 0x00:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_01:
-	ldb c, 0x01
+	ld c, 0x01:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_02:
-	ldb c, 0x02
+	ld c, 0x02:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_03:
-	ldb c, 0x03
+	ld c, 0x03:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_04:
-	ldb c, 0x04
+	ld c, 0x04:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_05:
-	ldb c, 0x05
+	ld c, 0x05:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_06:
-	ldb c, 0x06
+	ld c, 0x06:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_07:
-	ldb c, 0x07
+	ld c, 0x07:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_08:
-	ldb c, 0x08
+	ld c, 0x08:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_09:
-	ldb c, 0x09
+	ld c, 0x09:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_0A:
-	ldb c, 0x0a
+	ld c, 0x0a:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_0B:
-	ldb c, 0x0b
+	ld c, 0x0b:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_0C:
-	ldb c, 0x0c
+	ld c, 0x0c:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_0D:
-	ldb c, 0x0d
+	ld c, 0x0d:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_0E:
-	ldb c, 0x0e
+	ld c, 0x0e:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
 PartParam_Handler_0F:
-	ldb c, 0x0f
+	ld c, 0x0f:opc
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
@@ -243,7 +243,7 @@ Part_ValidateAndActivate:
 	jr ugt, PartValidate_Done
 	ldw	(4360:16), 0
 	xor	wa, wa
-	ldb a, 0x8a
+	ld a, 0x8a:opc
 	call UI_PostModeChangeEvent
 PartValidate_Done:
 	ret
@@ -356,7 +356,7 @@ SongBank_ScanActiveVoices:
 	mul hl, 0x800
 	add xhl, 0xab0d0
 	ld xiy, xhl
-	ldb b, 0x10
+	ld b, 0x10:opc
 	cpiw_sri 0xf5, 0x4e, 0xff, 0x00, 0x00
 	jr z, ScanVoice_NoneFound
 
@@ -398,13 +398,13 @@ PlayMode_SendModeCommand:
 	jr	z, 10
 PlayCheck_PostMode79:
 	xor wa, wa
-	ldb a, 0x79
+	ld a, 0x79:opc
 	call UI_PostModeChangeEvent
 	jr PlayCheck_Return
 
 PlayCheck_PostMode77:
 	xor wa, wa
-	ldb a, 0x77
+	ld a, 0x77:opc
 	call UI_PostModeChangeEvent
 
 PlayCheck_Return:
@@ -428,13 +428,13 @@ PlayMode_StartAndSendCommand:
 	jr z, PlayStart_PostMode77
 PlayStart_PostMode79:
 	xor wa, wa
-	ldb a, 0x79
+	ld a, 0x79:opc
 	call UI_PostModeChangeEvent
 	jr SongMode_PostEvtRetZero
 
 PlayStart_PostMode77:
 	xor wa, wa
-	ldb a, 0x77
+	ld a, 0x77:opc
 	call UI_PostModeChangeEvent
 
 SongMode_PostEvtRetZero:
@@ -476,13 +476,13 @@ SeqRestart_SendPlaybackNotify:
 	jr z, SeqNotify_PostMode77
 SeqNotify_PostMode79:
 	xor wa, wa
-	ldb a, 0x79
+	ld a, 0x79:opc
 	call UI_PostModeChangeEvent
 	jr SeqNotify_Return
 
 SeqNotify_PostMode77:
 	xor wa, wa
-	ldb a, 0x77
+	ld a, 0x77:opc
 	call UI_PostModeChangeEvent
 
 SeqNotify_Return:
@@ -527,7 +527,7 @@ SongMode_CheckAndDispatch:
 SongMode_SendStopCommand:
 	ld (4437:16), 0
 	xor wa, wa
-	ldb a, 0x6d
+	ld a, 0x6d:opc
 	call UI_PostModeChangeEvent
 	ret
 
@@ -548,7 +548,7 @@ SongMode_StartPlayback:
 	call SongMode_AbortAndClearBit2
 	ld (4437:16), 1
 	xor wa, wa
-	ldb a, 0x6d
+	ld a, 0x6d:opc
 	call UI_PostModeChangeEvent
 
 SongMode_StartReturn:
@@ -614,20 +614,20 @@ PartFormat_PartTypeDisp:
 	jp PartFormat_NullRet
 PartFormat_PostMode6D:
 	xor wa, wa
-	ldb a, 0x6d
+	ld a, 0x6d:opc
 	call UI_PostModeChangeEvent
 	jr PartFormat_NullRet
 
 PartFormat_PostMode6E:
 	xor wa, wa
-	ldb a, 0x6e
+	ld a, 0x6e:opc
 	call UI_PostModeChangeEvent
 	jr PartFormat_NullRet
 
 PartFormat_SendPlaybackCmd:
 	call PlayMode_SendStopEvent
 	xor wa, wa
-	ldb a, 0x6c
+	ld a, 0x6c:opc
 	call UI_PostModeChangeEvent
 	jr PartFormat_NullRet
 
@@ -682,7 +682,7 @@ PartFormat_CheckAndDispatch:
 PartFormat_SendStopCommand:
 	ld (4437:16), 0
 	xor wa, wa
-	ldb a, 0x6e
+	ld a, 0x6e:opc
 	call UI_PostModeChangeEvent
 	ret
 
@@ -703,7 +703,7 @@ PartFormat_StartPlayback:
 	call PartFormat_AbortAndClearBit2
 	ld (4437:16), 1
 	xor wa, wa
-	ldb a, 0x6e
+	ld a, 0x6e:opc
 	call UI_PostModeChangeEvent
 
 PartFormat_StartReturn:
@@ -738,7 +738,7 @@ PlayMode_StopAbortRetZero:
 PlayModeStop_SendStopCmd:
 	ld (4437:16), 0
 	xor wa, wa
-	ldb a, 0x6c
+	ld a, 0x6c:opc
 	call UI_PostModeChangeEvent
 	ret
 
@@ -761,7 +761,7 @@ PlayMode_SendCommand6C:
 	call PlayMode_StopAndAbort
 	ld (4437:16), 1
 	xor wa, wa
-	ldb a, 0x6c
+	ld a, 0x6c:opc
 	call UI_PostModeChangeEvent
 
 PlayModeStop_SendReturn:
@@ -780,7 +780,7 @@ PlayModeStop_ClearFlagBlock:
 	ret
 SqSngNameTtl_Dispatch:
 	xor wa, wa
-	ldb a, 0x73
+	ld a, 0x73:opc
 	call UI_PostModeChangeEvent
 	ret
 
@@ -998,13 +998,13 @@ SongBank_EnableAccompaniment:
 	bit 2, (0xfdad:16)
 	jr nz, SongBank_CheckBassMode
 	or (0xfdad:16), 4
-	ldb a, 0x4
+	ld a, 0x4:opc
 
 SongBank_SendAccompEvent:
 	ld	(4330:16), 1
-	ldb	e, 145
-	ldb	d, 3
-	ldb	w, 4
+	ld	e, 145:opc
+	ld	d, 3:opc
+	ld	w, 4:opc
 	call	16624640
 	call	15668398
 SongBank_CheckBassMode:
@@ -1016,12 +1016,12 @@ SongBank_CheckBassMode:
 
 SongBank_EnableBassMode:
 	or (0xfdad:16), 1
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 SongBank_SendBassEvent:
-	ldb	e, 145
-	ldb	d, 3
-	ldb	w, 1
+	ld	e, 145:opc
+	ld	d, 3:opc
+	ld	w, 1:opc
 	call	16624640
 	call	15668398
 	ld	(4596:16), 1
@@ -1032,7 +1032,7 @@ SqTrAs_Setup:
 	ld xiy, 0xcce
 	ld xix, 0xf1a0
 	xor bc, bc
-	ldb c, 0x10
+	ld c, 0x10:opc
 	ldir85
 	ret
 
@@ -1041,7 +1041,7 @@ SqTrAs_InitWall:
 	ld xix, 0xcce
 	ld xiy, 0xf1a0
 	xor bc, bc
-	ldb c, 0x10
+	ld c, 0x10:opc
 	ldir85
 	ret
 
@@ -2081,7 +2081,7 @@ NameGetFuncCall_Dispatch:
 	.byte 0xe0	; v10 does not spell this byte either
 	.byte 0xe8	; v10 does not spell this byte either
 	ldw	bc, 16257
-	ldb	w, 110
+	ld	w, 110:opc
 	push	177
 	nop
 	nop
@@ -2123,7 +2123,7 @@ NameGetFuncCall_Dispatch:
 	.byte 0xe0	; v10 does not spell this byte either
 	.byte 0xe8	; v10 does not spell this byte either
 	ldw	bc, 16257
-	ldb	w, 110
+	ld	w, 110:opc
 	push	177
 	nop
 	nop
@@ -2164,7 +2164,7 @@ NameGetFuncCall_Dispatch:
 	.byte 0xe0	; v10 does not spell this byte either
 	.byte 0xe8	; v10 does not spell this byte either
 	ldw	bc, 16257
-	ldb	w, 110
+	ld	w, 110:opc
 	push	177
 	nop
 	nop
@@ -2197,7 +2197,7 @@ NameGetFuncCall_Dispatch:
 	.byte 0xe0	; v10 does not spell this byte either
 	.byte 0xe8	; v10 does not spell this byte either
 	ldw	bc, 16257
-	ldb	w, 110
+	ld	w, 110:opc
 	push	177
 	nop
 	nop

@@ -248,7 +248,7 @@ ToneGen_VelocityFromTouch:
 	extz	bc
 	div	c, 12
 	ld	(xiz-7), b
-	ldb	a, 3
+	ld	a, 3:opc
 	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x41
 	extz	xwa
 	ld	xix, xwa
@@ -288,7 +288,7 @@ ToneGen_VelocityFromTouch:
 	ld	(xiz-10), wa
 	jr	ToneGen_VelocityFromTouch__pitchclass
 ToneGen_VelocityFromTouch__black_key:
-	ldb	c, 3
+	ld	c, 3:opc
 	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x43
 	extz	xbc
 	inc	2, xbc

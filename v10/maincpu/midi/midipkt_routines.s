@@ -1391,7 +1391,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	a, 199
+	ld	a, 199:opc
 	swi	3
 	sub	(xbc-31), ix
 	lda	xbc, (xix+32)

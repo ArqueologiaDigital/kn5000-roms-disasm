@@ -860,7 +860,7 @@ INIT_TONE_GEN:
 	; Initialize tone generator registers
 	ld xbc, 0x130000
 	ld xwa, 0x101001F
-	ldb d, 0x4	; TMP94C241 encoding (24 04)
+	ld d, 0x4:opc	; TMP94C241 encoding (24 04)
 INIT_TONE_GEN__init_loop:
 	ld w, a
 	ld (xbc), xwa
@@ -883,7 +883,7 @@ TONE_GEN_WRITE:
 	sll a, 5	; A = A << 5
 	set 4, a	; A |= 0x10
 	ld xhl, 0x130000
-	ldb d, 0x8
+	ld d, 0x8:opc
 TONE_GEN_WRITE__write_loop:
 	ld (xhl), a
 	ldb_spi E, 0xE4
@@ -1047,11 +1047,11 @@ INIT_DMA_SERIAL:
 	; Set up DMA for inter-CPU latch at 0x120000
 	lda xwa, (0x120000:24)
 	ldc_cr32 xwa, 0x28	; DMA channel 2 destination = 0x120000
-	ldb a, 0x8
+	ld a, 0x8:opc
 	ldc_cr8 a, 0x4A	; DMA channel 2 count = 8
 	lda xwa, (0x120000:24)
 	ldc_cr32 xwa, 0x00	; DMA channel 0 source = 0x120000
-	ldb a, 0x0	; TMP94C241 encoding (21 00)
+	ld a, 0x0:opc	; TMP94C241 encoding (21 00)
 	ldc_cr8 a, 0x42	; DMA channel 0 mode = 0
 
 	; Clear variables
@@ -1709,7 +1709,7 @@ INIT_MEMORY_TEST__serial_loop:
 	.org 0xFF89A9 - 0xFE0000, 0xFF
 
 DELAY_ROUTINE:
-	ldb l, 0x0	; ld L, 00h (TMP94C241 encoding)
+	ld l, 0x0:opc	; ld L, 00h (TMP94C241 encoding)
 DELAY_ROUTINE__outer_loop:
 	res_dd8 1, 0x30
 	ldw bc, 0x4000	; Default count
@@ -1721,7 +1721,7 @@ DELAY_ROUTINE__skip_long:
 	cp bc, 0:i3
 	jr z, DELAY_ROUTINE__next_bit
 DELAY_ROUTINE__delay_loop:
-	ldb e, 0x0	; ld E, 00h (TMP94C241 encoding)
+	ld e, 0x0:opc	; ld E, 00h (TMP94C241 encoding)
 DELAY_ROUTINE__inner_loop:
 	inc 1, e
 	cp e, 0x20
@@ -1731,7 +1731,7 @@ DELAY_ROUTINE__next_bit:
 	set_dd8 1, 0x30
 	ldw bc, 0x4000
 DELAY_ROUTINE__delay2_outer:
-	ldb e, 0x0	; ld E, 00h (TMP94C241 encoding)
+	ld e, 0x0:opc	; ld E, 00h (TMP94C241 encoding)
 DELAY_ROUTINE__delay2_inner:
 	inc 1, e
 	cp e, 0x20
@@ -1866,7 +1866,7 @@ ROM_CHECKSUM:
 	mrid4 0xB4, 0x02, 0x00, 0x00	; Checksum accumulator 1 (TMP94C241 encoding)
 	lda xhl, (xix + 2)
 	mrid4 0xB3, 0x02, 0x00, 0x00	; Checksum accumulator 2 (TMP94C241 encoding)
-	ldb w, 0x0	; Bank counter (TMP94C241 encoding)
+	ld w, 0x0:opc	; Bank counter (TMP94C241 encoding)
 ROM_CHECKSUM__bank_loop:
 	ld xiy, 0xFE0000	; Boot ROM base
 	ld xiz, 0:i3	; Word counter

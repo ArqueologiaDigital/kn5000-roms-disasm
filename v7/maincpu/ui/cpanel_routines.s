@@ -271,8 +271,8 @@ CPanel_PanelDetection:
 	ldw (0x8d03:16), 0x0000
 	or (0x8cf6:16), 0x01
 	ei 0x00
-	ldb A, 0x20
-	ldb W, 0x00
+	ld A, 0x20:opc
+	ld W, 0x00:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	cpw (0x8d03:16), 0x0000
@@ -286,8 +286,8 @@ PanelDet_ProbeRight:
 	ldw (0x8d03:16), 0x0000
 	or (0x8cf6:16), 0x01
 	ei 0x00
-	ldb A, 0xe0
-	ldb W, 0x00
+	ld A, 0xe0:opc
+	ld W, 0x00:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	cpw (0x8d03:16), 0x0000
@@ -334,19 +334,19 @@ CPanel_PollStartup:
 
 CPanel_ButtonPollLoop:
 	calr	223
-	ldb	a, 32
-	ldb	w, 11
+	ld	a, 32:opc
+	ld	w, 11:opc
 	calr	298
 	calr	65177
 	calr	1650
 	ld	a, (36281:16)
-	ldb	w, 13
+	ld	w, 13:opc
 	bit	7, a
 	jr	nz, 9
-	ldb	w, 14
+	ld	w, 14:opc
 	bit	6, a
 	jr	nz, 2
-	ldb	w, 12
+	ld	w, 12:opc
 CPanel_EncoderCheck:
 	.byte 0xc1, 0xce, 0x8d, 0xf8, 0xf1, 0xce, 0x8d, 0x40
 	.byte 0x6e, 0xd2, 0xf1, 0xce, 0x8d, 0x40, 0x43, 0xad
@@ -729,8 +729,8 @@ PollLoop_TXCheckThreshold:
 	cp	hl, 3:i3
 	jr	c, 38	; -> 0xFC4090
 	ld	(36094:16), 0
-	ldb	w, 224
-	ldb	a, 19
+	ld	w, 224:opc
+	ld	a, 19:opc
 	ld	iy, (36195:16)
 	ld	xde, 36197
 	st_rrb	w, xde, iy
@@ -943,7 +943,7 @@ c:
 	.byte 0x0e, 0xc9, 0xd8, 0x6e, 0x0a, 0x1e, 0x44, 0x01
 	.byte 0x1e, 0x41, 0x01, 0x68, 0x16
 MBytePkt_EncFFMarker:
-	ldb a, 0xff
+	ld a, 0xff:opc
 
 					; else:
 MBytePkt_CommitAndContinue:

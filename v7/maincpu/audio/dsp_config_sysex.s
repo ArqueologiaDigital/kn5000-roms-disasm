@@ -52,7 +52,7 @@ SysEx_ApplyToSlot49_Data:
 	.byte 0x66, 0x11, 0xde, 0x88, 0xe8, 0x13, 0xe8, 0xc8
 	.byte 0x10, 0x49, 0x00, 0x00, 0xaf, 0x06
 SysEx_ClampVoiceIndex8_49:
-	ldb	b, 29
+	ld	b, 29:opc
 	ld	xiz, 1642003906
 SysEx_ClampVoiceIndex8_49_DoLookup:
 	.byte 0xd7, 0xfa, 0xf6, 0x61, 0xd3, 0xf1, 0x74, 0xfc
@@ -482,8 +482,8 @@ SwbtWr_PostCallback_Loop:
 SwbtWr_PostCallback_Done:
 	.byte 0x08
 SwbtWr_QueueMainEvent:
-	ldb	w, 128
-	ldb	a, 216
+	ld	w, 128:opc
+	ld	a, 216:opc
 	ccf
 	call	16575059
 	call	15673229
@@ -797,7 +797,7 @@ MidiSeq_SendMultiByte_SerialSendLoop:
 MidiSeq_SendMultiByte_SerialNextByte:
 	ld	iz, bc
 	extz	xiz
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	ld	xbc, 120000
 MidiSeq_SendMultiByte_Exit:
@@ -812,7 +812,7 @@ SeqBuf_DspSysEx_ReadAndForward_Loop:
 	push	xiz
 	ld	iz, bc
 	extz	xiz
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	ld	xbc, 7920
 	call	16712319
@@ -910,7 +910,7 @@ MidiOut_CheckStop:
 	.byte 0x00, 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0xf1, 0x58
 	.byte 0xc1, 0x47, 0xdb, 0x12, 0xd1, 0x5a, 0xc1
 MidiOut_ReadSysExByte:
-	ldb a, 219
+	ld a, 219:opc
 	or (xwa+30), b
 	swi 5
 	ld (49502:16), hl
@@ -1005,7 +1005,7 @@ CompIface_RampUp_Clamp:
 	jr	z, 29
 	ld	wa, (xsp+12)
 	ld	(xiz), a
-	ldb	e, 255
+	ld	e, 255:opc
 	ld	xwa, (xsp+22)
 	ld	bc, (xsp+4)
 	ld	(xwa), bc
@@ -1063,7 +1063,7 @@ CompIface_ScaleAndNormalize:
 	.byte 0xbe, 0x01, 0x32, 0x82, 0x21, 0xc9, 0xcc, 0xc0
 	.byte 0xcb, 0x81, 0xb2, 0x41, 0x9f, 0x04, 0x61
 CompIface_WriteVolume:
-	ldb	e, 63
+	ld	e, 63:opc
 	jrl	-240
 	ld	e, (xwa+1)
 	and	e, 255
@@ -1072,7 +1072,7 @@ CompIface_WriteVolume:
 	extz	bc
 	sll	bc, 8
 	ld	hl, bc
-	ldb	l, 0
+	ld	l, 0:opc
 	add	hl, de
 	ld	bc, hl
 	srl	bc, 8
@@ -1221,7 +1221,7 @@ DSPCfg_ScaleFactor_Update:
 	.byte 0x00, 0x2e, 0xe9, 0x8b, 0x88, 0x01, 0x23, 0xcb
 	.byte 0xcc, 0xff, 0xc7, 0xf4, 0x9b, 0xdd, 0x12, 0x80
 DSPCfg_ScaleFactor_StoreResult:
-	ldb	c, 217
+	ld	c, 217:opc
 	zcf
 	ld	ix, bc
 	sla	ix, 8
@@ -1374,7 +1374,7 @@ DSPCfg_ReadField_Type76_ShiftAndMask:
 	.byte 0x68, 0x7d, 0xee, 0xcf, 0x00, 0x4d, 0x00, 0x00
 	.byte 0x6f
 DSPCfg_ReadField_Type76_Mask5Bits:
-	ldb	e, 191
+	ld	e, 191:opc
 	ldio	2, 4
 	nop
 	ld	wa, 4:i3
@@ -1539,7 +1539,7 @@ DSPCfg_Data_003:
 	.byte 0x38, 0xbf, 0x06, 0x30, 0x38, 0xbf, 0x10, 0x30
 	.byte 0x38, 0xbf, 0x1a, 0x31, 0xaf
 DSPCfg_DecodeParamIdRange:
-	ldb	w, 32
+	ld	w, 32:opc
 	calr	64648
 	ld	iz, hl
 	cp	iz, 0:i3
@@ -1566,7 +1566,7 @@ DSPCfg_DecodeParamIdRange:
 	ld	a, (xbc)
 	extz	wa
 	ld	bc, (xsp+18)
-	ldb	b, 0
+	ld	b, 0:opc
 	ld	e, c
 	extz	de
 	pushw	255
@@ -1610,7 +1610,7 @@ DSPCfg_ResolveParamToSlot:
 	inc	1, c
 	extz	bc
 	ld	de, (xsp+18)
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	de
 	ld	l, (xsp+10)
 	extz	hl
@@ -1690,7 +1690,7 @@ DSPCfg_ResolveParamToSlot_StoreResult:
 	.byte 0x30, 0x38, 0xbf, 0x06, 0x30, 0x38, 0xbf, 0x10
 	.byte 0x30, 0x38, 0xbf, 0x16, 0x31, 0xaf, 0x1a
 DSPCfg_ResolveAndExtract:
-	ldb	w, 30
+	ld	w, 30:opc
 	cp	(xiz), xde
 	cp	hl, 0:i3
 	jr	nz, 50
@@ -1845,7 +1845,7 @@ DSPCfg_WriteParamFull_Type1_Clamped:
 	srl	wa, 6
 	and	wa, 31
 	ld	hl, wa
-	ldb	e, 7
+	ld	e, 7:opc
 	jrl	-161
 DSPCfg_WriteParamFull_Type1_Notify:
 	.byte 0x9f, 0x0a, 0x3f, 0x02, 0x00, 0x6e, 0xc9, 0xde
@@ -1959,8 +1959,8 @@ DSPCfg_WriteAllSlots_Direct_CheckCount:
 DSPCfg_WriteAllSlots_Direct_Return:
 	jr	f, -81
 	ex_ff
-	ldb	h, 134
-	ldb	a, 216
+	ld	h, 134:opc
+	ld	a, 216:opc
 	ccf
 DSPCfg_WriteAllSlots_Clamped:
 	.byte 0xbf, 0x04, 0x50, 0xf2, 0xe0, 0x5f, 0xee, 0x31
@@ -2130,7 +2130,7 @@ DSPCfg_ApplyParamStruct_Normal:
 	ld	xsp, 2954903727
 	ld	xhl, 2941911221
 	push	xwa
-	ldb	w, 176
+	ld	w, 176:opc
 	nop
 	nop
 	ld	xwa, (xsp+52)

@@ -67,7 +67,7 @@ NoteOn_VoiceLookupAndAssign:
 NoteOn_MergeLayer1:
 	ldx
 	ld	iz, 0:i3
-	ldb	e, 127
+	ld	e, 127:opc
 	jr	50
 	ld	wa, iz
 	mul	wa, 5
@@ -2236,7 +2236,7 @@ LookupAllocEmit_LoadParam2:
 	.byte 0xe3, 0xfd, 0xa8, 0x00, 0x20, 0xd9, 0xa8, 0x1e
 	.byte 0x02, 0x0a, 0xe3, 0xfd, 0xa8, 0x00
 LookupAllocEmit_LoadParam3:
-	ldb	w, 217
+	ld	w, 217:opc
 	cp	(xbc+30), xwa
 	push	209
 	and	(xiz), e
@@ -2895,7 +2895,7 @@ NoteMap_AllocateVoice:
 	.byte 0xea, 0xf3, 0x6e, 0xa0, 0xcd, 0x8f, 0xb8, 0x01
 	.byte 0x47, 0x0e
 	ld (XWA+0x01),0x00
-	ldb L, 0x00
+	ld L, 0x00:opc
 	ret
 	.byte 0x3e, 0xcb, 0x8f, 0xdb, 0x12, 0xdb, 0x09, 0x0d
 	.byte 0x00, 0xf2, 0x2e, 0x8f, 0xee, 0x34, 0xe3, 0x07
@@ -3400,7 +3400,7 @@ EmitNoteData_Process_LoadReg4:
 	.byte 0x41, 0x68, 0x5c, 0xbf, 0x02, 0x00, 0x00, 0x68
 	.byte 0x56, 0xaf, 0x1a
 EmitNoteData_Process_InitVal:
-	ldb	w, 136
+	ld	w, 136:opc
 	push	sr
 	push	xsp
 EmitNoteData_Process_LoopBody:
@@ -3694,7 +3694,7 @@ AllocNewVoiceEntry_LoadParam4:
 	.byte 0x8f
 SetChannelParam_LoadDRAM2:
 	push	sr
-	ldb	a, 179
+	ld	a, 179:opc
 	ld	xbc, 148408537
 	halt
 	nop
@@ -3900,7 +3900,7 @@ BuildNoteOn_NextVoic_LoadReg:
 	.byte 0xda, 0x12, 0xaf, 0x06, 0x20, 0x1e, 0x9d, 0xea
 	.byte 0x78, 0xd4, 0x00, 0x9f, 0x02
 BuildNoteOn_NextVoic_NextIter:
-	ldb	w, 232
+	ld	w, 232:opc
 BuildNoteOn_CheckVoiceCount:
 	.byte 0x12, 0xe8, 0x89, 0xe9, 0xee, 0x02, 0xe8, 0x81
 	.byte 0xe9, 0x64, 0xaf, 0x0c, 0x81, 0xb9, 0x04, 0xb9
@@ -3941,14 +3941,14 @@ EmitNoteOnMessages_Compare:
 	.byte 0xc3, 0x07, 0xf0, 0xe4, 0x23, 0xcb
 EmitNoteOnMessages_LoadReg:
 	inc	6, wa
-	ldb	d, 203
+	ld	d, 203:opc
 	inc	6, bc
 	push_a
 	cp	c, 2:i3
 	jr	z, 8
 	cp	c, 3:i3
 	jr	nz, 40
-	ldb	e, 3
+	ld	e, 3:opc
 	jr	38
 	cp	e, 3:i3
 EmitNoteOnMessages_NextIter:
@@ -4146,7 +4146,7 @@ FindEntry_AdvanceSlo_LoadReg2:
 	.byte 0xaf, 0x12, 0x81, 0xb9, 0x03, 0x14, 0x86, 0x27
 	.byte 0x9f, 0x02, 0x61, 0xaf, 0x12, 0x20, 0x88, 0x01
 FindEntry_AdvanceSlo_Deref:
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 FindEntry_AdvanceSlo_StoreDRAM:
 	.byte 0x9f, 0x02, 0xf8, 0x67, 0xad, 0x78, 0x8d, 0x02
@@ -4545,7 +4545,7 @@ ComputeVoiceTuning_LoadParam2:
 	pop	sr
 	ld	xiz, 25715164
 Synth_WriteChannelGain_Loop:
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	cp	ix, bc
 	jrl	c, -163
@@ -4616,7 +4616,7 @@ NoteMap_ComputePitchOffset:
 	.byte 0x61, 0xc3, 0xfd, 0xa7
 PitchOffset_NegativeDir:
 	nop
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	cp	de, wa
 	jr	c, -36
@@ -6582,7 +6582,7 @@ SearchVoice_CheckCount:
 SearchVoice_StoreResult:
 	.byte 0xd8, 0x8a, 0xda, 0xec, 0x02, 0xc1, 0x43, 0xce
 SearchVoice_SetZero:
-	ldb	a, 201
+	ld	a, 201:opc
 	jr	ge, -40
 SearchVoice_SortCheck:
 	ccf
@@ -6712,9 +6712,9 @@ SoundFX_Handler_5:
 	.byte 0x6f, 0x05, 0xcb, 0xcf, 0x09, 0x6b, 0x04, 0x27
 	.byte 0x06, 0x68, 0x10, 0xcb, 0xcf, 0x0a, 0x6f, 0x05
 	.byte 0xcb, 0xcf, 0x0c, 0xb0, 0xfb
-	ldb L, 0x09
+	ld L, 0x09:opc
 	jr t, .Lc_fe8c43
-	ldb L, 0x00
+	ld L, 0x00:opc
 .Lc_fe8c43:
 	ret
 	jp 16682658
@@ -6985,11 +6985,11 @@ Voice_UpdatePlayModeState:
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x21, 0xc9, 0xd9
 PlayMode_CheckModes23:
 	jr	nz, 4
-	ldb	a, 40
+	ld	a, 40:opc
 	jr	39
 	cp	a, 5:i3
 	jr	nz, 4
-	ldb	a, 41
+	ld	a, 41:opc
 	jr	31
 	dec	1, c
 	cp	c, 0:i3
@@ -7083,7 +7083,7 @@ CheckAndResetSlotSta_Block:
 CheckAndResetSlotSta_LoadDRAM:
 	ld	xde, 272498894
 	ret
-	ldb	a, 1
+	ld	a, 1:opc
 	ld	l, (52809:24)
 	xor	h, h
 	dec	1, hl
@@ -7179,7 +7179,7 @@ VoiceSlot_StoreParams_LoadReg4:
 	.byte 0x56, 0xd7, 0x3e, 0x9a, 0xd1, 0xfa, 0xc4, 0x22
 	.byte 0xda, 0xcc, 0x00, 0x02, 0xd7, 0x3e, 0x8a, 0x66
 VoiceSlot_StoreParams_Increment:
-	ldb	w, 242
+	ld	w, 242:opc
 	and	(xhl), iz
 	nop
 VoiceSlot_StoreParams_LoadReg5:
@@ -7291,7 +7291,7 @@ VoiceSlot_CompareAndUpdate_TestBit24:
 	.byte 0x00, 0x00, 0x6e, 0x68, 0xc2, 0x49, 0xce, 0x00
 	.byte 0x23
 VoiceSlot_CompareAndUpdate_Block:
-	ldb	b, 3
+	ld	b, 3:opc
 	pushw	bc
 	calr	64074
 	ld	hl, de
@@ -7510,7 +7510,7 @@ NoteBuffer_CompactEn_Block2:
 NoteBuffer_CompactEn_Compare:
 	.byte 0x9b, 0xfe, 0x00, 0xc3, 0x07, 0xf8, 0xec
 NoteBuffer_CompactEn_Increment:
-	ldb w, 33
+	ld w, 33:opc
 	ld xwa, 13556722
 	push sr
 	normal
@@ -7585,7 +7585,7 @@ NoteDisplay_AlternateLookup:
 	cp w, 107
 	jr ugt, 3
 	add w, 12
-	ldb a, 64
+	ld a, 64:opc
 	stw_dpi wa, 241
 	djnz16 bc, -19
 	ret
@@ -7734,7 +7734,7 @@ InitPartAllocState_Return:
 	.byte 0xce
 InitPartAllocState_OrBits:
 	nop
-	ldb	a, 241
+	ld	a, 241:opc
 	pushw	de
 	mul8rr	a, h
 	ld	xiy, 52809
@@ -8798,7 +8798,7 @@ SendDataReturn_LoadReg:
 	call	16693162
 	popw	iz
 	ret
-	ldb	l, 0
+	ld	l, 0:opc
 	extz	wa
 	sub	wa, 16
 	cp	wa, 0:i3
@@ -9829,7 +9829,7 @@ SeekRecord_Done_LoopCheck:
 	.byte 0x30, 0x38, 0xbf, 0x12
 SeekRecord_Done_LoadParam:
 	ldw	wa, 4255
-	ldb	a, 233
+	ld	a, 233:opc
 	ccf
 	add	xbc, xwa
 	push	xbc
@@ -10069,7 +10069,7 @@ DecodeMidiEvent_LoadAddr:
 	jrl	301
 	ld	a, l
 	add	a, 29
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	ld	(59685:16), xwa
 	ld	iz, 0:i3
@@ -10103,7 +10103,7 @@ DecodeMidiEvent_LoadParam5:
 DecodeMidiEvent_LoadParam6:
 	ld	a, l
 	add	a, 29
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	ld	(59685:16), xwa
 	ld	iz, 0:i3
@@ -10438,7 +10438,7 @@ Epilogue_LoadReg:
 	.byte 0x00, 0xeb, 0x12, 0x68, 0x2a, 0x81, 0x27, 0xcf
 	.byte 0x30, 0x07, 0x89, 0x01
 Epilogue_InitVal:
-	ldb	e, 205
+	ld	e, 205:opc
 	ldw	wa, 52487
 	or	(xbc-55), h
 Epilogue_LoadIter:
@@ -11329,9 +11329,9 @@ StoreAndAdvance_Prologue:
 	swi	1
 	cp	l, 15
 	jr	z, 4
-	ldb	l, 128
+	ld	l, 128:opc
 	jr	13
-	ldb	l, 137
+	ld	l, 137:opc
 	jr	9
 	ld	xwa, (57522:16)
 StoreAndAdvance_LoopBody:
@@ -11487,7 +11487,7 @@ SndParam_StoreDRAMInit:
 	.byte 0x8e, 0x01, 0x21, 0xb1, 0x41, 0x68, 0x0a, 0x8e
 StoreDRAMInit_ReadBuf:
 	push	sr
-	ldb	a, 190
+	ld	a, 190:opc
 	pop	sr
 	ld	xbc, 2013267134
 	pop	xiz
@@ -11504,7 +11504,7 @@ StoreDRAMInit_ReadBuf2:
 	.byte 0xc9, 0x87, 0xdb, 0x12, 0xeb, 0x12, 0xeb, 0x85
 	.byte 0x85, 0x21, 0xb1, 0x41, 0x8d, 0x01
 StoreDRAMInit_ReadBuf3:
-	ldb	a, 178
+	ld	a, 178:opc
 	ld	xbc, 2246780324
 	ld	a, (xiy)
 	ld	(xbc), a
@@ -11636,12 +11636,12 @@ ApplyProgramChangeAs_LoadReg2:
 	.byte 0x0a, 0x25, 0xcd, 0x30
 SndParam_FetchOscTableEntry:
 	reti
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	xde
 	sll	xde, 7
 	ld	c, (xwa+11)
 	res	7, c
-	ldb	b, 0
+	ld	b, 0:opc
 	extz	xbc
 	or	xhl, xde
 	or	xhl, xbc
@@ -11655,12 +11655,12 @@ FetchOscTableEntry_Prologue:
 	ret
 	ld	e, (xwa+7)
 	res	7, e
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	xde
 	sll	xde, 7
 	ld	c, (xwa+8)
 	res	7, c
-	ldb	b, 0
+	ld	b, 0:opc
 	extz	xbc
 	or	xhl, xde
 	or	xhl, xbc
@@ -12302,7 +12302,7 @@ Param_SignExtendRetu_Return:
 	.byte 0x21, 0xd8, 0x12, 0xb1, 0x50, 0x68, 0x08, 0xc1
 	.byte 0xbe, 0xe2
 Param_SignExtendRetu_Block3:
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	ld	(xbc), wa
 	pop	xiz
@@ -12397,7 +12397,7 @@ SendCOMM_VariableLen_LoadReg:
 	ld	de, 1:i3
 	call	16706586
 	ret
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	a, 0:i3
 	jr	z, 2
 SendCOMM_VariableLen_Increment:
@@ -12564,7 +12564,7 @@ SendPartDataBlock_Block4:
 	.byte 0x45, 0x41, 0x8a, 0x37, 0x21, 0xb9, 0x46, 0x41
 	.byte 0x8a, 0x38, 0x21, 0xb9, 0x47, 0x41, 0x8a, 0x39
 SendPartDataBlock_ClearByte:
-	ldb	a, 185
+	ld	a, 185:opc
 	popw	wa
 	ld	xbc, 3105962634
 SendPartDataBlock_Block5:
@@ -12830,7 +12830,7 @@ SendPartDataBlock_Data:
 	.byte 0x23, 0x85, 0xf3, 0x6e, 0x06, 0xda, 0x61, 0xda
 	.byte 0xdb, 0x67, 0xe2, 0xda, 0xdb, 0x6e, 0x03, 0x27
 	.byte 0x03, 0x0e
-	ldb L, 0x00
+	ld L, 0x00:opc
 	ret
 	ldw DE, 0x24b8
 	lda xbc, (0x1e0000:24)
@@ -12985,7 +12985,7 @@ SendPartDataBlock_Compare4:
 SendPartDataBlock_InitVal7:
 	ldw	ix, 36847
 	push	sr
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 SendPartDataBlock_LoadReg5:
 	ld	c, (xsp)
@@ -13341,10 +13341,10 @@ TmFlash_BulkTransferToSubCPU:
 	ld	(xde), xbc
 	ld	wa, 1:i3
 	jp	15670698
-	ldb	e, 0
+	ld	e, 0:opc
 	bit	15, qwa
 	jr	z, 9
-	ldb	e, 1
+	ld	e, 1:opc
 	cpl	qwa
 	cpl	wa
 	inc	1, xwa
@@ -13554,7 +13554,7 @@ Free_Block:
 	.byte 0xaf, 0x08, 0x26, 0x3e, 0x1d, 0xc3, 0x07, 0xff
 	.byte 0x2b, 0xaf, 0x12
 Free_Compare:
-	ldb	w, 56
+	ld	w, 56:opc
 	push	xiz
 	call	16713025
 	lda	xsp, (xsp+14)

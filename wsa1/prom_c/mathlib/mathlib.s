@@ -198,7 +198,7 @@ sub_FC8C45:
 	pushw	hl                                   ; FC8C49  push HL
 	push	xix                                   ; FC8C4A  push XIX
 	push	xiy                                   ; FC8C4B  push XIY
-	ldb	h, 0                                   ; FC8C4C  ld H,0x00
+	ld	h, 0:opc                                   ; FC8C4C  ld H,0x00
 	ld	xbc, (0xFCB2CA:24)                     ; FC8C4E  ld XBC,(0xfcb2ca)
 	push	xbc                                   ; FC8C53  push XBC
 	ld	xbc, (0xFCB2C6:24)                     ; FC8C54  ld XBC,(0xfcb2c6)
@@ -210,7 +210,7 @@ sub_FC8C45:
 	call	0xFCA121                              ; FC8C62  call 0xfca121
 	cp	wa, 2:i3                                  ; FC8C66  cp WA,2
 	jr nz, sub_FC8C45__FC8C6C                  ; FC8C68  jr NZ,0xfc8c6c
-	ldb	h, 1                                   ; FC8C6A  ld H,0x01
+	ld	h, 1:opc                                   ; FC8C6A  ld H,0x01
 sub_FC8C45__FC8C6C:
 	ld	l, h                                    ; FC8C6C  ld L,H
 	cp	h, 0:i3                                   ; FC8C6E  cp H,0
@@ -309,10 +309,10 @@ sub_FC8C45__FC8CDB:
 	call	0xFCA1E5                              ; FC8D69  call 0xfca1e5
 	cp	wa, 0:i3                                  ; FC8D6D  cp WA,0
 	jr z, sub_FC8C45__FC8D75                   ; FC8D6F  jr Z,0xfc8d75
-	ldb	h, 1                                   ; FC8D71  ld H,0x01
+	ld	h, 1:opc                                   ; FC8D71  ld H,0x01
 	jr sub_FC8C45__FC8D77                      ; FC8D73  jr T,0xfc8d77
 sub_FC8C45__FC8D75:
-	ldb	h, 0                                   ; FC8D75  ld H,0x00
+	ld	h, 0:opc                                   ; FC8D75  ld H,0x00
 sub_FC8C45__FC8D77:
 	ld	c, h                                    ; FC8D77  ld C,H
 	xor	l, c                                   ; FC8D79  xor L,C
@@ -382,7 +382,7 @@ sub_FC8C45__FC8DDF:
 	extpfx2 0x95, 0x11                         ; FC8E1E  ldirw
 	lda	xix, (0xFCB2CE:24)                     ; FC8E20  lda XIX,0xfcb2ce
 	inc	8, xix                                 ; FC8E25  inc 0,XIX
-	ldb	h, 7                                   ; FC8E27  ld H,0x07
+	ld	h, 7:opc                                   ; FC8E27  ld H,0x07
 sub_FC8C45__FC8E29:
 	ld	xbc, (xiz-12)                           ; FC8E29  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; FC8E2C  push XBC
@@ -507,7 +507,7 @@ sub_FC8EE5:
 	ld	(xiz-16), xbc                           ; FC8F05  ld (XIZ+0xf0),XBC
 	sub	xwa, xwa                               ; FC8F08  sub XWA,XWA
 	ld	(xiz-20), xwa                           ; FC8F0A  ld (XIZ+0xec),XWA
-	ldb	e, 7                                   ; FC8F0D  ld E,0x07
+	ld	e, 7:opc                                   ; FC8F0D  ld E,0x07
 sub_FC8EE5__FC8F0F:
 	ld	xix, (xiz-20)                           ; FC8F0F  ld XIX,(XIZ+0xec)
 	sll	xix, 8                                 ; FC8F12  sll 0x08,XIX
@@ -594,7 +594,7 @@ sub_FC8EE5__FC8FCE:
 	sub	xbc, xbc                               ; FC8FE7  sub XBC,XBC
 	ld	(xiz-20), xbc                           ; FC8FE9  ld (XIZ+0xec),XBC
 sub_FC8EE5__FC8FEC:
-	ldb	e, 0                                   ; FC8FEC  ld E,0x00
+	ld	e, 0:opc                                   ; FC8FEC  ld E,0x00
 	sub	xbc, xbc                               ; FC8FEE  sub XBC,XBC
 	inc	4, xbc                                 ; FC8FF0  inc 4,XBC
 	ld	(xiz-4), xbc                            ; FC8FF2  ld (XIZ+0xfc),XBC
@@ -680,7 +680,7 @@ sub_FC8EE5__FC90A8:
 	or	xbc, 0x80000000                         ; FC90C6  or XBC,0x80000000
 	ld	(xiz-20), xbc                           ; FC90CC  ld (XIZ+0xec),XBC
 sub_FC8EE5__FC90CF:
-	ldb	e, 0                                   ; FC90CF  ld E,0x00
+	ld	e, 0:opc                                   ; FC90CF  ld E,0x00
 	ld	xix, 4                                  ; FC90D1  ld XIX,0x00000004
 sub_FC8EE5__FC90D6:
 	ld	xbc, (xiz-16)                           ; FC90D6  ld XBC,(XIZ+0xf0)
@@ -1030,7 +1030,7 @@ sub_FC9140__FC93E4:
 	extpfx2 0x95, 0x11                         ; FC9406  ldirw
 	lda	xix, (0xFCB376:24)                     ; FC9408  lda XIX,0xfcb376
 	inc	8, xix                                 ; FC940D  inc 0,XIX
-	ldb	h, 2                                   ; FC940F  ld H,0x02
+	ld	h, 2:opc                                   ; FC940F  ld H,0x02
 sub_FC9140__FC9411:
 	ld	xbc, (xiz-22)                           ; FC9411  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC9414  push XBC
@@ -1098,7 +1098,7 @@ sub_FC9140__FC9411:
 	extpfx2 0x95, 0x11                         ; FC94A3  ldirw
 	lda	xix, (0xFCB38E:24)                     ; FC94A5  lda XIX,0xfcb38e
 	inc	8, xix                                 ; FC94AA  inc 0,XIX
-	ldb	h, 4                                   ; FC94AC  ld H,0x04
+	ld	h, 4:opc                                   ; FC94AC  ld H,0x04
 sub_FC9140__FC94AE:
 	ld	xbc, (xiz-22)                           ; FC94AE  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC94B1  push XBC
@@ -1787,7 +1787,7 @@ sub_FC9844__FC9A68:
 	extpfx2 0x95, 0x11                         ; FC9A8A  ldirw
 	lda	xix, (0xFCB436:24)                     ; FC9A8C  lda XIX,0xfcb436
 	inc	8, xix                                 ; FC9A91  inc 0,XIX
-	ldb	h, 2                                   ; FC9A93  ld H,0x02
+	ld	h, 2:opc                                   ; FC9A93  ld H,0x02
 sub_FC9844__FC9A95:
 	ld	xbc, (xiz-14)                           ; FC9A95  ld XBC,(XIZ+0xf2)
 	push	xbc                                   ; FC9A98  push XBC
@@ -1857,7 +1857,7 @@ sub_FC9ACB:
 	extpfx2 0x95, 0x11                         ; FC9AF9  ldirw
 	lda	xix, (0xFCB44E:24)                     ; FC9AFB  lda XIX,0xfcb44e
 	inc	8, xix                                 ; FC9B00  inc 0,XIX
-	ldb	h, 3                                   ; FC9B02  ld H,0x03
+	ld	h, 3:opc                                   ; FC9B02  ld H,0x03
 sub_FC9ACB__FC9B04:
 	ld	xbc, (xiz-14)                           ; FC9B04  ld XBC,(XIZ+0xf2)
 	push	xbc                                   ; FC9B07  push XBC
@@ -2272,7 +2272,7 @@ sub_FC9D12__FC9DD5:
 	extpfx2 0x95, 0x11                         ; FC9E53  ldirw
 	lda	xix, (0xFCB4A6:24)                     ; FC9E55  lda XIX,0xfcb4a6
 	inc	8, xix                                 ; FC9E5A  inc 0,XIX
-	ldb	h, 2                                   ; FC9E5C  ld H,0x02
+	ld	h, 2:opc                                   ; FC9E5C  ld H,0x02
 sub_FC9D12__FC9E5E:
 	ld	xbc, (xiz-14)                           ; FC9E5E  ld XBC,(XIZ+0xf2)
 	push	xbc                                   ; FC9E61  push XBC
@@ -2310,7 +2310,7 @@ sub_FC9D12__FC9E5E:
 	extpfx2 0x95, 0x11                         ; FC9EAB  ldirw
 	lda	xix, (0xFCB4BE:24)                     ; FC9EAD  lda XIX,0xfcb4be
 	inc	8, xix                                 ; FC9EB2  inc 0,XIX
-	ldb	h, 3                                   ; FC9EB4  ld H,0x03
+	ld	h, 3:opc                                   ; FC9EB4  ld H,0x03
 sub_FC9D12__FC9EB6:
 	ld	xbc, (xiz-22)                           ; FC9EB6  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC9EB9  push XBC
@@ -3254,10 +3254,10 @@ Double_Add__FCA49C:
 	xor	bc, qwa                                ; FCA49E  xor BC,QWA
 	cp	bc, 0:i3                                  ; FCA4A1  cp BC,0
 	jr z, Double_Add__FCA4A9                   ; FCA4A3  jr Z,0xfca4a9
-	ldb	a, 45                                  ; FCA4A5  ld A,0x2d
+	ld	a, 45:opc                                  ; FCA4A5  ld A,0x2d
 	jr Double_Add__FCA4AB                      ; FCA4A7  jr T,0xfca4ab
 Double_Add__FCA4A9:
-	ldb	a, 43                                  ; FCA4A9  ld A,0x2b
+	ld	a, 43:opc                                  ; FCA4A9  ld A,0x2b
 Double_Add__FCA4AB:
 	extpfx3 0xD7, 0xF2, 0xBC                   ; FCA4AB  ex IX,QIX
 	extpfx3 0xD7, 0xF6, 0xBD                   ; FCA4AE  ex IY,QIY
@@ -3300,7 +3300,7 @@ Double_Add__FCA50A:
 Double_Add__FCA51C:
 	cp	a, 43                                   ; FCA51C  cp A,0x2b
 	jrl nz, Double_Add__FCA58E                 ; FCA51F  jrl NZ,0xfca58e
-	ldb	a, 0                                   ; FCA522  ld A,0x00
+	ld	a, 0:opc                                   ; FCA522  ld A,0x00
 	add	xhl, xde                               ; FCA524  add XHL,XDE
 	adc	xix, xiy                               ; FCA526  adc XIX,XIY
 	ld	bc, qix                                 ; FCA528  ld BC,QIX
@@ -3382,7 +3382,7 @@ Double_Add__FCA5DE:
 	xor	bc, 16                                 ; FCA5F1  xor BC,0x0010
 	or	bc, qwa                                 ; FCA5F5  or BC,QWA
 	ld	qix, bc                                 ; FCA5F8  ld QIX,BC
-	ldb	a, 0                                   ; FCA5FB  ld A,0x00
+	ld	a, 0:opc                                   ; FCA5FB  ld A,0x00
 	cp	wa, 0:i3                                  ; FCA5FD  cp WA,0
 	jr z, Double_Add__FCA616                   ; FCA5FF  jr Z,0xfca616
 	ld	bc, qix                                 ; FCA601  ld BC,QIX
@@ -4376,10 +4376,10 @@ Float32_Add__FCACB0:
 	xor	de, bc                                 ; FCACB0  xor DE,BC
 	cp	de, 0:i3                                  ; FCACB2  cp DE,0
 	jr z, Float32_Add__FCACBA                  ; FCACB4  jr Z,0xfcacba
-	ldb	c, 45                                  ; FCACB6  ld C,0x2d
+	ld	c, 45:opc                                  ; FCACB6  ld C,0x2d
 	jr Float32_Add__FCACBC                     ; FCACB8  jr T,0xfcacbc
 Float32_Add__FCACBA:
-	ldb	c, 43                                  ; FCACBA  ld C,0x2b
+	ld	c, 43:opc                                  ; FCACBA  ld C,0x2b
 Float32_Add__FCACBC:
 	ld	hl, qiy                                 ; FCACBC  ld HL,QIY
 	and	hl, 0x7F80                             ; FCACBF  and HL,0x7f80
@@ -4422,7 +4422,7 @@ Float32_Add__FCAD0B:
 	inc	1, hl                                  ; FCAD20  inc 1,HL
 	cp	hl, 0xFF                                ; FCAD22  cp HL,0x00ff
 	jr c, Float32_Add__FCAD30                  ; FCAD26  jr C,0xfcad30
-	ldb	c, 0                                   ; FCAD28  ld C,0x00
+	ld	c, 0:opc                                   ; FCAD28  ld C,0x00
 	cp	bc, 0:i3                                  ; FCAD2A  cp BC,0
 	jr z, Float32_Add__FCAD5A                  ; FCAD2C  jr Z,0xfcad5a
 	jr Float32_Add__FCAD52                     ; FCAD2E  jr T,0xfcad52
@@ -4436,7 +4436,7 @@ Float32_Add__FCAD30:
 	inc	1, hl                                  ; FCAD44  inc 1,HL
 	cp	hl, 0xFF                                ; FCAD46  cp HL,0x00ff
 	jr c, Float32_Add__FCAD98                  ; FCAD4A  jr C,0xfcad98
-	ldb	c, 0                                   ; FCAD4C  ld C,0x00
+	ld	c, 0:opc                                   ; FCAD4C  ld C,0x00
 	cp	bc, 0:i3                                  ; FCAD4E  cp BC,0
 	jr z, Float32_Add__FCAD5A                  ; FCAD50  jr Z,0xfcad5a
 Float32_Add__FCAD52:
@@ -4479,7 +4479,7 @@ Float32_Add__FCAD98:
 	xor	de, 0x80                               ; FCADA1  xor DE,0x0080
 	or	de, hl                                  ; FCADA5  or DE,HL
 	ld	qiy, de                                 ; FCADA7  ld QIY,DE
-	ldb	c, 0                                   ; FCADAA  ld C,0x00
+	ld	c, 0:opc                                   ; FCADAA  ld C,0x00
 	cp	bc, 0:i3                                  ; FCADAC  cp BC,0
 	jr z, Float32_Add__FCADCE                  ; FCADAE  jr Z,0xfcadce
 	ld	de, qiy                                 ; FCADB0  ld DE,QIY
@@ -4991,14 +4991,14 @@ Multiply32_Signed:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB0D3  link XIZ,0x0000
 	push	d                                     ; FCB0D7  push D
 	push	xix                                   ; FCB0D9  push XIX
-	ldb	d, 0                                   ; FCB0DA  ld D,0x00
+	ld	d, 0:opc                                   ; FCB0DA  ld D,0x00
 	ld	xiy, (xiz+8)                            ; FCB0DC  ld XIY,(XIZ+0x08)
 	ldcf	15, qiy                               ; FCB0DF  ldcf 0x0f,QIY
 	jr nc, Multiply32_Signed__FCB0EE           ; FCB0E3  jr NC,0xfcb0ee
 	cpl	iy                                     ; FCB0E5  cpl IY
 	cpl	qiy                                    ; FCB0E7  cpl QIY
 	inc	1, xiy                                 ; FCB0EA  inc 1,XIY
-	ldb	d, 1                                   ; FCB0EC  ld D,0x01
+	ld	d, 1:opc                                   ; FCB0EC  ld D,0x01
 Multiply32_Signed__FCB0EE:
 	ld	xix, (xiz+12)                           ; FCB0EE  ld XIX,(XIZ+0x0c)
 	ldcf	15, qix                               ; FCB0F1  ldcf 0x0f,QIX
@@ -5041,7 +5041,7 @@ Multiply32_Signed__FCB113:
 Multiply32:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB11B  link XIZ,0x0000
 	push	xix                                   ; FCB11F  push XIX
-	ldb	a, 16                                  ; FCB120  ld A,0x10
+	ld	a, 16:opc                                  ; FCB120  ld A,0x10
 	ld	iy, (xiz+8)                             ; FCB122  ld IY,(XIZ+0x08)
 	ld	ix, (xiz+12)                            ; FCB125  ld IX,(XIZ+0x0c)
 	mul	xiy, xix                               ; FCB128  mul XIY,IX
@@ -5075,14 +5075,14 @@ Divide32_Signed:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB141  link XIZ,0x0000
 	push	d                                     ; FCB145  push D
 	push	xix                                   ; FCB147  push XIX
-	ldb	d, 0                                   ; FCB148  ld D,0x00
+	ld	d, 0:opc                                   ; FCB148  ld D,0x00
 	ld	xiy, (xiz+8)                            ; FCB14A  ld XIY,(XIZ+0x08)
 	ldcf	15, qiy                               ; FCB14D  ldcf 0x0f,QIY
 	jr nc, Divide32_Signed__FCB15C             ; FCB151  jr NC,0xfcb15c
 	cpl	iy                                     ; FCB153  cpl IY
 	cpl	qiy                                    ; FCB155  cpl QIY
 	inc	1, xiy                                 ; FCB158  inc 1,XIY
-	ldb	d, 1                                   ; FCB15A  ld D,0x01
+	ld	d, 1:opc                                   ; FCB15A  ld D,0x01
 Divide32_Signed__FCB15C:
 	ld	xix, (xiz+12)                           ; FCB15C  ld XIX,(XIZ+0x0c)
 	ldcf	15, qix                               ; FCB15F  ldcf 0x0f,QIX
@@ -5121,7 +5121,7 @@ Divide32_Signed__FCB181:
 Divide32:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB189  link XIZ,0x0000
 	push	xix                                   ; FCB18D  push XIX
-	ldb	b, 32                                  ; FCB18E  ld B,0x20
+	ld	b, 32:opc                                  ; FCB18E  ld B,0x20
 	sub	wa, wa                                 ; FCB190  sub WA,WA
 	sub	xiy, xiy                               ; FCB192  sub XIY,XIY
 	sub	xix, xix                               ; FCB194  sub XIX,XIX

@@ -162,28 +162,28 @@ MidiCC_Handler_BitManipulation:
 	jr	84
 	.byte 0xf1, 0x57, 0xfd, 0xc8
 	jr	z, 78
-	ldb	b, 11
+	ld	b, 11:opc
 	ld	e, (38298:16)
 	cp	e, 12
 	jr	ugt, 67
-	ldb	d, 127
+	ld	d, 127:opc
 	jr	43
 	.byte 0xf1, 0x57, 0xfd, 0xc9
 	jr	z, 57
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	e, (38298:16)
 	sll	e, 1
-	ldb	d, 255
+	ld	d, 255:opc
 	jr	24
 	.byte 0xf1, 0x57, 0xfd, 0xc9
 	jr	z, 38
-	ldb	b, 9
+	ld	b, 9:opc
 	ld	e, (38298:16)
 	cp	e, 76
 	jr	ugt, 27
 	cp	e, 52
 	jr	c, 22
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -204,7 +204,7 @@ MidiCC_Handler_BitManipulation:
 	jr	nz, 63
 	.byte 0xf1, 0x57, 0xfd, 0xc9
 	jr	z, 57
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	xix, (36950:16)
 	extz	hl
 	ld	l, (38350:16)
@@ -215,7 +215,7 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	srl	e, 6
 	or	e, a
-	ldb	d, 255
+	ld	d, 255:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -258,7 +258,7 @@ MidiCC_Handler_BitManipulation:
 	cp	c, 255
 	jr	z, 26
 	ld	e, (38298:16)
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -274,7 +274,7 @@ MidiCC_Handler_BitManipulation:
 	cp	c, 255
 	jr	z, 26
 	ld	e, (38298:16)
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -308,7 +308,7 @@ MidiCC_Handler_BitManipulation:
 	cp	c, 255
 	jr	z, 26
 	ld	e, (38297:16)
-	ldb	d, 255
+	ld	d, 255:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -346,7 +346,7 @@ MidiCC_VoiceParam_8:
 	cp	c, 255
 	jr	z, 26
 	ld	e, (38297:16)
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -555,7 +555,7 @@ MIDI_DispatchCC:
 	.byte 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc, 0x00, 0x45
 	.byte 0xda, 0x01, 0xfd, 0x00
 MidiCC_DispatchCleanupRet:
-	ldb	a, 11
+	ld	a, 11:opc
 	calr	100
 MidiCC_DispatchStubRet:
 	ret
@@ -3597,7 +3597,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ld	l, c
 	cp	l, 0:i3
 	ret	ge
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 	cp	wa, 9
 	ret	ugt
@@ -4251,7 +4251,7 @@ MidiSysEx_SendBank1Param2:
 	.byte 0x07, 0x57, 0xfd, 0x34, 0xf3, 0x07, 0xf0, 0xe4
 	.byte 0xd8, 0x80
 MidiSysEx_SendBank1P2ViaCOMM:
-	ldb	l, 104
+	ld	l, 104:opc
 	pop	xde
 	ld	xbc, 1:i3
 	jr	78
@@ -4287,7 +4287,7 @@ MidiSysEx_SendBankData2:
 MidiSysEx_SendBank2ViaCOMM:
 	ld	l, (xwa)
 	jr	2
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 	ld	xwa, (48144:16)
 MidiSysEx_SendBank2Param2:
@@ -6463,10 +6463,10 @@ SoundMode_ProcessToneAndParams:
 	.byte 0xc1, 0xe2
 TGReg_ClearTerminator:
 	.byte 0xbf, 0x21, 0xd8, 0x12, 0x1e, 0x01, 0x00, 0x0e
-	ldb C, 0x00
+	ld C, 0x00:opc
 	bit 0x02,A
 	jr z, .Lc_fd8421
-	ldb C, 0x01
+	ld C, 0x01:opc
 .Lc_fd8421:
 	extz BC
 	ld WA,BC
@@ -6720,7 +6720,7 @@ MidiBuf_CalcFillRange:
 	.byte 0xf2, 0x2a, 0x4e, 0xee, 0x31, 0xe3, 0x07, 0xe4
 	.byte 0xe0, 0x21, 0xe9, 0x88, 0x89, 0x11
 MidiBuf_FillLoop:
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	sla	bc, 2
 	lda	xde, (15617898:24)
@@ -6973,7 +6973,7 @@ SeqAlt_ApplyDescB_DirectWrite:
 	.byte 0xcf, 0xfe, 0xdb, 0x12, 0x8e, 0x08, 0x21, 0xd8
 	.byte 0x12, 0x28, 0xcd, 0x89, 0xdb, 0x8a, 0x1d
 SeqAlt_ApplyDescB_DirectNoShift:
-	ldb	b, 170
+	ld	b, 170:opc
 	swi	5
 	pop	xiz
 	ret

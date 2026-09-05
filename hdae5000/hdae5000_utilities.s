@@ -111,7 +111,7 @@ HDAE5000_MemCompare_Block:	; 0x29AFBE
 	cp a, (xix)			; compare with A byte
 	jr z, .Lmcmp_loop		; equal - continue
 .Lmcmp_result:
-	ldb l, 0x00			; default L = 0
+	ld l, 0x00:opc			; default L = 0
 	cp bc, 0:i3			; if count exhausted, return 0
 	jr z, .Lmcmp_done
 	ld a, (xix)			; A byte
@@ -969,7 +969,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	stcf	0x0f, qhl
 	ld	hl, de
 	sll	hl, 0x01
-	ldb	l, 0x00
+	ld	l, 0x00:opc
 	ex8 h, l		; ex H,L
 	cp	hl, 0:i3
 	jr z, .LMUL_b776                       ; [66 17] jr Z,0x29b776
@@ -1101,10 +1101,10 @@ HDAE5000_Multiply:	; 0x29B72D
 	ret
 
 .LMUL_b870:
-	ldb	e, 0x00
+	ld	e, 0x00:opc
 	bit	0x0f, qwa
 	jr z, .LMUL_b881                       ; [66 09] jr Z,0x29b881
-	ldb	e, 0x01
+	ld	e, 0x01:opc
 	cpl	qwa
 	cpl	wa
 	inc 1, xwa                              ; inc 1,XWA
@@ -1141,9 +1141,9 @@ HDAE5000_Multiply:	; 0x29B72D
 	inc 1, xhl                              ; inc 1,XHL
 	ret
 
-	ldb	d, 0x00
+	ld	d, 0x00:opc
 	jr t, .LMUL_b870                       ; [68 b5] jr T,0x29b870
-	ldb	d, 0x01
+	ld	d, 0x01:opc
 	jr t, .LMUL_b870                       ; [68 b1] jr T,0x29b870
 
 
@@ -1206,7 +1206,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ret
 
 .LDIV_b915:
-	ldb	d, 0x00
+	ld	d, 0x00:opc
 .LDIV_b917:
 	cp	xwa, xbc
 	jr c, .LDIV_b929                       ; [67 0e] jr C,0x29b929
@@ -1276,7 +1276,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ret
 
 	nop                                     ; nop
-	ldb	e, 0x00
+	ld	e, 0x00:opc
 	ldcf	0x0f, qbc
 	stcf8ri 7, e		; stcf 0x07,E
 	jr nc, .LDIV_b9be                      ; [6f 07] jr NC,0x29b9be
@@ -1316,7 +1316,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	inc1_8_rid8 xiy, 0x00		; inc 1,(XIY+0x00)
 	jr t, .LDIV_ba16                       ; [68 15] jr T,0x29ba16
 .LDIV_ba01:
-	ldb	a, 0x17
+	ld	a, 0x17:opc
 	sub a, l		; sub A,L
 	cp	a, 0x10
 	jr lt, .LDIV_ba14                      ; [61 0a] jr LT,0x29ba14

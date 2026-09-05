@@ -828,12 +828,12 @@ DispatchResolve_MarkCurrent:
 	decw 1, (0xf231:16)
 	pop xde
 	ld (4349:16), xde
-	ldb w, 0x0
+	ld w, 0x0:opc
 	pop xde
 	ret
 
 DispatchResolve_ReturnFail:
-	ldb w, 0xff
+	ld w, 0xff:opc
 	pop xde
 	ret
 
@@ -1072,7 +1072,7 @@ VoiceSlot_Overflow:
 	ret
 
 VoiceSlot_SendErrorAndReset:
-	ldb w, 0x68
+	ld w, 0x68:opc
 
 	.byte 0x1d, 0xd2, 0xb5, 0xfe	; call MIDI_SendSysExCmd (v7 addr)
 

@@ -284,7 +284,7 @@ BmDrEdit_CalcNotePosition:
 	jr BmDrEdit_CalcNotePos_ReadFields
 
 BmDrEdit_CalcNotePos_VerticalMode:
-	ldb a, 0xb
+	ld a, 0xb:opc
 	sub a, (0x2806:16)
 	ld (0x2806:16), a
 
@@ -460,7 +460,7 @@ BmDrEdit_CalcSecondaryPosition:
 	jr BmDrEdit_CalcSecondaryPos_ClampSize
 
 BmDrEdit_CalcSecondaryPos_Vert:
-	ldb a, 0xb
+	ld a, 0xb:opc
 	sub a, (0x0210b0:24)
 	ld (0x0210b0:24), a
 
@@ -1083,7 +1083,7 @@ BmDrEdit_CountNotesLoop_Retry:
 	jr BmDrEdit_CountNotesLoop
 
 BmDrEdit_CheckChannelActive:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	lda xbc, (0xf1a0:16)
 
 BmDrEdit_CheckChannelActive_Loop:
@@ -1161,7 +1161,7 @@ BmDrEdit_SelectChannel_NextCh:
 BmDrEdit_SelectChannel_NotFound:
 	res 0, (3412:16)
 	res 2, (0x287b:16)
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 BmDrEdit_SelectChannel_Done:
 	popw_erp 0xfa
@@ -1198,11 +1198,11 @@ BmDrEdit_CompareVelocity:
 	ld (9830:16), wa
 	cp l, (0x2786:16)
 	jr z, BmDrEdit_CompareVelocity_Equal
-	ldb l, 0xff
+	ld l, 0xff:opc
 	jr BmDrEdit_CompareVelocity_Return
 
 BmDrEdit_CompareVelocity_Equal:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 BmDrEdit_CompareVelocity_Return:
 	pop xiz
@@ -3277,7 +3277,7 @@ BmDrEdit_ValidateAndProcessVoice:
 	call Part_ValidateVoiceChannel
 	cp (0x287a:16), 0
 	jr z, BmDrEdit_ValidateVoice_ProcessState
-	ldb l, 0xff
+	ld l, 0xff:opc
 	jr BmDrEdit_ValidateVoice_Epilog
 
 BmDrEdit_ValidateVoice_ProcessState:
@@ -3561,7 +3561,7 @@ BmDrEdit_BuildVoiceList:
 	inc 1, bc
 	ld h, c
 	ld ix, 0:i3
-	ldb l, 0x0
+	ld l, 0x0:opc
 	lda xde, (0x27a4:16)
 	ld wa, 0:i3
 	jr BmDrEdit_BuildVoice_SearchLoop
@@ -3593,7 +3593,7 @@ BmDrEdit_FindNextPageEntry:
 	ld hl, (0x2744:16)
 	sub hl, (0x27b2:16)
 	inc 1, l
-	ldb e, 0x0
+	ld e, 0x0:opc
 	lda xbc, (0x27a4:16)
 
 BmDrEdit_FindNextPage_ScanLoop:
@@ -3604,20 +3604,20 @@ BmDrEdit_FindNextPage_ScanLoop:
 	inc 1, e
 	cp (xwa), l
 	jr nz, BmDrEdit_FindNextPage_CheckBound
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ld a, e
 	extz wa
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x0
 	jr z, BmDrEdit_FindNextNonZeroEntry
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 BmDrEdit_FindNextPage_CheckBound:
 	cp e, (0x27a2:16)
 	jr c, BmDrEdit_FindNextPage_ScanLoop
-	ldb l, 0xff
+	ld l, 0xff:opc
 	ret
 
 BmDrEdit_FindNextPage_SkipZero:
@@ -3625,7 +3625,7 @@ BmDrEdit_FindNextPage_SkipZero:
 	inc 1, l
 	cp e, (0x27a2:16)
 	jr c, BmDrEdit_FindNextNonZeroEntry
-	ldb l, 0xff
+	ld l, 0xff:opc
 	jr BmDrEdit_FindNextPage_Return
 
 BmDrEdit_FindNextNonZeroEntry:
@@ -3902,7 +3902,7 @@ NoteEdit_UpdateScrollAndDisplay:
 	sub a, c
 	bit 0, (0x2742:16)
 	jr z, BmDrEdit_UpdateDisplay_MelodicOffset
-	ldb c, 0xb
+	ld c, 0xb:opc
 	sub c, a
 	ld (0x27cc:16), c
 	ret

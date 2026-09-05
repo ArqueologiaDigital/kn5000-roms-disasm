@@ -1747,7 +1747,7 @@ DisplayScript_Node_Scroll60_10:
 	rcf
 	jrl -4554
 	nop
-	ldb h, 0
+	ld h, 0:opc
 	.long DisplayScript_Node_Scroll60_10
 	.byte 0xff, 0x0f, 0x78, 0x36
 	.byte 0xee, 0x00, 0x00, 0x00, 0x46, 0x38, 0xee, 0x00
@@ -3655,7 +3655,7 @@ WidgetParam_Config_001:
 	jr	ule, 0
 	nop
 	jrl	gt, 2816
-	ldb	a, 0
+	ld	a, 0:opc
 	nop
 	nop
 	nop
@@ -3673,7 +3673,7 @@ WidgetParam_Config_002:
 	jr	ule, 0
 	nop
 	jrl	gt, 2816
-	ldb	a, 0
+	ld	a, 0:opc
 	nop
 	nop
 	nop
@@ -4236,7 +4236,7 @@ WidgetParam_Config_043:
 	jr	ule, 0
 	nop
 	jrl	gt, 2816
-	ldb	a, 0
+	ld	a, 0:opc
 	nop
 	nop
 	nop
@@ -6642,7 +6642,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	.byte 0x80, 0x7a, 0xca, 0x00, 0x00, 0x70, 0xe9, 0x00
 	nop
 	.long CharMap_ValueData_B
-	ldb	w, 0xff
+	ld	w, 0xff:opc
 	.byte 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0xff
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 	.byte 0x00, 0x20, 0x00, 0x04, 0x00, 0x00, 0x00, 0x10
@@ -8199,9 +8199,9 @@ CharMap_Mode4Reverse:
 	swi 7
 	swi 7
 	swi 7
-	ldb d, 47
-	ldb h, 55
-	ldb w, 57
+	ld d, 47:opc
+	ld h, 55:opc
+	ld w, 57:opc
 	push_f
 	ldw iy, 7731
 	pop_f
@@ -8222,9 +8222,9 @@ CharMap_Mode5Reverse:
 	swi 7
 	swi 7
 	swi 7
-	ldb d, 47
-	ldb h, 31
-	ldb w, 95
+	ld d, 47:opc
+	ld h, 31:opc
+	ld w, 95:opc
 	push_f
 	ldf 26
 	ldw hl, 4907
@@ -8294,7 +8294,7 @@ CharMap_Mode9:
 	pushw iy
 	pushw iz
 	pushw hl
-	ldb l, 255
+	ld l, 255:opc
 	swi 7
 	swi 7
 	ldw hl, 10495
@@ -8438,7 +8438,7 @@ CharMap_Mode16:
 	.byte 0x51, 0x52, 0x0f, 0x2f, 0x10, 0x11, 0x12, 0x2b
 	.ascii "*0,<5PL'(JKI$"
 	zcf
-	ldb	h, 20
+	ld	h, 20:opc
 	pop_a
 	ex_ff
 	ldf	46
@@ -8478,7 +8478,7 @@ CharMap_Mode17:
 	push_f
 	pop_f
 	ldw hl, 6736
-	ldb l, 40
+	ld l, 40:opc
 	jp 2366748
 	calr 7974
 	.ascii " +!-\"/#%012,456789:T=U>VWABCDEXYZ[F\\LK]^_`abcMNOdefghij)Gkl;<@?mnIoJHpqRrstuvwQSxyz{|}~"

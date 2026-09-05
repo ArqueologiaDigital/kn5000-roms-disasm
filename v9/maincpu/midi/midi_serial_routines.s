@@ -390,7 +390,7 @@ ClkTick_Src3ClickCheck:
 	ld (1054:16), 1
 	cpw (0x28aa:16), 0
 	jr z, ClkTick_Src3LowerSyncCheck
-	ldb a, 0x85
+	ld a, 0x85:opc
 	calr MIDI_QUEUE_EVENT_PAIR
 
 ClkTick_Src3LowerSyncCheck:
@@ -402,7 +402,7 @@ ClkTick_Src3LowerSyncCheck:
 	ld (1054:16), 8
 	cpw (0x28aa:16), 0
 	jr z, ClkTick_Src3OverflowQueue
-	ldb a, 0x86
+	ld a, 0x86:opc
 	calr MIDI_QUEUE_EVENT_PAIR
 
 ClkTick_Src3OverflowQueue:
@@ -430,7 +430,7 @@ Transport_StopSrc1QueueEvent:
 	ld (1054:16), 16
 	cpw (0x28aa:16), 0
 	jr z, Transport_StopSrc3Snapshot
-	ldb a, 0x86
+	ld a, 0x86:opc
 	calr MIDI_QUEUE_EVENT_PAIR
 
 Transport_StopSrc3Snapshot:
@@ -493,7 +493,7 @@ MIDI_RESET_PLAYBACK_STATE:
 	res 0, (0x28a6:16)
 	cpw (0x28aa:16), 0
 	jr z, ResetPlay_Src3Check
-	ldb a, 0x85
+	ld a, 0x85:opc
 	calr MIDI_QUEUE_EVENT_PAIR
 
 ResetPlay_Src3Check:
@@ -581,7 +581,7 @@ AltClk_StopSrc1Queue:
 	ld (1054:16), 12
 	cpw (0x28aa:16), 0
 	jr z, AltClk_StopSrc3Snapshot
-	ldb a, 0x86
+	ld a, 0x86:opc
 	calr MIDI_QUEUE_EVENT_PAIR
 
 AltClk_StopSrc3Snapshot:
@@ -739,7 +739,7 @@ ChanDisp_QueueOverflow:
 ChanDisp_SysExInProgress:
 	bit 1, (1063:16)
 	jr z, ChanDisp_ThreeByteRoute
-	ldb d, 0xf2
+	ld d, 0xf2:opc
 
 ChanDisp_ThreeByteRoute:
 	ld xix, 0x1f37b

@@ -3153,7 +3153,7 @@ DrawBitmapSP2_Impl_RowLoop:
 	srl iy, 8
 	ldib_erp 0xf5, 0
 	ld wa, (xwa)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	sll wa, 8
 	add iy, wa
 	ld iz, 0:i3

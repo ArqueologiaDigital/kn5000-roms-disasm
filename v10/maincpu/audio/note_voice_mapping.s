@@ -59,7 +59,7 @@ NoteOn_ChannelScanLoop_NoteOn:
 	ld xbc, (xsp + 2)
 	call Voice_ApplyTransposeWithEncode
 	ld iz, 0:i3
-	ldb c, 0x7f
+	ld c, 0x7f:opc
 	jr NoteOn_AutoPlayCheckCount
 
 NoteOn_AutoPlayVoiceLoop:
@@ -493,7 +493,7 @@ AccNoteOn_AssignVoices:
 	ld xwa, 0xcc1e
 	call NoteMap_AssignAllVoiceLinks
 	ld iz, 0:i3
-	ldb e, 0x7f
+	ld e, 0x7f:opc
 	jr AccNoteOn_AutoPlayCheck
 
 AccNoteOn_AutoPlayLoop:
@@ -529,7 +529,7 @@ AccNoteOn_AutoPlayCheck:
 	cp (0x8d38:16), 236
 	jr nz, AccNoteOn_EmitVoiceLoop_Init
 	ld iz, 0:i3
-	ldb e, 0x7f
+	ld e, 0x7f:opc
 	jr AccNoteOn_MinVelocity_Check
 
 AccNoteOn_FindMinVelocity_Loop:
@@ -576,7 +576,7 @@ AccNoteOn_MinVelocity_Check:
 
 AccNoteOn_EmitVoiceLoop_Init:
 	ld iz, 0:i3
-	ldb e, 0x7f
+	ld e, 0x7f:opc
 	jr AccNoteOn_EmitVoiceLoop_Check
 
 AccNoteOn_EmitVoiceLoop_Body:
@@ -3002,7 +3002,7 @@ MidiEvent_NoteSeqCount:
 NoteSeqCount_ProcMerge:
 	call NoteMap_ProcessAndMerge
 	ld (xiz + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 NoteSeqCount_Epilogue:
 	pop xiz
@@ -3288,7 +3288,7 @@ ClampAndStoreParam_DoInit:
 	call Voice_InitializeAll
 	ld xwa, (xsp + 10)
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 ClampAndStoreParam_Epilogue:
 	pop xiz
@@ -3601,7 +3601,7 @@ VoiceNotify_SendAllNotesOff:
 	call NoteMap_SendAllNotesOff
 	ld xwa, (xsp + 10)
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 VoiceNotify_Epilogue:
 	popw iz
@@ -3868,7 +3868,7 @@ RhythmParse_TruncateCount:
 	call Voice_InitTableGroup
 	ld xwa, (xsp + 6)
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 RhythmParse_StoreCountAndReturn:
 	popw iz
@@ -4112,7 +4112,7 @@ EncodeControlChange_DoInit:
 	call Voice_InitTablePair
 	ld xwa, (xsp + 6)
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 EncodeControlChange_RestoreReg:
 	popw iz
@@ -6644,7 +6644,7 @@ LinkVoiceSlots_LoadReg2:
 NoteMap_LookupAndMergeVoice:
 	lda xhl, (0xc5ca:16)
 	lda xix, (0xe7e8:16)
-	ldb c, 0x20
+	ld c, 0x20:opc
 	cp (xwa + 3), 0x2
 	jrl nc, LookupAndMergeVoice_Deref
 	ld c, (xwa + 3)
@@ -6715,13 +6715,13 @@ LookupAndMergeVoice_LoadReg2:
 
 LookupAndMergeVoice_Deref:
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 Voice_LookupTableEntries:
 	lda xhl, (0xc5ca:16)
 	lda xix, (0xe7e8:16)
-	ldb c, 0x20
+	ld c, 0x20:opc
 	cp (xwa + 3), 0x2
 	jrl nc, LookupTableEntries_Deref
 	ld c, (xwa + 3)
@@ -6786,7 +6786,7 @@ LookupTableEntries_LoadReg2:
 
 LookupTableEntries_Deref:
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 LookupTableEntries_Prologue:
@@ -6869,7 +6869,7 @@ NoteMap_ClaimVoiceSlot:
 
 ClaimVoiceSlot_Deref:
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jrl NoteMap_LookupReturn
 
 ClaimVoiceSlot_LoadReg:
@@ -7154,7 +7154,7 @@ NoteMap_LookupVoice:
 
 LookupVoice_RejectOutOfRange:
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jrl NoteMap_LookupVoice_Return
 
 LookupVoice_StartLookup:
@@ -7401,7 +7401,7 @@ NoteMap_CollectMatchingEntries:
 CollectMatchingEntri_LoadFromStack:
 	ld_sril XWA, (xsp + 0x00b0)
 	ld (xwa + 1), 0x0
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jrl EmitNoteData_Process_RestoreReg
 
 CollectMatchingEntri_LoadReg:
@@ -8934,9 +8934,9 @@ LoopAdvance_Next_LoadParam:
 
 NoteMap_FindBestVoiceSlot:
 	ld hl, 0:i3
-	ldb d, 0x21
-	ldb e, 0xff
-	ldb d, 0x21
+	ld d, 0x21:opc
+	ld e, 0xff:opc
+	ld d, 0x21:opc
 	jr NoteMap_FindEntry_AdvanceSlotD
 
 FindBestVoiceSlot_LoadReg:
@@ -8953,13 +8953,13 @@ FindBestVoiceSlot_LoadReg:
 	jr z, FindBestVoiceSlot_Compare
 	cp c, 3:i3
 	jr nz, FindBestVoiceSlot_ClearByte
-	ldb e, 0x3
+	ld e, 0x3:opc
 	jr NoteMap_FindEntry_AdvanceSlotD
 
 FindBestVoiceSlot_Compare:
 	cp e, 3:i3
 	jr z, NoteMap_FindEntry_AdvanceSlotD
-	ldb e, 0x2
+	ld e, 0x2:opc
 	jr NoteMap_FindEntry_AdvanceSlotD
 
 FindBestVoiceSlot_Compare2:
@@ -8967,7 +8967,7 @@ FindBestVoiceSlot_Compare2:
 	jr z, NoteMap_FindEntry_AdvanceSlotD
 	cp e, 2:i3
 	jr z, NoteMap_FindEntry_AdvanceSlotD
-	ldb e, 0x1
+	ld e, 0x1:opc
 	jr NoteMap_FindEntry_AdvanceSlotD
 
 FindBestVoiceSlot_Compare3:
@@ -8977,11 +8977,11 @@ FindBestVoiceSlot_Compare3:
 	jr z, NoteMap_FindEntry_AdvanceSlotD
 	cp e, 1:i3
 	jr z, NoteMap_FindEntry_AdvanceSlotD
-	ldb e, 0x0
+	ld e, 0x0:opc
 	jr NoteMap_FindEntry_AdvanceSlotD
 
 FindBestVoiceSlot_ClearByte:
-	ldb e, 0x0
+	ld e, 0x0:opc
 
 NoteMap_FindEntry_AdvanceSlotD:
 	ld c, d
@@ -8994,7 +8994,7 @@ NoteMap_FindEntry_AdvanceSlotD:
 	jr nz, FindBestVoiceSlot_LoadReg
 	cp e, 0xff
 	jr z, FindEntry_AdvanceSlo_Deref
-	ldb d, 0x21
+	ld d, 0x21:opc
 	jr FindEntry_AdvanceSlo_LoadReg2
 
 FindEntry_AdvanceSlo_LoadReg:
@@ -9181,8 +9181,8 @@ MarkEntriesAboveThre_LoadParam2:
 
 NoteMap_FindBestFreeVoice:
 	ld de, 0:i3
-	ldb h, 0x23
-	ldb l, 0xff
+	ld h, 0x23:opc
+	ld l, 0xff:opc
 	jr NoteMap_FindBestFreeVoice_AdvanceSlotH
 
 FindBestFreeVoice_LoadReg:
@@ -9199,13 +9199,13 @@ FindBestFreeVoice_LoadReg:
 	jr z, FindBestFreeVoice_Compare
 	cp c, 3:i3
 	jr nz, NoteMap_FindBestFreeVoice_AdvanceSlotH
-	ldb l, 0x2
+	ld l, 0x2:opc
 	jr NoteMap_FindBestFreeVoice_AdvanceSlotH
 
 FindBestFreeVoice_Compare:
 	cp l, 3:i3
 	jr z, NoteMap_FindBestFreeVoice_AdvanceSlotH
-	ldb l, 0x2
+	ld l, 0x2:opc
 	jr NoteMap_FindBestFreeVoice_AdvanceSlotH
 
 FindBestFreeVoice_Compare2:
@@ -9213,7 +9213,7 @@ FindBestFreeVoice_Compare2:
 	jr z, NoteMap_FindBestFreeVoice_AdvanceSlotH
 	cp l, 2:i3
 	jr z, NoteMap_FindBestFreeVoice_AdvanceSlotH
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr NoteMap_FindBestFreeVoice_AdvanceSlotH
 
 FindBestFreeVoice_Compare3:
@@ -9223,7 +9223,7 @@ FindBestFreeVoice_Compare3:
 	jr z, NoteMap_FindBestFreeVoice_AdvanceSlotH
 	cp l, 1:i3
 	jr z, NoteMap_FindBestFreeVoice_AdvanceSlotH
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 NoteMap_FindBestFreeVoice_AdvanceSlotH:
 	ld c, h
@@ -9236,7 +9236,7 @@ NoteMap_FindBestFreeVoice_AdvanceSlotH:
 	jr nz, FindBestFreeVoice_LoadReg
 	cp l, 0xff
 	jr z, FindBestFreeVoice_Ad_Deref
-	ldb h, 0x23
+	ld h, 0x23:opc
 	jr FindBestFreeVoice_Ad_LoadReg2
 
 FindBestFreeVoice_Ad_LoadReg:
@@ -9570,7 +9570,7 @@ ResetTimers_Return:
 	add wa, wa
 	add wa, 0xe4
 	lda_dri XBC, 0x07, 0xe4, 0xe0
-	ldb a, 0xf4
+	ld a, 0xf4:opc
 	add a, (xbc + 1)
 	ld (xsp + 4), a
 	jr ResetTimers_Return_LoadParam2
@@ -9624,17 +9624,17 @@ ResetTimers_Return_LoadParam2:
 	cp hl, 0:i3
 	jr nz, Synth_WriteChannelMod_Loop
 	ld (xsp + 10), 0x1
-	ldb a, 0x2
+	ld a, 0x2:opc
 	jr Synth_WriteChannelMod_Loop
 
 ResetTimers_Return_LoadParam3:
 	ld (xsp + 10), 0xff
-	ldb a, 0xff
+	ld a, 0xff:opc
 	jr Synth_WriteChannelMod_Loop
 
 ResetTimers_Return_LoadParam4:
 	ld (xsp + 10), 0x3
-	ldb a, 0x4
+	ld a, 0x4:opc
 
 Synth_WriteChannelMod_Loop:
 	ldw (xsp + 2), 0x0
@@ -9857,7 +9857,7 @@ Voice_ApplyTransposeWithEncode:
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
 	ld (xsp + 12), hl
-	ldb a, 0x2
+	ld a, 0x2:opc
 	ld xwa, 0x2205
 	call SndParam_LookupReadOnly
 	cp hl, 3:i3
@@ -10036,7 +10036,7 @@ SndParam_ComputeVoiceTuning:
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
 	ld (xsp + 10), hl
-	ldb a, 0x2
+	ld a, 0x2:opc
 	ld xwa, 0x2205
 	call SndParam_LookupReadOnly
 	cp hl, 3:i3
@@ -10046,17 +10046,17 @@ SndParam_ComputeVoiceTuning:
 	cp hl, 0:i3
 	jr nz, Synth_WriteChannelGain_Loop
 	ld (xsp + 6), 0x1
-	ldb a, 0x2
+	ld a, 0x2:opc
 	jr Synth_WriteChannelGain_Loop
 
 ComputeVoiceTuning_LoadParam:
 	ld (xsp + 6), 0xff
-	ldb a, 0xff
+	ld a, 0xff:opc
 	jr Synth_WriteChannelGain_Loop
 
 ComputeVoiceTuning_LoadParam2:
 	ld (xsp + 6), 0x3
-	ldb a, 0x4
+	ld a, 0x4:opc
 
 Synth_WriteChannelGain_Loop:
 	ldw (xsp + 2), 0x0
@@ -10221,7 +10221,7 @@ NoteMap_ComputePitchOffset:
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
 	ld (xsp + 10), hl
-	ldb a, 0x2
+	ld a, 0x2:opc
 	ld xwa, 0x2205
 	call SndParam_LookupReadOnly
 	cp hl, 3:i3
@@ -10231,17 +10231,17 @@ NoteMap_ComputePitchOffset:
 	cp hl, 0:i3
 	jr nz, Synth_InitChannelState_Loop
 	ld (xsp + 6), 0x1
-	ldb a, 0x2
+	ld a, 0x2:opc
 	jr Synth_InitChannelState_Loop
 
 PitchOffset_NegativeDir:
 	ld (xsp + 6), 0xff
-	ldb a, 0xff
+	ld a, 0xff:opc
 	jr Synth_InitChannelState_Loop
 
 PitchOffset_BothDirs:
 	ld (xsp + 6), 0x3
-	ldb a, 0x4
+	ld a, 0x4:opc
 
 Synth_InitChannelState_Loop:
 	ldw (xsp + 2), 0x0
@@ -10528,7 +10528,7 @@ SetTransposeAndAlloc_Compute2:
 SetTransposeAndAlloc_Compare:
 	cp h, 0x78
 	jr c, SetTransposeAndAlloc_LoadReg3
-	ldb h, 0xff
+	ld h, 0xff:opc
 
 SetTransposeAndAlloc_LoadReg3:
 	ld bc, ix
@@ -10602,7 +10602,7 @@ UpdateChannelTuning_LoadDRAM3:
 	jr Synth_SelectTone_Continue
 
 UpdateChannelTuning_SetByteFF:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 Synth_SelectTone_Continue:
 	ld a, (0xcd42:16)
@@ -10613,7 +10613,7 @@ Synth_SelectTone_Continue:
 	jr SelectTone_Continue_Return
 
 SelectTone_Continue_SetByteFF:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 SelectTone_Continue_Return:
 	ret
@@ -10658,18 +10658,18 @@ Note_CheckTransposeRange:
 	dec 4, xsp
 	ld (xsp), c
 	ld (xsp + 2), a
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
 	cp hl, 1:i3
 	jr nz, CheckTransposeRange_LoadParam
 	cp (xsp), 0x78
 	jr nz, CheckTransposeRange_ClearByte
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr UI_CheckControlCode_TestResult
 
 CheckTransposeRange_ClearByte:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr UI_CheckControlCode_TestResult
 
 CheckTransposeRange_LoadParam:
@@ -10677,11 +10677,11 @@ CheckTransposeRange_LoadParam:
 	and a, 0xf0
 	cp a, 0xf0
 	jr nz, CheckTransposeRange_ClearByte2
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr UI_CheckControlCode_TestResult
 
 CheckTransposeRange_ClearByte2:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 UI_CheckControlCode_TestResult:
 	inc 4, xsp
@@ -13951,7 +13951,7 @@ SndParam_DispatchReturn:
 	ret
 
 VoiceMap_AllocateSlot:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	cpw (0xce66:16), 0
 	jr nz, VoiceMap_AllocateSlo_Block
 	lda xwa, (0xce22:16)
@@ -13966,7 +13966,7 @@ VoiceMap_AllocateSlot:
 	jr NoteMap_FindBestMatch_Return
 
 VoiceMap_AllocateSlo_SetByteFF:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	jr NoteMap_FindBestMatch_Return
 
 VoiceMap_AllocateSlo_Block:
@@ -13996,7 +13996,7 @@ VoiceMap_AllocateSlo_Block3:
 	ld (0xceb2:16), 1
 
 VoiceMap_AllocateSlo_SetByteFF2:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 NoteMap_FindBestMatch_Return:
 	ret
@@ -14012,7 +14012,7 @@ NoteMap_FindBestMatch_Return:
 ; active voice when direct reuse is not available.
 ; ============================================================================
 NoteMap_FindBestMatch:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	ld (0xe9bc:16), 0
 	cpw (0xce22:16), 0
 	jr z, CheckVoiceReuse_Block
@@ -14041,11 +14041,11 @@ NoteMap_CheckVoiceReuse:
 	jr NoteMap_GetVoiceData_Return
 
 CheckVoiceReuse_SetByteFF:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	jr NoteMap_GetVoiceData_Return
 
 CheckVoiceReuse_SetByteFF2:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	jr NoteMap_GetVoiceData_Return
 
 CheckVoiceReuse_Block:
@@ -14975,7 +14975,7 @@ SoundFX_Handler_11:
 	ret
 
 VoiceBank_MapNoteToOffset:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	cp a, 7:i3
 	jr z, MapNoteToOffset_Compare4
 	cp a, 4:i3
@@ -14991,7 +14991,7 @@ MapNoteToOffset_Compare:
 	jr ugt, MapNoteToOffset_Compare2
 
 MapNoteToOffset_ClearByte:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_Compare2:
@@ -15001,7 +15001,7 @@ MapNoteToOffset_Compare2:
 	jr ugt, MapNoteToOffset_Compare3
 
 MapNoteToOffset_SetByte:
-	ldb l, 0x4
+	ld l, 0x4:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_Compare3:
@@ -15011,7 +15011,7 @@ MapNoteToOffset_Compare3:
 	ret ugt
 
 MapNoteToOffset_SetByte2:
-	ldb l, 0x8
+	ld l, 0x8:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_Compare4:
@@ -15021,7 +15021,7 @@ MapNoteToOffset_Compare4:
 	jr ugt, MapNoteToOffset_Compare5
 
 MapNoteToOffset_ClearByte2:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_Compare5:
@@ -15031,7 +15031,7 @@ MapNoteToOffset_Compare5:
 	jr ugt, MapNoteToOffset_Compare6
 
 MapNoteToOffset_SetByte3:
-	ldb l, 0x3
+	ld l, 0x3:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_Compare6:
@@ -15041,7 +15041,7 @@ MapNoteToOffset_Compare6:
 	jr ugt, MapNoteToOffset_Compare7
 
 MapNoteToOffset_SetByte4:
-	ldb l, 0x6
+	ld l, 0x6:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_Compare7:
@@ -15051,11 +15051,11 @@ MapNoteToOffset_Compare7:
 	ret ugt
 
 MapNoteToOffset_SetByte5:
-	ldb l, 0x9
+	ld l, 0x9:opc
 	jr Audio_NullRet1
 
 MapNoteToOffset_ClearByte3:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 Audio_NullRet1:
 	ret
@@ -15150,7 +15150,7 @@ PlayMode_UpdateAndReturn:
 	jr PlayMode_StoreResult
 
 PlayMode_SetZeroResult:
-	ldb h, 0x0
+	ld h, 0x0:opc
 	jr PlayMode_StoreResult
 
 PlayMode_StoreResult:
@@ -15191,7 +15191,7 @@ PlayMode_CheckSlotAndReturn:
 	jr PlayMode_Epilogue
 
 PlayMode_SetZero_Alt:
-	ldb h, 0x0
+	ld h, 0x0:opc
 	jr PlayMode_Epilogue
 
 PlayMode_Epilogue:
@@ -15381,7 +15381,7 @@ NullRet2_Data:
 	nop
 	incf
 	push_f
-	ldb	d, 0
+	ld	d, 0:opc
 	.byte 0xdc
 	cp	xix, xwa
 
@@ -15565,7 +15565,7 @@ ComputeNoteBitPositi_Prologue:
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ldb_sri A, 0x07, 0xf8, 0xec
 	dec 1, a
-	ldb c, 0xb
+	ld c, 0xb:opc
 	sub c, a
 	ldb_erp A, 0x3c
 	ld a, c
@@ -15606,7 +15606,7 @@ ComputeNoteBitPositi_Data:
 	inc	1, iy
 	djnz16	bc, -52
 	or	de, 1
-	ldb	c, 11
+	ld	c, 11:opc
 	sub	c, a
 	ex8	a, c
 	.byte 0xda
@@ -15642,13 +15642,13 @@ ComputeNoteBitPositi_TestBit9:
 	ldb_sri A, 0x07, 0xf8, 0xec
 	cp a, 1:i3
 	jr nz, ComputeNoteBitPositi_Compare
-	ldb a, 0x28
+	ld a, 0x28:opc
 	jr Voice_PitchCalcStep
 
 ComputeNoteBitPositi_Compare:
 	cp a, 5:i3
 	jr nz, Voice_DecrementCounter
-	ldb a, 0x29
+	ld a, 0x29:opc
 	jr Voice_PitchCalcStep
 
 Voice_DecrementCounter:
@@ -15685,8 +15685,8 @@ Voice_PitchCalcStep:
 	jr PitchCalc_Return_Return
 
 PitchCalcStep_ClearByte:
-	ldb a, 0x0
-	ldb w, 0x0
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	jr PitchCalc_Return
 PitchCalc_Return:
 
@@ -15773,8 +15773,8 @@ Voice_UpdateNoteBitmap:
 	jr VoiceSlot_LoadResult_LoadReg
 
 UpdateNoteBitmap_ClearByte:
-	ldb a, 0x0
-	ldb w, 0x0
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	jr VoiceSlot_LoadResult
 VoiceSlot_LoadResult:
 
@@ -15804,20 +15804,20 @@ VoiceSlot_LoadResult_Data:
 	push	xix
 	swi	1
 	jr	6
-	ldb	a, 0
-	ldb	w, 0
+	ld	a, 0:opc
+	ld	w, 0:opc
 	jr	0
 	ret
 
 VoiceSlot_LoadResult_Block:
 	cp (0x00cee0:24), 0x00
 	jr z, VoiceSlot_LoadResult_SetByte
-	ldb a, 0x0
-	ldb w, 0x0
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	jr VoiceSlot_LoadResult_Block2
 
 VoiceSlot_LoadResult_SetByte:
-	ldb a, 0x1
+	ld a, 0x1:opc
 	ld l, (0x00cee6:24)
 	xor h, h
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
@@ -15829,7 +15829,7 @@ VoiceSlot_LoadResult_Block2:
 	ret
 
 VoiceSlot_LoadResult_Data2:
-	ldb	a, 1
+	ld	a, 1:opc
 	ld	l, (0xcee5:24)
 	xor	h, h
 	dec	1, hl
@@ -15838,7 +15838,7 @@ VoiceSlot_LoadResult_Data2:
 	reti
 	swi	0
 	.byte 0xec
-	ldb	l, 70
+	ld	l, 70:opc
 	.byte 0x56
 	cp	(xhl), xiz
 	nop
@@ -15846,7 +15846,7 @@ VoiceSlot_LoadResult_Data2:
 	reti
 	swi	0
 	.byte 0xec
-	ldb	w, 194
+	ld	w, 194:opc
 	or	iz, 0x3e00
 	rcf
 	.byte 0xc2
@@ -16197,7 +16197,7 @@ LookupNoteAndCompute_Block:
 	cpw (0xcf2f:24), 0
 	jr nz, NoteDisplay_SetBounds
 	ld c, (0x00cee5:24)
-	ldb b, 0x3
+	ld b, 0x3:opc
 
 LookupNoteAndCompute_Prologue:
 	pushw bc
@@ -16270,8 +16270,8 @@ NoteDisplay_FoundEntry:
 	jr NoteDisplay_StoreBoundsReturn
 
 NoteDisplay_NotFound:
-	ldb a, 0x0
-	ldb w, 0x0
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	jr NoteDisplay_StoreBoundsReturn
 
 NoteDisplay_StoreBoundsReturn:
@@ -16312,8 +16312,8 @@ NoteDisplay_AlternateLookup:
 	jr NoteDisplay_AltReturn
 
 Voice_ZeroInitConverge:
-	ldb a, 0x0
-	ldb w, 0x0
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	jr NoteDisplay_AltReturn
 
 NoteDisplay_AltReturn:
@@ -16519,7 +16519,7 @@ InitPartAllocState_TestBit242:
 	xor b, b
 	add iy, bc
 	dec 1, iy
-	ldb e, 0x36
+	ld e, 0x36:opc
 
 InitPartAllocState_Increment:
 	inc 1, e
@@ -16547,7 +16547,7 @@ VoiceSlot_SetPitchParams:
 VoiceSlot_SetPitchParams_LoadReg:
 	ld xiz, VoiceSlot_CheckAndApply_Data
 	ldb_sri W, 0x07, 0xf8, 0xec
-	ldb a, 0x40
+	ld a, 0x40:opc
 	ldw (0x00cf77:24), 0x0001
 	ld (0x00cf7b:24), wa
 	ret
@@ -16668,7 +16668,7 @@ VoiceSlot_IterateAlloc_Block4:
 	add w, 0xc
 
 VoiceSlot_IterateAlloc_SetByte:
-	ldb a, 0x40
+	ld a, 0x40:opc
 	stw_dpi WA, 0xf1
 	djnz xbc, VoiceSlot_IterateAlloc_Block4
 
@@ -16684,7 +16684,7 @@ VoiceSlot_IterateAlloc_LoadReg:
 
 VoiceSlot_IterateAlloc_LoadReg2:
 	ld w, (xiy)
-	ldb a, 0x40
+	ld a, 0x40:opc
 	ld (xix + 4), wa
 	inc 1, iy
 	inc 1, ix
@@ -16830,7 +16830,7 @@ VoiceSlot_CheckAndApply_Data2:
 	nop
 	ldio 0, 16
 	nop
-	ldb w, 0
+	ld w, 0:opc
 	ld xwa, 32768
 	normal
 	nop
@@ -16840,7 +16840,7 @@ VoiceSlot_CheckAndApply_Data2:
 	nop
 	ldio 0, 16
 	nop
-	ldb w, 0
+	ld w, 0:opc
 	ld xwa, 960004096
 	push xhl
 	push xde
@@ -17134,7 +17134,7 @@ UIState_ProcessKeyEvent:
 	push_a
 	jrl nc, -28736
 	normal
-	ldb a, 216
+	ld a, 216:opc
 	ccf
 	cp	wa, 0:i3
 	jrl	mi, 483
@@ -17169,7 +17169,7 @@ SndParam_ProcessEntry:
 	scc16	z, wa
 	add	(xsp+1), l
 	nop
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	calr	5775
 	cp	l, 0:i3
@@ -17218,7 +17218,7 @@ SndParam_ProcessEntry:
 	scc8	z, h
 	.byte 0x1f, 0x01, 0x8f
 	nop
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	calr	5663
 	cp	l, 0:i3
@@ -17355,7 +17355,7 @@ HdaeRom_Entry:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	dec	6, bc
 	popw	wa
 	.byte 0xbf
@@ -17411,7 +17411,7 @@ HdaeRom_ProcessBlock:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	push_f
 	jr	ugt, 35
@@ -17447,7 +17447,7 @@ HdaeRom_ReadParam:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	push_f
 	jr	ugt, 35
@@ -17482,7 +17482,7 @@ HdaeRom_WriteParam:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	push_f
 	jr	ugt, 35
@@ -17517,7 +17517,7 @@ HdaeRom_CheckResult:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	push_f
 	jr	ugt, 35
@@ -17552,7 +17552,7 @@ HdaeRom_FinishBlock:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	push_f
 	jr	ugt, 35
@@ -17593,7 +17593,7 @@ HdaeRom_TableEntry2:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	cp	wa, 0:i3
 	jrl	mi, 133
@@ -17608,7 +17608,7 @@ HdaeRom_TableEntry2:
 	and	a, 255
 	jr	z, 98
 	lda	xbc, (xsp+2)
-	ldb	a, 0
+	ld	a, 0:opc
 	.byte 0xbf
 	push	sr
 	dec	6, l
@@ -17667,7 +17667,7 @@ UIStateEvt_ProcessHandler:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	inc	6, hl
 	ld	xiz, 0x5a66dac9
 	cp	a, 1:i3
@@ -17727,7 +17727,7 @@ HdaeRom_AltProcessBlock:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcf
 	decf
 	jr	ugt, 63
@@ -17777,7 +17777,7 @@ HdaeRom_AltReadParam:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	inc	6, ix
 	ld	xiy, 0x4166dbc9
 	cp	a, 2:i3
@@ -17826,7 +17826,7 @@ HdaeRom_AltCheckResult:
 	push_a
 	jrl nc, -28736
 	normal
-	ldb a, 201
+	ld a, 201:opc
 	inc 6, ix
 	pushw wa
 	cp	a, 3:i3
@@ -17852,7 +17852,7 @@ HdaeRom_AltCheckResult:
 	and	a, 255
 	jr	z, 33
 	lda	xbc, (xsp+2)
-	ldb	a, 0
+	ld	a, 0:opc
 	.byte 0xbf
 	push	sr
 	dec	6, l
@@ -17882,7 +17882,7 @@ HdaeRom_AltCheckResult:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	exts	l
 	jr	ugt, 69
 	cp	a, 4:i3
@@ -17954,7 +17954,7 @@ HdaeRom_AltTableEntry1:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	inc	6, hl
 	pushw	ix
 	cp	a, 1:i3
@@ -18129,7 +18129,7 @@ HdaeRom_AltTableEntry9:
 	push_a
 	jrl	nc, -28736
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	inc	6, bc
 	calr	55497
 	jr	nz, 79
@@ -18646,7 +18646,7 @@ SendEpilogue_Data:
 	calr	2042
 	ld qiz, hl
 	ld de, qiz
-	ldb	d, 0
+	ld	d, 0:opc
 	ldw	wa, 80
 	ldw	bc, 134
 	calr	1809
@@ -19464,10 +19464,10 @@ SendSysExCmd_Data:
 COMM_WriteAndCheck:
 	dec 4, xsp
 	ld (xsp + 2), a
-	ldb a, 0x1
+	ld a, 0x1:opc
 	cp (xsp + 2), 0x0
 	jr nz, WriteAndCheck_LoadParam
-	ldb a, 0x2
+	ld a, 0x2:opc
 
 WriteAndCheck_LoadParam:
 	ld (xsp + 2), a
@@ -19620,7 +19620,7 @@ SendAllSoundOff_Flush:
 	ret
 
 MIDI_WriteChannelData_Block:
-	ldb	l, 0
+	ld	l, 0:opc
 	extz	wa
 	sub	wa, 16
 	cp	wa, 0:i3
@@ -19632,7 +19632,7 @@ MIDI_WriteChannelData_Block:
 	ld_rrw wa, xix, wa
 	lda xix, (16695109:24)
 	jp_rr 8, xix, wa
-	ldb	l, 1
+	ld	l, 1:opc
 	ret
 
 ; ============================================================================
@@ -20294,7 +20294,7 @@ PlayModeStateMachine_Prologue:
 	call DivMod32
 	ld a, l
 	ld (1051:16), a
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	ld (0xd0a0:16), xwa
 	ei 0
@@ -21891,7 +21891,7 @@ RecordReadOK_LoadReg2:
 RecordReadOK_LoadReg3:
 	ld a, l
 	add a, 0x1d
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	ld (0xe9eb:16), xwa
 	ld iz, 0:i3
@@ -21943,7 +21943,7 @@ RecordReadOK_Block9:
 RecordReadOK_LoadReg4:
 	ld a, l
 	add a, 0x1d
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	ld (0xe9eb:16), xwa
 	ld iz, 0:i3
@@ -22531,7 +22531,7 @@ Dispatch_Data:
 	jr	nz, 51
 	ld	l, (xbc)
 	res	7, l
-	ldb	h, 0
+	ld	h, 0:opc
 	extz	xhl
 	jr	42
 	ld	l, (xbc)
@@ -24107,7 +24107,7 @@ ApplyMaskClamp_LoadParam:
 	cp (xwa), 0x7
 	jr nz, ApplyMaskClamp_Compare
 	resm 7, (xiz)
-	ldb c, 0x70
+	ld c, 0x70:opc
 	jr SndParam_StoreResult_Return
 
 ApplyMaskClamp_Compare:
@@ -24117,7 +24117,7 @@ ApplyMaskClamp_Compare:
 	cp (xwa), 0x0
 	jr nz, ApplyMaskClamp_LoadParam2
 	resm 7, (xiz)
-	ldb c, 0x10
+	ld c, 0x10:opc
 	jr SndParam_StoreResult_Return
 
 ApplyMaskClamp_LoadParam2:
@@ -24125,7 +24125,7 @@ ApplyMaskClamp_LoadParam2:
 	cp (xwa), 0x5
 	jr nz, ApplyMaskClamp_LoadReg
 	resm 7, (xiz)
-	ldb c, 0x15
+	ld c, 0x15:opc
 	jr SndParam_StoreResult_Return
 
 ApplyMaskClamp_LoadParam3:
@@ -24144,7 +24144,7 @@ ApplyMaskClamp_LoadParam4:
 	cp (xwa), 0x6
 	jr nz, ApplyMaskClamp_LoadParam5
 	ld (xiz), 0x0
-	ldb c, 0x50
+	ld c, 0x50:opc
 	jr SndParam_StoreResult_Return
 
 ApplyMaskClamp_LoadParam5:
@@ -24152,12 +24152,12 @@ ApplyMaskClamp_LoadParam5:
 	cp (xwa), 0x5
 	jr nz, ApplyMaskClamp_LoadReg
 	andmi8 (xiz), 0x3
-	ldb c, 0x55
+	ld c, 0x55:opc
 	jr SndParam_StoreResult_Return
 
 ApplyMaskClamp_LoadReg:
 	ld (xiz), 0x0
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 SndParam_StoreResult_Return:
 	ld xwa, (xsp + 4)
@@ -24348,10 +24348,10 @@ ApplyProgramChangeAs_Prologue:
 	jr ApplyProgramChangeAs_LoadParam2
 
 ApplyProgramChangeAs_ClearByte:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bitm 7, (xsp + 2)
 	jr z, ApplyProgramChangeAs_LoadParam
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 ApplyProgramChangeAs_LoadParam:
 	ld (xsp + 2), a
@@ -24411,11 +24411,11 @@ ApplyProgramChangeAs_DoLookupRe:
 	call GetCurrentPartSelect
 	cp l, 0xf
 	jr z, ApplyProgramChangeAs_SetByte
-	ldb l, 0x80
+	ld l, 0x80:opc
 	jr ApplyProgramChangeAs_Return
 
 ApplyProgramChangeAs_SetByte:
-	ldb l, 0x89
+	ld l, 0x89:opc
 	jr ApplyProgramChangeAs_Return
 
 ApplyProgramChangeAs_LoadDRAM:
@@ -24498,10 +24498,10 @@ FetchOscTableEntry_Prologue:
 	jr FetchOscTableEntry_ClearByte2
 
 FetchOscTableEntry_ClearByte:
-	ldb w, 0x0
+	ld w, 0x0:opc
 
 FetchOscTableEntry_ClearByte2:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ld a, (xiz + 1)
 	cp a, e
 	jr nc, FetchOscTableEntry_Compute
@@ -24818,7 +24818,7 @@ SndParam_DispatchProcessParam:
 	ldb_erp L, 0xfb
 	ld wa, 5:i3
 	call TaskSched_SignalEvent
-	ldb a, 0x2
+	ld a, 0x2:opc
 	cpib_erp 0xfb, 0
 	jr nz, SndParam_StoreResult
 	ld a, (xsp + 2)
@@ -24884,7 +24884,7 @@ TypeDispatch_Entry1_Extend2:
 SndParam_LoadTableConverge:
 	lda xde, (0xec11:16)
 	ld_sril3 XDE, 0x07, 0xe8, 0xec
-	ldb b, 0x0
+	ld b, 0x0:opc
 	extz xbc
 	add xbc, xde
 	ld l, (xbc)
@@ -24998,17 +24998,17 @@ Param_SignExtendRetu_Block2:
 	jr Param_SignExtendRetu_Block
 	ld l, (xwa + 9)
 	res 7, l
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	sll xhl, 14
 	ld e, (xwa + 10)
 	res 7, e
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	sll xde, 7
 	ld c, (xwa + 11)
 	res 7, c
-	ldb b, 0x0
+	ld b, 0x0:opc
 	extz xbc
 	or xhl, xde
 	or xhl, xbc
@@ -25020,12 +25020,12 @@ Param_SignExtendRetu_Data:
 	sll	xhl, 14
 	ld	e, (xwa+7)
 	res	7, e
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	xde
 	sll	xde, 7
 	ld	c, (xwa+8)
 	res	7, c
-	ldb	b, 0
+	ld	b, 0:opc
 	extz	xbc
 	or xhl, xde
 	or xhl, xbc
@@ -25205,7 +25205,7 @@ Param_SignExtendRetu_Data:
 	muls	wa, 80
 	extz	xwa
 	.byte 0xf3, 0xe1
-	ldb	l, 1
+	ld	l, 1:opc
 	ldw	wa, 0x3ab8
 	ldw	wa, 0xf6e8
 	jr	c, 61
@@ -25495,9 +25495,9 @@ Param_SignExtendRetu_Data:
 	swi	0
 	ld	xsp, 0xe1f700b6
 	.byte 0x93, 0xe1
-	ldb	w, 159
+	ld	w, 159:opc
 	.byte 0x04
-	ldb	a, 217
+	ld	a, 217:opc
 	xor	(xbc), a
 	.byte 0xc8
 	retd	7424
@@ -26019,11 +26019,11 @@ CommPort_StatusCheck_Compare:
 	jr nz, CheckValidityReturn_SetByteFF
 
 Note_CheckValidityReturn:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr CheckValidityReturn_Return
 
 CheckValidityReturn_SetByteFF:
-	ldb l, 0xff
+	ld l, 0xff:opc
 
 CheckValidityReturn_Return:
 	ret
@@ -26113,10 +26113,10 @@ SendPartDataBlock_Block4:
 
 
 SendPartDataBlock_ClearByte:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	cp a, 0:i3
 	jr z, SendPartDataBlock_Block5
-	ldb c, 0x1
+	ld c, 0x1:opc
 
 SendPartDataBlock_Block5:
 	cp (0xe357:16), c
@@ -26129,10 +26129,10 @@ SendPartDataBlock_Block5:
 	ret
 
 SendPartDataBlock_ClearByte2:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	cp a, 0:i3
 	jr z, SendPartDataBlock_Block6
-	ldb c, 0x1
+	ld c, 0x1:opc
 
 SendPartDataBlock_Block6:
 	cp (0xe358:16), c
@@ -26147,10 +26147,10 @@ SendPartDataBlock_Block6:
 SendPartDataBlock_Block7:
 	cp (0xe35b:16), a
 	ret z
-	ldb c, 0x1
+	ld c, 0x1:opc
 	cp a, 0:i3
 	jr nz, SendPartDataBlock_StoreDRAM
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 SendPartDataBlock_StoreDRAM:
 	ld (0xe35b:16), c
@@ -26161,10 +26161,10 @@ SendPartDataBlock_StoreDRAM:
 	ret
 
 SendPartDataBlock_ClearByte3:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	cp a, 0:i3
 	jr z, SendPartDataBlock_Block8
-	ldb c, 0x1
+	ld c, 0x1:opc
 
 SendPartDataBlock_Block8:
 	cp (0xe359:16), c
@@ -26177,10 +26177,10 @@ SendPartDataBlock_Block8:
 	ret
 
 SendPartDataBlock_Block9:
-	ldb	c, 0
+	ld	c, 0:opc
 	cp	a, 0:i3
 	jr	z, 2
-	ldb	c, 1
+	ld	c, 1:opc
 	cp	(0xe35a:16), c
 	ret	z
 	ld	(0xe35a:16), c
@@ -26312,7 +26312,7 @@ SendPartDataBlock_Block10:
 	ret
 
 SendPartDataBlock_ClearByte4:
-	ldb w, 0x0
+	ld w, 0x0:opc
 	lda xde, (0x1e0000:24)
 	lda xhl, (CharMap_FullPermutation_0x454:24)
 
@@ -26609,7 +26609,7 @@ SendPartDataBlock_Data:
 	.byte 0xc3
 	reti
 	or	xix, xix
-	ldb	c, 199
+	ld	c, 199:opc
 	.byte 0xf0
 	or	(xhl-53), iz
 	.byte 0x04
@@ -26782,7 +26782,7 @@ SendPartDataBlock_Data:
 	inc	5, c
 	ld	xwa, (xsp+10)
 	ld	(xwa), c
-	ldb	c, 5
+	ld	c, 5:opc
 	jr	47
 	cp	c, 24
 	jr	nc, 32
@@ -26803,7 +26803,7 @@ SendPartDataBlock_Data:
 	add	c, 19
 	ld	xwa, (xsp+10)
 	ld	(xwa), c
-	ldb	c, 19
+	ld	c, 19:opc
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
 	add	a, c
@@ -26837,7 +26837,7 @@ SendPartDataBlock_Data:
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xec
-	ldb	a, 243
+	ld	a, 243:opc
 	reti
 	.byte 0xe4, 0xf0
 	ld	xbc, 0xda61048f
@@ -26864,9 +26864,9 @@ SendPartDataBlock_Data:
 	ld	xwa, (xsp+6)
 	.byte 0xb0
 	inc	6, l
-	ldb	d, 175
+	ld	d, 175:opc
 	ex_ff
-	ldb	c, 187
+	ld	c, 187:opc
 	.byte 0x1c
 	ldw	de, 8578
 	bit	6, a
@@ -26891,7 +26891,7 @@ SendPartDataBlock_Data:
 	ld	(xsp+4), 0
 	.byte 0xb2
 	inc	6, l
-	ldb	e, 143
+	ld	e, 143:opc
 	max
 	push	xsp
 	nop
@@ -27069,7 +27069,7 @@ SendPartDataBlock_Data4:
 	lda	xiy, (xbc+59)
 	.byte 0x8a, 0x21
 SendPartDataBlock_Data5:
-	ldb	a, 181
+	ld	a, 181:opc
 	ld	xbc, 0xb33339b9
 	nop
 	ld	xde, 0xcfc92184
@@ -27110,7 +27110,7 @@ SendPartDataBlock_LoadReg2:
 SendPartDataBlock_Compare2:
 	cp de, 0x10
 	jr nz, SendPartDataBlock_InitVal5
-	ldb l, 0x6
+	ld l, 0x6:opc
 	ret
 
 SendPartDataBlock_InitVal5:
@@ -27134,7 +27134,7 @@ SendPartDataBlock_LoadReg3:
 SendPartDataBlock_Compare3:
 	cp de, 0x10
 	jr nz, SendPartDataBlock_InitVal6
-	ldb l, 0x5
+	ld l, 0x5:opc
 	ret
 
 SendPartDataBlock_InitVal6:
@@ -27158,7 +27158,7 @@ SendPartDataBlock_LoadReg4:
 SendPartDataBlock_Compare4:
 	cp de, 0x10
 	jr nz, SendPartDataBlock_InitVal7
-	ldb l, 0x4
+	ld l, 0x4:opc
 	ret
 
 SendPartDataBlock_InitVal7:
@@ -27185,7 +27185,7 @@ SendPartDataBlock_LoadReg5:
 SendPartDataBlock_Compare5:
 	cp de, 6:i3
 	jr nz, SendPartDataBlock_InitVal8
-	ldb l, 0x1
+	ld l, 0x1:opc
 	ret
 
 SendPartDataBlock_InitVal8:
@@ -27212,7 +27212,7 @@ SendPartDataBlock_LoadReg6:
 SendPartDataBlock_Compare6:
 	cp de, 3:i3
 	jr nz, SendPartDataBlock_InitVal9
-	ldb l, 0x2
+	ld l, 0x2:opc
 	ret
 
 SendPartDataBlock_InitVal9:
@@ -27239,11 +27239,11 @@ SendPartDataBlock_LoadReg7:
 SendPartDataBlock_Compare7:
 	cp de, 3:i3
 	jr nz, SendPartDataBlock_ClearByte5
-	ldb l, 0x3
+	ld l, 0x3:opc
 	ret
 
 SendPartDataBlock_ClearByte5:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 SendPartDataBlock_SetWord7:
@@ -27636,7 +27636,7 @@ TmFlashWrite_ValidateParams:
 	.byte 0x8f, 0x04
 	.ascii "?@oHè"
 	.byte 0x04
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	stb_erp	c, 248
 	extz	bc
@@ -27660,10 +27660,10 @@ TmFlashWrite_ValidateParams:
 	nop
 	jrl	0x3132
 	.byte 0xb8
-	ldb	d, 104
-	ldb	e, 143
+	ld	d, 104:opc
+	ld	e, 143:opc
 	.byte 0x04
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	stb_erp	c, 248
 	extz	bc
@@ -27904,7 +27904,7 @@ VoiceParam_DispatchTable1:
 	.byte 0x06
 	sub	(xhl), xsp
 	push	sr
-	ldb	w, 176
+	ld	w, 176:opc
 	jr	ule, 48
 	.byte 0xd6, 0x01
 	jr	65
@@ -27917,9 +27917,9 @@ VoiceParam_DispatchTable1:
 	.byte 0x06
 	sub	(xhl), xsp
 	push	sr
-	ldb	w, 176
+	ld	w, 176:opc
 	jr	ule, 48
-	ldb	a, 1
+	ld	a, 1:opc
 	jr	32
 	ld	xwa, xbc
 	sll	xwa, 3
@@ -27932,7 +27932,7 @@ VoiceParam_DispatchTable1:
 	.byte 0x06
 	sub	(xhl), xsp
 	push	sr
-	ldb	w, 176
+	ld	w, 176:opc
 	jr	ule, 48
 	.byte 0x90
 	nop
@@ -28308,10 +28308,10 @@ Free_InitVal:
 	jp TaskSched_SignalEvent
 
 Free_ClearByte:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	bit_erpw 0xe2, 0x0f
 	jr z, Free_Block4
-	ldb e, 0x1
+	ld e, 0x1:opc
 	cplw_erp 0xe2
 	cpl wa
 	inc 1, xwa
@@ -28350,11 +28350,11 @@ Free_OrBits2:
 	ret
 
 Free_ClearByte2:
-	ldb d, 0x0
+	ld d, 0x0:opc
 	jr Free_ClearByte
 
 Math_DivideSigned32:
-	ldb d, 0x1
+	ld d, 0x1:opc
 	jr Free_ClearByte
 
 DivMod32:
@@ -28412,7 +28412,7 @@ Math_DivideU32_Block3:
 	ret
 
 Math_DivideU32_ClearByte:
-	ldb d, 0x0
+	ld d, 0x0:opc
 
 Math_DivideU32_Compare:
 	cp xwa, xbc
@@ -28498,7 +28498,7 @@ String_Compare_Compare:
 	jr z, String_Compare_CheckZero
 
 String_Compare_ClearByte:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	cp bc, 0:i3
 	jr z, String_Compare_Extend
 	ld a, (xix)

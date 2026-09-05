@@ -422,14 +422,14 @@ TrimAndPadSmfFilename:
 TrimPad_LoopBody:
 	cp e, 0x7e
 	jr nz, TrimPad_CheckCtrl
-	ldb e, 0x5f
+	ld e, 0x5f:opc
 	jr TrimPad_StoreChar
 
 TrimPad_CheckCtrl:
 	ld e, (xwa)
 	cp e, 0x20
 	jr nc, TrimPad_AdvancePointers
-	ldb e, 0x20
+	ld e, 0x20:opc
 
 TrimPad_StoreChar:
 	ld (xwa), e
@@ -518,7 +518,7 @@ ValidateSmfFilename:
 ValidateFN_CheckSpace:
 	cp e, 0x20
 	jr z, ValidateFN_AdvancePointer
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 ValidateFN_AdvancePointer:
@@ -533,7 +533,7 @@ ValidateFN_LoopHead:
 	jr c, ValidateFN_CheckSpace
 
 ValidateFN_ReturnValid:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	ret
 
 FmmSmfFileNameFunc:

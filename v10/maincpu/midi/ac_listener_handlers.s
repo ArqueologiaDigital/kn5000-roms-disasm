@@ -1646,7 +1646,7 @@ Data_InOutGridDispatch:
 	push	sr
 	ldio	0, 158
 	.byte 0x04
-	ldb	a, 217
+	ld	a, 217:opc
 	.byte 0xec
 	push	sr
 	ld_rrl xwa, xhl, bc
@@ -2134,7 +2134,7 @@ MdPresetOKFunc:
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x44
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld xwa, 0x1430002
 	ld xbc, 0x1e30003
@@ -2147,7 +2147,7 @@ MdPresetOK_Slot1Func:
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x4d
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld xwa, 0x1430002
 	ld xbc, 0x1e30003
@@ -2164,7 +2164,7 @@ MdPresetOK_CheckSlotB:
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x41
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld xwa, 0x1430002
 	ld xbc, 0x1e30003
@@ -2177,7 +2177,7 @@ MdPresetOK_SlotBFunc:
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x4a
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld xwa, 0x1430002
 	ld xbc, 0x1e30003
@@ -2190,7 +2190,7 @@ MdPresetOK_Slot3Path:
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x1b
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld xwa, 0x1430002
 	ld xbc, 0x1e30003
@@ -2207,7 +2207,7 @@ MdPresetOK_Slot4Path:
 	ld xbc, 0x1e00090
 	ld xde, 0:i3
 	call SendEvent
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld xwa, 0x1430002
 	ld xbc, 0x1e30004

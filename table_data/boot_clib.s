@@ -177,7 +177,7 @@ Boot_memcmp__test:
 	cp a, (xix)
 	jr z, Boot_memcmp__bytes_equal
 Boot_memcmp__diff:
-	ldb l, 0x00
+	ld l, 0x00:opc
 	cp bc, 0:i3		; len exhausted: difference is 0
 	jr z, Boot_memcmp__sign_extend
 	ld a, (xix)
@@ -203,10 +203,10 @@ Boot_memcmp__sign_extend:
 ;           because the two entry stubs below jump here.
 ; -----------------------------------------------------------------------------
 Boot_SDivMod32:
-	ldb e, 0x00		; E = sign flags: bit0 dividend, bit1 divisor
+	ld e, 0x00:opc		; E = sign flags: bit0 dividend, bit1 divisor
 	bit 15, qwa		; dividend negative?
 	jr z, Boot_SDivMod32__abs_divisor
-	ldb e, 0x01
+	ld e, 0x01:opc
 	cpl qwa			; negate XWA (two's complement, 32-bit)
 	cpl wa
 	inc 1, xwa
@@ -247,10 +247,10 @@ Boot_SDivMod32__fix_sign:
 ; Callers: none in this ROM (unreferenced compiler-runtime entries).
 ; -----------------------------------------------------------------------------
 Boot_SMod32:
-	ldb d, 0x00
+	ld d, 0x00:opc
 	jr t, Boot_SDivMod32
 Boot_SDiv32:
-	ldb d, 0x01
+	ld d, 0x01:opc
 	jr t, Boot_SDivMod32
 
 ; -----------------------------------------------------------------------------
@@ -330,7 +330,7 @@ Boot_UDivMod32__dividend_small:
 	ld xde, xwa
 	ret
 Boot_UDivMod32__long_division:
-	ldb d, 0x00		; D = number of quotient bits
+	ld d, 0x00:opc		; D = number of quotient bits
 Boot_UDivMod32__normalize:
 	cp xwa, xbc
 	jr c, Boot_UDivMod32__norm_done

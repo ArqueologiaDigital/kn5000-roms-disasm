@@ -62,7 +62,7 @@ FDC_ProbeDiskFormat:
 	ldio	0x47, 0x1e		; PHFC = 0x1e
 	bit_dd8	6, 0x34			; PD6: disk-change/no-disk strap
 	ret	nz			; no disk -> abort probe
-	ldb	a, 0
+	ld	a, 0:opc
 	; --- request 1: recalibrate (cmd 0) ---
 	ldw	(0x0d52:16), 0		; +0x00 cmd = 0 (recalibrate)
 	ldw	(0x0d54:16), 0		; +0x02 = 0
@@ -150,8 +150,8 @@ FDC_ProbeDiskFormat__recal_done:
 Boot_CheckDiskPresent:
 	bit_dd8	6, 0x34			; PD6
 	jr	z, Boot_CheckDiskPresent__present
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 Boot_CheckDiskPresent__present:
-	ldb	l, 1
+	ld	l, 1:opc
 	ret

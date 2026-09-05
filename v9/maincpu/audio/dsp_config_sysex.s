@@ -10,7 +10,7 @@
 SysEx_ClampVoiceIndex8:
 	cp a, 0x8
 	jr c, SysEx_ClampVoiceIndex8_DoLookup
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SysEx_ClampVoiceIndex8_DoLookup:
 	extz wa
@@ -65,7 +65,7 @@ SysEx_ApplyToSlot4B_Data:
 SysEx_ClampVoiceIndex128:
 	cp a, 0x80
 	jr c, SysEx_ClampVoiceIndex128_DoLookup
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SysEx_ClampVoiceIndex128_DoLookup:
 	extz wa
@@ -122,7 +122,7 @@ SysEx_ApplyToSlot49_Data:
 SysEx_ClampVoiceIndex8_49:
 	cp a, 0x8
 	jr c, SysEx_ClampVoiceIndex8_49_DoLookup
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SysEx_ClampVoiceIndex8_49_DoLookup:
 	extz wa
@@ -177,7 +177,7 @@ SysEx_ApplyToSlot49_Format_Data:
 SysEx_ClampVoiceIndex128_49:
 	cp a, 0x80
 	jr c, SysEx_ClampVoiceIndex128_49_DoLookup
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SysEx_ClampVoiceIndex128_49_DoLookup:
 	extz wa
@@ -236,7 +236,7 @@ SysEx_ChannelHandler_4B_Data:
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
-	ldb	c, 14
+	ld	c, 14:opc
 
 SysEx_DispatchByChannel_49:
 	ldw hl, 0xd8f0
@@ -289,7 +289,7 @@ SysEx_ChannelHandler_49_Data:
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
-	ldb	c, 14
+	ld	c, 14:opc
 
 SysEx_ValidateRolandHeader:
 	cp c, 0xa
@@ -1995,7 +1995,7 @@ CompIface_ScaleValue:
 	push xiz
 	ld iz, bc
 	extz xiz
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	ld xbc, 0x1d4c0
 	call Math_MultiplyAccumulate
@@ -2009,7 +2009,7 @@ CompIface_ScaleAndNormalize:
 	push xiz
 	ld iz, bc
 	extz xiz
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	ld xbc, 0x1ef0
 	call Math_MultiplyAccumulate
@@ -2349,7 +2349,7 @@ DSPCfg_WriteParam:
 	ld (xiz), a
 
 DSPCfg_WriteParam_SetMask:
-	ldb e, 0xff
+	ld e, 0xff:opc
 
 DSPCfg_WriteParam_Exit:
 	ld xwa, (xsp + 22)
@@ -2403,7 +2403,7 @@ DSPCfg_WriteParam_Type70_Sub10:
 	and a, 0x7
 	add a, c
 	ld (xiz), a
-	ldb e, 0xf8
+	ld e, 0xf8:opc
 	jr DSPCfg_WriteParam_Exit
 
 DSPCfg_WriteParam_Type70_Sub20:
@@ -2441,7 +2441,7 @@ DSPCfg_WriteParam_Type76:
 	ld (xbc), a
 
 DSPCfg_WriteParam_SetMask7:
-	ldb e, 0x7
+	ld e, 0x7:opc
 	jrl DSPCfg_WriteParam_Exit
 
 DSPCfg_WriteParam_Type76_Sub10:
@@ -2464,7 +2464,7 @@ DSPCfg_WriteParam_IncCounter:
 	incw 1, (xsp + 4)
 
 DSPCfg_WriteParam_SetMask3F:
-	ldb e, 0x3f
+	ld e, 0x3f:opc
 	jrl DSPCfg_WriteParam_Exit
 
 DSPCfg_PackAddress:
@@ -2475,7 +2475,7 @@ DSPCfg_PackAddress:
 	extz bc
 	sll bc, 8
 	ld hl, bc
-	ldb l, 0x0
+	ld l, 0x0:opc
 	add hl, de
 	ld bc, hl
 	srl bc, 8
@@ -3411,7 +3411,7 @@ DSPCfg_WriteParamFull:
 	ld a, (xbc)
 	extz wa
 	ld bc, (xsp + 18)
-	ldb b, 0x0
+	ld b, 0x0:opc
 	ld e, c
 	extz de
 	pushw 0xff
@@ -3459,7 +3459,7 @@ DSPCfg_WriteParamFull_Type1_Notify:
 	inc 1, c
 	extz bc
 	ld de, (xsp + 18)
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz de
 	ld l, (xsp + 10)
 	extz hl
@@ -3693,7 +3693,7 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	inc 1, c
 	extz bc
 	stw_erp DE, 0xfa
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz de
 	ld l, (xsp + 12)
 	extz hl
@@ -3763,7 +3763,7 @@ DSPCfg_WriteAllSlots_Clamped_Loop:
 	inc 1, c
 	extz bc
 	ld de, (xsp + 14)
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz de
 	ld l, (xsp + 10)
 	extz hl
@@ -3839,10 +3839,10 @@ DSPCfg_Data_ParamDispatch:
 	jr	z, 59
 	.byte 0x8f, 0x06
 	.ascii "?df5Å"
-	ldb	l, 219
+	ld	l, 219:opc
 	zcf
 	ld qiz, 1
-	ldb e, 255
+	ld e, 255:opc
 	ld	xwa, (xsp+14)
 	ld	bc, qiz
 	ld	(xwa), bc
@@ -3873,7 +3873,7 @@ DSPCfg_Data_ParamDispatch:
 	srl	wa, 6
 	and	wa, 31
 	ld	hl, wa
-	ldb	e, 7
+	ld	e, 7:opc
 	cpw	(xsp+8), 1
 	jr	nz, -90
 	ld qiz, 1
@@ -3883,7 +3883,7 @@ DSPCfg_Data_ParamDispatch:
 	srl	wa, 11
 	and	wa, 31
 	ld	hl, wa
-	ldb	e, 248
+	ld	e, 248:opc
 	jr	-113
 	ld	hl, iz
 	and	hl, 63
@@ -3901,7 +3901,7 @@ DSPCfg_Data_ParamDispatch:
 	srl	wa, 6
 	and	wa, 31
 	ld	hl, wa
-	ldb	e, 7
+	ld	e, 7:opc
 	jrl	-161
 	cpw	(xsp+10), 2
 	jr	nz, -55
@@ -4288,10 +4288,10 @@ DSPCfg_ApplyParamStruct_WriteReadLoop:
 	cpw (xsp + 20), 0x2
 	jr nz, DSPCfg_ApplyParamStruct_WriteSkip2Byte
 	ld wa, hl
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld (xiz), a
 	sra hl, 8
-	ldb h, 0x0
+	ld h, 0x0:opc
 	ld (xiz + 1), l
 
 DSPCfg_ApplyParamStruct_WriteSkip2Byte:
@@ -4550,7 +4550,7 @@ AssSwb_SwapEntriesAndDispatch:
 	mul e, 0xc
 	extz de
 	div e, 0x5
-	ldb c, 0x63
+	ld c, 0x63:opc
 	cp e, 0x63
 	jr ugt, DSPCfg_EventType36_ClampResult
 	ld c, e
@@ -5819,7 +5819,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
-	ldb	w, 209
+	ld	w, 209:opc
 	.byte 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -5910,7 +5910,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	h, 209
+	ld	h, 209:opc
 	.byte 0x96, 0xc5
 	push	xix
 	.byte 0xe8
@@ -6021,7 +6021,7 @@ UIStateEvt_VolumeMixer_Data:
 	jr	z, 8
 	.byte 0xd1, 0x96, 0xc5
 	push	xiz
-	ldb	w, 0
+	ld	w, 0:opc
 	jr	19
 	.byte 0xd1, 0x96, 0xc5
 	push	xix
@@ -6100,10 +6100,10 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 184
+	ld	w, 184:opc
 	ex_ff
 	inc	6, w
-	ldb	w, 218
+	ld	w, 218:opc
 	add	w, (xwa-40)
 	add	wa, 228
 	lda	xbc, (0xc1ff:16)
@@ -6342,7 +6342,7 @@ UIStateEvt_ChannelConfig_Data:
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	retd	0xecc9
 	.byte 0x04, 0x83
@@ -6383,7 +6383,7 @@ UIStateEvt_ChannelConfig_Data:
 	jrl	nz, -14144
 	jr	z, 12
 	.byte 0xf1
-	ldb	b, 195
+	ld	b, 195:opc
 	.byte 0xb4, 0xd1, 0x9c, 0xc5
 	push	xiz
 	ldio	0, 104

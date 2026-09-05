@@ -150,7 +150,7 @@ Scoop_SoundEditorData:
 	ld	(xbc), 0
 	ld	(xde), 127
 	ld	(xhl), 0
-	ldb	a, 23
+	ld	a, 23:opc
 	jr	34
 	ld	(xwa), 255
 	ld	(xbc), 0
@@ -233,7 +233,7 @@ Scoop_SoundEditorData:
 	ld	(xbc), 0
 	ld	(xde), 50
 	ld	(xhl), 206
-	ldb	a, 24
+	ld	a, 24:opc
 	jr	34
 	ld	(xwa), 7
 	ld	(xbc), 5
@@ -675,7 +675,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 39
+	ld	a, 39:opc
 	jr	22
 	ld	a, (xsp+16)
 	dec	1, a
@@ -739,7 +739,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 40
+	ld	a, 40:opc
 	jr	23
 	ld	a, (xsp+16)
 	dec	1, a
@@ -803,7 +803,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 41
+	ld	a, 41:opc
 	jr	23
 	ld	a, (xsp+16)
 	dec	1, a
@@ -867,7 +867,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 42
+	ld	a, 42:opc
 	jr	23
 	ld	a, (xsp+16)
 	dec	1, a
@@ -938,7 +938,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 43
+	ld	a, 43:opc
 	jr	23
 	ld	a, (xsp+18)
 	dec	1, a
@@ -1009,7 +1009,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 44
+	ld	a, 44:opc
 	jr	23
 	ld	a, (xsp+18)
 	dec	1, a
@@ -1943,7 +1943,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	c, 77
+	ld	c, 77:opc
 	jr	25
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2001,7 +2001,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	c, 78
+	ld	c, 78:opc
 	jr	25
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2056,7 +2056,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	c, 55
+	ld	c, 55:opc
 	jr	25
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2111,7 +2111,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	c, 54
+	ld	c, 54:opc
 	jr	25
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2164,7 +2164,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 80
+	ld	a, 80:opc
 	jr	23
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2213,7 +2213,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 79
+	ld	a, 79:opc
 	jr	23
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2263,7 +2263,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 80
+	ld	a, 80:opc
 	jr	23
 	ld	a, (xsp+14)
 	dec	1, a
@@ -2872,7 +2872,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 4
-	ldb	a, 77
+	ld	a, 77:opc
 	jr	23
 	ld	a, (xsp+16)
 	dec	1, a

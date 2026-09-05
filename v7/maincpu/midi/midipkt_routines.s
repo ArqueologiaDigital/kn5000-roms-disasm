@@ -417,7 +417,7 @@ MidiPkt_EnqueueExtended2_Data:
 	.byte 0x5e, 0x5e, 0xef, 0x62, 0x0e
 	cp A,0x08
 	jr c, .Lc_fda37a
-	ldb A, 0x00
+	ld A, 0x00:opc
 .Lc_fda37a:
 	extz WA
 	lda xbc, (MidiPkt_EventType_Table_0x358:24)
@@ -520,7 +520,7 @@ MidiPkt_SysExValidator_Data:
 	ret
 	cp A,0x80
 	jr c, .Lc_fda50c
-	ldb A, 0x00
+	ld A, 0x00:opc
 .Lc_fda50c:
 	extz WA
 	lda xbc, (MidiPkt_EventType_Table_0x3E8:24)

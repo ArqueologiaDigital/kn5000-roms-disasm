@@ -68,7 +68,7 @@ FDemoText_ByteData_VoiceProbeC:
 	reti
 	.byte 0xf0	; v10 does not spell this byte either
 	.byte 0xe0	; v10 does not spell this byte either
-	ldb	w, 242
+	ld	w, 242:opc
 	.byte 0x97, 0x43, 0xf8	; differs from v10 here and llvm-objdump cannot read it
 	ldw	ix, 2035
 	.byte 0xf0	; v10 does not spell this byte either
@@ -889,14 +889,14 @@ FDemoText_CheckVoiceState:
 	jr z, FDemoText_CheckVoice_Active
 
 FDemoText_CheckVoice_Inactive:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 FDemoText_CheckVoice_Return:
 	inc 2, xsp
 	ret
 
 FDemoText_CheckVoice_TypeF:
-	ldb l, 0x2
+	ld l, 0x2:opc
 	jr FDemoText_CheckVoice_Return
 
 FDemoText_CheckVoice_MaskedActive:
@@ -908,7 +908,7 @@ FDemoText_CheckVoice_MaskedActive:
 	jr z, FDemoText_CheckVoice_Inactive
 
 FDemoText_CheckVoice_Active:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr FDemoText_CheckVoice_Return
 
 FDemoText_ScanMIDIChannels:

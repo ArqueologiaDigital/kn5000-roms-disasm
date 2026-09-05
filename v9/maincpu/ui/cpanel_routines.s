@@ -83,18 +83,18 @@ CPanel_InitHardware:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 
-	ldb a, 0x3	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
+	ld a, 0x3:opc	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
 	and a, 0xaf	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
 	ld (0x8d8f:16), a
 	st_dd8b A, 0x3f
-	ldb a, 0x15
+	ld a, 0x15:opc
 	and a, 0x8f
 	ld (0x8d8e:16), a
 	st_dd8b A, 0x3e
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
-	ldb a, 0x0
+	ld a, 0x0:opc
 	st_dd8b A, 0x3b
-	ldb a, 0x46
+	ld a, 0x46:opc
 	st_dd8b A, 0x3a
 	ldio 0xd6, 0x00	; serial clk: TO2 trigger
 	                  ; serial transfer mode: I/O  transfer mode
@@ -128,8 +128,8 @@ CPanel_InitHardware:
 
 	calr DELAY_6_TICKS
 
-	ldb a, 0x1f
-	ldb w, 0xda
+	ld a, 0x1f:opc
+	ld w, 0xda:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
@@ -143,25 +143,16 @@ CPanel_InitHardware:
 ; CPanel_SendInitSequence - Send initialization command sequence to control panel MCUs
 ; Commands sent: 0x1f 0x1a, 0x1d 0x00, 0xdd 0x03, 0x1e 0x80
 CPanel_SendInitSequence:
-	ldb a, 0x1f
-	ldb w, 0x1a
+	ld a, 0x1f:opc
+	ld w, 0x1a:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
 	ldw (0x8dfd:16), 0
 	calr DELAY_3000_LOOPS
 
-	ldb a, 0x1d
-	ldb w, 0x0
-	calr CPanel_SendCommand
-	calr DELAY_3000_LOOPS
-
-	ldw (0x8dfd:16), 0
-	calr DELAY_3000_LOOPS
-	calr DELAY_3000_LOOPS
-
-	ldb a, 0xdd
-	ldb w, 0x3
+	ld a, 0x1d:opc
+	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
@@ -169,8 +160,17 @@ CPanel_SendInitSequence:
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 
-	ldb a, 0x1e
-	ldb w, 0x80
+	ld a, 0xdd:opc
+	ld w, 0x3:opc
+	calr CPanel_SendCommand
+	calr DELAY_3000_LOOPS
+
+	ldw (0x8dfd:16), 0
+	calr DELAY_3000_LOOPS
+	calr DELAY_3000_LOOPS
+
+	ld a, 0x1e:opc
+	ld w, 0x80:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
@@ -427,8 +427,8 @@ CPanel_PanelDetection:
 	ldw (0x8d9f:16), 0
 	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
 	ei 0
-	ldb a, 0x20	; my guess: 20 = 001 00000 where 001 = left-panel mcu
-	ldb w, 0x0
+	ld a, 0x20:opc	; my guess: 20 = 001 00000 where 001 = left-panel mcu
+	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	cpw (0x8d9f:16), 0
@@ -443,8 +443,8 @@ PanelDet_ProbeRight:
 	ldw (0x8d9f:16), 0
 	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
 	ei 0
-	ldb a, 0xe0	; my guess: E0 = 111 00000 where 111 = right-panel mcu
-	ldb w, 0x0
+	ld a, 0xe0:opc	; my guess: E0 = 111 00000 where 111 = right-panel mcu
+	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	cpw (0x8d9f:16), 0
@@ -470,30 +470,30 @@ CPanel_ReadAllButtons:
 	ei 0
 
 	call CPanel_WaitTXReady
-	ldb a, 0x25
-	ldb w, 0x1
+	ld a, 0x25:opc
+	ld w, 0x1:opc
 	call CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
 
 	calr CPanel_WaitTXReady
-	ldb a, 0xe2
-	ldb w, 0x4
+	ld a, 0xe2:opc
+	ld w, 0x4:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
 
 	calr CPanel_WaitTXReady
-	ldb a, 0x20
-	ldb w, 0x10
+	ld a, 0x20:opc
+	ld w, 0x10:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
 
 	calr CPanel_WaitTXReady
-	ldb a, 0xe2
-	ldb w, 0x11
+	ld a, 0xe2:opc
+	ld w, 0x11:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
@@ -515,20 +515,20 @@ CPanel_PollStartup:
 
 CPanel_ButtonPollLoop:
 	calr CPanel_WaitTXReady
-	ldb a, 0x20
-	ldb w, 0xb
+	ld a, 0x20:opc
+	ld w, 0xb:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr CPanel_RX_Process
 
 	ld a, (0x8e55:16); Byte 11 is in gap between CPR (0-10) and CPL (16-26), possibly status/mode
-	ldb w, 0xd	; Default encoder check mode
+	ld w, 0xd:opc	; Default encoder check mode
 	bit 7, a	; Test bit 7 of status byte
 	jr nz, CPanel_EncoderCheck
-	ldb w, 0xe	; Alternate mode if bit 7 set
+	ld w, 0xe:opc	; Alternate mode if bit 7 set
 	bit 6, a	; Test bit 6 of status byte
 	jr nz, CPanel_EncoderCheck
-	ldb w, 0xc	; Third mode if bit 6 set
+	ld w, 0xc:opc	; Third mode if bit 6 set
 
 CPanel_EncoderCheck:
 	cp (0x8e6a:16), w
@@ -562,8 +562,8 @@ CPanel_InitButtonState:	; do that
 	ei 0
 
 	calr CPanel_WaitTXReady
-	ldb a, 0x2b
-	ldb w, 0x0
+	ld a, 0x2b:opc
+	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
@@ -571,8 +571,8 @@ CPanel_InitButtonState:	; do that
 	calr CPanel_RX_ProcessWithFlag
 
 	calr CPanel_WaitTXReady
-	ldb a, 0xeb
-	ldb w, 0x0
+	ld a, 0xeb:opc
+	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
@@ -580,16 +580,16 @@ CPanel_InitButtonState:	; do that
 	calr CPanel_RX_ProcessWithFlag
 
 	calr CPanel_WaitTXReady
-	ldb a, 0x20
-	ldb w, 0x10
+	ld a, 0x20:opc
+	ld w, 0x10:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
 	calr CPanel_RX_ProcessWithFlag
 
 	calr CPanel_WaitTXReady
-	ldb a, 0xe3
-	ldb w, 0x10
+	ld a, 0xe3:opc
+	ld w, 0x10:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
 	calr DELAY_6_TICKS
@@ -1074,8 +1074,8 @@ PollLoop_TXCheckThreshold:
 	cp hl, 3:i3
 	jr c, PollLoop_DispatchWork
 	ld (0x8d9a:16), 0
-	ldb w, 0xe0
-	ldb a, 0x13
+	ld w, 0xe0:opc
+	ld a, 0x13:opc
 	ld iy, (0x8dff:16)
 	ld xde, 0x8e01
 	stb_dri W, 0x07, 0xe8, 0xf4
@@ -1128,7 +1128,7 @@ PollLoop_CheckTXReady:
 	jr nc, PollLoop_StartTX
 	neg wa
 	ex8 a, w
-	ldb a, 0x3c
+	ld a, 0x3c:opc
 	sub a, w
 
 PollLoop_StartTX:
@@ -1198,7 +1198,7 @@ CPanel_RX_ParseNext:
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
 	ex8 a, w
-	ldb a, 0x5c
+	ld a, 0x5c:opc
 	sub a, w
 
 CPanel_RX_PacketSizeCheck:
@@ -1383,7 +1383,7 @@ c:
 	jr MBytePkt_CommitRXPtr
 
 MBytePkt_EncFFMarker:
-	ldb a, 0xff
+	ld a, 0xff:opc
 
 					; else:
 MBytePkt_CommitAndContinue:

@@ -417,7 +417,7 @@ INTT1_NoOverflow:
 	inc 1, w
 	cp w, 0x86
 	jr ule, INTT1_StoreCounters
-	ldb w, 0x0
+	ld w, 0x0:opc
 	or (1065:16), 16
 	call MIDI_SC0_TX_DISPATCH
 
@@ -607,7 +607,7 @@ UI_SUBSTATE_CLEAR_FLAGS:
 UI_SUBSTATE_PROCESS_A:
 	res 1, (1043:16)
 	res 0, (1044:16)
-	ldb a, 0x2
+	ld a, 0x2:opc
 	call TaskSched_SignalEvent_NoBlock
 	jr UIStateMachine_ExitToScheduler
 
@@ -758,7 +758,7 @@ INTTR4_SeqAutoStart:
 	dec 1, a
 	cp (1046:16), a
 	jr c, INTTR4_SeqAutoStart_Skip
-	ldb a, 0x1
+	ld a, 0x1:opc
 	ld (1056:16), a
 	ld (1057:16), a
 	cp (0x8d34:16), 19
@@ -885,7 +885,7 @@ INTTR4_AltSeqAccum_Update:
 	and (1073:16), 247
 	cpw (0x28aa:16), 0
 	jr z, INTTR4_AltSeqSync_Check
-	ldb a, 0x86
+	ld a, 0x86:opc
 	calr TempoRingBuf_WritePair
 
 INTTR4_AltSeqSync_Check:
@@ -897,7 +897,7 @@ INTTR4_AltSeqSync_Check:
 	and (1073:16), 254
 	cpw (0x28aa:16), 0
 	jr z, INTTR4_FadeDelay_Check
-	ldb a, 0x85
+	ld a, 0x85:opc
 	calr TempoRingBuf_WritePair
 
 INTTR4_FadeDelay_Check:
@@ -1063,12 +1063,12 @@ INTTR4_SubTick_PhaseSync_AltSeq:
 INTTR4_SubTick_ToAccum:
 	jp INTTR4_SeqAccum_Update
 INTTR4_BytecodeSnippet:
-	ldb	l, 0
+	ld	l, 0:opc
 	.byte 0xf1
 	push_a
 	.byte 0x04
 	cp	(xwa-80), xiz
-	ldb	l, 1
+	ld	l, 1:opc
 	ret
 
 
@@ -1321,7 +1321,7 @@ MidiEvt_FoundStatusByte:
 	jr c, MidiSerial_DataReceive
 
 MidiEvt_SetNoteOnFlag:
-	ldb b, 0x1
+	ld b, 0x1:opc
 
 MidiSerial_DataReceive:
 	bit_dri 7, 0x07, 0xec, 0xf4
@@ -1673,7 +1673,7 @@ TempoRingBuf_BytecodeSnippet:
 	max
 	dec	6, w
 	.byte 0x06
-	ldb	e, 129
+	ld	e, 129:opc
 	calr	24
 	ret
 	push	xix
@@ -1793,7 +1793,7 @@ SyncTiming_Snapshot_Return:
 	ret
 
 Seq_FullInit:
-	ldb a, 0xff
+	ld a, 0xff:opc
 	ld (1043:16), a
 	ld (1058:16), a
 	ld (1139:16), a
@@ -1849,7 +1849,7 @@ AudioMix_Init:
 	pop xwa
 	ld xbc, 0x150000
 	ld xwa, 0x101001f
-	ldb d, 0x4
+	ld d, 0x4:opc
 
 AudioMix_EnableChannels_Loop:
 	ld w, a
@@ -1864,7 +1864,7 @@ AudioMix_WriteChannelGroup:
 	sll a, 5
 	set 4, a
 	ld xhl, 0x150000
-	ldb d, 0x8
+	ld d, 0x8:opc
 
 AudioMix_WriteChannelGroup_Loop:
 	ld (xhl), a
@@ -1963,15 +1963,15 @@ TaskSched_ScreenGroupTable_End:
 INTT3_PriorityAdjust:
 	bit 0, (1158:16)
 	jr nz, INTT3_PriorityAdjust_Active
-	ldb a, 0x5
-	ldb c, 0x2
+	ld a, 0x5:opc
+	ld c, 0x2:opc
 	jrl TaskSched_ChangePriority_Inline
 
 INTT3_PriorityAdjust_Active:
-	ldb a, 0x3
+	ld a, 0x3:opc
 	calr TaskSched_YieldToQueue_NoBlock
-	ldb a, 0x5
-	ldb c, 0x3
+	ld a, 0x5:opc
+	ld c, 0x3:opc
 	jrl TaskSched_ChangePriority_Inline
 	ret
 
@@ -1995,7 +1995,7 @@ TaskSched_Init:
 	ldw hl, 0x4c5
 	extz xhl
 	ld de, 4:i3
-	ldb b, 0x3
+	ld b, 0x3:opc
 
 TaskSched_InitPriorityQueues:
 	ld ix, hl
@@ -2004,8 +2004,8 @@ TaskSched_InitPriorityQueues:
 	djnz8 b, TaskSched_InitPriorityQueues
 	ldw ix, 0x489
 	extz xix
-	ldb b, 0x5
-	ldb a, 0x0
+	ld b, 0x5:opc
+	ld a, 0x0:opc
 
 TaskSched_InitTCBFields:
 	ld (xix + 9), a
@@ -2015,7 +2015,7 @@ TaskSched_InitTCBFields:
 	djnz8 b, TaskSched_InitTCBFields
 	ldw ix, 0x5bb
 	extz xix
-	ldb b, 0x1
+	ld b, 0x1:opc
 	ld xwa, 0xffffffff
 
 TaskSched_InitTimerSlots:
@@ -2029,7 +2029,7 @@ TaskSched_InitTimerSlots:
 	ldir83
 	ldw hl, 0x4d1
 	extz xhl
-	ldb b, 0xa
+	ld b, 0xa:opc
 
 TaskSched_InitExtQueues:
 	ld ix, hl
@@ -2043,7 +2043,7 @@ TaskSched_InitExtQueues:
 	ldir83
 	ldw hl, 0x503
 	extz xhl
-	ldb b, 0xc
+	ld b, 0xc:opc
 
 TaskSched_InitExtQueues2:
 	ld ix, hl
@@ -2052,7 +2052,7 @@ TaskSched_InitExtQueues2:
 	djnz8 b, TaskSched_InitExtQueues2
 	ldw hl, 0x567
 	extz xhl
-	ldb b, 0xa
+	ld b, 0xa:opc
 	ld xwa, 0xffffffff
 
 TaskSched_InitFreeList:
@@ -2064,7 +2064,7 @@ TaskSched_InitFreeList:
 	ld (xiy + 256), iy
 	ld (xiy + 2), iy
 	ldw ix, 0x567
-	ldb b, 0xa
+	ld b, 0xa:opc
 
 TaskSched_LinkFreeSlots:
 	extz xix
@@ -2079,7 +2079,7 @@ TaskSched_LinkFreeSlots:
 	djnz8 b, TaskSched_LinkFreeSlots
 	ldw hl, 0x53f
 	extz xhl
-	ldb b, 0x5
+	ld b, 0x5:opc
 
 TaskSched_InitLockQueues:
 	ld ix, hl
@@ -2088,7 +2088,7 @@ TaskSched_InitLockQueues:
 	djnz8 b, TaskSched_InitLockQueues
 	ldw hl, 0x553
 	extz xhl
-	ldb b, 0x5
+	ld b, 0x5:opc
 
 TaskSched_InitMsgQueues:
 	ld ix, hl
@@ -2115,7 +2115,7 @@ TaskSched_PostInit:
 	or a, 0x20
 	st_dd8b A, 0xe5
 	calr Start_8bit_Timer_3
-	ldb a, 0x1
+	ld a, 0x1:opc
 	calr Show_ScreenGroup
 	ei 6
 	ld (1157:16), 0
@@ -2147,7 +2147,7 @@ TaskSched_Dispatch:
 	ld (1159:16), wa
 
 TaskSched_ScanPriorityQueues:
-	ldb b, 0x3
+	ld b, 0x3:opc
 	ldw ix, 0x4c5
 	extz xix
 
@@ -2187,7 +2187,7 @@ TaskSched_TimerTick:
 	ei 0
 	ldw ix, 0x5bb
 	extz xix
-	ldb b, 0x1
+	ld b, 0x1:opc
 
 TaskSched_CheckTimerSlot:
 	ld xwa, (xix + 4)
@@ -2273,11 +2273,11 @@ Show_ScreenGroup_Entry:
 	push xiy
 	push xiz
 	ld w, a
-	ldb l, 0xc
+	ld l, 0xc:opc
 	mul8rr l, a
 	extz xhl
 	add xhl, Checksum_ComputeComplement_0x4
-	ldb c, 0xc
+	ld c, 0xc:opc
 	mul8rr c, a
 	add bc, 0x47d
 	extz xbc
@@ -3756,7 +3756,7 @@ SeqEvtBuf_InlineBytecode:
 	.byte 0xd2
 	jr	nc, -14
 	.byte 0x01
-	ldb	c, 0x0e
+	ld	c, 0x0e:opc
 
 SeqEvtBuf_Init:
 	pushw ix
@@ -5055,7 +5055,7 @@ RingBuf512_ReadAlt_ByteBlock:
 	.byte 0xc3
 	reti
 	cp	xwa, xwa
-	ldb	l, 220
+	ld	l, 220:opc
 	push	xwa
 	swi	7
 	normal
@@ -5124,7 +5124,7 @@ RingBuf1024_ReadAlt_ByteBlock:
 	.byte 0xc3
 	reti
 	cp	xwa, xwa
-	ldb	l, 220
+	ld	l, 220:opc
 	push	xwa
 	swi	7
 	pop	sr
@@ -5179,7 +5179,7 @@ Seq_RingBuf_WriteByte_Data:
 	.byte 0xc3
 	reti
 	cp	xwa, xwa
-	ldb	l, 220
+	ld	l, 220:opc
 	push	xwa
 	swi	7
 	reti
@@ -5399,11 +5399,11 @@ SubCPU_Init_DMA_Channels:
 	ldio 0x8a, 0x07
 	lda xwa, (0x140000:24)
 	ldc_cr32 xwa, 0x28
-	ldb a, 0x8
+	ld a, 0x8:opc
 	ldc_cr8 a, 0x4a
 	lda xwa, (0x140000:24)
 	ldc_cr32 xwa, 0x00
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ldc_cr8 a, 0x42
 	ld (1504:16), 0
 	ld (1506:16), 0
@@ -5620,7 +5620,7 @@ Audio_DMA_Transfer_ByteLoop:
 	ld (1498:16), xwa
 	ld a, (xbc)
 	ld (0x140000:24), a
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 Audio_DMA_Transfer_DelayLoop:
 	inc 1, a
@@ -6074,7 +6074,7 @@ E1DMA_ISR_BytecodeBlock:
 	ret
 	ld	de, (1033:16)
 	.byte 0xf1
-	ldb	w, 6
+	ld	w, 6:opc
 	dec	6, l
 	pop	sr
 	ld	hl, 0:i3
@@ -6089,7 +6089,7 @@ E1DMA_ISR_BytecodeBlock:
 	.byte 0xf0
 	jr	-71
 	.byte 0xf1
-	ldb	w, 6
+	ld	w, 6:opc
 	.byte 0xb7
 	inc	1, (0xe364:16)
 	ldw	hl, 0xffff
@@ -8081,7 +8081,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld xwa, xbc
 	ld	xde, (xsp+4)
 	.byte 0xe5, 0xea
-	ldb	a, 191
+	ld	a, 191:opc
 	.byte 0x04
 	jr	le, 29
 	jrl	ugt, -4291

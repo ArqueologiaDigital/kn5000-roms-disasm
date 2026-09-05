@@ -110,7 +110,7 @@ RxDisp_SysExError:
 	.byte 0xc0, 0x66, 0x15, 0x9c
 RxDisp_DataByteDispatch:
 	swi	4
-	ldb	c, 243
+	ld	c, 243:opc
 RxDisp_SaveContextAndReturn:
 	.byte 0x07, 0xf0, 0xec, 0x00, 0x81, 0xdb, 0x38, 0xff
 	.byte 0x07, 0xd8, 0x69
@@ -178,7 +178,7 @@ ClkTick_Src1CoarseUpdate:
 	ret
 	.byte 0xf1, 0x27, 0x04, 0xc9
 	jr	z, 2
-	ldb	d, 242
+	ld	d, 242:opc
 	ld	xix, 127867
 	.byte 0x9c, 0xfe, 0x3f, 0x40, 0x00
 	jr	ugt, 14
@@ -498,7 +498,7 @@ SysEx_InProgressReturn:
 	ld	xix, 16577768
 	ld_rr8b	e, xix, a
 	ldw	bc, 2968
-	ldb	d, 192
+	ld	d, 192:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -520,7 +520,7 @@ SysEx_InProgressReturn:
 	cp	c, 255
 	jr	z, 26
 	ld	e, (38298:16)
-	ldb	d, 255
+	ld	d, 255:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -539,7 +539,7 @@ SysEx_InProgressReturn:
 	cp	c, 255
 	jr	z, 26
 	ld	d, (38298:16)
-	ldb	e, 255
+	ld	e, 255:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -558,7 +558,7 @@ SysEx_InProgressReturn:
 	ld	xix, 16577958
 	ld_rr8b	e, xix, a
 	ldw	bc, 840
-	ldb	d, 7
+	ld	d, 7:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
@@ -575,7 +575,7 @@ SysEx_InProgressReturn:
 	jr	nz, 86
 	cp	(38331:16), 17
 	jr	nz, 79
-	ldb	b, 5
+	ld	b, 5:opc
 	ldw	de, 64512
 	ld	a, (38298:16)
 	cp	a, 11

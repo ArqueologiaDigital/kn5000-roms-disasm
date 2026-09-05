@@ -194,15 +194,15 @@ FloppyIO_SelectReadMode:
 	jr z, FloppyIO_SelectReadMode_ModeDefault
 	cp (4600:16), 1
 	jr z, FloppyIO_SelectReadMode_Mode0
-	ldb a, 0x2
+	ld a, 0x2:opc
 	jp FloppyIO_SelectReadMode_Dispatch
 
 FloppyIO_SelectReadMode_Mode0:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jp FloppyIO_SelectReadMode_Dispatch
 
 FloppyIO_SelectReadMode_ModeDefault:
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 FloppyIO_SelectReadMode_Dispatch:
 	call	16612777
@@ -270,27 +270,27 @@ FloppyIO_SwitchboardChannelPtrs:
 FloppyIO_ConfigureSwitchboard:
 	cp (4600:16), 0
 	jrl z, FloppyIO_ConfigSwb_Mode0
-	ldb c, 0x0
+	ld c, 0x0:opc
 	and (0xfdad:16), 251
 	ld (0xf23d:16), 0
 	jrl FloppyIO_ConfigSwb_QueueEvent
 
 FloppyIO_ConfigSwb_Mode0:
 	or a, 0x4
-	ldb c, 0xff
+	ld c, 0xff:opc
 	or (0xfdad:16), 4
 	ld (0xf23d:16), 255
 
 FloppyIO_ConfigSwb_QueueEvent:
 	call FloppyIO_ComputeSwitchboardAddr
 	ld (4330:16), 1
-	ldb e, 0x91
-	ldb d, 0x3
-	ldb w, 0x4
+	ld e, 0x91:opc
+	ld d, 0x3:opc
+	ld w, 0x4:opc
 	xor a, a
 	cp (4600:16), 0
 	jrl nz, FloppyIO_ConfigSwb_DispatchAndReinit
-	ldb a, 0x4
+	ld a, 0x4:opc
 	push xhl
 	ld xhl, 0xf73d
 	andmi8 (xhl), 0xf8
@@ -843,7 +843,7 @@ Voice_ActivateChannels_Loop:
 	ld iy, hl
 	pushw hl
 	call SoundGen_CaptureVoiceParams
-	ldb a, 0x82
+	ld a, 0x82:opc
 	call ToneGen_LoadBlockValidate
 	call SoundGen_StoreVoiceParamsToTables
 	popw hl
@@ -876,7 +876,7 @@ SoundGen_ScanBitmap_Next:
 	ret
 
 FloppyIO_ReturnReady:
-	ldb w, 0x1
+	ld w, 0x1:opc
 	ret
 
 SMF_ReadMidiEventToBuffer:
@@ -912,14 +912,14 @@ SMF_ReadMidiEvt_CheckSize:
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
-	ldb w, 0x2
+	ld w, 0x2:opc
 	cp a, 0xd0
 	jrl z, SMF_ReadMidiEvt_OneByteMsg
 	cp a, 0xc0
 	jrl nz, SMF_ReadMidiEvt_CheckComplete
 
 SMF_ReadMidiEvt_OneByteMsg:
-	ldb w, 0x1
+	ld w, 0x1:opc
 
 SMF_ReadMidiEvt_CheckComplete:
 	cp c, w
@@ -942,14 +942,14 @@ FloppyIO_ReadMidiEventBytes:
 FloppyIO_ReadMidiEvtBytes_Loop:
 	lda_dpi XBC, 0xf0
 	inc 1, h
-	ldb c, 0x1
+	ld c, 0x1:opc
 	cp l, 0xd0
 	jrl z, FloppyIO_ReadMidiEvtBytes_OneByteMsg
 	cp l, 0xc0
 	jrl nz, FloppyIO_ReadMidiEvtBytes_CheckDone
 
 FloppyIO_ReadMidiEvtBytes_OneByteMsg:
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 FloppyIO_ReadMidiEvtBytes_CheckDone:
 	cp h, c
@@ -1027,8 +1027,8 @@ SeqPlay_InitChannelParams:
 	push xhl
 	xor xhl, xhl
 	xor xde, xde
-	ldb a, 0x2
-	ldb w, 0x80
+	ld a, 0x2:opc
+	ld w, 0x80:opc
 	ldw bc, 0x10
 
 SeqPlay_InitChannelParams_Loop:
@@ -1432,12 +1432,12 @@ MidiSysEx_CmdDispatchLoop:
 	jrl MidiSysEx_CmdDispatchLoop
 
 MidiSysEx_Cmd_AllNotesOff:
-	ldb a, 0x81
+	ld a, 0x81:opc
 	call ToneGen_WriteAllChannels
 	jrl MidiSysEx_CmdDispatchLoop
 
 MidiSysEx_Cmd_AllSoundOff:
-	ldb a, 0x82
+	ld a, 0x82:opc
 	call ToneGen_WriteAllChannels
 	xor hl, hl
 	xor iy, iy
@@ -1639,10 +1639,10 @@ SoundGen_RefreshAllVoices:
 	call SoundGen_CaptureVoiceParams
 	pop xiy
 	ld bc, (3946:16)
-	ldb a, 0x81
+	ld a, 0x81:opc
 
 SoundGen_RefreshVoices_Loop:
-	ldb a, 0x81
+	ld a, 0x81:opc
 	pushw bc
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -1852,13 +1852,13 @@ SoundGen_ApplyTempoToVoice:
 	call SoundGen_CaptureVoiceParams
 	popw wa
 	ld bc, wa
-	ldb a, 0x80
+	ld a, 0x80:opc
 	cpw (3932:16), 0
 	jrl z, SoundGen_UpdateTempoAndScale
 	cpw (3934:16), 1
 	jrl z, SoundGen_UpdateTempoAndScale
-	ldb a, 0xa0
-	ldb w, 0x7
+	ld a, 0xa0:opc
+	ld w, 0x7:opc
 	or a, w
 
 SoundGen_UpdateTempoAndScale:
@@ -1974,12 +1974,12 @@ MidiEvent_DispatchSetA:
 	ld hl, (4012:16)
 	cp l, 0x7f
 	jrl ule, MidiEvent_ClampVelocityA_Low
-	ldb l, 0x7f
+	ld l, 0x7f:opc
 
 MidiEvent_ClampVelocityA_Low:
 	cp h, 0x7f
 	jrl ule, MidiEvent_ClampVelocityA_High
-	ldb h, 0x7f
+	ld h, 0x7f:opc
 
 MidiEvent_ClampVelocityA_High:
 	ld (4012:16), hl
@@ -2036,12 +2036,12 @@ MidiEvent_DispatchSetB:
 	ld hl, (4012:16)
 	cp l, 0x7f
 	jrl ule, MidiEvent_ClampVelocityB_Low
-	ldb l, 0x7f
+	ld l, 0x7f:opc
 
 MidiEvent_ClampVelocityB_Low:
 	cp h, 0x7f
 	jrl ule, MidiEvent_ClampVelocityB_High
-	ldb h, 0x7f
+	ld h, 0x7f:opc
 
 MidiEvent_ClampVelocityB_High:
 	ld (4012:16), hl
@@ -2116,7 +2116,7 @@ SeqTrack_ReleaseVoiceAtEndOfTrack:
 	ld hl, iy
 	push xhl
 	call SoundGen_ReadVoiceRegs
-	ldb a, 0x82
+	ld a, 0x82:opc
 	call ToneGen_LoadBlockValidate
 	call SoundGen_StoreVoiceToTables_Clamped
 	pop xhl
@@ -2157,14 +2157,14 @@ SMF_ReadMidiStatus_StoreByte:
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
-	ldb w, 0x2
+	ld w, 0x2:opc
 	cp a, 0xd0
 	jrl z, SMF_ReadMidiStatus_OneByteMsg
 	cp a, 0xc0
 	jrl nz, SMF_ReadMidiStatus_CheckComplete
 
 SMF_ReadMidiStatus_OneByteMsg:
-	ldb w, 0x1
+	ld w, 0x1:opc
 
 SMF_ReadMidiStatus_CheckComplete:
 	cp c, w
@@ -2622,7 +2622,7 @@ MidiEvent_HandleChannelPressureA:
 	extz xiy
 	push xiy
 	call SoundGen_CaptureVoiceParams
-	ldb a, 0xd0
+	ld a, 0xd0:opc
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cp (4323:16), 0
@@ -2685,7 +2685,7 @@ MidiNoteOn_SetupVoiceA:
 	push	xix
 	call	15877661
 	pop	xix
-	ldb	a, 144
+	ld	a, 144:opc
 	push	xix
 	call	15879109
 	pop	xix
@@ -2724,7 +2724,7 @@ MidiNoteOn_SetupVoiceA:
 	xor	xbc, xbc
 	xor	xde, xde
 	ld	xix, 6711
-	ldb	a, 4
+	ld	a, 4:opc
 	ld_rrw	bc, xix, hl
 	ld	e, b
 	xor	hl, hl
@@ -2836,13 +2836,13 @@ MidiNoteOff_ScanActiveA_Loop:
 	call ToneGen_ComputeBlockPtr
 	pop xiy
 	ld wa, (xiy + 5)
-	ldb l, 0x60
+	ld l, 0x60:opc
 	divs8rr a, l
 	cp a, 0:i3
 	jrl nz, Scoop_ApplyMatchedVoiceEntry
 	cp w, 4:i3
 	jrl ugt, Scoop_ApplyMatchedVoiceEntry
-	ldb w, 0x5
+	ld w, 0x5:opc
 
 Scoop_ApplyMatchedVoiceEntry:
 	ld xhl, (4349:16)
@@ -2997,7 +2997,7 @@ MidiEvent_HandlePitchBendA:
 	extz xiy
 	push xiy
 	call SoundGen_CaptureVoiceParams
-	ldb a, 0xd2
+	ld a, 0xd2:opc
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cp (4323:16), 0
@@ -3116,7 +3116,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	push xhl
 	call SoundGen_CaptureVoiceParams
 	pop xhl
-	ldb a, 0xc0
+	ld a, 0xc0:opc
 	ld w, (6746:16)
 	and w, 0x80
 	rlc w
@@ -3190,7 +3190,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 MidiPgmChg_Mode1_SetupA:
 	push xiy
 	call SoundGen_CaptureVoiceParams
-	ldb a, 0xc0
+	ld a, 0xc0:opc
 	pop xiy
 	push xix
 	ld xix, 0xf72
@@ -3226,7 +3226,7 @@ MidiPgmChg_Mode1_SetupA:
 	pop xiy
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
-	ldb a, 0x0
+	ld a, 0x0:opc
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -3264,7 +3264,7 @@ MidiEvent_HandleChannelPressureB:
 	call SoundGen_ReadVoiceRegs
 	ld w, (4011:16)
 	and w, 0xf
-	ldb a, 0xa0
+	ld a, 0xa0:opc
 	or a, w
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -3330,7 +3330,7 @@ MidiNoteOn_SetupVoiceB:
 	pop	xix
 	ld	w, (4011:16)
 	and	w, 15
-	ldb	a, 144
+	ld	a, 144:opc
 	or	a, w
 	push	xix
 	call	15879109
@@ -3372,7 +3372,7 @@ MidiNoteOn_SetupVoiceB:
 	xor	xbc, xbc
 	xor	xde, xde
 	ld	xix, 6711
-	ldb	a, 4
+	ld	a, 4:opc
 	ld_rrw	bc, xix, hl
 	ld	e, b
 	xor	hl, hl
@@ -3418,7 +3418,7 @@ Scoop_ApplySoundParamsAlt:
 	ld a, (4013:16)
 	cp a, 0x7f
 	jrl ule, MidiNoteOn_ClampVelocityB
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 MidiNoteOn_ClampVelocityB:
 	push xiy
@@ -3490,13 +3490,13 @@ MidiNoteOff_ScanActiveB_Loop:
 	call ToneGen_ComputeBlockPtr
 	pop xiy
 	ld wa, (xiy + 5)
-	ldb l, 0x60
+	ld l, 0x60:opc
 	divs8rr a, l
 	cp a, 0:i3
 	jrl nz, Scoop_ApplyMatchedVoiceEntryAlt
 	cp w, 4:i3
 	jrl ugt, Scoop_ApplyMatchedVoiceEntryAlt
-	ldb w, 0x5
+	ld w, 0x5:opc
 
 Scoop_ApplyMatchedVoiceEntryAlt:
 	ld xhl, (4349:16)
@@ -3649,7 +3649,7 @@ MidiEvent_HandlePitchBendB:
 	call SoundGen_ReadVoiceRegs
 	ld w, (4011:16)
 	and w, 0xf
-	ldb a, 0xe0
+	ld a, 0xe0:opc
 	or a, w
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -3776,7 +3776,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 	push xhl
 	call SoundGen_ReadVoiceRegs
 	pop xhl
-	ldb a, 0xc0
+	ld a, 0xc0:opc
 	ld w, (6746:16)
 	and w, 0x80
 	rlc w
@@ -3848,7 +3848,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 MidiPgmChg_Mode1_SetupB:
 	push xiy
 	call SoundGen_ReadVoiceRegs
-	ldb a, 0xc0
+	ld a, 0xc0:opc
 	ld iy, (4011:16)
 	and iy, 0xf
 	push xix
@@ -3884,7 +3884,7 @@ MidiPgmChg_Mode1_SetupB:
 	pop xiy
 	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
-	ldb a, 0x0
+	ld a, 0x0:opc
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -4811,7 +4811,7 @@ VoiceParam_Pan_SetDirection:
 	xor a, a
 	cp (4013:16), 64
 	jr c, VoiceParam_Pan_StoreAndUpdate
-	ldb a, 0x8
+	ld a, 0x8:opc
 
 VoiceParam_Pan_StoreAndUpdate:
 	ld (4234:16), a
@@ -4900,7 +4900,7 @@ VoiceSynth_Algo_MultiPath:
 	and	iy, 15
 	push	xiy
 	call	SoundGen_CaptureVoiceParams
-	ldb	a, 209
+	ld	a, 209:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
@@ -5003,7 +5003,7 @@ VoiceSynth_Algo_MultiStage:
 	extz	xiy
 	call	SoundGen_CaptureVoiceParams
 	push	xiy
-	ldb	a, 176
+	ld	a, 176:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
@@ -5037,7 +5037,7 @@ VoiceSynth_Algo_MultiStage:
 	.byte 0xc3
 	reti
 	.byte 0xf0, 0xec
-	ldb	a, 193
+	ld	a, 193:opc
 	swi	0
 	scf
 	push	xsp
@@ -5054,7 +5054,7 @@ VoiceSynth_Algo_MultiStage:
 	push	xsp
 	nop
 	jr	nz, 60
-	ldb	a, 8
+	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
@@ -5072,7 +5072,7 @@ VoiceSynth_Algo_MultiStage:
 	push	xsp
 	nop
 	jr	nz, 28
-	ldb	a, 127
+	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
@@ -5091,7 +5091,7 @@ VoiceSynth_Algo_PitchModulated:
 	extz	xiy
 	push	xiy
 	call	SoundGen_CaptureVoiceParams
-	ldb	a, 211
+	ld	a, 211:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
@@ -5155,7 +5155,7 @@ VoiceSynth_Algo_PitchShift:
 	call	SoundGen_ReadVoiceRegs
 	ld	w, (4011:16)
 	and	w, 15
-	ldb	a, 208
+	ld	a, 208:opc
 	or	a, w
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
@@ -5255,7 +5255,7 @@ VoiceParam_ReadUpdate_10:
 	and	iy, 15
 	call	SoundGen_ReadVoiceRegs
 	push	xiy
-	ldb	a, 176
+	ld	a, 176:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
@@ -5290,7 +5290,7 @@ VoiceParam_ReadUpdate_10:
 	push	xsp
 	nop
 	jrl	nz, 63
-	ldb	a, 8
+	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
@@ -5308,7 +5308,7 @@ VoiceParam_ReadUpdate_10:
 	push	xsp
 	nop
 	jrl	nz, 29
-	ldb	a, 127
+	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
@@ -5329,7 +5329,7 @@ VoiceParam_ReadUpdate_11:
 	call	SoundGen_ReadVoiceRegs
 	ld	w, (4011:16)
 	and	w, 15
-	ldb	a, 240
+	ld	a, 240:opc
 	or	a, w
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy

@@ -369,12 +369,12 @@ Brass_PatchEntry_105:
 Brass_PatchEntry_106:
 	.byte 0x21, 0x00, 0xff
 Brass_PatchEntry_107:
-	ldb d, 0
+	ld d, 0:opc
 	swi	7
 Brass_PatchEntry_108:
 	.byte 0x25, 0x00, 0xff
 Brass_PatchEntry_109:
-	ldb l, 0
+	ld l, 0:opc
 	swi 7
 Brass_PatchEntry_110:	aligned_string "I"
 Brass_PatchEntry_111:

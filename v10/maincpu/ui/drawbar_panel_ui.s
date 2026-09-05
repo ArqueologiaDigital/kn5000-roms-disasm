@@ -1177,7 +1177,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xbc, (xwa)
 	ld	c, (xbc)
 	set	1, c
-	ldb	b, 0
+	ld	b, 0:opc
 	extz	xbc
 	ld	(xwa+14), xbc
 	jrl	204
@@ -1247,7 +1247,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xbc, (xwa)
 	ld	c, (xbc)
 	res	1, c
-	ldb	b, 0
+	ld	b, 0:opc
 	extz	xbc
 	ld	(xwa+14), xbc
 	call	16383559
@@ -1881,7 +1881,7 @@ TtMdCtlMsg_EventDispatch:
 	.byte 0xb1
 	scc8	nz, l
 	ldw	wa, 0xa006
-	ldb	a, 184
+	ld	a, 184:opc
 	ret
 	ldw	de, 0x3f81
 	nop
@@ -2027,7 +2027,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 0x1e0008c
 	call	SendEvent
 	.byte 0xbf
-	ldb	b, 2
+	ld	b, 2:opc
 	.byte 0x01
 	nop
 	lda	xwa, (0xf9c5:16)
@@ -2151,7 +2151,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 0x1e0008c
 	call	SendEvent
 	.byte 0xbf
-	ldb	b, 2
+	ld	b, 2:opc
 	.byte 0x01
 	nop
 	lda	xwa, (0xf9c5:16)
@@ -2303,7 +2303,7 @@ TtMdCtlMsg_EventDispatch:
 	ldio	160, 232
 	sub	(xbc), l
 	max
-	ldb	w, 160
+	ld	w, 160:opc
 	swi	1
 	jrl	nz, 381
 	ld	xwa, (xsp+24)
@@ -9052,7 +9052,7 @@ IvAccordion_Update:
 	ldiw_erp 0xe2, 0
 	ld bc, wa
 	srl bc, 8
-	ldb b, 0x0
+	ld b, 0x0:opc
 	cp c, 0xd
 	jrl nz, IvAccordion_Update_NonNote
 	cp a, 0xa
@@ -12528,7 +12528,7 @@ AudioCtrl_DataBlock:
 	.byte 0x9f
 	incf
 	push	xwa
-	ldb	e, 0
+	ld	e, 0:opc
 	.byte 0x9f
 	ldio	56, 37
 	nop
@@ -12799,7 +12799,7 @@ AudioCtrl_DataBlock:
 	push	xwa
 	ldwio	0, 4287
 	ldw	bc, 3743
-	ldb	b, 30
+	ld	b, 30:opc
 	cp	(xwa), h
 	lda	xbc, (xsp+16)
 	lda	xwa, (0x3eab0:24)
@@ -12837,11 +12837,11 @@ AudioCtrl_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	incf
 	jr	f, -97
 	.byte 0x04
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e0003e
@@ -12957,16 +12957,16 @@ AudioCtrl_DataBlock:
 	.byte 0xeb
 	pop	sr
 	ldw	wa, 3743
-	ldb	b, 218
+	ld	b, 218:opc
 	.byte 0xec
 	push	sr
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe8
-	ldb	b, 191
+	ld	b, 191:opc
 	push_a
 	ldw	wa, 3743
-	ldb	c, 210
+	ld	c, 210:opc
 	.byte 0x90
 	ld	xsp, 0x116ef302
 	ld	xhl, 3:i3
@@ -12996,11 +12996,11 @@ AudioCtrl_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	incf
 	jr	f, -97
 	.byte 0x04
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e0003e
@@ -13065,7 +13065,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	sub	(0x89d8a8:24), xsp
 	popw	de
-	ldb	w, 232
+	ld	w, 232:opc
 	set	0, l
 	.byte 0xc0, 0x01
 	jrl	z, 724
@@ -13250,11 +13250,11 @@ AudioCtrl_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x06
 	jr	f, -97
 	.byte 0x04
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e0003e
@@ -13323,11 +13323,11 @@ AudioCtrl_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x06
 	jr	f, -97
 	.byte 0x04
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e000b8
@@ -13819,11 +13819,11 @@ AudioCtrl_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x06
 	jr	f, -97
 	.byte 0x04
-	ldb	b, 234
+	ld	b, 234:opc
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e0003e
@@ -13909,7 +13909,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+64)
 	.byte 0x98, 0x06
 	push	xwa
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	bc, 7:i3
 	calr	61412
 	ld	wa, (xsp+12)
@@ -14027,7 +14027,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+64)
 	.byte 0x98, 0x06
 	push	xwa
-	ldb	w, 0
+	ld	w, 0:opc
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
 	calr	61494
@@ -14278,9 +14278,9 @@ AudioCtrl_DataBlock:
 	jr	z, 63
 	.byte 0x9f
 	ldwio	4, 1695
-	ldb	w, 159
+	ld	w, 159:opc
 	rcf
-	ldb	a, 218
+	ld	a, 218:opc
 	xor	(xwa+29), xiy
 	swi	0
 	swi	1
@@ -14358,9 +14358,9 @@ AudioCtrl_DataBlock:
 	ld	(xsp+14), hl
 	.byte 0x9f
 	ldwio	4, 1695
-	ldb	w, 159
+	ld	w, 159:opc
 	rcf
-	ldb	a, 159
+	ld	a, 159:opc
 	ldwio	34, 0x951d
 	swi	1
 	swi	1
@@ -14402,9 +14402,9 @@ AudioCtrl_DataBlock:
 	ld	(xsp+14), hl
 	.byte 0x9f
 	ldwio	4, 1695
-	ldb	w, 159
+	ld	w, 159:opc
 	rcf
-	ldb	a, 218
+	ld	a, 218:opc
 	xor	(xbc+29), xiy
 	swi	0
 	swi	1
@@ -14527,7 +14527,7 @@ AudioCtrl_DataBlock:
 	push	xde
 	ldw	ix, 0x9f00
 	incf
-	ldb	w, 30
+	ld	w, 30:opc
 	.byte 0xef, 0xe8
 	ld	(xsp+8), hl
 	sla	hl, 2
@@ -14600,12 +14600,12 @@ AudioCtrl_DataBlock:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	ret
 	jr	f, -24
 	.byte 0xcf
-	ldb	l, 0
-	ldb	a, 1
+	ld	l, 0:opc
+	ld	a, 1:opc
 	jrl	nz, 205
 	ld	wa, (0x24794:24)
 	ld	(xsp+12), wa
@@ -15343,7 +15343,7 @@ IvDrawbar_Update:
 	ldiw_erp 0xe2, 0
 	ld bc, wa
 	srl bc, 8
-	ldb b, 0x0
+	ld b, 0x0:opc
 	cp c, 0xc
 	jr nz, IvDrawbar_Update_GenericParam
 	extz wa

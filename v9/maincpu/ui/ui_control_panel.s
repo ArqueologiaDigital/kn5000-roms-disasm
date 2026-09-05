@@ -1984,10 +1984,10 @@ KeyScan_ScanLoop:
 	cp	(xix), bc
 	jr nz, KeyScan_AdvanceEntry			; No match, advance to next entry
 	; --- Match found: build XDE = (D<<24)|(E<<16)|(C07E<<8)|C07F ---
-	ldb d, 0x00
+	ld d, 0x00:opc
 	extz xde				; Zero-extend DE -> XDE
 	sll xde, 8
-	ldb w, 0x00
+	ld w, 0x00:opc
 	extz xwa				; Zero-extend WA -> XWA
 	add xde, xwa
 	sll xde, 8
@@ -2652,7 +2652,7 @@ MainPmanCtrl_CheckSoundParam:
 
 MainPmanCtrl_SetPartSelectOne:
 	ld (0x8d3a:16), 1
-	ldb e, 0x1
+	ld e, 0x1:opc
 	jr MainPmanCtrl_CompareAndUpdate
 
 MainPmanCtrl_SetPartSelectZero:
@@ -2906,7 +2906,7 @@ SeqState_HasModeChanged:
 
 UI_PostDialEnable:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0006f
@@ -2917,7 +2917,7 @@ UI_DialRangeData:
 
 UI_PostEvent_0x6E:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0006e
@@ -2925,7 +2925,7 @@ UI_PostEvent_0x6E:
 
 UI_PostDialRangeEvent:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00070
@@ -2933,7 +2933,7 @@ UI_PostDialRangeEvent:
 
 UI_PostDialValueEvent:
 	ld e, a
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00071

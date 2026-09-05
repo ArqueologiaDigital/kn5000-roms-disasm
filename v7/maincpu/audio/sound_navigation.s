@@ -97,7 +97,7 @@ Sound_SetSelection:
 	ld	qbc, 0
 	ld	de, bc
 	srl	bc, 8
-	ldb	b, 0
+	ld	b, 0:opc
 	extz	bc
 	extz	de
 	call	16553262
@@ -108,7 +108,7 @@ Sound_SetSelection:
 	ld	qbc, 0
 	ld	de, bc
 	srl	de, 8
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	de
 	extz	bc
 	pushw	bc

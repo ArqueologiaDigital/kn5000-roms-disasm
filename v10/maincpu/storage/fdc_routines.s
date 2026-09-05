@@ -34,9 +34,9 @@ FDC_Send_Command:
 	ld	(0x110008:24), a
 	ret
 	.byte 0xc1
-	ldb	b, 139
+	ld	b, 139:opc
 	pop_f
-	ldb	w, 139
+	ld	w, 139:opc
 	ld	(0x8b22:16), a
 	ret
 
@@ -117,7 +117,7 @@ FDC_WaitReady:
 	jr	z, 5
 	ld	(0x8b04:16), 255
 	.byte 0xc1
-	ldb	w, 138
+	ld	w, 138:opc
 	push	xsp
 	swi	7
 	jrl	z, 416
@@ -135,7 +135,7 @@ FDC_WaitReady:
 	calr	2494
 	calr	378
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 8
@@ -147,7 +147,7 @@ FDC_WaitReady:
 	calr	65246
 	bit	6, l
 	jr	nz, 24
-	ldb	l, 0
+	ld	l, 0:opc
 	cp	l, 128
 	jr	z, 11
 	calr	65231
@@ -175,7 +175,7 @@ FDC_WaitReady:
 	sub	(xsp-40), xhl
 	calr	1657
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 8
@@ -184,7 +184,7 @@ FDC_WaitReady:
 	ldw	wa, 79
 	calr	1636
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 8
@@ -248,7 +248,7 @@ FDC_WaitReady:
 	extz wa
 	calr	1421
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 7
@@ -256,7 +256,7 @@ FDC_WaitReady:
 	jr	25
 	calr	3748
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 7
@@ -298,7 +298,7 @@ FDC_CMD_HANDLER_BASE:
 	ret
 
 FDC_ReturnZero:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_ErrorInvalidDrive:
@@ -328,7 +328,7 @@ FDC_ValidateCommand:
 	jr nz, FDC_ValidateTrack
 
 FDC_NoOpReturn:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_Command5Handler:
@@ -602,7 +602,7 @@ FDC_Setup_DMA_Ack_Dest:
 	ldc_cr32 xhl, 0x0c
 	ld xhl, (0x8a4c:16)
 	ldc_cr32 xhl, 0x2c
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ldc_cr8 a, 0x4e
 	jr FDC_Port_Reset_Or_Noop
 
@@ -611,7 +611,7 @@ FDC_Setup_DMA_Src_Ack:
 	ldc_cr32 xhl, 0x0c
 	ld xhl, 0x120000
 	ldc_cr32 xhl, 0x2c
-	ldb a, 0x8
+	ld a, 0x8:opc
 	ldc_cr8 a, 0x4e
 	jr FDC_Port_Reset_Or_Noop
 	ld bc, (0x8a1c:16)
@@ -780,7 +780,7 @@ FDC_ResultPhase_Read:
 	ld	(xsp), a
 	calr	65361
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	nz, 7
@@ -793,7 +793,7 @@ FDC_ResultPhase_Read:
 	ld	(xsp), a
 	calr	65337
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	nz, 17
@@ -819,28 +819,28 @@ FDC_Exception_Status_Decoder:
 	jr z, FDC_StatusDecode_DriveNotReady
 	cp a, 0:i3
 	jr nz, FDC_StatusDecode_UnknownIC
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_StatusDecode_DriveNotReady:
 	ld (0x8b00:16), 255
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_StatusDecode_InvalidCommand:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_StatusDecode_AbnormalTerm:
 	bit 3, c
 	jr z, FDC_StatusDecode_Overrun
-	ldb l, 0x31
+	ld l, 0x31:opc
 	ret
 
 FDC_StatusDecode_Overrun:
 	bit 4, c
 	jr z, FDC_StatusDecode_CheckST2
-	ldb l, 0x32
+	ld l, 0x32:opc
 	ret
 
 FDC_StatusDecode_CheckST2:
@@ -885,7 +885,7 @@ FDC_StatusDecode_DefaultError:
 	jrl FDC_Set_Status
 
 FDC_StatusDecode_UnknownIC:
-	ldb l, 0x8
+	ld l, 0x8:opc
 	ret
 
 
@@ -927,7 +927,7 @@ FDC_HardwareSetup:
 	ld	(xsp), a
 	calr	63542
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jrl	nz, 214
@@ -979,7 +979,7 @@ FDC_HardwareSetup:
 	extz	wa
 	calr	65107
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	nz, 90
@@ -1035,7 +1035,7 @@ FDC_HardwareSetup:
 	jr	z, 5
 	cp	a, 53
 	jr	nz, 3
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 	ld	a, (0x8a28:16)
 	and	a, 31
@@ -1053,9 +1053,9 @@ FDC_HardwareSetup:
 	jr	ugt, 7
 	cp	a, 2:i3
 	jr	c, 3
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
-	ldb	l, 1
+	ld	l, 1:opc
 	ret
 	ld	a, (0x8a35:16)
 	and	a, 3
@@ -1362,7 +1362,7 @@ FDC_CmdRecalibrate:
 	calr	64643
 	calr	65385
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 5
@@ -1386,7 +1386,7 @@ FDC_CmdRecalibrate:
 	calr	64581
 	calr	65323
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 5
@@ -1399,7 +1399,7 @@ FDC_CmdRecalibrate:
 	ldw	wa, 198
 	calr	64543
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	ret	nz
@@ -1434,7 +1434,7 @@ FDC_CMD_EXEC:
 	ld	(0x8a24:16), 0
 	calr	65411
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 22
@@ -1449,7 +1449,7 @@ FDC_CMD_EXEC:
 	ld	xbc, 0xd1010378
 	popw	wa
 	.byte 0x8a
-	ldb	w, 209
+	ld	w, 209:opc
 	incf
 	incm8	3, (xhl-16)
 	.byte 0x06
@@ -1500,12 +1500,12 @@ FDC_CMD_EXEC:
 	.byte 0x8a
 	calr	65325
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 58
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	push	110
 	.byte 0x06
@@ -1526,7 +1526,7 @@ FDC_CMD_EXEC:
 	.byte 0x8a
 	jr	ge, -63
 	jr	-118
-	ldb	a, 201
+	ld	a, 201:opc
 	dec	6, wa
 	.byte 0x54
 	ld	(0x8a24:16), 16
@@ -1577,7 +1577,7 @@ FDC_CMD_EXEC:
 	ld	(0x8a24:16), 0
 	calr	65104
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 22
@@ -1592,7 +1592,7 @@ FDC_CMD_EXEC:
 	ld	xbc, 0xd1010478
 	popw	wa
 	.byte 0x8a
-	ldb	w, 209
+	ld	w, 209:opc
 	incf
 	incm8	3, (xhl-16)
 	.byte 0x06
@@ -1643,12 +1643,12 @@ FDC_CMD_EXEC:
 	.byte 0x8a
 	calr	154
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 59
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	push	110
 	push	30
@@ -1656,7 +1656,7 @@ FDC_CMD_EXEC:
 	calr	62189
 	jrl	129
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	pushw	sp
 	jr	z, 122
@@ -1672,7 +1672,7 @@ FDC_CMD_EXEC:
 	.byte 0x8a
 	jr	ge, -63
 	jr	-118
-	ldb	a, 201
+	ld	a, 201:opc
 	dec	6, wa
 	.byte 0x54
 	ld	(0x8a24:16), 32
@@ -1723,7 +1723,7 @@ FDC_CMD_EXEC:
 	ldw	wa, 197
 	calr	63871
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	ret	nz
@@ -1806,7 +1806,7 @@ FDC_MODE_CONFIG:
 ; Uses (R+d16) addressing for buffer and state access. 536 bytes.
 FDC_MC_EXIT:
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	.byte 0xf2, 0xd0
@@ -1817,7 +1817,7 @@ FDC_MC_EXIT:
 	ret
 	calr	64580
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jrl	nz, -3722
@@ -1832,7 +1832,7 @@ FDC_MC_EXIT:
 	ldw	(0x8a1c:16), 0
 	ld	ix, (0x8b0a:16)
 	srl	ix, 1
-	ldb	e, 0
+	ld	e, 0:opc
 	ld	iy, 0:i3
 	cp	iy, ix
 	jrl	nc, 262
@@ -1986,7 +1986,7 @@ FDC_MC_EXIT:
 	ldw	wa, 77
 	calr	63202
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	ret	nz
@@ -1996,7 +1996,7 @@ FDC_MC_EXIT:
 	ldw	wa, 254
 	calr	63182
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	z, 8
@@ -2021,9 +2021,9 @@ FDC_MC_EXIT:
 ;   Set flag (35434=255) or clear flag (35434=0).
 FDC_STATUS_COPY:
 	.byte 0xc1
-	ldb	h, 138
+	ld	h, 138:opc
 	pop_f
-	ldb	d, 138
+	ld	d, 138:opc
 	ret
 	ld	wa, (0x8a44:16)
 	cp	wa, 1:i3
@@ -2049,20 +2049,20 @@ FDC_INTERRUPT_HANDLER:
 	.byte 0xd7
 	swi	2
 	.byte 0x04, 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	nz, 64
 	ld	wa, 4:i3
 	calr	63086
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	nz, 52
 	calr	62516
 	.byte 0xc1
-	ldb	d, 138
+	ld	d, 138:opc
 	push	xsp
 	nop
 	jr	nz, 42
@@ -2342,7 +2342,7 @@ INT4_WaitDataReady:
 	calr FDC_Read_Status
 	bit 6, l
 	jr nz, INT4_StoreResultBase
-	ldb l, 0x0
+	ld l, 0x0:opc
 	cp l, 0x80
 	jr z, INT4_SendSpecifyCmd
 
@@ -2404,7 +2404,7 @@ Reset_Floppy_Disk_Controller:
 	ldio 0x47, 0x1e
 	bit_dd8 6, 0x34	; Port D bit 6: "FD.I/O signal"
 	ret nz
-	ldb a, 0x0
+	ld a, 0x0:opc
 	ldw (0x8b24:16), 0
 	ldw (0x8b26:16), 0
 	ldw (0x8b28:16), 0
@@ -2477,11 +2477,11 @@ FDC_Reset_BuildParams:
 Check_for_Floppy_Disk_Change:
 	bit_dd8 6, 0x34
 	jr z, Detected_Floppy_Disk_Change
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 Detected_Floppy_Disk_Change:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	ret
 
 ; End of FDC routines

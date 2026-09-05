@@ -651,7 +651,7 @@ EffectMode_UpdateBitFlags_ProcessEntry:
 	add xwa, xde
 	ld xiz, xbc
 	add xiz, xwa
-	ldb w, 0x0
+	ld w, 0x0:opc
 	jr EffectMode_UpdateBitFlags_CheckCount
 
 EffectMode_UpdateBitFlags_CopyByte:
@@ -764,10 +764,10 @@ EffectMode_SetRegionAndHold:
 	and a, 0x7
 	jr nz, EffectMode_SetRegion_Apply
 	call Get_Region_Code
-	ldb h, 0xa
+	ld h, 0xa:opc
 	cp l, 2:i3
 	jr nz, EffectMode_SetRegion_Apply
-	ldb h, 0x9
+	ld h, 0x9:opc
 
 EffectMode_SetRegion_Apply:
 	lda xbc, (xiz + 3)
@@ -1020,7 +1020,7 @@ MainCPU_self_test_routines:
 
 
 Report_test_result_by_blinking_LED:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 Report_BlinkLoop:
 	res_dd8 1, 0x30
@@ -1035,7 +1035,7 @@ Report_BlinkLoop_ShortFlash:
 	jr z, Report_BlinkLoop_FlashOff
 
 Report_BlinkLoop_FlashOn:
-	ldb e, 0x0
+	ld e, 0x0:opc
 
 Report_BlinkLoop_FlashDelay:
 	inc 1, e
@@ -1048,7 +1048,7 @@ Report_BlinkLoop_FlashOff:
 	ldw bc, 0x4000
 
 Report_BlinkLoop_OffDelay:
-	ldb e, 0x0
+	ld e, 0x0:opc
 
 Report_BlinkLoop_OffDelayInner:
 	inc 1, e
@@ -1169,7 +1169,7 @@ DramTest_IC10IC9_LoopEnd:
 
 
 Test_SRAM_IC21:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 SramTest_IC21_Loop:
 	ld c, l
@@ -1337,7 +1337,7 @@ Test_Rhythm_data_ROM_IC14:
 	ldw (xix), 0x0
 	lda xhl, (xix + 2)
 	ldw (xhl), 0x0
-	ldb w, 0x0
+	ld w, 0x0:opc
 
 RhythmRomTest_OuterLoop:
 	ld xiy, 0x400000
@@ -1699,8 +1699,8 @@ EffectMode_PopRetFA:
 	ret
 
 SelfTest_PopCount:
-	ldb l, 0x0
-	ldb c, 0x0
+	ld l, 0x0:opc
+	ld c, 0x0:opc
 
 SelfTest_PopCount_Loop:
 	bit 0, a
@@ -2174,7 +2174,7 @@ EffectMode_MidiSetLEDs:
 	ld a, (xiz + 2)
 	and a, (xiz + 1)
 	jr nz, EffectMode_MidiLED_HasMask
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 EffectMode_MidiLED_HasMask:
 	extz hl
@@ -4125,7 +4125,7 @@ MstStyle1_EventDispatch:
 	add xbc, xwa
 	ld xde, (xbc)
 	ld (0x0340d2:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle1Sub_CountEntries_Loop:
 	ld a, c
@@ -4203,7 +4203,7 @@ MstStyle1Sub_HandleSubSelect:
 	add xbc, xwa
 	ld xde, (xbc)
 	ld (0x0340d2:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle1Sub_SubSel_CountLoop:
 	ld a, c
@@ -4820,7 +4820,7 @@ MstStyle1Page_EventDispatch:
 	add xbc, xwa
 	ld xde, (xbc)
 	ld (0x0340d2:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_CountEntries_Loop:
 	ld a, c
@@ -4869,7 +4869,7 @@ MstStyle2_CountEntries_Adjust:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340d6:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_CountSubEntries_LoopA:
 	ld a, c
@@ -4903,7 +4903,7 @@ MstStyle2_CountSubEntries_AdjA:
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	ld (0x0340da:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_CountSubEntries_LoopB:
 	ld a, c
@@ -4944,7 +4944,7 @@ MstStyle2_InitOdd_Setup:
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	ld (0x0340d6:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_InitOdd_CountLoopA:
 	ld a, c
@@ -4973,7 +4973,7 @@ MstStyle2_InitOdd_CountAdjA:
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	ld (0x0340da:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_InitOdd_CountLoopB:
 	ld a, c
@@ -5096,7 +5096,7 @@ MstStyle2_DialDown_PageDec:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340d6:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_PageDec_CountLoop:
 	ld a, c
@@ -5133,7 +5133,7 @@ MstStyle2_PageDec_CountAdj:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340da:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_PageDec_CountLoop2:
 	ld a, c
@@ -5226,7 +5226,7 @@ MstStyle2_DialUp_PageInc:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340d6:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_PageInc_CountLoop:
 	ld a, c
@@ -5268,7 +5268,7 @@ MstStyle2_PageInc_CountAdj:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340da:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_PageInc_CountLoop2:
 	ld a, c
@@ -5365,7 +5365,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340d6:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_DialScrollDown_CountLoop:
 	ld a, c
@@ -5402,7 +5402,7 @@ MstStyle2_DialScrollDown_CountAdj:
 	add xwa, (0x340d2:24)
 	ld xde, (xwa + 4)
 	ld (0x0340da:24), xde
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_DialScrollDown_Count2Loop:
 	ld a, c
@@ -5597,7 +5597,7 @@ MstStyle2_DialScrollUp_NextPage:
 	add xwa, (0x340d2:24)
 	ld xiy, (xwa + 4)
 	ld (0x0340d6:24), xiy
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_DialScroll_CountLoopD:
 	ld a, c
@@ -5634,7 +5634,7 @@ MstStyle2_DialScroll_CountAdjD:
 	add xwa, (0x340d2:24)
 	ld xhl, (xwa + 4)
 	ld (0x0340da:24), xhl
-	ldb c, 0x0
+	ld c, 0x0:opc
 
 MstStyle2_DialScroll_CountLoopE:
 	ld a, c
@@ -8051,7 +8051,7 @@ AudioTable_ReturnZero:
 	ret
 
 AudioTable_FindMatchIndex:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	lda xde, (Str_StoreTotalSetting_DE_0x298:24)
 
 AudioTable_FindMatch_Loop:
@@ -8874,7 +8874,7 @@ PmExpFilter_EventDispatch:
 	jr	z, 103
 	cp	a, 1:i3
 	jrl	nz, 399
-	ldb	l, 0
+	ld	l, 0:opc
 	lda	xix, (ParamStr02_Vocalist_0x52:24)
 	ld	xwa, (xde)
 	ld	c, l
@@ -8914,7 +8914,7 @@ PmExpFilter_EventDispatch:
 	cp	l, 9
 	jr	c, -86
 	jrl	301
-	ldb	l, 0
+	ld	l, 0:opc
 	lda	xix, (ParamStr02_Vocalist_0x76:24)
 	ld	xwa, (xde)
 	ld	c, l
@@ -11281,7 +11281,7 @@ AcPmBkEditBoxProc:
 	call GetViewInstance
 	ld xwa, (xhl + 54)
 	ld xwa, (xwa)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	stl_dri XWA, 0xfd, 0x2e, 0x01
 	ld xwa, 0x1420008
@@ -11320,7 +11320,7 @@ AcPmBkEdit_BankChanged_UpdateLoop:
 	ld a, (xwa)
 	sll a, 3
 	addb_erp A, 0xfb
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	stl_dri XWA, 0xfd, 0x2e, 0x01
 	ld xwa, 0x1420008
@@ -13583,7 +13583,7 @@ VariScreen_CalcValidNoteRow:
 	ret
 
 CalcValidNoteRow_Invalid:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 VariScreen_IsHalfRangeAbove:

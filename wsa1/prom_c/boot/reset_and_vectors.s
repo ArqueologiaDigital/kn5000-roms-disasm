@@ -105,7 +105,7 @@ RESET:
 	; --- first touch of the CS0 device cluster -----------------------------
 	; This is the pair that proves MSAR0: the base just programmed as 0x10
 	; is loaded here as a full 24-bit address.
-	ldb E,0x01
+	ld E,0x01:opc
 	ld XIX,0x00100000
 
 	; --- timers, ports, serial ---------------------------------------------

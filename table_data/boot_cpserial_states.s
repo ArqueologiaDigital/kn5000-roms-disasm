@@ -397,8 +397,8 @@ BootSerial_PollTX__inject_free:
 	cp	hl, 3:i3
 	jr	c, BootSerial_PollTX__inject_done
 	ld	(0x0f72:16), 0
-	ldb	w, 0x20			; sync frame (0x20, 0x10)
-	ldb	a, 0x10
+	ld	w, 0x20:opc			; sync frame (0x20, 0x10)
+	ld	a, 0x10:opc
 	ld	iy, (0x0fd7:16)
 	ld	xde, 0x0fd9		; TX serial ring
 	stb_dri w, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
@@ -424,7 +424,7 @@ BootSerial_PollTX__encode:
 	jr	nc, BootSerial_PollTX__have_count
 	neg	wa
 	ex8	a, w
-	ldb	a, 0x3c
+	ld	a, 0x3c:opc
 	sub	a, w			; wrapped: pending = ring size - diff
 BootSerial_PollTX__have_count:
 	cp	a, 2:i3
@@ -503,7 +503,7 @@ BootSerial_RX_ParsePackets__next:
 	jr	nc, BootSerial_RX_ParsePackets__have_avail
 	neg	wa
 	ex8	a, w
-	ldb	a, 0x5c
+	ld	a, 0x5c:opc
 	sub	a, w			; wrapped: avail = ring size - diff
 BootSerial_RX_ParsePackets__have_avail:
 	cp	a, 2:i3			; a whole frame available?
@@ -718,7 +718,7 @@ BootSerial_RxPkt_VarLengthRun__scramble:
 	calr	BootSerial_CtrlRingRetreatIX	; whole pair
 	jr	t, BootSerial_RxPkt_VarLengthRun__commit_tail
 BootSerial_RxPkt_VarLengthRun__raw_done:
-	ldb	a, 0xff			; decode mode: 0xff terminator
+	ld	a, 0xff:opc			; decode mode: 0xff terminator
 BootSerial_RxPkt_VarLengthRun__store_mixed:
 	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX
@@ -990,7 +990,7 @@ AudioMix_Init:
 	pop	xwa
 	ld	xbc, 0x150000		; peripheral base (subcpu twin: 0x130000)
 	ld	xwa, 0x101001f		; A = first reg 0x1f, W = data 0x01
-	ldb	d, 4
+	ld	d, 4:opc
 AudioMix_Init__mode_loop:
 	ld	w, a
 	ld	(xbc), xwa
@@ -1013,7 +1013,7 @@ AudioMix_WriteChannelGroup:
 	sll	a, 5
 	set	4, a			; A = (channel << 5) | 0x10
 	ld	xhl, 0x150000		; peripheral base (subcpu twin: 0x130000)
-	ldb	d, 8
+	ld	d, 8:opc
 AudioMix_WriteChannelGroup__loop:
 	ld	(xhl), a		; register-address latch
 	ldb_spi	e, 0xe4			; LD E, (XSP+)

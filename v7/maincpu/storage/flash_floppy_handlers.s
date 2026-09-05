@@ -36,29 +36,29 @@ FlashWrite_BlockData_Type0:
 	nop
 	ldwio	97, 0xff06
 	nop
-	ldb	w, 12
+	ld	w, 12:opc
 	pushw	2
 	ldwio	98, 0xff06
 	nop
-	ldb	w, 100
+	ld	w, 100:opc
 	decf
 	push	sr
 	halt
 	pushw	1635
 	swi	7
 	nop
-	ldb	w, 187
+	ld	w, 187:opc
 	retd	2
 	nop
 	ldwio	100, 0xff06
 	nop
-	ldb	w, 20
+	ld	w, 20:opc
 	ccf
 	push	sr
 	nop
 	ldwio	101, 0xff06
 	nop
-	ldb	w, 107
+	ld	w, 107:opc
 	push_a
 	pop	sr
 FlashWrite_BlockData_Type1:
@@ -69,28 +69,28 @@ FlashWrite_BlockData_Type2:
 	nop
 	ldwio	97, 0xff06
 	nop
-	ldb	w, 12
+	ld	w, 12:opc
 	.byte 0x0b
 	push	sr
 FlashRead_BlockData_Field2:
 	nop
 	ldwio	98, 0xff06
 	nop
-	ldb	w, 100
+	ld	w, 100:opc
 	decf
 	push	sr
 FlashRead_BlockData_Field3:
 	nop
 	ldwio	99, 0xff06
 	nop
-	ldb	w, 188
+	ld	w, 188:opc
 	.byte 0x0f
 	push	sr
 FlashRead_BlockData_Field4:
 	nop
 	ldwio	100, 0xff06
 	nop
-	ldb	w, 20
+	ld	w, 20:opc
 	ccf
 	push	sr
 FlashRead_BlockData_Field5:
@@ -98,7 +98,7 @@ FlashRead_BlockData_Field5:
 	pushw	1637
 	swi	7
 	nop
-	ldb	w, 107
+	ld	w, 107:opc
 	push_a
 	push	sr
 	nop
@@ -106,7 +106,7 @@ FlashRead_BlockData_Field6:
 	nop
 	ldwio 102, 65286
 	nop
-	ldb	w, 196
+	ld	w, 196:opc
 	ex_ff
 	push	sr
 FlashRead_BlockHandler_Table:
@@ -123,11 +123,11 @@ FlashWrite_BlockData_Type3:
 	nop
 	ldwio	97, 65286
 	nop
-	ldb	w, 12
+	ld	w, 12:opc
 	pushw	2
 	ldwio	98, 65286
 	nop
-	ldb	w, 100
+	ld	w, 100:opc
 	decf
 	push	sr
 	push	sr
@@ -141,7 +141,7 @@ FlashWrite_BlockData_Type3:
 	jr	ov, 6
 	swi	7
 	nop
-	ldb	w, 19
+	ld	w, 19:opc
 	ccf
 	pop	sr
 FlashWrite_BlockRef_Type3:
@@ -150,21 +150,21 @@ FlashWrite_BlockData_Type4:
 	nop
 	ldwio	97, 0xff06
 	nop
-	ldb	w, 12
+	ld	w, 12:opc
 	pushw	2
 	ldwio	98, 0xff06
 	nop
-	ldb	w, 100
+	ld	w, 100:opc
 	decf
 	push	sr
 	nop
 	ldwio	99, 0xff06
 	nop
-	ldb	w, 188
+	ld	w, 188:opc
 	retd	2
 	ldwio	100, 0xff06
 	nop
-	ldb	w, 20
+	ld	w, 20:opc
 	ccf
 	push	sr
 FlashWrite_BlockRef_Type4:
@@ -173,12 +173,12 @@ FlashWrite_BlockData_Type5:
 	nop
 	ldwio	97, 0xff06
 	nop
-	ldb	w, 12
+	ld	w, 12:opc
 	pushw	1282
 	pushw	1634
 	swi	7
 	nop
-	ldb	w, 99
+	ld	w, 99:opc
 	decf
 	push	sr
 	nop
@@ -186,12 +186,12 @@ FlashWrite_BlockData_Type5:
 	pushw	1635
 	swi	7
 	nop
-	ldb	w, 187
+	ld	w, 187:opc
 	retd	2
 	nop
 	ldwio	100, 0xff06
 	nop
-	ldb	w, 19
+	ld	w, 19:opc
 	ccf
 	pop	sr
 FlashWrite_BlockRef_Type5:
@@ -203,20 +203,20 @@ FlashWrite_BlockData_Type6:
 	retd	1633
 	normal
 	nop
-	ldb	w, 167
+	ld	w, 167:opc
 	push_a
 	ld	(768:16), 11
 	pushw	2560
 	jr	le, 6	; -> 0xF15A5D
 	swi	7
 	nop
-	ldb	w, 100
+	ld	w, 100:opc
 	decf
 	push	sr
 	nop
 	ldwio	99, 65286
 	nop
-	ldb	w, 187
+	ld	w, 187:opc
 	.byte 0x0f	; llvm-mc cannot spell this byte
 	pop	sr
 FlashWrite_BlockRef_Type6:
@@ -1069,7 +1069,7 @@ Flash_InitBytecodeBlock:
 	calr	5818
 	jr	3
 	calr	6231
-	ldb	l, 0
+	ld	l, 0:opc
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -1087,7 +1087,7 @@ Flash_InitBytecodeBlock:
 	extz	de
 	calr	6188
 	call	16114965
-	ldb	l, 0
+	ld	l, 0:opc
 	inc	2, xsp
 	ret
 	jrl	-1298
@@ -1260,7 +1260,7 @@ PartGrid_OperationsBlock:
 	ld	(xsp+2), a
 	ld	bc, (xsp+18)
 	ld	de, bc
-	ldb	d, 0
+	ld	d, 0:opc
 	srl	bc, 8
 	ld	(xsp), c
 	ld	a, (xsp+2)
@@ -1626,7 +1626,7 @@ Flash_ExtendedOpsBlock:
 	lda xix, (0x06d4:16)
 	cpw (XIX), 0xffff
 	jr z, .Lc_f173a6
-	ldb L, 0x00
+	ld L, 0x00:opc
 	ld xbc, (0x0c92:16)
 .Lc_f17377:
 	ld A,L
@@ -1650,8 +1650,8 @@ Flash_ExtendedOpsBlock:
 	cp l, 4:i3
 	jr c, .Lc_f17377
 .Lc_f173a6:
-	ldb H, 0x00
-	ldb L, 0x00
+	ld H, 0x00:opc
+	ld L, 0x00:opc
 	lds_erpb 0xea, 0
 .Lc_f173ad:
 	ld_erpb_rr a, 0xea
@@ -2121,9 +2121,9 @@ Flash_ExtendedOpsBlock:
 	ld xde, (0x0c92:16)
 	ld wa, 1:i3
 	jp Flash_EraseSectorAndWrite
-	ldb L, 0x00
+	ld L, 0x00:opc
 	ld xde, (0x0c92:16)
-	ldb B, 0x00
+	ld B, 0x00:opc
 	cp a, 0:i3
 	jr nz, .Lc_f17f68
 	ld wa, 0:i3
@@ -2337,7 +2337,7 @@ DualVoice_ScanRow1Alt:
 SlotTable_InitBank1748:
 	lda xbc, (1748:16)
 	ldw (xbc), 0xffff
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ld wa, 0:i3
 
 SlotTable_InitBank1748_Loop:
@@ -2353,7 +2353,7 @@ SlotTable_InitBank1748_Loop:
 SlotTable_InitBank1850:
 	lda xbc, (1850:16)
 	ldw (xbc), 0xffff
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ld wa, 0:i3
 
 SlotTable_InitBank1850_Loop:
@@ -2439,7 +2439,7 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	lda	xbc, (3074:16)
 	ldw (xbc), 65535
-	ldb	l, 0
+	ld	l, 0:opc
 	ld	wa, 0:i3
 	ld	de, wa
 	inc	2, de
@@ -2456,7 +2456,7 @@ SlotTable_ExtendedOpsBlock:
 	ret
 	lda	xbc, (2972:16)
 	ldw (xbc), 65535
-	ldb	l, 0
+	ld	l, 0:opc
 	ld	wa, 0:i3
 	ld	de, wa
 	inc	2, de
@@ -2530,7 +2530,7 @@ Flash_WriteBackSlotTable:
 	cpw (xwa), 0xffff
 	jr z, Flash_WriteBackSlot_StartLoop
 	ld wa, (xwa)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	add a, 0x28
 	extz wa
 	ld bc, 0:i3
@@ -2605,7 +2605,7 @@ Flash_SlotUpdateOpsBlock:
 	ld_erpb_rr e, 0xfa
 	extz DE
 	calr Util_FrameSetup10
-	ldb H, 0x00
+	ld H, 0x00:opc
 	ld A,L
 	res 0x07,A
 	cp L,0x80
@@ -3543,7 +3543,7 @@ ToneParam_ExtendedOpsBlock:
 	ld HL,IZ
 	popw iz
 	ret
-	ldb L, 0x00
+	ld L, 0x00:opc
 	ld de, 0:i3
 .Lc_f1919c:
 	ld WA,DE
@@ -5462,7 +5462,7 @@ GridCheck_ClampParamAlt:
 	ld l, (xbc + 5)
 	cp l, 0xb
 	ret ule
-	ldb l, 0xb
+	ld l, 0xb:opc
 
 GridCheck_ClampDone:
 	ret

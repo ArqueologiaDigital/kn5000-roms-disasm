@@ -68,7 +68,7 @@ SMF_IncrementPosition:
 	ldw (3946:16), 0
 	pop xde
 	pop xwa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	push xwa
@@ -87,9 +87,9 @@ SMF_IncrPos_BufferEmpty:
 	jp SMF_FlushAndFinalize
 
 SMF_IncrPos_WriteEndMarker:
-	ldb a, 0xff
-	ldb w, 0x2f
-	ldb l, 0x0
+	ld a, 0xff:opc
+	ld w, 0x2f:opc
+	ld l, 0x0:opc
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -402,7 +402,7 @@ SMF_OutputCmd_SendFF:
 	ld xix, (4376:16)
 	bit 7, a
 	jr nz, SMF_OutputCmd_ReadByte
-	ldb a, 0xff
+	ld a, 0xff:opc
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
@@ -422,7 +422,7 @@ SMF_OutputCmd_ErrorCheck2:
 
 SMF_OutputCmd_Send51:
 	ld xix, (4376:16)
-	ldb a, 0x51
+	ld a, 0x51:opc
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
@@ -442,7 +442,7 @@ SMF_OutputCmd_ErrorCheck3:
 
 SMF_OutputCmd_Send03:
 	ld xix, (4376:16)
-	ldb a, 0x3
+	ld a, 0x3:opc
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
@@ -1033,32 +1033,32 @@ SMF_EventType_Switch:
 	jrl SMF_EventLoop_Continue
 
 SMF_Event_NoteOff82:
-	ldb a, 0x82
+	ld a, 0x82:opc
 	calr SMF_LookupSongBank
 	jrl SMF_EventLoop_Return
 
 SMF_Event_PartD0:
-	ldb a, 0xa0
+	ld a, 0xa0:opc
 	jr SMF_Event_OutputByte
 
 SMF_Event_PartD1:
-	ldb a, 0xd0
+	ld a, 0xd0:opc
 	jr SMF_Event_OutputByte
 
 SMF_Event_PartD2:
-	ldb a, 0xe0
+	ld a, 0xe0:opc
 	jr SMF_Event_OutputByte
 
 SMF_Event_PartD3:
-	ldb a, 0xf0
+	ld a, 0xf0:opc
 	jr SMF_Event_OutputByte
 
 SMF_Event_Part80:
-	ldb a, 0xa0
+	ld a, 0xa0:opc
 	jr SMF_Event_OutputByte
 
 SMF_Event_NoteOn:
-	ldb a, 0x90
+	ld a, 0x90:opc
 
 SMF_Event_OutputByte:
 	or a, (4008:16)
@@ -1120,7 +1120,7 @@ SMF_ProgChg_SearchNext:
 	jr ule, SMF_ProgChg_SearchPart
 
 SMF_ProgChg_NotFound:
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	jr SMF_ProgChg_Write
 
 SMF_ProgChg_Found:
@@ -1191,7 +1191,7 @@ SMF_CtrlChg_SearchNext:
 	jr ule, SMF_CtrlChg_SearchPart
 
 SMF_CtrlChg_NotFound:
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	jr SMF_CtrlChg_Write
 
 SMF_CtrlChg_Found:
@@ -1424,7 +1424,7 @@ SMF_ResolveChannel:
 	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
 	pop xix
 	jr nz, SMF_Resolve_DrumCh9
-	ldb a, 0x9
+	ld a, 0x9:opc
 	jrl SMF_Resolve_Return
 
 SMF_Resolve_DrumCh9:
@@ -1460,7 +1460,7 @@ SMF_Resolve_DrumSearch:
 	inc 1, iy
 	cp iy, 0xf
 	jr ule, SMF_Resolve_DrumSearch
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	jr SMF_Resolve_Return
 
 SMF_Resolve_DrumFound:
@@ -1473,7 +1473,7 @@ SMF_Resolve_NoDrum:
 	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
 	pop xix
 	jr nz, SMF_Resolve_Ch15Check
-	ldb a, 0xf
+	ld a, 0xf:opc
 	jr SMF_Resolve_Return
 
 SMF_Resolve_Ch15Check:
@@ -1509,7 +1509,7 @@ SMF_Resolve_Ch15Search:
 	inc 1, iy
 	cp iy, 0xf
 	jr ule, SMF_Resolve_Ch15Search
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	jr SMF_Resolve_Return
 
 SMF_Resolve_Ch15Found:
@@ -1571,7 +1571,7 @@ SMF_UpdateTempo_Encode:
 	ld wa, (xde + 1)
 	pop xde
 	push xhl
-	ldb l, 0x0
+	ld l, 0x0:opc
 	pushw bc
 	push xix
 	calr SMF_WriteByteLoop
@@ -1825,11 +1825,11 @@ SMF_TranslateChannel:
 	jr z, SMF_Translate_0xE
 	cp a, 0x10
 	jr nz, SMF_Translate_Apply
-	ldb w, 0x18
+	ld w, 0x18:opc
 	jr SMF_Translate_Apply
 
 SMF_Translate_0xE:
-	ldb w, 0x17
+	ld w, 0x17:opc
 
 SMF_Translate_Apply:
 	ld a, w
@@ -1880,7 +1880,7 @@ SMF_ConfigSlot_EventLoop:
 	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
-	ldb w, 0xf0
+	ld w, 0xf0:opc
 	and w, a
 	cp a, 0x82
 	jrl z, SMF_ConfigSlot_EndOfTrack
@@ -2145,13 +2145,13 @@ SMF_Config_HandleBit1:
 SMF_Config_OutputOverride1:
 	ld a, (3301:16)
 	inc 1, a
-	ldb w, 0x1
+	ld w, 0x1:opc
 	jr SMF_Config_SaveAndRestore
 
 SMF_Config_OutputOverride6:
 	ld a, (3301:16)
 	inc 1, a
-	ldb w, 0x6
+	ld w, 0x6:opc
 
 SMF_Config_SaveAndRestore:
 	push xix
@@ -2452,7 +2452,7 @@ SMF_SlotChain_ExtendedVoice:
 	jr SMF_SlotChain_ExtVoiceStore
 
 SMF_SlotChain_ExtVoiceDefault:
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SMF_SlotChain_ExtVoiceStore:
 	ld (xiy + 4), a
@@ -2734,11 +2734,11 @@ SMF_SlotParam_PitchBendCalc:
 	and a, 0x10
 	cp a, 0:i3
 	jr z, SMF_SlotParam_PitchBendStore
-	ldb a, 0x20
+	ld a, 0x20:opc
 	jr SMF_SlotParam_PitchBendReturn
 
 SMF_SlotParam_PitchBendStore:
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SMF_SlotParam_PitchBendReturn:
 	ld (xiy + 4), a

@@ -115,7 +115,7 @@ SeqStep_NoteCheckVel:
 	bit 0, a
 	jr nz, SeqStep_NoteVelSave
 	ld wa, (0x273e:16)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
@@ -373,7 +373,7 @@ SeqStep_EventStorePos:
 	ld (9824:16), a
 
 SeqStep_EventSetState:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	bit 0, (0x271e:16)
 	jr nz, SeqStep_EventAdvancePos
 	call SeqData_ReadNextByte
@@ -478,7 +478,7 @@ SeqStep_DeleteConsumeAdvance:
 	bit 0, a
 	jr nz, SeqStep_DeleteFinish
 	ld wa, (0x273e:16)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld (0x271c:16), a
 	ld wa, (0x273c:16)
 	extz xwa
@@ -2555,7 +2555,7 @@ SeqStep_PlaybackCheckPattern:
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackNoAction:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	jr SeqStep_PlaybackReturn
 
 SeqStep_PlaybackCheck10408:

@@ -108,7 +108,7 @@ Encoder_ClampScaleAndNormalize:
 
 Encoder_PerformScaling:
 	sub l, c	; Subtract minimum
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	sll xhl, 8	; Scale up (multiply by 256)
 	ld xwa, xhl

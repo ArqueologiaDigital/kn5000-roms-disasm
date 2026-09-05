@@ -164,7 +164,7 @@ SeqEvt_WriteNoteOff:
 
 	calr	635
 
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 	calr	630
 
@@ -203,7 +203,7 @@ SeqEvt_WriteVoiceParams:
 	ld A,W
 	stb_dri a, 0x07, 0xec, 0xf0
 	inc 1,IX
-	ldb A, 0x00
+	ld A, 0x00:opc
 	stb_dri a, 0x07, 0xec, 0xf0
 	inc 1,IX
 	ld (0x7d77:16), xhl
@@ -315,17 +315,17 @@ SeqEvt_HandleExtendedCtrl:
 SeqEvt_SetExtendedFlag:
 	popw	bc
 	calr	101
-	ldb	a, 208
+	ld	a, 208:opc
 	or	a, (32107:16)
 	calr	92
-	ldb	a, 7
+	ld	a, 7:opc
 	calr	87
 	ld_rrb	w, xhl, ix
 	calr	102
-	ldb	a, 0
+	ld	a, 0:opc
 	bit	0, w
 	jr	z, 2
-	ldb	a, 127
+	ld	a, 127:opc
 SeqEvt_WriteSustainValue:
 	calr SeqEvtBuf_WriteBytePreserve
 
@@ -999,7 +999,7 @@ Voice_NoteChannelTable1:
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld	c, 92:opc
 	ret
 	jrl	f, 28929
 	.byte 0x01
@@ -1115,12 +1115,12 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	ldb	a, 2
-	ldb	d, 1
-	ldb	c, 1
-	ldb	e, 1
-	ldb	c, 3
-	ldb	h, 1
+	ld	a, 2:opc
+	ld	d, 1:opc
+	ld	c, 1:opc
+	ld	e, 1:opc
+	ld	c, 3:opc
+	ld	h, 1:opc
 	nop
 	nop
 	nop
@@ -1181,15 +1181,15 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	ldb	d, 0
-	ldb	e, 0
+	ld	d, 0:opc
+	ld	e, 0:opc
 	pushw	hl
 	nop
 	nop
 	nop
 	pushw	wa
 	nop
-	ldb	h, 0
+	ld	h, 0:opc
 	.zero 16
 	nop
 	nop
@@ -1212,7 +1212,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	ldb	l, 0
+	ld	l, 0:opc
 	nop
 	nop
 	nop
@@ -1395,15 +1395,15 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	ldb	a, 0
-	ldb	b, 0
+	ld	a, 0:opc
+	ld	b, 0:opc
 	nop
 	nop
 	nop
@@ -1455,7 +1455,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	ldb	c, 0
+	ld	c, 0:opc
 	nop
 	nop
 	.zero 8
@@ -1673,10 +1673,10 @@ Voice_BankIndexTable:
 Voice_DecodeNoteParam:
 	cp l, 0x80
 	jr c, Voice_DecodeStandard
-	ldb h, 0x1
+	ld h, 0x1:opc
 	cp l, 0x8c
 	jr c, Voice_DecodePercussion
-	ldb l, 0x80
+	ld l, 0x80:opc
 
 Voice_DecodePercussion:
 	jr Voice_DecodeParamRet
@@ -1892,7 +1892,7 @@ AccPlay_InitializeStart:
 	push XIY
 	push XIZ
 	xor WA,WA
-	ldb A, 0x10
+	ld A, 0x10:opc
 	call UI_PostPartChangeEvent
 	pop XIZ
 	pop XIY
@@ -1947,7 +1947,7 @@ AccPlay_MainUpdateLoop:
 AccPlay_PostEvent9E_Enable:
 .Lc_f71b3c:
 	xor WA,WA
-	ldb A, 0x01
+	ld A, 0x01:opc
 	call UI_PostPartChangeEvent
 	bit 2, (0x7e79:16)
 	jr z, AccPlay_PostEvent9E_Disable
@@ -2111,10 +2111,10 @@ Voice_GetBankEntryPointer:
 	ld	a, (32376:16)
 	cp	a, 12
 	jr	c, 2
-	ldb	a, 0
+	ld	a, 0:opc
 Voice_CalcBankOffset:
 	ld xiy, 0x1e8820
-	ldb w, 0x10
+	ld w, 0x10:opc
 	mul8rr a, w
 	and xwa, 0xffff
 	add xiy, xwa
@@ -2162,12 +2162,12 @@ Voice_SlotTemplateData:
 	nop
 
 AccPlay_SetupSoundParams:
-	ldb A, 0x17
+	ld A, 0x17:opc
 	ld (0x8c9e:16), a
-	ldb E, 0x90
-	ldb D, 0x10
-	ldb A, 0x17
-	ldb W, 0xff
+	ld E, 0x90:opc
+	ld D, 0x10:opc
+	ld A, 0x17:opc
+	ld W, 0xff:opc
 	call SysEx_ApplyVoiceParam_49
 	ld a, (0xfd62:16)
 	ld w, (0xfd63:16)
@@ -2176,18 +2176,18 @@ AccPlay_SetupSoundParams:
 	ld wa, 0:i3
 	ld (0xfd62:16), a
 	ld (0xfd63:16), w
-	ldb E, 0x17
-	ldb D, 0x01
-	ldb A, 0x00
-	ldb W, 0x7f
+	ld E, 0x17:opc
+	ld D, 0x01:opc
+	ld A, 0x00:opc
+	ld W, 0x7f:opc
 	call SysEx_ApplyVoiceParam_49
-	ldb E, 0x17
-	ldb D, 0x00
-	ldb A, 0x00
-	ldb W, 0xff
+	ld E, 0x17:opc
+	ld D, 0x00:opc
+	ld A, 0x00:opc
+	ld W, 0xff:opc
 	call SysEx_ApplyVoiceParam_49
-	ldb H, 0x00
-	ldb L, 0x00
+	ld H, 0x00:opc
+	ld L, 0x00:opc
 	ld (0x905b:16), 0x17
 	call PartCtrl_WriteProgramChange
 	ld XBC,0x0000ff7e
@@ -2197,7 +2197,7 @@ AccPlay_SetupJumpTarget:
 AccPlay_SyncVoiceParams:
 	ld	xiy, 63926
 	ld	xix, 64866
-	ldb	c, 30
+	ld	c, 30:opc
 	ld	a, (xiy)
 	ld	w, (xix)
 	ld	(xix), a
@@ -2206,10 +2206,10 @@ AccPlay_SyncVoiceParams:
 	push	xiy
 	push	xix
 	push	xbc
-	ldb	e, 23
-	ldb	d, 30
+	ld	e, 23:opc
+	ld	d, 30:opc
 	sub	d, c
-	ldb	w, 255
+	ld	w, 255:opc
 	call	16624672
 	pop	xbc
 	pop	xix
@@ -2293,7 +2293,7 @@ AccPlay_ExtractVoiceSlot:
 
 	calr 1938
 
-	ldb a, 0x83
+	ld a, 0x83:opc
 
 	ld hl, (32374:16)
 
@@ -2416,7 +2416,7 @@ AccPlay_ChannelScanFail:
 	jr AccPlay_NoteReleaseRet
 
 AccPlay_ChannelSlotFound:
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(xhl), a
 	ld	d, (xhl+1)
 	ld	a, (xhl+2)
@@ -2434,7 +2434,7 @@ AccPlay_CalcNoteOffset:
 	jr nz, AccPlay_WriteNoteRelease
 	cp e, 2:i3
 	jr nc, AccPlay_WriteNoteRelease
-	ldb e, 0x2
+	ld e, 0x2:opc
 
 AccPlay_WriteNoteRelease:
 	ld	wa, (32372:16)
@@ -2494,7 +2494,7 @@ MidiSeq_ProcessSustainEvent:
 	ld	a, (xhl)
 	cp	a, 211
 	jr	nz, 4
-	ldb	a, 213
+	ld	a, 213:opc
 	ld	(xhl), a
 MidiSeq_SustainFixup:
 	ld de, 3:i3
@@ -2553,7 +2553,7 @@ MidiSeq_CtrlCheckType:
 	jr nz, MidiSeq_CheckSostenuto
 	cp w, 0x8
 	jr nz, MidiSeq_CheckSostenuto
-	ldb a, 0xd4
+	ld a, 0xd4:opc
 	ld (xhl), a
 	and e, 0x7f
 	ld (xhl + 2), e
@@ -2568,12 +2568,12 @@ MidiSeq_CheckSostenuto:
 	jr nz, MidiSeq_SustainHandler
 	bit 6, d
 	jr z, MidiSeq_SustainHandler
-	ldb a, 0xd7
+	ld a, 0xd7:opc
 	ld (xhl), a
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bit 6, e
 	jr z, MidiSeq_SostenutoValue
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 MidiSeq_SostenutoValue:
 	ld (xhl + 2), a
@@ -2588,12 +2588,12 @@ MidiSeq_SustainHandler:
 	jr nz, MidiSeq_SustainRet
 	bit 3, d
 	jr z, MidiSeq_SustainRet
-	ldb a, 0xd3
+	ld a, 0xd3:opc
 	ld (xhl), a
-	ldb a, 0x0
+	ld a, 0x0:opc
 	bit 3, e
 	jr z, MidiSeq_SoftPedalValue
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 
 MidiSeq_SoftPedalValue:
 	ld (xhl + 2), a
@@ -2694,7 +2694,7 @@ AccPlay_CompareAndSendProg:
 	jr	z, 28
 	ld	e, w
 	ld	w, a
-	ldb	a, 193
+	ld	a, 193:opc
 	ld	(32164:16), w
 	and	e, 15
 	bit	7, w
@@ -2712,13 +2712,13 @@ AccPlay_CompareReverbState:
 	and	l, 64
 	cp	wa, hl
 	jr	z, 16
-	ldb	e, 0
+	ld	e, 0:opc
 	cp	a, 0:i3
 	jr	z, 2
-	ldb	e, 127
+	ld	e, 127:opc
 AccPlay_SetReverbValue:
-	ldb w, 0x7
-	ldb a, 0xd1
+	ld w, 0x7:opc
+	ld a, 0xd1:opc
 	call AccompSeq_SendMidiEvent
 
 AccPlay_CompareChorusState:
@@ -2730,13 +2730,13 @@ AccPlay_CompareChorusState:
 	and	l, 8
 	cp	wa, hl
 	jr	z, 16
-	ldb	e, 0
+	ld	e, 0:opc
 	cp	a, 0:i3
 	jr	z, 2
-	ldb	e, 127
+	ld	e, 127:opc
 AccPlay_SetChorusValue:
-	ldb w, 0x3
-	ldb a, 0xd1
+	ld w, 0x3:opc
+	ld a, 0xd1:opc
 	call AccompSeq_SendMidiEvent
 
 AccPlay_ParamMonitorRet:
@@ -2747,7 +2747,7 @@ AccPlay_RestoreVoiceBank:
 	ld	wa, (xiy+9)
 	ld	e, w
 	ld	w, a
-	ldb	a, 193
+	ld	a, 193:opc
 	ld	(32164:16), w
 	and	e, 15
 	bit	7, w
@@ -2759,35 +2759,35 @@ AccPlay_SendBankProgram:
 	ld	wa, (xiy+9)
 	ld	(64866:16), a
 	ld	(64867:16), w
-	ldb	e, 23
-	ldb	d, 1
+	ld	e, 23:opc
+	ld	d, 1:opc
 	ld	a, w
-	ldb	w, 127
+	ld	w, 127:opc
 	call	16624672
 	ld	wa, (xiy+9)
-	ldb	e, 23
-	ldb	d, 0
-	ldb	w, 255
+	ld	e, 23:opc
+	ld	d, 0:opc
+	ld	w, 255:opc
 	call	16624672
 	ld	a, (xiy+12)
 	ld	e, a
-	ldb	w, 4
-	ldb	a, 209
+	ld	w, 4:opc
+	ld	a, 209:opc
 	call	16179773
 	ld	a, (xiy+12)
 	ld	(64874:16), a
-	ldb	e, 23
-	ldb	d, 8
-	ldb	w, 127
+	ld	e, 23:opc
+	ld	d, 8:opc
+	ld	w, 127:opc
 	call	16624672
 	ld	a, (xiy+13)
-	ldb	e, 0
+	ld	e, 0:opc
 	bit	0, a
 	jr	z, 2
-	ldb	e, 127
+	ld	e, 127:opc
 AccPlay_RestoreReverbVal:
-	ldb w, 0x7
-	ldb a, 0xd1
+	ld w, 0x7:opc
+	ld a, 0xd1:opc
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 13)
 	ld w, (0xfd66:16)
@@ -2798,19 +2798,19 @@ AccPlay_RestoreReverbVal:
 
 AccPlay_WriteReverbFlag:
 	ld	(64870:16), w
-	ldb	e, 23
-	ldb	d, 4
+	ld	e, 23:opc
+	ld	d, 4:opc
 	ld	a, w
-	ldb	w, 64
+	ld	w, 64:opc
 	call	16624672
 	ld	a, (xiy+14)
-	ldb	e, 0
+	ld	e, 0:opc
 	bit	0, a
 	jr	z, 2
-	ldb	e, 127
+	ld	e, 127:opc
 AccPlay_RestoreChorusVal:
-	ldb w, 0x3
-	ldb a, 0xd1
+	ld w, 0x3:opc
+	ld a, 0xd1:opc
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 14)
 	ld w, (0xfd66:16)
@@ -2821,15 +2821,15 @@ AccPlay_RestoreChorusVal:
 
 AccPlay_WriteChorusFlag:
 	ld	(64870:16), w
-	ldb	e, 23
-	ldb	d, 4
+	ld	e, 23:opc
+	ld	d, 4:opc
 	ld	a, w
-	ldb	w, 8
+	ld	w, 8:opc
 	call	16624672
 	ret
 AccPlay_ClearSlotTable:
 	ld	xhl, 32223
-	ldb	a, 0
+	ld	a, 0:opc
 AccPlay_ClearSlotLoop:
 	ld	(xhl), a
 	add	xhl, 9
@@ -2876,7 +2876,7 @@ AccPlay_SaveMuteStates:
 	ld	a, (64511:16)
 	ld	w, (64537:16)
 	ld	(32406:16), wa
-	ldb	a, 192
+	ld	a, 192:opc
 	or	(63939:16), a
 	or	(63965:16), a
 	or	(63991:16), a
@@ -2905,90 +2905,90 @@ AccPlay_SaveMuteStates:
 	and	a, 63
 	and	a, 240
 	ld	(64879:16), a
-	ldb	e, 23
-	ldb	d, 13
-	ldb	w, 207
+	ld	e, 23:opc
+	ld	d, 13:opc
+	ld	w, 207:opc
 	call	16624672
 	calr	1
 	ret
 AccompSeq_QueueAllMutes:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	ld a, (0xf9c3:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x1
+	ld e, 0x1:opc
 	ld a, (0xf9dd:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x2
+	ld e, 0x2:opc
 	ld a, (0xf9f7:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x3
+	ld e, 0x3:opc
 	ld a, (0xfa11:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x4
+	ld e, 0x4:opc
 	ld a, (0xfa2b:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x5
+	ld e, 0x5:opc
 	ld a, (0xfa45:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x6
+	ld e, 0x6:opc
 	ld a, (0xfa5f:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x7
+	ld e, 0x7:opc
 	ld a, (0xfa79:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x8
+	ld e, 0x8:opc
 	ld a, (0xfa93:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x9
+	ld e, 0x9:opc
 	ld a, (0xfaad:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0xa
+	ld e, 0xa:opc
 	ld a, (0xfac7:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0xb
+	ld e, 0xb:opc
 	ld a, (0xfae1:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0xc
+	ld e, 0xc:opc
 	ld a, (0xfafb:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0xd
+	ld e, 0xd:opc
 	ld a, (0xfb15:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0xe
+	ld e, 0xe:opc
 	ld a, (0xfb2f:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0xf
+	ld e, 0xf:opc
 	ld a, (0xfb49:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x10
+	ld e, 0x10:opc
 	ld a, (0xfb63:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x11
+	ld e, 0x11:opc
 	ld a, (0xfb7d:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x12
+	ld e, 0x12:opc
 	ld a, (0xfb97:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x13
+	ld e, 0x13:opc
 	ld a, (0xfbb1:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x14
+	ld e, 0x14:opc
 	ld a, (0xfbcb:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x15
+	ld e, 0x15:opc
 	ld a, (0xfbe5:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x16
+	ld e, 0x16:opc
 	ld a, (0xfbff:16)
 	calr AccompSeq_QueueMuteEvent
-	ldb e, 0x19
+	ld e, 0x19:opc
 	ld a, (0xfc19:16)
 	calr AccompSeq_QueueMuteEvent
 	ret
 
 AccompSeq_QueueMuteEvent:
-	ldb	d, 13
-	ldb	w, 207
+	ld	d, 13:opc
+	ld	w, 207:opc
 	call	16624672
 	ret
 AccPlay_RestoreMuteStates:
@@ -3031,9 +3031,9 @@ AccPlay_RestoreMuteStates:
 	ld	a, (64879:16)
 	or	a, 192
 	ld	(64879:16), a
-	ldb	e, 23
-	ldb	d, 13
-	ldb	w, 79
+	ld	e, 23:opc
+	ld	d, 13:opc
+	ld	w, 79:opc
 	call	16624672
 	calr	65142
 	ret
@@ -3157,7 +3157,7 @@ AccPlay_InitAndStartLoop:
 	call TempoRingBuf_ReInitAndRet
 	or (0x7e79:16), 0x04
 
-	ldb a, 0x8
+	ld a, 0x8:opc
 
 	call 16692690
 

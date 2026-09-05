@@ -374,7 +374,7 @@ BitMapOut_CopyVoicePreset9:
 	ld (xsp + 82), xbc
 	cp a, 0x80
 	jr nz, BitMapOut_CopyPreset9_Clamp50
-	ldb a, 0x50
+	ld a, 0x50:opc
 	jr BitMapOut_CopyPreset9_Execute
 
 BitMapOut_CopyPreset9_Clamp50:

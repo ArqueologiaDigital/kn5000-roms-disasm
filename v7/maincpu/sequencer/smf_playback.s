@@ -160,7 +160,7 @@ SoundBank_DefaultTrackData:	.asciz "ZZZZ"
 	normal
 	pushw	iz
 	nop
-	ldb	w, 5
+	ld	w, 5:opc
 
 SoundBank_CopyChannelData:
 	push xhl

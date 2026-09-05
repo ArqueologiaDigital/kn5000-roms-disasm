@@ -102,12 +102,12 @@ BootSerial_ModeSwitch:
 	jr	z, BootSerial_ModeSwitch__parse	; mode 0: just re-arm + parse
 	cp	a, 0x40
 	jr	nz, BootSerial_ModeSwitch__not40
-	ldb	a, 0x80			; 0x40 -> 0x80
+	ld	a, 0x80:opc			; 0x40 -> 0x80
 	jr	BootSerial_ModeSwitch__apply
 BootSerial_ModeSwitch__not40:
 	cp	a, 0x80
 	jr	nz, BootSerial_ModeSwitch__not80
-	ldb	a, 0xc0			; 0x80 -> 0xc0
+	ld	a, 0xc0:opc			; 0x80 -> 0xc0
 	jr	BootSerial_ModeSwitch__apply
 BootSerial_ModeSwitch__not80:
 	cp	a, 0xc0
@@ -223,18 +223,18 @@ BootSerial_FullInit:
 	ldw	(xhl - 4), 0
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
-	ldb	a, 0x03
+	ld	a, 0x03:opc
 	and	a, 0xaf			; = 0x03
 	ld	(0x0f67:16), a		; PFFC shadow
 	st_dd8b	a, 0x3f			; PFFC = 0x03
-	ldb	a, 0x15
+	ld	a, 0x15:opc
 	and	a, 0x8f			; = 0x05
 	ld	(0x0f66:16), a		; PFCR shadow
 	st_dd8b	a, 0x3e			; PFCR = 0x05
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ldb	a, 0
+	ld	a, 0:opc
 	st_dd8b	a, 0x3b			; PEFC = 0x00
-	ldb	a, 0x46
+	ld	a, 0x46:opc
 	st_dd8b	a, 0x3a			; PECR = 0x46
 	ldio	0xd6, 0x00		; SC1MOD
 	ldio	0xd7, 0x14		; BR1CR
@@ -255,8 +255,8 @@ BootSerial_FullInit:
 	ldw	(0x0f75:16), 0
 	ldw	(0x0f77:16), 0
 	calr	BootSerial_TickWait6
-	ldb	a, 0x1f			; opening frame (0x1f, 0xda)
-	ldb	w, 0xda
+	ld	a, 0x1f:opc			; opening frame (0x1f, 0xda)
+	ld	w, 0xda:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
 	ldw	(0x0fd5:16), 0
@@ -274,28 +274,28 @@ BootSerial_FullInit:
 ; Callers: fall-in from BootSerial_FullInit (calr at boot 0xffedce)
 ; -----------------------------------------------------------------------------
 BootSerial_HandshakeSequence:
-	ldb	a, 0x1f			; frame (0x1f, 0x1a)
-	ldb	w, 0x1a
+	ld	a, 0x1f:opc			; frame (0x1f, 0x1a)
+	ld	w, 0x1a:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
 	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
-	ldb	a, 0x1d			; frame (0x1d, 0x00)
-	ldb	w, 0x00
-	calr	BootSerial_SendFrame
-	calr	BootSerial_SpinWait3000
-	ldw	(0x0fd5:16), 0
-	calr	BootSerial_SpinWait3000
-	calr	BootSerial_SpinWait3000
-	ldb	a, 0xdd			; frame (0xdd, 0x03)
-	ldb	w, 0x03
+	ld	a, 0x1d:opc			; frame (0x1d, 0x00)
+	ld	w, 0x00:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
 	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
-	ldb	a, 0x1e			; frame (0x1e, 0x80)
-	ldb	w, 0x80
+	ld	a, 0xdd:opc			; frame (0xdd, 0x03)
+	ld	w, 0x03:opc
+	calr	BootSerial_SendFrame
+	calr	BootSerial_SpinWait3000
+	ldw	(0x0fd5:16), 0
+	calr	BootSerial_SpinWait3000
+	calr	BootSerial_SpinWait3000
+	ld	a, 0x1e:opc			; frame (0x1e, 0x80)
+	ld	w, 0x80:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
@@ -546,8 +546,8 @@ BootSerial_TestLoopback:
 	calr	BootSerial_WaitTxIdle
 	ldw	(0x0f75:16), 0
 	ldw	(0x0f77:16), 0
-	ldb	a, 0x20			; test frame (0x20, 0x00)
-	ldb	w, 0x00
+	ld	a, 0x20:opc			; test frame (0x20, 0x00)
+	ld	w, 0x00:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	cpw	(0x0f77:16), 0
@@ -557,8 +557,8 @@ BootSerial_TestLoopback__no_resp1:
 	calr	BootSerial_WaitTxIdle
 	ldw	(0x0f75:16), 0
 	ldw	(0x0f77:16), 0
-	ldb	a, 0xe0			; test frame (0xe0, 0x00)
-	ldb	w, 0x00
+	ld	a, 0xe0:opc			; test frame (0xe0, 0x00)
+	ld	w, 0x00:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	cpw	(0x0f77:16), 0
@@ -589,28 +589,28 @@ BootSerial_ProbeSequence:
 	ei	0
 	call	0xfff173		; BootSerial_WaitTxIdle (boot-time
 					; absolute; ROM label 0x9ff173)
-	ldb	a, 0x25			; frame (0x25, 0x01)
-	ldb	w, 0x01
+	ld	a, 0x25:opc			; frame (0x25, 0x01)
+	ld	w, 0x01:opc
 	call	0xfff1c5		; BootSerial_SendFrame (boot-time
 					; absolute; ROM label 0x9ff1c5)
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0xe2			; frame (0xe2, 0x04)
-	ldb	w, 0x04
+	ld	a, 0xe2:opc			; frame (0xe2, 0x04)
+	ld	w, 0x04:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0x20			; frame (0x20, 0x10)
-	ldb	w, 0x10
+	ld	a, 0x20:opc			; frame (0x20, 0x10)
+	ld	w, 0x10:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0xe2			; frame (0xe2, 0x11)
-	ldb	w, 0x11
+	ld	a, 0xe2:opc			; frame (0xe2, 0x11)
+	ld	w, 0x11:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
@@ -638,19 +638,19 @@ BootSerial_WaitDeviceIdent:
 	ei	0
 BootSerial_WaitDeviceIdent__poll:
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0x20			; ident request frame (0x20, 0x0b)
-	ldb	w, 0x0b
+	ld	a, 0x20:opc			; ident request frame (0x20, 0x0b)
+	ld	w, 0x0b:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_RX_ParsePackets
 	ld	a, (0x102d:16)		; decoded response byte
-	ldb	w, 0x0d
+	ld	w, 0x0d:opc
 	bit	7, a
 	jr	nz, BootSerial_WaitDeviceIdent__have
-	ldb	w, 0x0e
+	ld	w, 0x0e:opc
 	bit	6, a
 	jr	nz, BootSerial_WaitDeviceIdent__have
-	ldb	w, 0x0c
+	ld	w, 0x0c:opc
 BootSerial_WaitDeviceIdent__have:
 	cp	(0x1042:16), w		; same as previous poll?
 	ld	(0x1042:16), w
@@ -690,31 +690,31 @@ BootSerial_ResetAndIdent:
 	ld	(0x0f77:16), 0		; byte store
 	ei	0
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0x2b			; frame (0x2b, 0x00)
-	ldb	w, 0x00
+	ld	a, 0x2b:opc			; frame (0x2b, 0x00)
+	ld	w, 0x00:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_RX_SetBusy
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0xeb			; frame (0xeb, 0x00)
-	ldb	w, 0x00
+	ld	a, 0xeb:opc			; frame (0xeb, 0x00)
+	ld	w, 0x00:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_RX_SetBusy
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0x20			; frame (0x20, 0x10)
-	ldb	w, 0x10
+	ld	a, 0x20:opc			; frame (0x20, 0x10)
+	ld	w, 0x10:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6
 	calr	BootSerial_RX_SetBusy
 	calr	BootSerial_WaitTxIdle
-	ldb	a, 0xe3			; frame (0xe3, 0x10)
-	ldb	w, 0x10
+	ld	a, 0xe3:opc			; frame (0xe3, 0x10)
+	ld	w, 0x10:opc
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6

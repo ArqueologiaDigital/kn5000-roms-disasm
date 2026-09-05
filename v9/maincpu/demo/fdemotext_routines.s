@@ -77,7 +77,7 @@ FDemoText_ByteData_VoiceProbeC:
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
-	ldb	w, 242
+	ld	w, 242:opc
 	cp	(xhl+71), wa
 	ldw	ix, 2035
 	.byte 0xf0, 0xe0
@@ -895,7 +895,7 @@ FDemoText_ByteData_ProbeHelper:
 	calr	63389
 	lda	xbc, (xsp)
 	.byte 0xc5, 0xec
-	ldb	a, 185
+	ld	a, 185:opc
 	pop	sr
 	ld	xbc, 0x04b92183
 	ld	xbc, 0xb921068f
@@ -923,14 +923,14 @@ FDemoText_CheckVoiceState:
 	jr z, FDemoText_CheckVoice_Active
 
 FDemoText_CheckVoice_Inactive:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 FDemoText_CheckVoice_Return:
 	inc 2, xsp
 	ret
 
 FDemoText_CheckVoice_TypeF:
-	ldb l, 0x2
+	ld l, 0x2:opc
 	jr FDemoText_CheckVoice_Return
 
 FDemoText_CheckVoice_MaskedActive:
@@ -942,7 +942,7 @@ FDemoText_CheckVoice_MaskedActive:
 	jr z, FDemoText_CheckVoice_Inactive
 
 FDemoText_CheckVoice_Active:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr FDemoText_CheckVoice_Return
 
 FDemoText_ScanMIDIChannels:
@@ -1844,7 +1844,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	a, 129
+	ld	a, 129:opc
 	push	xsp
 	nop
 	jr	nz, -90
@@ -1996,7 +1996,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	w, 128
+	ld	w, 128:opc
 	push	xsp
 	nop
 	jr	nz, -115
@@ -2105,18 +2105,18 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x04
 	jr	f, -46
 	jr	f, 91
 	push	sr
-	ldb	w, 216
+	ld	w, 216:opc
 	.byte 0xec, 0x01
 	lda	xbc, (0x025b62:24)
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	ldio	80, 222
 	cp	(xwa-45), xiy
 	.byte 0x94
@@ -2158,7 +2158,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x04
 	jr	f, 104
 	push_a
@@ -2177,7 +2177,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	w, 128
+	ld	w, 128:opc
 	push	xsp
 	nop
 	jr	nz, -109
@@ -2209,7 +2209,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	f, -46
 	jr	f, 91
 	push	sr
-	ldb	a, 217
+	ld	a, 217:opc
 	.byte 0xec, 0x01
 	lda	xde, (0x025b62:24)
 	ld	wa, (xsp+8)
@@ -2240,7 +2240,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	f, -46
 	jr	f, 91
 	push	sr
-	ldb	w, 216
+	ld	w, 216:opc
 	.byte 0xec, 0x01
 	lda	xbc, (0x025b62:24)
 	.byte 0xf3
@@ -2287,7 +2287,7 @@ FDemoText_ByteData_LayoutEngine:
 	cp	(xwa-29), e
 	ccf
 	.byte 0x01
-	ldb	a, 30
+	ld	a, 30:opc
 	.byte 0xbf
 	swi	1
 	ld qiz, 0
@@ -2326,7 +2326,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	a, 129
+	ld	a, 129:opc
 	push	xsp
 	nop
 	jr	nz, -88
@@ -2398,7 +2398,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	a, 129
+	ld	a, 129:opc
 	push	xsp
 	nop
 	jr	nz, -60
@@ -2772,7 +2772,7 @@ FDemoText_ByteData_LayoutB:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 29
+	ld	w, 29:opc
 	ldwio	38, 0xdbfb
 	.byte 0x8e
 	ld	wa, (0x025b3e:24)
@@ -2781,9 +2781,9 @@ FDemoText_ByteData_LayoutB:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 29
+	ld	w, 29:opc
 	.byte 0x17
-	ldb	h, 251
+	ld	h, 251:opc
 	sub	iz, hl
 	lda	xde, (0x025b3c:24)
 	ld	bc, (xde)

@@ -281,7 +281,7 @@ MidiCC_Handler_BitManipulation:
 	ld	xix, MidiCC_Handler_BitManipulation_0x45
 	ld_rr8b e, xix, a
 	ldw bc, 2968
-	ldb d, 192
+	ld d, 192:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -306,7 +306,7 @@ MidiCC_Handler_PairedParamA:
 	cp c, 255
 	jr	z, 26
 	ld	e, (0x9636:16)
-	ldb	d, 255
+	ld	d, 255:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -328,7 +328,7 @@ MidiCC_Handler_PairedParamB:
 	cp c, 255
 	jr	z, 26
 	ld	d, (0x9636:16)
-	ldb	e, 255
+	ld	e, 255:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -350,7 +350,7 @@ MidiCC_Handler_RangeCheck:
 	ld	xix, MidiCC_Handler_RangeCheck_0x3F
 	ld_rr8b e, xix, a
 	ldw bc, 840
-	ldb	d, 7
+	ld	d, 7:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -370,7 +370,7 @@ MidiCC_Handler_ChannelMapping:
 	push	xsp
 	scf
 	jr	nz, 79
-	ldb	b, 5
+	ld	b, 5:opc
 	ldw	de, 0xfc00
 	ld	a, (0x9636:16)
 	cp	a, 11
@@ -418,7 +418,7 @@ MidiCC_Handler_ChannelMapping:
 	.byte 0x80, 0x80
 	popw	wa
 	halt
-	ldb	w, 32
+	ld	w, 32:opc
 	popw	wa
 	halt
 	ldio	8, 72
@@ -762,32 +762,32 @@ MidiCC_Handler_BankModeSelect:
 	swi	5
 	inc	6, w
 	popw	iz
-	ldb	b, 11
+	ld	b, 11:opc
 	ld	e, (0x9636:16)
 	cp	e, 12
 	jr	ugt, 67
-	ldb	d, 127
+	ld	d, 127:opc
 	jr	43
 	.byte 0xf1, 0x57
 	swi	5
 	inc	6, a
 	push	xbc
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	e, (0x9636:16)
 	sll	e, 1
-	ldb	d, 255
+	ld	d, 255:opc
 	jr	24
 	.byte 0xf1, 0x57
 	swi	5
 	inc	6, a
-	ldb	h, 34
+	ld	h, 34:opc
 	push	193
 	ldw	iz, 9622
 	cp	e, 76
 	jr	ugt, 27
 	cp	e, 52
 	jr	c, 22
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -816,7 +816,7 @@ MidiCC_Handler_ExpressionParam:
 	swi	5
 	inc	6, a
 	push	xbc
-	ldb	b, 10
+	ld	b, 10:opc
 	ld	xix, (0x90f2:16)
 	extz	hl
 	ld	l, (0x966a:16)
@@ -827,7 +827,7 @@ MidiCC_Handler_ExpressionParam:
 	ld	e, (0x9636:16)
 	srl	e, 6
 	or	e, a
-	ldb	d, 255
+	ld	d, 255:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -879,7 +879,7 @@ MidiCC_Handler_ParamDispatch:
 	cp c, 255
 	jr	z, 26
 	ld	e, (0x9636:16)
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -897,7 +897,7 @@ MidiCC_Handler_TableDispatch:
 	cp c, 0xff
 	jr z, MidiCC_Handler_TableDispatch_Ret
 	ld	e, (0x9636:16)
-	ldb d, 0x7f
+	ld d, 0x7f:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -942,7 +942,7 @@ MidiCC_Handler_CC4_VoiceParam:
 	cp c, 255
 	jr	z, 26
 	ld	e, (0x9635:16)
-	ldb	d, 255
+	ld	d, 255:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -984,7 +984,7 @@ MidiCC_Handler_CC5_VoiceParam:
 	cp c, 255
 	jr	z, 26
 	ld	e, (0x9635:16)
-	ldb	d, 127
+	ld	d, 127:opc
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -1061,7 +1061,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	xiy, 0x95b4
 	ld	(0x9664:16), xiy
 	ld	(0x966e:16), 0
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	xhl, 1:i3
 	ld	(0x966f:16), 0
 	ld	(0x9670:16), 0
@@ -1087,7 +1087,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	inc	1, (0x9670:16)
 	.byte 0xc1
 	jrl	f, 0x3f96
-	ldb	w, 110
+	ld	w, 110:opc
 	.byte 0xba, 0xc1
 	jr	nc, -106
 	push	xsp
@@ -1105,7 +1105,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	.byte 0xc1
 	jr	nz, -106
 	push	xsp
-	ldb	w, 110
+	ld	w, 110:opc
 	.byte 0x88
 	ret
 MIDI_DispatchCC:
@@ -1139,7 +1139,7 @@ PanelEvt_CheckFlag7_Dispatch_A:
 
 PanelEvt_CheckFlag7_DoDispatch_A:
 	ld xiy, PanelEvt_DispatchTable
-	ldb a, 0xf
+	ld a, 0xf:opc
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag7_Ret_A:
@@ -1153,7 +1153,7 @@ PanelEvt_CheckFlag7_Dispatch_B:
 
 PanelEvt_CheckFlag7_DoDispatch_B:
 	ld xiy, PanelEvt_DispatchTable
-	ldb a, 0xf
+	ld a, 0xf:opc
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag7_Ret_B:
@@ -1167,7 +1167,7 @@ PanelEvt_CheckFlag7_Dispatch_C:
 
 PanelEvt_CheckFlag7_DoDispatch_C:
 	ld xiy, PanelEvt_DispatchTable
-	ldb a, 0xf
+	ld a, 0xf:opc
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag7_Ret_C:
@@ -1175,7 +1175,7 @@ PanelEvt_CheckFlag7_Ret_C:
 
 PanelEvt_UnconditionalDispatch:
 	ld xiy, PanelEvt_DispatchTable
-	ldb a, 0xf
+	ld a, 0xf:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
@@ -1183,7 +1183,7 @@ PanelEvt_CheckFlag6_Dispatch:
 	bit 6, (0xfd53:16)
 	jr z, PanelEvt_CheckFlag6_Ret
 	ld xiy, PanelEvt_DispatchTable
-	ldb a, 0xf
+	ld a, 0xf:opc
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag6_Ret:
@@ -1197,7 +1197,7 @@ PanelEvt_CheckChanZero_Dispatch:
 
 PanelEvt_CheckChanZero_DoDispatch:
 	ld xiy, PanelEvt_DispatchTable
-	ldb a, 0xf
+	ld a, 0xf:opc
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckChanZero_Ret:
@@ -1270,7 +1270,7 @@ PanelEvt_Handler_3_ValueCheck:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 2
+	ld	w, 2:opc
 	calr	1602
 	ret
 PanelEvt_Handler_5_ValueCheck:
@@ -1293,7 +1293,7 @@ PanelEvt_Handler_5_ValueCheck:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 5
+	ld	w, 5:opc
 	calr	1545
 	ret
 PanelEvt_Handler_6_NullStub:
@@ -1318,7 +1318,7 @@ PanelEvt_Handler_7_ValueCheck:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 7
+	ld	w, 7:opc
 	calr	1487
 	ret
 PanelEvt_Handler_8_ValueCheck:
@@ -1341,7 +1341,7 @@ PanelEvt_Handler_8_ValueCheck:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 4
+	ld	w, 4:opc
 	calr	1430
 	ret
 PanelEvt_Handler_9_SingleByteParam:
@@ -1431,7 +1431,7 @@ PanelEvt_Handler_15_ConditionalSet:
 
 PanelEvt_Dispatch6Entry:
 	ld xiy, PanelEvt_Dispatch6_TableAndHandlers_0x1
-	ldb a, 0x6
+	ld a, 0x6:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
@@ -1467,7 +1467,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	and	e, 7
 	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0x49
 	ld_rr8b e, xiy, e
-	ldb w, 16
+	ld w, 16:opc
 	calr	1110
 	ret
 	swi	7
@@ -1488,18 +1488,18 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	cpl	h
 	and	h, d
 	and	e, d
-	ldb	l, 252
+	ld	l, 252:opc
 	.byte 0xc1
 	popw	iy
 	.byte 0x96
 	push	xsp
 	halt
 	jr	z, 2
-	ldb	l, 4
+	ld	l, 4:opc
 	and	h, l
 	jr	z, 16
 	ld	xix, 0xfbcb
-	ldb	w, 17
+	ld	w, 17:opc
 	xor	e, e
 	pushw	hl
 	pushw	de
@@ -1509,7 +1509,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	and	e, l
 	jr	z, 41
 	ld	xix, 0xfbcb
-	ldb	w, 17
+	ld	w, 17:opc
 	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0xAC
 	.byte 0xc1
 	popw	iy
@@ -1543,7 +1543,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 
 PanelEvt_Dispatch3Entry_A:
 	ld xiy, PanelEvt_Dispatch3_TableAndHandlers_A
-	ldb a, 0x3
+	ld a, 0x3:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
@@ -1562,7 +1562,7 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	.byte 0x96
 	inc	6, l
 	pushw	iz
-	ldb	l, 25
+	ld	l, 25:opc
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
@@ -1579,14 +1579,14 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	.byte 0x96
 	inc	6, l
 	push	sr
-	ldb	e, 127
-	ldb	w, 7
+	ld	e, 127:opc
+	ld	w, 7:opc
 	calr	912
 	ret
 
 PanelEvt_Dispatch3Entry_B:
 	ld xiy, PanelEvt_Dispatch3_Table_B
-	ldb a, 0x3
+	ld a, 0x3:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
@@ -1602,7 +1602,7 @@ PanelEvt_Dispatch3_Table_B:
 
 PanelEvt_Dispatch11Entry:
 	ld xiy, PanelEvt_Dispatch11_TableAndHandlers_0x1
-	ldb a, 0xb
+	ld a, 0xb:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
@@ -1646,7 +1646,7 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	.byte 0xc3
 	pop	sr
 	.byte 0xf4, 0xe8
-	ldb	e, 32
+	ld	e, 32:opc
 	ccf
 	calr	779
 	ret
@@ -1694,7 +1694,7 @@ MidiCC_ChannelDispatch_Ctrl40:
 	bit 0, (0xfd59:16)
 	jr z, BitMask_Ctrl40_ConfigExit
 	xor e, e
-	ldb w, 0x28
+	ld w, 0x28:opc
 	calr MidiChannel_ConfigureController
 
 BitMask_Ctrl40_ConfigExit:
@@ -1711,7 +1711,7 @@ MidiCC_ChannelDispatch_Ctrl41:
 	cp xix, 0xffffffff
 	jr z, MidiCC_ChannelDispatch_Ctrl41_Ret
 	xor e, e
-	ldb w, 0x29
+	ld w, 0x29:opc
 	calr MidiChannel_ConfigureController
 
 MidiCC_ChannelDispatch_Ctrl41_Ret:
@@ -1725,7 +1725,7 @@ MidiCC_ChannelDispatch_SpecialCh1:
 	bit 3, (0xfd58:16)
 	jr z, MidiCC_ChannelDispatch_SpecialCh1_Ret
 	ld e, (0x964e:16)
-	ldb w, 0x3
+	ld w, 0x3:opc
 	calr MidiChannel_ConfigureController
 
 MidiCC_ChannelDispatch_SpecialCh1_Ret:
@@ -1777,7 +1777,7 @@ MidiCC_ChannelDispatch_Ctrl1:
 	bit 1, (0xfd58:16)
 	jr z, BitMask_Ctrl1_ConfigExit
 	ld e, (0x964e:16)
-	ldb w, 0x1
+	ld w, 0x1:opc
 	calr MidiChannel_ConfigureController
 
 BitMask_Ctrl1_ConfigExit:
@@ -1796,7 +1796,7 @@ MidiCC_ChannelDispatch_Ctrl3:
 	bit 3, (0xfd58:16)
 	jr z, BitMask_Ctrl3_ConfigExit
 	ld e, (0x964e:16)
-	ldb w, 0x3
+	ld w, 0x3:opc
 	calr MidiChannel_ConfigureController
 
 BitMask_Ctrl3_ConfigExit:
@@ -1846,7 +1846,7 @@ MidiCC_ChannelDispatch_Ctrl0:
 	bit 0, (0xfd58:16)
 	jr z, BitMask_Ctrl0_ConfigExit
 	ld e, (0x964e:16)
-	ldb w, 0x0
+	ld w, 0x0:opc
 	calr MidiChannel_ConfigureController
 
 BitMask_Ctrl0_ConfigExit:
@@ -1869,7 +1869,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 9
+	ld	w, 9:opc
 	calr	243
 	ret
 	ld	l, (0x964d:16)
@@ -1888,7 +1888,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 8
+	ld	w, 8:opc
 	calr	195
 	ret
 	ld	l, (0x964d:16)
@@ -1907,7 +1907,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 12
+	ld	w, 12:opc
 	calr	147
 	ret
 	ld	l, (0x964d:16)
@@ -1926,7 +1926,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 13
+	ld	w, 13:opc
 	calr	99
 	ret
 	ld	l, (0x964d:16)
@@ -1945,7 +1945,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 14
+	ld	w, 14:opc
 	calr	51
 	ret
 	ld	l, (0x964d:16)
@@ -1964,7 +1964,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 	push	193
 	popw	iz
 	ld	iy, (xiz)
-	ldb	w, 15
+	ld	w, 15:opc
 	calr	3
 	ret
 	ret
@@ -2014,19 +2014,19 @@ FileData_ProcessWithLookup:
 	popw	bc
 	and	a, 15
 	or	a, 176
-	ldb	w, 100
+	ld	w, 100:opc
 	ld (xiy+256), wa
 	ld	(xiy+2), c
 	calr	106
-	ldb	a, 101
+	ld	a, 101:opc
 	ld	w, b
 	ld	(xiy+1), wa
 	calr	96
-	ldb	a, 6
+	ld	a, 6:opc
 	ld	w, d
 	ld	(xiy+1), wa
 	calr	86
-	ldb	a, 38
+	ld	a, 38:opc
 	ld	w, e
 	ld	(xiy+1), wa
 	calr	76
@@ -2050,12 +2050,12 @@ MidiCC_DualSend_SetupParams:
 	ld (xiy + 3), bc
 	and a, 0xf
 	or a, 0xb0
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld (xiy + 256), wa
 	res 7, d
 	ld (xiy + 2), d
 	calr FileData_ValidateAndDispatch
-	ldb w, 0x20
+	ld w, 0x20:opc
 	ld (xiy + 1), w
 	res 7, e
 	ld (xiy + 2), e
@@ -2143,7 +2143,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	ldb	w, 2
+	ld	w, 2:opc
 	swi	7
 	swi	7
 	max
@@ -2160,7 +2160,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	ldb	a, 255
+	ld	a, 255:opc
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -2193,7 +2193,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	ldb	c, 34
+	ld	c, 34:opc
 	swi	7
 	swi	7
 	.fill 8, 1, 0xff
@@ -2214,9 +2214,9 @@ MidiCC_ChannelMappingData:
 	normal
 	ldio	1, 16
 	normal
-	ldb	w, 1
-	ldb	w, 1
-	ldb	w, 1
+	ld	w, 1:opc
+	ld	w, 1:opc
+	ld	w, 1:opc
 	max
 	push	sr
 	push	sr
@@ -2227,7 +2227,7 @@ MidiCC_ChannelMappingData:
 	push	sr
 	rcf
 	push	sr
-	ldb	w, 2
+	ld	w, 2:opc
 	ld	xwa, 0xffffff02
 	swi	7
 	.fill 8, 1, 0xff
@@ -3010,7 +3010,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
-	ldb	d, 236
+	ld	d, 236:opc
 	.byte 0xcf
 	swi	7
 	swi	7
@@ -3026,8 +3026,8 @@ PanelEvt_Handler_4_DualValueCheck:
 	popw	iz
 	and	(xiz), hl
 	jr	z, 2
-	ldb	e, 127
-	ldb	w, 0
+	ld	e, 127:opc
+	ld	w, 0:opc
 	calr	62961
 	.byte 0xf1
 	popw	sp
@@ -3042,7 +3042,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
-	ldb	d, 236
+	ld	d, 236:opc
 	.byte 0xcf
 	swi	7
 	swi	7
@@ -3058,8 +3058,8 @@ PanelEvt_Handler_4_DualValueCheck:
 	popw	iz
 	and	(xiz), iz
 	jr	z, 2
-	ldb	e, 127
-	ldb	w, 6
+	ld	e, 127:opc
+	ld	w, 6:opc
 	calr	62902
 	ret
 	.byte 0x90
@@ -3362,7 +3362,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	cp	(xsp+5), e
 	nop
-	ldb	b, 10
+	ld	b, 10:opc
 	swi	5
 	nop
 	cp	(xsp+5), e
@@ -3504,14 +3504,14 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	7
 	swi	7
 	nop
-	ldb	w, 255
+	ld	w, 255:opc
 	swi	7
 	swi	7
 	swi	7
 	swi	7
 	swi	7
 	.byte 0x06
-	ldb	h, 101
+	ld	h, 101:opc
 	jr	ov, -1
 	swi	7
 	swi	7
@@ -5696,7 +5696,7 @@ FileData_RawDataBlock:
 	pop	xix
 	pop	sr
 	ldw	wa, 1711
-	ldb	a, 243
+	ld	a, 243:opc
 	.byte 0xe5, 0xec
 	push	sr
 	ldw	bc, 0xe91e
@@ -5888,7 +5888,7 @@ FileData_RawDataBlock:
 	.byte 0xf3, 0xe1
 	jr	ov, 2
 	ldw	wa, 1199
-	ldb	a, 243
+	ld	a, 243:opc
 	.byte 0xe5
 	lda	xbc, (xwa+2)
 	calr	1522
@@ -5933,7 +5933,7 @@ FileData_RawDataBlock:
 	.byte 0xf3, 0xe1, 0xcc
 	push	sr
 	ldw	wa, 1199
-	ldb	a, 243
+	ld	a, 243:opc
 	.byte 0xe5
 	jr	gt, 3
 	ldw	bc, 0x611e
@@ -5946,23 +5946,23 @@ FileData_RawDataBlock:
 	.byte 0xf3, 0xe1, 0xec
 	push	sr
 	ldw	wa, 1199
-	ldb	a, 243
+	ld	a, 243:opc
 	.byte 0xe5, 0x8a
 	pop	sr
 	ldw	bc, 0x5a1e
 	pushw	3759
-	ldb	w, 243
+	ld	w, 243:opc
 	.byte 0xe1, 0xf2
 	push	sr
 	ldw	wa, 1199
-	ldb	a, 243
+	ld	a, 243:opc
 	.byte 0xe5, 0xae
 	pop	sr
 	ldw	bc, 0x541e
 	pushw	3759
-	ldb	w, 175
+	ld	w, 175:opc
 	.byte 0x04
-	ldb	a, 30
+	ld	a, 30:opc
 	.byte 0xd0
 	decf
 	ld	xwa, 0xf980
@@ -8741,7 +8741,7 @@ VoiceParam_CopyBitfields_LargeBlock:
 	.byte 0xb0, 0x9e, 0xb2
 	add	(xsp), xwa
 	normal
-	ldb	a, 201
+	ld	a, 201:opc
 	neg	d
 	.byte 0x89
 	ret
@@ -9515,7 +9515,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	swi 6
 	ld xwa, xsp
 	normal
-	ldb l, 207
+	ld l, 207:opc
 	scc nc, d
 	andmi8	(xbc+1), 128
 	or	(xbc+1), l
@@ -9527,7 +9527,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	add (xwa), a
 	swi 7
 	add xwa, xsp
-	ldb l, 177
+	ld l, 177:opc
 	ld xsp, 3090225849
 	jp16 59952
 	bit_dd8 3, 103
@@ -9768,7 +9768,7 @@ SndParam_SaturationClamp:
 	cp	l, 0:i3
 	ret ge
 SndParam_SaturationClamp_Zero:
-	ldb l, 0x00
+	ld l, 0x00:opc
 	ret
 SndParam_TableDispatch_Memset:
 	; --- Routine 2: table dispatch via 0x1ed360 + WA*16 (32 bytes) ---
@@ -10710,10 +10710,10 @@ MidiStream_ApplyPendingCC:
 	push xhl
 	push xix
 	push xiz
-	ldb c, 0x48
-	ldb b, 0x3
+	ld c, 0x48:opc
+	ld b, 0x3:opc
 	ld e, (0xbd26:16)
-	ldb d, 0x7
+	ld d, 0x7:opc
 	call MidiStream_ApplyPendingParams
 	pop xiz
 	pop xix
@@ -10928,7 +10928,7 @@ VoiceQueue_IncrementCount:
 	ret
 
 MidiChan_DequeueVoiceEntry:
-	ldb l, 0xff
+	ld l, 0xff:opc
 	lda xbc, (xwa + 2)
 	ld xwa, (xbc)
 	cp (xwa), 0xff
@@ -11064,7 +11064,7 @@ SeqData_FieldDispatch:
 	jr	2
 
 SeqData_ReturnZeroField:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 SeqData_InitPlaybackFromField:
@@ -12339,7 +12339,7 @@ ArpQueue_ProcessAndSort_Data:
 
 ArpQueue_ComputeAndEnqueue:
 	dec 2, xsp
-	ldb e, 0x0
+	ld e, 0x0:opc
 	ld xiy, NakaInst_SoundConfig_LookupTable_0x17F6
 	ld xix, xsp
 	ldiw
@@ -12535,14 +12535,14 @@ SeqVoice_DispatchProcess_Data:
 	ld	xwa, (0xbcac:16)
 	ldw	bc, 13
 	calr	61828
-	ldb	h, 0
+	ld	h, 0:opc
 	extz	xhl
 	sll	xhl, 7
 	or	xiz, xhl
 	ld	xwa, (0xbcac:16)
 	ldw	bc, 14
 	calr	61809
-	ldb	h, 0
+	ld	h, 0:opc
 	extz	xhl
 	or	xiz, xhl
 	lda	xwa, (0xbcdc:16)
@@ -12695,7 +12695,7 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0xf1
 	push_f
 	ld	(xiy-50), xiz
-	ldb	h, 30
+	ld	h, 30:opc
 	jr	ge, 1
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
@@ -12835,7 +12835,7 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0xf1
 	push_f
 	ld	(xiy-50), xiz
-	ldb	h, 30
+	ld	h, 30:opc
 	.byte 0x52
 	nop
 	lda	xde, (0x1e8820:24)
@@ -13074,7 +13074,7 @@ AssSwb_ProcessLoop_Data:
 	reti
 	.byte 0xe4, 0xf4
 	add	b, a
-	ldb	a, 199
+	ld	a, 199:opc
 	.byte 0xf4, 0x99
 	extz	iy
 	ld	wa, (xix)
@@ -13082,7 +13082,7 @@ AssSwb_ProcessLoop_Data:
 	reti
 	.byte 0xe4, 0xf4
 	add	xde, xbc
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	ld	iy, wa
 	inc	1, iy
@@ -13093,7 +13093,7 @@ AssSwb_ProcessLoop_Data:
 	reti
 	.byte 0xe4, 0xf4
 	add	b, a
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	ld	iy, wa
 	inc	1, iy
@@ -13104,7 +13104,7 @@ AssSwb_ProcessLoop_Data:
 	reti
 	.byte 0xf0, 0xf4
 	add	xiz, xbc
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	ld	c, (xde)
 	extz	bc
@@ -13152,7 +13152,7 @@ Part_LookupTableEntry:
 	ret
 
 Part_LookupReturnZero:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 Part_ProcessEntry_Data:
@@ -13169,7 +13169,7 @@ Part_ProcessEntry_Data:
 	jr	nz, -14
 	ret
 	inc	1, xwa
-	ldb	l, 0
+	ld	l, 0:opc
 	dec	1, bc
 	ld	de, bc
 	dec	1, bc
@@ -13214,7 +13214,7 @@ MidiChan_SetStateMode:
 	bit 6, (0xbd18:16)
 	jr z, MidiChan_SetStateMode2
 	ld (0xbd36:16), 1
-	ldb a, 0x1
+	ld a, 0x1:opc
 	jr MidiChan_CompareAndFlag
 
 MidiChan_SetStateMode2:
@@ -13948,7 +13948,7 @@ MidiTable_CallFlush:
 
 MidiPkt_InitSingleField_Data:
 	.byte 0xc1
-	ldb	w, 189
+	ld	w, 189:opc
 	push	xsp
 	nop
 	ret	nz
@@ -14433,7 +14433,7 @@ SeqChan_DispatchByType_Data:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	c, 179
+	ld	c, 179:opc
 	cp	xbc, xwa
 	.byte 0x1c, 0xbd, 0xb7
 	ret
@@ -15783,10 +15783,10 @@ MidiCtrl_ModeSwitch_Data:
 	ret
 
 MidiCtrl_Bit2ToChannel:
-	ldb c, 0x0
+	ld c, 0x0:opc
 	bit 2, a
 	jr z, MidiCtrl_Bit2ToChannel_Store
-	ldb c, 0x1
+	ld c, 0x1:opc
 
 MidiCtrl_Bit2ToChannel_Store:
 	extz bc
@@ -16720,7 +16720,7 @@ SeqAlt_DescriptorBlock_Data:
 	.byte 0x8f, 0x04
 	ld	(0x857b:16), 143
 	max
-	ldb	c, 138
+	ld	c, 138:opc
 	ldwio	243, 0x7d6b
 	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
@@ -16789,7 +16789,7 @@ SeqAlt_DescriptorBlock_Data:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x04
 	jr	f, -31
 	ld	xwa, (xix-68)
@@ -17088,7 +17088,7 @@ DSPParam_StoreWithLoop_NoShift:
 	ld (xbc), l
 	ld a, (xiz + 6)
 	sub a, 0x61
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	ld (xsp + 4), xwa
 	sll xwa, 8
@@ -17164,7 +17164,7 @@ VoiceParam_ApplyNibbleLookup:
 	and l, 0x7
 	bit_erpb 0xfb, 0x07
 	jr z, VoiceParam_ApplyNibble_NoShiftBit
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 VoiceParam_ApplyNibble_NoShiftBit:
 	lda xwa, (xsp + 2)
@@ -17538,10 +17538,10 @@ VoiceParam_MultiBlock_Epilogue_Data:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	c, 191
+	ld	c, 191:opc
 	ldio	50, 136
 	.byte 0x06
-	ldb	c, 178
+	ld	c, 178:opc
 	ld	xhl, 0xba230788
 	.byte 0x01
 	ld	xhl, 0x2ba2383

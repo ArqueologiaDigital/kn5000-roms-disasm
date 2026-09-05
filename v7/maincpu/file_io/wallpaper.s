@@ -399,7 +399,7 @@ WPFind_CheckSlot:
 	and	iy, bc
 	jr	z, 8
 	ld	(35164:16), l
-	ldb	l, 1
+	ld	l, 1:opc
 	jr	8
 WPFind_NextSlot:
 	inc 1, iz
@@ -407,7 +407,7 @@ WPFind_NextSlot:
 	jr c, WPFind_SearchLoop
 
 WPFind_NotFound:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 WPFind_Return:
 	popw iz

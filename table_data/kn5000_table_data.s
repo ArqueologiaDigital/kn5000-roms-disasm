@@ -4768,7 +4768,7 @@ Handler_INT4__int4_wait_rqm:
 	jr nz, Handler_INT4__int4_setup_buffer	; 6e 18 - FDC has data for us
 
 	; FDC needs data from us - send sense interrupt command
-	ldb l, 0x0	; LD L, 0x00
+	ld l, 0x0:opc	; LD L, 0x00
 	cp l, 0x80	; CP L, 0x80
 	jr z, Handler_INT4__int4_send_cmd	; 66 0b
 

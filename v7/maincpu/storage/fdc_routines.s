@@ -197,7 +197,7 @@ FDC_CMD_HANDLER_BASE:
 	ld	l, (35208:16)
 	ret
 FDC_ReturnZero:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_ErrorInvalidDrive:
@@ -225,7 +225,7 @@ FDC_ValidateCommand:
 	cp	wa, 1:i3
 	jr	nz, 11
 FDC_NoOpReturn:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_Command5Handler:
@@ -595,26 +595,26 @@ FDC_Exception_Status_Decoder:
 	jr	z, 7
 	cp	a, 0:i3
 	jr	nz, 105
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 FDC_StatusDecode_DriveNotReady:
 	ld	(35428:16), 255
-	ldb	l, 0
+	ld	l, 0:opc
 	ret
 FDC_StatusDecode_InvalidCommand:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FDC_StatusDecode_AbnormalTerm:
 	bit 3, c
 	jr z, FDC_StatusDecode_Overrun
-	ldb l, 0x31
+	ld l, 0x31:opc
 	ret
 
 FDC_StatusDecode_Overrun:
 	bit 4, c
 	jr z, FDC_StatusDecode_CheckST2
-	ldb l, 0x32
+	ld l, 0x32:opc
 	ret
 
 FDC_StatusDecode_CheckST2:
@@ -659,7 +659,7 @@ FDC_StatusDecode_DefaultError:
 	jrl FDC_Set_Status
 
 FDC_StatusDecode_UnknownIC:
-	ldb l, 0x8
+	ld l, 0x8:opc
 	ret
 
 
@@ -723,7 +723,7 @@ FDC_HardwareSetup:
 	.byte 0xcf, 0x10, 0x66, 0x11, 0xc9, 0xcf, 0x11, 0x66
 	.byte 0x09, 0xc9, 0xcf, 0x0f, 0x6b, 0x07, 0xc9, 0xda
 	.byte 0x67, 0x03, 0x27, 0x00, 0x0e
-	ldb L, 0x01
+	ld L, 0x01:opc
 	ret
 	.byte 0xc1, 0x99, 0x89, 0x21, 0xc9, 0xcc, 0x03, 0xd8
 	.byte 0x12, 0x78, 0xa5, 0xfd, 0xc1, 0x9b, 0x89, 0x21
@@ -1194,7 +1194,7 @@ INT4_WaitDataReady:
 	calr FDC_Read_Status
 	bit 6, l
 	jr nz, INT4_StoreResultBase
-	ldb l, 0x0
+	ld l, 0x0:opc
 	cp l, 0x80
 	jr z, INT4_SendSpecifyCmd
 
@@ -1246,7 +1246,7 @@ Reset_Floppy_Disk_Controller:
 	ldio	71, 30
 	bit_dd8	6, 52
 	ret	nz
-	ldb	a, 0
+	ld	a, 0:opc
 	ldw	(35464:16), 0
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
@@ -1316,11 +1316,11 @@ FDC_Reset_BuildParams:
 Check_for_Floppy_Disk_Change:
 	bit_dd8 6, 0x34
 	jr z, Detected_Floppy_Disk_Change
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 Detected_Floppy_Disk_Change:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	ret
 
 ; End of FDC routines

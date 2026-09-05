@@ -106,7 +106,7 @@ Encoder_ClampScaleAndNormalize:
 	ld	l, c
 Encoder_PerformScaling:
 	sub	l, c
-	ldb	h, 0
+	ld	h, 0:opc
 	extz	xhl
 	sll	xhl, 8
 	ld	xwa, xhl

@@ -1012,10 +1012,10 @@ VoiceFloat_BlendAndMerge_Epilog:
 ; or to the remainder (sign(a)). Result in XHL. Not floating point despite the
 ; neighbours.
 Int_SignedDiv:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	bit_erpw 0xE2, 0x0F
 	jr z, Int_SignedDiv_AfterSignA
-	ldb e, 0x1
+	ld e, 0x1:opc
 	cplw_erp 0xE2
 	cpl wa
 	inc 1, xwa
@@ -1062,14 +1062,14 @@ Int_SignedDiv_NegResult:
 ; `jr -75` takes the raw signed 8-bit displacement, verified byte-identical by an
 ; llvm-mc round trip.
 Int_SignedDiv_ConstData:
-	ldb	d, 0
+	ld	d, 0:opc
 	jr	-75
 
 ; Entry point "signed remainder": D = 1, jump to Int_SignedDiv. The three bytes at
 ; 0x03DC63 are a fourth entry point ("unsigned remainder"): call FP_UnsignedDiv and
 ; return XDE in XHL.
 Int_SignedDiv_AltEntry:
-	ldb d, 0x1
+	ld d, 0x1:opc
 	jr Int_SignedDiv
 	calr FP_UnsignedDiv
 	ld xhl, xde
@@ -1134,7 +1134,7 @@ FP_UnsignedDiv_SmallDividend:
 
 ; General case: normalise the divisor by left-shifting, counting the shift in D.
 FP_UnsignedDiv_General:
-	ldb d, 0x0
+	ld d, 0x0:opc
 
 ; Shift the divisor left until it exceeds the dividend; bounded by the carry out of XBC.
 FP_UnsignedDiv_ShiftLoop:
@@ -1384,7 +1384,7 @@ FP_DP_Normalize_Pad:
 ; FP_DP_NormCore, and stores the sign at record+3.
 ; NOTE: SP/DP are swapped here - the core it calls uses the 23-bit (single) split.
 FP_DP_Normalize:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	ldcf_erpw 0xE6, 0x0F
 	extpfx3 0xCD, 0x24, 0x07
 	jr nc, FP_DP_Normalize_StoreSign
@@ -1437,7 +1437,7 @@ FP_DP_NormCore_Shift:
 
 ; Shift left, 16 bits at a time then the remainder.
 FP_DP_NormCore_ShiftLeft:
-	ldb a, 0x17
+	ld a, 0x17:opc
 	sub a, l
 	cp a, 0x10
 	jr lt, FP_DP_NormCore_ShiftLeftLoop
@@ -1487,7 +1487,7 @@ FP_DP_ShiftDecode:
 
 ; Exponent below 23: shift right by (23 - exponent).
 FP_DP_ShiftDecode_ShiftRight:
-	ldb a, 0x17
+	ld a, 0x17:opc
 	sub a, e
 	cp a, 0x10
 	jr lt, FP_DP_ShiftDecode_ShiftRightLoop
@@ -1616,7 +1616,7 @@ FP_DP_Decode:
 
 ; Zero input: set record+2 = 1 (zero flag), record+3 = 0.
 FP_DP_Decode_Zero:
-	ldb l, 0x1
+	ld l, 0x1:opc
 	ld (xwa + 2), l
 	ld (xwa + 3), 0x0
 	ret
@@ -1631,7 +1631,7 @@ FP_SP_Decode:
 	stcf_erpw 0xEE, 0x0F
 	ld hl, de
 	sll hl, 1
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ex8 h, l
 	cp hl, 0:i3
 	jr z, FP_SP_Decode_Zero
@@ -1659,7 +1659,7 @@ FP_SP_Decode_Zero:
 ; NOTE: SP/DP are swapped - the core uses the 20-bit (double) split and writes a 64-bit
 ; mantissa to +4/+8. Called by FP_ScalarToDP, i.e. by int-to-double conversion.
 FP_SP_Normalize:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	ldcf_erpw 0xE6, 0x0F
 	extpfx3 0xCD, 0x24, 0x07
 	jr nc, FP_SP_Normalize_StoreSign
@@ -1711,7 +1711,7 @@ FP_SP_NormCore_ShiftRight:
 
 ; Left shift, 16 bits at a time then the remainder.
 FP_SP_NormCore_ShiftLeft:
-	ldb a, 0x14
+	ld a, 0x14:opc
 	sub a, l
 	cp a, 0x10
 	jr lt, FP_SP_NormCore_ShiftLeftLoop
@@ -2169,7 +2169,7 @@ FP_DP_AlignMantissa_ShiftA:
 FP_DP_AlignMantissa_Shift:
 	ld xde, (xwa + 3)
 	ld xhl, (xwa + 7)
-	ldb e, 0x0
+	ld e, 0x0:opc
 	cp ix, 0x35
 	jr gt, FP_DP_AlignMantissa_MaxShift
 	cp ix, 0x20
@@ -2257,7 +2257,7 @@ FP_SP_AlignMantissa_ShiftA:
 ; Compute the difference and shift.
 FP_SP_AlignMantissa_Shift:
 	ld xde, (xbc + 3)
-	ldb e, 0x0
+	ld e, 0x0:opc
 	ld (xbc + 256), hl
 	sub hl, ix
 	cp hl, 0x18
@@ -2324,12 +2324,12 @@ FP_DP_MulMantissaCore:
 	lda xsp, (xsp - 12)
 	ld xiy, (xwa + 8)
 	ld xix, (xwa + 4)
-	ldb c, 0x8
+	ld c, 0x8:opc
 	stb_erp B, 0xEF
 	ld xiz, 0:i3
 	call FP_Div_Step_Bit3
 	ld (xsp), xiz
-	ldb c, 0x8
+	ld c, 0x8:opc
 	ld xiz, 0:i3
 	call FP_Div_Step4Bits
 	ld (xsp + 4), xiz
@@ -2494,9 +2494,9 @@ FP_DP_SubMantissa:
 	ld xde, (xwa + 4)
 	sub xde, (xbc + 4)
 	sbc xhl, (xbc + 8)
-	ldb b, 0x0
+	ld b, 0x0:opc
 	jr nc, FP_DP_SubMantissa_NoBorrow
-	ldb b, 0x80
+	ld b, 0x80:opc
 	ld xiy, 0:i3
 	dec 1, xiy
 	xor xde, xiy
@@ -2589,13 +2589,13 @@ FP_SP_SubMantissa:
 	ld de, (xwa + 256)
 	ld xix, (xwa + 4)
 	sub xix, (xbc + 4)
-	ldb b, 0x0
+	ld b, 0x0:opc
 	jr z, FP_SP_SubMantissa_Zero
 	jr nc, FP_SP_SubMantissa_Normalize
 	cplw_erp 0xF2
 	cpl ix
 	inc 1, xix
-	ldb b, 0x80
+	ld b, 0x80:opc
 
 ; Byte-wise renormalisation: shift left 8 bits while the top byte is empty.
 FP_SP_SubMantissa_Normalize:
@@ -2607,7 +2607,7 @@ FP_SP_SubMantissa_Normalize:
 
 ; Bit-search the top byte and do the final left shift, adjusting the exponent.
 FP_SP_SubMantissa_AlignBits:
-	ldb w, 0x7
+	ld w, 0x7:opc
 	bs1b_erpw 0xF2
 	sub w, a
 	ld a, w
@@ -3088,15 +3088,15 @@ FP_CopyVariant_Pad:
 ; is not flagged, copy 8 bytes from the XBC record to the XWA record. Reached from
 ; FP_SP_AddMantissa when either operand carries a special flag.
 FP_DP_CopyNoSign:
-	ldb d, 0x0
+	ld d, 0x0:opc
 	jr FP_DP_CopyDispatch
 
 ; Same helper, double-precision entry (D = 1) -> copies 12 bytes. A third entry at
 ; 0x03EA0A sets D = 2 but is not referenced anywhere in the image.
 FP_DP_CopyWithSign:
-	ldb d, 0x1
+	ld d, 0x1:opc
 	jr FP_DP_CopyDispatch
-	ldb d, 0x2
+	ld d, 0x2:opc
 	jr __jrt_nop_03EA0E
 __jrt_nop_03EA0E:
 
@@ -3158,7 +3158,7 @@ FP_SP_DecodeToInt_ShiftLeft:
 
 ; Exponent below 20: shift right by (20 - exponent).
 FP_SP_DecodeToInt_ShiftRight:
-	ldb a, 0x14
+	ld a, 0x14:opc
 	sub a, e
 	cp a, 0x10
 	jr lt, FP_SP_DecodeToInt_ShiftRightLoop
@@ -3681,15 +3681,15 @@ FP_Div_Step_Continue:
 ; is not flagged zero, copy 8 bytes from XBC to XWA and flip the sign byte. Reached from
 ; FP_SP_SubMantissa when an operand carries a special flag.
 FP_DP_NegNoSign:
-	ldb d, 0x0
+	ld d, 0x0:opc
 	jr FP_DP_NegDispatch
 
 ; Same helper, double-precision entry (D = 1) -> 12 bytes. Reached from
 ; FP_DP_SubMantissa. A third entry at 0x03EE3E sets D = 2 and is unreferenced.
 FP_DP_NegWithSign:
-	ldb d, 0x1
+	ld d, 0x1:opc
 	jr FP_DP_NegDispatch
-	ldb d, 0x2
+	ld d, 0x2:opc
 	jr __jrt_nop_03EE42
 __jrt_nop_03EE42:
 

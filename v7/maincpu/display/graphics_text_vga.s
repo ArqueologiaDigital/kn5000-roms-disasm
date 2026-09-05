@@ -534,9 +534,9 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x06
 	jr	lt, -104
 	.byte 0x04
-	ldb	b, 175
+	ld	b, 175:opc
 	.byte 0x06
-	ldb	a, 185
+	ld	a, 185:opc
 	push	sr
 	.byte 0x52
 	ld	de, (xwa+2)
@@ -1911,7 +1911,7 @@ HexCharToNibble_CheckUpper:
 	ret
 
 HexCharToNibble_Invalid:
-	ldb l, 0x0		; Invalid -> 0
+	ld l, 0x0:opc		; Invalid -> 0
 	ret
 
 FontGlyph_ByteData:
@@ -1921,10 +1921,10 @@ FontGlyph_ByteData:
 	.byte 0xc3
 	reti
 	or	xwa, xwa
-	ldb	a, 177
+	ld	a, 177:opc
 	ld	xbc, 0xcd25800e
 	.byte 0xcf
-	ldb	w, 102
+	ld	w, 102:opc
 	.byte 0x04
 	cp	e, 0:i3
 	jr	nz, 5
@@ -4686,7 +4686,7 @@ MainPmGet:
 	cp xbc, 0x1e2000f
 	jrl nz, MainPmGet_ReturnZero
 	call BitMapOut_PrepareRender_CheckBit1
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld (xsp + 6), xhl
 	ld xwa, 0xffffffff

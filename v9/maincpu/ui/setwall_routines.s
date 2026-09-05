@@ -222,7 +222,7 @@ SetWall_NewSlotSelected:
 
 SetWall_DispatchSlotEvent:
 	xor wa, wa
-	ldb a, 0xee
+	ld a, 0xee:opc
 	call SoundCtrl_SendCommand
 
 SetWall_ToReturn:
@@ -426,10 +426,10 @@ SetWall_WriteSingleSlot:
 	ldir85
 	push xhl
 	push xde
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp (3390:16), 3
 	jr nz, SetWall_WriteSingle_SetMode
-	ldb a, 0xff
+	ld a, 0xff:opc
 
 SetWall_WriteSingle_SetMode:
 	ld xix, 0xab000
@@ -493,10 +493,10 @@ SetWall_WriteAll_Loop:
 	add xix, xwa
 	ld xwa, 0xbd
 	add xix, xwa
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp (3390:16), 3
 	jr nz, SetWall_WriteAll_ModeSet
-	ldb a, 0xff
+	ld a, 0xff:opc
 
 SetWall_WriteAll_ModeSet:
 	ld (xix), a
@@ -571,10 +571,10 @@ SetWall_LocalWriteAll_Loop:
 	add xix, xwa
 	ld xwa, 0xbd
 	add xix, xwa
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp (3390:16), 3
 	jr nz, SetWall_LocalWriteAll_Mode
-	ldb a, 0xff
+	ld a, 0xff:opc
 
 SetWall_LocalWriteAll_Mode:
 	ld (xix), a
@@ -798,7 +798,7 @@ SetWall_ParseStream_MainLoop:
 	jr z, SetWall_ParseStream_ReadEvent
 	cp a, 0xd3
 	jr z, SetWall_ParseStream_ReadEvent
-	ldb w, 0xf0
+	ld w, 0xf0:opc
 	and w, a
 	cp w, 0x90
 	jr z, SetWall_ParseStream_ReadEvent
@@ -910,7 +910,7 @@ SetWall_ParseStream_TypeB0:
 	ld (3310:16), a
 	and (3310:16), 2
 	pushw bc
-	ldb c, 0x6
+	ld c, 0x6:opc
 
 SetWall_ParseStream_B0_ShiftLoop:
 	sla_sd16b 0xee, 0x0c
@@ -1105,7 +1105,7 @@ SetWall_SkipC0Scanner:
 	xor l, l
 	cp a, 0:i3
 	jr ule, SetWall_SkipC0_Return
-	ldb l, 0x1
+	ld l, 0x1:opc
 
 SetWall_SkipC0_Return:
 	ret
@@ -1156,7 +1156,7 @@ SetWall_ParseB0ControlChange:
 	and a, 0x3
 	stb_erp A, 0x3c
 	jr z, SetWall_B0CC_BankSelect
-	ldb c, 0x3
+	ld c, 0x3:opc
 	cp a, c
 	jr nz, SetWall_B0CC_ClearFlags
 
@@ -1445,15 +1445,15 @@ SetWall_FullReset_VoiceLoop:
 	ld xwa, 0x78
 	add xwa, xde
 	ldw iy, 0xffff
-	ldb c, 0x10
+	ld c, 0x10:opc
 
 SetWall_FullReset_ClearNotes:
 	stw_dpi IY, 0xe1
 	djnz8 c, SetWall_FullReset_ClearNotes
 	ld xwa, 0x98
 	add xwa, xde
-	ldb b, 0x5
-	ldb c, 0x10
+	ld b, 0x5:opc
+	ld c, 0x10:opc
 
 SetWall_FullReset_ClearCtrl:
 	lda_dpi XDE, 0xe0
@@ -1473,13 +1473,13 @@ SetWall_FullReset_ClearCtrl:
 	ld (0xf24b:16), 0
 	ld xix, 0xcef
 	xor wa, wa
-	ldb c, 0x10
+	ld c, 0x10:opc
 
 SetWall_FullReset_ClearGlobal1:
 	stw_dpi WA, 0xf1
 	djnz8 c, SetWall_FullReset_ClearGlobal1
 	ld xix, 0xd0f
-	ldb c, 0x10
+	ld c, 0x10:opc
 
 SetWall_FullReset_ClearGlobal2:
 	ld (xix), a
@@ -1802,9 +1802,9 @@ SetWall_Replay_Done:
 SetWall_SendPanelCtrl:
 	and (0xfdad:16), 254
 	xor a, a
-	ldb w, 0x1
-	ldb e, 0x91
-	ldb d, 0x3
+	ld w, 0x1:opc
+	ld e, 0x91:opc
+	ld d, 0x3:opc
 	call SwbtWr_QueuePostEvent
 	ret
 
@@ -1946,7 +1946,7 @@ SetWall_InlineCodeBlock3:
 	push	xix
 	swi	3
 	xor	wa, wa
-	ldb	a, 76
+	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
 	ret
 	ret
@@ -1992,10 +1992,10 @@ SetWall_MiscDataAndCode:
 	ldw	iz, 0x3f8d
 	.byte 0xa7
 	jr	z, 10
-	ldb	a, 142
+	ld	a, 142:opc
 	call	UI_PostModeChangeEvent
 	jp	SetWall_MiscDataAndCode_0x51
-	ldb	a, 131
+	ld	a, 131:opc
 	call	UI_PostModeChangeEvent
 	ret
 	ld	xwa, (4349:16)
@@ -2057,7 +2057,7 @@ SetWall_MiscDataAndCode:
 	ldw	ix, 0xe105
 	swi	5
 	rcf
-	ldb	c, 179
+	ld	c, 179:opc
 	divs8rr	c, l
 	jr	z, 35
 	.byte 0xe7
@@ -2069,7 +2069,7 @@ SetWall_MiscDataAndCode:
 	ldw	ix, 0xe105
 	swi	5
 	rcf
-	ldb	c, 179
+	ld	c, 179:opc
 	inc	6, l
 	ret
 	ld	hl, (xhl+3)
@@ -2128,13 +2128,13 @@ SetWall_Sync_PanelOff:
 	bit 2, (0xfdad:16)
 	jr nz, SetWall_Sync_FinalUpdate
 	or (0xfdad:16), 4
-	ldb a, 0x4
+	ld a, 0x4:opc
 
 SetWall_Sync_PostEvent:
 	ld (4330:16), 1
-	ldb e, 0x91
-	ldb d, 0x3
-	ldb w, 0x4
+	ld e, 0x91:opc
+	ld d, 0x3:opc
+	ld w, 0x4:opc
 	call SwbtWr_QueueMainEvent
 	call SwbtWr_ReinitBothBanks
 

@@ -142,7 +142,7 @@ Sprintf_String_UsePrecision:
 Sprintf_String_ComputePadding:
 	ldw	wa, 44800
 	pop	xix
-	ldb	w, 176
+	ld	w, 176:opc
 	srl	xwa, 98
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
@@ -267,7 +267,7 @@ Sprintf_Decimal_ZeroFillLoop:
 	.byte 0xfc, 0x21, 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x06
 	.byte 0x66, 0x09, 0x9f, 0x04
 Sprintf_Decimal_PrecZeroBody:
-	ldb	w, 232
+	ld	w, 232:opc
 	zcf
 	ld	(xbc), xwa
 	jr	94
@@ -349,7 +349,7 @@ Sprintf_Unsigned_DigitLoop:
 	.byte 0x22, 0xf5, 0xec, 0x31, 0xea, 0x88, 0xe8, 0xcc
 	.byte 0x0f, 0x00, 0x00, 0x00, 0xec, 0x80, 0x80
 Sprintf_Unsigned_PadRightSpace:
-	ldb	a, 177
+	ld	a, 177:opc
 	ld	xbc, 1845817322
 	sbc	xhl, xde
 	nop
@@ -369,7 +369,7 @@ Sprintf_Hex_Setup:
 	.byte 0xbf, 0x12, 0x37, 0xf2, 0x22, 0xc2, 0x03, 0x02
 	.byte 0x00, 0x00, 0xbf, 0x08, 0x32, 0xea, 0x8d, 0x8f
 Sprintf_Hex_ConvertToString:
-	ldb	b, 35
+	ld	b, 35:opc
 	ld	xiz, (xsp+36)
 	ld	ix, (xsp+46)
 	ld	hl, (xsp+48)
@@ -523,7 +523,7 @@ Sprintf_Octal_DigitLoop:
 	.byte 0x30, 0x68, 0x11, 0x9f, 0x1a, 0x3f, 0x00, 0x00
 	.byte 0x6a, 0x0f, 0x0b, 0x30, 0x00, 0xaf, 0x0e
 Sprintf_Octal_PadRightSpace:
-	ldb	w, 176
+	ld	w, 176:opc
 	srl	xwa, 98
 	incw	1, (246306:24)
 Sprintf_Octal_PadRightLoop:
@@ -652,7 +652,7 @@ Sprintf_FFixed_CheckDefaults:
 	.byte 0x03, 0x3f, 0x20, 0x00, 0x66, 0x11, 0x68, 0x19
 	.byte 0x0b, 0x20, 0x00, 0xaf, 0x0e
 Sprintf_FFixed_CheckLongDouble:
-	ldb	w, 176
+	ld	w, 176:opc
 	srl	xwa, 98
 	incw	1, (246306:24)
 	decm	1, (xsp+18)
@@ -665,7 +665,7 @@ Sprintf_FFixed_SpecNoUpperCase:
 	.byte 0x0b, 0x9f
 Sprintf_FFixed_CheckSpecG:
 	rcf
-	ldb	w, 216
+	ld	w, 216:opc
 	ldw	hl, 26114
 	retd	8203
 	nop
@@ -679,7 +679,7 @@ Sprintf_FFixed_RoundCheck:
 Sprintf_FFixed_RoundCarry:
 	ldw	wa, 44800
 	ret
-	ldb	w, 176
+	ld	w, 176:opc
 	srl	xwa, 98
 Sprintf_FFixed_RoundLoop:
 	.byte 0xd2, 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x12, 0x69
@@ -715,7 +715,7 @@ Sprintf_FFixed_StripZeroCheck:
 	.byte 0x6e, 0x08, 0x9f
 Sprintf_FFixed_ComputeOutputLen:
 	rcf
-	ldb	w, 216
+	ld	w, 216:opc
 	ldw	hl, 26115
 	retd	11787
 	nop
@@ -1269,7 +1269,7 @@ Sprintf_Shift_SetupLoop:
 Sprintf_Shift_Loop:
 	incf
 	ldw sp, 15023
-	ldb c, 94
+	ld c, 94:opc
 	lda xsp, (xsp+46)
 	ret
 	swi 7
@@ -1290,7 +1290,7 @@ Sprintf_Shift_LastEntry:
 	.byte 0x61, 0x28, 0xaf
 Sprintf_Shift_LastShift:
 	rcf
-	ldb	w, 56
+	ld	w, 56:opc
 	ld	xwa, (xsp+16)
 Sprintf_PropagateCarry:
 	.byte 0x38, 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0a, 0x37
@@ -1323,7 +1323,7 @@ Sprintf_Normalize_ClearLoop:
 	.byte 0x9f
 Sprintf_Normalize_MainLoop:
 	incf
-	ldb	w, 196
+	ld	w, 196:opc
 	cp	xbc, xix
 	jr	z, 5
 	djnz16	bc, -8

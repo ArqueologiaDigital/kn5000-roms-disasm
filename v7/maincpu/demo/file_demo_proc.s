@@ -866,7 +866,7 @@ Demo_PreSetup:
 	ret
 
 Demo_ScanActivePartChannels:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	lda xix, (0xf1a0:16)
 
 Demo_ScanPartLoop:
@@ -896,7 +896,7 @@ Demo_ScanPartLoop:
 	jr Demo_ScanPartDone
 
 Demo_ScanPartSkipToEnd:
-	ldb l, 0xf
+	ld l, 0xf:opc
 
 Demo_ScanPartNext:
 	inc 1, l
@@ -4572,7 +4572,7 @@ FileIO_Search_NotFound:
 	jr z, FileIO_Search_EndOfList
 
 FileIO_Search_Error:
-	ldb a, 0x0
+	ld a, 0x0:opc
 	cp de, 0:i3
 	jr z, FileIO_Search_Return
 	ld a, (xhl)
@@ -4736,13 +4736,13 @@ FileIO_GetRecordType_Extended:
 FileIO_GetRecordType_Error:
 	cp (xwa), 0x7e
 	jr nz, FileIO_GetRecordType_Return
-	ldb c, 0x5f
+	ld c, 0x5f:opc
 	jr FileIO_GetRecordType_ReturnOk
 
 FileIO_GetRecordType_Return:
 	cp (xwa), 0x20
 	jr nc, FileIO_GetRecordType_Alt
-	ldb c, 0x20
+	ld c, 0x20:opc
 
 FileIO_GetRecordType_ReturnOk:
 	ld (xwa), c
@@ -4791,7 +4791,7 @@ FileIO_WriteRecordName_Done:
 	jr c, FileIO_WriteRecordName_Return
 
 FileIO_WriteRecordName_Pad:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FileIO_WriteRecordName_Return:
@@ -4846,7 +4846,7 @@ FileIO_FormatName_Return:
 	jr c, FileIO_BuildRecordPath_Loop
 
 FileIO_BuildRecordPath:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FileIO_BuildRecordPath_Loop:
@@ -4895,7 +4895,7 @@ FileIO_GetRecordAttr_Check:
 	jr lt, FileIO_GetRecordAttr_Default
 
 FileIO_GetRecordAttr_Return:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 FileIO_GetRecordAttr_Default:
@@ -4920,7 +4920,7 @@ FileIO_CheckRecordValid:
 	jr c, CheckRecord_ValidRange
 
 CheckRecord_ReturnFalse:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 CheckRecord_ValidRange:
@@ -4947,7 +4947,7 @@ FileIO_CheckRecordByFile:
 	jr c, CheckRecordByFile_Valid
 
 CheckRecordByFile_OutOfRange:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 CheckRecordByFile_Valid:
@@ -5013,11 +5013,11 @@ FileIO_CheckFileExists:
 	cp xwa, 0x0
 	jr lt, CheckFileExists_NotFound
 	call _findclose
-	ldb l, 0x1
+	ld l, 0x1:opc
 	jr CheckFileExists_Done
 
 CheckFileExists_NotFound:
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 CheckFileExists_Done:
 	lda_dri XSP, 0xfd, 0x0a, 0x01
@@ -5217,7 +5217,7 @@ GetCurrentFileType:
 	calr ValidateFileSelectionIndex
 	cp hl, 0:i3
 	jr z, GetCurrentFileType_Lookup
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ret
 
 GetCurrentFileType_Lookup:
@@ -8408,7 +8408,7 @@ ValidateSigned_FoundMatch:
 	ret
 
 ValidateSigned_Positive:
-	ldb l, 0x23
+	ld l, 0x23:opc
 	ret
 FileIO_ErrorCodeByteBlock:
 	call	15665005
@@ -8575,7 +8575,7 @@ NumToAscii_FormatNumber:
 	ld ix, 0:i3
 	cp c, 0x10
 	jr ule, NumToAscii_ClampMin
-	ldb c, 0x10
+	ld c, 0x10:opc
 	jr NumToAscii_PadLeading
 
 NumToAscii_ClampMin:

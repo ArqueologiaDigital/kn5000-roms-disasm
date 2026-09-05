@@ -691,7 +691,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0a775:
 	ld_erpb_rr a, 0xfa
 	extz WA
-	ldb C, 0x04
+	ld C, 0x04:opc
 	addb_erp c, 0xfb
 	pushw 0x0027
 	ld de, 1:i3
@@ -788,7 +788,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0a88e:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x07
+	ld C, 0x07:opc
 	addb_erp c, 0xfb
 	pushw 0x0028
 	ld de, 1:i3
@@ -841,7 +841,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0a924:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x11
+	ld C, 0x11:opc
 	addb_erp c, 0xfb
 	pushw 0x0029
 	ld de, 1:i3
@@ -1074,7 +1074,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp	251, 1
 	stb_erp	a, 251
 	extz	wa
-	ldb	c, 23
+	ld	c, 23:opc
 	addb_erp	c, 250
 	pushw 43
 	ld	de, 1:i3
@@ -1122,7 +1122,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0ac26:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x1a
+	ld C, 0x1a:opc
 	addb_erp c, 0xfb
 	pushw 0x002c
 	ld de, 1:i3
@@ -1219,7 +1219,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 39
+	ld	c, 39:opc
 	addb_erp	c, 251
 	pushw 45
 	ld	de, 1:i3
@@ -1271,7 +1271,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0adc3:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x2e
+	ld C, 0x2e:opc
 	addb_erp c, 0xfb
 	pushw 0x002e
 	ld de, 1:i3
@@ -1552,7 +1552,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 54
+	ld	c, 54:opc
 	addb_erp c, 251
 	pushw 48
 	ld	de, 1:i3
@@ -1563,7 +1563,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldib_erp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	ldb	c, 77
+	ld	c, 77:opc
 	addb_erp c, 251
 	pushw 48
 	ld	de, 1:i3
@@ -1646,7 +1646,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0b1e9:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x39
+	ld C, 0x39:opc
 	addb_erp c, 0xfb
 	pushw 0x0036
 	ld de, 1:i3
@@ -1704,7 +1704,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0b28a:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x3d
+	ld C, 0x3d:opc
 	addb_erp c, 0xfb
 	pushw 0x0037
 	ld de, 1:i3
@@ -1757,7 +1757,7 @@ UpdSeSel_ExtendedOps_Data:
 .Lc_f0b320:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x47
+	ld C, 0x47:opc
 	addb_erp c, 0xfb
 	pushw 0x0038
 	ld de, 1:i3
@@ -2044,7 +2044,7 @@ SeMenu_AltUpdate_Data:
 .Lc_f0b623:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x1e
+	ld C, 0x1e:opc
 	addb_erp c, 0xfa
 	pushw 0x0024
 	ld de, 1:i3
@@ -2058,7 +2058,7 @@ SeMenu_AltUpdate_Data:
 .Lc_f0b644:
 	ld_erpb_rr a, 0xfb
 	extz WA
-	ldb C, 0x1e
+	ld C, 0x1e:opc
 	addb_erp c, 0xfa
 	pushw 0x0024
 	ld de, 1:i3
@@ -2128,7 +2128,7 @@ SeMenu_AltUpdate_Data:
 .Lc_f0b702:
 	ld A,(XSP+0x02)
 	extz WA
-	ldb C, 0x22
+	ld C, 0x22:opc
 	addb_erp c, 0xfa
 	pushw 0x0025
 	ld de, 1:i3
@@ -2142,7 +2142,7 @@ SeMenu_AltUpdate_Data:
 .Lc_f0b723:
 	ld_erpb_rr a, 0xfb
 	extz WA
-	ldb C, 0x22
+	ld C, 0x22:opc
 	addb_erp c, 0xfa
 	pushw 0x0025
 	ld de, 1:i3
@@ -2220,7 +2220,7 @@ SeMenu_ControllerUpdate:
 SeMenu_ControllerUpdate_Step1:
 	ld a, (xsp + 6)
 	extz wa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	addb_erp C, 0xfb
 	pushw 0x26
 	ld de, 1:i3
@@ -2233,7 +2233,7 @@ SeMenu_ControllerUpdate_Step1:
 SeMenu_ControllerUpdate_Step2:
 	ld a, (xsp + 8)
 	extz wa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	addb_erp C, 0xfb
 	pushw 0x26
 	ld de, 1:i3
@@ -2498,10 +2498,10 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	2, xsp
 	lda	xwa, (xsp)
 	call	15766913
-	ldb	a, 13
+	ld	a, 13:opc
 	.byte 0x87, 0x3f, 0x01
 	jr	z, 2
-	ldb	a, 16
+	ld	a, 16:opc
 	extz	wa
 	call	15786696
 	inc	2, xsp
@@ -2516,7 +2516,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call SeMenu_SetDisplayState
 	lds_erpb 0xfb, 0
 .Lc_f0baca:
-	ldb C, 0x5d
+	ld C, 0x5d:opc
 	addb_erp c, 0xfb
 	pushw 0x003a
 	ld wa, 0:i3
@@ -4913,7 +4913,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xde)
 	ld	(xsp+4), a
 	ldib_erp	251, 0
-	ldb	c, 0
+	ld	c, 0:opc
 	ld	a, c
 	add	a, c
 	inc	1, a
@@ -4963,7 +4963,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	c, 6
 	.byte 0x8f, 0x04, 0x3f, 0x7f
 	jr	nz, 4
-	ldb	b, 0
+	ld	b, 0:opc
 	jr	34
 	.byte 0x8f, 0x08, 0xa0
 	ld	a, (xsp+4)
@@ -5027,7 +5027,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756049
 	ld	a, (xsp+6)
 	extz	wa
-	ldb	c, 0
+	ld	c, 0:opc
 	addb_erp c, 251
 	dec	1, c
 	lda	xde, (xsp+4)
@@ -5045,7 +5045,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756049
 	ld	a, (xsp+6)
 	extz	wa
-	ldb	c, 0
+	ld	c, 0:opc
 	addb_erp c, 251
 	dec	1, c
 	lda	xde, (xsp+4)
@@ -6283,16 +6283,16 @@ SeMenu_DisplayPartValue:
 	push	xix
 	push	xiy
 	ld	wa, (xiz+10)
-	ldb	w, 255
+	ld	w, 255:opc
 	ld	de, (xiz+8)
-	ldb	d, 0
+	ld	d, 0:opc
 	push	xiz
 	call	16624640
 	pop	xiz
 	ld	wa, (xiz+12)
-	ldb	w, 127
+	ld	w, 127:opc
 	ld	de, (xiz+8)
-	ldb	d, 1
+	ld	d, 1:opc
 	push	xiz
 	call	16624640
 	pop	xiz
@@ -6576,14 +6576,14 @@ SeMenu_ShowConfirmDialog_Data:
 	ld XIY,SeBitmap_EnvCurve5_0x313
 	ld XIX,SeBitmap_EnvCurve5_0x31D
 	call SeMenu_NameEditor_Setup
-	ldb C, 0x02
+	ld C, 0x02:opc
 	jr t, .Lc_f0f0a6
 .Lc_f0f090:
 	ld (0x03efa8:24), 0x00
 	ld XIY,SeBitmap_EnvCurve5_0x313
 	ld XIX,SeBitmap_EnvCurve5_0x327
 	call SeMenu_NameEditor_Setup
-	ldb C, 0x04
+	ld C, 0x04:opc
 .Lc_f0f0a6:
 	ld w, (0x065e:16)
 	ld A,C
@@ -6591,7 +6591,7 @@ SeMenu_ShowConfirmDialog_Data:
 	dec 1,A
 	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_mid0.bin"
 	ld (0x03efa8:24), 0x00
-	ldb C, 0x07
+	ld C, 0x07:opc
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
 .Lc_f0f166:
@@ -6689,7 +6689,7 @@ SeMenu_ShowConfirmDialog_Data:
 	call SeMenu_NameEditor_ChangeCase_Data
 	popw iy
 	popw ix
-	ldb C, 0x05
+	ld C, 0x05:opc
 	ld XIZ,SeMenu_ShowConfirmDialog_Data_0x3F4
 .Lc_f0f2e0:
 	ld HL,(XIZ)
@@ -6708,15 +6708,15 @@ SeMenu_WaveformSelect_End:
 	ret
 
 SeMenu_WaveformSelect_Handler:
-	ldb c, 0x0
-	ldb a, 0xc
-	ldb a, 0x10
+	ld c, 0x0:opc
+	ld a, 0xc:opc
+	ld a, 0x10:opc
 	call Display_DeferOrDrawWall
 	ret
 
 SeMenu_WaveformSelect_Process:
-	ldb c, 0x7
-	ldb a, 0xc
+	ld c, 0x7:opc
+	ld a, 0xc:opc
 	call Display_DeferOrUpdateScreen
 	ret
 
@@ -6799,7 +6799,7 @@ SeMenu_PresetManager_Init:
 	ld	xiy, FlashWrite_BlockRef_Type6_0x690
 	ld	xix, FlashWrite_BlockRef_Type6_0x69A
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ld	(0x03efa8:24), 1
@@ -6886,14 +6886,14 @@ SeMenu_PresetManager_Data:
 	ld XIY,SeBitmap_EnvCurve5_0x7B6
 	ld XIX,SeBitmap_EnvCurve5_0x7C0
 	call SeMenu_NameEditor_Setup
-	ldb C, 0x02
+	ld C, 0x02:opc
 	jr t, .Lc_f0f7b0
 .Lc_f0f79a:
 	ld (0x03efa8:24), 0x00
 	ld XIY,SeBitmap_EnvCurve5_0x7B6
 	ld XIX,SeBitmap_EnvCurve5_0x7CA
 	call SeMenu_NameEditor_Setup
-	ldb C, 0x04
+	ld C, 0x04:opc
 .Lc_f0f7b0:
 	ld w, (0x065e:16)
 	ld A,C
@@ -6925,10 +6925,10 @@ SeMenu_PresetManager_Data:
 	ld (0x03efa8:24), 0x00
 	cp (0x06ae:16), 0x01
 	jr nz, .Lc_f0f816
-	ldb C, 0x02
+	ld C, 0x02:opc
 	jr t, .Lc_f0f818
 .Lc_f0f816:
-	ldb C, 0x04
+	ld C, 0x04:opc
 .Lc_f0f818:
 	ld w, (0x065e:16)
 	ld A,C
@@ -6958,7 +6958,7 @@ SeMenu_PresetManager_Data:
 	djnz8	c, -84
 	ret
 	ld (0x03efa8:24), 0x00
-	ldb C, 0x02
+	ld C, 0x02:opc
 	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
@@ -7042,7 +7042,7 @@ SeMenu_PresetBrowser_Data:
 	call	15789027
 	ret
 	ld	(257960:24), 0
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
@@ -7085,14 +7085,14 @@ SeMenu_PresetBrowser_Data:
 	ld	xiy, 15807908
 	ld	xix, 15807918
 	call	15789014
-	ldb	c, 4
+	ld	c, 4:opc
 	ld	xiy, 1637
 	ld	w, (xiy)
 	and	w, 32
 	jrl	z, 187
 	.byte 0xc8, 0x04, 0xcb, 0x04
 	push	xiy
-	ldb	d, 4
+	ld	d, 4:opc
 	sub	d, c
 	ld	e, d
 	xor	d, d
@@ -7560,7 +7560,7 @@ SeMenu_NameEdit_SetupPath:
 	ld	xiy, 15820149
 	ld	xix, 15820159
 	call	15789014
-	ldb	a, 0
+	ld	a, 0:opc
 SeMenu_NameEdit_DefaultPath:
 	ld	(0x03efa8:24), 0
 	ld xiy, EffectParam_Edit_Table
@@ -7623,7 +7623,7 @@ SeMenu_PatchEdit_SetupPath:
 	ld	xiy, 15805215
 	ld	xix, 15805225
 	call	15789014
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	6
 SeMenu_PatchEdit_CallHelper:
 	call SeMenu_PresetManager_Data_0xEA
@@ -7659,7 +7659,7 @@ SeMenu_BankEdit_LoopHelper:
 	ld	xiy, 15805276
 	ld	xix, 15805316
 	call	15789027
-	ldb	c, 0
+	ld	c, 0:opc
 	ld	xiz, 1636
 SeMenu_BankEdit_LoopBody:
 	.byte 0xcb, 0x04, 0x3e, 0x86, 0x3f, 0x00, 0x66, 0x35
@@ -7706,13 +7706,13 @@ SeMenu_DrumKit_Dispatch:
 	ld	xiy, TuningSys_Param_01_0x24A
 	ld	xix, TuningSys_Param_01_0x254
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	22
 	ld	(0x03efa8:24), 1
 	ld	xiy, TuningSys_Param_01_0x254
 	ld	xix, TuningSys_Param_01_0x25E
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 13
+	ld	a, 13:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, TuningSys_Param_01_0x25E
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -7894,7 +7894,7 @@ SeMenu_PresetInit_Main:
 	ret
 SeMenu_PresetInit_Loop1:
 	; --- Loop 1: iterate A from 2 to 5, call table lookup (15 bytes) ---
-	ldb a, 0x02
+	ld a, 0x02:opc
 SeMenu_PresetInit_Loop1Body:
 	push_a
 	call SeMenu_PresetInit_TableLookup1
@@ -7919,7 +7919,7 @@ SeMenu_PresetInit_Lookup1Return:
 	ret
 SeMenu_PresetInit_Loop2:
 	; --- Loop 2: iterate A from 0x0c to 0x0f, call table lookup (16 bytes) ---
-	ldb a, 0x0c
+	ld a, 0x0c:opc
 SeMenu_PresetInit_Loop2Body:
 	push_a
 	call SeMenu_PresetInit_TableLookup2
@@ -8066,7 +8066,7 @@ SeMenu_FilterEdit_Dispatch:
 	ld	xiy, TuningSystem_Handler_Table_0x123D
 	ld	xix, TuningSystem_Handler_Table_0x1247
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	xiy, TuningSystem_Handler_Table_0x117D
 	ld	(0x03efa8:24), 0
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -8078,7 +8078,7 @@ SeMenu_FilterEdit_AltDispatch:
 	ld	xiy, TuningSystem_Handler_Table_0x12CA
 	ld	xix, TuningSystem_Handler_Table_0x12D4
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, TuningSystem_Handler_Table_0x12B6
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -8090,7 +8090,7 @@ SeMenu_FilterEdit_DataBlock3:
 	ld	xiy, TuningSystem_Handler_Table_0x12CA
 	ld	xix, TuningSystem_Handler_Table_0x12D4
 	call	SeMenu_NameEditor_Setup
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	(0x03efa8:24), 0
 	ld	xiy, TuningSystem_Handler_Table_0x132F
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -8169,10 +8169,10 @@ SeMenu_EqEdit_SetupPath:
 	ld	xiy, 15814056
 	ld	xix, 15814086
 	call	15789014
-	ldb	a, 0
+	ld	a, 0:opc
 	jr	2
 SeMenu_EqEdit_SetConstA:
-	ldb a, 0x07
+	ld a, 0x07:opc
 SeMenu_EqEdit_DefaultPath:
 	ld	(257960:24), 0
 	ld	xiy, 15813180
@@ -8214,7 +8214,7 @@ SeMenu_EqEdit_DrawInit:
 	rcf
 	ldio	4, 42
 	.byte 0x55
-	ldb	b, 1
+	ld	b, 1:opc
 	push	sr
 	max
 	ldio	16, 42
@@ -8230,7 +8230,7 @@ SeMenu_EqEdit_DrawInit:
 	ld	xbc, 0x152a4122
 	pushw	de
 	.byte 0x55
-	ldb	b, 1
+	ld	b, 1:opc
 	ldwio	4, 0x4102
 	pushw	de
 	push_a
@@ -8246,7 +8246,7 @@ SeMenu_EqEdit_DrawInit:
 	ld	xbc, 0x152a4122
 	max
 	ldwio	20, 5130
-	ldb	b, 85
+	ld	b, 85:opc
 	pushw	de
 	max
 	push	sr
@@ -8400,7 +8400,7 @@ SeBitmap_EnvCurve2:
 	pop	sr
 	incf
 	rcf
-	ldb	w, 192
+	ld	w, 192:opc
 	.zero 24
 	nop
 	nop
@@ -8637,7 +8637,7 @@ SeBitmap_EnvCurve4:
 	pushw	2827
 	zcf
 	zcf
-	ldb	c, 35
+	ld	c, 35:opc
 	ld	xhl, 0x0383c343
 	pop	sr
 	pop	sr
@@ -11374,7 +11374,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld (XHL+0x04),XDE
 	ld a, (0x7ea1:16)
 	sll A, 0x04
-	ldb W, 0x00
+	ld W, 0x00:opc
 	extz XWA
 	add XWA,0x001e8a00
 	ld XIX,XWA
@@ -11982,7 +11982,7 @@ AcSndArgGrid_Init:
 	extz	wa
 	lda	xbc, (xsp+12)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0xf2, 0x32
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	xde
 	ld	xwa, 21233691
 	ld	xbc, 31719460
@@ -12049,7 +12049,7 @@ AcSndArgGrid_ScrollUp_NoCanScroll:
 	extz	wa
 	lda	xbc, (xsp+12)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0xf2, 0x32
-	ldb	d, 0
+	ld	d, 0:opc
 	extz	xde
 	ld	xwa, 21233691
 	ld	xbc, 31719460
@@ -12864,7 +12864,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+16)
 	.byte 0x9f
 	ldwio	4, 8863
-	ldb	b, 30
+	ld	b, 30:opc
 	.byte 0xd3
 	swi	6
 	ld	wa, (xsp+6)
@@ -12916,7 +12916,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+16)
 	.byte 0x9f
 	ldwio	4, 8863
-	ldb	b, 30
+	ld	b, 30:opc
 	pop	xde
 	swi	6
 	ld	wa, (xsp+6)
@@ -12952,7 +12952,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+16)
 	.byte 0x9f
 	ldwio	4, 8863
-	ldb	b, 30
+	ld	b, 30:opc
 	reti
 	swi	6
 	ld	wa, (xsp+6)
@@ -13057,7 +13057,7 @@ StylCnvStorOkFunc_DataBlock:
 	.byte 0x9f
 	ldio	4, 234
 	ld	d, (xbc-97)
-	ldb	b, 30
+	ld	b, 30:opc
 	reti
 	swi	5
 	lda	xwa, (xsp+22)
@@ -13068,7 +13068,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64750
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+14)
@@ -13093,7 +13093,7 @@ StylCnvStorOkFunc_DataBlock:
 	.byte 0x9f
 	ldio	4, 234
 	ld	d, (xbc-97)
-	ldb	b, 30
+	ld	b, 30:opc
 	.byte 0xae
 	swi	4
 	lda	xwa, (xsp+22)
@@ -13104,7 +13104,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64661
 	lda	xiy, (xsp+14)
 	lda	xix, (xsp+22)
@@ -13118,7 +13118,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xbc, (xsp+18)
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64626
 	lda	xwa, (xsp+26)
 	lda	xbc, (xsp+22)
@@ -13158,7 +13158,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xbc+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64535
 	lda	xwa, (xsp+22)
 	lda	xhl, (xsp+26)
@@ -13177,7 +13177,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xbc+2), de
 	.byte 0x9f
 	ldio	4, 159
-	ldb	d, 34
+	ld	d, 34:opc
 	calr	64491
 	pop	xiz
 	lda	xsp, (xsp+32)

@@ -370,7 +370,7 @@ DSP_ChannelRegs_Init:
 	add XSP,0x00000018                           ; F85F3A/F9802B  ef c8 18 00 00 00   drop 4 x (pointer + channel word)
 	ld XBC,DSP_REGS_BASE                         ; F85F40/F98031  a=41 00 00 7f 00 c=41 00 00 e0 00   the DSP register file / the register port
 	ld XWA,0x0101001f                            ; F85F45/F98036  40 1f 00 01 01   A = register 0x1F, +2 = 0x01 / A = register 0x1F, data 0x01
-	ldb d, 0x04                                  ; F85F4A/F9803B  24 04   four channels
+	ld d, 0x04:opc                                  ; F85F4A/F9803B  24 04   four channels
 DSP_ChannelRegs_Init__loop:
 ; prom_a's name for the SAME address, 0xF85F4C on CPU 1 and 0xF9803D on
 ; CPU 2; prom_c writes DSP_ChannelRegs_Init__loop just above.  BOTH are
@@ -482,7 +482,7 @@ DSP_ChannelRegs_Write8:
 	sll a, 0x05                                  ; F85F60/F98051  c9 ee 05   channel << 5 / channel * 0x20
 	set 0x04,A                                   ; F85F63/F98054  c9 31 04   | 0x10 -> the register index for this channel's first slot / + 0x10 -> first data register
 	ld XBC,DSP_REGS_BASE                         ; F85F66/F98057  a=41 00 00 7f 00 c=41 00 00 e0 00   the DSP register file
-	ldb d, 0x08                                  ; F85F6B/F9805C  24 08   eight registers
+	ld d, 0x08:opc                                  ; F85F6B/F9805C  24 08   eight registers
 DSP_ChannelRegs_Write8__loop:
 	ld (XBC),A                                   ; F85F6D/F9805E  b1 41   select the register / select register A
 	ldb_spi e, 0xf4                              ; F85F6F/F98060  c5 f4 25   ld E,(XIY+)

@@ -1392,7 +1392,7 @@ Voice_InitBankTables:
 	ld xix, 0x1e8800
 	ldw bc, 0x10
 	ldirw
-	ldb a, 0xc
+	ld a, 0xc:opc
 
 Voice_InitBankTables_Loop:
 	ld xiy, Voice_BankSlotZeroInit
@@ -1413,7 +1413,7 @@ Voice_InitBankTables_Loop:
 	ldw bc, 0x20
 	ldirw
 	ld xix, 0x1e8b00
-	ldb a, 0x39
+	ld a, 0x39:opc
 
 Voice_InitBankTables_SlotLoop:
 	ld xiy, Voice_SlotTemplate
@@ -1526,7 +1526,7 @@ Voice_ComputeAllocSize:
 	ld xiy, 0x1e8800
 	add xiy, 0x200
 	add xiy, 0x3800
-	ldb c, 0x39
+	ld c, 0x39:opc
 
 Voice_AllocSize_Loop:
 	cp c, 0:i3

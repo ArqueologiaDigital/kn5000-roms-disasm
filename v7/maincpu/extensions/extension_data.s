@@ -52,32 +52,32 @@ ExtData_ChordType_NullByte:
 ChordTypeStr_Blank_0:	aligned_string "     "
 ChordTypeStr_Blank_1:	aligned_string "     "
 ChordTypeStr_Blank_2:	ldb	w, 0x20
-	ldb	w, 32
-	ldb	w, 0
+	ld	w, 32:opc
+	ld	w, 0:opc
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
-	ldb	w, 0x20
-	ldb	w, 32
-	ldb	w, 0
+	ld	w, 0x20:opc
+	ld	w, 32:opc
+	ld	w, 0:opc
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
-	ldb	w, 0x20
-	ldb	w, 32
-	ldb	w, 0
+	ld	w, 0x20:opc
+	ld	w, 32:opc
+	ld	w, 0:opc
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
-	ldb	w, 0x20
-	ldb	w, 32
-	ldb	w, 0
+	ld	w, 0x20:opc
+	ld	w, 32:opc
+	ld	w, 0:opc
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
-	ldb	w, 0x20
-	ldb	w, 32
-	ldb	w, 0
+	ld	w, 0x20:opc
+	ld	w, 32:opc
+	ld	w, 0:opc
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
@@ -105,7 +105,7 @@ ChordTypeStr_7_Flat9:	aligned_string "7 ~9e9 "
 ChordTypeStr_sus4:	aligned_string "sus4 "
 ChordTypeStr_69:	jr	pl, 0x36
 	push	xbc
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	aligned_string "m79  "
 	aligned_string "m ~a05 "
@@ -128,13 +128,13 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	aligned_string "min7 "
 	jr	pl, 0x69
 	jr	nz, 32
-	ldb	w, 0
+	ld	w, 0:opc
 	aligned_string "aug  "
 	aligned_string "Maj7 "
 	aligned_string "7    "
-	ldb	w, 0x20
-	ldb	w, 32
-	ldb	w, 0
+	ld	w, 0x20:opc
+	ld	w, 32:opc
+	ld	w, 0:opc
 	aligned_string "     "
 	or	(xwa+2), iy
 	nop
@@ -185,21 +185,21 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	push	sr
 	.byte 0xed
 	nop
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 	aligned_string "B~a0"
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 	aligned_string "A~a0"
 	ld	xsp, 0x47ff0020
@@ -207,7 +207,7 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	nop
 	swi	7
 	ld	xiz, 0x45ff0020
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 	aligned_string "E~a0"
 	ld	xix, 0x44ff0020
@@ -215,9 +215,9 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	nop
 	swi	7
 	ld	xhl, 0x20ff0020
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
-	ldb	b, 3
+	ld	b, 3:opc
 	.byte 0xed
 	nop
 NoteNameStr_Table_0:
@@ -237,49 +237,49 @@ NoteNameStr_Table_0:
 	.long NoteStr0_Blank_1
 	.long NoteStr0_Blank_0
 NoteStr0_Blank_0:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr0_Blank_1:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr0_Blank_2:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr0_B:
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr0_ASharp:	aligned_string "A~9e"
 NoteStr0_A:
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr0_GSharp:	aligned_string "G~9e"
 NoteStr0_G:
 	.byte 0x47
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr0_FSharp:	aligned_string "F~9e"
 NoteStr0_F:	aligned_string "F "
 NoteStr0_E:
 	.byte 0x45
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr0_DSharp:	aligned_string "D~9e"
 NoteStr0_D:
 	.byte 0x44
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr0_CSharp:	aligned_string "C~9e"
 NoteStr0_C:
 	.byte 0x43
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr0_Blank_3:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 
@@ -302,48 +302,48 @@ NoteNameStr_Table_1:
 	.long NoteStr1_Blank_1
 	.long NoteStr1_Blank_0
 NoteStr1_Blank_0:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr1_Blank_1:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr1_Blank_2:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr1_B:
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr1_AFlat:
 	ld	xbc, 0x65397e
 	swi	7
 NoteStr1_A:
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr1_ASharp:	aligned_string "A~a0"
 NoteStr1_G:	aligned_string "G "
 NoteStr1_FSharp:	aligned_string "F~9e"
 NoteStr1_F:
 	.byte 0x46
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr1_E:
 	.byte 0x45
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr1_DSharp:	aligned_string "D~9e"
 NoteStr1_D:	aligned_string "D "
 NoteStr1_CSharp:	aligned_string "C~9e"
 NoteStr1_C:
 	.byte 0x43
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr1_Blank_3:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 
@@ -366,46 +366,46 @@ NoteNameStr_Table_2:
 	.long NoteStr2_Blank_1
 	.long NoteStr2_Blank_0
 NoteStr2_Blank_0:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr2_Blank_1:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr2_Blank_2:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr2_B:
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr2_BFlat:	aligned_string "B~a0"
 NoteStr2_A:	aligned_string "A "
 NoteStr2_GSharp:	aligned_string "G~9e"
 NoteStr2_G:
 	.byte 0x47
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr2_FSharp:	aligned_string "F~9e"
 NoteStr2_F:
 	.byte 0x46
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr2_E:	aligned_string "E "
 NoteStr2_DSharp:	aligned_string "D~9e"
 NoteStr2_D:
 	.byte 0x44
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr2_CSharp:	aligned_string "C~9e"
 NoteStr2_C:
 	.byte 0x43
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr2_Blank_3:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 
@@ -428,52 +428,52 @@ NoteNameStr_Table_3:
 	.long NoteStr3_Blank_1
 	.long NoteStr3_Blank_0
 NoteStr3_Blank_0:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr3_Blank_1:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr3_Blank_2:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 NoteStr3_B:
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_AFlat:	aligned_string "A~9e"
 NoteStr3_A:
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_GSharp:	aligned_string "G~9e"
 NoteStr3_G:
 	.byte 0x47
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_FSharp:	aligned_string "F~9e"
 NoteStr3_F:
 	.byte 0x46
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_E:
 	.byte 0x45
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_EFlat:	aligned_string "E~a0"
 NoteStr3_D:
 	.byte 0x44
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_CSharp:	aligned_string "C~9e"
 NoteStr3_C:
 	.byte 0x43
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 NoteStr3_Blank_3:
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 	ccf
@@ -654,46 +654,46 @@ CtrlAssignStr_PMemBankInc:	aligned_string "P.MEM BANK INC. "
 CtrlAssignStr_PMemDecrement:	aligned_string "P.MEM DECREMENT "
 CtrlAssignStr_PMemIncrement:	aligned_string "P.MEM INCREMENT "
 CtrlAssignStr_Off:	aligned_string "      OFF       "
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
 	nop
@@ -761,7 +761,7 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	ld	xiz, 0x25ff0046
 	jrl	ule, -256
 	aligned_string "PAGE 2/3"
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
 	aligned_string "PAGE 3/3"
@@ -841,19 +841,19 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	nop
 	popw	sp
 	ld	xiz, 0x4e4f0046
-	ldb	w, 0
+	ld	w, 0:opc
 	popw	sp
 	ld	xiz, 0x4e4f0046
-	ldb	w, 0
+	ld	w, 0:opc
 	popw	sp
 	popw	iz
-	ldb	w, 0
+	ld	w, 0:opc
 	popw	sp
 	ld	xiz, 0x4e4f0046
-	ldb	w, 0
+	ld	w, 0:opc
 	popw	sp
 	ld	xiz, 0x20200046
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	jrl	nov, 0
@@ -901,40 +901,40 @@ FadeTimeStr_1sec:	aligned_string " 1 sec "
 FadeTimeStr_Hold:	aligned_string " HOLD  "
 FadeTimeStr_Default:	aligned_string "DEFAULT"
 FadeTimeStr_Off:	aligned_string "  OFF  "
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
-	ldb	e, 115
+	ld	e, 115:opc
 	nop
 	swi	7
 	nop
@@ -949,10 +949,10 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	push	sr
 	aligned_string "PAGE"
 	aligned_string "Memory data "
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
-	ldb	w, 32
+	ld	w, 32:opc
 	nop
 	swi	7
 	.byte 0xa4
@@ -975,12 +975,12 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	nop
 	aligned_string "        "
 	aligned_string "%d-%d:"
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
 	aligned_string "PAGE 1/3"
 	aligned_string "BANK%2d:"
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
 	.byte 0x01
@@ -1002,14 +1002,14 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	popw	iz
 	ld	xix, 0x3a642500
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
 	aligned_string "PAGE %d/%d"
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
 ParamStr_Table_04:
@@ -1030,32 +1030,32 @@ VariationStr_V1:
 	.byte 0x56
 	ldw	bc, 0xff00
 	aligned_string "RHYTHM"
-	ldb	e, 115
+	ld	e, 115:opc
 	push	xde
 	nop
-	ldb	e, 115
+	ld	e, 115:opc
 	push	xde
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
-	ldb	e, 115
+	ld	e, 115:opc
 	push	xde
 	nop
 	aligned_string "PAGE %d/%d"
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
-	ldb	e, 115
+	ld	e, 115:opc
 	push	xde
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
-	ldb	e, 100
+	ld	e, 100:opc
 	push	xde
 	nop
 	push	sr
@@ -1108,39 +1108,39 @@ ParamStr_Table_05:
 	.long TransposeNoteStr_B
 TransposeNoteStr_B:
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 TransposeNoteStr_BFlat:	aligned_string "B~a0"
 TransposeNoteStr_A:
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 TransposeNoteStr_AFlat:	aligned_string "A~a0"
 TransposeNoteStr_G:
 	.byte 0x47
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 TransposeNoteStr_FSharp:	aligned_string "F~9e"
 TransposeNoteStr_F:
 	.byte 0x46
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 TransposeNoteStr_E:
 	.byte 0x45
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 TransposeNoteStr_EFlat:	aligned_string "E~a0"
 TransposeNoteStr_D:
 	.byte 0x44
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 TransposeNoteStr_DFlat:	aligned_string "D~a0"
 TransposeNoteStr_C:
 	ld xhl, 687800352
-	ldb e, 115
-	ldb e, 50
+	ld e, 115:opc
+	ld e, 50:opc
 	jr ov, 44
-	ldb w, 37
+	ld w, 37:opc
 	ldw hl, 10596
 	nop
 	swi 7
@@ -1165,9 +1165,9 @@ TransposeNoteStr_C:
 	pushw	0x3901
 	normal
 	aligned_string "DEFAULT"
-	ldb	w, 0x55
+	ld	w, 0x55:opc
 	aligned_string "SER  "
-	ldb	w, 0x45
+	ld	w, 0x45:opc
 	aligned_string "RROR "
 	.byte 0x9c
 	nop
@@ -1196,9 +1196,9 @@ TransposeNoteStr_C:
 	nop
 	nop
 	aligned_string "DEFAULT"
-	ldb	w, 0x55
+	ld	w, 0x55:opc
 	aligned_string "SER  "
-	ldb	w, 0x45
+	ld	w, 0x45:opc
 	aligned_string "RROR "
 	ldw	bc, 0x3100
 	nop
@@ -1234,7 +1234,7 @@ TransposeNoteStr_C:
 	.ascii "El USER INITIAL cambiar· el patr”n de fondo actual por un \"Plain Black\" (negro sin dise"
 	.byte 0xf1
 	jr	nc, 41
-	ldb	a, 0
+	ld	a, 0:opc
 	swi	7
 	.byte 0x55, 0x53
 	aligned_string "ER INITIAL va remplacer votre fond de l'Ècran par un fond noir !"
@@ -1243,14 +1243,14 @@ TransposeNoteStr_C:
 	swi	7
 	nop
 	nop
-	ldb	h, 0
+	ld	h, 0:opc
 	pushw	ix
 	nop
 	ldw	de, 6656
 	nop
 	ldio	0, 14
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	push_a
 	nop
 	nop
@@ -1278,28 +1278,28 @@ ParamStr_Table_06:
 	.long SplitNoteStr_B
 SplitNoteStr_B:
 	.byte 0x42
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 SplitNoteStr_BFlat:	aligned_string "B~a0"
 SplitNoteStr_A:
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 SplitNoteStr_AFlat:	aligned_string "A~a0"
 SplitNoteStr_G:
 	.byte 0x47
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 SplitNoteStr_FSharp:	aligned_string "F~9e"
 SplitNoteStr_F:	aligned_string "F "
 SplitNoteStr_E:
 	.byte 0x45
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 SplitNoteStr_EFlat:	aligned_string "E~a0"
 SplitNoteStr_D:
 	.byte 0x44
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 SplitNoteStr_DFlat:	aligned_string "D~a0"
 SplitNoteStr_C:
@@ -1341,11 +1341,11 @@ OctaveDigitStr_0A:
 	nop
 OctaveDigitStr_0B:
 	ldw wa, 8192
-	ldb w, 32
-	ldb w, 32
-	ldb w, 32
-	ldb w, 32
-	ldb w, 0
+	ld w, 32:opc
+	ld w, 32:opc
+	ld w, 32:opc
+	ld w, 32:opc
+	ld w, 0:opc
 	swi 7
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
@@ -1366,24 +1366,24 @@ ParamStr_Table_07:
 KeyScaleNoteStr_FSharp:	aligned_string "F~9e"
 KeyScaleNoteStr_F:
 	.byte 0x46
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 KeyScaleNoteStr_E:	aligned_string "E "
 KeyScaleNoteStr_EFlat:	aligned_string "E~a0"
 KeyScaleNoteStr_D:
 	.byte 0x44
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 KeyScaleNoteStr_DFlat:	aligned_string "D~a0"
 KeyScaleNoteStr_C:
 	.byte 0x43
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 KeyScaleNoteStr_B:	aligned_string "B "
 KeyScaleNoteStr_BFlat:	aligned_string "B~a0"
 KeyScaleNoteStr_A:
 	.byte 0x41
-	ldb	w, 0
+	ld	w, 0:opc
 	swi	7
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
 KeyScaleNoteStr_G:
@@ -1697,31 +1697,31 @@ ParamStr17_fixedrow:	aligned_string "fixedrow"
 ParamStr17_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstStyleAlpGridBox:
 	pushw	iz
-	ldb	d, 237
+	ld	d, 237:opc
 	nop
-	ldb	d, 36
+	ld	d, 36:opc
 	.byte 0xed
 	nop
 	calr	60708
 	nop
 	ex_ff
-	ldb	d, 237
+	ld	d, 237:opc
 	nop
 	ldwio	36, 237
 	swi	6
-	ldb	c, 237
+	ld	c, 237:opc
 	nop
 	.byte 0xee
-	ldb	c, 237
+	ld	c, 237:opc
 	nop
 	.byte 0xe2
-	ldb	c, 237
+	ld	c, 237:opc
 	nop
 	and	ix, (0xed23:24)
-	ldb	c, 237
+	ld	c, 237:opc
 	nop
 	.byte 0xc2
-	ldb	c, 237
+	ld	c, 237:opc
 	nop
 MstStyleAlpGrid_Empty:
 	nop
@@ -1763,7 +1763,7 @@ ParamStr18_fixedrow:	aligned_string "fixedrow"
 ParamStr18_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstStyle1SubGridBox:
 	ex_ff
-	ldb	e, 237
+	ld	e, 237:opc
 	nop
 ParamStr_Table_19:
 	.long ParamStr19_fixedcol
@@ -1827,10 +1827,10 @@ ParamStr21_fixedrow:	aligned_string "fixedrow"
 ParamStr21_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstSong2GridBox:
 	.byte 0xbe
-	ldb	h, 237
+	ld	h, 237:opc
 	nop
 	.byte 0xb4
-	ldb	h, 237
+	ld	h, 237:opc
 	nop
 	or	(xiz+38), xiy
 	nop
@@ -2345,7 +2345,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	ldb	w, 0
+	ld	w, 0:opc
 	calr	2048
 	nop
 	pushw	hl
@@ -2397,7 +2397,7 @@ NakaInstTable8_NullTerm:
 	normal
 	swi	7
 	swi	7
-	ldb	b, 0
+	ld	b, 0:opc
 	swi	7
 	swi	7
 	swi	7
@@ -2417,10 +2417,10 @@ NakaInstTable8_NullTerm:
 
 	nop
 	jr	f, 1
-	ldb	a, 0
+	ld	a, 0:opc
 	swi	7
 	swi	7
-	ldb	c, 0
+	ld	c, 0:opc
 	swi	7
 	swi	7
 	ldio	0, 160
@@ -2440,11 +2440,11 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	a, 0
+	ld	a, 0:opc
 	swi	7
 	swi	7
-	ldb	d, 0
-	ldb	b, 0
+	ld	d, 0:opc
+	ld	b, 0:opc
 	ldio	0, 121
 	nop
 	.byte 0x80
@@ -2462,11 +2462,11 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	a, 0
+	ld	a, 0:opc
 	swi	7
 	swi	7
-	ldb	e, 0
-	ldb	c, 0
+	ld	e, 0:opc
+	ld	c, 0:opc
 	ldio	0, 82
 	nop
 	.byte 0x80
@@ -2483,11 +2483,11 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	a, 0
+	ld	a, 0:opc
 	swi	7
 	swi	7
-	ldb	h, 0
-	ldb	d, 0
+	ld	h, 0:opc
+	ld	d, 0:opc
 	ldio	0, 43
 	nop
 	.byte 0x80
@@ -2505,12 +2505,12 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	a, 0
+	ld	a, 0:opc
 	swi	7
 	swi	7
 	swi	7
 	swi	7
-	ldb	e, 0
+	ld	e, 0:opc
 	ldio	0, 4
 	nop
 	.byte 0x80
@@ -2547,7 +2547,7 @@ NakaInstTable8_NullTerm:
 
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	bc
@@ -2574,7 +2574,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	de
@@ -2601,7 +2601,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	hl
@@ -2626,7 +2626,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	ix
@@ -2651,7 +2651,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	iy
@@ -2678,7 +2678,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	iz
@@ -2705,7 +2705,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	pushw	sp
@@ -2729,7 +2729,7 @@ NakaInstTable8_NullTerm:
 	push	xix
 	nop
 	jr	f, 1
-	ldb	l, 0
+	ld	l, 0:opc
 	swi	7
 	swi	7
 	swi	7
@@ -2769,7 +2769,7 @@ NakaInstTable8_NullTerm:
 	nop
 	call16 1012
 	nop
-	ldb	w, 244
+	ld	w, 244:opc
 	pop	sr
 	nop
 
@@ -2955,7 +2955,7 @@ NakaInstTable8_NullTerm:
 	nop
 	nop
 	nop
-	ldb	d, 244
+	ld	d, 244:opc
 	pop	sr
 	nop
 	pushw	wa
@@ -2981,7 +2981,7 @@ NakaInstTable8_NullTerm:
 	nop
 	ex_ff
 	nop
-	ldb	b, 1
+	ld	b, 1:opc
 
 
 	jr	ge, 0
@@ -3003,7 +3003,7 @@ NakaInstTable8_NullTerm:
 	.byte 0xdd
 	nop
 	ldf 0
-	ldb	b, 1
+	ld	b, 1:opc
 
 
 	ldw	iy, 0x6000
@@ -3052,7 +3052,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pop_f
 	nop
-	ldb	b, 1
+	ld	b, 1:opc
 
 
 	jr	ge, 0
@@ -3074,7 +3074,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push_f
 	nop
-	ldb	b, 1
+	ld	b, 1:opc
 .include "ui_widgets/control_menu_screens.s"
 	jr	f, 0x01
 	reti
@@ -3274,11 +3274,11 @@ Protocol_values_for_LED_rows:
 	ei	7
 	halt
 	pop	sr
-	ldb	c, 0
-	ldb	c, 0
+	ld	c, 0:opc
+	ld	c, 0:opc
 	pushw	hl
 	nop
-	ldb	l, 0
+	ld	l, 0:opc
 	pushw	sp
 	nop
 	ldw	hl, 3072
@@ -3315,7 +3315,7 @@ Protocol_values_for_LED_rows:
 	nop
 	ret
 	nop
-	ldb	l, 0
+	ld	l, 0:opc
 	reti
 	nop
 	reti
@@ -3340,7 +3340,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -3366,7 +3366,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -3392,7 +3392,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -3418,7 +3418,7 @@ Protocol_values_for_LED_rows:
 	nop
 	nop
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	nop
 	nop
 	ld	xwa, 0x80000000
@@ -3476,7 +3476,7 @@ Protocol_values_for_LED_rows:
 	nop
 	jr	ule, 0
 	pop_a
-	ldb	w, 0
+	ld	w, 0:opc
 	push	xix
 	push_f
 	.byte 0x50
@@ -3505,7 +3505,7 @@ Protocol_values_for_LED_rows:
 	nop
 	jr	ule, 0
 	push_f
-	ldb	a, 0
+	ld	a, 0:opc
 	push	sr
 	nop
 	jr	f, 79
@@ -3756,7 +3756,7 @@ Protocol_values_for_LED_rows:
 	nop
 	jr	ule, 0
 	ccf
-	ldb	c, 0
+	ld	c, 0:opc
 	ldw	bc, 0x320c
 	popw	iz
 	nop
@@ -3801,8 +3801,8 @@ Protocol_values_for_LED_rows:
 	push	sr
 	pop	xwa
 	.byte 0x04
-	ldb	a, 5
-	ldb	b, 84
+	ld	a, 5:opc
+	ld	b, 84:opc
 	nop
 	nop
 	.zero 8
@@ -3876,7 +3876,7 @@ Protocol_values_for_LED_rows:
 	pop	sr
 	.byte 0x92
 	halt
-	ldb	b, 5
+	ld	b, 5:opc
 	.byte 0xd1, 0x54
 	nop
 	nop
@@ -3885,7 +3885,7 @@ Protocol_values_for_LED_rows:
 	nop
 	jr	ule, 0
 	scf
-	ldb	c, 0
+	ld	c, 0:opc
 	ld	xsp, 0x693214
 	nop
 	nop
@@ -4568,7 +4568,7 @@ VoiceCtrlR1_Entry_014:
 	swi	7
 VoiceCtrlR1_Entry_015:
 	nop
-	ldb	a, 0
+	ld	a, 0:opc
 	nop
 	.byte 0x80
 	pop	sr
@@ -4586,7 +4586,7 @@ VoiceCtrlR1_Entry_015:
 	swi	7
 VoiceCtrlR1_Entry_016:
 	normal
-	ldb	a, 0
+	ld	a, 0:opc
 	nop
 	.byte 0x80
 	pop	sr
@@ -4654,7 +4654,7 @@ VoiceCtrlR1_Entry_020:
 	nop
 	.byte 0x80
 	nop
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -4667,7 +4667,7 @@ VoiceCtrlR1_Entry_020:
 	swi	7
 VoiceCtrlR1_Entry_021:
 	nop
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	nop
@@ -4685,7 +4685,7 @@ VoiceCtrlR1_Entry_021:
 	swi	7
 VoiceCtrlR1_Entry_022:
 	normal
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	nop
@@ -4716,7 +4716,7 @@ WidgetParam_MidiCC_Program:
 	swi	7
 VoiceCtrlR1_Entry_024:
 	push	sr
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	nop
@@ -4732,7 +4732,7 @@ VoiceCtrlR1_Entry_024:
 	swi	7
 VoiceCtrlR1_Entry_025:
 	pop	sr
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	nop
@@ -4750,7 +4750,7 @@ VoiceCtrlR1_Entry_025:
 	swi	7
 VoiceCtrlR1_Entry_026:
 	halt
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	push	sr
@@ -4828,7 +4828,7 @@ VoiceCtrlR1_Entry_029:
 	swi	7
 VoiceCtrlR1_Entry_030:
 	.byte 0x8a
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	reti
@@ -4846,11 +4846,11 @@ VoiceCtrlR1_Entry_030:
 	swi	7
 VoiceCtrlR1_Entry_031:
 	.byte 0x8b
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	reti
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -4863,7 +4863,7 @@ VoiceCtrlR1_Entry_031:
 	swi	7
 VoiceCtrlR1_Entry_032:
 	.byte 0x8c
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	reti
@@ -4877,7 +4877,7 @@ VoiceCtrlR1_Entry_032:
 	swi	7
 VoiceCtrlR1_Entry_033:
 	.byte 0x8d
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	ldio	128, 0
@@ -4893,7 +4893,7 @@ VoiceCtrlR1_Entry_033:
 	swi	7
 VoiceCtrlR1_Entry_034:
 	.byte 0x8e
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	ldio	4, 0
@@ -4909,7 +4909,7 @@ VoiceCtrlR1_Entry_034:
 	swi	7
 VoiceCtrlR1_Entry_035:
 	.byte 0x8f
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	ldio	8, 0
@@ -5007,7 +5007,7 @@ VoiceCtrlR1_Entry_040:
 	swi	7
 VoiceCtrlR1_Entry_041:
 	.byte 0x98
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	reti
@@ -5025,7 +5025,7 @@ VoiceCtrlR1_Entry_041:
 	swi	7
 VoiceCtrlR1_Entry_042:
 	.byte 0x99
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80
 	push	1
@@ -5042,7 +5042,7 @@ VoiceCtrlR1_Entry_042:
 	swi	7
 VoiceCtrlR1_Entry_043:
 	.byte 0x9a
-	ldb	b, 0
+	ld	b, 0:opc
 	nop
 	.byte 0x80, 0x01, 0x04
 	nop
@@ -6348,7 +6348,7 @@ MidiChParam_Entry_046:
 	nop
 	nop
 	jr	f, 1
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -6638,7 +6638,7 @@ MidiChParam_Entry_062:
 	ex_ff
 	cp	(xwa), l
 WidgetParam_MidiCC_Expression:
-	ldb	b, 197
+	ld	b, 197:opc
 	.byte 0xed
 	nop
 	retd	0
@@ -7189,7 +7189,7 @@ MidiChParam_Entry_091:
 	nop
 	swi	7
 MidiChParam_Entry_092:
-	ldb	w, 128
+	ld	w, 128:opc
 	nop
 	nop
 	nop
@@ -7361,7 +7361,7 @@ MidiChParam_Entry_102:
 	nop
 	swi	7
 MidiChParam_Entry_103:
-	ldb	a, 130
+	ld	a, 130:opc
 	nop
 	nop
 	ld	xix, 0x01000f08
@@ -7691,7 +7691,7 @@ VoiceParamEx_Entry_012:
 	nop
 	swi	7
 VoiceParamEx_Entry_013:
-	ldb	w, 132
+	ld	w, 132:opc
 	nop
 	nop
 	normal
@@ -7859,7 +7859,7 @@ VoiceParamEx_Entry_023:
 	nop
 	swi	7
 VoiceParamEx_Entry_024:
-	ldb	a, 134
+	ld	a, 134:opc
 	nop
 	nop
 	ld	xiy, 0x01000f08
@@ -8169,7 +8169,7 @@ VoiceParamEx_Entry_045:
 	nop
 	swi	7
 VoiceParamEx_Entry_046:
-	ldb	w, 136
+	ld	w, 136:opc
 	nop
 	nop
 	push	sr
@@ -8334,7 +8334,7 @@ VoiceParamEx_Entry_056:
 	nop
 	swi	7
 VoiceParamEx_Entry_057:
-	ldb	a, 138
+	ld	a, 138:opc
 	nop
 	nop
 	ld	xiz, 0x01000f08
@@ -8650,7 +8650,7 @@ VoiceParamEx_Entry_078:
 	nop
 	swi	7
 VoiceParamEx_Entry_079:
-	ldb	w, 140
+	ld	w, 140:opc
 	nop
 	nop
 	pop	sr
@@ -8915,7 +8915,7 @@ PartParam_Entry_010:
 	nop
 	swi	7
 PartParam_Entry_011:
-	ldb	w, 144
+	ld	w, 144:opc
 	nop
 	nop
 	max
@@ -9179,7 +9179,7 @@ PartParam_Entry_027:
 	nop
 	swi	7
 PartParam_Entry_028:
-	ldb	w, 148
+	ld	w, 148:opc
 	nop
 	nop
 	halt
@@ -9441,7 +9441,7 @@ PartParam_Entry_044:
 	nop
 	swi	7
 PartParam_Entry_045:
-	ldb	w, 152
+	ld	w, 152:opc
 	nop
 	nop
 	ei	1
@@ -9701,7 +9701,7 @@ PartParam_Entry_061:
 	nop
 	swi	7
 PartParam_Entry_062:
-	ldb	w, 156
+	ld	w, 156:opc
 	nop
 	nop
 	reti
@@ -9958,7 +9958,7 @@ PartParam_Entry_078:
 	nop
 	swi	7
 PartParam_Entry_079:
-	ldb	w, 160
+	ld	w, 160:opc
 	nop
 	nop
 	ldio	1, 127
@@ -10211,7 +10211,7 @@ PartParam_Entry_095:
 	nop
 	swi	7
 PartParam_Entry_096:
-	ldb	w, 164
+	ld	w, 164:opc
 	nop
 	nop
 	push	1
@@ -10460,7 +10460,7 @@ PartParam_Entry_112:
 	nop
 	swi	7
 PartParam_Entry_113:
-	ldb	w, 168
+	ld	w, 168:opc
 	nop
 	nop
 	ldwio	1, 127
@@ -10705,7 +10705,7 @@ PartParam_Entry_129:
 	nop
 	swi	7
 PartParam_Entry_130:
-	ldb	w, 172
+	ld	w, 172:opc
 	nop
 	nop
 	pushw	0x7f01
@@ -10957,7 +10957,7 @@ PartParam_Entry_146:
 	nop
 	swi	7
 PartParam_Entry_147:
-	ldb	w, 176
+	ld	w, 176:opc
 	nop
 	nop
 	incf
@@ -11208,7 +11208,7 @@ PartParam_Entry_163:
 	nop
 	swi	7
 PartParam_Entry_164:
-	ldb	w, 180
+	ld	w, 180:opc
 	nop
 	nop
 	decf
@@ -11456,7 +11456,7 @@ PartParam_Entry_180:
 	nop
 	swi	7
 PartParam_Entry_181:
-	ldb	w, 184
+	ld	w, 184:opc
 	nop
 	nop
 	ret
@@ -11700,7 +11700,7 @@ PartParam_Entry_197:
 	nop
 	swi	7
 PartParam_Entry_198:
-	ldb	w, 188
+	ld	w, 188:opc
 	nop
 	nop
 	retd	0x7f01
@@ -11952,7 +11952,7 @@ PartParam_Entry_214:
 	normal
 	swi	7
 PartParam_Entry_215:
-	ldb	w, 192
+	ld	w, 192:opc
 	nop
 	nop
 	rcf
@@ -12219,7 +12219,7 @@ ExtPartParam_Entry_231:
 	normal
 	swi	7
 ExtPartParam_Entry_232:
-	ldb	w, 196
+	ld	w, 196:opc
 	nop
 	nop
 	scf
@@ -12486,7 +12486,7 @@ ExtPartParam_Entry_248:
 	normal
 	swi	7
 ExtPartParam_Entry_249:
-	ldb	w, 200
+	ld	w, 200:opc
 	nop
 	nop
 	ccf
@@ -12753,7 +12753,7 @@ ExtPartParam_Entry_265:
 	normal
 	swi	7
 ExtPartParam_Entry_266:
-	ldb	w, 204
+	ld	w, 204:opc
 	nop
 	nop
 	zcf
@@ -13020,7 +13020,7 @@ ExtPartParam_Entry_282:
 	normal
 	swi	7
 ExtPartParam_Entry_283:
-	ldb	w, 208
+	ld	w, 208:opc
 	nop
 	nop
 	push_a
@@ -13287,7 +13287,7 @@ ExtPartParam_Entry_299:
 	nop
 	swi	7
 ExtPartParam_Entry_300:
-	ldb	w, 212
+	ld	w, 212:opc
 	nop
 	nop
 	pop_a
@@ -13554,7 +13554,7 @@ ExtPartParam_Entry_316:
 	nop
 	swi	7
 ExtPartParam_Entry_317:
-	ldb	w, 216
+	ld	w, 216:opc
 	nop
 	nop
 	ex_ff
@@ -13817,7 +13817,7 @@ ExtPartParam_Entry_333:
 	normal
 	swi	7
 ExtPartParam_Entry_334:
-	ldb	w, 220
+	ld	w, 220:opc
 	nop
 	nop
 	.byte 0x17, 0x01
@@ -14078,7 +14078,7 @@ ExtPartParam_Entry_350:
 	normal
 	swi	7
 ExtPartParam_Entry_351:
-	ldb	w, 224
+	ld	w, 224:opc
 	nop
 	nop
 	push_f
@@ -14285,7 +14285,7 @@ ExtPartParam_Entry_364:
 	nop
 	nop
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -14431,7 +14431,7 @@ ExtPartParam_Entry_372:
 	nop
 	nop
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -14447,7 +14447,7 @@ ExtPartParam_Entry_373:
 	nop
 	nop
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -14499,7 +14499,7 @@ ExtPartParam_Entry_376:
 	nop
 	normal
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -14629,7 +14629,7 @@ ExtPartParam_Entry_384:
 	nop
 	normal
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -14645,7 +14645,7 @@ ExtPartParam_Entry_385:
 	nop
 	normal
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -14697,7 +14697,7 @@ ExtPartParam_Entry_388:
 	nop
 	push	sr
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -14827,7 +14827,7 @@ ExtPartParam_Entry_396:
 	nop
 	push	sr
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -14843,7 +14843,7 @@ ExtPartParam_Entry_397:
 	nop
 	push	sr
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -14895,7 +14895,7 @@ ExtPartParam_Entry_400:
 	nop
 	pop	sr
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -15025,7 +15025,7 @@ ExtPartParam_Entry_408:
 	nop
 	pop	sr
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15041,7 +15041,7 @@ ExtPartParam_Entry_409:
 	nop
 	pop	sr
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15093,7 +15093,7 @@ ExtPartParam_Entry_412:
 	nop
 	max
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -15223,7 +15223,7 @@ ExtPartParam_Entry_420:
 	nop
 	max
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15239,7 +15239,7 @@ ExtPartParam_Entry_421:
 	nop
 	max
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15291,7 +15291,7 @@ ExtPartParam_Entry_424:
 	nop
 	halt
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -15421,7 +15421,7 @@ ExtPartParam_Entry_432:
 	nop
 	halt
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15437,7 +15437,7 @@ ExtPartParam_Entry_433:
 	nop
 	halt
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15488,7 +15488,7 @@ ExtPartParam_Entry_436:
 	.byte 0x98, 0x01
 	nop
 	ei	13
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -15610,7 +15610,7 @@ ExtPartParam_Entry_444:
 	.byte 0x9a, 0x01
 	nop
 	ei	12
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15625,7 +15625,7 @@ ExtPartParam_Entry_445:
 	.byte 0x04, 0x9a, 0x01
 	nop
 	ei	4
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15675,7 +15675,7 @@ ExtPartParam_Entry_448:
 	nop
 	reti
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -15805,7 +15805,7 @@ SeqMixParam_Entry_002:
 	nop
 	reti
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -15821,7 +15821,7 @@ SeqMixParam_Entry_003:
 	nop
 	reti
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16054,7 +16054,7 @@ SeqMixParam_Entry_018:
 	.byte 0xa4, 0x01
 	nop
 	push	13
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -16176,7 +16176,7 @@ SeqMixParam_Entry_026:
 	.byte 0xa6, 0x01
 	nop
 	push	12
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16191,7 +16191,7 @@ SeqMixParam_Entry_027:
 	.byte 0x04, 0xa6, 0x01
 	nop
 	push	4
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16593,7 +16593,7 @@ SeqMixParam_Entry_054:
 	nop
 	incf
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -16723,7 +16723,7 @@ SeqMixParam_Entry_062:
 	nop
 	incf
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16739,7 +16739,7 @@ SeqMixParam_Entry_063:
 	nop
 	incf
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16791,7 +16791,7 @@ SeqMixParam_Entry_066:
 	nop
 	decf
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -16921,7 +16921,7 @@ SeqMixParam_Entry_074:
 	nop
 	decf
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16937,7 +16937,7 @@ SeqMixParam_Entry_075:
 	nop
 	decf
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -16987,7 +16987,7 @@ SeqMixParam_Entry_078:
 	nop
 	ld	(xwa+1), 14
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -17104,7 +17104,7 @@ SeqMixParam_Entry_086:
 	pop	sr
 	ld	(xde+1), 14
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17119,7 +17119,7 @@ SeqMixParam_Entry_087:
 	max
 	ld	(xde+1), 14
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17166,7 +17166,7 @@ SeqMixParam_Entry_090:
 	nop
 	ld	(xix+1), 15
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -17283,7 +17283,7 @@ SeqMixParam_Entry_098:
 	pop	sr
 	ld	(xiz+1), 15
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17298,7 +17298,7 @@ SeqMixParam_Entry_099:
 	max
 	ld	(xiz+1), 15
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17347,7 +17347,7 @@ SeqMixParam_Entry_102:
 	nop
 	rcf
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -17477,7 +17477,7 @@ SeqMixParam_Entry_110:
 	nop
 	rcf
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17493,7 +17493,7 @@ SeqMixParam_Entry_111:
 	nop
 	rcf
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17545,7 +17545,7 @@ SeqMixParam_Entry_114:
 	nop
 	scf
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -17675,7 +17675,7 @@ SeqMixParam_Entry_122:
 	nop
 	scf
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17691,7 +17691,7 @@ SeqMixParam_Entry_123:
 	nop
 	scf
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17743,7 +17743,7 @@ SeqMixParam_Entry_126:
 	nop
 	ccf
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -17873,7 +17873,7 @@ SeqMixParam_Entry_134:
 	nop
 	ccf
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17889,7 +17889,7 @@ SeqMixParam_Entry_135:
 	nop
 	ccf
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -17941,7 +17941,7 @@ SeqMixParam_Entry_138:
 	nop
 	zcf
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -18071,7 +18071,7 @@ SeqMixParam_Entry_146:
 	nop
 	zcf
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18087,7 +18087,7 @@ SeqMixParam_Entry_147:
 	nop
 	zcf
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18139,7 +18139,7 @@ SeqMixParam_Entry_150:
 	nop
 	push_a
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -18269,7 +18269,7 @@ SeqMixParam_Entry_158:
 	nop
 	push_a
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18285,7 +18285,7 @@ SeqMixParam_Entry_159:
 	nop
 	push_a
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18337,7 +18337,7 @@ SeqMixParam_Entry_162:
 	nop
 	pop_a
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -18467,7 +18467,7 @@ SeqMixParam_Entry_170:
 	nop
 	pop_a
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18483,7 +18483,7 @@ SeqMixParam_Entry_171:
 	nop
 	pop_a
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18535,7 +18535,7 @@ SeqMixParam_Entry_174:
 	nop
 	ex_ff
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -18665,7 +18665,7 @@ SeqMixParam_Entry_182:
 	nop
 	ex_ff
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18681,7 +18681,7 @@ SeqMixParam_Entry_183:
 	nop
 	ex_ff
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18732,7 +18732,7 @@ SeqMixParam_Entry_186:
 	.byte 0xdc, 0x01
 	nop
 	ldf	13
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -18854,7 +18854,7 @@ SeqMixParam_Entry_194:
 	.byte 0xde, 0x01
 	nop
 	ldf	12
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18869,7 +18869,7 @@ SeqMixParam_Entry_195:
 	.byte 0x04, 0xde, 0x01
 	nop
 	.byte 0x17, 0x04
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -18919,7 +18919,7 @@ SeqMixParam_Entry_198:
 	nop
 	push_f
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -19049,7 +19049,7 @@ SeqMixParam_Entry_206:
 	nop
 	push_f
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -19065,7 +19065,7 @@ SeqMixParam_Entry_207:
 	nop
 	push_f
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -19117,7 +19117,7 @@ SeqMixParam_Entry_210:
 	nop
 	pop_f
 	decf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	swi	7
@@ -19247,7 +19247,7 @@ SeqMixParam_Entry_218:
 	nop
 	pop_f
 	incf
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop
@@ -19263,7 +19263,7 @@ SeqMixParam_Entry_219:
 	nop
 	pop_f
 	max
-	ldb	w, 0
+	ld	w, 0:opc
 	normal
 	halt
 	nop

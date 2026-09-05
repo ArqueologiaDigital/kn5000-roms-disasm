@@ -6403,7 +6403,7 @@ AcMixerVol_PartSelect_Default:
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
 	srl wa, 8
-	ldb w, 0x0
+	ld w, 0x0:opc
 	and a, 0x1f
 	extz wa
 	ld (xsp + 10), wa
@@ -8014,7 +8014,7 @@ AcTrkSw_ReturnZero:
 	extz xbc
 	ld xwa, (xsp + 4)
 	srl wa, 8
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	sll xwa, 0
 	ld xde, xwa
@@ -8414,7 +8414,7 @@ AcTrkSw_Return:
 	add	xwa, xbc
 	ld	a, (xwa)
 	sub	a, 65
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e00008
@@ -8431,7 +8431,7 @@ AcTrkSw_Return:
 	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e00009
@@ -8448,7 +8448,7 @@ AcTrkSw_Return:
 	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e0000a
@@ -8465,7 +8465,7 @@ AcTrkSw_Return:
 	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e0000b
@@ -8483,7 +8483,7 @@ AcTrkSw_Return:
 	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
-	ldb	w, 0
+	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e0000c
@@ -9092,7 +9092,7 @@ TitleWidget_Paint_DrawText:
 
 TitleWidget_Select:
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	ld xbc, 0x1e00025
@@ -9172,7 +9172,7 @@ TitleWidget_Confirm_DrawLayout:
 
 TitleWidget_Confirm_DrawRow:
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	ld xbc, 0x1e00025
@@ -9213,7 +9213,7 @@ TitleWidget_Confirm_DrawRowNext:
 	add xwa, (xsp + 10)
 	ld a, (xwa)
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	lda xde, (xsp + 18)
@@ -9256,7 +9256,7 @@ TitleWidget_OK:
 	add xbc, (xwa)
 	ld a, (xbc)
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	ld xbc, 0x1e0000d
@@ -9270,7 +9270,7 @@ TitleWidget_OK_Forward:
 	add_sril_rm XWA, 0xfd, 0x12, 0x01
 	ld a, (xwa)
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	ld xbc, 0x1e0000e
@@ -17466,7 +17466,7 @@ IDCountHelper_Loop:
 	lda xwa, (xsp + 8)
 	ldb_sri A, 0x07, 0xe0, 0xfa
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	ld xbc, 0x1e00027
@@ -17505,7 +17505,7 @@ IDCursorAdvance_Loop:
 	add xwa, xbc
 	ld a, (xwa)
 	sub a, 0x41
-	ldb w, 0x0
+	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
 	ld xbc, 0x1e00027
@@ -19115,7 +19115,7 @@ DisplayCmd_Execute_Type3:
 	extz xhl
 	add xhl, xde
 	push xhl
-	ldb a, 0x1
+	ld a, 0x1:opc
 	call Audio_Lock_Release
 	pop xhl
 	ret

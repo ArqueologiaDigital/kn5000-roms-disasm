@@ -13,7 +13,7 @@ SndParam_ProbeMatchFound:
 	.byte 0xaf, 0x16, 0x20, 0x88, 0x03, 0xcb, 0x68, 0x20
 	.byte 0xaf, 0x0a, 0x20, 0x80
 SndParam_ProbeAdvance:
-	ldb	c, 203
+	ld	c, 203:opc
 	ldw	wa, 55559
 	ccf
 	ld	xwa, (xsp+6)
@@ -236,7 +236,7 @@ SndParam_RW_HandleB1Type:
 SndParam_RW_Success:
 	.byte 0xb0, 0xf6, 0x88, 0x05
 SndParam_RW_Fail:
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 SndParam_RW_Epilogue:
 	.byte 0xd9, 0x81, 0xd3, 0x07, 0xe8
@@ -424,7 +424,7 @@ SndParam_BitfieldNoShift:
 SndParam_BitfieldPendingWrite:
 	jr	f, -128
 SndParam_BitfieldReturn:
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 SndParam_ReadRegAddress:
 	.byte 0xd8, 0xec, 0x02, 0xf2, 0x60, 0x11, 0xee, 0x34
@@ -1325,7 +1325,7 @@ SndParam_Widget1_CallType3:
 	ld	(1054:16), 1
 	cpw	(10410:16), 0
 	jr	z, 5
-	ldb	a, 133
+	ld	a, 133:opc
 	calr	643
 	.byte 0xf1, 0x31, 0x04, 0xcb
 	jr	z, 28
@@ -1335,7 +1335,7 @@ SndParam_Widget1_CallType3:
 	ld	(1054:16), 8
 	cpw	(10410:16), 0
 	jr	z, 5
-	ldb	a, 134
+	ld	a, 134:opc
 	calr	609
 	cp	(1051:16), 96
 	jr	nz, 99
@@ -1357,7 +1357,7 @@ SndParam_Widget1_CallType3:
 	ld	(1054:16), 16
 	cpw	(10410:16), 0
 	jr	z, 5
-	ldb	a, 134
+	ld	a, 134:opc
 	calr	532
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, 23

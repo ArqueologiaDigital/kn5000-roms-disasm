@@ -377,7 +377,7 @@ DSPCfg_InitDispatchData:
 	reti
 	or	xwa, xwa
 	ldw	de, 649
-	ldb	l, 207
+	ld	l, 207:opc
 	.byte 0x89, 0x82
 	cp	(905:16), a
 	jr	ugt, 9
@@ -398,7 +398,7 @@ DSPCfg_InitDispatchData:
 	reti
 	or	xwa, xwa
 	ldw	de, 649
-	ldb	l, 207
+	ld	l, 207:opc
 	.byte 0x89, 0x82
 	cp	(905:16), a
 	jr	ugt, 18
@@ -500,7 +500,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xe0, 0xec
 	ld	xhl, 0x890eabdb
 	.byte 0x01
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	.byte 0xf3
 	reti
@@ -589,12 +589,12 @@ DSPCfg_SyncBitmapData:
 	extz	xde
 	.byte 0xaf
 	ldwio	130, 1167
-	ldb	a, 178
+	ld	a, 178:opc
 	ld	xbc, 0x61d98ad9
 	extz	xde
 	.byte 0xaf
 	ldwio	130, 1679
-	ldb	a, 178
+	ld	a, 178:opc
 	ld	xbc, 0x61d98ad9
 	extz	xde
 	.byte 0xaf
@@ -618,7 +618,7 @@ DSPCfg_SyncBitmapData:
 	jr	nz, -115
 	.byte 0xc5
 	swi	0
-	ldb	a, 191
+	ld	a, 191:opc
 	.byte 0x04
 	ld	xbc, 0xff3f048f
 	jrl	nz, -149

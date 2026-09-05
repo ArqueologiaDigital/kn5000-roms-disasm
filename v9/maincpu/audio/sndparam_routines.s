@@ -336,14 +336,14 @@ SndParam_ResolveWidget:
 	extz wa
 	ld l, e
 	ld e, a
-	ldb b, 0x0
+	ld b, 0x0:opc
 	extz xbc
 	sll xbc, 8
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	sll xhl, 0
 	or xhl, xbc
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xiz, xde
 	or xiz, xhl
@@ -583,7 +583,7 @@ SndParam_ResolveWidgetEx_Data:
 	.byte 0x83
 	push	xsp
 	ld	(xbc), xiz
-	ldb	b, 175
+	ld	b, 175:opc
 	ldwio	33, 8593
 	ld	e, (xwa+15)
 	extz	de
@@ -800,13 +800,13 @@ SndParam_ResolveWidgetVariant2_Data:
 	.byte 0xe3
 	reti
 	or	xix, xwa
-	ldb	w, 243
+	ld	w, 243:opc
 	reti
 	.byte 0xe0, 0xec
 	ldw	wa, 1215
 	jr	f, -81
 	.byte 0x04
-	ldb	c, 94
+	ld	c, 94:opc
 	inc	8, xsp
 	ret
 
@@ -947,7 +947,7 @@ SndParam_ReadRegScanLoop:
 	ret
 
 SndParam_ReadRegBitfield:
-	ldb l, 0x0
+	ld l, 0x0:opc
 	ld c, (xwa + 4)
 	extz bc
 	sla bc, 2
@@ -985,7 +985,7 @@ SndParam_BitfieldNoShift:
 	jr SndParam_BitfieldReturn
 
 SndParam_BitfieldPendingWrite:
-	ldb l, 0x3
+	ld l, 0x3:opc
 
 SndParam_BitfieldReturn:
 	extz hl
@@ -1169,7 +1169,7 @@ SndParam_RegisterEntryAlt_Data:
 	.byte 0xe0
 	swi	0
 	add	c, c
-	ldb	c, 217
+	ld	c, 217:opc
 	ccf
 	lda_rr xhl, xwa, bc
 	ld a, (xhl)
@@ -1237,7 +1237,7 @@ SndParam_RegisterMultiField_Data:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x04
 	jr	f, -24
 	.byte 0xe0
@@ -1252,7 +1252,7 @@ SndParam_RegisterMultiField_Data:
 	.byte 0xe3
 	pop	sr
 	.byte 0xe4, 0xe0
-	ldb	a, 232
+	ld	a, 232:opc
 	.byte 0xa9, 0x81
 	ldx
 	jr	c, 2
@@ -1525,7 +1525,7 @@ SndParam_RegisterLinked2_Data:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x04
 	jr	f, -24
 	.byte 0xe0
@@ -1585,7 +1585,7 @@ SndParam_RegisterLinked2_Data:
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe4
-	ldb	l, 69
+	ld	l, 69:opc
 	pushw	ix
 	ld	(xde-19), 68
 	pushw	wa
@@ -1966,7 +1966,7 @@ SndParam_RegisterComplex_Data:
 	.byte 0xe3
 	pop	sr
 	.byte 0xe4, 0xe0
-	ldb	a, 159
+	ld	a, 159:opc
 	ldwio	63, 0
 	jr	lt, 9
 	ld	a, (xbc)
@@ -1978,9 +1978,9 @@ SndParam_RegisterComplex_Data:
 	sub	(xsp+10), wa
 	.byte 0x9f
 	ldwio	131, 3247
-	ldb	w, 136
+	ld	w, 136:opc
 	reti
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	cp	wa, hl
 	jr	le, 2
@@ -2081,7 +2081,7 @@ SndParam_NotifyQuick_Data:
 	.byte 0x9f, 0x06
 	add	(xbc), h
 	reti
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	cp	wa, bc
 	jr	le, 2
@@ -2316,7 +2316,7 @@ SndParam_RegisterWide_Data:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	w, 191
+	ld	w, 191:opc
 	.byte 0x04
 	jr	f, -24
 	.byte 0xe0
@@ -2353,7 +2353,7 @@ SndParam_RegisterWide_Data:
 	push_f
 	add	(xbc), b
 	reti
-	ldb	a, 216
+	ld	a, 216:opc
 	ccf
 	cp	wa, bc
 	jr	le, 2
@@ -2454,7 +2454,7 @@ SndParam_EncodeFieldSub_Data:
 	.byte 0xe3
 	pop	sr
 	or	xwa, xwa
-	ldb	b, 232
+	ld	b, 232:opc
 	.byte 0xa9, 0x82
 	ldx
 	jr	c, 2
@@ -2526,7 +2526,7 @@ SndParam_DecodeFieldAlt_Data:
 	.byte 0xe3
 	pop	sr
 	.byte 0xe4, 0xe0
-	ldb	a, 137
+	ld	a, 137:opc
 	normal
 	ldx
 	jr	nz, 4
@@ -2595,7 +2595,7 @@ SndParam_WriteFieldSub_Data:
 	.byte 0xe3
 	pop	sr
 	.byte 0xe4, 0xe0
-	ldb	a, 232
+	ld	a, 232:opc
 	.byte 0xa9, 0x81
 	ldx
 	jr	c, 2

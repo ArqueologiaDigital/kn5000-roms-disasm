@@ -398,7 +398,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	push xiy
 	push xiz
 	nop
-	ldb	w, 0x65
+	ld	w, 0x65:opc
 	aligned_string "rror"
 	.byte 0x20, 0x4f
 	.byte 0x4b, 0x00, 0x0a
@@ -417,7 +417,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	jr nz, 111
 	jrl ov, 28448
 	jrl f, 28261
-	ldb w, 114
+	ld w, 114:opc
 	jr mi, 97
 	jr ov, 32
 	jr z, 105
@@ -425,7 +425,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	nop
 	swi 7
 	aligned_string " error"
-	ldb w, 79
+	ld w, 79:opc
 	popw hl
 	nop
 	ldwio 68, 29793
@@ -437,7 +437,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	nop
 	swi 7
 	aligned_string " Error!!!!!!!!"
-	ldb w, 79
+	ld w, 79:opc
 	popw hl
 	nop
 	pushw de

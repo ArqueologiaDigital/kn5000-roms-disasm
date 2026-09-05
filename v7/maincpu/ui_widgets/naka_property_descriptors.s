@@ -224,7 +224,7 @@ StrDesc_PsStylCnvVer:
 StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long AcMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_AcMemNoBox
@@ -232,7 +232,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_0
 	.long AcCmpRecBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb h, 0
+	ld h, 0:opc
 	push sr
 	nop
 	.long StrName_AcCmpRecBox
@@ -240,7 +240,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_RecordBits
 	.long PsCmpQtzBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCmpQtzBox
@@ -248,7 +248,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_1
 	.long PsCmpMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCmpMeasBox
@@ -256,7 +256,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_2
 	.long PsCmpMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCmpMemBox
@@ -264,7 +264,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_3
 	.long AcS2cMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_AcS2cMemNoBox
@@ -272,7 +272,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_4
 	.long PsS2cFmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsS2cFmeasBox
@@ -280,7 +280,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_5
 	.long PsS2cLmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsS2cLmeasBox
@@ -288,7 +288,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_6
 	.long PsSeqSongNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsSeqSongNoBox
@@ -296,7 +296,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_7
 	.long PsS2cTransBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsS2cTransBox
@@ -304,7 +304,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_8
 	.long PsCstmCpBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb h, 0
+	ld h, 0:opc
 	push sr
 	nop
 	.long StrName_PsCstmCpBnkBox
@@ -312,7 +312,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_BankPair_0
 	.long PsCstmCpSwBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb h, 0
+	ld h, 0:opc
 	push sr
 	nop
 	.long StrName_PsCstmCpSwBox
@@ -320,7 +320,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_BankPair_1
 	.long PsCtmAttStrBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCtmAttStrBox
@@ -349,7 +349,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_MspBnkPair_0
 	.long PsMspBnkNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb h, 0
+	ld h, 0:opc
 	push sr
 	nop
 	.long StrName_PsMspBnkNameBox
@@ -357,7 +357,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_MspBnkPair_1
 	.long AcCmpTempoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_AcCmpTempoBox
@@ -365,7 +365,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_9
 	.long PsCmpCpFGrpBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCmpCpFGrpBox
@@ -373,7 +373,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_10
 	.long PsCmpCpFVariBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCmpCpFVariBox
@@ -381,7 +381,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_11
 	.long PsCmpCpFPtnBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsCmpCpFPtnBox
@@ -389,7 +389,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_12
 	.long PsNameMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsNameMemBox
@@ -406,7 +406,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long GridProperty_Config_Table
 	.long PsRgpSetBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsRgpSetBnkBox
@@ -423,7 +423,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long GridProperty_AltConfig_Table
 	.long PsMspMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsMspMeasBox
@@ -431,7 +431,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_15
 	.long PsMspMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsMspMemBox
@@ -439,7 +439,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_16
 	.long PsMspRecPadBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsMspRecPadBox
@@ -447,7 +447,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_17
 	.long PsMspRecBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsMspRecBnkBox
@@ -455,7 +455,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_18
 	.long PsMspNameBnkProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsMspNameBnk
@@ -463,7 +463,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_Empty_19
 	.long PsCstmCpNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb h, 0
+	ld h, 0:opc
 	push sr
 	nop
 	.long StrName_PsCstmCpNameBox
@@ -496,7 +496,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_PsParaListBox
 	.long PsSCTxtBoxProc
 	naka_header NAKA_TYPE_0x12
-	ldb d, 0
+	ld d, 0:opc
 	nop
 	nop
 	.long StrName_PsSCTxtBox
@@ -504,7 +504,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrFld_ParaList_Font_0x06
 	.long PsSCTxtBox2Proc
 	naka_header NAKA_TYPE_0x65
-	ldb h, 0
+	ld h, 0:opc
 	nop
 	nop
 	.long StrName_PsSCTxtBox2

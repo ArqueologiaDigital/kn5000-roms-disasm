@@ -1282,7 +1282,7 @@ StrTimeSig_2_2:
 StrTimeSig_1_2:
 	ldw bc, 12847
 	nop
-	ldb e, 100
+	ld e, 100:opc
 	nop
 	swi 7
 	aligned_string "%s (%s)"
@@ -2165,10 +2165,10 @@ MsgBox_AttentionHeader:
 	nop
 	pushw iy
 	nop
-	ldb w, 0
+	ld w, 0:opc
 	pushw iy
 	nop
-	ldb l, 0
+	ld l, 0:opc
 	call16 0
 	nop
 	; Localization: Attention (6 languages)

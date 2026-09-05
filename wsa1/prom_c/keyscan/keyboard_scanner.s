@@ -971,7 +971,7 @@ Link_SendCmdE1__F99B5A:
 Link_SendCmdE1__F99B8D:
 	cp (0x00F32C:24), 0x01                 ; F99B8D  cp (0x00f32c),0x01   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE1__F99B8D                       ; F99B93  jr NZ,0xf99b8d
-	ldb	h, 0xC8                            ; F99B95  ld H,0xc8
+	ld	h, 0xC8:opc                            ; F99B95  ld H,0xc8
 Link_SendCmdE1__F99B97:
 	dec	1, h                               ; F99B97  dec 1,H
 	cp	h, 0:i3                               ; F99B99  cp H,0

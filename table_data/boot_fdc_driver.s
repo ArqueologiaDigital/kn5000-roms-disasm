@@ -132,7 +132,7 @@ FDC_MediaConfigAndRecalibrate__drain_results:
 	calr FDC_ReadStatus	; calr 0xffd7e8
 	bit 6, l	; bit 0x06,L
 	jr nz, FDC_MediaConfigAndRecalibrate__read_results	; jr NZ,0xffd927
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	cp l, 0x80	; cp L,0x80
 	jr z, FDC_MediaConfigAndRecalibrate__send_sense_interrupt	; jr Z,0xffd921
 FDC_MediaConfigAndRecalibrate__wait_idle:
@@ -331,7 +331,7 @@ FDC_Validate_FormatParams:
 	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_AcceptAlways:
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_Validate_HeadDrive:
 	calr FDC_ValidateDrive	; calr 0xffdcdf
@@ -357,7 +357,7 @@ FDC_Validate_DriveTrackSector__check_command:
 	cp wa, 1:i3	; cp WA,1
 	jr nz, FDC_Validate_DriveTrackSector__check_track	; jr NZ,0xffdaf7
 FDC_Validate_DriveTrackSector__accept:
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_Validate_DriveTrackSector__format_check:
 	calr FDC_ValidateStub	; calr 0xffdcde
@@ -659,7 +659,7 @@ FDC_SetupDMAMode__dma_from_fdc:
 	ldc_cr32 xhl, 0x0c	; ldc DMAS3,XHL - DMAS3 = FDC DMA-acknowledge data port
 	ld xhl, (0x0c7a:16)	; ld XHL,(0x0c7a)
 	ldc_cr32 xhl, 0x2c	; ldc unknown,XHL - DMAD3 = caller's buffer
-	ldb a, 0	; ld A,0x00
+	ld a, 0:opc	; ld A,0x00
 	ldc_cr8 a, 0x4e	; ldc unknown,A - DMAM3 mode 0x00 = I/O -> memory, destination increments
 	jr Boot_UpdateDisplay	; jr T,0xffdd26
 
@@ -673,7 +673,7 @@ FDC_SetupDMA_WriteToFDC:
 	ldc_cr32 xhl, 0x0c	; ldc DMAS3,XHL - DMAS3 = caller's buffer
 	ld xhl, 0x120000	; ld XHL,0x00120000
 	ldc_cr32 xhl, 0x2c	; ldc unknown,XHL - DMAD3 = FDC DMA-acknowledge data port
-	ldb a, 8	; ld A,0x08
+	ld a, 8:opc	; ld A,0x08
 	ldc_cr8 a, 0x4e	; ldc unknown,A - DMAM3 mode 0x08 = memory -> I/O, source increments
 	jr Boot_UpdateDisplay	; jr T,0xffdd26
 
@@ -930,24 +930,24 @@ FDC_ProcessResults:
 	jr z, FDC_ProcessResults__st0_ready_changed	; jr Z,0xffdf39
 	cp a, 0:i3	; cp A,0
 	jr nz, FDC_ProcessResults__unknown_st0	; jr NZ,0xffdf9f
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_ProcessResults__st0_ready_changed:
 	ld (0x0d2e:16), 0xff	; ld (0x0d2e),0xff - ST0 = 11: ready line changed (disk removed)
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_ProcessResults__st0_invalid_command:
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_ProcessResults__st0_abnormal:
 	bit 3, c	; bit 0x03,C - ST0 = 01: abnormal termination; ST0 bit 3 = drive not ready
 	jr z, FDC_ProcessResults__check_equipment	; jr Z,0xffdf4c - error 0x31 = drive not ready
-	ldb l, 0x31	; ld L,0x31
+	ld l, 0x31:opc	; ld L,0x31
 	ret	; ret
 FDC_ProcessResults__check_equipment:
 	bit 4, c	; bit 0x04,C - ST0 bit 4 = equipment check (fault)
 	jr z, FDC_ProcessResults__decode_st1	; jr Z,0xffdf54 - error 0x32 = equipment check
-	ldb l, 0x32	; ld L,0x32
+	ld l, 0x32:opc	; ld L,0x32
 	ret	; ret
 FDC_ProcessResults__decode_st1:
 	ld c, (xde+0x02)	; ld C,(XDE+0x02) - C = ST1
@@ -984,7 +984,7 @@ FDC_ProcessResults__generic_error:
 	ldw wa, 8	; ld WA,0x0008 - error 0x08 = unspecified FDC error
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_ProcessResults__unknown_st0:
-	ldb l, 8	; ld L,0x08
+	ld l, 8:opc	; ld L,0x08
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -1150,7 +1150,7 @@ FDC_ValidateOpcode:
 	cp a, 0x35	; cp A,0x35
 	jr nz, FDC_ValidateOpcode__check_masked	; jr NZ,0xffe0cb
 FDC_ValidateOpcode__aux_ok:
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_ValidateOpcode__check_masked:
 	ld a, (0x0c56:16)	; ld A,(0x0c56)
@@ -1170,10 +1170,10 @@ FDC_ValidateOpcode__check_masked:
 	cp a, 2:i3	; cp A,2
 	jr c, FDC_ValidateOpcode__invalid	; jr C,0xffe0f7
 FDC_ValidateOpcode__ok:
-	ldb l, 0	; ld L,0x00
+	ld l, 0:opc	; ld L,0x00
 	ret	; ret
 FDC_ValidateOpcode__invalid:
-	ldb l, 1	; ld L,0x01
+	ld l, 1:opc	; ld L,0x01
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -1874,7 +1874,7 @@ FDC_BuildFormatFieldBuffer:
 	ldw (0x0c4a:16), 0	; ld (0x0c4a),0x0000
 	ld ix, (0x0d38:16)	; ld IX,(0x0d38)
 	srl ix, 1	; srl 0x01,IX
-	ldb e, 0	; ld E,0x00
+	ld e, 0:opc	; ld E,0x00
 	ld iy, 0:i3	; ld IY,0
 	cp iy, ix	; cp IY,IX
 	jrl nc, FDC_BuildFormatFieldBuffer__odd_tail	; jrl NC,0xffe80e

@@ -534,9 +534,9 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x06
 	jr	lt, -104
 	.byte 0x04
-	ldb	b, 175
+	ld	b, 175:opc
 	.byte 0x06
-	ldb	a, 185
+	ld	a, 185:opc
 	push	sr
 	.byte 0x52
 	ld	de, (xwa+2)
@@ -1472,7 +1472,7 @@ DrawFunc_Init_Variant1:
 	jr	nc, 10
 	cp	e, 128
 	jr	c, 5
-	ldb	a, 128
+	ld	a, 128:opc
 	sub	e, 128
 	cp	e, a
 	jr	ule, 8
@@ -1522,7 +1522,7 @@ DrawFunc_Init_Variant1:
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	c, 243
+	ld	c, 243:opc
 	swi	5
 	ldio	1, 48
 	lda	xbc, (xsp+260)
@@ -1635,7 +1635,7 @@ DrawFunc_Init_Variant1:
 	swi	5
 	.byte 0x04, 0x01
 	ldw	bc, 1950
-	ldb	w, 177
+	ld	w, 177:opc
 	.byte 0x50
 	ld	wa, (xiz+9)
 	ld	(xbc+2), wa
@@ -1712,7 +1712,7 @@ DrawFunc_Init_Variant1:
 	jr	nc, 10
 	cp	e, 128
 	jr	c, 5
-	ldb	a, 128
+	ld	a, 128:opc
 	sub	e, 128
 	cp	e, a
 	jr	ule, 8
@@ -1760,7 +1760,7 @@ DrawFunc_Init_Variant1:
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
-	ldb	l, 243
+	ld	l, 243:opc
 	swi	5
 	ldio	1, 48
 	lda	xbc, (xsp+260)
@@ -1798,7 +1798,7 @@ DrawFunc_Init_Variant1:
 	swi	5
 	.byte 0x04, 0x01
 	ldw	bc, 1950
-	ldb	w, 177
+	ld	w, 177:opc
 	.byte 0x50
 	ld	wa, (xiz+9)
 	ld	(xbc+2), wa
@@ -2334,7 +2334,7 @@ HexCharToNibble_CheckUpper:
 	ret
 
 HexCharToNibble_Invalid:
-	ldb l, 0x0		; Invalid -> 0
+	ld l, 0x0:opc		; Invalid -> 0
 	ret
 
 FontGlyph_ByteData:
@@ -2344,10 +2344,10 @@ FontGlyph_ByteData:
 	.byte 0xc3
 	reti
 	or	xwa, xwa
-	ldb	a, 177
+	ld	a, 177:opc
 	ld	xbc, 0xcd25800e
 	.byte 0xcf
-	ldb	w, 102
+	ld	w, 102:opc
 	.byte 0x04
 	cp	e, 0:i3
 	jr	nz, 5
@@ -5130,7 +5130,7 @@ MainPmGet:
 	cp xbc, 0x1e2000f
 	jrl nz, MainPmGet_ReturnZero
 	call BitMapOut_PrepareRender_CheckBit1
-	ldb h, 0x0
+	ld h, 0x0:opc
 	extz xhl
 	ld (xsp + 6), xhl
 	ld xwa, 0xffffffff

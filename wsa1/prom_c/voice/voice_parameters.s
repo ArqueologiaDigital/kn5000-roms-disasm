@@ -608,7 +608,7 @@ Voice_ComputePitch__FA8046:
 	extz	wa                                    ; FA8055  extz WA
 	extz	xwa                                   ; FA8057  extz XWA
 	ld	(xiz-8), xwa                            ; FA8059  ld (XIZ+0xf8),XWA
-	ldb	c, 12                                  ; FA805C  ld C,0x0c
+	ld	c, 12:opc                                  ; FA805C  ld C,0x0c
 	mul8rr	c, h                                ; FA805E  mul BC,H
 	extz	xbc                                   ; FA8060  extz XBC
 	add	xbc, xwa                               ; FA8062  add XBC,XWA
@@ -4119,12 +4119,12 @@ EnvRec_LoadSlot:
 	push	xhl                                   ; FA981F  push XHL
 	push	xde                                   ; FA9820  push XDE
 	push	xix                                   ; FA9821  push XIX
-	ldb	c, 4                                   ; FA9822  ld C,0x04
+	ld	c, 4:opc                                   ; FA9822  ld C,0x04
 	extpfx3 0x8E, 0x0C, 0x43                   ; FA9824  mul BC,(XIZ+0x0c)
 	ld	(xiz-2), bc                             ; FA9827  ld (XIZ+0xfe),BC
 	extz	xbc                                   ; FA982A  extz XBC
 	ld	(xiz-6), xbc                            ; FA982C  ld (XIZ+0xfa),XBC
-	ldb	a, 16                                  ; FA982F  ld A,0x10
+	ld	a, 16:opc                                  ; FA982F  ld A,0x10
 	extpfx3 0x8E, 0x0E, 0x41                   ; FA9831  mul WA,(XIZ+0x0e)
 	ld	(xiz-8), wa                             ; FA9834  ld (XIZ+0xf8),WA
 	extz	xwa                                   ; FA9837  extz XWA
@@ -4140,10 +4140,10 @@ EnvRec_LoadSlot:
 	ld	xix, xiy                                ; FA9857  ld XIX,XIY
 	add	xiy, xwa                               ; FA9859  add XIY,XWA
 	ld	xix, xiy                                ; FA985B  ld XIX,XIY
-	ldb	a, 9                                   ; FA985D  ld A,0x09
+	ld	a, 9:opc                                   ; FA985D  ld A,0x09
 	extpfx3 0x8E, 0x0E, 0x41                   ; FA985F  mul WA,(XIZ+0x0e)
 	ld	(xiz-16), wa                            ; FA9862  ld (XIZ+0xf0),WA
-	ldb	c, 27                                  ; FA9865  ld C,0x1b
+	ld	c, 27:opc                                  ; FA9865  ld C,0x1b
 	extpfx3 0x8E, 0x10, 0x43                   ; FA9867  mul BC,(XIZ+0x10)
 	add	bc, wa                                 ; FA986A  add BC,WA
 	ld	(xiz-18), bc                            ; FA986C  ld (XIZ+0xee),BC
@@ -5007,7 +5007,7 @@ Voice_StageChanSel_Reg04C0:
 	jrl z, Voice_StageChanSel_Reg04C0__FAA0B6                  ; FA9F42  jrl Z,0xfaa0b6
 	ld	h, (xiy+34)                             ; FA9F45  ld H,(XIY+0x22)
 	and	h, 3                                   ; FA9F48  and H,0x03
-	ldb	c, 4                                   ; FA9F4B  ld C,0x04
+	ld	c, 4:opc                                   ; FA9F4B  ld C,0x04
 	mul8rr	c, h                                ; FA9F4D  mul BC,H
 	extz	xbc                                   ; FA9F4F  extz XBC
 	ld	xix, xbc                                ; FA9F51  ld XIX,XBC
@@ -5662,7 +5662,7 @@ Voice_Field0029_EncodeSelector:
 	ld	h, (xiz+10)                             ; FAA3BA  ld H,(XIZ+0x0a)
 	cp	h, 0:i3                                   ; FAA3BD  cp H,0
 	jr nz, sub_FAA3B5__FAA3C5                  ; FAA3BF  jr NZ,0xfaa3c5
-	ldb	a, 7                                   ; FAA3C1  ld A,0x07
+	ld	a, 7:opc                                   ; FAA3C1  ld A,0x07
 	jr sub_FAA3B5__FAA3E7                      ; FAA3C3  jr T,0xfaa3e7
 sub_FAA3B5__FAA3C5:
 	cp	h, 5:i3                                   ; FAA3C5  cp H,5
@@ -5676,7 +5676,7 @@ sub_FAA3B5__FAA3C5:
 	cp	c, 5:i3                                   ; FAA3D9  cp C,5
 	jr nz, sub_FAA3B5__FAA3E1                  ; FAA3DB  jr NZ,0xfaa3e1
 sub_FAA3B5__FAA3DD:
-	ldb	a, 6                                   ; FAA3DD  ld A,0x06
+	ld	a, 6:opc                                   ; FAA3DD  ld A,0x06
 	jr sub_FAA3B5__FAA3E7                      ; FAA3DF  jr T,0xfaa3e7
 sub_FAA3B5__FAA3E1:
 	ld	c, h                                    ; FAA3E1  ld C,H
@@ -8367,7 +8367,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB818  link XIZ,0xfffc
 	pushw	hl                                   ; FAB81C  push HL
 	push	xix                                   ; FAB81D  push XIX
-	ldb	c, 68                                  ; FAB81E  ld C,0x44
+	ld	c, 68:opc                                  ; FAB81E  ld C,0x44
 	extpfx3 0x8E, 0x0A, 0x43                   ; FAB820  mul BC,(XIZ+0x0a)
 	add	bc, 19                                 ; FAB823  add BC,0x0013
 	extz	xbc                                   ; FAB827  extz XBC
@@ -8404,7 +8404,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E:
 	ld	h, (xix)                                ; FAB87E  ld H,(XIX)
 	cp	h, 64                                   ; FAB880  cp H,0x40
 	jr nc, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C7                  ; FAB883  jr NC,0xfab8c7
-	ldb	c, 68                                  ; FAB885  ld C,0x44
+	ld	c, 68:opc                                  ; FAB885  ld C,0x44
 	mul8rr	c, h                                ; FAB887  mul BC,H
 	add	bc, 19                                 ; FAB889  add BC,0x0013
 	extz	xbc                                   ; FAB88D  extz XBC
@@ -8415,7 +8415,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E:
 	jr nz, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3                  ; FAB89C  jr NZ,0xfab8c3
 	extpfx3 0x8E, 0x0A, 0xF6                   ; FAB89E  cp H,(XIZ+0x0a)
 	jr z, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3                   ; FAB8A1  jr Z,0xfab8c3
-	ldb	c, 68                                  ; FAB8A3  ld C,0x44
+	ld	c, 68:opc                                  ; FAB8A3  ld C,0x44
 	mul8rr	c, h                                ; FAB8A5  mul BC,H
 	inc	1, bc                                  ; FAB8A7  inc 1,BC
 	extz	xbc                                   ; FAB8A9  extz XBC

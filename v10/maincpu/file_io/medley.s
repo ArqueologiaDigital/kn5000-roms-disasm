@@ -247,13 +247,13 @@ FormatMedleyNumber:
 	lda_dpi XIY, 0xe0
 	cp c, 0xff
 	jr nz, FmtNum_CheckMarked
-	ldb c, 0x20
+	ld c, 0x20:opc
 	jr FmtNum_WriteSpacePad
 
 FmtNum_CheckMarked:
 	cp c, 0xfe
 	jr nz, FmtNum_FormatNumber
-	ldb c, 0x4d
+	ld c, 0x4d:opc
 
 FmtNum_WriteSpacePad:
 	lda_dpi XHL, 0xe0

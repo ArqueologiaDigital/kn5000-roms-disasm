@@ -80,11 +80,11 @@ Rhythm_NoteOnAfterSetup_A:
 	calr Rhythm_NoteOffMax_Dispatch
 	calr Rhythm_FourChannelDispatch
 	calr Rhythm_SendVolume_Dispatch
-	ldb a, 0x90
+	ld a, 0x90:opc
 	call Rhythm_SendByte
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	call Rhythm_SendByte
-	ldb a, 0x7d
+	ld a, 0x7d:opc
 	call Rhythm_SendByte
 	ret
 
@@ -107,11 +107,11 @@ Rhythm_NoteOnAfterSetup_B:
 	calr Rhythm_SendVolume_D4
 	calr Rhythm_SendVolume_D5
 	calr Rhythm_SendVolume_D6
-	ldb a, 0x90
+	ld a, 0x90:opc
 	call Rhythm_SendByte
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	call Rhythm_SendByte
-	ldb a, 0x7d
+	ld a, 0x7d:opc
 	call Rhythm_SendByte
 	ret
 
@@ -122,11 +122,11 @@ Rhythm_NoteOnAfterSetup_C:
 	calr Rhythm_NoteOffMax_D7
 	calr Rhythm_DispatchCh_D7
 	call Rhythm_SendVolume_D7
-	ldb a, 0x90
+	ld a, 0x90:opc
 	call Rhythm_SendByte
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	call Rhythm_SendByte
-	ldb a, 0x7d
+	ld a, 0x7d:opc
 	call Rhythm_SendByte
 	ret
 
@@ -444,7 +444,7 @@ Rhythm_VelocityLookup_A:
 	calr Rhythm_InstrBaseLookup
 	cp (0x32d8:16), 0
 	jr nz, Rhythm_VelLookA_CheckEmpty
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr Rhythm_VelLookA_Done
 
 Rhythm_VelLookA_CheckEmpty:
@@ -524,7 +524,7 @@ Rhythm_TransposeNote:
 Rhythm_Transp_CheckZero:
 	cp a, 0:i3
 	jr nz, Rhythm_Transp_Apply
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr Rhythm_Transp_Done
 
 Rhythm_Transp_Apply:
@@ -573,7 +573,7 @@ Rhythm_VoiceMapLookup:
 	push xhl
 	cp (0x32d8:16), 0
 	jr nz, Rhythm_VoiceMap_CheckInstr
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jrl Rhythm_VoiceMap_Done
 
 Rhythm_VoiceMap_CheckInstr:
@@ -606,7 +606,7 @@ Rhythm_VoiceMap_SelectTable:
 Rhythm_VoiceMap_CheckMute:
 	bit 5, h
 	jr z, Rhythm_VoiceMap_CheckDir
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr Rhythm_VoiceMap_Done
 
 Rhythm_VoiceMap_CheckDir:
@@ -739,7 +739,7 @@ Rhythm_VelocityCompute:
 	calr Rhythm_InstrBaseLookup
 	cp (0x32d8:16), 0
 	jr nz, Rhythm_VelComp_CheckBit4
-	ldb a, 0x0
+	ld a, 0x0:opc
 	jr Rhythm_VelComp_Done
 
 Rhythm_VelComp_CheckBit4:
@@ -805,7 +805,7 @@ Rhythm_DispatchCh_D7:
 	ld (0x32cc:16), a
 	and (0x32f4:16), 251
 	or (0x32f4:16), 8
-	ldb w, 0x97
+	ld w, 0x97:opc
 	ld xix, 0x30f4
 
 Rhythm_DispatchCh_D7_Loop:
@@ -823,7 +823,7 @@ Rhythm_DispatchCh_D4:
 	ld (0x32cc:16), a
 	and (0x32f4:16), 247
 	or (0x32f4:16), 4
-	ldb w, 0x94
+	ld w, 0x94:opc
 	ld xix, 0x313c
 
 Rhythm_DispatchCh_D4_Loop:
@@ -840,7 +840,7 @@ Rhythm_DispatchCh_D5:
 	ld a, (0x32c9:16)
 	ld (0x32cc:16), a
 	and (0x32f4:16), 243
-	ldb w, 0x95
+	ld w, 0x95:opc
 	ld xix, 0x3184
 
 Rhythm_DispatchCh_D5_Loop:
@@ -857,7 +857,7 @@ Rhythm_DispatchCh_D6:
 	ld a, (0x32ca:16)
 	ld (0x32cc:16), a
 	and (0x32f4:16), 243
-	ldb w, 0x96
+	ld w, 0x96:opc
 	ld xix, 0x31cc
 
 Rhythm_DispatchCh_D6_Loop:
@@ -881,7 +881,7 @@ Rhythm_SingleNoteHandler:
 	sub a, 0x10
 	cp a, 0:i3
 	jr gt, Rhythm_SingleNote_ClampVelocity
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 Rhythm_SingleNote_ClampVelocity:
 	call Rhythm_SendByte
@@ -1021,37 +1021,37 @@ Rhythm_MismatchOther_Return:
 	ret
 
 Rhythm_Send_Ch90_7F_7E:
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x7e
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x7e:opc
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_04:
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x4
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x4:opc
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_05:
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x5
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x5:opc
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_06:
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x6
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x6:opc
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_07:
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x7
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x7:opc
 	call Rhythm_Send3ByteMsg
 	ret
 
@@ -1065,9 +1065,9 @@ Rhythm_AllNotesOff_Dispatch:
 Rhythm_AllNotesOff_D7:
 	cp (0x332f:16), 0
 	jr z, Rhythm_AllNotesOff_D7_Skip
-	ldb a, 0xd7
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd7:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_AllNotesOff_D7_Skip:
@@ -1076,9 +1076,9 @@ Rhythm_AllNotesOff_D7_Skip:
 Rhythm_AllNotesOff_D4:
 	cp (0x3330:16), 0
 	jr z, Rhythm_AllNotesOff_D4_Skip
-	ldb a, 0xd4
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd4:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_AllNotesOff_D4_Skip:
@@ -1087,9 +1087,9 @@ Rhythm_AllNotesOff_D4_Skip:
 Rhythm_AllNotesOff_D5:
 	cp (0x3331:16), 0
 	jr z, Rhythm_AllNotesOff_D5_Skip
-	ldb a, 0xd5
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd5:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_AllNotesOff_D5_Skip:
@@ -1098,9 +1098,9 @@ Rhythm_AllNotesOff_D5_Skip:
 Rhythm_AllNotesOff_D6:
 	cp (0x3332:16), 0
 	jr z, Rhythm_AllNotesOff_D6_Done
-	ldb a, 0xd6
-	ldb w, 0x3
-	ldb e, 0x0
+	ld a, 0xd6:opc
+	ld w, 0x3:opc
+	ld e, 0x0:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_AllNotesOff_D6_Done:
@@ -1116,8 +1116,8 @@ Rhythm_SendVolume_Dispatch:
 Rhythm_SendVolume_D7:
 	cp (0x332f:16), 0
 	jr z, Rhythm_SendVolume_D7_Skip
-	ldb a, 0xd7
-	ldb w, 0x3
+	ld a, 0xd7:opc
+	ld w, 0x3:opc
 	ld e, (0x332f:16)
 	call Rhythm_Send3ByteMsg
 
@@ -1127,8 +1127,8 @@ Rhythm_SendVolume_D7_Skip:
 Rhythm_SendVolume_D4:
 	cp (0x3330:16), 0
 	jr z, Rhythm_SendVolume_D4_Skip
-	ldb a, 0xd4
-	ldb w, 0x3
+	ld a, 0xd4:opc
+	ld w, 0x3:opc
 	ld e, (0x3330:16)
 	call Rhythm_Send3ByteMsg
 
@@ -1138,8 +1138,8 @@ Rhythm_SendVolume_D4_Skip:
 Rhythm_SendVolume_D5:
 	cp (0x3331:16), 0
 	jr z, Rhythm_SendVolume_D5_Skip
-	ldb a, 0xd5
-	ldb w, 0x3
+	ld a, 0xd5:opc
+	ld w, 0x3:opc
 	ld e, (0x3331:16)
 	call Rhythm_Send3ByteMsg
 
@@ -1149,8 +1149,8 @@ Rhythm_SendVolume_D5_Skip:
 Rhythm_SendVolume_D6:
 	cp (0x3332:16), 0
 	jr z, Rhythm_SendVolume_D6_Done
-	ldb a, 0xd6
-	ldb w, 0x3
+	ld a, 0xd6:opc
+	ld w, 0x3:opc
 	ld e, (0x3332:16)
 	call Rhythm_Send3ByteMsg
 
@@ -1167,9 +1167,9 @@ Rhythm_NoteOffMax_Dispatch:
 Rhythm_NoteOffMax_D7:
 	cp (0x332f:16), 0
 	jr z, Rhythm_NoteOffMax_D7_Skip
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x77
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x77:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_NoteOffMax_D7_Skip:
@@ -1178,9 +1178,9 @@ Rhythm_NoteOffMax_D7_Skip:
 Rhythm_NoteOffMax_D4:
 	cp (0x3330:16), 0
 	jr z, Rhythm_NoteOffMax_D4_Skip
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x74
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x74:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_NoteOffMax_D4_Skip:
@@ -1189,9 +1189,9 @@ Rhythm_NoteOffMax_D4_Skip:
 Rhythm_NoteOffMax_D5:
 	cp (0x3331:16), 0
 	jr z, Rhythm_NoteOffMax_D5_Skip
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x75
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x75:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_NoteOffMax_D5_Skip:
@@ -1200,9 +1200,9 @@ Rhythm_NoteOffMax_D5_Skip:
 Rhythm_NoteOffMax_D6:
 	cp (0x3332:16), 0
 	jr z, Rhythm_NoteOffMax_D6_Done
-	ldb a, 0x90
-	ldb w, 0x7f
-	ldb e, 0x76
+	ld a, 0x90:opc
+	ld w, 0x7f:opc
+	ld e, 0x76:opc
 	call Rhythm_Send3ByteMsg
 
 Rhythm_NoteOffMax_D6_Done:
@@ -1323,10 +1323,10 @@ Rhythm_VoiceAssignDetect:
 	or (0x32fc:16), 2
 
 Rhythm_VoiceAssign_PartAOn:
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x32fc:16), 254
 	and (0x332b:16), 253
@@ -1356,10 +1356,10 @@ Rhythm_VoiceAssign_PartBDetect:
 	or (0x32fc:16), 1
 
 Rhythm_VoiceAssign_PartBOn:
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x32fc:16), 253
 	and (0x332b:16), 251
@@ -1382,10 +1382,10 @@ Rhythm_VoiceAssign_Ext1Detect:
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Ext2Detect
 	and (0xfc5f:16), 251
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x3300:16), 254
 	ld a, (0x3317:16)
@@ -1406,10 +1406,10 @@ Rhythm_VoiceAssign_Ext2Detect:
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Ext3Detect
 	and (0xfc5f:16), 247
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x3300:16), 253
 	ld a, (0x3316:16)
@@ -1430,10 +1430,10 @@ Rhythm_VoiceAssign_Ext3Detect:
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Perc1Detect
 	and (0xfc60:16), 251
-	ldb e, 0x48
-	ldb d, 0x6
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x6:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x3300:16), 251
 	ld a, (0x3316:16)
@@ -1454,10 +1454,10 @@ Rhythm_VoiceAssign_Perc1Detect:
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Perc2Detect
 	and (0xfc5f:16), 239
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x32fd:16), 254
 	or (0x3284:16), 4
@@ -1470,10 +1470,10 @@ Rhythm_VoiceAssign_Perc2Detect:
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_SaveShadow
 	and (0xfc5f:16), 223
-	ldb e, 0x48
-	ldb d, 0x5
-	ldb a, 0x0
-	ldb w, 0x0
+	ld e, 0x48:opc
+	ld d, 0x5:opc
+	ld a, 0x0:opc
+	ld w, 0x0:opc
 	calr Rhythm_QueuePartChangeEvent
 	and (0x32fd:16), 253
 	or (0x3284:16), 4
@@ -1578,7 +1578,7 @@ Rhythm_TranspMod_LookupTable:
 Rhythm_TranspMod_Offset1:
 	bit 5, h
 	jr z, Rhythm_TranspMod_MuteCheck
-	ldb a, 0x0
+	ld a, 0x0:opc
 	or (0x33e5:16), 1
 	jr Rhythm_TranspMod_Done
 

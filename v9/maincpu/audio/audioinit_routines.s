@@ -363,7 +363,7 @@ AudioInit_DrumSaveReturn:
 
 AudioInit_VoiceParamCtrl:
 	dec 6, xsp
-	ldb c, 0x0
+	ld c, 0x0:opc
 	bit 0, (0xfd53:16)
 	jr z, AudioInit_CheckVoiceParamState
 	set 1, c
@@ -733,7 +733,7 @@ AudioInit_ClearStatusBit9:
 	andw (0xc598:16), 0xfdff
 
 AudioInit_ChannelLoop_Init:
-	ldb e, 0x0
+	ld e, 0x0:opc
 	cp e, 0x10
 	jrl nc, AudioInit_ChannelLoop_Done
 
@@ -1831,9 +1831,9 @@ AudioInit_PartCompare_Return:
 	ret
 
 AudioInit_CompareVoiceConfig:
-	ldb e, 0x0
-	ldb l, 0x0
-	ldb d, 0x1
+	ld e, 0x0:opc
+	ld l, 0x0:opc
+	ld d, 0x1:opc
 	ld wa, (0xc59c:16)
 	bit 1, wa
 	jr z, AudioInit_VoiceCompare_BothFF

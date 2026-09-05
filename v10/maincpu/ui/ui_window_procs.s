@@ -857,14 +857,14 @@ WndScroll_HandleCharInput:
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
 	ldw (0x0274da:24), 0x0000
-	ldb c, 0x41
+	ld c, 0x41:opc
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsUppercase:
 	bit 1, c
 	jr z, WndScroll_CharIsLowercase
 	ldw (0x0274da:24), 0x0001
-	ldb c, 0x61
+	ld c, 0x61:opc
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsLowercase:
@@ -875,7 +875,7 @@ WndScroll_CharIsLowercase:
 	ldw (0x0274da:24), 0x0000
 
 WndScroll_SetCategoryZero:
-	ldb c, 0x15
+	ld c, 0x15:opc
 
 WndScroll_ComputeCharOffset:
 	ld wa, (0x0274d8:24)
@@ -1032,7 +1032,7 @@ WndScroll_ClampPageCount:
 	jr WndScroll_SendConfirmEvent
 
 WndScroll_CheckSPMarker:
-	ldb d, 0x0
+	ld d, 0x0:opc
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00081
@@ -6590,7 +6590,7 @@ ImageDecode_PixelLoop:
 	jr lt, ImageDecode_RowLoop
 	lda_dri XWA, 0xfd, 0x30, 0x01
 	ld (xsp + 28), xwa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	ld xde, (xsp + 28)
 	ld xwa, xde
 	lda_dri XWA, 0xe1, 0x00, 0x01
@@ -6701,7 +6701,7 @@ PaletteReduce_CheckDone:
 	jrl gt, ImageDecode_PaletteReduceLoop
 	lda xwa, (xsp + 48)
 	ld (xsp + 32), xwa
-	ldb c, 0x0
+	ld c, 0x0:opc
 	ld xde, (xsp + 28)
 	ld xhl, (xsp + 44)
 
@@ -8289,7 +8289,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x9f
 	ldio	129, 175
 	ret
-	ldb	w, 176
+	ld	w, 176:opc
 	.byte 0x51
 	ld	xwa, (xsp+24)
 	ld	a, (xwa)
@@ -8309,7 +8309,7 @@ ColorBlit2_LargeCodeBlock:
 	inc	6, l
 	jr	nov, -81
 	ldwio	37, 5791
-	ldb	h, 175
+	ld	h, 175:opc
 	ldwio	32, 8336
 	exts	xwa
 	add	xwa, xde
@@ -8345,7 +8345,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x84
 	push	xix
 	jr	f, -125
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-124), bc
 	ld	c, (xhl)
@@ -8361,7 +8361,7 @@ ColorBlit2_LargeCodeBlock:
 	ldwio	37, 0xa2d2
 	.byte 0xef
 	pop	sr
-	ldb	h, 175
+	ld	h, 175:opc
 	ldwio	32, 8336
 	exts	xwa
 	add	xwa, xde
@@ -8397,7 +8397,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x84
 	push	xix
 	jr	f, -125
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-124), bc
 	ld	c, (xhl)
@@ -8410,7 +8410,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xiy
 	jr	f, -113
 	push	sr
-	ldb	a, 143
+	ld	a, 143:opc
 	push	sr
 	.byte 0x89
 	ld	xwa, (xsp+10)
@@ -8782,7 +8782,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x9f
 	ld	xde, 0x6600f53f
 	ld	xsp, 0x08afa8e9
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0xcf
 	nop
 	nop
@@ -8806,7 +8806,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xiy
 	jr	f, -81
 	rcf
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0xec
 	push	sr
 	.byte 0xaf
@@ -8832,7 +8832,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x83
 	push	xix
 	jr	f, -124
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-125), bc
 	ld	e, (xix)
@@ -8845,7 +8845,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xiy
 	jr	f, -81
 	rcf
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0xec
 	push	sr
 	.byte 0xaf
@@ -8918,7 +8918,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x83
 	push	xix
 	jr	f, -124
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-125), bc
 	ld	e, (xix)
@@ -8989,8 +8989,8 @@ ColorBlit2_LargeCodeBlock:
 	.ascii "n6h7‚R"
 	.byte 0x04
 	pop	sr
-	ldb	h, 149
-	ldb	c, 235
+	ld	h, 149:opc
+	ld	c, 235:opc
 	zcf
 	ld	wa, (xiy+2)
 	exts	xwa
@@ -9003,7 +9003,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x84
 	push	xix
 	jr	f, -122
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-124), bc
 	ld	l, (xiz)
@@ -9016,7 +9016,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xiy
 	jr	f, -81
 	incf
-	ldb	w, 175
+	ld	w, 175:opc
 	.byte 0x04, 0x88
 	ld	xwa, (xsp+4)
 	sra	xwa, 0
@@ -9084,7 +9084,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x85
 	push	xix
 	jr	f, -122
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-123), bc
 	ld	l, (xiz)
@@ -9097,7 +9097,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xiy
 	jr	f, -81
 	rcf
-	ldb	w, 175
+	ld	w, 175:opc
 	ldio	136, 175
 	ldio	35, 235
 	.byte 0xed
@@ -9637,7 +9637,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x83
 	push	xix
 	jr	f, -124
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-125), bc
 	ld	c, (xix)
@@ -9650,7 +9650,7 @@ ColorBlit2_LargeCodeBlock:
 	.ascii "=`hTø"
 	pushw	iz
 	ldw	wa, 664
-	ldb	a, 233
+	ld	a, 233:opc
 	zcf
 	ld	xde, xbc
 	sll	xde, 2
@@ -9769,7 +9769,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x83
 	push	xix
 	jr	f, -124
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-125), bc
 	ld	c, (xix)
@@ -9921,7 +9921,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x84
 	push	xix
 	jr	f, -123
-	ldb	a, 201
+	ld	a, 201:opc
 	.byte 0xcc
 	add	(xsp-124), bc
 	ld	e, (xiy)
@@ -9933,8 +9933,8 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x84
 	push	xiy
 	jr	f, 104
-	ldb	h, 145
-	ldb	w, 232
+	ld	h, 145:opc
+	ld	w, 232:opc
 	zcf
 	add	xwa, xhl
 	add	xde, xwa

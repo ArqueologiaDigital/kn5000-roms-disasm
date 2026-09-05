@@ -913,7 +913,7 @@ sub_FAC2AE:
 	ld	bc, (xbc)                               ; FAC330  ld BC,(XBC)
 	add	bc, bc                                 ; FAC332  add BC,BC
 	ld	(xix+4), bc                             ; FAC334  ld (XIX+0x04),BC
-	ldb	c, 68                                  ; FAC337  ld C,0x44
+	ld	c, 68:opc                                  ; FAC337  ld C,0x44
 	extpfx3 0x8E, 0x08, 0x43                   ; FAC339  mul BC,(XIZ+0x08)
 	add	bc, 41                                 ; FAC33C  add BC,0x0029
 	extz	xbc                                   ; FAC340  extz XBC
@@ -1010,7 +1010,7 @@ sub_FAC34D:
 	push	xbc                                   ; FAC3FC  push XBC
 	pushw	hl                                   ; FAC3FD  push HL
 	call	0xFB713A                              ; FAC3FE  call 0xfb713a
-	ldb	c, 68                                  ; FAC402  ld C,0x44
+	ld	c, 68:opc                                  ; FAC402  ld C,0x44
 	mul8rr	c, d                                ; FAC404  mul BC,D
 	add	bc, 41                                 ; FAC406  add BC,0x0029
 	extz	xbc                                   ; FAC40A  extz XBC
@@ -1726,7 +1726,7 @@ sub_FAC90E:
 	extz	xbc                                   ; FAC926  extz XBC
 	add	xbc, 0xFDE42B                          ; FAC928  add XBC,0x00fde42b
 	ld	l, (xbc)                                ; FAC92E  ld L,(XBC)
-	ldb	h, 25                                  ; FAC930  ld H,0x19
+	ld	h, 25:opc                                  ; FAC930  ld H,0x19
 sub_FAC90E__FAC932:
 	ld	c, h                                    ; FAC932  ld C,H
 	extz	bc                                    ; FAC934  extz BC
@@ -1812,7 +1812,7 @@ sub_FAC9A6:
 	extz	xbc                                   ; FAC9C1  extz XBC
 	add	xbc, 0xFDE47B                          ; FAC9C3  add XBC,0x00fde47b
 	ld	h, (xbc)                                ; FAC9C9  ld H,(XBC)
-	ldb	l, 0                                   ; FAC9CB  ld L,0x00
+	ld	l, 0:opc                                   ; FAC9CB  ld L,0x00
 sub_FAC9A6__FAC9CD:
 	ld	c, l                                    ; FAC9CD  ld C,L
 	extz	bc                                    ; FAC9CF  extz BC
@@ -1896,7 +1896,7 @@ sub_FACA40__FACA50:
 	ld	h, (xix)                                ; FACA50  ld H,(XIX)
 	cp	h, 64                                   ; FACA52  cp H,0x40
 	jr nc, sub_FACA40__FACAB3                  ; FACA55  jr NC,0xfacab3
-	ldb	c, 68                                  ; FACA57  ld C,0x44
+	ld	c, 68:opc                                  ; FACA57  ld C,0x44
 	mul8rr	c, h                                ; FACA59  mul BC,H
 	ld	de, bc                                  ; FACA5B  ld DE,BC
 	ldw	hl, 0x3BCF                             ; FACA5D  ld HL,0x3bcf
@@ -1979,7 +1979,7 @@ sub_FACAB7__FACACB:
 	ld	h, (xix)                                ; FACACB  ld H,(XIX)
 	cp	h, 64                                   ; FACACD  cp H,0x40
 	jrl nc, sub_FACAB7__FACBA1                 ; FACAD0  jrl NC,0xfacba1
-	ldb	c, 68                                  ; FACAD3  ld C,0x44
+	ld	c, 68:opc                                  ; FACAD3  ld C,0x44
 	mul8rr	c, h                                ; FACAD5  mul BC,H
 	ld	(xiz-4), bc                             ; FACAD7  ld (XIZ+0xfc),BC
 	ldw	hl, 0x3BCF                             ; FACADA  ld HL,0x3bcf
@@ -2074,7 +2074,7 @@ sub_FACAB7__FACB9C:
 	inc	1, xix                                 ; FACB9C  inc 1,XIX
 	jrl sub_FACAB7__FACACB                     ; FACB9E  jrl T,0xfacacb
 sub_FACAB7__FACBA1:
-	ldb	d, 0                                   ; FACBA1  ld D,0x00
+	ld	d, 0:opc                                   ; FACBA1  ld D,0x00
 	ldw	ix, 0                                  ; FACBA3  ld IX,0x0000
 	ldw (xiz-2), 0x0009                        ; FACBA6  ld (XIZ+0xfe),0x0009
 sub_FACAB7__FACBAB:

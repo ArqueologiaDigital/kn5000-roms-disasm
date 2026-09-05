@@ -143,7 +143,7 @@ VoiceChannel_UpdateWithPitch:
 	extz xiy
 	push xiy
 	call SoundGen_CaptureVoiceParams
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	bit 7, (4235:16)
 	jr z, VoiceChannel_ApplyPitchFlags
 	or a, 0x2
@@ -217,7 +217,7 @@ SoundGen_ClampUpdateVoice:
 	and iy, 0xf
 	push xiy
 	call SoundGen_ReadVoiceRegs
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cp (4323:16), 0
@@ -308,7 +308,7 @@ SoundGen_LookupChannelBankParams:
 	jr SoundGen_LookupReturn
 
 ToneGen_StoreBadValue:
-	ldb a, 0xff
+	ld a, 0xff:opc
 	push xix
 	ld xix, 0x10b3
 	stb_dri A, 0x07, 0xf0, 0xf4
@@ -464,7 +464,7 @@ SoundGen_CaptureAndBuildParams:
 	call SoundGen_CaptureVoiceParams
 	popw bc
 	pop xiy
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	cp c, 1:i3
 	jr nz, SoundGen_UpdateAndWriteChannel
 	or a, 0x2
@@ -541,7 +541,7 @@ SoundGen_ApplyChannelParam:
 	pop xiy
 	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -624,7 +624,7 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	ldb a, 0x0
+	ld a, 0x0:opc
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -637,11 +637,11 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	ldb a, 0x2
+	ld a, 0x2:opc
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	ldb a, 0x7f
+	ld a, 0x7f:opc
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -682,7 +682,7 @@ SndParam_LookupChannelVoice:
 	xor XBC,XBC
 	xor XDE,XDE
 	ld XIX,0x00001a37
-	ldb A, 0x04
+	ld A, 0x04:opc
 	ldw_dri bc, 0x07, 0xf0, 0xec
 	ld E,B
 	xor HL,HL
@@ -696,7 +696,7 @@ SndParam_LookupChannelVoice:
 	cp A,0xff
 	jr z, SndParam_LookupReturn
 SndParam_LookupDefault:
-	ldb a, 0x0
+	ld a, 0x0:opc
 
 SndParam_LookupReturn:
 	pop xhl
@@ -751,7 +751,7 @@ SMF_SysEx_FileUnderflow:
 SMF_SysEx_CheckBlockLimit:
 	cp (0x11f8:16), 0x01
 	jr z, Seq_AdvanceBlock
-	ldb A, 0x7f
+	ld A, 0x7f:opc
 	ld BC,IX
 	sub A,C
 	sub A,0x01
@@ -804,7 +804,7 @@ SysEx_ReadBytesReturn:
 	ret
 
 SysEx_ClearBuffer:
-	ldb c, 0x7f
+	ld c, 0x7f:opc
 	ld xiy, 0x1a61
 
 SysEx_ClearLoop:
@@ -883,13 +883,13 @@ SeqPlay_StartWithDisplay:
 
 SeqPlay_SetFlagAndMode:
 	or (0xfdad:16), 4
-	ldb a, 0x4
+	ld a, 0x4:opc
 
 SeqPlay_QueueDisplayEvent:
 	ld	(4330:16), 1
-	ldb	e, 145
-	ldb	d, 3
-	ldb	w, 4
+	ld	e, 145:opc
+	ld	d, 3:opc
+	ld	w, 4:opc
 	call	16624640
 	call	15668398
 	call	16625070
@@ -1020,12 +1020,12 @@ SMF_WaitForReady:
 	jr nz, SMF_WaitForReady
 	ldw wa, 0x58ff
 	stw_dpi WA, 0xf1
-	ldb a, 0x4
+	ld a, 0x4:opc
 	ld w, (1075:16)
 	stw_dpi WA, 0xf1
 	ldw wa, 0x1802
 	stw_dpi WA, 0xf1
-	ldb a, 0x8
+	ld a, 0x8:opc
 	lda_dpi XBC, 0xf0
 	ld (4376:16), xix
 	ld l, (0xfc62:16)
@@ -1197,7 +1197,7 @@ SMF_WriteNote_FileUnderflow1:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_BankSelect:
-	ldb w, 0x20
+	ld w, 0x20:opc
 	ld l, (6743:16)
 	pushw bc
 	pushw de
@@ -1248,7 +1248,7 @@ SMF_WriteNote_AltPath:
 	call SMF_ResolveGlobalChannel
 	ld a, (6881:16)
 	or a, 0xb0
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld l, c
 	rlc l
 	and l, 0x1
@@ -1275,7 +1275,7 @@ SMF_WriteNote_FileUnderflow4:
 SMF_WriteNote_BankSelectLSB:
 	ld a, (6881:16)
 	or a, 0xb0
-	ldb w, 0x20
+	ld w, 0x20:opc
 	ld l, d
 	and l, 0x7
 	sla l, 4
@@ -1327,7 +1327,7 @@ SMF_WriteNote_FileUnderflow6:
 SMF_WriteChannelVolume:
 	ld a, (6881:16)
 	or a, 0xb0
-	ldb w, 0x7
+	ld w, 0x7:opc
 	ld l, b
 	pushw wa
 	pushw de
@@ -1350,7 +1350,7 @@ SMF_WriteVol_FileUnderflow1:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteVol_Chorus:
-	ldb w, 0x5d
+	ld w, 0x5d:opc
 	ld l, (4359:16)
 	pushw wa
 	pushw de
@@ -1373,11 +1373,11 @@ SMF_WriteVol_FileUnderflow2:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteVol_SustainPedal:
-	ldb w, 0x40
-	ldb l, 0x7f
+	ld w, 0x40:opc
+	ld l, 0x7f:opc
 	bit 3, e
 	jr nz, SMF_WriteVol_SustainValue
-	ldb l, 0x0
+	ld l, 0x0:opc
 
 SMF_WriteVol_SustainValue:
 	pushw wa
@@ -1399,7 +1399,7 @@ SMF_WriteVol_FileUnderflow3:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteVol_Reverb:
-	ldb w, 0x5b
+	ld w, 0x5b:opc
 	ld l, (4332:16)
 	and l, 0x7f
 	pushw wa
@@ -1446,7 +1446,7 @@ SMF_WriteVol_PanAndPitch:
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 8)
 	ldto_lerp XIY, 0x38
-	ldb w, 0xa
+	ld w, 0xa:opc
 	pushw wa
 	pushw bc
 	call SMF_WriteByteLoop
@@ -1468,8 +1468,8 @@ SMF_WriteRPN_FileUnderflow1:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_MSBZero:
-	ldb w, 0x65
-	ldb l, 0x0
+	ld w, 0x65:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1489,8 +1489,8 @@ SMF_WriteRPN_FileUnderflow2:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_LSBOne:
-	ldb w, 0x64
-	ldb l, 0x1
+	ld w, 0x64:opc
+	ld l, 0x1:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1525,7 +1525,7 @@ SMF_WriteRPN_FineTune:
 	ld c, l
 	srl l, 1
 	and l, 0x7f
-	ldb w, 0x6
+	ld w, 0x6:opc
 	pushw wa
 	pushw bc
 	call SMF_WriteByteLoop
@@ -1550,7 +1550,7 @@ SMF_WriteRPN_FineTuneLSB:
 	ld l, c
 	and l, 0x1
 	rrc_i_8 l, 2
-	ldb w, 0x26
+	ld w, 0x26:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1570,8 +1570,8 @@ SMF_WriteRPN_FileUnderflow5:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_MSBZero2:
-	ldb w, 0x65
-	ldb l, 0x0
+	ld w, 0x65:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1591,8 +1591,8 @@ SMF_WriteRPN_FileUnderflow6:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_LSBTwo:
-	ldb w, 0x64
-	ldb l, 0x2
+	ld w, 0x64:opc
+	ld l, 0x2:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1626,7 +1626,7 @@ SMF_WriteRPN_CoarseTune:
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 9)
 	ldto_lerp XIY, 0x38
-	ldb w, 0x6
+	ld w, 0x6:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1646,7 +1646,7 @@ SMF_WriteRPN_FileUnderflow8:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_CoarseTuneLSB:
-	ldb w, 0x26
+	ld w, 0x26:opc
 	xor l, l
 	pushw wa
 	call SMF_WriteByteLoop
@@ -1667,8 +1667,8 @@ SMF_WriteRPN_FileUnderflow9:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_MSBZero3:
-	ldb w, 0x65
-	ldb l, 0x0
+	ld w, 0x65:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1688,8 +1688,8 @@ SMF_WriteRPN_FileUnderflow10:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_LSBZero:
-	ldb w, 0x64
-	ldb l, 0x0
+	ld w, 0x64:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1721,7 +1721,7 @@ SMF_WriteRPN_Transpose:
 	ld xiy, 0xf460
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld l, (xiy + 11)
-	ldb w, 0x6
+	ld w, 0x6:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1741,7 +1741,7 @@ SMF_WriteRPN_FileUnderflow12:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_TransposeLSB:
-	ldb w, 0x26
+	ld w, 0x26:opc
 	xor l, l
 	pushw wa
 	call SMF_WriteByteLoop
@@ -1984,7 +1984,7 @@ SMF_ChannelPressure_Underflow:
 SMF_ChannelPressure_WriteCC:
 	and a, 0xf
 	or a, 0xb0
-	ldb w, 0x1
+	ld w, 0x1:opc
 	ld l, (4213:16)
 	call SMF_WriteByteLoop
 	push xwa
@@ -2084,7 +2084,7 @@ SMF_SystemExclusive_Underflow:
 SMF_SystemExclusive_WriteCC_MSB:
 	and a, 0xf
 	or a, 0xb0
-	ldb w, 0xb
+	ld w, 0xb:opc
 	ld l, (4213:16)
 	call SMF_WriteByteLoop
 	push xwa
@@ -2185,14 +2185,14 @@ SMF_NoteOn_WriteEvent_Underflow:
 SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11f9
 	lda_dri XIX, 0x07, 0xf0, 0xec
-	ldb a, 0x80
+	ld a, 0x80:opc
 	lda_dpi XBC, 0xf0
 	ld a, (4211:16)
 	lda_dpi XBC, 0xf0
 	ld a, (4213:16)
 	lda_dpi XBC, 0xf0
 	ld a, (4216:16)
-	ldb w, 0x60
+	ld w, 0x60:opc
 	muls8rr a, w
 	xor hl, hl
 	ld l, (4215:16)
@@ -2262,7 +2262,7 @@ SMF_ProgramChange_ProcessPatch:
 	pop	xix
 	ld	xwa, 6743
 	call	16703738
-	ldb	a, 176
+	ld	a, 176:opc
 	ld	w, (4213:16)
 	or	a, w
 	xor	w, w
@@ -2287,7 +2287,7 @@ SMF_ProgramChange_WriteBankMSB_Underflow:
 SMF_ProgramChange_WriteBankMSB_Data:
 	ldw (4206:16), 0
 	ld (4208:16), 0
-	ldb w, 0x20
+	ld w, 0x20:opc
 	ld l, (6743:16)
 	call SMF_WriteByteLoop
 	push xwa
@@ -2306,7 +2306,7 @@ SMF_ProgramChange_WriteBankLSB_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_ProgramChange_WriteBankLSB_Data:
-	ldb a, 0xc0
+	ld a, 0xc0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
@@ -2332,7 +2332,7 @@ SMF_ProgramChange_WriteVolume_Data:
 	jrl SMF_ProcessEventLoop
 
 SMF_ProgramChange_DirectWrite:
-	ldb w, 0x0
+	ld w, 0x0:opc
 	ld l, (4211:16)
 	and l, 0x1
 	call SMF_SendChannelConfig
@@ -2354,7 +2354,7 @@ SMF_ProgramChange_SendConfig_Underflow:
 SMF_ProgramChange_SendConfig_Data:
 	ldw (4206:16), 0
 	ld (4208:16), 0
-	ldb w, 0x20
+	ld w, 0x20:opc
 	ld h, (4211:16)
 	and h, 0xc
 	ld l, (4214:16)
@@ -2383,7 +2383,7 @@ SMF_ProgramChange_WritePatch_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_ProgramChange_WritePatchByte:
-	ldb a, 0xc0
+	ld a, 0xc0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
@@ -2436,11 +2436,11 @@ SMF_ControlChange_ValidateRange:
 	jrl c, SMF_ProcessEventLoop
 	cp l, 0xb
 	jrl ugt, SMF_ProcessEventLoop
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb w, 0x7
+	ld w, 0x7:opc
 	cp l, 3:i3
 	jrl z, SMF_CC_Volume_Handler
 	cp l, 4:i3
@@ -2489,12 +2489,12 @@ SMF_CC_RPN_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_RPN_WriteCC101:
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb w, 0x65
-	ldb l, 0x0
+	ld w, 0x65:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2514,8 +2514,8 @@ SMF_CC_RPN_WriteCC101_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_RPN_WriteCC100:
-	ldb w, 0x64
-	ldb l, 0x1
+	ld w, 0x64:opc
+	ld l, 0x1:opc
 	ld (4206:16), 0
 	pushw wa
 	call SMF_WriteByteLoop
@@ -2536,7 +2536,7 @@ SMF_CC_RPN_WriteCC100_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_RPN_WriteCC6_DataEntry:
-	ldb w, 0x6
+	ld w, 0x6:opc
 	ld l, (4215:16)
 	ld h, (4211:16)
 	and h, 0x1
@@ -2562,7 +2562,7 @@ SMF_CC_RPN_WriteCC6_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_RPN_WriteCC38_DataEntryLSB:
-	ldb w, 0x26
+	ld w, 0x26:opc
 	ld l, (4215:16)
 	and l, 0x1
 	rrc_i_8 l, 2
@@ -2617,12 +2617,12 @@ SMF_CC_PitchBendSens_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_PitchBendSens_WriteCC101:
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb w, 0x65
-	ldb l, 0x0
+	ld w, 0x65:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2642,8 +2642,8 @@ SMF_CC_PitchBendSens_WriteCC101_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_PitchBendSens_WriteCC100:
-	ldb w, 0x64
-	ldb l, 0x0
+	ld w, 0x64:opc
+	ld l, 0x0:opc
 	ld (4206:16), 0
 	pushw wa
 	call SMF_WriteByteLoop
@@ -2664,7 +2664,7 @@ SMF_CC_PitchBendSens_WriteCC100_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_PitchBendSens_WriteCC6:
-	ldb w, 0x6
+	ld w, 0x6:opc
 	ld l, (4215:16)
 	pushw wa
 	call SMF_WriteByteLoop
@@ -2685,8 +2685,8 @@ SMF_CC_PitchBendSens_WriteCC6_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_PitchBendSens_WriteCC38:
-	ldb w, 0x26
-	ldb l, 0x0
+	ld w, 0x26:opc
+	ld l, 0x0:opc
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2736,12 +2736,12 @@ SMF_CC_Modulation_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_Modulation_WriteCC101:
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb w, 0x65
-	ldb l, 0x0
+	ld w, 0x65:opc
+	ld l, 0x0:opc
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2761,8 +2761,8 @@ SMF_CC_Modulation_WriteCC101_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_Modulation_WriteCC100:
-	ldb w, 0x64
-	ldb l, 0x2
+	ld w, 0x64:opc
+	ld l, 0x2:opc
 	ld (4206:16), 0
 	pushw wa
 	call SMF_WriteByteLoop
@@ -2783,7 +2783,7 @@ SMF_CC_Modulation_WriteCC100_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_Modulation_WriteCC6:
-	ldb w, 0x6
+	ld w, 0x6:opc
 	ld l, (4215:16)
 	pushw wa
 	call SMF_WriteByteLoop
@@ -2804,8 +2804,8 @@ SMF_CC_Modulation_WriteCC6_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_Modulation_WriteCC38:
-	ldb w, 0x26
-	ldb l, 0x0
+	ld w, 0x26:opc
+	ld l, 0x0:opc
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2855,11 +2855,11 @@ SMF_CC_Pan_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_CC_Pan_WriteCC10:
-	ldb a, 0xb0
+	ld a, 0xb0:opc
 	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb w, 0xa
+	ld w, 0xa:opc
 	ld l, (4215:16)
 	call SMF_WriteByteLoop
 	push xwa
@@ -2893,7 +2893,7 @@ SMF_CC_Reverb_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Reverb_SetupCC93:
-	ldb w, 0x5d
+	ld w, 0x5d:opc
 	ld l, (4215:16)
 	jr SMF_ProcessTimedEvent_Continue
 
@@ -2907,16 +2907,16 @@ SMF_CC_Sustain_CheckBits:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Sustain_SetCC64Value:
-	ldb w, 0x40
-	ldb l, 0x0
+	ld w, 0x40:opc
+	ld l, 0x0:opc
 	bit 3, c
 	jr z, SMF_ProcessTimedEvent_Continue
-	ldb l, 0x7f
+	ld l, 0x7f:opc
 	jr SMF_ProcessTimedEvent_Continue
 
 SMF_CC_Chorus_Handler:
-	ldb w, 0x5b
-	ldb l, 0x0
+	ld w, 0x5b:opc
+	ld l, 0x0:opc
 	cp (6709:16), 0
 	jr z, SMF_CC_Chorus_SetupCC91
 	bit 0, (4236:16)
@@ -4577,7 +4577,7 @@ SeqStep_FileSectorDone:
 	ld	xwa, 1:i3
 	add	(xbc), xwa
 	ld	wa, (xsp+4)
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	(xde), a
 	ld	xbc, (xsp+6)
 	ld	xde, (xbc)
@@ -4684,7 +4684,7 @@ SeqStep_FileSectorReturn:
 	stb_dpi	a, 224
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	stb_dpi	a, 224
@@ -4696,7 +4696,7 @@ SeqStep_FileSectorReturn:
 	stb_dpi	a, 224
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	stb_dpi	a, 224
@@ -4708,7 +4708,7 @@ SeqStep_FileSectorReturn:
 	stb_dpi	a, 224
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	stb_dpi	a, 224
@@ -4952,7 +4952,7 @@ SeqStep_FileSectorPopReturn:
 	ld XBC,XWA
 	add XBC,XHL
 	ld WA,(XSP+0x10)
-	ldb W, 0x00
+	ld W, 0x00:opc
 	ld (XBC),A
 	cpw (XSP+0x04), 0x01ff
 	jr nz, .Lc_f4f9da
@@ -5031,7 +5031,7 @@ SeqStep_FileSectorPopReturn:
 	ld XBC,XWA
 	add XBC,XHL
 	ld WA,(XSP+0x10)
-	ldb W, 0x00
+	ld W, 0x00:opc
 	ld (XBC),A
 	ld WA,(XSP+0x04)
 	inc 1,WA
@@ -5111,7 +5111,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x08, 0xff, 0xef, 0x60, 0xaf, 0x08, 0x20, 0xb8
 	.byte 0x0b, 0x00, 0x00, 0xdb, 0xa8, 0xa6
 SeqByteBlock_MedleyPlayback:
-	ldb	w, 128
+	ld	w, 128:opc
 	push	xsp
 	pushw	sp
 	jr	z, 7
@@ -5157,9 +5157,9 @@ SeqByteBlock_EffectsSeqDotExt:
 SeqByteBlock_TechnichordCfgA:
 	.byte 0xa6
 SeqByteBlock_PathNormalize:
-	ldb	a, 175
+	ld	a, 175:opc
 	ldio	32, 129
-	ldb	c, 243
+	ld	c, 243:opc
 	reti
 	.byte 0xe0, 0xe8
 	ld	xhl, 0x88a6a9e8
@@ -5562,9 +5562,9 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xb8	; v10 does not spell this byte either
 	push	sr
 	dec	6, c
-	ldb	w, 175
+	ld	w, 175:opc
 	push	sr
-	ldb	w, 56
+	ld	w, 56:opc
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+14)
 	ld	xwa, (xwa)
@@ -5592,7 +5592,7 @@ SeqByteBlock_ChannelContainer:
 	jrl	156
 	ld	xwa, (xsp+6)
 	.byte 0x98	; v10 does not spell this byte either
-	ldb	h, 63
+	ld	h, 63:opc
 	nop
 	push	sr
 	jr	z, 5
@@ -5635,7 +5635,7 @@ SeqByteBlock_ChannelContainer:
 	pop	sr
 	inc	6, c
 	pushw	3759
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0x89	; v10 does not spell this byte either
 	ld	xwa, (xwa+71)
 	ld	(xbc+22), xwa
@@ -5644,7 +5644,7 @@ SeqByteBlock_ChannelContainer:
 	pop	sr
 	inc	6, d
 	retd	3759
-	ldb	w, 56
+	ld	w, 56:opc
 	calr	64111
 	inc	4, xsp
 	ld	xwa, (xsp+14)
@@ -5693,7 +5693,7 @@ SeqByteBlock_ChannelContainer:
 	sub	(xbc), xsp
 	ldio	32, 152
 	pushw	iz
-	ldb	w, 232
+	ld	w, 232:opc
 	ccf
 	sub	xwa, xbc
 	ld	xbc, (xsp+26)
@@ -5840,10 +5840,10 @@ SeqByteBlock_ChannelContainer:
 	push_a
 	sub	(xbc), l
 	ex_ff
-	ldb	w, 176
+	ld	w, 176:opc
 	jr	lt, -81
 	ldio	32, 184
-	ldb	w, 49
+	ld	w, 49:opc
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+42)
 	dec	2, wa
@@ -5928,9 +5928,9 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	sub	(xbc), l
 	.byte 0x06	; v10 does not spell this byte either
-	ldb	w, 152
+	ld	w, 152:opc
 	pushw	wa
-	ldb	w, 232
+	ld	w, 232:opc
 	ccf
 	add	xwa, xbc
 	ld	xde, xwa
@@ -5999,7 +5999,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+6)
 	.byte 0x98	; v10 does not spell this byte either
-	ldb	h, 81
+	ld	h, 81:opc
 	ld	(xsp+4), bc
 	ld	xbc, (xiz+34)
 	lda	xbc, (xbc+16)
@@ -6059,7 +6059,7 @@ SeqByteBlock_ChannelContainer:
 	ld	bc, (xsp+4)
 	ld	xwa, (xsp+6)
 	.byte 0x98	; v10 does not spell this byte either
-	ldb	h, 65
+	ld	h, 65:opc
 	ld	hl, bc
 	ld	bc, hl
 	extz	xbc
@@ -6074,7 +6074,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x98	; v10 does not spell this byte either
 	push_a
 	push	xsp
-	ldb	c, 0
+	ld	c, 0:opc
 	jr	nz, 8
 	ld	xwa, (xiz+34)
 	ldw	(xwa+20), 0
@@ -6137,7 +6137,7 @@ SeqByteBlock_ChannelContainer:
 	sub	(10350:16), l
 	ldwio	32, 1688
 	push	xsp
-	ldb	c, 0
+	ld	c, 0:opc
 	jr	z, 30
 	ld	xwa, (xsp+10)
 	.byte 0xb8	; v10 does not spell this byte either
@@ -6154,7 +6154,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xbc, (xwa+30)
 	ld	wa, (xsp+18)
 	.byte 0x99	; v10 does not spell this byte either
-	ldb	h, 240
+	ld	h, 240:opc
 	jrl	nc, 168
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+34)
@@ -6194,7 +6194,7 @@ SeqByteBlock_ChannelContainer:
 	lda	xbc, (xwa+26)
 	ld	xwa, (xsp+10)
 	.byte 0xa8	; v10 does not spell this byte either
-	ldb	b, 129
+	ld	b, 129:opc
 	ld	xwa, (xsp+10)
 	.byte 0xb8	; v10 does not spell this byte either
 	pop	sr
@@ -6317,7 +6317,7 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	sub	(4462:16), l
 	ldwio	32, 8872
-	ldb	w, 184
+	ld	w, 184:opc
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
 	ld	xwa, (xsp+10)
@@ -6397,9 +6397,9 @@ SeqChan_InitChannelState:
 	ex_ff
 	sub	(10350:16), l
 	incf
-	ldb	w, 152
+	ld	w, 152:opc
 	ei	63
-	ldb	c, 0
+	ld	c, 0:opc
 	jr	z, 30
 	ld	xwa, (xsp+12)
 	.byte 0xb8	; v10 does not spell this byte either
@@ -6464,7 +6464,7 @@ SeqChan_InitChannelState:
 	.byte 0xe0	; v10 does not spell this byte either
 	.byte 0xe4	; v10 does not spell this byte either
 	ldw	de, 3247
-	ldb	w, 184
+	ld	w, 184:opc
 	pop	sr
 	scc	nz, b
 	.byte 0x9d	; v10 does not spell this byte either
@@ -6619,7 +6619,7 @@ SeqChan_InitChannelState:
 	.byte 0xa8	; v10 does not spell this byte either
 	ld	xsp, 2936759281
 	incf
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0x89	; v10 does not spell this byte either
 	ld	xwa, (xwa+22)
 	ld	(xbc+71), xwa
@@ -6631,8 +6631,8 @@ SeqChan_InitChannelState:
 	ex_ff
 	sub	(4462:16), l
 	incf
-	ldb	w, 168
-	ldb	b, 32
+	ld	w, 168:opc
+	ld	b, 32:opc
 	.byte 0xb8	; v10 does not spell this byte either
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
@@ -7013,7 +7013,7 @@ SeqStep_SectorCompareBlock:
 	.byte 0xba
 	pop	sr
 	ld	(xsp-118), w
-	ldb	l, 219
+	ld	l, 219:opc
 	ccf
 	ret
 	dec	2, xsp
@@ -7211,7 +7211,7 @@ SeqChan_ByteBlockD:
 	push	sr
 	.byte 0xb3, 0xb1
 	push	sr
-	ldb	a, 0
+	ld	a, 0:opc
 	ld	xwa, (xiz)
 	push	xwa
 	calr	65246
@@ -7254,7 +7254,7 @@ SeqChan_ByteBlockD:
 	push	sr
 	.byte 0xb3, 0xb1
 	push	sr
-	ldb	w, 0
+	ld	w, 0:opc
 	ld	xwa, (xiz)
 	push	xwa
 	calr	65167
@@ -7273,7 +7273,7 @@ SeqChan_ByteBlockD:
 	push	sr
 	.byte 0xb3, 0xb1
 	push	sr
-	ldb	d, 0
+	ld	d, 0:opc
 	ld	xwa, (xiz)
 	push	xwa
 	calr	65130
@@ -7335,16 +7335,16 @@ SeqChan_ByteBlockE:
 	ldw	ix, 48979
 	ldio	83, 175
 	ex_ff
-	ldb	w, 168
+	ld	w, 168:opc
 	incf
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0xe0	; v10 does not spell this byte either
 	jrl	z, 148
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
 	.byte 0x9f	; v10 does not spell this byte either
 	ldwio	166, 5807
-	ldb	w, 152
+	ld	w, 152:opc
 	rcf
 	swi	6
 	jr	nc, 6
@@ -7385,7 +7385,7 @@ SeqChan_ByteBlockE:
 	ld	bc, iz
 	ld	xwa, (xsp+2)
 	.byte 0x98	; v10 does not spell this byte either
-	ldb	h, 65
+	ld	h, 65:opc
 	.byte 0xa2	; v10 does not spell this byte either
 	.byte 0x81	; v10 does not spell this byte either
 	ld	(xde), xbc
@@ -7471,16 +7471,16 @@ SeqChan_ByteBlockF:
 	ldw	ix, 48979
 	ldio	83, 175
 	ex_ff
-	ldb	w, 168
+	ld	w, 168:opc
 	incf
-	ldb	w, 232
+	ld	w, 232:opc
 	.byte 0xe0	; v10 does not spell this byte either
 	jrl	z, 148
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
 	.byte 0x9f	; v10 does not spell this byte either
 	ldwio	166, 5807
-	ldb	w, 152
+	ld	w, 152:opc
 	rcf
 	swi	6
 	jr	nc, 6
@@ -7521,7 +7521,7 @@ SeqChan_ByteBlockF:
 	ld	bc, iz
 	ld	xwa, (xsp+2)
 	.byte 0x98	; v10 does not spell this byte either
-	ldb	h, 65
+	ld	h, 65:opc
 	.byte 0xa2	; v10 does not spell this byte either
 	.byte 0x81	; v10 does not spell this byte either
 	ld	(xde), xbc
@@ -9830,7 +9830,7 @@ VoiceParam_ClampAndValidate:
 	jr c, VoiceParam_Clamp_LookupTable
 	cp l, 0xf0
 	jr c, VoiceParam_Clamp_CheckBank
-	ldb h, 0x0
+	ld h, 0x0:opc
 	and l, 0xf
 	or l, 0x80
 	jr TableLoad_Return
@@ -9939,7 +9939,7 @@ AccKey_ScanAndSetDirty:
 
 	.byte 0xc1, 0xe8, 0x31, 0x3c, 0xfd	; anddi8 (0x3284), 253 (v7 patched)
 
-	ldb a, 0x1
+	ld a, 0x1:opc
 
 	ld xhl, 0xf1a0
 
@@ -10071,7 +10071,7 @@ AccDisplay_RefreshDone:
 	ret
 
 AccState_ReadAccompParams:
-	ldb A, 0x00
+	ld A, 0x00:opc
 	ei 0x06
 	ld (0x0464:16), a
 	ld a, (0x0416:16)
