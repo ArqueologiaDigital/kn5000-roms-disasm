@@ -45,6 +45,29 @@ names.  The register table's NAME column is superseded by §5.3, which is the ta
 
 ---
 
+## ✅ IMPLEMENTED, 2026-09-05 (register-interface + decoded-state HLE)
+
+The faithful part of this guide is now a device: `kn7000_mame`
+`src/mame/matsushita/acoustic_modeling.cpp` / `.h` (`l7a1429_device`). It models
+everything this note settles and nothing it does not:
+
+* the `+0 select / +2 data` port pair and the `block*0x40 + channel` register
+  file (1217 registers), the (select, data) atomicity, and the write-only bus;
+* a **decoded per-channel state model** — `decoded_channel(ch)` returns
+  `l7a1429_resonator_params`: MAIN/SUB tune (MIDI note), POSITION (octave ratio,
+  absolute scale left unknown), MAIN/SUB MUTING cutoff (Hz, from the Q16 bilinear
+  one-pole), FITTING rise/decay and DEPTH (Q15), SUB GAIN, INTERACTION GAIN — all
+  read in the units §2/§5 fit, with the logger and the model sharing one decode.
+
+⚠ **No audio, and that is correct, not unfinished** (§1, §8.1-§8.2): the internal
+signal path is unmeasured, the device is never read so there is nothing to
+calibrate against, and IC4's six wave mask ROMs are undumped. Synthesising a
+13-bit stream would mean inventing the algorithm AND its input, with no spectral
+A/B possible. `decoded_channel` is the drop-in the eventual synthesis reads, the
+same role `reg()` has. What is settled is modelled; what is inference is refused.
+
+---
+
 ## 0. THE ANSWER, IN ONE PARAGRAPH
 
 The L7A1429 is a **per-channel pair of coupled linear RESONATORS** — the tone editor calls them
