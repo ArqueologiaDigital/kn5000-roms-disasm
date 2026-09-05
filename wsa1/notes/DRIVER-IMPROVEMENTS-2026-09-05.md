@@ -178,6 +178,25 @@ adds or sharpens.
 
 ## W1 — STRONG — decode `0xFA62DA` and `0xFA643F` so the tone-generator busy bit can fall (voice-pool exhaustion risk)
 
+> **✅ RESOLVED 2026-09-05 (steal-vs-refuse): the allocator STEALS; the fake is
+> benign for polyphony.** The two "undecoded" routines are decoded (wave 17):
+> `0xFA62DA` = `ChanRec_RelinkToPoolQueue`, `0xFA643F` = `ChanRec_RelinkToPartQueue`
+> — the doubly-linked-queue relink helpers, not the allocator. The allocator is
+> `ChanAlloc_ForNoteRequest` → `ChanAlloc_FindVictim` (`0xFA69FD`), which walks
+> the per-part priority list at `0xFE1220` (records point at
+> `Voice_Search_Order_List_1..3`, e.g. `86 85 06 05 84 83 82 04 03 02 81 80 01 00 FF`
+> — bit 7 = shared-pool queue, low 3 bits = queue number: **release/idle queues
+> first, the part's SOUNDING queue 0 last**) and takes the first non-empty queue.
+> It returns `0xFF` (silent) only if *every* queue including sounding is empty.
+> So the pool never replenishing does NOT refuse note-ons — it steals a sounding
+> voice. `tg_status_r`'s `0x1000` fake is benign for allocation; a faithful
+> retire and a true magnitude still need synthesis (gap A, blocked on the
+> undumped mask ROMs). Landed in `kn7000_mame` `4633537` (driver comment). The
+> separate, still-open item is premature retirement if the device busy bitmap
+> ever reads 0 — see `note_engine.s` §RETIRE; the driver keeps `m_tg_busy` set
+> to avoid it.
+
+
 * **Firmware / driver.** `tg_status_r()` (`wsa1.cpp:2199`) answers the per-channel
   magnitude query with a hard-coded `0x1000` and self-labels it (`:2175`) "THE ONE FAKE
   IN THIS HANDLER". The deeper problem is stated at `:2202-2213`: **the tone-generator
