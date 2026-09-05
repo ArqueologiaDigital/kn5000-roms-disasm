@@ -735,7 +735,7 @@ SMF_ProcessSysExBlock:
 	pop xiy
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SysEx_FileUnderflow
@@ -778,7 +778,7 @@ SysEx_ReadBytesLoop:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SysEx_ReadBytes_FileUnderflow
@@ -861,7 +861,7 @@ SMF_Seek_FileError:
 
 SMF_Seek_WritePosition:
 	ld xwa, 0xfa2
-	lds32 xbc, 4
+	ld xbc, 4:i3
 	call FileIO_WriteByte_Impl
 	pop xbc
 	pop xwa
@@ -1040,7 +1040,7 @@ SMF_WaitForReady:
 	call SMF_OutputCommandSeq
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_Setup_FileUnderflow
@@ -1076,7 +1076,7 @@ SMF_WriteChannelDataLoop:
 	ld xix, (4376:16)
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteChannel_FileUnderflow
@@ -1184,7 +1184,7 @@ SMF_WriteChannelNoteData:
 	popw	wa
 	push	xwa
 	push	xbc
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (6701:16)
 	cp	xwa, xbc
 	jr	lt, 6
@@ -1206,7 +1206,7 @@ SMF_WriteNote_BankSelect:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow2
@@ -1231,7 +1231,7 @@ SMF_WriteNote_ProgramChange:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow3
@@ -1259,7 +1259,7 @@ SMF_WriteNote_AltPath:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow4
@@ -1286,7 +1286,7 @@ SMF_WriteNote_BankSelectLSB:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow5
@@ -1311,7 +1311,7 @@ SMF_WriteNote_ProgramNumber:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow6
@@ -1336,7 +1336,7 @@ SMF_WriteChannelVolume:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow1
@@ -1359,7 +1359,7 @@ SMF_WriteVol_Chorus:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow2
@@ -1385,7 +1385,7 @@ SMF_WriteVol_SustainValue:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow3
@@ -1407,7 +1407,7 @@ SMF_WriteVol_Reverb:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow4
@@ -1454,7 +1454,7 @@ SMF_WriteVol_PanAndPitch:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow1
@@ -1475,7 +1475,7 @@ SMF_WriteRPN_MSBZero:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow2
@@ -1496,7 +1496,7 @@ SMF_WriteRPN_LSBOne:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow3
@@ -1533,7 +1533,7 @@ SMF_WriteRPN_FineTune:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow4
@@ -1556,7 +1556,7 @@ SMF_WriteRPN_FineTuneLSB:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow5
@@ -1577,7 +1577,7 @@ SMF_WriteRPN_MSBZero2:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow6
@@ -1598,7 +1598,7 @@ SMF_WriteRPN_LSBTwo:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow7
@@ -1632,7 +1632,7 @@ SMF_WriteRPN_CoarseTune:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow8
@@ -1653,7 +1653,7 @@ SMF_WriteRPN_CoarseTuneLSB:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow9
@@ -1674,7 +1674,7 @@ SMF_WriteRPN_MSBZero3:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow10
@@ -1695,7 +1695,7 @@ SMF_WriteRPN_LSBZero:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow11
@@ -1727,7 +1727,7 @@ SMF_WriteRPN_Transpose:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow12
@@ -1748,7 +1748,7 @@ SMF_WriteRPN_TransposeLSB:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow13
@@ -1881,7 +1881,7 @@ SMF_PolyAftertouch_Dispatch:
 	call SMF_ProcessChannels
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_PolyAftertouch_4Byte_Underflow
@@ -1921,7 +1921,7 @@ SMF_PolyAftertouch_3Byte_CalcTime:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_PolyAftertouch_3Byte_Underflow
@@ -1942,7 +1942,7 @@ SMF_PolyAftertouch_3Byte_SendStatus:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_PolyAftertouch_3Byte_WriteUnderflow
@@ -1968,7 +1968,7 @@ SMF_ChannelPressure_Handler:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ChannelPressure_Underflow
@@ -1989,7 +1989,7 @@ SMF_ChannelPressure_WriteCC:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ChannelPressure_WriteUnderflow
@@ -2015,7 +2015,7 @@ SMF_PitchBend_Handler:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_PitchBend_Underflow
@@ -2034,7 +2034,7 @@ SMF_PitchBend_WriteCC_MSB:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_PitchBend_WriteCC_MSB_Underflow
@@ -2068,7 +2068,7 @@ SMF_SystemExclusive_Handler:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SystemExclusive_Underflow
@@ -2089,7 +2089,7 @@ SMF_SystemExclusive_WriteCC_MSB:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SystemExclusive_WriteCC_MSB_Underflow
@@ -2147,7 +2147,7 @@ SMF_NoteOn_SlotFound:
 	popw hl
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_NoteOn_SlotFound_Underflow
@@ -2169,7 +2169,7 @@ SMF_NoteOn_WriteEventBytes:
 	popw hl
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_NoteOn_WriteEvent_Underflow
@@ -2221,7 +2221,7 @@ SMF_ProgramChange_CalcTime:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_Underflow
@@ -2272,7 +2272,7 @@ SMF_ProgramChange_ProcessPatch:
 	popw	wa
 	push	xwa
 	push	xbc
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (6701:16)
 	cp	xwa, xbc
 	jr	lt, 6
@@ -2292,7 +2292,7 @@ SMF_ProgramChange_WriteBankMSB_Data:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WriteBankLSB_Underflow
@@ -2315,7 +2315,7 @@ SMF_ProgramChange_WriteBankLSB_Data:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WriteVolume_Underflow
@@ -2338,7 +2338,7 @@ SMF_ProgramChange_DirectWrite:
 	call SMF_SendChannelConfig
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_SendConfig_Underflow
@@ -2369,7 +2369,7 @@ SMF_ProgramChange_SendConfig_Data:
 	call SMF_SendChannelConfig
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WritePatch_Underflow
@@ -2392,7 +2392,7 @@ SMF_ProgramChange_WritePatchByte:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WritePatch_Done_Underflow
@@ -2475,7 +2475,7 @@ SMF_CC_RPN_CalcTime:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_Underflow
@@ -2500,7 +2500,7 @@ SMF_CC_RPN_WriteCC101:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC101_Underflow
@@ -2522,7 +2522,7 @@ SMF_CC_RPN_WriteCC100:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC100_Underflow
@@ -2548,7 +2548,7 @@ SMF_CC_RPN_WriteCC6_DataEntry:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC6_Underflow
@@ -2571,7 +2571,7 @@ SMF_CC_RPN_WriteCC38_DataEntryLSB:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC38_Underflow
@@ -2603,7 +2603,7 @@ SMF_CC_PitchBendSens_CalcTime:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_Underflow
@@ -2628,7 +2628,7 @@ SMF_CC_PitchBendSens_WriteCC101:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC101_Underflow
@@ -2650,7 +2650,7 @@ SMF_CC_PitchBendSens_WriteCC100:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC100_Underflow
@@ -2671,7 +2671,7 @@ SMF_CC_PitchBendSens_WriteCC6:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC6_Underflow
@@ -2690,7 +2690,7 @@ SMF_CC_PitchBendSens_WriteCC38:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC38_Underflow
@@ -2722,7 +2722,7 @@ SMF_CC_Modulation_CalcTime:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_Underflow
@@ -2747,7 +2747,7 @@ SMF_CC_Modulation_WriteCC101:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC101_Underflow
@@ -2769,7 +2769,7 @@ SMF_CC_Modulation_WriteCC100:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC100_Underflow
@@ -2790,7 +2790,7 @@ SMF_CC_Modulation_WriteCC6:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC6_Underflow
@@ -2809,7 +2809,7 @@ SMF_CC_Modulation_WriteCC38:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC38_Underflow
@@ -2841,7 +2841,7 @@ SMF_CC_Pan_CalcTime:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Pan_Underflow
@@ -2864,7 +2864,7 @@ SMF_CC_Pan_WriteCC10:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Pan_WriteCC10_Underflow
@@ -3009,7 +3009,7 @@ FileOpen_AllocBuffer:
 	ld	(xsp+12), xhl
 	or	xhl, xhl
 	jr	nz, 5
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jrl	570
 FileOpen_CopyFilename:
 	ld	xwa, (xsp+24)
@@ -3041,7 +3041,7 @@ FileOpen_ScanForColon:
 	ld (xsp + 16), xwa
 	cp c, 0x3a
 	jr nz, FileOpen_NormalizeName
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	sub (xsp + 16), xwa
 	ld xwa, (xsp + 16)
 	stib_dsp 0xe0, 0x00
@@ -3110,7 +3110,7 @@ FileOpen_DeviceFound:
 
 FileOpen_ErrorNoFile:
 	ldw (0x01e53c:24), 0x0007
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl FileOpen_Return
 
 FileOpen_CheckPermission:
@@ -3124,7 +3124,7 @@ FileOpen_CheckPermission:
 	and a, c
 	jr z, FileOpen_FindFreeSlot
 	ldw (0x01e53c:24), 0x0002
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl FileOpen_Return
 
 FileOpen_FindFreeSlot:
@@ -3150,7 +3150,7 @@ FileOpen_SlotExhausted:
 	jr nz, FileOpen_InitSlot
 	ldw (0x01e53c:24), 0x0004
 	call SeqStep_FileNopB
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl FileOpen_Return
 
 FileOpen_InitSlot:
@@ -3175,9 +3175,9 @@ FileOpen_InitSlot:
 	ld bc, wa
 	sla bc, 2
 	lda xde, (0x0210b4:24)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xe8, 0xe4
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl FileOpen_Return
 
 FileOpen_PopulateStruct:
@@ -3224,7 +3224,7 @@ FileOpen_PopulateStruct:
 	ld bc, wa
 	sla bc, 2
 	lda xde, (0x0210b4:24)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xe8, 0xe4
 	ld a, l
 	exts wa
@@ -3233,7 +3233,7 @@ FileOpen_PopulateStruct:
 	push xwa
 	call SeqStep_FreeMemory
 	inc 4, xsp
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 FileOpen_ReturnHandle:
 	ld xhl, xiz
@@ -3371,7 +3371,7 @@ SeqStep_ByteBlockEF56:
 	nop
 	jr	nz, 11
 	ldw	(0x1e53c:24), 17
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr	53
 	.byte 0xb9, 0x04
 	dec	6, w
@@ -3380,7 +3380,7 @@ SeqStep_ByteBlockEF56:
 	push	sr
 	decf
 	nop
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr	37
 	ld	wa, (xsp+12)
 	dec	1, wa
@@ -3402,7 +3402,7 @@ SeqStep_ByteBlockEF56:
 	jr	z, 4
 	ld	xhl, xiz
 	jr	2
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop	xiz
 	ret
 
@@ -3541,7 +3541,7 @@ SeqStep_FileCloseReturn:
 	ld bc, wa
 	sla bc, 2
 	lda xde, (0x0210b4:24)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xe8, 0xe4
 	ld a, (xiz + 5)
 	extz wa
@@ -3930,7 +3930,7 @@ SeqStep_FileSeekError:
 	ld xwa, (xwa + 36)
 	call (xwa)
 	lda xsp, (xsp + 10)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ret
 
 SeqStep_FileSeekCleanup:
@@ -4119,7 +4119,7 @@ SeqStep_FileTellFinal:
 
 SeqStep_FileIoHelper:
 	pushw 0x0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push xwa
 	ld xwa, (xsp + 10)
 	push xwa
@@ -4179,8 +4179,8 @@ SeqStep_FileIoDone:
 SeqStep_FileIoReturn:
 	lda xwa, (0x02121a:24)
 	ld xix, xwa
-	lds32 xhl, 0
-	lds32 xiz, 0
+	ld xhl, 0:i3
+	ld xiz, 0:i3
 	ldw de, 0x8000
 	ldw (xsp + 4), 0x0
 	cpw (xsp + 4), 0xa
@@ -4248,7 +4248,7 @@ SeqStep_FileIoValidate:
 	ldw (xwa + 6), 0xa
 
 SeqStep_FileIoLoop:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl SeqStep_FileIoPopReturn
 
 SeqStep_FileIoLoopReturn:
@@ -4521,13 +4521,13 @@ SeqStep_FileBufferFinal:
 SeqStep_FileSectorRead:
 	ld xbc, (xsp + 4)
 	ld xde, (xbc)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xbc), xwa
 	ld l, (xde)
 	extz hl
 	ld xbc, (xsp + 4)
 	ld xde, (xbc)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xbc), xwa
 	ld a, (xde)
 	extz wa
@@ -4539,32 +4539,32 @@ SeqStep_FileSectorProcess:
 	ld xix, (xsp + 4)
 	ld xbc, xix
 	ld xde, (xbc)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xbc), xwa
 	ld a, (xde)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, a
 	ld xbc, xix
 	ld xde, (xbc)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xbc), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xde)
 	sll xwa, 8
 	add xhl, xwa
 	ld xbc, xix
 	ld xde, (xbc)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xbc), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xde)
 	sll xwa, 0
 	add xhl, xwa
 	ld xbc, xix
 	ld xde, (xbc)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xbc), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xde)
 	sll xwa, 8
 	sll xwa, 0
@@ -4574,14 +4574,14 @@ SeqStep_FileSectorProcess:
 SeqStep_FileSectorDone:
 	ld	xbc, (xsp+6)
 	ld	xde, (xbc)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xbc), xwa
 	ld	wa, (xsp+4)
 	ldb	w, 0
 	ld	(xde), a
 	ld	xbc, (xsp+6)
 	ld	xde, (xbc)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xbc), xwa
 	ld	wa, (xsp+4)
 	srl	wa, 8
@@ -4591,14 +4591,14 @@ SeqStep_FileSectorDone:
 	ld	xhl, (xsp+4)
 	ld	xde, xbc
 	ld	xix, (xde)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xde), xwa
 	ld	xwa, xhl
 	and	xwa, 255
 	ld	(xix), a
 	ld	xde, xbc
 	ld	xix, (xde)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xde), xwa
 	ld	xwa, xhl
 	srl	xwa, 8
@@ -4606,14 +4606,14 @@ SeqStep_FileSectorDone:
 	ld	(xix), a
 	ld	xde, xbc
 	ld	xix, (xde)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xde), xwa
 	ld	xwa, xhl
 	srl	xwa, 0
 	and	xwa, 255
 	ld	(xix), a
 	ld	xde, (xbc)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xbc), xwa
 	ld	xwa, xhl
 	srl	xwa, 8
@@ -4806,7 +4806,7 @@ SeqStep_FileSectorFinal:
 	cpw (xsp + 8), 0x1ff
 	jr nz, SeqStep_FileSectorStore
 	pushw 0x4
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push xwa
 	ld xwa, xiz
 	inc 1, xwa
@@ -4919,7 +4919,7 @@ SeqStep_FileSectorPopReturn:
 	cpw (XSP+0x04), 0x01ff
 	jr nz, .Lc_f4f968
 	pushw 0x0006
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push XWA
 	ld XWA,XIZ
 	inc 1,XWA
@@ -4957,7 +4957,7 @@ SeqStep_FileSectorPopReturn:
 	cpw (XSP+0x04), 0x01ff
 	jr nz, .Lc_f4f9da
 	pushw 0x0006
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push XWA
 	ld XWA,XIZ
 	inc 1,XWA
@@ -5151,7 +5151,7 @@ SeqByteBlock_EffectsSeqDotExt:
 	cp	(xwa), 46
 	jr	z, 8
 	ld	de, 7:i3
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xiz), xwa
 	jr	16
 SeqByteBlock_TechnichordCfgA:
@@ -5832,7 +5832,7 @@ SeqByteBlock_ChannelContainer:
 	push	xwa
 	calr	61342
 	inc	4, xsp
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (xsp+6)
 	ld	xbc, xwa
 	ld	xwa, (xsp+8)
@@ -5858,7 +5858,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xbc, (xsp+8)
 	ld	xbc, (xbc+32)
 	call	16712319
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (xsp+6)
 	sub	xhl, xwa
 	ld	xwa, (xsp+26)
@@ -5972,7 +5972,7 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
 	pushw	40
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
@@ -6045,7 +6045,7 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
 	ld	xbc, (xiz+34)
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xbc+12), xwa
 	ld	xwa, (xiz+34)
 	.byte 0x98	; v10 does not spell this byte either
@@ -6306,7 +6306,7 @@ SeqByteBlock_ChannelContainer:
 	ldw	(xsp+18), 0
 	ld	iz, 1:i3
 	ld	xwa, (xsp+10)
-	lds32	xde, 1
+	ld	xde, 1:i3
 	add	(xwa+22), xde
 	djnz16	iz, -68
 	ld	xwa, (xsp+10)
@@ -6321,7 +6321,7 @@ SeqByteBlock_ChannelContainer:
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
 	ld	xwa, (xsp+10)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
 	.byte 0x9f	; v10 does not spell this byte either
 	ccf
@@ -6576,7 +6576,7 @@ SeqChan_InitChannelState:
 	.byte 0xe8	; v10 does not spell this byte either
 	nop
 	decf
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+16), xwa
 	.byte 0xbf	; v10 does not spell this byte either
 	ei	2
@@ -6609,7 +6609,7 @@ SeqChan_InitChannelState:
 	ldw	(xsp+20), 0
 	ld	iz, 1:i3
 	ld	xwa, (xsp+12)
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	add	(xwa+22), xbc
 	sub	iz, 1
 	jrl	nz, -144
@@ -6637,7 +6637,7 @@ SeqChan_InitChannelState:
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
 	ld	xwa, (xsp+12)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
 	.byte 0x9f	; v10 does not spell this byte either
 	push_a
@@ -6764,7 +6764,7 @@ SeqChan_TraverseAndProcess:
 	ld	xwa, (xwa+34)
 	.byte 0x88, 0x16, 0x3c, 0xe7
 	ld	xwa, (xsp+12)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
 	ld	xwa, (xsp+12)
 	ld	xbc, (xsp+16)
@@ -6829,7 +6829,7 @@ SeqChan_ReadNextFromLoop:
 	call (xwa)
 	ld	wa, (xiz+69)
 	ld	(xsp+39), wa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+41), xwa
 	ld	xbc, (xsp+18)
 	ld	xwa, 32
@@ -6851,7 +6851,7 @@ SeqChan_ReadNextFromLoop:
 	.byte 0xb8, 0x16, 0xb9
 	ld	xwa, (xiz+34)
 	.byte 0xb8, 0x16, 0xb3
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xiz+71), xwa
 	ld	(xiz+64), 16
 	.byte 0xbe, 0x03, 0xbf
@@ -6875,7 +6875,7 @@ SeqChan_WritePatchData:
 	ld	bc, wa
 	sla	bc, 2
 	lda	xde, (0x210b4:24)
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	st_rrl xwa, xde, bc
 	ld xwa, xiz
 	push	xwa
@@ -6902,7 +6902,7 @@ SeqChan_WriteExtendedPatch:
 	jr	z, 56
 	ldw	hl, 0xffff
 	jr	80
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	add	(xsp+14), xwa
 	ld	xwa, (xsp+14)
 	ld	xbc, (xwa-4)
@@ -7086,7 +7086,7 @@ SeqStep_ParseVariableHeader:
 	ret
 
 SeqStep_ParseHeaderContinue:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push xwa
 	pushw 0x0
 	pushw 0x0
@@ -8509,7 +8509,7 @@ GetVolumeLabel:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GetVolumeLabel_JumpTable:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jrl	155
 
 FileIO_ReadVolumeLabelEntry:
@@ -8522,7 +8522,7 @@ FileIO_ReadVolumeLabelEntry:
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, GetVolumeLabel_ReadDir
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr GetVolumeLabel_Return
 
 GetVolumeLabel_ReadDir:
@@ -8577,7 +8577,7 @@ GetVolumeLabel_NotFound:
 	push xiz
 	call FileClose
 	inc 4, xsp
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 GetVolumeLabel_Return:
 	pop xiz
@@ -8666,7 +8666,7 @@ FileIO_ParseLoop_AppendSlash:
 	inc	1, xwa
 	ld	xhl, xwa
 FileIO_ParseLoop_Advance:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xiz), xwa
 
 FileIO_ParseLoop_Test:
@@ -9255,7 +9255,7 @@ TaskBuf_EmptyAndReturn:
 
 TaskBuf_ReadAndDecrement:
 	ld xbc, (0x023586:24)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (0x023586:24), xwa
 	ld a, (xbc)
 	ldb_erp A, 0xf8

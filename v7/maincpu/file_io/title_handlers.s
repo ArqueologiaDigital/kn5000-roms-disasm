@@ -21,7 +21,7 @@ LoadTtlJgFunc:
 	calr FileIO_DiskEventDispatch
 
 LoadTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveTtlJgFunc:
@@ -31,7 +31,7 @@ SaveTtlJgFunc:
 	calr FileIO_GetDiskCapacity
 
 SaveTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveSmfTtlJgFunc:
@@ -41,13 +41,13 @@ SaveSmfTtlJgFunc:
 	calr FileIO_GetDiskCapacity
 
 SaveSmfTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DirectPlayTtlJgFunc:
 	cp xbc, 0x1c00007
 	call z, (FileIO_DetectFileTypeAndPost:24)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SongMedleyTtlJgFunc:
@@ -57,7 +57,7 @@ SongMedleyTtlJgFunc:
 	calr FileIO_GetDiskCapacity
 
 SongMedleyTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SetupFlashFunc:
@@ -79,7 +79,7 @@ SetupFlash_HandleLoadEvent:
 	call Audio_DispatchCommand
 
 SetupFlash_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 FmmUtilityTitleFunc:
 	cp	xbc, 29360147
@@ -93,7 +93,7 @@ FmmUtilityTitleFunc:
 	calr	-1702
 	ld	xwa, 8060947
 	ld	xbc, 31784965
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xc0, 0x7e
 	cpw	(33892:16), 0
@@ -132,25 +132,25 @@ FmmUtility_CheckCapacity:
 	jrl	z, 189
 	ld	xwa, 8060947
 	ld	xbc, 31784966
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	ldw	wa, 124
 	jr	87
 FmmUtility_HandleCancel:
 	ld	xwa, 8060947
 	ld	xbc, 31784966
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32448:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 0
 	ldw	wa, 238
@@ -158,7 +158,7 @@ FmmUtility_HandleCancel:
 FmmUtility_HandleError:
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7d
 
@@ -170,18 +170,18 @@ FmmUtility_HandleSuccess:
 	calr	63480
 	ld	xwa, 8060947
 	ld	xbc, 31784966
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32448:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 2
 	ldw	wa, 238
@@ -192,11 +192,11 @@ FmmUtility_ShowStatus:
 FmmUtility_ContinueWait:
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jr FmmUtility_Return
 
@@ -204,7 +204,7 @@ FmmUtility_HandleAbort:
 	calr CancelOperationCleanup
 
 FmmUtility_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 FmmSmfUtilityTitleFunc:
 	cp	xbc, 29360147
@@ -218,7 +218,7 @@ FmmSmfUtilityTitleFunc:
 	calr	-2101
 	ld	xwa, 8060970
 	ld	xbc, 31784965
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xc2, 0x7e
 	cpw	(33892:16), 0
@@ -257,25 +257,25 @@ FmmSmfUtility_CheckCapacity:
 	jrl	z, 189
 	ld	xwa, 8060970
 	ld	xbc, 31784966
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	ldw	wa, 123
 	jr	87
 FmmSmfUtility_HandleCancel:
 	ld	xwa, 8060970
 	ld	xbc, 31784966
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32450:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 0
 	ldw	wa, 238
@@ -283,7 +283,7 @@ FmmSmfUtility_HandleCancel:
 FmmSmfUtility_HandleError:
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7d
 
@@ -295,18 +295,18 @@ FmmSmfUtility_HandleSuccess:
 	calr	63081
 	ld	xwa, 8060970
 	ld	xbc, 31784966
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423418
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32450:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 2
 	ldw	wa, 238
@@ -317,11 +317,11 @@ FmmSmfUtility_ShowStatus:
 FmmSmfUtility_ContinueWait:
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jr FmmSmfUtility_Return
 
@@ -329,6 +329,6 @@ FmmSmfUtility_HandleAbort:
 	calr CancelOperationCleanup
 
 FmmSmfUtility_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 

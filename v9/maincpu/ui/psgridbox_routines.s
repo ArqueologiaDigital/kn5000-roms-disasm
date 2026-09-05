@@ -56,7 +56,7 @@ PsGridBox_Close:
 	call Free
 	inc 4, xsp
 	ld xbc, (xiz + 50)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc), xwa
 
 PsGridBox_Close_FreeRows:
@@ -69,7 +69,7 @@ PsGridBox_Close_FreeRows:
 	call Free
 	inc 4, xsp
 	ld xbc, (xiz + 54)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc), xwa
 
 PsGridBox_Close_FreeRowAlt:
@@ -82,11 +82,11 @@ PsGridBox_Close_FreeRowAlt:
 	call Free
 	inc 4, xsp
 	ld xbc, (xiz + 58)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc), xwa
 
 PsGridBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl PsGridBox_Return
 
 PsGridBox_ShowHide:
@@ -386,7 +386,7 @@ PsGridBox_Paint:
 	ld xiz, xhl
 	ld XWA, (xsp + 0x014e)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 42)
 	ld de, (xwa)
@@ -1130,7 +1130,7 @@ PsGridBox_DispatchEvent:
 	sub wa, de
 	cp wa, (xhl + 38)
 	jrl nc, PsGridBox_ReturnZero
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr PsGridBox_Return
 
 PsGridBox_Default:

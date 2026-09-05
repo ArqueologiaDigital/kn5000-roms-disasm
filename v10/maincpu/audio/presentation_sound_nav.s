@@ -66,7 +66,7 @@ GroupBoxProc_SSFItemLoop:
 	lda xde, (xsp + 18)
 	ld (xde + 4), hl
 	ldw (xde + 6), 0x0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xde + 8), xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001c
@@ -271,7 +271,7 @@ GroupBox_NavUpDown:
 	call InitializeTimer
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1e000b4
-	lds32 xde, 0
+	ld xde, 0:i3
 
 GroupBox_NavDispatch:
 	call SendEvent
@@ -330,7 +330,7 @@ GroupBox_DisableDisplay:
 	call SetNeedUpdate
 
 GroupBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr GroupBox_Epilogue
 
 GroupBox_ForwardToBoxProc:
@@ -520,7 +520,7 @@ Screen_Init:
 	call GetCurrentTarget
 	ld xwa, xhl
 	ld xbc, 0x1e0004b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0xffffffff
 	jr nz, Screen_Init_RegisterChild
@@ -574,13 +574,13 @@ Screen_Init_SetWall:
 	call nz, (SleepMainTask:24)
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000b1
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	calr SetWallPaper
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000b2
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	calr SetWallColor
@@ -609,7 +609,7 @@ Screen_Init_SetWall:
 	call SendEvent
 
 Screen_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl Screen_Return
 
 Screen_Close:
@@ -665,7 +665,7 @@ Screen_OK:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_OK_NavUp
@@ -681,12 +681,12 @@ Screen_OK_NavUp:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00079
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 
 Screen_OK_PostAndDispatch:
 	call SendEvent
@@ -887,7 +887,7 @@ UI_ChangeWallPalette_Jump:
 IvScreenProc:
 	cp xbc, 0x1c0000d
 	jrl nz, ScreenProc
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 TtlScreenProc:
@@ -925,7 +925,7 @@ TtlScreen_PaintHandler:
 	ld xbc, (xhl + 38)
 	ld de, 0:i3
 	calr DrawTitleBar
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 TtlScreen_Return:
 	pop xiz
@@ -968,11 +968,11 @@ DrawTitleBar_CalcLayout:
 	add (xwa), iz
 	lda xbc, (xsp + 12)
 	calr GetBoxCenter
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld (xsp + 4), xwa
 	ld xiz, (xsp + 52)
 	ld xwa, xiz
-	lds32 xbc, 4
+	ld xbc, 4:i3
 	call CalcTotalWidth
 	ld (xsp + 8), hl
 	ld e, (xsp + 40)
@@ -1005,10 +1005,10 @@ DrawTitleBar_CalcLayout:
 	divs wa, 0x2
 	cp de, wa
 	jr le, DrawTitleBar_AdjustLeft
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 4), xwa
 	ld xwa, xiz
-	lds32 xbc, 1
+	ld xbc, 1:i3
 	call CalcTotalWidth
 	ld (xsp + 8), hl
 	lda xbc, (xsp + 12)
@@ -1032,10 +1032,10 @@ DrawTitleBar_AdjustLeft:
 	jr StringCenter_Entry
 
 DrawTitleBar_ShrinkFont:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 4), xwa
 	ld xwa, xiz
-	lds32 xbc, 1
+	ld xbc, 1:i3
 	call CalcTotalWidth
 	ld (xsp + 8), hl
 
@@ -1051,7 +1051,7 @@ StringCenter_Entry:
 	jr StringDraw_JoinPoint
 
 DrawTitleBar_LeftJustify:
-	lds32 xde, 4
+	ld xde, 4:i3
 	push xde
 	pushw 0xff
 	pushw 0xf7
@@ -1060,7 +1060,7 @@ DrawTitleBar_LeftJustify:
 	jr StringDraw_JoinPoint
 
 DrawTitleBar_RightJustify:
-	lds32 xde, 4
+	ld xde, 4:i3
 	push xde
 	pushw 0xff
 	pushw 0xf7
@@ -1146,7 +1146,7 @@ DirmdEmu_CaseC:
 	call GetTitleOld
 	ld xwa, xhl
 	ld xbc, 0x1e00032
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
 	call SleepMainTask
@@ -1173,7 +1173,7 @@ DirmdEmu_CaseC:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
 	call SleepMainTask
@@ -1192,7 +1192,7 @@ IvDirmd_ForwardToScreen:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
 	call SleepMainTask
@@ -1203,7 +1203,7 @@ IvDirmd_ForwardToScreen:
 	call WakeUpMainTask
 
 TaskWake_ZeroReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr IvDirmd_Epilogue
 	ld xwa, (xsp + 4)
 	cp xwa, 0xff
@@ -1211,7 +1211,7 @@ TaskWake_ZeroReturn:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
 	call SleepMainTask
@@ -1424,7 +1424,7 @@ DirmdEmu_ClearAllFlags:
 	ld (0xe3e2:16), 0
 	ld (0xe3e4:16), 255
 	ld (0xe3e6:16), 255
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -1491,20 +1491,20 @@ WindowProc_EventDispatch:
 	jr	z, 14
 	ld	xwa, (xsp+24)
 	ld	xbc, 0x01c00002
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	call	GetCurrentTarget
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 0x01e0004b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	cp	xhl, 0xffffffff
 	jr	z, 23
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 0x01e0004b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	cp	xhl, 0xffffffff
 	jr	nz, -23
@@ -1785,7 +1785,7 @@ WindowProc_RestoreTarget:
 	call SetCurrentTarget
 
 AcNaming_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 WindowProc_Epilogue:
 	pop xiz
@@ -1856,7 +1856,7 @@ AcNaming_InitScrollState:
 	ldw (0x0274da:24), 0x0000
 	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e0007c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld (0x0274d6:24), hl
 	cp hl, 0x20
@@ -1866,7 +1866,7 @@ AcNaming_InitScrollState:
 AcNaming_QueryCharSet:
 	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e00084
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld (0x0274e2:24), hl
 	ld wa, hl

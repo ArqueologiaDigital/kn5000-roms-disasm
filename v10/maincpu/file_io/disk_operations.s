@@ -142,11 +142,11 @@ FCopy_HandleCopyContext:
 	jr z, FCopy_CopyConfirm_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 FCopy_DispatchFA9D58:
 	call ApPostEvent
@@ -155,7 +155,7 @@ FCopy_DispatchFA9D58:
 FCopy_CopyConfirm_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -172,17 +172,17 @@ FCopy_CopyConfirm_Execute:
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x7b
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jr FCopy_NotifyComplete
@@ -192,7 +192,7 @@ FCopy_CopyExecute:
 	jr nz, FCopy_Return
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -209,17 +209,17 @@ FCopy_CopyExecute:
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x7b
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 
@@ -227,7 +227,7 @@ FCopy_NotifyComplete:
 	call SoundCtrl_SendCommand
 
 FCopy_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -308,7 +308,7 @@ FRename_HandleApply:
 	call FileIO_CopyString
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -323,13 +323,13 @@ FRename_HandleApply:
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 FRename_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -411,7 +411,7 @@ FRenameSmf_HandleApply:
 	call FileIO_BuildFilePath
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -426,13 +426,13 @@ FRenameSmf_HandleApply:
 	ld (0x8504:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 FRenameSmf_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -468,7 +468,7 @@ FmmFmt_InitPhase_DriveType23:
 	ld (0x7f68:16), a
 	ld xwa, 0x7b0036
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x84fe:16), 0
 	jr FmmFmt_InitPhase_SetActive
@@ -476,7 +476,7 @@ FmmFmt_InitPhase_DriveType23:
 FmmFmt_InitPhase_OtherDrive:
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x84fe:16), 2
 
@@ -507,7 +507,7 @@ FmmFmt_HandleProgress:
 	jrl nz, FmmFmt_ExecutePhase2
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -519,13 +519,13 @@ FmmFmt_HandleProgress:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	cp iz, 0:i3
 	jr ge, FmmFmt_FormatSuccess
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f6a:16)
 	extz wa
@@ -533,7 +533,7 @@ FmmFmt_HandleProgress:
 	ld (0x7f6c:16), 0
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, iz
 	ldw bc, 0x8
@@ -546,11 +546,11 @@ FmmFmt_HandleProgress:
 FmmFmt_FormatSuccess:
 	ld xwa, 0x7b0036
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0x7b0031
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x84fe:16), 1
 	jr FmmFmt_Return
@@ -561,11 +561,11 @@ FmmFmt_ExecutePhase2:
 	ld (0x7f68:16), 3
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0x7b0036
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr FmmFmt_DispatchAndNotify
 
 FmmFmt_HandleAbort:
@@ -582,11 +582,11 @@ FmmFmt_AbortPhase2:
 	ld (0x7f68:16), 2
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0x7b0036
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 FmmFmt_DispatchAndNotify:
 	call ApPostEvent
@@ -600,7 +600,7 @@ FmmFmt_NotifyComplete:
 	ld (0x84fe:16), 0
 
 FmmFmt_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -612,7 +612,7 @@ UtilityTtlJgFunc:
 	calr FileIO_DiskEventDispatch
 
 UtilTtlJg_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FmmLoadTitleFunc:
@@ -633,7 +633,7 @@ FmmLoadTitleFunc:
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ldmm8 0x7f6e, 0x8d37
 	cpw (0x8500:16), 0
@@ -675,7 +675,7 @@ FmmLoadTtl_CheckSmfHandle:
 	jrl z, FmmLoadTtl_LoadSlots
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x64
 	jrl FmmLoadTtl_PlaySound
@@ -683,18 +683,18 @@ FmmLoadTtl_CheckSmfHandle:
 FmmLoadTtl_StateCancelLoad:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f6e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
 	ldw wa, 0xee
@@ -703,7 +703,7 @@ FmmLoadTtl_StateCancelLoad:
 FmmLoadTtl_StateIdle:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	jrl FmmLoadTtl_PlaySound
@@ -711,19 +711,19 @@ FmmLoadTtl_StateIdle:
 FmmLoadTtl_StateSuccess:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	calr ResetProgressIndication
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f6e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
 	ldw wa, 0xee
@@ -735,11 +735,11 @@ FmmLoadTtl_NotifyComplete:
 FmmLoadTtl_LoadSlots:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x89fc:16), 0
 	ld (0x89fe:16), 0
@@ -778,7 +778,7 @@ FmmLoadTtl_HandleCancelOp:
 	calr CancelOperationCleanup
 	ld xwa, 0x610001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	jr FmmLoadTtl_Return
 
@@ -797,7 +797,7 @@ FmmLoadTtl_PlaySound:
 	call UI_PostModeChangeEvent
 
 FmmLoadTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -816,7 +816,7 @@ FmmSaveTitleFunc:
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8502:16), 0
 	jr ge, FmmSaveTtl_CheckFont
@@ -850,18 +850,18 @@ FmmSaveTtl_SlotLoop:
 FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr FmmSaveTtl_DispatchAndReturn
 
 FmmSaveTtl_HandleCancel:
 	calr CancelOperationCleanup
 	ld xwa, 0x670001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 
 FmmSaveTtl_DispatchAndReturn:
 	call ApPostEvent
@@ -874,7 +874,7 @@ FmmSaveTtl_HandleOk:
 	call UI_PostModeChangeEvent
 
 FmmSaveTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -967,7 +967,7 @@ DiskName_HandleApply:
 	call UI_PostModeChangeEvent
 
 DiskName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -1008,7 +1008,7 @@ DiskInfo_ResetCapacity:
 	calr ResetProgressIndication
 
 DiskInfo_ZeroCapacity:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	ld (xsp + 4), xwa
 
@@ -1028,7 +1028,7 @@ DiskInfo_ComputePercent:
 	jr DiskInfo_RenderStrings
 
 DiskInfo_ZeroPercent:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 
 DiskInfo_RenderStrings:
@@ -1078,7 +1078,7 @@ DiskInfo_RenderStrings:
 	call ApPostEvent
 
 DiskInfo_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -1134,7 +1134,7 @@ SongName_SendDisplay:
 	call ApPostEvent
 
 SongName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 8, xsp
 	ret
@@ -1169,7 +1169,7 @@ SaveFileNum_SendDisplay:
 	call ApPostEvent
 
 SaveFileNum_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret
@@ -1254,7 +1254,7 @@ SaveFileName_HandleApply:
 	call FileIO_GetRecordByType_Lookup
 
 SaveFileName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -1290,7 +1290,7 @@ CurFileName_SendDisplay:
 	call ApPostEvent
 
 CurFileName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret

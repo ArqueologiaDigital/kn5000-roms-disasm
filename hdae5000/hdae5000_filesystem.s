@@ -384,23 +384,23 @@ HDAE5000_FileLBNNameCheck:
 .LFS_75d1:
 	ld xhl, (xsp + 0x04)                    ; ld XHL,(XSP+0x04)
 	jr t, .LFS_75f7                        ; [68 21] jr T,0x2875f7
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_75f7                        ; [68 1d] jr T,0x2875f7
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_75f7                        ; [68 19] jr T,0x2875f7
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_75f7                        ; [68 15] jr T,0x2875f7
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_75f7                        ; [68 11] jr T,0x2875f7
 	lda xhl, (0x22aa57:24)
 	jr t, .LFS_75f7                        ; [68 0a] jr T,0x2875f7
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_75f7                        ; [68 06] jr T,0x2875f7
 .LFS_75f1:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_75f7                        ; [68 02] jr T,0x2875f7
 .LFS_75f5:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_75f7:
 	pop xiz                                 ; pop XIZ
 	inc 4, xsp                              ; inc 4,XSP
@@ -448,35 +448,35 @@ HDAE5000_LBNLswBitCheck:
 .LFS_7671:
 	ld	xhl, xiz
 	jrl t, .LFS_7703                       ; [78 8d 00] jrl T,0x287703
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7703                       ; [78 88 00] jrl T,0x287703
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7703                       ; [78 83 00] jrl T,0x287703
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7697                       ; [6e 0e] jr NZ,0x287697
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA4E:24), 0
 	jr nz, .LFS_7699                       ; [6e 06] jr NZ,0x287699
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7699                        ; [68 02] jr T,0x287699
 .LFS_7697:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7699:
 	jr t, .LFS_7703                        ; [68 68] jr T,0x287703
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_76b2                       ; [6e 0e] jr NZ,0x2876b2
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA4E:24), 0
 	jr nz, .LFS_76b4                       ; [6e 06] jr NZ,0x2876b4
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_76b4                        ; [68 02] jr T,0x2876b4
 .LFS_76b2:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_76b4:
 	jr t, .LFS_7703                        ; [68 4d] jr T,0x287703
 	lda xhl, (0x22aa4e:24)
 	jr t, .LFS_7703                        ; [68 46] jr T,0x287703
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7703                        ; [68 42] jr T,0x287703
 .LFS_76c1:
 	cpw	(0x22AA5C:24), 5
@@ -497,10 +497,10 @@ HDAE5000_LBNLswBitCheck:
 	ldw	de, 0xffff
 	calr	0xc2cf
 .LFS_76fd:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7703                        ; [68 02] jr T,0x287703
 .LFS_7701:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7703:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -547,35 +547,35 @@ HDAE5000_LBNPmtBitCheck:
 .LFS_777b:
 	ld	xhl, xiz
 	jrl t, .LFS_780d                       ; [78 8d 00] jrl T,0x28780d
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_780d                       ; [78 88 00] jrl T,0x28780d
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_780d                       ; [78 83 00] jrl T,0x28780d
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_77a1                       ; [6e 0e] jr NZ,0x2877a1
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA4F:24), 0
 	jr nz, .LFS_77a3                       ; [6e 06] jr NZ,0x2877a3
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_77a3                        ; [68 02] jr T,0x2877a3
 .LFS_77a1:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_77a3:
 	jr t, .LFS_780d                        ; [68 68] jr T,0x28780d
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_77bc                       ; [6e 0e] jr NZ,0x2877bc
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA4F:24), 0
 	jr nz, .LFS_77be                       ; [6e 06] jr NZ,0x2877be
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_77be                        ; [68 02] jr T,0x2877be
 .LFS_77bc:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_77be:
 	jr t, .LFS_780d                        ; [68 4d] jr T,0x28780d
 	lda xhl, (0x22aa4f:24)
 	jr t, .LFS_780d                        ; [68 46] jr T,0x28780d
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_780d                        ; [68 42] jr T,0x28780d
 .LFS_77cb:
 	cpw	(0x22AA5C:24), 5
@@ -596,10 +596,10 @@ HDAE5000_LBNPmtBitCheck:
 	ldw	de, 0xffff
 	calr	0xc1c5
 .LFS_7807:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_780d                        ; [68 02] jr T,0x28780d
 .LFS_780b:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_780d:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -646,35 +646,35 @@ HDAE5000_LBNSqtBitCheck:
 .LFS_7885:
 	ld	xhl, xiz
 	jrl t, .LFS_7917                       ; [78 8d 00] jrl T,0x287917
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7917                       ; [78 88 00] jrl T,0x287917
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7917                       ; [78 83 00] jrl T,0x287917
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_78ab                       ; [6e 0e] jr NZ,0x2878ab
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA50:24), 0
 	jr nz, .LFS_78ad                       ; [6e 06] jr NZ,0x2878ad
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_78ad                        ; [68 02] jr T,0x2878ad
 .LFS_78ab:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_78ad:
 	jr t, .LFS_7917                        ; [68 68] jr T,0x287917
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_78c6                       ; [6e 0e] jr NZ,0x2878c6
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA50:24), 0
 	jr nz, .LFS_78c8                       ; [6e 06] jr NZ,0x2878c8
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_78c8                        ; [68 02] jr T,0x2878c8
 .LFS_78c6:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_78c8:
 	jr t, .LFS_7917                        ; [68 4d] jr T,0x287917
 	lda xhl, (0x22aa50:24)
 	jr t, .LFS_7917                        ; [68 46] jr T,0x287917
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7917                        ; [68 42] jr T,0x287917
 .LFS_78d5:
 	cpw	(0x22AA5C:24), 5
@@ -695,10 +695,10 @@ HDAE5000_LBNSqtBitCheck:
 	ldw	de, 0xffff
 	calr	0xc0bb
 .LFS_7911:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7917                        ; [68 02] jr T,0x287917
 .LFS_7915:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7917:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -745,35 +745,35 @@ HDAE5000_LBNCmpBitCheck:
 .LFS_798f:
 	ld	xhl, xiz
 	jrl t, .LFS_7a21                       ; [78 8d 00] jrl T,0x287a21
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7a21                       ; [78 88 00] jrl T,0x287a21
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7a21                       ; [78 83 00] jrl T,0x287a21
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_79b5                       ; [6e 0e] jr NZ,0x2879b5
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA51:24), 0
 	jr nz, .LFS_79b7                       ; [6e 06] jr NZ,0x2879b7
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_79b7                        ; [68 02] jr T,0x2879b7
 .LFS_79b5:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_79b7:
 	jr t, .LFS_7a21                        ; [68 68] jr T,0x287a21
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_79d0                       ; [6e 0e] jr NZ,0x2879d0
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA51:24), 0
 	jr nz, .LFS_79d2                       ; [6e 06] jr NZ,0x2879d2
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_79d2                        ; [68 02] jr T,0x2879d2
 .LFS_79d0:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_79d2:
 	jr t, .LFS_7a21                        ; [68 4d] jr T,0x287a21
 	lda xhl, (0x22aa51:24)
 	jr t, .LFS_7a21                        ; [68 46] jr T,0x287a21
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7a21                        ; [68 42] jr T,0x287a21
 .LFS_79df:
 	cpw	(0x22AA5C:24), 5
@@ -794,10 +794,10 @@ HDAE5000_LBNCmpBitCheck:
 	ldw	de, 0xffff
 	calr	0xbfb1
 .LFS_7a1b:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7a21                        ; [68 02] jr T,0x287a21
 .LFS_7a1f:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7a21:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -844,35 +844,35 @@ HDAE5000_LBNTmBitCheck:
 .LFS_7a99:
 	ld	xhl, xiz
 	jrl t, .LFS_7b2b                       ; [78 8d 00] jrl T,0x287b2b
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7b2b                       ; [78 88 00] jrl T,0x287b2b
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7b2b                       ; [78 83 00] jrl T,0x287b2b
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7abf                       ; [6e 0e] jr NZ,0x287abf
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA52:24), 0
 	jr nz, .LFS_7ac1                       ; [6e 06] jr NZ,0x287ac1
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7ac1                        ; [68 02] jr T,0x287ac1
 .LFS_7abf:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7ac1:
 	jr t, .LFS_7b2b                        ; [68 68] jr T,0x287b2b
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7ada                       ; [6e 0e] jr NZ,0x287ada
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA52:24), 0
 	jr nz, .LFS_7adc                       ; [6e 06] jr NZ,0x287adc
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7adc                        ; [68 02] jr T,0x287adc
 .LFS_7ada:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7adc:
 	jr t, .LFS_7b2b                        ; [68 4d] jr T,0x287b2b
 	lda xhl, (0x22aa52:24)
 	jr t, .LFS_7b2b                        ; [68 46] jr T,0x287b2b
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7b2b                        ; [68 42] jr T,0x287b2b
 .LFS_7ae9:
 	cpw	(0x22AA5C:24), 5
@@ -893,10 +893,10 @@ HDAE5000_LBNTmBitCheck:
 	ldw	de, 0xffff
 	calr	0xbea7
 .LFS_7b25:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7b2b                        ; [68 02] jr T,0x287b2b
 .LFS_7b29:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7b2b:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -943,35 +943,35 @@ HDAE5000_LBNMspBitCheck:
 .LFS_7ba3:
 	ld	xhl, xiz
 	jrl t, .LFS_7c35                       ; [78 8d 00] jrl T,0x287c35
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7c35                       ; [78 88 00] jrl T,0x287c35
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7c35                       ; [78 83 00] jrl T,0x287c35
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7bc9                       ; [6e 0e] jr NZ,0x287bc9
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA53:24), 0
 	jr nz, .LFS_7bcb                       ; [6e 06] jr NZ,0x287bcb
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7bcb                        ; [68 02] jr T,0x287bcb
 .LFS_7bc9:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7bcb:
 	jr t, .LFS_7c35                        ; [68 68] jr T,0x287c35
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7be4                       ; [6e 0e] jr NZ,0x287be4
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA53:24), 0
 	jr nz, .LFS_7be6                       ; [6e 06] jr NZ,0x287be6
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7be6                        ; [68 02] jr T,0x287be6
 .LFS_7be4:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7be6:
 	jr t, .LFS_7c35                        ; [68 4d] jr T,0x287c35
 	lda xhl, (0x22aa53:24)
 	jr t, .LFS_7c35                        ; [68 46] jr T,0x287c35
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7c35                        ; [68 42] jr T,0x287c35
 .LFS_7bf3:
 	cpw	(0x22AA5C:24), 5
@@ -992,10 +992,10 @@ HDAE5000_LBNMspBitCheck:
 	ldw	de, 0xffff
 	calr	0xbd9d
 .LFS_7c2f:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7c35                        ; [68 02] jr T,0x287c35
 .LFS_7c33:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7c35:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -1042,35 +1042,35 @@ HDAE5000_LBNRcmBitCheck:
 .LFS_7cad:
 	ld	xhl, xiz
 	jrl t, .LFS_7d3f                       ; [78 8d 00] jrl T,0x287d3f
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7d3f                       ; [78 88 00] jrl T,0x287d3f
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7d3f                       ; [78 83 00] jrl T,0x287d3f
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7cd3                       ; [6e 0e] jr NZ,0x287cd3
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA54:24), 0
 	jr nz, .LFS_7cd5                       ; [6e 06] jr NZ,0x287cd5
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7cd5                        ; [68 02] jr T,0x287cd5
 .LFS_7cd3:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7cd5:
 	jr t, .LFS_7d3f                        ; [68 68] jr T,0x287d3f
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7cee                       ; [6e 0e] jr NZ,0x287cee
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA54:24), 0
 	jr nz, .LFS_7cf0                       ; [6e 06] jr NZ,0x287cf0
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7cf0                        ; [68 02] jr T,0x287cf0
 .LFS_7cee:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7cf0:
 	jr t, .LFS_7d3f                        ; [68 4d] jr T,0x287d3f
 	lda xhl, (0x22aa54:24)
 	jr t, .LFS_7d3f                        ; [68 46] jr T,0x287d3f
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7d3f                        ; [68 42] jr T,0x287d3f
 .LFS_7cfd:
 	cpw	(0x22AA5C:24), 5
@@ -1091,10 +1091,10 @@ HDAE5000_LBNRcmBitCheck:
 	ldw	de, 0xffff
 	calr	0xbc93
 .LFS_7d39:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7d3f                        ; [68 02] jr T,0x287d3f
 .LFS_7d3d:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7d3f:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -1141,35 +1141,35 @@ HDAE5000_LBNMdBitCheck:
 .LFS_7db7:
 	ld	xhl, xiz
 	jrl t, .LFS_7e49                       ; [78 8d 00] jrl T,0x287e49
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7e49                       ; [78 88 00] jrl T,0x287e49
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7e49                       ; [78 83 00] jrl T,0x287e49
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7ddd                       ; [6e 0e] jr NZ,0x287ddd
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA55:24), 0
 	jr nz, .LFS_7ddf                       ; [6e 06] jr NZ,0x287ddf
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7ddf                        ; [68 02] jr T,0x287ddf
 .LFS_7ddd:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7ddf:
 	jr t, .LFS_7e49                        ; [68 68] jr T,0x287e49
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7df8                       ; [6e 0e] jr NZ,0x287df8
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA55:24), 0
 	jr nz, .LFS_7dfa                       ; [6e 06] jr NZ,0x287dfa
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7dfa                        ; [68 02] jr T,0x287dfa
 .LFS_7df8:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7dfa:
 	jr t, .LFS_7e49                        ; [68 4d] jr T,0x287e49
 	lda xhl, (0x22aa55:24)
 	jr t, .LFS_7e49                        ; [68 46] jr T,0x287e49
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7e49                        ; [68 42] jr T,0x287e49
 .LFS_7e07:
 	cpw	(0x22AA5C:24), 5
@@ -1190,10 +1190,10 @@ HDAE5000_LBNMdBitCheck:
 	ldw	de, 0xffff
 	calr	0xbb89
 .LFS_7e43:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7e49                        ; [68 02] jr T,0x287e49
 .LFS_7e47:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7e49:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -1238,35 +1238,35 @@ HDAE5000_LBNMdBitCheck:
 .LFS_7ec1:
 	ld	xhl, xiz
 	jrl t, .LFS_7f53                       ; [78 8d 00] jrl T,0x287f53
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7f53                       ; [78 88 00] jrl T,0x287f53
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFS_7f53                       ; [78 83 00] jrl T,0x287f53
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7ee7                       ; [6e 0e] jr NZ,0x287ee7
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	cp	(0x22AA56:24), 0
 	jr nz, .LFS_7ee9                       ; [6e 06] jr NZ,0x287ee9
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7ee9                        ; [68 02] jr T,0x287ee9
 .LFS_7ee7:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7ee9:
 	jr t, .LFS_7f53                        ; [68 68] jr T,0x287f53
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7f02                       ; [6e 0e] jr NZ,0x287f02
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	cp	(0x22AA56:24), 0
 	jr nz, .LFS_7f04                       ; [6e 06] jr NZ,0x287f04
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7f04                        ; [68 02] jr T,0x287f04
 .LFS_7f02:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7f04:
 	jr t, .LFS_7f53                        ; [68 4d] jr T,0x287f53
 	lda xhl, (0x22aa56:24)
 	jr t, .LFS_7f53                        ; [68 46] jr T,0x287f53
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr t, .LFS_7f53                        ; [68 42] jr T,0x287f53
 .LFS_7f11:
 	cpw	(0x22AA5C:24), 5
@@ -1287,10 +1287,10 @@ HDAE5000_LBNMdBitCheck:
 	ldw	de, 0xffff
 	calr	0xba7f
 .LFS_7f4d:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFS_7f53                        ; [68 02] jr T,0x287f53
 .LFS_7f51:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFS_7f53:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -1423,7 +1423,7 @@ HDAE5000_FlsNamingCheck:
 	jr z, .LFS_RdFSB__a_evt86
 	cp xbc, 0x01e0003a
 	jr z, .LFS_RdFSB__a_evt3a
-	lds32 xhl, 0			; unrecognized event → return 0
+	ld xhl, 0:i3			; unrecognized event → return 0
 	jrl t, .LFS_RdFSB__a_exit
 .LFS_RdFSB__a_evt3a:			; EVT 0x3A: Read tile — copy 16-byte tile to caller
 	pushw 0x0010                            ; size = 16 bytes (tile data)
@@ -1445,7 +1445,7 @@ HDAE5000_FlsNamingCheck:
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__a_exit
 .LFS_RdFSB__a_evt84:                           ; EVT 0x84: Acknowledge — no action needed
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl t, .LFS_RdFSB__a_exit
 .LFS_RdFSB__a_evt7c:                           ; EVT 0x7C: Query tile size → 16 bytes
 	ld xhl, 0x00000010
@@ -1506,7 +1506,7 @@ HDAE5000_FlsNamingCheck:
 	calr HDAE5000_Menu_Callback              ; update menu display
 	calr HDAE5000_FS_Read_FSB	; recursive call — refresh page
 .LFS_RdFSB__a_done:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LFS_RdFSB__a_exit:
 	pop xiz
 	ret
@@ -1529,7 +1529,7 @@ HDAE5000_FlsNamingCheck2:
 	jr z, .LFS_RdFSB__b_evt86
 	cp xbc, 0x01e0003a
 	jr z, .LFS_RdFSB__b_evt3a
-	lds32 xhl, 0			; unrecognized event → return 0
+	ld xhl, 0:i3			; unrecognized event → return 0
 	jrl t, .LFS_RdFSB__b_exit
 .LFS_RdFSB__b_evt3a:			; EVT 0x3A: Read tile — copy 16-byte tile to caller
 	pushw 0x0010
@@ -1551,7 +1551,7 @@ HDAE5000_FlsNamingCheck2:
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__b_exit
 .LFS_RdFSB__b_evt84:                           ; EVT 0x84: Acknowledge — no-op
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl t, .LFS_RdFSB__b_exit
 .LFS_RdFSB__b_evt7c:                           ; EVT 0x7C: Query tile size → 16 bytes
 	ld xhl, 0x00000010
@@ -1614,7 +1614,7 @@ HDAE5000_FlsNamingCheck2:
 	ld bc, 2:i3                                ; BC = sector count 2
 	calr HDAE5000_FS_Write_FSB               ; → write FSB to disk (save operation)
 .LFS_RdFSB__b_done:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LFS_RdFSB__b_exit:
 	pop xiz
 	ret
@@ -1925,7 +1925,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000d
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	ld	a, (xsp+32)
 	extz wa                                 ; extz WA
@@ -1936,7 +1936,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000d
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_8666:
 	popw iz                                 ; pop IZ
@@ -2008,7 +2008,7 @@ HDAE5000_SelectFlsScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f013a
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_881e                      ; [78 c2 00] jrl T,0x28881e
 .LFWF_875c:
@@ -2030,7 +2030,7 @@ HDAE5000_SelectFlsScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0134
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_881e                       ; [68 72] jr T,0x28881e
 .LFWF_87ac:
@@ -2063,7 +2063,7 @@ HDAE5000_SelectFlsScreen:
 	ld	xbc, 0x01ea0003
 	call	(xhl)
 .LFWF_881e:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
 	ret
 
@@ -2095,13 +2095,13 @@ HDAE5000_FlsLoadScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0148
 	ld	xbc, 0x01ea0002
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 84 03] jrl T,0x288c1a
 .LFWF_8896:
 	ld	xbc, 0x01ca0001
 	push xbc
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	push xbc
 	ld	xbc, xwa
 	ld	xwa, (0x23a1a2)
@@ -2169,7 +2169,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f02f0
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_897a:
 	cp	(xsp+8), 0x01
@@ -2233,7 +2233,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f02f0
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_8a50:
 	cp	(xsp+8), 0x01
@@ -2264,7 +2264,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 61 01] jrl T,0x288c1a
 .LFWF_8ab9:
@@ -2282,7 +2282,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0244
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 1b 01] jrl T,0x288c1a
 .LFWF_8aff:
@@ -2364,7 +2364,7 @@ HDAE5000_FlsLoadScreen:
 	ld	bc, 1:i3
 	calr	0xf67b
 .LFWF_8c1a:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
 	inc	6, xsp
 	ret
@@ -2383,7 +2383,7 @@ HDAE5000_FlsFileLoadSwCatch:
 	jr z, .LFWF_8c4b                       ; [66 0e] jr Z,0x288c4b
 	cp	xwa, 0x01e00085
 	jrl nz, .LFWF_8cd1                     ; [7e 8b 00] jrl NZ,0x288cd1
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFWF_8cea                      ; [78 9f 00] jrl T,0x288cea
 .LFWF_8c4b:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
@@ -2402,7 +2402,7 @@ HDAE5000_FlsFileLoadSwCatch:
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jr t, .LFWF_8cea                       ; [68 60] jr T,0x288cea
 .LFWF_8c8a:
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
@@ -2459,7 +2459,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0169
 	ld	xbc, 0x01ea0002
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 9a 02] jrl T,0x288fe9
 .LFWF_8d4f:
@@ -2485,7 +2485,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f022f
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 37 02] jrl T,0x288fe9
 .LFWF_8db2:
@@ -2494,7 +2494,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f020d
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 17 02] jrl T,0x288fe9
 .LFWF_8dd2:
@@ -2549,7 +2549,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f014e
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 75 01] jrl T,0x288fe9
 .LFWF_8e74:
@@ -2558,7 +2558,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f02c1
 	ld	xbc, 0x01c00001
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	(xhl)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
@@ -2575,7 +2575,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 15 01] jrl T,0x288fe9
 .LFWF_8ed4:
@@ -2584,7 +2584,7 @@ HDAE5000_FlsEditScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0297
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	ld	xwa, 0x007f0298
 	ld	xbc, 0x007f0163
@@ -2654,7 +2654,7 @@ HDAE5000_FlsEditScreen:
 	ld	bc, 1:i3
 	calr	0xf2ac
 .LFWF_8fe9:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
 	ret
 
@@ -2676,7 +2676,7 @@ HDAE5000_FlsDel1SwCatch:
 	call	(xix)
 	jrl t, .LFWF_90e8                      ; [78 c8 00] jrl T,0x2890e8
 .LFWF_9020:
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFWF_90e8                      ; [78 c3 00] jrl T,0x2890e8
 .LFWF_9025:
 	ld	xwa, xiz
@@ -2693,7 +2693,7 @@ HDAE5000_FlsDel1SwCatch:
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jrl t, .LFWF_90e8                      ; [78 8a 00] jrl T,0x2890e8
 .LFWF_905e:
 	ld	xwa, (0x23a1a2)
@@ -2722,7 +2722,7 @@ HDAE5000_FlsDel1SwCatch:
 	ld	xhl, (xwa + 0x0104)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_90e6                       ; [68 1d] jr T,0x2890e6
 .LFWF_90c9:
@@ -2731,10 +2731,10 @@ HDAE5000_FlsDel1SwCatch:
 	ld	xhl, (xwa + 0x0104)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_90e6:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFWF_90e8:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -2757,7 +2757,7 @@ HDAE5000_FlsDel2SwCatch:
 	call	(xix)
 	jrl t, .LFWF_91e5                      ; [78 c8 00] jrl T,0x2891e5
 .LFWF_911d:
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFWF_91e5                      ; [78 c3 00] jrl T,0x2891e5
 .LFWF_9122:
 	ld	xwa, xiz
@@ -2774,7 +2774,7 @@ HDAE5000_FlsDel2SwCatch:
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jrl t, .LFWF_91e5                      ; [78 8a 00] jrl T,0x2891e5
 .LFWF_915b:
 	ld	xwa, (0x23a1a2)
@@ -2803,7 +2803,7 @@ HDAE5000_FlsDel2SwCatch:
 	ld	xhl, (xwa + 0x0104)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_91e3                       ; [68 1d] jr T,0x2891e3
 .LFWF_91c6:
@@ -2812,10 +2812,10 @@ HDAE5000_FlsDel2SwCatch:
 	ld	xhl, (xwa + 0x0104)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_91e3:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFWF_91e5:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -2886,7 +2886,7 @@ HDAE5000_FlsDirSelScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0159
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_935a                       ; [68 7c] jr T,0x28935a
 .LFWF_92de:
@@ -2921,7 +2921,7 @@ HDAE5000_FlsDirSelScreen:
 	ld	xbc, 0x01ea0003
 	call	(xhl)
 .LFWF_935a:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
 	ret
 
@@ -2944,7 +2944,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f015c
 	ld	xbc, 0x01ea0002
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 7d 01] jrl T,0x28952a
 .LFWF_93ad:
@@ -2959,7 +2959,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f02c1
 	ld	xbc, 0x01c00001
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	(xhl)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
@@ -2983,7 +2983,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 e2 00] jrl T,0x28952a
 .LFWF_9448:
@@ -2992,7 +2992,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xhl, (xwa + 0x0124)
 	ld	xwa, 0x007f0204
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 c2 00] jrl T,0x28952a
 .LFWF_9468:
@@ -3054,7 +3054,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	bc, 1:i3
 	calr	0xa63e
 .LFWF_952a:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
 	ret
 
@@ -3076,7 +3076,7 @@ HDAE5000_FlsOverWrSwCatch:
 	call	(xix)
 	jrl t, .LFWF_9663                      ; [78 02 01] jrl T,0x289663
 .LFWF_9561:
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jrl t, .LFWF_9663                      ; [78 fd 00] jrl T,0x289663
 .LFWF_9566:
 	ld	xwa, xiz
@@ -3093,7 +3093,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jrl t, .LFWF_9663                      ; [78 c4 00] jrl T,0x289663
 .LFWF_959f:
 	ld	xwa, (0x23a1a2)
@@ -3116,7 +3116,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, 0x007f02c1
 	ld	xbc, 0x01c00001
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	(xhl)
 	calr	0x1c33
 	ld	wa, (0x23A096:24)
@@ -3135,7 +3135,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xhl, (xwa + 0x0104)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_9661                       ; [68 1d] jr T,0x289661
 .LFWF_9644:
@@ -3144,10 +3144,10 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xhl, (xwa + 0x0104)
 	ld	xwa, 0x007f0163
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_9661:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 .LFWF_9663:
 	pop xiz                                 ; pop XIZ
 	ret
@@ -3239,7 +3239,7 @@ HDAE5000_FS_Buffer_Setup:	; 0x289665 (548 bytes)
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23
 	ld xwa, 0x007f00d9			; 40 d9 00 7f 00
 	ld xbc, 0x01c0000d			; 41 0d 00 c0 01
-	lds32 xde, 0				; ea a8
+	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
 
 	; Register event 0x01C0000D (handler 2) — tail call via jp
@@ -3248,7 +3248,7 @@ HDAE5000_FS_Buffer_Setup:	; 0x289665 (548 bytes)
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23
 	ld xwa, 0x007f00d8			; 40 d8 00 7f 00
 	ld xbc, 0x01c0000d			; 41 0d 00 c0 01
-	lds32 xde, 0				; ea a8
+	ld xde, 0:i3				; ea a8
 	jp (xhl)				; b3 d8 — tail call
 
 ; --- Event handler sub-function ---
@@ -3306,7 +3306,7 @@ HDAE5000_CopyToHDScreen:
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23
 	ld xwa, 0x007f00e2			; 40 e2 00 7f 00
 	ld xbc, 0x01c00001			; 41 01 00 c0 01
-	lds32 xde, 0				; ea a8
+	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
 	jr t, .Lfbs_evt_done			; 68 xx
 
@@ -3317,7 +3317,7 @@ HDAE5000_CopyToHDScreen:
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23
 	ld xwa, 0x007f027a			; 40 7a 02 7f 00
 	ld xbc, 0x01c00001			; 41 01 00 c0 01
-	lds32 xde, 0				; ea a8
+	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
 	jr t, .Lfbs_evt_done			; 68 xx
 
@@ -3358,7 +3358,7 @@ HDAE5000_CopyToHDScreen:
 	calr HDAE5000_FS_Buffer_Setup		; 1e xx xx — self-call
 
 .Lfbs_evt_done:					; 0x289885
-	lds32 xhl, 0				; eb a8
+	ld xhl, 0:i3				; eb a8
 	popw iz                                 ; pop iz (compact 16-bit)
 	ret					; 0e
 
@@ -3673,7 +3673,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	ld xhl, (xwa + 0x0124)             ; XHL = (XWA+0x0124)
 	ld xwa, 0x007f0297
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	ld xwa, 0x007f0298
 	ld xbc, 0x007f00d2
@@ -3709,7 +3709,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	ld xhl, (xwa + 0x0124)
 	ld xwa, 0x007f02a3
 	ld xbc, 0x01c00001
-	lds32 xde, 3
+	ld xde, 3:i3
 	call (xhl)
 	ld xwa, 0x01ca0002
 	push xwa
@@ -3819,7 +3819,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xhl, (xwa + 0x0124)
 	ld xwa, 0x007f02b0
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	ld xwa, 0x01ca0002
 	push xwa
@@ -3858,7 +3858,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xhl, (xwa + 0x0124)
 	ld xwa, 0x007f02c1
 	ld xbc, 0x01c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call (xhl)
 	lda xwa, (0x22abb0:24)
 	ld de, (0x23a092:24)
@@ -3872,7 +3872,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xhl, (xwa + 0x0124)
 	ld xwa, 0x007f00d2
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	jrl t, .LFSD__hA_exit
 .LFSD__hA_cyl_fits:
@@ -3882,7 +3882,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xhl, (xwa + 0x0124)
 	ld xwa, 0x007f02a9
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	ld xwa, 0x01ca0002
 	push xwa
@@ -3926,7 +3926,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xhl, (xwa + 0x0124)
 	ld xwa, 0x007f017b
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	jr t, .LFSD__hA_exit
 .LFSD__hA_scroll_up:			; Event 0x01EA0001: scroll up
@@ -3961,7 +3961,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xbc, 0x01ea0003
 	call (xhl)
 .LFSD__hA_exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 	;
@@ -4000,7 +4000,7 @@ HDAE5000_CP_FD_DIRNAMECheck:
 	ld xhl, xiz
 	jrl t, .LFSD__hB_exit2
 .LFSD__hB_84:				; Event 0x01E00084
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl t, .LFSD__hB_exit2
 .LFSD__hB_7c:				; Event 0x01E0007C
 	ld xhl, 0x00000010
@@ -4063,7 +4063,7 @@ HDAE5000_CP_FD_DIRNAMECheck:
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 .LFSD__hB_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LFSD__hB_exit2:
 	pop xiz
 	ret
@@ -4084,7 +4084,7 @@ HDAE5000_WrConfirmEventCatch:
 	cp xwa, 0x01e00085
 	jrl nz, .LFSD__hC_default
 	; Event 0x01E00085
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jrl t, .LFSD__hC_exit
 .LFSD__hC_0d:				; Event 0x01C0000D: pass-through
 	ld xwa, (xsp + 0x08)
@@ -4103,7 +4103,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld_sril xhl, (xbc + 0x0100)
 	ld xbc, 0x01c0000f
 	call (xhl)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl t, .LFSD__hC_exit
 .LFSD__hC_key:				; Event 0x01C00007: key dispatch
 	ld xde, (xsp + 0x04)
@@ -4135,7 +4135,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld_sril xhl, (xwa + 0x0100)
 	ld xwa, 0x007f004e
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	pushw 0x0023
 	pushw 0xa04e
@@ -4156,7 +4156,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld xhl, (xwa + 0x0104)
 	ld xwa, 0x007f0018
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 .LFSD__hC_default:			; Default: pass-through to registered handler
 	ld xwa, (xsp + 0x08)
@@ -4298,7 +4298,7 @@ HDAE5000_DelOptSwEventCatch:
 	jr z, .LFS_EL__evt_0d
 	cp xwa, 0x01e00085		; event 0x01E00085?
 	jrl nz, .LFS_EL__exit		; no match → exit
-	lds32 xhl, 1			; XHL = 1
+	ld xhl, 1:i3			; XHL = 1
 	jrl t, .LFS_EL__epilogue
 .LFS_EL__evt_0d:			; handler for event 0x0D
 	ld xwa, (xsp + 0x08)		; restore XWA
@@ -4317,7 +4317,7 @@ HDAE5000_DelOptSwEventCatch:
 	ld_sril xhl, (xbc + 0x0100)             ; ld XHL, (XBC + 0x0100)
 	ld xbc, 0x01c0000f
 	call (xhl)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl t, .LFS_EL__epilogue
 .LFS_EL__evt_07:			; handler for event 0x07
 	ld xde, (xsp + 0x04)
@@ -4340,7 +4340,7 @@ HDAE5000_DelOptSwEventCatch:
 	ld xhl, (xwa + 0x0124)             ; ld XHL, (XWA + 0x0124)
 	ld xwa, 0x007f01fb
 	ld xbc, 0x01c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call (xhl)
 	jr t, .LFS_EL__exit
 .LFS_EL__case_0a:			; Case 0x0A: copy file
@@ -4446,28 +4446,28 @@ HDAE5000_DelOptNameCheck:
 	ld xhl, (xsp + 0x04)
 	jr t, .LDUO__hA_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hA_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hA_exit
 	; Case 3
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hA_exit
 	; Case 4
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hA_exit
 	; Case 5
 	lda xhl, (0x22aa57:24)
 	jr t, .LDUO__hA_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hA_exit
 .LDUO__hA_ev82:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hA_exit
 .LDUO__hA_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hA_exit:
 	pop xiz
 	inc 4, xsp
@@ -4507,38 +4507,38 @@ HDAE5000_DelLswEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hB_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hB_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hB_exit
 	; Case 3: conditional on (0x22abe8)
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abe8:24), 0x00
 	jr nz, .LDUO__hB_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hB_c3_nz:
 	jr t, .LDUO__hB_exit
 	; Case 4: conditional on (0x22abe8)
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abe8:24), 0x00
 	jr nz, .LDUO__hB_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hB_c4_nz:
 	jr t, .LDUO__hB_exit
 	; Case 5
 	lda xhl, (0x22abe8:24)
 	jr t, .LDUO__hB_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hB_exit
 .LDUO__hB_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hB_exit
 .LDUO__hB_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hB_exit:
 	pop xiz
 	ret
@@ -4577,38 +4577,38 @@ HDAE5000_DelPmtEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hC_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hC_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hC_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abe9:24), 0x00
 	jr nz, .LDUO__hC_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hC_c3_nz:
 	jr t, .LDUO__hC_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abe9:24), 0x00
 	jr nz, .LDUO__hC_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hC_c4_nz:
 	jr t, .LDUO__hC_exit
 	; Case 5
 	lda xhl, (0x22abe9:24)
 	jr t, .LDUO__hC_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hC_exit
 .LDUO__hC_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hC_exit
 .LDUO__hC_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hC_exit:
 	pop xiz
 	ret
@@ -4647,38 +4647,38 @@ HDAE5000_DelSqtEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hD_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hD_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hD_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abea:24), 0x00
 	jr nz, .LDUO__hD_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hD_c3_nz:
 	jr t, .LDUO__hD_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abea:24), 0x00
 	jr nz, .LDUO__hD_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hD_c4_nz:
 	jr t, .LDUO__hD_exit
 	; Case 5
 	lda xhl, (0x22abea:24)
 	jr t, .LDUO__hD_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hD_exit
 .LDUO__hD_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hD_exit
 .LDUO__hD_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hD_exit:
 	pop xiz
 	ret
@@ -4717,38 +4717,38 @@ HDAE5000_DelCmpEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hE_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hE_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hE_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abeb:24), 0x00
 	jr nz, .LDUO__hE_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hE_c3_nz:
 	jr t, .LDUO__hE_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abeb:24), 0x00
 	jr nz, .LDUO__hE_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hE_c4_nz:
 	jr t, .LDUO__hE_exit
 	; Case 5
 	lda xhl, (0x22abeb:24)
 	jr t, .LDUO__hE_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hE_exit
 .LDUO__hE_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hE_exit
 .LDUO__hE_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hE_exit:
 	pop xiz
 	ret
@@ -4787,38 +4787,38 @@ HDAE5000_DelTmEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hF_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hF_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hF_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abec:24), 0x00
 	jr nz, .LDUO__hF_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hF_c3_nz:
 	jr t, .LDUO__hF_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abec:24), 0x00
 	jr nz, .LDUO__hF_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hF_c4_nz:
 	jr t, .LDUO__hF_exit
 	; Case 5
 	lda xhl, (0x22abec:24)
 	jr t, .LDUO__hF_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hF_exit
 .LDUO__hF_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hF_exit
 .LDUO__hF_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hF_exit:
 	pop xiz
 	ret
@@ -4857,38 +4857,38 @@ HDAE5000_DelMspEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hG_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hG_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hG_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abed:24), 0x00
 	jr nz, .LDUO__hG_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hG_c3_nz:
 	jr t, .LDUO__hG_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abed:24), 0x00
 	jr nz, .LDUO__hG_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hG_c4_nz:
 	jr t, .LDUO__hG_exit
 	; Case 5
 	lda xhl, (0x22abed:24)
 	jr t, .LDUO__hG_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hG_exit
 .LDUO__hG_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hG_exit
 .LDUO__hG_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hG_exit:
 	pop xiz
 	ret
@@ -4927,38 +4927,38 @@ HDAE5000_DelRcmEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hH_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hH_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hH_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abee:24), 0x00
 	jr nz, .LDUO__hH_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hH_c3_nz:
 	jr t, .LDUO__hH_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abee:24), 0x00
 	jr nz, .LDUO__hH_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hH_c4_nz:
 	jr t, .LDUO__hH_exit
 	; Case 5
 	lda xhl, (0x22abee:24)
 	jr t, .LDUO__hH_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hH_exit
 .LDUO__hH_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hH_exit
 .LDUO__hH_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hH_exit:
 	pop xiz
 	ret
@@ -4997,38 +4997,38 @@ HDAE5000_DelMdEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hI_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hI_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hI_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abef:24), 0x00
 	jr nz, .LDUO__hI_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hI_c3_nz:
 	jr t, .LDUO__hI_exit
 	; Case 4
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	cp (0x22abef:24), 0x00
 	jr nz, .LDUO__hI_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hI_c4_nz:
 	jr t, .LDUO__hI_exit
 	; Case 5
 	lda xhl, (0x22abef:24)
 	jr t, .LDUO__hI_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hI_exit
 .LDUO__hI_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hI_exit
 .LDUO__hI_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hI_exit:
 	pop xiz
 	ret
@@ -5067,44 +5067,44 @@ HDAE5000_DelTlxEditCheck:
 	ld xhl, xiz
 	jr t, .LDUO__hJ_exit
 	; Case 1
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hJ_exit
 	; Case 2
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hJ_exit
 	; Case 3
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	cp (0x22abf0:24), 0x00
 	jr nz, .LDUO__hJ_c3_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hJ_c3_nz:
 	jr t, .LDUO__hJ_exit
 	; Case 4: extra comparison vs 0x01
 	cp (0x22abf0:24), 0x01
 	jr nz, .LDUO__hJ_c4_ne1
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	jr t, .LDUO__hJ_c4_chk
 .LDUO__hJ_c4_ne1:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 .LDUO__hJ_c4_chk:
 	cp (0x22abf0:24), 0x00
 	jr nz, .LDUO__hJ_c4_nz
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hJ_c4_nz:
 	jr t, .LDUO__hJ_exit
 	; Case 5
 	lda xhl, (0x22abf0:24)
 	jr t, .LDUO__hJ_exit
 	; Case 6
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr t, .LDUO__hJ_exit
 .LDUO__hJ_ev82:
 	lda xwa, (0x22abe6:24)
 	calr HDAE5000_HD_Buffer_Init
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr t, .LDUO__hJ_exit
 .LDUO__hJ_default:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 .LDUO__hJ_exit:
 	pop xiz
 	ret

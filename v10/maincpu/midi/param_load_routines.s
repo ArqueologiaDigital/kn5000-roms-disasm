@@ -20,7 +20,7 @@ ParaLoadOpt_AudioFlagCheck:
 	ld (0xbd36:16), a
 	ld xwa, 0x570006
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 
 ; ParaLoadOpt case A
@@ -32,7 +32,7 @@ ParaLoadOpt_CaseA:
 	ld (0x02475c:24), a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 
 ; ParaLoadOpt case B
@@ -44,7 +44,7 @@ ParaLoadOpt_CaseB:
 	ld (0x02475e:24), a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 
 ; ParaLoadOpt case C
@@ -74,57 +74,57 @@ ParaLoadOpt_DispatchTable_A:
 	ld	(0x024768:24), 0
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	201
 	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	180
 	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	159
 	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	138
 	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	118
 	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	98
 	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	78
 	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	58
 	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	38
 	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	18
 	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 
 MidiFunc_SendEvtReturnAlt:
@@ -143,7 +143,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	ld (0xbd36:16), a
 	ld xwa, 0x570011
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 
 ; ParaLoadOpt case D
@@ -157,7 +157,7 @@ ParaLoadOpt_CaseD:
 	ld (0x02475c:24), a
 	ld xwa, 0x57001b
 	ld xbc, 0x1e000a7
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 
 ; ParaLoadOpt case E
@@ -171,7 +171,7 @@ ParaLoadOpt_CaseE:
 	ld (0x02475e:24), a
 	ld xwa, 0x57001b
 	ld xbc, 0x1e000a7
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 
 ; ParaLoadOpt case F
@@ -201,57 +201,57 @@ ParaLoadOpt_DispatchTable_B:
 	ld	(0x024768:24), 0
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	201
 	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	180
 	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	159
 	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	138
 	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	118
 	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	98
 	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	78
 	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	58
 	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	38
 	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	18
 	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 
 MidiFunc_SendEventReturn:
@@ -261,11 +261,11 @@ MidiFunc_SendEventReturn:
 ParaLoadOpt_PostDualEvent:
 	ld	xwa, 0x570006
 	ld	xbc, 0x01c00002
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x570011
 	ld	xbc, 0x01c00002
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jp	ApPostEvent
 
 TtMdParaLoad:
@@ -287,7 +287,7 @@ TtMdParaLoad:
 	ldw (xwa), 0x1
 
 TtMdParaLoad_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcParaLoadOptGridBoxProc:
@@ -330,7 +330,7 @@ ParaLoadOpt_GridHandler:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -373,11 +373,11 @@ ParaLoadOpt_GridReturn:
 	jrl z, AccFunc_ReturnZeroJmp
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
@@ -401,7 +401,7 @@ ParaLoadOpt_GridReturn:
 	jr z, ParaLoadOpt_GridDelegateProc
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -459,7 +459,7 @@ ParaLoadOpt_GridDelegateProc:
 	jr z, ParaLoadOpt_GridDelegateProc_B
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -549,7 +549,7 @@ ParaLoadOpt_CallApFunc:
 	call ApFuncCall
 
 AccFunc_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ParaLoadOpt_GridCheck4
 
 ; ParaLoadOpt grid check case 3
@@ -607,7 +607,7 @@ ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
@@ -632,7 +632,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f6:24)
 	ld	(xwa), xbc
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	jrl	303
 	ld	xiy, UserMemory_ConfirmData
@@ -642,7 +642,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f7:24)
 	ld	(xwa), xbc
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	jrl	272
 	ld	xiy, UserMemory_ConfirmData
@@ -652,7 +652,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f8:24)
 	ld	(xwa), xbc
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	jrl	241
 	ld	xiy, UserMemory_ConfirmData
@@ -662,13 +662,13 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f9:24)
 	ld	(xwa), xbc
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	jrl	210
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
@@ -693,7 +693,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f6:24)
 	ld	(xwa), xbc
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
@@ -705,7 +705,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f7:24)
 	ld	(xwa), xbc
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
 	.byte 0xb8
@@ -718,7 +718,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f8:24)
 	ld	(xwa), xbc
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
 	.byte 0xb8
@@ -733,7 +733,7 @@ ParaLoadOpt_GridDispatch:
 	lda	xwa, (xsp+44)
 	lda	xbc, (0x0340f9:24)
 	ld	(xwa), xbc
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc

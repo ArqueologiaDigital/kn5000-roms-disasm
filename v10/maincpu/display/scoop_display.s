@@ -787,7 +787,7 @@ Display_PollAudioDone:
 Display_DeletePollEvent:
 	; --- XBC/XWA setup and call ---
 	ld xbc, 0x01c00007
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	call DeleteEvent
 	ret
 Display_CallSetupRoutine:
@@ -18196,7 +18196,7 @@ Scoop_EnvCalc_Handler1:
 	ldw	wa, 0x89e8
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	lds32	xwa, 6
+	ld	xwa, 6:i3
 	push	xwa
 	pushw	255
 	pushw	245
@@ -18319,17 +18319,17 @@ Scoop_GlideParam_End:
 	ldw_sri0 WA, (xsp + 0x0102)
 	stw_dri WA, 0xfd, 0x06, 0x01
 	lda xwa, (xsp + 2)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	call CalcTotalWidth
 	ldw_sri0 WA, (xsp + 0x0102)
 	add wa, hl
 	stw_dri WA, 0xfd, 0x0a, 0x01
 	ldw_sri0 WA, (xsp + 0x0104)
 	stw_dri WA, 0xfd, 0x08, 0x01
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	call GetCharDescent
 	ld iz, hl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	call GetCharHeight
 	ldw_sri0 WA, (xsp + 0x0104)
 	add wa, hl
@@ -18341,7 +18341,7 @@ Scoop_GlideParam_End:
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
 	ld xde, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push xwa
 	pushw 0xff
 	pushw 0xf5
@@ -18417,7 +18417,7 @@ Scoop_GlideParam_Data:
 	ldw	wa, 0x89e8
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	push	xwa
 	pushw	255
 	pushw	245
@@ -18489,7 +18489,7 @@ Scoop_GlideCalc_Handler0:
 	ldw	wa, 0x89e8
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	push	xwa
 	pushw	255
 	pushw	245
@@ -19457,7 +19457,7 @@ Scoop_EventLoop_12Entry_Alt_End:
 .macro RegObjTable ParamA, ParamB, ParamC, ParamD, ParamE
 	mri_d2 0xb7, 0x31
 	.if \ParamA <= 7
-	lds32 xwa, \ParamA
+	ld xwa, \ParamA:i3
 	.else
 	ld xwa, \ParamA
 	.endif
@@ -19480,7 +19480,7 @@ Scoop_EventLoop_12Entry_Alt_End:
 .macro RegObjTabl ParamA, ParamB, ParamC, ParamD, ParamE
 	mri_d2 0xb7, 0x31
 	.if \ParamA <= 7
-	lds32 xwa, \ParamA
+	ld xwa, \ParamA:i3
 	.else
 	ld xwa, \ParamA
 	.endif
@@ -19504,17 +19504,17 @@ Scoop_EventLoop_12Entry_Alt_End:
 	pushw \ParamBhi
 	pushw \ParamBlow
 	.if \ParamC <= 7
-	lds32 xwa, \ParamC
+	ld xwa, \ParamC:i3
 	.else
 	ld xwa, \ParamC
 	.endif
 	.if \ParamD <= 7
-	lds32 xbc, \ParamD
+	ld xbc, \ParamD:i3
 	.else
 	ld xbc, \ParamD
 	.endif
 	.if \ParamE <= 7
-	lds32 xde, \ParamE
+	ld xde, \ParamE:i3
 	.else
 	ld xde, \ParamE
 	.endif
@@ -19527,17 +19527,17 @@ Scoop_EventLoop_12Entry_Alt_End:
 	pushw \ParamBhi
 	pushw \ParamBlow
 	.if \ParamC <= 7
-	lds32 xwa, \ParamC
+	ld xwa, \ParamC:i3
 	.else
 	ld xwa, \ParamC
 	.endif
 	.if \ParamD <= 7
-	lds32 xbc, \ParamD
+	ld xbc, \ParamD:i3
 	.else
 	ld xbc, \ParamD
 	.endif
 	.if \ParamE <= 7
-	lds32 xde, \ParamE
+	ld xde, \ParamE:i3
 	.else
 	ld xde, \ParamE
 	.endif

@@ -13,7 +13,7 @@ FDemoText:
 	ret
 
 FDemoText_ReturnNull:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FDemoText_LookupTableEntry:
@@ -608,7 +608,7 @@ FDemoText_SendVoiceParams:
 	ldw wa, 0x44
 	calr FDemoText_LookupTableEntry
 	ld (xsp + 2), xhl
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	ldi_erpb 0xfb, 0x0b
 
@@ -622,7 +622,7 @@ FDemoText_SendParams_NoteLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0c
@@ -632,7 +632,7 @@ FDemoText_SendParams_NoteLoop:
 	extz wa
 	calr FDemoText_LookupTableEntry
 	ld (xsp + 2), xhl
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	add (xsp + 2), xwa
 	ldib_erp 0xfb, 4
 
@@ -646,7 +646,7 @@ FDemoText_SendParams_LevelLoop:
 	ld	wa, 0:i3
 	ld	bc, 6:i3
 	call	15676106
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+2), xwa
 	inc1b_erp	251
 	cp_erpb	251, 8
@@ -694,7 +694,7 @@ FDemoText_SendExtParams_NoteLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0c
@@ -711,7 +711,7 @@ FDemoText_SendExtParams_LevelLoop:
 	ld	wa, 0:i3
 	ld	bc, 6:i3
 	call	sendCOMM
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+2), xwa
 	inc1b_erp	251
 	cp_erpb	251, 8
@@ -801,7 +801,7 @@ FDemoText_SendExtAlt_NoteLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0c
@@ -1195,7 +1195,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	94
 	ld	xwa, xiz
 	ld	xbc, 31457301
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	.byte 0x83, 0x3f, 0x00
 	jr	nz, 58
@@ -1205,7 +1205,7 @@ FDemoText_ByteData_DisplayRefresh:
 	extz	xwa
 	add	xwa, 27262976
 	ld	xbc, 31457301
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	xwa, xiz
 	ld	qwa, 0
@@ -1242,7 +1242,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	(xsp+8), xhl
 	or	xhl, xhl
 	jr	z, 82
-	lds32	xiz, 0
+	ld	xiz, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jr	ule, 69
@@ -1275,7 +1275,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xwa, xiz
 	.byte 0xaf, 0x08, 0xf0
 	jr	c, -69
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	sub	(xsp+4), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
@@ -1324,7 +1324,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr nz, .Lc_f84f28
 	ldw (XSP+0x02), 0x0000
 .Lc_f84f69:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (XSP+0x04),XWA
 .Lc_f84f6e:
 	call FileIO_ReadByte
@@ -1348,7 +1348,7 @@ FDemoText_ByteData_DisplayRefresh:
 	add XBC,(XSP+0x04)
 	ld A,L
 	ld (XBC),A
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (XSP+0x04),XWA
 	ld XWA,(XSP+0x04)
 	cp XWA,(XSP+0x10)
@@ -1370,7 +1370,7 @@ FDemoText_ByteData_DisplayRefresh:
 	add XBC,(XSP+0x04)
 	ld A,L
 	ld (XBC),A
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (XSP+0x04),XWA
 	ld XWA,(XSP+0x04)
 	cp XWA,(XSP+0x10)
@@ -1467,7 +1467,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 	ld	xde, (xsp+12)
 	ld	xbc, (xsp+16)
 	ld	(xbc), xde
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ld	hl, 0:i3
 	cp	xiz, 0
 	jr	ule, 87
@@ -1985,7 +1985,7 @@ FDemoText_Layout_Setup:
 	ld	xwa, (xsp+16)
 	lda_rr	xwa, xwa, iz
 	ld	(xsp+10), xwa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	sub	(xsp+10), xwa
 	cp	iz, 0:i3
 	jr	z, 13
@@ -2146,7 +2146,7 @@ FDemoText_ByteData_LayoutB:
 	call	16433802
 	jr	9
 	lda	xwa, (xsp+8)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	call	16431151
 	ld	wa, (xsp+8)
 	.byte 0x9f, 0x02, 0x80
@@ -2176,12 +2176,12 @@ Seq_InitVoiceLoop:
 	muls	wa, 24
 	lda	xbc, (149976:24)
 	lda_rr	xde, xbc, wa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xde+16), xwa
 	ld	wa, qiz
 	muls	wa, 24
 	lda_rr	xbc, xbc, wa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xbc+20), xwa
 	inc 1, qiz
 	cpw	qiz, 64
@@ -2342,7 +2342,7 @@ Seq_FillBufferLoop:
 	call	16287674
 	cp	hl, 0:i3
 	jr	lt, 62
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	bc, 2:i3
 	call	16288467
 	call	16288556

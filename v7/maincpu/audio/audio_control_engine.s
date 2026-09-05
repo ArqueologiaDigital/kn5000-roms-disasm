@@ -624,7 +624,7 @@ ExtDev_SndParam_DispatchComplex:
 	ret
 VoiceEntry_FindMasterVolume:
 	lda	xde, (49053:16)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	wa, 0:i3
 	jr	37
 VoiceEntry_CheckMatch:
@@ -1736,7 +1736,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	jr	ugt, 8
 	ld	a, (xwa)
 	extz	wa
-	lds32	xiz, 7
+	ld	xiz, 7:i3
 	jr	16
 	.byte 0x80	; v10 does not spell this byte either
 	push	xsp
@@ -2784,7 +2784,7 @@ VoiceData_ExtendedParamSetup:
 	ld	(xsp+2), 0
 	lda	xwa, (15578108:24)
 	ld	(xsp+4), xwa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (xsp+2)
 	ld	xbc, xwa
 	sll	xbc, 4
@@ -4381,13 +4381,13 @@ CtrlPanelRefresh_Done:
 
 CtrlPanel_BuildIndicatorBitmask:
 	push xiz
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	lda xde, (SoundProgram_DispatchTable_0x8DA:24)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr nz, IndBitmask_LookupByChannel
 	ld c, (xwa)
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ldb_erp C, 0xf8
 	and xiz, 0x7
 	ldb_sri0 A, (xwa + 0x00be)

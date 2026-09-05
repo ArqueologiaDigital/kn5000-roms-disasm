@@ -298,7 +298,7 @@ Sound_Navigate_Notify:
 	call BitMapOut_StorePresetValue
 
 Sound_Navigate_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -402,7 +402,7 @@ MainGetRhythmName:
 	call ApPostEvent
 
 MainGetRhythmName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw_erp 0xfa
 	inc 4, xsp
 	ret
@@ -475,7 +475,7 @@ MainGetPmemName_StoreResult:
 	ld xbc, 0x1e00023
 	ld xde, (xsp + 6)
 	call ApPostEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw_erp 0xfa
 	inc 8, xsp
 	ret
@@ -499,6 +499,6 @@ MainTrSwControl_HandleChannel:
 	call AppEvent_HandleChannelEvent
 
 MainTrSwControl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 4, xsp
 	ret

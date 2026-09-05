@@ -39,13 +39,13 @@ JumpInsert_DispatchBody:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	13
-	lds32	xhl, 4
+	ld	xhl, 4:i3
 	jr	9
 
 JumpInsert_Error:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr JumpInsert_Return
 	lda xhl, (0x0340f2:24)
 
@@ -82,11 +82,11 @@ FilePriority_ReturnPointer:
 	jr FilePriority_Return
 
 FilePriority_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr FilePriority_Return
 
 FilePriority_DefaultReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 FilePriority_Return:
 	pop xiz
@@ -100,7 +100,7 @@ SetupOkFunc:
 	call MainFuncCall
 
 SetupOk_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SetupExitFunc:
@@ -118,11 +118,11 @@ SetupExitFunc:
 	jr z, SetupExit_Return
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
@@ -135,7 +135,7 @@ SetupExitFunc:
 	call MainFuncCall
 
 SetupExit_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -161,11 +161,11 @@ TechnicsFileNaming:
 	jr TechnicsFileNaming_Return
 
 TechnicsFileNaming_Validate:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr TechnicsFileNaming_Return
 
 TechnicsFileNaming_Cancel:
-	lds32 xhl, 6
+	ld xhl, 6:i3
 	jr TechnicsFileNaming_Return
 
 TechnicsFileNaming_HandleOk:
@@ -184,7 +184,7 @@ TechnicsFileNaming_HandleOk:
 	call SendEvent
 
 TechnicsFileNaming_DefaultReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 TechnicsFileNaming_Return:
 	pop xiz
@@ -213,11 +213,11 @@ TechnicsFileRename:
 	jr TechnicsFileRename_Return
 
 TechnicsFileRename_Validate:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr TechnicsFileRename_Return
 
 TechnicsFileRename_Cancel:
-	lds32 xhl, 6
+	ld xhl, 6:i3
 	jr TechnicsFileRename_Return
 
 TechnicsFileRename_HandleOk:
@@ -232,11 +232,11 @@ TechnicsFileRename_HandleOk:
 	call MainFuncCall
 	ld xwa, 0x7b0000
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 
 TechnicsFileRename_DefaultReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 TechnicsFileRename_Return:
 	pop xiz
@@ -265,7 +265,7 @@ SmfFileNaming:
 	jr SmfFileNaming_Return
 
 SmfFileNaming_Validate:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr SmfFileNaming_Return
 
 SmfFileNaming_Cancel:
@@ -288,7 +288,7 @@ SmfFileNaming_HandleOk:
 	call SendEvent
 
 SmfFileNaming_DefaultReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 SmfFileNaming_Return:
 	pop xiz
@@ -317,7 +317,7 @@ SmfFileRename:
 	jr SmfFileRename_Return
 
 SmfFileRename_Validate:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr SmfFileRename_Return
 
 SmfFileRename_Cancel:
@@ -336,11 +336,11 @@ SmfFileRename_HandleOk:
 	call MainFuncCall
 	ld xwa, 0x7b0019
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 
 SmfFileRename_DefaultReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 SmfFileRename_Return:
 	pop xiz
@@ -369,7 +369,7 @@ FormatDiskNaming:
 	jr FormatDiskNaming_Return
 
 FormatDiskNaming_Validate:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr FormatDiskNaming_Return
 
 FormatDiskNaming_Cancel:
@@ -388,7 +388,7 @@ FormatDiskNaming_HandleOk:
 	call MainFuncCall
 
 FormatDiskNaming_DefaultReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 FormatDiskNaming_Return:
 	pop xiz
@@ -490,7 +490,7 @@ WaitingFunc_DrawMessage:
 	call SendEvent
 
 WaitingFunc_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 68)
 	ret
@@ -502,11 +502,11 @@ DiskMedleyShowHideFunc:
 	jr nz, DiskMedley_Return
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 DiskMedley_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 PsFileNameBoxProc:
@@ -557,21 +557,21 @@ PsFileNameBoxProc:
 	jr nz, PsFileNameBox_Init_HideFirst
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00017
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00018
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr PsFileNameBox_Init_Configure
 
 PsFileNameBox_Init_HideFirst:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00018
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00017
-	lds32 xde, 0
+	ld xde, 0:i3
 
 PsFileNameBox_Init_Configure:
 	call SetDialDown
@@ -650,21 +650,21 @@ PsFileNameBox_CheckScrollButtons:
 	jr nz, PsFileNameBox_Scroll_HideDown
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00017
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00018
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr PsFileNameBox_Scroll_Apply
 
 PsFileNameBox_Scroll_HideDown:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00018
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1c00017
-	lds32 xde, 0
+	ld xde, 0:i3
 
 PsFileNameBox_Scroll_Apply:
 	call SetDialDown
@@ -914,7 +914,7 @@ PsFileNameBox_ScrollDone_Forward:
 	call MainFuncCall
 
 PsFileNameBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl PsFileNameBox_Return
 
 PsFileNameBox_HandleClose:

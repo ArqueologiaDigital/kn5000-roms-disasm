@@ -127,10 +127,10 @@ Boot_malloc__grow_heap:
 	ld xwa, xhl
 	cp xwa, 0xffffffff
 	jr nz, Boot_malloc__init_new
-	lds32 xhl, 0		; heap exhausted: return NULL
+	ld xhl, 0:i3		; heap exhausted: return NULL
 	jr t, Boot_malloc__exit
 Boot_malloc__init_new:
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld (xwa), xbc		; new block: next = 0
 	ld (xwa + 4), iz	; new block: size = request
 Boot_malloc__return_data:
@@ -294,7 +294,7 @@ Boot_UDivMod32:
 	ld xde, xwa		; save dividend for the overflow path
 	div xwa, xbc		; hardware 32/16: WA = quotient, QWA = remainder
 	jr ov, Boot_UDivMod32__hw_overflow
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, xhl
 	ld hl, wa		; XHL = zero-extended quotient
 	ld de, qwa		; XDE = zero-extended remainder
@@ -314,17 +314,17 @@ Boot_UDivMod32__hw_overflow:
 	ret
 Boot_UDivMod32__divisor_one:
 	ld xhl, xwa		; q = dividend, r = 0
-	lds32 xde, 0
+	ld xde, 0:i3
 	ret
 Boot_UDivMod32__divisor_zero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, xhl
 	dec 1, xhl		; q = 0xFFFFFFFF, r = 0
 	ret
 Boot_UDivMod32__dividend_small:
 	; dividend <= divisor: equal gives q=1 r=0, less gives q=0 r=dividend
-	lds32 xhl, 1
-	lds32 xde, 0
+	ld xhl, 1:i3
+	ld xde, 0:i3
 	ret z			; Z still holds dividend == divisor
 	dec 1, xhl
 	ld xde, xwa
@@ -342,7 +342,7 @@ Boot_UDivMod32__normalize:
 Boot_UDivMod32__norm_done:
 	srl xbc, 1
 Boot_UDivMod32__bit_init:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 Boot_UDivMod32__bit_loop:
 	add xhl, xhl		; quotient <<= 1
 	cp xwa, xbc
@@ -383,7 +383,7 @@ Boot_free:
 	ld xwa, (0x0099a0:24)
 	or xwa, xwa
 	jr nz, Boot_free__scan_init
-	lds32 xwa, 0		; empty list: block becomes the only entry
+	ld xwa, 0:i3		; empty list: block becomes the only entry
 	jr t, Boot_free__insert_head
 Boot_free__scan_init:
 	; Address-ordered scan: XIZ = cursor, XIX = predecessor of cursor

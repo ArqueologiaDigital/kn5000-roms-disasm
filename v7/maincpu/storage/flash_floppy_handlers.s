@@ -566,109 +566,109 @@ NAKA_InitDataBlock:
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x13E0:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1452:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1492:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1684:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x16FC:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x186C:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x19FE:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1B8A:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1D6E:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1DF2:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x1F94:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x2004:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x2166:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x21E0:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x2342:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x24B2:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x2512:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
 	lda	xhl, (NAKA_UIObjectTable_0x2572:24)
 	ret
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	calr	371
 	calr	56
@@ -2816,10 +2816,10 @@ Flash_SlotUpdateOpsBlock:
 	ldw	bc, 512
 	.byte 0x95, 0x11
 	ld	xbc, (3190:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xbc+46)
 	ld	a, (xbc+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	lda	xbc, (xsp+16)
 	lda	xwa, (xbc+68)
@@ -2830,10 +2830,10 @@ Flash_SlotUpdateOpsBlock:
 	ld	xwa, (xsp+12)
 	ld	(xwa), xix
 	ld	xde, (3194:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xde+46)
 	ld	a, (xde+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	lda	xwa, (xbc+72)
 	ld	(xsp+8), xwa
@@ -2843,10 +2843,10 @@ Flash_SlotUpdateOpsBlock:
 	ld	xwa, (xsp+8)
 	ld	(xwa), xix
 	ld	xde, (3198:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xde+46)
 	ld	a, (xde+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	lda	xwa, (xbc+76)
 	ld	(xsp+4), xwa
@@ -2856,10 +2856,10 @@ Flash_SlotUpdateOpsBlock:
 	ld	xwa, (xsp+4)
 	ld	(xwa), xix
 	ld	xde, (3202:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xde+46)
 	ld	a, (xde+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	lda	xde, (xbc+80)
 	sll	xix, 8
@@ -2867,10 +2867,10 @@ Flash_SlotUpdateOpsBlock:
 	sll	xix, 4
 	ld	(xde), xix
 	ld	xix, (3206:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xix+46)
 	ld	a, (xix+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	lda	xiy, (xbc+84)
 	sll	xix, 8
@@ -2878,10 +2878,10 @@ Flash_SlotUpdateOpsBlock:
 	sll	xix, 4
 	ld	(xiy), xix
 	ld	xix, (3210:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xix+46)
 	ld	a, (xix+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	lda	xiz, (xbc+88)
 	sll	xix, 8
@@ -2889,10 +2889,10 @@ Flash_SlotUpdateOpsBlock:
 	sll	xix, 4
 	ld	(xiz), xix
 	ld	xix, (3214:16)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xix+46)
 	ld	a, (xix+47)
-	lds32	xix, 0
+	ld	xix, 0:i3
 	ldb_erp	a, 240
 	sll	xix, 8
 	add	xix, xhl
@@ -2933,9 +2933,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 1:i3
 	calr	-6169
 	ld	xwa, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xwa+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xwa+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -2947,9 +2947,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 2:i3
 	calr	-6209
 	ld	xwa, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xwa+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xwa+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -2961,9 +2961,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 3:i3
 	calr	-6249
 	ld	xwa, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xwa+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xwa+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -2975,9 +2975,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 4:i3
 	calr	-6289
 	ld	xwa, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xwa+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xwa+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -2989,9 +2989,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 5:i3
 	calr	-6329
 	ld	xhl, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xhl+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xhl+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -3004,9 +3004,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 6:i3
 	calr	-6370
 	ld	xhl, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xhl+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xhl+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -3019,9 +3019,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, 7:i3
 	calr	-6411
 	ld	xhl, (3186:16)
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (xhl+46)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (xhl+47)
 	sla	xbc, 8
 	add	xbc, xde
@@ -3187,10 +3187,10 @@ FloppyDisk_ComputeToneParams:
 	ldw bc, 0x200
 	ldirw
 	ld xbc, (3190:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xbc + 46)
 	ld a, (xbc + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	lda xbc, (xsp + 16)
 	lda xwa, (xbc + 68)
@@ -3201,10 +3201,10 @@ FloppyDisk_ComputeToneParams:
 	ld xwa, (xsp + 12)
 	ld (xwa), xix
 	ld xde, (3194:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xde + 46)
 	ld a, (xde + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	lda xwa, (xbc + 72)
 	ld (xsp + 8), xwa
@@ -3214,10 +3214,10 @@ FloppyDisk_ComputeToneParams:
 	ld xwa, (xsp + 8)
 	ld (xwa), xix
 	ld xde, (3198:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xde + 46)
 	ld a, (xde + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	lda xwa, (xbc + 76)
 	ld (xsp + 4), xwa
@@ -3227,10 +3227,10 @@ FloppyDisk_ComputeToneParams:
 	ld xwa, (xsp + 4)
 	ld (xwa), xix
 	ld xde, (3202:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xde + 46)
 	ld a, (xde + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	lda xde, (xbc + 80)
 	sll xix, 8
@@ -3238,10 +3238,10 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld (xde), xix
 	ld xix, (3206:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xix + 46)
 	ld a, (xix + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	lda xiy, (xbc + 84)
 	sll xix, 8
@@ -3249,10 +3249,10 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld (xiy), xix
 	ld xix, (3210:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xix + 46)
 	ld a, (xix + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	lda xiz, (xbc + 88)
 	sll xix, 8
@@ -3260,10 +3260,10 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld (xiz), xix
 	ld xix, (3214:16)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xix + 46)
 	ld a, (xix + 47)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	sll xix, 8
 	add xix, xhl
@@ -3310,9 +3310,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 1:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xwa + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3326,9 +3326,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 2:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xwa + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3342,9 +3342,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 3:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xwa + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3358,9 +3358,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 4:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xwa, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xwa + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3374,9 +3374,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 5:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xhl, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xhl + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xhl + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3391,9 +3391,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 6:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xhl, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xhl + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xhl + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3408,9 +3408,9 @@ FloppyDisk_CopyNoteBuffers:
 	ld wa, 7:i3
 	calr NoteEventBuffer_CopyToSlot
 	ld xhl, (3186:16)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xhl + 46)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xhl + 47)
 	sla xbc, 8
 	add xbc, xde
@@ -3860,7 +3860,7 @@ ToneData_CopyBlock5_Loop:
 	jr c, ToneData_CopyBlock5_Loop
 	ld xwa, (3226:16)
 	lda xbc, (xwa + 32)
-	lds32 xde, 0
+	ld xde, 0:i3
 
 ToneData_ScanRegionLoop:
 	cp (xbc), 0x0
@@ -4780,7 +4780,7 @@ CmpBndRngFunc:
 	jr z, CmpBndRng_ReturnSizeConst
 	cp xbc, 0x1e00042
 	jr z, CmpBndRng_BoundCase
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr CmpBndRng_PopIzRet
 
 CmpBndRng_BoundCase:
@@ -4811,11 +4811,11 @@ CmpBndRng_ReturnSizeConst:
 	jr CmpBndRng_PopIzRet
 
 CmpBndRng_ReturnThree:
-	lds32 xhl, 3
+	ld xhl, 3:i3
 	jr CmpBndRng_PopIzRet
 
 CmpBndRng_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 CmpBndRng_PopIzRet:
 	pop xiz
@@ -4898,7 +4898,7 @@ CmpSetP1_TtlDispatch:
 	ld (0x094810:24), a
 
 GridBoxProc_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; CmpSetP1 title dispatch end
 CmpSetP1_TtlDispatch_End:
@@ -4945,7 +4945,7 @@ CmpSetP1_DialGrid:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -4984,7 +4984,7 @@ CmpSetP1_DialGrid:
 	jr z, CmpSetP1_SendAndApplyFunc
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -5042,7 +5042,7 @@ CmpSetP1_SendAndApplyFunc:
 	jr z, CmpSetP1_DialDownSendApply
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -5123,7 +5123,7 @@ CmpSetP1_GridCheck_Case3:
 	call ApFuncCall
 
 CmpSetP1_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr CmpSetP1_GridCheck_Case5
 
 ; CmpSetP1 grid check case 4
@@ -5160,7 +5160,7 @@ CmpSetP1_GridCheck_EventEnc:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
@@ -5179,7 +5179,7 @@ CmpSetP1_GridCheck_EventEnc:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
@@ -5297,7 +5297,7 @@ WidgetHandler_PostEventAndReturnZero:
 	call SendEvent
 
 Widget_PostEvtReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	lda xsp, (xsp + 28)
 	ret
 
@@ -5327,7 +5327,7 @@ GridCheck_Handler0:
 	call GetFocusObject	; Get UI object
 	ld xwa, xhl	; Save result in XWA
 	ld xbc, 0x1e0008f	; Event code for query
-	lds32 xde, 0	; Parameter = 0
+	ld xde, 0:i3	; Parameter = 0
 	call SendEvent	; Query object state
 	ld xde, xhl	; Result in XDE
 	lda xwa, (xsp + 14)	; Get local var pointer
@@ -5359,7 +5359,7 @@ GridCheck_Handler1:
 	call GetFocusObject	; Get UI object
 	ld xwa, xhl	; Save result in XWA
 	ld xbc, 0x1e0008f	; Event code for query
-	lds32 xde, 0	; Parameter = 0
+	ld xde, 0:i3	; Parameter = 0
 	call SendEvent	; Query object state
 	ld xde, xhl	; Result in XDE
 	lda xwa, (xsp + 14)	; Get local var pointer
@@ -5445,7 +5445,7 @@ GridCheck_GetFocusAndSend:
 	call SendEvent
 
 GridCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
@@ -5480,7 +5480,7 @@ CmpSetPageFunc:
 	jr nz, CmpSetPage_ReturnZero
 	ld xwa, 0xb40002
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xb4000e
 	ld xbc, 0x1e0008e
@@ -5488,7 +5488,7 @@ CmpSetPageFunc:
 	call SendEvent
 
 CmpSetPage_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 AcApcToggle_End:
 
@@ -5521,7 +5521,7 @@ AcApcToggle_HandleClose:
 	jr z, AcApcToggle_Fallthrough
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e0006c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xbc, (xsp + 4)
 	ld xwa, (xbc + 34)
@@ -5603,12 +5603,12 @@ AcApcToggle_HandleLswMsg:
 	jr nz, AcApcToggle_SendZero
 	ld XWA,(XSP+0x0c)
 	ld XBC,0x01c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr t, AcApcToggle_SendEvent
 AcApcToggle_SendZero:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr AcApcToggle_SendEvent
 
 AcApcToggle_Check83Match:
@@ -5620,19 +5620,19 @@ AcApcToggle_Check83Match:
 	jr nz, AcApcToggle_Send83Zero
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr AcApcToggle_SendEvent
 
 AcApcToggle_Send83Zero:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 
 AcApcToggle_SendEvent:
 	call SendEvent
 
 EventHandler_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 AcApcToggle_PopReturn:
 	pop xiz
@@ -5648,7 +5648,7 @@ ApcOnOffFunc:
 	call MainLswPut
 
 ApcOnOff_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ApcOnBasFunc:
@@ -5660,7 +5660,7 @@ ApcOnBasFunc:
 	call MainLswPut
 
 ApcOnBas_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 ApcOnBas_End:
 
@@ -5770,7 +5770,7 @@ AcApcMdBox_SetDialEnable:
 	call SetDialEnable
 
 AcS2cMem_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcApcMdBox_PopReturn
 
 AcApcMdBox_DefaultInherited:
@@ -5829,7 +5829,7 @@ S2cMemNoBox_HandleScroll:
 	ld	xbc, 29360143
 	call	16421459
 S2cMemNoBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 S2cMemNoBox_PopReturn:
 	pop xiz
@@ -5873,13 +5873,13 @@ PsS2cFmeas_SetActive:
 PsS2cFmeas_SendUpdateEvents:
 	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsS2cFmeas_PopReturn:
 	pop xiz
@@ -5923,13 +5923,13 @@ PsS2cLmeas_SetActive:
 PsS2cLmeas_SendUpdateEvents:
 	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsS2cLmeas_PopReturn:
 	pop xiz
@@ -5966,7 +5966,7 @@ PsSeqSongNo_HandleScroll:
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16421459
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 PsSeqSongNo_PopReturn:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x00, 0x01
@@ -6015,13 +6015,13 @@ SndArg_GridBnk_Case0:
 SndArg_GridBnk_Case1:
 	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; SndArgGridBnk case 2
 SndArg_GridBnk_Case2:
@@ -6069,7 +6069,7 @@ FdcFormat_DialGrid:
 	jrl	nz, 538
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+8)
@@ -6108,7 +6108,7 @@ FdcFormat_DialGrid:
 	jr	z, 56
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	dec	1, hl
 	extz	xhl
@@ -6161,7 +6161,7 @@ S2cGrid_DialDownSendApply:
 	jr z, S2cGrid_DialUpSendApply
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
 	extz xhl
@@ -6242,7 +6242,7 @@ FdcFormat_GridCheck_Case3:
 	call GetFocusObject
 	ld xwa, xhl
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 12), xhl
 	ld xwa, (xsp + 16)
@@ -6251,7 +6251,7 @@ FdcFormat_GridCheck_Case3:
 	call SendEvent
 
 FdcFormat_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr FdcFormat_GridCheck_Case5
 
 ; FdcFormat grid check case 4

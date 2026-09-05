@@ -3815,7 +3815,7 @@ BitmapBmphk:
 	jr z, BitmapBmphk_ReturnA2
 	cp xbc, 0x1e000a1
 	jr z, BitmapBmphk_ReturnA1
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 BitmapBmphk_ReturnA1:
@@ -3849,11 +3849,11 @@ TtMdmenu:
 	jr z, TtMdmenu_ReturnZero
 	ld xwa, 0x500001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 TtMdmenu_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -3870,7 +3870,7 @@ TtVocalistWorkstation:
 	jr nz, TtVocalist_ReturnZero
 	ld xwa, 0xd70003
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xd7000e
 	call GetViewInstance
@@ -3880,7 +3880,7 @@ TtVocalistWorkstation:
 	ldw (xwa), 0x1
 
 TtVocalist_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcVocalGridBoxProc:
@@ -3921,7 +3921,7 @@ AcVocalGrid_DialSetup:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -3960,7 +3960,7 @@ AcVocalGrid_DialSetup:
 	jr z, AcVocalGrid_CheckEvent91
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -4018,7 +4018,7 @@ AcVocalGrid_CheckEvent91:
 	jr z, AcVocalGrid_CheckEvent91B
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -4107,7 +4107,7 @@ AcVocalGrid_FuncCallB:
 	call ApFuncCall
 
 Vocalist_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcVocalGrid_FuncCallD
 
 ; AcVocalGridBoxProc function callback C
@@ -4157,7 +4157,7 @@ VocalistGrid_DispatchData:
 	call	16400579
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
@@ -4192,7 +4192,7 @@ VocalistGrid_DispatchData:
 	call	16400579
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
@@ -4695,7 +4695,7 @@ VocalistGrid_CheckDispData:
 	ld	xbc, 31457420
 	call	SendEvent
 AcVocalist_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 48)
 	ret
@@ -4715,7 +4715,7 @@ AcVocalist_ListSetup:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x5
 	jr ugt, AcVocalist_ListCase1
@@ -4728,16 +4728,16 @@ AcVocalist_ListSetup:
 AcVocalist_ListDispatch:
 	ld	xwa, 0xd7000c
 	ld	xbc, 0x01c0000f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	12
 	ld	xwa, 0xd7000c
 	ld	xbc, 0x01c0000f
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	SendEvent
 
 ; AcVocalist list case 1
 AcVocalist_ListCase1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; AcVocalist list case 2
 AcVocalist_ListCase2:
@@ -4771,7 +4771,7 @@ PsHarmOnOffBoxProc:
 PsHarm_CheckMode:
 	ld xwa, 0xd7000a
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x5
 	jrl z, PsHarm_ReturnZero
@@ -4827,7 +4827,7 @@ PsHarm_DrawActiveBox:
 	call DrawDesignBox
 	ld xwa, 0xd7000a
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	lda xbc, (xsp + 16)
 	lda xwa, (xsp + 8)
@@ -4866,7 +4866,7 @@ PsHarm_DrawInactiveBox:
 	call DrawDesignBox
 	ld xwa, 0xd7000a
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	lda xbc, (xsp + 16)
 	lda xwa, (xsp + 8)
@@ -4893,7 +4893,7 @@ DrawCenterString_Exit:
 	call DrawStringCentered
 
 PsHarm_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsHarm_CleanupAndRet:
 	pop xiz
@@ -4901,7 +4901,7 @@ PsHarm_CleanupAndRet:
 	ret
 
 HarmOnOffFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 VocalistPage1OKFunc:
@@ -4911,13 +4911,13 @@ VocalistPage1OKFunc:
 	jr nz, VocalistP1OK_Case0
 	ld xwa, 0xd7000a
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld iz, hl
 	extz xiz
 	ld xwa, 0xd7000c
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	extz xhl
 	sll xhl, 0
@@ -4929,7 +4929,7 @@ VocalistPage1OKFunc:
 
 ; VocalistPage1OK case 0
 VocalistP1OK_Case0:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -4938,12 +4938,12 @@ VocalistPage2OKFunc:
 	jr nz, VocalistP1OK_Case1
 	ld xwa, 0x1430005
 	ld xbc, 0x1e30008
-	lds32 xde, 0
+	ld xde, 0:i3
 	call MainFuncCall
 
 ; VocalistPage1OK case 1
 VocalistP1OK_Case1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainVocalistPage1OKFunc:
@@ -4990,7 +4990,7 @@ VocalistPage1OK_Dispatch:
 	call	16601121
 	ld	(32420:16), 0
 VocalistPage_Handler:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 4, xsp
 	ret
 
@@ -5066,7 +5066,7 @@ MainVocalistPage2OKFunc:
 	ld	xde, 27263214
 	call	16423243
 VocalistPage2_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AccPlay_GetCurrentPart:
@@ -5091,7 +5091,7 @@ RevSelFunc:
 	jrl RevSel_CleanupAndRet
 
 RevSel_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jrl RevSel_CleanupAndRet
 
 RevSel_HandleInit:
@@ -5112,7 +5112,7 @@ RevSel_HandleInit:
 RevSel_NoPresetMatch:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001b
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr RevSel_SendAndRet
 
 RevSel_HandleConfirm:
@@ -5144,7 +5144,7 @@ RevSel_HandleDial:
 	call MainFuncCall
 
 RevSel_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 RevSel_CleanupAndRet:
 	pop xiz
@@ -5172,7 +5172,7 @@ EqSelFunc:
 	jrl EqSel_CleanupAndRet
 
 EqSel_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jrl EqSel_CleanupAndRet
 
 EqSel_HandleInit:
@@ -5193,7 +5193,7 @@ EqSel_HandleInit:
 EqSel_NoPresetMatch:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001b
-	lds32 xde, 2
+	ld xde, 2:i3
 
 EqSel_SendPresetEvent:
 	call	16421459
@@ -5224,7 +5224,7 @@ EqSel_HandleDial:
 	jr nz, RevEqFunc_ReturnZero
 	ld xwa, 0x19000b
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	extz xhl
 	sll xhl, 0
@@ -5255,7 +5255,7 @@ EqSel_SendEvent:
 	call SendEvent
 
 RevEqFunc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 EqSel_CleanupAndRet:
 	pop xiz
@@ -5283,7 +5283,7 @@ RevEqSelFunc:
 	jrl RevEqSel_CleanupAndRet
 
 RevEqSel_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jrl RevEqSel_CleanupAndRet
 
 RevEqSel_HandleInit:
@@ -5304,7 +5304,7 @@ RevEqSel_HandleInit:
 RevEqSel_NoPresetMatch:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001b
-	lds32 xde, 3
+	ld xde, 3:i3
 
 RevEqSel_SendPresetEvent:
 	call	16421459
@@ -5335,7 +5335,7 @@ RevEqSel_HandleDial:
 	jr nz, EqFunc_ReturnZero
 	ld xwa, 0x1a000a
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	extz xhl
 	sll xhl, 0
@@ -5366,7 +5366,7 @@ RevEqSel_SendEvent:
 	call SendEvent
 
 EqFunc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 RevEqSel_CleanupAndRet:
 	pop xiz
@@ -5377,26 +5377,26 @@ EqOnOffFunc:
 	call GetFocusObject
 	ld xwa, xhl
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0x4006
 	ld bc, hl
 	ld de, 1:i3
 	call MainLswPut
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 RevEqOnOffFunc:
 	call GetFocusObject
 	ld xwa, xhl
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0x4006
 	ld bc, hl
 	ld de, 1:i3
 	call MainLswPut
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainRevEqPresetLoad:
@@ -5425,7 +5425,7 @@ MainRevEqPresetLoad_DoLoad:
 	call SoundPreset_Dispatch
 
 RevEqPreset_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcGMOnOffBoxProc:
@@ -5455,7 +5455,7 @@ AcGMOnOff_InitHandler:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	call	16400380
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 AcGMOnOff_CleanupAndRet:
 	pop xiz
 	lda xsp, (xsp + 12)
@@ -5468,7 +5468,7 @@ StsAttentionCheck:
 	ret
 
 StsAttention_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 StsGMOnCheck:
@@ -5478,7 +5478,7 @@ StsGMOnCheck:
 	ret
 
 StsGMOn_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 StsGMOffCheck:
@@ -5488,7 +5488,7 @@ StsGMOffCheck:
 	ret
 
 StsGMOff_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 StsAreYouSureCheck:
@@ -5498,7 +5498,7 @@ StsAreYouSureCheck:
 	ret
 
 StsAreYouSure_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 GMOKFunc:
@@ -5515,43 +5515,43 @@ GMOKFunc:
 GMOK_ConfirmDialog:
 	ld xwa, 0x580001
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, GMOK_PostNoDialog
 	ld xwa, 0x580005
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr GMOK_PostEvent
 
 GMOK_PostNoDialog:
 	ld xwa, 0x58000d
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 GMOK_PostEvent:
 	call PostEvent
 
 GMOK_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 GMNoFunc:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 GMYesFunc:
 	ld	xwa, 5767169
 	ld	xbc, 31457387
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	xwa, 192
 	ld	bc, hl
@@ -5559,14 +5559,14 @@ GMYesFunc:
 	call	16381053
 	ld	xwa, 4294967295
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421701
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16421701
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 TtMdGm:
 	cp xbc, 0x1c00001
@@ -5576,11 +5576,11 @@ TtMdGm:
 	jr nz, TtMdGm_ReturnZero
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00014
@@ -5588,7 +5588,7 @@ TtMdGm:
 	call PostEvent
 
 TtMdGm_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 StsSplitCheck:
@@ -5598,7 +5598,7 @@ StsSplitCheck:
 	ret
 
 StsSplit_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SplitPointFunc:
@@ -5678,11 +5678,11 @@ SplitPoint_UpdateScreen:
 	call SetNeedUpdate
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00078
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 SplitPoint_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ParamFunc_CommonExit
 SplitPoint_HandleNoteEvt:
 	ld	xde, (xsp+8)
@@ -5718,7 +5718,7 @@ SplitPoint_ReturnParamId:
 	jr ParamFunc_CommonExit
 
 ParamFunc_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 ParamFunc_CommonExit:
 	pop xiz
@@ -5765,7 +5765,7 @@ R12OctaveFunc:
 	jr z, R12Octave_ReturnParamId
 	cp xbc, 0x1e00042
 	jr z, R12Octave_HandleNoteEvt
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr R12Octave_PopIzRet
 
 R12Octave_HandleNoteEvt:
@@ -5810,7 +5810,7 @@ R12Octave_StringCopyAndSendEvent:
 	inc	8, xsp
 	ld	xwa, 4294967295
 	ld	xbc, 31457400
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	xhl, xiz
 	jr	16
@@ -5819,7 +5819,7 @@ R12Octave_ReturnParamId:
 	jr R12Octave_PopIzRet
 
 R12Octave_ReturnOne:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr R12Octave_PopIzRet
 
 R12Octave_ReturnStepSize:

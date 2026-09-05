@@ -114,7 +114,7 @@ SndParam_LookupByKey:
 	ld (xsp + 12), bc
 	ldw (xsp + 4), 0x0
 	ld xiz, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 6), xwa
 	ld xhl, xiz
 	and xhl, 0xff
@@ -229,7 +229,7 @@ SndParam_LookupReadOnly:
 	push xiz
 	ldw (xsp + 4), 0xffff
 	ld xiz, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 6), xwa
 	ld xhl, xiz
 	and xhl, 0xff
@@ -448,7 +448,7 @@ SndParam_RW_ChainContinue:
 	jr nz, SndParam_RW_ChainNext
 
 SndParam_RW_NoEntry:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 
 SndParam_RW_ProcessResult:
 	ld xiz, xwa
@@ -521,7 +521,7 @@ SndParam_ResolveWidgetEx_Data:
 	ldiw
 	ldiw
 	ld	xiz, (xde)
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+6), xwa
 	ld	xhl, xiz
 	and	xhl, 255
@@ -625,7 +625,7 @@ SndParam_DecodeMidiAddr:
 	ld xwa, (xsp + 22)
 	ld xiz, (xwa)
 	ld (xsp + 6), xiz
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 10), xwa
 	ld xhl, xiz
 	and xhl, 0xff
@@ -737,10 +737,10 @@ SndParam_DMA_Epilogue:
 SndParam_ResolveWidgetVariant2_Data:
 	dec	8, xsp
 	push	xiz
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	(xsp+4), xbc
 	ld	xiz, xwa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+8), xwa
 	ld	xhl, xiz
 	and	xhl, 255
@@ -899,14 +899,14 @@ SndParam_CompareShifted:
 	ld_sril3 XBC, 0x03, 0xe4, 0xe0
 	cp l, (xbc + 1)
 	jr nz, SndParam_CompareStatus5
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	jr SndParam_CompareAddOffset
 
 SndParam_CompareStatus5:
-	lds32 xwa, 5
+	ld xwa, 5:i3
 	cp l, (xbc + 2)
 	jr nz, SndParam_CompareAddOffset
-	lds32 xwa, 4
+	ld xwa, 4:i3
 
 SndParam_CompareAddOffset:
 	add xbc, xwa
@@ -1256,7 +1256,7 @@ SndParam_RegisterMultiField_Data:
 	.byte 0xa9, 0x81
 	ldx
 	jr	c, 2
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	add	xbc, xwa
 	ld	l, (xbc)
 	ld	c, (xde+10)
@@ -1993,10 +1993,10 @@ SndParam_RegisterComplex_Data:
 	ld	hl, wa
 	ld	e, (xbc)
 	extz	de
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	cp	hl, de
 	jr	lt, 2
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	ld	xde, xbc
 	add	xde, xwa
 	ld	d, (xde)
@@ -2458,7 +2458,7 @@ SndParam_EncodeFieldSub_Data:
 	.byte 0xa9, 0x82
 	ldx
 	jr	c, 2
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	add	xde, xwa
 	ld	l, (xde)
 	ld	a, (xbc+9)
@@ -2530,12 +2530,12 @@ SndParam_DecodeFieldAlt_Data:
 	normal
 	ldx
 	jr	nz, 4
-	lds32	xwa, 3
+	ld	xwa, 3:i3
 	jr	9
-	lds32	xwa, 5
+	ld	xwa, 5:i3
 	cp	l, (xbc+2)
 	jr	nz, 2
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
@@ -2599,7 +2599,7 @@ SndParam_WriteFieldSub_Data:
 	.byte 0xa9, 0x81
 	ldx
 	jr	c, 2
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	add	xbc, xwa
 	ld	l, (xbc)
 	lda	xbc, (xsp)
@@ -3028,7 +3028,7 @@ SndParam_InitHashFillLoop:
 
 SndParam_RegisterAllWidgets:
 	push xiz
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 SndParam_RegisterLoop:
 	ld xbc, xiz
@@ -3125,7 +3125,7 @@ SndParam_ClearHashTable:
 	lda_dri XDE, 0xe1, 0xfc, 0x1f
 
 SndParam_ClearLoop:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dpi XWA, 0xe6
 	cp xbc, xde
 	jr c, SndParam_ClearLoop
@@ -3143,7 +3143,7 @@ SndParam_ClearHeap:
 
 SndParam_ReregisterAll:
 	push xiz
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 SndParam_ReregisterLoop:
 	ld xbc, xiz
@@ -3182,15 +3182,15 @@ SndParam_AllocAndInsert:
 	inc 2, xsp
 
 SndParam_AllocBuildKey:
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xsp + 18)
 	sll xde, 8
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp + 20)
 	sll xwa, 0
 	ld xbc, xwa
 	or xbc, xde
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp + 16)
 	ld (xsp + 12), xwa
 	or (xsp + 12), xbc
@@ -3287,7 +3287,7 @@ SndParam_HeapAlloc:
 	jr c, SndParam_HeapAllocOK
 
 SndParam_HeapAllocFail:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SndParam_HeapAllocOK:

@@ -34,7 +34,7 @@ ExcSendFunc:
 	jr nz, ExcSendFunc_InvalidParam_Exit
 	ld xwa, 0x570003
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	exts xhl
 	ld xwa, 0x1430001
@@ -43,7 +43,7 @@ ExcSendFunc:
 	call MainFuncCall
 
 ExcSendFunc_InvalidParam_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainExcSend:
@@ -51,7 +51,7 @@ MainExcSend:
 	jr nz, MainExcSend_UnexpectedMessageType_Exit
 	cp xde, 0x6
 	jr c, MainExcSend_ClampIndexToRange
-	lds32 xde, 0
+	ld xde, 0:i3
 
 MainExcSend_ClampIndexToRange:
 	ld	xwa, 15203716
@@ -59,7 +59,7 @@ MainExcSend_ClampIndexToRange:
 	ld	a, (xwa)
 	call	16614621
 MainExcSend_UnexpectedMessageType_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ExcDotFunc:
@@ -94,13 +94,13 @@ ExcDotFunc_HandlerJumpTable:
 	ld	(xix), 0
 	ld	xhl, xwa
 	ret
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	ret
 	ld	xhl, 32
 	ret
 
 ExcDotFunc_InvalidIndex_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ExcDotFunc_HandlerJumpTable_Ext:
@@ -133,12 +133,12 @@ ExcPmemFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	13
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	9
 ExcPmemFunc_InvalidIndex_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ExcPmemFunc_Return
 	lda xhl, (0x024760:24)
 
@@ -172,12 +172,12 @@ ExcSmemFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	13
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	9
 ExcSmemFunc_InvalidIndex_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ExcSmemFunc_Return
 	lda xhl, (0x024762:24)
 
@@ -211,12 +211,12 @@ ExcCompFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	13
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	9
 ExcCompFunc_InvalidIndex_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ExcCompFunc_Return
 	lda xhl, (0x024764:24)
 
@@ -250,12 +250,12 @@ ExcSeqFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	13
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	9
 ExcSeqFunc_InvalidIndex_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ExcSeqFunc_Return
 	lda xhl, (0x024766:24)
 
@@ -289,12 +289,12 @@ ExcMspFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	13
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	9
 ExcMspFunc_InvalidIndex_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ExcMspFunc_Return
 	lda xhl, (0x024768:24)
 

@@ -1062,7 +1062,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	(0x9664:16), xiy
 	ld	(0x966e:16), 0
 	ldb	w, 0
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	ld	(0x966f:16), 0
 	ld	(0x9670:16), 0
 	ld	xiz, (0x90f2:16)
@@ -10001,7 +10001,7 @@ SndParam_CopyPreset_MaskLoop:
 	call MainMpst_ReadPresetIndex
 	cp l, 0:i3
 	jr nz, SndParam_CopyPreset_SelectBank
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0xf9, 0xd8, 0x00
 
 SndParam_CopyPreset_SelectBank:
@@ -10060,7 +10060,7 @@ SndParam_GetBlockPointer_Extended:
 	jr z, SndParam_GetBlockPointer_Bank2
 	cp a, 0x1b
 	jr z, SndParam_GetBlockPointer_Bank1
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SndParam_GetBlockPointer_Bank1:
@@ -10197,7 +10197,7 @@ SndParam_UpdateChan_Mode3:
 	call SoundMode_FullRenderUpdate
 
 SndParam_UpdateChan_CopyMemory:
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xsp + 6)
 	sll xbc, 11
 	lda xwa, (0x0ab000:24)
@@ -10974,19 +10974,19 @@ MIDI_ReadChannelParam:
 MidiChan_ParamDispatch:
 	ld	(xwa), e
 	ret
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	jr	78
-	lds32	xbc, 2
+	ld	xbc, 2:i3
 	jr	74
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	jr	70
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	jr	66
-	lds32	xbc, 5
+	ld	xbc, 5:i3
 	jr	62
-	lds32	xbc, 6
+	ld	xbc, 6:i3
 	jr	58
-	lds32	xbc, 7
+	ld	xbc, 7:i3
 	jr	54
 	ld	xbc, 8
 	jr	47
@@ -11030,19 +11030,19 @@ SeqData_ReadFieldByIndex:
 SeqData_FieldDispatch:
 	ld	l, (xwa)
 	jr	90
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	jr	78
-	lds32	xbc, 2
+	ld	xbc, 2:i3
 	jr	74
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	jr	70
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	jr	66
-	lds32	xbc, 5
+	ld	xbc, 5:i3
 	jr	62
-	lds32	xbc, 6
+	ld	xbc, 6:i3
 	jr	58
-	lds32	xbc, 7
+	ld	xbc, 7:i3
 	jr	54
 	ld	xbc, 8
 	jr	47
@@ -11085,7 +11085,7 @@ MidiSeq_AssignVoiceSlots:
 	dec 4, xsp
 	pushw_erp 0xfa
 	ld xbc, (0xbc54:16)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc + 2), xwa
 	ld xwa, (0xbc54:16)
 	calr MidiChan_DequeueVoiceEntry
@@ -11933,13 +11933,13 @@ MidiSeq_Dequeue3Voices:
 	ld xwa, (0xbc54:16)
 	calr MidiChan_DequeueVoiceEntry
 	ldb_erp L, 0xfa
-	lds32 xde, 0
+	ld xde, 0:i3
 	stb_erp E, 0xfa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xf9
 	sll xwa, 7
 	or xde, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xf8
 	sll xwa, 14
 	or xde, xwa
@@ -12070,7 +12070,7 @@ MidiSeq_TrimQueue:
 	ld xhl, xbc
 
 MidiSeq_TrimLoop:
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xhl), xwa
 	cp (xbc), xde
 	jr c, MidiSeq_TrimLoop
@@ -12292,7 +12292,7 @@ ArpQueue_ProcessAndSort_Data:
 	push	xix
 	retd	0xaad9
 	calr	65359
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	sub	(0xbcc4:16), xwa
 	lda	xbc, (0xbcd4:16)
 	ld	xwa, (xbc)
@@ -12502,7 +12502,7 @@ SeqVoice_DispatchProcess_Data:
 	ld (xde), xwa
 	ld	(xiz), c
 	ld	xwa, (xsp+4)
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	sub	(xwa), xbc
 	ld	xbc, (xiy)
 	dec	1, xbc
@@ -12529,7 +12529,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	xwa, (0xbcac:16)
 	ldw	bc, 12
 	calr	61846
-	lds32	xiz, 0
+	ld	xiz, 0:i3
 	ldb_erp l, 248
 	sll xiz, 14
 	ld	xwa, (0xbcac:16)

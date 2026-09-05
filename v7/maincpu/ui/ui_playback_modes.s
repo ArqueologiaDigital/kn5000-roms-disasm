@@ -1050,7 +1050,7 @@ SqTrAs_LoadInline:
 	ret
 
 SqAftSetTtlFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqSngSelTtlFunc:
@@ -1084,7 +1084,7 @@ SqTrAs_CondCheck:
 	pop	xde
 
 SqSngName_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqSngNameTtlFunc:
@@ -1124,7 +1124,7 @@ SQTR_DISPATCH_TABLE_1:
 	pop xde
 
 SqTrAs_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrAsTtlFunc:
@@ -1191,7 +1191,7 @@ SqTrAs_EventHandler:
 	pop xde
 
 CDlikeSwTtl_ReturnZero2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrAsSureFunc:
@@ -1244,7 +1244,7 @@ SqTrAsPsTtl_CaseC:
 	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28
 
 SqTrAsPs_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrAsPsTtlFunc:
@@ -1270,15 +1270,15 @@ SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	pop	xde
 	ld	xwa, 0x8c0004
 	ld	xbc, 0x01e0004d
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	xwa, 0x8c0005
 	ld	xbc, 0x01e0004d
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x8c0006
 	ld	xbc, 0x01e0004d
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	.ascii "h\":;<>"
 	call	SetWall_DataBlock1_0xF
@@ -1303,7 +1303,7 @@ SqTrAsPsTtl_CaseD:
 	pop xde
 
 SqTrAsPsTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrAsPsSureFunc:
@@ -1337,7 +1337,7 @@ SqTrAsPsTtl_CaseE:
 	pop xde
 
 SetWall_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 SqTrAsPsTtl_CaseF:
 	ld	a, (35994:16)
@@ -1429,7 +1429,7 @@ SqMdlyPly_CheckState:
 	pop xde
 
 SqMdlyPly_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DkMdlyPlyTtlFunc:
@@ -1494,7 +1494,7 @@ DkMdlyPly_CheckPlayState:
 	pop xde
 
 DkMdlyPly_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; DkMdlyPly send audio command
@@ -1580,51 +1580,51 @@ DisplayMode_DispatchEvents:
 DisplayMode_BatchEventSend:
 	ld	xwa, 0x6f000a
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	165
 	ld	xwa, 0x73000c
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	150
 	ld	xwa, 0x700007
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x700008
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x700009
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	104
 	ld	xwa, 0x74000a
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x74000b
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x74000c
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	58
 	ld	xwa, 0x710007
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x710008
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	28
 	ld	xwa, 0x750009
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x75000a
 	ld	xbc, 0x01e0003b
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ret
 
@@ -1718,7 +1718,7 @@ DpMdlyDoc_CaseE:
 	pop xde
 
 DpMdlyDoc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DpMdlyPdTtlFunc:
@@ -1806,7 +1806,7 @@ DpMdlyPd_CaseE:
 	pop xde
 
 DpMdlyPd_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DpMdlySmfTtlFunc:
@@ -1881,7 +1881,7 @@ DpMdlySmf_CaseE:
 	pop xde
 
 DpMdlySmf_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DpMdlySmfLyrTtlFunc:
@@ -1931,7 +1931,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	pop	xde
 	ld	xwa, 7274534
 	ld	xbc, 29818890
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	29
 	push	xde
 	push	xhl
@@ -1946,7 +1946,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	jr	77
 	ld	xwa, 7274534
 	ld	xbc, 29818890
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	jr	59
 DpMdlySmfLyr_CaseA:
@@ -1986,7 +1986,7 @@ DpMdlySmfLyr_CaseC:
 	pop xde
 
 DpMdlySmfLyr_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 NameGetFuncCall:
@@ -2024,7 +2024,7 @@ NameGetFuncCall_Dispatch:
 	lda	xsp, (xsp+24)
 	ld	xwa, 4294967295
 	ld	xbc, 29818880
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	621
 	call	GetCurrentFileIndex
 	ld	wa, hl
@@ -2042,7 +2042,7 @@ NameGetFuncCall_Dispatch:
 	ld	(7283:16), 0
 	ld	xwa, 4294967295
 	ld	xbc, 29818881
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	564
 	call	GetFirstPageBase
 	ld	wa, hl
@@ -2062,7 +2062,7 @@ NameGetFuncCall_Dispatch:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818882
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	500
 	pushw	20
 	call	GetFirstPageBase
@@ -2090,7 +2090,7 @@ NameGetFuncCall_Dispatch:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818883
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	424
 	call	FileIO_GetCurrentFileIndex_Alt
 	inc	1, hl
@@ -2104,7 +2104,7 @@ NameGetFuncCall_Dispatch:
 	ld	(7365:16), 0
 	ld	xwa, 4294967295
 	ld	xbc, 29818886
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	378
 	pushw	12
 	call	FileIO_GetCurrentFileIndex_Alt
@@ -2132,7 +2132,7 @@ NameGetFuncCall_Dispatch:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818885
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	302
 	call	GetCurrentFileIndexAlt
 	inc	1, hl
@@ -2146,7 +2146,7 @@ NameGetFuncCall_Dispatch:
 	ld	(7369:16), 0
 	ld	xwa, 4294967295
 	ld	xbc, 29818888
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	256
 	call	GetCurrentFileIndexAlt
 	ld	wa, hl
@@ -2173,7 +2173,7 @@ NameGetFuncCall_Dispatch:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818887
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	184
 	call	GetFirstPageBase
 	ld	wa, hl
@@ -2206,7 +2206,7 @@ NameGetFuncCall_Dispatch:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818895
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	92
 	call	GetFirstPageBase
 	ld	wa, hl
@@ -2236,10 +2236,10 @@ NameGetFuncCall_Dispatch:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818894
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 NameGetFunc_Entry:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 CDlikeSwTtlFunc:
@@ -2257,7 +2257,7 @@ CDlikeSwTtlFunc:
 	jr z, CDlikeSwTtl_ReturnZero
 
 CDlikeSwTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 CDlikeSwTtl_ShowSongTitle:
@@ -2266,7 +2266,7 @@ CDlikeSwTtl_ShowSongTitle:
 	ret NZ
 	ld	xwa, 7471110
 	ld	xbc, 29818896
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	pushw 12
 	call	16291514
@@ -2319,7 +2319,7 @@ CDlikeSwTtl_SongBit1Check:
 	call	16693581
 	ld	xwa, 7274534
 	ld	xbc, 29818889
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	29
 CDlikeSwTtl_SongBit0Check:
 	call	16693163
@@ -2329,7 +2329,7 @@ CDlikeSwTtl_SongBit0Check:
 	call	16693581
 	ld	xwa, 7274534
 	ld	xbc, 29818889
-	lds32	xde, 0
+	ld	xde, 0:i3
 CDlikeSwTtl_JumpToFA9D58:
 	jp ApPostEvent
 
@@ -2434,7 +2434,7 @@ CDlikeSwTtl_SongNavDispatch:
 	call	16693581
 	ld	xwa, 7274534
 	ld	xbc, 29818889
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	wa, iz
 	call	16328724
@@ -2444,19 +2444,19 @@ CDlikeSwTtl_SongNavDispatch:
 	calr	63167
 	ld	xwa, 4294967295
 	ld	xbc, 31916047
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	64163
 	ld	xwa, 4294967295
 	ld	xbc, 31916048
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	64148
 	ld	xwa, 4294967295
 	ld	xbc, 31916057
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	64133
 	ld	xwa, 4294967295
 	ld	xbc, 31916058
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	111
 CDlikeSwTtl_SongNavBit0:
 	call	16693163
@@ -2465,7 +2465,7 @@ CDlikeSwTtl_SongNavBit0:
 	call	16693581
 	ld	xwa, 7274534
 	ld	xbc, 29818889
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	wa, iz
 	call	16328724
@@ -2475,19 +2475,19 @@ CDlikeSwTtl_SongNavBit0:
 	calr	63054
 	ld	xwa, 4294967295
 	ld	xbc, 31916047
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	64050
 	ld	xwa, 4294967295
 	ld	xbc, 31916048
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	64035
 	ld	xwa, 4294967295
 	ld	xbc, 31916057
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	64020
 	ld	xwa, 4294967295
 	ld	xbc, 31916058
-	lds32	xde, 0
+	ld	xde, 0:i3
 CDlikeSwTtl_SongNavFinishNames:
 	calr NameGetFuncCall
 	calr CDlikeSwTtl_ShowSongTitle
@@ -2502,19 +2502,19 @@ CDlikeSwTtl_SongNavNoRedraw:
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e7000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e70010
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e70019
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e7001a
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 
 CDlikeSwTtl_SongNavReturn:
@@ -2535,11 +2535,11 @@ CDlikeSwTtl_DocNavDispatch:
 	calr	62867
 	ld	xwa, 4294967295
 	ld	xbc, 31916051
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63863
 	ld	xwa, 4294967295
 	ld	xbc, 31916050
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	59
 CDlikeSwTtl_DocNavBit0:
 	call	16693163
@@ -2553,11 +2553,11 @@ CDlikeSwTtl_DocNavBit0:
 	calr	62806
 	ld	xwa, 4294967295
 	ld	xbc, 31916051
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63802
 	ld	xwa, 4294967295
 	ld	xbc, 31916050
-	lds32	xde, 0
+	ld	xde, 0:i3
 CDlikeSwTtl_DocNavFinishNames:
 	calr NameGetFuncCall
 	calr CDlikeSwTtl_ShowDocTitle
@@ -2571,11 +2571,11 @@ CDlikeSwTtl_DocNavNoRedraw:
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e70013
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e70012
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 
 CDlikeSwTtl_DocNavReturn:
@@ -2596,11 +2596,11 @@ CDlikeSwTtl_PdNavDispatch:
 	calr	62685
 	ld	xwa, 4294967295
 	ld	xbc, 31916053
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63681
 	ld	xwa, 4294967295
 	ld	xbc, 31916052
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	59
 CDlikeSwTtl_PdNavBit0:
 	call	16693163
@@ -2614,11 +2614,11 @@ CDlikeSwTtl_PdNavBit0:
 	calr	62624
 	ld	xwa, 4294967295
 	ld	xbc, 31916053
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63620
 	ld	xwa, 4294967295
 	ld	xbc, 31916052
-	lds32	xde, 0
+	ld	xde, 0:i3
 CDlikeSwTtl_PdNavFinishNames:
 	calr NameGetFuncCall
 	calr CDlikeSwTtl_ShowPdTitle
@@ -2632,11 +2632,11 @@ CDlikeSwTtl_PdNavNoRedraw:
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e70015
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e70014
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr NameGetFuncCall
 
 CDlikeSwTtl_PdNavReturn:
@@ -2761,7 +2761,7 @@ DpDoc_CaseJ:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 DpDocTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DpPdTtlFunc:
@@ -2882,7 +2882,7 @@ DpPd_CaseJ:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 DpPdTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DpSmfTtlFunc:
@@ -2924,7 +2924,7 @@ DpSmfTtl_Dispatch:
 	call	16693581
 	ld	xwa, 7274534
 	ld	xbc, 29818889
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	61264
 	jrl	184
@@ -3013,7 +3013,7 @@ DpSmf_CaseJ:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 DpSmfTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DpSmfLyrTtlFunc:
@@ -3039,13 +3039,13 @@ DpSmfLyrTtlFunc:
 DpSmfLyrTtl_Dispatch:
 	ld	xwa, 0x6f0026
 	ld	xbc, 0x01c7000a
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	18
 	calr	60982
 	jrl	193
 	ld	xwa, 0x6f0026
 	ld	xbc, 0x01c7000a
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	jrl	174
 
@@ -3126,7 +3126,7 @@ DpSmfLyr_ConfirmDispatch:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 SeqStep_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SeqStepModeFunc:
@@ -3160,7 +3160,7 @@ DpSmfLyr_CaseD:
 	pop xde
 
 SeqStepMode_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrSelTtlFunc:
@@ -3191,7 +3191,7 @@ SqTrSelTtl_Dispatch:	.ascii ":;<>"
 	pop	xde
 
 SqTrSelTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 Display_InitGraphicsAndScreen:

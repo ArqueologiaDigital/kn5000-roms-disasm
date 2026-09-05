@@ -20,7 +20,7 @@
 
 .macro RegObjTableHama ParamA, ParamB, ParamC, ParamD, ParamE
 	.if \ParamA <= 7
-	lds32 xwa, \ParamA
+	ld xwa, \ParamA:i3
 	.else
 	ld xwa, \ParamA
 	.endif
@@ -44,7 +44,7 @@
 
 .macro RegObjTablHama ParamA, ParamB, ParamC, ParamD, ParamE
 	.if \ParamA <= 7
-	lds32 xwa, \ParamA
+	ld xwa, \ParamA:i3
 	.else
 	ld xwa, \ParamA
 	.endif
@@ -70,17 +70,17 @@
 	lda_24 xwa, (\ParamB)
 	push xwa
 	.if \ParamC <= 7
-	lds32 xwa, \ParamC
+	ld xwa, \ParamC:i3
 	.else
 	ld xwa, \ParamC
 	.endif
 	.if \ParamD <= 7
-	lds32 xbc, \ParamD
+	ld xbc, \ParamD:i3
 	.else
 	ld xbc, \ParamD
 	.endif
 	.if \ParamE <= 7
-	lds32 xde, \ParamE
+	ld xde, \ParamE:i3
 	.else
 	ld xde, \ParamE
 	.endif
@@ -190,10 +190,10 @@ TitleFunc_LifecycleTable:
 	jr TitleFunc_Return
 	ld xwa, 0x01c00007
 	push xwa
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	push xwa
 	ld xbc, xiz
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xde, 0xffffffff
 	call KillApTimer
 	lda xwa, (FDTest_String_TestTitleFunc_0x7C:24)
@@ -205,7 +205,7 @@ TitleFunc_LifecycleTable:
 	calr RunTestCounters_Entry
 	ld xwa, 0x01c00007
 	push xwa
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	push xwa
 	ld xbc, xiz
 	ld xwa, 0x53
@@ -228,7 +228,7 @@ TitleFunc_LifecycleTable:
 	calr ListDir2_Entry
 
 TitleFunc_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -327,7 +327,7 @@ CreateRunFDOp_Entry:
 	ldw (xsp + 4), 0x0
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	lda xwa, (xsp)
 	push xwa
@@ -383,7 +383,7 @@ HamaEvtDisp_Entry:
 	jr z, HamaEvtDisp_LifecycleCheck
 	cp xbc, 0x01e00085
 	jr nz, HamaEvtDisp_Return
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 HamaEvtDisp_LifecycleCheck:
 	cp xde, 0x8b
@@ -403,7 +403,7 @@ HamaEvtDisp_ExtBootstrap:
 	lda xwa, (FDTest_String_TestTitleFunc_0x22E:24)
 	calr SendEvent_Entry
 HamaEvtDisp_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; CheckFDStatusAndLoadFile -- Checks FD status, loads file from disk into

@@ -48,7 +48,7 @@ Sprintf_ReadFormatChar:
 	cp iz, 0x2a
 	jr nz, Sprintf_CheckIfDigit
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld wa, (xwa - 2)
@@ -120,7 +120,7 @@ Sprintf_CheckPrecisionDot:
 	cp iz, 0x2a
 	jr nz, Sprintf_CheckPrecisionDigit
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld wa, (xwa - 2)
@@ -233,7 +233,7 @@ Sprintf_Format_CharOrPercent:
 	cp iz, 0x63
 	jr nz, Sprintf_Percent_LiteralPush
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	pushm (xwa - 2)
@@ -264,7 +264,7 @@ Sprintf_Percent_PadRightLoop:
 	jr gt, Sprintf_Percent_PadRight
 	jrl Sprintf_MainLoop_ReadNext
 	ld xbc, (xsp + 86)
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld xwa, (xwa - 4)
@@ -352,7 +352,7 @@ Sprintf_String_PadRightLoop:
 	bit 6, wa
 	jr z, Sprintf_Decimal_GetShortArg
 	ld xbc, (xsp + 86)
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld xwa, (xwa - 4)
@@ -361,7 +361,7 @@ Sprintf_String_PadRightLoop:
 
 Sprintf_Decimal_GetShortArg:
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld wa, (xwa - 2)
@@ -552,7 +552,7 @@ Sprintf_Decimal_PadRightLoop:
 	bit 6, wa
 	jr z, Sprintf_Unsigned_GetShortArg
 	ld xbc, (xsp + 86)
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld xde, (xwa - 4)
@@ -560,7 +560,7 @@ Sprintf_Decimal_PadRightLoop:
 
 Sprintf_Unsigned_GetShortArg:
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld de, (xwa - 2)
@@ -683,7 +683,7 @@ Sprintf_Hex_GetArg:
 	bit 6, wa
 	jr z, Sprintf_Hex_GetShortArg
 	ld xbc, (xsp + 86)
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld xde, (xwa - 4)
@@ -691,7 +691,7 @@ Sprintf_Hex_GetArg:
 
 Sprintf_Hex_GetShortArg:
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld de, (xwa - 2)
@@ -859,7 +859,7 @@ Sprintf_Hex_PadRightLoop:
 	bit 6, wa
 	jr z, Sprintf_Octal_GetShortArg
 	ld xbc, (xsp + 86)
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld xde, (xwa - 4)
@@ -867,7 +867,7 @@ Sprintf_Hex_PadRightLoop:
 
 Sprintf_Octal_GetShortArg:
 	ld xbc, (xsp + 86)
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld de, (xwa - 2)
@@ -1023,7 +1023,7 @@ Sprintf_Octal_PadRightLoop:
 	jr nz, Sprintf_Octal_PadRightSpace
 	jr Sprintf_MainLoop_ReadNext
 	ld xbc, (xsp + 86)
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	add (xbc), xwa
 	ld xwa, (xbc)
 	ld xbc, (xwa - 4)
@@ -2464,7 +2464,7 @@ Sprintf_Shift_Loop:
 Sprintf_Shift_ApplyShift:
 	ld (xbc), de
 	ld xbc, xix
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	sub xbc, xwa
 	add xbc, xiy
 	ld wa, (xsp + 4)
@@ -2656,7 +2656,7 @@ Sprintf_DivByTen_Loop:
 Sprintf_MultiplyDigitsByTen:
 	pushw iz
 	ld ix, 0:i3
-	lds32 xbc, 0
+	ld xbc, 0:i3
 
 Sprintf_MulByTen_Loop:
 	ld xhl, (xsp + 6)
@@ -2984,7 +2984,7 @@ Sprintf_ItoaBaseN_StoreDigit:
 	ld xiz, xhl
 	or xiz, xiz
 	jr z, Sprintf_ItoaBaseN_Reverse
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	sub (xsp + 4), xwa
 	jr Sprintf_ItoaBaseN_DivLoop
 
@@ -3054,7 +3054,7 @@ Sprintf_StringNSearch_Copy:
 	ret
 
 Sprintf_MemChr:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld bc, (xsp + 10)
 	cp bc, 0:i3
 	ret z
@@ -3063,7 +3063,7 @@ Sprintf_MemChr:
 	cpir83	; <-- aqui é o endereço FF28E2
 	dec 1, xhl
 	ret z
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 Sprintf_DataBlock_28E9:
@@ -3091,7 +3091,7 @@ Sprintf_StrLen_ScanLoop:
 	djnz xbc, Sprintf_StrLen_ScanLoop
 
 Sprintf_StrLen_NotFound:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Sprintf_StrLen_Return:
 	pop xiz

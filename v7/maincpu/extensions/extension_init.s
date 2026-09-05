@@ -693,14 +693,14 @@ InitializeToshi:
 	pushw 0x0002
 	pushw 0x00ed
 	pushw 0x897c
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld XBC,0x01200000
 	ld XDE,0x01a00001
 	call RegisterMode
 	pushw 0x0002
 	pushw 0x00ed
 	pushw 0x8986
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld XBC,0x01200000
 	ld XDE,0x01a00040
 	call RegisterMode
@@ -714,7 +714,7 @@ InitializeToshi:
 	pushw 0x0002
 	pushw 0x00ed
 	pushw 0x899a
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld XBC,0x01200000
 	ld XDE,0x00010001
 	call RegisterTitle

@@ -22,7 +22,7 @@ Scoop_SoundEditorData:
 	ld	wa, 3:i3
 	call	TaskSched_YieldToQueue
 	jr	-18
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	xbc, 0x01c00007
 	jp	DeleteEvent
 	jp	SeMenu_CopyWriteUpdate_Data_0x349

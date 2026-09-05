@@ -9853,10 +9853,10 @@ SeekRecord_Done_DoLookupRe:
 	jr	z, 5
 	cp	a, 208
 	jr	nz, 7
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	ld	(xsp+2), xwa
 	jr	5
-	lds32	xwa, 3
+	ld	xwa, 3:i3
 	ld	(xsp+2), xwa
 	ld	wa, (xsp+10)
 	exts	xwa
@@ -9975,7 +9975,7 @@ SeqFile_ValidateAndStore:
 	.byte 0x56
 SeqFile_ValidateAndS_LoadIter:
 	push	sr
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(59685:16), xwa
 	ld	iz, 0:i3
 	cp	iz, 6:i3
@@ -10448,7 +10448,7 @@ Epilogue_LoadIter:
 Epilogue_Block:
 	zcf
 	jr	2
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	push	xiz
 	ld	xbc, (59685:16)
@@ -10628,7 +10628,7 @@ Dispatch_Data:
 	.byte 0xeb, 0x3f, 0x07, 0x7e, 0xcf, 0xfe, 0xf1, 0x3f
 	.byte 0xeb, 0x00, 0x7f, 0x78, 0xc7, 0xfe
 	ldw (0xeb3b:16), 0x0000
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xeb37:16), xwa
 	popw iz
 	inc 4,XSP
@@ -10829,16 +10829,16 @@ ProcessMidiConverge_InitVal:
 ProcessMidiConverge_LoopBody:
 	ld	xbc, (xwa-15)
 	inc	8, xbc
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(59695:16), xwa
 	ldw	(59679:16), 0
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(59685:16), xwa
 ProcessMidiConverge_LoopCheck:
 	ldw	(59689:16), 0
 ProcessMidiConverge_LoadDRAM:
 	ldw	(59691:16), 0
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(60215:16), xwa
 	ldw	(60219:16), 0
 	ld	(59646:16), 0
@@ -11167,7 +11167,7 @@ CalcAddrOffset_Data:
 	.byte 0xfd, 0x30, 0x01, 0x41, 0xbf, 0x06, 0x00
 MidiRingBuf_WriteBytes:
 	swi	7
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+2), xwa
 	jr	117
 	call	15674360
@@ -11647,7 +11647,7 @@ SndParam_FetchOscTableEntry:
 	or	xhl, xbc
 	ret
 FetchOscTableEntry_LoadIter:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xwa+6)
 FetchOscTableEntry_Epilogue:
 	.byte 0xeb, 0xee
@@ -11986,7 +11986,7 @@ Param_SignExtendRetu_Return:
 	ld	xwa, (xsp+16)
 	ld	(xwa), l
 	inc	1, iz
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	add	(xsp+8), xwa
 	ld	wa, (xsp+6)
 	cp	iz, wa
@@ -13270,7 +13270,7 @@ TmFlash_WriteRoutine:
 	ld	xwa, (251180:24)
 	or	xwa, xwa
 	jr	nz, 15
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xbc), xwa
 	ld	(251180:24), xbc
 	ld	wa, 1:i3
@@ -13385,14 +13385,14 @@ VoiceParam_DispatchTable1:
 	.byte 0xda, 0x88, 0xd9, 0x50, 0xd8, 0x8b, 0xd7, 0xe2
 	.byte 0x8a, 0xea, 0x12, 0x0e
 	ld XHL,XWA
-	lds32 xde, 0
+	ld xde, 0:i3
 	ret
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld XDE,XHL
 	dec 1,XHL
 	ret
-	lds32 xhl, 1
-	lds32 xde, 0
+	ld xhl, 1:i3
+	ld xde, 0:i3
 	ret Z
 	.byte 0xeb, 0x69, 0xe8, 0x8a, 0x0e, 0x24, 0x00, 0xe9
 	.byte 0xf0, 0x67, 0x0b, 0xcc, 0x61, 0xe9, 0x81, 0x6f

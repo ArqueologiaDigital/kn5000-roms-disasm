@@ -557,7 +557,7 @@ UpdSeSel_DetailedUpdate_Step8:
 UpdSeSel_DetailedUpdate_Step9:
 	cp (xsp + 32), 0x9
 	jr nz, UpdSeSel_DetailedUpdate_StepA
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	call SeMenu_ProcessEffect
 	ld wa, 2:i3
 	ldw bc, 0x20
@@ -571,7 +571,7 @@ UpdSeSel_DetailedUpdate_SetStepAndJump:
 UpdSeSel_DetailedUpdate_StepA:
 	cp (xsp + 32), 0xa
 	jr nz, UpdSeSel_DetailedUpdate_End
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	call SeMenu_ProcessEffect
 	pushw 0x20
 	call SeMenu_ShowPopupDialog
@@ -1906,7 +1906,7 @@ SeMenu_AltUpdate_SetStepAndJump:
 	jr SeMenu_AltUpdate_End
 
 SeMenu_AltUpdate_Step3Plus:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	call SeMenu_ProcessEffect
 	lda xbc, (xsp + 6)
 	ld wa, 1:i3
@@ -2321,11 +2321,11 @@ SeMenu_ControllerData_Offset3:
 SeMenu_ControllerData_Offset4:
 	cp (xsp + 2), 0x0
 	jr nz, SeMenu_ControllerData_Offset5
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	jr SeMenu_ControllerData_Offset6
 
 SeMenu_ControllerData_Offset5:
-	lds32 xwa, 4
+	ld xwa, 4:i3
 
 SeMenu_ControllerData_Offset6:
 	call SeMenu_ProcessEffect
@@ -8785,7 +8785,7 @@ S2cShowHideFunc:
 	jr	nz, 5
 	ld	(14811:16), 3
 S2cShow_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 S2cGridCheck:
@@ -8808,7 +8808,7 @@ S2c_GridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
@@ -8826,7 +8826,7 @@ S2c_GridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
@@ -8880,24 +8880,24 @@ S2c_GridCheck_GetFocusSendEvt:
 
 ; S2cGridCheck event encoding dispatch
 S2c_GridCheck_EventEnc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	lda xsp, (xsp + 18)
 	ret
 
 CmpClrYesFunc:
 	ld xwa, 0x144000c
 	ld xbc, 0x1e40006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call MainFuncCall
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 CmpClrNoFunc:
 	ld xwa, 0x144000c
 	ld xbc, 0x1e40007
-	lds32 xde, 0
+	ld xde, 0:i3
 	call MainFuncCall
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 PsCmpCpFGrpBox_Entry:
 
@@ -8940,7 +8940,7 @@ PsCmpCpFGrpBox_HandleEvtBC:
 	call InheritedProc
 	ld xwa, 0x144000b
 	ld xbc, 0x1e40002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call MainFuncCall
 	jrl PsCmpCpFGrpBox_ReturnZero
 
@@ -8959,7 +8959,7 @@ PsCmpCpFGrpBox_SetColorFF:
 PsCmpCpFGrpBox_SendNotify:
 	ld	xwa, (xsp+272)
 	ld	xbc, 29360141
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+272)
@@ -8990,7 +8990,7 @@ PsCmpCpFGrpBox_DrawFrame:
 	call DrawDesignFrame
 
 PsCmpCpFGrpBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCmpCpFGrpBox_Epilogue:
 	pop xiz
@@ -9037,7 +9037,7 @@ PsCmpCpFVariBox_HandleEvtBC:
 	call InheritedProc
 	ld xwa, 0x144000b
 	ld xbc, 0x1e40003
-	lds32 xde, 0
+	ld xde, 0:i3
 	call MainFuncCall
 	jrl DesignFrame_Return
 
@@ -9057,7 +9057,7 @@ PsCmpCpFVariBox_SetColorFF:
 PsCmpCpFVariBox_SendNotify:
 	ld	xwa, (xsp+272)
 	ld	xbc, 29360141
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+272)
@@ -9091,7 +9091,7 @@ PsCmpCpFVariBox_DrawFrame:
 	call DrawDesignFrame
 
 DesignFrame_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCmpCpFVariBox_Epilogue:
 	pop xiz
@@ -9156,7 +9156,7 @@ PsCmpCpFPtnBox_SetColorFF:
 PsCmpCpFPtnBox_SendNotify:
 	ld	xwa, (xsp+268)
 	ld	xbc, 29360141
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+268)
@@ -9187,7 +9187,7 @@ PsCmpCpFPtnBox_DrawFrame:
 	call DrawDesignFrame
 
 PsCmpCpFPtnBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCmpCpFPtnBox_Epilogue:
 	pop xiz
@@ -9243,7 +9243,7 @@ PsCstmCpBnkBox_LookupAndSend:
 	ld	xbc, 29360143
 	call	16421459
 PsCstmCpBnkBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCstmCpBnkBox_Epilogue:
 	pop xiz
@@ -9306,7 +9306,7 @@ PsCstmCpSwBox_SendCommand:
 	ld	xbc, 29360143
 	call	16421459
 PsCstmCpSwBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCstmCpSwBox_Epilogue:
 	pop xiz
@@ -9358,7 +9358,7 @@ PsCstmCpNameBox_HandleEvtD:
 PsCstmCpNameBox_FuncCall2C:
 	ld xwa, 0x144001a
 	ld xbc, 0x1e4002c
-	lds32 xde, 0
+	ld xde, 0:i3
 
 PsCstmCpNameBox_MainFuncCall:
 	call MainFuncCall
@@ -9397,7 +9397,7 @@ PsCstmCpNameBox_SendEventJoin:
 	call SendEvent
 
 PsCtmAtt_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCstmCpNameBox_Epilogue:
 	pop xiz
@@ -9446,7 +9446,7 @@ PsCtmAttStrBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 PsCtmAttStrBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCtmAttStrBox_Epilogue:
 	pop xiz
@@ -9511,7 +9511,7 @@ AcMemNoBox_SetColorFF:
 AcMemNoBox_SendNotify:
 	ld	xwa, (xsp+268)
 	ld	xbc, 29360141
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+268)
@@ -9545,7 +9545,7 @@ AcMemNoBox_DrawFrame:
 	call DrawDesignFrame
 
 AcMemNoBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 AcMemNoBox_Epilogue:
 	pop xiz
@@ -9650,7 +9650,7 @@ AcCmpRecBox_InheritAndSend:
 	call SendEvent
 
 AcCmpRecBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 AcCmpRecBox_Epilogue:
 	pop xiz
@@ -9705,7 +9705,7 @@ PsCmpQtzBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 PsCmpQtzBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCmpQtzBox_Epilogue:
 	pop xiz
@@ -9773,7 +9773,7 @@ PsCmpMeasBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 PsCmpMeasBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCmpMeasBox_Epilogue:
 	pop xiz
@@ -9840,7 +9840,7 @@ PsCmpMemBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 PsCmpMemBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsCmpMemBox_Epilogue:
 	pop xiz
@@ -9873,7 +9873,7 @@ AcCmpTempoBox_HandleEvt1:
 	ld xde, xiz
 	call InheritedProc
 	ld XWA, (xsp + 0x0104)
-	lds32 xbc, 4
+	ld xbc, 4:i3
 	call SetLswFilter
 	jr CmpFunc_Return
 
@@ -9882,7 +9882,7 @@ AcCmpTempoBox_HandleEvt2:
 	ld xde, xiz
 	call InheritedProc
 	ld XWA, (xsp + 0x0104)
-	lds32 xbc, 4
+	ld xbc, 4:i3
 	call ResetLswFilter
 	jr CmpFunc_Return
 
@@ -9890,7 +9890,7 @@ AcCmpTempoBox_HandleEvtBC:
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	call MainLswGet
 	jr CmpFunc_Return
 
@@ -9904,7 +9904,7 @@ AcCmpTempoBox_HandleEvt1C:
 	.byte 0x20, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x53
 	.byte 0x92, 0xfa
 CmpFunc_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 AcCmpTempoBox_Epilogue:
 	pop xiz
@@ -9935,7 +9935,7 @@ CmpNamingCheck:
 	ld	xhl, xiz
 	jr	9
 CmpNamingCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr CmpNamingCheck_Epilogue
 
 CmpNamingCheck_Return0xD:
@@ -9959,7 +9959,7 @@ CmpNameOkFunc:
 	call MainFuncCall
 
 CmpNameOkFunc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 PsNameMemBox_Entry:
 
@@ -10020,7 +10020,7 @@ PsNameMemBox_SetColorFF:
 PsNameMemBox_SendNotify:
 	ld	xwa, (xsp+268)
 	ld	xbc, 29360141
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+268)
@@ -10056,7 +10056,7 @@ EasyCmp_TtlCase1:
 
 ; EasyCmp title case 2
 EasyCmp_TtlCase2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; EasyCmp title case 3
 EasyCmp_TtlCase3:
@@ -10103,7 +10103,7 @@ EasyCmp_DialGrid:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -10142,7 +10142,7 @@ EasyCmp_DialGrid:
 	jr z, EasyCmp_SendEvt091
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
 	extz xhl
@@ -10196,7 +10196,7 @@ EasyCmp_SendEvt091:
 	jr z, EasyCmp_IncSendEvt091
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
 	extz xhl
@@ -10273,7 +10273,7 @@ EasyCmp_GridCheck_Case3:
 	call ApFuncCall
 
 EasyCmp_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr EasyCmp_GridCheck_Case5
 
 ; EasyCmpGridCheck case 4
@@ -10309,7 +10309,7 @@ EasyCmp_GridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
@@ -10333,7 +10333,7 @@ EasyCmp_GridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
@@ -10416,7 +10416,7 @@ EasyCmp_GridCheck_EventCase3:
 
 ; EasyCmpGridCheck event case 4
 EasyCmp_GridCheck_EventCase4:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	lda xsp, (xsp + 28)
 	ret
 
@@ -10456,9 +10456,9 @@ EasyCmp_GridEvtCase_Default:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	79
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	75
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	71
 	lda	xhl, (32418:16)
 	jr	65
@@ -10485,7 +10485,7 @@ EasyCmp_GridEvtCase_Epilogue:
 	lda	xsp, (xsp+10)
 	ld	(13360:16), 0
 MspNaming_CleanupExit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -10513,7 +10513,7 @@ MspNamingCheck:
 	ld	xhl, xiz
 	jr	9
 MspNamingCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr MspNamingCheck_Epilogue
 
 MspNamingCheck_ReturnHex10:
@@ -10537,7 +10537,7 @@ MspNameOkFunc:
 	call MainFuncCall
 
 MspNameOkFunc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 MspNameOkFunc_End:
 
@@ -10586,7 +10586,7 @@ PsMspNameBnk_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 PsMspNameBnk_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsMspNameBnk_Epilogue:
 	pop xiz
@@ -10631,7 +10631,7 @@ VwVariBoxProc:
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
 VwVariBox_Init:
@@ -10671,7 +10671,7 @@ VwVariBox_Init:
 
 	ld xbc, 0x1c0000d
 
-	lds32 xde, 0
+	ld xde, 0:i3
 
 	.byte 0x78, 0xe7, 0x02	; jrl VwVariBox_DispatchAndReturn (v7 displacement)
 
@@ -10705,33 +10705,33 @@ VwVariBox_Match_ValueMismatch:
 	jr ge, VwVariBox_Match_HighIndex
 	ld xwa, 0xc80001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x1
 	jr z, VwVariBox_Match_Repaint
 	ld xwa, 0xc80001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xc80001
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr VwVariBox_Match_DispatchConfirm
 
 VwVariBox_Match_HighIndex:
 	ld xwa, 0xc80001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x2
 	jr z, VwVariBox_Match_Repaint
 	ld xwa, 0xc80001
 	ld xbc, 0x1e0007f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call SendEvent
 	ld xwa, 0xc80001
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 
 VwVariBox_Match_DispatchConfirm:
 	call ApDeliveryEvent
@@ -10739,7 +10739,7 @@ VwVariBox_Match_DispatchConfirm:
 VwVariBox_Match_Repaint:
 	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
 VwVariBox_Paint:
@@ -10770,7 +10770,7 @@ VwVariBox_Paint_DrawLabel:
 	call DrawEditSw
 	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
 VwVariBox_Confirm:
@@ -10828,7 +10828,7 @@ VwVariBox_Confirm_Render:
 	call DrawStringAlignment
 
 VwVariBox_ReturnHandled:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl VwVariBox_Return
 
 VwVariBox_GetText:
@@ -10902,7 +10902,7 @@ VwVariBox_OK:
 	call SendEvent
 	ld XWA,(XSP+0x0118)
 	ld XBC,0x01e0004d
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	ld XWA,(XSP+0x0118)
 	call GetViewInstance
@@ -10934,7 +10934,7 @@ VwVariBox_Release:
 	jrl z, VwVariBox_ReturnHandled
 	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1e0004d
-	lds32 xde, 0
+	ld xde, 0:i3
 
 VwVariBox_DispatchAndReturn:
 	call SendEvent
@@ -10950,7 +10950,7 @@ VwVariBox_CanScroll:
 	ld xwa, (xhl + 38)
 	cpw (xwa), 0x1
 	jrl nz, VwVariBox_ReturnHandled
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr VwVariBox_Return
 
 VwVariBox_Default:
@@ -10987,30 +10987,30 @@ MspBnkShow:
 	jr	ge, 38
 	ld	xwa, 13107201
 	ld	xbc, 31457366
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	cp	xhl, 1
 	jr	z, 54
 	ld	xwa, 13107201
 	ld	xbc, 31457407
-	lds32	xde, 1
+	ld	xde, 1:i3
 	jr	36
 MspBnk_SendEvt56_Case2:
 	ld xwa, 0xc80001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x2
 	jr z, MspBnk_ReturnZero
 	ld xwa, 0xc80001
 	ld xbc, 0x1e0007f
-	lds32 xde, 2
+	ld xde, 2:i3
 
 MspBnk_SendEvt7F:
 	call SendEvent
 
 MspBnk_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 AcMspBnkSlBox_Entry:
@@ -11128,7 +11128,7 @@ MspBnkSlBox_CallMainLswGet:
 	call MainLswGet
 
 MspBnkSlBox_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr MspBnkSlBox_Epilogue
 
 MspBnk_JoinLoadParams:
@@ -11199,25 +11199,25 @@ MspBnkNameBox_HandleEvtD:
 	jrl nz, RgpSetBnk_GridCheck_Case1
 	ld xwa, 0x1440010
 	ld xbc, 0x1e40017
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr MspBnk_MainFuncDispatch
 
 MspBnkNameBox_EvtD_Case1:
 	ld xwa, 0x1440010
 	ld xbc, 0x1e40018
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr MspBnk_MainFuncDispatch
 
 MspBnkNameBox_EvtD_Case2:
 	ld xwa, 0x1440010
 	ld xbc, 0x1e40019
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr MspBnk_MainFuncDispatch
 
 MspBnkNameBox_EvtD_Case3:
 	ld xwa, 0x1440010
 	ld xbc, 0x1e4001a
-	lds32 xde, 0
+	ld xde, 0:i3
 
 MspBnk_MainFuncDispatch:
 	call MainFuncCall
@@ -11279,7 +11279,7 @@ MspBnk_SendEventJoin:
 
 ; RgpSetBnkCheck case 1
 RgpSetBnk_GridCheck_Case1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr RgpSetBnk_GridCheck_Case3
 
 ; RgpSetBnkCheck case 2
@@ -11314,7 +11314,7 @@ MspRGrpSetGridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
@@ -11338,7 +11338,7 @@ MspRGrpSetGridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
@@ -11435,7 +11435,7 @@ AudioEvt_GetFocusRetZero:
 
 ; RgpSetBnkCheck return
 RgpSetBnk_GridCheck_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	lda xsp, (xsp + 28)
 	ret
 PsRgpSetBnkBoxProc_Entry:
@@ -11485,7 +11485,7 @@ RgpSetBnkBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 RgpSetBnkBox_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 RgpSetBnkBox_Epilogue:
 	pop xiz
@@ -11516,7 +11516,7 @@ MspRGrpSetBnk_UpdateLsw:
 
 	ld xbc, 0x1c0000b
 
-	lds32 xde, 0
+	ld xde, 0:i3
 
 	call	16421459
 
@@ -11549,7 +11549,7 @@ MspRGrpSetBnk_InnerLoop:
 	jr ule, MspRGrpSetBnk_OuterLoop
 
 MspRGrpSetBnk_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw_erp 0xfa
 	ret
 
@@ -11582,7 +11582,7 @@ MspRgpShowHide_PutLsw:
 	call MainLswPut
 
 MspRgpShow_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 MspRgpShowHide_End:
 
@@ -11631,7 +11631,7 @@ MspMeasBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 MspMeasBox_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 MspMeasBox_Epilogue:
 	pop xiz
@@ -11692,7 +11692,7 @@ MspMemBox_ClampValue:
 	ld	xbc, 29360143
 	call	16421459
 MspMemBox_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 MspMemBox_Epilogue:
 	pop xiz
@@ -11745,7 +11745,7 @@ MspRecBnkBox_CopyMemBlock:
 	ld	xbc, 29360143
 	call	16421459
 MspRecBnkBox_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 MspRecBnkBox_Epilogue:
 	pop xiz
@@ -11804,7 +11804,7 @@ AcSndArgGrid_BnkDispatch:
 	ld	xbc, 29360143
 	call	16421459
 AcSndArgGrid_BnkCase1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; AcSndArgGridBnk case 2
 AcSndArgGrid_BnkCase2:
@@ -11857,7 +11857,7 @@ MspPlayModeFunc_DataBlock:
 	scc16	nz, hl
 	extz	xhl
 	jr	28
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	24
 	lda	xhl, (32419:16)
 	jr	18
@@ -11869,7 +11869,7 @@ AcSndArgGrid_BoxProc:
 
 ; AcSndArgGridBox case 1
 AcSndArgGrid_BoxCase1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -11921,7 +11921,7 @@ AcSndArgGrid_Init:
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+22)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+8)
@@ -11960,7 +11960,7 @@ AcSndArgGrid_Init:
 	jr	z, 102
 	ld	xwa, (xsp+22)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	dec	1, hl
 	extz	xhl
@@ -12027,7 +12027,7 @@ AcSndArgGrid_ScrollUp_NoCanScroll:
 	jr	z, 102
 	ld	xwa, (xsp+22)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	inc	1, hl
 	extz	xhl
@@ -12210,7 +12210,7 @@ AcSndArgGrid_PlayAudio:
 	jr nz, AcSndArgGrid_ForwardToBase
 
 AcSndArgGrid_ReturnHandled:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcSndArgGrid_Return
 
 AcSndArgGrid_ForwardToBase:
@@ -12243,7 +12243,7 @@ SndArgGridCheck:
 	jr z, SndArgGridCheck_PlayColAudio
 	cp xbc, 0x1e0008d
 	jr z, SndArgGridCheck_CellSelect
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xwa, xiy
 	sub xwa, 0x1c00017
 	cp xwa, 0x0
@@ -12372,7 +12372,7 @@ SndArgGridCheck_DispatchPlayAudio:
 	call SendEvent
 
 SndArgGridCheck_ReturnHandled:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 SndArgGridCheck_Return:
 	pop xiz
@@ -12391,7 +12391,7 @@ SndArgTtlCheck:
 	.byte 0x41, 0x14, 0x00, 0xc0, 0x01, 0x42, 0x01, 0x00
 	.byte 0x80, 0x01, 0x1d, 0x45, 0x93, 0xfa
 ParamList_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 PsParaListBoxProc_Entry:
 
@@ -12577,7 +12577,7 @@ SndArgGrid_CheckCase2:
 	ld (xbc), wa
 
 PsParaListBoxProc_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; SndArgGridCheck case 3
 SndArgGrid_CheckCase3:
@@ -12619,14 +12619,14 @@ StylCnvStorBnkSel_DataBlock:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	19
-	lds32	xhl, 1
+	ld	xhl, 1:i3
 	jr	15
 	ld	xhl, 22
 	jr	8
 	lda	xhl, (14769:16)
 	jr	2
 PsSCTxtBox_EventDispatch:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 92)
 	ret
@@ -12673,7 +12673,7 @@ SCTxtBox_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 SCTxtBox_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 SCTxtBox_Epilogue:
 	pop xiz
@@ -12727,7 +12727,7 @@ SCTxtBox2_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 SCTxtBox2_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 SCTxtBox2_Epilogue:
 	pop xiz
@@ -12737,13 +12737,13 @@ SCTxtBox2_Epilogue:
 StylCnvStorOkFunc:
 	cp	xbc, 29360135
 	jr	nz, 20
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (14769:16)
 	ld	xwa, 21233699
 	ld	xbc, 31719472
 	call	16402006
 StylCnvStorOkFunc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 StylCnvStorOkFunc_DataBlock:
@@ -13217,7 +13217,7 @@ StylCnvStorBnk_ProcDataBlock:
 	jr	7
 	.byte 0x94, 0x04, 0x93, 0x04
 	calr	64441
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -13239,10 +13239,10 @@ CmpNameMenu_HandleEvtD:
 	call	16400380
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 CmpNameMenu_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 CmpNameMenu_Epilogue:
 	pop xiz
@@ -13255,7 +13255,7 @@ AttLangCheck:
 	ret
 
 AttLangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SureLangCheck:
@@ -13265,7 +13265,7 @@ SureLangCheck:
 	ret
 
 SureLangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SndMemLangCheck:
@@ -13275,7 +13275,7 @@ SndMemLangCheck:
 	ret
 
 SndMemLangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SndMem1LangCheck:
@@ -13285,7 +13285,7 @@ SndMem1LangCheck:
 	ret
 
 SndMem1LangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MemfulLangCheck:
@@ -13295,7 +13295,7 @@ MemfulLangCheck:
 	ret
 
 MemfulLangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 Memful2LangCheck:
@@ -13305,7 +13305,7 @@ Memful2LangCheck:
 	ret
 
 Memful2LangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 StylCnvLangCheck:
@@ -13315,7 +13315,7 @@ StylCnvLangCheck:
 	ret
 
 StylCnvLangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SndArrLangCheck:
@@ -13325,7 +13325,7 @@ SndArrLangCheck:
 	ret
 
 SndArrLangCheck_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 PsStylCnvVerProc_Entry:
 
@@ -13375,7 +13375,7 @@ StylCnvVer_HandleEvtBC:
 	ld	xbc, 29360143
 	call	16421459
 StylCnvVer_SetReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 StylCnvVer_Epilogue:
 	pop xiz

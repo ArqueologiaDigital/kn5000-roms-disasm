@@ -10,7 +10,7 @@
 	push XIZ
 	ldw (XSP+0x04), 0xffff
 	ld XIZ,XWA
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (XSP+0x06),XWA
 	ld XHL,XIZ
 	and XHL,0x000000ff

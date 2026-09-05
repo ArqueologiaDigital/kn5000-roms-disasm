@@ -139,7 +139,7 @@ FDemo_DisplayResourceData:
 	add	xde, xwa
 	ld	(0x25b7e:24), xde
 	jr	2
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 
 MainPreControl:
@@ -158,7 +158,7 @@ MainPreControl_Dispatch:
 	ldw	(0x0251d8:24), 0
 
 MainPreControl_ReturnNull:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FDemo_DisplayCtrlJumpHandler:
@@ -237,7 +237,7 @@ Seq_DispatchMainFunc:
 	call MainFuncCall
 
 ApPreControl_ReturnNull:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl ApPreControl_Exit
 
 Seq_StartWithFullInit:
@@ -279,15 +279,15 @@ Seq_StartWithFullInit:
 	jr lt, ApPreControl_ReturnNull
 	ld xwa, 0x1410000
 	ld xbc, 0x1e10006
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl Seq_DispatchMainFunc
 	ld xwa, NakaInst_Param_Field02_0x4
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld wa, iz
 	calr Seq_CopyResourcePtrs
@@ -384,7 +384,7 @@ FDemo_LinkedListSearchFound:
 	jr FDemo_LinkedListSearchExit
 
 FDemo_LinkedListSearchRetNull:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 FDemo_LinkedListSearchExit:
 	pop xiz
@@ -462,7 +462,7 @@ FDemo_LinkedListLookupField:
 	ret
 
 FDemo_LinkedListLookupNull:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FDemo_FileOpenAndProcess:
@@ -487,7 +487,7 @@ FDemo_FileOpen_DoOpen:
 	ld (xsp+4), hl
 	cpw (xsp+4), 0x0000
 	jr lt, FDemo_FileOpen_GetResult
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	bc, 2:i3
 	call FileIO_SeekAndReadBlock
 	call FileIO_SeekWriteBlock_Impl
@@ -1476,7 +1476,7 @@ FileIO_ValidateSig_Return:
 FileIO_ReadAndValidateHeader:
 	dec 4, xsp
 	pushw iz
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld bc, 0:i3
 	call FileIO_SeekAndReadBlock
 	ld iz, 0:i3
@@ -1567,7 +1567,7 @@ FileIO_ValidateOpen_Return:
 FileIO_ReadHeaderAt4:
 	pushw iz
 	ld iz, 1:i3
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld bc, 0:i3
 	call FileIO_SeekAndReadBlock
 	call FileIO_ReadByte
@@ -3857,7 +3857,7 @@ WriteFileWithVerify:
 	jrl WriteVerify_Return
 
 WriteVerify_InitCounters:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 	ld iz, 0:i3
 
@@ -4110,7 +4110,7 @@ FileIO_CloseHandle:
 	push xwa
 	call FileClose
 	inc 4, xsp
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x7f44:16), xwa
 
 FileIO_CloseHandle_Done:
@@ -4268,7 +4268,7 @@ FileIO_ReadBlock:
 	push xiz
 	ld (xsp + 18), xwa
 	ldw (xsp + 4), 0x0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 6), xwa
 	ld xwa, (0x7f44:16)
 	or xwa, xwa
@@ -6127,7 +6127,7 @@ GetFileCount_StoreAndClamp:
 
 ReadVariableLengthInt:
 	push xiz
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	jr ReadVarLen_ReadNext
 
 ReadVarLen_AccumulateLoop:
@@ -6295,7 +6295,7 @@ ParseSMF_CheckEOF:
 	call FileIO_ReturnError
 	cp hl, 0:i3
 	jr ge, ParseSMF_ReadDeltaAndLoop
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ParseSMF_Return
 
 ParseSMF_CheckMIDI:
@@ -6437,7 +6437,7 @@ ProcessRecord_Match2Next:
 	setm 6, (xwa)
 
 ProcessRecord_ReadTimeSig:
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld bc, 1:i3
 	call FileIO_SeekAndReadBlock
 	call FileIO_ReadByte
@@ -6455,7 +6455,7 @@ ProcessRecord_ReadTimeSig:
 	resm 7, (xwa)
 
 ProcessRecord_ReadAfterTimeSig:
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld bc, 1:i3
 	call FileIO_SeekAndReadBlock
 	ld iz, 0:i3
@@ -6516,7 +6516,7 @@ ProcessRecord_Match3Next:
 	inc 1, iz
 	cp iz, 4:i3
 	jrl c, ProcessRecord_MatchLoop3
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld bc, 1:i3
 	call FileIO_SeekAndReadBlock
 	calr ParseSMFTrackName
@@ -7889,7 +7889,7 @@ FileIO_FindFirstMatch:
 	ld XWA, (xsp + 0x0114)
 	ld (xwa), 0x0
 	ld XWA, (xsp + 0x0110)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld (xwa), xbc
 	ld a, (0x027414:24)
 	exts wa
@@ -7973,7 +7973,7 @@ FileIO_FindNextMatch:
 	jr z, FindNext_CopyName
 	ld (xiz), 0x0
 	ld XWA, (xsp + 0x010e)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld (xwa), xbc
 	ld xwa, (0x027416:24)
 	call _findclose
@@ -8363,7 +8363,7 @@ FileIO_DiskRemoved:
 	ret nz
 	ld xwa, 0x600002
 	ld xbc, 0x1e0009c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ret
 
@@ -8844,7 +8844,7 @@ FileIO_MedleyDispatchByMode:
 	ld a, (0x8d36:16)
 	cp a, 0x79
 	jr nz, MedleyDisp_ModeSmf
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00017
 	ld xde, 0xd
 	jrl FmmIntMedleyFunc
@@ -8852,7 +8852,7 @@ FileIO_MedleyDispatchByMode:
 MedleyDisp_ModeSmf:
 	cp a, 0x6c
 	jr nz, MedleyDisp_ModeDoc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00017
 	ld xde, 0xd
 	jrl FmmSmfMedleyFunc
@@ -8860,7 +8860,7 @@ MedleyDisp_ModeSmf:
 MedleyDisp_ModeDoc:
 	cp a, 0x6d
 	jr nz, MedleyDisp_ModePd
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00017
 	ld xde, 0xd
 	jp FmmDocMedleyFunc
@@ -8868,7 +8868,7 @@ MedleyDisp_ModeDoc:
 MedleyDisp_ModePd:
 	cp a, 0x6e
 	jr nz, MedleyDisp_ModeDisk
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00017
 	ld xde, 0xd
 	jrl FmmPdMedleyFunc
@@ -8876,7 +8876,7 @@ MedleyDisp_ModePd:
 MedleyDisp_ModeDisk:
 	cp a, 0x77
 	ret nz
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00017
 	ld xde, 0xd
 	calr FmmDiskMedleySelectFunc

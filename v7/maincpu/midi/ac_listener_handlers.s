@@ -134,7 +134,7 @@ AcLswBox_HandleValueChange:
 	ld (xbc), wa
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl AudioMix_SendEventAlt
 
 AcLswBox_HandleDialIncEvt:
@@ -149,7 +149,7 @@ AcLswBox_HandleDialIncEvt:
 	jrl z, AudioMix_ReturnZeroJmp2
 	ld xwa, xiz
 	ld xbc, 0x1e0003d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr AudioMix_SendEventAlt
 
 AcLswBox_HandleDialDecEvt:
@@ -164,7 +164,7 @@ AcLswBox_HandleDialDecEvt:
 	jr z, AudioMix_ReturnZeroJmp2
 	ld xwa, xiz
 	ld xbc, 0x1e0003d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr AudioMix_SendEventAlt
 
 AcLswBox_HandleScrollUpEvt:
@@ -200,7 +200,7 @@ AudioMix_SendEventAlt:
 	call SendEvent
 
 AudioMix_ReturnZeroJmp2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcLswBox_ReturnEpilogue
 
 AcLswBox_DefaultInherited:
@@ -234,7 +234,7 @@ TtMdRealMsg:
 	ldw (xwa), 0x0
 
 TtMdRealMsg_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcLswFuncEditBoxProc:
@@ -362,7 +362,7 @@ AcLswEdit_HandleValueChange:
 	ld (xbc), wa
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl AudioMix_SendEvent
 
 AcLswEdit_HandleDialIncEvt:
@@ -377,7 +377,7 @@ AcLswEdit_HandleDialIncEvt:
 	jrl z, AudioMix_ReturnZeroJmp
 	ld xwa, xiz
 	ld xbc, 0x1e0003d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr AudioMix_SendEvent
 
 AcLswEdit_HandleDialDecEvt:
@@ -392,7 +392,7 @@ AcLswEdit_HandleDialDecEvt:
 	jr z, AudioMix_ReturnZeroJmp
 	ld xwa, xiz
 	ld xbc, 0x1e0003d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr AudioMix_SendEvent
 
 AcLswEdit_HandleScrollUpEvt:
@@ -428,7 +428,7 @@ AudioMix_SendEvent:
 	call SendEvent
 
 AudioMix_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcLswEdit_Epilogue
 
 AcLswEdit_DefaultInherited:
@@ -475,7 +475,7 @@ TtFadeInOut:
 	ldw (xwa), 0x1
 
 TtFadeInOut_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; =============================================================================
@@ -538,7 +538,7 @@ VoiceParam_ListHandler:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -577,7 +577,7 @@ VoiceParam_ListHandler:
 	jr z, FadeGrid_CheckFadeOut
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp hl, 1:i3
 	jrl le, AudioMix_ReturnZeroJmp3
@@ -637,7 +637,7 @@ FadeGrid_CheckFadeOut:
 	jr z, FadeGrid_CheckFadeOutAlt
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	add wa, wa
@@ -725,7 +725,7 @@ FadeGrid_ApFuncCallAndReturn:
 	call ApFuncCall
 
 AudioMix_ReturnZeroJmp3:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr VoiceUI_GridCase4
 
 ; Voice UI grid case 3
@@ -783,7 +783,7 @@ Data_FadeSetGridDispatch:
 	call	16400579
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
@@ -806,7 +806,7 @@ Data_FadeSetGridDispatch:
 	call	16400579
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
@@ -944,7 +944,7 @@ SndParam_SendEventAndReturn:
 	call SendEvent
 
 SndParam_ReturnZero2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
@@ -968,7 +968,7 @@ TtMdInOut:
 	ldw (xwa), 0x1
 
 TtMdInOut_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcInOutGridBoxProc:
@@ -1007,7 +1007,7 @@ AcInOutGrid_Init:
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	xiz, xhl
 	ld	xwa, (xsp+4)
@@ -1046,7 +1046,7 @@ AcInOutGrid_Init:
 	jr	z, 119
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	ld	iz, hl
 	ld	xwa, 20480
@@ -1123,7 +1123,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	jr	z, 115	; -> 0xF755A6
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	iz, hl
 	ld	xwa, 20480
@@ -1241,7 +1241,7 @@ AcInOutGrid_CellSelect_Call:
 	call ApFuncCall
 
 AcInOutGrid_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcInOutGrid_Epilogue
 
 AcInOutGrid_Default:
@@ -1288,7 +1288,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
@@ -1357,7 +1357,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
@@ -1499,7 +1499,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 29360140
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	1136
 	ldw	(xbc), 2
 	ld	wa, (xix)
@@ -1517,7 +1517,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 29360140
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	1080
 	ldw	(xbc), 2
 	ld	wa, (xix)
@@ -1535,7 +1535,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 29360140
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	1024
 	ldw	(xbc), 3
 	ld	xwa, 20480
@@ -1875,7 +1875,7 @@ Data_ParaLoadOptDispatch:
 	ld	xbc, 31457420
 	call	SendEvent
 MdPreset_ReturnZero2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
@@ -1893,11 +1893,11 @@ TtMdPreset:
 	jr nz, TtMdPreset_ReturnZero
 	ld xwa, 0x560001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 TtMdPreset_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 IvMpstPageControlProc:
@@ -1926,7 +1926,7 @@ IvMpst_HandleClose:
 	call InheritedProc
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl IvMpst_SendEventEpilogue
 
 IvMpst_HandleGetName:
@@ -1943,25 +1943,25 @@ IvMpst_HandlePageSwitch:
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1e00094
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvMpst_CheckSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 IvMpst_CheckSecondView:
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1e00094
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvMpst_InheritAndCheck
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 IvMpst_InheritAndCheck:
@@ -1977,19 +1977,19 @@ IvMpst_InheritAndCheck:
 	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr IvMpst_SendEventEpilogue
 
 IvMpst_ActivateSecondView:
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 IvMpst_SendEventEpilogue:
 	call SendEvent
 
 IvMpst_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 IvMpst_Epilogue:
 	pop xiz
@@ -2005,7 +2005,7 @@ MdPresetWithoutFunc:
 	ld (0x024756:24), 0x00
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp l, 2:i3
 	jr z, MdPresetWithout_Slot2Path
@@ -2016,11 +2016,11 @@ MdPresetWithoutFunc:
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr MdPresetWithout_SendCreate
 
 MdPresetWithout_Slot2Path:
@@ -2029,17 +2029,17 @@ MdPresetWithout_Slot2Path:
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 MdPresetWithout_SendCreate:
 	call SendEvent
 
 MdPresetWith_ReturnSuccess:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -2052,7 +2052,7 @@ MdPresetWithFunc:
 	ld (0x024756:24), 0x01
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp l, 2:i3
 	jr z, MdPresetWith_Slot2Path
@@ -2063,11 +2063,11 @@ MdPresetWithFunc:
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr MdPresetWith_SendCreate
 
 MdPresetWith_Slot2Path:
@@ -2076,17 +2076,17 @@ MdPresetWith_Slot2Path:
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 MdPresetWith_SendCreate:
 	call SendEvent
 
 MdPreset_ReturnSuccess:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -2096,7 +2096,7 @@ MdPresetOKFunc:
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp l, 4:i3
 	jrl z, MdPresetOK_Slot4Path
@@ -2113,7 +2113,7 @@ MdPresetOKFunc:
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56000c
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	add l, 0x44
 	ldb h, 0x0
@@ -2126,7 +2126,7 @@ MdPresetOKFunc:
 MdPresetOK_Slot1Func:
 	ld xwa, 0x560015
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	add l, 0x4d
 	ldb h, 0x0
@@ -2143,7 +2143,7 @@ MdPresetOK_CheckSlotB:
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56002d
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	add l, 0x41
 	ldb h, 0x0
@@ -2156,7 +2156,7 @@ MdPresetOK_CheckSlotB:
 MdPresetOK_SlotBFunc:
 	ld xwa, 0x560039
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	add l, 0x4a
 	ldb h, 0x0
@@ -2169,7 +2169,7 @@ MdPresetOK_SlotBFunc:
 MdPresetOK_Slot3Path:
 	ld xwa, 0x560020
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	add l, 0x1b
 	ldb h, 0x0
@@ -2182,12 +2182,12 @@ MdPresetOK_Slot3Path:
 MdPresetOK_Slot4Path:
 	ld xwa, 0x560029
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (0x024758:24), l
 	ld xwa, 0x560025
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ldb h, 0x0
 	extz xhl
@@ -2199,7 +2199,7 @@ MdPreset_CallMainFunc:
 	call MainFuncCall
 
 MdPreset_PostMainFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainMpstFunc:
@@ -2234,7 +2234,7 @@ MainMpst_PostEvent:
 	call ApPostEvent
 
 MainMpst_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 4, xsp
 	ret
 
@@ -2254,6 +2254,6 @@ TtMdExc:
 TtMdExc_HandleClose:
 	.byte 0xea, 0xe2, 0x6e, 0x04, 0xf1, 0x46, 0xb7, 0xb6
 TtMdExc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 

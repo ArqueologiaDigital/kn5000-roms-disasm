@@ -32,7 +32,7 @@ BitMapOut_PaletteLoadLoop:
 	inc 4, xiz
 	cp xiz, 0x400
 	jr c, BitMapOut_PaletteLoadLoop
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ld xwa, (xsp + 8)
 	lda xde, (xwa + 20)
 	ld xwa, (xde)
@@ -41,7 +41,7 @@ BitMapOut_PaletteLoadLoop:
 	ld xix, (xsp + 4)
 	ld xwa, xix
 	lda xhl, (xwa + 1)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 
 BitMapOut_PixelBlitLoop:
 	ld a, (xix)
@@ -147,7 +147,7 @@ BitMapOut_ByteData_RenderB:
 	jr	nz, 18
 	ld	xwa, 4294967295
 	ld	xbc, 31457401
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	jr	35
 	ld	xwa, 4294967295
@@ -155,7 +155,7 @@ BitMapOut_ByteData_RenderB:
 	call	16421979
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	wa, 1:i3
 	calr	310
@@ -211,12 +211,12 @@ BitMapOut_ByteData_RenderD:
 	jr	nz, 18
 	ld	xwa, 4294967295
 	ld	xbc, 31457401
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	jr	21
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	calr	172
@@ -268,7 +268,7 @@ BitMapOut_ByteData_RenderE:
 	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360129
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	calr	32
@@ -299,7 +299,7 @@ BitMapOut_DecrementTimer:
 	ld	(36000:16), a
 	cp	a, 0:i3
 	ret	nz
-	lds32	xwa, 3
+	ld	xwa, 3:i3
 	call	16567398
 	ld	de, hl
 	pushw	255
@@ -335,7 +335,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
-	lds32	xde, 5
+	ld	xde, 5:i3
 	jr	75
 	.byte 0xf1	; v10 does not spell this byte either
 	.byte 0xc0	; differs from v10 here and llvm-objdump cannot read it
@@ -345,7 +345,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
-	lds32	xde, 6
+	ld	xde, 6:i3
 	jr	50
 	.byte 0xf1	; v10 does not spell this byte either
 	.byte 0xc0	; differs from v10 here and llvm-objdump cannot read it
@@ -359,11 +359,11 @@ BitMapOut_ByteData_TransitionSeq:
 	jr	nz, 14
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
-	lds32	xde, 3
+	ld	xde, 3:i3
 	jr	12
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApPostEvent
 	ret
 BitMapOut_ByteData_PresetCopy:
@@ -605,7 +605,7 @@ BitMapOut_RestoreFull_FieldLoop:
 
 BitMapOut_RestoreFull_CopyField:
 	stb_erp A, 0xe6
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ldb_erp A, 0xf8
 	lda xwa, (0xf9ce:16)
 	sub xwa, 0xf9b6
@@ -2944,9 +2944,9 @@ BitMapOut_ByteData_RenderState:
 	ld	xbc, 31457315
 	ld	xde, xiz
 	call	16423243
-	lds32	xwa, 0
-	lds32	xbc, 0
-	lds32	xde, 0
+	ld	xwa, 0:i3
+	ld	xbc, 0:i3
+	ld	xde, 0:i3
 	call	16354423
 	pop	xiz
 	ret
@@ -3155,7 +3155,7 @@ BitMapOut_ByteData_WidgetTable:
 
 
 BitMapOut_ApplyWidgetPatch:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 BitMapOut_ApplyPatch_SkipHeader:

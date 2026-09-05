@@ -61,7 +61,7 @@ Password_HandleDeleteEvent:
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
-	lds32 xde, 4
+	ld xde, 4:i3
 	jr Password_ForwardToFileName
 
 Password_Delete_CheckLoadOnly:
@@ -74,7 +74,7 @@ Password_Delete_CheckLoadOnly:
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
-	lds32 xde, 4
+	ld xde, 4:i3
 	jr Password_ForwardToFileName
 
 Password_Delete_CheckSaveOnly:
@@ -87,7 +87,7 @@ Password_Delete_CheckSaveOnly:
 	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
-	lds32 xde, 4
+	ld xde, 4:i3
 
 Password_ForwardToFileName:
 	calr FmmFileNameFunc
@@ -157,7 +157,7 @@ Password_HandleLoadEvent:
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
 	ld xbc, 0x1c00017
-	lds32 xde, 4
+	ld xde, 4:i3
 	calr FmmSeqSongNameFunc
 	jr Password_Return
 
@@ -169,7 +169,7 @@ Password_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 Password_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -272,11 +272,11 @@ FileName_ListSelect_Negative:
 	ldw (0x7f7a:16), 0
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
-	lds32 xde, 0
+	ld xde, 0:i3
 
 FileName_ListSelect_Forward:
 	call ApPostEvent
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x7f76:16), xwa
 	jrl FileName_Return
 
@@ -375,7 +375,7 @@ FileName_OpSave:
 	jrl z, FileName_OpLoad
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, (0x7f7a:16)
 	extz wa
@@ -390,11 +390,11 @@ FileName_OpSave:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0
 	jr z, FileName_OpSave_ShowCode1
@@ -422,7 +422,7 @@ FileName_OpSave_CallHandler:
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
@@ -436,7 +436,7 @@ FileName_OpLoad:
 	calr SelectPasswordMode
 	cp hl, 0:i3
 	jr z, FileName_OpLoad_NoPwd
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
@@ -450,17 +450,17 @@ FileName_OpLoad_NoPwd:
 	jr z, FileName_OpLoad_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -476,17 +476,17 @@ FileName_OpLoad_Execute:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
@@ -496,7 +496,7 @@ FileName_OpFormat:
 	jr nz, FileName_OpDelete
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -512,17 +512,17 @@ FileName_OpFormat:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
@@ -537,11 +537,11 @@ FileName_OpDelete:
 	jr z, FileName_OpDelete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 FileName_OpDispatch:
 	call ApPostEvent
@@ -550,7 +550,7 @@ FileName_OpDispatch:
 FileName_OpDelete_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -566,7 +566,7 @@ FileName_OpDelete_Execute:
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
@@ -576,7 +576,7 @@ FileName_OpFormatVariant:
 	jr nz, FileName_OpNavigate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -592,7 +592,7 @@ FileName_OpFormatVariant:
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
@@ -629,7 +629,7 @@ FileName_Navigate_CheckChanged:
 	jr z, FileName_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -644,7 +644,7 @@ FileName_Navigate_CheckChanged:
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 
@@ -800,7 +800,7 @@ FileName_DispatchWidget:
 	call ApPostEvent
 
 FileName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 8, xsp
 	ret

@@ -19,7 +19,7 @@ SMF_ProcessTimedEvent_Continue:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop1_BufferEmpty
@@ -36,7 +36,7 @@ SMF_WriteLoop1_Continue:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop2_BufferEmpty
@@ -73,7 +73,7 @@ SMF_IncrementPosition:
 	call SMF_ProcessChannels
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_IncrPos_BufferEmpty
@@ -93,7 +93,7 @@ SMF_IncrPos_WriteEndMarker:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_EndMarker_BufferEmpty
@@ -112,7 +112,7 @@ SMF_EndMarker_CheckPlayback:
 	call SMF_FlushToFile
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_Flush_BufferEmpty
@@ -385,7 +385,7 @@ SMF_OutputCmd_ReadByte:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck1
@@ -407,7 +407,7 @@ SMF_OutputCmd_SendFF:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck2
@@ -427,7 +427,7 @@ SMF_OutputCmd_Send51:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck3
@@ -447,7 +447,7 @@ SMF_OutputCmd_Send03:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck4
@@ -467,7 +467,7 @@ SMF_OutputCmd_SendTempoH:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck5
@@ -487,7 +487,7 @@ SMF_OutputCmd_SendTempoM:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck6
@@ -507,7 +507,7 @@ SMF_OutputCmd_SendTempoL:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck7
@@ -531,7 +531,7 @@ SMF_WriteByte:
 	pushw bc
 	push xwa
 	xor xwa, xwa
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	ld (6701:16), xwa
 	pop xwa
 	cp xix, 0x17f9
@@ -548,7 +548,7 @@ SMF_WriteByte_SectorCheck:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteByte_SectorError
@@ -590,7 +590,7 @@ SMF_WriteByte_AlignCheck:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteByte_AlignError
@@ -633,7 +633,7 @@ SMF_WriteLoop_ReadByte:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_Error
@@ -661,7 +661,7 @@ SMF_WriteLoop_Continue:
 	popw wa
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_SendFF
@@ -683,7 +683,7 @@ SMF_WriteLoop_AfterFF:
 	popw hl
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_Send51
@@ -708,7 +708,7 @@ SMF_WriteLoop_After51:
 	call SMF_WriteByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_FinalError
@@ -793,7 +793,7 @@ SMF_TimeDelta_Store:
 SMF_ProcessChannels:
 	push xwa
 	xor xwa, xwa
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	ld (6701:16), xwa
 	pop xwa
 	call SMF_ClearOutputQueue

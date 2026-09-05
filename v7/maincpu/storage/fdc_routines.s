@@ -1259,7 +1259,7 @@ FDC_Reset_SetDD_SectorCount:
 FDC_Reset_BuildParams:
 	ldw	(35472:16), 0
 	ldw	(35474:16), 0
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa

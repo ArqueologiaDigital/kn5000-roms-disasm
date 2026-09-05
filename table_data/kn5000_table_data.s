@@ -1239,7 +1239,7 @@ Boot_Init:
 	ld xsp, xwa
 
 	; === Clear RAM Variable ===
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (3072:16), xwa	; LD (0x0C00), XWA
 
 	; === Call Boot_ClearRAM ===
@@ -1458,7 +1458,7 @@ Boot_ClearRAM__copy2_done:
 ; -----------------------------------------------------------------------------
 BootCode_INTT1_Handler:
 	push xwa	; 38
-	lds32 xwa, 1	; e8 a9
+	ld xwa, 1:i3	; e8 a9
 	add (3072:16), xwa	; e1 00 0c 88
 	pop xwa	; 58
 	reti	; 07
@@ -2481,7 +2481,7 @@ Flash_Update_TableData__wait_erase_loop:
 	jr z, Flash_Update_TableData__wait_erase_loop	; JR Z, .wait_erase_loop
 
 Flash_Update_TableData__program_loop_start:
-	lds32 xiz, 0	; ee a8 - dest offset counter
+	ld xiz, 0:i3	; ee a8 - dest offset counter
 
 Flash_Update_TableData__program_loop:
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h) - get src ptr
@@ -2536,7 +2536,7 @@ FDC_Reset:
 	ldw (xbc + 6), 0xD3	; LD (XBC+06h), 00D3h - data rate
 	ldw (xbc + 8), 0x1	; LD (XBC+08h), 0001h - sectors/track
 	ldw (xbc + 10), 0x1	; LD (XBC+0Ah), 0001h - heads
-	lds32 xwa, 0	; e8 a8
+	ld xwa, 0:i3	; e8 a8
 	ld (xbc + 12), xwa	; LD (XBC+0Ch), XWA
 	push xbc	; 39
 	call 0xFFE944	; CALL 0xFFE944 (FDC_Init)
@@ -3076,7 +3076,7 @@ Boot_WaitDiskInsert__wdi_recheck_remove:
 	jr nz, Boot_WaitDiskInsert__wdi_recheck_remove	; JR NZ, recheck disk removal
 
 Boot_WaitDiskInsert__wdi_check_insert:
-	lds32 xwa, 0	; LD XWA, 0
+	ld xwa, 0:i3	; LD XWA, 0
 Boot_WaitDiskInsert__wdi_delay1:
 	inc 1, xwa	; INC 1, XWA
 	cp xwa, 0x40000	; CP XWA, 0x00040000
@@ -3092,7 +3092,7 @@ Boot_WaitDiskInsert__wdi_recheck_insert:
 	jr z, Boot_WaitDiskInsert__wdi_recheck_insert	; JR Z, recheck disk insert
 
 Boot_WaitDiskInsert__wdi_delay2:
-	lds32 xwa, 0	; LD XWA, 0
+	ld xwa, 0:i3	; LD XWA, 0
 Boot_WaitDiskInsert__wdi_delay2_loop:
 	inc 1, xwa	; INC 1, XWA
 	cp xwa, 0x200000	; CP XWA, 0x00200000
@@ -3117,7 +3117,7 @@ Boot_WaitFDCReady:
 	pushw iz	; 2e
 	ldw iz, 0x32	; LD IZ, 0x0032 - timeout counter
 Boot_WaitFDCReady__wfdc_poll:
-	lds32 xwa, 0	; LD XWA, 0
+	ld xwa, 0:i3	; LD XWA, 0
 	ld (3072:16), xwa	; LD (0x0C00), XWA
 	call 0xFFBD17	; CALL 0xFFBD17 - reset FDC
 	call 0xFFBE85	; CALL 0xFFBE85 - check FDC ready
@@ -3136,7 +3136,7 @@ Boot_WaitFDCReady__wfdc_timeout_check:
 	ldw bc, 0xB4	; LD BC, 0x00B4 - X pos
 	ld de, 5:i3	; LD DE, 5 - mode
 	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
-	lds32 xwa, 0	; LD XWA, 0
+	ld xwa, 0:i3	; LD XWA, 0
 	ld (3072:16), xwa	; LD (0x0C00), XWA
 
 Boot_WaitFDCReady__wfdc_continue:
@@ -3270,7 +3270,7 @@ Boot_LoadDiskData__ldd_halt:
 ; Address: 0x9FC4FE
 ; =============================================================================
 Boot_DelayLoop:
-	lds32 xbc, 0	; LD XBC, 0
+	ld xbc, 0:i3	; LD XBC, 0
 	cp xbc, xwa	; CP XBC, XWA
 	ret nc	; RET NC
 Boot_DelayLoop__delay_loop:
@@ -3352,7 +3352,7 @@ Flash_SearchFirstNonEmptyBlock__fvb_next:
 	lda xhl, (xhl + 64)	; LDA XHL, XHL+0x40 - next 64-byte block
 	cp xhl, xbc	; CP XHL, XBC
 	jr nz, Flash_SearchFirstNonEmptyBlock__fvb_not_end	; 6e 03
-	lds32 xhl, 0	; LD XHL, 0 - not found
+	ld xhl, 0:i3	; LD XHL, 0 - not found
 	ret	; 0e
 Flash_SearchFirstNonEmptyBlock__fvb_not_end:
 	ld xde, (xhl)	; LD XDE, (XHL)
@@ -3391,7 +3391,7 @@ Boot_VerifyFlash__vf_compare:
 	jr ule, Boot_VerifyFlash__vf_bank_loop	; 63 de
 
 Boot_VerifyFlash__vf_success:
-	lds32 xhl, 0	; LD XHL, 0 - success
+	ld xhl, 0:i3	; LD XHL, 0 - success
 Boot_VerifyFlash__vf_mismatch:
 	retd 0x2	; RETD 0x0002
 
@@ -3413,7 +3413,7 @@ Boot_ProgramCustomFlash__pcf_bank_loop:
 	ld (0x160000:24), a; LD (0x160000), A - set bank
 	lda xwa, (0x200000:24); LDA XWA, 0x200000 - source
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
-	lds32 xiz, 0	; LD XIZ, 0 - counter
+	ld xiz, 0:i3	; LD XIZ, 0 - counter
 
 Boot_ProgramCustomFlash__pcf_copy_loop:
 	ld xwa, (xsp + 8)	; LD XWA, (XSP+0x08) - dest ptr
@@ -3453,7 +3453,7 @@ Flash_ProgramHDAE_Initialization__phd1_bank_loop:
 	ld (0x160000:24), a; LD (0x160000), A - set bank
 	lda xwa, (0x280000:24); LDA XWA, 0x280000 - dest
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
-	lds32 xiz, 0	; LD XIZ, 0
+	ld xiz, 0:i3	; LD XIZ, 0
 
 Flash_ProgramHDAE_Initialization__phd1_copy_loop:
 	ld xwa, (xsp + 8)	; LD XWA, (XSP+0x08)
@@ -3492,7 +3492,7 @@ Flash_ProgramHDAE_Payload__phd2_bank_loop:
 	ld (0x160000:24), a; LD (0x160000), A
 	lda xwa, (0x280000:24); LDA XWA, 0x280000
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
-	lds32 xiz, 0	; LD XIZ, 0
+	ld xiz, 0:i3	; LD XIZ, 0
 
 Flash_ProgramHDAE_Payload__phd2_copy_loop:
 	ld xwa, (xsp + 8)	; LD XWA, (XSP+0x08)
@@ -3855,7 +3855,7 @@ LZSS_OutputByte:
 	call 0xFFBCD7	; CALL 0xFFBCD7 (write to dest)
 	ld (3126:16), 0; LD (0x0C36), 0x00 - reset index
 LZSS_OutputByte__not_full:
-	lds32 xwa, 1	; LD XWA, 1
+	ld xwa, 1:i3	; LD XWA, 1
 	add (3108:16), xwa	; ADD (0x0C24), XWA - increment output pos
 	ret	; RET
 
@@ -3885,7 +3885,7 @@ LZSS_OutputByte_Alt:
 	call 0xFFB903	; CALL 0xFFB903
 	ld (3126:16), 0; LD (0x0C36), 0x00
 LZSS_OutputByte_Alt__not_full:
-	lds32 xwa, 1	; LD XWA, 1
+	ld xwa, 1:i3	; LD XWA, 1
 	add (3108:16), xwa	; ADD (0x0C24), XWA
 	ret	; RET
 
@@ -3985,7 +3985,7 @@ LZSS_Decompress:
 	ld (xsp + 12), xwa	; LD (XSP+0x0C), XWA - copy to working ptr
 
 	; === Pre-fill window with zeros (positions 0 to 0x0FED) ===
-	lds32 xwa, 0	; LD XWA, 0
+	ld xwa, 0:i3	; LD XWA, 0
 	ld (3108:16), xwa	; LD (0x0C24), XWA - window fill index
 LZSS_Decompress__prefill_loop:
 	ld xwa, (3108:16); LD XWA, (0x0C24)
@@ -4002,7 +4002,7 @@ LZSS_Decompress__prefill_loop:
 	ldw (xsp + 10), 0xFEE	; LD (XSP+0x0A), 0x0FEE - window write pos
 	ldw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000 - flag byte
 	ld (3126:16), 0; LD (0x0C36), 0x00 - output counter
-	lds32 xwa, 0	; LD XWA, 0
+	ld xwa, 0:i3	; LD XWA, 0
 	ld (3108:16), xwa	; LD (0x0C24), XWA - output position
 
 	; === Setup source and display parameters ===

@@ -91,7 +91,7 @@ FP_SP_Decode_ReadSign_Pad:
 ; inside this region (pow, exp, ldexp, frexp, sin, modf) and never from outside.
 FP_DP_CmpZero64:
 	ld hl, 0:i3
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld xiy, (xwa + 4)
 	cp xiy, xde
 	jr lt, FP_DP_CmpZero64_Less
@@ -1091,7 +1091,7 @@ FP_UnsignedDiv:
 	ld xde, xwa
 	div xwa, xbc
 	jr ov, FP_UnsignedDiv_Overflow
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, xhl
 	ld hl, wa
 	stw_erp DE, 0xE2
@@ -1113,20 +1113,20 @@ FP_UnsignedDiv_Overflow:
 ; Divisor == 1: quotient = dividend, remainder = 0.
 FP_UnsignedDiv_ByOne:
 	ld xhl, xwa
-	lds32 xde, 0
+	ld xde, 0:i3
 	ret
 
 ; Divisor == 0: quotient = 0xFFFFFFFF, remainder = 0. No trap, no errno.
 FP_UnsignedDiv_Zero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, xhl
 	dec 1, xhl
 	ret
 
 ; dividend <= divisor: quotient is 0 or 1, remainder is the dividend.
 FP_UnsignedDiv_SmallDividend:
-	lds32 xhl, 1
-	lds32 xde, 0
+	ld xhl, 1:i3
+	ld xde, 0:i3
 	ret z
 	dec 1, xhl
 	ld xde, xwa
@@ -1153,7 +1153,7 @@ FP_UnsignedDiv_ShiftLoopDone:
 
 ; Clear the quotient accumulator.
 FP_UnsignedDiv_Subtract:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ; Restoring-division inner loop, `djnz D` bounded by the shift count.
 FP_UnsignedDiv_SubtractLoop:
@@ -1197,7 +1197,7 @@ FP_DP_NegMantissaLS:
 	cp l, 0:i3
 	jr nz, FP_DP_NegMantissaLS_Store
 	ld xhl, (xsp + 4)
-	lds32 xde, 0
+	ld xde, 0:i3
 	srl xhl, 1
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
@@ -1515,12 +1515,12 @@ FP_DP_ShiftDecode_Return:
 
 ; |x| < 1: result 0, then set ERANGE.
 FP_DP_ShiftDecode_Underflow:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr FP_DP_ShiftDecode_SetError
 
 ; |x| >= 2^32: result 0xFFFFFFFF, then set ERANGE.
 FP_DP_ShiftDecode_Overflow:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	dec 1, xhl
 
 ; errno (0x040C22) = 0x22 (ERANGE).
@@ -1530,7 +1530,7 @@ FP_DP_ShiftDecode_SetError:
 
 ; NaN/overflow marker in the record: return 0 without touching errno.
 FP_DP_ShiftDecode_Zero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; Adds the 53-bit mantissa of the unpacked record at XBC into the one at XWA (the
@@ -1596,7 +1596,7 @@ FP_DP_Decode_Pad:
 ; The bias 0x03FF and the 4-bit high-word exponent split confirm this operates on
 ; doubles.
 FP_DP_Decode:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, (xbc)
 	ld xbc, (xbc + 4)
 	stw_erp HL, 0xE6
@@ -1624,7 +1624,7 @@ FP_DP_Decode_Zero:
 ; Unpack an IEEE-754 float into the 8-byte working record. Bias 0x007F, hidden bit at
 ; bit 7 of the high byte. Twin of FP_DP_Decode.
 FP_SP_Decode:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xix, (xbc)
 	stw_erp DE, 0xF2
 	extpfx3 0xDA, 0x23, 0x0F
@@ -1649,7 +1649,7 @@ FP_SP_Decode_Store:
 
 ; Zero input: mantissa 0, zero flag 1.
 FP_SP_Decode_Zero:
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldib_erp 0xEE, 1
 	jr FP_SP_Decode_Store
 	swi 7
@@ -1695,7 +1695,7 @@ FP_SP_NormCore_Shift:
 	ld (xiy + 2), hl
 	ld l, a
 	ld (xiy + 256), hl
-	lds32 xix, 0
+	ld xix, 0:i3
 	cp l, 0x14
 	jr z, FP_SP_NormCore_StoreResult
 	jr lt, FP_SP_NormCore_ShiftLeft
@@ -1764,7 +1764,7 @@ FP_DP_Encode_Store:
 
 ; Flush to +0.0.
 FP_DP_Encode_Zero:
-	lds32 xix, 0
+	ld xix, 0:i3
 	ld xiy, xix
 	jr FP_DP_Encode_Store
 
@@ -1777,7 +1777,7 @@ FP_DP_Encode_NaN:
 ; (DBL_MAX) with the operand's sign ORed back in.
 FP_DP_Encode_Overflow:
 	ldw (0x040c22:24), 0x0022
-	lds32 xde, 0
+	ld xde, 0:i3
 	dec 1, xde
 	ld (xwa), xde
 	ld xde, 0x7FEFFFFF
@@ -1829,12 +1829,12 @@ FP_SP_Encode_NaN:
 	stb_erp E, 0xEE
 	cp e, 0x8
 	jr nz, FP_SP_Encode_Zero
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr FP_SP_Encode_Overflow_Store
 
 ; Flush to +0.0f.
 FP_SP_Encode_Zero:
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld (xwa), xde
 	ret
 
@@ -2175,7 +2175,7 @@ FP_DP_AlignMantissa_Shift:
 	cp ix, 0x20
 	jr lt, FP_DP_AlignMantissa_Shift16
 	ld xde, xhl
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	sub ix, 0x20
 	jr z, FP_DP_AlignMantissa_Round
 
@@ -2227,7 +2227,7 @@ FP_DP_AlignMantissa_Store:
 
 ; Exponent difference > 53: the smaller operand vanishes; zero it and set its zero flag.
 FP_DP_AlignMantissa_MaxShift:
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld (xwa), xde
 	ld (xwa + 4), xde
 	ld (xwa + 8), xde
@@ -2288,7 +2288,7 @@ FP_SP_AlignMantissa_Store:
 
 ; Exponent difference > 24: zero the operand and set its zero flag.
 FP_SP_AlignMantissa_MaxShift:
-	lds32 xix, 0
+	ld xix, 0:i3
 	ld (xbc + 4), xix
 	ldib_erp 0xF2, 1
 	ld (xbc), xix
@@ -2326,11 +2326,11 @@ FP_DP_MulMantissaCore:
 	ld xix, (xwa + 4)
 	ldb c, 0x8
 	stb_erp B, 0xEF
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	call FP_Div_Step_Bit3
 	ld (xsp), xiz
 	ldb c, 0x8
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	call FP_Div_Step4Bits
 	ld (xsp + 4), xiz
 	ld xiy, (xsp)
@@ -2401,7 +2401,7 @@ FP_SP_Mul_Outer:
 	ld xbc, (xbc + 4)
 	cp xbc, 0x800000
 	jr z, FP_SP_MulMantissaCore_Divisor1
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xix, xbc
 	add xix, xix
 	ld xiy, xix
@@ -2497,7 +2497,7 @@ FP_DP_SubMantissa:
 	ldb b, 0x0
 	jr nc, FP_DP_SubMantissa_NoBorrow
 	ldb b, 0x80
-	lds32 xiy, 0
+	ld xiy, 0:i3
 	dec 1, xiy
 	xor xde, xiy
 	xor xhl, xiy
@@ -3186,12 +3186,12 @@ FP_SP_DecodeToInt_Return:
 
 ; |x| < 1: result 0 with ERANGE.
 FP_SP_DecodeToInt_Underflow:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr FP_SP_DecodeToInt_SetError
 
 ; |x| >= 2^32: result 0xFFFFFFFF with ERANGE.
 FP_SP_DecodeToInt_Overflow:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	dec 1, xhl
 
 ; errno (0x040C22) = 0x22 (ERANGE).
@@ -3201,7 +3201,7 @@ FP_SP_DecodeToInt_SetError:
 
 ; NaN marker: return 0, errno untouched.
 FP_SP_DecodeToInt_NaN:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; ldexp(double x, int n) - scale by a power of two. C signature
@@ -3403,7 +3403,7 @@ FP_DP_MulAdd:
 	add (xsp + 4), xhl
 	adc (xsp + 8), xde
 	jr nc, FP_DP_MulAdd_Sum1
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	adc (xsp + 12), xhl
 
 ; Accumulate the low x high cross product with carry into the third word.
@@ -3414,7 +3414,7 @@ FP_DP_MulAdd_Sum1:
 	add (xsp + 4), xhl
 	adc (xsp + 8), xde
 	jr nc, FP_DP_MulAdd_Sum2
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	adc (xsp + 12), xhl
 
 ; Read the 106-bit product back out, normalise by one bit if bit 105 is set.

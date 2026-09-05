@@ -32,7 +32,7 @@ BitMapOut_PaletteLoadLoop:
 	inc 4, xiz
 	cp xiz, 0x400
 	jr c, BitMapOut_PaletteLoadLoop
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ld xwa, (xsp + 8)
 	lda xde, (xwa + 20)
 	ld xwa, (xde)
@@ -41,7 +41,7 @@ BitMapOut_PaletteLoadLoop:
 	ld xix, (xsp + 4)
 	ld xwa, xix
 	lda xhl, (xwa + 1)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 
 BitMapOut_PixelBlitLoop:
 	ld a, (xix)
@@ -157,7 +157,7 @@ BitMapOut_ByteData_RenderB:
 	jr	nz, 18
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e00079
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	jr	35
 	ld	xwa, 0xffffffff
@@ -165,7 +165,7 @@ BitMapOut_ByteData_RenderB:
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20007
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	calr	310
@@ -214,12 +214,12 @@ BitMapOut_ByteData_RenderD:
 	jr	nz, 18
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e00079
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	jr	21
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20007
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	calr	172
@@ -268,7 +268,7 @@ BitMapOut_ByteData_RenderE:
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	calr	32
@@ -279,7 +279,7 @@ BitMapOut_CheckDiskAndApply:
 	jp z, (Interrupt_ModeGuardCheck:24)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c20000
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 BitMapOut_ByteData_DiskCheck:
 	ld	l, (0x8d3e:16)
@@ -304,7 +304,7 @@ BitMapOut_DecrementTimer:
 	ld (0x8d3c:16), a
 	cp a, 0:i3
 	ret nz
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	call SndParam_LookupReadOnly
 	ld de, hl
 	pushw 0xff
@@ -338,7 +338,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
-	lds32	xde, 5
+	ld	xde, 5:i3
 	jr	75
 	.byte 0xf1
 	pop	xix
@@ -348,7 +348,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
-	lds32	xde, 6
+	ld	xde, 6:i3
 	jr	50
 	.byte 0xf1
 	pop	xix
@@ -362,11 +362,11 @@ BitMapOut_ByteData_TransitionSeq:
 	jr	nz, 14
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
-	lds32	xde, 3
+	ld	xde, 3:i3
 	jr	12
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApPostEvent
 	ret
 BitMapOut_ByteData_PresetCopy:
@@ -640,7 +640,7 @@ BitMapOut_Snapshot_Execute:
 	jr nz, BitMapOut_Snapshot_PostProcess
 	lda xhl, (0xf9b4:16)
 	sub xhl, 0xf9a2
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xde + 1)
 	cp xbc, xhl
 	jr nz, BitMapOut_Snapshot_PostProcess
@@ -983,7 +983,7 @@ BitMapOut_RestoreFull_FieldLoop:
 
 BitMapOut_RestoreFull_CopyField:
 	stb_erp A, 0xe6
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ldb_erp A, 0xf8
 	lda xwa, (0xf9ce:16)
 	sub xwa, 0xf9b6
@@ -3685,9 +3685,9 @@ BitMapOut_ByteData_RenderState:
 	ld	xbc, 0x01e00023
 	ld	xde, xiz
 	call	ApPostEvent
-	lds32	xwa, 0
-	lds32	xbc, 0
-	lds32	xde, 0
+	ld	xwa, 0:i3
+	ld	xbc, 0:i3
+	ld	xde, 0:i3
 	call	MainGetPmemName
 	pop	xiz
 	ret
@@ -3840,7 +3840,7 @@ BitMapOut_UpdateWidget_Done:
 	call	ApPostEvent
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e0009a
-	lds32	xde, 1
+	ld	xde, 1:i3
 	jr	32
 	.byte 0xc1
 	jrl	pl, 16320
@@ -3852,7 +3852,7 @@ BitMapOut_UpdateWidget_Done:
 	ret	z
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e0009a
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ret
 	ret
@@ -3918,7 +3918,7 @@ BitMapOut_ByteData_WidgetTable:
 	calr	0x0051
 
 BitMapOut_ApplyWidgetPatch:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 BitMapOut_ApplyPatch_SkipHeader:

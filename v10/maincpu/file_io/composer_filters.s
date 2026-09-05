@@ -31,7 +31,7 @@ FmmComposerLoadFunc:
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
 	jr ge, CompLoad_DispatchState
@@ -59,27 +59,27 @@ CompLoad_DispatchState:
 CompLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl CompLoad_DispatchWidget
 
 CompLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
 	ldw wa, 0xee
@@ -88,7 +88,7 @@ CompLoad_HandleCancel:
 CompLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
@@ -98,17 +98,17 @@ CompLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
 	ldw wa, 0xee
@@ -137,7 +137,7 @@ CompLoad_Selection_Negative:
 	ldw (0x7f80:16), 0
 	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl CompLoad_DispatchWidget
 
 CompLoad_HandleShow:
@@ -240,7 +240,7 @@ CompLoad_OpLoad:
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld iz, 0:i3
 
@@ -263,17 +263,17 @@ CompLoad_HideButtons_Loop:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
@@ -310,7 +310,7 @@ CompLoad_DispatchWidget:
 	call ApPostEvent
 
 CompLoad_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 2, xsp
 	ret
@@ -541,7 +541,7 @@ LoadFilter_OpLoad:
 	jrl z, LoadFilter_Return
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call GetCurrentFileIndex
 	extz hl
@@ -557,11 +557,11 @@ LoadFilter_OpLoad:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0
 	jr z, LoadFilter_Load_ShowCode1
@@ -589,13 +589,13 @@ LoadFilter_Load_CallHandler:
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 LoadFilter_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 6, xsp
 	ret
 
@@ -832,7 +832,7 @@ SaveFilter_OpSave:
 	calr SelectPasswordMode
 	cp hl, 0:i3
 	jr z, SaveFilter_Save_NoPwd
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
@@ -846,11 +846,11 @@ SaveFilter_Save_NoPwd:
 	jr z, SaveFilter_Save_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 SaveFilter_DispatchWidget:
 	call ApPostEvent
@@ -859,7 +859,7 @@ SaveFilter_DispatchWidget:
 SaveFilter_Save_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -875,17 +875,17 @@ SaveFilter_Save_Execute:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jr SaveFilter_CallStatusDisplay
@@ -896,7 +896,7 @@ SaveFilter_OpFormat:
 	jr nz, SaveFilter_ResetAll
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -912,17 +912,17 @@ SaveFilter_OpFormat:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 
@@ -962,7 +962,7 @@ SaveFilter_ResetAll_Loop:
 	jr lt, SaveFilter_ResetAll_Loop
 
 SaveFilter_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 6, xsp
 	ret
 

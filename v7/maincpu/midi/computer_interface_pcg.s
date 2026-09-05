@@ -30,7 +30,7 @@ TtMdPcgOut:
 	ldw (xwa), 0x1
 
 TtMdPcgOut_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcPcgOutGridBoxProc:
@@ -70,7 +70,7 @@ PcgOutGridBoxEventDispatch:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -109,7 +109,7 @@ PcgOutGridBoxEventDispatch:
 	jr z, PcgOutGrid_CheckAltPrev
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
 	extz xhl
@@ -163,7 +163,7 @@ PcgOutGrid_CheckAltPrev:
 	jr z, PcgOutGrid_CheckAltNext
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp hl, 3:i3
 	jrl ge, PcgOutGrid_ReturnZero
@@ -247,7 +247,7 @@ PcgOutGrid_CallDelegate:
 	call ApFuncCall
 
 PcgOutGrid_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr PcgOutGrid_Epilogue
 
 PcgOutGrid_DefaultHandler:
@@ -457,7 +457,7 @@ PcgOutCheck_SetFinalProp:
 	call SendEvent
 
 PcgOutGridCheckComplete:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 44)
 	ret
@@ -491,7 +491,7 @@ PcgOutSend_TransmitMidi:
 	call MainFuncCall
 
 PcgOutSendFunc_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainPcgOutSend:
@@ -504,7 +504,7 @@ MainPcgOutSend:
 	ld	de, (xde+2)
 	call	16625971
 MainPcgOutSend_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; End of Computer Interface PCG routines

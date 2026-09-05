@@ -37,7 +37,7 @@ Sprintf_StarWidth_Positive:
 	bit	6, wa
 	jr	z, 14
 	ld	xbc, (xsp+86)
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 Sprintf_Flag_Space:
 	.byte 0xa1, 0x88, 0xa1, 0x20, 0xa8
 Sprintf_Flag_Hash:
@@ -1300,7 +1300,7 @@ Sprintf_PropCarry_Loop:
 	.byte 0xaf, 0x04, 0x23, 0x9f, 0x08, 0x20, 0x83, 0x15
 	.byte 0xeb, 0x69, 0xb0, 0xf6
 Sprintf_PropCarry_Store:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	ld	de, (xsp+10)
 	ld	xix, (xsp+4)
@@ -1327,7 +1327,7 @@ Sprintf_Normalize_MainLoop:
 	cp	xbc, xix
 	jr	z, 5
 	djnz16	bc, -8
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop	xiz
 	ret
 	swi	7

@@ -118,7 +118,7 @@ MiddleFuncCall_DispatchData_Code:
 SqTrSel_CaseB:
 	call	16696381
 SqTrSel_CaseC:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SongBank_ComputeTableOfs:
@@ -271,7 +271,7 @@ SongBank_StoreCurrentSong:
 	pop xde
 
 SongBank_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -414,14 +414,14 @@ SeqSongMem_PostAndReturn:
 	call ApPostEvent
 
 SongBank_EventHandler_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
 CDlikeSwTtl_DispatchData:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 	bit 0, (0x0ce0:16)
 	jr nz, .Lc_f22901
@@ -447,72 +447,72 @@ CDlikeSwTtl_DispatchData:
 	jp ApPostEvent
 	ld XWA,0x008b0003
 	ld XBC,0x01e0009c
-	lds32 xde, 1
+	ld xde, 1:i3
 	jp ApPostEvent
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
 	ld xbc, 0x1e0009c
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendResetEvent:
 	ld xwa, 0x8b0000
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendStopEvtD:
 	ld xwa, 0x8b000d
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_0:
 	ld xwa, 0x8c0000
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_A:
 	ld xwa, 0x8c000a
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_13:
 	ld xwa, 0x8c0013
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SetRecordAndNotify:
 	ld (0x021090:24), 0x01
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, SepaOut_Config_0_0x25
 	ld xbc, 0x1c0000c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
 	ld xbc, 0x1c0000c
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 SeqInit_PostEventSequence:
 	ld (0x021090:24), 0x00
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, SepaOut_Config_0_0x25
 	ld xbc, 0x1c0000c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
 	ld xbc, 0x1c0000c
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 SeqInit_LookupDispatchEntry:
@@ -528,13 +528,13 @@ SeqInit_PostDispatchEvent:
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
 	ld xbc, 0x1e0004d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jp ApDeliveryEvent
 
 SeqInit_FinalEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001b
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 SeqRecPlay_EnableRecordOnly:
@@ -542,9 +542,9 @@ SeqRecPlay_EnableRecordOnly:
 	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
@@ -555,9 +555,9 @@ SeqRecPlay_EnablePlayOnly:
 	ld (0x021094:24), 0x01
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
@@ -568,9 +568,9 @@ SeqRecPlay_DisableBoth:
 	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
@@ -587,7 +587,7 @@ SqTrSel_CaseE:
 	call	16693581
 	ld	xwa, 7274534
 	ld	xbc, 29818889
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(7498:16), 0
 	ret
@@ -599,7 +599,7 @@ SqTrSel_CaseF:
 PlayMode_SendStopEvent:
 	ld xwa, 0x6f0026
 	ld xbc, 0x1c70009
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 ; SqTrSelTtl case G
@@ -677,19 +677,19 @@ PlayMode_CheckAndAbort:
 	call 0xfeb94d
 	ld XWA,0x006f0026
 	ld XBC,0x01c70009
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ret
 PlayMode_SwitchToModeAndNotify:
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ldw	wa, 139
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 35
 	ldw	wa, 238

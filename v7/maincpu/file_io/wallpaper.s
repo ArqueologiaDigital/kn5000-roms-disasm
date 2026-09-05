@@ -34,27 +34,27 @@ WPLoad_DispatchState:
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleCancel:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ldw	wa, 72
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 0
 	ldw	wa, 238
@@ -62,7 +62,7 @@ WPLoad_HandleCancel:
 WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
@@ -72,17 +72,17 @@ WPLoad_HandleSuccess:
 	calr	51015
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ldw	wa, 72
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 2
 	ldw	wa, 238
@@ -120,7 +120,7 @@ WPLoad_HandleShow:
 	jrl	452
 WPLoad_HandleScroll:
 	ld	xbc, 29687809
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	hl, (33048:16)
 	ld	(xsp+4), hl
@@ -190,7 +190,7 @@ WPLoad_OpLoad:
 	jr	nz, 101
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	50767
@@ -202,17 +202,17 @@ WPLoad_OpLoad:
 	calr	50841
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ldw	wa, 72
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	call	16355504
@@ -271,12 +271,12 @@ WPLoad_RedrawPage:
 WPLoad_SendState:
 	ld	xwa, (33044:16)
 	ld	xbc, 29687809
-	lds32	xde, 0
+	ld	xde, 0:i3
 WPLoad_DispatchWidget:
 	call ApPostEvent
 
 WPLoad_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 6, xsp
 	ret

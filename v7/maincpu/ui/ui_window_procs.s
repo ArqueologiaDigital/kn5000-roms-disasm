@@ -10,7 +10,7 @@
 
 	lda xde, (0x0274b0:24)
 	ld xhl, (0x0274e4:24)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 
 WndScroll_CopyLoop:
 	ld xwa, xbc
@@ -41,11 +41,11 @@ WndScroll_InitWindowProc:
 	calr WindowProc
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c00017
-	lds32 xde, 5
+	ld xde, 5:i3
 	calr SetDialUp
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c00018
-	lds32 xde, 3
+	ld xde, 3:i3
 	calr SetDialDown
 	ld wa, 1:i3
 	calr SetDialEnable
@@ -269,7 +269,7 @@ WndScroll_DrawSingleItem:
 	extz xhl
 	sll xhl, 2
 	add xhl, (xsp + 4)
-	lds32 xde, 0
+	ld xde, 0:i3
 	push xde
 	pushw 0xff
 	pushw 0xf7
@@ -616,7 +616,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 4294967295
 	add	xbc, xwa
 	ld	xhl, xbc
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	xhl, xwa
 	ld	xix, xde
 	add	xix, xhl
@@ -651,7 +651,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (160944:24)
 	ld	bc, iz
 	extz	xbc
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	xbc, xwa
 	ld	xhl, xbc
 	ld	xwa, 4294967295
@@ -780,7 +780,7 @@ WndEvt_EventCodeDispatch:
 	jr	ule, 31
 	lda	xde, (160944:24)
 	ld	xhl, (160996:24)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -837,7 +837,7 @@ WndEvt_EventCodeDispatch:
 	jr	ule, 30
 	lda	xde, (160944:24)
 	ld	xhl, xbc
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -849,7 +849,7 @@ WndEvt_EventCodeDispatch:
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 31457408
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, 22
 	ld	xbc, 29360143
@@ -857,7 +857,7 @@ WndEvt_EventCodeDispatch:
 	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	731
 WndScroll_CopyStringAndSend:
 	ld	xwa, (xsp+42)
@@ -868,7 +868,7 @@ WndScroll_CopyStringAndSend:
 	inc	8, xsp
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	702
 WndScroll_CopyFromSource:
 	pushw	2
@@ -1103,7 +1103,7 @@ WndScroll_ClampPageCount:
 	cp (xwa + 1), 0x50
 	jr nz, WndScroll_CheckSPMarker
 	ld xwa, (0x0274e4:24)
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa)
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00081
@@ -1126,7 +1126,7 @@ WndScroll_SendAndReturn:
 	call SendEvent
 
 UIDialog_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr WndScroll_Epilogue
 
 WndScroll_ForwardToWindowProc:
@@ -1161,7 +1161,7 @@ ModeEdit_HandlePaint:
 	call	16402706
 	ld	xwa, xhl
 	ld	xbc, 31457301
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	push	xhl
 	call	16402706
@@ -1182,7 +1182,7 @@ ModeEdit_HandlePaint:
 	lda	xwa, (xsp+260)
 	lda	xbc, (xsp+268)
 	lda	xde, (xsp+4)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	push	xhl
 	pushw	0
 	pushw	247
@@ -1212,29 +1212,29 @@ ModeEdit_HandleViewUpdate:
 	cp xhl, 0x60
 	jrl nz, TitleEdit_ReturnZero
 	ld xbc, 0x1e0002c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 30), xhl
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1e0002d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 34), xhl
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1e00030
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 38), hl
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1e00015
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 40), xhl
 	jr TitleEdit_ReturnZero
 
 ModeEdit_StoreField0:
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 30)
 	ld (xhl), xwa
@@ -1242,7 +1242,7 @@ ModeEdit_StoreField0:
 
 ModeEdit_StoreField1:
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 34)
 	ld (xhl + 4), xwa
@@ -1250,7 +1250,7 @@ ModeEdit_StoreField1:
 
 ModeEdit_StoreField2:
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xiz + 38)
 	ld (xhl + 8), wa
@@ -1259,13 +1259,13 @@ ModeEdit_StoreField2:
 ModeEdit_StoreField3:
 	ld xwa, (xwa)
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 40)
 	ld (xhl + 10), xwa
 
 TitleEdit_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 ModeEdit_Epilogue:
 	pop xiz
@@ -1293,7 +1293,7 @@ TitleEdit_HandlePaint:
 	call	16405594
 	ld	xwa, xhl
 	ld	xbc, 31457301
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16421459
 	push	xhl
 	call	16405594
@@ -1314,7 +1314,7 @@ TitleEdit_HandlePaint:
 	lda	xwa, (xsp+260)
 	lda	xbc, (xsp+268)
 	lda	xde, (xsp+4)
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	push	xhl
 	pushw	0
 	pushw	247
@@ -1344,29 +1344,29 @@ TitleEdit_HandleViewUpdate:
 	cp xhl, 0x61
 	jrl nz, StringBox_ReturnZero
 	ld xbc, 0x1e00032
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 30), xhl
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1e00033
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 34), xhl
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1e00030
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 38), hl
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1e00015
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 40), xhl
 	jr StringBox_ReturnZero
 
 TitleEdit_StoreFieldJA:
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 30)
 	ld (xhl), xwa
@@ -1374,7 +1374,7 @@ TitleEdit_StoreFieldJA:
 
 TitleEdit_StoreFieldNE:
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 34)
 	ld (xhl + 4), xwa
@@ -1382,7 +1382,7 @@ TitleEdit_StoreFieldNE:
 
 TitleEdit_StoreFieldLC:
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xiz + 38)
 	ld (xhl + 8), wa
@@ -1391,13 +1391,13 @@ TitleEdit_StoreFieldLC:
 TitleEdit_StoreFieldX:
 	ld xwa, (xwa)
 	ld xbc, 0x1e0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 40)
 	ld (xhl + 10), xwa
 
 StringBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 TitleEdit_Epilogue:
 	pop xiz
@@ -1443,7 +1443,7 @@ StringBox_HandlePaint:
 	ld xwa, xde
 	ld xde, xhl
 	call DrawStringAlignment
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 StringBox_Epilogue:
 	pop xiz
@@ -1484,7 +1484,7 @@ Label_HandlePaint:
 	pushw 0xf7	; <-- background color
 	ld xde, (xhl + 22)	; <-- string pointer
 	call DrawString
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Label_Epilogue:
 	pop xiz
@@ -1513,7 +1513,7 @@ Bitmap_HandlePaint:
 	ld (xwa + 2), bc
 	ld xbc, (xhl + 22)
 	call DrawBitmap
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Bitmap_Epilogue:
 	pop xiz
@@ -1543,7 +1543,7 @@ VwUserBitmap_HandlePaint:
 	ld (xbc + 2), wa
 	ld xwa, (xiz + 22)
 	ld xbc, 0x1e000a1
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
@@ -1551,12 +1551,12 @@ VwUserBitmap_HandlePaint:
 	jr z, VwUserBitmap_DrawFallback
 	ld xwa, (xiz + 22)
 	ld xbc, 0x1e000a2
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), hl
 	ld xwa, (xiz + 22)
 	ld xbc, 0x1e000a3
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 10)
 	pushw hl
@@ -1567,11 +1567,11 @@ VwUserBitmap_HandlePaint:
 
 VwUserBitmap_DrawFallback:
 	lda xwa, (xsp + 10)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	call DrawBitmap
 
 VwUserBitmap_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 VwUserBitmap_Epilogue:
 	pop xiz
@@ -1585,7 +1585,7 @@ UserBitmapCheck:
 	jr z, UserBitmapCheck_ReturnSize
 	cp xbc, 0x1e000a1
 	jr z, UserBitmapCheck_ReturnTablePtr
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 UserBitmapCheck_ReturnTablePtr:
@@ -1652,7 +1652,7 @@ VwUserBitmapByName_HandlePaint:
 	call	16433802
 	jr	26
 VwUserBitmapByName_DrawDefault:
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	call DrawBitmap
 	jr VwUserBitmapByName_ReturnZero
 
@@ -1667,7 +1667,7 @@ VwUserBitmapByName_CallViewable:
 	call ViewableProc
 
 VwUserBitmapByName_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 VwUserBitmapByName_Epilogue:
 	pop xiz
@@ -1717,7 +1717,7 @@ Icon_HandlePaint:
 	lda xwa, (xsp + 4)
 	ld xbc, (xiz + 22)
 	call DrawIcons
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Icon_Epilogue:
 	pop xiz
@@ -1776,7 +1776,7 @@ Line_DrawHorizontal:
 Line_DrawAndReturn:
 	ld de, (xhl + 22)
 	call DrawLine
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Line_Epilogue:
 	pop xiz
@@ -1803,7 +1803,7 @@ Frame_HandlePaint:
 	call GetVisible
 	cp hl, 0:i3
 	jr nz, Frame_DrawVisible
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr Frame_Epilogue
 
 Frame_DrawVisible:
@@ -1818,7 +1818,7 @@ Frame_DrawVisible:
 	ld bc, (xhl + 22)
 	ld de, (xhl + 24)
 	calr DrawDesignFrame
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Frame_Epilogue:
 	pop xiz
@@ -1847,7 +1847,7 @@ GetClientFrame2:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), bc
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xiz, (xsp + 10)
 	ld xiy, xde
 	ld xix, xiz
@@ -1863,7 +1863,7 @@ GetClientFrame2:
 ClientFrame2_ProcessThickness:
 	or xhl, xhl
 	jr z, FrameLoop_Cleanup
-	lds32 xiy, 0
+	ld xiy, 0:i3
 	cp xhl, 0x0
 	jr le, FrameLoop_Cleanup
 	lda xix, (xiz + 2)
@@ -1896,7 +1896,7 @@ DrawDesignFrame:
 	ldirw
 	cp de, 1:i3
 	jr nz, DesignFrame_Epilogue
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ld wa, (xsp + 12)
 	exts xwa
 	cp xwa, 0x0
@@ -1973,7 +1973,7 @@ EditSw_SendDialEvent:
 	call SendEvent
 
 EditSw_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr EditSw_Epilogue
 
 EditSw_ForwardToLabel:
@@ -2175,7 +2175,7 @@ DrawEditSw_FinalPosition:
 	add hl, (xiy)
 	ld (xwa + 6), hl
 	lda xde, (xsp + 2)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	push xhl
 	pushw 0xf4
 	pushw 0xf7
@@ -2317,7 +2317,7 @@ TextBox_FreeBuffer:
 	push	xwa
 	call	16712469
 	inc	4, xsp
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 TextBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 38)
@@ -2375,7 +2375,7 @@ VwBox_CallDrawDesignFrame:
 	calr DrawDesignFrame
 
 VwBox_DrawReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr ViewableProc_Return
 
 VwBox_HandleGetWidth:
@@ -2483,7 +2483,7 @@ PsParaBox_HandleGetText:
 	ld (xwa), 0x0
 
 PsParaBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PsParaBox_Epilogue:
 	pop xiz
@@ -2520,7 +2520,7 @@ AcLswBoxProc:
 	ld xiz, xhl
 	ld xwa, (xiz + 36)
 	ld xbc, 0x1e00040
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	lda xde, (xsp + 4)
 	ld (xde), xhl
@@ -2555,7 +2555,7 @@ AcLswBox_HandleShowHide:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e00040
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, xhl
 	calr MainLswGet
@@ -2570,7 +2570,7 @@ AcLswBox_HandleWriteBack:
 	ld xiz, xhl
 	ld xwa, (xiz + 36)
 	ld xbc, 0x1e00040
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 16)
 	cp (xwa), xhl
@@ -2587,7 +2587,7 @@ AcLswBox_HandleWriteBack:
 	call ApFuncCall
 	ld xwa, (xsp + 20)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl Ac_SendUIEvent_Common
 
 AcLswBox_HandleScrollUp:
@@ -2598,7 +2598,7 @@ AcLswBox_HandleScrollUp:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 20)
@@ -2613,7 +2613,7 @@ AcLswBox_HandleScrollDown:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 20)
@@ -2628,7 +2628,7 @@ AcLswBox_HandlePageUp:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
@@ -2646,7 +2646,7 @@ AcLswBox_HandlePageDown:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
@@ -2659,7 +2659,7 @@ Ac_SendUIEvent_Common:
 	call SendEvent
 
 AcLswBox_ReturnZeroJmp:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcLswBox_Epilogue
 
 AcLswBox_DefaultHandler:
@@ -2700,7 +2700,7 @@ AcRamBoxProc:
 	ld xiz, xhl
 	ld xwa, (xiz + 36)
 	ld xbc, 0x1e00045
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	lda xde, (xsp + 8)
 	ld (xde), xhl
@@ -2725,12 +2725,12 @@ AcRamBox_HandleDataRefresh:
 	ld xiz, xhl
 	ld xwa, (xiz + 36)
 	ld xbc, 0x1e00045
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), xhl
 	ld xwa, (xiz + 36)
 	ld xbc, 0x1e00046
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	ld bc, hl
@@ -2746,7 +2746,7 @@ AcRamBox_HandleWriteBack:
 	ld xiz, xhl
 	ld xwa, (xiz + 36)
 	ld xbc, 0x1e00045
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xix, (xsp + 30)
 	ld xwa, (xix)
@@ -2763,7 +2763,7 @@ AcRamBox_HandleWriteBack:
 	call ApFuncCall
 	ld xwa, (xsp + 34)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl AcRamBox_SendUIEvent_Common
 
 AcRamBox_HandleScrollUp:
@@ -2774,7 +2774,7 @@ AcRamBox_HandleScrollUp:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 34)
@@ -2789,7 +2789,7 @@ AcRamBox_HandleScrollDown:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 34)
@@ -2804,7 +2804,7 @@ AcRamBox_HandlePageUp:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
@@ -2822,7 +2822,7 @@ AcRamBox_HandlePageDown:
 	call GetViewInstance
 	ld xwa, (xhl + 36)
 	ld xbc, 0x1e0003f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
@@ -2835,7 +2835,7 @@ AcRamBox_SendUIEvent_Common:
 	call SendEvent
 
 AcRamBox_EventReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcRamBox_Epilogue
 
 AcRamBox_DefaultHandler:
@@ -2885,7 +2885,7 @@ AcTempoBox_HandleShowHide:
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	calr PsParaBoxProc
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	calr MainLswGet
 	jr PsRadioBox_EventReturn
 
@@ -2905,7 +2905,7 @@ AcTempoBox_MatchTempoID:
 	call	16567398
 	cp	hl, 0:i3
 	jr	nz, 26
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	call	16567398
 	pushw	hl
 	pushw	234
@@ -2929,7 +2929,7 @@ AcTempoBox_SendConfirmEvent:
 	call SendEvent
 
 PsRadioBox_EventReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 AcTempoBox_Epilogue:
 	pop xiz
@@ -2983,11 +2983,11 @@ PsRadioBoxProc:
 PsRadioBox_Paint_SendConfirm:
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1c0000e
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl PsRadioBox_DispatchAndReturn
 
 PsRadioBox_Confirm:
@@ -3070,11 +3070,11 @@ PsRadioBox_Select:
 	jr nz, PsRadioBox_Select_GetIndex
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1e0004e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl PsRadioBox_DispatchAndReturn
 
 PsRadioBox_Select_GetIndex:
@@ -3096,7 +3096,7 @@ PsRadioBox_Reset:
 	jr nz, PsRadioBox_Reset_CheckValue
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1c0000e
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl PsRadioBox_DispatchAndReturn
 
 PsRadioBox_Reset_CheckValue:
@@ -3107,7 +3107,7 @@ PsRadioBox_Reset_CheckValue:
 	jrl nz, PsRadioBox_ReturnZero
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1c0000e
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl PsRadioBox_DispatchAndReturn
 
 PsRadioBox_OK:
@@ -3125,7 +3125,7 @@ PsRadioBox_OK:
 	jr z, PsRadioBox_OK_Forward
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1e0004d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jrl PsRadioBox_DispatchAndReturn
 
 PsRadioBox_OK_Forward:
@@ -3150,7 +3150,7 @@ PsRadioBox_Release:
 	jrl z, PsRadioBox_ReturnZero
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1e0004d
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl PsRadioBox_DispatchAndReturn
 
 PsRadioBox_RadioSelect:
@@ -3175,7 +3175,7 @@ PsRadioBox_RadioSelect:
 	jrl nz, PsRadioBox_ReturnZero
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1e0004d
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr PsRadioBox_DispatchAndReturn
 
 PsRadioBox_SetIndex:
@@ -3215,7 +3215,7 @@ PsRadioBox_SetIndex_Store:
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0124)
 	ld xbc, 0x1c0000e
-	lds32 xde, 0
+	ld xde, 0:i3
 
 PsRadioBox_DispatchAndReturn:
 	call SendEvent
@@ -3226,7 +3226,7 @@ PsRadioBox_GetText:
 	ld (xwa), 0x0
 
 PsRadioBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr PsRadioBox_Return
 
 PsRadioBox_HitTest:
@@ -3274,7 +3274,7 @@ AcStrRadioBox_GetText:
 	push	xiz
 	call	16713584
 	inc	8, xsp
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 AcStrRadioBox_Epilogue:
 	pop xiz
 	ret
@@ -3308,7 +3308,7 @@ PsListBoxProc:
 	ldw (xwa), 0xffff
 	ld XWA, (xsp + 0x012a)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld de, iz
 	exts xde
@@ -3725,7 +3725,7 @@ PsListBox_GetText:
 	call	16713584
 	inc	8, xsp
 PsListBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr PsListBox_Return
 
 PsListBox_Default:
@@ -3791,7 +3791,7 @@ AcListBox_ScrollUpDown:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
 	exts xhl
@@ -3832,7 +3832,7 @@ AcListBox_ScrollDownInc:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e00090
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
 	exts xhl
@@ -3871,7 +3871,7 @@ AcListBox_GetText:
 	call	16713584
 	inc	8, xsp
 AcListBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcListBox_Return
 
 AcListBox_Default:
@@ -4031,7 +4031,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+52)
 	cp	bc, (xwa)
 	jr	le, 2
-	lds32	xde, 1
+	ld	xde, 1:i3
 	ld	(xsp+12), xde
 	ld	xde, 4294967295
 	ld	xwa, (xsp+48)
@@ -4046,7 +4046,7 @@ DrawDesignBox_ByteData:
 	ld	hl, (xwa)
 	cp	bc, hl
 	jr	le, 2
-	lds32	xde, 1
+	ld	xde, 1:i3
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
@@ -4085,7 +4085,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
 	jr	nz, 87
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jrl	lt, 481
@@ -4119,7 +4119,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
 	jr	nz, 87
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jrl	lt, 387
@@ -4173,7 +4173,7 @@ DrawDesignBox_ByteData:
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jrl	lt, 232
@@ -4227,7 +4227,7 @@ DrawDesignBox_ByteData:
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jr	lt, 79
@@ -4338,7 +4338,7 @@ DrawDesignBox_Impl:
 	ld (xsp + 70), de
 	ld (xsp + 72), bc
 	ld (xsp + 74), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 14), xwa
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
@@ -4490,9 +4490,9 @@ DrawDesignBox_4FrameCross:
 	ld bc, 0:i3
 	calr DrawFrame_Impl
 	jrl DrawFunc_Epilogue74
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 14), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 14), xwa
 	cpw (xsp + 72), 0xc0
 	jr z, DrawDesignBox_ColorsC0C1
@@ -4512,7 +4512,7 @@ DrawDesignBox_ApplyColors:
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 14)
 	cp xwa, 0x0
@@ -4566,20 +4566,20 @@ DrawDesignBox_BorderLoop:
 	decm 1, (xwa + 6)
 	incw 1, (xwa)
 	decm 1, (xwa + 4)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld xwa, (xsp + 10)
 	cp xwa, (xsp + 14)
 	jrl lt, DrawDesignBox_BorderLoop
 	jrl DrawFunc_Epilogue74
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 14), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 14), xwa
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 14)
 	cp xwa, 0x0
@@ -4675,7 +4675,7 @@ ColorAttribute_SetupReturn:
 	decm 1, (xwa + 6)
 	incw 1, (xwa)
 	decm 1, (xwa + 4)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld xwa, (xsp + 10)
 	cp xwa, (xsp + 14)
@@ -6169,7 +6169,7 @@ SplashBMP_ClearPalette:
 	stl_dpi XWA, 0xe6
 	cp xbc, xhl
 	jr c, SplashBMP_ClearPalette
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 30)
 	cp xwa, 0x0
@@ -6183,13 +6183,13 @@ SplashBMP_DecodePalette:
 	ld xix, xhl
 	add xix, xwa
 	ld a, (xix)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	sll xix, 8
 	ld xwa, xbc
 	ld xiy, xhl
 	add xiy, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xiy + 1)
 	add xix, xwa
 	sll xix, 8
@@ -6200,7 +6200,7 @@ SplashBMP_DecodePalette:
 	extz xwa
 	add xix, xwa
 	stl_dpi XIX, 0xea
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 6), xwa
 	ld xbc, (xsp + 6)
 	cp xbc, (xsp + 30)
@@ -6235,7 +6235,7 @@ SplashBMP_SkipExcessRows:
 	jr SplashBMP_FreeOnError
 
 SplashBMP_CheckSkipCount:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 6), xwa
 	ld xwa, (xsp + 2)
 	sub xwa, 0xf0
@@ -6256,7 +6256,7 @@ SplashBMP_PrepareRowBuffer:
 	ld	(xsp+30), xhl
 	add	xhl, 354304
 	ld	(xsp+22), xhl
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+2)
 	cp	xwa, 0
@@ -6296,7 +6296,7 @@ SplashBMP_ProcessRow:
 	jr SplashBMP_CopyToFramebuffer
 
 SplashBMP_WideImage:
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+10), xwa
 	ld	xbc, (xsp+14)
 	ld	xwa, 320
@@ -6343,7 +6343,7 @@ SplashBMP_CopyToFramebuffer:
 
 	sub (xsp + 22), xwa
 
-	lds32 xwa, 1
+	ld xwa, 1:i3
 
 	add (xsp + 6), xwa
 
@@ -6381,7 +6381,7 @@ SplashBMP_PadCopyLoop:
 	ld	xwa, 320
 	add	(xsp+26), xwa
 	add	(xsp+22), xwa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+6), xwa
 	ld	xwa, (xsp+6)
 	cp	xwa, 240
@@ -6460,7 +6460,7 @@ SplashData_1bppSetup:
 	push	xbc
 	call	16713148
 	lda	xsp, (xsp+12)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	xwa, (xsp+18)
 	cp	xwa, 0
 	jrl	le, 151
@@ -6614,18 +6614,18 @@ ImageDecode_PaletteReduceLoop:
 	jr	z, 8
 	or	xwa, xwa
 	jr	nz, 9
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	jr	5
 PaletteReduce_SpecialCase:
 	ld xbc, 0xb
 
 PaletteReduce_StartSortPass:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 20), xwa
 	ld xwa, 0x100
 	sub xwa, xbc
 	ld (xsp + 24), xwa
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xwa, (xsp + 24)
 	cp xwa, 0x0
 	jr le, PaletteReduce_CheckDone
@@ -6666,7 +6666,7 @@ PaletteReduce_SortCompare:
 	ld xde, (xiy)
 	ld (xix), xde
 	ld (xiy), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 20), xwa
 
 PaletteReduce_NoSwap:
@@ -6709,7 +6709,7 @@ PaletteReduce_RemapPixels:
 PaletteReduce_HighColorReduce:
 	ld xwa, 0x7fffffff
 	ld (xsp + 12), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 16), xwa
 	ld (xsp + 8), xwa
 
@@ -6760,7 +6760,7 @@ PaletteReduce_FindClosest:
 	ld XWA,(XSP+0x08)
 	ld (XSP+0x10),XWA
 PaletteReduce_UpdateMinDist:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0xc0
@@ -6773,7 +6773,7 @@ PaletteReduce_UpdateMinDist:
 	ld e, a
 	ld xwa, (xsp + 32)
 	stb_dri E, 0x07, 0xe0, 0xe4
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, (xsp + 36)
@@ -6782,7 +6782,7 @@ PaletteReduce_UpdateMinDist:
 ImageDecode_CopyPaletteToDAC:
 	ld xde, 0x696fc
 	ld xbc, 0x6977c
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 4), xwa
 
 ImageDecode_PaletteCopyLoop:
@@ -6790,7 +6790,7 @@ ImageDecode_PaletteCopyLoop:
 	ld (xbc), xwa
 	dec 4, xde
 	dec 4, xbc
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, 0xc0
@@ -7368,7 +7368,7 @@ ClipBlit_Replace_ScanlineLoop:
 	ld	xwa, 320
 	add	(xsp+12), xwa
 	add	(xsp+16), xwa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+8), xwa
 ClipBlit_Replace_ScanlineCond:
 	ld de, iz
@@ -7496,7 +7496,7 @@ ClipBlit_Direct_ScanlineLoop:
 	ld	xwa, 320
 	add	(xsp+12), xwa
 	add	(xsp+16), xwa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+8), xwa
 ClipBlit_Direct_ScanlineCond:
 	ld de, iz
@@ -8083,7 +8083,7 @@ ColorBlit2_Mode2_Entry:
 	cp bc, 0x13f
 	jr nz, ColorBlit2_Mode2_ClippedEntry
 	lda xbc, (0x043c00:24)
-	lds32 xde, 0
+	ld xde, 0:i3
 
 ColorBlit2_Mode2_FullscreenLoop:
 	bitm 7, (xbc)

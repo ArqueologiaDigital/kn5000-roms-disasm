@@ -30,7 +30,7 @@ TtMdPcgOut:
 	ldw (xwa), 0x1
 
 TtMdPcgOut_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 AcPcgOutGridBoxProc:
@@ -70,7 +70,7 @@ PcgOutGridBoxEventDispatch:
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
@@ -109,7 +109,7 @@ PcgOutGridBoxEventDispatch:
 	jr z, PcgOutGrid_CheckAltPrev
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
 	extz xhl
@@ -163,7 +163,7 @@ PcgOutGrid_CheckAltPrev:
 	jr z, PcgOutGrid_CheckAltNext
 	ld xwa, xiz
 	ld xbc, 0x1e0008f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp hl, 3:i3
 	jrl ge, PcgOutGrid_ReturnZero
@@ -248,7 +248,7 @@ PcgOutGrid_CallDelegate:
 	call ApFuncCall
 
 PcgOutGrid_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr PcgOutGrid_Epilogue
 
 PcgOutGrid_DefaultHandler:
@@ -298,7 +298,7 @@ PcgOutGridCheckJumpTable:
 	call	16401616
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16422496
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
@@ -330,7 +330,7 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+6), xbc
 	cp	xde, 29360153
 	jr	nz, 5
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
 	jrl	481
 	ld	xiy, 15204142
@@ -344,7 +344,7 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+6), xbc
 	cp	xde, 29360153
 	jr	nz, 5
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
 	jrl	434
 	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff
@@ -360,7 +360,7 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+6), xbc
 	cp	xde, 29360153
 	jr	nz, 5
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
 	jrl	378
 	ld	xiy, 15204142
@@ -376,13 +376,13 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+10), xbc
 	cp	xde, 29360153
 	jr	nz, 5
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
 	jrl	323
 	call	16401616
 	ld	xwa, xhl
 	ld	xbc, 31457423
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16422496
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
@@ -785,7 +785,7 @@ PcgOutCheck_SetFinalProp:
 	call SendEvent
 
 PcgOutGridCheckComplete:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 44)
 	ret
@@ -819,7 +819,7 @@ PcgOutSend_TransmitMidi:
 	call MainFuncCall
 
 PcgOutSendFunc_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainPcgOutSend:
@@ -833,7 +833,7 @@ MainPcgOutSend:
 	call MidiSysEx_BuildAndSend
 
 MainPcgOutSend_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; End of Computer Interface PCG routines

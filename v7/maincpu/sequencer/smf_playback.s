@@ -405,7 +405,7 @@ SMF_InitSequencerState:
 	call SeqTrack_ScanActiveChannels
 	call SeqTrack_ClearPlaybackBuffers
 	call FileIO_ReadBlockToBuffer
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jrl lt, SeqPlay_ResetAndStop
@@ -413,7 +413,7 @@ SMF_InitSequencerState:
 	ld xwa, 0x13fa
 	ld (4376:16), xwa
 	push xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (6883:16), xwa
 	ld (6887:16), 0
 	pop xwa
@@ -475,7 +475,7 @@ SMF_ReadMThd_Matched:
 
 FloppyIO_WaitReadComplete:
 	ld xbc, (6883:16)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	cp xbc, xwa
 	jp z, (SMF_AfterFloppyWait:24)
 	call FloppyIO_ReadNextByte
@@ -533,7 +533,7 @@ SMF_ReadTrackData_Loop:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadTrackData_FloppyErr
@@ -566,7 +566,7 @@ SMF_ReadLoopWithRetry:
 	call FloppyIO_ReadToTrackBuffer
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MainLoop_FloppyErr1
@@ -594,7 +594,7 @@ SMF_TempoScaling_Loop:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MainLoop_FloppyErr2
@@ -613,7 +613,7 @@ SMF_CheckMetaEvent:
 	call SMF_ParseTrackEvent
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MetaEvent_FloppyErr
@@ -649,7 +649,7 @@ SMF_ProcessSysEx:
 	call SMF_ProcessSysExBlock
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SysEx_FloppyErr
@@ -671,7 +671,7 @@ SMF_CheckMidiStatus:
 	call SMF_ReadMidiEventToBuffer
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MidiEvent_FloppyErr
@@ -693,7 +693,7 @@ SMF_RunningStatus_Read:
 	call FloppyIO_ReadMidiEventBytes
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_RunningStatus_FloppyErr

@@ -11,7 +11,7 @@
 
 
 CheckTitleFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainTitle_InitGraphicsAndEvents:
@@ -22,11 +22,11 @@ MainTitle_InitGraphicsAndEvents:
 	call LcdOn
 	ld xwa, 0x1a00000
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call PostEvent
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00014
@@ -43,11 +43,11 @@ MainTitle_SetBootFlag:
 MainTitle_TeardownAndLoop:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld wa, 0:i3
 	call SetNeedUpdate
@@ -59,7 +59,7 @@ MainTitle_UpdateAndRefresh:
 	call UpdateScreen
 
 MainTitle_EventLoop:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (0x027496:24), xwa
 	ld wa, 2:i3
 	call TaskSched_WaitForEvent
@@ -76,9 +76,9 @@ MainTitle_EventLoop:
 	jr z, MainTitle_EventLoopSkipInit
 
 	calr SleepMainTask
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c00000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call DirmdEmulator_Entry
 	ld wa, 1:i3
 	call SetNeedUpdate
@@ -109,7 +109,7 @@ CtrlPanel_HandleSingleBit:
 	and e, c
 	bit 1, e
 	jr z, CtrlPanel_HandleBit1SndParam
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	ld bc, 1:i3
 	ld de, 4:i3
 	jr CtrlPanel_DispatchSndParamLookup
@@ -117,7 +117,7 @@ CtrlPanel_HandleSingleBit:
 CtrlPanel_HandleBit1SndParam:
 	bit 0, e
 	jr z, SndParam_SendDiskMenuEvents
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	ldw bc, 0xffff
 	ld de, 4:i3
 
@@ -196,9 +196,9 @@ CtrlPanel_DispatchCombinedState:
 	jr z, CtrlPanel_PostDisplayEvent
 	cp xwa, 0x89
 	jr nz, CtrlPanel_HandlePortCommands
-	lds32 xwa, 7
+	ld xwa, 7:i3
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr CtrlPanel_PostCombinedEvent
 
 CtrlPanel_PostDisplayEvent:
@@ -228,7 +228,7 @@ CtrlPanel_HandlePortCommands:
 	ld	xwa, 4294967295
 	ld	xbc, 29360187
 	call	16421979
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (49122:16)
 	add	xde, 25165824
 	ld	xwa, 4294967295
@@ -261,9 +261,9 @@ CtrlPanel_EventType_A8:
 	jr	z, 26
 	ld	xwa, 4294967295
 	ld	xbc, 31457435
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	.byte 0xe2, 0x90, 0x74, 0x02, 0xe8
 	jrl	732
 CtrlPanel_A8_CheckRelease:
@@ -303,7 +303,7 @@ CtrlPanel_EventType_AA:
 	cp	l, 255
 	.byte 0xf2, 0x23, 0xec, 0xfa, 0xe6
 CtrlPanel_ClearStateVar:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x027490:24), xwa
 
 CtrlPanel_AA_Epilogue:
@@ -314,7 +314,7 @@ CtrlPanel_AA_PanelEvent_0F:
 	jr z, CtrlPanel_AA_0F_Release
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_0F_Release:
@@ -322,7 +322,7 @@ CtrlPanel_AA_0F_Release:
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_12:
@@ -330,7 +330,7 @@ CtrlPanel_AA_PanelEvent_12:
 	jr z, CtrlPanel_AA_12_Release
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
-	lds32 xde, 1
+	ld xde, 1:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_12_Release:
@@ -338,7 +338,7 @@ CtrlPanel_AA_12_Release:
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 1
+	ld xde, 1:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_0E_Bit3:
@@ -346,7 +346,7 @@ CtrlPanel_AA_PanelEvent_0E_Bit3:
 	jr z, CtrlPanel_AA_0E_Bit3Release
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
-	lds32 xde, 2
+	ld xde, 2:i3
 	jr CtrlPanel_AA_0E_PostAndContinue
 
 CtrlPanel_AA_0E_Bit3Release:
@@ -354,7 +354,7 @@ CtrlPanel_AA_0E_Bit3Release:
 	jr z, CtrlPanel_AA_PanelEvent_0E_Bit2
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 2
+	ld xde, 2:i3
 
 CtrlPanel_AA_0E_PostAndContinue:
 	call ApPostEvent
@@ -367,14 +367,14 @@ CtrlPanel_AA_PanelEvent_0E_Bit2:
 	jr	z, 14
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
-	lds32	xde, 3
+	ld	xde, 3:i3
 	jr	17
 CtrlPanel_AA_0E_Bit2Release:
 	bit 2, c
 	jr z, CtrlPanel_AA_PanelEvent_0E_Bit4
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 3
+	ld xde, 3:i3
 
 CtrlPanel_AA_0E_Bit2Post:
 	call ApPostEvent
@@ -402,7 +402,7 @@ CtrlPanel_AA_PanelEvent_04_Bit4:
 	jr z, CtrlPanel_AA_04_Bit4Release
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
-	lds32 xde, 4
+	ld xde, 4:i3
 	jr CtrlPanel_AA_04_PostAndContinue
 
 CtrlPanel_AA_04_Bit4Release:
@@ -410,7 +410,7 @@ CtrlPanel_AA_04_Bit4Release:
 	jr z, CtrlPanel_AA_PanelEvent_04_Bit5
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 4
+	ld xde, 4:i3
 
 CtrlPanel_AA_04_PostAndContinue:
 	call ApPostEvent
@@ -423,14 +423,14 @@ CtrlPanel_AA_PanelEvent_04_Bit5:
 	jr	z, 15
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
-	lds32	xde, 5
+	ld	xde, 5:i3
 	jrl	312
 CtrlPanel_AA_04_Bit5Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 5
+	ld xde, 5:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_15:
@@ -447,7 +447,7 @@ CtrlPanel_AA_PanelEvent_15:
 CtrlPanel_AA_15_AprInactive:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
-	lds32 xde, 6
+	ld xde, 6:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_15_Release:
@@ -464,7 +464,7 @@ CtrlPanel_AA_15_Release:
 CtrlPanel_AA_15_ReleaseAprInactive:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 6
+	ld xde, 6:i3
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_01_Bit1:
@@ -472,7 +472,7 @@ CtrlPanel_AA_PanelEvent_01_Bit1:
 	jr z, CtrlPanel_AA_01_Bit1Release
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
-	lds32 xde, 7
+	ld xde, 7:i3
 	jr CtrlPanel_AA_01_PostAndContinue
 
 CtrlPanel_AA_01_Bit1Release:
@@ -480,7 +480,7 @@ CtrlPanel_AA_01_Bit1Release:
 	jr z, CtrlPanel_AA_PanelEvent_01_Bit5
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
-	lds32 xde, 7
+	ld xde, 7:i3
 
 CtrlPanel_AA_01_PostAndContinue:
 	call ApPostEvent

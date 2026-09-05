@@ -463,7 +463,7 @@ FileIO_BytecodeData:
 	ld	(xwa+3), l
 	ld	xwa, (xsp+2)
 	calr	-1101
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	calr	-1112
@@ -563,7 +563,7 @@ FileIO_BytecodeData:
 	call	16474137
 	sll	l, 3
 	ld	(xsp+4), l
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (xiz+2)
 	call	16546867
 	inc	1, l
@@ -901,7 +901,7 @@ FileIO_BytecodeData:
 	jr	6
 	ld	xwa, (xsp+2)
 	calr	-2253
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	calr	-2264
@@ -921,7 +921,7 @@ FileIO_BytecodeData:
 	jr	z, 95
 	cp	a, 19
 	jr	z, 90
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	stb_erp	a, 251
 	call	16546867
 	ldb_erp	l, 251
@@ -967,7 +967,7 @@ FileIO_BytecodeData:
 	ld	(xwa), l
 	ld	xwa, (xsp+8)
 	calr	-2447
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	calr	-2458
@@ -1698,7 +1698,7 @@ ExtDev_SndParam_DispatchComplex:
 
 VoiceEntry_FindMasterVolume:
 	lda xde, (0xc039:16)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld wa, 0:i3
 	jr VoiceEntry_CheckTerminator
 
@@ -2693,7 +2693,7 @@ SndParam_GuardedNibbleSet_ViaReg0103:
 	andmi8	(xiz+14), 240
 	bit	2, (1057:16)
 	jr z, MidiCtrl_PopIzRet
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	call SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr nz, MidiCtrl_PopIzRet
@@ -2993,7 +2993,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	jr	ugt, 8
 	ld	a, (xwa)
 	extz	wa
-	lds32	xiz, 7
+	ld	xiz, 7:i3
 	jr	16
 	.byte 0x80
 	push	xsp
@@ -4214,7 +4214,7 @@ VoiceData_ExtendedParamSetup:
 	ld	(xsp+2), 0
 	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld	(xsp+4), xwa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (xsp+2)
 	ld	xbc, xwa
 	sll	xbc, 4
@@ -6098,13 +6098,13 @@ CtrlPanelRefresh_Done:
 
 CtrlPanel_BuildIndicatorBitmask:
 	push xiz
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	lda xde, (SoundProgram_DispatchTable_0x8DA:24)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr nz, IndBitmask_LookupByChannel
 	ld c, (xwa)
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ldb_erp C, 0xf8
 	and xiz, 0x7
 	ldb_sri0 A, (xwa + 0x00be)

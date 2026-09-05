@@ -61,7 +61,7 @@ SeqName_SendSlotLoop:
 	jr lt, SeqName_SendSlotLoop
 
 SeqName_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl SeqName_Exit
 
 SeqName_HandleNavigation:
@@ -102,7 +102,7 @@ SeqName_HandlePlayAction:
 	bitm 7, (xwa + 1)
 	jr nz, SeqName_CheckDiskAvail
 	ld (xwa), 0x1
-	lds32 xde, 1
+	ld xde, 1:i3
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
 	jr SeqName_PostAndExit
@@ -115,11 +115,11 @@ SeqName_CheckDiskAvail:
 	jr z, SeqName_LoadAndPlay
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 SeqName_PostAndExit:
 	call ApPostEvent
@@ -128,7 +128,7 @@ SeqName_PostAndExit:
 SeqName_LoadAndPlay:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -145,7 +145,7 @@ SeqName_LoadAndPlay:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jr SeqName_ShowAndExit
@@ -155,7 +155,7 @@ SeqName_HandleAction32:
 	jr nz, SeqName_GetCurrentIndex
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -172,7 +172,7 @@ SeqName_HandleAction32:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 
@@ -357,7 +357,7 @@ IntMed_NextSlot:
 	inc 1, iz
 	cp iz, 0xa
 	jr c, IntMed_CheckSlotLoop
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x82de:16), xwa
 	jrl IntMed_Exit
 
@@ -595,7 +595,7 @@ IntMed_HandleSelectToggle:
 	jrl nz, IntMed_HandleRepeatToggle
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmSeqSongNameFunc
 	ld iz, hl
 	lda xwa, (0x8890:16)
@@ -728,7 +728,7 @@ IntMed_StartPlayLoop:
 	inc 1, (0x889c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7a
 	call UI_PostModeChangeEvent
@@ -749,13 +749,13 @@ IntMed_CheckContinue:
 	jr z, IntMed_Exit
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7a
 	call UI_PostModeChangeEvent
 
 IntMed_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 8, xsp
 	ret
@@ -799,7 +799,7 @@ DiskMed1_FormatLoop:
 	jr c, DiskMed1_FormatLoop
 
 DiskMed1_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -844,7 +844,7 @@ DiskMed2_FormatLoop:
 	jr c, DiskMed2_FormatLoop
 
 DiskMed2_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -885,7 +885,7 @@ DiskMed_NextSong:
 	jrl DiskMed_ReturnZero
 
 DiskMed_ReturnFinished:
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	jrl DiskMed_HelperExit
 
 DiskMed_InitPlayOrder:
@@ -975,7 +975,7 @@ DiskMed_FindFirstLoop:
 DiskMed_PlaySong:
 	call SongBank_SwitchAndUpdateTempo
 	inc 1, (0x889c:16)
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jr DiskMed_HelperExit
 
 DiskMed_NextFindFirst:
@@ -984,7 +984,7 @@ DiskMed_NextFindFirst:
 	jr c, DiskMed_FindFirstLoop
 
 DiskMed_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 DiskMed_HelperExit:
 	popw iz
@@ -1018,17 +1018,17 @@ FmmDiskMedleySelectFunc:
 	jrl z, DiskSel_CheckPlaying
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	cpw (0x8502:16), 0
 	jr ge, DiskSel_InitState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
@@ -1036,11 +1036,11 @@ FmmDiskMedleySelectFunc:
 	call GetEncodedFreeSpaceData
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	calr SignalProgressUpdate
 
@@ -1092,11 +1092,11 @@ DiskSel_CheckPlaying:
 	jr nz, DiskSel_CheckFinished
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x78
 	jrl DiskSel_CallPauseMode
@@ -1106,11 +1106,11 @@ DiskSel_CheckFinished:
 	jrl nz, DiskSel_Exit
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld a, (0x893c:16)
 	cp a, (0x893a:16)
@@ -1153,25 +1153,25 @@ DiskSel_SendFileInfo:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x14, 0x00
 	jr lt, DiskSel_SendFileInfo
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDiskMedley1Func
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDiskMedley2Func
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
 	ld xde, 0x770008
 	calr DiskNameFunc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
 	ld xde, 0x770009
 	calr DiskInfoFunc
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -1180,11 +1180,11 @@ DiskSel_SendFileInfo:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	cpiw_erp 0xfa, 0
 	jr ge, DiskSel_PlayNext
@@ -1208,7 +1208,7 @@ DiskSel_PlayNext:
 	jr nz, DiskSel_NextSongLoop
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x78
 	call UI_PostModeChangeEvent
@@ -1265,25 +1265,25 @@ DiskSel_RepeatSendInfo:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x14, 0x00
 	jr lt, DiskSel_RepeatSendInfo
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDiskMedley1Func
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDiskMedley2Func
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
 	ld xde, 0x770008
 	calr DiskNameFunc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
 	ld xde, 0x770009
 	calr DiskInfoFunc
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -1292,11 +1292,11 @@ DiskSel_RepeatSendInfo:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	cpiw_erp 0xfa, 0
 	jr ge, DiskSel_RepeatPlayNext
@@ -1320,7 +1320,7 @@ DiskSel_RepeatPlayNext:
 	jr nz, DiskSel_RepeatNext
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x78
 
@@ -1341,18 +1341,18 @@ DiskSel_HandleError:
 	jr nz, DiskSel_ShowError
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jrl DiskSel_Exit
 
 DiskSel_ShowError:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 14
 	ldw wa, 0xee
@@ -1368,7 +1368,7 @@ DiskSel_PostStopEvent:
 	calr CancelOperationCleanup
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl DiskSel_PostEvent
 
 DiskSel_StoreWindowPtr:
@@ -1388,7 +1388,7 @@ DiskSel_DefaultIndex:
 	ldw (0x83de:16), 0
 	ld xwa, (0x83da:16)
 	ld xbc, 0x1e50002
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl DiskSel_PostEvent
 
 DiskSel_InitDisplay:
@@ -1548,13 +1548,13 @@ DiskSel_NextUnmark:
 	jr c, DiskSel_UnmarkLoop
 
 DiskSel_RefreshDisplay:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDiskMedley1Func
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr DiskSel_RefreshBoth
 
 DiskSel_HandleSelect:
@@ -1599,13 +1599,13 @@ DiskSel_NextReorder:
 	jr c, DiskSel_ReorderLoop
 
 DiskSel_RefreshAfterSelect:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDiskMedley1Func
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 
 DiskSel_RefreshBoth:
 	calr FmmDiskMedley2Func
@@ -1657,18 +1657,18 @@ DiskSel_PlayFindLoop:
 	call ApPostEvent
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_ParseDirectoryEntry
 	ldw_erp HL, 0xfa
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	cpiw_erp 0xfa, 0
 	jr ge, DiskSel_PlayNextSong
@@ -1696,7 +1696,7 @@ DiskSel_PlayNextSong:
 	jr nz, DiskSel_PlayNextLoop
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x78
 	call UI_PostModeChangeEvent
@@ -1753,7 +1753,7 @@ DiskSel_PostEvent:
 	call ApPostEvent
 
 DiskSel_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
@@ -1890,9 +1890,9 @@ SmfMed_FormatSlotList:
 	push xiz
 	ld iz, bc
 	ld (xsp + 6), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmSmfFileNameFunc
 	ldw_erp HL, 0xfa
 	stw_erp WA, 0xfa
@@ -2167,7 +2167,7 @@ SmfMed_ClearPlaying:
 	jrl SmfMed_Exit
 
 SmfMed_InitFromDisk:
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (0x8944:16)
 	ld xwa, 0x6c0018
 	ld xbc, 0x1e0003b
@@ -2176,7 +2176,7 @@ SmfMed_InitFromDisk:
 	jr ge, SmfMed_InitState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
@@ -2184,11 +2184,11 @@ SmfMed_InitFromDisk:
 	call GetEncodedFreeSpaceData
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	calr SignalProgressUpdate
 
@@ -2220,7 +2220,7 @@ SmfMed_ClearSlotsLoop:
 
 SmfMed_FinishInit:
 	call CDlike_InitModeAndLoadBank
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x8434:16), xwa
 	jrl SmfMed_Exit
 
@@ -2327,7 +2327,7 @@ SmfMed_HandleSelectToggle:
 	jr nz, SmfMed_HandleRepeat
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmSmfFileNameFunc
 	ld iz, hl
 	lda xhl, (0x88a0:16)
@@ -2422,7 +2422,7 @@ SmfMed_PlayFindLoop:
 	call GetFileEntryByIndex
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x73
 	call UI_PostModeChangeEvent
@@ -2438,14 +2438,14 @@ SmfMed_CheckAutoPlay:
 	jr nz, SmfMed_Exit
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmSmfFileNameFunc
 	ld iz, hl
 	ld wa, iz
 	call GetFileEntryByIndex
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x6f
 	jr SmfMed_CallPauseMode
@@ -2459,7 +2459,7 @@ SmfMed_CheckContinue:
 	jr z, SmfMed_Exit
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld a, (0x843a:16)
 	extz wa
@@ -2468,7 +2468,7 @@ SmfMed_CallPauseMode:
 	call UI_PostModeChangeEvent
 
 SmfMed_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret
@@ -2567,7 +2567,7 @@ PdName_RefreshList:
 	calr PdMed_FormatFileList
 
 PdName_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl PdName_Exit
 
 PdName_HandleNavigation:
@@ -2687,7 +2687,7 @@ PdName_RefreshPage:
 	calr PdMed_FormatFileList
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmPdMedleyFunc
 	jrl PdName_ReturnZero
 
@@ -2723,9 +2723,9 @@ PdMed_FormatSlotList:
 	push xiz
 	ld iz, bc
 	ld (xsp + 6), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmPdFileNameFunc
 	ldw_erp HL, 0xfa
 	stw_erp WA, 0xfa
@@ -2950,17 +2950,17 @@ PdMed_InitFromDisk:
 	jr ge, PdMed_InitState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call BuildPageRecordsAlt
 	ld (0x8506:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	call SignalProgressUpdate
 
@@ -2992,7 +2992,7 @@ PdMed_ClearSlotsLoop:
 
 PdMed_FinishInit:
 	call CDlike_InitModeAndLoadBank
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x8498:16), xwa
 	jrl PdMed_Exit
 
@@ -3094,7 +3094,7 @@ PdMed_HandleSelectToggle:
 	jr nz, PdMed_HandleRepeat
 	ld xwa, xiz
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmPdFileNameFunc
 	lda xix, (0x88a0:16)
 	extz xhl
@@ -3185,7 +3185,7 @@ PdMed_PlayFindLoop:
 	inc 1, (0x8922:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x75
 	call UI_PostModeChangeEvent
@@ -3201,7 +3201,7 @@ PdMed_CheckAutoPlay:
 	jr nz, PdMed_Exit
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x71
 	jr PdMed_CallPauseMode
@@ -3215,7 +3215,7 @@ PdMed_CheckContinue:
 	jr z, PdMed_Exit
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x75
 
@@ -3223,7 +3223,7 @@ PdMed_CallPauseMode:
 	call UI_PostModeChangeEvent
 
 PdMed_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -3277,7 +3277,7 @@ DocDisk_PostEvent:
 	call ApPostEvent
 
 DocDisk_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -3374,7 +3374,7 @@ DocName_RefreshList:
 	calr DocMed_FormatFileList
 
 DocName_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl DocName_Exit
 
 DocName_HandleNavigation:
@@ -3494,7 +3494,7 @@ DocName_RefreshPage:
 	calr DocMed_FormatFileList
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDocMedleyFunc
 	jrl DocName_ReturnZero
 
@@ -3531,9 +3531,9 @@ DocMed_FormatSlotList:
 	push xiz
 	ld iz, bc
 	ld (xsp + 6), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDocFileNameFunc
 	ldw_erp HL, 0xfa
 	stw_erp WA, 0xfa
@@ -3762,17 +3762,17 @@ DocMed_InitFromDisk:
 	ldw (0x8504:16), 0xffff
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_InitFileNavigation
 	ld (0x8508:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	call SignalProgressUpdate
 
@@ -3804,7 +3804,7 @@ DocMed_ClearSlotsLoop:
 
 DocMed_FinishInit:
 	call CDlike_InitModeAndLoadBank
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x84f8:16), xwa
 	jrl DocMed_Exit
 
@@ -3906,7 +3906,7 @@ DocMed_HandleSelectToggle:
 	jr nz, DocMed_HandleRepeat
 	ld xwa, xiz
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDocFileNameFunc
 	lda xix, (0x88a0:16)
 	extz xhl
@@ -3997,7 +3997,7 @@ DocMed_PlayFindLoop:
 	inc 1, (0x8922:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x74
 	call UI_PostModeChangeEvent
@@ -4013,11 +4013,11 @@ DocMed_CheckAutoPlay:
 	jr nz, DocMed_Exit
 	ld xwa, xiz
 	ld xbc, 0x1e50003
-	lds32 xde, 0
+	ld xde, 0:i3
 	calr FmmDocFileNameFunc
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x70
 	jr DocMed_CallPauseMode
@@ -4031,7 +4031,7 @@ DocMed_CheckContinue:
 	jr z, DocMed_Exit
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x74
 
@@ -4039,7 +4039,7 @@ DocMed_CallPauseMode:
 	call UI_PostModeChangeEvent
 
 DocMed_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -4268,7 +4268,7 @@ PasswordText:
 	ret
 
 PasswordText_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 CheckPasswordText:
@@ -4293,7 +4293,7 @@ CheckPwd_Return:
 	ret
 
 CheckPwd_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 WakeUpPassword:
@@ -4317,7 +4317,7 @@ WakeUpPassword:
 	jrl WakeUp_Exit
 
 WakeUp_Return1:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 	jrl WakeUp_Exit
 
 WakeUp_HandleDirect:
@@ -4343,7 +4343,7 @@ WakeUp_HandleOk:
 	call InheritedProc
 	ld xwa, 0x670001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x3
 	jr z, WakeUp_ReturnZero
@@ -4356,11 +4356,11 @@ WakeUp_HandleOk:
 	ld (0x02741a:24), 0x00
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0x600040
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr WakeUp_PostEvent
 
 WakeUp_ClearCounter:
@@ -4372,17 +4372,17 @@ WakeUp_StoreType:
 	ld (0x02748e:24), a
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0x600045
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 WakeUp_PostEvent:
 	call PostEvent
 
 WakeUp_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 WakeUp_Exit:
 	pop xiz
@@ -4409,7 +4409,7 @@ PasswordOk:
 	jr PwdOk_Exit
 
 PwdOk_Return2:
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	jr PwdOk_Exit
 
 PwdOk_HandleConfirm:
@@ -4420,15 +4420,15 @@ PwdOk_HandleConfirm:
 	call SendEvent
 	ld xwa, 0x600040
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld de, (0x02741c:24)
 	extz xde
@@ -4437,7 +4437,7 @@ PwdOk_HandleConfirm:
 	call MainFuncCall
 
 PwdOk_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 PwdOk_Exit:
 	pop xiz
@@ -4463,7 +4463,7 @@ CheckPasswordOk:
 	jrl CheckOk_Exit
 
 CheckOk_Return2:
-	lds32 xhl, 2
+	ld xhl, 2:i3
 	jrl CheckOk_Exit
 
 CheckOk_HandleConfirm:
@@ -4474,19 +4474,19 @@ CheckOk_HandleConfirm:
 	call SendEvent
 	ld xwa, 0x600045
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0x670001
 	ld xbc, 0x1e00056
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	lda xwa, (0x027424:24)
 	cp hl, 1:i3
@@ -4518,7 +4518,7 @@ CheckOk_CallFunc:
 	call MainFuncCall
 
 CheckOk_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 CheckOk_Exit:
 	pop xiz
@@ -4529,19 +4529,19 @@ PasswordNo:
 	jr nz, PwdNo_Exit
 	ld xwa, 0x600040
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 
 PwdNo_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 CheckPasswordNo:
@@ -4549,19 +4549,19 @@ CheckPasswordNo:
 	jr nz, CheckNo_HandleConfirm
 	ld xwa, 0x600045
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 
 CheckNo_HandleConfirm:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DiskAttention:
@@ -4571,7 +4571,7 @@ DiskAttention:
 	ret
 
 CheckNo_Type1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DiskSure:
@@ -4581,7 +4581,7 @@ DiskSure:
 	ret
 
 CheckNo_Type2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FormatText:
@@ -4591,7 +4591,7 @@ FormatText:
 	ret
 
 CheckNo_Type3:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DeleteText:
@@ -4601,7 +4601,7 @@ DeleteText:
 	ret
 
 CheckNo_CallFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DeleteYes:
@@ -4609,15 +4609,15 @@ DeleteYes:
 	jr nz, PwdChange_HandleOk
 	ld xwa, 0x7b0051
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00017
@@ -4625,7 +4625,7 @@ DeleteYes:
 	call PostEvent
 
 PwdChange_HandleOk:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DeleteNo:
@@ -4633,19 +4633,19 @@ DeleteNo:
 	jr nz, PwdChange_Type1
 	ld xwa, 0x7b0051
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 
 PwdChange_Type1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveText:
@@ -4655,7 +4655,7 @@ SaveText:
 	ret
 
 PwdChange_CallFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveYes:
@@ -4663,15 +4663,15 @@ SaveYes:
 	jr nz, PwdDel_HandleOk
 	ld xwa, 0x600037
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00017
@@ -4679,7 +4679,7 @@ SaveYes:
 	call PostEvent
 
 PwdDel_HandleOk:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveNo:
@@ -4687,19 +4687,19 @@ SaveNo:
 	jr nz, PwdDel_Type1
 	ld xwa, 0x600037
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call PostEvent
 
 PwdDel_Type1:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 InsertOptionText:
@@ -4709,7 +4709,7 @@ InsertOptionText:
 	ret
 
 PwdDel_Type2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 TypePriorityText:
@@ -4719,6 +4719,6 @@ TypePriorityText:
 	ret
 
 PwdDel_CallFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 

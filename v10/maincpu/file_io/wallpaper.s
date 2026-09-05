@@ -33,7 +33,7 @@ FmmWallpaperLoadFunc:
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
 	jr ge, WPLoad_DispatchState
@@ -61,27 +61,27 @@ WPLoad_DispatchState:
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
 	ldw wa, 0xee
@@ -90,7 +90,7 @@ WPLoad_HandleCancel:
 WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
@@ -100,17 +100,17 @@ WPLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
 	ldw wa, 0xee
@@ -152,7 +152,7 @@ WPLoad_HandleShow:
 
 WPLoad_HandleScroll:
 	ld xbc, 0x1c50001
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld hl, (0x81b4:16)
 	ld (xsp + 4), hl
@@ -226,7 +226,7 @@ WPLoad_OpLoad:
 	jr nz, WPLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -238,17 +238,17 @@ WPLoad_OpLoad:
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
@@ -310,13 +310,13 @@ WPLoad_RedrawPage:
 WPLoad_SendState:
 	ld xwa, (0x81b0:16)
 	ld xbc, 0x1c50001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 WPLoad_DispatchWidget:
 	call ApPostEvent
 
 WPLoad_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 6, xsp
 	ret

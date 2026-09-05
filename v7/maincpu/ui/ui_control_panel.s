@@ -80,7 +80,7 @@ ParaLoadOptSendEvtReturn:
 	call SendEvent
 
 ParaLoadOpt_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 62)
 	ret
@@ -93,7 +93,7 @@ ParaLoadOptOKFunc:
 	call MainFuncCall
 
 ParaLoadOptOK_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainFlashFunc:
@@ -119,7 +119,7 @@ MainFlash_AudioDispatch:
 	call Audio_DispatchCommand
 
 MainFlash_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 
@@ -167,7 +167,7 @@ AcTtlJgBox_HandleOK:
 	ld xwa, (xwa + 50)
 	ld xbc, (xsp + 12)
 	call MainFuncCall
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcTtlJgBox_Return
 
 AcTtlJgBox_CallInherited:
@@ -236,7 +236,7 @@ AcParaStrBox_HandleTimer:
 	jr nz, AcParaStrBox_ForwardInherited
 
 AcParaStrBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcParaStrBox_Return
 
 AcParaStrBox_ForwardInherited:
@@ -311,7 +311,7 @@ PsWinToggle_HandleCreate:
 	jr z, PsWinToggle_ForwardInherited
 	ld xwa, (xsp + 18)
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), hl
 	ld xde, (xiz + 40)
@@ -367,7 +367,7 @@ PsWinToggle_HandleOK:
 	jr z, PsWinToggle_ReturnZero
 	ld xwa, (xsp + 18)
 	ld xbc, 0x1e0006c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), hl
 	ld de, (xsp + 4)
@@ -381,30 +381,30 @@ PsWinToggle_HandleOK:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 44)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 40)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr PsWinToggle_SendToggleEvent
 
 PsWinToggle_HideChild40:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 40)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 44)
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 PsWinToggle_SendToggleEvent:
 	call SendEvent
 
 PsWinToggle_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr PsWinToggle_Return
 
 PsWinToggle_InheritedFallback:
@@ -425,7 +425,7 @@ PsWinToggle_HandleReEnable:
 	jr z, PsWinToggle_ForwardToInherited
 	ld xwa, (xsp + 18)
 	ld xbc, 0x1e0006b
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0x0
@@ -573,7 +573,7 @@ AcFileSfx_CallDrawString:
 	jr c, AcFileSfx_DrawLoop
 
 AcFileSfx_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr AcFileSfx_Return
 
 AcFileSfx_HandleReEnable:
@@ -664,7 +664,7 @@ IvFocus_HandleOK:
 	jr z, IvFocus_CallInherited
 	ld xwa, xiz
 	ld xbc, 0x1e0006c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 40)
@@ -685,7 +685,7 @@ IvFocus_SendEventReturn:
 	call SendEvent
 
 IvFocus_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr IvFocus_Return
 
 IvFocus_CallInherited:
@@ -758,7 +758,7 @@ IvTimer_HandleDestroy:
 	call InheritedProc
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	jr IvTimer_ReturnZero
 
@@ -773,7 +773,7 @@ IvTimer_HandleEvent3A:
 IvTimer_HandleEvent09:
 	ld xwa, 0x1e5000a
 	push xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	push xwa
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 20)
@@ -788,7 +788,7 @@ IvTimer_HandleEvent0A:
 	push xiz
 	ld xwa, (xsp + 12)
 	push xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 20)
 	call KillApTimer
@@ -801,7 +801,7 @@ IvTimer_CallMainFunc:
 	call MainFuncCall
 
 IvTimer_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 IvTimer_Cleanup:
 	pop xiz
@@ -834,7 +834,7 @@ VwTitle_HandleDestroy:
 	ld xbc, (xhl + 32)
 	ld de, 0:i3
 	call DrawTitleBar
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 VwTitle_Return:
 	pop xiz
@@ -1321,7 +1321,7 @@ DrawDouble_SkipV:
 	calr DrawProgressRectH
 
 DrawDouble_AfterV:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 DrawDouble_Return:
 	pop xiz
@@ -1372,7 +1372,7 @@ Slider_Case1E00067:
 	call InheritedProc
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl Slider_UpdateDone
 
 Slider_Case1E0006A:
@@ -1515,7 +1515,7 @@ Slider_UpdateDone:
 	call SendEvent
 
 Slider_NoChange:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr Slider_Exit
 
 Slider_Error:
@@ -1597,7 +1597,7 @@ Scrollbar_Case1E00067:
 	extz xwa
 	ld xbc, 0x1e5000a
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	push xbc
 	ld xbc, (xsp + 24)
 	ld xde, (xsp + 24)
@@ -1636,7 +1636,7 @@ Scrollbar_Case1E5000A:
 	extz xwa
 	ld xbc, 0x1e5000a
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	push xbc
 	ld xbc, (xsp + 24)
 	ld xde, (xsp + 24)
@@ -1654,14 +1654,14 @@ Scrollbar_Case1E5000A:
 	extz xwa
 	ld xbc, 0x1e5000a
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	push xbc
 	ld xbc, (xsp + 24)
 	ld xde, (xsp + 24)
 	call SetApTimer
 
 Scrollbar_Done:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr Scrollbar_Return
 
 Scrollbar_Case1C00001:
@@ -1741,7 +1741,7 @@ Bounds_Case1E0006B:
 	call InheritedProc
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	jr Bounds_Done
 
@@ -1793,7 +1793,7 @@ Bounds_Default:
 	call SetApTimer
 
 Bounds_Done:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr Bounds_Return
 
 Bounds_Error:
@@ -1826,7 +1826,7 @@ Edit_Case1E00067:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr Edit_Update
 
 Edit_Case1E00069:
@@ -1845,7 +1845,7 @@ Edit_Case1E00068:
 	jr z, Edit_NoChange
 	ld xwa, (xbc)
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	jr Edit_Update
 
 Edit_Default:
@@ -1857,13 +1857,13 @@ Edit_Default:
 	jr z, Edit_NoChange
 	ld xwa, (xbc)
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 
 Edit_Update:
 	call SendEvent
 
 Edit_NoChange:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Edit_Return:
 	pop xiz
@@ -2001,11 +2001,11 @@ KeyScan_ScanLoop:
 	extz	xwa
 	add	xde, xwa
 	sll	xde, 8
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (49122:16)
 	add	xde, xwa
 	sll	xde, 8
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, (49123:16)
 	add	xde, xwa
 	ld	xwa, 4294967295
@@ -2039,7 +2039,7 @@ CtrlPanel_HandleKeyInput:
 	jr	25
 CtrlPanel_HandleKey10:
 	call	16635862
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (35998:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29360175
@@ -2085,7 +2085,7 @@ ApTaskCtrl_HandleAD:
 	call TaskSched_WakeBySlotID
 
 ApTaskCtrl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainTaskControl:
@@ -2121,30 +2121,30 @@ MainTaskCtrl_HandleB0:
 	call ApPostEvent
 
 MainTaskCtrl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 SleepMainTask:
 	ld xwa, 0x120000b
 	ld xbc, 0x1e000ac
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl ApTaskControl
 
 WakeUpMainTask:
 	ld xwa, 0x120000b
 	ld xbc, 0x1e000ad
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl ApTaskControl
 
 SleepApTask:
 	ld xwa, 0x120000b
 	ld xbc, 0x1e000ae
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr MainTaskControl
 
 WakeUpApTask:
 	ld xwa, 0x120000b
 	ld xbc, 0x1e000af
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl MainTaskControl
 
 RefreshApTask:
@@ -2154,7 +2154,7 @@ RefreshApTask:
 	ld	(58140:16), 0
 	ld	(58142:16), 255
 	ld	(58144:16), 255
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(160922:24), xwa
 	ld	(160926:24), xwa
 	ld	(160930:24), xwa
@@ -2184,10 +2184,10 @@ RefreshApTask:
 	call	16421979
 	ld	xwa, 4294967295
 	ld	xbc, 31457456
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jp	16423243
 RefreshSwEvent:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0x02749a:24), xwa
 	ld (0x02749e:24), xwa
 	ld (0x0274a2:24), xwa
@@ -2202,7 +2202,7 @@ RefreshSwEvent:
 	call DeleteEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000b4
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 KeyScan_Enable:
@@ -2217,7 +2217,7 @@ MainAutoFree:
 	push	xde
 	call	16712469
 	inc	4, xsp
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 MainRamControl:
 	.byte 0xbf, 0xf0, 0x37, 0xe9, 0xcf, 0x68, 0x00, 0xe0
@@ -2252,7 +2252,7 @@ RamCtrl_Read_Dword:
 
 RamCtrl_Read_InvalidSize:
 	ld xwa, (xsp)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld (xwa + 14), xbc
 
 RamCtrl_Read_Dispatch:
@@ -2320,7 +2320,7 @@ RamCtrl_Adjust_Dword:
 	jr RamCtrl_Adjust_ClampLow
 
 RamCtrl_Adjust_InvalidSize:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 
 RamCtrl_Adjust_ClampLow:
@@ -2373,7 +2373,7 @@ RamCtrl_Adjust_Write_Dword:
 
 RamCtrl_Adjust_Write_InvalidSize:
 	ld xwa, (xsp)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld (xwa + 14), xbc
 
 RamCtrl_Adjust_Dispatch:
@@ -2420,7 +2420,7 @@ RamCtrl_Set_Dword:
 	jr RamCtrl_Set_Dispatch
 
 RamCtrl_Set_InvalidSize:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xde), xwa
 
 RamCtrl_Set_Dispatch:
@@ -2464,7 +2464,7 @@ RamCtrl_DispatchAndReturn:
 	call ApPostEvent
 
 RamCtrl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	lda xsp, (xsp + 16)
 	ret
 
@@ -2551,7 +2551,7 @@ BitCtrl_PostFinalEvent:
 	call ApPostEvent
 
 BitCtrl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 8, xsp
 	ret
@@ -2607,7 +2607,7 @@ MainPmanCtrl_CompareAndUpdate:
 	.byte 0xff, 0x00, 0x30, 0x90, 0x00, 0x31, 0x10, 0x00
 	.byte 0x1d, 0x53, 0xaa, 0xfd
 MainTitle_SendEventDone:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -2636,7 +2636,7 @@ MainTitleControl:
 	ld	(35992:16), l
 	ldw	wa, 72
 	call	16544114
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(160930:24), xwa
 	ld	(160926:24), xwa
 	ld	(160922:24), xwa
@@ -2654,7 +2654,7 @@ MainTitleCtrl_SaveAndTransition:
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
 	call	16544114
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(160930:24), xwa
 	ld	(160926:24), xwa
 	ld	(160922:24), xwa
@@ -2706,7 +2706,7 @@ MainTitleCtrl_SetIndicator60:
 	call CtrlPanel_SetIndicatorBit
 
 UIWidget_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 CtrlPanel_GetSelectionState:
@@ -2741,7 +2741,7 @@ UI_PostPartChangeEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00014
 	call DeleteEvent
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xsp)
 	add xde, 0x1800000
 	ld xwa, 0xffffffff
@@ -2756,7 +2756,7 @@ UI_PostModeChangeEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00015
 	call DeleteEvent
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xsp)
 	add xde, 0x1a00000
 	ld xwa, 0xffffffff
@@ -2780,7 +2780,7 @@ SoundCtrl_SendCommand:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	call DeleteEvent
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xsp)
 	add xde, 0x1a00000
 	ld xwa, 0xffffffff
@@ -2792,17 +2792,17 @@ SoundCtrl_SendCommand:
 UI_PostRefreshEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 UI_PostTimerResetEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000e
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
@@ -2873,7 +2873,7 @@ BoxProc_HandleDestroy:
 	ld bc, (xhl + 24)
 	ld de, (xhl + 22)
 	call DrawDesignBox
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr BoxProc_Return
 
 BoxProc_HandleB1:
@@ -2916,7 +2916,7 @@ GetClientBox2:
 	dec 4, xsp
 	push xiz
 	ld xiz, xde
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld xiy, xbc
 	ld xix, xiz
 	ld bc, 4:i3
@@ -2949,11 +2949,11 @@ CtrlPanel_DispatchByIndex:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CtrlPanel_FrameDispatchTable:
-	lds32	xde, 4
+	ld	xde, 4:i3
 	jr	18
-	lds32	xde, 3
+	ld	xde, 3:i3
 	jr	14
-	lds32	xde, 1
+	ld	xde, 1:i3
 	decm	2, (xiz+4)
 	ld	wa, 2:i3
 
@@ -2965,7 +2965,7 @@ CtrlPanel_InvalidIndexHandler:
 	jr z, CtrlPanel_MarginDone
 
 CtrlPanel_ApplyMarginLoop:
-	lds32 xiy, 0
+	ld xiy, 0:i3
 	cp xde, 0x0
 	jr le, CtrlPanel_MarginDone
 	lda xix, (xiz + 2)
@@ -3027,9 +3027,9 @@ CtrlFrame_SubRightMargin:
 	sub (xiz + 4), wa
 
 CtrlPanel_AfterLeftMargin:
-	lds32 xde, 2
+	ld xde, 2:i3
 	jrl CtrlPanel_ApplyMarginLoop
-	lds32 xde, 1
+	ld xde, 1:i3
 	decm 1, (xiz + 4)
 	ld wa, 1:i3
 	jrl CtrlPanel_SubFrameOffset
@@ -3084,7 +3084,7 @@ CtrlPanel_Frame_SubtractTopMargin:
 	sub (xiz + 4), wa
 
 CtrlPanel_AfterTopMargin:
-	lds32 xde, 1
+	ld xde, 1:i3
 	jrl CtrlPanel_ApplyMarginLoop
 
 CtrlPanel_FrameReturn:
@@ -3270,7 +3270,7 @@ GroupBox_HandlePartChange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e000aa
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
@@ -3282,7 +3282,7 @@ GroupBox_HandlePartChange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, GroupBox_PartChange_SendEvents
@@ -3292,26 +3292,26 @@ GroupBox_PartChange_DrawLoop:
 	jr nz, GroupBox_PartChange_SendRefresh
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 GroupBox_PartChange_SendRefresh:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00028
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cpw (xsp + 6), 0x0
 	jr nz, GroupBox_PartChange_CheckDraw
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 GroupBox_PartChange_CheckDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, GroupBox_PartChange_DrawLoop
@@ -3324,31 +3324,31 @@ GroupBox_PartChange_SendEvents:
 	call GetTitleOld
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 3
+	ld xde, 3:i3
 	call SendEvent
 	call GetModeOld
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 	call GetModeNow
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 2
+	ld xde, 2:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00033
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
@@ -3360,7 +3360,7 @@ GroupBox_HandleModeChange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e000aa
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
@@ -3372,7 +3372,7 @@ GroupBox_HandleModeChange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, GroupBox_ModeChange_SendEvents
@@ -3382,26 +3382,26 @@ GroupBox_ModeChange_DrawLoop:
 	jr nz, GroupBox_ModeChange_SendRefresh
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 GroupBox_ModeChange_SendRefresh:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00028
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cpw (xsp + 6), 0x0
 	jr nz, GroupBox_ModeChange_CheckDraw
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 GroupBox_ModeChange_CheckDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, GroupBox_ModeChange_DrawLoop
@@ -3414,21 +3414,21 @@ GroupBox_ModeChange_SendEvents:
 	call GetTitleOld
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 3
+	ld xde, 3:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 2
+	ld xde, 2:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00033
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
@@ -3442,14 +3442,14 @@ GroupBox_HandleSoundCommand:
 	jr nz, GroupBox_SndCmd_GetTitle
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 GroupBox_SndCmd_GetTitle:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e000aa
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), hl
 	ld wa, (xsp + 4)
@@ -3460,7 +3460,7 @@ GroupBox_SndCmd_GetTitle:
 	ld (xsp + 6), wa
 	ld xwa, (xsp + 30)
 	ld xbc, 0x1e00033
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1e00024
@@ -3479,7 +3479,7 @@ GroupBox_SndCmd_CheckDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, GroupBox_TitleCheck
@@ -3489,19 +3489,19 @@ GroupBox_SndCmd_DrawLoop:
 	jr nz, GroupBox_SndCmd_SendRefresh
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 GroupBox_SndCmd_SendRefresh:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00028
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cpw (xsp + 6), 0x0
 	jr nz, GroupBox_SndCmd_ClearStatus
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 
 GroupBox_SndCmd_ClearStatus:
@@ -3509,7 +3509,7 @@ GroupBox_SndCmd_ClearStatus:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, GroupBox_SndCmd_DrawLoop
@@ -3521,7 +3521,7 @@ GroupBox_TitleCheck:
 GroupBox_SndCmd_ProcessTitle:
 	ld xwa, (xsp + 30)
 	ld xbc, 0x1e00033
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1e000b5
@@ -3532,7 +3532,7 @@ GroupBox_SndCmd_ProcessTitle:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00098
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 30)
 	ld xde, xwa
@@ -3541,26 +3541,26 @@ GroupBox_SndCmd_ProcessTitle:
 	call GetTitleOld
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 4
+	ld xde, 4:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 2
+	ld xde, 2:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 6
+	ld xde, 6:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00076
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1c00001
-	lds32 xde, 3
+	ld xde, 3:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
@@ -3570,14 +3570,14 @@ GroupBox_SndCmd_ProcessTitle:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00099
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cpw (xsp + 4), 0x0
 	jrl z, GroupBox_ReturnZero
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00033
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1e00024
@@ -3595,14 +3595,14 @@ GroupBox_SndCmd_CheckTitleWidget:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jrl z, GroupBox_TitleCheck
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00076
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1e00024
@@ -3614,26 +3614,26 @@ GroupBox_SndCmd_CheckTitleWidget:
 	jr nz, GroupBox_SndCmd_RefreshAfterDraw
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call SendEvent
 
 GroupBox_SndCmd_RefreshAfterDraw:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00028
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	cpw (xsp + 6), 0x0
 	jrl nz, GroupBox_SndCmd_ProcessTitle
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	jrl GroupBox_SndCmd_ProcessTitle
 
 GroupBox_SndCmd_PostRefreshEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleRefresh:
@@ -3645,26 +3645,26 @@ GroupBox_HandleRefresh:
 	call GetTitleOld
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 7
+	ld xde, 7:i3
 	call SendEvent
 	call GetTitleOld
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 3
+	ld xde, 3:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1c00013
-	lds32 xde, 5
+	ld xde, 5:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00076
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
 	ld xbc, 0x1c00001
-	lds32 xde, 4
+	ld xde, 4:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
@@ -3674,13 +3674,13 @@ GroupBox_HandleRefresh:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00099
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleStateCompare:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	call GetModeNow
 	ldiw_erp 0xee, 0
@@ -3725,13 +3725,13 @@ GroupBox_StateCompare_Default:
 	jr z, GroupBox_Nav_SendSuspend
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr GroupBox_Nav_SendEventAndUpdate
 
 GroupBox_Nav_SendSuspend:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 
 GroupBox_Nav_SendEventAndUpdate:
 	call SendEvent
@@ -3764,7 +3764,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_ReturnZero
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1c0000b
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
@@ -3787,12 +3787,12 @@ GroupBox_CursorNav_SendAndTitle:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00078
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	jr GroupBox_CursorNav_UpdateScreen
 
 GroupBox_CursorNav_AddLsw:
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld de, 4:i3
 	calr MainLswAdd
 
@@ -3934,21 +3934,21 @@ GroupBox_KeyHold_CheckRange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0007a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jrl nz, GroupBox_ReturnZero
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e0009a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl GroupBox_NavDispatch
 
 GroupBox_TimerRepeat_SendNav:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00078
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleKeyRepeatTimer:
@@ -3980,7 +3980,7 @@ GroupBox_HandleKeyRepeatTimer:
 	push xwa
 	ld xwa, (xsp + 34)
 	push xwa
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 46)
 	call SetApTimer
@@ -4006,7 +4006,7 @@ GroupBox_HandleKeyRepeatTimer:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00078
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl GroupBox_NavDispatch
 
 ; Handler for event 0x1c00030 within GroupBoxProc.

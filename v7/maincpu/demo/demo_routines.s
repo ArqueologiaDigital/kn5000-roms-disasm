@@ -61,11 +61,11 @@ DemoModeFunc_Initialize:
 	pop xde
 
 DemoModeFunc_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DemoMenuTtlFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DemoStyleTtlFunc:
@@ -143,7 +143,7 @@ DemoStyle_EnterHandler:
 	pop xde
 
 DemoStyleTtlFunc_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DemoSoundTtlFunc:
@@ -221,7 +221,7 @@ DemoSound_EnterHandler:
 	pop xde
 
 DemoSoundTtlFunc_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DemoRhyTtlFunc:
@@ -299,7 +299,7 @@ DemoRhythm_EnterHandler:
 	pop xde
 
 DemoRhyTtlFunc_Exit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; End of Feature Demo routines

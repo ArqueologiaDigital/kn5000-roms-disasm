@@ -16962,7 +16962,7 @@ VoiceSlot_CheckAndApply_Prologue:
 	sla bc, 1
 	ld xiz, xiy
 	add xiz, 0x4
-	lds32 xiy, 0
+	ld xiy, 0:i3
 
 VoiceSlot_CheckAndApply_Compare:
 	cp iy, bc
@@ -20204,7 +20204,7 @@ PlayModeStateMachine_Block2:
 
 PlayModeStateMachine_DoPlayMode:
 	call AccWrap_PlayModeDispatch
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	cp xwa, 0x7ffe
 	jr ugt, PlayModeStateMachine_Block3
 
@@ -20237,12 +20237,12 @@ PlayModeStateMachine_Block4:
 	ld wa, (1052:16)
 	extz xwa
 	ld (0xd0a4:16), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (1051:16)
 	ld (0xd0a0:16), xwa
 	ei 0
 	call AccWrap_PlayModeDispatch
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	cp xwa, 0x7ffe
 	ret ugt
 
@@ -20265,7 +20265,7 @@ PlayModeStateMachine_Prologue:
 	ld (xsp + 6), wa
 	ei 6
 	ld a, (1051:16)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld wa, (1052:16)
 	mul wa, 0x60
@@ -20716,7 +20716,7 @@ SeqInit_SetDefaultMode:
 	calr SoundParam_InitDefaultBanks
 
 SeqInit_ConfigureBanks:
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	call SndParam_LookupReadOnly
 	ld wa, hl
 	exts xwa
@@ -20825,7 +20825,7 @@ ConfigureBanks_LoadReg2:
 	jrl FileIO_SeekRecord_Done
 
 ConfigureBanks_Block4:
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	cp xiz, (xsp + 4)
 	jr ge, ConfigureBanks_LoadAddr2
 
@@ -20889,7 +20889,7 @@ ConfigureBanks_Block7:
 	jrl FileIO_SeekRecord_Done
 
 ConfigureBanks_Block8:
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	cp xiz, (xsp + 4)
 	jr ge, ConfigureBanks_LoadParam
 
@@ -20940,7 +20940,7 @@ ConfigureBanks_LoadReg4:
 	set 15, wa
 	ld (4597:16), wa
 	ld bc, iz
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld de, 3:i3
 	call SoundParam_NotifyChange
 	call SeqTimer_UpdateTempoReg
@@ -20957,7 +20957,7 @@ ConfigureBanks_Block10:
 	jr FileIO_SeekRecord_Done
 
 ConfigureBanks_Block11:
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	cp xiz, (xsp + 4)
 	jr ge, FileIO_SeekRecord_LoopDone
 
@@ -21299,7 +21299,7 @@ SongFile_DecodeMidiEvent:
 	lda_dri XSP, 0xfd, 0xf0, 0xfd
 	pushw iz
 	ld iz, 0:i3
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 6), xwa
 	ldw (xsp + 10), 0x0
 	cpw (0xebfb:16), 0
@@ -21547,12 +21547,12 @@ SeqPlay_CheckStatusByte:
 	jr nz, SeqPlay_ThreeByteMsg
 
 SeqPlay_TwoByteMsg:
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	ld (xsp + 2), xwa
 	jr SeqPlay_ReadRemainingBytes
 
 SeqPlay_ThreeByteMsg:
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	ld (xsp + 2), xwa
 
 SeqPlay_ReadRemainingBytes:
@@ -21702,7 +21702,7 @@ SeqPlay_ReadFileRecord:
 	ld bc, 4:i3
 	ldirw
 	ldi85
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 2), xwa
 	calr FileIO_ReadNextRecord
 	ld wa, hl
@@ -21718,7 +21718,7 @@ SeqPlay_RecordReadOK:
 	jrl FileIO_Epilogue
 
 RecordReadOK_Block:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xe9eb:16), xwa
 	ld iz, 0:i3
 	cp iz, 6:i3
@@ -21844,7 +21844,7 @@ RecordReadOK_LoadIter2:
 	slla c
 
 RecordReadOK_Block5:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, c
 	add (xsp + 2), xwa
 	inc 1, iz
@@ -22031,11 +22031,11 @@ RecordReadOK_LoadReg6:
 	ld (xde), xbc
 	ld xwa, (0xe9eb:16)
 	ld bc, wa
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld de, 3:i3
 	call SoundParam_NotifyChange
 	call SeqTimer_UpdateTempoReg
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xe9e7:16), xwa
 	ld hl, 0:i3
 
@@ -22049,7 +22049,7 @@ Epilogue_Prologue:
 	calr MIDI_ResetAllChannels
 	ld wa, 2:i3
 	calr SoundParam_InitDefaultBanks
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	call SndParam_LookupReadOnly
 	ld wa, hl
 	exts xwa
@@ -22122,7 +22122,7 @@ Epilogue_LoadIter:
 	jr lt, Epilogue_LoadIter
 
 Epilogue_Block:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xebfd:16), xwa
 	ldw (0xec01:16), 0
 	ld hl, 0:i3
@@ -22134,7 +22134,7 @@ Epilogue_Prologue2:
 	calr MIDI_ResetAllChannels
 	ld wa, 2:i3
 	calr SoundParam_InitDefaultBanks
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	call SndParam_LookupReadOnly
 	ld wa, hl
 	exts xwa
@@ -22551,7 +22551,7 @@ Dispatch_Data:
 	ld	hl, wa
 	exts	xhl
 	jr	2
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 	push	xiz
 	ld	xbc, (0xe9eb:16)
@@ -22569,7 +22569,7 @@ Dispatch_Data:
 	sla	wa, 8
 	ld	iz, wa
 	exts	xiz
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	a, e
 	add	xiz, xwa
 	ld	xwa, xiz
@@ -22601,7 +22601,7 @@ Dispatch_Data:
 	.byte 0xb8
 	ld	wa, iz
 	ld	bc, wa
-	lds32	xwa, 4
+	ld	xwa, 4:i3
 	ld	de, 3:i3
 	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
@@ -22738,7 +22738,7 @@ ToneGen_CheckRecordType:
 	jr ToneGen_PopIzReturn
 
 ToneGen_ReadExtendedDelta:
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ldb_erp L, 0xf8
 	calr FileIO_ReadNextRecord
 	ld wa, hl
@@ -22773,7 +22773,7 @@ ToneGen_ResetAndInitBanks:
 	ld wa, 1:i3
 	calr SoundParam_InitDefaultBanks
 	ldw (4597:16), 0x8078
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ldw bc, 0x76
 	ld de, 3:i3
 	call SoundParam_NotifyChange
@@ -22975,7 +22975,7 @@ ProcessMidiConverge_Block:
 	ld wa, hl
 	cp wa, 0:i3
 	jrl lt, ToneGen_VoiceReset_Return
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, l
 	and xwa, 0xff
 	ld (0xebfd:16), xwa
@@ -22983,7 +22983,7 @@ ProcessMidiConverge_Block:
 	ld wa, hl
 	cp wa, 0:i3
 	jrl lt, ToneGen_VoiceReset_Return
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, l
 	sll xwa, 8
 	and xwa, 0xff00
@@ -22992,7 +22992,7 @@ ProcessMidiConverge_Block:
 	ld wa, hl
 	cp wa, 0:i3
 	jrl lt, ToneGen_VoiceReset_Return
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, l
 	sll xwa, 0
 	and xwa, 0xff0000
@@ -23001,7 +23001,7 @@ ProcessMidiConverge_Block:
 	ld wa, hl
 	cp wa, 0:i3
 	jrl lt, ToneGen_VoiceReset_Return
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, l
 	sll xwa, 8
 	sll xwa, 0
@@ -23083,7 +23083,7 @@ ToneGen_ValidateRange_Loop:
 
 ToneGen_VoiceReset_Return:
 	ldw (0xec01:16), 0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xebfd:16), xwa
 
 VoiceReset_Return_RestoreReg:
@@ -23513,16 +23513,16 @@ SndParam_StoreAndReturn:
 
 StoreAndReturn_Block:
 	ld (0xe9e4:16), 0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xe9e7:16), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xe9f5:16), xwa
 	ldw (0xe9e5:16), 0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xe9eb:16), xwa
 	ldw (0xe9ef:16), 0
 	ldw (0xe9f1:16), 0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (0xebfd:16), xwa
 	ldw (0xec01:16), 0
 	ld (0xe9c4:16), 0
@@ -24175,7 +24175,7 @@ SndParam_StoreDRAMInit:
 	stw_dri BC, 0xfd, 0x2e, 0x01
 	stb_dri A, 0xfd, 0x30, 0x01
 	ld (xsp + 6), 0xff
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 2), xwa
 	jr StoreDRAMInit_Block2
 
@@ -24185,7 +24185,7 @@ StoreDRAMInit_ReadBuf:
 	jr z, StoreDRAMInit_Block
 	lda xwa, (xsp + 12)
 	ld (xsp + 8), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 8), xwa
 	ld iz, 0:i3
 
@@ -24220,7 +24220,7 @@ StoreDRAMInit_LoadParam:
 	jr StoreDRAMInit_LoadParam2
 
 StoreDRAMInit_Block:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	cp xwa, 0xe00
@@ -24242,7 +24242,7 @@ StoreDRAMInit_LoadDRAM:
 	ld xhl, (0xe14e:16)
 	ld xde, (xhl + 4)
 	dec 1, xde
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	cp xix, xde
 	jr ugt, StoreDRAMInit_Block4
@@ -24628,7 +24628,7 @@ SndParam_LookupOscEnvelope:
 LookupOscEnvelope_LoadDRAM:
 	ld xwa, (0xe14e:16)
 	ld xde, (xwa + 28)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xbc)
 	sll xwa, 2
 	add xde, xwa
@@ -24956,7 +24956,7 @@ SndParam_LookupTableConverge:
 	add hl, bc
 	lda xbc, (0xec11:16)
 	ld_sril3 XBC, 0x07, 0xe4, 0xec
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp)
 	add xwa, xbc
 	ld l, (xwa)
@@ -25015,7 +25015,7 @@ Param_SignExtendRetu_Block2:
 	ret
 
 Param_SignExtendRetu_Data:
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ld	l, (xwa+6)
 	sll	xhl, 14
 	ld	e, (xwa+7)
@@ -25409,7 +25409,7 @@ Param_SignExtendRetu_Data:
 	ld	xwa, (xsp+16)
 	ld	(xwa), l
 	inc	1, iz
-	lds32	xwa, 2
+	ld	xwa, 2:i3
 	add	(xsp+8), xwa
 	ld	wa, (xsp+6)
 	cp	iz, wa
@@ -27984,7 +27984,7 @@ TmFlash_CompareStrings:
 	ld	wa, (xsp+6)
 	.byte 0x9f, 0x04, 0xf0
 	jr	ule, -46
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -28070,7 +28070,7 @@ ParseInt16_Return:
 
 ParseInt32:
 	ld xhl, (xsp + 4)
-	lds32 xiy, 0
+	ld xiy, 0:i3
 	ld ix, 0:i3
 	lda xbc, (CharMap_FullPermutation_0x660:24)
 	jr ParseInt32_CheckWhitespace
@@ -28195,7 +28195,7 @@ Sprintf_Unlocked:
 	ret
 Sprintf_OutputCallback:
 	ld	xbc, (0x3c21c:24)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(0x3c21c:24), xwa
 	ld	wa, (xsp+4)
 	ld	(xbc), a
@@ -28214,7 +28214,7 @@ Free:
 	ld xwa, (0x03d52c:24)
 	or xwa, xwa
 	jr nz, Free_Block
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc), xwa
 	ld (0x03d52c:24), xbc
 	ld wa, 1:i3
@@ -28374,7 +28374,7 @@ Math_DivideU32:
 	div xwa, xbc
 	jr ov, Math_DivideU32_Block
 			; Note: OV (Overflow) is the same as PE = Parity Even
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, xhl
 	ld hl, wa
 	stw_erp DE, 0xe2
@@ -28394,18 +28394,18 @@ Math_DivideU32_Block:
 
 Math_DivideU32_LoadReg:
 	ld xhl, xwa
-	lds32 xde, 0
+	ld xde, 0:i3
 	ret
 
 Math_DivideU32_Block2:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xde, xhl
 	dec 1, xhl
 	ret
 
 Math_DivideU32_Block3:
-	lds32 xhl, 1
-	lds32 xde, 0
+	ld xhl, 1:i3
+	ld xde, 0:i3
 	ret z
 	dec 1, xhl
 	ld xde, xwa
@@ -28427,7 +28427,7 @@ Math_DivideU32_Shift:
 	srl xbc, 1
 
 Math_DivideU32_Block4:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 Math_DivideU32_Compute:
 	add xhl, xhl
@@ -28760,7 +28760,7 @@ NumFormat_DivideAndC_Data:
 	ret	z
 	cp_spib_im	236, 0
 	jr	nz, -10
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	ret
 
 Malloc:
@@ -28832,11 +28832,11 @@ Malloc_LoadParam2:
 	jr nz, Malloc_Block2
 	ld wa, 1:i3
 	call TaskSched_SignalEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr Malloc_Epilogue
 
 Malloc_Block2:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xiz), xwa
 	ld wa, (xsp + 8)
 	ld (xiz + 4), wa

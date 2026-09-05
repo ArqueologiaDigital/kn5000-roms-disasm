@@ -35,27 +35,27 @@ CompLoad_DispatchState:
 CompLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl CompLoad_DispatchWidget
 
 CompLoad_HandleCancel:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 0
 	ldw	wa, 238
@@ -63,7 +63,7 @@ CompLoad_HandleCancel:
 CompLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
@@ -73,17 +73,17 @@ CompLoad_HandleSuccess:
 	calr	57104
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 2
 	ldw	wa, 238
@@ -110,7 +110,7 @@ CompLoad_Selection_Negative:
 	ldw	(32484:16), 0
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	443
 CompLoad_HandleShow:
 	ld iz, 0:i3
@@ -208,7 +208,7 @@ CompLoad_OpLoad:
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld iz, 0:i3
 CompLoad_HideButtons_Loop:
@@ -230,17 +230,17 @@ CompLoad_HideButtons_Loop:
 	calr	-8662
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	call	16355504
@@ -274,7 +274,7 @@ CompLoad_DispatchWidget:
 	call ApPostEvent
 
 CompLoad_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 2, xsp
 	ret
@@ -490,7 +490,7 @@ LoadFilter_OpLoad:
 	jrl z, LoadFilter_Return
 	ld XWA,0x00600026
 	ld XBC,0x01c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call GetCurrentFileIndex
 	extz HL
@@ -506,11 +506,11 @@ LoadFilter_OpLoad:
 	calr SignalProgressUpdate
 	ld XWA,0x00600026
 	ld XBC,0x01c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
 	ld XBC,0x01e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0x0000
 	jr z, LoadFilter_Load_ShowCode1
@@ -537,13 +537,13 @@ LoadFilter_Load_CallHandler:
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 LoadFilter_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 6, xsp
 	ret
 
@@ -750,7 +750,7 @@ SaveFilter_OpSave:
 	calr	61681
 	cp	hl, 0:i3
 	jr	z, 18
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
@@ -763,11 +763,11 @@ SaveFilter_Save_NoPwd:
 	jr z, SaveFilter_Save_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 SaveFilter_DispatchWidget:
 	call ApPostEvent
@@ -776,7 +776,7 @@ SaveFilter_DispatchWidget:
 SaveFilter_Save_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	55275
@@ -792,17 +792,17 @@ SaveFilter_Save_Execute:
 	calr	55333
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jr	123
@@ -812,7 +812,7 @@ SaveFilter_OpFormat:
 	jr	nz, 118
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	55150
@@ -828,17 +828,17 @@ SaveFilter_OpFormat:
 	calr	55208
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 SaveFilter_CallStatusDisplay:
@@ -862,7 +862,7 @@ SaveFilter_ResetAll_Loop:
 	.byte 0xc0, 0x01, 0x1d, 0x4b, 0x99, 0xfa, 0x97, 0x61
 	.byte 0x97, 0x3f, 0x08, 0x00, 0x61, 0xc2
 SaveFilter_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	inc 6, xsp
 	ret
 

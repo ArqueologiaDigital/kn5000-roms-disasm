@@ -4253,20 +4253,20 @@ MidiSysEx_SendBank1Param2:
 MidiSysEx_SendBank1P2ViaCOMM:
 	ldb	l, 104
 	pop	xde
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	jr	78
-	lds32	xbc, 2
+	ld	xbc, 2:i3
 	jr	74
 MidiSysEx_SendBankData2:
-	lds32	xbc, 3
+	ld	xbc, 3:i3
 	jr	70
-	lds32	xbc, 4
+	ld	xbc, 4:i3
 	jr	66
-	lds32	xbc, 5
+	ld	xbc, 5:i3
 	jr	62
-	lds32	xbc, 6
+	ld	xbc, 6:i3
 	jr	58
-	lds32	xbc, 7
+	ld	xbc, 7:i3
 	jr	54
 	ld	xbc, 8
 	jr	47

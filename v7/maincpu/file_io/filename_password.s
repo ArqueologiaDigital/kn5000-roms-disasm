@@ -121,7 +121,7 @@ Password_HandleLoadEvent:
 	set 7, (0x8971:16)
 	ld XWA,(XSP+0x04)
 	ld XBC,0x01c00017
-	lds32 xde, 4
+	ld xde, 4:i3
 	calr FmmSeqSongNameFunc
 	jr t, Password_Return
 Password_LoadErrorStatus:
@@ -131,7 +131,7 @@ Password_CallStatusDisplay:
 	call SoundCtrl_SendCommand
 
 Password_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -229,10 +229,10 @@ FileName_ListSelect_Negative:
 	ldw	(32478:16), 0
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
-	lds32	xde, 0
+	ld	xde, 0:i3
 FileName_ListSelect_Forward:
 	call	16423243
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(32474:16), xwa
 	jrl	1483
 FileName_HandleShow:
@@ -327,7 +327,7 @@ FileName_OpSave:
 	jrl	z, 152
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, (32478:16)
 	extz	wa
@@ -342,11 +342,11 @@ FileName_OpSave:
 	calr	-6769
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	cpw	(61854:16), 0
 	jr	z, 36
@@ -373,7 +373,7 @@ FileName_OpSave_CallHandler:
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
@@ -387,7 +387,7 @@ FileName_OpLoad:
 	calr	64862
 	cp	hl, 0:i3
 	jr	z, 19
-	lds32	xde, 0
+	ld	xde, 0:i3
 	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
@@ -400,17 +400,17 @@ FileName_OpLoad_NoPwd:
 	jr z, FileName_OpLoad_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	58459
@@ -426,17 +426,17 @@ FileName_OpLoad_Execute:
 	calr	58517
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	493
@@ -445,7 +445,7 @@ FileName_OpFormat:
 	jr	nz, 115
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	58336
@@ -461,17 +461,17 @@ FileName_OpFormat:
 	calr	58394
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	370
@@ -485,11 +485,11 @@ FileName_OpDelete:
 	jr z, FileName_OpDelete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 FileName_OpDispatch:
 	call ApPostEvent
@@ -498,7 +498,7 @@ FileName_OpDispatch:
 FileName_OpDelete_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	58161
@@ -514,7 +514,7 @@ FileName_OpDelete_Execute:
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	233
@@ -523,7 +523,7 @@ FileName_OpFormatVariant:
 	jr	nz, 77
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	58076
@@ -539,7 +539,7 @@ FileName_OpFormatVariant:
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	148
@@ -573,7 +573,7 @@ FileName_Navigate_CheckChanged:
 	jr	z, 74
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	-7615
@@ -588,7 +588,7 @@ FileName_Navigate_CheckChanged:
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 FileName_CallStatusDisplay:
@@ -735,7 +735,7 @@ FileName_DispatchWidget:
 	call ApPostEvent
 
 FileName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 8, xsp
 	ret

@@ -13113,7 +13113,7 @@ SeqData_TrackProcessComplete:
 SeqData_ScanAllTracks:
 	push xiz
 	ld iz, 0:i3
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (9690:16), xwa
 	res 1, (0x287b:16)
 	cpw (9694:16), 0
@@ -13129,7 +13129,7 @@ SeqData_ScanTracks_OuterLoop:
 SeqData_ScanTracks_InnerLoop:
 	bit 1, (0x287b:16)
 	jr z, SeqData_ScanTracks_SetFlag
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (9690:16), xwa
 	calr SeqData_AdvancePosition
 	cp (0x287a:16), 0
@@ -13610,7 +13610,7 @@ SeqPart_CalcRemainingTicks:
 	ld xhl, (9690:16)
 	cp xhl, xwa
 	jr ugt, SeqPart_CalcDivideAndStore
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (9914:16), xwa
 	jr SeqPart_CalcStoreResult
 
@@ -13728,7 +13728,7 @@ SeqPart_CalcTickRate:
 	ld xhl, (9690:16)
 	cp xhl, xwa
 	jr ugt, SeqPart_CalcTickDivide
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr SeqPart_CalcTickStore
 
 SeqPart_CalcTickDivide:
@@ -15022,7 +15022,7 @@ SeqBufInit_MainSetup:
 	jrl z, SeqPart_AbortAndUpdateState
 	ld (9884:16), wa
 	ldmm16 9890, 9822
-	lds32 xwa, 6
+	ld xwa, 6:i3
 	ld (9690:16), xwa
 	calr SeqBuf_ComputePageLayout
 	cp (0x287a:16), 0
@@ -15056,7 +15056,7 @@ SeqBufInit_SecondaryPath:
 	ldmm16 9890, 9822
 	cp (xbc), 0x0
 	jr nz, SeqBufInit_DualTrackPath
-	lds32 xwa, 6
+	ld xwa, 6:i3
 	ld (9690:16), xwa
 	calr SeqBuf_ComputePageLayout
 	cp (0x287a:16), 0
@@ -20071,7 +20071,7 @@ SeqEvent_CaseD:
 
 ; SeqEvent dispatch case E
 SeqEvent_CaseE:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; SeqEvent main handler
@@ -20117,15 +20117,15 @@ SeqEvent_Dispatch:
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
@@ -20137,35 +20137,35 @@ SeqEvent_Dispatch:
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 5
+	ld xde, 5:i3
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 4
+	ld xde, 4:i3
 	jrl AppEvent_PostEvent_Stub
 	ld wa, (0xf1d7:16)
 	add wa, (0xf1d9:16)
@@ -20173,15 +20173,15 @@ SeqEvent_Dispatch:
 	ld (9772:16), wa
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	jrl AppEvent_PostEvent_Stub
 	ld wa, (0xf1dc:16)
 	add wa, (0xf1de:16)
@@ -20189,35 +20189,35 @@ SeqEvent_Dispatch:
 	ld (9766:16), wa
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 6
+	ld xde, 6:i3
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 7
+	ld xde, 7:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
@@ -20326,19 +20326,19 @@ AppEvent_SubHandler0:
 AppEvent_PostDefaultEvents:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 3
+	ld xde, 3:i3
 
 AppEvent_PostEvent_Stub:
 	jp ApDeliveryEvent
@@ -20377,7 +20377,7 @@ AppEvtHandler_Branch_002:
 	incm8 1, (xwa)
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0x8d36:16)
 	extz wa
@@ -20419,7 +20419,7 @@ AppEvtHandler_Branch_004:
 	incw 1, (xiz)
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_005:
 	ld bc, (xiz)
@@ -20430,7 +20430,7 @@ AppEvtHandler_Branch_005:
 	ld (xwa), bc
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_006:
 	ld a, (0x8d36:16)
@@ -20480,7 +20480,7 @@ AppEvtHandler_Branch_008:
 	incw 1, (xwa)
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_009:
 	ld bc, (xiz)
@@ -20491,7 +20491,7 @@ AppEvtHandler_Branch_009:
 	ld (xiz), wa
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_010:
 	ld a, (0x8d36:16)
@@ -20519,7 +20519,7 @@ AppEvtHandler_Branch_013:
 	ld (9740:16), a
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 3
+	ld xde, 3:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (9762:16)
 	cp a, 0x7f
@@ -20528,7 +20528,7 @@ AppEvtHandler_Branch_013:
 	ld (9762:16), a
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 4
+	ld xde, 4:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf22e:16)
 	cp a, 0x7f
@@ -20537,7 +20537,7 @@ AppEvtHandler_Branch_013:
 	ld (0xf22e:16), a
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 5
+	ld xde, 5:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1e0:16)
 	cp a, 2:i3
@@ -20546,7 +20546,7 @@ AppEvtHandler_Branch_013:
 	ld (0xf1e0:16), a
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 6
+	ld xde, 6:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1f6:16)
 	cp a, 6:i3
@@ -20555,7 +20555,7 @@ AppEvtHandler_Branch_013:
 	ld (0xf1f6:16), a
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 7
+	ld xde, 7:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (9728:16)
 	cp a, 0x64
@@ -20952,7 +20952,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	1720
 	ld	a, (0x8d36:16)
 	extz	wa
@@ -21001,7 +21001,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApDeliveryEvent
 	ld	bc, (xiz)
 	ld	xwa, (xsp+4)
@@ -21013,7 +21013,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 2
+	ld	xde, 2:i3
 	call	ApDeliveryEvent
 	ld	a, (0x8d36:16)
 	cp	a, 163
@@ -21070,7 +21070,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 2
+	ld	xde, 2:i3
 	call	ApDeliveryEvent
 	ld	bc, (xiz)
 	ld	xwa, (xsp+4)
@@ -21082,7 +21082,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApDeliveryEvent
 	ld	a, (0x8d36:16)
 	cp	a, 163
@@ -21108,7 +21108,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 3
+	ld	xde, 3:i3
 	jrl	1295
 	ld	a, (9762:16)
 	cp	a, 129
@@ -21119,7 +21119,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 4
+	ld	xde, 4:i3
 	jrl	1265
 	ld	a, (0xf22e:16)
 	cp	a, 129
@@ -21130,7 +21130,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 5
+	ld	xde, 5:i3
 	jrl	1235
 	ld	a, (0xf1e0:16)
 	cp	a, 0:i3
@@ -21139,7 +21139,7 @@ AppEvent_SubDispatch:
 	ld	(0xf1e0:16), a
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
-	lds32	xde, 6
+	ld	xde, 6:i3
 	jrl	1206
 	ld	a, (0xf1f6:16)
 	cp	a, 0:i3
@@ -21150,7 +21150,7 @@ AppEvent_SubDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 7
+	ld	xde, 7:i3
 	jrl	1177
 	ld	a, (9728:16)
 	cp	a, 0:i3
@@ -21561,10 +21561,10 @@ SeqVoice_DispatchEventToHandler:
 	extz bc
 	ld wa, 0:i3
 	call Part_ReadSubBlock32
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	stb_erp C, 0xfb
 	sll xbc, 8
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp + 2)
 	sll xwa, 0
 	ld xix, xwa
@@ -21620,7 +21620,7 @@ SeqVoice_PostStatusEvent_Inactive:
 SeqVoice_PostStatus_Loop:
 	ldb b, 0x0
 	extz xbc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp)
 	sll xwa, 0
 	ld xde, xwa
@@ -21706,7 +21706,7 @@ AppEvent_ToggleShiftDone:
 AppEvent_ToggleSetStatus:
 	ldb h, 0x0
 	extz xhl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp + 4)
 	sll xwa, 0
 	ld xde, xwa
@@ -21756,7 +21756,7 @@ SeqState_Case2:
 SeqState_Case3:
 	ldb h, 0x0
 	extz xhl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp + 4)
 	sll xwa, 0
 	ld xde, xwa
@@ -21874,7 +21874,7 @@ AppEvent_9AStoreAndPost:
 	ld (9704:16), bc
 	ldb h, 0x0
 	extz xhl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xsp + 4)
 	sll xwa, 0
 	ld xde, xwa
@@ -21906,7 +21906,7 @@ EffEditMain:
 	jrl nz, AppEvent_ReturnZeroEpilogue4
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1e8000e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld a, (0x8d38:16)
 	cp a, 0xd6
@@ -21935,7 +21935,7 @@ EffEdit_TypeBLoop:
 EffEdit_DispatchTypeE:
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1e8000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	jrl AppEvent_ReturnZeroEpilogue4
 
@@ -22121,7 +22121,7 @@ EffEdit_CallWriteParam:
 	call DSPCfg_WriteParamDelta
 
 AppEvent_ReturnZeroEpilogue4:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret
@@ -22168,7 +22168,7 @@ EffEdit_DSPConfigBlock:
 	ret
 	nop
 	.byte 0xe8, 0x01
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	.byte 0xc1, 0x8c, 0xe3
 	push	xsp
@@ -22221,7 +22221,7 @@ EffEdit_DSPConfigBlock:
 	jrl	nz, 453
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01e8000e
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	.byte 0xc1, 0x8c, 0xe3
 	push	xsp
@@ -22293,7 +22293,7 @@ EffEdit_DSPConfigBlock:
 	ret
 	nop
 	.byte 0xe8, 0x01
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	.byte 0xc1, 0x8c, 0xe3
 	push	xsp
@@ -22315,7 +22315,7 @@ EffEdit_DSPConfigBlock:
 	.ascii "r) A"
 	retd	0xe800
 	.byte 0x01
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	153
 	ld	xwa, (xsp+2)
 	cp	xwa, 0x4e00
@@ -22328,7 +22328,7 @@ EffEdit_DSPConfigBlock:
 	ret
 	nop
 	.byte 0xe8, 0x01
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	.byte 0xc1, 0x8c, 0xe3
 	push	xsp
@@ -22409,7 +22409,7 @@ EffEdit_ValidateLoop:
 	jr EffEdit_ReadParamA_Check
 
 EffEdit_ReadParamA_Body:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4b10
 	call DSPCfg_ReadParam_Map0
@@ -22418,7 +22418,7 @@ EffEdit_ReadParamA_Body:
 	add wa, wa
 	lda xbc, (0x2978:16)
 	stw_dri HL, 0x07, 0xe4, 0xe0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4b10
 	call DSPCfg_ResolveAndExtract
@@ -22468,7 +22468,7 @@ EffEdit_ReadParamB:
 	jr EffEdit_ReadParamB_Check
 
 EffEdit_ReadParamB_Body:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4910
 	call DSPCfg_ReadParam_Map0
@@ -22477,7 +22477,7 @@ EffEdit_ReadParamB_Body:
 	add wa, wa
 	lda xbc, (0x2978:16)
 	stw_dri HL, 0x07, 0xe4, 0xe0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4910
 	call DSPCfg_ResolveAndExtract
@@ -22513,7 +22513,7 @@ EffEdit_ReadParamC:
 	ldib_erp 0xfb, 0
 
 EffEdit_ReadParamC_Loop:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4c10
 	call DSPCfg_ReadParam_Map0
@@ -22545,7 +22545,7 @@ EffEdit_ReadParamD6:
 	ldib_erp 0xfb, 0
 
 EffEdit_ReadParamD6_Loop:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4e10
 	call DSPCfg_ReadParam_Map0
@@ -22554,7 +22554,7 @@ EffEdit_ReadParamD6_Loop:
 	add wa, wa
 	lda xbc, (0x2978:16)
 	stw_dri HL, 0x07, 0xe4, 0xe0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stb_erp A, 0xfb
 	add xwa, 0x4e10
 	call DSPCfg_ResolveAndExtract
@@ -22664,7 +22664,7 @@ MimeSyori:
 	call AudioMode_ConfigureExternal
 
 MimeSyori_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ApPlaySyori:
@@ -22719,7 +22719,7 @@ ApPlaySyori:
 ; Sequencer accompaniment event dispatch
 SeqAccomp_EventDispatch:
 	ld	xbc, 0x01c0000f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	.byte 0xc1
 	ldw	hl, 6404
@@ -22727,7 +22727,7 @@ SeqAccomp_EventDispatch:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	ApDeliveryEvent
 	ld	a, (0x28b1:16)
 	and	a, 1
@@ -22739,21 +22739,21 @@ SeqAccomp_EventDispatch:
 
 SeqAccomp_StartAndPostEvents:
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl SeqAccomp_StartHandler
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 9010, 1075
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	call Seq_ComputePercentClamped99
 	ld (7528:16), l
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	bit 1, (0x28b1:16)
 	jr z, SeqPlay_AllocHideIndicator
@@ -22763,7 +22763,7 @@ SeqAccomp_StartAndPostEvents:
 	call SetVisible
 	ld xwa, 0x850013
 	ld xbc, 0x1e0009c
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr SeqPlay_AllocPostEvent
 
 SeqPlay_AllocHideIndicator:
@@ -22773,7 +22773,7 @@ SeqPlay_AllocHideIndicator:
 	call SetVisible
 	ld xwa, 0x850013
 	ld xbc, 0x1e0009c
-	lds32 xde, 0
+	ld xde, 0:i3
 
 SeqPlay_AllocPostEvent:
 	call ApPostEvent
@@ -22788,18 +22788,18 @@ SeqPlay_AllocPostEvent:
 	exts xwa
 	jrl NoteEdit_ScrollCallReset
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 9010, 1075
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApDeliveryEvent
 	call Seq_ComputePercentClamped99
 	ld (7528:16), l
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld a, (0x28b2:16)
 	and a, 0x1
@@ -22841,7 +22841,7 @@ SeqPlay_AllocAdjustBar:
 SeqAcc_SendParamsAndStart:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 7
+	ld xde, 7:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
@@ -22873,34 +22873,34 @@ SeqAcc_SendParamsAndStart:
 	calr AppEvent_SendAccompStatus
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 3
+	ld xde, 3:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 4
+	ld xde, 4:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 6
+	ld xde, 6:i3
 	jrl SeqAccomp_StartHandler
 
 SeqAccomp_DispatchRhythmEvents:
 	call BmDrEdit_EnterPlayMode
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 3
+	ld xde, 3:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 6
+	ld xde, 6:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
@@ -22929,7 +22929,7 @@ SeqAccomp_SubHandlerA:
 	ld	(9832:16), wa
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	846
 	bit	2, (1057:16)
 	jrl	nz, 1391
@@ -22957,13 +22957,13 @@ SeqAccomp_SubHandlerA:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 3
+	ld	xde, 3:i3
 	call	ApDeliveryEvent
 	.byte 0xe1
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 4
+	ld	xde, 4:i3
 	jrl	749
 	.byte 0xf1
 	ldb	a, 4
@@ -22990,7 +22990,7 @@ SeqAccomp_SubHandlerA:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 6
+	ld	xde, 6:i3
 	jr	44
 	ld wa, qde
 	.byte 0xd7
@@ -23007,14 +23007,14 @@ SeqAccomp_SubHandlerA:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 6
+	ld	xde, 6:i3
 	call	ApDeliveryEvent
 	calr	1553
 	.byte 0xe1
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 5
+	ld	xde, 5:i3
 	jrl	626
 	.byte 0xf1
 	ldb	a, 4
@@ -23044,7 +23044,7 @@ SeqAccomp_SubHandlerA:
 	calr	1478
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
-	lds32	xde, 6
+	ld	xde, 6:i3
 	jrl	551
 	.byte 0xf1
 	ldb	a, 4
@@ -23065,7 +23065,7 @@ SeqAccomp_SubHandlerA:
 	call	SeqPlay_DataBlock_BBE_0x155
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
-	lds32	xde, 7
+	ld	xde, 7:i3
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
@@ -23127,7 +23127,7 @@ SeqAccomp_SubHandlerB:
 	ld	(9832:16), wa
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jrl	312
 	stb_erp c, 239
 	ld	a, (0x28b1:16)
@@ -23172,7 +23172,7 @@ SeqAccomp_SubHandlerB:
 	call	SeqPlay_InitStartState
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c0000f
-	lds32	xde, 4
+	ld	xde, 4:i3
 	jrl	312
 	.byte 0xf1
 	ldb	a, 4
@@ -23204,7 +23204,7 @@ SeqAccomp_SubHandlerB:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 5
+	ld	xde, 5:i3
 	jr	122
 	.byte 0xf1
 	ldb	a, 4
@@ -23229,7 +23229,7 @@ SeqAccomp_SubHandlerB:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	ApDeliveryEvent
 	.byte 0xd1, 0x20
 	ldb	e, 0x19
@@ -23247,7 +23247,7 @@ SeqAccomp_SubHandlerB:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	ApDeliveryEvent
 	.byte 0xd1, 0x1c
 	ldb	e, 25
@@ -23257,7 +23257,7 @@ SeqAccomp_SubHandlerB:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 6
+	ld	xde, 6:i3
 	call	ApDeliveryEvent
 	jrl	504
 	.byte 0xf1
@@ -23283,7 +23283,7 @@ SeqAccomp_SubHandlerB:
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
-	lds32	xde, 7
+	ld	xde, 7:i3
 	.byte 0x1d
 	reti
 	or	bc, (xiz-6)
@@ -23331,12 +23331,12 @@ SeqAccomp_TogglePlayback:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
 	jr nz, SeqAccomp_ToggleSetZero
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 2), xwa
 	jr SeqAccomp_ToggleSendStatus
 
 SeqAccomp_ToggleSetZero:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 2), xwa
 
 SeqAccomp_ToggleSendStatus:
@@ -23361,7 +23361,7 @@ SeqAccomp_HandleStartStop:
 	call SetVisible
 	ld xwa, 0x850013
 	ld xbc, 0x1e0009c
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	jrl SeqAccomp_InitAndReturn
 
@@ -23382,7 +23382,7 @@ SeqAccomp_HandleOtherState:
 	calr SeqAccomp_ReassignVoiceState
 	cp hl, 0:i3
 	jrl z, AppEvent_ReturnZero
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	jr SeqAccomp_SendVoiceAndReturn
 
 SeqAccomp_OtherClearBit:
@@ -23392,7 +23392,7 @@ SeqAccomp_OtherClearBit:
 SeqAccomp_OtherActivate:
 	bit 2, (1057:16)
 	jr z, SeqAccomp_OtherSetBit
-	lds32 xwa, 0
+	ld xwa, 0:i3
 
 SeqAccomp_SendVoiceAndReturn:
 	calr AppEvent_SendVoiceUpdate
@@ -23418,12 +23418,12 @@ NoteEdit_ScrollToggle:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
 	jr nz, NoteEdit_ScrollSetZero
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 2), xwa
 	jr NoteEdit_ScrollDispatchMode
 
 NoteEdit_ScrollSetZero:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 2), xwa
 
 NoteEdit_ScrollDispatchMode:
@@ -23485,12 +23485,12 @@ NoteEditSy_ModeScrollReturn:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
 	jr nz, NoteEdit_ReturnSetZero
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	ld (xsp + 2), xwa
 	jr NoteEdit_ReturnGetParam
 
 NoteEdit_ReturnSetZero:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 2), xwa
 
 NoteEdit_ReturnGetParam:
@@ -23501,7 +23501,7 @@ NoteEdit_ReturnSendToggle:
 	calr AppEvent_SendModeToggle
 
 AppEvent_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret
@@ -23676,36 +23676,36 @@ NoteEditSy_SendModeScrollReset:
 NoteEditSy_ModeDispatch:
 	ld xwa, 0x810005
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 NoteEditSy_Dispatch85:
 	ld xwa, 0x850007
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 NoteEditSy_Dispatch87:
 	ld xwa, 0x870003
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 ; NoteEditSy scroll case 3
 NoteEditSy_ScrollCase3:
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 ; NoteEditSy scroll case 4
 NoteEditSy_ScrollCase4:
 	ld xbc, 0x1c0000f
-	lds32 xde, 3
+	ld xde, 3:i3
 	jr NoteEditSy_DeliverEvent
 
 NoteEditSy_DeliverParam7:
 	ld xbc, 0x1c0000f
-	lds32 xde, 7
+	ld xde, 7:i3
 
 NoteEditSy_DeliverEvent:
 	call ApDeliveryEvent
@@ -23723,19 +23723,19 @@ SeqMode_SendStatusUpdate:
 	ret nz
 	ld xwa, 0x810005
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr SeqMode_StatusDeliver
 
 SeqMode_Status85:
 	ld xwa, 0x850007
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	jr SeqMode_StatusDeliver
 
 SeqMode_Status87:
 	ld xwa, 0x870003
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 
 SeqMode_StatusDeliver:
 	call ApDeliveryEvent
@@ -23751,7 +23751,7 @@ SeqAccomp_SendStopNotify:
 SeqAccomp_StopNotifyDeliver:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	call ApDeliveryEvent
 	ret
 
@@ -23768,7 +23768,7 @@ SngSelSyori:
 	ld (0x29c6:16), xde
 	ld xwa, xde
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	jr SeqAcc_CheckLoopAndSendEvent
 
@@ -23786,7 +23786,7 @@ SngSel_HandlePrevSong:
 	cp (0x8d38:16), 129
 	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	jr SngSel_SendVoiceUpdate
 
 SngSel_HandleNextSong:
@@ -23803,7 +23803,7 @@ SngSel_HandleNextSong:
 	cp (0x8d38:16), 129
 	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
-	lds32 xwa, 0
+	ld xwa, 0:i3
 
 SngSel_SendVoiceUpdate:
 	calr AppEvent_SendVoiceUpdate
@@ -23819,12 +23819,12 @@ SeqAcc_CheckLoopAndSendEvent:
 	jr z, NoteEditSy_UpScrollTable
 	ld xwa, (0x29c6:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 
 ; NoteEditSy up-scroll table
 NoteEditSy_UpScrollTable:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw_erp 0xfa
 	ret
 
@@ -23970,50 +23970,50 @@ NoteEditSy_DownScroll_Param7:
 	call BmDrEdit_DrumVoiceUp_Check
 
 NoteEditSy_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 NoteEditSy_SendScrollCmd0:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd1:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 1
+	ld xde, 1:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd2:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 2
+	ld xde, 2:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendWidgetCmd0:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c80004
-	lds32 xde, 0
+	ld xde, 0:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendWidgetCmd1:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c80004
-	lds32 xde, 1
+	ld xde, 1:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendWidgetCmd2:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c80004
-	lds32 xde, 2
+	ld xde, 2:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendWidgetCmd3or4:
-	lds32 xde, 3
+	ld xde, 3:i3
 	bit 0, (0x2742:16)
 	jr z, NoteEditSy_SendWidgetCmdDispatch
-	lds32 xde, 4
+	ld xde, 4:i3
 
 NoteEditSy_SendWidgetCmdDispatch:
 	ld xwa, (0x2972:16)
@@ -24071,7 +24071,7 @@ NoteEditSy_GridPosOutOfRange:
 NoteEditSy_GridPosFinish:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c80004
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApDeliveryEvent
 	pop xiz
 	inc 4, xsp
@@ -24086,7 +24086,7 @@ NoteEditSy_UpdateEditModeGrid:
 	ld (0x27b8:16), wa
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c80004
-	lds32 xde, 7
+	ld xde, 7:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendModeScrollCmd:
@@ -24099,7 +24099,7 @@ NoteEditSy_SendModeScrollCmd:
 
 NoteEditSy_SendScrollCmdEdit:
 	ld xbc, 0x1c0000f
-	lds32 xde, 6
+	ld xde, 6:i3
 
 NoteEditSy_JumpFA9E07:
 	jp ApDeliveryEvent
@@ -24107,7 +24107,7 @@ NoteEditSy_JumpFA9E07:
 NoteEditSy_SendScrollCmd3:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 3
+	ld xde, 3:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendVelocityCmd:
@@ -24121,13 +24121,13 @@ NoteEditSy_SendGateCmd:
 	ldmm8 0x296a, 0x2788
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 4
+	ld xde, 4:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd5:
 	ld xwa, (0x2972:16)
 	ld xbc, 0x1c0000f
-	lds32 xde, 5
+	ld xde, 5:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd8:
@@ -24253,7 +24253,7 @@ SeqErec_ClearPlayFlags:
 	res 4, (0x28ad:16)
 
 SeqErecMode_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SeqErecModeFunc:
@@ -24273,7 +24273,7 @@ SeqErecFunc_CallSetIndicator:
 	call CtrlPanel_SetIndicatorBit
 
 SeqErecFunc_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SeqPlayModeFunc:
@@ -24296,7 +24296,7 @@ SeqPlayMode_SaveAndCleanup:
 	ld (0xe38e:16), 0
 
 SeqPlayMode_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SeqRealModeFunc:
@@ -24370,7 +24370,7 @@ SeqAcc_SaveChannelAndReinit:
 	ld (0xf19e:16), iz
 
 SeqAcc_ProcessedReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -24390,7 +24390,7 @@ SeqEdit_RestoreAndClear:
 	res 2, (0x28a7:16)
 
 SeqEdit_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqRealRecTitleFunc:
@@ -24446,7 +24446,7 @@ SqRealRec_HandleExitState:
 	res 0, (0x8d88:16)
 
 SqRealRec_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw_erp 0xfa
 	ret
 
@@ -24474,7 +24474,7 @@ SqPlay_HandleExitState:
 	res 0, (0x8d88:16)
 
 SqPlay_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqQtzTitleFunc:
@@ -24493,7 +24493,7 @@ SqQtz_ClearBit4:
 	res 4, (9702:16)
 
 SqQtzTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqMdelTitleFunc:
@@ -24512,7 +24512,7 @@ SqMdel_ClearBit0:
 	res 0, (9702:16)
 
 SqMdelTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqMersTitleFunc:
@@ -24531,7 +24531,7 @@ SqMers_ClearBit1:
 	res 1, (9702:16)
 
 SqMersTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqVcngTitleFunc:
@@ -24550,15 +24550,15 @@ SqVcng_ClearBit5:
 	res 5, (9702:16)
 
 SqVcngTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrnsTitleFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqNcngTitleFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqSoclTitleFunc:
@@ -24571,7 +24571,7 @@ SqSoclTitleFunc:
 	ldmm_sd24b 0xe3, 0xff, 0x00, 0x78, 0x28
 
 SqMcpy_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqMcpyTitleFunc:
@@ -24595,7 +24595,7 @@ SqMcpy_HandleExitState:
 	or (0xffec:24), wa
 
 SqMcpyTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqMinsTitleFunc:
@@ -24618,7 +24618,7 @@ SqMins_HandleExitState:
 	ldmmw_dd24 0xec, 0xff, 0x00, 0x75, 0x28
 
 SqMinsTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrclTitleFunc:
@@ -24637,7 +24637,7 @@ SqTrcl_HandleExitState:
 	and (0xffec:24), wa
 
 SqSngcp_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqSngcpTitleFunc:
@@ -24653,7 +24653,7 @@ SqSngcpTitleFunc:
 	ld (9998:16), 1
 
 SqRepeat_HandleReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqTrmgTitleFunc:
@@ -24665,11 +24665,11 @@ SqTrmgTitleFunc:
 	or (0xffec:24), wa
 
 SqTrmg_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqAdlyTitleFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqPunchTitleFunc:
@@ -24686,7 +24686,7 @@ SqPunch_HandleTickOnExit:
 	call SeqAcc_HandlePlaybackTick
 
 SqPunch_HandleReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqPunchmTitleFunc:
@@ -24703,7 +24703,7 @@ SqPunchm_HandleStopOnExit:
 	call SeqAcc_StopPlayback
 
 SqPunchm_HandleReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqNoteSelTitleFunc:
@@ -24716,7 +24716,7 @@ SqNoteSelTitleFunc:
 	res 0, (0x2742:16)
 
 SqNoteSel_HandleReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqNoteEdtTitleFunc:
@@ -24726,7 +24726,7 @@ SqNoteEdtTitleFunc:
 	call z, (BmDrEdit_CleanupMelodicMode:24)
 
 SqNoteEdt_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqDrmSelTitleFunc:
@@ -24740,7 +24740,7 @@ SqDrmSelTitleFunc:
 	set 0, (0x2742:16)
 
 SqDrmSel_HandleReturn:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqDrmEdtTitleFunc:
@@ -24750,7 +24750,7 @@ SqDrmEdtTitleFunc:
 	call z, (BmDrEdit_CleanupDrumMode:24)
 
 SqDrmEdt_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SdRevsetTitleFunc:
@@ -24765,7 +24765,7 @@ SdRevset_ClearFlag:
 	ld (0xe38c:16), 0
 
 SdRevset_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SdDspeffTitleFunc:
@@ -24780,7 +24780,7 @@ SdDspeff_ClearFlag:
 	ld (0xe38c:16), 0
 
 SdDspeff_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SdAccillTitleFunc:
@@ -24795,7 +24795,7 @@ SdAccill_ClearFlag:
 	ld (0xe38c:16), 0
 
 SdAccill_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqNoteCycpTitleFunc:
@@ -24805,7 +24805,7 @@ SqNoteCycpTitleFunc:
 	call z, (BmDrEdit_ExitPlayMode:24)
 
 SqNoteCycp_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SqDrmCycpTitleFunc:
@@ -24815,7 +24815,7 @@ SqDrmCycpTitleFunc:
 	call z, (BmDrEdit_ExitPlayMode:24)
 
 SqDrmCycp_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 HelpModeFunc:
@@ -24827,11 +24827,11 @@ HelpModeFunc:
 	call z, (AccWrap_PlayModeDispatch:24)
 
 HelpMode_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 HelpTitleFunc:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 EtmenuTitleFunc:
@@ -24860,19 +24860,19 @@ EtmenuTitleFunc:
 	call SetVisible
 	ld xwa, 0xd60003
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xd60004
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xd60005
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xd60006
 	ld xbc, 0x1c0000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	jr EtmenuTtl_ReturnZero
 
@@ -24886,7 +24886,7 @@ MainExe_DispatchReturn:
 	calr VoiceParam_SetD6Group
 
 EtmenuTtl_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainExeCall:
@@ -25305,7 +25305,7 @@ MainExe_OrPartMask:
 	or (0x2875:16), bc
 
 MainExe_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MainExe_InlineByteData:
@@ -25417,7 +25417,7 @@ MainPanic:
 	call SeqData_SendVoiceTableBlock
 
 MainPanic_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 HelpLang_DispatchDataBlock:
@@ -25461,39 +25461,39 @@ HelpLang_DispatchDataBlock:
 	jr nz, 30
 	ld xwa, 15138830
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BBE
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	96
 	cp	a, 2:i3
 	jr	nz, 30
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BC5
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BC7
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	62
 	cp	a, 3:i3
 	jr	nz, 30
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BD2
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BD4
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	28
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BDA
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BDD
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	ApPostEvent
 	ret
 
@@ -25511,13 +25511,13 @@ HelpLangChkMain:
 	jr nz, HelpLang_SetRegion5
 	ld xwa, Bitmap_MIDIConnections_2_0x3BB8
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr HelpLang_PostEvent
 
 HelpLang_SetRegion5:
 	ld xwa, Bitmap_MIDIConnections_2_0x3BB3
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 
 HelpLang_PostEvent:
 	call ApPostEvent
@@ -25546,7 +25546,7 @@ HelpLang_ParseSlideHeader:
 	call SLIDE_Parse_Header
 
 HelpLangChk_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 HelpFlashFunc:
@@ -25567,7 +25567,7 @@ HelpFlash_DispatchAudio:
 	call Audio_DispatchCommand
 
 HelpFlash_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SeqIndicator_HideBoth:
@@ -25712,7 +25712,7 @@ SeqLoad_ProcessDataBlock:
 	swi	2
 	.byte 0x04
 	ld	(xsp+6), a
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+2), xwa
 	ldib_erp 251, 1
 	ld	a, (xsp+6)
@@ -25732,7 +25732,7 @@ SeqLoad_ProcessDataBlock:
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr	z, 17
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	add	(xsp+2), xbc
 	call	PartCtrl_ReadWord
 	ld	wa, hl
@@ -25744,7 +25744,7 @@ SeqLoad_ProcessDataBlock:
 	ld	wa, (0xf22f:16)
 	cp	wa, 0xffff
 	jr	z, 17
-	lds32	xbc, 1
+	ld	xbc, 1:i3
 	add	(xsp+2), xbc
 	call	PartCtrl_ReadWord
 	ld	wa, hl
@@ -25896,7 +25896,7 @@ FileIO_WriteBlockToStream:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), bc
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld xiz, (7514:16)
 	extz xwa
 	dec 1, xwa
@@ -25955,7 +25955,7 @@ FileIO_WritePopReturn:
 	ret
 
 FileIO_FlushPendingBlock:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld bc, (0x29f6:16)
 	cp bc, 0:i3
 	ret z
@@ -26114,7 +26114,7 @@ SeqSave_CountBlocksLoop:
 	ld xiz, xhl
 	cp xiz, 0x0
 	jrl lt, AppEvent_LoadIzToHL
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	ld bc, 0:i3
 	calr FileIO_SeekReadAndCheck
 	ld xiz, xhl
@@ -26542,7 +26542,7 @@ SeqLoad_ReadPartDataBlock:
 	nop
 	nop
 	jr	nz, 5
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 	jrl	198
 	ld	xwa, 2048
 	ld	(xsp+4), xwa
@@ -26565,7 +26565,7 @@ SeqLoad_ReadPartDataBlock:
 	incw	1, (xsp+8)
 	cp	(xsp+8), bc
 	jr	c, -32
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+4), xwa
 	.byte 0xbf
 	ldio	2, 1
@@ -32307,7 +32307,7 @@ SeqPart_PositionForward:
 	jr z, SeqPart_PosForwardLoop
 	bit 3, a
 	jr nz, SeqPart_PosForwardLoop
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (9690:16), xwa
 
 SeqPart_PosForwardLoop:
@@ -32959,7 +32959,7 @@ SeqPart_ComputeStepCount:
 	cp (0x287a:16), 0
 	jr nz, SeqPart_StepCountPopReturn
 	ld iz, 0:i3
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (9690:16), xwa
 
 SeqPart_StepCountLoop:
@@ -32968,7 +32968,7 @@ SeqPart_StepCountLoop:
 	jr nz, SeqPart_StepCountCheck
 	ld bc, iz
 	extz xbc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (0x288e:16)
 	sub xwa, xbc
 	ld (9690:16), xwa
@@ -32995,14 +32995,14 @@ SeqPart_StepCountDone:
 
 SeqPart_StepCountReturn:
 	inc 1, iz
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (0x288e:16)
 	add (9690:16), xwa
 	cp iz, (0x27f4:16)
 	jr nz, SeqPart_StepCountAdvance
 
 SeqPart_StepCountError:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (9690:16), xwa
 
 SeqPart_StepCountPopReturn:
@@ -33017,7 +33017,7 @@ SeqPart_ReplayForward:
 	ld xwa, (9690:16)
 	dec 1, xwa
 	ld (9690:16), xwa
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	or xwa, xwa
 	jr z, SeqPart_ReplayEnd
 

@@ -13,7 +13,7 @@ FDemoText:
 	ret
 
 FDemoText_ReturnNull:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FDemoText_LookupTableEntry:
@@ -656,7 +656,7 @@ FDemoText_SendVoiceParams:
 	ldw wa, 0x44
 	calr FDemoText_LookupTableEntry
 	ld (xsp + 2), xhl
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	ldi_erpb 0xfb, 0x0b
 
@@ -670,7 +670,7 @@ FDemoText_SendParams_NoteLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0c
@@ -680,7 +680,7 @@ FDemoText_SendParams_NoteLoop:
 	extz wa
 	calr FDemoText_LookupTableEntry
 	ld (xsp + 2), xhl
-	lds32 xwa, 3
+	ld xwa, 3:i3
 	add (xsp + 2), xwa
 	ldib_erp 0xfb, 4
 
@@ -694,7 +694,7 @@ FDemoText_SendParams_LevelLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x08
@@ -743,7 +743,7 @@ FDemoText_SendExtParams_NoteLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0c
@@ -760,7 +760,7 @@ FDemoText_SendExtParams_LevelLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x08
@@ -851,7 +851,7 @@ FDemoText_SendExtAlt_NoteLoop:
 	ld wa, 0:i3
 	ld bc, 6:i3
 	call sendCOMM
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0c
@@ -1219,7 +1219,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	94
 	ld	xwa, xiz
 	ld	xbc, 0x01e00015
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	cp	(xhl), 0
 	jr	nz, 58
@@ -1229,7 +1229,7 @@ FDemoText_ByteData_DisplayRefresh:
 	extz	xwa
 	add	xwa, 0x01a00000
 	ld	xbc, 0x01e00015
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, xiz
 	ld	qwa, 0
@@ -1265,7 +1265,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	(xsp+8), xhl
 	or	xhl, xhl
 	jr	z, 82
-	lds32	xiz, 0
+	ld	xiz, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jr	ule, 69
@@ -1299,7 +1299,7 @@ FDemoText_ByteData_DisplayRefresh:
 	.byte 0xaf
 	ldio	240, 103
 	.byte 0xbb
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	sub	(xsp+4), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
@@ -1347,7 +1347,7 @@ FDemoText_ByteData_DisplayRefresh:
 	nop
 	jr	nz, -60
 	ldw	(xsp+2), 0
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	call	FileIO_ReadByte
 	cp	hl, 0:i3
@@ -1369,7 +1369,7 @@ FDemoText_ByteData_DisplayRefresh:
 	and	(xbc), l
 	.byte 0x89
 	ld	(xbc), a
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, (xsp+16)
@@ -1388,7 +1388,7 @@ FDemoText_ByteData_DisplayRefresh:
 	and	(xbc), l
 	.byte 0x89
 	ld	(xbc), a
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, (xsp+16)
@@ -1464,7 +1464,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	ld (xsp + 4), xwa
 	or xwa, xwa
 	jrl z, FDemoText_ProcessMarkup_SkipToEnd
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ld xbc, (xsp + 86)
 	jr FDemoText_ProcessMarkup_ScanLoop
 
@@ -1504,7 +1504,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 	ld xde, (xsp + 12)
 	ld xbc, (xsp + 16)
 	ld (xbc), xde
-	lds32 xix, 0
+	ld xix, 0:i3
 	ld hl, 0:i3
 	cp xiz, 0x0
 	jr ule, FDemoText_ProcessMarkup_CallHandler
@@ -1881,17 +1881,17 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x40
 	.long Pad_AfterNakaData_ExternalBase
 	ld	xbc, 0x01c00002
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	SendEvent
 	.byte 0x40
 	.long Pad_NakaExternal_Block1
 	ld	xbc, 0x01c00002
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	SendEvent
 	.byte 0x40
 	.long Pad_NakaExternal_Block1
 	ld	xbc, 0x01c00001
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	SendEvent
 	.byte 0x40
 	.long Pad_NakaExternal_Block1
@@ -1900,7 +1900,7 @@ FDemoText_ByteData_LayoutEngine:
 	call	SendEvent
 	ld	xwa, NakaInst_Param_Field02_0x4
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	pushw	2
 	pushw	0x4878
@@ -2013,19 +2013,19 @@ FDemoText_ByteData_LayoutEngine:
 	calr	1079
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e0009e
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9A9
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9AA
 	ld	xbc, 0x01c00001
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	SendEvent
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e0009e
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	call	DrawWall
 	jr	30
@@ -2233,7 +2233,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld	bc, (0x025b3e:24)
 	sla	bc, 2
 	lda	xde, (0x025b40:24)
-	lds32	xwa, 5
+	ld	xwa, 5:i3
 	.byte 0xf3
 	reti
 	or	xix, xwa
@@ -2419,11 +2419,11 @@ FDemoText_ByteData_LayoutEngine:
 	cp	xwa, 0xffffffff
 	jr	z, 27
 	ld	xbc, 0x01c00001
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9AA
 	ld	xbc, 0x01c00001
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	SendEvent
 	ld	hl, 0:i3
 	pop	xiz
@@ -2451,7 +2451,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xwa, (0x025b74:24)
 	ld	xbc, xwa
 	lda	xix, (xwa+8)
-	lds32	xwa, 5
+	ld	xwa, 5:i3
 	stl_dpi xwa, 238
 	stiw_dsp 233, 255, 0
 	.byte 0xf5, 0xe4
@@ -2676,7 +2676,7 @@ FDemoText_Layout_Setup:
 	ld xwa, (xsp + 16)
 	lda_dri XWA, 0x07, 0xe0, 0xf8
 	ld (xsp + 10), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	sub (xsp + 10), xwa
 	cp iz, 0:i3
 	jr z, FDemoText_Layout_ProcessLine
@@ -2849,7 +2849,7 @@ FDemoText_ByteData_LayoutB:
 	call	DrawBitmapFile
 	jr	9
 	lda	xwa, (xsp+8)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	call	DrawBitmap
 	ld	wa, (xsp+8)
 	add	wa, (xsp+2)
@@ -2882,12 +2882,12 @@ Seq_InitVoiceLoop:
 	muls wa, 0x18
 	lda xbc, (0x0249d8:24)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xde + 16), xwa
 	stw_erp WA, 0xfa
 	muls wa, 0x18
 	lda_dri XBC, 0x07, 0xe4, 0xe0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 20), xwa
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x40, 0x00
@@ -3061,7 +3061,7 @@ Seq_FillBufferLoop:
 	call FileIO_OpenWithMode				; open display resource
 	cp hl, 0:i3
 	jr lt, Seq_NamedResource_Epilogue			; failed
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	bc, 2:i3
 	call FileIO_SeekAndReadBlock				; set region param
 	call FileIO_SeekWriteBlock_Impl				; get display info

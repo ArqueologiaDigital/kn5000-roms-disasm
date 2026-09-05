@@ -27,7 +27,7 @@ Scoop_SoundEditorData:
 	ld	wa, 3:i3
 	call	15670325
 	jr	-18
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	xbc, 29360135
 	jp	16421979
 	jp	15776995

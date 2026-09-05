@@ -38,7 +38,7 @@ TtComputerConnection:
 	ld	xde, 27263214
 	call	16421701
 ComputerConnectionTitleExit:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 MdCmptCnctFunc:
@@ -61,7 +61,7 @@ MdCmptCnctFunc:
 	jrl z, CmptCnctInvalidInputReturn
 	cp xde, 0x1e00042
 	jr z, CmptCnctDrawConnectionDiagram
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl MdCmptCnct_Epilogue
 
 CmptCnctDrawConnectionDiagram:
@@ -125,7 +125,7 @@ CmptCnctInvalidInputReturn:
 	jr MdCmptCnct_Epilogue
 
 CmptCnctBlockingReturn:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 MdCmptCnct_Epilogue:
 	pop xiz
@@ -145,7 +145,7 @@ MdPcgModeFunc:
 	jr z, PcgMode_InvalidReturn
 	cp xbc, 0x1e00042
 	jr z, PcgModeGridEventStart
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr MdPcgMode_Epilogue
 
 PcgModeGridEventStart:
@@ -190,7 +190,7 @@ PcgMode_InvalidReturn:
 	jr MdPcgMode_Epilogue
 
 PcgMode_BlockingReturn:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 MdPcgMode_Epilogue:
 	pop xiz
@@ -209,7 +209,7 @@ MdDrumTypeFunc:
 	jr z, DrumType_InvalidReturn
 	cp xbc, 0x1e00042
 	jr z, DrumType_GridEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr MdDrumType_Epilogue
 
 DrumType_GridEvent:
@@ -254,7 +254,7 @@ DrumType_InvalidReturn:
 	jr MdDrumType_Epilogue
 
 DrumType_BlockingReturn:
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 MdDrumType_Epilogue:
 	pop xiz
@@ -293,16 +293,16 @@ SetupLoadOptionJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	21
-	lds32	xhl, 2
+	ld	xhl, 2:i3
 	jr	17
-	lds32	xhl, 3
+	ld	xhl, 3:i3
 	jr	13
 SetupLoadInvalidIndex:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr MdSetupLoad_Epilogue
 	lda xhl, (0x00ffc0:24)
 	jr MdSetupLoad_Epilogue
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 MdSetupLoad_Epilogue:
 	pop xiz

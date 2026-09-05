@@ -12,7 +12,7 @@ FmmSmfLoadTitleFunc:
 	calr	-10615
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xee, 0x7f
 	cpw	(33892:16), 0
@@ -57,7 +57,7 @@ SmfLoad_CheckSlotCount:
 
 	ld xbc, 0x1c00002
 
-	lds32 xde, 0
+	ld xde, 0:i3
 
 	call	16423243
 
@@ -70,18 +70,18 @@ SmfLoad_CheckSlotCount:
 SmfLoad_AbortPartial:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32750:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 0
 	ldw	wa, 238
@@ -89,7 +89,7 @@ SmfLoad_AbortPartial:
 SmfLoad_ErrorCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	jrl SmfLoad_CallHandler
@@ -98,18 +98,18 @@ SmfLoad_Success:
 	calr	54569
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32750:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 2
 	ldw	wa, 238
@@ -120,11 +120,11 @@ SmfLoad_CallStatusDisplay:
 SmfLoad_SendWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jr SmfLoad_Return
 
@@ -146,7 +146,7 @@ SmfLoad_CallHandler:
 	call UI_PostModeChangeEvent
 
 SmfLoad_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 FmmSmfSaveTitleFunc:
 	cp	xbc, 29360147
@@ -160,7 +160,7 @@ FmmSmfSaveTitleFunc:
 	calr	-11038
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	cpw	(33896:16), 0
 	jr	ge, 19
@@ -172,11 +172,11 @@ FmmSmfSaveTitleFunc:
 SmfSave_SendWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jr SmfSave_Return
 
@@ -184,7 +184,7 @@ SmfSave_CancelCleanup:
 	calr CancelOperationCleanup
 
 SmfSave_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 RenderSmfFilename:
@@ -281,7 +281,7 @@ SaveFN_HandleApply:
 	ld	xwa, 34740
 	call	16289486
 SaveFN_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -313,7 +313,7 @@ SeqToSong_BuildEntry:
 	ld	xde, 32760
 	call	16423243
 SeqToSong_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -344,7 +344,7 @@ SeqFromSong_BuildEntry:
 	ld	xde, 32892
 	call	16423243
 SeqFromSong_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -366,7 +366,7 @@ SeqSongName_BuildEntry:
 	ld	xbc, 29360143
 	call	16423243
 SeqSongName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SmfLoadAsFunc:
@@ -386,7 +386,7 @@ SmfLoadAs_Apply:
 	ld	xbc, 29360143
 	call	16423243
 SmfLoadAs_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 TrimAndPadSmfFilename:
@@ -536,7 +536,7 @@ FmmSmfFileNameFunc:
 SmfFN_JumpTable:
 	jp_rr 8, xix, de
 	ld	(33028:16), xbc
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(33032:16), xwa
 	ld	(33036:16), xwa
 	cp	(35994:16), 107
@@ -568,7 +568,7 @@ SmfFN_HandleActivate:
 	muls	bc, 10
 	calr	65187
 SmfFN_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jrl SmfFN_Return
 
 SmfFN_NavSetup:
@@ -645,7 +645,7 @@ SmfFN_HandleSave:
 	jrl	nz, 259
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	-12374
@@ -680,7 +680,7 @@ SmfFN_Save_WriteSlot:
 	ldw	bc, 16
 	calr	-799
 	lda	xwa, (700416:24)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, (34988:16)
 	sll	xbc, 11
 	add	xwa, xbc
@@ -699,11 +699,11 @@ SmfFN_Save_WriteSlot:
 SmfFN_Save_Finish:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0
 	jr z, SmfFN_Save_NoAltSlot
@@ -721,7 +721,7 @@ SmfFN_Save_CallResult:
 	ld	(32422:16), l
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	605
@@ -730,7 +730,7 @@ SmfFN_HandleOpen:
 	jrl nz, SmfFN_HandleOpen2
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_GetRecordPtrAlt
 	ld xwa, xhl
@@ -741,15 +741,15 @@ SmfFN_HandleOpen:
 	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl SmfFN_DispatchEvent
 
 SmfFN_Open_Execute:
@@ -773,17 +773,17 @@ SmfFN_Open_Execute:
 	calr	52865
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	394
@@ -792,7 +792,7 @@ SmfFN_HandleOpen2:
 	jrl	nz, 133
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	52683
@@ -814,17 +814,17 @@ SmfFN_HandleOpen2:
 	calr	52723
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	wa, 1:i3
 	call	16355414
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jrl	252
@@ -835,16 +835,16 @@ SmfFN_HandleDelete:
 	jr z, SmfFN_Delete_Execute
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
 	ld xbc, 0x1c00001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jrl SmfFN_DispatchEvent
 SmfFN_Delete_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	-13034
@@ -860,7 +860,7 @@ SmfFN_Delete_Execute:
 	ld	(33896:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	wa, (33040:16)
 	cp wa, (33896:16)
@@ -879,7 +879,7 @@ SmfFN_HandleDelete2:
 	jr nz, SmfFN_IgnoredEvents
 	ld XWA,0x00600026
 	ld XBC,0x01c00001
-	lds32 xde, 5
+	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -895,7 +895,7 @@ SmfFN_HandleDelete2:
 	ld (0x8468:16), hl
 	ld XWA,0x00600026
 	ld XBC,0x01c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, (0x8110:16)
 	.byte 0xd1, 0x68, 0x84, 0xf0, 0x61, 0x0d, 0xd8, 0xd8
@@ -940,13 +940,13 @@ SmfFN_HandleScrollFlag1:
 	ld	(34986:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	15
 SmfFN_LoadAs_Wrap:
 	ld	(34986:16), 0
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 SmfFN_LoadAs_Apply:
 	calr SmfLoadAsFunc
 	jrl SmfFN_UpdateDisplay
@@ -995,21 +995,21 @@ SmfFN_HandleSeqSongNum:
 	ld	(34988:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63415
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	102
 SmfFN_SeqToSong_Wrap:
 	ld	(34988:16), 0
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63385
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	72
 SmfFN_HandleSeqFromSong:
 	cp	xiz, 31
@@ -1020,21 +1020,21 @@ SmfFN_HandleSeqFromSong:
 	ld	(34988:16), c
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63428
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	28
 SmfFN_SeqFromSong_Wrap:
 	ld	(34988:16), 0
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	63398
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 SmfFN_SeqSongName_Dispatch:
 	calr SmfSeqSongNameFunc
 	jr SmfFN_UpdateDisplay
@@ -1102,7 +1102,7 @@ SmfFN_RedrawPage:
 	jr	nz, 13
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	17837
 SmfFN_UpdateFilenameField:
 	cp	(35994:16), 107
@@ -1129,12 +1129,12 @@ SmfFN_WriteFilenameField:
 	call	16289486
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
-	lds32	xde, 0
+	ld	xde, 0:i3
 	calr	62818
 SmfFN_SendOkState:
 	ld xwa, (0x8104:16)
 	ld XBC,0x01c50001
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr t, SmfFN_DispatchFinalEvent
 	ld (0x8108:16), xbc
 	jrl t, SmfFN_ReturnZero

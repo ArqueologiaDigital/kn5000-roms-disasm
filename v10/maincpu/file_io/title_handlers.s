@@ -21,7 +21,7 @@ LoadTtlJgFunc:
 	calr FileIO_DiskEventDispatch
 
 LoadTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveTtlJgFunc:
@@ -31,7 +31,7 @@ SaveTtlJgFunc:
 	calr FileIO_GetDiskCapacity
 
 SaveTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SaveSmfTtlJgFunc:
@@ -41,13 +41,13 @@ SaveSmfTtlJgFunc:
 	calr FileIO_GetDiskCapacity
 
 SaveSmfTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 DirectPlayTtlJgFunc:
 	cp xbc, 0x1c00007
 	call z, (FileIO_DetectFileTypeAndPost:24)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SongMedleyTtlJgFunc:
@@ -57,7 +57,7 @@ SongMedleyTtlJgFunc:
 	calr FileIO_GetDiskCapacity
 
 SongMedleyTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 SetupFlashFunc:
@@ -80,7 +80,7 @@ SetupFlash_HandleLoadEvent:
 	call Audio_DispatchCommand
 
 SetupFlash_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FmmUtilityTitleFunc:
@@ -95,7 +95,7 @@ FmmUtilityTitleFunc:
 	calr InitializeOperationState
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50005
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 0x7f5c, 0x8d37
 	cpw (0x8500:16), 0
@@ -137,7 +137,7 @@ FmmUtility_CheckCapacity:
 	jrl z, FmmUtility_ContinueWait
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7c
 	jr FmmUtility_CallHandler
@@ -145,18 +145,18 @@ FmmUtility_CheckCapacity:
 FmmUtility_HandleCancel:
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5c:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
 	ldw wa, 0xee
@@ -165,7 +165,7 @@ FmmUtility_HandleCancel:
 FmmUtility_HandleError:
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7d
 
@@ -177,18 +177,18 @@ FmmUtility_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5c:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
 	ldw wa, 0xee
@@ -200,11 +200,11 @@ FmmUtility_ShowStatus:
 FmmUtility_ContinueWait:
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jr FmmUtility_Return
 
@@ -212,7 +212,7 @@ FmmUtility_HandleAbort:
 	calr CancelOperationCleanup
 
 FmmUtility_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 FmmSmfUtilityTitleFunc:
@@ -227,7 +227,7 @@ FmmSmfUtilityTitleFunc:
 	calr InitializeOperationState
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50005
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 0x7f5e, 0x8d37
 	cpw (0x8500:16), 0
@@ -269,7 +269,7 @@ FmmSmfUtility_CheckCapacity:
 	jrl z, FmmSmfUtility_ContinueWait
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7b
 	jr FmmSmfUtility_CallHandler
@@ -277,18 +277,18 @@ FmmSmfUtility_CheckCapacity:
 FmmSmfUtility_HandleCancel:
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
 	ldw wa, 0xee
@@ -297,7 +297,7 @@ FmmSmfUtility_HandleCancel:
 FmmSmfUtility_HandleError:
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7d
 
@@ -309,18 +309,18 @@ FmmSmfUtility_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
 	ldw wa, 0xee
@@ -332,11 +332,11 @@ FmmSmfUtility_ShowStatus:
 FmmSmfUtility_ContinueWait:
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	jr FmmSmfUtility_Return
 
@@ -344,6 +344,6 @@ FmmSmfUtility_HandleAbort:
 	calr CancelOperationCleanup
 
 FmmSmfUtility_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 

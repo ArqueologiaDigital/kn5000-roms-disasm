@@ -76,7 +76,7 @@ FDC_ProbeDiskFormat__recal_alt:
 FDC_ProbeDiskFormat__recal_done:
 	ldw	(0x0d5a:16), 0		; +0x08 sector = 0
 	ldw	(0x0d5c:16), 0		; +0x0a count = 0
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(0x0d5e:16), xwa		; +0x0c buffer = NULL
 	lda	xwa, (0x0d52:16)
 	push	xwa

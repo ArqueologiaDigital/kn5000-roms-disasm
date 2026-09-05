@@ -5459,7 +5459,7 @@ Audio_DMA_Transfer:
 	ld xde, 0x10000
 
 Audio_DMA_Transfer_CheckSize:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	cp xde, 0x0
 	ret ule
 
@@ -6779,7 +6779,7 @@ HDAE5000_Status_DataBlock:
 	calr	65446
 	cp	hl, 0xffff
 	jr	z, -9
-	lds32	xiz, 0
+	ld	xiz, 0:i3
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe2
 	ldw	bc, 1215
@@ -6822,20 +6822,20 @@ SLIDE_Decompress_4K_FillRing:
 	ldw bc, 0xfee
 	ldiw_erp 0x30, 0
 	ldto_lerp XWA, 0x34
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa + 2)
 	sll xde, 8
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xwa + 3)
 	add xhl, xde
 	lda xde, (xwa + 1)
 	inc4_lerp 0x34
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xde)
 	ld xix, xwa
 	sll xix, 0
 	add xix, xhl
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	cp xix, 0x0
 	jrl ule, SLIDE_Decompress_4K_Done
 
@@ -6954,20 +6954,20 @@ SLIDE_Decompress_8K_FillRing:
 	ldw bc, 0x1ff6
 	ldiw_erp 0x30, 0
 	ldto_lerp XWA, 0x34
-	lds32 xde, 0
+	ld xde, 0:i3
 	ld e, (xwa + 2)
 	sll xde, 8
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, (xwa + 3)
 	add xhl, xde
 	lda xde, (xwa + 1)
 	add_erpl 0x34, 0x04, 0x00, 0x00, 0x00
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xde)
 	ld xix, xwa
 	sll xix, 0
 	add xix, xhl
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	cp xix, 0x0
 	jrl ule, SLIDE_Decompress_8K_Done
 
@@ -7114,7 +7114,7 @@ FDC_InitRecalibrate:
 	ldw (xbc + 6), 0xd3
 	ldw (xbc + 8), 0x1
 	ldw (xbc + 10), 0x1
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 12), xwa
 	push xbc
 	call FDC_CommandEntry
@@ -7604,7 +7604,7 @@ FloppyChange_WaitDiskRemove_Loop:
 	jr nz, FloppyChange_WaitDiskRemove_Loop
 
 FloppyChange_DiskRemoved:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 
 FloppyChange_Debounce1_Loop:
 	inc 1, xwa
@@ -7620,7 +7620,7 @@ FloppyChange_WaitDiskInsert_Loop:
 	jr z, FloppyChange_WaitDiskInsert_Loop
 
 FloppyChange_DiskInserted:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 
 FloppyChange_Debounce2_Loop:
 	inc 1, xwa
@@ -7636,7 +7636,7 @@ FloppyChange_Debounce2_Loop:
 Flash_BurnWithProgress:
 	pushw iz
 	ldw iz, 0x32
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (1033:16), xwa
 	call HDAE5000_Flash_Verify
 	call HDAE5000_Status_Check
@@ -7652,7 +7652,7 @@ FlashBurn_ProgressLoop:
 	ldw bc, 0xb4
 	ld de, 5:i3
 	call VRAM_FillRect
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (1033:16), xwa
 
 FlashBurn_CheckDone:
@@ -7785,7 +7785,7 @@ IllegalDisk_HaltLoop:
 	jr IllegalDisk_HaltLoop
 
 BusyWait_XWA_Cycles:
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	cp xbc, xwa
 	ret nc
 
@@ -7855,7 +7855,7 @@ TableData_ROM_Verify_NextBlock:
 	lda xhl, (xhl + 64)
 	cp xhl, xbc
 	jr nz, TableData_ROM_Verify_CheckBlock
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 TableData_ROM_Verify_CheckBlock:
@@ -7901,7 +7901,7 @@ HDAE5000_ROM_Transfer_WordLoop:
 	jr ule, HDAE5000_ROM_Transfer_BlockLoop
 
 HDAE5000_ROM_Transfer_Success:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 HDAE5000_ROM_Transfer_Return:
 	retd 0x2
@@ -7916,7 +7916,7 @@ HDAE5000_FlashWrite_BankLoop:
 	ld (0x160000:24), a
 	lda xwa, (0x200000:24)
 	ld (xsp + 4), xwa
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 HDAE5000_FlashWrite_WordLoop:
 	ld xwa, (xsp + 8)
@@ -7946,7 +7946,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	(1441792:24), a
 	lda	xwa, (2621440:24)
 	ld	(xsp+4), xwa
-	lds32	xiz, 0
+	ld	xiz, 0:i3
 	ld	xwa, (xsp+8)
 	stb_dpi	a, 226
 	ld	(xsp+8), xwa
@@ -7976,7 +7976,7 @@ HDAE5000_TableData_BankLoop:
 	ld (0x160000:24), a
 	lda xwa, (0x280000:24)
 	ld (xsp + 4), xwa
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 HDAE5000_TableData_WordLoop:
 	ld xwa, (xsp + 8)
@@ -8130,7 +8130,7 @@ Flash_AccumWrite_Byte:
 	ld (1620:16), 0
 
 Flash_AccumWrite_ByteDone:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (1602:16), xwa
 	ret
 
@@ -8156,7 +8156,7 @@ Flash_AccumWrite_Word:
 	ld (1620:16), 0
 
 Flash_AccumWrite_WordDone:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (1602:16), xwa
 	ret
 
@@ -8238,7 +8238,7 @@ LZ_Decompress_Init:
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+16)
 	ld	(xsp+12), xwa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(1602:16), xwa
 LZ_Decompress_ClearRing:
 	ld xwa, (1602:16)
@@ -8253,7 +8253,7 @@ LZ_Decompress_ClearRing:
 	ldw (xsp + 10), 0xfee
 	ldw (xsp + 4), 0x0
 	ld (1620:16), 0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (1602:16), xwa
 	lda xwa, (0x069800:24)
 	ld (1610:16), xwa

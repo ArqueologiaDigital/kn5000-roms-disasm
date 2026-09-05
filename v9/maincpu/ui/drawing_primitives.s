@@ -95,7 +95,7 @@ DrawLine_Impl:
 	ld xwa, (xsp + 66)
 	cp bc, (xwa)
 	jr le, DrawLine_Impl_XStepPositive
-	lds32 xde, 1
+	ld xde, 1:i3
 
 DrawLine_Impl_XStepPositive:
 	ld (xsp + 12), xde
@@ -109,7 +109,7 @@ DrawLine_Impl_XStepPositive:
 	ld wa, (xsp + 46)
 	cp wa, (xsp + 44)
 	jr le, DrawLine_Impl_YStepPositive
-	lds32 xbc, 1
+	ld xbc, 1:i3
 
 DrawLine_Impl_YStepPositive:
 	ld (xsp + 16), xbc
@@ -194,7 +194,7 @@ DrawLine_Impl_CopyStartPos:
 	jrl z, DrawLine_Impl_PatternSetup
 	or xwa, xwa
 	jr nz, DrawLine_Impl_HorizontalCheck
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
 	jrl lt, DrawLine_Impl_BuildDirtyRect
@@ -281,7 +281,7 @@ DrawLine_Impl_SteepCheck:
 	ld (xsp + 4), xwa
 	ld xwa, 0x8000
 	add (xsp + 4), xwa
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
 	jrl lt, DrawLine_Impl_BuildDirtyRect
@@ -332,7 +332,7 @@ DrawLine_Impl_ShallowSetup:
 	ld (xsp + 8), xwa
 	ld xwa, 0x8000
 	add (xsp + 8), xwa
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (xsp + 4)
 	cp xwa, 0x0
 	jrl lt, DrawLine_Impl_BuildDirtyRect
@@ -373,7 +373,7 @@ DrawLine_Impl_PatternSetup:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	jr nz, DrawLine_Impl_PatternNonVert
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
 	jrl lt, DrawLine_Impl_BuildDirtyRect
@@ -483,7 +483,7 @@ DrawLine_Impl_PatternDiagCheck:
 	ld (xsp + 4), xwa
 	ld xwa, 0x8000
 	add (xsp + 4), xwa
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
 	jrl lt, DrawLine_Impl_BuildDirtyRect
@@ -543,7 +543,7 @@ DrawLine_Impl_PatternShallowSetup:
 	ld (xsp + 8), xwa
 	ld xwa, 0x8000
 	add (xsp + 8), xwa
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (xsp + 4)
 	cp xwa, 0x0
 	jr lt, DrawLine_Impl_BuildDirtyRect
@@ -638,7 +638,7 @@ DrawLineEx:
 	ld xwa, (xsp + 50)
 	cp bc, (xwa)
 	jr le, DrawLineEx_XStepPositive
-	lds32 xde, 1
+	ld xde, 1:i3
 
 DrawLineEx_XStepPositive:
 	ld (xsp + 12), xde
@@ -655,7 +655,7 @@ DrawLineEx_XStepPositive:
 	ld hl, (xwa)
 	cp bc, hl
 	jr le, DrawLineEx_YStepPositive
-	lds32 xde, 1
+	ld xde, 1:i3
 
 DrawLineEx_YStepPositive:
 	ld (xsp + 16), xde
@@ -706,7 +706,7 @@ DrawLineEx_CopyStartPos:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	jrl nz, DrawLineEx_HorzCheck
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 28), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
@@ -736,7 +736,7 @@ DrawLineEx_VertLoop:
 DrawLineEx_VertAdvance:
 	ld xwa, (xsp + 16)
 	add (xsp + 42), wa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 28), xwa
 	ld xwa, (xsp + 28)
 	cp xwa, (xsp + 8)
@@ -764,7 +764,7 @@ DrawLineEx_HorzCheck:
 	ld xwa, (xsp + 8)
 	or xwa, xwa
 	jrl nz, DrawLineEx_DiagSetup
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 28), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, 0x0
@@ -794,7 +794,7 @@ DrawLineEx_HorzLoop:
 DrawLineEx_HorzAdvance:
 	ld xwa, (xsp + 12)
 	add (xsp + 40), wa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 28), xwa
 	ld xwa, (xsp + 28)
 	cp xwa, (xsp + 4)
@@ -842,7 +842,7 @@ DrawLineEx_DiagSetup:
 	ld (xsp + 4), xwa
 	ld xwa, 0x8000
 	add (xsp + 4), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 28), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
@@ -877,7 +877,7 @@ DrawLineEx_SteepAdvance:
 	ld (xbc), wa
 	ld xwa, (xsp + 16)
 	add (xiy), wa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 28), xwa
 	ld xwa, (xsp + 28)
 	cp xwa, (xsp + 8)
@@ -912,7 +912,7 @@ DrawLineEx_ShallowSetup:
 	ld (xsp + 8), xwa
 	ld xwa, 0x8000
 	add (xsp + 8), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 28), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, 0x0
@@ -948,7 +948,7 @@ DrawLineEx_ShallowAdvance:
 	ld (xde), wa
 	ld xwa, (xsp + 12)
 	add (xbc), wa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 28), xwa
 	ld xwa, (xsp + 28)
 	cp xwa, (xsp + 4)
@@ -1748,7 +1748,7 @@ DrawFrameEx_SidesSetup:
 	ld ix, (xde)
 	cp bc, ix
 	jr le, DrawFrameEx_SidesStepComputed
-	lds32 xhl, 1
+	ld xhl, 1:i3
 
 DrawFrameEx_SidesStepComputed:
 	ld xiy, xhl
@@ -2289,7 +2289,7 @@ DrawBitmap_Impl_LoTransparent:
 
 DrawBitmap_Impl_PixelAdvance:
 	inc 2, xix
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xsp + 6), xwa
 	inc 1, iy
 
@@ -2761,7 +2761,7 @@ DrawFrameSP_Impl_DrawNormal:
 	ld (xiy), a
 
 DrawFrameSP_Impl_PixelAdvance:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp), xwa
 	inc 1, hl
 	cp hl, (xbc)
@@ -2774,7 +2774,7 @@ DrawFrameSP_Impl_OddWidthPad:
 	add wa, wa
 	cp wa, (xbc)
 	jr z, DrawFrameSP_Impl_RowAdvance
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp), xwa
 
 DrawFrameSP_Impl_RowAdvance:
@@ -2968,7 +2968,7 @@ DrawBitmapSP_Impl_LoTransparent:
 	ld (xiz), a
 
 DrawBitmapSP_Impl_PixelAdvance:
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xsp + 22), xwa
 	inc 2, xiy
 	inc 1, ix
@@ -3008,7 +3008,7 @@ DrawBitmapSP_Impl_ColLoop:
 	ld (xhl), a
 
 DrawBitmapSP_Impl_OddPixelAdvance:
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xsp + 22), xwa
 
 DrawBitmapSP_Impl_RowAdvance:
@@ -3306,7 +3306,7 @@ DrawBitmapSP2_Impl_BitAdvance:
 	jr c, DrawBitmapSP2_Impl_BitLoop
 
 DrawBitmapSP2_Impl_MaskWordAdvance:
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add (xsp + 16), xwa
 	inc 1, iz
 
@@ -3434,7 +3434,7 @@ DrawBitmapFile_Impl:
 	srl xwa, 2
 	ld (xsp + 32), xwa
 	ld xbc, 0x69400
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 
 DrawBitmapFile_Impl_InitPalette:
@@ -3443,12 +3443,12 @@ DrawBitmapFile_Impl_InitPalette:
 	add xde, 0x69400
 	ld xwa, 0xff000000
 	ld (xde), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x100
 	jr lt, DrawBitmapFile_Impl_InitPalette
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 32)
 	cp xwa, 0x0
@@ -3462,22 +3462,22 @@ DrawBitmapFile_Impl_LoadPalette:
 	ld xix, xhl
 	add xix, xwa
 	ld a, (xix)
-	lds32 xix, 0
+	ld xix, 0:i3
 	ldb_erp A, 0xf0
 	sll xix, 8
 	ld xwa, xde
 	ld xiy, xhl
 	add xiy, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xiy + 1)
 	add xix, xwa
 	sll xix, 8
 	add xhl, xde
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, (xhl + 2)
 	add xix, xwa
 	stl_dpi XIX, 0xe6
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xde, (xsp + 12)
 	cp xde, (xsp + 32)
@@ -3519,7 +3519,7 @@ DrawBitmapFile_Impl_ParseDimensions:
 	ld xwa, (xsp + 8)
 	cp xwa, 0xf0
 	jr le, DrawBitmapFile_Impl_ComputeStride
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	ld xbc, (xsp + 8)
 	sub xbc, 0xf0
@@ -3528,7 +3528,7 @@ DrawBitmapFile_Impl_ParseDimensions:
 DrawBitmapFile_Impl_SkipExtraRows:
 	ld xwa, (xsp + 20)
 	add_sril_mr XWA, 0xfd, 0x34, 0x04
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	cp (xsp + 12), xbc
 	jr lt, DrawBitmapFile_Impl_SkipExtraRows
@@ -3547,7 +3547,7 @@ DrawBitmapFile_Impl_ComputeStride:
 	ld (xsp + 32), xhl
 	add xhl, 0x56800
 	ld (xsp + 28), xhl
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x0
@@ -3578,7 +3578,7 @@ DrawBitmapFile_Impl_DecodeRowLoop:
 	jr DrawBitmapFile_Impl_RowCopy
 
 DrawBitmapFile_Impl_TileRow:
-	lds32 xiz, 0
+	ld xiz, 0:i3
 	ld xbc, (xsp + 16)
 	ld xwa, 0x140
 	call Math_DivideSigned32
@@ -3623,7 +3623,7 @@ DrawBitmapFile_Impl_RowCopy:
 	sub (xsp + 28), xwa
 	ld xwa, (xsp + 20)
 	add_sril_mr XWA, 0xfd, 0x34, 0x04
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, (xsp + 8)
@@ -3653,7 +3653,7 @@ DrawBitmapFile_Impl_FillLoop:
 	lda_dri XIZ, 0xf9, 0x40, 0x01
 	ld xwa, 0x140
 	add (xsp + 28), xwa
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0xf0
@@ -4178,7 +4178,7 @@ DrawString_Impl_ColumnAdvance:
 	jrl c, DrawString_Impl_ColumnLoop
 
 DrawString_Impl_CharAdvance:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 24), xwa
 	ld xwa, (xsp + 24)
 	cp (xwa), 0x0

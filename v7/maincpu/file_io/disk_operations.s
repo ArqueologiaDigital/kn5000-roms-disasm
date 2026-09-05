@@ -139,7 +139,7 @@ FCopy_DispatchFA9D58:
 FCopy_CopyConfirm_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	62671
@@ -156,17 +156,17 @@ FCopy_CopyConfirm_Execute:
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ldw	wa, 123
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	jr	125
@@ -175,7 +175,7 @@ FCopy_CopyExecute:
 	jr	nz, 121
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	62544
@@ -192,24 +192,24 @@ FCopy_CopyExecute:
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ldw	wa, 123
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 FCopy_NotifyComplete:
 	call SoundCtrl_SendCommand
 
 FCopy_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -287,7 +287,7 @@ FRename_HandleApply:
 	call	16288975
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	62245
@@ -302,12 +302,12 @@ FRename_HandleApply:
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	call	16355504
 FRename_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -386,7 +386,7 @@ FRenameSmf_HandleApply:
 	call	16289030
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	61978
@@ -401,12 +401,12 @@ FRenameSmf_HandleApply:
 	ld	(33896:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ldw	wa, 238
 	call	16355504
 FRenameSmf_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -439,14 +439,14 @@ FmmFmt_InitPhase_DriveType23:
 	ld	(32460:16), a
 	ld	xwa, 8060982
 	ld	xbc, 29360129
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(33890:16), 0
 	jr	21
 FmmFmt_InitPhase_OtherDrive:
 	ld	xwa, 8060991
 	ld	xbc, 29360129
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(33890:16), 2
 FmmFmt_InitPhase_SetActive:
@@ -474,7 +474,7 @@ FmmFmt_HandleProgress:
 	jrl	nz, 167
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	ld	wa, 0:i3
 	calr	-3843
@@ -486,13 +486,13 @@ FmmFmt_HandleProgress:
 	calr	-3965
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	cp	iz, 0:i3
 	jr	ge, 69
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32462:16)
 	extz	wa
@@ -500,7 +500,7 @@ FmmFmt_HandleProgress:
 	ld	(32464:16), 0
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	wa, iz
 	ldw	bc, 8
@@ -512,11 +512,11 @@ FmmFmt_HandleProgress:
 FmmFmt_FormatSuccess:
 	ld	xwa, 8060982
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 8060977
 	ld	xbc, 29360129
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(33890:16), 1
 	jr	113
@@ -526,11 +526,11 @@ FmmFmt_ExecutePhase2:
 	ld	(32460:16), 3
 	ld	xwa, 8060991
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 8060982
 	ld	xbc, 29360129
-	lds32	xde, 0
+	ld	xde, 0:i3
 	jr	54
 FmmFmt_HandleAbort:
 	ld	e, c
@@ -545,11 +545,11 @@ FmmFmt_AbortPhase2:
 	ld	(32460:16), 2
 	ld	xwa, 8060991
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 8060982
 	ld	xbc, 29360129
-	lds32	xde, 0
+	ld	xde, 0:i3
 FmmFmt_DispatchAndNotify:
 	call ApPostEvent
 	jr FmmFmt_NotifyComplete
@@ -560,7 +560,7 @@ FmmFmt_HandleAbortFinal:
 FmmFmt_NotifyComplete:
 	ld	(33890:16), 0
 FmmFmt_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -572,7 +572,7 @@ UtilityTtlJgFunc:
 	calr FileIO_DiskEventDispatch
 
 UtilTtlJg_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 FmmLoadTitleFunc:
 	pushw	iz
@@ -592,7 +592,7 @@ FmmLoadTitleFunc:
 	calr	-4188
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xd2, 0x7e
 	cpw	(33892:16), 0
@@ -637,7 +637,7 @@ FmmLoadTtl_CheckSmfHandle:
 
 	ld xbc, 0x1c00002
 
-	lds32 xde, 0
+	ld xde, 0:i3
 
 	call	16423243
 
@@ -650,18 +650,18 @@ FmmLoadTtl_CheckSmfHandle:
 FmmLoadTtl_StateCancelLoad:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32466:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 0
 	ldw	wa, 238
@@ -669,7 +669,7 @@ FmmLoadTtl_StateCancelLoad:
 FmmLoadTtl_StateIdle:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
 	jrl FmmLoadTtl_PlaySound
@@ -677,19 +677,19 @@ FmmLoadTtl_StateIdle:
 FmmLoadTtl_StateSuccess:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	calr	60980
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 1
+	ld	xde, 1:i3
 	call	16423243
 	ld	a, (32466:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(32422:16), 2
 	ldw	wa, 238
@@ -700,11 +700,11 @@ FmmLoadTtl_NotifyComplete:
 FmmLoadTtl_LoadSlots:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	xwa, 4294967295
 	ld	xbc, 29360138
-	lds32	xde, 0
+	ld	xde, 0:i3
 	call	16423243
 	ld	(35168:16), 0
 	ld	(35170:16), 0
@@ -733,7 +733,7 @@ FmmLoadTtl_HandleCancelOp:
 	calr CancelOperationCleanup
 	ld xwa, 0x610001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 	call ApPostEvent
 	jr FmmLoadTtl_Return
 
@@ -751,7 +751,7 @@ FmmLoadTtl_PlaySound:
 	call UI_PostModeChangeEvent
 
 FmmLoadTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 FmmSaveTitleFunc:
@@ -769,7 +769,7 @@ FmmSaveTitleFunc:
 	calr	-4735
 	ld	xwa, 6291494
 	ld	xbc, 29360129
-	lds32	xde, 5
+	ld	xde, 5:i3
 	call	16423243
 	cpw	(33894:16), 0
 	jr	ge, 19
@@ -800,18 +800,18 @@ FmmSaveTtl_SlotLoop:
 FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
-	lds32 xde, 0
+	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000a
-	lds32 xde, 0
+	ld xde, 0:i3
 	jr FmmSaveTtl_DispatchAndReturn
 
 FmmSaveTtl_HandleCancel:
 	calr CancelOperationCleanup
 	ld xwa, 0x670001
 	ld xbc, 0x1e0007f
-	lds32 xde, 1
+	ld xde, 1:i3
 
 FmmSaveTtl_DispatchAndReturn:
 	call ApPostEvent
@@ -824,7 +824,7 @@ FmmSaveTtl_HandleOk:
 	call UI_PostModeChangeEvent
 
 FmmSaveTtl_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	ret
 
@@ -914,7 +914,7 @@ DiskName_HandleApply:
 	ldw	wa, 96
 	call	16355459
 DiskName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -953,7 +953,7 @@ DiskInfo_ResetCapacity:
 	calr ResetProgressIndication
 
 DiskInfo_ZeroCapacity:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	ld (xsp + 4), xwa
 
@@ -965,7 +965,7 @@ DiskInfo_ComputePercent:
 	.byte 0x88, 0x1d, 0x31, 0x04, 0xff, 0xbf, 0x08, 0x63
 	.byte 0x68, 0x05
 DiskInfo_ZeroPercent:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 DiskInfo_RenderStrings:
 	ld	xwa, (xsp+4)
@@ -1013,7 +1013,7 @@ DiskInfo_RenderStrings:
 	ld	xde, 34610
 	call	16423243
 DiskInfo_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -1066,7 +1066,7 @@ SongName_SendDisplay:
 	ld	xde, 34674
 	call	16423243
 SongName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 8, xsp
 	ret
@@ -1098,7 +1098,7 @@ SaveFileNum_SendDisplay:
 	ld	xde, 34740
 	call	16423243
 SaveFileNum_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret
@@ -1180,7 +1180,7 @@ SaveFileName_HandleApply:
 	ld	xwa, 34740
 	call	16289461
 SaveFileName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	inc 4, xsp
 	ret
@@ -1213,7 +1213,7 @@ CurFileName_SendDisplay:
 	ld	xde, 34772
 	call	16423243
 CurFileName_Return:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	popw iz
 	inc 4, xsp
 	ret

@@ -428,7 +428,7 @@ DSPCfg_InitDispatchData:
 	ld	l, (xde+2)
 	ld	h, l
 	.byte 0x80, 0xc6
-	lds32	xiy, 5
+	ld	xiy, 5:i3
 	cp	ix, iz
 	jr	nc, 21
 	ld	xbc, xiy
@@ -468,7 +468,7 @@ DSPCfg_InitDispatchData:
 	ld	l, (xde+2)
 	ld	h, l
 	.byte 0x80, 0xc6
-	lds32	xix, 5
+	ld	xix, 5:i3
 	cp	iy, iz
 	jr	nc, 27
 	ld	xbc, xix
@@ -559,7 +559,7 @@ DSPCfg_SyncBitmapData:
 	ld	(xsp+6), 0
 	ldb_spi a, 248
 	ld (xsp+8), a
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	add	(xsp+18), xwa
 	.byte 0x8f
 	ldio	63, 0
@@ -611,7 +611,7 @@ DSPCfg_SyncBitmapData:
 	incm8	1, (xsp+6)
 	decm8	1, (xsp+8)
 	inc	1, xiz
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+18), xwa
 	.byte 0x8f
 	ldio	63, 0
@@ -634,7 +634,7 @@ DSPCfg_SyncBitmapData:
 	ret
 
 SndParam_SyncDisplayBitmap:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	call SndParam_LookupReadOnly
 	ld (0x8e6c:16), l
 	ld xwa, 0x102
@@ -679,7 +679,7 @@ SndParam_SyncDisplayBitmap:
 SoundParam_NotifyMultipleChanges:
 	ld c, (0x8e6c:16)
 	extz bc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld de, 0:i3
 	call SoundParam_NotifyChange
 	ld c, (0x8e6e:16)

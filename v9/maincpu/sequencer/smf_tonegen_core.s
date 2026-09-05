@@ -151,7 +151,7 @@ FloppyIO_ReadNextByte_StorePtr:
 	ld (4376:16), xix
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6883:16)
 	cp xwa, xbc
 	jp z, (FloppyIO_ReadNextByte_UpdateRemaining:24)
@@ -406,7 +406,7 @@ FloppyIO_ReadTrackBuf_ReadLoop:
 	pop xix
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadTrackBuf_EarlyExit
@@ -661,7 +661,7 @@ SMF_ParseTrackEvent:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_EarlyExit
@@ -689,7 +689,7 @@ SMF_ParseTrack_Dispatch:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_ValidateExit
@@ -710,7 +710,7 @@ SMF_ParseTrack_MetaEvt02:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta02_EarlyExit
@@ -731,7 +731,7 @@ SMF_ParseTrack_MetaEvt03:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta03_EarlyExit
@@ -752,7 +752,7 @@ SMF_ParseTrack_MetaEvt2F:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta2F_EarlyExit
@@ -773,7 +773,7 @@ SMF_ParseTrack_MetaEvt51:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta51_Read1_EarlyExit
@@ -790,7 +790,7 @@ SMF_ParseTrack_Meta51_ReadByte2:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta51_Read2_EarlyExit
@@ -811,7 +811,7 @@ SMF_ParseTrack_MetaEvt58:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta58_EarlyExit
@@ -897,7 +897,7 @@ SMF_ReadMidiEvt_ReadLoop:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadMidiEvt_ReadFailed
@@ -964,7 +964,7 @@ FloppyIO_ReadMidiEvtBytes_CheckDone:
 	popw hl
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadMidiEvtBytes_ReadFailed
@@ -1132,7 +1132,7 @@ SMF_MTrk_ReadByteLoop:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MTrk_ReadFailed
@@ -1167,7 +1167,7 @@ SMF_MTrk_SignatureMatch:
 	ld (6887:16), 0
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MTrk_FileSizeReadFailed
@@ -1189,7 +1189,7 @@ SMF_ProcessVoiceData:
 	jrl nz, SMF_EventFailureExit
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_CheckFailed
@@ -1207,7 +1207,7 @@ SMF_VoiceData_ReadTrackBuffer:
 	call FloppyIO_ReadToTrackBuffer
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_ReadTrackFailed
@@ -1230,7 +1230,7 @@ SMF_VoiceData_DispatchAndParse:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_ParseFailed
@@ -1250,7 +1250,7 @@ SMF_VoiceData_CheckMetaFlag:
 	call SMF_ParseTrackEvent
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_MetaParseFailed
@@ -1277,7 +1277,7 @@ SMF_VoiceData_HandleEndOfTrack:
 
 SMF_VoiceData_DrainRemaining:
 	ld xbc, (6883:16)
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	cp xbc, xwa
 	jp z, (SMF_VoiceData_DrainDone:24)
 	call FloppyIO_ReadNextByte
@@ -1299,7 +1299,7 @@ SMF_VoiceData_HandleSysEx:
 	call SMF_ProcessSysExBlock
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_SysExFailed
@@ -1324,7 +1324,7 @@ SMF_VoiceData_CheckMidiStatus:
 	jrl nz, SMF_EventFailureExit
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_MidiStatusFailed
@@ -1346,7 +1346,7 @@ SMF_VoiceData_ReadMidiRunning:
 	jrl nz, SMF_VoiceData_SetErrorFlag
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_RunningMidiFailed
@@ -1711,7 +1711,7 @@ Sequencer_ValidateFileData:
 	call FloppyIO_ReadVariableLength
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, Sequencer_Validate_ReadFailed
@@ -1761,7 +1761,7 @@ Sequencer_Advance_StorePtr:
 	ld (4376:16), xix
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6883:16)
 	cp xwa, xbc
 	jp z, (Sequencer_Advance_UpdateRemaining:24)
@@ -1782,7 +1782,7 @@ SMF_SetTempoFromMetaEvent:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SetTempo_ReadByte1Failed
@@ -1800,7 +1800,7 @@ SMF_SetTempo_StoreByte1:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SetTempo_ReadByte2Failed
@@ -1841,7 +1841,7 @@ SoundGen_EncodeTempoByte:
 	and h, 0x1
 	sla h, 1
 	or w, h
-	lds32 xiy, 7
+	ld xiy, 7:i3
 	cpw (3932:16), 0
 	jrl z, SoundGen_ApplyTempoToVoice
 	cpw (3934:16), 1
@@ -1912,7 +1912,7 @@ SoundGen_ScaleAndWriteTempo:
 	pop xiy
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
-	lds32 xiy, 7
+	ld xiy, 7:i3
 	cpw (3932:16), 0
 	jrl z, SoundGen_SetVoiceBitAndWriteRegs
 	cpw (3934:16), 1
@@ -2098,7 +2098,7 @@ SoundGen_ClampVoiceIndexMin1:
 	extz xiy
 	cp xiy, 0x1
 	jrl ule, SoundGen_ClampVoice_Done
-	lds32 xiy, 1
+	ld xiy, 1:i3
 
 SoundGen_ClampVoice_Done:
 	ret
@@ -2142,7 +2142,7 @@ SMF_ReadMidiStatus_ReadLoop:
 	popw bc
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadMidiStatus_ReadFailed
@@ -2582,7 +2582,7 @@ FloppyIO_ReadVarLen_ReadLoop:
 	pop xix
 	push xwa
 	push xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadVarLen_ReadFailed

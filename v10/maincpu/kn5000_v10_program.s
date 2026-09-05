@@ -541,7 +541,7 @@ We_seem_to_be_running_boot_ROM_code:
 	call Draw_FlashMemUpdate_message_bitmap
 
 Boot_PostSelfTest:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (1033:16), xwa
 	ld (1024:16), 2
 	call TaskSched_Init
@@ -703,7 +703,7 @@ SubCPU_Send_Payload:
 	push xiz
 	cp (ROM_PaddingFF_0x4:24), 0xff
 	jrl nz, SubCPU_Payload_Done
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 SubCPU_Payload_DelayLoop_Short:
 	inc 1, xiz
@@ -761,7 +761,7 @@ SubCPU_Payload_TransferPart2:
 	ldw bc, 0x100
 	ld xde, 0x400
 	call InterCPU_E1_Bulk_Transfer
-	lds32 xiz, 0
+	ld xiz, 0:i3
 
 SubCPU_Payload_DelayLoop_Long:
 	inc 1, xiz
@@ -860,14 +860,14 @@ Boot_HandleFactoryReset:
 	ld xbc, 0x400
 
 FactoryReset_ClearDRAM:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dpi XWA, 0xe6
 	cp xbc, 0x100000
 	jr c, FactoryReset_ClearDRAM
 	ld xbc, 0x1e0000
 
 FactoryReset_ClearSRAM:
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dpi XWA, 0xe6
 	cp xbc, 0x200000
 	jr c, FactoryReset_ClearSRAM
@@ -1015,7 +1015,7 @@ ResInfo_GetMspSettingsRange:
 ResInfo_GetResourceListPtr:
 	lda xwa, (0xe1ffcc:24)
 	ld (xbc), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 4), xwa
 	ret
 
@@ -1581,7 +1581,7 @@ Voice_FactoryPresetData:
 	ld	(xbc), wa
 	ld	xwa, (xsp+16)
 	add	(xbc+2), wa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+8)
@@ -1607,7 +1607,7 @@ Voice_FactoryPresetData:
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
-	lds32	xwa, 0
+	ld	xwa, 0:i3
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
@@ -1706,7 +1706,7 @@ Voice_FactoryPresetData:
 	ld	(xwa), de
 	ld	xwa, (xsp+12)
 	add	(xbc), wa
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+4)
@@ -2304,7 +2304,7 @@ TextRender_BitMask4_Return:
 	jr c, TextRender_BitMask4_PixelLoop
 
 TextRender_BitMask5_ProcessCharacter:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 16), xwa
 	incw 1, (xsp + 28)
 
@@ -2387,7 +2387,7 @@ TextRender_BitMask5_Return:
 	jr c, TextRender_BitMask5_PixelLoop
 
 TextRender_BitMask5_AdvancePointer:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 16), xwa
 	incw 1, (xsp + 28)
 
@@ -2436,7 +2436,7 @@ ChordProc_SendRefreshEvent:
 	call SendEvent
 
 UI_EventHandler_InitReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 UI_EventHandler_PopAndReturn:
 	pop xiz
@@ -2470,7 +2470,7 @@ AcChordBox_HandleInitOrSelect:
 	call InheritedProc
 	ld xwa, 0x1420007
 	ld xbc, 0x1e2000d
-	lds32 xde, 0
+	ld xde, 0:i3
 	call MainFuncCall
 	jr AcChordBox_ReturnZero
 
@@ -2495,7 +2495,7 @@ AcChordBox_HandleChordUpdate:
 	call SendEvent
 
 AcChordBox_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 AcChordBox_PopAndReturn:
 	pop xiz
@@ -2568,7 +2568,7 @@ MainChordPre_AppendChordSuffix:
 	call ApPostEvent
 
 MainChordPre_ReturnZero:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	pop xiz
 	ret
 
@@ -2745,7 +2745,7 @@ SoundParam_NotifyChange:
 	ld (xsp + 12), bc
 	ldw (xsp + 4), 0x0
 	ld xiz, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xsp + 6), xwa
 	ld xhl, xiz
 	and xhl, 0xff

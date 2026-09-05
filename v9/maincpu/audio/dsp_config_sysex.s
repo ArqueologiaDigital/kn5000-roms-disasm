@@ -1499,7 +1499,7 @@ MidiSeq_SendMultiByte_PC2SendLoop:
 	call MIDI_SC0_ENABLE_TX
 
 MidiSeq_SendMultiByte_PC2NextByte:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld wa, iz
 	dec 1, iz
@@ -1529,7 +1529,7 @@ MidiSeq_SendMultiByte_SerialSendLoop:
 	call MIDI_SC0_ENABLE_TX
 
 MidiSeq_SendMultiByte_SerialNextByte:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld wa, iz
 	dec 1, iz
@@ -1947,7 +1947,7 @@ CompIface_RampDown_Apply:
 	extz xwa
 	sub xbc, xwa
 	jr ge, CompIface_RampDown_Clamp
-	lds32 xbc, 0
+	ld xbc, 0:i3
 
 CompIface_RampDown_Clamp:
 	ld (0xc1ee:16), bc
@@ -2260,7 +2260,7 @@ DSPCfg_ScaleFactor_Dispatch:
 	ret nz
 
 DSPCfg_ScaleFactor_Update:
-	lds32 xwa, 4
+	ld xwa, 4:i3
 	call SndParam_LookupReadOnly
 	ld (0xc1f6:16), hl
 	ld a, (0xc1f2:16)
@@ -2627,7 +2627,7 @@ DSPCfg_WriteMultiField_Loop:
 	jr ule, DSPCfg_WriteMultiField_AdvanceAddr
 
 DSPCfg_WriteMultiField_AccumXWA:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 14), xwa
 	inc 1, bc
 	cp bc, (xsp + 10)
@@ -3943,7 +3943,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	bc, 0:i3
 	cpw	(xsp+14), 0
 	jr	ule, 12
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+22), xwa
 	inc	1, bc
 	cp	bc, (xsp+14)
@@ -4038,7 +4038,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	xbc, WidgetParam_Config_058_0x36
 	add	xbc, xhl
 	ld	xbc, (xbc)
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+6), xwa
 	ld	e, (xsp+12)
 	dec	1, e
@@ -4250,11 +4250,11 @@ DSPCfg_ApplyParamStruct_CheckSpecial:
 	jr nz, DSPCfg_ApplyParamStruct_Offset1
 
 DSPCfg_ApplyParamStruct_Offset2:
-	lds32 xwa, 2
+	ld xwa, 2:i3
 	jr DSPCfg_ApplyParamStruct_WriteLoop
 
 DSPCfg_ApplyParamStruct_Offset1:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 
 DSPCfg_ApplyParamStruct_WriteLoop:
 	ld xde, xiz

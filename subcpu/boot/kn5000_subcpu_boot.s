@@ -1869,7 +1869,7 @@ ROM_CHECKSUM:
 	ldb w, 0x0	; Bank counter (TMP94C241 encoding)
 ROM_CHECKSUM__bank_loop:
 	ld xiy, 0xFE0000	; Boot ROM base
-	lds32 xiz, 0	; Word counter
+	ld xiz, 0:i3	; Word counter
 ROM_CHECKSUM__word_loop:
 	ld c, w
 	extz bc
@@ -2196,7 +2196,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
 	lda xde, (0xff804c:24); XDE = ToneGen_Velocity_Input_Curve
-	lds32 xhl, 0	; Clear XHL
+	ld xhl, 0:i3	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
 	ld bc, (0xff802a:24); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
@@ -2231,7 +2231,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	jr nz, NOTE_VELOCITY_LOOKUP_CALCULATE__clamp_velocity	; If not a sharp, skip offset
 
 NOTE_VELOCITY_LOOKUP_CALCULATE__apply_offset:
-	lds32 xbc, 0	; Clear XBC
+	ld xbc, 0:i3	; Clear XBC
 	ld c, (xde + 2)	; C = offset for sharp notes
 	sub xhl, xbc	; XHL = XHL - offset
 
@@ -2242,7 +2242,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__clamp_velocity:
 	jr gt, NOTE_VELOCITY_LOOKUP_CALCULATE__use_max	; If greater, use max
 	ld xde, xhl	; Otherwise use calculated value
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
-	lds32 xbc, 0	; Min velocity = 0
+	ld xbc, 0:i3	; Min velocity = 0
 	cp xde, 0x0	; Compare with min
 	jr lt, NOTE_VELOCITY_LOOKUP_CALCULATE__use_min	; If less, use min
 	ld xbc, xde	; Otherwise use clamped value

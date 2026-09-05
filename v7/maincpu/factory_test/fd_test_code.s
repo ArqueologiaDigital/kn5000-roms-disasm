@@ -305,7 +305,7 @@ FDTestDialogProc:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 FDTestDlg_DefaultCase:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr FDTestDlg_Return
 
 FDTestDlg_FormatDisplay:
@@ -323,11 +323,11 @@ FDTestDlg_FormatDisplay:
 	ld xde, xbc
 	ld xbc, 0x1e0008c
 	call SendEvent
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	jr FDTestDlg_Return
 
 FDTestDlg_Unhandled:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 
 FDTestDlg_Return:
 	lda xsp, (xsp + 264)
@@ -358,7 +358,7 @@ HamaList_HandleSelect:
 	push	xwa
 	call	16713584
 	inc	8, xsp
-	lds32	xhl, 0
+	ld	xhl, 0:i3
 HamaList_Return:
 	pop xiz
 	ret

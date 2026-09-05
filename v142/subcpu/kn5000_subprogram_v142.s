@@ -113,7 +113,7 @@ RESET:	; 01F924
 	ld (337:16), 128
 	ld (341:16), 129
 	ldio 0xF6, 0x00
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (4160:16), xwa
 	calr MemClear_DRAM_And_ExtRAM
 
@@ -196,7 +196,7 @@ Timer_AudioTick_Handler:
 	pushw bc
 	push xwa
 	push xix
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (4160:16), xwa
 	ld a, (61460:16)
 	ld c, a
@@ -4305,7 +4305,7 @@ VoiceNode_PriorityList_SelfLink:
 	sla wa, 2
 	ld bc, wa
 	inc 2, bc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xE8, 0xE4
 
 VoiceNode_PriorityList_InsertOrLink:
@@ -4401,7 +4401,7 @@ VoiceNode_SecondList_SelfLink:
 	sla wa, 2
 	ld bc, wa
 	inc 4, bc
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xE8, 0xE4
 
 VoiceNode_SecondList_InsertOrLink:
@@ -4692,7 +4692,7 @@ CmdTable_InitEntry_ZeroLoop:
 	muls wa, 0x1E
 	lda xbc, (4397:16)
 	lda_dri XBC, 0x07, 0xE4, 0xE0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xE4, 0xEC
 	inc 1, e
 	cp e, 7:i3
@@ -4753,7 +4753,7 @@ ChanStruct_Init_ZeroLoop:
 	muls wa, 0xC
 	lda xbc, (4937:16)
 	lda_dri XBC, 0x07, 0xE4, 0xE0
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0x07, 0xE4, 0xEC
 	inc 1, e
 	cp e, 2:i3
@@ -5034,7 +5034,7 @@ Voice_Find_Candidate_Advance:
 
 ; Shared not-found exit: XHL = 0.
 NoteChain_FindNode_NotFound:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; FREE-VOICE / CANDIDATE-NODE SEARCH, secondary form (voice stealing).
@@ -5074,7 +5074,7 @@ NoteChain_FindNode_B_Advance:
 
 ; Not-found exit: XHL = 0.
 NoteChain_FindNode_B_NotFound:
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ret
 
 ; NOTE-ON: ALLOCATE UP TO FOUR VOICE NODES FOR ONE NOTE EVENT.
@@ -5105,7 +5105,7 @@ Voice_Allocate_Nodes:
 	ld xwa, (xsp + 16)
 	bitm 6, (xwa + 6)
 	jr nz, Voice_Allocate_Nodes_SlotLoop
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (4393:16), xwa
 
 ; Extract the part index (event word bits 8..12); >= 0x1A jumps to the all-slots-fail exit. Then run the layer limiter and compute the part descriptor pointer.
@@ -5460,7 +5460,7 @@ OutputBuf_Flush_A_Emit:
 	ld xix, (xwa)
 	ld c, (xiy + 36)
 	ld (xix), c
-	lds32 xbc, 1
+	ld xbc, 1:i3
 	add (xwa), xbc
 
 ; Follow (node+0x08); stop when the walk wraps to the head.
@@ -5509,7 +5509,7 @@ OutputBuf_Flush_B_Emit:
 	ld a, (xiz + 36)
 	ld (xbc), a
 	ld xwa, (xsp + 8)
-	lds32 xbc, 1
+	ld xbc, 1:i3
 	add (xwa), xbc
 	cp xiz, (xiz + 16)
 	jr z, OutputBuf_Flush_B_Done
@@ -5572,7 +5572,7 @@ NoteOn_RoutePacket_BroadcastLoop:
 	bitm 0, (xiz + 34)
 	jr nz, NoteOn_RoutePacket_BroadcastNext
 	ld xbc, (xsp + 16)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 16), xwa
 	ld a, (xiz + 36)
 	ld (xbc), a
@@ -6697,11 +6697,11 @@ EnvDepth_Cap:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, c
 	ld xbc, 0x7F
 	sub xbc, xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld a, e
 	call FP_MulAccum64
 	ld xiz, xhl
@@ -6746,7 +6746,7 @@ EGEnv_Compute_A:
 	extz xiz
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 2)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xiz
 	call FP_MulAccum64
@@ -6804,7 +6804,7 @@ EGEnv_Compute_A_Simple:
 	ldw_sri HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xde + 4)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -6848,7 +6848,7 @@ EGEnv_Compute_B:
 	extz xiz
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 2)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xiz
 	call FP_MulAccum64
@@ -6907,7 +6907,7 @@ EGEnv_Compute_B_Simple:
 	ldw_sri HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xde + 4)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -6959,7 +6959,7 @@ Voice_Freq_WriteLeft:
 	extz xiz
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 2)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xiz
 	call FP_MulAccum64
@@ -7012,7 +7012,7 @@ Voice_Freq_WriteLeft_HiRange:
 	extz xiz
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 2)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xiz
 	call FP_MulAccum64
@@ -7082,7 +7082,7 @@ Voice_Freq_WriteRight:
 	ldw_sri HL, 0x07, 0xE4, 0xE0
 	extz xhl
 	ld a, (xiz + 4)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -15616,7 +15616,7 @@ Voice_LoadPitchTable_Ch:
 	call DSP_AlgoType_Dispatch2
 	extz xhl
 	ld a, (xsp + 6)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -15652,7 +15652,7 @@ Voice_LoadPitchTable_Ch_ScanLoop:
 	extz wa
 	lda xbc, (0x010dce:24)
 	ldb_sri A, 0x07, 0xE4, 0xE0
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -15768,7 +15768,7 @@ Voice_LoadFilterTable_Ch:
 	call DSP_AlgoType_Dispatch2
 	extz xhl
 	ld a, (xsp + 6)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -15804,7 +15804,7 @@ Voice_LoadFilterTable_Ch_ScanFilter:
 	extz wa
 	lda xbc, (0x010ece:24)
 	ldb_sri A, 0x07, 0xE4, 0xE0
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -15915,7 +15915,7 @@ Voice_LoadToneTable_Ch:
 	call DSP_ChanFreq_WritePacket2
 	extz xhl
 	ld a, (xsp + 6)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, xhl
 	call FP_MulAccum64
@@ -16404,7 +16404,7 @@ Audio_Tick_ServiceVoices_A_ClearSlot:
 
 ; Advance the per-part voice-index cursor by 1 and loop while *cursor < 0x40 (0x40 = list end).
 Audio_Tick_ServiceVoices_A_NextSlot:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp (xwa), 0x40
@@ -16523,7 +16523,7 @@ Audio_Tick_ServiceVoices_B_ClearPorta2A:
 
 ; Advance the loop-A cursor; loop while *cursor < 0x40.
 Audio_Tick_ServiceVoices_B_NextSlotA:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp (xwa), 0x40
@@ -16600,7 +16600,7 @@ Audio_Tick_ServiceVoices_B_ClearPorta2B:
 
 ; Loop-B counterparts of the loop-A labels above; identical logic minus the hardware writes.
 Audio_Tick_ServiceVoices_B_NextSlotB:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp (xwa), 0x40
@@ -17739,7 +17739,7 @@ LABEL_0284C1:
 	sra	xhl, 1
 LABEL_0284C8:
 	ld	a, (xde+2)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, a
 	ld	xwa, xhl
 	call	FP_MulAccum64
@@ -17769,7 +17769,7 @@ AudioMod_Porta_Curve_JumpBase:
 	muls	wa, 287
 	lda	xbc, (267131:24)
 	ld_rrb	a, xbc, wa	; ld A,(XBC+WA)
-	lds32	xbc, 0
+	ld	xbc, 0:i3
 	ld	c, a
 	ld	xwa, xhl
 	call	FP_MulAccum64
@@ -19051,7 +19051,7 @@ Voice_AllNotes_SustainRetrigger_BranchF:
 
 ; loop step of Voice_AllNotes_SustainRetrigger.
 Voice_AllNotes_SustainRetrigger_LoopStep:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp (xwa), 0x40
@@ -19232,7 +19232,7 @@ LABEL_0290B6:
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg21_Reg22
 LABEL_0290D6:
-	lds32	xwa, 1
+	ld	xwa, 1:i3
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	cp8_imm_ri	xwa, 0x40	; cp (XWA),0x40
@@ -21104,7 +21104,7 @@ Voice_PortamentoSlots_WriteHW_NopCont5:
 
 ; loop step of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_LoopStep:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp), xwa
 	ld xwa, (xsp)
 	cp (xwa), 0x40
@@ -26506,15 +26506,15 @@ Voice_SetPanning:
 	ld wa, (0x041360:24)
 	ld (xbc + 6), wa
 	ldw (xbc + 1), 0x1
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 19), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 23), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 27), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 31), xwa
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	ld (xbc + 39), xwa
 	ld (xbc + 12), 0x0
 	ld (xbc + 4), 0x14
@@ -34440,8 +34440,8 @@ DSP_SetVoiceCoefficients:
 	push xiz
 	ld (xsp + 8), xde
 	ld (xsp + 12), c
-	lds32 xiz, 0
-	lds32 xbc, 0
+	ld xiz, 0:i3
+	ld xbc, 0:i3
 	ld (xsp + 4), xbc
 	ld c, a
 	extz bc
@@ -41302,7 +41302,7 @@ Audio_CmdHandler_00_1F_Loop:
 	ld (xbc), a
 	incw 1, (11025:16)
 	dec 1, de
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 6), xwa
 	cp de, 0:i3
 	jr nz, Audio_CmdHandler_00_1F_Loop
@@ -43800,7 +43800,7 @@ CmdHandler2D_PathD:
 	cp_erpb 0xFB, 0x3F
 	jr ugt, CmdHandler2D_EnqueueOrReturn
 	ld a, (17264:16)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
@@ -43823,7 +43823,7 @@ CmdHandler2D_EnqueueOrReturn:
 	cp_erpb 0xFB, 0x40
 	jr nz, CmdHandler2D_QueuedPath
 	ld a, (17264:16)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, a
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
@@ -50180,17 +50180,17 @@ DSP_WriteCoeffData_5B:
 ; DSP program blobs is stored big-endian even though the CPU is little-endian.
 DSP_UnpackParam3B:
 	ld xix, (xwa)
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xix + 1)
 	ld xde, xbc
 	sla xde, 8
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	ld c, (xix)
 	sla xbc, 0
 	ld xiy, xbc
 	add xiy, xde
 	ld c, (xix + 2)
-	lds32 xhl, 0
+	ld xhl, 0:i3
 	ld l, c
 	add xhl, xiy
 	lda xbc, (xix + 3)
@@ -50272,7 +50272,7 @@ DSP_WriteLUT_AlgoC1_TypeDE2:
 ; iteration counter, and compute the trip count as size/4.
 DSP_WriteLUT_MainLoop_Init:
 	ld xbc, (xsp + 10)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld a, (xbc)
 	extz wa
@@ -51219,7 +51219,7 @@ DSP_AlgoParam_Decode_Type1:
 
 ; Advance the caller's cursor by one byte, load the result into XHL, unwind the 0x1C-byte frame.
 DSP_AlgoParam_Decode_Return:
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 28)
 	ld xbc, (xsp + 4)
@@ -54340,7 +54340,7 @@ DSP_BiquadCoeff_Algo1:
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
 	call VoiceFloat_SubSP
-	lds32 xwa, 0
+	ld xwa, 0:i3
 	stl_dri XWA, 0xFD, 0xBA, 0x00
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda_dri XWA, 0xFD, 0xB6, 0x00
@@ -56894,7 +56894,7 @@ DSP_PerParameterTranslator:
 ; 0x014745 and base 0x03CB8E, anything else -> DSP_Op_Unknown_Error.
 DSP_Translator_ReadOpcode:
 	ld xbc, (xsp + 42)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 42), xwa
 	ld a, (xbc)
 	ld e, a
@@ -56955,7 +56955,7 @@ DSP_Translator_PostDispatch:
 ; ★ 0x7A is the ONLY terminator -- see [UNCERTAIN].
 DSP_Translator_CheckEnd:
 	ld xbc, (xsp + 42)
-	lds32 xwa, 1
+	ld xwa, 1:i3
 	add (xsp + 42), xwa
 	ld a, (xbc)
 	extz wa
@@ -57877,7 +57877,7 @@ Keybed_Vel_Clamp:	; 03D1C4h - clamp pitch to 0-255 range
 ; Already named.
 Keybed_Vel_ClampHi:	; 03D1D3h
 	ld xde, xbc
-	lds32 xbc, 0
+	ld xbc, 0:i3
 	cp xde, 0x0
 	jr lt, Keybed_Vel_ClampLo
 	ld xbc, xde
