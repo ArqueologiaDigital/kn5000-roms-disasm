@@ -352,3 +352,15 @@ current tip and will drift once the in-progress build's edits land — re-anchor
 `DRIVER-INSIGHT-wsa1-2026-09-02.md`.
 
 LLVM: tlcs900_backend@86332721969d (86332721969de2d2b4c2ac16bc217b5cdee5cca5)
+
+
+## ADJUDICATED 2026-09-05 — the prom_d `0xE80000` "drift" is a FALSE ALARM
+
+The out-of-scope drift note (prom_d's linker "still carries 0xE80000" vs the driver's
+0xF00000) does not hold. Verified: prom_d's linker uses **ORIGIN 0 by deliberate decision**
+(its own header: "ORIGIN STAYS 0, AND THAT IS NOW A DECISION RATHER THAN AN ADMISSION"), and
+only *mentions* 0xE80000 to explain it is a **different, smaller flash on CS2**, not prom_d's
+base. The driver's `PROMDCS = 0xF00000` (wsa1.cpp) and the linker's ORIGIN 0 describe different
+things -- a chip-select address vs a position-independent data image -- and agree with
+FINDINGS-memory-map.md F4. ⚠ Do NOT relink prom_d at 0xF00000: it would relabel ~32,000 source
+lines for zero gain and put the byte gate at risk. No action.
