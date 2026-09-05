@@ -259,7 +259,7 @@ ClkTick_TempoThresholdCheck:
 	ld a, (1066:16)
 	cp a, 0x70
 	jr ugt, ClkTick_HighTempoLoad
-	cps a, 4
+	cp a, 4:i3
 	jr ugt, ClkTick_MidRangeTempoMul
 	ld wa, (0xb7d8:16)
 	jr ClkTick_WriteTimingReg
@@ -695,7 +695,7 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	jrl nz, SysEx_InProgressByte
 	bit 6, (1063:16)
 	jr nz, ChanDisp_SysExInProgress
-	cps a, 0
+	cp a, 0:i3
 	jr z, ChanDisp_NoStatusReturn
 	and a, 0x70
 	srl a, 2
@@ -750,7 +750,7 @@ ChanDisp_ThreeByteRoute:
 	cp d, 0x90
 	popw de
 	jr nz, ChanDisp_EnqueueThreeBytes
-	cps e, 0
+	cp e, 0:i3
 	jr nz, ChanDisp_NoteOnZeroReturn
 
 ChanDisp_EnqueueThreeBytes:
@@ -861,7 +861,7 @@ SC0Init_Entry:
 
 SC0Init_StandardBaudTable:
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr z, SC0Init_AlternateBaudTable
 	ldw (0xb7d4:16), 0x7a12
 	ldw (0xb7d6:16), 0x28b0

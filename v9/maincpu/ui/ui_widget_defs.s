@@ -2389,7 +2389,7 @@ PsMenuBox_Confirm_Render:
 PsMenuBox_HitTest:
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, PsMenuBox_ReturnZero
 	ld xwa, xiz
 	call GetViewInstance
@@ -2706,7 +2706,7 @@ AcTitleMenu_OK:
 	ld xbc, 0x1e00053
 	ld XDE, (xsp + 0x0130)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, AcTitleMenu_OK_Default
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 46)
@@ -3091,7 +3091,7 @@ PsEditSwBox_HitTest:
 	ld (xsp + 4), xhl
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, PsEditSwBox_ReturnZero
 	ld xwa, 0x2600024
 	ld xbc, 0x1e00029
@@ -3111,7 +3111,7 @@ PsEditSwBox_Repaint:
 	calr VwBoxProc
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, PsEditSwBox_Repaint_UpdateBounds
 	ld xwa, xiz
 	ld xbc, 0x1c0000c
@@ -3175,7 +3175,7 @@ PsEditSwBox_InlineData:
 	ld	wa, (xsp+8)
 	calr	36090
 	ldw	wa, 8
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 2
 	lds	wa, 0
 	ld	(xiz), wa
@@ -3194,7 +3194,7 @@ PsEditSwBox_InlineData:
 	ld	wa, (xsp+8)
 	calr	36054
 	lda	xwa, (xiz+4)
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 6
 	ldw	(xwa), 319
 	jr	4
@@ -3416,7 +3416,7 @@ ButtonState_Paint_DrawAndReturn:
 ButtonState_DispatchDSP:
 	ldb_sri0 A, (xsp + 0x0128)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, ButtonState_Paint_DrawAligned
 	cp wa, 0x10
 	jrl gt, ButtonState_Paint_DrawAligned
@@ -3624,13 +3624,13 @@ AcIndexEdit_Paint_AltOffset:
 AcIndexEdit_OK:
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, AcIndexEdit_Fallthrough
 	ld xwa, xiz
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 6)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, AcIndexEdit_Fallthrough
 	ld xwa, xiz
 	ld xbc, 0x1e00051
@@ -3659,7 +3659,7 @@ AcIndexEdit_DispatchDSP:
 	add xhl, xiz
 	ld a, (xhl)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, AcIndexEdit_ReturnZeroJmp
 	cp wa, 0x10
 	jrl gt, AcIndexEdit_ReturnZeroJmp
@@ -3704,13 +3704,13 @@ AcIndexEdit_Fallthrough:
 AcIndexEdit_Reset:
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcIndexEdit_FallthroughAlt
 	ld xwa, xiz
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 6)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcIndexEdit_FallthroughAlt
 	ld xwa, xiz
 	ld xbc, 0x1e00051
@@ -3803,13 +3803,13 @@ AcFuncEdit_Paint_SendConfirm:
 AcFuncEdit_OK:
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcFuncEdit_Fallthrough
 	ld xwa, xiz
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcFuncEdit_Fallthrough
 	ld xwa, xiz
 	ld xbc, 0x1e00014
@@ -4117,7 +4117,7 @@ AcWindowPage_OK:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcWindowPage_Default
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e00056
@@ -4304,7 +4304,7 @@ PsToggleBox_HitTest:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 28)
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, PsToggleBox_ReturnZero
 	ld xwa, 0x2600024
 	ld xbc, 0x1e00029
@@ -4372,7 +4372,7 @@ PsToggleBox_Repaint:
 	call ViewableProc
 	ld xwa, (xsp + 28)
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, PsToggleBox_Repaint_UpdateBounds
 	ld xwa, (xsp + 28)
 	ld xbc, 0x1c0000c
@@ -4444,7 +4444,7 @@ AcFuncToggle_OK:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcFuncToggle_Default
 	ld xwa, xiz
 	ld xbc, 0x1e0006c
@@ -4500,13 +4500,13 @@ AcIndexToggle_OK:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcIndexToggle_OK_Default
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcIndexToggle_OK_Default
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 40)
@@ -5475,7 +5475,7 @@ IvInterrupt_Init:
 	ld xbc, 0x1e0009d
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 1
+	cp hl, 1:i3
 	jr nz, IvInterrupt_Init_SetTimer
 	ld xwa, (xsp + 8)
 	call GetViewInstance
@@ -5525,7 +5525,7 @@ IvInterrupt_CheckActive:
 	ld xbc, 0x1e0009d
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	scc16 z, hl
 	extz xhl
 
@@ -7265,11 +7265,11 @@ PsCursorBox_Confirm_CheckCursor:
 	ld xwa, (xsp + 14)
 	ld c, (xwa + 34)
 	lda_dri XWA, 0xfd, 0x22, 0x02
-	cps c, 2
+	cp c, 2:i3
 	jr z, PsCursorBox_Confirm_AlignRight
-	cps c, 1
+	cp c, 1:i3
 	jr z, PsCursorBox_Confirm_AlignLeft
-	cps c, 0
+	cp c, 0:i3
 	jr nz, UI_ScrollBox_ComputeLayout
 	ld wa, (xsp + 4)
 	exts xwa
@@ -7480,7 +7480,7 @@ DbDebugMenu_OK:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 20)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DbDebugMenu_OK_HitTestFail
 	ld xwa, xiz
 	call GetViewInstance
@@ -8141,7 +8141,7 @@ AcTrkSw_Reset_DrawTrack:
 	div xde, xbc
 	ld (xsp + 8), de
 	ldw (xsp + 18), 0x0
-	cps bc, 0
+	cp bc, 0:i3
 	jrl ule, AcTrkSw_Select_CheckTrackNum
 
 AcTrkSw_Select:
@@ -9105,7 +9105,7 @@ TitleWidget_Confirm:
 	ld xwa, xde
 	add xwa, (xsp + 10)
 	ld a, (xwa)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, TitleWidget_Select
 	ld XWA, (xsp + 0x0112)
 	push xwa
@@ -9185,7 +9185,7 @@ TitleWidget_Confirm_DrawRowLoop:
 	ld xwa, xde
 	add xwa, (xsp + 10)
 	ld a, (xwa)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, TitleWidget_Confirm_DrawRow
 	lds32 xwa, 0
 	ld (xsp + 14), xwa
@@ -10409,7 +10409,7 @@ EnumList_PartChange_A:
 	ld xbc, (xsp + 42)
 	ld xde, 0xffffffff
 	call ResetApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, TitleProc_ReturnZero
 	ld xwa, 0x1c00028
 	push xwa
@@ -10479,7 +10479,7 @@ EnumList_ValueChange_Done:
 	ld xbc, (xsp + 42)
 	ld xde, 0xffffffff
 	call ResetApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, EnumList_Confirm_Init
 	ld xwa, 0x1c00028
 	push xwa
@@ -10497,7 +10497,7 @@ EnumList_Confirm_Init:
 EnumList_Confirm_Forward:
 	ld wa, (0x02bc30:24)
 	and wa, 0x1
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 nz, hl
 	exts xhl
 	jrl TitleFunc_Epilogue34
@@ -10543,7 +10543,7 @@ EnumList_Paint_Loop:
 	ld xbc, (xsp + 42)
 	ld xde, 0xffffffff
 	call ResetApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, EnumList_ReturnZero
 	ld xwa, 0x1c00028
 	push xwa
@@ -10577,7 +10577,7 @@ EnumList_Return:
 	ld xbc, (xsp + 42)
 	ld xde, 0xffffffff
 	call ResetApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, TitleProc_ToggleFlag
 	ld xwa, 0x1c00028
 	push xwa
@@ -10661,7 +10661,7 @@ EnumList_OK_ScrollUp_Wrap:
 	push xde
 	ld xde, 0xffffffff
 	call KillApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, TitleProc_ReturnZero
 
 EnumList_OK_ScrollUp_Done:
@@ -10679,7 +10679,7 @@ EnumList_OK_ScrollUp_Done:
 	push xde
 	ld xde, 0xffffffff
 	call KillApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, EnumList_OK_ScrollUp_Done
 	jrl TitleProc_ReturnZero
 
@@ -10807,7 +10807,7 @@ SetInterruptTime:
 	ld wa, (0x02bc30:24)
 	bit 1, wa
 	jr z, EnumList_Reset
-	cps iz, 2
+	cp iz, 2:i3
 	jr nz, EnumList_Reset
 	lds wa, 1
 	calr TitleProc_SetResourceDirtyFlag
@@ -10826,12 +10826,12 @@ EnumList_Reset:
 CheckNotDrawFlag:
 	ld wa, (0x02bc30:24)
 	and wa, 0x4
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 z, hl
 	ret
 
 SetVariFlag:
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, EnumList_Reset_CheckPart
 	ldw wa, 0x8
 	jr TitleProc_SetResourceDirtyFlag
@@ -10841,7 +10841,7 @@ EnumList_Reset_CheckPart:
 	jr TitleProc_ClearResourceDirtyFlag
 
 SetNotDrawFlag:
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, EnumList_Reset_Send
 	lds wa, 4
 	jr TitleProc_SetResourceDirtyFlag
@@ -11042,7 +11042,7 @@ Viewable_InitClose_ToChild:
 	jr Viewable_Show_DispatchTail
 	ld xwa, xiz
 	calr GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, Viewable_Show_DispatchChild
 	ld xwa, xiz
 	ld xbc, 0x1c0000d
@@ -11068,7 +11068,7 @@ Viewable_Show_DispatchChild:
 	jr Viewable_Show_DispatchTail
 	ld xwa, xiz
 	calr GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, Viewable_ReturnZero
 	ld xwa, xiz
 	ld xbc, 0x1c0000d
@@ -11400,7 +11400,7 @@ SetChange:
 	ld iz, bc
 	calr GetViewInstance
 	lda xwa, (xhl + 12)
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, DrawWidget_Hline_0_Setup
 	ormi16 (xwa), 0x4
 	jr DrawWidget_Hline_0_Draw
@@ -11416,7 +11416,7 @@ GetChange:
 	calr GetViewInstance
 	ld wa, (xhl + 12)
 	and wa, 0x4
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 nz, hl
 	ret
 
@@ -11425,7 +11425,7 @@ SetConst:
 	ld iz, bc
 	calr GetViewInstance
 	lda xwa, (xhl + 12)
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, DrawWidget_Hline_1_Setup
 	ormi16 (xwa), 0x8
 	jr DrawWidget_Hline_1_Draw
@@ -11441,7 +11441,7 @@ GetConst:
 	calr GetViewInstance
 	ld wa, (xhl + 12)
 	and wa, 0x8
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 nz, hl
 	ret
 
@@ -11450,7 +11450,7 @@ SetVisible:
 	ld iz, bc
 	calr GetViewInstance
 	lda xwa, (xhl + 12)
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, DrawWidget_Hline_2_Setup
 	andmi16 (xwa), 0xfffe
 	jr DrawWidget_Hline_2_Draw
@@ -11466,7 +11466,7 @@ GetVisible:
 	calr GetViewInstance
 	ld wa, (xhl + 12)
 	and wa, 0x1
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 z, hl
 	ret
 
@@ -11475,7 +11475,7 @@ SetMovable:
 	ld iz, bc
 	calr GetViewInstance
 	lda xwa, (xhl + 12)
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, DrawWidget_Hline_3_Setup
 	andmi16 (xwa), 0xfffd
 	jr DrawWidget_Hline_3_Draw
@@ -11491,7 +11491,7 @@ GetMovable:
 	calr GetViewInstance
 	ld wa, (xhl + 12)
 	and wa, 0x2
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 z, hl
 	ret
 
@@ -13277,7 +13277,7 @@ EdgeDraw_TopLeft_Return:
 	extz xwa
 	ld c, (xbc)
 	add xwa, xiz
-	cps c, 0
+	cp c, 0:i3
 	jr nz, EdgeDraw_TopLeft_Inner
 	ld (xwa), 0x0
 	lds32 xhl, 0
@@ -13696,7 +13696,7 @@ EdgeVariant_B_Return:
 	extz xde
 	add_sril_rm XDE, 0xfd, 0x82, 0x00
 	ld a, (xhl)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, EdgeVariant_B_CalcHeight
 	ld (xde), 0x0
 	lds32 xhl, 0
@@ -14014,7 +14014,7 @@ ShadowBox_B_Execute:
 	push xhl
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, ShadowBox_C_Setup
 	ld xwa, (xsp + 8)
 	sll xwa, 2
@@ -14907,7 +14907,7 @@ SliderH_DrawThumb:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SliderH_ReturnZero
 	lds32 xwa, 0
 	ld (xsp + 4), xwa
@@ -15032,7 +15032,7 @@ SliderV_DrawThumb:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SliderV_ReturnZero
 	lds32 xwa, 0
 	ld (xsp + 4), xwa
@@ -15156,7 +15156,7 @@ DrawHelper_A_DrawThumb:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DrawHelper_A_ReturnZero
 	lds32 xwa, 0
 	ld (xsp + 4), xwa
@@ -15343,7 +15343,7 @@ DrawHelper_C_ReturnZero:
 	push xhl
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DrawHelper_C_ReturnAlt
 	ld xwa, (xsp + 12)
 	sll xwa, 2
@@ -15539,7 +15539,7 @@ DrawHelper_E_ReturnZero:
 	push xhl
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DrawHelper_E_ReturnAlt
 	ld xwa, (xsp + 12)
 	sll xwa, 2
@@ -15844,7 +15844,7 @@ ViewID_EnumOpen_ScanLoop:
 	push xhl
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, ViewID_EnumOpen_ScanNext
 	ld xwa, (xsp + 8)
 	sll xwa, 2
@@ -16176,7 +16176,7 @@ ScreenID_EnumOpen_Compare:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, ScreenID_EnumOpen_ScanNext
 	ld xwa, (xsp + 8)
 	sll xwa, 2
@@ -16207,7 +16207,7 @@ ScreenID_EnumOpen_NotFound:
 	pushw 0xab2a
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, ScreenID_EnumOpen_CheckEmpty
 	ld xwa, (xsp + 4)
 	ld xbc, 0xffffffff
@@ -16528,7 +16528,7 @@ WindowID_EnumOpen_Compare:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, WindowID_EnumOpen_ScanNext
 	ld xwa, (xsp + 8)
 	sll xwa, 2
@@ -16559,7 +16559,7 @@ WindowID_EnumOpen_NotFound:
 	pushw 0xab6c
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, WindowID_EnumOpen_CheckEmpty
 	ld xwa, (xsp + 4)
 	ld xbc, 0xffffffff
@@ -16804,7 +16804,7 @@ ModeID_EnumOpen_Compare:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, ModeID_EnumOpen_SearchNext
 	ld xwa, (xsp + 8)
 	sll xwa, 2
@@ -17049,7 +17049,7 @@ TitleID_EnumOpen_Compare:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, TitleID_EnumOpen_SearchNext
 	ld xwa, (xsp + 8)
 	sll xwa, 2
@@ -17383,7 +17383,7 @@ CommonIDProc_EnumSearch_Compare:
 	push xwa
 	call Strcmp
 	inc 8, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, CommonIDProc_EnumSearch_Next
 	ld bc, iz
 	extz xbc
@@ -17538,7 +17538,7 @@ DispatchEvent:	; SysData_FA9585
 	lda xbc, (xsp + 4)
 	lda xde, (xsp)
 	calr GetEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, EventHandler_DispatchLoop
 
 ; EventHandler dual-phase dispatch
@@ -17607,7 +17607,7 @@ EventHandler_ContinueProc:
 	lda xbc, (xsp + 4)
 	lda xde, (xsp)
 	calr GetEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, EventHandler_ObjectDispatch
 
 EventHandler_DispatchLoop:
@@ -18098,7 +18098,7 @@ MainDispatchEvent:
 	lda xbc, (xsp + 4)
 	lda xde, (xsp)
 	calr MainGetEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MainSendEvent_Dispatch
 
 ; MainSendEvent object dispatch
@@ -18133,7 +18133,7 @@ MainSendEvent_Return:
 	lda xbc, (xsp + 4)
 	lda xde, (xsp)
 	calr MainGetEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, MainSendEvent_VirtualDispatch
 
 MainSendEvent_Dispatch:
@@ -18203,7 +18203,7 @@ MainPostEvent_VirtDispatch_Prologue:
 	lds wa, 7
 	call TaskSched_SignalEvent
 	call Boot_CheckConfigFlag7
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, MainGetEvent_ScanMatch
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -18434,7 +18434,7 @@ ObjectSearch_CheckLoop:
 	lds wa, 4
 	call TaskSched_SignalEvent
 	call Boot_CheckConfigFlag7
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, ApDeliveryEvent_Prologue
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -18500,7 +18500,7 @@ ApDeliveryEvent_ScanLoop:
 	lds wa, 4
 	call TaskSched_SignalEvent
 	call Boot_CheckConfigFlag7
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, ApTimer_Deliver
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -18885,7 +18885,7 @@ ResetApTimer:
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	calr KillApTimer
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, KillApTimer_ReturnZero
 	ld xwa, (xsp + 24)
 	push xwa
@@ -19189,7 +19189,7 @@ DrawFunc:
 	push xiz
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawFunc_CheckStack
 	push xiz
 	ld xhl, xiz
@@ -19249,7 +19249,7 @@ DrawFunc_StackEntry:
 	push xiz
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawFunc_StackEntry_Prologue
 	push xiz
 	ld xhl, xiz
@@ -19339,7 +19339,7 @@ InitializeGraphics:
 ; LcdOn - Enable LCD display output (sets flag at 0x030464)
 LcdOn:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, InitGraphics_SetupVRAM_Loop
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -19358,7 +19358,7 @@ InitGraphics_SetupVRAM_Loop:
 ; LcdOff - Disable LCD display output (clears flag at 0x030464)
 LcdOff:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, LcdOn_Return
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -19417,11 +19417,11 @@ LcdOff_Epilogue:
 ; =============================================================================
 UpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, UpdateScreen_Prologue
 	calr Gfx_BlitDirtyRegions
 	ld wa, (0x030450:24)
-	cps wa, 0
+	cp wa, 0:i3
 	ret nz
 	ld (0x03044e:24), wa
 	ret
@@ -19450,11 +19450,11 @@ Gfx_BlitDirtyRegions:
 	cpw (0x030460:24), 0
 	jr z, Gfx_BlitDirty_ScanMatch
 	ld wa, (0x03ef9e:24)
-	cps wa, 4
+	cp wa, 4:i3
 	jr nz, Gfx_BlitDirty_Prologue
 	cpw (0x03efa0:24), 4
 	jr z, Display_CheckScreenDimensions
-	cps wa, 4
+	cp wa, 4:i3
 	jr nz, Display_CheckScreenDimensions
 
 Gfx_BlitDirty_Prologue:
@@ -19613,7 +19613,7 @@ ReadPixel:
 	ld xiz, xwa
 	ld xwa, xiz
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SetChangeRect_Done
 	ld wa, (xiz + 2)
 	exts xwa
@@ -19657,7 +19657,7 @@ ModifyPixel:
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ReadPixel_Calculate
 	cp iz, 0xf7
 	jr z, ReadPixel_Calculate
@@ -19723,11 +19723,11 @@ ModifyPixelEx:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawLine_Epilogue
 	ld wa, iz
 	calr IsColorValid
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawLine_Epilogue
 	ld xwa, (xsp + 4)
 	ld bc, iz

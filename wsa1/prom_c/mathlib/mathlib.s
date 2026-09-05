@@ -116,7 +116,7 @@ sub_FC8BB2:
 	ld	xbc, (xiz+8)                            ; FC8BBC  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8BBF  push XBC
 	call	0xFCA1E5                              ; FC8BC0  call 0xfca1e5
-	cps	wa, 0                                  ; FC8BC4  cp WA,0
+	cp	wa, 0:i3                                  ; FC8BC4  cp WA,0
 	jr nz, sub_FC8BB2__FC8BDC                  ; FC8BC6  jr NZ,0xfc8bdc
 	ld	xiy, (xsp)                              ; FC8BC8  ld XIY,(XSP)
 	ld	xix, (0xFCB286:24)                     ; FC8BCA  ld XIX,(0xfcb286)
@@ -134,7 +134,7 @@ sub_FC8BB2__FC8BDC:
 	ld	xbc, (xiz+8)                            ; FC8BEC  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8BEF  push XBC
 	call	0xFCA121                              ; FC8BF0  call 0xfca121
-	cps	wa, 2                                  ; FC8BF4  cp WA,2
+	cp	wa, 2:i3                                  ; FC8BF4  cp WA,2
 	jr nz, sub_FC8BB2__FC8C07                  ; FC8BF6  jr NZ,0xfc8c07
 	ld	xbc, (xiz+12)                           ; FC8BF8  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8BFB  push XBC
@@ -208,12 +208,12 @@ sub_FC8C45:
 	ld	xbc, (xiz+8)                            ; FC8C5E  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8C61  push XBC
 	call	0xFCA121                              ; FC8C62  call 0xfca121
-	cps	wa, 2                                  ; FC8C66  cp WA,2
+	cp	wa, 2:i3                                  ; FC8C66  cp WA,2
 	jr nz, sub_FC8C45__FC8C6C                  ; FC8C68  jr NZ,0xfc8c6c
 	ldb	h, 1                                   ; FC8C6A  ld H,0x01
 sub_FC8C45__FC8C6C:
 	ld	l, h                                    ; FC8C6C  ld L,H
-	cps	h, 0                                   ; FC8C6E  cp H,0
+	cp	h, 0:i3                                   ; FC8C6E  cp H,0
 	jr z, sub_FC8C45__FC8C81                   ; FC8C70  jr Z,0xfc8c81
 	ld	xbc, (xiz+12)                           ; FC8C72  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8C75  push XBC
@@ -231,7 +231,7 @@ sub_FC8C45__FC8C81:
 	ld	xbc, (xiz+8)                            ; FC8C91  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8C94  push XBC
 	call	0xFCA121                              ; FC8C95  call 0xfca121
-	cps	wa, 1                                  ; FC8C99  cp WA,1
+	cp	wa, 1:i3                                  ; FC8C99  cp WA,1
 	jr nz, sub_FC8C45__FC8CB8                  ; FC8C9B  jr NZ,0xfc8cb8
 	ldw	(0xF362:24), 34                       ; FC8C9D  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC8CA4  ld XIY,(XSP)
@@ -250,7 +250,7 @@ sub_FC8C45__FC8CB8:
 	ld	xbc, (xiz+8)                            ; FC8CC8  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8CCB  push XBC
 	call	0xFCA121                              ; FC8CCC  call 0xfca121
-	cps	wa, 1                                  ; FC8CD0  cp WA,1
+	cp	wa, 1:i3                                  ; FC8CD0  cp WA,1
 	jr nz, sub_FC8C45__FC8CDB                  ; FC8CD2  jr NZ,0xfc8cdb
 	ldw	(0xF362:24), 34                       ; FC8CD4  ld (0x00f362),0x0022
 sub_FC8C45__FC8CDB:
@@ -307,7 +307,7 @@ sub_FC8C45__FC8CDB:
 	ld	xbc, (xiz-48)                           ; FC8D65  ld XBC,(XIZ+0xd0)
 	push	xbc                                   ; FC8D68  push XBC
 	call	0xFCA1E5                              ; FC8D69  call 0xfca1e5
-	cps	wa, 0                                  ; FC8D6D  cp WA,0
+	cp	wa, 0:i3                                  ; FC8D6D  cp WA,0
 	jr z, sub_FC8C45__FC8D75                   ; FC8D6F  jr Z,0xfc8d75
 	ldb	h, 1                                   ; FC8D71  ld H,0x01
 	jr sub_FC8C45__FC8D77                      ; FC8D73  jr T,0xfc8d77
@@ -345,7 +345,7 @@ sub_FC8C45__FC8D77:
 	ld	xbc, (xiz+8)                            ; FC8DC1  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8DC4  push XBC
 	call	0xFCA121                              ; FC8DC5  call 0xfca121
-	cps	wa, 2                                  ; FC8DC9  cp WA,2
+	cp	wa, 2:i3                                  ; FC8DC9  cp WA,2
 	jr nz, sub_FC8C45__FC8DDF                  ; FC8DCB  jr NZ,0xfc8ddf
 	xor	l, 1                                   ; FC8DCD  xor L,0x01
 	ld	xbc, (xiz+12)                           ; FC8DD0  ld XBC,(XIZ+0x0c)
@@ -364,7 +364,7 @@ sub_FC8C45__FC8DDF:
 	ld	xbc, (xiz+8)                            ; FC8DEF  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8DF2  push XBC
 	call	0xFCA121                              ; FC8DF3  call 0xfca121
-	cps	wa, 1                                  ; FC8DF7  cp WA,1
+	cp	wa, 1:i3                                  ; FC8DF7  cp WA,1
 	jrl nz, sub_FC8C45__FC8EB0                 ; FC8DF9  jrl NZ,0xfc8eb0
 	ld	xbc, (xiz+12)                           ; FC8DFC  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8DFF  push XBC
@@ -412,7 +412,7 @@ sub_FC8C45__FC8E29:
 	call	0xFCA41F                              ; FC8E5F  call 0xfca41f
 	inc	8, xix                                 ; FC8E63  inc 0,XIX
 	dec	1, h                                   ; FC8E65  dec 1,H
-	cps	h, 0                                   ; FC8E67  cp H,0
+	cp	h, 0:i3                                   ; FC8E67  cp H,0
 	jr nz, sub_FC8C45__FC8E29                  ; FC8E69  jr NZ,0xfc8e29
 	ld	xbc, (xiz+12)                           ; FC8E6B  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8E6E  push XBC
@@ -445,7 +445,7 @@ sub_FC8C45__FC8E29:
 	lda	xiy, (xiz+8)                           ; FC8EA9  lda XIY,XIZ+0x08
 	call	0xFCA41F                              ; FC8EAC  call 0xfca41f
 sub_FC8C45__FC8EB0:
-	cps	l, 0                                   ; FC8EB0  cp L,0
+	cp	l, 0:i3                                   ; FC8EB0  cp L,0
 	jr z, sub_FC8C45__FC8ED2                   ; FC8EB2  jr Z,0xfc8ed2
 	ld	xbc, (xiz+12)                           ; FC8EB4  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8EB7  push XBC
@@ -532,7 +532,7 @@ sub_FC8EE5__FC8F0F:
 	or	xwa, xix                                ; FC8F40  or XWA,XIX
 	ld	(xiz-16), xwa                           ; FC8F42  ld (XIZ+0xf0),XWA
 	dec	1, e                                   ; FC8F45  dec 1,E
-	cps	e, 3                                   ; FC8F47  cp E,3
+	cp	e, 3:i3                                   ; FC8F47  cp E,3
 	jr gt, sub_FC8EE5__FC8F0F                  ; FC8F49  jr GT,0xfc8f0f
 	ld	xix, (xiz-20)                           ; FC8F4B  ld XIX,(XIZ+0xec)
 	ld	(xiz-24), xwa                           ; FC8F4E  ld (XIZ+0xe8),XWA
@@ -626,7 +626,7 @@ sub_FC8EE5__FC8FF5:
 	inc	1, xbc                                 ; FC903B  inc 1,XBC
 	ld	(xiz-4), xbc                            ; FC903D  ld (XIZ+0xfc),XBC
 	inc	1, e                                   ; FC9040  inc 1,E
-	cps	e, 4                                   ; FC9042  cp E,4
+	cp	e, 4:i3                                   ; FC9042  cp E,4
 	jr lt, sub_FC8EE5__FC8FF5                  ; FC9044  jr LT,0xfc8ff5
 	ld	xwa, (xiz-20)                           ; FC9046  ld XWA,(XIZ+0xec)
 	or	xwa, xwa                                ; FC9049  or XWA,XWA
@@ -675,7 +675,7 @@ sub_FC8EE5__FC90A8:
 	sll	xiy, 0                                 ; FC90BA  sll 0x00,XIY
 	or	xbc, xiy                                ; FC90BD  or XBC,XIY
 	ld	(xiz-20), xbc                           ; FC90BF  ld (XIZ+0xec),XBC
-	cps	d, 0                                   ; FC90C2  cp D,0
+	cp	d, 0:i3                                   ; FC90C2  cp D,0
 	jr z, sub_FC8EE5__FC90CF                   ; FC90C4  jr Z,0xfc90cf
 	or	xbc, 0x80000000                         ; FC90C6  or XBC,0x80000000
 	ld	(xiz-20), xbc                           ; FC90CC  ld (XIZ+0xec),XBC
@@ -708,7 +708,7 @@ sub_FC8EE5__FC90D6:
 	ld	xix, (xiz-28)                           ; FC9116  ld XIX,(XIZ+0xe4)
 	inc	1, xix                                 ; FC9119  inc 1,XIX
 	inc	1, e                                   ; FC911B  inc 1,E
-	cps	e, 4                                   ; FC911D  cp E,4
+	cp	e, 4:i3                                   ; FC911D  cp E,4
 	jr lt, sub_FC8EE5__FC90D6                  ; FC911F  jr LT,0xfc90d6
 sub_FC8EE5__FC9121:
 	lda	xix, (xiz-32)                          ; FC9121  lda XIX,XIZ+0xe0
@@ -764,12 +764,12 @@ sub_FC9140:
 	ld	xbc, (xiz+8)                            ; FC915B  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC915E  push XBC
 	call	0xFCA121                              ; FC915F  call 0xfca121
-	cps	wa, 2                                  ; FC9163  cp WA,2
+	cp	wa, 2:i3                                  ; FC9163  cp WA,2
 	jr nz, sub_FC9140__FC916A                  ; FC9165  jr NZ,0xfc916a
 	ldw	hl, 1                                  ; FC9167  ld HL,0x0001
 sub_FC9140__FC916A:
 	ld	(xiz-2), hl                             ; FC916A  ld (XIZ+0xfe),HL
-	cps	hl, 0                                  ; FC916D  cp HL,0
+	cp	hl, 0:i3                                  ; FC916D  cp HL,0
 	jr z, sub_FC9140__FC9180                   ; FC916F  jr Z,0xfc9180
 	ld	xbc, (xiz+12)                           ; FC9171  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9174  push XBC
@@ -787,7 +787,7 @@ sub_FC9140__FC9180:
 	ld	xbc, (xiz+8)                            ; FC9190  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9193  push XBC
 	call	0xFCA121                              ; FC9194  call 0xfca121
-	cps	wa, 1                                  ; FC9198  cp WA,1
+	cp	wa, 1:i3                                  ; FC9198  cp WA,1
 	jr nz, sub_FC9140__FC91B7                  ; FC919A  jr NZ,0xfc91b7
 	ldw	(0xF362:24), 34                       ; FC919C  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC91A3  ld XIY,(XSP)
@@ -806,7 +806,7 @@ sub_FC9140__FC91B7:
 	ld	xbc, (xiz+8)                            ; FC91C7  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC91CA  push XBC
 	call	0xFCA121                              ; FC91CB  call 0xfca121
-	cps	wa, 1                                  ; FC91CF  cp WA,1
+	cp	wa, 1:i3                                  ; FC91CF  cp WA,1
 	jr nz, sub_FC9140__FC91DA                  ; FC91D1  jr NZ,0xfc91da
 	ldw	(0xF362:24), 34                       ; FC91D3  ld (0x00f362),0x0022
 sub_FC9140__FC91DA:
@@ -839,7 +839,7 @@ sub_FC9140__FC91DA:
 	ld	xbc, (xiz+8)                            ; FC9220  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9223  push XBC
 	call	0xFCA121                              ; FC9224  call 0xfca121
-	cps	wa, 1                                  ; FC9228  cp WA,1
+	cp	wa, 1:i3                                  ; FC9228  cp WA,1
 	jrl z, sub_FC9140__FC92FB                  ; FC922A  jrl Z,0xfc92fb
 	ld	xbc, (xiz-6)                            ; FC922D  ld XBC,(XIZ+0xfa)
 	push	xbc                                   ; FC9230  push XBC
@@ -979,7 +979,7 @@ sub_FC9140__FC92FB:
 	ld	xbc, (xiz-58)                           ; FC9385  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; FC9388  push XBC
 	call	0xFCA1E5                              ; FC9389  call 0xfca1e5
-	cps	wa, 0                                  ; FC938D  cp WA,0
+	cp	wa, 0:i3                                  ; FC938D  cp WA,0
 	jr z, sub_FC9140__FC9396                   ; FC938F  jr Z,0xfc9396
 	ldw	de, 1                                  ; FC9391  ld DE,0x0001
 	jr sub_FC9140__FC9399                      ; FC9394  jr T,0xfc9399
@@ -995,7 +995,7 @@ sub_FC9140__FC9399:
 	ld	xbc, (xiz+8)                            ; FC93A9  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC93AC  push XBC
 	call	0xFCA121                              ; FC93AD  call 0xfca121
-	cps	wa, 1                                  ; FC93B1  cp WA,1
+	cp	wa, 1:i3                                  ; FC93B1  cp WA,1
 	jr nz, sub_FC9140__FC93E4                  ; FC93B3  jr NZ,0xfc93e4
 	ld	xbc, (0xFCB32A:24)                     ; FC93B5  ld XBC,(0xfcb32a)
 	push	xbc                                   ; FC93BA  push XBC
@@ -1006,7 +1006,7 @@ sub_FC9140__FC9399:
 	ld	xbc, (xiz+8)                            ; FC93C5  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC93C8  push XBC
 	call	0xFCA121                              ; FC93C9  call 0xfca121
-	cps	wa, 2                                  ; FC93CD  cp WA,2
+	cp	wa, 2:i3                                  ; FC93CD  cp WA,2
 	jr nz, sub_FC9140__FC93E4                  ; FC93CF  jr NZ,0xfc93e4
 	ld	xbc, (0xFCB31E:24)                     ; FC93D1  ld XBC,(0xfcb31e)
 	ld	(xiz-10), xbc                           ; FC93D6  ld (XIZ+0xf6),XBC
@@ -1060,7 +1060,7 @@ sub_FC9140__FC9411:
 	call	0xFCA41F                              ; FC9447  call 0xfca41f
 	inc	8, xix                                 ; FC944B  inc 0,XIX
 	dec	1, h                                   ; FC944D  dec 1,H
-	cps	h, 0                                   ; FC944F  cp H,0
+	cp	h, 0:i3                                   ; FC944F  cp H,0
 	jr nz, sub_FC9140__FC9411                  ; FC9451  jr NZ,0xfc9411
 	ld	xbc, (xiz+12)                           ; FC9453  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9456  push XBC
@@ -1128,7 +1128,7 @@ sub_FC9140__FC94AE:
 	call	0xFCA41F                              ; FC94E4  call 0xfca41f
 	inc	8, xix                                 ; FC94E8  inc 0,XIX
 	dec	1, h                                   ; FC94EA  dec 1,H
-	cps	h, 0                                   ; FC94EC  cp H,0
+	cp	h, 0:i3                                   ; FC94EC  cp H,0
 	jr nz, sub_FC9140__FC94AE                  ; FC94EE  jr NZ,0xfc94ae
 	ld	xbc, (xiz-26)                           ; FC94F0  ld XBC,(XIZ+0xe6)
 	ld	(xiz-10), xbc                           ; FC94F3  ld (XIZ+0xf6),XBC
@@ -1144,7 +1144,7 @@ sub_FC9140__FC94FC:
 	lda	xiy, (xiz+8)                           ; FC950B  lda XIY,XIZ+0x08
 	call	0xFCA1B6                              ; FC950E  call 0xfca1b6
 sub_FC9140__FC9512:
-	cps	de, 0                                  ; FC9512  cp DE,0
+	cp	de, 0:i3                                  ; FC9512  cp DE,0
 	jr z, sub_FC9140__FC954B                   ; FC9514  jr Z,0xfc954b
 	ld	xbc, (xiz-6)                            ; FC9516  ld XBC,(XIZ+0xfa)
 	push	xbc                                   ; FC9519  push XBC
@@ -1247,14 +1247,14 @@ sub_FC9576:
 	ld	xbc, (xiz+16)                           ; FC958C  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; FC958F  push XBC
 	call	0xFCA121                              ; FC9590  call 0xfca121
-	cps	wa, 0                                  ; FC9594  cp WA,0
+	cp	wa, 0:i3                                  ; FC9594  cp WA,0
 	jrl z, sub_FC9576__FC9832                  ; FC9596  jrl Z,0xfc9832
 	ld	xbc, (xiz+12)                           ; FC9599  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC959C  push XBC
 	ld	xbc, (xiz+8)                            ; FC959D  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC95A0  push XBC
 	call	0xFCA1E5                              ; FC95A1  call 0xfca1e5
-	cps	wa, 0                                  ; FC95A5  cp WA,0
+	cp	wa, 0:i3                                  ; FC95A5  cp WA,0
 	jr nz, sub_FC9576__FC95C9                  ; FC95A7  jr NZ,0xfc95c9
 	ld	xbc, (0xFCB3DA:24)                     ; FC95A9  ld XBC,(0xfcb3da)
 	push	xbc                                   ; FC95AE  push XBC
@@ -1265,7 +1265,7 @@ sub_FC9576:
 	ld	xbc, (xiz+16)                           ; FC95B9  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; FC95BC  push XBC
 	call	0xFCA121                              ; FC95BD  call 0xfca121
-	cps	wa, 1                                  ; FC95C1  cp WA,1
+	cp	wa, 1:i3                                  ; FC95C1  cp WA,1
 	jrl nz, sub_FC9576__FC969C                 ; FC95C3  jrl NZ,0xfc969c
 	jrl sub_FC9576__FC9832                     ; FC95C6  jrl T,0xfc9832
 sub_FC9576__FC95C9:
@@ -1279,7 +1279,7 @@ sub_FC9576__FC95C9:
 	ld	xbc, (xiz+8)                            ; FC95DE  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC95E1  push XBC
 	call	0xFCA121                              ; FC95E2  call 0xfca121
-	cps	wa, 2                                  ; FC95E6  cp WA,2
+	cp	wa, 2:i3                                  ; FC95E6  cp WA,2
 	jrl nz, sub_FC9576__FC96BC                 ; FC95E8  jrl NZ,0xfc96bc
 	ld	xbc, (xiz+20)                           ; FC95EB  ld XBC,(XIZ+0x14)
 	push	xbc                                   ; FC95EE  push XBC
@@ -1297,7 +1297,7 @@ sub_FC9576__FC95C9:
 	ld	xbc, (xiz-16)                           ; FC960C  ld XBC,(XIZ+0xf0)
 	push	xbc                                   ; FC960F  push XBC
 	call	0xFCA121                              ; FC9610  call 0xfca121
-	cps	wa, 1                                  ; FC9614  cp WA,1
+	cp	wa, 1:i3                                  ; FC9614  cp WA,1
 	jr z, sub_FC9576__FC964E                   ; FC9616  jr Z,0xfc964e
 	ld	xbc, (xiz+20)                           ; FC9618  ld XBC,(XIZ+0x14)
 	push	xbc                                   ; FC961B  push XBC
@@ -1317,7 +1317,7 @@ sub_FC9576__FC95C9:
 	ld	xbc, (xiz+16)                           ; FC963A  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; FC963D  push XBC
 	call	0xFCA121                              ; FC963E  call 0xfca121
-	cps	wa, 0                                  ; FC9642  cp WA,0
+	cp	wa, 0:i3                                  ; FC9642  cp WA,0
 	jr nz, sub_FC9576__FC969C                  ; FC9644  jr NZ,0xfc969c
 	sub	xbc, xbc                               ; FC9646  sub XBC,XBC
 	inc	1, xbc                                 ; FC9648  inc 1,XBC
@@ -1353,7 +1353,7 @@ sub_FC9576__FC964E:
 	ld	xbc, (xiz-24)                           ; FC9690  ld XBC,(XIZ+0xe8)
 	push	xbc                                   ; FC9693  push XBC
 	call	0xFCA121                              ; FC9694  call 0xfca121
-	cps	wa, 0                                  ; FC9698  cp WA,0
+	cp	wa, 0:i3                                  ; FC9698  cp WA,0
 	jr z, sub_FC9576__FC96A6                   ; FC969A  jr Z,0xfc96a6
 sub_FC9576__FC969C:
 	ldw	(0xF362:24), 33                       ; FC969C  ld (0x00f362),0x0021
@@ -1378,7 +1378,7 @@ sub_FC9576__FC96BC:
 	ld	xbc, (xiz+8)                            ; FC96CC  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC96CF  push XBC
 	call	0xFCA121                              ; FC96D0  call 0xfca121
-	cps	wa, 0                                  ; FC96D4  cp WA,0
+	cp	wa, 0:i3                                  ; FC96D4  cp WA,0
 	jrl z, sub_FC9576__FC980E                  ; FC96D6  jrl Z,0xfc980e
 	ld	xbc, (xiz+12)                           ; FC96D9  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC96DC  push XBC
@@ -1400,7 +1400,7 @@ sub_FC9576__FC96BC:
 	ld	xbc, (xiz-16)                           ; FC9706  ld XBC,(XIZ+0xf0)
 	push	xbc                                   ; FC9709  push XBC
 	call	0xFCA121                              ; FC970A  call 0xfca121
-	cps	wa, 2                                  ; FC970E  cp WA,2
+	cp	wa, 2:i3                                  ; FC970E  cp WA,2
 	jr nz, sub_FC9576__FC9730                  ; FC9710  jr NZ,0xfc9730
 	ld	xbc, (xiz+12)                           ; FC9712  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9715  push XBC
@@ -1434,7 +1434,7 @@ sub_FC9576__FC9730:
 	ld	xbc, (xiz+16)                           ; FC9757  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; FC975A  push XBC
 	call	0xFCA121                              ; FC975B  call 0xfca121
-	cps	wa, 1                                  ; FC975F  cp WA,1
+	cp	wa, 1:i3                                  ; FC975F  cp WA,1
 	jrl z, sub_FC9576__FC97E2                  ; FC9761  jrl Z,0xfc97e2
 	ld	xbc, (xiz+12)                           ; FC9764  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9767  push XBC
@@ -1455,7 +1455,7 @@ sub_FC9576__FC9730:
 	ld	xbc, (xiz+16)                           ; FC978B  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; FC978E  push XBC
 	call	0xFCA121                              ; FC978F  call 0xfca121
-	cps	wa, 2                                  ; FC9793  cp WA,2
+	cp	wa, 2:i3                                  ; FC9793  cp WA,2
 	jr z, sub_FC9576__FC97C8                   ; FC9795  jr Z,0xfc97c8
 	ld	xbc, (xiz+12)                           ; FC9797  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC979A  push XBC
@@ -1570,7 +1570,7 @@ sub_FC9844:
 	ld	xbc, (xiz+8)                            ; FC985C  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC985F  push XBC
 	call	0xFCA121                              ; FC9860  call 0xfca121
-	cps	wa, 1                                  ; FC9864  cp WA,1
+	cp	wa, 1:i3                                  ; FC9864  cp WA,1
 	jr z, sub_FC9844__FC98B3                   ; FC9866  jr Z,0xfc98b3
 	ld	xbc, (0xFCB432:24)                     ; FC9868  ld XBC,(0xfcb432)
 	push	xbc                                   ; FC986D  push XBC
@@ -1581,7 +1581,7 @@ sub_FC9844:
 	ld	xbc, (xiz+8)                            ; FC9878  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC987B  push XBC
 	call	0xFCA121                              ; FC987C  call 0xfca121
-	cps	wa, 0                                  ; FC9880  cp WA,0
+	cp	wa, 0:i3                                  ; FC9880  cp WA,0
 	jr nz, sub_FC9844__FC9898                  ; FC9882  jr NZ,0xfc9898
 	ld	xiy, (xsp)                              ; FC9884  ld XIY,(XSP)
 	ld	xix, (0xFCB426:24)                     ; FC9886  ld XIX,(0xfcb426)
@@ -1607,7 +1607,7 @@ sub_FC9844__FC98B3:
 	ld	xbc, (xiz+8)                            ; FC98C3  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC98C6  push XBC
 	call	0xFCA121                              ; FC98C7  call 0xfca121
-	cps	wa, 2                                  ; FC98CB  cp WA,2
+	cp	wa, 2:i3                                  ; FC98CB  cp WA,2
 	jr z, sub_FC9844__FC9921                   ; FC98CD  jr Z,0xfc9921
 	ld	xbc, (0xFCB41A:24)                     ; FC98CF  ld XBC,(0xfcb41a)
 	push	xbc                                   ; FC98D4  push XBC
@@ -1618,7 +1618,7 @@ sub_FC9844__FC98B3:
 	ld	xbc, (xiz+8)                            ; FC98DF  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC98E2  push XBC
 	call	0xFCA121                              ; FC98E3  call 0xfca121
-	cps	wa, 0                                  ; FC98E7  cp WA,0
+	cp	wa, 0:i3                                  ; FC98E7  cp WA,0
 	jr nz, sub_FC9844__FC98FF                  ; FC98E9  jr NZ,0xfc98ff
 	ld	xiy, (xsp)                              ; FC98EB  ld XIY,(XSP)
 	ld	xix, (0xFCB40E:24)                     ; FC98ED  ld XIX,(0xfcb40e)
@@ -1649,12 +1649,12 @@ sub_FC9844__FC9921:
 	ld	xbc, (xiz+8)                            ; FC9934  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9937  push XBC
 	call	0xFCA121                              ; FC9938  call 0xfca121
-	cps	wa, 2                                  ; FC993C  cp WA,2
+	cp	wa, 2:i3                                  ; FC993C  cp WA,2
 	jr nz, sub_FC9844__FC9943                  ; FC993E  jr NZ,0xfc9943
 	ldw	hl, 1                                  ; FC9940  ld HL,0x0001
 sub_FC9844__FC9943:
 	ld	de, hl                                  ; FC9943  ld DE,HL
-	cps	hl, 0                                  ; FC9945  cp HL,0
+	cp	hl, 0:i3                                  ; FC9945  cp HL,0
 	jr z, sub_FC9844__FC9958                   ; FC9947  jr Z,0xfc9958
 	ld	xbc, (xiz+12)                           ; FC9949  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC994C  push XBC
@@ -1672,9 +1672,9 @@ sub_FC9844__FC9958:
 	ld	xbc, (xiz+8)                            ; FC9968  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC996B  push XBC
 	call	0xFCA121                              ; FC996C  call 0xfca121
-	cps	wa, 2                                  ; FC9970  cp WA,2
+	cp	wa, 2:i3                                  ; FC9970  cp WA,2
 	jr nz, sub_FC9844__FC99CE                  ; FC9972  jr NZ,0xfc99ce
-	cps	de, 0                                  ; FC9974  cp DE,0
+	cp	de, 0:i3                                  ; FC9974  cp DE,0
 	jr z, sub_FC9844__FC99A3                   ; FC9976  jr Z,0xfc99a3
 	ld	xbc, (xiz+12)                           ; FC9978  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC997B  push XBC
@@ -1759,7 +1759,7 @@ sub_FC9844__FC99CE:
 	push	xbc                                   ; FC9A45  push XBC
 	lda	xiy, (xiz+8)                           ; FC9A46  lda XIY,XIZ+0x08
 	call	0xFCA626                              ; FC9A49  call 0xfca626
-	cps	de, 0                                  ; FC9A4D  cp DE,0
+	cp	de, 0:i3                                  ; FC9A4D  cp DE,0
 	jr z, sub_FC9844__FC9A68                   ; FC9A4F  jr Z,0xfc9a68
 	ld	xbc, (xiz+12)                           ; FC9A51  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9A54  push XBC
@@ -1839,7 +1839,7 @@ sub_FC9ACB:
 	call	0xFCA41F                              ; FC9ACB  call 0xfca41f
 	inc	8, xix                                 ; FC9ACF  inc 0,XIX
 	dec	1, h                                   ; FC9AD1  dec 1,H
-	cps	h, 0                                   ; FC9AD3  cp H,0
+	cp	h, 0:i3                                   ; FC9AD3  cp H,0
 	jr nz, sub_FC9844__FC9A95                  ; FC9AD5  jr NZ,0xfc9a95
 	ld	xbc, (xiz+12)                           ; FC9AD7  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9ADA  push XBC
@@ -1887,7 +1887,7 @@ sub_FC9ACB__FC9B04:
 	call	0xFCA41F                              ; FC9B3A  call 0xfca41f
 	inc	8, xix                                 ; FC9B3E  inc 0,XIX
 	dec	1, h                                   ; FC9B40  dec 1,H
-	cps	h, 0                                   ; FC9B42  cp H,0
+	cp	h, 0:i3                                   ; FC9B42  cp H,0
 	jr nz, sub_FC9ACB__FC9B04                  ; FC9B44  jr NZ,0xfc9b04
 	ld	bc, (xiz-2)                             ; FC9B46  ld BC,(XIZ+0xfe)
 	inc	1, bc                                  ; FC9B49  inc 1,BC
@@ -1975,7 +1975,7 @@ sub_FC9BBC:
 	ld	xbc, (xiz+8)                            ; FC9BD4  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9BD7  push XBC
 	call	0xFCA121                              ; FC9BD8  call 0xfca121
-	cps	wa, 2                                  ; FC9BDC  cp WA,2
+	cp	wa, 2:i3                                  ; FC9BDC  cp WA,2
 	jr nz, sub_FC9BBC__FC9BE7                  ; FC9BDE  jr NZ,0xfc9be7
 	ldw (xiz-2), 0x0001                        ; FC9BE0  ld (XIZ+0xfe),0x0001
 	jr sub_FC9BBC__FC9BEC                      ; FC9BE5  jr T,0xfc9bec
@@ -2155,7 +2155,7 @@ sub_FC9D12:
 	ld	xbc, (xiz+8)                            ; FC9D29  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9D2C  push XBC
 	call	0xFCA121                              ; FC9D2D  call 0xfca121
-	cps	wa, 2                                  ; FC9D31  cp WA,2
+	cp	wa, 2:i3                                  ; FC9D31  cp WA,2
 	jr z, sub_FC9D12__FC9D41                   ; FC9D33  jr Z,0xfc9d41
 	ldw	(0xF362:24), 33                       ; FC9D35  ld (0x00f362),0x0021
 	pushw	0                                    ; FC9D3C  push 0x0000
@@ -2170,7 +2170,7 @@ sub_FC9D12__FC9D41:
 	ld	xbc, (xiz+8)                            ; FC9D51  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9D54  push XBC
 	call	0xFCA121                              ; FC9D55  call 0xfca121
-	cps	wa, 1                                  ; FC9D59  cp WA,1
+	cp	wa, 1:i3                                  ; FC9D59  cp WA,1
 	jr z, sub_FC9D12__FC9D7F                   ; FC9D5B  jr Z,0xfc9d7f
 	ldw	(0xF362:24), 33                       ; FC9D5D  ld (0x00f362),0x0021
 	pushw	1                                    ; FC9D64  push 0x0001
@@ -2208,7 +2208,7 @@ sub_FC9D12__FC9D7F:
 	ld	xbc, (xiz+8)                            ; FC9DB6  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9DB9  push XBC
 	call	0xFCA121                              ; FC9DBA  call 0xfca121
-	cps	wa, 2                                  ; FC9DBE  cp WA,2
+	cp	wa, 2:i3                                  ; FC9DBE  cp WA,2
 	jr nz, sub_FC9D12__FC9DD5                  ; FC9DC0  jr NZ,0xfc9dd5
 	decm	1, (xiz-10)                           ; FC9DC2  decw 1,(XIZ+0xf6)
 	ld	xbc, (0xFCB47E:24)                     ; FC9DC5  ld XBC,(0xfcb47e)
@@ -2302,7 +2302,7 @@ sub_FC9D12__FC9E5E:
 	call	0xFCA41F                              ; FC9E94  call 0xfca41f
 	inc	8, xix                                 ; FC9E98  inc 0,XIX
 	dec	1, h                                   ; FC9E9A  dec 1,H
-	cps	h, 0                                   ; FC9E9C  cp H,0
+	cp	h, 0:i3                                   ; FC9E9C  cp H,0
 	jr nz, sub_FC9D12__FC9E5E                  ; FC9E9E  jr NZ,0xfc9e5e
 	lda	xix, (xiz-26)                          ; FC9EA0  lda XIX,XIZ+0xe6
 	lda	xiy, (0xFCB4BE:24)                     ; FC9EA3  lda XIY,0xfcb4be
@@ -2340,7 +2340,7 @@ sub_FC9D12__FC9EB6:
 	call	0xFCA41F                              ; FC9EEC  call 0xfca41f
 	inc	8, xix                                 ; FC9EF0  inc 0,XIX
 	dec	1, h                                   ; FC9EF2  dec 1,H
-	cps	h, 0                                   ; FC9EF4  cp H,0
+	cp	h, 0:i3                                   ; FC9EF4  cp H,0
 	jr nz, sub_FC9D12__FC9EB6                  ; FC9EF6  jr NZ,0xfc9eb6
 	ld	xbc, (xiz+12)                           ; FC9EF8  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9EFB  push XBC
@@ -2449,7 +2449,7 @@ sub_FC9FA3:
 	ld	xbc, (xiz+8)                            ; FC9FBB  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9FBE  push XBC
 	call	0xFCA121                              ; FC9FBF  call 0xfca121
-	cps	wa, 2                                  ; FC9FC3  cp WA,2
+	cp	wa, 2:i3                                  ; FC9FC3  cp WA,2
 	jr nz, sub_FC9FA3__FC9FCC                  ; FC9FC5  jr NZ,0xfc9fcc
 	ldw	ix, 1                                  ; FC9FC7  ld IX,0x0001
 	jr sub_FC9FA3__FC9FCF                      ; FC9FCA  jr T,0xfc9fcf
@@ -2506,7 +2506,7 @@ sub_FC9FA3__FCA01A:
 	ldw	bc, 4                                  ; FCA049  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FCA04C  ldirw
 	pop	xix                                    ; FCA04E  pop XIX
-	cps	ix, 0                                  ; FCA04F  cp IX,0
+	cp	ix, 0:i3                                  ; FCA04F  cp IX,0
 	jr z, sub_FC9FA3__FCA071                   ; FCA051  jr Z,0xfca071
 	ld	xbc, (xiz+12)                           ; FCA053  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FCA056  push XBC
@@ -2709,7 +2709,7 @@ Shift16_Left:
 	ld	w, b                                    ; FCA0C0  ld W,B
 	srl	w, 4                                   ; FCA0C2  srl 0x04,W
 	sub	a, a                                   ; FCA0C5  sub A,A
-	cps	w, 0                                   ; FCA0C7  cp W,0
+	cp	w, 0:i3                                   ; FCA0C7  cp W,0
 	jr z, Shift16_Left__FCA0CD                 ; FCA0C9  jr Z,0xfca0cd
 	extpfx2 0xDD, 0xFE                         ; FCA0CB  sll A,IY
 Shift16_Left__FCA0CD:
@@ -2739,7 +2739,7 @@ Shift32_LogicalRight:
 	srl	w, 4                                   ; FCA0E3  srl 0x04,W
 	sub	a, a                                   ; FCA0E6  sub A,A
 Shift32_LogicalRight__FCA0E8:
-	cps	w, 0                                   ; FCA0E8  cp W,0
+	cp	w, 0:i3                                   ; FCA0E8  cp W,0
 	jr z, Shift32_LogicalRight__FCA0F2         ; FCA0EA  jr Z,0xfca0f2
 	extpfx2 0xED, 0xFF                         ; FCA0EC  srl A,XIY
 	dec	1, w                                   ; FCA0EE  dec 1,W
@@ -2771,7 +2771,7 @@ Shift32_Left:
 	srl	w, 4                                   ; FCA106  srl 0x04,W
 	sub	a, a                                   ; FCA109  sub A,A
 Shift32_Left__FCA10B:
-	cps	w, 0                                   ; FCA10B  cp W,0
+	cp	w, 0:i3                                   ; FCA10B  cp W,0
 	jr z, Shift32_Left__FCA115                 ; FCA10D  jr Z,0xfca115
 	extpfx2 0xED, 0xFE                         ; FCA10F  sll A,XIY
 	dec	1, w                                   ; FCA111  dec 1,W
@@ -2814,17 +2814,17 @@ Double_Compare:
 	ld	xde, (xiz+16)                           ; FCA131  ld XDE,(XIZ+0x10)
 	ld	wa, qix                                 ; FCA134  ld WA,QIX
 	and	wa, 0x7FF0                             ; FCA137  and WA,0x7ff0
-	cps	wa, 0                                  ; FCA13B  cp WA,0
+	cp	wa, 0:i3                                  ; FCA13B  cp WA,0
 	jr nz, Double_Compare__FCA14B              ; FCA13D  jr NZ,0xfca14b
 	ld	bc, qiy                                 ; FCA13F  ld BC,QIY
 	and	bc, 0x7FF0                             ; FCA142  and BC,0x7ff0
-	cps	bc, 0                                  ; FCA146  cp BC,0
+	cp	bc, 0:i3                                  ; FCA146  cp BC,0
 	jrl z, Double_Compare__FCA1AC              ; FCA148  jrl Z,0xfca1ac
 Double_Compare__FCA14B:
 	ld	wa, qix                                 ; FCA14B  ld WA,QIX
 	xor	wa, qiy                                ; FCA14E  xor WA,QIY
 	and	wa, 0x8000                             ; FCA151  and WA,0x8000
-	cps	wa, 0                                  ; FCA155  cp WA,0
+	cp	wa, 0:i3                                  ; FCA155  cp WA,0
 	jr z, Double_Compare__FCA16B               ; FCA157  jr Z,0xfca16b
 	ld	bc, qix                                 ; FCA159  ld BC,QIX
 	cp	bc, qiy                                 ; FCA15C  cp BC,QIY
@@ -2837,7 +2837,7 @@ Double_Compare__FCA166:
 Double_Compare__FCA16B:
 	ld	bc, qix                                 ; FCA16B  ld BC,QIX
 	and	bc, 0x8000                             ; FCA16E  and BC,0x8000
-	cps	bc, 0                                  ; FCA172  cp BC,0
+	cp	bc, 0:i3                                  ; FCA172  cp BC,0
 	jr z, Double_Compare__FCA17B               ; FCA174  jr Z,0xfca17b
 	ldw	wa, 3                                  ; FCA176  ld WA,0x0003
 	jr Double_Compare__FCA17E                  ; FCA179  jr T,0xfca17e
@@ -2900,7 +2900,7 @@ Double_Negate:
 	ld	xbc, (xiz+8)                            ; FCA1C0  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FCA1C3  push XBC
 	call	0xFCA1E5                              ; FCA1C4  call 0xfca1e5
-	cps	wa, 0                                  ; FCA1C8  cp WA,0
+	cp	wa, 0:i3                                  ; FCA1C8  cp WA,0
 	jr z, Double_Negate__FCA1D1                ; FCA1CA  jr Z,0xfca1d1
 	extpfx5 0x9E, 0x0E, 0x3D, 0x00, 0x80       ; FCA1CC  xor (XIZ+0x0e),0x8000
 Double_Negate__FCA1D1:
@@ -2940,11 +2940,11 @@ Double_Classify:
 	ld	xde, (xiz+8)                            ; FCA1EE  ld XDE,(XIZ+0x08)
 	ld	bc, qix                                 ; FCA1F1  ld BC,QIX
 	and	bc, 0x7FF0                             ; FCA1F4  and BC,0x7ff0
-	cps	bc, 0                                  ; FCA1F8  cp BC,0
+	cp	bc, 0:i3                                  ; FCA1F8  cp BC,0
 	jrl z, Double_Classify__FCA249             ; FCA1FA  jrl Z,0xfca249
 	ld	bc, qix                                 ; FCA1FD  ld BC,QIX
 	and	bc, 0x8000                             ; FCA200  and BC,0x8000
-	cps	bc, 0                                  ; FCA204  cp BC,0
+	cp	bc, 0:i3                                  ; FCA204  cp BC,0
 	jr z, Double_Classify__FCA217              ; FCA206  jr Z,0xfca217
 	cp	qix, 0                                  ; FCA208  cp QIX,0
 	jr nc, Double_Classify__FCA212             ; FCA20B  jr NC,0xfca212
@@ -2963,13 +2963,13 @@ Double_Classify__FCA221:
 	cp	qix, 0                                  ; FCA221  cp QIX,0
 	jr ugt, Double_Classify__FCA23D            ; FCA224  jr UGT,0xfca23d
 	jr c, Double_Classify__FCA243              ; FCA226  jr C,0xfca243
-	cps	ix, 0                                  ; FCA228  cp IX,0
+	cp	ix, 0:i3                                  ; FCA228  cp IX,0
 	jr ugt, Double_Classify__FCA23D            ; FCA22A  jr UGT,0xfca23d
 	jr c, Double_Classify__FCA243              ; FCA22C  jr C,0xfca243
 	cp	qde, 0                                  ; FCA22E  cp QDE,0
 	jr ugt, Double_Classify__FCA23D            ; FCA231  jr UGT,0xfca23d
 	jr c, Double_Classify__FCA243              ; FCA233  jr C,0xfca243
-	cps	de, 0                                  ; FCA235  cp DE,0
+	cp	de, 0:i3                                  ; FCA235  cp DE,0
 	jr ugt, Double_Classify__FCA23D            ; FCA237  jr UGT,0xfca23d
 	jr c, Double_Classify__FCA243              ; FCA239  jr C,0xfca243
 	jr Double_Classify__FCA249                 ; FCA23B  jr T,0xfca249
@@ -3023,7 +3023,7 @@ Double_Multiply:
 	ld	ix, (xiz+22)                            ; FCA267  ld IX,(XIZ+0x16)
 	and	ix, 0x7FF0                             ; FCA26A  and IX,0x7ff0
 	srl	ix, 4                                  ; FCA26E  srl 0x04,IX
-	cps	ix, 0                                  ; FCA271  cp IX,0
+	cp	ix, 0:i3                                  ; FCA271  cp IX,0
 	jrl z, Double_Multiply__FCA3CD             ; FCA273  jrl Z,0xfca3cd
 	ld	de, (xiz+22)                            ; FCA276  ld DE,(XIZ+0x16)
 	and	de, 15                                 ; FCA279  and DE,0x000f
@@ -3032,7 +3032,7 @@ Double_Multiply:
 	ld	iy, (xiz+14)                            ; FCA284  ld IY,(XIZ+0x0e)
 	and	iy, 0x7FF0                             ; FCA287  and IY,0x7ff0
 	srl	iy, 4                                  ; FCA28B  srl 0x04,IY
-	cps	iy, 0                                  ; FCA28E  cp IY,0
+	cp	iy, 0:i3                                  ; FCA28E  cp IY,0
 	jrl z, Double_Multiply__FCA3CD             ; FCA290  jrl Z,0xfca3cd
 	ld	de, (xiz+14)                            ; FCA293  ld DE,(XIZ+0x0e)
 	and	de, 15                                 ; FCA296  and DE,0x000f
@@ -3040,7 +3040,7 @@ Double_Multiply:
 	ld	(xiz+14), de                            ; FCA29E  ld (XIZ+0x0e),DE
 	add	ix, iy                                 ; FCA2A1  add IX,IY
 	sub	ix, 0x3FE                              ; FCA2A3  sub IX,0x03fe
-	cps	ix, 0                                  ; FCA2A7  cp IX,0
+	cp	ix, 0:i3                                  ; FCA2A7  cp IX,0
 	jrl le, Double_Multiply__FCA3CD            ; FCA2A9  jrl LE,0xfca3cd
 	cp	ix, 0x7FF                               ; FCA2AC  cp IX,0x07ff
 	jrl gt, Double_Multiply__FCA3A9            ; FCA2B0  jrl GT,0xfca3a9
@@ -3126,7 +3126,7 @@ Double_Multiply:
 	ld	qbc, wa                                 ; FCA395  ld QBC,WA
 	ld	qhl, de                                 ; FCA398  ld QHL,DE
 	and	wa, 0x200                              ; FCA39B  and WA,0x0200
-	cps	wa, 0                                  ; FCA39F  cp WA,0
+	cp	wa, 0:i3                                  ; FCA39F  cp WA,0
 	jr z, Double_Multiply__FCA3C7              ; FCA3A1  jr Z,0xfca3c7
 	cp	ix, 0x7FF                               ; FCA3A3  cp IX,0x07ff
 	jr nz, Double_Multiply__FCA3BF             ; FCA3A7  jr NZ,0xfca3bf
@@ -3143,7 +3143,7 @@ Double_Multiply__FCA3BF:
 	jr Double_Multiply__FCA3D9                 ; FCA3C5  jr T,0xfca3d9
 Double_Multiply__FCA3C7:
 	dec	1, ix                                  ; FCA3C7  dec 1,IX
-	cps	ix, 0                                  ; FCA3C9  cp IX,0
+	cp	ix, 0:i3                                  ; FCA3C9  cp IX,0
 	jr nz, Double_Multiply__FCA3D9             ; FCA3CB  jr NZ,0xfca3d9
 Double_Multiply__FCA3CD:
 	ld	xbc, 0                                  ; FCA3CD  ld XBC,0x00000000
@@ -3220,11 +3220,11 @@ Double_Add:
 	extpfx3 0xD7, 0xF6, 0xBD                   ; FCA453  ex IY,QIY
 	ld	bc, qix                                 ; FCA456  ld BC,QIX
 	and	bc, 0x7FF0                             ; FCA459  and BC,0x7ff0
-	cps	bc, 0                                  ; FCA45D  cp BC,0
+	cp	bc, 0:i3                                  ; FCA45D  cp BC,0
 	jr nz, Double_Add__FCA46D                  ; FCA45F  jr NZ,0xfca46d
 	ld	bc, qiy                                 ; FCA461  ld BC,QIY
 	and	bc, 0x7FF0                             ; FCA464  and BC,0x7ff0
-	cps	bc, 0                                  ; FCA468  cp BC,0
+	cp	bc, 0:i3                                  ; FCA468  cp BC,0
 	jrl z, Double_Add__FCA5BF                  ; FCA46A  jrl Z,0xfca5bf
 Double_Add__FCA46D:
 	ld	bc, qix                                 ; FCA46D  ld BC,QIX
@@ -3252,7 +3252,7 @@ Double_Add__FCA48D:
 Double_Add__FCA49C:
 	ld	bc, wa                                  ; FCA49C  ld BC,WA
 	xor	bc, qwa                                ; FCA49E  xor BC,QWA
-	cps	bc, 0                                  ; FCA4A1  cp BC,0
+	cp	bc, 0:i3                                  ; FCA4A1  cp BC,0
 	jr z, Double_Add__FCA4A9                   ; FCA4A3  jr Z,0xfca4a9
 	ldb	a, 45                                  ; FCA4A5  ld A,0x2d
 	jr Double_Add__FCA4AB                      ; FCA4A7  jr T,0xfca4ab
@@ -3305,7 +3305,7 @@ Double_Add__FCA51C:
 	adc	xix, xiy                               ; FCA526  adc XIX,XIY
 	ld	bc, qix                                 ; FCA528  ld BC,QIX
 	and	bc, 0xFF80                             ; FCA52B  and BC,0xff80
-	cps	bc, 0                                  ; FCA52F  cp BC,0
+	cp	bc, 0:i3                                  ; FCA52F  cp BC,0
 	jr z, Double_Add__FCA554                   ; FCA531  jr Z,0xfca554
 	srl	xix, 1                                 ; FCA533  srl 0x01,XIX
 	rr	xhl                                     ; FCA536  rr 0x01,XHL
@@ -3315,7 +3315,7 @@ Double_Add__FCA51C:
 	sub	xix, xix                               ; FCA543  sub XIX,XIX
 	sub	xhl, xhl                               ; FCA545  sub XHL,XHL
 	ldw	qix, 0x7FF0                            ; FCA547  ld QIX,0x7ff0
-	cps	wa, 0                                  ; FCA54C  cp WA,0
+	cp	wa, 0:i3                                  ; FCA54C  cp WA,0
 	jrl z, Double_Add__FCA616                  ; FCA54E  jrl Z,0xfca616
 	jrl Double_Add__FCA60C                     ; FCA551  jrl T,0xfca60c
 Double_Add__FCA554:
@@ -3323,7 +3323,7 @@ Double_Add__FCA554:
 	adc	xix, 0                                 ; FCA55A  adc XIX,0x00000000
 	ld	bc, qix                                 ; FCA560  ld BC,QIX
 	and	bc, 0xFF80                             ; FCA563  and BC,0xff80
-	cps	bc, 0                                  ; FCA567  cp BC,0
+	cp	bc, 0:i3                                  ; FCA567  cp BC,0
 	jrl z, Double_Add__FCA5DE                  ; FCA569  jrl Z,0xfca5de
 	srl	xix, 1                                 ; FCA56C  srl 0x01,XIX
 	rr	xhl                                     ; FCA56F  rr 0x01,XHL
@@ -3333,7 +3333,7 @@ Double_Add__FCA554:
 	sub	xix, xix                               ; FCA57D  sub XIX,XIX
 	sub	xhl, xhl                               ; FCA57F  sub XHL,XHL
 	ldw	qix, 0x7FF0                            ; FCA581  ld QIX,0x7ff0
-	cps	wa, 0                                  ; FCA586  cp WA,0
+	cp	wa, 0:i3                                  ; FCA586  cp WA,0
 	jrl z, Double_Add__FCA616                  ; FCA588  jrl Z,0xfca616
 	jrl Double_Add__FCA60C                     ; FCA58B  jrl T,0xfca60c
 Double_Add__FCA58E:
@@ -3341,17 +3341,17 @@ Double_Add__FCA58E:
 	sbc	xix, xiy                               ; FCA590  sbc XIX,XIY
 	cp	qix, 0                                  ; FCA592  cp QIX,0
 	jr nz, Double_Add__FCA5A6                  ; FCA595  jr NZ,0xfca5a6
-	cps	ix, 0                                  ; FCA597  cp IX,0
+	cp	ix, 0:i3                                  ; FCA597  cp IX,0
 	jr nz, Double_Add__FCA5A6                  ; FCA599  jr NZ,0xfca5a6
 	cp	qhl, 0                                  ; FCA59B  cp QHL,0
 	jr nz, Double_Add__FCA5A6                  ; FCA59E  jr NZ,0xfca5a6
-	cps	hl, 0                                  ; FCA5A0  cp HL,0
+	cp	hl, 0:i3                                  ; FCA5A0  cp HL,0
 	jr nz, Double_Add__FCA5A6                  ; FCA5A2  jr NZ,0xfca5a6
 	jr z, Double_Add__FCA5BF                   ; FCA5A4  jr Z,0xfca5bf
 Double_Add__FCA5A6:
 	ld	bc, qix                                 ; FCA5A6  ld BC,QIX
 	and	bc, 0xFFC0                             ; FCA5A9  and BC,0xffc0
-	cps	bc, 0                                  ; FCA5AD  cp BC,0
+	cp	bc, 0:i3                                  ; FCA5AD  cp BC,0
 	jr nz, Double_Add__FCA5D2                  ; FCA5AF  jr NZ,0xfca5d2
 Double_Add__FCA5B1:
 	sla	xhl, 1                                 ; FCA5B1  sla 0x01,XHL
@@ -3366,7 +3366,7 @@ Double_Add__FCA5BF:
 Double_Add__FCA5C5:
 	ld	bc, qix                                 ; FCA5C5  ld BC,QIX
 	and	bc, 0xFFC0                             ; FCA5C8  and BC,0xffc0
-	cps	bc, 0                                  ; FCA5CC  cp BC,0
+	cp	bc, 0:i3                                  ; FCA5CC  cp BC,0
 	jr nz, Double_Add__FCA5DE                  ; FCA5CE  jr NZ,0xfca5de
 	jr Double_Add__FCA5B1                      ; FCA5D0  jr T,0xfca5b1
 Double_Add__FCA5D2:
@@ -3383,11 +3383,11 @@ Double_Add__FCA5DE:
 	or	bc, qwa                                 ; FCA5F5  or BC,QWA
 	ld	qix, bc                                 ; FCA5F8  ld QIX,BC
 	ldb	a, 0                                   ; FCA5FB  ld A,0x00
-	cps	wa, 0                                  ; FCA5FD  cp WA,0
+	cp	wa, 0:i3                                  ; FCA5FD  cp WA,0
 	jr z, Double_Add__FCA616                   ; FCA5FF  jr Z,0xfca616
 	ld	bc, qix                                 ; FCA601  ld BC,QIX
 	and	bc, 0x7FF0                             ; FCA604  and BC,0x7ff0
-	cps	bc, 0                                  ; FCA608  cp BC,0
+	cp	bc, 0:i3                                  ; FCA608  cp BC,0
 	jr z, Double_Add__FCA616                   ; FCA60A  jr Z,0xfca616
 Double_Add__FCA60C:
 	ld	bc, qix                                 ; FCA60C  ld BC,QIX
@@ -3474,7 +3474,7 @@ Double_ToInt32:
 	ld	de, (xiz+14)                            ; FCA66B  ld DE,(XIZ+0x0e)
 	ld	bc, de                                  ; FCA66E  ld BC,DE
 	and	bc, 0x8000                             ; FCA670  and BC,0x8000
-	cps	bc, 0                                  ; FCA674  cp BC,0
+	cp	bc, 0:i3                                  ; FCA674  cp BC,0
 	jr z, Double_ToInt32__FCA67D               ; FCA676  jr Z,0xfca67d
 	ldw	hl, 11                                 ; FCA678  ld HL,0x000b
 	xor	de, bc                                 ; FCA67B  xor DE,BC
@@ -3484,7 +3484,7 @@ Double_ToInt32__FCA67D:
 	xor	de, wa                                 ; FCA683  xor DE,WA
 	or	de, 16                                  ; FCA685  or DE,0x0010
 	sra	wa, 4                                  ; FCA689  sra 0x04,WA
-	cps	wa, 0                                  ; FCA68C  cp WA,0
+	cp	wa, 0:i3                                  ; FCA68C  cp WA,0
 	jr nz, Double_ToInt32__FCA695              ; FCA68E  jr NZ,0xfca695
 	sub	xiy, xiy                               ; FCA690  sub XIY,XIY
 	jrl Double_ToInt32__FCA6F5                 ; FCA692  jrl T,0xfca6f5
@@ -3493,17 +3493,17 @@ Double_ToInt32__FCA695:
 	ld	iy, (xiz+12)                            ; FCA698  ld IY,(XIZ+0x0c)
 	ld	xix, (xiz+8)                            ; FCA69B  ld XIX,(XIZ+0x08)
 	sub	wa, 0x413                              ; FCA69E  sub WA,0x0413
-	cps	wa, 0                                  ; FCA6A2  cp WA,0
+	cp	wa, 0:i3                                  ; FCA6A2  cp WA,0
 	jr lt, Double_ToInt32__FCA6C0              ; FCA6A4  jr LT,0xfca6c0
 	cp	wa, hl                                  ; FCA6A6  cp WA,HL
 	jr le, Double_ToInt32__FCA6B0              ; FCA6A8  jr LE,0xfca6b0
-	cps	bc, 0                                  ; FCA6AA  cp BC,0
+	cp	bc, 0:i3                                  ; FCA6AA  cp BC,0
 	jr z, Double_ToInt32__FCA6E3               ; FCA6AC  jr Z,0xfca6e3
 	jr Double_ToInt32__FCA6DC                  ; FCA6AE  jr T,0xfca6dc
 Double_ToInt32__FCA6B0:
 	ld	de, wa                                  ; FCA6B0  ld DE,WA
 	dec	1, wa                                  ; FCA6B2  dec 1,WA
-	cps	de, 0                                  ; FCA6B4  cp DE,0
+	cp	de, 0:i3                                  ; FCA6B4  cp DE,0
 	jr z, Double_ToInt32__FCA6D0               ; FCA6B6  jr Z,0xfca6d0
 	sla	xix, 1                                 ; FCA6B8  sla 0x01,XIX
 	rl	xiy                                     ; FCA6BB  rl 0x01,XIY
@@ -3511,7 +3511,7 @@ Double_ToInt32__FCA6B0:
 Double_ToInt32__FCA6C0:
 	ld	de, wa                                  ; FCA6C0  ld DE,WA
 	inc	1, wa                                  ; FCA6C2  inc 1,WA
-	cps	de, 0                                  ; FCA6C4  cp DE,0
+	cp	de, 0:i3                                  ; FCA6C4  cp DE,0
 	jr z, Double_ToInt32__FCA6D0               ; FCA6C6  jr Z,0xfca6d0
 	sra	xiy, 1                                 ; FCA6C8  sra 0x01,XIY
 	rr	xix                                     ; FCA6CB  rr 0x01,XIX
@@ -3519,7 +3519,7 @@ Double_ToInt32__FCA6C0:
 Double_ToInt32__FCA6D0:
 	cp	xiy, 0x80000000                         ; FCA6D0  cp XIY,0x80000000
 	jr c, Double_ToInt32__FCA6EA               ; FCA6D6  jr C,0xfca6ea
-	cps	bc, 0                                  ; FCA6D8  cp BC,0
+	cp	bc, 0:i3                                  ; FCA6D8  cp BC,0
 	jr z, Double_ToInt32__FCA6E3               ; FCA6DA  jr Z,0xfca6e3
 Double_ToInt32__FCA6DC:
 	ld	xiy, 0x80000000                         ; FCA6DC  ld XIY,0x80000000
@@ -3528,7 +3528,7 @@ Double_ToInt32__FCA6E3:
 	ld	xiy, 0x7FFFFFFF                         ; FCA6E3  ld XIY,0x7fffffff
 	jr Double_ToInt32__FCA6F5                  ; FCA6E8  jr T,0xfca6f5
 Double_ToInt32__FCA6EA:
-	cps	bc, 0                                  ; FCA6EA  cp BC,0
+	cp	bc, 0:i3                                  ; FCA6EA  cp BC,0
 	jr z, Double_ToInt32__FCA6F5               ; FCA6EC  jr Z,0xfca6f5
 	cpl	iy                                     ; FCA6EE  cpl IY
 	cpl	qiy                                    ; FCA6F0  cpl QIY
@@ -3611,7 +3611,7 @@ UInt32_ToDouble:
 UInt32_ToDouble__FCA75D:
 	ld	bc, qix                                 ; FCA75D  ld BC,QIX
 	and	bc, 0xFFE0                             ; FCA760  and BC,0xffe0
-	cps	bc, 0                                  ; FCA764  cp BC,0
+	cp	bc, 0:i3                                  ; FCA764  cp BC,0
 	jr z, UInt32_ToDouble__FCA772              ; FCA766  jr Z,0xfca772
 	srl	xix, 1                                 ; FCA768  srl 0x01,XIX
 	rr	xiy                                     ; FCA76B  rr 0x01,XIY
@@ -3620,7 +3620,7 @@ UInt32_ToDouble__FCA75D:
 UInt32_ToDouble__FCA772:
 	ld	bc, qix                                 ; FCA772  ld BC,QIX
 	and	bc, 0xFFF0                             ; FCA775  and BC,0xfff0
-	cps	bc, 0                                  ; FCA779  cp BC,0
+	cp	bc, 0:i3                                  ; FCA779  cp BC,0
 	jr nz, UInt32_ToDouble__FCA787             ; FCA77B  jr NZ,0xfca787
 	sla	xiy, 1                                 ; FCA77D  sla 0x01,XIY
 	rl	xix                                     ; FCA780  rl 0x01,XIX
@@ -3677,7 +3677,7 @@ Double_Divide:
 	xor	(xiz+14), wa                           ; FCA7CB  xor (XIZ+0x0e),WA
 	extpfx5 0x9E, 0x0E, 0x3E, 0x10, 0x00       ; FCA7CE  or (XIZ+0x0e),0x0010
 	sra	wa, 4                                  ; FCA7D3  sra 0x04,WA
-	cps	wa, 0                                  ; FCA7D6  cp WA,0
+	cp	wa, 0:i3                                  ; FCA7D6  cp WA,0
 	jrl z, Double_Divide__FCA89F               ; FCA7D8  jrl Z,0xfca89f
 	cp	wa, 0x7FF                               ; FCA7DB  cp WA,0x07ff
 	jr ge, Double_Divide__FCA800               ; FCA7DF  jr GE,0xfca800
@@ -3686,7 +3686,7 @@ Double_Divide:
 	xor	(xiz+22), de                           ; FCA7E8  xor (XIZ+0x16),DE
 	extpfx5 0x9E, 0x16, 0x3E, 0x10, 0x00       ; FCA7EB  or (XIZ+0x16),0x0010
 	sra	de, 4                                  ; FCA7F0  sra 0x04,DE
-	cps	de, 0                                  ; FCA7F3  cp DE,0
+	cp	de, 0:i3                                  ; FCA7F3  cp DE,0
 	jr z, Double_Divide__FCA800                ; FCA7F5  jr Z,0xfca800
 	cp	de, 0x7FF                               ; FCA7F7  cp DE,0x07ff
 	jrl ge, Double_Divide__FCA89F              ; FCA7FB  jrl GE,0xfca89f
@@ -3732,14 +3732,14 @@ Double_Divide__FCA85A:
 	dec	1, wa                                  ; FCA860  dec 1,WA
 	ld	bc, qix                                 ; FCA862  ld BC,QIX
 	and	bc, 0x80                               ; FCA865  and BC,0x0080
-	cps	bc, 0                                  ; FCA869  cp BC,0
+	cp	bc, 0:i3                                  ; FCA869  cp BC,0
 	jr z, Double_Divide__FCA822                ; FCA86B  jr Z,0xfca822
 	add	xiy, 1                                 ; FCA86D  add XIY,0x00000001
 	adc	xix, 0                                 ; FCA873  adc XIX,0x00000000
 	ldw	de, 3                                  ; FCA879  ld DE,0x0003
 	ld	bc, qix                                 ; FCA87C  ld BC,QIX
 	and	bc, 0x80                               ; FCA87F  and BC,0x0080
-	cps	bc, 0                                  ; FCA883  cp BC,0
+	cp	bc, 0:i3                                  ; FCA883  cp BC,0
 	jr nz, Double_Divide__FCA889               ; FCA885  jr NZ,0xfca889
 	inc	1, de                                  ; FCA887  inc 1,DE
 Double_Divide__FCA889:
@@ -3747,13 +3747,13 @@ Double_Divide__FCA889:
 Double_Divide__FCA88B:
 	ld	bc, de                                  ; FCA88B  ld BC,DE
 	dec	1, de                                  ; FCA88D  dec 1,DE
-	cps	bc, 0                                  ; FCA88F  cp BC,0
+	cp	bc, 0:i3                                  ; FCA88F  cp BC,0
 	jr z, Double_Divide__FCA89B                ; FCA891  jr Z,0xfca89b
 	srl	xix, 1                                 ; FCA893  srl 0x01,XIX
 	rr	xiy                                     ; FCA896  rr 0x01,XIY
 	jr Double_Divide__FCA88B                   ; FCA899  jr T,0xfca88b
 Double_Divide__FCA89B:
-	cps	wa, 1                                  ; FCA89B  cp WA,1
+	cp	wa, 1:i3                                  ; FCA89B  cp WA,1
 	jr ge, Double_Divide__FCA8A5               ; FCA89D  jr GE,0xfca8a5
 Double_Divide__FCA89F:
 	sub	xiy, xiy                               ; FCA89F  sub XIY,XIY
@@ -3783,7 +3783,7 @@ Double_Divide__FCA8C5:
 	jr z, Double_Divide__FCA8F3                ; FCA8D7  jr Z,0xfca8f3
 	ld	hl, qix                                 ; FCA8D9  ld HL,QIX
 	and	hl, 0x7FF0                             ; FCA8DC  and HL,0x7ff0
-	cps	hl, 0                                  ; FCA8E0  cp HL,0
+	cp	hl, 0:i3                                  ; FCA8E0  cp HL,0
 	jr z, Double_Divide__FCA8F3                ; FCA8E2  jr Z,0xfca8f3
 	cp	qix, 0                                  ; FCA8E4  cp QIX,0
 	jr z, Double_Divide__FCA8F3                ; FCA8E7  jr Z,0xfca8f3
@@ -3820,7 +3820,7 @@ Double_ToInt16:
 	ld	de, (xiz+14)                            ; FCA90D  ld DE,(XIZ+0x0e)
 	ld	bc, de                                  ; FCA910  ld BC,DE
 	and	bc, 0x8000                             ; FCA912  and BC,0x8000
-	cps	bc, 0                                  ; FCA916  cp BC,0
+	cp	bc, 0:i3                                  ; FCA916  cp BC,0
 	jr z, Double_ToInt16__FCA91F               ; FCA918  jr Z,0xfca91f
 	ldw	hl, 11                                 ; FCA91A  ld HL,0x000b
 	xor	de, bc                                 ; FCA91D  xor DE,BC
@@ -3830,7 +3830,7 @@ Double_ToInt16__FCA91F:
 	xor	de, wa                                 ; FCA925  xor DE,WA
 	or	de, 16                                  ; FCA927  or DE,0x0010
 	sra	wa, 4                                  ; FCA92B  sra 0x04,WA
-	cps	wa, 0                                  ; FCA92E  cp WA,0
+	cp	wa, 0:i3                                  ; FCA92E  cp WA,0
 	jr nz, Double_ToInt16__FCA937              ; FCA930  jr NZ,0xfca937
 	sub	wa, wa                                 ; FCA932  sub WA,WA
 	jrl Double_ToInt16__FCA98F                 ; FCA934  jrl T,0xfca98f
@@ -3839,17 +3839,17 @@ Double_ToInt16__FCA937:
 	ld	iy, (xiz+12)                            ; FCA93A  ld IY,(XIZ+0x0c)
 	ld	xix, (xiz+8)                            ; FCA93D  ld XIX,(XIZ+0x08)
 	sub	wa, 0x403                              ; FCA940  sub WA,0x0403
-	cps	wa, 0                                  ; FCA944  cp WA,0
+	cp	wa, 0:i3                                  ; FCA944  cp WA,0
 	jr lt, Double_ToInt16__FCA962              ; FCA946  jr LT,0xfca962
 	cp	wa, hl                                  ; FCA948  cp WA,HL
 	jr le, Double_ToInt16__FCA952              ; FCA94A  jr LE,0xfca952
-	cps	bc, 0                                  ; FCA94C  cp BC,0
+	cp	bc, 0:i3                                  ; FCA94C  cp BC,0
 	jr z, Double_ToInt16__FCA984               ; FCA94E  jr Z,0xfca984
 	jr Double_ToInt16__FCA97F                  ; FCA950  jr T,0xfca97f
 Double_ToInt16__FCA952:
 	ld	de, wa                                  ; FCA952  ld DE,WA
 	dec	1, wa                                  ; FCA954  dec 1,WA
-	cps	de, 0                                  ; FCA956  cp DE,0
+	cp	de, 0:i3                                  ; FCA956  cp DE,0
 	jr z, Double_ToInt16__FCA972               ; FCA958  jr Z,0xfca972
 	sla	xix, 1                                 ; FCA95A  sla 0x01,XIX
 	rl	xiy                                     ; FCA95D  rl 0x01,XIY
@@ -3857,7 +3857,7 @@ Double_ToInt16__FCA952:
 Double_ToInt16__FCA962:
 	ld	de, wa                                  ; FCA962  ld DE,WA
 	inc	1, wa                                  ; FCA964  inc 1,WA
-	cps	de, 0                                  ; FCA966  cp DE,0
+	cp	de, 0:i3                                  ; FCA966  cp DE,0
 	jr z, Double_ToInt16__FCA972               ; FCA968  jr Z,0xfca972
 	sra	xiy, 1                                 ; FCA96A  sra 0x01,XIY
 	rr	xix                                     ; FCA96D  rr 0x01,XIX
@@ -3866,7 +3866,7 @@ Double_ToInt16__FCA972:
 	ld	wa, qiy                                 ; FCA972  ld WA,QIY
 	cp	wa, 0x8000                              ; FCA975  cp WA,0x8000
 	jr c, Double_ToInt16__FCA989               ; FCA979  jr C,0xfca989
-	cps	bc, 0                                  ; FCA97B  cp BC,0
+	cp	bc, 0:i3                                  ; FCA97B  cp BC,0
 	jr z, Double_ToInt16__FCA984               ; FCA97D  jr Z,0xfca984
 Double_ToInt16__FCA97F:
 	ldw	wa, 0x8000                             ; FCA97F  ld WA,0x8000
@@ -3875,7 +3875,7 @@ Double_ToInt16__FCA984:
 	ldw	wa, 0x7FFF                             ; FCA984  ld WA,0x7fff
 	jr Double_ToInt16__FCA98F                  ; FCA987  jr T,0xfca98f
 Double_ToInt16__FCA989:
-	cps	bc, 0                                  ; FCA989  cp BC,0
+	cp	bc, 0:i3                                  ; FCA989  cp BC,0
 	jr z, Double_ToInt16__FCA98F               ; FCA98B  jr Z,0xfca98f
 	neg	wa                                     ; FCA98D  neg WA
 Double_ToInt16__FCA98F:
@@ -3905,14 +3905,14 @@ Int16_ToDouble:
 	push	xiy                                   ; FCA99D  push XIY
 	ld	bc, (xiz+8)                             ; FCA99E  ld BC,(XIZ+0x08)
 	ld	de, bc                                  ; FCA9A1  ld DE,BC
-	cps	de, 0                                  ; FCA9A3  cp DE,0
+	cp	de, 0:i3                                  ; FCA9A3  cp DE,0
 	jr ge, Int16_ToDouble__FCA9A9              ; FCA9A5  jr GE,0xfca9a9
 	neg	bc                                     ; FCA9A7  neg BC
 Int16_ToDouble__FCA9A9:
 	pushw	bc                                   ; FCA9A9  push BC
 	lda	xiy, (xiz-8)                           ; FCA9AA  lda XIY,XIZ+0xf8
 	call	0xFCA9CF                              ; FCA9AD  call 0xfca9cf
-	cps	de, 0                                  ; FCA9B1  cp DE,0
+	cp	de, 0:i3                                  ; FCA9B1  cp DE,0
 	jr ge, Int16_ToDouble__FCA9BA              ; FCA9B3  jr GE,0xfca9ba
 	extpfx5 0x9E, 0xFE, 0x3D, 0x00, 0x80       ; FCA9B5  xor (XIZ+0xfe),0x8000
 Int16_ToDouble__FCA9BA:
@@ -3943,14 +3943,14 @@ UInt16_ToDouble:
 	sub	xix, xix                               ; FCA9D6  sub XIX,XIX
 	sub	xiy, xiy                               ; FCA9D8  sub XIY,XIY
 	ld	bc, (xiz+8)                             ; FCA9DA  ld BC,(XIZ+0x08)
-	cps	bc, 0                                  ; FCA9DD  cp BC,0
+	cp	bc, 0:i3                                  ; FCA9DD  cp BC,0
 	jr z, UInt16_ToDouble__FCAA20              ; FCA9DF  jr Z,0xfcaa20
 	ld	qix, bc                                 ; FCA9E1  ld QIX,BC
 	ldw	de, 0x403                              ; FCA9E4  ld DE,0x0403
 UInt16_ToDouble__FCA9E7:
 	ld	bc, qix                                 ; FCA9E7  ld BC,QIX
 	and	bc, 0xFFE0                             ; FCA9EA  and BC,0xffe0
-	cps	bc, 0                                  ; FCA9EE  cp BC,0
+	cp	bc, 0:i3                                  ; FCA9EE  cp BC,0
 	jr z, UInt16_ToDouble__FCA9FC              ; FCA9F0  jr Z,0xfca9fc
 	srl	xix, 1                                 ; FCA9F2  srl 0x01,XIX
 	rr	xiy                                     ; FCA9F5  rr 0x01,XIY
@@ -3959,7 +3959,7 @@ UInt16_ToDouble__FCA9E7:
 UInt16_ToDouble__FCA9FC:
 	ld	bc, qix                                 ; FCA9FC  ld BC,QIX
 	and	bc, 0xFFF0                             ; FCA9FF  and BC,0xfff0
-	cps	bc, 0                                  ; FCAA03  cp BC,0
+	cp	bc, 0:i3                                  ; FCAA03  cp BC,0
 	jr nz, UInt16_ToDouble__FCAA11             ; FCAA05  jr NZ,0xfcaa11
 	sla	xiy, 1                                 ; FCAA07  sla 0x01,XIY
 	rl	xix                                     ; FCAA0A  rl 0x01,XIX
@@ -3999,7 +3999,7 @@ Shift16_ArithRight:
 	ld	w, b                                    ; FCAA35  ld W,B
 	srl	w, 4                                   ; FCAA37  srl 0x04,W
 	sub	a, a                                   ; FCAA3A  sub A,A
-	cps	w, 0                                   ; FCAA3C  cp W,0
+	cp	w, 0:i3                                   ; FCAA3C  cp W,0
 	jr z, Shift16_ArithRight__FCAA42           ; FCAA3E  jr Z,0xfcaa42
 	extpfx2 0xDD, 0xFD                         ; FCAA40  sra A,IY
 Shift16_ArithRight__FCAA42:
@@ -4060,11 +4060,11 @@ Float32_ToDouble__FCAA94:
 	and	hl, 0x7FFF                             ; FCAAA7  and HL,0x7fff
 	xor	hl, wa                                 ; FCAAAB  xor HL,WA
 	ld	qix, hl                                 ; FCAAAD  ld QIX,HL
-	cps	wa, 0                                  ; FCAAB0  cp WA,0
+	cp	wa, 0:i3                                  ; FCAAB0  cp WA,0
 	jr z, Float32_ToDouble__FCAABF             ; FCAAB2  jr Z,0xfcaabf
 	sra	wa, 7                                  ; FCAAB4  sra 0x07,WA
 	add	wa, 0x380                              ; FCAAB7  add WA,0x0380
-	cps	wa, 1                                  ; FCAABB  cp WA,1
+	cp	wa, 1:i3                                  ; FCAABB  cp WA,1
 	jr ge, Float32_ToDouble__FCAAC5            ; FCAABD  jr GE,0xfcaac5
 Float32_ToDouble__FCAABF:
 	sub	xiy, xiy                               ; FCAABF  sub XIY,XIY
@@ -4075,7 +4075,7 @@ Float32_ToDouble__FCAAC5:
 Float32_ToDouble__FCAAC8:
 	ld	hl, de                                  ; FCAAC8  ld HL,DE
 	dec	1, de                                  ; FCAACA  dec 1,DE
-	cps	hl, 0                                  ; FCAACC  cp HL,0
+	cp	hl, 0:i3                                  ; FCAACC  cp HL,0
 	jr z, Float32_ToDouble__FCAAD8             ; FCAACE  jr Z,0xfcaad8
 	srl	xix, 1                                 ; FCAAD0  srl 0x01,XIX
 	rr	xiy                                     ; FCAAD3  rr 0x01,XIY
@@ -4124,7 +4124,7 @@ Shift32_ArithRight:
 	srl	w, 4                                   ; FCAB0E  srl 0x04,W
 	sub	a, a                                   ; FCAB11  sub A,A
 Shift32_ArithRight__FCAB13:
-	cps	w, 0                                   ; FCAB13  cp W,0
+	cp	w, 0:i3                                   ; FCAB13  cp W,0
 	jr z, Shift32_ArithRight__FCAB1D           ; FCAB15  jr Z,0xfcab1d
 	extpfx2 0xED, 0xFD                         ; FCAB17  sra A,XIY
 	dec	1, w                                   ; FCAB19  dec 1,W
@@ -4163,7 +4163,7 @@ Float32_ToInt32:
 	ld	xiy, (xiz+8)                            ; FCAB33  ld XIY,(XIZ+0x08)
 	ld	bc, qiy                                 ; FCAB36  ld BC,QIY
 	and	bc, 0x8000                             ; FCAB39  and BC,0x8000
-	cps	bc, 0                                  ; FCAB3D  cp BC,0
+	cp	bc, 0:i3                                  ; FCAB3D  cp BC,0
 	jr z, Float32_ToInt32__FCAB4C              ; FCAB3F  jr Z,0xfcab4c
 	ldw	hl, 8                                  ; FCAB41  ld HL,0x0008
 	ld	de, qiy                                 ; FCAB44  ld DE,QIY
@@ -4177,38 +4177,38 @@ Float32_ToInt32__FCAB4C:
 	or	wa, 0x80                                ; FCAB58  or WA,0x0080
 	ld	qiy, wa                                 ; FCAB5C  ld QIY,WA
 	sra	de, 7                                  ; FCAB5F  sra 0x07,DE
-	cps	de, 0                                  ; FCAB62  cp DE,0
+	cp	de, 0:i3                                  ; FCAB62  cp DE,0
 	jr nz, Float32_ToInt32__FCAB6B             ; FCAB64  jr NZ,0xfcab6b
 	sub	xiy, xiy                               ; FCAB66  sub XIY,XIY
 	jrl Float32_ToInt32__FCABBE                ; FCAB68  jrl T,0xfcabbe
 Float32_ToInt32__FCAB6B:
 	ld	wa, de                                  ; FCAB6B  ld WA,DE
 	sub	wa, 0x96                               ; FCAB6D  sub WA,0x0096
-	cps	wa, 0                                  ; FCAB71  cp WA,0
+	cp	wa, 0:i3                                  ; FCAB71  cp WA,0
 	jr lt, Float32_ToInt32__FCAB8C             ; FCAB73  jr LT,0xfcab8c
 	cp	wa, hl                                  ; FCAB75  cp WA,HL
 	jr le, Float32_ToInt32__FCAB7F             ; FCAB77  jr LE,0xfcab7f
-	cps	bc, 0                                  ; FCAB79  cp BC,0
+	cp	bc, 0:i3                                  ; FCAB79  cp BC,0
 	jr z, Float32_ToInt32__FCABAC              ; FCAB7B  jr Z,0xfcabac
 	jr Float32_ToInt32__FCABA5                 ; FCAB7D  jr T,0xfcaba5
 Float32_ToInt32__FCAB7F:
 	ld	ix, wa                                  ; FCAB7F  ld IX,WA
 	dec	1, wa                                  ; FCAB81  dec 1,WA
-	cps	ix, 0                                  ; FCAB83  cp IX,0
+	cp	ix, 0:i3                                  ; FCAB83  cp IX,0
 	jr z, Float32_ToInt32__FCAB99              ; FCAB85  jr Z,0xfcab99
 	sla	xiy, 1                                 ; FCAB87  sla 0x01,XIY
 	jr Float32_ToInt32__FCAB7F                 ; FCAB8A  jr T,0xfcab7f
 Float32_ToInt32__FCAB8C:
 	ld	ix, wa                                  ; FCAB8C  ld IX,WA
 	inc	1, wa                                  ; FCAB8E  inc 1,WA
-	cps	ix, 0                                  ; FCAB90  cp IX,0
+	cp	ix, 0:i3                                  ; FCAB90  cp IX,0
 	jr z, Float32_ToInt32__FCAB99              ; FCAB92  jr Z,0xfcab99
 	srl	xiy, 1                                 ; FCAB94  srl 0x01,XIY
 	jr Float32_ToInt32__FCAB8C                 ; FCAB97  jr T,0xfcab8c
 Float32_ToInt32__FCAB99:
 	cp	xiy, 0x80000000                         ; FCAB99  cp XIY,0x80000000
 	jr c, Float32_ToInt32__FCABB3              ; FCAB9F  jr C,0xfcabb3
-	cps	bc, 0                                  ; FCABA1  cp BC,0
+	cp	bc, 0:i3                                  ; FCABA1  cp BC,0
 	jr z, Float32_ToInt32__FCABAC              ; FCABA3  jr Z,0xfcabac
 Float32_ToInt32__FCABA5:
 	ld	xiy, 0x80000000                         ; FCABA5  ld XIY,0x80000000
@@ -4217,7 +4217,7 @@ Float32_ToInt32__FCABAC:
 	ld	xiy, 0x7FFFFFFF                         ; FCABAC  ld XIY,0x7fffffff
 	jr Float32_ToInt32__FCABBE                 ; FCABB1  jr T,0xfcabbe
 Float32_ToInt32__FCABB3:
-	cps	bc, 0                                  ; FCABB3  cp BC,0
+	cp	bc, 0:i3                                  ; FCABB3  cp BC,0
 	jr z, Float32_ToInt32__FCABBE              ; FCABB5  jr Z,0xfcabbe
 	cpl	iy                                     ; FCABB7  cpl IY
 	cpl	qiy                                    ; FCABB9  cpl QIY
@@ -4290,7 +4290,7 @@ UInt32_ToFloat32__FCAC15:
 UInt32_ToFloat32__FCAC18:
 	ld	bc, qiy                                 ; FCAC18  ld BC,QIY
 	and	bc, 0xFF00                             ; FCAC1B  and BC,0xff00
-	cps	bc, 0                                  ; FCAC1F  cp BC,0
+	cp	bc, 0:i3                                  ; FCAC1F  cp BC,0
 	jr z, UInt32_ToFloat32__FCAC2A             ; FCAC21  jr Z,0xfcac2a
 	srl	xiy, 1                                 ; FCAC23  srl 0x01,XIY
 	inc	1, de                                  ; FCAC26  inc 1,DE
@@ -4298,7 +4298,7 @@ UInt32_ToFloat32__FCAC18:
 UInt32_ToFloat32__FCAC2A:
 	ld	bc, qiy                                 ; FCAC2A  ld BC,QIY
 	and	bc, 0xFF80                             ; FCAC2D  and BC,0xff80
-	cps	bc, 0                                  ; FCAC31  cp BC,0
+	cp	bc, 0:i3                                  ; FCAC31  cp BC,0
 	jr nz, UInt32_ToFloat32__FCAC3C            ; FCAC33  jr NZ,0xfcac3c
 	sla	xiy, 1                                 ; FCAC35  sla 0x01,XIY
 	dec	1, de                                  ; FCAC38  dec 1,DE
@@ -4353,11 +4353,11 @@ Float32_Add:
 	ld	qix, wa                                 ; FCAC7E  ld QIX,WA
 	ld	hl, qiy                                 ; FCAC81  ld HL,QIY
 	and	hl, 0x7FF0                             ; FCAC84  and HL,0x7ff0
-	cps	hl, 0                                  ; FCAC88  cp HL,0
+	cp	hl, 0:i3                                  ; FCAC88  cp HL,0
 	jr nz, Float32_Add__FCAC98                 ; FCAC8A  jr NZ,0xfcac98
 	ld	hl, qix                                 ; FCAC8C  ld HL,QIX
 	and	hl, 0x7FF0                             ; FCAC8F  and HL,0x7ff0
-	cps	hl, 0                                  ; FCAC93  cp HL,0
+	cp	hl, 0:i3                                  ; FCAC93  cp HL,0
 	jrl z, Float32_Add__FCAD81                 ; FCAC95  jrl Z,0xfcad81
 Float32_Add__FCAC98:
 	ld	hl, qiy                                 ; FCAC98  ld HL,QIY
@@ -4374,7 +4374,7 @@ Float32_Add__FCACA8:
 	ex16	bc, de                                ; FCACAE  ex BC,DE
 Float32_Add__FCACB0:
 	xor	de, bc                                 ; FCACB0  xor DE,BC
-	cps	de, 0                                  ; FCACB2  cp DE,0
+	cp	de, 0:i3                                  ; FCACB2  cp DE,0
 	jr z, Float32_Add__FCACBA                  ; FCACB4  jr Z,0xfcacba
 	ldb	c, 45                                  ; FCACB6  ld C,0x2d
 	jr Float32_Add__FCACBC                     ; FCACB8  jr T,0xfcacbc
@@ -4401,12 +4401,12 @@ Float32_Add__FCACBC:
 	sub	wa, de                                 ; FCACF0  sub WA,DE
 	cp	wa, 25                                  ; FCACF2  cp WA,0x0019
 	jrl ugt, Float32_Add__FCAD98               ; FCACF6  jrl UGT,0xfcad98
-	cps	de, 0                                  ; FCACF9  cp DE,0
+	cp	de, 0:i3                                  ; FCACF9  cp DE,0
 	jrl z, Float32_Add__FCAD98                 ; FCACFB  jrl Z,0xfcad98
 Float32_Add__FCACFE:
 	ld	de, wa                                  ; FCACFE  ld DE,WA
 	dec	1, wa                                  ; FCAD00  dec 1,WA
-	cps	de, 0                                  ; FCAD02  cp DE,0
+	cp	de, 0:i3                                  ; FCAD02  cp DE,0
 	jr z, Float32_Add__FCAD0B                  ; FCAD04  jr Z,0xfcad0b
 	srl	xix, 1                                 ; FCAD06  srl 0x01,XIX
 	jr Float32_Add__FCACFE                     ; FCAD09  jr T,0xfcacfe
@@ -4416,28 +4416,28 @@ Float32_Add__FCAD0B:
 	add	xiy, xix                               ; FCAD10  add XIY,XIX
 	ld	de, qiy                                 ; FCAD12  ld DE,QIY
 	and	de, 0xFC00                             ; FCAD15  and DE,0xfc00
-	cps	de, 0                                  ; FCAD19  cp DE,0
+	cp	de, 0:i3                                  ; FCAD19  cp DE,0
 	jr z, Float32_Add__FCAD30                  ; FCAD1B  jr Z,0xfcad30
 	srl	xiy, 1                                 ; FCAD1D  srl 0x01,XIY
 	inc	1, hl                                  ; FCAD20  inc 1,HL
 	cp	hl, 0xFF                                ; FCAD22  cp HL,0x00ff
 	jr c, Float32_Add__FCAD30                  ; FCAD26  jr C,0xfcad30
 	ldb	c, 0                                   ; FCAD28  ld C,0x00
-	cps	bc, 0                                  ; FCAD2A  cp BC,0
+	cp	bc, 0:i3                                  ; FCAD2A  cp BC,0
 	jr z, Float32_Add__FCAD5A                  ; FCAD2C  jr Z,0xfcad5a
 	jr Float32_Add__FCAD52                     ; FCAD2E  jr T,0xfcad52
 Float32_Add__FCAD30:
 	add	xiy, 1                                 ; FCAD30  add XIY,0x00000001
 	ld	de, qiy                                 ; FCAD36  ld DE,QIY
 	and	de, 0xFC00                             ; FCAD39  and DE,0xfc00
-	cps	de, 0                                  ; FCAD3D  cp DE,0
+	cp	de, 0:i3                                  ; FCAD3D  cp DE,0
 	jr z, Float32_Add__FCAD98                  ; FCAD3F  jr Z,0xfcad98
 	srl	xiy, 1                                 ; FCAD41  srl 0x01,XIY
 	inc	1, hl                                  ; FCAD44  inc 1,HL
 	cp	hl, 0xFF                                ; FCAD46  cp HL,0x00ff
 	jr c, Float32_Add__FCAD98                  ; FCAD4A  jr C,0xfcad98
 	ldb	c, 0                                   ; FCAD4C  ld C,0x00
-	cps	bc, 0                                  ; FCAD4E  cp BC,0
+	cp	bc, 0:i3                                  ; FCAD4E  cp BC,0
 	jr z, Float32_Add__FCAD5A                  ; FCAD50  jr Z,0xfcad5a
 Float32_Add__FCAD52:
 	ld	xiy, 0xFF800000                         ; FCAD52  ld XIY,0xff800000
@@ -4449,17 +4449,17 @@ Float32_Add__FCAD62:
 	sub	xiy, xix                               ; FCAD62  sub XIY,XIX
 	cp	qiy, 0                                  ; FCAD64  cp QIY,0
 	jr nz, Float32_Add__FCAD6D                 ; FCAD67  jr NZ,0xfcad6d
-	cps	iy, 0                                  ; FCAD69  cp IY,0
+	cp	iy, 0:i3                                  ; FCAD69  cp IY,0
 	jr z, Float32_Add__FCAD81                  ; FCAD6B  jr Z,0xfcad81
 Float32_Add__FCAD6D:
 	ld	de, qiy                                 ; FCAD6D  ld DE,QIY
 	and	de, 0xFE00                             ; FCAD70  and DE,0xfe00
-	cps	de, 0                                  ; FCAD74  cp DE,0
+	cp	de, 0:i3                                  ; FCAD74  cp DE,0
 	jr nz, Float32_Add__FCAD92                 ; FCAD76  jr NZ,0xfcad92
 Float32_Add__FCAD78:
 	sla	xiy, 1                                 ; FCAD78  sla 0x01,XIY
 	dec	1, hl                                  ; FCAD7B  dec 1,HL
-	cps	hl, 1                                  ; FCAD7D  cp HL,1
+	cp	hl, 1:i3                                  ; FCAD7D  cp HL,1
 	jr nc, Float32_Add__FCAD85                 ; FCAD7F  jr NC,0xfcad85
 Float32_Add__FCAD81:
 	sub	xiy, xiy                               ; FCAD81  sub XIY,XIY
@@ -4467,7 +4467,7 @@ Float32_Add__FCAD81:
 Float32_Add__FCAD85:
 	ld	de, qiy                                 ; FCAD85  ld DE,QIY
 	and	de, 0xFE00                             ; FCAD88  and DE,0xfe00
-	cps	de, 0                                  ; FCAD8C  cp DE,0
+	cp	de, 0:i3                                  ; FCAD8C  cp DE,0
 	jr nz, Float32_Add__FCAD98                 ; FCAD8E  jr NZ,0xfcad98
 	jr Float32_Add__FCAD78                     ; FCAD90  jr T,0xfcad78
 Float32_Add__FCAD92:
@@ -4480,13 +4480,13 @@ Float32_Add__FCAD98:
 	or	de, hl                                  ; FCADA5  or DE,HL
 	ld	qiy, de                                 ; FCADA7  ld QIY,DE
 	ldb	c, 0                                   ; FCADAA  ld C,0x00
-	cps	bc, 0                                  ; FCADAC  cp BC,0
+	cp	bc, 0:i3                                  ; FCADAC  cp BC,0
 	jr z, Float32_Add__FCADCE                  ; FCADAE  jr Z,0xfcadce
 	ld	de, qiy                                 ; FCADB0  ld DE,QIY
 	and	de, 0x7F80                             ; FCADB3  and DE,0x7f80
-	cps	de, 0                                  ; FCADB7  cp DE,0
+	cp	de, 0:i3                                  ; FCADB7  cp DE,0
 	jr z, Float32_Add__FCADCE                  ; FCADB9  jr Z,0xfcadce
-	cps	iy, 0                                  ; FCADBB  cp IY,0
+	cp	iy, 0:i3                                  ; FCADBB  cp IY,0
 	jr nz, Float32_Add__FCADC4                 ; FCADBD  jr NZ,0xfcadc4
 	cp	qiy, 0                                  ; FCADBF  cp QIY,0
 	jr z, Float32_Add__FCADCE                  ; FCADC2  jr Z,0xfcadce
@@ -4530,11 +4530,11 @@ Double_ToFloat32:
 	and	wa, 0x7FF0                             ; FCADE8  and WA,0x7ff0
 	and	de, 0x7FFF                             ; FCADEC  and DE,0x7fff
 	xor	de, wa                                 ; FCADF0  xor DE,WA
-	cps	wa, 0                                  ; FCADF2  cp WA,0
+	cp	wa, 0:i3                                  ; FCADF2  cp WA,0
 	jr z, Double_ToFloat32__FCAE01             ; FCADF4  jr Z,0xfcae01
 	sra	wa, 4                                  ; FCADF6  sra 0x04,WA
 	sub	wa, 0x380                              ; FCADF9  sub WA,0x0380
-	cps	wa, 1                                  ; FCADFD  cp WA,1
+	cp	wa, 1:i3                                  ; FCADFD  cp WA,1
 	jr ge, Double_ToFloat32__FCAE05            ; FCADFF  jr GE,0xfcae05
 Double_ToFloat32__FCAE01:
 	sub	xiy, xiy                               ; FCAE01  sub XIY,XIY
@@ -4547,7 +4547,7 @@ Double_ToFloat32__FCAE05:
 Double_ToFloat32__FCAE11:
 	ld	hl, de                                  ; FCAE11  ld HL,DE
 	inc	1, de                                  ; FCAE13  inc 1,DE
-	cps	hl, 0                                  ; FCAE15  cp HL,0
+	cp	hl, 0:i3                                  ; FCAE15  cp HL,0
 	jr z, Double_ToFloat32__FCAE21             ; FCAE17  jr Z,0xfcae21
 	sla	xix, 1                                 ; FCAE19  sla 0x01,XIX
 	rl	xiy                                     ; FCAE1C  rl 0x01,XIY
@@ -4557,7 +4557,7 @@ Double_ToFloat32__FCAE21:
 	adc	xiy, 0                                 ; FCAE27  adc XIY,0x00000000
 	ld	hl, qiy                                 ; FCAE2D  ld HL,QIY
 	and	hl, 0x7F80                             ; FCAE30  and HL,0x7f80
-	cps	hl, 0                                  ; FCAE34  cp HL,0
+	cp	hl, 0:i3                                  ; FCAE34  cp HL,0
 	jr z, Double_ToFloat32__FCAE3C             ; FCAE36  jr Z,0xfcae3c
 	sub	xiy, xiy                               ; FCAE38  sub XIY,XIY
 	inc	1, wa                                  ; FCAE3A  inc 1,WA
@@ -4626,7 +4626,7 @@ Float32_Divide:
 	or	bc, 0x80                                ; FCAE9D  or BC,0x0080
 	ld	qix, bc                                 ; FCAEA1  ld QIX,BC
 	sra	wa, 7                                  ; FCAEA4  sra 0x07,WA
-	cps	wa, 0                                  ; FCAEA7  cp WA,0
+	cp	wa, 0:i3                                  ; FCAEA7  cp WA,0
 	jrl z, Float32_Divide__FCAF34              ; FCAEA9  jrl Z,0xfcaf34
 	cp	wa, 0xFF                                ; FCAEAC  cp WA,0x00ff
 	jr ge, Float32_Divide__FCAED3              ; FCAEB0  jr GE,0xfcaed3
@@ -4639,7 +4639,7 @@ Float32_Divide:
 	sra	bc, 7                                  ; FCAEC5  sra 0x07,BC
 	cp	bc, 0xFF                                ; FCAEC8  cp BC,0x00ff
 	jrl ge, Float32_Divide__FCAF34             ; FCAECC  jrl GE,0xfcaf34
-	cps	bc, 0                                  ; FCAECF  cp BC,0
+	cp	bc, 0:i3                                  ; FCAECF  cp BC,0
 	jr nz, Float32_Divide__FCAEDC              ; FCAED1  jr NZ,0xfcaedc
 Float32_Divide__FCAED3:
 	cp	qbc, 0                                  ; FCAED3  cp QBC,0
@@ -4665,12 +4665,12 @@ Float32_Divide__FCAEFD:
 	dec	1, wa                                  ; FCAF00  dec 1,WA
 	ld	bc, qiy                                 ; FCAF02  ld BC,QIY
 	and	bc, 0x400                              ; FCAF05  and BC,0x0400
-	cps	bc, 0                                  ; FCAF09  cp BC,0
+	cp	bc, 0:i3                                  ; FCAF09  cp BC,0
 	jr z, Float32_Divide__FCAEE4               ; FCAF0B  jr Z,0xfcaee4
 	add	xiy, 1                                 ; FCAF0D  add XIY,0x00000001
 	ld	bc, qiy                                 ; FCAF13  ld BC,QIY
 	and	bc, 0x400                              ; FCAF16  and BC,0x0400
-	cps	bc, 0                                  ; FCAF1A  cp BC,0
+	cp	bc, 0:i3                                  ; FCAF1A  cp BC,0
 	jr nz, Float32_Divide__FCAF21              ; FCAF1C  jr NZ,0xfcaf21
 	ldw	de, 4                                  ; FCAF1E  ld DE,0x0004
 Float32_Divide__FCAF21:
@@ -4678,12 +4678,12 @@ Float32_Divide__FCAF21:
 Float32_Divide__FCAF23:
 	ld	bc, de                                  ; FCAF23  ld BC,DE
 	dec	1, de                                  ; FCAF25  dec 1,DE
-	cps	bc, 0                                  ; FCAF27  cp BC,0
+	cp	bc, 0:i3                                  ; FCAF27  cp BC,0
 	jr z, Float32_Divide__FCAF30               ; FCAF29  jr Z,0xfcaf30
 	srl	xiy, 1                                 ; FCAF2B  srl 0x01,XIY
 	jr Float32_Divide__FCAF23                  ; FCAF2E  jr T,0xfcaf23
 Float32_Divide__FCAF30:
-	cps	wa, 1                                  ; FCAF30  cp WA,1
+	cp	wa, 1:i3                                  ; FCAF30  cp WA,1
 	jr ge, Float32_Divide__FCAF38              ; FCAF32  jr GE,0xfcaf38
 Float32_Divide__FCAF34:
 	sub	xiy, xiy                               ; FCAF34  sub XIY,XIY
@@ -4709,9 +4709,9 @@ Float32_Divide__FCAF51:
 	jr z, Float32_Divide__FCAF83               ; FCAF63  jr Z,0xfcaf83
 	ld	bc, qiy                                 ; FCAF65  ld BC,QIY
 	and	bc, 0x7F80                             ; FCAF68  and BC,0x7f80
-	cps	bc, 0                                  ; FCAF6C  cp BC,0
+	cp	bc, 0:i3                                  ; FCAF6C  cp BC,0
 	jr z, Float32_Divide__FCAF83               ; FCAF6E  jr Z,0xfcaf83
-	cps	iy, 0                                  ; FCAF70  cp IY,0
+	cp	iy, 0:i3                                  ; FCAF70  cp IY,0
 	jr nz, Float32_Divide__FCAF79              ; FCAF72  jr NZ,0xfcaf79
 	cp	qiy, 0                                  ; FCAF74  cp QIY,0
 	jr z, Float32_Divide__FCAF83               ; FCAF77  jr Z,0xfcaf83
@@ -4744,13 +4744,13 @@ Int16_ToFloat32:
 	push	xix                                   ; FCAF90  push XIX
 	ld	bc, (xiz+8)                             ; FCAF91  ld BC,(XIZ+0x08)
 	ld	de, bc                                  ; FCAF94  ld DE,BC
-	cps	de, 0                                  ; FCAF96  cp DE,0
+	cp	de, 0:i3                                  ; FCAF96  cp DE,0
 	jr ge, Int16_ToFloat32__FCAF9C             ; FCAF98  jr GE,0xfcaf9c
 	neg	bc                                     ; FCAF9A  neg BC
 Int16_ToFloat32__FCAF9C:
 	pushw	bc                                   ; FCAF9C  push BC
 	call	0xFCAFB4                              ; FCAF9D  call 0xfcafb4
-	cps	de, 0                                  ; FCAFA1  cp DE,0
+	cp	de, 0:i3                                  ; FCAFA1  cp DE,0
 	jr lt, Int16_ToFloat32__FCAFA7             ; FCAFA3  jr LT,0xfcafa7
 	jr Int16_ToFloat32__FCAFAD                 ; FCAFA5  jr T,0xfcafad
 Int16_ToFloat32__FCAFA7:
@@ -4775,7 +4775,7 @@ UInt16_ToFloat32:
 	push	xix                                   ; FCAFB9  push XIX
 	sub	xiy, xiy                               ; FCAFBA  sub XIY,XIY
 	ld	bc, (xiz+8)                             ; FCAFBC  ld BC,(XIZ+0x08)
-	cps	bc, 0                                  ; FCAFBF  cp BC,0
+	cp	bc, 0:i3                                  ; FCAFBF  cp BC,0
 	jr nz, UInt16_ToFloat32__FCAFC5            ; FCAFC1  jr NZ,0xfcafc5
 	jr UInt16_ToFloat32__FCAFFE                ; FCAFC3  jr T,0xfcaffe
 UInt16_ToFloat32__FCAFC5:
@@ -4784,7 +4784,7 @@ UInt16_ToFloat32__FCAFC5:
 UInt16_ToFloat32__FCAFCB:
 	ld	bc, qiy                                 ; FCAFCB  ld BC,QIY
 	and	bc, 0xFF00                             ; FCAFCE  and BC,0xff00
-	cps	bc, 0                                  ; FCAFD2  cp BC,0
+	cp	bc, 0:i3                                  ; FCAFD2  cp BC,0
 	jr z, UInt16_ToFloat32__FCAFDD             ; FCAFD4  jr Z,0xfcafdd
 	srl	xiy, 1                                 ; FCAFD6  srl 0x01,XIY
 	inc	1, de                                  ; FCAFD9  inc 1,DE
@@ -4792,7 +4792,7 @@ UInt16_ToFloat32__FCAFCB:
 UInt16_ToFloat32__FCAFDD:
 	ld	bc, qiy                                 ; FCAFDD  ld BC,QIY
 	and	bc, 0xFF80                             ; FCAFE0  and BC,0xff80
-	cps	bc, 0                                  ; FCAFE4  cp BC,0
+	cp	bc, 0:i3                                  ; FCAFE4  cp BC,0
 	jr nz, UInt16_ToFloat32__FCAFEF            ; FCAFE6  jr NZ,0xfcafef
 	sla	xiy, 1                                 ; FCAFE8  sla 0x01,XIY
 	dec	1, de                                  ; FCAFEB  dec 1,DE
@@ -4901,7 +4901,7 @@ Float32_Negate:
 	ld	xbc, (xiz-8)                            ; FCB05A  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FCB05D  push XBC
 	call	0xFCB075                              ; FCB05E  call 0xfcb075
-	cps	wa, 0                                  ; FCB062  cp WA,0
+	cp	wa, 0:i3                                  ; FCB062  cp WA,0
 	jr z, Float32_Negate__FCB06B               ; FCB064  jr Z,0xfcb06b
 	extpfx5 0x9C, 0x02, 0x3D, 0x00, 0x80       ; FCB066  xor (XIX+0x02),0x8000
 Float32_Negate__FCB06B:
@@ -4927,11 +4927,11 @@ Float32_Classify:
 	ld	xix, (xiz+8)                            ; FCB07D  ld XIX,(XIZ+0x08)
 	ld	de, qix                                 ; FCB080  ld DE,QIX
 	and	de, 0x7F80                             ; FCB083  and DE,0x7f80
-	cps	de, 0                                  ; FCB087  cp DE,0
+	cp	de, 0:i3                                  ; FCB087  cp DE,0
 	jr z, Float32_Classify__FCB0CA             ; FCB089  jr Z,0xfcb0ca
 	ld	de, qix                                 ; FCB08B  ld DE,QIX
 	and	de, 0x8000                             ; FCB08E  and DE,0x8000
-	cps	de, 0                                  ; FCB092  cp DE,0
+	cp	de, 0:i3                                  ; FCB092  cp DE,0
 	jr z, Float32_Classify__FCB0A5             ; FCB094  jr Z,0xfcb0a5
 	cp	qix, 0                                  ; FCB096  cp QIX,0
 	jr nc, Float32_Classify__FCB0A0            ; FCB099  jr NC,0xfcb0a0
@@ -4950,7 +4950,7 @@ Float32_Classify__FCB0AF:
 	cp	qix, 0                                  ; FCB0AF  cp QIX,0
 	jr ugt, Float32_Classify__FCB0BE           ; FCB0B2  jr UGT,0xfcb0be
 	jr c, Float32_Classify__FCB0C4             ; FCB0B4  jr C,0xfcb0c4
-	cps	ix, 0                                  ; FCB0B6  cp IX,0
+	cp	ix, 0:i3                                  ; FCB0B6  cp IX,0
 	jr ugt, Float32_Classify__FCB0BE           ; FCB0B8  jr UGT,0xfcb0be
 	jr c, Float32_Classify__FCB0C4             ; FCB0BA  jr C,0xfcb0c4
 	jr Float32_Classify__FCB0CA                ; FCB0BC  jr T,0xfcb0ca
@@ -5169,17 +5169,17 @@ Float32_Compare:
 	ld	xiy, (xiz+12)                           ; FCB1CA  ld XIY,(XIZ+0x0c)
 	ld	de, qix                                 ; FCB1CD  ld DE,QIX
 	and	de, 0x7F80                             ; FCB1D0  and DE,0x7f80
-	cps	de, 0                                  ; FCB1D4  cp DE,0
+	cp	de, 0:i3                                  ; FCB1D4  cp DE,0
 	jr nz, Float32_Compare__FCB1E3             ; FCB1D6  jr NZ,0xfcb1e3
 	ld	de, qiy                                 ; FCB1D8  ld DE,QIY
 	and	de, 0x7F80                             ; FCB1DB  and DE,0x7f80
-	cps	de, 0                                  ; FCB1DF  cp DE,0
+	cp	de, 0:i3                                  ; FCB1DF  cp DE,0
 	jr z, Float32_Compare__FCB233              ; FCB1E1  jr Z,0xfcb233
 Float32_Compare__FCB1E3:
 	ld	de, qix                                 ; FCB1E3  ld DE,QIX
 	xor	de, qiy                                ; FCB1E6  xor DE,QIY
 	and	de, 0x8000                             ; FCB1E9  and DE,0x8000
-	cps	de, 0                                  ; FCB1ED  cp DE,0
+	cp	de, 0:i3                                  ; FCB1ED  cp DE,0
 	jr z, Float32_Compare__FCB203              ; FCB1EF  jr Z,0xfcb203
 	ld	de, qix                                 ; FCB1F1  ld DE,QIX
 	cp	de, qiy                                 ; FCB1F4  cp DE,QIY
@@ -5192,7 +5192,7 @@ Float32_Compare__FCB1FE:
 Float32_Compare__FCB203:
 	ld	de, qix                                 ; FCB203  ld DE,QIX
 	and	de, 0x8000                             ; FCB206  and DE,0x8000
-	cps	de, 0                                  ; FCB20A  cp DE,0
+	cp	de, 0:i3                                  ; FCB20A  cp DE,0
 	jr z, Float32_Compare__FCB213              ; FCB20C  jr Z,0xfcb213
 	ldw	wa, 3                                  ; FCB20E  ld WA,0x0003
 	jr Float32_Compare__FCB215                 ; FCB211  jr T,0xfcb215
@@ -5241,7 +5241,7 @@ Shift8_LogicalRight:
 	ld	w, b                                    ; FCB242  ld W,B
 	srl	w, 4                                   ; FCB244  srl 0x04,W
 	sub	a, a                                   ; FCB247  sub A,A
-	cps	w, 0                                   ; FCB249  cp W,0
+	cp	w, 0:i3                                   ; FCB249  cp W,0
 	jr z, Shift8_LogicalRight__FCB24F          ; FCB24B  jr Z,0xfcb24f
 	extpfx2 0xCB, 0xFF                         ; FCB24D  srl A,C
 Shift8_LogicalRight__FCB24F:
@@ -5268,7 +5268,7 @@ Shift8_Left:
 	ld	w, b                                    ; FCB263  ld W,B
 	srl	w, 4                                   ; FCB265  srl 0x04,W
 	sub	a, a                                   ; FCB268  sub A,A
-	cps	w, 0                                   ; FCB26A  cp W,0
+	cp	w, 0:i3                                   ; FCB26A  cp W,0
 	jr z, Shift8_Left__FCB270                  ; FCB26C  jr Z,0xfcb270
 	extpfx2 0xCB, 0xFE                         ; FCB26E  sll A,C
 Shift8_Left__FCB270:

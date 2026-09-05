@@ -112,7 +112,7 @@ SetupExitFunc:
 	jr	nz, 82
 	lds	wa, 6
 	call	16535254
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 72
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -668,7 +668,7 @@ PsFileNameBox_HandleConfirm:
 	lda xhl, (xwa + 0x26)
 	ld DE,(XWA+0x28)
 	lda xbc, (xsp + 0x0092)
-	cps de, 1
+	cp de, 1:i3
 	jrl nz, PsFileNameBox_Confirm_MultiItem
 	cpw (XHL), 0x0001
 	jr nz, PsFileNameBox_Confirm_MultiItem

@@ -216,9 +216,9 @@ Flash_ReadDeviceId:
 	ld	de, (xbc)                           ; FC85D1  ld DE,(XBC)
 	ld	(0xE29F:24), de                    ; FC85D3  ld (0x00e29f),DE
 	ld	hl, (xbc+2)                         ; FC85D8  ld HL,(XBC+0x02)
-	cps	de, 1                              ; FC85DB  cp DE,1
+	cp	de, 1:i3                              ; FC85DB  cp DE,1
 	jr z, Flash_ReadDeviceId__FC85E3                        ; FC85DD  jr Z,0xfc85e3
-	cps	de, 4                              ; FC85DF  cp DE,4
+	cp	de, 4:i3                              ; FC85DF  cp DE,4
 	jr nz, Flash_ReadDeviceId__FC85F6                       ; FC85E1  jr NZ,0xfc85f6
 Flash_ReadDeviceId__FC85E3:
 	cp	hl, 0x2223                          ; FC85E3  cp HL,0x2223

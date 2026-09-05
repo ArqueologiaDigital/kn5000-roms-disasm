@@ -101,7 +101,7 @@ SLSrcBank_HandleShow:
 	ld	xwa, (33062:16)
 	lda	xde, (15336946:24)
 	ld	c, (35164:16)
-	cps	c, 0
+	cp	c, 0:i3
 	jr	nz, 17
 	cp	(35182:16), 0
 	jr	z, 10
@@ -132,7 +132,7 @@ SLSrcMem_HandleShow:
 	ld	xwa, (33066:16)
 	lda	xde, (15336996:24)
 	ld	c, (35164:16)
-	cps	c, 1
+	cp	c, 1:i3
 	jr	z, 7
 	cp	(35166:16), 0
 	jr	z, 10
@@ -402,14 +402,14 @@ SLSrcBankList_FuncBody:
 	cp	xhl, 29360152
 	jr	nz, 44
 	ld	c, e
-	cps	e, 0
+	cp	e, 0:i3
 	jr	z, 38
 	ld	e, (15337810:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 21
 	dec	1, c
 	ld	(35168:16), c
@@ -643,7 +643,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	cp	(35166:16), 0
 	jr	nz, 63
-	cps	bc, 4
+	cp	bc, 4:i3
 	jr	nc, 59
 	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
@@ -764,14 +764,14 @@ SLSrcBankList_FuncBody:
 	cp	xix, 29360152
 	jr	nz, 44
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 38
 	ld	e, (15337844:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 21
 	dec	1, c
 	ld	(35170:16), c
@@ -1165,7 +1165,7 @@ SLSrcBankList_FuncBody:
 	cp	xde, 29360152
 	jr	nz, 115
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 109
 	ld	e, (15337874:24)
 	ld	a, e
@@ -1176,7 +1176,7 @@ SLSrcBankList_FuncBody:
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 84
 	dec	1, c
 	ld	(35172:16), c
@@ -1282,7 +1282,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	inc	1, iz
-	cps	iz, 4
+	cp	iz, 4:i3
 	jr	c, -70
 	lds32	xhl, 0
 	popw	iz
@@ -1652,14 +1652,14 @@ SLDstBankList_FuncBody:
 	cp	xix, 29360152
 	jr	nz, 39
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 33
 	ld	e, (15337928:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 16
 	dec	1, c
 	ld	(35174:16), c
@@ -1817,7 +1817,7 @@ SLDstBankList_FuncBody:
 	cp	xde, 29360152
 	jr	nz, 16
 	ld	a, w
-	cps	w, 0
+	cp	w, 0:i3
 	jr	z, 10
 	dec	1, a
 	ld	(35176:16), a
@@ -2042,14 +2042,14 @@ SLDstBankList_FuncBody:
 	cp	xix, 29360152
 	jr	nz, 39
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 33
 	ld	e, (15337964:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 16
 	dec	1, c
 	ld	(35178:16), c
@@ -2402,7 +2402,7 @@ SLDstBankList_FuncBody:
 	cp	xde, 29360152
 	jr	nz, 110
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 104
 	ld	e, (15338002:24)
 	ld	a, e
@@ -2413,7 +2413,7 @@ SLDstBankList_FuncBody:
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 79
 	dec	1, c
 	ld	(35180:16), c
@@ -2521,7 +2521,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	call	16423243
 	inc	1, iz
-	cps	iz, 4
+	cp	iz, 4:i3
 	jr	c, -70
 	lds32	xhl, 0
 	popw	iz
@@ -2573,7 +2573,7 @@ SLDst_ShowHide_Dispatch:
 	cp	(35164:16), 0
 	jr	nz, 15
 	call	16281577
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 7
 	ld	(35182:16), 1
 	jr	5
@@ -2683,7 +2683,7 @@ SLDst_ScrollMode4:
 	cp	xwa, 4
 	jrl	nz, 188
 	calr	-8758
-	cps	l, 0
+	cp	l, 0:i3
 	jrl	z, -342
 	cp	(35164:16), 1
 	jr	z, 14
@@ -3301,7 +3301,7 @@ CmpSingleLoadFileFunc:
 	ld	(33120:16), xde
 	call	16290274
 	ld	(33124:16), hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 6
 	ldw	(33124:16), 0
 CmpFile_Selection_Clamp:
@@ -3349,7 +3349,7 @@ CmpFile_HandleScroll:
 CmpFile_ScrollDown:
 	cp xde, 0x1
 	jr nz, CmpFile_ScrollRedraw
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, CmpFile_ScrollRedraw
 	dec 1, wa
 
@@ -3365,10 +3365,10 @@ CmpFile_ScrollRedraw:
 	ld	(35164:16), 4
 	lds	wa, 3
 	call	16289732
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 23
 	call	16281313
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 15
 	ld	(35164:16), 2
 	ld	wa, (33124:16)
@@ -3424,11 +3424,11 @@ FmmCmpSingleLoadFunc:
 	calr	-26275
 FmmCmpLoad_DispatchState:
 	ld	wa, (33892:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	z, 169
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 139
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	z, 102
 	cpw	(33894:16), 0
 	jr	ge, 19
@@ -3441,10 +3441,10 @@ FmmCmpLoad_ContinueLoad:
 	ld	(35164:16), 4
 	lds	wa, 3
 	call	16289732
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 16
 	call	16281313
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 5
 	ld	(35164:16), 2
 FmmCmpLoad_SignalProgress:

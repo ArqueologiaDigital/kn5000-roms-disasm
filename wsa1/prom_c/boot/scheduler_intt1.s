@@ -122,7 +122,7 @@ INTT1_HANDLER__phase5:
 INTT1_HANDLER__dispatch:
 	sub	xbc, xbc
 	ld	bc, (xiz-2)
-	cps	bc, 5
+	cp	bc, 5:i3
 	jr	ugt, INTT1_HANDLER__advance
 	sll	bc, 2
 	add	xbc, 0x00F990C8

@@ -56,7 +56,7 @@ ParaLoadOpt_CaseC:
 	ld (0x02475a:24), a
 	ld a, (xsp + 4)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, MidiFunc_SendEvtReturnAlt
 	cp wa, 0xc
 	jrl gt, MidiFunc_SendEvtReturnAlt
@@ -183,7 +183,7 @@ ParaLoadOpt_CaseF:
 	ld (0xbd0c:16), a
 	ld a, (xsp + 4)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, MidiFunc_SendEventReturn
 	cp wa, 0xc
 	jrl gt, MidiFunc_SendEventReturn
@@ -369,7 +369,7 @@ ParaLoadOpt_GridReturn:
 	jrl nz, AccFunc_ReturnZeroJmp
 	lds wa, 7
 	call PanelDisplay_DispatchByMode
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, AccFunc_ReturnZeroJmp
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -619,11 +619,11 @@ ParaLoadOpt_GridDispatch:
 	jrl	nz, 801
 	cp	hl, 8
 	jr	z, 106
-	cps	hl, 7
+	cp	hl, 7:i3
 	jr	z, 71
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	z, 36
-	cps	hl, 2
+	cp	hl, 2:i3
 	jrl	nz, 782
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
@@ -680,11 +680,11 @@ ParaLoadOpt_GridDispatch:
 	jrl	nz, 618
 	cp	hl, 8
 	jrl	z, 127
-	cps	hl, 7
+	cp	hl, 7:i3
 	jr	z, 85
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	z, 43
-	cps	hl, 2
+	cp	hl, 2:i3
 	jrl	nz, 598
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
@@ -838,12 +838,12 @@ VoiceUI_MiscHandler:
 	ld wa, (xde)
 	cp wa, 0x8
 	jrl z, ParaLoadOpt_BuildFromIZ3
-	cps wa, 7
+	cp wa, 7:i3
 	jr z, ParaLoadOpt_BuildFromIZ2
 	ld xbc, (xsp + 8)
-	cps wa, 3
+	cp wa, 3:i3
 	jr z, ParaLoadOpt_BuildFromIZ1
-	cps wa, 2
+	cp wa, 2:i3
 	jrl nz, ParaLoadOpt_ReturnZero
 	ld a, (xiz)
 	extz wa

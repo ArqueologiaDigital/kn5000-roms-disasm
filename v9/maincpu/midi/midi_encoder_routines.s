@@ -149,7 +149,7 @@ Encoder_ProcessBreath:
 
 Encoder_ProcessBreath_WithModeAdjustment:
 	ld c, (0x8eda:16); Get breath mode
-	cps c, 0
+	cp c, 0:i3
 	ret z	; Return if disabled
 	srl a, 1	; Divide by 2
 	ld l, a
@@ -238,11 +238,11 @@ Encoder_ReturnDefaultConstant_End:
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
 	ld a, (0xc07d:16); Get mode selector
-	cps a, 6
+	cp a, 6:i3
 	jr z, Encoder_ConfigureRangeLimit	; Jump if mode 6
-	cps a, 5
+	cp a, 5:i3
 	jr z, Encoder_ConfigureVolumeMode	; Jump if mode 5
-	cps a, 4
+	cp a, 4:i3
 	ret nz	; Return if not mode 4
 	; Mode 4: Configure breath mode
 	ld a, (0xc07f:16)
@@ -265,7 +265,7 @@ Encoder_ConfigureVolumeMode:
 Encoder_ConfigureRangeLimit:
 	ld a, (0xc07f:16)
 	res 7, a	; Clear bit 7
-	cps a, 0
+	cp a, 0:i3
 	ret z	; Return if zero
 	ld a, (0xc07e:16)
 	res 7, a	; Clear bit 7

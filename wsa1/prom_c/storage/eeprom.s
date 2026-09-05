@@ -126,7 +126,7 @@ EEPROM_WriteEnable__clock:
 	ld	de, bc                                  ; FC89E6  ld DE,BC
 	res_dd8	3, P8                              ; FC89E8  res 3,(0x18)
 	dec	1, h                                   ; FC89EB  dec 1,H
-	cps	h, 0                                   ; FC89ED  cp H,0
+	cp	h, 0:i3                                   ; FC89ED  cp H,0
 	jr nz, EEPROM_WriteEnable__bit             ; FC89EF  jr NZ,0xfc89cf
 	res_dd8	5, P6                              ; FC89F1  res 5,(0x12)
 	popw	de                                    ; FC89F4  pop DE
@@ -162,7 +162,7 @@ EEPROM_WriteDisable__clock:
 	ld	de, bc                                  ; FC8A18  ld DE,BC
 	res_dd8	3, P8                              ; FC8A1A  res 3,(0x18)
 	dec	1, h                                   ; FC8A1D  dec 1,H
-	cps	h, 0                                   ; FC8A1F  cp H,0
+	cp	h, 0:i3                                   ; FC8A1F  cp H,0
 	jr nz, EEPROM_WriteDisable__bit            ; FC8A21  jr NZ,0xfc8a01
 	res_dd8	5, P6                              ; FC8A23  res 5,(0x12)
 	popw	de                                    ; FC8A26  pop DE
@@ -205,7 +205,7 @@ EEPROM_SendReadCommand__clock:
 	ld	de, bc                                  ; FC8A52  ld DE,BC
 	res_dd8	3, P8                              ; FC8A54  res 3,(0x18)
 	dec	1, h                                   ; FC8A57  dec 1,H
-	cps	h, 0                                   ; FC8A59  cp H,0
+	cp	h, 0:i3                                   ; FC8A59  cp H,0
 	jr nz, EEPROM_SendReadCommand__bit         ; FC8A5B  jr NZ,0xfc8a3b
 	popw	de                                    ; FC8A5D  pop DE
 	popw	hl                                    ; FC8A5E  pop HL
@@ -253,7 +253,7 @@ EEPROM_WriteWord__cmd_clock:
 	ld	de, bc                                  ; FC8A8C  ld DE,BC
 	res_dd8	3, P8                              ; FC8A8E  res 3,(0x18)
 	dec	1, h                                   ; FC8A91  dec 1,H
-	cps	h, 0                                   ; FC8A93  cp H,0
+	cp	h, 0:i3                                   ; FC8A93  cp H,0
 	jr nz, EEPROM_WriteWord__cmd_bit           ; FC8A95  jr NZ,0xfc8a75
 	ld	ix, (xiz+10)                            ; FC8A97  ld IX,(XIZ+0x0a)
 	ldb	h, 16                                  ; FC8A9A  ld H,0x10
@@ -272,13 +272,13 @@ EEPROM_WriteWord__data_clock:
 	ld	ix, bc                                  ; FC8AB3  ld IX,BC
 	res_dd8	3, P8                              ; FC8AB5  res 3,(0x18)
 	dec	1, h                                   ; FC8AB8  dec 1,H
-	cps	h, 0                                   ; FC8ABA  cp H,0
+	cp	h, 0:i3                                   ; FC8ABA  cp H,0
 	jr nz, EEPROM_WriteWord__data_bit          ; FC8ABC  jr NZ,0xfc8a9c
 	res_dd8	5, P6                              ; FC8ABE  res 5,(0x12)
 	ldb	h, 32                                  ; FC8AC1  ld H,0x20
 EEPROM_WriteWord__cs_low_delay:
 	dec	1, h                                   ; FC8AC3  dec 1,H
-	cps	h, 0                                   ; FC8AC5  cp H,0
+	cp	h, 0:i3                                   ; FC8AC5  cp H,0
 	jr nz, EEPROM_WriteWord__cs_low_delay      ; FC8AC7  jr NZ,0xfc8ac3
 	set_dd8	5, P6                              ; FC8AC9  set 5,(0x12)
 EEPROM_WriteWord__wait_ready:
@@ -325,7 +325,7 @@ EEPROM_ShiftIn16__clock_low:
 	add	xbc, xix                               ; FC8AF6  add XBC,XIX
 	ld	xix, xbc                                ; FC8AF8  ld XIX,XBC
 	dec	1, h                                   ; FC8AFA  dec 1,H
-	cps	h, 0                                   ; FC8AFC  cp H,0
+	cp	h, 0:i3                                   ; FC8AFC  cp H,0
 	jr nz, EEPROM_ShiftIn16__bit               ; FC8AFE  jr NZ,0xfc8ae3
 	res_dd8	5, P6                              ; FC8B00  res 5,(0x12)
 	srl	xbc, 1                                 ; FC8B03  srl 0x01,XBC
@@ -476,7 +476,7 @@ EEPROM_PortInit:
 	ldw	hl, 0x1770                             ; FC8BA6  ld HL,0x1770
 EEPROM_PortInit__delay:
 	dec	1, hl                                  ; FC8BA9  dec 1,HL
-	cps	hl, 0                                  ; FC8BAB  cp HL,0
+	cp	hl, 0:i3                                  ; FC8BAB  cp HL,0
 	jr nz, EEPROM_PortInit__delay              ; FC8BAD  jr NZ,0xfc8ba9
 	popw	hl                                    ; FC8BAF  pop HL
 	ret                                        ; FC8BB0  ret

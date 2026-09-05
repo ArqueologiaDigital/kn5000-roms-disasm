@@ -94,7 +94,7 @@ GraphicsRender_ByteData:
 	pushw	iz
 	ld	iz, wa
 	calr	37078
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 7
 	ld	wa, iz
 	calr	29
@@ -128,7 +128,7 @@ GraphicsRender_ByteData:
 	inc	4, xsp
 	ret
 	calr	36984
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 19
 	lds	wa, 4
 	calr	36737
@@ -176,7 +176,7 @@ GraphicsRender_ByteData:
 
 Display_DeferOrDrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Display_DeferOrDrawWall_Direct
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -194,7 +194,7 @@ Display_DeferOrDrawWall_Direct:
 
 Display_DeferOrUpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Display_DeferOrUpdateScreen_Direct
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -1394,9 +1394,9 @@ DrawFunc_Init_SkipShift:
 	extz hl
 	lda xbc, (xsp + 4)
 	pushw hl
-	cps ix, 2
+	cp ix, 2:i3
 	jr z, DrawFunc_Init_FontTable2
-	cps ix, 1
+	cp ix, 1:i3
 	jr nz, DrawFunc_Init_FontTable0
 	ld xwa, Str_No_0xE16
 	jr DrawFunc_Init_PushFontAndDraw
@@ -1441,9 +1441,9 @@ DrawFunc_Init_Variant1:
 	sll DE, 0x03
 	ld (XBC),DE
 	lda xbc, (xsp + 0x04)
-	cps hl, 2
+	cp hl, 2:i3
 	jr z, .Lc_fb1e46
-	cps hl, 1
+	cp hl, 1:i3
 	jr nz, .Lc_fb1e4f
 	pushm (xix)
 	ld XWA,Str_No_0xE4A
@@ -1804,7 +1804,7 @@ CalcTotalWidth_KerningLoop_Init:
 	lds iz, 0
 	ld xix, xbc
 	lds de, 0
-	cps hl, 0
+	cp hl, 0:i3
 	jr le, CalcTotalWidth_FreeAndReturn
 
 CalcTotalWidth_KerningLoop:
@@ -1926,7 +1926,7 @@ FontGlyph_ByteData:
 	.byte 0xcf
 	ldb	w, 102
 	.byte 0x04
-	cps	e, 0
+	cp	e, 0:i3
 	jr	nz, 5
 	ld	a, (xwa)
 	ld	(xbc), a
@@ -2168,7 +2168,7 @@ VGA_Initialize:
 	_VGA_SEQUENCER 0x8, 0x1
 	_VGA_SEQUENCER 0xd, 0x3
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, VGA_Init_ExtSeq0F_44
 
 	; For byte-matching purposes, the following instructions
@@ -3544,7 +3544,7 @@ PmBank_OK_SaveDelete:
 	ld xbc, 0x1e000aa
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, PmBank_OK_Forward
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
@@ -3950,7 +3950,7 @@ ToneGen_WriteParamByIndex:
 	ld bc, wa
 	ld wa, iz
 	lda xiy, (VariationStr_V1_0x3C:24)
-	cps bc, 5
+	cp bc, 5:i3
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
 	lda xix, (TransposeNoteStr_C_0x18E:24)
@@ -4143,7 +4143,7 @@ WallHomeEdit_EventDispatch:
 	jr	nz, 83
 	ldw	wa, 8
 	call	16535254
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 72
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -4421,7 +4421,7 @@ WallUsrShowHideFunc:
 	jr	nz, 83
 	ldw	wa, 8
 	call	16535254
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 72
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -4808,7 +4808,7 @@ MainSysControl:
 	pop	xde
 	stb_erp	a, 251
 	extz	wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	mi, 82
 	cp	wa, 8
 	jr	gt, 76
@@ -5007,7 +5007,7 @@ AcFreeSplit_CheckSecondKey:
 	jr	nz, 126
 	ld	xwa, 16768
 	call	16567398
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 18
 	pushw	237
 	pushw	7172

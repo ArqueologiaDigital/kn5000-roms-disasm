@@ -370,7 +370,7 @@ AudioInit_Pan_TypeED_Left:
 	add	d, d
 	inc	1, ix
 AudioInit_Pan_DefaultCenter:
-	cps	ix, 6
+	cp	ix, 6:i3
 	jrl	c, -130
 AudioInit_Pan_CheckReverbChannel:
 	.byte 0x68, 0x68, 0xc1, 0x63, 0xc1, 0x3f, 0xff, 0x66
@@ -682,7 +682,7 @@ AudioInit_PartAssign_CheckIdx15:
 	ld	xde, xwa
 	ld	xwa, xhl
 	call	16667741
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 12
 	lda	xwa, (xsp+8)
 	ld	xbc, (xsp+2)

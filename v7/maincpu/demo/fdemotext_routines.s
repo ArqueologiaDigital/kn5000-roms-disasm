@@ -29,11 +29,11 @@ FDemoText_ByteData_VoiceProbeA:
 	ld	c, (49121:16)
 	ld	a, (49124:16)
 	extz	wa
-	cps	c, 5
+	cp	c, 5:i3
 	jr	z, 24
-	cps	c, 1
+	cp	c, 1:i3
 	jr	z, 4
-	cps	c, 0
+	cp	c, 0:i3
 	ret	nz
 	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb	a, xbc, wa
@@ -58,9 +58,9 @@ FDemoText_ByteData_VoiceProbeC:
 	ld	a, (49121:16)
 	extz	wa
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	ret	lt
-	cps	wa, 6
+	cp	wa, 6:i3
 	ret	gt
 	add	wa, wa
 	lda	xix, (DemoDiskPrompt_English1_0x96:24)
@@ -104,7 +104,7 @@ FDemoText_ProcessVoiceFlags:
 	.byte 0xf1, 0xaa, 0x8c, 0x41
 FDemoText_ProcessVoiceFlags_ReadState:
 	call	15665005
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 353
 	ld	a, (149486:24)
 	bit	6, a
@@ -133,7 +133,7 @@ FDemoText_ProbeVoice_Loop:
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_erp C, 0xfa
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr z, FDemoText_ProbeVoice_SetActive
 	stb_erp A, 0xfa
 	cpl a
@@ -165,7 +165,7 @@ FDemoText_ProcessChannels_Loop:
 	and c, e
 	jr z, FDemoText_ProcessChannel_CheckNoFlag
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_ProcessChannel_Activate
 	stb_erp A, 0xfb
 	extz wa
@@ -182,7 +182,7 @@ FDemoText_ProcessChannel_CheckNoFlag:
 	calr FDemoText_CheckVoiceState
 	stb_erp A, 0xfb
 	extz wa
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_ProcessChannel_Deactivate
 	calr FDemoText_ActivateVoiceAlt
 	jr FDemoText_ProcessChannel_CheckMask
@@ -337,7 +337,7 @@ FDemoText_SyncPreset_ActiveLoop:
 	calr FDemoText_CheckVoiceState
 	stb_erp A, 0xfb
 	extz wa
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_SyncPreset_CallUpdate
 	ld bc, wa
 	lda xde, (DemoDiskPrompt_English1_0x86:24)
@@ -400,7 +400,7 @@ FDemoText_UpdateChannelVoice:
 	calr FDemoText_CheckVoiceState
 	ld a, (xsp + 4)
 	extz wa
-	cps l, 1
+	cp l, 1:i3
 	jr z, FDemoText_UpdateChannel_Active
 	ld (xiz), 0x0
 	pushw 0x7f
@@ -434,7 +434,7 @@ FDemoText_CheckAndSetTimer:
 	ld A,(XSP+0x04)
 	extz WA
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_CheckTimer_Done
 	cp (XIZ),0x00
 	jr nz, FDemoText_CheckTimer_Done
@@ -471,7 +471,7 @@ FDemoText_ParseControlMessage:
 	extz	bc
 	cp	e, 130
 	jr	z, 45
-	cps	e, 2
+	cp	e, 2:i3
 	jr	nz, 85
 	lds	wa, 6
 	call	16267494
@@ -510,7 +510,7 @@ FDemoText_ParseCtrl_SecondHalf:
 	ld c, (xwa + 2)
 	cp c, 0x82
 	jr z, FDemoText_ParseCtrl_FormatC3
-	cps c, 2
+	cp c, 2:i3
 	ret nz
 	ld c, (xwa + 7)
 	and c, 0xf
@@ -936,7 +936,7 @@ FDemoText_ScanMIDIChannels:
 	call sendCOMM
 	ldw (xsp + 6), 0x0
 	call SeqBuf_NoteEvent_CheckSongEnd
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, FDemoText_ScanMIDI_ReadResponse
 
 FDemoText_ScanMIDI_WaitLoop:
@@ -944,7 +944,7 @@ FDemoText_ScanMIDI_WaitLoop:
 	cpw (xsp + 6), 0x2710
 	jr ugt, FDemoText_ScanMIDI_ReadResponse
 	call SeqBuf_NoteEvent_CheckSongEnd
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FDemoText_ScanMIDI_WaitLoop
 
 FDemoText_ScanMIDI_ReadResponse:
@@ -974,10 +974,10 @@ FDemoText_ScanMIDI_StoreResponseByte:
 	inc 1, iz
 
 FDemoText_ScanMIDI_ByteLoop:
-	cps iz, 6
+	cp iz, 6:i3
 	jr nc, FDemoText_ScanMIDI_CheckStatus
 	call Seq_RingBuf_ReadSmall
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, FDemoText_ScanMIDI_StoreResponseByte
 
 FDemoText_ScanMIDI_CheckStatus:
@@ -1004,7 +1004,7 @@ FDemoText_ScanMIDI_ExtendLoop:
 	cp iz, wa
 	jr nc, FDemoText_ScanMIDI_ValidateResponse
 	call Seq_RingBuf_ReadSmall
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, FDemoText_ScanMIDI_ExtendResponse
 
 FDemoText_ScanMIDI_ValidateResponse:
@@ -1035,7 +1035,7 @@ FDemoText_ScanMIDI_NoMatch:
 
 FDemoText_ScanMIDI_ReadNextFrame:
 	call Seq_RingBuf_ReadSmall
-	cps hl, 0
+	cp hl, 0:i3
 	jrl ge, FDemoText_ScanMIDI_ReadBytes
 
 FDemoText_ScanMIDI_CheckTimeout:
@@ -1094,7 +1094,7 @@ FDemoText_Rescan_Loop:
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_erp C, 0xfa
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr z, FDemoText_Rescan_SetFlag
 	stb_erp A, 0xfa
 	cpl a
@@ -1251,7 +1251,7 @@ FDemoText_ByteData_DisplayRefresh:
 	sll	xwa, 0
 	add	xwa, xbc
 	call	16400055
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 42
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
@@ -1263,7 +1263,7 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xwa
 	call	16713560
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 14
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
@@ -1299,14 +1299,14 @@ FDemoText_ByteData_DisplayRefresh:
 	lds iz, 1
 .Lc_f84f28:
 	call FileIO_ReadByte
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lc_f84f4c
 .Lc_f84f30:
 	cpw (XSP+0x02), 0x0000
 	jr z, .Lc_f84f3f
 .Lc_f84f37:
 	call FileIO_ReadByte
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lc_f84f20
 .Lc_f84f3f:
 	cpw (XSP+0x02), 0x0000
@@ -1328,7 +1328,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld (XSP+0x04),XWA
 .Lc_f84f6e:
 	call FileIO_ReadByte
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lc_f84f84
 .Lc_f84f76:
 	cpw (XSP+0x02), 0x0001
@@ -1359,7 +1359,7 @@ FDemoText_ByteData_DisplayRefresh:
 	lds iz, 1
 .Lc_f84fbb:
 	call FileIO_ReadByte
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lc_f84fcc
 .Lc_f84fc3:
 	cpw (XSP+0x02), 0x0001
@@ -1437,7 +1437,7 @@ FDemoText_ProcessMarkup_ScanTagEnd:
 
 FDemoText_ProcessMarkup_ScanLoop:
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr z, FDemoText_ProcessMarkup_AllocCopy
 	cp a, 0x3e
 	jr nz, FDemoText_ProcessMarkup_ScanTagEnd
@@ -1761,9 +1761,9 @@ FDemoText_ByteData_TextRenderer:
 	lda	xsp, (xsp+12)
 	retd	4
 FDemoText_TextDispatch:
-	cps bc, 1
+	cp bc, 1:i3
 	jr z, FDemoText_TextDispatch_Return
-	cps bc, 0
+	cp bc, 0:i3
 	call z, (FDemoText_RenderTextLine:24)
 
 FDemoText_TextDispatch_Return:
@@ -1863,7 +1863,7 @@ FDemoText_UpdateCursorPosition:
 	lda xix, (0x0251da:24)
 	muls bc, 0x28
 	ld hl, bc
-	cps iz, 0
+	cp iz, 0:i3
 	jr le, FDemoText_FindCursor_LeftDone
 	ld bc, iz
 	ld de, hl
@@ -1875,7 +1875,7 @@ FDemoText_FindCursor_SearchLeft:
 	cpib_sri 0x07, 0xf0, 0xe8, 0x54
 	jr nz, FDemoText_FindCursor_LeftDone
 	ld iy, iz
-	cps iz, 0
+	cp iz, 0:i3
 	jr gt, FDemoText_FindCursor_SearchLeft
 
 FDemoText_FindCursor_LeftDone:
@@ -1987,7 +1987,7 @@ FDemoText_Layout_Setup:
 	ld	(xsp+10), xwa
 	lds32	xwa, 1
 	sub	(xsp+10), xwa
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	z, 13
 	ld	xwa, (xsp+10)
 	ld	(xwa), 0
@@ -2003,17 +2003,17 @@ FDemoText_Layout_ProcessLine:
 	ld xwa, (xsp + 6)
 	call CalcTotalWidth
 	ld (xsp + 8), hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, FDemoText_Layout_UpdatePosition
 	lda xbc, (0x025b74:24)
 	ld wa, (0x025b72:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	lda xbc, (xsp + 20)
-	cps a, 2
+	cp a, 2:i3
 	jr z, FDemoText_Layout_AlignRight
-	cps a, 1
+	cp a, 1:i3
 	jr z, FDemoText_Layout_DrawText
-	cps a, 0
+	cp a, 0:i3
 	jr nz, FDemoText_Layout_DrawText
 	ld de, (xsp + 4)
 	exts xde
@@ -2055,7 +2055,7 @@ FDemoText_Layout_UpdatePosition:
 	cpw (xsp + 14), 0x0
 	jr z, FDemoText_Layout_FreeBuffer
 	calr FDemoText_UpdateCursorPosition
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FDemoText_Layout_FreeBuffer
 	ld xwa, (xsp + 10)
 	inc 1, xwa
@@ -2119,11 +2119,11 @@ FDemoText_ByteData_LayoutB:
 	ld	wa, (154482:24)
 	ld_rrb	a, xbc, wa
 	lda	xbc, (xsp+8)
-	cps	a, 2
+	cp	a, 2:i3
 	jr	z, 31
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 36
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 32
 	exts	xhl
 	divs	hl, 2
@@ -2267,14 +2267,14 @@ Seq_LoadDisplayResource:
 	ldirw					; block copy
 	call GetDiskSizeInfo				; get display state
 	extz hl					; zero-extend result
-	cps hl, 1				; state == 1?
+	cp hl, 1:i3				; state == 1?
 	jr z, Seq_LoadResource_SpecialCase			; special case
-	cps hl, 5				; state == 5?
+	cp hl, 5:i3				; state == 5?
 	jr z, Seq_LoadResource_Error			; error
-	cps hl, 0				; state == 0?
+	cp hl, 0:i3				; state == 0?
 	jr z, Seq_LoadResource_Error			; error
 	call GetEncodedFileSizeData				; validate resource
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, Seq_LoadResource_Proceed			; valid, proceed
 	jr Seq_Epilogue32				; error, cleanup
 Seq_LoadResource_Error:
@@ -2297,7 +2297,7 @@ Seq_LoadResource_Proceed:
 	lda	xwa, (xsp+4)
 	ld	xbc, 15335502
 	call	16287674
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 28
 	pushw	234
 	pushw	24
@@ -2340,7 +2340,7 @@ Seq_FillBufferLoop:
 	lda	xwa, (xsp+4)
 	ld	xbc, 15335532
 	call	16287674
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 62
 	lds32	xwa, 0
 	lds	bc, 2
@@ -2358,7 +2358,7 @@ Seq_FillBufferLoop:
 	ld	xde, 15335506
 	calr	61108
 	call	16287803
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 8
 	calr	65095
 	lds	wa, 1

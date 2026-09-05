@@ -490,7 +490,7 @@ Rhythm_TransposeNote:
 	jr z, Rhythm_Transp_CheckZero
 	ld a, (0x323e:16)
 Rhythm_Transp_CheckZero:
-	cps a, 0
+	cp a, 0:i3
 	jr nz, Rhythm_Transp_Apply
 	ldb a, 0x0
 	jr Rhythm_Transp_Done
@@ -552,10 +552,10 @@ Rhythm_VoiceMap_ClampInstr:
 	.byte 0xcb, 0x66, 0x05, 0x45, 0x9c, 0x4e, 0xf5, 0x00
 Rhythm_VoiceMap_SelectTable:
 	ld_rr8b	l, xiy, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 38	; -> 0xF54E1F
 	ld	h, (13207:16)
-	cps	l, 1
+	cp	l, 1:i3
 	jr	z, 4	; -> 0xF54E05
 	ld	h, (13208:16)
 Rhythm_VoiceMap_CheckMute:
@@ -815,7 +815,7 @@ Rhythm_SingleNoteHandler:
 	call Rhythm_SendByte
 	ld a, (xix + 3)
 	sub a, 0x10
-	cps a, 0
+	cp a, 0:i3
 	jr gt, Rhythm_SingleNote_ClampVelocity
 	ldb a, 0x1
 
@@ -1402,7 +1402,7 @@ Rhythm_TranspMod_BaseLookup:
 Rhythm_TranspMod_OctaveWrap:
 	ld	a, (12861:16)
 	dec	1, a
-	cps	a, 7
+	cp	a, 7:i3
 	jr	nc, 12
 	add	w, a
 	bit	7, w

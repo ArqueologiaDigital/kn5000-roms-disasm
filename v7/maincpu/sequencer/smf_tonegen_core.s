@@ -137,7 +137,7 @@ FloppyIO_ReadNextByte:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	cps de, 0
+	cp de, 0:i3
 	jrl nz, FloppyIO_ReadNextByte_DivDone
 
 FloppyIO_ReadNextByte_DivDone:
@@ -354,7 +354,7 @@ SeqTrack_AssignChannel_Loop:
 	ld bc, (0x286d:16)
 	cp wa, bc
 	jrl ugt, SeqTrack_ErrorMark
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, SeqTrack_ErrorMark
 	pushw wa
 	ld hl, wa
@@ -427,9 +427,9 @@ FloppyIO_ReadTrackBuf_Done:
 
 SeqTrack_DispatchPartEvt:
 	call SeqTrack_ClearPartEventParams
-	cps ix, 1
+	cp ix, 1:i3
 	jrl z, SeqTrack_DispatchPart_Mode1
-	cps ix, 2
+	cp ix, 2:i3
 	jrl z, SeqTrack_DispatchPart_Mode2
 	jrl SeqTrack_DispatchPart_Mode3
 
@@ -488,7 +488,7 @@ SeqTrack_ComputeTempoScaling:
 	ld bc, (4211:16)
 	ld e, (4213:16)
 	xor d, d
-	cps de, 0
+	cp de, 0:i3
 	jrl z, SeqTrack_ComputeTempo_NoDelta
 	pushw wa
 	xor wa, wa
@@ -673,9 +673,9 @@ SMF_ParseTrack_EarlyExit:
 
 SMF_ParseTrack_Dispatch:
 	ld (4009:16), 0
-	cps a, 2
+	cp a, 2:i3
 	jrl z, SMF_ParseTrack_MetaEvt02
-	cps a, 3
+	cp a, 3:i3
 	jrl z, SMF_ParseTrack_MetaEvt03
 	cp a, 0x2f
 	jrl z, SMF_ParseTrack_MetaEvt2F
@@ -1071,7 +1071,7 @@ SMF_VoiceSetup_AssignToTrack:
 	ld bc, (0x286d:16)
 	cp wa, bc
 	jrl ugt, SMF_VoiceSetup_Exit
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, SMF_VoiceSetup_Exit
 	pushw wa
 	ld hl, wa
@@ -1470,7 +1470,7 @@ MidiSysEx_Cmd_NoteOn:
 	jrl MidiSysEx_CmdDispatchLoop
 
 MidiSysEx_Cmd_PolyPressure:
-	cps hl, 3
+	cp hl, 3:i3
 	jrl z, MidiSysEx_PolyPressure_Mode3
 	ld iy, (4211:16)
 	and iy, 0xf
@@ -1664,7 +1664,7 @@ SeqTrack_ComputeScaledDelta:
 	jrl z, SeqTrack_ScaledDelta_PassThrough
 	ld e, (4213:16)
 	ld wa, (4211:16)
-	cps e, 0
+	cp e, 0:i3
 	jrl z, SeqTrack_ScaledDelta_NoDivide3
 	ldw hl, 0x60
 	mul xwa, xhl
@@ -1745,7 +1745,7 @@ Sequencer_AdvanceBlockPosition:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	cps de, 0
+	cp de, 0:i3
 	jrl nz, Sequencer_Advance_DivDone
 
 Sequencer_Advance_DivDone:
@@ -2006,7 +2006,7 @@ MidiEvent_ChannelPressureA:
 
 MidiEvent_NoteOnA:
 	ld w, (xix + 2)
-	cps w, 0
+	cp w, 0:i3
 	jrl z, MidiEvent_NoteOffA
 	call MidiNoteOn_FindFreeVoiceSlotA
 	jrl MidiNoteOff_NullRetA
@@ -2068,7 +2068,7 @@ MidiEvent_ChannelPressureB:
 
 MidiEvent_NoteOnB:
 	ld w, (xix + 2)
-	cps w, 0
+	cp w, 0:i3
 	jrl z, MidiEvent_NoteOffB
 	call MidiNoteOn_FindFreeVoiceSlotB
 	jrl MidiNoteOff_NullRetB
@@ -2178,19 +2178,19 @@ SetWall_ValidateAndApply:
 	ld (0x27d2:16), 0
 	call SetWall_ParserInit
 	ld a, (0x2877:16)
-	cps a, 1
+	cp a, 1:i3
 	jrl c, SetWall_ParamOutOfRange
 	cp a, (0x28a1:16)
 	jrl ugt, SetWall_ParamOutOfRange
 	cp a, (9858:16)
 	jrl z, SetWall_ParamOutOfRange
 	ld a, (9858:16)
-	cps a, 1
+	cp a, 1:i3
 	jrl c, SetWall_ParamOutOfRange
 	cp a, (0x28a1:16)
 	jrl ugt, SetWall_ParamOutOfRange
 	ld a, (9860:16)
-	cps a, 1
+	cp a, 1:i3
 	jrl c, SetWall_ParamOutOfRange
 	cp a, (0x28a1:16)
 	jrl ule, SetWall_ParamsValid
@@ -2838,9 +2838,9 @@ MidiNoteOff_ScanActiveA_Loop:
 	ld wa, (xiy + 5)
 	ldb l, 0x60
 	divs8rr a, l
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, Scoop_ApplyMatchedVoiceEntry
-	cps w, 4
+	cp w, 4:i3
 	jrl ugt, Scoop_ApplyMatchedVoiceEntry
 	ldb w, 0x5
 
@@ -3492,9 +3492,9 @@ MidiNoteOff_ScanActiveB_Loop:
 	ld wa, (xiy + 5)
 	ldb l, 0x60
 	divs8rr a, l
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, Scoop_ApplyMatchedVoiceEntryAlt
-	cps w, 4
+	cp w, 4:i3
 	jrl ugt, Scoop_ApplyMatchedVoiceEntryAlt
 	ldb w, 0x5
 
@@ -3948,7 +3948,7 @@ SoundGen_ReadVoiceRegs:
 
 SoundGen_StoreVoiceToTables_Clamped:
 	push xix
-	cps hl, 1
+	cp hl, 1:i3
 	jr ule, SoundGen_StoreVoice_AfterClamp
 	lds hl, 1
 
@@ -4343,7 +4343,7 @@ VoiceSynth_HandleDataEntry:
 	ld a, e
 
 VoiceSynth_DataEntry_CheckSpec:
-	cps c, 1
+	cp c, 1:i3
 	jr nz, VoiceSynth_DataEntry_Done
 	push xhl
 	push xiy
@@ -4470,7 +4470,7 @@ VoiceChannel_SelectPrevParam:
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ldb_sri A, 0x07, 0xec, 0xf4
-	cps a, 0
+	cp a, 0:i3
 	jr z, VoiceChannel_PrevParam_AtZero
 	dec 1, a
 
@@ -4787,7 +4787,7 @@ VoiceParam_HandleDataEntry:
 	ld a, e
 
 VoiceParam_DataEntry_CheckSpec:
-	cps c, 1
+	cp c, 1:i3
 	jr nz, VoiceParam_DataEntry_Done
 	push xhl
 	push xiy
@@ -4966,7 +4966,7 @@ VoiceSynth_Algo_ChannelConfig:
 	cp	a, e
 	jr	ule, 2
 	ld	a, e
-	cps	c, 1
+	cp	c, 1:i3
 	jr	nz, 8
 	push	xhl
 	push	xiy
@@ -5220,7 +5220,7 @@ VoiceParam_ReadUpdate_6:
 	cp	a, e
 	jr	ule, 2
 	ld	a, e
-	cps	c, 1
+	cp	c, 1:i3
 	jr	nz, 8
 	push	xhl
 	pushw	iy

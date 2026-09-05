@@ -413,14 +413,14 @@ ListDir2_Return:
 ; Returns: l = 0xff if status invalid, otherwise falls through to display
 RunTestCounters_Entry:
 	call GetMediaType
-	cps l, 3
+	cp l, 3:i3
 	jr z, RunTestCounters_RunTest
-	cps l, 2
+	cp l, 2:i3
 	jr nz, RunTestCounters_BadStatus
 RunTestCounters_RunTest:
 	incw 1, (0x03dcfe:24)
 	calr FDLoadSaveTest
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, RunTestCounters_IncrNG
 	incw 1, (0x03dd00:24)
 	jr RunTestCounters_Display
@@ -466,7 +466,7 @@ CreateRunFDOp_Entry:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, CreateRunFDOp_Fail
 	lda xwa, (FDTest_String_TestTitleFunc_0x100:24)
 	calr FDTest_PrintDiag
@@ -545,9 +545,9 @@ CheckFDStatusLoad_Entry:
 	push xiz
 	call GetMediaType
 	extz hl
-	cps hl, 2
+	cp hl, 2:i3
 	jr z, CheckFDStatusLoad_DoLoad
-	cps hl, 3
+	cp hl, 3:i3
 	jr z, CheckFDStatusLoad_DoLoad
 	lda xwa, (FDTest_String_TestTitleFunc_0x236:24)
 	calr SendEvent_Entry
@@ -589,7 +589,7 @@ LoadExtROM_Entry:
 	push	xwa
 	call	16712932
 	add	xsp, 10
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 8
 	lda	xwa, (14811042:24)
 	jrl	-217
@@ -610,7 +610,7 @@ LoadXaprInit_Entry:
 	push	xwa
 	call	16712932
 	add	xsp, 10
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	nz
 	ld	(253188:24), 1
 	ret
@@ -638,7 +638,7 @@ LoadAndRunXapr_Entry:
 	push	xwa
 	call	16712932
 	add	xsp, 10
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 8
 	ld	(253188:24), 1
 	jr	6

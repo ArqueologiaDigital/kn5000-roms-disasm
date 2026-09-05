@@ -202,7 +202,7 @@ ComSetGridCheck_JumpTable:
 	jrl	nz, 737
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 34
 	ld	wa, (xsp+6)
 	sla	wa, 2
@@ -236,7 +236,7 @@ ComSetGridCheck_JumpTable:
 	jrl	nz, 621
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 34
 	ld	wa, (xsp+6)
 	sla	wa, 2
@@ -309,17 +309,17 @@ ComSetGridCheck_JumpTable:
 	jrl	363
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 7
 	ld	xwa, NakaInst_OFF_E80048_0x8
 	jr	44
 	ld	xwa, (xsp+22)
 	ld	wa, (xwa+4)
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	z, 22
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 11
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 21
 	.byte 0x40
 	.long NakaInst_NORMAL
@@ -381,7 +381,7 @@ ComSetGridCheck_ParamDisplay:
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp + 12)
 	ld xwa, NakaInst_GM_0x18
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ComSetGrid_CopyStrAndDispatch
 	ld xwa, NakaInst_GM_0x12
 
@@ -399,7 +399,7 @@ ComSetGrid_CopyStrAndDispatch:
 ComSetGrid_CheckC0Param:
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
-	cps hl, 1
+	cp hl, 1:i3
 	jr nz, ComSetGrid_LookupByColumn
 	ld xwa, NakaInst_GM_0x1E
 	jr UI_DisplayStringAndDispatchEvent
@@ -410,11 +410,11 @@ ComSetGrid_LookupByColumn:
 	lda xwa, (NakaData_ModeConfig2_0x8:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	call SndParam_LookupReadOnly
-	cps hl, 3
+	cp hl, 3:i3
 	jr z, ComSetGrid_ParamStr3
-	cps hl, 1
+	cp hl, 1:i3
 	jr z, ComSetGrid_ParamStr1
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, ComSetGrid_ParamStrDefault
 	ld xwa, NakaInst_GM_0x28
 	jr UI_DisplayStringAndDispatchEvent
@@ -518,11 +518,11 @@ AcPmemOutL_Init:
 	call SendEvent
 	ld xiz, xhl
 	ld wa, iz
-	cps wa, 3
+	cp wa, 3:i3
 	jr z, AcPmemOutL_Init_Cell3
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, AcPmemOutL_Init_Cell01
-	cps wa, 0
+	cp wa, 0:i3
 	jrl nz, AcPmemOutL_Init_ForwardBase
 
 AcPmemOutL_Init_Cell01:
@@ -583,11 +583,11 @@ AcPmemOutL_Init_ForwardBase:
 	ld xde, (xsp + 8)
 	jrl AcPmemOutL_CallBase
 	ld xwa, (xsp + 8)
-	cps wa, 3
+	cp wa, 3:i3
 	jrl z, AcPmemOutL_AutoIncDown_Cell3
-	cps wa, 2
+	cp wa, 2:i3
 	jrl z, AcPmemOutL_AutoIncUp_Cell2
-	cps wa, 1
+	cp wa, 1:i3
 	jrl nz, AcPmemOutL_ReloadAndForward
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -608,7 +608,7 @@ AcPmemOutL_Init_ForwardBase:
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, AcPmemOutL_AutoIncUp_Cell0_FwdParent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -655,7 +655,7 @@ AcPmemOutL_AutoIncUp_Cell2:
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
-	cps iz, 1
+	cp iz, 1:i3
 	jr z, AcPmemOutL_AutoIncUp_Cell2_FwdParent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -702,7 +702,7 @@ AcPmemOutL_AutoIncDown_Cell3:
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
-	cps iz, 3
+	cp iz, 3:i3
 	jr z, AcPmemOutL_AutoIncDown_Cell3_FwdParent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -828,11 +828,11 @@ AcPmemOutR_Init:
 	call SendEvent
 	ld xiz, xhl
 	ld wa, iz
-	cps wa, 7
+	cp wa, 7:i3
 	jr z, AcPmemOutR_Init_Cell567
-	cps wa, 6
+	cp wa, 6:i3
 	jr z, AcPmemOutR_Init_Cell567
-	cps wa, 5
+	cp wa, 5:i3
 	jr nz, AcPmemOutR_Init_ForwardBase
 
 AcPmemOutR_Init_Cell567:
@@ -864,11 +864,11 @@ AcPmemOutR_Init_ForwardBase:
 	ld xde, (xsp + 8)
 	jrl AcPmemOutR_CallBase
 	ld xwa, (xsp + 8)
-	cps wa, 7
+	cp wa, 7:i3
 	jrl z, AcPmemOutR_AutoIncDown_Cell7
-	cps wa, 6
+	cp wa, 6:i3
 	jrl z, AcPmemOutR_AutoIncUp_Cell6
-	cps wa, 5
+	cp wa, 5:i3
 	jrl nz, AcPmemOutR_ReloadAndForward
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -889,7 +889,7 @@ AcPmemOutR_Init_ForwardBase:
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, AcPmemOutR_AutoIncUp_Cell5_FwdParent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -936,7 +936,7 @@ AcPmemOutR_AutoIncUp_Cell6:
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
-	cps iz, 1
+	cp iz, 1:i3
 	jr z, AcPmemOutR_AutoIncUp_Cell6_FwdParent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -983,7 +983,7 @@ AcPmemOutR_AutoIncDown_Cell7:
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
-	cps iz, 2
+	cp iz, 2:i3
 	jr z, AcPmemOutR_AutoIncDown_Cell7_FwdParent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -1138,11 +1138,11 @@ PmemOutLGridCheck_JumpTable:
 	ld	(xwa+2), hl
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 1956
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	z, 124
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 39
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	nz, 1943
 	ld	xiy, 15204622
 	lda	xix, (xsp+60)
@@ -1204,11 +1204,11 @@ PmemOutLGridCheck_JumpTable:
 	ld	(xwa+2), hl
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 1757
-	cps	hl, 3
+	cp	hl, 3:i3
 	jrl	z, 135
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 46
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	nz, 1743
 	ld	xiy, 15204622
 	lda	xix, (xsp+60)
@@ -1572,11 +1572,11 @@ PmemOutL_GridCheck:
 	cpw (xbc), 0x1
 	jrl nz, PmemOutGrid_ReturnZero
 	ld wa, (xix)
-	cps wa, 3
+	cp wa, 3:i3
 	jrl z, PmemOutL_ColumnParamDisplay
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, PmemOutL_BitCheckDisplay
-	cps wa, 0
+	cp wa, 0:i3
 	jrl nz, PmemOutGrid_ReturnZero
 	ld c, (0x024772:24)
 	ld a, c
@@ -1720,11 +1720,11 @@ TtMdCtlMsg_EventDispatch:
 	normal
 	nop
 	jrl	nz, 2053
-	cps	bc, 2
+	cp	bc, 2:i3
 	jrl	z, 205
-	cps	bc, 1
+	cp	bc, 1:i3
 	jr	z, 112
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	nz, 2039
 	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
@@ -1844,11 +1844,11 @@ TtMdCtlMsg_EventDispatch:
 	normal
 	nop
 	jrl	nz, 1692
-	cps	bc, 2
+	cp	bc, 2:i3
 	jrl	z, 229
-	cps	bc, 1
+	cp	bc, 1:i3
 	jrl	z, 128
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	nz, 1677
 	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
@@ -2351,7 +2351,7 @@ CtlMsgGrid_EventHandler:
 	ld a, (0x024774:24)
 	ld xbc, 0x1a
 	call Math_MultiplyAccumulate
-	cps iz, 2
+	cp iz, 2:i3
 	jrl z, CtlMsg_ComputeAndCheck
 	lds32 xbc, 0
 	ld c, (0x024772:24)
@@ -2362,9 +2362,9 @@ CtlMsgGrid_EventHandler:
 	ld xbc, (xsp + 16)
 	add xbc, xwa
 	add xbc, xhl
-	cps iz, 1
+	cp iz, 1:i3
 	jr z, CtlMsg_ReadOffsetAndSend
-	cps iz, 0
+	cp iz, 0:i3
 	jrl nz, TtMdCtlMsg_ReturnZero2
 	ld xwa, (xsp + 28)
 	sub xwa, 0xf9a0
@@ -2618,7 +2618,7 @@ AcCtlMsgGrid_OK:
 	ld wa, (xbc)
 	inc 1, wa
 	ld (xbc), wa
-	cps wa, 1
+	cp wa, 1:i3
 	jr le, AcCtlMsgGrid_OK_Up_Store
 	ld xwa, (xde)
 	ldw (xwa), 0x0
@@ -2642,7 +2642,7 @@ AcCtlMsgGrid_OK_Down:
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, AcCtlMsgGrid_OK_Down_Store
 	ld xwa, (xde)
 	ldw (xwa), 0x1
@@ -2680,7 +2680,7 @@ AcCtlMsgGrid_OK_DispatchScroll:
 	lds32 xde, 0
 	call SendEvent
 	ld ix, hl
-	cps ix, 2
+	cp ix, 2:i3
 	jr nz, AcCtlMsgGrid_ScrollUp_CellNav
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 74)
@@ -2688,7 +2688,7 @@ AcCtlMsgGrid_OK_DispatchScroll:
 	ld wa, (xde)
 	dec 1, wa
 	ld (xde), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, AcCtlMsgGrid_ScrollUp_PageDec
 	ld xwa, (xbc)
 	ldw (xwa), 0x1
@@ -2788,7 +2788,7 @@ AcCtlMsgGrid_ScrollUp_AutoScroll:
 	ld wa, (xbc)
 	inc 1, wa
 	ld (xbc), wa
-	cps wa, 1
+	cp wa, 1:i3
 	jr le, AcCtlMsgGrid_ScrollDown_PageInc
 	ld xwa, (xde)
 	ldw (xwa), 0x0
@@ -2869,9 +2869,9 @@ AcCtlMsgGrid_GetRowText:
 	call GetViewInstance
 	ld xwa, (xhl + 74)
 	ld wa, (xwa)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, AcCtlMsgGrid_GetRowText_Page1
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, AcCtlMsgGrid_ReturnHandled
 	ld xwa, NakaInst_ON_E80168_0x12A
 	jr AcCtlMsgGrid_GetRowText_Push
@@ -3077,7 +3077,7 @@ MidiSetup_TtlDispatch:
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp + 20)
 	ld xwa, NakaInst_ON_E80168_0x282
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MidiSetup_CopyStrAndDispatch
 	ld xwa, NakaInst_ON_E80168_0x27C
 
@@ -3268,7 +3268,7 @@ MidiSetup_TtlCase5:
 	ld wa, (xbc)
 	inc 1, wa
 	ld (xbc), wa
-	cps wa, 2
+	cp wa, 2:i3
 	jr le, MidiPart_StorePartIndex
 	ld xwa, (xde)
 	ldw (xwa), 0x0
@@ -3301,7 +3301,7 @@ MidiPart_DecrementPart:
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, MidiPart_StoreAndNotify
 	ld xwa, (xde)
 	ldw (xwa), 0x2
@@ -3348,7 +3348,7 @@ MidiPart_CallMainFunc:
 	lds32 xde, 0
 	call SendEvent
 	ld iz, hl
-	cps iz, 2
+	cp iz, 2:i3
 	jrl nz, MidiPart_Part2ColumnNav
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 74)
@@ -3356,7 +3356,7 @@ MidiPart_CallMainFunc:
 	ld wa, (xde)
 	dec 1, wa
 	ld (xde), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, MidiPart_AutoDec_StorePart
 	ld xwa, (xbc)
 	ldw (xwa), 0x2
@@ -3516,7 +3516,7 @@ MidiPart_InitGridBox:
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
-	cps wa, 2
+	cp wa, 2:i3
 	jr le, MidiPart_AutoInc_StorePart
 	ld xwa, (xbc)
 	ldw (xwa), 0x0
@@ -3652,11 +3652,11 @@ MidiSetup_GridBoxCase1:
 	call GetViewInstance
 	ld xwa, (xhl + 74)
 	ld wa, (xwa)
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, MidiSetup_GridStr2
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, MidiSetup_GridStr1
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, MidiPart_ReturnZeroJmp
 	ld xwa, NakaInst_ON_E80168_0x2EE
 	jr MidiSetup_PushGridStr
@@ -3776,16 +3776,16 @@ MidiPartGridCheck_JumpTable:
 	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	z, 123
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 85
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	nz, 1030
 	ld	xwa, (xsp+12)
 	inc	1, xwa
 	call	16569399
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 36
 	ld	xwa, (xsp+12)
 	inc	1, xwa
@@ -3857,20 +3857,20 @@ MidiPartGridCheck_JumpTable:
 	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	z, 127
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 90
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	nz, 802
 	ld	xwa, (xsp+12)
 	inc	1, xwa
 	call	16569399
-	cps	hl, 1
+	cp	hl, 1:i3
 	jrl	nz, 788
 	ld	xwa, (xsp+12)
 	call	16569399
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 24
 	ld	xwa, (xsp+12)
 	inc	1, xwa
@@ -3935,7 +3935,7 @@ MidiPartGridCheck_JumpTable:
 	ld	xwa, (xde)
 	inc	1, xwa
 	call	16569399
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 18
 	pushw	232
 	pushw	1722
@@ -4005,12 +4005,12 @@ MidiSetup_EventHandler:
 	extz wa
 	muls wa, 0x60
 	add wa, bc
-	cps de, 3
+	cp de, 3:i3
 	jrl z, MidiPart_LookupFromTable
 	lda xbc, (NakaInst_ON_E80168_0x3B8:24)
-	cps de, 2
+	cp de, 2:i3
 	jr z, MidiPart_LookupColumnParam
-	cps de, 1
+	cp de, 1:i3
 	jrl nz, MidiSetup_ReturnZero
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 12), xwa
@@ -4019,7 +4019,7 @@ MidiSetup_EventHandler:
 	ld xwa, (xsp + 12)
 	inc 1, xwa
 	call SndParam_LookupReadOnly
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, MidiPart_AudioCmdDisplay
 	pushw 0xe8
 	pushw 0x6e2
@@ -4079,7 +4079,7 @@ MidiPart_LookupFromTable:
 	ld xwa, (xsp + 12)
 	call SndParam_LookupReadOnly
 	ld xwa, Transpose_String_Plus2_0x58
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MidiPart_CopyParamStr
 	ld xwa, Transpose_String_Plus2_0x52
 
@@ -4433,11 +4433,11 @@ AcSndEMenu_CheckModified:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcSndEMenu_ForwardInherited
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcSndEMenu_ForwardInherited
 	lds32 xhl, 0
 	jr AcSndEMenu_Epilogue
@@ -4474,9 +4474,9 @@ LswLeftHold:
 LswLeftHold_Case42:
 	ld bc, (xde + 4)
 	ld xwa, (xde + 8)
-	cps bc, 0
+	cp bc, 0:i3
 	jr lt, LswLeftHold_DefaultStr
-	cps bc, 1
+	cp bc, 1:i3
 	jr gt, LswLeftHold_DefaultStr
 	sla bc, 2
 	lda xde, (0x03e91c:24)
@@ -4707,7 +4707,7 @@ IvSdpart_PageSelect:
 	lds bc, 1
 	lds de, 1
 	calr SdpartScrollDelta
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, IvSdpart_ReturnHandled
 	ld wa, (0x03e99e:24)
 	ld bc, wa
@@ -8257,7 +8257,7 @@ LswMidiChannel:
 	ldw bc, 0x402
 	call SndParam_LookupViaEncode
 	ld xbc, (xiz + 8)
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, LswMidi_StrChannelAlt
 	ld wa, (xiz + 4)
 	inc 1, wa
@@ -8523,7 +8523,7 @@ PleaseWait_GetText:
 	inc 4, xsp
 	ld de, hl
 	lds hl, 0
-	cps de, 0
+	cp de, 0:i3
 	jr le, PleaseWait_BuildScrollStr
 
 PleaseWait_DotFillLoop:
@@ -8592,14 +8592,14 @@ CheckLanguage:
 	bit 7, de
 	jr z, CheckLang_Increment
 	ld c, a
-	cps a, 0
+	cp a, 0:i3
 	jr z, CheckLang_SkipLang4
 	dec 1, c
 	ld (0x0340e4:24), c
 
 CheckLang_SkipLang4:
 	ld a, (0x0340e4:24)
-	cps a, 4
+	cp a, 4:i3
 	jr nz, LanguageSelectEventReturn
 	dec 1, a
 	ld (0x0340e4:24), a
@@ -8607,14 +8607,14 @@ CheckLang_SkipLang4:
 
 CheckLang_Increment:
 	ld c, a
-	cps a, 5
+	cp a, 5:i3
 	jr nc, CheckLang_SkipLang4Up
 	inc 1, c
 	ld (0x0340e4:24), c
 
 CheckLang_SkipLang4Up:
 	ld a, (0x0340e4:24)
-	cps a, 4
+	cp a, 4:i3
 	jr nz, LanguageSelectEventReturn
 	inc 1, a
 	ld (0x0340e4:24), a
@@ -8675,7 +8675,7 @@ CheckMessage:
 	bit 7, iz
 	jr z, CheckMsg_IncrementCheck
 	ld bc, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, LanguageCheckReturn
 	dec 1, bc
 	ld (0x02478c:24), bc
@@ -8746,11 +8746,11 @@ MsgText_LookupMessage:
 
 MsgText_CheckLanguage:
 	ld a, (3298:16)
-	cps a, 3
+	cp a, 3:i3
 	jr z, MsgText_Lang3
-	cps a, 2
+	cp a, 2:i3
 	jr z, MsgText_Lang2
-	cps a, 1
+	cp a, 1:i3
 	jr z, MsgText_Lang1
 	lda xhl, (Str_DiskErr20_Italian_0x5DE:24)
 	ret
@@ -9023,7 +9023,7 @@ IvAccordion_PageSelect:
 	ld xwa, xiz
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 1
+	cp wa, 1:i3
 	jrl nz, IvAccordion_ReturnHandled
 	ld bc, (0x02477e:24)
 	extz xbc
@@ -9196,7 +9196,7 @@ AccordionX_PageSelect:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, StringCopyReturn
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c10000
@@ -9379,7 +9379,7 @@ Sdtecd_InitCase3:
 	call SendEvent
 	ld xwa, 0x4200
 	call SndParam_LookupReadOnly
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Voice_InheritedProcCall
 	ld xwa, 0x4200
 	lds bc, 1
@@ -9785,7 +9785,7 @@ PsLabel_HandleWidget1:
 	cpl_sri_rm XWA, 0xfd, 0x10, 0x01
 	jrl z, LswMaster_ReturnZeroJmp
 	ld XWA, (xsp + 0x0110)
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, PsLabel_StoreWidget1
 	ld de, (xiz + 26)
 	exts xde
@@ -9812,7 +9812,7 @@ PsLabel_HandleWidget2:
 	cpl_sri_rm XWA, 0xfd, 0x10, 0x01
 	jr z, LswMaster_ReturnZeroJmp
 	ld XWA, (xsp + 0x0110)
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, PsLabel_StoreWidget2
 	ld de, (xiz + 26)
 	exts xde
@@ -9912,11 +9912,11 @@ LswTuning_SearchLoop:
 	div wa, 0x3
 	stw_erp BC, 0xe2
 	lda xwa, (xsp + 6)
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, LswTuning_Octave6
-	cps bc, 1
+	cp bc, 1:i3
 	jr z, LswTuning_Octave3
-	cps bc, 0
+	cp bc, 0:i3
 	jr nz, StringOp_CopyCall
 	ld (xwa), 0x30
 	jr StringOp_CopyCall
@@ -10079,7 +10079,7 @@ Sdscltyp2_ScrollUp:
 	or xwa, xwa
 	jrl nz, IvSdscltyp2_ReturnZeroJmp
 	ld wa, (0x02478e:24)
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, Sdscltyp2_SetAutoIncUp
 	dec 1, wa
 	ld (0x02478e:24), wa
@@ -10626,7 +10626,7 @@ AcWelcomScreenProc:
 	call ChangePalette
 	call Get_Region_Code
 	ld xwa, Bitmap_DigitD_0x8DA
-	cps l, 2
+	cp l, 2:i3
 	jr nz, AcWelcomScreen_Init_StoreData
 	ld xwa, Bitmap_DigitD_0x22
 
@@ -10637,7 +10637,7 @@ AcWelcomScreen_Init_StoreData:
 	ld xde, (xsp + 16)
 	call InheritedProc
 	call Boot_GetButtonComboCode
-	cps l, 2
+	cp l, 2:i3
 	jr nz, AcWelcomScreen_Init_CheckSubCpu
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c10009
@@ -10646,7 +10646,7 @@ AcWelcomScreen_Init_StoreData:
 
 AcWelcomScreen_Init_CheckSubCpu:
 	call SubCPU_Payload_GetErrorFlag
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, AcWelcomScreen_Init_SwitchMode
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c10004
@@ -10681,7 +10681,7 @@ AcWelcomScreen_Close:
 
 AcWelcomScreen_Activate:
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcWelcomScreen_Activate_Setup
 	call LcdOff
 	ld xwa, Bitmap_DigitD_0x11CE
@@ -10700,7 +10700,7 @@ AcWelcomScreen_Activate_Setup:
 	ld xde, (xsp + 16)
 	call InheritedProc
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, AcWelcomScreen_ReturnHandled
 	call PaletteBankRotate
 	ldw (0x024784:24), 0x0001
@@ -10733,7 +10733,7 @@ AcWelcomScreen_Select:
 	ld hl, (xwa + 8)
 	lda xiy, (xwa + 4)
 	lda xde, (xwa + 10)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl mi, AcWelcomScreen_Select_NextStep
 	cp hl, 0xc
 	jrl gt, AcWelcomScreen_Select_NextStep
@@ -10748,7 +10748,7 @@ AcWelcomScreen_RenderBytecode:
 	lds32	xde, 0
 	jrl	987
 	ld	iz, (xbc+10)
-	cps	iz, 2
+	cp	iz, 2:i3
 	jrl	ge, 873
 	ld	bc, iz
 	muls	bc, 12
@@ -11478,7 +11478,7 @@ PsMixer_ControlCase5:
 	ld xde, (xsp + 82)
 	call SendEvent
 	ld iz, hl
-	cps iz, 7
+	cp iz, 7:i3
 	jrl gt, AudioCtrl_DispatchHandler
 	ld wa, (0x024794:24)
 	sla wa, 3
@@ -11652,7 +11652,7 @@ AudioCtrl_PageHandler:
 	jr z, AudioCtrl_PageAdvance
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
-	cps hl, 1
+	cp hl, 1:i3
 	scc16 z, bc
 	cpw (0x24794:24), 2
 	scc16 z, wa
@@ -11775,7 +11775,7 @@ PsMixer_ControlCase6:
 	ld xde, (xsp + 82)
 	call SendEvent
 	ld iz, hl
-	cps iz, 7
+	cp iz, 7:i3
 	jr gt, PsMixer_Case6_Forward
 	ld wa, (0x024794:24)
 	sla wa, 3
@@ -11819,7 +11819,7 @@ PsMixer_ControlCase7:
 	ld xde, (xsp + 82)
 	call SendEvent
 	ld iz, hl
-	cps iz, 7
+	cp iz, 7:i3
 	jr gt, PsMixer_Case7_Forward
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00009
@@ -12533,7 +12533,7 @@ AudioCtrl_DataBlock:
 	ldio	56, 37
 	nop
 	inc	1, iz
-	cps	iz, 7
+	cp	iz, 7:i3
 	jr	lt, -46
 	pop	xiz
 	lda	xsp, (xsp+22)
@@ -14926,7 +14926,7 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+2)
 	ldw	bc, 1026
 	call	SndParam_LookupViaEncode
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 91
 	.byte 0x9f
 	ei	4
@@ -14949,7 +14949,7 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
 	call	SndParam_LookupViaEncode
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 34
 	.byte 0x9f
 	ei	4
@@ -15495,13 +15495,13 @@ DrawCombo_CheckVisible:
 	ld (xsp + 4), xhl
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawCombo_ForwardToBase
 	ld xwa, xiz
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawCombo_ForwardToBase
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 40)
@@ -15747,7 +15747,7 @@ AcDrawbarName_DrawbarInit:
 	cp bc, de
 	jrl nz, AcDrawbarName_ReturnHandled
 	ld xwa, (xsp + 8)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl nz, AcDrawbarName_ReturnHandled
 	extz xde
 	ld xwa, 0x1400004
@@ -15762,7 +15762,7 @@ AcDrawbarName_DrawbarInit_NoInstr:
 	cp wa, hl
 	jr nz, AcDrawbarName_ReturnHandled
 	ld xwa, (xsp + 8)
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, AcDrawbarName_ReturnHandled
 	call GetPartSelect
 	extz xhl
@@ -16097,12 +16097,12 @@ LswPercDecay_PopIzRet:
 
 SdpartClampSignedScrollDelta:
 	ld hl, wa
-	cps wa, 7
+	cp wa, 7:i3
 	jr le, SdpartClamp_CheckUpper
 	sub wa, 0x10
 
 SdpartClamp_CheckUpper:
-	cps wa, 5
+	cp wa, 5:i3
 	jr gt, SdpartClamp_ReturnZero
 	cp wa, 0xfffb
 	jr ge, SdpartClamp_Apply
@@ -16113,11 +16113,11 @@ SdpartClamp_ReturnZero:
 
 SdpartClamp_Apply:
 	add wa, bc
-	cps wa, 5
+	cp wa, 5:i3
 	ret gt
 	cp wa, 0xfffb
 	ret lt
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, SdpartClamp_StoreResult
 	add wa, 0x10
 
@@ -16637,7 +16637,7 @@ IvDrawbar1_OK_ScrollDown:
 IvDrawbar1_OK_ScrollDown_DualMode:
 	lda xwa, (0x0247b0:24)
 	ldw_sri WA, 0x07, 0xe0, 0xe4
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, IvDrawbar1_OK_ScrollDown_Release
 	dec 1, wa
 	ld bc, wa
@@ -17391,9 +17391,9 @@ DemoMenu_BuildItemWorkspace:
 DemoMenu_WorkspaceFunc:
 	ld wa, (xsp + 6)
 	sub wa, 0x9
-	cps wa, 0
+	cp wa, 0:i3
 	jr c, DemoMenu_BuildItemWorkspace_Post
-	cps wa, 5
+	cp wa, 5:i3
 	jr ugt, DemoMenu_BuildItemWorkspace_Post
 	add wa, wa
 	lda xix, (KeyShiftStr_Zero_0x5E:24)
@@ -17448,9 +17448,9 @@ DemoMenu_WorkspaceReturn:
 ; DemoMenu descriptor function
 DemoMenu_DescriptorFunc:
 	sub wa, 0x9
-	cps wa, 0
+	cp wa, 0:i3
 	jr c, DemoMenu_DescriptorReturn
-	cps wa, 5
+	cp wa, 5:i3
 	jr ugt, DemoMenu_DescriptorReturn
 	add wa, wa
 	lda xix, (KeyShiftStr_Zero_0x6A:24)

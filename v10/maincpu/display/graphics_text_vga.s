@@ -94,7 +94,7 @@ GraphicsRender_ByteData:
 	pushw	iz
 	ld	iz, wa
 	calr	37078
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 7
 	ld	wa, iz
 	calr	29
@@ -128,7 +128,7 @@ GraphicsRender_ByteData:
 	inc	4, xsp
 	ret
 	calr	36984
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 19
 	lds	wa, 4
 	calr	36737
@@ -176,7 +176,7 @@ GraphicsRender_ByteData:
 
 Display_DeferOrDrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Display_DeferOrDrawWall_Direct
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -194,7 +194,7 @@ Display_DeferOrDrawWall_Direct:
 
 Display_DeferOrUpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Display_DeferOrUpdateScreen_Direct
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -1394,9 +1394,9 @@ DrawFunc_Init_SkipShift:
 	extz hl
 	lda xbc, (xsp + 4)
 	pushw hl
-	cps ix, 2
+	cp ix, 2:i3
 	jr z, DrawFunc_Init_FontTable2
-	cps ix, 1
+	cp ix, 1:i3
 	jr nz, DrawFunc_Init_FontTable0
 	ld xwa, Str_No_0xE16
 	jr DrawFunc_Init_PushFontAndDraw
@@ -1485,10 +1485,10 @@ DrawFunc_Init_Variant1:
 	ld	c, e
 	extz	bc
 	lda	xde, (xsp+5)
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 12
 	pushw	bc
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 17
 	ld	xwa, Str_No_0xE2A
 	jr	15
@@ -1500,9 +1500,9 @@ DrawFunc_Init_Variant1:
 	nop
 	.ascii "8:h#"
 	pushw	0
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 11
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 14
 	ld	xwa, Str_No_0xE36
 	jr	12
@@ -1567,9 +1567,9 @@ DrawFunc_Init_Variant1:
 	sll	de, 3
 	ld	(xbc), de
 	lda	xbc, (xsp+4)
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 13
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 18
 	.byte 0x94, 0x04
 	ld	xwa, Str_No_0xE4A
@@ -1642,9 +1642,9 @@ DrawFunc_Init_Variant1:
 	extz	de
 	lda	xbc, (xsp+4)
 	pushw	de
-	cps	l, 2
+	cp	l, 2:i3
 	jr	z, 11
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 14
 	ld	xwa, Str_No_0xE5E
 	jr	12
@@ -1725,9 +1725,9 @@ DrawFunc_Init_Variant1:
 	extz	de
 	lda	xbc, (xsp+5)
 	pushw	de
-	cps	l, 2
+	cp	l, 2:i3
 	jr	z, 11
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 14
 	ld	xwa, Str_No_0xE72
 	jr	12
@@ -1739,9 +1739,9 @@ DrawFunc_Init_Variant1:
 	.byte 0x04
 	ldw	bc, 11
 	nop
-	cps	l, 2
+	cp	l, 2:i3
 	jr	z, 11
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 14
 	ld	xwa, Str_No_0xE7E
 	jr	12
@@ -1803,9 +1803,9 @@ DrawFunc_Init_Variant1:
 	ld	wa, (xiz+9)
 	ld	(xbc+2), wa
 	lda	xbc, (xsp+4)
-	cps	l, 2
+	cp	l, 2:i3
 	jr	z, 13
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 20
 	.byte 0x92, 0x04
 	ld	xwa, Data_CharMapFormatBlock_0x8
@@ -2183,7 +2183,7 @@ CalcTotalWidth_KerningLoop_Init:
 	lds iz, 0
 	ld xix, xbc
 	lds de, 0
-	cps hl, 0
+	cp hl, 0:i3
 	jr le, CalcTotalWidth_FreeAndReturn
 
 CalcTotalWidth_KerningLoop:
@@ -2349,7 +2349,7 @@ FontGlyph_ByteData:
 	.byte 0xcf
 	ldb	w, 102
 	.byte 0x04
-	cps	e, 0
+	cp	e, 0:i3
 	jr	nz, 5
 	ld	a, (xwa)
 	ld	(xbc), a
@@ -2591,7 +2591,7 @@ VGA_Initialize:
 	_VGA_SEQUENCER 0x8, 0x1
 	_VGA_SEQUENCER 0xd, 0x3
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, VGA_Init_ExtSeq0F_44
 
 	; For byte-matching purposes, the following instructions
@@ -3934,7 +3934,7 @@ PmBank_OK_SaveDelete:
 	ld xbc, 0x1e000aa
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, PmBank_OK_Forward
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
@@ -4342,7 +4342,7 @@ ToneGen_WriteParamByIndex:
 	ld bc, wa
 	ld wa, iz
 	lda xiy, (VariationStr_V1_0x3C:24)
-	cps bc, 5
+	cp bc, 5:i3
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
 	lda xix, (TransposeNoteStr_C_0x18E:24)
@@ -4535,7 +4535,7 @@ WallHomeEdit_EventDispatch:
 	jr nz, WallHomeEditCheck_ReturnFalse
 	ldw wa, 0x8
 	call PanelDisplay_DispatchByMode
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, WallHomeEditCheck_ReturnFalse
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -4819,7 +4819,7 @@ WallUsrShowHideFunc:
 	jr nz, MainVariSet_ReturnZero
 	ldw wa, 0x8
 	call PanelDisplay_DispatchByMode
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MainVariSet_ReturnZero
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -5229,7 +5229,7 @@ MainSysControl:
 	pop xde
 	stb_erp A, 0xfb
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr mi, MainSysControl_PostDispatchFinalize
 	cp wa, 0x8
 	jr gt, MainSysControl_PostDispatchFinalize
@@ -5445,7 +5445,7 @@ AcFreeSplit_CheckSecondKey:
 	jr nz, UI_AccChordBoxProc_Return
 	ld xwa, 0x4180
 	call SndParam_LookupReadOnly
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcFreeSplit_LookupSecondNote
 	pushw 0xed
 	pushw 0x1c04
@@ -5556,7 +5556,7 @@ AcTranspose_ValueChanged:
 	jr nz, UI_EventHandler_InitReturnZero
 	lda xbc, (xsp + 4)
 	ld wa, (xiz + 4)
-	cps wa, 5
+	cp wa, 5:i3
 	jr nz, AcTranspose_FormatLabel
 	cp (0x8d3c:16), 0
 	jr nz, AcTranspose_FormatLabel

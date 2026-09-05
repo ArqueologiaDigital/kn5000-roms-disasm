@@ -171,14 +171,14 @@ Boot_memcmp__advance:
 	inc 1, xde
 	dec 1, bc
 Boot_memcmp__test:
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, Boot_memcmp__diff
 	ld a, (xde)
 	cp a, (xix)
 	jr z, Boot_memcmp__bytes_equal
 Boot_memcmp__diff:
 	ldb l, 0x00
-	cps bc, 0		; len exhausted: difference is 0
+	cp bc, 0:i3		; len exhausted: difference is 0
 	jr z, Boot_memcmp__sign_extend
 	ld a, (xix)
 	sub a, (xde)		; a[i] - b[i]
@@ -221,19 +221,19 @@ Boot_SDivMod32__divide:
 	pushw de		; save mode (D) + sign flags (E)
 	calr Boot_UDivMod32
 	popw wa			; W = mode, A = sign flags
-	cps w, 1
+	cp w, 1:i3
 	jr z, Boot_SDivMod32__quotient
 	ld xhl, xde		; remainder mode: result = remainder
 	bit 0, a
 	scc8 nz, a		; A = 1 iff the dividend was negative
 	jr t, Boot_SDivMod32__fix_sign
 Boot_SDivMod32__quotient:
-	cps a, 3		; both negative: quotient stays positive
+	cp a, 3:i3		; both negative: quotient stays positive
 	ret z
 Boot_SDivMod32__fix_sign:
 	or xhl, xhl		; zero result needs no sign fix
 	ret z
-	cps a, 0		; both positive: no sign fix
+	cp a, 0:i3		; both positive: no sign fix
 	ret z
 	cpl qhl			; negate XHL
 	cpl hl

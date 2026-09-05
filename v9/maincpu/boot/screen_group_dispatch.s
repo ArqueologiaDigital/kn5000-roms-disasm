@@ -38,7 +38,7 @@ ScreenGroup_Dispatch:
 ScreenGroup_DispatchAlt:
 	push xiz
 	ld iz, wa	; Screen group ID
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, ScreenGroup_SetupWidgetPtr
 	call ScreenGroup_InitState	; Initialize screen state
 	call TmFlash_CopyToExtMem
@@ -74,7 +74,7 @@ ScreenGroup_WidgetLoop:
 	ld xwa, (xbc)
 	or xwa, xwa
 	jr nz, VoiceInit_Dispatch
-	cps iz, 0
+	cp iz, 0:i3
 	call z, (ScreenGroup_ReInit:24)
 	pop xiz
 	ret

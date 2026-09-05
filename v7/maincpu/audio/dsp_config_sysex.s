@@ -160,7 +160,7 @@ SysEx_ApplyVoiceParam_4B:
 	ld XIX,0x0000bca0
 	ld bc, (0x9046:16)
 	srl BC, 0x01
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, .Lc_fdaae1
 	ldirw
 .Lc_fdaae1:
@@ -373,7 +373,7 @@ SysEx_ApplyAndReloadPreset_Type63_Loop:
 	ld	de, wa
 	srl	de, 1
 	lds	bc, 0
-	cps	de, 0
+	cp	de, 0:i3
 	jr	ule, 14
 	ld_spiw	wa, 241
 	stw_dpi	wa, 237
@@ -490,11 +490,11 @@ SwbtWr_QueueMainEvent:
 	ld	iz, hl
 	jr	54
 	ld	a, (49480:16)
-	cps	a, 2
+	cp	a, 2:i3
 	jr	z, 16
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 4
-	cps	a, 0
+	cp	a, 0:i3
 SwbtWr_QueueMainEvent_Done:
 	.byte 0x6e
 SwbtWr_QueuePostEvent:
@@ -534,7 +534,7 @@ PrePmLoad:
 PostPmLoad:
 	jr	z, 47
 	call	15673403
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	lt, 26
 	ld	xwa, (xsp+10)
 PrePmSave:
@@ -699,7 +699,7 @@ BitMapOut_MergeOutputFields:
 	cp L,0xf7
 	jrl nz, .Lc_fdb297
 .Lc_fdb347:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, .Lc_fdb35a
 	ei 0x00
 	lds wa, 4
@@ -979,7 +979,7 @@ CompIface_CallSync:
 CompIface_PostProcess:
 	ld	a, w
 	extz	wa
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	nz, 6
 	ld	l, (xix+5)
 	and	l, 31
@@ -1452,9 +1452,9 @@ DSPCfg_ReadViaTableLookup:
 	jr	z, 87
 	cp	bc, 8
 	jr	z, 70
-	cps	bc, 1
+	cp	bc, 1:i3
 	jr	z, 9
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	nz, 81
 	ld	(xsp+2), wa
 	jr	81
@@ -1506,15 +1506,15 @@ DSPCfg_FindSlot63:
 	ld	xde, (xhl)
 	or	xde, xde
 	jr	z, 32
-	cps	bc, 4
+	cp	bc, 4:i3
 	jr	z, 86
-	cps	bc, 3
+	cp	bc, 3:i3
 	jr	z, 68
-	cps	bc, 2
+	cp	bc, 2:i3
 	jr	z, 50
-	cps	bc, 1
+	cp	bc, 1:i3
 	jr	z, 20
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	nz, 12
 	cp	wa, 16
 DSPCfg_FindSlot63_Loop:
@@ -1542,12 +1542,12 @@ DSPCfg_DecodeParamIdRange:
 	ldb	w, 32
 	calr	64648
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl	nz, 230
 	ld	wa, (xsp+2)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 71
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	nz, 215
 	ld	wa, (xsp+18)
 	ld	bc, (xsp+6)
@@ -1584,7 +1584,7 @@ DSPCfg_DecodeParamIdRange_4910:
 DSPCfg_DecodeParamIdRange_4940:
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+10)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	nz, 18
 	push	xwa
 	push	xbc
@@ -1692,12 +1692,12 @@ DSPCfg_ResolveParamToSlot_StoreResult:
 DSPCfg_ResolveAndExtract:
 	ldb	w, 30
 	cp	(xiz), xde
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 50
 	ld	wa, (xsp+2)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 19
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 36
 	ld	xwa, (xsp+10)
 	calr	63557
@@ -2534,7 +2534,7 @@ DSPCfg_EventType51:
 	.byte 0xfd, 0x1b, 0x40, 0xf2, 0xfd
 	call 0xfdedfd
 	jp AudioInit_RefreshToneBank
-	cps a, 0
+	cp a, 0:i3
 	jr z, .Lc_fdd741
 	ld wa, (0xc4fc:16)
 	bit 0x02,WA
@@ -2600,7 +2600,7 @@ Audio_CheckSubsystemReady:
 	.byte 0xd1, 0xf8, 0xc4, 0x3e, 0x04, 0x00, 0x0e, 0x2e
 	.byte 0xc1, 0xe1, 0xbf, 0x21, 0xd8, 0x12
 AudioSubsystem_ClearVoiceFlags:
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	mi, 606
 AudioSubsystem_Callback:
 	.byte 0xd8, 0xde, 0x7a, 0x59, 0x02, 0xd8, 0x80, 0xf2

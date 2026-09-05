@@ -98,7 +98,7 @@ BootSerial_ModeSwitch:
 	ld	a, (0x0f64:16)
 	and	a, 0xc0			; isolate mode field
 	and	(0x0f64:16), 0x3f		; strip it from the flags byte
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, BootSerial_ModeSwitch__parse	; mode 0: just re-arm + parse
 	cp	a, 0x40
 	jr	nz, BootSerial_ModeSwitch__not40
@@ -396,7 +396,7 @@ BootSerial_SpinWait2:
 	lds	wa, 2
 BootSerial_SpinWait2__loop:
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, BootSerial_SpinWait2__done
 	jr	BootSerial_SpinWait2__loop
 BootSerial_SpinWait2__done:
@@ -406,7 +406,7 @@ BootSerial_SpinWait6:
 	lds	wa, 6
 BootSerial_SpinWait6__loop:
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, BootSerial_SpinWait6__done
 	jr	BootSerial_SpinWait6__loop
 BootSerial_SpinWait6__done:
@@ -416,7 +416,7 @@ BootSerial_SpinWait10:
 	ldw	wa, 10
 BootSerial_SpinWait10__loop:
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, BootSerial_SpinWait10__done
 	jr	BootSerial_SpinWait10__loop
 BootSerial_SpinWait10__done:
@@ -426,7 +426,7 @@ BootSerial_SpinWait300:
 	ldw	wa, 300
 BootSerial_SpinWait300__loop:
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, BootSerial_SpinWait300__done
 	jr	BootSerial_SpinWait300__loop
 BootSerial_SpinWait300__done:
@@ -436,7 +436,7 @@ BootSerial_SpinWait1500:
 	ldw	wa, 1500
 BootSerial_SpinWait1500__loop:
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, BootSerial_SpinWait1500__done
 	jr	BootSerial_SpinWait1500__loop
 BootSerial_SpinWait1500__done:
@@ -446,7 +446,7 @@ BootSerial_SpinWait3000:
 	ldw	wa, 3000
 BootSerial_SpinWait3000__loop:
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, BootSerial_SpinWait3000__done
 	jr	BootSerial_SpinWait3000__loop
 BootSerial_SpinWait3000__done:
@@ -469,7 +469,7 @@ BootSerial_TickWait2:
 BootSerial_TickWait2__loop:
 	ld	wa, (0x0c00:16)
 	sub	wa, (0x0f73:16)
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	lt, BootSerial_TickWait2__loop
 	ret
 
@@ -479,7 +479,7 @@ BootSerial_TickWait6:
 BootSerial_TickWait6__loop:
 	ld	wa, (0x0c00:16)
 	sub	wa, (0x0f73:16)
-	cps	wa, 6
+	cp	wa, 6:i3
 	jr	lt, BootSerial_TickWait6__loop
 	ret
 

@@ -478,9 +478,9 @@ Analog_ChangeDetect:
 	ex8	a, w                                   ; F98A24  ex A,W
 Analog_ChangeDetect__delta:
 	sub	a, w                                   ; F98A26  sub A,W
-	cps	a, 2                                   ; F98A28  cp A,2
+	cp	a, 2:i3                                   ; F98A28  cp A,2
 	jr ule, Analog_ChangeDetect__reset                          ; F98A2A  jr ULE,0xf98a5d
-	cps	a, 6                                   ; F98A2C  cp A,6
+	cp	a, 6:i3                                   ; F98A2C  cp A,6
 	jr ule, Analog_ChangeDetect__medium                          ; F98A2E  jr ULE,0xf98a49
 	xor	c, 3                                   ; F98A30  xor C,0x03
 	jr nz, Analog_ChangeDetect__count_up                           ; F98A33  jr NZ,0xf98a3f
@@ -566,7 +566,7 @@ Analog_ScanAndReport:
 	ld	(xiz-6), a                              ; F98A97  ld (XIZ+0xfa),A
 	inc	8, xsp                                 ; F98A9A  inc 0,XSP
 	inc	2, xsp                                 ; F98A9C  inc 2,XSP
-	cps	a, 0                                   ; F98A9E  cp A,0
+	cp	a, 0:i3                                   ; F98A9E  cp A,0
 	jr z, Analog_ScanAndReport__chan2                            ; F98AA0  jr Z,0xf98acb
 	ld	c, (xiz-5)                              ; F98AA2  ld C,(XIZ+0xfb)
 	ld	(0xE2E5:24), c                         ; F98AA5  ld (0x00e2e5),C
@@ -594,7 +594,7 @@ Analog_ScanAndReport__chan2:
 	ld	(xiz-6), a                              ; F98AE9  ld (XIZ+0xfa),A
 	inc	8, xsp                                 ; F98AEC  inc 0,XSP
 	inc	2, xsp                                 ; F98AEE  inc 2,XSP
-	cps	a, 0                                   ; F98AF0  cp A,0
+	cp	a, 0:i3                                   ; F98AF0  cp A,0
 	jr z, Analog_ScanAndReport__done                            ; F98AF2  jr Z,0xf98b1d
 	ld	c, (xiz-5)                              ; F98AF4  ld C,(XIZ+0xfb)
 	ld	(0xE2E7:24), c                         ; F98AF7  ld (0x00e2e7),C
@@ -708,7 +708,7 @@ Delay_CountdownArg_Z__loop:
 	dec	1, bc
 	ld	(xiz-2), bc
 	ld	(xiz+8), bc
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, Delay_CountdownArg_Z__done
 	jr	Delay_CountdownArg_Z__loop
 Delay_CountdownArg_Z__done:
@@ -869,7 +869,7 @@ MAIN__bit4:
 	ld	c, (0x007ED1:24)
 	and	c, 0x10
 	srl	c, 4
-	cps	c, 0
+	cp	c, 0:i3
 	jr	z, MAIN__bit5
 	res 4, (0x007ED1:24)
 	call	0xF99E5F
@@ -903,7 +903,7 @@ MAIN__bit5:
 	ld	c, (0x007ED1:24)
 	and	c, 0x20
 	srl	c, 5
-	cps	c, 0
+	cp	c, 0:i3
 	jr	z, MAIN__bit3
 	res 5, (0x007ED1:24)
 	calr	(0xF98A75 - 0xF98C8A)
@@ -911,7 +911,7 @@ MAIN__bit3:
 	ld	c, (0x007ED1:24)
 	and	c, 0x08
 	srl	c, 3
-	cps	c, 0
+	cp	c, 0:i3
 	jr	z, MAIN__tail
 	res 3, (0x007ED1:24)
 	calr	(0xF9915C - 0xF98CA1)

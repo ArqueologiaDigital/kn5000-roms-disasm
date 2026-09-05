@@ -17,7 +17,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_CopyWriteUpdate_Data_0x1DD6
 	lds	wa, 1
 	call	AudioLock_GetCount
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 8
 	lds	wa, 3
 	call	TaskSched_YieldToQueue
@@ -179,7 +179,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 18
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 14
 	ld	a, (xsp+16)
 	extz	wa
@@ -305,14 +305,14 @@ Scoop_SoundEditorData:
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	.byte 0xf2, 0x01
 	jr	pl, -16
 	.byte 0xde
 	ldw	wa, 45
 	lds	bc, 0
 	jp	SeMenu_SendEvent
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ldw	wa, 43
 	lds	bc, 1
@@ -445,7 +445,7 @@ Scoop_SoundEditorData:
 	.asciz "080,"
 	lds	bc, 3
 	call	SeMenu_TransferPartValues_EndData_0x169
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 29
 	lda	xbc, (xsp+12)
 	lds	wa, 3
@@ -475,7 +475,7 @@ Scoop_SoundEditorData:
 	lds	bc, 1
 	lds	de, 0
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+4)
 	call	SeMenu_ValidatePartNumber
@@ -518,7 +518,7 @@ Scoop_SoundEditorData:
 	pushw	bc
 	lds	bc, 0
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+6)
 	call	SeMenu_ValidatePartNumber
@@ -555,7 +555,7 @@ Scoop_SoundEditorData:
 	pushw	127
 	lds	bc, 2
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+4)
 	call	SeMenu_ValidatePartNumber
@@ -579,63 +579,63 @@ Scoop_SoundEditorData:
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	inc	8, xsp
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	.byte 0xf2, 0x01
 	jr	pl, -16
 	.byte 0xde
 	ldw	wa, 45
 	lds	bc, 0
 	jp	SeMenu_SendEvent
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 47
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ldw	wa, 43
 	lds	bc, 0
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
@@ -1112,18 +1112,18 @@ Scoop_SoundEditorData:
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+18)
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 43
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 45
 	lds	bc, 1
@@ -1147,7 +1147,7 @@ Scoop_SoundEditorData:
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 45
 	lds	bc, 1
@@ -1169,7 +1169,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 45
 	lds	bc, 1
@@ -1191,7 +1191,7 @@ Scoop_SoundEditorData:
 	jr	nz, 21
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 69
 	ldw	wa, 45
 	lds	bc, 1
@@ -1435,7 +1435,7 @@ Scoop_SoundEditorData:
 	lds	bc, 3
 	lds	de, 0
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+4)
 	call	SeMenu_ValidatePartNumber
@@ -1478,7 +1478,7 @@ Scoop_SoundEditorData:
 	pushw	bc
 	lds	bc, 2
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+6)
 	call	SeMenu_ValidatePartNumber
@@ -1515,7 +1515,7 @@ Scoop_SoundEditorData:
 	pushw	127
 	lds	bc, 4
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+4)
 	call	SeMenu_ValidatePartNumber
@@ -1595,63 +1595,63 @@ Scoop_SoundEditorData:
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+16)
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 43
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 47
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ldw	wa, 45
 	lds	bc, 0
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
@@ -1680,14 +1680,14 @@ Scoop_SoundEditorData:
 	extz	wa
 	lds	bc, 0
 	jp	SeMenu_ApplyPartEdit_Data2_0x292
-	cps	a, 0
+	cp	a, 0:i3
 	.byte 0xf2, 0x01
 	jr	pl, -16
 	.byte 0xde
 	ldw	wa, 45
 	lds	bc, 0
 	jp	SeMenu_SendEvent
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 9
 	ldw	wa, 43
 	lds	bc, 0
@@ -1695,25 +1695,25 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	lds	bc, 1
 	jp	SeMenu_TransferPartValues_EndData_0x20E
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 0
 	lds	bc, 2
 	call	SeMenu_TransferPartValues_EndData_0x20E
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 0
 	lds	bc, 3
 	call	SeMenu_TransferPartValues_EndData_0x20E
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 0
 	lds	bc, 4
 	call	SeMenu_TransferPartValues_EndData_0x20E
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
@@ -2154,7 +2154,7 @@ Scoop_SoundEditorData:
 	ld	e, (xsp+16)
 	res	7, e
 	lda	xwa, (xbc+10)
-	cps	e, 0
+	cp	e, 0:i3
 	jr	nz, 5
 	ld	(xwa), 1
 	jr	3
@@ -2182,7 +2182,7 @@ Scoop_SoundEditorData:
 	ldw	wa, 48
 	lds	bc, 5
 	call	SeMenu_TransferPartValues_EndData_0x169
-	cps	l, 1
+	cp	l, 1:i3
 	.byte 0xf2
 	pushw	bc
 	.byte 0x90, 0xf0, 0xe6
@@ -2232,7 +2232,7 @@ Scoop_SoundEditorData:
 	.asciz "0800"
 	lds	bc, 4
 	call	SeMenu_TransferPartValues_EndData_0x169
-	cps	l, 1
+	cp	l, 1:i3
 	.byte 0xf2
 	pushw	bc
 	.byte 0x90, 0xf0, 0xe6
@@ -2282,7 +2282,7 @@ Scoop_SoundEditorData:
 	.asciz "0800"
 	lds	bc, 5
 	call	SeMenu_TransferPartValues_EndData_0x169
-	cps	l, 1
+	cp	l, 1:i3
 	.byte 0xf2
 	pushw	bc
 	.byte 0x90, 0xf0, 0xe6
@@ -2310,11 +2310,11 @@ Scoop_SoundEditorData:
 	call	SeMenu_BitShiftMask_End_0x1A3
 	inc	4, xsp
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
@@ -2338,7 +2338,7 @@ Scoop_SoundEditorData:
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2374,7 +2374,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2396,7 +2396,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2509,7 +2509,7 @@ Scoop_SoundEditorData:
 	jr	nz, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2601,11 +2601,11 @@ Scoop_SoundEditorData:
 	call	SeMenu_BitShiftMask_End_0x1A3
 	inc	4, xsp
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
@@ -2629,7 +2629,7 @@ Scoop_SoundEditorData:
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2665,7 +2665,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2687,7 +2687,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -2794,7 +2794,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3032,11 +3032,11 @@ Scoop_SoundEditorData:
 	call	SeMenu_BitShiftMask_End_0x1A3
 	inc	4, xsp
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
@@ -3060,7 +3060,7 @@ Scoop_SoundEditorData:
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3094,7 +3094,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3116,7 +3116,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3184,11 +3184,11 @@ Scoop_SoundEditorData:
 	call	SeMenu_BitShiftMask_End_0x1A3
 	inc	4, xsp
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
@@ -3212,7 +3212,7 @@ Scoop_SoundEditorData:
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3248,7 +3248,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3270,7 +3270,7 @@ Scoop_SoundEditorData:
 	jr	z, 19
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3342,7 +3342,7 @@ Scoop_SoundEditorData:
 	.asciz "0806"
 	lds	bc, 3
 	call	SeMenu_TransferPartValues_EndData_0x169
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 29
 	lda	xbc, (xsp+12)
 	lds	wa, 3
@@ -3372,7 +3372,7 @@ Scoop_SoundEditorData:
 	lds	bc, 1
 	lds	de, 0
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+4)
 	call	SeMenu_ValidatePartNumber
@@ -3415,7 +3415,7 @@ Scoop_SoundEditorData:
 	pushw	bc
 	lds	bc, 0
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+6)
 	call	SeMenu_ValidatePartNumber
@@ -3452,7 +3452,7 @@ Scoop_SoundEditorData:
 	pushw	127
 	lds	bc, 2
 	call	SeMenu_PatchBank_Data_0x74
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 52
 	lda	xwa, (xsp+4)
 	call	SeMenu_ValidatePartNumber
@@ -3476,63 +3476,63 @@ Scoop_SoundEditorData:
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	inc	8, xsp
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	.byte 0xf2, 0x01
 	jr	pl, -16
 	.byte 0xde
 	ldw	wa, 55
 	lds	bc, 0
 	jp	SeMenu_SendEvent
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 57
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
@@ -3568,67 +3568,67 @@ Scoop_SoundEditorData:
 	ldw	bc, 61
 	ldw	de, 69
 	jp	SeMenu_ApplyPartEdit_Data2_0x602
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 48
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 57
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 6
 	lds	wa, 0
 	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 6
 	lds	wa, 1
 	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 56
 	lds	bc, 0
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
@@ -3654,63 +3654,63 @@ Scoop_SoundEditorData:
 	extz	wa
 	ldw	bc, 72
 	jp	SeMenu_ApplyPartEdit_Data2_0x8F4
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 48
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 7
 	ldw	wa, 57
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
-	cps	l, 0
+	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ldw	wa, 55
 	lds	bc, 0
 	call	SeMenu_SendEvent
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
@@ -3739,14 +3739,14 @@ Scoop_SoundEditorData:
 	extz	wa
 	lds	bc, 2
 	jp	SeMenu_ApplyPartEdit_Data2_0x292
-	cps	a, 0
+	cp	a, 0:i3
 	.byte 0xf2, 0x01
 	jr	pl, -16
 	.byte 0xde
 	ldw	wa, 55
 	lds	bc, 0
 	jp	SeMenu_SendEvent
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 9
 	ldw	wa, 48
 	lds	bc, 0
@@ -3754,25 +3754,25 @@ Scoop_SoundEditorData:
 	lds	wa, 2
 	lds	bc, 1
 	jp	SeMenu_TransferPartValues_EndData_0x20E
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 2
 	lds	bc, 2
 	call	SeMenu_TransferPartValues_EndData_0x20E
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 2
 	lds	bc, 3
 	call	SeMenu_TransferPartValues_EndData_0x20E
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	lds	wa, 2
 	lds	bc, 4
 	call	SeMenu_TransferPartValues_EndData_0x20E
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay

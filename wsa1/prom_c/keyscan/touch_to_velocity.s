@@ -187,7 +187,7 @@ Delay_CountdownArg__loop:
 	dec	1, bc
 	ld	(xiz-2), bc
 	ld	(xiz+8), bc
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	le, Delay_CountdownArg__done
 	jr	Delay_CountdownArg__loop
 Delay_CountdownArg__done:

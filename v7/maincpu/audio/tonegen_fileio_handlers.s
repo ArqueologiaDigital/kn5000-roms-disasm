@@ -13,7 +13,7 @@ ToneGen_IncrementWrap128:
 	jr	c, 2
 	lds	ix, 0
 	ret
-	cps	ix, 0
+	cp	ix, 0:i3
 	jr	nz, 4
 	ldw	ix, 127
 	ret
@@ -280,7 +280,7 @@ DSPCfg_Init_Setup:
 DSPCfg_Init_BoundsCheck:
 	ld e, (xbc)
 	extz de
-	cps de, 0
+	cp de, 0:i3
 	jr mi, DSPCfg_Init_Finalize
 	cp de, 0x8
 	jr gt, DSPCfg_Init_Finalize
@@ -341,7 +341,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xec
-	cps	xhl, 3
+	cp	xhl, 3:i3
 	or	(xhl+14), xwa
 	.byte 0x8a
 	ld	a, (xbc+1)
@@ -839,7 +839,7 @@ ToneGen_FlashVerifyLoop:
 	cp_spib A, 0xe8
 	jr nz, ToneGen_FlashWriteAll
 	inc 1, bc
-	cps bc, 3
+	cp bc, 3:i3
 	jr c, ToneGen_FlashVerifyLoop
 	ret
 
@@ -1011,7 +1011,7 @@ DSPCfg_Param_CaseB:
 	ret
 CtrlPanel_IndicatorJumpTable:
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	ret mi
 	cp wa, 0x8
 	ret gt
@@ -1056,7 +1056,7 @@ DSPCfg_Param_CaseC:
 
 Audio_DispatchCommand:
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	ret mi
 	cp wa, 0x8
 	ret gt
@@ -1101,7 +1101,7 @@ DSPCfg_Param_CaseD:
 	ret
 PanelDisplay_DispatchByMode:
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, DSPCfg_Param_Default
 	cp wa, 0x8
 	jrl gt, DSPCfg_Param_Default
@@ -1119,7 +1119,7 @@ PanelDisplay_DispatchData:
 	cp_spib a, 232
 	jr	nz, 114
 	inc	1, bc
-	cps	bc, 2
+	cp	bc, 2:i3
 	jr	c, -14
 	jr	115
 	ld	xde, 0x3d3410
@@ -1138,7 +1138,7 @@ PanelDisplay_DispatchData:
 	cp_spib a, 232
 	jr	nz, 56
 	inc	1, bc
-	cps	bc, 4
+	cp	bc, 4:i3
 	jr	c, -14
 	.asciz "h9B04="
 	lda	xhl, (0x0340f6:24)
@@ -1147,7 +1147,7 @@ PanelDisplay_DispatchData:
 	cp_spib a, 232
 	jr	nz, 28
 	inc	1, bc
-	cps	bc, 4
+	cp	bc, 4:i3
 	jr	c, -14
 	jr	t, 0x1d
 	.asciz "B@4="
@@ -1159,7 +1159,7 @@ PanelDisplay_DispatchData:
 	lds	hl, 1
 	ret
 	inc	1, bc
-	cps	bc, 6
+	cp	bc, 6:i3
 	jr	c, -17
 
 ; DSP config parameter default handler

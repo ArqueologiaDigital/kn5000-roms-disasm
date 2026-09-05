@@ -3734,7 +3734,7 @@ ErrorDialog_RecoveryLine3:
 	and	b, 205
 	xor	w, h
 	xor	(0xd8d6d4:24), de
-	cps	ix, 5
+	cp	ix, 5:i3
 	or	wa, iz
 	.byte 0xe2, 0xe4, 0xe6, 0xe8
 	sla	xde, 238
@@ -7684,9 +7684,9 @@ MidiChParam_Entry_064:
 	adc	w, 203
 	xor	d, 206
 	.byte 0xd0, 0xd1, 0xd2, 0xd4, 0xd5, 0xd6, 0xd7
-	cps	bc, 2
-	cps	hl, 4
-	cps	iz, 7
+	cp	bc, 2:i3
+	cp	hl, 4:i3
+	cp	iz, 7:i3
 	.byte 0xe0, 0xe2, 0xe3, 0xe4, 0xe5, 0xe7, 0xe8, 0xe9
 	sla	xde, 237
 	cp	xwa, xiz
@@ -8016,10 +8016,10 @@ MidiChParam_Entry_083:
 MidiChParam_Entry_084:
 	cp	h, 208
 	.byte 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7
-	cps	wa, 1
-	cps	de, 3
-	cps	ix, 5
-	cps	iz, 7
+	cp	wa, 1:i3
+	cp	de, 3:i3
+	cp	ix, 5:i3
+	cp	iz, 7:i3
 	.byte 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7
 	.byte 0xe8, 0xe9, 0xea
 	sla	xhl, 237

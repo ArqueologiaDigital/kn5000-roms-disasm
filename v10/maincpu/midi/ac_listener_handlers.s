@@ -581,7 +581,7 @@ VoiceParam_ListHandler:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 1
+	cp hl, 1:i3
 	jrl le, AudioMix_ReturnZeroJmp3
 	ld wa, hl
 	add wa, wa
@@ -849,7 +849,7 @@ Data_FadeSetGridDispatch:
 	inc	1, bc
 	ld	(xde), bc
 	ld	bc, (xde)
-	cps	bc, 7
+	cp	bc, 7:i3
 	jr	lt, -24
 	lda	xbc, (xsp+12)
 	ld	(xhl+4), xbc
@@ -941,7 +941,7 @@ SndParam_FormatAndDisplay:
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp + 12)
 	ld xwa, NakaInst_OFF_WidgetTbl2_0xB6
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SndParam_PushStrAndCopy
 	ld xwa, NakaInst_OFF_WidgetTbl2_0xB0
 
@@ -1069,7 +1069,7 @@ AcInOutGrid_Init:
 	call SndParam_LookupReadOnly
 	ld wa, iz
 	add wa, wa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AcInOutGrid_ScrollUp_AltTable
 	lda xbc, (NakaInst_OFF_WidgetTbl2_0xCA:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
@@ -1147,7 +1147,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	call SndParam_LookupReadOnly
 	ld wa, iz
 	add wa, wa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AcInOutGrid_ScrollDown_AltTable
 	lda xbc, (NakaInst_OFF_WidgetTbl2_0xEE:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
@@ -1218,11 +1218,11 @@ AcInOutGrid_GetColText:
 AcInOutGrid_GetRowText:
 	ld xwa, 0x5000
 	call SndParam_LookupReadOnly
-	cps hl, 2
+	cp hl, 2:i3
 	jr z, AcInOutGrid_GetRowText_Src2
-	cps hl, 1
+	cp hl, 1:i3
 	jr z, AcInOutGrid_GetRowText_Src1
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AcInOutGrid_ReturnZero
 	ld xwa, NakaInst_OFF_WidgetTbl2_0x112
 	jr AcInOutGrid_GetRowText_Push
@@ -1319,7 +1319,7 @@ Data_InOutGridDispatch:
 	ld	(xwa+2), bc
 	cpw	(xwa), 1
 	jrl	nz, 1774
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	mi, 1769
 	cp	bc, 8
 	jrl	gt, 1762
@@ -1342,9 +1342,9 @@ Data_InOutGridDispatch:
 	jrl	292
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 17
-	cps	hl, 1
+	cp	hl, 1:i3
 	jrl	nz, 1686
 	ld	xwa, 0x5001
 	lds	bc, 1
@@ -1385,7 +1385,7 @@ Data_InOutGridDispatch:
 	ld	(xwa+2), bc
 	cpw	(xwa), 1
 	jrl	nz, 1570
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	mi, 1565
 	cp	bc, 8
 	jrl	gt, 1558
@@ -1408,9 +1408,9 @@ Data_InOutGridDispatch:
 	jr	88
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 17
-	cps	hl, 1
+	cp	hl, 1:i3
 	jrl	nz, 1482
 	ld	xwa, 0x5001
 	ldw	bc, 0xffff
@@ -1493,11 +1493,11 @@ Data_InOutGridDispatch:
 	ld	xix, xwa
 	ld	wa, (xwa)
 	lda	xhl, (ControlMode_Option_Table_0xA:24)
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 121
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 61
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	nz, 1196
 	ldw	(xbc), 2
 	ld	wa, (xix)
@@ -1556,7 +1556,7 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 3
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 25
 	ld	wa, (xiz+4)
 	exts	wa
@@ -1582,7 +1582,7 @@ Data_InOutGridDispatch:
 	ldw (xbc), 3
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	nz, 22
 	.byte 0x9e, 0x04, 0x04
 	pushw	231
@@ -1674,7 +1674,7 @@ ParaLoadOpt_Entry:
 	cpw (xde), 0x1
 	jrl nz, MdPreset_ReturnZero2
 	ld wa, (xwa)
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, MdPreset_ReturnZero2
 	cp wa, 0x8
 	jrl gt, MdPreset_ReturnZero2
@@ -1732,12 +1732,12 @@ Data_ParaLoadOptDispatch:
 	call	SendEvent
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 99
 	lda	xwa, (xsp+6)
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 42
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	nz, 480
 	ldw	(xwa), 3
 	pushw	231
@@ -1784,11 +1784,11 @@ Data_ParaLoadOptDispatch:
 	jrl	340
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 88
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 38
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	nz, 322
 	pushw	231
 	pushw	0xfd28
@@ -2025,9 +2025,9 @@ MdPresetWithoutFunc:
 	ld xbc, 0x1e00056
 	lds32 xde, 0
 	call SendEvent
-	cps l, 2
+	cp l, 2:i3
 	jr z, MdPresetWithout_Slot2Path
-	cps l, 1
+	cp l, 1:i3
 	jr nz, MdPresetWith_ReturnSuccess
 	ld xwa, 0x560004
 	call GetViewInstance
@@ -2072,9 +2072,9 @@ MdPresetWithFunc:
 	ld xbc, 0x1e00056
 	lds32 xde, 0
 	call SendEvent
-	cps l, 2
+	cp l, 2:i3
 	jr z, MdPresetWith_Slot2Path
-	cps l, 1
+	cp l, 1:i3
 	jr nz, MdPreset_ReturnSuccess
 	ld xwa, 0x560004
 	call GetViewInstance
@@ -2116,18 +2116,18 @@ MdPresetOKFunc:
 	ld xbc, 0x1e00056
 	lds32 xde, 0
 	call SendEvent
-	cps l, 4
+	cp l, 4:i3
 	jrl z, MdPresetOK_Slot4Path
-	cps l, 3
+	cp l, 3:i3
 	jrl z, MdPresetOK_Slot3Path
 	ld a, (0x024756:24)
-	cps l, 2
+	cp l, 2:i3
 	jr z, MdPresetOK_CheckSlotB
-	cps l, 1
+	cp l, 1:i3
 	jrl nz, MdPreset_PostMainFunc
-	cps a, 1
+	cp a, 1:i3
 	jr z, MdPresetOK_Slot1Func
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56000c
 	ld xbc, 0x1e00090
@@ -2155,9 +2155,9 @@ MdPresetOK_Slot1Func:
 	jrl MdPreset_CallMainFunc
 
 MdPresetOK_CheckSlotB:
-	cps a, 1
+	cp a, 1:i3
 	jr z, MdPresetOK_SlotBFunc
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56002d
 	ld xbc, 0x1e00090

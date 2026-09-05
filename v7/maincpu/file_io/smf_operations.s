@@ -23,11 +23,11 @@ FmmSmfLoadTitleFunc:
 	calr	-10566
 SmfLoad_DispatchState:
 	ld	wa, (33892:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	z, 193
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 166
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	z, 94
 	cpw	(33896:16), 0
 	jr	ge, 19
@@ -209,7 +209,7 @@ RenderSmf_LoopCheck:
 	jr ge, RenderSmf_PadCheck
 	lda_dri XDE, 0x07, 0xe0, 0xf0
 	ld c, (xde)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, RenderSmf_CheckSeparator
 
 RenderSmf_PadCheck:
@@ -418,7 +418,7 @@ TrimPad_LoopCheck:
 	cp ix, bc
 	jr nc, TrimPad_PadCheck
 	ld e, (xhl)
-	cps e, 0
+	cp e, 0:i3
 	jr nz, TrimPad_LoopBody
 
 TrimPad_PadCheck:
@@ -499,7 +499,7 @@ ValidateFN_AdvancePointer:
 
 ValidateFN_LoopHead:
 	ldb_sri E, 0x07, 0xe0, 0xf4
-	cps e, 0
+	cp e, 0:i3
 	jr z, ValidateFN_ReturnValid
 	cp hl, bc
 	jr c, ValidateFN_CheckSpace
@@ -543,13 +543,13 @@ SmfFN_JumpTable:
 	jr	z, 20
 	call	16291514
 	ld	(33040:16), hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 26
 	ldw	(33040:16), 0
 	jr	18
 	ld	wa, (33896:16)
 	ld	(33040:16), wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	le, 2
 	dec	1, wa
 	call	16291735
@@ -592,7 +592,7 @@ SmfFN_NavDown_Apply:
 SmfFN_NavUp:
 	cp xwa, 0x1c00017
 	jrl nz, SmfFN_UpdateDisplay
-	cps ix, 0
+	cp ix, 0:i3
 	jrl le, SmfFN_UpdateDisplay
 	dec 1, ix
 	jr SmfFN_StoreIndex
@@ -636,7 +636,7 @@ SmfFN_PageDown_ClampCheck:
 	exts	xbc
 	divs	bc, 10
 	ld	wa, qbc
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 1320
 	ld	(33040:16), hl
 	jrl	1317
@@ -667,7 +667,7 @@ SmfFN_HandleSave:
 	lda	xwa, (xsp+8)
 	ldw	bc, 16
 	calr	-588
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 20
 	ld	wa, (33040:16)
 	call	16291811
@@ -735,7 +735,7 @@ SmfFN_HandleOpen:
 	call FileIO_GetRecordPtrAlt
 	ld xwa, xhl
 	call FileIO_CheckFileExists
-	cps l, 0
+	cp l, 0:i3
 	jr z, SmfFN_Open_Execute
 	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Open_Execute
@@ -865,7 +865,7 @@ SmfFN_Delete_Execute:
 	ld	wa, (33040:16)
 	cp wa, (33896:16)
 	jr	lt, 13
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	le, 9
 	dec	1, wa
 	ld	(33040:16), wa
@@ -934,7 +934,7 @@ SmfFN_HandleScrollFlag1:
 	ld	c, (34986:16)
 	ld	a, c
 	inc	1, a
-	cps	a, 3
+	cp	a, 3:i3
 	jr	nc, 18
 	inc	1, c
 	ld	(34986:16), c
@@ -1111,7 +1111,7 @@ SmfFN_UpdateFilenameField:
 	ld	wa, (33040:16)
 	cp wa, (33896:16)
 	jr	lt, 17
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	le, 13
 	ld	xwa, xiz
 	ld	xbc, 15337360

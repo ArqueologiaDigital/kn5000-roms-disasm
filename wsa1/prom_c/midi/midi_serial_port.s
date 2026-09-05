@@ -339,7 +339,7 @@ INTRX0_HANDLER:
 	ld (xiz-1), a
 	ld c, (xiz-2)
 	and c, 0x1c
-	cps c, 0
+	cp c, 0:i3
 	jr z, INTRX0_HANDLER__no_error
 	ld c, (xiz-2)
 	ld (0x00F327:24), c
@@ -621,7 +621,7 @@ Queue_Put:
 	push	xix                               ; F99332  push XIX
 	ld	xbc, (xiz+8)                        ; F99333  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc+20)                        ; F99336  ld WA,(XBC+0x14)
-	cps	wa, 0                              ; F99339  cp WA,0
+	cp	wa, 0:i3                              ; F99339  cp WA,0
 	jr nz, Queue_Put__F99344                       ; F9933B  jr NZ,0xf99344
 	ld	wa, (xbc+20)                        ; F9933D  ld WA,(XBC+0x14)
 	jr Queue_Put__F9937B                           ; F99340  jr T,0xf9937b
@@ -682,7 +682,7 @@ Queue_Put_IrqGuarded:
 	push	xix                               ; F99383  push XIX
 	ld	xbc, (xiz+8)                        ; F99384  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc+20)                        ; F99387  ld WA,(XBC+0x14)
-	cps	wa, 0                              ; F9938A  cp WA,0
+	cp	wa, 0:i3                              ; F9938A  cp WA,0
 	jr nz, Queue_Put_IrqGuarded__F99395                       ; F9938C  jr NZ,0xf99395
 	ld	wa, (xbc+20)                        ; F9938E  ld WA,(XBC+0x14)
 	jr Queue_Put_IrqGuarded__F993D0                           ; F99391  jr T,0xf993d0
@@ -985,7 +985,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 	ld_sd8b	c, 24                          ; F99546  ld C,(0x18)
 	and	c, 4                               ; F99549  and C,0x04
 	srl	c, 2                               ; F9954C  srl 0x02,C
-	cps	c, 0                               ; F9954F  cp C,0
+	cp	c, 0:i3                               ; F9954F  cp C,0
 	jr nz, MIDI_Watchdogs_And_TransportSwitch__F99575                       ; F99551  jr NZ,0xf99575
 	cp (0x00F328:24), 0x00                 ; F99553  cp (0x00f328),0x00   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99573                        ; F99559  jr Z,0xf99573

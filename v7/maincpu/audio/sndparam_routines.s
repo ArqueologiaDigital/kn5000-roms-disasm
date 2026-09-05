@@ -1222,7 +1222,7 @@ SndParam_Widget1_CallType3:
 	ld	a, (1066:16)
 	cp	a, 112
 	jr	ugt, 20
-	cps	a, 4
+	cp	a, 4:i3
 	jr	ugt, 6
 	ld	wa, (46908:16)
 	jr	14

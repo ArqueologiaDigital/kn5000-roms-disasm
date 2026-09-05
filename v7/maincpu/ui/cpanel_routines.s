@@ -142,7 +142,7 @@ DELAY_2_LOOPS:
 
 Delay2L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay2L_Done
 	jr Delay2L_Loop
 
@@ -155,7 +155,7 @@ DELAY_6_LOOPS:
 
 Delay6L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay6L_Done
 	jr Delay6L_Loop
 
@@ -168,7 +168,7 @@ DELAY_10_LOOPS:
 
 Delay10L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay10L_Done
 	jr Delay10L_Loop
 
@@ -181,7 +181,7 @@ DELAY_300_LOOPS:
 
 Delay300L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay300L_Done
 	jr Delay300L_Loop
 
@@ -194,7 +194,7 @@ DELAY_1500_LOOPS:
 
 Delay1500L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay1500L_Done
 	jr Delay1500L_Loop
 
@@ -207,7 +207,7 @@ DELAY_3000_LOOPS:
 
 Delay3000L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay3000L_Done
 	jr Delay3000L_Loop
 
@@ -726,7 +726,7 @@ PollLoop_TXForwardDist:
 	sub hl, wa
 
 PollLoop_TXCheckThreshold:
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	c, 38	; -> 0xFC4090
 	ld	(36094:16), 0
 	ldb	w, 224
@@ -793,7 +793,7 @@ CPanel_RX_ParseNext:
 	.byte 0x6f, 0x08, 0xd8, 0x07, 0xc8, 0xb9, 0x21, 0x5c
 	.byte 0xc8, 0xa1
 CPanel_RX_PacketSizeCheck:
-	cps a, 2
+	cp a, 2:i3
 	jrl c, CPanel_RX_Done
 
 	ldb_sri L, 0x07, 0xe8, 0xf4
@@ -959,7 +959,7 @@ MBytePkt_CommitRXPtr:
 MBytePkt_LoopTail:
 	inc 1, w
 	dec 1, b
-	cps b, 0
+	cp b, 0:i3
 	jrl nz, MBytePkt_LoopBody
 	jrl CPanel_RX_ParseNext
 
@@ -1008,7 +1008,7 @@ LEDs_TXForwardDist:
 	sub hl, wa
 
 LEDs_TXCheckThreshold:
-	cps hl, 3
+	cp hl, 3:i3
 	jrl c, LEDs_Return
 	ldb_sri A, 0x07, 0xf8, 0xf0
 	and a, 0x30
@@ -1084,7 +1084,7 @@ CPanel_LED_HandlePacketN__loop:
 	incw	1, (xiz-2)
 	ld	(36195:16), iy
 	dec	1, b
-	cps	b, 0
+	cp	b, 0:i3
 	jr	nz, -32
 	jrl	-201
 LEDs_Return:
@@ -1122,7 +1122,7 @@ IncEvt_NoWrap:
 
 
 CPanel_DecEventPtr:
-	cps ix, 0
+	cp ix, 0:i3
 	jr nz, DecEvt_NoWrap
 	ldw ix, 0x7f
 	ret

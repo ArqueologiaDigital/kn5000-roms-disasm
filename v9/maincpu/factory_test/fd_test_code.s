@@ -54,7 +54,7 @@ FDLoadSaveTest:
 	push xwa
 	call FileOpenDefault
 	inc 4, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FDTest_OpenFailed
 	lda xwa, (FDTest_String_TestTitleFunc_0x128:24)
 	calr FDTest_PrintDiag
@@ -208,7 +208,7 @@ FDTest_CompareNext:
 FDTest_CompareResult:
 	lda xwa, (FDTest_String_TestTitleFunc_0x1B6:24)
 	calr FDTest_PrintDiag
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, FDTest_Pass
 	lda xwa, (FDTest_String_TestTitleFunc_0x1C8:24)
 	calr FDTest_PrintDiag

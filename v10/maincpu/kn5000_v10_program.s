@@ -572,7 +572,7 @@ Boot_FlashAndExtensions:
 	bit_dd8 0, 0x38	;  Is the optional HD-AE5000 board present?
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	call nz, (HDAE5000_Parport_Setup:24)	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
@@ -589,7 +589,7 @@ BootInit_SeqAndPanel:
 	cp l, 0xff
 	jr nz, User_didnt_request_flash_mem_update
 	call Check_for_Floppy_Disk_Change
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, User_didnt_request_flash_mem_update
 	cp (1026:16), 4
 	jr nz, User_didnt_request_flash_mem_update
@@ -638,7 +638,7 @@ User_didnt_request_flash_mem_update:
 	ei 0
 	call SelfTest_FirmwareVersionCheck
 	calr SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
-	cps hl, 0	; HL=0: success, HL!=0: error
+	cp hl, 0:i3	; HL=0: success, HL!=0: error
 	jr nz, Boot_PayloadError	; Branch if error occurred
 	lds wa, 1	; Success: use screen group 1
 	jr Boot_DisplayScreen
@@ -783,7 +783,7 @@ Boot_SetConfigFlag7:
 Boot_CheckConfigFlag7:
 	ldcf_dd16 7, 0x06, 0x04
 	scc8 c, a
-	cps a, 1
+	cp a, 1:i3
 	scc16 z, hl
 	ret
 
@@ -797,7 +797,7 @@ Boot_CheckConfigFlag7:
 ;   Others: return (no special display)
 ; ===========================================================================
 Boot_HandleComboDisplay:
-	cps a, 2
+	cp a, 2:i3
 	jr nz, Boot_HandleComboDisplay_Check3
 	; --- Combo 2: Firmware version on LEDs ---
 	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
@@ -814,7 +814,7 @@ Boot_HandleComboDisplay:
 	ret
 
 Boot_HandleComboDisplay_Check3:
-	cps a, 3
+	cp a, 3:i3
 	ret nz
 	; --- Combo 3: Software version screen ---
 	ldw wa, 0xf0
@@ -851,7 +851,7 @@ Boot_ParseSubCPUTimestamp:
 Boot_HandleFactoryReset:
 	cpw (65482:24), 23205; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
 	ret z			; Yes -> checksums valid, skip reset
-	cps a, 1		; Combo code == 1 (Initial Setting)?
+	cp a, 1:i3		; Combo code == 1 (Initial Setting)?
 	ret nz			; No -> not requesting reset, return
 	; --- Factory Reset: clear all DRAM and SRAM ---
 	call ToneGen_FlashReadAndRestore
@@ -1050,13 +1050,13 @@ SetSepaOutMode:
 	ld xix, xsp
 	ldiw
 	ldiw
-	cps wa, 3
+	cp wa, 3:i3
 	jrl z, SetSepaOut_Mode3
-	cps wa, 2
+	cp wa, 2:i3
 	jrl z, SetSepaOut_Mode2
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, SetSepaOut_Mode1
-	cps wa, 0
+	cp wa, 0:i3
 	jrl nz, FileIO_SendCommand_Return
 	ld (xsp + 17), 0x14
 	lda xwa, (xsp + 16)
@@ -1476,7 +1476,7 @@ Voice_ReinitIfBankCountNonzero:
 	ld xiy, 0x1e8800
 	add xiy, 0xe
 	ld wa, (xiy)
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Voice_ReinitIfBankCount_Done
 	calr Voice_InitBankData
 
@@ -1529,7 +1529,7 @@ Voice_ComputeAllocSize:
 	ldb c, 0x39
 
 Voice_AllocSize_Loop:
-	cps c, 0
+	cp c, 0:i3
 	jr z, Voice_AllocSize_Done
 	ld a, (xiy)
 	bit 7, a
@@ -1626,11 +1626,11 @@ Voice_FactoryPresetData:
 	sll	xde, 2
 	add	xde, xwa
 	sll	xde, 6
-	cps	l, 2
+	cp	l, 2:i3
 	jrl	z, 146
-	cps	l, 1
+	cp	l, 1:i3
 	jr	z, 117
-	cps	l, 0
+	cp	l, 0:i3
 	jrl	nz, 160
 	ld	xhl, xbc
 	ld	iy, (xsp+50)
@@ -1733,7 +1733,7 @@ Voice_FactoryPresetData:
 	ld	(xsp+4), bc
 	ld	xiz, xwa
 	calr	38931
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 29
 	ld	a, (257960:24)
 	ld	(257962:24), a
@@ -1869,7 +1869,7 @@ DrawText_QueueOrDirect:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawText_QueueDeferred
 	ld a, (0x03efa8:24)
 	ld (0x03efaa:24), a
@@ -2219,11 +2219,11 @@ TextRender_ScanLineLoop:
 
 TextRender_SelectDrawMode:
 	ld a, (0x03efaa:24)
-	cps a, 2
+	cp a, 2:i3
 	jrl z, TextRender_XorMode_Init
-	cps a, 1
+	cp a, 1:i3
 	jrl z, TextRender_BitMask5_Init
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, TextRender_AdvanceToNextLine
 	ldw (xsp + 28), 0x0
 	jrl TextRender_BitMask4_CheckColumnEnd
@@ -2487,7 +2487,7 @@ AcChordBox_HandleChordUpdate:
 	lda xsp, (xsp + 12)
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AcChordBox_ReturnZero
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
@@ -2804,7 +2804,7 @@ Debug_PrintString:
 
 Debug_PrintString_Loop:
 	ldb_spi A, 0xf0
-	cps a, 0
+	cp a, 0:i3
 	jr z, Debug_PrintString_Done
 	push xix
 	calr Debug_UartDelay

@@ -266,7 +266,7 @@ HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	ld (xsp + 0x06), bc			; bf 06 51
 	ld (xsp + 0x08), wa			; bf 08 50
 	ld iz, (xsp + 0x12)			; 9f 12 26 — load mode arg
-	cps iz, 1				; de d9
+	cp iz, 1:i3				; de d9
 
 	; --- Branch on mode ---
 	jr nz, .Ldm_mode2			; 6e xx
@@ -319,7 +319,7 @@ HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	jrl t, .Ldm_done			; 78 xx xx
 
 .Ldm_success_check:				; 0x28AFCF
-	cps iz, 1				; de d9
+	cp iz, 1:i3				; de d9
 	jr nz, .Ldm_mode2_dereg		; 6e xx
 
 	; Mode 1 deregistration: via +0x0104 vtable
@@ -359,7 +359,7 @@ HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 
 .Ldm_fail:					; 0x28B049
 	; Failure path: register error event
-	cps iz, 1				; de d9
+	cp iz, 1:i3				; de d9
 	jr nz, .Ldm_fail_mode2			; 6e xx
 
 	; Fail mode 1: via +0x0100 vtable
@@ -515,7 +515,7 @@ HDAE5000_Display_Clear:	; 0x28B200 (43 bytes)
 	; Clear display area: copy 7 bytes from ROM table, then call buffer validate
 	; Input: XWA = pointer to display buffer
 	lds ix, 0			; IX = loop counter = 0
-	cps ix, 7
+	cp ix, 7:i3
 	jr nc, HDAE5000_Display_Clear__push
 HDAE5000_Display_Clear__loop:
 	stb_dpi c, 0xE0		; lda XHL, (XWA+) - get next dest addr, post-inc XWA
@@ -526,7 +526,7 @@ HDAE5000_Display_Clear__loop:
 	ld c, (xde)			; C = table byte
 	ld (xhl), c			; store to display buffer
 	inc 1, ix			; index++
-	cps ix, 7
+	cp ix, 7:i3
 	jr c, HDAE5000_Display_Clear__loop
 HDAE5000_Display_Clear__push:
 	pushw 0x002E			; push 0x2E (size param)
@@ -552,7 +552,7 @@ HDAE5000_Wait_Callback_Loop:	; 0x28B22B (45 bytes)
 	ld_sril xix, (xwa + 0x00d0)             ; ld XIX, (XWA + 0x00D0) — poll fn
 	lds wa, 1			; poll type = 1
 	call (xix)			; invoke poll
-	cps hl, 0			; result == 0?
+	cp hl, 0:i3			; result == 0?
 	jr nz, .LWait_Callback__invoke	; keep polling if non-zero
 	ret
 
@@ -560,7 +560,7 @@ HDAE5000_Set_Menu_Visibility:	; 0x28B258 (229 bytes)
 	; Set visibility for 9 menu items via workspace callback +0x0294
 	; Input: A = 0 → show (IZ=1), A != 0 → hide (IZ=0)
 	pushw iz
-	cps a, 0
+	cp a, 0:i3
 	jr nz, .Lsmv_hide
 	lds iz, 1			; show mode
 	jr t, .Lsmv_start
@@ -648,7 +648,7 @@ HDAE5000_Get_Table_Entry:	; 0x28B33E (61 bytes)
 	lda xwa, (xiz + 2)		; XWA = pointer to current index
 	incm8 1, (xwa)			; increment current index
 	ld a, (xwa)			; read new index value
-	cps a, 5			; wrap at 5?
+	cp a, 5:i3			; wrap at 5?
 	jr c, .Lgte_no_wrap
 	ld (xiz + 2), 0x00		; reset to 0
 .Lgte_no_wrap:
@@ -675,7 +675,7 @@ HDAE5000_Validate_String:	; 0x28B37B (56 bytes)
 	cp (xwa + 1), 0x00		; check if index is non-zero
 	jr nz, .LValidate_String__dec
 	ld c, (xwa)			; get count
-	cps c, 5			; count == 5?
+	cp c, 5:i3			; count == 5?
 	jr nz, .LValidate_String__dec_count
 	ld (xwa + 1), 0x04		; wrap: index = 4 (max-1)
 	jr t, .LValidate_String__ret
@@ -925,7 +925,7 @@ HDAE5000_AcLanguageText1Proc:
 	push xwa
 	call HDAE5000_MemCompare_Block
 	add	xsp, 0x0000000a
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr nz, .LUIH_b624                      ; [6e 05] jr NZ,0x28b624
 	ldw (xsp + 0x04), 1
 .LUIH_b624:
@@ -936,7 +936,7 @@ HDAE5000_AcLanguageText1Proc:
 	push xwa
 	call HDAE5000_MemCompare_Block
 	add	xsp, 0x0000000a
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr nz, .LUIH_b643                      ; [6e 05] jr NZ,0x28b643
 	ldw (xsp + 0x04), 2
 .LUIH_b643:
@@ -947,7 +947,7 @@ HDAE5000_AcLanguageText1Proc:
 	push xwa
 	call HDAE5000_MemCompare_Block
 	add	xsp, 0x0000000a
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr nz, .LUIH_b662                      ; [6e 05] jr NZ,0x28b662
 	ldw (xsp + 0x04), 3
 .LUIH_b662:
@@ -970,7 +970,7 @@ HDAE5000_AcLanguageText1Proc:
 	call	(xix)
 	ld	wa, (xhl+26)
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl lt, .LUIH_cccd                     ; [71 1f 16] jrl LT,0x28cccd
 	cp	wa, 0x0042
 	jr le, .LUIH_b6c6                      ; [62 12] jr LE,0x28b6c6
@@ -3257,7 +3257,7 @@ HDAE5000_LyricBoxProc:
 	jr lt, .LUIH_cf52                      ; [61 e5] jr LT,0x28cf52
 .LUIH_cf6d:
 	lds	hl, 0
-	cps	hl, 6
+	cp	hl, 6:i3
 	jr ge, .LUIH_cf93                      ; [69 20] jr GE,0x28cf93
 .LUIH_cf73:
 	ld	wa, hl
@@ -3268,7 +3268,7 @@ HDAE5000_LyricBoxProc:
 	lda xwa, (0x230808:24)
 	stb_dri c, 0x07, 0xE0, 0xEC	; ld (XWA+HL),C
 	inc	1, hl
-	cps	hl, 6
+	cp	hl, 6:i3
 	jr lt, .LUIH_cf73                      ; [61 e0] jr LT,0x28cf73
 .LUIH_cf93:
 	lds32	xhl, 0
@@ -3325,7 +3325,7 @@ HDAE5000_LyricBoxProc:
 	call	(xix)
 	ld	(0x22a088), xhl
 	lds	iz, 0
-	cps	iz, 6
+	cp	iz, 6:i3
 	jrl nc, .LUIH_d1a2                     ; [7f 4e 01] jrl NC,0x28d1a2
 .LUIH_d054:
 	ld	wa, iz
@@ -3436,7 +3436,7 @@ HDAE5000_LyricBoxProc:
 	call	(xhl)
 .LUIH_d19b:
 	inc	1, iz
-	cps	iz, 6
+	cp	iz, 6:i3
 	jrl c, .LUIH_d054                      ; [77 b2 fe] jrl C,0x28d054
 .LUIH_d1a2:
 	lda xwa, (0x22a094:24)
@@ -3784,9 +3784,9 @@ HDAE5000_Display_Error:	; 0x28D605 (204 bytes)
 	ld xwa, (xwa + 0x0e88)             ; ld XWA, (XWA + 0x0E88)
 	ld xix, (xwa + 8)		; XIX = device status callback
 	call (xix)			; call device check
-	cps l, 3			; check if result == 3
+	cp l, 3:i3			; check if result == 3
 	jr z, .Lde_ready		; if so, device ready
-	cps l, 2			; check if result == 2
+	cp l, 2:i3			; check if result == 2
 	jr z, .Lde_ready		; if so, device ready
 	ld xhl, 0xFFFFFFFF		; return -1 (not ready)
 	ret
@@ -3869,7 +3869,7 @@ HDAE5000_File_Operation:	; 0x28D6D1 (938 bytes)
 	jrl z, .Lfo_type_7E
 	cp wa, 88			; type 0x58?
 	jrl z, .Lfo_type_58
-	cps wa, 5			; type 5?
+	cp wa, 5:i3			; type 5?
 	jrl nz, .Lfo_end_iter		; unknown type → skip
 
 	; --- Type 5: check for newline (0x0D/0x0A) ---
@@ -4222,15 +4222,15 @@ HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 
 	; --- File type code switch on (0x229DAD) → 0x23087E ---
 	ld a, (0x229dad:24); A = content type 1
-	cps a, 4
+	cp a, 4:i3
 	jr z, .Lfs_type1_4
-	cps a, 3
+	cp a, 3:i3
 	jr z, .Lfs_type1_3
-	cps a, 2
+	cp a, 2:i3
 	jr z, .Lfs_type1_2
-	cps a, 1
+	cp a, 1:i3
 	jr z, .Lfs_type1_1
-	cps a, 0
+	cp a, 0:i3
 	jr nz, .Lfs_type1_default
 	ld (0x23087e:24), 0xf9; (0x23087E) = 0xF9
 	jr t, .Lfs_type1_done
@@ -4252,15 +4252,15 @@ HDAE5000_File_Save:	; 0x28DA7B (381 bytes)
 
 	; --- File type code switch on (0x229DAE) → 0x230880 ---
 	ld a, (0x229dae:24); A = content type 2
-	cps a, 4
+	cp a, 4:i3
 	jr z, .Lfs_type2_4
-	cps a, 3
+	cp a, 3:i3
 	jr z, .Lfs_type2_3
-	cps a, 2
+	cp a, 2:i3
 	jr z, .Lfs_type2_2
-	cps a, 1
+	cp a, 1:i3
 	jr z, .Lfs_type2_1
-	cps a, 0
+	cp a, 0:i3
 	jr nz, .Lfs_type2_default
 	ld (0x230880:24), 0xf9; (0x230880) = 0xF9
 	jr t, .Lfs_type2_done
@@ -4522,7 +4522,7 @@ HDAE5000_File_Delete:	; 0x28DE2C (579 bytes)
 	ld (xsp + 14), xbc		; save to local[0x0E]
 
 	; --- If A == 1: backup 5 directory entries (40 bytes each) ---
-	cps a, 1
+	cp a, 1:i3
 	jr nz, .Lfd_else		; skip backup if mode != 1
 
 	ldw (xsp + 2), 0		; slot = 0
@@ -4789,7 +4789,7 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	calr HDAE5000_File_Format
 	ld wa, hl
 	add (xsp + 2), wa		; accumulate
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, .Lfr_loop_next
 	ld xhl, 0xFFFFFFFF		; format returned 0 → error
 	jrl .Lfr_exit
@@ -4806,7 +4806,7 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	ld bc, (xsp + 2)
 	calr HDAE5000_File_Format
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, .Lfr_7c_error
 	ld wa, (xsp + 2)
 	extz xwa
@@ -4826,14 +4826,14 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	calr HDAE5000_File_Format
 	ld wa, hl
 	add (xsp + 2), wa
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lfr_search_pos_check
 	ld a, (xsp + 8)
 	extz wa
 	cp wa, (2294832:24); type == (0x230430)? (file type from partition)
 	jr nz, .Lfr_search_pos		; no match → try next partition
 .Lfr_search_pos_check:
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lfr_search_pos_err
 	ld hl, (xsp + 2)
 	extz xhl
@@ -4873,14 +4873,14 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	calr HDAE5000_File_Format
 	ld wa, hl
 	add (xsp + 2), wa
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lfr_fffe_check
 	ld a, (xsp + 8)
 	extz wa
 	cp wa, (2294832:24); compare with (0x230430)
 	jr nz, .Lfr_fffe_loop
 .Lfr_fffe_check:
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lfr_fffe_error
 	ld hl, (xsp + 2)
 	extz xhl
@@ -4936,7 +4936,7 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	ld iz, (xsp + 4)		; IZ = start sector
 	ld a, (xsp + 6)		; A = flags
 	and a, 1			; isolate bit 0
-	cps a, 1
+	cp a, 1:i3
 	jr nz, .Lff_skip_backup_flag
 	ldib_erp 0xfb, 1		; QIZH = 1 (backup mode)
 
@@ -5107,7 +5107,7 @@ HDAE5000_File_Format:	; 0x28E187 (772 bytes)
 	; --- Copy string block 2 (if flag bit 1 set) ---
 	ld a, (xsp + 6)		; A = flags
 	and a, 2			; isolate bit 1
-	cps a, 2
+	cp a, 2:i3
 	jr nz, .Lff_after_copy2		; skip if bit 1 not set
 	cpw (2294838:24), 127; cp (0x230436), 0x7F
 	jr ugt, .Lff_long_copy2
@@ -5202,7 +5202,7 @@ HDAE5000_Read_Table_Multi:		; 0x28E44B
 	lds32 xhl, 0
 	ld l, c				; L = count (initial byte)
 	lds ix, 0
-	cps ix, 3
+	cp ix, 3:i3
 	ret nc				; if count >= 3, return early
 .Lff_h2_loop:				; 0x28E468
 	ld bc, wa
@@ -5216,7 +5216,7 @@ HDAE5000_Read_Table_Multi:		; 0x28E44B
 	sla xhl, 8			; XHL <<= 8
 	add xhl, xbc			; XHL += byte
 	inc 1, ix
-	cps ix, 3
+	cp ix, 3:i3
 	jr c, .Lff_h2_loop		; loop while IX < 3
 	ret
 
@@ -5243,7 +5243,7 @@ HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
 	; --- Sub-routine 1: Inline VarInt decode from sector table ---
 	lds32 xhl, 0			; XHL = accumulator (decoded value)
 	lds ix, 0			; IX = byte index (0-3)
-	cps ix, 4			; guard: max 4 bytes per VarInt
+	cp ix, 4:i3			; guard: max 4 bytes per VarInt
 	jr nc, .Lcds_overflow
 .Lcds_loop:
 	; Read descriptor byte: table[base_sector + IX + 22]
@@ -5275,7 +5275,7 @@ HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
 .Lcds_continue:
 	sll xhl, 7			; make room for next 7-bit chunk
 	inc 1, ix
-	cps ix, 4			; max 4 continuation bytes
+	cp ix, 4:i3			; max 4 continuation bytes
 	jr c, .Lcds_loop
 .Lcds_overflow:
 	ld xhl, 0xFFFFFFFF		; overflow: VarInt > 4 bytes
@@ -5289,7 +5289,7 @@ HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
 	; Step 1: Count how many 7-bit chunks are needed
 	ld xde, xwa			; XDE = value to encode
 	lds hl, 1			; HL = chunk count (start at 1)
-	cps hl, 5			; max 5 chunks
+	cp hl, 5:i3			; max 5 chunks
 	jr nc, .Lcds_apply
 .Lcds_search:
 	srl xde, 7			; shift out 7 bits
@@ -5298,13 +5298,13 @@ HDAE5000_Calc_Disk_Space:	; 0x28E48B (178 bytes)
 	jr t, .Lcds_apply		; done counting
 .Lcds_next:
 	inc 1, hl
-	cps hl, 5
+	cp hl, 5:i3
 	jr c, .Lcds_search
 	; Step 2: Serialize chunks MSB-first into buffer
 .Lcds_apply:
 	ld xde, xwa			; XDE = value (fresh copy)
 	ld hl, ix			; HL = chunk count
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lcds_done		; nothing to write
 .Lcds_apply_loop:
 	ld wa, hl
@@ -5346,7 +5346,7 @@ HDAE5000_Display_Notify:	; 0x28E53D (113 bytes)
 	push xwa			; push dest ptr
 	call HDAE5000_File_Read
 	add xsp, 0x0000000A		; clean up 10 bytes (3 args)
-	cps hl, 0			; check read result
+	cp hl, 0:i3			; check read result
 	jr z, .Ldn_check1		; if OK, continue validation
 	ld xhl, 0xFFFFFFFF		; return -1 (read error)
 	ret
@@ -5393,7 +5393,7 @@ HDAE5000_Display_Progress:	; 0x28E5AE (59 bytes)
 	push xwa
 	call HDAE5000_File_Read		; read file data
 	add xsp, 0x0000000A		; deallocate 10 bytes (3 pushed args)
-	cps hl, 0			; check result
+	cp hl, 0:i3			; check result
 	jr z, .LDisplay_Progress__ok
 	ld xhl, 0xFFFFFFF6		; return -10 (error)
 	ret
@@ -5413,7 +5413,7 @@ HDAE5000_String_To_Upper:	; 0x28E5E9 (37 bytes)
 	ld xhl, xwa			; copy input
 	and xhl, 0x000000FF		; mask lowest byte
 	lds de, 0			; loop counter = 0
-	cps de, 3			; compare with 3
+	cp de, 3:i3			; compare with 3
 	ret ge				; return if already done
 .LString_To_Upper__loop:
 	srl xwa, 8			; next byte
@@ -5422,7 +5422,7 @@ HDAE5000_String_To_Upper:	; 0x28E5E9 (37 bytes)
 	and xbc, 0x000000FF		; mask byte
 	add xhl, xbc			; accumulate
 	inc 1, de			; counter++
-	cps de, 3
+	cp de, 3:i3
 	jr lt, .LString_To_Upper__loop
 	ret
 
@@ -5913,7 +5913,7 @@ HDAE5000_FDFileSelectProc:
 	push xwa
 	call HDAE5000_Display_Buffer_Validate
 	inc 4, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lsc_0f_notfound
 
 	; Found: format with name
@@ -6193,9 +6193,9 @@ HDAE5000_FDFileSelectProc:
 	ld XWA, (xwa + 0x0e88)             ; (XWA+0x0E88) status obj
 	ld xix, (xwa + 0x08)
 	call (xix)			; get status
-	cps l, 3
+	cp l, 3:i3
 	jr z, .Lsc_enter_active
-	cps l, 2
+	cp l, 2:i3
 	jrl nz, .Lsc_enter_skip
 
 .Lsc_enter_active:
@@ -6281,9 +6281,9 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	ld xwa, (xwa + 0x0e88)             ; XWA = (XWA + 0x0E88)
 	ld xix, (xwa + 8)		; XIX = (XWA + 0x08) — method ptr
 	call (xix)			; call method
-	cps l, 3			; if L != 3
+	cp l, 3:i3			; if L != 3
 	jr z, .Lpb_continue		;   (L==3 → continue)
-	cps l, 2			; if L != 2 either
+	cp l, 2:i3			; if L != 2 either
 	jrl nz, .Lpb_exit		;   return
 
 .Lpb_continue:				; 0x28EF8E
@@ -6326,7 +6326,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	push xwa
 	call 2731889			; strlen(path buffer)
 	inc 4, xsp
-	cps hl, 0			; if strlen > 0
+	cp hl, 0:i3			; if strlen > 0
 	jr z, .Lpb_no_separator		;   skip separator append
 
 	; Append separator
@@ -6371,7 +6371,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	ld xde, (xde + 0x0e88)             ; XDE = (XDE + 0x0E88)
 	ld_sril xix, (xde + 0x0098)             ; XIX = (XDE + 0x0098)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lpb_retry		; if HL == 0, retry
 
 	; --- Call vtable method at +0x009C ---
@@ -6465,7 +6465,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	call (xix)
 
 	; --- Check result and set flag ---
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, .Lpb_set_zero		; if HL < 0, set 0
 	; HL >= 0: set flag to 1
 	ld wa, iz
@@ -6533,7 +6533,7 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	push xwa
 	call HDAE5000_MemCompare_Block			; search/match
 	add xsp, 0x0000001a		; clean 26 bytes
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, .Ldh_ret0
 
 	; Check max entries
@@ -6595,7 +6595,7 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	push xwa
 	call HDAE5000_Code_Remainder			; string compare
 	inc 0, xsp			; clean 8 bytes
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Ldh_next_slot
 
 	; Found insert position — shift entries down
@@ -6833,13 +6833,13 @@ HDAE5000_VarInt_Decode:		; 0x28F3BD
 	; Continuation=1 → more bytes follow
 	inc 1, ix			; advance to next byte
 	sll xhl, 7			; make room for next 7-bit chunk
-	cps ix, 4
+	cp ix, 4:i3
 	jr le, .Lvd_length_check
 	cpib_erp 0xf4, 7		; if first byte > 7 and >4 bytes: invalid
 	jr ugt, .Lvd_error
 
 .Lvd_length_check:
-	cps ix, 5			; max 5 bytes (35 bits for 32-bit values)
+	cp ix, 5:i3			; max 5 bytes (35 bits for 32-bit values)
 	jr le, .Lvd_loop
 
 .Lvd_error:
@@ -6889,9 +6889,9 @@ HDAE5000_Extension_Check:	; 0x28F438 (153 bytes)
 	ld xwa, (xwa + 0x0e88)             ; ld XWA, (XWA+0x0E88) — handler table
 	ld xix, (xwa + 8)		; ld XIX, (XWA+0x08)
 	call (xix)			; call validation handler
-	cps l, 3			; check result == 3?
+	cp l, 3:i3			; check result == 3?
 	jr z, .Lec_process		; if so, process extension
-	cps l, 2			; check result == 2?
+	cp l, 2:i3			; check result == 2?
 	jr nz, .Lec_finish		; if neither 2 nor 3, skip to end
 .Lec_process:
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2)
@@ -7186,7 +7186,7 @@ HDAE5000_Boot_Init:	; 28F576h
 	call HDAE5000_Check_HD_Present
 	ld (0x230eda:24), l; Store result
 
-	cps l, 0
+	cp l, 0:i3
 	jr z, HDAE5000_Boot_Init__skip_hd_init	; Skip if no HD
 
 	; Hard disk present - initialize it
@@ -7287,12 +7287,12 @@ HDAE5000_Frame_Handler_Status:	; 28F6E0h
 	;
 	; Status changed - update previous state
 	ld (0x230ed0:24), a; Store new state
-	cps a, 0	; Check if bit 2 now clear
+	cp a, 0:i3	; Check if bit 2 now clear
 	jrl nz, HDAE5000_Frame_Handler_Exit	; jrl NZ, Frame_Handler_Exit  ; Skip if bit still set
 	;
 	; Bit 2 cleared - check if display init needed
 	call HDAE5000_Get_Status_Byte	; Call status check routine
-	cps l, 1	; Check return value
+	cp l, 1:i3	; Check return value
 	jr nz, HDAE5000_Frame_Handler_Exit	; Skip if not 1
 	;
 	; Initialize display - call workspace callback
@@ -7547,7 +7547,7 @@ HDAE5000_Load_Palette:	; 28F8E0h
 	pushw iz
 	ld (xsp + 2), xwa	; ld (XSP+0x02), XWA  ; store palette ptr
 	ldw iz, 0xFF	; IZ = 255 (palette index counter)
-	cps iz, 0	; initial check
+	cp iz, 0:i3	; initial check
 	jr lt, HDAE5000_Load_Palette__done	; skip loop if IZ < 0 (never happens here)
 HDAE5000_Load_Palette__loop:
 	stb_erp E, 0xF8	; E = current palette index
@@ -7581,7 +7581,7 @@ HDAE5000_Display_Init:	; 28F90Ch (114 bytes)
 	ld_sril xhl, (xwa + 0x00e8)             ; ld XHL, (XWA+0x00E8) — init callback
 	lds wa, 1			; WA = 1
 	call (xhl)			; call init callback
-	cps iz, 1			; mode == 1?
+	cp iz, 1:i3			; mode == 1?
 	jr nz, .Ldi_skip1		; skip sub-handler if not
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; ld XWA, (XWA+0x0E0A) — sub-handler table
@@ -7590,7 +7590,7 @@ HDAE5000_Display_Init:	; 28F90Ch (114 bytes)
 .Ldi_skip1:
 	call HDAE5000_Display_String_Render
 	ld (xsp + 2), hl		; save result on stack
-	cps iz, 1			; mode == 1?
+	cp iz, 1:i3			; mode == 1?
 	jr nz, .Ldi_skip2		; skip sub-handler if not
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; ld XWA, (XWA+0x0E0A)
@@ -7659,7 +7659,7 @@ HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD (62 bytes)
 	push xbc		; push tile address
 	call HDAE5000_MemCompare_Block
 	add xsp, 0x0000000E	; clean up 14 bytes
-	cps hl, 0		; check compare result
+	cp hl, 0:i3		; check compare result
 	jr nz, .Lgdd_done	; skip if mismatch
 	ldw	qiz, 0xffff
 .Lgdd_done:
@@ -7807,7 +7807,7 @@ HDAE5000_Validate_Cell_Coords:	; 0x28FAE9 (61 bytes)
 	push xhl		; push tile address (32-bit)
 	call HDAE5000_MemCompare_Block
 	add xsp, 0x0000000A	; clean up 10 bytes
-	cps hl, 0		; compare result
+	cp hl, 0:i3		; compare result
 	jr nz, .Lvcc_done	; if not equal, valid (keep 0)
 	ldw (xsp + 2), 0xFFFF	; mark invalid (-1)
 .Lvcc_done:
@@ -10922,7 +10922,7 @@ HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
 	push xwa
 	call HDAE5000_MemCompare_Block
 	add	xsp, 0x0000000a
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr nz, .LTCI_1c54                      ; [6e 04] jr NZ,0x291c54
 	lds	hl, 0
 	jr t, .LTCI_1c57                       ; [68 03] jr T,0x291c57
@@ -11506,7 +11506,7 @@ HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
 	ld	xde, (xde + 0x0e88)
 	ld_sril	xix, (xde + 0x00a0)
 	call	(xix)
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr lt, .LTCI_23ba                      ; [61 1b] jr LT,0x2923ba
 	lda	xwa, (xsp+20)
 	ld	xbc, (0x23a1a2)
@@ -11633,7 +11633,7 @@ HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
 	; Check if result < 0
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, .Lts488_error
 	; Workspace dispatch via XDE chain at 0xA8
 	lda xwa, (0x230f1c:24); 0x230F1C
@@ -11742,7 +11742,7 @@ HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
 	ld_sril xix, (xde + 0x00a0)             ; (XDE+0x00A0)
 	call (xix)
 	; Check result
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lts925_1
 	ldw hl, 0xFFFF
 	jrl .Lts925_exit
@@ -11887,7 +11887,7 @@ HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
 	ld_sril xix, (xde + 0x00a0)             ; (XDE+0x00A0)
 	call (xix)
 	; Check result
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lts927_1
 	ldw hl, 0xFFFF
 	jrl .Lts927_exit
@@ -12026,7 +12026,7 @@ HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
 	ld xde, (xde + 0x0e88)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lts929_1
 	ldw hl, 0xFFFF
 	jrl .Lts929_exit
@@ -12171,7 +12171,7 @@ HDAE5000_Table_Sub_292ADE:	; 0x292ADE (288 bytes)
 	ld xde, (xde + 0x0e88)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, .Lts92a_error
 	; Workspace dispatch: get handler
 	lda xwa, (0x230f1c:24); 0x230F1C
@@ -12267,7 +12267,7 @@ HDAE5000_Table_Sub_292BFE:	; 0x292BFE (280 bytes)
 	ld xde, (xde + 0x0e88)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, .Lts92b_error
 	lda xwa, (0x230f1c:24)
 	ld xbc, (xsp + 30)
@@ -12348,7 +12348,7 @@ HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
 	ld xde, (xde + 0x0e88)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, .Lts92d_1
 	ldw hl, 0xFFFF
 	jrl .Lts92d_exit
@@ -12488,7 +12488,7 @@ HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
 	ld xde, (xde + 0x0e88)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, .Lts92e_error
 	lda xwa, (0x230f1c:24)
 	ld xbc, (xsp + 30)
@@ -12570,7 +12570,7 @@ HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
 	ld xde, (xde + 0x0e88)
 	ld_sril xix, (xde + 0x00a0)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, .Lts92f_error
 	; Call 0x29AEC7 with args (8 bytes pushed, cleaned by inc 0)
 	pushw 0x8000
@@ -12902,7 +12902,7 @@ HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	ld iz, de
 	ld (xsp + 4), bc	; save file number
 	ld (xsp + 6), wa	; save partition
-	cps iz, 0
+	cp iz, 0:i3
 	jrl z, .Lws36b_exit	; nothing to do
 	; Workspace dispatch at 0xE8
 	ld xwa, (0x23a1a2:24); 0x23A1A2
@@ -13972,9 +13972,9 @@ HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
 	push xiz
 	ld (xsp + 0x0c), xbc                    ; ld (XSP+0x0c),XBC
 	ld	bc, (0x238F1C:24)
-	cps	bc, 1
+	cp	bc, 1:i3
 	jr z, .LDC_3fff                        ; [66 59] jr Z,0x293fff
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl nz, .LDC_4053                      ; [7e a8 00] jrl NZ,0x294053
 	ld (xsp + 0x04), xwa                    ; ld (XSP+0x04),XWA
 	ld xwa, (xsp + 0x0c)                    ; ld XWA,(XSP+0x0c)
@@ -14036,9 +14036,9 @@ HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
 	push xiz
 	ld (xsp + 0x06), xbc                    ; ld (XSP+0x06),XBC
 	ld	bc, (0x238F1C:24)
-	cps	bc, 2
+	cp	bc, 2:i3
 	jr z, .LDC_40da                        ; [66 62] jr Z,0x2940da
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl nz, .LDC_4137                      ; [7e ba 00] jrl NZ,0x294137
 	ld xbc, (xsp + 0x06)                    ; ld XBC,(XSP+0x06)
 	calr	0x027e
@@ -14115,11 +14115,11 @@ HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
 	lda	xsp, (xsp+16)
 	ret
 
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr z, .LDC_4195                        ; [66 2c] jr Z,0x294195
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr z, .LDC_4183                        ; [66 16] jr Z,0x294183
-	cps	wa, 0
+	cp	wa, 0:i3
 	ret nz                                  ; ret NZ
 
 	lda xwa, (0x201632:24)
@@ -14275,9 +14275,9 @@ HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
 	ld (xsp + 14), xwa		; save arg0
 	ldw (xsp + 8), 0x0000		; init result = 0
 	ld a, (0x238f2c:24); load active flag (0x238F2C)
-	cps a, 2
+	cp a, 2:i3
 	jr z, .Lds301_mode2
-	cps a, 1
+	cp a, 1:i3
 	jr nz, .Lds301_err1
 .Lds301_mode2:
 	ld xwa, (xsp + 10)		; reload arg1
@@ -15069,7 +15069,7 @@ HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
 	lds	iz, 0
 	lds	wa, 0
 	call HDAE5000_Display_Init
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr z, .LDS_4c79                        ; [66 02] jr Z,0x294c79
 	lds	iz, 1
 .LDS_4c79:
@@ -15513,7 +15513,7 @@ HDAE5000_Display_String:	; 0x2950F8
 
 HDAE5000_PPORT_Setup:	; 0x29511C (442 bytes)
 	; PPORT command dispatcher — WA = command ID (1-30)
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, .Lpps_error		; WA <= 0 → error
 	cp wa, 0x001E
 	jr gt, .Lpps_error		; WA > 30 → error
@@ -15779,35 +15779,35 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	; Execute PPORT command — dispatch on A register (command ID 0-7)
 	and a, 0x7F			; mask high bit
 	nop
-	cps a, 0
+	cp a, 0:i3
 	jr nz, .Lppe_cmd1
 	jp .Lppe_read_exec		; cmd 0 → read/execute
 .Lppe_cmd1:
-	cps a, 1
+	cp a, 1:i3
 	jr nz, .Lppe_cmd2
 	jp .Lppe_read_exec		; cmd 1 → read/execute
 .Lppe_cmd2:
-	cps a, 2
+	cp a, 2:i3
 	jr nz, .Lppe_cmd3
 	jp .Lppe_simple_ret		; cmd 2 → simple ret
 .Lppe_cmd3:
-	cps a, 3
+	cp a, 3:i3
 	jr nz, .Lppe_cmd4
 	jp .Lppe_simple_ret		; cmd 3 → simple ret
 .Lppe_cmd4:
-	cps a, 4
+	cp a, 4:i3
 	jr nz, .Lppe_cmd5
 	jp .Lppe_simple_ret		; cmd 4 → simple ret
 .Lppe_cmd5:
-	cps a, 5
+	cp a, 5:i3
 	jr nz, .Lppe_cmd6
 	jp .Lppe_simple_ret		; cmd 5 → simple ret
 .Lppe_cmd6:
-	cps a, 6
+	cp a, 6:i3
 	jr nz, .Lppe_cmd7
 	jp .Lppe_simple_ret		; cmd 6 → simple ret
 .Lppe_cmd7:
-	cps a, 7
+	cp a, 7:i3
 	jr nz, .Lppe_default
 	jp .Lppe_simple_ret		; cmd 7 → simple ret
 .Lppe_default:
@@ -15856,7 +15856,7 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	nop
 	and a, 0x04			; test bit 2
 	nop
-	cps a, 4			; bit 2 set?
+	cp a, 4:i3			; bit 2 set?
 	jr nz, .Lppe_poll		; keep polling if not
 	ldb a, 0x18
 	ld (0x160002:24), a; (0x160002) = 0x18
@@ -16069,7 +16069,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0				; check result
+	cp wa, 0:i3				; check result
 	jp z, (2709124:24)			; jp Z, 0x295684 — success path
 	nop
 	jp .Lc2b_do_cleanup
@@ -16130,7 +16130,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0
+	cp wa, 0:i3
 	jp z, (2709274:24)			; jp Z, 0x29571A — skip cleanup
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -16316,7 +16316,7 @@ HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
 	ei 0x00				; enable interrupts
 	call HDAE5000_Display_String
 	ei 0x07				; disable interrupts
-	cps wa, 0			; check result
+	cp wa, 0:i3			; check result
 	jp z, (0x295900:24)		; jp Z - skip cleanup if zero
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -16396,7 +16396,7 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0				; check result
+	cp wa, 0:i3				; check result
 	jp z, (2709986:24)			; jp Z, 0x2959E2 — skip cleanup
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -16481,7 +16481,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, .Lrfsb_no_error_flag
 	ld (0x2390e6:24), 0x01; set error flag
 .Lrfsb_no_error_flag:			; 0x295ACE
@@ -16586,7 +16586,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2710510:24)			; jp NZ, skip
 	nop
 	call 2714784				; call 0x296CA0 — read custom region
@@ -16598,7 +16598,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	and a, 0x02
 	nop
-	cps a, 2
+	cp a, 2:i3
 	jp nz, (2710556:24)			; jp NZ, skip
 	nop
 	ld xiy, (0x239118:24); ld XIY, (0x239118)
@@ -16614,7 +16614,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	and a, 0x04
 	nop
-	cps a, 4
+	cp a, 4:i3
 	jp nz, (2710602:24)
 	nop
 	ld xiy, (0x239120:24); ld XIY, (0x239120)
@@ -16698,7 +16698,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2710840:24)			; jp NZ, exit
 	nop
 	ld xiy, (0x23914c:24); ld XIY, (0x23914C)
@@ -16816,7 +16816,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2711164:24)			; jp NZ, .Lsfsb_bit1
 	nop
 	ld xwa, (0x23910c:24); ld XWA, (0x23910C) — region 0
@@ -16834,7 +16834,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	and a, 0x02
 	nop
-	cps a, 2
+	cp a, 2:i3
 	jp nz, (2711222:24)			; jp NZ, .Lsfsb_bit2
 	nop
 	ld xwa, (0x23911c:24); ld XWA, (0x23911C) — region 1
@@ -16852,7 +16852,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	and a, 0x04
 	nop
-	cps a, 4
+	cp a, 4:i3
 	jp nz, (2711280:24)			; jp NZ, .Lsfsb_bit3
 	nop
 	ld xwa, (0x239124:24); ld XWA, (0x239124) — region 2
@@ -16965,7 +16965,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2711638:24)			; jp NZ, .Lsfsb_exit
 	nop
 	ld xwa, (0x239150:24); ld XWA, (0x239150) — region 8
@@ -17058,7 +17058,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2711842:24)			; jp NZ, skip bit 0
 	nop
 	call 2714964				; call 0x296D54 — write custom region
@@ -17070,7 +17070,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	and a, 0x02
 	nop
-	cps a, 2
+	cp a, 2:i3
 	jp nz, (2711888:24)			; jp NZ, skip
 	nop
 	ld xiy, 0x001ED350			; region size
@@ -17086,7 +17086,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	and a, 0x04
 	nop
-	cps a, 4
+	cp a, 4:i3
 	jp nz, (2711934:24)			; jp NZ, skip
 	nop
 	ld xiy, 0x000AB000
@@ -17170,7 +17170,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2712172:24)			; jp NZ, skip
 	nop
 	ld xiy, 0x0022B430
@@ -17247,7 +17247,7 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	ei 0x00				; disable interrupts
 	call HDAE5000_Display_String
 	ei 0x07				; enable interrupts
-	cps wa, 0			; result == 0?
+	cp wa, 0:i3			; result == 0?
 	jp z, (2712342:24)		; jp Z, skip error handling (0x296316)
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -17321,7 +17321,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0				; check display result
+	cp wa, 0:i3				; check display result
 	jp z, (2712542:24)			; jp Z, 0x2963DE — skip error setup
 	nop
 	ldw wa, 0xFF00				; error indicator
@@ -17355,7 +17355,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0				; check result
+	cp wa, 0:i3				; check result
 	jp z, (2712652:24)			; jp Z, 0x29644C — skip error
 	nop
 	ldw wa, 0xFF00				; error indicator
@@ -17381,7 +17381,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0
+	cp wa, 0:i3
 	jp z, (2712722:24)			; jp Z, 0x296492 — skip error
 	nop
 	ldw wa, 0xFF00				; error indicator
@@ -17557,7 +17557,7 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	ei 0x00				; disable interrupts
 	call HDAE5000_Display_String
 	ei 0x07				; enable interrupts
-	cps wa, 0			; result == 0?
+	cp wa, 0:i3			; result == 0?
 	jp z, (2713196:24)		; jp Z → skip error (0x29666C)
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -17582,7 +17582,7 @@ HDAE5000_PPORT_Cmd_Reserved:	; 0x296680 (62 bytes)
 	ei 0x00				; enable interrupts
 	call HDAE5000_Display_String
 	ei 0x07				; disable interrupts
-	cps wa, 0			; check result
+	cp wa, 0:i3			; check result
 	jp z, (0x2966AA:24)		; jp Z - skip cleanup if zero
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -17604,7 +17604,7 @@ PPORT_Utility_1:	; 0x2966BE (60 bytes)
 	ei 0x00				; enable interrupts
 	call HDAE5000_Display_String
 	ei 0x07				; disable interrupts
-	cps wa, 0			; check result
+	cp wa, 0:i3			; check result
 	jp z, (0x2966E6:24)		; jp Z - skip cleanup if zero
 	nop
 	call HDAE5000_PPORT_Cleanup
@@ -17770,7 +17770,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC — checksum
 	nop
 .Lrdr2_loop2:				; 0x29685A
-	cps bc, 4				; 4 bytes?
+	cp bc, 4:i3				; 4 bytes?
 	jp z, (2713724:24)			; jp Z, 0x29687C — exit loop
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — load checksum byte
@@ -17783,7 +17783,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	jr t, .Lrdr2_loop2			; loop
 .Lrdr2_finalize:			; 0x29687C
 	call 2714160				; call 0x296A30 — finalize transfer
-	cps w, 0				; check result
+	cp w, 0:i3				; check result
 	jr z, .Lrdr2_exit			; exit if done
 	jp .Lrdr2_main				; retry main loop
 .Lrdr2_exit:				; 0x296888
@@ -17820,7 +17820,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC — checksum bytes
 	nop
 .Lpsb_loop2:				; 0x2968D0 — send 4 checksum bytes
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2713842:24)			; jp Z, 0x2968F2 — done
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — checksum byte
@@ -17833,7 +17833,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	jr t, .Lpsb_loop2
 .Lpsb_finalize:				; 0x2968F2
 	call .Lpsb_finish			; finalize transfer
-	cps w, 0				; check result
+	cp w, 0:i3				; check result
 	jr z, .Lpsb_exit
 	jp HDAE5000_PPORT_Sum_Buffer		; retry
 .Lpsb_exit:				; 0x2968FE
@@ -17847,12 +17847,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04				; test bit 2
 	nop
-	cps l, 4				; BUSY?
+	cp l, 4:i3				; BUSY?
 	jp nz, (2714008:24)			; jp NZ, 0x296998 — error if not busy
 	nop
 	and a, 0x01				; test bit 0
 	nop
-	cps a, 1				; DATA_READY?
+	cp a, 1:i3				; DATA_READY?
 	jp nz, (2713856:24)			; jp NZ, 0x296900 — retry
 	nop
 .Lpsb_read_phase2:			; 0x296920
@@ -17861,12 +17861,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714008:24)			; jp NZ, error
 	nop
 	and a, 0x02				; test bit 1
 	nop
-	cps a, 0				; wait for bit1=0
+	cp a, 0:i3				; wait for bit1=0
 	jp nz, (2713888:24)			; jp NZ, 0x296920 — retry
 	nop
 	ldb a, 0x99				; command byte — request read
@@ -17884,12 +17884,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714008:24)			; jp NZ, error
 	nop
 	and a, 0x02
 	nop
-	cps a, 2				; wait for bit1=1
+	cp a, 2:i3				; wait for bit1=1
 	jp nz, (2713944:24)			; jp NZ, 0x296958 — retry
 	nop
 	ld w, (0x160000:24); ld W, (0x160000) — read data byte
@@ -17917,12 +17917,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714152:24)			; jp NZ, 0x296A28 — error
 	nop
 	and a, 0x01
 	nop
-	cps a, 0				; wait for bit0=0
+	cp a, 0:i3				; wait for bit0=0
 	jp nz, (2714016:24)			; jp NZ, 0x2969A0 — retry
 	nop
 	ld (0x160000:24), w; st (0x160000), W — write data
@@ -17939,12 +17939,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714152:24)			; jp NZ, error
 	nop
 	and a, 0x02
 	nop
-	cps a, 0				; wait for bit1=0
+	cp a, 0:i3				; wait for bit1=0
 	jp nz, (2714070:24)			; jp NZ, 0x2969D6 — retry
 	nop
 	ld a, (0x160002:24); ld A, (0x160002)
@@ -17959,12 +17959,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714152:24)			; jp NZ, error
 	nop
 	and a, 0x02
 	nop
-	cps a, 2				; wait for bit1=1
+	cp a, 2:i3				; wait for bit1=1
 	jp nz, (2714118:24)			; jp NZ, 0x296A06 — retry
 	nop
 	ret
@@ -17987,12 +17987,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714260:24)			; jp NZ, 0x296A94 — error
 	nop
 	and a, 0x02
 	nop
-	cps a, 0				; wait for bit1=0
+	cp a, 0:i3				; wait for bit1=0
 	jr nz, .Lpsb_fin_wait1			; retry
 	ld w, (0x160004:24); ld W, (0x160004) — final status
 	nop
@@ -18010,12 +18010,12 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714260:24)			; jp NZ, error
 	nop
 	and a, 0x02
 	nop
-	cps a, 2				; wait for bit1=1
+	cp a, 2:i3				; wait for bit1=1
 	jr nz, .Lpsb_fin_wait2			; retry
 	ret
 	nop
@@ -18111,7 +18111,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC
 	nop
 .Lsb_cksum_loop:			; 0x296B42
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2714468:24)			; jp Z, .Lsb_finalize
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
@@ -18124,7 +18124,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	jr t, .Lsb_cksum_loop
 .Lsb_finalize:				; 0x296B64
 	call .Lpsb_finish
-	cps w, 0
+	cp w, 0:i3
 	jr z, .Lsb_ret
 	ld xiy, (0x239158:24); reload XIY from (0x239158)
 	nop
@@ -18169,19 +18169,19 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld l, a
 	and l, 0x04
 	nop
-	cps l, 4
+	cp l, 4:i3
 	jp nz, (2714658:24)			; jp NZ, .Lrb_set_error
 	nop
 	and a, 0x01
 	nop
-	cps a, 0
+	cp a, 0:i3
 	jr nz, .Lrb_status_check		; wait for ready
 .Lrb_recv_cksum:			; 0x296BDC — Receive 4 checksum bytes
 	lds bc, 0
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC
 	nop
 .Lrb_cksum_loop:			; 0x296BE4
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2714630:24)			; jp Z, .Lrb_finalize
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
@@ -18194,7 +18194,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	jr t, .Lrb_cksum_loop
 .Lrb_finalize:				; 0x296C06
 	call .Lpsb_finish
-	cps w, 0
+	cp w, 0:i3
 	jp z, (2714664:24)			; jp Z, .Lrb_ret
 	nop
 	ld xiy, (0x239158:24); reload saved start
@@ -18237,7 +18237,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC
 	nop
 .Lrs_cksum_loop:			; 0x296C70
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2714770:24)			; jp Z, .Lrs_finalize
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
@@ -18250,7 +18250,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	jr t, .Lrs_cksum_loop
 .Lrs_finalize:				; 0x296C92
 	call .Lpsb_finish
-	cps w, 0
+	cp w, 0:i3
 	jr z, .Lrs_ret
 	jp .Lppc_recv_sector_data		; retry
 .Lrs_ret:				; 0x296C9E
@@ -18310,7 +18310,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC
 	nop
 .Lsr_cksum_loop:			; 0x296D24
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2714950:24)			; jp Z, .Lsr_finalize
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4
@@ -18323,7 +18323,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	jr t, .Lsr_cksum_loop
 .Lsr_finalize:				; 0x296D46
 	call .Lpsb_finish
-	cps w, 0
+	cp w, 0:i3
 	jr z, .Lsr_ret
 	jp .Lppc_send_regions			; retry
 .Lsr_ret:				; 0x296D52
@@ -18385,7 +18385,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC
 	nop
 .Lrc_cksum_loop:			; 0x296DD8
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2715130:24)			; jp Z, .Lrc_finalize
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4
@@ -18398,7 +18398,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	jr t, .Lrc_cksum_loop
 .Lrc_finalize:				; 0x296DFA
 	call .Lpsb_finish
-	cps w, 0
+	cp w, 0:i3
 	jr z, .Lrc_ret
 	jp .Lppc_recv_custom_data		; retry
 .Lrc_ret:				; 0x296E06
@@ -18434,7 +18434,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2715236:24)			; jp NZ, .Lir_bit1
 	nop
 	ld xwa, 0x00000E40
@@ -18446,7 +18446,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	and a, 0x02
 	nop
-	cps a, 2
+	cp a, 2:i3
 	jp nz, (2715266:24)			; jp NZ, .Lir_bit2
 	nop
 	ld xwa, 0x00012CB0
@@ -18458,7 +18458,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	and a, 0x04
 	nop
-	cps a, 4
+	cp a, 4:i3
 	jp nz, (2715326:24)			; jp NZ, .Lir_bit3
 	nop
 	ldb e, 0x04				; E = flag bit value
@@ -18556,7 +18556,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	and a, 0x01
 	nop
-	cps a, 1
+	cp a, 1:i3
 	jp nz, (2715588:24)			; jp NZ, .Lir_ret
 	nop
 	ld xwa, 0x002304F2
@@ -18586,7 +18586,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0				; check result
+	cp wa, 0:i3				; check result
 	jp z, (2715652:24)			; jp Z, .Lcs_read_sector
 	nop
 	ld (0x2390e6:24), 0x01; set error flag
@@ -18601,7 +18601,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0
+	cp wa, 0:i3
 	jp z, (2715692:24)			; jp Z, .Lcs_process
 	nop
 	ld (0x2390e6:24), 0x01; set error flag
@@ -18659,7 +18659,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	di
 	call HDAE5000_Display_String
 	ei 7
-	cps wa, 0
+	cp wa, 0:i3
 	jp z, (2715834:24)			; jp Z, .Lsrpc_send_init
 	nop
 	ldw wa, 0xFF00				; error marker
@@ -18728,7 +18728,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	lda xix, (0x2390fc:24); lda XIX, 0x2390FC
 	nop
 .Lsrpc_cksum_loop:			; 0x297168
-	cps bc, 4
+	cp bc, 4:i3
 	jp z, (2716042:24)			; jp Z, .Lsrpc_finalize
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4
@@ -18741,7 +18741,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	jr t, .Lsrpc_cksum_loop
 .Lsrpc_finalize:			; 0x29718A
 	call .Lpsb_finish
-	cps w, 0
+	cp w, 0:i3
 	jr z, .Lsrpc_ret
 	ld xwa, (0x239158:24); reload saved region descriptor
 	nop
@@ -19342,7 +19342,7 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 	xor xiy, xiy			; quotient = 0
 	ldw iz, 32			; 32-bit counter
 .Lhciv_div_loop:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, .Lhciv_div_done
 	dec 1, iz
 	sll xix, 1			; shift remainder left
@@ -21131,12 +21131,12 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	push xiy
 	push xbc
 	call 0x298c52
-	cps	a, 0
+	cp	a, 0:i3
 	jp	z, (0x299014:24)
 	lda xix, (0x201434:24)
 	lda xiy, (0x200c98:24)
 	call 0x29899e
-	cps	a, 1
+	cp	a, 1:i3
 	jp	z, (0x299014:24)
 	cp	(0x229DC3:24), 5
 	jp	c, (0x298FD8:24)
@@ -21169,7 +21169,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	lda xix, (0x201434:24)
 	ld	xiy, (0x229cf0)
 	call 0x29899e
-	cps	a, 1
+	cp	a, 1:i3
 	jp	z, (0x29907D:24)
 	cp	(0x229DC3:24), 5
 	jp	c, (0x299041:24)
@@ -21211,7 +21211,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	push xix
 	call 0x2989e2
 	pop xix                                 ; pop XIX
-	cps	a, 1
+	cp	a, 1:i3
 	jp	nz, (0x2990C3:24)
 	ld	(0x229DC6:24), 0
 	jp 0x2990e8                             ; jp 0x2990e8
@@ -21448,12 +21448,12 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	push xiy
 	push xbc
 	call 0x298c52
-	cps	a, 0
+	cp	a, 0:i3
 	jp	z, (0x29936F:24)
 	lda xix, (0x2013b2:24)
 	lda xiy, (0x200c98:24)
 	call 0x29899e
-	cps	a, 1
+	cp	a, 1:i3
 	jp	z, (0x29936F:24)
 	cp	(0x229DC2:24), 5
 	jp	c, (0x299333:24)
@@ -21495,7 +21495,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	push xix
 	call 0x2989e2
 	pop xix                                 ; pop XIX
-	cps	a, 1
+	cp	a, 1:i3
 	jp	nz, (0x2993B5:24)
 	ld	(0x229DC5:24), 0
 	jp 0x2993da                             ; jp 0x2993da
@@ -21696,12 +21696,12 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	push xiy
 	push xbc
 	call 0x298c52
-	cps	a, 0
+	cp	a, 0:i3
 	jp	z, (0x2995F5:24)
 	lda xix, (0x2014b6:24)
 	lda xiy, (0x200c98:24)
 	call 0x29899e
-	cps	a, 1
+	cp	a, 1:i3
 	jp	z, (0x2995F5:24)
 	cp	(0x229DC4:24), 5
 	jp	c, (0x2995B9:24)
@@ -21743,7 +21743,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	push xix
 	call 0x2989e2
 	pop xix                                 ; pop XIX
-	cps	a, 1
+	cp	a, 1:i3
 	jp	nz, (0x29963B:24)
 	ld	(0x229DC7:24), 0
 	jp 0x299660                             ; jp 0x299660
@@ -22276,7 +22276,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	cp	wa, 0x0025
 	jr z, .LDSR_9cd6                       ; [66 26] jr Z,0x299cd6
 	sub	wa, 0x0063
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl lt, .LDSR_a3b7                     ; [71 fe 06] jrl LT,0x29a3b7
 	cp	wa, 0x0015
 	jrl gt, .LDSR_a3b7                     ; [7a f7 06] jrl GT,0x29a3b7
@@ -22373,7 +22373,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9d98:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9d8c                      ; [6e ea] jr NZ,0x299d8c
 	jr t, .LDSR_9db7                       ; [68 13] jr T,0x299db7
 .LDSR_9da4:
@@ -22388,7 +22388,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9db7:
 	ld	wa, (xsp+10)
 	decm	1, (xsp+10)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9da4                      ; [6e e3] jr NZ,0x299da4
 	ld	wa, (xsp+6)
 	bit	0x01, wa
@@ -22402,7 +22402,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9dd6:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9dcc                      ; [6e ec] jr NZ,0x299dcc
 	jrl t, .LDSR_a3b7                      ; [78 d4 05] jrl T,0x29a3b7
 	ld	wa, (xsp+6)
@@ -22500,7 +22500,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9ed1:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9ec7                      ; [6e ec] jr NZ,0x299ec7
 	ldw (xsp + 0x08), 0
 .LDSR_9ee0:
@@ -22539,7 +22539,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9f2c:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9f22                      ; [6e ec] jr NZ,0x299f22
 	jr t, .LDSR_9f42                       ; [68 0a] jr T,0x299f42
 .LDSR_9f38:
@@ -22550,7 +22550,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9f42:
 	ld	wa, (xsp+10)
 	decm	1, (xsp+10)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9f38                      ; [6e ec] jr NZ,0x299f38
 	jr t, .LDSR_9f66                       ; [68 18] jr T,0x299f66
 .LDSR_9f4e:
@@ -22578,7 +22578,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_9f82:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_9f78                      ; [6e ec] jr NZ,0x299f78
 	jrl t, .LDSR_a3b7                      ; [78 28 04] jrl T,0x29a3b7
 	ld	wa, (xsp+6)
@@ -22652,7 +22652,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a029:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a01d                      ; [6e ea] jr NZ,0x29a01d
 	jr t, .LDSR_a03f                       ; [68 0a] jr T,0x29a03f
 .LDSR_a035:
@@ -22663,7 +22663,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a03f:
 	ld	wa, (xsp+10)
 	decm	1, (xsp+10)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a035                      ; [6e ec] jr NZ,0x29a035
 	jr t, .LDSR_a05f                       ; [68 14] jr T,0x29a05f
 .LDSR_a04b:
@@ -22676,7 +22676,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	call	(xwa)
 	inc 2, xsp                              ; inc 2,XSP
 .LDSR_a05f:
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr nz, .LDSR_a04b                      ; [6e e8] jr NZ,0x29a04b
 	ld	wa, (xsp+6)
 	bit	0x01, wa
@@ -22690,7 +22690,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a078:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a06e                      ; [6e ec] jr NZ,0x29a06e
 	jrl t, .LDSR_a3b7                      ; [78 32 03] jrl T,0x29a3b7
 	setm	6, (xsp+6)
@@ -22779,7 +22779,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a14a:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a140                      ; [6e ec] jr NZ,0x29a140
 .LDSR_a154:
 	cp	qiz, 0
@@ -22808,7 +22808,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a18d:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a183                      ; [6e ec] jr NZ,0x29a183
 	jr t, .LDSR_a1a3                       ; [68 0a] jr T,0x29a1a3
 .LDSR_a199:
@@ -22819,7 +22819,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a1a3:
 	ld	wa, (xsp+10)
 	decm	1, (xsp+10)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a199                      ; [6e ec] jr NZ,0x29a199
 	jr t, .LDSR_a1c7                       ; [68 18] jr T,0x29a1c7
 .LDSR_a1af:
@@ -22847,7 +22847,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a1e3:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a1d9                      ; [6e ec] jr NZ,0x29a1d9
 	jrl t, .LDSR_a3b7                      ; [78 c7 01] jrl T,0x29a3b7
 	ld	wa, (xsp+6)
@@ -22901,7 +22901,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a25a:
 	ld	wa, (xsp+6)
 	and	wa, 0x0008
-	cps	wa, 0
+	cp	wa, 0:i3
 	scc16	nz, wa
 	ld (xsp + 0x12), wa                     ; ld (XSP+0x12),WA
 	ld	wa, iz
@@ -22930,12 +22930,12 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a2a5:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a29b                      ; [6e ec] jr NZ,0x29a29b
 .LDSR_a2af:
 	cpw	(xsp+18), 0x0000
 	jr z, .LDSR_a2c4                       ; [66 0e] jr Z,0x29a2c4
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr z, .LDSR_a2c4                       ; [66 0a] jr Z,0x29a2c4
 	pushw 0x0030
 	ld xwa, (xsp + 0x5c)                    ; ld XWA,(XSP+0x5c)
@@ -22956,7 +22956,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a2e1:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a2d7                      ; [6e ec] jr NZ,0x29a2d7
 	jr t, .LDSR_a2f7                       ; [68 0a] jr T,0x29a2f7
 .LDSR_a2ed:
@@ -22967,7 +22967,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a2f7:
 	ld	wa, (xsp+10)
 	decm	1, (xsp+10)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a2ed                      ; [6e ec] jr NZ,0x29a2ed
 	jr t, .LDSR_a317                       ; [68 14] jr T,0x29a317
 .LDSR_a303:
@@ -22980,7 +22980,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	call	(xwa)
 	inc 2, xsp                              ; inc 2,XSP
 .LDSR_a317:
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr nz, .LDSR_a303                      ; [6e e8] jr NZ,0x29a303
 	ld	wa, (xsp+6)
 	bit	0x01, wa
@@ -22994,7 +22994,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a330:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LDSR_a326                      ; [6e ec] jr NZ,0x29a326
 	jr t, .LDSR_a3b7                       ; [68 7b] jr T,0x29a3b7
 	ld xbc, (xsp + 0x56)                    ; ld XBC,(XSP+0x56)
@@ -23055,7 +23055,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl nz, .LDSR_9af3                     ; [7e 29 f7] jrl NZ,0x299af3
 	ld	hl, (xsp+4)
 	pop xiz                                 ; pop XIZ
@@ -23310,7 +23310,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
 	cpib_sri 0x07, 0xE0, 0xF8, 0x34	; cp (XWA+IZ),0x34
 	jr le, .LSFC_a600                      ; [62 25] jr LE,0x29a600
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr ge, .LSFC_a5ea                      ; [69 0b] jr GE,0x29a5ea
 	jr t, .LSFC_a600                       ; [68 1f] jr T,0x29a600
 .LSFC_a5e1:
@@ -23320,7 +23320,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	dec	1, iz
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
 	inc_srib 1, 0x07, 0xE0, 0xF8	; inc 1,(XWA+IZ)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr le, .LSFC_a600                      ; [62 08] jr LE,0x29a600
 	cpib_sri 0x07, 0xE0, 0xF8, 0x39	; cp (XWA+IZ),0x39
 	jr gt, .LSFC_a5e1                      ; [6a e1] jr GT,0x29a5e1
@@ -23369,7 +23369,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	decm	1, (xsp+18)
 .LSFC_a65b:
 	ld	iz, (xsp+28)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr nz, .LSFC_a66b                      ; [6e 09] jr NZ,0x29a66b
 	ld	wa, (xsp+16)
 	and	wa, 0x0005
@@ -23404,10 +23404,10 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 .LSFC_a6b0:
 	ld	wa, (xsp+18)
 	decm	1, (xsp+18)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a6a1                      ; [6a e7] jr GT,0x29a6a1
 .LSFC_a6ba:
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr z, .LSFC_a6c3                       ; [66 05] jr Z,0x29a6c3
 	pushw 0x002d
 	jr t, .LSFC_a6db                       ; [68 18] jr T,0x29a6db
@@ -23443,7 +23443,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 .LSFC_a709:
 	ld	wa, (xsp+18)
 	decm	1, (xsp+18)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a6fa                      ; [6a e7] jr GT,0x29a6fa
 .LSFC_a713:
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
@@ -23487,7 +23487,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	jr ge, .LSFC_a78b                      ; [69 1b] jr GE,0x29a78b
 	ld	wa, (xsp+2)
 	decm	1, (xsp+2)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a74e                      ; [6a d4] jr GT,0x29a74e
 	jr t, .LSFC_a78b                       ; [68 0f] jr T,0x29a78b
 .LSFC_a77c:
@@ -23499,7 +23499,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 .LSFC_a78b:
 	ld	wa, (xsp+2)
 	decm	1, (xsp+2)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a77c                      ; [6a e7] jr GT,0x29a77c
 	ld	wa, (xsp+16)
 	bit	0x03, wa
@@ -23540,7 +23540,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	jr ge, .LSFC_a7fb                      ; [69 0a] jr GE,0x29a7fb
 	ld	wa, (xsp+20)
 	decm	1, (xsp+20)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr nz, .LSFC_a7b5                      ; [6e ba] jr NZ,0x29a7b5
 .LSFC_a7fb:
 	ld	wa, (xsp+4)
@@ -23565,7 +23565,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	jr ge, .LSFC_a843                      ; [69 1b] jr GE,0x29a843
 	ld	wa, (xsp+20)
 	decm	1, (xsp+20)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a806                      ; [6a d4] jr GT,0x29a806
 	jr t, .LSFC_a843                       ; [68 0f] jr T,0x29a843
 .LSFC_a834:
@@ -23577,7 +23577,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 .LSFC_a843:
 	ld	wa, (xsp+20)
 	decm	1, (xsp+20)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a834                      ; [6a e7] jr GT,0x29a834
 	ld	wa, (xsp+16)
 	bit	0x01, wa
@@ -23592,7 +23592,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 .LSFC_a866:
 	ld	wa, (xsp+18)
 	decm	1, (xsp+18)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFC_a857                      ; [6a e7] jr GT,0x29a857
 .LSFC_a870:
 	popw iz                                 ; pop IZ
@@ -23710,7 +23710,7 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 	decm	1, (xsp+18)
 .LSFO_a96e:
 	ld	iz, (xsp+28)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr nz, .LSFO_a97e                      ; [6e 09] jr NZ,0x29a97e
 	ld	wa, (xsp+16)
 	and	wa, 0x0005
@@ -23740,7 +23740,7 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 	cpw	(xsp+18), 0x0000
 	jr gt, .LSFO_a9a1                      ; [6a e7] jr GT,0x29a9a1
 .LSFO_a9ba:
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr z, .LSFO_a9c3                       ; [66 05] jr Z,0x29a9c3
 	pushw 0x002d
 	jr t, .LSFO_a9db                       ; [68 18] jr T,0x29a9db
@@ -23861,7 +23861,7 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 	jr ge, .LSFO_aaf8                      ; [69 1b] jr GE,0x29aaf8
 	ld	wa, (xsp+20)
 	decm	1, (xsp+20)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFO_aab7                      ; [6a d0] jr GT,0x29aab7
 	jr t, .LSFO_aaf8                       ; [68 0f] jr T,0x29aaf8
 .LSFO_aae9:
@@ -23873,7 +23873,7 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 .LSFO_aaf8:
 	ld	wa, (xsp+20)
 	decm	1, (xsp+20)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr gt, .LSFO_aae9                      ; [6a e7] jr GT,0x29aae9
 	decm	1, (xsp+26)
 	ld	wa, (xsp+26)
@@ -23934,7 +23934,7 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 .LSFO_ab88:
 	ld	wa, qiz
 	inc	1, qiz
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr lt, .LSFO_ab79                      ; [61 e7] jr LT,0x29ab79
 	jr t, .LSFO_abad                       ; [68 19] jr T,0x29abad
 .LSFO_ab94:
@@ -23948,7 +23948,7 @@ HDAE5000_String_Format_Output:	; 0x29A888 (848 bytes)
 	inc 2, xsp                              ; inc 2,XSP
 	incw	1, (0x239488:24)
 .LSFO_abad:
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr nz, .LSFO_ab94                      ; [6e e3] jr NZ,0x29ab94
 	ld	wa, (xsp+16)
 	bit	0x01, wa
@@ -24027,7 +24027,7 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 	ld xhl, (xsp + 0x1C)		; XHL = output buffer ptr
 	lds ix, 0			; IX = 0 (sign = positive)
 	ld bc, (xsp + 0x20)		; BC = radix
-	cps bc, 2			; radix < 2?
+	cp bc, 2:i3			; radix < 2?
 	jr lt, .Lppi_empty		; → invalid, output empty string
 	cp bc, 0x0024			; radix > 36?
 	jr le, .Lppi_convert		; → valid, start conversion
@@ -24043,7 +24043,7 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 	cp bc, 0x000A			; radix == 10? (decimal)
 	jr nz, .Lppi_div_loop		; → unsigned for other radixes
 	ld wa, qbc		; ld WA, QBC (reload value)
-	cps wa, 0			; value < 0? (signed check)
+	cp wa, 0:i3			; value < 0? (signed check)
 	jr ge, .Lppi_div_loop		; → non-negative
 	lds ix, 1			; IX = 1 (negative flag)
 	ld wa, qbc		; ld WA, QBC (reload value)
@@ -24070,7 +24070,7 @@ HDAE5000_PPI_Block_Copy:	; 0x29ABD8 (237 bytes)
 	dec 1, xiy			; move digit pointer back
 	jr t, .Lppi_div_loop		; → next digit
 .Lppi_digits_done:
-	cps ix, 0			; negative flag set?
+	cp ix, 0:i3			; negative flag set?
 	jr z, .Lppi_copy_digits		; → no sign needed
 	stib_dpd 0xF4, 0x2D		; ld (-XIY), '-' (pre-decrement, store minus sign)
 .Lppi_copy_digits:
@@ -24255,7 +24255,7 @@ HDAE5000_String_Length:	; 0x29AE0C (24 bytes)
 	; Returns: XHL = pointer past found char, or 0 if not found
 	lds32 xhl, 0			; default: not found
 	ld bc, (xsp + 0x0A)		; BC = max count
-	cps bc, 0
+	cp bc, 0:i3
 	ret z				; count=0: return 0
 	ld xhl, (xsp + 4)		; XHL = string pointer
 	ld wa, (xsp + 8)		; WA (low byte = search char)
@@ -24272,7 +24272,7 @@ HDAE5000_File_Read:	; 0x29AE24 (123 bytes)
 	; Optimized: aligns to 4-byte boundary, then compares 32-bit words
 	ld bc, (xsp + 12)		; BC = length
 	lds hl, 0			; result = 0 (equal)
-	cps bc, 0			; length == 0?
+	cp bc, 0:i3			; length == 0?
 	ret z				; return if zero length
 	ld xix, (xsp + 4)		; XIX = ptr1
 	ld xiy, (xsp + 8)		; XIY = ptr2
@@ -24345,7 +24345,7 @@ HDAE5000_MemCopy:	; 29AE9Fh
 	; Uses LDIRW for word copies, handles odd byte at start/end
 	ld bc, (xsp + 12)	; ld BC, (XSP+0x0C) - count
 	ld xhl, (xsp + 4)	; ld XHL, (XSP+0x04) - dest
-	cps bc, 0
+	cp bc, 0:i3
 	ret z	; Return if count = 0
 	ld xix, xhl	; XIX = dest
 	ld xiy, (xsp + 8)	; ld XIY, (XSP+0x08) - src
@@ -24370,7 +24370,7 @@ HDAE5000_MemFill:	; 29AEC7h
 	; Aligns to 4-byte boundary, uses 32-bit writes for bulk fill
 	ld bc, (xsp + 10)	; ld BC, (XSP+0x0A) - count
 	ld xhl, (xsp + 4)	; ld XHL, (XSP+0x04) - dest
-	cps bc, 0
+	cp bc, 0:i3
 	ret z	; Return if count = 0
 	ld xix, xhl	; XIX = dest
 	ld wa, (xsp + 8)	; ld WA, (XSP+0x08) - fill value in A

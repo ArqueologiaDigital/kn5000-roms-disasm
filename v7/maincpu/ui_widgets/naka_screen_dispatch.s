@@ -14,7 +14,7 @@
 	.byte 0x00			; padding
 	.long NakaLabel_PatternCopy_MemoryLabel
 	.long NakaLabel_PatternCopy_PatMemLabel
-	cps	iz, 0
+	cp	iz, 0:i3
 	pop	sr
 	.byte 0x00			; padding
 	push	sr

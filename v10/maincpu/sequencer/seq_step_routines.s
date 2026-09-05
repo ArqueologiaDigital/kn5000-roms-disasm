@@ -35,9 +35,9 @@ SeqStep_NoteReadEvent:
 	jr z, SeqStep_NoteSetD1
 	extz wa
 	sub wa, 0x80
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, SeqStep_NoteSetOther
-	cps wa, 6
+	cp wa, 6:i3
 	jr gt, SeqStep_NoteSetOther
 	add wa, wa
 	lda xix, (Display_FontPalette_Table_0x7E:24)
@@ -183,14 +183,14 @@ SeqStep_EventProcess:
 	ldmm16 0x28af, 0x273c
 	ldmm16 9830, 0x273e
 	ld a, (0x287a:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, SeqStep_EventPosManage
 	cp a, 0xa
 	jrl nz, SeqStep_EventExit
 	ld (0x287a:16), 0
 	cpw (9778:16), 1
 	jr nz, SeqStep_EventPosManage
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, SeqStep_EventPosManage
 	cpw (xsp + 8), 0x0
 	jr nz, SeqStep_EventPosManage
@@ -296,9 +296,9 @@ SeqStep_EventPosConsumeAdvance:
 	jr z, SeqStep_EventPosSetD1
 	extz wa
 	sub wa, 0x80
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, SeqStep_EventPosSetD3
-	cps wa, 6
+	cp wa, 6:i3
 	jr gt, SeqStep_EventPosSetD3
 	add wa, wa
 	lda xix, (Display_FontPalette_Table_0x8C:24)
@@ -390,7 +390,7 @@ SeqStep_EventAdvancePos:
 
 SeqStep_VelNoteFwd:
 	ld wa, (9778:16)
-	cps wa, 1
+	cp wa, 1:i3
 	ret z
 	ld c, (9780:16)
 	ld (0x287f:16), wa
@@ -401,7 +401,7 @@ SeqStep_VelNoteFwd:
 	cp (0x287a:16), 0
 	ret nz
 	calr SeqStep_WalkWithCallback
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SeqStep_VelNoteFwdApply
 	ldmm16 0x28af, 0x28bf
 	ldmm16 9830, 0x28c1
@@ -469,7 +469,7 @@ SeqStep_DeleteConsumeLoop:
 	ldib_erp 0xfb, 0
 
 SeqStep_DeleteConsumeAdvance:
-	cps iz, 1
+	cp iz, 1:i3
 	jr nz, SeqStep_DeleteExit
 	call SeqData_ReadNextByte
 	cp l, 0x5f
@@ -539,9 +539,9 @@ SeqStep_DeleteDone:
 	jrl z, SeqStep_DeleteSetD1
 	extz wa
 	sub wa, 0x80
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, SeqStep_DeleteSetOther
-	cps wa, 6
+	cp wa, 6:i3
 	jrl gt, SeqStep_DeleteSetOther
 	add wa, wa
 	lda xix, (Display_FontPalette_Table_0x9A:24)
@@ -734,7 +734,7 @@ SeqStep_TrackChangeLoopExit:
 	ld c, (9996:16)
 	extz bc
 	call Part_ReadVoiceBit7
-	cps l, 0
+	cp l, 0:i3
 	jrl z, SeqStep_TrackChangeRecoverDone
 	cpw (xsp + 4), 0x0
 	jrl z, SeqStep_TrackChangeRecoverDone
@@ -990,7 +990,7 @@ SeqStep_MultiTrackAdvance:
 	inc 1, c
 	extz bc
 	call Part_ReadVoiceBit7
-	cps l, 0
+	cp l, 0:i3
 	jrl z, SeqStep_PartCopyComplete
 	stb_erp A, 0xf9
 	extz wa
@@ -999,7 +999,7 @@ SeqStep_MultiTrackAdvance:
 	extz bc
 	call Part_ReadVoiceWord
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl z, SeqStep_PartCopyComplete
 	cp iz, 0xffff
 	jrl z, SeqStep_PartCopyComplete
@@ -1518,7 +1518,7 @@ SeqStep_AdvanceHelper2Done:
 
 SeqStep_DecrementPos:
 	ld wa, (0x273e:16)
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, SeqStep_DecrementCheck
 	dec 1, wa
 	ld (0x2720:16), a
@@ -1528,7 +1528,7 @@ SeqStep_DecrementPos:
 SeqStep_DecrementCheck:
 	ld wa, (0x273c:16)
 	call PartCtrl_ReadWord_Off1
-	cps hl, 0
+	cp hl, 0:i3
 	ret z
 	ld (0x2726:16), hl
 	ld (0x2720:16), 255
@@ -1547,7 +1547,7 @@ SeqStep_WalkWithCallback:
 SeqStep_WalkCbLoop:
 	lda xwa, (xsp + 2)
 	calr SeqStep_WalkInner
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_WalkCbCheck81
 	ldw hl, 0xffff
 	jr SeqStep_WalkCbReturn
@@ -1573,7 +1573,7 @@ SeqStep_WalkInner:
 
 SeqStep_WalkInnerLoop:
 	calr SeqStep_WalkReadNext
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_WalkInnerProcess
 	ldw hl, 0xffff
 	jr SeqStep_WalkInnerReturn
@@ -1591,11 +1591,11 @@ SeqStep_WalkInnerReturn:
 
 SeqStep_WalkReadNext:
 	ld wa, (0x28c1:16)
-	cps wa, 5
+	cp wa, 5:i3
 	jr nz, SeqStep_WalkAdvancePos
 	ld wa, (0x28bf:16)
 	call PartCtrl_ReadWord_Off1
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SeqStep_WalkUpdatePos
 	ldw hl, 0xffff
 	ret
@@ -1692,7 +1692,7 @@ SeqStep_PrepareReadBack:
 	ldw_erp WA, 0xfa
 	ld (0x28c1:16), wa
 	ld wa, (9830:16)
-	cps wa, 5
+	cp wa, 5:i3
 	jr nz, SeqStep_PrepareCheck
 	ld wa, (0x28af:16)
 	call PartCtrl_ReadWord_Off1
@@ -1881,7 +1881,7 @@ SeqStep_BoundaryAdvance:
 	inc 1, c
 	extz bc
 	call Part_ReadVoiceBit7
-	cps l, 0
+	cp l, 0:i3
 	jrl z, SeqStep_BoundaryFinal
 	stb_erp A, 0xfb
 	extz wa
@@ -1890,7 +1890,7 @@ SeqStep_BoundaryAdvance:
 	extz bc
 	call Part_ReadVoiceWord
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, SeqStep_BoundaryDone
 	cp wa, 0xffff
 	jr nz, SeqStep_BoundaryExit
@@ -1983,7 +1983,7 @@ SeqStep_SkipIfLeftCheck:
 SeqStep_SkipIfLeftDone:
 	extz wa
 	calr SeqStep_SkipToMeasure
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_SkipIfLeftCheck
 
 SeqStep_SkipIfLeftReturn:
@@ -1993,7 +1993,7 @@ SeqStep_SkipIfLeftReturn:
 SeqStep_SkipInvertedA:
 	extz wa
 	calr SeqStep_SkipToMeasure
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_SkipInvertedADone
 	ldw hl, 0xffff
 	ret
@@ -2005,7 +2005,7 @@ SeqStep_SkipInvertedADone:
 SeqStep_SkipInvertedB:
 	extz wa
 	calr SeqStep_SkipToMeasure
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_SkipInvertedBDone
 	ldw hl, 0xffff
 	ret
@@ -2035,7 +2035,7 @@ SeqStep_AdvanceOneReturn:
 SeqStep_SkipToMeasure:
 	extz wa
 	calr SeqStep_AdvanceOneEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_SkipToMeasureLoop
 	ldw hl, 0xffff
 	ret
@@ -2059,7 +2059,7 @@ SeqStep_SkipThreeEvents:
 	cp (0x287a:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call SeqPart_ReadByte_Secondary
-	cps l, 0
+	cp l, 0:i3
 	jr z, SeqStep_SkipThreeReturn
 
 SeqStep_SkipThreeError:
@@ -2087,7 +2087,7 @@ SeqStep_ProcessC0SavePos:
 	ldw_erp WA, 0xfa
 	ld iz, (0x2889:16)
 	calr SeqStep_SkipThreeEvents
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SeqStep_ProcessC0Done
 	stw_erp WA, 0xfa
 	ld (0x288b:16), wa
@@ -2159,7 +2159,7 @@ SeqStep_ProcessB0:
 	ld a, (xsp + 6)
 	extz wa
 	calr SeqStep_SkipToMeasure
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SeqStep_ProcessB0Error
 	jr SeqStep_ProcessB0Exit
 
@@ -2195,7 +2195,7 @@ SeqStep_ProcessB0Return:
 	ld a, (xsp + 6)
 	extz wa
 	calr SeqStep_AdvanceOneEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_ProcessB0Cleanup
 
 SeqStep_ProcessB0Error:
@@ -2258,11 +2258,11 @@ SeqStep_ParseRhythmCheck:
 SeqStep_ParseRhythmAdvance:
 	call SeqPart_ReadByte_Secondary
 	ld c, (0x289d:16)
-	cps l, 3
+	cp l, 3:i3
 	jr c, SeqStep_ParseRhythmProcess
 	cp l, 0xb
 	jr ugt, SeqStep_ParseRhythmProcess
-	cps l, 6
+	cp l, 6:i3
 	jr nz, SeqStep_ParseRhythmStore
 
 SeqStep_ParseRhythmProcess:
@@ -2281,7 +2281,7 @@ SeqStep_ParseRhythmDone:
 	jr SeqStep_ParseRhythmValidate
 
 SeqStep_ParseRhythmReturn:
-	cps l, 3
+	cp l, 3:i3
 	jr z, SeqStep_ParseRhythmDone
 	res 0, c
 	res 2, c
@@ -2293,7 +2293,7 @@ SeqStep_ParseRhythmError:
 	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call SeqPart_ReadByte_Secondary
-	cps l, 5
+	cp l, 5:i3
 	jr z, SeqStep_ParseRhythmExit
 	ld a, (0x289d:16)
 	res 2, a
@@ -2306,7 +2306,7 @@ SeqStep_ParseRhythmError:
 	jr SeqStep_ParseRhythmComplete
 
 SeqStep_ParseRhythmSkip:
-	cps l, 3
+	cp l, 3:i3
 	jr nz, SeqStep_ParseRhythmCleanup
 	set 0, a
 	ld (0x289d:16), a
@@ -2373,7 +2373,7 @@ SeqStep_ProcessC0ExtCheck:
 	ldw_erp WA, 0xfa
 	ld iz, (0x2889:16)
 	calr SeqStep_SkipThreeEvents
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SeqStep_ProcessC0ExtFinal
 	stw_erp WA, 0xfa
 	ld (0x288b:16), wa
@@ -2449,7 +2449,7 @@ SeqStep_ProcessB0Ext:
 	ld a, (xsp + 6)
 	extz wa
 	calr SeqStep_SkipToMeasure
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SeqStep_ProcessB0ExtProcess
 	jr SeqStep_ProcessB0ExtExit
 
@@ -2555,7 +2555,7 @@ SeqStep_TimerDispatchC:
 SeqStep_PlaybackStateMachine:
 	pushw_erp 0xfa
 	ld a, (7518:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, SeqStep_PlaybackDecrCount
 	dec 1, a
 	ld (7518:16), a
@@ -2617,13 +2617,13 @@ SeqStep_PlaybackCallExtFill:
 	call SeqPlay_ProcessVoiceAndNotes
 
 SeqStep_PlaybackResultDispatch:
-	cps l, 3
+	cp l, 3:i3
 	jr z, SeqStep_PlaybackResult3
-	cps l, 2
+	cp l, 2:i3
 	jr z, SeqStep_PlaybackResult2
-	cps l, 4
+	cp l, 4:i3
 	jr z, SeqStep_PlaybackResult4
-	cps l, 1
+	cp l, 1:i3
 	jr z, SeqStep_PlaybackResult1
 	jr SeqStep_PlaybackReturn
 
@@ -2748,7 +2748,7 @@ SeqStep_SearchBackward:
 SeqStep_SearchBackwardLoop:
 	ld wa, iz
 	call PartCtrl_TestBit7
-	cps l, 0
+	cp l, 0:i3
 	jr nz, SeqStep_SearchBackwardDone
 	djnz xiz, SeqStep_SearchBackwardLoop
 
@@ -2764,7 +2764,7 @@ SeqStep_SearchForward:
 SeqStep_SearchForwardLoop:
 	ld wa, iz
 	call PartCtrl_TestBit7
-	cps l, 0
+	cp l, 0:i3
 	jr z, SeqStep_SearchForwardDone
 	inc 1, iz
 	cp iz, 0x4d8
@@ -2847,7 +2847,7 @@ SeqStep_UpdateRefsAfterSwap:
 	ld wa, iz
 	call PartCtrl_ReadWord_Off1
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, SeqStep_UpdateRefsLoop
 	ld bc, iz
 	call PartCtrl_WriteWord
@@ -2865,7 +2865,7 @@ SeqStep_UpdateRefsAdvance:
 	stb_erp C, 0xfb
 	extz bc
 	call Part_ReadVoiceBit7
-	cps l, 0
+	cp l, 0:i3
 	jr z, SeqStep_UpdateRefsDone
 	stb_erp A, 0xfa
 	extz wa

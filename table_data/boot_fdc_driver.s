@@ -178,9 +178,9 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 	ld a, (0x0c9c:16)	; ld A,(0x0c9c)
 	and a, 0x0f	; and A,0x0f - low nibble of the media-type code selects the stanza
 	extz wa	; extz WA
-	cps wa, 0	; cp WA,0
+	cp wa, 0:i3	; cp WA,0
 	jrl mi, FDC_MediaStanza_Default	; jrl M/MI,0xffda23
-	cps wa, 5	; cp WA,5
+	cp wa, 5:i3	; cp WA,5
 	jrl gt, FDC_MediaStanza_Default	; jrl GT,0xffda23
 	add wa, wa	; add WA,WA
 	lda xix, (0xffb496:24)	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
@@ -344,17 +344,17 @@ FDC_Validate_DriveTrackSector:
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__check_command:
 	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e)
-	cps wa, 4	; cp WA,4
+	cp wa, 4:i3	; cp WA,4
 	jr z, FDC_Validate_DriveTrackSector__check_track	; jr Z,0xffdaf7
-	cps wa, 3	; cp WA,3
+	cp wa, 3:i3	; cp WA,3
 	jr z, FDC_Validate_DriveTrackSector__check_track	; jr Z,0xffdaf7
-	cps wa, 2	; cp WA,2
+	cp wa, 2:i3	; cp WA,2
 	jr z, FDC_Validate_DriveTrackSector__check_track	; jr Z,0xffdaf7
-	cps wa, 5	; cp WA,5
+	cp wa, 5:i3	; cp WA,5
 	jr z, FDC_Validate_DriveTrackSector__format_check	; jr Z,0xffdaef
 	cp wa, 0x0b	; cp WA,0x000b
 	jr z, FDC_Validate_DriveTrackSector__accept	; jr Z,0xffdaec
-	cps wa, 1	; cp WA,1
+	cp wa, 1:i3	; cp WA,1
 	jr nz, FDC_Validate_DriveTrackSector__check_track	; jr NZ,0xffdaf7
 FDC_Validate_DriveTrackSector__accept:
 	ldb l, 0	; ld L,0x00
@@ -392,15 +392,15 @@ FDC_Validate_DriveTrackSector__check_sector:
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__sector_by_format:
 	ld a, (0x0c9a:16)	; ld A,(0x0c9a)
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr z, FDC_Validate_DriveTrackSector__max9_check	; jr Z,0xffdb92
-	cps a, 5	; cp A,5
+	cp a, 5:i3	; cp A,5
 	jr z, FDC_Validate_DriveTrackSector__max9_check	; jr Z,0xffdb92
-	cps a, 4	; cp A,4
+	cp a, 4:i3	; cp A,4
 	jr z, FDC_Validate_DriveTrackSector__fmt4_wildcard	; jr Z,0xffdb76
-	cps a, 3	; cp A,3
+	cp a, 3:i3	; cp A,3
 	jr z, FDC_Validate_DriveTrackSector__max18_check	; jr Z,0xffdb69
-	cps a, 2	; cp A,2
+	cp a, 2:i3	; cp A,2
 	jr nz, FDC_Validate_DriveTrackSector__bad_param	; jr NZ,0xffdb9f
 	cp (0x0c5b:16), 8	; cp (0x0c5b),0x08
 	jr ule, FDC_Validate_DriveTrackSector__check_head	; jr ULE,0xffdba5
@@ -452,15 +452,15 @@ FDC_SetGeometryForDiskType:
 	ld wa, (0x0c74:16)	; ld WA,(0x0c74)
 	ld (0x0c9c:16), a	; ld (0x0c9c),A
 	and a, 0x0f	; and A,0x0f
-	cps a, 3	; cp A,3
+	cp a, 3:i3	; cp A,3
 	jrl z, FDC_SetGeometryForDiskType__geom_2hd18	; jrl Z,0xffdc3e
-	cps a, 2	; cp A,2
+	cp a, 2:i3	; cp A,2
 	jr z, FDC_SetGeometryForDiskType__geom_2dd8_1024	; jr Z,0xffdc06
-	cps a, 5	; cp A,5
+	cp a, 5:i3	; cp A,5
 	jr z, FDC_SetGeometryForDiskType__geom_2dd9	; jr Z,0xffdbce
-	cps a, 4	; cp A,4
+	cp a, 4:i3	; cp A,4
 	jr z, FDC_SetGeometryForDiskType__geom_2dd9	; jr Z,0xffdbce
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jrl nz, FDC_SetGeometryForDiskType__bad_type	; jrl NZ,0xffdc76
 FDC_SetGeometryForDiskType__geom_2dd9:
 	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
@@ -564,7 +564,7 @@ Boot_ShortDelay:
 	ld (xsp), a	; ld (XSP),A
 	ld a, (xsp)	; ld A,(XSP)
 	decm8 1, (xsp)	; dec 1,(XSP)
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr z, Boot_ShortDelay__done	; jr Z,0xffdd14
 Boot_ShortDelay__loop:
 	nop	; nop
@@ -579,7 +579,7 @@ Boot_ShortDelay__loop:
 	nop	; nop
 	ld a, (xsp)	; ld A,(XSP)
 	decm8 1, (xsp)	; dec 1,(XSP)
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr nz, Boot_ShortDelay__loop	; jr NZ,0xffdd02
 Boot_ShortDelay__done:
 	inc 2, xsp	; inc 2,XSP
@@ -928,7 +928,7 @@ FDC_ProcessResults:
 	jr z, FDC_ProcessResults__st0_invalid_command	; jr Z,0xffdf41 - ST0 bits 7-6 = 10: invalid command issued
 	cp a, 0xc0	; cp A,0xc0
 	jr z, FDC_ProcessResults__st0_ready_changed	; jr Z,0xffdf39
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr nz, FDC_ProcessResults__unknown_st0	; jr NZ,0xffdf9f
 	ldb l, 0	; ld L,0x00
 	ret	; ret
@@ -1034,7 +1034,7 @@ FDC_IssueCommand:
 	ld a, (xsp)	; ld A,(XSP)
 	ld (0x0c56:16), a	; ld (0x0c56),A
 	calr FDC_ValidateOpcode	; calr 0xffe0ab
-	cps l, 0	; cp L,0
+	cp l, 0:i3	; cp L,0
 	jrl nz, FDC_IssueCommand__done	; jrl NZ,0xffe0a8
 	ld a, (xsp)	; ld A,(XSP)
 	cp a, 0x33	; cp A,0x33
@@ -1111,9 +1111,9 @@ FDC_IssueCommand__send_unit_head:
 	jr z, FDC_IssueCommand__seek_param	; jr Z,0xffe0a0
 	cp a, 0x4d	; cp A,0x4d - 0x4D = FORMAT TRACK: send N/SC/GPL/D
 	jr z, FDC_IssueCommand__format_params	; jr Z,0xffe09b
-	cps a, 7	; cp A,7
+	cp a, 7:i3	; cp A,7
 	jr z, FDC_IssueCommand__no_more_params	; jr Z,0xffe099
-	cps a, 4	; cp A,4
+	cp a, 4:i3	; cp A,4
 	jr z, FDC_IssueCommand__no_more_params	; jr Z,0xffe099
 	cp a, 0x4a	; cp A,0x4a
 	jr nz, FDC_IssueCommand__rw_params	; jr NZ,0xffe0a5
@@ -1167,7 +1167,7 @@ FDC_ValidateOpcode__check_masked:
 	jr z, FDC_ValidateOpcode__ok	; jr Z,0xffe0f4
 	cp a, 0x0f	; cp A,0x0f
 	jr ugt, FDC_ValidateOpcode__invalid	; jr UGT,0xffe0f7
-	cps a, 2	; cp A,2
+	cp a, 2:i3	; cp A,2
 	jr c, FDC_ValidateOpcode__invalid	; jr C,0xffe0f7
 FDC_ValidateOpcode__ok:
 	ldb l, 0	; ld L,0x00
@@ -1412,7 +1412,7 @@ FDC_WaitResult__check_timeout:
 	calr FDC_Error	; calr 0xffe231
 	ldw bc, 0xffff	; ld BC,0xffff
 FDC_WaitResult__check_done:
-	cps bc, 0	; cp BC,0
+	cp bc, 0:i3	; cp BC,0
 	jr z, FDC_WaitResult__poll	; jr Z,0xffe272
 	pop xiz	; pop XIZ
 	ret	; ret
@@ -1540,7 +1540,7 @@ FDC_SubmitReadDataCmd:
 FDC_CmdReadSectors:
 	pushw iz	; push IZ - cmd 3 entry
 	calr FDC_IsMediaProbeRead	; calr 0xffe1c8
-	cps hl, 0	; cp HL,0
+	cp hl, 0:i3	; cp HL,0
 	jr nz, FDC_CmdReadSectors__single_retry	; jr NZ,0xffe378
 	ld (0x0c96:16), 8	; ld (0x0c96),0x08 - normal request: up to 8 retries
 	jrl FDC_CmdReadSectors__check_remaining	; jrl T,0xffe49f
@@ -1582,7 +1582,7 @@ FDC_CmdReadSectors__burst_loop:
 	lda xwa, (0x0c78:16)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
-	cps wa, 0	; cp WA,0
+	cp wa, 0:i3	; cp WA,0
 	jr z, FDC_CmdReadSectors__submit	; jr Z,0xffe404
 	lda xwa, (0x0c76:16)	; lda XWA,0x0c76
 	incw 1, (xwa)	; incw 1,(XWA)
@@ -1612,7 +1612,7 @@ FDC_CmdReadSectors__next_retry:
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
 	dec 1, (0x0c96:16)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr nz, FDC_CmdReadSectors__check_remaining	; jr NZ,0xffe49f
 	ld (0x0c52:16), 0x10	; ld (0x0c52),0x10 - error 0x10 = read retries exhausted
 	jr FDC_CmdReadSectors__done	; jr T,0xffe4a8
@@ -1691,7 +1691,7 @@ FDC_CmdWriteSectors__burst_loop:
 	lda xwa, (0x0c78:16)	; lda XWA,0x0c78
 	decm 1, (xwa)	; decw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
-	cps wa, 0	; cp WA,0
+	cp wa, 0:i3	; cp WA,0
 	jr z, FDC_CmdWriteSectors__submit	; jr Z,0xffe537
 	lda xwa, (0x0c76:16)	; lda XWA,0x0c76
 	incw 1, (xwa)	; incw 1,(XWA)
@@ -1723,7 +1723,7 @@ FDC_CmdWriteSectors__recover:
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
 	dec 1, (0x0c96:16)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr nz, FDC_CmdWriteSectors__check_remaining	; jr NZ,0xffe5d8
 	ld (0x0c52:16), 0x20	; ld (0x0c52),0x20 - error 0x20 = write retries exhausted
 	jr FDC_CmdWriteSectors__done	; jr T,0xffe5e1
@@ -1790,15 +1790,15 @@ FDC_CmdFormat:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
 	jrl nz, FDC_CmdFormat__finish	; jrl NZ,0xffe6b6
 	ld a, (0x0c9a:16)	; ld A,(0x0c9a)
-	cps a, 2	; cp A,2
+	cp a, 2:i3	; cp A,2
 	jr z, FDC_CmdFormat__gap_8spt_1024	; jr Z,0xffe64f
-	cps a, 3	; cp A,3
+	cp a, 3:i3	; cp A,3
 	jr z, FDC_CmdFormat__gap_18spt	; jr Z,0xffe643
-	cps a, 5	; cp A,5
+	cp a, 5:i3	; cp A,5
 	jr z, FDC_CmdFormat__gap_9spt	; jr Z,0xffe637
-	cps a, 4	; cp A,4
+	cp a, 4:i3	; cp A,4
 	jr z, FDC_CmdFormat__gap_9spt	; jr Z,0xffe637
-	cps a, 0	; cp A,0
+	cp a, 0:i3	; cp A,0
 	jr nz, FDC_CmdFormat__start	; jr NZ,0xffe659
 FDC_CmdFormat__gap_9spt:
 	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
@@ -2057,7 +2057,7 @@ FDC_CmdMotorOn:
 	jr FDC_CmdMotorOn__done	; jr T,0xffe8c3
 FDC_CmdMotorOn__spinup:
 	lds iz, 1	; ld IZ,1
-	cps iz, 0	; cp IZ,0
+	cp iz, 0:i3	; cp IZ,0
 	jr z, FDC_CmdMotorOn__done	; jr Z,0xffe8c3
 FDC_CmdMotorOn__spin_wait:
 	ldw wa, 10	; ld WA,0x000a
@@ -2093,9 +2093,9 @@ FDC_CmdGetLastError:
 ; -----------------------------------------------------------------------------
 FDC_CmdSetDiskChanged:
 	ld wa, (0x0c72:16)	; ld WA,(0x0c72) - cmd 9 entry
-	cps wa, 1	; cp WA,1
+	cp wa, 1:i3	; cp WA,1
 	jr z, FDC_CmdSetDiskChanged__set	; jr Z,0xffe8ea
-	cps wa, 0	; cp WA,0
+	cp wa, 0:i3	; cp WA,0
 	jr nz, FDC_CmdSetDiskChanged__bad_flag	; jr NZ,0xffe8e3
 	jr FDC_CmdSetDiskChanged__clear	; jr T,0xffe8f0
 FDC_CmdSetDiskChanged__bad_flag:
@@ -2212,7 +2212,7 @@ FDC_Request__start:
 	ldmm8 (0x0c54), (0x0c52)	; ld (0x0c54),(0x0c52)
 	ld (0x0c52:16), 0	; ld (0x0c52),0x00
 	calr FDC_ValidateRequest	; calr 0xffda86
-	cps l, 0	; cp L,0
+	cp l, 0:i3	; cp L,0
 	jr nz, FDC_Request__finish	; jr NZ,0xffea49 - L != 0: validation rejected the request
 	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e)
 	cp wa, 0x0b	; cp WA,0x000b - commands are 0..11
@@ -2288,9 +2288,9 @@ FDC_PIO_ReadTransfer:
 	cpw (0x0c4a:16), 0	; cp (0x0c4a),0x0000
 	ret z	; ret Z
 	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e) - cmd 4 = write, cmd 3 = read; anything else has no PIO path
-	cps wa, 4	; cp WA,4
+	cp wa, 4:i3	; cp WA,4
 	jr z, FDC_PIO_WriteTransfer	; jr Z,0xffea8a
-	cps wa, 3	; cp WA,3
+	cp wa, 3:i3	; cp WA,3
 	ret nz	; ret NZ
 	ld c, (0x120000:24)	; ld C,(0x120000) - read one byte from the FDC DMA-acknowledge port
 	ld xhl, (0x0c7c:16)	; ld XHL,(0x0c7c) - NOTE: pointer kept at 0x0C7C = +2 into the 32-bit buffer field at 0x0C7A; the maincpu twin has the same +2 quirk (0x8A4E vs buffer at 0x8A4C) -- apparent shared latent defect; the DMA path is what ships

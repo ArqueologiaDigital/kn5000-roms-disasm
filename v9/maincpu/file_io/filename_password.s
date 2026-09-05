@@ -24,10 +24,10 @@ FmmPasswordFunc:
 	cp xbc, 0x1e5000d
 	jrl nz, Password_Return
 	call CheckAnySlotHasData
-	cps l, 0
+	cp l, 0:i3
 	jr nz, Password_ShowError
 	call CheckSlotIndexValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_ClearAndSetSlot
 
 Password_ShowError:
@@ -50,11 +50,11 @@ Password_HandleDeleteEvent:
 	cp (xde), 0x3
 	jr nz, Password_Delete_CheckLoadOnly
 	call CheckSlotIsSelected
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_Delete_CheckLoadOnly
 	ld wa, iz
 	call CheckIsCurrentSlot
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_Delete_CheckLoadOnly
 	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
@@ -69,7 +69,7 @@ Password_Delete_CheckLoadOnly:
 	jr nz, Password_Delete_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_Delete_CheckSaveOnly
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
@@ -82,7 +82,7 @@ Password_Delete_CheckSaveOnly:
 	jr nz, Password_ShowErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_ShowErrorStatus
 	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
@@ -102,11 +102,11 @@ Password_HandleSaveEvent:
 	cp (xde), 0x3
 	jr nz, Password_Save_CheckLoadOnly
 	call CheckSlotIsSelected
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_Save_CheckLoadOnly
 	ld wa, iz
 	call CheckIsCurrentSlot
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_Save_CheckLoadOnly
 	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
@@ -121,7 +121,7 @@ Password_Save_CheckLoadOnly:
 	jr nz, Password_Save_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_Save_CheckSaveOnly
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
@@ -134,7 +134,7 @@ Password_Save_CheckSaveOnly:
 	jr nz, Password_SaveErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_SaveErrorStatus
 	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
@@ -152,7 +152,7 @@ Password_SaveErrorStatus:
 
 Password_HandleLoadEvent:
 	call CheckSlotIsSelected
-	cps l, 0
+	cp l, 0:i3
 	jr z, Password_LoadErrorStatus
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
@@ -180,10 +180,10 @@ SelectPasswordMode:
 	ldib_erp 0xfa, 0
 	lds wa, 2
 	call FileIO_FormatName_Return
-	cps l, 0
+	cp l, 0:i3
 	jr z, SelectMode_CheckSaveAvail
 	call CheckAnySlotHasData
-	cps l, 0
+	cp l, 0:i3
 	jr z, SelectMode_CheckSaveAvail
 	bit 7, (0x8a0d:16)
 	jr nz, SelectMode_CheckSaveAvail
@@ -192,10 +192,10 @@ SelectPasswordMode:
 SelectMode_CheckSaveAvail:
 	lds wa, 3
 	call FileIO_FormatName_Return
-	cps l, 0
+	cp l, 0:i3
 	jr z, SelectMode_DetermineMode
 	call CheckSlotIndexValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, SelectMode_DetermineMode
 	bit 6, (0x8a0d:16)
 	jr nz, SelectMode_DetermineMode
@@ -260,7 +260,7 @@ FmmFileNameFunc:
 	ld (0x7f72:16), xbc
 	call GetCurrentFileIndex
 	ld (0x7f7a:16), hl
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FileName_ListSelect_Negative
 	exts xhl
 	ld xwa, (0x7f72:16)
@@ -368,10 +368,10 @@ FileName_OpSave:
 	cp xiz, 0x3
 	jrl nz, FileName_OpLoad
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FileName_OpLoad
 	call FileIO_WriteRecordName_Loop
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FileName_OpLoad
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -400,15 +400,15 @@ FileName_OpSave:
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr nz, FileName_OpSave_ShowCodeA
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_OpSave_ShowCode1
 
 FileName_OpSave_ShowCodeA:
@@ -431,10 +431,10 @@ FileName_OpLoad:
 	cp xiz, 0x4
 	jrl nz, FileName_OpFormat
 	call FileIO_FormatName_Done
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FileName_OpFormat
 	calr SelectPasswordMode
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FileName_OpLoad_NoPwd
 	lds32 xde, 0
 	ld e, (0x8a0c:16)
@@ -444,7 +444,7 @@ FileName_OpLoad:
 
 FileName_OpLoad_NoPwd:
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FileName_OpLoad_Execute
 	cp (0x0340ea:24), 0x00
 	jr z, FileName_OpLoad_Execute
@@ -531,7 +531,7 @@ FileName_OpDelete:
 	cp xiz, 0x5
 	jrl nz, FileName_OpFormatVariant
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FileName_OpFormatVariant
 	cp (0x0340ea:24), 0x00
 	jr z, FileName_OpDelete_Execute
@@ -601,7 +601,7 @@ FileName_OpNavigate:
 	cp xiz, 0x6
 	jrl nz, FileName_GetSelection
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
 	ld wa, (0x7f7a:16)
@@ -618,7 +618,7 @@ FileName_Navigate_ScrollUp:
 	cp xbc, 0x1c00017
 	jr nz, FileName_Navigate_CheckChanged
 	ld bc, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, FileName_Navigate_CheckChanged
 	dec 1, bc
 	ld (0x7f7a:16), bc
@@ -688,7 +688,7 @@ FileName_UpdateButtons_Loop:
 	call FileIO_CheckRecordValid
 	ld wa, (xsp + 6)
 	extz wa
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_UpdateButtons_Hide
 	call FileIO_FormatName_Loop
 	jr FileName_UpdateButtons_Check
@@ -702,11 +702,11 @@ FileName_UpdateButtons_Check:
 	jr lt, FileName_UpdateButtons_Loop
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_CheckCallback
 	ldw wa, 0x9
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_CheckCallback
 	lds wa, 2
 	call FileIO_FormatName_Loop
@@ -721,11 +721,11 @@ FileName_CheckCallback:
 	ld iz, hl
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_Callback_SetFilter
 	ldw wa, 0x9
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_Callback_SetFilter
 	set 2, iz
 
@@ -735,7 +735,7 @@ FileName_Callback_SetFilter:
 	bit 0, iz
 	jr z, FileName_Callback_Send
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_Callback_Send
 	res 0, iz
 	set 1, iz
@@ -763,11 +763,11 @@ FileName_HandleRegister:
 	ld iz, hl
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_Register_SetFilter
 	ldw wa, 0x9
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_Register_SetFilter
 	set 2, iz
 
@@ -777,7 +777,7 @@ FileName_Register_SetFilter:
 	bit 0, iz
 	jr z, FileName_Register_Send
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr z, FileName_Register_Send
 	res 0, iz
 	set 1, iz

@@ -62,7 +62,7 @@ FDC_WaitReady:
 	and	l, 31
 	ld	a, l
 	extz	wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 3
 	ld qiz, 0
 	ld	wa, (1033:16)
@@ -193,9 +193,9 @@ FDC_WaitReady:
 	ld	a, (0x8a6e:16)
 	and	a, 15
 	extz	wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	mi, 156
-	cps	wa, 5
+	cp	wa, 5:i3
 	jrl	gt, 151
 	add	wa, wa
 	lda	xix, (DiskWarning_ConfirmStrings_0xBFA:24)
@@ -314,17 +314,17 @@ FDC_CheckDriveCount:
 
 FDC_ValidateCommand:
 	ld wa, (0x8a40:16)
-	cps wa, 4
+	cp wa, 4:i3
 	jr z, FDC_ValidateTrack
-	cps wa, 3
+	cp wa, 3:i3
 	jr z, FDC_ValidateTrack
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, FDC_ValidateTrack
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, FDC_Command5Handler
 	cp wa, 0xb
 	jr z, FDC_NoOpReturn
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, FDC_ValidateTrack
 
 FDC_NoOpReturn:
@@ -369,15 +369,15 @@ FDC_CheckSectorNum:
 
 FDC_CheckFormatType:
 	ld a, (0x8a6c:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, FDC_FormatDefault
-	cps a, 5
+	cp a, 5:i3
 	jr z, FDC_FormatDefault
-	cps a, 4
+	cp a, 4:i3
 	jr z, FDC_FormatType4
-	cps a, 3
+	cp a, 3:i3
 	jr z, FDC_FormatType3
-	cps a, 2
+	cp a, 2:i3
 	jr nz, FDC_ErrorInvalid
 	cp (0x8a2d:16), 8
 	jr ule, FDC_ValidExecute
@@ -422,15 +422,15 @@ FDC_SetupFormatParams:
 	ld wa, (0x8a46:16)
 	ld (0x8a6e:16), a
 	and a, 0xf
-	cps a, 3
+	cp a, 3:i3
 	jrl z, FDC_Format1440K
-	cps a, 2
+	cp a, 2:i3
 	jr z, FDC_FormatDD
-	cps a, 5
+	cp a, 5:i3
 	jr z, FDC_FormatHD
-	cps a, 4
+	cp a, 4:i3
 	jr z, FDC_FormatHD
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, FDC_FormatUnknown
 
 FDC_FormatHD:
@@ -523,7 +523,7 @@ FDC_NOP_Delay:
 	ld (xsp), a
 	ld a, (xsp)
 	decm8 1, (xsp)
-	cps a, 0
+	cp a, 0:i3
 	jr z, FDC_NOP_Delay_Exit
 
 FDC_NOP_Delay_Loop:
@@ -539,7 +539,7 @@ FDC_NOP_Delay_Loop:
 	nop
 	ld a, (xsp)
 	decm8 1, (xsp)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, FDC_NOP_Delay_Loop
 
 FDC_NOP_Delay_Exit:
@@ -817,7 +817,7 @@ FDC_Exception_Status_Decoder:
 	jr z, FDC_StatusDecode_InvalidCommand
 	cp a, 0xc0
 	jr z, FDC_StatusDecode_DriveNotReady
-	cps a, 0
+	cp a, 0:i3
 	jr nz, FDC_StatusDecode_UnknownIC
 	ldb l, 0x0
 	ret
@@ -934,7 +934,7 @@ FDC_HardwareSetup:
 	ld	a, (xsp)
 	ld	(0x8a28:16), a
 	calr	208
-	cps	l, 0
+	cp	l, 0:i3
 	jrl	nz, 200
 	ld	a, (xsp)
 	cp	a, 51
@@ -1010,9 +1010,9 @@ FDC_HardwareSetup:
 	jr	z, 25
 	cp	a, 77
 	jr	z, 15
-	cps	a, 7
+	cp	a, 7:i3
 	jr	z, 9
-	cps	a, 4
+	cp	a, 4:i3
 	jr	z, 5
 	cp	a, 74
 	jr	nz, 12
@@ -1051,7 +1051,7 @@ FDC_HardwareSetup:
 	jr	z, 9
 	cp	a, 15
 	jr	ugt, 7
-	cps	a, 2
+	cp	a, 2:i3
 	jr	c, 3
 	ldb	l, 0
 	ret
@@ -1293,7 +1293,7 @@ FDC_ClearStatus_InitTimer:
 	ldw	wa, 9
 	calr	65444
 	ldw	bc, 0xffff
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	z, -34
 	pop	xiz
 	ret
@@ -1420,12 +1420,12 @@ FDC_CmdRecalibrate:
 FDC_CMD_EXEC:
 	pushw	iz
 	calr	65046
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 8
 	ld	(0x8a68:16), 1
 	jrl	310
 	calr	65101
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 8
 	ld	(0x8a68:16), 8
 	jrl	295
@@ -1480,7 +1480,7 @@ FDC_CMD_EXEC:
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 18
 	lda	xwa, (0x8a48:16)
 	incw	1, (xwa)
@@ -1623,7 +1623,7 @@ FDC_CMD_EXEC:
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 18
 	lda	xwa, (0x8a48:16)
 	incw	1, (xwa)
@@ -1749,15 +1749,15 @@ FDC_MODE_CONFIG:
 	cp	(0x8a24:16), 0
 	jrl	nz, 151
 	ld	a, (0x8a6c:16)
-	cps	a, 2
+	cp	a, 2:i3
 	jr	z, 40
-	cps	a, 3
+	cp	a, 3:i3
 	jr	z, 24
-	cps	a, 5
+	cp	a, 5:i3
 	jr	z, 8
-	cps	a, 4
+	cp	a, 4:i3
 	jr	z, 4
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 34
 	ld	(0x8a2e:16), 2
 	ld	(0x8a33:16), 80
@@ -2004,7 +2004,7 @@ FDC_MC_EXIT:
 	calr	63861
 	jr	15
 	lds	iz, 1
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	z, 9
 	ldw	wa, 10
 	calr	63948
@@ -2026,9 +2026,9 @@ FDC_STATUS_COPY:
 	ldb	d, 138
 	ret
 	ld	wa, (0x8a44:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 13
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 2
 	jr	13
 	ldw	wa, 254
@@ -2135,7 +2135,7 @@ FDC_CommandEntry_CopyParams:
 	ldmm8 0x8a26, 0x8a24
 	ld (0x8a24:16), 0
 	calr FDC_COMMAND_DISPATCHER
-	cps l, 0
+	cp l, 0:i3
 	jr	nz, 116
 	ld wa, (0x8a40:16)
 	cp wa, 0xb
@@ -2267,9 +2267,9 @@ FDC_ByteTransfer_PIO:
 	nop
 	ret	z
 	ld	wa, (0x8a40:16)
-	cps	wa, 4
+	cp	wa, 4:i3
 	jr	z, 36
-	cps	wa, 3
+	cp	wa, 3:i3
 	ret	nz
 	ld	c, (0x120000:24)
 	ld	xhl, (0x8a4e:16)
@@ -2408,7 +2408,7 @@ Reset_Floppy_Disk_Controller:
 	ldw (0x8b24:16), 0
 	ldw (0x8b26:16), 0
 	ldw (0x8b28:16), 0
-	cps a, 0
+	cp a, 0:i3
 	jr nz, FDC_Reset_SetDD_SectorCount
 	ldw (0x8b2a:16), 224
 	jr FDC_Reset_BuildParams

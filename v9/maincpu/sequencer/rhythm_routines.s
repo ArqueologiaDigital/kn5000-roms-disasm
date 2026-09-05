@@ -522,7 +522,7 @@ Rhythm_TransposeNote:
 	ld a, (0x32da:16)
 
 Rhythm_Transp_CheckZero:
-	cps a, 0
+	cp a, 0:i3
 	jr nz, Rhythm_Transp_Apply
 	ldb a, 0x0
 	jr Rhythm_Transp_Done
@@ -596,10 +596,10 @@ Rhythm_VoiceMap_ClampInstr:
 
 Rhythm_VoiceMap_SelectTable:
 	ldb_sri L, 0x03, 0xf4, 0xec
-	cps l, 0
+	cp l, 0:i3
 	jr z, Rhythm_VoiceMap_ApplyBase
 	ld h, (0x3433:16)
-	cps l, 1
+	cp l, 1:i3
 	jr z, Rhythm_VoiceMap_CheckMute
 	ld h, (0x3434:16)
 
@@ -879,7 +879,7 @@ Rhythm_SingleNoteHandler:
 	call Rhythm_SendByte
 	ld a, (xix + 3)
 	sub a, 0x10
-	cps a, 0
+	cp a, 0:i3
 	jr gt, Rhythm_SingleNote_ClampVelocity
 	ldb a, 0x1
 
@@ -1568,10 +1568,10 @@ Rhythm_TranspMod_ModCheck:
 Rhythm_TranspMod_LookupTable:
 	ld xiy, Rhythm_PitchShiftTable_Default
 	ldb_sri L, 0x03, 0xf4, 0xec
-	cps l, 0
+	cp l, 0:i3
 	jr z, Rhythm_TranspMod_Done
 	ld h, (0x33e6:16)
-	cps l, 1
+	cp l, 1:i3
 	jr z, Rhythm_TranspMod_Offset1
 	ld h, (0x33e7:16)
 
@@ -1620,7 +1620,7 @@ Rhythm_TranspMod_BaseLookup:
 Rhythm_TranspMod_OctaveWrap:
 	ld a, (0x32d9:16)
 	dec 1, a
-	cps a, 7
+	cp a, 7:i3
 	jr nc, Rhythm_TranspMod_WrapNeg
 	add w, a
 	bit 7, w

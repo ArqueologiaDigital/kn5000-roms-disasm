@@ -120,7 +120,7 @@ SoundBank_InitTrack_ByteFields:
 	ld_rrb	a, xix, iy
 	st_rrb	a, xhl, iy
 	inc	1, iy
-	cps	iy, 7
+	cp	iy, 7:i3
 	jr	ule, -21
 	ld	a, (36302:16)
 	st_rrb	a, xhl, iy
@@ -338,7 +338,7 @@ SMF_SelectBank_AfterToneLoad:
 	ld hl, (6699:16)
 	bit 15, hl
 	jr nz, SMF_SelectBank_Return
-	cps hl, 1
+	cp hl, 1:i3
 	jr z, SMF_SelectBank_Return
 	set 15, hl
 

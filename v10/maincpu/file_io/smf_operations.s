@@ -40,11 +40,11 @@ FmmSmfLoadTitleFunc:
 
 SmfLoad_DispatchState:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl z, SmfLoad_Success
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, SmfLoad_ErrorCancel
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, SmfLoad_AbortPartial
 	cpw (0x8504:16), 0
 	jr ge, SmfLoad_CheckFileCount
@@ -222,7 +222,7 @@ RenderSmf_LoopCheck:
 	jr ge, RenderSmf_PadCheck
 	lda_dri XDE, 0x07, 0xe0, 0xf0
 	ld c, (xde)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, RenderSmf_CheckSeparator
 
 RenderSmf_PadCheck:
@@ -443,7 +443,7 @@ TrimPad_LoopCheck:
 	cp ix, bc
 	jr nc, TrimPad_PadCheck
 	ld e, (xhl)
-	cps e, 0
+	cp e, 0:i3
 	jr nz, TrimPad_LoopBody
 
 TrimPad_PadCheck:
@@ -527,7 +527,7 @@ ValidateFN_AdvancePointer:
 
 ValidateFN_LoopHead:
 	ldb_sri E, 0x07, 0xe0, 0xf4
-	cps e, 0
+	cp e, 0:i3
 	jr z, ValidateFN_ReturnValid
 	cp hl, bc
 	jr c, ValidateFN_CheckSpace
@@ -571,13 +571,13 @@ SmfFN_JumpTable:
 	jr	z, 20
 	call	GetFirstPageBase
 	ld	(0x81ac:16), hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 26
 	ldw	(0x81ac:16), 0
 	jr	18
 	ld	wa, (0x8504:16)
 	ld	(0x81ac:16), wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	le, 2
 	dec	1, wa
 	call	NavigateToFileIndex
@@ -635,7 +635,7 @@ SmfFN_NavDown_Apply:
 SmfFN_NavUp:
 	cp xwa, 0x1c00017
 	jrl nz, SmfFN_UpdateDisplay
-	cps ix, 0
+	cp ix, 0:i3
 	jrl le, SmfFN_UpdateDisplay
 	dec 1, ix
 	jr SmfFN_StoreIndex
@@ -676,7 +676,7 @@ SmfFN_PageDown:
 	exts xhl
 	divs hl, 0xa
 	stw_erp WA, 0xee
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, SmfFN_UpdateDisplay
 	ld (0x81ac:16), bc
 	ld hl, bc
@@ -705,7 +705,7 @@ SmfFN_PageDown_ClampCheck:
 	exts xbc
 	divs bc, 0xa
 	stw_erp WA, 0xe6
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, SmfFN_UpdateDisplay
 	ld (0x81ac:16), hl
 	jrl SmfFN_RefreshIfChanged
@@ -737,7 +737,7 @@ SmfFN_HandleSave:
 	lda xwa, (xsp + 8)
 	ldw bc, 0x10
 	calr ValidateSmfFilename
-	cps l, 0
+	cp l, 0:i3
 	jr z, SmfFN_Save_WriteSlot
 	ld wa, (0x81ac:16)
 	call GetRecordPtrForFile
@@ -808,7 +808,7 @@ SmfFN_HandleOpen:
 	call FileIO_GetRecordPtrAlt
 	ld xwa, xhl
 	call FileIO_CheckFileExists
-	cps l, 0
+	cp l, 0:i3
 	jr z, SmfFN_Open_Execute
 	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Open_Execute
@@ -941,7 +941,7 @@ SmfFN_Delete_Execute:
 	ld wa, (0x81ac:16)
 	cp wa, (0x8504:16)
 	jr lt, SmfFN_Delete_AdjustIndex
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, SmfFN_Delete_AdjustIndex
 	dec 1, wa
 	ld (0x81ac:16), wa
@@ -977,7 +977,7 @@ SmfFN_HandleDelete2:
 	ld wa, (0x81ac:16)
 	cp wa, (0x8504:16)
 	jr lt, SmfFN_Delete2_AdjustIndex
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, SmfFN_Delete2_AdjustIndex
 	dec 1, wa
 	ld (0x81ac:16), wa
@@ -1019,7 +1019,7 @@ SmfFN_HandleScrollFlag1:
 	ld c, (0x8946:16)
 	ld a, c
 	inc 1, a
-	cps a, 3
+	cp a, 3:i3
 	jr nc, SmfFN_LoadAs_Wrap
 	inc 1, c
 	ld (0x8946:16), c
@@ -1217,7 +1217,7 @@ SmfFN_UpdateFilenameField:
 	ld wa, (0x81ac:16)
 	cp wa, (0x8504:16)
 	jr lt, SmfFN_FetchFilename
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, SmfFN_FetchFilename
 	ld xwa, xiz
 	ld xbc, Str_SmfConvert_GmToGm_0x10

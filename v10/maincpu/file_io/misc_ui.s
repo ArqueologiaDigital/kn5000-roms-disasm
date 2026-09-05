@@ -114,7 +114,7 @@ SetupExitFunc:
 	jr nz, SetupExit_Return
 	lds wa, 6
 	call PanelDisplay_DispatchByMode
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SetupExit_Return
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -692,7 +692,7 @@ PsFileNameBox_HandleConfirm:
 	lda xhl, (xwa + 38)
 	ld de, (xwa + 40)
 	lda_dri XBC, 0xfd, 0x92, 0x00
-	cps de, 1
+	cp de, 1:i3
 	jrl nz, PsFileNameBox_Confirm_MultiItem
 	cpw (xhl), 0x1
 	jr nz, PsFileNameBox_Confirm_MultiItem

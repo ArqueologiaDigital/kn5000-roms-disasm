@@ -99,7 +99,7 @@ CompLoad_HandleSelection:
 	ld	(32480:16), xde
 	call	16290274
 	ld	(32484:16), hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 16
 	exts	xhl
 	ld	xwa, (32480:16)
@@ -126,7 +126,7 @@ CompLoad_DrawItemLoop:
 	ld	(xhl), c
 	lds	bc, 3
 	call	16289787
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 10
 	ld	wa, iz
 	call	16290326
@@ -175,7 +175,7 @@ CompLoad_HandleScroll:
 CompLoad_ScrollUp:
 	cp xbc, 0x1c00017
 	jrl nz, CompLoad_GetSelection
-	cps wa, 0
+	cp wa, 0:i3
 	jrl le, CompLoad_GetSelection
 	dec 1, wa
 	jr CompLoad_StorePosition
@@ -204,7 +204,7 @@ CompLoad_OpLoad:
 	cp xde, 0x3
 	jrl nz, CompLoad_GetSelection
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -290,7 +290,7 @@ RenderFilterDisplay:
 	cp (xsp), 0x0
 	jr nz, RenderFilter_CheckType1
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_CheckType1
 	ld xwa, (xsp + 2)
 	ld xbc, DiskOp_ChannelCfgTable_0x82
@@ -300,15 +300,15 @@ RenderFilter_CheckType1:
 	cp (xsp), 0x1
 	jr nz, RenderFilter_CheckGeneric
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_CheckGeneric
 	lds wa, 0
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_Type1_Unavail
 	lds wa, 0
 	call FileIO_WriteRecordName_Done
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_Type1_Restricted
 	ld xwa, (xsp + 2)
 	ld xbc, DiskOp_ChannelCfgTable_0x88
@@ -328,12 +328,12 @@ RenderFilter_CheckGeneric:
 	ld a, (xsp)
 	extz wa
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_CheckType2
 	ld a, (xsp)
 	extz wa
 	call FileIO_WriteRecordName_Done
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_Generic_Restricted
 	ld xwa, (xsp + 2)
 	ld xbc, DiskOp_ChannelCfgTable_0x9A
@@ -349,16 +349,16 @@ RenderFilter_CheckType2:
 	jr nz, RenderFilter_Default
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_Default
 	ldw wa, 0x9
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_Default
 	ld a, (xsp)
 	extz wa
 	call FileIO_WriteRecordName_Done
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderFilter_Type2_Restricted
 	ld xwa, (xsp + 2)
 	ld xbc, DiskOp_ChannelCfgTable_0xA6
@@ -413,7 +413,7 @@ LoadFilter_HandleScroll:
 	cp xwa, 0x1
 	jr nz, LoadFilter_ScrollUp_CheckZero
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr z, LoadFilter_ScrollUp_CheckZero
 	lds wa, 0
 	jr LoadFilter_ShowButton
@@ -423,7 +423,7 @@ LoadFilter_ScrollUp_CheckZero:
 	or xwa, xwa
 	jr nz, LoadFilter_ScrollUp_Restore
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr nz, LoadFilter_UpdateDisplay
 
 LoadFilter_ScrollUp_Restore:
@@ -439,7 +439,7 @@ LoadFilter_ScrollDown:
 	cp xwa, 0x1
 	jr nz, LoadFilter_ScrollDown_CheckZero
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr z, LoadFilter_ScrollDown_CheckZero
 	lds wa, 0
 	jr LoadFilter_HideButton
@@ -449,7 +449,7 @@ LoadFilter_ScrollDown_CheckZero:
 	or xwa, xwa
 	jr nz, LoadFilter_ScrollDown_Restore
 	call GetCurrentFileType
-	cps l, 0
+	cp l, 0:i3
 	jr nz, LoadFilter_UpdateDisplay
 
 LoadFilter_ScrollDown_Restore:
@@ -483,10 +483,10 @@ LoadFilter_OpLoad:
 	cp XWA,0x0000000a
 	jrl nz, LoadFilter_Return
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, LoadFilter_Return
 	call FileIO_WriteRecordName_Loop
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, LoadFilter_Return
 	ld XWA,0x00600026
 	ld XBC,0x01c00001
@@ -516,15 +516,15 @@ LoadFilter_OpLoad:
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done
-	cps l, 0
+	cp l, 0:i3
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr nz, LoadFilter_Load_ShowCodeA
 	ldw WA, 0x0008
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, LoadFilter_Load_ShowCode1
 LoadFilter_Load_ShowCodeA:
 	ldw wa, 0xa
@@ -558,12 +558,12 @@ RenderSaveFilterDisplay:
 	ld a, c
 	extz wa
 	call FileIO_FormatName_Return
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderSaveFilter_Unavail
 	cp (xsp), 0x1
 	jr nz, RenderSaveFilter_Available
 	call FileIO_GetRecordAttr_Check
-	cps l, 0
+	cp l, 0:i3
 	jr z, RenderSaveFilter_Available
 	ld xwa, (xsp + 2)
 	ld xbc, DiskOp_ChannelCfgTable_0xB8
@@ -618,7 +618,7 @@ SaveFilter_HandleScroll:
 	cp xbc, 0x1c00017
 	jr nz, SaveFilter_ScrollDown
 	call FileIO_GetRecordAttr_Check
-	cps l, 0
+	cp l, 0:i3
 	jr z, SaveFilter_ScrollUp_Unavail
 	call FileIO_SetModeFlag_Reading
 	ld xwa, (xsp + 2)
@@ -634,10 +634,10 @@ SaveFilter_ScrollDown:
 	ld xwa, (xsp + 2)
 	extz wa
 	call FileIO_FormatName_Return
-	cps l, 0
+	cp l, 0:i3
 	jr z, SaveFilter_ScrollDown_Unlock
 	call FileIO_GetRecordAttr_Check
-	cps l, 0
+	cp l, 0:i3
 	jr nz, SaveFilter_UpdateDisplay
 	ld xwa, (xsp + 2)
 	extz wa
@@ -645,7 +645,7 @@ SaveFilter_ScrollDown:
 
 SaveFilter_ScrollDown_Unlock:
 	call FileIO_GetRecordAttr_Check
-	cps l, 0
+	cp l, 0:i3
 	jr nz, SaveFilter_UpdateDisplay
 	call FileIO_SetModeFlag_Writing
 	ld xwa, (xsp + 2)
@@ -745,10 +745,10 @@ SaveFilter_OpSave:
 	cp	xwa, 10
 	jrl	nz, 199
 	call	16289600
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 190
 	calr	61681
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 18
 	lds32	xde, 0
 	ld	e, (35184:16)
@@ -757,7 +757,7 @@ SaveFilter_OpSave:
 	jr	44
 SaveFilter_Save_NoPwd:
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SaveFilter_Save_Execute
 	cp (0x0340ea:24), 0x00
 	jr z, SaveFilter_Save_Execute

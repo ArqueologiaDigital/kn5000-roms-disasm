@@ -331,7 +331,7 @@ NoteTrim_BuildFromCalibration__F99849:
 	ld	a, (xbc)                            ; F99851  ld A,(XBC)
 	sub	a, 75                              ; F99853  sub A,0x4b
 	ld	(xiz-7), a                          ; F99856  ld (XIZ+0xf9),A
-	cps	a, 0                               ; F99859  cp A,0
+	cp	a, 0:i3                               ; F99859  cp A,0
 	jr ge, NoteTrim_BuildFromCalibration__F99861                       ; F9985B  jr GE,0xf99861
 	ld	(xiz-7), 0                          ; F9985D  ld (XIZ+0xf9),0x00
 NoteTrim_BuildFromCalibration__F99861:
@@ -639,7 +639,7 @@ Link_SendChunk:
 	pushw	de                               ; F999C3  push DE
 	pushw	ix                               ; F999C4  push IX
 	ld	h, (xiz+10)                         ; F999C5  ld H,(XIZ+0x0a)
-	cps	h, 0                               ; F999C8  cp H,0
+	cp	h, 0:i3                               ; F999C8  cp H,0
 	jrl z, Link_SendChunk__F99A3A                       ; F999CA  jrl Z,0xf99a3a
 	ldw	de, 0                              ; F999CD  ld DE,0x0000
 Link_SendChunk__F999D0:
@@ -858,7 +858,7 @@ Link_SendCmdByte__F99AD8:
 	ldw	hl, 0x3E8                          ; F99AF6  ld HL,0x03e8
 Link_SendCmdByte__F99AF9:
 	dec	1, hl                              ; F99AF9  dec 1,HL
-	cps	hl, 0                              ; F99AFB  cp HL,0
+	cp	hl, 0:i3                              ; F99AFB  cp HL,0
 	jr nz, Link_SendCmdByte__F99AF9                       ; F99AFD  jr NZ,0xf99af9
 	set_dd8	0, PA                          ; F99AFF  set 0,(0x1e)
 	ld	(0xF32C:24), 0                    ; F99B02  ld (0x00f32c),0x00
@@ -974,7 +974,7 @@ Link_SendCmdE1__F99B8D:
 	ldb	h, 0xC8                            ; F99B95  ld H,0xc8
 Link_SendCmdE1__F99B97:
 	dec	1, h                               ; F99B97  dec 1,H
-	cps	h, 0                               ; F99B99  cp H,0
+	cp	h, 0:i3                               ; F99B99  cp H,0
 	jr nz, Link_SendCmdE1__F99B97                       ; F99B9B  jr NZ,0xf99b97
 	ld	bc, (xix+4)                         ; F99B9D  ld BC,(XIX+0x04)
 	pushw	bc                               ; F99BA0  push BC

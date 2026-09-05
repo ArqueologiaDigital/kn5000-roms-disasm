@@ -1159,7 +1159,7 @@ SendData_Chunked__send_final:
 ; Timeout: 60000 iterations (~0.3 sec at 20MHz) before giving up
 ; ------------------------------------------------------------------------------
 SendData_Block:
-	cps c, 0	; Is count zero?
+	cp c, 0:i3	; Is count zero?
 	ret z	; Yes - nothing to send
 	lds ix, 0	; IX = timeout counter
 SendData_Block__wait_ready1:
@@ -1579,13 +1579,13 @@ CMD_Dispatch_Handler:
 	push xbc
 	push xwa
 	ld a, (1304:16)
-	cps a, 4	; State 4?
+	cp a, 4:i3	; State 4?
 	jr z, CMD_Dispatch_Handler__state4
-	cps a, 3	; State 3?
+	cp a, 3:i3	; State 3?
 	jr z, CMD_Dispatch_Handler__state3
-	cps a, 2	; State 2?
+	cp a, 2:i3	; State 2?
 	jr z, CMD_Dispatch_Handler__state2
-	cps a, 1	; State 1?
+	cp a, 1:i3	; State 1?
 	jr nz, CMD_Dispatch_Handler__check_watchdog
 	; State 1: Process received data, call handler from table
 	pushw 0x0
@@ -1718,7 +1718,7 @@ DELAY_ROUTINE__outer_loop:
 	ldw bc, 0xC000	; Longer delay if bit set
 	jr DELAY_ROUTINE__delay_loop
 DELAY_ROUTINE__skip_long:
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, DELAY_ROUTINE__next_bit
 DELAY_ROUTINE__delay_loop:
 	ldb e, 0x0	; ld E, 00h (TMP94C241 encoding)
@@ -1739,7 +1739,7 @@ DELAY_ROUTINE__delay2_inner:
 	djnz xbc, DELAY_ROUTINE__delay2_outer
 	srl a, 1	; Next bit
 	inc 1, l
-	cps l, 3
+	cp l, 3:i3
 	jr ule, DELAY_ROUTINE__outer_loop
 	ret
 
@@ -1884,7 +1884,7 @@ ROM_CHECKSUM__word_loop:
 	cp xiz, 0x800
 	jr c, ROM_CHECKSUM__word_loop
 	inc 1, w
-	cps w, 2
+	cp w, 2:i3
 	jr c, ROM_CHECKSUM__bank_loop
 	; Compare checksums
 	ld bc, (xhl)
@@ -2223,11 +2223,11 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	jr z, NOTE_VELOCITY_LOOKUP_CALCULATE__apply_offset
 	cp c, 0x8	; Is it G# (8)?
 	jr z, NOTE_VELOCITY_LOOKUP_CALCULATE__apply_offset
-	cps c, 6	; Is it F# (6)?
+	cp c, 6:i3	; Is it F# (6)?
 	jr z, NOTE_VELOCITY_LOOKUP_CALCULATE__apply_offset
-	cps c, 3	; Is it D# (3)?
+	cp c, 3:i3	; Is it D# (3)?
 	jr z, NOTE_VELOCITY_LOOKUP_CALCULATE__apply_offset
-	cps c, 1	; Is it C# (1)?
+	cp c, 1:i3	; Is it C# (1)?
 	jr nz, NOTE_VELOCITY_LOOKUP_CALCULATE__clamp_velocity	; If not a sharp, skip offset
 
 NOTE_VELOCITY_LOOKUP_CALCULATE__apply_offset:
@@ -2323,7 +2323,7 @@ __jrt_nop_FF8CA9:
 HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
 	lds wa, 0
 	calr AUDIO_HW_WRITE_READ	; Read hardware status
-	cps hl, 0	; Check result
+	cp hl, 0:i3	; Check result
 	jr z, HARDWARE_CALIBRATION_SEQUENCE__success	; If 0, hardware responded
 
 	; Hardware still busy, reset and retry
@@ -2866,7 +2866,7 @@ DEBUG_OUTPUT_STRING:
 	ld xix, xwa	; XIX = string pointer
 DEBUG_OUTPUT_STRING__loop:
 	ldb_spi A, 0xF0	; Load next char, increment
-	cps a, 0	; Check for null terminator
+	cp a, 0:i3	; Check for null terminator
 	jr z, DEBUG_OUTPUT_STRING__done	; If null, exit
 	push xix
 	calr SUB_FEC1	; Output character

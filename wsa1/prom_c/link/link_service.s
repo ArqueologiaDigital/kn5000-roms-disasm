@@ -221,7 +221,7 @@ Link_ServiceTask__F99F02:
 	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xB5   ; F99F0D  res 5,(0x00852c)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99F12  ei 0x00
 	ld	c, (xix)                            ; F99F14  ld C,(XIX)
-	cps	c, 0                               ; F99F16  cp C,0
+	cp	c, 0:i3                               ; F99F16  cp C,0
 	jr nz, Link_ServiceTask__F99F4F                       ; F99F18  jr NZ,0xf99f4f
 	ld	xbc, (0x8568:24)                   ; F99F1A  ld XBC,(0x008568)
 	push	xbc                               ; F99F1F  push XBC

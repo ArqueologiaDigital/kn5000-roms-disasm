@@ -200,7 +200,7 @@ Sprintf_DispatchType:
 	cp wa, 0x25
 	jr z, Sprintf_Format_Percent
 	sub wa, 0x63
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, Sprintf_MainLoop_ReadNext
 	cp wa, 0x15
 	jrl gt, Sprintf_MainLoop_ReadNext
@@ -312,7 +312,7 @@ Sprintf_String_PadLeftSpace:
 Sprintf_String_PadLeftLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_String_PadLeftSpace
 	jr Sprintf_String_OutputLoop
 
@@ -329,7 +329,7 @@ Sprintf_String_OutputChars:
 Sprintf_String_OutputLoop:
 	ld wa, (xsp + 10)
 	decm 1, (xsp + 10)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_String_OutputChars
 	ld wa, (xsp + 6)
 	bit 1, wa
@@ -345,7 +345,7 @@ Sprintf_String_PadRightSpace:
 Sprintf_String_PadRightLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_String_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
 	ld wa, (xsp + 6)
@@ -454,7 +454,7 @@ Sprintf_Decimal_PadLeftSpace:
 Sprintf_Decimal_PadLeftLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Decimal_PadLeftSpace
 	ldw (xsp + 8), 0x0
 
@@ -500,7 +500,7 @@ Sprintf_Decimal_ZeroFillBody:
 Sprintf_Decimal_ZeroFillLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Decimal_ZeroFillBody
 	jr Sprintf_Decimal_PrecZeroLoop
 
@@ -513,7 +513,7 @@ Sprintf_Decimal_PrecZeroBody:
 Sprintf_Decimal_PrecZeroLoop:
 	ld wa, (xsp + 10)
 	decm 1, (xsp + 10)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Decimal_PrecZeroBody
 	jr Sprintf_Decimal_DigitLoop
 
@@ -545,7 +545,7 @@ Sprintf_Decimal_PadRightSpace:
 Sprintf_Decimal_PadRightLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Decimal_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
 	ld wa, (xsp + 6)
@@ -629,7 +629,7 @@ Sprintf_Unsigned_PadLeftSpace:
 Sprintf_Unsigned_PadLeftLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Unsigned_PadLeftSpace
 	jr Sprintf_Unsigned_PrecZeroLoop
 
@@ -642,7 +642,7 @@ Sprintf_Unsigned_PrecZeroBody:
 Sprintf_Unsigned_PrecZeroLoop:
 	ld wa, (xsp + 10)
 	decm 1, (xsp + 10)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Unsigned_PrecZeroBody
 	jr Sprintf_Unsigned_DigitLoop
 
@@ -657,7 +657,7 @@ Sprintf_Unsigned_OutputDigits:
 	inc 2, xsp
 
 Sprintf_Unsigned_DigitLoop:
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, Sprintf_Unsigned_OutputDigits
 	ld wa, (xsp + 6)
 	bit 1, wa
@@ -673,7 +673,7 @@ Sprintf_Unsigned_PadRightSpace:
 Sprintf_Unsigned_PadRightLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Unsigned_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
 	setm 6, (xsp + 6)
@@ -774,7 +774,7 @@ Sprintf_Hex_PadLeftSpace:
 Sprintf_Hex_PadLeftLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Hex_PadLeftSpace
 
 Sprintf_Hex_EmitPrefix:
@@ -807,7 +807,7 @@ Sprintf_Hex_ZeroFillBody:
 Sprintf_Hex_ZeroFillLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Hex_ZeroFillBody
 	jr Sprintf_Hex_PrecZeroLoop
 
@@ -820,7 +820,7 @@ Sprintf_Hex_PrecZeroBody:
 Sprintf_Hex_PrecZeroLoop:
 	ld wa, (xsp + 10)
 	decm 1, (xsp + 10)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Hex_PrecZeroBody
 	jr Sprintf_Hex_DigitLoop
 
@@ -852,7 +852,7 @@ Sprintf_Hex_PadRightSpace:
 Sprintf_Hex_PadRightLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Hex_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
 	ld wa, (xsp + 6)
@@ -913,7 +913,7 @@ Sprintf_Octal_SubtractLength:
 Sprintf_Octal_CheckAltForm:
 	ld wa, (xsp + 6)
 	and wa, 0x8
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 nz, wa
 	ld (xsp + 18), wa
 	ld wa, iz
@@ -945,13 +945,13 @@ Sprintf_Octal_PadLeftSpace:
 Sprintf_Octal_PadLeftLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Octal_PadLeftSpace
 
 Sprintf_Octal_EmitPrefix:
 	cpw (xsp + 18), 0x0
 	jr z, Sprintf_Octal_ZeroFill
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, Sprintf_Octal_ZeroFill
 	pushw 0x30
 	ld xwa, (xsp + 92)
@@ -975,7 +975,7 @@ Sprintf_Octal_ZeroFillBody:
 Sprintf_Octal_ZeroFillLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Octal_ZeroFillBody
 	jr Sprintf_Octal_PrecZeroLoop
 
@@ -988,7 +988,7 @@ Sprintf_Octal_PrecZeroBody:
 Sprintf_Octal_PrecZeroLoop:
 	ld wa, (xsp + 10)
 	decm 1, (xsp + 10)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Octal_PrecZeroBody
 	jr Sprintf_Octal_DigitLoop
 
@@ -1003,7 +1003,7 @@ Sprintf_Octal_OutputDigits:
 	inc 2, xsp
 
 Sprintf_Octal_DigitLoop:
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, Sprintf_Octal_OutputDigits
 	ld wa, (xsp + 6)
 	bit 1, wa
@@ -1019,7 +1019,7 @@ Sprintf_Octal_PadRightSpace:
 Sprintf_Octal_PadRightLoop:
 	ld wa, (xsp + 8)
 	decm 1, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_Octal_PadRightSpace
 	jr Sprintf_MainLoop_ReadNext
 	ld xbc, (xsp + 86)
@@ -1085,7 +1085,7 @@ Sprintf_MainLoop_ReadNext:
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
-	cps iz, 0
+	cp iz, 0:i3
 	jrl nz, Sprintf_OutputLiteral
 	ld hl, (xsp + 4)
 	pop xiz
@@ -1344,7 +1344,7 @@ Sprintf_FFixed_RoundCheck:
 	ld xwa, (xsp + 22)
 	cpib_sri 0x07, 0xe0, 0xf8, 0x34
 	jr le, Sprintf_FFixed_AfterRound
-	cps iz, 0
+	cp iz, 0:i3
 	jr ge, Sprintf_FFixed_RoundLoop
 	jr Sprintf_FFixed_AfterRound
 
@@ -1356,7 +1356,7 @@ Sprintf_FFixed_RoundLoop:
 	dec 1, iz
 	ld xwa, (xsp + 22)
 	inc_srib 1, 0x07, 0xe0, 0xf8
-	cps iz, 0
+	cp iz, 0:i3
 	jr le, Sprintf_FFixed_AfterRound
 	cpib_sri 0x07, 0xe0, 0xf8, 0x39
 	jr gt, Sprintf_FFixed_RoundCarry
@@ -1415,7 +1415,7 @@ Sprintf_FFixed_CheckPrecZero:
 
 Sprintf_FFixed_AdjustForSign:
 	ld iz, (xsp + 28)
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, Sprintf_FFixed_AdjustForSign2
 	ld wa, (xsp + 16)
 	and wa, 0x5
@@ -1456,11 +1456,11 @@ Sprintf_FFixed_PadLeftSpace:
 Sprintf_FFixed_PadLeftLoop:
 	ld wa, (xsp + 18)
 	decm 1, (xsp + 18)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_PadLeftSpace
 
 Sprintf_FFixed_EmitSign:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, Sprintf_FFixed_SignPlus
 	pushw 0x2d
 	jr Sprintf_FFixed_SignEmit
@@ -1502,7 +1502,7 @@ Sprintf_FFixed_ZeroFillBody:
 Sprintf_FFixed_ZeroFillLoop:
 	ld wa, (xsp + 18)
 	decm 1, (xsp + 18)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_ZeroFillBody
 
 Sprintf_FFixed_LeadDigit:
@@ -1552,7 +1552,7 @@ Sprintf_FFixed_IntDigitLoop:
 	jr ge, Sprintf_FFixed_IntZeroLoop
 	ld wa, (xsp + 2)
 	decm 1, (xsp + 2)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_IntDigitOutput
 	jr Sprintf_FFixed_IntZeroLoop
 
@@ -1566,7 +1566,7 @@ Sprintf_FFixed_IntZeroFill:
 Sprintf_FFixed_IntZeroLoop:
 	ld wa, (xsp + 2)
 	decm 1, (xsp + 2)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_IntZeroFill
 	ld wa, (xsp + 16)
 	bit 3, wa
@@ -1612,7 +1612,7 @@ Sprintf_FFixed_FracLeadZeroLoop:
 	jr ge, Sprintf_FFixed_FracDigits
 	ld wa, (xsp + 20)
 	decm 1, (xsp + 20)
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Sprintf_FFixed_FracLeadZeros
 
 Sprintf_FFixed_FracDigits:
@@ -1640,7 +1640,7 @@ Sprintf_FFixed_FracDigitLoop:
 	jr ge, Sprintf_FFixed_FracTrailLoop
 	ld wa, (xsp + 20)
 	decm 1, (xsp + 20)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_FracDigitOutput
 	jr Sprintf_FFixed_FracTrailLoop
 
@@ -1654,7 +1654,7 @@ Sprintf_FFixed_FracTrailZeros:
 Sprintf_FFixed_FracTrailLoop:
 	ld wa, (xsp + 20)
 	decm 1, (xsp + 20)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_FracTrailZeros
 	ld wa, (xsp + 16)
 	bit 1, wa
@@ -1671,7 +1671,7 @@ Sprintf_FFixed_PadRightSpace:
 Sprintf_FFixed_PadRightLoop:
 	ld wa, (xsp + 18)
 	decm 1, (xsp + 18)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_FFixed_PadRightSpace
 
 Sprintf_FFixed_Return:
@@ -1793,7 +1793,7 @@ Sprintf_ESci_CheckPrecZero:
 
 Sprintf_ESci_AdjustForSign:
 	ld iz, (xsp + 28)
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, Sprintf_ESci_AdjustForSign2
 	ld wa, (xsp + 16)
 	and wa, 0x5
@@ -1829,7 +1829,7 @@ Sprintf_ESci_PadLeftLoop:
 	jr gt, Sprintf_ESci_PadLeftSpace
 
 Sprintf_ESci_EmitSign:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, Sprintf_ESci_SignPlus
 	pushw 0x2d
 	jr Sprintf_ESci_SignEmit
@@ -1967,7 +1967,7 @@ Sprintf_ESci_MantDigitLoop:
 	jr ge, Sprintf_ESci_MantTrailLoop
 	ld wa, (xsp + 20)
 	decm 1, (xsp + 20)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_ESci_MantDigitOutput
 	jr Sprintf_ESci_MantTrailLoop
 
@@ -1981,7 +1981,7 @@ Sprintf_ESci_MantTrailZeros:
 Sprintf_ESci_MantTrailLoop:
 	ld wa, (xsp + 20)
 	decm 1, (xsp + 20)
-	cps wa, 0
+	cp wa, 0:i3
 	jr gt, Sprintf_ESci_MantTrailZeros
 	decm 1, (xsp + 26)
 	ld wa, (xsp + 26)
@@ -2050,7 +2050,7 @@ Sprintf_ESci_ExpLeadZeros:
 Sprintf_ESci_ExpLeadZeroLoop:
 	stw_erp WA, 0xfa
 	inc1w_erp 0xfa
-	cps wa, 3
+	cp wa, 3:i3
 	jr lt, Sprintf_ESci_ExpLeadZeros
 	jr Sprintf_ESci_ExpDigitLoop
 
@@ -2066,7 +2066,7 @@ Sprintf_ESci_ExpDigitOutput:
 	incw 1, (0x3c222:24)
 
 Sprintf_ESci_ExpDigitLoop:
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, Sprintf_ESci_ExpDigitOutput
 	ld wa, (xsp + 16)
 	bit 1, wa
@@ -2200,7 +2200,7 @@ Sprintf_GGen_DecimalExponent:
 	calr Sprintf_DecimalExponent
 	inc 2, xsp
 	ld (xsp + 4), hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr ge, Sprintf_GGen_AdjustNegExp
 	decm 1, (xsp + 4)
 
@@ -2256,7 +2256,7 @@ Sprintf_GGen_DigitPairLoop:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, Sprintf_GGen_DigitPairLoop
-	cps ix, 0
+	cp ix, 0:i3
 	jr z, Sprintf_GGen_NormalizeArray
 	ormi16 (xde), 0x10
 
@@ -2267,7 +2267,7 @@ Sprintf_GGen_NormalizeArray:
 	calr Sprintf_CountLeadingZeros
 	inc 6, xsp
 	ldiw_erp 0xfa, 0
-	cps iz, 0
+	cp iz, 0:i3
 	jr le, Sprintf_GGen_NegativeExpCheck
 	cpw (xsp + 4), 0x0
 	jr le, Sprintf_GGen_PositiveExpDone
@@ -2427,7 +2427,7 @@ Sprintf_ShiftDigitArray:
 	lds iz, 0
 	lds wa, 0
 	ld hl, (xsp + 18)
-	cps hl, 0
+	cp hl, 0:i3
 	jr le, Sprintf_Shift_SetupLoop
 
 Sprintf_Shift_BuildMask:
@@ -2441,7 +2441,7 @@ Sprintf_Shift_SetupLoop:
 	ld iz, (xsp + 20)
 	dec 1, iz
 	ld xiy, (xsp + 14)
-	cps iz, 0
+	cp iz, 0:i3
 	jr le, Sprintf_Shift_LastEntry
 	ld (xsp + 4), wa
 	ldw (xsp + 2), 0x8
@@ -2480,7 +2480,7 @@ Sprintf_Shift_ApplyCarry:
 	or (xwa), bc
 	dec 1, iz
 	dec 2, xix
-	cps iz, 0
+	cp iz, 0:i3
 	jr gt, Sprintf_Shift_Loop
 
 Sprintf_Shift_LastEntry:
@@ -2580,7 +2580,7 @@ Sprintf_Normalize_ExtractDigit:
 	add wa, wa
 	lda xbc, (0x03c284:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Sprintf_Normalize_MultiplyTen
 	pushw iz
 	pushw wa
@@ -2629,7 +2629,7 @@ Sprintf_InsertCarry_Propagate:
 Sprintf_InsertCarry_PropCheck:
 	cpib_sri 0x07, 0xe0, 0xe8, 0x0a
 	ret lt
-	cps de, 0
+	cp de, 0:i3
 	jr gt, Sprintf_InsertCarry_Propagate
 	ret
 
@@ -2665,7 +2665,7 @@ Sprintf_MulByTen_Loop:
 	ld wa, (xde)
 	mul wa, 0xa
 	ld (xde), wa
-	cps ix, 0
+	cp ix, 0:i3
 	jr z, Sprintf_MulByTen_Next
 	ld iz, ix
 	jr Sprintf_MulByTen_CarryCheck
@@ -2682,7 +2682,7 @@ Sprintf_MulByTen_CarryLoop:
 	dec 1, iz
 
 Sprintf_MulByTen_CarryCheck:
-	cps iz, 0
+	cp iz, 0:i3
 	jr le, Sprintf_MulByTen_Next
 	ld de, iz
 	exts xde
@@ -2740,7 +2740,7 @@ Sprintf_BCDMul_CarryLoop:
 Sprintf_BCDMul_Next:
 	dec 2, de
 	dec 2, xbc
-	cps de, 0
+	cp de, 0:i3
 	jr gt, Sprintf_BCDMul_CarryLoop
 	ret
 
@@ -2790,7 +2790,7 @@ Sprintf_LeadZero_CheckBit7:
 	jr lt, Sprintf_LeadZero_ShiftBody
 
 Sprintf_LeadZero_ApplyShift:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, Sprintf_LeadZero_AccumShift
 	pushw iz
 	pushm (xsp + 14)
@@ -2819,7 +2819,7 @@ Sprintf_CountTrailingZeros:
 	ld xde, (xsp + 6)
 	lds iz, 0
 	ld bc, (xsp + 10)
-	cps bc, 0
+	cp bc, 0:i3
 	jr le, Sprintf_TrailZero_CheckAllZero
 
 Sprintf_TrailZero_Loop:
@@ -2856,7 +2856,7 @@ Sprintf_TrailZero_CheckHigh:
 	jr lt, Sprintf_TrailZero_ShiftLoop
 
 Sprintf_TrailZero_ApplyShift:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, Sprintf_TrailZero_Done
 	pushw bc
 	pushw iz
@@ -3056,7 +3056,7 @@ Sprintf_StringNSearch_Copy:
 Sprintf_MemChr:
 	lds32 xhl, 0
 	ld bc, (xsp + 10)
-	cps bc, 0
+	cp bc, 0:i3
 	ret z
 	ld xhl, (xsp + 4)
 	ld wa, (xsp + 8)
@@ -3081,7 +3081,7 @@ Sprintf_StringLength:
 	inc 1, hl
 	ld bc, hl
 	lda_dri XHL, 0x07, 0xf8, 0xe4
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, Sprintf_StrLen_NotFound
 	ld wa, (xsp + 12)
 

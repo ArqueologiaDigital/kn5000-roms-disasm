@@ -2002,7 +2002,7 @@ AccPlay_CheckResumeState:
 	call CtrlPanel_SetIndicatorLED
 TempoEvt_ProcessLoop:
 	call TempoRingBuf_CheckEmpty
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, TempoEvt_ReadAndClassify
 	jp AccPlay_PostLoopCleanup
 
@@ -2217,7 +2217,7 @@ AccPlay_SyncVoiceParams:
 	inc	1, iy
 	inc	1, ix
 	dec	1, c
-	cps	c, 0
+	cp	c, 0:i3
 	jr	nz, -38
 AccPlay_SyncParamsRet:
 	ret
@@ -2307,7 +2307,7 @@ AccPlay_ProcessNoteEvent:
 	lds	bc, 5
 	calr	1983
 	ld	a, (32413:16)
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 5
 	calr	6
 	jr	3
@@ -2424,15 +2424,15 @@ AccPlay_ChannelSlotFound:
 	cp	c, a
 	jr	nc, 9
 	add	c, 96
-	cps	d, 0
+	cp	d, 0:i3
 	jr	z, 2
 	dec	1, d
 AccPlay_CalcNoteOffset:
 	sub c, a
 	ld e, c
-	cps d, 0
+	cp d, 0:i3
 	jr nz, AccPlay_WriteNoteRelease
-	cps e, 2
+	cp e, 2:i3
 	jr nc, AccPlay_WriteNoteRelease
 	ldb e, 0x2
 
@@ -2564,7 +2564,7 @@ MidiSeq_CtrlCheckType:
 MidiSeq_CheckSostenuto:
 	cp a, 0x17
 	jr nz, MidiSeq_SustainHandler
-	cps w, 4
+	cp w, 4:i3
 	jr nz, MidiSeq_SustainHandler
 	bit 6, d
 	jr z, MidiSeq_SustainHandler
@@ -2584,7 +2584,7 @@ MidiSeq_SostenutoValue:
 MidiSeq_SustainHandler:
 	cp a, 0x17
 	jr nz, MidiSeq_SustainRet
-	cps w, 4
+	cp w, 4:i3
 	jr nz, MidiSeq_SustainRet
 	bit 3, d
 	jr z, MidiSeq_SustainRet
@@ -2611,7 +2611,7 @@ AccPlay_TrackMeasureChange:
 	jr	z, 45
 	ld	hl, (32370:16)
 	inc	1, hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 2
 	inc	1, hl
 AccPlay_MeasureIncrement:
@@ -2713,7 +2713,7 @@ AccPlay_CompareReverbState:
 	cp	wa, hl
 	jr	z, 16
 	ldb	e, 0
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 2
 	ldb	e, 127
 AccPlay_SetReverbValue:
@@ -2731,7 +2731,7 @@ AccPlay_CompareChorusState:
 	cp	wa, hl
 	jr	z, 16
 	ldb	e, 0
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 2
 	ldb	e, 127
 AccPlay_SetChorusValue:
@@ -4342,13 +4342,13 @@ VocalistGrid_DispatchData:
 	ld	xbc, 31457420
 	jrl	1094
 	ld	wa, (xbc)
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	z, 33
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 22
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 11
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 37
 	ld	xwa, 15200040
 	jr	19
@@ -4551,13 +4551,13 @@ VocalistGrid_CheckDispData:
 	jrl	464	; -> 0xF73BA6
 	ld	xwa, 11528
 	call	16567398
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	z, 33	; -> 0xF73A04
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 22	; -> 0xF739FD
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 11	; -> 0xF739F6
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 37	; -> 0xF73A14
 	ld	xwa, 15200216
 	jr	19	; -> 0xF73A09
@@ -4681,7 +4681,7 @@ VocalistGrid_CheckDispData:
 	ld_rrl	xwa, xde, bc
 	call	16567398
 	ld	xwa, 15200322
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 5	; -> 0xF73B8D
 	ld	xwa, 15200316
 	push	xwa
@@ -4955,7 +4955,7 @@ MainVocalistPage1OKFunc:
 	ld de, wa
 	extz wa
 	ld bc, wa
-	cps de, 5
+	cp de, 5:i3
 	jr ugt, VocalistPage_Handler
 	add de, de
 	lda xix, (MidiPart_HarmLocalStr_0x24:24)
@@ -4971,7 +4971,7 @@ VocalistPage1OK_Dispatch:
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 119808
 	lds	bc, 1
@@ -5002,7 +5002,7 @@ VocalistPage1_DispatchData:
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 98304
 	lds	bc, 1
@@ -5029,7 +5029,7 @@ VocalistPage1_DispatchData:
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 101376
 	lds	bc, 1
@@ -5134,7 +5134,7 @@ RevSel_HandleDial:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, RevSel_ReturnZero
 	ld xwa, (xsp + 4)
 	ld de, wa
@@ -5220,7 +5220,7 @@ EqSel_HandleDial:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 2
+	cp wa, 2:i3
 	jr nz, RevEqFunc_ReturnZero
 	ld xwa, 0x19000b
 	ld xbc, 0x1e0006b
@@ -5331,7 +5331,7 @@ RevEqSel_HandleDial:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 3
+	cp wa, 3:i3
 	jr nz, EqFunc_ReturnZero
 	ld xwa, 0x1a000a
 	ld xbc, 0x1e0006b
@@ -5503,11 +5503,11 @@ StsAreYouSure_ReturnZero:
 
 GMOKFunc:
 	ld l, (0x0340ea:24)
-	cps l, 2
+	cp l, 2:i3
 	jr z, GMOK_ConfirmDialog
-	cps l, 1
+	cp l, 1:i3
 	jr z, GMOK_ConfirmDialog
-	cps l, 0
+	cp l, 0:i3
 	jr nz, GMOK_ReturnZero
 	calr GMYesFunc
 	jr GMOK_ReturnZero
@@ -5656,7 +5656,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	call DrawBitmapSPFast
 	addiw_da (xsp + 4), 0x38
 	inc 1, iz
-	cps iz, 5
+	cp iz, 5:i3
 	jr nc, SplitPoint_UpdateScreen
 
 SplitPoint_FillRemainingLoop:
@@ -5667,7 +5667,7 @@ SplitPoint_FillRemainingLoop:
 	call DrawBitmapSPFast
 	addiw_da (xsp + 4), 0x38
 	inc 1, iz
-	cps iz, 5
+	cp iz, 5:i3
 	jr c, SplitPoint_FillRemainingLoop
 
 SplitPoint_UpdateScreen:

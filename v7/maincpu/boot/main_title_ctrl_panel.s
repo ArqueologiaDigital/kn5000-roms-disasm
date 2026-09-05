@@ -66,13 +66,13 @@ MainTitle_EventLoop:
 	lds wa, 0
 	call SetNeedUpdate
 	call INTTR4_BytecodeSnippet
-	cps l, 0
+	cp l, 0:i3
 	jr z, MainTitle_EventLoop
 
 	call RootContext_InitEventQueue
 	call DispatchEvent
 	call PostTitle_Function
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MainTitle_EventLoopSkipInit
 
 	calr SleepMainTask
@@ -252,7 +252,7 @@ CtrlPanel_HandleSerialPort:
 	ld	xbc, 29360159
 	jrl	774
 CtrlPanel_EventType_A8:
-	cps	e, 3
+	cp	e, 3:i3
 	jrl	nz, 155
 	ld	c, (49123:16)
 	ld	a, c
@@ -276,11 +276,11 @@ CtrlPanel_EventType_AA:
 	ld	c, (49123:16)
 	ld	a, c
 	and	a, (49122:16)
-	cps	e, 1
+	cp	e, 1:i3
 	jrl	z, 501
 	cp	e, 21
 	jrl	z, 402
-	cps	e, 4
+	cp	e, 4:i3
 	jrl	z, 306
 	cp	e, 14
 	jrl	z, 153
@@ -288,7 +288,7 @@ CtrlPanel_EventType_AA:
 	jr	z, 107
 	cp	e, 15
 	jr	z, 61
-	cps	e, 5
+	cp	e, 5:i3
 	jrl	nz, 671
 	ld	a, (49123:16)
 	and	a, (49122:16)
@@ -437,7 +437,7 @@ CtrlPanel_AA_PanelEvent_15:
 	bit 5, a
 	jr z, CtrlPanel_AA_15_Release
 	call GetAprStatus_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr z, CtrlPanel_AA_15_AprInactive
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a5
@@ -454,7 +454,7 @@ CtrlPanel_AA_15_Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
 	call GetAprStatus_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr z, CtrlPanel_AA_15_ReleaseAprInactive
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6
@@ -533,7 +533,7 @@ CtrlPanel_AA_PanelEvent_11:
 	ld	xde, 10
 	jr	19
 CtrlPanel_AA_11_Release:
-	cps c, 0
+	cp c, 0:i3
 	jr z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000a6

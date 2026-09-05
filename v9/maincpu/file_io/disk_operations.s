@@ -29,7 +29,7 @@ FileCopyFunc:
 	ld (0x7f60:16), xiz
 	call GetCurrentFileIndex
 	ld (0x7f64:16), hl
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FCopy_ScrollNeg_Reset
 	cp hl, 0x13
 	jr ge, FCopy_ScrollDown_Clamp
@@ -71,7 +71,7 @@ FCopy_HandleScroll:
 	ld de, wa
 	cp xbc, 0x1c00018
 	jr nz, FCopy_ScrollUp_Adjust
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, FCopy_ScrollDown_CheckMin
 	dec 1, wa
 	ld (0x7f66:16), wa
@@ -80,7 +80,7 @@ FCopy_ScrollDown_CheckMin:
 	ld wa, (0x7f66:16)
 	cp wa, (0x7f64:16)
 	jr nz, FCopy_ScrollDown_Reload
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, FCopy_ScrollDown_RestoreOld
 	dec 1, wa
 	ld (0x7f66:16), wa
@@ -132,11 +132,11 @@ FCopy_HandleCopyContext:
 	cp xiz, 0x8
 	jrl nz, FCopy_CopyExecute
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FCopy_CopyExecute
 	ld wa, (0x7f66:16)
 	call FileIO_GetRecordFlags
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FCopy_CopyConfirm_Execute
 	cp (0x0340ea:24), 0x00
 	jr z, FCopy_CopyConfirm_Execute
@@ -240,7 +240,7 @@ FileRenameFunc:
 	cp xbc, 0x1e0003a
 	jrl nz, FRename_Return
 	call GetCurrentFileIndex
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FRename_TextChange_Error
 	lda xiz, (0x8870:16)
 	ld wa, hl
@@ -265,22 +265,22 @@ FRename_PadLoop_Advance:
 	inc 1, iy
 
 FRename_PadLoop_Cond:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, FRename_PadLoop_Fill
 	lda_dri XDE, 0x07, 0xec, 0xf4
 	ld c, (xde)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, FRename_PadLoop_CheckChar
 
 FRename_PadLoop_Fill:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, FRename_PadDone
 	ld xbc, xwa
 
 FRename_FillLoop:
 	stib_ind 0x07, 0xe4, 0xf4, 0x5f
 	inc 1, iy
-	cps iy, 6
+	cp iy, 6:i3
 	jr lt, FRename_FillLoop
 
 FRename_PadDone:
@@ -301,7 +301,7 @@ FRename_TextChange_SendApply:
 
 FRename_HandleApply:
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FRename_Return
 	ld xwa, 0x8870
 	ld xbc, (xsp + 4)
@@ -343,7 +343,7 @@ FileRenameSmfFunc:
 	cp xbc, 0x1e0003a
 	jrl nz, FRenameSmf_Return
 	call GetFirstPageBase
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FRenameSmf_TextChange_Error
 	lda xiz, (0x8870:16)
 	ld wa, hl
@@ -372,7 +372,7 @@ FRenameSmf_PadLoop_Cond:
 	jr ge, FRenameSmf_PadLoop_Fill
 	lda_dri XDE, 0x07, 0xec, 0xf4
 	ld c, (xde)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, FRenameSmf_PadLoop_CheckChar
 
 FRenameSmf_PadLoop_Fill:
@@ -459,9 +459,9 @@ FmmFormatFunc:
 
 FmmFmt_InitPhase_CheckDrive:
 	ld wa, (0x8500:16)
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, FmmFmt_InitPhase_DriveType23
-	cps wa, 3
+	cp wa, 3:i3
 	jr nz, FmmFmt_InitPhase_OtherDrive
 
 FmmFmt_InitPhase_DriveType23:
@@ -503,7 +503,7 @@ FmmFmt_HandleProgress:
 	cp xde, 0xa
 	jrl nz, FmmFmt_Return
 	ld a, c
-	cps c, 0
+	cp c, 0:i3
 	jrl nz, FmmFmt_ExecutePhase2
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -521,7 +521,7 @@ FmmFmt_HandleProgress:
 	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	cps iz, 0
+	cp iz, 0:i3
 	jr ge, FmmFmt_FormatSuccess
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -556,7 +556,7 @@ FmmFmt_FormatSuccess:
 	jr FmmFmt_Return
 
 FmmFmt_ExecutePhase2:
-	cps a, 2
+	cp a, 2:i3
 	jr nz, FmmFmt_Return
 	ld (0x7f68:16), 3
 	ld xwa, 0x7b003f
@@ -570,14 +570,14 @@ FmmFmt_ExecutePhase2:
 
 FmmFmt_HandleAbort:
 	ld e, c
-	cps c, 0
+	cp c, 0:i3
 	jr nz, FmmFmt_AbortPhase2
 	call UI_PostModeChangeEvent
 	ld (0x7f6c:16), 0
 	jr FmmFmt_Return
 
 FmmFmt_AbortPhase2:
-	cps e, 2
+	cp e, 2:i3
 	jr nz, FmmFmt_Return
 	ld (0x7f68:16), 2
 	ld xwa, 0x7b003f
@@ -645,11 +645,11 @@ FmmLoadTitleFunc:
 
 FmmLoadTtl_StateDispatch:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl z, FmmLoadTtl_StateSuccess
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, FmmLoadTtl_StateIdle
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, FmmLoadTtl_StateCancelLoad
 	cpw (0x8502:16), 0
 	jr ge, FmmLoadTtl_CheckFileHandle
@@ -765,7 +765,7 @@ FmmLoadTtl_HandleScrollNav:
 	jr lt, FmmLoadTtl_Return
 	call GetCurrentFileIndex
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, FmmLoadTtl_Return
 	cp iz, 0x13
 	jr ge, FmmLoadTtl_Return
@@ -836,7 +836,7 @@ FmmSaveTtl_SlotLoop:
 	extz wa
 	call FileIO_BuildRecordPath_Done
 	inc 1, iz
-	cps iz, 6
+	cp iz, 6:i3
 	jr lt, FmmSaveTtl_SlotLoop
 	lds wa, 6
 	call FileIO_BuildRecordPath_Return
@@ -988,13 +988,13 @@ DiskInfoFunc:
 
 DiskInfo_ReadDriveType:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, DiskInfo_ResetCapacity
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, DiskInfo_ResetCapacity
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, DiskInfo_ReadCapacity
-	cps wa, 3
+	cp wa, 3:i3
 	jr nz, DiskInfo_ZeroCapacity
 
 DiskInfo_ReadCapacity:
@@ -1091,7 +1091,7 @@ SongNameFunc:
 	jr nz, SongName_Return
 	call GetFirstPageBase
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, SongName_NoSlot
 	lds wa, 0
 	calr InitializeOperationState
@@ -1147,7 +1147,7 @@ SaveFileNameNumFunc:
 	jr nz, SaveFileNum_Return
 	call GetCurrentFileIndex
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, SaveFileNum_NoSlot
 	call FileIO_GetRecordByType
 	ld xbc, xhl
@@ -1219,22 +1219,22 @@ SaveFileName_PadLoop_Advance:
 	inc 1, iy
 
 SaveFileName_PadLoop_Cond:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, SaveFileName_PadLoop_Fill
 	lda_dri XBC, 0x07, 0xec, 0xf4
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, SaveFileName_PadLoop_CheckChar
 
 SaveFileName_PadLoop_Fill:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, SaveFileName_PadDone
 	ld xwa, xde
 
 SaveFileName_FillLoop:
 	stib_ind 0x07, 0xe0, 0xf4, 0x5f
 	inc 1, iy
-	cps iy, 6
+	cp iy, 6:i3
 	jr lt, SaveFileName_FillLoop
 
 SaveFileName_PadDone:
@@ -1267,7 +1267,7 @@ CurFileNameFunc:
 	jr nz, CurFileName_Return
 	call GetCurrentFileIndex
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, CurFileName_NoSlot
 	ld wa, iz
 	call GetFileEntryPtr

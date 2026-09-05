@@ -47,7 +47,7 @@ FP_DP_CmpAndCopy:
 	call FP_DP_CmpZero64
 	lda xbc, (xsp + 8)
 	ld xwa, (xsp + 4)
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, FP_DP_CmpAndCopy_Negate
 	call FP_DP_Raw8Copy
 	ret
@@ -217,13 +217,13 @@ VoiceFloat_CompareAndConvert:
 	lda xbc, (0x01f646:24)
 	lds de, 1
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
 	lda xwa, (xsp + 74)
 	lda xbc, (0x01f64e:24)
 	lds de, 3
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
 	lda xbc, (xsp + 74)
 	lda xwa, (xsp + 54)
@@ -240,7 +240,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
 	lda xbc, (xsp + 54)
 	lda xwa, (xsp + 18)
@@ -249,7 +249,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	lda xbc, (xsp + 74)
 	lds de, 4
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
@@ -262,12 +262,12 @@ VoiceFloat_CompareAndConvert_AltPath:
 	lda xwa, (xsp + 74)
 	lds bc, 3
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
 	lda xwa, (xsp + 66)
 	lds bc, 5
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
@@ -285,7 +285,7 @@ VoiceFloat_CompareAndConvert_AltPath2:
 	lda xbc, (xsp + 74)
 	lds de, 5
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, VoiceFloat_ConvergenceLoop
 	ld xwa, (xsp + 54)
 	cp xwa, 0x0
@@ -330,14 +330,14 @@ VoiceFloat_IterationLoop:
 	lda xwa, (xsp + 74)
 	lds bc, 2
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_LessPath
 	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
 	lda xbc, (0x00f420:24)
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_GreaterPath
 	lda xwa, (xsp + 46)
 	call FP_DP_CopyOrNegate8
@@ -371,7 +371,7 @@ VoiceFloat_IterationLoop_LargeStep:
 	ld xwa, xde
 	lds bc, 2
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_LargeStep_NegPath
 	lda xbc, (0x00f420:24)
 	lda xwa, (xsp + 46)
@@ -419,7 +419,7 @@ VoiceFloat_IterationLoop_CheckContinue:
 	lda xwa, (xsp + 74)
 	lds bc, 1
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_IterationLoop_DifferentPath
 	ld xwa, (xsp + 62)
 	lda xbc, (xsp + 46)
@@ -500,7 +500,7 @@ VoiceFloat_ConvergenceLoop_SumCheck:
 	lda xwa, (xsp + 74)
 	lds bc, 2
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_ConvergenceLoop_RangeCheck
 	ld wa, iz
 	neg wa
@@ -516,7 +516,7 @@ VoiceFloat_ConvergenceLoop_RangeCheck:
 	call FP_DP_CmpZero64
 	lda xwa, (xsp + 46)
 	lda xbc, (0x00f420:24)
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_ConvergenceLoop_NegResult
 	call FP_DP_CopyOrNegate8
 	jr VoiceFloat_ConvergenceLoop_StoreResult
@@ -580,7 +580,7 @@ VoiceFloat_MulAddVariant2:
 	lda xwa, (xsp + 60)
 	lds bc, 2
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_MulAddVariant2_AltPath
 	pushw 0x1
 	lda xbc, (xsp + 62)
@@ -809,7 +809,7 @@ VoiceFloat_BlendAndMerge_InRange:
 	lda xbc, (0x01f696:24)
 	lds de, 1
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_BlendAndMerge_Phase2
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
@@ -843,7 +843,7 @@ VoiceFloat_BlendAndMerge_Phase3:
 	lda_dri XBC, 0xFD, 0x94, 0x00
 	lds de, 4
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFloat_BlendAndMerge_Phase4
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
@@ -908,7 +908,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	lda xwa, (xsp + 76)
 	lds de, 0
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, VoiceFloat_BlendAndMerge_FinalCheck
 	lda xde, (xsp + 124)
 	ld xbc, xde
@@ -1034,7 +1034,7 @@ Int_SignedDiv_CallUnsigned:
 	pushw de
 	calr FP_UnsignedDiv
 	popw wa
-	cps w, 1
+	cp w, 1:i3
 	jr z, Int_SignedDiv_ResultCorr
 	ld xhl, xde
 	bit 0, a
@@ -1043,14 +1043,14 @@ Int_SignedDiv_CallUnsigned:
 
 ; Remainder selected: sign follows the dividend only.
 Int_SignedDiv_ResultCorr:
-	cps a, 3
+	cp a, 3:i3
 	ret z
 
 ; Negate the 64-bit result when the computed sign says so (and it is non-zero).
 Int_SignedDiv_NegResult:
 	or xhl, xhl
 	ret z
-	cps a, 0
+	cp a, 0:i3
 	ret z
 	cplw_erp 0xEE
 	cpl hl
@@ -1194,7 +1194,7 @@ FP_DP_NegMantissaLS:
 	ld xiz, xwa
 	ld xwa, xsp
 	call FP_SP_Decode
-	cps l, 0
+	cp l, 0:i3
 	jr nz, FP_DP_NegMantissaLS_Store
 	ld xhl, (xsp + 4)
 	lds32 xde, 0
@@ -1275,7 +1275,7 @@ FP_DP_NormalizeMantissa:
 	ld xiz, xwa
 	ld xwa, xsp
 	call FP_DP_Decode
-	cps l, 0
+	cp l, 0:i3
 	jr nz, FP_DP_NormalizeMantissa_Encode
 	ld xhl, (xsp + 8)
 	ld de, (xsp + 6)
@@ -1472,7 +1472,7 @@ FP_DP_ShiftDecode:
 	ld xde, (xwa)
 	cpib_erp 0xEA, 0
 	jr nz, FP_DP_ShiftDecode_Zero
-	cps de, 0
+	cp de, 0:i3
 	jr lt, FP_DP_ShiftDecode_Underflow
 	cp de, 0x1F
 	jr gt, FP_DP_ShiftDecode_Overflow
@@ -1633,7 +1633,7 @@ FP_SP_Decode:
 	sll hl, 1
 	ldb l, 0x0
 	ex8 h, l
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FP_SP_Decode_Zero
 	and de, 0x7F
 	set 7, de
@@ -2007,7 +2007,7 @@ FP_DP_FreqAdjust:
 	lds bc, 5
 	call FP_DP_CmpZero64
 	ld xix, (xsp + 14)
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, FP_DP_FreqAdjust_NonZeroExp
 	ld xwa, xix
 	lda xbc, (xsp + 18)
@@ -2532,7 +2532,7 @@ FP_DP_SubMantissa_NormLoop:
 
 ; Shift right by (bitpos - 4) with exponent correction.
 FP_DP_SubMantissa_Shift:
-	cps a, 4
+	cp a, 4:i3
 	jr lt, FP_DP_SubMantissa_ShiftLeft
 	dec 4, a
 	extz wa
@@ -2651,7 +2651,7 @@ VoicePitch_SlideEngine:
 	lda xwa, (xsp + 58)
 	lds bc, 5
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoicePitch_SlideEngine_NonZero
 	ld xwa, (xsp + 54)
 	lda xbc, (xsp + 34)
@@ -2667,7 +2667,7 @@ VoicePitch_SlideEngine_NonZero:
 	lda xbc, (0x01f6c6:24)
 	lds de, 0
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoicePitch_SlideEngine_LessPath
 	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 54)
@@ -2681,7 +2681,7 @@ VoicePitch_SlideEngine_LessPath:
 	lda xbc, (0x01f6ce:24)
 	lds de, 2
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoicePitch_SlideEngine_StartIter
 	ld xwa, (xsp + 54)
 	lda xbc, (0x01f6d6:24)
@@ -2720,7 +2720,7 @@ VoicePitch_SlideEngine_IterLoop:
 	lda xbc, (xsp + 34)
 	lds de, 5
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, VoicePitch_SlideEngine_Done
 	inc 1, iz
 	cp iz, 0x12C
@@ -2760,7 +2760,7 @@ VoiceAmp_ConvergeEngine:
 	lda xwa, (xsp + 114)
 	lds bc, 3
 	call FP_DP_CmpZero64
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceAmp_ConvergeEngine_InRange
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 110)
@@ -2849,7 +2849,7 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	lda xbc, (xsp + 88)
 	lds de, 5
 	call ToneGen_Compare_Voice
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceAmp_ConvergeEngine_IterLoop
 	lda xiz, (0x00f3d2:24)
 	ld wa, (xsp + 104)
@@ -2925,7 +2925,7 @@ DSP_VoiceRegUpdate:
 	ld wa, (xbc)
 	and wa, 0x7FF0
 	srl wa, 4
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, DSP_VoiceRegUpdate_ZeroOrMax
 	cp wa, 0x7FF
 	jr nz, DSP_VoiceRegUpdate_InRange
@@ -2966,7 +2966,7 @@ DSP_VoiceRegUpdate_InRange:
 
 ; Unbiased exponent < 0 (|x| < 1): the integer part is 0.0.
 DSP_VoiceRegUpdate_NegOffset:
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, DSP_VoiceRegUpdate_LargeOffset
 	ld xwa, (xsp + 36)
 	lda xbc, (0x01f716:24)
@@ -3014,7 +3014,7 @@ DSP_VoiceRegUpdate_ForwardScan:
 	sll a, 4
 	ld (xix + 6), a
 	lds wa, 6
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, DSP_VoiceRegUpdate_BackScan
 
 ; Zero the bytes above the retained integer bits.
@@ -3105,7 +3105,7 @@ __jrt_nop_03EA0E:
 FP_DP_CopyDispatch:
 	bitm 0, (xbc + 2)
 	ret nz
-	cps d, 0
+	cp d, 0:i3
 	jr nz, FP_DP_Copy3Words
 	ld xhl, (xbc)
 	ld xde, (xbc + 4)
@@ -3137,7 +3137,7 @@ FP_SP_DecodeToInt:
 	ld xde, (xwa)
 	cpib_erp 0xEA, 0
 	jr nz, FP_SP_DecodeToInt_NaN
-	cps de, 0
+	cp de, 0:i3
 	jr lt, FP_SP_DecodeToInt_Underflow
 	cp de, 0x1F
 	jr gt, FP_SP_DecodeToInt_Overflow
@@ -3224,7 +3224,7 @@ VoiceFreq_EnvelopeStep:
 	lds bc, 5
 	call FP_DP_CmpZero64
 	ld xde, (xsp + 22)
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, VoiceFreq_EnvelopeStep_InRange
 	lda xbc, (0x01f71e:24)
 	ld xwa, xde
@@ -3281,9 +3281,9 @@ VoiceFreq_EnvelopeStep_NibbleAdjust:
 	add wa, iy
 	ld iy, wa
 	lds iz, 0
-	cps bc, 0
+	cp bc, 0:i3
 	jr le, VoiceFreq_EnvelopeStep_DecCheck
-	cps bc, 0
+	cp bc, 0:i3
 	jr le, VoiceFreq_EnvelopeStep_StoreResult
 
 ; n > 0: increment the biased exponent once per pass, saturating at 0x7FF with ERANGE.
@@ -3318,7 +3318,7 @@ VoiceFreq_EnvelopeStep_IncStep:
 
 ; n == 0: nothing to do.
 VoiceFreq_EnvelopeStep_DecCheck:
-	cps bc, 0
+	cp bc, 0:i3
 	jr ge, VoiceFreq_EnvelopeStep_StoreResult
 
 ; n < 0: decrement the biased exponent, flushing to 0.0 with ERANGE at 0 (0x01F72E).
@@ -3698,7 +3698,7 @@ __jrt_nop_03EE42:
 FP_DP_NegDispatch:
 	bitm 0, (xbc + 2)
 	ret nz
-	cps d, 0
+	cp d, 0:i3
 	jr nz, FP_DP_Neg3Words
 	ld xhl, (xbc)
 	ld xde, (xbc + 4)

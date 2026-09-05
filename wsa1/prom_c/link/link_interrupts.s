@@ -65,7 +65,7 @@ INT0_HANDLER:
 	extz bc
 	extz xbc
 	sub bc, 0x00e1
-	cps bc, 6
+	cp bc, 6:i3
 	jrl ugt, (0x00F99CCF - 0x00F99BE9)
 	sll bc, 2
 	add xbc, 0x00F99BF6

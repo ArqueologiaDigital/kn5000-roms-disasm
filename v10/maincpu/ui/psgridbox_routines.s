@@ -117,7 +117,7 @@ PsGridBox_ShowHide_CountLoop:
 	lda xwa, (xsp + 42)
 	add xwa, xbc
 	ld a, (xwa)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsGridBox_ShowHide_CountPipe
 	lda_dri XBC, 0xfd, 0x3e, 0x01
 	ld XWA, (xsp + 0x014e)
@@ -169,7 +169,7 @@ PsGridBox_ShowHide_ScanLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsGridBox_ShowHide_ScanPipe
 
 PsGridBox_ShowHide_CalcWidth:
@@ -245,7 +245,7 @@ PsGridBox_ShowHide_RowLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsGridBox_ShowHide_RowPipe
 
 PsGridBox_ShowHide_ClassifyCell:
@@ -452,7 +452,7 @@ PsGridBox_Confirm_ColLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsGridBox_Confirm_ColPipe
 
 PsGridBox_Confirm_DrawCol:
@@ -543,7 +543,7 @@ PsGridBox_Confirm_RowLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsGridBox_Confirm_RowPipe
 
 PsGridBox_Confirm_DrawRow:

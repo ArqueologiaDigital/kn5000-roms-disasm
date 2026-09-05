@@ -9,9 +9,9 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	ld xwa, (xwa + 0x0e88)             ; e3 e1 88 0e 20
 	ld xix, (xwa + 0x08)				; a8 08 24
 	call (xix)					; b4 e8
-	cps l, 3					; cf db
+	cp l, 3:i3					; cf db
 	jr z, .Lsd_status_ok				; 66 05
-	cps l, 2					; cf da
+	cp l, 2:i3					; cf da
 	jrl nz, .Lsd_not_ready			; 7e 49 02
 .Lsd_status_ok:
 	; Register event 0xD2 via vtable 0x0124
@@ -128,7 +128,7 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	ld xde, (xde + 0x0e88)             ; e3 e9 88 0e 22
 	ld_sril xix, (xde + 0x0098)             ; e3 e9 98 00 24
 	call (xix)					; b4 e8
-	cps hl, 0					; db d8
+	cp hl, 0:i3					; db d8
 	jr z, .Lsd_retry				; 66 a7
 	; Cleanup: call via 0x0e88.0x009c
 	ld xwa, xiz					; ee 88
@@ -707,11 +707,11 @@ HDAE5000_HDAETitleFunc:
 	; === Case 9: check cylinder count, set disk capacity ===
 .Lri_case9:					; 0x283649
 	ld a, (0x229da9:24); c2 a9 9d 22 21 — ld a, (0x229da9)
-	cps a, 3				; c9 db
+	cp a, 3:i3				; c9 db
 	jr z, .Lri_case9_cyl3			; 66 xx
-	cps a, 2				; c9 da
+	cp a, 2:i3				; c9 da
 	jr z, .Lri_case9_cyl2			; 66 xx
-	cps a, 1				; c9 d9
+	cp a, 1:i3				; c9 d9
 	jrl nz, .Lri_done			; 7e xx xx
 	ld xwa, 0x007f0018			; 40 18 00 7f 00
 	ld (0x23a09a:24), xwa; f2 9a a0 23 60
@@ -2965,26 +2965,26 @@ HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
 	; --- Parameter validation ---
 	cp a, 0x10			; A must be < 16
 	jr nc, .Lwr_exit		; if A >= 16, bail out
-	cps l, 1			; L must be <= 1
+	cp l, 1:i3			; L must be <= 1
 	jr ugt, .Lwr_exit		; if L > 1, bail out
-	cps e, 2			; E must be <= 2
+	cp e, 2:i3			; E must be <= 2
 	jr ugt, .Lwr_exit		; if E > 2, bail out
 	; --- Fill parameter blocks ---
 	ld (xsp + 5), a			; store register index at offset 5
 	ld (xsp + 1), a			; store register index at offset 1
-	cps l, 0			; check bank
+	cp l, 0:i3			; check bank
 	jr nz, .Lwr_bank1
 	ld (xsp + 7), 0x01		; bank 0: store 0x01 at offset 7
 	jr t, .Lwr_mode
 .Lwr_bank1:
 	ld (xsp + 7), 0x20		; bank 1: store 0x20 at offset 7
 .Lwr_mode:
-	cps e, 0			; check mode
+	cp e, 0:i3			; check mode
 	jr nz, .Lwr_mode1
 	ld (xsp + 3), 0x00		; mode 0: store 0x00 at offset 3
 	jr t, .Lwr_call
 .Lwr_mode1:
-	cps e, 1			; mode 1?
+	cp e, 1:i3			; mode 1?
 	jr nz, .Lwr_mode2
 	ld (xsp + 3), 0x01		; mode 1: store 0x01 at offset 3
 	jr t, .Lwr_call
@@ -3043,13 +3043,13 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	ld (0x23a0a4:24), 0x00; (0x23A0A4) = 0
 .LHD_SC__dispatch:
 	ld a, (0x22b2f4:24); re-read state byte
-	cps a, 3
+	cp a, 3:i3
 	jr z, .LHD_SC__state3
-	cps a, 2
+	cp a, 2:i3
 	jr z, .LHD_SC__state2
-	cps a, 1
+	cp a, 1:i3
 	jr z, .LHD_SC__state1
-	cps a, 0
+	cp a, 0:i3
 	ret z
 	ret
 .LHD_SC__state1:			; state=1: process A0A0, copy to A0A2
@@ -5128,7 +5128,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	push xwa
 	call HDAE5000_Code_Remainder			; string compare
 	inc 0, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, .LCHSC__try2
 	lds iz, 2			; match pattern 1 → IZ=2
 	jr t, .LCHSC__clear
@@ -5139,7 +5139,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	push xwa
 	call HDAE5000_Code_Remainder			; string compare
 	inc 0, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, .LCHSC__no_match
 	lds iz, 3			; match pattern 2 → IZ=3
 	jr t, .LCHSC__clear
@@ -5295,11 +5295,11 @@ HDAE5000_AttenHDFormatSwCatch:
 	; Post-switch: dispatch on result
 .LCHSC__post_switch:
 	ld wa, (xsp + 0x04)
-	cps wa, 3
+	cp wa, 3:i3
 	jrl z, .LCHSC__res3
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, .LCHSC__res2
-	cps wa, 1
+	cp wa, 1:i3
 	jrl nz, .LCHSC__done
 	; Result 1: setup with 0x007f02cb + two dialog boxes
 	ld xwa, (0x23a1a2:24)
@@ -5343,7 +5343,7 @@ HDAE5000_AttenHDFormatSwCatch:
 	calr HDAE5000_Wait_Callback_Loop
 	lds wa, 1
 	call HDAE5000_Display_Init
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, .LCHSC__res2_err
 	; Success: display + FS read
 	ld xwa, (0x23a1a2:24)
@@ -5476,7 +5476,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ld hl, (xsp + 0x06)		; HL = param from stack
 	ld de, wa			; DE = input digit
 	ld wa, (0x22aa5c:24); load current state
-	cps wa, 5			; state >= 6? (unsigned)
+	cp wa, 5:i3			; state >= 6? (unsigned)
 	jrl ugt, .LHD_SR__apply	; yes → apply values
 	add wa, wa			; state * 2
 	lda xix, (0x2e2cf2:24); jump table base
@@ -5494,7 +5494,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ldw de, 0x0064			; clamp to 100
 	jr t, .LHD_SR__apply
 .LHD_SR__c1_lo:
-	cps de, 0			; DE > 0?
+	cp de, 0:i3			; DE > 0?
 	jr gt, .LHD_SR__apply
 	lds de, 0			; clamp to 0
 	jr t, .LHD_SR__apply
@@ -5507,7 +5507,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ldw de, 0x0078			; clamp to 120
 	jr t, .LHD_SR__apply
 .LHD_SR__c2_lo:
-	cps de, 1			; DE > 1?
+	cp de, 1:i3			; DE > 1?
 	jr gt, .LHD_SR__apply
 	lds de, 0
 	jr t, .LHD_SR__apply
@@ -5518,7 +5518,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ldw de, 0x0078
 	jr t, .LHD_SR__apply
 .LHD_SR__c3_lo:
-	cps de, 0
+	cp de, 0:i3
 	jr gt, .LHD_SR__apply
 	lds de, 1
 	jr t, .LHD_SR__apply
@@ -5531,7 +5531,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ldw bc, 0x000a
 	jr t, .LHD_SR__apply
 .LHD_SR__c4_lo:
-	cps bc, 0
+	cp bc, 0:i3
 	jr gt, .LHD_SR__apply
 	lds bc, 0
 	jr t, .LHD_SR__apply
@@ -5542,7 +5542,7 @@ HDAE5000_HD_Sector_Read:	; 0x286A28 (1064 bytes)
 	ldw bc, 0x0010
 	jr t, .LHD_SR__apply
 .LHD_SR__c5_lo:
-	cps bc, 0
+	cp bc, 0:i3
 	jr gt, .LHD_SR__apply
 	lds bc, 1
 .LHD_SR__apply:				; store results
@@ -5871,15 +5871,15 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 
 	; --- Switch on state variable at 0x22AA5C ---
 	ld wa, (0x22aa5c:24); d2 5c aa 22 20 — ld wa, (0x22aa5c)
-	cps wa, 4				; d8 dc
+	cp wa, 4:i3				; d8 dc
 	jrl z, .Lsw_case4			; 76 xx xx
-	cps wa, 3				; d8 db
+	cp wa, 3:i3				; d8 db
 	jrl z, .Lsw_case3			; 76 xx xx
-	cps wa, 2				; d8 da
+	cp wa, 2:i3				; d8 da
 	jr z, .Lsw_case2			; 66 xx
-	cps wa, 1				; d8 d9
+	cp wa, 1:i3				; d8 d9
 	jr z, .Lsw_case1			; 66 xx
-	cps wa, 0				; d8 d8
+	cp wa, 0:i3				; d8 d8
 	jrl nz, .Lsw_exit			; 7e xx xx
 
 	; === Case 0: initialize cylinder from BC*100, set state=1 ===
@@ -5949,7 +5949,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 
 	; --- After all cases: check result ---
 	ld	wa, qiz
-	cps wa, 0				; d8 d8
+	cp wa, 0:i3				; d8 d8
 	jrl nz, .Lsw_exit			; 7e xx xx — error → exit
 
 	; --- Compute sector address and look up in table ---

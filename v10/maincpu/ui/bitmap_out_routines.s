@@ -66,7 +66,7 @@ BitMapOut_BlitComplete:
 
 BitMapOut_ByteData_RenderA:
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 	call	GetTitleNow
 	cp	xhl, 0x01a000f6
@@ -76,7 +76,7 @@ BitMapOut_ByteData_RenderA:
 	nop
 	ret	nz
 	calr	605
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	a, (0xc07e:16)
 	cp	a, 13
@@ -114,7 +114,7 @@ BitMapOut_ByteData_RenderA:
 BitMapOut_ByteData_RenderB:
 	dec	6, xsp
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 158
 	call	GetTitleNow
 	cp	xhl, 0x01a000f6
@@ -128,7 +128,7 @@ BitMapOut_ByteData_RenderB:
 	nop
 	jr	nz, 127
 	calr	429
-	cps	l, 0
+	cp	l, 0:i3
 	jr	nz, 120
 	call	GetTitleNow
 	cp	xhl, 0x01a000e8
@@ -177,7 +177,7 @@ BitMapOut_ByteData_RenderC:
 BitMapOut_ByteData_RenderD:
 	dec	6, xsp
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 120
 	call	GetTitleNow
 	.long DrawbarSlider_ConfigData
@@ -226,14 +226,14 @@ BitMapOut_ByteData_RenderD:
 	inc	6, xsp
 	ret
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 	.byte 0xc1
 	jrl	pl, 16320
 	nop
 	ret	nz
 	calr	146
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
@@ -247,7 +247,7 @@ BitMapOut_ByteData_RenderD:
 	ret
 BitMapOut_ByteData_RenderE:
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 	.byte 0xc1
 	jrl	pl, 16320
@@ -258,7 +258,7 @@ BitMapOut_ByteData_RenderE:
 	popw	wa
 	ret	nz
 	calr	78
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	call	GetTitleNow
 	cp	xhl, 0x01a000e9
@@ -298,11 +298,11 @@ BitMapOut_DecrementTimer:
 	cp xhl, 0x1a000ef
 	jr z, BitMapOut_SetDefaultTimer
 	ld a, (0x8d3c:16)
-	cps a, 0
+	cp a, 0:i3
 	ret z
 	dec 1, a
 	ld (0x8d3c:16), a
-	cps a, 0
+	cp a, 0:i3
 	ret nz
 	lds32 xwa, 3
 	call SndParam_LookupReadOnly
@@ -358,7 +358,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 14
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
@@ -393,13 +393,13 @@ BitMapOut_ByteData_PresetCopy:
 	dec1b_erp 251
 	ld a, (49279:16)
 	res	7, a
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 31
 	ld	xwa, 769
 	call	SndParam_LookupReadOnly
 	stb_erp a, 251
 	extz	wa
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 5
 	calr	497
 	jr	8
@@ -653,7 +653,7 @@ BitMapOut_Snapshot_Execute:
 	call SndParam_LookupReadOnly
 	ld a, (xsp)
 	extz wa
-	cps hl, 1
+	cp hl, 1:i3
 	jr nz, BitMapOut_Snapshot_RestoreFull
 	calr BitMapOut_RestoreVoiceFields
 	jr BitMapOut_Snapshot_PostProcess
@@ -684,7 +684,7 @@ BitMapOut_Snapshot_PostProcess:
 BitMapOut_Snapshot_CheckActive:
 	ld xwa, 0x302
 	call SndParam_LookupReadOnly
-	cps hl, 1
+	cp hl, 1:i3
 	jr nz, BitMapOut_Snapshot_SetFlags
 	bit 6, (0xfd9e:16)
 	call z, (MidiSysEx_SendAllParams:24)
@@ -978,7 +978,7 @@ BitMapOut_RestoreFull_FieldLoop:
 	lds bc, 0
 	stb_erp E, 0xe6
 	extz de
-	cps de, 0
+	cp de, 0:i3
 	jr ule, BitMapOut_RestoreFull_FieldDone
 
 BitMapOut_RestoreFull_CopyField:
@@ -2828,13 +2828,13 @@ BitMapOut_DeltaEncode_TypeDefault:
 	ld de, (xsp + 8)
 	extz xde
 	add xde, xix
-	cps c, 0
+	cp c, 0:i3
 	jrl z, BitMapOut_DeltaEncode_TypeDefaultC
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xiz, 0x3c8e4
 	add xiz, xwa
-	cps c, 1
+	cp c, 1:i3
 	jr z, BitMapOut_DeltaEncode_TypeDefaultB
 	ld wa, hl
 	inc 1, hl
@@ -2992,14 +2992,14 @@ BitMapOut_DeltaEncode_Type48Handler:
 	extz xwa
 	add xwa, xix
 	ld (xsp + 12), xwa
-	cps c, 0
+	cp c, 0:i3
 	jrl z, BitMapOut_DeltaEncode_Type48End
 	ld iy, (xsp + 16)
 	extz xiy
 	ld xwa, 0x3c8e4
 	add xwa, xiy
 	ld (xsp + 8), xwa
-	cps c, 1
+	cp c, 1:i3
 	jr z, BitMapOut_DeltaEncode_Type48Loop
 	ld wa, hl
 	inc 1, hl
@@ -3192,9 +3192,9 @@ BitMapOut_DeltaEncode_Type90Handler:
 	ld ix, de
 	extz xix
 	add xix, (xsp + 4)
-	cps c, 0
+	cp c, 0:i3
 	jrl z, BitMapOut_DeltaEncode_Type90Loop
-	cps c, 1
+	cp c, 1:i3
 	jr z, BitMapOut_DeltaEncode_Type90PartB
 	ld iz, hl
 	inc 1, hl
@@ -3629,9 +3629,9 @@ BitMapOut_ByteData_RenderState:
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
 	and	a, 3
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 29
-	cps	a, 2
+	cp	a, 2:i3
 	jr	nz, 48
 	calr	65468
 	ldb_erp l, 251
@@ -3694,15 +3694,15 @@ BitMapOut_ByteData_RenderState:
 BitMapOut_ByteData_DisplayUpdate:
 	push xiz
 	ld a, (49277:16)
-	cps	a, 1
+	cp	a, 1:i3
 	jr	nz, 107
 	ld	a, (0xc07f:16)
 	res	7, a
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 25
 	ld	xwa, 768
 	call	SndParam_LookupReadOnly
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 12
 	dec	1, l
 	srl	l, 3
@@ -3736,7 +3736,7 @@ BitMapOut_ByteData_DisplayUpdate:
 BitMapOut_UpdateDisplayWidget:
 	push xiz
 	ld xiz, xbc
-	cps a, 0
+	cp a, 0:i3
 	jr nz, BitMapOut_UpdateWidget_CheckType
 	pushw 0x10
 	pushw 0xeb
@@ -3765,7 +3765,7 @@ BitMapOut_UpdateWidget_TypeA:
 	ret
 
 BitMapOut_UpdateWidget_TypeB:
-	cps a, 0
+	cp a, 0:i3
 	ret z
 	dec 1, a
 	extz wa
@@ -3857,7 +3857,7 @@ BitMapOut_UpdateWidget_Done:
 	ret
 	ret
 	extz	wa
-	cps	bc, 0
+	cp	bc, 0:i3
 	.byte 0xf2
 	scc16	pl, wa
 	swi	4
@@ -3869,7 +3869,7 @@ BitMapOut_UpdateWidget_Done:
 	swi	2
 	.byte 0x04
 	ld	(xsp+2), a
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	ge, 11
 	ld	a, (xsp+2)
 	extz	wa
@@ -3933,7 +3933,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 BitMapOut_ApplyPatch_Execute:
 	lds iz, 0
 	ldib_erp 0xfb, 0
-	cps a, 0
+	cp a, 0:i3
 	jr ule, BitMapOut_ApplyPatch_Store
 
 BitMapOut_ApplyPatch_Loop:

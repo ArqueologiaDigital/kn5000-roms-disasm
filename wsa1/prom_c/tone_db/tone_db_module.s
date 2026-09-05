@@ -430,7 +430,7 @@ ToneDB_ResolveWaveSelectRecord__FB833A:
 	jr ToneDB_ResolveWaveSelectRecord__FB8355                      ; FB833A  jr T,0xfb8355
 ToneDB_ResolveWaveSelectRecord__FB833C:
 	ld	bc, (xiz-30)                            ; FB833C  ld BC,(XIZ+0xe2)
-	cps	bc, 0                                  ; FB833F  cp BC,0
+	cp	bc, 0:i3                                  ; FB833F  cp BC,0
 	jr z, ToneDB_ResolveWaveSelectRecord__FB82ED                   ; FB8341  jr Z,0xfb82ed
 	cp	bc, 16                                  ; FB8343  cp BC,0x0010
 	jr z, ToneDB_ResolveWaveSelectRecord__FB82ED                   ; FB8347  jr Z,0xfb82ed
@@ -492,7 +492,7 @@ ToneDB_ResolveWaveSelectRecord__FB83EF:
 	jr ToneDB_ResolveWaveSelectRecord__FB840C                      ; FB83EF  jr T,0xfb840c
 ToneDB_ResolveWaveSelectRecord__FB83F1:
 	ld	bc, (xiz-32)                            ; FB83F1  ld BC,(XIZ+0xe0)
-	cps	bc, 0                                  ; FB83F4  cp BC,0
+	cp	bc, 0:i3                                  ; FB83F4  cp BC,0
 	jrl z, ToneDB_ResolveWaveSelectRecord__FB8366                  ; FB83F6  jrl Z,0xfb8366
 	cp	bc, 64                                  ; FB83F9  cp BC,0x0040
 	jr z, ToneDB_ResolveWaveSelectRecord__FB8395                   ; FB83FD  jr Z,0xfb8395
@@ -1161,7 +1161,7 @@ ToneStage_SwitchToPart__FB8740:
 	jr ToneStage_SwitchToPart__FB875B                      ; FB8740  jr T,0xfb875b
 ToneStage_SwitchToPart__FB8742:
 	ld	bc, (xiz-16)                            ; FB8742  ld BC,(XIZ+0xf0)
-	cps	bc, 0                                  ; FB8745  cp BC,0
+	cp	bc, 0:i3                                  ; FB8745  cp BC,0
 	jr z, ToneStage_SwitchToPart__FB8728                   ; FB8747  jr Z,0xfb8728
 	cp	bc, 64                                  ; FB8749  cp BC,0x0040
 	jr z, ToneStage_SwitchToPart__FB8734                   ; FB874D  jr Z,0xfb8734
@@ -1411,7 +1411,7 @@ ToneStage_SwitchToPart__FB89A2:
 	jr ToneStage_SwitchToPart__FB89F3                      ; FB89D4  jr T,0xfb89f3
 ToneStage_SwitchToPart__FB89D6:
 	ld	bc, (xiz-18)                            ; FB89D6  ld BC,(XIZ+0xee)
-	cps	bc, 0                                  ; FB89D9  cp BC,0
+	cp	bc, 0:i3                                  ; FB89D9  cp BC,0
 	jrl z, ToneStage_SwitchToPart__FB8779                  ; FB89DB  jrl Z,0xfb8779
 	cp	bc, 64                                  ; FB89DE  cp BC,0x0040
 	jrl z, ToneStage_SwitchToPart__FB8779                  ; FB89E2  jrl Z,0xfb8779
@@ -1973,7 +1973,7 @@ sub_FB8CEC__FB8E71:
 	jr sub_FB8CEC__FB8E88                      ; FB8E71  jr T,0xfb8e88
 sub_FB8CEC__FB8E73:
 	ld	bc, (xiz-12)                            ; FB8E73  ld BC,(XIZ+0xf4)
-	cps	bc, 0                                  ; FB8E76  cp BC,0
+	cp	bc, 0:i3                                  ; FB8E76  cp BC,0
 	jrl z, sub_FB8CEC__FB8DA6                  ; FB8E78  jrl Z,0xfb8da6
 	cp	bc, 0x80                                ; FB8E7B  cp BC,0x0080
 	jr z, sub_FB8CEC__FB8E0D                   ; FB8E7F  jr Z,0xfb8e0d
@@ -2172,7 +2172,7 @@ sub_FB8CEC__FB9090:
 	jr sub_FB8CEC__FB90AF                      ; FB9090  jr T,0xfb90af
 sub_FB8CEC__FB9092:
 	ld	bc, (xiz-14)                            ; FB9092  ld BC,(XIZ+0xf2)
-	cps	bc, 0                                  ; FB9095  cp BC,0
+	cp	bc, 0:i3                                  ; FB9095  cp BC,0
 	jrl z, sub_FB8CEC__FB8F1E                  ; FB9097  jrl Z,0xfb8f1e
 	cp	bc, 64                                  ; FB909A  cp BC,0x0040
 	jrl z, sub_FB8CEC__FB8FD7                  ; FB909E  jrl Z,0xfb8fd7
@@ -3758,7 +3758,7 @@ sub_FB9B69__FB9E2D:
 	jr sub_FB9B69__FB9E47                      ; FB9E36  jr T,0xfb9e47
 sub_FB9B69__FB9E38:
 	ld	bc, (xiz-70)                            ; FB9E38  ld BC,(XIZ+0xba)
-	cps	bc, 0                                  ; FB9E3B  cp BC,0
+	cp	bc, 0:i3                                  ; FB9E3B  cp BC,0
 	jrl z, sub_FB9B69__FB9C06                  ; FB9E3D  jrl Z,0xfb9c06
 	cp	bc, 24                                  ; FB9E40  cp BC,0x0018
 	jrl z, sub_FB9B69__FB9D71                  ; FB9E44  jrl Z,0xfb9d71
@@ -4215,9 +4215,9 @@ sub_FB9B69__FBA242:
 	jr sub_FB9B69__FBA361                      ; FBA32F  jr T,0xfba361
 sub_FB9B69__FBA331:
 	ld	bc, (xiz-72)                            ; FBA331  ld BC,(XIZ+0xb8)
-	cps	bc, 0                                  ; FBA334  cp BC,0
+	cp	bc, 0:i3                                  ; FBA334  cp BC,0
 	jrl z, sub_FB9B69__FB9EEE                  ; FBA336  jrl Z,0xfb9eee
-	cps	bc, 4                                  ; FBA339  cp BC,4
+	cp	bc, 4:i3                                  ; FBA339  cp BC,4
 	jrl z, sub_FB9B69__FB9FDD                  ; FBA33B  jrl Z,0xfb9fdd
 	cp	bc, 8                                   ; FBA33E  cp BC,0x0008
 	jrl z, sub_FB9B69__FBA0B8                  ; FBA342  jrl Z,0xfba0b8
@@ -4522,7 +4522,7 @@ sub_FB9B69__FBA68F:
 	jr sub_FB9B69__FBA6A0                      ; FBA68F  jr T,0xfba6a0
 sub_FB9B69__FBA691:
 	ld	bc, (xiz-74)                            ; FBA691  ld BC,(XIZ+0xb6)
-	cps	bc, 0                                  ; FBA694  cp BC,0
+	cp	bc, 0:i3                                  ; FBA694  cp BC,0
 	jrl z, sub_FB9B69__FBA48C                  ; FBA696  jrl Z,0xfba48c
 	cp	bc, 24                                  ; FBA699  cp BC,0x0018
 	jrl z, sub_FB9B69__FBA5C4                  ; FBA69D  jrl Z,0xfba5c4
@@ -4882,9 +4882,9 @@ sub_FB9B69__FBA9A2:
 	jr sub_FB9B69__FBAA9D                      ; FBAA79  jr T,0xfbaa9d
 sub_FB9B69__FBAA7B:
 	ld	bc, (xiz-76)                            ; FBAA7B  ld BC,(XIZ+0xb4)
-	cps	bc, 0                                  ; FBAA7E  cp BC,0
+	cp	bc, 0:i3                                  ; FBAA7E  cp BC,0
 	jrl z, sub_FB9B69__FBA737                  ; FBAA80  jrl Z,0xfba737
-	cps	bc, 4                                  ; FBAA83  cp BC,4
+	cp	bc, 4:i3                                  ; FBAA83  cp BC,4
 	jrl z, sub_FB9B69__FBA82B                  ; FBAA85  jrl Z,0xfba82b
 	cp	bc, 8                                   ; FBAA88  cp BC,0x0008
 	jrl z, sub_FB9B69__FBA91E                  ; FBAA8C  jrl Z,0xfba91e
@@ -5076,7 +5076,7 @@ ToneStage_EnsurePartLoaded__FBABBF:
 	jr ToneStage_EnsurePartLoaded__FBAC20                      ; FBAC02  jr T,0xfbac20
 ToneStage_EnsurePartLoaded__FBAC04:
 	ld	bc, (xiz-12)                            ; FBAC04  ld BC,(XIZ+0xf4)
-	cps	bc, 0                                  ; FBAC07  cp BC,0
+	cp	bc, 0:i3                                  ; FBAC07  cp BC,0
 	jrl z, ToneStage_EnsurePartLoaded__FBAB79                  ; FBAC09  jrl Z,0xfbab79
 	cp	bc, 64                                  ; FBAC0C  cp BC,0x0040
 	jrl z, ToneStage_EnsurePartLoaded__FBAB79                  ; FBAC10  jrl Z,0xfbab79
@@ -6396,7 +6396,7 @@ sub_FBB4BF__FBB541:
 sub_FBB4BF__FBB543:
 	sub	xbc, xbc                               ; FBB543  sub XBC,XBC
 	ld	bc, (xiz-2)                             ; FBB545  ld BC,(XIZ+0xfe)
-	cps	bc, 7                                  ; FBB548  cp BC,7
+	cp	bc, 7:i3                                  ; FBB548  cp BC,7
 	jr ugt, sub_FBB4BF__FBB579                 ; FBB54A  jr UGT,0xfbb579
 	sll	bc, 2                                  ; FBB54C  sll 0x02,BC
 	add	xbc, 0xFBB559                          ; FBB54F  add XBC,0x00fbb559
@@ -6513,7 +6513,7 @@ sub_FBB57C__FBB60A:
 sub_FBB57C__FBB60C:
 	sub	xbc, xbc                               ; FBB60C  sub XBC,XBC
 	ld	bc, (xiz-2)                             ; FBB60E  ld BC,(XIZ+0xfe)
-	cps	bc, 7                                  ; FBB611  cp BC,7
+	cp	bc, 7:i3                                  ; FBB611  cp BC,7
 	jr ugt, sub_FBB57C__FBB642                 ; FBB613  jr UGT,0xfbb642
 	sll	bc, 2                                  ; FBB615  sll 0x02,BC
 	add	xbc, 0xFBB622                          ; FBB618  add XBC,0x00fbb622
@@ -6622,7 +6622,7 @@ sub_FBB645__FBB6BD:
 	sub	xbc, xbc                               ; FBB6BD  sub XBC,XBC
 	ld	bc, (xiz-2)                             ; FBB6BF  ld BC,(XIZ+0xfe)
 	dec	4, bc                                  ; FBB6C2  dec 4,BC
-	cps	bc, 7                                  ; FBB6C4  cp BC,7
+	cp	bc, 7:i3                                  ; FBB6C4  cp BC,7
 	jr ugt, sub_FBB645__FBB6F5                 ; FBB6C6  jr UGT,0xfbb6f5
 	sll	bc, 2                                  ; FBB6C8  sll 0x02,BC
 	add	xbc, 0xFBB6D5                          ; FBB6CB  add XBC,0x00fbb6d5
@@ -6715,11 +6715,11 @@ sub_FBB6F8__FBB751:
 	jr sub_FBB6F8__FBB762                      ; FBB751  jr T,0xfbb762
 sub_FBB6F8__FBB753:
 	ld	bc, (xiz-2)                             ; FBB753  ld BC,(XIZ+0xfe)
-	cps	bc, 4                                  ; FBB756  cp BC,4
+	cp	bc, 4:i3                                  ; FBB756  cp BC,4
 	jr z, sub_FBB6F8__FBB71B                   ; FBB758  jr Z,0xfbb71b
-	cps	bc, 5                                  ; FBB75A  cp BC,5
+	cp	bc, 5:i3                                  ; FBB75A  cp BC,5
 	jr z, sub_FBB6F8__FBB71B                   ; FBB75C  jr Z,0xfbb71b
-	cps	bc, 7                                  ; FBB75E  cp BC,7
+	cp	bc, 7:i3                                  ; FBB75E  cp BC,7
 	jr z, sub_FBB6F8__FBB72A                   ; FBB760  jr Z,0xfbb72a
 sub_FBB6F8__FBB762:
 	unlk32 xiz                                 ; FBB762  unlk XIZ
@@ -7831,7 +7831,7 @@ sub_FBC10A__FBC197:
 	ld	xbc, (xiz-4)                            ; FBC197  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+54)                             ; FBC19A  ld A,(XBC+0x36)
 	and	a, 7                                   ; FBC19D  and A,0x07
-	cps	a, 5                                   ; FBC1A0  cp A,5
+	cp	a, 5:i3                                   ; FBC1A0  cp A,5
 	jr nz, sub_FBC10A__FBC1CD                  ; FBC1A2  jr NZ,0xfbc1cd
 	ld	(xbc+77), 0                             ; FBC1A4  ld (XBC+0x4d),0x00
 	ld	xbc, (xiz-4)                            ; FBC1A8  ld XBC,(XIZ+0xfc)
@@ -7874,7 +7874,7 @@ sub_FBC10A__FBC200:
 	ld	xbc, (xiz-4)                            ; FBC200  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+54)                             ; FBC203  ld A,(XBC+0x36)
 	and	a, 7                                   ; FBC206  and A,0x07
-	cps	a, 5                                   ; FBC209  cp A,5
+	cp	a, 5:i3                                   ; FBC209  cp A,5
 	jr nz, sub_FBC10A__FBC239                  ; FBC20B  jr NZ,0xfbc239
 	ld	xwa, (xiz-8)                            ; FBC20D  ld XWA,(XIZ+0xf8)
 	ld	c, (xwa+1)                              ; FBC210  ld C,(XWA+0x01)
@@ -7955,13 +7955,13 @@ sub_FBC10A__FBC2A9:
 	jr sub_FBC10A__FBC2E8                      ; FBC2D3  jr T,0xfbc2e8
 sub_FBC10A__FBC2D5:
 	ld	bc, (xiz-14)                            ; FBC2D5  ld BC,(XIZ+0xf2)
-	cps	bc, 1                                  ; FBC2D8  cp BC,1
+	cp	bc, 1:i3                                  ; FBC2D8  cp BC,1
 	jr z, sub_FBC10A__FBC27D                   ; FBC2DA  jr Z,0xfbc27d
-	cps	bc, 2                                  ; FBC2DC  cp BC,2
+	cp	bc, 2:i3                                  ; FBC2DC  cp BC,2
 	jr z, sub_FBC10A__FBC2A9                   ; FBC2DE  jr Z,0xfbc2a9
-	cps	bc, 3                                  ; FBC2E0  cp BC,3
+	cp	bc, 3:i3                                  ; FBC2E0  cp BC,3
 	jr z, sub_FBC10A__FBC27D                   ; FBC2E2  jr Z,0xfbc27d
-	cps	bc, 4                                  ; FBC2E4  cp BC,4
+	cp	bc, 4:i3                                  ; FBC2E4  cp BC,4
 	jr z, sub_FBC10A__FBC2A9                   ; FBC2E6  jr Z,0xfbc2a9
 sub_FBC10A__FBC2E8:
 	jr sub_FBC10A__FBC316                      ; FBC2E8  jr T,0xfbc316
@@ -7969,7 +7969,7 @@ sub_FBC10A__FBC2EA:
 	sub	xbc, xbc                               ; FBC2EA  sub XBC,XBC
 	ld	bc, (xiz-12)                            ; FBC2EC  ld BC,(XIZ+0xf4)
 	dec	1, bc                                  ; FBC2EF  dec 1,BC
-	cps	bc, 4                                  ; FBC2F1  cp BC,4
+	cp	bc, 4:i3                                  ; FBC2F1  cp BC,4
 	jr ugt, sub_FBC10A__FBC316                 ; FBC2F3  jr UGT,0xfbc316
 	sll	bc, 2                                  ; FBC2F5  sll 0x02,BC
 	add	xbc, 0xFBC302                          ; FBC2F8  add XBC,0x00fbc302
@@ -8284,7 +8284,7 @@ sub_FBC39D__FBC531:
 sub_FBC39D__FBC534:
 	ld	xbc, (xiz+8)                            ; FBC534  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+5)                              ; FBC537  ld A,(XBC+0x05)
-	cps	a, 7                                   ; FBC53A  cp A,7
+	cp	a, 7:i3                                   ; FBC53A  cp A,7
 	jr z, sub_FBC39D__FBC546                   ; FBC53C  jr Z,0xfbc546
 	ld	a, (xbc+5)                              ; FBC53E  ld A,(XBC+0x05)
 	cp	a, 0xFF                                 ; FBC541  cp A,0xff
@@ -8514,7 +8514,7 @@ ToneStage_ApplyWaveSelTailPreset:
 	and	a, 63                                  ; FBC744  and A,0x3f
 	extz	wa                                    ; FBC747  extz WA
 	ld	(xiz-14), wa                            ; FBC749  ld (XIZ+0xf2),WA
-	cps	wa, 0                                  ; FBC74C  cp WA,0
+	cp	wa, 0:i3                                  ; FBC74C  cp WA,0
 	jr nz, ToneStage_ApplyWaveSelTailPreset__FBC7A9                  ; FBC74E  jr NZ,0xfbc7a9
 	ld	iy, (xiz+8)                             ; FBC750  ld IY,(XIZ+0x08)
 	extz	iy                                    ; FBC753  extz IY
@@ -8653,7 +8653,7 @@ ToneStage_ApplyPercWaveSelTailPreset:
 	and	c, 63                                  ; FBC838  and C,0x3f
 	extz	bc                                    ; FBC83B  extz BC
 	ld	(xiz-18), bc                            ; FBC83D  ld (XIZ+0xee),BC
-	cps	bc, 0                                  ; FBC840  cp BC,0
+	cp	bc, 0:i3                                  ; FBC840  cp BC,0
 	jrl nz, ToneStage_ApplyPercWaveSelTailPreset__FBC8E5                 ; FBC842  jrl NZ,0xfbc8e5
 	ld	iy, (xiz+8)                             ; FBC845  ld IY,(XIZ+0x08)
 	extz	iy                                    ; FBC848  extz IY
@@ -9809,7 +9809,7 @@ sub_FBD1D3__FBD264:
 	ld	xbc, (xiz-4)                            ; FBD264  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+17)                             ; FBD267  ld A,(XBC+0x11)
 	and	a, 7                                   ; FBD26A  and A,0x07
-	cps	a, 5                                   ; FBD26D  cp A,5
+	cp	a, 5:i3                                   ; FBD26D  cp A,5
 	jr nz, sub_FBD1D3__FBD29A                  ; FBD26F  jr NZ,0xfbd29a
 	ld	(xbc+19), 0                             ; FBD271  ld (XBC+0x13),0x00
 	ld	xbc, (xiz-4)                            ; FBD275  ld XBC,(XIZ+0xfc)
@@ -9852,7 +9852,7 @@ sub_FBD1D3__FBD2CD:
 	ld	xbc, (xiz-4)                            ; FBD2CD  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+17)                             ; FBD2D0  ld A,(XBC+0x11)
 	and	a, 7                                   ; FBD2D3  and A,0x07
-	cps	a, 5                                   ; FBD2D6  cp A,5
+	cp	a, 5:i3                                   ; FBD2D6  cp A,5
 	jr nz, sub_FBD1D3__FBD306                  ; FBD2D8  jr NZ,0xfbd306
 	ld	xwa, (xiz-8)                            ; FBD2DA  ld XWA,(XIZ+0xf8)
 	ld	c, (xwa+1)                              ; FBD2DD  ld C,(XWA+0x01)
@@ -9933,13 +9933,13 @@ sub_FBD1D3__FBD376:
 	jr sub_FBD1D3__FBD3B5                      ; FBD3A0  jr T,0xfbd3b5
 sub_FBD1D3__FBD3A2:
 	ld	bc, (xiz-14)                            ; FBD3A2  ld BC,(XIZ+0xf2)
-	cps	bc, 1                                  ; FBD3A5  cp BC,1
+	cp	bc, 1:i3                                  ; FBD3A5  cp BC,1
 	jr z, sub_FBD1D3__FBD34A                   ; FBD3A7  jr Z,0xfbd34a
-	cps	bc, 2                                  ; FBD3A9  cp BC,2
+	cp	bc, 2:i3                                  ; FBD3A9  cp BC,2
 	jr z, sub_FBD1D3__FBD376                   ; FBD3AB  jr Z,0xfbd376
-	cps	bc, 3                                  ; FBD3AD  cp BC,3
+	cp	bc, 3:i3                                  ; FBD3AD  cp BC,3
 	jr z, sub_FBD1D3__FBD34A                   ; FBD3AF  jr Z,0xfbd34a
-	cps	bc, 4                                  ; FBD3B1  cp BC,4
+	cp	bc, 4:i3                                  ; FBD3B1  cp BC,4
 	jr z, sub_FBD1D3__FBD376                   ; FBD3B3  jr Z,0xfbd376
 sub_FBD1D3__FBD3B5:
 	jr sub_FBD1D3__FBD3E3                      ; FBD3B5  jr T,0xfbd3e3
@@ -9947,7 +9947,7 @@ sub_FBD1D3__FBD3B7:
 	sub	xbc, xbc                               ; FBD3B7  sub XBC,XBC
 	ld	bc, (xiz-12)                            ; FBD3B9  ld BC,(XIZ+0xf4)
 	dec	1, bc                                  ; FBD3BC  dec 1,BC
-	cps	bc, 4                                  ; FBD3BE  cp BC,4
+	cp	bc, 4:i3                                  ; FBD3BE  cp BC,4
 	jr ugt, sub_FBD1D3__FBD3E3                 ; FBD3C0  jr UGT,0xfbd3e3
 	sll	bc, 2                                  ; FBD3C2  sll 0x02,BC
 	add	xbc, 0xFBD3CF                          ; FBD3C5  add XBC,0x00fbd3cf
@@ -10255,7 +10255,7 @@ sub_FBD46B__FBD5F3:
 sub_FBD46B__FBD60F:
 	ld	xbc, (xiz+8)                            ; FBD60F  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+5)                              ; FBD612  ld A,(XBC+0x05)
-	cps	a, 7                                   ; FBD615  cp A,7
+	cp	a, 7:i3                                   ; FBD615  cp A,7
 	jr z, sub_FBD46B__FBD621                   ; FBD617  jr Z,0xfbd621
 	ld	a, (xbc+5)                              ; FBD619  ld A,(XBC+0x05)
 	cp	a, 0xFF                                 ; FBD61C  cp A,0xff
@@ -10269,7 +10269,7 @@ sub_FBD46B__FBD628:
 sub_FBD46B__FBD62B:
 	ld	xbc, (xiz+8)                            ; FBD62B  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+5)                              ; FBD62E  ld A,(XBC+0x05)
-	cps	a, 7                                   ; FBD631  cp A,7
+	cp	a, 7:i3                                   ; FBD631  cp A,7
 	jr z, sub_FBD46B__FBD63D                   ; FBD633  jr Z,0xfbd63d
 	ld	a, (xbc+5)                              ; FBD635  ld A,(XBC+0x05)
 	cp	a, 0xFF                                 ; FBD638  cp A,0xff
@@ -10874,7 +10874,7 @@ sub_FBD9D4:
 	ld	bc, (xiz+8)                             ; FBD9E1  ld BC,(XIZ+0x08)
 	and	bc, 0xFF                               ; FBD9E4  and BC,0x00ff
 	ld	(xiz-2), bc                             ; FBD9E8  ld (XIZ+0xfe),BC
-	cps	bc, 0                                  ; FBD9EB  cp BC,0
+	cp	bc, 0:i3                                  ; FBD9EB  cp BC,0
 	jr nz, sub_FBD9D4__FBD9F6                  ; FBD9ED  jr NZ,0xfbd9f6
 	extpfx5 0x9E, 0x08, 0x3C, 0x00, 0xFF       ; FBD9EF  and (XIZ+0x08),0xff00
 	jr sub_FBD9D4__FBDA0A                      ; FBD9F4  jr T,0xfbda0a
@@ -11092,11 +11092,11 @@ sub_FBDA2C__FBDBB3:
 	jr sub_FBDA2C__FBDBC7                      ; FBDBB3  jr T,0xfbdbc7
 sub_FBDA2C__FBDBB5:
 	ld	bc, (xiz-8)                             ; FBDBB5  ld BC,(XIZ+0xf8)
-	cps	bc, 0                                  ; FBDBB8  cp BC,0
+	cp	bc, 0:i3                                  ; FBDBB8  cp BC,0
 	jrl z, sub_FBDA2C__FBDA63                  ; FBDBBA  jrl Z,0xfbda63
-	cps	bc, 1                                  ; FBDBBD  cp BC,1
+	cp	bc, 1:i3                                  ; FBDBBD  cp BC,1
 	jrl z, sub_FBDA2C__FBDAD4                  ; FBDBBF  jrl Z,0xfbdad4
-	cps	bc, 2                                  ; FBDBC2  cp BC,2
+	cp	bc, 2:i3                                  ; FBDBC2  cp BC,2
 	jrl z, sub_FBDA2C__FBDB45                  ; FBDBC4  jrl Z,0xfbdb45
 sub_FBDA2C__FBDBC7:
 	ld	a, (xiz-5)                              ; FBDBC7  ld A,(XIZ+0xfb)
@@ -11681,7 +11681,7 @@ sub_FBDCD3__FBE040:
 sub_FBDCD3__FBE0A2:
 	sub	xbc, xbc                               ; FBE0A2  sub XBC,XBC
 	ld	bc, (xiz-26)                            ; FBE0A4  ld BC,(XIZ+0xe6)
-	cps	bc, 5                                  ; FBE0A7  cp BC,5
+	cp	bc, 5:i3                                  ; FBE0A7  cp BC,5
 	jrl ugt, sub_FBDCD3__FBE00A                ; FBE0A9  jrl UGT,0xfbe00a
 	sll	bc, 2                                  ; FBE0AC  sll 0x02,BC
 	add	xbc, 0xFBE0B9                          ; FBE0AF  add XBC,0x00fbe0b9
@@ -12692,7 +12692,7 @@ sub_FBDCD3__FBEA53:
 	call	0xFAD688                              ; FBEA5C  call 0xfad688
 	ld	(xiz-12), wa                            ; FBEA60  ld (XIZ+0xf4),WA
 	inc	6, xsp                                 ; FBEA63  inc 6,XSP
-	cps	wa, 0                                  ; FBEA65  cp WA,0
+	cp	wa, 0:i3                                  ; FBEA65  cp WA,0
 	jr ge, sub_FBDCD3__FBEA73                  ; FBEA67  jr GE,0xfbea73
 	neg	wa                                     ; FBEA69  neg WA
 	ld	(xiz-28), wa                            ; FBEA6B  ld (XIZ+0xe4),WA
@@ -12736,7 +12736,7 @@ sub_FBDCD3__FBEA96:
 	ld	a, (xbc)                                ; FBEAD0  ld A,(XBC)
 	and	a, h                                   ; FBEAD2  and A,H
 	add	xsp, 18                                ; FBEAD4  add XSP,0x00000012
-	cps	a, 0                                   ; FBEADA  cp A,0
+	cp	a, 0:i3                                   ; FBEADA  cp A,0
 	jr z, sub_FBDCD3__FBEAEB                   ; FBEADC  jr Z,0xfbeaeb
 	ld	wa, (xiz-14)                            ; FBEADE  ld WA,(XIZ+0xf2)
 	neg	wa                                     ; FBEAE1  neg WA
@@ -13368,7 +13368,7 @@ sub_FBDCD3__FBF10F:
 sub_FBDCD3__FBF171:
 	sub	xbc, xbc                               ; FBF171  sub XBC,XBC
 	ld	bc, (xiz-32)                            ; FBF173  ld BC,(XIZ+0xe0)
-	cps	bc, 5                                  ; FBF176  cp BC,5
+	cp	bc, 5:i3                                  ; FBF176  cp BC,5
 	jrl ugt, sub_FBDCD3__FBF0D9                ; FBF178  jrl UGT,0xfbf0d9
 	sll	bc, 2                                  ; FBF17B  sll 0x02,BC
 	add	xbc, 0xFBF188                          ; FBF17E  add XBC,0x00fbf188
@@ -13878,7 +13878,7 @@ sub_FBF280__FBF617:
 sub_FBF280__FBF667:
 	sub	xbc, xbc                               ; FBF667  sub XBC,XBC
 	ld	bc, (xiz-26)                            ; FBF669  ld BC,(XIZ+0xe6)
-	cps	bc, 5                                  ; FBF66C  cp BC,5
+	cp	bc, 5:i3                                  ; FBF66C  cp BC,5
 	jrl ugt, sub_FBF280__FBF5EA                ; FBF66E  jrl UGT,0xfbf5ea
 	sll	bc, 2                                  ; FBF671  sll 0x02,BC
 	add	xbc, 0xFBF67E                          ; FBF674  add XBC,0x00fbf67e
@@ -13973,7 +13973,7 @@ sub_FBF280__FBF749:
 	call	0xFAD688                              ; FBF755  call 0xfad688
 	ld	(xiz-12), wa                            ; FBF759  ld (XIZ+0xf4),WA
 	inc	6, xsp                                 ; FBF75C  inc 6,XSP
-	cps	wa, 0                                  ; FBF75E  cp WA,0
+	cp	wa, 0:i3                                  ; FBF75E  cp WA,0
 	jr ge, sub_FBF280__FBF76C                  ; FBF760  jr GE,0xfbf76c
 	neg	wa                                     ; FBF762  neg WA
 	ld	(xiz-28), wa                            ; FBF764  ld (XIZ+0xe4),WA
@@ -14024,7 +14024,7 @@ sub_FBF280__FBF78F:
 	ld	a, (xbc)                                ; FBF7DD  ld A,(XBC)
 	and	a, h                                   ; FBF7DF  and A,H
 	add	xsp, 18                                ; FBF7E1  add XSP,0x00000012
-	cps	a, 0                                   ; FBF7E7  cp A,0
+	cp	a, 0:i3                                   ; FBF7E7  cp A,0
 	jr z, sub_FBF280__FBF7F8                   ; FBF7E9  jr Z,0xfbf7f8
 	ld	wa, (xiz-14)                            ; FBF7EB  ld WA,(XIZ+0xf2)
 	neg	wa                                     ; FBF7EE  neg WA
@@ -14715,7 +14715,7 @@ sub_FBF280__FBFEBB:
 sub_FBF280__FBFF0B:
 	sub	xbc, xbc                               ; FBFF0B  sub XBC,XBC
 	ld	bc, (xiz-32)                            ; FBFF0D  ld BC,(XIZ+0xe0)
-	cps	bc, 5                                  ; FBFF10  cp BC,5
+	cp	bc, 5:i3                                  ; FBFF10  cp BC,5
 	jrl ugt, sub_FBF280__FBFE8E                ; FBFF12  jrl UGT,0xfbfe8e
 	sll	bc, 2                                  ; FBFF15  sll 0x02,BC
 	add	xbc, 0xFBFF22                          ; FBFF18  add XBC,0x00fbff22
@@ -14743,11 +14743,11 @@ sub_FBF280__FBFF40:
 	jrl sub_FBF280__FBFFCF                     ; FBFF40  jrl T,0xfbffcf
 sub_FBF280__FBFF43:
 	ld	bc, (xiz-24)                            ; FBFF43  ld BC,(XIZ+0xe8)
-	cps	bc, 1                                  ; FBFF46  cp BC,1
+	cp	bc, 1:i3                                  ; FBFF46  cp BC,1
 	jrl	z, -0xCB4                              ; FBFF48  jrl Z,0xfbf297
-	cps	bc, 2                                  ; FBFF4B  cp BC,2
+	cp	bc, 2:i3                                  ; FBFF4B  cp BC,2
 	jrl	z, -0xAF8                              ; FBFF4D  jrl Z,0xfbf458
-	cps	bc, 3                                  ; FBFF50  cp BC,3
+	cp	bc, 3:i3                                  ; FBFF50  cp BC,3
 	jrl	z, -0x9BF                              ; FBFF52  jrl Z,0xfbf596
 	cp	bc, 28                                  ; FBFF55  cp BC,0x001c
 	jrl	z, -0x8C0                              ; FBFF59  jrl Z,0xfbf69c
@@ -14851,7 +14851,7 @@ sub_FBFFD4__FC000E:
 	ld	a, (xbc)                                ; FC0021  ld A,(XBC)
 	and	a, 63                                  ; FC0023  and A,0x3f
 	ld	(xiz-9), a                              ; FC0026  ld (XIZ+0xf7),A
-	cps	a, 0                                   ; FC0029  cp A,0
+	cp	a, 0:i3                                   ; FC0029  cp A,0
 	jr z, sub_FBFFD4__FC0058                   ; FC002B  jr Z,0xfc0058
 	ldb	c, 43                                  ; FC002D  ld C,0x2b
 	extpfx3 0x8E, 0xF8, 0x43                   ; FC002F  mul BC,(XIZ+0xf8)
@@ -14999,7 +14999,7 @@ sub_FBFFD4__FC016C:
 	ld	c, (xwa)                                ; FC018A  ld C,(XWA)
 	and	c, 63                                  ; FC018C  and C,0x3f
 	ld	(xiz-9), c                              ; FC018F  ld (XIZ+0xf7),C
-	cps	c, 0                                   ; FC0192  cp C,0
+	cp	c, 0:i3                                   ; FC0192  cp C,0
 	jr z, sub_FBFFD4__FC01DA                   ; FC0194  jr Z,0xfc01da
 	ldb	c, 43                                  ; FC0196  ld C,0x2b
 	extpfx3 0x8E, 0xF8, 0x43                   ; FC0198  mul BC,(XIZ+0xf8)
@@ -15134,7 +15134,7 @@ sub_FBFFD4__FC02D0:
 	jr sub_FBFFD4__FC02EF                      ; FC02D0  jr T,0xfc02ef
 sub_FBFFD4__FC02D2:
 	ld	bc, (xiz-14)                            ; FC02D2  ld BC,(XIZ+0xf2)
-	cps	bc, 0                                  ; FC02D5  cp BC,0
+	cp	bc, 0:i3                                  ; FC02D5  cp BC,0
 	jrl z, sub_FBFFD4__FBFFFD                  ; FC02D7  jrl Z,0xfbfffd
 	cp	bc, 64                                  ; FC02DA  cp BC,0x0040
 	jrl z, sub_FBFFD4__FBFFFD                  ; FC02DE  jrl Z,0xfbfffd
@@ -15291,7 +15291,7 @@ ToneQuery_ReplySourceName1_ViaIndexMap__FC03D6:
 	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC03F1                      ; FC03D6  jr T,0xfc03f1
 ToneQuery_ReplySourceName1_ViaIndexMap__FC03D8:
 	ld	bc, (xiz-30)                            ; FC03D8  ld BC,(XIZ+0xe2)
-	cps	bc, 0                                  ; FC03DB  cp BC,0
+	cp	bc, 0:i3                                  ; FC03DB  cp BC,0
 	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0391                   ; FC03DD  jr Z,0xfc0391
 	cp	bc, 16                                  ; FC03DF  cp BC,0x0010
 	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0391                   ; FC03E3  jr Z,0xfc0391
@@ -15345,7 +15345,7 @@ ToneQuery_ReplySourceName1_ViaIndexMap__FC0466:
 	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC0481                      ; FC0466  jr T,0xfc0481
 ToneQuery_ReplySourceName1_ViaIndexMap__FC0468:
 	ld	bc, (xiz-32)                            ; FC0468  ld BC,(XIZ+0xe0)
-	cps	bc, 0                                  ; FC046B  cp BC,0
+	cp	bc, 0:i3                                  ; FC046B  cp BC,0
 	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC03FA                   ; FC046D  jr Z,0xfc03fa
 	cp	bc, 64                                  ; FC046F  cp BC,0x0040
 	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0416                   ; FC0473  jr Z,0xfc0416
@@ -15466,7 +15466,7 @@ ToneQuery_ReplySourceName2_ViaIndexMap__FC0564:
 	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC057F                      ; FC0564  jr T,0xfc057f
 ToneQuery_ReplySourceName2_ViaIndexMap__FC0566:
 	ld	bc, (xiz-30)                            ; FC0566  ld BC,(XIZ+0xe2)
-	cps	bc, 0                                  ; FC0569  cp BC,0
+	cp	bc, 0:i3                                  ; FC0569  cp BC,0
 	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC051F                   ; FC056B  jr Z,0xfc051f
 	cp	bc, 16                                  ; FC056D  cp BC,0x0010
 	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC051F                   ; FC0571  jr Z,0xfc051f
@@ -15520,7 +15520,7 @@ ToneQuery_ReplySourceName2_ViaIndexMap__FC05F4:
 	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC060F                      ; FC05F4  jr T,0xfc060f
 ToneQuery_ReplySourceName2_ViaIndexMap__FC05F6:
 	ld	bc, (xiz-32)                            ; FC05F6  ld BC,(XIZ+0xe0)
-	cps	bc, 0                                  ; FC05F9  cp BC,0
+	cp	bc, 0:i3                                  ; FC05F9  cp BC,0
 	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC0588                   ; FC05FB  jr Z,0xfc0588
 	cp	bc, 64                                  ; FC05FD  cp BC,0x0040
 	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05A4                   ; FC0601  jr Z,0xfc05a4
@@ -15927,7 +15927,7 @@ ToneQuery_ReplyPartElementSourceName1__FC095A:
 	jr ToneQuery_ReplyPartElementSourceName1__FC0977                      ; FC095A  jr T,0xfc0977
 ToneQuery_ReplyPartElementSourceName1__FC095C:
 	ld	bc, (xiz-42)                            ; FC095C  ld BC,(XIZ+0xd6)
-	cps	bc, 0                                  ; FC095F  cp BC,0
+	cp	bc, 0:i3                                  ; FC095F  cp BC,0
 	jrl z, ToneQuery_ReplyPartElementSourceName1__FC08DE                  ; FC0961  jrl Z,0xfc08de
 	cp	bc, 16                                  ; FC0964  cp BC,0x0010
 	jrl z, ToneQuery_ReplyPartElementSourceName1__FC08DE                  ; FC0968  jrl Z,0xfc08de
@@ -15981,7 +15981,7 @@ ToneQuery_ReplyPartElementSourceName1__FC09EC:
 	jr ToneQuery_ReplyPartElementSourceName1__FC0A07                      ; FC09EC  jr T,0xfc0a07
 ToneQuery_ReplyPartElementSourceName1__FC09EE:
 	ld	bc, (xiz-44)                            ; FC09EE  ld BC,(XIZ+0xd4)
-	cps	bc, 0                                  ; FC09F1  cp BC,0
+	cp	bc, 0:i3                                  ; FC09F1  cp BC,0
 	jr z, ToneQuery_ReplyPartElementSourceName1__FC0980                   ; FC09F3  jr Z,0xfc0980
 	cp	bc, 64                                  ; FC09F5  cp BC,0x0040
 	jr z, ToneQuery_ReplyPartElementSourceName1__FC099C                   ; FC09F9  jr Z,0xfc099c
@@ -16221,7 +16221,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0C3B:
 	jr ToneQuery_ReplyPartElementSourceName2__FC0C57                      ; FC0C3B  jr T,0xfc0c57
 ToneQuery_ReplyPartElementSourceName2__FC0C3D:
 	ld	bc, (xiz-44)                            ; FC0C3D  ld BC,(XIZ+0xd4)
-	cps	bc, 0                                  ; FC0C40  cp BC,0
+	cp	bc, 0:i3                                  ; FC0C40  cp BC,0
 	jr z, ToneQuery_ReplyPartElementSourceName2__FC0BC5                   ; FC0C42  jr Z,0xfc0bc5
 	cp	bc, 16                                  ; FC0C44  cp BC,0x0010
 	jrl z, ToneQuery_ReplyPartElementSourceName2__FC0BC5                  ; FC0C48  jrl Z,0xfc0bc5
@@ -16275,7 +16275,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0CCC:
 	jr ToneQuery_ReplyPartElementSourceName2__FC0CE7                      ; FC0CCC  jr T,0xfc0ce7
 ToneQuery_ReplyPartElementSourceName2__FC0CCE:
 	ld	bc, (xiz-46)                            ; FC0CCE  ld BC,(XIZ+0xd2)
-	cps	bc, 0                                  ; FC0CD1  cp BC,0
+	cp	bc, 0:i3                                  ; FC0CD1  cp BC,0
 	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C60                   ; FC0CD3  jr Z,0xfc0c60
 	cp	bc, 64                                  ; FC0CD5  cp BC,0x0040
 	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C7C                   ; FC0CD9  jr Z,0xfc0c7c
@@ -16452,7 +16452,7 @@ ToneQuery_ReplyCatalogueListFooter__FC0E4C:
 ToneQuery_ReplyCatalogueListFooter__FC0E64:
 	sub	xbc, xbc                               ; FC0E64  sub XBC,XBC
 	ld	bc, (xiz-26)                            ; FC0E66  ld BC,(XIZ+0xe6)
-	cps	bc, 4                                  ; FC0E69  cp BC,4
+	cp	bc, 4:i3                                  ; FC0E69  cp BC,4
 	jr ugt, ToneQuery_ReplyCatalogueListFooter__FC0E4C                 ; FC0E6B  jr UGT,0xfc0e4c
 	sll	bc, 2                                  ; FC0E6D  sll 0x02,BC
 	add	xbc, 0xFC0E7A                          ; FC0E70  add XBC,0x00fc0e7a
@@ -16670,7 +16670,7 @@ sub_FC0F83__FC1002:
 	ld	xbc, (xwa+0x1523)                       ; FC101B  ld XBC,(XWA+0x1523)
 	ld	a, (xbc+6)                              ; FC1020  ld A,(XBC+0x06)
 	and	a, 0xC0                                ; FC1023  and A,0xc0
-	cps	a, 0                                   ; FC1026  cp A,0
+	cp	a, 0:i3                                   ; FC1026  cp A,0
 	jr nz, sub_FC0F83__FC1055                  ; FC1028  jr NZ,0xfc1055
 	ldw	bc, 41                                 ; FC102A  ld BC,0x0029
 	extpfx3 0x9E, 0xFC, 0x41                   ; FC102D  mul XBC,(XIZ+0xfc)
@@ -16684,7 +16684,7 @@ sub_FC0F83__FC1002:
 	ld	xbc, (xwa+0x1523)                       ; FC1043  ld XBC,(XWA+0x1523)
 	ld	a, (xbc+6)                              ; FC1048  ld A,(XBC+0x06)
 	and	a, 32                                  ; FC104B  and A,0x20
-	cps	a, 0                                   ; FC104E  cp A,0
+	cp	a, 0:i3                                   ; FC104E  cp A,0
 	jr nz, sub_FC0F83__FC1055                  ; FC1050  jr NZ,0xfc1055
 	incw	1, (xiz-6)                            ; FC1052  incw 1,(XIZ+0xfa)
 sub_FC0F83__FC1055:
@@ -17873,7 +17873,7 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC19DC:
 	jr ToneQuery_ReplyPercSourceName2AndIndex__FC19FB                      ; FC19DC  jr T,0xfc19fb
 ToneQuery_ReplyPercSourceName2AndIndex__FC19DE:
 	ld	bc, (xiz-48)                            ; FC19DE  ld BC,(XIZ+0xd0)
-	cps	bc, 0                                  ; FC19E1  cp BC,0
+	cp	bc, 0:i3                                  ; FC19E1  cp BC,0
 	jrl z, ToneQuery_ReplyPercSourceName2AndIndex__FC18FF                  ; FC19E3  jrl Z,0xfc18ff
 	cp	bc, 16                                  ; FC19E6  cp BC,0x0010
 	jrl z, ToneQuery_ReplyPercSourceName2AndIndex__FC18FF                  ; FC19EA  jrl Z,0xfc18ff
@@ -18801,7 +18801,7 @@ LinkQuery_ReplyElementBlockBytes_Elements01__FC20D1:
 	jr LinkQuery_ReplyElementBlockBytes_Elements01__FC20FA                      ; FC20EB  jr T,0xfc20fa
 LinkQuery_ReplyElementBlockBytes_Elements01__FC20ED:
 	ld	bc, (xiz-10)                            ; FC20ED  ld BC,(XIZ+0xf6)
-	cps	bc, 0                                  ; FC20F0  cp BC,0
+	cp	bc, 0:i3                                  ; FC20F0  cp BC,0
 	jr z, LinkQuery_ReplyElementBlockBytes_Elements01__FC20B5                   ; FC20F2  jr Z,0xfc20b5
 	cp	bc, 0x80                                ; FC20F4  cp BC,0x0080
 	jr z, LinkQuery_ReplyElementBlockBytes_Elements01__FC20D1                   ; FC20F8  jr Z,0xfc20d1
@@ -18938,7 +18938,7 @@ LinkQuery_ReplyElementBlockBytes_Elements23__FC21C2:
 	jr LinkQuery_ReplyElementBlockBytes_Elements23__FC21EB                      ; FC21DC  jr T,0xfc21eb
 LinkQuery_ReplyElementBlockBytes_Elements23__FC21DE:
 	ld	bc, (xiz-10)                            ; FC21DE  ld BC,(XIZ+0xf6)
-	cps	bc, 0                                  ; FC21E1  cp BC,0
+	cp	bc, 0:i3                                  ; FC21E1  cp BC,0
 	jr z, LinkQuery_ReplyElementBlockBytes_Elements23__FC21A6                   ; FC21E3  jr Z,0xfc21a6
 	cp	bc, 0x80                                ; FC21E5  cp BC,0x0080
 	jr z, LinkQuery_ReplyElementBlockBytes_Elements23__FC21C2                   ; FC21E9  jr Z,0xfc21c2
@@ -19100,7 +19100,7 @@ LinkQuery_ReplyElementWaveSelectBytes__FC22ED:
 	jr LinkQuery_ReplyElementWaveSelectBytes__FC2322                      ; FC2307  jr T,0xfc2322
 LinkQuery_ReplyElementWaveSelectBytes__FC2309:
 	ld	bc, (xiz-10)                            ; FC2309  ld BC,(XIZ+0xf6)
-	cps	bc, 0                                  ; FC230C  cp BC,0
+	cp	bc, 0:i3                                  ; FC230C  cp BC,0
 	jr z, LinkQuery_ReplyElementWaveSelectBytes__FC2298                   ; FC230E  jr Z,0xfc2298
 	cp	bc, 64                                  ; FC2310  cp BC,0x0040
 	jr z, LinkQuery_ReplyElementWaveSelectBytes__FC22B5                   ; FC2314  jr Z,0xfc22b5
@@ -19639,7 +19639,7 @@ ToneMsg_Dispatch__FC267E:
 	jr ToneMsg_Dispatch__FC2699                      ; FC268A  jr T,0xfc2699
 ToneMsg_Dispatch__FC268C:
 	ld	bc, (xiz-6)                             ; FC268C  ld BC,(XIZ+0xfa)
-	cps	bc, 0                                  ; FC268F  cp BC,0
+	cp	bc, 0:i3                                  ; FC268F  cp BC,0
 	jr z, ToneMsg_Dispatch__FC2670                   ; FC2691  jr Z,0xfc2670
 	cp	bc, 0x80                                ; FC2693  cp BC,0x0080
 	jr z, ToneMsg_Dispatch__FC267E                   ; FC2697  jr Z,0xfc267e
@@ -19675,7 +19675,7 @@ ToneMsg_Dispatch__FC26CB:
 	jr ToneMsg_Dispatch__FC26E6                      ; FC26D7  jr T,0xfc26e6
 ToneMsg_Dispatch__FC26D9:
 	ld	bc, (xiz-8)                             ; FC26D9  ld BC,(XIZ+0xf8)
-	cps	bc, 0                                  ; FC26DC  cp BC,0
+	cp	bc, 0:i3                                  ; FC26DC  cp BC,0
 	jr z, ToneMsg_Dispatch__FC26BD                   ; FC26DE  jr Z,0xfc26bd
 	cp	bc, 0x80                                ; FC26E0  cp BC,0x0080
 	jr z, ToneMsg_Dispatch__FC26CB                   ; FC26E4  jr Z,0xfc26cb
@@ -19728,7 +19728,7 @@ ToneMsg_Dispatch__FC2729:
 ToneMsg_Dispatch__FC273E:
 	sub	xbc, xbc                               ; FC273E  sub XBC,XBC
 	ld	bc, (xiz-4)                             ; FC2740  ld BC,(XIZ+0xfc)
-	cps	bc, 7                                  ; FC2743  cp BC,7
+	cp	bc, 7:i3                                  ; FC2743  cp BC,7
 	jr ugt, ToneMsg_Dispatch__FC2774                 ; FC2745  jr UGT,0xfc2774
 	sll	bc, 2                                  ; FC2747  sll 0x02,BC
 	add	xbc, 0xFC2754                          ; FC274A  add XBC,0x00fc2754
@@ -19808,7 +19808,7 @@ ToneMsg_Dispatch__FC27CA:
 ToneMsg_Dispatch__FC27D4:
 	sub	xbc, xbc                               ; FC27D4  sub XBC,XBC
 	ld	bc, (xiz-10)                            ; FC27D6  ld BC,(XIZ+0xf6)
-	cps	bc, 7                                  ; FC27D9  cp BC,7
+	cp	bc, 7:i3                                  ; FC27D9  cp BC,7
 	jr ugt, ToneMsg_Dispatch__FC280A                 ; FC27DB  jr UGT,0xfc280a
 	sll	bc, 2                                  ; FC27DD  sll 0x02,BC
 	add	xbc, 0xFC27EA                          ; FC27E0  add XBC,0x00fc27ea
@@ -20202,7 +20202,7 @@ sub_FC29BF:
 	extz	xwa                                   ; FC29E7  extz XWA
 	ld	xix, xwa                                ; FC29E9  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC29EB  ld IY,(XBC)
-	cps	iy, 0                                  ; FC29ED  cp IY,0
+	cp	iy, 0:i3                                  ; FC29ED  cp IY,0
 	jr z, sub_FC29BF__FC29F7                   ; FC29EF  jr Z,0xfc29f7
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC29F1  or (XWA),0x0001
 	jr sub_FC29BF__FC29FB                      ; FC29F5  jr T,0xfc29fb
@@ -20211,7 +20211,7 @@ sub_FC29BF__FC29F7:
 sub_FC29BF__FC29FB:
 	ld	xbc, (xiz-4)                            ; FC29FB  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC29FE  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC2A01  cp WA,0
+	cp	wa, 0:i3                                  ; FC2A01  cp WA,0
 	jr z, sub_FC29BF__FC2A0B                   ; FC2A03  jr Z,0xfc2a0b
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC2A05  or (XIX),0x0002
 	jr sub_FC29BF__FC2A0F                      ; FC2A09  jr T,0xfc2a0f
@@ -20220,7 +20220,7 @@ sub_FC29BF__FC2A0B:
 sub_FC29BF__FC2A0F:
 	ld	xbc, (xiz-4)                            ; FC2A0F  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC2A12  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC2A15  cp WA,0
+	cp	wa, 0:i3                                  ; FC2A15  cp WA,0
 	jr z, sub_FC29BF__FC2A1F                   ; FC2A17  jr Z,0xfc2a1f
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC2A19  or (XIX),0x0004
 	jr sub_FC29BF__FC2A23                      ; FC2A1D  jr T,0xfc2a23
@@ -20229,7 +20229,7 @@ sub_FC29BF__FC2A1F:
 sub_FC29BF__FC2A23:
 	ld	xbc, (xiz-4)                            ; FC2A23  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC2A26  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC2A29  cp WA,0
+	cp	wa, 0:i3                                  ; FC2A29  cp WA,0
 	jr z, sub_FC29BF__FC2A33                   ; FC2A2B  jr Z,0xfc2a33
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC2A2D  or (XIX),0x0008
 	jr sub_FC29BF__FC2A37                      ; FC2A31  jr T,0xfc2a37
@@ -20464,7 +20464,7 @@ sub_FC2AAF__FC2BBE:
 	extz	xbc                                   ; FC2BC7  extz XBC
 	add	xbc, xiz                               ; FC2BC9  add XBC,XIZ
 	ld	a, (xbc-10)                             ; FC2BCB  ld A,(XBC+0xf6)
-	cps	a, 0                                   ; FC2BCE  cp A,0
+	cp	a, 0:i3                                   ; FC2BCE  cp A,0
 	jr z, sub_FC2AAF__FC2BD4                   ; FC2BD0  jr Z,0xfc2bd4
 	ld	d, h                                    ; FC2BD2  ld D,H
 sub_FC2AAF__FC2BD4:
@@ -20473,7 +20473,7 @@ sub_FC2AAF__FC2BD4:
 	extz	xbc                                   ; FC2BD8  extz XBC
 	add	xbc, xiz                               ; FC2BDA  add XBC,XIZ
 	ld	a, (xbc-10)                             ; FC2BDC  ld A,(XBC+0xf6)
-	cps	a, 4                                   ; FC2BDF  cp A,4
+	cp	a, 4:i3                                   ; FC2BDF  cp A,4
 	jr c, sub_FC2AAF__FC2BEF                   ; FC2BE1  jr C,0xfc2bef
 	ld	xbc, (xiz+12)                           ; FC2BE3  ld XBC,(XIZ+0x0c)
 	incm8	1, (xbc)                             ; FC2BE6  inc 1,(XBC)
@@ -20663,7 +20663,7 @@ sub_FC2CD5:
 	extz	xwa                                   ; FC2CFF  extz XWA
 	ld	xix, xwa                                ; FC2D01  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC2D03  ld IY,(XBC)
-	cps	iy, 0                                  ; FC2D05  cp IY,0
+	cp	iy, 0:i3                                  ; FC2D05  cp IY,0
 	jr z, sub_FC2CD5__FC2D0F                   ; FC2D07  jr Z,0xfc2d0f
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC2D09  or (XWA),0x0001
 	jr sub_FC2CD5__FC2D13                      ; FC2D0D  jr T,0xfc2d13
@@ -20672,7 +20672,7 @@ sub_FC2CD5__FC2D0F:
 sub_FC2CD5__FC2D13:
 	ld	xbc, (xiz-4)                            ; FC2D13  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC2D16  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC2D19  cp WA,0
+	cp	wa, 0:i3                                  ; FC2D19  cp WA,0
 	jr z, sub_FC2CD5__FC2D23                   ; FC2D1B  jr Z,0xfc2d23
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC2D1D  or (XIX),0x0002
 	jr sub_FC2CD5__FC2D27                      ; FC2D21  jr T,0xfc2d27
@@ -20681,7 +20681,7 @@ sub_FC2CD5__FC2D23:
 sub_FC2CD5__FC2D27:
 	ld	xbc, (xiz-4)                            ; FC2D27  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC2D2A  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC2D2D  cp WA,0
+	cp	wa, 0:i3                                  ; FC2D2D  cp WA,0
 	jr z, sub_FC2CD5__FC2D37                   ; FC2D2F  jr Z,0xfc2d37
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC2D31  or (XIX),0x0004
 	jr sub_FC2CD5__FC2D3B                      ; FC2D35  jr T,0xfc2d3b
@@ -20690,7 +20690,7 @@ sub_FC2CD5__FC2D37:
 sub_FC2CD5__FC2D3B:
 	ld	xbc, (xiz-4)                            ; FC2D3B  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC2D3E  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC2D41  cp WA,0
+	cp	wa, 0:i3                                  ; FC2D41  cp WA,0
 	jr z, sub_FC2CD5__FC2D4B                   ; FC2D43  jr Z,0xfc2d4b
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC2D45  or (XIX),0x0008
 	jr sub_FC2CD5__FC2D4F                      ; FC2D49  jr T,0xfc2d4f
@@ -20790,7 +20790,7 @@ sub_FC2DA3:
 	extz	xwa                                   ; FC2DED  extz XWA
 	ld	xix, xwa                                ; FC2DEF  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC2DF1  ld IY,(XBC)
-	cps	iy, 0                                  ; FC2DF3  cp IY,0
+	cp	iy, 0:i3                                  ; FC2DF3  cp IY,0
 	jr z, sub_FC2DA3__FC2DFD                   ; FC2DF5  jr Z,0xfc2dfd
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC2DF7  or (XWA),0x0001
 	jr sub_FC2DA3__FC2E01                      ; FC2DFB  jr T,0xfc2e01
@@ -20799,7 +20799,7 @@ sub_FC2DA3__FC2DFD:
 sub_FC2DA3__FC2E01:
 	ld	xbc, (xiz-4)                            ; FC2E01  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC2E04  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC2E07  cp WA,0
+	cp	wa, 0:i3                                  ; FC2E07  cp WA,0
 	jr z, sub_FC2DA3__FC2E11                   ; FC2E09  jr Z,0xfc2e11
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC2E0B  or (XIX),0x0002
 	jr sub_FC2DA3__FC2E15                      ; FC2E0F  jr T,0xfc2e15
@@ -20808,7 +20808,7 @@ sub_FC2DA3__FC2E11:
 sub_FC2DA3__FC2E15:
 	ld	xbc, (xiz-4)                            ; FC2E15  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC2E18  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC2E1B  cp WA,0
+	cp	wa, 0:i3                                  ; FC2E1B  cp WA,0
 	jr z, sub_FC2DA3__FC2E25                   ; FC2E1D  jr Z,0xfc2e25
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC2E1F  or (XIX),0x0004
 	jr sub_FC2DA3__FC2E29                      ; FC2E23  jr T,0xfc2e29
@@ -20817,7 +20817,7 @@ sub_FC2DA3__FC2E25:
 sub_FC2DA3__FC2E29:
 	ld	xbc, (xiz-4)                            ; FC2E29  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC2E2C  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC2E2F  cp WA,0
+	cp	wa, 0:i3                                  ; FC2E2F  cp WA,0
 	jr z, sub_FC2DA3__FC2E39                   ; FC2E31  jr Z,0xfc2e39
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC2E33  or (XIX),0x0008
 	jr sub_FC2DA3__FC2E3D                      ; FC2E37  jr T,0xfc2e3d
@@ -20913,7 +20913,7 @@ sub_FC2E4B:
 	extz	xwa                                   ; FC2EBC  extz XWA
 	ld	xix, xwa                                ; FC2EBE  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC2EC0  ld IY,(XBC)
-	cps	iy, 0                                  ; FC2EC2  cp IY,0
+	cp	iy, 0:i3                                  ; FC2EC2  cp IY,0
 	jr z, sub_FC2E4B__FC2ECC                   ; FC2EC4  jr Z,0xfc2ecc
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC2EC6  or (XWA),0x0001
 	jr sub_FC2E4B__FC2ED0                      ; FC2ECA  jr T,0xfc2ed0
@@ -20922,7 +20922,7 @@ sub_FC2E4B__FC2ECC:
 sub_FC2E4B__FC2ED0:
 	ld	xbc, (xiz-4)                            ; FC2ED0  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC2ED3  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC2ED6  cp WA,0
+	cp	wa, 0:i3                                  ; FC2ED6  cp WA,0
 	jr z, sub_FC2E4B__FC2EE0                   ; FC2ED8  jr Z,0xfc2ee0
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC2EDA  or (XIX),0x0002
 	jr sub_FC2E4B__FC2EE4                      ; FC2EDE  jr T,0xfc2ee4
@@ -20931,7 +20931,7 @@ sub_FC2E4B__FC2EE0:
 sub_FC2E4B__FC2EE4:
 	ld	xbc, (xiz-4)                            ; FC2EE4  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC2EE7  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC2EEA  cp WA,0
+	cp	wa, 0:i3                                  ; FC2EEA  cp WA,0
 	jr z, sub_FC2E4B__FC2EF4                   ; FC2EEC  jr Z,0xfc2ef4
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC2EEE  or (XIX),0x0004
 	jr sub_FC2E4B__FC2EF8                      ; FC2EF2  jr T,0xfc2ef8
@@ -20940,7 +20940,7 @@ sub_FC2E4B__FC2EF4:
 sub_FC2E4B__FC2EF8:
 	ld	xbc, (xiz-4)                            ; FC2EF8  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC2EFB  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC2EFE  cp WA,0
+	cp	wa, 0:i3                                  ; FC2EFE  cp WA,0
 	jr z, sub_FC2E4B__FC2F08                   ; FC2F00  jr Z,0xfc2f08
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC2F02  or (XIX),0x0008
 	jr sub_FC2E4B__FC2F0C                      ; FC2F06  jr T,0xfc2f0c
@@ -21036,7 +21036,7 @@ sub_FC2F1A:
 	extz	xwa                                   ; FC2F8B  extz XWA
 	ld	xix, xwa                                ; FC2F8D  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC2F8F  ld IY,(XBC)
-	cps	iy, 0                                  ; FC2F91  cp IY,0
+	cp	iy, 0:i3                                  ; FC2F91  cp IY,0
 	jr z, sub_FC2F1A__FC2F9B                   ; FC2F93  jr Z,0xfc2f9b
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC2F95  or (XWA),0x0001
 	jr sub_FC2F1A__FC2F9F                      ; FC2F99  jr T,0xfc2f9f
@@ -21045,7 +21045,7 @@ sub_FC2F1A__FC2F9B:
 sub_FC2F1A__FC2F9F:
 	ld	xbc, (xiz-4)                            ; FC2F9F  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC2FA2  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC2FA5  cp WA,0
+	cp	wa, 0:i3                                  ; FC2FA5  cp WA,0
 	jr z, sub_FC2F1A__FC2FAF                   ; FC2FA7  jr Z,0xfc2faf
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC2FA9  or (XIX),0x0002
 	jr sub_FC2F1A__FC2FB3                      ; FC2FAD  jr T,0xfc2fb3
@@ -21054,7 +21054,7 @@ sub_FC2F1A__FC2FAF:
 sub_FC2F1A__FC2FB3:
 	ld	xbc, (xiz-4)                            ; FC2FB3  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC2FB6  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC2FB9  cp WA,0
+	cp	wa, 0:i3                                  ; FC2FB9  cp WA,0
 	jr z, sub_FC2F1A__FC2FC3                   ; FC2FBB  jr Z,0xfc2fc3
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC2FBD  or (XIX),0x0004
 	jr sub_FC2F1A__FC2FC7                      ; FC2FC1  jr T,0xfc2fc7
@@ -21063,7 +21063,7 @@ sub_FC2F1A__FC2FC3:
 sub_FC2F1A__FC2FC7:
 	ld	xbc, (xiz-4)                            ; FC2FC7  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC2FCA  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC2FCD  cp WA,0
+	cp	wa, 0:i3                                  ; FC2FCD  cp WA,0
 	jr z, sub_FC2F1A__FC2FD7                   ; FC2FCF  jr Z,0xfc2fd7
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC2FD1  or (XIX),0x0008
 	jr sub_FC2F1A__FC2FDB                      ; FC2FD5  jr T,0xfc2fdb
@@ -21158,7 +21158,7 @@ sub_FC2FE9:
 	extz	xwa                                   ; FC3059  extz XWA
 	ld	xix, xwa                                ; FC305B  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC305D  ld IY,(XBC)
-	cps	iy, 0                                  ; FC305F  cp IY,0
+	cp	iy, 0:i3                                  ; FC305F  cp IY,0
 	jr z, sub_FC2FE9__FC3069                   ; FC3061  jr Z,0xfc3069
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC3063  or (XWA),0x0001
 	jr sub_FC2FE9__FC306D                      ; FC3067  jr T,0xfc306d
@@ -21167,7 +21167,7 @@ sub_FC2FE9__FC3069:
 sub_FC2FE9__FC306D:
 	ld	xbc, (xiz-4)                            ; FC306D  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC3070  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC3073  cp WA,0
+	cp	wa, 0:i3                                  ; FC3073  cp WA,0
 	jr z, sub_FC2FE9__FC307D                   ; FC3075  jr Z,0xfc307d
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC3077  or (XIX),0x0002
 	jr sub_FC2FE9__FC3081                      ; FC307B  jr T,0xfc3081
@@ -21176,7 +21176,7 @@ sub_FC2FE9__FC307D:
 sub_FC2FE9__FC3081:
 	ld	xbc, (xiz-4)                            ; FC3081  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC3084  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC3087  cp WA,0
+	cp	wa, 0:i3                                  ; FC3087  cp WA,0
 	jr z, sub_FC2FE9__FC3091                   ; FC3089  jr Z,0xfc3091
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC308B  or (XIX),0x0004
 	jr sub_FC2FE9__FC3095                      ; FC308F  jr T,0xfc3095
@@ -21185,7 +21185,7 @@ sub_FC2FE9__FC3091:
 sub_FC2FE9__FC3095:
 	ld	xbc, (xiz-4)                            ; FC3095  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC3098  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC309B  cp WA,0
+	cp	wa, 0:i3                                  ; FC309B  cp WA,0
 	jr z, sub_FC2FE9__FC30A5                   ; FC309D  jr Z,0xfc30a5
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC309F  or (XIX),0x0008
 	jr sub_FC2FE9__FC30A9                      ; FC30A3  jr T,0xfc30a9
@@ -21275,7 +21275,7 @@ sub_FC30B7:
 	extz	xwa                                   ; FC311A  extz XWA
 	ld	xix, xwa                                ; FC311C  ld XIX,XWA
 	ld	iy, (xbc)                               ; FC311E  ld IY,(XBC)
-	cps	iy, 0                                  ; FC3120  cp IY,0
+	cp	iy, 0:i3                                  ; FC3120  cp IY,0
 	jr z, sub_FC30B7__FC312A                   ; FC3122  jr Z,0xfc312a
 	extpfx4 0x90, 0x3E, 0x01, 0x00             ; FC3124  or (XWA),0x0001
 	jr sub_FC30B7__FC312E                      ; FC3128  jr T,0xfc312e
@@ -21284,7 +21284,7 @@ sub_FC30B7__FC312A:
 sub_FC30B7__FC312E:
 	ld	xbc, (xiz-4)                            ; FC312E  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+2)                             ; FC3131  ld WA,(XBC+0x02)
-	cps	wa, 0                                  ; FC3134  cp WA,0
+	cp	wa, 0:i3                                  ; FC3134  cp WA,0
 	jr z, sub_FC30B7__FC313E                   ; FC3136  jr Z,0xfc313e
 	extpfx4 0x94, 0x3E, 0x02, 0x00             ; FC3138  or (XIX),0x0002
 	jr sub_FC30B7__FC3142                      ; FC313C  jr T,0xfc3142
@@ -21293,7 +21293,7 @@ sub_FC30B7__FC313E:
 sub_FC30B7__FC3142:
 	ld	xbc, (xiz-4)                            ; FC3142  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+4)                             ; FC3145  ld WA,(XBC+0x04)
-	cps	wa, 0                                  ; FC3148  cp WA,0
+	cp	wa, 0:i3                                  ; FC3148  cp WA,0
 	jr z, sub_FC30B7__FC3152                   ; FC314A  jr Z,0xfc3152
 	extpfx4 0x94, 0x3E, 0x04, 0x00             ; FC314C  or (XIX),0x0004
 	jr sub_FC30B7__FC3156                      ; FC3150  jr T,0xfc3156
@@ -21302,7 +21302,7 @@ sub_FC30B7__FC3152:
 sub_FC30B7__FC3156:
 	ld	xbc, (xiz-4)                            ; FC3156  ld XBC,(XIZ+0xfc)
 	ld	wa, (xbc+6)                             ; FC3159  ld WA,(XBC+0x06)
-	cps	wa, 0                                  ; FC315C  cp WA,0
+	cp	wa, 0:i3                                  ; FC315C  cp WA,0
 	jr z, sub_FC30B7__FC3166                   ; FC315E  jr Z,0xfc3166
 	extpfx4 0x94, 0x3E, 0x08, 0x00             ; FC3160  or (XIX),0x0008
 	jr sub_FC30B7__FC316A                      ; FC3164  jr T,0xfc316a
@@ -21579,7 +21579,7 @@ sub_FC3241__FC32AE:
 	and	a, 15                                  ; FC32DC  and A,0x0f
 	extpfx3 0x8E, 0xE6, 0xE1                   ; FC32DF  or A,(XIZ+0xe6)
 	ld	(xbc+3), a                              ; FC32E2  ld (XBC+0x03),A
-	cps	de, 3                                  ; FC32E5  cp DE,3
+	cp	de, 3:i3                                  ; FC32E5  cp DE,3
 	jr nc, sub_FC3241__FC3346                  ; FC32E7  jr NC,0xfc3346
 	ld	xix, (xiz-24)                           ; FC32E9  ld XIX,(XIZ+0xe8)
 	add	xix, 39                                ; FC32EC  add XIX,0x00000027
@@ -21592,7 +21592,7 @@ sub_FC3241__FC32AE:
 	jr le, sub_FC3241__FC3306                  ; FC3301  jr LE,0xfc3306
 	ldw	hl, 0x64                               ; FC3303  ld HL,0x0064
 sub_FC3241__FC3306:
-	cps	hl, 0                                  ; FC3306  cp HL,0
+	cp	hl, 0:i3                                  ; FC3306  cp HL,0
 	jr ge, sub_FC3241__FC330D                  ; FC3308  jr GE,0xfc330d
 	ldw	hl, 0                                  ; FC330A  ld HL,0x0000
 sub_FC3241__FC330D:
@@ -21613,7 +21613,7 @@ sub_FC3241__FC330D:
 	jr le, sub_FC3241__FC3338                  ; FC3333  jr LE,0xfc3338
 	ldw	hl, 0x64                               ; FC3335  ld HL,0x0064
 sub_FC3241__FC3338:
-	cps	hl, 0                                  ; FC3338  cp HL,0
+	cp	hl, 0:i3                                  ; FC3338  cp HL,0
 	jr ge, sub_FC3241__FC333F                  ; FC333A  jr GE,0xfc333f
 	ldw	hl, 0                                  ; FC333C  ld HL,0x0000
 sub_FC3241__FC333F:
@@ -21637,7 +21637,7 @@ sub_FC3241__FC3346:
 	jr le, sub_FC3241__FC3372                  ; FC336D  jr LE,0xfc3372
 	ldw	hl, 0x7F                               ; FC336F  ld HL,0x007f
 sub_FC3241__FC3372:
-	cps	hl, 0                                  ; FC3372  cp HL,0
+	cp	hl, 0:i3                                  ; FC3372  cp HL,0
 	jr ge, sub_FC3241__FC3379                  ; FC3374  jr GE,0xfc3379
 	ldw	hl, 0                                  ; FC3376  ld HL,0x0000
 sub_FC3241__FC3379:
@@ -21659,7 +21659,7 @@ sub_FC3241__FC3379:
 	jr le, sub_FC3241__FC33A9                  ; FC33A4  jr LE,0xfc33a9
 	ldw	hl, 0x64                               ; FC33A6  ld HL,0x0064
 sub_FC3241__FC33A9:
-	cps	hl, 0                                  ; FC33A9  cp HL,0
+	cp	hl, 0:i3                                  ; FC33A9  cp HL,0
 	jr ge, sub_FC3241__FC33B0                  ; FC33AB  jr GE,0xfc33b0
 	ldw	hl, 0                                  ; FC33AD  ld HL,0x0000
 sub_FC3241__FC33B0:
@@ -21681,7 +21681,7 @@ sub_FC3241__FC33B0:
 	jr le, sub_FC3241__FC33E0                  ; FC33DB  jr LE,0xfc33e0
 	ldw	hl, 0x64                               ; FC33DD  ld HL,0x0064
 sub_FC3241__FC33E0:
-	cps	hl, 0                                  ; FC33E0  cp HL,0
+	cp	hl, 0:i3                                  ; FC33E0  cp HL,0
 	jr ge, sub_FC3241__FC33E7                  ; FC33E2  jr GE,0xfc33e7
 	ldw	hl, 0                                  ; FC33E4  ld HL,0x0000
 sub_FC3241__FC33E7:
@@ -21694,7 +21694,7 @@ sub_FC3241__FC33EB:
 	inc	1, de                                  ; FC33F2  inc 1,DE
 	ld	xwa, 81                                 ; FC33F4  ld XWA,0x00000051
 	add	(xiz-24), xwa                          ; FC33F9  add (XIZ+0xe8),XWA
-	cps	de, 4                                  ; FC33FC  cp DE,4
+	cp	de, 4:i3                                  ; FC33FC  cp DE,4
 	jrl c, sub_FC3241__FC32AE                  ; FC33FE  jrl C,0xfc32ae
 	pop	xix                                    ; FC3401  pop XIX
 	popw	de                                    ; FC3402  pop DE

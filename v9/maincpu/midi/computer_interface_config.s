@@ -30,7 +30,7 @@ TtComputerConnection:
 	or xde, xde
 	jr nz, ComputerConnectionTitleExit
 	call GET_COMPUTER_INTERFACE_SELECTION
-	cps l, 0	;  MIDI
+	cp l, 0:i3	;  MIDI
 	jr nz, ComputerConnectionTitleExit
 	ld (0x7f42:16), 70
 	ld xwa, 0xffffffff
@@ -68,11 +68,11 @@ MdCmptCnctFunc:
 CmptCnctDrawConnectionDiagram:
 	ld bc, (xhl + 4)
 	ld xwa, (xhl + 8)
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, CmptCnct_DrawDiagram2
-	cps bc, 1
+	cp bc, 1:i3
 	jr z, CmptCnct_DrawDiagram1
-	cps bc, 0
+	cp bc, 0:i3
 	jr nz, CmptCnct_DrawDiagramDefault
 	pushw 0xe7
 	pushw 0xf848
@@ -157,12 +157,12 @@ PcgModeGridEventStart:
 	ld xwa, xde
 	ld de, (xwa + 4)
 	inc 8, xwa
-	cps de, 3
+	cp de, 3:i3
 	jr z, PcgMode_CopyStrCustom
 	ld xbc, (xwa)
-	cps de, 1
+	cp de, 1:i3
 	jr z, PcgModeDisplayString_Bank1
-	cps de, 0
+	cp de, 0:i3
 	jr nz, PcgModeDefaultCase
 	ld xwa, SplitPoint_NoteEntry_C_Code_0xD2
 	jr PcgMode_CopyStrEntry
@@ -222,12 +222,12 @@ DrumType_GridEvent:
 	ld xwa, xde
 	ld de, (xwa + 4)
 	inc 8, xwa
-	cps de, 3
+	cp de, 3:i3
 	jr z, DrumType_CopyStrCustom
 	ld xbc, (xwa)
-	cps de, 1
+	cp de, 1:i3
 	jr z, DrumType_CopyStrBank1
-	cps de, 0
+	cp de, 0:i3
 	jr nz, DrumType_CopyStrDefault
 	ld xwa, SplitPoint_NoteEntry_C_Code_0xFA
 	jr DrumType_CopyStrEntry

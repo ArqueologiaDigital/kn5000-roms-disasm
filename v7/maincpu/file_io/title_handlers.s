@@ -104,11 +104,11 @@ FmmUtilityTitleFunc:
 	calr	-1653
 FmmUtility_DispatchState:
 	ld	wa, (33892:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	z, 195
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 165
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	z, 93
 	cpw	(33894:16), 0
 	jr	ge, 19
@@ -229,11 +229,11 @@ FmmSmfUtilityTitleFunc:
 	calr	-2052
 FmmSmfUtility_DispatchState:
 	ld	wa, (33892:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	z, 195
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 165
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	z, 93
 	cpw	(33896:16), 0
 	jr	ge, 19

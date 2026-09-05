@@ -59,7 +59,7 @@ FDC_WaitReady:
 	and L,0x1f
 	ld A,L
 	extz WA
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, .Lc_f9674b
 	ld QIZ,0
 .Lc_f9674b:
@@ -212,17 +212,17 @@ FDC_CheckDriveCount:
 	jrl	1972
 FDC_ValidateCommand:
 	ld	wa, (35236:16)
-	cps	wa, 4
+	cp	wa, 4:i3
 	jr	z, 33
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	z, 29
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 25
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	z, 13
 	cp	wa, 11
 	jr	z, 4
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	nz, 11
 FDC_NoOpReturn:
 	ldb l, 0x0
@@ -281,15 +281,15 @@ FDC_SetupFormatParams:
 	ld	wa, (35242:16)
 	ld	(35282:16), a
 	and	a, 15
-	cps	a, 3
+	cp	a, 3:i3
 	jrl	z, 129
-	cps	a, 2
+	cp	a, 2:i3
 	jr	z, 69
-	cps	a, 5
+	cp	a, 5:i3
 	jr	z, 9
-	cps	a, 4
+	cp	a, 4:i3
 	jr	z, 5
-	cps	a, 0
+	cp	a, 0:i3
 	jrl	nz, 168
 FDC_FormatHD:
 	ld	(35218:16), 2
@@ -381,7 +381,7 @@ FDC_NOP_Delay:
 	ld (xsp), a
 	ld a, (xsp)
 	decm8 1, (xsp)
-	cps a, 0
+	cp a, 0:i3
 	jr z, FDC_NOP_Delay_Exit
 
 FDC_NOP_Delay_Loop:
@@ -397,7 +397,7 @@ FDC_NOP_Delay_Loop:
 	nop
 	ld a, (xsp)
 	decm8 1, (xsp)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, FDC_NOP_Delay_Loop
 
 FDC_NOP_Delay_Exit:
@@ -593,7 +593,7 @@ FDC_Exception_Status_Decoder:
 	jr	z, 20
 	cp	a, 192
 	jr	z, 7
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 105
 	ldb	l, 0
 	ret
@@ -827,7 +827,7 @@ FDC_ClearStatus_InitTimer:
 	calr FDC_Set_Status
 	ldw BC, 0xffff
 .Lc_f971ff:
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, .Lc_f971e1
 	pop XIZ
 	ret
@@ -983,9 +983,9 @@ FDC_STATUS_COPY:
 FDC_STATUS_COPY_Code:
 	ret	
 	ld	wa, (35240:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 13
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 2
 	jr	13
 	ldw	wa, 254
@@ -1250,7 +1250,7 @@ Reset_Floppy_Disk_Controller:
 	ldw	(35464:16), 0
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 8
 	ldw	(35470:16), 224
 	jr	6

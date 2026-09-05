@@ -149,7 +149,7 @@ AcTtlJgBox_HandleOK:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcTtlJgBox_CallInherited
 	ld xde, xiz
 	ld xwa, (xsp + 4)
@@ -345,7 +345,7 @@ PsWinToggle_HandleOK:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 10)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, PsWinToggle_InheritedFallback
 	ld xbc, (xsp + 6)
 	ld xwa, (xbc + 40)
@@ -649,7 +649,7 @@ IvFocus_HandleOK:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, IvFocus_CallInherited
 	ld xwa, xiz
 	ld xbc, 0x1e0006c
@@ -657,10 +657,10 @@ IvFocus_HandleOK:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 40)
-	cps de, 0
+	cp de, 0:i3
 	jr lt, IvFocus_ReturnZero
 	exts xde
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, IvFocus_SendListEmpty
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00017
@@ -862,11 +862,11 @@ DrawProgressRectH:
 	push xiz
 	ld (xsp + 32), bc
 	ld bc, (xsp + 38)
-	cps bc, 3
+	cp bc, 3:i3
 	jr z, DrawProgH_Mode3Setup
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, DrawProgH_Mode2Setup
-	cps bc, 1
+	cp bc, 1:i3
 	scc16 nz, bc
 	ld (xsp + 8), bc
 	ldw (xsp + 10), 0x0
@@ -955,7 +955,7 @@ DrawProgH_SetupCenter:
 	sub bc, ix
 	ld (xhl + 2), bc
 	ldw (xsp + 14), 0x0
-	cps iz, 0
+	cp iz, 0:i3
 	jr ule, DrawProgH_AfterLoop1
 
 DrawProgH_Loop1:
@@ -1064,11 +1064,11 @@ DrawProgressRectV:
 	push xiz
 	ld (xsp + 34), bc
 	ld bc, (xsp + 40)
-	cps bc, 3
+	cp bc, 3:i3
 	jr z, DrawProgV_Mode3Setup
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, DrawProgV_Mode2Setup
-	cps bc, 1
+	cp bc, 1:i3
 	scc16 nz, bc
 	ld (xsp + 6), bc
 	ldw (xsp + 8), 0x0
@@ -1939,7 +1939,7 @@ EditControlProc:
 ; ============================================================================
 UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
-	cps hl, 0				; Returns HL=1 if enabled
+	cp hl, 0:i3				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
 	ld a, (0x8d38:16); Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
@@ -2019,7 +2019,7 @@ CtrlPanel_HandleKeyInput:
 	ld a, (0xc07d:16); param byte (key code low)
 	cp a, 0x10				; Check for special key 0x10
 	jr z, CtrlPanel_HandleKey10			; Handle key 0x10
-	cps a, 0				; Check for key 0x00
+	cp a, 0:i3				; Check for key 0x00
 	ret nz					; Other keys: return
 	ld a, (0xc07f:16); additional key data
 	and a, 0x03				; check bits 1:0
@@ -2040,7 +2040,7 @@ CtrlPanel_HandleKey10:
 PartSelect_UpdateDisplayState:
 	ld a, (0xfc66:16)
 	and a, 0x1
-	cps a, 0
+	cp a, 0:i3
 	scc8 z, e
 	ld (0x8d3a:16), e
 	extz de
@@ -2236,11 +2236,11 @@ MainRamControl:
 	ldw bc, 0xb
 	ldirw
 	ld wa, (xhl + 4)
-	cps wa, 4
+	cp wa, 4:i3
 	jr z, RamCtrl_Read_Dword
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, RamCtrl_Read_Word
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, RamCtrl_Read_InvalidSize
 	ld xbc, xhl
 	lda xbc, (xbc + 14)
@@ -2290,13 +2290,13 @@ RamCtrl_Adjust_Entry:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp)
 	ld de, (xwa + 4)
-	cps de, 4
+	cp de, 4:i3
 	jr z, RamCtrl_Adjust_Dword
 	ld xbc, (xwa + 10)
 	ld xwa, (xwa + 6)
-	cps de, 2
+	cp de, 2:i3
 	jr z, RamCtrl_Adjust_Word_CheckRange
-	cps de, 1
+	cp de, 1:i3
 	jr nz, RamCtrl_Adjust_InvalidSize
 	cp xwa, xbc
 	jr ule, RamCtrl_Adjust_Byte_SignExt
@@ -2384,11 +2384,11 @@ RamCtrl_Adjust_WriteBack:
 	ld xbc, (xsp + 8)
 	ld (xwa + 14), xbc
 	ld wa, (xhl + 4)
-	cps wa, 4
+	cp wa, 4:i3
 	jr z, RamCtrl_Adjust_Write_Dword
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, RamCtrl_Adjust_Write_Word
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, RamCtrl_Adjust_Write_InvalidSize
 	ld xwa, (xsp + 4)
 	ld (xwa), c
@@ -2427,12 +2427,12 @@ RamCtrl_Set_Entry:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp)
 	ld bc, (xwa + 4)
-	cps bc, 4
+	cp bc, 4:i3
 	jr z, RamCtrl_Set_Dword
 	lda xde, (xwa + 14)
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, RamCtrl_Set_Word_Mask
-	cps bc, 1
+	cp bc, 1:i3
 	jr nz, RamCtrl_Set_InvalidSize
 	ld xbc, 0xff
 	jr RamCtrl_Set_MaskAndWrite
@@ -2646,9 +2646,9 @@ MainPmanCtrl_StorePartSelect:
 MainPmanCtrl_CheckSoundParam:
 	ld xwa, 0x4100
 	call SndParam_LookupReadOnly
-	cps l, 1
+	cp l, 1:i3
 	jr z, MainPmanCtrl_SetPartSelectOne
-	cps l, 5
+	cp l, 5:i3
 	jr nz, MainPmanCtrl_SetPartSelectZero
 
 MainPmanCtrl_SetPartSelectOne:
@@ -2768,22 +2768,22 @@ MainTitleCtrl_HandleBA:
 
 MainTitleCtrl_HandleBB:
 	ld wa, (0x0274aa:24)
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
 	ld (0x0274aa:24), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, MainTitleCtrl_CheckSecondTimer
 	ld wa, (0x0274a8:24)
 	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
 	ld wa, (0x0274ae:24)
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, UIWidget_ReturnZero
 	dec 1, wa
 	ld (0x0274ae:24), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, UIWidget_ReturnZero
 	cpw (0x274ac:24), 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
@@ -3010,7 +3010,7 @@ GetClientBox2:
 	ld xix, xiz
 	lds bc, 4
 	ldirw
-	cps wa, 0
+	cp wa, 0:i3
 	jr mi, CtrlPanel_InvalidIndexHandler
 	cp wa, 0xb
 	jr le, CtrlPanel_DispatchByIndex
@@ -3365,7 +3365,7 @@ GroupBox_HandlePartChange:
 	cpw (xsp + 2), 0x0
 	jrl nz, GroupBox_ReturnZero
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	scc16 z, wa
 	ld (xsp + 6), wa
 	call GetTitleNow
@@ -3455,7 +3455,7 @@ GroupBox_HandleModeChange:
 	cpw (xsp + 2), 0x0
 	jrl nz, GroupBox_ReturnZero
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	scc16 z, wa
 	ld (xsp + 6), wa
 	call GetTitleNow
@@ -3544,7 +3544,7 @@ GroupBox_SndCmd_GetTitle:
 	ld wa, (xsp + 4)
 	ld (xsp + 2), wa
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	scc16 z, wa
 	ld (xsp + 6), wa
 	ld xwa, (xsp + 30)
@@ -3807,7 +3807,7 @@ GroupBox_StateCompare_Default:
 	cp xhl, (xsp + 38)
 	jrl nz, GroupBox_ReturnZero
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, GroupBox_ReturnZero
 	ld xwa, (xsp + 30)
 	cp xwa, 0x5

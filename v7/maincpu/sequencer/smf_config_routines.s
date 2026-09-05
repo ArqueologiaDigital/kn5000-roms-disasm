@@ -272,7 +272,7 @@ SMF_CountActive_Next:
 	inc 1, c
 	cp c, 0xf
 	jr ule, SMF_CountActive_Loop
-	cps l, 2
+	cp l, 2:i3
 	jrl c, SMF_AssignReturn
 	xor bc, bc
 
@@ -577,7 +577,7 @@ SMF_WriteByte_NewSector:
 	ldw_erp DE, 0xe2
 	div xwa, xhl
 	stw_erp DE, 0xe2
-	cps de, 0
+	cp de, 0:i3
 	jr nz, SMF_WriteByte_AlignCheck
 
 SMF_WriteByte_AlignCheck:
@@ -842,7 +842,7 @@ SMF_ProcessCh_Next:
 	cp c, 0x20
 	jr c, SMF_ProcessCh_Loop
 	srl iy, 1
-	cps iy, 0
+	cp iy, 0:i3
 	jr z, SMF_ProcessCh_Finalize
 	call SMF_SortOutputQueue
 
@@ -1082,7 +1082,7 @@ SMF_Event_ProgramChange:
 	calr SMF_GetNextEvent
 	popw_dd16 0x66, 0x26
 	popw_dd16 0xaf, 0x28
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, SMF_EventLoop_Continue
 	bit 0, (4331:16)
 	jr z, SMF_ProgChg_UseDefault
@@ -1093,11 +1093,11 @@ SMF_Event_ProgramChange:
 	ld e, (0x2877:16)
 	xor d, d
 	ld iy, de
-	cps a, 0
+	cp a, 0:i3
 	jr c, SMF_ProgChg_NotFound
 	cp a, 0xf
 	jr ugt, SMF_ProgChg_NotFound
-	cps l, 0
+	cp l, 0:i3
 	jr ugt, SMF_ProgChg_NotFound
 	ld l, a
 	xor h, h
@@ -1157,15 +1157,15 @@ SMF_Event_ControlChange:
 	calr SMF_GetNextEvent
 	pop xhl
 	ld (4340:16), a
-	cps a, 0
+	cp a, 0:i3
 	jr c, SMF_CtrlChg_NotFound
 	cp a, 0xf
 	jr ugt, SMF_CtrlChg_NotFound
-	cps l, 3
+	cp l, 3:i3
 	jr c, SMF_CtrlChg_NotFound
 	cp l, 0xb
 	jr ugt, SMF_CtrlChg_NotFound
-	cps l, 6
+	cp l, 6:i3
 	jr z, SMF_CtrlChg_NotFound
 	jr SMF_CtrlChg_UseDefault
 	bit 0, (4331:16)
@@ -1317,7 +1317,7 @@ SMF_ClearQueue_Loop:
 	ret
 
 SMF_SortOutputQueue:
-	cps iy, 0
+	cp iy, 0:i3
 	jr z, SMF_Sort_Return
 	xor de, de
 	cp (4014:16), 255
@@ -1538,7 +1538,7 @@ SMF_UpdateTempo_Loop:
 	add xde, xix
 	ld wa, (xde + 3)
 	pop xde
-	cps l, 0
+	cp l, 0:i3
 	jr nz, SMF_UpdateTempo_SubtractBase
 	ld (4229:16), wa
 	jr SMF_UpdateTempo_Encode
@@ -1546,7 +1546,7 @@ SMF_UpdateTempo_Loop:
 SMF_UpdateTempo_SubtractBase:
 	ld de, wa
 	sub de, (3942:16)
-	cps de, 0
+	cp de, 0:i3
 	jr ge, SMF_UpdateTempo_ClampZero
 	lds de, 0
 
@@ -1705,7 +1705,7 @@ SMF_GlobalCh_Return:
 SMF_LoadSongBank:
 	call SMF_DetectFormat
 	ld a, (4394:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, SMF_LoadBank_Return
 	ld xde, 0xab000
 	lda_dri XDE, 0xe9, 0xc7, 0x00
@@ -1761,7 +1761,7 @@ SMF_ResetPlaybackState:
 	ld (3301:16), a
 	calr SMF_DetectFormat
 	ld a, (4394:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, SMF_Parse_Complete
 
 SMF_ParseEvents:
@@ -1982,15 +1982,15 @@ SMF_ConfigSlot_ReadDataLoop:
 	and (4411:16), 254
 	and (4411:16), 253
 	ld a, (4394:16)
-	cps a, 1
+	cp a, 1:i3
 	jr z, SMF_Config_Format1
-	cps a, 2
+	cp a, 2:i3
 	jr z, SMF_Config_Format2
-	cps a, 3
+	cp a, 3:i3
 	jr z, SMF_Config_Format3
-	cps a, 4
+	cp a, 4:i3
 	jp z, (SMF_Config_Format4or5:24)
-	cps a, 5
+	cp a, 5:i3
 	jp z, (SMF_Config_Format4or5:24)
 	jrl SMF_ConfigSlot_Return
 
@@ -2186,7 +2186,7 @@ SMF_Config_SaveAndRestore:
 SMF_Config_GetTableEntry:
 	stb_dri C, 0x07, 0xe8, 0xec
 	pop xde
-	cps a, 3
+	cp a, 3:i3
 	jr nz, SMF_Config_CallHandler
 	nop
 
@@ -2276,13 +2276,13 @@ SMF_DetectFormat:
 	lda xde, (xde + 4)
 	ld a, (xde + 1)
 	ld w, (xde + 2)
-	cps a, 1
+	cp a, 1:i3
 	jr nz, SMF_Format_Return
-	cps w, 3
+	cp w, 3:i3
 	jr z, SMF_Format_Version1
-	cps w, 6
+	cp w, 6:i3
 	jr z, SMF_Format_Version4
-	cps w, 7
+	cp w, 7:i3
 	jr z, SMF_Format_Version5
 	jr SMF_Format_Return
 
@@ -2442,7 +2442,7 @@ SMF_SlotChain_ExtendedVoice:
 	or w, (4395:16)
 	and a, w
 	and a, 0x20
-	cps a, 0
+	cp a, 0:i3
 	jr z, SMF_SlotChain_ExtVoiceDefault
 	xor hl, hl
 	ld l, (xiy + 2)
@@ -2466,7 +2466,7 @@ SMF_SlotChain_ExtVoiceReturn:
 
 SMF_SlotChain_Fmt3Voice:
 	ld a, (4394:16)
-	cps a, 3
+	cp a, 3:i3
 	jr nz, SMF_SlotChain_Fmt3Return
 	cp (0x2873:16), 15
 	jr z, SMF_SlotChain_Fmt3Return
@@ -2687,9 +2687,9 @@ SMF_SlotParam_ModWheelCalc:
 	or a, (4395:16)
 	ld w, (xiy + 5)
 	or w, (3310:16)
-	cps w, 4
+	cp w, 4:i3
 	jr z, SMF_SlotParam_ModWheelStore
-	cps w, 3
+	cp w, 3:i3
 	jr nz, SMF_SlotParam_ModWheelReturn
 	andmi8 (xiy + 4), 0xfb
 	ld (xiy + 5), 0x7
@@ -2734,7 +2734,7 @@ SMF_SlotParam_PitchBendCalc:
 	or (4411:16), 1
 	ld a, (xiy + 4)
 	and a, 0x10
-	cps a, 0
+	cp a, 0:i3
 	jr z, SMF_SlotParam_PitchBendStore
 	ldb a, 0x20
 	jr SMF_SlotParam_PitchBendReturn
@@ -2852,7 +2852,7 @@ SMF_SlotParam_Sustain:
 	jr nz, SMF_SlotParam_SustainReturn
 	ld a, (xiy + 5)
 	or a, (3310:16)
-	cps a, 3
+	cp a, 3:i3
 	jr nz, SMF_SlotParam_SustainReturn
 	ld a, (xiy + 2)
 	calr SMF_TranslateChannel

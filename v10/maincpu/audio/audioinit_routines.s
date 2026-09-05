@@ -136,11 +136,11 @@ AudioInit_SelectVoiceByType:
 	jr z, AudioInit_StereoVoiceCfg
 	cp a, 0x8
 	jr z, AudioInit_SetVoice19
-	cps a, 4
+	cp a, 4:i3
 	jr z, AudioInit_SetVoice18
-	cps a, 2
+	cp a, 2:i3
 	jr z, AudioInit_SetVoice17
-	cps a, 1
+	cp a, 1:i3
 	jr nz, AudioInit_StereoVoiceCfg
 	ld (0xc1ff:16), 16
 	orw (0xc59c:16), 2
@@ -517,7 +517,7 @@ AudioInit_CheckStereoRouting:
 AudioInit_ClearStereoRouting:
 	ld a, (0xc2ce:16)
 	res 7, a
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioInit_VoiceStereoCheck
 	set 7, (0xc2ce:16)
 	and (0xc2ce:16), 128
@@ -546,7 +546,7 @@ AudioInit_ClearAllVoiceBanks:
 	ld (0xc5c8:16), 255
 	ld a, (0xc2c3:16)
 	res 0, a
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioInit_ClearBank1Routing
 	set 7, (0xc2c2:16)
 	and (0xc2c3:16), 1
@@ -555,7 +555,7 @@ AudioInit_ClearAllVoiceBanks:
 AudioInit_ClearBank1Routing:
 	ld a, (0xc2c7:16)
 	res 0, a
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioInit_ClearBank2Routing
 	set 7, (0xc2c6:16)
 	and (0xc2c7:16), 1
@@ -564,7 +564,7 @@ AudioInit_ClearBank1Routing:
 AudioInit_ClearBank2Routing:
 	ld a, (0xc2ca:16)
 	res 7, a
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioInit_CheckBit2Routing
 	set 7, (0xc2ca:16)
 	and (0xc2ca:16), 128
@@ -586,7 +586,7 @@ AudioInit_CheckBit2Routing:
 AudioInit_ClearBank3Routing:
 	ld a, (0xc2ce:16)
 	res 7, a
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioInit_UpdateIndicators
 	set 7, (0xc2ce:16)
 	and (0xc2ce:16), 128
@@ -712,7 +712,7 @@ Audio_CheckInitStatus:
 	ld hl, (0xf19e:16)
 	or hl, (3409:16)
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, AudioInit_ClearStatusBit8
 	orw (0xc598:16), 256
 	jr AudioInit_CheckGroupB_Presence
@@ -724,7 +724,7 @@ AudioInit_CheckGroupB_Presence:
 	ld bc, (0x28a8:16)
 	or bc, (3407:16)
 	ld wa, bc
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, AudioInit_ClearStatusBit9
 	orw (0xc598:16), 512
 	jr AudioInit_ChannelLoop_Init
@@ -1151,11 +1151,11 @@ AudioInit_SelectPriority:
 	jrl z, AudioInit_Priority_Mode10
 	cp a, 0x8
 	jr z, AudioInit_Priority_Mode8
-	cps a, 4
+	cp a, 4:i3
 	jr z, AudioInit_Priority_Mode4
-	cps a, 2
+	cp a, 2:i3
 	jr z, AudioInit_Priority_Mode2
-	cps a, 1
+	cp a, 1:i3
 	jrl nz, AudioInit_Priority_Default
 	ld (0xc252:16), 0
 	ld (0xc253:16), 255
@@ -1526,7 +1526,7 @@ AudioInit_Pan_CheckTypeED:
 	jr z, AudioInit_Pan_DefaultCenter
 	ld a, (0xfc66:16)
 	and a, 0x3
-	cps a, 2
+	cp a, 2:i3
 	jr nz, AudioInit_Pan_TypeED_Left
 	ld (0xc2b4:16), 1
 	jr AudioInit_Pan_CheckReverbChannel
@@ -1574,7 +1574,7 @@ AudioInit_Pan_Reverb_CheckTypeED:
 	jr z, AudioInit_Pan_Reverb_Center
 	ld a, (0xfc66:16)
 	and a, 0x3
-	cps a, 2
+	cp a, 2:i3
 	jr nz, AudioInit_Pan_Reverb_TypeED_Left
 	ld (0xc2bc:16), 1
 	jr AudioInit_Pan_Done
@@ -1922,7 +1922,7 @@ AudioInit_VoiceCompare_BothFF:
 	and a, c
 	ld l, a
 	lds ix, 0
-	cps ix, 6
+	cp ix, 6:i3
 	jrl nc, AudioInit_VoiceCompare_BuildCmd
 
 AudioInit_VoiceCompare_LayerLoop:
@@ -1979,7 +1979,7 @@ AudioInit_VoiceCompare_LayerChanged:
 AudioInit_VoiceCompare_LayerNext:
 	add d, d
 	inc 1, ix
-	cps ix, 6
+	cp ix, 6:i3
 	jrl c, AudioInit_VoiceCompare_LayerLoop
 	jr AudioInit_VoiceCompare_BuildCmd
 
@@ -2022,9 +2022,9 @@ AudioInit_VoiceCompare_SetBit3:
 	set 3, l
 
 AudioInit_VoiceCompare_BuildCmd:
-	cps e, 0
+	cp e, 0:i3
 	jr nz, AudioInit_VoiceCompare_QueueCmd
-	cps l, 0
+	cp l, 0:i3
 	jr z, AudioInit_VoiceCompare_PanCheck
 
 AudioInit_VoiceCompare_QueueCmd:
@@ -2161,7 +2161,7 @@ AudioInit_ChannelMap_Return:
 AudioInit_ComparePriorityTable:
 	pushw iz
 	lds iz, 0
-	cps iz, 3
+	cp iz, 3:i3
 	jr nc, AudioInit_Priority_Return
 
 AudioInit_Priority_Loop:
@@ -2200,7 +2200,7 @@ AudioInit_Priority_Loop:
 
 AudioInit_Priority_Next:
 	inc 1, iz
-	cps iz, 3
+	cp iz, 3:i3
 	jr c, AudioInit_Priority_Loop
 
 AudioInit_Priority_Return:
@@ -2226,7 +2226,7 @@ AudioInit_PartAssign_Loop:
 	ld a, (xwa)
 	cp a, (xde)
 	jrl z, AudioInit_PartAssign_Next
-	cps iz, 2
+	cp iz, 2:i3
 	jr nz, AudioInit_PartAssign_CheckIdx15
 	ld wa, iz
 	lda xbc, (0xc202:16)

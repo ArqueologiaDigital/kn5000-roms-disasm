@@ -558,7 +558,7 @@ Screen_Init_ClearStoredValue:
 
 Screen_Init_SetWall:
 	calr PostTitle_Function
-	cps hl, 0
+	cp hl, 0:i3
 	call nz, (SleepMainTask:24)
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000b1
@@ -573,7 +573,7 @@ Screen_Init_SetWall:
 	ld wa, hl
 	calr SetWallColor
 	calr PostTitle_Function
-	cps hl, 0
+	cp hl, 0:i3
 	call nz, (WakeUpMainTask:24)
 	call GetTitleNow
 	ld xwa, xhl
@@ -802,9 +802,9 @@ EditSwParam_Default:
 	ret
 
 SetWallPaper:
-	cps wa, 0
+	cp wa, 0:i3
 	jr mi, SetWallPaper_Default
-	cps wa, 5
+	cp wa, 5:i3
 	jr gt, SetWallPaper_Default
 	add wa, wa
 	lda xix, (DiskWarning_ConfirmStrings_0xE8A:24)
@@ -830,11 +830,11 @@ SetWallPaper_CaseData:
 	jr	t, 0xe2
 
 SetWallColor:
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, SetWallColor_01
 	cp wa, 0xf9
 	jr z, SetWallColor_F9
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, SetWallColor_02
 	cp wa, 0xf8
 	jr z, SetWallColor_F8
@@ -955,9 +955,9 @@ DrawTitleBar_CalcLayout:
 	lda xbc, (xsp + 12)
 	cp (xsp + 40), 0x2
 	jrl z, DrawTitleBar_RightJustify
-	cps e, 1
+	cp e, 1:i3
 	jrl z, DrawTitleBar_LeftJustify
-	cps e, 0
+	cp e, 0:i3
 	jrl nz, StringDraw_JoinPoint
 	ld xhl, xbc
 	ld de, (xsp + 8)
@@ -1849,7 +1849,7 @@ AcNaming_QueryCharSet:
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (0x0274e4:24), xwa
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17
 	lds bc, 0

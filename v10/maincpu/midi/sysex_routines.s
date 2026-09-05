@@ -81,9 +81,9 @@ ExcDotFunc_HandlerJumpTable:
 	lds	de, 0
 	ld	c, (149340:24)
 	extz	bc
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	ule, 22
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 8
 	stib_dsp	240, 157
 	dec	1, l

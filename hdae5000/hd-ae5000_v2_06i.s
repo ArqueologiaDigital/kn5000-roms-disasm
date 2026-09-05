@@ -3335,7 +3335,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
 	srl	xwa, 0x00
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl nz, .LRF_265e                      ; [7e 17 01] jrl NZ,0x28265e
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
 	ld	bc, wa
@@ -3725,16 +3725,16 @@ HDAE5000_HardTestPage:
 	ld xwa, (xwa + 0x0e88)             ; e3 e1 88 0e 20 — (xwa+0x0e88)
 	ld xix, (xwa + 0x08)				; a8 08 24
 	call (xix)					; b4 e8
-	cps l, 3					; cf db
+	cp l, 3:i3					; cf db
 	jr z, .Leh_status_2or3			; 66 04
-	cps l, 2					; cf da
+	cp l, 2:i3					; cf da
 	jr nz, .Leh_status_other			; 6e 27
 .Leh_status_2or3:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e88)             ; e3 e1 88 0e 20
 	ld xix, (xwa + 0x04)				; a8 04 24
 	call (xix)					; b4 e8
-	cps hl, 0					; db d8
+	cp hl, 0:i3					; db d8
 	jr nz, .Leh_status_nonzero			; 6e 0a
 	lda xwa, (0x2e2204:24); f2 04 22 2e 30
 	calr HDAE5000_Event_Handler			; 1e 8d fd
@@ -3929,7 +3929,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	lda xsp, (xsp - 124)		; allocate stack frame
 	lds wa, 0
 	call 0x293E88
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, .Lpws_error
 	lda xwa, (xsp + 72)
 	call 0x297573
@@ -4113,7 +4113,7 @@ HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
 	push xwa
 	call HDAE5000_MemCompare_Block
 	add xsp, 0x00000018		; clean up stack (24 bytes)
-	cps hl, 0			; check compare result
+	cp hl, 0:i3			; check compare result
 	jr nz, .Lptb_found
 	ld hl, iz			; return index - 1
 	dec 1, hl

@@ -44,11 +44,11 @@ FmmWallpaperLoadFunc:
 
 WPLoad_DispatchState:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl z, WPLoad_HandleSuccess
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, WPLoad_HandleError
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, WPLoad_HandleCancel
 	cpw (0x850a:16), 0
 	jr ge, WPLoad_ContinueWait
@@ -128,7 +128,7 @@ WPLoad_HandleSelection:
 	ld (0x81b0:16), xwa
 	call FileIO_GetCurrentWallpaperIndex
 	ld (0x81b4:16), hl
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, WPLoad_Selection_Positive
 	ldw (0x81b4:16), 0
 
@@ -172,7 +172,7 @@ WPLoad_HandleScroll:
 WPLoad_ScrollUp:
 	cp xwa, 0x1c00017
 	jrl nz, WPLoad_GetSelection
-	cps hl, 0
+	cp hl, 0:i3
 	jrl le, WPLoad_GetSelection
 	dec 1, hl
 	jr WPLoad_StorePosition
@@ -215,7 +215,7 @@ WPLoad_PageDown_Boundary:
 	exts xde
 	divs de, 0xa
 	stw_erp WA, 0xea
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, WPLoad_GetSelection
 	ld (0x81b4:16), bc
 	jr WPLoad_UpdateDisplay
@@ -343,10 +343,10 @@ WPScan_LoopBody:
 WPScan_CheckAvail:
 	andw_erp DE, 0xfa
 	jrl z, WPScan_LoopContinue
-	cps c, 3
+	cp c, 3:i3
 	jr nz, WPScan_TypeNotThree
 	call FileIO_ValidateAndOpenFile
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
@@ -366,13 +366,13 @@ WPScan_MarkAvailable:
 
 WPScan_TypeNotThree:
 	ld a, c
-	cps c, 2
+	cp c, 2:i3
 	jr nz, WPScan_TypeGeneric
 	call FileIO_ValidateFileSignature
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, WPScan_LoopContinue
 	call FileIO_ValidateFileWithRegion
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
@@ -392,7 +392,7 @@ WPScan_TypeTwo_Mark:
 
 WPScan_TypeGeneric:
 	call FileIO_ValidateFileSignature
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
@@ -415,7 +415,7 @@ WPScan_LimitReached:
 
 WPScan_LoopContinue:
 	inc 1, iz
-	cps iz, 4
+	cp iz, 4:i3
 	jrl c, WPScan_LoopBody
 	pop xiz
 	ret
@@ -423,10 +423,10 @@ WPScan_LoopContinue:
 WP_FindNextSlot:
 	pushw iz
 	ld a, (0x89f8:16)
-	cps a, 4
+	cp a, 4:i3
 	jr nc, WPFind_NotFound
 	ld bc, (0x89f6:16)
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, WPFind_NotFound
 	lds iz, 1
 	extz wa
@@ -456,7 +456,7 @@ WPFind_CheckSlot:
 
 WPFind_NextSlot:
 	inc 1, iz
-	cps iz, 4
+	cp iz, 4:i3
 	jr c, WPFind_SearchLoop
 
 WPFind_NotFound:
@@ -563,7 +563,7 @@ WP_GetBankMemName:
 	stb_dpi A, 0xf8	; LDA XBC, XIZ+
 	ld wa, (xsp + 8)
 	ld (xbc), a	; Store type marker
-	cps de, 4
+	cp de, 4:i3
 	jr nc, WP_GetBankMemName_FromROM
 	; From RAM at 0x0948a0
 	lda xbc, (0x0948a0:24)

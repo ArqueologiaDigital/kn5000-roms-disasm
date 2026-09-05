@@ -179,7 +179,7 @@ Sound_Navigate_Init:
 	add iz, (xsp + 10)
 
 Sound_Navigate_SearchLoop:
-	cps iz, 0
+	cp iz, 0:i3
 	jr ge, Sound_Navigate_ScanForward
 	cpw (xsp + 8), 0x0
 	jr le, Sound_Navigate_AtBottom
@@ -319,11 +319,11 @@ GetSoundBankCount:
 	extz wa
 	cp hl, 0xf
 	jr z, GetSoundBankCount_CheckDrum
-	cps hl, 2
+	cp hl, 2:i3
 	jr z, GetSoundBankCount_StandardBank
-	cps hl, 1
+	cp hl, 1:i3
 	jr z, GetSoundBankCount_StandardBank
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, GetSoundBankCount_CheckSpecial
 
 GetSoundBankCount_StandardBank:

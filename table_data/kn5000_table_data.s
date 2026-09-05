@@ -1273,12 +1273,12 @@ __jrt_nop_9FB652:
 
 	; === Get Boot Mode and Check FDC ===
 	calr Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	call nz, (0xFFC6B2:24)	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
 
 Boot_SkipFDCCheck:
 	call 0xFFEC63	; Boot_CheckDiskPresent: L=1 disk present (PD6 low)
-	cps l, 0
+	cp l, 0:i3
 	jr z, Boot_PrepareJump
 
 	; === Bring up the boot CP-serial link ===
@@ -1287,7 +1287,7 @@ Boot_SkipFDCCheck:
 
 	; === Probe the device on the CP-serial link ===
 	call 0xFFED0E	; Boot_ProbeExternalDevice: HL=device class
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Boot_PrepareJump
 
 	; === Flash Update Sequence ===
@@ -1300,7 +1300,7 @@ Boot_SkipFDCCheck:
 	ldw de, 0x50	; height
 	call 0xFFCCFB	; Boot_DrawBitmap
 	call 0xFFBFC4	; Boot_WaitForInput
-	cps l, 3
+	cp l, 3:i3
 	jr z, Boot_PrepareJump
 	cp l, 0x8
 	jr z, Boot_PrepareJump
@@ -1519,7 +1519,7 @@ BootStub_ReturnError:
 Flash_Reset_16bit:
 	push xiz	; 3e
 	ld xbc, 0x280000	; 41 00 00 28 00 - HDAE5000 base
-	cps a, 1	; c9 d9
+	cp a, 1:i3	; c9 d9
 	jr nz, Flash_Reset_16bit__got_base	; 6e 05
 	ld xbc, 0x300000	; 41 00 00 30 00 - Custom Data base
 Flash_Reset_16bit__got_base:
@@ -1543,7 +1543,7 @@ Flash_Reset_16bit__wait_ready:
 	ei 0	; 06 00 - Re-enable interrupts
 	; Check if region code = 4 (high bank exists)
 	call 0xFFB700	; Get_Region_Code - returns region code in L
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Flash_Reset_16bit__done
 	; Reset high bank at base+0x80000
 	add xiz, 0x80000	; ee c8 00 00 08 00
@@ -1648,12 +1648,12 @@ Flash_ProgramWord_16bit__wait_ready:
 	bit_dd8 5, 0x1C	; f0 1c cd
 	jr z, Flash_ProgramWord_16bit__wait_ready	; 66 fb
 	; Check target
-	cps a, 1	; c9 d9
+	cp a, 1:i3	; c9 d9
 	jr nz, Flash_ProgramWord_16bit__hdae_target	; 6e 20
 	; Custom Data target - check for high bank
 	lda xiz, (0x300000:24); f2 00 00 30 36
 	call 0xFFB700	; CALL Boot_Get_Region_Code (at 0xFFB700)
-	cps l, 4	; cf dc
+	cp l, 4:i3	; cf dc
 	jr nz, Flash_ProgramWord_16bit__do_program	; 6e 18
 	; Check if address is in high bank (>= 0x380000)
 	ld xwa, (xsp + 6)	; LD XWA, (XSP+06h)
@@ -1724,7 +1724,7 @@ Flash_ChipErase_16bit__got_base:
 	ldw (xwa), 0x10	; LD (XWA), 0010h (word store)
 	; Check region code for high bank
 	call 0xFFB700	; CALL Boot_Get_Region_Code (at 0xFFB700)
-	cps l, 4	; cf dc
+	cp l, 4:i3	; cf dc
 	jr nz, Flash_ChipErase_16bit__done	; 6e 49
 	cp (xsp + 4), 0x1	; CP (XSP+04h), 01h
 	jr nz, Flash_ChipErase_16bit__done	; 6e 43
@@ -1778,7 +1778,7 @@ Flash_SectorErase_16bit__got_base:
 	and (xsp + 4), xwa	; AND (XSP+04h), XWA
 	; Check region and bank for Custom Data
 	call 0xFFB700	; CALL Boot_Get_Region_Code (at 0xFFB700)
-	cps l, 4	; cf dc
+	cp l, 4:i3	; cf dc
 	jr nz, Flash_SectorErase_16bit__do_erase	; 6e 11
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h)
 	cp xwa, 0x380000	; e8 cf 00 00 38 00
@@ -1807,7 +1807,7 @@ Flash_SectorErase_16bit__do_erase:
 
 	; Check if Custom Data flash (target 1) with region code 4
 	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
-	cps l, 4	; cf dc
+	cp l, 4:i3	; cf dc
 	jr nz, Flash_SectorErase_16bit__check_non_region4	; 6e 5f - skip if not region 4
 
 	; Region 4: Check if Custom Data flash (target 1)
@@ -1992,7 +1992,7 @@ Flash_Init_Custom_And_Table:
 
 	; Check region and reset Table Data ROM if not region 4
 	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
-	cps l, 4	; cf dc
+	cp l, 4:i3	; cf dc
 	call nz, (0xFFBC2D:24)	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
 
 	; Read Custom Data device ID
@@ -2019,7 +2019,7 @@ Flash_Init_Custom_And_Table:
 ; -----------------------------------------------------------------------------
 MemBlock_FillWithZeros:
 	lds de, 0	; da a8
-	cps bc, 0	; d9 d8
+	cp bc, 0:i3	; d9 d8
 	ret ule	; b0 f3 - return if count <= 0
 MemBlock_FillWithZeros__fill_loop:
 	stw_dpi DE, 0xE1	; LD (XWA+), DE - store 0 and advance
@@ -2617,7 +2617,7 @@ FDC_ReadSectorWrapper__retry:
 	push xwa	; 38
 	call 0xFFE944	; CALL 0xFFE944
 	inc 4, xsp	; INC 4, XSP - deallocate
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr z, FDC_ReadSectorWrapper__read_ok	; 66 05 - skip retry if success
 
 	; Read failed, try FDC reset and retry
@@ -2664,7 +2664,7 @@ Boot_DetectDiskType:
 	push xiz	; 3e - buffer ptr
 	call 0xFFFBDC	; CALL 0xFFFBDC - check signature
 	add xsp, 0xA	; ADD XSP, 0Ah - pop 10 bytes
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type2	; 6e 07
 	ld (xsp + 4), 0x1	; LD (XSP+04h), 01h - type 1
 	jrl Boot_DetectDiskType__done	; JRL T, .done
@@ -2676,7 +2676,7 @@ Boot_DetectDiskType__check_type2:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type3	; 6e 07
 	ld (xsp + 4), 0x2	; LD (XSP+04h), 02h - type 2
 	jrl Boot_DetectDiskType__done	; JRL T, .done
@@ -2688,7 +2688,7 @@ Boot_DetectDiskType__check_type3:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type4	; 6e 07
 	ld (xsp + 4), 0x3	; LD (XSP+04h), 03h - type 3
 	jrl Boot_DetectDiskType__done	; JRL T, .done
@@ -2700,7 +2700,7 @@ Boot_DetectDiskType__check_type4:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type5	; 6e 06
 	ld (xsp + 4), 0x4	; LD (XSP+04h), 04h - type 4
 	jr Boot_DetectDiskType__done	; JR T, .done
@@ -2712,7 +2712,7 @@ Boot_DetectDiskType__check_type5:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type6	; 6e 06
 	ld (xsp + 4), 0x5	; LD (XSP+04h), 05h - type 5
 	jr Boot_DetectDiskType__done	; JR T, .done
@@ -2724,7 +2724,7 @@ Boot_DetectDiskType__check_type6:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type7	; 6e 06
 	ld (xsp + 4), 0x6	; LD (XSP+04h), 06h - type 6
 	jr Boot_DetectDiskType__done	; JR T, .done
@@ -2736,7 +2736,7 @@ Boot_DetectDiskType__check_type7:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type8	; 6e 06
 	ld (xsp + 4), 0x7	; LD (XSP+04h), 07h - type 7
 	jr Boot_DetectDiskType__done	; JR T, .done
@@ -2748,7 +2748,7 @@ Boot_DetectDiskType__check_type8:
 	push xiz	; 3e
 	call 0xFFFBDC	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__done	; 6e 04
 	ld (xsp + 4), 0x8	; LD (XSP+04h), 08h - type 8
 
@@ -2783,7 +2783,7 @@ Boot_CopySectors:
 	div wa, 0x12	; DIV WA, 0x0012 - sectors per track
 	stw_erp WA, 0xE2	; LD WA, QWA - get remainder
 	lds iz, 0	; LD IZ, 0 - offset = 0
-	cps wa, 0	; CP WA, 0
+	cp wa, 0:i3	; CP WA, 0
 	jr z, Boot_CopySectors__cs_skip_partial	; 66 48
 
 	; Handle partial first track
@@ -2827,7 +2827,7 @@ Boot_CopySectors__cs_skip_partial:
 	ld (xsp + 8), wa	; LD (XSP+0x08), WA - track count
 	ldw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000 - counter
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
-	cps wa, 0	; CP WA, 0
+	cp wa, 0:i3	; CP WA, 0
 	jr ule, Boot_CopySectors__cs_check_remainder	; 63 4d
 
 Boot_CopySectors__cs_track_loop:
@@ -2863,7 +2863,7 @@ Boot_CopySectors__cs_check_remainder:
 	add wa, 0x800	; ADD WA, 0x0800
 	sub wa, (xsp + 6)	; SUB WA, (XSP+0x06)
 	ld iz, wa	; LD IZ, WA
-	cps iz, 0	; CP IZ, 0
+	cp iz, 0:i3	; CP IZ, 0
 	jr z, Boot_CopySectors__cs_done	; 66 43
 
 	; Read remainder
@@ -2918,7 +2918,7 @@ Boot_CopySectorsEx:
 	div wa, 0x12	; DIV WA, 0x0012
 	stw_erp WA, 0xE2	; LD WA, QWA
 	lds iz, 0	; LD IZ, 0
-	cps wa, 0	; CP WA, 0
+	cp wa, 0:i3	; CP WA, 0
 	jr z, Boot_CopySectorsEx__cse_skip_partial	; 66 4d
 
 	ldw iz, 0x12	; LD IZ, 0x0012
@@ -2962,7 +2962,7 @@ Boot_CopySectorsEx__cse_skip_partial:
 	ld (xsp + 8), bc	; LD (XSP+0x08), BC
 	ldw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
-	cps wa, 0	; CP WA, 0
+	cp wa, 0:i3	; CP WA, 0
 	jr ule, Boot_CopySectorsEx__cse_check_rem	; 63 52
 
 Boot_CopySectorsEx__cse_track_loop:
@@ -3000,7 +3000,7 @@ Boot_CopySectorsEx__cse_check_rem:
 	add wa, (xsp + 26)	; ADD WA, (XSP+0x1A)
 	sub wa, (xsp + 6)	; SUB WA, (XSP+0x06)
 	ld iz, wa	; LD IZ, WA
-	cps iz, 0	; CP IZ, 0
+	cp iz, 0:i3	; CP IZ, 0
 	jr z, Boot_CopySectorsEx__cse_done	; 66 48
 
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
@@ -3068,11 +3068,11 @@ Boot_WaitDiskInsert__display_prompt:
 
 Boot_WaitDiskInsert__wdi_wait_remove:
 	call 0xFFEC63	; CALL 0xFFEC63 - check disk present
-	cps l, 0	; CP L, 0
+	cp l, 0:i3	; CP L, 0
 	jr z, Boot_WaitDiskInsert__wdi_check_insert	; 66 08
 Boot_WaitDiskInsert__wdi_recheck_remove:
 	call 0xFFEC63	; CALL 0xFFEC63
-	cps l, 0	; CP L, 0
+	cp l, 0:i3	; CP L, 0
 	jr nz, Boot_WaitDiskInsert__wdi_recheck_remove	; JR NZ, recheck disk removal
 
 Boot_WaitDiskInsert__wdi_check_insert:
@@ -3084,11 +3084,11 @@ Boot_WaitDiskInsert__wdi_delay1:
 
 Boot_WaitDiskInsert__wdi_wait_insert:
 	call 0xFFEC63	; CALL 0xFFEC63
-	cps l, 0	; CP L, 0
+	cp l, 0:i3	; CP L, 0
 	jr nz, Boot_WaitDiskInsert__wdi_delay2	; 6e 08
 Boot_WaitDiskInsert__wdi_recheck_insert:
 	call 0xFFEC63	; CALL 0xFFEC63
-	cps l, 0	; CP L, 0
+	cp l, 0:i3	; CP L, 0
 	jr z, Boot_WaitDiskInsert__wdi_recheck_insert	; JR Z, recheck disk insert
 
 Boot_WaitDiskInsert__wdi_delay2:
@@ -3167,9 +3167,9 @@ Boot_LoadDiskData:
 	ld a, (xsp)	; LD A, (XSP)
 	extz wa	; EXTZ WA
 	dec 1, wa	; DEC 1, WA
-	cps wa, 0	; CP WA, 0
+	cp wa, 0:i3	; CP WA, 0
 	jrl lt, Boot_LoadDiskData__ldd_error	; JRL LT, .ldd_error (type < 1)
-	cps wa, 7	; CP WA, 7
+	cp wa, 7:i3	; CP WA, 7
 	jrl gt, Boot_LoadDiskData__ldd_error	; JRL GT, .ldd_error (type > 8)
 
 	; Dispatch via jump table
@@ -3288,13 +3288,13 @@ Boot_BlinkLED:
 	inc 1, (3080:16); INC 1, (0x0C08) - LED counter
 	ld a, (3080:16); LD A, (0x0C08)
 	and a, 0x3	; AND A, 0x03 - mask to 0-3
-	cps a, 3	; CP A, 3
+	cp a, 3:i3	; CP A, 3
 	jr z, Boot_BlinkLED__led_pattern3	; 66 24
-	cps a, 2	; CP A, 2
+	cp a, 2:i3	; CP A, 2
 	jr z, Boot_BlinkLED__led_pattern2	; 66 18
-	cps a, 1	; CP A, 1
+	cp a, 1:i3	; CP A, 1
 	jr z, Boot_BlinkLED__led_pattern1	; 66 0c
-	cps a, 0	; CP A, 0
+	cp a, 0:i3	; CP A, 0
 	jr nz, Boot_BlinkLED__led_delay	; 6e 1e
 
 	; Pattern 0: bit 0
@@ -3811,7 +3811,7 @@ LZSS_ReadByte__read_sectors:
 	calr FDC_ReadSectorWrapper	; CALR 0xFFBF92 (read sector data)
 	addw (3124:16), 18	; ADD (0x0C34), 0x0012
 	inc 1, iz	; INC 1, IZ
-	cps iz, 4	; CP IZ, 4
+	cp iz, 4:i3	; CP IZ, 4
 	jr c, LZSS_ReadByte__read_sectors	; JR C, .read_sectors
 	lda xwa, (0x0099a4:24); LDA XWA, 0x0099A4
 	ld (3116:16), xwa	; LD (0x0C2C), XWA - reset buffer pointer
@@ -3844,7 +3844,7 @@ LZSS_OutputByte:
 	ld e, a	; LD E, A
 	inc 1, a	; INC 1, A
 	ld (3126:16), a; LD (0x0C36), A
-	cps e, 3	; CP E, 3 - check if 4 bytes buffered
+	cp e, 3:i3	; CP E, 3 - check if 4 bytes buffered
 	jr nz, LZSS_OutputByte__not_full	; JR NZ, .not_full
 	; Flush 4-byte buffer to destination
 	ld xwa, (3112:16); LD XWA, (0x0C28) - dest ptr
@@ -3875,7 +3875,7 @@ LZSS_OutputByte_Alt:
 	ld c, a	; LD C, A
 	inc 1, a	; INC 1, A
 	ld (3126:16), a; LD (0x0C36), A
-	cps c, 1	; CP C, 1
+	cp c, 1:i3	; CP C, 1
 	jr nz, LZSS_OutputByte_Alt__not_full	; JR NZ, .not_full
 	ld xwa, (3128:16); LD XWA, (0x0C38)
 	stb_dpi A, 0xE1	; LDA XBC, XWA+
@@ -3913,7 +3913,7 @@ LZSS_ParseHeader__read_header:
 	add xde, xbc	; ADD XDE, XBC
 	ld (xde), l	; LD (XDE), L
 	inc 1, iz	; INC 1, IZ
-	cps iz, 6	; CP IZ, 6
+	cp iz, 6:i3	; CP IZ, 6
 	jr c, LZSS_ParseHeader__read_header	; JR C, .read_header
 	; Validate header against expected signature
 	pushw 0x5	; PUSH 0x0005
@@ -3922,7 +3922,7 @@ LZSS_ParseHeader__read_header:
 	push xwa	; PUSH XWA
 	call 0xFFFBDC	; CALL 0xFFFBDC (memcmp)
 	add xsp, 0xA	; ADD XSP, 0x0A
-	cps hl, 0	; CP HL, 0
+	cp hl, 0:i3	; CP HL, 0
 	jr z, LZSS_ParseHeader__valid	; JR Z, .valid
 	ldw hl, 0xFFFF	; LD HL, 0xFFFF
 	jr LZSS_ParseHeader__exit	; JR T, .exit
@@ -3938,7 +3938,7 @@ LZSS_ParseHeader__read_more:
 	extz wa	; EXTZ WA
 	calr LZSS_OutputByte_Alt	; CALR LZSS_OutputByte_Alt
 	inc 1, iz	; INC 1, IZ
-	cps iz, 6	; CP IZ, 6
+	cp iz, 6:i3	; CP IZ, 6
 	jr c, LZSS_ParseHeader__read_more	; JR C, .read_more
 	; Set display coordinates for progress indicator
 	ldw (3120:16), 42; LD (0x0C30), 0x002A
@@ -4233,7 +4233,7 @@ LZSS_Decompress__done:
 Boot_FlashUpdate_Main:
 	pushw_erp 0xFA	; PUSH QIZ
 	call 0xFFEC63	; CALL 0xFFEC63 - check disk present
-	cps l, 0	; CP L, 0
+	cp l, 0:i3	; CP L, 0
 	jrl z, Boot_FlashUpdate_Main__update_done	; JRL Z, .update_done - no disk
 
 	; Initialize FDC and detect disk type
@@ -4243,7 +4243,7 @@ Boot_FlashUpdate_Main:
 
 	; Check region code
 	call 0xFFB700	; CALL 0xFFB700 (Boot_Get_Region_Code)
-	cps l, 4	; CP L, 4
+	cp l, 4:i3	; CP L, 4
 	jr z, Boot_FlashUpdate_Main__update_check_flash	; 66 58
 
 	; Check flash ID
@@ -4346,7 +4346,7 @@ DrawBitmap_UpdateDisplay__db_row_loop:
 	extz xwa	; EXTZ XWA
 	div wa, 0x1C	; DIV WA, 0x001C - 28 bytes per row
 	stw_erp WA, 0xE2	; LD WA, QWA - get remainder
-	cps wa, 0	; CP WA, 0
+	cp wa, 0:i3	; CP WA, 0
 	jr nz, DrawBitmap_UpdateDisplay__db_not_row_start	; 6e 04
 	ld iy, hl	; LD IY, HL - reset X to start
 	dec 1, ix	; DEC 1, IX - decrement Y
@@ -4603,7 +4603,7 @@ FDC_WaitReady__fwr_loop:
 	and l, 0x1F	; AND L, 0x1F - mask status bits
 	ld a, l	; LD A, L
 	extz wa	; EXTZ WA
-	cps wa, 0	; CP WA, 0 - check if ready
+	cp wa, 0:i3	; CP WA, 0 - check if ready
 	jr nz, FDC_WaitReady__fwr_not_ready	; 6e 03
 	ldiw_erp 0xFA, 0	; LD QIZ, 0 - flag = success
 

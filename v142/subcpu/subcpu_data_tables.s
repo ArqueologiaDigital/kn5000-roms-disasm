@@ -11595,7 +11595,7 @@ SAVE_BYTE_TO_RING_BUFFER:	; 01F7DDh
 	ld hl, (xix)	; Get available count
 	lda xde, (xwa + 12)
 	ld xiy, (xde)
-	cps hl, 0
+	cp hl, 0:i3
 	ret z	; Buffer full
 	ld (xiy), c	; Write byte
 	cp xiy, (xwa + 4)
@@ -11676,7 +11676,7 @@ Audio_DMA_RingBuf_ReadLoop:
 	jr c, Audio_DMA_RingBuf_ReadLoop
 
 Audio_DMA_RingBuf_CheckSend:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, Audio_DMA_RingBuf_Done
 	ei 0
 	lds wa, 4
@@ -11691,7 +11691,7 @@ Audio_DMA_RingBuf_Done:
 Serial1_DataTransmit_Loop:
 	ld a, (xsp + 4)
 	decm8 1, (xsp + 4)
-	cps a, 0
+	cp a, 0:i3
 	jr z, Serial1_TX_Done
 
 Serial1_TX_LoopBody:
@@ -11717,7 +11717,7 @@ Serial1_TX_ViaRingBuf:
 Serial1_TX_CheckNext:
 	ld a, (xsp + 4)
 	decm8 1, (xsp + 4)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, Serial1_TX_LoopBody
 
 Serial1_TX_Done:

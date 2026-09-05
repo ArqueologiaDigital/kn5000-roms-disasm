@@ -227,7 +227,7 @@ MidiPkt_BuildControl:
 	or	a, l
 	ld	(xsp+4), a
 	ld	a, (xde+14)
-	cps	a, 1
+	cp	a, 1:i3
 	jr	nc, 76
 	extz	wa
 	sla	wa, 2
@@ -515,7 +515,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	ld a, (xde)
 	and a, c
 	ld (xde), a
-	cps a, 0
+	cp a, 0:i3
 	jr z, MidiPkt_DispatchViaTable_4DAE_Done
 	ld xwa, xiz
 	ld xbc, ToneKit_FrequencyTable_0x39E
@@ -948,7 +948,7 @@ MidiPkt_EnqueueControl_3364:
 	ld xde, (xiz + 4)
 	ld a, (xde + 8)
 	and a, (xbc + 2)
-	cps a, 1
+	cp a, 1:i3
 	jr nz, MidiPkt_EnqueueControl_3364_FormatData
 	ld c, (0xfc61:16)
 	and c, 0x30
@@ -1003,7 +1003,7 @@ MidiPkt_EnqueueControl_3368:
 	call ArpQueue_Enqueue
 	ld a, (0xfd99:16)
 	and a, 0x1
-	cps a, 1
+	cp a, 1:i3
 	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
 	ld xwa, ToneKit_FrequencyTable_0xB2
 	lds bc, 6
@@ -1126,7 +1126,7 @@ MidiPkt_EnqueueExtended2_Data:
 
 MidiPkt_CheckGateCondition:
 	ld c, (xwa + 12)
-	cps c, 0
+	cp c, 0:i3
 	jr z, MidiPkt_CheckGateCondition_Second
 	extz bc
 	muls bc, 0x6
@@ -1140,7 +1140,7 @@ MidiPkt_CheckGateCondition:
 
 MidiPkt_CheckGateCondition_Second:
 	ld a, (xwa + 13)
-	cps a, 0
+	cp a, 0:i3
 	jr z, MidiPkt_CheckGateCondition_Pass
 	extz wa
 	muls wa, 0x6
@@ -1219,7 +1219,7 @@ MidiPkt_DispatchData_Chan6:
 	jr	z, 11
 	cp	(0x8d34:16), 1
 	jr	nz, 6
-	cps	a, 1
+	cp	a, 1:i3
 	jr	nz, 2
 	jr	-44
 	ld	xwa, (0xbcac:16)
@@ -1231,7 +1231,7 @@ MidiPkt_SendBankSelect:
 	ld xwa, (0xbcac:16)
 	lds bc, 4
 	call SeqData_ReadFieldByIndex
-	cps l, 0
+	cp l, 0:i3
 	ret z
 	ld xwa, (0xbcac:16)
 	lds bc, 5
@@ -1319,9 +1319,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	call	SeqData_ReadFieldByIndex
 	extz	hl
 	dec	1, hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	lt
-	cps	hl, 5
+	cp	hl, 5:i3
 	ret	gt
 	add	hl, hl
 	lda	xix, (MidiPkt_EventType_Table_0x324:24)
@@ -1399,13 +1399,13 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0xb6
 	pop	xiz
 	swi	5
-	cps	l, 2
+	cp	l, 2:i3
 	jrl	ugt, 210
 	cp_erpb 251, 15
 	jrl z, 203
 	stb_erp a, 251
 	extz	wa
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 97
 	pushw	0
 	lds	bc, 0
@@ -1504,7 +1504,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	xwa, 0x4b00
 	ld	bc, hl
 	call	DSPCfg_WriteParamFull
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 72
 	ld	xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0

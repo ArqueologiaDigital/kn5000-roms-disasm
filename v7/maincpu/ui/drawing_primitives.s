@@ -36,7 +36,7 @@ DrawLine:
 	ld (xsp + 6), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawLine_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawLine_Return
@@ -83,11 +83,11 @@ DrawLine_Impl:
 	ld (xsp + 66), xwa
 	ld xwa, (xsp + 66)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawLine_Impl_Return
 	ld xwa, (xsp + 62)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawLine_Impl_Return
 	ld xde, 0xffffffff
 	ld xwa, (xsp + 62)
@@ -601,11 +601,11 @@ DrawLineEx:
 	ld (xsp + 50), xwa
 	ld xwa, (xsp + 50)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawLineEx_Return
 	ld xwa, (xsp + 46)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawLineEx_Return
 	ld xde, 0xffffffff
 	ld xwa, (xsp + 46)
@@ -1008,7 +1008,7 @@ DrawBox:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBox_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBox_Return
@@ -1057,7 +1057,7 @@ DrawBox_Impl:
 	ld wa, (xhl)
 	cp wa, (xde)
 	jrl gt, DrawBox_Impl_Return
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, DrawBox_Impl_ClipYMin
 	ldw (xhl), 0x0
 
@@ -1155,7 +1155,7 @@ DrawFrame:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawFrame_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawFrame_Return
@@ -1794,7 +1794,7 @@ MovePixels:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MovePixels_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, MovePixels_Return
@@ -1927,7 +1927,7 @@ MovePixels_Impl_Return:
 ; =============================================================================
 DrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawWall_DirectPath
 	ldw (0x030450:24), 0x0001
 	ldw (0x03044e:24), 0x0001
@@ -2069,7 +2069,7 @@ DrawBitmap:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBitmap_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBitmap_Return
@@ -2111,7 +2111,7 @@ DrawBitmap_Impl:
 	jrl z, DrawBitmap_Impl_Return
 	ld xwa, (xsp + 26)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawBitmap_Impl_Return
 	ld xhl, xiz
 	sll xhl, 3
@@ -2224,7 +2224,7 @@ DrawBitmap_Impl_ColLoop:
 	exts xwa
 	divs wa, 0x2
 	stw_erp WA, 0xe2
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, DrawBitmap_Impl_RowAdvance
 	cp (xix), 0xf7
 	jr z, DrawBitmap_Impl_OddPixelSkip
@@ -2295,7 +2295,7 @@ DrawBitmapFast:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBitmapFast_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBitmapFast_Return
@@ -2337,7 +2337,7 @@ DrawBitmapFast_Impl:
 	jrl z, DrawBitmapFast_Impl_Return
 	ld xwa, (xsp + 24)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawBitmapFast_Impl_Return
 	ld xhl, (xsp + 24)
 	ld bc, (xhl + 2)
@@ -2417,7 +2417,7 @@ DrawIcons:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawIcons_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawIcons_Return
@@ -2461,7 +2461,7 @@ DrawIcons_Impl:
 
 	ld xwa, (xsp + 36)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawIcons_Impl_Return
 	ld xwa, (xsp + 32)	; ICON ID
 	ld (xsp + 4), xwa
@@ -2553,7 +2553,7 @@ DrawFrameSP:
 	ld (xsp + 6), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawFrameSP_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawFrameSP_Return
@@ -2596,7 +2596,7 @@ DrawFrameSP_Impl:
 	ld (xsp + 30), xwa
 	ld xwa, (xsp + 30)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawFrameSP_Impl_Return
 	ld bc, (xsp + 28)
 	extz xbc
@@ -2725,7 +2725,7 @@ DrawBitmapSP:
 	ld (xsp + 6), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBitmapSP_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBitmapSP_Return
@@ -2778,7 +2778,7 @@ DrawBitmapSP_Impl:
 	ld (xsp + 26), xwa
 	ld xwa, (xsp + 26)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawBitmapSP_Impl_Return
 	ldw (xsp + 4), 0x0
 	ld wa, (xsp + 34)
@@ -2887,7 +2887,7 @@ DrawBitmapSP_Impl_ColLoop:
 	exts xwa
 	divs wa, 0x2
 	stw_erp WA, 0xe2
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, DrawBitmapSP_Impl_RowAdvance
 	ld xix, (xsp + 22)
 	cp (xix), 0xf7
@@ -2947,7 +2947,7 @@ DrawBitmapSPFast:
 	ld (xsp + 6), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBitmapSPFast_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBitmapSPFast_Return
@@ -3000,7 +3000,7 @@ DrawBitmapSPFast_Impl:
 	ld (xsp + 22), xwa
 	ld xwa, (xsp + 22)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawBitmapSPFast_Impl_Return
 	ld xhl, (xsp + 22)
 	ld bc, (xhl + 2)
@@ -3019,7 +3019,7 @@ DrawBitmapSPFast_Impl:
 	ld (xsp + 6), bc
 	ldw (xsp + 4), 0x0
 	ld wa, (xsp + 30)
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, DrawBitmapSPFast_Impl_BuildDirtyRect
 
 DrawBitmapSPFast_Impl_RowLoop:
@@ -3059,7 +3059,7 @@ DrawBitmapSP2:
 	ld (xsp + 6), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBitmapSP2_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBitmapSP2_Return
@@ -3121,12 +3121,12 @@ DrawBitmapSP2_Impl:
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 20)
 	calr IsPointOnScreen
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, DrawBitmapSP2_Impl_Return
 	lds hl, 0
 	ld bc, (xsp + 32)
 	ld de, bc
-	cps de, 0
+	cp de, 0:i3
 	jrl ule, DrawBitmapSP2_Impl_BuildDirtyRect
 
 DrawBitmapSP2_Impl_RowLoop:
@@ -3235,7 +3235,7 @@ DrawBitmapFile:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawBitmapFile_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawBitmapFile_Return
@@ -3280,7 +3280,7 @@ DrawBitmapFile_Impl:
 	push XWA
 	call 0xff04e4
 	add XSP,0x0000000a
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, DrawBitmapFile_Impl_Return
 	ld XWA,(XSP+0x0434)
 	lda xwa, (xwa + 0x0e)
@@ -3535,7 +3535,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	calr	8986
 	ld	xwa, (xsp+1080)
 	calr	1987
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 169	; -> 0xFAC6B6
 	ld	xbc, (xsp+36)
 	ld	xwa, (xbc+4)
@@ -3561,7 +3561,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ld	(xsp+34), bc
 	ldw	(xsp+32), 0
 	ld	wa, (xsp+42)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	ule, 50	; -> 0xFAC68A
 DrawBitmapFile_Impl_VRAMRowLoop:
 	.byte 0x9f, 0x22, 0x3f, 0xf0, 0x00, 0x6f, 0x2b, 0x9f
@@ -3627,7 +3627,7 @@ DrawString:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawString_DeferredPath
 	cpw (0x03044e:24), 0
 	jr z, DrawString_Return
@@ -3951,7 +3951,7 @@ DrawString_Impl_RowLoop:
 	cp iy, (xwa + 6)
 	jr gt, DrawString_Impl_ColumnAdvance
 	lds iy, 0
-	cps bc, 0
+	cp bc, 0:i3
 	jr ule, DrawString_Impl_RowAdvance
 
 DrawString_Impl_PixelLoop:
@@ -4196,11 +4196,11 @@ DrawStringAlignment:
 	ld ix, (xsp + 12)
 	ld xiz, (xsp + 14)
 	ld c, (xsp + 8)
-	cps c, 2		; mode 2 = right-justify
+	cp c, 2:i3		; mode 2 = right-justify
 	jr z, DrawStringAlignment_RightJustify
-	cps c, 1		; mode 1 = left-justify
+	cp c, 1:i3		; mode 1 = left-justify
 	jr z, DrawStringAlignment_LeftJustify
-	cps c, 0		; mode 0 = centered
+	cp c, 0:i3		; mode 0 = centered
 	jr nz, DrawStringAlignment_Return
 	push xiz
 	pushw ix
@@ -4275,11 +4275,11 @@ DrawStringReverse:
 	add wa, hl
 	ld (xbc), wa
 	ld a, (xsp + 34)
-	cps a, 2
+	cp a, 2:i3
 	jr z, DrawStringReverse_AlignRight
-	cps a, 1
+	cp a, 1:i3
 	jr z, DrawStringReverse_AlignLeft
-	cps a, 0
+	cp a, 0:i3
 	jr nz, DrawStringReverse_ComputeTextBox
 	ld wa, (xsp + 4)
 	exts xwa

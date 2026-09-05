@@ -98,7 +98,7 @@ SongBank_ComputeTableOfs:
 	extz xiz
 	add xiz, xix
 	lda_dpi XSP, 0xf8
-	cps e, 0
+	cp e, 0:i3
 	jr z, SongBank_CopyNameAndFinish
 	cpw (xsp + 4), 0x9
 	jr nz, SongBank_FormatTwoDigit
@@ -184,7 +184,7 @@ SongBank_HandleNextPrev:
 SeqSongName_CheckPrev:
 	cp xbc, 0x1c00017
 	jr nz, SongBank_StoreCurrentSong
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, SongBank_StoreCurrentSong
 	dec 1, wa
 
@@ -249,7 +249,7 @@ SongBank_LookupTableEntry:
 	extz xiz
 	add xiz, xhl
 	lda_dpi XHL, 0xf8
-	cps e, 0
+	cp e, 0:i3
 	jr z, SongBankLookup_BuildAudioCmd
 	cpw (xsp + 4), 0x9
 	jr nz, SongBankLookup_FormatTwoDigit
@@ -339,7 +339,7 @@ SongBank_HandleNextPrevAlt:
 SeqSongMem_CheckPrev:
 	cp xbc, 0x1c00017
 	jr nz, SongBank_EventCompare
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, SongBank_EventCompare
 	dec 1, wa
 
@@ -555,9 +555,9 @@ SqTrSel_CaseG:
 	ld a, (0x8d36:16)
 	extz wa
 	sub wa, 0x6f
-	cps wa, 0
+	cp wa, 0:i3
 	ret lt
-	cps wa, 7
+	cp wa, 7:i3
 	ret gt
 	add wa, wa
 	lda xix, (SepaOut_Config_0_0x26A:24)
@@ -801,7 +801,7 @@ SeqNode_InsertAtPosition:
 	ld xhl, (4349:16)
 	ld ix, (xhl + 1)
 	ld de, ix
-	cps ix, 0
+	cp ix, 0:i3
 	jr z, SeqNodeInsert_EmptyList
 	ld iy, ix
 	ldw (xhl + 1), 0x0
@@ -832,7 +832,7 @@ SeqNodeInsert_LinkPrev:
 	ld (xhl + 1), de
 
 SeqNodeInsert_LinkHead:
-	cps de, 0
+	cp de, 0:i3
 	jr z, SeqNodeInsert_Finalize
 	pushw iy
 	ld iy, de

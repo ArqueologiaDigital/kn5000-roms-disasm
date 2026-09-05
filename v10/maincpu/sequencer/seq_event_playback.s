@@ -1262,7 +1262,7 @@ AccPlay_CheckResumeState:
 
 TempoEvt_ProcessLoop:
 	call TempoRingBuf_CheckEmpty
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, TempoEvt_ReadAndClassify
 	jp AccPlay_PostLoopCleanup
 
@@ -1284,7 +1284,7 @@ TempoEvt_ReadAndClassify:
 	and w, 0xe0
 	dec 1, a
 	or w, a
-	cps a, 0
+	cp a, 0:i3
 	jr nz, TempoEvt_StoreBankParam
 	and w, 0x7f
 	calr AccPlay_UpdateBankParams
@@ -1298,7 +1298,7 @@ TempoEvt_CheckHighBit:
 	jr z, TempoEvt_ContinueProcessing
 	ld a, (0x7f16:16)
 	and a, 0x1f
-	cps a, 1
+	cp a, 1:i3
 	jr nz, TempoEvt_ContinueProcessing
 	call TempoRingBuf_ReadAlternate
 	ld a, l
@@ -1515,7 +1515,7 @@ AccPlay_SyncVoiceParams:
 	inc	1, iy
 	inc	1, ix
 	dec	1, c
-	cps	c, 0
+	cp	c, 0:i3
 	jr	nz, 0xda
 
 AccPlay_SyncParamsRet:
@@ -1610,7 +1610,7 @@ AccPlay_ProcessNoteEvent:
 	lds bc, 5
 	calr MidiSeqBuf_ScanAllEntries
 	ld a, (0x7f39:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, AccPlay_NoteNoSlotMatch
 	calr AccPlay_NoteWithSlot
 	jr AccPlay_NoteEventRet
@@ -1771,16 +1771,16 @@ AccPlay_ChannelSlotFound:
 	cp c, a
 	jr nc, AccPlay_CalcNoteOffset
 	add c, 0x60
-	cps d, 0
+	cp d, 0:i3
 	jr z, AccPlay_CalcNoteOffset
 	dec 1, d
 
 AccPlay_CalcNoteOffset:
 	sub c, a
 	ld e, c
-	cps d, 0
+	cp d, 0:i3
 	jr nz, AccPlay_WriteNoteRelease
-	cps e, 2
+	cp e, 2:i3
 	jr nc, AccPlay_WriteNoteRelease
 	ldb e, 0x2
 
@@ -1919,7 +1919,7 @@ MidiSeq_CtrlCheckType:
 MidiSeq_CheckSostenuto:
 	cp a, 0x17
 	jr nz, MidiSeq_SustainHandler
-	cps w, 4
+	cp w, 4:i3
 	jr nz, MidiSeq_SustainHandler
 	bit 6, d
 	jr z, MidiSeq_SustainHandler
@@ -1939,7 +1939,7 @@ MidiSeq_SostenutoValue:
 MidiSeq_SustainHandler:
 	cp a, 0x17
 	jr nz, MidiSeq_SustainRet
-	cps w, 4
+	cp w, 4:i3
 	jr nz, MidiSeq_SustainRet
 	bit 3, d
 	jr z, MidiSeq_SustainRet
@@ -1966,7 +1966,7 @@ AccPlay_TrackMeasureChange:
 	jr z, AccPlay_MeasureTrackRet
 	ld hl, (0x7f0e:16)
 	inc 1, hl
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AccPlay_MeasureIncrement
 	inc 1, hl
 
@@ -2076,7 +2076,7 @@ AccPlay_CompareReverbState:
 	cp wa, hl
 	jr z, AccPlay_CompareChorusState
 	ldb e, 0x0
-	cps a, 0
+	cp a, 0:i3
 	jr z, AccPlay_SetReverbValue
 	ldb e, 0x7f
 
@@ -2095,7 +2095,7 @@ AccPlay_CompareChorusState:
 	cp wa, hl
 	jr z, AccPlay_ParamMonitorRet
 	ldb e, 0x0
-	cps a, 0
+	cp a, 0:i3
 	jr z, AccPlay_SetChorusValue
 	ldb e, 0x7f
 
@@ -2456,7 +2456,7 @@ MidiSeqBuf_ScanLoop:
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	dec 1, bc
-	cps bc, 0
+	cp bc, 0:i3
 	jr nz, MidiSeqBuf_ScanLoop
 	bit 4, (0x7f15:16)
 	jr z, MidiSeqBuf_ScanDone
@@ -3243,13 +3243,13 @@ VocalistGrid_DispatchData:
 	ld	xbc, 0x01e0008c
 	jrl	1094
 	ld	wa, (xbc)
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	z, 33
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 22
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 11
-	cps	wa, 0
+	cp	wa, 0:i3
 	.ascii "n%@("
 	or	xsp, xsp
 	nop
@@ -3458,13 +3458,13 @@ VocalistGrid_CheckDispData:
 	jrl	464
 	ld	xwa, 0x2d08
 	call	SndParam_LookupReadOnly
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	z, 33
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 22
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 11
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 37
 	ld	xwa, MidiPart_OctaveStr_m2_0x17C
 	jr	19
@@ -3594,7 +3594,7 @@ VocalistGrid_CheckDispData:
 	.byte 0x37, 0xd4
 	swi	4
 	ld	xwa, MidiPart_AfterStr_0x2E
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 5
 	ld	xwa, MidiPart_AfterStr_0x28
 	push	xwa
@@ -3869,7 +3869,7 @@ MainVocalistPage1OKFunc:
 	ld de, wa
 	extz wa
 	ld bc, wa
-	cps de, 5
+	cp de, 5:i3
 	jr ugt, VocalistPage_Handler
 	add de, de
 	lda xix, (MidiPart_HarmLocalStr_0x24:24)
@@ -3885,7 +3885,7 @@ VocalistPage1OK_Dispatch:
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 0x01d400
 	lds	bc, 1
@@ -3919,7 +3919,7 @@ VocalistPage1_DispatchData:
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 0x018000
 	lds	bc, 1
@@ -3946,7 +3946,7 @@ VocalistPage1_DispatchData:
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 11
 	ld	xwa, 0x018c00
 	lds	bc, 1
@@ -4054,7 +4054,7 @@ RevSel_HandleDial:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, RevSel_ReturnZero
 	ld xwa, (xsp + 4)
 	ld de, wa
@@ -4141,7 +4141,7 @@ EqSel_HandleDial:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 2
+	cp wa, 2:i3
 	jr nz, RevEqFunc_ReturnZero
 	ld xwa, 0x19000b
 	ld xbc, 0x1e0006b
@@ -4253,7 +4253,7 @@ RevEqSel_HandleDial:
 	ld xwa, (xsp + 4)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 3
+	cp wa, 3:i3
 	jr nz, EqFunc_ReturnZero
 	ld xwa, 0x1a000a
 	ld xbc, 0x1e0006b
@@ -4426,11 +4426,11 @@ StsAreYouSure_ReturnZero:
 
 GMOKFunc:
 	ld l, (0x0340ea:24)
-	cps l, 2
+	cp l, 2:i3
 	jr z, GMOK_ConfirmDialog
-	cps l, 1
+	cp l, 1:i3
 	jr z, GMOK_ConfirmDialog
-	cps l, 0
+	cp l, 0:i3
 	jr nz, GMOK_ReturnZero
 	calr GMYesFunc
 	jr GMOK_ReturnZero
@@ -4598,7 +4598,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	call DrawBitmapSPFast
 	addiw_da (xsp + 4), 0x38
 	inc 1, iz
-	cps iz, 5
+	cp iz, 5:i3
 	jr nc, SplitPoint_UpdateScreen
 
 SplitPoint_FillRemainingLoop:
@@ -4609,7 +4609,7 @@ SplitPoint_FillRemainingLoop:
 	call DrawBitmapSPFast
 	addiw_da (xsp + 4), 0x38
 	inc 1, iz
-	cps iz, 5
+	cp iz, 5:i3
 	jr c, SplitPoint_FillRemainingLoop
 
 SplitPoint_UpdateScreen:

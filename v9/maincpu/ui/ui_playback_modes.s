@@ -21,7 +21,7 @@ UIStateEvt_VoiceParamHandler:
 	ld	(4330:16), 0
 	jrl	164
 	ld	a, (0xc07d:16)
-	cps	a, 3
+	cp	a, 3:i3
 	.byte 0xf2, 0xb4
 	pop	sr
 	.byte 0xf2
@@ -846,10 +846,10 @@ CDlikeSwitch_NullRet:
 
 CDlikeSwitch_PlaybackTimer:
 	ld w, (4420:16)
-	cps w, 0
+	cp w, 0:i3
 	jr z, CDlikeTimer_Return
 	dec 1, w
-	cps w, 5
+	cp w, 5:i3
 	jr nz, CDlikeTimer_CheckZeroCount
 	cp (0x8d36:16), 122
 	jr z, CDlikeTimer_ResetAccompaniment
@@ -866,7 +866,7 @@ CDlikeTimer_ResetAccompaniment:
 	jr CDlikeSwTtl_StorePlaybackMode
 
 CDlikeTimer_CheckZeroCount:
-	cps w, 0
+	cp w, 0:i3
 	jr nz, CDlikeSwTtl_StorePlaybackMode
 	cp (0x8d36:16), 122
 	jr z, CDlikeTimer_InitResetState
@@ -1438,7 +1438,7 @@ SqTrAsPsTtl_CaseF:
 	ld	a, (0x8d36:16)
 	extz	wa
 	sub	wa, 108
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	lt, 41
 	cp	wa, 13
 	jr	gt, 35
@@ -1670,9 +1670,9 @@ DisplayMode_DispatchEvents:
 	ld a, (0x8d36:16)
 	extz wa
 	sub wa, 0x6f
-	cps wa, 0
+	cp wa, 0:i3
 	ret lt
-	cps wa, 6
+	cp wa, 6:i3
 	ret gt
 	add wa, wa
 	lda xix, (SepaOut_Config_0_0xCE:24)
@@ -2397,7 +2397,7 @@ CDlikeSwTtl_ShowSongTitle:
 	lds wa, 1
 	call Acc_LoadAndStartPlayback
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jp nz, (SongMode_VoiceStateDisp:24)
 	calr SeqRecPlay_EnableRecordOnly
 	ld (4437:16), 0
@@ -2421,7 +2421,7 @@ CDlikeSwTtl_ShowDocTitle:
 	lds wa, 2
 	call Acc_LoadAndStartPlayback
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jp nz, (SongMode_VoiceStateDisp:24)
 	calr SeqRecPlay_EnableRecordOnly
 	ld (4437:16), 0
@@ -2445,7 +2445,7 @@ CDlikeSwTtl_ShowPdTitle:
 	lds wa, 4
 	call Acc_LoadAndStartPlayback
 	ld wa, hl
-	cps wa, 0
+	cp wa, 0:i3
 	jp nz, (SongMode_VoiceStateDisp:24)
 	calr SeqRecPlay_EnableRecordOnly
 	ld (4437:16), 0
@@ -2523,11 +2523,11 @@ CDlikeSwTtl_SongConfirmJump:
 
 CDlikeSwTtl_SongConfirmDispatch:
 	ld a, (7498:16)
-	cps a, 2
+	cp a, 2:i3
 	jr z, CDlikeSwTtl_SongConfirmState2
-	cps a, 1
+	cp a, 1:i3
 	jr z, CDlikeSwTtl_SongConfirmState1
-	cps a, 3
+	cp a, 3:i3
 	ret nz
 
 CDlikeSwTtl_SongConfirmState1:

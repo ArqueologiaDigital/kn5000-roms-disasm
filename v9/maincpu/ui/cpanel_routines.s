@@ -258,7 +258,7 @@ DELAY_2_LOOPS:
 
 Delay2L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay2L_Done
 	jr Delay2L_Loop
 
@@ -271,7 +271,7 @@ DELAY_6_LOOPS:
 
 Delay6L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay6L_Done
 	jr Delay6L_Loop
 
@@ -284,7 +284,7 @@ DELAY_10_LOOPS:
 
 Delay10L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay10L_Done
 	jr Delay10L_Loop
 
@@ -297,7 +297,7 @@ DELAY_300_LOOPS:
 
 Delay300L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay300L_Done
 	jr Delay300L_Loop
 
@@ -310,7 +310,7 @@ DELAY_1500_LOOPS:
 
 Delay1500L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay1500L_Done
 	jr Delay1500L_Loop
 
@@ -323,7 +323,7 @@ DELAY_3000_LOOPS:
 
 Delay3000L_Loop:
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, Delay3000L_Done
 	jr Delay3000L_Loop
 
@@ -338,7 +338,7 @@ DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
 DELAY_2_TICKS__loop:
 	ld wa, (1033:16)
 	sub wa, (0x8d9b:16)
-	cps wa, 2
+	cp wa, 2:i3
 	jr lt, DELAY_2_TICKS__loop
 	ret
 
@@ -350,7 +350,7 @@ DELAY_6_TICKS:
 Delay6T_Loop:
 	ld wa, (1033:16)
 	sub wa, (0x8d9b:16)
-	cps wa, 6
+	cp wa, 6:i3
 	jr lt, Delay6T_Loop
 	ret
 
@@ -911,7 +911,7 @@ CPanel_SM_TXComplete:
 	ld (0x8d8a:16), 0; ROUTINE_0
 	ld wa, (0x8dff:16)
 	sub wa, (0x8dfd:16)
-	cps wa, 2
+	cp wa, 2:i3
 	jr c, TXComplete_BufferEmpty
 	ld (0x8d8a:16), 4; ROUTINE_1
 	and (0x8d8f:16), 191; disable CPanel serial clk
@@ -971,7 +971,7 @@ RXByte1_ForwardDist:
 	sub iy, hl
 
 RXByte1_CheckThreshold:
-	cps iy, 3
+	cp iy, 3:i3
 	jr nc, RXByte1_AdvanceWritePtr
 	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
 	jr RXByte1_InspectByte
@@ -1071,7 +1071,7 @@ PollLoop_TXForwardDist:
 	sub hl, wa
 
 PollLoop_TXCheckThreshold:
-	cps hl, 3
+	cp hl, 3:i3
 	jr c, PollLoop_DispatchWork
 	ld (0x8d9a:16), 0
 	ldb w, 0xe0
@@ -1094,7 +1094,7 @@ PollLoop_DispatchWork:
 	ei 0
 	ld a, (0x8d8c:16)
 	and a, 0xc0
-	cps a, 0	; if (CP_Flags_A.76 == 0) {
+	cp a, 0:i3	; if (CP_Flags_A.76 == 0) {
 	jr z, PollLoop_DoLEDUpdate	; 	goto PollLoop_DoLEDUpdate; ; do this
 						; }
 
@@ -1132,7 +1132,7 @@ PollLoop_CheckTXReady:
 	sub a, w
 
 PollLoop_StartTX:
-	cps a, 2
+	cp a, 2:i3
 	jr c, PollLoop_Return
 	or (0x8d8c:16), 2	; CP_Flags_A.1 = 1
 	ld (0x8d8a:16), 4; ROUTINE_1
@@ -1202,7 +1202,7 @@ CPanel_RX_ParseNext:
 	sub a, w
 
 CPanel_RX_PacketSizeCheck:
-	cps a, 2
+	cp a, 2:i3
 	jrl c, CPanel_RX_Done
 
 	ldb_sri L, 0x07, 0xe8, 0xf4
@@ -1375,7 +1375,7 @@ c:
 	inc 1, hl
 	bit 4, (0x8d8c:16); This is never set ?!
 	jr z, MBytePkt_CommitAndContinue
-	cps a, 0
+	cp a, 0:i3
 	jr nz, MBytePkt_CommitAndContinue
 					; if CP_Flags_A.4 != 0 && A == 0:
 	calr CPanel_DecEventPtr
@@ -1400,7 +1400,7 @@ MBytePkt_CommitRXPtr:
 MBytePkt_LoopTail:
 	inc 1, w
 	dec 1, b
-	cps b, 0
+	cp b, 0:i3
 	jrl nz, MBytePkt_LoopBody
 	jrl CPanel_RX_ParseNext
 
@@ -1443,7 +1443,7 @@ LEDs_TXForwardDist:
 	sub hl, wa
 
 LEDs_TXCheckThreshold:
-	cps hl, 3
+	cp hl, 3:i3
 	jrl c, LEDs_Return
 	ldb_sri A, 0x07, 0xf8, 0xf0
 	and a, 0x30
@@ -1507,7 +1507,7 @@ CPanel_LED_HandlePacketN__loop:	; FC4BE4 -- loop: transfer remaining bytes
 	incw 1, (xiz - 2)		; increment pending LED byte count
 	ld (0x8dff:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	dec 1, b			; decrement loop counter
-	cps b, 0			; check if counter reached zero
+	cp b, 0:i3			; check if counter reached zero
 	jr nz, CPanel_LED_HandlePacketN__loop	; continue loop if bytes remain
 	jrl CPanel_UpdateLEDs__check_next	; done, check for more events
 
@@ -1546,7 +1546,7 @@ IncEvt_NoWrap:
 
 
 CPanel_DecEventPtr:
-	cps ix, 0
+	cp ix, 0:i3
 	jr nz, DecEvt_NoWrap
 	ldw ix, 0x7f
 	ret

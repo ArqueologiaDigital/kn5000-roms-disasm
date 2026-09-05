@@ -889,7 +889,7 @@ Kernel_ServiceSoftTimers__fire:
 IRQ_Epilogue:
 	pushw wa                                     ; F857B7/F9831C  28   push WA   THE SHARED INTERRUPT EPILOGUE
 	m_ldc_reg_cr RW+r0, 0x3c                     ; F857B8/F9831D  d8 2f 3c   ldc WA,unknown
-	cps wa, 0x01                                 ; F857BB/F98320  d8 d9   cp WA,1   depth == 1 means this interrupt was the outermost one
+	cp wa, 0x01:i3                                 ; F857BB/F98320  d8 d9   cp WA,1   depth == 1 means this interrupt was the outermost one
 	jr z, IRQ_Epilogue__enter_kernel             ; F857BD/F98322  66 02   jr Z,0xf98326
 	popw wa                                      ; F857BF/F98324  48   pop WA
 	reti                                         ; F857C0/F98325  07   reti   nested: plain RETI, do not run the kernel
@@ -1094,7 +1094,7 @@ Kernel_StartTask:
 	extz XBC                                     ; F857F7/F9835C  e9 12   extz XBC
 	ld XIX,XBC                                   ; F857F9/F9835E  e9 8c   ld XIX,XBC
 	ld A,(XIX+0x09)                              ; F857FB/F98360  8c 09 21   ld A,(XIX+0x09)   +9 = the state byte
-	cps a, 0x00                                  ; F857FE/F98363  c9 d8   cp A,0
+	cp a, 0x00:i3                                  ; F857FE/F98363  c9 d8   cp A,0
 	jrl nz, Kernel_ResumeTask                    ; F85800/F98365  7e 60 ff   jrl NZ,0xf982c8   already live: undo the pushes and return
 	ld XIY,(XHL+0x04)                            ; F85803/F98368  ab 04 25   ld XIY,(XHL+0x04)   record+4 = the top of this task's stack
 	sub XIY,0x00000022                           ; F85806/F9836B  ed ca 22 00 00 00   sub XIY,0x00000022   room for 7 registers (0x1C) + SR (2) + PC (4)

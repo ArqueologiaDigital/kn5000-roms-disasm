@@ -41,9 +41,9 @@ SysEx_ApplyToSlot4B_Data:
 	exts	xwa
 	add	xwa, 0x4b10
 	call	DSPCfg_ResolveAndExtract
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 4
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	nz, 21
 	ld	wa, iz
 	exts	xwa
@@ -87,7 +87,7 @@ SysEx_ApplyToSlot49_Data:
 	ld	xwa, 0x4900
 	ld	bc, hl
 	call	DSPCfg_WriteParamFull
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 72
 	ld	xwa, 0x4904
 	call	DSPCfg_ReadParam_Map0
@@ -153,9 +153,9 @@ SysEx_ApplyToSlot49_Format_Data:
 	exts	xwa
 	add	xwa, 0x4910
 	call	DSPCfg_ResolveAndExtract
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 4
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	nz, 21
 	ld	wa, iz
 	exts	xwa
@@ -191,9 +191,9 @@ SysEx_DispatchByChannel:
 	extz de
 	add de, de
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	ret mi
-	cps wa, 7
+	cp wa, 7:i3
 	ret gt
 	add wa, wa
 	lda xix, (MidiPkt_EventType_Table_0x4D4:24)
@@ -202,19 +202,19 @@ SysEx_DispatchByChannel:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SysEx_ChannelHandler_4B_Data:
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x468
 	jr	77
-	cps	c, 7
+	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x472
 	jr	66
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x480
 	jr	55
-	cps	c, 7
+	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x48A
 	jr	44
@@ -226,11 +226,11 @@ SysEx_ChannelHandler_4B_Data:
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4A8
 	jr	20
-	cps	c, 7
+	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4B8
 	jr	9
-	cps	c, 7
+	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4C6
 	.byte 0xd3
@@ -244,9 +244,9 @@ SysEx_DispatchByChannel_49:
 	extz de
 	add de, de
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	ret mi
-	cps wa, 7
+	cp wa, 7:i3
 	ret gt
 	add wa, wa
 	lda xix, (MidiPkt_EventType_Table_0x538:24)
@@ -255,35 +255,35 @@ SysEx_DispatchByChannel_49:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SysEx_ChannelHandler_49_Data:
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4E4
 	jr	75
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4EE
 	jr	64
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4F8
 	jr	53
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x502
 	jr	42
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x50C
 	jr	31
-	cps	c, 5
+	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x516
 	jr	20
-	cps	c, 6
+	cp	c, 6:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x520
 	jr	9
-	cps	c, 6
+	cp	c, 6:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x52C
 	.byte 0xd3
@@ -308,7 +308,7 @@ SysEx_ValidateRolandHeader:
 	ret nz
 	cp_spib_im 0xe0, 0x01
 	ret nz
-	cps c, 0
+	cp c, 0:i3
 	jr nz, SysEx_ValidateRolandHeader_NonZeroChan
 	lda xbc, (0x00f180:24)
 	add xbc, 0x2e0
@@ -370,7 +370,7 @@ SysEx_ApplyVoiceParam_4B:
 	ld bc, hl
 	ld xde, (xsp + 6)
 	call DSPCfg_WriteParamSimple
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, SysEx_ApplyVoiceParam_4B_Return
 	lda xwa, (0xfc8e:16)
 	cp xwa, (xsp + 6)
@@ -480,9 +480,9 @@ SysEx_ApplyVoiceParam_4B_128_SlotLoop:
 	exts xwa
 	add xwa, 0x4b10
 	call DSPCfg_ResolveAndExtract
-	cps hl, 1
+	cp hl, 1:i3
 	jr z, SysEx_ApplyVoiceParam_4B_128_WriteSlot
-	cps hl, 2
+	cp hl, 2:i3
 	jr nz, SysEx_ApplyVoiceParam_4B_128_SlotNext
 
 SysEx_ApplyVoiceParam_4B_128_WriteSlot:
@@ -528,7 +528,7 @@ SysEx_ApplyVoiceParam_49:
 	ld bc, hl
 	ld xde, (xsp + 6)
 	call DSPCfg_WriteParamSimple
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, SysEx_ApplyVoiceParam_49_Return
 	lda xwa, (0xfc74:16)
 	cp xwa, (xsp + 6)
@@ -638,9 +638,9 @@ SysEx_ApplyVoiceParam_49_128_SlotLoop:
 	exts xwa
 	add xwa, 0x4910
 	call DSPCfg_ResolveAndExtract
-	cps hl, 1
+	cp hl, 1:i3
 	jr z, SysEx_ApplyVoiceParam_49_128_WriteSlot
-	cps hl, 2
+	cp hl, 2:i3
 	jr nz, SysEx_ApplyVoiceParam_49_128_SlotNext
 
 SysEx_ApplyVoiceParam_49_128_WriteSlot:
@@ -684,7 +684,7 @@ SysEx_ApplyAndReloadPreset_Type61:
 	ld xwa, 0x4900
 	ld xde, 0xfc74
 	call DSPCfg_WriteParamSimple
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, AssswbWr_ReturnFail
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
@@ -715,7 +715,7 @@ SysEx_ApplyAndReloadPreset_Type63:
 	ld xwa, 0x4b00
 	ld xde, 0xfc8e
 	call DSPCfg_WriteParamSimple
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, AssswbWr_ReturnFail
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
@@ -828,7 +828,7 @@ SwbtWr_ProcessAll:
 	ld xix, 0xbd3c
 	ld bc, (0x90e2:16)
 	srl bc, 1
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, SwbtWr_ProcessAll_CompactDone
 	ldirw
 
@@ -989,7 +989,7 @@ PreLswLoad:
 	jp SndParam_SyncDisplayBitmap
 
 PostLswLoad:
-	cps wa, 0
+	cp wa, 0:i3
 	jp lt, (Voice_CopyFromScratch:24)
 	cp (0x0340f6:24), 0x00
 	call z, (VoiceParam_RestoreReverbChorus:24)
@@ -1034,7 +1034,7 @@ PrePmLoad:
 	ret
 
 PostPmLoad:
-	cps wa, 0
+	cp wa, 0:i3
 	ret lt
 	call ToneGen_Config_InitAllChannels
 	call ToneGen_DSPCfg_ResetAllChannels
@@ -1191,7 +1191,7 @@ BitMapOut_RenderDisplay:
 	ld de, wa
 	srl de, 1
 	lds bc, 0
-	cps de, 0
+	cp de, 0:i3
 	jr ule, BitMapOut_CopyRegion_Done
 
 BitMapOut_CopyRegion_Loop:
@@ -1375,11 +1375,11 @@ SeqOut_WriteTimedBytes_BufferFull:
 
 SeqOut_WriteTimedBytes_CompIface:
 	ld a, (0xc1e4:16)
-	cps a, 2
+	cp a, 2:i3
 	jr z, SeqOut_WriteTimedBytes_PC2Timing
-	cps a, 1
+	cp a, 1:i3
 	jr z, SeqOut_WriteTimedBytes_SerialWrite
-	cps a, 0
+	cp a, 0:i3
 	jr nz, MIDI_SeqProcess_DisableIntReturn
 
 SeqOut_WriteTimedBytes_SerialWrite:
@@ -1421,11 +1421,11 @@ MidiSeq_ReceiveAndForward:
 
 MidiSeq_ReceiveAndForward_CompIface:
 	ld a, (0xc1e4:16)
-	cps a, 2
+	cp a, 2:i3
 	jr z, MidiSeq_ReceiveAndForward_PC2Forward
-	cps a, 1
+	cp a, 1:i3
 	jr z, MidiSeq_ReceiveAndForward_SerialTiming
-	cps a, 0
+	cp a, 0:i3
 	jr nz, MidiSeq_ReceiveAndForward_Exit
 
 MidiSeq_ReceiveAndForward_SerialTiming:
@@ -1466,17 +1466,17 @@ MidiSeq_SendMultiByteWithTiming:
 MidiSeq_SendMultiByte_CompIface:
 	ld a, (0xc1e4:16)
 	ld iz, (xsp + 8)
-	cps a, 1
+	cp a, 1:i3
 	jr z, MidiSeq_SendMultiByte_SerialCountInit
-	cps a, 2
+	cp a, 2:i3
 	jr z, MidiSeq_SendMultiByte_PC2CountInit
-	cps a, 0
+	cp a, 0:i3
 	jr nz, MidiSeq_SendMultiByte_Exit
 
 MidiSeq_SendMultiByte_PC2CountInit:
 	ld wa, iz
 	dec 1, iz
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, MidiSeq_SendMultiByte_Exit
 
 MidiSeq_SendMultiByte_PC2SendLoop:
@@ -1485,7 +1485,7 @@ MidiSeq_SendMultiByte_PC2SendLoop:
 	extz wa
 	call MIDI_RX_BYTE_DISPATCHER
 	call SeqBuf_MidiOut_GetTimingValue
-	cps hl, 1
+	cp hl, 1:i3
 	jr lt, MidiSeq_SendMultiByte_PC2NextByte
 	ld xwa, (xsp + 10)
 	cp (xwa), 0xfe
@@ -1503,19 +1503,19 @@ MidiSeq_SendMultiByte_PC2NextByte:
 	add (xsp + 10), xwa
 	ld wa, iz
 	dec 1, iz
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, MidiSeq_SendMultiByte_PC2SendLoop
 	jr MidiSeq_SendMultiByte_Exit
 
 MidiSeq_SendMultiByte_SerialCountInit:
 	ld wa, iz
 	dec 1, iz
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, MidiSeq_SendMultiByte_Exit
 
 MidiSeq_SendMultiByte_SerialSendLoop:
 	call SeqBuf_MidiOut_GetTimingValue
-	cps hl, 1
+	cp hl, 1:i3
 	jr lt, MidiSeq_SendMultiByte_SerialNextByte
 	ld xwa, (xsp + 10)
 	cp (xwa), 0xfe
@@ -1533,7 +1533,7 @@ MidiSeq_SendMultiByte_SerialNextByte:
 	add (xsp + 10), xwa
 	ld wa, iz
 	dec 1, iz
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, MidiSeq_SendMultiByte_SerialSendLoop
 
 MidiSeq_SendMultiByte_Exit:
@@ -1669,13 +1669,13 @@ MIDI_BroadcastCC_CommLoop:
 
 CompIface_SendActiveSensing:
 	ld a, (0xb7e0:16)
-	cps a, 0	; MIDI
+	cp a, 0:i3	; MIDI
 	ret z
-	cps a, 3	;  PC2
+	cp a, 3:i3	;  PC2
 	jr z, CompIface_SendActiveSensing_PC2
-	cps a, 2	;  PC1
+	cp a, 2:i3	;  PC1
 	jr z, CompIface_SendActiveSensing_PC1MAC
-	cps a, 1	;  MAC
+	cp a, 1:i3	;  MAC
 	ret nz
 
 CompIface_SendActiveSensing_PC1MAC:
@@ -1794,7 +1794,7 @@ MidiOut_ReadSysExByte:
 	jrl nz, MidiOut_SerializeRealtimeLoop
 
 MidiOut_FlushBuffer:
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, MidiOut_SerializeAndSend_Exit
 	ei 0
 	lds wa, 4
@@ -2189,13 +2189,13 @@ DSPCfg_CheckChorusMuted:
 DSPCfg_CompressorDispatch:
 	ld c, a
 	and a, 0xff
-	cps e, 7
+	cp e, 7:i3
 	jr z, DSPCfg_CompParam_SubType7
-	cps e, 6
+	cp e, 6:i3
 	jr z, DSPCfg_CompParam_SubType6
-	cps e, 5
+	cp e, 5:i3
 	ret nz
-	cps a, 0
+	cp a, 0:i3
 	ret z
 	ld xwa, 0x2a00
 	call SndParam_LookupReadOnly
@@ -2208,7 +2208,7 @@ DSPCfg_CompressorDispatch:
 	ret
 
 DSPCfg_CompParam_SubType6:
-	cps a, 0
+	cp a, 0:i3
 	ret z
 	ld xwa, 0x2a01
 	call SndParam_LookupReadOnly
@@ -2299,7 +2299,7 @@ DSPCfg_ExtractFieldPair:
 	and w, 0xf
 	ld a, w
 	extz wa
-	cps wa, 2
+	cp wa, 2:i3
 	jr nz, DSPCfg_ExtractAdjustType2
 	ld l, (xix + 5)
 	and l, 0x1f
@@ -2917,9 +2917,9 @@ DSPCfg_Data_003:
 	pop	xiz
 	inc	8, xsp
 	ret
-	cps	wa, 4
+	cp	wa, 4:i3
 	jr	ge, 8
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	lt, 4
 	lds	hl, 0
 	jr	3
@@ -3127,7 +3127,7 @@ DSPCfg_ResolveAndExtract:
 	push xbc
 	lda xbc, (xsp + 20)
 	calr DSPCfg_ResolveParamToSlot
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DSPCfg_ResolveAndExtract_Return
 	ld wa, (xsp + 2)
 	ld bc, (xsp + 6)
@@ -3153,7 +3153,7 @@ DSPCfg_ResolveWithFallback:
 	ld xwa, (xsp + 28)
 	calr DSPCfg_ResolveParamToSlot
 	ld (xsp + 2), hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, DSPCfg_ResolveWithFallback_CheckType
 	ld wa, (xsp + 10)
 	extz xwa
@@ -3190,9 +3190,9 @@ DSPCfg_ResolveWithFallback_CheckType:
 	jr z, DSPCfg_ResolveWithFallback_Type9
 	cp bc, 0x8
 	jr z, DSPCfg_ResolveWithFallback_Type8
-	cps bc, 1
+	cp bc, 1:i3
 	jr z, DSPCfg_ResolveWithFallback_Type1
-	cps bc, 0
+	cp bc, 0:i3
 	jr nz, DSPCfg_ResolveWithFallback_UnknownType
 	ld (xsp + 2), wa
 	jr DSPCfg_ResolveWithFallback_Return
@@ -3317,15 +3317,15 @@ DSPCfg_ValidateSlotForWrite:
 	ld xde, (xhl)
 	or xde, xde
 	jr z, DSPCfg_ValidateSlotForWrite_Invalid
-	cps bc, 4
+	cp bc, 4:i3
 	jr z, DSPCfg_ValidateSlotForWrite_Slot4
-	cps bc, 3
+	cp bc, 3:i3
 	jr z, DSPCfg_ValidateSlotForWrite_Slot3
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, DSPCfg_ValidateSlotForWrite_Slot2
-	cps bc, 1
+	cp bc, 1:i3
 	jr z, DSPCfg_ValidateSlotForWrite_Slot1
-	cps bc, 0
+	cp bc, 0:i3
 	jr nz, DSPCfg_ValidateSlotForWrite_Invalid
 	cp wa, 0x10
 	jr c, DSPCfg_ValidateSlotForWrite_Valid
@@ -3387,12 +3387,12 @@ DSPCfg_WriteParamFull:
 	ld xwa, (xsp + 32)
 	calr DSPCfg_ResolveParamToSlot
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl nz, DSPCfg_WriteParamFull_Return
 	ld wa, (xsp + 2)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, DSPCfg_WriteParamFull_Type1
-	cps wa, 0
+	cp wa, 0:i3
 	jrl nz, DSPCfg_WriteParamFull_UnknownType
 	ld wa, (xsp + 18)
 	ld bc, (xsp + 6)
@@ -3429,7 +3429,7 @@ DSPCfg_WriteParamFull_Type1:
 	jr z, DSPCfg_WriteParamFull_Check491D
 	lda xwa, (xsp + 12)
 	lda xbc, (xsp + 10)
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, DSPCfg_WriteParamFull_Type1_Clamped
 	push xwa
 	push xbc
@@ -3510,12 +3510,12 @@ DSPCfg_WriteParamSimple:
 	ld xwa, (xsp + 36)
 	calr DSPCfg_ResolveParamToSlot
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl nz, DSPCfg_WriteParamSimple_Return
 	ld wa, (xsp + 2)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, DSPCfg_WriteParamSimple_Type1
-	cps wa, 0
+	cp wa, 0:i3
 	jrl nz, DSPCfg_WriteParamSimple_UnknownType
 	ld wa, (xsp + 22)
 	ld bc, (xsp + 6)
@@ -3539,7 +3539,7 @@ DSPCfg_WriteParamSimple_Type1:
 	jr z, DSPCfg_WriteParamSimple_Check491D
 	lda xwa, (xsp + 12)
 	lda xbc, (xsp + 10)
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, DSPCfg_WriteParamSimple_Type1_Clamped
 	push xwa
 	push xbc
@@ -3600,12 +3600,12 @@ DSPCfg_WriteParamDelta:
 	lda xbc, (xsp + 22)
 	ld xwa, (xsp + 26)
 	calr DSPCfg_ResolveParamToSlot
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DSPCfg_WriteParamDelta_Return
 	ld wa, (xsp + 2)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, DSPCfg_WriteParamDelta_Type1
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, DSPCfg_WriteParamDelta_BadType
 	ld xwa, (xsp + 10)
 	calr DSPCfg_GetParamCount
@@ -3739,7 +3739,7 @@ DSPCfg_WriteAllSlots_Clamped_Loop:
 	lda xde, (xsp + 14)
 	ld bc, iz
 	calr DSPCfg_ClampAndExtract
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DSPCfg_WriteAllSlots_Clamped_Next
 	ld wa, iz
 	ld xbc, (xsp + 6)
@@ -3799,7 +3799,7 @@ DSPCfg_WriteAllSlots_Combined:
 	stw_erp WA, 0xfa
 	add wa, hl
 	ldiw_erp 0xfa, 0
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, DSPCfg_WriteAllSlots_Combined_Done
 	ldi_erpw 0xfa, 0xff, 0xff
 
@@ -3995,9 +3995,9 @@ DSPCfg_Data_ParamDispatch:
 	nop
 	extz	wa
 	sub	wa, 97
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	lt, 78
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	gt, 74
 	add	wa, wa
 	lda	xix, (ToneKit_VoiceDispatch_Table_0x33C:24)
@@ -4194,7 +4194,7 @@ DSPCfg_ApplyParamStruct_Normal:
 	ld (xsp + 14), xwa
 	ldw (xsp + 12), 0x0
 	ld wa, (xsp + 6)
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, DSPCfg_ApplyParamStruct_CheckSpecial
 
 DSPCfg_ApplyParamStruct_ReadLoop:
@@ -4273,7 +4273,7 @@ DSPCfg_ApplyParamStruct_WriteLoop:
 	ld (xsp + 14), xwa
 	ldw (xsp + 12), 0x0
 	ld wa, (xsp + 6)
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, DSPCfg_ApplyParamStruct_Return
 
 DSPCfg_ApplyParamStruct_WriteReadLoop:
@@ -4387,7 +4387,7 @@ DSPCfg_ApplyParamStructFull:
 DSPCfg_ApplyParamStructFull_RangeCheck:
 	ld bc, (xsp + 30)
 	dec 1, bc
-	cps bc, 0
+	cp bc, 0:i3
 	jr lt, AssSwb_SwapEntriesAndDispatch
 	cp bc, 0x8
 	jr le, DspConfig_EventDispatch
@@ -5361,7 +5361,7 @@ AudioInit_CheckMIDIAndDispatch:
 	jp AudioInit_DispatchChanges
 
 Audio_InitDispatchReturn:
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioDispatch_ClearAccFlags
 	ld wa, (0xc598:16)
 	bit 2, wa
@@ -5470,7 +5470,7 @@ AudioVoiceReset_Handler:
 
 AudioMode_ConfigureExternal:
 	ld (0xc1fe:16), 0
-	cps a, 0
+	cp a, 0:i3
 	jr z, AudioMode_ConfigExternal_Off
 	orw (0xc594:16), 16
 	jr AudioMode_ConfigExternal_Apply
@@ -5536,7 +5536,7 @@ UIState_ProcessMidiEvent:
 	jr z, UIStateEvt_VoiceAssign
 	cp a, 0xc
 	jr z, UIStateEvt_PartRouting
-	cps a, 0
+	cp a, 0:i3
 	ret nz
 	ld a, e
 	and a, 0xff
@@ -5725,9 +5725,9 @@ UIStateEvt_ParamEdit_Data:
 	pushw	iz
 	ld	a, (0xc07d:16)
 	extz	wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	mi, 606
-	cps	wa, 6
+	cp	wa, 6:i3
 	jrl	gt, 601
 	add	wa, wa
 	lda	xix, (AudioInit_VoiceDispatch_Table_0x150:24)
@@ -5982,9 +5982,9 @@ UIStateEvt_ParamEdit_Data:
 UIStateEvt_VolumeMixer_Data:
 	ld	a, (0xc07d:16)
 	extz	wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	ret	mi
-	cps	wa, 5
+	cp	wa, 5:i3
 	ret	gt
 	add	wa, wa
 	lda	xix, (AudioInit_VoiceDispatch_Table_0x15E:24)
@@ -6141,28 +6141,28 @@ UIStateEvt_VolumeMixer_Data:
 	ret
 UIStateEvt_EffectSelect_Data:
 	ld	a, (0xc07d:16)
-	cps	a, 4
+	cp	a, 4:i3
 	jrl	z, 270
-	cps	a, 3
+	cp	a, 3:i3
 	jrl	z, 238
-	cps	a, 2
+	cp	a, 2:i3
 	jrl	z, 147
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 99
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	ld	a, (0xc07f:16)
 	and	a, 3
 	jr	z, 79
 	ld	a, (0xc07e:16)
 	and	a, 3
-	cps	a, 3
+	cp	a, 3:i3
 	jr	z, 57
-	cps	a, 2
+	cp	a, 2:i3
 	jr	z, 40
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 23
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 56
 	ld	a, (0xfd03:16)
 	res	7, a
@@ -6195,7 +6195,7 @@ UIStateEvt_EffectSelect_Data:
 	ret
 	ld	a, (0xc07f:16)
 	res	7, a
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ld	a, (0xfd02:16)
 	and	a, 3
@@ -6301,13 +6301,13 @@ UIStateEvt_ChannelConfig_Data:
 	jrl	z, 320
 	cp	a, 10
 	jrl	z, 314
-	cps	a, 3
+	cp	a, 3:i3
 	jrl	z, 158
-	cps	a, 2
+	cp	a, 2:i3
 	jrl	z, 146
-	cps	a, 1
+	cp	a, 1:i3
 	ret	z
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	.byte 0xf1
 	jrl	nc, -12608
@@ -6451,11 +6451,11 @@ UIStateEvt_ChannelConfig_Data:
 	ret
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	z, 38
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 15
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	nz
 	ld	(0xc362:16), 0
 	ld	(0xc363:16), 255

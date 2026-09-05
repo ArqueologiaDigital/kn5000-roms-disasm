@@ -140,7 +140,7 @@ Encoder_ProcessBreath:
 	.byte 0x7e, 0x3f, 0x00, 0x66, 0x3e
 Encoder_ProcessBreath_WithModeAdjustment:
 	ld	c, (36414:16)
-	cps	c, 0
+	cp	c, 0:i3
 	ret	z
 	srl	a, 1
 	ld	l, a
@@ -227,11 +227,11 @@ Encoder_ReturnDefaultConstant_End:
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
 	ld	a, (49121:16)
-	cps	a, 6
+	cp	a, 6:i3
 	jr	z, 50
-	cps	a, 5
+	cp	a, 5:i3
 	jr	z, 25
-	cps	a, 4
+	cp	a, 4:i3
 	ret	nz
 	ld	a, (49123:16)
 	and	a, 15
@@ -256,7 +256,7 @@ Encoder_ConfigureRangeLimit:
 	; from v9/v10's 0xc07f/0xc07e, a real cross-revision shift.
 	ld	a, (49123:16)
 	res	7, a
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	ld	a, (49122:16)
 	res	7, a

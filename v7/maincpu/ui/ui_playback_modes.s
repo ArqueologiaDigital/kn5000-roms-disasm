@@ -12,7 +12,7 @@ UIStateEvt_VoiceParamHandler:
 	ld	(4330:16), 0
 	jrl	164
 	ld	a, (49121:16)
-	cps	a, 3
+	cp	a, 3:i3
 	.byte 0xf2, 0x8a, 0x03, 0xf2, 0xde
 	ld	a, (49122:16)
 	ld	w, (49123:16)
@@ -789,10 +789,10 @@ CDlikeSwitch_NullRet:
 
 CDlikeSwitch_PlaybackTimer:
 	ld w, (0x1144:16)
-	cps w, 0
+	cp w, 0:i3
 	jr z, CDlikeTimer_Return
 	dec 1,W
-	cps w, 5
+	cp w, 5:i3
 	jr nz, CDlikeTimer_CheckZeroCount
 	cp (0x8c9a:16), 0x7a
 	jr z, CDlikeTimer_ResetAccompaniment
@@ -807,7 +807,7 @@ CDlikeTimer_ResetAccompaniment:
 	popw wa
 	jr CDlikeSwTtl_StorePlaybackMode
 CDlikeTimer_CheckZeroCount:
-	cps	w, 0
+	cp	w, 0:i3
 	jr	nz, 74
 	cp	(35994:16), 122
 	jr	z, 61
@@ -1343,7 +1343,7 @@ SqTrAsPsTtl_CaseF:
 	ld	a, (35994:16)
 	extz	wa
 	sub	wa, 108
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	lt, 41
 	cp	wa, 13
 	jr	gt, 35
@@ -1571,7 +1571,7 @@ DisplayMode_DispatchEvents:
 	ld a, (0x8c9a:16)
 	extz WA
 	sub WA,0x006f
-	cps wa, 0
+	cp wa, 0:i3
 	ret LT
 	.byte 0xd8, 0xde, 0xb0, 0xfa, 0xd8, 0x80, 0xf2, 0xb4
 	.byte 0x00, 0xe2, 0x34, 0xd3, 0x07, 0xf0, 0xe0, 0x20
@@ -2282,7 +2282,7 @@ CDlikeSwTtl_ShowSongTitle:
 	lds	wa, 1
 	call	16693375
 	ld	wa, hl
-	cps	wa, 0
+	cp	wa, 0:i3
 	.byte 0xf2, 0xca, 0x07, 0xf2, 0xde
 	calr	4520
 	ld	(4437:16), 0
@@ -2374,11 +2374,11 @@ CDlikeSwTtl_SongConfirmJump:
 	jp	16693796
 CDlikeSwTtl_SongConfirmDispatch:
 	ld a, (7498:16)
-	cps a, 2
+	cp a, 2:i3
 	jr z, CDlikeSwTtl_SongConfirmState2
-	cps a, 1
+	cp a, 1:i3
 	jr z, CDlikeSwTtl_SongConfirmState1
-	cps a, 3
+	cp a, 3:i3
 	ret nz
 
 CDlikeSwTtl_SongConfirmState1:

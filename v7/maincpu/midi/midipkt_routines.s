@@ -497,9 +497,9 @@ MidiPkt_SendBankSelect_Send:
 	exts	xwa
 	add	xwa, 18704
 	call	16629526
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 4
-	cps	hl, 2
+	cp	hl, 2:i3
 	jr	nz, 21
 MidiPkt_SysExValidator_Data:
 	ld	wa, iz
@@ -545,5 +545,5 @@ MidiPkt_SysExBulkTransfer_Data:
 	extz DE
 	add DE,DE
 	extz WA
-	cps wa, 0
+	cp wa, 0:i3
 	.incbin "includes/romslices/v7_block_midipkt_sysexbulktransfer_data_tail.bin"

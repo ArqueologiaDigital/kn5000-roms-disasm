@@ -29,7 +29,7 @@ FileCopyFunc:
 	ld	(32452:16), xiz
 	call	16290274
 	ld	(32456:16), hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 24
 	cp	hl, 19
 	jr	ge, 9
@@ -67,7 +67,7 @@ FCopy_HandleScroll:
 	ld	de, wa
 	cp	xbc, 29360152
 	jr	nz, 96
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	le, 6
 	dec	1, wa
 	ld	(32458:16), wa
@@ -75,7 +75,7 @@ FCopy_ScrollDown_CheckMin:
 	ld	wa, (32458:16)
 	cp	wa, (32456:16)
 	jr	nz, 16	; -> 0xF8B862
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	le, 8	; -> 0xF8B85E
 	dec	1, wa
 	ld	(32458:16), wa
@@ -121,11 +121,11 @@ FCopy_HandleCopyContext:
 	cp XIZ,0x00000008
 	jrl nz, FCopy_CopyExecute
 	call CheckFileSystemStatus
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FCopy_CopyExecute
 	ld wa, (0x7eca:16)
 	call FileIO_GetRecordFlags
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FCopy_CopyConfirm_Execute
 	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00, 0x66, 0x23
 	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x00, 0x00
@@ -222,7 +222,7 @@ FileRenameFunc:
 	cp	xbc, 31457338
 	jrl	nz, 225
 	call	16290274
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 89
 	lda	xiz, (34772:16)
 	ld	wa, hl
@@ -246,22 +246,22 @@ FRename_PadLoop_Advance:
 	inc 1, iy
 
 FRename_PadLoop_Cond:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, FRename_PadLoop_Fill
 	lda_dri XDE, 0x07, 0xec, 0xf4
 	ld c, (xde)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, FRename_PadLoop_CheckChar
 
 FRename_PadLoop_Fill:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, FRename_PadDone
 	ld xbc, xwa
 
 FRename_FillLoop:
 	stib_ind 0x07, 0xe4, 0xf4, 0x5f
 	inc 1, iy
-	cps iy, 6
+	cp iy, 6:i3
 	jr lt, FRename_FillLoop
 
 FRename_PadDone:
@@ -280,7 +280,7 @@ FRename_TextChange_SendApply:
 	jr	95
 FRename_HandleApply:
 	call	16289841
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 87
 	ld	xwa, 34772
 	ld	xbc, (xsp+4)
@@ -321,7 +321,7 @@ FileRenameSmfFunc:
 	cp	xbc, 31457338
 	jrl	nz, 237
 	call	16291514
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 95
 	lda	xiz, (34772:16)
 	ld	wa, hl
@@ -349,7 +349,7 @@ FRenameSmf_PadLoop_Cond:
 	jr ge, FRenameSmf_PadLoop_Fill
 	lda_dri XDE, 0x07, 0xec, 0xf4
 	ld c, (xde)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, FRenameSmf_PadLoop_CheckChar
 
 FRenameSmf_PadLoop_Fill:
@@ -431,9 +431,9 @@ FmmFormatFunc:
 	calr	-3594
 FmmFmt_InitPhase_CheckDrive:
 	ld	wa, (33892:16)
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 4
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	nz, 27
 FmmFmt_InitPhase_DriveType23:
 	ld	(32460:16), a
@@ -470,7 +470,7 @@ FmmFmt_HandleProgress:
 	cp	xde, 10
 	jrl	nz, 287
 	ld	a, c
-	cps	c, 0
+	cp	c, 0:i3
 	jrl	nz, 167
 	ld	xwa, 6291494
 	ld	xbc, 29360129
@@ -488,7 +488,7 @@ FmmFmt_HandleProgress:
 	ld	xbc, 29360130
 	lds32	xde, 0
 	call	16423243
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	ge, 69
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -521,7 +521,7 @@ FmmFmt_FormatSuccess:
 	ld	(33890:16), 1
 	jr	113
 FmmFmt_ExecutePhase2:
-	cps	a, 2
+	cp	a, 2:i3
 	jr	nz, 109
 	ld	(32460:16), 3
 	ld	xwa, 8060991
@@ -534,13 +534,13 @@ FmmFmt_ExecutePhase2:
 	jr	54
 FmmFmt_HandleAbort:
 	ld	e, c
-	cps	c, 0
+	cp	c, 0:i3
 	jr	nz, 11
 	call	16355459
 	ld	(32464:16), 0
 	jr	57
 FmmFmt_AbortPhase2:
-	cps	e, 2
+	cp	e, 2:i3
 	jr	nz, 53
 	ld	(32460:16), 2
 	ld	xwa, 8060991
@@ -603,11 +603,11 @@ FmmLoadTitleFunc:
 	calr	-4139
 FmmLoadTtl_StateDispatch:
 	ld	wa, (33892:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	z, 193
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 166
-	cps	wa, 5
+	cp	wa, 5:i3
 	jr	z, 94
 	cpw	(33894:16), 0
 	jr	ge, 19
@@ -787,7 +787,7 @@ FmmSaveTtl_SlotLoop:
 	extz	wa
 	call	16289650
 	inc	1, iz
-	cps	iz, 6
+	cp	iz, 6:i3
 	jr	lt, -15
 	lds	wa, 6
 	call	16289670
@@ -934,13 +934,13 @@ DiskInfoFunc:
 	ld (0x8464:16), hl
 DiskInfo_ReadDriveType:
 	ld	wa, (33892:16)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 28
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 24
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	z, 4
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	nz, 19
 DiskInfo_ReadCapacity:
 	call GetEncodedFreeSpaceData
@@ -1026,7 +1026,7 @@ SongNameFunc:
 	jr	nz, 99
 	call	16291514
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 67
 	lds	wa, 0
 	calr	60075
@@ -1079,7 +1079,7 @@ SaveFileNameNumFunc:
 	jr	nz, 59
 	call	16290274
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 27
 	call	16289455
 	ld	xbc, xhl
@@ -1146,22 +1146,22 @@ SaveFileName_PadLoop_Advance:
 	inc 1, iy
 
 SaveFileName_PadLoop_Cond:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, SaveFileName_PadLoop_Fill
 	lda_dri XBC, 0x07, 0xec, 0xf4
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, SaveFileName_PadLoop_CheckChar
 
 SaveFileName_PadLoop_Fill:
-	cps iy, 6
+	cp iy, 6:i3
 	jr ge, SaveFileName_PadDone
 	ld xwa, xde
 
 SaveFileName_FillLoop:
 	stib_ind 0x07, 0xe0, 0xf4, 0x5f
 	inc 1, iy
-	cps iy, 6
+	cp iy, 6:i3
 	jr lt, SaveFileName_FillLoop
 
 SaveFileName_PadDone:
@@ -1193,7 +1193,7 @@ CurFileNameFunc:
 	jr	nz, 61
 	call	16290274
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 29
 	ld	wa, iz
 	call	16290326

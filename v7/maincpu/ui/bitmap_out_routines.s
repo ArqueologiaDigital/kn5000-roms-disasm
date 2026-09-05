@@ -65,7 +65,7 @@ BitMapOut_BlitComplete:
 	ret
 BitMapOut_ByteData_RenderA:
 	call	15665005
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 	call	16405594
 	cp	xhl, 27263222
@@ -73,7 +73,7 @@ BitMapOut_ByteData_RenderA:
 	cp	(49121:16), 0
 	ret	nz
 	calr	605
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	a, (49122:16)
 	cp	a, 13
@@ -111,7 +111,7 @@ BitMapOut_ByteData_RenderA:
 BitMapOut_ByteData_RenderB:
 	dec	6, xsp
 	call	15665005
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 158
 	call	16405594
 	cp	xhl, 27263222
@@ -122,7 +122,7 @@ BitMapOut_ByteData_RenderB:
 	cp	(49121:16), 0
 	jr	nz, 127
 	calr	429
-	cps	l, 0
+	cp	l, 0:i3
 	jr	nz, 120
 	call	16405594
 	cp	xhl, 27263208
@@ -168,7 +168,7 @@ BitMapOut_ByteData_RenderD:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 49 of 76 slots byte-identical
 	dec	6, xsp
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 120
 	call	GetTitleNow
 	.byte 0xeb	; v10 does not spell this byte either
@@ -223,14 +223,14 @@ BitMapOut_ByteData_RenderD:
 	inc	6, xsp
 	ret
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 	.byte 0xc1	; v10 does not spell this byte either
 	.byte 0xe1, 0xbf, 0x3f	; differs from v10 here and llvm-objdump cannot read it
 	nop
 	ret	nz
 	calr	146
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
@@ -245,7 +245,7 @@ BitMapOut_ByteData_RenderD:
 BitMapOut_ByteData_RenderE:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 20 of 29 slots byte-identical
 	call	Boot_CheckConfigFlag7
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 	.byte 0xc1	; v10 does not spell this byte either
 	.byte 0xe1, 0xbf, 0x3f	; differs from v10 here and llvm-objdump cannot read it
@@ -258,7 +258,7 @@ BitMapOut_ByteData_RenderE:
 	popw	wa
 	ret	nz
 	calr	78
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	call	GetTitleNow
 	cp	xhl, 27263209
@@ -293,11 +293,11 @@ BitMapOut_DecrementTimer:
 	cp	xhl, 27263215
 	jr	z, -18
 	ld	a, (36000:16)
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	dec	1, a
 	ld	(36000:16), a
-	cps	a, 0
+	cp	a, 0:i3
 	ret	nz
 	lds32	xwa, 3
 	call	16567398
@@ -355,7 +355,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 192
 	call	16567398
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 14
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
@@ -600,7 +600,7 @@ BitMapOut_RestoreFull_FieldLoop:
 	lds bc, 0
 	stb_erp E, 0xe6
 	extz de
-	cps de, 0
+	cp de, 0:i3
 	jr ule, BitMapOut_RestoreFull_FieldDone
 
 BitMapOut_RestoreFull_CopyField:
@@ -2095,13 +2095,13 @@ BitMapOut_DeltaEncode_TypeDefault:
 	ld de, (xsp + 8)
 	extz xde
 	add xde, xix
-	cps c, 0
+	cp c, 0:i3
 	jrl z, BitMapOut_DeltaEncode_TypeDefaultC
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xiz, 0x3c8e4
 	add xiz, xwa
-	cps c, 1
+	cp c, 1:i3
 	jr z, BitMapOut_DeltaEncode_TypeDefaultB
 	ld wa, hl
 	inc 1, hl
@@ -2270,14 +2270,14 @@ BitMapOut_DeltaEncode_Type48Handler:
 	extz xwa
 	add xwa, xix
 	ld (xsp + 12), xwa
-	cps c, 0
+	cp c, 0:i3
 	jrl z, BitMapOut_DeltaEncode_Type48End
 	ld iy, (xsp + 16)
 	extz xiy
 	ld xwa, 0x3c8e4
 	add xwa, xiy
 	ld (xsp + 8), xwa
-	cps c, 1
+	cp c, 1:i3
 	jr z, BitMapOut_DeltaEncode_Type48Loop
 	ld wa, hl
 	inc 1, hl
@@ -2893,9 +2893,9 @@ BitMapOut_ByteData_RenderState:
 	ld	a, (49122:16)
 	and	a, (49123:16)
 	and	a, 3
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 29
-	cps	a, 2
+	cp	a, 2:i3
 	jr	nz, 48
 	calr	-68
 	ldb_erp	l, 251
@@ -2953,15 +2953,15 @@ BitMapOut_ByteData_RenderState:
 BitMapOut_ByteData_DisplayUpdate:
 	push	xiz
 	ld	a, (49121:16)
-	cps	a, 1
+	cp	a, 1:i3
 	jr	nz, 107
 	ld	a, (49123:16)
 	res	7, a
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 25
 	ld	xwa, 768
 	call	16567398
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 12
 	dec	1, l
 	srl	l, 3
@@ -2994,7 +2994,7 @@ BitMapOut_ByteData_DisplayUpdate:
 BitMapOut_UpdateDisplayWidget:
 	push xiz
 	ld xiz, xbc
-	cps a, 0
+	cp a, 0:i3
 	jr nz, BitMapOut_UpdateWidget_CheckType
 	pushw 0x10
 	pushw 0xeb
@@ -3022,7 +3022,7 @@ BitMapOut_UpdateWidget_TypeA:
 	pop	xiz
 	ret
 BitMapOut_UpdateWidget_TypeB:
-	cps a, 0
+	cp a, 0:i3
 	ret Z
 	dec 1,A
 	extz WA
@@ -3091,7 +3091,7 @@ BitMapOut_UpdateWidget_Done:
 	dec 2,XSP
 	push QIZ
 	ld (XSP+0x02),A
-	cps bc, 0
+	cp bc, 0:i3
 	jr ge, .Lc_fb5b1a
 	ld A,(XSP+0x02)
 	extz WA
@@ -3169,7 +3169,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 BitMapOut_ApplyPatch_Execute:
 	lds iz, 0
 	ldib_erp 0xfb, 0
-	cps a, 0
+	cp a, 0:i3
 	jr ule, BitMapOut_ApplyPatch_Store
 
 BitMapOut_ApplyPatch_Loop:

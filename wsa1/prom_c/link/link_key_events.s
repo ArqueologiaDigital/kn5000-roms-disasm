@@ -577,7 +577,7 @@ Link_Ch2_ForwardBytes__F98FDB:
 	dec	1, c                               ; F98FE0  dec 1,C
 	ld	(xiz-1), c                          ; F98FE2  ld (XIZ+0xff),C
 	ld	(xiz+8), c                          ; F98FE5  ld (XIZ+0x08),C
-	cps	h, 0                               ; F98FE8  cp H,0
+	cp	h, 0:i3                               ; F98FE8  cp H,0
 	jr z, Link_Ch2_ForwardBytes__F99017                        ; F98FEA  jr Z,0xf99017
 	ld	xbc, (xiz+10)                       ; F98FEC  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)                            ; F98FEF  ld A,(XBC)

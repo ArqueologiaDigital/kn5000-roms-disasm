@@ -60,9 +60,9 @@ SndParam_DispatchCallback:
 	cpw (xbc), 0xffff
 	jr z, SndParam_NotFound
 	ld wa, (xbc + 2)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, SndParam_CallbackType1
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, SndParam_Epilogue
 	ld wa, (xsp + 10)
 	calr SndParam_WidgetNotifyType0
@@ -84,7 +84,7 @@ SndParam_Epilogue:
 
 SndParam_DispatchTypeDE5:
 	ld c, (xwa + 16)
-	cps c, 6
+	cp c, 6:i3
 	jr nc, SndParam_Epilogue
 	extz bc
 	sla bc, 2
@@ -191,9 +191,9 @@ SndParam_Lkp2_Dispatch:
 	cpw (xbc), 0xffff
 	jr z, SndParam_Lkp2_NotFound
 	ld wa, (xbc + 2)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, SndParam_Lkp2_CallType1
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, SndParam_Lkp2_Epilogue
 	ld wa, (xsp + 10)
 	calr SndParam_WidgetNotifyType0
@@ -291,7 +291,7 @@ SndParam_RO_Dispatch:
 	or xwa, xwa
 	jr z, SndParam_RO_Epilogue
 	ld a, (xwa + 12)
-	cps a, 7
+	cp a, 7:i3
 	jr nc, SndParam_RO_Epilogue
 	extz wa
 	sla wa, 2
@@ -840,7 +840,7 @@ SndParam_ReadRegWithLUT:
 	lda xhl, (Naka_SubDispatch_A_Table_0x28:24)
 	ld_sril3 XBC, 0x03, 0xec, 0xe4
 	ld c, (xbc)
-	cps e, 2
+	cp e, 2:i3
 	jr nz, SndParam_ReadRegMasked
 	ld a, c
 	sll a, 6
@@ -935,7 +935,7 @@ SndParam_ReadRegScanLoop:
 	cp_spiw DE, 0xe1
 	ret z
 	inc 1, hl
-	cps hl, 5
+	cp hl, 5:i3
 	jr le, SndParam_ReadRegScanLoop
 	lds hl, 0
 	ret
@@ -1141,7 +1141,7 @@ SndParam_RegisterEntryAlt_Data:
 	xor	b, c
 	lda	xix, (xde+6)
 	lda	xiy, (0x96f2:16)
-	cps	hl, 4
+	cp	hl, 4:i3
 	jr	nz, 8
 	ld	a, (xix)
 	and	a, b
@@ -1426,7 +1426,7 @@ SndParam_RegisterLinked_Data:
 	lda	xix, (xwa+5)
 	ld	a, (xhl+5)
 	ld	(xix), a
-	cps	de, 3
+	cp	de, 3:i3
 	jr	nz, 9
 	inc	1, a
 	ld	(xix), a
@@ -1562,7 +1562,7 @@ SndParam_RegisterLinked2_Data:
 	ld	wa, (xix+7)
 	ld	xhl, xiy
 	ld	bc, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	ge, 6
 	ld	xwa, (xhl)
 	ld	l, (xwa)
@@ -2166,7 +2166,7 @@ SndParam_RegisterDual_Data:
 	ccf
 	or	(xwa), e
 	add	(xde-40), a
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	ge, 6
 	ld	xwa, (xde)
 	ld	e, (xwa)
@@ -2661,11 +2661,11 @@ SndParam_BatchUpdate_Data:
 	lda	xix, (0x9798:16)
 	ld	xwa, (xsp+22)
 	lda	xbc, (xwa+4)
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	z, 122
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	z, 77
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	nz, 166
 	lda	xwa, (xsp+10)
 	ld	e, (xbc)
@@ -2766,7 +2766,7 @@ SndParam_WidgetNotifyType0:
 	jr nz, SndParam_WidgetCheckDirty
 	cp (xbc + 5), 0x8
 	jr nz, SndParam_WidgetCheckDirty
-	cps wa, 4
+	cp wa, 4:i3
 	jr z, SndParam_WidgetCallHandler
 
 SndParam_WidgetCheckDirty:
@@ -2790,13 +2790,13 @@ SndParam_WidgetDispatch:
 	extz bc
 	ld a, (xiz + 4)
 	extz wa
-	cps hl, 4
+	cp hl, 4:i3
 	jr z, SndParam_WidgetCallType4
-	cps hl, 3
+	cp hl, 3:i3
 	jr z, SndParam_WidgetCallType3
-	cps hl, 2
+	cp hl, 2:i3
 	jr z, SndParam_WidgetAppendType2
-	cps hl, 1
+	cp hl, 1:i3
 	jr nz, SndParam_WidgetDispatchDone
 	cpw (0x90de:16), 508
 	call nc, (SwbtWr_ReinitBothBanks:24)
@@ -2852,7 +2852,7 @@ SndParam_WidgetNotifyType1:
 	push xiz
 	ld xiz, xbc
 	ld e, (xiz + 7)
-	cps e, 0
+	cp e, 0:i3
 	jrl z, SndParam_Widget1_Done
 	lda xiy, (xiz + 6)
 	ldb_erp E, 0xf0
@@ -2861,13 +2861,13 @@ SndParam_WidgetNotifyType1:
 	extz bc
 	ld l, (xiz + 4)
 	extz hl
-	cps wa, 4
+	cp wa, 4:i3
 	jrl z, SndParam_Widget1_CallType4
-	cps wa, 3
+	cp wa, 3:i3
 	jrl z, SndParam_Widget1_CallType3
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, SndParam_Widget1_AppendType2
-	cps wa, 1
+	cp wa, 1:i3
 	jrl nz, SndParam_Widget1_Done
 	cpw (0x90de:16), 504
 	call nc, (SwbtWr_ReinitBothBanks:24)
@@ -3272,7 +3272,7 @@ SndParam_AllocSuccess:
 	retd 0x4
 
 SndParam_HeapAlloc:
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, SndParam_HeapAllocFail
 	lda xbc, (0x0380f8:24)
 	ld de, (xbc)

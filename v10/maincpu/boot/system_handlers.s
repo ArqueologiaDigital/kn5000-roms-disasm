@@ -65,7 +65,7 @@ NMI_StorePayloadChecksums_Entry:
 	call Checksum_ComputeComplement
 	ld (0x00ffd2:24), hl
 	call Seq_IsMelodyActive
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, NMI_CopyPayloadToSRAM
 	addw (0xffd4:24), 1000
 
@@ -530,7 +530,7 @@ UIStateMachine_ClearBit3:
 	res 2, (1043:16)
 	ld a, (1041:16)
 	inc 1, a
-	cps a, 2
+	cp a, 2:i3
 	jr ule, UIStateMachine_PrimaryDispatch
 	sub a, a
 	inc 1, (1042:16)
@@ -783,7 +783,7 @@ INTTR4_MetroBeat_Check:
 	bit 3, (1056:16)
 	jr z, INTTR4_SeqBeat_Check
 	ld a, (1047:16)
-	cps a, 0
+	cp a, 0:i3
 	jr z, INTTR4_MetroBeat_OnBeat
 	cp a, 0x18
 	jr z, INTTR4_MetroBeat_OnBeat
@@ -1353,9 +1353,9 @@ MidiEvt_ClearDataFlag:
 	and b, 0xfd
 
 MidiEvt_CheckProcessMode:
-	cps b, 1
+	cp b, 1:i3
 	jr z, MidiEvt_ProcessNoteOn
-	cps b, 2
+	cp b, 2:i3
 	jr z, MidiSerial_ProcessAndReinit
 
 MidiEvt_AdvancePointer:
@@ -2222,7 +2222,7 @@ TaskSched_TimerSlot_Fire:
 INTT3_CheckNesting:
 	pushw wa
 	ld wa, (1475:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, INTT3_EnterScheduler
 	dec 1, wa
 	ld (1475:16), wa
@@ -2283,7 +2283,7 @@ Show_ScreenGroup_Entry:
 	extz xbc
 	ld xix, xbc
 	ld a, (xix + 9)
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, TaskSched_ReturnToDispatch
 	ld (xix + 11), w
 	ld xiy, (xhl + 4)
@@ -2428,7 +2428,7 @@ TaskSched_Resume:
 	ld ix, (1159:16)
 	extz xix
 	ld a, (xix + 10)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, TaskSched_Resume_DecrementWait
 	extz xix
 	xor xwa, xwa
@@ -5228,7 +5228,7 @@ SeqDMA_MultiWrite_NoteEvent:
 	lds iz, 0
 	ld a, (xsp + 6)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, SeqDMA_MultiWrite_NoteEvent_Done
 
 SeqDMA_MultiWrite_NoteEvent_Loop:
@@ -5259,7 +5259,7 @@ SeqDMA_MultiWrite_VoiceMap:
 	lds iz, 0
 	ld a, (xsp + 6)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, SeqDMA_MultiWrite_VoiceMap_Done
 
 SeqDMA_MultiWrite_VoiceMap_Loop:
@@ -5289,7 +5289,7 @@ SeqDMA_MultiWrite_DspSysEx:
 	lds iz, 0
 	ld a, (xsp + 6)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, SeqDMA_MultiWrite_DspSysEx_Done
 
 SeqDMA_MultiWrite_DspSysEx_Loop:
@@ -5320,7 +5320,7 @@ SeqDMA_MultiWrite_SoundEdit:
 	lds iz, 0
 	ld a, (xsp + 6)
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, SeqDMA_MultiWrite_SoundEdit_Done
 
 SeqDMA_MultiWrite_SoundEdit_Loop:
@@ -5471,7 +5471,7 @@ sendCOMM_FinalChunk:
 ;        Called by sendCOMM for chunked audio data transfers
 ; ===========================================================================
 InterCPU_Send_Data_Block:
-	cps c, 0
+	cp c, 0:i3
 	ret z
 	lds ix, 0
 
@@ -5605,7 +5605,7 @@ Audio_DMA_Transfer:
 	ld wa, (1502:16)
 	ld de, wa
 	extz xde
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, Audio_DMA_Transfer_CheckSize
 	ld xde, 0x10000
 
@@ -5624,7 +5624,7 @@ Audio_DMA_Transfer_ByteLoop:
 
 Audio_DMA_Transfer_DelayLoop:
 	inc 1, a
-	cps a, 3
+	cp a, 3:i3
 	jr c, Audio_DMA_Transfer_DelayLoop
 	inc 1, xhl
 	cp xhl, xde
@@ -5975,13 +5975,13 @@ INTTC0_HANDLER:
 	set 0, a
 	ld (xbc), a
 	ld a, (1506:16)
-	cps a, 4
+	cp a, 4:i3
 	jr z, INTTC0_E1_Phase2_Complete
-	cps a, 3
+	cp a, 3:i3
 	jr z, INTTC0_E2_Complete
-	cps a, 2
+	cp a, 2:i3
 	jr z, E1DMA_TransferSetup
-	cps a, 1
+	cp a, 1:i3
 	jr nz, E1DMA_ISR_Epilogue
 	ld c, (1508:16)
 	ld a, c
@@ -6098,7 +6098,7 @@ E1DMA_ISR_BytecodeBlock:
 Flash_IdentifyChip:
 	push xiz
 	ld xbc, 0x280000
-	cps a, 1
+	cp a, 1:i3
 	jr nz, Flash_IdentifyChip_UseBank1
 	ld xbc, 0x300000
 
@@ -6119,7 +6119,7 @@ Flash_IdentifyChip_WaitReady:
 	ldw_sri0 WA, (xiz + 0x3232)
 	ei 0
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Flash_IdentifyChip_Done
 	add xiz, 0x80000
 	ei 6
@@ -6201,11 +6201,11 @@ Flash_ProgramWord:
 Flash_ProgramWord_WaitReady:
 	bit_dd8 5, 0x1c
 	jr z, Flash_ProgramWord_WaitReady
-	cps a, 1
+	cp a, 1:i3
 	jr nz, Flash_ProgramWord_UseBank1
 	lda xiz, (0x300000:24)
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Flash_WriteWordSeq
 	ld xwa, (xsp + 6)
 	cp xwa, 0x380000
@@ -6260,7 +6260,7 @@ Flash_ChipErase_UseBank1:
 	add xwa, 0xaaaa
 	ldw (xwa), 0x10
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Flash_ChipErase_Done
 	cp (xsp + 4), 0x1
 	jr nz, Flash_ChipErase_Done
@@ -6303,7 +6303,7 @@ Flash_EraseSector_UseBank1:
 	ld xwa, 0xff0000
 	and (xsp + 4), xwa
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Flash_EraseSector_WriteSequence
 	ld xwa, (xsp + 4)
 	cp xwa, 0x380000
@@ -6326,7 +6326,7 @@ Flash_EraseSector_WriteSequence:
 	ld xwa, (xsp + 4)
 	ldw (xwa), 0x30
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr nz, Flash_EraseSector_CheckRegion
 	cp (xsp + 12), 0x1
 	jrl nz, FlashOp_Epilogue10
@@ -6452,7 +6452,7 @@ Flash_InitAllBanks:
 	lds wa, 2
 	calr Flash_IdentifyChip
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	call nz, (TableDataROM_IdentifyChip:24)
 	lds wa, 1
 	calr Flash_IdentifyAndValidateChip
@@ -6464,7 +6464,7 @@ Flash_InitAllBanks:
 
 Flash_FillBuffer:
 	lds de, 0
-	cps bc, 0
+	cp bc, 0:i3
 	ret ule
 
 Flash_FillBuffer_Loop:
@@ -7047,7 +7047,7 @@ SLIDE_Decompress_4K_CopyMatch:
 	and iz, 0xf
 	inc 2, iz
 	lds iy, 0
-	cps iz, 0
+	cp iz, 0:i3
 	jr c, SLIDE_Decompress_4K_Continue
 
 SLIDE_Decompress_4K_CopyLoop:
@@ -7170,7 +7170,7 @@ SLIDE_Decompress_8K_CopyMatch:
 	and iz, 0x7
 	inc 2, iz
 	lds iy, 0
-	cps iz, 0
+	cp iz, 0:i3
 	jr c, SLIDE_Decompress_8K_Continue
 
 SLIDE_Decompress_8K_CopyLoop:
@@ -7221,7 +7221,7 @@ SLIDE_Parse_Header:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, SLIDE_Parse_NotFound
 	lda xwa, (xiz + 5)
 	ld xiz, xwa
@@ -7319,7 +7319,7 @@ FDC_ReadSectors_Retry:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FDC_ReadSectors_Done
 	calr FDC_InitRecalibrate
 	jr FDC_ReadSectors_Retry
@@ -7347,7 +7347,7 @@ Detect_Disk_Type:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckProgram2of2
 	ld (xsp + 4), 0x1
 	jrl DetectDisk_FreeBufAndReturn
@@ -7359,7 +7359,7 @@ DetectDisk_CheckProgram2of2:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckTable1of2
 	ld (xsp + 4), 0x2
 	jrl DetectDisk_FreeBufAndReturn
@@ -7371,7 +7371,7 @@ DetectDisk_CheckTable1of2:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckTable2of2
 	ld (xsp + 4), 0x3
 	jrl DetectDisk_FreeBufAndReturn
@@ -7383,7 +7383,7 @@ DetectDisk_CheckTable2of2:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckCmpCustom
 	ld (xsp + 4), 0x4
 	jr DetectDisk_FreeBufAndReturn
@@ -7395,7 +7395,7 @@ DetectDisk_CheckCmpCustom:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckHDAEPRG
 	ld (xsp + 4), 0x5
 	jr DetectDisk_FreeBufAndReturn
@@ -7407,7 +7407,7 @@ DetectDisk_CheckHDAEPRG:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckProgramPCK
 	ld (xsp + 4), 0x6
 	jr DetectDisk_FreeBufAndReturn
@@ -7419,7 +7419,7 @@ DetectDisk_CheckProgramPCK:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_CheckTablePCK
 	ld (xsp + 4), 0x7
 	jr DetectDisk_FreeBufAndReturn
@@ -7431,7 +7431,7 @@ DetectDisk_CheckTablePCK:
 	push xiz
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, DetectDisk_FreeBufAndReturn
 	ld (xsp + 4), 0x8
 
@@ -7456,7 +7456,7 @@ FDC_WriteSectors:
 	div wa, 0x12
 	stw_erp WA, 0xe2
 	lds iz, 0
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, FDC_WriteSectors_FullTracks
 	ldw iz, 0x12
 	sub iz, wa
@@ -7498,7 +7498,7 @@ FDC_WriteSectors_FullTracks:
 	ld (xsp + 8), wa
 	ldw (xsp + 4), 0x0
 	ld wa, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, FDC_WriteSectors_Remainder
 
 FDC_WriteSectors_FullTrackOuter:
@@ -7534,7 +7534,7 @@ FDC_WriteSectors_Remainder:
 	add wa, 0x800
 	sub wa, (xsp + 6)
 	ld iz, wa
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, FDC_WriteSectors_Return
 	ld wa, (xsp + 6)
 	extz xwa
@@ -7582,7 +7582,7 @@ FDC_WriteSectors_Compressed:
 	div wa, 0x12
 	stw_erp WA, 0xe2
 	lds iz, 0
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, FDC_WriteCompressed_FullTracks
 	ldw iz, 0x12
 	sub iz, wa
@@ -7626,7 +7626,7 @@ FDC_WriteCompressed_FullTracks:
 	ld (xsp + 8), bc
 	ldw (xsp + 4), 0x0
 	ld wa, (xsp + 8)
-	cps wa, 0
+	cp wa, 0:i3
 	jr ule, FDC_WriteCompressed_Remainder
 
 FDC_WriteCompressed_FullTrackOuter:
@@ -7664,7 +7664,7 @@ FDC_WriteCompressed_Remainder:
 	add wa, (xsp + 26)
 	sub wa, (xsp + 6)
 	ld iz, wa
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, FDC_WriteCompressed_Return
 	ld wa, (xsp + 6)
 	extz xwa
@@ -7722,12 +7722,12 @@ SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
 	call Check_for_Floppy_Disk_Change
-	cps l, 0
+	cp l, 0:i3
 	jr z, FloppyChange_DiskRemoved
 
 FloppyChange_WaitDiskRemove_Loop:
 	call Check_for_Floppy_Disk_Change
-	cps l, 0
+	cp l, 0:i3
 	jr nz, FloppyChange_WaitDiskRemove_Loop
 
 FloppyChange_DiskRemoved:
@@ -7738,12 +7738,12 @@ FloppyChange_Debounce1_Loop:
 	cp xwa, 0x40000
 	jr c, FloppyChange_Debounce1_Loop
 	call Check_for_Floppy_Disk_Change
-	cps l, 0
+	cp l, 0:i3
 	jr nz, FloppyChange_DiskInserted
 
 FloppyChange_WaitDiskInsert_Loop:
 	call Check_for_Floppy_Disk_Change
-	cps l, 0
+	cp l, 0:i3
 	jr z, FloppyChange_WaitDiskInsert_Loop
 
 FloppyChange_DiskInserted:
@@ -7803,9 +7803,9 @@ Erase_and_Burn____when_disk_is_valid:
 	ld a, (xsp)
 	extz wa
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, SHOW_ILLEGAL_DISK_MESSAGE
-	cps wa, 7
+	cp wa, 7:i3
 	jrl gt, SHOW_ILLEGAL_DISK_MESSAGE
 	add wa, wa
 	lda xix, (HANDLE_UPDATE_OFFSETS:24)
@@ -7926,13 +7926,13 @@ LED_CyclePattern:
 	inc 1, (1574:16)
 	ld a, (1574:16)
 	and a, 0x3
-	cps a, 3
+	cp a, 3:i3
 	jr z, LED_CyclePattern_Phase3
-	cps a, 2
+	cp a, 2:i3
 	jr z, LED_CyclePattern_Phase2
-	cps a, 1
+	cp a, 1:i3
 	jr z, LED_CyclePattern_Phase1
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PortWrite_BusyWait
 	ld (0x160004:24), 0x01
 	jr PortWrite_BusyWait
@@ -8367,7 +8367,7 @@ Parport_RefillBuffer_Loop:
 	calr FDC_ReadSectors
 	addw (1618:16), 18
 	inc 1, iz
-	cps iz, 4
+	cp iz, 4:i3
 	jr c, Parport_RefillBuffer_Loop
 	lda xwa, (0x069800:24)
 	ld (1610:16), xwa
@@ -8394,7 +8394,7 @@ Flash_AccumWrite_Byte:
 	ld e, a
 	inc 1, a
 	ld (1620:16), a
-	cps e, 3
+	cp e, 3:i3
 	jr nz, Flash_AccumWrite_ByteDone
 	ld xwa, (1606:16)
 	stb_dpi B, 0xe2
@@ -8420,7 +8420,7 @@ Flash_AccumWrite_Word:
 	ld c, a
 	inc 1, a
 	ld (1620:16), a
-	cps c, 1
+	cp c, 1:i3
 	jr nz, Flash_AccumWrite_WordDone
 	ld xwa, (1622:16)
 	stb_dpi A, 0xe1
@@ -8455,7 +8455,7 @@ LZSS_Decompress_ReadHeader:
 	add xde, xbc
 	ld (xde), l
 	inc 1, iz
-	cps iz, 6
+	cp iz, 6:i3
 	jr c, LZSS_Decompress_ReadHeader
 	pushw 0x5	; lenght: 5 bytes
 	pushw 0xe0
@@ -8463,7 +8463,7 @@ LZSS_Decompress_ReadHeader:
 	push xwa
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, LZSS_Decompress_HeaderOK
 	ldw hl, 0xffff
 	jr LZSS_Decompress_Return
@@ -8480,7 +8480,7 @@ LZSS_Decompress_StreamHeaderBytes:
 	extz wa
 	calr Flash_AccumWrite_Word
 	inc 1, iz
-	cps iz, 6
+	cp iz, 6:i3
 	jr c, LZSS_Decompress_StreamHeaderBytes
 	ldw (1614:16), 42
 	ldw (1616:16), 200
@@ -8677,13 +8677,13 @@ LZ_Decompress_Done:
 FLASH_MEM_UPDATE:
 	pushw_erp 0xfa
 	call Check_for_Floppy_Disk_Change
-	cps l, 0
+	cp l, 0:i3
 	jrl z, flash_update__not_today
 	calr FDC_InitRecalibrate
 	calr Detect_Disk_Type
 	ldb_erp L, 0xfb
 	call Get_Region_Code
-	cps l, 4
+	cp l, 4:i3
 	jr z, Flash_CheckAndValidate
 	call HDAE5000_Detect
 	cp xhl, 0xffffffff
@@ -8779,7 +8779,7 @@ DrawBitmap_RowLoop:
 	extz xwa
 	div wa, 0x1c	; 28 bytes = 224 pixels de largura da imagem a ser desenhada
 	stw_erp WA, 0xe2
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, DrawBitmap_CheckNewRow
 	ld iy, hl	; IY = coordanada X do canto esquerdo da imagem a ser desenhada
 	dec 1, ix

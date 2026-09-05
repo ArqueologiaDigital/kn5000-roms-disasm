@@ -99,7 +99,7 @@ WPLoad_HandleSelection:
 	ld	(33044:16), xwa
 	call	16296968
 	ld	(33048:16), hl
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 6
 	ldw	(33048:16), 0
 WPLoad_Selection_Positive:
@@ -139,7 +139,7 @@ WPLoad_HandleScroll:
 WPLoad_ScrollUp:
 	cp xwa, 0x1c00017
 	jrl nz, WPLoad_GetSelection
-	cps hl, 0
+	cp hl, 0:i3
 	jrl le, WPLoad_GetSelection
 	dec 1, hl
 	jr WPLoad_StorePosition
@@ -180,7 +180,7 @@ WPLoad_PageDown_Boundary:
 	exts	xde
 	divs	de, 10
 	ld	wa, qde
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 118
 	ld	(33048:16), bc
 	jr	116
@@ -302,10 +302,10 @@ WPScan_LoopBody:
 WPScan_CheckAvail:
 	andw_erp DE, 0xfa
 	jrl z, WPScan_LoopContinue
-	cps c, 3
+	cp c, 3:i3
 	jr nz, WPScan_TypeNotThree
 	call FileIO_ValidateAndOpenFile
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
@@ -322,13 +322,13 @@ WPScan_MarkAvailable:
 	.byte 0x04, 0x6f, 0x64, 0x68, 0x69
 WPScan_TypeNotThree:
 	ld a, c
-	cps c, 2
+	cp c, 2:i3
 	jr nz, WPScan_TypeGeneric
 	call FileIO_ValidateFileSignature
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, WPScan_LoopContinue
 	call FileIO_ValidateFileWithRegion
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
@@ -345,7 +345,7 @@ WPScan_TypeTwo_Mark:
 	.byte 0x04, 0x6f, 0x2b, 0x68, 0x30
 WPScan_TypeGeneric:
 	call FileIO_ValidateFileSignature
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
@@ -364,7 +364,7 @@ WPScan_LimitReached:
 	.byte 0xc7, 0xf8, 0x89, 0xf1, 0x5c, 0x89, 0x41
 WPScan_LoopContinue:
 	inc 1, iz
-	cps iz, 4
+	cp iz, 4:i3
 	jrl c, WPScan_LoopBody
 	pop xiz
 	ret
@@ -372,10 +372,10 @@ WPScan_LoopContinue:
 WP_FindNextSlot:
 	pushw	iz
 	ld	a, (35164:16)
-	cps	a, 4
+	cp	a, 4:i3
 	jr	nc, 66
 	ld	bc, (35162:16)
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	z, 58
 	lds	iz, 1
 	extz	wa
@@ -403,7 +403,7 @@ WPFind_CheckSlot:
 	jr	8
 WPFind_NextSlot:
 	inc 1, iz
-	cps iz, 4
+	cp iz, 4:i3
 	jr c, WPFind_SearchLoop
 
 WPFind_NotFound:
@@ -510,7 +510,7 @@ WP_GetBankMemName:
 	stb_dpi A, 0xf8	; LDA XBC, XIZ+
 	ld wa, (xsp + 8)
 	ld (xbc), a	; Store type marker
-	cps de, 4
+	cp de, 4:i3
 	jr nc, WP_GetBankMemName_FromROM
 	; From RAM at 0x0948a0
 	lda xbc, (0x0948a0:24)

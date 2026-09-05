@@ -67,7 +67,7 @@
 	or XWA,XWA
 	jr z, .Lc_fccd1f
 	ld A,(XWA+0x0c)
-	cps a, 7
+	cp a, 7:i3
 	jr nc, .Lc_fccd1f
 	extz WA
 	sla WA, 0x02

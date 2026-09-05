@@ -1422,7 +1422,7 @@ SongEdit_OverflowCheck:
 
 	ld wa, (xde)
 
-	cps wa, 4
+	cp wa, 4:i3
 
 	jrl ge, 165
 
@@ -1564,7 +1564,7 @@ LyricsTrack_CheckEmpty:
 LyricsTrack_HandleNewline:
 	call	16713667
 	inc	4, xsp
-	cps	l, 1
+	cp	l, 1:i3
 	jr	z, 18
 	pushw	2
 	pushw	3662
@@ -1577,7 +1577,7 @@ LyricsTrack_HandleSingleChar:
 	lda xde, (0x020e4a:24)
 	lda xbc, (xde + 2)
 	ld wa, (xbc)
-	cps wa, 4
+	cp wa, 4:i3
 	ret ge
 	sla wa, 6
 	add wa, (xde)
@@ -1674,7 +1674,7 @@ LyricsTrack_ZeroFillLoop:
 	inc 1, iz
 	ld wa, iz
 	inc 1, wa
-	cps wa, 4
+	cp wa, 4:i3
 	jr le, LyricsTrack_ResetBufferLoop
 	lda xwa, (0x020e3e:24)
 	ldw (xwa + 2), 0x2
@@ -1714,7 +1714,7 @@ LyricsFile_ValidateAndInsert:
 	ld	(135023:24), 0
 LyricsFile_CheckFirstByte:
 	ld e, (0x020f4e:24)
-	cps e, 0
+	cp e, 0:i3
 	jrl z, LyricsBox_PopIzRet
 	lda xhl, (0x020cbe:24)
 	cp e, 0xd
@@ -1839,7 +1839,7 @@ LyricsBoxFunc_HandleInput:
 LyricsBoxFunc_HandleNewline:
 	call	16713667
 	inc	4, xsp
-	cps	l, 1
+	cp	l, 1:i3
 	jr	z, 40
 	pushw	2
 	pushw	3662
@@ -1858,7 +1858,7 @@ LyricsBoxFunc_HandleSingleChar:
 	lda xde, (0x020e4a:24)
 	lda xbc, (xde + 2)
 	ld wa, (xbc)
-	cps wa, 4
+	cp wa, 4:i3
 	jrl ge, SongName_ReturnZeroJmp
 	sla wa, 6
 	add wa, (xde)
@@ -3064,7 +3064,7 @@ AcTrAsGridBoxProc:
 TrAsGrid_HandleInit:
 	ld	xwa, 192
 	call	16567398
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 9
 	ld	xwa, 9109513
 	lds	bc, 0
@@ -3150,11 +3150,11 @@ TrAsGrid_ApplyScrollOffset:
 	ld c, (3296:16)
 	ld e, c
 	and e, 0x1
-	cps e, 0
+	cp e, 0:i3
 	scc16 nz, ix
 	ld wa, (xsp + 6)
 	sub wa, 0x2
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 z, hl
 	and hl, ix
 	jr z, TrAsGrid_CheckScrollBoundary
@@ -3170,9 +3170,9 @@ TrAsGrid_ApplyScrollOffset:
 	jr TrAsGrid_DispatchNavigate
 
 TrAsGrid_CheckScrollBoundary:
-	cps e, 0
+	cp e, 0:i3
 	scc16 z, bc
-	cps wa, 0
+	cp wa, 0:i3
 	scc16 z, wa
 	and wa, bc
 	jrl nz, TrAsGrid_ReturnZero
@@ -3274,11 +3274,11 @@ TrAsGrid_ApplyScrollOffset2:
 	ld c, (3296:16)
 	ld e, c
 	and e, 0x1
-	cps e, 0
+	cp e, 0:i3
 	scc16 z, ix
 	ld wa, (xsp + 6)
 	dec 2, wa
-	cps wa, 7
+	cp wa, 7:i3
 	scc16 z, hl
 	and hl, ix
 	jr z, TrAsGrid_CheckScrollBoundary2
@@ -3294,9 +3294,9 @@ TrAsGrid_ApplyScrollOffset2:
 	jr TrAsGrid_DispatchNavigate2
 
 TrAsGrid_CheckScrollBoundary2:
-	cps e, 0
+	cp e, 0:i3
 	scc16 nz, bc
-	cps wa, 7
+	cp wa, 7:i3
 	scc16 z, wa
 	and wa, bc
 	jrl nz, TrAsGrid_ReturnZero
@@ -3481,13 +3481,13 @@ TrAsGrid_ByteData1:
 	extz	wa
 	lda	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8:24)
 	ld_rrb a, xde, wa
-	cps c, 0
+	cp c, 0:i3
 	jr nz, 9
 	cp a, 19
 	jr	nc, 10
 	inc	1, a
 	jr	6
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 2
 	dec	1, a
 	extz	wa
@@ -3498,7 +3498,7 @@ TrAsGrid_ByteData1:
 	ldb	l, 14
 
 TrAsGrid_CheckTrackType:
-	cps a, 0
+	cp a, 0:i3
 	jr nz, TrAsGrid_CheckCurrentCell
 	ld a, c
 	extz wa
@@ -3559,11 +3559,11 @@ TrAsGridChk_ByteData:
 	ld	de, iz
 	ld	(xwa+2), de
 	ld	bc, (xwa)
-	cps	bc, 3
+	cp	bc, 3:i3
 	jrl	z, 178
-	cps	bc, 2
+	cp	bc, 2:i3
 	jr	z, 115
-	cps	bc, 1
+	cp	bc, 1:i3
 	jrl	nz, 1197
 	ld	a, (0x2873:16)
 	extz	wa
@@ -3663,11 +3663,11 @@ TrAsGridChk_ByteData:
 	ld	de, iz
 	ld	(xwa+2), de
 	ld	bc, (xwa)
-	cps	bc, 3
+	cp	bc, 3:i3
 	jrl	z, 179
-	cps	bc, 2
+	cp	bc, 2:i3
 	jr	z, 115
-	cps	bc, 1
+	cp	bc, 1:i3
 	jrl	nz, 881
 	ld	a, (0x2873:16)
 	extz	wa
@@ -3771,11 +3771,11 @@ TrAsGridChk_HandleResizeEvent:
 	ld (xbc + 4), xde
 	ld bc, (xbc)
 	ld wa, (xwa)
-	cps bc, 3
+	cp bc, 3:i3
 	jrl z, TrAsGridChk_Part3_Start
-	cps bc, 2
+	cp bc, 2:i3
 	jr z, TrAsGridChk_Part2_Start
-	cps bc, 1
+	cp bc, 1:i3
 	jrl nz, TrAsGridChk_ReturnZero
 	call GetFocusObject
 	ld xwa, xhl
@@ -3826,7 +3826,7 @@ TrAsGridChk_Part2_Start:
 	and hl, (0xf1d0:16)
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E4
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, TrAsGridChk_Part2_PushCmd
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E0
 
@@ -3849,14 +3849,14 @@ TrAsGridChk_Part2_PushCmd:
 	jr	nz, 17
 	lds	wa, 1
 	calr	64564
-	cps	l, 1
+	cp	l, 1:i3
 	jrl	nz, 132
 	ld	xwa, 14836888
 	jr	114
 TrAsGridChk_Part2_CheckType0:
 	lds wa, 0
 	calr TrAsGrid_CheckTrackType
-	cps l, 1
+	cp l, 1:i3
 	jr nz, TrAsGridChk_Part2_Finish
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23EC
 	jr TrAsGridChk_SendExtraAudioCmd
@@ -3868,7 +3868,7 @@ TrAsGridChk_Part2_UpDir:
 	and hl, (0xf1d0:16)
 	lda xbc, (xsp + 4)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F4
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, TrAsGridChk_Part2_UpPushCmd
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F0
 
@@ -3891,14 +3891,14 @@ TrAsGridChk_Part2_UpPushCmd:
 	jr	nz, 16
 	lds	wa, 1
 	calr	64463
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 32
 	ld	xwa, 14836904
 	jr	14
 TrAsGridChk_Part2_UpCheckType0:
 	lds wa, 0
 	calr TrAsGrid_CheckTrackType
-	cps l, 1
+	cp l, 1:i3
 	jr nz, TrAsGridChk_Part2_Finish
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23FC
 
@@ -3923,7 +3923,7 @@ TrAsGridChk_Part3_Start:
 	calr TrAsGrid_LookupTable
 	and hl, (0xf290:16)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2404
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, TrAsGridChk_Part3_PushCmd
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2400
 
@@ -3947,14 +3947,14 @@ TrAsGridChk_Part3_PushCmd:
 	jr	nz, 17
 	lds	wa, 1
 	calr	64331
-	cps	l, 1
+	cp	l, 1:i3
 	jrl	nz, 132
 	ld	xwa, 14836920
 	jr	114
 TrAsGridChk_Part3_CheckType0:
 	lds wa, 0
 	calr TrAsGrid_CheckTrackType
-	cps l, 1
+	cp l, 1:i3
 	jr nz, TrAsGridChk_Part3_Finish
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x240C
 	jr TrAsGridChk_SendExtraAudioCmd2
@@ -3965,7 +3965,7 @@ TrAsGridChk_Part3_UpDir:
 	calr TrAsGrid_LookupTable
 	and hl, (0xf290:16)
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2414
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, TrAsGridChk_Part3_UpPushCmd
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2410
 
@@ -3989,14 +3989,14 @@ TrAsGridChk_Part3_UpPushCmd:
 	jr	nz, 16
 	lds	wa, 1
 	calr	64230
-	cps	l, 1
+	cp	l, 1:i3
 	jr	nz, 32
 	ld	xwa, 14836936
 	jr	14
 TrAsGridChk_Part3_UpCheckType0:
 	lds wa, 0
 	calr TrAsGrid_CheckTrackType
-	cps l, 1
+	cp l, 1:i3
 	jr nz, TrAsGridChk_Part3_Finish
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x241C
 
@@ -6353,7 +6353,7 @@ HelpLangChk_CheckIzZero:
 	jr	z, 82
 	lds	wa, 4
 	call	16535254
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 72
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -6425,7 +6425,7 @@ HelpFunc_CheckIzZero:
 	jr	z, 82
 	lds	wa, 4
 	call	16535254
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 72
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
@@ -6532,7 +6532,7 @@ HelpTtlFunc_DecrementPage:
 	ld a, (0x296e:16)
 	extz wa
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, HelpTtlFunc_ClampMin
 	cp wa, 0x30
 	jr le, HelpTtlFunc_LookupSlide
@@ -6580,7 +6580,7 @@ IvSdrev_CheckParam:
 	jr	nz, 27
 	ld	xwa, 16386
 	call	16567398
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 14
 	ld	xwa, 16386
 	ldw	bc, 127
@@ -6649,7 +6649,7 @@ IvSddsp_CheckParam:
 	ld	wa, iz
 	ldw	bc, 93
 	call	16567590
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 26
 	lda	xwa, (37105:16)
 	ld	bc, iz
@@ -6720,7 +6720,7 @@ IvSdacc_CheckParam:
 	jr	nz, 26
 	ld	xwa, 16388
 	call	16567398
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 13
 	ld	xwa, 16388
 	lds	bc, 1
@@ -6971,13 +6971,13 @@ AcIndexToggle_HandleSelectEvent:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcIndexToggle_PrepareInherited
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e8006e
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcIndexToggle_PrepareInherited
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 44)
@@ -7275,7 +7275,7 @@ MsgToTtlProc:
 	cp xhl, 0x1a000ee
 	jr nz, MsgToTtl_ReturnZero
 	call CheckNotDrawFlag
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, MsgToTtl_ReturnZero
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -9112,7 +9112,7 @@ SndParam_Dispatch:
 	.byte 0x91, 0x3f, 0x01, 0x00
 	jrl	nz, 1331
 	ld	wa, de
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	mi, 1324
 	cp	wa, 8
 	jrl	gt, 1317
@@ -9162,7 +9162,7 @@ SndParam_Dispatch:
 	.byte 0x91, 0x3f, 0x01, 0x00
 	jrl	nz, 1159
 	ld	wa, hl
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	mi, 1152
 	cp	wa, 8
 	jrl	gt, 1145
@@ -9300,7 +9300,7 @@ EntGridCheck_Handler:
 EntGridCheck_Handle4140:
 	call	16567398
 	ld	xwa, 14895024
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 5
 	ld	xwa, 14895014
 EntGridCheck_CopyStringResult:
@@ -12244,7 +12244,7 @@ SqedtVal2_HandleUpScrollEvent:
 	ld xwa, (xsp + 66)
 	and xwa, 0xff
 	ldb_erp A, 0xfb
-	cps c, 0
+	cp c, 0:i3
 	jr nz, SqedtVal2_HandleDownScrollEvent
 	lda xix, (xsp + 58)
 	lda xbc, (xix + 2)
@@ -12341,7 +12341,7 @@ SqedtVal2_DrawScrollFrame:
 	ld xwa, (xsp + 66)
 	srl xwa, 8
 	and xwa, 0xff
-	cps a, 1
+	cp a, 1:i3
 	jr nz, SqedtVal2_DrawWithViewColors
 	lda xwa, (xsp + 58)
 	pushw 0xf2
@@ -14884,7 +14884,7 @@ EqOnOff_HandleToggleOn:
 	call	16400380
 	ld	xwa, 16390
 	call	16567398
-	cps	hl, 1
+	cp	hl, 1:i3
 	jr	nz, 11
 	ld	xwa, xiz
 	ld	xbc, 31457339
@@ -15200,11 +15200,11 @@ SqplyFunc_HandleTrackLookup:
 
 SqplyFunc_TrackMode82_86:
 	ld c, a
-	cps a, 3
+	cp a, 3:i3
 	jr z, SqplyFunc_TrackPart3
-	cps c, 2
+	cp c, 2:i3
 	jr z, SqplyFunc_TrackPart2
-	cps c, 1
+	cp c, 1:i3
 	jr nz, SqplyFunc_TrackTypeUnknown
 	ldb l, 0x4
 	jr SqplyFunc_TrackTypeReturn
@@ -15221,11 +15221,11 @@ SqplyFunc_TrackMode88:
 	cp l, 0x88
 	jr nz, SqplyFunc_TrackMode96_99
 	ld c, a
-	cps a, 3
+	cp a, 3:i3
 	jr z, SqplyFunc_TrackMode88_Part3
-	cps c, 2
+	cp c, 2:i3
 	jr z, SqplyFunc_TrackMode88_Part2
-	cps c, 1
+	cp c, 1:i3
 	jr nz, SqplyFunc_TrackTypeUnknown
 	ldb l, 0x8
 	jr SqplyFunc_TrackTypeReturn
@@ -15246,11 +15246,11 @@ SqplyFunc_TrackMode96_99:
 
 SqplyFunc_TrackModePerc:
 	ld c, a
-	cps a, 3
+	cp a, 3:i3
 	jr z, SqplyFunc_TrackPart3
-	cps c, 2
+	cp c, 2:i3
 	jr z, SqplyFunc_TrackPart2
-	cps c, 1
+	cp c, 1:i3
 	jr nz, SqplyFunc_TrackTypeUnknown
 	ldb l, 0xb
 	jr SqplyFunc_TrackTypeReturn
@@ -15266,9 +15266,9 @@ SqplyFunc_TrackTypeReturn:
 SqplyFunc_HandlePartQuery:
 	extz wa
 	dec 4, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, SqplyFunc_ReturnZero
-	cps wa, 7
+	cp wa, 7:i3
 	jr gt, SqplyFunc_ReturnZero
 	add wa, wa
 	lda xix, (ExtDevice_ModeDispatch_Table_0x63A:24)
@@ -15340,9 +15340,9 @@ Sqedt_ParamDispatch:
 	pushw	5
 	extz	hl
 	sub	hl, 156
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 62
-	cps	hl, 7
+	cp	hl, 7:i3
 	jr	gt, 58
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0xC0:24)
@@ -15367,9 +15367,9 @@ Sqedt_ParamDispatch:
 	ld	(xsp+4), xwa
 	extz	hl
 	sub	hl, 156
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 92
-	cps	hl, 7
+	cp	hl, 7:i3
 	jr	gt, 88
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0xB0:24)
@@ -15421,9 +15421,9 @@ Sqedt_ParamDispatch:
 	ld	(xsp+4), xwa
 	extz	hl
 	sub	hl, 156
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 92
-	cps	hl, 7
+	cp	hl, 7:i3
 	jr	gt, 88
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0xA0:24)
@@ -15471,7 +15471,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9740:16)
-	cps	e, 0
+	cp	e, 0:i3
 	jr	le, 17
 	exts	de
 	.byte 0x2a	; v10 does not spell this byte either
@@ -15484,7 +15484,7 @@ Sqedt_ParamDispatch:
 	jr	21
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+18)
-	cps	e, 0
+	cp	e, 0:i3
 	jr	ge, 17
 	neg	e
 	exts	de
@@ -15502,7 +15502,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9762:16)
-	cps	e, 0
+	cp	e, 0:i3
 	jr	le, 10
 	exts	de
 	pushw	de
@@ -15512,7 +15512,7 @@ Sqedt_ParamDispatch:
 	.byte 0xe3	; v10 does not spell this byte either
 	.byte 0x00	; v10 does not spell this byte either
 	jr	24
-	cps	e, 0
+	cp	e, 0:i3
 	jr	ge, 12
 	neg	e
 	exts	de
@@ -15530,13 +15530,13 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (61998:16)
-	cps	e, 0
+	cp	e, 0:i3
 	jr	le, 10
 	exts	de
 	pushw	de
 	ld	xwa, NakaInst_3d_0x44
 	jr	24
-	cps	e, 0
+	cp	e, 0:i3
 	jr	ge, 12
 	neg	e
 	exts	de
@@ -15584,12 +15584,12 @@ Sqedt_ParamDispatch:
 	ld	e, (9730:16)
 	ld	a, e
 	exts	wa
-	cps	e, 0
+	cp	e, 0:i3
 	jr	le, 8
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x60
 	jr	22
-	cps	e, 0
+	cp	e, 0:i3
 	jr	ge, 12
 	neg	e
 	exts	de
@@ -15935,9 +15935,9 @@ SeqFunc_ReturnZeroJmp:
 	lds32 xhl, 0
 	jrl SqedtFunc_Epilogue12
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, SqedtFunc_ReturnNegOne
-	cps wa, 6
+	cp wa, 6:i3
 	jrl gt, SqedtFunc_ReturnNegOne
 	add wa, wa
 	lda xix, (NakaInst_2d_0x92:24)
@@ -15949,7 +15949,7 @@ SeqFunc_ReturnZeroJmp:
 Sqedt_ValueDispatch:
 	extz	hl
 	sub	hl, 155
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 190
 	cp	hl, 8
 	jrl	gt, 183
@@ -15964,9 +15964,9 @@ Sqedt_ValueDispatch:
 	jrl	153
 	extz	hl
 	sub	hl, 156
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 140
-	cps	hl, 7
+	cp	hl, 7:i3
 	jrl	gt, 135
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0x70:24)
@@ -15977,7 +15977,7 @@ Sqedt_ValueDispatch:
 	jr	111
 	extz	hl
 	sub	hl, 155
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 99
 	cp	hl, 8
 	jr	gt, 93
@@ -16045,7 +16045,7 @@ SqedtFunc_SignExtend:
 	ldb l, 0xe
 	jr SqedtFunc_SignExtendAndReturn
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl mi, SeqFunc_ReturnZeroJmp
 	cp wa, 0xe
 	jrl gt, SeqFunc_ReturnZeroJmp
@@ -16085,7 +16085,7 @@ SeqFormat_DispatchA:
 	jrl	-384
 	extz	wa
 	sub	wa, 15
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	lt, -395
 	cp	wa, 15
 	jrl	gt, -402
@@ -16156,7 +16156,7 @@ SqedtFunc_StateChainB:
 	jr z, SeqFormat_DispatchB
 	extz wa
 	sub wa, 0x9b
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, SqedtFunc_GetFieldAddr_BySelector
 	cp wa, 0xd
 	jrl gt, SqedtFunc_GetFieldAddr_BySelector
@@ -17002,7 +17002,7 @@ FormatParamValueStr:
 	lda xhl, (xiz + 1)
 	cp w, 0x55
 	jrl z, Equalizer_CopyFixedString
-	cps w, 0
+	cp w, 0:i3
 	jrl z, Equalizer_CopyFixedString
 	ld c, a
 	extz bc
@@ -17018,7 +17018,7 @@ FormatParamValueStr:
 	ld a, w
 	extz wa
 	dec 8, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, PrepareAudioParam
 	cp wa, 0x11
 	jr le, Equalizer_FormatDispatch
@@ -17085,7 +17085,7 @@ Equalizer_FormatDefault:
 	jr FormatParamStr_CopyEnumName
 	add bc, bc
 	ldw_sri WA, 0x07, 0xe8, 0xe4
-	cps wa, 0
+	cp wa, 0:i3
 	jr ge, EqFormat_NegativeValue
 	neg wa
 	pushw wa
@@ -17094,7 +17094,7 @@ Equalizer_FormatDefault:
 
 EqFormat_NegativeValue:
 	pushw wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, EqFormat_PositiveValue
 	ld xwa, NakaInst_2d_0x1C2
 	jr SendAudioCommand

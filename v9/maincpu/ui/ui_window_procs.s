@@ -266,7 +266,7 @@ WndEvt_DispatchByEventCode:
 ; Window event dispatch by event code
 WndEvt_EventCodeDispatch:
 	ld	wa, (0x0274d8:24)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jrl	z, 2252
 	dec	1, wa
 	ld	(0x0274d8:24), wa
@@ -297,7 +297,7 @@ WndEvt_EventCodeDispatch:
 	ld	xde, (xsp+42)
 	jrl	770
 	ld	bc, (0x0274de:24)
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	z, 2155
 	ld	wa, (0x0274da:24)
 	extz	xwa
@@ -621,7 +621,7 @@ WndEvt_EventCodeDispatch:
 	ld qiz, 0
 	lds iz, 0
 	ld	de, (0x0274d6:24)
-	cps	de, 0
+	cp	de, 0:i3
 	jr	ule, 28
 	lda	xhl, (0x0274b0:24)
 	ld	a, (xbc)
@@ -643,7 +643,7 @@ WndEvt_EventCodeDispatch:
 	nop
 	nop
 	lds	iz, 0
-	cps	de, 0
+	cp	de, 0:i3
 	jr	ule, 37
 	lda	xbc, (0x0274b0:24)
 	ld	xwa, (0x0274e4:24)
@@ -982,7 +982,7 @@ WndScroll_HandleDialPage:
 	ld xwa, (xsp + 42)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	cps wa, 0
+	cp wa, 0:i3
 	jrl nz, UIDialog_ReturnZeroJmp
 	ld xwa, (xsp + 42)
 	ld de, wa
@@ -1726,7 +1726,7 @@ FrameProc:
 Frame_HandlePaint:
 	ld xwa, xiz
 	call GetVisible
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Frame_DrawVisible
 	lds32 xhl, 1
 	jr Frame_Epilogue
@@ -1778,9 +1778,9 @@ GetClientFrame2:
 	ld xix, xiz
 	lds bc, 4
 	ldirw
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, FrameLoop_Cleanup
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, ClientFrame2_ProcessThickness
 	ld hl, (xsp + 4)
 	exts xhl
@@ -1819,7 +1819,7 @@ DrawDesignFrame:
 	lda xix, (xsp + 4)
 	lds bc, 4
 	ldirw
-	cps de, 1
+	cp de, 1:i3
 	jr nz, DesignFrame_Epilogue
 	lds32 xiz, 0
 	ld wa, (xsp + 12)
@@ -2212,7 +2212,7 @@ TextBox_SetupWordwrap:
 	div xde, xbc
 	ld (xsp + 8), de
 	ldw (xsp + 16), 0x0
-	cps bc, 0
+	cp bc, 0:i3
 	jrl ule, TextBox_FreeBuffer
 
 TextBox_DrawLineLoop:
@@ -2330,7 +2330,7 @@ VwBox_HandleGetFocus:
 	call GetViewInstance
 	ld xbc, (xsp + 12)
 	lda xwa, (xsp + 4)
-	cps bc, 0
+	cp bc, 0:i3
 	jr z, VwBox_UseFocusColor
 	pushw 0xf2
 	lds bc, 1
@@ -2875,7 +2875,7 @@ AcTempoBox_HandleConfirm:
 AcTempoBox_MatchTempoID:
 	ld xwa, 0x2200
 	call SndParam_LookupReadOnly
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AcTempoBox_CopyTempoString
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
@@ -3164,7 +3164,7 @@ PsRadioBox_SetIndex:
 	cpl_sri_rm XWA, 0xfd, 0x1c, 0x01
 	jr z, PsRadioBox_ReturnZero
 	ld XWA, (xsp + 0x011c)
-	cps wa, 1
+	cp wa, 1:i3
 	jr nz, PsRadioBox_SetIndex_Store
 	ld de, (xbc + 26)
 	exts xde
@@ -3362,7 +3362,7 @@ PsListBox_Confirm_ScanLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsListBox_Confirm_ScanPipe
 
 PsListBox_Confirm_DrawItem:
@@ -3498,7 +3498,7 @@ PsListBox_Select_ScanLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsListBox_Select_CheckPipe
 
 PsListBox_Select_NextItem:
@@ -3599,7 +3599,7 @@ PsListBox_SelectUpd_ScanLoop:
 	ld xbc, xde
 	add xbc, xwa
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr nz, PsListBox_SelectUpd_CheckPipe
 
 PsListBox_SelectUpd_NextItem:
@@ -3912,7 +3912,7 @@ IsPointOnScreen:
 	cpw (xwa), 0x140
 	jr ge, IsPointOnScreen_OutOfBounds
 	ld wa, (xwa + 2)
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, IsPointOnScreen_OutOfBounds
 	cp wa, 0xf0
 	jr lt, IsPointOnScreen_InBounds
@@ -3926,7 +3926,7 @@ IsPointOnScreen_InBounds:
 	ret
 
 IsColorValid:
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, IsColorValid_Check256
 	cp wa, 0xff
 	jr le, IsColorValid_Valid
@@ -3947,7 +3947,7 @@ IsColorValid_Invalid:
 
 ClampColorToRange:
 	ld hl, bc
-	cps bc, 0
+	cp bc, 0:i3
 	ret lt
 	cp bc, 0xff
 	ret gt
@@ -3960,7 +3960,7 @@ DrawDesignBox_ByteData:
 	ld	(xsp+6), xbc
 	ld	xiz, xwa
 	calr	54020
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 22
 	cpw	(0x03044e:24), 0
 	jr	z, 58
@@ -4264,7 +4264,7 @@ DrawDesignBox:	; SysData_FAD559
 	ld (xsp + 6), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, DrawDesignBox_QueuedPath
 	cpw (0x03044e:24), 0
 	jr z, DrawDesignBox_DirectEpilogue
@@ -4345,7 +4345,7 @@ DrawDesignBox_CheckStyle80:
 	ld xhl, xbc
 	lda xde, (xsp + 28)
 	ld xiy, xde
-	cps wa, 0
+	cp wa, 0:i3
 	jr mi, Draw_StyledBoxWithFrame
 	cp wa, 0xb
 	jr le, Draw_DispatchByPartType
@@ -4839,9 +4839,9 @@ DrawDesignBox_PartGroupStyle:
 	cpw (xsp + 72), 0x7
 	jr z, DrawPartGroup_TableJump_DefaultCase
 	sub wa, 0x81
-	cps wa, 0
+	cp wa, 0:i3
 	jr lt, DrawPartGroup_TableJump_DefaultCase
-	cps wa, 7
+	cp wa, 7:i3
 	jr le, DrawPartGroup_DispatchByType
 	sub wa, 0x18
 	cp wa, 0x8
@@ -6098,7 +6098,7 @@ Gfx_LoadSplashBMP:
 	push xwa
 	call String_Compare
 	add xsp, 0xa
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, FileIO_ControllerValidationFailed
 	lda_dri XWA, 0xfd, 0x22, 0x04
 	ld xbc, 0x28
@@ -6913,7 +6913,7 @@ CaptureLcd:
 	lda xwa, (xsp + 2)
 	ld xbc, Str_No_0xB48
 	call FileIO_OpenWithMode
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, CaptureLcd_WriteFailed
 	lda_dri XWA, 0xfd, 0x3a, 0x04
 	ld xbc, 0xe
@@ -7023,7 +7023,7 @@ ChangeWall:
 	pushw iz
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ChangeWall_QueuedPath
 	ld wa, iz
 	calr ChangeWall_Impl
@@ -7064,7 +7064,7 @@ ChangeWallPalette:
 	pushw iz
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ChangeWallPalette_QueuedPath
 	ld wa, iz
 	calr ChangeWallPalette_Impl
@@ -7091,9 +7091,9 @@ ChangeWallPalette_Impl:
 	push xiz
 	ld iz, wa
 	ld wa, (0x03ef9c:24)
-	cps wa, 2
+	cp wa, 2:i3
 	jr z, WallPalette_Done
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, WallPalette_SetupLoop
 	inc 1, iz
 
@@ -7141,7 +7141,7 @@ ChangePalette:
 	pushw iz
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ChangePalette_QueuedPath
 	ld wa, iz
 	calr ChangePalette_Impl
@@ -7223,7 +7223,7 @@ UIRender_RetStub2:
 ; =============================================================================
 PaletteBankRotate:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, PaletteBankRotate_Impl
 	lds wa, 4
 	calr DrawQueue_Alloc
@@ -7296,7 +7296,7 @@ ClipBlit_Replace:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ClipBlit_Replace_Deferred
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -7442,7 +7442,7 @@ ClipBlit_Direct:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ClipBlit_Direct_Deferred
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -7571,7 +7571,7 @@ ColorBlit:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ColorBlit_Deferred
 	ld a, (0x03efa8:24)
 	ld (0x03efaa:24), a
@@ -7655,11 +7655,11 @@ ColorBlit_ClampBottom:
 	cp bc, 0xf7
 	jrl z, ColorBlit_PopReturn
 	ld e, (0x03efaa:24)
-	cps e, 2
+	cp e, 2:i3
 	jrl z, ColorBlit_Mode2_Entry
-	cps e, 1
+	cp e, 1:i3
 	jrl z, ColorBlit_Mode1_Entry
-	cps e, 0
+	cp e, 0:i3
 	jrl nz, ColorBlit_Epilogue
 	ld hl, ix
 	cp bc, 0xf5
@@ -7873,7 +7873,7 @@ ColorBlit2:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, ColorBlit2_Deferred
 	ld a, (0x03efa8:24)
 	ld (0x03efaa:24), a
@@ -7957,11 +7957,11 @@ ColorBlit2_ClampBottom:
 	cp bc, 0xf7
 	jrl z, ColorBlit2_PopReturn
 	ld e, (0x03efaa:24)
-	cps e, 2
+	cp e, 2:i3
 	jrl z, ColorBlit2_Mode2_Entry
-	cps e, 1
+	cp e, 1:i3
 	jrl z, ColorBlit2_Mode1_Entry
-	cps e, 0
+	cp e, 0:i3
 	jrl nz, ColorBlit2_Epilogue
 	ld hl, ix
 	cp bc, 0xf5
@@ -8206,7 +8206,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+6), xbc
 	ld	xiz, xwa
 	calr	43484
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 32
 	ld	a, (0x03efa8:24)
 	ld	(0x03efaa:24), a
@@ -8266,11 +8266,11 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+24), xbc
 	ld	(xsp+28), xwa
 	ld	a, (0x03efaa:24)
-	cps	a, 2
+	cp	a, 2:i3
 	jrl	z, 560
-	cps	a, 1
+	cp	a, 1:i3
 	jrl	z, 381
-	cps	a, 0
+	cp	a, 0:i3
 	jrl	nz, 722
 	ldw (xsp+6), 0
 	jrl	351
@@ -8590,7 +8590,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+6), xbc
 	ld	xiz, xwa
 	calr	42583
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 32
 	ld	a, (0x03efa8:24)
 	ld	(0x03efaa:24), a
@@ -8657,11 +8657,11 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+72), xwa
 	ld	xwa, (xsp+72)
 	calr	53867
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 1855
 	ld	xwa, (xsp+68)
 	calr	53856
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	z, 1844
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+68)
@@ -9437,7 +9437,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+6), xbc
 	ld	xiz, xwa
 	calr	40558
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 32
 	ld	a, (0x03efa8:24)
 	ld	(0x03efaa:24), a
@@ -9584,11 +9584,11 @@ ColorBlit2_LargeCodeBlock:
 	normal
 	jrl	ugt, 235
 	ld	a, (0x03efaa:24)
-	cps	a, 2
+	cp	a, 2:i3
 	jrl	z, 184
-	cps	a, 1
+	cp	a, 1:i3
 	jrl	z, 136
-	cps	a, 0
+	cp	a, 0:i3
 	jrl	nz, 215
 	lda	xwa, (xsp+46)
 	ld	xiy, xwa
@@ -9716,11 +9716,11 @@ ColorBlit2_LargeCodeBlock:
 	normal
 	jrl	ugt, 235
 	ld	a, (0x03efaa:24)
-	cps	a, 2
+	cp	a, 2:i3
 	jrl	z, 184
-	cps	a, 1
+	cp	a, 1:i3
 	jrl	z, 136
-	cps	a, 0
+	cp	a, 0:i3
 	jrl	nz, 215
 	lda	xwa, (xsp+46)
 	ld	xiy, xwa

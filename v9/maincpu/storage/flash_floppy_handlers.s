@@ -1728,7 +1728,7 @@ Flash_InitBytecodeBlock:
 	ld	wa, hl
 	ld	c, (xsp+10)
 	extz	bc
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 42
 	ld	wa, bc
 	calr	1912
@@ -1955,9 +1955,9 @@ PartGrid_ColumnDispatch:
 	extz wa
 	div a, 0x3
 	extz wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr mi, PartGrid_CopyHLtoBC
-	cps wa, 6
+	cp wa, 6:i3
 	jr gt, PartGrid_CopyHLtoBC
 	add wa, wa
 	lda xix, (MSP_Default_GroupOffsetA:24)
@@ -2027,13 +2027,13 @@ FrameSetup_ComputeGridIndex:
 	ld xwa, (xsp)
 	exts xbc
 	add xbc, xwa
-	cps e, 3
+	cp e, 3:i3
 	jr z, FrameSetup_RowOffset3
-	cps e, 2
+	cp e, 2:i3
 	jr z, FrameSetup_RowOffset2
-	cps e, 1
+	cp e, 1:i3
 	jr z, FrameSetup_RowOffset1
-	cps e, 0
+	cp e, 0:i3
 	jr nz, FrameSetup_PackResult
 	ld l, (xbc + 24)
 	ld xwa, 0x19
@@ -2225,7 +2225,7 @@ PartGrid_DefaultLoop_Inner:
 	add xhl, (3186:16)
 	ld (xhl + 96), wa
 	inc 1, iz
-	cps iz, 5
+	cp iz, 5:i3
 	jr ule, PartGrid_DefaultLoop_Inner
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x1d, 0x00
@@ -2292,9 +2292,9 @@ NoteEventBuffer_CopyToSlot:
 	ld xwa, (3186:16)
 	extz bc
 	dec 1, bc
-	cps bc, 0
+	cp bc, 0:i3
 	jr lt, NoteEvent_CopyCommon
-	cps bc, 6
+	cp bc, 6:i3
 	jr gt, NoteEvent_CopyCommon
 	add bc, bc
 	lda xix, (MSP_Default_GroupOffsetB:24)
@@ -2339,9 +2339,9 @@ NoteEventBuffer_Store:
 	ld a, (xsp + 8)
 	extz wa
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, NoteEvent_StoreCommon
-	cps wa, 6
+	cp wa, 6:i3
 	jrl gt, NoteEvent_StoreCommon
 	add wa, wa
 	lda xix, (MSP_Default_VarSize:24)
@@ -2405,7 +2405,7 @@ Flash_CopyMirrorLoop:
 
 ; NoteEventBuffer store common handler
 NoteEvent_StoreCommon:
-	cps a, 0
+	cp a, 0:i3
 	jrl nz, Flash_SectorWriteExecute
 
 Flash_WriteSectorWithMirrorCopy:
@@ -2535,7 +2535,7 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	add	wa, 80
 	ld_rrb a, xbc, wa
-	cps a, 0
+	cp a, 0:i3
 	jr z, 5
 	.byte 0x8f
 	push	sr
@@ -2549,7 +2549,7 @@ Flash_ExtendedOpsBlock:
 	ld	(xbc+2), hl
 	jr	6
 	inc	1, l
-	cps	l, 4
+	cp	l, 4:i3
 	jr	c, -47
 	ldb	h, 0
 	ldb	l, 0
@@ -2572,7 +2572,7 @@ Flash_ExtendedOpsBlock:
 	add	de, 16
 	ld	xwa, (3218:16)
 	ld_rrb a, xwa, de
-	cps a, 0
+	cp a, 0:i3
 	jr z, 5
 	.byte 0x8f
 	push	sr
@@ -2878,10 +2878,10 @@ Flash_ExtendedOpsBlock:
 	add	de, 80
 	ld	xbc, (3222:16)
 	st_rrb a, xbc, de
-	cps w, 3
+	cp w, 3:i3
 	jr z, 76
 	inc	1, w
-	cps	w, 3
+	cp	w, 3:i3
 	jr	ugt, 70
 	ld	e, w
 	extz	de
@@ -2894,7 +2894,7 @@ Flash_ExtendedOpsBlock:
 	ld	(xbc), 0
 	inc	1, w
 	inc	1, de
-	cps	w, 3
+	cp	w, 3:i3
 	jr	ule, -30
 	jr	34
 	ldb	w, 0
@@ -2908,7 +2908,7 @@ Flash_ExtendedOpsBlock:
 	ld	(xbc), 0
 	inc	1, w
 	inc	1, de
-	cps	w, 4
+	cp	w, 4:i3
 	jr	c, -30
 	ldb	w, 0
 	ldib_erp 226, 0
@@ -2979,7 +2979,7 @@ Flash_ExtendedOpsBlock:
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 63
 	ld	c, (xsp+4)
 	extz	bc
@@ -2990,7 +2990,7 @@ Flash_ExtendedOpsBlock:
 	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 32
 	lds	hl, 0
 	.byte 0x9f
@@ -3037,7 +3037,7 @@ Flash_ExtendedOpsBlock:
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 63
 	ld	c, (xsp+4)
 	extz	bc
@@ -3048,7 +3048,7 @@ Flash_ExtendedOpsBlock:
 	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 32
 	lds	hl, 0
 	.byte 0x9f
@@ -3103,7 +3103,7 @@ Flash_ExtendedOpsBlock:
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 57
 	ld	c, (xsp+4)
 	extz	bc
@@ -3113,7 +3113,7 @@ Flash_ExtendedOpsBlock:
 	lds	wa, 2
 	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 32
 	lds	hl, 0
 	.byte 0x9f
@@ -3160,7 +3160,7 @@ Flash_ExtendedOpsBlock:
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 57
 	ld	c, (xsp+4)
 	extz	bc
@@ -3170,7 +3170,7 @@ Flash_ExtendedOpsBlock:
 	lds	wa, 0
 	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 32
 	lds	hl, 0
 	.byte 0x9f
@@ -3220,7 +3220,7 @@ Flash_ExtendedOpsBlock:
 	ld	d, c
 	inc	1, c
 	inc	1, ix
-	cps	c, 4
+	cp	c, 4:i3
 	jr	c, -27
 	lda	xhl, (1952:16)
 	ld	wa, (1748:16)
@@ -3265,7 +3265,7 @@ Flash_ExtendedOpsBlock:
 	add	ix, 16
 	ld	xwa, (3218:16)
 	ld_rrb w, xwa, ix
-	cps w, 0
+	cp w, 0:i3
 	jr z, 5
 	.byte 0x8f
 	ldwio	240, 0x2f6e
@@ -3761,7 +3761,7 @@ Flash_ExtendedOpsBlock:
 	ldb	l, 0
 	ld	xde, (3218:16)
 	ldb	b, 0
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 34
 	lds	wa, 0
 	ld	ix, wa
@@ -3794,7 +3794,7 @@ Flash_ExtendedOpsBlock:
 	inc	1, l
 	inc	1, b
 	inc	1, wa
-	cps	b, 4
+	cp	b, 4:i3
 	jr	c, -29
 	ret
 
@@ -4214,7 +4214,7 @@ Flash_SlotUpdateOpsBlock:
 	extz	bc
 	lds	wa, 1
 	calr	64465
-	cps	l, 0
+	cp	l, 0:i3
 	jr	nz, 4
 	.byte 0xb7
 	push	sr
@@ -4550,7 +4550,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl	lt, 284
 	lda	xwa, (xsp+2)
 	.byte 0x80
@@ -4572,7 +4572,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl	lt, 236
 	lds	wa, 1
 	calr	60043
@@ -4582,7 +4582,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl	lt, 206
 	lds	wa, 2
 	calr	60013
@@ -4592,7 +4592,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl	lt, 176
 	lds	wa, 3
 	calr	59983
@@ -4602,7 +4602,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jrl	lt, 146
 	lds	wa, 4
 	calr	59953
@@ -4612,7 +4612,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 117
 	lds	wa, 5
 	calr	59924
@@ -4622,7 +4622,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 88
 	lds	wa, 6
 	calr	59895
@@ -4632,7 +4632,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 59
 	lds	wa, 7
 	calr	59866
@@ -4646,7 +4646,7 @@ Flash_SlotUpdateOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 18
 	ld	xbc, (3222:16)
 	ld	xde, (3218:16)
@@ -4783,7 +4783,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	xbc, 1024
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 296
 	lds	wa, 1
 	calr	59367
@@ -4797,7 +4797,7 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 4
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 256
 	lds	wa, 2
 	calr	59327
@@ -4811,7 +4811,7 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 4
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 216
 	lds	wa, 3
 	calr	59287
@@ -4825,7 +4825,7 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 4
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 176
 	lds	wa, 4
 	calr	59247
@@ -4839,7 +4839,7 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 4
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	lt, 136
 	lds	wa, 5
 	calr	59207
@@ -4854,7 +4854,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	xwa, xhl
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 95
 	lds	wa, 6
 	calr	59166
@@ -4869,7 +4869,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	xwa, xhl
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 54
 	lds	wa, 7
 	calr	59125
@@ -4884,7 +4884,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	xwa, xhl
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 13
 	ld	xwa, (3218:16)
 	ld	xbc, 0xf400
@@ -4911,7 +4911,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
 	lda xwa, (xsp + 2)
 	cp (xwa), 0x48
@@ -4928,7 +4928,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 1
 	calr NoteEventBuffer_Store
@@ -4940,7 +4940,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 2
 	calr NoteEventBuffer_Store
@@ -4952,7 +4952,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 3
 	calr NoteEventBuffer_Store
@@ -4964,7 +4964,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 4
 	calr NoteEventBuffer_Store
@@ -4976,7 +4976,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jrl lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 5
 	calr NoteEventBuffer_Store
@@ -4988,7 +4988,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 6
 	calr NoteEventBuffer_Store
@@ -5000,7 +5000,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 7
 	calr NoteEventBuffer_Store
@@ -5015,7 +5015,7 @@ FloppyDisk_LoadNoteEvents:
 	ld XHL, (xsp + 0x0402)
 	call (xhl)
 	ld iz, hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr lt, FloppyCtrl_LoadIzAndContinue
 	ld xbc, (3222:16)
 	ld xde, (3218:16)
@@ -5166,7 +5166,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 1
 	calr NoteEventBuffer_CopyToSlot
@@ -5182,7 +5182,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 2
 	calr NoteEventBuffer_CopyToSlot
@@ -5198,7 +5198,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 3
 	calr NoteEventBuffer_CopyToSlot
@@ -5214,7 +5214,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 4
 	calr NoteEventBuffer_CopyToSlot
@@ -5230,7 +5230,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 5
 	calr NoteEventBuffer_CopyToSlot
@@ -5247,7 +5247,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 6
 	calr NoteEventBuffer_CopyToSlot
@@ -5264,7 +5264,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 7
 	calr NoteEventBuffer_CopyToSlot
@@ -5281,7 +5281,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	ld XIX, (xsp + 0x0410)
 	call (xix)
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, FloppyCtrl_PopIzStoreRet
 	ld xwa, (3218:16)
 	ld XIX, (xsp + 0x0414)
@@ -5305,7 +5305,7 @@ ToneParam_ExtendedOpsBlock:
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	nz, 5
 	calr	20
 	ld	iz, hl
@@ -5329,7 +5329,7 @@ ToneParam_ExtendedOpsBlock:
 	ld	l, (xbc)
 	cp_erpb 238, 71
 	jr nz, 9
-	cps h, 0
+	cp h, 0:i3
 	jr nz, 5
 	cp	l, 75
 	jr	z, 16
@@ -5351,7 +5351,7 @@ ToneParam_ExtendedOpsBlock:
 	jr	80
 	cp_erpb 238, 70
 	jr nz, 9
-	cps h, 0
+	cp h, 0:i3
 	jr nz, 5
 	cp	l, 75
 	jr	z, 48
@@ -5426,7 +5426,7 @@ ToneParam_ExtendedOpsBlock:
 	ld	(0x39ac:16), a
 	ld	(0x39ad:16), a
 	calr	387
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	lds32	xwa, 1
@@ -5437,109 +5437,109 @@ ToneParam_ExtendedOpsBlock:
 	ld	(0x39ac:16), 12
 	ld	(0x39ad:16), 12
 	calr	353
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 13
 	ld	(0x39ad:16), 14
 	calr	333
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 14
 	ld	(0x39ad:16), 15
 	calr	313
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 15
 	ld	(0x39ad:16), 16
 	calr	293
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 16
 	ld	(0x39ad:16), 24
 	calr	273
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 17
 	ld	(0x39ad:16), 26
 	calr	253
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 18
 	ld	(0x39ad:16), 27
 	calr	233
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 19
 	ld	(0x39ad:16), 28
 	calr	213
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 12
 	ld	(0x39ad:16), 18
 	calr	193
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 13
 	ld	(0x39ad:16), 20
 	calr	173
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 14
 	ld	(0x39ad:16), 21
 	calr	153
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 15
 	ld	(0x39ad:16), 22
 	calr	133
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 12
 	ld	(0x39ad:16), 13
 	calr	113
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 15
 	ld	(0x39ad:16), 17
 	calr	93
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 16
 	ld	(0x39ad:16), 25
 	calr	73
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 19
 	ld	(0x39ad:16), 29
 	calr	53
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 12
 	ld	(0x39ad:16), 19
 	calr	33
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	(0x39ac:16), 15
 	ld	(0x39ad:16), 23
 	calr	13
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 3
 	ld	(xsp+4), hl
 	ld	hl, (xsp+4)
@@ -5856,7 +5856,7 @@ FileHdr_ValidateSignature:
 	ld c, (xwa + 2)
 	cp l, 0x47
 	jr nz, FileHdr_CheckLKE
-	cps e, 0
+	cp e, 0:i3
 	jr nz, FileHdr_CheckLKE
 	cp c, 0x4b
 	jr z, FileHdr_SignatureMatch
@@ -6114,7 +6114,7 @@ CmpBndRngFunc:
 CmpBndRng_BoundCase:
 	ld bc, (xde + 4)
 	ld xwa, (xde + 8)
-	cps bc, 0
+	cp bc, 0:i3
 	jr lt, CmpBndRng_DefaultString
 	cp bc, 0xc
 	jr gt, CmpBndRng_DefaultString
@@ -6501,7 +6501,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	ld	wa, (xwa)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	nz, 328
 	exts	xde
 	ld	xwa, 0x144000d
@@ -6520,7 +6520,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	ld	wa, (xwa)
-	cps	wa, 1
+	cp	wa, 1:i3
 	jrl	nz, 272
 	exts	xde
 	ld	xwa, 0x144000d
@@ -6542,9 +6542,9 @@ CmpSetP1_GridCheck_Return:
 	ld wa, (xwa)
 	lda xhl, (0x03da06:24)
 	dec 1, wa
-	cps wa, 0
+	cp wa, 0:i3
 	jrl lt, WidgetHandler_PostEventAndReturnZero
-	cps wa, 7
+	cp wa, 7:i3
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
 	lda xix, (StrTimeSig_1_2_0x10:24)
@@ -6672,9 +6672,9 @@ GridCheck_Handler0:
 	ld (xwa + 2), de	; Store high word
 	ld wa, (xwa)	; Load state value
 	exts xde	; Sign extend DE
-	cps wa, 2	; Check if state == 2
+	cp wa, 2:i3	; Check if state == 2
 	jr z, GridCheck_Handler0_State2
-	cps wa, 1	; Check if state == 1
+	cp wa, 1:i3	; Check if state == 1
 	jrl nz, GridCheck_ReturnZero	; If neither, exit
 	ld xwa, 0x144000d	; Widget ID
 	ld xbc, 0x1e40008	; Event: grid check state 1 (case 0)
@@ -6704,9 +6704,9 @@ GridCheck_Handler1:
 	ld (xwa + 2), de	; Store high word
 	ld wa, (xwa)	; Load state value
 	exts xde	; Sign extend DE
-	cps wa, 2	; Check if state == 2
+	cp wa, 2:i3	; Check if state == 2
 	jr z, GridCheck_Handler1_State2
-	cps wa, 1	; Check if state == 1
+	cp wa, 1:i3	; Check if state == 1
 	jr nz, GridCheck_ReturnZero	; If neither, exit
 	ld xwa, 0x144000d	; Widget ID
 	ld xbc, 0x1e40009	; Event: grid check state 1 (case 1)
@@ -6738,9 +6738,9 @@ CmpSet_GridCheck_Dispatch:
 	ld de, (xbc)
 	ld bc, (xwa)
 	exts xbc
-	cps de, 2
+	cp de, 2:i3
 	jr z, GridCheck_SetMode1
-	cps de, 1
+	cp de, 1:i3
 	jr nz, GridCheck_GetFocusAndSend
 	lds wa, 0
 	ld xiz, 0x3da4e
@@ -6784,7 +6784,7 @@ GridCheck_LookupSndParam:
 	sll xbc, 3
 	add xbc, 0x10
 	add xbc, xix
-	cps a, 0
+	cp a, 0:i3
 	jr nz, GridCheck_ClampParamAlt
 	ld l, (xbc + 2)
 	cp l, 0x7f
@@ -6851,7 +6851,7 @@ AcApcToggle_HandleClose:
 	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, AcApcToggle_Fallthrough
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e0006c
@@ -6898,7 +6898,7 @@ AcApcToggle_ReadSndParam:
 	call SndParam_LookupReadOnly
 	lda xbc, (xiz + 34)
 	ld xwa, (xbc)
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, AcApcToggle_SetOne
 	ldw (xwa), 0x0
 	jr AcApcToggle_SendUpdate

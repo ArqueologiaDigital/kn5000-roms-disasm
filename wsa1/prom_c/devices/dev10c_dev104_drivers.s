@@ -890,7 +890,7 @@ Dev10C_ChanMinus2_SetReg_0080_Bit15:
 	inc	1, bc                              ; FB6EA1  inc 1,BC
 	extz	xbc                               ; FB6EA3  extz XBC
 	ld	wa, (xbc+0x3BCF)                    ; FB6EA5  ld WA,(XBC+0x3bcf)
-	cps	wa, 0                              ; FB6EAA  cp WA,0
+	cp	wa, 0:i3                              ; FB6EAA  cp WA,0
 	jr z, Dev10C_ChanMinus2_SetReg_0080_Bit15__FB6ED6                        ; FB6EAC  jr Z,0xfb6ed6
 	ldw	bc, 2                              ; FB6EAE  ld BC,0x0002
 	mul	xbc, xhl                           ; FB6EB1  mul XBC,HL
@@ -939,7 +939,7 @@ Dev10C_ChanMinus2_ClrReg_0080_Bit15:
 	inc	1, bc                              ; FB6EF1  inc 1,BC
 	extz	xbc                               ; FB6EF3  extz XBC
 	ld	wa, (xbc+0x3BCF)                    ; FB6EF5  ld WA,(XBC+0x3bcf)
-	cps	wa, 0                              ; FB6EFA  cp WA,0
+	cp	wa, 0:i3                              ; FB6EFA  cp WA,0
 	jr z, Dev10C_ChanMinus2_ClrReg_0080_Bit15__FB6F26                        ; FB6EFC  jr Z,0xfb6f26
 	ldw	bc, 2                              ; FB6EFE  ld BC,0x0002
 	mul	xbc, xhl                           ; FB6F01  mul XBC,HL
@@ -4169,7 +4169,7 @@ Dev10C_ResetAllChannels__FB8119:
 	inc	1, bc                                  ; FB813B  d9 61             inc 1,BC
 	ld	(xiz-2), bc                             ; FB813D  be fe 51          ld (XIZ+0xfe),BC
 	dec	1, d                                   ; FB8140  cc 69             dec 1,D
-	cps	d, 0                                   ; FB8142  cc d8             cp D,0
+	cp	d, 0:i3                                   ; FB8142  cc d8             cp D,0
 	jr nz, Dev10C_ResetAllChannels__FB8119                            ; FB8144  6e d3             jr NZ,0xfb8119
 	lda	xix, (0x00D8DB:24)                       ; FB8146  f2 db d8 00 34    lda XIX,0x00d8db
 	pushw	68                                   ; FB814B  0b 44 00          push 0x0044

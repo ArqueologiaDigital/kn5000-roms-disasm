@@ -8,7 +8,7 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	ld	iz, wa
 	ldw (xsp + 0x02), 0
 	ld	wa, de
-	cps	wa, 6
+	cp	wa, 6:i3
 	jrl ugt, .LFS_7334                     ; [7b 49 02] jrl UGT,0x287334
 	add	wa, wa
 	lda xix, (0x2e2d46:24)
@@ -98,7 +98,7 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr z, .LFS_720d                        ; [66 22] jr Z,0x28720d
 	cp	iz, 0x0078
 	jr ugt, .LFS_720d                      ; [6b 1c] jr UGT,0x28720d
@@ -151,7 +151,7 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr z, .LFS_72b5                        ; [66 3c] jr Z,0x2872b5
 	cp	iz, 0x0078
 	jr ugt, .LFS_72b5                      ; [6b 36] jr UGT,0x2872b5
@@ -3298,7 +3298,7 @@ HDAE5000_CopyToHDScreen:
 	ld xwa, 0x007f00e6			; 40 e6 00 7f 00
 	calr HDAE5000_HD_Format_Params		; 1e xx xx
 	calr HDAE5000_Count_Active_Files	; 1e xx xx
-	cps hl, 0				; db d8
+	cp hl, 0:i3				; db d8
 	jr z, .Lfbs_evt_0006_empty		; 66 xx
 	; Has active files: register status 0x007f00e2
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20

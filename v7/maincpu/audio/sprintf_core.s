@@ -147,7 +147,7 @@ Sprintf_String_ComputePadding:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
 Sprintf_String_WidthAvailable:
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, -20
 	jr	10
 	pushw	48
@@ -158,7 +158,7 @@ Sprintf_String_CheckLeftAlign:
 	ld	wa, (xsp+10)
 Sprintf_String_PadLeftSpace:
 	decm	1, (xsp+10)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, -20
 	jr	24
 	decm	1, (xsp+18)
@@ -180,7 +180,7 @@ Sprintf_String_OutputLoop:
 	ld	wa, (xsp+8)
 Sprintf_String_PadRightSpace:
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, -20
 	jrl	455
 Sprintf_String_PadRightLoop:
@@ -229,7 +229,7 @@ Sprintf_Decimal_FinalWidth:
 Sprintf_Decimal_PadLeftSpace:
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, -20
 Sprintf_Decimal_PadLeftLoop:
 	jr	10
@@ -257,7 +257,7 @@ Sprintf_Decimal_ZeroFill:
 	inc	2, xsp
 	ld	wa, (xsp+8)
 	decm	1, (xsp+8)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, -20
 	jr	123
 Sprintf_Decimal_ZeroFillBody:
@@ -535,7 +535,7 @@ Sprintf_Octal_PadRightLoop:
 	.byte 0x20
 Sprintf_StoreCount_Short:
 	decm	1, (xsp+2)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	gt, -44
 Sprintf_FormatFloat_Entry:
 	.byte 0x68, 0x0f, 0x0b, 0x30, 0x00, 0xaf, 0x0e, 0x20
@@ -799,7 +799,7 @@ Sprintf_FFixed_IntDigitLoop:
 	incw	1, (246306:24)
 	ld	wa, qiz
 	inc	1, qiz
-	cps	wa, 3
+	cp	wa, 3:i3
 	jr	lt, -25
 	jr	25
 	dec	1, iz
@@ -809,7 +809,7 @@ Sprintf_FFixed_IntZeroFill:
 Sprintf_FFixed_IntZeroLoop:
 	srl	xwa, 98
 	incw	1, (246306:24)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	nz, -29
 	ld	wa, (xsp+16)
 	bit	1, wa
@@ -1022,7 +1022,7 @@ Sprintf_ESci_OutputMantissa:
 	lds	iz, 0
 	lds	wa, 0
 	ld	hl, (xsp+18)
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	le, 11
 Sprintf_ESci_MantDigitOutput:
 	add	wa, wa
@@ -1033,7 +1033,7 @@ Sprintf_ESci_MantDigitOutput:
 	ld	iz, (xsp+20)
 	dec	1, iz
 	ld	xiy, (xsp+14)
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	le, 79
 	ld	(xsp+4), wa
 Sprintf_ESci_MantDigitLoop:
@@ -1188,7 +1188,7 @@ Sprintf_GGen_PositiveExpDone:
 	ld	xde, (xsp+6)
 	lds	iz, 0
 	ld	bc, (xsp+10)
-	cps	bc, 0
+	cp	bc, 0:i3
 	jr	le, 20
 Sprintf_GGen_DivideLoop:
 	.byte 0xde, 0x88, 0xe8, 0x13, 0xe8, 0x80, 0xea, 0x80
@@ -1202,7 +1202,7 @@ Sprintf_GGen_NegativeExpCheck:
 Sprintf_GGen_FinalShift:
 	nop
 	jr	lt, -19
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	z, 8
 	pushw	bc
 Sprintf_GGen_RoundLoop:
@@ -1311,7 +1311,7 @@ Sprintf_PropCarry_Store:
 	ld	(xbc), a
 	ld	wa, de
 	dec	1, de
-	cps	wa, 0
+	cp	wa, 0:i3
 Sprintf_PropCarry_Check:
 	.byte 0xb0, 0xf6, 0x84, 0x3f, 0x00
 Sprintf_NormalizeDigits:

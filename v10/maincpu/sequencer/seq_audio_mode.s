@@ -106,7 +106,7 @@ AccPedal_CheckBit1Aux:
 	or a, 0x8
 
 AccPedal_ApplyChangeMask:
-	cps a, 0
+	cp a, 0:i3
 	jr z, AccPedal_CheckAuxBit2
 	ld w, a
 	xor w, 0xff
@@ -195,7 +195,7 @@ AccChannel_BytecodeBlock2:
 AccChannel_SetDirtyIfActive:
 	ld wa, (0x32e3:16)
 	and w, 0x7
-	cps w, 0
+	cp w, 0:i3
 	jr z, AccChannel_SetDirtyDone
 	or (0x3326:16), 63
 
@@ -219,7 +219,7 @@ AccChannel_ActivityCheckDone:
 
 AccChannel_CheckPartIndexDirty:
 	ld a, (1075:16)
-	cps a, 1
+	cp a, 1:i3
 	jr nz, AccChannel_PartIndexDone
 	or (0x3326:16), 63
 
@@ -491,7 +491,7 @@ RhythmPart_ProcessBit0:
 	and (0x3327:16), 192
 
 RhythmPart_ProcessBit1:
-	cps a, 0
+	cp a, 0:i3
 	jr z, AccChord_CheckExtraDirtyBit3
 	ldb w, 0x0
 	xor a, 0xff
@@ -1357,7 +1357,7 @@ RhythmROM_InvalidIncrement:
 	ld wa, (0x3454:16)
 	add wa, 0x1
 	ld (0x3454:16), wa
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, RhythmROM_CheckDone
 	ldb a, 0xee
 	ld (0xe3dc:16), a
@@ -1497,7 +1497,7 @@ AccPatch_SetByChordIndex:
 	srl l, 2
 	cp (0x32e6:16), 0
 	jrl nz, AccPatch_ChIdx1_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx0_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1520,7 +1520,7 @@ AccPatch_SetByChordIndex:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx0_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx0_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1566,7 +1566,7 @@ AccPatch_ChIdx0_Bank2:
 AccPatch_ChIdx1_Entry:
 	cp (0x32e6:16), 1
 	jrl nz, AccPatch_ChIdx2_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx1_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1589,7 +1589,7 @@ AccPatch_ChIdx1_Entry:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx1_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx1_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1635,7 +1635,7 @@ AccPatch_ChIdx1_Bank2:
 AccPatch_ChIdx2_Entry:
 	cp (0x32e6:16), 2
 	jrl nz, AccPatch_ChIdx3_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx2_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1658,7 +1658,7 @@ AccPatch_ChIdx2_Entry:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx2_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx2_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1704,7 +1704,7 @@ AccPatch_ChIdx2_Bank2:
 AccPatch_ChIdx3_Entry:
 	cp (0x32e6:16), 3
 	jrl nz, AccPatch_ChIdx4_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx3_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1727,7 +1727,7 @@ AccPatch_ChIdx3_Entry:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx3_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx3_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1773,7 +1773,7 @@ AccPatch_ChIdx3_Bank2:
 AccPatch_ChIdx4_Entry:
 	cp (0x32e6:16), 4
 	jrl nz, AccPatch_ChIdx5_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx4_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1796,7 +1796,7 @@ AccPatch_ChIdx4_Entry:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx4_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx4_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1842,7 +1842,7 @@ AccPatch_ChIdx4_Bank2:
 AccPatch_ChIdx5_Entry:
 	cp (0x32e6:16), 5
 	jrl nz, AccPatch_ChIdx6_Entry
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx5_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1865,7 +1865,7 @@ AccPatch_ChIdx5_Entry:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx5_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx5_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1911,7 +1911,7 @@ AccPatch_ChIdx5_Bank2:
 AccPatch_ChIdx6_Entry:
 	cp (0x32e6:16), 6
 	jrl nz, AccPatch_ChIdxDefault_Bank0
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdx6_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
@@ -1934,7 +1934,7 @@ AccPatch_ChIdx6_Entry:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx6_Bank1:
-	cps l, 1
+	cp l, 1:i3
 	jr nz, AccPatch_ChIdx6_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
@@ -1978,7 +1978,7 @@ AccPatch_ChIdx6_Bank2:
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdxDefault_Bank0:
-	cps l, 0
+	cp l, 0:i3
 	jr nz, AccPatch_ChIdxDefault_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam

@@ -106,7 +106,7 @@ SLSrcBank_HandleShow:
 	ld xwa, (0x81c2:16)
 	lda xde, (StorageAreaName_PanelMemory_0xE:24)
 	ld c, (0x89f8:16)
-	cps c, 0
+	cp c, 0:i3
 	jr nz, SLSrcBank_ShowFromIndex
 	cp (0x8a0a:16), 0
 	jr z, SLSrcBank_ShowFromIndex
@@ -139,7 +139,7 @@ SLSrcMem_HandleShow:
 	ld xwa, (0x81c6:16)
 	lda xde, (BankStr_Bank3_0x6:24)
 	ld c, (0x89f8:16)
-	cps c, 1
+	cp c, 1:i3
 	jr z, SLSrcMem_ShowDirect
 	cp (0x89fa:16), 0
 	jr z, SLSrcMem_ShowFromIndex
@@ -435,14 +435,14 @@ SLSrcBankList_FuncBody:
 	cp	xhl, 0x01c00018
 	jr	nz, 44
 	ld	c, e
-	cps	e, 0
+	cp	e, 0:i3
 	jr	z, 38
 	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 21
 	dec	1, c
 	ld	(0x89fc:16), c
@@ -708,7 +708,7 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	nz, 63
-	cps	bc, 4
+	cp	bc, 4:i3
 	jr	nc, 59
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
@@ -829,14 +829,14 @@ SLSrcBankList_FuncBody:
 	cp	xix, 0x01c00018
 	jr	nz, 44
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 38
 	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 21
 	dec	1, c
 	ld	(0x89fe:16), c
@@ -1253,7 +1253,7 @@ SLSrcBankList_FuncBody:
 	cp	xde, 0x01c00018
 	jr	nz, 115
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 109
 	ld	e, (Str_AllOption_EA0980_0x12:24)
 	ld	a, e
@@ -1264,7 +1264,7 @@ SLSrcBankList_FuncBody:
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 84
 	dec	1, c
 	ld	(0x8a00:16), c
@@ -1376,7 +1376,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	inc	1, iz
-	cps	iz, 4
+	cp	iz, 4:i3
 	jr	c, -70
 	lds32	xhl, 0
 	popw	iz
@@ -1770,14 +1770,14 @@ SLDstBankList_FuncBody:
 	cp	xix, 0x01c00018
 	jr	nz, 39
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 33
 	ld	e, (Str_AllOption_EA09B2_0x16:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 16
 	dec	1, c
 	ld	(0x8a02:16), c
@@ -1943,7 +1943,7 @@ SLDstBankList_FuncBody:
 	cp	xde, 0x01c00018
 	jr	nz, 16
 	ld	a, w
-	cps	w, 0
+	cp	w, 0:i3
 	jr	z, 10
 	dec	1, a
 	ld	(0x8a04:16), a
@@ -2184,14 +2184,14 @@ SLDstBankList_FuncBody:
 	cp	xix, 0x01c00018
 	jr	nz, 39
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 33
 	ld	e, (Str_AllOption_EA09B2_0x3A:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 16
 	dec	1, c
 	ld	(0x8a06:16), c
@@ -2573,7 +2573,7 @@ SLDstBankList_FuncBody:
 	cp	xde, 0x01c00018
 	jr	nz, 110
 	ld	c, l
-	cps	l, 0
+	cp	l, 0:i3
 	jr	z, 104
 	ld	e, (Data_SaveLoadMenuTable_0x22:24)
 	ld	a, e
@@ -2584,7 +2584,7 @@ SLDstBankList_FuncBody:
 	extz	wa
 	div8rr	a, e
 	ld	a, w
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 79
 	dec	1, c
 	ld	(0x8a08:16), c
@@ -2696,7 +2696,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 0x01c0000f
 	call	ApPostEvent
 	inc	1, iz
-	cps	iz, 4
+	cp	iz, 4:i3
 	jr	c, -70
 	lds32	xhl, 0
 	popw	iz
@@ -2750,7 +2750,7 @@ SLDst_ShowHide_Dispatch:
 	cp (0x89f8:16), 0
 	jr nz, SLDst_ClearFloppyFlag
 	call FileIO_ValidateWithExtHeader
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, SLDst_ClearFloppyFlag
 	ld (0x8a0a:16), 1
 	jr SLDst_Return
@@ -2866,7 +2866,7 @@ SLDst_ScrollMode4:
 	cp xwa, 0x4
 	jrl nz, SLDst_ScrollDispatch
 	calr WP_FindNextSlot
-	cps l, 0
+	cp l, 0:i3
 	jrl z, SLDst_Return
 	cp (0x89f8:16), 1
 	jr z, SLDst_ScrollMode4_Internal
@@ -3527,7 +3527,7 @@ CmpSingleLoadFileFunc:
 	ld (0x81fc:16), xde
 	call GetCurrentFileIndex
 	ld (0x8200:16), hl
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, CmpFile_Selection_Clamp
 	ldw (0x8200:16), 0
 
@@ -3580,7 +3580,7 @@ CmpFile_HandleScroll:
 CmpFile_ScrollDown:
 	cp xde, 0x1
 	jr nz, CmpFile_ScrollRedraw
-	cps wa, 0
+	cp wa, 0:i3
 	jr le, CmpFile_ScrollRedraw
 	dec 1, wa
 
@@ -3597,10 +3597,10 @@ CmpFile_ScrollRedraw:
 	ld (0x89f8:16), 4
 	lds wa, 3
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, CmpFile_RedrawDispatch
 	call FileIO_ValidateAndOpenFile
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, CmpFile_RedrawDispatch
 	ld (0x89f8:16), 2
 	ld wa, (0x8200:16)
@@ -3660,11 +3660,11 @@ FmmCmpSingleLoadFunc:
 
 FmmCmpLoad_DispatchState:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl z, FmmCmpLoad_HandleSuccess
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, FmmCmpLoad_HandleError
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, FmmCmpLoad_HandleCancel
 	cpw (0x8502:16), 0
 	jr ge, FmmCmpLoad_ContinueLoad
@@ -3678,10 +3678,10 @@ FmmCmpLoad_ContinueLoad:
 	ld (0x89f8:16), 4
 	lds wa, 3
 	call FileIO_CheckRecordValid
-	cps l, 0
+	cp l, 0:i3
 	jr z, FmmCmpLoad_CloseProgress
 	call FileIO_ValidateAndOpenFile
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FmmCmpLoad_SignalProgress
 	ld (0x89f8:16), 2
 
@@ -3761,7 +3761,7 @@ BuildSlotLabel:
 	extz xiz
 	add xiz, xix
 	lda_dpi XSP, 0xf8
-	cps e, 0
+	cp e, 0:i3
 	jr z, BuildSlotLabel_WriteContent
 	cpw (xsp + 4), 0x9
 	jr nz, BuildSlotLabel_WriteLetter

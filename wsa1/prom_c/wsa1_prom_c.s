@@ -376,7 +376,7 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	calr (0xFABDAC - 0xFABE55)                 ; FABE52  calr 0xfabdac
 	ld	hl, wa                                  ; FABE55  ld HL,WA
 	popw	bc                                    ; FABE57  pop BC
-	cps	wa, 0                                  ; FABE58  cp WA,0
+	cp	wa, 0:i3                                  ; FABE58  cp WA,0
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABEB3                   ; FABE5A  jr Z,0xfabeb3
 	ld	c, (xiz-2)                              ; FABE5C  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABE5F  push BC
@@ -429,7 +429,7 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	calr (0xFABDAC - 0xFABEE0)                 ; FABEDD  calr 0xfabdac
 	ld	hl, wa                                  ; FABEE0  ld HL,WA
 	popw	bc                                    ; FABEE2  pop BC
-	cps	wa, 0                                  ; FABEE3  cp WA,0
+	cp	wa, 0:i3                                  ; FABEE3  cp WA,0
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABF40                   ; FABEE5  jr Z,0xfabf40
 	ld	c, (xiz-2)                              ; FABEE7  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABEEA  push BC
@@ -483,7 +483,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	calr (0xFABDAC - 0xFABF72)                 ; FABF6F  calr 0xfabdac
 	ld	hl, wa                                  ; FABF72  ld HL,WA
 	popw	bc                                    ; FABF74  pop BC
-	cps	wa, 0                                  ; FABF75  cp WA,0
+	cp	wa, 0:i3                                  ; FABF75  cp WA,0
 	jrl z, Voice_RecomputeAllThreeBaseCurves__FAC00E                  ; FABF77  jrl Z,0xfac00e
 	ld	c, (xiz-2)                              ; FABF7A  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABF7D  push BC
@@ -825,7 +825,7 @@ sub_FAC08D__FAC251:
 	ldw (xiz-2), 0x0000                        ; FAC251  ld (XIZ+0xfe),0x0000
 	jr sub_FAC08D__FAC2A0                      ; FAC256  jr T,0xfac2a0
 sub_FAC08D__FAC258:
-	cps	hl, 1                                  ; FAC258  cp HL,1
+	cp	hl, 1:i3                                  ; FAC258  cp HL,1
 	jr nz, sub_FAC08D__FAC29D                  ; FAC25A  jr NZ,0xfac29d
 	extz	xix                                   ; FAC25C  extz XIX
 	ld	c, (xix)                                ; FAC25E  ld C,(XIX)
@@ -949,12 +949,12 @@ sub_FAC34D:
 	lda	xix, (0x14FE:16)                      ; FAC354  lda XIX,0x14fe
 	extz	xix                                   ; FAC358  extz XIX
 	ld	c, (xix+29)                             ; FAC35A  ld C,(XIX+0x1d)
-	cps	c, 0                                   ; FAC35D  cp C,0
+	cp	c, 0:i3                                   ; FAC35D  cp C,0
 	jrl z, sub_FAC34D__FAC426                  ; FAC35F  jrl Z,0xfac426
 	extz	xix                                   ; FAC362  extz XIX
 	decm8	1, (xix+30)                          ; FAC364  dec 1,(XIX+0x1e)
 	ld	c, (xix+30)                             ; FAC367  ld C,(XIX+0x1e)
-	cps	c, 0                                   ; FAC36A  cp C,0
+	cp	c, 0:i3                                   ; FAC36A  cp C,0
 	jrl nz, sub_FAC34D__FAC426                 ; FAC36C  jrl NZ,0xfac426
 	lda	xbc, (xiz-14)                          ; FAC36F  lda XBC,XIZ+0xf2
 	push	xbc                                   ; FAC372  push XBC
@@ -1639,7 +1639,7 @@ sub_FAC888:
 	ld	l, (xiz+8)                              ; FAC897  ld L,(XIZ+0x08)
 	extz	xde                                   ; FAC89A  extz XDE
 	ld	h, (xde+0x72)                           ; FAC89C  ld H,(XDE+0x72)
-	cps	h, 0                                   ; FAC89F  cp H,0
+	cp	h, 0:i3                                   ; FAC89F  cp H,0
 	jr nz, sub_FAC888__FAC8AB                  ; FAC8A1  jr NZ,0xfac8ab
 	extz	xde                                   ; FAC8A3  extz XDE
 	extpfx4 0x8A, 0x71, 0x3E, 0x10             ; FAC8A5  or (XDE+0x71),0x10
@@ -1663,7 +1663,7 @@ sub_FAC888__FAC8AB:
 sub_FAC888__FAC8CC:
 	extz	xde                                   ; FAC8CC  extz XDE
 	ld	h, (xde+0x73)                           ; FAC8CE  ld H,(XDE+0x73)
-	cps	h, 0                                   ; FAC8D1  cp H,0
+	cp	h, 0:i3                                   ; FAC8D1  cp H,0
 	jr z, sub_FAC888__FAC908                   ; FAC8D3  jr Z,0xfac908
 	ld	c, h                                    ; FAC8D5  ld C,H
 	dec	1, c                                   ; FAC8D7  dec 1,C
@@ -2048,9 +2048,9 @@ sub_FACAB7__FACB5F:
 	call	0xFC7C0D                              ; FACB68  call 0xfc7c0d
 	extz	wa                                    ; FACB6C  extz WA
 	inc	6, xsp                                 ; FACB6E  inc 6,XSP
-	cps	wa, 1                                  ; FACB70  cp WA,1
+	cp	wa, 1:i3                                  ; FACB70  cp WA,1
 	jr z, sub_FACAB7__FACB7A                   ; FACB72  jr Z,0xfacb7a
-	cps	wa, 2                                  ; FACB74  cp WA,2
+	cp	wa, 2:i3                                  ; FACB74  cp WA,2
 	jr z, sub_FACAB7__FACB8B                   ; FACB76  jr Z,0xfacb8b
 	jr sub_FACAB7__FACB9C                      ; FACB78  jr T,0xfacb9c
 sub_FACAB7__FACB7A:

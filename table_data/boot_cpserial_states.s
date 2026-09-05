@@ -204,7 +204,7 @@ BootSerial_State18_TxFrameDone:
 	ld	(0x0f62:16), 0
 	ld	wa, (0x0fd7:16)		; pending count
 	sub	wa, (0x0fd5:16)		; - send index
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	c, BootSerial_State18_TxFrameDone__go_idle
 	ld	(0x0f62:16), 0x04		; next frame: state 0x04
 	and	(0x0f67:16), 0xbf
@@ -266,7 +266,7 @@ BootSerial_State20_RxFirstByte__fwd:
 	ldw	iy, 0x005c
 	sub	iy, hl			; free = ring size - used
 BootSerial_State20_RxFirstByte__have_free:
-	cps	iy, 3
+	cp	iy, 3:i3
 	jr	nc, BootSerial_State20_RxFirstByte__room
 	or	(0x0f6a:16), 0x01		; RX ring overflow
 	jr	t, BootSerial_State20_RxFirstByte__counted
@@ -394,7 +394,7 @@ BootSerial_PollTX__inject_fwd:
 	ldw	hl, 0x003c
 	sub	hl, wa
 BootSerial_PollTX__inject_free:
-	cps	hl, 3
+	cp	hl, 3:i3
 	jr	c, BootSerial_PollTX__inject_done
 	ld	(0x0f72:16), 0
 	ldb	w, 0x20			; sync frame (0x20, 0x10)
@@ -427,7 +427,7 @@ BootSerial_PollTX__encode:
 	ldb	a, 0x3c
 	sub	a, w			; wrapped: pending = ring size - diff
 BootSerial_PollTX__have_count:
-	cps	a, 2
+	cp	a, 2:i3
 	jr	c, BootSerial_PollTX__exit
 	or	(0x0f64:16), 0x02		; TX-pending flag
 	ld	(0x0f62:16), 0x04		; state 0x04: TX line request
@@ -506,7 +506,7 @@ BootSerial_RX_ParsePackets__next:
 	ldb	a, 0x5c
 	sub	a, w			; wrapped: avail = ring size - diff
 BootSerial_RX_ParsePackets__have_avail:
-	cps	a, 2			; a whole frame available?
+	cp	a, 2:i3			; a whole frame available?
 	jrl	c, BootSerial_RxParseDone
 	ldb_sri	l, 0x07, 0xe8, 0xf4	; LD L, (XDE+IY) - first frame byte
 	and	l, 0x38
@@ -712,7 +712,7 @@ BootSerial_RxPkt_VarLengthRun__scramble:
 	inc	1, hl
 	bit	4, (0x0f64:16)		; collapse sentinel armed?
 	jr	z, BootSerial_RxPkt_VarLengthRun__store_mixed
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, BootSerial_RxPkt_VarLengthRun__store_mixed
 	calr	BootSerial_CtrlRingRetreatIX	; unchanged byte: elide the
 	calr	BootSerial_CtrlRingRetreatIX	; whole pair
@@ -731,7 +731,7 @@ BootSerial_RxPkt_VarLengthRun__commit_tail:
 BootSerial_RxPkt_VarLengthRun__step:
 	inc	1, w			; next run tag
 	dec	1, b
-	cps	b, 0
+	cp	b, 0:i3
 	jrl	nz, BootSerial_RxPkt_VarLengthRun__store
 	jrl	t, BootSerial_RX_ParsePackets__next
 
@@ -786,7 +786,7 @@ BootSerial_TX_EncodePackets__fwd:
 	ldw	hl, 0x003c
 	sub	hl, wa			; free = ring size - used
 BootSerial_TX_EncodePackets__have_free:
-	cps	hl, 3
+	cp	hl, 3:i3
 	jrl	c, BootSerial_TxEncodeDone
 	ldb_sri	a, 0x07, 0xf8, 0xf0	; LD A, (XIZ+IX) - packet tag
 	and	a, 0x30
@@ -858,7 +858,7 @@ BootSerial_TxPkt_VarLengthRun__loop:
 	incw	1, (xiz - 2)
 	ld	(0x0fd7:16), iy		; commit pending count
 	dec	1, b
-	cps	b, 0
+	cp	b, 0:i3
 	jr	nz, BootSerial_TxPkt_VarLengthRun__loop
 	jrl	t, BootSerial_TX_EncodePackets__next
 BootSerial_TxEncodeDone:
@@ -895,7 +895,7 @@ BootSerial_CtrlRingAdvanceIX__done:
 	ret
 
 BootSerial_CtrlRingRetreatIX:
-	cps	ix, 0
+	cp	ix, 0:i3
 	jr	nz, BootSerial_CtrlRingRetreatIX__dec
 	ldw	ix, 0x007f
 	ret
@@ -912,7 +912,7 @@ BootSerial_CtrlRingAdvanceIX_Dup__done:
 	ret
 
 BootSerial_CtrlRingRetreatIX_Dup:	; NO REFERENCE FOUND - dead duplicate
-	cps	ix, 0
+	cp	ix, 0:i3
 	jr	nz, BootSerial_CtrlRingRetreatIX_Dup__dec
 	ldw	ix, 0x007f
 	ret

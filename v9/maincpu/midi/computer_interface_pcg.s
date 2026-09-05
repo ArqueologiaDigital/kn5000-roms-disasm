@@ -165,7 +165,7 @@ PcgOutGrid_CheckAltPrev:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 3
+	cp hl, 3:i3
 	jrl ge, PcgOutGrid_ReturnZero
 	inc 1, hl
 	extz xhl
@@ -311,13 +311,13 @@ PcgOutGridCheckJumpTable:
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 1690
 	ld	xde, (xsp+44)
-	cps	bc, 3
+	cp	bc, 3:i3
 	jrl	z, 163
-	cps	bc, 2
+	cp	bc, 2:i3
 	jr	z, 103
-	cps	bc, 1
+	cp	bc, 1:i3
 	jr	z, 52
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	nz, 1669
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
@@ -395,13 +395,13 @@ PcgOutGridCheckJumpTable:
 	.byte 0x90, 0x3f, 0x01, 0x00
 	jrl	nz, 1420
 	ld	xde, (xsp+44)
-	cps	bc, 3
+	cp	bc, 3:i3
 	jrl	z, 205
-	cps	bc, 2
+	cp	bc, 2:i3
 	jrl	z, 131
-	cps	bc, 1
+	cp	bc, 1:i3
 	jr	z, 66
-	cps	bc, 0
+	cp	bc, 0:i3
 	jrl	nz, 1398
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
@@ -595,13 +595,13 @@ PcgOutCheckGridDataStructure:
 	cpw (xhl), 0x1
 	jrl nz, PcgOutGridCheckComplete
 	ld de, (xwa)
-	cps de, 3
+	cp de, 3:i3
 	jrl z, PcgOutCheck_SendPreset3
-	cps de, 2
+	cp de, 2:i3
 	jr z, PcgOutCheck_SendPreset2
-	cps de, 1
+	cp de, 1:i3
 	jr z, PcgOutCheck_SendPreset1
-	cps de, 0
+	cp de, 0:i3
 	jrl nz, PcgOutGridCheckComplete
 	ld a, (0x02476a:24)
 	inc 1, a

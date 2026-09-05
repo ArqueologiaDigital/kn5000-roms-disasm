@@ -67,7 +67,7 @@ FDC_ProbeDiskFormat:
 	ldw	(0x0d52:16), 0		; +0x00 cmd = 0 (recalibrate)
 	ldw	(0x0d54:16), 0		; +0x02 = 0
 	ldw	(0x0d56:16), 0		; +0x04 head = 0
-	cps	a, 0			; A is 0 -> always EQ (0x00d3 arm is dead)
+	cp	a, 0:i3			; A is 0 -> always EQ (0x00d3 arm is dead)
 	jr	nz, FDC_ProbeDiskFormat__recal_alt
 	ldw	(0x0d58:16), 0xe0		; +0x06 track/format field = 0x00e0
 	jr	FDC_ProbeDiskFormat__recal_done

@@ -1869,7 +1869,7 @@ DataBuf_CopyEffectBlock12:
 	ld	xwa, (xsp+6)
 	inc	2, xwa
 	call	16632296
-	cps	hl, 0
+	cp	hl, 0:i3
 	jrl	ge, 280
 	ld	xbc, (xsp+6)
 	ld	a, (xbc)
@@ -3539,7 +3539,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	pushw iz
 	ld IZ,WA
 	lda xwa, (Naka_ToshiParam_Table_0x6C:24)
-	cps iz, 0
+	cp iz, 0:i3
 	jr nz, .Lc_fd4c1f
 	lda xbc, (0x00f180:24)
 	add XBC,0x000002e0
@@ -3588,14 +3588,14 @@ DSPCfg_VoiceSlotB_ExtractData:
 .Lc_fd4c6d:
 	popw iz
 	ret
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 15
-	cps	c, 0
+	cp	c, 0:i3
 	jr	z, 11
 	sub	c, 127
 	add	c, a
 	ld	l, c
-	cps	l, 0
+	cp	l, 0:i3
 	ret	ge
 	ldb	l, 0
 	ret
@@ -3651,7 +3651,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	jr	c, 84
 	cp	a, 29
 	jr	ugt, 79
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 12
 	push	xde
 	push	xhl
@@ -3732,7 +3732,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	jr	c, -30
 	ret
 	ld c, (0xb754:16)
-	cps c, 2
+	cp c, 2:i3
 	ret Z
 	.byte 0xf1, 0xad, 0xfd, 0x30, 0xcb, 0xd8, 0x66, 0x11
 	.byte 0xcb, 0xd9, 0xb0, 0xfe, 0x80, 0x23, 0xcb, 0xcc
@@ -3958,7 +3958,7 @@ SndParam_CopyPreset_SelectBank:
 	nop
 	nop
 	call	16567398
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 111
 	pushw	14
 	pushw	238
@@ -4135,11 +4135,11 @@ MidiSysEx_SendProgramChange:
 	ldw IZ, 0xfffe
 .Lc_fd553f:
 	call SeqBuf_MidiOut_CheckEmpty
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, .Lc_fd554f
 	ld WA,IZ
 	dec 1,IZ
-	cps wa, 0
+	cp wa, 0:i3
 	jr nz, .Lc_fd553f
 .Lc_fd554f:
 	popw iz
@@ -4152,7 +4152,7 @@ MidiSysEx_SendProgramChange:
 	ld	xwa, (48144:16)
 	lds	bc, 4
 	calr	380
-	cps	l, 0
+	cp	l, 0:i3
 	jrl	nz, 144
 	call	15673490
 	cp	hl, 65535
@@ -5398,7 +5398,7 @@ MidiChan_CompareAndFlag:
 	.byte 0xac
 MidiChan_SetVoiceBaseState:
 	call	16602853
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (48152:16)
 MidiChan_SetBaseState128:
@@ -5432,7 +5432,7 @@ MidiSeq_UpdateToneParam:
 	ld xwa, (0xbc10:16)
 	lds bc, 4
 	call 0xfd56e5
-	cps l, 0
+	cp l, 0:i3
 	ret NZ
 	.byte 0xe1, 0x18, 0xbc, 0x20, 0xd9, 0xab, 0xda, 0xaf
 	.byte 0x1d, 0x69, 0x56, 0xfd, 0x40, 0x30, 0xbc, 0x00
@@ -5444,7 +5444,7 @@ MidiSeq_UpdateToneParam_Lower:
 	ld xwa, (0xbc10:16)
 	lds bc, 4
 	call 0xfd56e5
-	cps l, 0
+	cp l, 0:i3
 	ret NZ
 	.byte 0xe1, 0x18, 0xbc, 0x20, 0xd9, 0xab, 0x32, 0x08
 	.byte 0x00, 0x1d, 0x69, 0x56, 0xfd, 0x40, 0x30, 0xbc
@@ -5458,7 +5458,7 @@ MidiSeq_UpdateVolumeScale:
 	ld xwa, (0xbc10:16)
 	lds bc, 4
 	call 0xfd56e5
-	cps l, 0
+	cp l, 0:i3
 	ret NZ
 	.byte 0xe1, 0x18, 0xbc, 0x20, 0xd9
 MidiSeq_VolScale_Lower:
@@ -5515,7 +5515,7 @@ MidiSeq_PartLookup_Data:
 	ld	xwa, (48144:16)
 	lds	bc, 4
 	call	16602853
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (48152:16)
 	lds	bc, 3
@@ -5531,7 +5531,7 @@ MidiSeq_PartLookup_Data:
 	ld	xwa, (48144:16)
 	lds	bc, 4
 	call	16602853
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (48152:16)
 MidiSeq_ApplyPendingParams:
@@ -5549,7 +5549,7 @@ MidiSeq_ApplyPendingParams:
 	lds	bc, 4
 	call	16602853
 MidiSeq_ApplyParams_Lower:
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (48152:16)
 	lds	bc, 3
@@ -5568,7 +5568,7 @@ MidiSeq_PartConfigure_Data:
 	ld	xwa, (48144:16)
 	lds	bc, 4
 	call	16602853
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (48152:16)
 	incm8	1, (xwa+3)
@@ -5580,7 +5580,7 @@ MidiSeq_PartConfigure_Data:
 	ld	xwa, (48144:16)
 	lds	bc, 4
 	call	16602853
-	cps	l, 0
+	cp	l, 0:i3
 	jr	nz, 39
 	ld	xwa, 15611302
 	lds	bc, 5
@@ -5766,7 +5766,7 @@ ArpChord_FinalizePass:
 	retd	7424
 ArpChord_ClearBitAndReturn:
 	cp_spil_mr	xiy, 86
-	cps	l, 0
+	cp	l, 0:i3
 MidiTable_DispatchHelper:
 	.byte 0xb0, 0xfe, 0xe1, 0x10, 0xbc, 0x20, 0xd9, 0xab
 	.byte 0x32, 0x08, 0x00, 0x1d, 0x69, 0x56, 0xfd, 0x0e
@@ -5834,7 +5834,7 @@ MidiPkt_ArpExtHandler_E_Data:
 	lda	xbc, (xix+32)
 	retd	7424
 	cp_spil_mr	xiy, 86
-	cps	l, 0
+	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (48144:16)
 	lds	bc, 3
@@ -6350,12 +6350,12 @@ SoundMode_RenderWithNotify:
 SoundMode_NotifyActiveVoices:
 	ld	e, d
 	dec	1, d
-	cps	e, 0
+	cp	e, 0:i3
 	jr	z, 12
 	stib_dsp	236, 0
 	ld	e, d
 	dec	1, d
-	cps	e, 0
+	cp	e, 0:i3
 	jr	nz, -12
 	inc	4, xwa
 	cp	xwa, xbc
@@ -6454,7 +6454,7 @@ SoundMode_ProcessToneAndParams:
 	inc 1,XWA
 	ld C,A
 	dec 1,C
-	cps a, 0
+	cp a, 0:i3
 	ret Z
 	.byte 0xf5, 0xe8, 0x00, 0x7f, 0xcb, 0x89, 0xcb, 0x69
 	.byte 0xc9, 0xd8, 0x6e, 0xf4, 0x0e, 0xf1, 0x52, 0xb7
@@ -6875,7 +6875,7 @@ SeqData_FormatOutput_Dispatch:
 	ld	a, (xiz+14)
 	cp	a, 255
 	jr	z, 83
-	cps	a, 1
+	cp	a, 1:i3
 	jr	nc, 121
 	extz	wa
 	muls	wa, 6
@@ -6947,7 +6947,7 @@ SeqAlt_ApplyDescA_DirectNoShift:
 SeqAlt_ApplyDescA_FinalCall:
 	call	16705807
 SeqAlt_PopIzSkip4Ret:
-	cps	hl, 0
+	cp	hl, 0:i3
 	ret	z
 SeqAlt_ApplyDescriptor_TypeB:
 	.byte 0x40, 0xac, 0x35, 0xee, 0x00, 0xd9, 0xad, 0x1d

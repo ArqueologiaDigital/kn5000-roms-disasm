@@ -49,7 +49,7 @@ Debug_OutputString:
 	ld xix, xwa
 Debug_OutputString__next:
 	ldb_spi a, 0xF0		; ld A, (XIX+)
-	cps a, 0
+	cp a, 0:i3
 	jr z, Debug_OutputString__done
 	push xix
 	calr Debug_SendChar

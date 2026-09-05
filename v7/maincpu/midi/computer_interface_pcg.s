@@ -165,7 +165,7 @@ PcgOutGrid_CheckAltPrev:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	cps hl, 3
+	cp hl, 3:i3
 	jrl ge, PcgOutGrid_ReturnZero
 	inc 1, hl
 	extz xhl
@@ -309,13 +309,13 @@ PcgOutCheckGridDataStructure:
 	cpw (XHL), 0x0001
 	jrl nz, PcgOutGridCheckComplete
 	ld DE,(XWA)
-	cps de, 3
+	cp de, 3:i3
 	jrl z, PcgOutCheck_SendPreset3
-	cps de, 2
+	cp de, 2:i3
 	jr z, PcgOutCheck_SendPreset2
-	cps de, 1
+	cp de, 1:i3
 	jr z, PcgOutCheck_SendPreset1
-	cps de, 0
+	cp de, 0:i3
 	jrl nz, PcgOutGridCheckComplete
 	ld a, (0x02476a:24)
 	inc 1,A

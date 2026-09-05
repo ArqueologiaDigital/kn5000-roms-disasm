@@ -187,7 +187,7 @@ ClkTick_Src1CoarseUpdate:
 	cp	d, 144
 	popw	de
 	jr	nz, 4
-	cps	e, 0
+	cp	e, 0:i3
 	jr	nz, 37
 	.byte 0x9c, 0xfe, 0x3f, 0x04, 0x00
 	jr	c, 31
@@ -493,7 +493,7 @@ SysEx_InProgressReturn:
 	jr	nz, 45
 	xor	e, e
 	ld	a, (38298:16)
-	cps	a, 2
+	cp	a, 2:i3
 	jr	ugt, 10
 	ld	xix, 16577768
 	ld_rr8b	e, xix, a
@@ -553,7 +553,7 @@ SysEx_InProgressReturn:
 	jr	nz, 45
 	xor	e, e
 	ld	a, (38298:16)
-	cps	a, 3
+	cp	a, 3:i3
 	jr	ugt, 10
 	ld	xix, 16577958
 	ld_rr8b	e, xix, a
@@ -595,7 +595,7 @@ SC0TxEnable_MidiActivePath:
 	ld	xix, 4120306717
 	popw	de
 	popw	bc
-	cps	e, 0
+	cp	e, 0:i3
 SC0TxEnable_Return:
 	.byte 0x6e, 0x13
 

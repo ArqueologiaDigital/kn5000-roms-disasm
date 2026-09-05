@@ -29,11 +29,11 @@ FDemoText_ByteData_VoiceProbeA:
 	ld	c, (0xc07d:16)
 	ld	a, (0xc080:16)
 	extz	wa
-	cps	c, 5
+	cp	c, 5:i3
 	jr	z, 24
-	cps	c, 1
+	cp	c, 1:i3
 	jr	z, 4
-	cps	c, 0
+	cp	c, 0:i3
 	ret	nz
 	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb a, xbc, wa
@@ -56,7 +56,7 @@ FDemoText_ByteData_VoiceProbeB:
 	ret	nz
 	ld	a, (0xc07f:16)
 	res	7, a
-	cps	a, 0
+	cp	a, 0:i3
 	ret	z
 	.byte 0xf2, 0xee, 0x47
 	push	sr
@@ -68,9 +68,9 @@ FDemoText_ByteData_VoiceProbeC:
 	ld	a, (0xc07d:16)
 	extz	wa
 	dec	1, wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	ret	lt
-	cps	wa, 6
+	cp	wa, 6:i3
 	ret	gt
 	add	wa, wa
 	lda	xix, (DemoDiskPrompt_English1_0x96:24)
@@ -118,7 +118,7 @@ FDemoText_ProcessVoiceFlags:
 
 FDemoText_ProcessVoiceFlags_ReadState:
 	call Boot_CheckConfigFlag7
-	cps hl, 0
+	cp hl, 0:i3
 	jrl z, FDemoText_ProcessOutput_ClearAll
 	ld a, (0x0247ee:24)
 	bit 6, a
@@ -148,7 +148,7 @@ FDemoText_ProbeVoice_Loop:
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_erp C, 0xfa
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr z, FDemoText_ProbeVoice_SetActive
 	stb_erp A, 0xfa
 	cpl a
@@ -180,7 +180,7 @@ FDemoText_ProcessChannels_Loop:
 	and c, e
 	jr z, FDemoText_ProcessChannel_CheckNoFlag
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_ProcessChannel_Activate
 	stb_erp A, 0xfb
 	extz wa
@@ -197,7 +197,7 @@ FDemoText_ProcessChannel_CheckNoFlag:
 	calr FDemoText_CheckVoiceState
 	stb_erp A, 0xfb
 	extz wa
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_ProcessChannel_Deactivate
 	calr FDemoText_ActivateVoiceAlt
 	jr FDemoText_ProcessChannel_CheckMask
@@ -371,7 +371,7 @@ FDemoText_SyncPreset_ActiveLoop:
 	calr FDemoText_CheckVoiceState
 	stb_erp A, 0xfb
 	extz wa
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_SyncPreset_CallUpdate
 	ld bc, wa
 	lda xde, (DemoDiskPrompt_English1_0x86:24)
@@ -434,7 +434,7 @@ FDemoText_UpdateChannelVoice:
 	calr FDemoText_CheckVoiceState
 	ld a, (xsp + 4)
 	extz wa
-	cps l, 1
+	cp l, 1:i3
 	jr z, FDemoText_UpdateChannel_Active
 	ld (xiz), 0x0
 	pushw 0x7f
@@ -480,7 +480,7 @@ FDemoText_CheckAndSetTimer:
 	ld a, (xsp + 4)
 	extz wa
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr nz, FDemoText_CheckTimer_Done
 	cp (xiz), 0x0
 	jr nz, FDemoText_CheckTimer_Done
@@ -518,7 +518,7 @@ FDemoText_ParseControlMessage:
 	extz bc
 	cp e, 0x82
 	jr z, FDemoText_ParseCtrl_Type82
-	cps e, 2
+	cp e, 2:i3
 	jr nz, FDemoText_ParseCtrl_SecondHalf
 	lds wa, 6
 	call DemoMenu_BuildItemWorkspace
@@ -558,7 +558,7 @@ FDemoText_ParseCtrl_SecondHalf:
 	ld c, (xwa + 2)
 	cp c, 0x82
 	jr z, FDemoText_ParseCtrl_FormatC3
-	cps c, 2
+	cp c, 2:i3
 	ret nz
 	ld c, (xwa + 7)
 	and c, 0xf
@@ -970,7 +970,7 @@ FDemoText_ScanMIDIChannels:
 	call sendCOMM
 	ldw (xsp + 6), 0x0
 	call SeqBuf_NoteEvent_CheckSongEnd
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, FDemoText_ScanMIDI_ReadResponse
 
 FDemoText_ScanMIDI_WaitLoop:
@@ -978,7 +978,7 @@ FDemoText_ScanMIDI_WaitLoop:
 	cpw (xsp + 6), 0x2710
 	jr ugt, FDemoText_ScanMIDI_ReadResponse
 	call SeqBuf_NoteEvent_CheckSongEnd
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FDemoText_ScanMIDI_WaitLoop
 
 FDemoText_ScanMIDI_ReadResponse:
@@ -1008,10 +1008,10 @@ FDemoText_ScanMIDI_StoreResponseByte:
 	inc 1, iz
 
 FDemoText_ScanMIDI_ByteLoop:
-	cps iz, 6
+	cp iz, 6:i3
 	jr nc, FDemoText_ScanMIDI_CheckStatus
 	call Seq_RingBuf_ReadSmall
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, FDemoText_ScanMIDI_StoreResponseByte
 
 FDemoText_ScanMIDI_CheckStatus:
@@ -1038,7 +1038,7 @@ FDemoText_ScanMIDI_ExtendLoop:
 	cp iz, wa
 	jr nc, FDemoText_ScanMIDI_ValidateResponse
 	call Seq_RingBuf_ReadSmall
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, FDemoText_ScanMIDI_ExtendResponse
 
 FDemoText_ScanMIDI_ValidateResponse:
@@ -1069,7 +1069,7 @@ FDemoText_ScanMIDI_NoMatch:
 
 FDemoText_ScanMIDI_ReadNextFrame:
 	call Seq_RingBuf_ReadSmall
-	cps hl, 0
+	cp hl, 0:i3
 	jrl ge, FDemoText_ScanMIDI_ReadBytes
 
 FDemoText_ScanMIDI_CheckTimeout:
@@ -1128,7 +1128,7 @@ FDemoText_Rescan_Loop:
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	ldb_erp C, 0xfa
 	calr FDemoText_CheckVoiceState
-	cps l, 1
+	cp l, 1:i3
 	jr z, FDemoText_Rescan_SetFlag
 	stb_erp A, 0xfa
 	cpl a
@@ -1274,7 +1274,7 @@ FDemoText_ByteData_DisplayRefresh:
 	sll	xwa, 0
 	add	xwa, xbc
 	call	CheckViewObject
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	z, 42
 	ld	xbc, xiz
 	.byte 0xaf, 0x04
@@ -1286,7 +1286,7 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xwa
 	call	Strcmp
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 14
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
@@ -1322,12 +1322,12 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	nz, 17
 	lds	iz, 1
 	call	FileIO_ReadByte
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 28
 	cpw	(xsp+2), 0
 	jr	z, 8
 	call	FileIO_ReadByte
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, -31
 	cpw	(xsp+2), 0
 	jr	z, 35
@@ -1350,7 +1350,7 @@ FDemoText_ByteData_DisplayRefresh:
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
 	call	FileIO_ReadByte
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 14
 	cpw	(xsp+2), 1
 	jrl	z, 146
@@ -1378,7 +1378,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	nz, -75
 	lds	iz, 1
 	call	FileIO_ReadByte
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	ge, 9
 	cpw	(xsp+2), 1
 	jr	z, -84
@@ -1455,7 +1455,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	push xwa
 	call String_Compare
 	add xsp, 0xe
-	cps hl, 0
+	cp hl, 0:i3
 	jrl nz, FDemoText_ProcessMarkup_NextTag
 	ld bc, (xsp + 16)
 	sla bc, 3
@@ -1474,7 +1474,7 @@ FDemoText_ProcessMarkup_ScanTagEnd:
 
 FDemoText_ProcessMarkup_ScanLoop:
 	ld a, (xbc)
-	cps a, 0
+	cp a, 0:i3
 	jr z, FDemoText_ProcessMarkup_AllocCopy
 	cp a, 0x3e
 	jr nz, FDemoText_ProcessMarkup_ScanTagEnd
@@ -1770,9 +1770,9 @@ FDemoText_ByteData_TextRenderer:
 	retd	4
 
 FDemoText_TextDispatch:
-	cps bc, 1
+	cp bc, 1:i3
 	jr z, FDemoText_TextDispatch_Return
-	cps bc, 0
+	cp bc, 0:i3
 	call z, (FDemoText_RenderTextLine:24)
 
 FDemoText_TextDispatch_Return:
@@ -1813,15 +1813,15 @@ FDemoText_ByteData_LayoutEngine:
 	push xbc
 	call	Strcmp
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 49
 	ld wa, qiz
 	lda	xbc, (xsp+86)
 	cp qiz, 2
 	jr z, 27
-	cps wa, 1
+	cp wa, 1:i3
 	jr z, 16
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	nz, 30
 	push	xbc
 	call	ParseInt16
@@ -1956,13 +1956,13 @@ FDemoText_ByteData_LayoutEngine:
 	push	xwa
 	call	Strcmp
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 76
 	ld	bc, qiz
 	lda	xwa, (xsp+6)
 	cp qiz, 1
 	jr z, 15
-	cps bc, 0
+	cp bc, 0:i3
 	jr	nz, 61
 	push	xwa
 	call	ParseInt16
@@ -2029,7 +2029,7 @@ FDemoText_ByteData_LayoutEngine:
 	call	SendEvent
 	call	DrawWall
 	jr	30
-	cps	iz, 0
+	cp	iz, 0:i3
 	jr	lt, 26
 	cp	iz, 127
 	jr	gt, 20
@@ -2042,25 +2042,25 @@ FDemoText_ByteData_LayoutEngine:
 	pop xiz
 	lda xsp, (xsp+142)
 	ret
-	cps	de, 1
+	cp	de, 1:i3
 	jr	z, 5
-	cps	de, 0
+	cp	de, 0:i3
 	scc16	z, hl
 	ret
 	lds	hl, 0
 	ret
-	cps	de, 1
+	cp	de, 1:i3
 	jr	z, 7
-	cps	de, 0
+	cp	de, 0:i3
 	.byte 0xf2
 	divs8rr	h, b
 	swi	0
 	.byte 0xe6
 	lds	hl, 0
 	ret
-	cps	de, 1
+	cp	de, 1:i3
 	jr	z, 36
-	cps	de, 0
+	cp	de, 0:i3
 	jr	nz, 32
 	calr	1161
 	ld	wa, (0x025b72:24)
@@ -2074,15 +2074,15 @@ FDemoText_ByteData_LayoutEngine:
 	nop
 	lds	hl, 0
 	ret
-	cps	de, 1
+	cp	de, 1:i3
 	jr	z, 46
-	cps	de, 0
+	cp	de, 0:i3
 	jr	nz, 42
 	calr	1118
 	ld	wa, (0x025b72:24)
 	dec	1, wa
 	ld	(0x025b72:24), wa
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	ge, 7
 	ldw	(0x025b72:24), 0
 	lda	xbc, (0x025b74:24)
@@ -2138,18 +2138,18 @@ FDemoText_ByteData_LayoutEngine:
 	push	xwa
 	call	Strcmp
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 70
 	ld	bc, qiz
 	lda	xwa, (xsp+10)
 	cp qiz, 1
 	jr z, 39
-	cps bc, 0
+	cp bc, 0:i3
 	jr nz, 55
 	push	xwa
 	call	ParseInt16
 	inc	4, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 44
 	cp	hl, 9
 	jr	gt, 38
@@ -2165,7 +2165,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xwa
 	call	ParseInt16
 	inc	4, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	lt, 9
 	cp	hl, 255
 	jr	gt, 3
@@ -2218,15 +2218,15 @@ FDemoText_ByteData_LayoutEngine:
 	pop	xiz
 	lda xsp, (xsp+146)
 	ret
-	cps	de, 1
+	cp	de, 1:i3
 	jr	z, 79
-	cps	de, 0
+	cp	de, 0:i3
 	jr	nz, 75
 	ld	wa, (0x025b3e:24)
 	dec	1, wa
 	ld	(0x025b3e:24), wa
 	decw	1, (0x025b60:24)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	ge, 14
 	ldw	(0x025b3e:24), 0
 	ldw	(0x025b60:24), 0
@@ -2297,17 +2297,17 @@ FDemoText_ByteData_LayoutEngine:
 	push	xbc
 	call	Strcmp
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 47
 	ld wa, qiz
 	cpw qiz, 8
 	jr	gt, 37
-	cps	wa, 2
+	cp	wa, 2:i3
 	jr	ge, 33
 	lda	xbc, (xsp+136)
-	cps	wa, 0
+	cp	wa, 0:i3
 	jr	z, 6
-	cps	wa, 1
+	cp	wa, 1:i3
 	jr	z, 9
 	jr	18
 	push	xbc
@@ -2348,7 +2348,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xf2
 	swi	5
 	jr	-8
-	cps	xiz, 3
+	cp	xiz, 3:i3
 	cp	xhl, (xwa+94)
 	swi	5
 	rcf
@@ -2381,7 +2381,7 @@ FDemoText_ByteData_LayoutEngine:
 	push xbc
 	call	Strcmp
 	inc	8, xsp
-	cps	hl, 0
+	cp	hl, 0:i3
 	jr	nz, 19
 	cp qiz, 0
 	jr nz, 14
@@ -2552,7 +2552,7 @@ FDemoText_UpdateCursorPosition:
 	lda xix, (0x0251da:24)
 	muls bc, 0x28
 	ld hl, bc
-	cps iz, 0
+	cp iz, 0:i3
 	jr le, FDemoText_FindCursor_LeftDone
 	ld bc, iz
 	ld de, hl
@@ -2564,7 +2564,7 @@ FDemoText_FindCursor_SearchLeft:
 	cpib_sri 0x07, 0xf0, 0xe8, 0x54
 	jr nz, FDemoText_FindCursor_LeftDone
 	ld iy, iz
-	cps iz, 0
+	cp iz, 0:i3
 	jr gt, FDemoText_FindCursor_SearchLeft
 
 FDemoText_FindCursor_LeftDone:
@@ -2678,7 +2678,7 @@ FDemoText_Layout_Setup:
 	ld (xsp + 10), xwa
 	lds32 xwa, 1
 	sub (xsp + 10), xwa
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, FDemoText_Layout_ProcessLine
 	ld xwa, (xsp + 10)
 	ld (xwa), 0x0
@@ -2695,17 +2695,17 @@ FDemoText_Layout_ProcessLine:
 	ld xwa, (xsp + 6)
 	call CalcTotalWidth
 	ld (xsp + 8), hl
-	cps iz, 0
+	cp iz, 0:i3
 	jr z, FDemoText_Layout_UpdatePosition
 	lda xbc, (0x025b74:24)
 	ld wa, (0x025b72:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	lda xbc, (xsp + 20)
-	cps a, 2
+	cp a, 2:i3
 	jr z, FDemoText_Layout_AlignRight
-	cps a, 1
+	cp a, 1:i3
 	jr z, FDemoText_Layout_DrawText
-	cps a, 0
+	cp a, 0:i3
 	jr nz, FDemoText_Layout_DrawText
 	ld de, (xsp + 4)
 	exts xde
@@ -2747,7 +2747,7 @@ FDemoText_Layout_UpdatePosition:
 	cpw (xsp + 14), 0x0
 	jr z, FDemoText_Layout_FreeBuffer
 	calr FDemoText_UpdateCursorPosition
-	cps hl, 0
+	cp hl, 0:i3
 	jr z, FDemoText_Layout_FreeBuffer
 	ld xwa, (xsp + 10)
 	inc 1, xwa
@@ -2820,11 +2820,11 @@ FDemoText_ByteData_LayoutB:
 	ld	wa, (0x025b72:24)
 	ld_rrb a, xbc, wa
 	lda xbc, (xsp+8)
-	cps a, 2
+	cp a, 2:i3
 	jr z, 31
-	cps	a, 1
+	cp	a, 1:i3
 	jr	z, 36
-	cps	a, 0
+	cp	a, 0:i3
 	jr	nz, 32
 	exts	xhl
 	divs	hl, 2
@@ -2986,14 +2986,14 @@ Seq_LoadDisplayResource:
 	ldirw					; block copy
 	call GetDiskSizeInfo				; get display state
 	extz hl					; zero-extend result
-	cps hl, 1				; state == 1?
+	cp hl, 1:i3				; state == 1?
 	jr z, Seq_LoadResource_SpecialCase			; special case
-	cps hl, 5				; state == 5?
+	cp hl, 5:i3				; state == 5?
 	jr z, Seq_LoadResource_Error			; error
-	cps hl, 0				; state == 0?
+	cp hl, 0:i3				; state == 0?
 	jr z, Seq_LoadResource_Error			; error
 	call GetEncodedFileSizeData				; validate resource
-	cps hl, 0
+	cp hl, 0:i3
 	jr ge, Seq_LoadResource_Proceed			; valid, proceed
 	jr Seq_Epilogue32				; error, cleanup
 Seq_LoadResource_Error:
@@ -3016,7 +3016,7 @@ Seq_LoadResource_Proceed:
 	lda xwa, (xsp + 4)			; reload buffer
 	ld xbc, 0x00ea004e			; resource descriptor
 	call FileIO_OpenWithMode				; open display resource
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, Seq_Epilogue32			; failed
 	pushw 0x00ea
 	pushw 0x0018
@@ -3059,7 +3059,7 @@ Seq_FillBufferLoop:
 	lda xwa, (xsp + 4)
 	ld xbc, 0x00ea006c			; resource descriptor
 	call FileIO_OpenWithMode				; open display resource
-	cps hl, 0
+	cp hl, 0:i3
 	jr lt, Seq_NamedResource_Epilogue			; failed
 	lds32	xwa, 0
 	lds	bc, 2
@@ -3077,7 +3077,7 @@ Seq_FillBufferLoop:
 	ld xde, 0x00ea0052			; destination descriptor
 	calr	61108
 	call FileIO_CloseHandle			; finalize
-	cps hl, 0
+	cp hl, 0:i3
 	jr nz, Seq_NamedResource_Epilogue			; finalize failed
 	calr Seq_PostProcessDisplay			; post-processing
 	lds	wa, 1

@@ -56,7 +56,7 @@ SetWall_InlineCodeBlock:
 	call	CDlikeSwTtl_DispatchData_0x6
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 2
 	dec	1, a
 	ld	(3295:16), a
@@ -245,7 +245,7 @@ SetWall_CompareAndSwap:
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
 	and a, c
-	cps a, 0
+	cp a, 0:i3
 	jr z, SetWall_CopySlotData
 	jr SetWall_IncompatibleSlot
 
@@ -628,7 +628,7 @@ SetWall_InlineCodeBlock2:
 	ld_rrb a, xde, iy
 	pop xde
 	and	a, c
-	cps	a, 0
+	cp	a, 0:i3
 	jr	z, 2
 	jr	4
 	jp	SetWall_InlineCodeBlock2_0x5E
@@ -864,14 +864,14 @@ SetWall_ParseStream_TypeC0:
 	ldto_lerp XIZ, 0x38
 	ld (4349:16), xiz
 	pop xiz
-	cps l, 0
+	cp l, 0:i3
 	jrl nz, SetWall_ParseStream_Advance
 
 SetWall_ParseStream_TypeC0_Loop:
 	xor c, c
 
 SetWall_ParseStream_C0_Iter:
-	cps c, 2
+	cp c, 2:i3
 	jr nz, SetWall_ParseStream_C0_Read
 	ld a, (0x287c:16)
 
@@ -947,7 +947,7 @@ SetWall_ParseStream_B0_Iter:
 	xor c, c
 
 SetWall_ParseStream_B0_ByteLoop:
-	cps c, 0
+	cp c, 0:i3
 	jr nz, SetWall_ParseStream_B0_Byte1
 	bit 0, (3389:16)
 	jr z, SetWall_ParseStream_B0_Write
@@ -955,7 +955,7 @@ SetWall_ParseStream_B0_ByteLoop:
 	jr SetWall_ParseStream_B0_Write
 
 SetWall_ParseStream_B0_Byte1:
-	cps c, 2
+	cp c, 2:i3
 	jr nz, SetWall_ParseStream_B0_Byte3
 	cp (4340:16), 181
 	jr z, SetWall_ParseStream_B0_Write
@@ -966,7 +966,7 @@ SetWall_ParseStream_B0_Byte1:
 	ld a, (0x287c:16)
 
 SetWall_ParseStream_B0_Byte3:
-	cps c, 3
+	cp c, 3:i3
 	jr nz, SetWall_ParseStream_B0_Byte4
 	bit 1, (4393:16)
 	jr nz, SetWall_ParseStream_B0_Write
@@ -974,7 +974,7 @@ SetWall_ParseStream_B0_Byte3:
 	jr SetWall_ParseStream_B0_Write
 
 SetWall_ParseStream_B0_Byte4:
-	cps c, 4
+	cp c, 4:i3
 	jr nz, SetWall_ParseStream_B0_Write
 	cp (3387:16), 255
 	jr z, SetWall_ParseStream_B0_Write
@@ -1103,7 +1103,7 @@ SetWall_SkipC0Scanner:
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
 	xor l, l
-	cps a, 0
+	cp a, 0:i3
 	jr ule, SetWall_SkipC0_Return
 	ldb l, 0x1
 
@@ -1145,11 +1145,11 @@ SetWall_ParseB0ControlChange:
 	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
-	cps a, 3
+	cp a, 3:i3
 	jr c, SetWall_B0CC_ClearFlags
 	cp a, 0xb
 	jr ugt, SetWall_B0CC_ClearFlags
-	cps a, 6
+	cp a, 6:i3
 	jr z, SetWall_B0CC_ClearFlags
 	ldb_erp A, 0x3c
 	ld a, (0x2879:16)
@@ -1179,7 +1179,7 @@ SetWall_B0CC_Type48:
 	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
-	cps a, 5
+	cp a, 5:i3
 	jr nz, SetWall_B0CC_Type48_Check12
 	and (0x289d:16), 254
 	call SetWall_AdvanceStreamPos
@@ -1213,7 +1213,7 @@ SetWall_B0CC_Type48_Check12:
 	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	pop xde
-	cps a, 3
+	cp a, 3:i3
 	jrl nz, SetWall_B0CC_ClearFlags
 	jrl SetWall_B0CC_BankSelect
 
@@ -2110,7 +2110,7 @@ SetWall_SyncToneGenToDRAM:
 	ld wa, (0xf19e:16)
 	ld (0x00ffec:24), wa
 	and (0x28a5:16), 254
-	cps wa, 0
+	cp wa, 0:i3
 	jr z, SetWall_Sync_CheckPanelBit
 	or (0x28a5:16), 1
 

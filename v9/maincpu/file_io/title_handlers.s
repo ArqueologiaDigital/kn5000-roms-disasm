@@ -107,11 +107,11 @@ FmmUtilityTitleFunc:
 
 FmmUtility_DispatchState:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl z, FmmUtility_HandleSuccess
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, FmmUtility_HandleError
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, FmmUtility_HandleCancel
 	cpw (0x8502:16), 0
 	jr ge, FmmUtility_ScanFormat
@@ -239,11 +239,11 @@ FmmSmfUtilityTitleFunc:
 
 FmmSmfUtility_DispatchState:
 	ld wa, (0x8500:16)
-	cps wa, 1
+	cp wa, 1:i3
 	jrl z, FmmSmfUtility_HandleSuccess
-	cps wa, 0
+	cp wa, 0:i3
 	jrl z, FmmSmfUtility_HandleError
-	cps wa, 5
+	cp wa, 5:i3
 	jr z, FmmSmfUtility_HandleCancel
 	cpw (0x8504:16), 0
 	jr ge, FmmSmfUtility_ScanFormat

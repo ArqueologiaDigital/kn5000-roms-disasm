@@ -1933,7 +1933,7 @@ RVari_OK_TypeE_DispatchInput:
 	extz wa
 	lds bc, 0
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input88_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -1968,7 +1968,7 @@ RVari_OK_TypeE_Input89:
 	extz wa
 	lds bc, 1
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input89_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2003,7 +2003,7 @@ RVari_OK_TypeE_Input8A:
 	extz wa
 	lds bc, 2
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8A_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2038,7 +2038,7 @@ RVari_OK_TypeE_Input8B:
 	extz wa
 	lds bc, 3
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8B_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2073,7 +2073,7 @@ RVari_OK_TypeE_Input8C:
 	extz wa
 	lds bc, 4
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8C_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2108,7 +2108,7 @@ RVari_OK_TypeE_Input8:
 	extz wa
 	lds bc, 0
 	calr VariScreen_CalcValidNoteRow
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input8_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2150,7 +2150,7 @@ RVari_OK_TypeE_Input9:
 	extz wa
 	lds bc, 1
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_Input9_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2192,7 +2192,7 @@ RVari_OK_TypeE_InputA:
 	extz wa
 	lds bc, 2
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_InputA_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2234,7 +2234,7 @@ RVari_OK_TypeE_InputB:
 	extz wa
 	lds bc, 3
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_InputB_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2276,7 +2276,7 @@ RVari_OK_TypeE_InputC:
 	extz wa
 	lds bc, 4
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeE_InputC_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2340,7 +2340,7 @@ RVari_OK_TypeNE_DispatchInput:
 	extz wa
 	lds bc, 0
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input88_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2369,7 +2369,7 @@ RVari_OK_TypeNE_Input89:
 	extz wa
 	lds bc, 1
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input89_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2398,7 +2398,7 @@ RVari_OK_TypeNE_Input8A:
 	extz wa
 	lds bc, 2
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8A_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2427,7 +2427,7 @@ RVari_OK_TypeNE_Input8B:
 	extz wa
 	lds bc, 3
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8B_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2456,7 +2456,7 @@ RVari_OK_TypeNE_Input8C:
 	extz wa
 	lds bc, 4
 	calr VariScreen_IsHalfRangeAbove
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8C_Done
 	ld xde, (xiz + 64)
 	lda xbc, (xiz + 60)
@@ -2485,7 +2485,7 @@ RVari_OK_TypeNE_Input8:
 	extz wa
 	lds bc, 0
 	calr VariScreen_CalcValidNoteRow
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input8_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2519,7 +2519,7 @@ RVari_OK_TypeNE_Input9:
 	extz wa
 	lds bc, 1
 	calr VariScreen_CalcValidNoteRow
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_Input9_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2553,7 +2553,7 @@ RVari_OK_TypeNE_InputA:
 	extz wa
 	lds bc, 2
 	calr VariScreen_CalcValidNoteRow
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_InputA_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2587,7 +2587,7 @@ RVari_OK_TypeNE_InputB:
 	extz wa
 	lds bc, 3
 	calr VariScreen_CalcValidNoteRow
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_InputB_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
@@ -2621,7 +2621,7 @@ RVari_OK_TypeNE_InputC:
 	extz wa
 	lds bc, 4
 	calr VariScreen_CalcValidNoteRow
-	cps l, 0
+	cp l, 0:i3
 	jr z, RVari_OK_TypeNE_InputC_Done
 	ld xbc, (xiz + 64)
 	ld xwa, (xiz + 60)
