@@ -407,3 +407,25 @@ boot byte-identically to the pre-change baseline (only the flash ID differs, as 
      benefit, so they were deliberately left as `.rom()`. Do NOT 'finish' K1 on them.
   2. **K7's citation was wrong** — it pointed at census '§8', which is Sub-CPU P6.7, not the
      main P8.6. The claim holds; the code comment now cites `rom_bitop_census.py --all-bits P8`.
+
+## ✅ PLACEHOLDER SINE shipped 2026-09-05 (gap A stand-in, like the KN5000)
+
+While the six wave mask ROMs stay undumped, the WSA1R tone generator (IC4) now
+has a placeholder sine backend, the same stand-in the KN5000 uses
+(kn5000_tonegen.cpp RENDER_SINE): `kn7000_mame` `685c64a`, new
+`wsa1_tonegen_device` (a real MAME sound device on a stereo speaker). It renders
+one sine per gated voice, driven ONLY by the real 0x0010C000 writes the driver
+already decodes -- PITCH `chan+0x0400` (1/256 semitone) and the block-0 gate
+latch (0x8100/0x7E00) -- with a fixed per-voice level (0x0080's pin sense is not
+established) and click-free gate ramps. A `:TGSINE` toggle (default on) mutes it.
+
+Verified with `tools/rigs/wsa1_tg_sine_test.lua` + `-wavwrite`: gating an
+A-major triad through the port renders exactly 440/554/659 Hz and nothing else,
+and the no-gate null is silent from 2.0 s. It is drop-in replaceable by a real
+IC4 model behind the same two hooks once the ROMs are dumped.
+
+⚠ It is silent in normal use for a reason OUTSIDE this backend: no musical note
+reaches the TG yet (the CPU2->CPU1 link wedges; a brief boot-init transient
+aside, the firmware gates no musical voice on its own). Making a note reach the
+TG -- the link, or a MIDI-in path into prom_c's ring -- is the next step toward
+hearing it play without an injected gate.
