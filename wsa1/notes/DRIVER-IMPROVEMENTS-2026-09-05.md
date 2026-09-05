@@ -32,10 +32,11 @@ legends, prom_d base 0xF00000, CS1 RAM 0x7FFF, PEDALS port, PE.0 extension-prese
 PE.2/PE.5 comments, acoustic_modeling.h's 0x104000→IC3 promotion, and more).
 
 **What remains is genuine residue, and it is short.** The KN5000 driver carries two
-findings that materially affect emulation; the WSA1R driver carries almost none that are
-not blocked on undumped mask ROMs or on Felipe's hardware. That is the honest result of
-a mature codebase, and it is stated first so the list below is read as a small, sharp
-set rather than a long one.
+findings that materially affect emulation; the WSA1R driver carries one firmware-answerable
+item with a behavioural stake (W1, the voice-pool busy bit) and otherwise little that is
+not blocked on undumped mask ROMs or on Felipe's hardware. That is the honest result of a
+mature codebase, and it is stated first so the list below is read as a small, sharp set
+rather than a long one.
 
 Grades: **PROVEN** (firmware/schematic settles it *and* it changes what the emulator
 does) / **STRONG** (well-evidenced, lower or latent impact) / **WEAK** (certain but
@@ -175,7 +176,33 @@ is an accurate statement of what is left, and every item there is either blocked
 undumped mask ROMs or is a deliberate refusal. The findings below are what a fresh pass
 adds or sharpens.
 
-## W1 — STRONG (low urgency; already in the driver's TODO) — the three µPD6383GF DSPs have no device, and their upload goes nowhere
+## W1 — STRONG — decode `0xFA62DA` and `0xFA643F` so the tone-generator busy bit can fall (voice-pool exhaustion risk)
+
+* **Firmware / driver.** `tg_status_r()` (`wsa1.cpp:2199`) answers the per-channel
+  magnitude query with a hard-coded `0x1000` and self-labels it (`:2175`) "THE ONE FAKE
+  IN THIS HANDLER". The deeper problem is stated at `:2202-2213`: **the tone-generator
+  busy bit never falls by itself.** It clears only when the firmware writes `0x7E00`
+  (via `Dev10C_ChanReset`), and that is called ONLY from the retire path, which is itself
+  driven by the bit falling — a loop real hardware breaks because the chip decides when a
+  voice ends. `ChanRec_Release` has two call sites (`0xFA6892` all-64-at-boot, `0xFA6989`
+  the poll), so **between one `VoiceSubsystem_Init` and the next, no channel record
+  returns to the pool.**
+* **The disassembly gap.** Whether the allocator then STEALS a voice or REFUSES is **NOT
+  established** — the driver comment names `0xFA62DA` and `0xFA643F` as **undecoded**, and
+  "both are exactly the routines that could re-link a record". These are firmware
+  addresses in prom_c; decoding them is a firmware-only job (no hardware needed).
+* **What breaks / what to settle.** If the allocator REFUSES when the pool is empty, the
+  emulated WSA1R would stop sounding new notes after 64 note-ons until the next re-init —
+  a real, observable polyphony bug hiding behind the fake. If it STEALS, the current model
+  is benign. **Decode the two routines to find out which**; that decides whether
+  `tg_status_r` needs a real retire model or the fake is harmless. This is the strongest
+  WSA1R item because it is firmware-answerable and has a concrete behavioural stake — full
+  closure (a true magnitude) still needs synthesis (gap A, blocked on the undumped mask
+  ROMs), but the steal-vs-refuse question does not.
+* Source: `wsa1.cpp:2170-2213` (the driver's own reading); `notes/FINDINGS-prom_c-voice-
+  readback.md`, `FINDINGS-prom_c-dev10c-producers.md`.
+
+## W2 — STRONG (low urgency; already in the driver's TODO) — the three µPD6383GF DSPs have no device, and their upload goes nowhere
 
 * **Firmware.** CPU 2 uploads a fully-specified byte stream to three DSP destinations
   over P7 (data) + P5/P2/PB (strobes), polling P9.3 for READY at 18 sites
@@ -196,7 +223,7 @@ adds or sharpens.
 * ⚠ Do NOT fold in IC310 (the KN5000's second DSP, an MN19413): different chip, transport,
   word widths.
 
-## W2 — WEAK / needs re-measurement — the link "receiver-busy" keybed→tonegen path (old gap C)
+## W3 — WEAK / needs re-measurement — the link "receiver-busy" keybed→tonegen path (old gap C)
 
 * **Status.** `WSA1-EMULATION-DISASM-GAPS.md` gap C reported (PRIORITY 1) that CPU 1
   stops releasing the link's receiver-busy line after CPU 2's first packet, dropping the
@@ -211,7 +238,20 @@ adds or sharpens.
   not because a defect is confirmed — it may already be resolved by the timer fix. Grade
   WEAK precisely because the only measurement on file is now invalid.
 
-## W3 — NEEDS-HARDWARE — the L7A1429 (IC3) register meanings
+## W4 — WEAK — keybed status word value 2 is never produced, and its meaning is undecoded
+
+* **Firmware.** `KeyScan_ReadEvent` compares the keybed status word against **2** at
+  `prom_c 0xF9979A` and treats it like a touch byte of `0xFF` (note-on dropped,
+  `(0x008517) |= 3`; note-off velocity forced to 0). `0x008517` has exactly one literal
+  reference in the image (the `or` that sets it), so its reader is through a pointer.
+* **Driver today.** `keybed_status_r()` returns only 0/1 (`wsa1.cpp:2276`); the comment
+  `:2235` states "what value 2 MEANS is NOT ESTABLISHED, so this model never produces it".
+* **What breaks.** Nothing today — but if 2 is "queue overflow"/"scan error", a real
+  machine reaches a path the emulator never can. Disassembly-answerable (find the reader of
+  `0x008517`); listed WEAK because the current model is safe. See
+  `notes/FINDINGS-prom_c-keyboard-and-touch.md` §3.
+
+## W5 — NEEDS-HARDWARE — the L7A1429 (IC3) register meanings
 
 * IC3 = L7A1429 is now schematic-settled (IC27 `1Y1 = WFICS` → IC3 `NSGCE`; the driver's
   `acoustic_modeling.h` already cites it and feeds IC4). The 64-channel × 19-block
@@ -288,14 +328,17 @@ to the KN7000 investigation, not this driver).
 | machine | PROVEN | STRONG | WEAK | NEEDS-HARDWARE |
 |---|---:|---:|---:|---:|
 | KN5000 | 2 (K1, K2) | 0 | 5 (K3-K7) | 3 (PD.6, MICSNS, sub-SC1) |
-| SX-WSA1R | 0 | 1 (W1) | 1 (W2) | ~5 (W3 + panel SC1 / keybed-status-2 / P8.2 / 0xD7 / P9.3-timing) |
+| SX-WSA1R | 0 | 2 (W1, W2) | 2 (W3, W4) | ~4 (W5 + panel SC1 / P8.2 / 0xD7 / P9.3-timing) |
 
-Only two proposals materially change what the emulator does today, both KN5000: **K1**
-(flash) and **K2** (`0x150000`). The next-strongest is **W1** (a WSA1R DSP transport
-device), which is well-evidenced but low-urgency because the boot stall it once fixed is
-already gone. No WSA1R read handler returns an undocumented divergent constant — the
-three return-constant sites (`wsa1.cpp:1049`, `:2215`, `:2290`) are all deliberate and
-documented.
+The proposals that could most change what the emulator does today: **K1** (KN5000 flash,
+firmware-update path), **K2** (KN5000 `0x150000`, a real device mapped nowhere), and
+**W1** (WSA1R — decode two named routines to learn whether the voice pool exhausts,
+because the tone-generator busy bit never falls in the model). **W1 is the one WSA1R item
+that is both firmware-answerable and carries a behavioural stake**; the DSP transport
+device (W2) is well-evidenced but low-urgency because the boot stall it once fixed is
+already gone. No WSA1R read handler returns an *undocumented* divergent constant — the
+three return-constant sites (`wsa1.cpp:1049`, `:2199`, `:2215`) are each labelled and
+justified in the code (the `0x1000` at `:2199` is W1's "one fake").
 
 ## Reproducibility / provenance
 
