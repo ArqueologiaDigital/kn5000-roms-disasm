@@ -53,13 +53,57 @@ def _rw_ldda32(m):
 # shown able to report mismatches at all.  incm's foil is `inc` (the 8-bit
 # memory form, 0x8F prefix instead of 0x9F); ldda32's is the 24-bit address
 # width `:24` instead of `:16`.
+def _sel_rw(base, sel):
+    """`<mn> <dst>, <imm>` -> `<base> <dst>, <imm><sel>`: append an encoding
+    selector to the immediate (cps/lds/lds32/ldb sites are all `<reg>, 0..7`)."""
+    def rw(m):
+        return (m.group('head') + base + m.group('sep') + m.group('dst') + ','
+                + m.group('mid') + m.group('imm') + sel + m.group('rest'))
+    return rw
+
+
+def _io_rw(base):
+    """Reshape the io family: `<mn> <addr>, <val>` -> `<base> (<addr>:8), <val>:io`."""
+    def rw(m):
+        return (m.group('head') + base + m.group('sep') + '(' + m.group('addr')
+                + ':8),' + m.group('mid') + m.group('val') + ':io'
+                + m.group('rest'))
+    return rw
+
+
+def _sel_re(mn):
+    return re.compile(r'^(?P<head>\s*)' + mn + r'(?P<sep>[ \t]+)'
+                      r'(?P<dst>[^,;]+),(?P<mid>[ \t]*)(?P<imm>[^\s;]+)(?P<rest>.*)$')
+
+
+def _io_re(mn):
+    return re.compile(r'^(?P<head>\s*)' + mn + r'(?P<sep>[ \t]+)'
+                      r'(?P<addr>[^,;]+),(?P<mid>[ \t]*)(?P<val>[^\s;]+)(?P<rest>.*)$')
+
+
 FOILS = {
     'incm': ('incw', 'inc'),
     'ldda32': (':16)', ':24)'),
+    # Dropping the selector yields the long/untagged form: different bytes, a
+    # clean byte-difference null (verified: none become a rejection).
+    'cps': (':i3', ''),
+    'lds': (':i3', ''),
+    'lds32': (':i3', ''),
+    'ldb': (':opc', ''),
+    'ldio': (':io', ''),
+    'ldwio': (':io', ''),
 }
 
 FAMILIES = {
     'incm': (re.compile(r'^(?P<head>\s*)incm(?P<tail>[ \t].*)$'), _rw_incm),
+    # Encoding-selector families (SPEC-encoding-selectors-2026-09-04.md step 9);
+    # selector per family VERIFIED against the assembler, not assumed.
+    'cps':   (_sel_re('cps'),   _sel_rw('cp', ':i3')),
+    'lds':   (_sel_re('lds'),   _sel_rw('ld', ':i3')),
+    'lds32': (_sel_re('lds32'), _sel_rw('ld', ':i3')),
+    'ldb':   (_sel_re('ldb'),   _sel_rw('ld', ':opc')),
+    'ldio':  (_io_re('ldio'),   _io_rw('ld')),
+    'ldwio': (_io_re('ldwio'),  _io_rw('ldw')),
     'ldda32': (re.compile(
         r'^(?P<head>\s*)ldda32(?P<sep>[ \t]+)(?P<reg>[a-z]+)\s*,\s*'
         r'\(?\s*(?P<addr>0x[0-9a-fA-F]+|\d+)\s*\)?(?P<rest>.*)$'), _rw_ldda32),
@@ -69,11 +113,15 @@ INSN = re.compile(r'^(?P<head>\s*)(?P<mn>[a-z][a-z0-9_]*)(?P<tail>[ \t].*)?$')
 
 
 def sources():
-    for r in ROOTS:
-        for dp, _dn, fn in os.walk(r):
-            for f in sorted(fn):
-                if f.endswith('.s'):
-                    yield os.path.join(dp, f)
+    # Git-tracked assembler files only, so the population matches the census in
+    # encoding_selector_exposure.py exactly (git ls-files, same globs) and no
+    # scratch/generated file is ever rewritten -- e.g. the untracked image dump
+    # wsa1/notes/.image-*.s, which os.walk would otherwise sweep in.
+    out = subprocess.run(['git', 'ls-files', '-z', '*.s', '*.inc', '*.asm'],
+                         capture_output=True, text=True, check=True).stdout
+    for path in out.split('\0'):
+        if path:
+            yield path
 
 
 def collect(family, foil=False):
@@ -122,19 +170,38 @@ def mc_encode(mc, lines):
 
 
 def verify(mc, sites):
-    """Assemble old and new spelling of every site; return list of mismatches."""
+    """Assemble old and new spelling of every site; return list of mismatches.
+
+    A site whose operand is a macro parameter (`\\Param`) cannot be assembled
+    standalone -- it needs the macro-expansion context -- and is rejected
+    identically as the OLD and the NEW spelling, so the rewrite cannot have
+    changed it.  Such sites are dropped from the byte check here and their
+    equivalence is proven in context by gate-all after --apply.  A site that
+    assembles as one spelling but NOT the other is a real change: return
+    'ASYM' so the caller fails loudly."""
     olds = [l.split(';', 1)[0].rstrip() for _p, _n, l, _nw in sites]
     news = [nw.split(';', 1)[0].rstrip() for _p, _n, _l, nw in sites]
     eo, bad_o = mc_encode(mc, olds)
     en, bad_n = mc_encode(mc, news)
-    if eo is None or en is None:
-        return None, (bad_o, bad_n)
-    if len(eo) != len(sites) or len(en) != len(sites):
-        raise SystemExit('encoding count mismatch: %d old / %d new / %d sites'
-                         % (len(eo), len(en), len(sites)))
-    mism = [(sites[i][0], sites[i][1], olds[i], news[i], eo[i], en[i])
-            for i in range(len(sites)) if eo[i] != en[i]]
-    return mism, (eo, en)
+    if eo is not None and en is not None:
+        if len(eo) != len(sites) or len(en) != len(sites):
+            raise SystemExit('encoding count mismatch: %d old / %d new / %d sites'
+                             % (len(eo), len(en), len(sites)))
+        mism = [(sites[i][0], sites[i][1], olds[i], news[i], eo[i], en[i])
+                for i in range(len(sites)) if eo[i] != en[i]]
+        return mism, (eo, en)
+    # Rejected lines somewhere (bad_o / bad_n are 1-based indices into the batch).
+    so, sn = set(bad_o or []), set(bad_n or [])
+    if so != sn:
+        return 'ASYM', (sorted(so), sorted(sn), sorted(so ^ sn))
+    keep = [i for i in range(len(sites)) if (i + 1) not in so]
+    eo2, _bo = mc_encode(mc, [olds[i] for i in keep])
+    en2, _bn = mc_encode(mc, [news[i] for i in keep])
+    if eo2 is None or en2 is None:
+        return None, (_bo, _bn)
+    mism = [(sites[keep[j]][0], sites[keep[j]][1], olds[keep[j]], news[keep[j]],
+             eo2[j], en2[j]) for j in range(len(keep)) if eo2[j] != en2[j]]
+    return mism, ('deferred', sorted(so))
 
 
 def apply(sites):
@@ -317,10 +384,20 @@ def main():
     print('%s: %d sites in %d files' % (a.family, len(sites), files))
     if not sites:
         return
-    mism, extra = verify(mc, sites)
+    result, extra = verify(mc, sites)
+    if result == 'ASYM':
+        so, sn, asym = extra
+        print('ASYMMETRIC: %d site(s) assemble as one spelling but not the '
+              'other -- the rewrite changed assemblability; batch indices %r'
+              % (len(asym), asym[:20]))
+        raise SystemExit(2)
+    mism = result
     if mism is None:
         print('REFUSED: llvm-mc rejected lines; old %r new %r' % extra)
         raise SystemExit(2)
+    if isinstance(extra, tuple) and extra and extra[0] == 'deferred':
+        print('deferred to gate-all: %d macro-parameter site(s), un-assemblable '
+              'standalone and symmetric (old rejects == new rejects)' % len(extra[1]))
     print('mismatching sites: %d' % len(mism))
     for row in mism[:20]:
         print('  %s:%d\n    old %-40s %s\n    new %-40s %s' % row)
