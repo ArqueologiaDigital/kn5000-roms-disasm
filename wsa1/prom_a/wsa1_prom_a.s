@@ -175018,6 +175018,9 @@ sub_FF42C9:
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
 ; Paint_DiskMenu -- a screen painter this round REFUSED to name.
+; ^ SUPERSEDED: this auto-generated refusal line predates the naming of
+;   Paint_DiskMenu (0xFF42CD); it is NOT refused. See the ENTER-method
+;   header above and the Screen: line below for its real identity.
 ;
 ; It hands 3 display list(s) to the interpreter ON THE STACK.
 ;     site 0xFF42D7  list 0xF58014-0xF580B0 (156 B, leaves by call)
