@@ -176,3 +176,39 @@ run:**
 * Order (largest first): cps 19,261 -> lds 18,564 -> ldb 16,138 ->
   lds32 14,239 -> ldio 2,354 -> ldwio 1,111. gate-all + null after each.
   Then step 10: delete the nine aliases, re-run steps 4/5/6/8.
+
+## ✅ CONTINUED 2026-09-05 (Opus 4.8): STEP 9 COMPLETE, pin PROMOTED
+
+All six selector families converted, each per-site byte-verified, gate-all
+13/13 and comments +0 after every one. **71,667 sites, 0 residual synthetic
+names.** Commits on disasm main, in order:
+
+* `204d4274` tooling: size_family_convert.py taught the six families
+  (cps/lds/lds32 -> :i3, ldb -> :opc, ldio/ldwio -> :io reshape); sources() now
+  git-tracked-only; verify() defers macro-parameter operands to gate-all.
+* `e5d52803` **PIN PROMOTED** 86332721969d/850b013e -> 7a7a3fd6318b/35829d3c.
+  ⚠⚠ THE LLVM: COMMIT TRAILER IS NOW `tlcs900_backend@7a7a3fd6318b
+  (7a7a3fd6318b2ab085eccc234e4a86cd6a5d56de)` for ALL future disasm commits.
+  Snapshot llvm-mc.snap is now 35829d3c; old kept at
+  llvm-mc.snap.86332721969d-850b013e. Header updated in TOOLCHAIN_VERSION.
+* `7b4b49c1` cps 19,261  · `805e610f` lds 18,564 · `75002aa5` lds32 14,239 ·
+  `004e1a72` ldb 16,138 · `65cfb7b8` ldwio 1,111 · `f305c6c9` ldio 2,354.
+* `45b550bc` verify_ldio_symbolic.py + transcript: 65/80 symbolic io names
+  byte-verified standalone (null proven), 15 covered by gate-all.
+
+llvm-project `tlcs900_backend` tip is `cc2c09c7376e` (the foils commit, test-
+only) on top of the pinned `7a7a3fd6318b`; both build llvm-mc 35829d3c.
+
+**STEP 10 REMAINS — delete the nine legacy aliases, then re-run 4/5/6/8.**
+* The aliases are in llvm-project TLCS900InstrInfo.td (the nine
+  `def : InstAlias<"cps ...">` / lds / lds32 / lds8 / ldb / ldio / ldwio at
+  EmitPriority 0). Deleting them closes the untagged path into the short
+  encodings and kills the `&7` truncation. Only safe NOW because no source
+  spells the old mnemonics (verified: 0 residual).
+* Procedure: edit .td, `ninja -Cbuild llvm-mc`, rebuild the snapshot, gate-all
+  13/13, re-run encoding_selector_foils.py + tlcs900-ambiguity-foils.sh, and a
+  clean-checkout null run recording the new binary sha as UPDATE 16. It moves
+  the pin again (new binary), so the trailer changes once more.
+* Then re-run mnemonic_census.py / encoding_selector_exposure.py and report the
+  SYNTHETIC residue as a split (spec step 10 target: 147,842 -> ~76,175, and 7
+  distinct synthetic names retired). NOT DONE THIS SESSION.
