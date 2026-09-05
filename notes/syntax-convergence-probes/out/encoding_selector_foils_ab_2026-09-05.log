@@ -1,0 +1,58 @@
+tree 1dc30fea; llvm-project 7a7a3fd6318b; llvm-mc sha256 35829d3c7f573fae5f8a32918bedc00f8cb38c59273eb1f12442bed9394741f3
+FOIL a -- single_load.s:361 `cp	xwa, 5` -> `cp	xwa, 5:i3`
+  [foiled] kn: exit 1, 1 image(s) differ, 5s
+       kn5000_v7_program                      IDENTICAL
+       kn5000_v9_program                      IDENTICAL
+       kn5000_v10_program                     34985 BYTES DIFFER
+       kn5000_subprogram_v142                 IDENTICAL
+       kn5000_subprogram_v142_compressed      IDENTICAL
+       kn5000_table_data                      IDENTICAL
+       kn5000_subcpu_boot                     IDENTICAL
+       kn5000_custom_data                     IDENTICAL
+       hd-ae5000_v2_06i                       IDENTICAL
+     FAIL: 1 target(s) differ.
+  RED as required
+  [restored] kn: exit 0, 0 image(s) differ, 5s
+       kn5000_v7_program                      IDENTICAL
+       kn5000_v9_program                      IDENTICAL
+       kn5000_v10_program                     IDENTICAL
+       kn5000_subprogram_v142                 IDENTICAL
+       kn5000_subprogram_v142_compressed      IDENTICAL
+       kn5000_table_data                      IDENTICAL
+       kn5000_subcpu_boot                     IDENTICAL
+       kn5000_custom_data                     IDENTICAL
+       hd-ae5000_v2_06i                       IDENTICAL
+     PASS: every rebuilt ROM is byte-identical.
+  GREEN as required
+FOIL b -- the `cps` alias for CP8_small points at the LONG def CP8ri
+  llvm-project HEAD 7a7a3fd6318b; llvm-mc before: 35829d3c7f573fae
+  rebuilt with the foil in 8s: llvm-mc 653505744461f3e8
+  [foiled] kn: exit 2, 0 image(s) differ, 2s
+       BUILD FAILED -- the comparison below would be meaningless:
+     v10/maincpu/storage/fdc_routines.s:2187:7: error: invalid .org offset '1670541' (at offset '1672344')
+     make: *** [Makefile:711: rebuilt_ROMs/kn5000_v10_program.llvm.o] Error 1
+  [foiled] wsa: exit 2, 0 image(s) differ, 0s
+       BUILD FAILED -- the gate cannot pass on a tree that does not assemble.
+     ld.lld: error: section '.text' will not fit in region 'ROM': overflowed by 1486 bytes
+     make: *** [Makefile:80: rebuilt_ROMs/wsa1_prom_a.llvm.elf] Error 1
+  RED as required (0 KN5000 + 0 SX-WSA1R images differ)
+  restored and rebuilt in 4s: llvm-mc 35829d3c7f573fae (identical to before)
+  [restored] kn: exit 0, 0 image(s) differ, 22s
+       kn5000_v7_program                      IDENTICAL
+       kn5000_v9_program                      IDENTICAL
+       kn5000_v10_program                     IDENTICAL
+       kn5000_subprogram_v142                 IDENTICAL
+       kn5000_subprogram_v142_compressed      IDENTICAL
+       kn5000_table_data                      IDENTICAL
+       kn5000_subcpu_boot                     IDENTICAL
+       kn5000_custom_data                     IDENTICAL
+       hd-ae5000_v2_06i                       IDENTICAL
+     PASS: every rebuilt ROM is byte-identical.
+  [restored] wsa: exit 0, 0 image(s) differ, 1s
+       ok       wsa1_prom_a.ic12  (524,288 bytes)
+       ok       wsa1_prom_b.ic13  (524,288 bytes)
+       ok       wsa1_prom_c.ic28  (524,288 bytes)
+       ok       wsa1_prom_d.bin  (524,288 bytes)
+     PASS: every rebuilt ROM is byte-identical.
+  GREEN as required
+OK: every foil red, every restore green

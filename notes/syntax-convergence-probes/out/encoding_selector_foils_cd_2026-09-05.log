@@ -1,0 +1,12 @@
+FOIL c -- CP8_small loses its whole :i3 selector (asm tail + immi3_8 class)
+  ambiguous pairs: 2 (baseline 1); matchables: CP8ri CP8_small LINK LINK32r 
+  RED as required
+FOIL d -- a throwaway CP8_tiny joins the cp.r8.imm family with no selector
+  ambiguous pairs: 2 (baseline 1); matchables: CP8ri CP8_tiny LINK LINK32r 
+  RED as required
+CONTROL -- the untouched tree
+ambiguous pairs: 1 (baseline 1)
+matchables involved: LINK LINK32r (baseline: LINK LINK32r)
+OK: ambiguity report unchanged
+  GREEN as required
+OK: both foils red, control green

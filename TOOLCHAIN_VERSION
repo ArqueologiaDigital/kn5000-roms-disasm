@@ -688,3 +688,55 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # find_free_wins.py (candidate spellings it generates) and
 # l2_name_vs_return_value.py (parses SOURCE lines); mnemonic_census.py reads
 # source mnemonics and the backend's MnemonicTable, both unchanged.
+#
+# UPDATE 15, STEPS 4 & 8 (2026-09-05): the null run RE-CERTIFIED AT THE TIP,
+# and the four gate foils, closing the two items the 2026-09-04 handoff marked
+# NOT YET DONE.
+#
+# ★ STEP 4 -- THE NULL RUN, at the FINAL commit this time. The earlier null run
+#   (above) was at step 3's 6d3e9621 binary / commit 3a0635ee2c65; steps 5-7
+#   then moved the backend to 7a7a3fd6318b (binary 35829d3c7f57). Re-run from a
+#   CLEAN worktree at that tip: an incremental relink REPRODUCED the byte-for-
+#   byte same llvm-mc sha256 35829d3c7f57 (so the binary is deterministic here,
+#   the one hazard this file exists to name), and
+#       make LLVM_MC=<the 35829d3c binary> gate-all
+#   on the still-UNCONVERTED tree (all 71,667 sites spelled cps/lds/lds32/ldb/
+#   ldio/ldwio) is 9 KN5000 + 4 SX-WSA1R byte-identical, 8/8 assert_images_
+#   assemble.py, 8/8 + 4/4 assert_toolchain_is_a_prerequisite.py. Expected
+#   delta ZERO, confirmed a second time at the tip: the nine retyped defs plus
+#   nine aliases moved no byte, and an independent re-run agrees with steps 6-7.
+#
+# ★ STEP 8 -- FOUR FOILS, each made to fail before the green was trusted.
+#   Byte gate (notes/syntax-convergence-probes/encoding_selector_foils.py;
+#   transcript out/encoding_selector_foils_ab_2026-09-05.log):
+#     (a) v10 single_load.s:361 `cp xwa, 5` -> `cp xwa, 5:i3`: the short form
+#         drops 4 bytes, kn5000_v10_program goes RED (34,985 bytes differ as a
+#         later .org desyncs); git checkout restores, GREEN.
+#     (b) point the `cps` alias at the LONG def CP8ri and rebuild llvm-mc
+#         (653505744461): BOTH trees RED -- and, on these fixed-.org ROMs, as a
+#         build REFUSAL not a silent byte diff (v10 .org overflow; WSA1R .text
+#         overflows region ROM by 1,486 B), because the extra byte per cps site
+#         breaks the layout. Restore returns llvm-mc to 35829d3c and GREEN.
+#   TableGen ambiguity guard (llvm-project llvm/utils/tlcs900-ambiguity-
+#   foils.sh, committed there at cc2c09c7376e; scratch-copy only, real tree
+#   untouched; transcript out/encoding_selector_foils_cd_2026-09-05.log):
+#     (c) strip CP8_small's WHOLE :i3 selector -> 2 ambiguous pairs naming
+#         CP8_small / CP8ri.
+#     (d) a throwaway CP8_tiny joining the family with i8imm and no selector
+#         -> 2 pairs naming CP8_tiny / CP8ri.  Control: 1 pair (LINK/LINK32r).
+#
+#   ⚠ FINDING behind foil c: the :i3 selector is TWO parts, the FormI3.AsmTail
+#     spelling AND the immi3_8 operand class (ParserMatchClass ImmI3AsmOperand).
+#     Removing the AsmString tail ALONE leaves the report at one pair -- the
+#     operand class by itself still tells CP8_small from CP8ri. The original
+#     tail-only foil c was malformed (it stayed green, which would read as a
+#     guard defect); the guard is sound. The tail-removal-only case is instead
+#     the disassembler's concern (basic.txt / roundtrip.txt), not the asm
+#     matcher's. Foil c now strips both halves.
+#
+# STEPS 4 AND 8 ARE DONE. What remains of the spec: step 9 (convert the 71,667
+# sites to the selector spellings, six commits) and step 10 (delete the nine
+# legacy aliases). Step 9 REQUIRES promoting the header pin to 7a7a3fd6318b
+# first (a coordinator call): once a source writes `:i3`/`:opc`/`:io`, only the
+# new backend can assemble it, so the snapshot and the LLVM: trailer must move
+# in lockstep with the first converted commit.
