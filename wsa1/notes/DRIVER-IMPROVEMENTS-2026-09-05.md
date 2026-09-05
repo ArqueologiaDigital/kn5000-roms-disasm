@@ -364,3 +364,27 @@ base. The driver's `PROMDCS = 0xF00000` (wsa1.cpp) and the linker's ORIGIN 0 des
 things -- a chip-select address vs a position-independent data image -- and agree with
 FINDINGS-memory-map.md F4. ⚠ Do NOT relink prom_d at 0xF00000: it would relabel ~32,000 source
 lines for zero gain and put the byte gate at risk. No action.
+
+
+## APPLIED 2026-09-05 — what actually landed, and two refinements the firmware forced
+
+Committed to the overlay (`kn7000_mame` main) and published; all three machines validate and
+boot byte-identically to the pre-change baseline (only the flash ID differs, as intended).
+
+* **K2, K4, K7 — landed** in `5376e62`. K2: `0x150000/0x150002` mapped as a labelled logging
+  register file (68 writes/boot captured, no effect synthesised; chip ID still needs manual
+  p.32). K4/K7: the two contradicted comments corrected.
+* **K1 — landed in `0d02d16`, but custom_data ONLY**, not all three ROMs the plan named.
+  Verified behavioural win: KN5000 flash autoselect now returns `0x0205E0 = 2258`
+  (`AMD_29F800B_16BIT`) where it read `0xFFFF` before. Re-derivable:
+  `tools/rigs/kn5000_flash_id_tap.lua`.
+
+⚠ TWO PLACES THIS PLAN WAS WRONG, corrected in the code and here:
+  1. **K1's scope was overstated.** Only **custom_data (bank 1, 0x300000)** has a
+     boot-consumed JEDEC ID. `program (0xE00000)` is never put in command mode by resident
+     firmware (0 command hits in v10; the updater at 0xEF3740 uses only 0x280000/0x300000/
+     0x380000), and `table_data (0x800000)`'s autoselect result is READ AND DISCARDED by
+     `Flash_InitAllBanks`. Converting either adds regression risk for zero boot-consumed
+     benefit, so they were deliberately left as `.rom()`. Do NOT 'finish' K1 on them.
+  2. **K7's citation was wrong** — it pointed at census '§8', which is Sub-CPU P6.7, not the
+     main P8.6. The claim holds; the code comment now cites `rom_bitop_census.py --all-bits P8`.
