@@ -450,9 +450,39 @@ Following the placeholder sine, three more landed in `kn7000_mame`:
   works: MIDI → SC0 → link → CPU 2 note engine → tone generator → placeholder
   sine. Machine flag is now `MACHINE_IMPERFECT_SOUND`.
 
-⚠ **Open (note-off / retirement).** A note-off does not stop a placeholder
-voice: the busy bit never falls (nothing runs the amplitude envelope to
-completion), so the firmware never retires the record and voices accumulate.
-Closing it needs the time-varying segment envelope (`0x0800..0x0A40`, rate/level
-semantics not established) and a voice-retirement model. MIDI OUT (SC0 TX) is
-also still a stub.
+✅ **Note-off / retirement — CLOSED (2026-09-06).** A released voice now
+retires through the firmware's own path. The mechanism (RE'd this session):
+there is **no note-off gate bit**; on note-off the retire walk
+(`MidiNote_Dispatch` velocity-0 arm → `VoiceList_RetireByMode` →
+`Voice_Retire_Mode20` 0xFB3D26) re-stages the amplitude envelope with a RELEASE
+profile via `Dev10C_WriteSixChanRegs_FromD78A` (0xFB7345), writing
+`chan+{0x0800,0x0840,0x0900,0x0940,0x09C0,0x0A00}` but **not** `chan+0x0A40` —
+whose only writer is the note-on burst `Dev10C_WriteAllChanRegs` (its last
+register; order `...0x0A00` then `0x0A40` measured at 0xFB7278/0xFB728B). The
+driver keys on that single asymmetry: `0x0A40` ends a note-on burst, so a later
+`0x0A00` write on a still-gated channel is the release. The placeholder voice
+decays (fixed placeholder ramp; the real segment rate/level is still not
+established), and when it reaches silence the driver drops the busy bit in
+`tg_status_r` QUERY 1 — so the firmware's own poll writes `0x7E00` (FREE) via
+`Dev10C_ChanReset`, exactly as the chip's decaying busy bit makes it on
+hardware. No `0x7E00` is fabricated. **Verified** with
+`kn7000_mame/tools/rigs/wsa1_wav_rms.py` on `note_long.mid`: before, a monotonic
+drone to full-scale clipping (32767); after, voices retire (peak 1949, the
+passage ends in silence).
+
+`MidiNote_OffTail` (0xFB374A) is a byte-for-byte re-stage of the note-on writes
+and is inert on a genuine note-off — the release is the retire walk, which runs
+*before* it in the dispatch arm. Full trace in the session's note-off RE.
+
+✅ **MIDI OUT — wired (2026-09-06).** `tmp95c061` gained an SC0 transmit
+callback (`sc0_txd`, called from `sc0buf_w`, which previously only faked
+send-complete); the `wsa1_midi_uart` now shifts those bytes out (byte→bits,
+31250 baud) to a `midiout` port. The machine transmits what the firmware sends
+(bulk/group SysEx dumps, GM). This is also the carrier for a live parameter
+mirror (see the sysex-messages live-sync analysis on the docs site).
+
+**Related, same session — WSA1R DSP ISA cross-validation.** The WSA1R's three
+uPD6383GF DSPs run the *same* ISA as KN5000 IC311; running the KN5000 model over
+the WSA1R microcode confirms the ISA and populates the KN5000's undecidable
+hapaxes. See `FINDINGS-dsp-isa-crossval.md` and
+`dsp/analysis/wsa1_dsp_isa_crossval.py`.
