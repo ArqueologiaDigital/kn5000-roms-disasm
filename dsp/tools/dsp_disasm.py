@@ -659,7 +659,9 @@ def alu_decoded_spec(w):
     if c_format(w):
         return False
     cl = class4(w)
-    if cl not in (2, 8, 0xA):
+    # ★ SPECULATIVE: also admit register-file modes class 1 and class 9 (the
+    # disassembler already renders these as "internal register file [XX]").
+    if cl not in (1, 2, 8, 9, 0xA):
         return False
     if lo12(w) & 0x800:
         return False

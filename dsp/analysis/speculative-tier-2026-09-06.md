@@ -17,6 +17,7 @@ Reproducer: `dsp/tools/spec_coverage.py` (self-test `3057` / `1178` PASS).
 | SRC 0x13 | coef/wave table port | `CORPUS-PATTERNS-SPECULATIVE.md` S-6: `102.A.**.4C8` is the table-port multiply |
 | ACT 0x0C | delay READ | 12/12 sites are immediately followed by a delay read |
 | ACT 0x08 | table-port multiply (pairs with SRC 0x13) | weakest of the five; no named reading, adopted for the pairing |
+| class 1/9 | register-file addressing modes (operand = internal register file) | the disassembler already renders these as `internal register file [XX]` (R2 §1); accepting them as a decoded register-file-operand ALU op |
 
 ⚠ Each of these was, under the rigorous gate, *refused* — the corpus supplies
 occurrences but no discriminating consumer (`xcorpus-routing.md`). The speculative
@@ -29,23 +30,22 @@ fits together; it is not a claim any of them is proven.
 
 ```
 STRICT      (alu_decoded):        1178 / 3057 = 38.53%   <- rigorous baseline, unchanged
-SPECULATIVE (alu_decoded_spec):   1297 / 3057 = 42.43%
-  ⇒ prospective readings fit:     +119 words (+3.89 pts)
+SPECULATIVE (alu_decoded_spec):   1402 / 3057 = 45.86%
+  ⇒ prospective readings fit:     +224 words (+7.33 pts)
 ```
 
-Isolated per-code contribution (on top of strict):
+Contributions (on top of strict):
 
 ```
-SRC 0x11 ACCB           +49      <- the single largest OPEN routing code
-ACT 0x08 table mul       +9
-SRC 0x0B delay-read reg  +7
-SRC 0x13 table port      +0      } decode only TOGETHER (the table-port pair),
-ACT 0x0C delay READ      +0      } which is why the combined +119 > sum of isolated
+class 1/9 register-file modes  +105     <- the register-file addressing extension
+SRC 0x11 ACCB                   +49      <- the single largest OPEN routing code
+ACT 0x08 table mul              +9       (SRC 0x13 + ACT 0x08 also decode the
+SRC 0x0B delay-read reg         +7        table-port pair jointly)
 ```
 
-(At the routing gate alone — before the class/bit-4/f31 guards — the same codes
-route-anchor +224 words, 45.18% → 52.50%; the +119 is the honest full-predicate
-number after the other guards refuse some of those.)
+The SRC/ACT readings alone fit +119 (42.43%); adding the class-1/9 register-file
+addressing modes brings it to +224 (45.86%). The device's execution gate remains
+the strict `alu_decoded()`.
 
 ## Implemented into the core
 

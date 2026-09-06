@@ -69,6 +69,9 @@ def main():
         n = sum(1 for w in words if _decoded_with(w, src_set, act_set)
                 and not D.alu_decoded(w))
         print("   %-24s +%d" % (label, n))
+    # the register-file addressing modes are an addressing extension, not a code
+    c19 = sum(1 for w in words if D.alu_decoded_spec(w) and D.class4(w) in (1, 9))
+    print("   %-24s %d (class 1/9 register-file words admitted)" % ("class 1/9 modes", c19))
 
 
 def _decoded_with(w, src_set, act_set):
