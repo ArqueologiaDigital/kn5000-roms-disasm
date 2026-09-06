@@ -66,14 +66,22 @@ address/word bytes. This is the gate: feeding raw group bytes into the KN5000
 
 ## The build, in order
 
-1. **Add CPU 2 port handlers** P7/P5/PB/P2 (latches), and a `/WR`+`/CS` latch
-   detector per the edge note above. **Capture-only first** (logerror the byte
-   stream per destination) — no device yet, so nothing can be faked.
-2. **Verify the transport** against the static corpus: the captured runtime stream
-   must reduce to the same records `wsa1_dsp_isa_crossval.py` extracted from the
-   pool (70 opcode-3 program records, 5777 words; 99 opcode-2 coeff records). This
-   comparison also *reveals* the group -> chip-protocol mapping (step 3), and is
-   the hardware-free correctness gate for the whole device.
+1. ✅ **DONE (2026-09-06). CPU 2 port handlers** P7/P5/PB/P2 with the `/CS`-falling-
+   edge-while-`/WR`-low latch, capture-only, in `wsa1.cpp` (`dsp_capture()`, gated
+   on `LOG_DSPUP`).  Analyser + recipe: `kn7000_mame/tools/rigs/wsa1_dsp_capture.py`.
+   MEASURED (30 s boot): **17,859 bytes captured** — dest0/IC6 10,830, dest1/IC5
+   6,173, dest2/IC30 856 — and the stream carries the documented P7 framing (dest0:
+   540 value-group `0x0A` leads, 82 address-group `08 01` leads; the same shape on
+   IC5/IC30).  ⇒ **the transport model is CORRECT: the real upload reaches the
+   right DSPs in the right framing.**  ⚠ The C/D (`CMD`/`DAT`) tag is imperfect
+   (P5.3's exact edge relative to the `/CS` latch needs one more look); the byte
+   VALUES are right.
+2. **Verify against the static corpus (framing gate, PARTIAL).** The captured
+   5-byte groups (`08 01 ..` address, `0A ..` value) match
+   `FINDINGS-prom_c-p7-group-and-naming.md`.  Still to do: de-frame the groups back
+   to the pool records `wsa1_dsp_isa_crossval.py` extracts (70 opcode-3 / 99
+   opcode-2) and confirm word-for-word — this both closes the gate and *reveals*
+   the group→chip-protocol mapping (step 3).  The capture is the instrument for it.
 3. **Map group -> chip host protocol** from step 2's evidence; if it reduces to the
    KN5000 `01`/`02` framing, feed `host_w(cd, byte)` directly; else extend the
    device (or add a WSA1R host adapter) to the WSA1R framing.
