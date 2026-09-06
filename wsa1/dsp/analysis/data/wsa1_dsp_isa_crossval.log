@@ -1,0 +1,295 @@
+====================================================================================================
+RULE 20 SELF-TESTS (KN5000 baseline reproduced from the ROM)
+====================================================================================================
+   KN5000 corpus words            3057   published   3057   PASS
+   KN5000 alu_decoded             1178   published   1178   PASS
+   KN5000 guard_fail==0           1178   published   1178   PASS
+   WSA1R words bits[36:39]!=0        0   published      0   PASS
+
+====================================================================================================
+1. DECODE RATE vs NULL  (predicate: dsp_disasm.alu_decoded == upd6383d.h)
+====================================================================================================
+   KN5000 program words   :  3057   decoded  1178    38.53%
+   WSA1R  program words   :  5777   decoded  1992    34.48%
+   WSA1R  distinct words  :   918
+   -- NULLS (20 trials each). A null keeps SOMETHING real and destroys the rest --
+   uniform random 36-bit         (WSA1R-sized) :   0.03%  (keeps nothing)
+   byte-shuffle of WSA1R words                  :   0.40%  (keeps byte histogram)
+   field-shuffle of WSA1R words                 :  22.43%  (keeps each field's marginal)
+   field-shuffle of KN5000 words (for symmetry) :  28.49%  (keeps each field's marginal)
+   => WSA1R real  34.48% vs uniform 0.03% = 1285x ; vs byte-shuffle = 87x ;
+      and its lift over field-shuffle (22.43%) matches KN5000's own lift over 28.49%.
+
+====================================================================================================
+2. WSA1R POOL FRAMING (STREAM objects only)
+====================================================================================================
+   record opcode counts   : {0: 895, 1: 99, 2: 99, 3: 70, 4: 266, 5: 81, 14: 25, 15: 297}
+   opcode-3 (program) records give 5777 words; opcode-2 gives 2562 coeffs
+
+====================================================================================================
+3. FIELD HISTOGRAMS  (KN5000 vs WSA1R)
+====================================================================================================
+
+   --- hi12 microword (top 16) ---
+   KN5000:
+    (n=3057)
+     000        818   26.8%
+     212        352   11.5%
+     202        290    9.5%
+     880        233    7.6%
+     102        191    6.2%
+     104        143    4.7%
+     012        131    4.3%
+     092         81    2.6%
+     182         70    2.3%
+     082         64    2.1%
+     C40         57    1.9%
+     204         55    1.8%
+     040         53    1.7%
+     192         44    1.4%
+     02A         42    1.4%
+     804         39    1.3%
+   WSA1R:
+    (n=5777)
+     000       1502   26.0%
+     880        665   11.5%
+     212        663   11.5%
+     202        593   10.3%
+     C40        396    6.9%
+     102        227    3.9%
+     282        166    2.9%
+     012        150    2.6%
+     104        142    2.5%
+     204        140    2.4%
+     092         95    1.6%
+     082         79    1.4%
+     182         71    1.2%
+     292         69    1.2%
+     804         64    1.1%
+     192         54    0.9%
+
+   --- class4 addressing ---
+   KN5000:
+    (n=3057)
+     2         1569   51.3%
+     A          844   27.6%
+     1          337   11.0%
+     0          112    3.7%
+     4           55    1.8%
+     6           54    1.8%
+     8           44    1.4%
+     3           31    1.0%
+     9            6    0.2%
+     5            3    0.1%
+     C            1    0.0%
+     D            1    0.0%
+   WSA1R:
+    (n=5777)
+     2         2385   41.3%
+     A         1593   27.6%
+     1         1262   21.8%
+     0          135    2.3%
+     8          114    2.0%
+     3           75    1.3%
+     9           72    1.2%
+     4           55    1.0%
+     6           53    0.9%
+     C           12    0.2%
+     B            8    0.1%
+     5            7    0.1%
+     D            6    0.1%
+
+   --- SRC (lo12[10:6]) ---
+   KN5000:
+    (n=3057)
+     07         931   30.5%
+     10         702   23.0%
+     00         648   21.2%
+     11         167    5.5%
+     19         140    4.6%
+     0B         106    3.5%
+     13          87    2.8%
+     08          83    2.7%
+     1A          76    2.5%
+     1C          46    1.5%
+     01          37    1.2%
+     02          25    0.8%
+     04           2    0.1%
+     1B           2    0.1%
+     03           1    0.0%
+     05           1    0.0%
+     06           1    0.0%
+     0A           1    0.0%
+     0D           1    0.0%
+   WSA1R:
+    (n=5777)
+     07        1566   27.1%
+     00        1507   26.1%
+     10        1345   23.3%
+     0B         451    7.8%
+     11         281    4.9%
+     19         164    2.8%
+     13         100    1.7%
+     08          96    1.7%
+     1A          82    1.4%
+     01          50    0.9%
+     1C          50    0.9%
+     02          35    0.6%
+     1B          24    0.4%
+     04           7    0.1%
+     03           6    0.1%
+     05           6    0.1%
+     06           6    0.1%
+     0D           1    0.0%
+
+   --- ACTION (lo12[4:0]) ---
+   KN5000:
+    (n=3057)
+     00         845   27.6%
+     15         707   23.1%
+     07         458   15.0%
+     0E         227    7.4%
+     0D         203    6.6%
+     19          92    3.0%
+     12          85    2.8%
+     0B          82    2.7%
+     14          58    1.9%
+     03          54    1.8%
+     08          52    1.7%
+     0C          43    1.4%
+     01          41    1.3%
+     13          40    1.3%
+     1C          24    0.8%
+     1A          20    0.7%
+     11          10    0.3%
+     05           4    0.1%
+     1B           3    0.1%
+     02           2    0.1%
+     04           2    0.1%
+     1D           2    0.1%
+     06           1    0.0%
+     16           1    0.0%
+     17           1    0.0%
+   WSA1R:
+    (n=5777)
+     00        1696   29.4%
+     15        1578   27.3%
+     07         740   12.8%
+     0E         366    6.3%
+     0D         325    5.6%
+     12         271    4.7%
+     0B         152    2.6%
+     19         149    2.6%
+     08          66    1.1%
+     13          65    1.1%
+     14          64    1.1%
+     03          59    1.0%
+     01          58    1.0%
+     0C          51    0.9%
+     1C          29    0.5%
+     1B          26    0.5%
+     1A          20    0.3%
+     02          14    0.2%
+     1D          14    0.2%
+     11          12    0.2%
+     05           8    0.1%
+     04           7    0.1%
+     06           6    0.1%
+     17           1    0.0%
+
+   --- f31 (hi12[3:1]) ---
+   KN5000:
+    (n=3057)
+     1         1310   42.9%
+     0         1302   42.6%
+     2          283    9.3%
+     5           60    2.0%
+     4           48    1.6%
+     3           35    1.1%
+     7           16    0.5%
+     6            3    0.1%
+   WSA1R:
+    (n=5777)
+     0         2916   50.5%
+     1         2317   40.1%
+     2          408    7.1%
+     3           52    0.9%
+     5           29    0.5%
+     7           28    0.5%
+     4           27    0.5%
+
+====================================================================================================
+4. GUARD-FAIL SPECTRUM  (why a word is NOT decoded)
+====================================================================================================
+   guard                                          KN5000          WSA1R
+   DECODED                                  1178   38.5%   1992   34.5%
+   CLASS                                     546   17.9%   1259   21.8%
+   OPERATION (the f31 switch)                106    3.5%    114    2.0%
+   FORMAT (C-format)                          68    2.2%    444    7.7%
+   ACTION-07 off mode 2                        0    0.0%     12    0.2%
+   GUARD 7 (bit4+bit7 at f31 != 2)            20    0.7%     78    1.4%
+   routing/SRC-or-ACTION not anchored       1139   37.3%   1878   32.5%
+
+====================================================================================================
+5. THE KN5000 UNDECIDABLE RESIDUE -- does WSA1R exercise it?
+====================================================================================================
+
+   5a. SRC codes: KN5000 count vs WSA1R count
+       anchored SRC = ['0x07', '0x10', '0x19', '0x1A']
+       SRC          KN5000      WSA1R note
+       0x00           648       1507  unanchored
+       0x01            37         50  unanchored
+       0x02            25         35  unanchored
+       0x03             1          6  unanchored KN5000-hapax
+       0x04             2          7  unanchored
+       0x05             1          6  unanchored KN5000-hapax
+       0x06             1          6  unanchored KN5000-hapax
+       0x07           931       1566  ANCHORED
+       0x08            83         96  unanchored
+       0x0A             1          0  unanchored KN5000-hapax
+       0x0B           106        451  unanchored
+       0x0D             1          1  unanchored KN5000-hapax
+       0x10           702       1345  ANCHORED
+       0x11           167        281  unanchored
+       0x13            87        100  unanchored
+       0x19           140        164  ANCHORED
+       0x1A            76         82  ANCHORED
+       0x1B             2         24  unanchored
+       0x1C            46         50  unanchored
+       KN5000 SRC hapaxes (count==1): ['0x03', '0x05', '0x06', '0x0A', '0x0D']
+
+   5b. class 8/9/C/D populations
+       class 8 : KN5000    44   WSA1R   114
+       class 9 : KN5000     6   WSA1R    72
+       class C : KN5000     1   WSA1R    12
+       class D : KN5000     1   WSA1R     6
+       class B : KN5000     0   WSA1R     8  (class4==B, ABSENT in KN5000)
+       NB: class4==C (above) is the addressing field bits[23:20]; it is
+       DISTINCT from the C-FORMAT flag hi12[11:8]==C reported in 5e.
+
+   5c. f31 in {4,5} (measured-closed in KN5000; f31=4 fires ZERO in clean vehicle)
+       f31=4 : KN5000    48   WSA1R    27
+       f31=5 : KN5000    60   WSA1R    29
+
+   5d. bit-11 populations (the KN5000 'bit-11 drought')
+       lo12 bit11 (FORMAT ESC) : KN5000    95   WSA1R   125
+       hi12 bit11              : KN5000   438   WSA1R  1333
+
+   5e. C-FORMAT words (hi12[11:8]==0xC)
+       KN5000    68   WSA1R   444
+
+   5f. distinct 36-bit encodings in WSA1R but NEVER in KN5000: 441 of 918
+       of those, alu_decoded already handles: 103   still-dark: 338
+       sample of WSA1R-only DARK words (first 12), with guard:
+         000.1.0E.405  guard=CLASS                          cls=1 SRC=10 ACT=05 f31=0
+         000.1.0E.406  guard=CLASS                          cls=1 SRC=10 ACT=06 f31=0
+         000.1.8E.447  guard=CLASS                          cls=1 SRC=11 ACT=07 f31=0
+         000.1.C2.40E  guard=CLASS                          cls=1 SRC=10 ACT=0E f31=0
+         000.1.C4.401  guard=CLASS                          cls=1 SRC=10 ACT=01 f31=0
+         000.1.C4.402  guard=CLASS                          cls=1 SRC=10 ACT=02 f31=0
+         000.1.C4.403  guard=CLASS                          cls=1 SRC=10 ACT=03 f31=0
+         000.1.C4.404  guard=CLASS                          cls=1 SRC=10 ACT=04 f31=0
+         000.1.C4.405  guard=CLASS                          cls=1 SRC=10 ACT=05 f31=0
+         000.1.C4.406  guard=CLASS                          cls=1 SRC=10 ACT=06 f31=0
+         000.1.C4.40E  guard=CLASS                          cls=1 SRC=10 ACT=0E f31=0
+         000.1.D1.40E  guard=CLASS                          cls=1 SRC=10 ACT=0E f31=0
