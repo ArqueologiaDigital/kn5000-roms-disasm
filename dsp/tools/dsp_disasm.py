@@ -303,10 +303,16 @@ _ANCHORED_ACT = (LO_ACT_ACC_BUS, LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
 LO_SRC_ACCB = 0x11
 LO_SRC_DRD  = 0x0B
 LO_SRC_TABLE = 0x13
+LO_SRC_MEM0 = 0x00   # sect. 233: mem[ptr] / delay-RAM read (null-MAC rival refuted)
+LO_SRC_LFO  = 0x08   # the LFO / per-unit modulation source
 LO_ACT_DELAY_RD = 0x0C
 LO_ACT_TBL_MUL  = 0x08
-_ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE)
-_ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL)
+LO_ACT_BIQ_D = 0x0D  # sect. 234: biquad delay-stage action; the pair (0x0D,0x0E)
+LO_ACT_BIQ_E = 0x0E  #   is confirmed 1-of-49, only the tap/lag is hardware Q4
+_ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
+                                      LO_SRC_MEM0, LO_SRC_LFO)
+_ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL,
+                                      LO_ACT_BIQ_D, LO_ACT_BIQ_E)
 
 # ---------------------------------------------------------------------------
 #  hi12 BIT 7 GATES THE BIT-4 STORE (upd6383d.h HI_B7).  The biquad's 0.094 dB
@@ -659,9 +665,10 @@ def alu_decoded_spec(w):
     if c_format(w):
         return False
     cl = class4(w)
-    # ★ SPECULATIVE: also admit register-file modes class 1 and class 9 (the
-    # disassembler already renders these as "internal register file [XX]").
-    if cl not in (1, 2, 8, 9, 0xA):
+    # ★ SPECULATIVE: also admit register-file modes class 1/9 (rendered "internal
+    # register file [XX]") and the table-lookup idiom's class 4/6 (rendered
+    # "table-lookup idiom", INFERRED).
+    if cl not in (1, 2, 4, 6, 8, 9, 0xA):
         return False
     if lo12(w) & 0x800:
         return False
@@ -1039,11 +1046,15 @@ def annotate(w, at=None):
     # LABELLED, so a speculative-tier word shows its adopted reading.  Mirrors
     # upd6383d.cpp; bases at the _ANCHORED_*_SPEC comment above.
     s, a = lo_src(w), lo_act(w)
-    sr = ("SRC 0x0B = delay-read data register" if s == LO_SRC_DRD else
+    sr = ("SRC 0x00 = mem[ptr]/delay-RAM read" if s == LO_SRC_MEM0 else
+          "SRC 0x08 = LFO/per-unit source" if s == LO_SRC_LFO else
+          "SRC 0x0B = delay-read data register" if s == LO_SRC_DRD else
           "SRC 0x11 = ACCB (2nd accumulator)" if s == LO_SRC_ACCB else
           "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else None)
     ar = ("ACT 0x0C = delay READ" if a == LO_ACT_DELAY_RD else
-          "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else None)
+          "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else
+          "ACT 0x0D = biquad delay-stage (pair w/ 0x0E)" if a == LO_ACT_BIQ_D else
+          "ACT 0x0E = biquad delay-stage (pair w/ 0x0D)" if a == LO_ACT_BIQ_E else None)
     if sr or ar:
         return ("SPECULATIVE (prospective, not measured): "
                 + "; ".join(x for x in (sr, ar) if x))

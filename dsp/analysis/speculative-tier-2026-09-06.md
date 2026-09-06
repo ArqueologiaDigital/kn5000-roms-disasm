@@ -10,14 +10,18 @@ Reproducer: `dsp/tools/spec_coverage.py` (self-test `3057` / `1178` PASS).
 
 ## What is accepted, and on what basis (all PROSPECTIVE, none MEASURED)
 
-| code | prospective reading | basis |
-|---|---|---|
-| SRC 0x0B | delay-read data register | LEDGER §215: its consumer follows a delay READ 13/13 |
-| SRC 0x11 | ACCB, the second accumulator | §27; adjacent to SRC 0x10, and the CDJ-500 block diagram gives this ALU two accumulators |
-| SRC 0x13 | coef/wave table port | `CORPUS-PATTERNS-SPECULATIVE.md` S-6: `102.A.**.4C8` is the table-port multiply |
-| ACT 0x0C | delay READ | 12/12 sites are immediately followed by a delay read |
-| ACT 0x08 | table-port multiply (pairs with SRC 0x13) | weakest of the five; no named reading, adopted for the pairing |
-| class 1/9 | register-file addressing modes (operand = internal register file) | the disassembler already renders these as `internal register file [XX]` (R2 §1); accepting them as a decoded register-file-operand ALU op |
+| code | prospective reading | basis | grade |
+|---|---|---|---|
+| SRC 0x00 | mem[ptr] / delay-RAM read | §233: SINGLE DELAY separated the 7 readings 1-of-7, this survived, null-MAC rival refuted | STRONG |
+| ACT 0x0D + 0x0E | the biquad's two delay-stage actions (a pair) | §234: the pair confirmed 1-of-49 by PARAMETRIC EQ's entry window; only which-tap / lag is hardware Q4 | STRONG |
+| SRC 0x0B | delay-read data register | §215: its consumer follows a delay READ 13/13 | med |
+| SRC 0x11 | ACCB, the second accumulator | §27; adjacent to SRC 0x10, and the CDJ-500 block diagram gives this ALU two accumulators | med |
+| SRC 0x13 | coef/wave table port | `CORPUS-PATTERNS-SPECULATIVE.md` S-6: `102.A.**.4C8` is the table-port multiply | med |
+| SRC 0x08 | LFO / per-unit modulation source | class-A + ACT 0x00 in the LFO-publish idiom | weak |
+| ACT 0x0C | delay READ | 12/12 sites are immediately followed by a delay read | med |
+| ACT 0x08 | table-port multiply (pairs with SRC 0x13) | no named reading; adopted for the pairing | weak |
+| class 1/9 | register-file addressing modes | rendered `internal register file [XX]` (R2 §1) | med |
+| class 4/6 | the table-lookup idiom | rendered `table-lookup idiom` (INFERRED, MCC +1.000) | med |
 
 ⚠ Each of these was, under the rigorous gate, *refused* — the corpus supplies
 occurrences but no discriminating consumer (`xcorpus-routing.md`). The speculative
@@ -30,22 +34,18 @@ fits together; it is not a claim any of them is proven.
 
 ```
 STRICT      (alu_decoded):        1178 / 3057 = 38.53%   <- rigorous baseline, unchanged
-SPECULATIVE (alu_decoded_spec):   1402 / 3057 = 45.86%
-  ⇒ prospective readings fit:     +224 words (+7.33 pts)
+SPECULATIVE (alu_decoded_spec):   2094 / 3057 = 68.50%
+  ⇒ prospective readings fit:     +916 words (+29.96 pts)
 ```
 
-Contributions (on top of strict):
+Biggest contributions: SRC 0x00 = mem[ptr] (§233) and the ACT 0x0D/0x0E biquad
+pair (§234) together carry the bulk; the register-file (class 1/9) and
+table-lookup (class 4/6) addressing modes and the SRC 0x0B/0x11/0x13 routing
+codes make up the rest. The device's execution gate remains the strict
+`alu_decoded()`; this tier is the disassembler/measurement view only.
 
-```
-class 1/9 register-file modes  +105     <- the register-file addressing extension
-SRC 0x11 ACCB                   +49      <- the single largest OPEN routing code
-ACT 0x08 table mul              +9       (SRC 0x13 + ACT 0x08 also decode the
-SRC 0x0B delay-read reg         +7        table-port pair jointly)
-```
-
-The SRC/ACT readings alone fit +119 (42.43%); adding the class-1/9 register-file
-addressing modes brings it to +224 (45.86%). The device's execution gate remains
-the strict `alu_decoded()`.
+Adopted in tranches (2026-09-06): (1) SRC 0x0B/0x11/0x13 + ACT 0x0C/0x08 +
+class 1/9 → 45.86%; (2) SRC 0x00 + ACT 0x0D/0x0E + SRC 0x08 + class 4/6 → 68.50%.
 
 ## Implemented into the core
 
