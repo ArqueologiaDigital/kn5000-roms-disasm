@@ -125,12 +125,31 @@ The correctness gate is now proven INSIDE the emulator, not just offline.
 - **Only 63/384 of IC30's I-RAM is filled at boot** — the rest (the shared kernel
   epilogue, other effect bodies) loads when effects are selected.
 
+## ✅ Coefficients into C-RAM — DONE and TESTED in-emulator (2026-09-07)
+
+The driver now de-frames the coefficient groups (`dsp_deframe()` in `wsa1.cpp`,
+the sliding-window logic of `dsp/analysis/dsp_deframe.py`) and loads each device
+through new `upd6383` host methods `cram_ptr_w`/`cram_data_w` (+ `dsc_*`/`dram_*`).
+
+⚠ Values are routed **by their own K tag** into the three spaces the chip's poke
+path uses — `0x26` C-RAM, `0x4C` descriptor, `0x15` D-RAM register file — each with
+its own auto-incrementing pointer set by its address/ldptr word. This corrects a
+first attempt that routed every value to the last address group's target: the boot
+stream is K=0x15-dominated (dest0: **239** D-RAM / **174** descriptor / **108**
+C-RAM values), so active-target routing leaked D-RAM/descriptor values into C-RAM.
+Framing adversarially verified end to end (wf_dec61ab4-b19): the WSA1R ADDRESS
+group *is* a uPD6383 `ldptr` word and the VALUE group *is* the poke data packet;
+`A` is a direct 0..255 C-RAM cell index; the tag↔K pairing is 0x21↔0x26 (C-RAM),
+0x25↔0x4C (descriptor), opcode-0↔0x15 (D-RAM reg).
+
+Verified with `kn7000_mame/tools/rigs/wsa1_dsp_cram_verify.lua` on a
+`WSA1R_ENABLE_DSP=1` build, against the golden map `dsp/analysis/dsp_cram_map.py`
+(`golden-cram-map-boot.txt`): **IC6 79 / IC5 54 non-zero C-RAM cells with the
+known constants at their golden cells (chorusLFO `0x000072`, 0.5 `0x400000`); IC30
+C-RAM empty at boot** (it gets a program block + a few D-RAM-register values only).
+
 ## Still open (next improvements)
 
-- **Coefficients into C-RAM.** They are captured and de-framed (values = the known
-  constants) but `host_w` ignores the WSA1R 5-byte groups, so C-RAM is empty.
-  Next: de-frame the `08 01`/`0A` groups in the driver (or extend `host_w`) and
-  write the device's `AS_CRAM`.
 - **Capture effect-load uploads**, not just boot, to fill more I-RAM on all three
   DSPs and exercise more of the 918-word corpus at runtime.
 - **Execution** stays held off (ISA not measured-decoded); once coefficients load
