@@ -82,16 +82,36 @@ instruction words the driver regroups the payload by 5 from the start address (t
 ROM gives no per-word framing to key off — the word width is the chip's, INFERRED
 5 bytes).
 
+## ✅ FRAMING GATE CLOSED for program words (MEASURED)
+
+De-interleaving by the C/D command markers (not by byte value) works, and the
+result verifies against the static corpus.  `dsp_verify_upload.py` on a 30 s boot:
+
+- A program record is `CMD 0x01` + two `DAT` (16-bit big-endian start address) +
+  N `DAT` payload bytes, regrouped by 5 into 40-bit words.
+- **IC30's static program blocks match the corpus 63/63 per block** — every word
+  is container-valid (top nibble 0) AND present in the statically-extracted
+  corpus (`wsa1_dsp_isa_crossval.py`).
+- The only non-matching words are at start address **0x0160 = I-RAM 352 — the
+  host-poke region** (I-RAM 352..382, runtime parameter pokes computed by the
+  firmware), which by definition are NOT in the static corpus.  So 126/150 total
+  match, and the 24 that don't are exactly the runtime pokes, not a decode gap.
+- In this boot IC6/IC5 receive coefficients only (their `CMD 0x01`s are the
+  coefficient framing's, with no `DAT` payload); the program code goes to IC30.
+
+⇒ **The DSP-device correctness gate is proven: the microcode the emulator uploads
+at runtime is byte-for-byte the microcode the disassembler extracts statically.**
+A `upd6383` instance fed this de-interleaved stream has the right I-RAM, and no
+word is faked.
+
 ## Still open
 
-- **Full alignment to the static corpus.** With the C/D rule and both framings now
-  known, the remaining step is to de-interleave a boot capture — coefficient
-  groups (opcode 0/1/5) vs program blocks (opcode 3) — and match the regrouped
-  program words to the statically-extracted 5,777 words
-  (`wsa1_dsp_isa_crossval.py`).  The `08 01 .. 21` byte pattern appears in both a
-  coefficient address group and inside program payload, so clean de-interleaving
-  (segment strictly by the C/D command markers, not by byte value) is the care
-  point.  This is the last gate before a `upd6383` instance can be fed and run.
+- **Instantiate the `upd6383` device(s)** and feed the de-interleaved program +
+  coefficient stream (mechanical now — the framing is proven).  Then the output
+  stage (the KN5000's is a separate blocker) governs whether it makes sound; but
+  as an *instrument* it can already run the OPEN codes for decode.
+- **Capture the effect-load uploads** (not just boot) to see program code reach
+  IC6/IC5 and to exercise more of the 918-word corpus at runtime.
 - **The program (opcode-3) words** — the I-RAM instruction upload — are the other
   half; this pass characterised the coefficient (value/address) groups.  MEASURED:
   the three known group forms (addr `08 01`, value `0A`, opcode-0 addr `00 00 1X`)
