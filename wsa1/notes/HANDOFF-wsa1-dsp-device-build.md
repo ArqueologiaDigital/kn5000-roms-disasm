@@ -48,7 +48,29 @@ a naive "`/WR` low AND `/CS` low" test misfires — latch on the **`/CS` falling
 edge while `/WR` is already low**, or capture on `/WR` low and attribute the DSP
 from the CS that goes low next. Get this wrong and bytes are missed/mis-attributed.
 
-## The framing — the RE gap that gates the build (OPEN)
+## ✅ UPDATE 2026-09-06: the framing gate is CLOSED, and it matches host_w
+
+The capture (step 1) plus the C/D trace resolved the framing:
+- **Program words == the KN5000 `host_w` cmd-0x01 protocol, exactly.** A WSA1R
+  program record is `SendCmd(0x01)` + `SendArg(addr_hi)` + `SendArg(addr_lo)` +
+  N×`SendData(payload)` = `host_w(cd=0, 0x01)`, then `host_w(cd=1, ...)` for the
+  16-bit address and the payload — which is precisely how `upd6383.cpp host_w`
+  parses cmd 0x01 (16-bit addr + N×5-byte words).  **PROVEN**: de-interleaving a
+  boot capture and regrouping by 5 gives words that match the static corpus
+  63/63 per block (`dsp_verify_upload.py`; the only misses are I-RAM 352
+  host-pokes).  ⇒ **feeding the captured (cd, byte) stream straight to host_w
+  loads the right I-RAM.**  The step-3 worry below (group→protocol mapping) is
+  therefore resolved *for program words*.
+- **Coefficients** use the WSA1R's own 5-byte groups (`0A` value, `08 01`
+  address), NOT the KN5000 cmd 0x02, so host_w ignores them.  De-frame them in the
+  driver (`dsp_deframe.py` logic) and write C-RAM directly, or extend host_w.
+
+**Immediate next step (mechanical):** instantiate the `upd6383` device(s) in the
+wsa1 driver, call `m_dsp[dest]->host_w(cd, byte)` from `dsp_capture()`, and read
+back I-RAM after boot to confirm the in-emulator gate.  Then coefficients, then
+execution (silent, per the output-stage blocker) as a decode instrument.
+
+## The framing — the historical RE gap (now CLOSED, see the update above)
 
 The bytes on the wire are **5-byte groups** (`P7Stream_Run`; `FINDINGS-prom_c-p7-group-and-naming.md`):
 ```
