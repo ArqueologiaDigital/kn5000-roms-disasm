@@ -104,14 +104,39 @@ at runtime is byte-for-byte the microcode the disassembler extracts statically.*
 A `upd6383` instance fed this de-interleaved stream has the right I-RAM, and no
 word is faked.
 
-## Still open
+## ✅ Device instantiated and TESTED in-emulator (2026-09-06)
 
-- **Instantiate the `upd6383` device(s)** and feed the de-interleaved program +
-  coefficient stream (mechanical now — the framing is proven).  Then the output
-  stage (the KN5000's is a separate blocker) governs whether it makes sound; but
-  as an *instrument* it can already run the OPEN codes for decode.
-- **Capture the effect-load uploads** (not just boot) to see program code reach
-  IC6/IC5 and to exercise more of the 918-word corpus at runtime.
+The three `upd6383` devices are now instantiated behind `WSA1R_ENABLE_DSP`
+(default off) and fed the upload via `host_w` from `dsp_capture()`.  Verified with
+`kn7000_mame/tools/rigs/wsa1_dsp_iram_verify.lua` on a `WSA1R_ENABLE_DSP=1` build:
+**dsp2 (IC30) I-RAM word 0x30 = `08010C0821`, words 0x30..0x35 match the offline
+de-framed corpus byte-for-byte, 63 non-zero words = the boot program block.**  No
+crash; the device loads the same microcode the disassembler extracts statically.
+The correctness gate is now proven INSIDE the emulator, not just offline.
+
+## Insights collected (to keep improving)
+
+- **What IC30 gets at boot:** a single contiguous corpus run of 63 program words
+  (flat-corpus index 230) at DSP I-RAM addr 0x30 — one program/kernel block, not
+  scattered words.  So the boot loads a specific program to IC30.
+- **Per-DSP boot split:** IC30 gets that program block (+2 host-poke blocks at
+  I-RAM 352); IC6 and IC5 get **coefficients only** at boot (533 / 269 value
+  groups), no program.  Program code for IC6/IC5 must arrive on effect selection.
+- **Only 63/384 of IC30's I-RAM is filled at boot** — the rest (the shared kernel
+  epilogue, other effect bodies) loads when effects are selected.
+
+## Still open (next improvements)
+
+- **Coefficients into C-RAM.** They are captured and de-framed (values = the known
+  constants) but `host_w` ignores the WSA1R 5-byte groups, so C-RAM is empty.
+  Next: de-frame the `08 01`/`0A` groups in the driver (or extend `host_w`) and
+  write the device's `AS_CRAM`.
+- **Capture effect-load uploads**, not just boot, to fill more I-RAM on all three
+  DSPs and exercise more of the 918-word corpus at runtime.
+- **Execution** stays held off (ISA not measured-decoded); once coefficients load
+  and a decode instrument reads internal state, the device can run the OPEN codes
+  — the path to promoting speculative readings to measured.  Output/audio is a
+  separate blocker (as on the KN5000).
 - **The program (opcode-3) words** — the I-RAM instruction upload — are the other
   half; this pass characterised the coefficient (value/address) groups.  MEASURED:
   the three known group forms (addr `08 01`, value `0A`, opcode-0 addr `00 00 1X`)
