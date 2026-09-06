@@ -294,6 +294,20 @@ _ANCHORED_SRC = (LO_SRC_MEM, LO_SRC_ACC, LO_SRC_TA, LO_SRC_TB)
 _ANCHORED_ACT = (LO_ACT_ACC_BUS, LO_ACT_ST_BUS, LO_ACT_NONE_2, LO_ACT_CAP_TA,
                  LO_ACT_CAP_TB, LO_ACT_NONE_5, LO_ACT_CAP_TA2)
 
+# ★ SPECULATIVE TIER (goal 2026-09-06): prospective SRC/ACT readings accepted so
+# more of the corpus "fits in place".  Kept separate from the strict sets; each
+# rests on a prospective reading, never a MEASURED one (bases: SRC 0x0B = delay-
+# read data register, LEDGER sect. 215; SRC 0x11 = ACCB, sect. 27; SRC 0x13 =
+# coef/wave table port, CORPUS-PATTERNS-SPECULATIVE S-6; ACT 0x0C = delay READ,
+# 12/12; ACT 0x08 = table-port multiply).  Mirrors upd6383d.h *_spec.
+LO_SRC_ACCB = 0x11
+LO_SRC_DRD  = 0x0B
+LO_SRC_TABLE = 0x13
+LO_ACT_DELAY_RD = 0x0C
+LO_ACT_TBL_MUL  = 0x08
+_ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE)
+_ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL)
+
 # ---------------------------------------------------------------------------
 #  hi12 BIT 7 GATES THE BIT-4 STORE (upd6383d.h HI_B7).  The biquad's 0.094 dB
 #  never reached a bit-7 word -- PARAMETRIC EQ has ZERO words carrying bit 4 and
@@ -629,6 +643,36 @@ def alu_decoded(w):
         # Price, MEASURED: ONE corpus word (`092.A.01.1C0', header I-RAM 37).
         if hi_f31(hi12(w)) != 2:
             return False
+    f = hi_f31(hi12(w))
+    if f in (HI_ACC_LOAD, HI_ACC_ADD):
+        return True
+    if f == HI_ACC_HOLD:
+        return cl == 8
+    return False
+
+
+def alu_decoded_spec(w):
+    """★ SPECULATIVE decode (goal 2026-09-06): alu_decoded() with the prospective
+    SRC/ACT codes anchored too (_ANCHORED_*_SPEC).  Everything it admits beyond
+    alu_decoded() rests on a prospective reading; the strict predicate is
+    untouched.  Mirrors upd6383d.h alu_decoded_spec()."""
+    if c_format(w):
+        return False
+    cl = class4(w)
+    if cl not in (2, 8, 0xA):
+        return False
+    if lo12(w) & 0x800:
+        return False
+    if lo_ptrmode(w):
+        return False
+    if lo_src(w) not in _ANCHORED_SRC_SPEC or lo_act(w) not in _ANCHORED_ACT_SPEC:
+        return False
+    if (hi12(w) & HI_ST) and (cl & 7) != 2:
+        return False
+    if lo_act(w) == LO_ACT_ST_BUS and (cl & 7) != 2:
+        return False
+    if (hi12(w) & HI_ST) and (hi12(w) & HI_B7) and hi_f31(hi12(w)) != 2:
+        return False
     f = hi_f31(hi12(w))
     if f in (HI_ACC_LOAD, HI_ACC_ADD):
         return True
@@ -988,6 +1032,19 @@ def annotate(w, at=None):
     # fired on genuine in-program words (A00.0.00.041 in CHORUS, A3C.D.9F.287 at
     # I-RAM 78) where it is meaningless.  Host packets are decoded by
     # host_packet() below, which only a host-stream viewer should call.
+
+    # ★ SPECULATIVE TIER (goal 2026-09-06): render the prospective SRC/ACT codes,
+    # LABELLED, so a speculative-tier word shows its adopted reading.  Mirrors
+    # upd6383d.cpp; bases at the _ANCHORED_*_SPEC comment above.
+    s, a = lo_src(w), lo_act(w)
+    sr = ("SRC 0x0B = delay-read data register" if s == LO_SRC_DRD else
+          "SRC 0x11 = ACCB (2nd accumulator)" if s == LO_SRC_ACCB else
+          "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else None)
+    ar = ("ACT 0x0C = delay READ" if a == LO_ACT_DELAY_RD else
+          "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else None)
+    if sr or ar:
+        return ("SPECULATIVE (prospective, not measured): "
+                + "; ".join(x for x in (sr, ar) if x))
     return None
 
 
