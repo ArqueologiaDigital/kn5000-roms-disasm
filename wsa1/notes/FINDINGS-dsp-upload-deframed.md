@@ -56,6 +56,10 @@ C-RAM / coefficient bases (0x00 / 0x20 / 0x60 / 0xC0-region).
   precise per-destination trace of `P7Byte_SendCmd/SendData/SendArg`
   (prom_c 0xF9A163 / 0xF9A31A / 0xF9A4B0).  The byte VALUES are right regardless.
 - **The program (opcode-3) words** — the I-RAM instruction upload — are the other
-  half; this pass characterised the coefficient (value/address) groups.  Aligning
-  the program-word groups to the statically-extracted 5,777 words
-  (`wsa1_dsp_isa_crossval.py`) is the remaining step before an executing device.
+  half; this pass characterised the coefficient (value/address) groups.  MEASURED:
+  the three known group forms (addr `08 01`, value `0A`, opcode-0 addr `00 00 1X`)
+  account for only **32%** of dest0's bytes (79 + 533 + 74 groups); the other
+  **68% (7,398 bytes)** are the program-word upload in a framing not yet aligned.
+  Aligning it to the statically-extracted 5,777 words (`wsa1_dsp_isa_crossval.py`)
+  is the remaining step before an executing device, and it is helped by first
+  fixing the C/D tag (above) so command bytes segment the stream.
