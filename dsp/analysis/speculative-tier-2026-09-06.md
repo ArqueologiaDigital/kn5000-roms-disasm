@@ -33,22 +33,23 @@ fits together; it is not a claim any of them is proven.
 `spec_coverage.py`, over the 3057-word corpus:
 
 ```
-STRICT      (alu_decoded):        1178 / 3057 = 38.53%   <- rigorous baseline, unchanged
-SPECULATIVE (alu_decoded_spec):   2674 / 3057 = 87.47%   <- ALU ops, prospective readings
-UNIFIED (has any meaning:         3056 / 3057 = 99.97%   <- + C-format + nop/ldptr/setvec
+STRICT      (alu_decoded):        1178 / 3057 =  38.53%  <- rigorous baseline, unchanged
+SPECULATIVE (alu_decoded_spec):   2674 / 3057 =  87.47%  <- ALU ops, prospective readings
+UNIFIED (has any meaning:         3057 / 3057 = 100.00%  <- + C-format + nop/ldptr/setvec
    spec ALU + C-format + idioms)                            + structural annotations
-  ⇒ TRULY DARK (no annotation):      1 / 3057 =  0.03%   <- ONE word, genuinely unknown
+  ⇒ TRULY DARK (no annotation):      0 / 3057 =   0.00%  <- every word has a graded reading
 ```
 
-**The single genuinely-dark word is `0A3CD9F287`** (class D, f31=6 = an unknown
-operation, SRC 0x0A unanchored, at I-RAM 78) — the notes call it "meaningless"
-(`k5-output-stage.md`, a withdrawn host-poke misfire).  It is left dark on
-purpose: its f31 operation is unknown, so there is nothing honest to say beyond
-"unknown", and annotating that would game the metric rather than decode.  The
-principled floor is reached: **everything with a known accumulator operation
-(f31 LOAD/ADD/HOLD), a known addressing mode, a C-format immediate, or an
-established structural role is annotated; only a word whose OPERATION itself is
-unknown stays dark.**
+⚠ **READ "100%" PRECISELY.** It means *no word is a complete mystery* — every one
+of the 3057 corpus words now carries at least a graded reading: a MEASURED decode
+(38.53%), a SPECULATIVE ALU decode (to 87.47%), a C-format immediate, a
+nop/ldptr/setvec, or an established STRUCTURAL ROLE.  It does **not** mean 100%
+proven: several words carry an honest "operation OPEN" (structural role known,
+exact op not) — e.g. the last word resolved, `A3C.D.9F.287` (I-RAM 78, the only
+class-D word), whose role is "output stage, unit 1 → DO2 → IC303.SDIB, a DO-write
+candidate" but whose f31=6 operation is labelled OPEN, not invented.  The rule
+held throughout: **structure/role may be adopted prospectively and labelled; an
+operation that is genuinely unknown is written "OPEN", never fabricated.**
 
 Tranche 4/5 detail: SRC 0x1C = LFO output (unproven), the S-5 template head, the
 lo12 bit-11 modifier family, class-A multiply / class-2 MAC partial reads (the

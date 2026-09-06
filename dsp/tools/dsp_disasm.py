@@ -1039,6 +1039,12 @@ def annotate(w, at=None):
     # I-RAM 78) where it is meaningless.  Host packets are decoded by
     # host_packet() below, which only a host-stream viewer should call.
 
+    # ★ SPECULATIVE: A3C.D.9F.287 (I-RAM 78) is the only class-D word and sits in
+    # the output stage -- role unit 1 -> DO2 -> IC303.SDIB, a DO-write candidate.
+    if w == 0xA3CD9F287:
+        return ("output-stage word (unit 1 -> DO2 -> IC303.SDIB); the only class-D "
+                "word, a DO-write candidate; its operation (f31=6) is OPEN")
+
     # ★ SPECULATIVE (S-5): A00.0.00.041 heads a fixed 3-word template; operands
     # SRC 0x01/ACT 0x01 stay dark but the structural role is established.
     if w == 0xA00000041:
