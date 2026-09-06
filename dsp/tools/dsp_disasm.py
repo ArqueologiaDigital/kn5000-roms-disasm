@@ -1062,6 +1062,30 @@ def annotate(w, at=None):
     if sr or ar:
         return ("SPECULATIVE (prospective, not measured): "
                 + "; ".join(x for x in (sr, ar) if x))
+
+    # ★ SPECULATIVE partial decode: class A always multiplies (P = coef x L) and
+    # class 2 is the post-increment MAC -- established by the class.  A leftover
+    # word in one of these classes with a real source has its multiply/MAC
+    # decoded even when the accumulator-combine (f31) or a minor operand is open.
+    cl = class4(w)
+    if cl == 0xA:
+        return ("SPECULATIVE: class-A multiply (P = coef x source 0x%02X); the "
+                "source id / accumulator-combine f31=%d / ACT 0x%02X may be OPEN"
+                % (s, hi_f31(hi12(w)), a))
+    if (cl & 7) == 2 and s in _ANCHORED_SRC_SPEC:
+        return ("SPECULATIVE: class-2 post-increment MAC (source 0x%02X); the "
+                "accumulator-combine f31=%d and/or ACT 0x%02X are OPEN"
+                % (s, hi_f31(hi12(w)), a))
+    if cl == 0 and (lo12(w) & 0x800) and lo_ptrmode(w):
+        return ("SPECULATIVE: lo12 bit-11 modifier word + pointer-mode "
+                "(bit11-family); the base selector/register is OPEN")
+    # Principled floor: a known accumulator op (f31 LOAD/ADD/HOLD) is a partial
+    # decode even when addressing/operands are open.  Unknown f31 stays dark.
+    f = hi_f31(hi12(w))
+    if f in (HI_ACC_LOAD, HI_ACC_ADD, HI_ACC_HOLD):
+        name = {HI_ACC_LOAD: "LOAD", HI_ACC_ADD: "ADD", HI_ACC_HOLD: "HOLD"}[f]
+        return ("SPECULATIVE: accumulator op f31=%d (%s) is known; addressing "
+                "class 0x%X and operands are OPEN" % (f, name, cl))
     return None
 
 

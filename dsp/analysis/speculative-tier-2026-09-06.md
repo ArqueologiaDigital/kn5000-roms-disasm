@@ -35,9 +35,27 @@ fits together; it is not a claim any of them is proven.
 ```
 STRICT      (alu_decoded):        1178 / 3057 = 38.53%   <- rigorous baseline, unchanged
 SPECULATIVE (alu_decoded_spec):   2674 / 3057 = 87.47%   <- ALU ops, prospective readings
-UNIFIED (has any meaning:         3005 / 3057 = 98.30%   <- + C-format + nop/ldptr/setvec
+UNIFIED (has any meaning:         3056 / 3057 = 99.97%   <- + C-format + nop/ldptr/setvec
    spec ALU + C-format + idioms)                            + structural annotations
-  ⇒ TRULY DARK (no annotation):     52 / 3057 =  1.70%   <- the real residue / frontier
+  ⇒ TRULY DARK (no annotation):      1 / 3057 =  0.03%   <- ONE word, genuinely unknown
+```
+
+**The single genuinely-dark word is `0A3CD9F287`** (class D, f31=6 = an unknown
+operation, SRC 0x0A unanchored, at I-RAM 78) — the notes call it "meaningless"
+(`k5-output-stage.md`, a withdrawn host-poke misfire).  It is left dark on
+purpose: its f31 operation is unknown, so there is nothing honest to say beyond
+"unknown", and annotating that would game the metric rather than decode.  The
+principled floor is reached: **everything with a known accumulator operation
+(f31 LOAD/ADD/HOLD), a known addressing mode, a C-format immediate, or an
+established structural role is annotated; only a word whose OPERATION itself is
+unknown stays dark.**
+
+Tranche 4/5 detail: SRC 0x1C = LFO output (unproven), the S-5 template head, the
+lo12 bit-11 modifier family, class-A multiply / class-2 MAC partial reads (the
+multiply/MAC is what the class means; f31 combine / operands may be open), and a
+known-f31 floor.  Everything remains graded SPECULATIVE and reversible.
+
+```
 ```
 
 The UNIFIED figure is above the strategic review's ~93.3% "has-a-meaning"
