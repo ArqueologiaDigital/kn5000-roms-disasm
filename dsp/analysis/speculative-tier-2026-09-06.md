@@ -34,9 +34,19 @@ fits together; it is not a claim any of them is proven.
 
 ```
 STRICT      (alu_decoded):        1178 / 3057 = 38.53%   <- rigorous baseline, unchanged
-SPECULATIVE (alu_decoded_spec):   2094 / 3057 = 68.50%
-  ⇒ prospective readings fit:     +916 words (+29.96 pts)
+SPECULATIVE (alu_decoded_spec):   2628 / 3057 = 85.97%   <- ALU ops, prospective readings
+UNIFIED (has any meaning:         2924 / 3057 = 95.65%   <- + C-format + nop/ldptr/setvec
+   spec ALU + C-format + idioms)                            + structural annotations
+  ⇒ TRULY DARK (no annotation):    133 / 3057 =  4.35%   <- the real residue / frontier
 ```
+
+The UNIFIED figure is above the strategic review's ~93.3% "has-a-meaning"
+ceiling — because the speculative tier accepts the prospective readings the
+strict method refused.  Tranche 3 (2026-09-06) added ACT 0x0B (delay access) and
+relaxed the store / HI_ACC_HOLD guards in the speculative predicate (the store
+OPERATION is known; only its mode-dependent target is open, which is a detail for
+a decode metric and cannot cause a dead store since this predicate never
+executes) → 68.50% → 85.97%.
 
 Biggest contributions: SRC 0x00 = mem[ptr] (§233) and the ACT 0x0D/0x0E biquad
 pair (§234) together carry the bulk; the register-file (class 1/9) and

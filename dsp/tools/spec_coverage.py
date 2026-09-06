@@ -49,6 +49,16 @@ def main():
     print("   strict decoded %4d   published %4d   %s"
           % (strict, PUB_STRICT, "PASS" if strict == PUB_STRICT else "FAIL"))
 
+    # the UNIFIED "has a meaning" metric: an ALU op decoded (speculatively), OR a
+    # C-format immediate (rendered with its opcode), OR nop/ldptr/rstcur/setvec,
+    # OR any structural/idiom annotation.  This is the fraction of the corpus that
+    # is not TRULY DARK -- the sense in which the ~93.3% ceiling was stated.
+    def has_meaning(w):
+        return (D.alu_decoded_spec(w) or D.c_format(w) or D.decoded(w)
+                or bool(D.annotate(w)))
+    meaning = sum(1 for w in words if has_meaning(w))
+    dark = tot - meaning
+
     print("\n== DECODE COVERAGE")
     print("   STRICT (alu_decoded, rigorous baseline):  %4d / %d = %.2f%%"
           % (strict, tot, 100.0 * strict / tot))
@@ -56,6 +66,11 @@ def main():
           % (spec, tot, 100.0 * spec / tot))
     print("   ⇒ prospective readings fit in place:      +%d words (+%.2f pts)"
           % (spec - strict, 100.0 * (spec - strict) / tot))
+    print("   UNIFIED (has any meaning: spec ALU + C-format + nop/ldptr/setvec")
+    print("            + structural annotation):        %4d / %d = %.2f%%"
+          % (meaning, tot, 100.0 * meaning / tot))
+    print("   ⇒ TRULY DARK (no annotation at all):      %4d / %d = %.2f%%"
+          % (dark, tot, 100.0 * dark / tot))
 
     print("\n== per prospective code: words it newly decodes (isolated on top of strict)")
     for label, s_add, a_add in [

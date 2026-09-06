@@ -309,10 +309,11 @@ LO_ACT_DELAY_RD = 0x0C
 LO_ACT_TBL_MUL  = 0x08
 LO_ACT_BIQ_D = 0x0D  # sect. 234: biquad delay-stage action; the pair (0x0D,0x0E)
 LO_ACT_BIQ_E = 0x0E  #   is confirmed 1-of-49, only the tap/lag is hardware Q4
+LO_ACT_DELAY_ACC = 0x0B  # delay-line access (dark-words F); READ/WRITE class-borne
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
                                       LO_SRC_MEM0, LO_SRC_LFO)
 _ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL,
-                                      LO_ACT_BIQ_D, LO_ACT_BIQ_E)
+                                      LO_ACT_BIQ_D, LO_ACT_BIQ_E, LO_ACT_DELAY_ACC)
 
 # ---------------------------------------------------------------------------
 #  hi12 BIT 7 GATES THE BIT-4 STORE (upd6383d.h HI_B7).  The biquad's 0.094 dB
@@ -676,18 +677,13 @@ def alu_decoded_spec(w):
         return False
     if lo_src(w) not in _ANCHORED_SRC_SPEC or lo_act(w) not in _ANCHORED_ACT_SPEC:
         return False
-    if (hi12(w) & HI_ST) and (cl & 7) != 2:
-        return False
-    if lo_act(w) == LO_ACT_ST_BUS and (cl & 7) != 2:
-        return False
-    if (hi12(w) & HI_ST) and (hi12(w) & HI_B7) and hi_f31(hi12(w)) != 2:
-        return False
+    # ★ SPECULATIVE: drop the three strict store guards (bit-4 / ACT 07 / bit-7
+    # off mode 2).  The store OPERATION is known; only its target is
+    # mode-dependent (R2), which is a detail for a decode metric and irrelevant
+    # here since this predicate never executes.  And accept HI_ACC_HOLD on any
+    # admitted class (the op is the same as at class 8).
     f = hi_f31(hi12(w))
-    if f in (HI_ACC_LOAD, HI_ACC_ADD):
-        return True
-    if f == HI_ACC_HOLD:
-        return cl == 8
-    return False
+    return f in (HI_ACC_LOAD, HI_ACC_ADD, HI_ACC_HOLD)
 
 
 def decoded(w):
@@ -1053,6 +1049,7 @@ def annotate(w, at=None):
           "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else None)
     ar = ("ACT 0x0C = delay READ" if a == LO_ACT_DELAY_RD else
           "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else
+          "ACT 0x0B = delay-line access (READ/WRITE class-borne)" if a == LO_ACT_DELAY_ACC else
           "ACT 0x0D = biquad delay-stage (pair w/ 0x0E)" if a == LO_ACT_BIQ_D else
           "ACT 0x0E = biquad delay-stage (pair w/ 0x0D)" if a == LO_ACT_BIQ_E else None)
     if sr or ar:
