@@ -139,6 +139,12 @@ def is_c40(w):    return (hi12(w) & 0xFFE) == 0xC40
 def c_imm13(w):   return (w >> 12) & 0x1FFF
 def c_a(w):       return (w >> 17) & 0xFF      # payload
 def c_b(w):       return (w >> 12) & 0x1F      # 5-bit sub-field
+# c_opcode() bits[35:25] -- the C-format OPCODE (output-stage-decode.md sect. 5).
+# MEASURED over 68 words: 0x620 x57, 0x605 x3, 0x632 x2, 0x600 x2, and 0x602 /
+# 0x621 / 0x625 / 0x60B once each.  The payload rule is_c40() IS opcode 0x620,
+# 57/57 both ways; the five lo12=0x820 words carry four opcodes (602/605/621/625),
+# a shared destination not an instruction.
+def c_opcode(w):  return (w >> 25) & 0x7FF
 
 
 # proven-to-be FIELDS, meaning UNKNOWN
@@ -808,28 +814,27 @@ def annotate(w, at=None):
 
     # ---- C-FORMAT FIRST.  bits [24:12] are ONE 13-bit immediate -------------
     if c_format(w):
-        a, b = c_a(w), c_b(w)
+        a, b, op = c_a(w), c_b(w), c_opcode(w)
         if is_setvec(w):                       # decoded(); never reaches here
             return None
-        # THE PAYLOAD RULE IS FAMILY-LOCAL (K3 sect. 5.3): `A = imm13 >> 5' is
-        # MEASURED 57/57 inside (hi12 & 0xFFE) == 0xC40 and 2/11 outside, so the
-        # A/B split is asserted only here.  NOT extended to the other prefixes.
+        # THE PAYLOAD RULE IS THE OPCODE (bits[35:25]): is_c40 <=> opcode 0x620,
+        # 57/57 both ways, so `A = imm13 >> 5' is that opcode's 8-bit payload.
         if is_c40(w):
-            return ("C-format IMMEDIATE LOAD: A=%d B=%d (imm13 0x%04X = %d*32, "
-                    "MEASURED 57/57 in this sub-family); destination register "
-                    "lo12=%03X UNKNOWN" % (a, b, c_imm13(w), a, lo))
+            return ("C-format opcode 0x%03X IMMEDIATE LOAD: A=%d B=%d (imm13 0x%04X "
+                    "= %d*32, MEASURED 57/57 for this opcode); destination register "
+                    "lo12=%03X UNKNOWN" % (op, a, b, c_imm13(w), a, lo))
         if hi == 0xC00:
             own = ("= its own I-RAM address" if at is not None and at >= 0 and a == at
                    else "(I-RAM index?)")
-            return ("WAIT / SYNC (INFERRED): A=%d %s, B=%d = the event; both C00 "
-                    "words in the machine encode their own address (2/2)"
-                    % (a, own, b))
+            return ("WAIT / SYNC (INFERRED), C-format opcode 0x%03X: A=%d %s, B=%d = "
+                    "the event; both C00 words in the machine encode their own "
+                    "address (2/2)" % (op, a, own, b))
         if lo in (0x820, 0x825, 0x827, 0x822):
-            return ("C-format word with a pointer-load lo12; the A/B split is NOT "
-                    "established for this sub-family (B in {0,17,18,23}) -- residue "
-                    "A=%d B=%d shown for the record" % (a, b))
-        return ("C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into "
-                "hi12 bit 0, not class+addr; A=%d B=%d" % (a, b))
+            return ("C-format opcode 0x%03X, pointer-load lo12; the five lo12=0x820 "
+                    "words carry FOUR opcodes (602/605/621/625) -- a shared "
+                    "DESTINATION, not an instruction; A=%d B=%d" % (op, a, b))
+        return ("C-format opcode 0x%03X: bits [24:12] are one 13-bit IMMEDIATE "
+                "reaching into hi12 bit 0, not class+addr; A=%d B=%d" % (op, a, b))
 
     if is_end(w):
         if cl == 1 and ad == 0x0E:

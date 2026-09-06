@@ -166,9 +166,11 @@ exactly the four padding bits). The working field map is INFERRED
   family-locality: it is a property of **one instruction**, and the 11 words outside
   it are simply *other instructions*. Corollary the tree had wrong: the five
   `lo12 = 0x820` header words carry **four different opcodes**, so they are not a
-  family at all — they share a destination. Neither disassembler renders the opcode
-  yet (both still print a C-format word's `hi12` as microword flags, which is
-  meaningless); that is a sync item.
+  family at all — they share a destination. ✅ **SYNC ITEM CLOSED (2026-09-06):**
+  both disassemblers now render the opcode — `upd6383d.cpp`/`upd6383d.h`
+  (`c_opcode()`, the MAME core) and `tools/dsp_disasm.py` (`c_opcode()`) — printing
+  `C-format opcode 0x%03X` on every C-format word, and stating that the payload rule
+  `is_c40` **is** opcode `0x620`.
 
   The 11 words between them are **all kernel words** (8 header, 3 output stage,
   **0 of 2974 body words**) and exactly **2 of 11** are multiples of 32. Use the
