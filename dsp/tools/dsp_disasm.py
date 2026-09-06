@@ -305,13 +305,14 @@ LO_SRC_DRD  = 0x0B
 LO_SRC_TABLE = 0x13
 LO_SRC_MEM0 = 0x00   # sect. 233: mem[ptr] / delay-RAM read (null-MAC rival refuted)
 LO_SRC_LFO  = 0x08   # the LFO / per-unit modulation source
+LO_SRC_LFOOUT = 0x1C # the LFO OUTPUT (action00-discriminator.md:468); UNPROVEN (dead end #6)
 LO_ACT_DELAY_RD = 0x0C
 LO_ACT_TBL_MUL  = 0x08
 LO_ACT_BIQ_D = 0x0D  # sect. 234: biquad delay-stage action; the pair (0x0D,0x0E)
 LO_ACT_BIQ_E = 0x0E  #   is confirmed 1-of-49, only the tap/lag is hardware Q4
 LO_ACT_DELAY_ACC = 0x0B  # delay-line access (dark-words F); READ/WRITE class-borne
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
-                                      LO_SRC_MEM0, LO_SRC_LFO)
+                                      LO_SRC_MEM0, LO_SRC_LFO, LO_SRC_LFOOUT)
 _ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL,
                                       LO_ACT_BIQ_D, LO_ACT_BIQ_E, LO_ACT_DELAY_ACC)
 
@@ -1038,6 +1039,11 @@ def annotate(w, at=None):
     # I-RAM 78) where it is meaningless.  Host packets are decoded by
     # host_packet() below, which only a host-stream viewer should call.
 
+    # ★ SPECULATIVE (S-5): A00.0.00.041 heads a fixed 3-word template; operands
+    # SRC 0x01/ACT 0x01 stay dark but the structural role is established.
+    if w == 0xA00000041:
+        return "head of a fixed 3-word template (S-5); operands SRC 0x01/ACT 0x01 dark"
+
     # ★ SPECULATIVE TIER (goal 2026-09-06): render the prospective SRC/ACT codes,
     # LABELLED, so a speculative-tier word shows its adopted reading.  Mirrors
     # upd6383d.cpp; bases at the _ANCHORED_*_SPEC comment above.
@@ -1046,7 +1052,8 @@ def annotate(w, at=None):
           "SRC 0x08 = LFO/per-unit source" if s == LO_SRC_LFO else
           "SRC 0x0B = delay-read data register" if s == LO_SRC_DRD else
           "SRC 0x11 = ACCB (2nd accumulator)" if s == LO_SRC_ACCB else
-          "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else None)
+          "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else
+          "SRC 0x1C = LFO output (UNPROVEN)" if s == LO_SRC_LFOOUT else None)
     ar = ("ACT 0x0C = delay READ" if a == LO_ACT_DELAY_RD else
           "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else
           "ACT 0x0B = delay-line access (READ/WRITE class-borne)" if a == LO_ACT_DELAY_ACC else

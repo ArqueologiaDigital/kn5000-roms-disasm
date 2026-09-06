@@ -34,10 +34,10 @@ fits together; it is not a claim any of them is proven.
 
 ```
 STRICT      (alu_decoded):        1178 / 3057 = 38.53%   <- rigorous baseline, unchanged
-SPECULATIVE (alu_decoded_spec):   2628 / 3057 = 85.97%   <- ALU ops, prospective readings
-UNIFIED (has any meaning:         2924 / 3057 = 95.65%   <- + C-format + nop/ldptr/setvec
+SPECULATIVE (alu_decoded_spec):   2674 / 3057 = 87.47%   <- ALU ops, prospective readings
+UNIFIED (has any meaning:         3005 / 3057 = 98.30%   <- + C-format + nop/ldptr/setvec
    spec ALU + C-format + idioms)                            + structural annotations
-  ⇒ TRULY DARK (no annotation):    133 / 3057 =  4.35%   <- the real residue / frontier
+  ⇒ TRULY DARK (no annotation):     52 / 3057 =  1.70%   <- the real residue / frontier
 ```
 
 The UNIFIED figure is above the strategic review's ~93.3% "has-a-meaning"
