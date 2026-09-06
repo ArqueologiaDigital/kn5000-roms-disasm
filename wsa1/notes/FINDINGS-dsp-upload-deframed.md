@@ -48,13 +48,50 @@ C-RAM / coefficient bases (0x00 / 0x20 / 0x60 / 0xC0-region).
    de-framed (address, 24-bit value) coefficient writes has its C-RAM loaded with
    the real numbers.
 
+## The C/D tag is CORRECT — the sampling rule, traced (MEASURED)
+
+An earlier revision here called the driver's C/D tag "unreliable"; that was a
+misdiagnosis, now corrected by a full trace of `P7Byte_SendCmd` (0xF9A163),
+`P7Byte_SendData` (0xF9A31A) and `P7Byte_SendArg` (0xF9A4B0):
+
+- `res 3,(P5)` (C/D low) is **not** in a shared sequence — it exists at exactly
+  three sites, **all inside SendCmd** (0xF9A1D2 / 0xF9A24C / 0xF9A2C6, one per
+  destination).  SendData and SendArg **never touch P5.3**; it stays HIGH.
+- So at `ld (P7),byte` P5.3 is HIGH for all three routines (can't distinguish),
+  and P5.3 diverges only inside SendCmd's `res 3 … set 3` window.
+- **The single rule: sample P5.3 at the SECOND /CS-falling edge — the data latch,
+  after `ld (P7)` and after `/WR` (PB.5) low.  P5.3==0 ⇒ command (SendCmd);
+  P5.3==1 ⇒ data/arg (SendData/SendArg).**  There are TWO /CS-falling edges per
+  byte; the first (pre-data) always reads HIGH.
+
+The driver's capture already does exactly this — it triggers on `/CS` falling
+while `PB.5` (`/WR`) is low, which is only ever the second edge — so its C/D tags
+are **correct**.  What looked wrong ("mostly command" on IC6/IC5) is the real
+upload shape: those two get coefficient-heavy streams (SendCmd/SendArg framing),
+while IC30 carries a program block (below).
+
+## The program-word framing, traced (MEASURED)
+
+An opcode-3 record (the I-RAM instruction upload) serializes as:
+`SendCmd(0x01)` + `SendArg(addr_hi)` + `SendArg(addr_lo)` + **N × `SendData`(raw
+byte)** — a flat payload after a 16-bit big-endian start address, **no per-word
+grouping** (the 5-byte grouping belongs to the coefficient opcodes 0/1/5).  In the
+capture this is a `CMD 0x01` followed by a run of `DAT` bytes.  IC30 shows exactly
+one such block: `CMD 0x01`, addr `0x0030`, then a 315-byte `DAT` payload.  To get
+instruction words the driver regroups the payload by 5 from the start address (the
+ROM gives no per-word framing to key off — the word width is the chip's, INFERRED
+5 bytes).
+
 ## Still open
 
-- **The C/D (command/data) tag** the driver records is unreliable — the per-byte
-  sequence pulses P5.3 low just before every latch, and sampling it at the P7
-  write instead keys off the destination, not the role.  Getting it right needs a
-  precise per-destination trace of `P7Byte_SendCmd/SendData/SendArg`
-  (prom_c 0xF9A163 / 0xF9A31A / 0xF9A4B0).  The byte VALUES are right regardless.
+- **Full alignment to the static corpus.** With the C/D rule and both framings now
+  known, the remaining step is to de-interleave a boot capture — coefficient
+  groups (opcode 0/1/5) vs program blocks (opcode 3) — and match the regrouped
+  program words to the statically-extracted 5,777 words
+  (`wsa1_dsp_isa_crossval.py`).  The `08 01 .. 21` byte pattern appears in both a
+  coefficient address group and inside program payload, so clean de-interleaving
+  (segment strictly by the C/D command markers, not by byte value) is the care
+  point.  This is the last gate before a `upd6383` instance can be fed and run.
 - **The program (opcode-3) words** — the I-RAM instruction upload — are the other
   half; this pass characterised the coefficient (value/address) groups.  MEASURED:
   the three known group forms (addr `08 01`, value `0A`, opcode-0 addr `00 00 1X`)

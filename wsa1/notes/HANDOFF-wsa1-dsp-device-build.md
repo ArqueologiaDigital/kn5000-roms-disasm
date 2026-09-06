@@ -73,9 +73,11 @@ address/word bytes. This is the gate: feeding raw group bytes into the KN5000
    6,173, dest2/IC30 856 — and the stream carries the documented P7 framing (dest0:
    540 value-group `0x0A` leads, 82 address-group `08 01` leads; the same shape on
    IC5/IC30).  ⇒ **the transport model is CORRECT: the real upload reaches the
-   right DSPs in the right framing.**  ⚠ The C/D (`CMD`/`DAT`) tag is imperfect
-   (P5.3's exact edge relative to the `/CS` latch needs one more look); the byte
-   VALUES are right.
+   right DSPs in the right framing.**  ✅ The C/D tag is CORRECT too, now traced:
+   `res 3,(P5)` lives only in SendCmd, so P5.3 at the second /CS-falling latch is
+   low=command / high=data-arg (`FINDINGS-dsp-upload-deframed.md`).  And the
+   program-word framing is known: `SendCmd(0x01) + SendArg(addr_hi/lo) +
+   N×SendData(payload)`, regroup payload by 5.
 2. **Verify against the static corpus (framing gate, PARTIAL).** The captured
    5-byte groups (`08 01 ..` address, `0A ..` value) match
    `FINDINGS-prom_c-p7-group-and-naming.md`.  Still to do: de-frame the groups back
