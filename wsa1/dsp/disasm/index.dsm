@@ -64,3 +64,15 @@
 ; load 0x00  @0xFD4093  48 words  2/45 runtime
 ; load 0x30  @0xFDBE94  63 words  45/45 runtime  <- THE RUNTIME KERNEL (all resident words)
 ; load 0x6A  @0xFCE71F  94 words  1/45 runtime
+; distinct structural/alternate op3 programs (not in the effect directory):
+; load 0x00 @0xFD4093  48 words  2/45 runtime  -> struct_00_fd4093.dsm
+; load 0x30 @0xFCD2C6  59 words  20/45 runtime  -> struct_30_fcd2c6.dsm
+; load 0x30 @0xFCD5E2  112 words  18/45 runtime  -> struct_30_fcd5e2.dsm
+; load 0x30 @0xFCD81C  59 words  20/45 runtime  -> struct_30_fcd81c.dsm
+; load 0x30 @0xFCDA77  63 words  43/45 runtime  -> struct_30_fcda77.dsm
+; load 0x30 @0xFDBC5A  112 words  17/45 runtime  -> struct_30_fdbc5a.dsm
+; load 0x6A @0xFCE71F  94 words  1/45 runtime  -> struct_6a_fce71f.dsm
+; load 0x6A @0xFCFCA1  93 words  1/45 runtime  -> struct_6a_fcfca1.dsm
+; load 0x6A @0xFD7DC2  91 words  1/45 runtime  -> struct_6a_fd7dc2.dsm
+; load 0x6A @0xFD91EA  90 words  1/45 runtime  -> struct_6a_fd91ea.dsm
+; load 0x6A @0xFDB219  90 words  1/45 runtime  -> struct_6a_fdb219.dsm

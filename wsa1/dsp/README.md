@@ -18,6 +18,11 @@ commented.
   is rendered by the shared ISA model: mnemonic + `hi12.class.addr8.lo12` field breakdown
   + the decoded/**SPECULATIVE** reading + C-RAM coefficient-cursor addresses. A reading
   marked `SPECULATIVE` is a *graded prospective hypothesis*, not measured.
+- **`disasm/struct_*.dsm`** — the remaining distinct op3 programs in the pool that the effect
+  directory does not name: the 0x00 header, the 0x30 kernel variants (near-duplicates of the
+  runtime kernel), and the 0x6A alternates (distinct ~90-word bodies — candidates for a second
+  unit's program or an alternate reverb tank). With these, **all 57 distinct op3 programs in
+  the pool are listed.**
 - **`disasm/index.dsm`** — the program index with per-effect word/decode counts.
 - **`programs.tsv`** — the machine-readable manifest (record, name, slots, words, class-A
   multiplies, strict/speculative decode counts, family, whether the name is shared with a
