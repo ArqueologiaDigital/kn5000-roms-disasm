@@ -38,6 +38,19 @@ families, and the family's algorithm constrains the reading.
 - `cls=2 src=0x07 act=0x11` occurs **only in biquad/EQ** → act 0x11 there is a filter
   coefficient MAC or state update, not a routing code.
 
+## ⚠ The device is already AHEAD of this metric on C-format (2026-09-07)
+
+The residue here is measured by the **disassembler** model (`dsp/tools/dsp_disasm.py`
+`alu_decoded_spec`), which is the decode *authority*. But the MAME **device**
+(`upd6383.cpp:2697-2710`) already executes **every** C-format immediate load: it decodes
+`imm13`, sign-extends it, and parks it in the `m_cimm` latch (the destination register is
+"1 of 6 enumerated", parked rather than written to avoid a possible clobber). So the top
+group (`cfmt 0x620/0x605/0x600/0x632`, ~20 words) is a **disassembler-metric conservatism,
+not a device execution gap** — the device's real executable coverage is already ~2% above
+the 86.7% quoted here. Promoting these in the metric is a `dsp_disasm` change (count a
+C-format load as executable), not a device change, and it is *measured*, not speculative.
+The genuinely device-side residue is the non-C-format OPEN-action groups below it.
+
 ## The two safest fills (measured, low risk)
 
 1. **C-format immediate loads (opcodes 0x620/0x605/0x600/0x632, ~20 words).** The immediate
