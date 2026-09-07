@@ -55,11 +55,18 @@ built the same way, on two products with the same chip.
 
 ## Where they differ (real findings, not noise)
 
-- **The reverbs differ in tap structure.** ROOM REVERB 1 is 13w/19r on the KN5000 but
-  **28w/12r** on the WSA1R; GATED REVERB 10w/10r vs 17w/3r. The WSA1R reverbs are
-  write-heavy where the KN5000's are read-heavy — a genuinely different reverb-tank
-  topology between the two products (a candidate for a focused follow-up: which network —
-  more combs vs more all-passes).
+- **The reverbs differ in tap structure — and the follow-up is now answered.** The DRAM
+  access *order* (`dsp_idiom_sequence.py`, DRAM-only trace) tells the network apart:
+  - **KN5000 ROOM REVERB** = `RWRWRWRW…RRRRRRRW` — read/write *alternation*, i.e. a chain
+    of **all-pass diffuser stages** (each reads the old sample and writes the new), then a
+    run of output-tap reads. Matches its decoded role exactly.
+  - **WSA1R ROOM REVERB** = `RW WWWWWWWWWWWWW R WWWWWWWWWWWW RRRRRRRRR W` — long *runs of
+    writes* into a delay line at many tap points (with `DCDC…` = delay + C-format immediate
+    tap offsets), i.e. a **write-heavy multi-tap / comb (feedback-delay-network)** structure,
+    not an all-pass ladder.
+  So the two products implement the *same effect name with different reverb architectures*:
+  KN5000 an all-pass diffuser tank, WSA1R a comb/FDN. A genuine cross-product design
+  difference, pinned to the DRAM access pattern.
 - **NO OPERATION is minimal on the WSA1R** — 10 words / 0 multiplies, versus the KN5000's
   49-word pass-through that still runs a level detector. The WSA1R bypass is a true
   near-nop.
