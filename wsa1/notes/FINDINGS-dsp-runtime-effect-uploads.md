@@ -114,10 +114,16 @@ Either way, **as measured the goal is not met: runtime effect selection writes n
 
 - **Why the reload writes no I-RAM (the narrowed crux).** `sub_FA3A3C` runs on an effect
   change and calls `P7Stream_Run(field+12)` (the op3 body), but host_w performs zero
-  I-RAM writes (write-tap). Capture the raw bus (`LOG_DSPUP`) around an effect change and
-  de-frame it: if `cmd 0x01 / addr 0x6E` appears, the body is on the bus and a host_w fix
-  fills I-RAM (goal reachable); if not, the firmware gates the body as boot-resident
-  (goal not reachable via effect selection). This is THE next step.
+  I-RAM writes (write-tap — the clean, decisive instrument; it does not depend on any
+  log). To distinguish firmware-gate from a host_w framing gap, capture the raw bus
+  (`LOG_DSPUP`) around an effect change and de-frame it: if `cmd 0x01 / addr 0x6E`
+  appears, the body is on the bus and a host_w fix fills I-RAM (goal reachable); if not,
+  the firmware gates the body as boot-resident (goal not reachable via effect selection).
+  ⚠ CAVEAT (learned 2026-09-07): a naive `VERBOSE|LOG_DSPUP` build is UNUSABLE here — the
+  `upd6383` device's own per-sample logging (`§227`, unmapped-read warnings) floods
+  error.log to >1 GB / 16 M lines and slows the sim so it never reaches the change frame
+  (a run captured only ~3 k of boot's ~10 k dest0 bytes before the wall). First SILENCE
+  the device's logging (or gate LOG_DSPUP to post-boot only), then capture.
 - Static executable-vs-data classification is DONE
   (`dsp/analysis/dsp_program_record_classify.py`): all 70 records are real programs, and
   the body is field +12 (`dsp_record_field_opcodes.py`); the task is "find why the field+12
