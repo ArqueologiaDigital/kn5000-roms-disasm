@@ -69,15 +69,34 @@ upload the per-effect bodies through the triggers tested here.
 selected." Measured: the rest does **not** load on the twin-poke effect change, nor on
 group/combi/preamble-clear reloads. Corrected there in the same commit.
 
-⚠ **OPEN, and this is the crux (not "refuted"):** ~60 real effect-body programs exist in
-ROM at I-RAM 0x6E but the tested triggers did not upload them. The boot block itself
-spans 0x30..~0x6E, so the bodies overlap the kernel tail and a per-effect body upload
-*would* be visible if it happened. Why it does not — whether the effect→record directory
-maps every reachable effect's body to the resident kernel, whether the body is *staged*
-(`P7Stream_StageAndSend`) but committed only on an event not triggered here (audio-active?
-a separate commit?), or whether a body-uploading trigger simply has not been found — is
-the open question. The goal of exercising more of the corpus at runtime is therefore
-**open**, not refuted: the corpus is real; the upload trigger is unidentified.
+### The mechanism, traced (2026-09-07) — the reload RUNS but writes no I-RAM
+
+Follow-up RE + execution/write taps resolved most of the crux:
+
+- **The I-RAM program body is PoolDir_Records field +12**, not +0/+4 (verified:
+  `dsp/analysis/dsp_record_field_opcodes.py` — field +12 is opcode-3 for 48/56 effects;
+  +0/+4/+8 are all opcode-0 coefficient streams). `sub_FA3A3C` emits it via
+  `P7Stream_Run(field+12)` at `p7_module.s` 0xFA3B9C. So each effect *does* have a
+  distinct body in ROM (48 of them).
+- **The reload routines RUN on an effect change** (exec-taps,
+  `notes/wsa1-probes/wsa1_effect_exec_taps.lua`): `P7Units_ServiceTask` wakes,
+  `ResolveProgramsAndReload` runs, and `sub_FA3A3C` fires (+2 on a program change), with
+  `P7Byte_SendCmd` emitting bytes. So it is NOT skipped.
+- **Yet host_w writes ZERO DSP I-RAM** on the change (write-tap,
+  `wsa1_effect_iram_writetap.lua`: 0 I-RAM writes on all three DSPs; C-RAM writes DO
+  happen — IC6 +12). So the negative is now confirmed at the WRITE level, not just the
+  non-zero count: runtime effect selection produces no I-RAM write at all.
+
+⚠ **The one remaining open question** (narrow and precise): the reload executes but its
+field+12 op3 body never becomes an I-RAM write. Either the firmware does not actually put
+the body on the P7 bus at runtime (it treats the boot-resident program as sufficient — a
+resident/"changed?" gate, so `sub_FA3A3C`'s body `P7Stream_Run` early-returns), or the
+body IS emitted but in a framing host_w does not parse as a cmd-0x01 program (a driver
+interleaving gap with the coefficient poke-port stream). Distinguishing needs a raw-byte
+capture (`LOG_DSPUP`) around an effect change, de-framed to look for `cmd 0x01 / addr
+0x6E`. If it is on the bus → a host_w fix would fill I-RAM (goal reachable); if not →
+the firmware never re-uploads bodies in play (goal not reachable via effect selection).
+Either way, **as measured the goal is not met: runtime effect selection writes no I-RAM.**
 
 ## What was and wasn't achieved vs the stated goal
 
@@ -93,15 +112,16 @@ the open question. The goal of exercising more of the corpus at runtime is there
 
 ## Still open
 
-- **The body-upload trigger (the crux).** ~60 container-valid effect-body programs sit at
-  I-RAM 0x6E in the pool, but none uploaded on the tested triggers. Resolve whether the
-  effect→PoolDir_Records directory maps every reachable effect's body pointer (field +4)
-  to the resident kernel, or whether `P7Stream_StageAndSend` stages a body that a later
-  event commits (trace `sub_FA3A3C` → `P7Unit_LoadProgramStreams` and what gates its DSP
-  write). This is the path to actually exercising the corpus at runtime.
+- **Why the reload writes no I-RAM (the narrowed crux).** `sub_FA3A3C` runs on an effect
+  change and calls `P7Stream_Run(field+12)` (the op3 body), but host_w performs zero
+  I-RAM writes (write-tap). Capture the raw bus (`LOG_DSPUP`) around an effect change and
+  de-frame it: if `cmd 0x01 / addr 0x6E` appears, the body is on the bus and a host_w fix
+  fills I-RAM (goal reachable); if not, the firmware gates the body as boot-resident
+  (goal not reachable via effect selection). This is THE next step.
 - Static executable-vs-data classification is DONE
-  (`dsp/analysis/dsp_program_record_classify.py`): all 70 records are real programs, so
-  the task is not "drop the data" but "find the trigger that loads the other 60+".
+  (`dsp/analysis/dsp_program_record_classify.py`): all 70 records are real programs, and
+  the body is field +12 (`dsp_record_field_opcodes.py`); the task is "find why the field+12
+  send produces no I-RAM write", not "drop the data".
 - IC30 unit2 effect changes resolve a record but touch neither its I-RAM nor C-RAM —
   what unit2's effect program actually controls (routing? a main/reverb path?) is
   uncharacterised.
