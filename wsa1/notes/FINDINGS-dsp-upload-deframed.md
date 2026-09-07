@@ -122,8 +122,12 @@ The correctness gate is now proven INSIDE the emulator, not just offline.
 - **Per-DSP boot split:** IC30 gets that program block (+2 host-poke blocks at
   I-RAM 352); IC6 and IC5 get **coefficients only** at boot (533 / 269 value
   groups), no program.  Program code for IC6/IC5 must arrive on effect selection.
-- **Only 63/384 of IC30's I-RAM is filled at boot** — the rest (the shared kernel
-  epilogue, other effect bodies) loads when effects are selected.
+- **Only 63/384 of IC30's I-RAM is filled at boot** — this 63-word block (45 distinct
+  words) is a RESIDENT kernel. ⚠ CORRECTION (2026-09-07): the rest does **NOT** load
+  when effects are selected — measured across all 55 real effects plus group/combi/
+  preamble-clear reloads, IC30's I-RAM is byte-identical every time. Runtime effect
+  selection is coefficient-driven (C-RAM only). See
+  [FINDINGS-dsp-runtime-effect-uploads.md](FINDINGS-dsp-runtime-effect-uploads.md).
 
 ## ✅ Coefficients into C-RAM — DONE and TESTED in-emulator (2026-09-07)
 
