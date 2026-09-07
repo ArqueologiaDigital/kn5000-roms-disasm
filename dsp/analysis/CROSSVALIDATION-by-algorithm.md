@@ -41,6 +41,23 @@ instances.
   stage of a combi in stereo where the KN5000's combi EQ is folded — a real, specific
   structural difference, visible in one number.
 
+## The whole catalog, scored (`dsp_idiom_sequence.py --crossval`)
+
+Of the **31 effects present on both chips**, the idiom-histogram similarity classifies:
+
+- **13 IDENTICAL** (sim ≥ 0.99, same biquad count): OVERDRIVE, PHASER, MULTI TAP DELAY,
+  ENSEMBLE, MIX UP, VIBRATO, and every `S.DELAY+…` combination, `PEQ+COMPR+OVERDR`.
+- **15 same-algorithm** (sim ≥ 0.95): PARAMETRIC EQ (0.999), SINGLE DELAY, DISTORTION,
+  FUZZ, FLANGER, ENHANCER, EXCITER, RING MODULATOR, and the `PEQ+…` combinations (which
+  carry ~2× the biquad sections = the WSA1R runs that stage in stereo).
+- **3 DIFFER**: GATED REVERB (0.912) and ROOM REVERB 1 (0.842) — the reverb-architecture
+  difference above — and NO OPERATION (0.809), which is a 10-word near-nop on the WSA1R
+  versus a 49-word level-detector pass-through on the KN5000.
+
+So **28 of 31 shared effects are the same program on two independent silicon instances** —
+a broad, quantified cross-validation of the ISA and the algorithm decode. The three
+exceptions are genuine, specific design differences, not decode noise.
+
 ## Why this matters for the decode
 
 The strict decoder needs measured evidence per field; the algorithm-identity argument is a

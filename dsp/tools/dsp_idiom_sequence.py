@@ -79,7 +79,52 @@ def all_names(tree):
     return out
 
 
+def histo(words):
+    h = {}
+    for w in words:
+        h[idiom(w)] = h.get(idiom(w), 0) + 1
+    return h
+
+
+def similarity(a, b):
+    """0..1 cosine-like overlap of two idiom histograms."""
+    keys = set(a) | set(b)
+    dot = sum(a.get(k, 0) * b.get(k, 0) for k in keys)
+    na = sum(v * v for v in a.values()) ** 0.5
+    nb = sum(v * v for v in b.values()) ** 0.5
+    return dot / (na * nb) if na and nb else 0.0
+
+
+def crossval_all():
+    knn = all_names(TREES["KN5000"])
+    wsn = all_names(TREES["WSA1R"])
+    shared = sorted(set(knn) & set(wsn))
+    print("Structural cross-validation of every effect on BOTH chips (%d shared):\n" % len(shared))
+    print("effect                 KN5000w  WSA1Rw  biquad(k/w)  idiom-sim  verdict")
+    ident = same = diff = 0
+    for nm in shared:
+        kw = load(TREES["KN5000"], nm)
+        ww = load(TREES["WSA1R"], nm)
+        bk, bw = biquad_bands(kw), biquad_bands(ww)
+        sim = similarity(histo(kw), histo(ww))
+        if sim >= 0.99 and bk == bw:
+            v, ident = "IDENTICAL", ident + 1
+        elif sim >= 0.95:
+            v, same = "same algorithm", same + 1
+        else:
+            v, diff = "DIFFERS", diff + 1
+        print("%-22s %5d   %5d    %2d / %-2d      %.3f     %s"
+              % (nm[:22], len(kw), len(ww), bk, bw, sim, v))
+    print("\n%d identical, %d same-algorithm, %d differ (of %d shared effects)"
+          % (ident, same, diff, len(shared)))
+    print("=> the two products run structurally the same DSP programs, with the reverbs the "
+          "main exception.")
+    return 0
+
+
 def main():
+    if len(sys.argv) >= 2 and sys.argv[1] == "--crossval":
+        return crossval_all()
     if len(sys.argv) >= 2 and sys.argv[1] == "--biquads":
         print("Direct-Form-I biquad sections per EQ-family program (a section = 5 coeffs):\n")
         for label, tree in TREES.items():
