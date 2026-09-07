@@ -28,7 +28,7 @@ Unit0Vector:
         ; UNIT-0 CALL VECTOR; host writes setvec unit0,#84 (link) / #42 (disconnect) [DETERMINED]
   w65   020018F1C1   ?word   0x020018F1C1   ; 200.1.8F.1C1  hi12{f98=2}  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
   w66   000018C107   ?word   0x000018C107   ; 000.1.8C.107  hi12{-}  [internal register file [8C], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w67   0980520402   ?word   0x0980520402   ; 980.5.20.402  hi12{ESC f98=1 ?7 res=080}
+  w67   0980520402   ?word   0x0980520402   ; 980.5.20.402  hi12{ESC f98=1 ?7 res=080}  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0x5 and operands are OPEN]
   w68   009218C19B   ?word   0x009218C19B   ; 092.1.8C.19B  hi12{ST f31=1 ?7 res=080}  [internal register file [8C], unit 1 (bit 7 = the unit); this index has no named role yet]
   w69   0801090821   ldptr   #$90
         ; ptr-load family: register 0x821 <- 0x90.  0x90 is ALSO the unit-1 C-RAM bank
@@ -37,24 +37,24 @@ Unit1Vector:
   w71   001190F446   ?word   0x001190F446   ; 011.9.0F.446  hi12{ST ?0 res=001} cur  [writes the unit-1 CALL VECTOR (I-RAM 71) -- DETERMINED destination; this SOURCE form is the canned boot default, its source field is OPEN]
         ; UNIT-1 CALL VECTOR; host writes setvec unit1,#200 (link) / #50 (disconnect) [DETERMINED]
   w72   0000106087   ?word   0x0000106087   ; 000.1.06.087  hi12{-}  [internal register file [06] -- per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- the last four host actions of cold boot are setvec unit1,#200 / setvec unit0,#84 / reg 0x06 <- +0.500000 / reg 0x86 <- +0.183992, both cleared at reset), unit 0]
-  w73   0E30C00404   ?word   0x0E30C00404   ; E30.C.00.404  hi12{ESC f98=2 ?10 ?5 res=420} cur
+  w73   0E30C00404   ?word   0x0E30C00404   ; E30.C.00.404  hi12{ESC f98=2 ?10 ?5 res=420} cur  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0xC and operands are OPEN]
         ; the machine's ONLY class-C word (0 of 2974 body words)
-  w74   0C169AB000   ?word   0x0C169AB000   ; C16.9.AB.000  {C-fmt A=77 B=11}  hi12{ESC f31=3 ?10 res=400}  [C-format: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=77 B=11]
+  w74   0C169AB000   ?word   0x0C169AB000   ; C16.9.AB.000  {C-fmt A=77 B=11}  hi12{ESC f31=3 ?10 res=400}  [C-format opcode 0x60B: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=77 B=11]
         ; C-format; imm13 0x9AB = 77*32 + 11, and I-RAM 77 is the next pointer load
   w75   082E80F000   ?word   0x082E80F000   ; 82E.8.0F.000  hi12{ESC f31=7 ?5 res=020} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
         ; class 8 post-sum step, operation UNKNOWN; addr8 0x0F equals the unit-1 tag
-  w76   0C00984000   ?word   0x0C00984000   ; C00.9.84.000  {C-fmt A=76 B=4}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED): A=76 = its own I-RAM address, B=4 = the event; both C00 words in the machine encode their own address (2/2)]
+  w76   0C00984000   ?word   0x0C00984000   ; C00.9.84.000  {C-fmt A=76 B=4}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=76 = its own I-RAM address, B=4 = the event; both C00 words in the machine encode their own address (2/2)]
         ; WAIT/SYNC: imm13 0x984 = 76*32 + 4 = its OWN I-RAM address + event 4 [INFERRED]
   w77   0859086822   ?word   0x0859086822   ; 859.0.86.822  hi12{ESC f31=4 ?6 ?0 res=041}  [register write: selector lo12[7:0]=22, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN; hi12 bit 4 is set BUT SO IS THE FORMAT ESCAPE (bit 11), and inside the escape this decoder does not read bit 4 as the store -- K3 sect. 5.2 reads it as a store anyway.  CONFLICT, 1 site, UNRESOLVED]
         ; ptr-load family: register 0x822 <- 0x86
-  w78   0A3CD9F287   ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur
+  w78   0A3CD9F287   ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur  [output-stage word (unit 1 -> DO2 -> IC303.SDIB); the only class-D word, a DO-write candidate; its operation (f31=6) is OPEN]
         ; the machine's ONLY class-D word (0 of 2974 body words)
   w79   00122FF1CE   ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
         ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
-  w80   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}
+  w80   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
         ; ordinary body vocabulary (22 exact matches in the 2974-word body corpus)
   w81   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; ordinary body vocabulary (34 exact matches in the 2974-word body corpus)
 FrameWait:
-  w82   0C00A47407   ?word   0x0C00A47407   ; C00.A.47.407  {C-fmt A=82 B=7}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED): A=82 = its own I-RAM address, B=7 = the event; both C00 words in the machine encode their own address (2/2)]
+  w82   0C00A47407   ?word   0x0C00A47407   ; C00.A.47.407  {C-fmt A=82 B=7}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=82 = its own I-RAM address, B=7 = the event; both C00 words in the machine encode their own address (2/2)]
         ; FRAME TERMINATOR: imm13 0xA47 = 82*32 + 7 = its OWN address + event 7 [INFERRED]
