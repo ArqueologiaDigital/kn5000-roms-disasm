@@ -59,3 +59,8 @@
 ;  53  NO OPERATION            73    10      0  1/10    dynamics      eff53_no_operation.dsm
 ;  54  PITCH SHIFTER            1   108     32  28/92    pitch         eff54_pitch_shifter.dsm
 ;  55  PEDAL WAH+DELAY          1   103     25  45/93    combination   eff55_pedal_wah_delay.dsm
+;
+; SHARED KERNEL / structural records (NOT per-effect bodies):
+; load 0x00  @0xFD4093  48 words  2/45 runtime
+; load 0x30  @0xFDBE94  63 words  45/45 runtime  <- THE RUNTIME KERNEL (all resident words)
+; load 0x6A  @0xFCE71F  94 words  1/45 runtime

@@ -8,6 +8,12 @@ commented.
 
 ## What is here
 
+- **`disasm/kernel.dsm`** — the **shared kernel** (I-RAM load 0x30, 63 words). ★ This is the
+  program that *actually executes at runtime*: measured on the emulated WSA1R, the only DSP
+  program uploaded in SOUND play is this kernel (at boot, to IC30); all 45 runtime-resident
+  words are in it. The per-effect bodies below are the ROM's programs but are **not** uploaded
+  during normal play — effect changes stream only C-RAM coefficients onto this resident kernel
+  (see `analysis/FINDINGS-dsp-runtime-effect-uploads.md`).
 - **`disasm/eff*.dsm`** — one listing per distinct effect program (48 of them). Each word
   is rendered by the shared ISA model: mnemonic + `hi12.class.addr8.lo12` field breakdown
   + the decoded/**SPECULATIVE** reading + C-RAM coefficient-cursor addresses. A reading
