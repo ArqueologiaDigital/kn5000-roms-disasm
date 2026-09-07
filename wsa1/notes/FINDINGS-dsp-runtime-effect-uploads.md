@@ -54,6 +54,15 @@ low static decode rate (WSA1R 34.48%, near the field-shuffle null 22.43%): much 
 is data/coefficient bytecode framed as opcode-3, not executable instructions. The 45
 runtime-resident words are the ones with a genuine execution context.
 
+**Measured-resident executable surface (a decode advance).**
+`dsp/analysis/dsp_runtime_resident_vs_corpus.py` cross-checks the 45 runtime-resident
+words against the static corpus: **45/45 are container-valid AND 45/45 are in the
+918-word corpus** — so the runtime kernel is a genuine subset, and exactly **45 of 918
+(4.9%)** static "program words" are proven-executed. Those 45 are the sharpest target
+for ISA decode (they carry a real runtime execution context); the other ~873 are, by
+this measurement, never executed as microcode during operation. Baseline word list:
+`dsp/analysis/runtime-resident-iram-words.txt`.
+
 ⚠ **This REFUTES the earlier note** (`FINDINGS-dsp-upload-deframed.md`, "Insights"):
 "Only 63/384 of IC30's I-RAM is filled at boot — the rest loads when effects are
 selected." Measured: the rest does **not** load on effect selection (nor on group/
