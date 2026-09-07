@@ -46,27 +46,38 @@ record (`0x8586`/`0x85A0`/`0x85BA`) confirm each change landed.
 ## Consequence for the 918-word "corpus" (the important part)
 
 The static pool has **70 opcode-3 (program) records → 5,777 words / 918 distinct**
-(`dsp/analysis/wsa1_dsp_isa_crossval.py`). But at runtime **only 45 distinct I-RAM
-words are ever resident** (IC30's kernel), and **no effect selection uploads any of
-the rest**. This is strong new evidence that the static "program corpus" is dominated
-by content that is **never executed as microcode** at runtime — consistent with the
-low static decode rate (WSA1R 34.48%, near the field-shuffle null 22.43%): much of it
-is data/coefficient bytecode framed as opcode-3, not executable instructions. The 45
-runtime-resident words are the ones with a genuine execution context.
+(`dsp/analysis/wsa1_dsp_isa_crossval.py`). At runtime **only 45 distinct I-RAM words
+are ever resident** (IC30's kernel), and **none of the tested triggers uploaded any of
+the rest**.
 
 **Measured-resident executable surface (a decode advance).**
 `dsp/analysis/dsp_runtime_resident_vs_corpus.py` cross-checks the 45 runtime-resident
 words against the static corpus: **45/45 are container-valid AND 45/45 are in the
-918-word corpus** — so the runtime kernel is a genuine subset, and exactly **45 of 918
-(4.9%)** static "program words" are proven-executed. Those 45 are the sharpest target
-for ISA decode (they carry a real runtime execution context); the other ~873 are, by
-this measurement, never executed as microcode during operation. Baseline word list:
-`dsp/analysis/runtime-resident-iram-words.txt`.
+918-word corpus** — the runtime kernel is a genuine subset, and exactly **45 of 918
+(4.9%)** static words are proven-executed (baseline: `runtime-resident-iram-words.txt`).
+
+⚠ **The other ~873 are NOT data** — an earlier revision of this note guessed they were
+coefficient/data framed as opcode-3; `dsp/analysis/dsp_program_record_classify.py`
+**refutes that**: all 70 records are **100% container-valid** and most decode well above
+the ~22% field-shuffle null (many 40–70%). They are **genuine effect-body programs** —
+the runtime kernel is record #69 (addr 0x0030, 45/45 words); ~60 distinct effect bodies
+sit at I-RAM address 0x6E. So the 918-word corpus is real code; the runtime just did not
+upload the per-effect bodies through the triggers tested here.
 
 ⚠ **This REFUTES the earlier note** (`FINDINGS-dsp-upload-deframed.md`, "Insights"):
 "Only 63/384 of IC30's I-RAM is filled at boot — the rest loads when effects are
-selected." Measured: the rest does **not** load on effect selection (nor on group/
-combi/preamble-clear reloads). Corrected there in the same commit.
+selected." Measured: the rest does **not** load on the twin-poke effect change, nor on
+group/combi/preamble-clear reloads. Corrected there in the same commit.
+
+⚠ **OPEN, and this is the crux (not "refuted"):** ~60 real effect-body programs exist in
+ROM at I-RAM 0x6E but the tested triggers did not upload them. The boot block itself
+spans 0x30..~0x6E, so the bodies overlap the kernel tail and a per-effect body upload
+*would* be visible if it happened. Why it does not — whether the effect→record directory
+maps every reachable effect's body to the resident kernel, whether the body is *staged*
+(`P7Stream_StageAndSend`) but committed only on an event not triggered here (audio-active?
+a separate commit?), or whether a body-uploading trigger simply has not been found — is
+the open question. The goal of exercising more of the corpus at runtime is therefore
+**open**, not refuted: the corpus is real; the upload trigger is unidentified.
 
 ## What was and wasn't achieved vs the stated goal
 
@@ -74,17 +85,23 @@ combi/preamble-clear reloads). Corrected there in the same commit.
   effects, driven through the real firmware path, with the devices loaded live.
 - ✅ **More C-RAM filled at runtime**: IC6 coefficient vocabulary 37→47 distinct
   values (IC5 likewise).
-- ❌ **More of the 918-word I-RAM corpus is NOT exercised** by effect selection — the
-  hardware does not re-program the DSPs per effect. This is a measured property of the
-  instrument, not a rig limitation.
+- ⏳ **More of the 918-word I-RAM corpus was NOT exercised by the tested triggers** —
+  effect change, group/combi reload, preamble-clear all moved only C-RAM. Measured, but
+  NOT proof the corpus can never be exercised: ~60 real effect-body programs demonstrably
+  exist in ROM (classifier), so the missing piece is the trigger that commits a per-effect
+  body to I-RAM. The goal is **open**, not refuted.
 
 ## Still open
 
-- WHERE (if anywhere) the other 69 opcode-3 pool records are consumed — a different
-  product variant, a mode not reachable in SOUND/COMBI play, or genuinely dead/data.
-  A static pass classifying each opcode-3 record as executable-microcode vs
-  coefficient-data (using the runtime 45-word kernel as ground truth) is the next step
-  and would sharpen the real ISA decode surface.
+- **The body-upload trigger (the crux).** ~60 container-valid effect-body programs sit at
+  I-RAM 0x6E in the pool, but none uploaded on the tested triggers. Resolve whether the
+  effect→PoolDir_Records directory maps every reachable effect's body pointer (field +4)
+  to the resident kernel, or whether `P7Stream_StageAndSend` stages a body that a later
+  event commits (trace `sub_FA3A3C` → `P7Unit_LoadProgramStreams` and what gates its DSP
+  write). This is the path to actually exercising the corpus at runtime.
+- Static executable-vs-data classification is DONE
+  (`dsp/analysis/dsp_program_record_classify.py`): all 70 records are real programs, so
+  the task is not "drop the data" but "find the trigger that loads the other 60+".
 - IC30 unit2 effect changes resolve a record but touch neither its I-RAM nor C-RAM —
   what unit2's effect program actually controls (routing? a main/reverb path?) is
   uncharacterised.
