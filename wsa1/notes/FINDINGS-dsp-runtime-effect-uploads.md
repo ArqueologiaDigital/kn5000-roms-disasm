@@ -87,16 +87,28 @@ Follow-up RE + execution/write taps resolved most of the crux:
   happen — IC6 +12). So the negative is now confirmed at the WRITE level, not just the
   non-zero count: runtime effect selection produces no I-RAM write at all.
 
-⚠ **The one remaining open question** (narrow and precise): the reload executes but its
-field+12 op3 body never becomes an I-RAM write. Either the firmware does not actually put
-the body on the P7 bus at runtime (it treats the boot-resident program as sufficient — a
-resident/"changed?" gate, so `sub_FA3A3C`'s body `P7Stream_Run` early-returns), or the
-body IS emitted but in a framing host_w does not parse as a cmd-0x01 program (a driver
-interleaving gap with the coefficient poke-port stream). Distinguishing needs a raw-byte
-capture (`LOG_DSPUP`) around an effect change, de-framed to look for `cmd 0x01 / addr
-0x6E`. If it is on the bus → a host_w fix would fill I-RAM (goal reachable); if not →
-the firmware never re-uploads bodies in play (goal not reachable via effect selection).
-Either way, **as measured the goal is not met: runtime effect selection writes no I-RAM.**
+### ✅ RESOLVED (raw-bus capture, 2026-09-07): the body is never on the bus — firmware-gated
+
+The remaining question is now directly settled. A clean `LOG_DSPUP` capture (device iram
+map temporarily widened to silence the per-sample unmapped-read flood; recipe in
+`dsp/analysis/dsp_bus_program_scan.py`) around two effect changes shows:
+
+- **The only cmd-0x01 PROGRAM upload on the entire bus is to 0x0030 on dest2 (IC30) — at
+  boot** (bytes #1, #436). There is **no cmd-0x01 to 0x006E, ever**, and **no program
+  upload of any kind after boot**.
+- The effect changes produced **1923 (IC6) / 26 (IC5) post-boot bytes, all coefficient/
+  descriptor framing** (0A value, 08 01 address, 00 00 D-RAM groups) — zero cmd-0x01
+  program records.
+
+⇒ **The firmware does NOT emit the per-effect I-RAM body to the DSP bus at runtime.**
+`sub_FA3A3C`'s field+12 op3 `P7Stream_Run` is gated (the boot-loaded program is treated
+as resident); effect changes stream only coefficients. This DIRECTLY confirms the
+write-tap (0 I-RAM writes) at the bus level and **refutes the host_w-framing hypothesis**
+(the body isn't on the bus in any framing — so no driver fix could load it). **The goal
+of exercising more of the 918-word I-RAM corpus via effect selection is not achievable:
+it is a firmware-architecture fact, not a driver limitation.** (Side note: the boot
+program uploads to IC30 only; the ~48 field+12 effect bodies at I-RAM 0x6E in the pool
+are never uploaded during SOUND-mode play.)
 
 ## What was and wasn't achieved vs the stated goal
 
@@ -112,18 +124,19 @@ Either way, **as measured the goal is not met: runtime effect selection writes n
 
 ## Still open
 
-- **Why the reload writes no I-RAM (the narrowed crux).** `sub_FA3A3C` runs on an effect
-  change and calls `P7Stream_Run(field+12)` (the op3 body), but host_w performs zero
-  I-RAM writes (write-tap — the clean, decisive instrument; it does not depend on any
-  log). To distinguish firmware-gate from a host_w framing gap, capture the raw bus
-  (`LOG_DSPUP`) around an effect change and de-frame it: if `cmd 0x01 / addr 0x6E`
-  appears, the body is on the bus and a host_w fix fills I-RAM (goal reachable); if not,
-  the firmware gates the body as boot-resident (goal not reachable via effect selection).
-  ⚠ CAVEAT (learned 2026-09-07): a naive `VERBOSE|LOG_DSPUP` build is UNUSABLE here — the
-  `upd6383` device's own per-sample logging (`§227`, unmapped-read warnings) floods
-  error.log to >1 GB / 16 M lines and slows the sim so it never reaches the change frame
-  (a run captured only ~3 k of boot's ~10 k dest0 bytes before the wall). First SILENCE
-  the device's logging (or gate LOG_DSPUP to post-boot only), then capture.
+- ✅ **Why the reload writes no I-RAM — RESOLVED** (see the raw-bus section above): the
+  firmware never puts the field+12 body on the bus at runtime; effect changes stream
+  coefficients only. Not a driver bug — a firmware gate. So the goal is not reachable via
+  effect selection, proven at the bus level.
+- (Capture gotcha, for the record: a naive `VERBOSE|LOG_DSPUP` build floods error.log to
+  >1 GB / 16 M lines from the `upd6383` device's per-sample read past its 384-word iram
+  (`unmapped iram memory read from 7B7`) and never reaches the change frame; widen the
+  device `iram_map` to the full 11-bit space (`map(0x000,0x7ff)`) for the capture build.
+  That the device reads iram word 395 (>383) every sample is itself a device oddity worth
+  a look, tangential to this finding.)
+- **The only remaining runtime avenue** (unlikely to change the answer): whether some mode
+  outside SOUND/COMBI play (a specific bank, a service/test mode) ever uploads the 0x6E
+  bodies. Not observed in normal operation; low priority.
 - Static executable-vs-data classification is DONE
   (`dsp/analysis/dsp_program_record_classify.py`): all 70 records are real programs, and
   the body is field +12 (`dsp_record_field_opcodes.py`); the task is "find why the field+12
