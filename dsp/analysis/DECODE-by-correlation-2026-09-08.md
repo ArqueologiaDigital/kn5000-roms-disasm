@@ -46,6 +46,26 @@ words but with an **identical idiom histogram and identical DRAM tap counts** (2
 the same reverb-tank *shape* with different tap offsets and immediates. This is the same
 lesson as the runtime finding at a different level: reverb *character* is data, not code.
 
+## 3. Program-order context confirms the ACT 0x0D/0x0E biquad pair
+
+A second discriminator the isolated word cannot give: what feeds each OPEN code and what it
+feeds, aggregated across the catalog (`dsp/tools/dsp_context_analysis.py`).
+
+- **ACT 0x0D → ACT 0x0E is an ADJACENT PAIR.** ACT 0x0D is *immediately* followed by ACT
+  0x0E in **226/274 (82%)**, and ACT 0x0E is *immediately* preceded by ACT 0x0D in **226/304
+  (74%)**. Two back-to-back state updates are exactly a biquad's `z⁻¹`/`z⁻²` pair — this is a
+  strong, cross-program, MEASURED confirmation of the reading the strict method had refused
+  for want of a discriminator. ⚠ It confirms the *pairing/role*, not the *lag* (which tap is
+  delayed) — that stays hardware-Q4.
+- **It is a general primitive, not EQ-only.** ACT 0x0D appears in every family (reverb 11,
+  delay 13, modulation 6, eq/filter 10, other 15), so the two-state filter update is used
+  wherever there is a resonant filter, damping one-pole or feedback comb — which is why the
+  biquad idiom shows up far beyond the parametric EQ.
+- **SRC 0x00 context matches the MEASURED mem-read.** SRC 0x00's neighbour profile (cMAC /
+  route before, route / cMAC after) is the same shape as SRC 0x07 (`= mem[ptr]`, MEASURED),
+  supporting the shipped "delay-read". **SRC 0x11** is *preceded by a route 56%* of the time,
+  consistent with a second accumulator that is set up by a route then read (the ACCB reading).
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get
