@@ -54,15 +54,47 @@ opcode-framed; the open question is only which caller feeds `PoolDir_Records[idx
 — the per-effect path feeds +0/+8, and the group path feeds a fixed table (0xFCD2C6 …),
 so the exact trigger for the +12 body is still being pinned.
 
+## In-emulator test (2026-09-08, WSA1R_ENABLE_DSP=1 build, I-RAM/C-RAM write-taps)
+
+I rebuilt the DSP-instantiated emulator and drove both paths under a write-tap that counts
+every I-RAM and C-RAM write event (so an identical re-upload is visible), with a handshake
+confirming each trigger landed. Rigs: `wsa1_dsp_group_toggle.lua` (state diff),
+`wsa1_dsp_group_writetap.lua`, `wsa1_dsp_group_writetap2.lua` (handshake + write count).
+
+| trigger | I-RAM writes | C-RAM writes | notes |
+|---|---|---|---|
+| **boot** | **630** to IC30, **words 48..110** (= load 0x30..0x6E, the 63-word kernel) | IC6 108, IC5 59 | the kernel upload |
+| effect change (unit 0/2) | **0** | 0–2 coeffs | landed=true; coefficient-only |
+| **group toggle** (`0xF361`+`0x7ECC.0`) | **0** (every run) | 0–12 coeffs | see caveat |
+
+- The **only I-RAM upload ever observed is the boot kernel** (words 48..110). **No trigger
+  produced a single further I-RAM write** — in particular nothing was written above word 110
+  (where the +12 bodies would land). So no body upload was observed in the emulator.
+- ⚠ **CORRECTION of this note's first draft:** I earlier wrote that a group change "re-issues
+  command-01 I-RAM loads (0x30 stream 0xFCD2C6)" and called "boot-kernel-only" *refuted*.
+  That was inferred from static control flow and is **NOT supported by measurement** — the
+  write-tap shows **zero** I-RAM writes on a group toggle. Retracted.
+- ⚠ **But my triggering is not airtight, so this does not refute Felipe either.** The RAM-poke
+  of command 0x80 is **timing-sensitive**: `0xF35D` tracked `0xF361` in one run but in another
+  the group step showed `landed=false` (F35D never flipped) while still causing 12 C-RAM
+  writes. So the group *resolve/reload* was not reliably driven by the poke, and I have **not**
+  cleanly exercised `P7Units_ReloadForGroup`. An opcode-fetch exec-tap to confirm it runs
+  failed (TLCS-900 fetches bypass program-space read taps).
+
 ## Status / honest grading
 
-- **REFUTED (static, decisive):** "runtime uploads only the boot kernel, never re-programs
-  I-RAM." A group change (command 0x80) runs `P7Units_ReloadForGroup`, which re-issues
-  command-01 I-RAM loads (0x30 stream `0xFCD2C6`). The prior sweep never triggered it.
-- **OPEN (to confirm in-emulator):** whether a group change (or a group change combined
-  with an effect select) also emits the 0x6E **bodies**. Experiment: on the
-  `WSA1R_ENABLE_DSP=1` build, poke `0xF361` to the opposite of its current value and set
-  `0x7ECC` bit 0 (mimicking command 0x80, exactly as the sweep mimics 0x81/82/83), then diff
-  each DSP's I-RAM. Rig: `wsa1_dsp_group_toggle.lua` (this session).
+- **CONFIRMED (static):** command **0x80/0x88** (group select, writes `0xF361`, sets
+  `0x7ECC.0`) is a real link sub-command the effect sweep (0x81/82/83) never issued — Felipe
+  is right that the trigger space was not exhausted. The 57 command-01 loads at 0x6E (the
+  bodies) and the `P7Stream_Run` op-3 arm (`0xF9AAFB`) are real.
+- **MEASURED (emulator):** across effect-change and group-select triggers, **no I-RAM body
+  upload occurs**; only the boot kernel is ever written to I-RAM. Effect/group changes write
+  C-RAM coefficients only.
+- **OPEN / needs a better instrument:** whether a *faithfully-delivered* command 0x80 (via
+  the real link channel, not a RAM poke) drives `P7Units_ReloadForGroup` to emit I-RAM — and
+  whether any path feeds `PoolDir_Records[idx]+12` to the op-3 arm. Settling it needs either
+  real link-command injection or hardware (unreachable). I did **not** find a body-upload
+  trigger; I did find that the trigger space is larger than the prior sweep exercised.
 
-Builds on [[wsa1r-dsp-runtime-effects]]; corrects `FINDINGS-dsp-runtime-effect-uploads.md`.
+Builds on [[wsa1r-dsp-runtime-effects]]; refines `FINDINGS-dsp-runtime-effect-uploads.md`
+(which stands: effect selection is coefficient-driven).
