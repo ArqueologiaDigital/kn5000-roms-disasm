@@ -88,6 +88,28 @@ agree on the same two readings: **`ACT 0x0D/0x0E` = a biquad two-state update** 
 **C-format `lo12=0x000` = a delay-line parameter**. None needed hardware; each is a
 discriminator the isolated word could not provide.
 
+## 5. The reverb PRIMITIVE differs between products, at the coefficient level
+
+Reading each reverb's delay stages (`R…W` spans) together with the C-RAM cursor cells the
+multiplies inside them consume pins the exact reverb primitive — and it is different on the
+two chips:
+
+- **KN5000 ROOM REVERB = an all-pass diffuser ladder.** Its stages are **`RMaaW`**: read the
+  delayed sample, **one** multiply (a *single* coefficient — cells 7, 8, 9, 10, … one per
+  stage), then two route ops. One coefficient applied with `+g`/`−g` combines is exactly a
+  first-order all-pass — which matches the SOLVED "all-pass diffuser ladder" reading, and it
+  **decodes the two route (`a`) ops as the all-pass ±g combine**.
+- **WSA1R ROOM/PLATE/CONCERT REVERB = a comb with damping.** Its stages are **`RMMzzW`**:
+  **two** multiplies (feedback gain + a damping filter) followed by the biquad `zz` pair —
+  a lossy feedback-delay-network / comb, not a single-coefficient all-pass. The two mults
+  read *distinct* consecutive cells (0,1 / 20..24), i.e. a gain plus a multi-tap damping
+  filter, never one reused coefficient.
+
+⇒ Same effect name, genuinely different reverb *algorithm* between the products — now shown
+not just by the DRAM read/write order (`TOPOLOGY-vs-ALGORITHMS.md`) but by the per-stage
+coefficient count: **1 coefficient/stage (all-pass) vs 2+ (comb+damp)**. For the KN5000 this
+also gives the all-pass route ops a decoded role.
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get
