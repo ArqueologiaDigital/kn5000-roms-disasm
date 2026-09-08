@@ -66,6 +66,28 @@ feeds, aggregated across the catalog (`dsp/tools/dsp_context_analysis.py`).
   supporting the shipped "delay-read". **SRC 0x11** is *preceded by a route 56%* of the time,
   consistent with a second accumulator that is set up by a route then read (the ACCB reading).
 
+## 4. Instruction MOTIFS name the building blocks and pin register 0x000
+
+Mining the recurring idiom n-grams (`dsp/tools/dsp_motif_analysis.py`) recovers the
+algorithm primitives directly:
+
+- **`MMM` / `MMMM` (302 / 164)** — coefficient runs = biquad / filter sections.
+- **`zz` (the biquad two-state pair, 155 `zza`)** — always adjacent (§3).
+- **`WC` / `WCWC` (124–127)** — a delay-tap **WRITE** immediately followed by a **C-format
+  load of 480 to register `lo12=0x000`**, and it occurs in **all 11 reverbs**. So a reverb
+  is a *uniform comb*: write a tap, (re)load the delay parameter, write the next. This is
+  independent confirmation that **`0x000` is a delay-memory parameter** (§1) — here caught
+  red-handed being reloaded before every comb write, constant 480.
+- **delay STAGES (`R…W` spans)** — `RMaaW` (a comb: read tap, gain, add, write), and
+  crucially **`RMMzzW`** = read tap, gain, **biquad damping filter (`zz`)**, write: a comb
+  with a one-pole damper in its feedback — the textbook reverb-tank stage. The `zz` inside
+  the delay loop is *why* the biquad idiom appears in reverbs (§3), not just EQ.
+
+⇒ Three independent angles (value correlation, program-order context, motif position) now
+agree on the same two readings: **`ACT 0x0D/0x0E` = a biquad two-state update** and
+**C-format `lo12=0x000` = a delay-line parameter**. None needed hardware; each is a
+discriminator the isolated word could not provide.
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get
