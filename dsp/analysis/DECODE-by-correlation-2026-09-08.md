@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Thirteen results (§1–§13), all from the committed `.dsm` of
+where a single occurrence could not. Fourteen results (§1–§14), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -413,6 +413,36 @@ turns the §5 reverb divergence into a single scalar, and separates the feedback
 ⇒ R:W is a cheap, robust discriminator of the delay *topology* (feedback comb vs all-pass vs
 feedforward vs none) that an emulator can use to pick the right delay-loop structure per effect.
 
+## 14. Coefficient budget per effect, and the cursor almost never rewinds
+
+Each program reads its coefficients by advancing a cursor (`c+`); counting those fetches gives
+the C-RAM budget an emulator must allocate, and asking whether the cursor is ever *rewound*
+(`rstcur`) tells whether any coefficients are reused (`dsp/tools/dsp_coeff_budget_analysis.py`).
+
+| family | progs | mean coeff-fetches | min–max |
+|---|---:|---:|---|
+| **eq** | 20 | **37.6** | 20–72 |
+| pitch | 1 | 32.0 | — |
+| reverb | 14 | 23.3 | 8–33 |
+| delay | 17 | 22.5 | 16–28 |
+| modulation | 17 | 17.8 | 6–34 |
+| dyn/dist | 11 | 13.6 | 6–24 |
+
+- The budget ranks **exactly as the algorithms predict**: EQ is richest (six biquad
+  coefficients × bands × channels), a waveshaper distortion is leanest. This is an independent
+  cross-check of the family identifications — coefficient *count* tracks algorithmic complexity.
+- **`rstcur` (cursor rewind) occurs exactly ONCE in the whole 86-program corpus** — the KN5000
+  PARAMETRIC EQ, which rewinds between its two channels so channel 2 re-reads channel 1's ~30
+  coefficients (left and right share one EQ curve). **Every other program has a monotonic
+  cursor** — distinct cells per channel/band, no reuse. A plausible "stereo re-reads its
+  coefficients" hypothesis is thus refuted everywhere but that one program.
+- **Cross-product**: the WSA1R 6-band PEQ does *not* rewind — it spends the budget maximum
+  (**72** = 6 bands × 2 ch × 6 coeffs) on distinct cells, where the KN5000 5-band PEQ spends
+  ~30 shared across L/R. Same algorithm, different coefficient-memory strategy.
+
+⇒ for implementation: stream the coefficient cursor forward per effect and size C-RAM to the
+budget above; model no reuse except the single KN5000-PEQ stereo rewind.
+
 ## Why this matters for decode + implementation
 
 - The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
@@ -431,7 +461,7 @@ feedforward vs none) that an emulator can use to pick the right delay-loop struc
   every element already decoded, so the modulation family is implementable from the disasm.
 
 Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
-`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`. Graded:
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`, `dsp_coeff_budget_analysis.py`. Graded:
 correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
 DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
 gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
