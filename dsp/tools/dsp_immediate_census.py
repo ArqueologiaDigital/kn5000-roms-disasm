@@ -11,18 +11,28 @@ actual C-format immediate VALUES a program embeds -- and partitions them by file
 
     python3 dsp/tools/dsp_immediate_census.py
 
-MEASURED 2026-09-08 (both products' committed .dsm):
-  * The 86 effect-body programs embed ONLY structural immediates: delay/length (register
-    0x000: 384/480/704/896), makeup gain (0x44C: 800/992), filter-count (0x451: 480/672),
-    and a handful of per-effect singletons -- every one |imm| <= ~1500.
-  * EVERY larger constant (|imm| > 1500) lives in kernel.dsm (the resident runtime program)
-    or the boot struct_* records -- 0 of 86 effect bodies has one.
+The C-format opcode matters: 0x620 is the immediate VALUE load (a size, gain or coefficient),
+whereas 0x600 (WAIT/SYNC, whose field is the word's own I-RAM address) and 0x60B/0x60C/0x60D
+(pointer-loads) carry ADDRESSES, not values. Lumping them (as an early draft did) makes
+addresses look like huge "coefficients". This tool separates them.
 
-=> the effect program is pure TOPOLOGY plus structural sizing; the numeric filter constants
-   live in the resident kernel, and per-effect character is the streamed C-RAM coefficients
-   (matches the runtime bus finding). NOT claimed: the exact role of the kernel/struct
-   constants (their values span ~0.1..1.9 in Q1.11 across four registers -- too wide for a
-   single clean coefficient class, so they are left OPEN, not decoded as biquad a-coeffs).
+MEASURED 2026-09-08 (both products' committed .dsm):
+  * Effect bodies contain ONLY value-load C-format words (opcode 0x620): 296 of them, every
+    value in [0..1440] -- delay/length (register 0x000: 384/480/704/896), makeup gain
+    (0x44C: 800/992), filter-count (0x451), per-effect singletons. NO WAIT/SYNC, NO pointer
+    loads, NO control words at all.
+  * The resident kernel (kernel.dsm) contains ONLY control words -- WAIT/SYNC + pointer-loads
+    (its "big" values 224..3520 are I-RAM addresses / pointer targets) -- and ZERO value
+    loads. Coefficients reach the resident program via streamed C-RAM, never a C-format
+    immediate.
+  * Across ALL programs, NO value-load (0x620) immediate exceeds |imm|=1440. There is no
+    baked biquad-range (a1/a2 ~ +/-2) signal coefficient ANYWHERE; every large number is an
+    address, not a coefficient.
+
+=> the effect program is pure TOPOLOGY + structural sizing (value-loads only); the resident
+   kernel is pure control/pointer scaffolding; per-effect character is the streamed C-RAM.
+   The topology/coefficient split, measured at the value level, and it matches the runtime
+   bus finding.
 
 stdlib + dsp_disasm; read-only.
 """
@@ -39,7 +49,9 @@ import dsp_disasm as D                              # noqa: E402
 WORD = re.compile(r"^\s*w\d+\s+([0-9A-Fa-f]{10})\b")
 TREES = [os.path.join(HERE, "..", "disasm"),
          os.path.join(HERE, "..", "..", "wsa1", "dsp", "disasm")]
-BIG = 1500   # threshold separating structural sizing from larger (filter-coefficient-range) values
+VALUE_LOAD = 0x620   # C-format opcode that loads an immediate VALUE (size / gain / coeff);
+#                      every other C-format opcode (0x600 sync, 0x60B/C/D pointer-load) is a
+#                      control word whose 13-bit field is an ADDRESS, not a value.
 
 
 def file_class(b):
@@ -50,22 +62,15 @@ def file_class(b):
     return "struct/other"
 
 
-def imms(path):
-    out = []
-    for ln in open(path):
-        m = WORD.match(ln)
-        if m:
-            w = int(m.group(1), 16)
-            if D.c_format(w):
-                im = D.c_imm13(w)
-                out.append(im - 0x2000 if im & 0x1000 else im)
-    return out
+def imm(w):
+    im = D.c_imm13(w)
+    return im - 0x2000 if im & 0x1000 else im
 
 
 def main():
-    by_class = collections.defaultdict(list)       # class -> all imms
+    val = collections.defaultdict(list)     # class -> value-load (0x620) immediates
+    ctrl = collections.defaultdict(list)     # class -> control-word (sync/pointer) fields
     nfiles = collections.Counter()
-    body_with_big = []
     for tree in TREES:
         for p in sorted(glob.glob(os.path.join(tree, "*.dsm"))):
             b = os.path.basename(p)
@@ -73,27 +78,29 @@ def main():
                 continue
             cls = file_class(b)
             nfiles[cls] += 1
-            vs = imms(p)
-            by_class[cls].extend(vs)
-            if cls == "effect-body" and any(abs(v) > BIG for v in vs):
-                body_with_big.append(b)
+            for ln in open(p):
+                m = WORD.match(ln)
+                if m:
+                    w = int(m.group(1), 16)
+                    if D.c_format(w):
+                        (val if D.c_opcode(w) == VALUE_LOAD else ctrl)[cls].append(imm(w))
 
-    print("C-format immediate VALUES by file class  (|imm|>%d = larger-than-structural)\n" % BIG)
-    print("class          files   imms   value range        # |imm|>%d   distinct 'big' vals" % BIG)
+    print("C-format words by file class, split VALUE-LOAD (opcode 0x620) vs CONTROL (sync/ptr)\n")
+    print("class          files   value-loads (sizes/gains/coeffs)   control words (addresses)")
     for cls in ("effect-body", "kernel", "struct/other"):
-        vs = by_class[cls]
-        if not vs:
-            continue
-        big = [v for v in vs if abs(v) > BIG]
-        print("%-13s  %4d  %5d   [%6d..%6d]   %6d      %s"
-              % (cls, nfiles[cls], len(vs), min(vs), max(vs), len(big),
-                 sorted(set(big))[:6]))
+        v, c = val[cls], ctrl[cls]
+        vs = ("n=%-3d range[%d..%d] max|imm|=%d" % (len(v), min(v), max(v),
+              max(abs(x) for x in v))) if v else "n=0 (none)"
+        cs = ("n=%-3d range[%d..%d]" % (len(c), min(c), max(c))) if c else "n=0 (none)"
+        print("%-13s  %4d   %-32s %s" % (cls, nfiles[cls], vs, cs))
 
-    print("\neffect-body files carrying ANY |imm|>%d : %d of %d  %s"
-          % (BIG, len(body_with_big), nfiles["effect-body"], body_with_big or "(none)"))
-    print("=> effect bodies are topology + structural sizing; every filter-range constant is")
-    print("   confined to the resident kernel and boot struct records (topology/coeff split,")
-    print("   measured at the value level; corroborates the runtime bus finding).")
+    allval = [x for cls in val for x in val[cls]]
+    print("\n* Effect bodies carry ONLY value-loads (0 control words); the resident kernel")
+    print("  carries ONLY control words (0 value-loads).")
+    print("* No value-load (0x620) immediate anywhere exceeds |imm|=%d -- there is NO baked"
+          % max(abs(x) for x in allval))
+    print("  biquad-range signal coefficient in any program; every large field is an address.")
+    print("=> topology/coefficient split, measured at the value level; matches the bus finding.")
     return 0
 
 

@@ -276,28 +276,33 @@ refutation of "LFO-only" is measured: 19 non-LFO programs cannot be explained by
 
 Every earlier "coefficients are runtime data, not baked in the program" result came from bus
 capture or the descriptor structure. A fresh, independent check: look at the actual C-format
-immediate *values* a program embeds, partitioned by file class (`dsp/tools/dsp_immediate_census.py`).
+immediate *values* a program embeds (`dsp/tools/dsp_immediate_census.py`). The decisive
+distinction is the **C-format opcode**: `0x620` loads an immediate *value* (a size, gain or
+coefficient); `0x600` (WAIT/SYNC — its field is the word's own I-RAM address) and
+`0x60B/0x60C/0x60D` (pointer-loads) are *control* words whose 13-bit field is an **address**.
+Separating them by opcode (an earlier draft of this section lumped them and mistook addresses
+for huge "coefficients"):
 
-| file class | files | imms | value range | `|imm|`>1500 |
-|---|---:|---:|---|---:|
-| **effect body** (`prog*`/`eff*`) | 86 | 296 | [0 … 1440] | **0** |
-| resident **kernel** (`kernel.dsm`) | 2 | 15 | [224 … 3520] | 8 |
-| boot **struct** records | 12 | 134 | [−3931 … 3520] | 39 |
+| file class | value-loads (0x620) | control words (0x600/0x60B–D) |
+|---|---|---|
+| **effect body** (`prog*`/`eff*`) | **296**, range [0 … 1440] | **0** |
+| resident **kernel** (`kernel.dsm`) | **0** | 15, range [224 … 3520] (addresses) |
+| boot **struct** records | 90, range [384 … 480] | 44, range [−3931 … 3520] (addresses) |
 
-**Zero of the 86 effect programs embeds any constant larger than the structural range.** Every
-effect-body immediate is a delay/length (register 0x000: 384/480/704/896), a makeup gain
-(0x44C: 800/992), a filter-count (0x451), or a per-effect singleton — all `|imm| ≤ 1440`. Every
-larger constant lives in the resident kernel or the boot struct records. So the effect program
-is **pure topology + structural sizing**; the numeric filter constants sit in the resident
-program (which is exactly what runs every frame — the WSA1R runtime finding), and per-effect
-character is the *streamed* C-RAM coefficients. Two unrelated instruments — the raw-bus capture
-and this static value census — now draw the same boundary.
+Two clean, measured facts fall out:
 
-⚠ **Not decoded** (discipline): the kernel/struct constants' exact roles. Read as Q1.11 they
-span ~0.1…1.9 across four registers (0x000/0x20D/0x407/0x820) — too wide and too varied for a
-single clean coefficient class, so the tempting "these are the resident biquad's a1/a2" reading
-is **refused** for want of a discriminator. What is measured is the *boundary*, not the meaning
-of what lies past it.
+- **Effect bodies carry ONLY value-loads (never a control word); the resident kernel carries
+  ONLY control words (never a value-load).** The kernel is pure sync/pointer scaffolding — the
+  runtime *engine* — and it takes its coefficients from streamed C-RAM, not from any C-format
+  immediate. The effect programs are pure topology + structural sizing (delay length 0x000,
+  gain 0x44C, filter-count 0x451). That is the topology/coefficient split drawn a third way,
+  and it matches the raw-bus runtime finding exactly.
+- **No value-load immediate anywhere — body, kernel or struct — exceeds `|imm| = 1440`.** There
+  is **no baked biquad-range (a1/a2 ≈ ±2) signal coefficient in any program.** The large
+  numbers that first looked like coefficients (up to ±3931) are every one an *address* in a
+  WAIT/SYNC or pointer-load word. The tempting "resident biquad a1/a2" reading is not merely
+  unproven — it is **wrong**: those fields are addresses, not fixed-point values. (This section
+  corrects that misread in the same commit that found it, per the evidence rule.)
 
 ## Why this matters for decode + implementation
 
