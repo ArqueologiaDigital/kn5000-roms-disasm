@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Fifteen results (§1–§15), all from the committed `.dsm` of
+where a single occurrence could not. Sixteen results (§1–§16), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -472,6 +472,34 @@ filter section reading its block, so the run **length** names the section
 biquad-mechanism (§7) and delay-taxonomy (§12) found — and the 80 = 80 identity is the
 tightest cross-check in this whole document.
 
+## 16. The combination effects are their components CONCATENATED (EQ trimmed)
+
+The catalogue has 20+ combination effects — PEQ+CHORUS, S.DELAY+FLANGER, PEQ+COMPR+DIST, … .
+If the DSP builds a chain the obvious way, a combo's microcode is its components' blocks in
+series. Measuring how much of each *standalone* component's idiom sequence appears inside the
+combo (`dsp/tools/dsp_combo_decomposition.py`, LCS overlap) confirms it:
+
+| combo | component overlaps |
+|---|---|
+| S.DELAY+CHORUS | S.DELAY 81 %, **CHORUS 97 %** |
+| PEQ+COMPR+DIST | PEQ 54 %, **COMPR 98 %, DIST 90 %** |
+| S.DELAY+FLANGER | **S.DELAY 92 %, FLANGER 86 %** |
+| PEQ+OVERDR+DELAY | PEQ 66 %, **OVERDR 95 %** |
+| PEQ+VIBRATO | PEQ 50–58 %, **VIBRATO 80–81 %** |
+
+- **A combo is its components concatenated.** Across all combos the mean overlap of the
+  non-EQ components is **86 %** — chorus, distortion, flanger, vibrato, compressor appear
+  *essentially whole* inside the combo, in series.
+- **The EQ prefix is trimmed.** The PARAMETRIC-EQ component appears at only **58 %** on
+  average — the standalone 5/6-band EQ is cut to fewer bands in a combo to make room for the
+  second (and third) effect, while that second effect is used intact. So a PEQ+X effect is
+  *reduced-EQ → full-X*, not *full-EQ → full-X*.
+
+⇒ for implementation, a combination effect needs no new kernel: run the (band-reduced) EQ
+block, then the component effects' blocks in series — the same primitives (§7, §12) chained.
+It also explains the coefficient budget of the combos (§14): the trimmed EQ plus the second
+effect's full coefficient set.
+
 ## Why this matters for decode + implementation
 
 - The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
@@ -490,7 +518,7 @@ tightest cross-check in this whole document.
   every element already decoded, so the modulation family is implementable from the disasm.
 
 Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
-`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`, `dsp_coeff_budget_analysis.py`, `dsp_coeff_run_analysis.py`. Graded:
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`, `dsp_coeff_budget_analysis.py`, `dsp_coeff_run_analysis.py`, `dsp_combo_decomposition.py`. Graded:
 correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
 DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
 gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
