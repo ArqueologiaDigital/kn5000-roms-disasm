@@ -213,6 +213,32 @@ parametric EQ) does **not** use it — it uses the DF-I latch. There are **two**
 primitives, and they separate by family: DF-I for tone-shaping EQ, the 0x0D/0x0E pair for
 the resonant/damping filters embedded in reverb/mod/delay feedback paths.
 
+### 7d. The distortion family = {pre-gain → waveshaper → optional tone filter}, and the tone filter names the effect
+
+Tracing `prog32_distortion.dsm` per channel (it is stereo — two byte-identical halves)
+composes §6's waveshaper with §7's DF-I biquad into the textbook AGC-waveshaper the header
+names ("distortion: AGC waveshaper, curve A"):
+
+- **input load** → **pre-gain / drive** (C-RAM[0x00], the `op0x61` coefficient — decoded by
+  position as the *drive* amount) → **waveshaper table lookup** (w10/w31, class-6
+  `addr8=0x28` — §6's distortion curve, now confirmed *by composition*) → **output level**
+  (C-RAM[0x02], `op0x62` — the makeup after the AGC-normalised curve).
+
+Whether a **DF-I tone biquad** sits in that chain, and where, discriminates the whole family
+(`dsp_biquad_mechanisms.py`, both products):
+
+| effect | datapath (per channel) | character |
+|---|---|---|
+| **FUZZ, DISTORTION** | waveshaper only | hardest — raw curve, no tone filter |
+| **OVERDRIVE, EXCITER** | waveshaper → **tone biquad** | smoothed — a post filter tames the clipping harmonics |
+| **PEQ+DIST / PEQ+OVERDR …** | **pre-EQ biquad(s)** → waveshaper | the parametric EQ shapes the tone *into* the nonlinearity |
+
+That ordering is exactly what the effect names imply — fuzz is the harshest (bare curve),
+overdrive is softer (post-nonlinearity smoothing), and the PEQ combos put a full parametric
+pre-filter ahead of the drive. So the distortion family needs one shared kernel —
+`gain · waveshaper(curve) · gain` — plus an optional DF-I biquad placed before or after by a
+per-effect flag; the curve itself is the C-RAM table, not code.
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get

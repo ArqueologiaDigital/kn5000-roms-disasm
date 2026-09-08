@@ -131,6 +131,27 @@ def main():
           % (eq_ldta, tot_ldta, 100.0 * eq_ldta / (tot_ldta or 1)))
     print("The class-8 `post acc,c` op occurs ONLY in these DF-I programs -- it is the")
     print("biquad section's normalize/output step, not a general instruction.")
+
+    # --- distortion-family datapath: waveshaper LUT (addr8=0x28) with/without a tone biquad.
+    # The nonlinearity is a class-6 lookup at addr8=0x28 (dsp_table_analysis); a DF-I tone
+    # biquad may sit before it (pre-emphasis / parametric pre-EQ) or after it (smoothing).
+    print("\nDistortion family datapath (waveshaper addr8=0x28 vs the DF-I tone biquad):")
+    seen = set()
+    for b, (nm, ws) in sorted(progs.items()):
+        if nm in seen or not any(D.class4(w) == 6 and D.addr8(w) == 0x28 for w in ws):
+            continue
+        seen.add(nm)
+        order = []
+        for w in ws:
+            if D.class4(w) == 6 and D.addr8(w) == 0x28:
+                order.append("SHAPE")
+            elif D.lo_act(w) == LATCH_ENTRY:
+                order.append("biq")
+        shape = "->".join(order)
+        kind = ("hard waveshaper (no tone filter)" if "biq" not in order else
+                "pre-EQ -> waveshaper" if order[0] == "biq" else
+                "waveshaper -> tone filter")
+        print("  %-18s %-34s [%s]" % (nm, shape, kind))
     return 0
 
 
