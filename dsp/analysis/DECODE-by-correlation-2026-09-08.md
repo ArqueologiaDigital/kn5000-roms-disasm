@@ -132,6 +132,87 @@ shape:
 ⇒ The class-6 selector `addr8` is a table id, decoded by family into waveshaper vs LFO, and
 it closes the LFO datapath: *phase accumulator → LFO waveform table → modulates the delay/gain*.
 
+## 7. End-to-end reconstruction: the decoded pieces COMPOSE, and there are TWO biquads
+
+The strongest check on all of the above is not another correlation but a *composition* test:
+trace a whole program and see whether the independently-decoded fields assemble into the
+textbook algorithm the effect name promises. Two programs, traced word-by-word, plus the
+mechanism split they reveal (`dsp/tools/dsp_biquad_mechanisms.py`).
+
+### 7a. CHORUS (prog01) is a textbook LFO-swept delay — built from this session's decodes
+
+Reading `prog01_chorus.dsm` top to bottom, every stage is one of the primitives decoded above:
+
+- **LFO phase accumulator** (w5 `phase += increment`, w7 `phase wrap`, consuming the
+  MEASURED `0x7FFFFF` = 2²³−1 mask) — the §6 phase generator, verbatim.
+- **Two class-6 LFO-table reads**: w31 `addr8=0x18` (voice 0) **and** w35 `addr8=0x20`
+  (voice 1), each with `lo12=0x4CD`. That is §6's *multi-voice* prediction caught in the act:
+  the header's "**quadrature 2-voice** chorus" is literally **two** LFO-waveform lookups at
+  the two selectors §6 named — verified with the disassembler, not asserted.
+- **Modulated delay taps**: external delay-DRAM read/write pairs (w9/w14/w18/w23 …) whose
+  address moves with the LFO, each scaled by a **C-format gain load to `lo12=0x44C`, A=25**
+  (w12/w21/w53/w62) — the §1 near-unity makeup gain.
+- The **ACT 0x0D/0x0E pair** appears only in the I/O amble (w1/w2, w46/w47), not in the LFO
+  or delay core.
+
+⇒ the parts decoded from *independent* angles (LFO tables §6, C-format gain §1, biquad pair
+§3) **compose** into exactly the block diagram a chorus should have. Composition is the
+cross-check a single-word reading can never give.
+
+### 7b. PARAMETRIC EQ is a Direct-Form-I biquad — and it uses a DIFFERENT filter primitive
+
+`prog39_parametric_eq.dsm` / `eff04_parametric_eq.dsm` are a pristine, fully-named
+Direct-Form-I bilinear biquad. Each section is a fixed **9-word** template with six
+coefficients (`b1, b0, b2, −a1, −a2, makeup`) and **two state latches** `ta`/`tb`:
+
+```
+  ld.ta   (p),c+  ; b1  -- P=b1*S0, latch A <- S0     (ACT 0x13 = section entry)
+  mac     ...+1   ; b0  -- S0<-x, acc=P, P=b0*x        (ACT 0x12 = MAC + advance)
+  mac     ...+1   ; b2  -- acc+=P, P=b2*S1
+  mac.tb  ...+1   ; -a1 -- acc+=P, P=-a1*S2, latch B<-S2 (ACT 0x14 = the -a1 tap)
+  mac     ...+0   ; -a2 -- acc+=P, P=-a2*S3
+  mac.st  tb      ; acc+=P, S3 <- latch B
+  post    acc,c   ; class-8 normalize/output step
+  mac.st  acc,c+  ; makeup -- S2<-acc, P=makeup*acc
+  ld.st   ta      ; acc<-P, S1 <- latch A
+```
+
+KN5000 runs **5 sections × 2 channels**, WSA1R runs **6 × 2** — otherwise byte-identical
+template. So the parametric EQ is **convergent** between the products, unlike the reverb
+primitive, which genuinely differs (§5). "Same name → different algorithm" is effect-specific.
+
+### 7c. This resolves the "OPEN ACT 0x12/0x13/0x14" red herring and decodes class-8 `post`
+
+An earlier family-concentration scan flagged ACT `0x12/0x13/0x14` as codes "worth decoding"
+because each is concentrated in the eq/filter family. The 7b trace shows they are **not open**:
+they are the Direct-Form-I latch ops the disassembler already renders `mac` / `ld.ta` /
+`mac.tb`. They are eq-concentrated because DF-I *is* the EQ mechanism. Measured split
+(`dsp_biquad_mechanisms.py`, both products):
+
+| primitive | ops | where | count |
+|---|---|---|---:|
+| **Direct-Form-I latch biquad** | `ld.ta`(0x13) · `mac`(0x12) · `mac.tb`(0x14) · class-8 `post` · makeup | **EQ / PEQ-combo / wah only** | **91 % of 101 `ld.ta`** |
+| **two-state pair** | ACT 0x0D / 0x0E (adjacent 82 %, §3) | **every family** (I/O amble, feedback damping) | 78–110 per family |
+
+Two consequences:
+
+- **The negative adjacency of §3-adjacent-test is now the *expected* signature.** ACT 0x13→
+  0x14 came back **0/66** — because in a DF-I section they are the *entry* (`ld.ta`) and the
+  *−a1 tap* (`mac.tb`), **three words apart**, not a z⁻¹/z⁻² neighbour pair. A biquad z-pair
+  would be adjacent (that is 0x0D/0x0E); a DF-I section deliberately is not. The failed pair
+  test *confirms* the mechanism rather than refuting anything.
+- **The class-8 `post acc,c` op is decoded by concentration.** In the PEQ disasm it was
+  literally commented `OPERATION UNKNOWN`; measured here, it occurs **only** in DF-I biquad
+  programs (PARAMETRIC EQ, every PEQ+*, OVERDRIVE, EXCITER, ROCK/ROTARY, wah) and **never**
+  in a pure reverb/delay/modulation program. ⇒ graded reading: it is the **biquad section's
+  normalize / output-scale step** (the point where the accumulated sum is rounded/saturated
+  back to the sample word before the makeup multiply), not a general instruction.
+
+So §3's "ACT 0x0D/0x0E = the biquad" was slightly too broad: the *reference* biquad (the
+parametric EQ) does **not** use it — it uses the DF-I latch. There are **two** filter
+primitives, and they separate by family: DF-I for tone-shaping EQ, the 0x0D/0x0E pair for
+the resonant/damping filters embedded in reverb/mod/delay feedback paths.
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get
@@ -142,7 +223,16 @@ it closes the LFO datapath: *phase accumulator → LFO waveform table → modula
   words' addresses — consistent with the "address is in the descriptor, not the word" finding.
 - The reverb clustering says an emulator needs only ~4 reverb programs + the coefficient
   presets, not 13 distinct algorithms.
+- The emulator needs **two** filter kernels, not one: a Direct-Form-I biquad (parametric EQ,
+  5–6 bands × 2 ch, coefficients `b1,b0,b2,−a1,−a2,makeup` + a normalize step) and a
+  0x0D/0x0E two-state update for the reverb/mod feedback filters. The DF-I kernel is shared
+  by both products; the reverb primitive is not (§5, §7b). §7a shows a chorus is fully
+  specified by {LFO phase-accumulator → two LFO tables → LFO-swept delay tap → makeup gain} —
+  every element already decoded, so the modulation family is implementable from the disasm.
 
-Instruments: `dsp/tools/dsp_cformat_analysis.py`. Graded: correlational hypotheses, to be
-confirmed by a device arm (does register `lo12=0x000` feed a DRAM limit/loop?) — but the
-discrimination (memory vs gain vs filter) is measured across the catalog.
+Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`. Graded:
+correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
+DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
+gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
+catalog, and §7's composition test is a construction, not a correlation.
