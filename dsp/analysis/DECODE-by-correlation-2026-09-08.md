@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Eight results (§1–§8), all from the committed `.dsm` of
+where a single occurrence could not. Nine results (§1–§9), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -272,6 +272,33 @@ reading in this same change, per the "correct the old text with the new evidence
 is a graded refinement (the *what-it-carries-per-family* split is a correlation), but the
 refutation of "LFO-only" is measured: 19 non-LFO programs cannot be explained by an LFO source.
 
+## 9. The topology/coefficient split, measured at the VALUE level
+
+Every earlier "coefficients are runtime data, not baked in the program" result came from bus
+capture or the descriptor structure. A fresh, independent check: look at the actual C-format
+immediate *values* a program embeds, partitioned by file class (`dsp/tools/dsp_immediate_census.py`).
+
+| file class | files | imms | value range | `|imm|`>1500 |
+|---|---:|---:|---|---:|
+| **effect body** (`prog*`/`eff*`) | 86 | 296 | [0 … 1440] | **0** |
+| resident **kernel** (`kernel.dsm`) | 2 | 15 | [224 … 3520] | 8 |
+| boot **struct** records | 12 | 134 | [−3931 … 3520] | 39 |
+
+**Zero of the 86 effect programs embeds any constant larger than the structural range.** Every
+effect-body immediate is a delay/length (register 0x000: 384/480/704/896), a makeup gain
+(0x44C: 800/992), a filter-count (0x451), or a per-effect singleton — all `|imm| ≤ 1440`. Every
+larger constant lives in the resident kernel or the boot struct records. So the effect program
+is **pure topology + structural sizing**; the numeric filter constants sit in the resident
+program (which is exactly what runs every frame — the WSA1R runtime finding), and per-effect
+character is the *streamed* C-RAM coefficients. Two unrelated instruments — the raw-bus capture
+and this static value census — now draw the same boundary.
+
+⚠ **Not decoded** (discipline): the kernel/struct constants' exact roles. Read as Q1.11 they
+span ~0.1…1.9 across four registers (0x000/0x20D/0x407/0x820) — too wide and too varied for a
+single clean coefficient class, so the tempting "these are the resident biquad's a1/a2" reading
+is **refused** for want of a discriminator. What is measured is the *boundary*, not the meaning
+of what lies past it.
+
 ## Why this matters for decode + implementation
 
 - The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
@@ -290,7 +317,7 @@ refutation of "LFO-only" is measured: 19 non-LFO programs cannot be explained by
   every element already decoded, so the modulation family is implementable from the disasm.
 
 Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
-`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`. Graded:
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`. Graded:
 correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
 DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
 gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
