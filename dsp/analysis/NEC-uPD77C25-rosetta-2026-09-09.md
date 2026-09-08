@@ -50,6 +50,34 @@ So the 6383's execution-order model — store-before-ALU, post-increment-at-end,
 is not a guess forced by the corpus; it is **exactly the order NEC documents for its DSPs**.
 That moves three FORCED readings onto a documented footing without any hardware.
 
+## The register-operand encoding matches the convention — including adjacent pairs
+
+The 77C25 provides its ALU/data-move operands as a small register vocabulary — RAM, the two
+accumulators A/B, a temp register (TR), a ROM/data pointer, status/serial — with A and B as
+*adjacent* codes in the SRC/DST tables. The 6383's already-decoded SRC codes (`dsp_disasm`)
+line up with that vocabulary, and reproduce the *adjacent-pair* encoding:
+
+| 6383 SRC | dsp_disasm role | NEC operand role | grade |
+|---|---|---|---|
+| `0x07` | `mem[ptr]` | **RAM** | MEASURED |
+| **`0x10` / `0x11`** | ACCA / ACCB | **the two accumulators A/B** (adjacent codes) | 0x10 proven by the solved PEQ; 0x11 spec |
+| **`0x19` / `0x1A`** | temp TA / TB | **temp register(s)** (adjacent codes) | anchored |
+| `0x13` | coef/wave table | **ROM / coefficient-pointer read** | inferred |
+
+That the accumulators sit at `0x10/0x11` and the temps at `0x19/0x1A` — each an adjacent
+pair — is the NEC convention showing through: the register file is encoded the way NEC encodes
+its DSP operands, which independently validates the 6383 register decode (and the Rosetta
+approach itself: the convention *predicts* the encoding, it does not merely post-hoc fit it).
+
+**A new graded reading for an OPEN code falls out.** SRC `0x01` (72 uses) never feeds a
+multiply (0 % in MAC words); it appears only inside a fixed `C-format → [SRC 0x01 load] →
+external-DRAM` template (preceded by a C-format immediate 64/72, followed by a DRAM access
+70/72). That is not an ALU input — it is an **address / data-pointer setup**, matching NEC's
+**DP (data-pointer)** operand role: load an immediate, stage it through SRC 0x01, use it to
+address delay-DRAM. Graded — a documented-role hypothesis to confirm by a device arm — but it
+retires "SRC 0x01 dark" with a specific, testable role drawn from the documented vocabulary
+rather than invented.
+
 ## What it does NOT prove (honest limits)
 
 - **Not ISA identity.** The word widths differ (23 vs 36 bit), the product lines differ
