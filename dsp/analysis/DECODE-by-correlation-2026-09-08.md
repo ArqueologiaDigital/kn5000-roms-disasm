@@ -110,6 +110,28 @@ not just by the DRAM read/write order (`TOPOLOGY-vs-ALGORITHMS.md`) but by the p
 coefficient count: **1 coefficient/stage (all-pass) vs 2+ (comb+damp)**. For the KN5000 this
 also gives the all-pass route ops a decoded role.
 
+## 6. The table-lookup SELECTOR decodes by family — and reveals the LFO
+
+The class-6 word is a table lookup; its `addr8` selects *which* table. Grouping the selector
+by the effect family that uses it (`dsp/tools/dsp_table_analysis.py`) names the tables,
+because a distortion only ever looks up a waveshaper and a chorus only ever looks up an LFO
+shape:
+
+- **`addr8 = 0x28` → the WAVESHAPER / distortion curve.** Used by DISTORTION, FUZZ,
+  OVERDRIVE, EXCITER and every PEQ+DIST / PEQ+OVERDR combination (18 words).
+- **`addr8 = 0x18` → the LFO WAVEFORM table.** Used by the modulation effects — RING
+  MODULATOR, VIBRATO, PHASER, CHORUS, FLANGER, AUTO PAN (29 words). So the **LFO is a
+  phase-accumulate → table lookup**, i.e. a *shaped* waveform (sine/triangle), not a bare
+  ramp — which is what the phase-accumulator idiom (§ the f31=1 step / f31=2 wrap words)
+  feeds into.
+- **`addr8 = 0x18 / 0x1A / 0x1E / 0x20` together → multiple LFO voices.** ENSEMBLE and some
+  PEQ+CHORUS / S.DELAY+CHORUS read *several* LFO tables at once — one detuned phase per
+  voice, exactly a multi-voice chorus/ensemble.
+- **`lo12 = 0x4CD`** is the table-lookup operation register (47 of the class-6 words).
+
+⇒ The class-6 selector `addr8` is a table id, decoded by family into waveshaper vs LFO, and
+it closes the LFO datapath: *phase accumulator → LFO waveform table → modulates the delay/gain*.
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get
