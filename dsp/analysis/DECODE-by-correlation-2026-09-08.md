@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Eleven results (§1–§11), all from the committed `.dsm` of
+where a single occurrence could not. Twelve results (§1–§12), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -350,6 +350,42 @@ distinct reach offsets, exactly what an LFO-swept tap that reads at a moving off
 This is the on-chip state/delay geometry, complementary to the descriptor-borne DRAM topology
 (§5): an emulator's per-effect scratch buffer is sized and accessed along these lines.
 
+## 12. Delay-stage taxonomy — span length separates delay networks from signal chains
+
+Extending §4/§5 (reverb-only) to the whole catalogue (`dsp/tools/dsp_delay_primitive_taxonomy.py`).
+A delay stage is the span from an external-DRAM **read** to the next **write**; but a *long*
+R…W span is not a stage — it is the whole algorithm bracketed by an input read and an output
+write (an EQ reads the input, runs its entire biquad chain, writes the output). So the span
+**length** is itself the first discriminator:
+
+| family | R…W spans | mean length | short (≤10) | long (>10) |
+|---|---:|---:|---:|---:|
+| **reverb** | 68 | **7.8** | 63 | 5 |
+| delay | 69 | 12.4 | 40 | 29 |
+| modulation | 43 | 17.6 | 23 | 20 |
+| **eq** | 45 | **27.4** | 16 | 29 |
+| **dyn/dist** | 5 | **32.2** | **0** | 5 |
+
+⇒ a **reverb is a *tank*** — many short stages; an **EQ or distortion is a *signal chain*** —
+its work lives in one long input→output span, with no delay stages at all (dyn/dist has **zero**
+short spans). That single number tells an implementer whether an effect needs a delay-line
+loop or a straight DSP block.
+
+Classifying only the short spans (the real delay stages) into textbook primitives — 1-mult +
+double-route = **all-pass**, ≥2-mult + biquad z-pair = **comb+damp**, ≥3-mult no-state =
+**tapped/FIR**:
+
+- **reverb: 24 all-pass + 22 comb+damp + 15 tapped** — the diffuser ladder + damped comb tank
+  (KN5000 all-pass, WSA1R comb+damp, §5), now counted across all reverbs.
+- **delay: combs + taps + damped feedback** stages — a feedback delay line with taps.
+- **modulation: a few short stages** — one swept delay per voice, not a tank (§7a).
+- **eq / dist: essentially none** — confirming their algorithm is the DF-I biquad / waveshaper
+  chain (§7b/§7d), not a delay network.
+
+⚠ Method note: an earlier cut of this classified *all* spans and mislabelled the EQ's one long
+biquad span as 30 "comb+damp delay stages". The length filter (a delay stage is short) fixes
+it; the miscount is called out here so the corrected reading is the one on record.
+
 ## Why this matters for decode + implementation
 
 - The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
@@ -368,7 +404,7 @@ This is the on-chip state/delay geometry, complementary to the descriptor-borne 
   every element already decoded, so the modulation family is implementable from the disasm.
 
 Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
-`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`. Graded:
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`. Graded:
 correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
 DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
 gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
