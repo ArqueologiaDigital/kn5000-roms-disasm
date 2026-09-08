@@ -74,12 +74,29 @@ confirming each trigger landed. Rigs: `wsa1_dsp_group_toggle.lua` (state diff),
   command-01 I-RAM loads (0x30 stream 0xFCD2C6)" and called "boot-kernel-only" *refuted*.
   That was inferred from static control flow and is **NOT supported by measurement** — the
   write-tap shows **zero** I-RAM writes on a group toggle. Retracted.
-- ⚠ **But my triggering is not airtight, so this does not refute Felipe either.** The RAM-poke
-  of command 0x80 is **timing-sensitive**: `0xF35D` tracked `0xF361` in one run but in another
-  the group step showed `landed=false` (F35D never flipped) while still causing 12 C-RAM
-  writes. So the group *resolve/reload* was not reliably driven by the poke, and I have **not**
-  cleanly exercised `P7Units_ReloadForGroup`. An opcode-fetch exec-tap to confirm it runs
-  failed (TLCS-900 fetches bypass program-space read taps).
+### Decisive run: the reload provably executed, and still uploaded nothing
+
+The resolve (`P7Units_ResolveProgramsAndReload`) that reads `0xF361→0xF35D` and calls
+`P7Units_ReloadForGroup` runs on an **effect-change** flag, not on the group bit alone — so
+the faithful trigger is: set the group value (`0xF361`) *then* cause a confirmed effect
+change. `wsa1_dsp_group_then_effect.lua` does exactly that:
+
+    [phase 1] set F361=1, effect-change unit2->30: landed=true  F35D=1 F35E=1 (flip)  I-RAM=0 C-RAM=0
+    [phase 2] set F361=0, effect-change unit2->40: landed=true  F35D=0 F35E=0 (flip)  I-RAM=0 C-RAM=0
+
+`0xF35E` (the group shadow) is written **only after** the `call P7Units_ReloadForGroup` at
+`0xFA5730`, and it **flipped** both phases — so `P7Units_ReloadForGroup` **provably executed**.
+Yet it produced **zero** DSP writes: no I-RAM, and not even C-RAM. (The emulator's DSP write
+path is not the problem — it faithfully records the boot kernel's 630 I-RAM writes and the
+effect changes' C-RAM writes.) The most consistent reading: `P7Units_ReloadForGroup` re-runs
+`P7Unit_LoadProgramStreams` for the three units, but those emit nothing when the underlying
+records are unchanged — the group reload is a **no-op for DSP memory** in this state, and it
+does **not** upload the 0x6E bodies.
+
+So the earlier "triggering was not airtight" caveat is resolved: the reload was cleanly
+driven (shadow flip) and uploaded no I-RAM. An opcode-fetch exec-tap to watch the reload
+directly failed (TLCS-900 fetches bypass program-space read taps), but the shadow flip is
+equivalent proof it ran.
 
 ## Status / honest grading
 
@@ -87,14 +104,20 @@ confirming each trigger landed. Rigs: `wsa1_dsp_group_toggle.lua` (state diff),
   `0x7ECC.0`) is a real link sub-command the effect sweep (0x81/82/83) never issued — Felipe
   is right that the trigger space was not exhausted. The 57 command-01 loads at 0x6E (the
   bodies) and the `P7Stream_Run` op-3 arm (`0xF9AAFB`) are real.
-- **MEASURED (emulator):** across effect-change and group-select triggers, **no I-RAM body
-  upload occurs**; only the boot kernel is ever written to I-RAM. Effect/group changes write
-  C-RAM coefficients only.
-- **OPEN / needs a better instrument:** whether a *faithfully-delivered* command 0x80 (via
-  the real link channel, not a RAM poke) drives `P7Units_ReloadForGroup` to emit I-RAM — and
-  whether any path feeds `PoolDir_Records[idx]+12` to the op-3 arm. Settling it needs either
-  real link-command injection or hardware (unreachable). I did **not** find a body-upload
-  trigger; I did find that the trigger space is larger than the prior sweep exercised.
+- **MEASURED (emulator):** across effect-change, group-select, and the group RELOAD (proven
+  to execute by the `0xF35E` shadow flip), **no I-RAM body upload occurs** — only the boot
+  kernel is ever written to I-RAM (words 48..110). Effect changes write C-RAM coefficients;
+  the group reload, run with unchanged records, writes nothing.
+- **OPEN:** whether any path feeds `PoolDir_Records[idx]+12` (the op-3 body) to `P7Stream_Run`
+  at runtime. `P7Unit_LoadProgramStreams` feeds +0/+8; `P7Units_ReloadForGroup` runs fixed
+  canned streams and, when records are unchanged, emits nothing. No caller of the +12 body
+  was found, and none fired in the emulator. Remaining ways it *could* still happen: (a) an
+  emulator-fidelity gap in how `P7Units_ReloadForGroup`'s streams reach the DSP (though the
+  boot and effect paths ARE modelled faithfully), (b) a first-time/cold record load that
+  differs from a re-selection, or (c) the +12 bodies are genuinely dormant on this runtime
+  config. Settling (a)/(b) cleanly needs hardware (unreachable) or real link-command
+  injection. **I found no positive evidence of a body upload**, but confirmed the trigger
+  space is larger than the prior sweep exercised.
 
 Builds on [[wsa1r-dsp-runtime-effects]]; refines `FINDINGS-dsp-runtime-effect-uploads.md`
 (which stands: effect selection is coefficient-driven).
