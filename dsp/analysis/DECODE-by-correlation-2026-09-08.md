@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Nine results (§1–§9), all from the committed `.dsm` of
+where a single occurrence could not. Eleven results (§1–§11), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -304,6 +304,52 @@ Two clean, measured facts fall out:
   unproven — it is **wrong**: those fields are addresses, not fixed-point values. (This section
   corrects that misread in the same commit that found it, per the evidence rule.)
 
+## 10. Whole-catalog template clustering — the cross-name algorithm identities
+
+§2 collapsed the 13 reverb *names* to 4 programs. Generalising that to all 86 effect programs
+(`dsp/tools/dsp_template_clusters.py`, clustering by idiom sequence): **78 exact templates**
+(only the reverb 1/2 variants and DISTORTION≡FUZZ are word-identical) and **~52 near-families**
+at idiom-sequence LCS ≥ 0.85. The near-families expose identities the *names* hide:
+
+- **EXCITER ≡ OVERDRIVE** (waveshaper + post tone biquad, §7d) — the same template.
+- **AUTO WAH ≡ PEDAL WAH** (a swept filter: auto = LFO-swept, pedal = manual — one DSP program).
+- **MANUAL DELAY ≡ SINGLE DELAY**; **SLOW ATTACKER ≡ NO OPERATION** (a stub, confirming the
+  KN5000 stub-effect list on the WSA1R too).
+- **FLANGER ~ VIBRATO** inside the S.DELAY+ / PEQ+ combos (both LFO-swept delay).
+- every **KN5000 ↔ WSA1R same-name pair** clusters — cross-product structural validation.
+
+⇒ the catalogue does *not* collapse to a handful of templates (each family is its own program),
+but it does contain real cross-name equivalences an emulator can share: implement one
+waveshaper-plus-tone-filter for exciter+overdrive, one swept-filter for auto/pedal wah, etc.
+
+## 11. The scratch-pointer STRIDE is a family fingerprint of the on-chip state geometry
+
+Every class-2 word carries a signed post-increment in `addr8` — the move of the internal
+scratch/state pointer `p` (the external DRAM taps are descriptor-borne, not here). Histogramming
+the strides by family (`dsp/tools/dsp_pointer_stride_analysis.py`) turns this already-decoded
+field into an algorithm discriminator:
+
+| stride class | meaning | global count |
+|---|---|---:|
+| **0** | same-cell accumulate / store-back | 2248 |
+| **±1, ±2** | the biquad two-state (z⁻¹/z⁻²) move | ~1140 |
+| **\|d\| > 2** | reach-back into on-chip scratch (short delay / all-pass / comb state, multi-tap) | — |
+
+| family | strides | state (\|d\|≤2) | reach (\|d\|>2) | distinct reach |
+|---|---:|---:|---:|---:|
+| **eq** | 1518 | **75 %** | 25 % | 72 |
+| reverb | 754 | 53 % | **47 %** | 48 |
+| delay | 1186 | 63 % | 37 % | 63 |
+| **modulation** | 988 | 57 % | 43 % | **90** |
+| dyn/dist | 522 | 68 % | 32 % | 57 |
+
+⇒ EQ is **state-bound** (three-quarters of its pointer moves are the biquad z-state) while
+reverb/delay/modulation spend nearly half their moves **reaching back** into scratch — the
+on-chip short-delay / all-pass / comb state — and modulation has the **widest** spread of
+distinct reach offsets, exactly what an LFO-swept tap that reads at a moving offset produces.
+This is the on-chip state/delay geometry, complementary to the descriptor-borne DRAM topology
+(§5): an emulator's per-effect scratch buffer is sized and accessed along these lines.
+
 ## Why this matters for decode + implementation
 
 - The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
@@ -322,7 +368,7 @@ Two clean, measured facts fall out:
   every element already decoded, so the modulation family is implementable from the disasm.
 
 Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
-`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`. Graded:
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`. Graded:
 correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
 DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
 gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
