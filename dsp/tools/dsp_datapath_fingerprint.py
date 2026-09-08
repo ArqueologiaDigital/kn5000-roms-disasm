@@ -22,6 +22,7 @@ gain 992 -- a delay-line crossfading pitch shifter, NOT a phase vocoder.
 
 Graded structural census from the committed disasm. stdlib + dsp_disasm; read-only.
 """
+import collections
 import glob
 import os
 import re
@@ -129,6 +130,27 @@ def main():
     # LFO-voice architecture: the number of DISTINCT LFO-table selectors a modulation effect
     # reads = its detuned-voice count (each selector is one detuned LFO phase, sect. 6). Total
     # lookups can exceed that when the same table is read once per stereo channel.
+    # DRAM read:write balance -- an architecture fingerprint. A feedback comb/FDN WRITES each
+    # stage's state (write-heavy); an all-pass ladder READS the delayed sample per stage
+    # (balanced/read-leaning); a feedforward or dry-dominant effect reads more than it writes.
+    print("\nDRAM read:write balance by product/family (architecture fingerprint):")
+    rw = collections.defaultdict(lambda: [0, 0])
+    for prod, nm, ws in progs:
+        rd = sum(1 for x in ws if D.class4(x) == 1 and (D.hi12(x) & 0x800) and not (D.addr8(x) & 0x40))
+        wr = sum(1 for x in ws if D.class4(x) == 1 and (D.hi12(x) & 0x800) and (D.addr8(x) & 0x40))
+        f = ("eq" if "EQ" in nm.upper() else
+             "reverb" if any(k in nm.upper() for k in ("REVERB", "HAAS", "GATED")) else
+             "delay" if "DELAY" in nm.upper() else
+             "dyn/dist" if any(k in nm.upper() for k in ("DIST", "FUZZ", "OVERDR", "EXCITER", "WAH", "COMPRESS")) else
+             "modulation" if any(k in nm.upper() for k in ("CHORUS", "FLANGER", "PHASER", "VIBRATO", "ENSEMBLE", "PAN", "RING", "ROTARY", "MIX")) else
+             "other")
+        rw[(prod, f)][0] += rd
+        rw[(prod, f)][1] += wr
+    for (prod, f), (r, w) in sorted(rw.items()):
+        if r + w:
+            note = "  <- write-heavy (comb/FDN)" if w > r * 1.5 else ("  <- read-heavy" if r > w * 2 else "")
+            print("  %-6s %-11s R=%-4d W=%-4d  R:W=%.2f%s" % (prod, f, r, w, r / (w or 1), note))
+
     print("\nLFO-voice architecture (distinct selectors = detuned voices):")
     arch = {}
     for prod, nm, ws in progs:

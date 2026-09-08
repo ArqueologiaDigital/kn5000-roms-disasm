@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Twelve results (§1–§12), all from the committed `.dsm` of
+where a single occurrence could not. Thirteen results (§1–§13), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -385,6 +385,33 @@ double-route = **all-pass**, ≥2-mult + biquad z-pair = **comb+damp**, ≥3-mul
 ⚠ Method note: an earlier cut of this classified *all* spans and mislabelled the EQ's one long
 biquad span as 30 "comb+damp delay stages". The length filter (a delay stage is short) fixes
 it; the miscount is called out here so the corrected reading is the one on record.
+
+## 13. DRAM read:write balance is a one-number architecture fingerprint
+
+The ratio of external-DRAM reads to writes per family (`dsp/tools/dsp_datapath_fingerprint.py`)
+turns the §5 reverb divergence into a single scalar, and separates the feedback topologies:
+
+| product / family | R | W | R:W |
+|---|---:|---:|---:|
+| **WSA1R reverb** | 126 | 300 | **0.42** — write-heavy |
+| KN5000 reverb | 29 | 23 | **1.26** — balanced |
+| KN5000 dyn/dist | 12 | 2 | **6.00** — read-heavy |
+| delay (both) | ~45 | ~35 | ~1.3 |
+| modulation | 33–43 | 18–27 | 1.6–1.8 |
+| eq | ~30 | ~25 | ~1.1 |
+
+- **A feedback comb / FDN is write-heavy**: every stage writes its recirculated state back to
+  DRAM, so writes outnumber reads — the WSA1R reverb's **0.42** is the comb+damp tank of §5
+  seen as a ratio. **An all-pass ladder is balanced/read-leaning**: it reads the delayed sample
+  and writes once per stage — the KN5000 reverb's **1.26**. The two products' reverbs are now
+  separated by a single number, consistent with the per-stage primitive count (§5) and the
+  short-span taxonomy (§12).
+- **Distortion is read-heavy (6.0)** — it reads its input and barely writes DRAM, because it
+  has no delay line (it is the waveshaper chain of §7d); confirms §12's "0 delay stages".
+- Delay/modulation/eq sit near 1.1–1.8 (feedforward-ish, balanced read/write).
+
+⇒ R:W is a cheap, robust discriminator of the delay *topology* (feedback comb vs all-pass vs
+feedforward vs none) that an emulator can use to pick the right delay-loop structure per effect.
 
 ## Why this matters for decode + implementation
 
