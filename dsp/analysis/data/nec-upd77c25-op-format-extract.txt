@@ -1,0 +1,36 @@
+NEC uPD77C20A/7720A/77P20 -- OP/RT instruction format
+Source: 1989 NEC "DSP and Speech Products Data Book", section uPD77C20A/7720A/77P20,
+"Signal Processing Interface (SPI)", ~figure/page 2-7.  (Also present in the 1992 "NEC DSP
+and Speech Processor Products" book.)  Recipe to reproduce:
+    pdftotext "1989_DSP_and_Speech_Products_Data_Book.pdf" - | \
+        sed -n '/three types of instructions: Load Immediate/,/RPDCR Field/p'
+The databook PDFs are large copyrighted NEC documents (kept in ~/compartilhado/KN7000, not
+committed); the quotes below are the fair-use excerpts this analysis relies on.
+
+--- instruction word (23-bit, horizontal microcode) ---
+"The SPI has three types of instructions: Load Immediate, Branch, and the multifunction OP
+ instruction.  Each type takes the form of a 23-bit word ..."
+
+OP/RT field layout (Figure 4), high->low:
+    [22 21]=00/01 opcode | P-Select | ALU | ASL | DPL | DPH-M | (RP)DCR | SRC | DST
+
+--- execution order (the key quote) ---
+"data moves from source to destination before other elements of the instruction.  Data being
+ moved on the internal data bus (IDB) is available for use in ALU operations (if P-select
+ field ... specifies IDB).  However, if the accumulator specified in the ASL field is also
+ specified as the destination of the data move, the ALU operation becomes a NOP, as the data
+ move supersedes the ALU operation.
+ Pointer modifications occur at the end of the instruction cycle after their values have been
+ used for data moves. ...  If a return is specified as part of an OP instruction, it is
+ executed last."
+"write assembly code in the order described; that is: data move, ALU operations, data pointer
+ modifications, and then return."
+
+--- fields ---
+P-Select (table 4): RAM / IDB / M register / N register  (the ALU input source).
+ALU field (table 5): NOP, OR, AND, XOR, SUB, ADD, SBB, ADC, INC, DEC, CMP (+ dual-ACC flags
+    CA/CB, ZA/ZB, SA0/SB0, OVA/OVB -- two accumulators ACCA/ACCB).
+ASL (table 6): selects accumulator A or B for the ALU result.
+SRC field (table 10) / DST field (table 11): data-move source/destination register codes;
+    both tables list ACCA (A) and ACCB (B) as explicit register operands, plus TR, DP, RP,
+    DR, SR, serial-out, multiplier in/out, etc.
