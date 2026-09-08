@@ -4,7 +4,7 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Fourteen results (§1–§14), all from the committed `.dsm` of
+where a single occurrence could not. Fifteen results (§1–§15), all from the committed `.dsm` of
 both products, no emulator, no hardware.
 
 > **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
@@ -443,6 +443,35 @@ the C-RAM budget an emulator must allocate, and asking whether the cursor is eve
 ⇒ for implementation: stream the coefficient cursor forward per effect and size C-RAM to the
 budget above; model no reuse except the single KN5000-PEQ stereo rewind.
 
+## 15. Coefficient-run length decodes the filter section — and 80 = 80
+
+Coefficients are read by advancing a cursor; a maximal run of consecutive `c+` fetches is one
+filter section reading its block, so the run **length** names the section
+(`dsp/tools/dsp_coeff_run_analysis.py`):
+
+| family | run1 | run3 | run4 | **run5** | run6+ | biquad (run5/6) | `ld.ta` (§7) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **eq** | 251 | 8 | 2 | **78** | 2 | **80** | **80** |
+| reverb | 111 | 21 | 29 | 0 | 0 | 0 | 0 |
+| delay | 205 | 13 | 11 | 0 | 0 | 0 | 4 |
+| modulation | 210 | 11 | 1 | 6 | 1 | 7 | 3 |
+| dyn/dist | 74 | 0 | 0 | 4 | 4 | 8 | 12 |
+
+- **run 5–6 = a Direct-Form-I biquad section** (b1,b0,b2,−a1,−a2, +makeup). The EQ's **80**
+  run-5/6 blocks **exactly equal its 80 `ld.ta` section-entries from §7** — two completely
+  independent instruments (coefficient-run *length* vs the ACT-0x13 section-*entry* opcode)
+  agreeing to the unit is a strong cross-validation of the biquad decode. The dyn/dist run-5/6
+  blocks are the OVERDRIVE / EXCITER post tone filters (§7d).
+- **run 3–4 = a reverb comb+damp stage** (feedback gain + a short damping filter): reverb has
+  **0** run-5 but **50** run-3/4 blocks — it builds from comb stages, not DF-I biquads, exactly
+  as §5 found from the delay-stage side.
+- **run 1 = a single coefficient** — a delay-tap gain, a mix/level, an LFO depth: delay and
+  modulation are overwhelmingly run-1 (single taps and gains, no filter sections).
+
+⇒ the coefficient-run length is a third, independent read of the same section structure the
+biquad-mechanism (§7) and delay-taxonomy (§12) found — and the 80 = 80 identity is the
+tightest cross-check in this whole document.
+
 ## Why this matters for decode + implementation
 
 - The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
@@ -461,7 +490,7 @@ budget above; model no reuse except the single KN5000-PEQ stereo rewind.
   every element already decoded, so the modulation family is implementable from the disasm.
 
 Instruments: `dsp/tools/dsp_cformat_analysis.py`, `dsp_context_analysis.py`,
-`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`, `dsp_coeff_budget_analysis.py`. Graded:
+`dsp_motif_analysis.py`, `dsp_table_analysis.py`, `dsp_biquad_mechanisms.py`, `dsp_immediate_census.py`, `dsp_template_clusters.py`, `dsp_pointer_stride_analysis.py`, `dsp_delay_primitive_taxonomy.py`, `dsp_coeff_budget_analysis.py`, `dsp_coeff_run_analysis.py`. Graded:
 correlational hypotheses, to be confirmed by a device arm (does register `lo12=0x000` feed a
 DRAM limit/loop? does class-8 `post` round/saturate?) — but the discriminations (memory vs
 gain vs filter; DF-I vs two-state; which LFO tables a voice reads) are measured across the
