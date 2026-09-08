@@ -125,6 +125,25 @@ def main():
     print("  SRC 0x1C words consumed by the NEXT op being a MAC: %d/%d"
           % (consumed_by_mac, total_1c))
     print("  => 0x1C is a control/mod bus multiplied into the path, NOT LFO-specific.")
+
+    # LFO-voice architecture: the number of DISTINCT LFO-table selectors a modulation effect
+    # reads = its detuned-voice count (each selector is one detuned LFO phase, sect. 6). Total
+    # lookups can exceed that when the same table is read once per stereo channel.
+    print("\nLFO-voice architecture (distinct selectors = detuned voices):")
+    arch = {}
+    for prod, nm, ws in progs:
+        sels = sorted({D.addr8(w) for w in ws
+                       if D.class4(w) == 6 and D.addr8(w) in LFO_SEL})
+        if sels:
+            arch.setdefault(nm, {})[prod] = len(sels)
+    for nm in sorted(arch, key=lambda k: (-max(arch[k].values()), k)):
+        v = arch[nm]
+        same = len(set(v.values())) == 1
+        vc = next(iter(v.values())) if same else v
+        tag = ("4-voice ensemble" if vc == 4 else "2-voice quadrature" if vc == 2
+               else "single LFO" if vc == 1 else "")
+        print("  %-22s voices=%s %s%s"
+              % (nm[:22], vc, tag, "" if same else " (differs by product!)"))
     return 0
 
 

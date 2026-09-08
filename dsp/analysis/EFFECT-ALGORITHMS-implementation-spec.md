@@ -41,9 +41,12 @@ phase ──┤                                  ├─▶ sweep the delay read 
         └─ LFO gen (voice 1, table 0x20) ─┘
 x ──▶ [write delay] … [read swept tap] ──▶ ×makeup(0x44C) ──▶ mix ──▶ y
 ```
-- CHORUS is a **quadrature 2-voice** LFO-swept delay: two LFO-table lookups (`0x18`+`0x20`),
-  proven by the trace in §7a. ENSEMBLE reads more voices (`0x18/1A/1E/20`).
-- Flanger/phaser: same LFO, shorter delay / all-pass chain (phaser sweeps all-pass notches).
+- **Voice count = the number of distinct LFO-table selectors** (each is one detuned phase):
+  **ENSEMBLE = 4** (`0x18/1A/1E/20`), **CHORUS / MOD-CHORUS / PEQ+CHORUS / S.DELAY+CHORUS = 2**
+  (quadrature, `0x18`+`0x20`/`0x1E`), **FLANGER / PHASER / VIBRATO / AUTO-PAN / RING-MOD = 1**.
+  Convergent across both products. This is *why* a chorus sounds richer than a vibrato and an
+  ensemble richer than a chorus — literally more detuned LFO voices. (`dsp_datapath_fingerprint.py`)
+- Flanger/phaser: single LFO, shorter delay / all-pass chain (phaser sweeps all-pass notches).
 - Wet mix from the `op0x66` coefficient pair; delay length from `lo12=0x000`.
 
 ### Distortion family: distortion / overdrive / fuzz / exciter  (prog32…) — STRONG
