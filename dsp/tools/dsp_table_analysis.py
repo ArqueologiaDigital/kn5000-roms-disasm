@@ -43,9 +43,11 @@ TREES = [os.path.join(HERE, "..", "disasm"),
 
 
 def load_all():
-    progs = {}
+    # LIST, not a name-keyed dict: KN5000/WSA1R share 31 effect names across byte-different
+    # programs, so a dict would drop one product's version. (Fixed 2026-09-08.)
+    progs = []
     for tree in TREES:
-        for p in glob.glob(os.path.join(tree, "*.dsm")):
+        for p in sorted(glob.glob(os.path.join(tree, "*.dsm"))):
             if os.path.basename(p) == "index.dsm":
                 continue
             nm, ws = None, []
@@ -57,7 +59,7 @@ def load_all():
                 if m:
                     ws.append(int(m.group(1), 16))
             if nm and ws:
-                progs[nm] = ws
+                progs.append((nm, ws))
     return progs
 
 
@@ -83,7 +85,7 @@ def main():
     progs = load_all()
     bysel = collections.defaultdict(collections.Counter)   # addr8 -> family counter
     lo12s = collections.Counter()
-    for nm, ws in progs.items():
+    for nm, ws in progs:
         for w in ws:
             if D.class4(w) == 6:
                 bysel[D.addr8(w)][family(nm)] += 1

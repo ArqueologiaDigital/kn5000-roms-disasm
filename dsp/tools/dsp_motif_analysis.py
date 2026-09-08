@@ -15,8 +15,8 @@ idiom key:  M coeff-MAC   z biquad state   C C-format load   R/W delay-DRAM read
     python3 dsp/tools/dsp_motif_analysis.py
 
 MEASURED 2026-09-08 (both products' committed .dsm):
-  * MMM/MMMM (302/164): coefficient runs -- biquad / filter sections.
-  * zz (the biquad z^-1/z^-2 pair): 155 `zza`, always adjacent (see dsp_context_analysis).
+  * MMM/MMMM (446/243): coefficient runs -- biquad / filter sections.
+  * zz (the biquad z^-1/z^-2 pair): 263 `zza`, always adjacent (see dsp_context_analysis).
   * WC / WCWC (124-127): a delay-tap WRITE immediately followed by a C-format load of 480
     to register lo12=0x000 -- in ALL 11 reverbs. So the reverb is a uniform comb: write a
     tap, (re)load the delay parameter (0x000 = a stride/length, constant 480), write the
@@ -43,9 +43,13 @@ TREES = [os.path.join(HERE, "..", "disasm"),
 
 
 def load_all():
-    progs = {}
+    # A LIST of (name, words), NOT a dict: KN5000 and WSA1R share 31 effect names
+    # (DISTORTION, PARAMETRIC EQ, ROOM REVERB 1, ...) across byte-different programs, so a
+    # name-keyed dict would silently drop one product's version. Keep every program.
+    progs = []
     for tree in TREES:
-        for p in glob.glob(os.path.join(tree, "*.dsm")):
+        prod = "WSA1R" if "wsa1" in tree else "KN5000"
+        for p in sorted(glob.glob(os.path.join(tree, "*.dsm"))):
             if os.path.basename(p) == "index.dsm":
                 continue
             nm, ws = None, []
@@ -57,7 +61,7 @@ def load_all():
                 if m:
                     ws.append(int(m.group(1), 16))
             if nm and ws:
-                progs[nm] = ws
+                progs.append((prod, nm, ws))
     return progs
 
 
@@ -82,13 +86,29 @@ def idi(w):
     return "."
 
 
+def rw_spans(s):
+    spans = collections.Counter()
+    i = 0
+    while i < len(s):
+        if s[i] == "R":
+            j = i + 1
+            while j < len(s) and s[j] not in ("W", "R"):
+                j += 1
+            if j < len(s) and s[j] == "W":
+                spans["".join(s[i:j + 1])] += 1
+            i = j
+        else:
+            i += 1
+    return spans
+
+
 def main():
     progs = load_all()
-    seqs = {nm: [idi(w) for w in ws] for nm, ws in progs.items()}
+    seqs = [(prod, nm, [idi(w) for w in ws], ws) for prod, nm, ws in progs]
 
     for N in (3, 4):
         ng = collections.Counter()
-        for s in seqs.values():
+        for _, _, s, _ in seqs:
             for i in range(len(s) - N + 1):
                 ng["".join(s[i:i + N])] += 1
         print("=== top idiom %d-grams (building blocks) ===" % N)
@@ -98,18 +118,8 @@ def main():
 
     print("=== delay STAGES: R..W spans (comb / all-pass; a biquad 'zz' inside = damping) ===")
     spans = collections.Counter()
-    for s in seqs.values():
-        i = 0
-        while i < len(s):
-            if s[i] == "R":
-                j = i + 1
-                while j < len(s) and s[j] not in ("W", "R"):
-                    j += 1
-                if j < len(s) and s[j] == "W":
-                    spans["".join(s[i:j + 1])] += 1
-                i = j
-            else:
-                i += 1
+    for _, _, s, _ in seqs:
+        spans.update(rw_spans(s))
     for span, c in spans.most_common(10):
         note = "  (comb + biquad damping)" if "zz" in span else ""
         print("  %-16s %4d%s" % (span, c, note))
@@ -118,18 +128,28 @@ def main():
     dest = collections.Counter()
     val = collections.Counter()
     effs = set()
-    for nm, ws in progs.items():
-        s = seqs[nm]
+    for prod, nm, s, ws in seqs:
         for i in range(len(s) - 1):
             if s[i] == "W" and s[i + 1] == "C":
                 dest[D.lo12(ws[i + 1])] += 1
                 im = D.c_imm13(ws[i + 1])
                 val[im - 0x2000 if im & 0x1000 else im] += 1
-                effs.add(nm)
+                effs.add("%s/%s" % (prod, nm))
     print("  a delay WRITE is followed by a C-format load to: %s"
           % dict(("0x%03X" % k, v) for k, v in dest.most_common(3)))
     print("  loaded value(s): %s   in %d programs (%s...)"
           % (dict(val.most_common(3)), len(effs), ", ".join(sorted(effs)[:4])))
+
+    # Per-reverb all-pass stage census: count RMaaW (single-coeff all-pass) spans. Independent
+    # cross-check of the exhaustively-proven "9 all-pass diffusers (5+4)" in the KN5000 reverb.
+    # Labelled by product because the two share the "ROOM REVERB 1" name across DIFFERENT algos.
+    print("\n=== all-pass (RMaaW) stages per reverb program ===")
+    for prod, nm, s, _ in sorted(seqs, key=lambda t: (t[0], t[1])):
+        if "REVERB" not in nm.upper():
+            continue
+        sp = rw_spans(s)
+        print("  %-6s %-22s RMaaW×%d  (all R..W spans: %d)"
+              % (prod, nm[:22], sp.get("RMaaW", 0), sum(sp.values())))
     return 0
 
 

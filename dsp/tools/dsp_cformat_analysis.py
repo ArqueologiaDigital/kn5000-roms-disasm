@@ -14,12 +14,12 @@ unity is a gain. The effect NAMES + structural idiom counts are the independent 
     python3 dsp/tools/dsp_cformat_analysis.py
 
 MEASURED 2026-09-08 (both products' committed .dsm):
-  lo12 0x000 (195 words, ~all effects): r=-0.81 vs delay taps, 0.00 vs cMACs
+  lo12 0x000 (207 words, ~all effects): r=-0.82 vs delay taps, +0.03 vs cMACs
      -> a DELAY/MEMORY structural parameter (values 384/480/704/896; reverbs->384,
         simple effects->896), NOT a signal coefficient.
-  lo12 0x44C (46 words): no structural correlation; values 800/992 = 0.78/0.97 of 1024
+  lo12 0x44C (64 words): no structural correlation; values 800/992 = 0.78/0.97 of 1024
      -> a near-unity GAIN / makeup-scale immediate.
-  lo12 0x451 (8 words): r=+0.98 vs cMACs, -1.00 vs taps -> a FILTER-structure parameter.
+  lo12 0x451 (14 words): r=+0.64 vs cMACs, -0.88 vs taps -> a FILTER-structure parameter.
 
 Every reading here is a graded correlational hypothesis (a discriminator the raw corpus
 lacked), not a proven fact. stdlib + dsp_disasm; read-only.
@@ -42,9 +42,12 @@ TREES = [os.path.join(HERE, "..", "disasm"),
 
 
 def load_all():
-    progs = {}
+    # LIST, not dict: KN5000/WSA1R share 31 effect NAMES across byte-different programs, so a
+    # name-keyed dict silently drops one product's version. (Fixed 2026-09-08.)
+    progs = []
     for tree in TREES:
-        for p in glob.glob(os.path.join(tree, "*.dsm")):
+        prod = "WSA1R" if "wsa1" in tree else "KN5000"
+        for p in sorted(glob.glob(os.path.join(tree, "*.dsm"))):
             if os.path.basename(p) == "index.dsm":
                 continue
             nm, ws = None, []
@@ -56,7 +59,7 @@ def load_all():
                 if m:
                     ws.append(int(m.group(1), 16))
             if nm and ws:
-                progs[nm] = ws
+                progs.append(("%s/%s" % (prod, nm), ws))
     return progs
 
 
@@ -95,7 +98,7 @@ def role(lo, rd, rm, vals):
 def main():
     progs = load_all()
     dest = collections.defaultdict(list)
-    for nm, ws in progs.items():
+    for nm, ws in progs:
         dram, macs, ln = features(ws)
         for w in ws:
             if D.c_format(w):

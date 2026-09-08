@@ -15,8 +15,8 @@ visible for comparison.
     python3 dsp/tools/dsp_context_analysis.py
 
 MEASURED 2026-09-08 (both products' committed .dsm):
-  * ACT 0x0D is IMMEDIATELY followed by ACT 0x0E in 226/274 (82%); ACT 0x0E is preceded by
-    ACT 0x0D in 226/304 (74%). The pair is the two-state (z^-1 / z^-2) filter update -- a
+  * ACT 0x0D is IMMEDIATELY followed by ACT 0x0E in 355/441 (80%); ACT 0x0E is preceded by
+    ACT 0x0D in 355/483 (73%). The pair is the two-state (z^-1 / z^-2) filter update -- a
     strong cross-program confirmation of the biquad-pair reading, and it appears in ALL
     families (a general resonant-filter / damping primitive, not EQ-only).
   * SRC 0x00's context matches the MEASURED mem-read (SRC 0x07) -> supports "delay-read".
@@ -42,9 +42,11 @@ TREES = [os.path.join(HERE, "..", "disasm"),
 
 
 def load_all():
-    progs = {}
+    # LIST of word-arrays, not a name-keyed dict: KN5000/WSA1R share 31 effect names across
+    # byte-different programs, so a dict would drop one product's version. (Fixed 2026-09-08.)
+    progs = []
     for tree in TREES:
-        for p in glob.glob(os.path.join(tree, "*.dsm")):
+        for p in sorted(glob.glob(os.path.join(tree, "*.dsm"))):
             if os.path.basename(p) == "index.dsm":
                 continue
             nm, ws = None, []
@@ -56,7 +58,7 @@ def load_all():
                 if m:
                     ws.append(int(m.group(1), 16))
             if nm and ws:
-                progs[nm] = ws
+                progs.append(ws)
     return progs
 
 
@@ -84,7 +86,7 @@ def idiom(w):
 def context(progs, pred, label):
     prev, nxt = collections.Counter(), collections.Counter()
     n = 0
-    for ws in progs.values():
+    for ws in progs:
         for i, w in enumerate(ws):
             if pred(w):
                 n += 1
@@ -100,7 +102,7 @@ def context(progs, pred, label):
 
 def adjacency(progs, a_code, b_code, aname, bname):
     a_tot = ab = b_tot = ba = 0
-    for ws in progs.values():
+    for ws in progs:
         acts = [D.lo_act(w) for w in ws]
         for i, a in enumerate(acts):
             if a == a_code:

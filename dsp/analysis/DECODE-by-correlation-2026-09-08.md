@@ -4,8 +4,17 @@
 supply. The idea: the effect NAMES and the program STRUCTURE (delay-tap count, coefficient
 count) are independent variables; if an OPEN field's value *tracks* one of them across the
 whole catalog, that correlation is a discriminator — it says what the field is *for*, even
-where a single occurrence could not. Two results, both from the committed `.dsm` of both
-products, no emulator, no hardware.
+where a single occurrence could not. Eight results (§1–§8), all from the committed `.dsm` of
+both products, no emulator, no hardware.
+
+> **Counts corrected 2026-09-08:** the correlation tools first keyed programs by effect
+> *name*, but KN5000 and WSA1R share 31 effect names across byte-different programs, so a
+> name-keyed dict silently kept only one product's version (86 programs collapsed to 55).
+> The tools now retain every program; all counts below are the re-run values on the full
+> corpus. **No qualitative conclusion changed** — every correlation, adjacency and family
+> association held; only the absolute counts grew (e.g. 0x0D→0x0E stayed 82→80 %). The
+> composition results (§7) and the 0x1C refutation (§8) used filename-keyed tools and were
+> never affected.
 
 ## 1. The C-format immediate DESTINATIONS are decodable, and they are not coefficients
 
@@ -15,14 +24,14 @@ program structure (`dsp/tools/dsp_cformat_analysis.py`) separates three distinct
 
 | dest `lo12` | words | r vs delay-taps | r vs cMACs | values | proposed role (GRADED, correlational) |
 |---|---:|---:|---:|---|---|
-| **0x000** | 195 | **−0.81** | 0.00 | 384/480/704/896 | a **DELAY / MEMORY** structural parameter — it tracks the delay-tap count and is *independent of the coefficient count*. Reverbs (40 taps) → 384; simple effects (2 taps) → 896; values are 3/5/7 × 128. |
-| **0x44C** | 46 | −0.01 | +0.17 | 800/992 | a **near-unity GAIN / makeup-scale** (0.78 / 0.97 of 1024) — no structural correlation, sits just under 1.0. This is the chorus's "A = 25" (800 = 25 × 32). |
-| **0x451** | 8 | **−1.00** | **+0.98** | 480/672 | a **FILTER-structure** parameter — tracks the coefficient-MAC count almost perfectly. |
+| **0x000** | 207 | **−0.82** | +0.03 | 384/480/704/896 | a **DELAY / MEMORY** structural parameter — it tracks the delay-tap count and is *independent of the coefficient count*. Reverbs (40 taps) → 384; simple effects (2 taps) → 896; values are 3/5/7 × 128. |
+| **0x44C** | 64 | −0.03 | +0.27 | 800/992 | a **near-unity GAIN / makeup-scale** (0.78 / 0.97 of 1024) — no structural correlation, sits just under 1.0. This is the chorus's "A = 25" (800 = 25 × 32). |
+| **0x451** | 14 | **−0.88** | **+0.64** | 480/672 | a **FILTER-structure** parameter — tracks the coefficient-MAC count, not the tap count. |
 
 ⇒ **The C-format instruction is not one thing.** Its `lo12` selects *what the immediate
 parameterises*: memory/delay sizing (0x000, the common case), a gain (0x44C), or a filter
 count (0x451). That is a real advance over "destination UNKNOWN": the destination is now a
-graded, discriminated hypothesis. It also tells the decode that **the 195 words at 0x000
+graded, discriminated hypothesis. It also tells the decode that **the 207 words at 0x000
 are structural, not signal** — so their immediate should be modelled as a size/limit, and a
 wrong "it's a coefficient" reading is ruled out by the zero correlation with cMACs.
 
@@ -52,8 +61,8 @@ A second discriminator the isolated word cannot give: what feeds each OPEN code 
 feeds, aggregated across the catalog (`dsp/tools/dsp_context_analysis.py`).
 
 - **ACT 0x0D → ACT 0x0E is an ADJACENT PAIR.** ACT 0x0D is *immediately* followed by ACT
-  0x0E in **226/274 (82%)**, and ACT 0x0E is *immediately* preceded by ACT 0x0D in **226/304
-  (74%)**. Two back-to-back state updates are exactly a biquad's `z⁻¹`/`z⁻²` pair — this is a
+  0x0E in **355/441 (80%)**, and ACT 0x0E is *immediately* preceded by ACT 0x0D in **355/483
+  (73%)**. Two back-to-back state updates are exactly a biquad's `z⁻¹`/`z⁻²` pair — this is a
   strong, cross-program, MEASURED confirmation of the reading the strict method had refused
   for want of a discriminator. ⚠ It confirms the *pairing/role*, not the *lag* (which tap is
   delayed) — that stays hardware-Q4.
@@ -71,9 +80,9 @@ feeds, aggregated across the catalog (`dsp/tools/dsp_context_analysis.py`).
 Mining the recurring idiom n-grams (`dsp/tools/dsp_motif_analysis.py`) recovers the
 algorithm primitives directly:
 
-- **`MMM` / `MMMM` (302 / 164)** — coefficient runs = biquad / filter sections.
-- **`zz` (the biquad two-state pair, 155 `zza`)** — always adjacent (§3).
-- **`WC` / `WCWC` (124–127)** — a delay-tap **WRITE** immediately followed by a **C-format
+- **`MMM` / `MMMM` (446 / 243)** — coefficient runs = biquad / filter sections.
+- **`zz` (the biquad two-state pair, 263 `zza`)** — always adjacent (§3).
+- **`WC` / `WCWC` (~124 / 106)** — a delay-tap **WRITE** immediately followed by a **C-format
   load of 480 to register `lo12=0x000`**, and it occurs in **all 11 reverbs**. So a reverb
   is a *uniform comb*: write a tap, (re)load the delay parameter, write the next. This is
   independent confirmation that **`0x000` is a delay-memory parameter** (§1) — here caught
@@ -98,7 +107,13 @@ two chips:
   delayed sample, **one** multiply (a *single* coefficient — cells 7, 8, 9, 10, … one per
   stage), then two route ops. One coefficient applied with `+g`/`−g` combines is exactly a
   first-order all-pass — which matches the SOLVED "all-pass diffuser ladder" reading, and it
-  **decodes the two route (`a`) ops as the all-pass ±g combine**.
+  **decodes the two route (`a`) ops as the all-pass ±g combine**. The motif count finds
+  **exactly nine `RMaaW` stages** in ROOM REVERB 1 — independently reproducing the "nine
+  first-order all-pass diffusers (five + four)" that the *exhaustive constraint search*
+  proved (public `effects-dsp.md` §4). Two unrelated methods agreeing on 9 is a
+  **cross-validation of the motif approach against a PROVEN anchor**; the remaining spans
+  (`RsMMMzzMMMaW`, `RaMMMaW`) are the pre-delay / damping / recirculation the doc places
+  *outside* the diffuser.
 - **WSA1R ROOM/PLATE/CONCERT REVERB = a comb with damping.** Its stages are **`RMMzzW`**:
   **two** multiplies (feedback gain + a damping filter) followed by the biquad `zz` pair —
   a lossy feedback-delay-network / comb, not a single-coefficient all-pass. The two mults
@@ -118,9 +133,9 @@ because a distortion only ever looks up a waveshaper and a chorus only ever look
 shape:
 
 - **`addr8 = 0x28` → the WAVESHAPER / distortion curve.** Used by DISTORTION, FUZZ,
-  OVERDRIVE, EXCITER and every PEQ+DIST / PEQ+OVERDR combination (18 words).
+  OVERDRIVE, EXCITER and every PEQ+DIST / PEQ+OVERDR combination (34 words).
 - **`addr8 = 0x18` → the LFO WAVEFORM table.** Used by the modulation effects — RING
-  MODULATOR, VIBRATO, PHASER, CHORUS, FLANGER, AUTO PAN (29 words). So the **LFO is a
+  MODULATOR, VIBRATO, PHASER, CHORUS, FLANGER, AUTO PAN (53 words). So the **LFO is a
   phase-accumulate → table lookup**, i.e. a *shaped* waveform (sine/triangle), not a bare
   ramp — which is what the phase-accumulator idiom (§ the f31=1 step / f31=2 wrap words)
   feeds into.
@@ -192,7 +207,7 @@ they are the Direct-Form-I latch ops the disassembler already renders `mac` / `l
 | primitive | ops | where | count |
 |---|---|---|---:|
 | **Direct-Form-I latch biquad** | `ld.ta`(0x13) · `mac`(0x12) · `mac.tb`(0x14) · class-8 `post` · makeup | **EQ / PEQ-combo / wah only** | **91 % of 101 `ld.ta`** |
-| **two-state pair** | ACT 0x0D / 0x0E (adjacent 82 %, §3) | **every family** (I/O amble, feedback damping) | 78–110 per family |
+| **two-state pair** | ACT 0x0D / 0x0E (adjacent 80 %, §3) | **every family** (I/O amble, feedback damping) | 78–110 per family |
 
 Two consequences:
 
@@ -259,7 +274,7 @@ refutation of "LFO-only" is measured: 19 non-LFO programs cannot be explained by
 
 ## Why this matters for decode + implementation
 
-- The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get
+- The 207 C-format-0x000 words (~6 % of the combined two-product corpus) get
   a *structural* reading — a decode gain that costs no hardware and no speculation beyond the
   correlation, which is itself the evidence.
 - It reframes the delay/reverb implementation: the per-effect delay geometry is set by these
