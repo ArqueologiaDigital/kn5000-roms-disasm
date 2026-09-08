@@ -239,6 +239,24 @@ pre-filter ahead of the drive. So the distortion family needs one shared kernel 
 `gain · waveshaper(curve) · gain` — plus an optional DF-I biquad placed before or after by a
 per-effect flag; the curve itself is the C-RAM table, not code.
 
+## 8. Correction: SRC 0x1C is a control bus, NOT "LFO output"
+
+Correlation can also *refute*. The disassembler carried a speculative reading
+`SRC 0x1C = LFO output`. If that were right, 0x1C could only occur in programs that build an
+LFO. Cross-tabulating 0x1C against the presence of an LFO-waveform table
+(`dsp_datapath_fingerprint.py`) shows it is **present in 19 programs that have NO LFO table
+at all** — DISTORTION, FUZZ, OVERDRIVE, EXCITER, PITCH SHIFTER, and the PEQ+COMPR+DIST/OVERDR
+combos — versus 29 that do. And it is **consumed by a MAC in 91 of 91 occurrences**.
+
+⇒ 0x1C is not the LFO. It is the effect's **control/modulation bus**: a source register,
+always multiplied into the signal path, that carries the **LFO** in modulation effects and an
+**envelope / AGC level** in the dynamics/distortion effects (which is exactly what an
+AGC-waveshaper and a compressor need, and where the LFO reading was impossible). The
+annotation in `dsp_disasm.py` and all 48 regenerated `.dsm` are corrected to the control-bus
+reading in this same change, per the "correct the old text with the new evidence" rule. This
+is a graded refinement (the *what-it-carries-per-family* split is a correlation), but the
+refutation of "LFO-only" is measured: 19 non-LFO programs cannot be explained by an LFO source.
+
 ## Why this matters for decode + implementation
 
 - The 195 C-format-0x000 words (6.4 % of the WSA1R corpus, and a chunk of the KN5000's) get

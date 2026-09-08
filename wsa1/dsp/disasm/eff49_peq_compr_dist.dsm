@@ -63,7 +63,7 @@
   w31  0000A00415  ld      acc,c+,(p)+0
         ; C-RAM[0x0E] (coefficient cursor)
   w32  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w33  0092253700  ?word   0x0092253700   ; 092.2.53.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w33  0092253700  ?word   0x0092253700   ; 092.2.53.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w34  0000A00415  ld      acc,c+,(p)+0
         ; C-RAM[0x0F] (coefficient cursor)
   w35  01822AD000  ?word   0x01822AD000   ; 182.2.AD.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
@@ -141,7 +141,7 @@
   w87  0000A00415  ld      acc,c+,(p)+0
         ; C-RAM[0x24] (coefficient cursor)
   w88  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w89  009225C700  ?word   0x009225C700   ; 092.2.5C.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w89  009225C700  ?word   0x009225C700   ; 092.2.5C.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w90  0000A00415  ld      acc,c+,(p)+0
         ; C-RAM[0x25] (coefficient cursor)
   w91  01822A4000  ?word   0x01822A4000   ; 182.2.A4.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]

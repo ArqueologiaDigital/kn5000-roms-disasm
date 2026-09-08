@@ -64,7 +64,7 @@
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x66[0] (role mix/tap, INFERRED)
   w32   0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
-  w33   00922FA700   ?word   0x00922FA700   ; 092.2.FA.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w33   00922FA700   ?word   0x00922FA700   ; 092.2.FA.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w34   0028A061D5   ?word   0x0028A061D5   ; 028.A.06.1D5  hi12{f31=4 ?5 res=020} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=4 / ACT 0x15 may be OPEN]
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
   w35   0182200407   mac.st  acc,(p)+0
@@ -76,7 +76,7 @@
   w41   0000AF5415   ld      acc,c+,(p)-11
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = op0x66[1] (role mix/tap, INFERRED)
-  w42   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w42   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w43   0212A0B1D5   mac     (p),c+,(p)+11 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
   w44   0182200407   mac.st  acc,(p)+0

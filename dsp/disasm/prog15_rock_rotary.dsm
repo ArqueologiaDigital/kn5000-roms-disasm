@@ -22,7 +22,7 @@
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w4    0020200000   ?word   0x0020200000   ; 020.2.00.000  hi12{?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w5    002E20000B   ?word   0x002E20000B   ; 02E.2.00.00B  hi12{f31=7 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read; ACT 0x0B = delay-line access (READ/WRITE class-borne)]
-  w6    009220A700   ?word   0x009220A700   ; 092.2.0A.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w6    009220A700   ?word   0x009220A700   ; 092.2.0A.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w7    0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w8    01822F6000   ?word   0x01822F6000   ; 182.2.F6.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]

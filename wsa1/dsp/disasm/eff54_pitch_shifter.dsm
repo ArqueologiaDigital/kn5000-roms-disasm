@@ -57,7 +57,7 @@
   w32  08801202C7  ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
   w33  0102ABD4C8  ?word   0x0102ABD4C8   ; 102.A.BD.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x09] (coefficient cursor)
-  w34  0092200700  ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w34  0092200700  ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w35  0000A021D5  ld      (p),c+,(p)+2
         ; C-RAM[0x0A] (coefficient cursor)
   w36  0182A011D5  mac     (p),c+,(p)+1
@@ -72,7 +72,7 @@
         ; C-RAM[0x0C] (coefficient cursor)
   w44  00122011CE  ?word   0x00122011CE   ; 012.2.01.1CE  hi12{ST f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
   w45  01042001CE  ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
-  w46  0142000F22  ?word   0x0142000F22   ; 142.0.00.F22  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w46  0142000F22  ?word   0x0142000F22   ; 142.0.00.F22  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w47  0000A02408  ?word   0x0000A02408   ; 000.A.02.408  hi12{-} cur+  [SPECULATIVE (prospective, not measured): ACT 0x08 = table-port multiply]
         ; C-RAM[0x0D] (coefficient cursor)
   w48  0000AFE652  ld      ta,c+,(p)-2
@@ -126,7 +126,7 @@
   w85  08801202C7  ?word   0x08801202C7   ; 880.1.20.2C7  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
   w86  0102AB34C8  ?word   0x0102AB34C8   ; 102.A.B3.4C8  hi12{f98=1 f31=1} cur+  [gain multiply (same op in phaser all-pass and reverb diffuser)]
         ; C-RAM[0x19] (coefficient cursor)
-  w87  0092200700  ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w87  0092200700  ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w88  0000A081D5  ld      (p),c+,(p)+8
         ; C-RAM[0x1A] (coefficient cursor)
   w89  0182A011D5  mac     (p),c+,(p)+1
@@ -141,7 +141,7 @@
         ; C-RAM[0x1C] (coefficient cursor)
   w97  00122011CE  ?word   0x00122011CE   ; 012.2.01.1CE  hi12{ST f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
   w98  01042001CE  ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
-  w99  0142000F22  ?word   0x0142000F22   ; 142.0.00.F22  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w99  0142000F22  ?word   0x0142000F22   ; 142.0.00.F22  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w100 0000A03408  ?word   0x0000A03408   ; 000.A.03.408  hi12{-} cur+  [SPECULATIVE (prospective, not measured): ACT 0x08 = table-port multiply]
         ; C-RAM[0x1D] (coefficient cursor)
   w101 0000A07652  ld      ta,c+,(p)+7

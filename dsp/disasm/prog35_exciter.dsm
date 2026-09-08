@@ -22,7 +22,7 @@
   w8    0212A00000   ?word   0x0212A00000   ; 212.A.00.000  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x00] = op0x61[0] (role coeff, INFERRED)
-  w9    00922C1700   ?word   0x00922C1700   ; 092.2.C1.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w9    00922C1700   ?word   0x00922C1700   ; 092.2.C1.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w10   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
   w11   018223F000   ?word   0x018223F000   ; 182.2.3F.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
@@ -77,7 +77,7 @@
   w43   0212A00000   ?word   0x0212A00000   ; 212.A.00.000  hi12{ST f98=2 f31=1} cur+  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = op0x61[1] (role coeff, INFERRED)
-  w44   00922BD700   ?word   0x00922BD700   ; 092.2.BD.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = LFO output (UNPROVEN)]
+  w44   00922BD700   ?word   0x00922BD700   ; 092.2.BD.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w45   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
   w46   0182243000   ?word   0x0182243000   ; 182.2.43.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]

@@ -100,6 +100,31 @@ def main():
         print("%-6s | %-22s | %5d | %5d | %5d | %3d | %5d | %4d | %7d | %s"
               % (prod, nm[:22], len(ws), dr, dw, lfo, shape, df1, twos,
                  ",".join(str(g) for g in gains) or "-"))
+
+    if filt:
+        return 0
+    # SRC 0x1C control-bus check: refutes the "0x1C = LFO output" reading. If 0x1C were the
+    # LFO it could only appear in programs that HAVE an LFO table -- it does not.
+    with_lfo = without_lfo = consumed_by_mac = total_1c = 0
+    for prod, nm, ws in progs:
+        has_1c = any(not D.c_format(w) and D.lo_src(w) == 0x1C for w in ws)
+        has_lfo = any(D.class4(w) == 6 and D.addr8(w) in LFO_SEL for w in ws)
+        if has_1c:
+            if has_lfo:
+                with_lfo += 1
+            else:
+                without_lfo += 1
+        for i, w in enumerate(ws):
+            if not D.c_format(w) and D.lo_src(w) == 0x1C:
+                total_1c += 1
+                if i + 1 < len(ws) and (D.class4(ws[i + 1]) & 8):
+                    consumed_by_mac += 1
+    print("\nSRC 0x1C control-bus check (refutes 'LFO output'):")
+    print("  programs with SRC 0x1C: %d with an LFO table, %d WITHOUT any LFO table"
+          % (with_lfo, without_lfo))
+    print("  SRC 0x1C words consumed by the NEXT op being a MAC: %d/%d"
+          % (consumed_by_mac, total_1c))
+    print("  => 0x1C is a control/mod bus multiplied into the path, NOT LFO-specific.")
     return 0
 
 

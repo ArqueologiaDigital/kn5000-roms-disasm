@@ -305,7 +305,11 @@ LO_SRC_DRD  = 0x0B
 LO_SRC_TABLE = 0x13
 LO_SRC_MEM0 = 0x00   # sect. 233: mem[ptr] / delay-RAM read (null-MAC rival refuted)
 LO_SRC_LFO  = 0x08   # the LFO / per-unit modulation source
-LO_SRC_LFOOUT = 0x1C # the LFO OUTPUT (action00-discriminator.md:468); UNPROVEN (dead end #6)
+LO_SRC_LFOOUT = 0x1C # control/mod source read into a MAC (was "LFO OUTPUT",
+                     # action00-discriminator.md:468) -- REFINED 2026-09-08: 0x1C is
+                     # present in 19 programs with NO LFO table (distortion/exciter/pitch/
+                     # PEQ-combos) and is MAC-consumed 91/91, so it is the effect's control
+                     # bus (LFO for modulation, envelope/AGC for dynamics), NOT LFO-specific.
 LO_ACT_DELAY_RD = 0x0C
 LO_ACT_TBL_MUL  = 0x08
 LO_ACT_BIQ_D = 0x0D  # sect. 234: biquad delay-stage action; the pair (0x0D,0x0E)
@@ -1059,7 +1063,9 @@ def annotate(w, at=None):
           "SRC 0x0B = delay-read data register" if s == LO_SRC_DRD else
           "SRC 0x11 = ACCB (2nd accumulator)" if s == LO_SRC_ACCB else
           "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else
-          "SRC 0x1C = LFO output (UNPROVEN)" if s == LO_SRC_LFOOUT else None)
+          "SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, "
+          "envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs "
+          "(dsp_datapath_fingerprint)" if s == LO_SRC_LFOOUT else None)
     ar = ("ACT 0x0C = delay READ" if a == LO_ACT_DELAY_RD else
           "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else
           "ACT 0x0B = delay-line access (READ/WRITE class-borne)" if a == LO_ACT_DELAY_ACC else
