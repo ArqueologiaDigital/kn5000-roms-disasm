@@ -105,7 +105,15 @@ x ──▶ [write delay] ──▶ ┌ read tap A (ramping) ×window ┐
 3. Coefficients and tap offsets are **C-RAM / descriptor data**, streamed per effect — the
    program words give the *topology*, the presets give the *character*. This is why runtime
    effect changes upload only coefficients, never new I-RAM (the Goal-2 runtime finding).
-4. Reverb needs **~4 programs + presets**, and the reverb kernel **differs by product**
+   Confirmed a third way by the immediate-value census (`DECODE-by-correlation` §9): **no
+   C-format value-load anywhere carries a biquad-range coefficient** — every value is a size,
+   a gain or a filter-count (`|imm| ≤ 1440`); the numeric coefficients arrive only via C-RAM.
+4. **Division of labour, by C-format opcode.** Effect bodies contain *only* value-loads
+   (opcode `0x620`) and no control words; the resident kernel contains *only* control words —
+   WAIT/SYNC (`0x600`, segmenting the per-frame loop into event-synchronised phases) and
+   pointer-loads (`0x60B–D`) — and no value-loads. Model the kernel as the control/sync engine
+   and the body as straight-line signal code parameterised by streamed C-RAM.
+5. Reverb needs **~4 programs + presets**, and the reverb kernel **differs by product**
    (KN5000 all-pass vs WSA1R comb+damp); EQ and the modulation LFO are **shared**.
 
 Every row here is reproducible from the committed `dsp/tools/dsp_*_analysis.py` +
