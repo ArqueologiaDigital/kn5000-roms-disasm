@@ -88,6 +88,39 @@ rather than invented.
   stronger than the corpus-only correlation grade, weaker than a bit-level datasheet match.
   It raises confidence and retires the bare "FORCED" label; it does not close a Q4.
 
+## Second source: MAME's `upd7725` core confirms the model (executable, BSD)
+
+The same conventions are implemented — and therefore independently verifiable — in MAME's
+`upd7725` device (`src/devices/cpu/upd7725/`, BSD-3-Clause). Its OP word (24-bit) decodes as
+`type[23:22] · P-select[21:20] · ALU[19:16] · ASL[15] · DPL[14:13] · DPHM[12:9] · RPDCR[8] ·
+SRC[7:4] · DST[3:0]`, and `exec_op` runs, in order: **(1)** read the SRC register into the
+internal data bus, **(2)** the ALU op — *gated by a non-zero ALU field*, so ALU=0 is NOP,
+**(3)** write the data-move destination, **(4)** the pointer (DP) update — *skipped when the
+move already targeted DP/RP*, **(5)** RP decrement. That is the databook's stated order made
+executable, and it matches the 6383's "store/move before ALU", `cur+` post-increment, and the
+move-supersedes-pointer suppression. Two independent expressions of the convention (a 1989
+datasheet and a 2020s emulator) agree, which is as close to "measured" as a documented
+convention gets.
+
+The core also gives a concrete **ALU op table** (0=NOP,1=OR,2=AND,3=XOR,4=SUB,5=ADD,6=SBB,
+7=ADC,8=DEC,9=INC,10=CMP,11=SHR1,12=SHL1,13=SHL2,14=SHL4,15=XCHG) and a **register-role
+vocabulary** for SRC/DST (accumulators A/B, temps TR/TRB, pointers DP/RP, ROM read RO, data
+reg DR, status SR, serial SI/SO, multiplier inputs K/L) — the finite documented menu the
+6383's still-OPEN SRC/ACT codes can be read against (a multiplier-input port, a status read, a
+serial-audio latch), rather than inventing meanings. ⚠ The *numeric* codes are 4-bit here and
+5-bit on the 6383 and do not transfer; only the role set and the execution model do. (One NEC
+quirk to keep in mind if the 6383 ever executes: ADC/SBB take the carry-in from the *other*
+accumulator's flags.)
+
+## No NEC databook DSP is a datapath twin (negative control)
+
+I checked whether a closer sibling exists than the 23-bit 77C25 — e.g. the µPD77220/77230
+"Advanced Signal Processor". It is not a datapath match: the documented NEC DSPs are 16×16
+multiply with dual 16-bit accumulators (77C25) or 32-bit floating-point (77230), whereas the
+6383 is **24×24 multiply into a 44-bit ALU** (CDJ-500 block diagram). So no NEC part in these
+books is the 6383's datapath twin; the 77C25 is a *house-convention* reference only, which is
+exactly why every reading here is graded "convention-corroborated", not "datasheet-matched".
+
 ## Why this is a new "other way", and what it unlocks next
 
 Correlation (`DECODE-by-correlation`, §1–§16) mined the corpus against itself; this mines a
