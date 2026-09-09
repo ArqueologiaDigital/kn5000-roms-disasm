@@ -44,6 +44,33 @@ hardware.
    makeup per DF-I section (§15). Host-writes-6 = DSP-reads-6, same order — the parametric EQ
    is now closed end to end, host formula through DSP execution.
 
+## Runtime validation: reading the real coefficients out of the chip
+
+The static work could only say coefficients are *runtime data*; the rebuilt DSP emulator
+(`WSA1R_ENABLE_DSP=1`) lets us read them. Sweeping effect selection on unit 2 and dumping the
+coefficient DSPs' C-RAM (`kn7000_mame/tools/rigs/wsa1_dsp_cram_values.lua`, 40 resolved
+records) gives real numbers that check the decode:
+
+- **Every coefficient is a Q0.23 fraction in `[-0.972, +0.996]`.** They live in `[-1, 1)`, as
+  fixed-point filter/gain coefficients must — and *nothing* is in the ±2 range, independently
+  re-confirming §9's correction that the large `±3931`-type words are **addresses, not
+  coefficients**. The captured C-RAM even shows the biquad layout directly: 6-cell groups of
+  `b1, b0, b2, −a1, −a2, makeup` with `±` value pairs and a recurring make-up term.
+- **IC6 is constant across all 40 effects; IC5 is the per-effect set.** IC6's C-RAM has a
+  single value-signature over every record, while IC5's cell count changes per effect —
+  refining the coefficient-DSP role split (IC6 = fixed/common coefficients, IC5 = per-effect).
+- **The IC5 coefficient count tracks effect complexity, matching the static budget (§14) — from
+  runtime data.** PEQ and the PEQ-combos load **112–115** cells (richest, the 6-band biquad),
+  the reverbs load a uniform **75** (consistent with §2's "few reverb programs + presets" and
+  §5's shared tank), simple delays/modulations **58–68**, and NO-OP the baseline **54**. The
+  static coefficient-fetch ranking (§14: eq richest → dyn leanest) is thus confirmed by the
+  live coefficient counts.
+
+⚠ Scope: the rig dumped IC6 *values* and IC5 *counts*; checking the reverb all-pass gains for
+the *descending* ladder of §5 needs the IC5 *values* — a one-line rig change and a re-run,
+deferred. What is validated here is the format ([-1,1) Q0.23), the biquad cell layout, the
+IC6/IC5 role split, and the per-effect budget.
+
 ## Grade and pointers
 
 The host-side facts are established in `host-side.md` / `biquad-eq.md` (not re-derived here);
