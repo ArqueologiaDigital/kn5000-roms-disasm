@@ -1,0 +1,41 @@
+# WSA1R DSP body-upload experiment -- write-tap + handshake results
+# Produced 2026-09-08 on a WSA1R_ENABLE_DSP=1 build by the committed rigs
+# kn7000_mame/tools/rigs/wsa1_dsp_group_{writetap,writetap2,then_effect}.lua.
+# Cited by wsa1/notes/FINDINGS-dsp-group-selector-upload-path.md and blog part226:
+# boot uploads the kernel (630 I-RAM writes, IC30 words 48-110); effect-change and
+# group-select (incl. the provably-executed group reload, shadow 0xF35E flip) emit ZERO
+# further I-RAM writes -- no effect-body upload observed.
+# --- writetap2 (handshake) ---
+BOOT IC30 I-RAM=630(48-110) | IC6 C-RAM=108 IC5 C-RAM=59 | F361=0 F35D=0 F35E=0
+[effch-u2->20] landed=true (F35D=0 F35E=0)
+  effch-u2->20 IC6  I-RAM=0(-) C-RAM=0
+  effch-u2->20 IC5  I-RAM=0(-) C-RAM=0
+  effch-u2->20 IC30 I-RAM=0(-) C-RAM=0
+[effch-u0->20] landed=true (F35D=0 F35E=0)
+  effch-u0->20 IC6  I-RAM=0(-) C-RAM=0
+  effch-u0->20 IC5  I-RAM=0(-) C-RAM=0
+  effch-u0->20 IC30 I-RAM=0(-) C-RAM=0
+[group->1] landed=false (F35D=0 F35E=0)
+  group->1   IC6  I-RAM=0(-) C-RAM=12
+  group->1   IC5  I-RAM=0(-) C-RAM=2
+  group->1   IC30 I-RAM=0(-) C-RAM=0
+[group->0] landed=true (F35D=0 F35E=0)
+  group->0   IC6  I-RAM=0(-) C-RAM=0
+  group->0   IC5  I-RAM=0(-) C-RAM=0
+  group->0   IC30 I-RAM=0(-) C-RAM=0
+WRITETAP2 DONE
+# --- group_then_effect (reload provably ran: F35E flip) ---
+BOOT IC30 I-RAM=630(48-110)|IC6 C=108 IC5 C=59|F361=0 F35D=0 F35E=0
+[phase 1] set F361=1 (+7ECC.0)
+[phase 1] effect-change unit2 -> 30 (invokes resolve)
+[phase 1] landed=true  F361=1 F35D=1 F35E=1  <- F35E flip => ReloadForGroup ran
+  phase1       IC6  I-RAM=0(-) C-RAM=0
+  phase1       IC5  I-RAM=0(-) C-RAM=0
+  phase1       IC30 I-RAM=0(-) C-RAM=0
+[phase 2] set F361=0 (+7ECC.0)
+[phase 2] effect-change unit2 -> 40 (invokes resolve)
+[phase 2] landed=true  F361=0 F35D=0 F35E=0  <- F35E flip => ReloadForGroup ran
+  phase2       IC6  I-RAM=0(-) C-RAM=0
+  phase2       IC5  I-RAM=0(-) C-RAM=0
+  phase2       IC30 I-RAM=0(-) C-RAM=0
+GROUP_THEN_EFFECT DONE
