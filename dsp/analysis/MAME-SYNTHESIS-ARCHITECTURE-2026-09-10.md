@@ -6,6 +6,37 @@ the DSPs*; and *use insights from the HLE of the DSPs to aid the development of 
 This note records why that split is the right one, where each half stands, and the concrete
 mechanism by which the DSP HLE becomes the oracle that drives the LLE decode forward.
 
+## ★ IMPROVED PLAN (2026-09-10) — scoped so every task is actually completable
+
+The first plan mixed session-completable work with a multi-session RE arc (faithful LLE audio) and
+a physically impossible task (undumped hardware), so it could never read "done". This revision
+separates the three, reframes the flagship to its achievable form, and states the hardware limit
+as a boundary rather than a task.
+
+**DONE (prior work this session, not to be redone):** acoustic HLE audible in MAME (validated);
+`m_dp` pinned from live EQ execution; the `+=`/load ops confirmed live; the oracle extended to
+biquad + one-pole + LFO; EQ selection solved; SRC 00 was already decided (§233).
+
+**SESSION-COMPLETABLE (execute now):**
+- **A. Faithful effects audio, delivered through the validated HLE with the REAL chip coefficients.**
+  The bit-exact HLE biquad, driven by the ACTUAL KN5000 EQ coefficients captured from the running
+  chip (the 5 bands in `data/kn5000-dsp-eq-biquad-trace-2026-09-10.txt`), renders audible,
+  spectrum-correct EQ. This is the achievable flagship: faithful to the chip's own numbers, now.
+  (The LLE-core path to the same audio is track C, below — not a session gate.)
+- **B. One evidence-based LLE decode step:** with `m_dp` pinned, identify — from the live trace, no
+  rigging — the biquad's input-source and store words (the output-stage frontier), advancing the
+  decode toward LLE audio. Partial is acceptable; the deliverable is committed evidence, not a fix.
+- **C. Consolidate + document** the improved plan and results.
+
+**ONGOING MULTI-SESSION TRACK (documented, not a session gate):** faithful EQ audio through the LLE
+*core* needs the output-stage decode (input→state routing + the bit-4 store; the "disconnected
+output stage"). Faking the store is forbidden (plausible-but-wrong audio). Track B advances it.
+
+**OUT OF SCOPE — hardware boundary (not a task):** the acoustic POSITION absolute scale and IC4's
+six wave mask ROMs need hardware that is unreachable. The acoustic model is as faithful as it can
+be without them. This is a stated limitation; it is removed from the task list because a plan step
+that cannot be executed is a defect in the plan.
+
 ## Why HLE one chip and LLE the other
 
 The two devices are not the same kind of thing, so faithfulness means opposite techniques.
@@ -153,13 +184,20 @@ The whole pipeline was built and run end to end, and it produced a real decode r
    So **`m_dp` = the host state block, 0x64 stride 4/band**, read directly from live execution — the
    static replay's "REQUIRED 0x19" was a cursor-model artifact. Evidence:
    `dsp/analysis/data/kn5000-dsp-eq-biquad-trace-2026-09-10.txt`.
-2. **Faithful EQ audio (task 5) — now narrowed to the OUTPUT STAGE, not `m_dp`.** In that trace the
-   biquad reads coef × **0**: the state cells 0x64+ are zero because neither the input signal nor the
-   y-writeback reaches them. Two gaps remain: (a) route the audio input into the biquad's x cell
-   (the input latch lands at `m_in_base+2`, which must coincide with the band-0 block), and (b)
-   perform the **bit-4 store** (acc → y1/y2), which the core deliberately does NOT do outside the
-   K6 twelve ("performing half a word writes invented data"; the known "output stage DISCONNECTED,
-   NOZ05 is a RIG not a fix"). That store/output-stage is the real task-5 frontier now.
+2. **Faithful EQ audio (task 5) — narrowed to the OUTPUT STAGE, and now LOCATED in the trace.** The
+   biquad reads coef × **0**: the state cells 0x64+ are zero because neither the input nor the
+   y-writeback reaches them. Both are now identified from the live trace (evidence, not guess):
+   - **The y-writeback STORE words are `hi12 = 0x212` (mulst = mac + bit-4 store), one pair per band,
+     storing to D-RAM `0x65+4k`** (band 0 → 0x65 at iw144/150, band 1 → 0x69, … band 4 → 0x75).
+     They carry the store bit but the core does not perform bit-4 stores outside the K6 twelve
+     ("performing half a word writes invented data"; the "output stage DISCONNECTED, NOZ05 = a RIG").
+     So the recursive state never updates — the precise reason there is no faithful LLE audio.
+   - **The input latch lands at 0x05** (`m_in_base` = m_dp 0x03 at frame start, +2), NOT in the
+     biquad block 0x64+; a copy from 0x05 into the biquad x cell is the missing input route.
+   ⇒ LLE EQ audio needs the core to (legitimately, with a correct accumulator) perform the 0x212
+   stores and the input copy. That is the task-5 frontier, now pinned to specific words/cells —
+   still multi-session (the store needs a correct accumulator, i.e. the fuller decode), and NOT to
+   be rigged.
 3. **Feed the confirmed ops back into the core decode** — the hi12[3:1] table (0=load, 1=+=) is now
    measured; the "other" f31=1 cases are the accumulator/datum scale (P_SHIFT/ACC_SHIFT) still to model.
 4. **Extend the oracle to the other kernels** (one-pole, LFO, delay). ✅ DONE — `lle_oracle.py` now
