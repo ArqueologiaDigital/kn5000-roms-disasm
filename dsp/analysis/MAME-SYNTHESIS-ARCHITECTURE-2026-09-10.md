@@ -189,9 +189,14 @@ The whole pipeline was built and run end to end, and it produced a real decode r
    y-writeback reaches them. Both are now identified from the live trace (evidence, not guess):
    - **The y-writeback STORE words are `hi12 = 0x212` (mulst = mac + bit-4 store), one pair per band,
      storing to D-RAM `0x65+4k`** (band 0 → 0x65 at iw144/150, band 1 → 0x69, … band 4 → 0x75).
-     They carry the store bit but the core does not perform bit-4 stores outside the K6 twelve
-     ("performing half a word writes invented data"; the "output stage DISCONNECTED, NOZ05 = a RIG").
-     So the recursive state never updates — the precise reason there is no faithful LLE audio.
+     ★ **CORRECTION (MEASURED 2026-09-10, plan 1.2):** these stores are ALREADY DECODED and FIRE.
+     `0x212` = mulst is a decoded, class-independent store form (`upd6383d.cpp:248`, ":64"), and the
+     trace's iw144 (lo12=0x412) and iw150 (lo12=0x407) show hi12=0x212, bit-4 set, mul=Y — they
+     execute the multiply and write mem[ptr]. The "core does not perform bit-4 stores outside the K6
+     twelve" rule applies only to UNDECODED words carrying bit 4 ("half a word"); mulst is decoded
+     and does the store. So the store is NOT the blocker — it writes **0** only because the
+     accumulator is 0, and the accumulator is 0 solely because the input never reaches the state
+     cells. The recursive state would persist across frames (run_frame resets only PC/SP, not D-RAM).
    - **The input latch lands at 0x05** (`m_in_base` = m_dp 0x03 at frame start, +2), NOT in the
      biquad block 0x64+; a copy from 0x05 into the biquad x cell is the missing input route.
    ⇒ LLE EQ audio needs the core to (legitimately, with a correct accumulator) perform the 0x212
