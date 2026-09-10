@@ -157,6 +157,73 @@ def synth_trace(section, base, dp_of, corrupt_step=None):
     return "\n".join(lines)
 
 
+def diff_onepole(oracle, observed):
+    """Confront a one-pole damping kernel (the ACT 0x0D/0x0E pair): y=(1-d)x + d*y1 as a
+    load-then-accumulate MAC pair.  `observed` = list of (acc0, P0, acc1, P1) per sample (the two
+    MAC words' accumulator/product).  Verifies acc0==P0 (load) and acc1==acc0+P1 (accumulate),
+    and reports the coefficient factorization the oracle implies ({1-d,d} two-coeff sums to 1)."""
+    ok, out = True, []
+    d = oracle.d
+    out.append("  one-pole factorization: (1-d)=%+.4f + d=%+.4f = %.4f -> %s"
+               % (1 - d, d, (1 - d) + d, "two-coeff {1-d,d}" if abs((1 - d) + d - 1.0) < 1e-9 else "coeff+subtract"))
+    for i, (a0, p0, a1, p1) in enumerate(observed):
+        load_ok, acc_ok = (a0 == p0), (a1 == a0 + p1)
+        ok = ok and load_ok and acc_ok
+        out.append("  sample %d: load acc==P [%s]; accumulate acc==prev+P [%s]"
+                   % (i, "y" if load_ok else "N", "y" if acc_ok else "N"))
+    return ok, out
+
+
+def synth_onepole(oracle, corrupt=False):
+    """Faithful (or corrupted) observed sequence from a OnePoleOracle, in integer chip units."""
+    obs = []
+    for x in (0.3, -0.5, 0.7):
+        steps, _ = oracle.step(x)
+        Q = 1 << 23
+        p0 = round(steps[0].product * Q); a0 = round(steps[0].acc_after * Q)
+        p1 = round(steps[1].product * Q); a1 = round(steps[1].acc_after * Q)
+        if corrupt:
+            a1 += 4242                       # break the accumulate relationship
+        obs.append((a0, p0, a1, p1))
+    return obs
+
+
+def diff_lfo(inc, phases, wrap=1 << 23):
+    """Confront the LFO phase accumulator (the 0x092 write-back word) across frames: each phase
+    value must be (prev + inc) mod 2^23.  `phases` = consecutive phase-word values."""
+    ok, out = True, []
+    for i in range(1, len(phases)):
+        step_ok = (phases[i] == (phases[i - 1] + inc) % wrap)
+        ok = ok and step_ok
+        out.append("  frame %d: phase %d == (prev + inc %d) mod 2^23 [%s]"
+                   % (i, phases[i], inc, "y" if step_ok else "N"))
+    return ok, out
+
+
+def synth_delay(delay, inputs, corrupt=False):
+    """Faithful (or corrupted) delay records + the parallel oracle to confront them."""
+    orc = O.DelayOracle(delay)
+    recs = []
+    for x in inputs:
+        wa, ra, o = orc.step(x)
+        if corrupt:
+            ra = (ra + 1) % orc.n            # wrong tap address
+        recs.append((wa, ra, o))
+    return recs
+
+
+def diff_delay_records(delay, length, records):
+    """Verify delay records against a fresh ring model: read_addr == (write_addr - delay) mod n."""
+    ok, out = True, []
+    for i, (wa, ra, o) in enumerate(records):
+        exp_ra = (wa - delay) % length
+        addr_ok = (ra == exp_ra)
+        ok = ok and addr_ok
+        out.append("  rec %d: read_addr 0x%X == (head 0x%X - delay %d) mod %d = 0x%X [%s]"
+                   % (i, ra, wa, delay, length, exp_ra, "y" if addr_ok else "N"))
+    return ok, out
+
+
 def selftest():
     secs = O.sections_from_capture()
     base, section = secs[0]
@@ -179,7 +246,33 @@ def selftest():
     ok_all = ok_all and (not ok_bad)
     print("  [%s]\n" % ("PASS" if not ok_bad else "FAIL (accepted a wrong trace!)"))
 
-    print("ALL SELFTESTS PASSED" if ok_all else "SELFTEST FAILED")
+    # SELFTEST 3-5: the other-kernel confrontations (accept faithful, reject corrupted).
+    op = O.OnePoleOracle(0.6, base=0x30)
+    ok3a, _ = diff_onepole(O.OnePoleOracle(0.6), synth_onepole(O.OnePoleOracle(0.6)))
+    ok3b, _ = diff_onepole(O.OnePoleOracle(0.6), synth_onepole(O.OnePoleOracle(0.6), corrupt=True))
+    print("SELFTEST 3 -- one-pole: faithful ACCEPT [%s], corrupted REJECT [%s]"
+          % ("PASS" if ok3a else "FAIL", "PASS" if not ok3b else "FAIL"))
+    ok_all = ok_all and ok3a and not ok3b
+
+    lo = O.LFOOracle(3.0)
+    phases = []
+    for _ in range(5):
+        b, inc, a = lo.step(); phases.append(a)
+    ok4a, _ = diff_lfo(inc, phases)
+    ok4b, _ = diff_lfo(inc, phases[:2] + [phases[2] + 99] + phases[3:])
+    print("SELFTEST 4 -- LFO phase: faithful ACCEPT [%s], corrupted REJECT [%s]"
+          % ("PASS" if ok4a else "FAIL", "PASS" if not ok4b else "FAIL"))
+    ok_all = ok_all and ok4a and not ok4b
+
+    dl = 7
+    n = dl + 1
+    ok5a, _ = diff_delay_records(dl, n, synth_delay(dl, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]))
+    ok5b, _ = diff_delay_records(dl, n, synth_delay(dl, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], corrupt=True))
+    print("SELFTEST 5 -- delay ring: faithful ACCEPT [%s], corrupted REJECT [%s]"
+          % ("PASS" if ok5a else "FAIL", "PASS" if not ok5b else "FAIL"))
+    ok_all = ok_all and ok5a and not ok5b
+
+    print("\nALL SELFTESTS PASSED" if ok_all else "\nSELFTEST FAILED")
     return 0 if ok_all else 1
 
 

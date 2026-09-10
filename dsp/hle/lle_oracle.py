@@ -163,6 +163,31 @@ class LFOOracle:
         return before, self.inc, self.phase
 
 
+class DelayOracle:
+    """Per-frame oracle for a DELAY LINE: a ring buffer of `length` samples in D-RAM/DRAM.  Each
+    frame writes the input to the head and reads a tap `delay` samples behind it, so the output is
+    the input from `delay` frames ago -- the decode target for the delay-line words (the
+    descriptor-driven tap + the head post-increment).  A live delay word must show read_addr =
+    (head - delay) mod length and return the value written there `delay` frames earlier."""
+
+    def __init__(self, delay, length=None):
+        self.delay = int(delay)
+        self.n = int(length if length else self.delay + 1)
+        if self.n < 2:
+            self.n = 2
+        self.buf = [0.0] * self.n
+        self.head = 0
+
+    def step(self, x):
+        """One frame: write x at head, read the tap.  Returns (write_addr, read_addr, output)."""
+        self.buf[self.head] = float(x)
+        read_addr = (self.head - self.delay) % self.n
+        out = self.buf[read_addr]
+        rec = (self.head, read_addr, out)
+        self.head = (self.head + 1) % self.n
+        return rec
+
+
 # ---- capture ingest (identical section map to validate_against_capture.py) ------------------
 def first_record_cells(path=CAP):
     for ln in open(path):

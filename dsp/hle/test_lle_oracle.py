@@ -102,6 +102,17 @@ def main():
     check("LFO oracle phase == LFO kernel phase", abs(a0 / O.LFOOracle.WRAP - lref.phase) < 1e-6,
           "oracle %.6f vs kernel %.6f" % (a0 / O.LFOOracle.WRAP, lref.phase))
 
+    # 8. Delay oracle: the ring buffer returns the input written `delay` frames ago.
+    dl = O.DelayOracle(4)
+    xs = [0.11, 0.22, 0.33, 0.44, 0.55, 0.66, 0.77]
+    outs = [dl.step(x)[2] for x in xs]
+    check("delay returns input from `delay` frames ago", outs[4] == xs[0] and outs[6] == xs[2],
+          "out[4]=%.2f want %.2f" % (outs[4], xs[0]))
+    dl2 = O.DelayOracle(4)
+    addrs = [dl2.step(x)[1] for x in xs]        # read_addr = (head-delay) mod n
+    check("delay read address is (head - delay) mod n",
+          all(addrs[i] == ((i - 4) % dl2.n) for i in range(len(xs))))
+
     print("\n%s" % ("ALL LLE-ORACLE CHECKS PASSED" if PASS else "SOME CHECKS FAILED"))
     return 0 if PASS else 1
 
