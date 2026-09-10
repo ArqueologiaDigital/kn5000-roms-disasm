@@ -145,9 +145,27 @@ One operational blocker is shared by every build-lane capture and is stated once
 > hold either — nor `(coef_raw × L) >> P_SHIFT` (off ~1%). So the exact multiplier relationship
 > (which word's coef × which word's L, plus the P_SHIFT/ACC_SHIFT fixed-point and any rounding) is a
 > finer datapath decode than a one-line formula. ⚠ Deliberately NOT fishing for a shift/pipeline
-> combination that happens to match (that is the "criterion that cannot fail" failure mode). The
-> firm result stands: the biquad datapath is LIVE (non-zero products from seeded state); the exact
-> P-model is the next multi-session decode step, and the input route (4.2) is the gating unknown.
+> combination that happens to match (that is the "criterion that cannot fail" failure mode).
+>
+> **SEEDED TRACE COMMITTED + PIPELINE PROBED (2026-09-11).** Reproducibility fix: the BIQSEED
+> numbers quoted above lived only in scratch — the seeded run is now committed as
+> `dsp/analysis/data/kn5000-dsp-eq-biquad-trace-SEEDED-2026-09-11.txt` (header carries the exact
+> regenerate command), and `dsp/tools/biquad_pipeline_probe.py` produces the numbers below.
+> Two results, graded:
+>   - **MEASURED — the accumulate side is a clean one-slot pipeline.** Scoped to the EQ biquad pass
+>     (rows 56–99, cursor 0x00–0x1D), `acc[N] == acc[N-1] + P[N-1]` holds at **every non-boundary
+>     pair — 0 unexplained breaks**; the 21 breaks are all LOAD (hi12 0x000) / STORE-and-makeup
+>     (0x212/0x804) / band-boundary words, exactly where a break is expected. The product computed
+>     at row N-1 lands in the accumulator at row N. (This confirms §50 for the ACCUMULATE path.)
+>   - **OPEN — the product (multiplier) side is not one shift.** Per-MAC-row, the best-fit `s` in
+>     `(coef_raw × L) >> s ≈ P` scatters over {0,3,6,7,8,16,19}; the low-residual rows cluster at
+>     s=6/7/8 (<2%) while the ~32% rows are all `coef=0x100000` LOADs and the ~88–98% rows are
+>     tiny-coef words — i.e. the operand paired with each coef shifts with the pipeline, so the fix
+>     is an operand-select + rounding decode, NOT a global shift. Left OPEN, not fitted.
+>
+> The firm result stands: the biquad datapath is LIVE (non-zero products from seeded state) and its
+> accumulator is a verified one-slot MAC; the exact P-model (operand select + rounding) is the next
+> multi-session decode step, and the input route (4.2) is the gating unknown for faithful audio.
 
 ---
 
