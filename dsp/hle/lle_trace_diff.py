@@ -183,12 +183,72 @@ def selftest():
     return 0 if ok_all else 1
 
 
+def classify_ops(rows):
+    """Accumulator-op decode from a live trace, INDEPENDENT of the oracle: for each word,
+    decode hi12 bits [3:1] (the accumulator-op field f31, upd6383d.cpp) and classify what the
+    accumulator actually did -- LOAD (acc==P), ACCUMULATE (acc==prev+P), UNCHANGED (acc==prev).
+    Builds the f31 -> behaviour table the LLE needs (3 of 8 codes were read; 5 open).  Words
+    whose P is 0 carry no information (a silent frame), and are counted separately -- which is why
+    a MEANINGFUL run needs audio into the DSP (RULE 12)."""
+    table = {}   # f31 -> Counter of behaviours
+    prev = None
+    informative = 0
+    for r in rows:
+        w = r["word"]
+        hi12 = (w >> 24) & 0xFFF
+        esc = (hi12 >> 11) & 1
+        f31 = (hi12 >> 1) & 7
+        acc, p = r["acc"], r["p"]
+        if prev is None or esc:      # first word / format-escape word: f31 not an op field
+            prev = acc
+            continue
+        # ★ LOAD (acc<-P) and ACC (acc+=P) are only DISTINGUISHABLE when the accumulator was
+        #   non-zero AND the product is non-zero.  On a silent frame both give acc==P, so the
+        #   op cannot be read -- which is exactly why a meaningful capture needs audio (RULE 12).
+        if p == 0:
+            beh = "silent(P=0)"
+        elif acc == prev + p and prev != 0:
+            beh = "ACC"                       # definitive: acc grew by exactly P from non-zero
+        elif acc == p and prev == 0:
+            beh = "LOAD/ACC?"                 # ambiguous: prev was 0, both ops give acc==P
+        elif acc == p:
+            beh = "LOAD"                      # definitive: prev non-zero, acc reset to P
+        elif acc == prev:
+            beh = "UNCH"
+        else:
+            beh = "other"
+        prev = acc
+        table.setdefault(f31, {}).setdefault(beh, 0)
+        table[f31][beh] += 1
+        if beh in ("LOAD", "ACC"):
+            informative += 1                  # a word that DISTINGUISHED the op
+    return table, informative
+
+
+def ops_report(rows):
+    table, informative = classify_ops(rows)
+    print("Accumulator-op decode from the live trace (hi12 bits[3:1] = f31 -> behaviour):")
+    print("  f31  behaviours (count)                     reading")
+    known = {0: "acc <- P (LOAD)", 1: "acc += P (ACC)", 2: "acc unchanged"}
+    for f31 in sorted(table):
+        behs = ", ".join("%s=%d" % (b, n) for b, n in sorted(table[f31].items()))
+        print("   %d   %-40s %s" % (f31, behs, known.get(f31, "OPEN -- researched guess only")))
+    print("\n%d informative words (non-zero product, LOAD or ACC)." % informative)
+    if informative < 5:
+        print("⚠ Few informative words: the frame carried little signal.  For the biquad += op and")
+        print("  the m_dp origin, capture with audio flowing into the DSP (RULE 12) -- see the rig.")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("trace", nargs="?", help="a upd6383 frame-trace file (log or capture)")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--ops", action="store_true", help="classify accumulator ops (oracle-free)")
     ap.add_argument("--section", type=int, default=0, help="which captured biquad section")
     a = ap.parse_args()
+    if a.ops and a.trace:
+        return ops_report(parse_trace(open(a.trace).read()))
     if a.selftest or not a.trace:
         return selftest()
     secs = O.sections_from_capture()
