@@ -83,6 +83,25 @@ def main():
     check("SUB adds amplitude beating", env(pair).std() / (env(pair).mean() + 1e-9)
           > env(solo).std() / (env(solo).mean() + 1e-9), "coupling detune produces beats")
 
+    # 6. Coupling: INTERACTION GAIN drives the coupled-resonator normal-mode split.
+    print("\nCoupling solver (INTERACTION GAIN -> normal-mode detune):")
+    dm0, ds0 = L.coupled_detune(440.0, 437.0, 0.0)
+    dm1, ds1 = L.coupled_detune(440.0, 437.0, 0.3)
+    dm2, ds2 = L.coupled_detune(440.0, 437.0, 0.8)
+    split0 = abs(dm0) + abs(ds0)
+    split1 = abs(dm1) + abs(ds1)
+    split2 = abs(dm2) + abs(ds2)
+    check("zero interaction = no split", split0 < 1e-6, "%.3f cents" % split0)
+    check("more interaction = wider split", split2 > split1 > 0.5,
+          "gain .3->%.1f  .8->%.1f cents" % (split1, split2))
+    # audible: the coupled voice's beating rate changes with interaction gain
+    a = L.synth_channel(69, dur=2.0, sub_gain=1.0, sub_detune_cents=-8, interaction_gain=0.0, muting_cut_hz=5000)
+    b = L.synth_channel(69, dur=2.0, sub_gain=1.0, sub_detune_cents=-8, interaction_gain=0.6, muting_cut_hz=5000)
+    IFS2 = int(FS)
+    ea = np.abs(a[IFS2 // 4:IFS2]); eb = np.abs(b[IFS2 // 4:IFS2])
+    check("interaction changes the beating", abs(eb.std() / (eb.mean() + 1e-9)
+          - ea.std() / (ea.mean() + 1e-9)) > 1e-3, "coupling alters the mode split")
+
     print("\n%s" % ("ALL L7A1429 HLE CHECKS PASSED" if PASS else "SOME CHECKS FAILED"))
     return 0 if PASS else 1
 

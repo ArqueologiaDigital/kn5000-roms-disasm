@@ -73,6 +73,31 @@ def onepole_coeff(fc, fs=FS):
     return t - math.sqrt(max(t * t - 1.0, 0.0))
 
 
+def coupled_detune(f_main, f_sub, interaction_gain):
+    """The MAIN<->SUB coupling as normal-mode splitting of two coupled resonators (HLE-GUIDE:
+    sub_FC4269 'solves the characteristic function of a network of coupled delay resonators'
+    and returns a per-resonator detune in 1/256 semitone; INTERACTION GAIN sets the coupling).
+
+    This implements the PHYSICS the solver computes -- two oscillators of angular frequency
+    w1,w2 coupled with strength kappa split into normal modes
+        w_pm = sqrt( (w1^2+w2^2)/2  +/-  sqrt( ((w1^2-w2^2)/2)^2 + kappa^2 ) )
+    -- and returns (detune_main, detune_sub) in cents.  kappa scales with INTERACTION GAIN
+    (0..1).  ⚠ GRADED: faithful to the documented coupling MODEL, not the exact fixed-point
+    arithmetic of the 1087-byte ROM routine (that is notes/w24_e093_coupling_solver.py)."""
+    w1 = 2.0 * math.pi * f_main
+    w2 = 2.0 * math.pi * f_sub
+    mean = (w1 * w1 + w2 * w2) / 2.0
+    half = (w1 * w1 - w2 * w2) / 2.0
+    # coupling lives in the omega^2 domain (same scale as `mean`/`half`); 0.06 calibrates
+    # gain=1 to a ~tens-of-cents split, the order the ROM solver's ~13-cent quantum implies.
+    kappa = float(interaction_gain) * 0.06 * mean
+    root = math.sqrt(half * half + kappa * kappa)
+    wp = math.sqrt(max(mean + root, 1e-9))     # upper normal mode -> the (higher) main side
+    wm = math.sqrt(max(mean - root, 1e-9))     # lower normal mode -> the (lower) sub side
+    cents = lambda wc, w0: 1200.0 * math.log2(wc / w0) if w0 > 0 else 0.0
+    return cents(wp, w1), cents(wm, w2)
+
+
 class Waveguide:
     """One resonator: a Karplus-Strong / digital-waveguide loop -- a delay of `period`
     samples with a one-pole loss filter and a feedback gain, plus a POSITION pickup tap.
@@ -122,7 +147,7 @@ def driver_excitation(nsamples, fitting_rise=0.002, fitting_decay=0.03, seed=0, 
 
 
 def synth_channel(note, dur=2.0, *, muting_cut_hz=3000.0, sub_gain=1.0, sub_detune_cents=-6.0,
-                  position=0.5, position_scale=1.0, feedback=0.999,
+                  interaction_gain=0.0, position=0.5, position_scale=1.0, feedback=0.999,
                   fitting_rise=0.002, fitting_decay=0.03, fs=FS, seed=0):
     """Render one L7A1429 channel: coupled MAIN+SUB waveguides mixed by SUB GAIN.
 
@@ -135,8 +160,14 @@ def synth_channel(note, dur=2.0, *, muting_cut_hz=3000.0, sub_gain=1.0, sub_detu
                       constant (§8.1), exposed as a single named parameter.
     """
     f0 = 440.0 * 2.0 ** ((note - 69) / 12.0)
-    period_main = fs / f0 * position_scale
-    period_sub = fs / (f0 * 2.0 ** (sub_detune_cents / 1200.0)) * position_scale
+    f_main = f0
+    f_sub = f0 * 2.0 ** (sub_detune_cents / 1200.0)
+    if interaction_gain > 0.0:                    # apply the coupled-resonator normal-mode split
+        dm, ds = coupled_detune(f_main, f_sub, interaction_gain)
+        f_main *= 2.0 ** (dm / 1200.0)
+        f_sub *= 2.0 ** (ds / 1200.0)
+    period_main = fs / f_main * position_scale
+    period_sub = fs / f_sub * position_scale
     nsamp = int(dur * fs)
     exc = driver_excitation(nsamp, fitting_rise, fitting_decay, seed, fs)
 
