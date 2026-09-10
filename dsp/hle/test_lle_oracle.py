@@ -78,6 +78,30 @@ def main():
     check("makeup applied after the sum (y_out == presum*makeup)",
           abs(y_out - y_presum * mk) < 1e-12, "makeup %+.3f" % mk)
 
+    # 6. One-pole oracle == the validated OnePole kernel (the 0x0D/0x0E damping pair).
+    from kernels import OnePole, LFO                                     # noqa: E402
+    op = O.OnePoleOracle(0.6, base=0x30)
+    ref = OnePole(0.6)
+    xs = np.random.default_rng(1).standard_normal(64)
+    worst = max(abs(op.step(x)[1] - ref.process_one(x)) for x in xs)
+    check("one-pole oracle == OnePole kernel", worst < 1e-12, "max |Δ| = %.2e" % worst)
+    op2 = O.OnePoleOracle(0.6, base=0x30)
+    st, _ = op2.step(1.0)
+    check("one-pole is load-then-accumulate at consecutive cells",
+          [s.acc_op for s in st] == ["load", "mac"] and [s.cursor_cell for s in st] == [0x30, 0x31])
+
+    # 7. LFO oracle: the phase accumulates by a fixed increment and wraps at 2^23 -- and tracks
+    #    the validated LFO kernel's fractional phase.
+    lo = O.LFOOracle(3.0, fs=44100.0)
+    b0, inc, a0 = lo.step()
+    b1, _, a1 = lo.step()
+    check("LFO phase accumulates by inc", a0 == (b0 + inc) % O.LFOOracle.WRAP and a1 == (b1 + inc) % O.LFOOracle.WRAP)
+    check("LFO inc matches rate/fs", abs(inc / O.LFOOracle.WRAP - 3.0 / 44100.0) < 1e-6)
+    lref = LFO(3.0, 44100.0)
+    lref.block(1)                                          # advance one sample
+    check("LFO oracle phase == LFO kernel phase", abs(a0 / O.LFOOracle.WRAP - lref.phase) < 1e-6,
+          "oracle %.6f vs kernel %.6f" % (a0 / O.LFOOracle.WRAP, lref.phase))
+
     print("\n%s" % ("ALL LLE-ORACLE CHECKS PASSED" if PASS else "SOME CHECKS FAILED"))
     return 0 if PASS else 1
 

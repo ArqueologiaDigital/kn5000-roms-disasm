@@ -113,6 +113,56 @@ class BiquadOracle:
         return BiquadDF1(b0, b1, b2, -na1, -na2, mk)
 
 
+class OnePoleOracle:
+    """Per-word oracle for the one-pole DAMPING filter (the reverb/mod feedback loss, the
+    0x0D/0x0E two-state pair, §3/§5).  The kernel is y = (1-d)*x + d*y1, so one sample is TWO
+    MACs -- a load then an accumulate -- exactly the biquad's schedule in miniature:
+        acc  <- (1-d) * x        (load)
+        acc  += d     * y1       (accumulate)   ; y1 <- acc
+    ⚠ GRADED: the SET of the two products and their sum is the hard target; whether the chip
+    stores {1-d, d} as two coefficients or one coefficient plus a subtract is the factorization
+    hypothesis a live trace tests (the 0x0D/0x0E adjacency is what carries it)."""
+
+    def __init__(self, damping, base=0):
+        self.d = float(damping)
+        self.base = int(base)
+        self.y1 = 0.0
+
+    def step(self, x):
+        x = float(x)
+        p0 = (1.0 - self.d) * x
+        acc = p0                                   # load
+        p1 = self.d * self.y1
+        acc = acc + p1                             # accumulate
+        steps = [
+            MacStep(0, self.base, 1.0 - self.d, "1-d", "x", x, "load", p0, p0),
+            MacStep(1, self.base + 1, self.d, "d", "y1", self.y1, "mac", p1, acc),
+        ]
+        self.y1 = acc
+        return steps, acc
+
+
+class LFOOracle:
+    """Per-word oracle for the LFO PHASE ACCUMULATOR (§6/§7a; the 0x092 phase-accumulate word
+    that writes the phase back, = 0x082 LFO-read + bit4).  One frame advances the phase by a
+    fixed increment and wraps at 2^23-1 -- so the decode target is the plainest possible '+=':
+        phase <- (phase + inc) mod 2^23
+    A live trace's phase cell must grow by exactly `inc` each frame (the running-sum test across
+    FRAMES, not within one), confirming the phase word carries the accumulate op and writes back.
+    inc = round(rate_hz/fs * 2^23) is the 23-bit phase increment."""
+
+    WRAP = 1 << 23
+
+    def __init__(self, rate_hz, fs=44100.0, phase=0):
+        self.inc = int(round(float(rate_hz) / float(fs) * self.WRAP)) & (self.WRAP - 1)
+        self.phase = int(phase) & (self.WRAP - 1)
+
+    def step(self):
+        before = self.phase
+        self.phase = (self.phase + self.inc) & (self.WRAP - 1)
+        return before, self.inc, self.phase
+
+
 # ---- capture ingest (identical section map to validate_against_capture.py) ------------------
 def first_record_cells(path=CAP):
     for ln in open(path):
