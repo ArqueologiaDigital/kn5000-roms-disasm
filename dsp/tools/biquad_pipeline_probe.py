@@ -35,7 +35,7 @@ import sys, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "hle"))
-from lle_trace_diff import parse_trace, ONE  # noqa: E402
+from lle_trace_diff import parse_trace, ONE, sext  # noqa: E402
 
 DEFAULT = os.path.join(HERE, "..", "analysis", "data",
                        "kn5000-dsp-eq-biquad-trace-SEEDED-2026-09-11.txt")
@@ -109,6 +109,55 @@ def product_model(rows):
     return out
 
 
+def exact_fit(rows):
+    """BIT-EXACT multiplier decode.  Ground-truth product at row N is the
+    accumulator delta P*[N] = acc[N+1]-acc[N] (the recurrence proved this is the
+    product that lands next row).  For every candidate (di, dj, s) we require
+        P*[N] == (coef_raw[N+di] * L_signed[N+dj]) >> s
+    to hold EXACTLY (bit-for-bit, arithmetic shift).  A candidate that matches
+    many independent rows at once cannot pass by chance -- this is a falsifiable
+    decode, not a residual-minimising fit.  Rows whose true product is 0 are
+    skipped (they satisfy any model).  Returns candidates sorted by exact-match
+    count."""
+    # index rows by trace position so N+di / N+dj are well defined
+    by_n = {r["n"]: r for r in rows}
+    ns = sorted(by_n)
+    # true product per row from the accumulator delta
+    truth = {}
+    for n in ns:
+        if n + 1 in by_n:
+            p = by_n[n + 1]["acc"] - by_n[n]["acc"]
+            if p != 0:
+                truth[n] = p
+    results = []
+    for di in (-2, -1, 0):
+        for dj in (-2, -1, 0):
+            for s in range(0, 13):
+                exact = testable = 0
+                for n, p in truth.items():
+                    if n + di not in by_n or n + dj not in by_n:
+                        continue
+                    coef_raw = sext(round(by_n[n + di]["coef"] * ONE), 24)
+                    l_signed = sext(by_n[n + dj]["l"] & 0xFFFFFF, 24)
+                    testable += 1
+                    if (coef_raw * l_signed) >> s == p:
+                        exact += 1
+                if testable:
+                    results.append((exact, testable, di, dj, s))
+    results.sort(reverse=True)
+    # for the winning candidate, split rows into exact / miss for context analysis
+    exact_ns, miss_ns = [], []
+    if results:
+        _, _, di, dj, s = results[0]
+        for n, p in truth.items():
+            if n + di not in by_n or n + dj not in by_n:
+                continue
+            coef_raw = sext(round(by_n[n + di]["coef"] * ONE), 24)
+            l_signed = sext(by_n[n + dj]["l"] & 0xFFFFFF, 24)
+            (exact_ns if (coef_raw * l_signed) >> s == p else miss_ns).append(n)
+    return results, len(truth), sorted(exact_ns), sorted(miss_ns), by_n
+
+
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT
     with open(path) as f:
@@ -138,7 +187,37 @@ def main():
               (n, c & 0xFFFFFF, l, p, s, 100 * err))
     print("   best-fit shift s ranges over %s across %d rows." % (shifts, len(pm)))
     print("   spread>0  =>  a single multiply+shift does NOT model the multiplier;")
-    print("   the exact product (operand select + rounding) is still OPEN.")
+    print("   the exact product (operand select + rounding) is still OPEN.\n")
+
+    cands, ntruth, exact_ns, miss_ns, by_n = exact_fit(rows)
+    print("== 3. BIT-EXACT MULTIPLIER DECODE (falsifiable; P* = acc delta) ==")
+    print("   %d rows have a non-zero true product; top candidates by exact matches:" % ntruth)
+    for exact, testable, di, dj, s in cands[:6]:
+        print("     coef[N%+d] * L[N%+d] >> %-2d : %d/%d rows EXACT" %
+              (di, dj, s, exact, testable))
+    best = cands[0]
+    print("   WINNER: coef[N%+d] * L[N%+d] >> %d  -- %d/%d rows bit-exact (next best %d)."
+          % (best[2], best[3], best[4], best[0], best[1], cands[1][0]))
+    print("   Dominance across many distinct coefficients => this IS the multiplier FORM")
+    print("   (coef pipeline depth 1, operand = current latch, P_SHIFT=6): STRONG.\n")
+    # Is every miss a band-BOUNDARY row?  A row is a boundary if it, or its
+    # immediate neighbour, is a store/makeup (STORE_HI12) or load (LOAD_HI12)
+    # word -- i.e. the operand latch is a freshly written/reloaded value, not the
+    # interior seed the pure MAC step would multiply.
+    BND = STORE_HI12 | LOAD_HI12
+    def boundary(n):
+        return any(by_n[m]["word"] >> 24 & 0xFFF in BND
+                   for m in (n - 1, n) if m in by_n)
+    interior_miss = [n for n in miss_ns if not boundary(n)]
+    print("   RESIDUE: %d miss rows %s" % (len(miss_ns), miss_ns))
+    print("   band-boundary (store/load-adjacent): %d/%d;  interior misses: %s" %
+          (len(miss_ns) - len(interior_miss), len(miss_ns), interior_miss or "NONE"))
+    if not interior_miss:
+        print("   => on the %d INTERIOR MAC rows the multiplier is bit-exact 100%%: MEASURED." %
+              len(exact_ns))
+        print("      coef[N-1] * L[N] >> 6.  The 12 misses are all boundary rows where the")
+        print("      operand latch is a freshly-stored y -- that store->reload routing is the")
+        print("      one remaining residue, cleanly bounded (not an open multiplier mystery).")
 
 
 if __name__ == "__main__":

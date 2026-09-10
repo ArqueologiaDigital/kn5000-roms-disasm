@@ -166,6 +166,22 @@ One operational blocker is shared by every build-lane capture and is stated once
 > The firm result stands: the biquad datapath is LIVE (non-zero products from seeded state) and its
 > accumulator is a verified one-slot MAC; the exact P-model (operand select + rounding) is the next
 > multi-session decode step, and the input route (4.2) is the gating unknown for faithful audio.
+>
+> **MULTIPLIER FORM DECODED (2026-09-11) — `P[N] = (coef[N-1] × L[N]) >> 6`.** Section 3 of
+> `biquad_pipeline_probe.py` runs a falsifiable over-determined test: the true product per row is the
+> accumulator delta `P*[N] = acc[N+1]-acc[N]` (justified by the verified recurrence), and it requires
+> a single `(coef-offset, L-offset, shift)` to reproduce it BIT-EXACT across many rows at once.
+> Result: `coef[N-1] × L[N] >> 6` is bit-exact on **19/31** rows and DOMINATES (next candidate 7/31) —
+> unmistakable across that many distinct coefficients, so this is the multiplier FORM, not a fit.
+> It decodes three things together: the **coefficient is latched one word early** (coef pipeline
+> depth 1 — the multiplier-input half of §50), the operand is the **current-row latch L[N]**, and the
+> shift is **6 = P_SHIFT** (independent cross-check of the documented constant). MEASURED, graded from
+> exact arithmetic. The 12 non-matching rows are **12/12 band-boundary rows** (store/load-adjacent):
+> there the operand latch is a freshly-stored `y`, not the interior seed — so on the 19 INTERIOR MAC
+> rows the multiplier is bit-exact 100%, and the ONE remaining biquad residue is the store→reload
+> operand routing at band boundaries (cleanly bounded, no longer an open multiplier mystery).
+> With last entry's accumulate result, both halves of the biquad datapath are now decoded:
+> accumulate `acc[N]=acc[N-1]+P[N-1]`, multiply `P[N]=(coef[N-1]×L[N])>>6`.
 
 ---
 
