@@ -16,6 +16,24 @@ Research areas: DSP LLE output stage → faithful EQ audio through the upd6383 c
 
 # Master Plan — Technics KN5000 / WSA1R DSP + Acoustic Preservation
 
+## ★ EXECUTION STATUS (2026-09-11)
+
+- **Phase 1 — COMPLETE (all zero-build).** 1.1 comparator `--eq-trace` retarget ✓ (`fce…`→committed);
+  1.2 stores-fire correction ✓ (MEASURED); 1.4 honest ceiling ✓ (`ceiling_partition.py`: open frontier
+  = 315 words / 10.3%, not the folklore 93.3%); 1.5 oracle confrontations for one-pole/LFO/delay ✓
+  (all selftests green); 1.6 standalone C++ HLE reference + golden A/B ✓ (0.000000 dB vs Python).
+  **1.3 REFUTED on verification** — SRC 0x00 is 1-of-N "applied but untested", NOT strict; not promoted.
+- **Phase 3 — partial.** 3.2 drop the ad-hoc detune ✓; 3.3 decoded-FITTING excitation ✓ (both verified
+  in `wsa1r`: rings 436 Hz, decays). 3.4/3.5/3.6 remain (SESSION, incremental fidelity + docs).
+- **Phase 2 — BLOCKED on execution** (see the box below): the KN5000 EQ coefficient order/topology is
+  undecoded (WSA1R order is unstable on KN5000), so a faithful in-MAME render needs a decode first
+  (new prereq 2.0, via Phase 4). Scaffolding reverted; offline `render_eq_from_capture.py` stays the
+  honest audible answer.
+- **Phases 4–6 — MULTI-SESSION / build-lane** (input-route decode → live decode → speaker-audible LLE),
+  as tagged. **Boundary — HARDWARE** (POSITION scale, IC4 ROMs) unchanged.
+- Two plan premises (1.3, 2.3) were caught wrong by verifying against source before executing — the
+  grade-by-provenance / never-rig discipline working as intended.
+
 ## Ordering rationale
 
 The flagship value is **faithful DSP audio + advancing the LLE decode**, and the project's hard discipline is *never rig audio, grade by provenance, commit the artefact in the same session*. Those two facts fix the order:
