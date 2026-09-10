@@ -140,6 +140,14 @@ One operational blocker is shared by every build-lane capture and is stated once
 > `P = coef × L` where L is the operand loaded by the PRIOR word (one-slot delay, §50), not this
 > word's `mem[ptr]`, and the mid-frame stores overwrite state cells — so `--eq-trace`'s naive
 > `coef × mem[dp]` does not match; the comparator needs an L-pipeline+store-aware mode (next step).
+>
+> **L-pipeline check ATTEMPTED (2026-09-11):** on the seeded trace, `P == coef_raw × L` does NOT
+> hold either — nor `(coef_raw × L) >> P_SHIFT` (off ~1%). So the exact multiplier relationship
+> (which word's coef × which word's L, plus the P_SHIFT/ACC_SHIFT fixed-point and any rounding) is a
+> finer datapath decode than a one-line formula. ⚠ Deliberately NOT fishing for a shift/pipeline
+> combination that happens to match (that is the "criterion that cannot fail" failure mode). The
+> firm result stands: the biquad datapath is LIVE (non-zero products from seeded state); the exact
+> P-model is the next multi-session decode step, and the input route (4.2) is the gating unknown.
 
 ---
 
