@@ -117,6 +117,16 @@ One operational blocker is shared by every build-lane capture and is stated once
 > sit behind this.
 
 - **4.1 Census the input→biquad bridge by measurement.** — Build-lane run of `tools/rigs/kn5000_dsp_frame_trace.lua` (PARAMETRIC EQ, RULE-12 audio `:KEY2 C4..B4`); over settled EQ frames, census every word that READS cell 0x05 (§222 `pk_fetch`) and every word that WRITES 0x64..0x77 (§221 provenance / §104 residency); cross them to name the bridge word (identity + SRC/ACT/class + current decode status). **Falsifier:** if no word bridges 0x05→0x64, the 0x64=x0 or the 0x05-latch reading is wrong — re-derive, do not paper over. — *M* — [MULTI-SESSION] *(build-lane)*
+> **4.2 IDENTIFICATION DONE (2026-09-11).** The disassembler's live annotations name the input
+> route: it is the **K6 input-stage words (iw3–iw10)**. iw4 (`204.2.02.1CE`) and iw8 (`084.2.01.1C0`)
+> are "THE PORT READ, block A/B -- mem[X+2]/mem[X+5] is an AUDIO INPUT LATCH (read-never-written)";
+> iw3/iw5/iw7/iw10 read/store the X+4..X+6 one-frame state cells with **"ALU UNKNOWN"**. So the
+> bridge is not missing -- it is these named, addressing-decoded-but-ALU-undecoded input-stage words.
+> ⚠ Their ALU cannot be read from this capture because the values are 0 (acc=0 everywhere): decoding
+> what arithmetic each performs, and how the input at X+2/X+5 (kernel region ~0x05) reaches the
+> unit-0 body's biquad x0 at 0x64, needs SIGNAL-BEARING frames -- the multi-session live decode.
+> This is the concrete 4.2 target, now pinned to specific words (iw3/5/7/10, ALU unknown).
+
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*
 - **4.4 Validate the internal biquad against the retargeted oracle.** — Run the Phase-1.1 comparator on the non-zero trace: assert `acc[k]==acc[k-1]+P[k]` (MACs), `acc[0]==P[0]` (LOAD), cursor coeffs match `[b1,b0,b2,-a1,-a2]`, operands map to x0..y2 at 0x64+4k. Commit the passing diff as the evidence the LLE biquad now matches the HLE bit-for-bit internally. — *S* — [SESSION] *(build-lane)*
