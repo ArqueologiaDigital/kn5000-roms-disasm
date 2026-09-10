@@ -205,14 +205,19 @@ def classify_ops(rows):
         # ★ LOAD (acc<-P) and ACC (acc+=P) are only DISTINGUISHABLE when the accumulator was
         #   non-zero AND the product is non-zero.  On a silent frame both give acc==P, so the
         #   op cannot be read -- which is exactly why a meaningful capture needs audio (RULE 12).
+        # The product and the accumulator can live at different fixed-point scales: the biquad
+        # applies a MEASURED one-bit shift (P<<1, the factor-of-two of biquad-eq.md / §227), and
+        # the coefficient/accumulator shifts (P_SHIFT 6 / ACC_SHIFT 16) can put P at P>>k.  So an
+        # ACCUMULATE shows acc-prev == P at ONE of these scales, not only P itself.
+        scales = (p, p << 1, p >> 1) + tuple(p >> k for k in (6, 16, 22))
         if p == 0:
             beh = "silent(P=0)"
-        elif acc == prev + p and prev != 0:
-            beh = "ACC"                       # definitive: acc grew by exactly P from non-zero
+        elif prev != 0 and any(acc == prev + s for s in scales):
+            beh = "ACC"                       # definitive: acc grew by P (at a known scale) from non-zero
         elif acc == p and prev == 0:
             beh = "LOAD/ACC?"                 # ambiguous: prev was 0, both ops give acc==P
-        elif acc == p:
-            beh = "LOAD"                      # definitive: prev non-zero, acc reset to P
+        elif any(acc == s for s in scales):
+            beh = "LOAD"                      # definitive: acc reset to P (at a known scale)
         elif acc == prev:
             beh = "UNCH"
         else:
