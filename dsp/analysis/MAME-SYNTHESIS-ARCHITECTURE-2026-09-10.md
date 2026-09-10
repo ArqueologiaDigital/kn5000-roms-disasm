@@ -137,12 +137,18 @@ The whole pipeline was built and run end to end, and it produced a real decode r
 
 ## Next steps (each its own reviewable change)
 
-1. **`m_dp` origin (the biquad-specific unknown).** Needs PARAMETRIC EQ running (5 MACs reading the
-   x/y history). NAV=1 does not select it on the installed v140/141 subprogram (the origincap panel
-   navigation is v142-tuned; `program=` stays 0). Options: fix the nav seg/bits for this ROM, run
-   the v142 subprogram, or poke the effect-type RAM + trigger the per-effect origin host poke
-   (`kn5000_dsp_origincap.py` reads it). Then `lle_trace_diff.py` (biquad mode) pins `m_dp` from
-   the operands. Program 0 (default) has no biquad, so it confirmed the op but not `m_dp`.
+1. **`m_dp` origin (the biquad-specific unknown).** UPDATE 2026-09-10 (verified): the kn5000
+   machine's DEFAULT BIOS (v10) loads **kn5000_subprogram_v142** — the exact version the origincap
+   nav + extractor target — so `kn5000_dsp_origincap.lua TYPEIDX=15` DOES select PARAMETRIC EQ, and
+   `kn5000_dsp_frame_trace.lua NAV=1` (aligned to origincap's timing/gate, DSP-on-late) captures an
+   EQ frame with audio (peak|mix|≈16000). The origin is NOT a visible pointer-load poke
+   (`kn5000_dsp_origincap.py` on the EQ capture shows only `821`/`825` coefficient/descriptor loads,
+   confirming the ledger: nothing loads `m_dp`) — so it must be read from LIVE EXECUTION. ⚠ The real
+   remaining gap is a MAPPING one: the frame trace's `iw` is the runtime I-RAM PC (control-flow
+   jumps, and iw 0..5 run through `latch_inputs` outside the traced exec path), so identifying the
+   biquad's 5 MACs in the trace needs the parked effort's runtime-I-RAM-layout model (trace PC ↔ EQ
+   body word index). Once that maps, the `dp` column at the biquad MACs IS `m_dp`. Program 0
+   (default) has no biquad, so it confirmed the op but not `m_dp`.
 2. **Feed the confirmed ops back into the core decode** — the hi12[3:1] table (0=load, 1=+=) is now
    measured; the "other" f31=1 cases are the accumulator/datum scale (P_SHIFT/ACC_SHIFT) still to model.
 3. **Extend the oracle to the other kernels** (one-pole, LFO, delay) — each already in `kernels.py`.
