@@ -24,15 +24,18 @@ thing we *do* have — the exact microcode — and bake in guesses. So: HLE the 
 
 ## Where each half stands today (2026-09-10)
 
-**Acoustic modelling — HLE.** The MAME device `l7a1429_device` (`src/mame/matsushita/
-acoustic_modeling.cpp`) decodes the 1217-register file into engineering units (`decoded_channel`)
-and produces **no audio** — correctly, because it is not yet a `device_sound_interface` and the
-internal path is unmeasured. The audio-producing model already exists and is validated *outside*
-MAME: `wsa1/hle/l7a1429_hle.py` (coupled digital-waveguide resonators; rings at pitch; sustains
-and decays with no key-off; MUTING = loop damping; INTERACTION GAIN coupling). **The HLE task** is
-to make the device a sound interface and port that model in, consuming the parameters
-`decoded_channel()` already exposes, with the two honest stand-ins behind switches (DRIVER
-excitation = undumped IC4 wave ROMs; POSITION absolute scale = a hardware unknown).
+**Acoustic modelling — HLE. ✅ DONE (2026-09-10).** `l7a1429_device` (`src/mame/matsushita/
+acoustic_modeling.cpp`) now becomes a `device_sound_interface` under `WSA1R_ENABLE_ACOUSTIC_HLE`
+(default 0 — the shipped machine is unchanged), running the documented coupled digital-waveguide
+resonator model ported from `wsa1/hle/l7a1429_hle.py` (per channel MAIN+SUB waveguide: delay =
+pitch period → MUTING one-pole loss → feedback, POSITION pickup tap; mixed by SUB GAIN; no
+key-off). A MAIN TUNE write is the per-channel note event. **Validated in `wsa1r`**
+(`tools/rigs/wsa1_acoustic_hle_probe.lua` pokes MAIN TUNE over CPU 2's bus): exciting all 64
+voices at A4 rings at **436 Hz ≈ 440** (pitch tracks the written tune) and **decays autonomously**
+(RMS 164→94→87, highs damping first via MUTING). Two honest stand-ins behind the flag: the
+excitation is a synthetic burst for IC4's undumped wave ROMs, and POSITION's absolute scale is
+unknown. It is the DOCUMENTED model, not the chip's real audio (its output leaves on RQWFI into
+IC4). Commit: kn7000_mame `4944c81`.
 
 **Effects DSP — LLE.** The core `upd6383_device` (`src/devices/cpu/upd6383/upd6383.cpp`, 8345 lines)
 is a real executable CPU core with `execute_run()`, C-RAM/D-RAM/descriptor banks, a biquad path
@@ -152,8 +155,9 @@ The whole pipeline was built and run end to end, and it produced a real decode r
 2. **Feed the confirmed ops back into the core decode** — the hi12[3:1] table (0=load, 1=+=) is now
    measured; the "other" f31=1 cases are the accumulator/datum scale (P_SHIFT/ACC_SHIFT) still to model.
 3. **Extend the oracle to the other kernels** (one-pole, LFO, delay) — each already in `kernels.py`.
-4. **Acoustic HLE in MAME** (independent track). Make `l7a1429_device` a `device_sound_interface`
-   and port `wsa1/hle/l7a1429_hle.py`, stand-ins behind switches.
+4. **Acoustic HLE in MAME** (independent track). ✅ DONE — see the acoustic status above
+   (kn7000_mame `4944c81`, behind `WSA1R_ENABLE_ACOUSTIC_HLE`, validated in `wsa1r`). Remaining
+   acoustic work is hardware-gated (POSITION absolute scale; IC4 wave ROMs) — task 7, opportunistic.
 
 Builds on: `dsp/hle/` (effects HLE), `wsa1/hle/` (acoustic HLE), `dsp/analysis/biquad-eq.md`,
 `dsp/analysis/HOST-to-DSP-coefficient-chain-2026-09-09.md`, and the LLE core's own decode notes
