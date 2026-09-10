@@ -96,36 +96,37 @@ trace tests, not itself a measurement.
 
 Run: `python3 dsp/hle/lle_oracle.py`, `test_lle_oracle.py`, `lle_trace_diff.py --selftest` (all pass).
 
-## Live capture — DONE, and the one remaining blocker (2026-09-10)
+## Live capture — DONE; the "+=" op is CONFIRMED on hardware-emulation (2026-09-10)
 
-The whole pipeline was built and run end to end:
+The whole pipeline was built and run end to end, and it produced a real decode result:
 
 1. **The LLE trace dump is parseable** (upd6383.cpp) and the core was **built with
-   `KN5000_ENABLE_DSP1=1` and run**; a **real 285-word per-word frame trace was captured** from
-   the executing DSP (the committed data file). The comparator parses it; the pipeline works.
-2. **`f31 = 0 → acc ← P` (the LOAD op) is confirmed on live execution** (`--ops`).
-3. **⚠ The blocker for the "+=" op and `m_dp` is RULE 12: no audio reaches the DSP under script.**
-   Across four runs (keybed chord, DEMO button) the tone generator's `DSP INPUT AUDIT` reported
-   `peak |mix| = 0`: the 1 ms `keybed_scan` timer runs and generates note-on events, but no voice
-   sounds at boot state, so `di[]` stays zero. With zero input the biquad products are zero, and
-   **LOAD vs ACC are mathematically indistinguishable when the accumulator was zero** — the
-   comparator correctly refuses to decide (`--ops` reports 0 informative words). The mechanism is
-   complete; it needs one capture *with signal*.
+   `KN5000_ENABLE_DSP1=1` and run**; a **full 285-word per-word frame trace was captured** from
+   the executing DSP (the committed data file) **with audio flowing into it**.
+2. **★ The accumulator op is CONFIRMED on live execution** (`lle_trace_diff.py --ops`):
+   - **`f31` (hi12 bits[3:1]) `= 0 → acc ← P` (LOAD)** — 8 clean, 0 contradicting.
+   - **`f31 = 1 → acc += P` (ACCUMULATE)** — 5 clean, e.g. iw95 `prev 15729046 + P 900 = 15729946`.
+   - and the **biquad's MEASURED factor-of-two is reproduced live**: iw33 `prev + (P<<1) == acc`.
+   This turns the hi12[3:1] "+=" reading from established-elsewhere into **measured on the running
+   chip model**, through the HLE-oracle toolchain — exactly "use the DSP HLE to aid the LLE".
+3. **The audio fix (RULE 12):** signal reaches the DSP only when a note sounds in the **right-hand
+   melody zone** (`KEY2` = C4..B4, the R1 voice); the split's left/accompaniment zone (`KEY1`) is
+   silent unless ACMP is on — an early C3/E3/G3 chord there gave `peak |mix| = 0`. C4 gives
+   `peak |mix| ≈ 16000` (WAV RMS 550). On a silent frame LOAD and ACC are indistinguishable, which
+   the comparator states honestly (0 informative words); with audio it decides.
 
 ## Next steps (each its own reviewable change)
 
-1. **Get audio into the DSP (the gating data step).** Make a KN5000 voice sound under script —
-   options: reproduce a known-good note path (a working env-rig screen state / master volume /
-   part-on), feed a MIDI note through the `kbdmidi` bridge (`-kbdmidi`), or trigger a rhythm/demo
-   that actually reaches `mix`. Verify with `DSP INPUT AUDIT peak |mix| > 0`. Then re-run
-   `kn5000_dsp_frame_trace.lua` and `lle_trace_diff.py --ops` → the "+=" op falls out.
-2. **Select PARAMETRIC EQ** (for `m_dp`): `NAV=1 TYPEIDX=15`, but the rig's display-poll addresses
-   are v142-specific and garble on v140 — confirm the type by the running `program=` in the trace
-   (EQ = 39), or fix the poll addresses for the installed subprogram ROM.
-3. **Crack the "+=" code and `m_dp` origin** from the diff (`lle_trace_diff.py`), then feed the
-   result back into the core's decode (the hi12[3:1] table and the `m_dp` load).
-4. **Extend the oracle to the other kernels** (one-pole, LFO, delay) — each already in `kernels.py`.
-5. **Acoustic HLE in MAME** (independent track). Make `l7a1429_device` a `device_sound_interface`
+1. **`m_dp` origin (the biquad-specific unknown).** Needs PARAMETRIC EQ running (5 MACs reading the
+   x/y history). NAV=1 does not select it on the installed v140/141 subprogram (the origincap panel
+   navigation is v142-tuned; `program=` stays 0). Options: fix the nav seg/bits for this ROM, run
+   the v142 subprogram, or poke the effect-type RAM + trigger the per-effect origin host poke
+   (`kn5000_dsp_origincap.py` reads it). Then `lle_trace_diff.py` (biquad mode) pins `m_dp` from
+   the operands. Program 0 (default) has no biquad, so it confirmed the op but not `m_dp`.
+2. **Feed the confirmed ops back into the core decode** — the hi12[3:1] table (0=load, 1=+=) is now
+   measured; the "other" f31=1 cases are the accumulator/datum scale (P_SHIFT/ACC_SHIFT) still to model.
+3. **Extend the oracle to the other kernels** (one-pole, LFO, delay) — each already in `kernels.py`.
+4. **Acoustic HLE in MAME** (independent track). Make `l7a1429_device` a `device_sound_interface`
    and port `wsa1/hle/l7a1429_hle.py`, stand-ins behind switches.
 
 Builds on: `dsp/hle/` (effects HLE), `wsa1/hle/` (acoustic HLE), `dsp/analysis/biquad-eq.md`,
