@@ -110,6 +110,12 @@ def main():
     rv = FX.reverb(imp, decay=0.85, mix=1.0)
     tail = np.sqrt(np.mean(rv[nfs // 2:] ** 2))
     check("reverb has an audible tail at 0.5 s", tail > 1e-4, "rms %.2e" % tail)
+    # KN5000 all-pass diffuser ladder (§5): dense diffusion + a decaying tail from recirculation
+    rvk = FX.reverb_kn5000(imp, decay=0.85, mix=1.0)
+    early = np.count_nonzero(np.abs(rvk[:int(0.05 * nfs)]) > 1e-4)
+    tailk = np.sqrt(np.mean(rvk[nfs // 2:] ** 2))
+    check("KN5000 ladder diffuses (dense early echoes)", early > 100, "%d nonzero in 50 ms (a plain delay gives <10)" % early)
+    check("KN5000 ladder decays via recirculation", 1e-5 < tailk, "rms %.2e" % tailk)
 
     # 7. Parametric EQ (multi-band) runs and boosts its bands.
     print("Parametric EQ (5-band series):")

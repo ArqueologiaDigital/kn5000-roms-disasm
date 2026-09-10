@@ -115,6 +115,35 @@ def reverb(x, decay=0.84, damp_hz=4500.0, mix=0.3, fs=D.FS):
     return y
 
 
+def reverb_kn5000(x, decay=0.86, damp_hz=5000.0, mix=0.3, fs=D.FS):
+    """KN5000 REVERB (§5 + public effects-dsp.md §4): a pre-delay feeding NINE first-order
+    all-pass diffusers in two descending-gain ladders (five + four), with a damping one-pole
+    and recirculation providing the decay (the diffuser ladder itself is loss-less/all-pass,
+    exactly as proven; decay lives in the feedback around it)."""
+    x = np.asarray(x, dtype=np.float64)
+    n = x.size
+    predelay = DelayLine(int(D.ms_to_samples(20.0, fs)) + 4)
+    pd_n = int(D.ms_to_samples(20.0, fs))
+    # nine all-pass diffusers, two descending-gain ladders (5 + 4); mutually-prime lengths
+    ap_ms = [4.2, 6.1, 8.3, 11.9, 15.1,   3.1, 5.3, 7.7, 10.3]
+    gains = [0.72, 0.70, 0.68, 0.66, 0.64,  0.70, 0.68, 0.66, 0.64]  # descending per ladder
+    aps = [_Allpass(int(D.ms_to_samples(m, fs)), g) for m, g in zip(ap_ms, gains)]
+    fb_delay = DelayLine(int(D.ms_to_samples(38.0, fs)) + 4)
+    fb_n = int(D.ms_to_samples(38.0, fs))
+    damp = OnePole(D.damping_from_hz(damp_hz, fs))
+    y = np.zeros(n)
+    recirc = 0.0
+    for i in range(n):
+        predelay.push(x[i])
+        s = predelay.read(pd_n) + decay * damp.process_one(recirc)
+        for ap in aps:
+            s = ap.tick(s)
+        fb_delay.push(s)
+        recirc = fb_delay.read(fb_n)
+        y[i] = (1.0 - mix) * x[i] + mix * s
+    return y
+
+
 def distortion(x, drive=8.0, level=0.4, curve="tanh", tone_hz=None, fs=D.FS):
     """DISTORTION / OVERDRIVE / EXCITER (§7d): drive -> waveshaper(curve) -> output level,
     with an optional post tone biquad (overdrive/exciter add one; fuzz/distortion do not)."""
