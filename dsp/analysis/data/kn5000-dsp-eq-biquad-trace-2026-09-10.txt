@@ -1,0 +1,316 @@
+# Live uPD6383GF EQ biquad trace -- KN5000 IC311, PARAMETRIC EQ (algo 39), 2026-09-10.
+# Build: KN5000_ENABLE_DSP1=1.  Run: kn5000_dsp_frame_trace.lua NAV=1 TYPEIDX=15 AUDIO=key
+#   DSPVAL=3 (decoded+SPECULATIVE ISA) UPD6383_SPEC=4000000000.  peak|mix|=15851 (audio on).
+#
+# ★ m_dp PINNED FROM LIVE EXECUTION.  The 5 EQ bands appear at C-RAM cursor 0x00..0x1D
+# (6 cells/band = [b1,b0,b2,-a1,-a2,makeup]; b0=0.125 across bands, the parametric-EQ
+# signature), and each band's operands are read from D-RAM 0x64+4k -- band 0 at 0x64,
+# band 1 at 0x68, ... band 4 at 0x74 = EXACTLY the host-written state block {64,68,6C,70,74}.
+# So the biquad OPERAND ORIGIN m_dp = the host state block (0x64, stride 4/band), read
+# directly here -- resolving what the static replay (kn5000_dsp_trace.py) left OPEN as
+# 'REQUIRED 0x19, none of the header registers' (a cursor-model artifact).  Speculative
+# mode (DSPCFG bit1) + rstcur in the EQ body put the cursor at 0x00, so the coefficients
+# read correctly too.  REMAINING gap for faithful audio: the input signal is not yet in
+# the state cells (mem/P = 0), so the biquad computes coef*0 -- the input-routing last mile.
+#
+upd6383: ==== TIME-ORDERED FRAME TRACE, 176 slots ====
+upd6383:   n  iw u1  word         dp  mem    acc            accb           P              cur coef   tA     tB     MUL       L
+upd6383:    0   6  0  0400A00419 03 000000              0              0              0  41 000000 000000 000000   Y        0
+upd6383:    1   9  0  00122FF1D5 04 00A800              0              0              0  42 000000 000000 000000   .        0
+upd6383:    2  18  0  0182A00415 06 000000              0              0              0  47 000000 000000 000000   Y        0
+upd6383:    3  27  0  0012201655 07 000000              0              0              0  4A 000000 000000 000000   .        0
+upd6383:    4  34  0  0000AFF407 05 000000              0              0              0  4E 000000 000000 000000   Y        0
+upd6383:    5  35  0  0012A001C0 05 000000              0              0              0  4F 000000 000000 000000   Y        0
+upd6383:    6  39  0  0410AFF647 05 000000              0              0              0  52 000000 000000 000000   Y        0
+upd6383:    7  42  0  0801070821 05 000000              0              0              0  53 000000 000000 000000   .        0
+upd6383:    8  44  0  0801025825 05 000000              0              0              0  53 000000 000000 000000   .        0
+upd6383:    9  88  0  0000240407 50 000000              0              0              0  54 000000 000000 000000   .        0
+upd6383:   10  89  0  0000A001D3 50 000000              0              0              0  55 000000 000000 000000   Y        0
+upd6383:   11  90  0  0212A01412 51 000000              0              0              0  56 000000 000000 000000   Y        0
+upd6383:   12  91  0  0202A011D5 52 000000              0              0              0  57 000000 000000 000000   Y        0
+upd6383:   13  92  0  0202A011D4 53 000000              0              0              0  58 000000 000000 000000   Y        0
+upd6383:   14  93  0  0202A001D5 53 000000              0              0              0  59 000000 000000 000000   Y        0
+upd6383:   15  94  0  01022FF687 52 000000              0              0              0  59 000000 000000 000000   .        0
+upd6383:   16  95  0  0804816415 52 000000              0              0              0  59 000000 000000 000000   .        0
+upd6383:   17  96  0  0212AFF407 51 000000              0              0              0  5A 000000 000000 000000   Y        0
+upd6383:   18  97  0  0000203647 54 000000              0              0              0  5A 000000 000000 000000   .        0
+upd6383:   19  98  0  0000A001D3 54 000000              0              0              0  5B 000000 000000 000000   Y        0
+upd6383:   20  99  0  0212A01412 55 000000              0              0              0  5C 000000 000000 000000   Y        0
+upd6383:   21 100  0  0202A011D5 56 000000              0              0              0  5D 000000 000000 000000   Y        0
+upd6383:   22 101  0  0202A011D4 57 000000              0              0              0  5E 000000 000000 000000   Y        0
+upd6383:   23 102  0  0202A001D5 57 000000              0              0              0  5F 000000 000000 000000   Y        0
+upd6383:   24 103  0  01022FF687 56 000000              0              0              0  5F 000000 000000 000000   .        0
+upd6383:   25 104  0  0804816415 56 000000              0              0              0  5F 000000 000000 000000   .        0
+upd6383:   26 105  0  0212AFF407 55 000000              0              0              0  60 000000 000000 000000   Y        0
+upd6383:   27 106  0  0000203647 58 000000              0              0              0  60 000000 000000 000000   .        0
+upd6383:   28 107  0  0000A001D3 58 000000              0              0              0  61 000000 000000 000000   Y        0
+upd6383:   29 108  0  0212A01412 59 000000              0              0              0  62 000000 000000 000000   Y        0
+upd6383:   30 109  0  0202A011D5 5A 000000              0              0              0  63 000000 000000 000000   Y        0
+upd6383:   31 110  0  0202A011D4 5B 000000              0              0              0  64 000000 000000 000000   Y        0
+upd6383:   32 111  0  0202A001D5 5B 000000              0              0              0  65 000000 000000 000000   Y        0
+upd6383:   33 112  0  01022FF687 5A 000000              0              0              0  65 000000 000000 000000   .        0
+upd6383:   34 113  0  0804816415 5A 000000              0              0              0  65 000000 000000 000000   .        0
+upd6383:   35 114  0  0212AFF407 59 000000              0              0              0  66 000000 000000 000000   Y        0
+upd6383:   36 115  0  0000203647 5C 000000              0              0              0  66 000000 000000 000000   .        0
+upd6383:   37 116  0  0000A001D3 5C 000000              0              0              0  67 000000 000000 000000   Y        0
+upd6383:   38 117  0  0212A01412 5D 000000              0              0              0  68 000000 000000 000000   Y        0
+upd6383:   39 118  0  0202A011D5 5E 000000              0              0              0  69 000000 000000 000000   Y        0
+upd6383:   40 119  0  0202A011D4 5F 000000              0              0              0  6A 000000 000000 000000   Y        0
+upd6383:   41 120  0  0202A001D5 5F 000000              0              0              0  6B 000000 000000 000000   Y        0
+upd6383:   42 121  0  01022FF687 5E 000000              0              0              0  6B 000000 000000 000000   .        0
+upd6383:   43 122  0  0804816415 5E 000000              0              0              0  6B 000000 000000 000000   .        0
+upd6383:   44 123  0  0212AFF407 5D 000000              0              0              0  6C 000000 000000 000000   Y        0
+upd6383:   45 124  0  0000203647 60 000000              0              0              0  6C 000000 000000 000000   .        0
+upd6383:   46 125  0  0000A001D3 60 000000              0              0              0  6D 000000 000000 000000   Y        0
+upd6383:   47 126  0  0212A01412 61 000000              0              0              0  6E 000000 000000 000000   Y        0
+upd6383:   48 127  0  0202A011D5 62 000000              0              0              0  6F 000000 000000 000000   Y        0
+upd6383:   49 128  0  0202A011D4 63 000000              0              0              0  70 000000 000000 000000   Y        0
+upd6383:   50 129  0  0202A001D5 63 000000              0              0              0  71 000000 000000 000000   Y        0
+upd6383:   51 130  0  01022FF687 62 000000              0              0              0  71 000000 000000 000000   .        0
+upd6383:   52 131  0  0804816415 62 000000              0              0              0  71 000000 000000 000000   .        0
+upd6383:   53 132  0  0212AFF407 61 000000              0              0              0  72 000000 000000 000000   Y        0
+upd6383:   54 133  0  00002AD647 0E 000000              0              0              0  72 000000 000000 000000   .        0
+upd6383:   55 141  0  0000254407 64 000000              0              0              0  72 000000 000000 000000   .        0
+upd6383:   56 142  0  0801000021 64 000000              0              0              0  00 60259A 000000 000000   .        0
+upd6383:   57 143  0  0000A001D3 64 000000              0              0              0  01 100000 000000 000000   Y        0
+upd6383:   58 144  0  0212A01412 65 000000              0              0              0  02 0FDBB0 000000 000000   Y        0
+upd6383:   59 145  0  0202A011D5 66 000000              0              0              0  03 3FB4CB 000000 000000   Y        0
+upd6383:   60 146  0  0202A011D4 67 000000              0              0              0  04 40913D 000000 000000   Y        0
+upd6383:   61 147  0  0202A001D5 67 000000              0              0              0  05 3FFF61 000000 000000   Y        0
+upd6383:   62 148  0  01022FF687 66 000000              0              0              0  05 3FFF61 000000 000000   .        0
+upd6383:   63 149  0  0804816415 66 000000              0              0              0  05 3FFF61 000000 000000   .        0
+upd6383:   64 150  0  0212AFF407 65 000000              0              0              0  06 604D70 000000 000000   Y        0
+upd6383:   65 151  0  0000203647 68 000000              0              0              0  06 604D70 000000 000000   .        0
+upd6383:   66 152  0  0000A001D3 68 000000              0              0              0  07 100000 000000 000000   Y        0
+upd6383:   67 153  0  0212A01412 69 000000              0              0              0  08 0FB7B6 000000 000000   Y        0
+upd6383:   68 154  0  0202A011D5 6A 000000              0              0              0  09 3F651F 000000 000000   Y        0
+upd6383:   69 155  0  0202A011D4 6B 000000              0              0              0  0A 412128 000000 000000   Y        0
+upd6383:   70 156  0  0202A001D5 6B 000000              0              0              0  0B 001F94 000000 000000   Y        0
+upd6383:   71 157  0  01022FF687 6A 000000              0              0              0  0B 001F94 000000 000000   .        0
+upd6383:   72 158  0  0804816415 6A 000000              0              0              0  0B 001F94 000000 000000   .        0
+upd6383:   73 159  0  0212AFF407 69 000000              0              0              0  0C 60A3A3 000000 000000   Y        0
+upd6383:   74 160  0  0000203647 6C 000000              0              0              0  0C 60A3A3 000000 000000   .        0
+upd6383:   75 161  0  0000A001D3 6C 000000              0              0              0  0D 100000 000000 000000   Y        0
+upd6383:   76 162  0  0212A01412 6D 000000              0              0              0  0E 0F70C6 000000 000000   Y        0
+upd6383:   77 163  0  0202A011D5 6E 000000              0              0              0  0F 3EB8B9 000000 000000   Y        0
+upd6383:   78 164  0  0202A011D4 6F 000000              0              0              0  10 423CE5 000000 000000   Y        0
+upd6383:   79 165  0  0202A001D5 6F 000000              0              0              0  11 300005 000000 000000   Y        0
+upd6383:   80 166  0  01022FF687 6E 000000              0              0              0  11 300005 000000 000000   .        0
+upd6383:   81 167  0  0804816415 6E 000000              0              0              0  11 300005 000000 000000   .        0
+upd6383:   82 168  0  0212AFF407 6D 000000              0              0              0  12 616905 000000 000000   Y        0
+upd6383:   83 169  0  0000203647 70 000000              0              0              0  12 616905 000000 000000   .        0
+upd6383:   84 170  0  0000A001D3 70 000000              0              0              0  13 0FFFFC 000000 000000   Y        0
+upd6383:   85 171  0  0212A01412 71 000000              0              0              0  14 0EE727 000000 000000   Y        0
+upd6383:   86 172  0  0202A011D5 72 000000              0              0              0  15 3D2E02 000000 000000   Y        0
+upd6383:   87 173  0  0202A011D4 73 000000              0              0              0  16 446357 000000 000000   Y        0
+upd6383:   88 174  0  0202A001D5 73 000000              0              0              0  17 00044E 000000 000000   Y        0
+upd6383:   89 175  0  01022FF687 72 000000              0              0              0  17 00044E 000000 000000   .        0
+upd6383:   90 176  0  0804816415 72 000000              0              0              0  17 00044E 000000 000000   .        0
+upd6383:   91 177  0  0212AFF407 71 000000              0              0              0  18 634E90 000000 000000   Y        0
+upd6383:   92 178  0  0000203647 74 000000              0              0              0  18 634E90 000000 000000   .        0
+upd6383:   93 179  0  0000A001D3 74 000000              0              0              0  19 100000 000000 000000   Y        0
+upd6383:   94 180  0  0212A01412 75 000000              0              0              0  1A 0DE616 000000 000000   Y        0
+upd6383:   95 181  0  0202A011D5 76 000000              0              0              0  1B 3962E0 000000 000000   Y        0
+upd6383:   96 182  0  0202A011D4 77 000000              0              0              0  1C 4867A6 000000 000000   Y        0
+upd6383:   97 183  0  0202A001D5 77 000000              0              0              0  1D 000000 000000 000000   Y        0
+upd6383:   98 184  0  01022FF687 76 000000              0              0              0  1D 000000 000000 000000   .        0
+upd6383:   99 185  0  0804816415 76 000000              0              0              0  1D 000000 000000 000000   .        0
+upd6383:  100 186  0  0212AFF407 75 000000              0              0              0  1E 000000 000000 000000   Y        0
+upd6383:  101  50  0  0801050821 75 000000              0              0              0  1E 000000 000000 000000   .        0
+upd6383:  102  52  0  0801025825 75 000000              0              0              0  1E 000000 000000 000000   .        0
+upd6383:  103 201  1  0000289415 0E 000000              0              0              0  1E 000000 000000 000000   .        0
+upd6383:  104 202  1  0212A811D5 8F 000000              0              0              0  1F 000000 000000 000000   Y        0
+upd6383:  105 203  1  0202AFD1D5 8C 000000              0              0              0  20 000000 000000 000000   Y        0
+upd6383:  106 204  1  0202AF91D5 85 000000              0              0              0  21 000000 000000 000000   Y        0
+upd6383:  107 207  1  0212A001D5 D0 000000              0              0              0  22 000000 000000 000000   Y        0
+upd6383:  108 208  1  0212A00415 D0 000000              0              0              0  23 000000 000000 000000   Y        0
+upd6383:  109 209  1  0202A001D5 D0 000000              0              0              0  24 000000 000000 000000   Y        0
+upd6383:  110 210  1  0202200407 D0 000000              0              0              0  24 000000 000000 000000   .        0
+upd6383:  111 212  1  0000A00695 D0 000000              0              0              0  25 000000 000000 000000   Y        0
+upd6383:  112 214  1  0212200419 8A 000000              0              0              0  25 000000 000000 000000   .        0
+upd6383:  113 216  1  0000200000 8A 000000              0              0              0  25 000000 000000 000000   .        0
+upd6383:  114 217  1  0000A0A1D5 94 000000              0              0              0  26 000000 000000 000000   Y        0
+upd6383:  115 221  1  0000200419 94 000000              0              0              0  26 000000 000000 000000   .        0
+upd6383:  116 222  1  0012200680 94 000000              0              0              0  26 000000 000000 000000   .        0
+upd6383:  117 225  1  0000200000 94 000000              0              0              0  27 000000 000000 000000   .        0
+upd6383:  118 226  1  0000200000 94 000000              0              0              0  27 000000 000000 000000   .        0
+upd6383:  119 229  1  0000200419 94 000000              0              0              0  27 000000 000000 000000   .        0
+upd6383:  120 230  1  0012200680 94 000000              0              0              0  27 000000 000000 000000   .        0
+upd6383:  121 233  1  0000200000 94 000000              0              0              0  28 000000 000000 000000   .        0
+upd6383:  122 234  1  0000200000 94 000000              0              0              0  28 000000 000000 000000   .        0
+upd6383:  123 237  1  0000200419 94 000000              0              0              0  28 000000 000000 000000   .        0
+upd6383:  124 238  1  0012200680 94 000000              0              0              0  28 000000 000000 000000   .        0
+upd6383:  125 241  1  0000200000 94 000000              0              0              0  29 000000 000000 000000   .        0
+upd6383:  126 242  1  0000200000 94 000000              0              0              0  29 000000 000000 000000   .        0
+upd6383:  127 245  1  0000200419 94 000000              0              0              0  29 000000 000000 000000   .        0
+upd6383:  128 246  1  0012200680 94 000000              0              0              0  29 000000 000000 000000   .        0
+upd6383:  129 249  1  0000200000 94 000000              0              0              0  2A 000000 000000 000000   .        0
+upd6383:  130 250  1  0000200000 94 000000              0              0              0  2A 000000 000000 000000   .        0
+upd6383:  131 253  1  0000200419 94 000000              0              0              0  2A 000000 000000 000000   .        0
+upd6383:  132 254  1  0012200680 94 000000              0              0              0  2A 000000 000000 000000   .        0
+upd6383:  133 257  1  0000200000 94 000000              0              0              0  2B 000000 000000 000000   .        0
+upd6383:  134 258  1  0000200000 94 000000              0              0              0  2B 000000 000000 000000   .        0
+upd6383:  135 260  1  0000A00695 94 000000              0              0              0  2C 000000 000000 000000   Y        0
+upd6383:  136 261  1  00002F3407 87 000000              0              0              0  2C 000000 000000 000000   .        0
+upd6383:  137 262  1  0212200419 87 000000              0              0              0  2C 000000 000000 000000   .        0
+upd6383:  138 264  1  000024A407 D1 000000              0              0              0  2C 000000 000000 000000   .        0
+upd6383:  139 265  1  0000A001D5 D1 000000              0              0              0  2D 000000 000000 000000   Y        0
+upd6383:  140 266  1  0212A00415 D1 000000              0              0              0  2E 000000 000000 000000   Y        0
+upd6383:  141 267  1  0202A001D5 D1 000000              0              0              0  2F 000000 000000 000000   Y        0
+upd6383:  142 268  1  0202200407 D1 000000              0              0              0  2F 000000 000000 000000   .        0
+upd6383:  143 271  1  0000200419 D1 000000              0              0              0  2F 000000 000000 000000   .        0
+upd6383:  144 272  1  0012200680 D1 000000              0              0              0  2F 000000 000000 000000   .        0
+upd6383:  145 275  1  0000200000 8B 000000              0              0              0  30 000000 000000 000000   .        0
+upd6383:  146 276  1  0000200000 8B 000000              0              0              0  30 000000 000000 000000   .        0
+upd6383:  147 279  1  0000200419 8B 000000              0              0              0  30 000000 000000 000000   .        0
+upd6383:  148 280  1  0012200680 8B 000000              0              0              0  30 000000 000000 000000   .        0
+upd6383:  149 283  1  0000200000 8B 000000              0              0              0  31 000000 000000 000000   .        0
+upd6383:  150 284  1  0000200000 8B 000000              0              0              0  31 000000 000000 000000   .        0
+upd6383:  151 287  1  0000200419 8B 000000              0              0              0  31 000000 000000 000000   .        0
+upd6383:  152 288  1  0012200680 8B 000000              0              0              0  31 000000 000000 000000   .        0
+upd6383:  153 291  1  0000200000 8B 000000              0              0              0  32 000000 000000 000000   .        0
+upd6383:  154 292  1  0000200000 8B 000000              0              0              0  32 000000 000000 000000   .        0
+upd6383:  155 295  1  0000200419 8B 000000              0              0              0  32 000000 000000 000000   .        0
+upd6383:  156 296  1  0012200680 8B 000000              0              0              0  32 000000 000000 000000   .        0
+upd6383:  157 299  1  0000200000 8B 000000              0              0              0  33 000000 000000 000000   .        0
+upd6383:  158 300  1  0000200000 8B 000000              0              0              0  33 000000 000000 000000   .        0
+upd6383:  159 302  1  0000A00695 8B 000000              0              0              0  34 000000 000000 000000   Y        0
+upd6383:  160 303  1  00002FE407 89 000000              0              0              0  34 000000 000000 000000   .        0
+upd6383:  161 304  1  0212200419 89 000000              0              0              0  34 000000 000000 000000   .        0
+upd6383:  162 306  1  0000249407 D2 000000              0              0              0  34 000000 000000 000000   .        0
+upd6383:  163 308  1  0212A00415 D2 000000              0              0              0  36 000000 000000 000000   Y        0
+upd6383:  164 309  1  0202A001D5 D2 000000              0              0              0  37 000000 000000 000000   Y        0
+upd6383:  165 310  1  02022B8407 8A 000000              0              0              0  37 000000 000000 000000   .        0
+upd6383:  166 313  1  00002FE407 88 000000              0              0              0  37 000000 000000 000000   .        0
+upd6383:  167 317  1  0212AF51D5 89 000000              0              0              0  3A 000000 000000 000000   Y        0
+upd6383:  168 318  1  0202AFC1D5 85 000000              0              0              0  3B 000000 000000 000000   Y        0
+upd6383:  169 324  1  00002FB407 88 000000              0              0              0  3B 000000 000000 000000   .        0
+upd6383:  170 328  1  0212A041D5 8B 000000              0              0              0  3E 000000 000000 000000   Y        0
+upd6383:  171 329  1  0202AFA1D5 85 000000              0              0              0  3F 000000 000000 000000   Y        0
+upd6383:  172  62  0  0801026825 00 000000              0              0              0  3F 000000 000000 000000   .        0
+upd6383:  173  64  0  0C40A80445 00 000000              0              0              0  3F 000000 000000 000000   .        0
+upd6383:  174  69  0  0801090821 00 000000              0              0              0  3F 000000 000000 000000   .        0
+upd6383:  175  71  0  0C41900446 00 000000              0              0              0  3F 000000 000000 000000   .        0
+upd6383: ACCUMULATOR PROFILE (peak |acc| per I-RAM slot)
+upd6383:   6:0 9:0 18:0 27:0 34:0 35:0 39:0 42:0 44:0 50:0 52:0 62:0 64:0 69:0 71:0 88:0 89:0 90:0 91:0 92:0 93:0 94:0 95:0
+upd6383:   96:0 97:0 98:0 99:0 100:0 101:0 102:0 103:0 104:0 105:0 106:0 107:0 108:0 109:0 110:0 111:0 112:0 113:0 114:0 115:0
+upd6383:   116:0 117:0 118:0 119:0 120:0 121:0 122:0 123:0 124:0 125:0 126:0 127:0 128:0 129:0 130:0 131:0 132:0 133:0 141:0
+upd6383:   142:0 143:0 144:0 145:0 146:0 147:0 148:0 149:0 150:0 151:0 152:0 153:0 154:0 155:0 156:0 157:0 158:0 159:0 160:0
+upd6383:   161:0 162:0 163:0 164:0 165:0 166:0 167:0 168:0 169:0 170:0 171:0 172:0 173:0 174:0 175:0 176:0 177:0 178:0 179:0
+upd6383:   180:0 181:0 182:0 183:0 184:0 185:0 186:0 201:0 202:0 203:0 204:0 207:0 208:0 209:0 210:0 212:0 214:0 216:0 217:0
+upd6383:   221:0 222:0 225:0 226:0 229:0 230:0 233:0 234:0 237:0 238:0 241:0 242:0 245:0 246:0 249:0 250:0 253:0 254:0 257:0
+upd6383:   258:0 260:0 261:0 262:0 264:0 265:0 266:0 267:0 268:0 271:0 272:0 275:0 276:0 279:0 280:0 283:0 284:0
+upd6383:   C-RAM cells written: 39 of 256 non-zero, 0 coefficients routed
+upd6383:   CRAM 00=60259A 01=100000 02=0FDBB0 03=3FB4CB 04=40913D 05=3FFF61 06=604D70 07=100000 08=0FB7B6 09=3F651F 0A=412128
+upd6383:   CRAM 0B=001F94 0C=60A3A3 0D=100000 0E=0F70C6 0F=3EB8B9 10=423CE5 11=300005 12=616905 13=0FFFFC 14=0EE727 15=3D2E02
+upd6383:   CRAM 16=446357 17=00044E 18=634E90 19=100000 1A=0DE616 1B=3962E0 1C=4867A6 90=26C9B2 97=747B89 9E=11800F 9F=1AE8DB
+upd6383:   CRAM A0=713E1D A6=11800F A7=1AE8DB A8=713E1D AC=1364D9 B2=1364D9
+upd6383: 189622944 undecoded words executed, 98 distinct:
+    0000106087  x256       ?word   0x0000106087   ; 000.1.06.087  hi12{-}  [internal register file [06] -- per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- the last four host actions of cold boot are setvec unit1,#200 / setvec unit0,#84 / reg 0x06 <- +0.500000 / reg 0x86 <- +0.183992, both cleared at reset), unit 0]
+    000018A007  x256       ?word   0x000018A007   ; 000.1.8A.007  hi12{-}  [internal register file [8A], unit 1 (bit 7 = the unit); this index has no named role yet]
+    000018C107  x256       ?word   0x000018C107   ; 000.1.8C.107  hi12{-}  [internal register file [8C], unit 1 (bit 7 = the unit); this index has no named role yet]
+    00002002D9  x256       ?word   0x00002002D9   ; 000.2.00.2D9  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x0B = delay-read data register]
+    000020040E  x512       ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+    0000201000  x256       ?word   0x0000201000   ; 000.2.01.000  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    0000201007  x256       ?word   0x0000201007   ; 000.2.01.007  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    000020A1CD  x256       ?word   0x000020A1CD   ; 000.2.0A.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+    000020B1CD  x256       ?word   0x000020B1CD   ; 000.2.0B.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+    00002BA000  x256       ?word   0x00002BA000   ; 000.2.BA.000  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    00002F7000  x256       ?word   0x00002F7000   ; 000.2.F7.000  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    00002FF1CE  x256       ?word   0x00002FF1CE   ; 000.2.FF.1CE  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+    0000A0064D  x256       ?word   0x0000A0064D   ; 000.A.00.64D  hi12{-} cur+  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+    0000A0C452  x256       ?word   0x0000A0C452   ; 000.A.0C.452  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
+    0000AFF207  x256       ?word   0x0000AFF207   ; 000.A.FF.207  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source]
+    0000AFF452  x256       ?word   0x0000AFF452   ; 000.A.FF.452  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
+    00109D020C  x256       ?word   0x00109D020C   ; 010.9.D0.20C  hi12{ST} cur  [internal register file [D0] -- base of the per-unit STATE BLOCK (MEASURED -- see 0x50; unit 1's run is 3 cells in all 12 reverbs), unit 1]
+    0010A0020C  x256       ?word   0x0010A0020C   ; 010.A.00.20C  hi12{ST} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source; ACT 0x0C = delay READ]
+    001218D05B  x256       ?word   0x001218D05B   ; 012.1.8D.05B  hi12{ST f31=1}  [internal register file [8D], unit 1 (bit 7 = the unit); this index has no named role yet]
+    00122FF1CE  x512       ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
+    0028200000  x256       ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    002A200000  x512       ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    00842011C0  x256       ~word   0x00842011C0   ; 084.2.01.1C0  {addr: rd mem[p], p+1}  hi12{f31=2 ?7 res=080}  [K6 input stage, header w8: *** THE PORT READ, block B *** mem[X+5] is an AUDIO INPUT LATCH; p+1]
+    0084202680  x256       ~word   0x0084202680   ; 084.2.02.680  {addr: rd mem[p], p+2}  hi12{f31=2 ?7 res=080}  [K6 input stage, header w2: read mem[X+1], p+2 -- X+1 is the one-frame feedback cell the epilogue's w79 wrote]
+    00902FB40E  x256       ?word   0x00902FB40E   ; 090.2.FB.40E  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+    0090A001D5  x256       ?word   0x0090A001D5   ; 090.A.00.1D5  hi12{ST ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=0 / ACT 0x15 may be OPEN]
+    0090A011C8  x256       ~word   0x0090A011C8   ; 090.A.01.1C8  {addr: ST mem[p], cur+, p+1}  hi12{ST ?7 res=080} cur+  [K6 input stage, header w7: ST mem[X+4], p+1, cursor+1 -- X+4 is a one-frame state cell (read at w5/w6, written here)]
+    009218C19B  x256       ?word   0x009218C19B   ; 092.1.8C.19B  hi12{ST f31=1 ?7 res=080}  [internal register file [8C], unit 1 (bit 7 = the unit); this index has no named role yet]
+    009218D15B  x256       ?word   0x009218D15B   ; 092.1.8D.15B  hi12{ST f31=1 ?7 res=080}  [internal register file [8D], unit 1 (bit 7 = the unit); this index has no named role yet]
+    009220120D  x256       ~word   0x009220120D   ; 092.2.01.20D  {addr: rd mem[p], p+1}  hi12{ST f31=1 ?7 res=080}  [K6 input stage, header w0: ST mem[X+0], p+1 -- the epilogue's w80/w81 read X+0 this same frame]
+    0092A011C0  x256       ?word   0x0092A011C0   ; 092.A.01.1C0  hi12{ST f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=1 / ACT 0x00 may be OPEN]
+    009AA00200  x256       ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source]
+    0102200000  x256       ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+    0102A0064B  x2048      ?word   0x0102A0064B   ; 102.A.00.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
+    0102ABA64B  x256       ?word   0x0102ABA64B   ; 102.A.BA.64B  hi12{f98=1 f31=1} cur+  [all-pass core slot 6/6 -- class-A multiply whose multiplicand is a SUM OF TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst (0x407) (FORCED under a 2-input ALU, R1 F8)]
+    0104200000  x2304      ?word   0x0104200000   ; 104.2.00.000  hi12{f98=1 f31=2}  [all-pass core slot 1/6 -- role NOT settled (family B: acc += P; family A: no job at all).  Outside the reverb all 8 sites follow a class-A multiply-and-store]
+    01042001CE  x256       ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+    0192A00455  x256       ?word   0x0192A00455   ; 192.A.00.455  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
+    020018F1C1  x256       ?word   0x020018F1C1   ; 200.1.8F.1C1  hi12{f98=2}  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
+    0202200000  x256       ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    02022081CD  x256       ?word   0x02022081CD   ; 202.2.08.1CD  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+    020224B1CD  x256       ?word   0x020224B1CD   ; 202.2.4B.1CD  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+    020227B1CD  x256       ?word   0x020227B1CD   ; 202.2.7B.1CD  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+    0202A00448  x256       ~word   0x0202A00448   ; 202.A.00.448  {addr: rd mem[p], cur+, p+0}  hi12{f98=2 f31=1} cur+  [K6 input stage, header w5: read mem[X+4], p+0, cursor+1; ALU UNKNOWN]
+    02042021CE  x256       ~word   0x02042021CE   ; 204.2.02.1CE  {addr: rd mem[p], p+2}  hi12{f98=2 f31=2}  [K6 input stage, header w4: *** THE PORT READ, block A *** mem[X+2] is an AUDIO INPUT LATCH (read-never-written by all 3057 words); p+2]
+    0212200000  x256       ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+    0212202000  x256       ?word   0x0212202000   ; 212.2.02.000  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+    0212205000  x256       ?word   0x0212205000   ; 212.2.05.000  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
+    0282200000  x256       ?word   0x0282200000   ; 282.2.00.000  hi12{f98=2 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    0282A00000  x512       ?word   0x0282A00000   ; 282.A.00.000  hi12{f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+    0282A01417  x256       ~word   0x0282A01417   ; 282.A.01.417  {addr: rd mem[p], cur+, p+1}  hi12{f98=2 f31=1 ?7 res=080} cur+  [K6 input stage, header w10: read mem[X+5] a SECOND time, p+1, cursor+1; ALU UNKNOWN]
+    0292A00455  x256       ?word   0x0292A00455   ; 292.A.00.455  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
+    02A61850C7  x256       ?word   0x02A61850C7   ; 2A6.1.85.0C7  hi12{f98=2 f31=3 ?7 ?5 res=0A0}  [internal register file [85], unit 1 (bit 7 = the unit); this index has no named role yet]
+    02A79051C3  x256       ?word   0x02A79051C3   ; 2A7.9.05.1C3  hi12{f98=2 f31=3 ?7 ?5 ?0 res=0A1} cur  [internal register file [05], unit 0 (bit 7 = the unit); this index has no named role yet]
+    040010E000  x256       ?word   0x040010E000   ; 400.1.0E.000  hi12{END}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
+    040010F007  x256       ?word   0x040010F007   ; 400.1.0F.007  hi12{END}  [END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word]
+    0400201447  x256       ~word   0x0400201447   ; 400.2.01.447  {addr: rd mem[p], p+1}  hi12{END}  [K6 input stage, header w11: END OF BLOCK B (falls through), read mem[X+6], p+1 -- the pointer leaves at X+7]
+    0400A00000  x512       ?word   0x0400A00000   ; 400.A.00.000  hi12{END} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    0400A0021A  x256       ?word   0x0400A0021A   ; 400.A.00.21A  hi12{END} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    0410A0040E  x256       ?word   0x0410A0040E   ; 410.A.00.40E  hi12{END ST} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    0412A00200  x256       ?word   0x0412A00200   ; 412.A.00.200  hi12{END ST f31=1} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    042810E000  x256       ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
+    05042001D5  x256       ?word   0x05042001D5   ; 504.2.00.1D5  hi12{END f98=1 f31=2}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    051220044D  x256       ?word   0x051220044D   ; 512.2.00.44D  hi12{END ST f98=1 f31=1}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    061210F000  x256       ?word   0x061210F000   ; 612.1.0F.000  hi12{END ST f98=2 f31=1}  [END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word]  [!! bit 4 = store, yet addr8 is the unit index -- UNEXPLAINED]
+    0692200415  x256       ?word   0x0692200415   ; 692.2.00.415  hi12{END ST f98=2 f31=1 ?7 res=080}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    0692A00415  x256       ?word   0x0692A00415   ; 692.A.00.415  hi12{END ST f98=2 f31=1 ?7 res=080} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+    080016000B  x512       ?word   0x080016000B   ; 800.1.60.00B  hi12{ESC}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    080080C000  x256       ?word   0x080080C000   ; 800.8.0C.000  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
+    0801064827  x256       ?word   0x0801064827   ; 801.0.64.827  hi12{ESC ?0 res=001}  [register write: selector lo12[7:0]=27, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN]
+    080106C827  x256       ?word   0x080106C827   ; 801.0.6C.827  hi12{ESC ?0 res=001}  [register write: selector lo12[7:0]=27, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN]
+    0809000839  x256       ?word   0x0809000839   ; 809.0.00.839  hi12{ESC f31=4 ?0 res=001}  [lo12 0x839 -- selector OPEN (K3 sect. 5.4: 'sub-op 3 on register 1' under one field reading, a sixth register under the other); 2 sites in 3057]
+    082E80F000  x256       ?word   0x082E80F000   ; 82E.8.0F.000  hi12{ESC f31=7 ?5 res=020} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
+    0859086822  x256       ?word   0x0859086822   ; 859.0.86.822  hi12{ESC f31=4 ?6 ?0 res=041}  [register write: selector lo12[7:0]=22, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN; hi12 bit 4 is set BUT SO IS THE FORMAT ESCAPE (bit 11), and inside the escape this decoder does not read bit 4 as the store -- K3 sect. 5.2 reads it as a store anyway.  CONFLICT, 1 site, UNRESOLVED]
+    08801202D5  x768       ?word   0x08801202D5   ; 880.1.20.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    088012040B  x256       ?word   0x088012040B   ; 880.1.20.40B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    088012064B  x768       ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    0880120655  x2304      ?word   0x0880120655   ; 880.1.20.655  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    088013000B  x256       ?word   0x088013000B   ; 880.1.30.00B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    0880130407  x256       ?word   0x0880130407   ; 880.1.30.407  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    0880130647  x256       ?word   0x0880130647   ; 880.1.30.647  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    08801602D4  x2304      ?word   0x08801602D4   ; 880.1.60.2D4  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    08801602DA  x768       ?word   0x08801602DA   ; 880.1.60.2DA  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    088016040E  x256       ?word   0x088016040E   ; 880.1.60.40E  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+    0980520402  x256       ?word   0x0980520402   ; 980.5.20.402  hi12{ESC f98=1 ?7 res=080}  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0x5 and operands are OPEN]
+    0A3CD9F287  x256       ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur  [output-stage word (unit 1 -> DO2 -> IC303.SDIB); the only class-D word, a DO-write candidate; its operation (f31=6) is OPEN]
+    0C00984000  x256       ?word   0x0C00984000   ; C00.9.84.000  {C-fmt A=76 B=4}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=76 (I-RAM index?), B=4 = the event; both C00 words in the machine encode their own address (2/2)]
+    0C04312820  x256       ?word   0x0C04312820   ; C04.3.12.820  {C-fmt A=24 B=18}  hi12{ESC f31=2 ?10 res=400}  [C-format opcode 0x602, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- they share a DESTINATION, not an instruction, so no lo12 rule fits all five; A=24 B=18 for the record]
+    0C0A0E0000  x256       ~word   0x0C0A0E0000   ; C0A.0.E0.000  {C-fmt A=7 B=0}  {addr: none -- C-format, SAFE NO-OP}  hi12{ESC f31=5 ?10 res=400}  [K6 input stage, header w1: C-format, imm13 0x0E0 = 7*32 -> I-RAM 7 = block B; SAFE NO-OP (no memory, pointer or cursor effect)]
+    0C0A292820  x256       ?word   0x0C0A292820   ; C0A.2.92.820  {C-fmt A=20 B=18}  hi12{ESC f31=5 ?10 res=400}  [C-format opcode 0x605, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- they share a DESTINATION, not an instruction, so no lo12 rule fits all five; A=20 B=18 for the record]
+    0C0A4B1820  x256       ?word   0x0C0A4B1820   ; C0A.4.B1.820  {C-fmt A=37 B=17}  hi12{ESC f31=5 ?10 res=400}  [C-format opcode 0x605, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- they share a DESTINATION, not an instruction, so no lo12 rule fits all five; A=37 B=17 for the record]
+    0C169AB000  x256       ?word   0x0C169AB000   ; C16.9.AB.000  {C-fmt A=77 B=11}  hi12{ESC f31=3 ?10 res=400}  [C-format opcode 0x60B: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=77 B=11]
+    0C40180000  x1024      ?word   0x0C40180000   ; C40.1.80.000  {C-fmt A=12 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=12 B=0 (imm13 0x0180 = 12*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
+    0C42457820  x256       ?word   0x0C42457820   ; C42.4.57.820  {C-fmt A=34 B=23}  hi12{ESC f31=1 ?10 ?6 res=440}  [C-format opcode 0x621, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- they share a DESTINATION, not an instruction, so no lo12 rule fits all five; A=34 B=23 for the record]
+    0C4A1C0820  x256       ?word   0x0C4A1C0820   ; C4A.1.C0.820  {C-fmt A=14 B=0}  hi12{ESC f31=5 ?10 ?6 res=440}  [C-format opcode 0x625, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- they share a DESTINATION, not an instruction, so no lo12 rule fits all five; A=14 B=0 for the record]
+    0C645A2000  x256       ?word   0x0C645A2000   ; C64.5.A2.000  {C-fmt A=45 B=2}  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [C-format opcode 0x632: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=45 B=2]
+    0C646A2007  x256       ?word   0x0C646A2007   ; C64.6.A2.007  {C-fmt A=53 B=2}  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [C-format opcode 0x632: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=53 B=2]
+    0E30C00404  x256       ?word   0x0E30C00404   ; E30.C.00.404  hi12{ESC f98=2 ?10 ?5 res=420} cur  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0xC and operands are OPEN]
+[:tonegen] tonegen: 130 note-ons selected an UNDUMPED socket (IC304/305/306); PCM mode rendered them SILENT
+[:tonegen] kn5000_tonegen: pitch-anchor census over 71 note-ons (C table: 1444 selectors, 1376 single-valued, 68 ambiguous):
+[:tonegen]    keybed                          6  (  8.5%)
+[:tonegen]    firmware-C                      1  (  1.4%)
+[:tonegen]    firmware-C(ambiguous)           0  (  0.0%)
+[:tonegen]    learned-trim                    0  (  0.0%)
+[:tonegen]    CONSTANT-0x3524                 0  (  0.0%)
+[:tonegen]    none                           64  ( 90.1%)
+[:tonegen] IC311 send/return: 1316826 frames sent, 0 returns USABLE (0 per 10000).
+[:tonegen] kn5000_tonegen: ★★★★ §228 DSP FRAME CLOCK: declared 44100 Hz, rendering stream 48000 Hz, 1316826 frames over 71.045559 emulated s = 18534.952 frames/s (pre-§228 this read 48000.0 -- archived arms, 1440001 frames / 30 s)
