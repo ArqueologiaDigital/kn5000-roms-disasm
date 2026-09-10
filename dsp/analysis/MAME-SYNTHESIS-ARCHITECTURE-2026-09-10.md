@@ -145,17 +145,26 @@ The whole pipeline was built and run end to end, and it produced a real decode r
    nav + extractor target — so `kn5000_dsp_origincap.lua TYPEIDX=15` DOES select PARAMETRIC EQ, and
    `kn5000_dsp_frame_trace.lua NAV=1` (aligned to origincap's timing/gate, DSP-on-late) captures an
    EQ frame with audio (peak|mix|≈16000). The origin is NOT a visible pointer-load poke
-   (`kn5000_dsp_origincap.py` on the EQ capture shows only `821`/`825` coefficient/descriptor loads,
-   confirming the ledger: nothing loads `m_dp`) — so it must be read from LIVE EXECUTION. ⚠ The real
-   remaining gap is a MAPPING one: the frame trace's `iw` is the runtime I-RAM PC (control-flow
-   jumps, and iw 0..5 run through `latch_inputs` outside the traced exec path), so identifying the
-   biquad's 5 MACs in the trace needs the parked effort's runtime-I-RAM-layout model (trace PC ↔ EQ
-   body word index). Once that maps, the `dp` column at the biquad MACs IS `m_dp`. Program 0
-   (default) has no biquad, so it confirmed the op but not `m_dp`.
-2. **Feed the confirmed ops back into the core decode** — the hi12[3:1] table (0=load, 1=+=) is now
+   ✅ **RESOLVED 2026-09-10.** Running EQ with the SPECULATIVE ISA (DSPCFG bit1) — which enables the
+   per-unit cursor rebase and, with `rstcur` in the EQ body, seats the coefficient cursor at 0x00 —
+   the live frame trace shows all five EQ bands: coefficients at C-RAM cursor 0x00..0x1D (6 cells/
+   band = `[b1,b0,b2,-a1,-a2,makeup]`, b0=0.125 across bands) and their D-RAM operand cells at
+   **band k → 0x64+4k** (0x64/0x68/0x6C/0x70/0x74 = the host-written state block {64,68,6C,70,74}).
+   So **`m_dp` = the host state block, 0x64 stride 4/band**, read directly from live execution — the
+   static replay's "REQUIRED 0x19" was a cursor-model artifact. Evidence:
+   `dsp/analysis/data/kn5000-dsp-eq-biquad-trace-2026-09-10.txt`.
+2. **Faithful EQ audio (task 5) — now narrowed to the OUTPUT STAGE, not `m_dp`.** In that trace the
+   biquad reads coef × **0**: the state cells 0x64+ are zero because neither the input signal nor the
+   y-writeback reaches them. Two gaps remain: (a) route the audio input into the biquad's x cell
+   (the input latch lands at `m_in_base+2`, which must coincide with the band-0 block), and (b)
+   perform the **bit-4 store** (acc → y1/y2), which the core deliberately does NOT do outside the
+   K6 twelve ("performing half a word writes invented data"; the known "output stage DISCONNECTED,
+   NOZ05 is a RIG not a fix"). That store/output-stage is the real task-5 frontier now.
+3. **Feed the confirmed ops back into the core decode** — the hi12[3:1] table (0=load, 1=+=) is now
    measured; the "other" f31=1 cases are the accumulator/datum scale (P_SHIFT/ACC_SHIFT) still to model.
-3. **Extend the oracle to the other kernels** (one-pole, LFO, delay) — each already in `kernels.py`.
-4. **Acoustic HLE in MAME** (independent track). ✅ DONE — see the acoustic status above
+4. **Extend the oracle to the other kernels** (one-pole, LFO, delay). ✅ DONE — `lle_oracle.py` now
+   has `OnePoleOracle` and `LFOOracle`, each proven == its kernel (`test_lle_oracle.py`).
+5. **Acoustic HLE in MAME** (independent track). ✅ DONE — see the acoustic status above
    (kn7000_mame `4944c81`, behind `WSA1R_ENABLE_ACOUSTIC_HLE`, validated in `wsa1r`). Remaining
    acoustic work is hardware-gated (POSITION absolute scale; IC4 wave ROMs) — task 7, opportunistic.
 
