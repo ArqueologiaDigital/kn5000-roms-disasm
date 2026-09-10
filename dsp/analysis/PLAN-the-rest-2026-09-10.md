@@ -100,6 +100,13 @@ One operational blocker is shared by every build-lane capture and is stated once
 ## Phase 4 — The master unblocker: route input into the biquad state cells
 *The single evidence-based decode that unlocks all live-signal LLE work. Genuinely uncertain (could falsify the 0x64=x0 reading), build-lane, and reviewed — hence below the certain wins despite its leverage. Depends on Phase 1.1 (comparator) for validation.*
 
+> **4.1 PROGRESS (2026-09-11).** Censused the committed EQ trace: the input signal is present but
+> tiny at D-RAM **0x04 = +0.0051**, while every biquad state cell 0x64..0x77 reads **0** — and NO
+> DECODED (traced) word bridges 0x04/0x05 → 0x64. So the bridge is an **undecoded input-stage word**
+> (absent from the executed-word trace by construction), confirming 4.2's target. The falsifier did
+> not fire (input latch region IS written; 0x64=x0 stands). Full census (which undecoded word writes
+> 0x64) needs the §221/§222 audits + a build-lane run — in progress.
+
 - **4.1 Census the input→biquad bridge by measurement.** — Build-lane run of `tools/rigs/kn5000_dsp_frame_trace.lua` (PARAMETRIC EQ, RULE-12 audio `:KEY2 C4..B4`); over settled EQ frames, census every word that READS cell 0x05 (§222 `pk_fetch`) and every word that WRITES 0x64..0x77 (§221 provenance / §104 residency); cross them to name the bridge word (identity + SRC/ACT/class + current decode status). **Falsifier:** if no word bridges 0x05→0x64, the 0x64=x0 or the 0x05-latch reading is wrong — re-derive, do not paper over. — *M* — [MULTI-SESSION] *(build-lane)*
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*
