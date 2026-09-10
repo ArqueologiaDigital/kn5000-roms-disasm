@@ -245,13 +245,61 @@ def ops_report(rows):
     return 0
 
 
+def eq_trace_report(rows, base=0x00, nbands=5, ncells=6):
+    """KN5000 PARAMETRIC EQ geometry: the coefficient cursor is seeded at `base` (0x00 for the
+    KN5000 unit-0 body via rstcur, vs the WSA1R capture's 0x60), 6 cells per band.  This reads
+    the coefficients from the TRACE ITSELF (the `coef` column = the chip's own C-RAM read, so it
+    is --cram-from-trace by construction) and, per band, prints the six coefficients, the D-RAM
+    operand cell each class-A word resolved (the `dp` column = m_dp), and whether acc/P carry
+    signal.  It does NOT need the WSA1R capture and does NOT assume the operands are non-zero --
+    it reports the truth, so a silent frame reads as "no signal" rather than a false PASS."""
+    out = ["KN5000 EQ geometry: base 0x%02X, %d bands x %d cells; coefficients read from the trace."
+           % (base, nbands, ncells)]
+    # first-seen coef per cursor cell, and the dp/acc/P of the class-A word at that cell
+    bycur = {}
+    for r in rows:
+        cl = (r["word"] >> 20) & 0xF
+        if cl in (0, 0xA) and r["cur"] not in bycur and abs(r["coef"]) > 1e-9:
+            bycur[r["cur"]] = r
+    ROLES = ["b1", "b0", "b2", "-a1", "-a2", "mk"]
+    any_signal = False
+    for band in range(nbands):
+        cells = [base + band * ncells + k for k in range(ncells)]
+        if not any(c in bycur for c in cells):
+            out.append("  band %d: (not present in trace)" % band); continue
+        coefs = " ".join("%s=%+.4f" % (ROLES[k], bycur[c]["coef"]) if c in bycur else "%s=--" % ROLES[k]
+                         for k, c in enumerate(cells))
+        dps = " ".join("0x%02X" % bycur[c]["dp"] for c in cells if c in bycur)
+        sig = any((bycur[c]["p"] != 0 or bycur[c]["mem"] != 0.0) for c in cells if c in bycur)
+        any_signal = any_signal or sig
+        out.append("  band %d  cur 0x%02X..0x%02X" % (band, cells[0], cells[-1]))
+        out.append("     coeffs: %s" % coefs)
+        out.append("     m_dp operand cells: %s   signal(acc/P/mem != 0): %s"
+                   % (dps, "YES" if sig else "no"))
+    out.append("")
+    out.append("m_dp: EQ band k operands resolve to D-RAM 0x%02X+%dk (the host state block)."
+               % (bycur[base]["dp"] if base in bycur else 0, ncells // 6 * 4 or 4))
+    if not any_signal:
+        out.append("⚠ NO SIGNAL in the state cells (acc/P/mem all 0): coefficients + m_dp are pinned,")
+        out.append("  but the biquad computes coef*0 -- the input route (0x05->0x64) is still missing.")
+    return any_signal, out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("trace", nargs="?", help="a upd6383 frame-trace file (log or capture)")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--ops", action="store_true", help="classify accumulator ops (oracle-free)")
+    ap.add_argument("--eq-trace", action="store_true",
+                    help="KN5000 EQ geometry: read coeffs+m_dp from the trace at --base (default 0x00)")
+    ap.add_argument("--base", type=lambda s: int(s, 0), default=0x00,
+                    help="coefficient-cursor base for --eq-trace (0x00 KN5000, 0x60 WSA1R)")
+    ap.add_argument("--bands", type=int, default=5, help="number of EQ bands (KN5000 EQ = 5)")
     ap.add_argument("--section", type=int, default=0, help="which captured biquad section")
     a = ap.parse_args()
+    if a.eq_trace and a.trace:
+        _, rep = eq_trace_report(parse_trace(open(a.trace).read()), base=a.base, nbands=a.bands)
+        print("\n".join(rep)); return 0
     if a.ops and a.trace:
         return ops_report(parse_trace(open(a.trace).read()))
     if a.selftest or not a.trace:
