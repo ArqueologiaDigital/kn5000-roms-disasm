@@ -131,6 +131,16 @@ One operational blocker is shared by every build-lane capture and is stated once
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*
 - **4.4 Validate the internal biquad against the retargeted oracle.** — Run the Phase-1.1 comparator on the non-zero trace: assert `acc[k]==acc[k-1]+P[k]` (MACs), `acc[0]==P[0]` (LOAD), cursor coeffs match `[b1,b0,b2,-a1,-a2]`, operands map to x0..y2 at 0x64+4k. Commit the passing diff as the evidence the LLE biquad now matches the HLE bit-for-bit internally. — *S* — [SESSION] *(build-lane)*
 
+> **4.3/4.4 PARTIAL (2026-09-11) — the biquad datapath is LIVE.** Added an env-gated diagnostic
+> `UPD6383_BIQSEED` (default-off; shipped/LLE path byte-identical) that seeds the band-0 state cells
+> 0x64..0x67 with known values at unit-0 entry. Result (kn7000_mame commit): the biquad's `mem`
+> reads show the seeded values and its MACs produce **non-zero products** (were 0 before) — so the
+> biquad datapath COMPUTES when fed. ⇒ the entire remaining faithful-EQ gap is the INPUT ROUTE
+> (4.2), not the biquad. ⚠ Full oracle validation still needs the **L-latch pipeline** model:
+> `P = coef × L` where L is the operand loaded by the PRIOR word (one-slot delay, §50), not this
+> word's `mem[ptr]`, and the mid-frame stores overwrite state cells — so `--eq-trace`'s naive
+> `coef × mem[dp]` does not match; the comparator needs an L-pipeline+store-aware mode (next step).
+
 ---
 
 ## Phase 5 — Downstream live decode (SPECULATIVE → MEASURED)
