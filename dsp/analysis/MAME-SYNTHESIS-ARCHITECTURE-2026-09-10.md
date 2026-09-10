@@ -115,6 +115,26 @@ The whole pipeline was built and run end to end, and it produced a real decode r
    `peak |mix| ≈ 16000` (WAV RMS 550). On a silent frame LOAD and ACC are indistinguishable, which
    the comparator states honestly (0 informative words); with audio it decides.
 
+## Session addendum (plan execution) — audio SOLVED; EQ capture is an operational blocker
+
+- **★ AUDIO INTO THE DSP IS SOLVED.** Play the **right-hand melody zone** (`:KEY2`, C4..B4 → R1
+  voice): `DSP INPUT AUDIT peak |mix| ≈ 16000`. The split's left/accompaniment zone (`:KEY1`) is
+  silent unless ACMP is on. This unblocks RULE 12 for every future capture.
+- **`m_program_id` is never set by the driver — it is stuck at 0.** Do NOT use `program=` in the
+  trace to tell which effect is running; identify the effect by the **cursor base** instead
+  (EQ / unit-0 body starts at cursor `0x00`; the boot-default program's unit body starts at `0x90`).
+- **Multiplier structure (from live data):** `P` is the `coef × operand` product at a fixed-point
+  scale (iw5: coef 0.5 → `P` ≈ `coef_raw × operand`); the exact scale (P_SHIFT/ACC_SHIFT and the
+  biquad `P<<1`) is what the "other" accumulate cases still need. Not yet a clean closed form.
+- **⚠ The remaining blocker for `m_dp` and the EQ flagship is OPERATIONAL, not analytic:** reliably
+  capturing a *full* EQ frame trace *with audio*. Three finicky couplings: (a) the frame trace
+  arms by a DSP-ON frame count while the effective rate is diluted, so `UPD6383_TRACE_FRAME` must
+  be tuned to land in the note+effect window; (b) arming mid-frame yields a partial capture; (c) in
+  some runs `error.log` ends at boot with no `device_stop` dump. The pieces all work individually
+  (nav selects effects by UP presses — user-confirmed; audio flows; the trace dumps) — they need to
+  co-occur in one run. Next attempt: hold the melody note, select EQ, arm ~1 frame after EQ lands,
+  give generous dwell + timeout, and confirm via cursor base 0x00 before diffing with the oracle.
+
 ## Next steps (each its own reviewable change)
 
 1. **`m_dp` origin (the biquad-specific unknown).** Needs PARAMETRIC EQ running (5 MACs reading the
