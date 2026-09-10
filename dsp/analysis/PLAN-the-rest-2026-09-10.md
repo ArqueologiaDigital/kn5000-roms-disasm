@@ -104,8 +104,17 @@ One operational blocker is shared by every build-lane capture and is stated once
 > tiny at D-RAM **0x04 = +0.0051**, while every biquad state cell 0x64..0x77 reads **0** — and NO
 > DECODED (traced) word bridges 0x04/0x05 → 0x64. So the bridge is an **undecoded input-stage word**
 > (absent from the executed-word trace by construction), confirming 4.2's target. The falsifier did
-> not fire (input latch region IS written; 0x64=x0 stands). Full census (which undecoded word writes
-> 0x64) needs the §221/§222 audits + a build-lane run — in progress.
+> not fire (input latch region IS written; 0x64=x0 stands).
+>
+> **Live §221/§222 census (build-lane, DSPVAL=3 + UPD6383_EPIBUS=1 + UPD6383_PICKUP=1):** the §222
+> pickup audit reports **fetches 0 (PREDICTED 5)** -- the input-pickup words (`lo12 0x1CD`) do NOT
+> fetch in the armed frame, so nothing carries the input toward the biquad. The undecoded candidates
+> surfaced are the pickup word (`0x1CD`) and the all-pass `102.A.NN.64B` (multiplicand = SUM OF TWO
+> REGISTERS, a fourth route beside mac 0x1D5 / mulst 0x407). ⇒ **4.2 is the genuine ISA frontier:
+> decode the input-stage / pickup word(s).** The census names the target, but one frame
+> underdetermines the word's ALU -- decoding it (never rigging) is the iterative build-lane decode
+> the plan scopes as MULTI-SESSION. Phase 2's coefficient-order decode and all Phase-5 live decode
+> sit behind this.
 
 - **4.1 Census the input→biquad bridge by measurement.** — Build-lane run of `tools/rigs/kn5000_dsp_frame_trace.lua` (PARAMETRIC EQ, RULE-12 audio `:KEY2 C4..B4`); over settled EQ frames, census every word that READS cell 0x05 (§222 `pk_fetch`) and every word that WRITES 0x64..0x77 (§221 provenance / §104 residency); cross them to name the bridge word (identity + SRC/ACT/class + current decode status). **Falsifier:** if no word bridges 0x05→0x64, the 0x64=x0 or the 0x05-latch reading is wrong — re-derive, do not paper over. — *M* — [MULTI-SESSION] *(build-lane)*
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
