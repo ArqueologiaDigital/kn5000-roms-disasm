@@ -88,6 +88,16 @@ ACCUMULATOR/STORE side of the input-stage words. Reduced to a checklist:
    > break is the store/source-code decode from the bit-encoding (or hardware), NOT
    > another capture. Capture campaigns cannot settle accb while every reachable
    > program feeds it the kernel-B constant. This is the honest structural boundary.
+   > ✔ **SPECULATIVE ISA TESTED (2026-09-11) — does NOT break the cycle.** Captured
+   > program 0 at `DSPVAL=3` (the speculative ISA executes the gate codes under their
+   > researched-guess readings), full 285-slot frame: UNIT-0 computes (19 live
+   > operands, 9 distinct acc) but **UNIT-1 (reverb) stays FROZEN — 0 live operands,
+   > 0 products**. Even the most permissive decode available does not carry the
+   > unit-0→unit-1 handoff; the speculative store/source readings do not route audio
+   > to accb/unit-1. A falsifiable test that COULD have lit unit-1 up and didn't ⇒
+   > the route is undecoded beyond even the speculative layer — confirming, from a
+   > third independent angle, that the break requires the true bit-encoding (or
+   > hardware), not more permissive execution.
 2. **Store-target codes ACT {0x08,0x0D,0x0E,0x17}.** These need an observable
    store, which strict decode refuses (the words don't execute). Resolve from the
    bit-encoding cross-reference (their addressing IS decoded; the store TARGET is
