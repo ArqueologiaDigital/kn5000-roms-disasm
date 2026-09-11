@@ -15,7 +15,8 @@ counts idioms through the shared ISA model). Regenerate the tables below with it
 | **DRw / DRr** | class-1 ESCAPE word; addr8 bit 6 = direction | delay-line taps (write in / read tap) — delay, reverb, chorus, flanger |
 | **cMAC** | class-A multiply | filter/gain coefficients — biquads (EQ), diffuser/feedback gains |
 | **tbl** | class-6 table-lookup | a nonlinearity LUT — distortion, exciter, ring-mod |
-| **bqp** | ACT 0x0D/0x0E | the two z⁻¹ biquad delay-stage updates — all-pass chains, EQ state |
+| **bqp** | ACT 0x0D/0x0E | ~~the two z⁻¹ biquad delay-stage updates~~ **CORRECTED 2026-09-11: a GENERAL delay-line / state I/O mixing op — present in EVERY family incl. delay (3/3) and am (2/2), which have no biquad; the true 2nd-order-section state ops are ACT 0x12/0x13/0x14 (see `DSP-TOPOLOGY-INSTRUCTION-INSIGHT-2026-09-11.md`)** |
+| **s2s** | ACT 0x12/0x13/0x14 | the 2nd-order-SECTION state ops (ld.ta/mac/mac.tb, tempA/tempB = z⁻¹) — biquads (EQ, tone) AND all-pass chains (phaser); per-program count = number of sections |
 | **accB** | SRC 0x11 (2nd accumulator) | a parallel path / crossfade |
 
 ## What the fingerprint confirms (each name matches its canonical topology)

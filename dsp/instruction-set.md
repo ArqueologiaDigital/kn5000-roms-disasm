@@ -540,6 +540,33 @@ prefix (a landmark is not a decode; the `?` is the greppable worklist):
   literal `INC 8` in the writer, and `rstcur` = `801.0.00.021` is the same word with
   it clear — the only `hi12 == 0x801` word in the 2974-word body corpus.
 
+## Topology-confirmed idiom semantics — 2026-09-11
+
+Cross-referencing each program's **classic-effect topology** (the flowchart annotations,
+`analysis/DSP-TOPOLOGY-INSTRUCTION-INSIGHT-2026-09-11.md`) with an idiom census over all 38 images —
+and with live runtime captures — anchors four idioms to their function by their **presence/absence
+pattern across families** (each falsifiable):
+
+- **ACT 0x12 / 0x13 / 0x14 = the 2nd-order-SECTION state ops** (biquad AND all-pass). Present *iff*
+  the topology has such a section, and the per-program **count = the number of sections**: PHASER 20
+  (all-pass chain), OVERDRIVE 1 (tone biquad) vs FUZZ/DISTORTION 0 (bare waveshaper), delay 0, am 0.
+  Confirms the spec's `ld.ta(0x13)/mac(0x12)/mac.tb(0x14)` with tempA/tempB = the two z⁻¹ states,
+  and generalises it to all-pass chains. (LIVE: ACT 0x12/13/14 present in OVERDRIVE, absent in FUZZ.)
+- **class-6 = a shaped-table lookup, ONE op in THREE roles** — LFO WAVEFORM (modulation 7/7),
+  waveshaper nonlinearity (distortion 3/3, exciter), ring-mod carrier (am). ABSENT from
+  delay/eq/filter/reverb/dynamics. Unifies the "waveshaper LUT" and "LFO table" as the same idiom.
+- **SRC 0x08 (coefficient-square, §224 §S2sq) = the LFO/envelope modulation op.** Present *exactly*
+  in modulation (7/7), am (2/2), dynamics (2/2) — the families with an LFO or envelope — and absent
+  from pure filter/delay/eq/distortion/reverb. (LIVE: FLANGER's *gated* class-A word is a SRC 0x08
+  f31=4 op that fires only on the LFO's active phase.)
+- **⚠ ACT 0x0D / 0x0E is UNIVERSAL, not a biquad z⁻¹ pair.** It appears in EVERY family incl. delay
+  (3/3) and am (2/2), which have no biquad — so it is a general delay-line / state I/O **mixing** op
+  (ACT 0x0D reads mem, 0x0E reads acc onto the bus around the delay read/write), correcting the
+  earlier `bqp` label in `analysis/TOPOLOGY-vs-ALGORITHMS.md`.
+
+These are stage-to-opcode anchors: they raise confidence on the "opaque" words wherever the topology
+fixes a stage, and they localise the residual ambiguity (input-route ALU; biquad realization).
+
 ## Addressing — MEASURED
 
 > **Superseded in part by R2 (2026-07-26).** There *is* an encoded space-selector field
