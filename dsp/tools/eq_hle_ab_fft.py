@@ -22,7 +22,10 @@ QUESTION IT ANSWERS
 import sys, wave
 import numpy as np
 
-BAND0_LO, BAND0_HI, BAND0_CENTRE = 500.0, 900.0, 673.0
+# Band centre in Hz: argv[3] (default 673 = band 0). The measured band centres are
+# 673, 966, 1405, 2091, 3219 Hz. The in-band window is centre*[0.74 .. 1.34].
+CENTRE = float(sys.argv[3]) if len(sys.argv) > 3 else 673.0
+BAND_LO, BAND_HI, BAND_CENTRE = CENTRE * 0.74, CENTRE * 1.34, CENTRE
 
 
 def read_wav(path):
@@ -92,15 +95,24 @@ def welch(x, fs, nfft=8192):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print("usage: eq_hle_ab_fft.py <A_dry.wav> <B_eq.wav>"); return 2
+    if len(sys.argv) not in (3, 4):
+        print("usage: eq_hle_ab_fft.py <A_dry.wav> <B_eq.wav> [band_centre_Hz]"); return 2
     fsa, A = read_wav(sys.argv[1])
     fsb, B = read_wav(sys.argv[2])
     assert fsa == fsb, "sample-rate mismatch"
     fs = fsa
-    sa, ea = loud_window(A, fs)
-    sb, eb = loud_window(B, fs)
-    print(f"fs={fs}  A loud {sa/fs:.2f}-{ea/fs:.2f}s  B loud {sb/fs:.2f}-{eb/fs:.2f}s")
+    # eq_hle_ab.lua always plays the chord over a FIXED emulated window (NOTES ON t=49 s,
+    # OFF t=57 s), and -wavwrite records from emulation start, so the same wall-clock window
+    # holds both runs. Use a fixed matched window (50.5-56.0 s, inside the sustain) rather
+    # than an independent per-file loudness detector, which can pick different-length
+    # segments for A and B and skew the off-band comparison. Fall back to detection only if
+    # the file is shorter than the fixed window.
+    ws, we = int(50.5 * fs), int(56.0 * fs)
+    if len(A) < we or len(B) < we:
+        sa, ea = loud_window(A, fs); sb, eb = loud_window(B, fs)
+    else:
+        sa, ea = sb, eb = ws, we
+    print(f"fs={fs}  A window {sa/fs:.2f}-{ea/fs:.2f}s  B window {sb/fs:.2f}-{eb/fs:.2f}s")
     fA, pA = welch(A[sa:ea], fs)
     fB, pB = welch(B[sb:eb], fs)
     ratio_db = 10.0 * np.log10((pB + 1e-12) / (pA + 1e-12))
@@ -111,14 +123,16 @@ def main():
         w = pA[m]
         return np.average(ratio_db[m], weights=w + 1e-12) if m.any() else float("nan")
 
-    in_band = band_mean(BAND0_LO, BAND0_HI)
-    lo_ref = band_mean(60.0, 250.0)      # below the band
-    hi_ref = band_mean(3000.0, 8000.0)   # above the band
-    ci = np.argmin(np.abs(fA - BAND0_CENTRE))
-    print(f"\n  B/A at {fA[ci]:.0f} Hz (band-0 centre): {ratio_db[ci]:+.2f} dB")
-    print(f"  B/A mean in band 0 ({BAND0_LO:.0f}-{BAND0_HI:.0f} Hz, A-weighted): {in_band:+.2f} dB")
-    print(f"  B/A mean below  (60-250 Hz):   {lo_ref:+.2f} dB")
-    print(f"  B/A mean above  (3-8 kHz):     {hi_ref:+.2f} dB")
+    in_band = band_mean(BAND_LO, BAND_HI)
+    lo_hi = max(120.0, CENTRE * 0.55)
+    hi_lo = CENTRE * 1.8
+    lo_ref = band_mean(60.0, lo_hi)                       # below the band
+    hi_ref = band_mean(hi_lo, min(CENTRE * 6.0, 14000.0)) # above the band
+    ci = np.argmin(np.abs(fA - BAND_CENTRE))
+    print(f"\n  B/A at {fA[ci]:.0f} Hz (band centre {BAND_CENTRE:.0f}): {ratio_db[ci]:+.2f} dB")
+    print(f"  B/A mean in band ({BAND_LO:.0f}-{BAND_HI:.0f} Hz, A-weighted): {in_band:+.2f} dB")
+    print(f"  B/A mean below  (60-{lo_hi:.0f} Hz):   {lo_ref:+.2f} dB")
+    print(f"  B/A mean above  ({hi_lo:.0f} Hz+):     {hi_ref:+.2f} dB")
 
     # show the biggest-boost bins overall
     order = np.argsort(ratio_db)[::-1]
