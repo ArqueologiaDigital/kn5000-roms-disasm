@@ -218,6 +218,23 @@ before blow-up carry the signal — read the *first* transition.
 > history at unit-0 entry (in+3←in+2, in+2←in+1) so the −a1/−a2 reads hit LIVE y1/y2. Accept test:
 > does the cascade stop railing? If it stabilizes, the feedback-sign question is then settled
 > empirically on a live recursion (SHIFT alone vs SHIFT+SUBFB) rather than on a dead one.
+>
+> **TESTED (2026-09-11) — recursion is now LIVE but still UNSTABLE; blocked on the cell→role map.**
+> Ran `SPEC_INJECT + SPEC_SHIFT + SPEC_SUBFB` (accept tool `dsp/tools/eq_cascade_probe.py`). In a full
+> frame the in+2 cells now hold VARYING sub-rail values (0.066, −0.955, −0.75…) instead of stuck rails
+> — the shift IS feeding a live recursion (the dead-recursion diagnosis is confirmed and fixed) — but
+> the in+3 cells and band 1 still rail (±1.0, peak acc 3.0×FS). So making the recursion live did NOT
+> stabilize it. Root cause: the offline stability proof (subtractive ⇒ poles 0.710) assumed standard
+> DF-I roles [x0,x1,x2,y1,y2]; the LLE reads the chip's ACTUAL cell order, so negating in+2/in+3
+> stabilizes only if those are genuinely y1/y2 — the **336-order role ambiguity**, still unresolved.
+> ⛔ Deliberately NOT sweeping (shift × sign × role) combinations for one that "looks stable" — with
+> that many knobs a stable-looking result is a criterion that cannot fail. **The disciplined next
+> step is a STRONG oracle: render the LLE output over many frames on a real signal and FFT it; accept
+> a (shift,sign,role) combo ONLY if its response matches the offline peaking EQ (peak f≈0.30, poles
+> 0.710) from `biquad_stability_probe.py`.** That harness (multi-frame WAV render + FFT vs the oracle)
+> is the real S4 closer; single-frame rail-checks got us to a live recursion and no further. The
+> role map itself is still best settled by the cross-frame delay-line observation or the firmware EQ
+> designer's (f0,gain,Q) — the response-match oracle would confirm whichever the LLE realizes.
 
 ---
 
