@@ -193,6 +193,17 @@ One operational blocker is shared by every build-lane capture and is stated once
 > So the biquad DATAPATH is fully decoded: multiply `P[N]=(coef[N-1]×L[N])>>6`, accumulate/load
 > `acc←{acc+P | P}`. The ONE remaining biquad structure is the **inter-band DF-I cascade** (band k's
 > output `y` feeding band k+1's input) — a routing/topology trace, not a datapath unknown (4.4 close).
+>
+> **OPERAND SOURCE DECODED (2026-09-11) — probe section 5.** Where the multiplier's operand latch
+> `L` comes from: **interior** `L[N] == mem[N-1]` — the D-RAM cell at `dp`, read by the prior word,
+> one slot late — on **38/43** rows (equivalently `P[N] = (coef[N-1] × mem[N-1]) >> 6`, 26/27). So on
+> interior MACs the operand is simply the microword's own D-RAM addressing; there is no separate
+> route to decode. The **5 exceptions {58,62,63,64,65} are exactly the band boundaries**, where `L`
+> instead takes the freshly-computed `y` from the accumulator/store path, and it **SATURATES** (rows
+> 63,64 show `L=0x7FFFFF`, the positive max). That divergence IS the DF-I inter-band cascade (y_k
+> feeds band k+1 via a saturating store). The one finer datapath detail still open is the exact
+> **saturating acc→datum store constant** in that cascade — deliberately NOT guessed. Net: the biquad
+> is decoded end-to-end except that single store-scaling constant.
 
 ---
 

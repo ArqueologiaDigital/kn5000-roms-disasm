@@ -214,8 +214,29 @@ def main():
     print("   LOAD (hi12 0x000, f31=0): acc[N] == P[N-1] on %d/%d load rows"
           " => acc<-P confirmed." % (load_ok, load_tot))
     print("   STORE/makeup (0x102/0x212/0x804) write the band's y out and re-seat the acc for")
-    print("   the next band -- the DF-I cascade (y of band k feeds band k+1).  That inter-band")
-    print("   cascade routing is the one remaining biquad structure to trace end-to-end (4.4).")
+    print("   the next band -- the DF-I cascade (y of band k feeds band k+1).\n")
+
+    print("== 5. OPERAND SOURCE (where the latch L comes from) ==")
+    hold = tot = 0
+    misses = []
+    for r in rows:
+        prev = by_n.get(r["n"] - 1)
+        if prev is None:
+            continue
+        tot += 1
+        if (r["l"] & 0xFFFFFF) == (round(prev["mem"] * ONE) & 0xFFFFFF):
+            hold += 1
+        else:
+            misses.append(r["n"])
+    print("   INTERIOR: L[N] == mem[N-1] (the D-RAM cell at dp, one slot late) on %d/%d rows."
+          % (hold, tot))
+    print("   => the operand is the microword's own D-RAM addressing; no separate route needed.")
+    sat = [n for n in misses if (by_n[n]["l"] & 0xFFFFFF) == 0x7FFFFF]
+    print("   BOUNDARY: the %d exceptions %s are band boundaries where L instead takes the" %
+          (len(misses), misses))
+    print("   freshly-computed y from the accumulator/store path -- SATURATING (rows %s show" % sat)
+    print("   L=0x7FFFFF, the positive max).  This IS the inter-band cascade; the exact")
+    print("   saturating acc->datum store constant is the one finer datapath detail left (not guessed).")
 
 
 if __name__ == "__main__":
