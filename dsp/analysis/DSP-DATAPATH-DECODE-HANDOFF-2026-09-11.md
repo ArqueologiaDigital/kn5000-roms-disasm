@@ -110,9 +110,16 @@ ACCUMULATOR/STORE side of the input-stage words. Reduced to a checklist:
 
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
-- Store-scaling constant of the biquad cascade (the saturating acc→datum makeup),
-  best decoded with a re-seed of smaller values (avoid saturation) — build-lane,
-  optional; the biquad transfer function is already reproduced by the HLE oracle.
+- ✅ **Store-scaling constant: DECODED (2026-09-11)** — no longer open. With a small
+  seed (`UPD6383_BIQSEED=8`, evidence trace `...-SEED8-2026-09-11.txt`, probe
+  `dsp/tools/store_constant_probe.py`) every band's output datum equals
+  **`acc >> 16` (= acc >> ACC_SHIFT), bit-exact on 4/4 bands**, shift 16 uniquely.
+  So the biquad DATAPATH is now decoded end-to-end: multiply `(coef[N-1]×L[N])>>6`
+  (P_SHIFT=6), accumulate `acc+=P` / load `acc←P`, operand `L=mem[N-1]`, store
+  `datum=acc>>16` (ACC_SHIFT=16) — both fixed-point shifts confirmed from live data.
+  (⚠ a first hand-check mis-multiplied and briefly read the makeup-row acc as the
+  stored quantity; the probe's correct arithmetic caught it — the stored value is
+  the boundary accumulator, not the makeup-row acc.)
 - Phase 2 KN5000 EQ coefficient order (the WSA1R order is Jury-unstable on KN5000
   coeffs); needs the real tap→coef assignment, which needs live signal (gated on
   4.2) or hardware.
