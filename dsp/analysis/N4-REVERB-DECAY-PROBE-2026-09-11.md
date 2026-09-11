@@ -18,10 +18,21 @@ seeded cells are not being advanced as a reverb delay line — hence the frozen 
 non-decaying 0xD0. This is a finding about the experiment setup, not a reverb decode, and it
 confirms the delay-line advance (§73-78) remains the open blocker.
 
+## Second run — reverb correctly selected, still no decay; ROOT CAUSE found
+Built `reverb_select.lua` (opens the DIGITAL REVERB page 0x0A via CPL_SEG8 0x02 — the unit-1
+reverb, not the DSP-EFFECT page peq_gain uses; per notes/kn5000-dsp-paramlist.md). The page opens
+(type=0x0A confirmed) and unit 1 runs, but seeding still shows no clean decay: 0xD0 grows
+(1.46/1.24), and the seeded cells 0x85/0x8C/0x8F stay frozen.
+
+`reverb_active_cells_probe.py` on the reverb frame explains it: **the REVSEED cell set is partly
+wrong.** Censusing the unit-1 frame's D-RAM accesses, the real delay-line/state cells (by store
+count) are **0x94 (45 reads/5 stores, the hub), 0x8B (30/4), 0xD1, 0xD2, 0xFC, 0x88, 0x89, 0xD0** —
+but REVSEED seeds the **dead coefficient cells 0x85 (4 reads/0 stores) and 0x8C** and misses
+0x8B/0xD1/0xD2/0xFC entirely. Frozen seed cells + a growing 0xD0 = seeding the wrong cells, not a
+decoded (or refuted) decay. Evidence: `data/kn5000-dsp-reverb-frame-page0A-2026-09-11.txt`.
+
 ## Next step (deliberate)
-Run the same REVSEED_ONCE decay test with an **actual reverb effect selected** (navigate to a
-reverb program, not PARAMETRIC EQ) so unit 1 runs its delay-advance body, then check whether the
-delay-line cells produce a decaying echo train whose per-loop ratio tracks the measured all-pass
-gains (0.91 / 0.1367). Needs a rig that selects a reverb effect by its TYPE index (peq_gain only
-reaches PARAMETRIC EQ); the effect-index list is the prerequisite. The delay-line advance itself
-(§73-78) is the substantive open question this would test.
+Retarget REVSEED to the MEASURED delay-line cells (0x94, 0x8B, 0xD0/0xD1/0xD2, 0x88, 0x89, 0xFC),
+re-run the seed-once decay test with `reverb_select.lua`, and check whether those cells produce a
+decaying echo train whose per-loop ratio tracks the all-pass gains (0.91 / 0.1367). Only then is
+the delay-line advance (§73-78) — the substantive open question — actually under test.
