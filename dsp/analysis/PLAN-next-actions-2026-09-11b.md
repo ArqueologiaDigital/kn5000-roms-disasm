@@ -40,6 +40,15 @@ reproduces the trajectory and the rival FAILS. (biquad_topology_probe.py extende
 PEQ's biquad is bit-exact. If its program uses SRC 0x08/0x11 in a spot whose output is validated,
 that constrains those readings the way SINGLE DELAY located ACT 0x0D/0x0E. Grep PEQ for them.
 
+### P3 RESULT 2026-09-11 — technique N/A; codes already partially characterized
+Census: SRC 0x08 is used in 22 programs, SRC 0x11 in 33 — but NEITHER known-answer program (SINGLE
+DELAY, PARAMETRIC EQ) uses them, so they cannot newly constrain the readings by matching a validated
+output. However, prior work already partially decodes both: **SRC 0x08 = put C-RAM[c] (a coefficient)
+on the bus** (§224 §S2sq, the coefficient-squaring MACs), **SRC 0x11 = the accb register** (a separate
+44-bit accumulator). So P3's specific technique adds nothing new; the codes are not "unanchored" in
+the way ACT 0x0D/0x0E are. Net: the input-route residue that matters is ACT 0x0D/0x0E (M2, located as
+delay-line mixing), not SRC 0x08/0x11.
+
 ## P4 — M5: N4 gain-mapping from the decoded delay [offline]
 Read the reverb descriptor block for the per-tap delay length; relate the measured decay ratios
 (0xD0 ×0.767, 0xD2/0x8A ×0.547) to the all-pass gains (0.91/0.1367) through that length; test the
