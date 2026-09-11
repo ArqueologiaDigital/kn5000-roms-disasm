@@ -170,6 +170,18 @@ One operational blocker is shared by every build-lane capture and is stated once
 > ACT 0x08/0x0D/0x0E/0x17 (+ the f31=2 latch-read admission), one code at a time, each needing MEASURED
 > evidence of its effect — which cannot come from captures (these words don't execute), so it is
 > bit-encoding cross-reference or hardware. The frontier is now a checklist, not a fog.
+>
+> **BOUNDARY DEMONSTRATED, not asserted (2026-09-11) — `input_route_guards.py <trace>`.** Tested
+> whether the committed captures could anchor any gate code (the disciplined "prove the instrument can
+> see it" check). Result: they cannot, for concrete per-code reasons. **SRC 0x11 (accb):** accb is
+> non-zero at only 5/285 rows of the program-0 frame and **0 of those use SRC 0x11** with an operand
+> matching accb — so the accb *writer* must be modelled first (plan 5.4) before any SRC-0x11 word can
+> be confronted. **ACT store-targets {0x08,0x0D,0x0E,0x17}:** their words are not strict-executed, so
+> they perform no store — no observable effect to measure the target from (the `acc+=P` that appears
+> at 2 rows is the generic MAC accumulate, independent of the store code). ⇒ the boundary is real and
+> specific, not a hand-wave. **Side-observation (candidate, NOT promoted):** at row 131 an SRC-0x10
+> word reads `L == accb>>16` — a single data point consistent with SRC 0x10's speculative reading;
+> one point is far short of the "N clean / 0 contradicting" bar, so it is recorded as a lead only.
 
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*

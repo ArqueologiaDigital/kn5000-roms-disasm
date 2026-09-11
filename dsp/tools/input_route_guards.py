@@ -76,6 +76,32 @@ def main():
     print("  it cannot be read from captures (these words are not executed) -- ISA-level")
     print("  work (bit-encoding cross-reference or a hardware reference), one code at a time.")
 
+    # Optional: demonstrate, from a trace, WHY the captures cannot anchor them.
+    tp = next((a for a in sys.argv[1:] if not a.startswith("-")), None)
+    if tp:
+        boundary_from_trace(tp)
+
+
+def boundary_from_trace(path):
+    """Show per-code why a capture cannot anchor the gate codes: SRC 0x11 needs a
+    non-zero accb to match an operand against; the ACT store-targets need the word
+    to execute (an observable store), which strict decode refuses."""
+    import os
+    sys.path.insert(0, os.path.join(HERE, "..", "hle"))
+    from lle_trace_diff import parse_trace
+    rows = parse_trace(open(path).read())
+    accb_rows = [r for r in rows if r["accb"] != 0]
+    src11_matchable = [r for r in accb_rows if D.lo_src(r["word"]) == 0x11
+                       and any(r["accb"] >> k == r["l"] and r["l"] for k in range(25))]
+    print("\nWHY %s CANNOT ANCHOR THEM (demonstrated, not asserted):" % os.path.basename(path))
+    print("  SRC 0x11 = accb: %d/%d rows carry a non-zero accb, but %d of them use SRC 0x11 with an"
+          % (len(accb_rows), len(rows), len(src11_matchable)))
+    print("     operand matching accb -- so SRC 0x11 stays un-anchorable here; the words that DO")
+    print("     read accb are elsewhere, and the accb WRITER is what plan 5.4 must model first.")
+    print("  ACT store-targets {0x08,0x0D,0x0E,0x17}: these words are not strict-executed, so")
+    print("     they perform no store -- no observable effect to measure the target from.")
+    print("     (acc+=P where it appears is the generic MAC accumulate, not the store code.)")
+
 
 if __name__ == "__main__":
     main()
