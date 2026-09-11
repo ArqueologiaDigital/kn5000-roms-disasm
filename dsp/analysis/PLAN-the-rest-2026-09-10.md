@@ -126,6 +126,22 @@ One operational blocker is shared by every build-lane capture and is stated once
 > what arithmetic each performs, and how the input at X+2/X+5 (kernel region ~0x05) reaches the
 > unit-0 body's biquad x0 at 0x64, needs SIGNAL-BEARING frames -- the multi-session live decode.
 > This is the concrete 4.2 target, now pinned to specific words (iw3/5/7/10, ALU unknown).
+>
+> **4.2 LOCALIZED + STRATEGY CORRECTED (2026-09-11) — probe `dsp/tools/input_route_probe.py`.**
+> Traced the deposit end-to-end in the core (`latch_inputs_to_dram`, upd6383.cpp): `m_in_base = m_dp`
+> at frame start (= 0xFF), `IN_LATCH_L_OFF=2`, `R_OFF=5`, `IN_PORT=0`, so the DI audio is deposited to
+> D-RAM **0x01 (L)** and **0x04 (R)**. The committed AUDIO=`key` trace CONFIRMS this: of 176 rows
+> exactly ONE carries any non-zero mem/P/L — row 1 at **dp=0x04, mem=+0.005** — i.e. audio really
+> does arrive at the DI latch (just quiet at that frame). The biquad band cells 0x64.. are all zero,
+> so the deposited audio is NOT carried onward to band-0 x0. **So the gap is precisely the input-stage
+> ALU that routes 0x01/0x04 → the biquad x0 cell.**
+> ⚠ STRATEGY CORRECTION to the note above: this is NOT primarily a "needs signal-bearing frames"
+> problem. The core runs those input-stage words as ADDRESSING-ONLY (ALU open), so (a) the copy never
+> happens and (b) their arithmetic **cannot be passively observed in any trace, signal or not** — an
+> unexecuted word emits no effect to measure. Decoding 4.2 is therefore an ISA-level task: recover the
+> input-stage words' ALU op + full SRC/ACT route from their bit encoding (and/or a hardware
+> reference), not just a better capture. Signal-bearing frames remain necessary for VALIDATION once a
+> candidate op exists, but they are not sufficient to DERIVE it. This is the honest 4.2 boundary.
 
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*
