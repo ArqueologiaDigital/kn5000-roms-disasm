@@ -24,8 +24,8 @@
   w7    0094A00200   ?word   0x0094A00200   ; 094.A.00.200  hi12{ST f31=2 ?7 res=080} cur+  [LFO: phase wrap, consumes 0x7FFFFF (29/29); AND vs sub-if-ge OPEN]
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w8    00002FC447   ?word   0x00002FC447   ; 000.2.FC.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
-  w9    000024B1CD   ?word   0x000024B1CD   ; 000.2.4B.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
-  w10   00002B940E   ?word   0x00002B940E   ; 000.2.B9.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w9    000024B1CD   ?word   0x000024B1CD   ; 000.2.4B.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w10   00002B940E   ?word   0x00002B940E   ; 000.2.B9.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w11   021224700B   ?word   0x021224700B   ; 212.2.47.00B  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w12   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w13   0000A001D3   ld.ta   (p),c+,(p)+0
@@ -71,7 +71,7 @@
   w36   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w37   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w38   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
-  w39   01042061CE   ?word   0x01042061CE   ; 104.2.06.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w39   01042061CE   ?word   0x01042061CE   ; 104.2.06.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w40   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w41   0000AF5415   ld      acc,c+,(p)-11
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
@@ -83,13 +83,13 @@
   w45   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w46   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w47   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
-  w48   01042F31CE   ?word   0x01042F31CE   ; 104.2.F3.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w48   01042F31CE   ?word   0x01042F31CE   ; 104.2.F3.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w49   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w50   0000AFE415   ld      acc,c+,(p)-2
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = op0x66[2] (role mix/tap, INFERRED)
   w51   021220A1CD   ?word   0x021220A1CD   ; 212.2.0A.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w52   00002F81CE   ?word   0x00002F81CE   ; 000.2.F8.1CE  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w52   00002F81CE   ?word   0x00002F81CE   ; 000.2.F8.1CE  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w53   021224F407   mac.st  acc,(p)+79 ; mem[p]<-acc, acc=0
   w54   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w55   0000A001D3   ld.ta   (p),c+,(p)+0

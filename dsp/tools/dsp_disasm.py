@@ -312,8 +312,10 @@ LO_SRC_LFOOUT = 0x1C # control/mod source read into a MAC (was "LFO OUTPUT",
                      # bus (LFO for modulation, envelope/AGC for dynamics), NOT LFO-specific.
 LO_ACT_DELAY_RD = 0x0C
 LO_ACT_TBL_MUL  = 0x08
-LO_ACT_BIQ_D = 0x0D  # sect. 234: biquad delay-stage action; the pair (0x0D,0x0E)
-LO_ACT_BIQ_E = 0x0E  #   is confirmed 1-of-49, only the tap/lag is hardware Q4
+LO_ACT_BIQ_D = 0x0D  # delay/state I/O MIXING (0x0D reads mem onto bus). ⚠ name kept
+LO_ACT_BIQ_E = 0x0E  #   for ABI; "biquad delay-stage" CORRECTED 2026-09-11 -- the pair
+                     #   is UNIVERSAL (every family incl. plain delay/AM, no biquad);
+                     #   true 2nd-order-section state = 0x13/0x14. Exact ALU = hw Q4.
 LO_ACT_DELAY_ACC = 0x0B  # delay-line access (dark-words F); READ/WRITE class-borne
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
                                       LO_SRC_MEM0, LO_SRC_LFO, LO_SRC_LFOOUT)
@@ -1069,8 +1071,8 @@ def annotate(w, at=None):
     ar = ("ACT 0x0C = delay READ" if a == LO_ACT_DELAY_RD else
           "ACT 0x08 = table-port multiply" if a == LO_ACT_TBL_MUL else
           "ACT 0x0B = delay-line access (READ/WRITE class-borne)" if a == LO_ACT_DELAY_ACC else
-          "ACT 0x0D = biquad delay-stage (pair w/ 0x0E)" if a == LO_ACT_BIQ_D else
-          "ACT 0x0E = biquad delay-stage (pair w/ 0x0D)" if a == LO_ACT_BIQ_E else None)
+          "ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)" if a == LO_ACT_BIQ_D else
+          "ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)" if a == LO_ACT_BIQ_E else None)
     if sr or ar:
         return ("SPECULATIVE (prospective, not measured): "
                 + "; ".join(x for x in (sr, ar) if x))

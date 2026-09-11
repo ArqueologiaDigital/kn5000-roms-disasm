@@ -46,7 +46,7 @@ InputBlock1:
   w18   0182A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
   w19   051220044D   ?word   0x051220044D   ; 512.2.00.44D  hi12{END ST f98=1 f31=1}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
-  w20   0000A0064D   ?word   0x0000A0064D   ; 000.A.00.64D  hi12{-} cur+  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
+  w20   0000A0064D   ?word   0x0000A0064D   ; 000.A.00.64D  hi12{-} cur+  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
   w21   0410A0040E   ?word   0x0410A0040E   ; 410.A.00.40E  hi12{END ST} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)

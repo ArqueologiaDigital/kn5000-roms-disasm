@@ -67,7 +67,7 @@
   w33   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w34   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w35   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
-  w36   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w36   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w37   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w38   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
@@ -83,7 +83,7 @@
   w44   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
   w45   02122091CD   ?word   0x02122091CD   ; 212.2.09.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w46   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w46   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w47   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w48   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w49   0000201407   ld.st   acc,(p)+1
@@ -142,7 +142,7 @@
   w81   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w82   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w83   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
-  w84   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w84   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w85   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
   w86   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1F] (coeff, base 0x00 MEASURED)
@@ -158,6 +158,6 @@
   w92   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x23] (coeff, base 0x00 MEASURED)
   w93   02122FB1CD   ?word   0x02122FB1CD   ; 212.2.FB.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w94   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w94   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w95   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w96   042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
