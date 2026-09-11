@@ -154,6 +154,22 @@ One operational blocker is shared by every build-lane capture and is stated once
 > IDENTICALLY — a degeneracy, not a special op (the probe flags it). Net sharpening: 4.2's open
 > frontier is now specifically the **f31/store semantics of w3/w5/w10** (their multiply is solved),
 > and the audio is confirmed present at the input-stage multiply — not stuck at the raw deposit.
+>
+> **4.2 GATE ENUMERATED (2026-09-11) — `dsp/tools/input_route_guards.py`.** Ran `alu_decoded`
+> guard-by-guard over all 12 K6 input-stage words. Result — the audio route reduces to a SHORT, NAMED
+> list of unanchored codes, not a vague unknown:
+>   - **w9** (`ST mem[X+6]`, the product the mix block consumes) and **w6** (end of block A) already
+>     **DECODE strict** — so the mix input IS computed/stored; the route's tail works.
+>   - The audio-carrying and latch words are each open on ONE or two specific codes:
+>     unanchored **SRC {0x08, 0x11(accb)}**, unanchored **ACT {0x08, 0x0D, 0x0E(P←bus), 0x17}**, plus
+>     the port-read words needing **f31=2 ("acc unchanged", a pure latch-read)** admitted off class 8.
+>   - Causal chain, now explicit: w5/w10 READ the audio (verified) but are unexecuted (open codes), so
+>     the audio never enters the accumulator that the decoded w9 stores → the mix block gets an
+>     audio-free value. Anchoring those ~6 codes makes the whole route executable.
+> This is the concrete, actionable 4.2 target for a next session: settle SRC 0x08/0x11 and
+> ACT 0x08/0x0D/0x0E/0x17 (+ the f31=2 latch-read admission), one code at a time, each needing MEASURED
+> evidence of its effect — which cannot come from captures (these words don't execute), so it is
+> bit-encoding cross-reference or hardware. The frontier is now a checklist, not a fog.
 
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*
