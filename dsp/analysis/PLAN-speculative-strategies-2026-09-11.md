@@ -61,6 +61,19 @@ any) that passes (b); if several pass, report the ambiguity honestly.
 **Risk/label.** SPECULATIVE until a measured anchor lands. But note the acceptance test is
 strong: an incorrect route almost never reproduces the bit-exact biquad oracle on live audio.
 
+> **S1 EXECUTED (2026-09-11) — audio flows through the measured biquad; output saturates.**
+> `UPD6383_SPEC_INJECT` (upd6383.cpp, env, default off) copies the deposited audio (D-RAM 0x01)
+> into band-0 `x0` (0x64) at unit-0 entry. Captured a real-note PARAMETRIC-EQ frame: band-0 x0
+> now carries the live audio (−0.0797), the biquad's b0 word forms a **non-zero product from it**,
+> and the whole EQ pass has **41 non-zero products cascading** — the measured biquad runs on real
+> audio for the first time (the plan's core goal). ⚠ BUT the cascade **over-gains and saturates**:
+> band 0 turns an 8%-FS input into a **100%-FS (saturated) output**, band 3 into 75%, peak |acc| =
+> 3.5×FS. That is the recursion mis-wired — matching the Phase-2 finding that these coefficients are
+> Jury-unstable in the assumed `[b1,b0,b2,-a1,-a2]` order. ⇒ **S1 and S4 are COUPLED**: the input
+> route is bridged, but faithful EQ output needs the correct `x1/x2` vs `y1/y2` role assignment
+> (S4) so the feedback terms are right. Real, honest progress — audio is in the datapath — with the
+> remaining faithfulness gap localized to the recursive structure, not the input route.
+
 ---
 
 ## S2. Close the loop: an HLE-oracle-driven LLE bring-up harness
