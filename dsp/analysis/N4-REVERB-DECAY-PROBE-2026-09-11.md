@@ -31,8 +31,18 @@ but REVSEED seeds the **dead coefficient cells 0x85 (4 reads/0 stores) and 0x8C*
 0x8B/0xD1/0xD2/0xFC entirely. Frozen seed cells + a growing 0xD0 = seeding the wrong cells, not a
 decoded (or refuted) decay. Evidence: `data/kn5000-dsp-reverb-frame-page0A-2026-09-11.txt`.
 
-## Next step (deliberate)
-Retarget REVSEED to the MEASURED delay-line cells (0x94, 0x8B, 0xD0/0xD1/0xD2, 0x88, 0x89, 0xFC),
-re-run the seed-once decay test with `reverb_select.lua`, and check whether those cells produce a
-decaying echo train whose per-loop ratio tracks the all-pass gains (0.91 / 0.1367). Only then is
-the delay-line advance (§73-78) — the substantive open question — actually under test.
+## Third run — REVSEED retargeted, and the reverb DECAYS
+Retargeted REVSEED to the measured delay-line cells (0x94, 0x8B, 0xD0/0xD1/0xD2, 0x8A) and re-ran
+the seed-once decay test on the reverb page. The seeded cells now show **stable geometric per-frame
+ratios** — the reverb's linear feedback datapath is live (unlike the frozen dead cells):
+- **0xD0 → ×0.767 decay** (0.7672/0.7673/0.7673),
+- **0xD2, 0x8A → ×0.547 decay** (0.5467/0.5465/0.5468),
+- **0x8B → ×2.024 growth** (constant — an accumulator, or the C-RAM>>1 factor-of-2 seen in the biquad).
+Ratios constant to 4 decimals across all steps ⇒ clean linear behaviour; the seed-once impulse-decay
+METHOD works. Tool `reverb_decay_probe.py`; data `data/kn5000-dsp-reverb-decay-F{1..4}-2026-09-11.txt`.
+
+## Still open (the substantive question)
+Mapping the per-frame ratios (0.767, 0.547) to the all-pass gains (0.91 / 0.1367) needs the
+delay-line length/structure — the per-frame ratio is not the single-tap gain until the loop
+structure (§73-78 delay-advance) is known — and 0x8B's ×2.024 growth needs the same structural read.
+The harness (seed-once + reverb page + delay-cell targeting + decay probe) is now in place to do it.
