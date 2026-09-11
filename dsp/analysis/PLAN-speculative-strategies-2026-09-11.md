@@ -267,21 +267,30 @@ before blow-up carry the signal — read the *first* transition.
 > (cross-frame + the firmware designer's intended response as the oracle), and it is the honest
 > terminus of what this session's captures + offline analysis can establish.
 >
-> **TOPOLOGY CANDIDATE FOUND: DF-II TRANSPOSED (2026-09-11).** The shared-cell puzzle (0x65 written
-> as y by the 0x212 store, yet read by b2/cur02) is the SIGNATURE of a **Direct-Form-II transposed**
-> biquad: its two state variables each hold a mixed `b·x − a·y` term, so one cell is legitimately
-> both a store target and a feedforward tap — which a textbook DF-I can never be. Tested offline with
-> the captured band-0 coefficients (subtractive, a=+stored): DF-II transposed is **STABLE** (IR tail
-> 7e-8) and a **sensible peaking EQ** (peak f=0.30, +3.1 dB). So the KN5000 EQ is very likely
-> **DF-II transposed, subtractive**, which reconciles ALL the observations at once: the stable poles
-> (0.71, shared with DF-I), the two stores (y to in+1, cascade via makeup), the shared cell roles,
-> and why a DF-I model + sign + shift could not stabilize the LLE. **Next-session confirmation
-> (falsifiable):** run the DF-II state recurrence with the captured coefficients on the injected
-> input and match its w1/w2 trajectory to the LLE's cells 0x65/0x66 across frames (cross-frame
-> capture); a bit-for-bit state match promotes DF-II from candidate to decoded, and then the LLE core
-> can realize the correct (shared-state) update for a faithful, non-saturating EQ. This turns the
-> "non-standard topology" open item into a NAMED form with a concrete accept test — the productive
-> handoff point for the biquad, and a real advance from the strict plan's "coefficient order OPEN".
+> **TOPOLOGY = a SHARED-DELAY (DF-II-FAMILY) form; "transposed" was OVERCLAIMED (2026-09-11, corrected
+> by adversarial verification).** The shared-cell puzzle (a cell written as y by a store yet read by a
+> b-coefficient word) rules OUT a textbook DF-I (disjoint x/y state) and points to a **single-delay-
+> line / shared-state (DF-II family)** form. ⛔ But it does NOT single out DF-II *transposed*: DF-I,
+> DF-II canonical and DF-II transposed all realize the SAME H(z), so their impulse response,
+> stability, FFT and the HLE oracle are **topology-INVARIANT** and cannot discriminate — proved by
+> `dsp/tools/biquad_topology_probe.py` (max|DF-I − DF-II-transposed| = 0.0). ⚠ The earlier "DF-II
+> transposed IR tail 7e-8 / peak +3.1 dB" were literally the **DF-I** probe's numbers (a
+> reproducibility-rule violation, now closed by the topology probe), and in strict DF-II *transposed*
+> b2 multiplies the current input, so the "cell read by b2 AND stored" observation actually fits DF-II
+> **canonical** at least as well. So the honest state: **KN5000 EQ = subtractive, shared-delay
+> biquad, exact form (DF-II canonical vs transposed vs scaled/coupled) UNDECIDED.**
+> ⚠ **RED FLAG the verification surfaced:** under the current b/a slot assignment all five bands'
+> poles cluster at f_norm ≈ 0.30 (~13.5 kHz) — a real 5-band parametric EQ spreads across the
+> spectrum, so the **coefficient role split (which slots are x1/x2 vs y1/y2, and b0=0.125 as a fixed
+> input scale) is probably still wrong**, independent of the topology.
+> **Confirmation (falsifiable, DIFFERENTIAL) — the only valid decode:** the forms diverge ONLY in
+> their internal STATE trajectory under saturating fixed point. Match the chip's per-frame cells
+> (0x65/0x66 + the 0x50 stereo twin) to each candidate's state trajectory across frames (identical
+> held input; read the operand address BEFORE the post-increment; watch the twin), and accept a form
+> ONLY if it reproduces the cells bit-exactly AND a rival form FAILS the same test (a null). Response-
+> matching, the HLE oracle, and the designer's (f0,gain,Q) validate H(z)/coefficients, NEVER the
+> topology. This is still a real advance over "coefficient order OPEN" (form narrowed to the DF-II
+> family, sign decoded, a differential accept test defined), but it is a CANDIDATE, not a decode.
 
 ---
 

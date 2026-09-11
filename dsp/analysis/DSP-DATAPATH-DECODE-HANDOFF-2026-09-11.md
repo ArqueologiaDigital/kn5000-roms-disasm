@@ -139,31 +139,24 @@ seeds the reverb operand cells (0xD0/0x94/0x8A/0x85/0x8C/0x8F). Result (evidence
   nonzero tempB (23808, 14848 from residual delay reads), but it does NOT confirm
   the feedback arithmetic — at n=142 coef=0.91 and tempB=23808 are both present yet
   P=0.
-- ★ **CORRECTION — the reverb gain is NOT a class-A MAC (2026-09-11).** n=142 is
-  **class4=0** (multiply NOT enabled; the MUL=Y column is the disassembler's
-  speculative flag, not the datapath), and a whole-frame search finds **ZERO
-  class-A/8 words that multiply tempB (SRC 0x1A) by a coefficient.** So the reverb
-  does NOT apply its feedback gain via the standard multiplier at all — "gain×y1 via
-  MAC" (and the delay-seed-to-confirm-a-MAC plan) was WRONG. The reverb uses class
-  {0,2,8} words; class 8 (hi12 0x880) is the **delay read/write** family
-  (n=141/145/149/153, SRC 0x0B). ⇒ the REVERB DATAPATH IS A SEPARATE DECODE from
-  the biquad — the biquad's `(coef×L)>>6` multiplier model does NOT transfer. The
-  0.91/0.1367 are loaded coefficients but applied through the class-8 delay
-  read/write path (likely the delay WRITE scales by the feedback gain), which is
-  the actual next decode target for the reverb — not a MAC confirmation.
-- ★ **CONVERGES ON THE CORE'S §73–78 (2026-09-11).** The class-8 delay path in
-  upd6383.cpp: the delay WRITE stores the accumulator (`acc_to_datum(wacc)>>8`,
-  ~line 2970), the READ returns `delay<<8` (~3051), and the pipeline mechanics are
-  SPECULATIVE (§74/§76/§78, mask bits 19/20). The core already MEASURED the wall —
-  **§73: "a loop whose behaviour does not change when its gains change is not being
-  attenuated by them at all"** — i.e. the reverb feedback gains are not applied in
-  the loop, matching this session's finding (no class-A MAC uses the 0.91/0.1367).
-  So the reverb feedback IS the core's documented §73–78 delay-pipeline problem: a
-  deep, already-known-hard/speculative decode, not a fresh reachable step. REVSEED's
-  contribution is to have LOCALIZED it — the reverb datapath is excitable and its
-  gains are loaded; the open part is precisely the class-8 delay-pipeline gain
-  application (§74/76/78), which needs the pipeline model confirmed (mask-bit
-  experiments / hardware) — gated like the input route.
+- ⛔ **RETRACTED (2026-09-11, adversarial verification): "the reverb gain is NOT a
+  class-A MAC" was based on a CLASS4-EXTRACTION BUG.** The throwaway analysis read
+  class4 as `(word>>32)&0xF` (the top nibble of hi12), not `(word>>20)&0xF`. With
+  the CORRECT extraction, n=142 (the 0.91/tempB word) is **class4 = 0xA — class-A,
+  multiply-enabled** (verified: 0x0000A00695 → (>>20)&0xF = 0xA). So the reverb DOES
+  use class-A MACs, the biquad multiplier `(coef×L)>>6` DOES apply, and the "no
+  class-A / class-8-delay-path / converges-on-§73-78" conclusions above are WRONG.
+  The real anomaly is narrower and known: at n=142 the class-A MAC reads tempB with
+  coef 0.91 and MUL=Y yet **P=0** — a coefficient-cursor timing issue (the cursor
+  advance at n=142 vs the working MAC at n=147), an "(?!)" the author already
+  flagged — NOT evidence the reverb avoids the multiplier. ⇒ the reverb is decoded
+  like the biquad (class-A MACs on tempB = the delayed output via SRC 0x1A ← delay
+  read SRC 0x0B), and its OPEN part is the same shared-state/topology + the cursor
+  timing at the feedback MAC — not a separate "class-8 arithmetic". The §73-78
+  delay-PIPELINE (how the delay line advances) remains a real open item, but it is
+  the delay addressing, not "the gains aren't a MAC". (No committed tool carried the
+  bug; it was inline only. The multiplier/store decodes gated on the trace's own
+  MUL flag, so they are unaffected.)
 
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
