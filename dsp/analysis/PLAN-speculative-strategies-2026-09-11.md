@@ -190,6 +190,34 @@ before blow-up carry the signal — read the *first* transition.
 > and renders a stable EQ matching `biquad_stability_probe.py`'s peaking response. This is a careful
 > reviewed core edit, not an end-of-session rush; the analysis behind it (sign, mechanism, stable-
 > filter proof) is complete and committed.
+>
+> ⛔ **S4 WIRING TESTED — "negate the operands" is the WRONG FIX (2026-09-11).** Implemented
+> `UPD6383_SPEC_SUBFB` (negate the operand read from in+2/in+3) and ran the accept test with a
+> multiply-site instrument. RESULT: the negation reached the multiply exactly as coded (iw147 −a1
+> consumed L=+8388608 = −(−8388608), the negation of an exact −1.0 rail), yet the cascade still
+> saturates (band 1 in = −0.99996). ROOT CAUSE, measured: the cells the −a1/−a2 words read
+> (in+2/in+3 = 0x66/0x67 per band) are **never written by ANY store word in the whole frame** and
+> are **constant/stuck** across it (distinct=1 on every one). There is no functioning recursion to
+> stabilize — the negation just flipped a dead rail. The only EQ-block stores target **in+1**
+> (0x65,0x69,0x6D,0x71,0x75). ⇒ the true S4 gap is the **delay-line STATE UPDATE / cell mapping**,
+> not the feedback sign. The sign result (subtractive ⇒ stable) stands for the TRUE filter; the LLE
+> cannot realize it until its recursive reads hit live, per-frame-updated y-history.
+> **New lead:** the frame's store targets fall in TWO parallel stride-4 blocks — `0x51,0x55,0x59,
+> 0x5D,0x61` (a 0x50 block) AND `0x65…0x75` (the 0x64 block). The biquad reads only the 0x64 block;
+> the 0x50 block is written and never read by the recursive words. Candidate: the live y-history
+> lives in the 0x50 block and the −a1/−a2 reads are aimed at the wrong block (a pointer-mapping
+> gap), which would explain the stuck 0x66/0x67 exactly. Under investigation.
+> **→ REFUTED (same day).** The 0x50 block is the **STEREO TWIN**: a second, parallel 5-band × 4-cell
+> cascade (cursor 0x54–0x72) that is read AND stored — every value 0.0, because only the 0x64
+> channel is injected. It is not the y-history. But it confirms the structure twice over: in BOTH
+> channels only `in+1` is ever stored and `in+2/in+3` are read but never written. ⇒ for a working
+> IIR the chip must **rotate/shift the history each frame** (y→y1→y2 — a circular pointer or an
+> explicit shift); the LLE's per-frame pointer is FIXED at 0x64+4k and it performs no shift, so the
+> recursion is dead by construction. **This is the true S4 gap — the delay-line shift — and it is
+> directly testable:** `UPD6383_SPEC_SHIFT` (upd6383.cpp, env, default off) rotates each band's
+> history at unit-0 entry (in+3←in+2, in+2←in+1) so the −a1/−a2 reads hit LIVE y1/y2. Accept test:
+> does the cascade stop railing? If it stabilizes, the feedback-sign question is then settled
+> empirically on a live recursion (SHIFT alone vs SHIFT+SUBFB) rather than on a dead one.
 
 ---
 
