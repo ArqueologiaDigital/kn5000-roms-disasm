@@ -46,6 +46,26 @@ So the multiplier operand = **C-RAM[cursor] >> 1**; there is no transform beyond
 (Note SEED8 and the clean peq-default are different EQ *presets* — SEED8's band-0 2cos term is
 0.995, peq-default's is 1.99 — but the C-RAM↔operand factor of 2 is preset-independent.)
 
+## Gain calibration — the design parameters are recoverable (2026-09-11, MAME port)
+`eq_spectral_ab.py` proved the raw cells cannot be read as a direct-form biquad H(z) (that
+needs the walled N2 realization). But the **design parameters** are recoverable, which is all
+the HLE port needs (it *synthesises* textbook RBJ peaking biquads, exactly as `dsp/hle/` does):
+- **Frequency (SOLID):** `cell 0x03 = 2·cos ω₀`. Band 1's 0x03 gives 966 Hz == N1′ band-1
+  centre; universal across bands.
+- **Gain (STRONG, band-0-calibrated):** the pure, frequency-INDEPENDENT gain signal is
+  **(c1 − 0.5)**, where c1 = cell base+1. That cell is **exactly 0.5 (0x200000) at 0 dB** —
+  for band 0, band 1, *and* under a frequency-only (FC) edit — and moves only under a gain
+  edit (0.50654 at +12 dB). So **A² = 1 + G·(c1 − 0.5)**, G = 455.7 fit to the +12 dB capture
+  (A²=3.98). NB **(c1 − c2) is the WRONG signal**: c2 moves with frequency, so an FC edit
+  misreads as +31 dB — de-entangling to (c1 − 0.5) is what fixes it.
+
+This is validated **offline against all three captures** by `dsp/tools/eq_rbj_reconstruct_ab.py`
+(flat→0.0 dB, +12 dB→+11.9 dB at 673 Hz, FC→0 dB with the design centre migrated up). It is the
+formula shipped in `kn7000_mame` `kn5000_tonegen.cpp` (the `eq_hle` insert, default OFF, DSPHLE
+port), pending the in-emulator spectral A/B. SPECULATIVE: that the same G holds for bands 1-4
+(only band 0 was driven); the 0.5 baseline is confirmed shared. Q is assumed 2.0 (sets
+bandwidth only; the A/B's peak-height check is Q-independent).
+
 ## Open (feeds N2)
 - The realization question now reduces to: **which biquad structure does the cursor-ordered MAC
   sequence implement over these near-RBJ coefficients (read C-RAM>>1)?** Answerable from the
