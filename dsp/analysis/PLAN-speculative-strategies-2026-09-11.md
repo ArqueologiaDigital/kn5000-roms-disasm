@@ -162,6 +162,21 @@ before blow-up carry the signal — read the *first* transition.
 > ⚠ Still speculative on the *mechanism* (subtractive MAC vs negated y-store); the SIGN is forced by
 > stability. This is the "make it fit" result the mandate asked for: the one sign that makes the
 > captured coefficients a real filter.
+>
+> **S4 MECHANISM COMPLETE + full cascade validated (2026-09-11).** (a) The full 5-band cascade with
+> subtractive feedback is STABLE (IR tail 4.5e-13) and a coherent peaking EQ — the decoded KN5000
+> parametric EQ is a real filter, all 5 bands (poles 0.710–0.752). cur05 ("makeup") is [0.5, 0.001,
+> 0.375, 0.0001, 0.0] ⇒ a **band-ENABLE** (bands 1/3/4 off in this preset). (b) The recursive words
+> cur03(-a1)/cur04(-a2) use **f31=1 (ADD)**, not a subtract op — verified. So the only way the chip
+> gets the required subtractive feedback with an adding MAC is a **NEGATED y-state**: the biquad
+> stores −y, and coef·(−y) added = −coef·y. **The exact LLE fix is therefore: negate the
+> recursive-feedback operands** (the cells read by the -a1/-a2 words, 0x66/0x67 per band) — or
+> equivalently negate the y-state writeback. Reproduced by `biquad_stability_probe.py`. This closes
+> the S4 ANALYSIS (sign + mechanism + exact fix, offline-validated); the remaining step is the
+> engineering wiring of that negation into the core, then re-run S1 for faithful non-saturating LLE
+> EQ (S6). ⚠ Still speculative that 0x66/0x67 are the y-state vs x-state (the 336-order ambiguity),
+> but the fix is sign-forced: whichever cells the recursive words read must enter negated for the
+> captured coefficients to be the stable filter they provably are.
 
 ---
 
