@@ -125,6 +125,16 @@ instability of the WSA1R order is the control: the correct order must be the sta
 **Risk/label.** SPECULATIVE; the biquad is Jury-unstable in the wrong order, so the first frames
 before blow-up carry the signal — read the *first* transition.
 
+> **S4 localized by S1 (2026-09-11).** Tracing band 0 on the injected real audio: the over-gain is
+> NOT the input (x0 = 0x64 = −0.08, b0 = 0.125) — it is the **state cells 0x66 = +1.0 (saturated)
+> and 0x67 = +0.5**, which the biquad multiplies by ~0.5 coefficients into a huge product
+> (547232219436 at cur 04), driving acc to +1.36 FS by the makeup word. So the LLE biquad running the
+> chip's microcode on live audio is **unstable in its executed recursion**, while the real chip's EQ
+> is stable ⇒ the gap is the **state/recursion writeback**: either the executed cell-role order is
+> wrong (0x66/0x67 are being read as the wrong taps) or the LLE does not model the per-frame delay-
+> line update (y written back to y1, shift), so the feedback reads runaway values. This is the exact
+> thing S4's cross-frame seed-once capture must settle, and it is now pinned to two cells.
+
 ---
 
 ## S5. Adopt the delay-pipeline (§74/76/78) model and make the reverb ring
