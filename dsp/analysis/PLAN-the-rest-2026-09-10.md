@@ -77,7 +77,19 @@ One operational blocker is shared by every build-lane capture and is stated once
 > flat-EQ claim). The 2.1/2.2 scaffolding was reverted rather than ship a gate for an unfaithful
 > render. New prerequisite task **2.0**: capture a KN5000 EQ frame with signal (Phase 4) and use
 > the oracle to solve the coefficient order from the biquad's known DF-I transfer function.
-
+>
+> **2.0 PARTIAL (2026-09-11) — the C-RAM coefficient→cell LAYOUT is now READ, not assumed.** With the
+> biquad datapath decoded (operand `L = mem[dp]`), `dsp/tools/eq_coef_layout_probe.py` reads the
+> actual per-band coefficient→operand-cell order from the SEED8 trace: each band is
+> `[prev-band cell (~0.75), INPUT/x0 (0.125), input+1 (~0.12), input+2 (~0.48), input+3 (~0.53), …]`,
+> storing `acc>>16` to the next band's input. **b0 = 0.125 on the input cell in ALL 5 bands** (the PEQ
+> signature — confirms the input cell 0x64+4k is x0). This is NOT the assumed WSA1R order
+> `[b1,b0,b2,-a1,-a2,makeup]`, which is exactly why that order was Jury-unstable here. So the ADDRESSING
+> half of the coefficient order is decoded and ungated. ⚠ STILL GATED: which state cell is x1/x2 vs
+> y1/y2 — hence the exact transfer function and its stability — needs the cross-frame DELAY-LINE
+> update (real signal flow through the band), i.e. the SAME input-route gate as 4.2/5.x. So Phase 2
+> converges on the identical bit-encoding/hardware frontier: its addressing is solved, its recursive
+> role-assignment is not, for the same reason everything downstream isn't.
 - **2.1 Add a read-only `cram_peek` accessor to the upd6383 core.** — `u32 cram_peek(u8) const { return m_cram.read_dword(addr)&0xffffff; }` next to `cram_data_w`; the ONLY core touch, read-only (does not alter `m_cursor`/`execute_run`/`run_frame`, so the LLE path is byte-identical). HLE treats an all-zero EQ region as "no coefficients yet" → passthrough, never invents. Consume the firmware-streamed coefficients; do not re-derive host-side. — *S* — [SESSION] *(reviewed core edit)*
 - **2.2 Make DSPCFG a genuine 3-way A/B gate.** — Widen the port mask `0x03→0x07` (`kn5000.cpp:886-895`), add `PORT_CONFSETTING 0x05 = "On + HLE reference EQ (research; the HLE, NOT the LLE)"` (bit0 arms send/return, bit2 selects HLE over `run_frame`); default stays Off. Off = silence, 0x01/0x03 = LLE (silent today), 0x05 = HLE. — *S* — [SESSION] *(reviewed)*
 - **2.3 Wire the HLE EQ render into the tonegen insert.** — At the `lrck_edge` block, when the HLE bit is set run the ported cascade over `cram_peek(0x00..0x1D)` (6 cells/band ×5 bands, passthrough if all-zero) with per-channel biquad state kept across LRCK edges; return `wet = eq(dry) − dry` so `mix+wet == eq(mix)` (series filter, not additive insert — sidesteps the double-signal and the unknown per-voice send levels G-2/G-3). Read the gate once per update; prove inert when off. Grade as whole-mix EQ, not per-part. — *M* — [MULTI-SESSION] *(reviewed audio-path edit)*
