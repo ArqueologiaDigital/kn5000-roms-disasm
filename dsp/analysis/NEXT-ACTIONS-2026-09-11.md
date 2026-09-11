@@ -42,7 +42,13 @@ uploaded C-RAM 0x00+ coeffs (2cos form) with the cursor-walk operands the multip
 — that transform IS the realization question and may decide the DF-II-family form more cheaply than a
 cross-frame state match.
 
-**N2 — Decide the biquad TOPOLOGY by cross-frame state matching (the only valid decode). [multi-session]**
+**N2 — Decide the biquad TOPOLOGY by cross-frame state matching (the only valid decode). [multi-session; STARTED 2026-09-11]**
+Progress (`N2-CROSSFRAME-STATE-PROGRESS-2026-09-11.md`): built `UPD6383_TRACE_DETAIL` (per-word state
+during note-play) + captured a consecutive-frame pair with SPEC_INJECT audio. MEASURED: the input
+delay line shifts x0→x1 one cell/frame (0x65[B]==0x64[A] exactly). BLOCKER: the recursion SATURATES
+(acc pinned, 0x66/0x67 frozen), so the recursive trajectory is degenerate and cannot decide the form —
+NO topology claim made (a constant matches every form). Next: seed a small non-saturating excitation
+(BIQSEED-style), capture ~8 frames, run the differential null. Original spec follows.
 Build `biquad_topology_probe.py` out into a differential oracle over {DF-I, DF-II canonical, DF-II
 transposed, scaled/coupled} under 24-bit **saturating** fixed point. Capture the chip's per-frame
 state cells (0x65/0x66 + the 0x50 stereo twin) across CONSECUTIVE frames (held steady note, RULE-12
