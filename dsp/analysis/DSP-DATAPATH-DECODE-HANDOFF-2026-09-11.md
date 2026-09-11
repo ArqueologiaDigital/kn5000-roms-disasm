@@ -135,6 +135,14 @@ seeds the reverb operand cells (0xD0/0x94/0x8A/0x85/0x8C/0x8F). Result (evidence
   arithmetic needs seeding the **external delay DRAM** (the SRC 0x0B source) — a
   delay-line seed diagnostic (AS_DELAY space, `dsp1_delay_map`). Still REACHABLE
   (no input route needed); that is the corrected concrete next step for 5.1.
+- ⚠ **Cheap path ruled out (verified 2026-09-11)**: the REVSEED frame already had
+  nonzero tempB (23808, 14848 from residual delay reads), but it does NOT confirm
+  the feedback arithmetic — at n=142 coef=0.91 and tempB=23808 are both present yet
+  P=0, because that word is a LOAD (hi12=0x000), not a multiply-enabled MAC, so
+  gain*tempB never fires there; the nonzero reverb P (n=152) carries coef=0
+  (propagated, not a product). So confirming gain*y1 genuinely needs the delay-line
+  seed AND landing the gain on a class-A MAC word, not just any frame with nonzero
+  tempB. Structure + gains stand; the bit-exact arithmetic is open.
 
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
