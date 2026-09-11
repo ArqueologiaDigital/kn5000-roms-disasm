@@ -134,6 +134,19 @@ before blow-up carry the signal — read the *first* transition.
 > wrong (0x66/0x67 are being read as the wrong taps) or the LLE does not model the per-frame delay-
 > line update (y written back to y1, shift), so the feedback reads runaway values. This is the exact
 > thing S4's cross-frame seed-once capture must settle, and it is now pinned to two cells.
+>
+> **S4 stability-shortcut tried — UNDER-CONSTRAINED (2026-09-11).** The speculation-friendly hope was
+> to pick the cell-role order by "which assignment is stable + sensible EQ", using the captured
+> band-0 coefficients (b0=0.125 fixed on x0; the other five permuted into b1,b2,a1,a2,makeup, each
+> recursive term tried ±). Result: **336 assignments pass** — the stability+gain criterion does not
+> fail enough to decode the order (a criterion that cannot fail is not a decode). So the order cannot
+> be speculated from stability alone. The real determinant is the **state WRITEBACK** (which cell
+> receives the computed y each frame): an unstable writeback — not a coefficient mislabel — is what
+> made S1 saturate, and 336 stable *interpretations* exist regardless. ⇒ S4 needs a genuinely
+> constraining input: EITHER the cross-frame seed-once capture (observe which cell y lands in and how
+> the taps shift), OR the firmware EQ designer's intended (f0, gain, Q) for this band from the
+> parameter record (design the target biquad, match the one order that reproduces it). Both are
+> reachable; neither is the stability shortcut.
 
 ---
 
