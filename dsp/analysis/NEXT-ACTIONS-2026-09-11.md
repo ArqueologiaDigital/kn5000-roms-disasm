@@ -68,12 +68,13 @@ same coefficients the core just used).
 
 **N4 — Consolidate + broaden in parallel (highest value-per-effort, needs no input route). [ongoing]**
 Route AROUND the proven input-route/accb dependency cycle via controlled seeding + the HLE oracle:
-- reverb: STARTED 2026-09-11 — built `UPD6383_REVSEED_ONCE` (seed-once, the BIQSEED_ONCE analogue for
-  the reverb) and ran a first impulse-decay probe. INCONCLUSIVE: it was captured with PARAMETRIC EQ
-  selected, so unit 1 ran no reverb program (0xD0 grew, other cells frozen). Valid test needs a reverb
-  effect selected + a rig that reaches it by TYPE index; then check the decay ratio vs the all-pass
-  gains (0.91/0.1367). The delay-line ADVANCE (§73-78) is the open part. See
-  `N4-REVERB-DECAY-PROBE-2026-09-11.md`;
+- reverb: ADVANCED 2026-09-11 — built `UPD6383_REVSEED_ONCE` + `reverb_select.lua` (opens the DIGITAL
+  REVERB page 0x0A) + retargeted REVSEED to the measured delay-line cells. The reverb now **DECAYS**:
+  seeded cells show stable geometric per-frame ratios (0xD0 ×0.767, 0xD2/0x8A ×0.547 decay; 0x8B ×2.024
+  growth) — the linear feedback datapath is live and the seed-once impulse-decay method works. STILL
+  OPEN: map the ratios to the all-pass gains (0.91/0.1367) — needs the delay-line structure (§73-78);
+  the harness (seed-once + reverb page + delay-cell targeting + `reverb_decay_probe.py`) is now in
+  place. See `N4-REVERB-DECAY-PROBE-2026-09-11.md`;
 - extend the seed-probe method to the one-pole and LFO/delay families (existing tools);
 - WSA1R twin as a cross-check oracle for **shared biquad/core primitives only** (NOT the reverb — its
   is comb/FDN vs the KN5000 all-pass ladder);
