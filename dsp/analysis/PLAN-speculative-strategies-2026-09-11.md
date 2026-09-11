@@ -251,6 +251,21 @@ before blow-up carry the signal — read the *first* transition.
 > not final; the response-match oracle (or the design target) settles it. Net: the ANALYSIS of the
 > KN5000 EQ is as complete as captures allow; a faithful LLE render is one careful state-update
 > decode away, and it is a multi-session build-lane task, not a one-shot.
+>
+> **STORE MECHANISM RECONCILED — but the cell roles are NON-STANDARD (2026-09-11).** Two earlier
+> findings (store→in+1 vs cascade→next-band) are reconciled: there are TWO stores per band. The
+> **MAC+store word (0x212, st=1)** writes the band's y to **in+1 (0x65/0x69/…)** — its own history;
+> the **makeup+store word (0x102, st=1, MODE-DEPENDENT target ≠ dp)** writes acc>>16 to the **cascade
+> cell (next band's input, 0x68/0x6C/…)**. So `SPEC_SHIFT`'s rotation 0x65→0x66→0x67 was directionally
+> right. ⛔ But the deeper obstacle is now exposed: **0x65 is WRITTEN as y (the 0x212 store) yet READ
+> by b2 (a feedforward coefficient, cur02)** — the same cell serves as both a y-history slot and an
+> x-history tap. So the KN5000 biquad does **not** map to a textbook DF-I with disjoint x/y state;
+> its cell roles are shared/non-standard, which is precisely why the naive subtractive-DF-I offline
+> model (poles 0.71) does not predict the LLE's behavior and why sign+shift alone can't stabilize it.
+> ⇒ the true remaining decode is the chip's actual **biquad TOPOLOGY** (a transposed/lattice/shared-
+> state form), not just a sign or a rotation. That is a genuine multi-session structural decode
+> (cross-frame + the firmware designer's intended response as the oracle), and it is the honest
+> terminus of what this session's captures + offline analysis can establish.
 
 ---
 
