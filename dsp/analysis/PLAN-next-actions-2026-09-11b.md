@@ -54,6 +54,18 @@ Read the reverb descriptor block for the per-tap delay length; relate the measur
 (0xD0 ×0.767, 0xD2/0x8A ×0.547) to the all-pass gains (0.91/0.1367) through that length; test the
 C-RAM>>1 factor-of-2 for the 0x8B ×2.024 growth. Falsifier: if no length fits, recensus the taps.
 
+### P4 RESULT 2026-09-11 — the mapping premise was wrong; the reverb tail is already decoded
+Prior work (reverb-head-tail.md, reverb-topology-round7.md) already decodes the reverb's decay
+structure: early-reflection taps at **6000/12000/18000/24000 samples**, an L/R decorrelation ratio
+**1.2006**, and the topology narrowed to the **pipe-comb / series-comb** family (all-pass, parallel
+comb, Moorer, nested all-pass, lattice all REJECTED, and rejected in the topology-neutral pool too).
+Those long delays live in **external delay-DRAM**, which REVSEED (local D-RAM cells) does not reach —
+so my measured local decays (0xD0 ×0.767, 0xD2/0x8A ×0.547) are LOCAL damping/feedback, NOT the
+reverb-tail comb gain. My N4 "map the decay ratio to the all-pass gains 0.91/0.1367" framing rested
+on a wrong assumption (that the local cells are the tail). Honest net: the reverb is more decoded than
+that framing implied; to measure the tail gain one must seed the external delay-DRAM, not the local
+cells — and the tail STRUCTURE (comb family, sample delays) is already on record.
+
 ## P5 — M6: audible EQ default-off [after P2]
 Once P2 fixes the realization: SPEC_DF2 + SPEC_AUDIO (default off), spectral A/B vs peq_ab.py.
 Behavioral merge stays review-gated; building+testing default-off is not.
