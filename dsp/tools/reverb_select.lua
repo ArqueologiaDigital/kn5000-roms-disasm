@@ -1,30 +1,30 @@
--- reverb_select.lua -- §227 TASK 2: select a DIGITAL REVERB preset on the KN5000 panel
--- so the firmware re-uploads unit 1's coefficients, and the uC-IF capture
--- (kn5000_dsp1_upload.{bin,txt}, written into the CWD at exit) contains them.
+-- reverb_select.lua -- select a DIGITAL REVERB (page type 0x0A, CPL_SEG8 0x02),
+-- so the unit-1 reverb program actually runs.  Copy of peq_gain.lua with the editor
+-- key changed from DSP EFFECT (CPL_SEG7 0x02, page 0x0B) to REVERB (CPL_SEG8 0x02,
+-- page 0x0A -- 12 reverbs + 2 delays; see notes/kn5000-dsp-paramlist.md).  Pair with
+-- UPD6383_REVSEED + UPD6383_REVSEED_ONCE for the impulse-decay test.  TYPEIDX picks
+-- the reverb from the list (0 = first).
 --
--- WHY.  §226 measured the header's coefficient bank C-RAM[0x90..0xB4] INVARIANT across
--- an effect change -- but on ONE capture pair in which unit 1 (ROOM REVERB 1) did NOT
--- change.  The Sub CPU ROM's per-algorithm map says a reverb preset rewrites
--- C-RAM[0x9E..0xB2], and 0x9E/0x9F/0xA0 are INSIDE the header's own 0x90..0xA3 walk.
--- This capture decides it.  `python3 dsp/tools/hdrbase.py' scores the result.
+-- The loaded preset is FLAT (all five sections give 0.00 dB), which cannot tell a
+-- correctly-decoded filter from a pass-through.  This moves one band so the target
+-- response has a sharp localised feature at a KNOWN frequency.
 --
--- Navigation is MEASURED (notes/kn5000-dsp-paramlist.md §1, and verbatim from
--- dsp/tools/peq_select.lua which is itself verbatim from tools/kn5000_dsp_origincap.lua):
---   SOUND menu   = CPR_SEG10 0x04
---   REVERB page  = RIGHT-2  = CPL_SEG8 0x02   -> editor page type 0x0A
---   TYPE up/down = CPL_SEG10 0x20 / 0x10      (the list does NOT wrap: saturate DOWN first)
+-- MEASURED navigation (kn5000-dsp-origin-capture.md / -paramlist.md sect.1):
+--   SOUND = CPR_SEG10 0x04 ; DSP EFFECT editor = CPL_SEG7 0x02 ; TYPE = CPL_SEG10 0x20/0x10
+-- INFERRED, and this run is the test of it (-paramlist.md sect.1.3 names the three pairs
+-- "TYPE / PARAMETER / VALUE" but only measured TYPE):
+--   PARAMETER = UP-2/DOWN-2 = CPL_SEG10 0x80/0x40 ; VALUE = UP-3/DOWN-3 = CPL_SEG9 0x20/0x10
+-- SELF-VALIDATING: if these are the right keys the live C-RAM section coefficients move
+-- off flat.  If C-RAM comes back identical to the flat capture, the inference is refuted.
 --
--- The TYPE order on that page is ROOM 1, ROOM 2, PLATE 1, PLATE 2, CONCERT 1, CONCERT 2,
--- DARK 1, DARK 2, BRIGHT 1, BRIGHT 2, WAVE 1, WAVE 2, SINGLE DELAY, MULTI TAP DELAY.
---
--- Env:
---   REVIDX : index to land on after saturating DOWN.  0 = ROOM REVERB 1 = the cold-boot
---            default, which is the MATCHED CONTROL ARM: same navigation, no preset change.
-local REVIDX = tonumber(os.getenv("REVIDX") or "4")   -- 4 = CONCERT REVERB 1
+-- gain = 0.5*user - 12.0 dB (kn5000-dsp-biquad-coeffs.md sect.1.2), so 0 dB is user 24 and
+-- +24 VALUE-up steps should saturate that band at +12.0 dB.
+local TYPEIDX = tonumber(os.getenv("TYPEIDX") or "15")
+local NPARAM  = tonumber(os.getenv("NPARAM") or "2")    -- PARAMETER-up presses (0=FC 1=Q 2=G?)
+local NVALUE  = tonumber(os.getenv("NVALUE") or "24")   -- VALUE-up presses
 local mach = manager.machine
 local sp = mach.devices[":maincpu"].spaces["program"]
 
--- the core must be ON + SPECULATIVE, exactly as the DSP harness runs it
 do local d = mach.ioport.ports[":DSPCFG"]
    if d then for _, f in pairs(d.fields) do f.user_value = 3 end
    else emu.print_error("### NO :DSPCFG PORT") end end
@@ -34,47 +34,59 @@ local function setbtn(tag, mk, v)
   if not port then emu.print_error("### NO PORT " .. tag); return end
   for _, f in pairs(port.fields) do if f.mask == mk then f:set_value(v) end end
 end
-local function title()
-  local s = ""
-  for i = 0, 17 do
-    local c = sp:read_u8(0x30AE5 + i)
-    s = s .. ((c >= 32 and c < 127) and string.char(c) or " ")
+local function keys(v)
+  local p = mach.ioport.ports[":KEY2"]; if not p then return end
+  for _, nm in ipairs({ "C4", "E4", "G4" }) do
+    for k, f in pairs(p.fields) do
+      if k == nm or f.name == nm then
+        if v == 1 then f:set_value(1) else f:clear_value() end
+      end
+    end
   end
-  return (s:gsub("%s+$", ""))
+end
+local function scr(a, n)
+  local s = ""
+  for i = 0, n - 1 do
+    local c = sp:read_u8(a + i)
+    s = s .. ((c >= 32 and c < 127) and string.char(c) or ".")
+  end
+  return s
 end
 local function report(tag)
-  local cnt = sp:read_u8(0x29AA); local s = ""
-  for i = 0, 12 do s = s .. sp:read_u8(0x29AC + i) .. (i < 12 and "," or "") end
-  emu.print_error(string.format("### %s title='%s' page=0x%02X cnt=%d idx=[%s]",
-      tag, title(), sp:read_u8(0x8D38), cnt, s))
+  emu.print_error(string.format("### %s type=0x%02X cnt=%d lcd='%s'",
+      tag, sp:read_u8(0x8D38), sp:read_u8(0x29AA), scr(0x30AE5, 40)))
 end
 
 local steps = {}
 local function add(dt, fn) steps[#steps + 1] = { dt, fn } end
+local function tap(tag, mk, dt)
+  add(dt, function() setbtn(tag, mk, 1) end)
+  add(dt, function() setbtn(tag, mk, 0) end)
+end
 
-add(0.0, function() emu.print_error("### boot settle done"); report("at boot") end)
-add(0.8, function() setbtn("CPR_SEG10", 0x04, 1) end)         -- SOUND menu
-add(0.4, function() setbtn("CPR_SEG10", 0x04, 0) end)
-add(1.5, function() setbtn("CPL_SEG8", 0x02, 1) end)          -- REVERB editor (RIGHT-2)
-add(0.4, function() setbtn("CPL_SEG8", 0x02, 0) end)
-add(1.5, function() report("reverb editor opened"); mach.video:snapshot() end)
-for _ = 1, 40 do                                              -- saturate DOWN -> ROOM 1
-  add(0.08, function() setbtn("CPL_SEG10", 0x10, 1) end)
-  add(0.08, function() setbtn("CPL_SEG10", 0x10, 0) end)
-end
-add(1.2, function() report("saturated DOWN -> ROOM REVERB 1") end)
-for _ = 1, REVIDX do                                          -- step UP to the target
-  add(0.12, function() setbtn("CPL_SEG10", 0x20, 1) end)
-  add(0.12, function() setbtn("CPL_SEG10", 0x20, 0) end)
-end
-add(1.5, function()
-  report("LANDED ON TARGET")
-  mach.video:snapshot()
-  emu.print_error(string.format("### REVERB-SELECTED REVIDX=%d AT-TIME %.3f",
-      REVIDX, mach.time.seconds))
+add(0.0, function() emu.print_error("### boot settle done") end)
+tap("CPR_SEG3", 0x04, 0.35)                              -- DSP EFFECT on
+add(0.8, function() end)
+tap("CPR_SEG10", 0x04, 0.4)                              -- SOUND menu
+add(1.5, function() end)
+tap("CPL_SEG8", 0x02, 0.4)                               -- REVERB editor (page type 0x0A), NOT DSP EFFECT
+add(1.5, function() report("reverb editor opened") end)
+for _ = 1, 40 do tap("CPL_SEG10", 0x10, 0.08) end        -- saturate DOWN -> first reverb
+add(1.2, function() report("saturated DOWN") end)
+for _ = 1, TYPEIDX do tap("CPL_SEG10", 0x20, 0.10) end   -- UP to the chosen reverb (TYPEIDX in the reverb list)
+add(1.5, function() report("LANDED ON REVERB"); mach.video:snapshot() end)
+-- move the PARAMETER cursor, then drive the VALUE up
+for _ = 1, NPARAM do tap("CPL_SEG8", 0x10, 0.30) end    -- PARAMETER up (UP-2)
+add(1.2, function() report("PARAMETER moved"); mach.video:snapshot() end)
+for _ = 1, NVALUE do tap("CPL_SEG7", 0x20, 0.10) end     -- VALUE up (UP-3)
+add(1.5, function() report("VALUE driven UP"); mach.video:snapshot() end)
+add(1.0, function()
+  emu.print_error(string.format("### EQ-EDITED-AT-TIME %.3f  NPARAM=%d NVALUE=%d",
+      mach.time.seconds, NPARAM, NVALUE))
 end)
-add(2.0, function() report("settled"); mach.video:snapshot() end)
-add(0.5, function() emu.print_error("### exiting -> capture files flush"); mach:exit() end)
+add(0.5, function() emu.print_error("### NOTES ON"); keys(1) end)
+add(6.0, function() emu.print_error("### NOTES OFF"); keys(0) end)
+add(2.0, function() emu.print_error("### exiting"); mach.video:snapshot(); mach:exit() end)
 
 local phase, next_t = 0, nil
 _G._n = emu.register_frame_done(function()
@@ -92,4 +104,5 @@ _G._n = emu.register_frame_done(function()
   end)
   if not ok then emu.print_error("### CB ERR " .. tostring(e)) end
 end)
-emu.print_error(string.format("### reverb_select loaded REVIDX=%d steps=%d", REVIDX, #steps))
+emu.print_error(string.format("### peq_gain loaded TYPEIDX=%d NPARAM=%d NVALUE=%d steps=%d",
+    TYPEIDX, NPARAM, NVALUE, #steps))
