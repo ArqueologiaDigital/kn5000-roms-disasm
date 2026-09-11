@@ -408,6 +408,83 @@ BLOG = "the MAME development blog, KN5000 effects-DSP series (Parts 78-84)"
 DOCS = "the project docs site, `/effects-dsp/`"
 
 
+#  ★ Classic-effect-topology hints, per family: the canonical textbook topology the
+#  program's SHAPE matches, and what that match implies about the still-opaque ISA
+#  idioms.  Grounded in analysis/TOPOLOGY-vs-ALGORITHMS.md +
+#  EFFECT-ALGORITHMS-implementation-spec.md and the 2026-09-11 LIVE runtime findings
+#  (DSP-RUNTIME-COMPARE / T2 / T3).  Rendered as a section in each flowchart.
+TOPOLOGY_HINTS = {
+    "eq": ("Cascaded Direct-Form-I biquads (2nd-order sections in series)",
+           "Each band = one 9-word DF-I section `ld.ta(0x13) · mac(0x12) · mac · mac.tb(0x14) · "
+           "mac · mac.st tb · class-8 post · mac.st(makeup) · ld.st ta`; two z&#8315;&#185; state "
+           "latches tempA/tempB; coefficients b1,b0,b2,&minus;a1,&minus;a2,makeup.",
+           "**Instruction hint:** ACT 0x13 = load state tempA, 0x12 = MAC, 0x14 = MAC+store tempB; "
+           "**tempA/tempB ARE the biquad z&#8315;&#185; states**. This is the ISA reference program."),
+    "delay": ("Feedback / multi-tap delay line (Schroeder delay)",
+              "External delay-DRAM (class-1 ESCAPE word, addr8 bit 6 = write vs read) + a "
+              "feedback-gain MAC; multi-tap = one write / N read taps.",
+              "**Instruction hint:** class-1 ESC words are the delay taps; delay length = "
+              "READ_CELL &minus; WRITE_CELL (descriptor); feedback/mix gain = a class-A MAC on the "
+              "delay-read register SRC 0x0B (LIVE: coef 0.5 = the documented 0.5 mix)."),
+    "reverb": ("All-pass diffuser ladder + comb (Schroeder/Moorer reverb tank)",
+               "A chain of all-pass sections (single coefficient/stage on the KN5000) over the "
+               "external delay-DRAM &mdash; the most DRAM-heavy program; ER taps at "
+               "6000/12000/18000/24000 samples.",
+               "**Instruction hint:** the diffuser feed/feedback gains are class-A MACs on "
+               "delay-read taps; the all-pass z&#8315;&#185; updates are the bqp pair (ACT 0x0D/0x0E)."),
+    "modulation": ("LFO-modulated delay (chorus/flanger/ensemble) or swept all-pass chain (phaser)",
+                   "An LFO phase accumulator (a D-RAM cell ramping by the LFO-SPEED each frame) "
+                   "modulates a short delay tap (chorus/flanger, + feedback/resonance) or sweeps an "
+                   "all-pass chain (phaser sweeps notches, ~0 delay-DRAM but many z&#8315;&#185; pairs).",
+                   "**Instruction hint:** the LFO cell's per-frame increment IS the LFO-SPEED "
+                   "parameter (LIVE: CHORUS cell 0x10 ramps +114/frame, &rarr;+494 when the SPEED "
+                   "knob is driven); the LFO-conditional MACs are the class-A words that do NOT fire "
+                   "every frame (LIVE: FLANGER's SRC 0x08 coef-square, f31=4)."),
+    "am": ("Amplitude / carrier modulation (auto-pan L/R gain, ring-mod carrier&times;signal, vibrato)",
+           "An LFO or carrier multiplies the signal: auto-pan = LFO&rarr;L/R gains; ring-mod = "
+           "table carrier &times; signal; vibrato = LFO&rarr;delay/pitch.",
+           "**Instruction hint:** the modulating multiply is a class-A MAC whose operand is the "
+           "LFO/carrier cell; ring-mod adds a class-6 table (the carrier)."),
+    "distortion": ("Memoryless waveshaper (drive &rarr; nonlinearity &rarr; level) + optional tone biquad",
+                   "gain(drive) &rarr; nonlinear transfer &rarr; gain(level); OVERDRIVE/EXCITER "
+                   "append a DF-I tone biquad, FUZZ/DISTORTION are the bare (harder) shaper.",
+                   "**Instruction hint:** the nonlinearity is a class-6 LUT (addr8 0x28) or a Horner "
+                   "polynomial via class-A MACs feeding SRC 0x10 (acc) back as operand (LIVE in "
+                   "OVERDRIVE: coeffs [0.019, 0.609, &minus;0.448, 0.750]); the tone stage is a DF-I "
+                   "biquad (ACT 0x12/0x13/0x14 &mdash; LIVE only in OVERDRIVE, ABSENT from FUZZ)."),
+    "exciter": ("Harmonic exciter = high-band waveshaper + tone biquad",
+                "A waveshaper generates upper harmonics, then a DF-I tone biquad shapes them.",
+                "**Instruction hint:** same waveshaper + DF-I-biquad idioms as distortion."),
+    "dynamics": ("Envelope follower + gain computer (level detector &rarr; VCA)",
+                 "A rectify/smooth level detector drives a gain multiply; no delay line.",
+                 "**Instruction hint:** the threshold/envelope path GATES a class-A MAC (LIVE: "
+                 "COMPRESSOR's SRC 0x07/ACT 0x15 store MAC does not fire every frame &mdash; the "
+                 "threshold conditional)."),
+    "filter": ("Swept state-variable / DF-I biquad (enhancer, auto-wah)",
+               "A biquad whose cutoff is swept by an LFO or an envelope (auto-wah).",
+               "**Instruction hint:** the same DF-I biquad idiom as EQ, with the cutoff coefficient "
+               "updated from the LFO/envelope cell."),
+    "rotary": ("LFO-swept delay (Doppler) + tone biquad (horn coloration)",
+               "A rotating-speaker model: an LFO sweeps a delay (Doppler pitch) into a tone biquad.",
+               "**Instruction hint:** LFO cell + delay-DRAM + a DF-I biquad, combined."),
+    "combi": ("Union of the sub-effect topologies, in name order",
+              "E.g. PEQ+DIST+DELAY = DF-I biquad(s) &rarr; waveshaper &rarr; delay line; the shape is "
+              "the concatenation of the named stages.",
+              "**Instruction hint:** each named stage contributes its own idiom (biquad ACT "
+              "0x12/13/14, waveshaper class-6/Horner, delay class-1 ESC, LFO cell)."),
+}
+
+
+def _topology_section(fam):
+    hint = TOPOLOGY_HINTS.get(fam)
+    if not hint:
+        return []
+    topo, shape, instr = hint
+    return ["### Classic-topology match", "",
+            "**Most likely textbook topology:** %s." % topo, "",
+            shape, "", instr, ""]
+
+
 def emit_program_page(path, rep, slots, nm, unit, la, fam, conf, role, f, params, c):
     named = f.get("named", 0)
     lines = []
@@ -429,6 +506,7 @@ def emit_program_page(path, rep, slots, nm, unit, la, fam, conf, role, f, params
     lines.append("")
     lines.append(c.render())
     lines.append("")
+    lines.extend(_topology_section(fam))
     if params:
         lines.append("**UI parameters** (MEASURED, `notes/kn5000-dsp-paramlist.md`): "
                      + compress(params) + ".")

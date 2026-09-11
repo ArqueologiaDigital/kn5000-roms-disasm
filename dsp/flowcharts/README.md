@@ -26,44 +26,44 @@ Ordering follows the family signal chain documented in [`../algorithms/families.
 
 | chart | effect | family | conf. | words | opaque | landmarks |
 |---|---|---|---|---|---|---|
-| [prog00](prog00_no_operation.md) | NO OPERATION | dynamics | medium | 49 | 22 | 1 biquad DF-I section(s), 2 C-format immediate load(s), 3 DRAM read/write word(s) |
-| [prog01](prog01_chorus.md) | CHORUS | modulation | high | 70 | 17 | 1 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog02](prog02_modulated_chorus.md) | MODULATED CHORUS | modulation | high | 85 | 22 | 2 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s) |
-| [prog03](prog03_enhancer.md) | ENHANCER | filter | medium | 99 | 32 | 2 C-format immediate load(s), 1 DRAM read/write word(s), 4 all-pass marker(s) |
-| [prog04](prog04_flanger.md) | FLANGER | modulation | medium | 65 | 22 | 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog05](prog05_phaser.md) | PHASER | modulation | medium | 106 | 33 | 2 LFO phase word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s) |
-| [prog06](prog06_ensemble.md) | ENSEMBLE | modulation | medium | 96 | 39 | 1 LFO phase word(s), 3 DRAM read/write word(s), 4 waveshaper LUT selector(s) |
-| [prog08](prog08_gated_reverb.md) | GATED REVERB | reverb | medium | 102 | 15 | 2 C-format immediate load(s), 10 DRAM read/write word(s), 6 all-pass marker(s) |
-| [prog09](prog09_single_delay.md) | SINGLE DELAY | delay | high | 48 | 13 | 3 DRAM read/write word(s) |
-| [prog10](prog10_multi_tap_delay.md) | MULTI TAP DELAY | delay | high | 68 | 23 | 2 DRAM read/write word(s) |
-| [prog15](prog15_rock_rotary.md) | ROCK ROTARY | rotary | high | 86 | 15 | 1 biquad DF-I section(s), 5 C-format immediate load(s), 1 DRAM read/write word(s), 1 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog16](prog16_room_reverb_1.md) | ROOM REVERB 1 | reverb | SOLVED | 133 | 7 | 4 C-format immediate load(s), 13 DRAM read/write word(s), 9 all-pass marker(s) |
-| [prog32](prog32_distortion.md) | DISTORTION | distortion | high | 42 | 17 | 2 waveshaper LUT selector(s) |
-| [prog33](prog33_overdrive.md) | OVERDRIVE | distortion | high | 63 | 18 | 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog34](prog34_fuzz.md) | FUZZ | distortion | high | 42 | 17 | 2 waveshaper LUT selector(s) |
-| [prog35](prog35_exciter.md) | EXCITER | exciter | high | 69 | 24 | 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog36](prog36_compressor.md) | COMPRESSOR | dynamics | medium | 40 | 19 | 4 C-format immediate load(s) |
-| [prog39](prog39_parametric_eq.md) | PARAMETRIC EQ | eq | SOLVED | 105 | 8 | 10 biquad DF-I section(s), 10 class-8 post-sum step(s) |
-| [prog48](prog48_auto_pan.md) | AUTO PAN | am | high | 50 | 24 | 2 LFO phase word(s), 2 waveshaper LUT selector(s) |
-| [prog50](prog50_vibrato.md) | VIBRATO | modulation | high | 53 | 16 | 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog52](prog52_auto_wah.md) | AUTO WAH | filter | medium | 72 | 30 | 1 C-format immediate load(s), 2 class-8 post-sum step(s) |
-| [prog54](prog54_ring_modulator.md) | RING MODULATOR | am | high | 46 | 23 | 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog56](prog56_mix_up.md) | MIX UP | modulation | medium | 64 | 19 | 3 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s) |
-| [prog64](prog64_s_delay_chorus.md) | S.DELAY+CHORUS | combi | high | 95 | 20 | 1 LFO phase word(s), 4 C-format immediate load(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog65](prog65_s_delay_s_delay.md) | S.DELAY+S.DELAY | delay | high | 68 | 14 | 5 DRAM read/write word(s) |
-| [prog66](prog66_s_delay_flanger.md) | S.DELAY+FLANGER | combi | medium | 100 | 26 | 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog67](prog67_s_delay_vibrato.md) | S.DELAY+VIBRATO | combi | high | 86 | 20 | 2 LFO phase word(s), 2 C-format immediate load(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
-| [prog68](prog68_s_delay_phaser.md) | S.DELAY+PHASER | combi | medium | 110 | 30 | 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s) |
-| [prog70](prog70_auto_wah_s_delay.md) | AUTO WAH+S.DELAY | combi | medium | 105 | 35 | 1 C-format immediate load(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s) |
-| [prog71](prog71_peq_chorus.md) | PEQ+CHORUS | combi | high | 93 | 20 | 2 biquad DF-I section(s), 1 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog72](prog72_peq_s_delay.md) | PEQ+S.DELAY | combi | high | 54 | 9 | 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s) |
-| [prog73](prog73_peq_flanger.md) | PEQ+FLANGER | combi | high | 91 | 23 | 2 biquad DF-I section(s), 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog74](prog74_peq_vibrato.md) | PEQ+VIBRATO | combi | high | 77 | 17 | 2 biquad DF-I section(s), 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog75](prog75_peq_compressor.md) | PEQ+COMPRESSOR | combi | high | 59 | 19 | 2 biquad DF-I section(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 class-8 post-sum step(s) |
-| [prog96](prog96_peq_compr_dist.md) | PEQ+COMPR+DIST | combi | high | 90 | 28 | 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog97](prog97_peq_compr_overdr.md) | PEQ+COMPR+OVERDR | combi | high | 97 | 25 | 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s) |
-| [prog98](prog98_peq_dist_delay.md) | PEQ+DIST+DELAY | combi | high | 92 | 23 | 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
-| [prog99](prog99_peq_overdr_delay.md) | PEQ+OVERDR+DELAY | combi | high | 104 | 21 | 4 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s) |
+| [prog00](prog00_no_operation.md) | NO OPERATION | dynamics | medium | 49 | 0 | 1 biquad DF-I section(s), 2 C-format immediate load(s), 3 DRAM read/write word(s) |
+| [prog01](prog01_chorus.md) | CHORUS | modulation | high | 70 | 0 | 1 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog02](prog02_modulated_chorus.md) | MODULATED CHORUS | modulation | high | 85 | 0 | 2 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s) |
+| [prog03](prog03_enhancer.md) | ENHANCER | filter | medium | 99 | 0 | 2 C-format immediate load(s), 1 DRAM read/write word(s), 4 all-pass marker(s) |
+| [prog04](prog04_flanger.md) | FLANGER | modulation | medium | 65 | 0 | 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog05](prog05_phaser.md) | PHASER | modulation | medium | 106 | 0 | 2 LFO phase word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s) |
+| [prog06](prog06_ensemble.md) | ENSEMBLE | modulation | medium | 96 | 0 | 1 LFO phase word(s), 3 DRAM read/write word(s), 4 waveshaper LUT selector(s) |
+| [prog08](prog08_gated_reverb.md) | GATED REVERB | reverb | medium | 102 | 0 | 2 C-format immediate load(s), 10 DRAM read/write word(s), 6 all-pass marker(s) |
+| [prog09](prog09_single_delay.md) | SINGLE DELAY | delay | high | 48 | 0 | 3 DRAM read/write word(s) |
+| [prog10](prog10_multi_tap_delay.md) | MULTI TAP DELAY | delay | high | 68 | 0 | 2 DRAM read/write word(s) |
+| [prog15](prog15_rock_rotary.md) | ROCK ROTARY | rotary | high | 86 | 0 | 1 biquad DF-I section(s), 5 C-format immediate load(s), 1 DRAM read/write word(s), 1 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog16](prog16_room_reverb_1.md) | ROOM REVERB 1 | reverb | SOLVED | 133 | 0 | 4 C-format immediate load(s), 13 DRAM read/write word(s), 9 all-pass marker(s) |
+| [prog32](prog32_distortion.md) | DISTORTION | distortion | high | 42 | 0 | 2 waveshaper LUT selector(s) |
+| [prog33](prog33_overdrive.md) | OVERDRIVE | distortion | high | 63 | 0 | 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog34](prog34_fuzz.md) | FUZZ | distortion | high | 42 | 0 | 2 waveshaper LUT selector(s) |
+| [prog35](prog35_exciter.md) | EXCITER | exciter | high | 69 | 0 | 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog36](prog36_compressor.md) | COMPRESSOR | dynamics | medium | 40 | 0 | 4 C-format immediate load(s) |
+| [prog39](prog39_parametric_eq.md) | PARAMETRIC EQ | eq | SOLVED | 105 | 0 | 10 biquad DF-I section(s), 10 class-8 post-sum step(s) |
+| [prog48](prog48_auto_pan.md) | AUTO PAN | am | high | 50 | 0 | 2 LFO phase word(s), 2 waveshaper LUT selector(s) |
+| [prog50](prog50_vibrato.md) | VIBRATO | modulation | high | 53 | 0 | 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog52](prog52_auto_wah.md) | AUTO WAH | filter | medium | 72 | 0 | 1 C-format immediate load(s), 2 class-8 post-sum step(s) |
+| [prog54](prog54_ring_modulator.md) | RING MODULATOR | am | high | 46 | 0 | 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog56](prog56_mix_up.md) | MIX UP | modulation | medium | 64 | 0 | 3 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s) |
+| [prog64](prog64_s_delay_chorus.md) | S.DELAY+CHORUS | combi | high | 95 | 0 | 1 LFO phase word(s), 4 C-format immediate load(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog65](prog65_s_delay_s_delay.md) | S.DELAY+S.DELAY | delay | high | 68 | 0 | 5 DRAM read/write word(s) |
+| [prog66](prog66_s_delay_flanger.md) | S.DELAY+FLANGER | combi | medium | 100 | 0 | 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog67](prog67_s_delay_vibrato.md) | S.DELAY+VIBRATO | combi | high | 86 | 0 | 2 LFO phase word(s), 2 C-format immediate load(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s) |
+| [prog68](prog68_s_delay_phaser.md) | S.DELAY+PHASER | combi | medium | 110 | 0 | 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s) |
+| [prog70](prog70_auto_wah_s_delay.md) | AUTO WAH+S.DELAY | combi | medium | 105 | 0 | 1 C-format immediate load(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s) |
+| [prog71](prog71_peq_chorus.md) | PEQ+CHORUS | combi | high | 93 | 0 | 2 biquad DF-I section(s), 1 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog72](prog72_peq_s_delay.md) | PEQ+S.DELAY | combi | high | 54 | 0 | 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s) |
+| [prog73](prog73_peq_flanger.md) | PEQ+FLANGER | combi | high | 91 | 0 | 2 biquad DF-I section(s), 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog74](prog74_peq_vibrato.md) | PEQ+VIBRATO | combi | high | 77 | 0 | 2 biquad DF-I section(s), 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog75](prog75_peq_compressor.md) | PEQ+COMPRESSOR | combi | high | 59 | 0 | 2 biquad DF-I section(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 class-8 post-sum step(s) |
+| [prog96](prog96_peq_compr_dist.md) | PEQ+COMPR+DIST | combi | high | 90 | 0 | 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog97](prog97_peq_compr_overdr.md) | PEQ+COMPR+OVERDR | combi | high | 97 | 0 | 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s) |
+| [prog98](prog98_peq_dist_delay.md) | PEQ+DIST+DELAY | combi | high | 92 | 0 | 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s) |
+| [prog99](prog99_peq_overdr_delay.md) | PEQ+OVERDR+DELAY | combi | high | 104 | 0 | 4 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s) |
 
 ## Regenerating
 

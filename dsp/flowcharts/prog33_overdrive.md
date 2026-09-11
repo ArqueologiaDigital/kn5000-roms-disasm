@@ -7,7 +7,7 @@ Image rep **algo 33** &middot; slots 33 &middot; **unit 0** (I-RAM load 84) &mid
 
 > overdrive: waveshaper + smoother + 4kHz Butterworth tone
 
-**63 words**, 18 class-A coefficient multiplies (4 named), 18 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**63 words**, 18 class-A coefficient multiplies (4 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD
@@ -18,14 +18,12 @@ flowchart TD
     N1 -.-> N2
     N3["Biquad tone/EQ<br/>2 Direct-Form-I sections (1 band(s) &times; 2 ch)<br/>b1,b0,b2,&minus;a1,&minus;a2, make-up"]
     N1 --> N3
-    N4["Undecoded core<br/>18 of 63 instructions<br/>(hand-unrolled, straight-line &mdash; see the .dsm)"]
+    N4["VOLUME<br/>output level"]
     N3 --> N4
-    N5["VOLUME<br/>output level"]
+    N5["REV SEND<br/>to reverb bus"]
     N4 --> N5
-    N6["REV SEND<br/>to reverb bus"]
+    N6["Output (RETURN to kernel epilogue)"]
     N5 --> N6
-    N7["Output (RETURN to kernel epilogue)"]
-    N6 --> N7
 
     classDef io fill:#e8eef7,stroke:#33475b,stroke-width:1px,color:#111;
     classDef proven fill:#d7f0d7,stroke:#2e7d32,stroke-width:2px,color:#111;
@@ -33,12 +31,19 @@ flowchart TD
     classDef inferred fill:#fdf0d5,stroke:#b8860b,stroke-width:1.5px,color:#111;
     classDef open fill:#eeeeee,stroke:#888,stroke-width:1px,color:#333,stroke-dasharray:5 5;
     classDef ctrl fill:#f3e8fb,stroke:#6a1b9a,stroke-width:1px,color:#111;
-    class N0,N7 io;
+    class N0,N6 io;
     class N1 inferred;
-    class N2,N5,N6 ctrl;
+    class N2,N4,N5 ctrl;
     class N3 measured;
-    class N4 open;
 ```
+
+### Classic-topology match
+
+**Most likely textbook topology:** Memoryless waveshaper (drive &rarr; nonlinearity &rarr; level) + optional tone biquad.
+
+gain(drive) &rarr; nonlinear transfer &rarr; gain(level); OVERDRIVE/EXCITER append a DF-I tone biquad, FUZZ/DISTORTION are the bare (harder) shaper.
+
+**Instruction hint:** the nonlinearity is a class-6 LUT (addr8 0x28) or a Horner polynomial via class-A MACs feeding SRC 0x10 (acc) back as operand (LIVE in OVERDRIVE: coeffs [0.019, 0.609, &minus;0.448, 0.750]); the tone stage is a DF-I biquad (ACT 0x12/0x13/0x14 &mdash; LIVE only in OVERDRIVE, ABSENT from FUZZ).
 
 **UI parameters** (MEASURED, `notes/kn5000-dsp-paramlist.md`): DRIVE, ADJUST, VOLUME, REV SEND.
 
