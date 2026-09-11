@@ -151,6 +151,19 @@ seeds the reverb operand cells (0xD0/0x94/0x8A/0x85/0x8C/0x8F). Result (evidence
   0.91/0.1367 are loaded coefficients but applied through the class-8 delay
   read/write path (likely the delay WRITE scales by the feedback gain), which is
   the actual next decode target for the reverb — not a MAC confirmation.
+- ★ **CONVERGES ON THE CORE'S §73–78 (2026-09-11).** The class-8 delay path in
+  upd6383.cpp: the delay WRITE stores the accumulator (`acc_to_datum(wacc)>>8`,
+  ~line 2970), the READ returns `delay<<8` (~3051), and the pipeline mechanics are
+  SPECULATIVE (§74/§76/§78, mask bits 19/20). The core already MEASURED the wall —
+  **§73: "a loop whose behaviour does not change when its gains change is not being
+  attenuated by them at all"** — i.e. the reverb feedback gains are not applied in
+  the loop, matching this session's finding (no class-A MAC uses the 0.91/0.1367).
+  So the reverb feedback IS the core's documented §73–78 delay-pipeline problem: a
+  deep, already-known-hard/speculative decode, not a fresh reachable step. REVSEED's
+  contribution is to have LOCALIZED it — the reverb datapath is excitable and its
+  gains are loaded; the open part is precisely the class-8 delay-pipeline gain
+  application (§74/76/78), which needs the pipeline model confirmed (mask-bit
+  experiments / hardware) — gated like the input route.
 
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
