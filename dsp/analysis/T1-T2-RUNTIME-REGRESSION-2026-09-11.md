@@ -23,7 +23,34 @@ The non-firing static `mac` words cluster on specific variants:
 - **`mac.st tb,(p)-1`** — OVERDRIVE w21 and w52 (identical words) — a MAC-and-store of tempB;
 - **`mac.st acc,(p)+4`** — FLANGER w49; **`mac ta,(p)+1`** — FLANGER w12; `mac.b (p),(p)+N` — COMPRESSOR w9/w30, OVERDRIVE w32.
 
-## The honest wrinkle (grade this before drawing per-word conclusions)
+## T2 RESOLVED (2026-09-11, later) — the wrinkle was my WRONG criterion; clean result below
+The wrinkle was my own: I used the `mac` MNEMONIC as the class-A predicate. It is not — the
+disassembler's "class-A" = **class4==0xA** (raw word `(w>>20)&0xF`), which matches the prog headers
+EXACTLY (FLANGER 18, OVERDRIVE 18, etc.); class4==0xA words render as `mac`(5)/`?word`(8)/`ld`(5), so
+the mnemonic is a subset. The image load is confirmed **contiguous at I-RAM 84** (upload log:
+kernel[0..82], program[84..], reverb[200..332]), so iw−84 = w-index is exact. Redoing T2 with
+class4==0xA gives a CLEAN per-word non-firing set:
+
+| program | static class4==0xA | live-firing | non-firing (w-index) | the non-firing word(s) |
+|---|---:|---:|---|---|
+| OVERDRIVE | 18 | 18 | **0** | — (all fire) |
+| SINGLE DELAY | 18 | 18 | **0** | — (all fire) |
+| FLANGER | 18 | 16 | **2** | w21 = w36 = `0094A00200` (SRC 0x08, ACT 0x00, f31=4) |
+| COMPRESSOR | 10 | 8 | **2** | w4 = w25 = `0104A001D5` (SRC 0x07, ACT 0x15, bit4 store) |
+
+**Finding (the T2 lead, now decoded to specific opcodes):** the class-A words that DON'T fire live are
+specific, and repeat identically within a program:
+- **FLANGER's** two are the **SRC 0x08 coefficient-squaring MAC** (§224 §S2sq: SRC 0x08 puts C-RAM[c]
+  on the bus and the multiply reads C-RAM[c] again) with the **anomalous f31=4** accumulator code —
+  a class-A word whose multiply is gated/skipped live.
+- **COMPRESSOR's** two are a **SRC 0x07 (mem[ptr]) store MAC with ACT 0x15** — also gated live.
+- OVERDRIVE and SINGLE DELAY have NO gated class-A (all 18 fire) — so the gating is program-specific,
+  concentrated in the modulation (FLANGER) and dynamics (COMPRESSOR) families, exactly where the
+  static decode flagged conditional behaviour.
+This is a real per-word runtime decode: the input/state-conditional class-A ops are now named
+(SRC 0x08 coef-square + f31=4; SRC 0x07/ACT 0x15 store), not just counted.
+
+## (superseded) The earlier wrinkle write-up
 The live class-A set and the static `mac` set **do not align 1:1** under the naive `w-index = iw−84`
 mapping — each program has live class-A words that are NOT static `mac` words (right column) and vice
 versa. So the "non-firing" list above is PROVISIONAL: it may reflect a real input/state gate OR a
