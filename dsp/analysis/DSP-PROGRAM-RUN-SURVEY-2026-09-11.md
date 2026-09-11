@@ -47,12 +47,14 @@ blockers are about the simulator's per-word execution, not live loading/processi
 2. **Upload size grows with complexity** — 93 words (ENHANCER) → 785 (PEQ+COMPR+DIST) — tracking the
    program's word count / family (combi > distortion/rotary > modulation > simple filter). A live,
    per-program coefficient (C-RAM) set is capturable for every program.
-3. **Per-word datapath tracing is GATED live for all non-EQ programs.** The time-ordered per-word
-   trace only emits when the pointer walk "closes on 1 frame"; that holds for the PARAMETRIC EQ but
-   for NONE of the 15 here (`DOES NOT CLOSE`). This mirrors the Python harness (36/38 execute only
-   with enumerated blockers): the live LLE has the same execution-completeness gap, so deep per-word
-   inspection across the corpus is gated on the same undecoded input/state mechanism — not on
-   capturing more frames.
+3. ~~Per-word datapath tracing is GATED live for all non-EQ programs.~~ **RETRACTED 2026-09-11 — this
+   was a RIG ARTIFACT, not a live gate.** The `kn5000_dsp_frame_trace.lua` rig did not fill the
+   time-ordered `m_trace` buffer for these captures (its arm/DWELL timing), so `m_trace_n=0` and no
+   per-word rows dumped. Re-running via **`peq_gain.lua` TYPEIDX=N + TRACE_DETAIL** DOES yield the
+   full per-word trace for a non-EQ program: OVERDRIVE (TYPEIDX 10) → **278 words, 78 class-A
+   multiplies, 33 distinct D-RAM cells.** So per-word runtime IS achievable for the whole corpus with
+   the right rig — the deep inspection is UNBLOCKED, not walled. (The dump at upd6383.cpp:1632 is
+   gated only on `m_trace_n>0`; the frame_trace rig simply wasn't arming/filling it.)
 4. **The two harness-blocked images run live.** MULTI TAP DELAY and ROCK ROTARY load and process
    audio in MAME even though the Python sim stalls at w52/w42 — a live per-word trace of these (once
    the pointer-walk gate is lifted) is the direct route to the missing coefficient / `ACT 0x1D`.
@@ -70,11 +72,12 @@ blockers are about the simulator's per-word execution, not live loading/processi
   per-word runtime, the survey was stopped at family-complete rather than fought against the memory
   limit for identical coefficient-only results.
 
-## Honest bottom line
-The run-all plan is executed to its achievable depth: **every program can be triggered and its
-coefficients/upload captured live (the catalog's prerequisites are validated across the page), but
-per-word runtime inspection is gated — live, exactly as in the Python harness — on the pointer-walk /
-execution-completeness condition that only the EQ currently satisfies.** So "running them all" yields
-a validated trigger map + a per-program coefficient/upload survey + the finding that the deep runtime
-decode is gated on the same open mechanism (input route / state rotation), now confirmed to be a
-LIVE gate and not merely a simulator artefact.
+## Honest bottom line (corrected)
+Every program can be triggered (the catalog's prerequisites are validated across the page) and its
+coefficients captured. And — correcting the retracted finding 3 — **per-word runtime traces ARE
+achievable for non-EQ programs** via `peq_gain.lua TYPEIDX=N + TRACE_DETAIL` (the earlier "gated"
+result was the frame_trace rig failing to fill `m_trace`, not a live gate). So the deep runtime
+inspection the survey first reported as walled is in fact OPEN; see the follow-on plan/results doc
+`DSP-RUNTIME-COMPARE-2026-09-11.md`. Also corrected: the "upload words" column was CUMULATIVE
+navigation transfers (monotonic with TYPEIDX), not per-program size — the per-program coefficient
+measure is the C-RAM nonzero count (~25–46 simple, ~119–139 complex combi/multi-voice).
