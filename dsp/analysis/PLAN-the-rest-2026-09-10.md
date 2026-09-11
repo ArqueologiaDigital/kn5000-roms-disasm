@@ -284,6 +284,17 @@ One operational blocker is shared by every build-lane capture and is stated once
 - **5.2 Anchor ACT 0x0D/0x0E in the EQ window (#2/#3 routing payoff, +124/+110 strict).** — Observe `acc←bus` (0x0D) / `P←bus` (0x0E) in PARAMETRIC EQ's entry words. **Depends on Phase 4** (the EQ entry runs bus=0 until the route lands). — *L* — [MULTI-SESSION] *(build-lane)*
 - **5.3 Harvest f31 {4,5,6,7} operation codes from LFO-driven captures.** — Capture VIBRATO/ROCK ROTARY/CHORUS frames (LFO phase accumulator is always-live), run the oracle-free `--ops` classifier, chase the iw30 f31=5 anomaly (acc ≈ latched-P·5/6). Promote a code only on N clean / 0 contradicting at a fixed chip scale. Small raw coverage (≤106 words) but high value: spec→MEASURED and it feeds the open P_SHIFT/ACC_SHIFT datum scale. — *M* — [MULTI-SESSION] *(build-lane)*
 - **5.4 Anchor SRC 0x11 (accb, +49), 0x13 (table, 44w), 0x0B (delay-read, +7).** — All read 0 in the committed trace, so: first model the accb *writer* in the kernel, then a source-operand classifier (match live L against acc/accb/coef/mem/tA/tB) requires downstream validation against the HLE, not just a plausible L. Two-sided, default off, graded by provenance. — *M* — [MULTI-SESSION] *(build-lane; reviewed)*
+> **5.4 accb WRITER LOCATED (2026-09-11) — `dsp/tools/accb_writer_probe.py`.** Progress on the root
+> of the 4.2 chain (SRC 0x11 = accb is un-anchorable until the accb writer is known). On the program-0
+> frame, accb is a SEPARATE register, live only in a narrow window (rows 130–134): **REFUTED** the
+> trivial "accb is a pipeline-delayed acc" hypothesis (best `accb[N]==acc[N-k]` match is 29%, k=0 —
+> just the shared-zero rows, no clean delay). Its writer words are identified: the first write
+> `accb←acc` is a **class-1, hi12=0x400, ACT=0x07** word (n=129); a later transition is consistent
+> only with **accb+=P** (n=131), and the window ends with an **accb←0 clear** (n=134). ⚠ LEAD, not a
+> decode: only 3 transitions in one frame, and the load transition has acc==P so accb←acc vs accb←P is
+> not split. Promoting an accb op needs N-clean/0-contradicting across MANY frames (and a transition
+> where acc≠P). But the WRITER word class is now located — the next concrete node before SRC 0x11,
+> and thus before the input route (4.2) and the reverb (5.1), can be anchored.
 - **5.5 Capture + confront delay and LFO kernels.** — SINGLE DELAY (verify landing by the algo-9 word signature, NOT `program=` which is stuck at 0) confronted with `diff_delay` + loop `diff_onepole`; cross-frame LFO via the §109 witness (`+=114`, and a captured wrap event to settle AND vs sub-if-ge). Delay confrontation needs the external-delay datum column added to the trace row (**reviewed core edit**) OR the §153/§157/§200 logerror-parsing fallback. — *M/L* — [MULTI-SESSION] *(build-lane; reviewed for the trace-column / witness-generalization edits)*
 - **5.6 Opportunistic: class 0 (38w) + ACT 0x0C delay-read (12w).** — Decode whenever a live frame exercises them with signal. Smallest leverage — do last. — *S* — [MULTI-SESSION] *(build-lane)*
 
