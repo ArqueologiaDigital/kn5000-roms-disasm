@@ -147,6 +147,21 @@ before blow-up carry the signal — read the *first* transition.
 > the taps shift), OR the firmware EQ designer's intended (f0, gain, Q) for this band from the
 > parameter record (design the target biquad, match the one order that reproduces it). Both are
 > reachable; neither is the stability shortcut.
+>
+> **S4 SIGN DECODED (2026-09-11) — the feedback must SUBTRACT.** The stability search was
+> under-constrained across *permutations*, but fixing the natural order `[b1,b0,b2,-a1,-a2,makeup]`
+> (b0=0.125 at cur01, confirmed) and testing only the FEEDBACK SIGN is decisive. The recursive
+> coefficients are stored **positive** (cur03=+0.498, cur04=+0.504, sign bit 0). ADD them (the
+> summary's "pre-negated → += MAC" convention): denominator `1 − 0.498z⁻¹ − 0.504z⁻²`, **pole 1.001,
+> UNSTABLE** — precisely S1's saturation. SUBTRACT them (stored = the true a1,a2): denominator
+> `1 + 0.498z⁻¹ + 0.504z⁻²`, **poles 0.710, STABLE**, with sensible bounded gain. ⇒ the KN5000 EQ
+> biquad is stable ONLY with **subtractive feedback**; the "+=, pre-negated" convention (in the
+> session summary and docs §9) is WRONG for the KN5000. The concrete LLE fix: the recursive MACs
+> must subtract (or the y-state cell is stored negated). Wiring that should turn S1's saturating
+> cascade into a faithful EQ — the next build-lane step, and it also corrects effects-dsp §9.
+> ⚠ Still speculative on the *mechanism* (subtractive MAC vs negated y-store); the SIGN is forced by
+> stability. This is the "make it fit" result the mandate asked for: the one sign that makes the
+> captured coefficients a real filter.
 
 ---
 
