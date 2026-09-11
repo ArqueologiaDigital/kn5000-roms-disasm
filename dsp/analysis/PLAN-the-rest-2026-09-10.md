@@ -295,6 +295,18 @@ One operational blocker is shared by every build-lane capture and is stated once
 >
 - **5.2 Anchor ACT 0x0D/0x0E in the EQ window (#2/#3 routing payoff, +124/+110 strict).** — Observe `acc←bus` (0x0D) / `P←bus` (0x0E) in PARAMETRIC EQ's entry words. **Depends on Phase 4** (the EQ entry runs bus=0 until the route lands). — *L* — [MULTI-SESSION] *(build-lane)*
 - **5.3 Harvest f31 {4,5,6,7} operation codes from LFO-driven captures.** — Capture VIBRATO/ROCK ROTARY/CHORUS frames (LFO phase accumulator is always-live), run the oracle-free `--ops` classifier, chase the iw30 f31=5 anomaly (acc ≈ latched-P·5/6). Promote a code only on N clean / 0 contradicting at a fixed chip scale. Small raw coverage (≤106 words) but high value: spec→MEASURED and it feeds the open P_SHIFT/ACC_SHIFT datum scale. — *M* — [MULTI-SESSION] *(build-lane)*
+> **5.3 ATTEMPTED (2026-09-11) — the f31=5 anomaly is CONFIRMED, and it does NOT promote.** With the
+> `-log` harness fixed, captured both program 0 and a fresh CHORUS (TYPEIDX=0, LFO) frame at DSPVAL=3.
+> The f31 {4,5,6,7} live-product words are IDENTICAL across both — they are **KERNEL** slots (I-RAM
+> ~15/30/31/38), effect-independent, not the effect body. f31=5 (n=15/30/31) shows **delta/P =
+> {1.000, 0.000, 0.167}** across its three occurrences — accumulate, then hold, then +1/6·P — i.e. NO
+> single accumulator op. The plan's "acc ≈ 5/6·P" reproduces (acc[30]=329853435904 ≈ 5/6·P[30]) but is
+> **NOT bit-exact** (off ~0.016%), so it is not a clean fixed-point op. Per the N-clean/0-contradicting
+> bar, f31=5 **cannot be promoted** — it is genuinely the documented anomaly (context-dependent or a
+> rounding/pipeline confound). f31=4 (n=38) is load-like (acc[N+1]=P[N]) but a SINGLE occurrence, also
+> below the bar. ⇒ the open f31 codes need either an ISOLATED LFO-phase capture where the code is not
+> pipeline-confounded, or the deeper ISA/hardware — the same class of gate as the input route. The
+> attempt is real; the honest result is that these codes do not decode from the reachable captures.
 - **5.4 Anchor SRC 0x11 (accb, +49), 0x13 (table, 44w), 0x0B (delay-read, +7).** — All read 0 in the committed trace, so: first model the accb *writer* in the kernel, then a source-operand classifier (match live L against acc/accb/coef/mem/tA/tB) requires downstream validation against the HLE, not just a plausible L. Two-sided, default off, graded by provenance. — *M* — [MULTI-SESSION] *(build-lane; reviewed)*
 > **5.4 accb WRITER LOCATED (2026-09-11) — `dsp/tools/accb_writer_probe.py`.** Progress on the root
 > of the 4.2 chain (SRC 0x11 = accb is un-anchorable until the accb writer is known). On the program-0
