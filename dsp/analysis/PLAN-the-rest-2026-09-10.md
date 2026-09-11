@@ -227,6 +227,20 @@ One operational blocker is shared by every build-lane capture and is stated once
 *Needs signal from Phase 4, except 5.1 which is independent and can start alongside Phase 4. Requires the Phase-1.5 confrontation functions. Build-lane; reviewed where it touches the core.*
 
 - **5.1 Anchor the one-pole reverb kernel (needs no route).** — CONCERT REVERB 1 is the unit-1 cold-boot default, so a NAV=0 boot frame already contains reverb words (u1=1); filter u1=1, run `diff_onepole` on the ACT 0x0D/0x0E pairs, resolve the {1-d,d} vs coeff+subtract factorization. Needs audio (`AUDIO=demo`) for y1≠0; grade `DSPVAL=3` cursor rebase SPECULATIVE. — *M* — [MULTI-SESSION] *(build-lane; parallel with Phase 4)*
+> **5.1 PREMISE REFUTED (2026-09-11) — the reverb unit is STARVED, not merely present.** The plan
+> claimed 5.1 "needs no route" because CONCERT REVERB 1 is the unit-1 boot default and its words
+> appear in a NAV=0 frame. They DO appear — but they do not COMPUTE. On the program-0 live-frame
+> trace (real audio, RMS 550), `input_route_probe.py` reports per unit: **UNIT-0 = 152 rows, 41 live
+> operands, 31 distinct acc (computing); UNIT-1 = 133 rows, 1 live operand, 2 live products, a SINGLE
+> frozen acc = 2603010048 (no computation).** The one nonzero value is just the carried-over product
+> from unit-0's startup row 123 — the reverb's own recursive term y1 is 0, so `diff_onepole` has
+> nothing to confront. ⇒ 5.1 DOES depend on a route: signal must reach unit-1, i.e. the **unit-0 →
+> unit-1 handoff** must carry the main output into the reverb input. That handoff is a second,
+> further-downstream instance of the 4.2 input-route class (and is itself an addressing/ALU decode).
+> Net: one-pole reverb anchoring is gated on the same open ISA decode as 4.2, one stage later — it is
+> NOT the independent early win the plan assumed. (The datapath primitive it will use is already
+> MEASURED — see the 5.x foundation note below.)
+>
 - **5.2 Anchor ACT 0x0D/0x0E in the EQ window (#2/#3 routing payoff, +124/+110 strict).** — Observe `acc←bus` (0x0D) / `P←bus` (0x0E) in PARAMETRIC EQ's entry words. **Depends on Phase 4** (the EQ entry runs bus=0 until the route lands). — *L* — [MULTI-SESSION] *(build-lane)*
 - **5.3 Harvest f31 {4,5,6,7} operation codes from LFO-driven captures.** — Capture VIBRATO/ROCK ROTARY/CHORUS frames (LFO phase accumulator is always-live), run the oracle-free `--ops` classifier, chase the iw30 f31=5 anomaly (acc ≈ latched-P·5/6). Promote a code only on N clean / 0 contradicting at a fixed chip scale. Small raw coverage (≤106 words) but high value: spec→MEASURED and it feeds the open P_SHIFT/ACC_SHIFT datum scale. — *M* — [MULTI-SESSION] *(build-lane)*
 - **5.4 Anchor SRC 0x11 (accb, +49), 0x13 (table, 44w), 0x0B (delay-read, +7).** — All read 0 in the committed trace, so: first model the accb *writer* in the kernel, then a source-operand classifier (match live L against acc/accb/coef/mem/tA/tB) requires downstream validation against the HLE, not just a plausible L. Two-sided, default off, graded by provenance. — *M* — [MULTI-SESSION] *(build-lane; reviewed)*

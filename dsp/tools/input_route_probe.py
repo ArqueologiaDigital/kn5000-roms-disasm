@@ -57,6 +57,21 @@ def main():
         print("   none non-zero => the input route STOPS before the biquad: the deposited")
         print("   audio at 0x01/0x04 is NOT carried to band-0 x0 at 0x64.\n")
 
+    # Per-unit signal reach: does signal propagate from unit-0 to unit-1?  The
+    # reverb (5.1) lives in unit-1; if unit-1's operands are all 0 while unit-0
+    # computes, the unit-0 -> unit-1 handoff is the blocker, not just the input.
+    for u in (0, 1):
+        ur = [r for r in rows if r["u1"] == u]
+        if not ur:
+            continue
+        liveL = sum(1 for r in ur if r["l"] != 0)
+        liveP = sum(1 for r in ur if r["p"] != 0)
+        naccs = len({r["acc"] for r in ur})
+        print("UNIT-%d: %d rows, %d live operands, %d live products, %d distinct acc%s"
+              % (u, len(ur), liveL, liveP, naccs,
+                 "  <= FROZEN (no computation)" if naccs <= 1 and len(ur) > 4 else ""))
+    print()
+
     print("VERDICT:")
     if dep and not biq:
         print("   Audio reaches the DSP (deposit non-zero) but does NOT reach the biquad.")
