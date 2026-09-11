@@ -33,6 +33,18 @@ until every state cell's update law is known, so NO topology call is made (that 
 **Next for M1:** identify the 0x66/0x67 writer — census pointer-indirect / non-bit-4 stores and the
 makeup-word target across the full frame; that is now the single concrete unknown for the null.
 
+### M1 PROGRESS (cont.) — the writer is OUTSIDE the decoded DSP store path
+Full-frame store census: every band stores ONLY to its **+1 cell** (0x65, 0x69, 0x6D, 0x71, 0x75)
+plus the 0x50 stereo-twin +1 cells (0x51, 0x55, 0x59, 0x5D, 0x61); **no bit-4 store EVER targets any
++2/+3 cell** (0x66, 0x67, 0x6A, 0x6B, …). Yet 0x66 is read as physical cell 0x66 (dp=0x66) and its
+value evolves frame-to-frame. So the y-history +2/+3 cells are written by a mechanism **outside the
+decoded DSP bit-4 store** — i.e. an external/other-process writer or an undecoded store path.
+**Honest consequence:** this RE-CONNECTS the null to the input-route/external-writer question — my
+"not blocked on the input route" was premature. The clean statement: the biquad stores exactly one
+state per band (the +1 shared w); the +2/+3 y-history is populated by an unidentified writer, and
+until that writer is known the canonical-vs-transposed null cannot be clean. This is a sharper,
+truer localization than before, and it is a genuine open RE question — not withheld effort.
+
 ## M2 — Decide the unanchored ACT codes against SINGLE DELAY ground truth [offline; unblocks the class]
 `unblocking-and-discriminators.md`: SINGLE DELAY has a validated answer (lag 1001, gain 0.02149296,
 matched to 0.001%). If SINGLE DELAY's program exercises the unanchored codes (ACT 0x0D/0x0E, SRC
