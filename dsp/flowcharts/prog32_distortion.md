@@ -40,7 +40,7 @@ flowchart TD
 
 gain(drive) &rarr; nonlinear transfer &rarr; gain(level); OVERDRIVE/EXCITER append a DF-I tone biquad, FUZZ/DISTORTION are the bare (harder) shaper.
 
-**Instruction hint:** the nonlinearity is a class-6 LUT (addr8 0x28) or a Horner polynomial via class-A MACs feeding SRC 0x10 (acc) back as operand (LIVE in OVERDRIVE: coeffs [0.019, 0.609, &minus;0.448, 0.750]); the tone stage is a DF-I biquad (ACT 0x12/0x13/0x14 &mdash; LIVE only in OVERDRIVE, ABSENT from FUZZ).
+**Instruction hint:** the nonlinearity is a class-6 table lookup (addr8 0x28) into a ROM LUT whose curve is UNDUMPED (walled) &mdash; present in OVERDRIVE, FUZZ and DISTORTION alike. The ACT 0x12/0x13/0x14 cluster, LIVE only in OVERDRIVE and ABSENT from FUZZ, is the post tone BIQUAD (its coeffs [0.019, 0.609, &minus;0.448, 0.750] sit in biquad range, e.g. &minus;a2&asymp;0.448 for a 4 kHz low-pass); it is NOT a polynomial waveshaper (an earlier reading, now retracted &mdash; the same cluster is the DF-I biquad state ops 0x13=ld.ta / 0x14=mac.tb).
 
 **UI parameters** (MEASURED, `notes/kn5000-dsp-paramlist.md`): DRIVE, ADJUST, VOLUME, REV SEND.
 

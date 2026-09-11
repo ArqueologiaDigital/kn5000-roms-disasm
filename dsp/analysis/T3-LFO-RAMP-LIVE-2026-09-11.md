@@ -61,14 +61,26 @@ So the phase-accumulator increment IS the settable LFO SPEED — which resolves 
 gap (a different speed setting, not a decode error) and validates the LFO model end to end (the panel
 parameter controls the observed live ramp).
 
-**(2) OVERDRIVE waveshaper — characterized live as a POLYNOMIAL (Horner form).** The distinctive
-class-A MAC sequence (iw100–104, mirrored iw131–135 for the R channel) is:
-`SRC 0x07 ACT 0x13 (0.019) → SRC 0x10 ACT 0x12 (0.019) → SRC 0x07 ACT 0x15 (0.609) →
-SRC 0x07 ACT 0x14 (−0.448) → SRC 0x07 ACT 0x15 (0.750)`. It feeds **SRC 0x10 (the accumulator) back
-as a multiply operand**, which is how it builds the x²/x³ nonlinear terms — a Horner-form polynomial
-waveshaper with coefficients [0.019, 0.609, −0.448, 0.750, …]. **FUZZ has NONE of ACT 0x12/0x13/0x14**
-→ a different (harder) clip. So OVERDRIVE = polynomial waveshaper + tone biquad; FUZZ = a distinct
-clipping mechanism — a live datapath distinction, and the distortion nonlinearity now named.
+**(2) OVERDRIVE ACT 0x12/0x13/0x14 cluster — this is the TONE BIQUAD, not a polynomial waveshaper.**
+The distinctive class-A MAC sequence (iw100–104, mirrored iw131–135 for the R channel) reads coeffs
+[0.019, 0.609, −0.448, 0.750, …]. **⚠ RETRACTED (2026-09-11): the earlier reading of this cluster
+as a Horner-form polynomial nonlinearity was WRONG.** Three independent lines refute it:
+- **The ISA ops are biquad-state ops.** This session's own topology census
+  (`DSP-TOPOLOGY-INSTRUCTION-INSIGHT-2026-09-11.md`) identifies ACT 0x13 = `ld.ta`, 0x12 = `mac`,
+  0x14 = `mac.tb`, i.e. the second-order-section z⁻¹ state ops — a DF-I biquad, count = 1 section,
+  which is exactly what §1 of THIS note first called it (the OVERDRIVE-only tone stage).
+- **The coefficients sit in biquad range.** e.g. −0.448 = −a₂ of a ~4 kHz low-pass; a polynomial
+  waveshaper's coefficients would not coincide with the EQ biquad's own coefficient range.
+- **The corpus reads it as the tone biquad.** the prog33 header (“waveshaper + smoother + 4 kHz
+  Butterworth tone”), the flowchart landmark detector (1–2 DF-I sections), and `programs.tsv` all
+  treat this cluster as OVERDRIVE's tone filter, count = 1 section.
+
+**The actual OVERDRIVE nonlinearity is the class-6 table lookup (w13–w15, addr8 0x28) into a ROM
+LUT whose curve is UNDUMPED — the SAME walled LUT as FUZZ and DISTORTION** (there is no measured-curve
+freebie). So: OVERDRIVE = (undumped class-6 shaper) + tone biquad; FUZZ = (undumped class-6 shaper),
+no tone biquad. The live datapath distinction that stands is the *presence of the tone biquad in
+OVERDRIVE and its absence in FUZZ* — not a decoded nonlinearity. Any HLE distortion audio must use a
+labelled SPECULATIVE stand-in (tanh/hard-clip) for the shaper, default-off.
 
 ## T3 status — COMPLETE
 All three families probed live and confronted with the decode: modulation LFO (CHORUS +114 exact,
