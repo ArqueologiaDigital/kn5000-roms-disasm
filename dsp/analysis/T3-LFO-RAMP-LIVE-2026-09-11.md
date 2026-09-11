@@ -54,10 +54,27 @@ harder clip with no tone filter, this ACT 0x13/0x14 cluster is **OVERDRIVE's ext
 stage** — a live datapath distinction between the two distortion variants. (The clipping waveshaper
 op proper is a further probe; what's established here is the OVERDRIVE-only tone stage.)
 
-## T3 status
-All three families probed live: modulation LFO (CHORUS +114 exact, FLANGER +81 parameter-dependent),
-delay (delay-DRAM read/write/0.5-mix confirmed), distortion (OVERDRIVE-only tone-stage ACT 0x13/0x14).
-Each is a live confrontation of the decode; CHORUS's LFO is the clean exact match.
+## T3 follow-ups (both executed)
+**(1) LFO ramp = LFO SPEED — CONFIRMED by driving the panel.** CHORUS with LFO SPEED (parameter #1)
+driven up 20 steps (peq_gain NPARAM=1 NVALUE=20): cell 0x10 ramp went **+114/frame → +494/frame**.
+So the phase-accumulator increment IS the settable LFO SPEED — which resolves the FLANGER 81-vs-38
+gap (a different speed setting, not a decode error) and validates the LFO model end to end (the panel
+parameter controls the observed live ramp).
+
+**(2) OVERDRIVE waveshaper — characterized live as a POLYNOMIAL (Horner form).** The distinctive
+class-A MAC sequence (iw100–104, mirrored iw131–135 for the R channel) is:
+`SRC 0x07 ACT 0x13 (0.019) → SRC 0x10 ACT 0x12 (0.019) → SRC 0x07 ACT 0x15 (0.609) →
+SRC 0x07 ACT 0x14 (−0.448) → SRC 0x07 ACT 0x15 (0.750)`. It feeds **SRC 0x10 (the accumulator) back
+as a multiply operand**, which is how it builds the x²/x³ nonlinear terms — a Horner-form polynomial
+waveshaper with coefficients [0.019, 0.609, −0.448, 0.750, …]. **FUZZ has NONE of ACT 0x12/0x13/0x14**
+→ a different (harder) clip. So OVERDRIVE = polynomial waveshaper + tone biquad; FUZZ = a distinct
+clipping mechanism — a live datapath distinction, and the distortion nonlinearity now named.
+
+## T3 status — COMPLETE
+All three families probed live and confronted with the decode: modulation LFO (CHORUS +114 exact,
+ramp CONFIRMED = LFO SPEED by driving it to +494), delay (delay-DRAM read/write/0.5-mix confirmed),
+distortion (OVERDRIVE polynomial waveshaper + tone stage named; FUZZ distinct). Live confrontations,
+honestly graded.
 
 ## Discipline
 Consecutive-frame capture via deterministic re-runs (TRACE_FRAME F, F+1, F+2); raw 24-bit deltas;
