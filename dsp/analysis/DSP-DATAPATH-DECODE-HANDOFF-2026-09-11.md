@@ -75,13 +75,19 @@ ACCUMULATOR/STORE side of the input-stage words. Reduced to a checklist:
    > timeout 110 ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log
    > -autoboot_script tools/rigs/kn5000_dsp_frame_trace.lua` then
    > `sed 's/^\[:dsp1\] //' error.log | accb_writer_probe.py /dev/stdin`.
-   > ⚠ **REMAINING for the accb-op split**: sustained-tone frames all converge to a
-   > FIXED POINT (accb load has acc==P=2603010048, so accb←acc vs accb←P is not
-   > split); short arm frames land mid-frame (107 slots) and miss the accb region
-   > (unit-1 rows ~130-134). Need a FULL (285-slot) frame during the note ATTACK
-   > TRANSIENT (acc≠P) — a precise arm-frame at a frame boundary shortly after
-   > note-on. That arm-timing precision is the residual sub-task (plan line 186's
-   > "no mid-frame arming"). The harness itself is no longer the blocker.
+   > ⚠ **REMAINING for the accb-op split — a DEPENDENCY CYCLE, not a timing task
+   > (corrected 2026-09-11).** The campaign ran (harness works). But in program 0
+   > the accb load is `accb ← 2603010048` with **acc == P == 2603010048** — the
+   > frame-invariant KERNEL-B CONSTANT (documented; also seen at unit-0 row 123),
+   > NOT audio. Verified identical in a fresh capture and the committed trace. So
+   > acc==P is STRUCTURAL, and **no arm-timing — attack or steady — can ever give
+   > acc≠P here** (my earlier "attack transient" note was wrong). Splitting
+   > `accb←acc` vs `accb←P` needs a program whose accb input VARIES, i.e. a signal
+   > reaching accb — which is the very input route that is blocked (the reverb unit
+   > is starved, §5.1). So the accb-op decode and the input route form a CYCLE; the
+   > break is the store/source-code decode from the bit-encoding (or hardware), NOT
+   > another capture. Capture campaigns cannot settle accb while every reachable
+   > program feeds it the kernel-B constant. This is the honest structural boundary.
 2. **Store-target codes ACT {0x08,0x0D,0x0E,0x17}.** These need an observable
    store, which strict decode refuses (the words don't execute). Resolve from the
    bit-encoding cross-reference (their addressing IS decoded; the store TARGET is

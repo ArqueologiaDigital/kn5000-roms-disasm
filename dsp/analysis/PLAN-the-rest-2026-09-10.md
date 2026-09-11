@@ -295,6 +295,14 @@ One operational blocker is shared by every build-lane capture and is stated once
 > not split. Promoting an accb op needs N-clean/0-contradicting across MANY frames (and a transition
 > where acc≠P). But the WRITER word class is now located — the next concrete node before SRC 0x11,
 > and thus before the input route (4.2) and the reverb (5.1), can be anchored.
+> **UPDATE 2026-09-11 (capture campaign ran; a CYCLE found).** The harness was unblocked (it needs
+> MAME `-log`; see the handoff doc) and 3 frames were captured. But in program 0 the accb load is
+> `accb ← 2603010048` with **acc == P** — the frame-invariant kernel-B CONSTANT, not audio (verified
+> across a fresh capture and the committed trace). So no arm-timing yields acc≠P: splitting
+> `accb←acc` vs `accb←P` needs accb to be fed a VARYING signal, which needs the input route — which
+> needs accb/SRC 0x11. **accb-op ⇄ input-route is a dependency CYCLE**; the break is the store/source
+> code decode from the bit-encoding (or hardware), NOT another capture. This retargets 5.4 away from
+> "capture more frames" and onto the ISA-encoding decode of the gate codes (4.2's checklist).
 - **5.5 Capture + confront delay and LFO kernels.** — SINGLE DELAY (verify landing by the algo-9 word signature, NOT `program=` which is stuck at 0) confronted with `diff_delay` + loop `diff_onepole`; cross-frame LFO via the §109 witness (`+=114`, and a captured wrap event to settle AND vs sub-if-ge). Delay confrontation needs the external-delay datum column added to the trace row (**reviewed core edit**) OR the §153/§157/§200 logerror-parsing fallback. — *M/L* — [MULTI-SESSION] *(build-lane; reviewed for the trace-column / witness-generalization edits)*
 - **5.6 Opportunistic: class 0 (38w) + ACT 0x0C delay-read (12w).** — Decode whenever a live frame exercises them with signal. Smallest leverage — do last. — *S* — [MULTI-SESSION] *(build-lane)*
 
