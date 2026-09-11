@@ -50,6 +50,23 @@ that tension is itself resolvable only with a transient. **P2 next:** excite 0x6
 input (an impulse via a one-shot seed of 0x64, or varying audio) and re-run the null; only a transient
 excites the discriminator.
 
+### P2 RESULT (cont.) — the transient attempt exposes the REAL wall (a dilemma)
+Built a scaled SPEC_INJECT (commit 594cee4) to drive x0 with small VARYING audio (the transient the
+null needs). Captured at a mid-note frame (SPEC_INJECT=8): 0x64 now varies (−7.2e-05) but the
+recursive cells 0x66/0x67 stay at 1.0/0.5 — **the recursion does not engage under real audio without
+a seed.** So there is a dilemma:
+  * SEEDED (BIQSEED_ONCE): recursion is LIVE (0x66 evolves) but the input is CONSTANT → degenerate,
+    can't discriminate the forms;
+  * AUDIO-DRIVEN (SPEC_INJECT): input is TRANSIENT but the y-history doesn't visibly engage.
+Faithfully getting BOTH (live recursion + transient input) needs the real input→biquad→recursion path
+decoded — i.e. **the input route again** — because the shipped LLE's y-history update is not faithful
+(the SPEC_SHIFT comment: in+2/in+3 sit at a rail; the real y→y1→y2 rotation is undecoded). Forcing the
+recursion live with SPEC_SHIFT would make any resulting topology a property of MY speculative shift,
+not the chip — circular, and the overclaim the discipline forbids. **So N2's null is genuinely walled
+on the same undecoded input/state-rotation mechanism**, now characterized precisely (a dilemma, not a
+missing capture). NOTE: a memory-pressure kill ended the multi-frame captures; the single completed
+frame is enough to establish the dilemma.
+
 ## P3 — M2 cont.: does PARAMETRIC EQ constrain SRC 0x08/0x11? [offline]
 PEQ's biquad is bit-exact. If its program uses SRC 0x08/0x11 in a spot whose output is validated,
 that constrains those readings the way SINGLE DELAY located ACT 0x0D/0x0E. Grep PEQ for them.
