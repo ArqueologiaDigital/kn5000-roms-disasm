@@ -138,11 +138,19 @@ seeds the reverb operand cells (0xD0/0x94/0x8A/0x85/0x8C/0x8F). Result (evidence
 - ⚠ **Cheap path ruled out (verified 2026-09-11)**: the REVSEED frame already had
   nonzero tempB (23808, 14848 from residual delay reads), but it does NOT confirm
   the feedback arithmetic — at n=142 coef=0.91 and tempB=23808 are both present yet
-  P=0, because that word is a LOAD (hi12=0x000), not a multiply-enabled MAC, so
-  gain*tempB never fires there; the nonzero reverb P (n=152) carries coef=0
-  (propagated, not a product). So confirming gain*y1 genuinely needs the delay-line
-  seed AND landing the gain on a class-A MAC word, not just any frame with nonzero
-  tempB. Structure + gains stand; the bit-exact arithmetic is open.
+  P=0.
+- ★ **CORRECTION — the reverb gain is NOT a class-A MAC (2026-09-11).** n=142 is
+  **class4=0** (multiply NOT enabled; the MUL=Y column is the disassembler's
+  speculative flag, not the datapath), and a whole-frame search finds **ZERO
+  class-A/8 words that multiply tempB (SRC 0x1A) by a coefficient.** So the reverb
+  does NOT apply its feedback gain via the standard multiplier at all — "gain×y1 via
+  MAC" (and the delay-seed-to-confirm-a-MAC plan) was WRONG. The reverb uses class
+  {0,2,8} words; class 8 (hi12 0x880) is the **delay read/write** family
+  (n=141/145/149/153, SRC 0x0B). ⇒ the REVERB DATAPATH IS A SEPARATE DECODE from
+  the biquad — the biquad's `(coef×L)>>6` multiplier model does NOT transfer. The
+  0.91/0.1367 are loaded coefficients but applied through the class-8 delay
+  read/write path (likely the delay WRITE scales by the feedback gain), which is
+  the actual next decode target for the reverb — not a MAC confirmation.
 
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
