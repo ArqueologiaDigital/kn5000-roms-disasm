@@ -108,6 +108,24 @@ ACCUMULATOR/STORE side of the input-stage words. Reduced to a checklist:
    reverb (5.1) with a live y1, then LFO/delay (5.3/5.5).
 4. **Phase 6** (speaker-audible LLE) follows once the whole frame runs trap-free.
 
+## 4b. Phase 5.1 REOPENED — the reverb datapath is seedable (2026-09-11)
+
+The earlier "downstream stages are cycle-gated / uncapturable" conclusion was too
+broad: the input ROUTE is cycle-gated, but a stage's DATAPATH is decodable by
+controlled state-seeding, exactly as BIQSEED decoded the biquad. New diagnostic
+`UPD6383_REVSEED` (unit-1 analogue of BIQSEED; upd6383.cpp, env-gated default off)
+seeds the reverb operand cells (0xD0/0x94/0x8A/0x85/0x8C/0x8F). Result (evidence
+`dsp/analysis/data/kn5000-dsp-revseed-frame-2026-09-11.txt`): unit-1 goes from
+0 → **41 live operands / 16 live products** — the reverb computes.
+- **Observed**: ACT 0x0E (P←bus) loads P = seed << 16 (= ACC_SHIFT; P=268435456 =
+  4096<<16) — a cross-check of ACC_SHIFT and a live sighting of one of the 4.2
+  gate codes in action.
+- ⚠ **PARTIAL**: the reverb 0.91 feedback MAC (SRC 0x1A) still gives P=0 — it reads
+  its operand via SRC 0x1A from a cell NOT in the seed set. A full one-pole decode
+  needs seeding that exact feedback cell (identify it, extend REVSEED). This is the
+  concrete next step, and it is REACHABLE (no route needed) — unlike the input
+  route itself.
+
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
 - ✅ **Store-scaling constant: DECODED (2026-09-11)** — no longer open. With a small
