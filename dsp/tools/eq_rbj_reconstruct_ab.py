@@ -56,6 +56,12 @@ def q22(x):
 def rbj_from_cells(cells):
     """The exact reconstruction kn5000_tonegen.cpp performs, band 0."""
     c1, c3 = q22(cells[1]), q22(cells[3])
+    # Scale normalisation (mirrors kn5000_tonegen.cpp): m_cram is read at either the CELL
+    # scale (these committed dumps: c3 = 2cos w0) or, at runtime without the LLE, the
+    # OPERAND scale (exactly half: c3 = cos w0).  |c3|<=1 => operand => double back to cell
+    # scale.  For these cell-scale dumps c3 (1.99/-1.09) is already >1, so norm == 1.
+    norm = 2.0 if abs(c3) <= 1.0 else 1.0
+    c1 *= norm; c3 *= norm
     cosw0 = max(-0.9995, min(0.9995, c3 * 0.5))
     w0 = math.acos(cosw0)
     f0 = w0 * FS / (2.0 * math.pi)          # design centre frequency (always defined)
