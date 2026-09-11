@@ -62,20 +62,26 @@ ACCUMULATOR/STORE side of the input-stage words. Reduced to a checklist:
    `accb←P`, and confirm `accb+=P` / `accb←0` at N-clean/0-contradicting. This
    anchors the accb writer → then SRC 0x11 (=accb) via the source-operand
    classifier (match live L against acc/accb/coef/mem).
-   > ⚠ **OPERATIONAL BLOCKER DIAGNOSED (2026-09-11), fix in progress.** Attempted
-   > the campaign; the capture harness produced NO frame trace at any
-   > `UPD6383_TRACE_FRAME` (tried 10000..735000, 7 runs). Diagnosis (evidence, not
-   > guess): the note DOES sound — a `-wavwrite` capture has peak 17083 / rms 619 —
-   > and `cfg/kn5000.cfg` persists `:DSPCFG value="3"` (on), yet the DSP emits ZERO
-   > `upd6383:` frame stats, i.e. the tonegen's `run_frame()` is never called
-   > (`dsp_on` path inactive). The committed 2026-09-10 program-0 trace proves the
-   > feed worked on a PRIOR build, so this is a build-staleness regression — most
-   > likely `kn5000_tonegen.o` compiled without `KN5000_ENABLE_DSP1` while
-   > `kn5000.o` (force-touched for the DSPCFG define) has the device. **FIX:** clean
-   > rebuild with `CPPFLAGS="-DKN5000_ENABLE_DSP1=1"` after touching BOTH
-   > `kn5000.cpp` AND `kn5000_tonegen.cpp` (done; rebuild running). Verify with a
-   > low `UPD6383_TRACE_FRAME` (e.g. 10000) dumping a trace before the sweep. This
-   > IS the "shared operational blocker" (plan line 186) — solve once, reuse.
+   > ✅ **OPERATIONAL BLOCKER SOLVED (2026-09-11) — the harness needs `-log`.** The
+   > frame trace is emitted via `logerror` (upd6383.cpp:1627), which reaches a file
+   > ONLY with MAME's `-log` (writes `error.log`) — the upload messages I saw use
+   > `osd_printf` (always visible), which masked the difference. Adding `-log` and
+   > reading `error.log` (strip the `[:dsp1] ` line prefix before parsing) dumps the
+   > full trace (verified: 285-slot frame, DSP clock 44100 Hz, DSPCFG read 0x3).
+   > ⚠ **RETRACTED same-day**: the earlier "build-staleness / stale `kn5000_tonegen.o`"
+   > diagnosis was WRONG — a clean rebuild did NOT change the symptom; the missing
+   > `-log` did. (The rebuild was harmless.) **WORKING CAPTURE RECIPE:**
+   > `DISPLAY=:0 NAV=0 AUDIO=key BOOTGATE=10 DWELL=25 DSPVAL=1 UPD6383_TRACE_FRAME=<F>
+   > timeout 110 ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log
+   > -autoboot_script tools/rigs/kn5000_dsp_frame_trace.lua` then
+   > `sed 's/^\[:dsp1\] //' error.log | accb_writer_probe.py /dev/stdin`.
+   > ⚠ **REMAINING for the accb-op split**: sustained-tone frames all converge to a
+   > FIXED POINT (accb load has acc==P=2603010048, so accb←acc vs accb←P is not
+   > split); short arm frames land mid-frame (107 slots) and miss the accb region
+   > (unit-1 rows ~130-134). Need a FULL (285-slot) frame during the note ATTACK
+   > TRANSIENT (acc≠P) — a precise arm-frame at a frame boundary shortly after
+   > note-on. That arm-timing precision is the residual sub-task (plan line 186's
+   > "no mid-frame arming"). The harness itself is no longer the blocker.
 2. **Store-target codes ACT {0x08,0x0D,0x0E,0x17}.** These need an observable
    store, which strict decode refuses (the words don't execute). Resolve from the
    bit-encoding cross-reference (their addressing IS decoded; the store TARGET is
