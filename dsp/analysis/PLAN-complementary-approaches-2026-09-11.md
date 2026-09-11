@@ -31,6 +31,18 @@ a ground-truth decode without hardware.
 - Falsifier: if SINGLE DELAY does not use those codes, this program can't decide them — say so; try
   another known-answer program (PARAMETRIC EQ's biquad is bit-exact and may constrain SRC 0x08/0x11).
 
+### M2 PROGRESS 2026-09-11 — the codes are LOCATED (structural, ground-truth)
+`unanchored_context_probe.py` on prog09_single_delay.dsm: the input-route codes occur as a PAIR —
+ACT 0x0D (SRC 0x07 = mem[ptr]) then ACT 0x0E (SRC 0x10 = acc) — three times (w1-2, w21-22, w44-45),
+and each pair sits on the path **[delay-DRAM READ (w0, addr8 0x30)] → [ACT 0x0D mem][ACT 0x0E acc] →
+MACs → [delay-DRAM WRITE (w5/w28/w46, addr8 0x60)]**. So in the one validated program the codes are
+the **delay-line input mixing**: they gather mem (dry/input) and acc (wet/feedback) onto the bus that
+feeds the delay/state write. **STRONG (ground-truth placement); the exact ALU op stays enumerated**
+(consistent with ACT 0x0D: acc←bus, ACT 0x0E: P←bus). SINGLE DELAY's validated lag/gain is invariant
+to the reading (result B), so it locates but does not decode the op. **This is the input-route
+mechanism the biquad's x0=0x64 route shares** — the same bus-mixing, now seen where it's legible.
+Next for M2: check whether PARAMETRIC EQ's bit-exact biquad constrains SRC 0x08/0x11 the same way.
+
 ## M3 — WSA1R as a second witness for the shared biquad realization [complementary; independent instance]
 The WSA1R uses the same uPD6383 biquad hardware (memory: "WSA1R PEQ = same DF-I biquad"). Its DSP
 device runs behind WSA1R_ENABLE_DSP. Capture its biquad state trajectory (BIQSEED_ONCE-equivalent) —
