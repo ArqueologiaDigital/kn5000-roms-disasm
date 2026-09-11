@@ -177,6 +177,19 @@ before blow-up carry the signal — read the *first* transition.
 > EQ (S6). ⚠ Still speculative that 0x66/0x67 are the y-state vs x-state (the 336-order ambiguity),
 > but the fix is sign-forced: whichever cells the recursive words read must enter negated for the
 > captured coefficients to be the stable filter they provably are.
+>
+> **EXACT LLE WIRING SPEC (for the next reviewed core edit).** In `exec_alu` (upd6383.cpp), the
+> multiply operand is latched at `m_l = u32(L) & 0xffffff` (~line 4975). The fix, behind a new
+> env flag `UPD6383_SPEC_SUBFB` (default off, speculative): when the operand's source cell is a
+> **y-state cell** — band_input+2/+3, i.e. the set {0x66,0x67, 0x6A,0x6B, 0x6E,0x6F, 0x72,0x73,
+> 0x76,0x77} — negate `L` before the multiply (equivalently negate the product for the recursive
+> -a1/-a2 words). ⚠ Two review hazards: (1) the source cell here is `m_dp`, which is POST-incremented
+> inside exec_alu (the pre/post-increment trap, memory `kn5000-dsp-handoff-next`) — read the operand
+> address BEFORE the increment; (2) confirm the y-state set against a real capture (the 336-order
+> ambiguity) — the empirical accept test is that S1 (`UPD6383_SPEC_INJECT`) + SUBFB stops saturating
+> and renders a stable EQ matching `biquad_stability_probe.py`'s peaking response. This is a careful
+> reviewed core edit, not an end-of-session rush; the analysis behind it (sign, mechanism, stable-
+> filter proof) is complete and committed.
 
 ---
 
