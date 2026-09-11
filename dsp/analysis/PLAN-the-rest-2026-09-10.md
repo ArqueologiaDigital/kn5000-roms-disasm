@@ -171,17 +171,28 @@ One operational blocker is shared by every build-lane capture and is stated once
 > `biquad_pipeline_probe.py` runs a falsifiable over-determined test: the true product per row is the
 > accumulator delta `P*[N] = acc[N+1]-acc[N]` (justified by the verified recurrence), and it requires
 > a single `(coef-offset, L-offset, shift)` to reproduce it BIT-EXACT across many rows at once.
-> Result: `coef[N-1] × L[N] >> 6` is bit-exact on **19/31** rows and DOMINATES (next candidate 7/31) —
+> Result: `coef[N-1] × L[N] >> 6` is bit-exact and DOMINATES (next candidate far behind) —
 > unmistakable across that many distinct coefficients, so this is the multiplier FORM, not a fit.
 > It decodes three things together: the **coefficient is latched one word early** (coef pipeline
 > depth 1 — the multiplier-input half of §50), the operand is the **current-row latch L[N]**, and the
-> shift is **6 = P_SHIFT** (independent cross-check of the documented constant). MEASURED, graded from
-> exact arithmetic. The 12 non-matching rows are **12/12 band-boundary rows** (store/load-adjacent):
-> there the operand latch is a freshly-stored `y`, not the interior seed — so on the 19 INTERIOR MAC
-> rows the multiplier is bit-exact 100%, and the ONE remaining biquad residue is the store→reload
-> operand routing at band boundaries (cleanly bounded, no longer an open multiplier mystery).
-> With last entry's accumulate result, both halves of the biquad datapath are now decoded:
-> accumulate `acc[N]=acc[N-1]+P[N-1]`, multiply `P[N]=(coef[N-1]×L[N])>>6`.
+> shift is **6 = P_SHIFT** (independent cross-check of the documented constant).
+>
+> **CORRECTION + FULL MULTIPLIER CLOSURE (2026-09-11).** The first pass used the accumulator delta
+> `acc[N+1]-acc[N]` as the product truth and reported 19/31 with a "12/12 band-boundary operand-
+> routing residue". That framing was WRONG: the acc delta is only the product on interior rows; at a
+> band boundary the accumulator does a non-accumulate op, so the delta there is not the product. Using
+> the chip's own PRODUCT REGISTER (trace P column) as truth, `P[N] = (coef[N-1] × L[N]) >> 6` is
+> bit-exact on **27/27 MUL=Y rows, band boundaries INCLUDED** (next candidate 11/27). The multiplier
+> is MEASURED and UNCONDITIONAL — there is NO multiplier/operand residue.
+>
+> The boundary differences are the ACCUMULATOR's own ops, now isolated (probe section 4):
+>   - **LOAD** (hi12 0x000, f31=0): `acc ← P` — verified `acc[N]==P[N-1]` on **8/8** load rows.
+>   - **accumulate** (f31=1): `acc += P`, one-slot delayed (`acc[N]=acc[N-1]+P[N-1]`, prior entry).
+>   - **store/makeup** (0x102/0x212/0x804): write the band's `y` out and re-seat the acc for the next
+>     band.
+> So the biquad DATAPATH is fully decoded: multiply `P[N]=(coef[N-1]×L[N])>>6`, accumulate/load
+> `acc←{acc+P | P}`. The ONE remaining biquad structure is the **inter-band DF-I cascade** (band k's
+> output `y` feeding band k+1's input) — a routing/topology trace, not a datapath unknown (4.4 close).
 
 ---
 

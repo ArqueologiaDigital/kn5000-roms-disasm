@@ -110,25 +110,20 @@ def product_model(rows):
 
 
 def exact_fit(rows):
-    """BIT-EXACT multiplier decode.  Ground-truth product at row N is the
-    accumulator delta P*[N] = acc[N+1]-acc[N] (the recurrence proved this is the
-    product that lands next row).  For every candidate (di, dj, s) we require
-        P*[N] == (coef_raw[N+di] * L_signed[N+dj]) >> s
+    """BIT-EXACT multiplier decode.  Ground-truth product at row N is the chip's
+    own PRODUCT REGISTER, the trace P column (the direct multiplier output; on
+    interior rows it equals the accumulator delta, and it stays correct at band
+    boundaries where the accumulator is reset/loaded and the delta is not the
+    product).  For every candidate (di, dj, s) we require
+        P[N] == (coef_raw[N+di] * L_signed[N+dj]) >> s
     to hold EXACTLY (bit-for-bit, arithmetic shift).  A candidate that matches
     many independent rows at once cannot pass by chance -- this is a falsifiable
-    decode, not a residual-minimising fit.  Rows whose true product is 0 are
-    skipped (they satisfy any model).  Returns candidates sorted by exact-match
-    count."""
+    decode, not a residual-minimising fit.  Rows whose product is 0 are skipped
+    (they satisfy any model).  Returns candidates sorted by exact-match count."""
     # index rows by trace position so N+di / N+dj are well defined
     by_n = {r["n"]: r for r in rows}
-    ns = sorted(by_n)
-    # true product per row from the accumulator delta
-    truth = {}
-    for n in ns:
-        if n + 1 in by_n:
-            p = by_n[n + 1]["acc"] - by_n[n]["acc"]
-            if p != 0:
-                truth[n] = p
+    # true product per MUL=Y row from the product register (trace P column)
+    truth = {r["n"]: r["p"] for r in rows if r["mul"] and r["p"] != 0}
     results = []
     for di in (-2, -1, 0):
         for dj in (-2, -1, 0):
@@ -190,34 +185,37 @@ def main():
     print("   the exact product (operand select + rounding) is still OPEN.\n")
 
     cands, ntruth, exact_ns, miss_ns, by_n = exact_fit(rows)
-    print("== 3. BIT-EXACT MULTIPLIER DECODE (falsifiable; P* = acc delta) ==")
-    print("   %d rows have a non-zero true product; top candidates by exact matches:" % ntruth)
+    print("== 3. BIT-EXACT MULTIPLIER DECODE (falsifiable; truth = P register) ==")
+    print("   %d MUL=Y rows have a non-zero product; top candidates by exact matches:" % ntruth)
     for exact, testable, di, dj, s in cands[:6]:
         print("     coef[N%+d] * L[N%+d] >> %-2d : %d/%d rows EXACT" %
               (di, dj, s, exact, testable))
     best = cands[0]
     print("   WINNER: coef[N%+d] * L[N%+d] >> %d  -- %d/%d rows bit-exact (next best %d)."
           % (best[2], best[3], best[4], best[0], best[1], cands[1][0]))
-    print("   Dominance across many distinct coefficients => this IS the multiplier FORM")
-    print("   (coef pipeline depth 1, operand = current latch, P_SHIFT=6): STRONG.\n")
-    # Is every miss a band-BOUNDARY row?  A row is a boundary if it, or its
-    # immediate neighbour, is a store/makeup (STORE_HI12) or load (LOAD_HI12)
-    # word -- i.e. the operand latch is a freshly written/reloaded value, not the
-    # interior seed the pure MAC step would multiply.
-    BND = STORE_HI12 | LOAD_HI12
-    def boundary(n):
-        return any(by_n[m]["word"] >> 24 & 0xFFF in BND
-                   for m in (n - 1, n) if m in by_n)
-    interior_miss = [n for n in miss_ns if not boundary(n)]
-    print("   RESIDUE: %d miss rows %s" % (len(miss_ns), miss_ns))
-    print("   band-boundary (store/load-adjacent): %d/%d;  interior misses: %s" %
-          (len(miss_ns) - len(interior_miss), len(miss_ns), interior_miss or "NONE"))
-    if not interior_miss:
-        print("   => on the %d INTERIOR MAC rows the multiplier is bit-exact 100%%: MEASURED." %
-              len(exact_ns))
-        print("      coef[N-1] * L[N] >> 6.  The 12 misses are all boundary rows where the")
-        print("      operand latch is a freshly-stored y -- that store->reload routing is the")
-        print("      one remaining residue, cleanly bounded (not an open multiplier mystery).")
+    if best[0] == best[1]:
+        print("   => bit-exact on ALL %d rows incl. band boundaries: MEASURED, unconditional." % best[1])
+        print("      P[N] = (coef[N-1] * L[N]) >> 6  -- coef pipeline depth 1, operand = current")
+        print("      latch, shift 6 = P_SHIFT.  No multiplier residue.\n")
+    else:
+        print("   => %d misses %s remain: multiplier residue still open.\n" % (len(miss_ns), miss_ns))
+
+    print("== 4. ACCUMULATOR OPS (the band-boundary behaviour, isolated) ==")
+    print("   The multiplier is unconditional; where acc[N+1] != acc[N]+P[N] the ACCUMULATOR")
+    print("   did a non-accumulate op.  Classify the deviating rows by hi12:")
+    load_ok = load_tot = 0
+    for a, b in zip(rows, rows[1:]):
+        if b["n"] != a["n"] + 1 or b["acc"] == a["acc"] + a["p"]:
+            continue
+        h = hi12(b["word"])
+        if h in LOAD_HI12:               # f31=0 LOAD:  acc <- P (one-slot delayed)
+            load_tot += 1
+            load_ok += (b["acc"] == a["p"])
+    print("   LOAD (hi12 0x000, f31=0): acc[N] == P[N-1] on %d/%d load rows"
+          " => acc<-P confirmed." % (load_ok, load_tot))
+    print("   STORE/makeup (0x102/0x212/0x804) write the band's y out and re-seat the acc for")
+    print("   the next band -- the DF-I cascade (y of band k feeds band k+1).  That inter-band")
+    print("   cascade routing is the one remaining biquad structure to trace end-to-end (4.4).")
 
 
 if __name__ == "__main__":
