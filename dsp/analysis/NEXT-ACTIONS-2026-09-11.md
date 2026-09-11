@@ -30,10 +30,17 @@ b/a assignment is probably wrong. `eq_role_split_probe.py` tested this and the *
   them 60–240 dB — it is a routing/mode gate, not an output gain.
 ⟹ The clustering is a property of the CAPTURED COEFFICIENTS, not the decode. This trace is a
 near-default / partly-muted EQ state; per-band centre frequency is not readable from it.
-**Redirect (N1'):** DIFFERENTIAL capture — drive one band at a time to known distinct gain/centre
-(peq_gain.lua / peq_cursor.lua already exist), re-capture with the `-log` recipe, and watch which
-coefficient(s) move. That assigns roles and locates centre-frequency directly. Emulator-gated but
-self-contained; no core edits. (Artefact: `dsp/tools/eq_role_split_probe.py`.)
+**Redirect (N1'): DONE 2026-09-11 — 13.5 kHz red flag RESOLVED.** Ran the differential capture
+(peq_gain.lua flat vs +12 dB gain vs FC-up; `eq_gain_diff_probe.py`, data committed). Results:
+the panel EQ coefficients live in **C-RAM 0x00+** as five 6-cell band groups (near-RBJ); **0x03 is
+the 2cos ω₀ frequency term** (an FC edit moves it +1.99→−1.09), **0x01 is a gain term** (a +12 dB
+edit moves only 0x01 + slightly 0x00/0x02); the 5 bands' 2cos terms are 1.99→1.79 → centres
+≈673/966/1405/2091/3219 Hz — **genuinely spread**. The ~13.5 kHz cluster was an artefact of reading
+the cursor-walk *D-RAM operand* cells (eq_coef_layout_probe) as the coefficients. Full write-up:
+`dsp/analysis/N1-EQ-COEFFICIENT-MEMORY-2026-09-11.md`. **Follow-up (feeds N2):** reconcile the
+uploaded C-RAM 0x00+ coeffs (2cos form) with the cursor-walk operands the multiplier uses (0.75/0.5…)
+— that transform IS the realization question and may decide the DF-II-family form more cheaply than a
+cross-frame state match.
 
 **N2 — Decide the biquad TOPOLOGY by cross-frame state matching (the only valid decode). [multi-session]**
 Build `biquad_topology_probe.py` out into a differential oracle over {DF-I, DF-II canonical, DF-II
