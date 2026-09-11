@@ -36,6 +36,20 @@ With every writer of 0x65/0x66/0x67 known, the biquad state-update law is comple
 canonical vs transposed with that law + the captured input + coefficients; accept a form only if it
 reproduces the trajectory and the rival FAILS. (biquad_topology_probe.py extended.)
 
+### P2 RESULT 2026-09-11 — ran the null; it is NON-DISCRIMINATING (constant input)
+Captured a clean 6-frame seeded band-0 trajectory (`data/kn5000-dsp-eq-null-trajectory-2026-09-11.txt`):
+0x64 (x0) = 0.004419 **constant** every frame; 0x65 settles to 0.004419 = 0x64 **exactly**; 0x66 (y1)
+grows quadratically (constant 2nd difference ≈0.0043 — a double pole at DC, the known instability);
+0x67 (y2) = 0x66[n−1]/2 exactly. `biquad_null_discriminates.py` shows DF-II canonical and transposed
+have identical OUTPUT (topology-invariant) and their shared internal state differs only under a
+TRANSIENT input; under the captured CONSTANT input the shared cell degenerates (x1 = x = w-ish), so
+**the trajectory cannot tell the forms apart — a criterion that cannot fail.** NO topology call made.
+Subtlety worth noting: 0x65 tracking x EXACTLY leans toward it being the delayed input x1 (a DF-I-like
+separate history), which is in tension with the store-bit reading (0x65 written by cur 0x02) — and
+that tension is itself resolvable only with a transient. **P2 next:** excite 0x64 with a NON-CONSTANT
+input (an impulse via a one-shot seed of 0x64, or varying audio) and re-run the null; only a transient
+excites the discriminator.
+
 ## P3 — M2 cont.: does PARAMETRIC EQ constrain SRC 0x08/0x11? [offline]
 PEQ's biquad is bit-exact. If its program uses SRC 0x08/0x11 in a spot whose output is validated,
 that constrains those readings the way SINGLE DELAY located ACT 0x0D/0x0E. Grep PEQ for them.
