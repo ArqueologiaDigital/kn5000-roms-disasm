@@ -43,6 +43,15 @@ METHOD works. Tool `reverb_decay_probe.py`; data `data/kn5000-dsp-reverb-decay-F
 
 ## Still open (the substantive question)
 Mapping the per-frame ratios (0.767, 0.547) to the all-pass gains (0.91 / 0.1367) needs the
-delay-line length/structure — the per-frame ratio is not the single-tap gain until the loop
-structure (§73-78 delay-advance) is known — and 0x8B's ×2.024 growth needs the same structural read.
-The harness (seed-once + reverb page + delay-cell targeting + decay probe) is now in place to do it.
+delay-line length/structure, and 0x8B's ×2.024 growth needs the same structural read (likely the
+C-RAM>>1 factor-of-2).
+
+**Correction (contradict-and-correct):** I earlier called the delay-line advance "§73-78 open."
+That framing is OUTDATED — `dossier/reverb_listing.tsv` iw200 shows the external delay-DRAM advance
+was DECODED in adjudication-round5: the delay is **READ_CELL − WRITE_CELL**, addressed as
+DESCRIPTOR_CELL[k] + G (the identity map, FORCED), with **addr8 bit 6 the read/write direction**
+(0x60 = write), and it moves with the user's DELAY(ms) knob. So the reverb is "SOLVED, narrowed to
+two surviving assignments" (programs.tsv) — the residual is that two-assignment ambiguity plus the
+ratio→gain mapping, not the whole delay pipeline. The seed-once decay harness built here is the
+instrument to settle the residual (a clean-input differential, the reverb analogue of the biquad's
+canonical-vs-transposed) — which, like the biquad's, is gated on a clean known input to unit 1.
