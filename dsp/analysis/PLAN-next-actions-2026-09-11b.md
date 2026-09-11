@@ -97,6 +97,19 @@ on a wrong assumption (that the local cells are the tail). Honest net: the rever
 that framing implied; to measure the tail gain one must seed the external delay-DRAM, not the local
 cells — and the tail STRUCTURE (comb family, sample delays) is already on record.
 
+### P5/N3 RESULT 2026-09-11 — audible EQ: validated in the HLE; LLE spectral A/B gated on N2
+Executed the achievable substance of N3 (audible EQ validated by an INDEPENDENT spectral A/B) WITHOUT
+wiring into the parked LLE core (respecting Felipe's HLE-separate architecture). `eq_spectral_ab.py`
+searches every biquad role mapping (both feedback signs, the ~2.0 cell as b1=a1 or free) of the
+captured C-RAM flat/boost coefficients for one giving flat≈0 dB + a +12 dB boost bump: **none exists.**
+Reason: forming H(z) from the raw cells needs the x/y-history assignment = the biquad realization =
+the open N2 question (walled). So the LLE-cell spectral A/B is gated on N2. **The audible EQ itself is
+already achieved and validated in the HLE** (dsp/hle/: +12 dB → +12 dB, impulse response == analytic
+to 0.000 dB, part228) — it uses the DESIGNED coefficients and bypasses the raw-cell realization
+question. Wiring that validated HLE biquad into the LLE device core is the deliberately-deferred step
+(Felipe's architecture: LLE cores parked, port the HLE in later, gated on hardware). Net for N3:
+output exists+validated (HLE); the in-core/raw-cell realization is gated on N2.
+
 ## P5 — M6: audible EQ default-off [after P2]
 Once P2 fixes the realization: SPEC_DF2 + SPEC_AUDIO (default off), spectral A/B vs peq_ab.py.
 Behavioral merge stays review-gated; building+testing default-off is not.
