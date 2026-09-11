@@ -17,6 +17,20 @@ cell with the writing site + iw + frame. Run on the seeded EQ capture and read w
 - **Falsifier:** if the watch shows a DSP word with a non-bit-4 store gate writes it, the gate is
   undecoded (decode it); if nothing in the DSP writes it, an external device does (characterize it).
 
+### P1 RESULT 2026-09-11 — the writer is a DECODED word (correcting my over-correction)
+`UPD6383_WATCH_CELL=0x66` on the seeded EQ: cell 0x66 is written **every frame by iw=150 via
+`store_mode` (site 2)** — data `data/kn5000-dsp-eq-watch-0x66-2026-09-11.txt`. iw=150 is **cur 0x06,
+band-1's ENTRY store** (word 0x0212AFF407, hi12=0x212 = store bit + f31=1, class-A, coef −0.49527):
+it reads operand 0x65 (prev-band w) and stores the result to 0x66. So the +2/+3 y-history writer is
+**NOT external and NOT undecoded** — it is the cross-band entry store, a decoded DSP word on the
+`store_mode` path that my earlier **bit-4-only census missed** (store_mode is a distinct, decoded
+store path). The factor-of-2 recurs: it writes 55605 while 0x66 reads back 0.006629 = 27803 = 55605/2.
+**Correction:** my "writer is outside the decoded store path / re-connects to the input route" was an
+OVER-correction — the writer is decoded; the input route is not needed for this. **Consequence:** the
+biquad state-update law is now attributable end-to-end (0x65 ← cur 0x02 own-band store; 0x66 ← cur
+0x06 cross-band entry store), so the N2 null is unblocked modulo the exact store-target increment
+(pre/post) — the last small unknown, and instruction-set.md already narrows it.
+
 ## P2 — resolve the state update, then run the N2 null [offline, after P1]
 With every writer of 0x65/0x66/0x67 known, the biquad state-update law is complete. Model DF-II
 canonical vs transposed with that law + the captured input + coefficients; accept a form only if it

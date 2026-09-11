@@ -1,0 +1,7 @@
+# What writes cell 0x66 (biquad +2 y-history): UPD6383_WATCH_CELL=0x66, seeded EQ.
+#
+WATCH 0x66 <- 55605  site=store_mode(2) iw=150 frame=2000000
+WATCH 0x66 <- 129404  site=store_mode(2) iw=150 frame=2000001
+WATCH 0x66 <- 239584  site=store_mode(2) iw=150 frame=2000002
+WATCH 0x66 <- 385787  site=store_mode(2) iw=150 frame=2000003
+WATCH 0x66 <- 567647  site=store_mode(2) iw=150 frame=2000004
