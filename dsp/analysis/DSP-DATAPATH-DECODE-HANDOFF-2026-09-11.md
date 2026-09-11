@@ -62,6 +62,20 @@ ACCUMULATOR/STORE side of the input-stage words. Reduced to a checklist:
    `accb←P`, and confirm `accb+=P` / `accb←0` at N-clean/0-contradicting. This
    anchors the accb writer → then SRC 0x11 (=accb) via the source-operand
    classifier (match live L against acc/accb/coef/mem).
+   > ⚠ **OPERATIONAL BLOCKER DIAGNOSED (2026-09-11), fix in progress.** Attempted
+   > the campaign; the capture harness produced NO frame trace at any
+   > `UPD6383_TRACE_FRAME` (tried 10000..735000, 7 runs). Diagnosis (evidence, not
+   > guess): the note DOES sound — a `-wavwrite` capture has peak 17083 / rms 619 —
+   > and `cfg/kn5000.cfg` persists `:DSPCFG value="3"` (on), yet the DSP emits ZERO
+   > `upd6383:` frame stats, i.e. the tonegen's `run_frame()` is never called
+   > (`dsp_on` path inactive). The committed 2026-09-10 program-0 trace proves the
+   > feed worked on a PRIOR build, so this is a build-staleness regression — most
+   > likely `kn5000_tonegen.o` compiled without `KN5000_ENABLE_DSP1` while
+   > `kn5000.o` (force-touched for the DSPCFG define) has the device. **FIX:** clean
+   > rebuild with `CPPFLAGS="-DKN5000_ENABLE_DSP1=1"` after touching BOTH
+   > `kn5000.cpp` AND `kn5000_tonegen.cpp` (done; rebuild running). Verify with a
+   > low `UPD6383_TRACE_FRAME` (e.g. 10000) dumping a trace before the sweep. This
+   > IS the "shared operational blocker" (plan line 186) — solve once, reuse.
 2. **Store-target codes ACT {0x08,0x0D,0x0E,0x17}.** These need an observable
    store, which strict decode refuses (the words don't execute). Resolve from the
    bit-encoding cross-reference (their addressing IS decoded; the store TARGET is
