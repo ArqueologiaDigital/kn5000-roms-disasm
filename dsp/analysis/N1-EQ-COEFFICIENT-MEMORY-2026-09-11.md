@@ -62,9 +62,27 @@ the HLE port needs (it *synthesises* textbook RBJ peaking biquads, exactly as `d
 This is validated **offline against all three captures** by `dsp/tools/eq_rbj_reconstruct_ab.py`
 (flat→0.0 dB, +12 dB→+11.9 dB at 673 Hz, FC→0 dB with the design centre migrated up). It is the
 formula shipped in `kn7000_mame` `kn5000_tonegen.cpp` (the `eq_hle` insert, default OFF, DSPHLE
-port), pending the in-emulator spectral A/B. SPECULATIVE: that the same G holds for bands 1-4
-(only band 0 was driven); the 0.5 baseline is confirmed shared. Q is assumed 2.0 (sets
-bandwidth only; the A/B's peak-height check is Q-independent).
+port). Q is assumed 2.0 (sets bandwidth only; the A/B's peak-height check is Q-independent).
+
+### All five bands' gain calibrated (2026-09-11) — the slope is per-band, not uniform
+Driving EACH band's gain +12 dB in turn (`dsp/tools/eq_band_gain_calibrate.py`; the editor's
+PARAMETER cursor is a FLAT list over 5 bands × {FC,Q,G}, so band b's gain = NPARAM `3b+2`) shows
+the gain constant G is **NOT the same across bands** — the gain cell moves ~2× further per dB as
+the band centre rises, so a single G over-boosts the higher bands:
+
+| band | centre | c1 at +12 dB | G = (A²−1)/(c1−0.5) |
+|---|---|---|---|
+| 0 | 673 Hz | 0.5064 | 465.8 |
+| 1 | 966 Hz | 0.5132 | 225.8 |
+| 2 | 1405 Hz | 0.5261 | 114.2 |
+| 3 | 2091 Hz | 0.5511 | 58.3 |
+| 4 | 3219 Hz | 0.5979 | 30.5 |
+
+Adjacent ratios ≈ 2 (the slope roughly halves per band). The 0.5 baseline is shared by all bands
+(confirmed: the four un-driven bands stay at exactly 0.5 in every run). The emulator now uses this
+per-band table. In-emulator spectral A/B is clean at bands 0 (+10.4 dB @ 674 Hz) and 2 (+10.5 dB @
+1406 Hz), flat elsewhere. The exact closed form of the per-band slope (why ≈2×) is unresolved (it
+is entangled with the walled N2 realization); the measured table is the working calibration.
 
 ## Open (feeds N2)
 - The realization question now reduces to: **which biquad structure does the cursor-ordered MAC
