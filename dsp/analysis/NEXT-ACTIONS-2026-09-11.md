@@ -16,15 +16,24 @@ and the designer's (f0,gain,Q) are all topology-invariant and cannot decide it.*
 
 ## Ordered next actions
 
-**N1 — Fix the b/a coefficient role split (cheapest, unblocks everything). [1–2 sessions]**
-The red flag: under the current slot→role guess, all 5 EQ bands' poles cluster at ~13.5 kHz — a real
-parametric EQ spreads across the spectrum, so the assignment (which captured slots are b0/b1/b2/a1/a2,
-with b0=0.125 a fixed input scale) is probably wrong. Pin it with the firmware EQ **designer as a
-COEFFICIENT oracle** (not a topology one): grid `biquad_peaking(f0,Q,gain)` over plausible (f0,Q,gain),
-find the (params, role-permutation) that reproduces the captured band coefficients, and require the
-recovered f0 to spread sensibly across the 5 bands. Accept only if the fit is tight AND the band
-frequencies are musically plausible. *Falsifier:* if no permutation both fits the coefficients and
-spreads the bands, the EQ form isn't the assumed peaking biquad — a finding, not something to tune.
+**N1 — Fix the b/a coefficient role split. PREMISE REFUTED 2026-09-11; redirected. [done → re-capture]**
+Original premise: under the current slot→role guess all 5 EQ bands' poles cluster at ~13.5 kHz, so the
+b/a assignment is probably wrong. `eq_role_split_probe.py` tested this and the **premise is false**:
+- the current split reproduces the clustering exactly (band 0 pole r=0.710, f_norm=0.614 ≈ 13538 Hz);
+- **no** permutation of the 4 free coeffs {entry,store,c2,c3} → {b1,b2,a1,a2} × {sub,add} spreads the
+  bands — max spread 0.074 of Nyquist vs the ~0.7 a real 5-band EQ needs (falsifier fires against
+  "wrong role split");
+- the numerator {b0=0.125, entry, store} sums to 1.000–1.009 in every band — a unity-DC-gain numerator
+  that *structurally confirms* the split, leaving {c2,c3} as the denominator;
+- it is **not** a textbook RBJ peaking EQ (b1=entry≈0.75 ≠ a1=c2≈0.50);
+- the per-band response is not five spread bands: the "makeup" coeff is ≈0 in bands 1/3/4, dropping
+  them 60–240 dB — it is a routing/mode gate, not an output gain.
+⟹ The clustering is a property of the CAPTURED COEFFICIENTS, not the decode. This trace is a
+near-default / partly-muted EQ state; per-band centre frequency is not readable from it.
+**Redirect (N1'):** DIFFERENTIAL capture — drive one band at a time to known distinct gain/centre
+(peq_gain.lua / peq_cursor.lua already exist), re-capture with the `-log` recipe, and watch which
+coefficient(s) move. That assigns roles and locates centre-frequency directly. Emulator-gated but
+self-contained; no core edits. (Artefact: `dsp/tools/eq_role_split_probe.py`.)
 
 **N2 — Decide the biquad TOPOLOGY by cross-frame state matching (the only valid decode). [multi-session]**
 Build `biquad_topology_probe.py` out into a differential oracle over {DF-I, DF-II canonical, DF-II
@@ -63,7 +72,9 @@ Route AROUND the proven input-route/accb dependency cycle via controlled seeding
 5. Commit the producing script for every quoted number, same session (the DF-II gap was a lapse).
 6. 100% decode is unreachable (~93.3% ceiling); scope wins as coverage + named forms, not completion.
 
-**Recommended sequencing:** N1 (fix roles) and N4 (consolidate + reverb DLYSEED) first — cheap, high
-value, no input route. N2 (topology cross-frame) is the rigorous flagship but multi-session. N3
-(audible) only after N1+N2. Front-load N1: the 13.5 kHz clustering says a wrong role split may be
-masquerading as the whole "topology" mystery, so fixing roles could sharply narrow N2.
+**Recommended sequencing:** N1 is DONE (offline) and its premise refuted — the role split is
+structurally confirmed, not wrong; the clustering is in the captured (near-default) coefficients, so
+the successor is **N1'** (differential per-band gain/centre capture), which is emulator-gated and
+pairs naturally with N2 (both need fresh `-log` captures of the EQ under controlled panel settings).
+Do N1' + N4 (consolidate + reverb DLYSEED) next — cheap, high value, no input route. N2 (topology
+cross-frame) is the rigorous flagship but multi-session. N3 (audible) only after N1'+N2.
