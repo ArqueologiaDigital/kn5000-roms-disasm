@@ -37,12 +37,19 @@ panel-controlled *filter* coefficients live in **C-RAM 0x00+**, where band centr
 and spread. So the b/a role work (N1) was chasing the wrong memory; the decode datapath
 (P=(coef×L)>>6, etc.) is unaffected.
 
+## Reconciled: C-RAM coeff = 2 × cursor operand (MEASURED, exact)
+The "two representations" are one. In the SEED8 capture — the one trace that dumps BOTH the
+C-RAM and the cursor walk — the C-RAM cell at each cursor index is **exactly 2.000000×** the
+cursor `coef` the multiplier reads (41/41 cells, max deviation 0.0; `eq_cram_operand_reconcile.py`).
+So the multiplier operand = **C-RAM[cursor] >> 1**; there is no transform beyond a 1-bit
+(Q-format) scale. The biquad's real coefficients ARE the near-RBJ C-RAM 0x00+ set, read halved.
+(Note SEED8 and the clean peq-default are different EQ *presets* — SEED8's band-0 2cos term is
+0.995, peq-default's is 1.99 — but the C-RAM↔operand factor of 2 is preset-independent.)
+
 ## Open (feeds N2)
-- The **relationship between the uploaded C-RAM 0x00+ coefficients (near-RBJ, 2cos form)
-  and the cursor-walk operands the multiplier actually uses** (0.75/0.5/0.49…). The DSP
-  must transform one into the other; that transform IS the biquad realization question (N2).
-  Reconciling them may decide the DF-II-family form more cheaply than a cross-frame state
-  match.
+- The realization question now reduces to: **which biquad structure does the cursor-ordered MAC
+  sequence implement over these near-RBJ coefficients (read C-RAM>>1)?** Answerable from the
+  decoded datapath + the coefficient identities — potentially without a cross-frame state match.
 - The exact 2cos→frequency and gain→coefficient mappings (RBJ assumed, not yet fit).
 - Per-band grouping is inferred from the 6-cell C-RAM repeat + the band-0 intervention;
   confirming it needs a rig that moves the BAND cursor (peq_gain.lua only moves the
