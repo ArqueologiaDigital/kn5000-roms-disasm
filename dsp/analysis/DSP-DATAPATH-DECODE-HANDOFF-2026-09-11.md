@@ -120,11 +120,21 @@ seeds the reverb operand cells (0xD0/0x94/0x8A/0x85/0x8C/0x8F). Result (evidence
 - **Observed**: ACT 0x0E (P←bus) loads P = seed << 16 (= ACC_SHIFT; P=268435456 =
   4096<<16) — a cross-check of ACC_SHIFT and a live sighting of one of the 4.2
   gate codes in action.
-- ⚠ **PARTIAL**: the reverb 0.91 feedback MAC (SRC 0x1A) still gives P=0 — it reads
-  its operand via SRC 0x1A from a cell NOT in the seed set. A full one-pole decode
-  needs seeding that exact feedback cell (identify it, extend REVSEED). This is the
-  concrete next step, and it is REACHABLE (no route needed) — unlike the input
-  route itself.
+- **REVERB ALL-PASS STRUCTURE DECODED from the data flow (2026-09-11):** the
+  feedback operand is **tempB** (SRC 0x1A = tempB, per the core operand map), and
+  tempB is loaded by an **ACT 0x14 (tempB←L) word via SRC 0x0B (delay-line read)** —
+  the repeating pattern n=149/157/165/173/181/199/207 loads tempB from the delay
+  line = the delayed output y1. That delayed output is then multiplied by **two
+  gains, 0.91 (n=142) and 0.1367 (n=190/232)** via SRC 0x1A — consistent with the
+  KN5000 **all-pass ladder** (feedback + feedforward gains), as opposed to the
+  WSA1R comb/FDN. So the reverb one-pole/all-pass TOPOLOGY and its gains are read
+  from the trace.
+- ⚠ **Correction to last entry**: the feedback is tempB from the DELAY LINE
+  (SRC 0x0B), NOT a D-RAM cell — so REVSEED (D-RAM) cannot feed it, and "seed the
+  feedback cell" was the wrong next step. Bit-exact confirmation of the 0.91×y1
+  arithmetic needs seeding the **external delay DRAM** (the SRC 0x0B source) — a
+  delay-line seed diagnostic (AS_DELAY space, `dsp1_delay_map`). Still REACHABLE
+  (no input route needed); that is the corrected concrete next step for 5.1.
 
 ## 5. HARDWARE BOUNDARY (not tasks — unreachable)
 
