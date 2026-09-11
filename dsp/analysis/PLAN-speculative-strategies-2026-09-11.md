@@ -235,6 +235,22 @@ before blow-up carry the signal — read the *first* transition.
 > is the real S4 closer; single-frame rail-checks got us to a live recursion and no further. The
 > role map itself is still best settled by the cross-frame delay-line observation or the firmware EQ
 > designer's (f0,gain,Q) — the response-match oracle would confirm whichever the LLE realizes.
+>
+> **S4 ANALYTIC CHARACTERIZATION COMPLETE (2026-09-11).** The captured recursive coefficients are a
+> genuine per-band EQ, not fixed constants: under the subtractive convention they give stable poles
+> that sweep smoothly across the five bands (|pole| 0.710→0.752; a1 0.498→0.448, a2 0.504→0.566) —
+> monotonic per-band tuning. So the KN5000 parametric EQ is decoded as a real, stable, per-band
+> subtractive biquad, and the WSA1R-vs-KN5000 sign difference is settled (docs §9 corrected). What
+> remains for a FAITHFUL LLE render is purely the **state-update mechanism**: (a) the b0=0.125 on the
+> input cell is a fixed input scale, the per-band tuning lives in a1/a2; (b) the store writes the
+> band's y to **in+1**, and the recursion reads **in+2/in+3**, so the chip rotates in+1→in+2→in+3
+> each frame — the LLE's fixed pointer does not, and my `SPEC_SHIFT` rotates only the y-history, not
+> the x-history, which is why it went live-but-unstable; (c) the exact set of cells that shift (and
+> whether x1/x2 also rotate) needs the cross-frame observation. ⚠ The per-band resonances cluster
+> near ~13.5 kHz in this preset — either its actual band placement or a sign the b/a role split is
+> not final; the response-match oracle (or the design target) settles it. Net: the ANALYSIS of the
+> KN5000 EQ is as complete as captures allow; a faithful LLE render is one careful state-update
+> decode away, and it is a multi-session build-lane task, not a one-shot.
 
 ---
 
