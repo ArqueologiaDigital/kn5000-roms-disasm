@@ -154,13 +154,20 @@ def exact_fit(rows):
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    path = args[0] if args else DEFAULT
     with open(path) as f:
         allrows = parse_trace(f.read())
-    rows = eq_pass(allrows)
+    all_rows = "--all-rows" in sys.argv
+    rows = allrows if all_rows else eq_pass(allrows)
     print("biquad_pipeline_probe: %d parsed rows from %s" % (len(allrows), os.path.basename(path)))
-    print("EQ biquad pass = rows %d..%d (cursor 0x%02X..0x%02X), %d rows.\n" %
-          (rows[0]["n"], rows[-1]["n"], rows[0]["cur"], rows[-1]["cur"], len(rows)))
+    if all_rows:
+        print("ALL-ROWS mode: multiplier decode over every MUL=Y row (cross-program check),")
+        print("%d rows.  (Sections 1/4/5 assume the EQ pass and are informational here.)\n"
+              % len(rows))
+    else:
+        print("EQ biquad pass = rows %d..%d (cursor 0x%02X..0x%02X), %d rows.\n" %
+              (rows[0]["n"], rows[-1]["n"], rows[0]["cur"], rows[-1]["cur"], len(rows)))
 
     hold, brk, breaks = recurrence(rows)
     total = hold + brk

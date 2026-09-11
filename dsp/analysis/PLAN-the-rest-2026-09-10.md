@@ -233,6 +233,21 @@ One operational blocker is shared by every build-lane capture and is stated once
 - **5.5 Capture + confront delay and LFO kernels.** — SINGLE DELAY (verify landing by the algo-9 word signature, NOT `program=` which is stuck at 0) confronted with `diff_delay` + loop `diff_onepole`; cross-frame LFO via the §109 witness (`+=114`, and a captured wrap event to settle AND vs sub-if-ge). Delay confrontation needs the external-delay datum column added to the trace row (**reviewed core edit**) OR the §153/§157/§200 logerror-parsing fallback. — *M/L* — [MULTI-SESSION] *(build-lane; reviewed for the trace-column / witness-generalization edits)*
 - **5.6 Opportunistic: class 0 (38w) + ACT 0x0C delay-read (12w).** — Decode whenever a live frame exercises them with signal. Smallest leverage — do last. — *S* — [MULTI-SESSION] *(build-lane)*
 
+> **5.x FOUNDATION — the multiplier datapath GENERALISES beyond the EQ (2026-09-11).** The multiplier
+> decode `P[N] = (coef[N-1] × L[N]) >> 6` (MEASURED 27/27 on the PARAMETRIC-EQ seeded trace) was
+> re-tested on a DIFFERENT program: the boot-default **program 0** live-frame trace (NAV=0, a real
+> C4/E4/G4 note, audio verified RMS 550 — so signal is genuinely present here, unlike the EQ capture).
+> Run: `biquad_pipeline_probe.py <live-frame-trace> --all-rows`. Result: the SAME model dominates —
+> `coef[N-1] × L[N] >> 6` bit-exact on **18/21** MUL=Y rows (next candidate 11/21). The 3 misses
+> {5,10,123} are principled, not model failures: rows 5 and 10 are frame-startup words whose P column
+> carries the previous frame's accumulator (`P[5] = acc[0] = 333185286144`, not a fresh product), and
+> 123 is a single downstream row. So the coef-pipeline-depth-1 / operand=current-latch / shift-6
+> multiplier is the chip's GENERAL datapath, not an EQ-specific coincidence — the shared datapath
+> every Phase-5 downstream stage (one-pole, LFO, delay) is built on. This raises the multiplier from
+> "MEASURED on one program" to "MEASURED across two programs incl. a real-audio frame". (It does NOT
+> by itself decode the downstream STAGE structures 5.1/5.3/5.5 — those still need their own
+> confrontations — but it fixes the arithmetic primitive they all use.)
+
 ---
 
 ## Phase 6 — Speaker-audible LLE (broad-decode arc)
