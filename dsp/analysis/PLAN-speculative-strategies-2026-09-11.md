@@ -266,6 +266,22 @@ before blow-up carry the signal — read the *first* transition.
 > state form), not just a sign or a rotation. That is a genuine multi-session structural decode
 > (cross-frame + the firmware designer's intended response as the oracle), and it is the honest
 > terminus of what this session's captures + offline analysis can establish.
+>
+> **TOPOLOGY CANDIDATE FOUND: DF-II TRANSPOSED (2026-09-11).** The shared-cell puzzle (0x65 written
+> as y by the 0x212 store, yet read by b2/cur02) is the SIGNATURE of a **Direct-Form-II transposed**
+> biquad: its two state variables each hold a mixed `b·x − a·y` term, so one cell is legitimately
+> both a store target and a feedforward tap — which a textbook DF-I can never be. Tested offline with
+> the captured band-0 coefficients (subtractive, a=+stored): DF-II transposed is **STABLE** (IR tail
+> 7e-8) and a **sensible peaking EQ** (peak f=0.30, +3.1 dB). So the KN5000 EQ is very likely
+> **DF-II transposed, subtractive**, which reconciles ALL the observations at once: the stable poles
+> (0.71, shared with DF-I), the two stores (y to in+1, cascade via makeup), the shared cell roles,
+> and why a DF-I model + sign + shift could not stabilize the LLE. **Next-session confirmation
+> (falsifiable):** run the DF-II state recurrence with the captured coefficients on the injected
+> input and match its w1/w2 trajectory to the LLE's cells 0x65/0x66 across frames (cross-frame
+> capture); a bit-for-bit state match promotes DF-II from candidate to decoded, and then the LLE core
+> can realize the correct (shared-state) update for a faithful, non-saturating EQ. This turns the
+> "non-standard topology" open item into a NAMED form with a concrete accept test — the productive
+> handoff point for the biquad, and a real advance from the strict plan's "coefficient order OPEN".
 
 ---
 
