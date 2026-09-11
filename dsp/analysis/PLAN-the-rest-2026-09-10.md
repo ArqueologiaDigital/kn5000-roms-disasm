@@ -142,6 +142,18 @@ One operational blocker is shared by every build-lane capture and is stated once
 > input-stage words' ALU op + full SRC/ACT route from their bit encoding (and/or a hardware
 > reference), not just a better capture. Signal-bearing frames remain necessary for VALIDATION once a
 > candidate op exists, but they are not sufficient to DERIVE it. This is the honest 4.2 boundary.
+>
+> **4.2 OPEN PART NARROWED (2026-09-11) — probe `dsp/tools/input_stage_alu_probe.py`.** On the
+> program-0 real-audio trace, the input-stage words w5/w10 (dsp_disasm.py's "ALU UNKNOWN") DO read the
+> audio into the multiplier: their operand `L=5084004` is the DI-latch value, and their PRODUCT is the
+> ordinary `(coef × L) >> 6` — verified bit-exact on the NON-degenerate w10 (coef=0.359). So the
+> "ALU UNKNOWN" is NOT the multiply; it is the ACCUMULATOR/STORE side (the f31 op and which value gets
+> written) that is undecoded. The audio therefore reaches the input-stage MULTIPLY; whether it
+> propagates onward depends on that accumulator-side op. ⚠ RETRACTED lead: w5 first appeared to be an
+> "input injection = L<<16", but w5 has coef=0.5 (=2^22 raw), which makes `(coef×L)>>6 ≡ L<<16`
+> IDENTICALLY — a degeneracy, not a special op (the probe flags it). Net sharpening: 4.2's open
+> frontier is now specifically the **f31/store semantics of w3/w5/w10** (their multiply is solved),
+> and the audio is confirmed present at the input-stage multiply — not stuck at the raw deposit.
 
 - **4.2 Decode the bridge word's ALU from the census.** — If a decoded word is mis-routing, fix the SRC/ACT/`m_dp` to the measured value; if it is a K6 input-stage word with UNKNOWN ALU (e.g. w7/w9), promote it from addressing-only to decoded — but decode ONLY what the census forces; if underdetermined, stop and report the residue (plausible-but-wrong audio is worse than silence). Commit with the census that forced it. — *M* — [MULTI-SESSION] *(reviewed core edit; gates 4.3, 4.4, 5.2, 5.4)*
 - **4.3 Verify the stores now carry a correct accumulator.** — Re-capture the EQ frame: confirm `mem[0x64]≠0`, LOAD (iw143) seeds `acc=coef*x0`, the four MACs accumulate, iw144→0x65 and iw150 (ACT-0x07) write a real y that persists to next frame's y1. No code change if 4.2 was right; watch the fixed-point scale (P_SHIFT/ACC_SHIFT, `acc_to_datum` saturation) end-to-end so the newly-live path doesn't clip x0 before the multiply. — *S* — [SESSION] *(build-lane)*
