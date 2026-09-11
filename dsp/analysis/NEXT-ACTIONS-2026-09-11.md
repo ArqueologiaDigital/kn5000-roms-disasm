@@ -68,9 +68,12 @@ same coefficients the core just used).
 
 **N4 — Consolidate + broaden in parallel (highest value-per-effort, needs no input route). [ongoing]**
 Route AROUND the proven input-route/accb dependency cycle via controlled seeding + the HLE oracle:
-- reverb: add `DLYSEED` (AS_DELAY seed) and impulse-test for a decaying echo train whose per-loop
-  decay tracks the gains, gated by the §73 gain-sensitivity falsifier (the delay-line ADVANCE, not the
-  arithmetic, is the open part now that the class-A retraction stands);
+- reverb: STARTED 2026-09-11 — built `UPD6383_REVSEED_ONCE` (seed-once, the BIQSEED_ONCE analogue for
+  the reverb) and ran a first impulse-decay probe. INCONCLUSIVE: it was captured with PARAMETRIC EQ
+  selected, so unit 1 ran no reverb program (0xD0 grew, other cells frozen). Valid test needs a reverb
+  effect selected + a rig that reaches it by TYPE index; then check the decay ratio vs the all-pass
+  gains (0.91/0.1367). The delay-line ADVANCE (§73-78) is the open part. See
+  `N4-REVERB-DECAY-PROBE-2026-09-11.md`;
 - extend the seed-probe method to the one-pole and LFO/delay families (existing tools);
 - WSA1R twin as a cross-check oracle for **shared biquad/core primitives only** (NOT the reverb — its
   is comb/FDN vs the KN5000 all-pass ladder);
