@@ -21,6 +21,18 @@ reproduces the captured trajectory bit-exactly AND the rival FAILS.**
 - Falsifier: if neither form reproduces 0x65's trajectory, or both do, the null is not discriminating
   — report OPEN, do not pick.
 
+### M1 PROGRESS 2026-09-11 — attempted; blocker RE-LOCALIZED (not the input route)
+Ran the prerequisite state-writer census on the seeded band-0 frame. The input route is NOT the
+blocker for the null — the input value is captured (mem[0x64]). The real gap is narrower and new:
+**cells 0x66/0x67 evolve across frames (0x66: 0 → 0.00663 → 0.01543) but NO word stores to them via
+the bit-4 gate** — only 0x65 is written (cur 0x02, band-0 coef +0.2478; and cur 0x06, band-1 entry
+coef −0.4953, both bit-4 stores). So the biquad y-history cells 0x66/0x67 update via a mechanism not
+yet identified (not a bit-4 store; candidates: a delay-line shift like 0x64→0x65, a pointer-indirect
+write, or the makeup/0x102 store to an aliased cell). A canonical-vs-transposed null cannot be clean
+until every state cell's update law is known, so NO topology call is made (that would overclaim).
+**Next for M1:** identify the 0x66/0x67 writer — census pointer-indirect / non-bit-4 stores and the
+makeup-word target across the full frame; that is now the single concrete unknown for the null.
+
 ## M2 — Decide the unanchored ACT codes against SINGLE DELAY ground truth [offline; unblocks the class]
 `unblocking-and-discriminators.md`: SINGLE DELAY has a validated answer (lag 1001, gain 0.02149296,
 matched to 0.001%). If SINGLE DELAY's program exercises the unanchored codes (ACT 0x0D/0x0E, SRC
