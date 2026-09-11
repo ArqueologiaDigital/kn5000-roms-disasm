@@ -35,6 +35,32 @@ proportionally. Different programs also use different LFO phase cells (CHORUS 0x
 - The waveshaper (distortion) and delay-DRAM tap (delay) probes are the remaining T3 families, now
   trivially runnable on the isolated program the same way.
 
+## T3 — delay family (SINGLE DELAY, delay-DRAM taps)
+Isolated SINGLE DELAY (iw≥84) shows the external delay-DRAM datapath executing live:
+- **iw84 = class-1 READ (addr8=0x30)** — the delay-DRAM read (first access of the body);
+- **iw89 / iw112 / iw130 = class-1 WRITE (addr8 bit-6 set)** — delay-DRAM writes;
+- **iw89 / iw112 read the SRC 0x0B delay-read register with coef 0.5** — the documented "0.5 mix";
+- iw93 / iw116 class-1 addr8=0x20 (secondary access), iw131 end-of-block.
+So the delay read/write/mix structure is confirmed on the running chip; the lag (1001) is the
+descriptor READ_CELL−WRITE_CELL offset (already decoded). The operand mem values are 0 at this frame
+because the delay line is unfed (the input-route gap — audio doesn't reach the biquad/delay input in
+the current LLE), so the STRUCTURE is confirmed but not the delayed-signal values.
+
+## T3 — distortion family (OVERDRIVE vs FUZZ)
+The OVERDRIVE image carries a distinctive **class-A cluster with ACT 0x12 / 0x13 / 0x14** that is
+**absent from FUZZ and from every other family probed** (delay, modulation, dynamics). Since OVERDRIVE
+= a waveshaper PLUS a post-distortion tone biquad (4 kHz Butterworth, per the catalog) while FUZZ is a
+harder clip with no tone filter, this ACT 0x13/0x14 cluster is **OVERDRIVE's extra tone-filter
+stage** — a live datapath distinction between the two distortion variants. (The clipping waveshaper
+op proper is a further probe; what's established here is the OVERDRIVE-only tone stage.)
+
+## T3 status
+All three families probed live: modulation LFO (CHORUS +114 exact, FLANGER +81 parameter-dependent),
+delay (delay-DRAM read/write/0.5-mix confirmed), distortion (OVERDRIVE-only tone-stage ACT 0x13/0x14).
+Each is a live confrontation of the decode; CHORUS's LFO is the clean exact match.
+
 ## Discipline
 Consecutive-frame capture via deterministic re-runs (TRACE_FRAME F, F+1, F+2); raw 24-bit deltas;
-CHORUS matches the documented constant; FLANGER graded as parameter-dependent (a lead, not an error).
+CHORUS matches the documented constant; FLANGER graded as parameter-dependent (a lead, not an error);
+delay operand values are 0 (unfed line) so only the structure is claimed; distortion ACTs verified
+family-specific by cross-program presence check.
