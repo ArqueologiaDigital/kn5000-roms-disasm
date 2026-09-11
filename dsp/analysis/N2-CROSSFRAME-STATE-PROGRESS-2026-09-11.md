@@ -31,12 +31,26 @@ reproduce and others fail. The captured recursion is saturated (degenerate), so 
 "match" a constant — a criterion that cannot fail. Claiming a realization here would repeat the
 DF-II overclaim the verification caught. Held.
 
+## UPDATE (same session): non-degenerate trajectory OBTAINED
+The saturation blocker is cleared. `UPD6383_BIQSEED_ONCE=F` (upd6383.cpp, default 0) seeds the
+band-0 state **once** at frame F and lets the recursion evolve. With a small seed (BIQSEED=64),
+frames 2000001/2000002 give a live trajectory: **0x66 evolves 0 → 0.00663 → 0.01543** (recursive
+history), 0x64→0x65 is the input delay, 0x67 the delayed 0x66. Data:
+`data/kn5000-dsp-eq-seedonce-{F0,F0p1,F0p2}-2026-09-11.txt`; tool `eq_seed_trajectory_probe.py`.
+
+### Corroboration (MEASURED): 0x65 is a WRITTEN state cell (DF-II shared w)
+The store gate (hi12 bit 4) on the band-0 words: 0x64 store=0 (read-only input x0), **0x65
+store=1** (cur 0x02 reads it as an operand AND writes it), 0x66/0x67 store=0. So 0x65 is not a
+passive x1 — it is the DF-II shared intermediate w: read as w[n-1], rewritten as w[n] in the same
+word. Its cross-frame value tracks the delayed input only because w≈x when feedback is small
+(low-signal degeneracy). This **independently corroborates SHARED-DELAY (DF-II-family)** and rules
+out textbook DF-I — consistent with the topology work, now from a live seeded trajectory + the
+store bit rather than from the coefficient layout alone.
+
 ## Next step (deliberate)
-Get a **non-saturating** recursive trajectory, then run the differential null:
-- seed a small excitation the way `UPD6383_BIQSEED` did (right-shift the state seeds) so the
-  recursion stays in range for several frames, OR inject a short low-amplitude impulse;
-- capture ~8 consecutive frames of 0x64..0x67 (TRACE_DETAIL across F..F+7);
-- feed the captured x-input + coefficients (C-RAM 0x00+ >> 1, per the N1′ reconciliation) into
-  DF-I / DF-II canonical / DF-II transposed under 24-bit **saturating** fixed point
-  (`biquad_topology_probe.py`), and accept a form only if it reproduces the cell trajectory
-  bit-exactly **and a rival FAILS**.
+Distinguish DF-II canonical vs transposed (the only remaining topology unknown):
+- capture ~8 consecutive seeded frames (TRACE_FRAME=F..F+7 with BIQSEED_ONCE at F) for a longer w
+  trajectory, ideally at a frame with notes OFF for a clean zero-input natural response;
+- feed the seeded IC + coefficients (C-RAM 0x00+ >> 1, per the N1′ reconciliation) into DF-II
+  canonical vs transposed under 24-bit **saturating** fixed point (`biquad_topology_probe.py`),
+  and accept a form only if it reproduces the w-trajectory bit-exactly **and the rival FAILS**.
