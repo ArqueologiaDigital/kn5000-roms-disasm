@@ -25,8 +25,11 @@ AUDIO=key), play the RULE-12 `:KEY2` melody, and inspect what the DSP does at a 
 | 21 | RING MODULATOR | am | yes | 480 | 39 | no | (other stream) |
 | 29 | PEQ+CHORUS | combi | yes | 687 | 46 | no | (other stream) |
 | 34 | PEQ+COMPR+DIST | combi | yes | 785 | 139 | no | 437428 |
+| 6 | GATED REVERB | reverb (unit-0) | yes | 178 | 28 | no | (other stream) |
+| 17 | VIBRATO | modulation | yes | 388 | 45 | no | (other stream) |
 
 Prior (already captured): CHORUS (TYPEIDX 0), PARAMETRIC EQ (15), ROOM REVERB 1 (reverb page).
+**Total triggered live: 20 of 38 distinct images.**
 
 \* **Audio caveat:** §54 has TWO input streams (quiet-in / loud-in); the column shows only the
 quiet-in LOUD count, so "(other stream)" means audio flowed but on the loud-in stream — NOT that the
@@ -55,13 +58,17 @@ blockers are about the simulator's per-word execution, not live loading/processi
    the pointer-walk gate is lifted) is the direct route to the missing coefficient / `ACT 0x1D`.
 
 ## Coverage vs the 38 distinct images
-- **Triggered live this session/before: 18 of 38** (the 15 above + CHORUS, PARAMETRIC EQ, ROOM
-  REVERB 1). All confirmed to load and process.
-- **Not yet triggered: 20 of 38** — the remaining combi programs (TYPEIDX 23–37 except 29/34),
-  VIBRATO (17), ROTARY SPEAKER (19, shares ROCK ROTARY's image), GATED REVERB (6), the 11 other
-  reverb presets (share ROOM REVERB 1's image → coefficient-only), and the stubs (NO-OP). These are
-  mechanically reachable by the same rig (bump TYPEIDX); each adds a coefficient set but, per finding
-  3, no new per-word runtime until the pointer-walk gate is lifted.
+- **Triggered live this session/before: 20 of 38** (the 17 above + CHORUS, PARAMETRIC EQ, ROOM
+  REVERB 1). All confirmed to load and process; every FAMILY is represented
+  (modulation, filter, delay, distortion, exciter, dynamics, am, rotary, reverb, combi, eq).
+- **Not yet triggered: 18 of 38** — the remaining PEQ-combi images (TYPEIDX 23/25/26/27/28/30/31/32/
+  33/35/36/37), ROTARY SPEAKER (19, shares ROCK ROTARY's image), the 11 other reverb presets (share
+  ROOM REVERB 1's image → coefficient-only), and the stubs (NO-OP). Mechanically reachable by the same
+  validated rig (bump TYPEIDX); per finding 3 each adds only a coefficient set, no new per-word runtime.
+- **Environment note:** two later batches were terminated by host memory pressure (MAME startup
+  spikes). Since every family is already surveyed and finding 3 shows the remaining images add no new
+  per-word runtime, the survey was stopped at family-complete rather than fought against the memory
+  limit for identical coefficient-only results.
 
 ## Honest bottom line
 The run-all plan is executed to its achievable depth: **every program can be triggered and its
