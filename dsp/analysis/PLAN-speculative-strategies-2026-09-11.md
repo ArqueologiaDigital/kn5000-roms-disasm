@@ -1,0 +1,194 @@
+# KN5000 effects-DSP — speculation-friendly strategies to push decode → audible LLE
+
+**Mandate (Felipe, 2026-09-11):** *"Write a new plan for additional strategies we can use to
+continue improving the decoding and implementation. You can rely on speculation in order to try
+to make things fit in place."*
+
+This plan is the deliberate counterpart to `PLAN-the-rest-2026-09-10.md`. That plan was
+strict-measured: a code was promoted only on N-clean/0-contradicting bit-exact evidence, and every
+remaining item was correctly shown to be gated on evidence that in-session captures cannot supply.
+**This plan lifts that gate on purpose.** It permits *speculative* readings — adopt a candidate,
+wire it in, and judge it by whether the whole effect then **FITS** (runs trap-free and produces
+output that matches the independent HLE reference), rather than by isolated bit-exact proof.
+
+## 0. The one idea that makes speculation safe and productive
+
+We already have a **bit-exact, hardware-rooted oracle**: the HLE reference (`dsp/hle/`), whose
+parametric-EQ biquad reproduces the chip's solved transfer function to 0.000 dB, plus the
+now-**MEASURED** LLE datapath (multiply `(coef[N-1]×L[N])>>6`, accumulate/load on `hi12[3:1]`,
+store `acc>>16`; `run_decode_regression.sh`). So a speculative reading of an *undecoded* code is not
+a shot in the dark — it has an **acceptance test**:
+
+> **Adopt the speculative code → run the LLE frame → compare the LLE's per-word acc/P/output against
+> the HLE oracle fed the same coefficients and the same input. If they agree, the speculation FITS
+> and is promoted "by construction"; if they diverge, the reading is wrong and is discarded.**
+
+This is legitimate validation (the memory rule *fake-with-the-real-mechanism*: route through the
+correct datapath, label it, make it drop-in-replaceable, gate it with a spectral A/B). Every
+speculative result stays **flag-gated, default-off, and labelled SPECULATIVE** until a measured
+anchor or hardware confirms it — plausible-but-wrong is still never shipped as *faithful*, but it
+IS allowed to exist as a labelled research path that we iterate against the oracle.
+
+Ordered by leverage (highest first). Each strategy states: the **speculative move**, the **fit
+test** that accepts/rejects it, and the **risk/label**.
+
+---
+
+## S1. Wire the input route speculatively, and let the biquad oracle judge it *(highest leverage)*
+
+**Why first.** The input route is the single gate between the decoded datapath and audible LLE.
+Everything downstream (reverb, second accumulator) sits behind it. And we have the perfect judge:
+the biquad datapath is MEASURED, so if the route is right, the biquad's output on real audio must
+match the HLE biquad fed the same input.
+
+**Speculative move.** Adopt the standing speculative readings of the input-stage codes and wire the
+route end to end:
+- source `SRC 0x11 = accb`, `SRC 0x08 = ?` (try `mem[ptr]` then `acc`);
+- action `ACT 0x0E = P←bus`, `ACT 0x0D = acc←bus`, `ACT 0x08 = ?`, `ACT 0x17 = ?` (enumerate the
+  small candidate set; the "bus" is the DI-latch datum at acc-scale, `<<16`, which we already
+  observed live);
+- admit `f31 = 2` (operand-unchanged) on the two port-read words so the latch read executes.
+Implement behind `UPD6383_SPEC_INROUTE` (env, default off), in the disassembler's
+`alu_decoded_spec()` path so the strict decode is untouched.
+
+**Fit test.** Play a note (RULE-12 `:KEY2`), capture with `-log`, and confirm: (a) `mem[0x64] ≠ 0`
+(audio reached band-0 `x0`); (b) the biquad's per-word `acc`/`P` now match the HLE biquad fed the
+same captured `x0` and the captured coefficients, word-for-word; (c) the frame runs trap-free. If
+(b) holds, the input route is correct *by construction* — the only reading that makes the measured
+biquad produce the oracle's output. Enumerate the candidate code assignments and keep the one (if
+any) that passes (b); if several pass, report the ambiguity honestly.
+
+**Risk/label.** SPECULATIVE until a measured anchor lands. But note the acceptance test is
+strong: an incorrect route almost never reproduces the bit-exact biquad oracle on live audio.
+
+---
+
+## S2. Close the loop: an HLE-oracle-driven LLE bring-up harness
+
+**Speculative move.** Generalise S1's judge into a standing tool: `lle_vs_hle.py` that, given a
+captured frame, runs BOTH (i) the LLE datapath model with the current (measured + speculative)
+code table and (ii) the HLE reference wired from the same captured coefficients, and reports the
+first word where they diverge. Speculative code assignments are toggles in a table.
+
+**Fit test.** The harness *is* the fit test for every other strategy here — it turns "does this
+speculation fit?" into a bit-for-bit diff with a named first-divergence word. Drive S1/S3/S5/S6 by
+minimising that divergence.
+
+**Risk/label.** None new — it is an instrument. Commit it beside the probes; it makes every
+speculative promotion in this plan reproducible and falsifiable.
+
+---
+
+## S3. Promote the `f31 {4,5,6,7}` accumulator codes speculatively, judged downstream
+
+**Speculative move.** Assign each open `f31` code its best-fit op and let the frame vote:
+`f31 = 4 → acc←P` (load-like, seen once); `f31 = 6,7 → ` try {`acc += P<<1`, `acc += P>>k`,
+saturating-add}; the anomalous `f31 = 5 → ` try the `≈5/6·P` reading as a **rounded** op
+(`acc = (5·P)/6` with the chip's rounding) *and* as a two-word {hold; +⅙P} idiom. Wire each behind
+a spec toggle.
+
+**Fit test.** Run S2's harness on the kernel words that carry these codes; accept the assignment
+that makes the whole-frame acc trajectory match the HLE reference (or at least stops the frame
+trapping there). The `5/6` reading is accepted only if a consistent rounding rule makes it
+*bit-exact* across all `f31=5` occurrences — otherwise keep it labelled ANOMALY.
+
+**Risk/label.** SPECULATIVE; the `f31=5` anomaly may be a rounding/pipeline artefact, so prefer the
+reading that also explains *why* it looks like 5/6 (e.g. a shift+add that approximates it).
+
+---
+
+## S4. Cross-frame "seed-once" capture to assign the biquad x/y roles (Phase-2 closure)
+
+**Speculative move.** Add `UPD6383_BIQSEED_ONCE` (seed the band-0 state only on the first frame,
+then let it evolve). Speculatively assign the state-cell roles `x1,x2,y1,y2` from the read order +
+the store cascade already decoded (`b0=0.125` on `x0`, store `acc>>16` → next band).
+
+**Fit test.** Capture ~3 consecutive frames (raise the trace cap, or 3 runs at adjacent arm
+frames); observe how each seeded cell's value moves frame-to-frame and match it to the assumed
+delay-line shift (`x0→x1`, `y→y1`). Accept the role assignment whose implied transfer function is
+(a) **stable** and (b) matches the designed peaking-EQ response for the captured coefficients. The
+instability of the WSA1R order is the control: the correct order must be the stable one.
+
+**Risk/label.** SPECULATIVE; the biquad is Jury-unstable in the wrong order, so the first frames
+before blow-up carry the signal — read the *first* transition.
+
+---
+
+## S5. Adopt the delay-pipeline (§74/76/78) model and make the reverb ring
+
+**Speculative move.** Turn on the core's own speculative delay-pipeline (mask bits 19/20: the delay
+WRITE word is the read consumer; one-deep per-line pipeline) and adopt `SRC 0x1A = tempB ←
+delay-read`, with the class-8 path applying the `0.91/0.1367` gains (try: the delay WRITE scales the
+stored value by the feedback gain; the read applies the feedforward gain).
+
+**Fit test.** Seed the delay line (`UPD6383_DLYSEED`, AS_DELAY space) with an impulse and check the
+reverb output is a **decaying echo train** whose decay rate matches `0.91` per loop and whose
+spectrum matches the HLE all-pass ladder reference (spectral A/B). The core's §73 control applies:
+the loop behaviour MUST change when the gains change — if it does, the feedback is finally wired.
+
+**Risk/label.** SPECULATIVE and the most intricate; the payoff is the first audible reverb tail.
+Keep the §73 falsifier (gain-sensitivity) as the accept/reject gate.
+
+---
+
+## S6. Speaker-audible LLE behind a labelled flag (Phase-6, speculative build)
+
+**Speculative move.** With S1 (+ S5) in place, route the LLE frame's output to the mix behind
+`UPD6383_SPEC_AUDIO` (env, default off), replacing the "discard every frame" gate with "play the
+frame if it ran trap-free under the speculative table."
+
+**Fit test.** Spectral A/B the speculative-LLE speaker output against the HLE reference render for
+the same effect + parameters (`render_eq_from_capture.py` / the HLE showcase). Ship it **only** as
+the labelled `SPEC_AUDIO` path — never the default, never called "faithful". A match promotes the
+whole speculative table from "fits the oracle internally" to "fits audibly"; a mismatch localises
+which stage is still wrong.
+
+**Risk/label.** SPECULATIVE audio, clearly labelled, default-off, drop-in-replaceable, and always
+presented next to the HLE reference so no one mistakes it for measured-faithful. This honours the
+standing rule (never ship plausible-but-wrong as faithful) while still delivering audible progress.
+
+---
+
+## S7. Cross-check speculative readings against the SX-WSA1R twin
+
+**Speculative move.** The WSA1R runs the same uPD6383 core with the same kernel; its PEQ is the same
+biquad (validated by construction). Where a KN5000 code is ambiguous, adopt the reading that is
+*consistent across both products* — a speculative reading that only works on one is suspect.
+
+**Fit test.** Run S2's harness on captured WSA1R frames with the same code table; a reading is
+strengthened if it fits both, weakened if it needs per-product special-casing.
+
+**Risk/label.** SPECULATIVE corroboration, not proof; a cheap consistency filter on S1/S3/S5.
+
+---
+
+## S8. Feed everything back into the disassembler's speculative tier
+
+**Speculative move.** Each reading that passes its fit test graduates from OPEN into
+`alu_decoded_spec()` / `_ANCHORED_*_SPEC` with a one-line provenance ("fits the HLE oracle on
+frame X, S1"), lifting the speculative decode-coverage number and, more importantly, making the
+next capture *interpretable*.
+
+**Fit test.** `ceiling_partition.py` re-run: speculative coverage should climb as codes graduate;
+the strict tier stays untouched (the honest floor).
+
+**Risk/label.** Bookkeeping; keep the strict vs speculative columns strictly separated so the
+honest measured coverage is never inflated.
+
+---
+
+## Guardrails (unchanged, and they make speculation safe)
+
+1. **Two tiers, never merged.** Strict-measured stays the honest floor; everything here lands in the
+   SPECULATIVE tier with provenance. `run_decode_regression.sh` remains the measured-only truth.
+2. **Every speculative reading is falsifiable via S2** (the HLE-oracle diff) and is discarded the
+   moment it diverges — speculation that *cannot* fail is not adopted.
+3. **Speculative audio is labelled, default-off, and always shown beside the HLE reference.** We are
+   allowed to be wrong here; we are not allowed to *claim* we are right.
+4. **Hardware questions stay parked** (`notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md`): POSITION scale,
+   IC4 ROMs, and any reading only Felipe's hardware can settle are flagged for him, not guessed into
+   the measured tier.
+
+**Recommended order:** S2 (build the judge) → S1 (input route) → S4 (biquad roles) → S3 (f31) →
+S5 (reverb) → S6 (audible) → S7/S8 (corroborate + record). S1 alone, if its fit test passes, is the
+breakthrough: real audio through the measured biquad, judged bit-for-bit by the oracle.
