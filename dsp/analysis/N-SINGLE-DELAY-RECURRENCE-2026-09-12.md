@@ -162,9 +162,12 @@ cells (the LFO increment 114, the 240-sample sweep) but leaves a GAIN at Q22 of 
 DRIVE/VOLUME (`q22d × cs`) are the same shape. So the audit's verdict is **per block**: gains
 scaled via `fscale` are Q23 and correct; gains scaled via `q22 × cs` are 2× hot and should become
 `q22 × cs / 2` (= Q23) — chorus wet first, then every block that copies the `cs` idiom for a
-gain rather than an integer. The A/B for the chorus is the wet/dry ratio in the spectral A/B
-(expect the modulated energy to halve), effect by effect, before any HLE change ships; the EQ is
-exempt (design parameters, calibrated to the panel's dB).
+gain rather than an integer. The EQ is exempt (design parameters, calibrated to the panel's dB).
+**Chorus wet corrected and A/B'd (kn7000_mame, `cho_wet … * 0.5`):** `dsp/tools/chorus_wet_ab.py`
+on the previous vs the rebuilt binary (same `chorus_ab.lua` rig, one held note): LFO-band
+modulation strength **0.0751 → 0.0449 (0.60×)**, rate unchanged at 0.62 Hz, mix rms 0.0149 →
+0.0180 (the larger dry share, `(1−0.152)/(1−0.303) = 1.22`). The halving landed; the impl page
+regenerated. Distortion DRIVE/VOLUME (`q22d × cs`, behind an AGC normaliser) are next in the audit.
 
 ## Honest grade
 §7 MEASURED (two EQ runs, two delay runs; the rail/no-rail of the device's own state block), the
