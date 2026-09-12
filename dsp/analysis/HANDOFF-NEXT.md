@@ -59,6 +59,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
+   ⛔⛔ **SEVEN CONFIGURATIONS NOW, NOTHING PASSES BOTH** (§28, one binary, three criteria):
+   `CALLACC` is **identical to the baseline on every criterion** — the accumulator does not carry
+   across a block boundary in any observable way, so there is nothing to clear. **§138 (`SPEC`
+   bit 55) is REFUTED alone and in combination** — the EQ goes bit-identical and the chorus
+   increment is 168 353.
+   ★★ **THE LIVE QUESTION HAS MOVED: it is the BUS TERM at the body entry, not product lifetime.**
+   §27 measured that with `iw85`'s LOAD removed the EQ's entry counts the **same bus datum three
+   times** (`ACT 0x0D` loads it at `iw84`, `ACT 0x00` adds it at `iw86`, and again at `iw87`) and
+   `iw88`'s store rails the pickup at `0x7FFFFF`. ⇒ **at most ONE of these three readings can be
+   right as it stands**, and that is the next round:
+   1. `ACT 0x0D` loads the accumulator from the bus (63 + 29 rows, 53 programs);
+   2. `ACT 0x00` adds the bus on top of the `f31` op at `f31 = 1` (442 rows);
+   3. the same at `f31 = 5`.
+   The shipped decode hides the conflict because `iw85`'s LOAD throws the first copy away — **the
+   erasure was also the thing preventing the triple count.**
    ★ POSITIVE by-product, measured: **row 25 (§52, `ldptr` seeds the coefficient cursor) is
    load-bearing for the kernel's DELIVERY of audio.** With it cleared the inputs are bit-identical
    (`0x01` = 60 672, `0x04` = 122 880) and the **pickup cell `0x05` goes to 0**, taking 91 of the
