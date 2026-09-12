@@ -64,8 +64,15 @@ shorthand drops the product term. `dlyseed_confront.py`'s own test has always in
 | `cls2 ACT0D SRC07 f31=1` | `L << 16` | 29 | 29 |
 
 **`f31 = 1` gives `L<<16`, not `acc + L<<16`** (29 discriminating rows), so this code overrides the
-accumulate. That is a sharper statement than the committed speculative gloss *"ACT 0x0D = delay/
-state MIXING: mem onto bus"* — on the accumulator side it is a **bus LOAD**.
+accumulate.
+
+⚠ This does **not** contradict the committed speculative gloss *"ACT 0x0D = delay/state MIXING:
+mem onto bus"* — that gloss describes what drives the **bus**, and this describes what the
+**accumulator** receives. They are the two halves of the same word, and the measured half is the
+one that was missing: whatever `ACT 0x0D` puts on the bus, the accumulator **takes it and drops
+its own contents**, `f31` notwithstanding. The same distinction applies to `ACT 0x0E` (*"acc onto
+bus"*): on the accumulator side it is a plain `f31` LOAD (`P`, 53 rows, 53 programs), which is
+consistent with the accumulator being that word's **source** rather than its destination.
 
 ## 5. Two corrections the tool forced on ITSELF
 Both are recorded because they are the kind of error that would otherwise have shipped as a result.
