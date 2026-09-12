@@ -1277,6 +1277,48 @@ on two programs.
 ⚠ Grade: MEASURED, ten programs, one binary, one baseline. Promotion is a judgement on that
 evidence, and the enhancer flag is the standing argument against it.
 
+## 37. ★★ THE ENHANCER FLAG IS RESOLVED — it is §30, on a second program, unmasked
+§36 promoted the flush with one standing objection: the **ENHANCER's** non-zero product rows drop
+**46 → 10** and nothing explained it. Reading its body entry in both configurations explains it
+completely, and the answer is not a regression.
+
+```
+ENHANCER body entry, WITH the flush                      (base = the same words, residue instead of 0)
+iw85  cls2 ACT0D SRC07 f31=0   acc = 320 968 982 528   <- = 4 897 598 << 16, THE INPUT
+iw86  cls2 ACT0E SRC10 f31=0   acc = 0                 <- LOAD from P.  input DISCARDED
+iw87  cls2 ACT00 SRC00 f31=1   acc = 320 968 982 528   <- the bus term puts it BACK
+iw88  cls2 ACT00 SRC00 f31=5   acc = 320 968 982 528      and the pointer moves 0x10 -> 0x50
+iw89  clsA ACT15 SRC07 f31=0   acc = 0, L = 0, mem[0x50] = 0   <- the body reads a cell NOTHING WROTE
+```
+
+From `iw89` on every operand is zero, so every multiply is zero — which is the entire 46 → 10.
+**Under the baseline the same words run and the same discard happens**; the only difference is that
+`iw86` loads the *kernel's residue* instead of zero, so the body has a non-zero number to multiply.
+⇒ **the flush did not break the enhancer. It removed the residue that was standing in for its
+input**, exactly as §23/§29 established for the EQ.
+
+★★ **And the two programs now state the same gap in the same words.** Compare:
+
+| | ENHANCER | PARAMETRIC EQ |
+|---|---|---|
+| input assembled in the accumulator | `iw85`/`iw87` | `iw84`/`iw86` |
+| pointer moves to the band/state block | `iw88`, `0x10 → 0x50` | `iw88`, `0x10 → 0x50` |
+| first body word reads | `iw89` `ld (p),c+,(p)+0` at **`0x50`** | `iw89` `ld.ta (p),c+,(p)+0` at **`0x50`** |
+| what is in `0x50` | **0** | **0** |
+
+Two unrelated effect families, the same entry shape, the same empty cell. ⇒ §30's question —
+**what writes `0x50`** — is not an EQ quirk; it is *the* remaining body-side gap, and it is now
+stated on two programs. The EQ has an explicit store at `iw88` whose target is the **pre**-increment
+pointer (`0x10`, unread); the enhancer's `iw88` carries no store bit at all. Whatever the chip does
+to get the entry's accumulator into `0x50`, the device is not doing it in either program.
+
+⇒ **The §36 promotion's standing objection is withdrawn**: the enhancer flag is the known open
+problem made visible, not a new fault. The flag stays in the table — it is a real difference — but
+it is no longer unexplained, and it is no longer an argument against the flush.
+
+⚠ Grade: MEASURED, from the committed regression captures' own traces
+(`reg/base/t2_F.log`, `reg/flush/t2_F.log`; regenerable per `catalogue_regression.sh`).
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
