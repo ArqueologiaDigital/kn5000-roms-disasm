@@ -240,6 +240,36 @@ The withdrawal is of my own assumption. The "depth scale is missing" conclusion 
 with it: the depth scale is **present and correct** (`240 × phase >> 23` → 0..240); what was
 full-scale in the §157 census is the accumulator's excursion over 1.5 M frames, not the tap range.
 
+## 11. THE TABLE'S CONSUMER, IDENTIFIED: the SECOND sweep word (MEASURED)
+§10 left "which consumer does the table feed?" as the open question. Censusing the chorus body for
+every row that touches the cells the two lookups write (`0x0C` for selector `0x18`, `0x0E` for
+selector `0x20`) answers it:
+
+```
+iw115  the first lookup      dp = 0x0C  mem = B3078B      <- a wavetable entry
+iw116  012.4.01.1CE          dp = 0x0C  L = -5 044 341    <- reads it (= s24(B3078B))
+iw119  the second lookup     dp = 0x0E  mem = 8E45AF      <- another wavetable entry
+iw120  012.4.01.1CE          dp = 0x0E  L = -7 453 265    <- reads it
+...
+iw135  0192A44000  class A  SRC 0x00  dp = 0x52  L = -171 087  == the value cell 0x0E then holds
+```
+
+`iw135` is `192.A.44.000` — **the same word form as the sweep word `iw94`** (`192.A.40.000`), i.e.
+the program's **second sweep**. Its operand comes from the table path (cell `0x0E`), after the
+intermediate arithmetic of `iw116..iw134` reduces the raw entry (±5–7 M) to `−171 087`.
+
+⇒ **the chorus drives its two sweeps from two different sources**: the first from the **phase**
+directly (§10, `depth × phase`, a ramp) and the second from the **class-6 table** by way of cell
+`0x0E`. That is a quadrature-shaped structure — two modulators for two taps — which is what the
+HLE models with `sin` and `cos`, but built from one ramp and one table lookup rather than two
+trigonometric functions.
+
+⚠ Grade: MEASURED (operand identity and cell provenance from the archived capture); the *reading*
+of what the intermediate words do to the table value between `iw116` and `iw135` is NOT established
+here, so "what shape the second modulator actually has" stays open. ★ But the question §10 posed —
+which consumer — is answered, and the answer says the table is **not** decorative: it drives one of
+the two taps.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
