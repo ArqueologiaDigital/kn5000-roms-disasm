@@ -59,7 +59,26 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
-   ★★★★★ **§32: A CONFIGURATION PASSES ALL FOUR CRITERIA. THE FIRST ONE EVER.**
+   ⛔⛔ **§32's HEADLINE IS RETRACTED BY §34 — there is NO configuration that passes.** The chorus
+   criterion I used was the phase cell's **within-frame delta**, and `iw89` loads the increment
+   while `iw91` stores it, so it reads **114 even when the phase is reset to zero every frame**.
+   The device has printed the right measurement in every capture all along (§119's witness, the
+   phase on **eight consecutive frames**), and under `CALLFLUSH` + bit 28 it is
+   **`0 0 0 0 0 0 0 0`**. ⇒ **§109 bit 28 kills the chorus's LFO**; with the flush the phase is
+   dead, without it frozen. ★ **`dsp/tools/lfo_ramp_check.py` is the criterion now**, and the gate
+   uses it; it runs on any archived chorus capture, which is how this was caught retrospectively.
+   ⚠⚠ **A criterion must be able to fail in the way the thing fails.** I built a four-criterion
+   gate because single criteria had been fooling this project, then let the most important one be
+   a quantity that is constant under the failure it existed to detect.
+   ★★ **What that leaves, and it is the strongest standing result:** by the eight-frame ramp,
+   `CALLFLUSH` (and `PCLR`, and bit 12) give the chorus a **constant +114 per frame** — a correct
+   free-running LFO — while the baseline and every other arm wander. Combined with §29 (the flush
+   is also the only configuration delivering **one clean copy** of the EQ's input), **two unrelated
+   criteria on two programs now point at `CALLFLUSH`.** What is still unsolved is the EQ's
+   delivery: the clean copy lands on `0x10`, which nothing reads, and bit 28 — the only thing that
+   moves it to `0x50` — costs the chorus its LFO.
+
+   ~~★★★★★ §32: A CONFIGURATION PASSES ALL FOUR CRITERIA. THE FIRST ONE EVER.~~ ⛔ withdrawn:
    `UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 UPD6383_SPEC=B9108446B39B440F` (the shipped mask **+
    §109 bit 28**, the `ACT 0x07` store target) with the baseline arms:
    | criterion | result |
