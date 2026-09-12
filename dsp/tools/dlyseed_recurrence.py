@@ -33,10 +33,11 @@ from dlyseed_confront import parse, s24   # noqa: E402
 
 X = 0x400000
 PSHIFT = 6                                   # the multiplier's right shift (S227: 6 shipped, 7 = total 23)
+SHIFT_OF = {}                                # per-coefficient shift (--fmtbit: 7 on bit-12-clear words)
 
 
-def mul(c, l):
-    return (s24(c) * l) >> PSHIFT
+def mul(c, l, name=None):
+    return (s24(c) * l) >> SHIFT_OF.get(name, PSHIFT)
 
 
 def main():
@@ -49,11 +50,20 @@ def main():
     b = {r["iw"]: r for r in rows if r["u1"] == 0 and 84 <= r["iw"] <= 131}
     if not b:
         print("no body rows"); return 1
-    c = {k: b[iw]["coef"] for k, iw in (("c0", 86), ("c1", 87), ("c2", 89), ("c3", 93), ("c4", 94),
-                                        ("c5", 95), ("c6", 98), ("c7", 99), ("c8", 100))}
+    # coefficient -> (row whose coef column shows it, the word that MULTIPLIES with it)
+    CW = (("c0", 86, 87), ("c1", 87, 88), ("c2", 89, 90), ("c3", 93, 94), ("c4", 94, 95),
+          ("c5", 95, 96), ("c6", 98, 99), ("c7", 99, 100), ("c8", 100, 101))
+    c = {k: b[iw]["coef"] for k, iw, _ in CW}
+    if "--fmtbit" in sys.argv:
+        # UPD6383_FMTBIT reading: the multiplying word's bit 12 clear -> Q0.23 (shift 7), set -> Q1.22 (6)
+        for k, _, mw in CW:
+            SHIFT_OF[k] = 6 if (int(b[mw]["word"], 16) >> 12) & 1 else 7
     print("coefficients in force (coef column of the previous row):")
-    for k, v in c.items():
-        print("  %s = %06X  (%+.4f at Q22)" % (k, v, s24(v) / 4194304.0))
+    for k, iw, mw in CW:
+        v = c[k]
+        sh = SHIFT_OF.get(k, PSHIFT)
+        print("  %s = %06X  (%+.4f at Q22)  multiplied at iw%d %s bit12=%d shift %d" % (
+            k, v, s24(v) / 4194304.0, mw, b[mw]["word"], (int(b[mw]["word"], 16) >> 12) & 1, sh))
     m08 = s24(b[87]["mem"])                     # cell 0x08 as the frame starts (dp=08 at iw87; w7's operand)
     s51 = s24(b[98]["mem"])                     # cell 0x51 as section B starts
     print("\nstate entering the frame: m08 = %d (%+.4f)  s51 = %d (%+.4f)  x = %d (1.0)"
@@ -61,17 +71,17 @@ def main():
 
     # section A.  w10 LOADS the product w6 formed, c2 * x (c2 = 0x400000: unity at total shift 22,
     # one half at 23), and leaves its datum v in cell 0x50; w11/w12 multiply v.
-    a10 = mul(c["c2"], X)
+    a10 = mul(c["c2"], X, "c2")
     v = a10 >> 16
     u = v + m08                                  # w7's bus-add: P[w6] (= c2*x) + mem[0x08]
-    accA = a10 + mul(c["c3"], u) + mul(c["c4"], v)               # after w12's accumulate
+    accA = a10 + mul(c["c3"], u, "c3") + mul(c["c4"], v, "c4")   # after w12's accumulate
     s50n = accA >> 16
-    yA = (accA + mul(c["c5"], v)) >> 16
+    yA = (accA + mul(c["c5"], v, "c5")) >> 16
     # section B
-    p5 = mul(c["c5"], v)
-    accB = p5 + mul(c["c6"], s51) + mul(c["c7"], p5 >> 16)
+    p5 = mul(c["c5"], v, "c5")
+    accB = p5 + mul(c["c6"], s51, "c6") + mul(c["c7"], p5 >> 16, "c7")
     s51n = accB >> 16
-    yB = (accB + mul(c["c8"], p5 >> 16)) >> 16
+    yB = (accB + mul(c["c8"], p5 >> 16, "c8")) >> 16
 
     def chk(name, pred, got):
         print("  %-28s predicted %12d   trace %12d   %s" % (name, pred, got, "OK" if pred == got else "DIFF %+d" % (got - pred)))
@@ -88,7 +98,7 @@ def main():
     # product, loaded by w1's f31=0) + L[w2]<<16 (the P<-bus reading of ACT 0x0E, here the pickup
     # cell 0x05 = a saturated rail in the starved LLE) + c0*m08 (w3: FEEDBACK x damped output) + c1*m08.
     # Only the c0 term is a clean multiply; the rest rides on the open 0x0D/0x0E readings.
-    fold = b[84]["p"] + (b[86]["l"] << 16) + mul(c["c0"], m08) + mul(c["c1"], m08)
+    fold = b[84]["p"] + (b[86]["l"] << 16) + mul(c["c0"], m08, "c0") + mul(c["c1"], m08, "c1")
     chk("acc after w4 (iw88) = fold", fold, b[88]["acc"])
     print("\n  the fold's clean term: c0 = C-RAM[0x00] = %+.4f (Q22) x y_B -- the HLE's feedback cell; the "
           "other two terms (P[w0] stale, L[w2]<<16 = the pickup rail) are the open 0x0D/0x0E words."

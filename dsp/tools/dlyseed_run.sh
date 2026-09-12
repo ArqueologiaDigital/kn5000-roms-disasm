@@ -12,11 +12,12 @@
 # then copies error.log to OUT.log and runs dlyseed_confront.py on it.
 set -u
 TYPEIDX=${1:?TYPEIDX}; OUT=${2:?OUT.log}; shift 2
-LO=84; HI=130; EXTRA=()
+LO=84; HI=130; PSHIFT=6; EXTRA=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --lo) LO=$2; shift 2;;
     --hi) HI=$2; shift 2;;
+    --pshift) PSHIFT=$2; shift 2;;     # the multiplier shift to check against (7 under UPD6383_PSHIFT=2)
     *=*)  EXTRA+=("$1"); shift;;
     *)    echo "unknown arg $1"; exit 2;;
   esac
@@ -34,4 +35,4 @@ env DISPLAY=${DISPLAY:-:0} DHLE=0 DSPCFG=3 TYPEIDX="$TYPEIDX" NOTEMODE=0 TGM=0 \
     -autoboot_script "$HERE/fx_ab.lua" > /dev/null 2>&1
 echo "rc=$?  LANDED=$(grep -c '### LANDED' error.log)  blocks=$(grep -c 'TIME-ORDERED FRAME TRACE' error.log)"
 cp error.log "$OUT"
-python3 "$HERE/dlyseed_confront.py" "$OUT" --lo "$LO" --hi "$HI"
+python3 "$HERE/dlyseed_confront.py" "$OUT" --lo "$LO" --hi "$HI" --pshift "$PSHIFT"

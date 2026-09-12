@@ -169,10 +169,65 @@ modulation strength **0.0751 → 0.0449 (0.60×)**, rate unchanged at 0.62 Hz, m
 0.0180 (the larger dry share, `(1−0.152)/(1−0.303) = 1.22`). The halving landed; the impl page
 regenerated. Distortion DRIVE/VOLUME (`q22d × cs`, behind an AGC normaliser) are next in the audit.
 
+## 8. ⚠ Refinement: the register already had a PER-WORD format bit — "Q23 globally" is too strong
+`SPECULATIVE-APPLIED-REGISTER.md` (the §71-era entry, "hi12 bit 12 selects the coefficient
+format") records that **word bit 12 (= addr8 bit 0) selects Q1.22 when set and Q0.23 when
+clear**, derived from the EQ (its 0 dB `b0/a0 ≡ 1` cell holds `0x400000` on a bit-set word; its
+`−a2/a0` cell, which must satisfy |·| < 1, sits on a bit-clear word) and from the single delay's
+`0x400000` on a bit-clear word measuring exactly +0.5. The device never implemented it: it
+applies one shift (22) to every word, which §227 then defended as "coefficients are Q1.22,
+MEASURED" — a statement that is true of the bit-SET words only. Re-reading §6–§7 against it:
+every word this note measured is **bit-clear** — the delay's c2 (`0202AB8655`, addr8 0xB8) and all
+six damping words (`…A001D5`/`…A00415`, addr8 0x00), the EQ's `−a2` consumer (`0202A001D5`) —
+so "Q23" was right for exactly those words, and the two-program result is better stated as:
+**the shipped global 22 is wrong for the bit-clear words (it doubles them: the EQ's a2 → 1.98 and
+rails, the delay's damping → 1.45×), and a global 23 would be wrong for the bit-set words (it
+halves them: the EQ's b0/b2/−a1, and the delay's feedback word w3 `0212A011D5`, addr8 0x01).**
+The chorus wet consumer (w39 `0000A00415`, addr8 0x00) is bit-clear, so the HLE correction of §7
+stands under both readings; the delay's feedback (w3, bit set) is **−0.58 at Q1.22**, not the
+−0.29 the `fscale` convention gives — so the HLE audit's "delay correct" needs the same
+per-word care (OPEN until the format bit is implemented and confronted). Which word carries the
+bit — the fetching word or the multiplying word — also needs the confrontation: on the EQ the
+fetching-word reading leaves b1 at half the scale of b0/b2, the multiplying-word reading breaks
+the a-pair; one of them (or the pipeline offset) must give the RBJ-consistent set
+`b = a/2` (b1 = −0.995, a1 = −1.991, a2 = 0.991: a low band, Q ≈ 1.6).
+**Next arm, precisely:** `UPD6383_FMTBIT` — per-word `P_SHIFT = 7` on bit-clear words, 6 on
+bit-set — with the fixed-point tool given per-coefficient shifts; predictions: EQ state finite
+AND b-path RBJ-consistent, delay damped with a −0.58 feedback fold. **Do not flip the global
+default** (recommended in the previous report): it trades one half of the words for the other.
+
+## 9. The per-word format bit was RUN as "bit 12 of the multiplying word" — not enough (MEASURED)
+`UPD6383_FMTBIT` (kn7000_mame, default off): shift 7 on bit-12-clear words, the shipped 6 on
+bit-set ones (FIRED 94 180 005). `dlyseed_run.sh 7 … UPD6383_FMTBIT=1` / `15 … UPD6383_BIQSEED=8`;
+`dlyseed_recurrence.py --fmtbit` takes the shift from each multiplying word's own bit.
+* **Delay:** sections A and B check **6/6** with the damping words at 7 and the feedback word
+  `w3` at 6 (its product is at shift 6 in the trace: `Q1b` 13/16 at `>>7`, the 3 misses being the
+  three bit-set words). New anomaly: cell **0x08 = 2 × cell 0x07** (−1479855 vs −739929) where
+  both held `y_B` at the two global scales — some word between `w18` and the next frame's `w7`
+  (or in the kernel, which the arm did not exclude) now doubles the state on its way to 0x08; the
+  fold reads 0x07 (`w3`'s operand is `mem[0x07]`, not 0x08 — the tool now reads it there).
+* **EQ:** the state block **still rails** (19/48, as at the shipped scale). The products are as
+  designed — `b1` at 7 (−0.4977), `b0`/`b2`/`−a1` at 6 (0.5 / 0.4956 / 1.991), `−a2` at 7
+  (−0.9911) — and that set is the problem: an RBJ peaking band needs `b1 = a1 × (b0/a0)`, i.e.
+  **−0.995**, so its DC numerator cancels the denominator (`1 − 1.991 + 0.9911 ≈ 0.0001`); with
+  `b1 = −0.4977` the band has a DC gain of ~5000 and rails on any offset. So the RBJ-consistent
+  per-word scales are `b0, b1, b2, a1` at Q1.22-equivalent and `a2` at Q0.23-equivalent — and
+  **bit 12 explains every one of them except `b1`**, whose word `0000A001D3` (bit clear) differs
+  from the delay's Q0.23 damping word `0000A001D5` only in ACT (0x13 = tempA capture vs 0x15).
+  ⇒ the scale is not a pure coefficient-format bit. The live hypothesis is a **datum-path factor
+  on some words** (a doubled store or operand — exactly what the delay's `0x08 = 2 × 0x07` shows
+  under this arm), which would let `b1` at Q0.23 × a doubled `x1` equal `b1` at Q1.22 × `x1`.
+  Untested; it needs an arm on the store/operand path, not on the coefficient shift.
+**Net:** the two global scales and the bit-12 rule are all refuted as complete accounts; the
+MEASURED facts stand (damping words behave as Q0.23; `a2` as Q0.23; `b0/b2/a1` as Q1.22; the
+chorus-wet word as Q0.23 — its HLE correction is unaffected). Kept as a default-off diagnostic.
+
 ## Honest grade
-§7 MEASURED (two EQ runs, two delay runs; the rail/no-rail of the device's own state block), the
-scale conclusion STRONG (two independent constraints + the corpus annotations; the shipped 22 was
-never independently pinned). §6 INFERRED (closed-form from measured coefficients + a physical constraint; a named falsifier).
+§9 MEASURED (two runs; the EQ's RBJ argument is arithmetic on the measured cells). §8 corrects §6–§7's scope: MEASURED facts unchanged, the conclusion narrowed to the bit-clear
+words (STRONG), the per-word format bit's carrier word OPEN. §7 MEASURED (two EQ runs, two delay
+runs; the rail/no-rail of the device's own state block), the scale conclusion STRONG for the
+bit-clear words (two independent constraints + the corpus annotations; the shipped 22 was never
+independently pinned for them). §6 INFERRED (closed-form from measured coefficients + a physical constraint; a named falsifier).
 §5 MEASURED (two runs each program; the delay's rail is the device's own fixed point). §2 MEASURED: the recurrence reproduces every checked column from the entering state and the
 coefficients (9/9, one LSB of rounding), i.e. this is exactly what the device executes. §3: the
 feedback-cell identity is MEASURED (coefficient on the bus, operand = the damped output); the
