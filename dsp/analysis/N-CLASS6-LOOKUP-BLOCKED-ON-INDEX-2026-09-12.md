@@ -80,6 +80,35 @@ time in this project that item has been actionable.
 right rate and depth. Those are the next measurements, and the HLE gives both targets — the chorus's
 0.6 Hz rate and its ±240-sample sweep are already decoded and A/B-validated.
 
+## 6. The lookup was IMPLEMENTED and RUN — it fires, and the criterion FAILS (MEASURED)
+`UPD6383_C6LUT` (default off) performs the lookup: index = the accumulator as a datum modulo the
+word's own `addr8` (0x18 = 24), table = `m_rf[0x1D + index]` (§160's window), result into `P` at
+the multiply's scale. Chorus, same rig, arm off vs on in one command:
+
+```
+off  §157 TAPMOD PER SLOT: iw96:0..240(r240) iw105:0..240(r240) iw137:-1984..0(r1984)    iw146:-240..0(r240)
+on   §157 TAPMOD PER SLOT: iw96:0..240(r240) iw105:0..240(r240) iw137:-4194544..0(r4194544) iw146:-240..0(r240)
+      (FIRED 3 150 504 = twice per frame, the two class-6 sites)
+```
+
+**The pre-registered criterion is NOT met.** It required the census to stop reporting a constant
+240 and start spanning a range at the LFO rate. The two sweep slots `iw96`/`iw105` are **still
+`0..240`** — the depth is as constant as before — and the only slot that moved, `iw137`, did not
+acquire a sweep: its excursion blew up to **4 194 544 ≈ 2²²**, i.e. roughly the raw table value
+(the sine peaks near `0.95·2²³`) rather than a ±240 modulation.
+
+⇒ the lookup's value **reaches the tap-modulation path but at the wrong place and the wrong
+scale**. Read plainly: firing the lookup is necessary and is now demonstrated, but *this* index and
+*this* destination are not the chip's. The candidates the failure points at, in order: the result
+may belong somewhere other than `P` (the idiom's third word `012.4.01.1CE` is the untested half);
+the index may need the `(coef × phase) >> 23` form rather than the accumulator-as-datum shortcut I
+took; and the depth multiply that should scale the waveform to ±240 is evidently not downstream of
+where the value lands.
+
+⚠ Grade: MEASURED negative with a fired count and a like-for-like control in the same command. The
+arm stays default-off. ★ This does not weaken §5 — the index *does* arrive, which is what §5
+claimed — it shows that arrival is not sufficient and names what else the idiom needs.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
