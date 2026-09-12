@@ -25,9 +25,25 @@ Validated by TWO in-emulator A/Bs (DSPCFG=2):
   **0.62 Hz** (the decoded rate), 32× over dry. PASS.
 So both chained stages are present and correct — the combi chaining works end to end.
 
-## The other S.DELAY+X combos (same pattern)
-Each is the delay stage chained with a different second block, pinned the same way (drive the
-second effect's LFO SPEED / feedback, find its cell; delay feedback and descriptor as above):
-- S.DELAY+FLANGER (25), S.DELAY+VIBRATO (26), S.DELAY+PHASER (27), S.DELAY+S.DELAY (24).
-- AUTO WAH+S.DELAY (28) and PEQ+S.DELAY (30) need their non-delay stage (auto-wah = envelope
-  filter; PEQ = the biquad) first.
+## The other S.DELAY+X combos — ALL VALIDATED (DSPHLE == 9..12)
+Each is the delay stage chained with a different second block; each has its OWN C-RAM layout,
+pinned by intervention (drive the second effect's LFO SPEED, find its rate cell; the delay
+feedback cell and descriptor 0x26 as the delay stage). Second-stage feedback/sweep where the
+combo layout does not expose them are fixed; the validated per-combo quantity is the mod RATE
+(and, for the delays, the echo). All reuse the standalone mod-block delay lines / all-pass
+stages; S.DELAY+S.DELAY uses a second long delay line (m_dly2).
+
+| combo | TYPEIDX | mod RATE cell | delay feedback cell | A/B result |
+|---|---|---|---|---|
+| S.DELAY+FLANGER | 25 | 0x00 (0.2 Hz) | 0x04 | mod 0.77 Hz driven, 36× over dry |
+| S.DELAY+VIBRATO | 26 | 0x00 (0.6 Hz) | 0x04 | mod 0.62 Hz, 22× over dry |
+| S.DELAY+PHASER  | 27 | 0x03 (0.4 Hz), MANUAL=0x0A, DEPTH=0x09 | 0x00 | mod 0.77 Hz driven, 32× over dry |
+| S.DELAY+S.DELAY | 24 | (no LFO) delay2 feedback=0x05 | 0x00 | echo at 178 ms, strength 0.92 |
+
+So all five S.DELAY+X combos are audible and validated in the emulator: the delay stage
+produces its echo, and the modulation stage modulates at its decoded rate.
+
+## Still needing their non-delay stage
+- AUTO WAH+S.DELAY (28): auto-wah = an envelope-swept filter (envelope follower, not an LFO) —
+  a different block, not yet built.
+- PEQ+S.DELAY (30): the PEQ biquad stage + the delay — the EQ block exists; would chain it.
