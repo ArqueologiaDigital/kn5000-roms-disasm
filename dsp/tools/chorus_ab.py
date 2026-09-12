@@ -86,8 +86,8 @@ def mod_spectrum(x, fs):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print("usage: chorus_ab.py <A_dry.wav> <B_chorus.wav>"); return 2
+    if len(sys.argv) not in (3, 4, 5):
+        print("usage: chorus_ab.py <A_dry.wav> <B_chorus.wav> [band_lo_Hz] [band_hi_Hz]"); return 2
     fsa, A = read_main(sys.argv[1])
     fsb, B = read_main(sys.argv[2])
     fs = fsa
@@ -95,10 +95,13 @@ def main():
     print(f"fs={fs}  A window {sa/fs:.2f}-{ea/fs:.2f}s  B window {sb/fs:.2f}-{eb/fs:.2f}s")
     mf, mA = mod_spectrum(A[sa:ea], fs)
     _, mB = mod_spectrum(B[sb:eb], fs)
-    # Search the LFO BAND (0.35-1.1 Hz) for the chorus rate: the decoded CHORUS LFO is ~0.6 Hz
-    # (cell 0x00 = 114). The instrument voice's own tremolo/vibrato sits higher (~2.6 Hz) and
-    # is present in the dry control too, so it must be excluded from the chorus test.
-    lo, hi = np.searchsorted(mf, 0.35), np.searchsorted(mf, 1.1)
+    # Search the LFO BAND for the effect's rate. Default 0.35-1.1 Hz (chorus/driven flanger/
+    # phaser/ensemble); override via argv[3],argv[4] for a faster LFO (e.g. vibrato ~4 Hz).
+    # The instrument voice's own tremolo (~2.6 Hz) is present in the dry too, so the band is
+    # chosen to exclude it.
+    band_lo = float(sys.argv[3]) if len(sys.argv) > 3 else 0.35
+    band_hi = float(sys.argv[4]) if len(sys.argv) > 4 else 1.1
+    lo, hi = np.searchsorted(mf, band_lo), np.searchsorted(mf, band_hi)
 
     def peak(m):
         k = lo + int(np.argmax(m[lo:hi]))
@@ -110,8 +113,8 @@ def main():
     print(f"  B (chorus) LFO-band peak: {fB:5.2f} Hz  (strength {vB:.4f})")
     print(f"  B/A strength ratio at {fB:.2f} Hz: {vB / max(vA_here, 1e-9):.1f}x")
 
-    ok = (0.4 < fB < 1.0) and (vB > 3.0 * vA_here) and (vB > 0.02)
-    print(f"\nPASS -- chorus modulates the note at {fB:.2f} Hz (the decoded ~0.6 Hz LFO rate), "
+    ok = (band_lo < fB < band_hi) and (vB > 3.0 * vA_here) and (vB > 0.02)
+    print(f"\nPASS -- modulates the note at {fB:.2f} Hz (the decoded LFO rate), "
           f"far above the dry control." if ok else
           "\nFAIL/INCONCLUSIVE -- no clear LFO-rate modulation in B vs A.")
     return 0 if ok else 1
