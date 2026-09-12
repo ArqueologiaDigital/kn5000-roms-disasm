@@ -353,10 +353,19 @@ n=159  iw54  080016000B  acc 1301505024 / 1301505024   P 1301505024 / 1301505024
 * `iw54` (`080016000B`, class 1 escape, delay-DRAM WRITE direction, **`f31 = 0` = LOAD**) then does
   `acc ← P`, **overwriting the body's live result (1 065 091 072) with that constant**.
 
-⇒ the body's output is discarded one word after the body ends, by a load from a product whose
-operand never changes. The operand code is **`SRC 0x08`** — the "LFO / per-unit modulation source",
-one of the codes the handoff's audio-gate checklist has always listed as open
-(`SRC {0x08, 0x11}`, `ACT {0x08, 0x0D, 0x0E, 0x17}`).
+⚠⚠ **THE ATTRIBUTION TO `SRC 0x08` IS WRONG, AND WITHDRAWN — same-session, from the handover.**
+`SRC 0x08` is **anchored and MEASURED**: it reads `C-RAM[cursor]`, established by the LFO rate, and
+`HANDOFF-NEXT` says in terms *"⛔ `SRC 0x08` MUST NOT BE TOUCHED"*. The trace agrees exactly — at
+`iw53` the cursor is `0x50` and `C-RAM[0x50] = 0x008000 = 32 768`, which is the `L` in the table.
+**A coefficient is constant by nature**, so "its operand never changes" is not evidence of a gap;
+it is the anchored decode working. I reasoned from a symptom without checking the code's status
+first — the second time this session, and the same rule both times (*check the handover first*).
+
+What survives the withdrawal is the **measurement**: the body's result does not reach the output.
+`iw184` (`ACT 0x07`, `dp = 0x76`) stores `L = 0`, `iw186` (bit-4 store, `dp = 0x75`) carries a live
+accumulator — and cells **`0x75`, `0x76`, `0x77` all read 0 and stay static across the frame pair**
+while `0x74` moves. So the break is at the body's **output store**, one stage after the channel
+work, and its cause is **not** `SRC 0x08` and not yet identified.
 
 ### The shape of the whole problem, now visible
 The "audio gate" was never one thing. It is a **chain of open codes**, one per stage, and each
@@ -366,18 +375,18 @@ starves everything downstream so only the first is ever visible:
 |---|---|---|
 | kernel → body | `iw38` `ACT 0x19` capture, suppressed by the bit-11 branch | **opened** (`UPD6383_LO12CAP=1`) |
 | body, 1st → 2nd channel | `iw137`/`iw138` `ACT 0x0D`/`0x0E` mixing pair | **opened** (`sel0e = mem[ptr] ← bus`) |
-| body → output stage | `iw53` `SRC 0x08` operand constant; `iw54` loads over the result | **open** |
+| body → output stage | the body's output cells `0x75`–`0x77` stay 0 while the words storing to them run live | **open, cause unidentified** |
 
 Every one of the three is on the handoff's own checklist of ~6 unanchored codes. That is why
 progress looked blocked for so long: with the first gate shut, the second and third could not even
 be *seen*, and each looks like "the body is starved" from downstream. The frame-pair diff is what
 makes them separable — it locates the exact row where liveness stops, one stage at a time.
 
-⚠ Grade: MEASURED (the columns above, two captures, same rig). The reading of `SRC 0x08` is NOT
-proposed here — what is measured is that its operand is constant and that the word after it
-discards the body's result. The next step is the same method: enumerate that code's candidate
-routes, and take the one that makes `iw53`'s operand track the body while leaving the two opened
-stages intact.
+⚠ Grade: the columns and the cell census are MEASURED; the `SRC 0x08` attribution built on them is
+WITHDRAWN (above). The chain table's first two rows stand on two-sided arm results; the third row
+now records a measured symptom with **no candidate cause**. The next step is a writer census of
+cells `0x75`–`0x77` — which word is supposed to write them, and does its store fire — and to check
+each code's status in the handover *before* building anything on it.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
