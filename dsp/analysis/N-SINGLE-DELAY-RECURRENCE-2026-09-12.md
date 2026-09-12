@@ -114,11 +114,62 @@ class-2 store readings (which the fixed point does reproduce) and on "a damping 
 amplify". The same argument applies to §5: the MULALL rail at unity input is partly the scale
 (a 1.45× cascade rails a 1.0 seed) — so §5's verdict is "disfavoured at the shipped scale", and
 the reading deserves a re-run once the scale is settled. **Falsifier:** the §227 `UPD6383_PSHIFT=2`
-build, seeded the same way, must give a self-consistent fixed point with `y_B/x ≈ −0.35`, and the
+build, seeded the same way, must give a self-consistent fixed point with a damped gain, and the
 EQ's design-parameter match (docs §12) must survive — both already-built instruments.
 
+**RUN (same day), delay half — MEASURED.** `dlyseed_run.sh 7 … UPD6383_PSHIFT=2` (no rebuild:
+§227 is env-selected; the trace's header confirms `P_SHIFT = 7 ACC_SHIFT = 16 TOTAL = 23`). With
+the tools told the shift (`--pshift 7`): multiplier **16/16** exact at `>> 7`, accumulator 21 + 17
++ 2 bus-add + 7 boundary, **0 unexplained, 0 saturated**; the recurrence check passes **8/8** (+1
+LSB) once section A's load is written as `v = c2·x` (`c2 = 0x400000` is unity at 22 and one half
+at 23 — the corrected tool reproduces BOTH traces). Entering state `m08 = −0.176`, `s51 = −0.198`
+— the closed form's `−0.176 / −0.198` exactly — against `−1.452 / −1.624` at the shipped scale,
+likewise exactly the closed form. So the two scales are two self-consistent executions of the
+same routing, and the question is which is the chip's; at 23 the cascade DAMPS (0.18) and the
+feedback cell reads −0.29, at 22 it amplifies (1.45) and the cell reads −0.58. The EQ half of the
+falsifier (does the biquad stop railing at 23, as `a2 = 0.9911` vs `1.98` predicts?) is §7.
+
+## 7. The EQ half of the falsifier — the biquad stops railing at total shift 23 (MEASURED)
+The parametric EQ's coefficient cells read `−a2 = 0x81227B` etc.; as Q23 that is `a2 = +0.9911`
+(poles at |z| ≈ 0.996, a stable resonant band), as Q22 it is `a2 = +1.98` — an UNSTABLE recursion
+that must rail. `dlyseed_run.sh 15 … UPD6383_BIQSEED=8` at both scales, counting the body rows
+whose cell under the pointer sits at a rail (`0x7FFFFF`/`0x800000`) and whose accumulator sits at
+or beyond the ±2³⁹ clamp, and the biquad state block 0x64..0x77 in particular:
+
+| | rows | mem at a rail | \|acc\| ≥ 2³⁹ | state cells 0x64..0x77 seen / railed |
+|---|---|---|---|---|
+| shipped, total 22 | 105 | **59** | **85** | 48 / **19** (`6A=800000`, `6C..6E=7FFFFF`) |
+| `UPD6383_PSHIFT=2`, total 23 | 105 | 5 | 11 | 48 / **0** (`68=FFC4E0`, `6C=007623`, …) |
+
+At the shipped scale the EQ's own state block is pinned to the rails; at total 23 it holds small,
+finite values. Two programs, two independent physical constraints (a damping filter's gain ≤ 1;
+a biquad's `|a2| < 1`), one answer: **the chip's coefficient field is Q23 — unity `0x7FFFFF`,
+total multiply-to-datum shift 23 — i.e. §227's UNTIED variant (`P_SHIFT 7 / ACC_SHIFT 16`), not
+the shipped 22.** This is the first time the absolute scale has been pinned by anything other than
+the device's own columns (the biquad 27/27 is scale-free and holds at both: 16/16 at `>> 7`).
+The disassembly's own static header annotations already read the cells this way (`prog09`: "0.5
+mix, 0.15/0.3 feedback" = `0x400000`, `0xDAC37C` at Q23; `prog01`: "wet 0.25/0.15" =
+`0x1364D9` at Q23) — the LLE's shipped 22 and the HLE's `q22 × cs` convention are the outliers.
+
+**Consequence for the HLE (audited against the source, not assumed).** The HLE reads raw cells
+with two conventions. The single delay's `fscale = bit1 ? 0.5 : 1.0` ("cell → operand, actual
+gain") on top of `q22d` **already yields Q23 of the chip cell** — its feedback comes out `−0.29`
+in both DSPCFG modes, exactly the chip's; so the delay is RIGHT and this note's first draft, which
+called it 2× hot, was wrong and is corrected here. The chorus, by contrast, scales its wet gain
+as `q22c(cell) × cs` with `cs = bit1 ? 1.0 : 2.0` — a convention that restores the chip's INTEGER
+cells (the LFO increment 114, the 240-sample sweep) but leaves a GAIN at Q22 of the chip cell:
+`cho_wet = 0.303` where Q23 says `0.152` (the disassembly header's "wet 0.15"). The distortion's
+DRIVE/VOLUME (`q22d × cs`) are the same shape. So the audit's verdict is **per block**: gains
+scaled via `fscale` are Q23 and correct; gains scaled via `q22 × cs` are 2× hot and should become
+`q22 × cs / 2` (= Q23) — chorus wet first, then every block that copies the `cs` idiom for a
+gain rather than an integer. The A/B for the chorus is the wet/dry ratio in the spectral A/B
+(expect the modulated energy to halve), effect by effect, before any HLE change ships; the EQ is
+exempt (design parameters, calibrated to the panel's dB).
+
 ## Honest grade
-§6 INFERRED (closed-form from measured coefficients + a physical constraint; a named falsifier).
+§7 MEASURED (two EQ runs, two delay runs; the rail/no-rail of the device's own state block), the
+scale conclusion STRONG (two independent constraints + the corpus annotations; the shipped 22 was
+never independently pinned). §6 INFERRED (closed-form from measured coefficients + a physical constraint; a named falsifier).
 §5 MEASURED (two runs each program; the delay's rail is the device's own fixed point). §2 MEASURED: the recurrence reproduces every checked column from the entering state and the
 coefficients (9/9, one LSB of rounding), i.e. this is exactly what the device executes. §3: the
 feedback-cell identity is MEASURED (coefficient on the bus, operand = the damped output); the

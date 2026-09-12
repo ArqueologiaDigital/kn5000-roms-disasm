@@ -11,8 +11,8 @@ The L-channel words of prog09 (iw = 84 + w), with the operand routing the trace 
 (L[N] = mem[dp[N-1]] for SRC 0x07, acc>>16 for SRC 0x10, tempA for SRC 0x19, coefficient bus for the
 LFO-family words) and the coefficient in force (coef column of the previous row):
 
-    w7   000.2.48.000   acc = (x + m08) << 16        (bus-add of mem[0x08], with P[w6] = 1.0 * x)
-    w10  ld  (p)        acc = x ; P = c3 * (x + m08)  (mem[0x50] holds x + m08 from w7)
+    w7   000.2.48.000   acc = (v + m08) << 16        (bus-add of mem[0x08] onto P[w6] = c2 * x =: v)
+    w10  ld  (p)        acc = v ; P = c3 * (v + m08)  (mem[0x50] holds v + m08 from w7)
     w11  mac acc        acc += c3*(x+m08) ; P = c4 * x
     w12  mac (p)        acc += c4*x ; P = c5 * x        -> s50' = acc>>16 (left in cell 0x50)
     w13  mac.st acc     acc += c5*x  (= y_A, not stored: the bit-4 store keeps the PRE-ALU acc)
@@ -32,15 +32,19 @@ sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from dlyseed_confront import parse, s24   # noqa: E402
 
 X = 0x400000
+PSHIFT = 6                                   # the multiplier's right shift (S227: 6 shipped, 7 = total 23)
 
 
 def mul(c, l):
-    return (s24(c) * l) >> 6
+    return (s24(c) * l) >> PSHIFT
 
 
 def main():
+    global PSHIFT
     if len(sys.argv) < 2:
         print(__doc__); return 2
+    if "--pshift" in sys.argv:
+        PSHIFT = int(sys.argv[sys.argv.index("--pshift") + 1])
     rows = parse(sys.argv[1])
     b = {r["iw"]: r for r in rows if r["u1"] == 0 and 84 <= r["iw"] <= 131}
     if not b:
@@ -55,13 +59,16 @@ def main():
     print("\nstate entering the frame: m08 = %d (%+.4f)  s51 = %d (%+.4f)  x = %d (1.0)"
           % (m08, m08 / 4194304.0, s51, s51 / 4194304.0, X))
 
-    # section A
-    u = X + m08
-    accA = (X << 16) + mul(c["c3"], u) + mul(c["c4"], X)          # after w12's accumulate
+    # section A.  w10 LOADS the product w6 formed, c2 * x (c2 = 0x400000: unity at total shift 22,
+    # one half at 23), and leaves its datum v in cell 0x50; w11/w12 multiply v.
+    a10 = mul(c["c2"], X)
+    v = a10 >> 16
+    u = v + m08                                  # w7's bus-add: P[w6] (= c2*x) + mem[0x08]
+    accA = a10 + mul(c["c3"], u) + mul(c["c4"], v)               # after w12's accumulate
     s50n = accA >> 16
-    yA = (accA + mul(c["c5"], X)) >> 16
+    yA = (accA + mul(c["c5"], v)) >> 16
     # section B
-    p5 = mul(c["c5"], X)
+    p5 = mul(c["c5"], v)
     accB = p5 + mul(c["c6"], s51) + mul(c["c7"], p5 >> 16)
     s51n = accB >> 16
     yB = (accB + mul(c["c8"], p5 >> 16)) >> 16
@@ -91,13 +98,13 @@ def main():
     # coefficient scales S227 leaves open (total shift 22 = shipped, unity 0x400000; 23 = the
     # "UNTIED" variant, unity 0x7FFFFF).  Section B's own fixed point s51 = c5(1+c7)x/(1-c6),
     # y_B = c5(1+c7+c8)x + c6*s51.  A damping filter has |gain| <= 1; the tap x is the input.
-    print("\nDC gain of the damping cascade y_B/x under the measured routing (device reading):")
+    print("\nDC gain of the damping cascade y_B/x under the measured routing (device reading; v = c2*x):")
     for shift, unity in ((22, 4194304.0), (23, 8388608.0)):
-        k = {n: s24(v) / unity for n, v in c.items()}
-        s51fp = k["c5"] * (1 + k["c7"]) / (1 - k["c6"])
-        ybx = k["c5"] * (1 + k["c7"] + k["c8"]) + k["c6"] * s51fp
-        print("  total shift %d (unity 0x%06X): c3..c8 = %+.3f %+.3f %+.3f | %+.3f %+.3f %+.3f  ->  s51/x = %+.3f  y_B/x = %+.3f  |gain| %s 1"
-              % (shift, int(unity), k["c3"], k["c4"], k["c5"], k["c6"], k["c7"], k["c8"], s51fp, ybx,
+        k = {n: s24(vv) / unity for n, vv in c.items()}
+        s51fp = k["c5"] * k["c2"] * (1 + k["c7"]) / (1 - k["c6"])
+        ybx = k["c5"] * k["c2"] * (1 + k["c7"] + k["c8"]) + k["c6"] * s51fp
+        print("  total shift %d (unity 0x%06X): c2 = %+.3f  c3..c8 = %+.3f %+.3f %+.3f | %+.3f %+.3f %+.3f  ->  s51/x = %+.3f  y_B/x = %+.3f  |gain| %s 1"
+              % (shift, int(unity), k["c2"], k["c3"], k["c4"], k["c5"], k["c6"], k["c7"], k["c8"], s51fp, ybx,
                  "<=" if abs(ybx) <= 1 else ">"))
     return 0
 

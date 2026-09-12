@@ -106,6 +106,7 @@ def main():
     hi = int(sys.argv[sys.argv.index("--hi") + 1]) if "--hi" in sys.argv else 130
     if not args:
         print(__doc__); return 2
+    pshift = int(sys.argv[sys.argv.index("--pshift") + 1]) if "--pshift" in sys.argv else 6
     rows = parse(args[0])
     body = [r for r in rows if r["u1"] == 0 and lo <= r["iw"] <= hi]
     if not body:
@@ -118,7 +119,7 @@ def main():
     # Q1: does the seeded impulse reach the operand latch / a product?
     hits = [r for r in body if abs(r["l"]) == IMPULSE]
     phits = [r for r in body if r["mul"] and r["coef"] and
-             r["p"] == (s24(r["coef"]) * IMPULSE) >> 6]
+             r["p"] == (s24(r["coef"]) * IMPULSE) >> pshift]
     print("Q1  impulse on the operand latch L (== +-0x400000): %d row(s)" % len(hits))
     for r in hits[:8]:
         print("     n=%3d iw=%3d word=%s dp=%02X L=%d P=%d acc=%d" % (r["n"], r["iw"], r["word"], r["dp"], r["l"], r["p"], r["acc"]))
@@ -144,7 +145,7 @@ def main():
             if abs(s24(nx["mem"])) == IMPULSE or abs(s24(r["mem"])) == IMPULSE: fate.append("in mem[dp]")
             if abs(nx["acc"]) == IMPULSE << ACC_SHIFT or abs(r["acc"]) == IMPULSE << ACC_SHIFT:
                 fate.append("loaded into acc")
-            if nx["mul"] and nx["p"] and nx["p"] == (s24(r["coef"]) * nx["l"]) >> 6 and abs(nx["l"]) == IMPULSE:
+            if nx["mul"] and nx["p"] and nx["p"] == (s24(r["coef"]) * nx["l"]) >> pshift and abs(nx["l"]) == IMPULSE:
                 fate.append("multiplied")
             print("     iw=%3d -> iw=%3d word=%s dp=%02X mem=%06X acc=%d L=%d : %s"
                   % (r["iw"], nx["iw"], nx["word"], nx["dp"], nx["mem"], nx["acc"], nx["l"],
@@ -155,11 +156,11 @@ def main():
     ok_c = bad_c = 0
     for i in range(1, len(body)):
         if body[i]["mul"] and body[i]["p"]:
-            pred = (s24(body[i - 1]["coef"]) * body[i]["l"]) >> 6
+            pred = (s24(body[i - 1]["coef"]) * body[i]["l"]) >> pshift
             if body[i]["p"] == pred: ok_c += 1
             else: bad_c += 1
-    print("Q1b multiplier P[N]==coef[N-1]*L[N]>>6 (coef latched one word early): %d exact, %d mismatch"
-          % (ok_c, bad_c))
+    print("Q1b multiplier P[N]==coef[N-1]*L[N]>>%d (coef latched one word early): %d exact, %d mismatch"
+          % (pshift, ok_c, bad_c))
     pbus = [body[i] for i in range(len(body)) if body[i]["p"] and body[i]["p"] == body[i]["l"] << ACC_SHIFT]
     if pbus:
         print("    P <- bus rows (P[N] == L[N] << %d, the ACT 0x0E `P<-bus' reading): %d  [iw %s]"
