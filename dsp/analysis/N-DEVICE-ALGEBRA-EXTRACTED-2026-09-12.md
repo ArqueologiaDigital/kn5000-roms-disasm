@@ -291,6 +291,35 @@ where the pooled corpus had none — every tempB group was tied.
 
 ⚠ Grade: MEASURED on one configuration, ten programs; one row flagged circular in place.
 
+## 12. `--by-addr8` closes the last unexplained group on a clean machine — it was the NOP
+§10 left one ⛔ on the single-machine corpus: `cls2 ACT00 SRC00 f31=0`, 39 rows over 5 programs.
+Adding `addr8` to the group key (`--by-addr8`) splits it into two, both uniquely determined and
+both fully discriminating:
+
+| group | op | rows | programs |
+|---|---|---|---|
+| `cls2 ACT00 SRC00 f31=0 **a8=00**` | **`hold`** | 22 | 3 |
+| `cls2 ACT00 SRC00 f31=0 **a8=01**` | `P + (L << 16)` | 5 | 2 |
+
+Every row of the first is the **same word**, `0000200000` — and the disassembler already renders
+that word **`nop`**, at 62 sites across the corpus. So the group was never contradictory: it was
+the machine's NOP sharing a key with real arithmetic, because the key ignored `addr8`.
+
+★ Two things worth keeping from that:
+1. **A small but real cross-check between the disassembler and the device**: the word the listing
+   calls `nop` does in fact leave the accumulator alone, measured on 22 discriminating rows. The
+   two halves of the project agree where nobody had checked that they did.
+2. **`addr8` participates in the accumulator semantics** of class-2 words, which every table above
+   had been averaging over. For class 2 `addr8` is the pointer post-increment delta, so
+   *"`addr8 = 0` and holds"* is exactly the shape a do-nothing word should have.
+
+⇒ `--by-addr8` belongs in any run that reports a ⛔ on a single machine, alongside
+`--split-config` for one that pools several. Artefact:
+`data/algebra_one_machine_byaddr8_2026-09-12.txt`.
+
+⚠ Grade: MEASURED. Not a new decode of the chip — a correction to the extractor's grouping, and a
+confirmation that the listing's `nop` and the device's behaviour match.
+
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's
 docstring) from the archived captures. Nothing here is a statement about the µPD6383GF; §1 says so

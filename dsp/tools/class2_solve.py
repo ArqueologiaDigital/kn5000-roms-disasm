@@ -24,7 +24,7 @@ QUESTION IT ANSWERS
 
 USAGE
     python3 dsp/tools/class2_solve.py trace1.log [trace2.log ...] [--cls 2] [--lo 84] [--hi 400]
-        [--all-classes] [--min-rows 4] [--show-unexplained] [--split-config]
+        [--all-classes] [--min-rows 4] [--show-unexplained] [--split-config] [--by-addr8]
 
     Traces are `error.log' from a run with -log and UPD6383_TRACE_FRAME set (see
     dsp/tools/pair_gate.sh / dlyseed_run.sh for the capture recipe).  Pass SEVERAL programs'
@@ -190,6 +190,7 @@ def config_of(path):
 def main():
     argv = sys.argv[1:]
     VALUED = {"--lo", "--hi", "--cls", "--min-rows", "--sat", "--target"}
+    by_a8 = "--by-addr8" in argv       # ★ §12: addr8 in the group key
     split_cfg = "--split-config" in argv   # key groups by device configuration too   # flags that consume the next argument
     logs, skip = [], False
     for i, a in enumerate(argv):
@@ -249,7 +250,7 @@ def main():
                         pass
                 measured = s24(cur[target])
             ok = {n for n, v in vals.items() if v == measured}
-            k = key_of(cur) + ((cfg,) if split_cfg else ())
+            k = key_of(cur) + ((fields(cur)[3],) if by_a8 else ()) + ((cfg,) if split_cfg else ())
             g = groups.setdefault(k, dict(n=0, ok=None, disc=0, progs=set(), cfgs=set(),
                                           iws=set(), vals=[], rows=[]))
             g["n"] += 1
@@ -302,8 +303,11 @@ def main():
             continue
         cls, act, src, f31 = k[:4]
         name = "cls%X ACT%02X SRC%02X f31=%d" % (cls, act, src, f31)
+        j = 4
+        if by_a8:
+            name += " a8=%02X" % k[j]; j += 1
         if split_cfg:
-            name += " @" + (",".join("%s=%s" % a for a in k[4]) or "bare")
+            name += " @" + (",".join("%s=%s" % a for a in k[j]) or "bare")
         surv = sorted(g["ok"])
         note = ""
         if not surv:
