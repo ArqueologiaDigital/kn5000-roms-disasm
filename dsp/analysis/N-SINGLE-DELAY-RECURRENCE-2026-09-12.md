@@ -293,16 +293,30 @@ Consequences, all of them sharper than anything the arms produced:
    what it writes into those cells. That also explains the delay's `cell 0x08 = 2 × y_B` under a
    mixed-shift arm, and it predicts the next measurement: on a non-railed EQ frame with real
    audio, `|x-history| / |y-history|` must sit at 4 for a signal passing a unity band.
-4. **The immediate LLE experiment** is therefore a store-side arm, not another shift: write the
-   x-history cells at `acc >> 18` (÷4) and the band-input cell at `acc >> 17` (÷2) while the
-   y-history keeps `>> 16`, then check the two falsifiers already built — the EQ's state block
-   stays finite AND its band gain comes out 1 (it is 2.00 today at total-23), and the delay's
-   fixed point stays self-consistent. If that holds, the EQ is bit-correct for the first time and
-   `P_SHIFT` reverts to a single uniform value.
+4. **The ×2 half of it is ALREADY a documented rule, independently.** `b1`'s operand cell
+   `0x64` is the **host-written** state block, and the project's host-payload rule
+   (`r3-delaydram.md`; §71 measured the uploaded levels coming out *exactly half* their
+   documented values) says host-written words land at half scale. A coefficient meeting a
+   half-scale operand must be twice as large — which is precisely the ×2 measured on `b1` and on
+   nothing else. Two unrelated measurements, the same factor, the same cell class.
+5. **⇒ This is a quantitative constraint on the OPEN input stage, not a new device arm.** The
+   remaining ×4 sits on the x-history pair, which the body does not originate — it comes from the
+   audio input path, i.e. the "4.2 audio gate" that is the LLE's #1 open item. The EQ's own
+   coefficients therefore state what that stage must deliver: **the input sample arrives at ¼ of
+   the y-scale.** Any future decode of the input route has to reproduce that quarter, and a route
+   that delivers full scale is wrong *by this measurement* — which is a falsifier the input-stage
+   work did not have before. It also explains the LLE's EQ blow-up without any change to
+   `P_SHIFT`: the device feeds its biquad an x-history 4× too hot, so the b-path products are 4×
+   and the recursion diverges.
 
 ## Honest grade
-§10 MEASURED and EXACT (five bands, zero spread, arm-independent; the RBJ identity is textbook).
-Its consequence 1 is a proof, 2 a deduction, 3 and 4 are INFERRED leads with named tests.
+§10 MEASURED and EXACT (five bands, zero spread, arm-independent; the RBJ identity is textbook,
+and the flat-band solve is an identity rather than a fit). Consequence 1 is a proof, 2 a
+deduction, 3 an INFERRED operand map (it rests on the tool's coefficient→operand pairing, which
+is one pipeline slot wide), 4 a correspondence with an independently measured rule, 5 the
+constraint 4 and 3 place on the input-stage decode — stated as a falsifier, not a decode.
+⚠ What §10 does NOT do: it does not decode a single instruction word, and it does not make the
+LLE's EQ correct; it says exactly what any correct account must produce.
 §9 MEASURED (two runs; the EQ's RBJ argument is arithmetic on the measured cells). §8 corrects §6–§7's scope: MEASURED facts unchanged, the conclusion narrowed to the bit-clear
 words (STRONG), the per-word format bit's carrier word OPEN. §7 MEASURED (two EQ runs, two delay
 runs; the rail/no-rail of the device's own state block), the scale conclusion STRONG for the
