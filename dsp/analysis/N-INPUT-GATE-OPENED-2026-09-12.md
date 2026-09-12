@@ -269,6 +269,35 @@ zero-fire arms and two wrong structural readings with one grep. The measured par
 live row at `n=108/iw142`, the moving/static cell census, `0x0F` as the second pickup) are
 unaffected — they came from the trace, not from the triplets.
 
+## 11. What actually starves the second channel: the OPEN 0x0D/0x0E MIXING PAIR (MEASURED)
+Having removed a bad candidate (§10), the disciplined move is a writer census before any new arm.
+The EQ body itself addresses the second pickup. Every body word whose pointer is `0x0E`/`0x0F`:
+
+| n | iw | word | class | SRC | ACT | dp | mem | row differs between frames? |
+|---|---|---|---|---|---|---|---|---|
+| 99 | 133 | `00002AD647` | 2 | 0x19 | 0x07 | 0x0E | 004D93 | **yes** |
+| 100 | 134 | `0028200000` | 2 | 0x00 | 0x00 | 0x0E | 004D93 | **yes** |
+| 101 | 135 | `0880130407` | 1 | 0x10 | 0x07 | 0x0E | 004D93 | **yes** |
+| 103 | 137 | `000020A1CD` | 2 | 0x07 | **0x0D** | 0x0F | 004867 | **yes** |
+| 104 | 138 | `00002FF1CE` | 2 | 0x07 | **0x0E** | 0x0E | 004D93 | **yes** |
+
+**Every one of those rows differs between consecutive frames — and the cells they address do not
+move at all** (`0x0E` stays `0x4D93`, `0x0F` stays `0x4867` = 18 535, the value the second half
+then reads). So the words run, they run on live data, and they leave their cells unchanged.
+
+`iw137`/`iw138` are the **`ACT 0x0D` / `ACT 0x0E` pair** — the "delay/state MIXING" codes that the
+register lists as long-open, and for which `0x0E` has **three contradictory committed readings**
+(`mem[ptr] ← bus` / `acc → bus` / `P ← bus`). Under the reading the device currently ships, the
+pair reads but never writes, which is exactly the observed signature.
+
+⇒ **The dead second channel is gated by the 0x0D/0x0E mixing pair**, one of the four items the
+handoff has carried as open since long before this session. That is a genuine join between the
+newest measurement and the oldest open decode, and it also says what would settle it: of the three
+readings for `0x0E`, only `mem[ptr] ← bus` writes a cell, and it is the one that would make
+`0x0F` move. ⚠ Stated as the *discriminating prediction*, not as a decode — the right next step is
+to run the three readings against this frame pair and see which makes the second channel live
+without disturbing the first, not to assume the convenient one.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
