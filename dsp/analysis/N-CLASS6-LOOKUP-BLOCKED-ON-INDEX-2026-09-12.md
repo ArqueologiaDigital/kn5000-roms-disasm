@@ -206,6 +206,40 @@ last one between this and a chorus whose tap sweeps at the HLE's rate and depth.
 STRONG (its justification is measurably no longer needed, and its cost is measured) but it is a
 statement about the DEVICE's readings, not yet a decode of the chip.
 
+## 10. ⚠ THE SWEEP IS DRIVEN BY THE PHASE DIRECTLY — the table feeds something else
+I had assumed throughout that the class-6 waveform feeds the tap sweep. **The trace says otherwise,
+and it says it exactly.** In the consistent configuration with §148 off and the lookup on:
+
+```
+iw93  ...  coef = 0000F0 = 240 (the depth, C-RAM 0x02)
+iw94  0192A40000  SRC 0x00  dp = 0x50  L = 2 800 600   P = 5 251 125
+iw115 00006184CD  the class-6 word, dp = 0x0C, mem = B3078B   <- a wavetable entry, written by C6LUT=2
+iw116 00124011CE  L = -5 044 341 = s24(0xB3078B)              <- the NEXT word reads the waveform
+```
+
+* `L` at the sweep word is **2 800 600** — that is the **phase**, the value cell `0x10` carries
+  (the frame pair shows `0x10` stepping `2 800 600 → 2 800 714`, +114). Not a table entry.
+* Its product checks exactly: `240 × 2 800 600 >> 7 = 5 251 125`, and as a datum
+  `240 × phase >> 23` sweeps **0 … 240** as the phase ramps `0 … 2²³`. **The tap modulation is
+  `depth × phase` — a RAMP** — and its range in datum terms is the decoded ±240 after all.
+* The lookup's value does reach a consumer, but a **different** one: `iw116` reads it
+  (`L = −5 044 341` = the cell the lookup wrote), four words after the phase-driven sweep.
+
+⇒ **the chorus drives its tap from the phase accumulator directly and uses the class-6 table for
+something else** (the wet/quadrature path is the obvious candidate — the program has two lookups,
+selectors `0x18` and `0x20`). My working assumption for the last several experiments — "the table
+feeds the sweep" — is **withdrawn**; it was never measured, only inherited from the HLE's sine-swept
+model. ★ And that makes it an **HLE-refinement candidate with bytecode provenance**: the HLE sweeps
+its delay taps with `sin`/`cos` of the phase, while the bytecode's sweep word multiplies the depth
+by the **raw phase**. Whether the chip's audible sweep is therefore triangular, or the table
+re-shapes it further downstream, is the question — and it is now a question about *which consumer*,
+not about whether the table works.
+
+⚠ Grade: MEASURED (operand, coefficient and product all check to the LSB on the archived capture).
+The withdrawal is of my own assumption. The "depth scale is missing" conclusion of §9 is corrected
+with it: the depth scale is **present and correct** (`240 × phase >> 23` → 0..240); what was
+full-scale in the §157 census is the accumulator's excursion over 1.5 M frames, not the tap range.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
