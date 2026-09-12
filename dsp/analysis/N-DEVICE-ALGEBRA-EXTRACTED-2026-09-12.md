@@ -89,6 +89,13 @@ Both are recorded because they are the kind of error that would otherwise have s
   `acc >> 1`, exact. Both behaviours are real; they are not the same machine. The tool now reads
   the device's own arm-report lines back out of each log and prints how many configurations each
   group spans — this corpus has **52**.
+  ★ **`--split-config` closes it.** Keying every group by the arms its capture was taken with
+  turns that one ⛔ into eight `★ UNIQUE` rows, one per machine, and each reads exactly as its arm
+  says: `hold` wherever `UPD6383_C8SHIFT` is unset, `acc >> 1` at `C8SHIFT=1`, `acc >> 2` at 2,
+  `acc >> 3` at 3 — every one fully discriminating. That is the class-8 post-sum-scale decode
+  recovered mechanically and per configuration
+  (`data/allclass_algebra_bycfg_2026-09-12.txt`). Use `--split-config` the moment a group with
+  many rows reports that no candidate explains them all.
 
 ## 6. What the VACUOUS rows are asking for
 These are the combinations the whole 104-capture corpus cannot separate. They are the shortest
