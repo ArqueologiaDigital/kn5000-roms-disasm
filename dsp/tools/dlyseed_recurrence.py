@@ -58,6 +58,11 @@ def main():
         # UPD6383_FMTBIT reading: the multiplying word's bit 12 clear -> Q0.23 (shift 7), set -> Q1.22 (6)
         for k, _, mw in CW:
             SHIFT_OF[k] = 6 if (int(b[mw]["word"], 16) >> 12) & 1 else 7
+    if "--fmtbit2" in sys.argv:
+        # UPD6383_FMTBIT=2: shift 7 iff bit 12 clear AND ACT != 0x13 (the constraint-set arm)
+        for k, _, mw in CW:
+            w = int(b[mw]["word"], 16)
+            SHIFT_OF[k] = 7 if (not (w >> 12) & 1) and (w & 0x1f) != 0x13 else 6
     print("coefficients in force (coef column of the previous row):")
     for k, iw, mw in CW:
         v = c[k]
