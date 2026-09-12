@@ -8,11 +8,16 @@
 #   and §20 MEASURED that it starves another (the parametric EQ).  A reading of the product
 #   register is only admissible if it passes BOTH criteria AT THE SAME SETTING:
 #
-#     (A) CHORUS, TYPEIDX 0 -- BOTH halves.  The LFO phase cell's increment must be 114 at rest
-#         AND the chorus body must be LIVE across a frame pair.  ⚠ The phase alone is NOT a test:
-#         §22/§9 measured four structurally unrelated interventions that all report 114, one of
-#         which leaves the EQ bit-identical.  114 is as much the starvation signature as the
-#         right answer.
+#     (A) CHORUS, TYPEIDX 0 -- THREE halves, and the third is the one that matters.
+#         (A1) the LFO phase must be a FREE-RUNNING RAMP: the device's §119 witness shows the
+#              phase cell on eight consecutive frames and the step must be CONSTANT and equal to
+#              the increment (lfo_ramp_check.py).  ⛔⛔ §34: the old within-frame delta criterion
+#              CANNOT FAIL in the way that matters -- it reads 114 even when the phase is reset
+#              to zero every frame, and a configuration scoring a perfect 114 had a phase of
+#              0 on eight consecutive frames.  The delta is still printed, as context only.
+#         (A2) the chorus body must be LIVE across a frame pair.
+#         ⚠ Neither of those alone is a test: §22/§9 measured four unrelated interventions all
+#         reporting a 114 delta, one of which leaves the EQ bit-identical.
 #     (B) PARAMETRIC EQ, TYPEIDX 15 -- the body must stay LIVE: cells moving and rows differing
 #         between two consecutive frames (frame_pair_diff.py, non-zero exit on a static body).
 #         Reference, this binary + baseline arms: NO-FLUSH gives 39 of 44 cells / 105 of 105 rows.
@@ -89,6 +94,12 @@ cap 0 1 "$OUTDIR/pg_${TAG}_cho_F1.log"
 python3 "$HERE/dlyseed_confront.py" "$OUTDIR/pg_${TAG}_cho.log" --lo 84 --hi 188 2>/dev/null \
   | grep -E "delta across the pair" \
   || echo "  !! no LFO landmark line -- the chorus trace is missing or the body never ran"
+# ⛔⛔ THE LINE ABOVE IS NOT A TEST -- §34.  It is the WITHIN-FRAME delta, and `iw89' loads the
+# increment while `iw91' stores it, so it reads 114 even when the phase cell is reset to zero
+# every frame and the LFO never advances.  A configuration that scored a perfect 114 had a phase
+# of 0 on eight consecutive frames.  The real measurement is the device's own §119 witness:
+python3 "$HERE/lfo_ramp_check.py" "$OUTDIR/pg_${TAG}_cho.log"
+echo "(A) LFO ramp exit status: $?   [0 = free-running at the increment, non-zero = frozen/dead/wrong]"
 python3 "$HERE/frame_pair_diff.py" "$OUTDIR/pg_${TAG}_cho.log" "$OUTDIR/pg_${TAG}_cho_F1.log" \
     --lo 84 --hi 188 | grep -E "cells seen|tuples differing|VERDICT"
 echo "(A) liveness exit status: ${PIPESTATUS[0]}   [0 = live, non-zero = STATIC]"
