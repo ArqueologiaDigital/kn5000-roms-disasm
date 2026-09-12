@@ -59,6 +59,22 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
+   ★★★★ **§36: `UPD6383_CALLFLUSH` IS PROMOTED TO DEFAULT-ON** (`UPD6383_CALLFLUSH=0` restores the
+   old behaviour; the A/B stays available, as §225 did for `LFOWRAP`). **Zero regressions across
+   ten programs**, and **five of the five programs that have an LFO phase word gain a correct
+   free-running +114/frame ramp where the baseline had none** (chorus, modulated chorus, flanger,
+   phaser, ensemble). Four independent lines for one change: §29 (only configuration delivering
+   one clean copy of the EQ input), §34 (only family giving the chorus a constant phase step),
+   §36 (five programs, not one), §36 (zero regressions, four families). Verified two-sided after
+   the change: no env ⇒ ramp and the device reports 1; `=0` ⇒ the old wandering phase and it
+   reports 0.
+   ⚠⚠ **THE STANDING ARGUMENT AGAINST IT — look here before treating it as settled: the ENHANCER's
+   non-zero product rows drop 46 → 10 and NOTHING EXPLAINS THAT.** It has no LFO and does not rail.
+   ⚠ The EQ's 100 → 9 is a **different** flag and is understood: the baseline's EQ activity was the
+   kernel's residue being filtered (§23/§29); the flush removes it, and the bands are then fed
+   correctly at `0x10` — which nothing reads (§30). That is the EQ thread's next step, not a
+   regression.
+
    ⛔⛔ **§35: THE CATALOGUE DISQUALIFIES `CALLFLUSH` + bit 28 ON TEN PROGRAMS.** Every modulation
    program loses its LFO (chorus, modulated chorus, flanger, phaser, ensemble all freeze at phase
    0) and the **EQ gains nine railed cells**. The three that pass are exactly the three with no
