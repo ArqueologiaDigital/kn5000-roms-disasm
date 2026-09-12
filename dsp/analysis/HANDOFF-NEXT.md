@@ -39,11 +39,24 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    runs criterion (A) chorus phase = 114 and criterion (B) EQ liveness at ONE setting. Run it on
    every product-register arm before writing anything down. **Nothing may be called "consistent"
    on one program again.**
-   ★ **§21 candidate under test: `UPD6383_PCLR`** — the multiplier output register is *driven*,
-   not held, so a word that issues no multiply leaves `P` at zero. Finer-grained than "flush on
-   CALL" and, by construction, discriminates: it clears `P` at the chorus's LFO block entry
-   (preceded by non-multiplying words) without clearing it between the EQ's back-to-back
-   multiplies.
+   ⛔⛔ **§22: THE WHOLE PRODUCT-REGISTER FAMILY IS REFUTED.** `UPD6383_PCLR` (the driven-register
+   reading) was predicted to leave the EQ untouched; measured on the gate it makes the EQ body
+   **bit-identical across a frame pair** — worse than the flush, not better. Three points on one
+   binary:
+   | configuration | chorus increment | EQ cells | EQ rows |
+   |---|---|---|---|
+   | no flush | 3 129 519 ⛔ | 39 of 44 | 105 of 105 |
+   | `+ CALLFLUSH` | **114** ✅ | 2 | 9 |
+   | `+ PCLR` | **114** ✅ | 0 | **0** ⛔ |
+   Every rule that fixes the phase does it by taking product away from the EQ, and the more it
+   takes the more completely the EQ dies. **That is a trade, not a decode** ⇒ the contamination is
+   **not a retention policy on the product register**; the question is what the preceding words
+   left there. ⛔ **Do not propose a fourth retention rule.**
+   ★ The concrete successor lead is on the KERNEL side, not the register:
+   `N-DEVICE-ALGEBRA-EXTRACTED-2026-09-12.md` §8 — `iw45` fetches a **zero** coefficient off the
+   delay-descriptor ramp (cursor seeded to `0x70` by §52's row 25) and `iw46`, the delay-DRAM
+   WRITE, does `acc ← P[iw45] = 0` over live audio. `UPD6383_SPEC` bit 12 clears that seed and is
+   already argued for independently (21 + 16 = 37 = the host's coefficient run count).
    ★ **§148 is measured IRRELEVANT to the EQ** (on vs off byte-identical), so the chorus evidence
    against it stands unopposed and removing it costs the reference program nothing.
 2. **Class 8 is a POST-SUM ACCUMULATOR SCALE, not a no-op** (`UPD6383_C8SHIFT=n`). `0804816415`

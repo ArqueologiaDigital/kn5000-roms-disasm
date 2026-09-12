@@ -1,0 +1,61 @@
+=== pair_gate [noflush] : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B440F ===
+--- (A) CHORUS phase, TYPEIDX 0 ---
+  LFO  phase cell 0x07 delta across the pair = 3129519 (compare the HLE LFOOracle increment round(rate/44100*2^23); the phase word's L=114 is the increment on the bus)
+--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---
+frame A: pg_noflush_eq.log
+frame B: pg_noflush_eq_F1.log
+cells seen: 44   MOVED: 39
+   0x05       4904681 ->      4910085
+   0x10       7792377 ->      7791690
+   0x50       1572727 ->      1574402
+   0x51       1571019 ->      1572727
+   0x52       1048422 ->      1049557
+   0x53        523659 ->       524211
+   0x54      -1048422 ->     -1049557
+   0x55      -1047318 ->     -1048422
+   0x56       -698854 ->      -699619
+   0x57       -349070 ->      -349427
+   0x58        698854 ->       699619
+   0x59        698139 ->       698854
+   0x5A        465695 ->       466209
+   0x5B        232616 ->       232847
+   0x5C       -465695 ->      -466209
+   0x5D       -465232 ->      -465695
+   0x5E       -309952 ->      -310296
+   0x5F       -154826 ->      -154976
+   0x60        309952 ->       310296
+   0x61        309652 ->       309952
+   0x62        205363 ->       205592
+   0x63        102584 ->       102681
+   0x64       -205363 ->      -205592
+   0x65       -205169 ->      -205363
+per-row (iw, acc, P, L) tuples differing: 105 of 105
+
+✅ VERDICT: the frames DIFFER -- the body is live; downstream measurements are meaningful.
+(B) exit status: 0   [0 = live, non-zero = STATIC]
+=== pair_gate [callflush] : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 UPD6383_SPEC=B9108446A39B440F ===
+--- (A) CHORUS phase, TYPEIDX 0 ---
+  LFO  phase cell 0x07 delta across the pair = 114 (compare the HLE LFOOracle increment round(rate/44100*2^23); the phase word's L=114 is the increment on the bus)
+--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---
+frame A: pg_callflush_eq.log
+frame B: pg_callflush_eq_F1.log
+cells seen: 44   MOVED: 2
+   0x05       4904681 ->      4910085
+   0x10       4899462 ->      4904681
+per-row (iw, acc, P, L) tuples differing: 9 of 105
+
+✅ VERDICT: the frames DIFFER -- the body is live; downstream measurements are meaningful.
+(B) exit status: 0   [0 = live, non-zero = STATIC]
+=== pair_gate [pclr] : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_PCLR=1 UPD6383_SPEC=B9108446A39B440F ===
+--- (A) CHORUS phase, TYPEIDX 0 ---
+  LFO  phase cell 0x07 delta across the pair = 114 (compare the HLE LFOOracle increment round(rate/44100*2^23); the phase word's L=114 is the increment on the bus)
+--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---
+frame A: pg_pclr_eq.log
+frame B: pg_pclr_eq_F1.log
+cells seen: 44   MOVED: 0
+per-row (iw, acc, P, L) tuples differing: 0 of 105
+
+⛔ VERDICT: the two frames are BIT-IDENTICAL -- the body is STATIC.  No audio is
+   reaching it, and nothing downstream (operand scales, filter state, signal flow)
+   can be measured until that changes.
+(B) exit status: 1   [0 = live, non-zero = STATIC]

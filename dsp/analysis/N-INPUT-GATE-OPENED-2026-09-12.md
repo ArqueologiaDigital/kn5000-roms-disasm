@@ -666,6 +666,45 @@ measurement can contradict it rather than confirm a story written afterwards. Ga
 
 ⚠ Grade: PREDICTED, not measured. The result follows in §22.
 
+## 22. ⛔ §21 IS REFUTED — and so is the whole *product-register* family of fixes
+The two-sided gate (`dsp/tools/pair_gate.sh`, one binary, one session, baseline arms
+`UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1`) on three configurations, all sharing
+`UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B440F`:
+
+| configuration | (A) chorus LFO increment | (B) EQ cells moved | (B) rows differing |
+|---|---|---|---|
+| no flush | 3 129 519 ⛔ | **39 of 44** | **105 of 105** |
+| `+ CALLFLUSH=1` | **114** ✅ | 2 | 9 of 105 |
+| `+ PCLR=1` | **114** ✅ | **0** | **0 of 105** ⛔ |
+
+**§21's prediction was that `PCLR` would leave the EQ's back-to-back `mac`s untouched. It is
+wrong.** `PCLR` does not merely reduce the EQ's liveness the way the flush does — it makes the
+body **bit-identical across a frame pair**, i.e. completely static. The prediction was recorded
+before the run precisely so this could happen, and it did.
+
+★★ **The pattern across three configurations is the result, not the individual failures.** Every
+rule that makes the chorus's phase come out right does so by **removing product from the EQ**, and
+the more thoroughly it removes it, the more completely the EQ dies:
+
+```
+liveness  105 rows  ->  9 rows  ->  0 rows
+phase       WRONG   ->   114    ->   114
+```
+
+That is a straight trade, not a decode. ⇒ **The contamination is not a retention policy on the
+product register.** If it were, some retention rule would satisfy both programs, and three points
+on the trade curve say none does. The chorus's LFO entry LOAD reads a product that should not be
+*there*, which is a question about **what the preceding words did**, not about how long `P` lives.
+
+⇒ Next, and it is a different investigation from this one: find which word leaves that product
+behind and why the chip would not. §8 of `N-DEVICE-ALGEBRA-EXTRACTED-2026-09-12.md` opens one
+concrete candidate on the kernel side — `iw45` fetching a **zero** coefficient off the delay
+descriptor ramp because the cursor was seeded there, and `iw46` loading that zero over live audio.
+
+⚠ Grade: MEASURED, `dsp/analysis/data/pair_gate_3configs_2026-09-12.txt` plus the five archived
+captures `pg_*_2026-09-12.log.gz`. `UPD6383_PCLR` stays in the device **default-off**, with this
+refutation in its comment, exactly like the other refuted arms.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
