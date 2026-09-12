@@ -83,7 +83,35 @@ def main():
         print("    -> the impulse did NOT reach the ALU: the tap read is not being published/consumed"
               " (or DLYSEED2 was not active on this frame).")
 
-    # Q2: running sum across consecutive multiply rows
+    # Q1b: the MEASURED multiplier has a coefficient pipeline of depth 1 (handoff §1):
+    #      P[N] = (coef[N-1] x L[N]) >> 6.  Test it with the PREVIOUS row's coef.
+    ok_c = bad_c = 0
+    for i in range(1, len(body)):
+        if body[i]["mul"] and body[i]["p"]:
+            pred = (s24(body[i - 1]["coef"]) * body[i]["l"]) >> 6
+            if body[i]["p"] == pred: ok_c += 1
+            else: bad_c += 1
+    print("Q1b multiplier P[N]==coef[N-1]*L[N]>>6 (coef latched one word early): %d exact, %d mismatch"
+          % (ok_c, bad_c))
+
+    # Q2b: the MEASURED accumulator is a ONE-SLOT pipeline (handoff §1): acc[N] = acc[N-1] + P[N-1]
+    #      (f31=1), or acc[N] = P[N-1] at a section-start load (f31=0), saturating at +-2^39.
+    #      Classify every consecutive pair; the residue should sit ONLY on class-2 / DRAM / mixing
+    #      boundary words (the open codes), never on a multiply row.
+    SAT = {549755748352, 549755813888, -549755813888, -549755748352}
+    acc_ok = acc_ld = acc_sat = acc_c2 = acc_bad = 0
+    for i in range(1, len(body)):
+        r, p = body[i], body[i - 1]
+        if r["acc"] == p["acc"] + p["p"]: acc_ok += 1
+        elif r["acc"] == p["p"]: acc_ld += 1
+        elif r["acc"] in SAT or p["acc"] in SAT: acc_sat += 1
+        elif not r["mul"]: acc_c2 += 1
+        else: acc_bad += 1
+    print("Q2b one-slot accumulator acc[N]==acc[N-1]+P[N-1]: %d accumulate, %d load (acc==P[N-1]),"
+          " %d saturated, %d class-2/DRAM/mixing boundary, %d UNEXPLAINED multiply rows"
+          % (acc_ok, acc_ld, acc_sat, acc_c2, acc_bad))
+
+    # Q2: running sum across consecutive multiply rows (naive same-slot control)
     ok = bad = loads = 0
     prev = None
     for r in body:
