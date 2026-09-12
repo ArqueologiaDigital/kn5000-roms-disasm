@@ -237,6 +237,38 @@ the next target.
 zero-fire counts are MEASURED. The correction is to my own §8. No decode changed; both arms stay
 default-off with their zero counts recorded.
 
+## 10. ⚠⚠ SECOND CORRECTION, from the project's OWN prior analysis: the triplets are PER UNIT
+§8 called the two kernel triplets "IN and OUT" (correcting §8's first reading of "L and R"), on the
+strength of the execution order and of `w51`'s payload `0x64` matching the EQ's second state-block
+base. **Both readings are wrong, and the register already said so.** `SPECULATIVE-APPLIED-REGISTER`
+§116 analysed these exact two words years of sessions ago:
+
+> *"`0x27` is the only member whose target is unidentified, and it occurs exactly twice: once per
+> unit. That is where a per-unit mode register is configured… unit 0 `0x6C = 01101100`, unit 1
+> `0x64 = 01100100`, XOR `0x08` → bit 3, and nothing else."*
+
+So the two triplets are **unit 0's and unit 1's setup**, written immediately before each unit's
+body: `ldptr`, the per-unit mode register, `ldptr.d`. Bit 3 selects wrap (unit 0, the LFO-bearing
+effects whose phase accumulator must wrap) versus saturate (unit 1, the reverbs) — which is exactly
+what the device consults it for (`m_ovc & 0x08`). The frame is
+`kernel-A → unit-0 body → unit-1 setup → unit-1 body → epilogue`, and that is why the second
+triplet is seen holding unit 0's final accumulator: it runs right after that body, but its job is
+unit-1 setup, not carrying the result. **`w51`'s `0x64` matching the EQ's second state-block base
+is a coincidence of two unrelated 8-bit values**, and I built a reading on it.
+
+**Corpus check that agrees:** `lo12 == 0x827` occurs at exactly **2 of 3057** words, both in the
+kernel — a per-unit configuration site, not a data path. Nothing else in the corpus uses that form.
+
+⇒ The body→epilogue handoff and the second pickup `0x0F` remain open, and the kernel's bit-11
+triplets have **nothing to do with either**. Everything §8 and §9 said about them beyond the
+measured cell census is withdrawn.
+
+★ **The rule this broke is one of the project's own:** *check the handover first*. §116's analysis
+of these two words was committed and indexed; reading it would have replaced two builds, two
+zero-fire arms and two wrong structural readings with one grep. The measured parts of §8 (the last
+live row at `n=108/iw142`, the moving/static cell census, `0x0F` as the second pickup) are
+unaffected — they came from the trace, not from the triplets.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
