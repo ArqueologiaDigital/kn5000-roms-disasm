@@ -140,6 +140,52 @@ the same rig that shows both gates). The *mechanism* is a READ of the words plus
 `m_rf` finding — it names where to look, it is not a decode. §221's E1 "epilogue/handover operand
 provenance" census is the instrument already built for exactly this.
 
+## 8. Where the live signal actually stops: the L→R CHANNEL BOUNDARY (MEASURED)
+§7 said "the body is live but the output stage is static" and pointed at the body→epilogue
+handoff. Diffing the frame pair **in execution order** rather than by `iw` locates it exactly, and
+it is earlier than that:
+
+```
+rows compared 187, differing 99
+   n    3..3     iw 3..3
+   n    7..31    iw 7..31
+   n   35..44    iw 35..44
+   n   46..108   iw 46..142     <- last live row
+   (nothing from n=109 / iw143 onward)
+```
+(The frame's real execution order is `iw 0..49` → `iw 84..188` (the body) → `iw 50..81`, so a diff
+ordered by `iw` mixes the kernel's two halves; ordering by `n` does not.)
+
+`iw142/143` is the **L→R channel boundary of the EQ body**: `w57 = ld.st acc,(p)+84` steps the
+pointer from the L state block to the R one (`dp 0x10 → 0x64`) and `w58 = rstcur` restarts the
+coefficient cursor (`cur 0x1E → 0x00`, visible in the trace). So the **L channel is live and the R
+channel never receives input** — its first operand cell `0x64` sits static at 18535 — and the
+epilogue presents the R result, which is why §7 saw a dead output stage.
+
+**The kernel's own structure says where the R deposit is.** It carries TWO matching `lo12`-bit-11
+triplets, identical word forms differing only in `addr8`:
+
+| | L | R |
+|---|---|---|
+| `ACT 0x01` | `w42 0801070821` addr8 `0x70` | `w50 0801050821` addr8 `0x50` |
+| `ACT 0x07` | `w43 080106C827` addr8 `0x6C` | `w51 0801064827` addr8 **`0x64`** |
+| `ACT 0x05` | `w44 0801025825` addr8 `0x25` | `w52 0801025825` addr8 `0x25` |
+
+One triplet per channel, and the R one names **exactly the cell the R channel reads**.
+
+**Arm extended to the ACT-0x07 store — and it FIRED ZERO TIMES.** `UPD6383_LO12CAP=2` performs the
+`ACT 0x07` store on bit-11 words; the count is 0 and the frame pair is unchanged (59 of 105 rows,
+identical to `=1`). The reason is in the device and is itself informative: those two words have
+`lo12 == 0x827`, which the **§116 branch catches first** (`m_ovc = addr8; return;` — "a register
+aimed") under a mask bit that is set by default. ⇒ `w51` does not store; it **aims a register at
+`0x64`**, confirming the two-channel reading from the other side. The R channel's actual deposit
+must therefore be `w50` (`ACT 0x01`) or `w52` (`ACT 0x05`), both of which DO fall into the bit-11
+"addressing only" branch and are suppressed there — the same suppression that held the first gate.
+
+⚠ Grade: the stop point and the triplet table are MEASURED/READ; the zero-fire is a MEASURED
+negative that corrects §7's "the break is the body→epilogue handoff" to "the break is the R
+channel's input, one stage earlier". The arm is left in place, default-off, with its zero count.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
