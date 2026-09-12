@@ -26,10 +26,13 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    `(total 22, shift 2)` for the band gain. The **input level** breaks the tie: at total-22 the
    pickup arrives pinned at full scale, at total-23 it is finite. Second independent vote for
    §227's total-23.
-4. Still dead, and **NOT for the bit-11 reason** (that was withdrawn in §9 after two zero-fire
-   arms): the second pickup `0x0F` and the body→epilogue handoff. The open words in that region
-   are `w43`/`w51` (`?word`, "register write, selector 0x27", values `0x6C` and `0x64`), which
-   §116 swallows into `m_ovc` where only one wrap bit is read. **That is the next target.**
+4. Still dead, and **NOT for the bit-11 reason** (withdrawn in §9) and **not for the `w43`/`w51`
+   reason either** (withdrawn in §10): the second pickup `0x0F` and the body→epilogue handoff.
+   ⚠ `w43`/`w51` are **§116's per-unit mode register** — 2 of 3057 corpus words, payloads `0x6C`
+   (unit 0, wrap) and `0x64` (unit 1, saturate), differing in bit 3 — nothing to do with the data
+   path; `w51`'s `0x64` matching the EQ's second state-block base is a coincidence I built on.
+   **The next target is therefore open**: find what writes `0x0F`, with the same frame-pair
+   instrument and a writer census, before proposing any arm.
 
 ⚠ **Method note that cost two builds:** read a word's LISTING before inferring its role from its
 fields — `w42/w44/w50/w52` render as `ldptr`/`ldptr.d` (decoded pointer setup) and can never reach
