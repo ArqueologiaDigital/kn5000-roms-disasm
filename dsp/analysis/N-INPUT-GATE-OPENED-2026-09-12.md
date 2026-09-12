@@ -504,6 +504,29 @@ device passes that test only with the body dead, which is no test at all.
 reveal what was downstream of it, it **invalidated a measurement that everyone (including the HLE
 triangle) had trusted** — because that measurement had only ever been taken in the starved state.
 
+### One level further: the entry point is `iw88`'s LOAD, and what should isolate the block
+Reading the LFO block's arithmetic word by word shows the chip's intent is exactly the HLE's, and
+where the device parts company from it:
+
+```
+iw88  000.2.F4.407  f31 = 0  -> LOAD  acc <- P
+iw89  092.A.00.200  f31 = 1  -> acc += P + (L << 16),  L = 114 = C-RAM[0x00] = the increment
+iw90  082.2.00.1C0  f31 = 1  -> acc += mem[0x07] << 16,  the phase
+iw91  094.A.00.200  f31 = 2  -> the wrap word; its STORE writes acc >> 16 back to the phase cell
+```
+Starved, `P` at `iw88` is **0**, so the chain computes exactly `increment + phase` and the store is
+correct — `2 800 486 → 2 800 600`, `+114`. Live, `P` at `iw88` is **3.19 × 10¹¹** (the body's
+product), the LOAD takes it, and everything after inherits it.
+
+So the defect is not in the phase words' own arithmetic — which is the HLE's formula, word for word
+— but in **what the accumulator carries into `iw88`**. `f31 = 0` is a LOAD from `P`, and `P` is the
+one-slot pipeline's *previous* product. Either the chip isolates the LFO block (a preceding word
+that clears `P`, or a `P` that is not shared across that boundary), or `iw88`'s source is not the
+product at all. Both are decode questions about words the corpus already contains, and the
+two-sided test is the one stated above: **the cell must advance by the increment with the body
+live**. ⚠ Note what this does NOT say: it does not say the gate arm is correct — §16's cost stands
+— only that the phase failure is downstream of a modelling choice that the starved state concealed.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
