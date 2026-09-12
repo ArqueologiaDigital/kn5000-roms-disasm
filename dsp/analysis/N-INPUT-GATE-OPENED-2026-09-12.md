@@ -439,6 +439,39 @@ post-sum scale, `ACT 0x0E = mem[ptr] ← bus`) are **compatible with the project
 datapath measurement**. That is a necessary condition, not a sufficient one, but a reading that
 failed it would have been dead on arrival.
 
+## 16. ⚠⚠ THE GATE ARM HAS A MEASURED COST: it breaks the chorus's LFO phase
+The session's headline needs this qualification attached to it, not filed beneath it. Bisecting the
+arms against the one modulation quantity that matched the HLE exactly — the chorus's phase cell
+advancing by **114 per frame**, the `N-DLYSEED2-CHORUS-CONFRONT §1` triangle:
+
+| configuration | phase-cell delta |
+|---|---|
+| baseline (shipped readings) | **114** ✓ |
+| `ACT 0x0E = mem[ptr] ← bus` alone | **114** ✓ |
+| **`UPD6383_LO12CAP=1`** (capture the accumulator) | **1 360 432** ✗ |
+| **`UPD6383_LO12CAP=4`** (capture the BUS instead) | **4 348 764** ✗ |
+
+Two things follow, and the second is the one that matters:
+1. **The mixing-code change is innocent.** `ACT 0x0E = mem[ptr] ← bus` — the reading that makes the
+   EQ's second channel compute — leaves the phase at 114. My prior said it would be the culprit;
+   the bisect says otherwise, which is why the bisect was run.
+2. **Both captured SOURCES break the phase.** Accumulator and bus alike. So this is not "the wrong
+   value is being captured", which was the obvious next hypothesis and is now refuted — **it is the
+   capture happening at all** that disturbs the chorus's phase path.
+
+⇒ `UPD6383_LO12CAP` is a **two-sided experiment with a measured cost**, not a fix: it opens the
+body and breaks a quantity three independent sources agree on (bytecode constant, HLE increment,
+panel rate). A reading that trades a confirmed-correct behaviour for liveness is not yet the chip's,
+however useful it is as an instrument — and it *is* useful, because everything §12–§15 measured was
+only visible with the body running.
+
+What that implies for the next attempt: the chorus's phase path evidently depends on `tempA`
+retaining its value across `iw38`, so the chip's `ACT 0x19` there cannot be a plain capture. Either
+the action is conditional (on something not yet decoded), or it targets a register other than
+`tempA`, or the phase path's dependence on the stale `tempA` is itself an artefact of another
+speculative reading upstream. Those are three testable shapes, and the frame-pair diff plus the
+phase-delta check together make a two-sided test for each.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
