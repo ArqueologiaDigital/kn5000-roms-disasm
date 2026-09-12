@@ -1,0 +1,13 @@
+=== pair_gate [spec12] : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B540F ===
+--- (A) CHORUS phase, TYPEIDX 0 ---
+  LFO  phase cell 0x07 delta across the pair = 114 (compare the HLE LFOOracle increment round(rate/44100*2^23); the phase word's L=114 is the increment on the bus)
+--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---
+frame A: pg_spec12_eq.log
+frame B: pg_spec12_eq_F1.log
+cells seen: 44   MOVED: 0
+per-row (iw, acc, P, L) tuples differing: 0 of 105
+
+⛔ VERDICT: the two frames are BIT-IDENTICAL -- the body is STATIC.  No audio is
+   reaching it, and nothing downstream (operand scales, filter state, signal flow)
+   can be measured until that changes.
+(B) exit status: 1   [0 = live, non-zero = STATIC]

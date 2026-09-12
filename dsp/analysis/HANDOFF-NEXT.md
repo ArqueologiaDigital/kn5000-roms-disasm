@@ -52,11 +52,18 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    takes the more completely the EQ dies. **That is a trade, not a decode** ⇒ the contamination is
    **not a retention policy on the product register**; the question is what the preceding words
    left there. ⛔ **Do not propose a fourth retention rule.**
-   ★ The concrete successor lead is on the KERNEL side, not the register:
-   `N-DEVICE-ALGEBRA-EXTRACTED-2026-09-12.md` §8 — `iw45` fetches a **zero** coefficient off the
-   delay-descriptor ramp (cursor seeded to `0x70` by §52's row 25) and `iw46`, the delay-DRAM
-   WRITE, does `acc ← P[iw45] = 0` over live audio. `UPD6383_SPEC` bit 12 clears that seed and is
-   already argued for independently (21 + 16 = 37 = the host's coefficient run count).
+   ⛔ **A FOURTH intervention shows the SAME trade** (`N-DEVICE-ALGEBRA-EXTRACTED` §9): clearing
+   §52's cursor seed (`SPEC` bit 12, `…540F`) also gives phase **114** and an EQ that is
+   **bit-identical across a frame pair**. Structurally unrelated to the product register, same
+   result ⇒ **the phase = 114 criterion is passed by anything that empties `P` at the LFO entry
+   word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
+   **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
+   with a live EQ is the one with the wrong phase.
+   ★ POSITIVE by-product, measured: **row 25 (§52, `ldptr` seeds the coefficient cursor) is
+   load-bearing for the kernel's DELIVERY of audio.** With it cleared the inputs are bit-identical
+   (`0x01` = 60 672, `0x04` = 122 880) and the **pickup cell `0x05` goes to 0**, taking 91 of the
+   body's 100 non-zero products with it. The coefficient cursor covers the same `0x00..0x1E` in
+   both, so this is not a re-aiming. Row 25 cannot be removed as a tidy-up.
    ★ **§148 is measured IRRELEVANT to the EQ** (on vs off byte-identical), so the chorus evidence
    against it stands unopposed and removing it costs the reference program nothing.
 2. **Class 8 is a POST-SUM ACCUMULATOR SCALE, not a no-op** (`UPD6383_C8SHIFT=n`). `0804816415`

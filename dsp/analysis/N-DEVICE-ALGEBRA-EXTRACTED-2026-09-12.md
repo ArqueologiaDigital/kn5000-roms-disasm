@@ -177,6 +177,41 @@ tempA trajectory at `iw45` from the same chorus capture. ⚠ Two-sided, like eve
 the chorus phase must still be 114 **and** the EQ must stay live. Recorded before the run so the
 measurement can contradict it.
 
+## 9. ⛔ §8 IS REFUTED — and the refutation is a NEW positive fact about §52
+Ran it: `pair_gate.sh spec12 UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B540F` (bit 12 set, i.e.
+row 25's cursor seed CLEARED), same binary and baseline arms as everything else.
+
+| | chorus increment | EQ cells moved | EQ rows |
+|---|---|---|---|
+| seed ON (`…440F`) | 3 129 519 ⛔ | 39 of 44 | 105 of 105 |
+| seed OFF (`…540F`) | **114** ✅ | **0** | **0** ⛔ |
+
+So clearing the seed does **not** rescue the kernel's audio. It does the opposite, and the trace
+says exactly where:
+
+| | input cell `0x01` | input cell `0x04` | **pickup `0x05`** | `0x10` | kernel peak acc | body rows with non-zero `P` |
+|---|---|---|---|---|---|---|
+| seed ON | 60 672 | 122 880 | **4 899 462** | 7 792 377 | 8.05e11 | 100 of 105 |
+| seed OFF | 60 672 | 122 880 | **0** | 524 288 | 1.76e11 | **9 of 105** |
+
+The **inputs are bit-identical** and the EQ's coefficient cursor covers the **same** range
+(`0x00..0x1E`, 31 distinct cells) in both — so this is not a re-aiming of coefficients. What
+changes is that the **kernel stops delivering**: the pickup cell the body reads goes to zero, and
+with it 91 of the body's 100 non-zero products.
+
+★ ⇒ **Row 25 — the `ldptr` seeding of the coefficient cursor (§52) — is load-bearing for the
+kernel's delivery of audio to the body.** That is a *second and independent* argument for a
+reading the project has on file as "⛔ STILL AGAINST K3" and has argued against on counting grounds
+(21 + 16 = 37 = the host's coefficient run count). The counting argument is unchanged; it now has a
+measured argument against it, and **the measured one is about audio actually arriving**. Neither
+is proof; what is settled is that row 25 cannot be removed as a tidy-up.
+
+⚠ And §8's specific story — *"`iw45` fetches a zero coefficient off the ramp, `iw46` loads it over
+live audio"* — is refuted as a *cause*. `iw46` does load a zero over the audio; removing the seed
+does not fix it, it removes the audio earlier. The observation stands, the causal claim does not.
+
+⚠ Grade: MEASURED. `data/pair_gate_spec12_2026-09-12.txt` + `data/pg_spec12_*_2026-09-12.log.gz`.
+
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's
 docstring) from the archived captures. Nothing here is a statement about the µPD6383GF; §1 says so
