@@ -1386,6 +1386,39 @@ rules out the whole family of uniform-target fixes including the one §32 got ex
 ⚠ Grade: the listings, the census and the ten-program first-read table are MEASURED; the
 sign-dependence is the next experiment, stated so it can fail.
 
+## 39. ★★★★★ §38's HYPOTHESIS PASSES ALL FOUR CRITERIA — the sign of `addr8` IS the discriminator
+`UPD6383_ST07SIGN=1` (new, default off): the `ACT 0x07` mode-2 store lands on the **POST**-increment
+cell when `addr8 > 0`, and on the PRE cell otherwise. Run through the gate at
+`UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B440F` with the baseline arms:
+
+| criterion | result |
+|---|---|
+| (A1) chorus LFO, **eight-frame witness** | ✅ **FREE-RUNNING RAMP at +114/frame** |
+| (A2) chorus body live | ✅ 3 of 17 cells, 21 of 70 rows |
+| (B) EQ body live | ✅ **30 of 44 cells, 105 of 105 rows** |
+| (C) one copy of the input | ✅ **at `0x50`, `0x54`, `0x58`, `0x5C`, `0x60`** |
+
+The arm fired **10 733 061** times, so it is not a no-op. ★★★ **This is what §32 was reaching for
+and got wrong**: the EQ's five band blocks each receive one clean copy of the input **and** the
+chorus keeps a correct free-running oscillator — on the very criterion (the §119 eight-frame
+witness) that exposed §32's failure. The EQ's liveness is also the highest of any configuration
+tried: **30 of 44 cells and 105 of 105 rows**, against bit 28's 13 and 94.
+
+★ **The prediction was written before the run** (§38), from a constraint rather than a guess: the
+chorus's phase store and the EQ's entry store are the same word but for `addr8` (`−12` against
+`+64`), a uniform target cannot serve both, and the census said the split is real
+(181 positive / 155 negative / 54 zero among `ACT 0x07` words carrying no bit-4 store).
+
+⚠ **NOT PROMOTED YET, and the reason is this session's own history.** §32 also passed everything I
+was measuring at the time, and it was wrong because a criterion could not fail. The standard this
+investigation now holds is the **ten-program catalogue regression** — the instrument that
+disqualified bit 28 on five LFOs and nine railed cells — and that is running. Nothing is promoted
+on two programs again.
+
+⚠ Grade: MEASURED on the two reference programs
+(`data/pair_gate_st07sign_2026-09-13.txt`, `data/pg_st07sign_*_2026-09-13.log.gz`). The catalogue
+verdict follows in §40.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
