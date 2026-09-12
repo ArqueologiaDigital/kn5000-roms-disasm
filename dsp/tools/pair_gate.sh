@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# pair_gate.sh -- THE TWO-SIDED GATE for any uPD6383 product-register / pipeline arm.
+#
+#   dsp/tools/pair_gate.sh <TAG> [ENV=VAL ...]
+#
+# QUESTION IT ANSWERS
+#   N-INPUT-GATE-OPENED §19 proposed a configuration on the evidence of ONE program (the chorus)
+#   and §20 MEASURED that it starves another (the parametric EQ).  A reading of the product
+#   register is only admissible if it passes BOTH criteria AT THE SAME SETTING:
+#
+#     (A) CHORUS, TYPEIDX 0 -- the LFO phase cell must advance by the increment across a frame
+#         pair.  At rest that is 114 (dlyseed_confront.py's LANDMARKS line).  Any other value
+#         means the phase word's LOAD picked up a contaminated product.
+#     (B) PARAMETRIC EQ, TYPEIDX 15 -- the body must stay LIVE: cells moving and rows differing
+#         between two consecutive frames (frame_pair_diff.py, non-zero exit on a static body).
+#         The reference number to beat is the NO-FLUSH configuration's 42 of 52 cells / 149 of
+#         187 rows; 2 cells / 9 rows is the STARVED shape §20 recorded for UPD6383_CALLFLUSH=1.
+#
+#   An arm that passes (A) and fails (B) is program-destructive and is NOT the chip's rule.
+#
+# Example (the §20 baseline that fails B, and the §21 candidate):
+#   dsp/tools/pair_gate.sh callflush UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 \
+#                          UPD6383_SPEC=B9108446A39B440F
+#   dsp/tools/pair_gate.sh pclr      UPD6383_LO12CAP=1 UPD6383_PCLR=1 \
+#                          UPD6383_SPEC=B9108446A39B440F
+#
+# Frame schedule is fx_ab.lua's own: NOTE ON at 36.0 s + 0.2 s x TYPEIDX, trace armed 1.0 s later
+# (RULE 12 -- a DSP test with no notes playing is not a test).  Visible window, timeout-wrapped.
+set -u
+TAG=${1:?TAG}; shift
+EXTRA=("$@")
+HERE=$(cd "$(dirname "$0")" && pwd)
+BUILD=${KN7000_BUILD:-$HOME/compartilhado/kn7000_mame_build}
+OUTDIR=${OUTDIR:-${CLAUDE_JOB_DIR:-/tmp}/tmp}
+mkdir -p "$OUTDIR"
+
+cap() {   # cap <TYPEIDX> <FRAME_OFFSET_FRAMES> <OUT.log>
+  local ti=$1 off=$2 out=$3
+  local note frame
+  note=$(python3 -c "print(36.0 + 0.2*$ti)")
+  frame=$(python3 -c "print(int(($note + 1.0) * 44100) + $off)")
+  ( cd "$BUILD" && rm -f error.log && \
+    env DISPLAY=${DISPLAY:-:0} DHLE=0 DSPCFG=3 TYPEIDX="$ti" NOTEMODE=0 TGM=0 \
+        UPD6383_TRACE_FRAME="$frame" "${EXTRA[@]}" \
+        timeout 180 ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log -window \
+        -autoboot_script "$HERE/fx_ab.lua" > /dev/null 2>&1
+    cp error.log "$out" )
+}
+
+echo "=== pair_gate [$TAG] : ${EXTRA[*]:-(no arms)} ==="
+
+echo "--- (A) CHORUS phase, TYPEIDX 0 ---"
+# ONE capture: the landmark is the delta between the phase-accumulate word (hi12 092.A) and the
+# wrap word (094.A) INSIDE one frame, i.e. the increment the LFO actually applied this frame.
+cap 0 0 "$OUTDIR/pg_${TAG}_cho.log"
+python3 "$HERE/dlyseed_confront.py" "$OUTDIR/pg_${TAG}_cho.log" --lo 84 --hi 188 2>/dev/null \
+  | grep -E "delta across the pair" \
+  || echo "  !! no LFO landmark line -- the chorus trace is missing or the body never ran"
+
+echo "--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---"
+cap 15 0 "$OUTDIR/pg_${TAG}_eq.log"
+cap 15 1 "$OUTDIR/pg_${TAG}_eq_F1.log"
+python3 "$HERE/frame_pair_diff.py" "$OUTDIR/pg_${TAG}_eq.log" "$OUTDIR/pg_${TAG}_eq_F1.log" \
+    --lo 84 --hi 188
+echo "(B) exit status: $?   [0 = live, non-zero = STATIC]"

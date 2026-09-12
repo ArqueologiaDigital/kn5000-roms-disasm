@@ -29,6 +29,23 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    ⇒ `CALLFLUSH` is **necessary**, not refuted (§18 was refuted only as a *solo* fix).
    ⚠ Still three speculative readings standing together, all default-off; this is joint evidence,
    not proof.
+   ⛔⛔ **§20 WITHDRAWS the "mutually consistent" part of the above.** Tested on the *other*
+   program, the configuration is destructive: with `CALLFLUSH` the **EQ's body goes from 42 of 52
+   cells and 149 of 187 rows moving to 2 cells and 9 rows**, and its non-zero products from 57 to
+   6. A flush at the block CALL cures the chorus's phase and **starves the EQ's filter at the same
+   setting**, so it cannot be the chip's rule. What survives is the DIAGNOSIS — two independent
+   paths contaminate the LFO block's entry LOAD and both must be closed — not the closure.
+   ★ **The two-sided gate is now a committed tool: `dsp/tools/pair_gate.sh <TAG> ENV=VAL ...`**
+   runs criterion (A) chorus phase = 114 and criterion (B) EQ liveness at ONE setting. Run it on
+   every product-register arm before writing anything down. **Nothing may be called "consistent"
+   on one program again.**
+   ★ **§21 candidate under test: `UPD6383_PCLR`** — the multiplier output register is *driven*,
+   not held, so a word that issues no multiply leaves `P` at zero. Finer-grained than "flush on
+   CALL" and, by construction, discriminates: it clears `P` at the chorus's LFO block entry
+   (preceded by non-multiplying words) without clearing it between the EQ's back-to-back
+   multiplies.
+   ★ **§148 is measured IRRELEVANT to the EQ** (on vs off byte-identical), so the chorus evidence
+   against it stands unopposed and removing it costs the reference program nothing.
 2. **Class 8 is a POST-SUM ACCUMULATOR SCALE, not a no-op** (`UPD6383_C8SHIFT=n`). `0804816415`
    sits at 35 corpus sites with identical neighbours at every one, biquad programs only; `acc >>= 1`
    is the unique small integer that un-rails the EQ (0 → 33 rows at full scale; 1 → none, all five
