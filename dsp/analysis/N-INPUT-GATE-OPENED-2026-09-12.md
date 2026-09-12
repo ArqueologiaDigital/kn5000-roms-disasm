@@ -705,6 +705,48 @@ descriptor ramp because the cursor was seeded there, and `iw46` loading that zer
 captures `pg_*_2026-09-12.log.gz`. `UPD6383_PCLR` stays in the device **default-off**, with this
 refutation in its comment, exactly like the other refuted arms.
 
+## 23. ★★ WHAT ACTUALLY ERASES THE EQ: `iw88`, AND IT IS §138'S SHAPE
+§22 said the next question is *what the preceding words left there*. Reading the EQ's body entry in
+all three configurations answers it. Under `CALLFLUSH` (the middle column of §22):
+
+```
+iw84  cls2 ACT0D SRC07 f31=0   L = 4 904 681            <- the pickup, LIVE
+iw86  cls2 ACT00 SRC00 f31=1   acc = 321 433 174 016    <- = 4 904 681 << 16, the audio IS in acc
+iw87  cls2 ACT00 SRC00 f31=5   acc = 321 433 174 016       (held)
+iw88  cls2 ACT07 SRC10 f31=0   acc = 0                  <- LOAD from P, and P is 0.  ERASED.
+iw89+ every band cell 000000
+```
+
+**`iw86` puts the live input into the accumulator and `iw88` throws it away**, two words later,
+by doing `acc ← P` on a word that issues **no multiply** — so `P` is not this word's result, it is
+whatever survived from before. That is verbatim the shape `upd6383.cpp` already names:
+
+> *"LOADing the accumulator from a stale product is not an operation; it is an erasure."* — §83,
+> generalised by **§138 (`m_specmask` bit 55)** with `m_in_dram` dropped: *a LOAD that brought no
+> fresh product is an erasure; treat it as HOLD.*
+
+★ And it explains the whole trade in one sentence. Without the flush, `iw88` loads the **kernel's**
+stale product (103 180 042 421) — which is itself audio-derived, so the EQ's bands keep moving and
+the body looks live. **The EQ was never being fed correctly; it was being fed the kernel's leftover
+product.** Clear that leftover by any means — flush at the CALL, drive the register per word, move
+the cursor — and the EQ gets a clean zero instead, which is why *every* intervention kills it.
+
+### The prediction, written before the run
+`UPD6383_SPEC` bit 55 (§138) makes `iw88` HOLD instead of loading. Then:
+- **EQ:** `iw88` keeps `321 433 174 016` — the actual input — and the bands are fed the right
+  quantity for the first time, rather than the kernel's residue. Criterion (B) should pass, and
+  pass *for the right reason*.
+- **Chorus:** `iw88` would hold `acc = 205 088 689 406` from `iw87` instead of loading, so the phase
+  word at `iw89` would add that in and the increment would **not** be 114. ⇒ criterion (A) is
+  expected to FAIL, and if it does, that is informative rather than fatal: it would say the
+  chorus's accumulator ought to be empty at `iw87` for a reason that has nothing to do with `iw88`.
+
+Test: `dsp/tools/pair_gate.sh s138 UPD6383_LO12CAP=1 UPD6383_SPEC=B9908446A39B440F`
+(`B9108446A39B440F | 1<<55`).
+
+⚠ Grade: the READING of the three traces is MEASURED (`data/pg_*_eq_2026-09-12.log.gz`); the
+prediction is a prediction.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
