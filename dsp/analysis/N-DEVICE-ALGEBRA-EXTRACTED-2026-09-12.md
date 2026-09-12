@@ -118,6 +118,12 @@ relevant register is non-zero:
 non-zero tempA at those words settles four rows of this table at once — that is the single highest
 -value experiment the tool identifies.
 
+✅ **UPDATE (§10): the first row is SETTLED, and it did not need a new capture — it needed a corpus
+that was ONE MACHINE.** On the ten-program single-configuration sweep `cls2 ACT0E SRC07 f31=2`
+comes out **`hold`, 13 rows over 5 programs, all discriminating**. The pooled corpus could not
+separate it; ten programs on one machine could. Try `--split-config`, or a single-configuration
+corpus, **before** designing a capture for any row of this table.
+
 ## 7. ★ THE TEMP-REGISTER WRITER MAP (`--target ta|tb`)
 Same machinery, different left-hand side: which `(class, ACT, SRC, f31)` groups **write** tempA or
 tempB, and with what. Everything not listed HOLDS the register — that alone is worth having, since
