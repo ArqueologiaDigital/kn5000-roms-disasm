@@ -1005,11 +1005,51 @@ Scanning **every row of the frame, both units**, only **two** address cell `0x50
 nonetheless holds `1 572 727` (audio-derived, from the contamination); under `CALLFLUSH` it holds
 **0**, and the bands have nothing to filter.
 
-⇒ **The next target is `0x50`'s writer**, and the instrument already exists: the device's §109
-store-site probe and `watch_store` record every store with its site and target. Either a word
-stores there through a path the `dp` column does not show (a mode-1 `mem[addr8]` store), or the
-cell is meant to be fed by the entry and the device aims that store at `0x10` when it should reach
-`0x50`. Both are decidable from one instrumented run, and neither needs a new hypothesis.
+⇒ **The next target is `0x50`'s writer** — and the captures ALREADY CARRY the answer, in the
+device's own store census, so no new run was needed:
+
+```
+§99  MODE-1 STORES -> register file: … 50:1331600 51:1340068 52:1329064 53:1338511 …
+     MODE-1 ACT-07 STORES: … [dest 50 src 0B ptr 50] [dest 51 src 0B ptr 51] [dest 52 src 0B ptr 52]
+```
+
+Cells `0x50`–`0x53` **are** written, about 1.33 M times each — by **mode-1 `ACT 0x07` stores with
+`SRC 0x0B`**. ⚠ But that census is **CUMULATIVE SINCE BOOT** (the same caveat that forced the
+delay-age retraction), and **neither the EQ's listing nor the kernel's contains a word of that
+shape**: the EQ's 33 `ACT 0x07` words carry `addr8 ∈ {0x40, 0xFF, 0x03, 0xAD, 0x30, 0x54}` and the
+kernel's two `SRC 0x0B` words are `ACT 0x15`/`ACT 0x19`. ⇒ **those stores belong to a different
+program**, and the correction to the paragraph above is this: *nothing the EQ or the kernel
+executes writes the band's input cell at all.* The baseline's non-zero `0x50` is **residue left by
+whatever ran before it**.
+
+## 31. ★★★ AND THE BRIDGE IS ONE EXISTING MASK BIT: `§109`, bit 28
+`iw88` stores to `0x10` and `iw89` reads `0x50`; nothing joins them. The device says why in its own
+report line:
+
+```
+§109 ACT-07 store target = PRE-increment (mask bit 28 = 0)
+```
+
+`iw88` is `ld.st acc,(p)+64`: its pointer moves `0x10 → 0x50`, and the `ACT 0x07` store is aimed at
+the pointer **before** that move. **Aim it after the move and the store lands on `0x50` — exactly
+the cell the band reads.** That bit already exists and has never been run against the EQ with a
+correct input in the accumulator, because until §29 there was never a configuration that had one.
+
+### Prediction, before the run
+`UPD6383_CALLFLUSH=1 UPD6383_SPEC=B9108446B39B440F` (the shipped mask **+ bit 28**):
+- (C) the pickup stays **one clean copy** — `CALLFLUSH` already delivers it;
+- **the band's `x` cell `0x50` receives that copy instead of `0x10`**, so the five bands run on the
+  EQ's own input for the first time;
+- (B) EQ liveness rises well above the flush's 2 cells / 9 rows, and rises **for the right
+  reason**;
+- (A) the chorus is untouched by a store-target change on `ACT 0x07`… ⚠ **not necessarily** — the
+  chorus has `ACT 0x07` stores too, so this must be run through all four criteria, not just the EQ.
+
+⚠ If it fails, the alternative is the mirror image: the `+64` pointer move is mis-ordered rather
+than the store mis-aimed. Both are single decisions about the same word.
+
+⚠ Grade: the census reading and the listing check are MEASURED; the prediction is a prediction,
+recorded before the run.
 
 ⚠ Grade: MEASURED, `data/pickup_copies_2026-09-12.txt` + the seven archived EQ captures. §29's
 reversal is a correction of my own §20/§22 interpretation on the project's own evidence.
