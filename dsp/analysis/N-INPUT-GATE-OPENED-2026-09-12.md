@@ -1339,6 +1339,53 @@ it is no longer unexplained, and it is no longer an argument against the flush.
 ⚠ Grade: MEASURED, from the committed regression captures' own traces
 (`reg/base/t2_F.log`, `reg/flush/t2_F.log`; regenerable per `catalogue_regression.sh`).
 
+## 38. ★★ THE REMAINING GAP HAS A NAMED DISCRIMINATOR: the SIGN of the store word's `addr8`
+§37 left the question as *"is `0x50` written by the entry at all?"*. Comparing the programs that
+work with the two that do not answers it, and narrows the solution to one field.
+
+**A program whose body reads live data writes its state cells with the BIT-4 store.** The
+SINGLE DELAY's body entry is the control — it reads `0x50` and finds **−201**, not zero:
+
+```
+SINGLE DELAY   w3 = 0212A011D5   mac (p),c+,(p)+1 ; mem[p]<-acc, acc=0   <- hi12 0x212 carries HI_ST
+               w4 = 0202A481D5   mac (p),c+,(p)+72                       -> pointer reaches 0x50
+PARAMETRIC EQ  w4 = 0000240407   ld.st acc,(p)+64                        <- hi12 0x000: NO bit-4 store
+ENHANCER       w4 = 002A240000                                           <- ACT 0x00: no store at all
+```
+
+⇒ the delay's cells are filled by **bit-4 stores on class-A words**, which land at `mem[ptr]` and
+work. The EQ's only store at its entry is the **`ACT 0x07` site-3 store**, and the enhancer has
+none — which is why exactly those two start on an empty cell while the delay does not. (Of the ten
+programs swept, the first body read finds live data in seven; `0x50` itself holds **−201** in the
+single delay, so the cell is perfectly writable.)
+
+### ★ And the discriminator is ONE FIELD
+The chorus's phase store and the EQ's entry store are the **same word but for one field**:
+
+| | word | ACT | SRC | f31 | `addr8` |
+|---|---|---|---|---|---|
+| CHORUS `iw88` (phase cell must keep working) | `00002F4407` | 07 | 10 | 0 | **0xF4 = −12** |
+| PARAMETRIC EQ `iw88` (needs the store at `0x50`) | `0000240407` | 07 | 10 | 0 | **0x40 = +64** |
+
+The EQ needs the `ACT 0x07` store at the **post**-increment pointer; the chorus needs it at the
+**pre**-increment pointer, because §109 bit 28 moves *every* such store and that is precisely what
+freezes the LFOs (§35). **The two words differ only in the SIGN of their post-increment.**
+
+⇒ **The next hypothesis, named and falsifiable:** the `ACT 0x07` store target depends on the sign
+(or the magnitude) of `addr8` rather than being uniform. Corpus census of `ACT 0x07` words carrying
+no bit-4 store: **181 with `addr8 > 0`, 155 with `addr8 < 0`, 54 with `addr8 == 0`** — a real split,
+not a handful of special cases, so a sign-dependent rule is testable on hundreds of sites and the
+catalogue regression is already built to grade it.
+
+⚠ **This is a HYPOTHESIS, not a reading.** "The two words that need opposite behaviour differ in
+this field" is a constraint on the answer, not the answer: the difference could equally be carried
+by something the trace does not print. What is MEASURED is the constraint itself — that a uniform
+store target cannot satisfy both programs — and that is worth more than another arm, because it
+rules out the whole family of uniform-target fixes including the one §32 got excited about.
+
+⚠ Grade: the listings, the census and the ten-program first-read table are MEASURED; the
+sign-dependence is the next experiment, stated so it can fail.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
