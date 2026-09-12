@@ -472,6 +472,38 @@ the action is conditional (on something not yet decoded), or it targets a regist
 speculative reading upstream. Those are three testable shapes, and the frame-pair diff plus the
 phase-delta check together make a two-sided test for each.
 
+## 17. ★ THE REGRESSION IS A MODELLING ARTEFACT OF THE LFO PHASE WORDS — exposed, not caused
+§16 left three shapes for why the capture breaks the phase. The traces already in hand decide it,
+and the answer converts the regression from "my arm is wrong" into something more useful.
+
+Compare the LFO block with the gate off and on (chorus, `iw88..92`):
+
+```
+gate OFF  iw88 acc            0   | iw89 acc      7 471 104  | iw91 (wrap) acc    183 540 121 600 ; phase cell 2ABB66 -> 2ABBD8  (+114)
+gate ON   iw88 acc  319 452 807 168 | iw89 acc 638 913 085 440 | iw91 (wrap) acc    228 176 166 912 ; phase cell 205E2C -> 35205C  (+1.36 M)
+```
+
+The phase words are `092.A.00.200` (phase +=) and `094.A.00.200` (the wrap), and both carry the
+**store bit**: the device writes `acc >> 16` into the phase cell. With the body starved the
+accumulator arriving at `iw88` is **0**, so the cell receives only the increment and advances by
+exactly 114 — the behaviour that matched the HLE. With the body live the accumulator arriving is
+**3.19 × 10¹¹**, i.e. audio, and the same store writes **audio + phase** into the phase cell.
+
+⇒ **The phase does not break because the capture is wrong; it breaks because the LFO phase words'
+store is modelled as "store the whole accumulator", and that model is only harmless while the
+accumulator is dead.** The 114-per-frame agreement with the HLE was measured under exactly the
+condition that hides the defect. A phase accumulator has to be a narrow path — the increment and
+the wrap, not the effect's running sum — and the chip evidently keeps it separate.
+
+That is a **new open decode with a sharp statement and a two-sided test already built**: any
+correct model of `092.A`/`094.A` must advance the cell by the increment (114 for the chorus at
+rest, and by the panel-driven rate when LFO SPEED moves) **while the body is live**. Today the
+device passes that test only with the body dead, which is no test at all.
+
+★ This is the session's method paying off in an unexpected direction: opening a gate did not just
+reveal what was downstream of it, it **invalidated a measurement that everyone (including the HLE
+triangle) had trusted** — because that measurement had only ever been taken in the starved state.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
