@@ -419,6 +419,26 @@ halves are separate problems, and §216 already closed the question of whether f
 signal helps. Anyone continuing should treat the output stage as its own investigation — starting
 from §216/§217's measurements, not from a fresh frame-pair hunt that will rediscover them.
 
+## 15. REGRESSION CHECK: the opened readings do not disturb the MEASURED primitives
+A reading that makes a stage live is worthless if it breaks what was already bit-exact. The same
+EQ frame, three configurations, through `dlyseed_confront.py`:
+
+| configuration | multiplier `P[N] = coef[N−1]·L[N] >> 7` | accumulator classification |
+|---|---|---|
+| shipped readings | **57 exact, 0 mismatch** | 61 accumulate, 27 load, 4 bus-add, 2 saturated, 10 boundary, **0 unexplained** |
+| `+LO12CAP +C8SHIFT` | **57 exact, 0 mismatch** | 60, 27, 4, **0 saturated**, 13 boundary, **0 unexplained** |
+| `+LO12CAP +C8SHIFT +ACT0E=mem[ptr]` | **57 exact, 0 mismatch** | 60, 27, 4, **0 saturated**, 13 boundary, **0 unexplained** |
+
+The multiplier is bit-exact on all 57 non-zero products in every configuration, and the accumulator
+has **no unexplained multiply rows** in any of them. The only movement is that the two saturated
+rows disappear once the class-8 post-sum scale is applied — which is the intended effect, not a
+regression — and three rows move from "saturated" into the boundary bucket.
+
+⇒ the three readings opened or decoded this session (`ACT 0x19` capture on the bit-11 word, class-8
+post-sum scale, `ACT 0x0E = mem[ptr] ← bus`) are **compatible with the project's bit-exact
+datapath measurement**. That is a necessary condition, not a sufficient one, but a reading that
+failed it would have been dead on arrival.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
