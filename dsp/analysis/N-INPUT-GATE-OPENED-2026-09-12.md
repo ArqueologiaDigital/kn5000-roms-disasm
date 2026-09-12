@@ -639,6 +639,33 @@ nothing. That part of §9 is **confirmed on a second program**.
 session's headline result, found by testing it where it could do damage rather than where it was
 built.
 
+## 21. THE CANDIDATE §20 CALLS FOR: a DRIVEN product register (`UPD6383_PCLR`)
+§20 says the chip's rule must be finer-grained than "flush on CALL". The obvious finer rule is
+that the multiplier's output register is **driven, not held**: it carries the result of *this*
+word's multiply, and a word that issues no multiply leaves it undriven, i.e. **zero**, for the
+next word's `f31 = 0` LOAD. Implemented as `UPD6383_PCLR` (default off): a per-word flag
+`m_ptouch` is set by every site that writes `m_p`, and at the end of each word an untouched `P` is
+cleared.
+
+### The PREDICTION, written from the listings BEFORE the run
+- **Chorus.** The LFO block's entry LOAD is `iw88 = 00002F4407` (`ld.st acc,(p)-12`, `f31 = 0`).
+  The three words before it — `iw85` `000020E1CD`, `iw86` `00002DE40E`, `iw87` `021222200B` — are
+  all **class 2** and issue no multiply. So `PCLR` clears `P` before the LOAD, exactly as
+  `CALLFLUSH` did, but by a local rule instead of a block-boundary one. ⇒ criterion (A) should
+  still give **114**.
+- **EQ.** A band is `ld.ta`, four back-to-back `mac`s, `mac.st tb`, `post acc,c` (class 8),
+  `mac.st acc`. Between the four `mac`s nothing is cleared, because every one of them writes `P`.
+  ⇒ criterion (B) should stay at the **no-flush** liveness, not the starved shape.
+- ★ And it removes a **double count** the hold model has: `w11` (`post acc,c`) issues no multiply,
+  so under the hold model `w12`'s accumulate adds `w10`'s product a **second time** — `w11` already
+  consumed it. The clear happens *after* the word's datapath work, so `w11` still consumes it once.
+
+If (A) or (B) fails, this reading dies like the others; it is recorded here as a prediction so the
+measurement can contradict it rather than confirm a story written afterwards. Gate:
+`dsp/tools/pair_gate.sh pclr UPD6383_LO12CAP=1 UPD6383_PCLR=1 UPD6383_SPEC=B9108446A39B440F`.
+
+⚠ Grade: PREDICTED, not measured. The result follows in §22.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
