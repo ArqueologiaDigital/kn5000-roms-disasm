@@ -88,6 +88,22 @@ one operation the project's own *reference* program still listed as UNKNOWN, and
 gate-opening exposed — with the body starved, a uniform post-sum gain is invisible, which is
 exactly why the earlier "0.094 dB with class 8 doing no multiply" evidence (a ratio) could not see it.
 
+**The two knobs are DEGENERATE — but the input level breaks the tie.** Repeating the sweep at the
+shipped total-22 multiply scale instead of total-23:
+
+| configuration | per-band gain | band-0 input (the pickup) | rails |
+|---|---|---|---|
+| total-23 + `c8>>1` | 0.667 ×4 | **4 904 730** (finite) | 2 |
+| total-22 + `c8>>1` | *(rail/rail)* | 8 388 607 (**at FS**) | 39 |
+| total-22 + `c8>>2` | 0.667 ×4 | 8 388 607 (**at FS**) | 10 |
+
+`(total 23, shift 1)` and `(total 22, shift 2)` give the **same** per-band gain — one bit moved
+from the multiplier to the post-sum word — so the band gain alone cannot tell the two mechanisms
+apart. What does tell them apart is the **input**: the value the kernel hands the body is scaled by
+the multiply shift, and at total-22 it arrives **pinned at full scale** while at total-23 it is a
+finite 4.9 M. A pickup saturated before the filter even starts cannot be right, so this is a second,
+independent vote for total-23 — from the input path rather than from the filter.
+
 ⚠ **The AMOUNT is not pinned.** A flat EQ band should have a per-band gain of 1.0 and n = 1 gives
 0.667 — so either the preset is not flat, or the true operation is not a bare 1-bit arithmetic
 shift (a round-and-shift, a saturating normalize, or a shift whose amount comes from `addr8` under
