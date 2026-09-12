@@ -1,0 +1,42 @@
+body-entry shape: 'ACT 0x00 f31=1 (input -> acc) then f31=0 no-coefficient LOAD'
+  scanned 38 body images, first 8 words, reach 3
+  WITH the shape   : 18 of 38
+     prog00_no_operation.dsm                  w5  0212200000  ->  w7  00002F9407
+     prog05_phaser.dsm                        w1  0092A0E200  ->  w4  000020C1CD
+     prog06_ensemble.dsm                      w2  0092A05200  ->  w5  0000206447
+     prog33_overdrive.dsm                     w4  0212200000  ->  w5  0000200415
+     prog35_exciter.dsm                       w3  0212200000  ->  w5  000023F407
+     prog39_parametric_eq.dsm                 w2  0212200000  ->  w4  0000240407
+     prog48_auto_pan.dsm                      w3  0212200000  ->  w5  0880130000
+     prog50_vibrato.dsm                       w4  0212200000  ->  w5  09001601D5
+     prog52_auto_wah.dsm                      w4  0022200000  ->  w5  0880130000
+     prog54_ring_modulator.dsm                w3  0212200000  ->  w5  00002FE1CD
+     prog56_mix_up.dsm                        w4  0092A00200  ->  w7  0000201447
+     prog64_s_delay_chorus.dsm                w0  0092A03200  ->  w3  0880130447
+     prog65_s_delay_s_delay.dsm               w3  0212200000  ->  w5  00002FE407
+     prog66_s_delay_flanger.dsm               w4  0092A00200  ->  w7  0000201447
+     prog67_s_delay_vibrato.dsm               w4  0022200000  ->  w5  00002F6407
+     prog68_s_delay_phaser.dsm                w4  0022200000  ->  w5  00002FE407
+     prog70_auto_wah_s_delay.dsm              w5  0022200000  ->  w6  00002F6407
+     prog74_peq_vibrato.dsm                   w1  0092A03200  ->  w4  0000201447
+  without          : 20
+     prog01_chorus.dsm
+     prog02_modulated_chorus.dsm
+     prog03_enhancer.dsm
+     prog04_flanger.dsm
+     prog08_gated_reverb.dsm
+     prog09_single_delay.dsm
+     prog10_multi_tap_delay.dsm
+     prog15_rock_rotary.dsm
+     prog16_room_reverb_1.dsm
+     prog32_distortion.dsm
+     prog34_fuzz.dsm
+     prog36_compressor.dsm
+     prog71_peq_chorus.dsm
+     prog72_peq_s_delay.dsm
+     prog73_peq_flanger.dsm
+     prog75_peq_compressor.dsm
+     prog96_peq_compr_dist.dsm
+     prog97_peq_compr_overdr.dsm
+     prog98_peq_dist_delay.dsm
+     prog99_peq_overdr_delay.dsm

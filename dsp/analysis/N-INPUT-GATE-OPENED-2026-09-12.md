@@ -751,8 +751,19 @@ This rule does not adjust one instruction; it changes **a third of the machine**
 A gate pass would be strong evidence, and a gate failure would not be surprising. The reverbs are
 the most exposed (`prog16_room_reverb_1` 70 words, `prog08_gated_reverb` 53).
 
+★ **And it is not the EQ's quirk.** `dsp/tools/entry_erasure_census.py` scans the first eight
+words of every body image for the same shape — an `ACT 0x00 / f31 = 1` word (the bus-add that puts
+the input in the accumulator) followed within three words by an `f31 = 0` word that fetches no
+coefficient. **18 of the 38 distinct body images carry it**, the reference program among them
+(`prog39_parametric_eq` `w2 0212200000 → w4 0000240407`), and so do NO OPERATION, the phaser, the
+ensemble, the overdrive, the exciter, auto-pan, vibrato, auto-wah, the ring modulator and five
+combis. ⇒ whatever this one situation decodes to reaches **about half the catalogue**, which is
+both why it matters and why it must not be guessed.
+⚠ The shape is in the BYTECODE; calling it an erasure is a statement about the DEVICE, which has
+no fresh product there. On the chip the pipeline may have one. The census sizes the question.
+
 ⚠ Grade: the READING of the three traces is MEASURED (`data/pg_*_eq_2026-09-12.log.gz`); the
-prediction is a prediction.
+census is MEASURED (`data/entry_erasure_census_2026-09-12.txt`); the prediction is a prediction.
 
 ## 24. ★★ THE CHORUS NEEDS AN EMPTY **ACCUMULATOR**, NOT AN EMPTY PRODUCT REGISTER
 Reading the chorus's phase block on the `CALLFLUSH` trace to the unit shows what the LFO actually
