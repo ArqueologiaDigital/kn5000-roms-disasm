@@ -361,9 +361,18 @@ own state, and the device is known-wrong here. It does not confirm §10's withdr
 (the required scalings there were ×4/×2/×1 across the b- and a-paths; this is a single ×2 inside
 the a-path). What it does is convert "some factor of two is missing" into "this pair of cells, in
 this program, in this device", which is a fix-shaped statement rather than a hypothesis.
-**Next:** identify which word writes each cell (band 1's candidates are `iw99`/`iw105`, both
-`0x212…` bit-4 stores, and `iw103` `102.2.FF.687` ACT 0x07) and check whether the two take
-different store paths in `store_mode()`. That is a read of the device, not another run.
+**Followed up immediately, and it sharpens:** censusing every unit-0 row whose pointer is band 1's
+y-pair shows only ONE writer in the band (`iw103`, `102.2.FF.687`, ACT 0x07 → cell `0x56`), and the
+CELLS are *not* exactly 2:1 — `0x56` holds 1 825 566 while `0x57` holds 913 807, a ratio of
+1.99776. The exact 2.000000 is between the **operands**: `−a2`'s operand is 912 783 = exactly half
+of `−a1`'s 1 825 566, while the cell its pointer names holds 913 807 (1024 more). ⇒ **the halving
+is on the OPERAND PATH, not in a store** — the `−a2` word (`iw102`, `202.A.00.1D5`) carries
+**`SRC 0x00`**, which is the corpus's single biggest open code (648 words; anchoring it alone would
+newly decode 348, `routing_census.py`) and whose device reading is a live speculative switch
+between `mem[ptr]` and `C-RAM[cursor]`. So the EQ's missing factor of two lands squarely on the
+code the coverage census already names as the top lever — the two lines of work meet here.
+**Next:** instrument that one word's operand selection (which route fired, and what each candidate
+route would have returned) on this same capture — a read-only probe, no decode change.
 
 ## Honest grade
 §10's **coefficient** result is MEASURED and EXACT (five bands, zero spread, arm-independent, from
