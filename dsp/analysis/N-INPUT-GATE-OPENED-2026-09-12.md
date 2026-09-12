@@ -754,6 +754,49 @@ the most exposed (`prog16_room_reverb_1` 70 words, `prog08_gated_reverb` 53).
 ⚠ Grade: the READING of the three traces is MEASURED (`data/pg_*_eq_2026-09-12.log.gz`); the
 prediction is a prediction.
 
+## 24. ★★ THE CHORUS NEEDS AN EMPTY **ACCUMULATOR**, NOT AN EMPTY PRODUCT REGISTER
+Reading the chorus's phase block on the `CALLFLUSH` trace to the unit shows what the LFO actually
+requires, and it is architectural rather than incidental:
+
+```
+iw89  clsA ACT00 SRC08 f31=1   acc = 0 + 0 + (114 << 16)            =       7 471 104
+iw90  cls2 ACT00 SRC07 f31=1   acc = 7 471 104 + (2 800 486 << 16)  = 183 540 121 701
+iw91  clsA ACT00 SRC08 f31=2   store -> cell 0x2ABB66 + 114 = 0x2ABBD8          ✔ +114
+```
+
+The sum `phase + increment` is formed across **two** words: `iw89` puts the **increment** in the
+accumulator and `iw90` adds the **phase cell**. For that to work, `iw89` must start from an
+**empty accumulator** — which is a statement about the accumulator at body entry, nothing to do
+with how long a product lives.
+
+⇒ `CALLFLUSH` reaches that state only **indirectly**: it empties `P`, and `iw88` (`f31 = 0`) then
+loads the zero into `acc`. That is why it also takes the EQ's product path with it. **Clearing the
+accumulator at the block CALL says what is actually required and leaves the product path alone** —
+and the product path is the half the EQ needs (§23).
+
+### The candidate pair, and its prediction
+`UPD6383_CALLACC=1` (new, default off) **+** `UPD6383_SPEC` bit 55 (§138: a LOAD that brought no
+fresh product is a HOLD):
+
+- **Chorus:** the accumulator is 0 at body entry, so `iw89`/`iw90` form `phase + increment` and the
+  increment comes out **114** — *and* the body stays live, because nothing has emptied `P`.
+- **EQ:** `iw86` puts the live pickup in the accumulator, `iw88` now **holds** instead of loading
+  the kernel's residue, so the bands are fed **their own input** for the first time (§23).
+
+This is the first candidate that is not on §22's trade curve: the two arms act on **different
+registers**, each addressing the program that needs it, and neither takes anything away from the
+other. ⚠ It is also two speculative arms at once, and §138's blast radius is **35.5 % of the
+corpus** (1 084 of 3 057 words) — so a pass is evidence, not proof, and each arm needs its own
+single-arm run to say which half did the work.
+
+Test, in this order:
+```
+dsp/tools/pair_gate.sh callacc      UPD6383_LO12CAP=1 UPD6383_CALLACC=1 UPD6383_SPEC=B9108446A39B440F
+dsp/tools/pair_gate.sh s138         UPD6383_LO12CAP=1 UPD6383_SPEC=B9908446A39B440F
+dsp/tools/pair_gate.sh callacc_s138 UPD6383_LO12CAP=1 UPD6383_CALLACC=1 UPD6383_SPEC=B9908446A39B440F
+```
+⚠ Grade: the trace reading is MEASURED; the pair is a PREDICTION, recorded before the build.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
