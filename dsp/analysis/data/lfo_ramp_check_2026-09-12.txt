@@ -1,0 +1,12 @@
+LFO phase across 8 consecutive frames -- the step must be CONSTANT and equal 114
+
+capture                              frames         step  verdict
+pg_noflush_cho.log                        8       varies  ⛔ step NOT constant: -5219983, 3168625
+pg_callflush_cho.log                      8          114  ✅ FREE-RUNNING RAMP at the increment
+pg_pclr_cho.log                           8          114  ✅ FREE-RUNNING RAMP at the increment
+pg_spec12_cho.log                         8          114  ✅ FREE-RUNNING RAMP at the increment
+pg_bit28_cho.log                          8            0  ⛔ FROZEN -- the phase never advances (value 0)
+pg_bit28only_cho.log                      8            0  ⛔ FROZEN -- the phase never advances (value 3168511)
+pg_v3_triple_cho.log                      8       varies  ⛔ step NOT constant: -3525815, -3369606, -3177259, 4896955
+pg_v3_s138_cho.log                        8       varies  ⛔ step NOT constant: -192639, -59489, 19187, 91948
+pg_v3_callacc_cho.log                     8       varies  ⛔ step NOT constant: -5219983, 3168625

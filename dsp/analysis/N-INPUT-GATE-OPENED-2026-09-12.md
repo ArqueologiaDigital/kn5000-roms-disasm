@@ -1054,7 +1054,8 @@ recorded before the run.
 ⚠ Grade: MEASURED, `data/pickup_copies_2026-09-12.txt` + the seven archived EQ captures. §29's
 reversal is a correction of my own §20/§22 interpretation on the project's own evidence.
 
-## 32. ★★★★★ IT PASSES. ALL FOUR CRITERIA, FOR THE FIRST TIME — `CALLFLUSH` + §109 bit 28
+## 32. ⛔ RETRACTED BY §34 — READ §34 FIRST. (kept in full; the EQ half stands, the headline does not)
+## 32. ~~★★★★★ IT PASSES. ALL FOUR CRITERIA, FOR THE FIRST TIME~~ — `CALLFLUSH` + §109 bit 28
 `UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 UPD6383_SPEC=B9108446B39B440F`, baseline arms as always:
 
 | criterion | result |
@@ -1136,6 +1137,57 @@ each demonstrably necessary, and the pair passing four criteria on two programs.
 evidence and still default-off until a regression over the remaining programs.
 
 ⚠ Grade: MEASURED, `data/pair_gate_bit28only_2026-09-12.txt` + `data/pg_bit28only_*`.
+
+## 34. ⛔⛔ §32's HEADLINE IS RETRACTED — the chorus criterion could not fail, and the phase is DEAD
+§32 claimed the first configuration to pass all four criteria. **It does not.** The chorus
+criterion I was using — the phase cell's **within-frame** delta — is one of those criteria that
+cannot fail in the way that matters, which is the rule this project wrote down years of passes ago
+and which I applied to everyone's work but my own.
+
+`iw89` LOADs the increment into the accumulator and `iw91` stores it, so the **delta is 114 even
+when the cell is reset to zero every frame and the LFO never advances at all.** And the device has
+been printing the right measurement in every single capture the whole time — §119's witness, the
+phase cell resident at body-0 `iw89` **on eight consecutive frames**:
+
+| configuration | phase, 8 consecutive frames | step | verdict |
+|---|---|---|---|
+| **`CALLFLUSH`** | 7 273 022 · 7 273 136 · 7 273 250 · 7 273 364 … | **+114 constant** | ✅ **free-running ramp** |
+| `PCLR` | identical | +114 | ✅ |
+| `SPEC` bit 12 | identical | +114 | ✅ |
+| **`CALLFLUSH` + bit 28** | **0 · 0 · 0 · 0 · 0 · 0 · 0 · 0** | 0 | ⛔ **NO PHASE AT ALL** |
+| bit 28 alone | 3 168 511 × 8 | 0 | ⛔ frozen |
+| baseline | 6 987 734 · 1 767 751 · 4 936 376 … | varies | ⛔ |
+| the triple, §138, `CALLACC` | wander | varies | ⛔ |
+
+⇒ **§109 bit 28 destroys the chorus's LFO.** With the flush the phase is zero on every frame;
+without it, frozen at a constant. Either way the modulation is dead, and §32's criterion (A) —
+both halves of it, the delta *and* the body liveness — reported a pass.
+
+### What survives §32, and what does not
+- ⛔ **"The first configuration to pass all four criteria" is withdrawn.** There is none.
+- ⛔ **bit 28 is back on §22's trade curve**, and its trade is now exactly characterised: it fixes
+  the EQ's delivery and kills the chorus's LFO.
+- ✅ **The EQ half of §32 stands and is unaffected**: with bit 28 the five band blocks
+  `0x50`/`0x54`/`0x58`/`0x5C`/`0x60` each receive **exactly one copy** of the input and the body
+  moves 94 of 105 rows. That measurement is about the EQ and is not touched by the chorus witness.
+- ★★ **And §29's result is now much STRONGER, not weaker.** `CALLFLUSH` was already the only
+  configuration delivering one clean copy of the input; the eight-frame witness now independently
+  shows it is also the only family of configurations giving the chorus a **correct free-running
+  ramp at exactly the increment**. Two unrelated criteria, two programs, same answer.
+
+### The instrument, fixed
+`dsp/tools/lfo_ramp_check.py` reads §119's witness and checks the only property an LFO phase must
+have: a **constant, non-zero step**. It runs on **any archived chorus capture**, which is how this
+was found — retrospectively, on captures taken hours earlier. The gate's criterion (A) now uses it
+instead of the within-frame delta.
+
+⚠ ⚠ **The lesson, recorded against my own headline:** I built a four-criterion gate specifically
+because single criteria had been fooling this project, then let the most important of the four be
+a quantity that is constant under the failure it was meant to detect. *A criterion must be able to
+fail in the way the thing fails.* The evidence was already in the logs; nothing new was captured
+to find it.
+
+⚠ Grade: MEASURED, `data/lfo_ramp_check_2026-09-12.txt`, from the nine archived chorus captures.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
