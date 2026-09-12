@@ -43,19 +43,30 @@ peak == rms** before the seed — a constant, not silence: the LLE wet under the
 DC/rail (consistent with the trace's ±2³⁹ clamps), so a 0.5-FS impulse in the delay line is invisible
 in the audio. The loop delay therefore has to be measured in the TRACE domain (§5), not by listening.
 
-## 5. The realized loop delay (hardware question Q4) — measured in the trace domain
+## 5. The realized loop delay (hardware question Q4) — NOT measured; the census claim RETRACTED
 Seed once at frame F = 1 820 000, then trace frame F+k and inspect the tap-read words (iw93/iw116):
 the line is otherwise empty (no audio ever enters it — the input route is blocked), so **any non-zero
 L at the tap read at F+k is the recirculated seed, and that k is the LLE's realized loop delay**.
-**RESULT — the realized delay matches the DESCRIPTOR (~350–400 ms), measured by the device's own
-§200 age census.** The census is printed in the SAME trace dump (not boot-gated as I first thought —
-it accumulates every delay read and prints at the frame-trace). For the single delay's read
-descriptor **0x26** it reports `frames_since_written 0 .. 17711 (0.00 .. 401.61 ms @ 44100 Hz)` —
-the maximum age ≈ **402 ms**, right by the descriptor's nominal **350 ms** (15437 samples); the
-other descriptors span similar depths (0x28 up to 1112 ms, etc.). So the LLE's external delay LINE
-DEPTH tracks the descriptor, as the HLE delay assumes.
 
-⚠ **This RETRACTS a weaker reading.** My first pass seed-once-and-read-at-F+k test found `L = −2` at
+⚠⚠ **RETRACTED (same day, by the chorus confrontation's census cross-check —
+`N-DLYSEED2-CHORUS-CONFRONT-2026-09-12 §5`).** This section first claimed "the realized delay matches
+the DESCRIPTOR (~350–400 ms), measured by the device's own §200 age census", quoting dsc 0x26
+`frames_since_written 0 .. 17711 (401.61 ms)` ≈ the descriptor's 350 ms. That number is **not a
+line-depth measurement**: (a) the §200 census is CUMULATIVE SINCE BOOT and spans every program that
+ran before the navigation (the boot default's reads on the same descriptor index are pooled in);
+(b) the read ADDRESS in this build carries the SPECULATIVE tap-modulation term `m_tapmod` (mask bit
+60) — prog09 has NO `44C` word, so during the single delay `m_tapmod` is whatever STALE value the
+previous program's `44C` word left, a garbage constant offset that the seed itself perturbs. Five
+runs of the same recipe give dsc 0x26 max = 27748 / 27750 / 27748 / 27748 / **17711** with
+IDENTICAL hit counts (311 892) — the one 17711 is the every-frame DLYSEED2 run, the others are v1
+DLYSEED and `_ONCE` runs — i.e. the max moves with the stale offset, not with the line. The
+coincidence 17711 ≈ 402 ms ≈ 350 ms was luck. **The LLE's realized single-delay depth is therefore
+UNMEASURED.** Under the device's address model `addr = cell + rot` it equals `(R_cell − W_cell)`
+by construction (the descriptor difference, ~350 ms) — a property of the model, not a measurement
+of the chip. The instrument that would measure it: a per-program census reset (env-gated) with
+mask bit 60 OFF, or the `_ONCE` recirculation read at F+k with the address rotation accounted for.
+
+⚠ **This ALSO retracts the earlier weaker reading.** My first pass seed-once-and-read-at-F+k test found `L = −2` at
 F+500 and `L = 0` at F+15437 and I called it "suggestive of the Q4 ~500-frame lag". That was
 **near-noise and wrong**: −2 is not a recirculation of a 0.5-FS seed — a single `_ONCE` seed plus
 the per-frame address rotation (addr = cellv + m_frames_run) simply does not land the impulse on the
@@ -68,14 +79,17 @@ are not in conflict once distinguished.)
 §1–§3 are MEASURED from the live seeded trace and are the first POSITIVE oracle confrontation of
 a non-biquad program: the decoded arithmetic primitives are the chip's, and the open codes are
 confined to the boundary words. §4 is a MEASURED negative result about the audio test method. §5 is
-MEASURED from the device's §200 age census (realized delay-line depth ≈ the descriptor, ~350–400 ms),
-and RETRACTS the near-noise seed-residue reading. No decode was changed; DLYSEED2 is a pure
-observation diagnostic.
+RETRACTED in full (two readings, both wrong: the census max is a stale speculative offset, the
+seed-residue was noise) — the realized line depth is UNMEASURED. No decode was changed; DLYSEED2 is
+a pure observation diagnostic. (`dlyseed_confront.py` now also names 2 of §3's 7 boundary rows as
+the device's "bus-add" form `acc += L<<16`, leaving 5 boundary words — same residue, finer label.)
 
 ## 6. Net result toward full LLE
 The single delay's **arithmetic core is confirmed decoded** (multiplier + one-slot accumulator,
-bit-exact, generalizing the biquad) and its **external delay-line depth matches the descriptor**.
+bit-exact, generalizing the biquad). Its external delay-line depth is NOT yet measured (§5).
 What stays open is unchanged and unchanged in kind: the class-2 / 0x0D-0x0E mixing / SRC-0x00
 boundary words (the feedback/mix fold), and the `SRC 0x11`/accb input route — both hardware/
 bit-encoding items, not HLE-answerable (`N-HLE-AS-LLE-ORACLE-2026-09-12 §4`). The HLE oracle has now
-validated the delay datapath as far as the open codes allow.
+validated the delay ARITHMETIC as far as the open codes allow. The trace this note is built on is
+the every-frame DLYSEED2 capture (the `_ONCE`/v1 captures show 0 impulse rows — the tool's Q1
+distinguishes them).
