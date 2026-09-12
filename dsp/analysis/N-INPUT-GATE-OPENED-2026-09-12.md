@@ -337,6 +337,48 @@ is not this code.
 readings under which both channels compute, and the shipped one cannot by inspection. That is the
 strongest discrimination this code has had, and it is reproducible with one environment variable.
 
+## 13. The THIRD gate, localized: `iw53`/`iw54` on the output path (MEASURED)
+With `ACT 0x0E` set to `mem[ptr] ← bus` the live rows reach `n=158`. Where they stop is one word,
+and the trace shows the mechanism in two columns:
+
+```
+n=157  iw52  0801025825  acc 1065091072 / 1066467328   P 1065091072 / 1066467328   (both DIFFER)
+n=158  iw53  00109D020C  acc 1065091072 / 1066467328   P 1301505024 / 1301505024   L 32768 / 32768
+n=159  iw54  080016000B  acc 1301505024 / 1301505024   P 1301505024 / 1301505024   (both SAME)
+```
+
+* `iw53` (`00109D020C`, class 9, **`SRC 0x08`**, `ACT 0x0C`) carries a LIVE accumulator — it differs
+  between frames — but its **operand `L` is the constant `32768`** and its **product is the constant
+  `1 301 505 024`**.
+* `iw54` (`080016000B`, class 1 escape, delay-DRAM WRITE direction, **`f31 = 0` = LOAD**) then does
+  `acc ← P`, **overwriting the body's live result (1 065 091 072) with that constant**.
+
+⇒ the body's output is discarded one word after the body ends, by a load from a product whose
+operand never changes. The operand code is **`SRC 0x08`** — the "LFO / per-unit modulation source",
+one of the codes the handoff's audio-gate checklist has always listed as open
+(`SRC {0x08, 0x11}`, `ACT {0x08, 0x0D, 0x0E, 0x17}`).
+
+### The shape of the whole problem, now visible
+The "audio gate" was never one thing. It is a **chain of open codes**, one per stage, and each
+starves everything downstream so only the first is ever visible:
+
+| stage | gate | status |
+|---|---|---|
+| kernel → body | `iw38` `ACT 0x19` capture, suppressed by the bit-11 branch | **opened** (`UPD6383_LO12CAP=1`) |
+| body, 1st → 2nd channel | `iw137`/`iw138` `ACT 0x0D`/`0x0E` mixing pair | **opened** (`sel0e = mem[ptr] ← bus`) |
+| body → output stage | `iw53` `SRC 0x08` operand constant; `iw54` loads over the result | **open** |
+
+Every one of the three is on the handoff's own checklist of ~6 unanchored codes. That is why
+progress looked blocked for so long: with the first gate shut, the second and third could not even
+be *seen*, and each looks like "the body is starved" from downstream. The frame-pair diff is what
+makes them separable — it locates the exact row where liveness stops, one stage at a time.
+
+⚠ Grade: MEASURED (the columns above, two captures, same rig). The reading of `SRC 0x08` is NOT
+proposed here — what is measured is that its operand is constant and that the word after it
+discards the body's result. The next step is the same method: enumerate that code's candidate
+routes, and take the one that makes `iw53`'s operand track the body while leaving the two opened
+stages intact.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
