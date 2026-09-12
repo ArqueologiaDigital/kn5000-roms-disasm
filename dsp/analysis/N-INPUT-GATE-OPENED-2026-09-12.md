@@ -298,6 +298,45 @@ readings for `0x0E`, only `mem[ptr] ← bus` writes a cell, and it is the one th
 to run the three readings against this frame pair and see which makes the second channel live
 without disturbing the first, not to assume the convenient one.
 
+## 12. ★★ ACT 0x0E = `mem[ptr] ← bus` MAKES THE SECOND CHANNEL LIVE (MEASURED, no rebuild)
+The discriminating test §11 called for needed **no new code**: the device already exposes the
+`ACT 0x0E` reading as a selector in the speculative mask (bits 45–47), so `UPD6383_SPEC` selects it.
+Reading the shipped value explains the symptom outright: **selector 7 = `P ← bus`, which writes no
+memory** — which is why `iw138` runs on live data every frame and leaves its cell untouched.
+Selector **4 = `mem[ptr] ← bus`** is the one committed reading that writes a cell.
+
+`UPD6383_SPEC=B9108446A39B440F` (the default mask with `sel0e` 7 → 4), same rig, same frame pair:
+
+| | shipped `sel0e=7` | **`sel0e=4`** |
+|---|---|---|
+| cells moving (whole frame) | 25 of 52 | **42 of 52** |
+| rows differing | 99 of 187 | **149 of 187** |
+| last live row | `n=108` (`iw142`, mid-body) | **`n=158`** (into the post-body kernel) |
+| second state block `0x64..0x77` | **static** | **`0x64`–`0x74` ALL MOVING** |
+| rows at the rail (body) | 2 of 105 | 2 of 105 |
+| per-band gain | 0.667 ×4 | 0.667 ×4 |
+
+⇒ **Both channels of the reference program run for the first time.** Of the three contradictory
+committed readings of `ACT 0x0E`, only this one does that; the shipped `P ← bus` starves the second
+channel by construction, because it never writes memory.
+
+⚠ **My specific prediction still failed, and that matters.** §11 predicted *cell `0x0F` moves*.
+It does not — `0x0E` (19 859) and `0x0F` (18 535) are as static as before, while the whole second
+state block came alive. So the sub-claim "`0x0F` is the second pickup" is **refuted**: it is static
+*and* irrelevant to whether the channel runs. What §11 got right was the gate (the `0x0D`/`0x0E`
+pair); what it got wrong was the cell.
+
+⚠ **What this is NOT.** Liveness is evidence, not proof: switching the reading also changes the
+first channel's values (`0x50`: 4 899 512 → 1 574 402), as any different ACT reading must, so
+"intact first channel" was never a fair criterion and I should not have written it as one. The
+rail count (2 of 105) and the per-band gain (0.667) are unchanged, so nothing regressed. The
+epilogue remains bit-identical — **a further gate stands between the body and the output**, and it
+is not this code.
+
+★ The honest summary: on the reference program, `mem[ptr] ← bus` is the only one of the three
+readings under which both channels compute, and the shipped one cannot by inspection. That is the
+strongest discrimination this code has had, and it is reproducible with one environment variable.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
