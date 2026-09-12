@@ -808,6 +808,52 @@ dsp/tools/pair_gate.sh callacc_s138 UPD6383_LO12CAP=1 UPD6383_CALLACC=1 UPD6383_
 ```
 ⚠ Grade: the trace reading is MEASURED; the pair is a PREDICTION, recorded before the build.
 
+## 25. ★★ THE TRIPLE, DERIVED WORD BY WORD — *a block starts with an empty datapath*
+§24 proposed `CALLACC` + §138 and I then traced what each word would actually do. It does not
+work, and the same trace says what does. Working from the measured columns (`data/pg_*_cho`,
+`pg_*_eq`), with §138's guard being `f31 == 0 && !coeff_fetch ⇒ HOLD`:
+
+**Chorus, `CALLACC` alone.** `iw87` is `f31 = 1`, so §138 never touches it and the kernel's
+product enters there: `acc ← 0 + P(kernel)`. ⇒ (A) fails.
+**Chorus, §138 alone.** `iw84…iw88` all become HOLDs, so nothing clears the accumulator the kernel
+left (421 997 151 871). ⇒ (A) fails.
+**Chorus, `CALLACC` + §138.** Same as the first: `iw87` still admits the kernel's product.
+
+⇒ the product register must ALSO be empty at the boundary. With **all three** on:
+
+```
+CHORUS                                     EQ
+iw84 hold            acc = 0               iw84 hold            acc = 0
+iw85 hold            acc = 0               iw85 hold            acc = 0
+iw86 hold            acc = 0               iw86 acc+P+L<<16     acc = 4 904 681 << 16   <- the input
+iw87 acc + P(0)      acc = 0               iw87 hold            acc = 4 904 681 << 16
+iw88 hold            acc = 0               iw88 hold            acc = 4 904 681 << 16   <- SURVIVES
+iw89 0 + P + 114<<16 -> increment 114 ✅    iw89 acc <- P (FRESH, coefficient word) -> band runs ✅
+```
+
+★ Note what each arm is doing, and that none of them is a patch:
+| arm | what it says |
+|---|---|
+| `UPD6383_CALLFLUSH` | the **product register** does not cross a block boundary |
+| `UPD6383_CALLACC` | neither does the **accumulator** |
+| `SPEC` bit 55 (§138) | a word that **produced nothing** does not overwrite what is there |
+
+Together: **a block starts with an empty datapath, and a word that computes nothing leaves it
+alone.** That is one architectural statement in three switches, not three unrelated fixes — which
+is exactly what §22 said was missing from every candidate so far.
+
+### Predictions, before the runs
+- `callacc` alone → (A) **fails** (the phase will not be 114); EQ unchanged from no-flush.
+- `s138` alone → (A) **fails**; EQ may improve, since `iw88` stops erasing.
+- **`callflush + callacc + s138` → both criteria pass**: chorus increment 114 *with a live body*,
+  and the EQ live *and fed its own input* rather than the kernel's residue.
+⚠ If the triple passes, that is still three speculative arms at once and §138 alone rewrites
+**35.5 %** of the corpus — the single-arm runs above are what say which arm did what, and a pass
+must be followed by a regression over the other programs, not shipped.
+
+⚠ Grade: the per-word derivation is READ from measured columns; the three predictions are
+predictions, recorded before the build.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
