@@ -54,10 +54,52 @@ recursion, the same cell values can be consistent with a flat band through a dif
 entirely. §10's ratios are a **constraint to be explained**, not a correction to be applied — and
 `EQSCALE`'s failure is exactly what a wrong application looks like.
 
+## 5. `w11` DECODED as a POST-SUM ACCUMULATOR SCALE — measured, with the amount still open
+Step 1 of §4 was done immediately. Two independent lines:
+
+**(a) The corpus says what it is.** `0804816415` occurs at **35 sites** and every single one has
+the identical neighbours — `01022FF687` (the last MAC of the biquad's five-term sum) before it and
+`0212AFF407` (the makeup multiply + store) after it. It appears only in the **17 programs that
+carry a biquad/tone section**, ten times in PARAMETRIC EQ = once per band per channel. Its own
+fields agree: `SRC 0x10` takes the **accumulator** as the operand and `ACT 0x15` writes no memory,
+so the word transforms the accumulator in place. (The other two class-8 encodings sit in the
+kernel and the epilogue with `addr8` 0x0C and 0x0F against the biquad word's 0x16.)
+
+**(b) The device says it is a SCALE.** `UPD6383_C8SHIFT=n` (default 0 = the shipped no-op) applies
+`acc >>= n` at class-8 words. With the audio gate open (`LO12CAP`), sweeping n over the small
+integers — each row one capture, the per-band gain read as the ratio of successive bands' input
+operands, the rail count over the whole body:
+
+| `C8SHIFT` | band inputs (b0's operand, bands 0→4) | per-band gain | rows at the rail |
+|---|---|---|---|
+| **0** (shipped) | 4 904 779, −8 388 607, 8 388 607, −8 388 607, 8 388 607 | *(rail/rail)* | **33** |
+| **1** | 4 904 730, −3 269 683, 2 179 521, −1 452 381, 966 664 | **0.667, 0.667, 0.666, 0.666** | **2** |
+| 2 | 4 904 730, −1 401 414, 400 460, −114 478, 32 777 | 0.286 ×4 | 5 |
+| 3 | 4 904 730, −654 007, 87 220, −11 639, 1 558 | 0.133 ×4 | 5 |
+
+At the shipped no-op every band from 1 on is pinned to full scale. **At n = 1 nothing in any band
+is at the rail**, the five bands' levels form a clean geometric cascade, and the frame-pair diff
+shows cells `0x5B`–`0x63` (bands 2–4) moving with **59 of 105 rows differing** where the no-op has
+15 and only band 0 alive. n = 2 and n = 3 over-attenuate. So among the small integers **n = 1 is
+unique**: it is the only value that yields a live, unsaturated, fully propagating cascade.
+
+⇒ **`w11` is a post-sum scaling of the accumulator, not a no-op.** That is a positive decode of the
+one operation the project's own *reference* program still listed as UNKNOWN, and it is what the
+gate-opening exposed — with the body starved, a uniform post-sum gain is invisible, which is
+exactly why the earlier "0.094 dB with class 8 doing no multiply" evidence (a ratio) could not see it.
+
+⚠ **The AMOUNT is not pinned.** A flat EQ band should have a per-band gain of 1.0 and n = 1 gives
+0.667 — so either the preset is not flat, or the true operation is not a bare 1-bit arithmetic
+shift (a round-and-shift, a saturating normalize, or a shift whose amount comes from `addr8` under
+some encoding would all sit here). Note too that halving the accumulated sum also halves what
+feeds back through the a-path, so the change is not a pure gain and the observed 0.667 is not
+`2.0 / 2`. ⛔ **`addr8 = 0x16` is NOT used as the shift** in this arm — 22 bits would annihilate
+the sum; what `addr8` encodes on class 8 is the next question, not an assumption baked in now.
+
 ## 4. What to do next, in order
-1. **Decode `w11` (`0804816415`).** It is the single open operation inside the project's *reference*
-   program, it occurs 35 times corpus-wide in one encoding, and it sits in the one place where a
-   uniform output gain would live. Everything about the EQ's level is downstream of it.
+1. ~~Decode `w11`~~ — **done, §5: it is a post-sum accumulator scale** (MEASURED). What remains is
+   the AMOUNT and its encoding: is `addr8` the source, is there a rounding term, and does the
+   right amount make the band gain 1.0 on a preset known to be flat?
 2. ~~Settle the makeup cell's format~~ — **done here, negatively**: it is measured at −1.0 in the
    captures, so it is not the source of the ×2 (it is the source of the per-band sign flip).
 3. Only then revisit the b-path ratios — with `w11` and `w12` in the model, not outside it.
