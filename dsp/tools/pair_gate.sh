@@ -8,15 +8,18 @@
 #   and §20 MEASURED that it starves another (the parametric EQ).  A reading of the product
 #   register is only admissible if it passes BOTH criteria AT THE SAME SETTING:
 #
-#     (A) CHORUS, TYPEIDX 0 -- the LFO phase cell must advance by the increment across a frame
-#         pair.  At rest that is 114 (dlyseed_confront.py's LANDMARKS line).  Any other value
-#         means the phase word's LOAD picked up a contaminated product.
+#     (A) CHORUS, TYPEIDX 0 -- BOTH halves.  The LFO phase cell's increment must be 114 at rest
+#         AND the chorus body must be LIVE across a frame pair.  ⚠ The phase alone is NOT a test:
+#         §22/§9 measured four structurally unrelated interventions that all report 114, one of
+#         which leaves the EQ bit-identical.  114 is as much the starvation signature as the
+#         right answer.
 #     (B) PARAMETRIC EQ, TYPEIDX 15 -- the body must stay LIVE: cells moving and rows differing
 #         between two consecutive frames (frame_pair_diff.py, non-zero exit on a static body).
-#         The reference number to beat is the NO-FLUSH configuration's 42 of 52 cells / 149 of
-#         187 rows; 2 cells / 9 rows is the STARVED shape §20 recorded for UPD6383_CALLFLUSH=1.
+#         Reference, this binary + baseline arms: NO-FLUSH gives 39 of 44 cells / 105 of 105 rows.
+#         CALLFLUSH gives 2 cells / 9 rows; PCLR and the cursor-seed clear give 0 and 0.
 #
-#   An arm that passes (A) and fails (B) is program-destructive and is NOT the chip's rule.
+#   An arm must pass (A) BOTH HALVES and (B).  Nothing has yet: the one configuration with a live
+#   EQ is the one with the wrong phase.
 #
 # Example (the §20 baseline that fails B, and the §21 candidate):
 #   dsp/tools/pair_gate.sh callflush UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 \
@@ -67,13 +70,22 @@ cap() {   # cap <TYPEIDX> <FRAME_OFFSET_FRAMES> <OUT.log>
 
 echo "=== pair_gate [$TAG] : ${EXTRA[*]:-(no arms)} ==="
 
-echo "--- (A) CHORUS phase, TYPEIDX 0 ---"
-# ONE capture: the landmark is the delta between the phase-accumulate word (hi12 092.A) and the
-# wrap word (094.A) INSIDE one frame, i.e. the increment the LFO actually applied this frame.
+echo "--- (A) CHORUS phase + liveness, TYPEIDX 0 ---"
+# The phase landmark is the delta between the phase-accumulate word (hi12 092.A) and the wrap word
+# (094.A) INSIDE one frame, i.e. the increment the LFO actually applied.
+# ⚠⚠ THE PHASE ALONE IS VACUOUS.  MEASURED over four structurally unrelated interventions
+# (CALLFLUSH, PCLR, the cursor-seed clear, and the starved baseline): EVERY configuration that
+# empties the product register at the LFO entry word reports 114, including ones that leave the
+# EQ bit-identical across a frame pair.  "114" is the STARVATION signature as much as the correct
+# answer, so the chorus needs its OWN liveness half -- hence the second capture.
 cap 0 0 "$OUTDIR/pg_${TAG}_cho.log"
+cap 0 1 "$OUTDIR/pg_${TAG}_cho_F1.log"
 python3 "$HERE/dlyseed_confront.py" "$OUTDIR/pg_${TAG}_cho.log" --lo 84 --hi 188 2>/dev/null \
   | grep -E "delta across the pair" \
   || echo "  !! no LFO landmark line -- the chorus trace is missing or the body never ran"
+python3 "$HERE/frame_pair_diff.py" "$OUTDIR/pg_${TAG}_cho.log" "$OUTDIR/pg_${TAG}_cho_F1.log" \
+    --lo 84 --hi 188 | grep -E "cells seen|tuples differing|VERDICT"
+echo "(A) liveness exit status: ${PIPESTATUS[0]}   [0 = live, non-zero = STATIC]"
 
 echo "--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---"
 cap 15 0 "$OUTDIR/pg_${TAG}_eq.log"
