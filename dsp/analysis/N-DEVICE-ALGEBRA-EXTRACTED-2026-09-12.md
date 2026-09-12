@@ -152,6 +152,31 @@ tied in §6. One experiment — a capture where `L`, `coef[-1]` and `0` differ a
 both. ⚠ Note this is a statement about the DEVICE's tempA; what the chip does at `iw45` is what the
 experiment has to establish.
 
+## 8. THE PREDICTION THAT FOLLOWS, written before the run
+`iw45` fetches a coefficient (`cur+`) and multiplies by it, and the coefficient it fetches is
+**zero** — so its product is zero, and `iw46`, the kernel's **external delay-DRAM WRITE** word
+(`cls1 ACT0B SRC00 f31=0`, a LOAD), takes `acc ← P[iw45] = 0`. That is where the kernel's audio
+dies: `iw45` arrives holding `acc = 269 380 293 754` (the live signal) and `iw46` replaces it with
+zero, one word before the delay line is written.
+
+Why is that coefficient zero? Because the cursor is sitting at `0x70`, the **delay-descriptor ramp
+table**, put there by `iw42`'s `ldptr #$70` under the **§52 reading (row 25 seeds the coefficient
+cursor from `ldptr`)**. The same trace shows what the cursor fetches when it is *not* seeded:
+`iw36 → 0x5D70A3`, `iw37 → 0x5C28F5`, `iw39 → 0x599999`, `iw41 → 0x4CCCCC` at `cur = 0xA1..0xA4` —
+genuine coefficients around 0.6–0.73 at Q23.
+
+⇒ **Prediction.** With `UPD6383_SPEC` **bit 12 set** (the mask bit that CLEARS row 25 —
+`B9108446A39B440F | 0x1000 = B9108446A39B540F`), the cursor runs on continuously into `0xA5`,
+`iw45`'s product is non-zero, and `iw46` no longer erases the accumulator. `upd6383.cpp` already
+argues bit 12 on independent grounds: without row 25 the run is kernel `0x90..0xA4` (21 cells) plus
+body `0xA5..0xB4` (16), and **21 + 16 = 37 = exactly the host's coefficient run count**, while with
+row 25 the sixteen genuine coefficients at `0xA5..0xB4` are read by nobody.
+
+Test: `dsp/tools/pair_gate.sh spec12 UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B540F`, plus the
+tempA trajectory at `iw45` from the same chorus capture. ⚠ Two-sided, like everything else here:
+the chorus phase must still be 114 **and** the EQ must stay live. Recorded before the run so the
+measurement can contradict it.
+
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's
 docstring) from the archived captures. Nothing here is a statement about the µPD6383GF; §1 says so
