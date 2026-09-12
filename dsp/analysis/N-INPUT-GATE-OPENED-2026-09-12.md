@@ -202,6 +202,41 @@ behind the same bit-11 branch: the **R-channel input** (mirror of the released c
 `0x0F`) and the **body→epilogue output** (`w50`/`w52`). §7's framing is corrected: the output break
 is real, but it is one of two, not the only one. The arm stays default-off with its zero count.
 
+## 9. ⚠ CORRECTION: the triplets are POINTER SETUP, and only ONE kernel word was ever suppressed
+Two further arms were built and both **fired zero times**: `LO12CAP=2` (bit-11 `ACT 0x07` stores)
+and `LO12CAP=3` (bit-11 `ACT 0x05` stores under the pointer). Chasing *why* corrects §8's central
+claim, and the correction is worth more than either arm.
+
+**Read the disassembly of the seven words instead of inferring from their fields:**
+```
+  w38   0809000839   ?word                 <- UNDECODED  (the one LO12CAP=1 released)
+  w42   0801070821   ldptr   #$70          <- DECODED
+  w43   080106C827   ?word   (register write, selector lo12[7:0] = 0x27)
+  w44   0801025825   ldptr.d #$25          <- DECODED
+  w50   0801050821   ldptr   #$50          <- DECODED
+  w51   0801064827   ?word   (register write, selector 0x27)
+  w52   0801025825   ldptr.d #$25          <- DECODED
+```
+So the "triplets" are **pointer-setup sequences** — `ldptr`, a register write, `ldptr.d` — not data
+deposits. `w42`/`w44`/`w50`/`w52` are DECODED words, and the device's bit-11 branch lives inside
+`if (m_speculative && !alu_decoded(word))`: **a decoded word never reaches it.** That is why both
+arms fired zero: those words were never suppressed in the first place.
+
+⇒ **§8's "two suppressed handoffs remain, both behind the same bit-11 branch" is WRONG and is
+withdrawn.** Of the kernel's seven bit-11 words exactly **one** — `w38` — was ever suppressed, and
+`LO12CAP=1` released it. The second pickup (`0x0F`) and the body→epilogue handoff are still dead,
+but **not for this reason**, and the bit-11 branch has nothing further to give.
+
+**What is genuinely still open there** is the pair `w43`/`w51` (`?word`, "register write, selector
+0x27"), which §116 consumes as `m_ovc = addr8; return;`. Their values are `0x6C` and `0x64` — and
+`0x64` is exactly the second channel's state-block base. In the device `m_ovc` is consulted only
+for one wrap bit, so whatever those words really write is unread. That, not the bit-11 branch, is
+the next target.
+
+⚠ Grade: the listing quotations and the `alu_decoded` gate are READ from the sources; the two
+zero-fire counts are MEASURED. The correction is to my own §8. No decode changed; both arms stay
+default-off with their zero counts recorded.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
