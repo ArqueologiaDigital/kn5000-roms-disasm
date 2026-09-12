@@ -270,6 +270,37 @@ here, so "what shape the second modulator actually has" stays open. ★ But the 
 which consumer — is answered, and the answer says the table is **not** decorative: it drives one of
 the two taps.
 
+## 12. The intermediate path, partially read: the table value is SCALED BY A COEFFICIENT
+§11 left the words between the lookup and the second sweep unread. Reading them gives one solid
+step and an honest boundary.
+
+```
+iw119  the second lookup        dp = 0x0E  mem = 8E45AF        <- wavetable entry
+iw120  012.4.01.1CE             L = -7 453 265                 <- reads it
+iw126  0010A001D5  class A      L = -7 453 265   coef = 1364D9  P = -74 008 650 534
+iw129  0212AF41D5  class A      L = -1 300 356   coef = E00000  P =  21 305 032 704
+iw134  09001601D5                dp = 0x0E  mem = FD63B1 = -171 087
+iw135  0192A44000  the 2nd sweep  L = -171 087                  <- consumes it
+```
+
+**`iw126` multiplies the table value by `C-RAM 0x1364D9`** — and that is the chorus's **decoded wet
+/ mix coefficient** (0.303 at Q22, the cell pair `0x09`/`0x0A` identified in
+`N-DLYSEED2-CHORUS-CONFRONT §3`). The product checks exactly: `s24(0x1364D9) × −7 453 265 >> 7 =
+−74 008 650 534`. A second class-A multiply at `iw129` applies `0xE00000` (−0.5 at Q22), and the
+chain reaches cell `0x0E` holding **−171 087**, which the second sweep word then takes as its
+operand.
+
+⇒ the table's output is **scaled by program coefficients before it modulates the tap** — it is not
+used raw, which is why the raw-entry magnitudes (±5–7 M) never appear at the sweep. That much is
+MEASURED.
+
+⚠ **Boundary, stated:** the full arithmetic from `−7 453 265` to `−171 087` runs through class-2
+words whose ACT codes are among the open set, so the *exact* transfer is NOT established — only
+that the path exists, that its first step is a multiply by the wet coefficient, and that its output
+is what drives the second tap. Anyone continuing has the row list above and can work it out one
+word at a time; what they should not do is assume the shape from the HLE, which is the mistake §10
+recorded.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
