@@ -361,18 +361,54 @@ own state, and the device is known-wrong here. It does not confirm §10's withdr
 (the required scalings there were ×4/×2/×1 across the b- and a-paths; this is a single ×2 inside
 the a-path). What it does is convert "some factor of two is missing" into "this pair of cells, in
 this program, in this device", which is a fix-shaped statement rather than a hypothesis.
-**Followed up immediately, and it sharpens:** censusing every unit-0 row whose pointer is band 1's
-y-pair shows only ONE writer in the band (`iw103`, `102.2.FF.687`, ACT 0x07 → cell `0x56`), and the
-CELLS are *not* exactly 2:1 — `0x56` holds 1 825 566 while `0x57` holds 913 807, a ratio of
-1.99776. The exact 2.000000 is between the **operands**: `−a2`'s operand is 912 783 = exactly half
-of `−a1`'s 1 825 566, while the cell its pointer names holds 913 807 (1024 more). ⇒ **the halving
-is on the OPERAND PATH, not in a store** — the `−a2` word (`iw102`, `202.A.00.1D5`) carries
-**`SRC 0x00`**, which is the corpus's single biggest open code (648 words; anchoring it alone would
-newly decode 348, `routing_census.py`) and whose device reading is a live speculative switch
-between `mem[ptr]` and `C-RAM[cursor]`. So the EQ's missing factor of two lands squarely on the
-code the coverage census already names as the top lever — the two lines of work meet here.
-**Next:** instrument that one word's operand selection (which route fired, and what each candidate
-route would have returned) on this same capture — a read-only probe, no decode change.
+**Follow-up — and a correction of my own first attempt.** I first wrote that the cells were
+1.99776:1 and that the exact 2 therefore lived on the **operand path of a `SRC 0x00` word**. Both
+halves of that were wrong and are withdrawn:
+* the ratio arithmetic was mine and it was bad — `0x1BDB1E = 1 825 566` is **exactly** twice
+  `0x0DED8F = 912 783` (checked by machine, not by eye), so the **cells themselves are 2:1**;
+* the code is **`SRC 0x07` (`mem[ptr]`), not `SRC 0x00`** — I read the `addr8` column as the SRC.
+  Both a-path words (`0202A011D4`, `0202A001D5`) decode to `SRC 0x07 / ACT 0x14, 0x15`, all of
+  them **anchored, decoded codes**. There is no open-code lever here and no convergence with the
+  coverage census; that paragraph was a false lead and is retracted.
+
+What stands after the correction: **the two y-history cells hold values in an exact 2:1 ratio, and
+they are read by ordinary decoded words.** Censusing every unit-0 row whose pointer is band 1's
+pair shows exactly one in-frame writer — `iw103` (`102.2.FF.687`, ACT 0x07, mode 2 → `m_dp` =
+`0x56`) — and **`0x57` is never written during the frame**, so it carries a value from an earlier
+one. Two readings remain, and they are cleanly separable:
+1. **Dynamics:** `0x57` is simply the previous frame's `y`, and the cascade is growing at exactly
+   ×2 per frame. (Suspicious: with the coefficients at this scale the poles sit at |p| = 0.70 —
+   a decaying section, not a doubling one.)
+2. **Structure:** the two cells are written through paths that differ by one bit of shift, so they
+   hold the same quantity at two scales.
+**The discriminator was one run, and it was run:** frames F and F+1 (`TRACE_FRAME = 1 764 000` and
+`1 764 001`, everything else identical).
+
+```
+frame F    0x52=  -913644 0x53=  -456822 | 0x56= 1825566 0x57= 912783 | 0x5A= -3637552 0x5B= -1818776
+frame F+1  0x52=  -913644 0x53=  -456822 | 0x56= 1825566 0x57= 912783 | 0x5A= -3637552 0x5B= -1818776
+```
+
+**Bit-identical.** Reading 1 (growth at ×2 per frame) is refuted outright — nothing grows, because
+nothing moves. And that also deflates the observation that led here: the pair are not consecutive
+output samples at all, they are **frozen values**, one of which (`0x57`) is not written during a
+frame. A ratio between two frozen leftovers carries little information, so **§11's "consecutive
+samples cannot differ by 2" argument is withdrawn**. (What keeps the observation alive at all is
+that the ratio is exactly 2.000000 in **four independent bands** — four frozen leftovers do not
+land on the same exact ratio by accident. But it cannot be interpreted while the state is dead.)
+
+### What the run DID establish, and it is worth more than the thing I was chasing
+**The LLE's EQ body is completely static: two consecutive frames are bit-identical in every state
+cell.** That is a sharper, quantitative form of the project's #1 open item — "the audio never
+reaches the body" — and it comes with a cheap, reusable instrument: *trace F and F+1 and diff the
+cells*. A frame-pair diff is a two-sided test that any future input-route arm must pass **before**
+anything downstream is worth measuring: if F and F+1 are still identical, the route did not open,
+whatever the coverage counters say. Every scale question in §6–§11 is downstream of it — you
+cannot measure a filter's operand scales in a filter that is not running.
+
+⇒ **The scale thread is parked here on purpose.** §10's coefficient solve stands on its own (it
+needs no trace); everything that tried to locate the factor in the device needs a live frame
+first. The next work is the input route, and the frame-pair diff is its acceptance test.
 
 ## Honest grade
 §10's **coefficient** result is MEASURED and EXACT (five bands, zero spread, arm-independent, from
