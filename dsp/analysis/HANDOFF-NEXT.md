@@ -1,3 +1,44 @@
+# ▶ UNPARKED 2026-09-12 — THE AUDIO GATE IS OPEN; READ THIS BANNER FIRST
+
+The park below stands for everything it describes, but the central obstacle it was parked on —
+*"the audio never reaches the effect body"* — has been **located to one instruction word and
+opened** behind a default-off diagnostic. Start here, then read the park.
+
+**The instrument that did it:** `dsp/tools/frame_pair_diff.py` — capture frame F and F+1 with an
+otherwise identical command line, diff every cell and every executed row. A body fed live audio
+cannot produce two identical frames; exit status is non-zero on a static body so it can gate a
+harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` → body `iw84..188`
+→ `iw50..81`.
+
+**What it found (all MEASURED, notes `N-INPUT-GATE-OPENED-2026-09-12.md`,
+`N-EQ-TOPOLOGY-FROM-BYTECODE-2026-09-12.md`, `N-SINGLE-DELAY-RECURRENCE-2026-09-12.md`):**
+1. Audio arrives (cells `0x01`/`0x04` move), the kernel is live through `iw38`, and **`iw39`
+   onward — the whole body — was bit-identical**. Cause: `iw38 = 809.0.00.839` carries `lo12`
+   bit 11, so `upd6383.cpp:2754`'s "addressing only" branch returns before its **ACT 0x19 tempA
+   capture**; `tA` stayed frozen at `0xF65100`. `UPD6383_LO12CAP=1` performs the capture (taking
+   the accumulator — the open half of ACT 0x19): body cells 0→3, rows 0→15 of 105.
+2. **Class 8 is a POST-SUM ACCUMULATOR SCALE, not a no-op** (`UPD6383_C8SHIFT=n`). `0804816415`
+   sits at 35 corpus sites with identical neighbours at every one, biquad programs only; `acc >>= 1`
+   is the unique small integer that un-rails the EQ (0 → 33 rows at full scale; 1 → none, all five
+   bands propagating, 59 of 105 rows differing; 2 and 3 over-attenuate). ⚠ The AMOUNT is not
+   pinned and `addr8 = 0x16` is deliberately not used as the shift.
+3. The **multiply scale and the class-8 shift are degenerate** — `(total 23, shift 1)` ≡
+   `(total 22, shift 2)` for the band gain. The **input level** breaks the tie: at total-22 the
+   pickup arrives pinned at full scale, at total-23 it is finite. Second independent vote for
+   §227's total-23.
+4. Still dead, and **NOT for the bit-11 reason** (that was withdrawn in §9 after two zero-fire
+   arms): the second pickup `0x0F` and the body→epilogue handoff. The open words in that region
+   are `w43`/`w51` (`?word`, "register write, selector 0x27", values `0x6C` and `0x64`), which
+   §116 swallows into `m_ovc` where only one wrap bit is read. **That is the next target.**
+
+⚠ **Method note that cost two builds:** read a word's LISTING before inferring its role from its
+fields — `w42/w44/w50/w52` render as `ldptr`/`ldptr.d` (decoded pointer setup) and can never reach
+the speculative branch, which is why arms aimed at them fired zero.
+⚠ **Build note:** `build.sh`'s wholesale `rsync` was OOM-killed twice; for a source-only change
+build directly in `kn7000_mame_build` (the overlay files are symlinked in) with `-j3`.
+
+---
+
 # ⏸ PARKED — 2026-08-01
 
 **The uPD6383GF (IC311) decoding effort is parked, not abandoned.** The autonomous tick has been
