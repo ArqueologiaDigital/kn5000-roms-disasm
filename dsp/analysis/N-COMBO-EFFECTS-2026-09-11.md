@@ -43,7 +43,17 @@ stages; S.DELAY+S.DELAY uses a second long delay line (m_dly2).
 So all five S.DELAY+X combos are audible and validated in the emulator: the delay stage
 produces its echo, and the modulation stage modulates at its decoded rate.
 
+## PEQ+S.DELAY (TYPEIDX 30, algo 72, DSPHLE == 13) — VALIDATED
+A single emphasis peaking band chained into the delay. It reuses the STANDALONE EQ cell layout
+exactly (pinned by intervention): **FREQ = cell 0x03** (2cos w0, moved by FC; default cos 0.897
+≈ 3219 Hz), **GAIN = cell 0x01** (moved by G; cell 0x05 = −2.0, the same EQ structural constant),
+**DELAY FEEDBACK L = cell 0x06**, delay length = descriptor 0x26 (~300 ms). HLE: one RBJ peaking
+biquad reconstructed onto m_eq_l[0] (gain slope G picked by the detected centre, the 5-band table)
+→ the feedback delay (m_dly).
+Validated by TWO A/Bs (DSPCFG=2): EQ emphasis (`eq_hle_ab.lua` TYPEIDX=30, G flat vs +24,
+`eq_hle_ab_fft.py` centre 3219) → **+16.7 dB at 3217 Hz**, flat below (+0.4 dB); delay
+(`delay_ab.lua` TYPEIDX=30) → echo at **299 ms**. Both chained stages present. PASS.
+
 ## Still needing their non-delay stage
 - AUTO WAH+S.DELAY (28): auto-wah = an envelope-swept filter (envelope follower, not an LFO) —
   a different block, not yet built.
-- PEQ+S.DELAY (30): the PEQ biquad stage + the delay — the EQ block exists; would chain it.
