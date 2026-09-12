@@ -873,6 +873,49 @@ Artefacts: `data/pair_gate_v2_3criteria_2026-09-12.txt`, `data/pg_v2_*_cho*_2026
 ⚠ Grade: MEASURED. The run was stopped after these two configurations; `pclr` and `spec12` already
 have their phase and EQ numbers in §22/§9 and only their chorus-liveness half is missing.
 
+## 27. ⛔ THE TRIPLE IS REFUTED — and the diagnosis is that the body entry TRIPLE-COUNTS the input
+Measured, same binary and baseline arms, `UPD6383_CALLFLUSH=1 UPD6383_CALLACC=1
+UPD6383_SPEC=B9908446A39B440F`:
+
+| | chorus increment | chorus body | EQ body |
+|---|---|---|---|
+| the triple | **5 211 349** ⛔ | LIVE, and the most of any configuration — 5 of 17 cells, **64 of 70 rows** | **0 of 44 cells, 0 of 105 rows** ⛔ |
+
+§25's word-by-word derivation was wrong in both halves, and the traces say exactly where.
+
+**Where the chorus derivation broke.** `CALLACC` works — `iw84` arrives at `acc = 0`. But `iw85`
+(`ACT 0x0D`, `f31 = 0`, no coefficient) **still loads the bus**: `acc = 5 211 235 << 16`. I had
+predicted §138's guard would make it HOLD. It does not fire there, so the accumulator is non-zero
+from the body's second word onward and the phase word can never see zero.
+
+**Where the EQ derivation broke — and this is the useful half.** Everything up to `iw88` went as
+predicted: `iw85` held, the bus arrived, `iw88` held instead of erasing. But look at what the
+accumulator actually contains by then:
+
+```
+iw84  ACT 0x0D  f31=0   acc  = 5 211 235 << 16        <- the bus, LOADED
+iw86  ACT 0x00  f31=1   acc += 5 211 235 << 16        <- the same bus, ADDED
+iw87  ACT 0x00  f31=5   acc += 5 211 235 << 16        <- the same bus, ADDED AGAIN
+iw88  ld.st             STORE acc -> cell 0x10, and 3 x the input SATURATES: mem = 7FFFFF
+```
+
+★ **The body entry counts the same input three times**, and `iw88`'s store then rails the EQ's
+pickup cell at `0x7FFFFF`. The bands read zero from `0x50` afterwards because the railed pickup
+never propagates. Under the shipped decode this never showed, because `iw85`'s LOAD threw the
+first copy away — **the erasure §23 identified was also the thing keeping the input from being
+counted three times.**
+
+⇒ **At most ONE of these three readings can be right as it stands:**
+1. `ACT 0x0D` loads the accumulator from the bus (measured device behaviour, 63 + 29 rows);
+2. `ACT 0x00` adds the bus on top of the `f31` op at `f31 = 1` (442 rows, §3 of the algebra note);
+3. the same at `f31 = 5`.
+
+That is a sharper, falsifiable statement than anything the retention-policy family produced, and it
+is about the **bus term**, not about product lifetime. ⇒ the next round belongs there.
+
+⚠ Grade: MEASURED (`data/pg_v3_triple_*`). The prediction it refutes was recorded in §25 before the
+build, and the refutation is of my derivation, not of the instrument.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
