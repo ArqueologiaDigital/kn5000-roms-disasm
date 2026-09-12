@@ -29,10 +29,14 @@ between the sum and the band's output**, and both are outside that model:
 * **`w12` — the makeup multiply.** The value handed to the next band is **`makeup · acc`**, while
   the value stored as `y1` is the **pre-makeup** sum. So the band's transfer function is
   `makeup · H(z)`, and its recursion uses the un-scaled sum — a structure `|b/a|` cannot express.
-  The makeup cell is `0x800000`: **−1.0 read as Q0.23, −2.0 read as Q1.22.** A per-band gain of
-  exactly ±2 — which is what the trace measures — is precisely what that cell produces at Q1.22,
-  with the sign alternation the trace also shows (band 0's `y` is the exact negation of band 1's
-  `x`). ⇒ the measured "gain 2.0" is most simply the MAKEUP cell's format, not a b-path error.
+  The makeup cell is `0x800000`: **−1.0 read as Q0.23, −2.0 read as Q1.22** — so it is a candidate
+  for the measured per-band gain of ±2. ⚠ **Checked in the trace, and it is NOT the carrier in
+  these captures.** At `w12` (trace `iw96`, band 0) the product is `−549 755 748 352`, which is
+  exactly `−(L << 16)` for `L = 8 388 607`: the makeup multiply is measured at **−1.0**, not −2.
+  (All the clean captures run `UPD6383_PSHIFT=2`, where `0x800000 × L >> 7` is exactly `−L`.)
+  So the makeup explains the **sign alternation** the trace shows — band 0's `y` is the exact
+  negation of band 1's `x` — and explains none of the magnitude. The ±2 must come from `w11` or
+  from the coefficient scales, and `w11` is the only unmodelled step of the two.
 * **`w11` — a class-8 word whose OPERATION IS UNKNOWN**, sitting exactly where a fixed-point
   biquad puts its output scaling. The device currently models class 8 as doing no multiply (the
   handoff notes the biquad "reproduces to 0.094 dB with class 8 doing no multiply at all" — a
@@ -54,13 +58,13 @@ entirely. §10's ratios are a **constraint to be explained**, not a correction t
 1. **Decode `w11` (`0804816415`).** It is the single open operation inside the project's *reference*
    program, it occurs 35 times corpus-wide in one encoding, and it sits in the one place where a
    uniform output gain would live. Everything about the EQ's level is downstream of it.
-2. **Settle the makeup cell's format.** `0x800000` is ±1 or ±2 depending on Q0.23 vs Q1.22, and the
-   per-band gain follows directly. The two readings differ by exactly the factor the trace shows.
+2. ~~Settle the makeup cell's format~~ — **done here, negatively**: it is measured at −1.0 in the
+   captures, so it is not the source of the ×2 (it is the source of the per-band sign flip).
 3. Only then revisit the b-path ratios — with `w11` and `w12` in the model, not outside it.
 
 ## Honest grade
 §1 is a READ of a SOLVED listing (the disassembler's annotations, not my inference) and it
-CONFIRMS the DF-I structure. §2 is a READ plus arithmetic on one ROM cell; that the ±2 comes from
-the makeup format is the **simplest** account of the measured gain and is INFERRED, not measured —
-the alternative (it comes from `w11`) is exactly what step 1 must separate. §3 corrects §10's
+CONFIRMS the DF-I structure. §2 is a READ plus a MEASUREMENT: the makeup multiply is −1.0 in the trace, which
+KILLS the tidy "it's the makeup format" account I wrote first and leaves `w11` as the only
+unmodelled step that can carry the ×2. §3 corrects §10's
 conclusion while leaving its measurement intact. Nothing here changes the device.
