@@ -261,6 +261,36 @@ artefact, and it is the next thing this tool should be pointed at.
 
 ⚠ Grade: MEASURED on one configuration.
 
+## 11. THE TEMP WRITERS ON ONE MACHINE — and `ACT 0x19` has TWO behaviours, cleanly separated
+Same ten-program single-configuration corpus, `--target ta|tb`
+(`data/temp_ta_one_machine_2026-09-12.txt`, `…_tb_…`). Everything not listed holds.
+
+| group | writes | rows | programs | |
+|---|---|---|---|---|
+| `cls2 ACT19 SRC0B f31=0` | **`L`** | 10 | 10 | the ordinary capture |
+| `cls1 ACT19 SRC0B f31=0` | **`L`** | 11 | 4 | the same, class 1 |
+| `cls1 ACT01 SRC07 f31=0` | **`L`** | 10 | 10 | |
+| `cls1 ACT14 SRC0B f31=0` | **`L`** → **tempB** | 7 | 1 | ★ the **first** uniquely determined tempB writer |
+| `cls0 ACT19 SRC00 f31=4` | **`acc_datum`** | 10 | 10 | ⚠ **circular** — see below |
+
+★ **`ACT 0x19` is not one action.** With `SRC 0x0B` it captures **the operand latch `L`**, on 10
+programs; at the audio-gate word (`class 0`, `SRC 0x00`, `f31 = 4`) it captures **the accumulator's
+datum**. Two distinct behaviours under one ACT code, separated by 10 programs on one machine where
+the pooled corpus reported the second as ⛔ (it mixed captures with `UPD6383_LO12CAP` on and off —
+§5's trap again).
+
+⚠ **The second row is CIRCULAR and must not be quoted as a decode**: `UPD6383_LO12CAP=1` *is* the
+arm that makes the gate word capture the accumulator, so recovering that is recovering the arm's
+own definition. What the row does establish is narrower and still worth having: the arm is
+**self-consistent across all ten programs** and does not collide with the ordinary `ACT 0x19`
+capture, which keeps taking `L`. The handover's *"taking the accumulator — the open half of
+`ACT 0x19`"* stays open on the chip; on the device the two halves are now distinguishable.
+
+★ Non-circular and new: **tempB has a uniquely determined writer** (`cls1 ACT14 SRC0B f31=0 → L`),
+where the pooled corpus had none — every tempB group was tied.
+
+⚠ Grade: MEASURED on one configuration, ten programs; one row flagged circular in place.
+
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's
 docstring) from the archived captures. Nothing here is a statement about the µPD6383GF; §1 says so
