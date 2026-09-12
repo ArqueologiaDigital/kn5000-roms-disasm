@@ -36,6 +36,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dlyseed_confront import parse, s24   # noqa: E402
+from lfo_ramp_check import phases          # noqa: E402
 
 RAIL = 0x7fffff
 TYPE_NAME = {
@@ -106,6 +107,28 @@ def main():
             continue
         fb = "%s %2d/%2d %2d %3d" % ("LIVE" if b["live"] else "DEAD", b["moved"], b["cells"], b["railed"], b["prods"])
         fc = "%s %2d/%2d %2d %3d" % ("LIVE" if c["live"] else "DEAD", c["moved"], c["cells"], c["railed"], c["prods"])
+        #  ★ §34: for any program with an LFO, the decisive measure is the device's §119
+        #  witness -- the phase on eight consecutive frames -- NOT anything within one frame.
+        #  A configuration that reset the phase to zero every frame scored a perfect
+        #  within-frame delta.  Report the ramp verdict beside the liveness so a regression
+        #  that kills modulation cannot hide behind a moving body.
+        lfo = ""
+        pb, pc = phases(os.path.join(base, "t%d_F.log" % t)), phases(os.path.join(cand, "t%d_F.log" % t))
+        def ramp(ph):
+            if len(ph) < 3:
+                return None
+            st = sorted({y - x for (_a, x), (_b2, y) in zip(ph, ph[1:])})
+            return st[0] if len(st) == 1 else None
+        rb, rc = ramp(pb), ramp(pc)
+        if pb and pc:
+            if rb and not rc:
+                lfo = "  ⛔ LFO ramp LOST (was +%d/frame)" % rb
+                bad += 1
+            elif rb and rc and rb != rc:
+                lfo = "  ⛔ LFO step changed %+d -> %+d" % (rb, rc)
+                bad += 1
+            elif rc and not rb:
+                lfo = "  ★ LFO ramp GAINED (+%d/frame)" % rc
         if b["live"] and not c["live"]:
             v = "⛔ REGRESSION -- the candidate kills a live body"
             bad += 1
@@ -117,7 +140,7 @@ def main():
                 c["moved"] - b["moved"], c["prods"] - b["prods"])
         else:
             v = "✅ no regression"
-        print("%-4d %-18s | %-26s | %-26s | %s" % (t, name, fb, fc, v))
+        print("%-4d %-18s | %-26s | %-26s | %s%s" % (t, name, fb, fc, v, lfo))
     print("\n%d regression(s)." % bad)
     return 1 if bad else 0
 
