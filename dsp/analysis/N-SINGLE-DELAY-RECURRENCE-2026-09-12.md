@@ -243,6 +243,15 @@ traces; the cells are identical in every arm, as they must be):
 in every band is itself a check: RBJ's `b0` at 0 dB is the constant 1, and the cell is the
 constant ¼ of it.)
 
+### ⚠ CORRECTED (same day, `N-EQ-TOPOLOGY-FROM-BYTECODE-2026-09-12.md`)
+Reading the program instead of assuming it shows the band has **two more steps between the sum and
+its output** than this section models: a class-8 word (`w11`, OPERATION UNKNOWN, 35 corpus sites in
+one encoding) and a **makeup multiply** (`w12`) that scales the band's OUTPUT but not the value
+stored as `y1`. `|H| = |b/a|` cannot express either. So the ratios below stand as MEASURED facts
+about the ROM cells, but the conclusion drawn from them — "scale b0,b2 ×4 and b1 ×2" — does not
+follow, and applying it to the device changed nothing (`N-INPUT-GATE-OPENED §6`). Treat them as a
+constraint to be explained once `w11` is decoded, not a correction to apply.
+
 ### The assignment is not merely constrained — it is SOLVED, to 0.00 dB
 Evaluating `|H(e^jω)|` over 200 log-spaced frequencies from each band's own five cells, for each
 candidate scaling of the b-path (same tool, "FLATNESS TEST"):
