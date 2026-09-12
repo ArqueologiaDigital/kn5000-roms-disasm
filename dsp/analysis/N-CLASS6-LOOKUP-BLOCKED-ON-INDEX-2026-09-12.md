@@ -130,6 +130,44 @@ Remaining, in the order I would test them: the index FORM (`(coef × phase) >> 2
 where the DEPTH multiply sits relative to the lookup — the chorus's depth cell is C-RAM `0x02`
 = 240 and its product with a unit-scale waveform is exactly the ±240 the census should show.
 
+## 8. §148's coefficient substitution is what blocks the sweep — and turning it off BREAKS the LFO
+§7 narrowed the gap to "the scaling between table and tap". Looking for where the scaling could be
+lost led to an existing speculative reading rather than to my arm. The chorus's sweep word is
+`192.A.40.000`, class A with `f98 = 1` — exactly the population **§148** captures, where the device
+substitutes **`C-RAM[cursor]` for `SRC 0x00`** instead of `mem[ptr]`. That is why its operand has
+measured **240** (the depth coefficient) all session and why it computed `240 × 240`: with the
+coefficient occupying the operand slot, no waveform can reach it, whatever the lookup writes.
+
+§148 is speculative (mask bit 59, set by default), so clearing it needs no rebuild. Same rig, two
+masks differing only in that bit, with `C6LUT=2` in both:
+
+```
+§148 ON   §157: iw96:0..240(r240)      iw105:0..240(r240)      iw137:-686371..111743   iw146:-240..0
+§148 OFF  §157: iw96:0..8388607        iw105:0..8388607        iw137:-509702..+509707  iw146:-1201385..+1201383
+```
+
+**The pre-registered criterion is met for the first time**: the two sweep slots stop reporting a
+constant 240 and span a range, and `iw137`/`iw146` become **symmetric about zero** — the signature
+of a bipolar modulation, where before they were one-sided. The class-6 rows also show real table
+entries on the bus (`mem` = `D4F570`, `5E2382`, `71BA50`, `780304` — all wavetable values).
+
+⚠⚠ **AND IT BREAKS SOMETHING THAT WAS MEASURED CORRECT.** The chorus's LFO phase cell advanced by
+**exactly 114 per frame** under the shipped readings — the HLE's increment for its 0.6 Hz rate,
+the three-way triangle of `N-DLYSEED2-CHORUS-CONFRONT §1`. Under these arms the delta across the
+wrap pair is **≈ 3.13 M**, in BOTH masks. So the phase accumulator no longer runs at the rate the
+bytecode, the HLE and the panel all agree on, and the excursions above are therefore not a correct
+sweep either — they are a live datapath with a broken index.
+
+⇒ **This configuration is not a net improvement.** It trades a quantity that was confirmed correct
+against the HLE for liveness elsewhere, and a reading that does that is not yet the chip's. The
+honest next question is not "which candidate scales the waveform" but **"why does the phase
+accumulation break once the gates are open"** — because the phase was the single thing in the
+modulation family that matched the HLE exactly, and it is the anchor any correct configuration
+has to keep.
+
+⚠ Grade: MEASURED both ways, like-for-like, environment-only (no rebuild). The criterion's success
+and the regression are equally measured, and the regression is the more important of the two.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
