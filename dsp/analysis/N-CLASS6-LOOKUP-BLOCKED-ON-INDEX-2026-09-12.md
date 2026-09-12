@@ -109,6 +109,27 @@ where the value lands.
 arm stays default-off. ★ This does not weaken §5 — the index *does* arrive, which is what §5
 claimed — it shows that arrival is not sufficient and names what else the idiom needs.
 
+## 7. The DESTINATION candidate was tested too — identical failure, so it is the SCALING
+§6 named three candidates. The first was the destination, and it was the bytecode's own suggestion:
+the chorus's sweep word `192.A.40.000` carries `SRC 0x00 = mem[ptr]`, so for its product to be
+`depth × waveform = ±240` the waveform must be in a D-RAM cell it reads rather than in `P`.
+`UPD6383_C6LUT=2` stores the looked-up value under the class-6 word's own pointer instead.
+
+```
+=1 (value -> P)        §157: iw96:0..240  iw105:0..240  iw137:-4194544..0  iw146:-240..0
+=2 (value -> mem[ptr]) §157: iw96:0..240  iw105:0..240  iw137:-4194544..0  iw146:-240..0
+```
+
+**Identical.** The destination was not the defect either. Both arms inject a **full-scale** table
+value into the chain and neither produces a ±240 sweep ⇒ **what is missing is the SCALING step
+between the table and the tap, not the route.** That is a sharper statement of the gap than §6's
+three-way list, and it is reached by eliminating one of the three rather than by assuming.
+
+Remaining, in the order I would test them: the index FORM (`(coef × phase) >> 23` as
+`lfo-ramp.md §10` reads it, rather than the accumulator-as-datum shortcut both arms used), and
+where the DEPTH multiply sits relative to the lookup — the chorus's depth cell is C-RAM `0x02`
+= 240 and its product with a unit-scale waveform is exactly the ±240 the census should show.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
