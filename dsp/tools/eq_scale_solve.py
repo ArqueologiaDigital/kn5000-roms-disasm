@@ -99,6 +99,37 @@ def main():
     print("   ⇒ the scaling whose spread is ~0 dB at ~0 dB mean is the one the chip's datapath must"
           " realise (RBJ: b == a exactly makes H == 1).")
 
+    # ---- the OPERANDS each coefficient actually met, for the carrier question ------------------
+    # P[N] = coef[N-1] x L[N], so the word that MULTIPLIES with a cursor cell is the row AFTER the
+    # row whose `cur' shows it.  Print those five operands per band.
+    # ⚠⚠ ONLY MEANINGFUL ON A CLEAN CAPTURE.  A saturated frame gives every operand the rail, and a
+    # UPD6383_BIQSEED frame writes a 1:2:3:4 RAMP into 0x64..0x67 -- so a factor of 2 between
+    # neighbouring cells is the diagnostic's own, not the chip's (this retracted a reading once:
+    # N-SINGLE-DELAY-RECURRENCE §10).  The tool refuses to interpret either case.
+    idx = {id(r): i for i, r in enumerate(rows)}
+    RAIL = (8388607, -8388608)
+    print("\n== OPERANDS the five coefficients met (L of the multiplying row), per band")
+    for band in range(5):
+        base = band * 6
+        cells = [first.get(base + k) for k in range(5)]
+        if not all(cells):
+            continue
+        ops, dps, railed = [], [], 0
+        for c in cells:
+            i = idx[id(c)]
+            nxt = rows[i + 1] if i + 1 < len(rows) else None
+            if nxt is None:
+                ops.append(None); dps.append(None); continue
+            ops.append(nxt["l"]); dps.append(c["dp"])
+            if nxt["l"] in RAIL:
+                railed += 1
+        print("  band %d  b1 %-10s b0 %-10s b2 %-10s -a1 %-10s -a2 %-10s  (cells %s)%s"
+              % (band, *(str(o) for o in ops),
+                 " ".join("%02X" % d if d is not None else "--" for d in dps),
+                 "   ⚠ %d/5 AT THE RAIL -- uninterpretable" % railed if railed else ""))
+    print("   ⚠ if the capture used UPD6383_BIQSEED, the 0x64..0x67 values are the seed's own"
+          " 1:2:3:4 ramp -- do not read scale ratios off them.")
+
     if len(pat) > 1:
         for name, idx in (("b0/1", 0), ("b1/a1", 1), ("b2/a2", 2)):
             col = [p[idx] for p in pat]

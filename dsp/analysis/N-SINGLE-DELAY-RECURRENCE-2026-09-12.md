@@ -323,6 +323,48 @@ Consequences, all of them sharper than anything the arms produced:
    It was the most useful-sounding claim of the pass and it inherited the contamination whole.
    The input stage gets no new falsifier from §10 until the clean capture is taken.
 
+## 11. The clean capture, finally taken — and it finds a LOCALIZED DEVICE DEFECT
+§10's retraction demanded an EQ frame that is neither saturated nor seeded. Getting one took three
+runs and the first two failed informatively:
+* **The handoff's `DSPVAL=1` biquad rig no longer emits a frame trace at all.** Two runs
+  (`NAV=1 TYPEIDX=15 AUDIO=key BOOTGATE=10 DWELL=25 DSPVAL=1`) reached the armed frame — the
+  device's own `§75` line prints `frame 1150000` — and produced **zero** `TIME-ORDERED FRAME TRACE`
+  blocks. With the decoded-only ISA the body's words trap and the frame is discarded, so there are
+  no rows to print. The recipe in `DSP-DATAPATH-DECODE-HANDOFF §4` needs `DSPCFG ≥ 2` today.
+* **Unseeded is not enough: at the shipped scale the EQ rails anyway.** An unseeded `DSPCFG=3`
+  capture (`fx_ab.lua TYPEIDX=15`, trace frame 1 764 000 = its note-on + 1 s) has every operand at
+  `±0x800000`. So **no interpretable EQ frame exists in the shipped LLE at all** — which is itself
+  a fact worth stating: a filter running on its own ROM coefficients should not diverge.
+
+The third run — `UPD6383_PSHIFT=2` **without** `BIQSEED`, same rig — is the first clean one
+(bands 0–3 finite; band 4 rails at the end of the cascade). `eq_scale_solve.py` now refuses to
+interpret saturated or seeded frames, and on this one it reports the operand each coefficient met:
+
+| band | b1 | b0 | b2 | −a1 | −a2 | **a1-op / a2-op** |
+|---|---|---|---|---|---|---|
+| 0 | −456930 | −456930 | −456930 | **−913644** | **−456822** | **2.000000** |
+| 1 | −456930 | 913644 | 913644 | **1825566** | **912783** | **2.000000** |
+| 2 | 913644 | −1825566 | −1825566 | **−3637552** | **−1818776** | **2.000000** |
+| 3 | −1825566 | 3637552 | 3637552 | **7170371** | **3585185** | **2.000000** |
+
+**In every band the operand `−a1` meets is EXACTLY twice the operand `−a2` meets** — 4 of 4, exact
+to the LSB, across four different coefficient sets and four different signal levels. Those two
+operands are the biquad's **y-history pair**: `y1` and `y2` are consecutive output samples, so for
+a 262 Hz chord at 44.1 kHz they must differ by a few percent at most. **They cannot differ by
+exactly 2.** ⇒ one of the two y cells is written (or read) one bit off in the device — a concrete,
+reproducible defect, localized to a specific pair of cells (band 1: `0x56` = 1825566, `0x57` =
+912783), and exactly the "extra factor of two" the coefficient solve (§10) says must exist
+somewhere in this program.
+
+⚠ **Grade, carefully:** this is MEASURED *of the LLE*, not of the chip — the trace is the device's
+own state, and the device is known-wrong here. It does not confirm §10's withdrawn operand story
+(the required scalings there were ×4/×2/×1 across the b- and a-paths; this is a single ×2 inside
+the a-path). What it does is convert "some factor of two is missing" into "this pair of cells, in
+this program, in this device", which is a fix-shaped statement rather than a hypothesis.
+**Next:** identify which word writes each cell (band 1's candidates are `iw99`/`iw105`, both
+`0x212…` bit-4 stores, and `iw103` `102.2.FF.687` ACT 0x07) and check whether the two take
+different store paths in `store_mode()`. That is a read of the device, not another run.
+
 ## Honest grade
 §10's **coefficient** result is MEASURED and EXACT (five bands, zero spread, arm-independent, from
 the ROM's C-RAM cells with no trace in the loop; the RBJ identity is textbook and the flat-band
