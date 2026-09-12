@@ -17,6 +17,12 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    bit 11, so `upd6383.cpp:2754`'s "addressing only" branch returns before its **ACT 0x19 tempA
    capture**; `tA` stayed frozen at `0xF65100`. `UPD6383_LO12CAP=1` performs the capture (taking
    the accumulator — the open half of ACT 0x19): body cells 0→3, rows 0→15 of 105.
+   ⚠⚠ **BUT IT HAS A MEASURED COST (note §16):** the chorus's LFO phase stops advancing by 114
+   per frame (→ 1 360 432), and capturing the BUS instead (`=4`) does not help (→ 4 348 764) —
+   so it is **the capture happening at all**, not its source. `ACT 0x0E = mem[ptr]` is innocent
+   (114). ⇒ treat `LO12CAP` as an **INSTRUMENT** that makes the downstream stages measurable,
+   **not as a decode**: it trades a quantity the bytecode, the HLE and the panel agree on for
+   liveness. Everything in items 2–4 was only visible with it on.
 2. **Class 8 is a POST-SUM ACCUMULATOR SCALE, not a no-op** (`UPD6383_C8SHIFT=n`). `0804816415`
    sits at 35 corpus sites with identical neighbours at every one, biquad programs only; `acc >>= 1`
    is the unique small integer that un-rails the EQ (0 → 33 rows at full scale; 1 → none, all five
