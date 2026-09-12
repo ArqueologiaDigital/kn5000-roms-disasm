@@ -86,6 +86,19 @@ def main():
     print("\n  the fold's clean term: c0 = C-RAM[0x00] = %+.4f (Q22) x y_B -- the HLE's feedback cell; the "
           "other two terms (P[w0] stale, L[w2]<<16 = the pickup rail) are the open 0x0D/0x0E words."
           % (s24(c["c0"]) / 4194304.0))
+
+    # DC gain of the damping cascade under the MEASURED routing, closed form, for the two
+    # coefficient scales S227 leaves open (total shift 22 = shipped, unity 0x400000; 23 = the
+    # "UNTIED" variant, unity 0x7FFFFF).  Section B's own fixed point s51 = c5(1+c7)x/(1-c6),
+    # y_B = c5(1+c7+c8)x + c6*s51.  A damping filter has |gain| <= 1; the tap x is the input.
+    print("\nDC gain of the damping cascade y_B/x under the measured routing (device reading):")
+    for shift, unity in ((22, 4194304.0), (23, 8388608.0)):
+        k = {n: s24(v) / unity for n, v in c.items()}
+        s51fp = k["c5"] * (1 + k["c7"]) / (1 - k["c6"])
+        ybx = k["c5"] * (1 + k["c7"] + k["c8"]) + k["c6"] * s51fp
+        print("  total shift %d (unity 0x%06X): c3..c8 = %+.3f %+.3f %+.3f | %+.3f %+.3f %+.3f  ->  s51/x = %+.3f  y_B/x = %+.3f  |gain| %s 1"
+              % (shift, int(unity), k["c3"], k["c4"], k["c5"], k["c6"], k["c7"], k["c8"], s51fp, ybx,
+                 "<=" if abs(ybx) <= 1 else ">"))
     return 0
 
 

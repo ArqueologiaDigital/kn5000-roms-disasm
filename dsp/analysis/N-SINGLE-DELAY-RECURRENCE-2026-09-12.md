@@ -94,7 +94,31 @@ So of §4's two candidates the **`w14` move** (`y_A` → cell 0x51) is the one s
 class-2-multiply reading needs a narrower form (e.g. only on `ld`/`mac`-family class-2 words with
 a tempA/acc source) before it is worth another run.
 
+## 6. The coefficient SCALE, argued from the damping cascade's DC gain (HLE-informed, INFERRED)
+The biquad's bit-exactness is scale-free (it compares the device's columns with themselves), so
+the absolute multiply scale — §227's three-way `P_SHIFT`/`ACC_SHIFT` question, shipped total 22
+(unity `0x400000`) vs the "UNTIED" total 23 (unity `0x7FFFFF`) — was never pinned by the LLE.
+The recurrence of §2 pins what a damping section must NOT do: a damping filter's DC gain is at
+most 1. `dlyseed_recurrence.py` evaluates the cascade's closed-form gain under the measured
+routing at both scales:
+
+```
+total shift 22 (unity 0x400000): c3..c8 = +0.547 +0.774 -0.415 | +0.547 +0.774 -0.415  -> y_B/x = -1.452  |gain| > 1
+total shift 23 (unity 0x7FFFFF): c3..c8 = +0.273 +0.387 -0.207 | +0.273 +0.387 -0.207  -> y_B/x = -0.353  |gain| <= 1
+```
+At the shipped scale the "damping" cascade AMPLIFIES the tap by 1.45 (and the fold's feedback
+cell reads −0.58); at total shift 23 it damps to 0.35 and C-RAM[0x00] reads **−0.29 ≈ the "0.3
+feedback" the program header and the HLE both carry**. Two independent cells agreeing with the
+physical expectation only at 23 is an argument, not a measurement: it stands on the device's
+class-2 store readings (which the fixed point does reproduce) and on "a damping filter does not
+amplify". The same argument applies to §5: the MULALL rail at unity input is partly the scale
+(a 1.45× cascade rails a 1.0 seed) — so §5's verdict is "disfavoured at the shipped scale", and
+the reading deserves a re-run once the scale is settled. **Falsifier:** the §227 `UPD6383_PSHIFT=2`
+build, seeded the same way, must give a self-consistent fixed point with `y_B/x ≈ −0.35`, and the
+EQ's design-parameter match (docs §12) must survive — both already-built instruments.
+
 ## Honest grade
+§6 INFERRED (closed-form from measured coefficients + a physical constraint; a named falsifier).
 §5 MEASURED (two runs each program; the delay's rail is the device's own fixed point). §2 MEASURED: the recurrence reproduces every checked column from the entering state and the
 coefficients (9/9, one LSB of rounding), i.e. this is exactly what the device executes. §3: the
 feedback-cell identity is MEASURED (coefficient on the bus, operand = the damped output); the
