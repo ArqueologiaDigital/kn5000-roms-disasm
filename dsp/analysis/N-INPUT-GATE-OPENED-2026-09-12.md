@@ -607,6 +607,38 @@ which the numbers at the LFO block are bit-identical to the starved baseline tha
 That is the strongest joint evidence any of these codes has, and it is still three speculative
 readings standing together. All three remain default-off.
 
+## 20. ⚠⚠ §19's CONFIGURATION IS NOT PROGRAM-NEUTRAL: `CALLFLUSH` starves the EQ
+§19 called the three readings "mutually consistent". That was tested on **one program**. Running the
+**parametric EQ** — the reference program — in the same configuration shows the cost:
+
+| EQ body, frame pair | cells moved | rows differing | non-zero products |
+|---|---|---|---|
+| gate + `C8SHIFT` + `ACT 0x0E = mem[ptr]` | **42 of 52** | **149 of 187** | 57 |
+| …**plus `CALLFLUSH`** | **2** (`0x05`, `0x10`) | **9 of 105** | **6** |
+
+The signal still reaches the pickup, but it no longer propagates into the band state (`0x50`+) at
+all. So **`CALLFLUSH` fixes the chorus's phase and starves the EQ's filter** — the two programs
+want opposite things from the product register at a block CALL, which is precisely what a *correct*
+decode must not do. ⇒ **§19's "mutually consistent" is withdrawn as stated**: the configuration is
+consistent *for the chorus*, and the flush is not a program-neutral reading.
+
+What survives §19 unqualified: the *diagnosis* — there are two independent paths that contaminate
+the LFO block's entry LOAD, and both must be closed for the phase to survive. What does not is the
+conclusion that the particular closure used is the chip's. A flush at the CALL is too blunt: the
+chorus needs `P` clear at its body entry and the EQ needs `P` carried into its own, so whatever the
+chip does is finer-grained than "flush on CALL" — conditional on the word, the block, or something
+not yet decoded.
+
+★ Separately and cleanly: **§148 is irrelevant to the EQ.** On and off give byte-identical results
+(6 exact products, `92/7/3/0/2` accumulator classification, zero railed bands in both) — its
+population is `SRC 0x00` on `f98 = 1` class-A words, which the EQ's biquad does not use. So the
+chorus evidence against §148 stands unopposed by the reference program; removing it costs the EQ
+nothing. That part of §9 is **confirmed on a second program**.
+
+⚠ Grade: MEASURED (four EQ runs, frame pairs and product counts). This is a correction of this
+session's headline result, found by testing it where it could do damage rather than where it was
+built.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
