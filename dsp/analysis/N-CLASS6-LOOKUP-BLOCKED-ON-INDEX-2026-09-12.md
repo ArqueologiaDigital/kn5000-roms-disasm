@@ -52,6 +52,34 @@ phase cell advances by exactly the HLE's increment, 114 per frame, MEASURED
 (`N-DLYSEED2-CHORUS-CONFRONT §1`). So the phase exists, the table exists, and the wire between
 them is what is missing.
 
+## 5. ★★ AND THE GATES UNBLOCK IT — the index now ARRIVES (MEASURED, same day)
+§4 said the modulation family is blocked on getting the phase to the class-6 word, not on the
+table. The capture it was read from predates this session's gate work, so the obvious question is
+whether the three arms change it. Re-running the CHORUS (`TYPEIDX 0`, trace frames 1 631 700 /
+1 631 701) with `UPD6383_LO12CAP=1`, `UPD6383_C8SHIFT=1` and
+`UPD6383_SPEC=B9108446A39B440F` (`ACT 0x0E = mem[ptr] ← bus`) — no rebuild, environment only —
+and reading **the device's own §162 census**, whose verdict string is not mine to write:
+
+| | shipped readings | **all three gates open** |
+|---|---|---|
+| site `00006184CD` (`addr8=18`) | `acc 0 .. 0` **(CONSTANT -- phase is NOT here)** | `acc 0 .. 977 106` **(VARIES)** |
+| site `0000620407` (`addr8=20`) | `acc 0 .. 0` **(CONSTANT -- phase is NOT here)** | `acc 0 .. 1 954 212` **(VARIES)** |
+
+**The census flips its own verdict.** The accumulator at both class-6 sites now varies, so **the
+index reaches the word**. The chorus body is live with it (24 of 70 rows differing between
+consecutive frames). The two maxima are in exact 2:1 ratio (977 106 / 1 954 212), which is the
+relationship two quadrature lookups of one phase would have — noted, not claimed.
+
+⇒ **§4's "implementing the lookup today would be pointless" no longer holds.** With the gates open
+the table is present *and* the index arrives, so the class-6 lookup becomes implementable and is
+now the single missing step between the modulation family and a sweeping tap. That is the first
+time in this project that item has been actionable.
+
+⚠ What is NOT shown: that the index is *correct* (its scale and origin are `lfo-ramp.md §10`'s
+`(coef × phase) >> 23` reading, unverified here), or that a lookup would make the tap sweep at the
+right rate and depth. Those are the next measurements, and the HLE gives both targets — the chorus's
+0.6 Hz rate and its ±240-sample sweep are already decoded and A/B-validated.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
