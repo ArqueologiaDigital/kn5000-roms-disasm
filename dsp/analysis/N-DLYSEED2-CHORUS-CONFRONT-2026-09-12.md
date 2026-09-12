@@ -172,3 +172,30 @@ flanger's tA-clobber is MEASURED in the device and is a STRONG lead — the next
 `44C`/ACT-0x0C reading (does it really write tA?), not on ACT 0x07. The SRC 0x13 word after every
 modulation-family READ is the open decode that gates the wet path: "table source" (S-6) and
 "delay datum" are now the two live readings for 0x13 on those words.
+
+## 8. The tempA arm was RUN — prediction HELD (MEASURED, flanger, both channels)
+The clobber comes from a SPECULATIVE blanket rule in the device (`exec_alu`, the "§121 one
+pairing of sixteen" block): ACT codes 0x01/0x08/0x0C/0x11/0x16 all capture the bus into tempA.
+`UPD6383_NOTA0C` (default off) excuses ACT 0x0C — the `44C` word — from that capture and nothing
+else. Run: `dsp/tools/dlyseed_run.sh 3 … UPD6383_NOTA0C=1` (FIRED 3 777 882).
+**Prediction: tempA holds the datum through w12 and w12's `L = 0x400000`. Result: HELD**, on both
+channels — `mac ta` (w12 `012.2.01.655`, SRC 0x19) now reads `L = 4194304` at iw96 and iw142,
+where the arm-off run read 194 (the tap offset the `44C` word had written into tempA). The single
+delay's proven route — WRITE word `900.1.60.2D9` ACT 0x19 → tempA → the next SRC-0x19 word — is
+therefore intact in the flanger too, and the device's blanket ACT-0x0C tempA capture is what broke
+it. Grade: MEASURED for the route (2/2), STRONG that the `44C` word must not write tempA (the
+HLE's signal flow has no place for a tap offset in the tap register); the other four blanket codes
+are untested by this and stay as they are.
+
+What w12 then does with the datum is the next decode: it is a class-2 word (the device forms no
+product on it — P stays 12 582 910 — and its accumulate form takes `acc[N] = acc[N−1] + P[N−1]`
+with a stale P), so the tap reaches its consumer's operand latch but is not yet folded into the
+feedback sum or the wet. The HLE says both must happen (`line ← dry + fb·tap`, `wet = tap`); the
+bytecode's carrier is now known (tempA), and the remaining question is the class-2 `mac ta`
+semantics — the same open family (class-2 mixing words) the single delay left, now with a live,
+non-zero operand on it for the first time.
+
+Everything above is with a 0 coefficient at the "gain multiply" word after each READ (flanger
+C-RAM[0x04]); a panel setting that makes it non-zero (or the FEEDBACK/DEPTH controls) is the
+cheap next intervention to see the tap multiplied — the LLE now carries the tap to a multiply's
+doorstep.
