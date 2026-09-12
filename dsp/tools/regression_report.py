@@ -46,7 +46,15 @@ TYPE_NAME = {
 
 
 def stats(fa, fb, lo, hi):
-    """(live, n_railed_cells, n_nonzero_product_rows, n_cells) for one frame pair."""
+    """(live, n_railed_cells, n_nonzero_product_rows, n_cells) for one frame pair.
+
+    Returns None if either half of the pair is missing -- a sweep in progress, or a capture
+    whose emulator run was killed.  A regression table must degrade to "no data" on that row
+    rather than crash and discard the rows that DID complete.
+    """
+    if not (os.path.exists(fa) and os.path.exists(fb)):
+        return None
+
     def cells(path):
         out = {}
         rows = []
