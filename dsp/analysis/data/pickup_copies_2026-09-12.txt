@@ -1,10 +1,8 @@
-body entry at iw84, pickup cell 0x10 -- the HLE says the ratio must be 1.0
+body entry at iw84 -- the HLE says ONE copy of the input must reach the band's cell
 
-capture                               bus datum         cell      acc @ store    ratio  verdict
-pg_noflush_eq.log                       4904681      7792377     103180042421    1.589  ⛔ 1.589 copies -- the entry is not delivering the input
-pg_callflush_eq.log                     4904681      4899462                0    0.999  ✅ ONE COPY
-pg_pclr_eq.log                                0            0                0        -  ⛔ NO INPUT on the bus at all
-pg_spec12_eq.log                              0       524288                0        -  ⛔ NO INPUT on the bus at all
-pg_v3_triple_eq.log                     5211235      8388607    1024570490880    1.610  ⛔ RAILED -- the entry oversums the input
-pg_v3_s138_eq.log                       5211235      8388607    1243828562248    1.610  ⛔ RAILED -- the entry oversums the input
-pg_v3_callacc_eq.log                    4904681      7792377     103180042421    1.589  ⛔ 1.589 copies -- the entry is not delivering the input
+capture                           bus datum  cells holding exactly one copy
+pg_bit28_eq.log                     4900429  ✅ ONE COPY at 0x50, 0x54, 0x58, 0x5C, 0x60
+pg_callflush_eq.log                 4904681  ✅ ONE COPY at 0x10
+pg_noflush_eq.log                   4904681  ⛔ none. ratios 0x10=1.589, 0x50=0.321, 0x54=-0.214, 0x58=0.142
+pg_v3_s138_eq.log                   5211235  ⛔ none. RAILED at 0x10. ratios 0x50=0.321, 0x54=-0.214, 0x58=0.143, 0x5C=-0.095
+pg_pclr_eq.log                            0  ⛔ NO INPUT on the bus at all

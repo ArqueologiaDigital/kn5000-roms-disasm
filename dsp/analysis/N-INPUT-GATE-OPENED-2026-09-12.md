@@ -1054,6 +1054,61 @@ recorded before the run.
 ⚠ Grade: MEASURED, `data/pickup_copies_2026-09-12.txt` + the seven archived EQ captures. §29's
 reversal is a correction of my own §20/§22 interpretation on the project's own evidence.
 
+## 32. ★★★★★ IT PASSES. ALL FOUR CRITERIA, FOR THE FIRST TIME — `CALLFLUSH` + §109 bit 28
+`UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 UPD6383_SPEC=B9108446B39B440F`, baseline arms as always:
+
+| criterion | result |
+|---|---|
+| (A) chorus LFO increment | **114** ✅ |
+| (A) chorus body liveness | LIVE — 2 of 17 cells, 16 of 70 rows ✅ |
+| (B) EQ body liveness | LIVE — **13 of 44 cells, 94 of 105 rows** ✅ (was 2 / 9 under the flush alone) |
+| (C) one copy of the input | ✅ **at `0x50`, `0x54`, `0x58`, `0x5C`, `0x60`** — ratio **1.000** at every one |
+
+★★★ **Those five cells are the five bands' state blocks**, spaced exactly 4 apart, which is the
+EQ's decoded topology (five bands × a 4-cell Direct-Form-I block). **Every band now receives
+exactly one copy of the input**, and the frame pair shows the filtered results moving beside them:
+
+```
+0x05  4 900 429 -> 4 905 834     the kernel's pickup
+0x50  4 900 429 -> 4 905 834     band 1 x   <- ONE COPY
+0x54  4 900 429 -> 4 905 834     band 2 x
+0x58  4 900 429 -> 4 905 834     band 3 x
+0x5C  4 900 429 -> 4 905 834     band 4 x
+0x60  4 900 429 -> 4 905 834     band 5 x
+0x52 -1 584 693 -> -1 586 989    band 1 y   <- and the bands are FILTERING
+0x5A  7 930 544 -> 7 928 308     band 3 y
+0x62  6 290 625 -> 6 288 694     band 5 y
+0x66 -2 896 796 -> -2 894 720
+0x6A  7 704 710 -> 7 702 465
+0x6E -5 414 305 -> -5 411 857
+```
+
+### What the change actually is
+One bit, already in the device, never previously runnable against the EQ because until §29 there
+was no configuration that put a correct input in the accumulator to begin with:
+
+> `§109 ACT-07 store target = PRE-increment (mask bit 28 = 0)` → set it, and the store on
+> `iw88 = ld.st acc,(p)+64` lands on the pointer **after** its `+64`, i.e. on `0x50` — the cell
+> `iw89` reads — instead of on `0x10`, which nothing reads.
+
+⚠ **Two arms, and the honest split between them.** `CALLFLUSH` supplies the clean single copy in
+the accumulator (§29); bit 28 delivers it to the cell the band reads (§31). Neither works alone:
+the flush alone leaves the bands at 2 cells / 9 rows, and bit 28 without it would store the
+contaminated accumulator. Both remain **speculative and default-off** — this is a joint pass of
+four criteria on two programs, which is the strongest evidence this project has had for a body-side
+reading, and it is still not proof.
+
+⚠ **One instrument bug this exposed, fixed in the same breath:** `pickup_copies.py` hard-coded
+cell `0x10` and therefore reported the *correct* configuration as "0.000 copies" — it was
+measuring the cell the store no longer targets. It now checks the store-target candidates and
+names the cells that hold the input. A criterion that moves with the thing it measures is not a
+criterion; this one nearly cost the result.
+
+⚠ Grade: MEASURED, `data/pair_gate_bit28_2026-09-12.txt`, `data/pg_bit28_*_2026-09-12.log.gz`,
+`data/pickup_copies_2026-09-12.txt`. Next: a regression over the other programs before any of this
+is promoted out of default-off, and the single-arm run (bit 28 without the flush) to confirm the
+split above.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

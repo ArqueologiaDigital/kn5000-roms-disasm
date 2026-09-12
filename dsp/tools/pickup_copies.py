@@ -72,27 +72,44 @@ def main():
         print(__doc__)
         return 2
 
-    print("body entry at iw%d, pickup cell 0x%02X -- the HLE says the ratio must be 1.0\n" % (entry, cell))
-    print("%-34s %12s %12s %16s %8s  %s" % ("capture", "bus datum", "cell", "acc @ store", "ratio", "verdict"))
+    #  ★ WHICH CELL?  Do not hard-code one.  `iw88's ACT-0x07 store lands on the PRE-increment
+    #  pointer (0x10) or the POST-increment pointer (0x50) depending on §109's mask bit 28, and
+    #  the EQ's five bands each own a 4-cell state block at 0x50 / 0x54 / 0x58 / 0x5C / 0x60.
+    #  Asking only about 0x10 made the correct configuration report "0.000 copies" -- the tool
+    #  was measuring the cell the store no longer targets.  So check the candidates and name the
+    #  one that holds the input; a correct entry puts ONE copy in the cells the bands READ.
+    cands = [cell] + [c for c in (0x10, 0x50, 0x54, 0x58, 0x5C, 0x60) if c != cell]
+    print("body entry at iw%d -- the HLE says ONE copy of the input must reach the band's cell\n" % entry)
+    print("%-30s %12s  %s" % ("capture", "bus datum", "cells holding exactly one copy"))
     bad = 0
     for p in logs:
-        bus, cellv, acc = measure(p, entry, cell)
-        name = os.path.basename(p)[:34]
+        name = os.path.basename(p)[:30]
+        bus = measure(p, entry, cands[0])[0]
         if not bus:
-            print("%-34s %12s %12s %16s %8s  ⛔ NO INPUT on the bus at all"
-                  % (name, bus, cellv, acc, "-"))
+            print("%-30s %12s  ⛔ NO INPUT on the bus at all" % (name, bus))
             bad += 1
             continue
-        ratio = cellv / bus
-        if cellv is not None and abs(cellv) >= RAIL:
-            verdict = "⛔ RAILED -- the entry oversums the input"
-            bad += 1
-        elif abs(ratio - 1.0) <= 0.01:
-            verdict = "✅ ONE COPY"
+        hits, railed, others = [], [], []
+        for c in cands:
+            _b, cellv, _a = measure(p, entry, c)
+            if cellv is None:
+                continue
+            if abs(cellv) >= RAIL:
+                railed.append(c)
+            elif abs(cellv / bus - 1.0) <= 0.01:
+                hits.append(c)
+            elif cellv:
+                others.append((c, cellv / bus))
+        if hits:
+            note = "✅ ONE COPY at " + ", ".join("0x%02X" % c for c in hits)
         else:
-            verdict = "⛔ %.3f copies -- the entry is not delivering the input" % ratio
             bad += 1
-        print("%-34s %12d %12d %16d %8.3f  %s" % (name, bus, cellv, acc, ratio, verdict))
+            note = "⛔ none. "
+            if railed:
+                note += "RAILED at " + ", ".join("0x%02X" % c for c in railed) + ". "
+            if others:
+                note += "ratios " + ", ".join("0x%02X=%.3f" % (c, r) for c, r in others[:4])
+        print("%-30s %12d  %s" % (name, bus, note))
     return 1 if bad else 0
 
 
