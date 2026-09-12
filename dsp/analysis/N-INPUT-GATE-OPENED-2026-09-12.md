@@ -1232,6 +1232,51 @@ where the EQ thread resumes.
 ⚠ Grade: MEASURED, `data/regression_bit28_2026-09-12.txt`; captures in the session scratch are
 regenerable with the two commands in the tools' docstrings and are not committed (40 logs, ~25 MB).
 
+## 36. ★★★★ `CALLFLUSH` ALONE PASSES THE CATALOGUE — zero regressions, and FIVE programs gain an LFO
+Same ten programs, same baseline, candidate = `UPD6383_CALLFLUSH=1` on its own
+(`data/regression_callflush_2026-09-13.txt`):
+
+| TYPE | effect | baseline live/rail/prod | candidate live/rail/prod | verdict |
+|---|---|---|---|---|
+| 0 | CHORUS | LIVE 4/17 0 53 | LIVE 3/17 0 46 | ✅ ★ **LFO +114/frame — was not a ramp** |
+| 1 | MODULATED CHORUS | LIVE 6/20 0 68 | LIVE 5/20 0 62 | ✅ ★ **LFO +114/frame — was not a ramp** |
+| 2 | ENHANCER | LIVE 5/31 0 46 | LIVE 2/31 0 **10** | ✅ ⚠ products halved or worse |
+| 3 | FLANGER | LIVE 3/13 1 56 | LIVE 3/13 1 52 | ✅ ★ **LFO +114/frame — was not a ramp** |
+| 4 | PHASER | LIVE 26/32 0 87 | LIVE 26/32 0 86 | ✅ ★ **LFO +114/frame — was not a ramp** |
+| 5 | ENSEMBLE | LIVE 6/23 1 37 | LIVE 4/23 1 35 | ✅ ★ **LFO +114/frame — was not a ramp** |
+| 6 | GATED REVERB | LIVE 3/15 0 53 | LIVE 3/15 0 51 | ✅ |
+| 7 | SINGLE DELAY | LIVE 1/10 0 44 | LIVE 1/10 0 41 | ✅ |
+| 8 | MULTI TAP DELAY | LIVE 3/13 0 44 | LIVE 2/13 0 28 | ✅ |
+| 15 | PARAMETRIC EQ | LIVE 39/44 0 100 | LIVE 2/44 0 **9** | ✅ ⚠ products halved or worse |
+
+**0 regressions.** No body dies, **no cell rails anywhere** (the flanger's and ensemble's single
+railed cell is present in the baseline too), and **five of the five programs that have an LFO phase
+word gain a correct free-running ramp at exactly the increment, where the baseline had none.**
+
+★★ That is now **four independent lines of evidence for the same single change**:
+1. §29 — it is the **only** configuration delivering **one clean copy** of the EQ's input;
+2. §34 — it is the only family giving the chorus a **constant +114/frame** phase;
+3. §36 — **five** programs gain that ramp, not one;
+4. §36 — **zero** regressions across ten programs spanning four families.
+
+⚠ **The two ⚠ flags, stated plainly rather than explained away:**
+- **PARAMETRIC EQ, 100 → 9 products.** This is the KNOWN open problem, not a new one: §23/§29
+  established that the baseline's EQ activity is **the kernel's residue being filtered**, and the
+  flush removes the residue. The bands are then correctly fed at `0x10` — which nothing reads
+  (§30). Expected, understood, and the EQ thread's next step.
+- **ENHANCER, 46 → 10 products.** ⚠ **NOT explained.** It is not an LFO program and it does not
+  rail; its arithmetic simply drops by a factor of four. This is the one thing the catalogue flags
+  that no current reading accounts for, and it should be looked at before anyone treats the flush
+  as settled.
+
+⇒ On this evidence the arm is **promoted to default-ON**, with `UPD6383_CALLFLUSH=0` to restore the
+old behaviour so the A/B stays available — the same treatment §225 gave `UPD6383_LFOWRAP`. It is
+the first body-side reading in this investigation to be promoted on catalogue evidence rather than
+on two programs.
+
+⚠ Grade: MEASURED, ten programs, one binary, one baseline. Promotion is a judgement on that
+evidence, and the enhancer flag is the standing argument against it.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

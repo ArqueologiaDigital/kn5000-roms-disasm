@@ -1,0 +1,16 @@
+catalogue regression: baseline base  vs  candidate flush   (iw 84..400)
+
+TYPE effect             | BASELINE live/rail/prod    | CANDIDATE live/rail/prod   | verdict
+----------------------------------------------------------------------------------------------------------------------
+0    CHORUS             | LIVE  4/17  0  53          | LIVE  3/17  0  46          | ✅ no regression  LFO +114/frame ★ was not a ramp
+1    MODULATED CHORUS   | LIVE  6/20  0  68          | LIVE  5/20  0  62          | ✅ no regression  LFO +114/frame ★ was not a ramp
+2    ENHANCER           | LIVE  5/31  0  46          | LIVE  2/31  0  10          | ✅ no regression  ⚠ products 46 -> 10 (halved or worse)
+3    FLANGER            | LIVE  3/13  1  56          | LIVE  3/13  1  52          | ✅ no regression  LFO +114/frame ★ was not a ramp
+4    PHASER             | LIVE 26/32  0  87          | LIVE 26/32  0  86          | ✅ no regression  LFO +114/frame ★ was not a ramp
+5    ENSEMBLE           | LIVE  6/23  1  37          | LIVE  4/23  1  35          | ✅ no regression  LFO +114/frame ★ was not a ramp
+6    GATED REVERB       | LIVE  3/15  0  53          | LIVE  3/15  0  51          | ✅ no regression
+7    SINGLE DELAY       | LIVE  1/10  0  44          | LIVE  1/10  0  41          | ✅ no regression
+8    MULTI TAP DELAY    | LIVE  3/13  0  44          | LIVE  2/13  0  28          | ✅ no regression
+15   PARAMETRIC EQ      | LIVE 39/44  0 100          | LIVE  2/44  0   9          | ✅ no regression  ⚠ products 100 -> 9 (halved or worse)
+
+0 regression(s).
