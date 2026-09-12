@@ -527,6 +527,32 @@ two-sided test is the one stated above: **the cell must advance by the increment
 live**. ⚠ Note what this does NOT say: it does not say the gate arm is correct — §16's cost stands
 — only that the phase failure is downstream of a modelling choice that the starved state concealed.
 
+## 18. The pipeline-flush hypothesis was tested — REFUTED (MEASURED)
+§17 named the mechanism (the body inherits a live `P` into `iw88`'s LOAD) and the obvious hardware
+reading that would prevent it: a product register that **flushes at a block CALL**.
+`UPD6383_CALLFLUSH` clears `P` at the call, nothing else.
+
+```
+FIRED 3 181 374  (twice per frame -- the two unit calls, as expected)
+chorus phase-cell delta: 1 360 432   -- IDENTICAL to LO12CAP=1 alone
+```
+
+**Refuted.** Clearing the product at the CALL changes nothing, so the contamination is **not
+inherited across the block boundary** — it is produced *inside* the body, in the four words before
+the LFO block (`iw84` the delay READ, `iw85`/`iw86` the `0x0D`/`0x0E` mixing pair, `iw87` a store).
+None of those is class A, so none of them should form a product at all — yet `P` is live by `iw88`.
+
+That is a sharper target than §17 left, and it points at the **ACT codes that write `P` directly**:
+the device's `ACT 0x0E` default reading is `P ← bus` (selector 7), which is exactly such a writer,
+and the chorus's `iw86` carries `ACT 0x0E`. ⚠ But that alone does not close it either — the
+`sel0e = mem[ptr]` configuration (which does *not* write `P`) still shows a broken phase
+(3 129 519), so at least one more `P` writer is in play among those four words.
+
+⇒ the question is now narrow and mechanical: **which of `iw84..iw87` leaves a live product, under
+which reading?** Every one of those words is in the corpus, the trace records `P` at each row, and
+the two-sided test is unchanged. ⚠ Grade: MEASURED refutation with a fired count; the arm stays
+default-off with its record.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
