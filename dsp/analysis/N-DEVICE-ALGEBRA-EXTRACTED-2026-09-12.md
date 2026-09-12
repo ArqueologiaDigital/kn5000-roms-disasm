@@ -219,6 +219,42 @@ does not fix it, it removes the audio earlier. The observation stands, the causa
 
 ⚠ Grade: MEASURED. `data/pair_gate_spec12_2026-09-12.txt` + `data/pg_spec12_*_2026-09-12.log.gz`.
 
+## 10. ★★ THE ALGEBRA ON **ONE MACHINE**, TEN PROGRAMS — and it closes a standing lead
+The tables above pooled 104 captures across **52 device configurations**, which §5 records as a
+trap: pooling captures pools machines. The catalogue-regression sweep produced the corpus that
+fixes it — **one configuration** (`PSHIFT=2 C8SHIFT=1 LO12CAP=1 SPEC=…440F`), **ten programs**
+spanning modulation, reverb, both delay shapes and the biquad. Artefact:
+`data/algebra_one_machine_10programs_2026-09-12.txt`.
+
+Groups that were VACUOUS in the pooled run come out **uniquely determined** here, because the ten
+programs exercise registers the old corpus left at zero:
+
+| group | op | rows | programs | note |
+|---|---|---|---|---|
+| **`cls2 ACT0E SRC07 f31=2`** | **`hold`** | 13 | 5 | ★★ **`f31 = 2` = accumulator HOLD, non-vacuously** |
+| `cls2 ACT15 SRC07 f31=2` | `hold` | 30 | 4 | the same, on a second ACT code |
+| `cls2 ACT00 SRC00 f31=2` | `acc + L<<16` | 16 | 4 | ★ at `f31 = 2` `ACT 0x00` **still adds the bus** |
+| `cls1 ACT00 SRC00 f31=0` | `P + L<<16` | 11 | 8 | was tied in the pooled run |
+| `cls2 ACT00 SRC1A f31=1` | `acc + P + L<<16` | 13 | 2 | new |
+| `cls8 ACT15 SRC10 f31=2` | `acc >> 1` | 10 | 1 | the class-8 scale, clean on one machine |
+
+★★ **`f31 = 2` = HOLD is now measured rather than argued.** The project's memory carried it as
+*"the HLE argues `f31 = 2` = acc-HOLD on the class-2 port reads (STRONG lead, build-lane to
+confirm)"*. It needed no build lane in the end — it needed a corpus that was **one machine**, and
+13 fully discriminating rows over 5 programs settle it. Together with `ACT 0x00`'s bus term
+surviving at `f31 = 2`, the picture is that **`f31` chooses what happens to the PRODUCT and `ACT`
+chooses what happens to the BUS, independently** — which is the cleanest structural statement the
+extractor has produced.
+
+⚠ One group is still ⛔ on a single machine, and it is informative: `cls2 ACT00 SRC00 f31=0`
+(39 rows, 5 programs). Reading its rows, **`P + L<<16` explains the live ones** — e.g. the EQ's
+`iw136`, `−13 473 677 312 + (19 859 << 16) = −12 172 197 888`, exact — while a run of
+`0000200000` words with **`addr8 = 0x00`** simply HOLD. ⇒ the group key needs `addr8`, or those
+words are padding the device treats differently. That is a decode question, not a pooling
+artefact, and it is the next thing this tool should be pointed at.
+
+⚠ Grade: MEASURED on one configuration.
+
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's
 docstring) from the archived captures. Nothing here is a statement about the µPD6383GF; §1 says so
