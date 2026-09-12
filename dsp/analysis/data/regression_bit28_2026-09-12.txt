@@ -1,0 +1,16 @@
+catalogue regression: baseline base  vs  candidate cand   (iw 84..400)
+
+TYPE effect             | BASELINE live/rail/prod    | CANDIDATE live/rail/prod   | verdict
+----------------------------------------------------------------------------------------------------------------------
+0    CHORUS             | LIVE  4/17  0  53          | LIVE  2/17  0  48          | ✅ no regression  ⛔ LFO FROZEN (phase 0 on all frames)
+1    MODULATED CHORUS   | LIVE  6/20  0  68          | LIVE  3/20  0  63          | ✅ no regression  ⛔ LFO FROZEN (phase 0 on all frames)
+2    ENHANCER           | LIVE  5/31  0  46          | LIVE  2/31  0  10          | ✅ no regression  ⚠ products 46 -> 10 (halved or worse)
+3    FLANGER            | LIVE  3/13  1  56          | LIVE  1/13  0  41          | ✅ no regression  ⛔ LFO FROZEN (phase 0 on all frames)
+4    PHASER             | LIVE 26/32  0  87          | LIVE 25/32  0  24          | ✅ no regression  ⛔ LFO FROZEN (phase 0 on all frames)  ⚠ products 87 -> 24 (halved or worse)
+5    ENSEMBLE           | LIVE  6/23  1  37          | LIVE  4/23  0  35          | ✅ no regression  ⛔ LFO FROZEN (phase 0 on all frames)
+6    GATED REVERB       | LIVE  3/15  0  53          | LIVE  3/15  0  51          | ✅ no regression
+7    SINGLE DELAY       | LIVE  1/10  0  44          | LIVE  1/10  0  41          | ✅ no regression
+8    MULTI TAP DELAY    | LIVE  3/13  0  44          | LIVE  2/13  0  32          | ✅ no regression
+15   PARAMETRIC EQ      | LIVE 39/44  0 100          | LIVE 13/44  9  71          | ⛔ REGRESSION -- 9 new railed cell(s)
+
+6 regression(s).

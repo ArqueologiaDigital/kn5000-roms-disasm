@@ -38,6 +38,21 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dlyseed_confront import parse, s24   # noqa: E402
 from lfo_ramp_check import phases          # noqa: E402
 
+
+def has_lfo(path):
+    """Does this program's body actually contain the LFO phase-accumulate word?
+
+    ⛔ THE §119 WITNESS SAMPLES CELL 0x07 AT BODY-0 iw89 WHETHER OR NOT THE PROGRAM PUTS ITS
+    LFO PHASE THERE.  Reading "phase 0 on all frames" as a frozen LFO for SINGLE DELAY or
+    PARAMETRIC EQ -- which have no LFO at that word at all -- is the same class of error as
+    grading a starved body on its liveness: the measurement is real, the subject is not.
+    So ask the trace: is `hi12 = 092', class A (the phase accumulate) present in the body?
+    """
+    for r in parse(path):
+        if r["u1"] == 0 and r["word"][1:4] == "092" and r["word"][4] == "A" and r["iw"] >= 84:
+            return True
+    return False
+
 RAIL = 0x7fffff
 TYPE_NAME = {
     0: "CHORUS", 1: "MODULATED CHORUS", 2: "ENHANCER", 3: "FLANGER", 4: "PHASER",
@@ -120,15 +135,23 @@ def main():
             st = sorted({y - x for (_a, x), (_b2, y) in zip(ph, ph[1:])})
             return st[0] if len(st) == 1 else None
         rb, rc = ramp(pb), ramp(pc)
-        if pb and pc:
-            if rb and not rc:
-                lfo = "  ⛔ LFO ramp LOST (was +%d/frame)" % rb
+        #  ⛔ THE FIRST VERSION OF THIS ONLY FIRED WHEN THE BASELINE HAD A RAMP TO LOSE, and the
+        #  baseline here is the unflushed configuration whose phase already wanders -- so the
+        #  column stayed silent on a candidate §34 had already MEASURED to leave the phase at
+        #  0 on eight consecutive frames.  A comparison against a broken reference is not a
+        #  test.  Report the CANDIDATE's ramp on its own terms, every time.
+        if pc and has_lfo(os.path.join(cand, "t%d_F.log" % t)):
+            if rc and rc != 0:
+                lfo = "  LFO +%d/frame%s" % (rc, "" if (rb == rc) else " ★ was %s" % (
+                    ("+%d" % rb) if rb else "not a ramp"))
+            elif rc == 0:
+                lfo = "  ⛔ LFO FROZEN (phase %d on all frames)" % pc[0][1]
                 bad += 1
-            elif rb and rc and rb != rc:
-                lfo = "  ⛔ LFO step changed %+d -> %+d" % (rb, rc)
-                bad += 1
-            elif rc and not rb:
-                lfo = "  ★ LFO ramp GAINED (+%d/frame)" % rc
+            else:
+                lfo = "  ⚠ LFO not a ramp (step varies)"
+        #  ★ a large drop in arithmetic is not "no regression" just because the body still moves
+        if b["prods"] and c["prods"] < b["prods"] // 2:
+            lfo += "  ⚠ products %d -> %d (halved or worse)" % (b["prods"], c["prods"])
         if b["live"] and not c["live"]:
             v = "⛔ REGRESSION -- the candidate kills a live body"
             bad += 1

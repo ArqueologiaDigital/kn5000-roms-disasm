@@ -1189,6 +1189,49 @@ to find it.
 
 ⚠ Grade: MEASURED, `data/lfo_ramp_check_2026-09-12.txt`, from the nine archived chorus captures.
 
+## 35. ★★ THE CATALOGUE ANSWERS: `CALLFLUSH` + bit 28 IS DISQUALIFIED ON TEN PROGRAMS
+§34 caught the chorus. The catalogue regression (`dsp/tools/catalogue_regression.sh` +
+`regression_report.py`, ten programs spanning modulation, reverb, both delay shapes and the
+biquad, one frame pair each, baseline vs candidate) shows it is not one program:
+
+| TYPE | effect | baseline live/rail/prod | candidate live/rail/prod | verdict |
+|---|---|---|---|---|
+| 0 | CHORUS | LIVE 4/17 0 53 | LIVE 2/17 0 48 | ⛔ **LFO FROZEN** |
+| 1 | MODULATED CHORUS | LIVE 6/20 0 68 | LIVE 3/20 0 63 | ⛔ **LFO FROZEN** |
+| 2 | ENHANCER | LIVE 5/31 0 46 | LIVE 2/31 0 **10** | ⚠ products halved or worse |
+| 3 | FLANGER | LIVE 3/13 1 56 | LIVE 1/13 0 41 | ⛔ **LFO FROZEN** |
+| 4 | PHASER | LIVE 26/32 0 87 | LIVE 25/32 0 **24** | ⛔ **LFO FROZEN** + products |
+| 5 | ENSEMBLE | LIVE 6/23 1 37 | LIVE 4/23 0 35 | ⛔ **LFO FROZEN** |
+| 6 | GATED REVERB | LIVE 3/15 0 53 | LIVE 3/15 0 51 | ✅ |
+| 7 | SINGLE DELAY | LIVE 1/10 0 44 | LIVE 1/10 0 41 | ✅ |
+| 8 | MULTI TAP DELAY | LIVE 3/13 0 44 | LIVE 2/13 0 32 | ✅ |
+| 15 | PARAMETRIC EQ | LIVE 39/44 **0** 100 | LIVE 13/44 **9** 71 | ⛔ **9 new RAILED cells** |
+
+⇒ **Every modulation program loses its LFO**, and the EQ — the program the change was *for* —
+gains **nine railed cells**. Two independent disqualifications on top of §34's. The three
+programs that pass are exactly the three with no LFO phase word and no biquad.
+
+★ **And the EQ result refines §32 rather than erasing it.** §32's measurement stands: with bit 28
+the five band `x` cells each receive **one clean copy** of the input. What the regression adds is
+that **nine other cells rail** — the filter's own outputs saturating. So the delivery is right and
+the **downstream gain is too high**: the bands are now fed properly and overdriven. That is a
+different, narrower, and much more tractable problem than "nothing reaches the bands", and it is
+where the EQ thread resumes.
+
+### Two instrument bugs this table exposed, both fixed before the numbers above were read
+1. ⛔ **The LFO column only fired when the BASELINE had a ramp to lose** — and the baseline here is
+   the unflushed configuration, whose phase already wanders. So it stayed **silent** on a candidate
+   §34 had already measured to leave the phase at 0 on eight consecutive frames. *A comparison
+   against a broken reference is not a test.* It now reports the candidate's ramp on its own terms.
+2. ⛔ **…and then it over-fired**, flagging "LFO FROZEN" for SINGLE DELAY, GATED REVERB and the EQ,
+   which have no LFO phase word at `iw89` at all — the §119 witness samples that cell regardless.
+   The measurement was real and the subject was not. It now asks the trace whether the body
+   actually contains the phase-accumulate word (`hi12 = 092`, class A) before judging.
+   ⚠ Same shape of error as grading a starved body on liveness, twice in one afternoon.
+
+⚠ Grade: MEASURED, `data/regression_bit28_2026-09-12.txt`; captures in the session scratch are
+regenerable with the two commands in the tools' docstrings and are not committed (40 logs, ~25 MB).
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
