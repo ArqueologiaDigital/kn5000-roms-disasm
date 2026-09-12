@@ -168,6 +168,44 @@ has to keep.
 ⚠ Grade: MEASURED both ways, like-for-like, environment-only (no rebuild). The criterion's success
 and the regression are equally measured, and the regression is the more important of the two.
 
+## 9. ★★ IN THE CONSISTENT CONFIGURATION THE TAP GOES BIPOLAR — and §148 stops being load-bearing
+§19 of `N-INPUT-GATE-OPENED` produced a configuration where the body is live **and** the LFO phase
+advances by exactly 114. Re-running the class-6 tests inside it changes the picture twice over.
+
+**(a) With §148 ON (the shipped coefficient substitution):**
+```
+C6LUT=0/1/2  §157: iw96:0..240  iw105:0..240   ... and phase = 114 in all three
+```
+The lookup no longer damages the phase — but the sweep slots stay constant, because §148 makes the
+sweep word read the **coefficient** (240) as its operand: `240 × 240`, constant by construction.
+No lookup can change that; it is the operand route, not the table.
+
+**(b) With §148 OFF, in the same consistent configuration:**
+```
+C6LUT=0  §157: iw96:0..8388607  iw105:0..8388607  iw137:-4..10            iw146:0..0        phase = 114
+C6LUT=2  §157: iw96:0..8388607  iw105:0..8388607  iw137:-509702..+509707  iw146:-1201385..+1201383   phase = 114
+```
+Three things at once, none of which has held before: **the phase stays exactly 114**, the sweep
+slots **stop being constant**, and with the lookup on two slots become **symmetric about zero** —
+the signature of a bipolar sine modulation, where without it they are one-sided or dead.
+
+**★ And the part that matters most for the decode:** §148 was adopted because it made the LFO
+twins come out right. In this configuration **the phase is 114 with §148 ON *and* OFF** — so §148
+is **no longer load-bearing for the thing it was introduced to fix**, while it *is* what prevents
+the tap from ever sweeping. That is the same shape as the "store the whole accumulator" artefact
+(`N-INPUT-GATE-OPENED §17`): a reading whose supporting evidence was collected in the starved
+state, and which the live state no longer needs. ⇒ **§148's coefficient substitution is now a
+candidate for removal**, on evidence, rather than a fixture.
+
+⚠ What is still missing is only the **depth scale**: the excursions are full-scale
+(`0..8 388 607`) where the chorus's decoded depth is ±240 samples, so the multiply that should
+scale the waveform by C-RAM `0x02` = 240 is still not in the path. That is one step, and it is the
+last one between this and a chorus whose tap sweeps at the HLE's rate and depth.
+
+⚠ Grade: MEASURED, four runs, phase and census reported together each time. The §148 conclusion is
+STRONG (its justification is measurably no longer needed, and its cost is measured) but it is a
+statement about the DEVICE's readings, not yet a decode of the chip.
+
 ## Honest grade
 §1 is READ from the device. §2 and §3 are MEASURED, from the device's own censuses in an archived
 capture (`dsp/analysis/data/dlyseed2_chorus_2026-09-12.log.gz`). §4 is the deduction they force.
