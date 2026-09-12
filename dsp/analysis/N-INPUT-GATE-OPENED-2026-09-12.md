@@ -744,6 +744,13 @@ the cursor — and the EQ gets a clean zero instead, which is why *every* interv
 Test: `dsp/tools/pair_gate.sh s138 UPD6383_LO12CAP=1 UPD6383_SPEC=B9908446A39B440F`
 (`B9108446A39B440F | 1<<55`).
 
+⚠ **Know the blast radius before reading the result** (`dsp/tools/load_nocoef_census.py`,
+`data/load_nocoef_census_2026-09-12.txt`): of the corpus's **3 057** words, **1 302 (42.6 %)** are
+`f31 = 0` LOADs and **1 084 of those fetch no coefficient — 35.5 % of every word in the corpus.**
+This rule does not adjust one instruction; it changes **a third of the machine** from LOAD to HOLD.
+A gate pass would be strong evidence, and a gate failure would not be surprising. The reverbs are
+the most exposed (`prog16_room_reverb_1` 70 words, `prog08_gated_reverb` 53).
+
 ⚠ Grade: the READING of the three traces is MEASURED (`data/pg_*_eq_2026-09-12.log.gz`); the
 prediction is a prediction.
 

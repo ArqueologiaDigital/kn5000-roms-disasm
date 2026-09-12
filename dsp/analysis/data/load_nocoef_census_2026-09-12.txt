@@ -1,0 +1,15 @@
+corpus words                       : 3057
+f31 == 0 (LOAD acc <- P)           : 1302  (42.6%)
+  ...fetching NO coefficient       : 1084  (35.5% of ALL words)
+  ⇒ that is the blast radius of the "stale LOAD is an erasure" rule.
+programs with the most such words:
+   prog16_room_reverb_1.dsm                 70
+   prog08_gated_reverb.dsm                  53
+   prog70_auto_wah_s_delay.dsm              45
+   prog64_s_delay_chorus.dsm                43
+   prog66_s_delay_flanger.dsm               42
+   prog06_ensemble.dsm                      40
+   prog65_s_delay_s_delay.dsm               38
+   prog67_s_delay_vibrato.dsm               38
+   prog10_multi_tap_delay.dsm               35
+   prog02_modulated_chorus.dsm              33
