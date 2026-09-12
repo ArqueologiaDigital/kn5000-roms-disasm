@@ -199,3 +199,28 @@ Everything above is with a 0 coefficient at the "gain multiply" word after each 
 C-RAM[0x04]); a panel setting that makes it non-zero (or the FEEDBACK/DEPTH controls) is the
 cheap next intervention to see the tap multiplied — the LLE now carries the tap to a multiply's
 doorstep.
+
+## 9. The flanger's feedback and sweep words, read at word level (MEASURED coefficients, HLE roles)
+The same trace (`--dump --lo 84 --hi 94`) shows the flanger's first section with every
+coefficient on the bus, and it is the HLE flanger line by line (`line ← dry + fb·tap`,
+`tap_offset = depth·waveform`):
+
+| word | trace | reading (coefficient MEASURED on the bus; role by HLE correspondence) |
+|---|---|---|
+| w1–w3 `040.0.00.8BC`, `000.2.05.1CD`, `000.2.00.40E` | dp = 0x0A, the 0x0D/0x0E pair | the input pickup at cell 0x0A (the open mixing pair, as in the delay) |
+| w4 `212.A.01.1D5` (iw88) | P = 0x2602DF × 383 >> 6 = 14 907 694 ✓ | **C-RAM[0x00] = 0x2602DF = the HLE's FEEDBACK cell (≈0.3)** × cell 0x0A: `fb · tap` |
+| w6 `202.A.C0.1D5` (iw90) | P = 0x8000 × 191 >> 6 = 97 792 ✓ | C-RAM[0x02] = 0x8000 × cell 0x50 (191, a sample-count-sized state cell) |
+| w7 `900.1.60.2D9` (iw91) | tA ← 0x400000; the WRITE data is the accumulator | **the line write** `line ← (fb·tap + …)` — and the ACT 0x19 capture of the published tap (§8) |
+| w8 `192.A.FB.1D5` (iw92) | P = 0x60 × 0x7FFFFF >> 6 = 12 582 910 ✓ | **C-RAM[0x03] = 96 = the sweep DEPTH in samples** × cell 0x10 (the waveform cell; reads 0x7FFFFF = full scale because the device does not model the lookup) — `depth · waveform` |
+| w10 `000.2.00.44C` (iw94) | tapmod ← acc >> 16 = 194 (§157: slot iw94 spans 0..194) | the modulated tap offset applied to the next READ (≈ 2·96 + 2) |
+
+Two consequences. (1) The flanger's sweep word takes its waveform operand from a D-RAM cell
+(`SRC 0x07`, cell 0x10) — so the chorus's analogous word `192.A.40.000` (`SRC 0x00`, which §148
+resolves to the coefficient and thereby squares the depth, §5) should likewise be reading a
+waveform cell; the two words differ in exactly the SRC field, and the flanger's is the one whose
+product is dimensionally right. (2) Because the lookup is not modelled, cell 0x10 sits at full
+scale and the LLE flanger's tap offset is a CONSTANT 194 — the same "static tap" symptom as the
+chorus (§5), now traced to the same cause in a second program. Grade: coefficients and products
+MEASURED (the multiplier rule holds at every row shown); the roles are the HLE's, matched by cell
+identity (feedback cell 0x00 was pinned by panel intervention in the HLE work; depth 96 samples
+is the flanger's musically-plausible ~2 ms sweep), STRONG.
