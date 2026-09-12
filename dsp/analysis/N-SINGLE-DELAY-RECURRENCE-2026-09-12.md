@@ -260,7 +260,33 @@ per-coefficient scales of the EQ are now solved arithmetically, from the ROM's o
 emulator run in the loop.** (The predicted per-band inversion is visible in a live trace: band 0's
 y cell `0x6A = −30243` is the exact negation of band 1's x cell `0x6C = +30243`.)
 
-### Where the factor lives: the OPERAND CELLS, not the coefficients
+### ⚠⚠ Where the factor lives — RETRACTED SAME DAY: the operand evidence is CONTAMINATED
+The subsection below (written first) paired each coefficient with a D-RAM cell and concluded that
+the x-history sits at ×4 and the host cell at ×2. **That pairing cannot support the conclusion,
+for two independent reasons, and both were mine to check first:**
+
+1. **The trace it was read from is RAILED.** In `eq_base` every operand latch reads `0x800000`
+   (the clamp), so *any* coefficient pairs with *any* cell equally well — the table below is
+   pattern-matching on a constant.
+2. **The one non-railed capture is SEEDED WITH A 1:2:3:4 RAMP INTO EXACTLY THOSE CELLS.**
+   `UPD6383_BIQSEED` writes `0x100000 / 0x200000 / 0x300000 / 0x400000` (shifted) into
+   `0x64..0x67` every frame — so a factor of exactly 2 between neighbouring state cells is what
+   the diagnostic itself puts there. Reading "cell 0x64 is at half scale" off that frame measures
+   the seed, not the chip. (Live: `64=002000 65=004000 66=006000 67=008000` at `BIQSEED=8`.)
+
+⇒ **§10's consequences 3–5 are withdrawn**, including the claim that the input stage must deliver
+`x` at ¼ of the y-scale. That was the most interesting thing in the previous pass and it does not
+survive its own evidence. §10's coefficient result (the table above and the flatness solve) is
+**untouched** — it uses only the C-RAM cells the host uploads from ROM, no trace at all.
+
+**The clean measurement this needs** (build-lane, recipe already committed in the handoff §4):
+a PARAMETRIC EQ frame with **real audio and no BIQSEED** —
+`DISPLAY=:0 NAV=0 AUDIO=key BOOTGATE=10 DWELL=25 DSPVAL=1 UPD6383_TRACE_FRAME=<F> … -log
+-autoboot_script tools/rigs/kn5000_dsp_frame_trace.lua` — then read each band's five operand
+latches directly. Only there is `|x-history| / |y-history|` a measurement. Until then the scale
+factor's CARRIER is unknown; what is known is exactly what the coefficients demand of it.
+
+### (withdrawn) The operand-cell table, kept for the record
 Pairing each coefficient with the D-RAM cell its multiplying word reads (`lle_trace_diff.py
 --eq-trace` reports the same map) gives a clean partition:
 
@@ -272,14 +298,11 @@ Pairing each coefficient with the D-RAM cell its multiplying word reads (`lle_tr
 | −a1 | 0x52 | ×1 |
 | −a2 | 0x53 | ×1 |
 
-The x-history pair (0x50/0x51) shares one scale, the y-history pair (0x52/0x53) another, and the
-band's incoming sample a third — i.e. **the firmware pre-scales each coefficient for the scale of
-the cell it will meet**, and the multiply itself can stay uniform. That reframes the whole scale
-question: the LLE's defect is most likely not `P_SHIFT` at all but the scale at which it STORES
-the x-history and the incoming sample (it stores everything with one `acc >> 16`), which is
-exactly why the EQ's recursion blows up under the shipped shift. Neither `bit 12` nor the ACT code
-partitions the five words this way (b2 and a2 share ACT 0x15 with different scales), so those
-selectors are refuted a third time, statically.
+⚠ Read from the railed `eq_base` capture; see the retraction above. The ONE part of it that does
+not depend on the operand values is the negative: neither `bit 12` nor the ACT code partitions the
+five words into the three scales the coefficients demand (b2 and a2 share ACT 0x15 and need
+different scales; b0 is the only bit-clear word yet shares b2's scale). That refutation stands,
+because it uses only the words' own fields and the coefficient ratios.
 
 Consequences, all of them sharper than anything the arms produced:
 1. **Bit 12 is refuted statically, not just behaviourally.** `b0` is the ONLY bit-clear word of
@@ -288,33 +311,30 @@ Consequences, all of them sharper than anything the arms produced:
 2. **No single global shift can be right either**, which is why both 22 and 23 fail somewhere:
    the correct model needs **two** halvings between the `a`-path and `b0`/`b2`, and **one**
    between the `a`-path and `b1`.
-3. **The carrier is the operand cell's own scale** (table above): x-history ×4, incoming sample
-   ×2, y-history ×1. The multiply can stay uniform; what must change is how the device SCALES
-   what it writes into those cells. That also explains the delay's `cell 0x08 = 2 × y_B` under a
-   mixed-shift arm, and it predicts the next measurement: on a non-railed EQ frame with real
-   audio, `|x-history| / |y-history|` must sit at 4 for a signal passing a unity band.
-4. **The ×2 half of it is ALREADY a documented rule, independently.** `b1`'s operand cell
-   `0x64` is the **host-written** state block, and the project's host-payload rule
-   (`r3-delaydram.md`; §71 measured the uploaded levels coming out *exactly half* their
-   documented values) says host-written words land at half scale. A coefficient meeting a
-   half-scale operand must be twice as large — which is precisely the ×2 measured on `b1` and on
-   nothing else. Two unrelated measurements, the same factor, the same cell class.
-5. **⇒ This is a quantitative constraint on the OPEN input stage, not a new device arm.** The
-   remaining ×4 sits on the x-history pair, which the body does not originate — it comes from the
-   audio input path, i.e. the "4.2 audio gate" that is the LLE's #1 open item. The EQ's own
-   coefficients therefore state what that stage must deliver: **the input sample arrives at ¼ of
-   the y-scale.** Any future decode of the input route has to reproduce that quarter, and a route
-   that delivers full scale is wrong *by this measurement* — which is a falsifier the input-stage
-   work did not have before. It also explains the LLE's EQ blow-up without any change to
-   `P_SHIFT`: the device feeds its biquad an x-history 4× too hot, so the b-path products are 4×
-   and the recursion diverges.
+3. ~~The carrier is the operand cell's own scale~~ — **WITHDRAWN** (contaminated evidence, above).
+   What survives: *some* mechanism must deliver the three scales, and it is not a field of the
+   instruction word.
+4. ~~The ×2 is the documented host-payload halving~~ — **WITHDRAWN with 3**: it rested on the same
+   pairing (and under `BIQSEED` cell `0x64` is written by the diagnostic, not by the host). The
+   host-payload rule itself is untouched; what is withdrawn is the claim that it explains `b1`.
+   ⚠ It remains a *candidate* worth testing on the clean capture — the coincidence of factor and
+   cell class is suggestive, and suggestive is not measured.
+5. ~~A quantitative constraint on the input stage (x arrives at ¼)~~ — **WITHDRAWN with 3 and 4.**
+   It was the most useful-sounding claim of the pass and it inherited the contamination whole.
+   The input stage gets no new falsifier from §10 until the clean capture is taken.
 
 ## Honest grade
-§10 MEASURED and EXACT (five bands, zero spread, arm-independent; the RBJ identity is textbook,
-and the flat-band solve is an identity rather than a fit). Consequence 1 is a proof, 2 a
-deduction, 3 an INFERRED operand map (it rests on the tool's coefficient→operand pairing, which
-is one pipeline slot wide), 4 a correspondence with an independently measured rule, 5 the
-constraint 4 and 3 place on the input-stage decode — stated as a falsifier, not a decode.
+§10's **coefficient** result is MEASURED and EXACT (five bands, zero spread, arm-independent, from
+the ROM's C-RAM cells with no trace in the loop; the RBJ identity is textbook and the flat-band
+solve is an identity, not a fit). Consequence 1 (bit 12 and the ACT code refuted as selectors) is
+a proof from the words' own fields; consequence 2 (no global shift works) a deduction.
+⚠⚠ **Consequences 3–5 are RETRACTED the same day** — the operand-cell map they rested on was read
+from a RAILED capture, and the only non-railed capture is seeded by `UPD6383_BIQSEED` with a
+1:2:3:4 ramp into the very cells whose ratios were being read. The withdrawn claims are the
+operand-scale table, the host-payload correspondence, and "the input stage must deliver x at ¼" —
+that last was the most useful-sounding result of the pass and it inherited the contamination
+whole. What the scale factor's CARRIER is remains open; a real-audio unseeded EQ frame is the
+measurement (recipe in the note).
 ⚠ What §10 does NOT do: it does not decode a single instruction word, and it does not make the
 LLE's EQ correct; it says exactly what any correct account must produce.
 §9 MEASURED (two runs; the EQ's RBJ argument is arithmetic on the measured cells). §8 corrects §6–§7's scope: MEASURED facts unchanged, the conclusion narrowed to the bit-clear
