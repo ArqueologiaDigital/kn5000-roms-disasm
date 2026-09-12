@@ -131,6 +131,21 @@ def main():
     else:
         print("    %d multiply rows carry a non-zero product -> the running-sum test is meaningful." % nz_p)
 
+    # Landmarks (any program): the LFO phase-accumulate / wrap pair (hi12 092.A / 094.A -- the
+    # phase cell is mem[dp]; the wrap constant is 0x7FFFFF) and class-6 table lookups (class4 == 6,
+    # addr8 = table selector; the device models the ADDRESSING but NOT the table, so L/P here show
+    # the device's gap, not a lookup). Printed so the tool serves the modulation family too.
+    lfo = [r for r in body if r["word"][0:3] in ("092", "094") and r["word"][3] == "A"]
+    c6 = [r for r in body if r["word"][3] == "6"]
+    if lfo or c6:
+        print("\nLANDMARKS")
+        for r in lfo:
+            print("  LFO  %s iw=%3d dp=%02X mem(phase cell)=%06X acc=%d L=%d" % (
+                "phase+=" if r["word"][0:3] == "092" else "wrap  ", r["iw"], r["dp"], r["mem"], r["acc"], r["l"]))
+        for r in c6:
+            print("  C6   table sel 0x%s iw=%3d dp=%02X mem=%06X acc=%d P=%d L=%d  (table NOT modelled in the device)" % (
+                r["word"][4:6], r["iw"], r["dp"], r["mem"], r["acc"], r["p"], r["l"]))
+
     # Q3: where the signal dies
     live = [r for r in body if r["acc"] or r["p"] or r["l"]]
     if live:
