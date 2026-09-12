@@ -79,6 +79,34 @@ are scaled ×4 and `b1` ×2 relative to the a-path, and no single shift (and nei
 selector) produces that. The two threads have met: **the gate is open, and the first thing the
 live signal hits is the unresolved scale.**
 
+## 6. The scale fix was tried on the live body — and the prediction FAILED (MEASURED)
+`UPD6383_EQSCALE` (default off, and marked in the source as never-to-ship) applies §10's solved
+scales — `b0`, `b2` ×4 and `b1` ×2 — **by the coefficient's position in the band** (`cursor % 6`,
+using the EQ's known cell order). That is deliberately fitted: the chip cannot know a
+coefficient's role, so the probe is not a decode. Its only job was to answer what arithmetic
+cannot — *fed those numbers, does the device produce a working filter?* Pre-registered: the
+y-history stops railing, the per-band gain falls from 2.0 to ~1, movement reaches all five bands.
+
+**All three failed.** With the probe on (FIRED 21 220 974) the capture is indistinguishable from
+the probe off: band 0's `−a1` operand is still `8388607`, the same three cells move (`0x05`,
+`0x50`, `0x51`), the same 15 of 105 rows differ, and bands 1–4 stay at the rail.
+
+**What that refutes is an assumption of mine, and it is worth more than the numbers.** §10's
+flatness solve is arithmetic about a **Direct-Form-I biquad**: it says those five ROM cells, used
+as `y = b0·x + b1·x1 + b2·x2 − a1·y1 − a2·y2`, are flat only under that scaling. But the device's
+own measured behaviour contradicts the same model *before* any scaling: with the coefficients as
+stored, DF-I predicts a band gain near **¼**, and the trace measures **2.0** — a factor of eight.
+A model that is off by 8 cannot have its inputs corrected by 4. ⇒ **the device is not evaluating
+the EQ as the DF-I I assumed**, and §10's numbers cannot be applied to it word-by-word until the
+program's actual topology is read out of the bytecode rather than assumed from the cell names.
+(That is a bytecode question — exactly the kind the project's own rule says outranks the HLE.)
+
+**And the railing itself needs no scale mystery.** `acc_to_datum()` clamps the *datum*, not the
+accumulator: the 44-bit accumulator has headroom, but a band's output is converted to 24 bits and
+clipped at ±2²³. With a per-band gain of 2 and five bands in cascade, any real input is amplified
+~32× and clips — which is precisely the observed pattern (bands 2–4 with 3 of 5 operands at the
+rail). Fix the gain and the railing goes with it; the gain is the open item, not the clamp.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
@@ -89,3 +117,6 @@ and by which quantity is input-dependent; the arm is default-off and changes no 
 reaching the body is numerically right, or that any effect yet produces correct audio. It
 establishes that one word's suppressed action is what holds the gate shut, and that releasing it
 lets the body run.
+§6 is a MEASURED refutation with its criterion registered in advance, and what it refutes is my own
+DF-I assumption behind §10 — the flatness solve stays true of the ROM cells under DF-I and becomes
+UNPROVEN as a statement about this device. The probe stays default-off and is marked never-to-ship.
