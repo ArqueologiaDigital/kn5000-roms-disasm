@@ -55,7 +55,7 @@ the value here is that it is now stated as one arithmetic form, checked on 442 r
 ⚠ Where a note or a commit message writes the device's *"bus-add"* form as `acc += L<<16`, that
 shorthand drops the product term. `dlyseed_confront.py`'s own test has always included it
 (`acc[N] == acc[N−1] + P[N−1] + (L[N] << 16)`, `:187`); the prose is what is loose.
-`N-DLYSEED2-SINGLE-DELAY-CONFRONT` §? carries the loose form and is corrected in place.
+`N-DLYSEED2-SINGLE-DELAY-CONFRONT-2026-09-12.md` carried the loose form and is corrected in place.
 
 ## 4. ★ `ACT 0x0D` REPLACES the accumulator with the bus, `f31` notwithstanding
 | group | op | rows | programs |
@@ -103,6 +103,47 @@ relevant register is non-zero:
 ★ Four separate groups are tied **only because tempA is zero in every capture**. One capture with a
 non-zero tempA at those words settles four rows of this table at once — that is the single highest
 -value experiment the tool identifies.
+
+## 7. ★ THE TEMP-REGISTER WRITER MAP (`--target ta|tb`)
+Same machinery, different left-hand side: which `(class, ACT, SRC, f31)` groups **write** tempA or
+tempB, and with what. Everything not listed HOLDS the register — that alone is worth having, since
+it says the temps are written by a short, named list rather than as a side effect of arithmetic.
+Artefacts: `data/temp_ta_algebra_2026-09-12.txt`, `data/temp_tb_algebra_2026-09-12.txt`.
+
+| group | writes tempA | rows | programs |
+|---|---|---|---|
+| `clsA ACT08 SRC11 f31=1` | **`L`** | 53 | 53 |
+| `clsA ACT19 SRC10 f31=0` | **`L`** | 53 | 53 |
+| `cls2 ACT19 SRC0B f31=0` | **`L`** | 53 | 53 |
+| `cls1 ACT01 SRC07 f31=0` | **`L`** | 53 | 53 |
+| `cls1 ACT19 SRC0B f31=0` | **`L`** | 18 | 9 |
+
+⇒ every uniquely-determined tempA writer in the corpus writes **the operand latch `L`**, across
+five different `(class, ACT)` combinations and 53 programs. That is the concrete form of the
+project's standing reading that *"a read's datum reaches the multiplicand through tempA, one slot
+later"*. tempB has no uniquely determined writer yet: `clsA ACT1A SRC08 f31=0` is tied between `L`
+and `coef[-1]`, and `clsA ACT14 SRC07 f31=1` between `L` and `mem[-1]`.
+
+### ★★ And this locates why tempA is zero in the body
+MEASURED on the chorus kernel, one frame, `UPD6383_LO12CAP=1`:
+
+```
+iw37  clsA ACT00 SRC07 f31=1   acc = 443 684 591 449
+iw38  cls0 ACT19 SRC00 f31=4   tA 000000 -> 674DA9      <- the gate word captures the LIVE audio
+iw39  clsA ACT07 SRC19 f31=0   L = 6 770 089 = tA       <- and the next word CONSUMES it
+iw45  clsA ACT0C SRC08 f31=0   tA 674DA9 -> 000000      <- and nine words later it is WIPED
+```
+
+`0x674DA9 = 6 770 089 = acc[iw37] >> 16`, exactly — so the capture is the accumulator's datum, as
+`UPD6383_LO12CAP=1` implements it, and it is genuinely live audio. The body starts at `iw84` with
+`tA = 0` because **`iw45` overwrote it**, and `iw45` is `ACT 0x0C`, whose tempA write the corpus
+cannot pin: the survivors are `{L, coef[-1], zero}` and all three are zero on all 53 rows.
+
+⇒ **`ACT 0x0C` is now the single highest-value open code.** It is the one that decides whether the
+body sees the kernel's audio in tempA, and it is the same code that leaves four accumulator groups
+tied in §6. One experiment — a capture where `L`, `coef[-1]` and `0` differ at `iw45` — resolves
+both. ⚠ Note this is a statement about the DEVICE's tempA; what the chip does at `iw45` is what the
+experiment has to establish.
 
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's

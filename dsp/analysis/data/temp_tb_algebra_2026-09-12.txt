@@ -1,0 +1,276 @@
+class2_solve: 104 log(s), iw 0..400, class ALL, target tb
+
+device configurations in this corpus: 52
+   15  capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   6   capture(s)  UPD6383_DSCRING=1, UPD6383_STPROBE=1
+   6   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   5   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   5   capture(s)  UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   5   capture(s)  (no arms)
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C6LUT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C6LUT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB1108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C6LUT=1, UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DLY07DRAM=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_FMTBIT=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_MULALL=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_NOTA0C=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=2, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=3, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_SPEC=0x6A39B440F
+   2   capture(s)  UPD6383_SPEC=0x46A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_SPEC=0xB910E446A79B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x30E446A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C6LUT=1, UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB1108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x110E446A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_NOZ05=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1, UPD6383_XB85=1
+   1   capture(s)  UPD6383_SPEC=0x1003C6A39B440F
+   1   capture(s)  UPD6383_DRPUB=1, UPD6383_DSCRING=1, UPD6383_NOZ05=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DRPUB=1, UPD6383_DSCRING=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DRPUB=1, UPD6383_DSCRING=1, UPD6383_SRC0B2=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1, UPD6383_XB85=2
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EQSCALE=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C8SHIFT=2, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C8SHIFT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB1108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1, UPD6383_XB85=3
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=2, UPD6383_PICKUP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_NOCARRY=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_PSHIFT=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x6A39F440F
+   1   capture(s)  UPD6383_SPEC=0x10E446A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_FMTBIT=2, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_SRC0B2=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x800046A39B440F
+   ⚠ MORE THAN ONE CONFIGURATION.  A group spanning several is comparing different
+     machines; read its `cfgs' column before believing a ⛔.
+
+cls/ACT/SRC/f31          rows  disc progs  cfgs surviving candidates
+----------------------------------------------------------------------------------------------------
+clsA ACT15 SRC07 f31=1    623   623    53    25 hold   ★ UNIQUE
+cls2 ACT00 SRC00 f31=1    242   242    53    25 hold   ★ UNIQUE
+clsA ACT13 SRC07 f31=0    240   240    24    14 hold   ★ UNIQUE
+clsA ACT12 SRC10 f31=1    240   240    24    14 hold   ★ UNIQUE
+clsA ACT14 SRC07 f31=1    240     0    24    14 L,mem[-1]   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT07 SRC1A f31=1    240     0    24    14 hold,mem   ⚠ VACUOUS (no row separates the survivors)
+cls8 ACT15 SRC10 f31=2    240     0    24    14 hold,mem,mem[-1]   ⚠ VACUOUS (no row separates the survivors)
+clsA ACT07 SRC10 f31=1    240     0    24    14 hold,mem[-1]   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT07 SRC19 f31=0    216   216    24    14 hold   ★ UNIQUE
+cls0 ACT01 SRC00 f31=0    183   183    53    25 hold   ★ UNIQUE
+cls2 ACT07 SRC10 f31=0    170   170    53    25 hold   ★ UNIQUE
+cls0 ACT05 SRC00 f31=0    159   159    53    25 hold   ★ UNIQUE
+cls2 ACT0E SRC07 f31=2    154   154    53    25 hold   ★ UNIQUE
+cls2 ACT00 SRC07 f31=1    148   148    24    14 hold   ★ UNIQUE
+clsA ACT15 SRC10 f31=1    126   126    53    25 hold   ★ UNIQUE
+cls1 ACT0B SRC00 f31=0    115   115    53    25 hold   ★ UNIQUE
+cls2 ACT00 SRC00 f31=0    107   107    53    25 hold   ★ UNIQUE
+cls2 ACT0E SRC07 f31=1    106   106    53    25 hold   ★ UNIQUE
+clsA ACT00 SRC00 f31=0    106   106    53    25 hold   ★ UNIQUE
+clsA ACT15 SRC11 f31=1    106   106    53    25 hold   ★ UNIQUE
+clsA ACT00 SRC07 f31=1    106   106    53    25 hold   ★ UNIQUE
+cls0 ACT07 SRC00 f31=0    106   106    53    25 hold   ★ UNIQUE
+cls1 ACT07 SRC00 f31=0    106   106    53    25 hold   ★ UNIQUE
+cls2 ACT00 SRC00 f31=5    101   101    53    25 hold   ★ UNIQUE
+cls0 ACT01 SRC01 f31=0     88    88    24    14 hold   ★ UNIQUE
+cls1 ACT07 SRC0B f31=0     88    88    24    14 hold   ★ UNIQUE
+clsA ACT08 SRC13 f31=1     88    88    24    14 hold   ★ UNIQUE
+cls2 ACT0D SRC07 f31=0     87    87    53    25 hold   ★ UNIQUE
+cls1 ACT00 SRC00 f31=0     82    82    53    25 hold   ★ UNIQUE
+cls2 ACT07 SRC11 f31=0     81    81    53    25 hold   ★ UNIQUE
+clsA ACT00 SRC08 f31=1     81    81    53    25 hold   ★ UNIQUE
+cls1 ACT15 SRC07 f31=0     80    80    20    13 hold   ★ UNIQUE
+clsA ACT00 SRC00 f31=1     80    80    20    13 hold   ★ UNIQUE
+cls3 ACT0C SRC11 f31=0     80    80    20    13 hold   ★ UNIQUE
+cls2 ACT07 SRC10 f31=1     69    69    29    17 hold   ★ UNIQUE
+clsA ACT15 SRC10 f31=0     68    68    24    14 hold   ★ UNIQUE
+cls2 ACT0E SRC10 f31=0     63    63    53    25 hold   ★ UNIQUE
+cls1 ACT0B SRC10 f31=0     61    61    53    25 hold   ★ UNIQUE
+cls2 ACT15 SRC19 f31=1     61    61    53    25 hold   ★ UNIQUE
+cls2 ACT15 SRC07 f31=2     61    61    53    25 hold   ★ UNIQUE
+clsA ACT15 SRC07 f31=0     57    57    29    17 hold   ★ UNIQUE
+cls0 ACT00 SRC00 f31=5     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT00 SRC1A f31=2     53    53    53    25 hold   ★ UNIQUE
+clsA ACT08 SRC11 f31=1     53    53    53    25 hold   ★ UNIQUE
+clsA ACT19 SRC10 f31=0     53    53    53    25 hold   ★ UNIQUE
+clsA ACT08 SRC07 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT00 SRC07 f31=2     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT15 SRC07 f31=1     53    53    53    25 hold   ★ UNIQUE
+clsA ACT17 SRC10 f31=1     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT15 SRC0B f31=0     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT0D SRC11 f31=1     53    53    53    25 hold   ★ UNIQUE
+clsA ACT0D SRC19 f31=0     53    53    53    25 hold   ★ UNIQUE
+clsA ACT0E SRC10 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls3 ACT00 SRC00 f31=2     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT15 SRC10 f31=1     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT19 SRC0B f31=0     53    53    53    25 hold   ★ UNIQUE
+cls4 ACT00 SRC00 f31=1     53    53    53    25 hold   ★ UNIQUE
+clsA ACT00 SRC08 f31=5     53    53    53    25 hold   ★ UNIQUE
+cls4 ACT00 SRC00 f31=5     53    53    53    25 hold   ★ UNIQUE
+clsA ACT07 SRC08 f31=0     53    53    53    25 hold   ★ UNIQUE
+clsA ACT07 SRC10 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls0 ACT19 SRC00 f31=4     53    53    53    25 hold   ★ UNIQUE
+clsA ACT07 SRC19 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT00 SRC00 f31=5     53    53    53    25 hold   ★ UNIQUE
+clsA ACT1A SRC08 f31=0     53     0    53    25 L,coef[-1]   ⚠ VACUOUS (no row separates the survivors)
+clsA ACT0C SRC08 f31=0     53     0    53    25 L[-1],hold   ⚠ VACUOUS (no row separates the survivors)
+cls8 ACT00 SRC00 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls5 ACT00 SRC00 f31=2     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT0E SRC07 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls9 ACT0C SRC08 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls2 ACT07 SRC00 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls6 ACT07 SRC00 f31=2     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT1B SRC01 f31=1     53    53    53    25 hold   ★ UNIQUE
+cls9 ACT03 SRC07 f31=3     53    53    53    25 hold   ★ UNIQUE
+clsA ACT05 SRC11 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT01 SRC07 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT07 SRC04 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls5 ACT02 SRC10 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT1B SRC06 f31=1     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT07 SRC03 f31=3     53    53    53    25 hold   ★ UNIQUE
+cls9 ACT06 SRC11 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls1 ACT07 SRC02 f31=0     53    53    53    25 hold   ★ UNIQUE
+clsC ACT04 SRC10 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls9 ACT00 SRC00 f31=3     53    53    53    25 hold   ★ UNIQUE
+cls8 ACT00 SRC00 f31=7     53    53    53    25 hold   ★ UNIQUE
+cls9 ACT00 SRC00 f31=0     53    53    53    25 hold   ★ UNIQUE
+cls0 ACT02 SRC00 f31=4     53    53    53    25 hold   ★ UNIQUE
+clsD ACT07 SRC0A f31=6     53    53    53    25 hold   ★ UNIQUE
+cls4 ACT0E SRC07 f31=1     48    48    24    14 hold   ★ UNIQUE
+cls2 ACT0D SRC07 f31=1     29    29    29    17 hold   ★ UNIQUE
+clsA ACT00 SRC08 f31=2     28    28    24    14 hold   ★ UNIQUE
+cls2 ACT00 SRC1C f31=1     28    28    24    14 hold   ★ UNIQUE
+cls0 ACT03 SRC11 f31=0     28    28    24    14 hold   ★ UNIQUE
+cls6 ACT0D SRC13 f31=0     28    28    24    14 hold   ★ UNIQUE
+cls1 ACT07 SRC10 f31=0     28    28    28    16 hold   ★ UNIQUE
+cls1 ACT00 SRC00 f31=1     25    25    25    16 hold   ★ UNIQUE
+cls2 ACT00 SRC00 f31=4     24    24    24    14 hold   ★ UNIQUE
+cls1 ACT07 SRC19 f31=0     24     0    24    14 hold,mem,mem[-1],zero   ⚠ VACUOUS (no row separates the survivors)
+cls1 ACT00 SRC00 f31=4     24     0    24    14 L,hold,mem,mem[-1],zero   ⚠ VACUOUS (no row separates the survivors)
+cls1 ACT1C SRC02 f31=0     20    20    20    13 hold   ★ UNIQUE
+cls2 ACT0B SRC00 f31=1     20    20    20    13 hold   ★ UNIQUE
+cls0 ACT03 SRC11 f31=1     20    20    20    13 hold   ★ UNIQUE
+cls6 ACT07 SRC10 f31=0     20    20    20    13 hold   ★ UNIQUE
+clsA ACT12 SRC10 f31=0     20    20    20    13 hold   ★ UNIQUE
+cls1 ACT19 SRC0B f31=0     18    18     9     7 hold   ★ UNIQUE
+clsA ACT15 SRC19 f31=1     10    10     5     5 hold   ★ UNIQUE
+cls2 ACT19 SRC10 f31=1     10    10     5     5 hold   ★ UNIQUE
+cls1 ACT0B SRC19 f31=0     10    10     5     5 hold   ★ UNIQUE
+cls2 ACT0C SRC11 f31=0      8     8     4     3 hold   ★ UNIQUE
+cls0 ACT1C SRC02 f31=0      4     4     4     3 hold   ★ UNIQUE
+
+★ UNIQUELY DETERMINED GROUPS (one candidate, at least one discriminating row):
+   clsA ACT15 SRC07 f31=1 -> hold          623 rows, 623 discriminating, 53 program(s), iw 87,88,89,90,91,92,93,96
+   cls2 ACT00 SRC00 f31=1 -> hold          242 rows, 242 discriminating, 53 program(s), iw 13,81,86,93,109,114,116,122
+   clsA ACT13 SRC07 f31=0 -> hold          240 rows, 240 discriminating, 24 program(s), iw 89,98,107,116,125,143,152,161
+   clsA ACT12 SRC10 f31=1 -> hold          240 rows, 240 discriminating, 24 program(s), iw 90,99,108,117,126,144,153,162
+   cls2 ACT07 SRC19 f31=0 -> hold          216 rows, 216 discriminating, 24 program(s), iw 97,106,115,124,133,151,160,169
+   cls0 ACT01 SRC00 f31=0 -> hold          183 rows, 183 discriminating, 53 program(s), iw 42,50,69,142
+   cls2 ACT07 SRC10 f31=0 -> hold          170 rows, 170 discriminating, 53 program(s), iw 88,100,101,102,104,117,125,127
+   cls0 ACT05 SRC00 f31=0 -> hold          159 rows, 159 discriminating, 53 program(s), iw 44,52,62
+   cls2 ACT0E SRC07 f31=2 -> hold          154 rows, 154 discriminating, 53 program(s), iw 4,80,113,117,121,128
+   cls2 ACT00 SRC07 f31=1 -> hold          148 rows, 148 discriminating, 24 program(s), iw 90,95,101,104,119,136,142,145
+   clsA ACT15 SRC10 f31=1 -> hold          126 rows, 126 discriminating, 53 program(s), iw 18,23,95,100,118,123
+   cls1 ACT0B SRC00 f31=0 -> hold          115 rows, 115 discriminating, 53 program(s), iw 46,54,84
+   cls2 ACT00 SRC00 f31=0 -> hold          107 rows, 107 discriminating, 53 program(s), iw 57,91,98,103,114,121,126,136
+   cls2 ACT0E SRC07 f31=1 -> hold          106 rows, 106 discriminating, 53 program(s), iw 3,79
+   clsA ACT00 SRC00 f31=0 -> hold          106 rows, 106 discriminating, 53 program(s), iw 14,36
+   clsA ACT15 SRC11 f31=1 -> hold          106 rows, 106 discriminating, 53 program(s), iw 16,17
+   clsA ACT00 SRC07 f31=1 -> hold          106 rows, 106 discriminating, 53 program(s), iw 35,37
+   cls0 ACT07 SRC00 f31=0 -> hold          106 rows, 106 discriminating, 53 program(s), iw 43,51
+   cls1 ACT07 SRC00 f31=0 -> hold          106 rows, 106 discriminating, 53 program(s), iw 58,59
+   cls2 ACT00 SRC00 f31=5 -> hold          101 rows, 101 discriminating, 53 program(s), iw 15,87,140
+   cls0 ACT01 SRC01 f31=0 -> hold          88 rows, 88 discriminating, 24 program(s), iw 97,98,106,138,144,147
+   cls1 ACT07 SRC0B f31=0 -> hold          88 rows, 88 discriminating, 24 program(s), iw 98,99,107,139,145,148
+   clsA ACT08 SRC13 f31=1 -> hold          88 rows, 88 discriminating, 24 program(s), iw 99,100,108,140,146,149
+   cls2 ACT0D SRC07 f31=0 -> hold          87 rows, 87 discriminating, 53 program(s), iw 84,85,86,105,128,137
+   cls1 ACT00 SRC00 f31=0 -> hold          82 rows, 82 discriminating, 53 program(s), iw 49,130,147,152
+   cls2 ACT07 SRC11 f31=0 -> hold          81 rows, 81 discriminating, 53 program(s), iw 11,92,106,121
+   clsA ACT00 SRC08 f31=1 -> hold          81 rows, 81 discriminating, 53 program(s), iw 33,89,103,118
+   cls1 ACT15 SRC07 f31=0 -> hold          80 rows, 80 discriminating, 20 program(s), iw 93,102,134,143
+   clsA ACT00 SRC00 f31=1 -> hold          80 rows, 80 discriminating, 20 program(s), iw 94,103,135,144
+   cls3 ACT0C SRC11 f31=0 -> hold          80 rows, 80 discriminating, 20 program(s), iw 96,105,137,146
+   cls2 ACT07 SRC10 f31=1 -> hold          69 rows, 69 discriminating, 29 program(s), iw 97,102,109,113,120,125,132,133
+   clsA ACT15 SRC10 f31=0 -> hold          68 rows, 68 discriminating, 24 program(s), iw 109,115,123,130,150
+   cls2 ACT0E SRC10 f31=0 -> hold          63 rows, 63 discriminating, 53 program(s), iw 85,86,87,106,129
+   cls1 ACT0B SRC10 f31=0 -> hold          61 rows, 61 discriminating, 53 program(s), iw 26,95,141
+   cls2 ACT15 SRC19 f31=1 -> hold          61 rows, 61 discriminating, 53 program(s), iw 27,96,142
+   cls2 ACT15 SRC07 f31=2 -> hold          61 rows, 61 discriminating, 53 program(s), iw 28,97,143
+   clsA ACT15 SRC07 f31=0 -> hold          57 rows, 57 discriminating, 29 program(s), iw 94,99,108,110,117,122,123,126
+   cls0 ACT00 SRC00 f31=5 -> hold          53 rows, 53 discriminating, 53 program(s), iw 1
+   cls2 ACT00 SRC1A f31=2 -> hold          53 rows, 53 discriminating, 53 program(s), iw 2
+   clsA ACT08 SRC11 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 5
+   clsA ACT19 SRC10 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 6
+   clsA ACT08 SRC07 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 7
+   cls2 ACT00 SRC07 f31=2 -> hold          53 rows, 53 discriminating, 53 program(s), iw 8
+   cls2 ACT15 SRC07 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 9
+   clsA ACT17 SRC10 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 10
+   cls1 ACT15 SRC0B f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 12
+   cls2 ACT0D SRC11 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 19
+   clsA ACT0D SRC19 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 20
+   clsA ACT0E SRC10 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 21
+   cls3 ACT00 SRC00 f31=2 -> hold          53 rows, 53 discriminating, 53 program(s), iw 22
+   cls2 ACT15 SRC10 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 24
+   cls2 ACT19 SRC0B f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 25
+   cls4 ACT00 SRC00 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 29
+   clsA ACT00 SRC08 f31=5 -> hold          53 rows, 53 discriminating, 53 program(s), iw 30
+   cls4 ACT00 SRC00 f31=5 -> hold          53 rows, 53 discriminating, 53 program(s), iw 31
+   clsA ACT07 SRC08 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 32
+   clsA ACT07 SRC10 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 34
+   cls0 ACT19 SRC00 f31=4 -> hold          53 rows, 53 discriminating, 53 program(s), iw 38
+   clsA ACT07 SRC19 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 39
+   cls1 ACT00 SRC00 f31=5 -> hold          53 rows, 53 discriminating, 53 program(s), iw 40
+   cls8 ACT00 SRC00 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 47
+   cls5 ACT00 SRC00 f31=2 -> hold          53 rows, 53 discriminating, 53 program(s), iw 48
+   cls2 ACT0E SRC07 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 108,131,132,138
+   cls9 ACT0C SRC08 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 53
+   cls2 ACT07 SRC00 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 55
+   cls6 ACT07 SRC00 f31=2 -> hold          53 rows, 53 discriminating, 53 program(s), iw 56
+   cls1 ACT1B SRC01 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 61
+   cls9 ACT03 SRC07 f31=3 -> hold          53 rows, 53 discriminating, 53 program(s), iw 63
+   clsA ACT05 SRC11 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 64
+   cls1 ACT01 SRC07 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 65
+   cls1 ACT07 SRC04 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 66
+   cls5 ACT02 SRC10 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 67
+   cls1 ACT1B SRC06 f31=1 -> hold          53 rows, 53 discriminating, 53 program(s), iw 68
+   cls1 ACT07 SRC03 f31=3 -> hold          53 rows, 53 discriminating, 53 program(s), iw 70
+   cls9 ACT06 SRC11 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 71
+   cls1 ACT07 SRC02 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 72
+   clsC ACT04 SRC10 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 73
+   cls9 ACT00 SRC00 f31=3 -> hold          53 rows, 53 discriminating, 53 program(s), iw 74
+   cls8 ACT00 SRC00 f31=7 -> hold          53 rows, 53 discriminating, 53 program(s), iw 75
+   cls9 ACT00 SRC00 f31=0 -> hold          53 rows, 53 discriminating, 53 program(s), iw 76
+   cls0 ACT02 SRC00 f31=4 -> hold          53 rows, 53 discriminating, 53 program(s), iw 77
+   clsD ACT07 SRC0A f31=6 -> hold          53 rows, 53 discriminating, 53 program(s), iw 78
+   cls4 ACT0E SRC07 f31=1 -> hold          48 rows, 48 discriminating, 24 program(s), iw 112,116,120,127
+   cls2 ACT0D SRC07 f31=1 -> hold          29 rows, 29 discriminating, 29 program(s), iw 107,130,131
+   clsA ACT00 SRC08 f31=2 -> hold          28 rows, 28 discriminating, 24 program(s), iw 91,105,120
+   cls2 ACT00 SRC1C f31=1 -> hold          28 rows, 28 discriminating, 24 program(s), iw 107,111,122
+   cls0 ACT03 SRC11 f31=0 -> hold          28 rows, 28 discriminating, 24 program(s), iw 110,114,125
+   cls6 ACT0D SRC13 f31=0 -> hold          28 rows, 28 discriminating, 24 program(s), iw 111,115,126
+   cls1 ACT07 SRC10 f31=0 -> hold          28 rows, 28 discriminating, 28 program(s), iw 135,148
+   cls1 ACT00 SRC00 f31=1 -> hold          25 rows, 25 discriminating, 25 program(s), iw 131,153
+   cls2 ACT00 SRC00 f31=4 -> hold          24 rows, 24 discriminating, 24 program(s), iw 134
+   cls1 ACT1C SRC02 f31=0 -> hold          20 rows, 20 discriminating, 20 program(s), iw 84
+   cls2 ACT0B SRC00 f31=1 -> hold          20 rows, 20 discriminating, 20 program(s), iw 87
+   cls0 ACT03 SRC11 f31=1 -> hold          20 rows, 20 discriminating, 20 program(s), iw 118
+   cls6 ACT07 SRC10 f31=0 -> hold          20 rows, 20 discriminating, 20 program(s), iw 119
+   clsA ACT12 SRC10 f31=0 -> hold          20 rows, 20 discriminating, 20 program(s), iw 128
+   cls1 ACT19 SRC0B f31=0 -> hold          18 rows, 18 discriminating, 9 program(s), iw 89,91,112,137
+   clsA ACT15 SRC19 f31=1 -> hold          10 rows, 10 discriminating, 5 program(s), iw 90,113
+   cls2 ACT19 SRC10 f31=1 -> hold          10 rows, 10 discriminating, 5 program(s), iw 92,115
+   cls1 ACT0B SRC19 f31=0 -> hold          10 rows, 10 discriminating, 5 program(s), iw 93,116
+   cls2 ACT0C SRC11 f31=0 -> hold          8 rows, 8 discriminating, 4 program(s), iw 94,140
+   cls0 ACT1C SRC02 f31=0 -> hold          4 rows, 4 discriminating, 4 program(s), iw 85
+   ⚠ One program is NOT a decode.  Re-run with traces from several programs and
+     only believe a group whose `progs' count is > 1.

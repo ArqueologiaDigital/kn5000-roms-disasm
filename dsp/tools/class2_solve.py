@@ -131,6 +131,30 @@ CANDIDATES = [
 ]
 
 
+#  ★ THE TEMP-REGISTER ALGEBRA (--target ta|tb).  Same machinery, different left-hand side:
+#  which ACT codes WRITE tempA / tempB, and with what.  This matters because four separate
+#  groups in the accumulator table are tied ONLY because tempA is zero in every capture
+#  (N-DEVICE-ALGEBRA-EXTRACTED §6), and the reason it is zero is itself a decode question:
+#  MEASURED on the chorus kernel, `iw38' captures the live audio datum into tempA (0x674DA9)
+#  and `iw45' (clsA ACT0C SRC08 f31=0) overwrites it with ZERO nine words later, so the body
+#  never sees it.  Explaining what ACT 0x0C writes is therefore the same question as unlocking
+#  those four rows.  Values here are 24-bit datum scale, not accumulator scale.
+TCANDIDATES = [
+    ("hold",         lambda p, c, t: s24(p[t])),
+    ("acc_datum",    lambda p, c, t: p["acc"] >> BUS),
+    ("P_datum",      lambda p, c, t: p["p"] >> BUS),
+    ("L",            lambda p, c, t: c["l"]),
+    ("L[-1]",        lambda p, c, t: p["l"]),
+    ("mem",          lambda p, c, t: s24(c["mem"])),
+    ("mem[-1]",      lambda p, c, t: s24(p["mem"])),
+    ("coef",         lambda p, c, t: s24(c["coef"])),
+    ("coef[-1]",     lambda p, c, t: s24(p["coef"])),
+    ("zero",         lambda p, c, t: 0),
+    ("other_temp",   lambda p, c, t: s24(p["tb" if t == "ta" else "ta"])),
+    ("accb_datum",   lambda p, c, t: p["accb"] >> BUS),
+]
+
+
 def key_of(r):
     _hi, f31, cls, _a8, src, act = fields(r)
     return (cls, act, src, f31)
@@ -157,7 +181,7 @@ def config_of(path):
 
 def main():
     argv = sys.argv[1:]
-    VALUED = {"--lo", "--hi", "--cls", "--min-rows", "--sat"}   # flags that consume the next argument
+    VALUED = {"--lo", "--hi", "--cls", "--min-rows", "--sat", "--target"}   # flags that consume the next argument
     logs, skip = [], False
     for i, a in enumerate(argv):
         if skip:
@@ -174,6 +198,9 @@ def main():
     want_cls = opt("--cls", 2)
     min_rows = opt("--min-rows", 4)
     all_classes = "--all-classes" in argv
+    target = argv[argv.index("--target") + 1] if "--target" in argv else "acc"
+    if target not in ("acc", "ta", "tb"):
+        print("--target must be acc, ta or tb"); return 2
     global SAT
     SAT = opt("--sat", 0)
     show_unexp = "--show-unexplained" in argv
@@ -198,12 +225,21 @@ def main():
             if not all_classes and cls != want_cls:
                 continue
             vals = {}
-            for name, fn in CANDIDATES:
-                try:
-                    vals[name] = clamp(fn(prev, cur))
-                except Exception:
-                    pass
-            ok = {n for n, v in vals.items() if v == cur["acc"]}
+            if target == "acc":
+                for name, fn in CANDIDATES:
+                    try:
+                        vals[name] = clamp(fn(prev, cur))
+                    except Exception:
+                        pass
+                measured = cur["acc"]
+            else:
+                for name, fn in TCANDIDATES:
+                    try:
+                        vals[name] = fn(prev, cur, target)
+                    except Exception:
+                        pass
+                measured = s24(cur[target])
+            ok = {n for n, v in vals.items() if v == measured}
             k = key_of(cur)
             g = groups.setdefault(k, dict(n=0, ok=None, disc=0, progs=set(), cfgs=set(),
                                           iws=set(), vals=[], rows=[]))
@@ -238,8 +274,8 @@ def main():
             g["disc"] = sum(1 for vals in g["vals"]
                             if len({vals[n] for n in surv if n in vals}) > 1)
 
-    print("class2_solve: %d log(s), iw %d..%d, class %s\n"
-          % (len(logs), lo, hi, "ALL" if all_classes else want_cls))
+    print("class2_solve: %d log(s), iw %d..%d, class %s, target %s\n"
+          % (len(logs), lo, hi, "ALL" if all_classes else want_cls, target))
     print("device configurations in this corpus: %d" % len(all_cfgs))
     for cfg, tags in sorted(all_cfgs.items(), key=lambda kv: -len(kv[1])):
         print("   %-3d capture(s)  %s" % (len(tags), ", ".join("%s=%s" % a for a in cfg) or "(no arms)"))
