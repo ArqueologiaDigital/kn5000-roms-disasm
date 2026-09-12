@@ -59,6 +59,19 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
+   ⛔⛔ **§35: THE CATALOGUE DISQUALIFIES `CALLFLUSH` + bit 28 ON TEN PROGRAMS.** Every modulation
+   program loses its LFO (chorus, modulated chorus, flanger, phaser, ensemble all freeze at phase
+   0) and the **EQ gains nine railed cells**. The three that pass are exactly the three with no
+   LFO word and no biquad. ★ The EQ result **refines** §32 rather than erasing it: the five band
+   `x` cells *do* each get one clean copy, and nine OTHER cells rail — **delivery right,
+   downstream gain too high**, which is a far narrower problem than "nothing reaches the bands"
+   and is where the EQ thread resumes. Instruments: `dsp/tools/catalogue_regression.sh` +
+   `regression_report.py` (ten programs, TYPE 0–8 + 15, chosen because `TYPE_MAP.md` is off by
+   one above index 8 and 15 is one of its two measured controls).
+   ⚠ Two instrument bugs that table exposed, both fixed: the LFO column **only fired when the
+   baseline had a ramp to lose** (and the baseline's phase already wanders, so it stayed silent on
+   a candidate known to freeze it), and then it **over-fired** on programs with no LFO word at all.
+
    ⛔⛔ **§32's HEADLINE IS RETRACTED BY §34 — there is NO configuration that passes.** The chorus
    criterion I used was the phase cell's **within-frame delta**, and `iw89` loads the increment
    while `iw91` stores it, so it reads **114 even when the phase is reset to zero every frame**.
