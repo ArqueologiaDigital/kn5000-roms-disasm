@@ -854,6 +854,25 @@ must be followed by a regression over the other programs, not shipped.
 ⚠ Grade: the per-word derivation is READ from measured columns; the three predictions are
 predictions, recorded before the build.
 
+## 26. THE REFERENCE TABLE, all three criteria, one binary
+The gate's chorus half now carries its own liveness (§22 showed the phase landmark alone is a
+starvation signature). Measured with `UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1
+UPD6383_SPEC=B9108446A39B440F`:
+
+| configuration | chorus increment | chorus body | EQ body |
+|---|---|---|---|
+| no flush | **3 129 519** ⛔ | LIVE — 4 of 17 cells, 24 of 70 rows | LIVE — **39 of 44 cells, 105 of 105 rows** |
+| `+ CALLFLUSH=1` | **114** ✅ | LIVE — 3 of 17 cells, 21 of 70 rows | **2 of 44 cells, 9 of 105 rows** |
+
+★ Both configurations leave the **chorus body live**, so the chorus's liveness half does not
+discriminate between them — the discrimination is entirely in the phase and in the EQ. That is
+worth stating because it means §19's original evidence ("body live **and** phase 114") was, on
+this measurement, one real criterion and one that the baseline also passes.
+
+Artefacts: `data/pair_gate_v2_3criteria_2026-09-12.txt`, `data/pg_v2_*_cho*_2026-09-12.log.gz`.
+⚠ Grade: MEASURED. The run was stopped after these two configurations; `pclr` and `spec12` already
+have their phase and EQ numbers in §22/§9 and only their chorus-liveness half is missing.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
