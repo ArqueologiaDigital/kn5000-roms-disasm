@@ -916,6 +916,43 @@ is about the **bus term**, not about product lifetime. ⇒ the next round belong
 ⚠ Grade: MEASURED (`data/pg_v3_triple_*`). The prediction it refutes was recorded in §25 before the
 build, and the refutation is of my derivation, not of the instrument.
 
+## 28. ★★ THE COMPLETE MATRIX — and `CALLACC` is a MEASURED NO-OP
+Seven configurations, one binary, one session, baseline arms `UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1
+UPD6383_LO12CAP=1`. Criterion (A) is the chorus's LFO increment (114 at rest) *and* its body
+liveness; criterion (B) is the EQ's body liveness.
+
+| configuration | chorus increment | chorus body (cells/rows) | EQ body (cells/rows) |
+|---|---|---|---|
+| baseline (`SPEC …440F`) | 3 129 519 ⛔ | 4 of 17 / 24 of 70 | **39 of 44 / 105 of 105** |
+| `+ CALLACC=1` | **3 129 519** | **4 of 17 / 24 of 70** | **39 of 44 / 105 of 105** |
+| `+ CALLFLUSH=1` | **114** ✅ | 3 of 17 / 21 of 70 | 2 of 44 / 9 of 105 |
+| `+ PCLR=1` | **114** ✅ | — | 0 / 0 ⛔ |
+| `SPEC` bit 12 (cursor seed cleared) | **114** ✅ | — | 0 / 0 ⛔ |
+| `SPEC` bit 55 (§138) alone | 168 353 ⛔ | 5 of 17 / 64 of 70 | 0 / 0 ⛔ |
+| `CALLFLUSH + CALLACC + §138` | 5 211 349 ⛔ | 5 of 17 / 64 of 70 | 0 / 0 ⛔ |
+
+★★ **`UPD6383_CALLACC` is identical to the baseline on every one of the three criteria** — the
+same increment to the unit, the same 4 cells and 24 rows, the same 39 and 105. Clearing the
+accumulator at the block CALL **changes nothing**, because the body's first two words overwrite it
+anyway (`iw84`/`iw85` load the bus or a product). ⇒ **§24's premise is vacuous: the accumulator
+does not carry across a block boundary in any observable way, so there is nothing there to clear.**
+That is a clean negative, and it is only visible because the gate measures all three criteria at
+once — a single-criterion run would have called it "no regression".
+
+⛔ **§138 is refuted on its own**, not only inside the triple: the EQ goes bit-identical and the
+chorus increment is wrong. The mechanism is §27's — with `iw85`'s LOAD turned into a HOLD the body
+entry counts the same bus datum three times and `iw88`'s store rails the pickup cell at
+`0x7FFFFF`. **The long-standing "a LOAD that brought no fresh product is an erasure" candidate is
+dead as a blanket rule**, and its blast radius (35.5 % of the corpus) is why.
+
+⇒ What stands after seven configurations: **nothing passes both criteria**, the one configuration
+with a live EQ still has the wrong chorus phase, and the live question has moved off product
+lifetime entirely and onto the **bus term at the body entry** — at most one of §27's three
+readings can be right as it stands.
+
+⚠ Grade: MEASURED. `data/pair_gate_v3_matrix_2026-09-12.txt`, `data/pg_v3_*_2026-09-12.log.gz`,
+`data/pair_gate_v2_3criteria_2026-09-12.txt`, `data/pair_gate_3configs_2026-09-12.txt`.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
