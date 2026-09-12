@@ -24,7 +24,7 @@ QUESTION IT ANSWERS
 
 USAGE
     python3 dsp/tools/class2_solve.py trace1.log [trace2.log ...] [--cls 2] [--lo 84] [--hi 400]
-        [--all-classes] [--min-rows 4] [--show-unexplained]
+        [--all-classes] [--min-rows 4] [--show-unexplained] [--split-config]
 
     Traces are `error.log' from a run with -log and UPD6383_TRACE_FRAME set (see
     dsp/tools/pair_gate.sh / dlyseed_run.sh for the capture recipe).  Pass SEVERAL programs'
@@ -48,6 +48,10 @@ USAGE
           which is how the combined `acc + P + (L << 16)' form was found.
     To make a statement about the CHIP you still need the oracle: run the same program through
     the HLE and compare what it computes, not what the device computed.
+
+  ★ --split-config keys every group by the device arms the capture was taken with, so a ⛔ that is
+    really "two different emulators pooled" resolves into one clean row per machine.  Use it the
+    moment a group with many rows reports that no candidate explains them all.
 
 READS, NOT ASSUMES
     acc, P, L, mem, accb, tA and tB all come from the trace columns.  The candidate algebra is
@@ -94,6 +98,10 @@ CANDIDATES = [
     ("mem<<16",      lambda p, c: s24(c["mem"]) << BUS),
     ("acc*2",        lambda p, c: p["acc"] * 2),
     ("acc>>1",       lambda p, c: p["acc"] >> 1),
+    #  the deeper post-sum scales UPD6383_C8SHIFT sweeps; without these a capture taken at
+    #  C8SHIFT = 2 or 3 reports "no candidate explains" for a word the device is simply scaling.
+    ("acc>>2",       lambda p, c: p["acc"] >> 2),
+    ("acc>>3",       lambda p, c: p["acc"] >> 3),
     ("zero",         lambda p, c: 0),
     ("accb",         lambda p, c: p["accb"]),
     ("acc+accb",     lambda p, c: p["acc"] + p["accb"]),
@@ -181,7 +189,8 @@ def config_of(path):
 
 def main():
     argv = sys.argv[1:]
-    VALUED = {"--lo", "--hi", "--cls", "--min-rows", "--sat", "--target"}   # flags that consume the next argument
+    VALUED = {"--lo", "--hi", "--cls", "--min-rows", "--sat", "--target"}
+    split_cfg = "--split-config" in argv   # key groups by device configuration too   # flags that consume the next argument
     logs, skip = [], False
     for i, a in enumerate(argv):
         if skip:
@@ -240,7 +249,7 @@ def main():
                         pass
                 measured = s24(cur[target])
             ok = {n for n, v in vals.items() if v == measured}
-            k = key_of(cur)
+            k = key_of(cur) + ((cfg,) if split_cfg else ())
             g = groups.setdefault(k, dict(n=0, ok=None, disc=0, progs=set(), cfgs=set(),
                                           iws=set(), vals=[], rows=[]))
             g["n"] += 1
@@ -291,8 +300,10 @@ def main():
         g = groups[k]
         if g["n"] < min_rows:
             continue
-        cls, act, src, f31 = k
+        cls, act, src, f31 = k[:4]
         name = "cls%X ACT%02X SRC%02X f31=%d" % (cls, act, src, f31)
+        if split_cfg:
+            name += " @" + (",".join("%s=%s" % a for a in k[4]) or "bare")
         surv = sorted(g["ok"])
         note = ""
         if not surv:

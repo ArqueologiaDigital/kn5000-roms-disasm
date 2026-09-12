@@ -1,4 +1,4 @@
-class2_solve: 104 log(s), iw 84..400, class ALL
+class2_solve: 104 log(s), iw 84..400, class ALL, target acc
 
 device configurations in this corpus: 52
    15  capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
@@ -137,5 +137,3 @@ clsA ACT15 SRC10 f31=1     20    20     5     5 acc+P   ★ UNIQUE
    clsA ACT15 SRC10 f31=1 -> acc+P         20 rows, 20 discriminating, 5 program(s), iw 95,100,118,123
    ⚠ One program is NOT a decode.  Re-run with traces from several programs and
      only believe a group whose `progs' count is > 1.
-
-⛔ 50 row(s) no candidate explains -- the algebra is incomplete there.

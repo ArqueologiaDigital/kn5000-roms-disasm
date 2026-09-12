@@ -1,4 +1,4 @@
-class2_solve: 104 log(s), iw 84..400, class 2
+class2_solve: 104 log(s), iw 84..400, class 2, target acc
 
 device configurations in this corpus: 52
    15  capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
