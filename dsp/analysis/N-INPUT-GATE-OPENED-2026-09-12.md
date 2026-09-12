@@ -553,6 +553,60 @@ which reading?** Every one of those words is in the corpus, the trace records `P
 the two-sided test is unchanged. ⚠ Grade: MEASURED refutation with a fired count; the arm stays
 default-off with its record.
 
+## 19. ★★★ THE THREE READINGS ARE MUTUALLY CONSISTENT — body LIVE **and** phase EXACT
+§16 concluded "the gate arm breaks the LFO phase" and §18 concluded "the pipeline-flush hypothesis
+is refuted". **Both are wrong, and the experiment that shows it also closes the loop.**
+
+Dumping `P` row by row at the body's entry under each arm separately shows two *different* paths
+to the same contamination:
+
+```
+CALLFLUSH only:  iw84 P = 0                  <- the flush DOES work
+                 iw86 P = 319 452 807 168     <- ACT 0x0E under the SHIPPED reading (P <- bus)
+                                                 re-creates it: L << 16, exactly
+                 iw88 LOAD acc <- P           -> phase destroyed
+sel0e=4 only:    iw84 P = 102 544 344 703     <- inherited; nothing flushed it
+                 iw86 P unchanged             <- this reading does NOT write P
+                 iw88 LOAD acc <- P           -> phase destroyed
+```
+
+Each arm closes one path and leaves the other open — which is exactly why each looked like a
+failure on its own. **Together** (`UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 UPD6383_SPEC=…8446…`):
+
+```
+iw84  P = 0     iw86  P = 0     iw88  acc = 0, P = 0
+iw89  acc = 7 471 104 = 114 << 16        <- identical to the STARVED baseline
+iw91  phase cell 2ABB66 -> 2ABBD8        <- +114
+```
+
+and the frame pair, the other half of the two-sided test:
+
+```
+cells seen 17, MOVED 3:  0x05 4 874 463 -> 4 872 698   (the pickup: live audio)
+                         0x07 2 800 486 -> 2 800 600   (+114, the phase)
+                         0x10 2 800 600 -> 2 800 714   (+114, its published copy)
+rows differing: 21 of 70        ✅ the body is LIVE
+```
+
+**Both criteria pass at once, for the first time:** the effect body runs on live audio **and** the
+LFO phase advances by exactly 114 per frame — the bytecode's constant, the HLE's increment, the
+panel's rate. The phase cell and its published copy each step by the increment while the input cell
+carries changing audio.
+
+⇒ **§16 corrected:** the gate arm does not break the phase; it breaks it *only in combination with*
+the shipped `ACT 0x0E` reading and an un-flushed product.
+⇒ **§18 corrected:** `CALLFLUSH` is not refuted; it is **necessary**. It was refuted only as a
+*solo* fix, which is a different claim and the one I should have made.
+⇒ Three readings that individually looked destructive or inert — the `ACT 0x19` capture, the block
+CALL's product flush, and `ACT 0x0E = mem[ptr] ← bus` — are **mutually consistent**, and each was
+needed for the other two to show their value.
+
+⚠ What this is NOT: proof that any of the three is the chip's. It is a configuration in which two
+independent criteria hold simultaneously where previously no configuration satisfied both, and in
+which the numbers at the LFO block are bit-identical to the starved baseline that matched the HLE.
+That is the strongest joint evidence any of these codes has, and it is still three speculative
+readings standing together. All three remain default-off.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
