@@ -1,0 +1,141 @@
+class2_solve: 104 log(s), iw 84..400, class ALL
+
+device configurations in this corpus: 52
+   15  capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   6   capture(s)  UPD6383_DSCRING=1, UPD6383_STPROBE=1
+   6   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   5   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   5   capture(s)  UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   5   capture(s)  (no arms)
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C6LUT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C6LUT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB1108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C6LUT=1, UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DLY07DRAM=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_FMTBIT=1, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_MULALL=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_NOTA0C=1, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=2, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=3, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_C8SHIFT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   2   capture(s)  UPD6383_SPEC=0x6A39B440F
+   2   capture(s)  UPD6383_SPEC=0x46A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_SPEC=0xB910E446A79B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x30E446A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB9108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C6LUT=1, UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB1108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x110E446A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_NOZ05=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1, UPD6383_XB85=1
+   1   capture(s)  UPD6383_SPEC=0x1003C6A39B440F
+   1   capture(s)  UPD6383_DRPUB=1, UPD6383_DSCRING=1, UPD6383_NOZ05=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DRPUB=1, UPD6383_DSCRING=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DRPUB=1, UPD6383_DSCRING=1, UPD6383_SRC0B2=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1, UPD6383_XB85=2
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EQSCALE=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C8SHIFT=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C8SHIFT=2, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_C8SHIFT=1, UPD6383_CALLFLUSH=1, UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_LO12CAP=1, UPD6383_PSHIFT=2, UPD6383_SPEC=0xB1108446A39B440F, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=1, UPD6383_PICKUP=1, UPD6383_STPROBE=1, UPD6383_XB85=3
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_EPIBUS=1, UPD6383_NOZ05=2, UPD6383_PICKUP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_NOCARRY=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_LFOWRAP=1, UPD6383_PSHIFT=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x6A39F440F
+   1   capture(s)  UPD6383_SPEC=0x10E446A39B440F
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_FMTBIT=2, UPD6383_LFOWRAP=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_DSCRING=1, UPD6383_SRC0B2=1, UPD6383_STPROBE=1
+   1   capture(s)  UPD6383_SPEC=0x800046A39B440F
+   ⚠ MORE THAN ONE CONFIGURATION.  A group spanning several is comparing different
+     machines; read its `cfgs' column before believing a ⛔.
+
+cls/ACT/SRC/f31          rows  disc progs  cfgs surviving candidates
+----------------------------------------------------------------------------------------------------
+clsA ACT15 SRC07 f31=1    623   623    53    25 acc+P   ★ UNIQUE
+clsA ACT13 SRC07 f31=0    240   240    24    14 P   ★ UNIQUE
+clsA ACT12 SRC10 f31=1    240   240    24    14 acc+P   ★ UNIQUE
+clsA ACT14 SRC07 f31=1    240   240    24    14 acc+P   ★ UNIQUE
+cls2 ACT07 SRC1A f31=1    240   240    24    14 acc+P   ★ UNIQUE
+cls8 ACT15 SRC10 f31=2    240     0    24    14 (none)   ⛔ NO CANDIDATE EXPLAINS EVERY ROW (the algebra is incomplete here)
+clsA ACT07 SRC10 f31=1    240   240    24    14 acc+P   ★ UNIQUE
+cls2 ACT07 SRC19 f31=0    216   216    24    14 P   ★ UNIQUE
+cls2 ACT07 SRC10 f31=0    170   170    53    25 P   ★ UNIQUE
+cls2 ACT00 SRC07 f31=1    148   148    24    14 acc+P+L<<16   ★ UNIQUE
+cls2 ACT00 SRC00 f31=1    136   136    48    24 acc+P+L<<16   ★ UNIQUE
+cls0 ACT01 SRC01 f31=0     88    88    24    14 hold   ★ UNIQUE
+cls1 ACT07 SRC0B f31=0     88    88    24    14 P   ★ UNIQUE
+clsA ACT08 SRC13 f31=1     88     0    24    14 acc*2,acc+P,acc+P+L<<16,acc+P+tA<<16,acc+P-L<<16   ⚠ VACUOUS (no row separates the survivors)
+cls1 ACT15 SRC07 f31=0     80    80    20    13 P   ★ UNIQUE
+clsA ACT00 SRC00 f31=1     80    80    20    13 acc+P+L<<16   ★ UNIQUE
+cls3 ACT0C SRC11 f31=0     80     0    20    13 acc+tA<<16,acc+tA[-1]<<16,acc-tA<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT07 SRC10 f31=1     69    69    29    17 acc+P   ★ UNIQUE
+clsA ACT15 SRC10 f31=0     68    68    24    14 P   ★ UNIQUE
+cls2 ACT0D SRC07 f31=0     63    63    53    25 L<<16   ★ UNIQUE
+cls2 ACT0E SRC10 f31=0     63     0    53    25 P,acc+P-L<<16   ⚠ VACUOUS (no row separates the survivors)
+clsA ACT15 SRC07 f31=0     57    57    29    17 P   ★ UNIQUE
+cls2 ACT00 SRC00 f31=0     54    54    29    15 P+L<<16   ★ UNIQUE
+cls2 ACT0E SRC07 f31=0     53    53    53    25 P   ★ UNIQUE
+cls4 ACT0E SRC07 f31=1     48     0    24    14 acc+P,acc+P+tA<<16   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT0E SRC07 f31=2     48     0    24    14 acc+tA<<16,acc+tA[-1]<<16,acc-tA<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT00 SRC00 f31=5     48     0    24    14 acc+P+L<<16,acc+P+mem<<16   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT0D SRC07 f31=1     29    29    29    17 L<<16   ★ UNIQUE
+cls1 ACT00 SRC00 f31=0     29     0    29    17 P,P+L<<16   ⚠ VACUOUS (no row separates the survivors)
+clsA ACT00 SRC08 f31=1     28    28    24    14 acc+P+L<<16   ★ UNIQUE
+clsA ACT00 SRC08 f31=2     28    28    24    14 mem<<16   ★ UNIQUE
+cls2 ACT07 SRC11 f31=0     28     0    24    14 P,acc+P-L<<16   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT00 SRC1C f31=1     28     0    24    14 acc+P,acc+P+L<<16,acc+P+tA<<16,acc+P-L<<16   ⚠ VACUOUS (no row separates the survivors)
+cls0 ACT03 SRC11 f31=0     28     0    24    14 acc+tA<<16,acc+tA[-1]<<16,acc-tA<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+cls6 ACT0D SRC13 f31=0     28     0    24    14 acc+tA<<16,acc+tA[-1]<<16,acc-tA<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+cls1 ACT07 SRC10 f31=0     28    28    28    16 P   ★ UNIQUE
+cls1 ACT00 SRC00 f31=1     25     0    25    16 acc*2,acc+P,acc+P+L<<16,acc+P+mem<<16,acc+P-L<<16   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT00 SRC00 f31=4     24    24    24    14 P+L<<16   ★ UNIQUE
+cls0 ACT01 SRC00 f31=0     24    24    24    14 hold   ★ UNIQUE
+cls1 ACT07 SRC19 f31=0     24    24    24    14 P   ★ UNIQUE
+cls1 ACT00 SRC00 f31=4     24     0    24    14 (acc+P)>>1,P,P+L<<16,acc+L<<16,acc+mem<<16,acc+tB<<16,acc+tB[-1]<<16,acc-L<<16,acc-tB<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+cls2 ACT0B SRC00 f31=1     20     0    20    13 acc+P,acc+P+tA<<16   ⚠ VACUOUS (no row separates the survivors)
+cls0 ACT03 SRC11 f31=1     20     0    20    13 acc+tA<<16,acc+tA[-1]<<16,acc-tA<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+cls6 ACT07 SRC10 f31=0     20     0    20    13 acc+tA<<16,acc+tA[-1]<<16,acc-tA<<16,hold   ⚠ VACUOUS (no row separates the survivors)
+clsA ACT12 SRC10 f31=0     20    20    20    13 P   ★ UNIQUE
+clsA ACT15 SRC10 f31=1     20    20     5     5 acc+P   ★ UNIQUE
+
+★ UNIQUELY DETERMINED GROUPS (one candidate, at least one discriminating row):
+   clsA ACT15 SRC07 f31=1 -> acc+P         623 rows, 623 discriminating, 53 program(s), iw 87,88,89,90,91,92,93,96
+   clsA ACT13 SRC07 f31=0 -> P             240 rows, 240 discriminating, 24 program(s), iw 89,98,107,116,125,143,152,161
+   clsA ACT12 SRC10 f31=1 -> acc+P         240 rows, 240 discriminating, 24 program(s), iw 90,99,108,117,126,144,153,162
+   clsA ACT14 SRC07 f31=1 -> acc+P         240 rows, 240 discriminating, 24 program(s), iw 92,101,110,119,128,146,155,164
+   cls2 ACT07 SRC1A f31=1 -> acc+P         240 rows, 240 discriminating, 24 program(s), iw 94,103,112,121,130,148,157,166
+   clsA ACT07 SRC10 f31=1 -> acc+P         240 rows, 240 discriminating, 24 program(s), iw 96,105,114,123,132,150,159,168
+   cls2 ACT07 SRC19 f31=0 -> P             216 rows, 216 discriminating, 24 program(s), iw 97,106,115,124,133,151,160,169
+   cls2 ACT07 SRC10 f31=0 -> P             170 rows, 170 discriminating, 53 program(s), iw 88,100,101,102,104,117,125,127
+   cls2 ACT00 SRC07 f31=1 -> acc+P+L<<16   148 rows, 148 discriminating, 24 program(s), iw 90,95,101,104,119,136,142,145
+   cls2 ACT00 SRC00 f31=1 -> acc+P+L<<16   136 rows, 136 discriminating, 48 program(s), iw 86,93,109,114,116,122,124,127
+   cls0 ACT01 SRC01 f31=0 -> hold          88 rows, 88 discriminating, 24 program(s), iw 97,98,106,138,144,147
+   cls1 ACT07 SRC0B f31=0 -> P             88 rows, 88 discriminating, 24 program(s), iw 98,99,107,139,145,148
+   cls1 ACT15 SRC07 f31=0 -> P             80 rows, 80 discriminating, 20 program(s), iw 93,102,134,143
+   clsA ACT00 SRC00 f31=1 -> acc+P+L<<16   80 rows, 80 discriminating, 20 program(s), iw 94,103,135,144
+   cls2 ACT07 SRC10 f31=1 -> acc+P         69 rows, 69 discriminating, 29 program(s), iw 97,102,109,113,120,125,132,133
+   clsA ACT15 SRC10 f31=0 -> P             68 rows, 68 discriminating, 24 program(s), iw 109,115,123,130,150
+   cls2 ACT0D SRC07 f31=0 -> L<<16         63 rows, 63 discriminating, 53 program(s), iw 85,86,105,128,137
+   clsA ACT15 SRC07 f31=0 -> P             57 rows, 57 discriminating, 29 program(s), iw 94,99,108,110,117,122,123,126
+   cls2 ACT00 SRC00 f31=0 -> P+L<<16       54 rows, 54 discriminating, 29 program(s), iw 91,98,103,114,121,126,136
+   cls2 ACT0E SRC07 f31=0 -> P             53 rows, 53 discriminating, 53 program(s), iw 108,131,132,138
+   cls2 ACT0D SRC07 f31=1 -> L<<16         29 rows, 29 discriminating, 29 program(s), iw 107,130,131
+   clsA ACT00 SRC08 f31=1 -> acc+P+L<<16   28 rows, 28 discriminating, 24 program(s), iw 89,103,118
+   clsA ACT00 SRC08 f31=2 -> mem<<16       28 rows, 28 discriminating, 24 program(s), iw 91,105,120
+   cls1 ACT07 SRC10 f31=0 -> P             28 rows, 28 discriminating, 28 program(s), iw 135,148
+   cls2 ACT00 SRC00 f31=4 -> P+L<<16       24 rows, 24 discriminating, 24 program(s), iw 134
+   cls0 ACT01 SRC00 f31=0 -> hold          24 rows, 24 discriminating, 24 program(s), iw 142
+   cls1 ACT07 SRC19 f31=0 -> P             24 rows, 24 discriminating, 24 program(s), iw 187
+   clsA ACT12 SRC10 f31=0 -> P             20 rows, 20 discriminating, 20 program(s), iw 128
+   clsA ACT15 SRC10 f31=1 -> acc+P         20 rows, 20 discriminating, 5 program(s), iw 95,100,118,123
+   ⚠ One program is NOT a decode.  Re-run with traces from several programs and
+     only believe a group whose `progs' count is > 1.
+
+⛔ 50 row(s) no candidate explains -- the algebra is incomplete there.

@@ -82,7 +82,9 @@ confined to the boundary words. §4 is a MEASURED negative result about the audi
 RETRACTED in full (two readings, both wrong: the census max is a stale speculative offset, the
 seed-residue was noise) — the realized line depth is UNMEASURED. No decode was changed; DLYSEED2 is
 a pure observation diagnostic. (`dlyseed_confront.py` now also names 2 of §3's 7 boundary rows as
-the device's "bus-add" form `acc += L<<16`, leaving 5 boundary words — same residue, finer label.)
+the device's "bus-add" form — corrected here to the form the tool actually tests and
+`N-DEVICE-ALGEBRA-EXTRACTED` §3 confirms on 442 rows: **`acc ← acc[N−1] + P[N−1] + (L[N] << 16)`**,
+not `acc += L<<16`; the product term is part of it — leaving 5 boundary words, same residue, finer label.)
 
 ## 6. Net result toward full LLE
 The single delay's **arithmetic core is confirmed decoded** (multiplier + one-slot accumulator,

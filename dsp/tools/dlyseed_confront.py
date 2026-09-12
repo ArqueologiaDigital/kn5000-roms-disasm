@@ -69,7 +69,11 @@ def parse(path):
         n, iw, u1, word, dp, mem, acc, accb, p, cur, coef, ta, tb, mul, l = m.groups()
         rows.append(dict(n=int(n), iw=int(iw), u1=int(u1), word=word, dp=int(dp, 16),
                          mem=int(mem, 16), acc=int(acc), accb=int(accb), p=int(p),
-                         cur=int(cur, 16), coef=int(coef, 16), mul=(mul == "Y"), l=int(l)))
+                         cur=int(cur, 16), coef=int(coef, 16), mul=(mul == "Y"), l=int(l),
+                         #  the two TEMP registers, kept so class2_solve.py can test the
+                         #  tempA/tempB transitions -- SRC 0x19/0x1A name them and 456 of the
+                         #  solver's unexplained rows sit on exactly those two codes.
+                         ta=int(ta, 16), tb=int(tb, 16)))
     parse.ages = ages
     return rows
 

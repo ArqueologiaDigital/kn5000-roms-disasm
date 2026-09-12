@@ -26,9 +26,27 @@
 #
 # Frame schedule is fx_ab.lua's own: NOTE ON at 36.0 s + 0.2 s x TYPEIDX, trace armed 1.0 s later
 # (RULE 12 -- a DSP test with no notes playing is not a test).  Visible window, timeout-wrapped.
+#
+# ⚠⚠ THE BASELINE ARMS ARE NOT OPTIONAL, and leaving them out cost a whole gate run.
+#   UPD6383_PSHIFT=2   -- §227's total-23 multiply scale.  At the shipped total-22 the EQ's
+#                         pickup arrives PINNED at full scale and every band rails.
+#   UPD6383_C8SHIFT=1  -- §2 of the handover banner: `acc >>= 1' on the class-8 post-sum word is
+#                         the unique small integer that un-rails the EQ (0 leaves 33 rows at full
+#                         scale; 1 propagates all five bands).
+# Without them criterion (B) reports the EQ body STATIC no matter what the product register does,
+# which reads as "this arm starves the EQ" when the real cause is the scale.  MEASURED: the first
+# run of this script omitted both and returned 0 cells / 0 rows for the NO-FLUSH configuration,
+# the one already known to give 42 of 52 cells.  Override by passing your own value for either.
 set -u
 TAG=${1:?TAG}; shift
-EXTRA=("$@")
+BASE=(UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1)
+EXTRA=()
+for a in "${BASE[@]}"; do
+  n=${a%%=*}
+  for u in "$@"; do [ "${u%%=*}" = "$n" ] && { n=""; break; }; done
+  [ -n "$n" ] && EXTRA+=("$a")
+done
+EXTRA+=("$@")
 HERE=$(cd "$(dirname "$0")" && pwd)
 BUILD=${KN7000_BUILD:-$HOME/compartilhado/kn7000_mame_build}
 OUTDIR=${OUTDIR:-${CLAUDE_JOB_DIR:-/tmp}/tmp}
