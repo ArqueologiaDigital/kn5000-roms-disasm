@@ -68,12 +68,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    §36 (five programs, not one), §36 (zero regressions, four families). Verified two-sided after
    the change: no env ⇒ ramp and the device reports 1; `=0` ⇒ the old wandering phase and it
    reports 0.
-   ⚠⚠ **THE STANDING ARGUMENT AGAINST IT — look here before treating it as settled: the ENHANCER's
-   non-zero product rows drop 46 → 10 and NOTHING EXPLAINS THAT.** It has no LFO and does not rail.
-   ⚠ The EQ's 100 → 9 is a **different** flag and is understood: the baseline's EQ activity was the
-   kernel's residue being filtered (§23/§29); the flush removes it, and the bands are then fed
-   correctly at `0x10` — which nothing reads (§30). That is the EQ thread's next step, not a
-   regression.
+   ✅ **THE STANDING OBJECTION IS WITHDRAWN (§37).** The ENHANCER's 46 → 10 is **the same open
+   problem unmasked**: its entry assembles the input in the accumulator, the pointer moves
+   `0x10 → 0x50`, and `iw89` reads `0x50` — which nothing writes, so every operand after it is
+   zero. The baseline runs the same words and makes the same discard; it just loads the **kernel's
+   residue** instead of 0, so it has a number to multiply. The flush removed the residue, not the
+   signal.
+   ★★ **THE ONE REMAINING BODY-SIDE GAP, now stated on TWO programs (§30/§37): nothing writes cell
+   `0x50`**, which both the EQ and the enhancer read at `iw89`. CLOSED as an explanation: the
+   pointer walk — both carry `addr8 = 0x40`, `0x10 + 64 = 0x50`, correct (⚠ I mis-sliced that field
+   once and nearly wrote up a decode error that does not exist). CONSTRAINT: the EQ's `iw88` has an
+   `ACT 0x07` store aimed at the **pre**-increment pointer, the enhancer's `iw88` has **no store at
+   all** ⇒ **a store-target change cannot fix both**, which is an independent reason bit 28 was
+   never the answer. ⇒ the question is not *which pointer does the store use* but **is `0x50`
+   written by the entry at all, or does the body's first read take its operand from somewhere other
+   than `mem[ptr]`?**
 
    ⛔⛔ **§35: THE CATALOGUE DISQUALIFIES `CALLFLUSH` + bit 28 ON TEN PROGRAMS.** Every modulation
    program loses its LFO (chorus, modulated chorus, flanger, phaser, ensemble all freeze at phase

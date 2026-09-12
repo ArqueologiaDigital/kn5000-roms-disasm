@@ -1312,6 +1312,26 @@ stated on two programs. The EQ has an explicit store at `iw88` whose target is t
 pointer (`0x10`, unread); the enhancer's `iw88` carries no store bit at all. Whatever the chip does
 to get the entry's accumulator into `0x50`, the device is not doing it in either program.
 
+### One candidate explanation CLOSED before anyone spends a build on it
+The obvious suspicion is that the pointer move is mis-decoded — that the entry word lands the
+pointer on the wrong cell. **It does not.** Both programs' `iw88` carries `addr8 = 0x40`, the
+disassembler reads it as the signed post-increment `+64`, and `0x10 + 64 = 0x50` — the cell the
+next word reads. ⚠ I first read that field as `0x24` by mis-slicing `addr8` out of the word and
+nearly wrote up a decode error that does not exist; the field is bits [19:12]. **The pointer
+arithmetic is right in both programs**, so the fault is in the STORE, not in the walk.
+
+And the two programs constrain the store differently, which is the useful half:
+- the **EQ**'s `iw88` carries `ACT 0x07` — a store — aimed at the **pre**-increment pointer
+  (`0x10`), per the device's own `§109 ACT-07 store target` line;
+- the **enhancer**'s `iw88` (`002A240000`) has `ACT 0x00`: **no store at all**. Its only `ACT 0x07`
+  store is `w8`, four words later, by which time the body has already read `0x50`.
+
+⇒ **A store-target change cannot fix both**, which is an independent reason §109 bit 28 was never
+going to be the answer, quite apart from the LFOs it freezes. Whatever puts the entry's accumulator
+into `0x50` is something the enhancer's entry does *without* a store word — so the next question is
+not "which pointer does the store use" but **"is `0x50` written by the entry at all, or does the
+body's first read take its operand from somewhere other than `mem[ptr]`?"**
+
 ⇒ **The §36 promotion's standing objection is withdrawn**: the enhancer flag is the known open
 problem made visible, not a new fault. The flag stays in the table — it is a real difference — but
 it is no longer unexplained, and it is no longer an argument against the flush.
