@@ -98,6 +98,12 @@ real agreement between the two sides.
 1. Build-lane: confirm **f31=2 = acc-hold** on w2/w4/w8 (device arm reading `acc` across them). If it
    holds, f31=2 generalizes off class 8 and the two port reads + the feedback read stop trapping.
 2. Reconcile **ACT 0x0E** (§3.1) from the bit-encoding — it is the blocker that three docs disagree on.
-3. Extend `dsp/hle/lle_oracle.py` from the biquad to the **delay** datapath (+ selftest) so a seeded
-   delay trace pins the delay's remaining words, as BIQSEED did the biquad.
+3. ✅ **DONE this session:** `dsp/hle/lle_oracle_delay.py` composes the primitive oracles
+   (`DelayOracle` + `OnePoleOracle`) into the whole SINGLE-DELAY signal flow (tap → in-loop HIGH
+   DAMP → feedback fold → dry/wet mix), with a selftest proving the echo structure (impulse → peaks
+   at N/2N/3N decaying; damped 2nd echo < undamped). It prints exactly what a seeded **DLYSEED**
+   trace must reproduce per frame (read address, damp, the mixing fold, write, mix) — so the delay's
+   remaining open words (the ACT 0x0D/0x0E mixing order, the SRC 0x00 read address) become
+   constraint-solving targets, as `lle_trace_diff.py` + BIQSEED did for the biquad. ⚠ Needs the
+   build-lane to add DLYSEED and produce the trace; the oracle is the ready target.
 4. `SRC 0x11`/accb and the rest of the routing guard remain hardware/bit-encoding items (§4).
