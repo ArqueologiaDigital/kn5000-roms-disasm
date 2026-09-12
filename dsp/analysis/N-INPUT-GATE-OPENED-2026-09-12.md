@@ -953,6 +953,67 @@ readings can be right as it stands.
 ⚠ Grade: MEASURED. `data/pair_gate_v3_matrix_2026-09-12.txt`, `data/pg_v3_*_2026-09-12.log.gz`,
 `data/pair_gate_v2_3criteria_2026-09-12.txt`, `data/pair_gate_3configs_2026-09-12.txt`.
 
+## 29. ★★★ THE CRITERION THE HLE SUPPLIES — *one copy of the input* — AND IT REVERSES §20
+Every criterion used so far was **self-consistency**: do two frames differ, does the phase advance
+by its increment. Neither asks whether the number arriving is the **right** number, and §27 showed
+why that is not a detail — a body entry that counts the same input three times is extremely alive
+and completely wrong. The HLE supplies the missing criterion, and it is the simplest one in the
+project: **the EQ's input is ONE copy of the pickup.**
+
+`dsp/tools/pickup_copies.py` reads the bus datum the body entry takes and the pickup cell the band
+chain reads, and divides. Over the seven gate configurations
+(`data/pickup_copies_2026-09-12.txt`):
+
+| configuration | bus datum | cell `0x10` | ratio | verdict |
+|---|---|---|---|---|
+| **`+ CALLFLUSH=1`** | 4 904 681 | **4 899 462** | **0.999** | ✅ **ONE COPY** |
+| baseline | 4 904 681 | 7 792 377 | 1.589 | ⛔ |
+| `+ CALLACC=1` | 4 904 681 | 7 792 377 | 1.589 | ⛔ |
+| `SPEC` bit 55 (§138) | 5 211 235 | **8 388 607** | 1.610 | ⛔ RAILED |
+| the triple | 5 211 235 | **8 388 607** | 1.610 | ⛔ RAILED |
+| `+ PCLR=1` | 0 | 0 | — | ⛔ no input at all |
+| `SPEC` bit 12 | 0 | 524 288 | — | ⛔ no input at all |
+
+★★★ **`CALLFLUSH` is the only configuration in which the body entry delivers a correct input**, and
+it does it exactly: `iw88`'s bit-4 store takes the accumulator *before* its own ALU step — the
+order this file already calls FORCED (R1 F2) — and under the flush that accumulator holds
+`4 904 681 << 16`, one clean copy, which it writes to cell `0x10`.
+
+⇒ **§20's interpretation is REVERSED, and §22's with it.** The statement *"`CALLFLUSH` starves the
+EQ"* is true as a **liveness** measure and false as a diagnosis. The baseline's 39-of-44 moving
+cells were **the kernel's stale product being filtered**, not the EQ's input being processed —
+§23 said exactly that and I did not draw the consequence. The liveness criterion was **rewarding
+contamination**, and the one configuration it marked worst is the one delivering the right number.
+⚠ What survives §20 unchanged: a claim must be tested on both programs. What does not: which way
+the EQ's own evidence pointed.
+
+⚠ This does **not** promote `CALLFLUSH` to "correct". It says the flush gets **the body entry's
+input** right, on the one criterion that can distinguish right from merely alive. The chorus phase
+agrees with it (114). What is still wrong under it is downstream — §30.
+
+## 30. THE GAP, NOW ONE CELL WIDE: nothing writes the band's input cell `0x50`
+With the input correct at `0x10`, the EQ's bands still do not run: 2 of 44 cells and 9 of 105 rows.
+The trace says why, and it is a single cell.
+
+```
+iw88  cls2 ACT07 SRC10 f31=0   ld.st acc,(p)+64   store -> cell 0x10 (pre-increment), ptr -> 0x50
+iw89  clsA ACT13 SRC07 f31=0   ld.ta (p),c+,(p)+0 reads  cell 0x50   <- the band's x input
+```
+
+Scanning **every row of the frame, both units**, only **two** address cell `0x50` — `iw88` and
+`iw89`, and both are reads. **No word in the traced frame writes it.** Under the baseline it
+nonetheless holds `1 572 727` (audio-derived, from the contamination); under `CALLFLUSH` it holds
+**0**, and the bands have nothing to filter.
+
+⇒ **The next target is `0x50`'s writer**, and the instrument already exists: the device's §109
+store-site probe and `watch_store` record every store with its site and target. Either a word
+stores there through a path the `dp` column does not show (a mode-1 `mem[addr8]` store), or the
+cell is meant to be fed by the entry and the device aims that store at `0x10` when it should reach
+`0x50`. Both are decidable from one instrumented run, and neither needs a new hypothesis.
+
+⚠ Grade: MEASURED, `data/pickup_copies_2026-09-12.txt` + the seven archived EQ captures. §29's
+reversal is a correction of my own §20/§22 interpretation on the project's own evidence.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

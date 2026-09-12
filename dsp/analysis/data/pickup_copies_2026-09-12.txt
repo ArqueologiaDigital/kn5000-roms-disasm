@@ -1,0 +1,10 @@
+body entry at iw84, pickup cell 0x10 -- the HLE says the ratio must be 1.0
+
+capture                               bus datum         cell      acc @ store    ratio  verdict
+pg_noflush_eq.log                       4904681      7792377     103180042421    1.589  ⛔ 1.589 copies -- the entry is not delivering the input
+pg_callflush_eq.log                     4904681      4899462                0    0.999  ✅ ONE COPY
+pg_pclr_eq.log                                0            0                0        -  ⛔ NO INPUT on the bus at all
+pg_spec12_eq.log                              0       524288                0        -  ⛔ NO INPUT on the bus at all
+pg_v3_triple_eq.log                     5211235      8388607    1024570490880    1.610  ⛔ RAILED -- the entry oversums the input
+pg_v3_s138_eq.log                       5211235      8388607    1243828562248    1.610  ⛔ RAILED -- the entry oversums the input
+pg_v3_callacc_eq.log                    4904681      7792377     103180042421    1.589  ⛔ 1.589 copies -- the entry is not delivering the input
