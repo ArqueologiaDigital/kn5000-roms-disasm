@@ -52,7 +52,7 @@ def q23(hexstr):
 
 # One parsed trace row.  acc/accb/P are ints (chip fixed-point); mem/coef/ta/tb are floats.
 ROW = re.compile(
-    r"^\s*(?:upd6383:\s*)?(\d+)\s+(\d+)\s+([01])\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+"
+    r"^\s*(?:\[:dsp\d\]\s*)?(?:upd6383:\s*)?(\d+)\s+(\d+)\s+([01])\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+"
     r"([0-9A-Fa-f]+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+"
     r"([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+([Y.])\s+(-?\d+)\s*$")
 

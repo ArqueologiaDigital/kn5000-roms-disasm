@@ -73,8 +73,29 @@ columns at `w15–w18`, and a run with the device switched to it either reproduc
 self-consistent frame or does not. (In the current device the trace is self-consistent — that is
 the point of §2 — so this is a decode question, not a device bug.)
 
+## 5. The "multiplier runs on class-2 words" reading was RUN — disfavoured (MEASURED)
+`UPD6383_MULALL` (kn7000_mame `upd6383.cpp`, default off) forms the product on every BODY class-2
+word (never C-format, never the kernel) with the cursor's coefficient and no cursor advance.
+Recipe: `dsp/tools/dlyseed_run.sh 7 … UPD6383_MULALL=1` (delay; FIRED 123 042 050) and
+`dlyseed_run.sh 15 … UPD6383_MULALL=1 UPD6383_BIQSEED=8` / without the arm (EQ).
+* **Delay:** the fixed point RAILS — cells 0x08, 0x50, 0x51 all read 0x7FFFFF (+2.0) entering the
+  frame, the accumulator sits above the clamp, and `dlyseed_confront.py` reports 5 unexplained
+  accumulator rows (0 without the arm). At unity input a damping loop must not rail; under this
+  reading the extra products (w7's `1.0·L`, w13/w14's `c6·(…)`, the fold's `c0·(…)`) drive it to
+  the rail. DISFAVOURED, in the form implemented (product on every class-2 word).
+* **EQ:** INCONCLUSIVE — in the `fx_ab.lua`/`DSPCFG=3` rig used here the EQ trace is railed
+  (state cells at 0x800000/0x7FFFFF) with and without the arm, so the biquad running-sum test
+  cannot discriminate (2 broken rows with the arm, 0 without, both at saturation). The proper
+  falsifier is the handoff's original biquad rig (`NAV=0 AUDIO=key BOOTGATE=10 DWELL=25
+  DSPVAL=1 …`, DSP-DATAPATH-DECODE-HANDOFF §1), not re-run here. `lle_trace_diff.py`'s row regex
+  now accepts the `[:dsp1]` log prefix (it parsed 0 rows before); its `--eq-trace` geometry
+  report is identical across the two arms, as it must be (the arm touches no addressing).
+So of §4's two candidates the **`w14` move** (`y_A` → cell 0x51) is the one still standing; the
+class-2-multiply reading needs a narrower form (e.g. only on `ld`/`mac`-family class-2 words with
+a tempA/acc source) before it is worth another run.
+
 ## Honest grade
-§2 MEASURED: the recurrence reproduces every checked column from the entering state and the
+§5 MEASURED (two runs each program; the delay's rail is the device's own fixed point). §2 MEASURED: the recurrence reproduces every checked column from the entering state and the
 coefficients (9/9, one LSB of rounding), i.e. this is exactly what the device executes. §3: the
 feedback-cell identity is MEASURED (coefficient on the bus, operand = the damped output); the
 "two sections" is MEASURED as structure, its filter form is OPEN pending §4. §4 is a STRONG
