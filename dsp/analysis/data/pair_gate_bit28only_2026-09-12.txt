@@ -1,0 +1,33 @@
+=== pair_gate [bit28only] : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446B39B440F ===
+--- (A) CHORUS phase + liveness, TYPEIDX 0 ---
+  LFO  phase cell 0x07 delta across the pair = 3129519 (compare the HLE LFOOracle increment round(rate/44100*2^23); the phase word's L=114 is the increment on the bus)
+cells seen: 17   MOVED: 5
+per-row (iw, acc, P, L) tuples differing: 24 of 70
+✅ VERDICT: the frames DIFFER -- the body is live; downstream measurements are meaningful.
+(A) liveness exit status: 0   [0 = live, non-zero = STATIC]
+--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---
+frame A: pg_bit28only_eq.log
+frame B: pg_bit28only_eq_F1.log
+cells seen: 44   MOVED: 12
+   0x05       4900429 ->      4905834
+   0x10       1571362 ->      1573037
+   0x52      -1363790 ->     -1361939
+   0x64      -4625682 ->     -4623947
+   0x66      -2980495 ->     -2981232
+   0x68      -4625682 ->     -4623947
+   0x6A       5961046 ->      5961106
+   0x6C      -4625682 ->     -4623947
+   0x6E      -5081654 ->     -5082444
+   0x70      -4625682 ->     -4623947
+   0x72       8202213 ->      8202366
+   0x74      -4625682 ->     -4623947
+per-row (iw, acc, P, L) tuples differing: 72 of 105
+
+✅ VERDICT: the frames DIFFER -- the body is live; downstream measurements are meaningful.
+(B) exit status: 0   [0 = live, non-zero = STATIC]
+--- (C) ONE COPY of the input at the EQ's pickup cell (the HLE's criterion) ---
+body entry at iw84 -- the HLE says ONE copy of the input must reach the band's cell
+
+capture                           bus datum  cells holding exactly one copy
+pg_bit28only_eq.log                 4900429  ⛔ none. RAILED at 0x50, 0x54, 0x58, 0x5C, 0x60. ratios 0x10=0.321
+(C) exit status: 1   [0 = one clean copy, non-zero = wrong quantity]

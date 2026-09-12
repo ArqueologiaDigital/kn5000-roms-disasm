@@ -1109,6 +1109,34 @@ criterion; this one nearly cost the result.
 is promoted out of default-off, and the single-arm run (bit 28 without the flush) to confirm the
 split above.
 
+## 33. THE SPLIT, CONFIRMED TWO-SIDED — bit 28 delivers, `CALLFLUSH` cleans
+§32 claimed the two arms do different jobs and that neither works alone. Run bit 28 **without**
+the flush (`UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446B39B440F`):
+
+| criterion | bit 28 alone | bit 28 + `CALLFLUSH` |
+|---|---|---|
+| chorus increment | 3 129 519 ⛔ | **114** ✅ |
+| chorus body | 5 of 17 cells, 24 of 70 rows | 2 of 17, 16 of 70 |
+| EQ body | 12 of 44 cells, 72 of 105 rows | 13 of 44, **94 of 105** |
+| one copy of the input | ⛔ **RAILED at `0x50`, `0x54`, `0x58`, `0x5C`, `0x60`** | ✅ **1.000 at all five** |
+
+★ Exactly the predicted shape. Bit 28 alone **does** reach the bands — all five state blocks now
+receive something, where before nothing did — but what it delivers is the **contaminated**
+accumulator, and it rails every one of them. The flush is what makes the delivered quantity one
+clean copy.
+
+⇒ **Each arm is doing a distinct, nameable job**, and each is falsified without the other:
+| arm | job | without it |
+|---|---|---|
+| `UPD6383_CALLFLUSH` | the product register does not cross a block boundary, so the accumulator at the store holds **one copy of the input** | the bands are fed the kernel's residue and **rail** |
+| `§109` bit 28 | the `ACT 0x07` store lands on the pointer **after** its post-increment, i.e. the cell the band **reads** | the copy is written to `0x10`, which nothing reads, and the bands stay at **2 cells / 9 rows** |
+
+That is the cleanest joint result this investigation has produced: two arms, two distinct jobs,
+each demonstrably necessary, and the pair passing four criteria on two programs. ⚠ Still joint
+evidence and still default-off until a regression over the remaining programs.
+
+⚠ Grade: MEASURED, `data/pair_gate_bit28only_2026-09-12.txt` + `data/pg_bit28only_*`.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
