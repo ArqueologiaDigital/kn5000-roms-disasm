@@ -18,8 +18,14 @@
 #         Reference, this binary + baseline arms: NO-FLUSH gives 39 of 44 cells / 105 of 105 rows.
 #         CALLFLUSH gives 2 cells / 9 rows; PCLR and the cursor-seed clear give 0 and 0.
 #
-#   An arm must pass (A) BOTH HALVES and (B).  Nothing has yet: the one configuration with a live
-#   EQ is the one with the wrong phase.
+#     (C) PARAMETRIC EQ, the HLE's own criterion -- the pickup cell must hold exactly ONE copy of
+#         the input (pickup_copies.py).  ★★★ This is the only criterion that separates RIGHT from
+#         merely ALIVE, and it REVERSED §20: liveness rewards contamination, and the one
+#         configuration liveness marked worst (CALLFLUSH) is the one delivering a clean input.
+#
+#   An arm must pass (A) BOTH HALVES, (B) and (C).  Nothing has yet -- but as of §29 CALLFLUSH
+#   passes (A) and (C), and what fails under it is downstream: nothing writes the band's input
+#   cell 0x50 (§30).
 #
 # Example (the §20 baseline that fails B, and the §21 candidate):
 #   dsp/tools/pair_gate.sh callflush UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 \
@@ -93,3 +99,13 @@ cap 15 1 "$OUTDIR/pg_${TAG}_eq_F1.log"
 python3 "$HERE/frame_pair_diff.py" "$OUTDIR/pg_${TAG}_eq.log" "$OUTDIR/pg_${TAG}_eq_F1.log" \
     --lo 84 --hi 188
 echo "(B) exit status: $?   [0 = live, non-zero = STATIC]"
+
+# ★★★ (C) THE ONLY CRITERION THAT DISTINGUISHES RIGHT FROM MERELY ALIVE, and the one that
+# reversed §20.  Liveness rewards CONTAMINATION: the baseline moves 39 of 44 cells because the
+# body is filtering the kernel's leftover product, and a configuration that counts the input
+# three times moves even more.  The HLE says what the number should be -- the EQ's input is ONE
+# copy of the pickup -- so measure that.  §29: of seven configurations only UPD6383_CALLFLUSH=1
+# passes it (0.999), the baseline gives 1.589 and §138 rails at 0x7FFFFF.
+echo "--- (C) ONE COPY of the input at the EQ's pickup cell (the HLE's criterion) ---"
+python3 "$HERE/pickup_copies.py" "$OUTDIR/pg_${TAG}_eq.log"
+echo "(C) exit status: $?   [0 = one clean copy, non-zero = wrong quantity]"
