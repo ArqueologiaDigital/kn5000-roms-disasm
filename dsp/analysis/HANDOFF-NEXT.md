@@ -59,6 +59,25 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
+   ★★★★★ **§32: A CONFIGURATION PASSES ALL FOUR CRITERIA. THE FIRST ONE EVER.**
+   `UPD6383_LO12CAP=1 UPD6383_CALLFLUSH=1 UPD6383_SPEC=B9108446B39B440F` (the shipped mask **+
+   §109 bit 28**, the `ACT 0x07` store target) with the baseline arms:
+   | criterion | result |
+   |---|---|
+   | chorus LFO increment | **114** ✅ |
+   | chorus body live | 2 of 17 cells, 16 of 70 rows ✅ |
+   | EQ body live | **13 of 44 cells, 94 of 105 rows** ✅ (2 / 9 under the flush alone) |
+   | one copy of the input | ✅ at **`0x50`, `0x54`, `0x58`, `0x5C`, `0x60`**, ratio **1.000** each |
+   ★★★ Those five cells are **the five bands' state blocks, spaced 4 apart** — the EQ's decoded
+   topology — so **every band now receives exactly one copy of its own input**, with the filtered
+   `y` histories moving beside them. The change is one bit already in the device: `iw88` is
+   `ld.st acc,(p)+64` and its store was aimed at the pointer **before** the `+64`, landing on
+   `0x10`, which nothing reads; aimed **after**, it lands on `0x50`, which `iw89` reads.
+   ⚠ Two speculative arms, jointly: `CALLFLUSH` supplies the clean copy (§29), bit 28 delivers it
+   (§31). Both stay **default-off** pending a regression over the other programs.
+   ⚠ And the instrument nearly hid it: `pickup_copies.py` hard-coded cell `0x10` and reported the
+   correct configuration as "0.000 copies". **A criterion must move with the thing it measures.**
+
    ★★★ **§29 REVERSES THE READING OF §20/§22 — READ THIS BEFORE ANYTHING ELSE BELOW.** The HLE
    supplies a criterion none of the earlier ones did: **the EQ's input is ONE copy of the pickup**
    (`dsp/tools/pickup_copies.py`, now criterion **(C)** of the gate). Over the seven
