@@ -59,7 +59,24 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
-   ⛔⛔ **SEVEN CONFIGURATIONS NOW, NOTHING PASSES BOTH** (§28, one binary, three criteria):
+   ★★★ **§29 REVERSES THE READING OF §20/§22 — READ THIS BEFORE ANYTHING ELSE BELOW.** The HLE
+   supplies a criterion none of the earlier ones did: **the EQ's input is ONE copy of the pickup**
+   (`dsp/tools/pickup_copies.py`, now criterion **(C)** of the gate). Over the seven
+   configurations, **`UPD6383_CALLFLUSH=1` is the ONLY one that delivers it** — ratio **0.999**,
+   against **1.589** for the baseline and a **railed** 1.610 under `SPEC` bit 55. ⇒ *"CALLFLUSH
+   starves the EQ"* is true as a **liveness** measure and **false as a diagnosis**: the baseline's
+   39 moving cells were the **kernel's stale product being filtered**, so the liveness criterion
+   was **rewarding contamination**. ⛔ **Never grade an arm on liveness alone again.**
+   ★★ **And the remaining gap is ONE CELL WIDE (§30).** With the input correct at `0x10`, the
+   bands still do not run because **nothing writes cell `0x50`**, the band's `x` input: of every
+   row in the frame, both units, exactly two address it (`iw88`, `iw89`) and **both are reads**.
+   Under the baseline it holds audio-derived contamination; under the flush it holds 0.
+   ⇒ **THE NEXT TASK: find `0x50`'s writer**, with the device's existing §109 store-site probe and
+   `watch_store`. Either a word stores there through a path the `dp` column does not show (a
+   mode-1 `mem[addr8]` store), or `iw88`'s store is aimed at `0x10` when it should reach `0x50`.
+   Both are decidable from one instrumented run and neither needs a new hypothesis.
+
+   ⛔⛔ **SEVEN CONFIGURATIONS, NOTHING PASSES ALL FOUR CRITERIA YET** (§28, one binary):
    `CALLACC` is **identical to the baseline on every criterion** — the accumulator does not carry
    across a block boundary in any observable way, so there is nothing to clear. **§138 (`SPEC`
    bit 55) is REFUTED alone and in combination** — the EQ goes bit-identical and the chorus
