@@ -222,7 +222,87 @@ bit-set ones (FIRED 94 180 005). `dlyseed_run.sh 7 … UPD6383_FMTBIT=1` / `15 �
 MEASURED facts stand (damping words behave as Q0.23; `a2` as Q0.23; `b0/b2/a1` as Q1.22; the
 chorus-wet word as Q0.23 — its HLE correction is unaffected). Kept as a default-off diagnostic.
 
+## 10. Solved statically: the scale ratios are EXACTLY 1/4, 1/2, 1/4 in all five bands
+Instead of guessing another selector, the EQ's own filter identity settles what any selector must
+produce. An RBJ peaking biquad normalised to `a0 = 1` has **`b1 == a1` exactly** — at every gain
+and every centre frequency, both are `−2cos(ω₀)/(1+α/A)` — and at 0 dB also `b0 = 1`, `b2 = a2`.
+Reading all five cells of each band at one scale (`dsp/tools/eq_scale_solve.py`, on the archived
+traces; the cells are identical in every arm, as they must be):
+
+| band | b1 | b0 | b2 | −a1 | −a2 | mk | **b0/1** | **b1/a1** | **b2/a2** | words (bit12/ACT) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | −0.4977 | +0.2500 | +0.2478 | +0.9954 | −0.9911 | −1.00 | 0.2500 | 0.5000 | 0.2500 | 1/0D 0/13 1/12 1/15 1/14 |
+| 1 | −0.4953 | +0.2500 | +0.2456 | +0.9905 | −0.9824 | −1.00 | 0.2500 | 0.5000 | 0.2500 | 1/07 0/13 1/12 1/15 1/14 |
+| 2 | −0.4900 | +0.2500 | +0.2413 | +0.9800 | −0.9650 | −1.00 | 0.2500 | 0.5000 | 0.2500 | 1/07 0/13 1/12 1/15 1/14 |
+| 3 | −0.4780 | +0.2500 | +0.2329 | +0.9559 | −0.9314 | −1.00 | 0.2500 | 0.5000 | 0.2500 | 1/07 0/13 1/12 1/15 1/14 |
+| 4 | −0.4483 | +0.2500 | +0.2172 | +0.8967 | −0.8687 | −1.00 | 0.2500 | 0.5000 | 0.2500 | 1/07 0/13 1/12 1/15 1/14 |
+
+**Spread across the five bands: 0.00000 on all three ratios.** The `b`-path sits at **¼** of the
+`a`-path and `b1` at **½** — three distinct scales among five coefficients, constant over a
+2.4:1 span of centre frequencies and independent of which arm produced the trace. (`b0 = 0.2500`
+in every band is itself a check: RBJ's `b0` at 0 dB is the constant 1, and the cell is the
+constant ¼ of it.)
+
+### The assignment is not merely constrained — it is SOLVED, to 0.00 dB
+Evaluating `|H(e^jω)|` over 200 log-spaced frequencies from each band's own five cells, for each
+candidate scaling of the b-path (same tool, "FLATNESS TEST"):
+
+| scaling | band 0 | band 1 | band 2 | band 3 | band 4 |
+|---|---|---|---|---|---|
+| as stored (one scale) | −49.00 dB, spread 108.72 | −45.39 / 95.33 | −40.59 / 80.10 | −34.68 / 63.46 | −27.82 / 45.96 |
+| b-path ×2 | −42.98 / 108.72 | −39.37 / 95.33 | −34.57 / 80.10 | −28.66 / 63.46 | −21.80 / 45.96 |
+| b-path ×4 | −36.96 / 108.72 | −33.35 / 95.33 | −28.55 / 80.10 | −22.64 / 63.46 | −15.78 / 45.96 |
+| **b0, b2 ×4 and b1 ×2** | **−0.00 dB, spread 0.00** | **+0.00 / 0.00** | **−0.00 / 0.00** | **−0.00 / 0.00** | **+0.00 / 0.00** |
+
+Not a fit — an identity: under that one assignment `b` becomes exactly `[1, a1, a2]`, so `H ≡ 1`
+and (with `mk = −1`) each band is a unity inverter. Every rival is 46–109 dB of ripple. **The
+per-coefficient scales of the EQ are now solved arithmetically, from the ROM's own cells, with no
+emulator run in the loop.** (The predicted per-band inversion is visible in a live trace: band 0's
+y cell `0x6A = −30243` is the exact negation of band 1's x cell `0x6C = +30243`.)
+
+### Where the factor lives: the OPERAND CELLS, not the coefficients
+Pairing each coefficient with the D-RAM cell its multiplying word reads (`lle_trace_diff.py
+--eq-trace` reports the same map) gives a clean partition:
+
+| coefficient | operand cell | required scale |
+|---|---|---|
+| b1 | **0x64** (the host/previous-band state block) | ×2 |
+| b0 | 0x50 | ×4 |
+| b2 | 0x51 | ×4 |
+| −a1 | 0x52 | ×1 |
+| −a2 | 0x53 | ×1 |
+
+The x-history pair (0x50/0x51) shares one scale, the y-history pair (0x52/0x53) another, and the
+band's incoming sample a third — i.e. **the firmware pre-scales each coefficient for the scale of
+the cell it will meet**, and the multiply itself can stay uniform. That reframes the whole scale
+question: the LLE's defect is most likely not `P_SHIFT` at all but the scale at which it STORES
+the x-history and the incoming sample (it stores everything with one `acc >> 16`), which is
+exactly why the EQ's recursion blows up under the shipped shift. Neither `bit 12` nor the ACT code
+partitions the five words this way (b2 and a2 share ACT 0x15 with different scales), so those
+selectors are refuted a third time, statically.
+
+Consequences, all of them sharper than anything the arms produced:
+1. **Bit 12 is refuted statically, not just behaviourally.** `b0` is the ONLY bit-clear word of
+   the five, yet `b2` — bit set — shares its scale exactly, and `b1` — bit set — has a third one.
+   No function of bit 12 can produce ¼, ½, ¼. §9's behavioural refutation is now a corollary.
+2. **No single global shift can be right either**, which is why both 22 and 23 fail somewhere:
+   the correct model needs **two** halvings between the `a`-path and `b0`/`b2`, and **one**
+   between the `a`-path and `b1`.
+3. **The carrier is the operand cell's own scale** (table above): x-history ×4, incoming sample
+   ×2, y-history ×1. The multiply can stay uniform; what must change is how the device SCALES
+   what it writes into those cells. That also explains the delay's `cell 0x08 = 2 × y_B` under a
+   mixed-shift arm, and it predicts the next measurement: on a non-railed EQ frame with real
+   audio, `|x-history| / |y-history|` must sit at 4 for a signal passing a unity band.
+4. **The immediate LLE experiment** is therefore a store-side arm, not another shift: write the
+   x-history cells at `acc >> 18` (÷4) and the band-input cell at `acc >> 17` (÷2) while the
+   y-history keeps `>> 16`, then check the two falsifiers already built — the EQ's state block
+   stays finite AND its band gain comes out 1 (it is 2.00 today at total-23), and the delay's
+   fixed point stays self-consistent. If that holds, the EQ is bit-correct for the first time and
+   `P_SHIFT` reverts to a single uniform value.
+
 ## Honest grade
+§10 MEASURED and EXACT (five bands, zero spread, arm-independent; the RBJ identity is textbook).
+Its consequence 1 is a proof, 2 a deduction, 3 and 4 are INFERRED leads with named tests.
 §9 MEASURED (two runs; the EQ's RBJ argument is arithmetic on the measured cells). §8 corrects §6–§7's scope: MEASURED facts unchanged, the conclusion narrowed to the bit-clear
 words (STRONG), the per-word format bit's carrier word OPEN. §7 MEASURED (two EQ runs, two delay
 runs; the rail/no-rail of the device's own state block), the scale conclusion STRONG for the
