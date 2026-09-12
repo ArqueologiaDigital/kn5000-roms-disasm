@@ -388,6 +388,37 @@ now records a measured symptom with **no candidate cause**. The next step is a w
 cells `0x75`–`0x77` — which word is supposed to write them, and does its store fire — and to check
 each code's status in the handover *before* building anything on it.
 
+## 14. ⚠ POSITIONING AGAINST §215/§216 — the downstream null was ALREADY MEASURED
+Checking the handover for the third gate (as §13's correction says to) turns up that the project
+has been here before, by a different route:
+
+> **§216: "The output stage is a NULL independent of the send."** With the send **forced open**,
+> body 0 ran its whole ladder on live audio (28 input-dependent slots) and fed body 1 — and
+> `w73`/`w78` were still `min 0 max 0`, quiet and loud. §217 re-measured it in three more arms
+> including a no-stimulus window: still `min 0 max 0`, all six readings.
+> *"Every link is MEASURED. Do not re-derive any of them."*
+
+So **"the body runs live and the output stage still produces nothing" is not a new finding** — it
+is §216's, and my §7/§13 rediscovered its downstream half. That needs saying plainly.
+
+**What IS new in this session, stated against that baseline:**
+* §216 forced the send open with a rig (`m_noz05`, suppressing the words that zero cell `0x05`).
+  This session found the **MECHANISM** instead: one word (`iw38`), one suppressed action
+  (`ACT 0x19`), one branch (`lo12` bit 11, `upd6383.cpp:2754`) — a word-level cause rather than an
+  artificial forcing, with a two-sided frame-pair criterion.
+* `ACT 0x0E` had three contradictory readings and no discriminator. It has one now: only
+  `mem[ptr] ← bus` makes the reference program's second channel compute (§12).
+* Class 8 was `OPERATION UNKNOWN` in the reference listing; it is a post-sum accumulator scale (§5
+  of `N-EQ-TOPOLOGY-FROM-BYTECODE`).
+* `frame_pair_diff.py` is a reusable two-sided instrument for "is this stage running", which is
+  what let each stage be separated from the one downstream.
+
+**And the consequence for planning, which is the useful part:** opening further INPUT-side gates
+cannot produce audio, because the output stage is null *independently* of what reaches it. The two
+halves are separate problems, and §216 already closed the question of whether feeding the body more
+signal helps. Anyone continuing should treat the output stage as its own investigation — starting
+from §216/§217's measurements, not from a fresh frame-pair hunt that will rediscover them.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

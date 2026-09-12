@@ -26,8 +26,11 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    `(total 22, shift 2)` for the band gain. The **input level** breaks the tie: at total-22 the
    pickup arrives pinned at full scale, at total-23 it is finite. Second independent vote for
    §227's total-23.
-4. Still dead, and **NOT for the bit-11 reason** (withdrawn in §9) and **not for the `w43`/`w51`
-   reason either** (withdrawn in §10): the second pickup `0x0F` and the body→epilogue handoff.
+4. ⚠ **The OUTPUT stage is §216's already-measured null** — *"the output stage is a NULL
+   independent of the send"*, and §13's attempt to attribute it to `SRC 0x08` is withdrawn (that
+   code is anchored). Opening further INPUT-side gates cannot produce audio; the two halves are
+   separate problems. What this session adds on the input side is the MECHANISM (`iw38`) where
+   §215/§216 used a forcing rig. Still dead and unexplained on the input side:
    ⚠ `w43`/`w51` are **§116's per-unit mode register** — 2 of 3057 corpus words, payloads `0x6C`
    (unit 0, wrap) and `0x64` (unit 1, saturate), differing in bit 3 — nothing to do with the data
    path; `w51`'s `0x64` matching the EQ's second state-block base is a coincidence I built on.
