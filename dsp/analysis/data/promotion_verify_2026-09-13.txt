@@ -1,0 +1,5 @@
+LFO phase across 8 consecutive frames -- the step must be CONSTANT and equal 114
+
+capture                              frames         step  verdict
+promo_default.log                         8          114  ✅ FREE-RUNNING RAMP at the increment
+promo_off.log                             8       varies  ⛔ step NOT constant: -5219983, 3168625
