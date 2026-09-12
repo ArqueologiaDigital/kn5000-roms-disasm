@@ -107,6 +107,39 @@ clipped at ±2²³. With a per-band gain of 2 and five bands in cascade, any rea
 ~32× and clips — which is precisely the observed pattern (bands 2–4 with 3 of 5 operands at the
 rail). Fix the gain and the railing goes with it; the gain is the open item, not the clamp.
 
+## 7. A SECOND gate, at the body → output-stage boundary (MEASURED)
+The same instrument, pointed at the epilogue. With the input gate open **and** the class-8 post-sum
+scale on (so the body is fully live — all five EQ bands propagating, 59 of 105 body rows differing
+between frames), the **output stage is still completely static**:
+
+```
+python3 dsp/tools/frame_pair_diff.py eq_c8_F.log eq_c8_F1.log --lo 60 --hi 83
+   cells seen: 2   MOVED: 0        per-row tuples differing: 0 of 22
+```
+
+So the chain is now: audio → kernel → **body (live)** → ✗ → epilogue → output. The break is visible
+row by row in the trace:
+
+* the body ends with a live accumulator — `iw186` (the makeup multiply/store) leaves
+  `acc = 95 987 382`, `iw187` loads `acc = −95 944 704`, `iw188` is the END-OF-BLOCK word;
+* the epilogue opens at `iw60` with `acc = 1 301 505 024` — a constant, not the body's value — and
+  at `iw65` a `f31 = 0` LOAD takes `P = 0`, so **`acc = 0` from `iw65` onward**;
+* `iw73` (`E30.C.00.404`, `SRC 0x10` = the accumulator) is the unit-0 presentation, and it
+  presents that zero. `iw72` fetches `L = 0x400000` = the documented unit-0 OUTPUT LEVEL (+0.5),
+  so the level is right there and is multiplied into nothing.
+
+The epilogue's reads are **mode-1 register-file addresses** (`0x8D`, `0x8C`, `0x8F`, `0x06`,
+`0x85`, `0x90`) while its pointer sits at `dp = 0x00` — i.e. the handover is meant to go through
+the REGISTER FILE, not through D-RAM. That is the same array the chorus's delay datum was found
+landing in unread (`N-DLYSEED2-CHORUS-CONFRONT §7`): mode-1 stores go to `m_rf[]` under mask bit
+23, and nothing on the operand side reads it back. ⇒ **the body→epilogue handoff is the next
+single-point break, and it is a register-file question, not an arithmetic one.**
+
+⚠ Grade: MEASURED (two captures, the pair differing in the body and identical in the epilogue, on
+the same rig that shows both gates). The *mechanism* is a READ of the words plus the standing
+`m_rf` finding — it names where to look, it is not a decode. §221's E1 "epilogue/handover operand
+provenance" census is the instrument already built for exactly this.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
