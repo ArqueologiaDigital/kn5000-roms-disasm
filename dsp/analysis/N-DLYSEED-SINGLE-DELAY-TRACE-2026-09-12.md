@@ -26,11 +26,17 @@ frame (frame rate = 44100 Hz, one frame per sample).
 - **accb = −549 755 813 888, constant across the whole frame — confirms the documented kernel-B
   constant** (`DSP-DATAPATH-DECODE-HANDOFF §4.1`): accb is frame-invariant, the root of the SRC 0x11
   dependency cycle. Seen here independently.
-- **The delay datapath is STARVED — MEASURED, and this is the decisive result.** The external
-  delay-DRAM READ (iw93, `088012064B`) returns `mem=0`: the delay line is **empty**, because the
-  blocked input route never wrote audio into it. The body's own `mac.ta2` (iw92) stores acc(=0) back
-  over cell 0x50 mid-frame, so the damping/filter MACs downstream (iw94..102, cursor 0x04..0x09)
-  read 0 and every product P is 0. The whole single-delay body computes on zero.
+- **The delay datapath is STARVED — STRONG (the direct part is MEASURED; see the caveat).** At the
+  external delay-DRAM READ (iw93, `088012064B`) the operand latch **L = 0** and P = 0, and every
+  downstream damping/filter MAC (iw94..102, cursor 0x04..0x09) computes P = 0 with acc = 0 — the
+  whole single-delay body runs on zero (MEASURED). The body's own `mac.ta2` (iw92) stores acc(=0)
+  back over cell 0x50 mid-frame (MEASURED: mem at dp=0x50 is 0x400000 at iw88/91 and 0 from iw92 on).
+  ⚠ **CAVEAT (corrected on reading the trace emitter, `upd6383.cpp:5933`):** the trace's `mem`
+  column is `m_dram[dp]` — the D-RAM cell at the pointer — **not** the datum fetched from the
+  external delay DRAM; the fetched datum lands on the operand latch `L` (§76). So "the line is
+  empty" is INFERRED from L = 0 at the tap read plus the documented blocked input route (nothing has
+  ever written the line), not read off a DRAM-fetch column. Graded STRONG, not a direct DRAM
+  measurement. (An earlier draft of this note called it MEASURED — retracted here.)
 
 ## What this means for the LLE
 1. It **reproduces the input-route starvation at the single-delay datapath**, from a new angle: not
@@ -47,7 +53,9 @@ frame (frame rate = 44100 Hz, one frame per sample).
    capture (the honest structural boundary, `N-HLE-AS-LLE-ORACLE-2026-09-12.md §4`).
 
 ## Honest grade
-All four observations above are MEASURED from the live trace. The interpretation (signal path is
-external-DRAM-based; seed the external DRAM next) is STRONG. No decode was changed; DLYSEED is a
+The seed-visibility, body-entry, accb-constant and "body computes on zero" observations are
+MEASURED from the live trace. "The delay line is empty" is STRONG (inferred from L = 0 at the tap
+read + the blocked route — the trace has no DRAM-fetch column, see the caveat above). The
+interpretation (signal path is external-DRAM-based; seed the external DRAM next) is STRONG. No decode was changed; DLYSEED is a
 pure observation diagnostic. The positive oracle confrontation (damping one-pole arithmetic) awaits
 DLYSEED v2 seeding the external delay DRAM.
