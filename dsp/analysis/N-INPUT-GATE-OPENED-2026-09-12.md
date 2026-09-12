@@ -171,20 +171,36 @@ triplets, identical word forms differing only in `addr8`:
 | `ACT 0x07` | `w43 080106C827` addr8 `0x6C` | `w51 0801064827` addr8 **`0x64`** |
 | `ACT 0x05` | `w44 0801025825` addr8 `0x25` | `w52 0801025825` addr8 `0x25` |
 
-One triplet per channel, and the R one names **exactly the cell the R channel reads**.
+⚠ **CORRECTED by the execution order: the two triplets are not L and R, they are IN and OUT.**
+The first (`w42..w44`) runs in `iw0..49`, *before* the body. The second (`w50..w52`) runs at
+`n=155+`, *after* it — and the trace shows it holding `acc = −95 944 704`, **the body's own final
+accumulator**. So the second triplet is the **body→epilogue handoff** §7 was looking for, and it is
+suppressed by this same bit-11 branch. The symmetry of the two triplets is a symmetry of the
+input and output stages, not of two channels.
+
+**And the R channel's input is a distinct, still-dead cell.** Diffing the kernel-region cells
+across the frame pair: `0x01`, `0x04`, `0x05`, `0x06`, `0x10` **move**; `0x0E` (19 859) and `0x0F`
+(18 535) are **static** — and 18 535 is exactly what the R channel's first operand reads (cells
+`0x64`/`0x65` carry the same value). So `0x0F` is the R pickup, the mirror of the L pickup `0x05`,
+and it is still frozen: `LO12CAP=1` released one capture and brought **one** channel to life.
 
 **Arm extended to the ACT-0x07 store — and it FIRED ZERO TIMES.** `UPD6383_LO12CAP=2` performs the
 `ACT 0x07` store on bit-11 words; the count is 0 and the frame pair is unchanged (59 of 105 rows,
 identical to `=1`). The reason is in the device and is itself informative: those two words have
 `lo12 == 0x827`, which the **§116 branch catches first** (`m_ovc = addr8; return;` — "a register
-aimed") under a mask bit that is set by default. ⇒ `w51` does not store; it **aims a register at
-`0x64`**, confirming the two-channel reading from the other side. The R channel's actual deposit
-must therefore be `w50` (`ACT 0x01`) or `w52` (`ACT 0x05`), both of which DO fall into the bit-11
-"addressing only" branch and are suppressed there — the same suppression that held the first gate.
+aimed") under a mask bit that is set by default. ⇒ `w51` does not store; it **aims a register at `0x64`**. The live
+candidates in that triplet are therefore `w50` (`ACT 0x01`) and `w52` (`ACT 0x05`), both of which
+DO fall into the bit-11 "addressing only" branch and are suppressed there — the same suppression
+that held the first gate shut. Since that triplet is the OUTPUT handoff (above), releasing it is
+what should carry the body's result to the epilogue; the R channel's input needs the *other*
+missing capture, the mirror of the one `LO12CAP=1` released.
 
-⚠ Grade: the stop point and the triplet table are MEASURED/READ; the zero-fire is a MEASURED
-negative that corrects §7's "the break is the body→epilogue handoff" to "the break is the R
-channel's input, one stage earlier". The arm is left in place, default-off, with its zero count.
+⚠ Grade: the stop point, the triplet table, the execution-order correction and the static/moving
+cell census are MEASURED. The zero-fire is a MEASURED negative whose cause was then READ from the
+device (§116). ⇒ there are **two** remaining suppressed handoffs, both in the shared kernel and both
+behind the same bit-11 branch: the **R-channel input** (mirror of the released capture; its cell is
+`0x0F`) and the **body→epilogue output** (`w50`/`w52`). §7's framing is corrected: the output break
+is real, but it is one of two, not the only one. The arm stays default-off with its zero count.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
