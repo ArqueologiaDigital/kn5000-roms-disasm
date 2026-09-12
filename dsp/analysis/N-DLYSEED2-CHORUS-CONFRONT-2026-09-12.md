@@ -127,3 +127,48 @@ bit-exact (third program), LFO phase increment exact against the HLE. The HLE no
 LLE chorus's two failures to two specific words — the READ word's **ACT 0x07 target** (wet path)
 and the sweep word's **SRC 0x00 operand** (the LUT output, not the coefficient) — both concrete,
 env-gateable arms with stated predictions, the first testable next on the FLANGER.
+
+## 7. The §4 arm was RUN — and REFUTED (same day; MEASURED, arm on/off, chorus + flanger)
+`UPD6383_DLY07DRAM` (kn7000_mame `upd6383.cpp`, default off): the §161-re-aimed delay-word
+ACT-07 store goes to D-RAM under the pointer instead of the mode-1 register file `m_rf[]` —
+which is where the device had been putting it (found while placing the arm: `store_mode()` routes
+every mode-1 store to `m_rf` under mask bit 23, so the chorus's datum WAS stored, into
+`m_rf[0x50]`, where no operand fetch reads). Runs: `dsp/tools/dlyseed_run.sh 0 … UPD6383_DLY07DRAM=1`
+(chorus) and `dlyseed_run.sh 3 …` with and without the arm (flanger, prog04, iw84..148,
+TRACE_FRAME 1 658 160 = note-on 36.6 s + 1 s).
+
+**Prediction failed in both programs.** With the arm the datum does persist in `mem[0x50..0x53]`
+across frames (chorus Q1c: "in mem[dp]" on 8 rows; FIRED 6 301 890) — but the word after each
+READ, `102.A.xx.4C8`, is **SRC 0x13 = the TABLE source** (`LO_SRC_TABLE`, class-A "table-port
+multiply"), not `mem[ptr]`: its `L = 0` with the arm on and off, chorus and flanger alike, and its
+coefficient is 0 in BOTH programs' current settings (chorus C-RAM[0x03]/[0x05], flanger [0x04]).
+Worse, the cells are program STATE: in the chorus the next frame's w11 (`082.2.00.1C0`, SRC 0x07)
+bus-adds `mem[0x50]` into the TAP-OFFSET accumulator (acc = 0x400000<<16 + 240<<16), a term the
+HLE topology has no place for; in the flanger cell 0x51 normally holds 0x7FFFFF and the arm
+overwrites it. ⇒ "ACT 0x07 on the READ word stores the datum under the pointer" is REFUTED as the
+wet route. The §4 inference was wrong about the MECHANISM, right about the symptom (the datum dies).
+
+**What the flanger trace adds (MEASURED, arm off):**
+* Its **WRITE word `900.1.60.2D9` carries ACT 0x19 (CAP_TA2)** like the single delay's, and the
+  trace shows `tA ← 0x400000` there (iw91) — the delay's proven bus→tempA route exists here too —
+  but four words later the `44C` word (w10 `000.2.00.44C`, ACT 0x0C) **overwrites tA with the
+  tap offset (194)** before `mac ta` (w12, SRC 0x19) reads it. In the single delay the SRC-0x19
+  consumer is the very next word, so the route survives; in the flanger the device's ACT-0x0C
+  reading (tA ← acc, the §153 modulation transport) clobbers it. That collision — not the READ
+  word — is the flanger's first HLE-visible break: the HLE flanger needs the tap at its
+  feedback/wet multiply, and the bytecode's only measured carrier of it is tA.
+* LFO: **phase cell 0x08 advances +38/frame with `L = 38 = C-RAM[0x05]` on the bus** at w19 —
+  the HLE flanger's rate cell (0x05) confirmed at word level (38 → 0.1998 Hz at the default
+  setting; the 0.77 Hz in the HLE A/B was the panel-driven rate). A SECOND phase pair lives at
+  cell 0x09 (w34..w36) whose delta is NOT +38 (0x670761 → 0x35E5E5) — the flanger runs two
+  phase accumulators and the second is not a plain +inc ramp under the device's readings;
+  OPEN, and a second HLE-refinement candidate (the HLE flanger has one LFO).
+* Multiplier 11/11 exact; accumulator 24 + 17 + 10 bus-add + 13 boundary, 0 unexplained; P←bus
+  fires on the two LUT motifs (iw112/113, 127/128).
+
+**Honest grade of §7:** MEASURED refutation of the §4 mechanism (two programs, both arms); the
+`m_rf` finding is a MEASURED device fact (the store did land, in an array nothing reads). The
+flanger's tA-clobber is MEASURED in the device and is a STRONG lead — the next arm is on the
+`44C`/ACT-0x0C reading (does it really write tA?), not on ACT 0x07. The SRC 0x13 word after every
+modulation-family READ is the open decode that gates the wet path: "table source" (S-6) and
+"delay datum" are now the two live readings for 0x13 on those words.
