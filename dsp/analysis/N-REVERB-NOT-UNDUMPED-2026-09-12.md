@@ -20,9 +20,12 @@ too (adjudication-round5: delay = READ_CELL − WRITE_CELL, descriptor-addressed
 DELAY knob). And `N4-REVERB-DECAY-PROBE` showed the reverb **measurably decays in the emulator**
 (seed the correct delay-line cells → clean geometric per-frame ratios, 0xD0 ×0.767).
 
-So there is **no undumped dependency**. Contrast: distortion's clipping curve is a genuinely
-undumped ROM LUT, and the acoustic-modeling chip's wave ROMs are undumped — those are real
-missing-data walls. The reverb is not one of them.
+So there is **no undumped dependency**. The only genuine data wall here is the acoustic-modeling
+chip's wave mask ROMs (undumped, separate chip). Note: distortion's clipping curve was *also* once
+called "undumped" — that too is **wrong** and has since been retracted
+(`N-DISTORTION-NOT-UNDUMPED-2026-09-12.md`): the class-6 waveshaper reads a table from C-RAM, which
+is populated entirely from dumped ROM (the LFO-waveform role of the same idiom is a proven
+host-uploaded sine). The reverb is not a data wall, and neither is distortion.
 
 ## What IS still open (a decode refinement, not missing data)
 `reverb-topology-round7.md`: the exact micro-topology is **narrowed but not closed** — the

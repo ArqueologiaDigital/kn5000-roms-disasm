@@ -75,18 +75,39 @@ as a Horner-form polynomial nonlinearity was WRONG.** Three independent lines re
   Butterworth tone”), the flowchart landmark detector (1–2 DF-I sections), and `programs.tsv` all
   treat this cluster as OVERDRIVE's tone filter, count = 1 section.
 
-**The actual OVERDRIVE nonlinearity is the class-6 table lookup (w13–w15, addr8 0x28) into a ROM
-LUT whose curve is UNDUMPED — the SAME walled LUT as FUZZ and DISTORTION** (there is no measured-curve
-freebie). So: OVERDRIVE = (undumped class-6 shaper) + tone biquad; FUZZ = (undumped class-6 shaper),
-no tone biquad. The live datapath distinction that stands is the *presence of the tone biquad in
-OVERDRIVE and its absence in FUZZ* — not a decoded nonlinearity. Any HLE distortion audio must use a
-labelled SPECULATIVE stand-in (tanh/hard-clip) for the shaper, default-off.
+**The actual OVERDRIVE nonlinearity is the class-6 table lookup (w13–w15, addr8 0x28 = table
+selector) — the SAME idiom as FUZZ and DISTORTION.** ⚠ CORRECTED (2026-09-12): this table is **NOT
+undumped**, but the earlier "undumped ROM LUT" label was wrong in the *opposite* way from a naive
+"it's TABLE B" — so state it precisely:
+
+- The class-6 idiom reads a table **from C-RAM** (`table[index]`, index in `m_tb`; C63 + class-6
+  measured as ONE idiom, 53/53 in both directions, `instruction-set.md`). C-RAM is populated
+  **entirely from dumped ROM** — per-preset parameter streams and the resident boot blob at Sub CPU
+  ROM **0x01E6BE**. There is no internal silicon table ROM in the class-6 path.
+- **PROVEN for the identical idiom's LFO-waveform role:** the LFO table is a **24-entry sine
+  UPLOADED BY THE HOST**, decoded from the 24 host packets and matched against
+  `0.95·2²³·sin(2πk/24 + 0.1)` to within **1 LSB** (`upd6383.cpp` §188; scale coeff `0x18` = 24 at
+  8/8 sites per `lfo-ramp.md §10`, idiom `(coef·phase)>>23` → index 0..23). The class-6 table is
+  host-uploaded firmware data, not silicon.
+- A live C-RAM capture *reads zeros* at a resident-table region only as a **capture artifact** (it
+  replays parameter streams from a zeroed C-RAM and never replays the boot blob) — not missing data.
+
+What remains is a **DECODE refinement, not a data wall**: which exact C-RAM cells hold the
+distortion waveshaper table (selector 0x28) and the precise index arithmetic — the §162/§167 probes
+(measure that `m_tb` varies, pin the table base). Note the resident ramp/clamp tables A/B
+(`(32+k)·0x400`, `min(1214k,0x7FFF)`) at 0x50–0x8B are read by K3 as the per-unit **delay-DRAM
+allocation**, *not* established as the waveshaper curve — so an HLE must NOT claim TABLE B is the
+clip curve. So: OVERDRIVE = (class-6 shaper, C-RAM table) + tone biquad; FUZZ = (class-6 shaper,
+C-RAM table), no tone biquad. An HLE distortion's clip curve is still a **labelled SPECULATIVE
+stand-in** (hard-clip/tanh) until the table base is pinned; the DRIVE/VOLUME/tone stages are
+measurable from the dumped preset stream.
 
 ## T3 status — COMPLETE
 All three families probed live and confronted with the decode: modulation LFO (CHORUS +114 exact,
 ramp CONFIRMED = LFO SPEED by driving it to +494), delay (delay-DRAM read/write/0.5-mix confirmed),
-distortion (OVERDRIVE polynomial waveshaper + tone stage named; FUZZ distinct). Live confrontations,
-honestly graded.
+distortion (OVERDRIVE = class-6 C-RAM-table shaper + tone biquad; FUZZ = same shaper, no tone stage;
+the class-6 table is host-uploaded/dumped — NOT undumped — proven via the LFO-sine role). Live
+confrontations, honestly graded.
 
 ## Discipline
 Consecutive-frame capture via deterministic re-runs (TRACE_FRAME F, F+1, F+2); raw 24-bit deltas;
