@@ -2048,6 +2048,47 @@ exactly `0` are the sharpest cases.
 
 ⚠ Grade: MEASURED, 32 captures, live bodies, identities fingerprinted.
 
+## 55. ★★★ WHAT KILLS THE OUTPUT ACCUMULATOR: **14 of 14 are an `f31 = 0` LOAD, 13 of them stale**
+§54 asked why 14 of 16 bodies leave a constant accumulator. Scanning each body for the row where
+its accumulator **last differs between consecutive frames**, and looking at the word immediately
+after (`data/acc_lastlive_2026-09-13.txt`):
+
+| the word that follows the last live accumulator | programs |
+|---|---|
+| `cls1 ACT00 SRC00 **f31 = 0**` | 6 |
+| `cls2 ACT0E SRC07 **f31 = 0**` | 4 |
+| `cls2 ACT07 SRC10 **f31 = 0**` | 2 |
+| `cls2 ACT13 SRC10 **f31 = 0**` | 1 |
+| `clsA ACT13 SRC07 **f31 = 0**` | 1 |
+| (reached the body's end still live) | **2** — the positive control |
+
+★★★ **Every single one of the 14 has `f31 = 0`** — a LOAD of the accumulator from the product
+register — across five different `(class, ACT, SRC)` shapes and 14 different programs. And **13 of
+the 14 fetch NO coefficient**, so the product they load is one that nothing in that slot produced.
+
+★ **The body's terminal instruction does not distinguish the groups**: all 16 end with the same
+`cls1 ACT00 SRC00` family, and the live exciter ends with the byte-identical word `042810E000` that
+five constant-accumulator programs also end with. So the difference is *where the accumulator was
+killed*, not how the body finishes.
+
+### ⚠ THIS REVIVES §138 — AND §138 HAS A MEASURED HARM, SO SAY BOTH
+The predicate *"`f31 == 0` and no coefficient fetch ⇒ the LOAD is an erasure, treat it as HOLD"* is
+**§138**, already in the device behind `SPEC` bit 55. **It was refuted (§27/§28) — but only on TWO
+programs**, and with a known mechanism: at the EQ's *body entry* it makes `iw85` HOLD, the entry
+then counts the same bus datum three times and `iw88`'s store rails the pickup.
+⇒ The new evidence is that the same predicate names the killer in **13 of 14 bodies' TAILS**. Those
+are different sites from the entry that §28 measured breaking.
+⚠ **Not proposed as an arm here.** §138 as a blanket rule rewrites **35.5 % of the corpus**
+(`load_nocoef_census.py`) and has a measured harm at the entry; "restrict it to the tail" would be
+**fitting the rule to the data**, which this session has already been burned by. What is MEASURED
+and worth carrying forward is the pattern itself: **the output accumulator dies to an `f31 = 0`
+LOAD in every program that loses it, and to a stale one in 13 of 14.**
+
+⇒ The honest next step is to decide `f31 = 0`'s semantics **from the corpus and the HLE**, not from
+another arm — it is the single most load-bearing undecoded behaviour the output path has.
+
+⚠ Grade: MEASURED, 32 captures, 16 programs, live bodies.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

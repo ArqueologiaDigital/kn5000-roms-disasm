@@ -1,0 +1,42 @@
+WITHIN THE BODY: where does the accumulator LAST differ between frames, and what kills it?
+
+TYPE program                  #live  last   killer word  killer fields
+12   prog35_exciter           64     iw152  -            (body end) @-
+16   prog48_auto_pan          5      iw124  00002021CE   cls2 ACT0E SRC07 f31=0 @iw125
+17   prog50_vibrato           4      iw125  00002021CE   cls2 ACT0E SRC07 f31=0 @iw126
+18   prog52_auto_wah          15     iw142  0000200413   cls2 ACT13 SRC10 f31=0 @iw143
+19   prog15_rock_rotary       26     iw167  0880160000   cls1 ACT00 SRC00 f31=0 @iw168
+20   prog15_rock_rotary       26     iw167  0880160000   cls1 ACT00 SRC00 f31=0 @iw168
+22   prog56_mix_up            35     iw136  00002031CE   cls2 ACT0E SRC07 f31=0 @iw137
+24   prog65_s_delay_s_delay   8      iw145  0880130000   cls1 ACT00 SRC00 f31=0 @iw146
+27   prog68_s_delay_phaser    21     iw165  00002F8407   cls2 ACT07 SRC10 f31=0 @iw166
+28   prog70_auto_wah_s_delay  9      iw186  0880160000   cls1 ACT00 SRC00 f31=0 @iw187
+32   prog74_peq_vibrato       1      iw135  00002F81CE   cls2 ACT0E SRC07 f31=0 @iw136
+33   prog75_peq_compressor    7      iw140  0880160000   cls1 ACT00 SRC00 f31=0 @iw141
+34   prog96_peq_compr_dist    8      iw173  -            (body end) @-
+35   prog97_peq_compr_overdr  2      iw85   0000A001D3   clsA ACT13 SRC07 f31=0 @iw86
+36   prog98_peq_dist_delay    11     iw173  0880160000   cls1 ACT00 SRC00 f31=0 @iw174
+37   prog99_peq_overdr_delay  7      iw173  0000201407   cls2 ACT07 SRC10 f31=0 @iw174
+
+the word that FOLLOWS the last live accumulator, by shape:
+   cls1 ACT00 SRC00 f31=0             6 programs
+   cls2 ACT0E SRC07 f31=0             4 programs
+   (body end)                         2 programs
+   cls2 ACT07 SRC10 f31=0             2 programs
+   cls2 ACT13 SRC10 f31=0             1 programs
+   clsA ACT13 SRC07 f31=0             1 programs
+
+the 14 killer words: do they FETCH A COEFFICIENT? (coeff_fetch = (class4 & 8) && !c_format)
+word         class4 hi12     f31       coeff_fetch?
+00002021CE   2      0        0         no   (x2 programs)
+0000200413   2      0        0         no   (x2 programs)
+0880160000   1      880      0         no   (x2 programs)
+00002031CE   2      0        0         no   (x2 programs)
+0880130000   1      880      0         no   (x1 programs)
+00002F8407   2      0        0         no   (x2 programs)
+00002F81CE   2      0        0         no   (x1 programs)
+0000A001D3   A      0        0         YES   (x1 programs)
+0000201407   2      0        0         no   (x1 programs)
+
+⇒ 13 of 14 killer instances fetch NO coefficient -- a LOAD from a product nothing produced.
+   ⚠ every one of the 14 has f31 = 0.

@@ -1,0 +1,19 @@
+THE BODY'S LAST WORD -- does it distinguish the 2 live-acc bodies from the 14 constant ones?
+
+TYPE program                  acc?  last word    fields                 acc
+12   prog35_exciter           LIVE  042810E000   cls1 ACT00 SRC00 f31=4  398030274560
+16   prog48_auto_pan          const 042410E000   cls1 ACT00 SRC00 f31=2  0
+17   prog50_vibrato           const 040010E000   cls1 ACT00 SRC00 f31=0  429496729600
+18   prog52_auto_wah          const 042410E000   cls1 ACT00 SRC00 f31=2  -65487
+19   prog15_rock_rotary       const 060210E000   cls1 ACT00 SRC00 f31=1  0
+20   prog15_rock_rotary       const 060210E000   cls1 ACT00 SRC00 f31=1  0
+22   prog56_mix_up            const 040010E000   cls1 ACT00 SRC00 f31=0  429496729600
+24   prog65_s_delay_s_delay   const 040010E000   cls1 ACT00 SRC00 f31=0  0
+27   prog68_s_delay_phaser    const 060410E000   cls1 ACT00 SRC00 f31=2  90
+28   prog70_auto_wah_s_delay  const 042010E000   cls1 ACT00 SRC00 f31=0  0
+32   prog74_peq_vibrato       const 042810E000   cls1 ACT00 SRC00 f31=4  0
+33   prog75_peq_compressor    const 042810E000   cls1 ACT00 SRC00 f31=4  445615102739
+34   prog96_peq_compr_dist    LIVE  042810E000   cls1 ACT00 SRC00 f31=4  317016817664
+35   prog97_peq_compr_overdr  const 042810E000   cls1 ACT00 SRC00 f31=4  84565177910
+36   prog98_peq_dist_delay    const 042810E000   cls1 ACT00 SRC00 f31=4  0
+37   prog99_peq_overdr_delay  const 042810E000   cls1 ACT00 SRC00 f31=4  0
