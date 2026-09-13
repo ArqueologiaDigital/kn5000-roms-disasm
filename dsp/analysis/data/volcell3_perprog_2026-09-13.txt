@@ -1,0 +1,8 @@
+=== VOLUME cell 0x06, PER-PROGRAM census (UPD6383_CENSUS_PERPROG=1), TYPES 16..20 ===
+  TYPE | arm OFF (shipped)                       | GATECLR ON
+  16   | (3075606, -599857..8388607, chg 177316) | (2260027, 0..2260027, chg 1)
+  17   | (8388607, -599857..8388607, chg 109605) | (2260027, 0..2260027, chg 1)
+  18   | (8388607, 0..8388607, chg 11)           | (2260027, 0..2260027, chg 1)
+  19   | (6913425, 0..8388607, chg 38311)        | (2260027, 0..2260027, chg 1)
+  20   | (8388607, 0..8388607, chg 41456)        | (2260027, 0..2260027, chg 1)
+  arm ON : chg == 1 and NOT railed in 5 of 5.  arm OFF: railed in 5 of 5, chg > 1000 in 4 of 5.

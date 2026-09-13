@@ -4860,6 +4860,53 @@ is not more care at the same speed. **A per-program capture harness — one prog
 walk — would have removed three of the five by construction**, and that is the instrument the next
 pass should build before it designs another criterion.
 
+## 103. THE INSTRUMENT THAT REMOVES THE MISTAKE — and the store-gate result it produces
+Device: **`UPD6383_CENSUS_PERPROG`** (default OFF, read-only). Data:
+[`data/volcell3_perprog_2026-09-13.txt`](data/volcell3_perprog_2026-09-13.txt).
+
+§102 ended with five defective criteria, three of them the same defect: the capture harness steps
+UP from TYPE 0, so a capture of TYPE *n* has walked through *n+1* program loads, and §176's D-RAM
+census and §228's rise census both accumulate **from boot**. I documented that in §100 and then
+wrote three criteria that ignored it. ★ **The fix is not more care at the same speed — it is an
+instrument that cannot be read the wrong way.**
+
+With the arm on, both censuses are cleared when a new I-RAM program arrives, so a capture's numbers
+describe the program it traced; the census header line now states which mode produced it,
+**including a warning on the default path**, because every census number this project has published
+was cumulative and nothing said so.
+
+### And with it, the store-gate result comes out clean
+The same five out-of-sample programs, re-measured per-program:
+
+```
+   TYPE | arm OFF (shipped)                       | GATECLR ON
+   16   | (3075606, -599857..8388607, chg 177316) | (2260027, 0..2260027, chg 1)
+   17   | (8388607, -599857..8388607, chg 109605) | (2260027, 0..2260027, chg 1)
+   18   | (8388607,       0..8388607, chg     11) | (2260027, 0..2260027, chg 1)
+   19   | (6913425,       0..8388607, chg  38311) | (2260027, 0..2260027, chg 1)
+   20   | (8388607,       0..8388607, chg  41456) | (2260027, 0..2260027, chg 1)
+```
+
+★★★ **With the arm the VOLUME cell is written EXACTLY ONCE per program, holds a plausible depth,
+and is never railed — 5 of 5.** Without it the cell is **railed in 5 of 5** and churned 11 … 177 316
+times. That is `PREDICT_VOLCELL`'s W1 and W3 as originally intended, on the instrument that makes
+them mean what they say, over programs captured for the first time today, with the control firing
+on every one — and with `PREDICT_VOLCELL2`'s cumulative-form W1/W2 already passed 5/5 beforehand.
+
+### What is now determined, stated at exactly its strength
+The arm implements *"the incoming accumulator does not contribute to the gate word's result"*.
+⇒ **every surviving family that carries the accumulator through the gate word is refuted** —
+including the shipped `-/clr:never` — because those are the machines that rail and churn a cell the
+firmware writes once and the ROM proves is the user's VOLUME (`register-space.md` item A1, 49 of 49
+algorithms).
+
+⛔ It does **not** choose between `-`, `ST(acc→else)` and `LD`: all three can discard the incoming
+accumulator, and `else` is unreadable by construction. The axis narrows from *what happens to the
+accumulator AND the memory* to **the memory access alone**.
+
+⛔ **Coverage is unchanged at 75.0 %.** `alu_decoded()` refuses these 138 words for the memory
+access, which this does not touch — exactly as both pre-registrations said a pass would leave it.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
