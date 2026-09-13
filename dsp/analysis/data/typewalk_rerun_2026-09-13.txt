@@ -1,0 +1,56 @@
+kn5000_subcpu_boot.ic30 ROM NEEDS REDUMP
+kn5000_rhythm_data_rom.ic14 WRONG CHECKSUMS:
+    EXPECTED: CRC(aa4917ce) SHA1(fef7f1927935d8fdada2afbdbfac29aac56e1c3c)
+       FOUND: CRC(76d11a5e) SHA1(e4b572d318c9fe7ba00e5b44ea783e89da9c68bd)
+kn5000_waveform_rom.ic307 ROM NEEDS REDUMP
+kn5000_waveform_rom.ic307 ROM NEEDS REDUMP
+kn5000_waveform_rom.ic307 ROM NEEDS REDUMP
+WARNING: the machine might not run correctly.
+### type_enum loaded NMAX=40 steps=210
+### boot settle done
+### editor opened, title='           9'
+### TYPE  0  type=0x0B  '           9'
+### TYPE  1  type=0x0B  '           9'
+### TYPE  2  type=0x0B  '  i     G   S   F'
+### TYPE  3  type=0x0B  '  i     G   S   F'
+### TYPE  4  type=0x0B  '  i     G   S   F'
+### TYPE  5  type=0x0B  '  i     G   S   F'
+### TYPE  6  type=0x0B  '  i     G   S   F'
+### TYPE  7  type=0x0B  '  i     G   S   F'
+### TYPE  8  type=0x0B  '72  i     W   c'
+### TYPE  9  type=0x0B  '72  i     W   c'
+### TYPE 10  type=0x0B  '72  i     W   c'
+### TYPE 11  type=0x0B  '72  i     W   c'
+### TYPE 12  type=0x0B  '72  i     W   c'
+### TYPE 13  type=0x0B  '72  i     W   c'
+### TYPE 14  type=0x0B  '0.02  i     g   s'
+### TYPE 15  type=0x0B  '0.02  i     g   s'
+### TYPE 16  type=0x0B  '0.02  i     g   s'
+### TYPE 17  type=0x0B  '0.02  i     g   s'
+### TYPE 18  type=0x0B  '0.02  i     g   s'
+### TYPE 19  type=0x0B  '0.02  i     g   s'
+### TYPE 20  type=0x0B  ''
+### TYPE 21  type=0x0B  ''
+### TYPE 22  type=0x0B  ''
+### TYPE 23  type=0x0B  ''
+### TYPE 24  type=0x0B  ''
+### TYPE 25  type=0x0B  ''
+### TYPE 26  type=0x0B  '      DEPTH'
+### TYPE 27  type=0x0B  '      DEPTH'
+### TYPE 28  type=0x0B  '      DEPTH'
+### TYPE 29  type=0x0B  '      DEPTH'
+### TYPE 30  type=0x0B  '      DEPTH'
+### TYPE 31  type=0x0B  '  + 60  i'
+### TYPE 32  type=0x0B  '  + 60  i'
+### TYPE 33  type=0x0B  '  + 60  i'
+### TYPE 34  type=0x0B  '  + 60  i'
+### TYPE 35  type=0x0B  '  + 60  i'
+### TYPE 36  type=0x0B  '  + 60  i'
+### TYPE 37  type=0x0B  '  i     G   S   F'
+### TYPE 38  type=0x0B  '  i     G   S   F'
+### TYPE 39  type=0x0B  '  i     G   S   F'
+### TYPE 40  type=0x0B  '  i     G   S   F'
+### done
+upd6383: wrote 882 transfers (38122 bytes) to kn5000_dsp1_upload.{bin,txt}
+upd6383: wrote pointer trace to kn5000_dsp1_upload_ptrtrace.txt
+Average speed: 35.90% (62 seconds)

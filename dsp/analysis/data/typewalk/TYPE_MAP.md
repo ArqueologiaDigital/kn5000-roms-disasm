@@ -13,6 +13,27 @@ mislabelled four entries.
 ★ KNOWN-ANSWER CONTROLS, both passing: TYPE 0 = CHORUS and TYPE 15 = PARAMETRIC EQ,
 both measured independently before this table existed (`peq_select.lua`).
 
+## ⚠ RE-RUN ATTEMPTED 2026-09-13 — TWO PRACTICAL FINDINGS, MAP NOT YET FIXED
+The off-by-one below blocks the catalogue regression for 28 of the 38 programs, so the walk was
+re-run. It did **not** produce a corrected map, and the two reasons are recorded here because both
+cost a run and neither is in any docstring:
+
+1. ★ **`type_enum.lua`'s output goes to STDOUT/STDERR, not to `error.log`.** Every other harness in
+   `dsp/tools/` is captured with `-log` + `cp error.log`, and doing that here yields a 511 KB log
+   with **zero** `###` lines and no error — the script ran perfectly and its output went to the
+   console that was redirected to `/dev/null`. Capture it with `> out.txt 2>&1`.
+2. ⛔ **The display read at `0x30AE5` does not return the effect name in this build.** At every
+   index the title comes back as garbage (`'           9'`, `'  i     G   S   F'`) while
+   `type=0x0B` never changes, including at the "editor opened" checkpoint. So the walk's *titles*
+   cannot be used to rebuild the map, and the note below is right that the authoritative mapping
+   came from **matching uploaded program images (16 words)**, not from the display.
+
+⇒ **To fix the map properly**, capture the uploaded program image at each index and match it
+against the 38 listings on 16 words (the method the header already describes), rather than reading
+the panel text. That is a self-contained job and it unblocks sweeping the other 28 programs.
+⚠ Also: the re-run was killed by its 120 s timeout before finishing 40 steps
+(`data/typewalk_rerun_2026-09-13.txt`); allow more.
+
 ⛔ **OFF BY ONE ABOVE INDEX 8 — §194.** This table was built from *distinct consecutive*
 programs, so **two adjacent TYPE slots sharing one program image collapse into a single row**,
 shifting every later index down by one. Measured: asking for map-index 28 lands on map-index 29's

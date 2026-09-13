@@ -82,8 +82,15 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    and it would contest the bit-4 target the project FORCED over 2 160 models — a forcing done on
    the EQ, whose bit-4 words sit elsewhere). ⚠ **No arm proposed**: neither shape has a
    discriminating measurement yet, and §32 is recent enough.
-   ⚠ The other **28 programs are unswept** (TYPE_MAP is off by one above index 8 — re-run the walk
-   without deduplication first); the **output stage** is still §216's null.
+   ⚠ The other **28 programs are unswept**, blocked on TYPE_MAP's off-by-one above index 8. A
+   re-run was attempted 2026-09-13 and produced **two practical findings but no fixed map**
+   (`data/typewalk/TYPE_MAP.md`, new banner): ★ `type_enum.lua` prints to **stdout/stderr, not
+   `error.log`** — capturing it the way every other harness is captured yields a 511 KB log with
+   zero output and no error; ⛔ the display read at `0x30AE5` **does not return the effect name in
+   this build** (garbage at every index, `type` byte constant). ⇒ fix the map by **matching the
+   uploaded program image at each index against the 38 listings on 16 words**, which is what the
+   original did, not by reading the panel text. Self-contained, and it unblocks 28 programs.
+   ⚠ The **output stage** is still §216's null.
 
    ★★★★ **§36: `UPD6383_CALLFLUSH` IS PROMOTED TO DEFAULT-ON** (`UPD6383_CALLFLUSH=0` restores the
    old behaviour; the A/B stays available, as §225 did for `LFOWRAP`). **Zero regressions across
