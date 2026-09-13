@@ -95,7 +95,29 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    result. (`fx_ab.lua`, used by the gate and the catalogue sweeps, steps UP from 0 and is NOT
    affected; its TYPE 0–8 are the verified short-distance regime and its TYPE 15 captures are
    confirmed to be the EQ by their five 4-cell band blocks.)
-   ⇒ **Sweeping the remaining 28 programs is addressed by a measured index now** — but it needs the
+   ★★★★ **§42: THE OTHER 28 ARE SWEPT — and this is where the LLE actually stands.** Every
+   identity fingerprinted from the machine's own upload; the rebuilt map independently confirmed
+   (TYPE 19 and 20 both load the rotary in this harness too).
+   | reading | count |
+   |---|---|
+   | ✅ LIVE (audio present **and** the body moves) | **7** |
+   | ⛔ **STATIC with audio present** | **16** |
+   | ⚠ VOID (no audio at the traced frame) | 5 |
+   ⇒ **the 16 are the remaining body-side work, and they are now NAMED** (exciter, auto-pan,
+   vibrato, auto-wah, rotary ×2, mix-up, s.delay+s.delay, s.delay+phaser, auto-wah+s.delay and six
+   PEQ combis) rather than estimated. ⚠ "STATIC" is **not** "broken by the promoted changes" —
+   there is no baseline here, only an absolute health check under the defaults.
+   ⚠ The 5 VOID rows are an instrument limit: `fx_ab.lua` arms the trace at
+   `36.0 + 0.2 × TYPEIDX + 1.0 s`, which puts no audio in the chip for those programs — they need
+   their own offset before they can be read at all.
+   ⚠ The audio test must be PER PROGRAM (any of `0x01`/`0x04`/`0x05`): TYPE 9 carries its input in
+   `0x01` with `0x05 = 0`, and a single-cell check mislabelled rows before I widened it.
+   ★ `catalogue_regression.sh` now takes `TYPES="..."` and fingerprints every run; ⇒ **§193's
+   "fx_ab drops steps at long distances" does NOT survive the map rebuild** — asking for TYPE 29
+   loads `prog71_peq_chorus` with live audio, so the separate selector-driven harness
+   (`catalogue_sweep_sel.sh`) is not needed for this.
+
+   ~~Sweeping the remaining 28 programs is addressed by a measured index now~~ — but it needs the
    OTHER harness, and that one is newly built and only half-tuned:
    ★ `dsp/tools/catalogue_sweep_sel.sh` drives `type_select.lua` (the calibrated transport) and
    **fingerprints every run**, because `catalogue_regression.sh`'s `fx_ab.lua` steps UP from 0 and
