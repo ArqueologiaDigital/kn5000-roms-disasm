@@ -1,0 +1,10 @@
+LFO phase across 8 consecutive frames -- the step must be CONSTANT and equal 114
+
+capture                              frames         step  verdict
+promo2_def_cho.log                        8          114  ✅ FREE-RUNNING RAMP at the increment
+
+body entry at iw84 -- the HLE says ONE copy of the input must reach the band's cell
+
+capture                           bus datum  cells holding exactly one copy
+promo2_def_eq.log                   4879200  ✅ ONE COPY at 0x50, 0x54, 0x58, 0x5C, 0x60
+promo2_off_eq.log                   4857267  ✅ ONE COPY at 0x10

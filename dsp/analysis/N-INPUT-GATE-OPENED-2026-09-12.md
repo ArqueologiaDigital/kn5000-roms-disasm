@@ -1419,6 +1419,55 @@ on two programs again.
 (`data/pair_gate_st07sign_2026-09-13.txt`, `data/pg_st07sign_*_2026-09-13.log.gz`). The catalogue
 verdict follows in §40.
 
+## 40. ★★★★★ THE CATALOGUE AGREES — `UPD6383_ST07SIGN` IS PROMOTED, AND THE EQ'S BODY RUNS
+Isolated against the **flush-only** sweep (so the comparison measures this change and nothing
+else), ten programs, one frame pair each (`data/regression_st07sign_2026-09-13.txt`):
+
+| TYPE | effect | flush only | + `ST07SIGN` | |
+|---|---|---|---|---|
+| 0 | CHORUS | 3/17 0 46 | 3/17 0 46 | ✅ unchanged, LFO +114 |
+| 1 | MODULATED CHORUS | 5/20 0 62 | 5/20 0 62 | ✅ unchanged, LFO +114 |
+| 2 | ENHANCER | 2/31 0 10 | 2/31 0 10 | ✅ unchanged |
+| 3 | FLANGER | 3/13 1 52 | 3/13 1 **53** | ✅ **+1 product**, LFO +114 |
+| 4 | PHASER | 26/32 0 86 | 26/32 0 86 | ✅ unchanged, LFO +114 |
+| 5 | ENSEMBLE | 4/23 **1** 35 | 4/23 **0** 35 | ✅ **a railed cell REMOVED**, LFO +114 |
+| 6 | GATED REVERB | 3/15 0 51 | 3/15 0 51 | ✅ unchanged |
+| 7 | SINGLE DELAY | 1/10 0 41 | 1/10 0 41 | ✅ unchanged |
+| 8 | MULTI TAP DELAY | 2/13 0 28 | 2/13 0 28 | ✅ unchanged |
+| **15** | **PARAMETRIC EQ** | **2/44 0 9** | **30/44 0 90** | ✅ **+28 cells, +81 products** |
+
+**0 regressions.** Nothing loses liveness, nothing gains a railed cell, every LFO stays at
++114/frame — and the reference program goes from **starved to running**: 2 moving cells become 30,
+9 non-zero products become 90. The ensemble even *loses* a pre-existing railed cell and the flanger
+gains a product. Seven programs are untouched, which is exactly right: their entry stores carry a
+negative or absent `addr8`, so the rule never applies to them.
+
+⇒ **Promoted to default-on**, `UPD6383_ST07SIGN=0` restores the old uniform PRE target.
+**Verified two-sided after the change** (`data/promotion2_verify_2026-09-13.txt`):
+
+```
+default          ✅ ONE COPY at 0x50, 0x54, 0x58, 0x5C, 0x60   <- the cells the bands READ
+ST07SIGN=0       ✅ ONE COPY at 0x10                            <- the old, unread cell
+chorus, default  ✅ FREE-RUNNING RAMP at +114/frame
+```
+
+★★★ **This is the body-side gap of §23/§30/§37 closed.** The chain now runs end to end on the
+reference program: the kernel delivers the input, the entry assembles one clean copy of it, the
+store lands on the cell the first band reads, and all five bands filter their own input while the
+chorus keeps its oscillator. Two changes, each promoted on ten-program evidence, each with its
+switch kept for the A/B.
+
+⚠ **What is still open**, stated so it is not mistaken for finished:
+- the **ENHANCER** is unchanged at 10 products — it has **no `ACT 0x07` store at its entry at all**
+  (§37), so this rule cannot help it, and how its body is meant to be fed is still unknown;
+- the sign rule is a **hypothesis that survived**, not a derivation. `addr8 > 0` may be standing in
+  for something the trace does not print, and the corpus split (181/155/54) means roughly half the
+  `ACT 0x07` sites moved;
+- the other 28 effect programs, and the whole output stage (§216's null), are untouched by this.
+
+⚠ Grade: MEASURED — gate (§39), isolated ten-program regression, two-sided verification after the
+change. Promotion is a judgement on that evidence.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
