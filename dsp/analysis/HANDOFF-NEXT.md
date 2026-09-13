@@ -1,3 +1,35 @@
+# ★★★★★ 2026-09-13 — THE ORACLE INVERTED MY OWN HEADLINE: THE EQ IS A **CASCADE**
+
+**`dsp/hle/effects.py`'s `parametric_eq` is a SERIES of biquads** — `y` feeds forward, band 2
+filters band 1's *output*. ⇒ **exactly ONE band, the first, should ever receive a clean copy of the
+input; the other four must NOT.**
+
+Applying §29's one-copy criterion to all four cells of the selector × arms 2×2:
+
+| configuration | one clean copy at … |
+|---|---|
+| **sel 7 (SHIPPED), arms OFF** | ✅ **`0x50` ONLY — the first band. MATCHES THE ORACLE.** |
+| sel 7, arms ON | ⛔ RAILED at all five |
+| sel 4, arms OFF | ⛔ none (ratio 1.600 — the contaminated baseline) |
+| sel 4, arms ON | ⚠ all five — **the WRONG topology (parallel, not cascade)** |
+
+⛔⛔ **THIS RETRACTS §32's HEADLINE.** *"Every band now receives exactly one copy of the input"* was
+**a description of a DEFECT, not a success** — for a cascade it is exactly what must not happen —
+and **§40's promotion of `ST07SIGN` rested on producing it**, so its central evidence is
+**inverted**. ✅ §29's criterion itself STANDS, but it must be applied **PER TOPOLOGY**: *one copy
+at the FIRST stage of a cascade*, not *one copy everywhere*. Applying it without the topology is
+how this happened.
+⚠ **§36's `CALLFLUSH` evidence is NOT touched** — it is about the chorus and the modulation family,
+not the EQ's topology.
+⇒ **`ACT 0x0E` = selector 7, AS SHIPPED, for the EQ.** ⚠ One program; re-read §234's 1-of-49 disk
+confirmation beside it.
+
+★★★ **METHOD: the ORACLE is the tie-break, and it must be consulted BEFORE a criterion is applied,
+not after a promotion.** The bytecode is the source of truth; the HLE says what the program
+*computes*; a criterion applied without either can confirm a defect.
+
+---
+
 # ⛔⛔ 2026-09-13 — READ THIS FIRST: A REGRESSION WAS SHIPPED AND REVERTED
 
 **Both of this session's promotions (`UPD6383_CALLFLUSH`, `UPD6383_ST07SIGN`) are BACK TO
