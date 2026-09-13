@@ -4993,6 +4993,46 @@ than a liveness flag.
 line, so the next attempt should not be built on it — and the reason is now on file with a passing
 reach test instead of being rediscovered.
 
+## 108. ★★ §96's STATIC BLINDNESS WALK, VALIDATED BY THE MACHINE — 5 of 5
+Pre-registration: [`data/PREDICT_F31BLIND_2026-09-13.md`](data/PREDICT_F31BLIND_2026-09-13.md).
+Data: [`data/f31blind_2026-09-13.txt`](data/f31blind_2026-09-13.txt).
+
+§96 admitted 32 words on a lemma and graded itself *"DETERMINED-conditional, not FORCED"*. The
+method that closed the store gate suggested the missing half: **sweep the reading and look at the
+machine.** The device can express three readings of `f31 == 5` (`m_bx_f5`, SPEC bits 50-51:
+LOAD / ADD / HOLD), so run each program under all three with the per-program census and ask whether
+anything moves.
+
+| TYPE | program | `f31 == 5` fired | censuses | frame trace | machine says |
+|---|---|---:|---|---|---|
+| 0 | chorus | 1 601 712 | identical | **differ** | BLIND |
+| 2 | enhancer | 2 154 408 | identical | **differ** | BLIND |
+| 4 | phaser | 2 195 822 | **DIFFER** | differ | OBSERVED |
+| 15 | parametric EQ | 2 449 160 | **DIFFER** | differ | OBSERVED |
+| 18 | auto wah | 3 060 922 | **DIFFER** | differ | OBSERVED |
+
+★★ **The instrument says BOTH answers**, so "identical" is a null with power — G3 and G4 both hold:
+the frame trace differs in every row (the arm demonstrably changed the machine's internal state),
+and three of five programs move a census.
+
+★★★ **And it agrees with §96's static walk 5 of 5.** The enhancer's two sites are the ones §96
+called BLIND; the phaser's and the EQ's are the ones it called live; the auto wah has three live
+sites and differs. Where the walk says the accumulator is destroyed unread, the machine cannot tell
+the three readings apart. Where it says the accumulator is read, the machine can.
+
+⇒ **§96's lemma is no longer conditional on an argument** — the walk's verdicts are reproduced by
+the hardware model on five programs, with an instrument shown able to say the opposite.
+
+⛔ **No new words are admitted and coverage stays at 77.6 %.** That is the point: the statically-live
+sites are empirically observed, exactly as the walk said, so there was nothing here to harvest. The
+run's value is that the 32 words §96 admitted now rest on a measurement as well as a lemma.
+
+⚠ Two limits, stated. The observable set is the censuses — broad (all 256 D-RAM cells with ranges
+and change counts, the rise census, the per-site accumulator censuses, the write counts) but **not
+the audio**; a difference that altered only the output samples would read as "blind" here. And
+`f31 == 4` **fired 0 times** in the chorus, so the two arms aimed at it said nothing; it is untested
+and is recorded as such rather than swept in with the rest.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

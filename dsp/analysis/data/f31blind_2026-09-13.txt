@@ -1,0 +1,15 @@
+=== EMPIRICAL BLINDNESS, f31 == 5, three readings (LOAD/ADD/HOLD), per-program census ===
+TYPE   program                f31=5 n    censuses       frametrace   verdict
+0      chorus                 1601712    identical      differ       BLIND
+2      enhancer               2154408    identical      differ       BLIND
+4      phaser                 2195822    DIFFER(2)      differ       OBSERVED
+15     parametric EQ          2449160    DIFFER(3)      differ       OBSERVED
+18     auto wah               3060922    DIFFER(3)      differ       OBSERVED
+
+  §96's STATIC walk, for the same sites:
+     chorus   -- only the kernel's w30            §96: (gate axis)      machine: BLIND
+     enhancer -- w4, w52                          §96: BLIND, BLIND     machine: BLIND
+     phaser   -- w7, w66                          §96: live, live       machine: OBSERVED
+     PEQ      -- w3, w56                          §96: live, live       machine: OBSERVED
+     auto wah -- w3, w23, w39, w57                §96: BLIND + 3 live   machine: OBSERVED
+  ⇒ 5 of 5 agree.  The instrument says BOTH answers, so "identical" is a null with power.
