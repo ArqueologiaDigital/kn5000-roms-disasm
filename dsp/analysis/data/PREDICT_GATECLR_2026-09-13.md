@@ -142,3 +142,25 @@ chorus's own step has never been measured.
 **P2′ (same prediction, correct instrument):** with `UPD6383_CENSUS_PERPROG=1` and `GATECLR=1`, the
 chorus's cell `07` must read `step 114..114`, `mean 114.000`, `period 73 584 frames = 0.5993 Hz` —
 the ROM's own constant. Control: the same capture with `GATECLR` off must NOT.
+
+---
+
+## P2″ — the OTHER clear placement, registered before the run
+
+P2′ missed per-program too (`step 114..4190812 mean 29167` off, `114..3470859 mean 15544` on). The
+frame trace says why, and it is not a defect in the criterion this time: with the feedback dropped
+the gate word still LOADS the one-slot product `m_p`, and at the LFO ramp word that product is the
+PREVIOUS word's — junk. The increment does not arrive until the NEXT word (`082.2.00.1C0`,
+`SRC 0x07` + `ACT 0x00`, `f31 == 1`), where the pipeline delivers it.
+
+**`clr:after` — the accumulator left at ZERO after the gate word — removes that too**, and it is
+`store-gate.md` §4's other surviving clear placement, not a new hypothesis.
+
+**P2″ (`UPD6383_GATECLR=2`, with `UPD6383_CENSUS_PERPROG=1`):**
+
+| | prediction | what a miss means |
+|---|---|---|
+| **Q1** | the arm fires (count > 0) | discard |
+| **Q2** ★★ | chorus cell `07`: `step 114..114`, `mean 114.000`, `0.5993 Hz` — the ROM's constant | `clr:after` does not produce the ROM's rate either, and BOTH clear placements are out on this criterion |
+| **Q3** | the VOLUME cell `0x06` stays written-once and unrailed (what `clr:before` already achieves) | the arm trades one firmware criterion for the other |
+| **Q4** | 10-program hand-off regression, 0 BROKEN | it is a trade, not a decode |
