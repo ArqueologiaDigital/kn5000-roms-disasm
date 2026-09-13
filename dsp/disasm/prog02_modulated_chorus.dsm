@@ -16,20 +16,20 @@
   w2    000020F40E   ld      acc,(p)+15
   w3    02122F100B   ?word   0x02122F100B   ; 212.2.F1.00B  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w4    00002F5407   ld.st   acc,(p)-11
-  w5    0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
+  w5    0092A00200   mac.b   c,c+,(p)+0 ; store SUPPRESSED (bit7)
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w6    00822001C0   mac.b   (p),(p)+0
   w7    0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
   w8    0000201447   ?word   0x0000201447   ; 000.2.01.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
-  w9    0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
+  w9    0092A00200   mac.b   c,c+,(p)+0 ; store SUPPRESSED (bit7)
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w10   00822001C0   mac.b   (p),(p)+0
   w11   0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w12   0000207447   ?word   0x0000207447   ; 000.2.07.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w13   09001601D5   dly.w  dsc[k],p+96
-  w14   0192A40000   ?word   0x0192A40000   ; 192.A.40.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w14   0192A40000   mac.b   (p)0,c+,(p)+64 ; store SUPPRESSED (bit7)
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
   w15   00822001C0   mac.b   (p),(p)+0
   w16   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 57/57 for this opcode); destination register lo12=44C UNKNOWN]
@@ -40,7 +40,7 @@
   w20   00002FF407   ld.st   acc,(p)-1
   w21   00122FE1C0   mac.b   (p),(p)-2 ; mem[p]<-acc, acc=0
   w22   09001601D5   dly.w  dsc[k],p+96
-  w23   0192A41000   ?word   0x0192A41000   ; 192.A.41.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w23   0192A41000   mac.b   (p)0,c+,(p)+65 ; store SUPPRESSED (bit7)
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
   w24   00822001C0   mac.b   (p),(p)+0
   w25   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 57/57 for this opcode); destination register lo12=44C UNKNOWN]
@@ -76,22 +76,22 @@
   w49   0102A0A1D5   mac     (p),c+,(p)+10
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x66[1] (role mix/tap, INFERRED)
-  w50   0202200000   mac.b   ?,(p)+0
+  w50   0202200000   mac.b   (p)0,(p)+0
   w51   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = op0x66[2] (role mix/tap, INFERRED)
-  w52   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w52   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w53   00002FF407   ld.st   acc,(p)-1
   w54   0010AF71D5   ld      (p),c+,(p)-9 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
   w55   0202A091D5   mac     (p),c+,(p)+9
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = op0x66[3] (role mix/tap, INFERRED)
-  w56   0202200000   mac.b   ?,(p)+0
+  w56   0202200000   mac.b   (p)0,(p)+0
   w57   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = op0x66[4] (role mix/tap, INFERRED)
-  w58   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w58   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w59   0000A01412   ld      acc,c+,(p)+1
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
   w60   0212AF41D5   mac     (p),c+,(p)-12 ; mem[p]<-acc, acc=0
@@ -101,7 +101,7 @@
   w63   0212201407   mac.st  acc,(p)+1 ; mem[p]<-acc, acc=0
   w64   00002FD407   ld.st   acc,(p)-3
   w65   09001601D5   dly.w  dsc[k],p+96
-  w66   0192A44000   ?word   0x0192A44000   ; 192.A.44.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w66   0192A44000   mac.b   (p)0,c+,(p)+68 ; store SUPPRESSED (bit7)
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
   w67   00822001C0   mac.b   (p),(p)+0
   w68   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 57/57 for this opcode); destination register lo12=44C UNKNOWN]
@@ -112,7 +112,7 @@
   w72   00002FF407   ld.st   acc,(p)-1
   w73   00122FF1C0   mac.b   (p),(p)-1 ; mem[p]<-acc, acc=0
   w74   09001601D5   dly.w  dsc[k],p+96
-  w75   0192A44000   ?word   0x0192A44000   ; 192.A.44.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w75   0192A44000   mac.b   (p)0,c+,(p)+68 ; store SUPPRESSED (bit7)
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
   w76   00822001C0   mac.b   (p),(p)+0
   w77   0C4032044C   ?word   0x0C4032044C   ; C40.3.20.44C  {C-fmt A=25 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=25 B=0 (imm13 0x0320 = 25*32, MEASURED 57/57 for this opcode); destination register lo12=44C UNKNOWN]

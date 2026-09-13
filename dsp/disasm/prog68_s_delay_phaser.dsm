@@ -15,7 +15,7 @@
   w1    000020D1CD   ld      (p),(p)+13
   w2    000020040E   ld      acc,(p)+0
   w3    021220000B   ?word   0x021220000B   ; 212.2.00.00B  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w4    0022200000   mac.b   ?,(p)+0
+  w4    0022200000   mac.b   (p)0,(p)+0
   w5    00002FE407   ld.st   acc,(p)-2
   w6    0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
@@ -34,9 +34,9 @@
         ; coeff C-RAM[0x02] = op0x66[0] (role mix/tap, INFERRED)
   w15   020420D1CD   post    (p),(p)+13
   w16   000020040E   ld      acc,(p)+0
-  w17   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w17   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w18   0000201407   ld.st   acc,(p)+1
-  w19   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
+  w19   0092A00200   mac.b   c,c+,(p)+0 ; store SUPPRESSED (bit7)
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
   w20   00822001C0   mac.b   (p),(p)+0
   w21   0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)
@@ -63,7 +63,7 @@
   w39   0212AB5412   mac     acc,c+,(p)-75 ; mem[p]<-acc, acc=0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = filter section cell 1 (role filter, INFERRED)
-  w40   0104200000   post.b  ?,(p)+0
+  w40   0104200000   post.b  (p)0,(p)+0
   w41   0000209407   ld.st   acc,(p)+9
   w42   01042001D5   post    (p),(p)+0
   w43   0202A01415   mac     acc,c+,(p)+1
@@ -78,7 +78,7 @@
   w48   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w49   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w50   01042FE1CE   post    (p),(p)-2
-  w51   0102200000   mac.b   ?,(p)+0
+  w51   0102200000   mac.b   (p)0,(p)+0
   w52   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x09] = op0x66[2] (role mix/tap, INFERRED)
@@ -93,7 +93,7 @@
   w58   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w59   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w60   01042041CE   post    (p),(p)+4
-  w61   0102200000   mac.b   ?,(p)+0
+  w61   0102200000   mac.b   (p)0,(p)+0
   w62   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x66[4] (role mix/tap, INFERRED)
@@ -104,7 +104,7 @@
   w65   00002F81CE   ld      (p),(p)-8
   w66   021220B407   mac.st  acc,(p)+11 ; mem[p]<-acc, acc=0
   w67   0880130000   dly.r  dsc[k],p+48
-  w68   0022200000   mac.b   ?,(p)+0
+  w68   0022200000   mac.b   (p)0,(p)+0
   w69   00002FF407   ld.st   acc,(p)-1
   w70   0000A001D5   ld      (p),c+,(p)+0
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
@@ -123,7 +123,7 @@
         ; coeff C-RAM[0x10] = op0x66[6] (role mix/tap, INFERRED)
   w79   020420D1CD   post    (p),(p)+13
   w80   000020040E   ld      acc,(p)+0
-  w81   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w81   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w82   00002F8407   ld.st   acc,(p)-8
   w83   0000AFD1D5   ld      (p),c+,(p)-3
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
@@ -146,8 +146,8 @@
   w99   0212ABB412   mac     acc,c+,(p)-69 ; mem[p]<-acc, acc=0
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = filter section cell 4 (role filter, INFERRED)
-  w100  0104200000   post.b  ?,(p)+0
-  w101  0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
+  w100  0104200000   post.b  (p)0,(p)+0
+  w101  0092A00200   mac.b   c,c+,(p)+0 ; store SUPPRESSED (bit7)
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
   w102  00822001C0   mac.b   (p),(p)+0
   w103  0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)

@@ -705,7 +705,7 @@ def _alu_half_anchored(w):
         return False
     if lo_src(w) not in _ANCHORED_SRC or not _act_anchored(w):
         return False
-    if (hi & HI_ST) and (hi & HI_B7) and hi_f31(hi) != 2:
+    if (hi & HI_ST) and (hi & HI_B7) and hi_f31(hi) not in (1, 2):
         return False
     return hi_f31(hi) in (HI_ACC_LOAD, HI_ACC_ADD, HI_ACC_HOLD)
 
@@ -767,7 +767,31 @@ def alu_decoded(w):
         # ALU, where it zeroes the result whatever the ACTION was, and it is
         # one of the 21 class-(1,1) effects store-gate.md sect. 4 leaves alive.
         # Price, MEASURED: ONE corpus word (`092.A.01.1C0', header I-RAM 37).
-        if hi_f31(hi12(w)) != 2:
+        #
+        # ★★★★★ 2026-09-13 (N-INPUT-GATE-OPENED sect. 106): `f31 == 1' IS NOW
+        # ADMITTED.  The gate's THREE-WAY openness was closed by ELIMINATION, on
+        # criteria the ROM and the FIRMWARE supply -- each of which demonstrably
+        # CAN fail, because a different arm made each of them fail:
+        #   clr:never  (the shipped reading) ⛔ the VOLUME cell `0x06' -- PROVEN BY
+        #      CONSTRUCTION as the user's effect depth in 49 of 49 algorithms,
+        #      written once by `EFF_VolumeLoop' -- is RAILED in 5 of 5 out-of-sample
+        #      programs and churned 11 .. 177 316 times.
+        #   clr:after  ⛔ the LFO phase cell stops moving at all.
+        #   LD@before  ⛔ the LFO runs at a 4.0-frame period against a ROM constant
+        #      of 114 per frame.
+        #   LD@after   ⛔ the phase cell is dead.
+        #   clr:before ✔ VOLUME written ONCE and unrailed 5 of 5; the LFO alive with
+        #      its minimum step exactly the ROM's 114; 10-program hand-off
+        #      regression 10 KEPT / 0 BROKEN; re-verified with NO ENV SET AT ALL.
+        # ⇒ `none' and `ST(acc->else)' are the only survivors and they are THE SAME
+        # MACHINE -- `gate_settle.py:70' makes the `else' key unreadable by
+        # construction.  So "is there a store at all" stays UNANSWERABLE and stops
+        # mattering for EXECUTION, which is what this predicate asks.  Promoted in
+        # the device as `UPD6383_GATECLR' default 1 (`=0' is the control).
+        # ⚠ `f31 == 0' still traps: there the two surviving GATE CONDITIONS
+        # disagree about whether `mem[ptr]' is written at all, which is not an
+        # accumulator question and is untouched by any of this.
+        if hi_f31(hi12(w)) not in (1, 2):
             return False
     f = hi_f31(hi12(w))
     if f in (HI_ACC_LOAD, HI_ACC_ADD):
@@ -1291,7 +1315,14 @@ def host_packet(b5):
 
 
 # --- the ALU rendering (upd6383d.cpp text(), the `decoded' branch) ----------
-_SRC_NAME = {LO_SRC_MEM: "(p)", LO_SRC_ACC: "acc", LO_SRC_TA: "ta", LO_SRC_TB: "tb"}
+#   ★ 2026-09-13: the three codes ANCHORED this session had no NAME, so every word
+#   sourcing them printed `?' next to a real mnemonic -- a decoded word that reads
+#   as undecoded.  Caught when sect. 106 admitted 82 words and they came out as
+#   `mac.b ?,c+'.  The names are the anchorings' own wording, not new claims.
+_SRC_NAME = {LO_SRC_MEM: "(p)", LO_SRC_ACC: "acc", LO_SRC_TA: "ta", LO_SRC_TB: "tb",
+             LO_SRC_MEM0: "(p)0",     # sect. 233: mem[ptr] / delay-RAM read
+             LO_SRC_DRD: "dr",        # the delay-read data register
+             LO_SRC_LFO: "c"}         # C-RAM[cursor] -- THE COEFFICIENT
 _ACC_MNEM = {HI_ACC_LOAD: "ld", HI_ACC_ADD: "mac"}      # else the class-8 post-sum step
 _ACT_SUFFIX = {LO_ACT_CAP_TA: ".ta", LO_ACT_CAP_TA2: ".ta2",
                LO_ACT_CAP_TB: ".tb", LO_ACT_ST_BUS: ".st",

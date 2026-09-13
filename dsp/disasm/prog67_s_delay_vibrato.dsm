@@ -15,15 +15,15 @@
   w1    000020D1CD   ld      (p),(p)+13
   w2    00002F640E   ld      acc,(p)-10
   w3    021220A00B   ?word   0x021220A00B   ; 212.2.0A.00B  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w4    0022200000   mac.b   ?,(p)+0
+  w4    0022200000   mac.b   (p)0,(p)+0
   w5    00002F6407   ld.st   acc,(p)-10
-  w6    0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
+  w6    0092A00200   mac.b   c,c+,(p)+0 ; store SUPPRESSED (bit7)
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w7    00822001C0   mac.b   (p),(p)+0
   w8    0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
   w9    0000201447   ?word   0x0000201447   ; 000.2.01.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
-  w10   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
+  w10   0092A00200   mac.b   c,c+,(p)+0 ; store SUPPRESSED (bit7)
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w11   00822001C0   mac.b   (p),(p)+0
   w12   0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)
@@ -49,10 +49,10 @@
         ; coeff C-RAM[0x07] = op0x66[0] (role mix/tap, INFERRED)
   w24   020420D1CD   post    (p),(p)+13
   w25   000020040E   ld      acc,(p)+0
-  w26   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w26   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w27   0000202407   ld.st   acc,(p)+2
   w28   09001601D5   dly.w  dsc[k],p+96
-  w29   0192A3C000   ?word   0x0192A3C000   ; 192.A.3C.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w29   0192A3C000   mac.b   (p)0,c+,(p)+60 ; store SUPPRESSED (bit7)
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = filter section cell 4 (role filter, INFERRED)
   w30   00822001C0   mac.b   (p),(p)+0
@@ -73,7 +73,7 @@
   w41   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w42   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w43   01042061CE   post    (p),(p)+6
-  w44   0102200000   mac.b   ?,(p)+0
+  w44   0102200000   mac.b   (p)0,(p)+0
   w45   0000AF5415   ld      acc,c+,(p)-11
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x66[2] (role mix/tap, INFERRED)
@@ -85,7 +85,7 @@
   w50   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w51   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w52   01042F31CE   post    (p),(p)-13
-  w53   0102200000   mac.b   ?,(p)+0
+  w53   0102200000   mac.b   (p)0,(p)+0
   w54   0000AFE415   ld      acc,c+,(p)-2
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = op0x66[3] (role mix/tap, INFERRED)
@@ -93,7 +93,7 @@
   w56   00002F81CE   ld      (p),(p)-8
   w57   021220B407   mac.st  acc,(p)+11 ; mem[p]<-acc, acc=0
   w58   0880130000   dly.r  dsc[k],p+48
-  w59   0022200000   mac.b   ?,(p)+0
+  w59   0022200000   mac.b   (p)0,(p)+0
   w60   00002FE407   ld.st   acc,(p)-2
   w61   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
@@ -114,10 +114,10 @@
         ; coeff C-RAM[0x12] = op0x66[4] (role mix/tap, INFERRED)
   w71   020420D1CD   post    (p),(p)+13
   w72   000020040E   ld      acc,(p)+0
-  w73   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w73   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w74   00002F5407   ld.st   acc,(p)-11
   w75   09001601D5   dly.w  dsc[k],p+96
-  w76   0192A4B000   ?word   0x0192A4B000   ; 192.A.4B.000  hi12{ST f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w76   0192A4B000   mac.b   (p)0,c+,(p)+75 ; store SUPPRESSED (bit7)
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = filter section cell 3 (role filter, INFERRED)
   w77   00822001C0   mac.b   (p),(p)+0

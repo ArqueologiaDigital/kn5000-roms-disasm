@@ -41,37 +41,37 @@
   w14   0104A001D5   post    (p),c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
   w15   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w16   0182A00000   mac.b   ?,c+,(p)+0
+  w16   0182A00000   mac.b   (p)0,c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
   w17   000020B447   ?word   0x000020B447   ; 000.2.0B.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
-  w18   00A2200000   mac.b   ?,(p)+0
+  w18   00A2200000   mac.b   (p)0,(p)+0
   w19   00122421C0   mac.b   (p),(p)+66 ; mem[p]<-acc, acc=0
-  w20   0000A00219   ld.ta2  ?,c+,(p)+0
+  w20   0000A00219   ld.ta2  c,c+,(p)+0
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
   w21   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = C-RAM[cursor] (the COEFFICIENT), MEASURED: the chorus LFO at iw89 reads L = 114 and acc = 114<<16 exactly, and 114 = C-RAM[0x00] = floor(0.5993*2^23/44100), the ROM's own ramp constant; the rival "sample source" is REFUTED from disk (SQUARING-MULTIPLY item B)]
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0A] = op0x72[0] (role gain-computer, PROVEN)
   w22   0C401E0451   ?word   0x0C401E0451   ; C40.1.E0.451  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=451 UNKNOWN]
-  w23   0102201000   mac.b   ?,(p)+1
+  w23   0102201000   mac.b   (p)0,(p)+1
   w24   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w25   002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w26   0000200415   ld      acc,(p)+0
-  w27   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w27   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w28   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
-  w29   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w29   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w30   00922FF700   ?word   0x00922FF700   ; 092.2.FF.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w31   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
-  w32   0182201000   mac.b   ?,(p)+1
+  w32   0182201000   mac.b   (p)0,(p)+1
   w33   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w34   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w35   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w36   01042001CE   post    (p),(p)+0
-  w37   0102200000   mac.b   ?,(p)+0
+  w37   0102200000   mac.b   (p)0,(p)+0
   w38   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
-  w39   0292A011D5   ?word   0x0292A011D5   ; 292.A.01.1D5  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=1 / ACT 0x15 may be OPEN]
+  w39   0292A011D5   mac     (p),c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
   w40   0182AFF1D4   mac.tb  (p),c+,(p)-1
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
@@ -84,7 +84,7 @@
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
   w45   02122091CD   mac     (p),(p)+9 ; mem[p]<-acc, acc=0
   w46   000020040E   ld      acc,(p)+0
-  w47   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w47   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w48   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w49   0000201407   ld.st   acc,(p)+1
   w50   00122481C0   mac.b   (p),(p)+72 ; mem[p]<-acc, acc=0
@@ -114,39 +114,39 @@
         ; C-RAM[0x19] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x19] = biquad -a1 (role EQ, PROVEN)
   w63   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w64   0182A00000   mac.b   ?,c+,(p)+0
+  w64   0182A00000   mac.b   (p)0,c+,(p)+0
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = biquad -a2 (role EQ, PROVEN)
   w65   000020A447   ?word   0x000020A447   ; 000.2.0A.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
-  w66   00A2200000   mac.b   ?,(p)+0
+  w66   00A2200000   mac.b   (p)0,(p)+0
   w67   00122491C0   mac.b   (p),(p)+73 ; mem[p]<-acc, acc=0
-  w68   0000A00219   ld.ta2  ?,c+,(p)+0
+  w68   0000A00219   ld.ta2  c,c+,(p)+0
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1B] = biquad makeup (role EQ, PROVEN)
   w69   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = C-RAM[cursor] (the COEFFICIENT), MEASURED: the chorus LFO at iw89 reads L = 114 and acc = 114<<16 exactly, and 114 = C-RAM[0x00] = floor(0.5993*2^23/44100), the ROM's own ramp constant; the rival "sample source" is REFUTED from disk (SQUARING-MULTIPLY item B)]
         ; C-RAM[0x1C] (coeff, base 0x00 MEASURED)
   w70   0C401E0451   ?word   0x0C401E0451   ; C40.1.E0.451  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=451 UNKNOWN]
-  w71   0102201000   mac.b   ?,(p)+1
+  w71   0102201000   mac.b   (p)0,(p)+1
   w72   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w73   002E200000   ?word   0x002E200000   ; 02E.2.00.000  hi12{f31=7 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w74   0000200415   ld      acc,(p)+0
-  w75   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w75   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w76   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1D] = op0x74[0] (role input/tone, INFERRED)
-  w77   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w77   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w78   00922FF700   ?word   0x00922FF700   ; 092.2.FF.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w79   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1E] (coeff, base 0x00 MEASURED)
-  w80   0182201000   mac.b   ?,(p)+1
+  w80   0182201000   mac.b   (p)0,(p)+1
   w81   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w82   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w83   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w84   01042001CE   post    (p),(p)+0
-  w85   0102200000   mac.b   ?,(p)+0
+  w85   0102200000   mac.b   (p)0,(p)+0
   w86   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1F] (coeff, base 0x00 MEASURED)
-  w87   0292A011D5   ?word   0x0292A011D5   ; 292.A.01.1D5  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=1 / ACT 0x15 may be OPEN]
+  w87   0292A011D5   mac     (p),c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x20] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x20] = op0x72[1] (role gain-computer, PROVEN)
   w88   0182AFF1D4   mac.tb  (p),c+,(p)-1
@@ -159,5 +159,5 @@
         ; C-RAM[0x23] (coeff, base 0x00 MEASURED)
   w93   02122FB1CD   mac     (p),(p)-5 ; mem[p]<-acc, acc=0
   w94   000020040E   ld      acc,(p)+0
-  w95   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w95   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w96   042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

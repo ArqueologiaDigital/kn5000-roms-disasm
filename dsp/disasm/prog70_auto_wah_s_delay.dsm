@@ -16,7 +16,7 @@
   w2    000024F40E   ld      acc,(p)+79
   w3    02122B100B   ?word   0x02122B100B   ; 212.2.B1.00B  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w4    002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
-  w5    0022200000   mac.b   ?,(p)+0
+  w5    0022200000   mac.b   (p)0,(p)+0
   w6    00002F6407   ld.st   acc,(p)-10
   w7    0000200413   ld.ta   acc,(p)+0
   w8    00002481CD   ld      (p),(p)+72
@@ -35,7 +35,7 @@
   w20   0202A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = op0x66[0] (role mix/tap, INFERRED)
-  w21   0204200000   post.b  ?,(p)+0
+  w21   0204200000   post.b  (p)0,(p)+0
   w22   00002FE407   ld.st   acc,(p)-2
   w23   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
@@ -57,15 +57,15 @@
         ; coeff C-RAM[0x05] = op0x66[1] (role mix/tap, INFERRED)
   w33   02042091CD   post    (p),(p)+9
   w34   000020040E   ld      acc,(p)+0
-  w35   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
-  w36   0020200000   ld.b    ?,(p)+0
+  w35   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
+  w36   0020200000   ld.b    (p)0,(p)+0
   w37   0000202407   ld.st   acc,(p)+2
   w38   0010AFF6D5   ?word   0x0010AFF6D5   ; 010.A.FF.6D5  hi12{ST} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x1B); the source id / accumulator-combine f31=0 / ACT 0x15 may be OPEN]
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = filter section cell 4 (role filter, INFERRED)
   w39   0202A041D5   mac     (p),c+,(p)+4
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
-  w40   0202200000   mac.b   ?,(p)+0
+  w40   0202200000   mac.b   (p)0,(p)+0
   w41   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w42   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w43   0018A001D5   ?word   0x0018A001D5   ; 018.A.00.1D5  hi12{ST f31=4} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=4 / ACT 0x15 may be OPEN]
@@ -73,32 +73,32 @@
   w44   0104A001D5   post    (p),c+,(p)+0
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
   w45   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w46   0182A00000   mac.b   ?,c+,(p)+0
+  w46   0182A00000   mac.b   (p)0,c+,(p)+0
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
   w47   0000200447   ?word   0x0000200447   ; 000.2.00.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w48   00122011C0   mac.b   (p),(p)+1 ; mem[p]<-acc, acc=0
   w49   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
-  w50   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w50   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w51   0000200407   ld.st   acc,(p)+0
   w52   00002F51CD   ld      (p),(p)-11
   w53   000020040E   ld      acc,(p)+0
-  w54   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w54   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w55   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w56   0000200415   ld      acc,(p)+0
-  w57   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w57   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w58   0000200415   ld      acc,(p)+0
-  w59   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w59   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w60   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x24[0] (role coeff, INFERRED)
   w61   0212AFE1D5   mac     (p),c+,(p)-2 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = op0x24[1] (role coeff, INFERRED)
-  w62   0202200000   mac.b   ?,(p)+0
+  w62   0202200000   mac.b   (p)0,(p)+0
   w63   000020D407   ld.st   acc,(p)+13
   w64   00122F31D1   ?word   0x00122F31D1   ; 012.2.F3.1D1  hi12{ST f31=1}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=1 and/or ACT 0x11 are OPEN]
-  w65   0292200000   ?word   0x0292200000   ; 292.2.00.000  hi12{ST f98=2 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w65   0292200000   mac.b   (p)0,(p)+0 ; store SUPPRESSED (bit7)
   w66   0000AFE455   ?word   0x0000AFE455   ; 000.A.FE.455  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = op0x24[2] (role coeff, INFERRED)
@@ -107,7 +107,7 @@
   w69   021220A407   mac.st  acc,(p)+10 ; mem[p]<-acc, acc=0
   w70   0880130000   dly.r  dsc[k],p+48
   w71   002A200000   ?word   0x002A200000   ; 02A.2.00.000  hi12{f31=5 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
-  w72   0022200000   mac.b   ?,(p)+0
+  w72   0022200000   mac.b   (p)0,(p)+0
   w73   00002F6407   ld.st   acc,(p)-10
   w74   0000200413   ld.ta   acc,(p)+0
   w75   000024C1CD   ld      (p),(p)+76
@@ -126,7 +126,7 @@
   w86   00002001D5   ld      (p),(p)+0
   w87   0202A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
-  w88   0204200000   post.b  ?,(p)+0
+  w88   0204200000   post.b  (p)0,(p)+0
   w89   00002FE407   ld.st   acc,(p)-2
   w90   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
@@ -147,6 +147,6 @@
         ; coeff C-RAM[0x14] = filter section cell 1 (role filter, INFERRED)
   w100  02042FB1CD   post    (p),(p)-5
   w101  000020040E   ld      acc,(p)+0
-  w102  0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w102  0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w103  0880160000   dly.w  dsc[k],p+96
   w104  042010E000   ?word   0x042010E000   ; 420.1.0E.000  hi12{END ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

@@ -219,3 +219,45 @@ writes. *"Is there a store at all"* stays unanswerable, and stops mattering.
 
 ⛔ A pass closes the gate **for execution only**. It does not say whether the word stores; it says
 that whatever it does with memory cannot be observed, which is what `decoded()` asks.
+
+
+---
+
+## R-TEST RESULT — **both `LD` placements REFUTED. The gate is DETERMINED for execution.**
+
+One binary, chorus, per-program census, `UPD6383_GATECLR` = 3 / 4 / 1:
+
+| mode | VOLUME `0x06` | LFO phase `07` | |
+|---|---|---|---|
+| **3** `LD@before` | `(6454331, 0..6454331, chg 1)` ok | `rises 85 902`, **step 36 … 4 194 103, mean 2 082 744, period 4.0 frames** | ⛔ the LFO at ~11 kHz against a ROM constant of 114/frame |
+| **4** `LD@after` | `(4194304, 0..4194304, chg 1)` ok | **ABSENT — the phase cell is dead** | ⛔ |
+| **1** `clr:before` (control) | `(2260027, 0..2260027, chg 1)` | `chg 1 570 842`, **min step exactly 114** | ✔ |
+
+**R1 HIT** (22 230 564 each). **R2 MISS** — the VOLUME cell does *not* discriminate the `LD` family;
+it only refuted `clr:never` and `clr:after`. **R3 HIT on both** — the LFO does. **R4 HIT** — the
+control reproduces.
+
+### ★★★★★ The elimination, complete
+
+| reading | refuted by | measurement |
+|---|---|---|
+| `-/clr:never` (**shipped**) | the **VOLUME** cell | railed 5 of 5 out-of-sample, churned 11 … 177 316 |
+| `-/clr:after` | the **LFO** | phase cell absent from both instruments |
+| `LD@before` | the **LFO** | 4.0-frame period; step up to 4 194 103 against 114 |
+| `LD@after` | the **LFO** | phase cell dead |
+| **`-/clr:before`** | — | VOLUME once and unrailed 5/5; LFO alive, min step = the ROM's 114; 10 KEPT / 0 BROKEN |
+
+`ST(acc→else)/clr:before` is **the same machine** as `-/clr:before`: `gate_settle.py:70` declares
+the `else` key *"a memory key no pointer can ever equal"*. ⇒ *"is there a store at all"* stays
+**unanswerable and stops mattering for EXECUTION**, which is what `decoded()` asks.
+
+**PROMOTED.** `UPD6383_GATECLR` default 1 (`=0` is the control), **re-verified with NO ENV SET AT
+ALL** (§56's rule): hand-off `05:177684(-2869494..3486228/chg175660)` unchanged, `06` written once,
+`07` alive. The disassembler's guard 7 now admits `f31 == 1`; mirrors agree 3057/3057; byte-match
+OK; the 24 documentation pages regenerate and the HLE-permanence test passes.
+
+⚠ **Coverage 75.0 % → 77.6 %** (tier 1 74.0 % → **76.6 %**, +78 body words; the frame floor
+70.4 % → 72.2 %).
+
+⚠ NOT claimed fixed: the LFO's **rate** is still wrong under the survivor (81 Hz against the ROM's
+0.599 Hz). §102 measured that the gate is not its only cause. That defect is open.

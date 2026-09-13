@@ -36,20 +36,20 @@
   w10   00002C1647   ld.st   ta,(p)-63
   w11   002A200407   ?word   0x002A200407   ; 02A.2.00.407  hi12{f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x10); the accumulator-combine f31=5 and/or ACT 0x07 are OPEN]
   w12   0000200415   ld      acc,(p)+0
-  w13   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w13   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w14   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = op0x61[0] (role coeff, INFERRED)
-  w15   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w15   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w16   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w17   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
-  w18   0182200000   mac.b   ?,(p)+0
+  w18   0182200000   mac.b   (p)0,(p)+0
   w19   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w20   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w21   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w22   01042001CE   post    (p),(p)+0
-  w23   0102200000   mac.b   ?,(p)+0
+  w23   0102200000   mac.b   (p)0,(p)+0
   w24   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x08] = op0x62[0] (role output-level, INFERRED)
@@ -59,7 +59,7 @@
         ; coeff C-RAM[0x09] = op0x66[0] (role mix/tap, INFERRED)
   w27   020420D1CD   post    (p),(p)+13
   w28   000020040E   ld      acc,(p)+0
-  w29   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w29   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w30   0000201407   ld.st   acc,(p)+1
   w31   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
@@ -81,7 +81,7 @@
         ; coeff C-RAM[0x0D] = op0x66[1] (role mix/tap, INFERRED)
   w41   02042091CD   post    (p),(p)+9
   w42   000020040E   ld      acc,(p)+0
-  w43   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w43   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w44   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w45   0000201407   ld.st   acc,(p)+1
   w46   00122451C0   mac.b   (p),(p)+69 ; mem[p]<-acc, acc=0
@@ -109,20 +109,20 @@
   w56   00002BD647   ld.st   ta,(p)-67
   w57   002A200407   ?word   0x002A200407   ; 02A.2.00.407  hi12{f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x10); the accumulator-combine f31=5 and/or ACT 0x07 are OPEN]
   w58   0000200415   ld      acc,(p)+0
-  w59   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w59   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w60   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x14] = op0x61[1] (role coeff, INFERRED)
-  w61   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w61   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w62   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w63   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
-  w64   0182200000   mac.b   ?,(p)+0
+  w64   0182200000   mac.b   (p)0,(p)+0
   w65   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w66   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w67   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w68   01042001CE   post    (p),(p)+0
-  w69   0102200000   mac.b   ?,(p)+0
+  w69   0102200000   mac.b   (p)0,(p)+0
   w70   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x16] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x16] = op0x62[1] (role output-level, INFERRED)
@@ -132,7 +132,7 @@
         ; coeff C-RAM[0x17] = op0x66[2] (role mix/tap, INFERRED)
   w73   020420D1CD   post    (p),(p)+13
   w74   000020040E   ld      acc,(p)+0
-  w75   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w75   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w76   0000201407   ld.st   acc,(p)+1
   w77   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
@@ -153,6 +153,6 @@
         ; coeff C-RAM[0x1B] = op0x66[3] (role mix/tap, INFERRED)
   w87   02042FB1CD   post    (p),(p)-5
   w88   000020040E   ld      acc,(p)+0
-  w89   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w89   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w90   0880160000   dly.w  dsc[k],p+96
   w91   042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

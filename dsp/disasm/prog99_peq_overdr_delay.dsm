@@ -36,15 +36,15 @@
   w10   00002C1647   ld.st   ta,(p)-63
   w11   002A242407   ?word   0x002A242407   ; 02A.2.42.407  hi12{f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x10); the accumulator-combine f31=5 and/or ACT 0x07 are OPEN]
   w12   0000200415   ld      acc,(p)+0
-  w13   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w13   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w14   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = op0x61[0] (role coeff, INFERRED)
-  w15   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w15   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w16   00922BE700   ?word   0x00922BE700   ; 092.2.BE.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w17   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
-  w18   0182242000   mac.b   ?,(p)+66
+  w18   0182242000   mac.b   (p)0,(p)+66
   w19   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w20   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w21   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
@@ -73,7 +73,7 @@
         ; coeff C-RAM[0x0F] = op0x66[0] (role mix/tap, INFERRED)
   w35   020420D1CD   post    (p),(p)+13
   w36   000020040E   ld      acc,(p)+0
-  w37   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w37   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w38   0000201407   ld.st   acc,(p)+1
   w39   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
@@ -93,7 +93,7 @@
   w48   0202AFC415   mac     acc,c+,(p)-4
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = op0x66[1] (role mix/tap, INFERRED)
-  w49   0204200000   post.b  ?,(p)+0
+  w49   0204200000   post.b  (p)0,(p)+0
   w50   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w51   0000201407   ld.st   acc,(p)+1
   w52   00122491C0   mac.b   (p),(p)+73 ; mem[p]<-acc, acc=0
@@ -121,15 +121,15 @@
   w62   00002B9647   ld.st   ta,(p)-71
   w63   002A24A407   ?word   0x002A24A407   ; 02A.2.4A.407  hi12{f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x10); the accumulator-combine f31=5 and/or ACT 0x07 are OPEN]
   w64   0000200415   ld      acc,(p)+0
-  w65   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w65   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w66   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = op0x61[1] (role coeff, INFERRED)
-  w67   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w67   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w68   00922B6700   ?word   0x00922B6700   ; 092.2.B6.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w69   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
-  w70   018224A000   mac.b   ?,(p)+74
+  w70   018224A000   mac.b   (p)0,(p)+74
   w71   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w72   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w73   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
@@ -159,7 +159,7 @@
         ; coeff C-RAM[0x23] = op0x66[2] (role mix/tap, INFERRED)
   w87   020420D1CD   post    (p),(p)+13
   w88   000020040E   ld      acc,(p)+0
-  w89   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
+  w89   0212200000   mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w90   0000201407   ld.st   acc,(p)+1
   w91   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x24] (coeff, base 0x00 MEASURED)
@@ -178,6 +178,6 @@
   w100  0202AEE415   mac     acc,c+,(p)-18
         ; C-RAM[0x27] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x27] = op0x66[3] (role mix/tap, INFERRED)
-  w101  0204200000   post.b  ?,(p)+0
+  w101  0204200000   post.b  (p)0,(p)+0
   w102  0880160000   dly.w  dsc[k],p+96
   w103  042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
