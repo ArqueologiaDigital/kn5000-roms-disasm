@@ -126,6 +126,14 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★★ **§49: THE TALLY IS 22 LIVE / 16 STATIC / 0 VOID of 38.** The five VOID rows were an
+   INSTRUMENT LIMIT — the trace was armed at note-on +1.0 s, before the note reached the chip.
+   Re-traced at **+2.5 s** (`NOTEOFS`, new env on `catalogue_regression.sh`) **all five are LIVE**
+   (19–62 rows, 32–64 products each). ★ Four of them are combis outside the ten-program regression
+   set, so this is a second confirmation of the promoted decodes on programs they were never tuned
+   against. ⚠ The drift grows with `TYPEIDX` (the scheduler fires each step on the first frame
+   at/after its deadline) — **always check an input cell is non-zero before reading downstream.**
+
    ★★★ **§47/§48 RESHAPE WHAT IS LEFT — read these before planning anything.**
    * **§47: the OUTPUT-STAGE NULL SURVIVES both promoted decodes**, re-measured on all 38 programs
      (`loud frames … max 0` everywhere). ⇒ *"fix the bodies and the output follows"* is **refuted
