@@ -760,7 +760,22 @@ def alu_decoded(w):
         #   been claimed by a different predicate and cannot reach here.
         #   ⚠ The 29 wrap-words stay refused; they are a DIFFERENT operation, and they are refused
         #   on `SRC 0x08' as well, which is open on its own account.
-        return cl == 8 or not _is_wrapword(w)
+        #   ★★★★★ 2026-09-13 (second pass): THE WRAP FAMILY IS ADMITTED TOO, so this is now
+        #   unconditional.  I excluded it an hour ago on two grounds and BOTH have since gone:
+        #     "a different operation" -- true, but `alu_decoded()' asks whether the semantics is
+        #        DETERMINED, not whether it matches its neighbours.  For these 29 it is:
+        #        `acc <- (datum(acc) & L) << ACC_SHIFT', §224/§225, SHIPPED AS THE DEVICE DEFAULT,
+        #        anchored on the ROM's own ramp constant and carried through FOUR passing
+        #        falsifiers (W0 one slot, W1's clip-count delta predicted TO THE UNIT in both
+        #        buckets, W2 the chorus LFO reaching its published cell as a +114/frame ramp, W3
+        #        every regression control unmoved); the fifth was restated under RULE 21 and is
+        #        then 0/0/0 in BOTH arms.
+        #     "open on SRC 0x08 anyway" -- no longer true: SRC 0x08 was anchored above in this
+        #        same pass, so that reason expired the moment it was written.
+        #   ⇒ all three sub-populations of `f31 == 2' are determined: class 8 (forced identity by
+        #   the biquad), the wrap family (the modulus, shipped), and the remaining 215 (the AND
+        #   rival is not expressible on them -- 0 of 215 carry the SRC 0x08 operand it needs).
+        return True
     return False
 
 
@@ -827,6 +842,8 @@ def form_of(w):
     if not decoded(w):
         return None
     if is_setvec(w):  return "setvec"
+    if _is_wrapword(w):
+        return "wrap"
     if is_dram(w) and dram_dir(w):
         return "dly.r" if dram_dir(w) == "READ" else "dly.w"
     if is_ldptr(w):   return "ldptr"
@@ -1266,6 +1283,12 @@ def text(w, at=None):
         #   `k' is the index of this escape within its own body; the address is DESCRIPTOR_CELL[k]
         #   + G by the IDENTITY map (adjudication-round5, PROVEN BY CONSTRUCTION), which is why
         #   no address appears in the word.
+        #   ★ THE WRAP WORD RENDERS AS ITS OWN OPERATION.  It is `f31 == 2' like a HOLD but it
+        #   does something else entirely -- `acc <- (datum(acc) & L) << ACC_SHIFT', the LFO's
+        #   modulus (§224/§225, shipped).  Rendering it as an ordinary accumulator op would hide
+        #   the one instruction in the corpus that wraps.
+        if _is_wrapword(w):
+            return "wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)"
         if is_dram(w) and dram_dir(w):
             return "dly.%s  dsc[k]%s" % ("r" if dram_dir(w) == "READ" else "w",
                                          "" if dd == 0 else ",p%+d" % dd)

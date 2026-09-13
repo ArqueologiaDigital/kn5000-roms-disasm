@@ -3788,6 +3788,44 @@ the device's own behaviour, which is the circularity this file has refused four 
 ⚠ Grade: the `SRC 0x08` anchoring is MEASURED with a refuted rival; the audit is READ from each
 item's own adjudication, cited.
 
+## 85. 74.9 % → 75.9 %: the WRAP FAMILY, admitted on a reason that had expired while I wrote it
+§83 admitted `f31 = 2` off class 8 **except** on §224/§225's 29-word wrap family, and gave two
+reasons. Re-reading them an hour later, **both were already void**:
+
+| the reason I gave | why it does not hold |
+|---|---|
+| *"they are a DIFFERENT operation"* | True — and irrelevant. `alu_decoded()` asks whether a word's semantics is **DETERMINED**, not whether it resembles its neighbours. For these 29 it is determined: `acc ← (datum(acc) & L) << ACC_SHIFT`, **shipped as the device default**, anchored on the ROM's own ramp constant and carried through **four passing falsifiers** (W0 one slot; W1's clip-count delta predicted **to the unit** in both buckets; W2 the chorus LFO reaching its published cell as a +114/frame ramp; W3 every regression control unmoved), the fifth restated under RULE 21 and then 0/0/0 in **both** arms. |
+| *"open on `SRC 0x08` anyway"* | **Expired in the same pass** — §84 anchored `SRC 0x08` a few paragraphs earlier. The sentence was stale before it was committed. |
+
+⇒ all three sub-populations of `f31 = 2` are determined — class 8 (identity, forced by the
+biquad), the wrap family (the modulus, shipped), and the remaining 215 (the `AND` rival is not
+expressible: **0 of 215** carry the operand it needs) — so the rule is now unconditional.
+
+★ **And the wrap word renders as its own operation**, the same correction the delay escapes needed:
+```
+   w7   0094A00200   wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)
+```
+It is `f31 = 2` like a HOLD and does something else entirely; rendering it as an ordinary
+accumulator op would hide the one instruction in the corpus that wraps.
+
+| | §84 | now |
+|---|---:|---:|
+| executable words | 2 227 / 2 974 | **2 256 / 2 974** |
+| **coverage** | 74.9 % | **★ 75.9 %** |
+| distinct undecoded | 202 | **200** |
+| families | 82 | **81** |
+
+**+29 words — exactly the family.** Cumulative: **41.5 % → 75.9 %, +1 022 executable words.**
+
+⚠ **The lesson, which is the reusable part:** I wrote an exclusion and a justification for it in the
+same commit as the change that invalidated half the justification. Carve-outs written *while* the
+surrounding facts are moving need re-reading before they harden — this one survived barely an hour,
+and only because I went back through the remaining list word by word instead of trusting my own
+note.
+
+⚠ Grade: MEASURED/SHIPPED evidence (§224/§225), re-examined; the gain is exactly the 29 words the
+family contains.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
