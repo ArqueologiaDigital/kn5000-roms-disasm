@@ -1,0 +1,9 @@
+prog32_distortion: WHERE does its accumulator last differ between frames?
+
+configuration          #live rows last   killer word  killer fields
+selector 7 (correct)   0        -      -            acc NEVER varies in the body
+selector 4 (refuted)   39       iw125  -            (body end)
+
+input cells at each configuration:
+   selector 7   0x01=-103680    0x04=-71424     0x05=8388607   
+   selector 4   0x01=-153600    0x04=-172288    0x05=0         

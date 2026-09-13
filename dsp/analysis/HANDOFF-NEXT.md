@@ -23,8 +23,21 @@ mask).
 env at all**, **13 of 14** sampled programs (every family) run their bodies on live audio. ★ So the
 finding largely survives — and **the promoted arms were never what made the bodies run; they ran
 anyway.** ⛔ But *"all 38"* does NOT survive as stated: **`prog32_distortion` is STATIC with audio
-present** at the correct selector where §42 had it LIVE at selector 4. ⛔ **§61 REFUTED MY OWN "it's the instrument" HYPOTHESIS: the distortion is static at THREE trace
-offsets** (+1.0 / +2.5 / +3.2 s), audio present at every one. ⇒ **genuine, not an artefact.**
+present** at the correct selector where §42 had it LIVE at selector 4. ✅✅ **§62 DISSOLVES THE TENSION: the distortion's PICKUP CELL `0x05` IS RAILED at `0x7FFFFF`** at
+selector 7 (it is 0 at selector 4). A railed cell is **constant frame to frame**, so a body fed from
+one cannot move — the frame-pair test says STATIC and is right. ⇒ **`ACT 0x0E` = selector 7 is NOT
+contradicted**: §58/§59 are about where the EQ's input is ROUTED, this is about the distortion's
+input being SATURATED. ⇒ it is a **SCALE problem (§227's `P_SHIFT`/`ACC_SHIFT` territory), not a
+body-side decode gap** — and the distortion is a dynamics program, the family whose gain staging
+§227 never settled.
+⚠⚠ **AND IT EXPOSES A LENIENT CHECK I USED ALL SESSION:** the audio precondition was *"any of
+`0x01`/`0x04`/`0x05` > 1 000"*, and the distortion **passed** it on `0x01` while `0x05` sat at the
+rail. ⇒ **a RAILED pickup must FAIL the audio test** — RULE 13 one level up, *a constant is not a
+signal, even a large one*. **New precondition: an input cell must be non-zero AND NOT RAILED.**
+Every "audio present" verdict in §42/§50/§60/§61 used the lenient rule; only this row changed, but
+the rule was wrong on all of them.
+
+⛔ **§61: the distortion is static at THREE trace offsets** (+1.0 / +2.5 / +3.2 s), audio present at every one. ⇒ **genuine, not an artefact.**
 ★★ **AND IT IS A TENSION:** at selector **4** (refuted) it was **LIVE**; at selector **7**
 (confirmed twice) it is **STATIC**. ⇒ **the selector that is right for the EQ leaves the DISTORTION
 dead.** Three readings, none decidable here: `ACT 0x0E` is **context-dependent** (precedent:

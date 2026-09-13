@@ -2321,6 +2321,42 @@ the same scan at selector 4, which is where it was alive.
 ⚠ Grade: MEASURED, 6 captures, three offsets. The §60 hypothesis it refutes was mine, made one
 section earlier.
 
+## 62. ★★ §61's TENSION DISSOLVES: the distortion's PICKUP CELL IS RAILED at the correct selector
+§61 left three readings and called the EQ-specific one the honest default. The bounded scan it
+named settles it instead, and the answer is neither of the exotic options
+(`data/t9_scan_2026-09-13.txt`):
+
+| configuration | acc varies in the body? | **pickup cell `0x05`** |
+|---|---|---|
+| **selector 7 (correct)** | **never** | **8 388 607 = `0x7FFFFF` — RAILED** |
+| selector 4 (refuted) | 39 rows, live to the body's end | 0 |
+
+★★ **The distortion's body is static because its INPUT is pinned at full scale**, not because the
+selector broke the body. A railed cell is *constant frame to frame* by definition, so a body fed
+from one cannot move — the frame-pair test reports STATIC and is right to.
+
+⇒ **`ACT 0x0E` = selector 7 is NOT contradicted by the distortion.** The two results were never in
+conflict: §58/§59 are about where the EQ's input is *routed*, and this is about the distortion's
+input being *saturated*. ⇒ §61's readings 1 and 2 (context-dependence; an unrelated blocker) are
+**not needed**, and reading 3's caution — *carry the decode as "for the EQ"* — remains correct but
+for the ordinary reason that one program confirmed it, not because of a counter-example.
+
+### ⚠⚠ AND MY AUDIO CHECK IS TOO LENIENT — it passed a saturated input as "audio present"
+The check used throughout this session is *"any of `0x01`/`0x04`/`0x05` above 1 000"*. At selector 7
+the distortion has `0x01 = −103 680`, so it **passed** — while the cell the body actually reads,
+`0x05`, sat at the rail. ⇒ **a railed pickup must FAIL the audio test, not pass it**: it is exactly
+RULE 13's shape one level up — *a constant is not a signal*, even a large one.
+⇒ **Fix carried forward:** the audio precondition is *"an input cell is non-zero **and not
+railed**"*. Every "audio present" verdict in §42, §50, §60 and §61 was computed with the lenient
+rule; the only row it changed is this one, because the rail is rare — but the rule was wrong on
+every one of them.
+
+⇒ **This is a SCALE problem, not a body-side decode gap**, which puts it in §227's territory
+(`P_SHIFT`/`ACC_SHIFT`) rather than the input-path work — and the distortion is a dynamics program,
+the family whose gain staging that section never settled.
+
+⚠ Grade: MEASURED. Both of §61's exotic readings are retired by a scan it asked for.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
