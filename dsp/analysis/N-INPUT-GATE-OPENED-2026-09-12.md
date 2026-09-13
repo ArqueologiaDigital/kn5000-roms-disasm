@@ -1660,6 +1660,22 @@ guess. **The corpus refuses it.** Census over all 3 057 words:
 flag are independent fields and `f31 = 5` cannot *be* the store. ⇒ rejected, from the listings, at
 no cost. (The undecoded family `f31 ∈ {3,5,6,7}` is 114 words, under 4 % of the corpus.)
 
+### A LEAD WITH ITS OWN COUNTER-EXAMPLE: the `hi12 = 0x02A` word family
+The starved entry word is `002A24B000` — unique in the corpus (one site, `prog96_peq_compr_dist`
+`w1`) — but its `hi12 = 0x02A` family has **42 words across 16 programs**, and those programs are
+not randomly distributed:
+
+| | carries `hi12 = 0x02A` |
+|---|---|
+| of the 15 STATIC programs | **9** (exciter, auto-pan, auto-wah, auto-wah+s.delay, PEQ+vibrato, PEQ+compressor, PEQ+COMPR+DIST, PEQ+DIST+DELAY, PEQ+OVERDR+DELAY) |
+| of the 16 LIVE programs | **4** (phaser, compressor, **PARAMETRIC EQ**, ring modulator) |
+
+⚠ **And the counter-example is the reference program itself.** The EQ carries this family and
+works. So `hi12 = 0x02A` is **not sufficient** to starve a body, and this is a *correlation with a
+refutation attached*, not a cause — if it matters, it matters in combination with something the
+EQ does not have. Recorded at that strength deliberately: 9-of-15 is the kind of number that reads
+as a finding if the 4-of-16 is left out.
+
 ⚠ **No arm is proposed.** Reading 1 would widen the store predicate, which is exactly the kind of
 change that needs the four-criteria gate and the ten-program regression first — and this session
 has already killed two plausible hypotheses (§32's, §43's) that looked at least as good before they
