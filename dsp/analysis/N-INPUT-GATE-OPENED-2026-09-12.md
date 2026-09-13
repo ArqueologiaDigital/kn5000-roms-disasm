@@ -2960,6 +2960,74 @@ identities fingerprinted. The **cause** is localised to `iw45`'s clamp and the *
 settled as an interaction. **Nothing is promoted**, and the arm that removes the symptom is
 explicitly NOT proposed as a fix.
 
+## 71. ⛔ THE `NOZ05` ARM IS REFUTED — and it corrects §70's vocabulary AND exposes a confound
+§70 localised the rail to `iw45`'s clamped bit-4 store. Walking one step further back showed that
+was the **perpetuation, not the origin**: at **`iw8`**, the frame's *first* touch of cell `0x05`,
+NO OPERATION already reads `0x800000` while the flanger reads a real sample. The rail is present
+**before the frame starts** ⇒ a **LATCH-UP**, and the device's own default-off `UPD6383_NOZ05`
+suppresses exactly the kernel-A stores that could close the loop.
+
+Predictions were **written and committed before the run** (`data/PREDICT_NOZ05_2026-09-13.md`).
+
+| # | prediction | result |
+|---|---|---|
+| **P1** | `0x05` NOT railed | ⛔ **FAILS** — still railed, it only flipped sign (`−8 388 608` → `+8 388 607`) |
+| P2 | `0x05` non-zero | passes, but see below |
+| **P3** | `\|0x05\|` of the input's order (10⁵…10⁶) | ⛔ **FAILS** |
+| **P4** | `0x01`/`0x04` unchanged — the internal null | ✅ **HELD** (−286 976 / −166 400) |
+| **C1** | the flanger unharmed | ✅ **HELD** (2 912 280, identical) |
+
+The arm **fired** (`iw9:1 722 190  iw35:1 722 183  iw45:1 722 183` stores suppressed).
+⇒ **REFUTED, and trustworthily so**: the null held and the control held, so the failure is the
+arm's, not the instrument's.
+
+### ★★★ What the refutation revealed is worth more than a pass would have been
+With every kernel-A store to `0x05` suppressed, the cell **never changes for the entire frame** —
+one line, `iw8`, and nothing after it. ⇒ **those stores are the cell's ONLY writer.** Suppressing
+them does not break a loop; it **starves the cell**, which is precisely the failure mode P2 was
+written to catch.
+
+### ⛔⛔ AND THAT CORRECTS THE WORD "PICKUP" IN §62, §70 AND EVERY SECTION THAT USED IT
+The device's own input-stage audit says where DI1 actually deposits:
+
+> *"WHERE THE WINDOW SAT … most common X = `0xFF` on 1 711 626 (99.64 %) → **latch cells `0x01` /
+> `0x04`**"*
+
+and those two cells carry **sane, sample-like values in every capture ever taken**, railed or not
+(`−286 976 / −166 400` here). ⇒ ★★ **cell `0x05` is NOT the input latch. It is a DERIVED cell —
+the kernel's hand-off of the assembled input to the body** — which is why the kernel's own stores
+are its only writer and why `iw8` reads last frame's value. The project's two annotations
+(*"latch cells 0x01/0x04"* and *"[..] marks the per-unit base/input cells 05 07 85 87"*) are
+consistent once `0x05` is read as the **hand-off**, not the deposit.
+⇒ So the defect is **not "the input arrives saturated"**. The input arrives fine, every time. It is
+**the kernel's input stage saturating while assembling it**, between `iw2` and `iw45`.
+
+### ⚠⚠ A CONFOUND IN §70's HEADLINE, found by checking my own sample
+§70 said *"4 of 4 detector programs rail"*. On the same machine, the input latch cells read:
+
+| program | `0x01` | `0x05` |
+|---|---:|---|
+| `prog03_enhancer` | 306 688 | ⛔ railed |
+| `prog00_no_operation` | −286 976 | ⛔ railed |
+| `prog52_auto_wah` | −118 528 | ⛔ railed |
+| `prog36_compressor` | −65 024 | ⛔ railed |
+| **`prog04_flanger`** | **−32 512** | **ok** |
+
+★ **The one program that does not rail also has the SMALLEST input — by 2× on the nearest railing
+program and 9× on the loudest.** The four detector programs were traced at *later* instants
+(`36.0 + 0.2·TYPE + 2.5 s`), so they are further into the note and simply **louder**. ⇒ **input
+level is confounded with program family in that sample**, and §70's headline cannot distinguish
+*"the detector family saturates"* from *"a loud enough input saturates"*.
+
+⚠ **A decontamination run is in flight**: three NON-detector programs (ensemble, multi tap delay,
+mix up) at the true default, whose inputs sit in the same 150k–160k band as the railing ones. If
+they rail, the family is not the variable and §70's headline must be restated as a level effect.
+
+⚠ Grade: the refutation is **MEASURED** with a pre-registered criterion, a null that held and a
+control that held. The vocabulary correction is **READ from the device's own audit**. The confound
+is **MEASURED and currently unresolved** — §70's headline is *provisional* until the
+decontamination reports.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
