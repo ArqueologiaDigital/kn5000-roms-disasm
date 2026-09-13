@@ -1,3 +1,34 @@
+# ★★★★ 2026-09-13 — THE BIT-5 PAGE IS PARTITIONED, and the SHARPEST PROBE is 20 words
+
+§69 (`dsp/tools/bit5_words.py`, `bit5_trace.py`). Three things the next pass needs:
+
+**1. The terminator marker is `hi12` bit 10, and it was ALREADY DECODED** — `dsp_disasm.py:426`
+*"bit 10 with bit 11 clear = END OF BLOCK"*. ⚠ I re-derived it before checking. Confirmed with the
+null it lacked: **39 of 40 images end on one** (the 40th ends on a C-format word where that bit is
+part of the format code); bit-10 words are terminal **74 %** of the time against a **1.34 %** base
+rate — **55×**. The 14 non-terminal ones are 13 in `kernel` + 1 in `epilogue`, the two images
+entered and left several times a frame.
+
+**2. ★★★★ Crossing it with bit 5 gives a HARD CONSTRAINT.** 17 bit-5 words are also END (2.9
+expected — **5.8×**), all of them the program's terminal word — and **inside the bit-5 page every
+END word takes an EVEN `f31`, 17 of 17**, where non-END bit-5 words are only 25 % even
+(`P ≈ 6.5e-11`). ⚠ On the `bit5 = 0` page END words are mixed (0:17 1:12 2:6), so this is **not** a
+property of END words generally. ⇒ the population splits: **17 terminators (EVEN) / 11
+level-detector heads (ODD, §67) / 144 unexplained.**
+
+**3. ★★★ THE SHARPEST PROBE IN THE CORPUS — aim here.** The bit-5 page's dominant shape is
+`0020200000`: **class 2, `ACT 0x00`, `SRC 0x00`, `addr8 0x00`, NO STORE** — 92 words in 30
+programs, a word whose *entire* content is bit 5 plus the three `f31` bits, with no source, no
+action, no store and no pointer walk. Whatever changes between its instances **is the accumulator
+operation alone**. Of the 92, **only 20 are LIVE** (§64's successor test) — `f31` 5:10, 3:6, 4:2,
+0:1, 7:1 — and those 20 are the cleanest place in 3 057 words to decide what a high code does.
+⛔ **NOT the parametric EQ**: run in execution order on a live capture at the true default, its
+three bit-5 words with large deltas (`4.2e11`, `1.3e9`, `5.5e11`) are **all discarded by the next
+instruction**, and its only two LIVE ones sit in the epilogue where the accumulator is already
+dead. **The EQ cannot grade this experiment at all.**
+
+---
+
 # ★★★★★ 2026-09-13 — THE BYTECODE CORRECTED THE HLE: the compressor's detector is a RECTIFIER
 
 The standing goal's *"there may even be mistakes on the HLE version"* paid out. The shipped DSPHLE
