@@ -1468,6 +1468,43 @@ switch kept for the A/B.
 ⚠ Grade: MEASURED — gate (§39), isolated ten-program regression, two-sided verification after the
 change. Promotion is a judgement on that evidence.
 
+## 41. THE ENHANCER'S GAP IS **ONE READ**, and no `addr8`-keyed store rule can close it
+§40 left the enhancer as the one program the promoted rule cannot help. Its body entry under the
+promoted configuration says exactly why, and the answer is narrow enough to be useful:
+
+```
+iw87  cls2 ACT00 SRC00 f31=1  ST  a8 = +0    dp = 0x10   acc = 320 968 982 528   <- BIT-4 STORE of the INPUT
+iw88  cls2 ACT00 SRC00 f31=5      a8 = +64   dp -> 0x50  acc = 320 968 982 528   <- the move, NO store
+iw89  clsA ACT15 SRC07 f31=0      a8 = +0    dp = 0x50   mem = 0                 <- the first read: EMPTY
+iw90  clsA ACT12 SRC10 f31=1  ST  a8 = +1    dp = 0x51   acc = 0                 <- stores 0 into its own state
+```
+
+★ **The enhancer's body is internally consistent — it writes its own state block correctly.**
+`iw90` carries a bit-4 store and targets `0x51`, inside the `0x50..0x61` block; it writes **zero**
+only because `iw89` read an empty cell and left the accumulator at zero. Every downstream cell
+follows from that one read. ⇒ **the gap is a single missing operand, not a broken body.**
+
+⛔ **And it rules out extending §40's rule.** The promoted rule keys the store target on the
+**storing word's own `addr8`**. Here the store is at `iw87` with `addr8 = +0`, so post and pre are
+the same cell — the `+64` that separates `0x10` from `0x50` is on the **following** word, which
+does not store. **No rule keyed on the storing word's `addr8` can bridge this**, whatever sign
+convention it uses. That is worth having: it stops the obvious next attempt before it costs a build.
+
+⇒ Two shapes remain, and they are mutually exclusive:
+1. `iw89` should read **`0x10`** — i.e. `iw88`'s `+64` pointer move is mis-timed or mis-decoded;
+2. `iw87`'s **bit-4** store should land at `0x50` — which would need a rule spanning two words,
+   unlike anything else in this ISA, **and** would contradict the bit-4 store's target, which the
+   project FORCED against 2 160 enumerated accumulator models. ⚠ That forcing was done on the
+   **EQ**, whose bit-4 words sit elsewhere, so it constrains this less than it looks — but
+   overturning it needs its own two-sided evidence, not an argument from convenience.
+
+⚠ **No arm is proposed here on purpose.** §32 is recent enough: a candidate that fixes the
+enhancer must be gated on all four criteria and then on the ten-program regression before it is
+believed, and neither shape above has a discriminating measurement yet. What is MEASURED is the
+geometry, the internal consistency of the body, and the exclusion.
+
+⚠ Grade: MEASURED from `reg/st07/t2_F.log` under the promoted defaults.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -72,9 +72,18 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    `0x50/54/58/5C/60`; `=0`: back to the unread `0x10`).
    ⚠ **The hypothesis SURVIVED; it was not derived.** `addr8 > 0` may stand for something the trace
    does not print, and it moved roughly half the `ACT 0x07` sites (corpus split 181 / 155 / 54).
-   ⚠ **Still open:** the **ENHANCER** stays at 10 products — it has **no `ACT 0x07` store at its
-   entry at all** (§37), so this rule cannot help it and how its body is fed is unknown; the other
-   28 programs are unswept; the output stage is still §216's null.
+   ⚠ **Still open, and §41 narrows the first one to a single read:** the **ENHANCER**'s body is
+   **internally consistent** — `iw90` writes its own state block correctly — and fails only because
+   `iw89` reads an empty `0x50`. Its input IS stored, by a **bit-4** store at `iw87`, into `0x10`;
+   the `+64` that separates the two is on the **following** word, which does not store. ⛔ **So no
+   rule keyed on the storing word's own `addr8` can close it** — that rules out the obvious
+   extension of §40 before it costs a build. Two mutually exclusive shapes remain: `iw89` should
+   read `0x10` (the move is mis-timed), or the bit-4 store should reach `0x50` (a two-word rule,
+   and it would contest the bit-4 target the project FORCED over 2 160 models — a forcing done on
+   the EQ, whose bit-4 words sit elsewhere). ⚠ **No arm proposed**: neither shape has a
+   discriminating measurement yet, and §32 is recent enough.
+   ⚠ The other **28 programs are unswept** (TYPE_MAP is off by one above index 8 — re-run the walk
+   without deduplication first); the **output stage** is still §216's null.
 
    ★★★★ **§36: `UPD6383_CALLFLUSH` IS PROMOTED TO DEFAULT-ON** (`UPD6383_CALLFLUSH=0` restores the
    old behaviour; the A/B stays available, as §225 did for `LFOWRAP`). **Zero regressions across
