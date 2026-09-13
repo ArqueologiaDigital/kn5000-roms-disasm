@@ -2158,6 +2158,57 @@ contaminated configuration.
 
 ⚠ Grade: MEASURED, 4 configurations, 8 captures, reference program.
 
+## 58. ★★★★★ THE ORACLE SETTLES IT — AND IT INVERTS §32/§40: the EQ is a **CASCADE**
+§57 said the `ACT 0x0E` selector must be decided on the **one-copy criterion**, not cell counts.
+Applied to all four configurations of the 2×2, using captures already taken
+(`data/selector_onecopy_2026-09-13.txt`):
+
+| configuration | one clean copy of the input at … |
+|---|---|
+| **sel 7 (SHIPPED), arms OFF** | ✅ **`0x50` — the FIRST band cell, and only that one** |
+| sel 7, arms ON | ⛔ **RAILED** at `0x50`,`0x54`,`0x58`,`0x5C`,`0x60` |
+| sel 4, arms OFF | ⛔ none (ratio 1.600 at `0x10` — the contaminated baseline) |
+| sel 4, arms ON | ✅ `0x50`,`0x54`,`0x58`,`0x5C`,`0x60` — **all five** |
+
+### ★★★ The HLE decides between the two passing rows, and it is not the one I promoted
+`dsp/hle/effects.py`:
+```python
+def parametric_eq(x, bands):
+    """PARAMETRIC EQ (§7b): a SERIES of Direct-Form-I peaking biquads."""
+    y = np.asarray(x, dtype=np.float64)
+    for f0, Q, g in bands:
+        y = BiquadDF1(*D.biquad_peaking(f0, Q, g)).process(y)   # y feeds forward
+    return y
+```
+**It is a CASCADE.** Band 2 filters band 1's *output*, not the input. ⇒ **exactly ONE band — the
+first — should ever receive a clean copy of the input**, and the other four should receive
+something that is *not* a copy of it.
+
+⇒ ★★★★★ **`sel 7, arms OFF` — the configuration the device already ships — is the one that matches
+the HLE.** And **`sel 4, arms ON` — the configuration I built, validated and promoted — feeds the
+raw input to all five bands in PARALLEL, which is the wrong topology for a parametric EQ.**
+
+### ⛔⛔ What this retracts
+- **§32's headline** *"every band now receives exactly one copy of the input"* was **a description
+  of a defect, not a success.** For a cascade that is precisely what must NOT happen.
+- **§40's promotion of `ST07SIGN`** rested on producing exactly that, so its central evidence is
+  **inverted**: the "one copy at all five band blocks" it achieved is the wrong answer.
+- §29's one-copy criterion itself stands — but it must be applied **per topology**: *one copy at
+  the FIRST stage of a cascade*, not *one copy everywhere*. Applying it without the topology is how
+  I got here.
+⚠ §36's `CALLFLUSH` evidence (LFO ramps, zero regressions) is **not** touched by this — it is
+about the chorus and the modulation family, not the EQ's topology.
+
+✅ **§56's revert was therefore doubly right**, and for a reason better than the one it gave: not
+merely *"validated off-default"* but **"validated against the wrong topology"**.
+
+⇒ **The `ACT 0x0E` selector question is ANSWERED for the EQ: selector 7, as shipped.** ⚠ That is
+one program; §234's 1-of-49 disk confirmation is the other evidence and should be re-read next to
+this.
+
+⚠ Grade: MEASURED (four configurations) + the HLE **as the oracle the project's goal names**, with
+the bytecode's own cascade structure as the tie-break.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
