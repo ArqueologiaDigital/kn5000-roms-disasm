@@ -36,7 +36,32 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from pickup_cells import read, RAIL                                    # noqa: E402
+from pickup_cells import RAIL, sext24                                   # noqa: E402
+
+ROW = re.compile(r"upd6383:\s+(\d+)\s+(\d+)\s+([01])\s+([0-9A-F]{10})\s+([0-9A-F]{2})\s+"
+                 r"([0-9A-F]{6})\s")
+
+
+def handoff_out(path, cell=0x05, last_iw=50):
+    """The value THIS frame leaves in the hand-off cell -- its own output.
+
+    ⚠⚠ NOT `pickup_cells.read()`.  That returns the cell's FIRST touch, i.e. what the frame
+    INHERITED from its predecessor, so an arm's effect appears one frame LATE -- which is exactly
+    how N-INPUT-GATE-OPENED §73 came to report the flanger as unfixed when its own store had been
+    fixed.  A promotion gate must grade what the arm PRODUCES, so this takes the LAST touch inside
+    the kernel (iw < 50), after `iw45`'s store.
+    """
+    out, started = None, False
+    for ln in open(path, errors="replace"):
+        if "TIME-ORDERED FRAME TRACE" in ln:
+            started = True
+            continue
+        if not started:
+            continue
+        m = ROW.search(ln)
+        if m and int(m.group(5), 16) == cell and int(m.group(2)) < last_iw:
+            out = sext24(int(m.group(6), 16))
+    return out
 
 
 def state(v):
@@ -63,7 +88,7 @@ def main():
             tally["missing"] += 1
             rows.append((ti, None, None, "missing"))
             continue
-        a, b = read(f).get(0x05), read(g).get(0x05)
+        a, b = handoff_out(f), handoff_out(g)          # the frame's OWN store, not what it inherited
         sa, sb = state(a), state(b)
         if "missing" in (sa, sb):
             v = "missing"
@@ -78,7 +103,8 @@ def main():
         tally[v] += 1
         rows.append((ti, a, b, v))
 
-    print("=== `UPD6383_SRC0B2` PROMOTION GATE -- hand-off cell 0x05, TRUE DEFAULT ===")
+    print("=== `UPD6383_SRC0B2` PROMOTION GATE -- hand-off cell 0x05 AS THIS FRAME LEAVES IT,")
+    print("    TRUE DEFAULT.  (NOT the inherited value -- see handoff_out().) ===")
     print("  TYPE        arm OFF        arm ON   verdict")
     for ti, a, b, v in rows:
         mark = "  ⛔" if v == "BROKEN" else "  ★" if v == "FIXED" else ""
