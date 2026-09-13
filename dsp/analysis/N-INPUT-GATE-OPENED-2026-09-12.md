@@ -1638,6 +1638,28 @@ readings, both testable:
 ⇒ and **the rotary is a separate problem**: its first-read cell **is** written, twice, by bit-4
 stores. It is static for a reason that is not "nothing writes the cell", and it needs its own look.
 
+### ⛔ ONE CANDIDATE FOR READING 1, CHECKED AND REJECTED: `f31 = 5` is not a store bit
+The PEQ combis' starved entry word `002A24B000` carries `hi12 = 0x02A`, i.e. **`f31 = 5`** — one of
+the values this file records as undecoded (`f31 > 2` gets "the same no-product behaviour as
+HI_ACC_HOLD, one of four enumerated options with no independent support"), and one that §231's
+*"`f31 ∈ {3,6,7}` is a dead lever"* does **not** cover. So "f31 = 5 means store" is the obvious
+guess. **The corpus refuses it.** Census over all 3 057 words:
+
+| `f31` | words | of which carry the bit-4 store |
+|---|---|---|
+| 0 | 1 302 | 22 |
+| 1 | 1 310 | 632 |
+| 2 | 283 | 29 |
+| 3 | 35 | 1 |
+| 4 | 48 | 13 |
+| **5** | **60** | **10** |
+| 6 | 3 | 1 |
+| 7 | 16 | 0 |
+
+**10 of the 60 `f31 = 5` words already carry the bit-4 store explicitly**, so `f31` and the store
+flag are independent fields and `f31 = 5` cannot *be* the store. ⇒ rejected, from the listings, at
+no cost. (The undecoded family `f31 ∈ {3,5,6,7}` is 114 words, under 4 % of the corpus.)
+
 ⚠ **No arm is proposed.** Reading 1 would widen the store predicate, which is exactly the kind of
 change that needs the four-criteria gate and the ten-program regression first — and this session
 has already killed two plausible hypotheses (§32's, §43's) that looked at least as good before they
