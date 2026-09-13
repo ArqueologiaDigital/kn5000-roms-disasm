@@ -147,8 +147,20 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    pair), so anchoring means **deciding between those and the measurements**, not decoding from
    nothing.
    ⇒ ★ **RANKED QUEUE: `SRC 0x00`, `ACT 0x0D`, `ACT 0x0E`, `f31 = 2` off class 8, class 1** — each
-   against the HLE, top down. §5 already measured `SRC 0x00`'s ROUTING (the ordinary one-slot
-   memory operand, `mem[N−1]`, **51 of 51**); what it still needs is the VALUES from the oracle.
+   against the HLE, top down.
+   ⛔⛔ **BUT THE TOP ITEM IS NOT A SIMPLE ANCHOR (§7): `SRC 0x00` HAS AT LEAST THREE POPULATIONS.**
+   Across all 1 433 of its rows in the live corpus:
+   * **class A, `f98 = 1`** (exactly §148's stated population): the **COEFFICIENT**, 20 of 20; the
+     memory operand **0 of 20**. ⚠ CIRCULAR — the device *ships* §148 — but it does establish that
+     **§148's population restriction is right: the two rival readings PARTITION, they do not
+     compete.**
+   * the rest: `mem[N−1]` explains **74 %**, but **356 of those matches are trivially zero==zero**
+     (518 informative) and the **307-row residue concentrates 232 rows in `hi12 = 000, class 2`**.
+   ⇒ the work is **"separate `SRC 0x00`'s populations, then anchor each"**, and the **`000/cls2`
+   residue (232 rows) is the first sub-question.** The 310-occurrence leverage is unchanged.
+   ⚠⚠ **AND A CORRECTION TO CARRY:** §5's *"`mem[N−1]`, 51 of 51"* is true **of family
+   `212/2/000`** and says nothing about `SRC 0x00` as a CODE. **Never promote a per-family
+   measurement to a per-code anchor** — same error class as §43–§46.
 
    ★★★★ **THE COVERAGE LONG POLE IS A RANKED WORK LIST, NOT A SEARCH** —
    `N-COVERAGE-WORKLIST-2026-09-13.md`. Counting OCCURRENCES (what coverage buys) rather than
