@@ -33,37 +33,26 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import dsp_disasm as D                                                   # noqa: E402
+#   ⚠⚠ THE AXIS ENUMERATION LIVES IN `acc_blind.py' NOW, and this tool used to have its own.
+#   Its copy ran the `alu_decoded()' guards UNCONDITIONALLY, which printed FICTIONAL axes on two
+#   whole families: a C-format word has no class4/addr8 at all (bits [24:12] are one 13-bit
+#   immediate), and a bit-11 word's lo12 is not the SRC/mode/ACTION route -- so the table was
+#   charging 29 C-format words to "class 3 + SRC 0x11 + ACT 0x0C" and 76 bit-11 words to
+#   "pointer mode 1 + SRC 0x11 + ACT 0x03", none of which are fields of those words.  It also
+#   charged the class-1 DELAY ESCAPES to "class 1" although `_alu_half_anchored()' has no class
+#   test.  The corrected table moves `ACT 0x0B' from 12 sole occurrences to 62 and makes
+#   `C-format' and `bit-11 encoding' single axes -- i.e. it reorders the queue this tool exists
+#   to steer.  Two copies of a decode table is a second thing to keep in step, and this project
+#   has paid for that before (dsp_coverage.py's form table).
+from acc_blind import open_axes                                          # noqa: E402
 
 ROW = re.compile(r"^\s+w(\d+)\s+([0-9A-F]{10})\s")
 
 
 def reasons(w):
-    """every axis on which alu_decoded() refuses w, as (axis, value) labels."""
-    out = []
-    if D.c_format(w):
-        out.append(("format", "C-format"))
-    cl = D.class4(w)
-    if cl not in (2, 8, 0xA):
-        out.append(("class", "class %X" % cl))
-    if D.lo12(w) & 0x800:
-        out.append(("bit11", "lo12 bit 11"))
-    if D.lo_ptrmode(w):
-        out.append(("ptrmode", "pointer mode %d" % D.lo_ptrmode(w)))
-    if D.lo_src(w) not in D._ANCHORED_SRC:
-        out.append(("SRC", "SRC 0x%02X" % D.lo_src(w)))
-    if D.lo_act(w) not in D._ANCHORED_ACT:
-        out.append(("ACT", "ACT 0x%02X" % D.lo_act(w)))
-    hi = D.hi12(w)
-    if (hi & D.HI_ST) and (cl & 7) != 2:
-        out.append(("store", "bit-4 store on class %X" % cl))
-    if D.lo_act(w) == D.LO_ACT_ST_BUS and (cl & 7) != 2:
-        out.append(("store", "ACT 0x07 store on class %X" % cl))
-    if (hi & D.HI_ST) and (hi & D.HI_B7) and D.hi_f31(hi) != 2:
-        out.append(("storegate", "store+bit7 with f31 %d" % D.hi_f31(hi)))
-    f = D.hi_f31(hi)
-    if f not in (D.HI_ACC_LOAD, D.HI_ACC_ADD) and not (f == D.HI_ACC_HOLD and cl == 8):
-        out.append(("f31", "f31 %d%s" % (f, " off class 8" if f == D.HI_ACC_HOLD else "")))
-    return out
+    """every axis on which decoded() refuses w, as (axis, value) labels.  One axis per FIELD THAT
+    EXISTS on the word -- see the import note above for the two families this used to invent."""
+    return [(lab.split()[0].rstrip(","), lab) for lab in open_axes(w)]
 
 
 def main():

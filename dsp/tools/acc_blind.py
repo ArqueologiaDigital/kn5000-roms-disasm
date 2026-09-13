@@ -2,8 +2,8 @@
 """acc_blind.py -- which undecoded words are refused for a reason that CANNOT BE OBSERVED?
 
 QUESTION IT ANSWERS
-    Two of the three largest entries in `decode_leverage.py' are open axes that live ENTIRELY IN
-    THE ACCUMULATOR:
+    Three of the largest entries in `decode_leverage.py' are open axes that live ENTIRELY INSIDE
+    THE ARITHMETIC -- two in the accumulator, one on the operand bus:
 
       * `f31' 3/4/5/7 -- `f31-high.md' item A enumerates four readings (`base', `negP', `hold',
         `prod'); every one of them differs from the others ONLY in how `acc' is updated.
@@ -13,6 +13,13 @@ QUESTION IT ANSWERS
         declared `a memory key no pointer can ever equal' (line 70), so `ST(...->else)' is
         unreadable BY CONSTRUCTION, and `LD' writes `st.acc' and nothing else.  ⇒ those three
         families, and the three `clr' placements with them, differ ONLY in `acc'.
+      * ★ an open SOURCE code (`SRC 0x11', `0x1B', ...).  Whatever the code names, the field
+        selects the MULTIPLICAND: it cannot move a pointer, advance a cursor or write a temporary,
+        because those are the `class4' and ACTION fields.  So on a word whose ACTION keeps the bus
+        inside the arithmetic (`0x00' -> the accumulator's input term; `0x12' / `0x15' -> no side
+        effect at all) an unknown SRC reaches nothing but the product and the accumulator.
+        ⚠ It reaches the product FIRST -- `P[N] = coef[N-1] x L[N-1]' -- so its taint arrives in
+        `acc' at word i+1 and an `f31 == 0' reload there LOADS it rather than killing it.
 
     `f31-high.md' item F already measured that 92 of 203 such words are BLIND -- "an `f31 = 0'
     word overwrites the accumulator before anything reads it" -- but used the fact only to explain
@@ -32,6 +39,9 @@ USAGE
     python3 dsp/tools/acc_blind.py --list           # every qualifying site
     python3 dsp/tools/acc_blind.py --audit          # why each NON-qualifying site fails
     python3 dsp/tools/acc_blind.py --null           # ★ the control: the discard rate per `f31'
+
+MEASURED 2026-09-13: 310 candidate sites, **32 blind** (29 `f31', 2 `SRC 0x11', 1 store gate).
+Body corpus 2200 -> 2231 of 2974 = 74.0 % -> 75.0 %.
 
 THE LIVENESS WALK, and exactly what it assumes
     Bodies are straight-line (N-INPUT-GATE-OPENED sect. 95: 100 % of every image executes every
@@ -104,8 +114,29 @@ def acc_kills(w):
     return D.hi_f31(D.hi12(w)) == D.HI_ACC_LOAD
 
 
-def blind_after(words, i):
-    """(blind, why) for the accumulator the word at index `i' leaves behind.
+#   The ACTIONs that keep an unknown OPERAND inside the arithmetic.  `0x00' routes the bus into
+#   the accumulator's input term and `0x12' / `0x15' have no temp or memory side effect at all, so
+#   on those three an open `SRC' can reach nothing but the product and the accumulator.  Every
+#   other ACTION (`0x07' stores the bus to `mem[ptr]', the captures write a temporary) lets the
+#   unknown escape, and the walk refuses those without looking.
+_BUS_CONFINED_ACT = (0x00, 0x12, 0x15)
+
+
+def blind_after(words, i, bus=False):
+    """(blind, why) for the value the word at index `i' leaves behind.
+
+    Two entry conditions, because the two open-axis families taint different registers:
+
+      * an ACCUMULATOR-confined axis (`f31', the store gate) taints `acc' at the site and nothing
+        else.  The product is untouched.
+      * ★ an OPERAND-confined axis (an open `SRC' with a bus-confined ACTION) taints the PRODUCT
+        first, not the accumulator: `P[N] = coef[N-1] x L[N-1]`, the one-slot pipeline this
+        project measured bit-exactly.  So the unknown operand reaches `acc' only at word i+1,
+        and it reaches it there even if that word is an `f31 == 0' RELOAD -- `acc <- P' LOADS the
+        tainted product rather than killing it.  ⚠ Getting this backwards would have admitted
+        every open-SRC word whose successor reloads the accumulator, which is the commonest shape
+        in the corpus.  With ACTION `0x00' the bus ALSO enters `acc' at the site itself, so both
+        taints are live at once.
 
     ⚠ THE SITE'S OWN STORE COUNTS.  A word that carries the bit-4 store delivers its OWN
     accumulator to `mem[ptr]' -- and whether that is the pre-ALU or the post-ALU value is one of
@@ -114,12 +145,26 @@ def blind_after(words, i):
     """
     if acc_observes_own_output(words[i]):
         return False, "the site itself stores acc"
+    if bus and D.lo_act(words[i]) not in _BUS_CONFINED_ACT:
+        return False, "ACT 0x%02X lets the unknown operand escape the arithmetic" % D.lo_act(words[i])
+    t_acc = (not bus) or D.lo_act(words[i]) == 0x00
+    t_p = bus
     for j in range(i + 1, len(words)):
         w = words[j]
-        r = acc_observes(w)
-        if r:
-            return False, "w%d observes acc: %s" % (j, r)
-        if acc_kills(w):
+        if t_acc or t_p:
+            r = acc_observes(w)
+            if r:
+                return False, "w%d observes acc: %s" % (j, r)
+        if D.c_format(w) or D.alt_lo12(w):
+            return False, "w%d is not the ALU encoding -- its effect on a tainted machine is open" % j
+        f = D.hi_f31(D.hi12(w))
+        if t_p:                                  # j == i+1: the tainted product is consumed here
+            if f in (D.HI_ACC_LOAD, D.HI_ACC_ADD):
+                t_acc = True                     # `acc <- P' LOADS the taint; `acc += P' adds it
+            t_p = False
+        elif f == D.HI_ACC_LOAD:
+            t_acc = False
+        if not t_acc and not t_p:
             return True, "w%d reloads acc (f31 0)" % j
     return False, "runs to the end of the image -- acc crosses the block"
 
@@ -189,6 +234,14 @@ def acc_confined(axis):
     return axis.startswith("f31 ")
 
 
+def bus_confined(axis):
+    """★ An open SOURCE code is confined to the OPERAND BUS.  Whatever `SRC 0x11' / `0x1B' / ...
+    name, the field selects the multiplicand; it cannot move a pointer, advance a cursor or write
+    a temporary, because those are the `class4' / ACTION fields.  So on a word whose ACTION keeps
+    the bus inside the arithmetic, an open SRC can only reach the product and the accumulator."""
+    return axis.startswith("SRC ")
+
+
 def blind_sites(words):
     """★ THE IMPORTABLE PREDICATE.  Indices `i' of `words' that `decoded()' refuses but whose
     refusal is provably without consequence (see the module docstring).  `dsp_coverage.py' scores
@@ -199,9 +252,9 @@ def blind_sites(words):
         if D.decoded(w):
             continue
         ax = open_axes(w)
-        if not ax or not all(acc_confined(a) for a in ax):
+        if not ax or not all(acc_confined(a) or bus_confined(a) for a in ax):
             continue
-        ok, _why = blind_after(words, i)
+        ok, _why = blind_after(words, i, bus=any(bus_confined(a) for a in ax))
         if ok:
             out.append(i)
     return out
@@ -278,10 +331,10 @@ def main():
             if D.decoded(w):
                 continue
             ax = open_axes(w)
-            if not ax or not all(acc_confined(a) for a in ax):
+            if not ax or not all(acc_confined(a) or bus_confined(a) for a in ax):
                 continue
             tot += 1
-            ok, why = blind_after(words, i)
+            ok, why = blind_after(words, i, bus=any(bus_confined(a) for a in ax))
             if ok:
                 blind += 1
                 for a in ax:
@@ -293,7 +346,7 @@ def main():
     if "--null" in sys.argv:
         return null_control(_images(files))
     print("=== ACCUMULATOR-BLIND WORDS -- refused only on an axis confined to `acc' ===")
-    print("   candidate sites (every open axis is accumulator-confined) : %4d" % tot)
+    print("   candidate sites (every open axis is accumulator- or bus-confined): %4d" % tot)
     print("   ★ of those, BLIND -- the accumulator is destroyed unread  : %4d" % blind)
     print("     still observable (the axis matters there)               : %4d" % (tot - blind))
     if byaxis:

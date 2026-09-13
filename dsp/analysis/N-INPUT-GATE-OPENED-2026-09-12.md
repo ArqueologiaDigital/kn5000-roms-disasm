@@ -4365,13 +4365,13 @@ being the only control flow.
 programs, not 38 — but the result is 100 %/100 %/100 % with no partial case, and the frame
 structure (a fixed slot count per unit) predicts it generally.
 
-## 96. ★ TIER 1b: 30 WORDS WHOSE OPEN AXIS CANNOT BE OBSERVED — 74.0 % → 74.9 %
+## 96. ★ TIER 1b: 32 WORDS WHOSE OPEN AXIS CANNOT BE OBSERVED — 74.0 % → 75.0 %
 Tool: [`../tools/acc_blind.py`](../tools/acc_blind.py). Wired into
 [`../tools/dsp_coverage.py`](../tools/dsp_coverage.py) as its own column, never folded into
 `decoded()`.
 
-Two of the three largest entries in the leverage table are open axes that live **entirely in the
-accumulator**:
+Three of the largest entries in the leverage table are open axes that live **entirely inside the
+arithmetic** — two in the accumulator, one on the operand bus:
 
 * **`f31` 3/4/5/6/7** — `f31-high.md` item A enumerates four readings (`base`, `negP`, `hold`,
   `prod`); each differs from the others only in how `acc` is updated.
@@ -4390,10 +4390,18 @@ explain why the biquad cannot DECIDE the field. ★ **Turned around, it is a cov
 
 That is what tier 1 measures: not *what the code names* but *can we run it faithfully*.
 
-**MEASURED:** 200 sites have an accumulator-confined open axis; **30 are blind** — 15 × `f31 5`,
-6 × `f31 4`, 5 × `f31 3`, 2 × `f31 7`, 1 × `f31 6`, and **1 store-gate site (kernel `w24`,
-`0692200415`)**. The body corpus goes **2200 → 2229 of 2974, 74.0 % → 74.9 %**; the frame floor
-70.4 % → 70.8 %.
+**MEASURED:** 310 sites have an open axis confined to the arithmetic; **32 are blind** — 15 ×
+`f31 5`, 6 × `f31 4`, 5 × `f31 3`, 2 × `f31 7`, 1 × `f31 6`, 2 × `SRC 0x11`, and **1 store-gate
+site (kernel `w24`, `0692200415`)**. The body corpus goes **2200 → 2231 of 2974, 74.0 % →
+75.0 %**; the frame floor 70.4 % → 70.8 %.
+
+⚠ **The operand case taints the PRODUCT, not the accumulator, and getting that backwards would
+have been a large false positive.** `P[N] = coef[N−1] × L[N−1]` — the one-slot pipeline this
+project measured bit-exactly — so an unknown operand reaches `acc` only at word *i+1*, and it
+reaches it there **even if that word is an `f31 == 0` reload**: `acc <- P` LOADS the tainted
+product rather than killing it. The commonest shape in the corpus is exactly "open-SRC word whose
+successor reloads the accumulator", so a walk that killed the taint at *i+1* would have admitted
+most of the 54 `SRC 0x11` sites instead of 2.
 
 ### The walk, and the three places it is deliberately pessimistic
 `SRC 0x10` observes the accumulator; so does the bit-4 store — **except** on a `b7 & f31 == 1`
