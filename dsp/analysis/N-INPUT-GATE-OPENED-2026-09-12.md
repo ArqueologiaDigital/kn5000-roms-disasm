@@ -1684,6 +1684,51 @@ the next question is which words store at all.**
 
 ⚠ Grade: MEASURED from the 28-program sweep's captures and the anchored source table.
 
+## 45. ★★★ THE DISCRIMINATING MEASUREMENT ARRIVES: the same instruction, split by ONE field
+§44 said the next question is *which words store at all* and refused to guess. The corpus answers
+it, because **the starved programs and the working one use the SAME instruction**:
+
+```
+PARAMETRIC EQ       w3  002A200000   hi12 0x02A  a8 = +0      <- works
+PEQ+COMPR+DIST      w1  002A24B000   hi12 0x02A  a8 = +75     <- starved
+```
+Identical but for `addr8`. Splitting all 42 `hi12 = 0x02A` words in the effect programs by whether
+that field is zero:
+
+| | LIVE programs | STATIC programs |
+|---|---|---|
+| `addr8 == 0` | 7 | 21 |
+| **`addr8 != 0`** | **1** | **7** (+2 in the ENHANCER, which §37 showed is starved too ⇒ **9 vs 1**) |
+
+★★ **And the reference program is the built-in control: BOTH of the EQ's instances carry
+`addr8 = +0`.** A rule keyed on `addr8 != 0` therefore **cannot move the EQ at all** — which is
+exactly the demonstration §43 said any change in this area needs, and it is a property of the
+corpus rather than something arranged.
+
+The `addr8 != 0` instances, in full: `prog03_enhancer` w4 (+64) and w52 (+74); `prog35_exciter` w4
+(+1); **`prog36_compressor` w0 (+15) — the one LIVE counter-example**; `prog75_peq_compressor` w0
+(+75); `prog96_peq_compr_dist` w1 (+75); `prog98_peq_dist_delay` w1 (+75);
+`prog99_peq_overdr_delay` w1 (+75), w11 (+66), w63 (+74).
+
+### The hypothesis, and the predictions, before the arm is built
+**`hi12 = 0x02A` words with `addr8 != 0` perform a store of the accumulator at the POST-increment
+cell** — the same shape as §40's promoted `ACT 0x07` rule, on the family that carries the starved
+programs' entries.
+
+| program | prediction |
+|---|---|
+| PARAMETRIC EQ | **unchanged** — both instances have `addr8 = 0` (the control; if it moves, the reading is wrong) |
+| the 7–9 starved programs | their entry stores into the cell their body reads ⇒ bodies become live |
+| `prog36_compressor` | gains a store it did not have — **must not regress** (the one live counter-example) |
+| everything else | untouched: no `hi12 = 0x02A` word, or `addr8 = 0` |
+
+⚠ This is a hypothesis with a measured split behind it and a control inside it — **not** a guess.
+It still gets the four-criteria gate and then the ten-program regression before anything is
+promoted, exactly like §39/§40, and this session has already killed four candidates that looked
+reasonable before they were measured.
+
+⚠ Grade: the split and the control are MEASURED from the listings; the rest is a prediction.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
