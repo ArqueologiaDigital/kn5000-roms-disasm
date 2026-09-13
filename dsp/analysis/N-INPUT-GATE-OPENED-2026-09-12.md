@@ -1907,6 +1907,41 @@ excluded before any theory is built on it.*
 
 ⚠ Grade: MEASURED, 32 captures, every identity fingerprinted.
 
+## 51. ★★★ WHY THE OUTPUT STAGE IS A NULL: **the epilogue's pointer never leaves `0x00`**
+With every body live (§50), the output stage can finally be asked the §48 question: *who writes
+what it reads?* Measured on 16 programs (`data/epilogue_disjoint_2026-09-13.txt`):
+
+| | |
+|---|---|
+| cells the epilogue (`iw60..82`) addresses | **`0x00` and `0xFF`. In ALL 16 programs, without exception.** |
+| cells the bodies actually move | `0x04`, `0x05`, `0x06`, `0x08`, `0x0F`, `0x11`, `0x13`, `0x50`–`0x55` … |
+| **overlap** | **0 of 16 programs. NONE.** |
+
+⇒ ★★★ **The epilogue never addresses a single cell any body writes.** Its pointer sits at `0x00`
+for all 23 of its words and moves once, to `0xFF`, at `iw79`. That is a *structural* disjointness,
+identical across every program, and it is the mechanism behind §216's null: the output stage is not
+losing a signal, it is **reading somewhere else entirely**. §221 said the operands are disjoint
+from the signal path; this says **why** — the pointer is never brought to the bodies' block.
+
+★ The epilogue is not idle, either. Its accumulator arrives **non-zero** at `iw60`
+(`prog35_exciter`: 1 291 510 784) and is destroyed at `iw65` (`SRC 07 ACT 01 f31 = 0`, a LOAD).
+⚠ But that value is **program-dependent and frame-STATIC** — six distinct values across eight
+programs, *identical* between frame F and F+1 while those same bodies are frame-live. **It is not
+audio**, and I checked that before drawing anything from it, having been caught by §47's constant
+an hour earlier.
+
+⇒ **The output-stage question is now concrete and it is about the POINTER, not the arithmetic:**
+what should bring the epilogue's pointer to the cells the bodies write? Every candidate is
+checkable against a hard control — **16 programs, zero overlap** — and against the 38-live tally,
+which any change must not reduce.
+
+⚠ **What this does NOT claim.** That the disjointness is a device defect rather than the chip's
+real behaviour is *unproven*: the bodies may be expected to deliver through a path that is not a
+D-RAM cell at all (the per-unit accumulator, a temp, or the delay DRAM). What is MEASURED is the
+disjointness itself and that it is universal.
+
+⚠ Grade: MEASURED, 16 programs, live bodies, identities fingerprinted.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

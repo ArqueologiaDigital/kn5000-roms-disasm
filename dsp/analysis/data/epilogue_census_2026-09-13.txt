@@ -1,0 +1,30 @@
+EPILOGUE (iw60..82) on a LIVE body -- prog35_exciter at note-on +2.5s
+n    iw   word         dp     mem       acc            what it reads
+262  60   009218D15B   0x00   0         1291510784     SRC05 ACT1B f31=1
+263  61   001218D05B   0x00   0         1281516544     SRC01 ACT1B f31=1
+264  62   0801026825   0x00   0         1281516544     SRC00 ACT05 f31=0
+265  63   02A79051C3   0x00   0         1281516544     SRC07 ACT03 f31=3
+266  64   0C40A80445   0x00   0         1281516544     SRC11 ACT05 f31=0
+267  65   020018F1C1   0x00   0         0              SRC07 ACT01 f31=0
+268  66   000018C107   0x00   0         0              SRC04 ACT07 f31=0
+269  67   0980520402   0x00   0         0              SRC10 ACT02 f31=0
+270  68   009218C19B   0x00   0         0              SRC06 ACT1B f31=1
+271  69   0801090821   0x00   0         0              SRC00 ACT01 f31=0
+272  70   02A61850C7   0x00   0         0              SRC03 ACT07 f31=3
+273  71   0C41900446   0x00   0         0              SRC11 ACT06 f31=0
+274  72   0000106087   0x00   0         0              SRC02 ACT07 f31=0
+275  73   0E30C00404   0x00   0         0              SRC10 ACT04 f31=0
+276  74   0C169AB000   0x00   0         0              SRC00 ACT00 f31=3
+277  75   082E80F000   0x00   0         0              SRC00 ACT00 f31=7
+278  76   0C00984000   0x00   0         0              SRC00 ACT00 f31=0
+279  77   0859086822   0x00   0         0              SRC00 ACT02 f31=4
+280  78   0A3CD9F287   0x00   0         0              SRC0A ACT07 f31=6
+281  79   00122FF1CE   0xFF   0         0              SRC07 ACT0E f31=1
+282  80   01042001CE   0xFF   0         0              SRC07 ACT0E f31=2
+283  81   0102200000   0xFF   0         0              SRC00 ACT00 f31=1
+
+cells the epilogue touches: 0x00, 0xFF
+
+who writes those cells anywhere in the frame?
+   0x00 : bit4 u0 iw0, bit4 u0 iw151, ACT07 u0 iw51, bit4 u0 iw53
+   0xFF : bit4 u0 iw79

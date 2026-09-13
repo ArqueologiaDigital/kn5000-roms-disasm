@@ -1,0 +1,20 @@
+DOES THE EPILOGUE EVER ADDRESS A CELL THE BODY WRITES?
+TYPE  program                  epilogue cells         body cells that MOVE       overlap
+12    prog35_exciter           0x00,0xFF              0x05,0x11,0x50,0x52,0x53,0 NONE
+16    prog48_auto_pan          0x00,0xFF              0x05                       NONE
+17    prog50_vibrato           0x00,0xFF              0x04,0x05                  NONE
+18    prog52_auto_wah          0x00,0xFF              0x05,0x51,0x55             NONE
+19    prog15_rock_rotary       0x00,0xFF              0x01,0x04,0x05,0x06        NONE
+20    prog15_rock_rotary       0x00,0xFF              0x01,0x04,0x05,0x06        NONE
+22    prog56_mix_up            0x00,0xFF              0x04,0x05,0x06,0x07,0x08,0 NONE
+24    prog65_s_delay_s_delay   0x00,0xFF              0x05                       NONE
+27    prog68_s_delay_phaser    0x00,0xFF              0x05,0x09,0x13             NONE
+28    prog70_auto_wah_s_delay  0x00,0xFF              0x05                       NONE
+32    prog74_peq_vibrato       0x00,0xFF              0x04                       NONE
+33    prog75_peq_compressor    0x00,0xFF              0x05                       NONE
+34    prog96_peq_compr_dist    0x00,0xFF              0x05,0x0F                  NONE
+35    prog97_peq_compr_overdr  0x00,0xFF              0x05                       NONE
+36    prog98_peq_dist_delay    0x00,0xFF              0x05,0x13                  NONE
+37    prog99_peq_overdr_delay  0x00,0xFF              0x05,0x13                  NONE
+
+⇒ 0 of 16 programs have ANY overlap between the epilogue's cells and the body's moving cells.
