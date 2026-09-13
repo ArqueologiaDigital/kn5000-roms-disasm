@@ -1,0 +1,20 @@
+THE PSHIFT 2x2 -- is the railed pickup the PROGRAM FAMILY or the DATUM SCALE?  (§70)
+
+  PRODUCER: dsp/tools/pshift_2x2.sh   READ WITH: dsp/tools/pickup_cells.py
+  DESIGN  : each cell holds the PROGRAM and the TRACE INSTANT fixed and changes ONLY the machine.
+            PSHIFT=2 -> P_SHIFT 7 / ACC_SHIFT 16, total 23; default -> 6/16, total 22 (datum 2x).
+
+  cell 0x05          arms ON (total 23)      TRUE DEFAULT (total 22)
+  NO OPERATION            -185  ok            -8388608  RAILED
+  FLANGER               517549  ok             2912280  ok
+
+  INTERNAL NULL (must not move, and did not):
+  NO OPERATION 0x01 = -286976 and 0x04 = -166400 in BOTH arms, byte-identical.
+
+  => the datum scale is NECESSARY but NOT SUFFICIENT.  Not the family (NO OPERATION un-rails);
+     not the arm (the flanger never rails).  The earlier 14-program census was taken at total 23,
+     so the arm was hiding the defect in every program it measured.
+
+  WARNING: PSHIFT=2 is NOT a fix.  Un-railed, NO OPERATION's pickup reads -185 while the device's
+  own input-stage audit reports samples up to 2420992 entering -- still broken, just quietly.  And
+  PSHIFT=2 is the documented two-sided control that CONTRADICTS the MEASURED Q1.22 scale.
