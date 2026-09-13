@@ -81,3 +81,30 @@ a `grep` for the `m_dp = u8(m_dp + s8(addr8(word)))` spelling finds are
 ★ The general rule, and it is the same one §97 states from the other side: **a fired count is not
 a formality.** Run 2 patches the real site; the predictions above are unchanged and were not
 edited.
+
+
+---
+
+## Run 2 — **P1 HALF-hit: the arm reached class 4 and not class 6.** Also discarded.
+
+```
+   §100 CLS46PTR (ON): class-4/6 pointer advances performed: 3 150 504
+```
+
+**3 150 504 = exactly 2 per frame**, and the chorus carries **four** words of these classes (2
+class-4, 2 class-6). P1 predicted ≈ 4 per frame. ⇒ only the class-4 half fired, and the trace
+confirms it: with the arm on, `dp` at the two `00124011CE` rows advances `0C→0D` and `0F→10`,
+while the class-6 rows (`00006184CD`, `0000620407`) leave it where it was.
+
+**Cause:** `exec_alu()` has a dedicated `if (cl == 6) { ... }` branch — the §162 probe and the
+class-6 table-lookup diagnostic — and it **returns** before the post-increment at the end of the
+function.
+
+★ **A non-zero fired count is still not the count you predicted.** P1 was written as "> 0, and ≈ 4
+per frame in the chorus" precisely so half an arm would not read as a whole one; had it said only
+"> 0" this run would have been graded, and it tests half the hypothesis.
+
+For the record, what the half-arm did to P2: the operand `L` at the two class-4 taps went `0`/
+`39 718` → `0`/`1`. That is not evidence against the claim — the pointer post-increments, so a
+class-4 word's own read is unaffected by its own advance, and with class 6 frozen the two words
+walk out of step. Run 3 adds the advance inside the class-6 branch.
