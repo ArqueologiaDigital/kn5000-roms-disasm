@@ -42,7 +42,14 @@ echo "=== catalogue_regression -> $OUT : ${EXTRA[*]} ==="
 for ti in $TYPES; do
   for off in 0 1; do
     note=$(python3 -c "print(36.0 + 0.2*$ti)")
-    frame=$(python3 -c "print(int(($note + 1.0) * 44100) + $off)")
+    # ★ NOTEOFS: seconds after the harness's own note-on at which the frame is traced.
+    # ⚠ +1.0 is NOT universal.  MEASURED 2026-09-13: five programs (TYPE 23/25/29/30/31) trace
+    # with NO AUDIO in the chip at +1.0 -- their input cells read zero, which reads as "dead
+    # body" and is really "traced before the note arrived".  The scheduler fires each step on the
+    # first frame at/after its deadline, so real note-on drifts later than the sum of the dt's,
+    # and the drift grows with TYPEIDX.  Raise NOTEOFS for those; the note is held 3.5 s so
+    # anything up to ~3.0 is inside it.  ⚠ ALWAYS check an input cell is non-zero in the capture.
+    frame=$(python3 -c "print(int(($note + ${NOTEOFS:-1.0}) * 44100) + $off)")
     tag=$([ "$off" = 0 ] && echo F || echo F1)
     ( cd "$BUILD" && rm -f error.log && \
       env DISPLAY=${DISPLAY:-:0} DHLE=0 DSPCFG=3 TYPEIDX="$ti" NOTEMODE=0 TGM=0 \
