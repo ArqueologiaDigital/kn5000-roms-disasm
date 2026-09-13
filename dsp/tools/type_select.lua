@@ -36,6 +36,22 @@ do local d = mach.ioport.ports[":DSPCFG"]
    if d then for _, f in pairs(d.fields) do f.user_value = 3 end
    else emu.print_error("### NO :DSPCFG PORT") end end
 
+-- ★ THE TONE-GENERATOR MODE PORT, and WITHOUT IT NO AUDIO REACHES THE DSP.
+-- MEASURED 2026-09-13: a sweep driven by this script traced six programs whose bodies were
+-- BIT-IDENTICAL across a frame pair while still carrying non-zero products -- which reads as
+-- "dead body" and is really NO INPUT. The chip's own pickup cells said so: 0x05 = 13 and
+-- 0x01 = 0, against 4 873 981 and 60 672 in a working fx_ab.lua capture of the same machine.
+-- fx_ab.lua writes `:TGMODE'; this script never did, so the TG stayed in its default mode and
+-- the notes it presses never became audio. Set TGM in the environment to write the port
+-- (0 = real PCM, 1 = sine render); LEAVE IT UNSET to keep this script's historical behaviour.
+if os.getenv("TGM") then
+  local v = tonumber(os.getenv("TGM"))
+  local p = mach.ioport.ports[":TGMODE"]
+  if p then for _, f in pairs(p.fields) do f.user_value = v end
+  else emu.print_error("### NO :TGMODE PORT") end
+  emu.print_error(string.format("### TGMODE <- %d", v))
+end
+
 local function setbtn(tag, mk, v)
   local port = mach.ioport.ports[":cpanel:" .. tag]
   if not port then emu.print_error("### NO PORT " .. tag); return end
