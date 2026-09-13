@@ -1,3 +1,37 @@
+# ★★★★ 2026-09-13 — `f31` IS A REAL FIELD EVERYWHERE, AND THE ISA SPLITS ON `hi12` BIT 5
+
+§55 asked for `f31 = 0`'s semantics **from the corpus and the HLE, not from another arm**. The
+corpus half is done, statically, with **no emulator and no circularity** (`dsp/tools/f31_activity.py`,
+`dsp/tools/bit5_words.py`; N-INPUT-GATE-OPENED §63/§64):
+
+* ⛔ **"hi12[3:1] is a don't-care on non-multiply words" is REFUTED.** A **minimal-pair** test —
+  same word in every other bit, different `f31` — finds **12 shapes** among non-coefficient words
+  (positive control: **6** among coefficient-fetching ones, so the instrument fires). `0100200000`
+  is written 35× as ADD and 23× as HOLD. ⇒ **§55's output-killing LOADs are deliberate codes.**
+* ★★★ **The corpus is two populations.** With `hi12` **bit 5 clear**, **98.9 %** of 2 885 words use
+  only `f31 ∈ {0,1,2}`. With bit 5 **set**, **75 %** of 172 words use `f31 ∈ {3..7}` — which the
+  device **collapses into one behaviour** (`acc ← acc + bus`). Five deliberately-written codes
+  execute as one.
+* The bit-5 population is **172 words / 5.6 % / 32 of 40 programs**, and **92 of them are ONE
+  shape** (`0020200000`: class 2, `ACT 0x00`, `SRC 0x00`, `addr8 0`, no store) — a word whose entire
+  content is bit 5 plus the three `f31` bits. ⛔ Not padding (scattered through bodies; three are in
+  **`prog00_no_operation`**). ⛔ And **"bit 5 = terminator" is REFUTED**: 17 of 40 programs, 8 with
+  no bit-5 word at all.
+* ★★★ **WHERE IT CAN BE SEEN — read this before aiming anything at bit 5.** A bit-5 word whose
+  **next** instruction is an `f31 = 0` LOAD has its only effect overwritten one slot later:
+  **96 of 172 sites are BLIND, 59 LIVE, of which 41 carry a high code.** Measured at the EQ's
+  `iw87`, at the true default with **no environment set**: it adds `421 845 467 136` and `iw88`
+  discards the whole accumulator (it comes out exactly `P`).
+  ⇒ **Aim only at the live 41** — `prog36_compressor`, `prog05_phaser` w9/w68,
+  `prog06_ensemble` w14/24/34/72/82/92, `prog15_rock_rotary` w5, and **the `epilogue` at w74/w78**,
+  which is the stage §47/§51/§54 cannot make present anything. A run that samples the blind 96
+  returns a **false null** — the §46 failure mode, now predictable in advance.
+
+⚠ Nothing is anchored: this says the codes are chosen and where they are gradeable, **not what they
+mean**. The HLE half of §55's instruction is still owed.
+
+---
+
 # ★★★★★ 2026-09-13 — `ACT 0x0E` IS CLOSED FOR THE EQ: **SELECTOR 7, AS SHIPPED**, BY TWO INDEPENDENT ROUTES
 
 | route | evidence |

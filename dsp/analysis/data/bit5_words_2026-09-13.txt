@@ -1,0 +1,50 @@
+=== hi12 BIT 5: 172 of 3057 words (5.6%) in 32 of 40 programs ===
+  programs with NO bit-5 word (8): prog01_chorus, prog02_modulated_chorus, prog04_flanger, prog09_single_delay, prog10_multi_tap_delay, prog16_room_reverb_1, prog50_vibrato, prog56_mix_up
+  ⚠ of these, C-FORMAT (hi12 & 0xf00 == 0xc00, an immediate -- NOT this encoding): 2 ['kernel w48', 'kernel w56']
+  class : 02:142 01:18 0A:6 09:1 0C:1 08:1 0D:1 05:1
+  ACT   : 00:128 07:28 15:7 0B:4 0D:2 03:1 04:1 13:1
+  SRC   : 00:133 10:14 07:11 0B:6 11:6 03:1 0A:1
+  f31   : 05:42 03:34 04:34 01:24 07:16 00:13 02:6 06:3
+  store bit set: 2 of 172
+
+-- SHAPES (the word with f31 masked out)
+   0020200000 n=92  cls 2 ACT 00 SRC 00 addr8 00 store=0
+   042010E000 n=17  cls 1 ACT 00 SRC 00 addr8 0E store=0
+   00A0200000 n=8   cls 2 ACT 00 SRC 00 addr8 00 store=0
+   00202002C7 n=6   cls 2 ACT 07 SRC 0B addr8 00 store=0
+   0020200407 n=4   cls 2 ACT 07 SRC 10 addr8 00 store=0
+   0020A061D5 n=3   cls A ACT 15 SRC 07 addr8 06 store=0
+   002024B00B n=3   cls 2 ACT 0B SRC 00 addr8 4B store=0
+   00202F6407 n=3   cls 2 ACT 07 SRC 10 addr8 F6 store=0
+
+-- PADDING test: distance from the image's last word
+   at the last word: 17 ; within the last 3: 21 ; of 172
+-- TERMINATOR test: the image's last word has bit 5 in 17 of 40 programs
+
+-- ★ SUCCESSOR test: does the NEXT word discard the accumulator (f31 == 0, a LOAD)?
+   next word is an f31 = 0 LOAD  (term DISCARDED -- site is BLIND) : 96
+   next word is NOT a LOAD       (term SURVIVES  -- site is LIVE ) : 59
+   no next word in the image                                      : 17
+   LIVE sites by f31: 0:9 1:9 3:20 4:6 5:10 6:1 7:4
+   LIVE sites, first 20:
+      epilogue                   w73  0E30C00404 f31=0  ->  w74  0C169AB000 f31=3
+      epilogue                   w78  0A3CD9F287 f31=6  ->  w79  00122FF1CE f31=1
+      prog00_no_operation        w10  002E200000 f31=7  ->  w11  0018A001D5 f31=4
+      prog05_phaser              w9   0028AFF1D5 f31=4  ->  w10  02022481C8 f31=1
+      prog05_phaser              w68  0028AFD1D5 f31=4  ->  w69  02022531C8 f31=1
+      prog06_ensemble            w14  00202002C7 f31=0  ->  w15  00022C0680 f31=1
+      prog06_ensemble            w24  00202002C7 f31=0  ->  w25  00022BF680 f31=1
+      prog06_ensemble            w34  00202002C7 f31=0  ->  w35  00022B0680 f31=1
+      prog06_ensemble            w72  00202002C7 f31=0  ->  w73  00022BA680 f31=1
+      prog06_ensemble            w82  00202002C7 f31=0  ->  w83  00022B9680 f31=1
+      prog06_ensemble            w92  00202002C7 f31=0  ->  w93  00022A5680 f31=1
+      prog15_rock_rotary         w4   0020200000 f31=0  ->  w5   002E20000B f31=7
+      prog15_rock_rotary         w5   002E20000B f31=7  ->  w6   009220A700 f31=1
+      prog36_compressor          w2   00262F3000 f31=3  ->  w3   0018A001D5 f31=4
+      prog36_compressor          w7   00A620D447 f31=3  ->  w8   00A2200000 f31=1
+      prog36_compressor          w8   00A2200000 f31=1  ->  w9   001223C1C0 f31=1
+      prog36_compressor          w22  002A200000 f31=5  ->  w23  00262F9407 f31=3
+      prog36_compressor          w23  00262F9407 f31=3  ->  w24  0018A001D5 f31=4
+      prog36_compressor          w28  00A6207447 f31=3  ->  w29  00A2200000 f31=1
+      prog36_compressor          w29  00A2200000 f31=1  ->  w30  00122421C0 f31=1
+      ... 39 more

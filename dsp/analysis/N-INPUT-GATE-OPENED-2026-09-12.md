@@ -2365,6 +2365,133 @@ gain-staging review, and it should not be filed against §227 until something ti
 
 ⚠ Grade: MEASURED. Both of §61's exotic readings are retired by a scan it asked for.
 
+## 63. ★★★ `f31` IS AN ACTIVELY CHOSEN FIELD — and the corpus is TWO populations split by `hi12` bit 5
+§55 ended with an instruction: *"decide `f31 = 0`'s semantics **from the corpus and the HLE**, not
+from another arm."*  This is the corpus half, and it is a question the **bytecode can answer on its
+own** — no emulator, no arm, no circularity.  Tools: `dsp/tools/f31_activity.py`,
+`dsp/tools/bit5_words.py`; artefacts `data/f31_activity_2026-09-13.txt`,
+`data/bit5_words_2026-09-13.txt`.
+
+### The test, registered before it was run
+The reading §55 leaves open is that `f31` is simply **not a field** on words that fetch no
+coefficient — that hi12[3:1] is a don't-care there, the assembler emits whatever, and the device's
+`acc ← P_stale + bus` is our invention rather than the chip's.  That reading makes a **falsifiable
+prediction**: a field nobody chooses is a field that is always the same, so the same instruction
+shape should never appear with two different `f31` codes.
+
+> **MINIMAL PAIR** = two corpus words identical in **every other bit** (all 36, with hi12[3:1]
+> masked out) that carry different `f31`.
+
+The **coefficient-fetching population is the built-in positive control**: a multiply chain must
+start (LOAD) and continue (ADD), so pairs *must* exist there or the instrument is broken.
+
+### ⛔ The prediction FAILS — `f31` is chosen on both sides
+| population | words | minimal-pair shapes |
+|---|---|---|
+| coefficient-fetching (**control**) | 893 | **6** ✅ the control fires |
+| **no coefficient fetch** | 2 164 | **12** |
+
+Among the non-fetching shapes the choice is not marginal: `0100200000` appears **35×** as `ADD` and
+**23×** as `HOLD`; `0200200000` **18×** / **13×**; `042010E000` — *the family every body ends with*
+— carries codes 0, 2, 4 **and** 6.
+
+⇒ ★★★ **`f31 = 0` on a non-coefficient word is a DELIBERATE code, not a don't-care.**  One of the
+two readings §55 left open is closed, and it is closed against the convenient one: §55's
+output-killing LOADs are instructions the programmer wrote on purpose, so "the chip ignores the
+field there" cannot be the explanation for the dead output accumulator.
+
+### ★★★★ And the same census splits the ISA in two
+Cross-tabulating `f31` against **`hi12` bit 5** — a bit `dsp_disasm.py` prints as `?5`, undecoded —
+over all 3 057 corpus words:
+
+| | f31 ∈ {0,1,2} | f31 ∈ {3..7} |
+|---|---|---|
+| **bit 5 CLEAR** (2 885 words) | **2 852 — 98.9 %** | 33 — 1.1 % |
+| **bit 5 SET** (172 words) | 43 — 25 % | **129 — 75 %** |
+
+★ With bit 5 clear the corpus uses a **two-bit** operation field.  With bit 5 set it uses **all
+eight codes, high ones dominant**.  That is §229's device-side census reproduced **statically from
+the source of truth**, and sharper than it: the point is not that bit 5 *admits* the high codes, it
+is that bit-5 words are **mostly** high codes.  ⚠ The device collapses every code above 2 into one
+behaviour (`acc ← acc + bus`), so **five codes the corpus writes deliberately execute as one.**
+
+### What the bit-5 population IS
+172 words, 5.6 % of the corpus, in 32 of 40 programs (2 of them C-format, where hi12 is an
+immediate and this encoding does not apply — named, not silently dropped).  It is **not** a
+scattering: 92 of the 172 are a **single shape**, `0020200000` — class 2, `ACT 0x00`, `SRC 0x00`,
+`addr8 0x00`, **no store** — a word with no source, no action, no store and no pointer walk, whose
+*entire* content is `hi12` bit 5 and the three `f31` bits.
+
+⛔ **And it is not padding**, the obvious trap: the 92 are scattered through the bodies (tail
+offsets 1 … 105), present in 30 programs, and three of them are in **`prog00_no_operation`** — a
+program that by name does nothing and still runs the full skeleton.
+
+⛔ **A tempting headline, falsified on the spot:** *"bit 5 marks the terminator"*.  It looked
+compelling — `prog00` and `prog39` both end on one.  Corpus-wide it is **17 of 40 programs**, and
+**8 programs contain no bit-5 word at all** (chorus, modulated chorus, flanger, single delay, multi
+tap delay, room reverb 1, vibrato, mix up).  Refuted.
+
+⚠ Grade: MEASURED, 3 057 words, 40 listings, static, with a positive control that fired and a
+headline of my own that did not survive its own corpus check.
+
+## 64. ★★★ WHERE THE COLLAPSE CAN BE SEEN AT ALL: 96 of the 172 bit-5 sites are BLIND
+§63 says five codes execute as one.  Before calling that load-bearing it has to be shown to be
+**observable** — and the parametric EQ shows exactly why it might not be.
+
+### The EQ's bit-5 word, measured at the SHIPPED default
+The EQ is the one program whose structure the oracle fixes: a 9-word DF-I biquad block repeated
+**ten** times (five bands × two units).  Its **four** bit-5 words sit at the four **seams** and
+never inside a block — `w3` (unit-0 entry), `w50` (after unit 0's last band), `w56` (unit-1 entry,
+positionally homologous to `w3`: `w0↔w53, w1↔w54, w2↔w55, w3↔w56, w4↔w57`), and `w104` (the last
+word).  `w3` is `iw87`, and the frame trace at the **true default, no environment set**
+(`dsp/tools/trace_window.py`, capture per `catalogue_regression.sh TYPES=15`) reads:
+
+```
+    n  iw u1 word        dp mem     acc                 delta(acc)            P
+   52  86  0 0212200000 10 17DDEC         933634777639        831127289856        319337988096
+   53  87  0 002A200000 10 17DDEC        1355480244775  ★    421845467136        319337988096
+   54  88  0 0000240407 50 4A5700         319337988096      -1036142256679        319337988096
+```
+
+★★ `iw87` — the bit-5 word, `f31 = 5` — adds **421 845 467 136** to the accumulator, and `iw88`'s
+`f31 = 0` LOAD **discards the whole accumulator one slot later**: it comes out *exactly equal to
+`P`*.  ⇒ **This site is BLIND.**  No reading of the bit-5 word — collapse, clear, no-op, anything —
+could be graded here, because the next instruction overwrites the only register it touched.
+
+### The corpus-wide blindness census
+Applying that criterion to all 172 (`bit5_words.py`, SUCCESSOR test):
+
+| the next word is … | sites |
+|---|---|
+| an `f31 = 0` LOAD — the term is **DISCARDED**, the site is **BLIND** | **96** |
+| **not** a LOAD — the term **survives**, the site is **LIVE** | **59** |
+| no next word in the image | 17 |
+
+and of the 59 live sites, **41 carry a high code** (`f31` 3:20, 4:6, 5:10, 6:1, 7:4) — the ones the
+device collapses.
+
+⇒ ★★★ **The observable size of the collapse is 41 sites**, not 129 and not 172, and they are
+*named*: `prog36_compressor` (many), `prog05_phaser` `w9`/`w68`, `prog06_ensemble` `w14/24/34/72/82/92`,
+`prog15_rock_rotary` `w5`, and — worth its own line — **the `epilogue` itself at `w74` (`f31 = 3`)
+and `w78` (`f31 = 6`)**, which is the stage §47/§51/§54 have been unable to make present anything.
+
+### Why this is the right shape for the next unit of work
+It converts *"five undecoded codes"* into **"41 sites where a reading can be graded, and 96 where
+any experiment would return a false null"** — and that second number is the important one, because
+this session has already produced three false nulls by aiming an arm at a site that could not
+respond (§46's three aiming errors).  **Any future test of `hi12` bit 5 must be aimed at the live
+41**; a gate run that happens to sample the blind 96 would report "no change" and mean nothing.
+
+⚠ **What this does NOT establish:** nothing about what bit 5 or the high codes *mean*.  It
+establishes that the corpus chooses them deliberately (§63), that the device collapses them, and
+exactly where that collapse is and is not visible.  ⚠ The successor test is **static**, so it reads
+the listing in address order — execution order only inside a straight run.  A site it calls blind
+**is** blind; a site it calls live could still be discarded further downstream, so 41 is an **upper
+bound** on the gradeable set and 96 a **lower bound** on the blind one.
+
+⚠ Grade: MEASURED — static census over 3 057 words, plus one frame-trace window read at the true
+default with no environment set (the §56 rule, applied this time *before* drawing the conclusion).
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
