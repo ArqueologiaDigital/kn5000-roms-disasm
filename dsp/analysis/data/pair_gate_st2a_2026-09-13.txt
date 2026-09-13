@@ -1,0 +1,50 @@
+=== pair_gate [st2a] : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_ST2A=1 UPD6383_SPEC=B9108446A39B440F ===
+--- (A) CHORUS phase + liveness, TYPEIDX 0 ---
+  LFO  phase cell 0x07 delta across the pair = 114 (compare the HLE LFOOracle increment round(rate/44100*2^23); the phase word's L=114 is the increment on the bus)
+LFO phase across 8 consecutive frames -- the step must be CONSTANT and equal 114
+
+capture                              frames         step  verdict
+pg_st2a_cho.log                           8          114  ✅ FREE-RUNNING RAMP at the increment
+(A) LFO ramp exit status: 0   [0 = free-running at the increment, non-zero = frozen/dead/wrong]
+cells seen: 17   MOVED: 3
+per-row (iw, acc, P, L) tuples differing: 21 of 70
+✅ VERDICT: the frames DIFFER -- the body is live; downstream measurements are meaningful.
+(A) liveness exit status: 0   [0 = live, non-zero = STATIC]
+--- (B) PARAMETRIC EQ liveness, TYPEIDX 15 ---
+frame A: pg_st2a_eq.log
+frame B: pg_st2a_eq_F1.log
+cells seen: 44   MOVED: 30
+   0x05       4879200 ->      4884605
+   0x50       4879200 ->      4884605
+   0x52      -1055273 ->     -1057117
+   0x53       -526859 ->      -527637
+   0x54       4879200 ->      4884605
+   0x56       -325677 ->      -325971
+   0x57       -162647 ->      -162839
+   0x58       4879200 ->      4884605
+   0x5A      -1318456 ->     -1319977
+   0x5B       -658599 ->      -659228
+   0x5C       4879200 ->      4884605
+   0x5E        298540 ->       298036
+   0x5F        149539 ->       149270
+   0x60       4879200 ->      4884605
+   0x61       4873981 ->      4879200
+   0x62       -976041 ->      -976537
+   0x63       -487714 ->      -488021
+   0x64       2929611 ->      2931087
+   0x66        101630 ->       101538
+   0x67         50858 ->        50815
+   0x68       2929611 ->      2931087
+   0x6A      -1050988 ->     -1051472
+   0x6B       -525261 ->      -525494
+   0x6C       2929611 ->      2931087
+per-row (iw, acc, P, L) tuples differing: 105 of 105
+
+✅ VERDICT: the frames DIFFER -- the body is live; downstream measurements are meaningful.
+(B) exit status: 0   [0 = live, non-zero = STATIC]
+--- (C) ONE COPY of the input at the EQ's pickup cell (the HLE's criterion) ---
+body entry at iw84 -- the HLE says ONE copy of the input must reach the band's cell
+
+capture                           bus datum  cells holding exactly one copy
+pg_st2a_eq.log                      4879200  ✅ ONE COPY at 0x50, 0x54, 0x58, 0x5C, 0x60
+(C) exit status: 0   [0 = one clean copy, non-zero = wrong quantity]
