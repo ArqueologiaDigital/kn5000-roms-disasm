@@ -5070,6 +5070,47 @@ It cannot be the answer as it stands, because it destroys the hand-off. What it 
 path**: the C-format immediate is implicated in the LFO rate defect, and the next pass has
 something specific to pull on instead of a symptom.
 
+## 110. `SRC 0x11`: the anchored criteria are BLIND, and the diff says exactly why
+Pre-registration and result: [`data/PREDICT_SRC11_2026-09-13.md`](data/PREDICT_SRC11_2026-09-13.md).
+
+`SRC 0x11` — 54 sole / 77 words over 29 images, 5 of them in the resident kernel — has three
+readings, all already in the device behind the SPEC mask: the current unit's accumulator (shipped),
+`ACCB`, and `mem[ptr]`. None had ever been swept against the criteria that closed the store gate.
+
+**All three leave the hand-off cell `0x05`, the VOLUME cell `0x06` and the LFO phase `07`
+bit-identical.** No refutation.
+
+### ★ And the diff localises the blindness, which is the useful part
+```
+   §176 D-RAM CENSUS   IDENTICAL   -- 0 of 12 cells differ
+   §228 LFO RISE       IDENTICAL
+   §162                IDENTICAL
+   §175 PER-SITE       DIFFER      -- `L' 0..8388607 vs 0..7474246, and `P' with it
+   D-RAM WRITES        DIFFER
+```
+
+The readings **do** feed different operands into the multiplier — `§175` shows it — and the
+**resulting D-RAM state is bit-identical, cell for cell.** The difference is absorbed before
+anything is stored.
+
+⇒ **that is why the store-gate method does not transfer here.** The hand-off, VOLUME and the LFO
+phase are all D-RAM cells, and no D-RAM cell separates the readings. The gate was decidable because
+it changed the accumulator wholesale; a SOURCE swap changes a multiplicand the datapath absorbs.
+
+★ **The instrument the next pass needs is named**: one that grades **`L` and `P` at the `SRC 0x11`
+sites** — `§175` already reports both — against a program where the multiplicand at such a word is
+known from the ROM. The same shape as SINGLE DELAY's lag-1001 product, applied to an operand rather
+than an output.
+
+⛔ Coverage unchanged at 77.6 %.
+
+### ⚠ Three negatives in a row, and they are not the same negative
+§107 (`ACT 0x0B` vs the delay line): the criterion reaches the code and cannot see it.
+§109 (C-format): the criterion refutes 3 of 6 and cannot separate the rest.
+§110 (`SRC 0x11`): the criterion cannot see it, **and the diff says the whole D-RAM is insensitive
+to the axis**. Each one removes a specific experiment from the queue and names what would replace
+it. That is what a queue is for.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

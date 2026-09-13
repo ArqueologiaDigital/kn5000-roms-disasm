@@ -1,0 +1,14 @@
+=== SRC 0x11 SWEEP, chorus, per-program census, true default ===
+arm reading                        HAND-OFF 0x05                          VOLUME 0x06                    LFO 07 mean
+A   cur-unit accumulator (shipped) 05:177684(-2869494..3486228/chg175660) 06:2260027(0..2260027/chg1)    mean 15543.9286
+B   ACCB (unit 1's)                05:177684(-2869494..3486228/chg175660) 06:2260027(0..2260027/chg1)    mean 15543.9286
+C   mem[ptr]                       05:177684(-2869494..3486228/chg175660) 06:2260027(0..2260027/chg1)    mean 15543.9286
+
+which census moves:
+   §176 D-RAM CENSUS     IDENTICAL
+   §228 LFO RISE         IDENTICAL
+   §162                  IDENTICAL
+   §175                  DIFFER (3 distinct)
+   D-RAM WRITES           DIFFER (3 distinct)
+
+0 of 12 D-RAM cells differ between the three readings.
