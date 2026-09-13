@@ -57,3 +57,27 @@ mild counter-evidence and it is recorded here rather than discovered afterwards.
 limited: `closure-pointer.md` item F **falsified the closure criterion's own premise**, item B
 already measured that the pool is not constant (8 nets over 37 images), and item G's rejections
 were at **29 and 31** distinct nets, not 15.
+
+
+---
+
+## Run 1 — **P1 MISS, and the run is discarded** (recorded, not hidden)
+
+```
+   §100 CLS46PTR (ON): class-4/6 pointer advances performed: 0
+```
+
+and the traced frame, the D-RAM census and the two tap rows were **bit-identical** to the control.
+⛔ **The arm never fired**, so the run says nothing about the claim — which is exactly what P1 was
+written for, and the second time this session that a gate has caught an arm that could not reach
+its target (§97 was the first, on someone else's experiment; this one is mine).
+
+**Cause:** the pointer post-increment is performed at the END of `exec_alu()`
+(`if ((cl & 7) == 2) m_dp = u8(m_dp + dd);`), the one site that runs for every word. The two sites
+a `grep` for the `m_dp = u8(m_dp + s8(addr8(word)))` spelling finds are
+`exec_addressing_only()` — the twelve K6 whitelist words — and a copy inside `exec_decoded()`'s
+**nop branch**. I patched those two and not the one that matters.
+
+★ The general rule, and it is the same one §97 states from the other side: **a fired count is not
+a formality.** Run 2 patches the real site; the predictions above are unchanged and were not
+edited.
