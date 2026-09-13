@@ -108,3 +108,49 @@ For the record, what the half-arm did to P2: the operand `L` at the two class-4 
 `39 718` → `0`/`1`. That is not evidence against the claim — the pointer post-increments, so a
 class-4 word's own read is unaffected by its own advance, and with class 6 frozen the two words
 walk out of step. Run 3 adds the advance inside the class-6 branch.
+
+
+---
+
+## Run 3 — **P1 HIT, P5 HIT, P2 FAIL** ([`cls46ptr_run3_2026-09-13.txt`](cls46ptr_run3_2026-09-13.txt))
+
+```
+   §100 CLS46PTR (ON): class-4/6 pointer advances performed: 6 301 008      = exactly 4 per frame
+```
+
+**P1 HIT.** And the walk is exactly what the static argument predicts — the chorus's first macro
+instance, with the arm on:
+
+```
+   n=80  0040000C63  dp 0C
+   n=81  00006184CD  dp 24     0x0C + 0x18
+   n=82  00124011CE  dp 25     +1
+   n=83  01042021CE  dp 27     +2      ⇒ net +27 over the macro, the predicted value
+```
+
+**P5 HIT — the upstream null holds exactly.** The kernel's cells are bit-identical to the control:
+`01`, `04`, `05`, `06`, `07` all unchanged, including the per-unit hand-off `05:177684
+(-2869494..3486228/chg175660)`. The blast radius is what was measured before the run.
+
+**⛔ P2 FAIL.** The operand `L` at the two class-4 taps is still `0` and `1`. The cells they read
+moved (`0x0C`→`0x24`, `0x0E`→`0x47`) and the new cells carry the same tiny self-written values
+(`24: -17..19`, `47: -33..39`). The tap is relocated, not aimed.
+
+### ⚠ AND P2 WAS NOT A FAIR TEST — my error, and it was knowable in advance
+§97, written two hours earlier, established that the macro's head (`C63`) carries `lo12` bit 11 and
+**leaves `exec_alu()` before the SOURCE stage, 3 150 504 times a run**. So the index the macro is
+built around **is never delivered**. The tap's address is `pointer + (index that never arrives)`;
+moving the pointer alone can relocate it but cannot aim it. **P2 required the index to be present
+and the arm does not supply one — a criterion that could not succeed**, which is the same defect
+as a control that cannot fail, seen from the other side.
+
+⇒ **P2's miss is not evidence against the claim.** It is evidence that the addressing half cannot
+be graded on audio until the bit-11 head is decoded. What P2 *did* earn: it is now on record that
+relocating the tap changes nothing audible, so nobody re-runs this expecting sound.
+
+### Verdict
+**NOT PROMOTED.** The static case (the cross-corpus twin; the two spellings agreeing at +27) is
+strong and the arm reproduces the predicted walk to the cell; but one pre-registered criterion
+failed, its failure is explained rather than excused, and the remaining criterion — P4, the
+10-program regression at the true default — is what decides whether the arm may stay as a
+default-off decode or must be reverted.
