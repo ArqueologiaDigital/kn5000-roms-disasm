@@ -126,6 +126,22 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ⛔ **§52/§53: THE EPILOGUE REBASE (register row 23) IS REFUTED A SECOND TIME, FOR A BETTER
+   REASON.** Re-tested because its original withdrawal (*"rebasing moved the pointer to `0x05` and
+   the stores still read zero"*) rested on a premise §50 destroyed — `0x05` now moves in all 16
+   programs. Result: structurally the arm works (epilogue cells `0x00,0xFF` → `0x04,0x05`), but it
+   gives **no overlap in 3 of 4**, leaves the output stage at `loud max 0`, and **breaks three of
+   four bodies including the PARAMETRIC EQ** (30 moving cells → STATIC).
+   ★★ **MECHANISM: `m_dp` is THREADED ACROSS FRAMES.** `run_frame()` resets the PC and nothing
+   else — the first words run on the pointer the *previous* frame's epilogue left. Forcing it at
+   the epilogue sets **where the NEXT frame's kernel starts walking**. ⇒ **the epilogue's `0x00`
+   is not a missing rebase; it is the value the previous frame legitimately left there.**
+   ⇒ ⛔ **Do not re-propose an epilogue pointer rebase.** The pointer is an OUTPUT of the frame
+   loop, not an input to be set.
+   ✅ **The regression bound caught it**: §52 stated *"the 38-live tally must not fall"* before the
+   run, and it fell on the reference program immediately. Fourth pre-registered check to decide an
+   outcome this session.
+
    ★★★ **§51: THE OUTPUT-STAGE NULL HAS A MECHANISM — the epilogue's POINTER NEVER LEAVES `0x00`.**
    With every body live, the §48 question was put to the output stage: *who writes what it reads?*
    Measured on 16 programs — the epilogue (`iw60..82`) addresses **only `0x00` and `0xFF`, in ALL
