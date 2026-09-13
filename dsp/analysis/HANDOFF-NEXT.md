@@ -174,10 +174,19 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    ⇒ **MEASURED NECESSARY CONDITION: the latch is only ever reloaded when the PREVIOUS word was a
    multiply or an `ACT 0x07`.** Not sufficient (those two shapes hold 20 / load 16) — but it
    eliminates five of seven preceding contexts and **cuts the open set from 363 rows to 36**.
-   ⇒ ★ **The live candidate is now a field the trace does not print**, with a natural reading: a
-   multiply's own operand fetch plausibly drives the latch, so the next word sees held or reloaded
-   depending on **the multiply's pipeline state**. ⚠ **Testing it needs a NEW TRACE COLUMN, not a
-   new arm.**
+   ✅✅ **CLOSED BY §10 — WITH AN OBSERVATION, NOT AN ARM.** The new **`LW`** trace column (set
+   where `m_last_l` is finalised, reset per word, printed `W`/`.`; **read-only, no behaviour
+   change, ships unconditionally**) says whether the word DROVE the operand latch. Result:
+   **the latch changes if and only if the word drove it — 57 of 57 undriven rows HOLD, zero
+   exceptions** (driven: 5 changed, 3 held with the same value).
+   ⇒ §8's *"95.6 % held"* and §9's *"16 exceptions"* were **never two behaviours** — they were one
+   behaviour seen through a **missing column**. `addr8`, the unit and the preceding word were all
+   refuted because **none of them was the variable.**
+   ★★ **METHOD, generalises:** three discriminator hunts each cost a measurement and each failed
+   because the quantity that mattered **was not in the trace**. ⇒ **when successive plausible
+   discriminators all fail, SUSPECT THE INSTRUMENT before inventing a fourth candidate.**
+   ⚠ This does **not** anchor `SRC 0x00` — it deletes a spurious sub-question and returns the work
+   to §7's real partition (class-A `f98=1` = coefficient; the rest = memory operand, vs the HLE).
    ⚠ **Nothing anchored — a 95.6 % rule is not a decode, and the 4.4 % is what would make it one.**
    ⚠⚠ **AND A CORRECTION TO CARRY:** §5's *"`mem[N−1]`, 51 of 51"* is true **of family
    `212/2/000`** and says nothing about `SRC 0x00` as a CODE. **Never promote a per-family
