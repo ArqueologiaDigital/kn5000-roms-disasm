@@ -4032,11 +4032,41 @@ place above.
 railed**. A finder that surfaces true candidates alongside artefacts is still the reason §88 found
 its cascade; it just cannot be quoted as a measurement of harm.
 
-### What a store-accurate census would take
-The count has to move from the conversion to the **write**. There is no central D-RAM write helper —
-**33 `m_dram.write_dword` sites** — so it is a refactor, not a counter, and I have not done it
-rather than patch 33 call sites blind. The device's own log now states all of this at the point of
-use, so the number cannot be misread again the way I misread it.
+### ✅ THE STORE-ACCURATE CENSUS — built, after two wrong turns worth recording
+I first wrote *"there is no central D-RAM write helper — 33 `m_dram.write_dword` sites — so it is a
+refactor, not a counter."* **Both halves of that were wrong.**
+
+**Wrong turn 1.** I picked the 5 sites that looked like microcode stores and instrumented them. The
+census came back **`0 of 0`** — *the microcode's stores do not reach D-RAM through those calls at
+all.* A negative result from my own patch, and the useful kind: it said the write path was somewhere
+else entirely.
+
+**Wrong turn 2.** The code's own comments point at a helper called **`do_store()`** — *"do_store()
+implements the rule"*, twice. **There is no such function**; it survives only in comments. Stale
+documentation sent me looking for something that had been renamed or inlined.
+
+★ The real central helper is **`store_mode()`**, under its own banner *"one rule for both store
+sites"* — exactly the thing I had declared absent. Counting there, and reverting the 5 mis-placed
+call sites so nothing is double-charged:
+
+| | auto wah | no operation |
+|---|---:|---:|
+| **full-scale datums received / microcode stores** | **9 986 693 / 135 151 116 = 7.39 %** | 9 430 830 / 128 539 510 = **7.34 %** |
+| `cell 06` | **33.7 %** | **32.7 %** |
+| `cell 8B` | 13.3 % | 12.7 % |
+| `cell 94` | 9.1 % | 6.1 % |
+| `cell 12` (the auto-wah detector output, §88) | **5.3 %** | — |
+| `cell 05` / `07` ★ per-unit hand-off | 4.7 % | 5.6 % |
+
+⇒ ★★ **`cell 06` really is the largest recipient** — so the *direction* of §75's claim survives —
+but its share is **33.7 %, not 57 %**, and it now means *"this cell was handed full scale 3.4 M
+times"* rather than *"57 % of clipping happened near it"*. **One third of the excursions, and a
+different statement.** ★ The detector cell §88 found from the trace appears independently at 5.3 %,
+and both per-unit hand-off cells are in the top six.
+
+⚠ **Still not an inference about clipping**: it counts a stored datum that *is* the rail, so a
+legitimately full-scale sample is counted too. That is the honest reading and it is the one printed
+at the point of use.
 
 ⚠ **And the honest consequence for §88's ordering.** *"Scale before semantics"* still stands — the
 auto-wah's detector really is pinned by a railed operand at cell `0x0F`, and that was read from the
