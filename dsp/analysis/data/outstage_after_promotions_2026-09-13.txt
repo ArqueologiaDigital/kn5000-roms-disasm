@@ -1,0 +1,29 @@
+OUTPUT STAGE (ACCA at w73) under the PROMOTED DEFAULTS -- §216 measured this as min 0 max 0 everywhere
+TYPE program                             quiet max           loud max
+13   prog36_compressor                 88235781586                  0  ★ NON-ZERO
+14   prog00_no_operation               88235781586                  0  ★ NON-ZERO
+16   prog48_auto_pan                   88235781586                  0  ★ NON-ZERO
+17   prog50_vibrato                    88235781586                  0  ★ NON-ZERO
+18   prog52_auto_wah                   88235781586                  0  ★ NON-ZERO
+19   prog15_rock_rotary                88235781586                  0  ★ NON-ZERO
+20   prog15_rock_rotary                88235781586                  0  ★ NON-ZERO
+21   prog54_ring_modulator             88235781586                  0  ★ NON-ZERO
+22   prog56_mix_up                     88235781586                  0  ★ NON-ZERO
+23   prog64_s_delay_chorus             88235781586                  0  ★ NON-ZERO
+24   prog65_s_delay_s_delay            88235781586                  0  ★ NON-ZERO
+25   prog66_s_delay_flanger            88235781586                  0  ★ NON-ZERO
+26   prog67_s_delay_vibrato            88235781586                  0  ★ NON-ZERO
+27   prog68_s_delay_phaser             88235781586                  0  ★ NON-ZERO
+28   prog70_auto_wah_s_delay           88235781586                  0  ★ NON-ZERO
+29   prog71_peq_chorus                 88235781586                  0  ★ NON-ZERO
+30   prog72_peq_s_delay                88235781586                  0  ★ NON-ZERO
+31   prog73_peq_flanger                88235781586                  0  ★ NON-ZERO
+32   prog74_peq_vibrato                88235781586                  0  ★ NON-ZERO
+33   prog75_peq_compressor             88235781586                  0  ★ NON-ZERO
+34   prog96_peq_compr_dist             88235781586                  0  ★ NON-ZERO
+35   prog97_peq_compr_overdr           88235781586                  0  ★ NON-ZERO
+36   prog98_peq_dist_delay             88235781586                  0  ★ NON-ZERO
+37   prog99_peq_overdr_delay           88235781586                  0  ★ NON-ZERO
+15   prog39_parametric_eq              88235781586                  0  ★ NON-ZERO
+
+25 of 38 programs carry a NON-ZERO output-stage accumulator.

@@ -1767,6 +1767,39 @@ reach. The device now carries that as a comment at the site.
 ⚠ Grade: MEASURED (`data/st2a_verdict_2026-09-13.txt`). The arm stays in the tree, default-off,
 with its refutation and all three aiming errors beside it.
 
+## 47. §216's OUTPUT-STAGE NULL **SURVIVES** THE TWO PROMOTED DECODES — and a constant nearly fooled me
+The handover's chain ends *"...the bodies write zero → and even forced open, the output stage is a
+null"*. This session broke the **"bodies write zero"** link, so the null had to be re-measured
+rather than inherited. It was, on all 38 programs (`data/outstage_after_promotions_2026-09-13.txt`).
+
+**The result: the output stage is still a null for audio.** `§70 ACCA AT w73` reports
+**`loud frames … max 0` on every one of the 38 programs** — the frames where input is present are
+exactly the frames where the output stage carries nothing. ⇒ bodies that compute do **not** by
+themselves produce output, and the two promoted decodes (§36, §40) do not touch this. §216 stands.
+
+### ⚠ THE TRAP I WALKED INTO, AND CAUGHT — recorded because the next reader will see the same line
+The same report shows `quiet frames … max 88 235 781 586`, non-zero, on **25 of 38 programs**. Read
+alone that looks like the output stage coming alive for the first time since §216. It is not, on
+three independent grounds, each of which is enough:
+1. **The value is IDENTICAL to the last digit across all 25 programs.** Different topologies,
+   different coefficients, different bodies — a genuine output cannot be bit-identical across them.
+2. **It is present in the PRE-PROMOTION capture too** (`reg/base`, the unmodified configuration),
+   so it is not a consequence of anything this session changed. ⚠ It is *absent* under the
+   **disqualified** bit-28 configuration, which is exactly the kind of coincidence that would have
+   made a false story look corroborated.
+3. **It appears on QUIET frames and is exactly 0 on LOUD ones** — inverted from audio. That is
+   RULE 13 in its purest form: *a difference from silence is not a signal.*
+
+⇒ `88 235 781 586` (datum `1 346 371`) is a **constant of the idle machine**, not a signal, and any
+future reading of `§70`'s quiet column must exclude it. The honest statement of the output stage is
+unchanged: **it receives nothing when there is something to receive.**
+
+★ What this does buy: the null is now measured **with live bodies on 38 programs** rather than
+inherited from a rig with dead ones, so "fix the bodies and the output will follow" is refuted
+directly. The output stage is an independent decode problem and the largest unexamined area left.
+
+⚠ Grade: MEASURED, 38 programs, plus the three-way check that killed my own first reading.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
