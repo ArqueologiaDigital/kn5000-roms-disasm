@@ -126,6 +126,19 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★ **§51: THE OUTPUT-STAGE NULL HAS A MECHANISM — the epilogue's POINTER NEVER LEAVES `0x00`.**
+   With every body live, the §48 question was put to the output stage: *who writes what it reads?*
+   Measured on 16 programs — the epilogue (`iw60..82`) addresses **only `0x00` and `0xFF`, in ALL
+   16, without exception**; the bodies move `0x04/0x05/0x06/0x08/0x0F/0x11/0x13/0x50–0x55`; the
+   **overlap is 0 of 16**. ⇒ the output stage is **not losing a signal, it is reading somewhere
+   else**. §221 said the operands are disjoint; this says WHY — the pointer is never brought to the
+   bodies' block. ⇒ **the question is now about the POINTER, not the arithmetic**, with a hard
+   control (16 programs, zero overlap) and the 38-live tally that no change may reduce.
+   ⚠ The epilogue's accumulator DOES arrive non-zero and is destroyed at `iw65` by a LOAD — but it
+   is **program-dependent and frame-STATIC** while those bodies are frame-live, so **it is not
+   audio**. ⚠ NOT claimed: that the disjointness is a defect rather than the chip's behaviour; the
+   bodies may deliver through something that is not a D-RAM cell.
+
    ★★★★★ **§50: THE TALLY IS 38 LIVE / 0 STATIC / 0 VOID. EVERY EFFECT PROGRAM RUNS ITS BODY ON
    LIVE AUDIO** under the promoted defaults. The whole "static" set was a **trace-timing
    artefact**: a body's first operand is **last frame's state** (§48), so a body only runs once its
