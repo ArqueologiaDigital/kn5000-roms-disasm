@@ -1,5 +1,14 @@
 PICKUP CELLS AT THE CORRECT SELECTOR -- is the distortion's rail family-wide?
 
+  ⚠ PRODUCER: dsp/tools/pickup_cells.py (written AFTER this table and checked against it --
+    it reproduces prog04_flanger -32512/-14848/517549 and prog32_distortion 0x05 = 8388607).
+  ⚠⚠ MACHINE: these captures carry UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1, which is NOT the
+    device default.  Do NOT pool this table with captures taken at the true default
+    (PSHIFT=0 C8SHIFT=0) -- that is the §229 pooling trap.  See N-INPUT-GATE-OPENED §70.
+  ⚠ The sample is also SKEWED: it contains no standalone dynamics/detector program except the
+    distortion -- no compressor, enhancer, auto wah or NO OPERATION.  Its "1 of 14" therefore
+    says nothing about that family.
+
 TYPE program                           0x01        0x04        0x05  pickup state
 1    prog02_modulated_chorus        -132352       26624          57  ok
 3    prog04_flanger                  -32512      -14848      517549  ok
