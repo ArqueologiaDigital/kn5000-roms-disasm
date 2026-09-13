@@ -65,3 +65,51 @@ goal asks for, and it is repeatable family by family.
 
 ⚠ Grade: the concentration and the cross-reference are MEASURED. **No family is promoted here**,
 and none should be until the oracle has spoken.
+
+## 5. ★★ THE FIRST FAMILY TAKEN DOWN THE LIST: `212/2/000`, and only ONE axis was open
+Following §4's own instruction — *take the largest family and work it* — applied to `212/2/000`
+(**103 occurrences, 32 programs**, the biggest undecoded family in the corpus).
+
+★ **88 of its 103 occurrences are a single word**, `0212200000`, and its fields are almost all
+already settled:
+
+| axis | value | status |
+|---|---|---|
+| `hi12` bit 4 | set | **bit-4 STORE** — decoded, and its target/timing FORCED over 2 160 models |
+| `f31` | 1 | **ACCUMULATE** — decoded |
+| `ACT` | 0x00 | **adds the bus on top of the `f31` op** — 442 rows, `N-DEVICE-ALGEBRA` §3 |
+| `addr8` | 0 | pointer delta **zero** — no walk |
+| **`SRC`** | **0x00** | ⛔ **the only open axis** |
+
+⇒ the family is not an unknown instruction. It is **one open source code on an otherwise
+specified word.**
+
+### What `SRC 0x00` puts on the bus, measured
+Over every occurrence in the 16-program live corpus (`data/src00_bus_2026-09-13.txt`), comparing
+the operand latch `L` against each candidate:
+
+| `L` equals | occurrences |
+|---|---|
+| **the PREVIOUS row's `mem[ptr]`** | **51 of 51** ✅ |
+| `mem[ptr]` (same row) | 22 (a subset, where the two coincide) |
+| the coefficient, `tempA`, zero | subsets only |
+
+★★ **`mem[N−1]` is the ONLY candidate that matches every occurrence** — and it is not a new rule:
+it is the project's already-MEASURED **one-slot operand** (`operand L = mem[N−1]`, the same pipeline
+depth that makes `P[N] = coef[N−1] × L[N] >> shift` bit-exact on the biquad). ⇒ **`SRC 0x00` on
+this family is the ordinary memory operand, not a special source.**
+
+⚠ **What is still needed before this family can be called decoded**, stated so the next pass does
+not over-read it:
+1. this is the **device's** `L` column against the **device's** `mem` column — it shows the family
+   obeys an *already-established* rule rather than inventing one, which is weaker than an oracle
+   confirmation and stronger than a guess;
+2. `alu_decoded()` refuses `SRC 0x00` on purpose (§145/§148 carry rival readings of it, one of them
+   *"SRC 0x00 = coefficient"* behind mask bits 57–59). **This measurement is evidence against the
+   coefficient reading for this family** — `L` equals the coefficient only on the subset where the
+   coefficient and `mem[N−1]` coincide — but §148's population is `f98 = 1` class-A words, which
+   this is not, so the two need not conflict;
+3. the **values** still need the HLE: routing being right does not make the arithmetic right.
+
+⇒ **Next: run the programs that use `212/2/000` through the HLE and check the values**, then take
+`000/2/40E` (77 occurrences, still tied in the extractor between `P` and `acc+P−L<<16`).

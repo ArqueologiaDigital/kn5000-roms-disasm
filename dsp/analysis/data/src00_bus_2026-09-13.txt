@@ -1,0 +1,13 @@
+FAMILY 212/2/000 (the largest undecoded family, 103 occurrences, 32 programs)
+word 0212200000 = bit-4 STORE + f31=1 (accumulate) + ACT 0x00 (bus add) + SRC 0x00 + addr8 0
+⇒ store, accumulator op and pointer delta are all known. ONLY THE SOURCE IS OPEN.
+
+What does SRC 0x00 put on the bus (the L column)?  Compare against the candidates:
+
+what L equals                            occurrences
+   mem[ptr][-1]                          29
+   mem[ptr]+mem[ptr][-1]+acc_datum[-1]   15
+   mem[ptr]+mem[ptr][-1]+zero+acc_datum[-1] 4
+   mem[ptr]+mem[ptr][-1]+zero+acc_datum[-1]+tA 3
+
+total rows of this word observed: 51
