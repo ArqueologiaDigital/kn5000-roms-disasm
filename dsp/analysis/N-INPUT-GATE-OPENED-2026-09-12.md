@@ -1729,6 +1729,44 @@ reasonable before they were measured.
 
 ⚠ Grade: the split and the control are MEASURED from the listings; the rest is a prediction.
 
+## 46. ⛔ §45's ARM IS REFUTED — after THREE aiming errors that each produced a false null
+The hypothesis was implemented (`UPD6383_ST2A`, default off) and run. **It is refuted**, but only
+the third build actually tested it, and the first two produced nulls that looked like refutations
+and were not. Recording all three, because "the arm fired and nothing changed" was wrong twice:
+
+| attempt | aim | fired | why the null was FALSE |
+|---|---|---|---|
+| 1 | `m_dp + addr8` | 10 487 | the pointer walk had **already run**, so the store landed on `0x9B` (= `0x50 + 75`), a cell nothing addresses |
+| 2 | `m_dp`, inside `case LO_ACT_ST_BUS` | 10 487 | the starved word is `002A24B000`, `lo12 = 0x000` ⇒ **ACT 0x00**, so it never reaches that switch arm. ★ The **identical fired count** is what gave it away |
+| 3 | `m_dp`, on the **per-word path** | **327 220** | fires on the target — this is the real test |
+
+### The real result
+| TYPE | program | before mv/rows/rail/prod | after | cell `0x50` |
+|---|---|---|---|---|
+| 15 | PARAMETRIC EQ **(control)** | 30/105/0/90 | **30/105/0/90** | 4 879 200 ✅ **unchanged** |
+| 34 | PEQ+COMPR+DIST | 0/0/**0**/76 | 0/0/**1**/86 | **0** ⛔ **a new railed cell** |
+| 37 | PEQ+OVERDR+DELAY | 0/0/0/27 | 0/0/0/**50** | **0** = still static |
+| 13 | COMPRESSOR (the live counter-example) | 1/13/4/37 | 1/13/4/37 | 4 718 592 = unchanged |
+
+⇒ **the store does not reach `0x50`** — the cell is still **0** in both starved programs — while the
+extra products (76→86, 27→50) and a **new railed cell** show the store is landing *somewhere* and
+doing harm. ⇒ **`hi12 = 0x02A` with a non-zero delta is not an unrecognised store of the
+accumulator at the pointer.**
+
+★ **What survives, and it is not nothing:** the **control held** through all three builds — the EQ
+is bit-identical every time, exactly as §45 predicted from the corpus (both its instances carry
+`addr8 = 0`). A rule keyed on that field genuinely cannot touch the reference program. The *class*
+of hypothesis is therefore still admissible; **this particular member of it is dead.**
+
+⚠⚠ **THE METHOD LESSON, and it is the expensive one: A NULL FROM AN ARM YOU HAVE NOT PROVED FIRES
+ON THE TARGET WORD IS NOT A REFUTATION.** Twice in a row the fired count was non-zero and the arm
+was still never reaching the instruction under test. The check that caught it was **comparing the
+fired count between builds** — identical counts across a changed aim means the change did not
+reach. The device now carries that as a comment at the site.
+
+⚠ Grade: MEASURED (`data/st2a_verdict_2026-09-13.txt`). The arm stays in the tree, default-off,
+with its refutation and all three aiming errors beside it.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -1,0 +1,7 @@
+§45 ARM on the PER-WORD path -- before vs after (fired 327 220 times)
+
+TYPE program                          BEFORE mv/rows/rl/pr   AFTER                  cell0x50   verdict
+15   prog39_parametric_eq (CONTROL)   30/105/ 0/ 90          30/105/ 0/ 90          4879200    ✅ CONTROL UNCHANGED
+34   prog96_peq_compr_dist             0/  0/ 0/ 76           0/  0/ 1/ 86          0          ⛔ new railed cells
+37   prog99_peq_overdr_delay           0/  0/ 0/ 27           0/  0/ 0/ 50          0          = unchanged
+13   prog36_compressor (live)          1/ 13/ 4/ 37           1/ 13/ 4/ 37          4718592    = unchanged
