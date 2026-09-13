@@ -10237,6 +10237,19 @@ Excluding it the pairing is **53/53 both ways with no exceptions at all**.
 
 ### 3. ⇒ What the idiom is, and where the index lives
 
+> ⛔⛔ **RETRACTED 2026-09-13 — N-INPUT-GATE-OPENED §97.** Everything in this subsection reads
+> `SRC` and `ACTION` out of `lo12 = 0xC63`, **a word that has neither field**: bit 11 is set, and
+> `bit11-family.md` §9 — cited by the device's own branch comment — proves the alternate encoding
+> carries *"no SRC and no ACTION field"*. `dsp_disasm.alt_lo12()` says the same in one line:
+> *"`lo_src()`/`lo_act()`/`lo_ptrmode()` are MEANINGLESS on these words."* The device agrees in
+> code: `exec_alu()` takes the bit-11 branch at `upd6383.cpp:2768`, performs the addressing and
+> **returns**, so no SOURCE and no ACTION decode ever runs for a `C63` word and `m_tb` — assigned
+> only inside the ACTION switch — can never be written by one.
+> ⇒ **§2 stands** (the 53/53 bijection is pure adjacency and needs no field decode). **§3 does
+> not**, and neither does §168's follow-up, which tested a SOURCE reading against a word that
+> cannot reach the SOURCE stage. Where the idiom's index lives is OPEN; the next step is the
+> bit-11 alternate encoding of `lo12 = 0xC63`.
+
 `C63` decodes as `SRC 0x11 / ACT 0x03`, and `ACT 0x03` is `m_tb = L` (`upd6383.cpp:2932`):
 
 ```
@@ -10270,6 +10283,18 @@ Evidence grade: §2 **MEASURED** (exhaustive over all 91 programs, null computed
 ---
 
 ## §168 — bit 18 tested at last, and it names the defect: **`C63` reads a cell that never changes**
+
+> ⛔⛔ **VOID 2026-09-13 — N-INPUT-GATE-OPENED §97.** Re-run at the corrected default with the
+> predictions written first: the gate fires **12 760 530** times and `§167 tB` at the class-6 site
+> is **bit-identical to the control** (`0..5872025 chg 1`), as are `m_dp`, `cursor`, `L`, `acc` and
+> cell `0x0C`. The verdict below survives; **its diagnosis does not, and the test was never
+> capable of a different answer.** `C63` carries lo12 bit 11, so `exec_alu()` returns before the
+> SOURCE switch — bit 18 could not reach that word under any setting. ★ A fired-count proves the
+> arm ran *somewhere*, not that it ran at the site the conclusion is about; §116 hit the identical
+> trap on `lo12 = 0x827` and caught it only because its count was per-site. A **§97 SWALLOW
+> CENSUS** now logs every `lo12` that leaves `exec_alu()` at that return.
+> ⚠ And §2's premise below is separately false today: cell `0x0C` moves — `§176` reports
+> `0C:1(-17..19/chg19520)`.
 
 §113 has sat off since it was written. §112 §2 records why — *"⚠⚠ §113 WAS NOT VALIDLY TESTED — a
 mask collision"* — and §130 moved the colliding gate to bit 38, so the confound is gone. Bit 18

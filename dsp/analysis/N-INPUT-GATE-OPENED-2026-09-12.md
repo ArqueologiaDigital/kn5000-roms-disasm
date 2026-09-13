@@ -4452,6 +4452,93 @@ MAME disassembler mirrors it word for word and has no image to look at — and `
 now takes a LIST OF IMAGES rather than a concatenation, so a site at one body's tail cannot find
 its `f31 == 0` killer in the next body, which does not follow it in execution.
 
+## 97. ⛔ §168 WAS VOID: THE ARM COULD NOT REACH THE WORD IT WAS AIMED AT
+Pre-registration: [`data/PREDICT_SRC11_MEM_2026-09-13.md`](data/PREDICT_SRC11_MEM_2026-09-13.md).
+Control: [`data/src11_control_2026-09-13.txt`](data/src11_control_2026-09-13.txt).
+Arm: [`data/src11_bit18_2026-09-13.txt`](data/src11_bit18_2026-09-13.txt). One program
+(`prog01_chorus`), one frame, `NOTEOFS=2.5`, true default plus `UPD6383_SPEC=b910e446a39f440f`.
+
+### Why it was re-opened
+The `C63` + class-6 idiom is the largest coherent undecoded block in the corpus — with the
+`012.4.01.1CE` word that follows it, **159 words, 5.3 % of the body corpus**. §166 called it one
+idiom (53 of 53 in both directions) and named `tempB` as its index register; §168 tested the
+`SRC 0x11` reading that would fill that register and refuted it on one sentence:
+
+> *"Cell `0x0C` is not among them. `C63` reads cell `0x0C` … It is reading the wrong cell."*
+
+At today's default that sentence is false: `§176 0C:1(-17..19/chg19520)` — a small signed integer
+changing every ~91 frames, which is the shape of a table index. So the refutation was re-run.
+
+### Result against the pre-registration
+
+| | pre-registered | measured | |
+|---|---|---|---|
+| **P1** gate fires | `§113` count > 0 | **12 760 530** | ✔ |
+| **P2** ★ the decision | `tB` at the class-6 site VARIES, chg ≫ 1, range inside `-17..+19` | `tB 0..5872025 chg 1` — **bit-identical to the control** | **MISS** |
+| **P3** control that can fail | `m_dp` `12..12`/`14..14`, `cursor 9..9` unchanged | unchanged | ✔ |
+| **P4** upstream null | cell `0x0C` census unchanged | `-17..19/chg19520` | ✔ |
+| **P5** RULE 12 | the traced frame has audio | `01` chg 175 919, `05` chg 175 660 | ✔ |
+
+The whole 256-cell census is identical between arm and control except `06: chg1389 → chg2` — the
+same single-cell difference §168 recorded (`06: chg 1100 -> 2`), reproduced, and not at the idiom.
+
+### ★ Why it did not move, and it is not the reason §168 gave
+`lo12 = 0xC63` has **bit 11 set**. `upd6383.cpp:2768` — whose own comment cites
+`bit11-family.md` §9 — takes the alternate-encoding branch, performs the addressing and
+**`return`s**. The SOURCE switch is at ~3830 and the ACTION switch at ~4600, both downstream of
+that return, and `m_tb` is assigned **only** inside the ACTION switch.
+
+⇒ **`SRC 0x11` is never decoded for a `C63` word, under any setting of bit 18, and `m_tb` can
+never be written by one.** §168's experiment could not have produced a different answer. Its
+9 279 912 firings were real and were counting *other* words.
+
+★★ **A fired-count proves the arm ran somewhere. It does not prove it ran at the site the
+conclusion is about.** §116 hit the identical trap on `lo12 = 0x827` — *"a selector-0x27 word is
+swallowed here and never reaches the register-load dispatch"* — and caught it because its count
+was per-site. This one was not.
+
+### ★★ And the same bit sinks §166's identification of the index register
+§166 §3 reads `C63` as *"`SRC 0x11 / ACT 0x03`, and `ACT 0x03` is `m_tb = L`"*. Those are the
+ALU field accessors applied to a word that does not have those fields —
+`dsp_disasm.alt_lo12()`'s own docstring says *"`lo_src()`/`lo_act()`/`lo_ptrmode()` are
+MEANINGLESS on these words"*, and the device comment at the branch says the alternate encoding has
+*"no SRC and no ACTION field"*. It is the same error this session corrected in
+`decode_leverage.py`, where the leverage table was charging 76 bit-11 words to a
+`pointer mode 1 + SRC 0x11 + ACT 0x03` that is not in their encoding.
+
+⇒ **§166 §2 STANDS** — the 53/53 bijection is pure adjacency and needs no field decode. **§166 §3
+does not.** The idiom's index does not live in `tempB` by way of `ACT 0x03`; where it lives is
+open, and the next step for the 159 words is to decode the **bit-11 alternate encoding of
+`lo12 = 0xC63`**, not to keep testing SOURCE readings that the word never reaches.
+
+### The instrument, so this cannot happen a third time — and it turns the argument into a measurement
+`upd6383.h` gains `note_alt11()` and `upd6383.cpp` a **§97 SWALLOW CENSUS**: every distinct `lo12`
+that leaves `exec_alu()` at the bit-11 return, with its count, logged at the end of every run.
+Built and run ([`data/swallow_census_2026-09-13.txt`](data/swallow_census_2026-09-13.txt), chorus,
+true default):
+
+```
+   lo12 822 : 1 581 303 times
+   lo12 839 : 1 601 712 times
+   lo12 8BC : 1 576 134 times
+   lo12 C63 : 3 150 504 times   <- the C63 idiom's first word
+```
+
+★ **3 150 504 = exactly twice per frame** against §162's 1 575 252 hits per class-6 site — the
+chorus's two idiom instances, every frame, every one of them leaving before the SOURCE stage. The
+claim is now MEASURED, not inferred from reading the branch. And the census names the rest of the
+family: **all four bit-11 shapes in this program execute as addressing only**, which is the only
+honest thing the device can do with an encoding whose fields are undecoded — but it is also the
+reason no SOURCE or ACTION arm will ever move any of the 84 undecoded bit-11 words.
+
+Any future arm on a SOURCE or ACTION field can now check in one line whether its target word even
+reaches the stage it edits.
+
+⚠ Not isolated: between §168 and today the input stage was corrected (§76) and the census quoted
+here (`§176`) is not the one §168 quoted (`§164`). What is established is that the sentence the
+refutation rested on is not true of the machine as it ships, and that the refutation's *verdict*
+survives anyway — for a reason that makes the test void rather than negative.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

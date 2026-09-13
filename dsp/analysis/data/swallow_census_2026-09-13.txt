@@ -1,0 +1,6 @@
+upd6383: ★★★ §97 SWALLOW CENSUS -- words that left exec_alu() at the lo12-bit-11 return (no SOURCE, no ACTION decode ran for them):
+lo12 822 : 1581303 times
+lo12 839 : 1601712 times
+lo12 8BC : 1576134 times
+lo12 C63 : 3150504 times   <- the C63 idiom's first word
+§112 class-A ACT-07 latched P instead of storing: 4805136
