@@ -1,3 +1,11 @@
+THE FOUR DECODED LEVEL-DETECTOR PROGRAMS, AT THE TRUE DEFAULT (2026-09-13, N-INPUT-GATE §70)
+
+  PRODUCER: dsp/tools/detector_pickup_census.sh  (captures + reads; regenerates from scratch)
+  MACHINE : UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0 -- the DEVICE DEFAULT, arms OFF.  ⚠ Do NOT pool
+            with data/railed_pickups_2026-09-13.txt, which was taken with PSHIFT=2 C8SHIFT=1.
+  t2 = prog03_enhancer | t13 = prog36_compressor | t14 = prog00_no_operation | t18 = prog52_auto_wah
+  (every identity fingerprinted by the harness against the 38 listings)
+
 PICKUP CELLS -- an input cell must be NON-ZERO **and NOT RAILED** (§62)
 capture                          0x01         0x04         0x05  state
 t2_F.log                       306688       100864      8388607  ⛔ RAILED at 0x05
