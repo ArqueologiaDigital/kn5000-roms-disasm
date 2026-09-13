@@ -1,0 +1,25 @@
+THE SHIPPED CONFIGURATION -- device's OWN default mask (ACT 0x0E selector 7), no override
+
+TYPE program                tested-with (sel 4)        SHIPPED (sel 7)            verdict
+0    prog01_chorus          -                          3 cells/22 rows/0 rail     ✅ live at the shipped default
+12   prog35_exciter         8 cells/68 rows/1 rail     8 cells/62 rows/2 rail     ⛔ MORE RAILED than tested
+15   prog39_parametric_eq   -                          24 cells/105 rows/6 rail   ✅ live at the shipped default
+
+⇒ 1 program(s) differ at the shipped default.
+
+ATTRIBUTION -- PARAMETRIC EQ at the device's own default mask (ACT 0x0E selector 7)
+
+configuration                            cells/rows/railed
+my promotions ON  (as shipped)           24/105/6
+my promotions OFF (pre-session)          22/59/0
+selector 4 + promotions (validated)      (missing)
+
+⇒ MY PROMOTIONS ADD railing at this mask: 0 -> 6
+
+AFTER THE REVERT -- PARAMETRIC EQ at the device's own default, no env at all
+
+   before the session (promotions off)    22 cells / 59 rows / 0 railed
+   the bad promotion (as shipped)         24 cells / 105 rows / 6 railed
+   AFTER THE REVERT                       22 cells / 59 rows / 0 railed
+
+⇒ ✅ THE REVERT RESTORES THE PRE-SESSION DEFAULT EXACTLY.

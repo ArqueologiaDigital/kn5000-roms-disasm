@@ -2089,6 +2089,47 @@ another arm — it is the single most load-bearing undecoded behaviour the outpu
 
 ⚠ Grade: MEASURED, 32 captures, 16 programs, live bodies.
 
+## 56. ⛔⛔ I SHIPPED A REGRESSION: both promotions are REVERTED to default-off
+**The gap:** every gate run, every catalogue regression and both promotion verifications in this
+session used `UPD6383_SPEC=B9108446A39B440F` — **`ACT 0x0E` selector 4**. The device's own default
+is `m_specmask = 0xb910e446a39b440f` — **selector 7**. The two differ in bits 45–46, and
+**the shipped combination was never tested.** The project's own `dsp/tools/lint_handoff.py` prints
+the header's mask on every run; it was in front of me all session.
+
+**Measured at the device's own default, no environment at all** — PARAMETRIC EQ, the reference
+program (`data/shipped_default_regression_2026-09-13.txt`):
+
+| configuration | cells / rows / **railed** |
+|---|---|
+| before this session (both arms off) | 22 / 59 / **0** |
+| **as I shipped it** (both promoted) | 24 / 105 / **6** ⛔ |
+| selector 4 + both arms (**what I validated**) | 30 / 105 / **0** |
+
+⇒ **At the mask the device actually ships, my two promotions add six railed cells to the reference
+program.** The improvement I measured is real *at selector 4* and does not survive the move to
+selector 7. ⇒ ⛔⛔ **A promotion validated under a configuration that is not the shipped one is NOT
+validated.** Both are **reverted to default-off** (`UPD6383_CALLFLUSH=1` / `UPD6383_ST07SIGN=1`
+re-enable them; their selector-4 evidence in §36 and §40 stands untouched).
+
+✅ **The revert is verified to restore the prior default EXACTLY**: 22 cells / 59 rows / 0 railed,
+identical to the pre-session measurement in every column.
+
+### ⚠⚠ The failure, stated plainly
+This session built a two-sided gate, a ten-program catalogue regression, a pre-registered bound and
+a fingerprint check — and then **ran all of them against a configuration that was not the default**,
+promoting on that basis. Every downstream guard worked; the *input* to all of them was wrong.
+⇒ **RULE, and it belongs with RULE 12 and RULE 13: BEFORE promoting anything, RE-RUN THE
+ACCEPTANCE TEST WITH NO ENVIRONMENT SET AT ALL.** The shipped configuration is the only one whose
+behaviour is a promise to anyone else. An acceptance suite that never runs bare is testing a
+machine nobody will use.
+
+⚠ What survives: §36 and §40's evidence (zero regressions over ten programs, five LFOs gained,
+the EQ's band cells fed) is unaffected — it is simply **conditional on selector 4**, which the
+device does not ship. Reconciling the `ACT 0x0E` selector (§234's territory) is now a prerequisite
+for those promotions, not an independent question.
+
+⚠ Grade: MEASURED, and the regression is mine.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
