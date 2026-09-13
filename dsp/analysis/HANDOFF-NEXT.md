@@ -9,6 +9,20 @@ revert is verified to restore the prior default **exactly**. Their selector-4 ev
 stands but is **conditional on selector 4**, so reconciling the `ACT 0x0E` selector (§234) is now a
 **prerequisite** for re-promoting them. N-INPUT-GATE-OPENED §56.
 
+★★ **§57 REFINES THE DIAGNOSIS — it is an INTERACTION, not a bad arm.** The 2×2 on the
+PARAMETRIC EQ:
+| | arms OFF | arms ON |
+|---|---|---|
+| **sel 7 (SHIPPED)** | 22/59/**0 rail** | 24/105/**6 rail** ⛔ |
+| **sel 4 (validated)** | 39/105/**0 rail** | 30/105/**0 rail** |
+**Railing is in exactly ONE of four cells.** Neither the selector nor the arms rails alone — only
+the combination. ⇒ the arms are not defective and neither is the selector; **they are
+INCOMPATIBLE**, and no guard in this session could have caught it because every run fixed the
+selector. ⚠ With the arms off the two selectors differ hugely (39/105 vs 22/59), so the choice is
+**load-bearing for the whole body** — but that is NOT an argument for sel 4: §29 showed raw
+liveness rewards **contamination**, and 39 is the very baseline §36 attributed to the kernel's
+residue. ⇒ **decide `ACT 0x0E` on the ONE-COPY criterion, not on cell counts.**
+
 ★★★ **RULE — belongs beside RULE 12 and RULE 13:**
 > **BEFORE PROMOTING ANYTHING, RE-RUN THE ACCEPTANCE TEST WITH NO ENVIRONMENT SET AT ALL.**
 > The shipped configuration is the only one whose behaviour is a promise to anyone else. An

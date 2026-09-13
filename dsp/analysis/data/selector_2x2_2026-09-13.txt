@@ -1,0 +1,10 @@
+THE 2x2 -- PARAMETRIC EQ: `ACT 0x0E` selector  x  the two promoted arms
+
+                     arms OFF                   arms ON                   
+sel 7 (SHIPPED)      22 cells / 59 rows / 0 rail 24 cells / 105 rows / 6 rail
+sel 4 (validated)    39 cells / 105 rows / 0 rail 30 cells / 105 rows / 0 rail
+
+★ RAILING appears in EXACTLY ONE cell of the four: sel 7 + arms ON (6 cells).
+   sel 7 alone: 0   sel 4 alone: 0   sel 4 + arms: 0
+⇒ the regression is an INTERACTION between the shipped selector and the arms --
+  neither the selector nor the arms rails on its own.

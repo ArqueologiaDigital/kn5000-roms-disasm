@@ -2130,6 +2130,34 @@ for those promotions, not an independent question.
 
 ⚠ Grade: MEASURED, and the regression is mine.
 
+## 57. ★★ THE REGRESSION IS AN **INTERACTION**, not a bad arm — the 2×2
+§56 reverted both arms. The obvious question is *whose fault* the railing is, and a 2×2 answers it
+exactly (`data/selector_2x2_2026-09-13.txt`, PARAMETRIC EQ):
+
+| | arms OFF | arms ON |
+|---|---|---|
+| **`ACT 0x0E` selector 7 (SHIPPED)** | 22 cells / 59 rows / **0 railed** | 24 / 105 / **6 railed** ⛔ |
+| **`ACT 0x0E` selector 4 (validated)** | 39 / 105 / **0 railed** | 30 / 105 / **0 railed** |
+
+★★ **Railing appears in exactly ONE of the four cells.** Neither the shipped selector alone nor
+the two arms alone rails anything; only the **combination** does. ⇒ **§56's revert was right and
+its diagnosis needs refining: the arms are not defective, and neither is the selector — they are
+INCOMPATIBLE, and nothing in this session's method would have caught that, because every guard ran
+with the selector fixed.**
+
+★ **And the table carries a second, independent reading.** With the arms off, the two selectors
+differ enormously: **sel 4 gives 39 cells / 105 rows, sel 7 gives 22 / 59.** ⚠ That is *not* an
+argument that sel 4 is right — §29 established that raw liveness rewards **contamination**, and the
+39-cell figure is exactly the baseline §36 attributed to *"the kernel's residue being filtered"*.
+It does say the selector choice is **load-bearing for the whole body**, not a detail.
+
+⇒ **The prerequisite §56 named is now sharper:** deciding `ACT 0x0E` is not a tidy-up before
+re-promoting — it **determines whether the arms are admissible at all**, and the decision must be
+made on the **one-copy criterion** (§29) rather than on cell counts, because cell counts prefer the
+contaminated configuration.
+
+⚠ Grade: MEASURED, 4 configurations, 8 captures, reference program.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
