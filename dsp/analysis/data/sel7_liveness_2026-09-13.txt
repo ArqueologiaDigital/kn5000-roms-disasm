@@ -1,0 +1,19 @@
+LIVENESS AT THE CORRECT SELECTOR (device default, NO arms, NO env override)
+
+TYPE program                    audio  cells/rows/rail    verdict
+1    prog02_modulated_chorus    yes    6/33/0             ✅ LIVE
+3    prog04_flanger             yes    5/40/2             ✅ LIVE
+4    prog05_phaser              yes    26/95/1            ✅ LIVE
+5    prog06_ensemble            yes    8/38/2             ✅ LIVE
+6    prog08_gated_reverb        yes    4/15/0             ✅ LIVE
+7    prog09_single_delay        yes    1/10/0             ✅ LIVE
+8    prog10_multi_tap_delay     yes    4/42/0             ✅ LIVE
+9    prog32_distortion          yes    0/0/0              ⛔ STATIC
+17   prog50_vibrato             yes    5/34/1             ✅ LIVE
+22   prog56_mix_up              yes    9/47/0             ✅ LIVE
+27   prog68_s_delay_phaser      yes    8/86/1             ✅ LIVE
+33   prog75_peq_compressor      yes    12/51/1            ✅ LIVE
+34   prog96_peq_compr_dist      yes    2/9/0              ✅ LIVE
+37   prog99_peq_overdr_delay    yes    18/92/2            ✅ LIVE
+
+⇒ 13 live, 1 static of 14 measured AT THE CORRECT SELECTOR.

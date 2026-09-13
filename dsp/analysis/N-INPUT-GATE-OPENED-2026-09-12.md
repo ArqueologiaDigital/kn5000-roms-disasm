@@ -2250,6 +2250,36 @@ coverage work list, `f31 = 0` as a multiply-class semantic), which never touched
 ⚠ Grade: MEASURED (§58) + FROM DISK (§234, pre-existing). The process failure is stated because it
 explains two of this session's three retractions.
 
+## 60. §50's "38 LIVE" RE-MEASURED AT THE CORRECT SELECTOR — it mostly survives, with one exception
+§59 required everything measured at selector 4 to be re-read as measured on a refuted
+configuration. §50's headline — *all 38 programs run their bodies on live audio* — was one of those.
+Re-measured on 14 programs spanning every family, at the **device's own default, no arms, no
+environment override at all** (`data/sel7_liveness_2026-09-13.txt`):
+
+| | |
+|---|---|
+| **LIVE** | **13 of 14** — modulated chorus, flanger, phaser, ensemble, gated reverb, single delay, multi-tap, vibrato, mix-up, s.delay+phaser, PEQ+compressor, PEQ+COMPR+DIST, PEQ+OVERDR+DELAY |
+| **STATIC** | **1 — `prog32_distortion` (TYPE 9)**, audio present, 0 cells / 0 rows |
+
+★ **§50's finding largely survives the correction**, which is worth stating because it was measured
+on a refuted mask: bodies do run at the correct selector, across every family, without any of this
+session's arms. The **promoted arms were never what made them run** — they ran anyway.
+
+⛔ **But "all 38" does not survive as stated.** `prog32_distortion` is **static with audio present**
+at the correct selector, where §42 had recorded it **LIVE** (3 cells / 42 rows) at selector 4. ⇒
+the honest tally at the shipped configuration is **13 of 14 in this sample**, not 38 of 38, and the
+remaining 24 programs are **unmeasured at the correct selector**.
+
+⚠ **What this does NOT mean.** One static program is not a defect claim — §50's own lesson was that
+a static body is more often the instrument than the machine, and `prog32_distortion` may simply
+need a different trace offset (it is a dynamics program with no LFO to prime). ⇒ **it is a
+measurement to redo, not a fault to explain**, and redoing it is the first item.
+
+⇒ **Revised, honest status of the catalogue: 13 of 14 sampled programs run their bodies on live
+audio at the shipped configuration; 1 needs re-measuring; 24 are unmeasured there.**
+
+⚠ Grade: MEASURED, 28 captures, identities fingerprinted, at the device's own default.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

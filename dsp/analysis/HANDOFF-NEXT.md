@@ -18,7 +18,15 @@ consulted before building on its contradiction. This is the `check-the-handover-
 cost most of a session's promotions.
 ⇒ ⚠ **RE-READ EVERYTHING MEASURED AT SELECTOR 4 AS MEASURED ON A REFUTED CONFIGURATION.** Survives
 unconditionally: §47, §51, §55, §13 and the coverage work list (corpus-only, never touched the
-mask). ⚠ §50's *38 live* should be **re-measured at selector 7**.
+mask).
+✅ **§60 DID THE RE-MEASUREMENT for §50's *38 live*:** at the device's own default, **no arms, no
+env at all**, **13 of 14** sampled programs (every family) run their bodies on live audio. ★ So the
+finding largely survives — and **the promoted arms were never what made the bodies run; they ran
+anyway.** ⛔ But *"all 38"* does NOT survive as stated: **`prog32_distortion` is STATIC with audio
+present** at the correct selector where §42 had it LIVE at selector 4. ⚠ One static program is not
+a defect claim — §50's own lesson is that a static body is more often the **instrument**; it is a
+dynamics program with no LFO to prime, so **try a different `NOTEOFS` first**. ⇒ honest tally:
+**13 of 14 sampled live at the shipped configuration, 1 to re-measure, 24 unmeasured there.**
 
 ---
 
