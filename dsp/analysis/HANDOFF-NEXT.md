@@ -1,3 +1,35 @@
+# ★★★★★ 2026-09-13 — **THE HLE ORACLE NOW MEETS THE LLE** (§70–§77)
+
+Two things landed together: the input path was fixed (§76) and the oracle that confronts the two
+was repaired (§77). The EQ's **whole cascade is now observable live in the LLE for the first time.**
+
+| | |
+|---|---|
+| **all 5 EQ bands** | `signal: YES` — before §76 the body was fed a rail and none could |
+| **coefficients** | coherent 5-band peaking family, `b0` constant `+0.2500`, recursive pair **pre-negated** as `algorithms/biquad-eq.md` documents, poles 0.9954 → 0.8967 |
+| ★★★ **topology** | **band *k*'s first operand is a state cell of band *k−1* — 4 of 4.** §58 derived the SERIES CASCADE from the HLE; this reads the same topology out of the chip's own `m_dp` walk. **Two independent derivations, same answer.** |
+| **accumulator op** | confirmed **on live audio**: `f31 0` → LOAD (19:1), `1` → ACC, `2` → unchanged. `f31 3/4/5` still OPEN (§63–§69's population) |
+
+⛔⛔ **AND THE ORACLE HAD BEEN SILENTLY BROKEN — BY ME, TODAY.** `lle_trace_diff.py`'s row parser
+was anchored on `L` being the **last** column; the `LW` flag I shipped this morning moved it, so it
+parsed **zero rows** and reported *"the frame carried little signal"* — the vocabulary of a null,
+not of a read failure. The project's stated method was unusable for as long as nobody ran it on a
+fresh capture. ⇒ ★ **RULE: never anchor a trace parser on the last column**; a trace that gains a
+column must not silence its readers.
+
+⇒ **NEXT, and now unblocked:**
+1. ★ **The numeric confrontation** — `lle_trace_diff.py` default mode with **this program's cursor
+   base** (the run reporting `cur 0x60..0x64 MISSING` is a parameter mismatch, not a divergence).
+   Topology, coefficients, signal and the accumulator op are cross-validated; **the arithmetic is
+   not yet**. That is the remaining half of "compare HLE with the LLE".
+2. **Re-run §54/§55** (*"14 of 16 bodies leave a constant accumulator"*) — it was measuring the
+   consequence of the rail.
+3. **Cell `0x06` at 56 %** of all clipping (§75) — the largest remaining scale defect, never
+   investigated.
+4. §64/§69's bit-5 probe (20 live sites, `prog52_auto_wah` the best host) is **gradeable now**.
+
+---
+
 # ★★★★★ 2026-09-13 — **PROMOTED: the input stage now reads the input** (§70–§76)
 
 **`UPD6383_SRC0B2` IS DEFAULT-ON.** `SRC 0x0B` on a word with **no delay access** is `mem[ptr]`,
