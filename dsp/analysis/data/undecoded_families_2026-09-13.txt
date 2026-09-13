@@ -1,0 +1,23 @@
+UNDECODED families by OCCURRENCE COUNT (the coverage the family would buy)
+family hi12/cls/lo12   occurs   distinct fields
+212/2/000              103      14       cls2 ACT00 SRC00 f31=1  hi12=212
+000/2/40E              77       20       cls2 ACT0E SRC10 f31=0  hi12=000
+104/2/1CE              57       15       cls2 ACT0E SRC07 f31=2  hi12=104
+012/4/1CE              53       1        cls4 ACT0E SRC07 f31=1  hi12=012
+000/2/1CD              49       22       cls2 ACT0D SRC07 f31=0  hi12=000
+092/2/700              46       13       cls2 ACT00 SRC1C f31=1  hi12=092
+040/0/C63              46       1        cls0 ACT03 SRC11 f31=0  hi12=040
+000/6/4CD              46       2        cls6 ACT0D SRC13 f31=0  hi12=000
+104/2/1D5              46       22       cls2 ACT15 SRC07 f31=2  hi12=104
+102/2/1CD              43       28       cls2 ACT0D SRC07 f31=1  hi12=102
+102/2/000              42       8        cls2 ACT00 SRC00 f31=1  hi12=102
+102/A/4C8              41       20       clsA ACT08 SRC13 f31=1  hi12=102
+000/2/000              40       16       cls2 ACT00 SRC00 f31=0  hi12=000
+880/1/2C7              40       1        cls1 ACT07 SRC0B f31=0  hi12=880
+880/1/000              38       2        cls1 ACT00 SRC00 f31=0  hi12=880
+A00/0/041              35       1        cls0 ACT01 SRC01 f31=0  hi12=A00
+000/2/447              34       15       cls2 ACT07 SRC11 f31=0  hi12=000
+182/2/000              32       15       cls2 ACT00 SRC00 f31=1  hi12=182
+
+total undecoded occurrences in effect bodies: 1740 across 133 families
+the top 18 families are 49.9% of all undecoded occurrences

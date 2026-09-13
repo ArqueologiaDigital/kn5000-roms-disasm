@@ -1,0 +1,24 @@
+THE 18 LARGEST UNDECODED FAMILIES (49.9%% of all undecoded occurrences) vs the extractor
+
+family             occurs extractor's accumulator op evidence
+212/2/000          103    acc+P+L<<16                ★ UNIQUE 136 rows / 48 programs (pooled)
+000/2/40E          77     -                          ⚠ tied: P,acc+P-L<<16
+104/2/1CE          57     hold                       ★ UNIQUE 13 rows / 5 programs (1machine)
+012/4/1CE          53     acc+P                      ★ UNIQUE 13 rows / 5 programs (1machine)
+000/2/1CD          49     L<<16                      ★ UNIQUE 63 rows / 53 programs (pooled)
+092/2/700          46     -                          ⚠ tied: acc+P,acc+P+L<<16,acc+P+tA<<16
+040/0/C63          46     hold                       ★ UNIQUE 8 rows / 5 programs (1machine)
+000/6/4CD          46     hold                       ★ UNIQUE 8 rows / 5 programs (1machine)
+104/2/1D5          46     hold                       ★ UNIQUE 30 rows / 4 programs (1machine)
+102/2/1CD          43     L<<16                      ★ UNIQUE 29 rows / 29 programs (pooled)
+102/2/000          42     acc+P+L<<16                ★ UNIQUE 136 rows / 48 programs (pooled)
+102/A/4C8          41     -                          ⚠ tied: acc*2,acc+P,acc+P+L<<16,acc+P+
+000/2/000          40     P+L<<16                    ★ UNIQUE 54 rows / 29 programs (pooled)
+880/1/2C7          40     P                          ★ UNIQUE 88 rows / 24 programs (pooled)
+880/1/000          38     P+L<<16                    ★ UNIQUE 11 rows / 8 programs (1machine)
+A00/0/041          35     hold                       ★ UNIQUE 88 rows / 24 programs (pooled)
+000/2/447          34     P                          ★ UNIQUE 8 rows / 6 programs (1machine)
+182/2/000          32     acc+P+L<<16                ★ UNIQUE 136 rows / 48 programs (pooled)
+
+⇒ 15 of 18 families have a UNIQUELY DETERMINED accumulator op already measured,
+   covering 704 of the top-18's 868 occurrences (81%).
