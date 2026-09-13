@@ -126,6 +126,20 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★ **§55: WHAT KILLS THE OUTPUT ACCUMULATOR — `f31 = 0`, IN 14 OF 14.** Scanning each body for
+   the row where its accumulator last differs between frames, the word immediately after is an
+   **`f31 = 0` LOAD in every single one of the 14** — across five different `(class, ACT, SRC)`
+   shapes and 14 programs — and **13 of the 14 fetch NO coefficient**. The 2 that stay live reach
+   the body's end. ★ The body's terminal instruction does NOT distinguish them (all 16 share the
+   `cls1 ACT00 SRC00` family; the live exciter ends with a word 5 constant programs also end with).
+   ⚠ **This revives §138** (`SPEC` bit 55, *"a LOAD that brought no fresh product is an erasure"*),
+   which names the killer in 13 of 14 **tails** — but §138 was refuted on **two** programs with a
+   measured harm at the body **ENTRY** (it makes the EQ's entry triple-count and rail) and rewrites
+   **35.5 %** of the corpus. ⛔ **Do NOT "restrict it to the tail"** — that is fitting the rule to
+   the data, and this session has been burned by exactly that.
+   ⇒ ★ **`f31 = 0`'s semantics is the single most load-bearing undecoded behaviour in the output
+   path, and it should be decided FROM THE CORPUS AND THE HLE, not from another arm.**
+
    ★★★ **§54: THE OUTPUT PROBLEM IS UPSTREAM OF THE EPILOGUE — 14 of 16 BODIES LEAVE A CONSTANT
    ACCUMULATOR.** `w73` sources **`SRC 0x10` = the ACCUMULATOR** (anchored), not a cell, so the
    pointer was never the whole story. On the body's **last executed row** (the body runs BEFORE
