@@ -1570,16 +1570,36 @@ still static either stores through the BIT-4 store (which the rule does not touc
 store at its entry at all.** The reference program was fixed because its entry store happens to be
 `ACT 0x07`; these are not.
 
-### The hypothesis this makes, written before any run
-**The bit-4 store may take the same sign-dependent target as `ACT 0x07`** — the POST-increment cell
-when `addr8 > 0`, the PRE cell otherwise — exactly mirroring §40.
-⚠ **And this contests a forcing, which is why it needs more than a gate pass.** The bit-4 store's
-"target `mem[ptr]`, before the word's own ALU step" was FORCED against **2 160 enumerated
-accumulator models** — but **on the PARAMETRIC EQ**, whose bit-4 words sit elsewhere and whose
-entry store is `ACT 0x07`. That forcing therefore constrains the *EQ's* bit-4 words, not these.
-Overturning it needs: the four-criteria gate, the ten-program regression **and** a demonstration
-that the EQ itself is unchanged — because if the EQ moves, the forcing is being contradicted
-directly rather than extended.
+### ⛔ THE HYPOTHESIS THIS MADE IS DEAD ON ARRIVAL — killed before a single build
+The obvious mirror of §40 is *"the bit-4 store takes the same sign-dependent target"*. **It cannot
+help any of these 16, and the listings say so without running anything**
+(`data/static16_store_shapes_2026-09-13.txt`). Classifying each program by the store that runs
+**before** its first operand read:
+
+| what the entry has | n | which |
+|---|---|---|
+| a **bit-4 store** | 8 | exciter, auto-pan, vibrato, auto-wah, mix-up, s.delay+s.delay, s.delay+phaser, auto-wah+s.delay |
+| **NO STORE AT ALL** | 8 | rotary ×2, PEQ+vibrato, PEQ+compressor, PEQ+COMPR+DIST, PEQ+COMPR+OVERDR, PEQ+DIST+DELAY, PEQ+OVERDR+DELAY |
+| `ACT 0x07` only | **0** | — |
+
+★ **Six of the eight bit-4 stores carry `addr8 = +0`**, where the post-increment cell **is** the
+pre-increment cell — a sign-dependent target changes nothing for them. The other two carry
+negative deltas at the relevant word (`−3`, `−79`), which a *"positive ⇒ post"* rule also leaves
+alone. ⇒ **the mirror rule moves none of these programs.**
+
+⇒ ★★ **The corrected statement, and it is stronger than the hypothesis it replaces: NEITHER
+store-target rule can close these 16.** Half of them never store at their entry at all, and the
+half that do store with a zero delta. So the input does not reach the body's first cell by a
+store whose target is in question — either **some other word is meant to write it**, or **the
+body's first read is not `mem[ptr]`** and should take the accumulator or a temp directly. Those
+are the two shapes worth testing next, and neither is a store-target change.
+
+⚠ **Recorded as a correction rather than an edit.** The hypothesis was committed in this same
+section an hour earlier, under a mis-assignment: I attached it to group A, whose programs turn out
+to have **no store at all**, while the bit-4 stores are in group B. Checking *which store each
+program actually has* before building the arm is what caught it — the listings were enough.
+✅ **And the 2 160-model forcing of the bit-4 store's target is NOT contested after all** — the
+rule that would have contested it is the one just killed. The forcing stands untouched.
 
 ⚠ Groups **B** and **C** are NOT addressed by that hypothesis and stay open: B's accumulator is
 empty before the read (so the entry never assembles the input at all), and C's cells are non-zero
