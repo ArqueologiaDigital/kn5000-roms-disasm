@@ -875,6 +875,20 @@ def decoded(w):
     if hi == 0x000 and cl == 2 and ad == 0x00 and lo == 0x000: return True  # nop
     if is_ldptr(w) or is_rstcur(w) or is_ldptrd(w):            return True
     if is_setvec(w):                                           return True
+    #   ★★★★★ 2026-09-14 (N-INPUT-GATE-OPENED sect. 115): THE `is_c40' IMMEDIATE LOAD.
+    #   `is_c40' is ONE instruction -- opcode 0x620, and the payload rule holds 57 of 57 inside it
+    #   and 2 of 11 outside -- and its DESTINATION is selected by `lo12'.  That is not a guess: it
+    #   is what `is_setvec(w) = is_c40(w) and is_vector_lo12(lo12(w))' PROVES for `lo12' 0x445 and
+    #   0x446, the per-unit CALL VECTOR registers (K5, DETERMINED destination).  ⇒ for one opcode
+    #   the destination field selects among REGISTERS; `acc' or `tempB' would mean the same opcode
+    #   writes a register for two `lo12' values and the accumulator for the others, which is not
+    #   how a destination field works.  INFERRED (strong), on a proven sub-case.
+    #   ★ AND THE REGISTER IS NEVER READ: `UPD6383_CFMTDST=7' (`reg[lo12 & 0xFF]') is BIT-IDENTICAL
+    #   to the shipped latch on **8 of 8 programs**, with the arm firing ~28 M times in each.
+    #   ⇒ the word loads an immediate into a register nothing reads back: EXECUTABLE.
+    #   ⛔ NOT extended to the 11 non-`is_c40' C-format words -- `k3-pointers.md' sect. 8 item 3
+    #   warns explicitly against carrying the payload rule past opcode 0x620, and this does not.
+    if is_c40(w):                                              return True
     #   ★★★★★ 2026-09-13: THE DELAY ESCAPE IS EXECUTABLE **WHEN BOTH ITS HALVES ARE**.
     #   A class-1 escape is an external delay-DRAM access whose ADDRESSING is FORCED -- direction
     #   from `addr8' bit 6, address = DESCRIPTOR_CELL[k] + G by the IDENTITY map
@@ -1397,6 +1411,9 @@ def text(w, at=None):
         #   the one instruction in the corpus that wraps.
         if _is_wrapword(w):
             return "wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)"
+        if is_c40(w):
+            return "ldreg   r%02X,#%d          ; immediate -> the register lo12 selects" % (
+                lo12(w) & 0xFF, c_a(w))
         if is_terminator(w):
             return "endblk  unit%d          ; END OF BLOCK -- the image's last word" % (
                 0 if addr8(w) == 0x0E else 1)

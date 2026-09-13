@@ -26,7 +26,7 @@
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w12   0104A001D5   post    (p),c+,(p)+0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
-  w13   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
+  w13   0C402C0000   ldreg   r00,#22          ; immediate -> the register lo12 selects
   w14   0182A00000   mac.b   (p)0,c+,(p)+0
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
   w15   000023C447   ?word   0x000023C447   ; 000.2.3C.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
@@ -35,7 +35,7 @@
   w17   029AAB821A   ?word   0x029AAB821A   ; 29A.A.B8.21A  hi12{ST f98=2 f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = C-RAM[cursor] (the COEFFICIENT), MEASURED: the chorus LFO at iw89 reads L = 114 and acc = 114<<16 exactly, and 114 = C-RAM[0x00] = floor(0.5993*2^23/44100), the ROM's own ramp constant; the rival "sample source" is REFUTED from disk (SQUARING-MULTIPLY item B)]
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
   w18   080B000839   ?word   0x080B000839   ; 80B.0.00.839  hi12{ESC f31=5 ?0 res=001}  [lo12 0x839 -- selector OPEN (K3 sect. 5.4: 'sub-op 3 on register 1' under one field reading, a sixth register under the other); 2 sites in 3057]
-  w19   0C40500647   ?word   0x0C40500647   ; C40.5.00.647  {C-fmt A=40 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=40 B=0 (imm13 0x0500 = 40*32, MEASURED 57/57 for this opcode); destination register lo12=647 UNKNOWN]
+  w19   0C40500647   ldreg   r47,#40          ; immediate -> the register lo12 selects
   w20   0000200688   ?word   0x0000200688   ; 000.2.00.688  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x08 = table-port multiply]
   w21   00922FF1D5   mac     (p),(p)-1 ; store SUPPRESSED (bit7)
   w22   0184A011D5   post    (p),c+,(p)+1

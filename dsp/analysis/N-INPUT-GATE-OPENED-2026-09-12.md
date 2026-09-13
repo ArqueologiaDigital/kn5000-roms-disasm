@@ -5231,6 +5231,49 @@ The same shape as SINGLE DELAY's lag-1001 product, applied at the instruction in
 output. Stated here because it is the common cause of five separate negatives, and finding it again
 from scratch would cost another session.
 
+## 114–115. ★★★★ THE C-FORMAT IMMEDIATE LOAD DECODES — 78.5 % → 80.4 %
+Pre-registration and all runs:
+[`data/PREDICT_CFMTDST_2026-09-13.md`](data/PREDICT_CFMTDST_2026-09-13.md).
+
+### §114 — the enumeration was missing its best-motivated member
+§109 swept six destinations and mode 6 indexed the register file by **`addr8`**. That is the wrong
+half of the word: `is_setvec(w) = is_c40(w) && is_vector_lo12(lo12(w))` — **`lo12` is what selects
+the destination** on a C40 word, PROVEN (K5) for `lo12 = 0x445` / `0x446`, the per-unit CALL VECTOR
+registers — while `addr8` carries the PAYLOAD under the same family's payload rule. Mode 7 is
+`reg[lo12 & 0xFF]`, the member the enumeration should have had.
+
+**MEASURED: mode 7 is BIT-IDENTICAL to the shipped latch on 8 of 8 programs** (chorus, enhancer,
+flanger, phaser, ensemble, gated reverb, multi tap delay, parametric EQ), with the arm firing
+~28 M times in each. ⇒ **the register that destination names is never read back in the frame.**
+
+### §115 — and the structural half, which is a proven sub-case rather than a preference
+`is_c40` is **ONE instruction**: opcode `0x620`, the payload rule holding **57 of 57** inside it
+and 2 of 11 outside. Its destination is selected by `lo12`, and for two `lo12` values that
+destination is **proven** to be a register. ⇒ for one opcode the destination field selects among
+**registers**; `acc` or `tempB` would mean the same opcode writes a register for two `lo12` values
+and the accumulator or a temporary for the others, which is not how a destination field works.
+
+Combined: the destination is a register, and the register is never read.
+⇒ **the 57 `is_c40` words are EXECUTABLE**, rendering as
+`ldreg   r4C,#25          ; immediate -> the register lo12 selects`.
+
+**PROMOTED:** `UPD6383_CFMTDST` default **7** (`=0` restores the latch as the control) — a
+**zero-risk** default, bit-identical by the 8-of-8 measurement — and **re-verified with NO ENV SET
+AT ALL**: hand-off `05:177684(-2869494..3486228/chg175660)`, `06` written once, `07` alive, all
+three byte-for-byte what the pre-promotion no-env run reported.
+
+```
+   all 38 distinct body images    2974   2360  79.4%   +31  80.4%
+   FRAME FLOOR as linked           216    163  75.5%
+   reverb image (algo 16)          133    122  91.7%
+```
+**tier 1 77.4 % → 79.4 % (+57 words), 80.4 % with tier 1b; the frame floor 73.6 % → 75.5 %.**
+Mirrors agree **3057/3057**, BYTE-MATCH OK, 24 doc pages regenerated, permanence test PASS.
+
+⛔ **NOT extended to the 11 non-`is_c40` C-format words.** `k3-pointers.md` §8 item 3 warns
+explicitly against carrying the payload rule past opcode `0x620`, and this does not: they keep
+trapping.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
