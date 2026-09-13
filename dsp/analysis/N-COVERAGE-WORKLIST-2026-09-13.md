@@ -279,3 +279,42 @@ the trace's `L` column shows only after the fact. Testing that needs a **new tra
 new arm.
 
 ⚠ Grade: MEASURED, 363 rows. Nothing anchored. Two candidates eliminated, the open set cut 10×.
+
+## 10. ★★★ ANSWERED BY AN OBSERVATION, NOT AN ARM: the `LW` column closes §8/§9
+§9 concluded the live candidate was *"a state the trace does not print"* and that testing it needed
+**a new trace column, not a new arm**. That was done: `m_ltouch` is set at the single point where
+`m_last_l` is finalised, reset per word beside `m_ptouch`, and printed as **`LW`** — a `W` when the
+word drove the operand latch, `.` when it did not. **Observation only: no behaviour changes**, so
+there is no regression risk and no arm to gate.
+
+Result on `hi12 = 000, class 2, SRC 0x00, ACT 0x00` (`data/lw_answer_2026-09-13.txt`):
+
+| `LW` | `L` vs `L[N−1]` | rows |
+|---|---|---|
+| **not driven** | held | **57** |
+| **not driven** | changed | **0** |
+| driven | changed | 5 |
+| driven | held | 3 |
+
+★★★ **The latch changes if and only if the word drove it — 57 of 57 undriven rows hold, zero
+exceptions.** So §8's *"95.6 % held"* and §9's sixteen exceptions are **not two behaviours**: they
+are one behaviour seen through a missing column. The words that "held" never touched the latch; the
+words that "loaded" drove it, and three of those happened to drive it with the value already there.
+
+⇒ **§8/§9's open question is CLOSED**, and it closed with **no new hypothesis, no arm, and no
+behaviour change** — only an instrument that could see the distinction. The `addr8`, unit and
+preceding-word discriminators were all refuted because **none of them was the variable**; the
+variable was whether the ALU path selected a bus operand at all, which the trace had never shown.
+
+★ **The method point, which generalises beyond this question:** three discriminator hunts
+(§8 `addr8`, §9 unit, §9 preceding word) each cost a measurement and each failed, because the
+quantity that mattered was not in the trace. **When successive plausible discriminators all fail,
+suspect the instrument before inventing a fourth candidate.**
+
+⚠ **What this does NOT do:** it does not anchor `SRC 0x00`. It removes a spurious sub-question —
+the "16 exceptions" were an artefact of not printing the latch-write — and returns the work to
+§7's real partition (class-A `f98 = 1` = the coefficient; the rest = the memory operand, to be
+confirmed against the HLE).
+
+⚠ Grade: MEASURED, 65 rows of the shape in the new captures. The column ships **unconditionally**
+(it is read-only) and is now available to every future trace.

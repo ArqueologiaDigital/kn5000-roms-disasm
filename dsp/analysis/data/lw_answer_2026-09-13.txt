@@ -1,0 +1,14 @@
+THE `LW` COLUMN ANSWERS §9: on `hi12=000 cls2 SRC00 ACT00`, is the latch DRIVEN or not?
+
+LW flag    L vs L[N-1] rows
+   not driven held         57
+   DRIVEN  changed      5
+   DRIVEN  held         3
+
+total rows of the shape: 65
+
+⇒ NOT DRIVEN: 57 held, 0 changed   |   DRIVEN: 3 held, 5 changed
+★★★ CLEAN: the latch changes ONLY when the word DROVE it. The 'holds' are words that
+    never touched the latch, and the apparent 'loads' are words that DID drive it.
+    ⇒ the open question of §8/§9 is ANSWERED: nothing exotic -- these words simply
+      differ in whether the ALU path selected a bus operand at all.
