@@ -2846,6 +2846,92 @@ predicted it.
 ⚠ Grade: MEASURED (static over 3 057 words with two nulls; one live capture at the true default).
 Nothing anchored.
 
+## 70. ★★★★★ THE PICKUP RAIL IS NOT ONE PROGRAM — 4 of 4 DETECTOR PROGRAMS RAIL, AND `NO OPERATION` IS ONE
+This session opened by **narrowing** §62's railed pickup to *"`prog32_distortion` specifically,
+not the dynamics family"*. **That narrowing was made on a sample that contained no standalone
+dynamics program except the distortion** — no compressor, no enhancer, no auto wah, no
+NO OPERATION. Measuring those four (`dsp/tools/pickup_cells.py`, captures
+`reg/det7`, **true default, `PSHIFT=0 C8SHIFT=0`, no arms**, `NOTEOFS=2.5`, every identity
+fingerprinted):
+
+| TYPE | program | `0x01` | `0x04` | `0x05` | |
+|---|---|---:|---:|---:|---|
+| 2 | `prog03_enhancer` | 306 688 | 100 864 | **8 388 607** | ⛔ RAILED |
+| 13 | `prog36_compressor` | −65 024 | −241 664 | **−8 388 608** | ⛔ RAILED |
+| 14 | `prog00_no_operation` | −286 976 | −166 400 | **−8 388 608** | ⛔ RAILED |
+| 18 | `prog52_auto_wah` | −118 528 | −211 456 | **8 388 607** | ⛔ RAILED |
+
+★★★★ **4 of 4.** And **`prog00_no_operation` railing is decisive that this is OUR defect, not the
+chip's**: a program whose entire job is to pass audio through cannot legitimately saturate its own
+input cell. No fidelity argument survives that.
+
+### It blocks everything downstream, measured
+| | |
+|---|---|
+| body reads of cell `0x05` across the four programs | **9** |
+| of those, **railed** | **9** |
+| the rail across a frame pair | **CONSTANT** (verified on TYPE 2 and 13) |
+
+⇒ a body fed from a constant cannot move. §61's *"the distortion is genuinely STATIC at the correct
+selector"* is the same phenomenon, and it is **general to this family**, not peculiar to one
+program.
+
+### ★★★ And it is NOT an input sample — it is a CLAMPED STORE, at a named word
+| | |
+|---|---|
+| peak `\|sample\|` that ever entered and was read (device's own input-stage audit) | **0x24F100 = 2 420 992** — *identical in all three programs checked* |
+| the rail | **8 388 607** — the input never came within **3.5×** of it |
+
+Tracing every touch of cell `0x05` through a NO OPERATION frame (identical in both frames of the
+pair):
+
+```
+   iw8   read  -8388608  <-- RAIL, left over from the previous frame
+   iw10        -4233362      sane
+   iw34        -4543261      sane
+   iw35  ST=1   4194304      = 0x400000
+   iw45  ST=1  -8388608  <-- RAIL WRITTEN HERE
+   iw84/86/118 -8388608      the body reads the rail
+```
+
+★★★ **`iw45` = `0010A0020C`** — class A, `ACT 0x0C`, `SRC 0x08`, `f31 = 0`, **bit-4 STORE**. The
+accumulator arriving there is **−791 648 272 384**, whose datum is **−12 079 997**, i.e. **1.44×
+past the datum rail**, so the bit-4 store's deliberate clamp writes `0x800000`. On the flanger the
+*same word* stores **2 824 201** and nothing clamps — the accumulator arriving is
+**+185 086 889 467**, 4× smaller.
+
+⇒ **The pickup is railed by the kernel's own arithmetic overflowing the datum rail, and cell `0x05`
+is both the store's target and the input pickup `iw8` reads.** That is why §62 could call it a
+scale problem and be right about the *kind* of defect.
+
+### ⛔ One candidate confirmed PRESENT and refuted as the DISCRIMINATOR
+`SQUARING-MULTIPLY_findings.md` item F attributes a kernel overflow to the **cursor base being
+unseeded at frame start** (*"shipped, `c = 0x9B`, which is unit 1's reverb bank … nothing seeds the
+cursor at frame start"*). **Confirmed present**: `cur = 0x9B` at `iw28`, walking `0x9C 0x9D 0x9E …
+0xA3 0xA4`. ⛔ **But it is IDENTICAL in the railing program and the non-railing one** — same
+cursor, same coefficients, at every step. So the unseeded cursor is real and is **not** what
+separates them. What separates them is the **magnitude of the accumulator**, already 45× apart by
+`iw28`.
+
+### ⚠⚠ AND A POOLING TRAP I NEARLY WALKED INTO — the two censuses are DIFFERENT MACHINES
+I was one keystroke from writing *"4 of 4 dynamics programs rail, against 13 of 14 others fine"*.
+**Those are not comparable.** The 14-program table (`data/railed_pickups_2026-09-13.txt`) was
+captured with **`UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1`**; these four are at the **true default**.
+`PSHIFT=2` sets `P_SHIFT=7/ACC_SHIFT=16`, total **23** instead of **22** — **it halves every
+datum**, which is exactly the quantity that decides whether the clamp fires. Pooling them would
+have attributed to the *program family* something that may belong to the *arm*. That is §229's
+trap, one level up.
+
+⇒ **A 2×2 is the discriminator, and it is running**: NO OPERATION (rails at the default) **with**
+the arms, and the flanger (fine with the arms) at the **true default** — each cell holding the
+program and the trace instant fixed and changing only the machine. ⚠ Until it reports, the honest
+statement is: **4 of 4 detector programs rail at the true default**, and whether the other family's
+survival is the family or the arm is **not yet decided**.
+
+⚠ Grade: MEASURED (4 captures at the true default, identities fingerprinted, frame pairs, the
+input-stage audit's own peak, the full cell trajectory). The **cause** is localised to `iw45`'s
+clamp; the **discriminator** between families is explicitly still open.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -1,0 +1,8 @@
+PICKUP CELLS -- an input cell must be NON-ZERO **and NOT RAILED** (§62)
+capture                          0x01         0x04         0x05  state
+t2_F.log                       306688       100864      8388607  ⛔ RAILED at 0x05
+t13_F.log                      -65024      -241664     -8388608  ⛔ RAILED at 0x05
+t14_F.log                     -286976      -166400     -8388608  ⛔ RAILED at 0x05
+t18_F.log                     -118528      -211456      8388607  ⛔ RAILED at 0x05
+
+⇒ 4 of 4 captures fail the non-zero-and-not-railed precondition.
