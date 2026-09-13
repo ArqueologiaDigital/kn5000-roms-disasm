@@ -4714,6 +4714,41 @@ patched those. ★ **Second time in one session that a fired count caught an arm
 reach its target** — §97 was the first, on someone else's experiment. Recorded in the
 pre-registration rather than quietly retried.
 
+⛔ **Run 2: 3 150 504 = exactly 2 per frame**, against P1's "≈ 4". Only the class-4 half fired:
+`exec_alu()` has a dedicated `if (cl == 6)` branch that returns before the post-increment. ★ **A
+non-zero fired count is still not the count you predicted** — P1 was written with the rate in it,
+which is the only reason half an arm did not read as a whole one.
+
+✔ **Run 3: 6 301 008 = exactly 4 per frame**, and the chorus's first macro instance walks
+`dp 0C → 24 → 25 → 27` — **net +27, the predicted value, to the cell.** P5 holds exactly: the
+kernel's cells are bit-identical, including the hand-off `05:177684(-2869494..3486228/chg175660)`.
+
+⛔ **P2 FAILS and the criterion could not have succeeded.** The taps' operand is still 0 and 1;
+the cells they read moved (`0x0C`→`0x24`, `0x0E`→`0x47`) and carry the same tiny self-written
+values. §97 — mine, from earlier the same day — established that the macro's head never reaches the
+SOURCE stage, so **the index the tap is built around never arrives**: moving the pointer relocates
+the tap but cannot aim it. A criterion that required the index is a control that cannot fail, seen
+from the other side. My error, and it was knowable in advance.
+
+✔ **P4: 10 KEPT, 0 BROKEN** over the ten-program catalogue at the true default — correct rather
+than null, since the kernel carries no class-4 or class-6 word.
+
+⚠ **And the harness cannot grade the body side.** `fx_ab.lua` steps UP from TYPE 0 and §176's
+D-RAM census accumulates from boot ("cells present" grows 12 → 109 across the sample), so diffing
+it between arms conflates every program walked through. My first pass at it read the PARAMETRIC
+EQ's five band cells as losing half their movement — **but PEQ contains no class-4 or class-6
+word**, so the arm cannot touch it. ⇒ §176's census in a `catalogue_regression.sh` capture is
+**CUMULATIVE, not per-program**; the frame-local instruments (`pickup_cells.py`,
+`src0b2_regression.py`, the traced frame) are the per-program ones.
+
+### Verdict: NOT PROMOTED, and coverage is unchanged at 75.0 %
+The static case stands on its own — the cross-corpus twin and the two spellings agreeing at +27 —
+and the arm reproduces the predicted walk to the cell with no regression. But **a decode is not
+promoted on a failed criterion however well the failure is explained**, the runtime case cannot be
+made until the bit-11 head is decoded, and `012.4.01.1CE` would additionally owe its **store
+target** on a mode the store rule never adjudicated (that rule separates mode 1 from mode 2; modes
+4 and 6 were never in its sample). `UPD6383_CLS46PTR` ships default-off with its fired count.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
