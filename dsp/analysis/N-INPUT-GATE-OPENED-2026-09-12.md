@@ -5189,6 +5189,48 @@ SEQUENCER's model, not the ISA's"* and that stays true — this says **the word 
 that the jump is derived from the encoding. Disjoint from the delay escape by construction:
 `is_end` needs `hi12` bit 10 set with bit 11 CLEAR; the escape needs bit 11 SET.
 
+## 113. `f31 == 4`: outcome C — and what five rounds of this say about the instrument set
+Pre-registration and data: [`data/PREDICT_F31_4_2026-09-13.md`](data/PREDICT_F31_4_2026-09-13.md),
+[`data/f31_4_2026-09-13.txt`](data/f31_4_2026-09-13.txt).
+
+§108 measured `f31 == 4` firing **0 times** in the chorus. The shape census found where it does
+run: 12 of the 34 words refused for that axis alone are one shape, **`018.A.00.1D5`**, whose
+`f31 == 0` twin `010.A.00.1D5` — the same word differing in `f31`'s **bit 2 alone** — is DECODED.
+
+```
+   TYPE  program        f31=4 fired   §176        anchored cells (05 / 06 / LFO)
+   13    compressor     1 196 405     DIFFER(3)   ALL THREE IDENTICAL
+   14    no operation     485 513     DIFFER(3)   ALL THREE IDENTICAL
+   18    auto wah         536 818     DIFFER(3)   ALL THREE IDENTICAL
+```
+
+**M1 HIT** — it fires everywhere, which is the precondition §108 could not meet. **M2 MISS** — the
+D-RAM census differs, so the words are not blind. **M3 MISS** — no reading is singled out: the
+hand-off `0x05`, the VOLUME cell `0x06` and the LFO are **identical across LOAD / ADD / HOLD in all
+three programs**. ⇒ **M4, outcome C**, named in advance. No words admitted; **coverage unchanged at
+78.5 %**.
+
+### ★★ Five rounds now say the same thing about the instruments, and it generalises
+| § | axis | result |
+|---|---|---|
+| 107 | `ACT 0x0B` | the delay criterion reaches it and cannot see it |
+| 109 | C-format destination | refutes 3 of 6, cannot separate the other 4 |
+| 110 | `SRC 0x11` | the operand moves; **no D-RAM cell** distinguishes the readings |
+| 111 | `SRC 0x11` blindness | but the operand IS consumed — 5 of 5 |
+| 113 | `f31 == 4` | the census moves; **the anchored cells do not** |
+
+★ **The three criteria that closed the store gate — the per-unit hand-off, the VOLUME cell and the
+LFO phase — are sensitive to a change in the accumulator WHOLESALE and insensitive to a change in
+one word's arithmetic.** The gate and the C-format destination were decidable because they alter
+the accumulator or memory globally; `f31`, `SRC 0x11` and `ACT 0x0B` alter one word's contribution,
+which the datapath absorbs before it reaches any of those three cells.
+
+⇒ **that is what the next criterion has to be: local to the word — its operand `L` and its product
+`P`, which `§175` already reports — graded against ROM-known arithmetic, not a downstream cell.**
+The same shape as SINGLE DELAY's lag-1001 product, applied at the instruction instead of the
+output. Stated here because it is the common cause of five separate negatives, and finding it again
+from scratch would cost another session.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

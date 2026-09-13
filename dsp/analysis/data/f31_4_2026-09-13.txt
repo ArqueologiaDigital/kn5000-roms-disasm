@@ -1,0 +1,8 @@
+=== f31 == 4 SWEEP, three programs that EXECUTE it, per-program census ===
+TYPE  program          f31=4 n     §176        anchored cells (05 / 06 / LFO)
+13    compressor       1196405     DIFFER(3)    ALL THREE IDENTICAL
+14    no_operation     485513      DIFFER(3)    ALL THREE IDENTICAL
+18    auto_wah         536818      DIFFER(3)    ALL THREE IDENTICAL
+
+M1 HIT (it fires -- unlike the chorus, where sect. 108 measured 0).
+M2 MISS (the census differs), M3 MISS (no reading singled out), => M4 outcome C.
