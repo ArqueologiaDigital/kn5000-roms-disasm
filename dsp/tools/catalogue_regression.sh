@@ -52,8 +52,11 @@ TYPES=${TYPES:-"0 1 2 3 4 5 6 7 8 15"}
 mkdir -p "$OUT"
 
 echo "=== catalogue_regression -> $OUT : ${EXTRA[*]} ==="
+# ★ NOPAIR=1: capture only frame N, not the N/N+1 pair -- HALVES the wall clock.  Use it when the
+#   question is a per-frame STATE (e.g. pickup_cells.py reading cell 0x05), not a frame-to-frame
+#   DELTA.  ⚠ Liveness tests need the pair; they compare the two frames.  Default 0 = both.
 for ti in $TYPES; do
-  for off in 0 1; do
+  for off in $([ "${NOPAIR:-0}" = 1 ] && echo 0 || echo 0 1); do
     note=$(python3 -c "print(36.0 + 0.2*$ti)")
     # ★ NOTEOFS: seconds after the harness's own note-on at which the frame is traced.
     # ⚠ +1.0 is NOT universal.  MEASURED 2026-09-13: five programs (TYPE 23/25/29/30/31) trace
