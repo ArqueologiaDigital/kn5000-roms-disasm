@@ -4184,6 +4184,59 @@ share must fall while `iw39`'s contribution (decoded, the control) stays put.*
 **not** say `iw331` is wrong — it says it is where the rail enters, and that the word doing it is
 one I called executable this morning on grounds that did not cover this.
 
+## 92. ⛔⛔ COVERAGE 76.4 % → 74.0 % — I WALK BACK PART OF §80, BECAUSE ITS PREMISE IS FALSE
+§91 left two readings of `iw331` and said I was not choosing. **The code chooses.**
+
+§80 admitted all **276** class-1 delay escapes as executable on one stated premise:
+
+> *"It never reaches the ALU: the device's own `is_dram` branch **RETURNS BEFORE IT**. So grading
+> these words on anchored SRC/ACT/`f31` — fields they do not use — counted 276 fully-determined
+> words as undecoded."*
+
+⛔ **The branch does not return.** It calls **`exec_alu(word)` with `m_in_dram = true`**, twice, under
+
+```
+   const bool run_alu = m_speculative && (m_specmask & 0x80000) && !m_in_dram;
+```
+
+and **SPEC bit 19 is SET in the default mask** (`0xb910e446a39b440f`). The delay word runs its
+datapath half **deliberately** — that is how the delay datum reaches the chain — so its
+`SRC` / `ACT` / `f31` **do** apply. §91's `iw331` is the visible consequence: a delay *write* that
+leaves unit 1's accumulator at exactly the positive rail, which "an external delay write" does not
+describe.
+
+⇒ **My gain was partly built on a misreading of the device**, and the honest predicate is:
+*a delay escape is decoded when its **addressing** is forced **and** its **ALU half** is anchored.*
+
+| | |
+|---|---:|
+| delay escapes with a validated direction | 276 |
+| … whose ALU half is **also** anchored | **201** |
+| … refused on their ALU half | **75** — `ACT 0x0B` on class 1 ×50, `ACT 0x1C` ×17, `ACT 0x1A` ×6, `ACT 0x07` ×2 |
+
+### THE COST, reported as a decrease
+| | before | after |
+|---|---:|---:|
+| executable words | 2 272 / 2 974 | **2 200 / 2 974** |
+| **coverage** | 76.4 % | **⛔ 74.0 %** |
+| undecoded families | 80 | 87 |
+
+**−72 words.** Session total is now **41.5 % → 74.0 %, +966** (not +1 038).
+
+### Why I am reporting a number going DOWN
+Because it is the same discipline that made the other eight gains worth anything. Every anchoring
+this session was justified by *"a determination the project had already evidenced"*. §80's
+justification was **my own reading of a code path, and I read it wrong** — I quoted a comment
+(*"returns before the ALU"*) instead of following the branch. The words whose ALU half really is
+anchored keep their place; the 75 that were riding on a false premise lose it.
+
+★ **And the lesson is exactly the one that has bitten four times today**: I took a claim from a
+*comment* rather than from the code. §89 found comments naming a `do_store()` that does not exist;
+this is the same failure mode, and this time it had put 75 words on the board.
+
+⚠ Grade: FORCED (the mask bit is set; the call is unconditional given it). The 201 that remain are
+anchored on both halves and are unaffected.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

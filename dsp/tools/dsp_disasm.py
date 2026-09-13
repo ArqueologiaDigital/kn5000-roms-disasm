@@ -694,6 +694,22 @@ def is_input_latch_read(w):
 #  5. OPERATION.  hi12[3:1] must be one the biquad determines.  HI_ACC_HOLD is
 #     admitted ONLY on class 8.
 # ---------------------------------------------------------------------------
+def _alu_half_anchored(w):
+    """The ALU part of `alu_decoded()' WITHOUT the class test -- for a word whose class is already
+    explained by its format escape.  A class-1 delay word still runs its datapath half (the device
+    calls `exec_alu()' for it under SPEC bit 19, set by default), so these fields are live."""
+    hi = hi12(w)
+    if lo12(w) & 0x800:
+        return False
+    if lo_ptrmode(w):
+        return False
+    if lo_src(w) not in _ANCHORED_SRC or not _act_anchored(w):
+        return False
+    if (hi & HI_ST) and (hi & HI_B7) and hi_f31(hi) != 2:
+        return False
+    return hi_f31(hi) in (HI_ACC_LOAD, HI_ACC_ADD, HI_ACC_HOLD)
+
+
 def _act_anchored(w):
     """The anchored ACT set, plus one CLASS-CONDITIONAL member.
 
@@ -835,13 +851,24 @@ def decoded(w):
     if hi == 0x000 and cl == 2 and ad == 0x00 and lo == 0x000: return True  # nop
     if is_ldptr(w) or is_rstcur(w) or is_ldptrd(w):            return True
     if is_setvec(w):                                           return True
-    #   ★★★★★ 2026-09-13: THE DELAY ESCAPE IS EXECUTABLE, and this predicate was asking it the
-    #   wrong questions.  A class-1 escape is an external delay-DRAM access whose semantics are
-    #   FORCED -- direction from `addr8' bit 6, address = DESCRIPTOR_CELL[k] + G by the IDENTITY
-    #   map (adjudication-round5, PROVEN BY CONSTRUCTION).  It never reaches the ALU: the device's
-    #   own `is_dram' branch RETURNS BEFORE IT.  So grading these words on anchored SRC/ACT/f31 --
-    #   fields they do not use -- counted 276 fully-determined words as undecoded.
-    if is_dram(w) and dram_dir(w):                             return True
+    #   ★★★★★ 2026-09-13: THE DELAY ESCAPE IS EXECUTABLE **WHEN BOTH ITS HALVES ARE**.
+    #   A class-1 escape is an external delay-DRAM access whose ADDRESSING is FORCED -- direction
+    #   from `addr8' bit 6, address = DESCRIPTOR_CELL[k] + G by the IDENTITY map
+    #   (adjudication-round5, PROVEN BY CONSTRUCTION) -- so grading it on the CLASS test, which
+    #   the escape itself explains, was wrong and cost 276 determined words.
+    #   ⛔⛔ BUT MY FIRST VERSION OF THIS WAS TOO STRONG, and §91 caught it.  I wrote that such a
+    #   word "never reaches the ALU: the device's own `is_dram' branch RETURNS BEFORE IT", and
+    #   admitted all 276 on that basis.  **The branch does not return** -- it calls `exec_alu(word)'
+    #   with `m_in_dram = true' under SPEC bit 19, which is SET IN THE DEFAULT MASK.  The delay
+    #   word runs its ALU half deliberately, so that the delay datum reaches the datapath, and its
+    #   SRC / ACT / f31 therefore DO apply.  MEASURED consequence: `iw331', a delay WRITE, leaves
+    #   unit 1's accumulator at exactly the positive rail -- which "an external delay write" does
+    #   not describe.
+    #   ⇒ a delay escape is decoded when its ADDRESSING is forced AND its ALU half is anchored.
+    #   MEASURED: 201 of the 276 qualify; the other 75 are refused on their ALU half
+    #   (`ACT 0x0B' on class 1 x50, `ACT 0x1C' x17, `ACT 0x1A' x6, `ACT 0x07' x2).
+    if is_dram(w) and dram_dir(w):
+        return _alu_half_anchored(w)
     if alu_decoded(w):                                         return True
     return False
 
