@@ -1,0 +1,30 @@
+=== catalogue_regression -> /home/fsanches/.claude/jobs/c9daa85d/tmp/reg/rest : UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 UPD6383_LO12CAP=1 UPD6383_SPEC=B9108446A39B440F ===
+  TYPE  9  ✅ prog32_distortion
+  TYPE 10  ✅ prog33_overdrive
+  TYPE 11  ✅ prog34_fuzz
+  TYPE 12  ✅ prog35_exciter
+  TYPE 13  ✅ prog36_compressor
+  TYPE 14  ✅ prog00_no_operation
+  TYPE 16  ✅ prog48_auto_pan
+  TYPE 17  ✅ prog50_vibrato
+  TYPE 18  ✅ prog52_auto_wah
+  TYPE 19  ✅ prog15_rock_rotary
+  TYPE 20  ✅ prog15_rock_rotary
+  TYPE 21  ✅ prog54_ring_modulator
+  TYPE 22  ✅ prog56_mix_up
+  TYPE 23  ✅ prog64_s_delay_chorus
+  TYPE 24  ✅ prog65_s_delay_s_delay
+  TYPE 25  ✅ prog66_s_delay_flanger
+  TYPE 26  ✅ prog67_s_delay_vibrato
+  TYPE 27  ✅ prog68_s_delay_phaser
+  TYPE 28  ✅ prog70_auto_wah_s_delay
+  TYPE 29  ✅ prog71_peq_chorus
+  TYPE 30  ✅ prog72_peq_s_delay
+  TYPE 31  ✅ prog73_peq_flanger
+  TYPE 32  ✅ prog74_peq_vibrato
+  TYPE 33  ✅ prog75_peq_compressor
+  TYPE 34  ✅ prog96_peq_compr_dist
+  TYPE 35  ✅ prog97_peq_compr_overdr
+  TYPE 36  ✅ prog98_peq_dist_delay
+  TYPE 37  ✅ prog99_peq_overdr_delay
+=== done; compare with: python3 dsp/tools/regression_report.py --base <dir> --cand /home/fsanches/.claude/jobs/c9daa85d/tmp/reg/rest ===

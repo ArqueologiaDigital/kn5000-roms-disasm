@@ -1505,6 +1505,43 @@ geometry, the internal consistency of the body, and the exclusion.
 
 ⚠ Grade: MEASURED from `reg/st07/t2_F.log` under the promoted defaults.
 
+## 42. ★★★ THE OTHER 28 PROGRAMS, SWEPT AND IDENTIFIED — where the LLE actually stands
+With the TYPE map rebuilt (§246) and every run fingerprinted, the remaining 28 indices were swept
+under the promoted defaults. **Every identity was verified from the machine's own upload**, and the
+rebuilt map was independently confirmed — including the duplicate: TYPE 19 and TYPE 20 both load
+`prog15_rock_rotary` in this harness too. Artefacts: `data/sweep28_health_2026-09-13.txt`,
+`data/sweep28_identities_2026-09-13.txt`.
+
+| reading | count | meaning |
+|---|---|---|
+| ✅ **LIVE** | **7** | audio present **and** the body moves across a frame pair |
+| ⛔ **STATIC with audio present** | **16** | the audio reaches the kernel and the body does **not** move |
+| ⚠ **VOID** | **5** | no audio at the traced frame — the reading says nothing |
+
+Live: distortion, overdrive, fuzz, compressor, NO OPERATION, ring modulator, s.delay+vibrato.
+Static-with-audio: exciter, auto-pan, vibrato, auto-wah, the rotary (both slots), mix-up,
+s.delay+s.delay, s.delay+phaser, auto-wah+s.delay, and six of the PEQ combis.
+Void: four PEQ combis and s.delay+chorus / s.delay+flanger — the trace offset does not suit them.
+
+★★ **This is the first per-program statement of where the LLE stands**, and it is the honest answer
+to "is the implementation full?": **it is not.** The two promoted decodes (§36, §40) close the
+body-side input path on the **reference program**, and the ten programs swept earlier were all
+live — but across the other 28, **16 have audio arriving at the kernel and a body that does not
+move**. Those 16 are where the remaining body-side work is, and they are now named rather than
+estimated.
+
+⚠ **What this is NOT.** "STATIC" is not "broken by the promoted changes" — there is no baseline
+comparison here, only an absolute health check under the defaults. It says the body-side path is
+not closed for those programs; it does not say the defaults closed or opened anything for them.
+⚠ The 5 VOID rows are an instrument limit, not a finding: `fx_ab.lua`'s note-on is
+`36.0 + 0.2 × TYPEIDX` and the trace is armed one second later, which does not put audio in the
+chip for those programs. They need their own offset before they can be read at all.
+⚠ The audio test is *"any of cells `0x01`/`0x04`/`0x05` above 1 000"*. The pickup cell differs by
+program (TYPE 9 carries its input in `0x01` with `0x05 = 0`), so a single-cell check would have
+mislabelled several rows — I used a blanket one first and it did.
+
+⚠ Grade: MEASURED, 56 captures, every identity fingerprinted.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

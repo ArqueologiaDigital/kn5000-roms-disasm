@@ -1,0 +1,32 @@
+28-program sweep under the PROMOTED DEFAULTS -- identity fingerprinted, audio checked per program
+TYPE program (MEASURED)           audio  cells  moved railed  reading
+9    prog32_distortion              yes      5      3      0  ✅ LIVE (42 rows)
+10   prog33_overdrive               yes     13      6      0  ✅ LIVE (37 rows)
+11   prog34_fuzz                    yes      5      3      0  ✅ LIVE (42 rows)
+12   prog35_exciter                 yes     14      0      1  ⛔ STATIC with audio present
+13   prog36_compressor              yes      9      1      4  ✅ LIVE (13 rows)
+14   prog00_no_operation            yes     10      1      4  ✅ LIVE (12 rows)
+16   prog48_auto_pan                yes      8      0      0  ⛔ STATIC with audio present
+17   prog50_vibrato                 yes     11      0      0  ⛔ STATIC with audio present
+18   prog52_auto_wah                yes     19      0      0  ⛔ STATIC with audio present
+19   prog15_rock_rotary             yes     29      0      2  ⛔ STATIC with audio present
+20   prog15_rock_rotary             yes     29      0      2  ⛔ STATIC with audio present
+21   prog54_ring_modulator          yes      8      2      1  ✅ LIVE (33 rows)
+22   prog56_mix_up                  yes     14      0      0  ⛔ STATIC with audio present
+23   prog64_s_delay_chorus           NO     18      1      0  ⚠ VOID -- no audio at the traced frame
+24   prog65_s_delay_s_delay         yes      9      0      0  ⛔ STATIC with audio present
+25   prog66_s_delay_flanger          NO     18      0      0  ⚠ VOID -- no audio at the traced frame
+26   prog67_s_delay_vibrato         yes     17      4      0  ✅ LIVE (45 rows)
+27   prog68_s_delay_phaser          yes     25      0      0  ⛔ STATIC with audio present
+28   prog70_auto_wah_s_delay        yes     21      0      0  ⛔ STATIC with audio present
+29   prog71_peq_chorus               NO     27      0      0  ⚠ VOID -- no audio at the traced frame
+30   prog72_peq_s_delay              NO     15      0      0  ⚠ VOID -- no audio at the traced frame
+31   prog73_peq_flanger              NO     24      0      0  ⚠ VOID -- no audio at the traced frame
+32   prog74_peq_vibrato             yes     24      0      0  ⛔ STATIC with audio present
+33   prog75_peq_compressor          yes     17      0      1  ⛔ STATIC with audio present
+34   prog96_peq_compr_dist          yes     17      0      0  ⛔ STATIC with audio present
+35   prog97_peq_compr_overdr        yes     21      0      1  ⛔ STATIC with audio present
+36   prog98_peq_dist_delay          yes     15      0      0  ⛔ STATIC with audio present
+37   prog99_peq_overdr_delay        yes     23      0      0  ⛔ STATIC with audio present
+
+7 live, 16 static WITH audio, 5 void (no audio at the traced frame)
