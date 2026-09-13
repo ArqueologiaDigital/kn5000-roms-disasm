@@ -1,0 +1,23 @@
+WHERE DOES THE BODY'S LIVE RESULT STOP DIFFERING BETWEEN FRAMES? (kernel-B / epilogue, iw50..82)
+
+TYPE program                  last LIVE word (acc differs) first DEAD word (acc identical)
+12   prog35_exciter           iw57  0000201000             iw54  080016000B
+16   prog48_auto_pan          (never live in this region)
+17   prog50_vibrato           (never live in this region)
+18   prog52_auto_wah          (never live in this region)
+19   prog15_rock_rotary       (never live in this region)
+20   prog15_rock_rotary       (never live in this region)
+22   prog56_mix_up            (never live in this region)
+24   prog65_s_delay_s_delay   (never live in this region)
+27   prog68_s_delay_phaser    (never live in this region)
+28   prog70_auto_wah_s_delay  (never live in this region)
+32   prog74_peq_vibrato       (never live in this region)
+33   prog75_peq_compressor    (never live in this region)
+34   prog96_peq_compr_dist    iw57  0000201000             iw53  00109D020C
+35   prog97_peq_compr_overdr  (never live in this region)
+36   prog98_peq_dist_delay    (never live in this region)
+37   prog99_peq_overdr_delay  (never live in this region)
+
+first-dead word, by iw:
+   iw54   : 1 programs
+   iw53   : 1 programs

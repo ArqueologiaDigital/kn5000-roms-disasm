@@ -1,0 +1,21 @@
+WHAT DOES THE BODY LEAVE IN THE ACCUMULATOR?  (body runs BEFORE kernel-B in execution order)
+
+TYPE program                  cells mv   acc at body end F                F+1 carries signal?
+12   prog35_exciter           8               398030274560       398053441536 ★ YES
+16   prog48_auto_pan          1                          0                  0 ⛔ frame-static
+17   prog50_vibrato           2               429496729600       429496729600 ⛔ frame-static
+18   prog52_auto_wah          3                     -65487             -65487 ⛔ frame-static
+19   prog15_rock_rotary       4                          0                  0 ⛔ frame-static
+20   prog15_rock_rotary       4                          0                  0 ⛔ frame-static
+22   prog56_mix_up            7               429496729600       429496729600 ⛔ frame-static
+24   prog65_s_delay_s_delay   1                          0                  0 ⛔ frame-static
+27   prog68_s_delay_phaser    3                         90                 90 ⛔ frame-static
+28   prog70_auto_wah_s_delay  1                          0                  0 ⛔ frame-static
+32   prog74_peq_vibrato       1                          0                  0 ⛔ frame-static
+33   prog75_peq_compressor    1               445615102739       445615102739 ⛔ frame-static
+34   prog96_peq_compr_dist    2               317016817664       316362899456 ★ YES
+35   prog97_peq_compr_overdr  1                84565177910        84565177910 ⛔ frame-static
+36   prog98_peq_dist_delay    2                          0                  0 ⛔ frame-static
+37   prog99_peq_overdr_delay  2                          0                  0 ⛔ frame-static
+
+⇒ 2 of 16 programs leave a FRAME-VARYING accumulator at the body's end; 14 leave a constant.

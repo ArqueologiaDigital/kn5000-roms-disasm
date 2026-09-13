@@ -2013,6 +2013,41 @@ pre-registered check has decided an outcome.
 ⚠ Grade: MEASURED, 8 captures. `UPD6383_EPIREBASE` stays in the tree default-off with this
 refutation beside row 23's original one.
 
+## 54. ★★ THE OUTPUT PROBLEM IS **UPSTREAM OF THE EPILOGUE**: 14 of 16 bodies leave a CONSTANT accumulator
+§51 located the epilogue's pointer. But the presentation word `w73` sources **`SRC 0x10` = the
+ACCUMULATOR** (anchored), not a memory cell — so the pointer was never going to be the whole story,
+and the right question is *what the body leaves in the accumulator*. Measured across 16 programs
+(`data/body_leaves_2026-09-13.txt`), on the body's **last executed row** (the body runs *before*
+kernel-B in execution order):
+
+| | count |
+|---|---|
+| bodies leaving a **frame-VARYING** accumulator | **2** — exciter, PEQ+COMPR+DIST |
+| bodies leaving a **frame-static constant** | **14** |
+
+★★ **So the bodies compute — their cells move — and 14 of 16 still hand the next stage a
+constant.** Several hand it exactly `0` (auto-pan, rotary ×2, s.delay+s.delay, auto-wah+s.delay,
+PEQ+vibrato, PEQ+DIST+DELAY, PEQ+OVERDR+DELAY); others hand a fixed large value
+(`429 496 729 600` = `0x64_0000_0000` in vibrato and mix-up, `445 615 102 739` in PEQ+compressor).
+
+⇒ **The output stage is not the first broken link.** A body whose state cells move but whose final
+accumulator is a constant has not failed to *deliver* a result — it has failed to *end up holding*
+one. The epilogue's disjoint pointer (§51) and its `loud max 0` (§47) are **downstream of that**.
+
+### ⚠ AND THIS CORRECTS A READING I WAS ONE STEP FROM PUBLISHING
+Tracing the exciter alone showed its live accumulator surviving to `iw53` and going constant at
+`iw54` (`080016000B`, a delay-DRAM WRITE doing `acc ← P`), which looks exactly like a single-word
+erasure worth arming. **It is not general**: across 16 programs only **2** have a frame-varying
+accumulator anywhere in `iw50..82`, and the other 14 are constant from the body's end onward.
+⇒ *"iw54 erases the output"* would have been a one-program artefact promoted to a rule — the same
+error as §43–§46, caught this time by asking the other 15 programs **before** writing it down.
+
+⇒ **The next question is per-body and upstream:** why does a body whose cells move leave a constant
+accumulator? The 2 that don't (exciter, PEQ+COMPR+DIST) are the positive control, and the 8 leaving
+exactly `0` are the sharpest cases.
+
+⚠ Grade: MEASURED, 32 captures, live bodies, identities fingerprinted.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
