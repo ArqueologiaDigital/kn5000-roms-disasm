@@ -3231,7 +3231,19 @@ in the loud one.**
 
 ⇒ ★★ **Cell `0x05` is not the main event — it is 4–6 % of the clipping.** The session found it
 because it is the cell a *body reads*, so its clip is the one that silences audio; but the machine
-is saturating **everywhere**, and `0x06` takes ten times more of it. ⚠ That does **not** demote
+is saturating **everywhere**, and `0x06` takes ten times more of it.
+> ⛔⛔ **CORRECTION (§89) — READ THIS BEFORE QUOTING THE TABLE.** *"Cell `0x06` takes 57–65 % of the
+> clipping"* **overstates what this census measures.** It is indexed by `m_dp` **at the moment of
+> the conversion**, so it counts every clipping conversion that happened **while the pointer rested
+> on a cell** — not the clipped datums that cell actually **received**. MEASURED in one auto-wah
+> frame: cell `0x94` has **45 rows and only 5 carry a store**; cell `0x06` has **20 and 10**. ⇒ a
+> cell the pointer merely **passes through** during heavy arithmetic accumulates counts it never
+> took. **Use the ranking as a CANDIDATE FINDER, not a verdict** — which it earned: it independently
+> named cell `0x12` in `prog52_auto_wah`, a real store target that really is railed (§88).
+> ⚠ And `m_dp` is the **D-RAM pointer**, not the internal register-file index (`addr8` on a class-1
+> non-escape word) — so *"cell 06"* here is **D-RAM `0x06`**, NOT register `[06]`, the per-unit
+> output level named PROVEN BY CONSTRUCTION in the listings. I conflated those two when I first
+> read this table. ⚠ That does **not** demote
 §70–§73 (a clip on `0x05` still silences a body, and the arm still fixes it) — it says the
 input-stage defect is **one visible symptom of a machine-wide scale problem**, which is §62's
 original reading arriving a third time, now with a number on it.
@@ -3986,6 +3998,53 @@ are untouched; only my sentence about what the device does with them was wrong.
 ⚠ Grade: MEASURED on a fresh capture at the true default with the promotion in; the correction is
 READ from the device's own dispatch (`op = sel ? f31 & 3 : f31`, `sel = SPEC bit 0`, set by default)
 and confirmed in the trace by two adjacent words behaving differently.
+
+## 89. ⛔ MY OWN CENSUS OVER-ATTRIBUTES — corrected, and what a real one would take
+Chasing §88's conclusion (*scale before semantics*) to its biggest target, I went after **cell
+`0x06` at 57 %** of all clipping. It does not survive contact.
+
+### Two errors, both mine
+**1. I conflated two different address spaces.** The listings grade register **`[06]` = the per-unit
+OUTPUT LEVEL, PROVEN BY CONSTRUCTION** — and that is the **internal register file**, indexed by
+`addr8` on a class-1 non-escape word. `§S1C` is indexed by **`m_dp`, the D-RAM pointer**. *"Cell
+06"* in my census is **D-RAM `0x06`**, a different thing entirely. Tracing it confirms the point:
+it is rewritten constantly through the kernel (`−211 456`, `−393 309`, `6 039 795`, `8 388 607`),
+which is not how an output-level register behaves.
+
+**2. The census counts POINTER RESIDENCE, not RECEIPT.** It fires in `acc_to_datum()`, where the
+target is not knowable — so every clipping conversion that occurs while the pointer happens to rest
+on a cell is charged to that cell. Measured in one auto-wah frame:
+
+| cell | rows with the pointer there | of which carry a STORE |
+|---|---:|---:|
+| `0x94` | 45 | **5** |
+| `0x00` | 31 | 15 |
+| `0x8B` | 30 | **4** |
+| `0x06` | 20 | **10** |
+| `0x12` | 9 | 2 |
+
+⇒ **a cell the pointer merely passes through during heavy arithmetic accumulates counts it never
+took.** The ranking is a **candidate finder, not a verdict**, and §75's headline is corrected in
+place above.
+
+★ **It is not worthless** — and the distinction matters. It independently named **cell `0x12`** in
+`prog52_auto_wah`, which §88 then confirmed from the trace as a **real store target that really is
+railed**. A finder that surfaces true candidates alongside artefacts is still the reason §88 found
+its cascade; it just cannot be quoted as a measurement of harm.
+
+### What a store-accurate census would take
+The count has to move from the conversion to the **write**. There is no central D-RAM write helper —
+**33 `m_dram.write_dword` sites** — so it is a refactor, not a counter, and I have not done it
+rather than patch 33 call sites blind. The device's own log now states all of this at the point of
+use, so the number cannot be misread again the way I misread it.
+
+⚠ **And the honest consequence for §88's ordering.** *"Scale before semantics"* still stands — the
+auto-wah's detector really is pinned by a railed operand at cell `0x0F`, and that was read from the
+trace, not from this census. What does **not** stand is *"cell `0x06` is the largest remaining scale
+defect"*. The largest is **unknown** until the census counts receipts.
+
+⚠ Grade: MEASURED (the store-bearing split, one frame); the correction is to my own instrument and
+to two of my own claims, and both are corrected at the point a reader meets them.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
