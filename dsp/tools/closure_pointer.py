@@ -566,6 +566,23 @@ VARIANTS = {
         lambda w: D.ptr_postinc(w) and not (D.hi12(w) & 0x800),
     "V5 accumulator-store (hi12 bit 4) words do NOT post-increment":
         lambda w: D.ptr_postinc(w) and not (D.hi12(w) & 0x10),
+    #   ★★★ N-INPUT-GATE-OPENED sect. 98.  `addr8' is NEVER ZERO on classes 4, 6 and 8 -- 53 of
+    #   53, 53 of 53, 44 of 44 -- and the model reads it on none of them.  The null is
+    #   exceptionless in the one class where both kinds coexist: every class-0 word with a
+    #   non-zero `addr8' is a register load whose `addr8' is its PAYLOAD (8 of 8), and every
+    #   class-0 word without that use carries zero (100 of 100).  So the field is load-bearing
+    #   there.  One of the two live readings is that it is the SAME pointer delta classes 2 and A
+    #   carry; these rows test exactly that, against the two criteria this tool already applies.
+    "V7 class 4 post-increments too":
+        lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) == 4),
+    "V8 class 6 post-increments too":
+        lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) == 6),
+    "V9 class 8 post-increments too":
+        lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) == 8),
+    "V10 classes 4, 6 and 8 ALL post-increment (the delta reading)":
+        lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) in (4, 6, 8)),
+    "V11 everything but the register-file classes 0/1/9 moves":
+        lambda w: (not D.c_format(w)) and D.class4(w) not in (0, 1, 9),
 }
 
 

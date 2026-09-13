@@ -4539,6 +4539,66 @@ here (`§176`) is not the one §168 quoted (`§164`). What is established is tha
 refutation rested on is not true of the machine as it ships, and that the refutation's *verdict*
 survives anyway — for a reason that makes the test void rather than negative.
 
+## 98. `addr8` IS READ BY NOTHING ON 53 WORDS — and the first version of this said 150
+Tool: [`../tools/addr8_usage.py`](../tools/addr8_usage.py). Static, no emulator.
+
+§97 named the next target: the `C63 | class-6 | class-4` idiom. Start with the field nobody has
+asked about. The device reads `addr8` for exactly three things — the pointer delta on classes 2
+and A, the register-file index on 1 and 9, and the register-load payload on a bit-11 word. On
+classes 0, 4, 5, 6, 8, C and D it reads nothing.
+
+### The null, and it is exceptionless
+Class 0 is the only class carrying both kinds of word:
+
+| class 0 | words | of which have a known use for `addr8` |
+|---|---:|---|
+| `addr8 != 0` | 9 | **9** — every one an `is_regload()` whose `addr8` is its payload |
+| `addr8 == 0` | 100 | **0** |
+
+⇒ **in this ROM `addr8` is zero exactly when the word has no use for it.** No exceptions. Against
+that null, classes 4, 6 and 8 carry a non-zero `addr8` in **150 of 150** words and the model reads
+none of them. The shape agrees: a signed DELTA has zeros (classes 2/A are **46.5 %** zero — "do
+not move" is a legal delta), an INDEX does not (classes 1/9 are **0 of 328**), and 4/6/8 are
+**0 of 150**.
+
+And the delta reading was tested rather than argued. `closure_pointer.py variants` gained V7–V11,
+which add classes 4 / 6 / 8 to the pointer walk. **None closes the frame, and every one raises the
+unit-0 pool's net heterogeneity** — 8 distinct nets at the baseline → 10, 15, 12, 21, 21. That
+tool's item G killed two earlier variants for exactly this ("destroying the pool constancy"), so
+the delta reading is disfavoured on four independent arms.
+
+### ⚠⚠ And then the control, which cut the finding from 150 words to 53
+**"Never zero" is not "carries information."** A field holding the SAME VALUE everywhere is never
+zero either. Split by how many values each class actually takes:
+
+| class | distinct `addr8` | varies inside one image? | |
+|---|---:|---|---|
+| 4 | **1** (`0x01` ×53) | no | ⇒ CONSTANT — selects nothing |
+| 8 | 3 (`0x16` ×42 body, kernel `0x0C`, epilogue `0x0F`) | no | ⇒ CONSTANT — selects nothing |
+| **6** | **5** (`18` ×29, `1A`, `1E` ×3, `20` ×3, `28` ×17) | **yes, in 5 images** | ★ **SELECTS SOMETHING** |
+
+Class 8 has a positive check besides, and it is the strongest acceptance test this project owns:
+PARAMETRIC EQ's ten class-8 words are the **identical word `0804816415`**, and the biquad
+reproduces the firmware's own bilinear designer to **0.198 dB** with `addr8` unread at all ten.
+If that field redirected the coefficient fetch, the 6-cells-per-band cursor map would not hold.
+
+⇒ **No word is demoted. The coverage number stands at 75.0 %.** I had drafted the opposite —
+"36 class-8 words are admitted as tier-1 while carrying an unread load-bearing field, so the
+number is 1.2 % too high" — and the constant/varying split refutes it. ★ The lesson is the same
+shape as §66 and §73: *check whether the corpus can distinguish your explanation from the
+alternative before believing it*, and here the check was one `collections.Counter`.
+
+### What survives, and it is aimed at the idiom
+**53 words — every class-6 word in the corpus — carry an `addr8` that takes five values, varies
+between sites inside a single program (chorus: `0x18` at `w31`, `0x20` at `w35`), and is read by
+nothing.** That is the idiom's SECOND word, the one the disassembler already annotates
+"class-6 `addr8` = table selector (INFERRED)". The annotation now has evidence under it: the
+field is used, it is not the pointer delta, and it distinguishes sites within one program.
+
+★ And the five values split exactly along the idiom's two variants, 53 of 53:
+`040.0.00.C63 → 000.6.{18,28}.4CD` (46) and `142.0.00.C63 → 000.6.{1A,1E,20}.407` (7). The
+selector's value set is a property of which variant the macro is, not of the program.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
