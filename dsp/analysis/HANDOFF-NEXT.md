@@ -95,7 +95,19 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    result. (`fx_ab.lua`, used by the gate and the catalogue sweeps, steps UP from 0 and is NOT
    affected; its TYPE 0–8 are the verified short-distance regime and its TYPE 15 captures are
    confirmed to be the EQ by their five 4-cell band blocks.)
-   ⇒ **Sweeping the remaining 28 programs is now a mechanical run**, addressed by a measured index.
+   ⇒ **Sweeping the remaining 28 programs is addressed by a measured index now** — but it needs the
+   OTHER harness, and that one is newly built and only half-tuned:
+   ★ `dsp/tools/catalogue_sweep_sel.sh` drives `type_select.lua` (the calibrated transport) and
+   **fingerprints every run**, because `catalogue_regression.sh`'s `fx_ab.lua` steps UP from 0 and
+   drops steps at long distances. ⚠⚠ **Its first six readings were VOID** — six programs came back
+   with bodies bit-identical across the frame pair *while carrying non-zero products*, which reads
+   as "dead body" and was really **a trace taken before the note arrived**: input cells
+   `0x05 = 13, 0x01 = 0` at note-on +1.0 s, and `0x01 = −264 448` at +3.0 s on the same program.
+   The offset is now **+3.0 s, measured**, and ⚠ **even that is not verified per program — CHECK
+   AN INPUT CELL IS NON-ZERO in every capture before reading anything downstream.**
+   ⚠ Two other hypotheses were tested and REFUTED first, so do not re-try them: the missing
+   `DHLE/NOTEMODE/TGM` environment, and the `:TGMODE` port (the port write was genuinely missing
+   from `type_select.lua` and is now there, guarded by `TGM`, but it was not the cause).
 
    ★★★ **The calibration behind it: the TYPE list has 38 entries (0..37), not 36** — that single fact
    is the root of TYPE_MAP's off-by-one, and `type_select.lua`'s default `TYPELAST` was wrong by
