@@ -4793,6 +4793,73 @@ largest open axis now has ten minimal pairs and one of them sits in the machine'
 arithmetic — which is the first time the gate has had a context with known mathematics that the
 29-block solve did not already consume.
 
+## 102. THE STORE GATE, GRADED AT LAST — on a criterion the FIRMWARE supplies
+Arm: `UPD6383_CLS46PTR`'s sibling **`UPD6383_GATECLR`**, default OFF — on a word carrying the
+bit-4 store **and** bit 7 **and** `f31 == 1`, the accumulator's feedback term is dropped, which is
+`store-gate.md` item D's **`clr:before`** survivor exactly. Pre-registrations:
+[`data/PREDICT_GATECLR_2026-09-13.md`](data/PREDICT_GATECLR_2026-09-13.md),
+[`data/PREDICT_VOLCELL_2026-09-13.md`](data/PREDICT_VOLCELL_2026-09-13.md),
+[`data/PREDICT_VOLCELL2_2026-09-13.md`](data/PREDICT_VOLCELL2_2026-09-13.md).
+
+### Attempt 1 — the LFO rate. MISS by 136×
+§101 found that `092.A.00.200`, the **LFO ramp word**, is a gate word. The LFO is anchored
+nine-fold, so the rate is a known answer: `114 = floor(0.5993 × 2²³/44100)` ⇒ 0.5993 Hz. §228's
+read-only rise census on the chorus phase cell:
+
+| | step | mean | rate |
+|---|---|---:|---:|
+| shipped | 114 … 4 190 812 | 29 098.03 | **152.97 Hz** |
+| `GATECLR` | 114 … 3 470 859 | **15 506.97** | 81.52 Hz |
+| predicted | 114 … 114 | 114.000 | **0.5993 Hz** |
+
+⛔ MISS. ⚠ **And the criterion assumed the gate word is the phase's only contaminant** — I never
+checked that, and it is false. So the miss refutes *"the gate alone accounts for the 255× error"*,
+not `clr:before`. ★ The minimum step being exactly the ROM's constant, in both arms, is itself the
+standing evidence that the increment path is right and the accumulator path is dirty.
+
+### Attempt 2 — the VOLUME cell. ★ 5 of 5 OUT OF SAMPLE, control 5 of 5
+`register-space.md` item A1 is **PROVEN BY CONSTRUCTION** over 49 of 49 algorithms: cell `0x06` is
+the user's effect **VOLUME**, written by `EFF_VolumeLoop` after linking. Registered on five TYPE
+indices never captured this session:
+
+```
+   TYPE  limit | arm OFF (shipped)                        | GATECLR ON
+   16    <=22  | (3075606, -8388608..8388607, chg 188032) | (2260027, -1..8388607, chg 13)
+   17    <=23  | (8388607, -8388608..8388607, chg 120328) | (2260027, -1..8388607, chg 13)
+   18    <=24  | (8388607, -8388608..8388607, chg  10746) | (2260027, -1..8388607, chg 13)
+   19    <=25  | (6913425, -8388608..8388607, chg  49056) | (2260027, -1..8388607, chg 13)
+   20    <=26  | (8388607, -8388608..8388607, chg  52201) | (2260027, -1..8388607, chg 13)
+```
+
+**W1 HIT 5/5. W2 (the control that can fail) HIT 5/5.** W3 (never railed) MISS — and its metric is
+a range accumulated from boot, so it localises nothing; the ten-program run puts the remaining rail
+in the PARAMETRIC EQ. Plus **10 KEPT / 0 BROKEN** on the hand-off regression at the true default.
+
+★ **Stated correctly, because the obvious phrasing is wrong:** `chg` counts **value changes, not
+writes**, and the gate word writes `0x06` in *neither* arm — the shipped reading already suppresses
+its store. The arm changes the accumulator, hence the VALUE some other word deposits there. What
+is tested is *"the VOLUME cell holds a constant under the arm and churns without it"*.
+
+### What it settles, and what it does not
+★★ This is **the strongest evidence the store gate has ever had, and the first time it has been
+graded against a criterion the firmware supplies rather than one the emulator can fake.** It is
+evidence about **the CLEAR**: taken BEFORE the ALU.
+
+⛔ It does **not** settle the memory access. `LD` passes W1/W2 exactly as `-` does — both stop the
+accumulator's junk reaching whatever writes `0x06`. The axis goes **three-way → two-way**, and
+`alu_decoded()` still refuses all 138 words. **Coverage is unchanged at 75.0 %**, which is what the
+pre-registration said a pass would leave.
+
+### ⚠⚠ FIVE defective criteria in one session, and the last two were repeats
+§100's P2 needed an index the arm could not supply. The class-4/6 P1 was patched at the wrong site
+**twice**. §102's first P2 assumed a sole cause. The first VOLUME criterion used a per-program
+threshold against a **cumulative** census — after I had documented that census as cumulative in §100
+— and W3 did it again. Every one was caught by the criterion or its control rather than by the
+result, which is the case *for* writing them down; but the rate is itself the finding, and the fix
+is not more care at the same speed. **A per-program capture harness — one program per boot, no type
+walk — would have removed three of the five by construction**, and that is the instrument the next
+pass should build before it designs another criterion.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
