@@ -164,3 +164,36 @@ PREVIOUS word's — junk. The increment does not arrive until the NEXT word (`08
 | **Q2** ★★ | chorus cell `07`: `step 114..114`, `mean 114.000`, `0.5993 Hz` — the ROM's constant | `clr:after` does not produce the ROM's rate either, and BOTH clear placements are out on this criterion |
 | **Q3** | the VOLUME cell `0x06` stays written-once and unrailed (what `clr:before` already achieves) | the arm trades one firmware criterion for the other |
 | **Q4** | 10-program hand-off regression, 0 BROKEN | it is a trade, not a decode |
+
+
+---
+
+## P2″ RESULT — **`clr:after` is REFUTED: it kills the LFO outright**
+
+```
+   §102/§104 GATECLR (mode 2): gate words affected: 22 230 564          Q1 HIT
+```
+
+With `UPD6383_GATECLR=2` and the per-program census, **cell `07` disappears from both instruments**:
+it is absent from §176's non-zero list (11 of 256 non-zero, `07` not among them) and it has **no row
+at all** in §228's rise census. Under the shipped arm the same capture reads
+`07:2946538(0..8388606/chg1574370)`.
+
+⇒ **Q2 MISS, and not a near miss: the LFO phase never moves.** The chorus's modulation stops
+existing. `0x06` is zero too, so Q3 fails with it — the effect depth would be silence.
+
+★ The hand-off cell is untouched (`05:177684(-2869494..3486228/chg175660)`, identical to control),
+so the damage is specific rather than a broken machine.
+
+### ★★★ Which FORCES the clear, by elimination
+Three clear placements, three independent anchored criteria:
+
+| placement | verdict | on what |
+|---|---|---|
+| `clr:never` (**shipped**) | ⛔ REFUTED | the **VOLUME** cell — railed 5 of 5, churned 11 … 177 316 times, against a firmware-proven write-once |
+| `clr:after` | ⛔ REFUTED | the **LFO** — the phase cell never moves at all |
+| **`clr:before`** | ✔ **the only survivor** | VOLUME written once and unrailed 5 of 5; LFO alive (rate still wrong, which is a separate defect) |
+
+**The store gate's clear is taken BEFORE the ALU.** Both rivals fall on criteria the ROM and the
+firmware supply, neither of which the emulator can fake, and each of which demonstrably CAN fail —
+because each of them just did, on a different arm.
