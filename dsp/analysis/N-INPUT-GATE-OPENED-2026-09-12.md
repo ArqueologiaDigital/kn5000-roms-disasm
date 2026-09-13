@@ -4907,6 +4907,49 @@ accumulator AND the memory* to **the memory access alone**.
 ⛔ **Coverage is unchanged at 75.0 %.** `alu_decoded()` refuses these 138 words for the memory
 access, which this does not touch — exactly as both pre-registrations said a pass would leave it.
 
+## 104–106. ★★★★★ THE STORE GATE IS DETERMINED — 75.0 % → 77.6 %
+Pre-registration and every run: [`data/PREDICT_GATECLR_2026-09-13.md`](data/PREDICT_GATECLR_2026-09-13.md).
+
+`store-gate.md` item D left the gate at `(bit 7, f31 == 1)` **three-way open** — `none`,
+`ST(acc→else)`, `LD`, each with three clear placements — and said so because its 29 blocks could
+not separate them. It is now closed, by **elimination on criteria the ROM and the FIRMWARE supply**,
+each of which demonstrably CAN fail, because a different arm made each of them fail.
+
+| reading | refuted by | the measurement |
+|---|---|---|
+| `-/clr:never` — **the shipped one** | the **VOLUME** cell | `0x06` is the user's effect depth, PROVEN BY CONSTRUCTION in 49 of 49 algorithms and written once by `EFF_VolumeLoop`. Shipped, it is **RAILED in 5 of 5 out-of-sample programs** and churned **11 … 177 316** times |
+| `-/clr:after` | the **LFO** | the phase cell vanishes from both instruments — absent from the non-zero census, no row in the rise census |
+| `LD@before` | the **LFO** | `step 36 … 4 194 103, mean 2 082 744`, a **4.0-frame period** against a ROM constant of **114 per frame** |
+| `LD@after` | the **LFO** | phase cell dead |
+| **`-/clr:before`** | — | VOLUME written **once**, unrailed, **5 of 5**; the LFO alive with its **minimum step exactly 114**; **10 KEPT / 0 BROKEN** on the hand-off regression at the true default |
+
+★★★ And `ST(acc→else)/clr:before` is **the same machine** as `-/clr:before`: `gate_settle.py:70`
+declares the `else` key *"a memory key no pointer can ever equal"*, so nothing can read what it
+writes. ⇒ *"is there a store at all"* remains **unanswerable — and stops mattering for EXECUTION**,
+which is the only question `decoded()` asks.
+
+### Promoted, and verified the way §56 demands
+`UPD6383_GATECLR` default **1** (`=0` is the control), **re-verified with NO ENVIRONMENT SET AT
+ALL**: hand-off `05:177684(-2869494..3486228/chg175660)` unchanged, `06` written once at 2 260 027,
+`07` alive. Guard 7 in `dsp_disasm.py` and its C++ mirror now admit `f31 == 1`; **mirrors agree
+3057/3057**, `dsp/verify.py` **BYTE-MATCH OK**, the 24 documentation pages regenerate and
+`test_hle_permanence.py` passes.
+
+**COVERAGE: tier 1 74.0 % → 76.6 % (+78 body words), 77.6 % with tier 1b. Frame floor 70.4 % →
+72.2 %.** The 82 words render as real instructions for the first time — `mac.b c,c+,(p)+0 ;
+store SUPPRESSED (bit7)`.
+
+⚠ Two things this does NOT claim. The LFO's **rate** is still wrong under the survivor (81 Hz
+against the ROM's 0.599 Hz) — §102 measured that the gate was never its only cause, and that defect
+is open. And `f31 == 0` still traps: there the two surviving GATE CONDITIONS disagree about whether
+`mem[ptr]` is written at all, which is not an accumulator question and nothing here touches it.
+
+### ★ What made it work, after five defective criteria
+Not care — an **instrument**. §103's `UPD6383_CENSUS_PERPROG` made the censuses per-program, and
+`register-space.md` item A1 supplied a known answer the emulator cannot fake. Every criterion that
+decided something here is one the ROM or the firmware states: the VOLUME cell's write-once, and the
+LFO's `floor(f × 2²³/44100)`. The three that failed earlier were all criteria I had constructed.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
