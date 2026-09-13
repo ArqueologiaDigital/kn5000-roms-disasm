@@ -1864,6 +1864,49 @@ rule stays — check an input cell is non-zero in the capture before reading any
 
 ⚠ Grade: MEASURED, 10 captures, identities fingerprinted.
 
+## 50. ★★★★★ ALL 38 PROGRAMS RUN — the "static" set was an INSTRUMENT ARTEFACT, and §43–§48 were chasing it
+§49 resolved the 5 VOID rows by tracing 1.5 s later. §48 had just measured that a body's first
+operand is **last frame's state**, so a body only runs once its loop is primed — which says the
+same offset should be tried on the *static* rows too. It was, on all 16
+(`data/static_resolved_2026-09-13.txt`):
+
+**16 of 16 came ALIVE. 0 remain static.**
+
+| TYPE | program | writer | at +1.0 | at +2.5 |
+|---|---|---|---|---|
+| 12 | exciter | bit4 | 0/0 | **8 cells / 68 rows / 58 products** |
+| 17 | vibrato | bit4 | 0/0 | 2 / 6 / 42 |
+| 19, 20 | rock rotary | bit4 | 0/0 | 4 / 30 / 54 |
+| 22 | mix-up | bit4 | 0/0 | 7 / 44 / 55 |
+| 27 | s.delay+phaser | bit4 | 0/0 | 3 / 37 / 38 |
+| **33–37** | the **5 PEQ combis** | **NONE** | 0/0 | **1–2 cells / 2–19 rows / 27–92 products** |
+| …and 12 through 32 likewise | | | 0/0 | all live |
+
+⇒ ★★★★★ **THE TALLY IS 38 LIVE / 0 STATIC / 0 VOID.** Every effect program in the catalogue runs
+its body on live audio under the promoted defaults.
+
+### ⛔⛔ AND THIS RETIRES §43, §44, §45, §46 AND HALF OF §48 — they were explaining an artefact
+Everything built on *"16 programs have audio and a static body"* was analysing a **trace taken
+before the body's loop had primed**:
+- §43's three-way decomposition of the 16 — **the groups were timing, not topology**;
+- §44's *"the PEQ combis read a cell NO WORD WRITES"* — **the five run anyway**, so the missing
+  writer is not what was stopping them. ⚠ The census fact stands (no writer in *that* frame); the
+  **conclusion drawn from it does not**;
+- §45/§46's arm and its three aiming errors — **built to fix programs that were never broken**;
+- §48's split into "11 upstream / 5 structural" — **both halves dissolve**.
+✅ What survives §48 intact is its **positive** finding, which is the one that mattered: the
+first-read cell is a **STATE CELL** written in frame *N* and read at the top of *N+1*. That is
+exactly why an early trace shows a static body, and it is the fact that predicted this result.
+
+⚠⚠ **THE METHOD FAILURE, stated plainly.** I ran the catalogue sweep at a fixed offset, saw 16
+static bodies, and spent five sections theorising about store predicates — **without once checking
+whether the bodies were static or merely unprimed**, even though the same session had already
+caught this exact artefact on 5 other programs (§42's VOID rows) and named the cause. The tell was
+in my own notes. *A measurement whose instrument has a known systematic must have that systematic
+excluded before any theory is built on it.*
+
+⚠ Grade: MEASURED, 32 captures, every identity fingerprinted.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -1,0 +1,21 @@
+THE 16 STATIC PROGRAMS, re-traced at note-on +2.5 s
+
+TYPE program                  writer  at +1.0        at +2.5
+12   prog35_exciter           bit4    0/0            ★ LIVE -- 8 cells / 68 rows / 58 prod
+16   prog48_auto_pan          bit4    0/0            ★ LIVE -- 1 cells / 6 rows / 29 prod
+17   prog50_vibrato           bit4    0/0            ★ LIVE -- 2 cells / 6 rows / 42 prod
+18   prog52_auto_wah          bit4    0/0            ★ LIVE -- 3 cells / 25 rows / 28 prod
+19   prog15_rock_rotary       bit4    0/0            ★ LIVE -- 4 cells / 30 rows / 54 prod
+20   prog15_rock_rotary       bit4    0/0            ★ LIVE -- 4 cells / 30 rows / 54 prod
+22   prog56_mix_up            bit4    0/0            ★ LIVE -- 7 cells / 44 rows / 55 prod
+24   prog65_s_delay_s_delay   bit4    0/0            ★ LIVE -- 1 cells / 14 rows / 10 prod
+27   prog68_s_delay_phaser    bit4    0/0            ★ LIVE -- 3 cells / 37 rows / 38 prod
+28   prog70_auto_wah_s_delay  bit4    0/0            ★ LIVE -- 1 cells / 12 rows / 40 prod
+32   prog74_peq_vibrato       bit4    0/0            ★ LIVE -- 1 cells / 1 rows / 64 prod
+33   prog75_peq_compressor    NONE    0/0            ★ LIVE -- 1 cells / 9 rows / 44 prod
+34   prog96_peq_compr_dist    NONE    0/0            ★ LIVE -- 2 cells / 11 rows / 76 prod
+35   prog97_peq_compr_overdr  NONE    0/0            ★ LIVE -- 1 cells / 2 rows / 92 prod
+36   prog98_peq_dist_delay    NONE    0/0            ★ LIVE -- 2 cells / 19 rows / 29 prod
+37   prog99_peq_overdr_delay  NONE    0/0            ★ LIVE -- 2 cells / 13 rows / 27 prod
+
+⇒ 16 of 16 came ALIVE at the later offset; 0 remain static.
