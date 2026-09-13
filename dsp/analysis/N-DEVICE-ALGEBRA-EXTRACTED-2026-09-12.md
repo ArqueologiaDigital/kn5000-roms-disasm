@@ -320,6 +320,53 @@ the machine's NOP sharing a key with real arithmetic, because the key ignored `a
 ⚠ Grade: MEASURED. Not a new decode of the chip — a correction to the extractor's grouping, and a
 confirmation that the listing's `nop` and the device's behaviour match.
 
+## 13. ★★★ `f31 = 0` IS A MULTIPLY-CLASS SEMANTIC — from the CORPUS, 213 of 213
+§55 (input-gate note) measured that the output accumulator dies to an `f31 = 0` LOAD in **14 of 14**
+programs that lose it, 13 of them on words fetching no coefficient. That is a statement about the
+*failure*. This is the matching statement about the **bytecode**, which is the source of truth —
+and it was derived without reference to which programs fail
+(`data/f31_by_class_2026-09-13.txt`).
+
+Every `f31 = 0` word in the 41 committed listings, by class, split on whether it fetches a
+coefficient:
+
+| class4 | words in class | `f31=0` **with** coefficient | `f31=0` **without** | no-coef share |
+|---|---|---|---|---|
+| **A** (the multiply class) | 844 | **213** | **1** ⚠ | **0.1 %** |
+| 8 | 44 | 1 | 0 | 0 % |
+| 9 | 6 | 3 | 1 | 17 % |
+| 0 | 112 | 0 | 101 | **90.2 %** |
+| 1 | 337 | 0 | 304 | **90.2 %** |
+| 2 | 1569 | 0 | 592 | 37.7 % |
+| 3 | 31 | 0 | 30 | **96.8 %** |
+| 6 | 54 | 0 | 53 | **98.1 %** |
+
+★ **The single class-A exception is not one.** It is `epilogue w82 = 0C00A47407`, `hi12 = 0xC00` —
+a **C-format** word, which `coeff_fetch()` excludes *by definition* because C-format does not carry
+the normal field layout. ⇒ **in the multiply class it is 213 of 213, with no real counterexample.**
+
+★★★ **THE READING: `f31 = 0` — "load the accumulator from the product" — is a MULTIPLY-CLASS
+semantic.** Where the bytecode uses it, a product is produced in the same instruction, every single
+time. In the non-multiply classes the `f31 = 0` encoding appears constantly (90–98 % of classes 0,
+1, 3 and 6) and **never** with a coefficient, so there is no product for it to load.
+
+⇒ The device applies one uniform rule — `f31 = 0 ⇒ acc ← P` — to both populations. On the multiply
+class that is exactly right and is the biquad's "start a new sum". On the other classes it loads a
+register **nothing in that instruction wrote**, and §55 measured that this is what kills the output
+accumulator in 13 of 14 programs.
+
+⚠ **What this does NOT establish**: what `f31 = 0` *does* mean on a non-multiply word. HOLD is the
+obvious candidate (§138's reading) and it is **not** what this shows — the corpus shows only that
+the LOAD reading is **unsupported** there. The field may be re-used for something else entirely in
+those classes, exactly as `addr8` is a pointer delta in one class and a direction field in another
+(adjudication-round5 §3). ⚠ And §138's *blanket* form has a MEASURED harm at the body entry (§28),
+so this is an argument for decoding the non-multiply case, **not** for flipping that bit.
+
+★ Why this is worth more than the arms: it comes from the **bytecode**, it never looked at which
+programs fail, and it explains §55's 14-of-14 without being fitted to it.
+
+⚠ Grade: MEASURED from the 41 committed listings, 3 057 words.
+
 ## Honest grade
 MEASURED, about the **emulator**. The tables are regenerable with one command (in the tool's
 docstring) from the archived captures. Nothing here is a statement about the µPD6383GF; §1 says so

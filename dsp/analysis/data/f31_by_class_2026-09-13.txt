@@ -1,0 +1,17 @@
+f31 = 0 words by CLASS, split on whether they fetch a coefficient
+class4   words    f31=0 w/ coef  f31=0 no coef  no-coef share of class
+0        112      0              101            90.2%
+1        337      0              304            90.2%
+2        1569     0              592            37.7%
+3        31       0              30             96.8%
+4        55       0              0              0.0%
+5        3        0              2              66.7%
+6        54       0              53             98.1%
+8        44       1              0              0.0%
+9        6        3              1              16.7%
+A        844      213            1              0.1%
+C        1        1              0              0.0%
+D        1        0              0              0.0%
+
+⇒ if f31 meant the SAME thing everywhere, the no-coefficient f31=0 words would be spread
+   across classes in proportion to class size.  Concentration means f31 is CONTEXT-DEPENDENT.
