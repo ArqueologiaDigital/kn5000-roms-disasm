@@ -59,12 +59,12 @@ InputBlock1:
   w27   0012201655   mac     ta,(p)+1 ; mem[p]<-acc, acc=0
   w28   05042001D5   post    (p),(p)+0 ; END OF BLOCK (falls through)
   w29   0C42457820   ?word   0x0C42457820   ; C42.4.57.820  {C-fmt A=34 B=23}  hi12{ESC f31=1 ?10 ?6 res=440}  [C-format opcode 0x621, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=34 B=23]
-  w30   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source]
+  w30   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = C-RAM[cursor] (the COEFFICIENT), MEASURED: the chorus LFO at iw89 reads L = 114 and acc = 114<<16 exactly, and 114 = C-RAM[0x00] = floor(0.5993*2^23/44100), the ROM's own ramp constant; the rival "sample source" is REFUTED from disk (SQUARING-MULTIPLY item B)]
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
   w31   0C0A4B1820   ?word   0x0C0A4B1820   ; C0A.4.B1.820  {C-fmt A=37 B=17}  hi12{ESC f31=5 ?10 res=400}  [C-format opcode 0x605, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=37 B=17]
-  w32   0000AFF207   ?word   0x0000AFF207   ; 000.A.FF.207  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source]
+  w32   0000AFF207   ld.st   ?,c+,(p)-1
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
-  w33   0412A00200   ?word   0x0412A00200   ; 412.A.00.200  hi12{END ST f31=1} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w33   0412A00200   mac.b   ?,c+,(p)+0 ; mem[p]<-acc, acc=0; END OF BLOCK (falls through)
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
   w34   0000AFF407   ld.st   acc,c+,(p)-1
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
@@ -86,7 +86,7 @@ Unit0Setup:
   w43   080106C827   ?word   0x080106C827   ; 801.0.6C.827  hi12{ESC ?0 res=001}  [register write: selector lo12[7:0]=27, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN]
   w44   0801025825   ldptr.d #$25
         ; ldptr.d #$25 -- delay-DESCRIPTOR pointer; unit-0 bodies then start at cell 0x26 [R3]
-  w45   0010A0020C   ?word   0x0010A0020C   ; 010.A.00.20C  hi12{ST} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source; ACT 0x0C = delay READ]
+  w45   0010A0020C   ?word   0x0010A0020C   ; 010.A.00.20C  hi12{ST} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = C-RAM[cursor] (the COEFFICIENT), MEASURED: the chorus LFO at iw89 reads L = 114 and acc = 114<<16 exactly, and 114 = C-RAM[0x00] = floor(0.5993*2^23/44100), the ROM's own ramp constant; the rival "sample source" is REFUTED from disk (SQUARING-MULTIPLY item B); ACT 0x0C = delay READ]
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; lo12 0x20C, unit-0 half of the pair with w53; mode 2 (mem[ptr]) vs w53's register
   w46   080016000B   dly.w  dsc[k],p+96

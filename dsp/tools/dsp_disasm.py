@@ -304,7 +304,10 @@ LO_SRC_ACCB = 0x11
 LO_SRC_DRD  = 0x0B
 LO_SRC_TABLE = 0x13
 LO_SRC_MEM0 = 0x00   # sect. 233: mem[ptr] / delay-RAM read (null-MAC rival refuted)
-LO_SRC_LFO  = 0x08   # the LFO / per-unit modulation source
+LO_SRC_LFO  = 0x08   # ★ = C-RAM[cursor], THE COEFFICIENT.  Name kept for ABI; the old
+                     # "LFO / per-unit modulation source" gloss is CORRECTED 2026-09-13 --
+                     # it is the coefficient port, and it is the LFO's ramp CONSTANT that
+                     # anchored it, not an LFO signal.
 LO_SRC_LFOOUT = 0x1C # control/mod source read into a MAC (was "LFO OUTPUT",
                      # action00-discriminator.md:468) -- REFINED 2026-09-08: 0x1C is
                      # present in 19 programs with NO LFO table (distortion/exciter/pitch/
@@ -367,6 +370,19 @@ _ANCHORED_SRC = _ANCHORED_SRC + (LO_SRC_MEM0,)
 #   ⚠ The 7 words this anchors are EXACTLY that measured blast radius -- kernel `iw25' and the six
 #   `020.2.00.2C7' in prog06_ensemble.  Nothing is admitted here that the gate did not exercise.
 _ANCHORED_SRC = _ANCHORED_SRC + (LO_SRC_DRD,)
+
+#   ★★★★★ 2026-09-13: SRC 0x08 ANCHORED = C-RAM[cursor], the COEFFICIENT.
+#   MEASURED and its rival REFUTED FROM DISK (SQUARING-MULTIPLY_findings.md item B): the chorus
+#   LFO at `iw89' has `L = 114' and `acc = 7 471 104 = 114 << 16' EXACTLY, and
+#   `114 = C-RAM[0x00] = floor(0.5993 * 2^23 / 44100)' -- the constant `lfo_ramp.py' derives from
+#   the ROM.  The rival requires SRC 0x08 to be a SAMPLE source, and a sample there gives no ramp.
+#   ⚠ The old gloss "LFO / per-unit modulation source" is CORRECTED above: it is the coefficient
+#   port.  What anchored it was the LFO's ramp CONSTANT, not an LFO signal -- the name misread its
+#   own evidence.
+#   ★ Null, computed (item D): P(SRC 0x08 | not multiply-gated) = 0.05 %, 1 of 2 096; 81 of its 83
+#   corpus occurrences are class A (97.6 %).  It is essentially DEFINED by the coefficient gate.
+#   ⛔ LEDGER: "do not touch the SRC 0x08 source read (anchored)".
+_ANCHORED_SRC = _ANCHORED_SRC + (LO_SRC_LFO,)
 
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
                                       LO_SRC_MEM0, LO_SRC_LFO, LO_SRC_LFOOUT)
@@ -1153,7 +1169,10 @@ def annotate(w, at=None):
     # upd6383d.cpp; bases at the _ANCHORED_*_SPEC comment above.
     s, a = lo_src(w), lo_act(w)
     sr = ("SRC 0x00 = mem[ptr]/delay-RAM read" if s == LO_SRC_MEM0 else
-          "SRC 0x08 = LFO/per-unit source" if s == LO_SRC_LFO else
+          "SRC 0x08 = C-RAM[cursor] (the COEFFICIENT), MEASURED: the chorus LFO at iw89 "
+          "reads L = 114 and acc = 114<<16 exactly, and 114 = C-RAM[0x00] = "
+          "floor(0.5993*2^23/44100), the ROM's own ramp constant; the rival \"sample source\" "
+          "is REFUTED from disk (SQUARING-MULTIPLY item B)" if s == LO_SRC_LFO else
           "SRC 0x0B = delay-read data register" if s == LO_SRC_DRD else
           "SRC 0x11 = ACCB (2nd accumulator)" if s == LO_SRC_ACCB else
           "SRC 0x13 = coef/wave table port" if s == LO_SRC_TABLE else

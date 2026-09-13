@@ -3744,6 +3744,50 @@ build script's exit code, which is 0 either way.
 ⚠ Grade: the anchoring rests on §224/§225 (shipped, ROM-anchored) plus a corpus measurement that is
 **0 of 215** — an exclusion by construction, not a majority.
 
+## 84. 74.6 % → 74.9 %, and THE REMAINDER AUDITED — what 100 % would actually require
+### ✅ `SRC 0x08` anchored (+8 words), and its NAME was wrong
+`SRC 0x08 = C-RAM[cursor]`, **the coefficient** — MEASURED with the rival **REFUTED FROM DISK**
+(`SQUARING-MULTIPLY_findings.md` item B): the chorus LFO at `iw89` reads `L = 114` with
+`acc = 7 471 104 = 114 << 16` **exactly**, and `114 = C-RAM[0x00] = floor(0.5993 × 2²³/44100)`, the
+constant `lfo_ramp.py` derives from the ROM. The rival needs it to be a **sample** source, and a
+sample there gives no ramp. Null (item D): `P(SRC 0x08 | not multiply-gated) = 0.05 %`, 1 of 2 096;
+81 of 83 occurrences are class A. The LEDGER already said *"do not touch the `SRC 0x08` source read
+(anchored)"*.
+⛔ **And the disassembler's label contradicted the evidence**: it read *"SRC 0x08 = LFO / per-unit
+modulation source"*. It is the **coefficient port** — what anchored it was the LFO's ramp
+**constant**, not an LFO signal. The name had misread its own evidence; corrected in both the
+constant's comment and the rendered annotation.
+
+### THE AUDIT — every remaining item, and why it is open
+I worked each one to its source rather than leaving them as a list.
+
+| item | words | status | what it would take |
+|---|---:|---|---|
+| **store gate + `f31 1`** | 52 | ⛔ **OPEN, forced negative only.** `store-gate.md` item D: over **19 758 816** machines, **17 928** survive, and **not one writes `mem[ptr]`** — but **three** readings survive: `none`, `store → elsewhere`, and ★ `load` (*a READ into the accumulator*). Those differ materially. | evidence separating "no store" from "store elsewhere" from "read into acc" |
+| **`SRC 0x11`** | 50 | ⛔ **OPEN by record**: needs a **device arm** (not passively capturable — dependency cycle + kernel-B constant), and **the HLE does not model the chip's second accumulator**, so the oracle cannot reach it | a device arm, or an HLE that models ACCB |
+| **`f31` 5/4/3/7** | 117 | ⛔ **OPEN** — §63–§69's `hi12` bit-5 page. Actively chosen (minimal pairs), partitioned (17 terminators EVEN / 11 detector heads ODD), but **no reading anchored**; 41 gradeable sites named | an experiment at §64's live sites, now that their input is no longer a rail |
+| **`ACT 0x0B`** | 28 | ⛔ **OPEN, explicitly**: `adjudication-round5.md` — *"ACT 0x0B ⇒ READ is DEGENERATE with `H-ADB6`: every ACT-0x0B delay word carries `addr8 0x20/0x30`. It adds nothing and it is not independent evidence. **0x0B stays OPEN.**"* | evidence independent of `addr8` |
+| **C-format** | 13 | ⛔ operation MEASURED 57/57, **destination register UNKNOWN** (§81) | the destination |
+| `class 1` (non-escape), `ACT 0x08`, `ACT 0x1A`, `SRC 0x1B`, `ACT 0x1D` | ~30 | ⛔ small, each open on its own account | — |
+
+### ⇒ WHERE 100 % STANDS, stated plainly
+| | |
+|---|---:|
+| coverage now | **2 227 / 2 974 = 74.9 %** |
+| undecoded occurrences | 743 |
+| undecoded FAMILIES | 82 |
+
+**Every remaining item has a documented reason for being open, and for four of the five largest the
+project has already written down what it would take.** None of them is a predicate lagging a
+determination — that seam, which produced this session's first ~1 000 words, is **exhausted**.
+⇒ Reaching 100 % from here is **not a bookkeeping exercise**: it requires new measurements —
+a device arm for `SRC 0x11`, a discriminator for the store gate's three survivors, and an
+experiment at the bit-5 sites. Claiming otherwise would mean anchoring codes on majorities or on
+the device's own behaviour, which is the circularity this file has refused four times today.
+
+⚠ Grade: the `SRC 0x08` anchoring is MEASURED with a refuted rival; the audit is READ from each
+item's own adjudication, cited.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
