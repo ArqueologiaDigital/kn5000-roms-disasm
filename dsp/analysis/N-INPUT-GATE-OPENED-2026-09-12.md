@@ -2209,6 +2209,47 @@ this.
 ⚠ Grade: MEASURED (four configurations) + the HLE **as the oracle the project's goal names**, with
 the bytecode's own cascade structure as the tie-break.
 
+## 59. ★★★★★ §58 IS CORROBORATED BY §234 — TWO INDEPENDENT METHODS, SAME ANSWER; AND I IGNORED IT
+§58 concluded **`ACT 0x0E` = selector 7, as shipped**, from the HLE's cascade topology. Re-reading
+`LEDGER.md`'s **TIER 0a** — the blocker section, the first thing the ledger says to read — shows the
+project had already reached the same answer by an entirely different route:
+
+> **§234: "THE PAIR THE DEVICE SHIPS — §133's selector `(1, 7)`, `ACT 0x0D: acc <- bus`,
+> `ACT 0x0E: P <- bus` at the multiply's scale — IS CONFIRMED FROM DISK, `1 of 49`."**
+> *"✔ PARAMETRIC EQ's ENTRY WINDOW decides it … 2 of 49 pairs deliver BOTH channels to the
+> designer's biquad at 0.198 dB and keep them apart; a junk-pre-load control kills the runner-up
+> (44.876 dB)."*
+
+★★ **Two independent confirmations of selector 7:**
+| route | evidence |
+|---|---|
+| **§234** (from DISK, before this session) | the EQ's **entry window** against the designer's biquad — **1 of 49** pairs, with a junk-pre-load control |
+| **§58** (this session, from the ORACLE) | the HLE's `parametric_eq` is a **series cascade** ⇒ only the FIRST band may receive the input; only selector 7 does that |
+
+They use different instruments, different criteria and different sides of the project — and agree.
+That is the strongest form of corroboration available here, and it closes `ACT 0x0E` for the EQ.
+★ It also answers the standing memory note *"`ACT 0x0E` has 3 contradictory committed readings —
+reconcile"*: **§234 + §58 reconcile them in favour of the shipped `P ← bus`.**
+
+### ⛔⛔ AND THE PROCESS FAILURE IS MINE, NOT THE PROJECT'S
+**Every gate run, every catalogue regression and both promotions in this session used
+`UPD6383_SPEC=B9108446A39B440F` — selector 4 — a reading §234 had already ruled out from disk.**
+That value was inherited from a note and carried forward unexamined for the whole session.
+⚠ The project's own standing rule is **`check-the-handover-first`**, and `LEDGER.md`'s **TIER 0a**
+is titled *"READ THIS BEFORE … RE-OPENING `ACT 0x0D`/`0x0E`"*. I re-opened it, repeatedly,
+without reading it.
+⇒ **§56's regression and §58's inversion have ONE root cause**, and it is not a measurement error:
+**a settled result was not consulted before building on its contradiction.**
+
+⇒ ★ **Everything in this session that was measured AT selector 4 must be re-read as measured on a
+REFUTED configuration.** What survives unconditionally: results that do not depend on it — §47
+(the output-stage null), §50 (38 programs live — ⚠ but re-measure at selector 7), §51 (the epilogue
+addresses only `0x00`/`0xFF`), §55 (the `f31 = 0` killer), and the corpus-only work (§13, the
+coverage work list, `f31 = 0` as a multiply-class semantic), which never touched the mask.
+
+⚠ Grade: MEASURED (§58) + FROM DISK (§234, pre-existing). The process failure is stated because it
+explains two of this session's three retractions.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
