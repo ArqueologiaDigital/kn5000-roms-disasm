@@ -129,3 +129,16 @@ criterion that would have refuted it was mis-specified), it halves a 255× rate 
 a proven-by-construction parameter cell from railed-and-overwritten into written-once. That is a
 better lead than the gate has had, and it needs a criterion built on the VOLUME cell rather than on
 the LFO rate.
+
+---
+
+## RE-TEST — P2 was measured on a CUMULATIVE census, like everything else
+
+Registered before the run. §103 built `UPD6383_CENSUS_PERPROG`, and it applies to §228's LFO rise
+census as much as to §176: the `step 114..3 470 859, mean 15 506.97` quoted above was accumulated
+over the **whole type walk**, i.e. over sixteen other programs' LFOs as well as the chorus's. The
+chorus's own step has never been measured.
+
+**P2′ (same prediction, correct instrument):** with `UPD6383_CENSUS_PERPROG=1` and `GATECLR=1`, the
+chorus's cell `07` must read `step 114..114`, `mean 114.000`, `period 73 584 frames = 0.5993 Hz` —
+the ROM's own constant. Control: the same capture with `GATECLR` off must NOT.
