@@ -156,8 +156,19 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
      compete.**
    * the rest: `mem[N−1]` explains **74 %**, but **356 of those matches are trivially zero==zero**
      (518 informative) and the **307-row residue concentrates 232 rows in `hi12 = 000, class 2`**.
-   ⇒ the work is **"separate `SRC 0x00`'s populations, then anchor each"**, and the **`000/cls2`
-   residue (232 rows) is the first sub-question.** The 310-occurrence leverage is unchanged.
+   ⇒ the work is **"separate `SRC 0x00`'s populations, then anchor each"**. The 310-occurrence
+   leverage is unchanged.
+   ✅ **§8 WORKED THE FIRST SUB-QUESTION:** the `000/cls2` residue is a **HELD OPERAND LATCH** —
+   all 232 rows have `L == L[N−1]` and all carry `ACT 0x00`, so `SRC 0x00` sources nothing there;
+   the latch keeps what the previous word left and `ACT 0x00`'s bus term re-uses it. (That is also
+   why they looked like a residue: they were tested against `mem[N−1]`, a value they never load.)
+   Widened to the whole shape with adjacency verified: **held in 347 of 363 (95.6 %)**, **loaded in
+   16**, concentrated at `iw119` and unit-1 `iw213`.
+   ⛔ **`addr8` does NOT discriminate** — `0x01`, `0xBA`, `0xFF` each appear in BOTH columns
+   (`0xBA`: 3 held, 13 loaded). ⇒ **next measurement, bounded: what makes 16 of 363
+   otherwise-identical words LOAD when 347 HOLD?** Not the pointer field; candidates are the
+   **unit**, the **preceding word**, or a field the trace does not print.
+   ⚠ **Nothing anchored — a 95.6 % rule is not a decode, and the 4.4 % is what would make it one.**
    ⚠⚠ **AND A CORRECTION TO CARRY:** §5's *"`mem[N−1]`, 51 of 51"* is true **of family
    `212/2/000`** and says nothing about `SRC 0x00` as a CODE. **Never promote a per-family
    measurement to a per-code anchor** — same error class as §43–§46.
