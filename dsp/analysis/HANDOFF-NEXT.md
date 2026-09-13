@@ -1,3 +1,25 @@
+# ⛔⛔ 2026-09-13 — READ THIS FIRST: A REGRESSION WAS SHIPPED AND REVERTED
+
+**Both of this session's promotions (`UPD6383_CALLFLUSH`, `UPD6383_ST07SIGN`) are BACK TO
+DEFAULT-OFF.** They were validated with `UPD6383_SPEC=B9108446A39B440F` — **`ACT 0x0E` selector
+4** — while the device's own default `m_specmask = 0xb910e446a39b440f` is **selector 7**. The
+shipped combination was never tested, and at it the pair **adds 6 railed cells to the PARAMETRIC
+EQ** (22 cells / 59 rows / **0** railed before the session → 24 / 105 / **6** as shipped). The
+revert is verified to restore the prior default **exactly**. Their selector-4 evidence (§36, §40)
+stands but is **conditional on selector 4**, so reconciling the `ACT 0x0E` selector (§234) is now a
+**prerequisite** for re-promoting them. N-INPUT-GATE-OPENED §56.
+
+★★★ **RULE — belongs beside RULE 12 and RULE 13:**
+> **BEFORE PROMOTING ANYTHING, RE-RUN THE ACCEPTANCE TEST WITH NO ENVIRONMENT SET AT ALL.**
+> The shipped configuration is the only one whose behaviour is a promise to anyone else. An
+> acceptance suite that never runs bare is testing a machine nobody will use.
+
+⚠ This session built a two-sided gate, a ten-program catalogue regression, a pre-registered bound
+and a per-run fingerprint check — **every guard worked, and the input to all of them was wrong.**
+`dsp/tools/lint_handoff.py` prints the header's mask on every run and would have shown it.
+
+---
+
 # ▶ UNPARKED 2026-09-12 — THE AUDIO GATE IS OPEN; READ THIS BANNER FIRST
 
 The park below stands for everything it describes, but the central obstacle it was parked on —
