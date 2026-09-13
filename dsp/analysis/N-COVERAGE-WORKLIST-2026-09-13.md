@@ -242,3 +242,40 @@ much smaller than the question §7 handed it.
 
 ⚠ Grade: MEASURED, 363 rows, adjacency verified. **Nothing anchored** — a 95.6 % rule is not a
 decode, and the 4.4 % is exactly the part that would make it one.
+
+## 9. BOTH NAMED CANDIDATES REFUTED — but the 16 loads are CONCENTRATED, and that is a real constraint
+§8 left one question: what makes 16 of 363 otherwise-identical words LOAD the operand latch when
+347 HOLD it? It named three candidates. Two are now measured
+(`data/hold_vs_load_2026-09-13.txt`):
+
+⛔ **The UNIT does not discriminate.** Unit 0: 40 held / 3 loaded. Unit 1: 307 held / 13 loaded.
+Both units do both.
+
+⛔ **The preceding word's `(class, ACT)` does not FULLY discriminate** — two shapes appear in both
+columns. But it is very far from random:
+
+| preceding word | held | loaded |
+|---|---|---|
+| `cls2 ACT00` | 148 | **0** |
+| `clsA ACT0B` | 144 | **0** |
+| `cls1 ACT0B` | 16 | **0** |
+| `cls6 ACT07` | 16 | **0** |
+| `cls1 ACT00`, `cls1 ACT1C` | 3 | **0** |
+| **`clsA ACT15`** (the MULTIPLY) | 18 | **14** |
+| **`cls1 ACT07`** | 2 | **2** |
+
+★★ **327 of the 347 holds follow a word that NEVER precedes a load.** Every one of the 16 loads
+follows either the **class-A multiply** (`ACT 0x15`, 14 of 16) or a **`cls1 ACT 0x07`** (2 of 16).
+
+⇒ **A NECESSARY CONDITION, measured:** *the latch is only ever reloaded on this shape when the
+**previous word was a multiply or an `ACT 0x07`**.* It is **not sufficient** — those two shapes
+hold 20 times and load 16 — but it eliminates five of the seven preceding contexts outright and
+cuts the open question from 363 rows to the **36** that follow those two shapes.
+
+⇒ The third candidate §8 named — **a field the trace does not print** — is now the live one, and it
+has a natural reading: a multiply's own operand fetch plausibly drives the latch, so whether the
+next word sees a *held* or a *reloaded* latch may depend on **the multiply's pipeline state**, which
+the trace's `L` column shows only after the fact. Testing that needs a **new trace column**, not a
+new arm.
+
+⚠ Grade: MEASURED, 363 rows. Nothing anchored. Two candidates eliminated, the open set cut 10×.

@@ -1,0 +1,18 @@
+CANDIDATE 1 -- the UNIT:
+   unit 0 : held 40   loaded 3
+   unit 1 : held 307  loaded 13
+   ⇒ unit does NOT discriminate (both do both)
+
+CANDIDATE 2 -- the PRECEDING word's (class, ACT):
+   prev cls/ACT   held     loaded  
+   cls2 ACT00      148      0       
+   clsA ACT0B      144      0       
+   clsA ACT15      18       14      
+   cls1 ACT0B      16       0       
+   cls6 ACT07      16       0       
+   cls1 ACT07      2        2       
+   cls1 ACT00      2        0       
+   cls1 ACT1C      1        0       
+
+   prev-word shapes appearing in BOTH columns: clsA/ACT15, cls1/ACT07
+   ⇒ the preceding word's class/ACT does NOT fully discriminate
