@@ -99,13 +99,51 @@ def main():
                    for p, v in prog.items()), reverse=True)
     for r, n, p in dens[:8]:
         print("   %-26s %2d/%-3d = %4.1f%%" % (p, round(r * n), n, 100 * r))
-    #  ⚠ The control that kills the pretty reading: prog00_no_operation passes audio through and
-    #  does no level detection at all, so if it is ABOVE the corpus rate, "bit 5 marks the
-    #  nonlinear / envelope arithmetic" cannot be right.
-    for r, n, p in dens:
-        if p == "prog00_no_operation":
-            print("   ⚠ CONTROL  %-17s %2d/%-3d = %4.1f%%  (a pass-through program)"
-                  % (p, round(r * n), n, 100 * r))
+    #  ⛔⛔ DO NOT re-invent the control I got wrong.  I used `prog00_no_operation' as the control
+    #  that kills the envelope reading -- "a pass-through program cannot be dense in detection".
+    #  `dsp/algorithms/families.md' ("Filter / dynamics") had ALREADY classified it, on independent
+    #  COEFFICIENT evidence (the 2/pi scale constant + the one-pole smoother coefficients), as one
+    #  of the FOUR level-detector programs, and says in as many words: "NO OPERATION is not empty:
+    #  it is a dry pass-through that still runs that level detector".  So its above-rate density
+    #  CONFIRMS the reading it was supposed to refute.  The groups below are that file's, not mine.
+    rate = len(b5) / total
+    GROUPS = {
+        "decoded LEVEL-DETECTOR family (families.md 'Filter / dynamics')":
+            ["prog03_enhancer", "prog52_auto_wah", "prog36_compressor", "prog00_no_operation"],
+        "pure delay/modulation networks (the zero-density set)":
+            ["prog01_chorus", "prog02_modulated_chorus", "prog04_flanger", "prog09_single_delay",
+             "prog10_multi_tap_delay", "prog16_room_reverb_1", "prog50_vibrato", "prog56_mix_up"],
+    }
+    print("   -- against the NULL (uniform at the corpus rate):")
+    for nm, grp in GROUPS.items():
+        grp = [p for p in grp if p in prog]
+        n = sum(len(prog[p]) for p in grp)
+        o = sum(1 for p in grp for _, w in prog[p] if fields(w)["b5"])
+        print("      %-58s words=%4d observed=%3d expected=%5.1f" % (nm, n, o, n * rate))
+        if o == 0:
+            print("      %-58s P(observe 0 | uniform) = %.2e" % ("", (1 - rate) ** n))
+
+    #  ★ SITE-level control for the same reading.  If bit 5 were the control-bus / VCA operation
+    #  (DECODE-by-correlation §8: SRC 0x1C is "the effect's control/modulation bus, always
+    #  multiplied into the signal path"), bit-5 words should sit NEAR SRC 0x1C words.  The null is
+    #  the same statistic over every word that is NOT bit-5.
+    print("   -- SITE-level control: distance to a SRC 0x1C (control-bus) word, vs the null")
+    for win in (1, 2, 3):
+        hit = tot_ = nhit = ntot = 0
+        for p, v in prog.items():
+            near = set()
+            for k, (_, w) in enumerate(v):
+                if fields(w)["src"] == 0x1c:
+                    near.update(range(k - win, k + win + 1))
+            for k, (_, w) in enumerate(v):
+                if fields(w)["b5"]:
+                    tot_ += 1
+                    hit += k in near
+                else:
+                    ntot += 1
+                    nhit += k in near
+        print("      ±%d slots: bit-5 %3d/%3d = %4.1f%%   NULL %4d/%4d = %4.1f%%"
+              % (win, hit, tot_, 100.0 * hit / tot_, nhit, ntot, 100.0 * nhit / ntot))
 
     print("\n-- BIT-5 MINIMAL PAIRS: is bit 5 a MODIFIER on an otherwise identical instruction?")
     B5 = 1 << 29

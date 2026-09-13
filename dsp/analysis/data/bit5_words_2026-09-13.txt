@@ -30,7 +30,14 @@
    prog52_auto_wah             9/72  = 12.5%
    prog35_exciter              8/69  = 11.6%
    prog97_peq_compr_overdr    10/97  = 10.3%
-   ⚠ CONTROL  prog00_no_operation  5/49  = 10.2%  (a pass-through program)
+   -- against the NULL (uniform at the corpus rate):
+      decoded LEVEL-DETECTOR family (families.md 'Filter / dynamics') words= 260 observed= 34 expected= 14.6
+      pure delay/modulation networks (the zero-density set)      words= 586 observed=  0 expected= 33.0
+                                                                 P(observe 0 | uniform) = 1.83e-15
+   -- SITE-level control: distance to a SRC 0x1C (control-bus) word, vs the null
+      ±1 slots: bit-5   4/172 =  2.3%   NULL  134/2885 =  4.6%
+      ±2 slots: bit-5   5/172 =  2.9%   NULL  225/2885 =  7.8%
+      ±3 slots: bit-5   7/172 =  4.1%   NULL  315/2885 = 10.9%
 
 -- BIT-5 MINIMAL PAIRS: is bit 5 a MODIFIER on an otherwise identical instruction?
    EXACT pairs (identical in all 40 bits but bit 5): 2

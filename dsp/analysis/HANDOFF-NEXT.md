@@ -34,10 +34,22 @@ corpus half is done, statically, with **no emulator and no circularity** (`dsp/t
   that hands unit 0's result to `DO1` and has presented `0` in every configuration ever measured.
   ⚠ Its `f31` is `0`, in the decoded low set, so §63's collapse does **not** touch it and §54's
   "the failure is upstream" is unmoved. Recorded only as: that word is not fully decoded either.
-* ⛔ **REFUTED, so nobody re-derives it:** bit-5 density ranks compressor 30 %, auto-pan 16 %,
-  auto-wah 12.5 %, exciter 11.6 % with **all eight zero-density programs being pure delay/modulation
-  networks** — which reads as *"bit 5 = the envelope/non-MAC operation group"*. **`prog00_no_operation`
-  is 10.2 %, above the corpus rate.** A pass-through program cannot be dense in envelope arithmetic.
+* ★★★★ **bit 5 tracks the decoded DYNAMICS families, hugely.** The **8 pure delay/modulation
+  networks carry ZERO bit-5 words in 586 words** where uniformity predicts **33** (`P ≈ 1.8e-15`),
+  and **all four** of `families.md`'s decoded LEVEL-DETECTOR programs are above the corpus rate
+  (compressor 30 %, auto wah 12.5 %, no operation 10.2 %, enhancer 8.1 % — 34 observed vs 14.6
+  expected). The longest program in the corpus is one of the zeroes, killing the length confound.
+* ⛔⛔ **I REFUTED THAT AND THE REFUTATION WAS WRONG — retracted in §66.** I used
+  `prog00_no_operation` as the control ("a pass-through cannot be dense in detection").
+  **`dsp/algorithms/families.md` already classifies it as one of the four level-detector programs**,
+  on independent coefficient evidence, and says *"NO OPERATION is not empty: it is a dry
+  pass-through that still runs that level detector"*. ⇒ ★ **RULE: before using a program as a
+  control, read what the decode already says it does.** (The §59 failure mode, reached by inventing
+  a control rather than by ignoring the ledger.)
+* ⛔ **But the MECHANISM is refuted, with a calibrated null:** if bit 5 were the control-bus / VCA
+  operation (`SRC 0x1C`), bit-5 words would sit near `SRC 0x1C` words. They sit **2–3× FURTHER**
+  than the null (±3 slots: **4.1 %** vs **10.9 %**), and 5 of the 8 zero programs contain `SRC 0x1C`
+  anyway. ⇒ **the association is at PROGRAM level, not SITE level.**
 
 ⚠ Nothing is anchored: this says the codes are chosen and where they are gradeable, **not what they
 mean**. THREE headlines died to their own controls here (terminator, envelope group, and §64's
@@ -45,9 +57,12 @@ blindness killing the EQ site) — that is the instrument working.
 
 ⇒ ★★★ **THE NEXT UNIT OF WORK, named:** the HLE half of §55's instruction is still owed, and it is
 currently **blocked by the oracle itself** — `dsp/hle/effects.py` models 8 effects and **none of the
-envelope-following ones** (no compressor, auto-wah, auto-pan, exciter), which are exactly the
-bit-5-dense programs. ⇒ **extend the HLE to the dynamics family first**; until then the oracle
-cannot speak to the densest bit-5 sites at all.
+four decoded LEVEL-DETECTOR ones** (compressor, auto wah, enhancer, no operation), which are exactly
+where the bit-5 signal is strongest. **The oracle is silent precisely where the evidence is.**
+⇒ **Extend the HLE to the dynamics family first** — `families.md` already gives the algorithm
+(level detector via the 2/π scale constant + one-pole smoother; gain computed **arithmetically**,
+with **no comparator opcode** in the corpus, so THRESHOLD/RATIO enter as coefficients). Per the
+standing goal, any improved HLE goes into the documentation page as well.
 
 ---
 

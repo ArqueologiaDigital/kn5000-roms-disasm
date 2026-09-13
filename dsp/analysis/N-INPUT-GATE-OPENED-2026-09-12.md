@@ -2545,28 +2545,80 @@ itself: **bit 5 selects a second operation group — the non-MAC arithmetic (rec
 / limit) an envelope follower needs**, which would also explain why the corpus spends all five high
 `f31` codes there.
 
-⛔ **It fails its own control.** `prog00_no_operation` — a program that passes audio through and
-detects nothing — is **5 of 49 = 10.2 %, above the corpus rate**. A do-nothing program cannot be
-dense in envelope arithmetic. ⇒ **the envelope reading is refuted**, and the density table is
-recorded as an unexplained association, not as evidence for it.
+⛔ **I wrote here that it fails its own control. THAT REFUTATION IS RETRACTED — see §66.** The
+control was `prog00_no_operation` ("a pass-through program cannot be dense in detection", 10.2 %,
+above the corpus rate). **The premise was false, and this project had already written down why.**
 
-⚠ **This is the third headline in three sections that did not survive** (§63's terminator, §64's
-none, §65's envelope group). That is the instrument working: each was killed by a control chosen
-*because* it could kill it — the 8 zero programs, `prog00`, the coefficient-fetching population.
-The `f31`/bit-5 question is left **open and better fenced** than it was, which is the honest
-outcome, and every fence is a counted number rather than a judgement.
+⚠ Grade: the density table is MEASURED; my refutation of the reading it suggests was WRONG and is
+withdrawn in the next section, which also supplies the null it should have had from the start.
 
-### What the next pass should do with this
-1. The HLE half of §55's instruction is **still owed** — `dsp/hle/effects.py` models 8 effects and
-   **none of the envelope-following ones** (no compressor, auto-wah, auto-pan or exciter), so the
-   oracle cannot currently speak to the densest bit-5 programs at all. ⇒ *That* is the gap to close
-   before bit 5 can be taken to the oracle: the HLE needs the dynamics family.
+## 66. ⛔⛔ §65's REFUTATION IS RETRACTED — my control was invalid, and `families.md` said so already
+§65 killed the *"bit 5 selects the envelope / non-MAC operation group"* reading with one control:
+`prog00_no_operation` is bit-5-dense at **10.2 %**, and a pass-through program detects nothing.
+
+⛔⛔ **`dsp/algorithms/families.md` had already classified that exact program**, under
+**"Filter / dynamics"**, on **independent coefficient evidence** (the 2/π scale constant and the
+one-pole smoother coefficients), together with ENHANCER, AUTO WAH and COMPRESSOR — and says it in
+as many words:
+
+> *"**`NO OPERATION` is not empty**: it is a dry pass-through that still runs that level detector
+> (most plausibly effect-level metering or a de-click ramp)."*
+
+⇒ **My control's premise was false.** `prog00`'s above-rate density is not a refutation of the
+reading; it is a **fourth confirming member of it**. ★ And this is the **§59 failure mode again** —
+a settled, written-down result not consulted before building on its contradiction — reached this
+time not by ignoring the ledger but by **inventing a control instead of looking up whether the
+project had already characterised the program I was using as one.** The rule generalises:
+**before a program is used as a control, read what the decode already says it does.**
+
+### With the null it should have had from the start
+| group (classification is **`families.md`'s**, not mine) | words | bit-5 observed | expected at the 5.63 % corpus rate |
+|---|---:|---:|---:|
+| **decoded LEVEL-DETECTOR family** — enhancer, auto wah, compressor, no operation | 260 | **34** | 14.6 |
+| **pure delay/modulation networks** — chorus, mod. chorus, flanger, single delay, multi tap delay, room reverb 1, vibrato, mix up | 586 | **0** | 33.0 |
+
+★★★★ **All four detector-family programs are above the corpus rate** (compressor 30.0 %, auto wah
+12.5 %, no operation 10.2 %, enhancer 8.1 %), a **2.3× enrichment** — and the eight linear networks
+carry **zero** where uniformity predicts **33**: `P(0 | uniform) ≈ 1.8 × 10⁻¹⁵`. ⚠ And the longest
+program in the corpus, `prog16_room_reverb_1` (133 words), is one of the zeroes, which kills the
+obvious confound that long or complex programs simply accumulate more of everything.
+
+⇒ **The association between `hi12` bit 5 and the decoded dynamics families is real and very
+strong.** It is a **correlation over 40 programs**, and `families.md`'s own grading of the detector
+claim ("survives on the coefficient evidence alone") is inherited by it.
+
+### ⛔ But the obvious MECHANISM is refuted, and by the right control this time
+If bit 5 were the **control-bus operation** — `DECODE-by-correlation` §8 decodes `SRC 0x1C` as
+*"the effect's control/modulation bus, a source register always multiplied into the signal path,
+carrying the LFO in modulation effects and an envelope / AGC level in the dynamics ones"* — then
+bit-5 words should sit **near** `SRC 0x1C` words. Null = the same statistic over every non-bit-5 word:
+
+| window | bit-5 words near a `SRC 0x1C` | **NULL** (all other words) |
+|---|---:|---:|
+| ±1 slot | 2.3 % | 4.6 % |
+| ±2 | 2.9 % | 7.8 % |
+| ±3 | **4.1 %** | **10.9 %** |
+
+⛔ **Refuted, and in the wrong direction**: bit-5 words are **two to three times LESS** likely to be
+near the control bus than an average word. And **5 of the 8 zero-density programs contain `SRC 0x1C`
+anyway**, so "has a control bus" does not predict bit 5 either.
+
+⇒ ★★★ **The association is at PROGRAM level and NOT at SITE level.** Whatever bit 5 marks, it is
+something the dynamics and distortion families need *somewhere in the program* and the linear delay
+networks never need at all — but it is **not** the control-bus multiply, and it is not adjacent to
+it. That is a much sharper statement of the open question than §65 left, and it was bought by
+running the site-level test the program-level table could not justify on its own.
+
+⚠ Grade: MEASURED (static, 3 057 words, 40 listings, two nulls). **Nothing anchored**; one
+refutation of mine retracted, one mechanism refuted with a calibrated null.
+
+### Where this leaves the queue
+1. ⇒ **The HLE cannot yet arbitrate**: `dsp/hle/effects.py` models 8 effects and **none of the four
+   detector-family ones**. The oracle is silent exactly where the signal is strongest, so
+   **extending the HLE to the dynamics family is now the top item** — it is what §55's "and the
+   HLE" half needs, and what would let bit 5 be taken to an oracle at all.
 2. Any in-emulator test of bit 5 must be aimed at §64's **live 41**, never the blind 96.
-3. The two EXACT pairs are the cheapest experiment in the corpus: one instruction, written both
-   ways, `f31 = 0` on both sides.
-
-⚠ Grade: MEASURED (static, 3 057 words, 40 listings). Nothing anchored; one reading refuted by a
-pre-chosen control.
+3. The two EXACT bit-5 pairs (§65) remain the cheapest experiment in the corpus.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
