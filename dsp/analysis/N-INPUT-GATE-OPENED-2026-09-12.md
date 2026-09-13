@@ -1942,6 +1942,39 @@ disjointness itself and that it is universal.
 
 ⚠ Grade: MEASURED, 16 programs, live bodies, identities fingerprinted.
 
+## 52. THE EPILOGUE REBASE IS WORTH RE-TESTING — its withdrawal rests on a premise §50 destroyed
+`upd6383.cpp` carries a withdrawn candidate at the epilogue entry, register **row 23**:
+
+> *"The device already applies `base = 0x05 | unit<<7` AT THE PER-UNIT CALL … the epilogue … is the
+> one place in the frame that runs without a CALL and therefore never receives the rebase, which is
+> exactly the shape of the observed defect."*
+> ⛔ *"WITHDRAWN. Rebasing here moved the stores from ptr `0x00` to ptr `0x05` **and they still read
+> zero**."*
+
+★ **That withdrawal's premise is no longer true.** §50 measured every body live, and §51's census
+shows **cell `0x05` MOVES in all 16 programs** — it is in every single program's moving set. The
+rebase would put the epilogue's pointer on exactly that cell. It was withdrawn because `0x05` read
+zero; `0x05` is now the most reliably non-zero cell in the catalogue.
+
+⚠ This is the **same failure mode** as §43–§46 and as the withdrawal itself: *a hypothesis refuted
+while the bodies were dead is not refuted.* §50 established that for my own work an hour ago; this
+is the project's own older casualty of it.
+
+### Prediction, before the arm is built
+`UPD6383_EPIREBASE=1`: set `m_dp = 0x05 | unit<<7` at epilogue entry (`iw60`), the same value and
+rule the per-unit CALL already applies.
+- the epilogue's cells become `0x05`-based instead of `0x00`/`0xFF` ⇒ **the §51 overlap stops being
+  zero**, which is the first thing to check and is a *structural* check, not an audio one;
+- `§70 ACCA AT w73` should stop being `max 0` on loud frames **if** the output path is otherwise
+  intact — ⚠ and it may well not be, because §51 only shows the pointer is in the wrong place, not
+  that the pointer is the *only* thing wrong;
+- ⚠ **regression bound: the 38-live tally must not fall**, and the two promoted decodes must be
+  unaffected (this changes only the epilogue's pointer, not any body's).
+
+⚠ Grade: the premise-destruction is MEASURED; the prediction is a prediction. It is recorded before
+the build, and it is a **re-test of someone else's withdrawn candidate on new evidence**, not a new
+guess.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
