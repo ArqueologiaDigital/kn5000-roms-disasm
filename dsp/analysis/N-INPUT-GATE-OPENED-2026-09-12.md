@@ -1542,6 +1542,52 @@ mislabelled several rows — I used a blanket one first and it did.
 
 ⚠ Grade: MEASURED, 56 captures, every identity fingerprinted.
 
+## 43. ★★★ THE 16 DECOMPOSE INTO THREE CAUSES — and the largest is the BIT-4 STORE'S TARGET
+§42 named 16 programs with audio arriving and a static body. Reading each one's **first operand
+read** (`data/static16_decomposition_2026-09-13.txt`) splits them into three distinct failures, not
+one:
+
+| group | n | shape |
+|---|---|---|
+| **A** the entry holds the input and the body's first cell is **0** | **6** | mix-up, auto-wah+s.delay, PEQ+COMPR+DIST, PEQ+COMPR+OVERDR, PEQ+DIST+DELAY, PEQ+OVERDR+DELAY |
+| **B** the accumulator is **already 0** at the body's first operand | **7** | exciter, auto-pan, vibrato, s.delay+s.delay, s.delay+phaser, PEQ+compressor, type 12 |
+| **C** the first operand cell is **non-zero** — static for another reason | **3** | auto-wah (760), rotary ×2 (9), PEQ+vibrato (−185 681) |
+
+### ★★ Group A is §41's shape, and it is the promoted rule's blind spot
+`PEQ+COMPR+DIST`, read to the word:
+```
+iw84  cls1 ACT1C SRC02 f31=0   acc = 427 268 152 305      <- the input arrives
+iw85  cls2 ACT00 SRC00 f31=5  a8=+75  dp: 0x05 -> 0x50    acc = 750 711 118 833   NO STORE
+iw86  clsA ACT13 SRC07 f31=0   dp = 0x50, mem = 0         <- the body reads an empty cell
+```
+The entry holds the input **and moves the pointer into the body's block in the same word**, but
+that word carries **`ACT 0x00` and no bit-4 store**, so nothing is written. Compare `VIBRATO`
+(group B), which *does* store — `iw88` carries the **bit-4** store with the input in the
+accumulator — but stores it at `mem[ptr] = 0x10` and then reads `0x50`.
+
+⇒ ★★★ **The unifying statement: §40's promoted rule moves only `ACT 0x07` stores. Every program
+still static either stores through the BIT-4 store (which the rule does not touch) or does not
+store at its entry at all.** The reference program was fixed because its entry store happens to be
+`ACT 0x07`; these are not.
+
+### The hypothesis this makes, written before any run
+**The bit-4 store may take the same sign-dependent target as `ACT 0x07`** — the POST-increment cell
+when `addr8 > 0`, the PRE cell otherwise — exactly mirroring §40.
+⚠ **And this contests a forcing, which is why it needs more than a gate pass.** The bit-4 store's
+"target `mem[ptr]`, before the word's own ALU step" was FORCED against **2 160 enumerated
+accumulator models** — but **on the PARAMETRIC EQ**, whose bit-4 words sit elsewhere and whose
+entry store is `ACT 0x07`. That forcing therefore constrains the *EQ's* bit-4 words, not these.
+Overturning it needs: the four-criteria gate, the ten-program regression **and** a demonstration
+that the EQ itself is unchanged — because if the EQ moves, the forcing is being contradicted
+directly rather than extended.
+
+⚠ Groups **B** and **C** are NOT addressed by that hypothesis and stay open: B's accumulator is
+empty before the read (so the entry never assembles the input at all), and C's cells are non-zero
+(so they are static for a reason not yet looked at).
+
+⚠ Grade: MEASURED decomposition from the 28-program sweep's own captures; the hypothesis is a
+hypothesis.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

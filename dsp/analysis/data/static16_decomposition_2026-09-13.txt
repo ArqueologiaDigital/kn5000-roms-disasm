@@ -1,0 +1,20 @@
+The 16 STATIC-with-audio programs: what does the body's FIRST operand read find?
+TYPE program                  1st iw     cell      value entry stored the input where?
+12   prog35_exciter               92     0x50          0 acc held 0 at entry
+16   prog48_auto_pan              94     0x10          0 acc held 0 at entry
+17   prog50_vibrato               90     0x50          0 acc held 0 at entry
+18   prog52_auto_wah              95     0x11        760 acc held 4861770 at entry
+19   prog15_rock_rotary           85     0x0F          9 acc held 6422435 at entry
+20   prog15_rock_rotary           85     0x0F          9 acc held 6422435 at entry
+22   prog56_mix_up                88     0x07          0 ★ SAME SHAPE: acc had 3831686, the cell it reads is 0
+24   prog65_s_delay_s_delay       90     0x11          0 acc held 0 at entry
+27   prog68_s_delay_phaser        90     0x10          0 acc held 0 at entry
+28   prog70_auto_wah_s_delay      96     0x07          0 ★ SAME SHAPE: acc had 10, the cell it reads is 0
+32   prog74_peq_vibrato           85     0x08    -185681 acc held 6884041 at entry
+33   prog75_peq_compressor        86     0x50          0 acc held 0 at entry
+34   prog96_peq_compr_dist        86     0x50          0 ★ SAME SHAPE: acc had 11454942, the cell it reads is 0
+35   prog97_peq_compr_overdr      86     0x50          0 ★ SAME SHAPE: acc had 3597510, the cell it reads is 0
+36   prog98_peq_dist_delay        86     0x50          0 ★ SAME SHAPE: acc had 6519594, the cell it reads is 0
+37   prog99_peq_overdr_delay      86     0x50          0 ★ SAME SHAPE: acc had 6519594, the cell it reads is 0
+
+6 of 16 show the ENHANCER'S SHAPE: the entry holds the input in the accumulator and the body's first operand cell is ZERO.
