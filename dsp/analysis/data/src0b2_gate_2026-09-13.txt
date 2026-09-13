@@ -1,0 +1,15 @@
+=== `UPD6383_SRC0B2` PROMOTION GATE -- hand-off cell 0x05 AS THIS FRAME LEAVES IT,
+    TRUE DEFAULT.  (NOT the inherited value -- see handoff_out().) ===
+  TYPE        arm OFF        arm ON   verdict
+     0             0        113541   FIXED    ★
+     2       8388607        145244   FIXED    ★
+     3       8388607        -21382   FIXED    ★
+     5             0        -33547   FIXED    ★
+     8      -8388608       -143401   FIXED    ★
+    13      -8388608       -347997   FIXED    ★
+    14      -8388608       -239616   FIXED    ★
+    22      -8388608        270950   FIXED    ★
+
+  FIXED 8 | KEPT 0 | STILL 0 | BROKEN 0 | missing 0
+  ✅ No regressions, and 8 program(s) fixed. The gate this note set is MET;
+     what remains is the judgement that a hand-off is not yet audio.

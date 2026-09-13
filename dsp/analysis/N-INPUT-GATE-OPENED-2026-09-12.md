@@ -3237,6 +3237,74 @@ poisoned*. One re-indexing, and the answer is a ranked list of cells.
 calls `acc_to_datum()` up to five times), so the percentages are a **distribution over clipped
 conversions**, not a store census — read the ranking, not the absolute counts.
 
+## 76. ★★★★★ PROMOTED — the gate is met, 8 FIXED / 0 BROKEN, and verified with NO ENVIRONMENT SET
+§73 named three blockers to promoting `UPD6383_SRC0B2`. All three are now discharged.
+
+### The gate (`dsp/tools/src0b2_regression.py`, `data/src0b2_gate_2026-09-13.txt`)
+8 programs spanning modulation / delay / detector families, **one binary, both arms, the TRUE
+DEVICE DEFAULT**, every identity fingerprinted. Graded on the hand-off cell **as the frame leaves
+it** (not what it inherited — §73's own lesson):
+
+| TYPE | program | arm OFF | arm ON |
+|---|---|---:|---:|
+| 0 | chorus | **0** | 113 541 |
+| 2 | enhancer | **8 388 607** | 145 244 |
+| 3 | flanger | **8 388 607** | −21 382 |
+| 5 | ensemble | **0** | −33 547 |
+| 8 | multi tap delay | **−8 388 608** | −143 401 |
+| 13 | compressor | **−8 388 608** | −347 997 |
+| 14 | **no operation** | **−8 388 608** | −239 616 |
+| 22 | mix up | **−8 388 608** | 270 950 |
+
+**FIXED 8 · KEPT 0 · STILL 0 · BROKEN 0.** ★ Every result lands in the 10⁴–10⁵ band — the same
+order as the input latches feeding them. ★ And TYPE 3 at arm OFF stores `8 388 607`, confirming
+§72's correction that the flanger was never the healthy one.
+
+### ⚠ THE BLAST RADIUS — the test §138 was refused by, applied to my own candidate
+| | |
+|---|---:|
+| corpus | 3 057 words |
+| `SRC 0x0B` words | 106 (3.5 %) |
+| … class 1 (delay) — **untouched in both arms** | 99 |
+| **… non-delay — the arm's ENTIRE blast radius** | **7 words = 0.23 %** |
+| distinct shapes | **2** — kernel `iw25` (`000.2.00.2D9`) and 6 × `020.2.00.2C7` in `prog06_ensemble` |
+
+★★ **Both shapes are exercised by the gate** (the kernel word by all 8 programs, the ensemble's six
+by TYPE 5) — so this is not 7 words of which one was tested. ⚠ Compare §138, refused partly for
+rewriting **35.5 %** of the corpus.
+
+⛔ **AND IT CORRECTS MY OWN PRE-REGISTRATION.** I wrote *"one kernel site passing is not the
+1 610-word population `SRC 0x0B` spans."* **That number was wrong** — 1 610 is the `SRC 0x00`
+population; `SRC 0x0B` spans **106**, and the arm touches **7**. My stated blocker rested on a
+conflation, and measuring it is what dissolved it.
+
+### ✅ THE §56 RULE, APPLIED: re-run with NO environment set at all
+Not via the harness (which passes its own arms) — the emulator invoked directly with **no
+`UPD6383_*` variable except the read-only trace instrument**. The banner confirms what was actually
+in force: `PSHIFT = 0` (total 22, the true default), `C8SHIFT = 0`, `SRC0B2 = 1` (the new default).
+
+| `prog00_no_operation`, same instant | before | after |
+|---|---:|---:|
+| hand-off cell `0x05` | **−8 388 608** ⛔ | **−239 616** ✅ |
+| input latches `0x01`/`0x04` | −286 976 / −166 400 | **unchanged** |
+
+★ And `§74 §S1C` corroborates independently: **cell `0x05` has dropped out of the top-6 clip
+targets entirely.**
+
+### ⚠ WHAT THIS IS NOT
+* **Not "the DSP works now."** The hand-off is a **precondition**, not audio. Whether the bodies
+  compute the right thing is untouched by this.
+* **Not the end of the scale problem.** `§S1C` still reports **cell `0x06` at 56 %** and `0x07` — the
+  *other* per-unit hand-off cell — at **7.2 %**. §75's machine-wide saturation stands; this fixed
+  one path through it.
+* **Not a claim about the chip's audio.** Nobody has heard the real instrument
+  (`kn5000-hardware-inaccessible`). The case rests on the ROM's own structure: an input stage that
+  reads the input latch, versus one that reads a leftover.
+
+⚠ Grade: **PROMOTED.** Pre-registered, 8 of 8 with zero regressions on one binary at the true
+default, blast radius measured before promoting, semantic confirmation, re-verified with no
+environment set. The control `UPD6383_SRC0B2=0` restores the previous reading.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
