@@ -1,0 +1,49 @@
+THE 232-ROW RESIDUE: SRC 0x00, hi12=000, class 2, where L != mem[N-1].  What IS L?
+
+what L equals instead                        rows
+   L[N-1] (held)+tA                          206
+   mem[N-2]+L[N-1] (held)+tA+tB+zero         8
+   L[N-1] (held)+tA+tB+zero                  8
+   mem[N-2]+L[N-1] (held)                    4
+   mem[N-2]+L[N-1] (held)+tA+tB+acc_datum[N-1]+zero 2
+   L[N-1] (held)+tA+tB+acc_datum[N-1]+zero   2
+   mem[N-2]+L[N-1] (held)+tA+zero            1
+   L[N-1] (held)+tA+zero                     1
+
+residue rows: 232 ; by ACT code:
+   ACT 00 : 232
+
+ALL `hi12=000 cls2 SRC00 ACT00` rows -- is the latch HELD uniformly?
+   rows                      : 363
+   L == L[N-1] (latch HELD)  : 347  (95.6%)
+   L == mem[N-1]             : 131  (36.1%)
+   both (coincide)           : 115
+
+⇒ NOT uniform -- the hold rule does not cover this shape.
+
+SAME TEST, restricted to rows TRULY ADJACENT in execution order (same unit, n-1):
+   rows                      : 363   (skipped 0 non-adjacent)
+   L == L[N-1] (latch HELD)  : 347  (95.6%)
+
+   the exceptions:
+   iw     prev iw            L       L[N-1]     mem[N-1]
+   119    118         4858768      7288152      4858768
+   213    212               0         -128            0
+   213    212               0         -128            0
+   213    212               0         -128            0
+   213    212               0         -128            0
+   213    212               0         -128            0
+
+DOES addr8 DISCRIMINATE hold from load on this shape?
+addr8    HELD       LOADED    
+0x00     321        0         
+0x01     16         1         
+0x4B     1          0         
+0xBA     3          13        
+0xF5     1          0         
+0xF6     1          0         
+0xF7     0          1         
+0xFF     4          1         
+
+addr8 values appearing in BOTH columns: 0x01, 0xBA, 0xFF
+⇒ addr8 does NOT discriminate -- the same addr8 does both.

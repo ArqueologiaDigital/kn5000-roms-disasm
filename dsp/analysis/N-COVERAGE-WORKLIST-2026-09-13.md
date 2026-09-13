@@ -208,3 +208,37 @@ The 310-occurrence leverage figure is unchanged; the **work** behind it is one l
 implied.
 
 ⚠ Grade: MEASURED, 1 433 `SRC 0x00` rows over 16 programs. No code anchored.
+
+## 8. THE FIRST SUB-QUESTION WORKED: the `000/cls2` residue is a HELD OPERAND LATCH (95.6 %)
+§7 named the `hi12 = 000, class 2` residue (232 rows) as the first sub-question. Working it
+(`data/residue_000cls2_2026-09-13.txt`):
+
+★ **Every one of the 232 residue rows has `L == L[N−1]`** — the operand latch is **HELD**, not
+reloaded. And **all 232 carry `ACT 0x00`**. So on those words `SRC 0x00` is not sourcing anything:
+the latch simply keeps what the previous word put there, and `ACT 0x00`'s bus term re-uses it.
+That also explains why they looked like a residue at all — they were being tested against
+`mem[N−1]`, a value they never load.
+
+Widening to **every** `hi12 = 000, class 2, SRC 0x00, ACT 0x00` row (not just the residue), with
+adjacency verified in execution order (same unit, consecutive `n` — **0 rows skipped**):
+
+| | rows | share |
+|---|---|---|
+| `L == L[N−1]` (latch **held**) | **347** | **95.6 %** |
+| the 16 exceptions: `L == mem[N−1]` (latch **loaded**) | 16 | 4.4 % |
+
+⇒ the shape is **dominantly a held latch**, with a **16-row exception set that loads instead**,
+concentrated at two instruction addresses (`iw119`, and `iw213` in unit 1).
+
+### ⛔ And the obvious discriminator is refuted
+`addr8` does **not** separate them: values `0x01`, `0xBA` and `0xFF` each appear in **both**
+columns — the same pointer delta both holds and loads. (`0xBA`: 3 held, 13 loaded.) So whatever
+decides it is **not** the pointer field.
+
+⇒ **Well-posed and bounded:** *what makes 16 of 363 otherwise-identical words load the operand
+latch when the other 347 hold it?* Not `addr8`. The candidates left are the **unit**, the
+**preceding word**, and a field the trace does not print. That is the next measurement, and it is
+much smaller than the question §7 handed it.
+
+⚠ Grade: MEASURED, 363 rows, adjacency verified. **Nothing anchored** — a 95.6 % rule is not a
+decode, and the 4.4 % is exactly the part that would make it one.
