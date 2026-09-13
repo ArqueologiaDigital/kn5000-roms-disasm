@@ -334,6 +334,27 @@ LO_ACT_DELAY_ACC = 0x0B  # delay-line access (dark-words F); READ/WRITE class-bo
 #   the HLE's cascade 4 of 4.
 _ANCHORED_ACT = _ANCHORED_ACT + (LO_ACT_BIQ_D, LO_ACT_BIQ_E)
 
+#   ★★★★★ 2026-09-13: SRC 0x00 ANCHORED.  It is the corpus's single largest open axis (648
+#   occurrences; sole reason for refusing 348 of them), and BOTH of its populations already have
+#   evidenced, SHIPPED readings -- the disassembler's predicate was simply lagging the decode.
+#
+#     class A & hi12[9:8] == 1  ->  C-RAM[cursor]  (the COEFFICIENT).  §145/§148, SHIPPED in the
+#       device behind SPEC bit 59, which is SET in the default mask.  Three pre-registered
+#       predictions including a known-answer control.  MEASURED 20 of 20 on the live corpus.
+#     everything else           ->  mem[ptr].       §233: SEVEN candidate readings enumerated and
+#       SIX REFUTED -- the SINGLE DELAY's lag-1001 ROM product accepts `mem' and ONLY `mem'.  That
+#       supersedes the old "1 of 6 enumerated, no independent support" grade.
+#
+#   ⚠ TWO READINGS, ONE CODE -- and that is legitimate here because the split is a function of the
+#   word's OWN FIELDS (class4 and hi12[9:8]), so a disassembler can compute which applies without
+#   any context.  `alu_decoded()' asks "is this word's semantics determined"; it is.
+#   ⚠ It is NOT anchored because a majority matched: §7 measured the naive whole-code test at
+#   1005/1413 and the 232-row residue looked like a third population.  §8-§10 dissolved that -- the
+#   residue was words that never DROVE the operand latch, invisible until the `LW' column existed,
+#   and 57 of 57 undriven rows hold with zero exceptions.  The partition is clean BECAUSE that
+#   sub-question was closed, not in spite of it.
+_ANCHORED_SRC = _ANCHORED_SRC + (LO_SRC_MEM0,)
+
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
                                       LO_SRC_MEM0, LO_SRC_LFO, LO_SRC_LFOOUT)
 _ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL,

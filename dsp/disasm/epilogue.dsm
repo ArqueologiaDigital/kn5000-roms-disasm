@@ -53,7 +53,7 @@ Unit1Vector:
         ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
   w80   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
         ; ordinary body vocabulary (22 exact matches in the 2974-word body corpus)
-  w81   0102200000   ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w81   0102200000   mac.b   ?,(p)+0
         ; ordinary body vocabulary (34 exact matches in the 2974-word body corpus)
 FrameWait:
   w82   0C00A47407   ?word   0x0C00A47407   ; C00.A.47.407  {C-fmt A=82 B=7}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=82 = its own I-RAM address, B=7 = the event; both C00 words in the machine encode their own address (2/2)]

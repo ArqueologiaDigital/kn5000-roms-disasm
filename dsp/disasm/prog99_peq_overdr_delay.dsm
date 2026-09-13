@@ -36,15 +36,15 @@
   w10   00002C1647   ld.st   ta,(p)-63
   w11   002A242407   ?word   0x002A242407   ; 02A.2.42.407  hi12{f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x10); the accumulator-combine f31=5 and/or ACT 0x07 are OPEN]
   w12   0000200415   ld      acc,(p)+0
-  w13   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w13   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w14   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = op0x61[0] (role coeff, INFERRED)
-  w15   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w15   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w16   00922BE700   ?word   0x00922BE700   ; 092.2.BE.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w17   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
-  w18   0182242000   ?word   0x0182242000   ; 182.2.42.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w18   0182242000   mac.b   ?,(p)+66
   w19   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w20   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w21   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
@@ -73,7 +73,7 @@
         ; coeff C-RAM[0x0F] = op0x66[0] (role mix/tap, INFERRED)
   w35   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
   w36   000020040E   ld      acc,(p)+0
-  w37   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w37   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w38   0000201407   ld.st   acc,(p)+1
   w39   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
@@ -85,7 +85,7 @@
   w42   0202A01655   mac     ta,c+,(p)+1
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = filter section cell 2 (role filter, INFERRED)
-  w43   00002FF000   ?word   0x00002FF000   ; 000.2.FF.000  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w43   00002FF000   nop
   w44   0212200419   mac.ta2 acc,(p)+0 ; mem[p]<-acc, acc=0
   w45   088012064B   ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
   w46   00002FF407   ld.st   acc,(p)-1
@@ -121,15 +121,15 @@
   w62   00002B9647   ld.st   ta,(p)-71
   w63   002A24A407   ?word   0x002A24A407   ; 02A.2.4A.407  hi12{f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x10); the accumulator-combine f31=5 and/or ACT 0x07 are OPEN]
   w64   0000200415   ld      acc,(p)+0
-  w65   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w65   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w66   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1A] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x1A] = op0x61[1] (role coeff, INFERRED)
-  w67   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w67   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w68   00922B6700   ?word   0x00922B6700   ; 092.2.B6.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w69   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x1B] (coeff, base 0x00 MEASURED)
-  w70   018224A000   ?word   0x018224A000   ; 182.2.4A.000  hi12{f98=1 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w70   018224A000   mac.b   ?,(p)+74
   w71   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w72   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w73   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
@@ -159,7 +159,7 @@
         ; coeff C-RAM[0x23] = op0x66[2] (role mix/tap, INFERRED)
   w87   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
   w88   000020040E   ld      acc,(p)+0
-  w89   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w89   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w90   0000201407   ld.st   acc,(p)+1
   w91   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x24] (coeff, base 0x00 MEASURED)

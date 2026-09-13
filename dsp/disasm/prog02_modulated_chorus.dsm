@@ -76,22 +76,22 @@
   w49   0102A0A1D5   mac     (p),c+,(p)+10
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0C] = op0x66[1] (role mix/tap, INFERRED)
-  w50   0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w50   0202200000   mac.b   ?,(p)+0
   w51   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = op0x66[2] (role mix/tap, INFERRED)
-  w52   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w52   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w53   00002FF407   ld.st   acc,(p)-1
   w54   0010AF71D5   ld      (p),c+,(p)-9 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
   w55   0202A091D5   mac     (p),c+,(p)+9
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = op0x66[3] (role mix/tap, INFERRED)
-  w56   0202200000   ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w56   0202200000   mac.b   ?,(p)+0
   w57   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = op0x66[4] (role mix/tap, INFERRED)
-  w58   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w58   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w59   0000A01412   ld      acc,c+,(p)+1
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
   w60   0212AF41D5   mac     (p),c+,(p)-12 ; mem[p]<-acc, acc=0

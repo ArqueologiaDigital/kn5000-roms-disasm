@@ -3435,6 +3435,59 @@ count as closed.
 refutation of the caveat that blocked them. The coverage delta is mechanical once the predicate
 changes.
 
+## 79. ★★★★★ COVERAGE 49.2 % → 58.6 %: `SRC 0x00` ANCHORED — the predicate was lagging the decode
+`SRC 0x00` is the corpus's **largest single open axis**: 648 occurrences, and the **sole** reason
+`alu_decoded()` refused **348** of them (`dsp/tools/decode_leverage.py`, now committed — the old
+leverage table had no producer).
+
+### Both populations already had SHIPPED, evidenced readings
+| population | count | reading | evidence |
+|---|---:|---|---|
+| class A **&** `hi12[9:8] == 1` | 41 | **C-RAM[cursor]** — the coefficient | §145/§148, **shipped** behind SPEC bit 59 (**set in the default mask**), three pre-registered predictions incl. a known-answer control, **20 of 20** live |
+| everything else | 607 | **`mem[ptr]`** | **§233: SEVEN readings enumerated, SIX REFUTED** — the SINGLE DELAY's lag-1001 ROM product accepts `mem` and **only** `mem`. Supersedes the old *"1 of 6 enumerated, no independent support"* |
+
+⇒ the decode existed on both sides; only the **disassembler's predicate** had not caught up — the
+same shape of lag as §78's `ACT 0x0D`/`0x0E`.
+
+★ **Two readings for one code is legitimate here** because the split is a function of the word's
+**own fields** (`class4`, `hi12[9:8]`), so a disassembler computes which applies with no context at
+all. `alu_decoded()` asks *"is this word's semantics determined"* — it is.
+
+⚠ **And it is NOT anchored on a majority.** §7's naive whole-code test was 1 005/1 413 with a
+232-row residue that looked like a **third** population. §8–§10 dissolved it: those rows never
+**drove** the operand latch, which was invisible until the `LW` column existed, and **57 of 57**
+undriven rows hold with zero exceptions. **The partition is clean because that sub-question was
+closed, not in spite of it.**
+
+### ★★★★★ THE RESULT
+| | §78 | now |
+|---|---:|---:|
+| executable words | 1 464 / 2 974 | **1 743 / 2 974** |
+| **coverage** | 49.2 % | **★ 58.6 %** |
+| distinct undecoded words | 351 | **287** (−64) |
+| distinct undecoded FAMILIES | 126 | **114** (−12) |
+| frame floor as linked | 42.6 % | **48.1 %** |
+
+**+279 words.** Cumulative from this session's start: **41.5 % → 58.6 %, +509 executable words.**
+Listings regenerated, MAME rebuilt clean, docs regenerated, HLE permanence intact.
+
+### ⚠ AND A CIRCULARITY I REFUSED ON THE WAY
+The next item on the leverage table is **`f31 = 2` off class 8** (161 occurrences). I checked it
+against the live EQ trace, which shows `f31 = 2` on classes 2/3/5/6/8 leaving the accumulator
+unchanged with **large non-zero products** — apparently decisive.
+⛔ **It is not evidence.** The device *implements* `f31 = 2` as HOLD, so the trace is the device
+obeying its own code — the §3 warning in the coverage worklist, exactly. **Not anchored.** The real
+question there is the one `alu_decoded()`'s own comment states: on class 8 the biquad **forces** the
+identity, but elsewhere `f31 = 2` could be a **wrap/limit that simply does not fire on an in-range
+sum** — and §75's finding that **19 % of conversions clip in loud passages** makes that *more* live,
+not less. Deciding it needs the sample-for-sample HLE confrontation (§77's outstanding half), not a
+predicate edit.
+
+⚠ Grade: both anchorings rest on pre-existing MEASURED/FORCED determinations plus a closed
+sub-question; the coverage delta is mechanical once the predicate changes. Nothing new was decided
+about the chip here — what changed is that the disassembler now states what the project had already
+established.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
