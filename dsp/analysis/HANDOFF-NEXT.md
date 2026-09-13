@@ -103,6 +103,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    | ✅ LIVE (audio present **and** the body moves) | **7** |
    | ⛔ **STATIC with audio present** | **16** |
    | ⚠ VOID (no audio at the traced frame) | 5 |
+   ★★ **§43/§44 DECOMPOSE THE 16 AND EXHAUST THE STORE-TARGET FAMILY.** 8 have a **bit-4 store**
+   at their entry (6 of them with `addr8 = +0`, where post and pre are the same cell) and 8 have
+   **no store at all** — none has only an `ACT 0x07` store. ⇒ **a sign-dependent bit-4 rule, the
+   obvious mirror of §40, moves NONE of them**; that hypothesis was killed from the listings
+   before any build, and the 2 160-model forcing of the bit-4 target is consequently **not**
+   contested. Of the "no store" eight, the **PEQ combis read a cell NO WORD IN THEIR PROGRAM
+   WRITES** (2 rows address it, both reads), while the **rotary's IS written twice by bit-4
+   stores** and is static for another reason. The first read is `SRC 0x07`, anchored as `mem[ptr]`,
+   so "the read is wrong" is ruled out.
+   ⇒ ★ **THE NEXT QUESTION IS WHICH WORDS STORE AT ALL, not where stores land.** The PEQ combis'
+   entry word holds the input, moves the pointer `0x05 → 0x50` in the same instruction, and carries
+   neither the bit-4 flag nor `ACT 0x07` — if the store predicate is incomplete, that is where it
+   shows. ⚠ No arm proposed: this session has already killed two hypotheses (§32, §43) that looked
+   at least as good before they were measured.
+
    ⇒ **the 16 are the remaining body-side work, and they are now NAMED** (exciter, auto-pan,
    vibrato, auto-wah, rotary ×2, mix-up, s.delay+s.delay, s.delay+phaser, auto-wah+s.delay and six
    PEQ combis) rather than estimated. ⚠ "STATIC" is **not** "broken by the promoted changes" —

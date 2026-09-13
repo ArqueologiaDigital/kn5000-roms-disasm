@@ -1608,6 +1608,44 @@ empty before the read (so the entry never assembles the input at all), and C's c
 ⚠ Grade: MEASURED decomposition from the 28-program sweep's own captures; the hypothesis is a
 hypothesis.
 
+## 44. THE 8 "NO STORE" PROGRAMS SPLIT AGAIN — and the PEQ combis have NO WRITER AT ALL
+§43 killed the store-target hypothesis and named two remaining shapes: *"some other word is meant
+to write the body's first cell"* or *"the body's first read is not `mem[ptr]`"*. Both are now
+checked.
+
+**Shape 2 is ruled out.** The first read is `SRC 0x07`, and `upd6383d.h` carries that as
+`LO_SRC_MEM = 0x07 // mem[ptr]` with **no speculative marker** — it is anchored. The read is
+reading the right thing.
+
+**Shape 1 splits the eight.** Scanning the WHOLE frame, both units, for any word that stores while
+the pointer is on that cell:
+
+| program | first-read cell | writers anywhere in the frame |
+|---|---|---|
+| `prog96_peq_compr_dist` | `0x50` | **NONE** — 2 rows address it, both reads |
+| `prog99_peq_overdr_delay` | `0x50` | **NONE** — 2 rows address it, both reads |
+| `prog15_rock_rotary` | `0x0F` | **two bit-4 stores**, `iw90` (`a8 = +10`) and `iw126` (`a8 = −66`) |
+
+⇒ ★★ **The PEQ combis read a cell that NO WORD IN THEIR OWN PROGRAM WRITES.** Not a mis-aimed
+store — no store. That is a different kind of gap from everything closed so far, and it admits two
+readings, both testable:
+1. **a word that should store is not decoded as storing** — the entry word `002A24B000` holds the
+   input, moves the pointer `0x05 → 0x50` in the same instruction, and carries neither the bit-4
+   flag nor `ACT 0x07`, so the current decode gives it no store. If the store predicate is
+   incomplete, this is where it shows;
+2. **the cell is meant to be filled from outside the body** — by the kernel, or by the other unit.
+
+⇒ and **the rotary is a separate problem**: its first-read cell **is** written, twice, by bit-4
+stores. It is static for a reason that is not "nothing writes the cell", and it needs its own look.
+
+⚠ **No arm is proposed.** Reading 1 would widen the store predicate, which is exactly the kind of
+change that needs the four-criteria gate and the ten-program regression first — and this session
+has already killed two plausible hypotheses (§32's, §43's) that looked at least as good before they
+were measured. What is MEASURED here is the constraint: **the store-target family is exhausted, and
+the next question is which words store at all.**
+
+⚠ Grade: MEASURED from the 28-program sweep's captures and the anchored source table.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
