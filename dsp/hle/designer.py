@@ -66,3 +66,14 @@ def damping_from_hz(cutoff_hz, fs=FS):
     # standard one-pole: d = 2 - x - sqrt((2-x)^2 - 1)
     t = 2.0 - x
     return t - math.sqrt(max(t * t - 1.0, 0.0))
+
+
+def onepole_a_from_seconds(tau_s, fs=FS):
+    """One-pole smoother coefficient `a' for a time constant in SECONDS -- the inverse of the
+    relation the ROM's own detector constants satisfy: tau = 1/(a*fs).
+
+    MEASURED (SPECULATIVE-APPLIED-REGISTER §147): at ROM 0x84CD the host uploads
+    `009DAD' = 0.004812 -> 4.712 ms and `003F29' = 0.001927 -> 11.764 ms, and COMPRESSOR's
+    coefficient cursor consumes them as its ATTACK and RELEASE.  This is the host-side designer
+    that produces such a coefficient from the UI's `ATTACK SENS.(s)' / `RELEASE SENS.(s)'."""
+    return min(max(1.0 / (float(tau_s) * fs), 0.0), 1.0)

@@ -126,6 +126,73 @@ def main():
     check("EQ boosts 1 kHz band", m[bin_at(1000, n)] > 5.0, "%.1f dB" % m[bin_at(1000, n)])
     check("EQ cuts 3 kHz band", m[bin_at(3000, n)] < -3.0, "%.1f dB" % m[bin_at(3000, n)])
 
+    # ---- the DYNAMICS family (N-INPUT-GATE-OPENED §67; constants read from ROM 0x84CD) ----
+    print("\n-- level detector / dynamics (ROM constants)")
+    from kernels import LevelDetector
+    _D = D
+    check("2/pi constant is the ROM's, to the LSB",
+          LevelDetector.TWO_OVER_PI == 0x517CC1 / float(1 << 23),
+          "0x517CC1 = %.6f" % LevelDetector.TWO_OVER_PI)
+    # Defining property 1: the smoother time constants ARE 4.712 ms and 11.764 ms.
+    for nm, a, want in (("attack", LevelDetector.A_ATTACK, 4.712),
+                        ("release", LevelDetector.A_RELEASE, 11.764)):
+        tau = 1000.0 / (a * FS)
+        check("detector %s tau = %.3f ms" % (nm, want), abs(tau - want) < 0.002,
+              "got %.3f ms" % tau)
+    check("designer inverts it", abs(_D.onepole_a_from_seconds(0.004712)
+                                     - 0x009DAD / float(1 << 23)) < 1e-6)
+    # Defining property 2: the detector is LINEAR in amplitude (it is a rectifier + LPF, so
+    # doubling the input must double the settled envelope).  This is what makes it a LEVEL
+    # detector rather than a waveshaper, and it is the property the compressor depends on.
+    t = np.arange(int(FS)) / FS
+    e1 = FX.level_envelope(np.sin(2 * np.pi * 440 * t) * 0.2)[-1]
+    e2 = FX.level_envelope(np.sin(2 * np.pi * 440 * t) * 0.4)[-1]
+    check("detector linear in amplitude", abs(e2 / e1 - 2.0) < 0.02, "ratio %.4f" % (e2 / e1))
+    # Defining property 3: it is ASYMMETRIC -- attacks faster than it releases, which is what
+    # having two constants is FOR.  Step up then down, and compare the 63 % crossing times.
+    step = np.concatenate([np.zeros(int(0.05 * FS)),
+                           np.ones(int(0.2 * FS)), np.zeros(int(0.2 * FS))]) \
+        * np.sin(2 * np.pi * 1000 * np.arange(int(0.45 * FS)) / FS)
+    env = FX.level_envelope(step)
+    rise = int(0.05 * FS) + np.argmax(env[int(0.05 * FS):int(0.25 * FS)]
+                                      > 0.63 * env[int(0.24 * FS)])
+    fall = int(0.25 * FS) + np.argmax(env[int(0.25 * FS):] < 0.37 * env[int(0.24 * FS)])
+    check("detector attacks faster than it releases",
+          (rise - 0.05 * FS) < (fall - 0.25 * FS),
+          "attack %.1f ms, release %.1f ms" % (1000 * (rise - 0.05 * FS) / FS,
+                                               1000 * (fall - 0.25 * FS) / FS))
+    # COMPRESSOR: its defining property is that it REDUCES dynamic range.
+    quiet, loud = 0.1, 0.9
+    x = np.sin(2 * np.pi * 440 * t) * np.where(t < 0.5, quiet, loud)
+    y = FX.compressor(x, threshold=0.25, ratio=4.0)
+    rms = lambda v: float(np.sqrt(np.mean(v ** 2)))
+    gi = rms(x[int(0.8 * FS):]) / rms(x[int(0.3 * FS):int(0.5 * FS)])
+    go = rms(y[int(0.8 * FS):]) / rms(y[int(0.3 * FS):int(0.5 * FS)])
+    check("compressor reduces dynamic range", go < gi,
+          "in %.1f dB -> out %.1f dB" % (20 * np.log10(gi), 20 * np.log10(go)))
+    check("compressor is transparent below threshold",
+          abs(rms(FX.compressor(np.sin(2 * np.pi * 440 * t) * 0.01, threshold=0.25, ratio=4.0))
+              / rms(np.sin(2 * np.pi * 440 * t) * 0.01) - 1.0) < 0.05)
+    # AUTO WAH: its defining property is that the RESONANCE moves with the input level -- and
+    # moves to the place the model's own envelope predicts.  ⚠ The first version of this check
+    # used the spectral CENTROID and FAILED at a threshold I would then have been tempted to
+    # lower: a 2-pole low-pass leaves so much stopband energy that its centroid barely tracks f0
+    # (1183 -> 1229 Hz for a filter whose corner doubles).  Measuring the PEAK instead makes the
+    # test two-sided -- it must move AND land where predicted -- which is strictly stronger than
+    # the check that was failing, not weaker.
+    def peak_hz(v, fmax=4000.0):
+        m = np.abs(np.fft.rfft(v * np.hanning(v.size)))
+        m = np.convolve(m, np.ones(41) / 41.0, "same")          # kill the noise jitter
+        f = np.arange(m.size) * FS / v.size
+        return float(f[np.argmax(m[:int(fmax * v.size / FS)])])
+    n = np.random.RandomState(7).randn(int(0.5 * FS)) * 0.05
+    for gain in (1.0, 12.0):
+        xin = n * gain
+        pred = 400.0 * (1.0 + 3.0 * float(np.median(FX.level_envelope(xin))))
+        got = peak_hz(FX.auto_wah(xin, manual_hz=400.0, sweep_range=3.0, resonance=4.0))
+        check("auto wah resonance at gain %.0f" % gain, abs(got - pred) / pred < 0.10,
+              "predicted %.0f Hz, measured %.0f Hz" % (pred, got))
+
     print("\n%s" % ("ALL HLE CHECKS PASSED" if PASS else "SOME CHECKS FAILED"))
     return 0 if PASS else 1
 

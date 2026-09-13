@@ -140,3 +140,69 @@ def waveshape(x, drive=1.0, curve="tanh"):
     if curve == "cubic":                            # soft cubic (overdrive-ish)
         return np.clip(x - (x ** 3) / 3.0, -2.0 / 3.0, 2.0 / 3.0) * 1.5
     raise ValueError(curve)
+
+
+class LevelDetector:
+    """The 2/pi LEVEL DETECTOR (§67 / SPECULATIVE-APPLIED-REGISTER §147) -- the fifth kernel,
+    and the one the dynamics family is built on.
+
+    ★ THIS IS NOT A TEXTBOOK ENVELOPE FOLLOWER: every constant below is READ FROM THE ROM.
+    At ROM 0x84CD the host's own upload script holds five consecutive Q0.23 coefficients, and
+    COMPRESSOR's coefficient cursor consumes them in exactly that order:
+
+        517CC1  0.636620  = floor(2/pi * 2^23) EXACTLY -- the mean of |sin|, i.e. the constant
+                            that relates a sine's AMPLITUDE to its RECTIFIED MEAN.  ⚠ The idiom
+                            MULTIPLIES by it (a class-A multiply against C-RAM[0x00]), and
+                            multiplying cannot undo a rectification -- converting a rectified
+                            mean back to an amplitude needs the RECIPROCAL.  So 2/pi here is a
+                            scale factor whose other half lives somewhere this decode has not
+                            found: most likely folded into the THRESHOLD coefficient the host
+                            uploads, which would let a MAC-only machine avoid a divide.  ⚠ WHERE
+                            THE RECIPROCAL LIVES IS OPEN; this kernel reproduces what the
+                            microcode does, not what would make the number read prettily.
+        400000  0.500000
+        009DAD  0.004812  -> one-pole tau = 1/(a*fs) = 4.712 ms   ATTACK
+        003F29  0.001927  -> one-pole tau =           11.764 ms   RELEASE
+        066666  0.050000
+
+    The two time constants are why the chip's parameter list gives COMPRESSOR an `ATTACK SENS.(s)'
+    and a `RELEASE SENS.(s)' (kn5000-dsp-paramlist.md), and the idiom appears TWICE in
+    prog36_compressor -- once per stage, one smoother constant each.
+
+    ⚠ SPECULATIVE, and named as such: that the idiom's HEAD word (hi12 bit 5, f31 in {3,7}) is the
+    RECTIFIER is an INFERENCE -- the detector must rectify, 2/pi is the wrong constant for an RMS
+    detector, and the head is the idiom's only slot not already accounted for by a named
+    coefficient.  11 of the 12 idiom sites are headed by such a word; one is not.  See
+    N-INPUT-GATE-OPENED §67 for the rival readings that survive.
+
+    y[n] = y[n-1] + a * (|x[n]| * 2/pi - y[n-1]),  a = A_ATTACK while rising, A_RELEASE falling.
+    """
+
+    TWO_OVER_PI = 5340353 / float(1 << 23)          # 0x517CC1, the ROM's own truncation
+    A_ATTACK = 0x009DAD / float(1 << 23)            # 0.004812 -> 4.712 ms
+    A_RELEASE = 0x003F29 / float(1 << 23)           # 0.001927 -> 11.764 ms
+
+    def __init__(self, a_attack=None, a_release=None):
+        self.a_att = self.A_ATTACK if a_attack is None else float(a_attack)
+        self.a_rel = self.A_RELEASE if a_release is None else float(a_release)
+        self.y1 = 0.0
+
+    def reset(self):
+        self.y1 = 0.0
+
+    def process_one(self, x):
+        t = abs(x) * self.TWO_OVER_PI
+        a = self.a_att if t > self.y1 else self.a_rel
+        self.y1 += a * (t - self.y1)
+        return self.y1
+
+    def process(self, x):
+        x = np.asarray(x, dtype=np.float64)
+        out = np.empty_like(x)
+        y, aa, ar, k = self.y1, self.a_att, self.a_rel, self.TWO_OVER_PI
+        for n in range(x.size):
+            t = abs(x[n]) * k
+            y += (aa if t > y else ar) * (t - y)
+            out[n] = y
+        self.y1 = y
+        return out

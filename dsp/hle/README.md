@@ -15,9 +15,9 @@ MAME HLE path later, drop-in and A/B-testable — without touching the delicate 
 
 | file | what |
 |---|---|
-| `kernels.py` | the four decoded kernels + waveshaper: Direct-Form-I biquad, one-pole damping, LFO (phase-accum→table), delay line (ring buffer, fractional read), waveshaper LUT |
+| `kernels.py` | the decoded kernels + waveshaper: Direct-Form-I biquad, one-pole damping, LFO (phase-accum→table), delay line (ring buffer, fractional read), waveshaper LUT, and ★ **`LevelDetector`** — the 2/π rectify-and-smooth envelope follower, **every constant read from ROM 0x84CD** |
 | `designer.py` | the **host-side** coefficient designers (Sub-CPU `DSP_PerParameterTranslator`): bilinear peaking biquad (`K=tan(πf₀/fs)`), ms→samples delay (`×44100/1000`), LFO rate (`f/fs`), damping |
-| `effects.py` | per-family wiring: `parametric_eq`, `chorus`, `flanger`, `delay`, `reverb`, `distortion` |
+| `effects.py` | per-family wiring: `parametric_eq`, `chorus`, `flanger`, `delay`, `reverb`, `distortion`, and ★ the **dynamics family** — `level_envelope`, `compressor`, `auto_wah` |
 | `test_hle.py` | self-validation — each block checked by its defining property |
 | `render_demo.py` | render each effect on a test signal to a WAV for listening |
 
@@ -37,6 +37,24 @@ python3 dsp/hle/render_demo.py       # write demo WAVs
   all-pass (the KN5000 reverb primitive, §5).
 - **Distortion**: waveshaper odd + monotonic, and it adds a 3rd harmonic to a pure tone.
 - **Reverb**: audible decaying tail at 0.5 s. **5-band EQ**: boosts/cuts the right bands.
+- ★ **Level detector** (the dynamics family): the 2/π constant is the ROM's `0x517CC1` **to the
+  LSB**; the smoother time constants come out at **4.712 ms** and **11.764 ms**, the two values
+  the host's own upload script at ROM `0x84CD` supplies as COMPRESSOR's ATTACK and RELEASE; the
+  detector is **linear in amplitude** (ratio 2.0000 for a 2× input) and **attacks faster than it
+  releases**. **Compressor**: 19.1 dB in → 8.4 dB out, transparent below threshold.
+  **Auto wah**: the resonance lands within 1.5 % of the frequency the envelope predicts, at two
+  input levels a factor of 12 apart.
+
+## ⚠ What in the dynamics family is DECODED and what is not
+
+The **detector** is decoded — constant for constant, from the ROM, cross-checked against the
+instrument's own parameter list (COMPRESSOR's `ATTACK SENS.(s)` / `RELEASE SENS.(s)` are exactly
+the two smoother constants). The **gain law** is **not**: what the corpus establishes is negative
+and strong — there is **no comparator opcode**, the bodies are branchless, so THRESHOLD and RATIO
+must enter as coefficients — and the linear `g = clip(1 − k·env, 1/ratio, 1)` implemented here is
+the simplest law meeting that constraint, **not a decode**. Rivals not excluded: a reciprocal-style
+AGC, or a gain curve delivered by the same table-lookup idiom the distortion family uses. Likewise
+`auto_wah`'s multiplicative sweep. See `dsp/analysis/N-INPUT-GATE-OPENED-2026-09-12.md` §67.
 
 ## Grade
 

@@ -11,7 +11,7 @@ models of the decoded ALGORITHM (graded), not bit-exact to the chip.
 import math
 import numpy as np
 
-from kernels import BiquadDF1, OnePole, LFO, DelayLine, waveshape
+from kernels import BiquadDF1, OnePole, LFO, DelayLine, LevelDetector, waveshape
 import designer as D
 
 
@@ -151,3 +151,86 @@ def distortion(x, drive=8.0, level=0.4, curve="tanh", tone_hz=None, fs=D.FS):
     if tone_hz is not None:
         y = BiquadDF1(*D.biquad_lowpass(tone_hz, 0.707)).process(y)
     return y
+
+
+# ---------------------------------------------------------------------------
+# The DYNAMICS family.  These were the HLE's blind spot: `families.md' groups
+# ENHANCER, AUTO WAH, COMPRESSOR and NO OPERATION as the programs that carry a
+# LEVEL DETECTOR, and none of them was modelled here -- which meant the oracle
+# was silent exactly where N-INPUT-GATE-OPENED §63-§67's `hi12 bit 5' signal is
+# strongest.  The detector itself (kernels.LevelDetector) is READ FROM THE ROM,
+# constant for constant.  What each effect DOES with it is marked per function.
+# ---------------------------------------------------------------------------
+
+
+def level_envelope(x, attack_s=None, release_s=None, fs=D.FS):
+    """The decoded 2/pi level detector, exposed on its own (§67).
+
+    `attack_s' / `release_s' are the chip's own `ATTACK SENS.(s)' / `RELEASE SENS.(s)' UI
+    parameters; omit them to use the ROM's shipped constants (4.712 ms / 11.764 ms)."""
+    det = LevelDetector(D.onepole_a_from_seconds(attack_s, fs) if attack_s else None,
+                        D.onepole_a_from_seconds(release_s, fs) if release_s else None)
+    return det.process(x)
+
+
+def compressor(x, threshold=0.25, ratio=4.0, attack_s=None, release_s=None,
+               volume=1.0, fs=D.FS):
+    """COMPRESSOR (algo 13; params THRESHOLD, RATIO, ATTACK SENS.(s), RELEASE SENS.(s),
+    VOLUME, REV SEND).
+
+    ★ DECODED, from the ROM: the detector -- rectify, scale by 2/pi, smooth with a one-pole whose
+      coefficient is the ATTACK constant while the level rises and the RELEASE constant while it
+      falls.  `prog36_compressor' runs the idiom TWICE (two stages), consuming one smoother
+      constant each.
+
+    ⚠ SPECULATIVE, and this is the part to challenge: THE GAIN LAW.  What the decode establishes
+      is NEGATIVE and strong -- `DECODE-by-correlation' / `families.md': *"The compressor computes
+      gain ARITHMETICALLY: there is NO COMPARATOR OPCODE in the corpus (the bodies are branchless),
+      so THRESHOLD/RATIO enter as COEFFICIENTS, not as a compare."*  A branchless, divider-free,
+      MAC-only machine cannot evaluate `if env > threshold'.  The simplest law that fits those
+      constraints is a LINEAR gain reduction driven by the envelope and bounded by the chip's own
+      saturating clamp (which the hardware really has -- the bit-4 store clamp and the class-8
+      post-sum word):
+
+          g[n] = clip(1 - k * env[n],  1/ratio,  1),     k = (1 - 1/ratio) / threshold
+
+      so gain is unity in silence and reaches its floor 1/ratio when the envelope reaches the
+      threshold.  ⚠ RIVALS NOT EXCLUDED: a reciprocal-style AGC (`g = 1/(1 + k*env)'), or a gain
+      curve delivered by the same table-lookup idiom the distortion family uses.  Nothing in the
+      corpus has yet been measured to choose between them -- do not read this curve as decoded."""
+    x = np.asarray(x, dtype=np.float64)
+    env = level_envelope(x, attack_s, release_s, fs)
+    k = (1.0 - 1.0 / float(ratio)) / max(float(threshold), 1e-6)
+    g = np.clip(1.0 - k * env, 1.0 / float(ratio), 1.0)
+    return x * g * float(volume)
+
+
+def auto_wah(x, resonance=4.0, manual_hz=400.0, sweep_range=3.0,
+             attack_s=None, release_s=None, volume=1.0, fs=D.FS):
+    """AUTO WAH (algo 18; params RESONANCE, MANUAL, SWEEP RANGE, VOLUME, REV SEND).
+    `families.md': a level detector plus *"a swept resonator"* -- the same detector as the
+    compressor, driving the centre frequency of a resonant low-pass.
+
+        f0[n] = MANUAL * (1 + SWEEP RANGE * env[n])      RESONANCE = the biquad Q
+
+    ⚠ HLE APPROXIMATION, stated so it is not mistaken for a decode: the biquad coefficients are
+    recomputed every `block' samples rather than every sample.  The chip re-derives them
+    continuously; at 32 samples (0.7 ms) the difference is inaudible and the cost is ~1400x lower.
+    ⚠ SPECULATIVE: that the sweep is MULTIPLICATIVE in `f0' (musically the usual choice, and what
+    a MAC computes naturally) rather than additive in some warped coordinate."""
+    x = np.asarray(x, dtype=np.float64)
+    env = level_envelope(x, attack_s, release_s, fs)
+    block = 32
+    y = np.empty_like(x)
+    bq = BiquadDF1(*D.biquad_lowpass(manual_hz, resonance, fs))
+    for i in range(0, x.size, block):
+        f0 = manual_hz * (1.0 + float(sweep_range) * env[i])
+        f0 = min(max(f0, 20.0), 0.45 * fs)
+        b0, b1, b2, a1, a2 = D.biquad_lowpass(f0, resonance, fs)
+        #  ⚠ BiquadDF1 keeps its coefficients in the tuples `b' and `a', NOT as b0/b1/...
+        #  attributes -- assigning the latter silently creates dead fields and the filter never
+        #  moves.  Caught by the "auto wah sweeps up with level" check in test_hle.py, which
+        #  reported identical spectral centroids at a 12x input level.
+        bq.b, bq.a = (b0, b1, b2), (a1, a2)
+        y[i:i + block] = bq.process(x[i:i + block])
+    return y * float(volume)
