@@ -18,10 +18,15 @@
 #     5 ENSEMBLE        6 GATED REVERB       7 SINGLE DELAY  8 MULTI TAP DELAY
 #     15 PARAMETRIC EQ
 #
-#   That is the modulation family, the reverb family, both delay shapes and the biquad -- ten
-#   programs, no index whose identity is in doubt.  ⚠ It is NOT the whole catalogue: the dynamics
-#   (distortion/compressor) and the 14 combis sit above the off-by-one and need the TYPE walk
-#   re-run without deduplication before they can be addressed by index.
+#   That is the modulation family, the reverb family, both delay shapes and the biquad.
+#
+# ★★ 2026-09-13: THE WHOLE CATALOGUE IS NOW ADDRESSABLE.  TYPE_MAP.md was rebuilt per index from
+#   the machine's own uploads, and -- checked with type_fingerprint.py -- **this harness's UP walk
+#   is ACCURATE at high indices**: asking for TYPE 29 loads `prog71_peq_chorus', exactly what the
+#   rebuilt map says, with live audio at the pickup (cell 0x05 = 4 861 770, 59 non-zero products).
+#   ⇒ §193's "fx_ab drops steps at long distances" was itself read against the BROKEN map and does
+#   not survive the rebuild.  Pass TYPES="..." for any indices; every run is now fingerprinted, so
+#   a mis-selection appears in the output instead of silently becoming a result.
 #
 # Each program costs two emulator runs.  Visible window, timeout-wrapped (RULE 12: the note is
 # playing at the traced frame, by fx_ab.lua's own schedule).
@@ -44,8 +49,11 @@ for ti in $TYPES; do
           UPD6383_TRACE_FRAME="$frame" "${EXTRA[@]}" \
           timeout 180 ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log -window \
           -autoboot_script "$HERE/fx_ab.lua" > /dev/null 2>&1
-      cp error.log "$OUT/t${ti}_${tag}.log" )
+      cp error.log "$OUT/t${ti}_${tag}.log"
+      [ "$off" = 0 ] && cp kn5000_dsp1_upload.txt "$OUT/up_t${ti}.txt" 2>/dev/null )
   done
-  echo "  TYPE $ti captured"
+  printf "  TYPE %2d  " "$ti"
+  python3 "$HERE/type_fingerprint.py" "$OUT/up_t${ti}.txt" 2>/dev/null | sed 's/^[^ ]* *//' \
+    || echo "(no upload capture)"
 done
 echo "=== done; compare with: python3 dsp/tools/regression_report.py --base <dir> --cand $OUT ==="
