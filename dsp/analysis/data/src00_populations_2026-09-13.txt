@@ -1,0 +1,49 @@
+SRC 0x00 ACROSS EVERY POPULATION IT APPEARS IN (live corpus, 16 programs)
+Rival readings: (a) mem[N-1] -- the ordinary one-slot memory operand
+                (b) the COEFFICIENT (S145/S148, shipped behind mask bits 57-59)
+
+class / f98      rows    mem[N-1]     coef[N-1]    coef       zero
+cls0 f98=0       176     99           19           22         81
+cls1 f98=0       208     125          0            3          62
+cls1 f98=2       19      19           0            0          19
+cls2 f98=0       469     237          2            2          134
+cls2 f98=1       199     199          2            2          61
+cls2 f98=2       128     128          1            1          24
+cls3 f98=0       16      16           0            0          0
+cls4 f98=0       32      16           0            0          4
+cls5 f98=0       16      16           0            0          0
+cls6 f98=0       16      16           0            0          10
+cls8 f98=0       36      36           3            3          16
+cls9 f98=0       32      32           6            6          32
+clsA f98=0       32      32           0            0          0
+clsA f98=1       20      0            20           3          0
+clsA f98=2       34      34           0            0          4
+
+⇒ mem[N-1] matches 1005 of 1433 SRC 0x00 rows (70.1%) across every class it occurs in.
+
+EXCLUDING §148's OWN POPULATION (clsA f98=1), how well does mem[N-1] explain SRC 0x00?
+   rows                        : 1413
+   L == mem[N-1]               : 1005 (71.1%)
+      ...of which BOTH ZERO    : 414  <- trivial matches, no information
+      ...NON-TRIVIAL matches   : 591
+   L != mem[N-1]  (RESIDUE)    : 408 (28.9%)
+
+   examples of the residue:
+   iw    word                    L     mem[N-1]       coef
+   1     0C0A0E0000        5084004            0    5084004
+   31    0C0A4B1820        5033164      1419539    4194304
+   38    0809000839        2097152      3019897    6039797
+   40    0C4A1C0820        6748291      2097152    5872025
+   42    0801070821        5872025      2097152          0
+   43    080106C827        5872025      2097152          0
+
+EXCLUDING §148's POPULATION **AND** C-FORMAT (which carries an IMMEDIATE, not an operand):
+   rows                        : 1181
+   L == mem[N-1]               : 874 (74.0%)   [356 trivial zero-zero, 518 informative]
+   residue                     : 307 (26.0%)
+
+   the residue, by word shape:
+      hi12=000 cls2          232
+      hi12=801 cls0          48
+      hi12=809 cls0          16
+      hi12=880 cls1          11

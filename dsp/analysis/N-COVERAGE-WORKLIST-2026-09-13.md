@@ -167,3 +167,44 @@ job than decoding from nothing.
 
 ⇒ **The ranked queue for the remaining coverage work is: `SRC 0x00`, `ACT 0x0D`, `ACT 0x0E`,
 `f31 = 2` off class 8, class 1.** Each against the HLE, top down.
+
+## 7. ⛔ THE TOP QUEUE ITEM IS NOT A SIMPLE ANCHOR: `SRC 0x00` HAS AT LEAST THREE POPULATIONS
+§6 put `SRC 0x00` first (310 occurrences unblocked alone). §5 measured it as `mem[N−1]` **51 of
+51** — but that was **one family**. Taking the code across *every* population it appears in, over
+the 16-program live corpus (`data/src00_populations_2026-09-13.txt`), it is **not uniform**:
+
+| population | rows | `L == mem[N−1]` | `L == coef[N−1]` |
+|---|---|---|---|
+| **class A, `f98 = 1`** | 20 | **0** | **20 — 100 %** |
+| every other class | 1 413 | 1 005 (71 %) | 2 |
+
+★ **The `clsA f98 = 1` population is EXACTLY §148's stated population** (*"`SRC 0x00` on `f98 = 1`
+class-A words"*), and there the coefficient reading holds **20 of 20** while the memory reading
+holds **0 of 20**. ⚠ **That is circular** — the device *ships* §148 (mask bit 59 is set in the
+default `SPEC`), so this measures the arm, not the chip. What it does establish is that **§148's
+population restriction is exactly right**: the two rival readings do not compete, they partition.
+
+⛔ **But the majority population does not close either.** Excluding §148's population *and*
+C-format words (which carry an immediate, not an operand):
+
+| | rows |
+|---|---|
+| `L == mem[N−1]` | 874 (74 %) — of which **356 are trivially zero==zero** |
+| **informative** matches | **518** |
+| **residue** | **307 (26 %)**, concentrated: **232 in `hi12 = 000, class 2`** |
+
+⇒ ★★ **`SRC 0x00` cannot be anchored to one source on this evidence.** It has **at least three
+populations**: §148's class-A `f98 = 1` (the coefficient), a large `mem[N−1]` majority, and a
+**232-row `000/cls2` residue** that is neither.
+
+### What that changes about the queue
+⚠ **This corrects an over-read I was one step from making.** *"51 of 51 for family `212/2/000`"*
+is true and says nothing about `SRC 0x00` as a **code** — the family is one narrow slice of it. A
+per-family measurement must not be promoted to a per-code anchor, which is the same error class as
+§43–§46 and §50 in this note's sibling.
+⇒ The top queue item is therefore **not** *"anchor `SRC 0x00`"* but **"separate `SRC 0x00`'s
+populations, then anchor each"** — and the `000/cls2` residue (232 rows) is the first sub-question.
+The 310-occurrence leverage figure is unchanged; the **work** behind it is one level finer than §6
+implied.
+
+⚠ Grade: MEASURED, 1 433 `SRC 0x00` rows over 16 programs. No code anchored.
