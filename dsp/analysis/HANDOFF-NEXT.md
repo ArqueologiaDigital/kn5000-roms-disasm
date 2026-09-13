@@ -126,6 +126,30 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★★★ **THE 41.5 % COVERAGE NUMBER COUNTS *OPEN AXES*, NOT UNKNOWN INSTRUCTIONS.**
+   `alu_decoded()` needs EVERY axis (format, class, bit-11, anchored SRC, anchored ACT, store mode,
+   `f31`), so a word with six settled axes and one open is counted exactly like one nobody
+   understands. Asking the predicate WHY it refuses each of the **1 740** undecoded occurrences:
+   **52 % are refused for exactly ONE reason** (30 % for two, 11 % three, 7 % four-plus).
+   ★★★ **LEVERAGE — what a single code buys ON ITS OWN** (sole reason for refusal):
+   | anchor this | unblocks alone | appears in |
+   |---|---|---|
+   | **`SRC 0x00`** | **310** | 552 |
+   | `ACT 0x0D` | 123 | 200 |
+   | `ACT 0x0E` | 110 | 222 |
+   | `f31 = 2` off class 8 | 72 | 236 |
+   | class 1 admitted | 69 | 322 |
+   | `SRC 0x11`, `SRC 0x1C`, `SRC 0x08`, `ACT 0x0B`, `f31 = 4`, `ACT 0x1A`, `ACT 0x08` | 195 | |
+   ⇒ **twelve single decisions unblock 869 of 1 740 (50 %) by themselves.**
+   ⚠ "Unblock" = *the predicate stops refusing*, **not** *we know what it does* — each anchor is a
+   claim about the chip and needs the **oracle**. ⚠ Several already have committed **speculative**
+   readings behind mask bits (`SRC 0x00` = coefficient, §145/§148; `ACT 0x0D`/`0x0E` the mixing
+   pair), so anchoring means **deciding between those and the measurements**, not decoding from
+   nothing.
+   ⇒ ★ **RANKED QUEUE: `SRC 0x00`, `ACT 0x0D`, `ACT 0x0E`, `f31 = 2` off class 8, class 1** — each
+   against the HLE, top down. §5 already measured `SRC 0x00`'s ROUTING (the ordinary one-slot
+   memory operand, `mem[N−1]`, **51 of 51**); what it still needs is the VALUES from the oracle.
+
    ★★★★ **THE COVERAGE LONG POLE IS A RANKED WORK LIST, NOT A SEARCH** —
    `N-COVERAGE-WORKLIST-2026-09-13.md`. Counting OCCURRENCES (what coverage buys) rather than
    distinct words: **1 740 undecoded occurrences in 133 families**, and **the 18 largest are
