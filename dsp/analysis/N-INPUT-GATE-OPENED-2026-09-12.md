@@ -2922,15 +2922,43 @@ datum**, which is exactly the quantity that decides whether the clamp fires. Poo
 have attributed to the *program family* something that may belong to the *arm*. That is §229's
 trap, one level up.
 
-⇒ **A 2×2 is the discriminator, and it is running**: NO OPERATION (rails at the default) **with**
-the arms, and the flanger (fine with the arms) at the **true default** — each cell holding the
-program and the trace instant fixed and changing only the machine. ⚠ Until it reports, the honest
-statement is: **4 of 4 detector programs rail at the true default**, and whether the other family's
-survival is the family or the arm is **not yet decided**.
+### ★★★★★ THE 2×2 REPORTS: IT IS AN INTERACTION — NEITHER THE FAMILY NOR THE ARM ALONE
+Each cell holds the **program and the trace instant fixed** and changes only the machine
+(`dsp/tools/pshift_2x2.sh`):
 
-⚠ Grade: MEASURED (4 captures at the true default, identities fingerprinted, frame pairs, the
-input-stage audit's own peak, the full cell trajectory). The **cause** is localised to `iw45`'s
-clamp; the **discriminator** between families is explicitly still open.
+| cell `0x05` | **arms ON** (`PSHIFT=2`, total shift **23**) | **TRUE DEFAULT** (`PSHIFT=0`, total **22**) |
+|---|---:|---:|
+| **NO OPERATION** (TYPE 14) | **−185 — ok** | **−8 388 608 — ⛔ RAILED** |
+| **FLANGER** (TYPE 3) | 517 549 — ok | **2 912 280 — ok** |
+
+★ **The internal null holds**: for NO OPERATION, cells `0x01` and `0x04` come out
+**byte-identical** across the arm (−286 976 / −166 400) — the arm moved **only** the cell that
+rails, which is what the mechanism predicts and what a contaminated run would not give.
+
+⇒ **Both one-factor stories are wrong.**
+* ⛔ **Not the program family**: NO OPERATION **un-rails** when the datum scale changes.
+* ⛔ **Not the arm**: the flanger **does not rail** without it.
+* ⇒ ★★★ **The datum scale is NECESSARY but not SUFFICIENT.** At the shipped total shift of 22,
+  programs whose kernel accumulator runs large enough overflow the datum rail at `iw45` — and the
+  four detector programs do while the flanger does not. That is why the earlier 14-program census,
+  taken at total 23, saw only one rail: **the arm was hiding the defect in every program it
+  measured.**
+
+### ⚠⚠ AND THE ARM IS NOT THE FIX — this is the part not to over-read
+Un-railed, NO OPERATION's pickup reads **−185**. The input-stage audit says samples up to
+**2 420 992** entered. **A dry pass-through whose input cell carries −185 is still broken** — it is
+simply broken quietly instead of loudly. Compare the flanger at **517 549 / 2 912 280**, which are
+plausible signal levels.
+⇒ **`PSHIFT=2` removes a SYMPTOM.** It is also §227's *"two-sided control"*, documented as
+contradicting the MEASURED Q1.22 scale, so *"just ship total 23"* is exactly the move this note's
+own rules forbid. ⚠ What the 2×2 buys is **a correctly-posed question**: why does the kernel's
+accumulator arrive at `iw45` 4× larger in the detector programs, and why does the pass-through's
+pickup end up at −185 either way?
+
+⚠ Grade: MEASURED — 2×2, four cells, program and instant held fixed, an internal null that held,
+identities fingerprinted. The **cause** is localised to `iw45`'s clamp and the **discriminator** is
+settled as an interaction. **Nothing is promoted**, and the arm that removes the symptom is
+explicitly NOT proposed as a fix.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
