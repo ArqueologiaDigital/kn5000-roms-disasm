@@ -145,6 +145,41 @@ def main():
         print("      ±%d slots: bit-5 %3d/%3d = %4.1f%%   NULL %4d/%4d = %4.1f%%"
               % (win, hit, tot_, 100.0 * hit / tot_, nhit, ntot, 100.0 * nhit / ntot))
 
+    #  ★ bit 10 with bit 11 clear is ALREADY DECODED as END OF BLOCK (dsp_disasm.py:426, and the
+    #  kernel's own annotations call w6/w11 "END OF BLOCK A/B").  Confirmed here with the null it
+    #  never had: 39 of 40 images end on such a word (the 40th, the epilogue, ends on a C-FORMAT
+    #  word, where bit 10 is part of the 0xC00 format code and means nothing).  Crossing it with
+    #  bit 5 partitions the bit-5 population -- and turns up a hard constraint.
+    end_of = lambda w: bool(fields(w)["hi"] & 0x400) and not (fields(w)["hi"] & 0x800)
+    print("\n-- CROSSED WITH `END OF BLOCK' (hi12 bit 10, bit 11 clear -- an EXISTING decode)")
+    cell = collections.Counter((end_of(w), fields(w)["b5"]) for v in prog.values() for _, w in v)
+    print("               bit5=0  bit5=1")
+    for e in (False, True):
+        print("   END=%-5s %7d %7d" % (e, cell[(e, False)], cell[(e, True)]))
+    exp = (len(b5) * sum(1 for v in prog.values() for _, w in v if end_of(w))) / float(total)
+    print("   bit-5 AND END: observed %d, expected %.1f under independence (%.1fx)"
+          % (cell[(True, True)], exp, cell[(True, True)] / max(exp, 1e-9)))
+    print("   ★ f31 inside each page, split by END  (the null is the bit5=0 row)")
+    for pg in (True, False):
+        for e in (True, False):
+            c = collections.Counter(fields(w)["f31"] for v in prog.values() for _, w in v
+                                    if fields(w)["b5"] == pg and end_of(w) == e)
+            print("      bit5=%d %s : %s" % (pg, "END   " if e else "notEND",
+                                             " ".join("%d:%d" % (k, c.get(k, 0)) for k in range(8))))
+    ev = sum(1 for v in prog.values() for _, w in v
+             if fields(w)["b5"] and end_of(w) and fields(w)["f31"] % 2 == 0)
+    od = sum(1 for v in prog.values() for _, w in v
+             if fields(w)["b5"] and end_of(w) and fields(w)["f31"] % 2)
+    nev = sum(1 for v in prog.values() for _, w in v
+              if fields(w)["b5"] and not end_of(w) and fields(w)["f31"] % 2 == 0)
+    nod = sum(1 for v in prog.values() for _, w in v
+              if fields(w)["b5"] and not end_of(w) and fields(w)["f31"] % 2)
+    p_even = nev / float(nev + nod)
+    print("   ★★ INSIDE THE BIT-5 PAGE, END words take only EVEN f31: %d even / %d odd."
+          % (ev, od))
+    print("      Non-END bit-5 words are %.0f%% even, so P(all %d even by chance) = %.1e"
+          % (100 * p_even, ev, p_even ** ev))
+
     print("\n-- BIT-5 MINIMAL PAIRS: is bit 5 a MODIFIER on an otherwise identical instruction?")
     B5 = 1 << 29
     words = [w for v in prog.values() for _, w in v]
