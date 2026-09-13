@@ -18,9 +18,9 @@ Header:
         ; per-frame entry; sets up pointer registers then CALLs the unit bodies
   w1    0C0A0E0000   ~word   0x0C0A0E0000   ; C0A.0.E0.000  {C-fmt A=7 B=0}  {addr: none -- C-format, SAFE NO-OP}  hi12{ESC f31=5 ?10 res=400}  [K6 input stage, header w1: C-format, imm13 0x0E0 = 7*32 -> I-RAM 7 = block B; SAFE NO-OP (no memory, pointer or cursor effect)]
         ; C-format A=7; I-RAM 7 is the start of the second input block (INFERRED, n=1)
-  w2    0084202680   ~word   0x0084202680   ; 084.2.02.680  {addr: rd mem[p], p+2}  hi12{f31=2 ?7 res=080}  [K6 input stage, header w2: read mem[X+1], p+2 -- X+1 is the one-frame feedback cell the epilogue's w79 wrote]
+  w2    0084202680   post.b  tb,(p)+2
   w3    00122FF1CE   mac     (p),(p)-1 ; mem[p]<-acc, acc=0
-  w4    02042021CE   ~word   0x02042021CE   ; 204.2.02.1CE  {addr: rd mem[p], p+2}  hi12{f98=2 f31=2}  [K6 input stage, header w4: *** THE PORT READ, block A *** mem[X+2] is an AUDIO INPUT LATCH (read-never-written by all 3057 words); p+2]
+  w4    02042021CE   post    (p),(p)+2
   w5    0202A00448   ~word   0x0202A00448   ; 202.A.00.448  {addr: rd mem[p], cur+, p+0}  hi12{f98=2 f31=1} cur+  [K6 input stage, header w5: read mem[X+4], p+0, cursor+1; ALU UNKNOWN]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
   w6    0400A00419   ld.ta2  acc,c+,(p)+0 ; END OF BLOCK (falls through)
@@ -29,7 +29,7 @@ InputBlock1:
   w7    0090A011C8   ~word   0x0090A011C8   ; 090.A.01.1C8  {addr: ST mem[p], cur+, p+1}  hi12{ST ?7 res=080} cur+  [K6 input stage, header w7: ST mem[X+4], p+1, cursor+1 -- X+4 is a one-frame state cell (read at w5/w6, written here)]
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; second of the two input blocks (blocks are 0..6 and 7..11) -- K6
-  w8    00842011C0   ~word   0x00842011C0   ; 084.2.01.1C0  {addr: rd mem[p], p+1}  hi12{f31=2 ?7 res=080}  [K6 input stage, header w8: *** THE PORT READ, block B *** mem[X+5] is an AUDIO INPUT LATCH; p+1]
+  w8    00842011C0   post.b  (p),(p)+1
   w9    00122FF1D5   mac     (p),(p)-1 ; mem[p]<-acc, acc=0
   w10   0282A01417   ~word   0x0282A01417   ; 282.A.01.417  {addr: rd mem[p], cur+, p+1}  hi12{f98=2 f31=1 ?7 res=080} cur+  [K6 input stage, header w10: read mem[X+5] a SECOND time, p+1, cursor+1; ALU UNKNOWN]
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
@@ -57,7 +57,7 @@ InputBlock1:
   w25   00002002D9   ld.ta2  ?,(p)+0
   w26   088012040B   dly.r  dsc[k],p+32
   w27   0012201655   mac     ta,(p)+1 ; mem[p]<-acc, acc=0
-  w28   05042001D5   ?word   0x05042001D5   ; 504.2.00.1D5  hi12{END f98=1 f31=2}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w28   05042001D5   post    (p),(p)+0 ; END OF BLOCK (falls through)
   w29   0C42457820   ?word   0x0C42457820   ; C42.4.57.820  {C-fmt A=34 B=23}  hi12{ESC f31=1 ?10 ?6 res=440}  [C-format opcode 0x621, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=34 B=23]
   w30   009AA00200   ?word   0x009AA00200   ; 09A.A.00.200  hi12{ST f31=5 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x08 = LFO/per-unit source]
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)

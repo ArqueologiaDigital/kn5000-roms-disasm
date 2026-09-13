@@ -35,7 +35,7 @@
   w15   0202A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x03] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x03] = op0x66[0] (role mix/tap, INFERRED)
-  w16   0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w16   0204200000   post.b  ?,(p)+0
   w17   0000201407   ld.st   acc,(p)+1
   w18   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x04] (coeff, base 0x00 MEASURED)
@@ -55,7 +55,7 @@
   w27   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x07] = op0x66[1] (role mix/tap, INFERRED)
-  w28   02042091CD   ?word   0x02042091CD   ; 204.2.09.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w28   02042091CD   post    (p),(p)+9
   w29   000020040E   ld      acc,(p)+0
   w30   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w31   00002F7407   ld.st   acc,(p)-9
@@ -82,7 +82,7 @@
   w46   0202A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x0B] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0B] = op0x66[2] (role mix/tap, INFERRED)
-  w47   0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w47   0204200000   post.b  ?,(p)+0
   w48   0000201407   ld.st   acc,(p)+1
   w49   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)
@@ -102,7 +102,7 @@
   w58   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = op0x66[3] (role mix/tap, INFERRED)
-  w59   02042FB1CD   ?word   0x02042FB1CD   ; 204.2.FB.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w59   02042FB1CD   post    (p),(p)-5
   w60   000020040E   ld      acc,(p)+0
   w61   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w62   0880130000   dly.r  dsc[k],p+48

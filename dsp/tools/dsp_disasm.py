@@ -678,6 +678,14 @@ def is_input_latch_read(w):
 #  5. OPERATION.  hi12[3:1] must be one the biquad determines.  HI_ACC_HOLD is
 #     admitted ONLY on class 8.
 # ---------------------------------------------------------------------------
+def _is_wrapword(w):
+    """§224/§225's LFO WRAP family: the SIX fields together, exactly as the device gates it.
+    bit-4 store + bit 7 + hi12[3:1] == 2 + ACTION 0x00 + SRC 0x08 + class A.  29 words."""
+    hi = hi12(w)
+    return (bool(hi & HI_ST) and bool(hi & HI_B7) and hi_f31(hi) == HI_ACC_HOLD
+            and lo_act(w) == LO_ACT_ACC_BUS and lo_src(w) == 0x08 and class4(w) == 0xA)
+
+
 def alu_decoded(w):
     if c_format(w):
         return False
@@ -712,7 +720,31 @@ def alu_decoded(w):
     if f in (HI_ACC_LOAD, HI_ACC_ADD):
         return True
     if f == HI_ACC_HOLD:
-        return cl == 8
+        #   ★★★★★ 2026-09-13: `f31 == 2' ADMITTED OFF CLASS 8, except on the WRAP-WORD family.
+        #
+        #   This used to be `return cl == 8', for a reason stated right here: the joint solve left
+        #   TWO candidates alive -- a plain no-op and `AND 2^23-1' -- and on class 8 the biquad
+        #   FORCES the sum in range, where both are the identity.  Elsewhere the two could differ,
+        #   so the code was refused.  MEASURED today over 10 live captures: they DO differ
+        #   somewhere -- 9 of 216 executions leave datum range, by up to 1.3x the rail.  So the
+        #   ambiguity is real and "mostly identity" would not have been enough.
+        #
+        #   ⇒ WHAT SETTLES IT IS THAT THE RIVAL HAS ITS OWN PREDICATE, AND THESE WORDS FAIL IT.
+        #   The `AND' reading is NOT hypothetical -- it is shipped (§224/§225, default ON) as the
+        #   LFO WRAP, anchored on the ROM's own ramp constant (+114/frame, 29 LFO blocks in 16
+        #   programs, 9 distinct increments).  Its arithmetic is `acc <- datum(acc) & L', and `L'
+        #   is the SRC 0x08 operand -- MEASURED as C-RAM[0x01] = 0x7FFFFF, the cell the C-RAM
+        #   annotation itself calls "wrap".  The family is identified by SIX fields together:
+        #   bit-4 store + bit 7 + f31 == 2 + ACT 0x00 + SRC 0x08 + class A, and it is 29 words.
+        #
+        #   MEASURED: of the 215 off-class-8 `f31 == 2' words that are NOT in that family,
+        #   **ZERO carry SRC 0x08** (their sources are 0x07 x155, 0x00 x51, 0x1A x5, 0x10/0x11 x2).
+        #   Without that operand there is no modulus, so the `AND' candidate is not merely
+        #   unlikely on them -- it is NOT EXPRESSIBLE.  The one rival that kept this code out has
+        #   been claimed by a different predicate and cannot reach here.
+        #   ⚠ The 29 wrap-words stay refused; they are a DIFFERENT operation, and they are refused
+        #   on `SRC 0x08' as well, which is open on its own account.
+        return cl == 8 or not _is_wrapword(w)
     return False
 
 

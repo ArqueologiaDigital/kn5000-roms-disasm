@@ -51,7 +51,7 @@ Unit1Vector:
         ; the machine's ONLY class-D word (0 of 2974 body words)
   w79   00122FF1CE   mac     (p),(p)-1 ; mem[p]<-acc, acc=0
         ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
-  w80   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w80   01042001CE   post    (p),(p)+0
         ; ordinary body vocabulary (22 exact matches in the 2974-word body corpus)
   w81   0102200000   mac.b   ?,(p)+0
         ; ordinary body vocabulary (34 exact matches in the 2974-word body corpus)

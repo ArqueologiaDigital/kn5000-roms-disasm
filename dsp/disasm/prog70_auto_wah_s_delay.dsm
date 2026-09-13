@@ -21,12 +21,12 @@
   w7    0000200413   ld.ta   acc,(p)+0
   w8    00002481CD   ld      (p),(p)+72
   w9    01122031CE   mac     (p),(p)+3 ; mem[p]<-acc, acc=0
-  w10   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w10   01042001CE   post    (p),(p)+0
   w11   02022FF1D5   mac     (p),(p)-1
   w12   0102AB51D4   mac.tb  (p),c+,(p)-75
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
-  w13   020424C1CD   ?word   0x020424C1CD   ; 204.2.4C.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
-  w14   02042FE687   ?word   0x02042FE687   ; 204.2.FE.687  hi12{f98=2 f31=2}  [P-consumer, stores latch B (INFERRED)]
+  w13   020424C1CD   post    (p),(p)+76
+  w14   02042FE687   post.st tb,(p)-2
   w15   08048161DA   ?word   0x08048161DA   ; 804.8.16.1DA  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w16   00002FF647   ld.st   ta,(p)-1
   w17   0000202687   ld.st   tb,(p)+2
@@ -35,7 +35,7 @@
   w20   0202A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x01] = op0x66[0] (role mix/tap, INFERRED)
-  w21   0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w21   0204200000   post.b  ?,(p)+0
   w22   00002FE407   ld.st   acc,(p)-2
   w23   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
@@ -55,7 +55,7 @@
   w32   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x05] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x05] = op0x66[1] (role mix/tap, INFERRED)
-  w33   02042091CD   ?word   0x02042091CD   ; 204.2.09.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w33   02042091CD   post    (p),(p)+9
   w34   000020040E   ld      acc,(p)+0
   w35   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w36   0020200000   ld.b    ?,(p)+0
@@ -70,7 +70,7 @@
   w42   0026200000   ?word   0x0026200000   ; 026.2.00.000  hi12{f31=3 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w43   0018A001D5   ?word   0x0018A001D5   ; 018.A.00.1D5  hi12{ST f31=4} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=4 / ACT 0x15 may be OPEN]
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
-  w44   0104A001D5   ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=2 / ACT 0x15 may be OPEN]
+  w44   0104A001D5   post    (p),c+,(p)+0
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
   w45   0C402C0000   ?word   0x0C402C0000   ; C40.2.C0.000  {C-fmt A=22 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=22 B=0 (imm13 0x02C0 = 22*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
   w46   0182A00000   mac.b   ?,c+,(p)+0
@@ -102,7 +102,7 @@
   w66   0000AFE455   ?word   0x0000AFE455   ; 000.A.FE.455  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
         ; C-RAM[0x0E] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0E] = op0x24[2] (role coeff, INFERRED)
-  w67   020420A1CD   ?word   0x020420A1CD   ; 204.2.0A.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w67   020420A1CD   post    (p),(p)+10
   w68   00002F91CE   ld      (p),(p)-7
   w69   021220A407   mac.st  acc,(p)+10 ; mem[p]<-acc, acc=0
   w70   0880130000   dly.r  dsc[k],p+48
@@ -112,13 +112,13 @@
   w74   0000200413   ld.ta   acc,(p)+0
   w75   000024C1CD   ld      (p),(p)+76
   w76   01122031CE   mac     (p),(p)+3 ; mem[p]<-acc, acc=0
-  w77   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w77   01042001CE   post    (p),(p)+0
   w78   02022FF1D5   mac     (p),(p)-1
   w79   0102AB11D4   mac.tb  (p),c+,(p)-79
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = op0x24[3] (role coeff, INFERRED)
-  w80   02042501CD   ?word   0x02042501CD   ; 204.2.50.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
-  w81   02042FE687   ?word   0x02042FE687   ; 204.2.FE.687  hi12{f98=2 f31=2}  [P-consumer, stores latch B (INFERRED)]
+  w80   02042501CD   post    (p),(p)+80
+  w81   02042FE687   post.st tb,(p)-2
   w82   08048161DA   ?word   0x08048161DA   ; 804.8.16.1DA  hi12{ESC f31=2} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w83   00002FF647   ld.st   ta,(p)-1
   w84   0000202687   ld.st   tb,(p)+2
@@ -126,7 +126,7 @@
   w86   00002001D5   ld      (p),(p)+0
   w87   0202A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
-  w88   0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w88   0204200000   post.b  ?,(p)+0
   w89   00002FE407   ld.st   acc,(p)-2
   w90   0000A011D5   ld      (p),c+,(p)+1
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
@@ -145,7 +145,7 @@
   w99   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x14] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x14] = filter section cell 1 (role filter, INFERRED)
-  w100  02042FB1CD   ?word   0x02042FB1CD   ; 204.2.FB.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w100  02042FB1CD   post    (p),(p)-5
   w101  000020040E   ld      acc,(p)+0
   w102  0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w103  0880160000   dly.w  dsc[k],p+96

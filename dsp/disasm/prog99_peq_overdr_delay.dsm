@@ -48,7 +48,7 @@
   w19   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w20   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w21   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
-  w22   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w22   01042001CE   post    (p),(p)+0
   w23   0102A001D3   mac.ta  (p),c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
   w24   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
@@ -71,7 +71,7 @@
   w34   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x0F] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0F] = op0x66[0] (role mix/tap, INFERRED)
-  w35   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w35   020420D1CD   post    (p),(p)+13
   w36   000020040E   ld      acc,(p)+0
   w37   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w38   0000201407   ld.st   acc,(p)+1
@@ -93,7 +93,7 @@
   w48   0202AFC415   mac     acc,c+,(p)-4
         ; C-RAM[0x13] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x13] = op0x66[1] (role mix/tap, INFERRED)
-  w49   0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w49   0204200000   post.b  ?,(p)+0
   w50   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w51   0000201407   ld.st   acc,(p)+1
   w52   00122491C0   mac.b   (p),(p)+73 ; mem[p]<-acc, acc=0
@@ -133,7 +133,7 @@
   w71   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w72   00006284CD   ?word   0x00006284CD   ; 000.6.28.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
   w73   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
-  w74   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w74   01042001CE   post    (p),(p)+0
   w75   0102A001D3   mac.ta  (p),c+,(p)+0
         ; C-RAM[0x1C] (coeff, base 0x00 MEASURED)
   w76   0212A01412   mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
@@ -157,7 +157,7 @@
   w86   0202AF3415   mac     acc,c+,(p)-13
         ; C-RAM[0x23] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x23] = op0x66[2] (role mix/tap, INFERRED)
-  w87   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w87   020420D1CD   post    (p),(p)+13
   w88   000020040E   ld      acc,(p)+0
   w89   0212200000   mac.b   ?,(p)+0 ; mem[p]<-acc, acc=0
   w90   0000201407   ld.st   acc,(p)+1
@@ -178,6 +178,6 @@
   w100  0202AEE415   mac     acc,c+,(p)-18
         ; C-RAM[0x27] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x27] = op0x66[3] (role mix/tap, INFERRED)
-  w101  0204200000   ?word   0x0204200000   ; 204.2.00.000  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w101  0204200000   post.b  ?,(p)+0
   w102  0880160000   dly.w  dsc[k],p+96
   w103  042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

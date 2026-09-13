@@ -3683,6 +3683,67 @@ subtracted before it means anything; until then read only the pipeline column.
 anchored** — this moves no coverage. What it buys is the first working numeric channel between the
 HLE's algebra and the LLE, plus a bounded, named next question (bands 0/1).
 
+## 83. ★★★★★ COVERAGE 68.0 % → 74.6 %: `f31 = 2` off class 8, settled by the RIVAL having its own predicate
+§81 measured this code's ambiguity as **observable** (9 of 216 live executions leave datum range,
+up to 1.3× the rail) and refused to anchor it. That refusal was right on the evidence I had. The
+evidence I did not have is that **the rival is not hypothetical — it is shipped, and it has its own
+six-field predicate.**
+
+### The argument
+`alu_decoded()` admitted `f31 = 2` only on class 8, because the joint solve left two candidates —
+a plain no-op and `AND 2^23−1` — and on class 8 the biquad forces the sum in range, where both are
+the identity.
+
+★★ **The `AND` candidate is §224/§225's LFO WRAP, shipped as the device default**, anchored on the
+ROM's own ramp constant (+114/frame, reproduced across **29 LFO blocks in 16 programs with 9
+distinct increments**). Its arithmetic is stated exactly:
+
+> `acc ← (datum(acc) & L) << ACC_SHIFT` — where **`L` is the `SRC 0x08` operand**, MEASURED as
+> `C-RAM[0x01] = 0x7FFFFF`, the cell the C-RAM annotation itself calls *"wrap"*.
+
+and it is gated on **six fields together**: bit-4 store + bit 7 + `f31 == 2` + `ACT 0x00` +
+`SRC 0x08` + class A — **29 words**, none of them class 8.
+
+### ★★★ The measurement that closes it
+| | |
+|---|---:|
+| off-class-8 `f31 = 2` words | 244 |
+| … in the wrap family | 29 |
+| … **outside** it | **215** |
+| **… of those 215, how many carry `SRC 0x08`** | **ZERO** |
+
+their sources are `0x07`×155, `0x00`×51, `0x1A`×5, `0x10`/`0x11`×2.
+
+⇒ ★★★★ **Without the `SRC 0x08` operand there is no modulus, so `AND 2^23−1` is not merely
+unlikely on those 215 words — it is NOT EXPRESSIBLE.** The one rival that kept this code out of the
+anchored set has been claimed by a different predicate and cannot reach them.
+⇒ `f31 = 2` is admitted **except on the wrap family**, which stays refused: those 29 are a
+*different operation*, and they are open on `SRC 0x08` on their own account anyway.
+
+### ★★★★★ THE RESULT
+| | §81 | now |
+|---|---:|---:|
+| executable words | 2 021 / 2 974 | **2 219 / 2 974** |
+| **coverage** | 68.0 % | **★ 74.6 %** |
+| frame floor as linked | — | **69.9 %** |
+| distinct undecoded words | 262 | **203** (−59) |
+| distinct undecoded FAMILIES | 94 | **83** (−11) |
+
+**+198 words.** Cumulative: **41.5 % → 74.6 %, +985 executable words.**
+
+⚠ **What this does NOT say.** It does not say the accumulator is *observed* unchanged at those 215
+words — the live trace showing that is the device obeying its own code, and §81 records why that is
+not evidence. It says the **only enumerated alternative cannot apply to them**, which is an argument
+from the ISA's own field usage plus a ROM-anchored shipped decode. If a *third* candidate is ever
+proposed, this reasoning does not cover it.
+
+⚠ **And a build note**: the first C++ mirror used the wrong identifier (`word` for `w`) and failed
+to compile — caught only because the rule says to grep the log for `error:` rather than trust the
+build script's exit code, which is 0 either way.
+
+⚠ Grade: the anchoring rests on §224/§225 (shipped, ROM-anchored) plus a corpus measurement that is
+**0 of 215** — an exclusion by construction, not a majority.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
