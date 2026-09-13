@@ -3880,6 +3880,52 @@ correlation, not a register identity).
 ⚠ Grade: FORCED, with its premise separately FORCED; the gain is exactly the 16 words the class-A
 population contains.
 
+## 87. ★★★★★ THE REMAINDER AUDITED TO ITS SOURCES — what 100 % requires, item by item
+Eight anchorings took the decode from **41.5 % to 76.4 %** (+1 038 executable words, families
+133 → 80). **Every one of them was the same kind of move**: a determination the project had already
+made and evidenced, which the *predicate* had never been told about. That seam is now exhausted —
+§86 mined the last of it by searching the listings for annotations claiming `FORCED` /
+`PROVEN BY CONSTRUCTION` / `MEASURED` and checking each against `alu_decoded()`.
+
+So the question is no longer *"what else has been decided?"* but ***"what would it take to decide
+the rest?"*** — and I worked each category to its own adjudication rather than restating a list.
+
+| category | words | its own verdict, quoted | what would settle it |
+|---|---:|---|---|
+| **table-lookup idiom** | 152 | device, `c6lut`: ***"⛔ NOT A DECODE: the index's scale … is NOT verified here"*** — and **both arms were run and BOTH FAILED**: *"neither produces a ±240 sweep ⇒ what is missing is the **SCALING step** between the table and the tap, not the route"* | the scaling step; candidates named (index form `(coef × phase) >> 23`, the depth multiply's position) |
+| **store gate (bit 7)** | 149 | `store-gate.md` item D: over **19 758 816** machines **17 928** survive and **not one writes `mem[ptr]`** — but **three** readings do: `none`, `store → elsewhere`, and ★ `load` (*a READ into the accumulator*) | a discriminator among those three; they differ materially |
+| **`f31` high codes** (bit-5 page) | 126 | §63–§69: **actively chosen** (minimal pairs), **partitioned** (17 terminators EVEN / 11 detector heads ODD, `P ≈ 6.5e-11`), **nothing anchored** | an experiment at §64's **41 gradeable sites** — now possible, since §76 un-railed their input |
+| **`SRC 0x11`** (accb) | 71 | recorded as needing a **device arm** — not passively capturable (dependency cycle + kernel-B constant) — and **the HLE does not model the chip's second accumulator**, so the oracle cannot reach it | a device arm, or an HLE that implements ACCB |
+| **C-format immediate** | 68 | *"IMMEDIATE LOAD … **MEASURED 57/57** for this opcode; destination register `lo12` **UNKNOWN**"* | the destination register |
+| **internal register file** | 52 | §99: *"**WHERE THEY GO INSTEAD is the open part**, and the two established readings disagree"*; and the `0x0E`/`0x0F` terminators are ***"EDUCATED GUESS G-5"*** whose own comment concedes *"the MECHANISM by which the target is chosen is unknown"* | the mode-1 store destination; the call/return target mechanism |
+| other | 131 | small populations, each open on its own account | — |
+
+### ⇒ THE CONCLUSION, stated plainly
+**100 % is not reachable from the bytecode and the current instruments.** Every remaining word needs
+evidence that does not exist yet, and in two cases (the table-lookup arms, §138's blanket rule) the
+project has **already run the experiment and had it fail**.
+
+To reach 100 % today I would have to anchor codes on one of:
+* a **majority** — refused at §81 (`f31 = 2` was 207/216 and that was not enough);
+* **the device's own behaviour** — refused at §81 and §83, and it is the circularity this file has
+  now turned down four separate times;
+* an **educated guess** — G-5 is labelled as one by its own author;
+* a reading the project has explicitly marked ***NOT A DECODE***.
+
+Each of those would raise the number and **destroy what the number means**. The coverage figure is
+only worth quoting because everything inside it is evidenced; a 100 % built the other way would be
+a worse artefact than a 76.4 % that is true.
+
+⇒ **The three reachable next steps, in order of size:**
+1. **the bit-5 experiment** (126 words) — the only one whose blocker was removed *today*; §64 names
+   the 41 gradeable sites and `prog52_auto_wah` as the best host;
+2. **the table-lookup scaling step** (152) — two candidates already named by the failed arms;
+3. **an ACCB-aware HLE** (71) — would let the oracle reach `SRC 0x11` for the first time.
+
+⚠ Grade: the coverage figures are MEASURED (`dsp_coverage.py`); every row of the table is READ from
+the cited adjudication, not inferred. **Nothing here is a new decode** — it is the map of what is
+left and what each item costs.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
