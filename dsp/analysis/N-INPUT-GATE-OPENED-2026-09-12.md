@@ -2351,9 +2351,17 @@ railed**"*. Every "audio present" verdict in §42, §50, §60 and §61 was compu
 rule; the only row it changed is this one, because the rail is rare — but the rule was wrong on
 every one of them.
 
-⇒ **This is a SCALE problem, not a body-side decode gap**, which puts it in §227's territory
-(`P_SHIFT`/`ACC_SHIFT`) rather than the input-path work — and the distortion is a dynamics program,
-the family whose gain staging that section never settled.
+⇒ **This is a SCALE problem, not a body-side decode gap.**
+⚠ **BUT MY PLACEMENT OF IT WAS TOO BROAD, and the next measurement says so.** I filed it under
+§227's `P_SHIFT`/`ACC_SHIFT` territory as *"the dynamics family's gain staging"*. Checking the
+pickup cells of all 14 sampled programs at the correct selector
+(`data/railed_pickups_2026-09-13.txt`): **exactly ONE rails — `prog32_distortion` — and 13 do not**,
+with healthy pickups from 517 549 to 5 211 235. ★ Decisively, **`prog96_peq_compr_dist` — which
+contains the same distortion block — does NOT rail** (`0x05 = 5 211 235`).
+⇒ **It is not the dynamics family and it is not distortion-as-a-block. It is `prog32_distortion`
+specifically**, which makes it a question about that program's own code or coefficients rather than
+a systemic scale defect. A one-program rail is a much smaller and better-posed target than a family
+gain-staging review, and it should not be filed against §227 until something ties it there.
 
 ⚠ Grade: MEASURED. Both of §61's exotic readings are retired by a scan it asked for.
 

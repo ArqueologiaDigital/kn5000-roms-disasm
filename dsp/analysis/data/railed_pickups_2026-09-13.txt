@@ -1,0 +1,19 @@
+PICKUP CELLS AT THE CORRECT SELECTOR -- is the distortion's rail family-wide?
+
+TYPE program                           0x01        0x04        0x05  pickup state
+1    prog02_modulated_chorus        -132352       26624          57  ok
+3    prog04_flanger                  -32512      -14848      517549  ok
+4    prog05_phaser                   320000      182272     3922727  ok
+5    prog06_ensemble                 152576      -23296     5117384  ok
+6    prog08_gated_reverb             308736      211456     4953687  ok
+7    prog09_single_delay             109312     -145920           0  ok
+8    prog10_multi_tap_delay         -162304      -99584     4821043  ok
+9    prog32_distortion              -103680      -71424     8388607  ⛔ RAILED at 0x5
+17   prog50_vibrato                 -256256     -314112     3709747  ok
+22   prog56_mix_up                   157952      188160     3650262  ok
+27   prog68_s_delay_phaser            25088      319232     4983174  ok
+33   prog75_peq_compressor            54016      288512     5044915  ok
+34   prog96_peq_compr_dist          -321792     -316160     5211235  ok
+37   prog99_peq_overdr_delay        -472832     -350464     5130535  ok
+
+⇒ 1 of 14 sampled programs have a RAILED pickup cell at the correct selector.

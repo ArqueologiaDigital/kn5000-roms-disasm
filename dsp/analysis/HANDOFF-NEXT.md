@@ -27,9 +27,12 @@ present** at the correct selector where §42 had it LIVE at selector 4. ✅✅ *
 selector 7 (it is 0 at selector 4). A railed cell is **constant frame to frame**, so a body fed from
 one cannot move — the frame-pair test says STATIC and is right. ⇒ **`ACT 0x0E` = selector 7 is NOT
 contradicted**: §58/§59 are about where the EQ's input is ROUTED, this is about the distortion's
-input being SATURATED. ⇒ it is a **SCALE problem (§227's `P_SHIFT`/`ACC_SHIFT` territory), not a
-body-side decode gap** — and the distortion is a dynamics program, the family whose gain staging
-§227 never settled.
+input being SATURATED. ⇒ it is a **SCALE problem, not a body-side decode gap**. ⚠ **My first placement of it was too
+broad:** checking all 14 sampled pickups at the correct selector, **exactly ONE rails — the
+distortion — and 13 are healthy** (517 549 … 5 211 235), and **`prog96_peq_compr_dist`, which
+contains the same distortion block, does NOT rail.** ⇒ **not the dynamics family, not
+distortion-as-a-block — `prog32_distortion` specifically**, i.e. that program's own code or
+coefficients. **Do not file it against §227** until something ties it there.
 ⚠⚠ **AND IT EXPOSES A LENIENT CHECK I USED ALL SESSION:** the audio precondition was *"any of
 `0x01`/`0x04`/`0x05` > 1 000"*, and the distortion **passed** it on `0x01` while `0x05` sat at the
 rail. ⇒ **a RAILED pickup must FAIL the audio test** — RULE 13 one level up, *a constant is not a
