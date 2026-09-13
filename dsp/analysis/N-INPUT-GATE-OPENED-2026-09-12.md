@@ -1835,6 +1835,35 @@ must leave those 7 untouched — a constraint the store-target attempts never ha
 
 ⚠ Grade: MEASURED over all 38 programs' captures, identities fingerprinted.
 
+## 49. ★★ THE 5 VOID PROGRAMS RESOLVE **LIVE** — the tally is 22 live / 16 static / 0 void
+§42's five VOID rows were an instrument limit, not a property of those programs: `fx_ab.lua`'s
+trace was armed at note-on **+1.0 s** and their captures contained no audio. Re-traced at
+**+2.5 s** (`NOTEOFS`, new), every one of the five is **LIVE**
+(`data/void_resolved_2026-09-13.txt`):
+
+| TYPE | program | at +1.0 | at +2.5 |
+|---|---|---|---|
+| 23 | `prog64_s_delay_chorus` | no audio | ✅ 6 cells / 39 rows / 61 products |
+| 25 | `prog66_s_delay_flanger` | no audio | ✅ 4 cells / 25 rows / 32 products |
+| 29 | `prog71_peq_chorus` | no audio | ✅ 14 cells / 62 rows / 64 products |
+| 30 | `prog72_peq_s_delay` | no audio | ✅ 5 cells / 19 rows / 45 products |
+| 31 | `prog73_peq_flanger` | no audio | ✅ 7 cells / 44 rows / 64 products |
+
+⇒ ★★ **THE PER-PROGRAM TALLY IS NOW 22 LIVE / 16 STATIC / 0 VOID** of 38 — the first time the
+catalogue has been measured with no unreadable rows. **22 of 38 programs run their bodies on live
+audio under the promoted defaults.**
+
+★ And it is a second confirmation of the promoted decodes on programs they were never tuned
+against: four of these five are PEQ combis and delay combis, none of them in the ten-program
+regression set, all live.
+
+⚠ **The instrument lesson, again and cheaply:** the drift grows with `TYPEIDX` because the
+harness's scheduler fires each step on the first frame at or after its deadline, so the real
+note-on runs later than the sum of the programmed delays. `NOTEOFS` exists now; **the standing
+rule stays — check an input cell is non-zero in the capture before reading anything downstream.**
+
+⚠ Grade: MEASURED, 10 captures, identities fingerprinted.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
