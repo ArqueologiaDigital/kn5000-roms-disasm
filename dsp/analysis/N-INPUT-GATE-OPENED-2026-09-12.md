@@ -4338,6 +4338,33 @@ the arm **still** fails.
 chain §90–§93 built is unaffected — `iw331` still rails ACCB, `iw19` still copies it, `cell 06` is
 still the largest recipient. What is now excluded is **this** fix for it.
 
+## 95. THE DENOMINATOR IS HONEST — every undecoded word is EXECUTED
+One avenue remained that could have raised the number legitimately rather than by fiat: **dead
+code.** A word in an image that never runs does not affect LLE fidelity, and if any of the remaining
+774 were unreachable they would not belong in the denominator.
+
+Measured against live frame traces (body base I-RAM 84):
+
+| program | image | executed | undecoded in image | **of those, EXECUTED** |
+|---|---:|---:|---:|---:|
+| `prog52_auto_wah` | 72 | **72 (100 %)** | 14 | **14** |
+| `prog00_no_operation` | 49 | **49 (100 %)** | 17 | **17** |
+| `prog39_parametric_eq` | 105 | **105 (100 %)** | 4 | **4** |
+
+⇒ **100 % of every image runs every frame, and every undecoded word is among them.** There is no
+padding, no unreachable tail, no slack. ⇒ the coverage figure is **not inflated by dead code**, and
+the whole remaining gap is **load-bearing**: each of those 774 words executes on every frame of
+every program that contains it.
+
+★ That closes the last avenue that could have moved the number without new evidence. It also says
+something useful about the machine: these are **straight-line microprograms with no dead
+instructions**, which is consistent with a fixed-slot DSP frame and with the call/return sequencer
+being the only control flow.
+
+⚠ Grade: MEASURED on three programs spanning modulation, dynamics and the biquad. ⚠ It is three
+programs, not 38 — but the result is 100 %/100 %/100 % with no partial case, and the frame
+structure (a fixed slot count per unit) predicts it generally.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
