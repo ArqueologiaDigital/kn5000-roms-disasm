@@ -55,14 +55,28 @@ corpus half is done, statically, with **no emulator and no circularity** (`dsp/t
 mean**. THREE headlines died to their own controls here (terminator, envelope group, and §64's
 blindness killing the EQ site) — that is the instrument working.
 
+* ★★★★★ **AND THE SITE-LEVEL MECHANISM IS FOUND (§67)** — by looking up a constant, not by running
+  anything. `0x517CC1` = `floor(2/π × 2²³)` exactly, **2/π being the mean of a RECTIFIED sine**;
+  `programs.tsv` calls it *"2/pi env"* in the ROM's own role table. Its byte-identical idiom occurs
+  **12 times in 8 images** — every one a detector program — and **11 of the 12 are HEADED BY A BIT-5
+  WORD**, `f31 = 3` (×8) or `7` (×3), never a low code. ⇒ **the bit-5 word is part of the level
+  detector itself**, which also *explains* the anti-correlation above: the idiom **produces** the
+  envelope, `SRC 0x1C` **carries** it elsewhere, so they must not be adjacent.
+  ⛔ Falsifier kept: `prog08_gated_reverb` `w80` is headed by a bit-5-CLEAR word — 11/12, not 12/12.
+  ⚠ INFERRED, not anchored: the detector must rectify, and the head is the idiom's only unaccounted
+  slot ⇒ **bit 5 + `f31 ∈ {3,7}` is plausibly the RECTIFIER**. Rivals alive: rectification in the
+  source encoding, or upstream of the idiom. And it is a **6 % foothold** — 11 of 172; `auto_pan`
+  and `exciter` are bit-5-dense with **no 2/π idiom at all**.
+
 ⇒ ★★★ **THE NEXT UNIT OF WORK, named:** the HLE half of §55's instruction is still owed, and it is
 currently **blocked by the oracle itself** — `dsp/hle/effects.py` models 8 effects and **none of the
 four decoded LEVEL-DETECTOR ones** (compressor, auto wah, enhancer, no operation), which are exactly
 where the bit-5 signal is strongest. **The oracle is silent precisely where the evidence is.**
-⇒ **Extend the HLE to the dynamics family first** — `families.md` already gives the algorithm
-(level detector via the 2/π scale constant + one-pole smoother; gain computed **arithmetically**,
-with **no comparator opcode** in the corpus, so THRESHOLD/RATIO enter as coefficients). Per the
-standing goal, any improved HLE goes into the documentation page as well.
+⇒ **Extend the HLE to the dynamics family first**, and §67 now supplies the arithmetic **from the
+ROM**: `env[n] = onepole((2/π)·|x[n]|, τ)` with `τ ∈ {4.712 ms, 11.764 ms}` and a `0.5`
+coefficient; gain computed **arithmetically**, with **no comparator opcode** in the corpus, so
+THRESHOLD/RATIO enter as coefficients. Per the standing goal, any improved HLE goes into the
+documentation page as well.
 
 ---
 

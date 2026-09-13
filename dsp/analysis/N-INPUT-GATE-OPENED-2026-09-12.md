@@ -2620,6 +2620,71 @@ refutation of mine retracted, one mechanism refuted with a calibrated null.
 2. Any in-emulator test of bit 5 must be aimed at §64's **live 41**, never the blind 96.
 3. The two EXACT bit-5 pairs (§65) remain the cheapest experiment in the corpus.
 
+## 67. ★★★★★ THE SITE-LEVEL MECHANISM §66 SAID WAS MISSING — and it was already written down
+§66 left a sharp gap: bit 5 tracks the dynamics families at **program** level
+(`P ≈ 1.8 × 10⁻¹⁵`) but is **anti-correlated** with the control bus at **site** level, so *what*
+those programs use it for was open. `SPECULATIVE-APPLIED-REGISTER.md` §3 already had it, and I found
+it by looking up the constant rather than by running anything new.
+
+`0x517CC1` = **`floor(2/π × 2²³)` exactly**, and **2/π is the mean of a RECTIFIED sine** — it is
+`programs.tsv`'s *"2/pi env"* level detector, **named in the ROM's own role table**. It sits in a
+byte-identical idiom, and measuring the corpus for it (`dsp/tools/detector_idiom.py`,
+`data/detector_idiom_2026-09-13.txt`):
+
+```
+   <HEAD>                 hi12 = 026 or 02E — class 2, BIT 5 SET, f31 = 3 or 7
+   018.A.00.1D5           C-RAM 0x517CC1 = 2/π
+   104.A.00.1D5           C-RAM 0x400000 = 0.5, pointer FROZEN
+   C40.2.C0.000           C-format immediate
+   182.A.00.000           one-pole smoothers, 4.712 ms and 11.764 ms
+```
+
+| | |
+|---|---|
+| idiom sites | **12**, in 8 of 40 images |
+| ★ head word carries **`hi12` bit 5** | **11 of 12** |
+| its `f31` | **3** (×8) and **7** (×3) — *never* a low code |
+
+and the images are exactly the detector set: `prog00_no_operation`, `prog36_compressor` ×2,
+`prog52_auto_wah`, `prog70_auto_wah_s_delay`, `prog75_peq_compressor` ×2, `prog96_peq_compr_dist` ×2,
+`prog97_peq_compr_overdr` ×2, `prog08_gated_reverb`.
+
+⇒ ★★★★ **§66's program-level association HAS a site-level mechanism: the bit-5 word is part of the
+level detector itself.** And it explains §66's refutation rather than contradicting it — the idiom
+**produces** the envelope; `SRC 0x1C` **carries** it to the consumers elsewhere in the program, so
+the two must *not* be adjacent. The anti-correlation was evidence for this reading, read backwards.
+
+⛔ **The one exception, stated because it is the falsifier:** `prog08_gated_reverb` `w80` is headed
+by `000020868B` — **bit 5 clear, `f31 = 0`**. So the head is not *required* to be a bit-5 word, and
+any "bit 5 ⇒ detector head" rule is already 11/12, not 12/12.
+
+### ★ The inference this invites, and its exact strength
+The detector must **rectify** — 2/π is the mean of `|sin|`, and it is the wrong constant for an RMS
+detector (that would be `1/√2`). Of the idiom's five slots, four are accounted for by named
+quantities (2/π, 0.5, an immediate, the smoother). The unaccounted one is **the head**.
+⇒ **`hi12` bit 5 with `f31 ∈ {3, 7}` is plausibly the RECTIFIER — an absolute value, which is
+exactly the "non-MAC operation" §65 proposed and §66 restored.**
+
+⚠ **Grade: this is an INFERENCE, not a measurement, and it is not promoted.** Rivals that survive
+it: the rectification could live in the **source encoding**, or happen **upstream** of the idiom
+entirely; and `f31 = 3` vs `f31 = 7` differ by `f31[2]`, which §227/§27 tried to read as an
+accumulator select and had **refuted** (the accumulator is selected by the UNIT). What *is*
+measured is the co-occurrence, 11 of 12.
+
+⚠ And the foothold is small: **11 of 172** bit-5 words are idiom heads — **6 %**. The other 94 %
+remain unexplained, and `prog48_auto_pan` (16 %) and `prog35_exciter` (11.6 %) are bit-5-dense with
+**no 2/π idiom at all**.
+
+### ⇒ What this unblocks, concretely
+This is the first **decoded semantic** attached to a bit-5 word, and it arrives with its own
+arithmetic: `env[n] = onepole((2/π)·|x[n]|, τ)`, `τ ∈ {4.712 ms, 11.764 ms}`, plus a `0.5`
+coefficient — enough to write the **level detector the HLE does not have**, from the bytecode
+rather than from a textbook. That is §66's top queue item, now with its constants supplied by the
+ROM.
+
+⚠ Grade: MEASURED (12 sites, 40 listings) for the co-occurrence; the rectifier reading is INFERRED
+and explicitly not anchored.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -1,0 +1,17 @@
+=== 2/pi LEVEL-DETECTOR IDIOM: 12 sites in 8 of 40 images ===
+  ★ the word BEFORE the idiom has hi12 bit 5 : 11 of 12
+    its f31 codes                            : {7: 3, 0: 1, 3: 8}
+   prog00_no_operation        w11   head=002E200000 bit5=True  f31=7 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog08_gated_reverb        w80   head=000020868B bit5=False f31=0 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog36_compressor          w3    head=00262F3000 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog36_compressor          w24   head=00262F9407 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog52_auto_wah            w25   head=0026200000 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog70_auto_wah_s_delay    w43   head=0026200000 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog75_peq_compressor      w12   head=00262F5407 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog75_peq_compressor      w42   head=00262F6407 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog96_peq_compr_dist      w13   head=00262F5000 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog96_peq_compr_dist      w58   head=00262F6407 bit5=True  f31=3 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog97_peq_compr_overdr    w13   head=002E2F5000 bit5=True  f31=7 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+   prog97_peq_compr_overdr    w61   head=002E2F6407 bit5=True  f31=7 | 0018A001D5 0104A001D5 0C402C0000 0182A00000
+
+⇒ idiom heads are 11 of the corpus's 172 bit-5 words (6%) -- a FOOTHOLD, not the whole population.
