@@ -112,7 +112,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    WRITES** (2 rows address it, both reads), while the **rotary's IS written twice by bit-4
    stores** and is static for another reason. The first read is `SRC 0x07`, anchored as `mem[ptr]`,
    so "the read is wrong" is ruled out.
-   ⇒ ★ **THE NEXT QUESTION IS WHICH WORDS STORE AT ALL, not where stores land.** The PEQ combis'
+   ⛔ **§45/§46: THE ONE TESTABLE CANDIDATE IN THAT AREA IS NOW DEAD.** The starved programs and
+   the EQ use the SAME instruction (`hi12 = 0x02A`), differing only in `addr8` — 9 starved vs 1
+   live among the `addr8 != 0` instances, and **both** of the EQ's carry `addr8 = 0`, giving a
+   control that is a property of the corpus. Implemented as `UPD6383_ST2A` and **refuted**: the
+   cell the bodies read stays **0** while the store lands elsewhere and **rails a cell**.
+   ✅ The control held in every build — the EQ is bit-identical — so the *class* of rule is still
+   admissible; this member is not.
+   ⚠⚠ **AND THE EXPENSIVE LESSON: A NULL FROM AN ARM YOU HAVE NOT PROVED FIRES ON THE TARGET WORD
+   IS NOT A REFUTATION.** Two builds gave non-zero fired counts while never reaching the
+   instruction: aiming at `m_dp + addr8` stores past the target (the walk has already run), and
+   placing the check inside `case LO_ACT_ST_BUS` never sees a word whose ACT is 0x00. **Compare
+   the FIRED COUNT between builds** — identical counts across a changed aim means the change did
+   not reach. Third aim, on the per-word path: 10 487 → 327 220.
+
+   ⇒ ★ **THE NEXT QUESTION IS STILL WHICH WORDS STORE AT ALL, not where stores land.** The PEQ combis'
    entry word holds the input, moves the pointer `0x05 → 0x50` in the same instruction, and carries
    neither the bit-4 flag nor `ACT 0x07` — if the store predicate is incomplete, that is where it
    shows. ⚠ No arm proposed: this session has already killed two hypotheses (§32, §43) that looked
