@@ -30,6 +30,19 @@
 #
 # Each program costs two emulator runs.  Visible window, timeout-wrapped (RULE 12: the note is
 # playing at the traced frame, by fx_ab.lua's own schedule).
+# ⛔⛔⛔ 2026-09-13 -- READ THIS BEFORE TRUSTING ANY NUMBER THIS SCRIPT PRODUCES.
+#   The `EXTRA' line below passes UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 as "baseline arms".  They are
+#   NOT the device default, and N-INPUT-GATE-OPENED §72 measured what they were doing:
+#
+#     PSHIFT=2 sets total shift 23 instead of 22 -- it HALVES every datum -- and at the DEVICE
+#     DEFAULT the kernel's input stage SATURATES, handing 7 of 8 programs a hand-off cell that is
+#     RAILED (6) or ZERO (1).  With these arms on, the stage does not saturate and every program
+#     looks fine.  ⇒ THIS ARM WAS HIDING THE PROJECT'S LARGEST INPUT-PATH DEFECT, in every
+#     liveness census taken with it (§42/§50/§60 and data/railed_pickups_2026-09-13.txt).
+#
+#   ⇒ Pass `UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0' as trailing arguments to OVERRIDE them back to the
+#     device default whenever the question is "what does the SHIPPED device do" -- which it usually
+#     is.  ⇒ And NEVER pool captures taken with the arms against captures taken without (§229).
 set -u
 OUT=${1:?OUTDIR}; shift
 EXTRA=(UPD6383_PSHIFT=2 UPD6383_C8SHIFT=1 "$@")

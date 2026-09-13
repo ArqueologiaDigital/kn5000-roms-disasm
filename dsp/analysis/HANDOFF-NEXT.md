@@ -1,3 +1,63 @@
+# ★★★★★ 2026-09-13 — **THE KERNEL'S INPUT STAGE SATURATES: 7 OF 8 PROGRAMS GET A BROKEN HAND-OFF**
+
+★★★★★ **READ THIS FIRST. It is upstream of nearly everything else on this page.** §70–§72.
+
+**All 8 programs measured on ONE machine at the DEVICE DEFAULT** (`PSHIFT=0 C8SHIFT=0`,
+identities fingerprinted, `data/handoff_cell_2026-09-13.txt`):
+
+| program | `0x01` (input latch) | `0x05` (hand-off to the body) |
+|---|---:|---|
+| `prog04_flanger` | −32 512 | **2 912 280 — the ONLY healthy one** |
+| `prog06_ensemble` | 152 576 | **0** ⛔ |
+| `prog10_multi_tap_delay` | −162 304 | −8 388 608 ⛔ |
+| `prog56_mix_up` | 157 952 | −8 388 608 ⛔ |
+| `prog03_enhancer` | 306 688 | 8 388 607 ⛔ |
+| `prog36_compressor` | −65 024 | −8 388 608 ⛔ |
+| `prog00_no_operation` | −286 976 | −8 388 608 ⛔ |
+| `prog52_auto_wah` | −118 528 | 8 388 607 ⛔ |
+
+★★ **The input ARRIVES INTACT in all eight** — `0x01`/`0x04` are the DI1 latch cells (the device's
+own audit: *"latch cells 0x01 / 0x04"*) and they are sample-like everywhere. **Cell `0x05` is the
+kernel's HAND-OFF of the assembled input to the body**, not the deposit. ⇒ **the defect is the
+kernel's ASSEMBLY, between `iw2` and `iw45`.**
+
+⛔⛔ **AND IT IS NOT A FAMILY EFFECT** — two retractions of my own, both made because the sample in
+front of me could not see the alternative:
+1. this session's opening commit narrowed it to *"`prog32_distortion` specifically"* — the sample
+   held no other standalone dynamics program;
+2. §70 then said *"the detector family"* — those four were traced later in the note and were simply
+   **louder**. `multi_tap_delay` and `mix_up` have **no detector at all** and rail at inputs *below*
+   the enhancer's.
+⇒ ★ §62's **original** reading — *"a SCALE problem, §227's `P_SHIFT`/`ACC_SHIFT` territory"* — was
+right all along.
+
+⛔⛔⛔ **WHY NOBODY SAW IT, and the process lesson:** every liveness census (§42/§50/§60,
+`data/railed_pickups_2026-09-13.txt`, `reg/sel7_live`) carried **`UPD6383_PSHIFT=2`**, passed by
+`catalogue_regression.sh` as a *"baseline arm … NOT optional"*. It halves the datum, the stage stops
+saturating, and **every program looks fine**. ⇒ **An arm adopted because it made things work was
+hiding the largest input-path defect in the project.** The harness now says so at the top, and
+`UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0` overrides it back.
+
+⚠ **`PSHIFT=2` IS STILL NOT THE FIX**: it is §227's documented two-sided control and contradicts the
+MEASURED Q1.22 scale. Candidates for the real cause: the shift, `iw45`'s own decode, the unseeded
+cursor base (§70: confirmed present, refuted as the *discriminator*, not excluded as a
+*contributor*).
+
+⇒ **CONSEQUENCES — most of the queue below is downstream of this:**
+* §54/§55's *"14 of 16 bodies leave a constant accumulator"* — **a body handed a rail cannot do
+  anything else**; that was measuring the consequence.
+* §64/§69's bit-5 probe sites (`prog52_auto_wah` was named the best host) are **fed a rail ⇒
+  ungradeable today**.
+* §47/§51's output-stage nulls sit downstream of a body that never received a signal.
+⇒ **UNRAIL FIRST.** The two-sided evidence is already in hand: halve the datum and it stops.
+
+⛔ **REFUTED, pre-registered, so nobody repeats it:** `UPD6383_NOZ05=1` (suppress every kernel-A
+store to `0x05`). The cell stays railed and only flips sign; with the stores gone it **never
+changes all frame**, because they are its *only* writer — suppressing them **starves** it.
+Internal null and control both held (`data/PREDICT_NOZ05_2026-09-13.md`, §71).
+
+---
+
 # ★★★★★ 2026-09-13 — **THE INPUT PICKUP IS RAILED FOR A WHOLE FAMILY, AND `NO OPERATION` IS ONE OF THEM**
 
 ★★★★★ **READ THIS BEFORE ANY DSP EXPERIMENT.** §70. This is the biggest blocker on the board and
