@@ -3201,6 +3201,37 @@ build tree and the capture share one machine, and the capture is the one with a 
 ⚠ Grade: the instrument is SHIPPED and compiles; its first catalogue-wide reading is pending the
 regression. The process error is recorded as fact, with its remedy applied.
 
+## 75. THE NEW CENSUS'S FIRST READING — the clipping is much broader than the hand-off cell
+`§74 §S1C` ran for the first time on the regression's own captures (`prog03_enhancer` and
+`prog04_flanger`, true default). It pays for itself immediately, and **not by confirming what I
+expected**:
+
+| cell | enhancer | flanger | |
+|---|---:|---:|---|
+| **`0x06`** | **61.1 %** | **65.5 %** | ⚠ **the single largest clip target, by 10×** |
+| `0x8B` | 12.7 % | 13.0 % | |
+| `0x94` | 8.5 % | 8.6 % | |
+| **`0x05`** | 5.9 % | 4.3 % | ★ the hand-off cell §70–§73 chased |
+| `0x07` | — | 0.8 % | ★ the other per-unit base cell |
+
+and the global rate from `§S1` beside it: **6.1 % of conversions clip in the quiet bucket, 19.0 %
+in the loud one.**
+
+⇒ ★★ **Cell `0x05` is not the main event — it is 4–6 % of the clipping.** The session found it
+because it is the cell a *body reads*, so its clip is the one that silences audio; but the machine
+is saturating **everywhere**, and `0x06` takes ten times more of it. ⚠ That does **not** demote
+§70–§73 (a clip on `0x05` still silences a body, and the arm still fixes it) — it says the
+input-stage defect is **one visible symptom of a machine-wide scale problem**, which is §62's
+original reading arriving a third time, now with a number on it.
+
+★ **This is what the instrument was built for.** `§S1` had been reporting a 6–19 % clip rate all
+along and nobody could act on it, because a rate per *instruction* does not say *what gets
+poisoned*. One re-indexing, and the answer is a ranked list of cells.
+
+⚠ Grade: MEASURED, first reading, two programs. ⚠ It counts **conversions**, not stores (one store
+calls `acc_to_datum()` up to five times), so the percentages are a **distribution over clipped
+conversions**, not a store census — read the ranking, not the absolute counts.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
