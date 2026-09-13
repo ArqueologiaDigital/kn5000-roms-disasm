@@ -82,8 +82,8 @@
   w43   02122AF447   ?word   0x02122AF447   ; 212.2.AF.447  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w44   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x11] (coeff, base 0x00 MEASURED)
-  w45   02122091CD   ?word   0x02122091CD   ; 212.2.09.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w46   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w45   02122091CD   mac     (p),(p)+9 ; mem[p]<-acc, acc=0
+  w46   000020040E   ld      acc,(p)+0
   w47   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w48   0028200000   ?word   0x0028200000   ; 028.2.00.000  hi12{f31=4 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w49   0000201407   ld.st   acc,(p)+1
@@ -157,7 +157,7 @@
   w91   02122A8447   ?word   0x02122A8447   ; 212.2.A8.447  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w92   0000A00415   ld      acc,c+,(p)+0
         ; C-RAM[0x23] (coeff, base 0x00 MEASURED)
-  w93   02122FB1CD   ?word   0x02122FB1CD   ; 212.2.FB.1CD  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
-  w94   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w93   02122FB1CD   mac     (p),(p)-5 ; mem[p]<-acc, acc=0
+  w94   000020040E   ld      acc,(p)+0
   w95   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w96   042810E000   ?word   0x042810E000   ; 428.1.0E.000  hi12{END f31=4 ?5 res=020}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]

@@ -317,6 +317,23 @@ LO_ACT_BIQ_E = 0x0E  #   for ABI; "biquad delay-stage" CORRECTED 2026-09-11 -- t
                      #   is UNIVERSAL (every family incl. plain delay/AM, no biquad);
                      #   true 2nd-order-section state = 0x13/0x14. Exact ALU = hw Q4.
 LO_ACT_DELAY_ACC = 0x0B  # delay-line access (dark-words F); READ/WRITE class-borne
+
+#   ★★★★★ 2026-09-13: ACT 0x0D / 0x0E PROMOTED OUT OF THE SPECULATIVE TIER.
+#   The pair was CLOSED as `ACT 0x0E' selector 7 by TWO INDEPENDENT ROUTES -- §234 FROM DISK
+#   (the EQ's entry window against the designer's biquad, 1 of 49, with a junk-pre-load control
+#   that kills the runner-up) and §58 FROM THE HLE ORACLE (`parametric_eq' is a SERIES CASCADE, so
+#   only the FIRST band may receive a clean copy of the input; only selector 7 delivers that).
+#   It was nevertheless carried as "FOR THE EQ, not a global decode" for ONE stated reason: at
+#   selector 7 `prog32_distortion' read STATIC (§61).
+#   ⇒ THAT REASON IS NOW REFUTED.  §70-§76 showed the distortion's deadness was its INPUT CELL
+#   BEING RAILED, not the selector; with the input-stage decode fixed it runs -- 42 of 42 body
+#   rows move frame to frame and its hand-off cell carries -102 851.  The caveat's whole basis
+#   was a defect somewhere else.
+#   ⇒ and §77 adds a live corroboration the earlier rounds could not have: with these two words
+#   behaving, the EQ's five bands all carry signal and the LLE's own operand pointers reproduce
+#   the HLE's cascade 4 of 4.
+_ANCHORED_ACT = _ANCHORED_ACT + (LO_ACT_BIQ_D, LO_ACT_BIQ_E)
+
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
                                       LO_SRC_MEM0, LO_SRC_LFO, LO_SRC_LFOOUT)
 _ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL,

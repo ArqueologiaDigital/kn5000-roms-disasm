@@ -49,7 +49,7 @@ Unit1Vector:
         ; ptr-load family: register 0x822 <- 0x86
   w78   0A3CD9F287   ?word   0x0A3CD9F287   ; A3C.D.9F.287  hi12{ESC f98=2 f31=6 ?5 res=020} cur  [output-stage word (unit 1 -> DO2 -> IC303.SDIB); the only class-D word, a DO-write candidate; its operation (f31=6) is OPEN]
         ; the machine's ONLY class-D word (0 of 2974 body words)
-  w79   00122FF1CE   ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
+  w79   00122FF1CE   mac     (p),(p)-1 ; mem[p]<-acc, acc=0
         ; byte-identical to header w3 (input stage); lo12 0x1CE has 140 body uses
   w80   01042001CE   ?word   0x01042001CE   ; 104.2.00.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
         ; ordinary body vocabulary (22 exact matches in the 2974-word body corpus)

@@ -3380,6 +3380,61 @@ step and it is now unblocked.
 ⚠ Grade: MEASURED against a live trace at the true default with the promotion in, identity
 fingerprinted. The cascade check is 4/4 and stated as a test, not an eyeball.
 
+## 78. ★★★★★ COVERAGE 41.5 % → 49.2 %: `ACT 0x0D`/`0x0E` ANCHORED, because §76 refuted the caveat
+The coverage worklist ranked `ACT 0x0D` (123 occurrences unblocked alone) and `ACT 0x0E` (110) as
+queue items 2 and 3. Both were **already closed** as `ACT 0x0E` = **selector 7** by two independent
+routes — **§234 FROM DISK** (the EQ's entry window against the designer's biquad, **1 of 49**, with
+a junk-pre-load control that kills the runner-up) and **§58 FROM THE HLE ORACLE** (the cascade
+topology admits one clean copy to the first band only; selector 7 alone delivers it).
+
+They were nevertheless held in the SPECULATIVE tier, for **one stated reason**: §61 measured
+`prog32_distortion` **STATIC at selector 7**, so §266 ruled the finding must be carried *"as FOR
+THE EQ, not as a global decode."*
+
+### ⇒ That reason is REFUTED, and by this session's own input-stage work
+`prog32_distortion` re-captured at the **true default with §76's promotion in**:
+
+| | |
+|---|---|
+| hand-off cell `0x05` | **−102 851 / −127 919** (was **railed at 8 388 607**) |
+| body rows whose accumulator moves frame-to-frame | **42 of 42** |
+| body rows whose memory moves | 33 of 42 |
+
+★★ **The distortion was never dead because of the `ACT 0x0E` selector. It was dead because its
+input cell was railed.** §61's tension — *"the selector that is right for the EQ leaves the
+DISTORTION dead"* — had a third explanation neither side considered, and it was a defect two stages
+upstream.
+
+⇒ the pair moves from `_ANCHORED_*_SPEC` into `_ANCHORED_ACT` (`dsp/tools/dsp_disasm.py`), mirrored
+into `lo_act_anchored()` (`upd6383d.h`) so the two predicates cannot drift.
+
+### ★★★★★ THE RESULT
+| | before | after |
+|---|---:|---:|
+| executable words, 38 body images | 1 234 / 2 974 | **1 464 / 2 974** |
+| **coverage** | **41.5 %** | **★ 49.2 %** |
+| distinct undecoded words | 443 | **351** (−92) |
+| distinct undecoded FAMILIES | 133 | **126** (−7) |
+| frame floor as linked | 38.9 % | **42.6 %** |
+
+**+230 executable words** — against the worklist's predicted 233 for this pair, which is the
+cross-check that the leverage table was counting the right thing.
+
+★ And it is visible in the listings, which is the point: words that rendered as
+`?word … [SPECULATIVE (prospective, not measured)]` now render as instructions —
+`ld (p),(p)+11`, `ld acc,(p)+0`. 40 listings regenerated, MAME rebuilt clean, the 24 documentation
+pages regenerated and `test_hle_permanence.py` still **24 pages / 46 `cpp` blocks byte-identical**.
+
+⚠ **What this does NOT claim**: that `ACT 0x0D`/`0x0E`'s *arithmetic* is verified sample-for-sample
+— §77's confrontation validated topology, coefficients, signal and the accumulator op, not the
+values. What changed here is that the **one documented objection** to treating the pair as a global
+decode was a misattribution, and removing it lets a decode the project had already closed twice
+count as closed.
+
+⚠ Grade: the anchoring rests on §234 + §58 (both pre-existing and independent) plus a MEASURED
+refutation of the caveat that blocked them. The coverage delta is mechanical once the predicate
+changes.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

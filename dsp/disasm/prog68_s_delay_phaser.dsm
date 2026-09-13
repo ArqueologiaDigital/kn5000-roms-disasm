@@ -12,8 +12,8 @@
 ; Put labels/comments in the matching dsp/sym/*.sym; analysis in dsp/algorithms/.
 
   w0    08801308BC   ?word   0x08801308BC   ; 880.1.30.8BC  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w1    000020D1CD   ?word   0x000020D1CD   ; 000.2.0D.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
-  w2    000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w1    000020D1CD   ld      (p),(p)+13
+  w2    000020040E   ld      acc,(p)+0
   w3    021220000B   ?word   0x021220000B   ; 212.2.00.00B  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w4    0022200000   ?word   0x0022200000   ; 022.2.00.000  hi12{f31=1 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
   w5    00002FE407   ld.st   acc,(p)-2
@@ -33,7 +33,7 @@
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x02] = op0x66[0] (role mix/tap, INFERRED)
   w15   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
-  w16   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w16   000020040E   ld      acc,(p)+0
   w17   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w18   0000201407   ld.st   acc,(p)+1
   w19   0092A00200   ?word   0x0092A00200   ; 092.A.00.200  hi12{ST f31=1 ?7 res=080} cur+  [LFO: phase += increment (increment = f/44100 in Q0.23)]
@@ -47,19 +47,19 @@
         ; coeff C-RAM[0x05] = filter section cell 0 (role filter, INFERRED)
   w24   02022481C8   ?word   0x02022481C8   ; 202.2.48.1C8  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x08 = table-port multiply]
   w25   00002BB1D5   ld      (p),(p)-69
-  w26   01022451CD   ?word   0x01022451CD   ; 102.2.45.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w26   01022451CD   mac     (p),(p)+69
   w27   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w28   01042BA1D5   ?word   0x01042BA1D5   ; 104.2.BA.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w29   01022461CD   ?word   0x01022461CD   ; 102.2.46.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w29   01022461CD   mac     (p),(p)+70
   w30   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w31   01042B91D5   ?word   0x01042B91D5   ; 104.2.B9.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w32   01022471CD   ?word   0x01022471CD   ; 102.2.47.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w32   01022471CD   mac     (p),(p)+71
   w33   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w34   01042B81D5   ?word   0x01042B81D5   ; 104.2.B8.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w35   01022481CD   ?word   0x01022481CD   ; 102.2.48.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w35   01022481CD   mac     (p),(p)+72
   w36   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w37   01042B71D5   ?word   0x01042B71D5   ; 104.2.B7.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w38   01022491CD   ?word   0x01022491CD   ; 102.2.49.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w38   01022491CD   mac     (p),(p)+73
   w39   0212AB5412   mac     acc,c+,(p)-75 ; mem[p]<-acc, acc=0
         ; C-RAM[0x06] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x06] = filter section cell 1 (role filter, INFERRED)
@@ -100,8 +100,8 @@
   w63   0212AF91D5   mac     (p),c+,(p)-7 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0D] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x0D] = op0x66[5] (role mix/tap, INFERRED)
-  w64   020220A1CD   ?word   0x020220A1CD   ; 202.2.0A.1CD  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
-  w65   00002F81CE   ?word   0x00002F81CE   ; 000.2.F8.1CE  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w64   020220A1CD   mac     (p),(p)+10
+  w65   00002F81CE   ld      (p),(p)-8
   w66   021220B407   mac.st  acc,(p)+11 ; mem[p]<-acc, acc=0
   w67   0880130000   ?word   0x0880130000   ; 880.1.30.000  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
   w68   0022200000   ?word   0x0022200000   ; 022.2.00.000  hi12{f31=1 ?5 res=020}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
@@ -122,7 +122,7 @@
         ; C-RAM[0x10] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x10] = op0x66[6] (role mix/tap, INFERRED)
   w79   020420D1CD   ?word   0x020420D1CD   ; 204.2.0D.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
-  w80   000020040E   ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
+  w80   000020040E   ld      acc,(p)+0
   w81   0212200000   ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
   w82   00002F8407   ld.st   acc,(p)-8
   w83   0000AFD1D5   ld      (p),c+,(p)-3
@@ -130,19 +130,19 @@
         ; coeff C-RAM[0x11] = filter section cell 3 (role filter, INFERRED)
   w84   020224E1C8   ?word   0x020224E1C8   ; 202.2.4E.1C8  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): ACT 0x08 = table-port multiply]
   w85   00002B61D5   ld      (p),(p)-74
-  w86   010224A1CD   ?word   0x010224A1CD   ; 102.2.4A.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w86   010224A1CD   mac     (p),(p)+74
   w87   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w88   01042B51D5   ?word   0x01042B51D5   ; 104.2.B5.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w89   010224B1CD   ?word   0x010224B1CD   ; 102.2.4B.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w89   010224B1CD   mac     (p),(p)+75
   w90   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w91   01042B41D5   ?word   0x01042B41D5   ; 104.2.B4.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w92   010224C1CD   ?word   0x010224C1CD   ; 102.2.4C.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w92   010224C1CD   mac     (p),(p)+76
   w93   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w94   01042B31D5   ?word   0x01042B31D5   ; 104.2.B3.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w95   010224D1CD   ?word   0x010224D1CD   ; 102.2.4D.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w95   010224D1CD   mac     (p),(p)+77
   w96   0212201412   mac     acc,(p)+1 ; mem[p]<-acc, acc=0
   w97   01042B21D5   ?word   0x01042B21D5   ; 104.2.B2.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=2 and/or ACT 0x15 are OPEN]
-  w98   010224E1CD   ?word   0x010224E1CD   ; 102.2.4E.1CD  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
+  w98   010224E1CD   mac     (p),(p)+78
   w99   0212ABB412   mac     acc,c+,(p)-69 ; mem[p]<-acc, acc=0
         ; C-RAM[0x12] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x12] = filter section cell 4 (role filter, INFERRED)

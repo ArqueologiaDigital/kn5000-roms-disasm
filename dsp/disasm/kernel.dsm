@@ -19,7 +19,7 @@ Header:
   w1    0C0A0E0000   ~word   0x0C0A0E0000   ; C0A.0.E0.000  {C-fmt A=7 B=0}  {addr: none -- C-format, SAFE NO-OP}  hi12{ESC f31=5 ?10 res=400}  [K6 input stage, header w1: C-format, imm13 0x0E0 = 7*32 -> I-RAM 7 = block B; SAFE NO-OP (no memory, pointer or cursor effect)]
         ; C-format A=7; I-RAM 7 is the start of the second input block (INFERRED, n=1)
   w2    0084202680   ~word   0x0084202680   ; 084.2.02.680  {addr: rd mem[p], p+2}  hi12{f31=2 ?7 res=080}  [K6 input stage, header w2: read mem[X+1], p+2 -- X+1 is the one-frame feedback cell the epilogue's w79 wrote]
-  w3    00122FF1CE   ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
+  w3    00122FF1CE   mac     (p),(p)-1 ; mem[p]<-acc, acc=0
   w4    02042021CE   ~word   0x02042021CE   ; 204.2.02.1CE  {addr: rd mem[p], p+2}  hi12{f98=2 f31=2}  [K6 input stage, header w4: *** THE PORT READ, block A *** mem[X+2] is an AUDIO INPUT LATCH (read-never-written by all 3057 words); p+2]
   w5    0202A00448   ~word   0x0202A00448   ; 202.A.00.448  {addr: rd mem[p], cur+, p+0}  hi12{f98=2 f31=1} cur+  [K6 input stage, header w5: read mem[X+4], p+0, cursor+1; ALU UNKNOWN]
         ; C-RAM[0x00] (coeff, base 0x00 MEASURED)
@@ -46,9 +46,9 @@ InputBlock1:
   w18   0182A00415   mac     acc,c+,(p)+0
         ; C-RAM[0x07] (coeff, base 0x00 MEASURED)
   w19   051220044D   ?word   0x051220044D   ; 512.2.00.44D  hi12{END ST f98=1 f31=1}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
-  w20   0000A0064D   ?word   0x0000A0064D   ; 000.A.00.64D  hi12{-} cur+  [SPECULATIVE (prospective, not measured): ACT 0x0D = delay/state MIXING: mem onto bus (universal; pair w/ 0x0E)]
+  w20   0000A0064D   ld      ta,c+,(p)+0
         ; C-RAM[0x08] (coeff, base 0x00 MEASURED)
-  w21   0410A0040E   ?word   0x0410A0040E   ; 410.A.00.40E  hi12{END ST} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w21   0410A0040E   ld      acc,c+,(p)+0 ; mem[p]<-acc, acc=0; END OF BLOCK (falls through)
         ; C-RAM[0x09] (coeff, base 0x00 MEASURED)
   w22   0C04312820   ?word   0x0C04312820   ; C04.3.12.820  {C-fmt A=24 B=18}  hi12{ESC f31=2 ?10 res=400}  [C-format opcode 0x602, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=24 B=18]
   w23   0692A00415   ?word   0x0692A00415   ; 692.A.00.415  hi12{END ST f98=2 f31=1 ?7 res=080} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
