@@ -82,7 +82,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    and it would contest the bit-4 target the project FORCED over 2 160 models — a forcing done on
    the EQ, whose bit-4 words sit elsewhere). ⚠ **No arm proposed**: neither shape has a
    discriminating measurement yet, and §32 is recent enough.
-   ⚠ The other **28 programs are unswept**, blocked on TYPE_MAP's off-by-one above index 8. A
+   ★★★ **UNBLOCKED 2026-09-13: the TYPE list has 38 entries (0..37), not 36** — that single fact
+   is the root of TYPE_MAP's off-by-one, and `type_select.lua`'s default `TYPELAST` was wrong by
+   two. Found by **fingerprinting the uploaded program image** (`dsp/tools/type_fingerprint.py`,
+   new: replays the uC-IF capture into a 384-word I-RAM image and matches 16 words against the 38
+   listings) instead of reading the panel text. With `TYPELAST=37` **both** of the map's own
+   known-answer controls pass: `TYPEIDX=0 → prog01_chorus`, `TYPEIDX=15 → prog39_parametric_eq`;
+   at 35 they gave `prog03_enhancer` and `prog50_vibrato`, exactly two slots high.
+   ⇒ **index-addressed experiments across the whole catalogue are now possible.** ⚠ The map's table
+   is still the old mapping and has NOT been regenerated — use the calibrated transport and
+   **fingerprint every run**; a calibrated transport is still a transport.
+   ⚠ The other **28 programs remain unswept** (the work is now unblocked, not done).
+   ⚠ `catalogue_regression.sh` uses `fx_ab.lua`, which steps UP from 0 rather than using
+   `type_select.lua` — fine for TYPE 0–8 (the verified short-distance regime) and the TYPE 15
+   captures are confirmed to be the EQ **by their structure** (five 4-cell band blocks), but the
+   sweep should fingerprint rather than infer. A
    re-run was attempted 2026-09-13 and produced **two practical findings but no fixed map**
    (`data/typewalk/TYPE_MAP.md`, new banner): ★ `type_enum.lua` prints to **stdout/stderr, not
    `error.log`** — capturing it the way every other harness is captured yields a 511 KB log with

@@ -16,7 +16,20 @@
 -- copy that file into the run directory before the next launch overwrites it.
 -- A transport that is merely *more* reliable is not a transport that is correct.
 local TYPEIDX = tonumber(os.getenv("TYPEIDX") or "28")
-local LAST    = tonumber(os.getenv("TYPELAST") or "35")   -- §170: 36 entries, 0..35
+-- ★★★ CALIBRATED 2026-09-13, and the old default was WRONG BY TWO.
+-- The list has 38 entries (0..37), not 36.  MEASURED by fingerprinting the uploaded program
+-- (dsp/tools/type_fingerprint.py) instead of trusting the panel text:
+--     TYPELAST=35, TYPEIDX=0  -> prog03_enhancer      (wanted CHORUS)
+--     TYPELAST=35, TYPEIDX=15 -> prog50_vibrato       (wanted PARAMETRIC EQ)
+-- Both land exactly TWO slots high, which is what "saturate UP to 37 then step down (35 - N)"
+-- does: 37 - (35 - N) = N + 2.  With LAST = 37 BOTH of the map's known-answer controls pass:
+--     TYPELAST=37, TYPEIDX=0  -> prog01_chorus        ✅
+--     TYPELAST=37, TYPEIDX=15 -> prog39_parametric_eq ✅
+-- This is also the root of TYPE_MAP.md's documented off-by-one above index 8.
+-- ⚠ THE OBLIGATION TO FINGERPRINT EVERY RUN STANDS.  A calibrated transport is still a
+-- transport; type_fingerprint.py on kn5000_dsp1_upload.txt is what makes a run's identity a
+-- measurement.  ⚠ This script prints to stdout/stderr, NOT error.log.
+local LAST    = tonumber(os.getenv("TYPELAST") or "37")
 local mach = manager.machine
 
 do local d = mach.ioport.ports[":DSPCFG"]

@@ -13,7 +13,30 @@ mislabelled four entries.
 ★ KNOWN-ANSWER CONTROLS, both passing: TYPE 0 = CHORUS and TYPE 15 = PARAMETRIC EQ,
 both measured independently before this table existed (`peq_select.lua`).
 
-## ⚠ RE-RUN ATTEMPTED 2026-09-13 — TWO PRACTICAL FINDINGS, MAP NOT YET FIXED
+## ★★★ ROOT CAUSE FOUND AND THE TRANSPORT CALIBRATED — 2026-09-13
+**The DSP EFFECT TYPE list has 38 entries (0..37), not 36.** That single fact is the root of the
+off-by-one recorded below, and it was found by *fingerprinting the uploaded program image* rather
+than by reading the panel — `dsp/tools/type_fingerprint.py`, which replays the uC-IF capture into a
+384-word I-RAM image and matches 16 words against the 38 committed listings.
+
+| run | result | wanted |
+|---|---|---|
+| `TYPELAST=35 TYPEIDX=0` | `prog03_enhancer` | CHORUS |
+| `TYPELAST=35 TYPEIDX=15` | `prog50_vibrato` | PARAMETRIC EQ |
+| **`TYPELAST=37 TYPEIDX=0`** | **`prog01_chorus`** ✅ | CHORUS |
+| **`TYPELAST=37 TYPEIDX=15`** | **`prog39_parametric_eq`** ✅ | PARAMETRIC EQ |
+
+Both mis-selections land exactly **two slots high**, which is what *"saturate UP to the end, then
+step down (LAST − N)"* does when the end is 37 and `LAST` says 35: `37 − (35 − N) = N + 2`. With
+`LAST = 37` **both of this map's own known-answer controls pass**. `type_select.lua`'s default is
+corrected accordingly.
+
+⇒ **Index-addressed experiments across the catalogue are unblocked**, which was the standing
+obstacle to sweeping the other 28 programs. ⚠ The table below is still the *old* mapping and has
+not been regenerated; use the calibrated transport **and fingerprint every run** rather than
+trusting a row of it.
+
+## ⚠ THE RE-RUN THAT FOUND IT — TWO PRACTICAL FINDINGS
 The off-by-one below blocks the catalogue regression for 28 of the 38 programs, so the walk was
 re-run. It did **not** produce a corrected map, and the two reasons are recorded here because both
 cost a run and neither is in any docstring:
