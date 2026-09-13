@@ -891,6 +891,25 @@ def decoded(w):
     #   ⇒ a delay escape is decoded when its ADDRESSING is forced AND its ALU half is anchored.
     #   MEASURED: 201 of the 276 qualify; the other 75 are refused on their ALU half
     #   (`ACT 0x0B' on class 1 x50, `ACT 0x1C' x17, `ACT 0x1A' x6, `ACT 0x07' x2).
+    #   ★★★★★ 2026-09-13 (N-INPUT-GATE-OPENED sect. 112): THE BLOCK TERMINATOR, on exactly the
+    #   argument sect. 90 used for the delay escape -- the CLASS TEST is what refuses it, and the
+    #   word's own form EXPLAINS the class.
+    #     * WHAT IT IS, MEASURED: `host-side.md' item B1 -- the class-1 index word is THE LAST
+    #       WORD OF EVERY BODY IMAGE and carries `addr8 = 0x0E' in 37 of 37 unit-0 images and
+    #       `0x0F' in the one unit-1 image.  `instruction-set.md' already publishes the form
+    #       ("terminator / END OF BLOCK -- class4 == 1 && addr8 in {0E, 0F}").
+    #     * ITS `addr8' IS THE UNIT INDEX, measured on the same 38.
+    #     * AND ITS ALU HALF RUNS.  upd6383.cpp's sequencer is explicit -- "the transfer, AFTER
+    #       the word has done its datapath work" -- so its SRC / ACT / f31 apply, which is the
+    #       check sect. 91 says to make before admitting anything on a format escape.
+    #   ⇒ decoded when the ADDRESSING is explained AND the ALU half is anchored, exactly as for
+    #   the escape.  ⚠ Disjoint from the delay escape by construction: `is_end' requires hi12
+    #   bit 10 SET and bit 11 CLEAR, and `is_dram' requires bit 11 SET.
+    #   ⚠ NOT claimed: what the sequencer does with it.  upd6383.cpp calls its call/return model
+    #   "the frame SEQUENCER's model, not the ISA's" and that stays true -- this says the WORD is
+    #   executable, not that the jump is derived.
+    if is_terminator(w):
+        return _alu_half_anchored(w)
     if is_dram(w) and dram_dir(w):
         return _alu_half_anchored(w)
     if alu_decoded(w):                                         return True
@@ -933,6 +952,16 @@ def form_of(w):
 #  false.  They are kept separate so no coverage number launders one into the
 #  other.  status() is what the coverage tool counts.
 # --------------------------------------------------------------------------
+def is_terminator(w):
+    """THE BLOCK TERMINATOR -- the last word of every body image (sect. 112).
+
+    `class4 == 1' with the END bit and `addr8' in {0x0E, 0x0F}.  MEASURED as the final word of
+    37 of 37 unit-0 images and the one unit-1 image (`host-side.md' item B1); the form is already
+    published in `instruction-set.md'.  Disjoint from `is_dram()' by construction -- `is_end'
+    needs hi12 bit 10 set with bit 11 CLEAR, the escape needs bit 11 SET."""
+    return (not c_format(w)) and class4(w) == 1 and is_end(w) and addr8(w) in (0x0E, 0x0F)
+
+
 def is_dram(w):
     """external delay-DRAM access word.
 
@@ -1368,6 +1397,9 @@ def text(w, at=None):
         #   the one instruction in the corpus that wraps.
         if _is_wrapword(w):
             return "wrap    acc,c+          ; acc <- datum(acc) & coef  (LFO modulus)"
+        if is_terminator(w):
+            return "endblk  unit%d          ; END OF BLOCK -- the image's last word" % (
+                0 if addr8(w) == 0x0E else 1)
         if is_dram(w) and dram_dir(w):
             return "dly.%s  dsc[k]%s" % ("r" if dram_dir(w) == "READ" else "w",
                                          "" if dd == 0 else ",p%+d" % dd)

@@ -5147,6 +5147,48 @@ conclusion was drawn over five programs with three showing the opposite, which i
 §110's was drawn over one, which is why it did not. Any future use of the sweep-and-diff instrument
 needs the sample, not just the instrument.
 
+## 112. ★★★ THE BLOCK TERMINATOR IS EXECUTABLE — 77.6 % → 78.5 %
+The queue's `class 1` entry turned out to be one word shape. All **19 words refused for that axis
+alone** are `xxx.1.0E.000` — class 1, `addr8 = 0x0E`, `lo12 = 0x000` — differing only in `hi12`.
+
+★ That is **the block terminator**, and its identity is MEASURED, not guessed: `host-side.md` item
+B1 — *"the class-1 index word is **the last word of every body image** and it carries `addr8 =
+0x0E` in **37 of 37** unit-0 images and `0x0F` in the one unit-1 image"* — and
+`instruction-set.md` already publishes the form (*"terminator / END OF BLOCK — `class4 == 1 &&
+addr8 ∈ {0E, 0F}`"*).
+
+So this is exactly §90's argument for the delay escape: **the CLASS TEST is what refuses the word,
+and the word's own form explains the class.**
+
+### The §91 check, which is the reason §90's first version was wrong
+§91 caught §90 admitting words on the belief that their ALU half never ran. So: does a terminator's
+ALU half run? `upd6383.cpp`'s sequencer answers in its own comment —
+
+> `// ---- the transfer, AFTER the word has done its datapath work -------`
+
+— the datapath executes first, then the call/return. ⇒ its `SRC` / `ACT` / `f31` apply and must be
+anchored, which for all 19 they are (`SRC 0x00`, `ACT 0x00`, `f31 ∈ {0,1,2}`, no store, no bit-11,
+no pointer mode). Graded on `_alu_half_anchored()`, exactly as the escape is.
+
+★ And `text()`'s own comment had already noticed the gap without closing it: *"the word still
+performs its datapath work AND ends the block … class 1 cannot reach here, so the unit-tagged
+CALL/RETURN form is unreachable by construction."*
+
+### Result
+```
+   all 38 distinct body images   2974   2303  77.4%   +31  78.5%
+   FRAME FLOOR as linked          216    159  73.6%
+   resident kernel                 83     39  47.0%
+```
+**tier 1 76.6 % → 77.4 % (+25 words), 78.5 % with tier 1b; the frame floor 72.2 % → 73.6 %.**
+They render as `endblk  unit0 ; END OF BLOCK -- the image's last word`. Mirrors agree
+**3057/3057**, `dsp/verify.py` BYTE-MATCH OK, 24 doc pages regenerated, permanence test PASS.
+
+⚠ **NOT claimed: the call/return itself.** `upd6383.cpp` calls its sequencer model *"the frame
+SEQUENCER's model, not the ISA's"* and that stays true — this says **the word is executable**, not
+that the jump is derived from the encoding. Disjoint from the delay escape by construction:
+`is_end` needs `hi12` bit 10 set with bit 11 CLEAR; the escape needs bit 11 SET.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

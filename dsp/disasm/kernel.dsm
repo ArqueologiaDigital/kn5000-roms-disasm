@@ -94,7 +94,7 @@ Unit0Setup:
   w47   080080C000   ld.b    (p)0,c
   w48   0C645A2000   ?word   0x0C645A2000   ; C64.5.A2.000  {C-fmt A=45 B=2}  hi12{ESC f31=2 ?10 ?6 ?5 res=460}  [C-format opcode 0x632: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=45 B=2]
 Unit0Call:
-  w49   040010E000   ?word   0x040010E000   ; 400.1.0E.000  hi12{END}  [END OF BLOCK, unit 0 -- CALL/RETURN -- and still performs the rest of the word]
+  w49   040010E000   endblk  unit0          ; END OF BLOCK -- the image's last word
         ; unit-tagged transfer, tag 0x0E -- CALLs the unit-0 body at I-RAM 84
 Unit1Setup:
   w50   0801050821   ldptr   #$50
@@ -110,5 +110,5 @@ Unit1Setup:
   w57   0000201000   nop
   w58   000018A007   ?word   0x000018A007   ; 000.1.8A.007  hi12{-}  [internal register file [8A], unit 1 (bit 7 = the unit); this index has no named role yet]
 Unit1Call:
-  w59   040010F007   ?word   0x040010F007   ; 400.1.0F.007  hi12{END}  [END OF BLOCK, unit 1 -- CALL/RETURN -- and still performs the rest of the word]
+  w59   040010F007   endblk  unit1          ; END OF BLOCK -- the image's last word
         ; unit-tagged transfer, tag 0x0F -- CALLs the unit-1 body at I-RAM 200
