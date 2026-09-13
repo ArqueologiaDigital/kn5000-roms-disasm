@@ -197,3 +197,25 @@ Three clear placements, three independent anchored criteria:
 **The store gate's clear is taken BEFORE the ALU.** Both rivals fall on criteria the ROM and the
 firmware supply, neither of which the emulator can fake, and each of which demonstrably CAN fail —
 because each of them just did, on a different arm.
+
+---
+
+## R-TEST — item D's THIRD family, `LD`, at both placements. Registered before the run.
+
+With `clr:before` forced by P2″, the only rivals left are item D's `LD` family: the memory access
+read INTO the accumulator (bit 7 as a memory-port DIRECTION bit), at `@before` and `@after`.
+
+★ **If both fall on the same anchored criteria, the axis closes for EXECUTION.** The two survivors
+would be `none` and `ST(acc→else)`, and those are **the same machine** — `gate_settle.py:70`
+declares the `else` key *"a memory key no pointer can ever equal"*, so nothing can read what it
+writes. *"Is there a store at all"* stays unanswerable, and stops mattering.
+
+| | prediction | what a miss means |
+|---|---|---|
+| **R1** | modes 3 and 4 fire (count > 0) | discard |
+| **R2** ★ | the **VOLUME** cell `0x06` is railed or churned (`chg > 2`) under **both** modes — i.e. they behave like the refuted `clr:never`, because the accumulator carries a memory value into whatever writes that cell | if a mode leaves it written-once, `LD` is still alive and the axis stays open |
+| **R3** ★ | the **LFO** phase cell `07` fails to ramp at 114 under both modes | as above |
+| **R4** | CONTROL: mode 1 (`clr:before`) on the same binary must still give `06 chg 1`, unrailed | the binary changed something else and the comparison is void |
+
+⛔ A pass closes the gate **for execution only**. It does not say whether the word stores; it says
+that whatever it does with memory cannot be observed, which is what `decoded()` asks.
