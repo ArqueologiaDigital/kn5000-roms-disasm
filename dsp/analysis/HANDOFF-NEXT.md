@@ -23,10 +23,18 @@ mask).
 env at all**, **13 of 14** sampled programs (every family) run their bodies on live audio. ★ So the
 finding largely survives — and **the promoted arms were never what made the bodies run; they ran
 anyway.** ⛔ But *"all 38"* does NOT survive as stated: **`prog32_distortion` is STATIC with audio
-present** at the correct selector where §42 had it LIVE at selector 4. ⚠ One static program is not
-a defect claim — §50's own lesson is that a static body is more often the **instrument**; it is a
-dynamics program with no LFO to prime, so **try a different `NOTEOFS` first**. ⇒ honest tally:
-**13 of 14 sampled live at the shipped configuration, 1 to re-measure, 24 unmeasured there.**
+present** at the correct selector where §42 had it LIVE at selector 4. ⛔ **§61 REFUTED MY OWN "it's the instrument" HYPOTHESIS: the distortion is static at THREE trace
+offsets** (+1.0 / +2.5 / +3.2 s), audio present at every one. ⇒ **genuine, not an artefact.**
+★★ **AND IT IS A TENSION:** at selector **4** (refuted) it was **LIVE**; at selector **7**
+(confirmed twice) it is **STATIC**. ⇒ **the selector that is right for the EQ leaves the DISTORTION
+dead.** Three readings, none decidable here: `ACT 0x0E` is **context-dependent** (precedent:
+`addr8`, and `SRC 0x00`'s own partition); the distortion is blocked by something selector 4 masked;
+or — **the honest default** — **both confirmations are EQ-SPECIFIC BY CONSTRUCTION**, so
+**"`ACT 0x0E` = selector 7" must be carried as *FOR THE EQ*, not as a global decode.**
+⇒ next, bounded: run §55's scan (where does the accumulator last differ between frames?) on the
+distortion at selector 7 **and** at selector 4, and compare.
+⇒ honest tally: **13 of 14 sampled live at the shipped configuration, 1 GENUINELY static,
+24 unmeasured there.**
 
 ---
 

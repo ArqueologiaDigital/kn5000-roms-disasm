@@ -2280,6 +2280,47 @@ audio at the shipped configuration; 1 needs re-measuring; 24 are unmeasured ther
 
 ⚠ Grade: MEASURED, 28 captures, identities fingerprinted, at the device's own default.
 
+## 61. ⛔ THE DISTORTION IS GENUINELY STATIC AT THE CORRECT SELECTOR — and that is a TENSION, not a tidy-up
+§60 left `prog32_distortion` as *"a measurement to redo, not a fault to explain"*, on the reasoning
+that a static body is more often the instrument. **Redone at three trace offsets, it is static at
+all three** (`data/t9_offsets_2026-09-13.txt`):
+
+| offset | audio | cells / rows |
+|---|---|---|
+| +1.0 s | yes | 0 / 0 ⛔ |
+| +2.5 s | yes | 0 / 0 ⛔ |
+| +3.2 s | yes | 0 / 0 ⛔ |
+
+⇒ **not an instrument artefact.** Audio reaches the chip at every offset and the body never moves.
+⚠ My §60 hypothesis is refuted, and I am recording that rather than quietly widening the search.
+
+### ★★ THE TENSION, STATED PLAINLY
+At **selector 4** — the reading §234 and §58 both refute — `prog32_distortion` was **LIVE**
+(§42: 3 cells / 42 rows). At **selector 7** — the reading two independent routes confirm — it is
+**STATIC**. So:
+
+> **The selector that is right for the PARAMETRIC EQ leaves the DISTORTION's body dead.**
+
+That is a genuine conflict between two well-evidenced results, and it admits three readings, none
+of which this session can choose between:
+1. `ACT 0x0E` is **context-dependent** — selector 7 for the EQ's population, something else for the
+   dynamics family. The project has precedent: `addr8` is a pointer delta in one class and a
+   direction field in another, and `SRC 0x00` was just shown to partition (§7 of the work list).
+2. the distortion is **blocked by something unrelated** that selector 4 happened to mask.
+3. §234's 1-of-49 and §58's cascade argument are both about **the EQ**, and neither claims to be
+   corpus-wide — they close `ACT 0x0E` *for that program*, which is exactly how §59 stated it.
+
+⚠ **Reading 3 is the honest default**: both confirmations are EQ-specific by construction. ⇒ **the
+claim "`ACT 0x0E` = selector 7" must be carried as *for the EQ*, not as a global decode**, and the
+distortion is the first counter-population to work.
+
+⇒ Next, and bounded: find where `prog32_distortion`'s body stops — the §55 instrument (scan for the
+row where its accumulator last differs between frames) applied at selector 7 — and compare against
+the same scan at selector 4, which is where it was alive.
+
+⚠ Grade: MEASURED, 6 captures, three offsets. The §60 hypothesis it refutes was mine, made one
+section earlier.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

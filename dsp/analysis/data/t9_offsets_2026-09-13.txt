@@ -1,0 +1,6 @@
+prog32_distortion (TYPE 9) at the CORRECT selector -- three trace offsets
+
+offset       audio   cells/rows/rail      verdict
++1.0 s       yes     0/0/0                ⛔ STATIC
++2.5 s       yes     0/0/0                ⛔ STATIC
++3.2 s       yes     0/0/0                ⛔ STATIC
