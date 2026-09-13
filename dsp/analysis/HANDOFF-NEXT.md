@@ -126,6 +126,24 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★★ **THE CORPUS ANSWERS IT: `f31 = 0` IS A MULTIPLY-CLASS SEMANTIC — 213 of 213.**
+   (`N-DEVICE-ALGEBRA-EXTRACTED` §13, `data/f31_by_class_2026-09-13.txt`.) Every `f31 = 0` word in
+   the **multiply class A** fetches a coefficient — **213 of 213**; the one apparent exception is
+   `epilogue w82`, a **C-format** word the predicate excludes by definition. In the **non-multiply**
+   classes the same encoding is everywhere (**90 %** of class 0, **90 %** of class 1, **97 %** of
+   class 3, **98 %** of class 6) and **never** fetches a coefficient.
+   ⇒ *"load the accumulator from the product"* is well-defined **exactly where a product is
+   produced in the same instruction**. The device applies that one rule to BOTH populations, and on
+   the non-multiply words it loads a register nothing in that instruction wrote — which is what §55
+   measured killing the output accumulator in 13 of 14 programs.
+   ★ **It comes from the BYTECODE and never looked at which programs fail**, so it explains §55
+   without being fitted to it.
+   ⚠ It does **NOT** establish what `f31 = 0` means on a non-multiply word. HOLD (§138's reading)
+   is a candidate, not a conclusion; the field may be re-used entirely, as `addr8` is a pointer
+   delta in one class and a direction field in another. ⚠ And §138's blanket form has a measured
+   harm at the body entry ⇒ **this is an argument for DECODING the non-multiply case, not for
+   flipping bit 55.**
+
    ★★★ **§55: WHAT KILLS THE OUTPUT ACCUMULATOR — `f31 = 0`, IN 14 OF 14.** Scanning each body for
    the row where its accumulator last differs between frames, the word immediately after is an
    **`f31 = 0` LOAD in every single one of the 14** — across five different `(class, ACT, SRC)`
