@@ -126,6 +126,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★★ **THE COVERAGE LONG POLE IS A RANKED WORK LIST, NOT A SEARCH** —
+   `N-COVERAGE-WORKLIST-2026-09-13.md`. Counting OCCURRENCES (what coverage buys) rather than
+   distinct words: **1 740 undecoded occurrences in 133 families**, and **the 18 largest are
+   49.9 % of them**. Cross-referenced against `class2_solve.py`'s algebra, **15 of those 18 already
+   have a UNIQUELY DETERMINED accumulator op** — several on **48–53 programs** with full
+   discrimination — covering **81 %** of the top-18's occurrences and **~40 % of the whole
+   undecoded mass**.
+   ⛔⛔ **BUT THAT IS NOT 40 % OF A DECODE, for two hard reasons:** (1) the extractor measures the
+   **DEVICE**, so promoting it would encode our own emulator's speculation as truth — **the
+   bytecode is the source of truth and the HLE is the oracle**; (2) an accumulator op is only PART
+   of a word (`decoded()` also needs the store, the pointer walk, the source and the destination).
+   ⇒ ★ **The next unit of work is named and repeatable:** *take family `212/2/000` (103
+   occurrences, candidate `acc + P + L<<16` on 48 programs), run the programs that use it through
+   the HLE, and confirm or refute against what the HLE computes.* Family by family, top down.
+
    ★★★★ **THE CORPUS ANSWERS IT: `f31 = 0` IS A MULTIPLY-CLASS SEMANTIC — 213 of 213.**
    (`N-DEVICE-ALGEBRA-EXTRACTED` §13, `data/f31_by_class_2026-09-13.txt`.) Every `f31 = 0` word in
    the **multiply class A** fetches a coefficient — **213 of 213**; the one apparent exception is
