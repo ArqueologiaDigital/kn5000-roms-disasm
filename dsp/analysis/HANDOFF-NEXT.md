@@ -126,7 +126,23 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
-   ⇒ ★ **THE NEXT QUESTION IS STILL WHICH WORDS STORE AT ALL, not where stores land.** The PEQ combis'
+   ★★★ **§47/§48 RESHAPE WHAT IS LEFT — read these before planning anything.**
+   * **§47: the OUTPUT-STAGE NULL SURVIVES both promoted decodes**, re-measured on all 38 programs
+     (`loud frames … max 0` everywhere). ⇒ *"fix the bodies and the output follows"* is **refuted
+     directly**; the output stage is an INDEPENDENT decode problem and the largest unexamined area
+     left. ⚠ `§70`'s **quiet** column shows `88 235 781 586` on 25 of 38 — that is a **constant of
+     the idle machine**: identical to the last digit across all 25, present in the PRE-promotion
+     capture, and zero on loud frames. RULE 13. Exclude it.
+   * **§48: the 16 static programs are TWO problems, and 11 are NOT a store problem.** Census of
+     who writes the body's first-read cell: **all 7 live programs** have a **bit-4 store** doing
+     it, **11 static ones do too** (their cells ARE written, with **zero**), and only the **5 PEQ
+     combis** have **no writer anywhere in the frame**. ⇒ the 11 are starved **UPSTREAM** and join
+     the enhancer (§41); the store-target line (§43/§45/§46) was aimed at the wrong group.
+   * ★ In the live programs the writer sits **at or AFTER** the read — a **state cell**, written in
+     frame *N*, read at the top of *N+1*. A body only runs once the loop is primed.
+   * ★ **First positive control the area has had: 7 live programs any fix must leave untouched.**
+
+   ⇒ ★ **THE NEXT QUESTION, for the 5 PEQ combis only, is which words store at all.** The PEQ combis'
    entry word holds the input, moves the pointer `0x05 → 0x50` in the same instruction, and carries
    neither the bit-4 flag nor `ACT 0x07` — if the store predicate is incomplete, that is where it
    shows. ⚠ No arm proposed: this session has already killed two hypotheses (§32, §43) that looked
