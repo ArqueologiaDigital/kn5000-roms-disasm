@@ -1,0 +1,16 @@
+§52 EPILOGUE REBASE -- structural check first
+
+TYPE program                epi BEFORE     epi AFTER        overlap   body
+12   prog35_exciter         0x00,0xFF      0x04,0x05        NONE      STATIC
+15   prog39_parametric_eq   0x00,0xFF      0x04,0x05        NONE      STATIC
+19   prog15_rock_rotary     0x00,0xFF      0x04,0x05        0x04      LIVE 4
+34   prog96_peq_compr_dist  0x00,0xFF      0x04,0x05        NONE      STATIC
+
+--- output stage (ACCA at w73), LOUD frames ---
+   TYPE 12  before  loud min 0              max 0
+   TYPE 12  after   loud min 0              max 0
+   TYPE 15  after   loud min 0              max 0
+   TYPE 19  before  loud min 0              max 0
+   TYPE 19  after   loud min 0              max 0
+   TYPE 34  before  loud min 0              max 0
+   TYPE 34  after   loud min 0              max 0

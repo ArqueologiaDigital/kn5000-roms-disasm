@@ -1975,6 +1975,44 @@ rule the per-unit CALL already applies.
 the build, and it is a **re-test of someone else's withdrawn candidate on new evidence**, not a new
 guess.
 
+## 53. ⛔ THE EPILOGUE REBASE IS REFUTED AGAIN — and the REGRESSION BOUND is what caught it
+`UPD6383_EPIREBASE=1` was built and run on four programs at the correct trace offset
+(`data/epirebase_verdict_2026-09-13.txt`):
+
+| TYPE | program | epilogue cells before → after | overlap | body |
+|---|---|---|---|---|
+| 12 | exciter | `0x00,0xFF` → **`0x04,0x05`** | NONE | ⛔ **STATIC** (was LIVE 8 cells) |
+| 15 | PARAMETRIC EQ | `0x00,0xFF` → **`0x04,0x05`** | NONE | ⛔ **STATIC** (was LIVE 30 cells) |
+| 19 | rock rotary | `0x00,0xFF` → **`0x04,0x05`** | `0x04` | LIVE 4 |
+| 34 | PEQ+COMPR+DIST | `0x00,0xFF` → **`0x04,0x05`** | NONE | ⛔ **STATIC** |
+
+Output stage: **`loud … max 0` before and after, on every one.** No change.
+
+★ **The arm does exactly what it claims structurally** — the epilogue's cells move from
+`{0x00, 0xFF}` to `{0x04, 0x05}`. And it still produces **no overlap** in 3 of 4, because the
+bodies' moving cells are `0x50`+ and `0x11`/`0x13`, not `0x04`/`0x05`.
+
+⛔ **But it BREAKS THREE OF FOUR BODIES**, and the mechanism is plain: **`m_dp` is threaded across
+frames.** `run_frame()` resets the PC and nothing else — *"Words 0..41 … run on pointers left
+behind by the PREVIOUS frame's epilogue"*, which the source states explicitly. Forcing the pointer
+at the epilogue therefore sets **where the NEXT frame's kernel starts walking**, and the machine
+loses its own threading. The epilogue's `0x00` is not a missing rebase; **it is the value the
+previous frame legitimately left there.**
+
+⇒ ★★ **Row 23 is refuted a second time, on new evidence and for a NEW reason.** The first
+withdrawal said *"rebasing moved the stores to `0x05` and they still read zero"*; that premise was
+dead (§52). The real objection is structural and survives live bodies: **the epilogue's pointer is
+an output of the frame loop, not an input to be set.**
+
+✅ **The regression bound did its job.** §52 stated in advance that *"the 38-live tally must not
+fall"*. It fell, immediately, on the reference program itself — so the arm was rejected on a
+criterion fixed before the run rather than on a judgement made after seeing the numbers. That is
+the whole point of writing bounds down first, and it is the fourth time this session a
+pre-registered check has decided an outcome.
+
+⚠ Grade: MEASURED, 8 captures. `UPD6383_EPIREBASE` stays in the tree default-off with this
+refutation beside row 23's original one.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
