@@ -2739,8 +2739,42 @@ against a prediction, which is *stronger* than the check that was failing.
 reference and its headline no longer says "square-law"; `test_hle_permanence.py` still passes
 **24 pages / 46 `cpp` blocks byte-identical**, so the archive obligation is intact.
 
+### ★ How big is the correction? Measured, not asserted
+`dsp/hle/compare_detector_laws.py` (artefact `data/detector_laws_2026-09-13.txt`) runs **both**
+detectors on the same signal — 220 Hz, amplitude 0.08 → 0.9 → 0.08 — through the **same** gain law,
+so none of the difference comes from a change nobody has evidence for:
+
+| detector | release back to the quiet passage |
+|---|---|
+| **the ROM's** (rectify, 4.712 / 11.764 ms) | **15.9 ms** |
+| the one that shipped (square-law, ~2.1 / 150 ms) | **350.7 ms** |
+
+⇒ ★ **the shipped detector took 22× longer to let go.** That is the audible part: it kept ducking a
+passage the instrument's own ROM says had already recovered — with the release constant sitting
+unread in `C-RAM[0x03]` the whole time.
+
+### And it was run, not just compiled
+A/B in the emulator, timeout-wrapped, visible window, notes playing (RULE 12), `TYPEIDX=13`
+(`prog36_compressor`), control `DHLE=0` vs `DHLE=0x16`, identical in every other respect:
+
+| | control | compressor HLE |
+|---|---|---|
+| 30–35 s (note on, effect not yet engaged) | rms 1 251.8 | rms 1 251.8 — **bit-identical**, the null |
+| 40–45 s | rms 5 526.7 | **rms 6 438.9**, difference rms 1 638.8 |
+| peak | 27 067 | **27 067 of 32 767 — NOT railed** |
+
+★ The 30–35 s window is the **calibration**: the two arms are byte-identical there, so the
+difference later is the effect engaging and not a run-to-run wobble (RULE 13 — and this instrument
+can see a null, because it produced one).
+
+⚠ **What this does NOT show:** that the change *improved* the audio against hardware. Nobody has
+heard the real instrument's compressor (`kn5000-hardware-inaccessible`), so this is *"the
+reconstruction now follows the ROM's constants and still runs, engages and does not rail"* — not a
+fidelity claim. The fidelity claim rests entirely on the ROM's own coefficients.
+
 ⚠ Grade: corrections 1–3 are **FORCED** from the ROM's own upload script plus the adjudicated
-squaring census. The gain law remains **SPECULATIVE** and is marked so in both references.
+squaring census. The size of the correction and the A/B are **MEASURED**. The gain law remains
+**SPECULATIVE** and is marked so in both references.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped

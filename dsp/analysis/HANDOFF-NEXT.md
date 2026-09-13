@@ -1,3 +1,31 @@
+# ★★★★★ 2026-09-13 — THE BYTECODE CORRECTED THE HLE: the compressor's detector is a RECTIFIER
+
+The standing goal's *"there may even be mistakes on the HLE version"* paid out. The shipped DSPHLE
+compressor (selector `0x16`) and its archived documentation page both said **"square-law
+detector"**, with an attack through an invented map and a **release fixed at 150 ms** while
+`C-RAM[0x03]` went unread. The ROM contradicts all three (§68):
+
+| | the HLE said | the ROM says |
+|---|---|---|
+| detector | square-law (RMS) | **mean-absolute**: `C-RAM[0x00] = 0x517CC1 = floor(2/π·2²³)` exactly, and 2/π is the mean of `\|sin\|`. An RMS detector needs `1/√2 = 0.7071`, **absent from the ROM**. `programs.tsv` calls the cell *"2/pi env"*. |
+| attack | ~2.1 ms (invented map) | **4.712 ms** — `C-RAM[0x02] = 0.004812`, `τ = 1/(a·fs)` |
+| release | **fixed 150 ms**, cell ignored | **11.764 ms** — `C-RAM[0x03] = 0.001927`, an **uploaded** value (hence the panel's `RELEASE SENS.(s)`) |
+
+★ Second, independent leg for the rectifier: `SQUARING-MULTIPLY_findings.md` adjudicated every
+squaring in the corpus as **coefficient × coefficient**, negligible — **there is no `x·x` of the
+signal in 3 057 words**, so square-law had no mechanism in the ISA.
+★ Size of it, measured: the shipped detector took **22× longer to let go** (350.7 ms vs 15.9 ms).
+✅ Fixed in `kn5000_tonegen.cpp`, compiles clean, **A/B'd in the emulator with a null** (control and
+arm bit-identical at 30–35 s, apart by rms 1 639 at 40–45 s, peak 27 067/32 767 — not railed).
+✅ Documentation regenerated; `test_hle_permanence.py` still **24 pages / 46 blocks byte-identical**.
+⛔ **The GAIN LAW was deliberately NOT changed** — the corpus only rules out a comparator, and
+nothing measured chooses between the shipped knee and the linear alternative. Fix what the evidence
+covers; leave what it does not.
+✅ And `dsp/hle/` now HAS the dynamics family at all: `LevelDetector` (constants from ROM `0x84CD`),
+`level_envelope`, `compressor`, `auto_wah`, validated by defining property.
+
+---
+
 # ★★★★ 2026-09-13 — `f31` IS A REAL FIELD EVERYWHERE, AND THE ISA SPLITS ON `hi12` BIT 5
 
 §55 asked for `f31 = 0`'s semantics **from the corpus and the HLE, not from another arm**. The

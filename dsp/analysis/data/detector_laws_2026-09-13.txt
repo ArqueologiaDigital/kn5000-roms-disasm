@@ -1,0 +1,14 @@
+=== COMPRESSOR DETECTOR: the ROM's law vs the one that shipped ===
+  signal: 220 Hz, amplitude 0.08 -> 0.9 at 0.5 s -> 0.08 at 1.0 s
+
+  ROM (rectify, 4.712 / 11.764 ms)     steady loud 0.4289   release-to-quiet   15.9 ms
+  shipped (square-law, ~2.1 / 150 ms)  steady loud 0.8726   release-to-quiet  350.7 ms
+
+  ⇒ the shipped detector took 22.1x longer to let go.
+    That is the audible part: a compressor whose release is an order of magnitude too
+    slow keeps ducking a passage the instrument's own ROM says should already have
+    recovered -- and the release was not even read from its cell.
+
+  ⚠ The steady-state levels also differ, but that is a SCALE difference two laws with
+    different calibrations will always show; the makeup/threshold mapping absorbs it.
+    The TIME is the part neither mapping can absorb.
