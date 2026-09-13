@@ -3520,6 +3520,12 @@ A **class-1 format escape** is an external delay-DRAM access. Its semantics are 
 ★★ **And it never reaches the ALU** — the device's own `is_dram` branch **returns before it**. So
 `decoded()` was grading 276 fully-determined words on **anchored SRC / ACT / `f31`: fields they do
 not use.** They were counted as undecoded for failing a test that does not apply to them.
+> ⚠ **QUALIFIED BY §91.** *"Never reaches the ALU"* is the device's structure, and at least one of
+> these words — `iw331` (`088016040E`) — **leaves ACCB at exactly the positive rail anyway**, which
+> "an external delay write" does not describe. Either the device has an extra accumulator effect the
+> chip does not (a bug beside this anchoring), or the delay write genuinely does more than the
+> access (and then "executable" is too strong for these 276). **The anchoring rests on the
+> ADDRESSING, which is forced; the accumulator effect was neither examined nor claimed.**
 
 | | |
 |---|---:|
@@ -4127,6 +4133,56 @@ is the shape of a defect, not of a diffuse scale problem.
 ⚠ Grade: MEASURED (one run each, two programs; the `accb` identity is exact to the unit). ⚠ It does
 **not** say what `SRC 0x11` should read, or why `accb` is railed — it says the two questions are the
 same one, and hands it a criterion.
+
+## 91. ★★★★★ THE CHAIN REACHES ONE INSTRUCTION — `iw331` — and it caveats my own §80
+§90 traced a third of every full-scale store in the machine to `iw19` reading **ACCB**, which sits
+at **`8 388 607 << 16`** exactly. One step further back: `use_b` resolves to `m_cur_unit1` under the
+shipped mask, so **ACCB *is* unit 1's accumulator**, and kernel A's `iw19` reads **last frame's**
+unit-1 result. So: *what leaves it at the rail?*
+
+Tracing every change of `accb` through an auto-wah frame — 88 of them — the **last** is decisive:
+
+```
+   n=262  iw=330  u1=1  020227B1CD   accb = 0
+   n=263  iw=331  u1=1  088016040E   accb = 549 755 748 352   <-- EXACTLY the positive rail
+   (next frame)  n=0  iw=0           accb = 549 755 748 352   <-- what iw19 reads
+```
+
+⇒ ★★★★ **`iw331` ends body 1 by leaving unit 1's accumulator at exactly full scale, every frame**,
+and kernel A copies that into `cell 06` on the next one. **The complete chain, from a 33.7 %
+statistic to a single instruction:**
+
+> `iw331` rails ACCB → `iw19` (`SRC 0x11`) copies ACCB → `cell 06` → **33.7 % of every full-scale
+> datum the machine stores.**
+
+### ⚠ AND IT CAVEATS §80, WHICH IS MINE FROM THIS MORNING
+`iw331` = `088016040E` is `hi12 0x880`, class 1, `addr8 0x60` — **a class-1 delay WRITE**. That is
+one of the 276 forms I anchored in §80 as executable, and it renders as `dly.w  dsc[k],p+96`.
+
+★ But it **also leaves ACCB at the rail**, which "an external delay write" does not describe. §80's
+justification was that a class-1 escape *"never reaches the ALU — the device's own `is_dram` branch
+RETURNS BEFORE IT"*. **At `iw331` something touched the accumulator anyway.**
+
+⇒ Two readings, and I am not choosing between them here:
+1. the device has an **extra accumulator effect** on a delay write that the chip does not — a bug,
+   and then §80's anchoring is right and this is a defect beside it;
+2. the delay write **genuinely does more** than the delay access — and then §80's anchoring
+   describes only part of the word, and "executable" is too strong for these 276.
+
+⚠ **Either way §80 needs qualifying**, and the qualification is written here rather than left for
+someone to trip over: **the delay escape was anchored on its ADDRESSING, which is forced; its
+effect on the accumulator was neither examined nor claimed.** The coverage gain stands only under
+reading (1).
+
+### What this gives the next pass
+A **single named instruction** for the largest scale defect in the machine, with the count already
+instrumented: `§S1R` reports `cell 06`'s share and its writers automatically in any capture. The
+test is now trivially two-sided — *change what `iw331` does to the accumulator, and `cell 06`'s
+share must fall while `iw39`'s contribution (decoded, the control) stays put.*
+
+⚠ Grade: MEASURED (one frame, 88 `accb` transitions, the rail identity exact to the unit). ⚠ It does
+**not** say `iw331` is wrong — it says it is where the rail enters, and that the word doing it is
+one I called executable this morning on grounds that did not cover this.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
