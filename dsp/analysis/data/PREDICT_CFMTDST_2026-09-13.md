@@ -85,3 +85,43 @@ four `lo12` values the corpus uses (`0x44C` ×29, `0x000` ×16, `0x451` ×8, `0x
 register nothing reads ⇒ the 57 are EXECUTABLE whatever the destination is, by §96's lemma.
 **N3** if it differs, it is a live destination and must then be graded against the anchored cells.
 **N4** ⚠ §111's boundary: one program's null does not generalise — a pass needs several.
+
+---
+
+## §114 RESULT — mode 7 is BIT-IDENTICAL to the latch, 3 of 3
+
+```
+   TYPE  program    fired        vs latch
+   0     chorus     28 577 436   IDENTICAL
+   2     enhancer   28 423 412   IDENTICAL
+   3     flanger    28 061 296   IDENTICAL
+```
+
+**N1 ✔**, **N2 ✔ on three programs**: writing the immediate into `reg[lo12 & 0xFF]` cannot be told
+apart from writing it to a latch nobody reads. ⇒ **the register that destination names is never
+read back in the frame.**
+
+The destinations now fall into three equivalence classes: **{latch, `reg[addr8]`,
+`reg[lo12 & 0xFF]`}** — mutually bit-identical — against `acc` and `tempB`, which each differ.
+
+## §115 — THE PROMOTION CASE, and the structural argument that carries it
+★ `is_c40` is **ONE instruction**: opcode `0x620`, and the payload rule holds **57 of 57** inside it
+and 2 of 11 outside. Its destination is selected by `lo12` — that is not a guess, it is what
+`is_setvec(w) = is_c40(w) && is_vector_lo12(lo12(w))` **proves** for `lo12 = 0x445` / `0x446`, the
+per-unit CALL VECTOR registers (K5, DETERMINED destination).
+
+⇒ for one opcode, the destination field selects among **registers**. `acc` and `tempB` would mean
+the same opcode writes a register for two `lo12` values and the accumulator or a temporary for the
+others — which is not how a destination field works. **INFERRED (strong), resting on a proven
+sub-case rather than on a preference.**
+
+Combined with N2: the destination is a register, and that register is never read. ⇒ **the 57
+`is_c40` words are EXECUTABLE.**
+
+## The gate before anything is promoted
+| | |
+|---|---|
+| **O1** | mode 7 bit-identical to the latch on **at least 5 more programs** (§111: one program's null does not generalise) |
+| **O2** | promoting mode 7 to the device default must change **nothing** — it is bit-identical by O1, so this is a zero-risk default, and the run must confirm it with NO ENV SET AT ALL |
+| **O3** | mirrors agree 3057/3057, `dsp/verify.py` BYTE-MATCH OK, the 24 doc pages and the permanence test pass |
+| ⛔ | the **11 non-`is_c40` C-format words are NOT covered** — `k3-pointers.md` §8 item 3 warns explicitly against extending the payload rule beyond opcode `0x620`, and this does not |
