@@ -91,3 +91,16 @@
       prog36_compressor          w28  00A6207447 f31=3  ->  w29  00A2200000 f31=1
       prog36_compressor          w29  00A2200000 f31=1  ->  w30  00122421C0 f31=1
       ... 39 more
+
+-- ★★★ THE PURE ACCUMULATOR-OP SHAPE `0020200000` -- where a high code is GRADEABLE
+   92 in the corpus; 20 LIVE, in 10 programs:
+      prog52_auto_wah            TYPE 18   4 live: w3(f31=5), w23(f31=5), w24(f31=3), w57(f31=5)
+      prog70_auto_wah_s_delay    TYPE 28   4 live: w4(f31=5), w41(f31=5), w42(f31=3), w71(f31=5)
+      prog48_auto_pan            TYPE 16   3 live: w13(f31=4), w43(f31=5), w48(f31=4)
+      prog96_peq_compr_dist      TYPE 34   2 live: w24(f31=3), w69(f31=3)
+      prog97_peq_compr_overdr    TYPE 35   2 live: w24(f31=3), w72(f31=3)
+      prog00_no_operation        TYPE 14   1 live: w10(f31=7)
+      prog15_rock_rotary         TYPE 19   1 live: w4(f31=0)
+      prog36_compressor          TYPE 13   1 live: w22(f31=5)
+      prog71_peq_chorus          TYPE 29   1 live: w4(f31=5)
+      prog73_peq_flanger         TYPE 31   1 live: w4(f31=5)

@@ -228,6 +228,34 @@ def main():
               % (p, i, w, fields(w)["f31"], ni, nw, fields(nw)["f31"]))
     if len(livesites) > 20:
         print("      ... %d more" % (len(livesites) - 20))
+
+    #  ★★★ THE SHARPEST PROBE, and WHICH PROGRAM CAN HOST IT.
+    #  `0020200000' is class 2, ACT 0x00, SRC 0x00, addr8 0x00, NO STORE -- a word with no source,
+    #  no action, no store and no pointer walk, whose ENTIRE content is bit 5 plus the three f31
+    #  bits.  Whatever differs between its instances is the accumulator operation ALONE, so its
+    #  LIVE instances are the cleanest place in the corpus to decide what a high code does.
+    #  Printed with the TYPE index so the next pass can select the program without a second lookup.
+    TGT, M = 0x0020200000, ~(7 << 25) & ((1 << 40) - 1)
+    tmap, tpath = {}, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                   "..", "analysis", "data", "typewalk", "TYPE_MAP.md")
+    if os.path.exists(tpath):
+        for ln in open(tpath, errors="replace"):
+            m = re.match(r"\|\s*(\d+)\s*\|\s*`([^`]+)`", ln)
+            if m:
+                tmap.setdefault(m.group(2), m.group(1))
+    hosts = collections.defaultdict(list)
+    for p, v in prog.items():
+        for k, (i, w) in enumerate(v):
+            if (w & M) == TGT and k + 1 < len(v) and fields(v[k + 1][1])["f31"] != 0:
+                hosts[p].append((i, fields(w)["f31"]))
+    n_live = sum(len(x) for x in hosts.values())
+    print("\n-- ★★★ THE PURE ACCUMULATOR-OP SHAPE `0020200000` -- where a high code is GRADEABLE")
+    print("   %d in the corpus; %d LIVE, in %d programs:"
+          % (sum(1 for v in prog.values() for _, w in v if (w & M) == TGT), n_live, len(hosts)))
+    for p in sorted(hosts, key=lambda x: -len(hosts[x])):
+        print("      %-26s TYPE %-4s %d live: %s"
+              % (p, tmap.get(p, "?"), len(hosts[p]),
+                 ", ".join("w%d(f31=%d)" % t for t in hosts[p])))
     return 0
 
 
