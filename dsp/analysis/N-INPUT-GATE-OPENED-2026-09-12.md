@@ -2776,6 +2776,76 @@ fidelity claim. The fidelity claim rests entirely on the ROM's own coefficients.
 squaring census. The size of the correction and the A/B are **MEASURED**. The gain law remains
 **SPECULATIVE** and is marked so in both references.
 
+## 69. ★★★★ THE BIT-5 PAGE SPLITS ON A BIT THE PROJECT HAD ALREADY DECODED — and END words are all EVEN
+§63 tested *"bit 5 marks the terminator"* and refuted it (17 of 40). **The terminator marker is a
+different bit, and it was decoded long ago**: `dsp_disasm.py:426` — *"bit 10 with bit 11 clear =
+END OF BLOCK (the word still does its work)"* — and the kernel's own annotations call `w6`/`w11`
+*"END OF BLOCK A/B"*.
+
+⚠ **I re-derived this from scratch before checking**, and was one step from writing it up as a
+find. The rule §66 extracted the hard way — *read what the decode already says* — applies to bits
+as well as to programs. What is genuinely added here is the **null it never had**:
+
+| | |
+|---|---|
+| non-C-format words carrying bit 10 | **53** of 2 989 (1.8 %) |
+| of those, sitting at the image's **last** word | **39** — i.e. **39 of 40 images end on one** |
+| the 40th | the `epilogue`, which ends on a **C-format** word where bit 10 is part of the `0xC00` format code and means nothing |
+| base rate: a random non-C-format word is terminal | **1.34 %** |
+| a **bit-10** word is terminal | **74 %** — a **55× enrichment** |
+
+The 14 non-terminal ones are **13 in `kernel` and 1 in `epilogue`** — the two shared images that
+are entered and left several times a frame, which is what "end of *block*" rather than "end of
+program" predicts.
+
+### ★★ Crossing it with bit 5 partitions the population — and yields a hard constraint
+| | `bit5 = 0` | `bit5 = 1` |
+|---|---:|---:|
+| not END | 2 850 | 155 |
+| **END** | 35 | **17** |
+
+17 observed against **2.9 expected** under independence — **5.8×**. All 17 are the program's
+terminal word, all of the `042X10E000` family. And inside the bit-5 page:
+
+| page | `f31` histogram (0…7) |
+|---|---|
+| `bit5 = 1`, **END** | `0:2  1:0  2:2  3:0  4:12  5:0  6:1  7:0` — ★★ **EVERY ONE EVEN, 17 of 17** |
+| `bit5 = 1`, not END | `0:11 1:24 2:4 3:34 4:22 5:42 6:2 7:16` — **75 % ODD** |
+| `bit5 = 0`, END | `0:17 1:12 2:6` — **mixed**, so the rule is *not* a property of END words generally |
+
+★★★★ **Inside the bit-5 page, an END-OF-BLOCK word takes only an EVEN code — 17 of 17 — where the
+non-END bit-5 words are only 25 % even. `P ≈ 6.5 × 10⁻¹¹`.**
+
+⇒ The bit-5 population now has **three identified parts**, and the parity separates two of them
+cleanly:
+
+| part | count | `f31` |
+|---|---:|---|
+| **block terminators** (§69) | 17 | **even** — 0, 2, 4, 6 |
+| **level-detector heads** (§67) | 11 | **odd** — 3, 7 |
+| unexplained | 144 | mixed |
+
+⚠ **What this is:** a constraint a reading must satisfy, not a reading. It says `hi12` bit 1 (the
+low bit of `f31`) is **anti-correlated with bit 10 inside the bit-5 page** — never that we know
+what either means there. ⚠ And 144 of 172 remain unexplained, so this is a partition, not a decode.
+
+### ★ The EQ, dynamically: it has NO gradeable bit-5 site at all
+Running §64's successor test in **execution order** on a live capture (`dsp/tools/bit5_trace.py`,
+the EQ at the true default) rather than address order:
+
+| the EQ's 11 bit-5 executions | |
+|---|---|
+| `iw87`, `iw134`, `iw140` — large deltas (`4.2e11`, `1.3e9`, `5.5e11`) | **all BLIND**, discarded by the next `f31 = 0` LOAD |
+| `iw73`, `iw78` — the only **LIVE** ones | delta **0**, because the epilogue's accumulator is already dead (§47/§54) |
+
+⇒ ★ **The parametric EQ cannot grade a bit-5 experiment**: where the words do something it is
+discarded, and where it would survive there is nothing left to do it to. The reference program this
+session has leaned on hardest is **exactly the wrong place** to test this, and the static census
+predicted it.
+
+⚠ Grade: MEASURED (static over 3 057 words with two nulls; one live capture at the true default).
+Nothing anchored.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
