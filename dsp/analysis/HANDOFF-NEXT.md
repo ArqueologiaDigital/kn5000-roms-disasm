@@ -1,3 +1,62 @@
+# ★★★★★ 2026-09-13 — **THE INPUT PICKUP IS RAILED FOR A WHOLE FAMILY, AND `NO OPERATION` IS ONE OF THEM**
+
+★★★★★ **READ THIS BEFORE ANY DSP EXPERIMENT.** §70. This is the biggest blocker on the board and
+it invalidates measurements taken downstream of it.
+
+**4 of 4** decoded LEVEL-DETECTOR programs rail their input cell `0x05` at the **true default**
+(`dsp/tools/pickup_cells.py`, captures fingerprinted, `NOTEOFS=2.5`):
+
+| TYPE | program | `0x05` |
+|---|---|---:|
+| 2 | `prog03_enhancer` | **8 388 607** ⛔ |
+| 13 | `prog36_compressor` | **−8 388 608** ⛔ |
+| 14 | **`prog00_no_operation`** | **−8 388 608** ⛔ |
+| 18 | `prog52_auto_wah` | **8 388 607** ⛔ |
+
+★★★★ **`NO OPERATION` railing settles that this is OUR defect**: a program whose whole job is to
+pass audio through cannot legitimately saturate its own input. **9 of 9** body reads of that cell
+across the four are railed, and the value is **constant across a frame pair** — so those bodies
+cannot move, which is exactly §61's *"genuinely STATIC at the correct selector"*, now shown to be
+**family-wide rather than one program**.
+
+⛔⛔ **AND IT RETRACTS THIS SESSION'S OWN OPENING COMMIT.** I narrowed §62's rail to
+*"`prog32_distortion` specifically, not the dynamics family"* — on a 14-program sample that
+**contained no standalone dynamics program except the distortion**.
+
+**Where it comes from — localised to one word.** It is **not** an input sample: the device's own
+input-stage audit says the peak that ever entered was **2 420 992**, never within **3.5×** of the
+rail. Cell `0x05` is *both* the pickup `iw8` reads *and* a target of the kernel's bit-4 stores.
+The trajectory through a NO OPERATION frame ends at **`iw45` = `0010A0020C`** (class A, `ACT 0x0C`,
+`SRC 0x08`, `f31 = 0`, **bit-4 STORE**), where the accumulator arrives at **−791 648 272 384** —
+datum **−12 079 997**, **1.44× past the rail** — so the store's deliberate clamp writes `0x800000`.
+On the flanger the same word stores 2 824 201 and nothing clamps.
+
+**★★★★★ THE 2×2, program and instant held fixed, only the machine changed:**
+
+| cell `0x05` | arms ON (`PSHIFT=2`, total 23) | TRUE DEFAULT (total 22) |
+|---|---:|---:|
+| NO OPERATION | **−185 ok** | **−8 388 608 ⛔** |
+| FLANGER | 517 549 ok | **2 912 280 ok** |
+
+⇒ **an INTERACTION**: the datum scale is **necessary but not sufficient**. ⛔ Not the family (NO OP
+un-rails). ⛔ Not the arm (the flanger never rails). ⇒ **the earlier 14-program census was taken at
+total 23 — the arm was hiding the defect in every program it measured.**
+★ Internal null held: `0x01`/`0x04` byte-identical across the arm.
+
+⚠⚠ **`PSHIFT=2` IS NOT THE FIX.** Un-railed, NO OPERATION's pickup reads **−185** against inputs of
+2 420 992 — still broken, just quietly. And that arm is §227's documented two-sided control,
+contradicting the MEASURED Q1.22 scale. ⇒ **the question to answer is why the kernel's accumulator
+arrives at `iw45` 4× larger in the detector programs, and why the pass-through's pickup ends at
+−185 either way** — not "set the shift to 23".
+
+⚠ **CONSEQUENCE FOR THE bit-5 QUEUE below:** `prog52_auto_wah` was named as the best host for the
+bit-5 probe (4 gradeable sites). **Its pickup is railed**, so a test there today measures a body fed
+a constant — RULE 13. **Unrail first.**
+⚠ **CONSEQUENCE FOR EVERY CAPTURE ON DISK:** `reg/sel7_live` and the 14-program census carry
+`PSHIFT=2 C8SHIFT=1`; `reg/det7`, `reg/x_def` are the true default. **Never pool them** (§229).
+
+---
+
 # ★★★★ 2026-09-13 — THE BIT-5 PAGE IS PARTITIONED, and the SHARPEST PROBE is 20 words
 
 §69 (`dsp/tools/bit5_words.py`, `bit5_trace.py`). Three things the next pass needs:
