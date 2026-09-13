@@ -4599,6 +4599,49 @@ field is used, it is not the pointer delta, and it distinguishes sites within on
 `040.0.00.C63 → 000.6.{18,28}.4CD` (46) and `142.0.00.C63 → 000.6.{1A,1E,20}.407` (7). The
 selector's value set is a property of which variant the macro is, not of the program.
 
+## 99. ⚠ CORRECTION TO §97's OWN FRAMING — the "index-shaped" cell is our own output
+Evidence: [`data/idiom_cells_2026-09-13.txt`](data/idiom_cells_2026-09-13.txt), from the same
+chorus capture.
+
+§97 re-opened §168 because the cell the idiom sits on had come alive: `§176 0C:1(-17..19/chg19520)`
+— *"a small signed integer changing every ~91 frames is the shape of a table index"*. The
+conclusion §97 reached does not depend on that, but **the framing was wrong and it should not
+stand.**
+
+The frame trace shows the idiom's two chorus instances executing at `dp = 0x0C` and `dp = 0x0E`:
+
+```
+   n=80 iw114  0040000C63  dp 0C  mem 000000     the C63 word
+   n=81 iw115  00006184CD  dp 0C  mem 000000     the class-6 selector word
+   n=82 iw116  00124011CE  dp 0C  mem 000000     the class-4 word -- carries the bit-4 store
+   n=83 iw117  01042021CE  dp 0E  mem 009B26     the class-2 `post (p),(p)+2'
+   n=84 iw118  0142000C63  dp 0E                 the second instance begins
+   n=85 iw119  0000620407  dp 0E
+   n=86 iw120  00124011CE  dp 0E  mem 000001
+```
+
+and the same run's write census reports **`0C: 144162/3252070`** — cell `0x0C` is written
+**3 252 070 times**, about twice per frame, by words inside this frame.
+
+⇒ **the idiom writes the cell it reads.** Its `-17..+19` content is a fixed point of our own
+undecoded execution — the class-4 word storing its accumulator back where the next frame's class-4
+word will read it — not a quantity the chip is feeding in from a table. Reading it as
+"index-shaped" was reading our own output back as evidence.
+
+★ This makes §97's verdict stronger, not weaker: the entire §166/§168 thread was chasing a value
+the emulator produces. And it is the same failure §168 committed one level up — RULE 13 in its
+general form, *a value that moves is not a signal until you know who moves it.* The pre-registration
+`data/PREDICT_SRC11_MEM_2026-09-13.md` carries the same over-reading in its "Why this is being
+re-opened"; it is left as written, because a pre-registration that is edited after the run is not
+one, and this section is the correction.
+
+⚠ Also visible and worth the next pass's attention: in the first instance `mem[0x0C] = 0`, so the
+modulated tap multiplies by **zero**, and in the second `mem[0x0E] = 39718` — 0.5 % of full scale.
+Neither cell carries audio (the live audio cells in the same census run to ±2.9 million). **The
+chorus's two modulated taps are not reading the delay line.** That is what an undecoded addressing
+mode looks like from the outside, and it is the same shape as the input-stage defect §76 fixed:
+the arithmetic runs, and it runs on the wrong cell.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
