@@ -1,0 +1,22 @@
+UPD6383_SRC0B2=1 AT THE TRUE DEFAULT -- the pre-registered result (§73)
+
+  PRODUCER: dsp/tools/catalogue_regression.sh TYPES="5 22 3" NOTEOFS=2.5 \
+              UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0 UPD6383_SRC0B2=1
+  READ BY : dsp/tools/pickup_cells.py ; predictions in data/PREDICT_SRC0B2_2026-09-13.md
+
+  tempA at iw25 (the defect site)        SHIPPED        SRC0B2=1     and 0x04 is...
+    prog06_ensemble                            0         -23296          -23296  <- EXACT MATCH
+    prog56_mix_up                       -8388608         188160          188160  <- EXACT MATCH
+    prog04_flanger                       8388352         -14848          -14848  <- EXACT MATCH
+  => under the rival, iw25 reads the DI1 INPUT LATCH; shipped, it reads a stale delay register.
+
+  hand-off cell 0x05                     SHIPPED        SRC0B2=1   frame N+1
+    prog06_ensemble                            0         -12903      -33547   P3 PASS
+    prog56_mix_up                       -8388608         263946      270950   P2 PASS
+    prog04_flanger                       2912280        2912280     8081098   C1 PASS (unchanged)
+
+  internal null: cells 0x01/0x04 identical in all three, both arms.   P4 PASS
+
+  NOT PROMOTED: one kernel site is not the 1610-word SRC 0x0B population; and the flanger is
+  unchanged and still climbing (2912280 -> 8081098), so a SECOND path to full scale exists that
+  this arm does not touch.  Promotion needs the catalogue regression at the TRUE DEFAULT.

@@ -3058,6 +3058,11 @@ delay-family programs with no level detector at all, and they rail at inputs of 
 ⇒ ★★★★★ **THE CORRECTED HEADLINE, and it is far bigger than the one it replaces: at the SHIPPED
 datum scale, 7 of 8 programs hand the body a cell that is RAILED (6) or ZERO (1). Exactly ONE
 program in eight delivers a plausible sample to its body.**
+> ⚠ **AND EVEN THAT ONE IS NOT HEALTHY — §73.** `prog04_flanger`'s frame **also ends with `iw45`
+> storing `0x7FFFFF`**, and its cell reads **2 912 280 in frame N and 8 081 098 (96 % of full
+> scale) in frame N+1**. It is **latching up more slowly**, not surviving. ⇒ the true count is
+> **8 of 8 at or near full scale**; "exactly one healthy" was a sampling artefact of reading the
+> cell at `iw8`, before the frame's own store.
 
 ★ The ensemble's zero is **not** an absent measurement — the cell is touched 20 times in the frame
 and is driven to `0` by the **same `iw45`** that rails the others. Saturating to a rail and
@@ -3095,6 +3100,64 @@ refuted as the *discriminator* but not as a *contributor*).
 
 ⚠ Grade: MEASURED — 8 programs, ONE machine, identities fingerprinted, the confound §71 named
 explicitly tested and the previous attribution refuted by it.
+
+## 73. ★★★★★ THE DEFECT IS NAMED, AND A PRE-REGISTERED DECODE RIVAL FIXES IT
+§72 left *"the kernel's assembly saturates, somewhere between `iw2` and `iw45`"*. A **matched pair**
+closes it: `prog06_ensemble` (input `0x01` = 152 576, hand-off ends at **0**) and `prog56_mix_up`
+(157 952, ends **RAILED**) — same machine, inputs **3.5 % apart**, opposite failures, running the
+**byte-identical shared kernel**. Tracing the `tA` column:
+
+| | |
+|---|---|
+| `iw7` `0090A011C8` (ACT 0x08) | tempA ← **−23 296 / 188 160 / −14 848** — a real sample, all three |
+| **`iw25` `00002002D9` (ACT 0x19, `SRC 0x0B`)** | tempA ← **0 / −8 388 608 / +8 388 352** — ★ **OVERWRITTEN with zero or a rail** |
+| `iw39` (`SRC 0x19` = tempA, an **anchored** source) | reads the garbage |
+| `iw40` | multiplies it |
+| `iw45` | stores the result into the hand-off cell `0x05` |
+
+⇒ ★★★ **Both failure modes are ONE defect.** Whether the hand-off ends at `0` or at the rail is
+only whether `iw25`'s garbage was `0` or `±8 388 608`.
+
+### ★ And `iw25` is exactly the case a COMMITTED decode rival already covers
+`iw25` is **class 2 — not a delay word** — and its source is `SRC 0x0B`. The device ships:
+
+> `UPD6383_SRC0B2`: *0 = SHIPPED: `SRC 0x0B` is the delay-read register everywhere;
+> 1 = RIVAL: **on a word with no delay access it is `mem[ptr]`***
+
+Predictions committed **before** the run (`data/PREDICT_SRC0B2_2026-09-13.md`). Result:
+
+| # | prediction | result |
+|---|---|---|
+| **P1** | tempA at `iw25` becomes sample-like | ✅ **−23 296 / 188 160 / −14 848** |
+| **P2** | `mix_up`'s hand-off stops railing | ✅ **−8 388 608 → +263 946** |
+| **P3** | `ensemble`'s hand-off stops being 0 | ✅ **0 → −12 903** |
+| **P4** | internal null: `0x01`/`0x04` unchanged | ✅ **identical in all three** |
+| **C1** | the flanger not broken | ✅ **2 912 280, unchanged** |
+
+★★★★★ **And P1 is a SEMANTIC confirmation, not just a better number: the values tempA receives are
+`−23 296 / 188 160 / −14 848` — EXACTLY each program's own cell `0x04`, the DI1 input latch.**
+Under the rival, `iw25` reads **the input sample**; under the shipped reading it reads a **stale
+delay register**. An input stage that reads the input latch is the reading that makes sense of the
+word; the shipped one never did.
+
+★ **Stable across the frame pair**, so it is not a one-frame transient: `mix_up` 263 946 → 270 950,
+`ensemble` −12 903 → −33 547 — both moving with the audio and staying sane.
+
+### ⚠ NOT PROMOTED, and three reasons why
+1. **My own pre-registration forbids it**: *"one kernel site passing is not the 1 610-word
+   population `SRC 0x0B` spans."*
+2. ⚠ **It does not fix everything.** `prog04_flanger` is **unchanged** and still climbs
+   (2 912 280 → 8 081 098 across the pair). So a **second path to full scale exists** that this
+   arm does not touch — and it is in the program §72 wrongly called the healthy one.
+3. Promotion needs the **catalogue regression at the true default**, which is the one measurement
+   this session never had (every prior sweep carried the datum-halving arm, §72).
+
+⇒ **What it IS:** the input stage's first real candidate, passing five pre-registered criteria
+including a semantic one, at the site a confrontation identified. ⇒ **What to do next:** run the
+catalogue at the **true default**, arm off vs on, and grade `0x05` across all 38 programs.
+
+⚠ Grade: MEASURED, pre-registered, with an internal null and a control that both held, and the
+limitation that it leaves one of the three test programs unfixed stated in the same breath.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
