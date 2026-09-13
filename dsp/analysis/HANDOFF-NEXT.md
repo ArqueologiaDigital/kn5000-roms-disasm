@@ -1,3 +1,27 @@
+# ★★★★★ 2026-09-13 — `ACT 0x0E` IS CLOSED FOR THE EQ: **SELECTOR 7, AS SHIPPED**, BY TWO INDEPENDENT ROUTES
+
+| route | evidence |
+|---|---|
+| **§234** (FROM DISK, pre-existing, `LEDGER.md` TIER 0a) | the EQ's **entry window** vs the designer's biquad — **1 of 49** pairs, junk-pre-load control kills the runner-up |
+| **§58** (this session, FROM THE ORACLE) | `parametric_eq` is a **SERIES CASCADE** ⇒ only the FIRST band may receive the input; only selector 7 does |
+
+Different instruments, different criteria, same answer. ★ This also settles the standing memory
+note *"`ACT 0x0E` has 3 contradictory committed readings — reconcile"*: **reconciled in favour of
+the shipped `P ← bus`.**
+
+⛔⛔ **AND THE PROCESS FAILURE WAS MINE.** Every gate run, every catalogue regression and both
+promotions this session used `UPD6383_SPEC=B9108446A39B440F` — **selector 4, which §234 had already
+ruled out from disk.** `LEDGER.md`'s TIER 0a is literally titled *"READ THIS BEFORE … RE-OPENING
+`ACT 0x0D`/`0x0E`"*; I re-opened it repeatedly without reading it, on a value inherited from a note.
+⇒ **§56's shipped regression and §58's inversion have ONE root cause** — a settled result was not
+consulted before building on its contradiction. This is the `check-the-handover-first` rule, and it
+cost most of a session's promotions.
+⇒ ⚠ **RE-READ EVERYTHING MEASURED AT SELECTOR 4 AS MEASURED ON A REFUTED CONFIGURATION.** Survives
+unconditionally: §47, §51, §55, §13 and the coverage work list (corpus-only, never touched the
+mask). ⚠ §50's *38 live* should be **re-measured at selector 7**.
+
+---
+
 # ★★★★★ 2026-09-13 — THE ORACLE INVERTED MY OWN HEADLINE: THE EQ IS A **CASCADE**
 
 **`dsp/hle/effects.py`'s `parametric_eq` is a SERIES of biquads** — `y` feeds forward, band 2
