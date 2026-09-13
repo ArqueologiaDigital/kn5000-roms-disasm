@@ -41,6 +41,14 @@ def sext24(v):
 def read(path):
     """FIRST value seen in each pickup cell over the traced frame.
 
+    ⚠⚠ ONE-FRAME LAG, and it has already caused one misreading.  The first touch is what the
+    frame INHERITS from its predecessor -- which is exactly right for "what is this body handed",
+    but it means **the effect of any arm appears one frame LATE**.  N-INPUT-GATE-OPENED §73 read
+    `prog04_flanger` as "unchanged, the arm did not fix it" on that basis; the trace shows its
+    `iw45` storing -21 382 with the arm against +8 388 607 without, i.e. the arm HAD fixed it and
+    this function was reporting the previous frame.  ⇒ to grade an ARM, read the frame's own
+    STORES (trace_window.py / the cell trajectory), not this function alone.
+
     ★ FIRST, not last, and the difference is not cosmetic.  Cell `0x05` is touched 19 times in a
     frame: the kernel DEPOSITS the arriving sample at `iw8`, and the site-2 bit-4 store rewrites it
     again at `iw35`/`iw45` (the device's own `NOZ05` note names those sites).  The PICKUP question

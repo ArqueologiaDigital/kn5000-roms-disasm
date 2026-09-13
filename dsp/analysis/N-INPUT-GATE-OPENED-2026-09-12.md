@@ -3146,9 +3146,15 @@ word; the shipped one never did.
 ### ⚠ NOT PROMOTED, and three reasons why
 1. **My own pre-registration forbids it**: *"one kernel site passing is not the 1 610-word
    population `SRC 0x0B` spans."*
-2. ⚠ **It does not fix everything.** `prog04_flanger` is **unchanged** and still climbs
-   (2 912 280 → 8 081 098 across the pair). So a **second path to full scale exists** that this
-   arm does not touch — and it is in the program §72 wrongly called the healthy one.
+2. ⚠ ~~**It does not fix everything.** `prog04_flanger` is unchanged and still climbs~~
+   ⛔ **RETRACTED — that was MY instrument, not the arm.** `pickup_cells.py` reads the cell's
+   **first touch**, which is what the frame *inherits from its predecessor*, so **an arm's effect
+   shows up one frame LATE**. Reading the frame's own STORES instead: with the arm the flanger's
+   `iw45` stores **−21 382**; without it, **+8 388 607**. ⇒ **the arm fixes the flanger too**, and
+   "a second path to full scale" is **not supported** by that evidence. ⚠ The lag is now documented
+   in the tool, and the rule is: **to grade an arm, read the frame's own stores, not the cell it
+   inherited.** (§72's separate point stands: the flanger was never healthy at the default — its
+   own `iw45` stored the rail.)
 3. Promotion needs the **catalogue regression at the true default**, which is the one measurement
    this session never had (every prior sweep carried the datum-halving arm, §72).
 
