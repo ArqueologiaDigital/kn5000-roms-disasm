@@ -65,6 +65,13 @@ THE LIVENESS WALK, and exactly what it assumes
     Running off the end of the image is NOT blind: the accumulator crosses a block boundary in
     this machine (only the PRODUCT register is flushed, sect. 36), so a tail site stays open.
 
+★ AND THE PESSIMISM COSTS NOTHING -- MEASURED, so the headline does not rest on either judgement
+  call.  Re-run with C-format words treated as non-observers, with bit-11 words treated as
+  non-observers, and with both: **32 blind sites in every case**, the same as shipped.  (§97 gives
+  an independent reason to believe the bit-11 relaxation would be sound -- those words leave
+  `exec_alu()' before the SOURCE stage, measured 3 150 504 times in one chorus run -- but since it
+  buys nothing, the conservative reading stays.)
+
 ⚠ WHAT THIS IS NOT.  It does not decode `f31', and it does not choose among the store gate's three
   families.  Those stay OPEN and the notes must keep saying so.  It says that at these particular
   sites the choice has no consequence.
