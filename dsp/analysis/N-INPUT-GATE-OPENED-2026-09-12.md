@@ -2412,8 +2412,15 @@ over all 3 057 corpus words:
 ★ With bit 5 clear the corpus uses a **two-bit** operation field.  With bit 5 set it uses **all
 eight codes, high ones dominant**.  That is §229's device-side census reproduced **statically from
 the source of truth**, and sharper than it: the point is not that bit 5 *admits* the high codes, it
-is that bit-5 words are **mostly** high codes.  ⚠ The device collapses every code above 2 into one
-behaviour (`acc ← acc + bus`), so **five codes the corpus writes deliberately execute as one.**
+is that bit-5 words are **mostly** high codes.
+> ⛔ **CORRECTION (§88).** I wrote here that the device *"collapses every code above 2 into one
+> behaviour (`acc ← acc + bus`)"*. **That is wrong at the shipped default.** `SPEC` bit 0 is SET, so
+> the device computes `op = f31 & 3`: **4 → LOAD, 5 → ADD, 6 → HOLD**, and only **3 and 7** land on
+> "no product". So the five high codes execute as **two** behaviours, three of them **aliased onto
+> the decoded ops**. ⚠ That aliasing is the device's own silent mapping, which §133 calls *"a
+> standing breach of this project's own rule"* — it is not evidence, and it does not make those
+> codes decoded. The measured facts of this section (the minimal pairs, the bit-5 split) are
+> unaffected.
 
 ### What the bit-5 population IS
 172 words, 5.6 % of the corpus, in 32 of 40 programs (2 of them C-format, where hi12 is an
@@ -3925,6 +3932,60 @@ a worse artefact than a 76.4 % that is true.
 ⚠ Grade: the coverage figures are MEASURED (`dsp_coverage.py`); every row of the table is READ from
 the cited adjudication, not inferred. **Nothing here is a new decode** — it is the map of what is
 left and what each item costs.
+
+## 88. THE BIT-5 EXPERIMENT, ATTEMPTED — it is blocked by the SCALE problem, not by the decode
+§87 named the bit-5 experiment as the most reachable of the three remaining items, because §76
+un-railed its host's input. I ran it. **The host is still broken, one level deeper.**
+
+### The setup
+`prog52_auto_wah` is the right host: §67 showed its `w24` **heads the 2/π level-detector idiom**, and
+a rectify-and-smooth detector has an HLE-grounded criterion that needs no oracle run — **its output
+is non-negative and bounded by the input's magnitude, by construction.**
+
+### ⛔ The result: a SATURATION CASCADE
+Captured at the true default **with §76's promotion in** — the pickup is fixed
+(`0x05` = **−326 247**, was **railed at 8 388 607**) — and the detector is **still pinned**:
+
+```
+   iw104  0010AFC1D5  dp 0F  mem 7FFFFF     <- cell 0x0F is AT THE RAIL
+   iw105  0202A031D5  coef 517CC1 (2/pi)  L 8388607   <- the one-slot lag makes the rail its OPERAND
+   iw106  0202200000  acc += 1 094 039 241 359
+   iw107  002A200000  acc += 1 094 039 241 359        <- 2.16e12, i.e. datum 33 000 000
+   iw109  0018A001D5  ST  -> cell 0x12 = 7FFFFF       <- the store CLAMPS; the envelope is pinned
+```
+
+⇒ **a railed cell (`0x0F`) poisons the detector, whose own output cell (`0x12`) then rails too.**
+★ And `§74 §S1C` — the census I shipped this morning — **independently names `cell 12` at 3.5 %** of
+all clipped conversions in this very capture, alongside `cell 06` at 57.1 %. The instrument found
+the same cell the trace did.
+
+⇒ ★★★ **The bit-5 experiment cannot be graded today, and the reason is not the bit-5 decode.** A
+2/π detector pinned at full scale carries no information, so no reading of its head word can be
+distinguished from any other. §75's machine-wide saturation is the blocker — **at a second cell,
+one level upstream of the one I fixed.** That is a real result about the *order* the remaining work
+has to be done in: **scale before semantics.**
+
+### ⛔ AND A CORRECTION TO MY OWN §63, FOUND IN THIS TRACE
+§63 states the device *"collapses every code above 2 into one behaviour (`acc ← acc + bus`)"*. The
+trace shows otherwise, in two adjacent words:
+
+| | | |
+|---|---|---|
+| `iw107` `002A200000` | **`f31 = 5`** | acc **+1 094 039 241 359** — the **full product** |
+| `iw108` `0026200000` | **`f31 = 3`** | acc **+25 427 968** — the **bus term only** |
+
+They are not the same behaviour. `SPEC` bit 0 is **SET in the shipped default**, so the device
+computes **`op = f31 & 3`**: `4 → LOAD`, `5 → ADD`, `6 → HOLD`, and only `3` and `7` reach "no
+product". ⇒ the five high codes execute as **two** behaviours, **three of them aliased onto the
+decoded ops** — not one behaviour as I wrote.
+⚠ **This does not make them decoded.** The aliasing is the device's own silent mapping, which §133
+names *"a standing breach of this project's own rule"* (they execute with **no fired-count
+anywhere**). The §63/§64 measurements — minimal pairs, the bit-5 split, the blind/live census —
+are untouched; only my sentence about what the device does with them was wrong.
+
+⚠ Grade: MEASURED on a fresh capture at the true default with the promotion in; the correction is
+READ from the device's own dispatch (`op = sel ? f31 & 3 : f31`, `sel = SPEC bit 0`, set by default)
+and confirmed in the trace by two adjacent words behaving differently.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
