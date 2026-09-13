@@ -4950,6 +4950,49 @@ Not care — an **instrument**. §103's `UPD6383_CENSUS_PERPROG` made the census
 decided something here is one the ROM or the firmware states: the VOLUME cell's write-once, and the
 LFO's `floor(f × 2²³/44100)`. The three that failed earlier were all criteria I had constructed.
 
+## 107. ⛔ THE DELAY CRITERION IS BLIND TO `ACT 0x0B` — measured, with its reach test passing
+Tool: [`../tools/sd_act0b.py`](../tools/sd_act0b.py). Output:
+[`data/sd_act0b_2026-09-13.txt`](data/sd_act0b_2026-09-13.txt). Static, no emulator.
+
+`ACT 0x0B` is now the second-largest entry in the queue (62 sole, 66 occurrences), and
+`act0b-reverb.md` item H stopped exactly here: *"picking between [the three surviving readings]
+needs known mathematics the reverb does not supply — the diffuser gains are known but there is NO
+REFERENCE RESPONSE."* §106's method says what to do about that: find a criterion the ROM states.
+
+SINGLE DELAY has one — an impulse must return at the cascade lag **1001** carrying **45 074** =
+`((c·c)>>23)·h>>23` from the program's own coefficients, and `sd_rerun.py` self-tests that harness
+**13 of 13** — and `prog09_single_delay` carries **three ACT-0x0B words** (`w0`, `w9`, `w32`).
+
+### It reaches the code and it still cannot see it
+```
+   REACH TEST      ACT 0x0B fired 13 812 times in one scoring pass    ✔ (expected ~6 906+)
+   CONTROL         known-good baseline reproduces (1001, 45074)       ✔
+   ADDRESSING      pointer map over the 6 readings: 1 distinct        ✔ INVARIANT
+   THE SWEEP       none / tA<-bus / tB<-bus / tA<-acc / tB<-acc / mem<-bus
+                   ALL SIX -> 1001:45074                              ⛔ 6 of 6 ACCEPTED
+```
+
+**The criterion has no power on this code**, and that is a measurement rather than a suspicion: it
+demonstrably CAN fail — the *shipped* `ACT 0x0D`/`0x0E` pair fails it, putting 45 074 at lag 500
+(§234's own recorded result, which is why the baseline pair here is chosen mechanically as the
+first in menu order that reproduces the ROM answer, and printed).
+
+⇒ **at a09's three sites the six readings are the same machine.** What `ACT 0x0B` writes never
+reaches the delay output in this program.
+
+### And the static generalisation does NOT carry
+If the six readings were indistinguishable wherever all three of their destinations (tempA, tempB,
+`mem[ptr]`) are dead downstream, those words would be executable by §96's lemma. Measured over the
+62: **0 qualify.** `mem[ptr]` is live at every one of them under the honest test (any later memory
+read at all), which is what you would expect of a machine that reads memory constantly. The a09
+result is therefore a fact about a09's three sites, not a route to the other 59 — and the reason it
+holds there must be the *cell* the write lands on, which needs the pointer walk per site rather
+than a liveness flag.
+
+⛔ **Coverage unchanged at 77.6 %.** What this earns: `ACT 0x0B` cannot be decided by the delay
+line, so the next attempt should not be built on it — and the reason is now on file with a passing
+reach test instead of being rediscovered.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

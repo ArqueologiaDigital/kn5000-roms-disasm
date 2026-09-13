@@ -1,0 +1,28 @@
+==============================================================================
+== act0b -- ACTION 0x0B against SINGLE DELAY's lag-1001 ROM product
+==============================================================================
+   ★ REACH TEST FIRST (rule 15) -- a09's own ACT-0x0B words:
+
+      w0   088013000B  class 1  addr8 30  SRC 00  f31 0  store 0  delay-DRAM escape
+      w9   088012064B  class 1  addr8 20  SRC 19  f31 0  store 0  delay-DRAM escape
+      w32  088012064B  class 1  addr8 20  SRC 19  f31 0  store 0  delay-DRAM escape
+
+   ★ BASELINE `act0d'/`act0e' = ('nop', 'nop') -- the first pair in menu order that reproduces
+     the ROM answer.  The SHIPPED pair ('acc<-bus', 'P<-bus') does NOT (it puts 45074 at lag 500, §234).
+
+   ⇒ in ONE scoring pass (2302 frames) ACT 0x0B fired 13812 times (UNCONDITIONAL)
+      expected if the ACTION stage is reached every frame: ~6906
+      known-GOOD (act0b = none): 1001:45074   ✔ the ROM answer (lag 1001, sample 45074)
+      ★ ADDRESSING CONTROL -- pointer map over the 6 readings: 1 distinct   ✔ INVARIANT, so any echo difference is the ACTION
+
+   ★ THE SIX READINGS, pre-registered criterion = lag 1001 carrying 45074
+
+      none      1001:45074                               ✔ ACCEPTED   [item D survivor]
+      tA<-bus   1001:45074                               ✔ ACCEPTED
+      tB<-bus   1001:45074                               ✔ ACCEPTED
+      tA<-acc   1001:45074                               ✔ ACCEPTED   [item D survivor]
+      tB<-acc   1001:45074                               ✔ ACCEPTED
+      mem<-bus  1001:45074                               ✔ ACCEPTED   [item D survivor]
+
+   ⇒ 6 of 6 readings reproduce the ROM product; of item D's three survivors, 3 do: none, tA<-acc, mem<-bus
+   ⚠ Surviving here is NOT a decode -- it is not being refuted by THIS criterion.

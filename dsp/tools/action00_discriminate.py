@@ -201,6 +201,7 @@ ACT0D0E_SEL = {"nop": 0, "acc<-bus": 1, "tA<-bus": 2, "tB<-bus": 3,
 #  incremented whenever a word carrying the code is EXECUTED by step(), before
 #  any refusal.  Without them "the reading was never exercised" and "the reading
 #  was exercised and made no difference" print the same table.
+ACT0B_FIRED = [0]          # ★ sect. 107: rule 15 needs a fired count for 0x0B too
 ACT0D_FIRED = [0]
 ACT0E_FIRED = [0]
 
@@ -488,6 +489,7 @@ def step(m, st, w, coef, rng, ash=0, psh=23, dram=None, unknown=None,
                 st.tb = bus & MASK24
         elif act == 0x0B:
             # See the ACT0B note above.  "none" is the historical behaviour.
+            ACT0B_FIRED[0] += 1               # ★ sect. 107, rule 8: UNCONDITIONAL
             if m.act0b == "tA<-bus":
                 st.ta = bus & MASK24
             elif m.act0b == "tB<-bus":
