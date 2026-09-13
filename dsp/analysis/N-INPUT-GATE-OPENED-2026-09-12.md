@@ -4076,6 +4076,58 @@ defect"*. The largest is **unknown** until the census counts receipts.
 ⚠ Grade: MEASURED (the store-bearing split, one frame); the correction is to my own instrument and
 to two of my own claims, and both are corrected at the point a reader meets them.
 
+## 90. ★★★★★ THE SCALE PROBLEM AND THE DECODE GAP ARE THE SAME PROBLEM — a complete causal chain
+§89 gave the saturation a properly-measured target list for the first time. A ranked list of cells
+says *where* the damage lands; it does not say *who causes it*. So I extended `§S1R` to record, per
+cell, the **instructions** that hand it full scale (four `(iw, count)` slots each). One run, and the
+chain closes end to end.
+
+### The chain
+| step | evidence |
+|---|---|
+| the largest recipient | **`cell 06`, 33.7 %** of all full-scale receipts (3 083 579) |
+| its writers | **`iw19` (1 706 614)** and **`iw39` (1 372 663)** — together **all** of it, and both in the **shared kernel**, so in **every program** |
+| what `iw19` is | `051220044D` — class 2, store, `ACT 0x0D`, **`SRC 0x11`** … and **`decoded()` = FALSE** |
+| what it does | in the auto-wah trace its accumulator becomes **exactly `accb`**: `549 755 748 352` |
+| what `accb` is | `549 755 748 352` = **`8 388 607 << 16`, EXACTLY** — the positive rail, to the unit |
+
+⇒ ★★★★ **ACCB is pinned at the rail, `iw19` copies it into `cell 06`, and that is one third of every
+full-scale datum the machine stores.**
+
+### ⇒ Why this matters more than the number
+`SRC 0x11` has sat on the open list all session with the note *"needs a **device arm** — not
+passively capturable (dependency cycle + kernel-B constant) — and **the HLE does not model the
+chip's second accumulator**, so the oracle cannot reach it."* True, and it made the item look like a
+low-priority curiosity: 71 words, no way in.
+
+It is **the largest single scale defect in the machine**, and it now has:
+1. **a reason to be worked** — 1.7 M full-scale stores per run trace to it;
+2. ★ **a two-sided criterion that did not exist before** — *does `accb` stop sitting at
+   `8 388 607 << 16`, and does `cell 06`'s share of full-scale receipts fall?* Both are counted
+   automatically by `§S1R` now, in any capture, with no new rig;
+3. **a control**: `iw39` writes the *other* 1.37 M and **is decoded** (`ld.st ta,c+,(p)-1`), so its
+   railing is genuine arithmetic overflow, not a decode gap. A fix aimed at `SRC 0x11` must move
+   `iw19`'s count and **leave `iw39`'s alone** — if both move, the change is too broad.
+
+⇒ **§88's "scale before semantics" was half right.** At this site they are not two problems in an
+order — they are **one problem**: the cell is railed *because* the word feeding it is undecoded.
+
+### The rest of the culprit table, for the next pass
+| cell | share | railed by |
+|---|---:|---|
+| `8B` | 12.7 % | `iw296`, `iw303`, `iw288` (body 1, ~400 k each) |
+| `0E` | 7.9 % | **`iw121`** (493 718 — one word, nearly all of it) |
+| `94` | 6.1 % | `iw261`, `iw254`, `iw246` |
+| **`07`** ★ per-unit hand-off | 5.6 % | **`iw126`** (250 283) |
+| `8A` / `8C` / `8F` | ~4 % each | `iw313` / `iw66` / `iw332` — **one word each**, ~400 k |
+
+★ Several are **a single instruction responsible for essentially all of a cell's railing** — which
+is the shape of a defect, not of a diffuse scale problem.
+
+⚠ Grade: MEASURED (one run each, two programs; the `accb` identity is exact to the unit). ⚠ It does
+**not** say what `SRC 0x11` should read, or why `accb` is railed — it says the two questions are the
+same one, and hands it a criterion.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
