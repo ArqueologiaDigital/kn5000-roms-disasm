@@ -1,0 +1,16 @@
+=== `UPD6383_SRC0B2` PROMOTION GATE -- hand-off cell 0x05 AS THIS FRAME LEAVES IT,
+    TRUE DEFAULT.  (NOT the inherited value -- see handoff_out().) ===
+  TYPE        arm OFF        arm ON   verdict
+     0        113541        113541   KEPT   
+     1         38338         38338   KEPT   
+     2        145244        145244   KEPT   
+     3        -21382        -21382   KEPT   
+     4        262471        262471   KEPT   
+     5        -33547        -33547   KEPT   
+     6        304496        304496   KEPT   
+     7       -210125       -210125   KEPT   
+     8       -143401       -143401   KEPT   
+    15         56033         56033   KEPT   
+
+  FIXED 0 | KEPT 10 | STILL 0 | BROKEN 0 | missing 0
+  ⚠ No regressions and nothing fixed -- the arm is INERT on this sample.

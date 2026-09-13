@@ -154,3 +154,50 @@ strong and the arm reproduces the predicted walk to the cell; but one pre-regist
 failed, its failure is explained rather than excused, and the remaining criterion — P4, the
 10-program regression at the true default — is what decides whether the arm may stay as a
 default-off decode or must be reverted.
+
+
+---
+
+## P4 — the 10-program regression at the true default ([`cls46ptr_p4_2026-09-13.txt`](cls46ptr_p4_2026-09-13.txt))
+
+One binary, both arms, `NOPAIR=1 NOTEOFS=2.5`, `UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0`, every
+identity fingerprinted (10 of 10 ✅). Graded on the per-unit hand-off cell `0x05` **as the frame
+leaves it**:
+
+```
+   FIXED 0 | KEPT 10 | STILL 0 | BROKEN 0 | missing 0
+```
+
+**Nothing broken.** Every value bit-identical — which is the correct result and not a null: the
+kernel carries no class-4 or class-6 word, so P5's blast-radius argument predicts exactly this.
+
+⚠ **AND THE HARNESS CANNOT GRADE THE BODY SIDE, which I nearly read as a regression.**
+`fx_ab.lua` steps UP from TYPE 0, so a TYPE-15 capture has passed through every program before it,
+and `§176`'s D-RAM census accumulates from boot: "cells present" grows 12 → 109 across the sample.
+Diffing that census between arms therefore conflates every program walked through. My first pass at
+it reported the PARAMETRIC EQ's five band cells `0x50`/`54`/`58`/`5C`/`60` losing half their
+movement — but **PEQ contains no class-4 or class-6 word at all** (`bit11-family.md` item F lists
+it among the images with no bit-11 word), so the arm cannot touch it and the difference came from
+the programs walked through on the way. ⇒ **§176's census in a `catalogue_regression.sh` capture is
+CUMULATIVE, not per-program.** The frame-local instruments — the traced frame, `pickup_cells.py`,
+`src0b2_regression.py` — are the per-program ones.
+
+## VERDICT — NOT PROMOTED, arm ships DEFAULT-OFF
+
+| | |
+|---|---|
+| **P1** | ✔ 6 301 008 advances, exactly 4 per frame; the macro walks `0C→24→25→27`, **net +27 to the cell** |
+| **P2** | ⛔ FAIL — and the criterion could not have succeeded (the bit-11 head never reaches the SOURCE stage, so no index arrives; the tap is relocated, not aimed) |
+| **P3** | n/a — P2 did not pass, so there is nothing to check for constancy |
+| **P4** | ✔ 10 KEPT, 0 BROKEN at the hand-off; the body side is not gradeable with this harness |
+| **P5** | ✔ the kernel's cells bit-identical, blast radius as measured beforehand |
+| **P6** | ✔ notes playing, input cells non-zero and moving |
+
+★ The STATIC case stands on its own and is unaffected by any of this: the cross-corpus twin
+(`012.2.01.1CE` ↔ `012.4.01.1CE`, identical but for `class4`) and the two spellings of one macro
+agreeing at +27. ⛔ The RUNTIME case cannot be made until the bit-11 head is decoded, and **a
+decode is not promoted on a failed criterion however well the failure is explained.**
+`UPD6383_CLS46PTR` stays default-off, with its fired count and this file beside it.
+
+⇒ **Coverage is unchanged at 75.0 %.** `012.4.01.1CE` would additionally owe its store target on a
+mode the store rule never adjudicated, so even a clean pass would not have admitted it by itself.
