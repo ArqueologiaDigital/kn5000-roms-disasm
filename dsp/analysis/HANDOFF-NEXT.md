@@ -82,7 +82,22 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    and it would contest the bit-4 target the project FORCED over 2 160 models — a forcing done on
    the EQ, whose bit-4 words sit elsewhere). ⚠ **No arm proposed**: neither shape has a
    discriminating measurement yet, and §32 is recent enough.
-   ★★★ **UNBLOCKED 2026-09-13: the TYPE list has 38 entries (0..37), not 36** — that single fact
+   ★★★★ **DONE 2026-09-13: THE TYPE MAP IS REBUILT, ALL 38 INDICES MEASURED** — the 28-program
+   blocker is **removed, not merely unblocked** (`data/typewalk/TYPE_MAP.md`, every row from the
+   machine's own upload via `type_map_rebuild.sh` + `type_fingerprint.py`, 16-word match).
+   **What it corrected:** indices **0..19 were already right**; **index 20 is the collapse — TYPE
+   19 AND 20 BOTH LOAD `prog15_rock_rotary`** — so 21..35 were shifted down by one and **36/37
+   were missing entirely**. ⇒ the old rule *"add 1 above index 8"* was wrong about **where**, and
+   wrong for 9..19 which needed no adjustment.
+   ⚠ And independently the **selector** was wrong: `TYPELAST` defaulted to 35 for a list of 38, so
+   every request landed **two slots high**. **Anything measured through `type_select.lua` before
+   2026-09-13 was addressing a program two slots from the one intended** — re-check any such
+   result. (`fx_ab.lua`, used by the gate and the catalogue sweeps, steps UP from 0 and is NOT
+   affected; its TYPE 0–8 are the verified short-distance regime and its TYPE 15 captures are
+   confirmed to be the EQ by their five 4-cell band blocks.)
+   ⇒ **Sweeping the remaining 28 programs is now a mechanical run**, addressed by a measured index.
+
+   ★★★ **The calibration behind it: the TYPE list has 38 entries (0..37), not 36** — that single fact
    is the root of TYPE_MAP's off-by-one, and `type_select.lua`'s default `TYPELAST` was wrong by
    two. Found by **fingerprinting the uploaded program image** (`dsp/tools/type_fingerprint.py`,
    new: replays the uC-IF capture into a 384-word I-RAM image and matches 16 words against the 38
