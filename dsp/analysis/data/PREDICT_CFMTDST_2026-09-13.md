@@ -67,3 +67,21 @@ same machine. ⇒ **the words stay undecoded and coverage is unchanged at 77.6 %
 ⛔ It cannot be the answer as it stands — it destroys the hand-off — but it names the path: **the
 C-format immediate is implicated in the LFO rate defect.** The next pass has a specific thing to
 pull on rather than a symptom.
+
+---
+
+## §114 — the enumeration was missing its best-motivated member, and the corpus says which
+
+⚠ Mode 6 indexed the register file by **`addr8`**. That is the wrong half of the word:
+`is_setvec(w) = is_c40(w) && is_vector_lo12(lo12(w))` — **`lo12` is what selects the destination**
+on a C40 word, PROVEN (K5) for `lo12 = 0x445` / `0x446`, the per-unit CALL VECTOR registers — while
+`addr8` is where the PAYLOAD lives under the same family's payload rule. Mode 7 is
+`reg[lo12 & 0xFF]`, the member the enumeration should have had from the start.
+
+★ It is not a new hypothesis: it is the sub-case the project already proved, applied to the other
+four `lo12` values the corpus uses (`0x44C` ×29, `0x000` ×16, `0x451` ×8, `0x1DA` ×2).
+
+**N1** the arm fires. **N2 ★** if mode 7 is BIT-IDENTICAL to the latch, the C40 words write a
+register nothing reads ⇒ the 57 are EXECUTABLE whatever the destination is, by §96's lemma.
+**N3** if it differs, it is a live destination and must then be graded against the anchored cells.
+**N4** ⚠ §111's boundary: one program's null does not generalise — a pass needs several.
