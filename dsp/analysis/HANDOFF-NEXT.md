@@ -164,10 +164,20 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    why they looked like a residue: they were tested against `mem[N−1]`, a value they never load.)
    Widened to the whole shape with adjacency verified: **held in 347 of 363 (95.6 %)**, **loaded in
    16**, concentrated at `iw119` and unit-1 `iw213`.
-   ⛔ **`addr8` does NOT discriminate** — `0x01`, `0xBA`, `0xFF` each appear in BOTH columns
-   (`0xBA`: 3 held, 13 loaded). ⇒ **next measurement, bounded: what makes 16 of 363
-   otherwise-identical words LOAD when 347 HOLD?** Not the pointer field; candidates are the
-   **unit**, the **preceding word**, or a field the trace does not print.
+   ⛔ **THREE DISCRIMINATORS TESTED, TWO MORE REFUTED (§9).** `addr8` does not separate them
+   (`0x01`/`0xBA`/`0xFF` in BOTH columns; `0xBA` 3 held / 13 loaded). Neither does the **UNIT**
+   (u0: 40 held / 3 loaded; u1: 307 / 13). Nor does the preceding word's `(class, ACT)` **fully** —
+   but it is far from random:
+   ★★ **EVERY ONE of the 16 loads follows either the class-A MULTIPLY (`ACT 0x15`, 14 of 16) or a
+   `cls1 ACT 0x07` (2 of 16)**, and **327 of the 347 holds follow a word that NEVER precedes a
+   load** (`cls2 ACT00` 148/0, `clsA ACT0B` 144/0, `cls1 ACT0B` 16/0, `cls6 ACT07` 16/0 …).
+   ⇒ **MEASURED NECESSARY CONDITION: the latch is only ever reloaded when the PREVIOUS word was a
+   multiply or an `ACT 0x07`.** Not sufficient (those two shapes hold 20 / load 16) — but it
+   eliminates five of seven preceding contexts and **cuts the open set from 363 rows to 36**.
+   ⇒ ★ **The live candidate is now a field the trace does not print**, with a natural reading: a
+   multiply's own operand fetch plausibly drives the latch, so the next word sees held or reloaded
+   depending on **the multiply's pipeline state**. ⚠ **Testing it needs a NEW TRACE COLUMN, not a
+   new arm.**
    ⚠ **Nothing anchored — a 95.6 % rule is not a decode, and the 4.4 % is what would make it one.**
    ⚠⚠ **AND A CORRECTION TO CARRY:** §5's *"`mem[N−1]`, 51 of 51"* is true **of family
    `212/2/000`** and says nothing about `SRC 0x00` as a CODE. **Never promote a per-family
