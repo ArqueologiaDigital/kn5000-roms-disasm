@@ -59,6 +59,23 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    word, including things that destroy the machine.** ★★ On its own it selects no mechanism.
    **Only the PAIR (A)+(B) is a test, and nothing has passed both yet** — the single configuration
    with a live EQ is the one with the wrong phase.
+   ★★★★★ **§40: `UPD6383_ST07SIGN` IS ALSO PROMOTED — THE BODY-SIDE INPUT PATH IS CLOSED ON THE
+   REFERENCE PROGRAM.** The `ACT 0x07` mode-2 store lands on the **POST**-increment cell when
+   `addr8 > 0`, on the PRE cell otherwise (`UPD6383_ST07SIGN=0` restores the uniform target).
+   Isolated against the flush-only sweep: **zero regressions on ten programs**, every LFO still
+   +114/frame, the ensemble **loses** a railed cell, the flanger gains a product, and the
+   **PARAMETRIC EQ goes from 2 moving cells / 9 products to 30 / 90** — starved to running. Seven
+   programs are untouched because their entry stores carry a negative or absent `addr8`.
+   ★ The chain now runs end to end on the EQ: kernel delivers → entry assembles **one clean copy**
+   → the store lands on the cell the first band reads → all five bands filter their own input,
+   while the chorus keeps its oscillator. Verified two-sided after the change (default: one copy at
+   `0x50/54/58/5C/60`; `=0`: back to the unread `0x10`).
+   ⚠ **The hypothesis SURVIVED; it was not derived.** `addr8 > 0` may stand for something the trace
+   does not print, and it moved roughly half the `ACT 0x07` sites (corpus split 181 / 155 / 54).
+   ⚠ **Still open:** the **ENHANCER** stays at 10 products — it has **no `ACT 0x07` store at its
+   entry at all** (§37), so this rule cannot help it and how its body is fed is unknown; the other
+   28 programs are unswept; the output stage is still §216's null.
+
    ★★★★ **§36: `UPD6383_CALLFLUSH` IS PROMOTED TO DEFAULT-ON** (`UPD6383_CALLFLUSH=0` restores the
    old behaviour; the A/B stays available, as §225 did for `LFOWRAP`). **Zero regressions across
    ten programs**, and **five of the five programs that have an LFO phase word gain a correct
