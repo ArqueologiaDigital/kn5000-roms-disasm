@@ -1,3 +1,67 @@
+# ★★★★★ 2026-09-13 — **THE INPUT-STAGE DEFECT IS NAMED, AND A DECODE RIVAL FIXES IT**
+
+★★★★★ **START HERE.** §70–§73. The input stage was handing **8 of 8 programs** a hand-off cell at
+or near full scale, and it is now localised to **one word** with a **pre-registered arm that
+passes**.
+
+## The defect, from a matched pair
+`prog06_ensemble` (input 152 576, hand-off → **0**) vs `prog56_mix_up` (157 952, → **RAILED**):
+same machine, inputs **3.5 % apart**, opposite failures, **byte-identical shared kernel**.
+
+```
+  iw7   0090A011C8  ACT 08   tempA <- -23296 / 188160 / -14848      a real sample
+  iw25  00002002D9  ACT 19   tempA <-      0 / -8388608 / 8388352   ★ OVERWRITTEN, 0 or a RAIL
+  iw39  0410AFF647  SRC 19 = tempA (ANCHORED) reads the garbage
+  iw40                       multiplies it
+  iw45  0010A0020C  ST       stores the result into the hand-off cell 0x05
+```
+⇒ **both failure modes are ONE defect** — zero vs rail is only which garbage `iw25` left.
+
+## The arm: `UPD6383_SRC0B2=1`, pre-registered, **5 of 5 PASS**
+`iw25` is **class 2, not a delay word**, source `SRC 0x0B`. The shipped reading gives it the
+**delay-read register**; the committed rival gives it **`mem[ptr]`**.
+
+| | shipped | `SRC0B2=1` |
+|---|---:|---:|
+| tempA @ `iw25` (ens/mix/fla) | 0 / −8 388 608 / 8 388 352 | **−23 296 / 188 160 / −14 848** |
+| hand-off `0x05` ensemble | 0 | **−12 903** → −33 547 |
+| hand-off `0x05` mix_up | **−8 388 608** | **263 946** → 270 950 |
+| `0x01`/`0x04` (internal null) | — | **unchanged, all three** |
+| flanger (control) | 2 912 280 | **2 912 280, unchanged** |
+
+★★★★★ **P1 is SEMANTIC**: tempA's new values are **exactly each program's own cell `0x04`, the DI1
+input latch**. Under the rival `iw25` reads **the input**; shipped, it reads a **stale delay
+register**. That is the reading that makes sense of the word.
+
+## ⚠ NOT PROMOTED — three reasons, and the next command
+1. the pre-registration forbids promoting on one site (`SRC 0x0B` spans **1 610 words**);
+2. ⚠ **it does not fix everything**: `prog04_flanger` is unchanged and **still climbs**
+   (2 912 280 → **8 081 098**, 96 % of full scale, across the frame pair) ⇒ **a SECOND path to
+   full scale exists**. ★ That also corrects §72: the flanger was never the healthy one, it is
+   **latching up more slowly** — the true count is **8 of 8**;
+3. promotion needs the **catalogue regression at the TRUE DEFAULT**, the one sweep this session
+   never had (every prior one carried the datum-halving arm).
+
+⇒ **NEXT COMMAND:**
+```
+TYPES="<all 38>" NOTEOFS=2.5 dsp/tools/catalogue_regression.sh <out> \
+    UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0 UPD6383_SRC0B2=1     # and again without the last arm
+python3 dsp/tools/pickup_cells.py <out>/t*_F.log            # grade 0x05 across the catalogue
+```
+
+⛔ **REFUTED, pre-registered, so nobody repeats it:** `UPD6383_NOZ05=1`. The cell stays railed and
+only flips sign; with those stores gone it **never changes all frame**, because they are its *only*
+writer (null and control both held). §71, `data/PREDICT_NOZ05_2026-09-13.md`.
+
+⛔⛔⛔ **AND THE PROCESS LESSON:** every liveness census ever taken (§42/§50/§60,
+`data/railed_pickups_2026-09-13.txt`, `reg/sel7_live`) carried **`UPD6383_PSHIFT=2`** — passed by
+`catalogue_regression.sh` as a *"baseline arm … NOT optional"* — which halves the datum and makes
+the saturation disappear. **An arm adopted because it made things work was hiding the project's
+largest input-path defect.** The harness now warns at the top; override with
+`UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0`. ⚠ **Never pool captures across the two settings** (§229).
+
+---
+
 # ★★★★★ 2026-09-13 — **THE KERNEL'S INPUT STAGE SATURATES: 7 OF 8 PROGRAMS GET A BROKEN HAND-OFF**
 
 ★★★★★ **READ THIS FIRST. It is upstream of nearly everything else on this page.** §70–§72.
