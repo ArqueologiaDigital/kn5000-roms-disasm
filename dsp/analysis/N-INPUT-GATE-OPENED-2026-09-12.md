@@ -4365,6 +4365,85 @@ being the only control flow.
 programs, not 38 — but the result is 100 %/100 %/100 % with no partial case, and the frame
 structure (a fixed slot count per unit) predicts it generally.
 
+## 96. ★ TIER 1b: 30 WORDS WHOSE OPEN AXIS CANNOT BE OBSERVED — 74.0 % → 74.9 %
+Tool: [`../tools/acc_blind.py`](../tools/acc_blind.py). Wired into
+[`../tools/dsp_coverage.py`](../tools/dsp_coverage.py) as its own column, never folded into
+`decoded()`.
+
+Two of the three largest entries in the leverage table are open axes that live **entirely in the
+accumulator**:
+
+* **`f31` 3/4/5/6/7** — `f31-high.md` item A enumerates four readings (`base`, `negP`, `hold`,
+  `prod`); each differs from the others only in how `acc` is updated.
+* **the store gate at `f31 == 1`** — `store-gate.md` item D is a FORCED NEGATIVE: of 17 928
+  machines surviving all 29 blocks, **not one writes `mem[ptr]`**. The three survivors are `none`,
+  `ST(acc->else)` and `LD`. ★ `gate_settle.py:70` declares the `else` key *"a memory key no
+  pointer can ever equal"*, and `LD` assigns `st.acc` and nothing else — so all three families,
+  and the three `clr` placements with them, **differ only in `acc`**.
+
+`f31-high.md` item F had already measured that 92 of 203 such words are BLIND, and used it only to
+explain why the biquad cannot DECIDE the field. ★ **Turned around, it is a coverage result:**
+
+> if a word's only open axis is confined to the accumulator, and the accumulator it leaves is
+> destroyed before anything reads it, then every surviving reading executes that word identically
+> as far as the machine can tell — so the word is EXECUTABLE though the axis is unknown.
+
+That is what tier 1 measures: not *what the code names* but *can we run it faithfully*.
+
+**MEASURED:** 200 sites have an accumulator-confined open axis; **30 are blind** — 15 × `f31 5`,
+6 × `f31 4`, 5 × `f31 3`, 2 × `f31 7`, 1 × `f31 6`, and **1 store-gate site (kernel `w24`,
+`0692200415`)**. The body corpus goes **2200 → 2229 of 2974, 74.0 % → 74.9 %**; the frame floor
+70.4 % → 70.8 %.
+
+### The walk, and the three places it is deliberately pessimistic
+`SRC 0x10` observes the accumulator; so does the bit-4 store — **except** on a `b7 & f31 == 1`
+word, where item D forces that it does not reach `mem[ptr]`. `f31 == 0` (`acc <- P`) destroys it,
+and that kill does not depend on the open `ACTION 0x00` reading either, because
+`action00-discriminator.md` item C proves `load`/`add`/`rload` are the *same expression* at
+`hi12[3:1] == 0`. Pessimistic on purpose: **a C-format word, a bit-11 word, or any word whose SRC
+this project has not anchored counts as an observer**, because `gate_settle.py`'s own menus list
+`acc` among the candidates for `SRC 0x00`, `0x08` and `0x11`. Assuming those are harmless would
+assume away the coverage gap. It also counts **the site's own store** — whether that store takes
+the pre- or post-ALU accumulator is one of the solver's free dimensions, so the axis is observable
+at the site and the walk never starts. That last check alone removed 25 sites from a first draft.
+
+### ★ The control, and it goes the right way
+An accumulator thrown away four slots later looks like **dead work**, and §95 has just shown these
+microprograms contain no unreachable instructions. If discarding were rare, finding it
+concentrated on the `f31 > 2` words would be evidence that those words are *not* accumulator
+operations — and the lemma would be assuming the very thing in doubt. So measure the rate where
+the operation is not in question (`acc_blind.py --null`):
+
+| `f31` | words | accumulator discarded | rate |
+|---|---:|---:|---:|
+| 0 (`acc <- P`) | 1143 | 354 | **31.0 %** |
+| 1 (`acc <- acc + P`) | 808 | 157 | 19.4 % |
+| 2 (hold) | 251 | 26 | 10.4 % |
+| **anchored 0/1/2** | **2202** | **537** | **24.4 %** |
+| **open 3..7** | **131** | **32** | **24.4 %** |
+
+**The same rate, to three digits.** Discarding an accumulator is ORDINARY in this machine — the
+fully anchored `acc <- P` is discarded 31 % of the time — so it carries no information about what
+the open codes mean. The objection is answered by the machine itself, and the ROM's microprograms
+are shown not to be minimal: they routinely compute accumulator values nothing reads.
+
+### Grade, split honestly
+⚠ **The store-gate site is FORCED** — the survivor set is exhaustive over the 19 758 816 machines
+`gate_settle.py` searched, and `else` is unreadable by construction.
+⚠ **The 29 `f31` sites rest on a stated premise**: that `hi12[3:1]` selects the accumulator's
+update for values 3..7 as it provably does for 0/1/2. That premise is FORCED to be an accumulator
+control by the LFO minimal pair `092.A.dd.200` / `094.A.dd.200` (identical in class4, addr8 and
+all twelve lo12 bits) and MEASURED to have base-op structure by `f31-high.md` item B (bases 0/1/2
+track to three digits across bit 2, over a 20× sample-size difference) — but `f31-high.md` §4.3 is
+explicit that the four readings are *"a starting set, not an enumeration"*, and item C shows base 3
+is not a modified base 3. **So this is DETERMINED-conditional, not FORCED, and the column is kept
+separate from `decoded()` so no published per-word number moves.**
+
+⚠ Tier 1b is a property of the SITE, not the word. `dsp_disasm.decoded()` stays per-word — the
+MAME disassembler mirrors it word for word and has no image to look at — and `dsp_coverage.tally()`
+now takes a LIST OF IMAGES rather than a concatenation, so a site at one body's tail cannot find
+its `f31 == 0` killer in the next body, which does not follow it in execution.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

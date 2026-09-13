@@ -55,17 +55,36 @@ REVERB_ALGO = 16
 form_of = D.form_of
 
 
-def tally(words):
-    t1 = [w for w in words if D.decoded(w)]
-    t2 = [w for w in words if not D.decoded(w) and D.status(w)]
-    return len(words), len(t1), len(t2)
+#   ★ TIER 1b -- EXECUTABLE IN CONTEXT (N-INPUT-GATE-OPENED sect. 96).  `decoded()' is a
+#   per-WORD predicate and the MAME disassembler mirrors it word for word, so it cannot see that
+#   a word's ONE open axis is an accumulator the image throws away four slots later.  That is a
+#   property of the SITE, not of the word, and `acc_blind.py' computes it from the image.  Kept
+#   as its own column so the per-word number stays comparable with every figure ever published.
+import acc_blind as B                                                    # noqa: E402
 
 
-def row(name, words):
-    n, a, b = tally(words)
-    return ("  %-30s %5d %7d %7.1f%% %8d %8.1f%%"
-            % (name, n, a, 100.0 * a / n if n else 0.0, b,
-               100.0 * (a + b) / n if n else 0.0))
+def tally(images):
+    """★ `images' is a LIST OF IMAGES, not a flat word list.  Tier 1b is a per-SITE property and
+    its liveness walk runs to the end of THE IMAGE -- concatenating first would let a site at the
+    tail of one body find its `f31 == 0' killer in the next body, which does not follow it in
+    execution.  Every caller passes the images separately for that reason."""
+    n = a = nb = b = 0
+    for words in images:
+        blind = set(B.blind_sites(words))
+        n += len(words)
+        a += sum(1 for w in words if D.decoded(w))
+        nb += len(blind)
+        b += sum(1 for i, w in enumerate(words)
+                 if not D.decoded(w) and i not in blind and D.status(w))
+    return n, a, nb, b
+
+
+def row(name, *images):
+    n, a, nb, b = tally(images)
+    return ("  %-30s %5d %7d %7.1f%% %6d %7.1f%% %6d %7.1f%%"
+            % (name, n, a, 100.0 * a / n if n else 0.0,
+               nb, 100.0 * (a + nb) / n if n else 0.0, b,
+               100.0 * (a + nb + b) / n if n else 0.0))
 
 
 def main():
@@ -107,8 +126,8 @@ def main():
     print("=" * 78)
     print("uPD6383GF DECODE COVERAGE -- tier 1 = executable, tier 2 = operation only")
     print("=" * 78)
-    print("  %-30s %5s %7s %8s %8s %9s"
-          % ("region", "words", "tier1", "tier1%", "tier2", "t1+t2%"))
+    print("  %-30s %5s %7s %8s %6s %8s %6s %8s"
+          % ("region", "words", "tier1", "tier1%", "+1b", "t1+1b%", "tier2", "all%"))
     # What the chip actually EXECUTES differs from the canned ROM image in
     # exactly two words: after EFF_Link the host has overwritten I-RAM 64 and 71
     # with the C-format call-vector loads (cold-boot capture transfers 50/51,
@@ -117,14 +136,15 @@ def main():
     linked[64 - 60] = 0xC40A80445          # setvec unit0,#84
     linked[71 - 60] = 0xC41900446          # setvec unit1,#200
 
-    print(row("resident kernel I-RAM 0..82", kernel))
+    print(row("resident kernel I-RAM 0..82", header, epilogue))
     print(row("   ...header  I-RAM  0..59", header))
     print(row("   ...output stage 60..82", epilogue))
     print(row("   ...output stage AS LINKED", linked))
     print(row("reverb image (algo 16)", reverb))
-    print(row("FRAME FLOOR kernel + reverb", kernel + reverb))
-    print(row("FRAME FLOOR as linked", header + linked + reverb))
-    print(row("all %d distinct body images" % len(distinct), allbody))
+    print(row("FRAME FLOOR kernel + reverb", header, epilogue, reverb))
+    print(row("FRAME FLOOR as linked", header, linked, reverb))
+    print(row("all %d distinct body images" % len(distinct),
+              *[distinct[a] for a in sorted(distinct)]))
     print()
     print("  tier-1 forms on the frame floor:")
     fc = {}
