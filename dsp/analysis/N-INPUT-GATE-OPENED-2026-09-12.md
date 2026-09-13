@@ -5033,6 +5033,43 @@ the audio**; a difference that altered only the output samples would read as "bl
 `f31 == 4` **fired 0 times** in the chorus, so the two arms aimed at it said nothing; it is untested
 and is recorded as such rather than swept in with the rest.
 
+## 109. THE C-FORMAT DESTINATION: 6 → 4, and a 255× lead on the LFO
+Pre-registration and result: [`data/PREDICT_CFMTDST_2026-09-13.md`](data/PREDICT_CFMTDST_2026-09-13.md).
+
+C-format became the queue's largest entry once the store gate closed — **68 words, every one
+trapping** — and `status()` has called its operation MEASURED with the destination OPEN since it
+was written, *"1 of 6 enumerated"*, with nobody ever having run the six. New arm
+`UPD6383_CFMTDST` (default 0 = the shipped latch) runs them.
+
+| dest | hand-off `0x05` | LFO mean step (ROM says 114) | |
+|---|---|---:|---|
+| latch (shipped) | intact | 15 543.93 | |
+| acc | intact | 15 543.93 | |
+| **P** | **14 — DESTROYED** | **128.30** | ⛔ refuted / ★ the lead |
+| **tempA** | **53 — DESTROYED** | 167.40 | ⛔ refuted |
+| tempB | intact | 15 543.93 | |
+| **mem[ptr]** | **45 — DESTROYED** | LFO DEAD | ⛔ refuted |
+| reg[addr8] | intact | 15 543.93 | **bit-identical to the latch** |
+
+**Three of six are refuted** on an anchored criterion: they collapse the per-unit hand-off cell
+from a live ±2.9 M audio signal to a frozen constant, and that cell is the one §76 promoted
+`SRC0B2` on across 8 programs. ★ `latch` and `reg[addr8]` are **bit-identical** — the register-file
+destination cannot be told apart from a latch nobody reads — but `acc` and `tempB` move other
+censuses, so the four survivors are **not one machine**.
+
+⛔ **The words stay undecoded. Coverage is unchanged at 77.6 %.** The pre-registration named this
+outcome in advance (H5) so it is a result and not a disappointment.
+
+### ★★ The lead is larger than the result
+**Destination `P` takes the chorus LFO from 153 Hz to 0.674 Hz** — `step 128..464046, mean 128.30`
+against the ROM's **114** — **within 12.5 %** of `floor(0.5993 × 2²³/44100)`, where the shipped
+model is out by **255×**. Nothing else this session moved that number into the right order of
+magnitude, and §102 left precisely this open: *"the gate is not the only cause."*
+
+It cannot be the answer as it stands, because it destroys the hand-off. What it does is **name the
+path**: the C-format immediate is implicated in the LFO rate defect, and the next pass has
+something specific to pull on instead of a symptom.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

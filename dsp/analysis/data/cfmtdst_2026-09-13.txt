@@ -1,0 +1,11 @@
+=== C-FORMAT DESTINATION SWEEP, chorus, per-program census, true default ===
+m   dest        fired       cens md5   HAND-OFF 0x05                        LFO 07 mean step
+0   latch       0           e81a960c   05:177684(-2869494..3486228/chg175660) mean 15543.9286
+1   acc         28577436    d6d14c1c   05:177684(-2869494..3486228/chg175660) mean 15543.9286
+2   P           28577436    9dfca228   05:14(0..14/chg1)                    mean 128.2953
+3   tempA       28577436    61de52aa   05:53(0..53/chg1)                    mean 167.4048
+4   tempB       28577436    2632d526   05:177684(-2869494..3486228/chg175660) mean 15543.9286
+5   mem[ptr]    28577436    049052fe   05:45(0..45/chg1)                    LFO DEAD
+6   reg[addr8]  28577436    e81a960c   05:177684(-2869494..3486228/chg175660) mean 15543.9286
+
+ROM constant: the chorus LFO increment is 114/frame = 0.5993 Hz (lfo-ramp.md, nine-fold)
