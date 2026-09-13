@@ -1,0 +1,35 @@
+WHO WRITES THE CELL THE BODY FIRST READS?  (live programs = the training set)
+TYPE program                  state  cell   value    the writer, if any
+9    prog32_distortion        LIVE   0x05   0        ACT07 u0 iw34, bit4 u0 iw35, bit4 u0 iw39
+10   prog33_overdrive         LIVE   0x50   0        ACT07 u0 iw86, bit4 u0 iw88, bit4 u0 iw90
+11   prog34_fuzz              LIVE   0x05   0        ACT07 u0 iw34, bit4 u0 iw35, bit4 u0 iw39
+12   prog35_exciter           static 0x50   0        ACT07 u0 iw89, bit4 u0 iw92, bit4 u0 iw98
+13   prog36_compressor        LIVE   0x07   8388607  bit4 u0 iw27, bit4 u0 iw30, bit4 u0 iw87
+14   prog00_no_operation      LIVE   0x14   8388607  bit4 u0 iw95
+16   prog48_auto_pan          static 0x10   0        bit4 u0 iw87, bit4 u0 iw94
+17   prog50_vibrato           static 0x50   0        bit4 u0 iw90, ACT07 u0 iw94
+18   prog52_auto_wah          static 0x11   760      bit4 u0 iw129, bit4 u0 iw132, bit4 u0 iw133
+19   prog15_rock_rotary       static 0x0F   9        bit4 u0 iw90, bit4 u0 iw126
+20   prog15_rock_rotary       static 0x0F   9        bit4 u0 iw90, bit4 u0 iw126
+21   prog54_ring_modulator    LIVE   0x12   563560   bit4 u0 iw94, bit4 u0 iw96, ACT07 u0 iw97
+22   prog56_mix_up            static 0x07   0        bit4 u0 iw27, bit4 u0 iw30, bit4 u0 iw87
+23   prog64_s_delay_chorus    -      0x08   7801958  bit4 u0 iw84, bit4 u0 iw86, ACT07 u0 iw87
+24   prog65_s_delay_s_delay   static 0x11   0        bit4 u0 iw126
+25   prog66_s_delay_flanger   -      0x08   3389917  bit4 u0 iw87, bit4 u0 iw88, bit4 u0 iw90
+26   prog67_s_delay_vibrato   LIVE   0x08   0        ACT07 u0 iw89, bit4 u0 iw90, bit4 u0 iw92
+27   prog68_s_delay_phaser    static 0x10   0        ACT07 u0 iw89, bit4 u0 iw94
+28   prog70_auto_wah_s_delay  static 0x07   0        bit4 u0 iw27, bit4 u0 iw30, bit4 u0 iw145
+29   prog71_peq_chorus        -      0x08   3441260  bit4 u0 iw87, bit4 u0 iw89, bit4 u0 iw91
+30   prog72_peq_s_delay       -      0x50   0        bit4 u0 iw87
+31   prog73_peq_flanger       -      0x08   3441262  bit4 u0 iw87, bit4 u0 iw89, bit4 u0 iw91
+32   prog74_peq_vibrato       static 0x08   -185681  bit4 u0 iw85, bit4 u0 iw87, bit4 u0 iw126
+33   prog75_peq_compressor    static 0x50   0        NOTHING WRITES IT
+34   prog96_peq_compr_dist    static 0x50   0        NOTHING WRITES IT
+35   prog97_peq_compr_overdr  static 0x50   0        NOTHING WRITES IT
+36   prog98_peq_dist_delay    static 0x50   0        NOTHING WRITES IT
+37   prog99_peq_overdr_delay  static 0x50   0        NOTHING WRITES IT
+
+   -        writer=bit4   : 5 programs
+   LIVE     writer=bit4   : 7 programs
+   static   writer=NONE   : 5 programs
+   static   writer=bit4   : 11 programs

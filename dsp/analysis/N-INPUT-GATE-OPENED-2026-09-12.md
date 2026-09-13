@@ -1800,6 +1800,41 @@ directly. The output stage is an independent decode problem and the largest unex
 
 ⚠ Grade: MEASURED, 38 programs, plus the three-way check that killed my own first reading.
 
+## 48. ★★ THE TRAINING-SET CENSUS: the 16 static programs are TWO problems, and 11 of them are NOT a store problem
+§44 asked *"which words store at all"*. The right way to answer it is not another arm but a census
+**against the programs that work**: for all 38, who writes the cell the body first reads?
+(`data/firstcell_writers_2026-09-13.txt`.)
+
+| | writer of the first-read cell | n |
+|---|---|---|
+| **LIVE** programs | a **bit-4 store** (sometimes plus `ACT 0x07`) | **7 of 7** |
+| static | a **bit-4 store** exists | **11** |
+| static | **NOTHING WRITES IT** | **5** — the PEQ combis |
+
+★ **First, the shape the live programs actually use.** In every live program the writer sits
+**at or AFTER** the first read in the frame (e.g. `prog33_overdrive` reads at `iw86` and the
+bit-4 stores are at `iw88`/`iw90`). That is not a contradiction — it is a **state cell**: written
+late in frame *N*, read at the top of frame *N+1*. The frame loop carries it. So the body's first
+operand is **last frame's state**, and a body only runs once the loop has been primed.
+
+⇒ ★★ **THE 16 ARE TWO DIFFERENT PROBLEMS, and the larger group is not a store problem at all.**
+- **11 static programs have a writer** for that cell, exactly like the 7 live ones. Their cells are
+  written and the value written is **zero**, so they are starved **upstream** — the chain that
+  should reach the store never carries anything. A store-target or store-predicate change cannot
+  help them; that whole line of attack (§43, §45, §46) was aimed at the wrong group.
+- **5 PEQ combis have NO writer anywhere in the frame, either unit.** Only those five are the
+  structural case §44 described.
+
+⚠ **This retires the framing of §44's "which words store at all" for 11 of the 16.** The question
+for them is *what should be feeding the store*, which is an upstream-chain question and joins the
+enhancer's (§41) rather than the PEQ combis'.
+
+★ And it gives the next investigation a **positive control for the first time**: 7 live programs
+whose first-read cell is written by a bit-4 store and whose bodies run. Any proposed fix for the 11
+must leave those 7 untouched — a constraint the store-target attempts never had.
+
+⚠ Grade: MEASURED over all 38 programs' captures, identities fingerprinted.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
