@@ -5111,6 +5111,42 @@ than an output.
 to the axis**. Each one removes a specific experiment from the queue and names what would replace
 it. That is what a queue is for.
 
+## 111. ⛔ `SRC 0x11`'s OPERAND IS CONSUMED — 5 of 5, and the chorus was the exception
+Pre-registration and result:
+[`data/PREDICT_SRC11BLIND_2026-09-13.md`](data/PREDICT_SRC11BLIND_2026-09-13.md).
+
+§110 measured, on the chorus, that `SRC 0x11`'s three readings move the operand (`§175`) while the
+whole D-RAM census comes out **bit-identical**. I read that as *"the operand is never consumed"*,
+which would have made the **54 words refused for this axis alone** executable by §96's lemma — a
++1.8 % coverage move — and wrote it into a pre-registration.
+
+**Five programs say no.**
+
+```
+   TYPE  program        sites   §175 (K1)     §176 (K2)
+   2     enhancer         4     differ(3)     DIFFER(3)
+   3     flanger          4     differ(3)     DIFFER(3)
+   5     ensemble         7     differ(3)     DIFFER(3)
+   14    no operation     2     differ(3)     DIFFER(3)
+   16    auto pan         4     differ(3)     DIFFER(3)
+   ---   chorus (§110)    -     differ(3)     IDENTICAL   <- the exception
+```
+
+⇒ **the operand IS consumed. No words are admitted and coverage stays at 77.6 %.**
+
+### What is refuted is my extrapolation, not the measurement
+§110's chorus numbers stand. The sentence built on them does not: **the chorus's D-RAM being
+insensitive is a property of the chorus, not of the code.**
+
+★ **Sixth over-read of this session, and the sixth stopped by a criterion written before the run.**
+K1 and K2 exist so that "the censuses agree" cannot be quoted without "and they were able to
+disagree" — here they disagreed, five times out of five.
+
+⚠ **And it bounds §108's method: one program's null does not generalise.** §108's blindness
+conclusion was drawn over five programs with three showing the opposite, which is why it holds;
+§110's was drawn over one, which is why it did not. Any future use of the sweep-and-diff instrument
+needs the sample, not just the instrument.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -40,3 +40,38 @@ would become decodable.
 
 ⛔ It does not decode `SRC 0x11`. ⛔ It licenses only the programs actually run. ⛔ And it says
 nothing about the other 23 words in the population, which are refused on other axes too.
+
+
+---
+
+## RESULT — **K2 FAILS 5 of 5. The extrapolation is refuted; the measurement it came from stands.**
+Data: [`src11blind_2026-09-13.txt`](src11blind_2026-09-13.txt).
+
+```
+   TYPE  program        sites   §175 (K1)     §176 (K2)      verdict
+   2     enhancer         4     differ(3)     DIFFER(3)      OPERAND IS CONSUMED
+   3     flanger          4     differ(3)     DIFFER(3)      OPERAND IS CONSUMED
+   5     ensemble         7     differ(3)     DIFFER(3)      OPERAND IS CONSUMED
+   14    no operation     2     differ(3)     DIFFER(3)      OPERAND IS CONSUMED
+   16    auto pan         4     differ(3)     DIFFER(3)      OPERAND IS CONSUMED
+   ---   chorus (§110)    -     differ(3)     IDENTICAL      <- the exception, not the rule
+```
+
+**K1 holds everywhere** (the operand really moves), and **K2 fails everywhere**: the D-RAM census
+differs between the three readings in all five programs. ⇒ **`SRC 0x11`'s operand IS consumed**, and
+no word is admitted. **Coverage unchanged at 77.6 %.**
+
+### ⚠ This refutes my extrapolation, not §110's measurement
+§110 measured, on the CHORUS, that the operand moves while the D-RAM comes out bit-identical. That
+stands. What does not stand is the sentence I built on it in this file's header — *"the operand
+these words select is fed to the multiplier and never reaches memory"*. Five programs say it does.
+**The chorus's D-RAM being insensitive is a property of the chorus, not of the code.**
+
+★ That is the sixth over-read of this session, and like the others it was stopped by a criterion
+written before the run rather than by the result. K1 and K2 exist precisely so that "the censuses
+agree" cannot be quoted without "and they were able to disagree" — here they disagreed, five times
+out of five.
+
+⚠ It also puts a boundary on §108's method: **one program's null does not generalise.** §108's
+conclusion was drawn over five programs with three of them showing the opposite; §110's was drawn
+over one. The instrument is sound; the sample size was mine.

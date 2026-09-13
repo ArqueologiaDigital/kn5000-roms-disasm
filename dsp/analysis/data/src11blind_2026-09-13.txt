@@ -1,0 +1,9 @@
+=== SRC 0x11 BLINDNESS TEST, five programs, per-program census, true default ===
+TYPE  program                  sites    §175 (K1)     §176 (K2)     verdict
+2     enhancer                 4        differ(3)      DIFFER(3)      OPERAND IS CONSUMED
+3     flanger                  4        differ(3)      DIFFER(3)      OPERAND IS CONSUMED
+5     ensemble                 7        differ(3)      DIFFER(3)      OPERAND IS CONSUMED
+14    no_operation             2        differ(3)      DIFFER(3)      OPERAND IS CONSUMED
+16    auto_pan                 4        differ(3)      DIFFER(3)      OPERAND IS CONSUMED
+
+chorus (sect. 110), for comparison:  §175 differ(3)   §176 IDENTICAL   -- the exception
