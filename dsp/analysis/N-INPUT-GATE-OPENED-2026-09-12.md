@@ -4749,6 +4749,50 @@ made until the bit-11 head is decoded, and `012.4.01.1CE` would additionally owe
 target** on a mode the store rule never adjudicated (that rule separates mode 1 from mode 2; modes
 4 and 6 were never in its sample). `UPD6383_CLS46PTR` ships default-off with its fired count.
 
+## 101. THE STORE GATE HAS TEN MINIMAL PAIRS, AND THE LFO RAMP WORD IS ONE OF THEM
+Tool: `class_twins.py --bit7`. Static, pooled corpus, no emulator.
+
+The gate at `(bit 7, f31 == 1)` is the largest single entry in the leverage table (82 sole / 138)
+and `store-gate.md` item D leaves it three-way open. The same instrument that cracked `class4` —
+minimal pairs over the pooled KN5000 + WSA1R corpus — aimed at `hi12` bit 7:
+
+**23 pairs differ in bit 7 and in nothing else** (same `class4`, `addr8`, `lo12`, and every other
+`hi12` bit), and in **10 of them the bit-7 member is the open gate while its twin is DECODED** and
+stores `acc` to `mem[ptr]`. Ten minimal pairs across the one bit whose meaning is open, and nobody
+had asked the corpus for them.
+
+```
+   0212200000 x236  ↔  0292200000 x4      0012A00200 x1   ↔  0092A00200 x26   ★ THE LFO RAMP
+   0212A01412 x100  ↔  0292A01412 x23     00122FF1D5 x8   ↔  00922FF1D5 x4
+   00122011CE x2    ↔  00922011CE x2      001224F1C0 x2   ↔  009224F1C0 x2
+   0212A001D3 x7    ↔  0292A001D3 x1      0212A011D5 x4   ↔  0292A011D5 x3
+   0012A001D5 x2    ↔  0092A001D5 x1      001224B1C0 x1   ↔  009224B1C0 x1
+```
+
+★★ **`092.A.00.200` is the LFO ramp word** — 46 occurrences over 26 images, the one whose
+increment `lfo-ramp.md` anchors **nine-fold** (`floor(f × 2²³/44100)` for round decimal rates) —
+**and its bit-7-clear twin `012.A.00.200` exists.** The LFO is this project's best-anchored
+arithmetic; the gate's three survivors differ only in the accumulator; and a phase accumulator is
+made of exactly that. In the chorus frame the ramp word sits two slots before the WRAP word
+`094.A.00.200` (`f31 == 2`, DECODED, and the one that actually stores the phase to cell `0x07`),
+so the block is *ramp → … → wrap-and-store* with the ramp's own store suppressed under the shipped
+reading. ⇒ **the question "where does the phase enter the accumulator" is the one the LFO can
+answer, and `LD` — bit 7 as a memory-port DIRECTION bit, item D's third survivor — is the reading
+that would answer it.**
+
+⚠⚠ **AND A LEAD IS NOT A TEST — this one is post-hoc and is labelled so in the tool.** I noticed
+the WSA1R pitch shifter carrying both spellings of one word four slots apart, and only then asked
+how often the two share an image: **5 of 10, against a shuffled null of 2.72 ± 0.76**
+(P = 0.019, 2000 shuffles preserving each word's image count). The hypothesis was formed on the
+data that scores it. A real test needs a prediction made before looking — the obvious one being
+the **order** of the two spellings inside an image under the direction reading, which nothing here
+has examined.
+
+⛔ **Nothing is anchored and coverage does not move.** What this section delivers is that the
+largest open axis now has ten minimal pairs and one of them sits in the machine's best-anchored
+arithmetic — which is the first time the gate has had a context with known mathematics that the
+29-block solve did not already consume.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

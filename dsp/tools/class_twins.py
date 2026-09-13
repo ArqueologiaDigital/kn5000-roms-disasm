@@ -39,9 +39,22 @@ QUESTION IT ANSWERS
     A model under which the ROM's two spellings of one macro differ by 25 cells, against one under
     which they agree exactly.
 
+    ★★ AND THE SAME INSTRUMENT AIMED AT `hi12' BIT 7 (`--bit7'), the store gate's own bit.  Over
+    the pooled corpus **23 pairs** differ in bit 7 and in NOTHING ELSE -- same `class4', same
+    `addr8', same `lo12', same every other `hi12' bit -- and in **10** of them the bit-7 member is
+    the open gate (`bit-4 store' + `f31 == 1') while its twin is DECODED and stores `acc' to
+    `mem[ptr]'.  That is ten minimal pairs across the one bit whose meaning `store-gate.md' item D
+    left three-way open, and the corpus had never been asked for them.
+
+    ⚠ ONE OF THEM IS THE LFO RAMP WORD.  `092.A.00.200' (46 occurrences, 26 images) is the ramp
+    whose increment `lfo-ramp.md' anchors NINE-FOLD, and its bit-7-clear twin `012.A.00.200`
+    exists -- once.  The LFO is the project's best-anchored arithmetic and the gate's survivors
+    differ only in the accumulator, which is exactly what a phase accumulator is made of.
+
 USAGE
     python3 dsp/tools/class_twins.py            # the twins and the control
     python3 dsp/tools/class_twins.py --macro    # the macro's net displacement, both models
+    python3 dsp/tools/class_twins.py --bit7     # ★ the store gate's own minimal pairs
 
 ⚠ WHAT THIS IS NOT.  It does not promote anything.  n = 2 for the alternative spelling, in ONE
   program, and `closure_pointer.py variants' row V12 is mild counter-evidence (adding classes 4 and
@@ -83,6 +96,36 @@ def images():
                     ws.append(int(m.group(2), 16))
             if ws:
                 yield label, b, sl, ws
+
+
+def bit7_twins(words, where):
+    """★ Pairs identical in everything but `hi12' bit 7 -- the store gate's own bit.
+
+    ⚠⚠ THE CO-OCCURRENCE FIGURE BELOW IS POST-HOC AND IS LABELLED SO.  I noticed the WSA1R pitch
+    shifter carrying both spellings of one word four slots apart, and only then asked how often
+    the two spellings share an image.  5 of 10 against a shuffled null of 2.72 +- 0.76
+    (P = 0.019, 2000 shuffles preserving each word's image count) is a LEAD, not a test: the
+    hypothesis was formed on the same data that scores it.  A real test needs a prediction made
+    before looking -- the obvious one being the ORDER of the two spellings inside an image under
+    the `bit 7 = memory-port DIRECTION' reading, which nothing here has examined."""
+    g = collections.defaultdict(dict)
+    for w in words:
+        key = (D.hi12(w) & ~D.HI_B7, D.class4(w), D.addr8(w), D.lo12(w))
+        g[key][1 if (D.hi12(w) & D.HI_B7) else 0] = w
+    tw = [v for v in g.values() if len(v) == 2]
+    gate = [v for v in tw if (D.hi12(v[1]) & D.HI_ST) and D.hi_f31(D.hi12(v[1])) == 1]
+    print("\n=== ★★ BIT-7 TWINS -- identical but for `hi12' bit 7: %d pairs, %d of them THE GATE ==="
+          % (len(tw), len(gate)))
+    print("   %-14s %-6s %-14s %-6s %-7s %s"
+          % ("bit 7 CLEAR", "x", "bit 7 SET", "x", "shared", "an image holding both"))
+    for v in sorted(gate, key=lambda v: -(words[v[0]] + words[v[1]])):
+        a, b = v[0], v[1]
+        ov = sorted(where[a] & where[b])
+        print("   %010X %-6d %010X %-6d %-7d %s"
+              % (a, words[a], b, words[b], len(ov), ov[0] if ov else ""))
+    print("   ⇒ %d of %d gate pairs put BOTH spellings in one image. ⚠ post-hoc -- see the"
+          % (sum(1 for v in gate if where[v[0]] & where[v[1]]), len(gate)))
+    print("     docstring; the null is 2.72 +- 0.76 and the hypothesis came from the same data.")
 
 
 def main():
@@ -130,6 +173,8 @@ def main():
                   % (hi, c, ad, lo, multi[k][c], D.decoded(w),
                      ", ".join(sorted(where[w])[:2])))
 
+    if "--bit7" in sys.argv:
+        bit7_twins(words, where)
     if "--macro" in sys.argv:
         print("\n=== ★★ THE MACRO, BOTH SPELLINGS -- net pointer displacement of the three"
               " words after the head ===")
