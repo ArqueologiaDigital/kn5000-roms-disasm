@@ -694,6 +694,27 @@ def is_input_latch_read(w):
 #  5. OPERATION.  hi12[3:1] must be one the biquad determines.  HI_ACC_HOLD is
 #     admitted ONLY on class 8.
 # ---------------------------------------------------------------------------
+def _act_anchored(w):
+    """The anchored ACT set, plus one CLASS-CONDITIONAL member.
+
+    ★★★ `ACT 0x0B' ON CLASS A is the all-pass core's fourth MULTIPLICAND ROUTE.  Every one of the
+    16 class-A occurrences is the same word shape `lo12 = 0x64B' with `SRC 0x19' (tempA), and the
+    listing's own annotation grades it **FORCED**: "class-A multiply whose multiplicand is a SUM OF
+    TWO REGISTERS, so lo12 0x64B is a fourth multiplicand route beside mac (0x1D5) and mulst
+    (0x407) (FORCED under a 2-input ALU, R1 F8)".  The premise it is forced under -- that the
+    multiplier has exactly two ports -- is itself FORCED (SQUARING-MULTIPLY item A: a coefficient
+    port hardwired to C-RAM[ccur] and ONE operand bus selected by SRC; there is no third port).
+
+    ⛔ NOT admitted on any other class.  On class 1/2 the code is the DELAY-ACCESS reading, and
+    `adjudication-round5.md' is explicit about that one: "ACT 0x0B => READ is DEGENERATE with
+    H-ADB6: every ACT-0x0B delay word carries addr8 0x20/0x30.  It adds nothing and it is not
+    independent evidence.  0x0B stays OPEN."  Those 16 class-2 words keep trapping."""
+    a = lo_act(w)
+    if a in _ANCHORED_ACT:
+        return True
+    return a == LO_ACT_DELAY_ACC and class4(w) == 0xA
+
+
 def _is_wrapword(w):
     """§224/§225's LFO WRAP family: the SIX fields together, exactly as the device gates it.
     bit-4 store + bit 7 + hi12[3:1] == 2 + ACTION 0x00 + SRC 0x08 + class A.  29 words."""
@@ -712,7 +733,7 @@ def alu_decoded(w):
         return False
     if lo_ptrmode(w):
         return False
-    if lo_src(w) not in _ANCHORED_SRC or lo_act(w) not in _ANCHORED_ACT:
+    if lo_src(w) not in _ANCHORED_SRC or not _act_anchored(w):
         return False
     if (hi12(w) & HI_ST) and (cl & 7) != 2:
         return False

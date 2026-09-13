@@ -3826,6 +3826,60 @@ note.
 ⚠ Grade: MEASURED/SHIPPED evidence (§224/§225), re-examined; the gain is exactly the 29 words the
 family contains.
 
+## 86. 75.9 % → 76.4 %: `ACT 0x0B` on CLASS A, and a SEAM I had not been mining
+### The gain
+All **16** class-A `ACT 0x0B` words are one shape — `lo12 = 0x64B`, `SRC 0x19` (tempA) — and the
+listing's own annotation grades it **FORCED**:
+
+> *"all-pass core slot 6/6 — class-A multiply whose multiplicand is a **SUM OF TWO REGISTERS**, so
+> `lo12 0x64B` is a fourth multiplicand route beside `mac` (0x1D5) and `mulst` (0x407)
+> **(FORCED under a 2-input ALU, R1 F8)**"*
+
+★ and the premise it is forced under is itself forced: `SQUARING-MULTIPLY_findings.md` item A —
+*"the multiply has exactly TWO ports: a coefficient port HARDWIRED to `C-RAM[ccur]` and ONE operand
+bus `L` selected by `SRC`. There is no third, sample-only port."*
+
+⛔ **Admitted on class A ONLY.** On class 1/2 the same code is the delay-access reading, which
+`adjudication-round5.md` closes explicitly: *"`ACT 0x0B` ⇒ READ is **DEGENERATE** with `H-ADB6` …
+It adds nothing and it is not independent evidence. **`0x0B` stays OPEN.**"* The 16 class-2
+occurrences keep trapping. Third use of the split-by-the-word's-own-fields pattern, after
+`SRC 0x00` and `SRC 0x0B`.
+
+| | §85 | now |
+|---|---:|---:|
+| executable words | 2 256 / 2 974 | **2 272 / 2 974** |
+| **coverage** | 75.9 % | **★ 76.4 %** |
+| families | 81 | **80** |
+
+**+16 — exactly the class-A population.** Cumulative: **41.5 % → 76.4 %, +1 038 words.**
+
+### ★★ THE SEAM, which is the transferable part
+I found this by asking a question I should have asked hours ago: **which undecoded words carry an
+annotation that already claims `FORCED` / `PROVEN BY CONSTRUCTION` / `MEASURED`?** The disassembly
+has been *writing determinations into its own listing text* that its own predicate never consults.
+
+**13 shapes, 71 occurrences.** Audited, they are:
+
+| | |
+|---|---|
+| C-format `0x620` immediate loads | **55** — operation MEASURED 57/57, **destination register UNKNOWN** ⇒ correctly refused |
+| class-A `ACT 0x0B` | **16** — FORCED ⇒ **admitted here** |
+| internal register file `[06]` = per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION), `[D0]` = per-unit STATE BLOCK base (MEASURED) | 2 — the *role* of the register is known; the word's **access** (index, direction, ALU effect) is not ⇒ still refused |
+
+⇒ the seam is now **mined out**: every annotation claiming a determination has been checked against
+the predicate, and the only one that was genuinely being ignored is this one.
+
+⚠ **It also says something about the remaining 698.** They are not hiding determinations in their
+own text — I looked. What is left is the register-file family (52 words, the END/CALL-RETURN
+terminators among them, whose annotation says the marker *"still performs the rest of the word"* so
+the register access has to be decoded too), the table-lookup idiom (~145, marked **"⛔ NOT A
+DECODE"** in the device with both arms run and failed), the store gate's three survivors (52),
+`SRC 0x11` (50, needs a device arm), the bit-5 high codes (~117), and `SRC 0x1C` (28, a *role*
+correlation, not a register identity).
+
+⚠ Grade: FORCED, with its premise separately FORCED; the gain is exactly the 16 words the class-A
+population contains.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
