@@ -54,7 +54,14 @@ def q23(hexstr):
 ROW = re.compile(
     r"^\s*(?:\[:dsp\d\]\s*)?(?:upd6383:\s*)?(\d+)\s+(\d+)\s+([01])\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+"
     r"([0-9A-Fa-f]+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+"
-    r"([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+([Y.])\s+(-?\d+)\s*$")
+    #  ⚠ TRAILING COLUMNS ARE TOLERATED ON PURPOSE.  This regex used to end `(-?\d+)\s*$',
+    #  anchoring on L being the LAST column.  On 2026-09-13 the device gained an `LW' flag after
+    #  it (§29's operand-latch-write marker) and this tool went SILENT -- it parsed zero rows and
+    #  reported "0 informative words", which reads as "the frame carried no signal" rather than
+    #  "I cannot read this file".  The HLE->LLE oracle was unusable for exactly as long as nobody
+    #  ran it against a fresh capture.  ⇒ never anchor a trace parser on the last column; a trace
+    #  that gains a column must not silence its readers.
+    r"([0-9A-Fa-f]+)\s+([0-9A-Fa-f]+)\s+([Y.])\s+(-?\d+)(?:\s+\S+)*\s*$")
 
 
 def parse_trace(text):

@@ -1,0 +1,28 @@
+KN5000 EQ geometry: base 0x00, 5 bands x 6 cells; coefficients read from the trace.
+  band 0  cur 0x00..0x05
+     coeffs: b1=-0.4977 b0=+0.2500 b2=+0.2478 -a1=+0.9954 -a2=-0.9911 mk=-1.0000
+     m_dp operand cells: 0x64 0x50 0x51 0x52 0x53 0x53   signal(acc/P/mem != 0): YES
+  band 1  cur 0x06..0x0B
+     coeffs: b1=-0.4953 b0=+0.2500 b2=+0.2456 -a1=+0.9905 -a2=-0.9824 mk=-1.0000
+     m_dp operand cells: 0x51 0x54 0x55 0x56 0x57 0x57   signal(acc/P/mem != 0): YES
+  band 2  cur 0x0C..0x11
+     coeffs: b1=-0.4900 b0=+0.2500 b2=+0.2413 -a1=+0.9800 -a2=-0.9650 mk=-1.0000
+     m_dp operand cells: 0x55 0x58 0x59 0x5A 0x5B 0x5B   signal(acc/P/mem != 0): YES
+  band 3  cur 0x12..0x17
+     coeffs: b1=-0.4780 b0=+0.2500 b2=+0.2329 -a1=+0.9559 -a2=-0.9314 mk=-1.0000
+     m_dp operand cells: 0x59 0x5C 0x5D 0x5E 0x5F 0x5F   signal(acc/P/mem != 0): YES
+  band 4  cur 0x18..0x1D
+     coeffs: b1=-0.4483 b0=+0.2500 b2=+0.2172 -a1=+0.8967 -a2=-0.8687 mk=-1.0000
+     m_dp operand cells: 0x5D 0x60 0x61 0x62 0x63 0x63   signal(acc/P/mem != 0): YES
+
+m_dp: EQ band k operands resolve to D-RAM 0x64+4k (the host state block).
+Accumulator-op decode from the live trace (hi12 bits[3:1] = f31 -> behaviour):
+  f31  behaviours (count)                     reading
+   0   ACC=1, LOAD=19, UNCH=54, other=13, silent(P=0)=7 acc <- P (LOAD)
+   1   ACC=13, LOAD=1, UNCH=39, other=57, silent(P=0)=18 acc += P (ACC)
+   2   LOAD=1, UNCH=9, other=1, silent(P=0)=3   acc unchanged
+   3   silent(P=0)=2                            OPEN -- researched guess only
+   4   LOAD=1, other=1                          OPEN -- researched guess only
+   5   other=3                                  OPEN -- researched guess only
+
+36 informative words (non-zero product, LOAD or ACC).

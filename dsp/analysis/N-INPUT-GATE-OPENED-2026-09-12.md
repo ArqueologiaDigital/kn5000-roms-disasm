@@ -3305,6 +3305,81 @@ targets entirely.**
 default, blast radius measured before promoting, semantic confirmation, re-verified with no
 environment set. The control `UPD6383_SRC0B2=0` restores the previous reading.
 
+## 77. ★★★★★ THE ORACLE MEETS THE LLE: all five EQ bands carry signal, and the LLE's own pointers reproduce the HLE's CASCADE
+§76 fixed what the bodies are *handed*. The standing goal is to use the HLE as an **oracle against
+the LLE**, and `dsp/hle/lle_trace_diff.py` exists to do exactly that — it confronts a live per-word
+LLE trace with the validated HLE biquad. So: capture the parametric EQ at the **true default with
+the promotion in** (hand-off cell now leaves as **56 033**, a real sample) and run it.
+
+### ⛔ FIRST: THE ORACLE WAS SILENTLY BROKEN — BY ME, TODAY
+It reported **"0 informative words … the frame carried little signal"** on a trace full of non-zero
+products. Its row parser ended `…([Y.])\s+(-?\d+)\s*$` — **anchored on `L` being the last column**.
+Earlier today I shipped the `LW` operand-latch flag *after* `L` (§10), and the regex stopped
+matching. It parsed **zero rows** and said so in the vocabulary of *"no signal"* rather than
+*"I cannot read this file."*
+
+⇒ **The HLE→LLE oracle — the project's stated method — had been unusable for exactly as long as
+nobody ran it against a fresh capture, and I broke it myself while adding an instrument.**
+⇒ ★ **RULE: never anchor a trace parser on the last column.** Fixed to tolerate trailing fields, with
+that reasoning in the source.
+
+### ✅ THE CONFRONTATION (`data/eq_oracle_confront_2026-09-13.txt`)
+**All five bands, coefficients read from the trace's own cursor, and — the line that matters —**
+
+| band | cursor | `b1` | `b0` | `b2` | `−a1` | `−a2` | operand cells | **signal?** |
+|---|---|---:|---:|---:|---:|---:|---|---|
+| 0 | 0x00–0x05 | −0.4977 | +0.2500 | +0.2478 | +0.9954 | −0.9911 | `64 50 51 52 53` | **YES** |
+| 1 | 0x06–0x0B | −0.4953 | +0.2500 | +0.2456 | +0.9905 | −0.9824 | `51 54 55 56 57` | **YES** |
+| 2 | 0x0C–0x11 | −0.4900 | +0.2500 | +0.2413 | +0.9800 | −0.9650 | `55 58 59 5A 5B` | **YES** |
+| 3 | 0x12–0x17 | −0.4780 | +0.2500 | +0.2329 | +0.9559 | −0.9314 | `59 5C 5D 5E 5F` | **YES** |
+| 4 | 0x18–0x1D | −0.4483 | +0.2500 | +0.2172 | +0.8967 | −0.8687 | `5D 60 61 62 63` | **YES** |
+
+★★ **`signal: YES` on all five.** Before §76 the body was fed a rail; these bands could not carry a
+signal at all. This is the first time the EQ's whole cascade has been observed live in the LLE.
+★ The coefficients are a coherent five-band peaking family — `b0` constant at **+0.2500**, the
+recursive pair **pre-negated** exactly as `algorithms/biquad-eq.md` documents, poles marching down
+from 0.9954 to 0.8967 as the band centres rise.
+
+### ★★★★★ AND THE TOPOLOGY CROSS-VALIDATES — 4 of 4
+§58 established **from the HLE** that `parametric_eq` is a **SERIES CASCADE**: band *k* filters band
+*k−1*'s output. That was a statement about the reference model. The LLE's own **operand pointers**,
+which nothing in this session tuned, say the same thing:
+
+| | band *k*'s FIRST operand | is it a state cell of band *k−1*? |
+|---|---|---|
+| band 1 | `0x51` | ✅ in `{50,51,52,53}` |
+| band 2 | `0x55` | ✅ in `{54,55,56,57}` |
+| band 3 | `0x59` | ✅ in `{58,59,5A,5B}` |
+| band 4 | `0x5D` | ✅ in `{5C,5D,5E,5F}` |
+
+**4 of 4.** Band *k* opens by reading band *k−1*'s state — and band 0 alone opens on `0x64`, outside
+the chain, which is where the input enters. ⇒ ★★★ **The HLE's cascade and the LLE's pointer walk are
+the same topology, derived independently.** §58 reached it by reading `effects.py`; this reaches it
+by reading the chip's own `m_dp` sequence out of a live frame.
+
+### ✅ And the accumulator op, confirmed on live audio
+`--ops`, 36 informative words (it had **0** before the parser fix):
+
+| `f31` | live behaviour | reading |
+|---|---|---|
+| **0** | **LOAD 19** / ACC 1 | `acc ← P` ✅ |
+| **1** | ACC 13 / LOAD 1 | `acc += P` ✅ |
+| **2** | UNCH 9 / LOAD 1 | unchanged ✅ |
+| 3, 4, 5 | 2, 2, 3 occurrences | still **OPEN** — §63–§69's population |
+
+⇒ the three decoded codes are confirmed **on live signal** rather than on the synthetic self-test,
+which is what `lle_oracle.py`'s own header asked for. The high codes remain the open queue, and
+§64's aiming constraint still applies to them.
+
+⚠ **What this is NOT**: the values are not checked sample-for-sample against the HLE's output — that
+needs the oracle's numeric mode with this program's cursor base (the default-mode run reports
+`cur 0x60..0x64 MISSING`, a parameter mismatch, not a divergence). **Topology, coefficients, signal
+presence and the accumulator op are cross-validated; the arithmetic is not yet.** That is the next
+step and it is now unblocked.
+
+⚠ Grade: MEASURED against a live trace at the true default with the promotion in, identity
+fingerprinted. The cascade check is 4/4 and stated as a test, not an eyeball.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
