@@ -2472,8 +2472,26 @@ device collapses.
 
 ⇒ ★★★ **The observable size of the collapse is 41 sites**, not 129 and not 172, and they are
 *named*: `prog36_compressor` (many), `prog05_phaser` `w9`/`w68`, `prog06_ensemble` `w14/24/34/72/82/92`,
-`prog15_rock_rotary` `w5`, and — worth its own line — **the `epilogue` itself at `w74` (`f31 = 3`)
-and `w78` (`f31 = 6`)**, which is the stage §47/§51/§54 have been unable to make present anything.
+`prog15_rock_rotary` `w5`, and — worth its own line — **the `epilogue`**, the stage §47/§51/§54
+have been unable to make present anything.
+
+### ★★ The epilogue, and one fact that needs stating carefully
+The epilogue is **the densest program in the corpus after the compressor**: `5` bit-5 words in
+`23`, **21.7 %** against a corpus rate of 5.6 %. Two of the five are live (`w70` and `w75` are
+blind), and its indices are **absolute I-RAM**, so `epilogue w73` *is* `iw73` —
+
+★★★ **`iw73`, the presentation word, is a bit-5 word.** `0E30C00404`: `SRC 0x10` = the accumulator,
+store set, `hi12 = 0xE30` — **bit 5 SET**, `f31 = 0`. That is the single word that hands unit 0's
+result to `DO1`, the one §43/§48/§61/§63 measured presenting `0` in every configuration ever tried.
+
+⚠ **And here is the discipline this deserves, because the temptation is obvious.** `iw73`'s `f31`
+is `0` — in the **low** set, which the device decodes normally — so the *collapse* of §63 does not
+touch it, and the device's existing reading (`ACCA ← level × ACCA`, a coefficient-fetching class-C
+word) is a sensible one for a presentation word. **`iw73` being a bit-5 word does not make it
+suspect**; §54 already placed the output failure **upstream** of the epilogue, and nothing here
+moves it back. What it does say is narrower and still worth recording: *the word that gates the
+DSP's audio output carries a bit whose meaning we have just shown to be unsettled*, so `iw73` is
+not fully decoded even though its accumulator op is.
 
 ### Why this is the right shape for the next unit of work
 It converts *"five undecoded codes"* into **"41 sites where a reading can be graded, and 96 where
@@ -2491,6 +2509,64 @@ bound** on the gradeable set and 96 a **lower bound** on the blind one.
 
 ⚠ Grade: MEASURED — static census over 3 057 words, plus one frame-trace window read at the true
 default with no environment set (the §56 rule, applied this time *before* drawing the conclusion).
+
+## 65. bit 5 IS A MODIFIER, NOT A CLASS — and the prettiest reading of it dies to its own control
+§63/§64 bounded the bit-5 population without saying what it is. Two more static tests
+(`bit5_words.py`, same artefact) narrow it, and kill the reading I would otherwise have written up.
+
+### ★ It is a modifier on an otherwise identical instruction
+| test | result |
+|---|---|
+| shapes written **both** ways (bit 5 and `f31` masked) | **17** of 715 |
+| **EXACT** pairs — identical in all 40 bits **but bit 5** | **2** |
+
+The two exact pairs are the corpus's own A/B: `0000200000` (**62×**) vs `0020200000` (**2×**), and
+`040010E000` (**8×**) vs `042010E000` (**2×**) — the class-2 do-nothing word and the body-terminal
+word, each written both ways with **`f31 = 0` on both sides**. ⇒ bit 5 is **not** a class or a
+format selector: the same instruction exists with and without it.
+
+### ⛔ And the reading that the density table suggests does NOT survive
+The per-program density is strikingly non-uniform against the 5.6 % corpus rate:
+
+| program | bit-5 words | density |
+|---|---|---|
+| `prog36_compressor` | 12/40 | **30.0 %** |
+| `epilogue` | 5/23 | 21.7 % |
+| `prog75_peq_compressor` | 12/59 | 20.3 % |
+| `prog48_auto_pan` | 8/50 | 16.0 % |
+| `prog96_peq_compr_dist` | 14/90 | 15.6 % |
+| `prog52_auto_wah` | 9/72 | 12.5 % |
+| `prog35_exciter` | 8/69 | 11.6 % |
+
+and the **eight programs with ZERO** are *every* pure delay/modulation network in the catalogue —
+chorus, modulated chorus, flanger, single delay, multi tap delay, room reverb 1, vibrato, mix up.
+Compressor, auto-wah, exciter at the top; linear delay networks at the bottom. The reading writes
+itself: **bit 5 selects a second operation group — the non-MAC arithmetic (rectify / peak / compare
+/ limit) an envelope follower needs**, which would also explain why the corpus spends all five high
+`f31` codes there.
+
+⛔ **It fails its own control.** `prog00_no_operation` — a program that passes audio through and
+detects nothing — is **5 of 49 = 10.2 %, above the corpus rate**. A do-nothing program cannot be
+dense in envelope arithmetic. ⇒ **the envelope reading is refuted**, and the density table is
+recorded as an unexplained association, not as evidence for it.
+
+⚠ **This is the third headline in three sections that did not survive** (§63's terminator, §64's
+none, §65's envelope group). That is the instrument working: each was killed by a control chosen
+*because* it could kill it — the 8 zero programs, `prog00`, the coefficient-fetching population.
+The `f31`/bit-5 question is left **open and better fenced** than it was, which is the honest
+outcome, and every fence is a counted number rather than a judgement.
+
+### What the next pass should do with this
+1. The HLE half of §55's instruction is **still owed** — `dsp/hle/effects.py` models 8 effects and
+   **none of the envelope-following ones** (no compressor, auto-wah, auto-pan or exciter), so the
+   oracle cannot currently speak to the densest bit-5 programs at all. ⇒ *That* is the gap to close
+   before bit 5 can be taken to the oracle: the HLE needs the dynamics family.
+2. Any in-emulator test of bit 5 must be aimed at §64's **live 41**, never the blind 96.
+3. The two EXACT pairs are the cheapest experiment in the corpus: one instruction, written both
+   ways, `f31 = 0` on both sides.
+
+⚠ Grade: MEASURED (static, 3 057 words, 40 listings). Nothing anchored; one reading refuted by a
+pre-chosen control.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped

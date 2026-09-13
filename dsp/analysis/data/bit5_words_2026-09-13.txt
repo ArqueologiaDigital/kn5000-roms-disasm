@@ -21,6 +21,29 @@
    at the last word: 17 ; within the last 3: 21 ; of 172
 -- TERMINATOR test: the image's last word has bit 5 in 17 of 40 programs
 
+-- DENSITY per program (corpus rate 5.6%) -- is bit 5 an EFFECT-KIND marker?
+   prog36_compressor          12/40  = 30.0%
+   epilogue                    5/23  = 21.7%
+   prog75_peq_compressor      12/59  = 20.3%
+   prog48_auto_pan             8/50  = 16.0%
+   prog96_peq_compr_dist      14/90  = 15.6%
+   prog52_auto_wah             9/72  = 12.5%
+   prog35_exciter              8/69  = 11.6%
+   prog97_peq_compr_overdr    10/97  = 10.3%
+   ⚠ CONTROL  prog00_no_operation  5/49  = 10.2%  (a pass-through program)
+
+-- BIT-5 MINIMAL PAIRS: is bit 5 a MODIFIER on an otherwise identical instruction?
+   EXACT pairs (identical in all 40 bits but bit 5): 2
+      0000200000 n=62   vs 0020200000 n=2     f31=0
+      040010E000 n=8    vs 042010E000 n=2     f31=0
+   shapes (bit5 AND f31 masked) written BOTH ways: 17 of 715
+      0000200000  bit5=0:62   bit5=1:92    cls 2 ACT 00 SRC 00 addr8 00
+      00002001D5  bit5=0:30   bit5=1:2     cls 2 ACT 15 SRC 07 addr8 00
+      0000A001D3  bit5=0:28   bit5=1:1     cls A ACT 13 SRC 07 addr8 00
+      040010E000  bit5=0:8    bit5=1:17    cls 1 ACT 00 SRC 00 addr8 0E
+      0000201407  bit5=0:19   bit5=1:1     cls 2 ACT 07 SRC 10 addr8 01
+      0000AFF1D5  bit5=0:9    bit5=1:1     cls A ACT 15 SRC 07 addr8 FF
+
 -- ★ SUCCESSOR test: does the NEXT word discard the accumulator (f31 == 0, a LOAD)?
    next word is an f31 = 0 LOAD  (term DISCARDED -- site is BLIND) : 96
    next word is NOT a LOAD       (term SURVIVES  -- site is LIVE ) : 59

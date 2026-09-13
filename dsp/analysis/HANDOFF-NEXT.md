@@ -27,8 +27,27 @@ corpus half is done, statically, with **no emulator and no circularity** (`dsp/t
   which is the stage §47/§51/§54 cannot make present anything. A run that samples the blind 96
   returns a **false null** — the §46 failure mode, now predictable in advance.
 
+* ★ **bit 5 is a MODIFIER, not a class:** 17 shapes are written both ways, and **2 are EXACT pairs**
+  — identical in all 40 bits but bit 5, `f31 = 0` on both sides (`0000200000` 62× vs `0020200000`
+  2×; `040010E000` 8× vs `042010E000` 2×). Cheapest experiment in the corpus.
+* ★★ **`iw73`, the presentation word, is a bit-5 word** (`0E30C00404`, `hi12 = 0xE30`) — the word
+  that hands unit 0's result to `DO1` and has presented `0` in every configuration ever measured.
+  ⚠ Its `f31` is `0`, in the decoded low set, so §63's collapse does **not** touch it and §54's
+  "the failure is upstream" is unmoved. Recorded only as: that word is not fully decoded either.
+* ⛔ **REFUTED, so nobody re-derives it:** bit-5 density ranks compressor 30 %, auto-pan 16 %,
+  auto-wah 12.5 %, exciter 11.6 % with **all eight zero-density programs being pure delay/modulation
+  networks** — which reads as *"bit 5 = the envelope/non-MAC operation group"*. **`prog00_no_operation`
+  is 10.2 %, above the corpus rate.** A pass-through program cannot be dense in envelope arithmetic.
+
 ⚠ Nothing is anchored: this says the codes are chosen and where they are gradeable, **not what they
-mean**. The HLE half of §55's instruction is still owed.
+mean**. THREE headlines died to their own controls here (terminator, envelope group, and §64's
+blindness killing the EQ site) — that is the instrument working.
+
+⇒ ★★★ **THE NEXT UNIT OF WORK, named:** the HLE half of §55's instruction is still owed, and it is
+currently **blocked by the oracle itself** — `dsp/hle/effects.py` models 8 effects and **none of the
+envelope-following ones** (no compressor, auto-wah, auto-pan, exciter), which are exactly the
+bit-5-dense programs. ⇒ **extend the HLE to the dynamics family first**; until then the oracle
+cannot speak to the densest bit-5 sites at all.
 
 ---
 

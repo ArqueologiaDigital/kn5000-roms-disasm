@@ -93,6 +93,39 @@ def main():
     print("-- TERMINATOR test: the image's last word has bit 5 in %d of %d programs"
           % (len(lastb5), len(prog)))
 
+    print("\n-- DENSITY per program (corpus rate %.1f%%) -- is bit 5 an EFFECT-KIND marker?"
+          % (100.0 * len(b5) / total))
+    dens = sorted(((sum(1 for _, w in v if fields(w)["b5"]) / len(v), len(v), p)
+                   for p, v in prog.items()), reverse=True)
+    for r, n, p in dens[:8]:
+        print("   %-26s %2d/%-3d = %4.1f%%" % (p, round(r * n), n, 100 * r))
+    #  ⚠ The control that kills the pretty reading: prog00_no_operation passes audio through and
+    #  does no level detection at all, so if it is ABOVE the corpus rate, "bit 5 marks the
+    #  nonlinear / envelope arithmetic" cannot be right.
+    for r, n, p in dens:
+        if p == "prog00_no_operation":
+            print("   ⚠ CONTROL  %-17s %2d/%-3d = %4.1f%%  (a pass-through program)"
+                  % (p, round(r * n), n, 100 * r))
+
+    print("\n-- BIT-5 MINIMAL PAIRS: is bit 5 a MODIFIER on an otherwise identical instruction?")
+    B5 = 1 << 29
+    words = [w for v in prog.values() for _, w in v]
+    have, cnt = set(words), collections.Counter(words)
+    ex = sorted({(w & ~B5, w | B5) for w in have if (w & ~B5) in have and (w | B5) in have})
+    print("   EXACT pairs (identical in all 40 bits but bit 5): %d" % len(ex))
+    for lo, hi in ex:
+        print("      %010X n=%-4d vs %010X n=%-4d  f31=%d"
+              % (lo, cnt[lo], hi, cnt[hi], (lo >> 25) & 7))
+    g = collections.defaultdict(lambda: [0, 0])
+    for w in words:
+        g[w & ~(B5 | (7 << 25)) & ((1 << 40) - 1)][1 if w & B5 else 0] += 1
+    both = [k for k, v in g.items() if v[0] and v[1]]
+    print("   shapes (bit5 AND f31 masked) written BOTH ways: %d of %d" % (len(both), len(g)))
+    for k in sorted(both, key=lambda k: -sum(g[k]))[:6]:
+        f = fields(k)
+        print("      %010X  bit5=0:%-4d bit5=1:%-4d  cls %X ACT %02X SRC %02X addr8 %02X"
+              % (k, g[k][0], g[k][1], f["cls"], f["act"], f["src"], f["a8"]))
+
     print("\n-- ★ SUCCESSOR test: does the NEXT word discard the accumulator (f31 == 0, a LOAD)?")
     blind = live = noeat = 0
     livesites = []
