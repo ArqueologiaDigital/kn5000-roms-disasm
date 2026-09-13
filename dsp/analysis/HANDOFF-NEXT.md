@@ -126,7 +126,22 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
-   ★★★★ **§49: THE TALLY IS 22 LIVE / 16 STATIC / 0 VOID of 38.** The five VOID rows were an
+   ★★★★★ **§50: THE TALLY IS 38 LIVE / 0 STATIC / 0 VOID. EVERY EFFECT PROGRAM RUNS ITS BODY ON
+   LIVE AUDIO** under the promoted defaults. The whole "static" set was a **trace-timing
+   artefact**: a body's first operand is **last frame's state** (§48), so a body only runs once its
+   loop is primed, and the sweep was tracing at note-on **+1.0 s**. At **+2.5 s** (`NOTEOFS`)
+   **16 of 16 come alive** — including the five PEQ combis whose first-read cell has no writer in
+   the frame (1–2 cells, 2–19 rows, 27–92 products each).
+   ⛔⛔ **THIS RETIRES §43, §44, §45, §46 AND HALF OF §48** — all of them were explaining an
+   artefact. The `UPD6383_ST2A` arm and its three aiming errors were built to fix programs that
+   were never broken. ✅ What survives is §48's **positive** finding (the first-read cell is a
+   STATE CELL), which is what predicted this.
+   ⚠⚠ **METHOD FAILURE, recorded against myself:** I theorised across five sections without
+   checking whether the bodies were static or merely **unprimed**, having already caught that exact
+   artefact on five other programs in the same session (§42's VOID rows). **Exclude a known
+   instrument systematic BEFORE building theory on the measurement.**
+
+   ~~§49: THE TALLY IS 22 LIVE / 16 STATIC / 0 VOID of 38.~~ The five VOID rows were an
    INSTRUMENT LIMIT — the trace was armed at note-on +1.0 s, before the note reached the chip.
    Re-traced at **+2.5 s** (`NOTEOFS`, new env on `catalogue_regression.sh`) **all five are LIVE**
    (19–62 rows, 32–64 products each). ★ Four of them are combis outside the ten-program regression
