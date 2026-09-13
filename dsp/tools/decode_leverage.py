@@ -82,7 +82,13 @@ def main():
             if m:
                 words.append(int(m.group(2), 16))
 
-    undec = [w for w in words if not D.alu_decoded(w)]
+    #   ⚠ THE DENOMINATOR MUST BE `decoded()', NOT `alu_decoded()'.  The coverage number counts
+    #   `decoded()' -- which also admits the nop, the pointer forms, setvec and (since 2026-09-13)
+    #   the class-1 DELAY ESCAPE.  Measuring `alu_decoded()' here made the table keep charging the
+    #   delay words to "class 1" long after they were executable, i.e. the leverage tool disagreed
+    #   with the very number it was meant to steer.  Reasons are still enumerated against the ALU
+    #   predicate, because that is what refuses the remainder.
+    undec = [w for w in words if not D.decoded(w)]
     nreas = collections.Counter()
     sole = collections.Counter()
     appears = collections.Counter()

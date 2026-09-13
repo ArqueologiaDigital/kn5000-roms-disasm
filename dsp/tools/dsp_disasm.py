@@ -355,6 +355,19 @@ _ANCHORED_ACT = _ANCHORED_ACT + (LO_ACT_BIQ_D, LO_ACT_BIQ_E)
 #   sub-question was closed, not in spite of it.
 _ANCHORED_SRC = _ANCHORED_SRC + (LO_SRC_MEM0,)
 
+#   ★★★★★ 2026-09-13: SRC 0x0B ANCHORED, and it closes a loop opened the same day.
+#   Like SRC 0x00 this is ONE code with TWO readings, split by a field of the word itself:
+#     class 1 (the delay ESCAPE)  ->  the delay-read data register.  The original reading,
+#       motivated by and validated on the 99 class-1 delay words; unchanged.
+#     any other class             ->  mem[ptr].  PROMOTED TO THE DEVICE DEFAULT TODAY
+#       (`UPD6383_SRC0B2', N-INPUT-GATE-OPENED §73/§76) on a pre-registered gate: 8 programs
+#       across 3 families at the TRUE device default, 8 FIXED / 0 BROKEN, blast radius measured
+#       at 7 words before promoting -- and confirmed SEMANTICALLY, not just numerically: under it
+#       the kernel's `iw25' loads tempA with EXACTLY each program's own DI1 input-latch cell.
+#   ⚠ The 7 words this anchors are EXACTLY that measured blast radius -- kernel `iw25' and the six
+#   `020.2.00.2C7' in prog06_ensemble.  Nothing is admitted here that the gate did not exercise.
+_ANCHORED_SRC = _ANCHORED_SRC + (LO_SRC_DRD,)
+
 _ANCHORED_SRC_SPEC = _ANCHORED_SRC + (LO_SRC_ACCB, LO_SRC_DRD, LO_SRC_TABLE,
                                       LO_SRC_MEM0, LO_SRC_LFO, LO_SRC_LFOOUT)
 _ANCHORED_ACT_SPEC = _ANCHORED_ACT + (LO_ACT_DELAY_RD, LO_ACT_TBL_MUL,

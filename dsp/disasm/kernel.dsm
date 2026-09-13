@@ -54,7 +54,7 @@ InputBlock1:
   w23   0692A00415   ?word   0x0692A00415   ; 692.A.00.415  hi12{END ST f98=2 f31=1 ?7 res=080} cur+  [END OF BLOCK (falls through) -- and still performs the rest of the word]
         ; C-RAM[0x0A] (coeff, base 0x00 MEASURED)
   w24   0692200415   ?word   0x0692200415   ; 692.2.00.415  hi12{END ST f98=2 f31=1 ?7 res=080}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
-  w25   00002002D9   ?word   0x00002002D9   ; 000.2.00.2D9  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x0B = delay-read data register]
+  w25   00002002D9   ld.ta2  ?,(p)+0
   w26   088012040B   dly.r  dsc[k],p+32
   w27   0012201655   mac     ta,(p)+1 ; mem[p]<-acc, acc=0
   w28   05042001D5   ?word   0x05042001D5   ; 504.2.00.1D5  hi12{END f98=1 f31=2}  [END OF BLOCK (falls through) -- and still performs the rest of the word]

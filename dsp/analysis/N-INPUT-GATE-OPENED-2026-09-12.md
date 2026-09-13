@@ -3552,6 +3552,71 @@ predicate change alone would have been silently wrong.
 applying ALU tests to non-ALU words. MAME rebuilt clean, 24 doc pages regenerated, HLE permanence
 intact.
 
+## 81. COVERAGE 67.8 % → 68.0 %, and TWO REFUSALS I am not making
+Small gain, and two items I worked and **declined to anchor** — which matters more than the 0.2 %.
+
+### ✅ `SRC 0x0B` anchored (+6 words) — closing the same day's loop
+The 7 undecoded `SRC 0x0B` words turned out to be **exactly the blast radius of §76's promotion**:
+kernel `iw25` and the six `020.2.00.2C7` in `prog06_ensemble`. I promoted that decode into the
+device today on a pre-registered gate (8 programs, **8 FIXED / 0 BROKEN**, plus the semantic
+confirmation that `iw25` then loads tempA with each program's own DI1 latch) — and the
+disassembler's predicate was still refusing the very words the gate exercised. Same two-population
+shape as `SRC 0x00`, split by the word's own class. Mirrored into `lo_src_anchored()`.
+
+### ⛔ REFUSED #1: `f31 = 2` off class 8 (203 occurrences — the biggest item left)
+`alu_decoded()` admits `f31 = 2` **only on class 8**, and its own comment says why: the two
+surviving candidates — a plain no-op and `AND 2^23−1` — **are both the identity when the sum is in
+range**, and on class 8 the biquad forces it in range. So the question is measurable: *off class 8,
+does the accumulator ever leave datum range at those words?*
+
+Over 10 live captures, 216 executions of `f31 = 2` on classes 2/3/5/6/A:
+
+| | |
+|---|---:|
+| accumulator **in** datum range (the two candidates agree) | **207** |
+| accumulator **OUT** of range (they **differ**) | **9** — all class 2, up to **1.3×** the rail |
+
+⇒ **The ambiguity is observable.** 96 % agreement is not a decode, and the 4 % is exactly the part
+that would make it one. **Not anchored.**
+⚠ And note what I did *not* use: the live trace shows every `f31 = 2` word leaving the accumulator
+unchanged with large non-zero products, which looks decisive and **is circular** — the device
+*implements* HOLD, so that is the device obeying its own code (the coverage worklist's §3 warning).
+
+### ⛔ REFUSED #2: C-format (13 occurrences)
+Opcode `0x620` is *"IMMEDIATE LOAD … **MEASURED 57/57** for this opcode"* — the operation is
+settled. But the same annotation ends *"destination register `lo12` **UNKNOWN**"*. An immediate
+load whose destination is unknown is **not executable**; that is precisely the tier-2 state
+(`status()` reports it, `decoded()` must not). **Not anchored.**
+
+### Where that leaves it
+| | |
+|---|---:|
+| executable words | **2 021 / 2 974 = 68.0 %** |
+| undecoded occurrences | 1 007, of which **509 are ONE decision away** |
+| undecoded FAMILIES | 94 |
+
+⚠ **And the top of the remaining table is now dominated by genuinely open questions, not by lag:**
+`f31 = 2` off class 8 (203, measured open above), the `f31` codes 3/5/4/7 (117 — §63–§69's bit-5
+page, shown undecoded today), the bit-7 store gate (52 — the device's own log calls its rule *"the
+CO-EQUAL survivor"*, i.e. rival gates fit equally), `SRC 0x11` (50 — recorded as needing a device
+arm, and the HLE does not model the second accumulator so the oracle cannot reach it).
+⇒ The easy harvest — predicate lagging an existing determination — is **finished**. What remains
+needs new evidence, and the instrument for producing it is §77's numeric confrontation, which
+cannot run yet (below).
+
+### ⚠ A THIRD INSTRUMENT DEFECT, found while trying to produce that evidence
+`lle_trace_diff.py`'s **numeric** mode ignores `--base` entirely: it takes its cursor base from
+`sections_from_capture()`, which supplies a **different geometry** (0x60…, WSA1R-shaped). Asked for
+KN5000 section 0 at base `0x00` it still reports `cur 0x60..0x64 MISSING` — and "MISSING" reads as
+a divergence rather than as "I was pointed at the wrong cursor."
+⇒ **The sample-for-sample confrontation has never been runnable against a KN5000 trace.** Fixing it
+properly means building the oracle from the coefficients the trace itself carries (which
+`--eq-trace` already extracts) rather than from a foreign capture. That is the next instrument job,
+and it is what `f31 = 2` is waiting on.
+
+⚠ Grade: the anchoring rests on today's own gated promotion; both refusals are MEASURED, and the
+circular argument I could have used for the first one is recorded so nobody reaches for it later.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
