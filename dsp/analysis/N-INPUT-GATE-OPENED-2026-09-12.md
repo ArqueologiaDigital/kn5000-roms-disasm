@@ -3488,6 +3488,70 @@ sub-question; the coverage delta is mechanical once the predicate changes. Nothi
 about the chip here — what changed is that the disassembler now states what the project had already
 established.
 
+## 80. ★★★★★ COVERAGE 58.6 % → 67.8 %: the predicate was asking the DELAY ESCAPE the wrong questions
+The leverage table listed *"class 1 admitted — 52"*. That figure was **an artefact of the framing**,
+and working the item exposed why.
+
+A **class-1 format escape** is an external delay-DRAM access. Its semantics are **FORCED**:
+* direction from `addr8` bit 6 — `0x20`/`0x30` READ, `0x60` WRITE (adjudication-round5 §3);
+* address = `DESCRIPTOR_CELL[k] + G` by the **IDENTITY map**, **PROVEN BY CONSTRUCTION** — the k-th
+  escape of a body takes the k-th cell of that body's own descriptor block, which is why **no
+  address appears in the word**.
+
+★★ **And it never reaches the ALU** — the device's own `is_dram` branch **returns before it**. So
+`decoded()` was grading 276 fully-determined words on **anchored SRC / ACT / `f31`: fields they do
+not use.** They were counted as undecoded for failing a test that does not apply to them.
+
+| | |
+|---|---:|
+| class-1 escapes in the corpus | **276** |
+| … inside the **validated** `addr8` set (`0x20`×106, `0x30`×58, `0x60`×112) | **276** |
+| … outside it (device traps; so does the predicate) | **0** |
+| … that `decoded()` accepted before | **0** |
+
+⚠ The direction rule is scoped to the addr8 values it was validated on, and `dram_dir()` answers
+`None` outside them — the restriction costs nothing today and still **refuses to answer for an
+addr8 nobody validated**.
+
+### ★★★★★ THE RESULT
+| | §79 | now |
+|---|---:|---:|
+| executable words | 1 743 / 2 974 | **2 015 / 2 974** |
+| **coverage** | 58.6 % | **★ 67.8 %** |
+| **frame floor as linked** | 48.1 % | **★ 63.0 %** |
+| distinct undecoded words | 287 | **263** |
+| distinct undecoded FAMILIES | 114 | **95** (−19) |
+| tier-2 (operation known, not executable) | 329 | **57** |
+
+**+272 words.** Cumulative: **41.5 % → 67.8 %, +781 executable words.**
+
+### ★ AND THEY NOW RENDER AS WHAT THEY ARE
+Making `decoded()` true was not enough: the listing rendered them through the **ALU** path as
+`ld ?` — *"a decoded word whose operand cannot be named"* — because the operand is a delay address,
+not an ALU source. That is the same confusion, one layer up. New mnemonics, placed **before** the
+ALU branch:
+
+```
+   w51   0880130407   dly.r  dsc[k],p+48        (was:  ld.st  acc)
+   w0    088013000B   dly.r  dsc[k],p+48        (was:  ld     ?  )
+   w26   08801602D9   dly.w  dsc[k],p+96
+```
+164 `dly.r` + 112 `dly.w` across the listings.
+
+### ⛔ AND A MISTAKE OF MINE, CAUGHT BY THE OUTPUT
+I wrote fresh `is_dram()` and `dram_dir()` helpers — **both already existed** in `dsp_disasm.py`,
+120 lines further down, and the existing `dram_dir()` returns `"READ"`/`"WRITE"`, not `'R'`/`'W'`.
+Python took the later definitions, so my renderer compared against the wrong literal and printed
+**`dly.w` for every READ**. The duplicates are deleted and the renderer uses the existing API.
+⇒ ★ **Third time today the same rule bit: read what the project already has before adding it.**
+(§66: a program already characterised; §69: a bit already decoded; here: a function already
+written.) It was caught only because the *rendered output* was checkable against `addr8` — a
+predicate change alone would have been silently wrong.
+
+⚠ Grade: the decode is PRE-EXISTING and FORCED; what changed is that the coverage predicate stopped
+applying ALU tests to non-ALU words. MAME rebuilt clean, 24 doc pages regenerated, HLE permanence
+intact.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -1,0 +1,38 @@
+=== alu_decoded() REFUSAL ANALYSIS -- 3057 words, 1297 undecoded occurrences ===
+
+-- how many AXES is each undecoded occurrence short of?
+   refused for 1 reason   :   606   46.7 %   ★ ONE DECISION AWAY
+   refused for 2 reasons  :   445   34.3 %
+   refused for 3 reasons  :   103    7.9 %
+   refused for 4 reasons  :    57    4.4 %
+   refused for 5 reasons  :    83    6.4 %
+   refused for 6 reasons  :     3    0.2 %
+
+-- refusals by AXIS (an occurrence can be short on several)
+   class        600
+   SRC          560
+   f31          406
+   ACT          342
+   storegate    151
+   store        148
+   ptrmode       96
+   bit11         95
+   format        68
+
+-- ★ THE LEVERAGE TABLE: anchor ONE thing, nothing else changes
+   decision                   unblocks  appears
+   f31 2 off class 8               203      244
+   class 1                         103      337
+   store+bit7 with f31 1            52      138
+   SRC 0x11                         50      167
+   f31 5                            42       60
+   f31 4                            34       48
+   ACT 0x0B                         28       82
+   f31 3                            26       35
+   f31 7                            15       16
+   C-format                         13       68
+   SRC 0x08                         10       83
+   ACT 0x08                          9       52
+   SRC 0x0B                          7      106
+   ACT 0x1A                          4       20
+   TOP 14 TOGETHER                 596  = 46 % of the undecoded mass

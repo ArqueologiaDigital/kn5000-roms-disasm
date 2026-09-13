@@ -738,6 +738,13 @@ def decoded(w):
     if hi == 0x000 and cl == 2 and ad == 0x00 and lo == 0x000: return True  # nop
     if is_ldptr(w) or is_rstcur(w) or is_ldptrd(w):            return True
     if is_setvec(w):                                           return True
+    #   ★★★★★ 2026-09-13: THE DELAY ESCAPE IS EXECUTABLE, and this predicate was asking it the
+    #   wrong questions.  A class-1 escape is an external delay-DRAM access whose semantics are
+    #   FORCED -- direction from `addr8' bit 6, address = DESCRIPTOR_CELL[k] + G by the IDENTITY
+    #   map (adjudication-round5, PROVEN BY CONSTRUCTION).  It never reaches the ALU: the device's
+    #   own `is_dram' branch RETURNS BEFORE IT.  So grading these words on anchored SRC/ACT/f31 --
+    #   fields they do not use -- counted 276 fully-determined words as undecoded.
+    if is_dram(w) and dram_dir(w):                             return True
     if alu_decoded(w):                                         return True
     return False
 
@@ -759,6 +766,8 @@ def form_of(w):
     if not decoded(w):
         return None
     if is_setvec(w):  return "setvec"
+    if is_dram(w) and dram_dir(w):
+        return "dly.r" if dram_dir(w) == "READ" else "dly.w"
     if is_ldptr(w):   return "ldptr"
     if is_ldptrd(w):  return "ldptr.d"
     if is_rstcur(w):  return "rstcur"
@@ -1186,6 +1195,16 @@ def text(w, at=None):
             return "ldptr.d #$%02x" % ad
         if is_rstcur(w):
             return "rstcur"
+        #   ★ THE DELAY ESCAPE RENDERS AS WHAT IT IS.  Placed BEFORE the ALU branch on purpose:
+        #   a class-1 escape never reaches the ALU (the device's `is_dram' branch returns first),
+        #   so rendering it through the ALU path produced `ld ?' -- a decoded word whose operand
+        #   could not be named, because the operand is a delay-DRAM address and not an ALU source.
+        #   `k' is the index of this escape within its own body; the address is DESCRIPTOR_CELL[k]
+        #   + G by the IDENTITY map (adjudication-round5, PROVEN BY CONSTRUCTION), which is why
+        #   no address appears in the word.
+        if is_dram(w) and dram_dir(w):
+            return "dly.%s  dsc[k]%s" % ("r" if dram_dir(w) == "READ" else "w",
+                                         "" if dd == 0 else ",p%+d" % dd)
 
         # THE ALU, rendered as the two fields it really is: the OPERATION from
         # hi12[3:1] and the ROUTING from lo12.  The optional multiply / store /
