@@ -4289,6 +4289,55 @@ the *tail* case now has **independent corroboration and a two-sided test**, whic
 and `accb` equals `P`). The identification with §138 is **FORCED** by its own stated predicate. No
 arm was run.
 
+## 94. ⛔ §138 REFUTED AGAIN — by a better criterion, while its ORIGINAL refutation no longer reproduces
+§93 arrived at §138's predicate from an unrelated direction and said the tail case now had a
+criterion and a control it never had. I pre-registered both
+(`data/PREDICT_STALE138_TAIL_2026-09-13.md`) and ran it: `SPEC` bit 55 on, true default otherwise.
+
+| # | prediction | result |
+|---|---|---|
+| **P1** | `cell 06`'s share of full-scale receipts **falls** | ⛔ **FAIL** — its absolute count **ROSE**, 3 368 783 → **3 540 489** |
+| **P2** ★ | **`iw39`, the DECODED control, is unchanged** | ⛔ **FAIL** — 1 372 663 → **1 758 928 (+28 %)** |
+| **P3** | `iw19`'s count falls | ⛔ **FAIL** — 1 706 614 → 1 762 079 |
+| **C1** | the EQ, §28's refutation site, is unharmed | ✅ **PASS** |
+
+★★★ **And the number that settles it, which §138 has never been measured against:**
+
+| | baseline | §138 armed |
+|---|---:|---:|
+| full-scale datums received / microcode stores | **9 986 693 / 135 151 116 = 7.39 %** | **40 580 369 / 135 151 116 = 30.03 %** |
+
+⇒ **the guard QUADRUPLES the machine's saturation.** Turning stale LOADs into HOLDs does not stop
+the erasure — it stops the *clearing*, so accumulators carry further and rail more often. `cell 8B`
+alone goes 1 326 062 → 7 063 430, its four writers landing on **1 763 1xx each**, a suspiciously
+flat signature of a machine pinned rather than computing.
+
+★ **P2 is what caught it, and it was written down in advance.** `iw39` is decoded
+(`ld.st ta,c+,(p)-1`) and has nothing to do with stale products; a correct guard must not touch it.
+It moved 28 %. That is the definition of too broad, and it is the same shape as §28's original
+refutation — measured this time as a number rather than as a topology.
+
+### ★★ THE OTHER HALF: §28's refutation no longer reproduces
+**C1 passed, and that is a finding in itself.** §138 was closed because at the EQ's entry it made
+`iw85` a HOLD, the entry triple-counted the input and `iw88`'s store railed the pickup. Armed today
+the EQ is **untouched** — pickup `0x05` identical to the baseline (inherited 53 452, leaves 56 033),
+`0x01`/`0x04` identical, and **all five bands still carry signal**.
+
+⇒ §76's input-stage promotion changed the conditions under which §28 measured. **The original
+refutation's mechanism is gone; the arm is still wrong, for a different and better-measured
+reason.** ⚠ That is worth recording precisely because it would have been easy to re-open §138 on
+*"§28 no longer reproduces"* alone — and it would have been wrong. A refutation expiring does not
+make the claim true.
+
+⇒ **§138 stays closed**, now with a quantitative reason (`7.4 % → 30.0 %`) and a named control that
+moved, on top of the topological one that has lapsed. §55's *"do not restrict it to the tail — that
+is fitting the rule to the data"* is vindicated: the tail case was corroborated independently and
+the arm **still** fails.
+
+⚠ Grade: MEASURED, pre-registered, with the control that decided it written before the run. The
+chain §90–§93 built is unaffected — `iw331` still rails ACCB, `iw19` still copies it, `cell 06` is
+still the largest recipient. What is now excluded is **this** fix for it.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
