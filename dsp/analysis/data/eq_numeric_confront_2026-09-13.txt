@@ -1,0 +1,22 @@
+SAMPLE-FOR-SAMPLE CONFRONTATION -- the chip's accumulator vs the biquad sum
+  (coefficients and operands both read from the trace; P_SHIFT = 6)
+  band 0  running sum: NO   pipeline P == coef[k-1]xL[k-1]: 0/4  ⛔
+      step 1 cur 0x02  want +1751515136  trace P +1836089344  (delta +84574208)
+      step 2 cur 0x03  want +1819812633  trace P +1616276042  (delta -203536591)
+      step 3 cur 0x04  want +6492987127  trace P +231648790624  (delta +225155803497)
+      step 4 cur 0x00  want -230654044611  trace P +2429419520  (delta +233083464131)
+  band 1  running sum: NO   pipeline P == coef[k-1]xL[k-1]: 0/4  ⛔
+      step 1 cur 0x07  want -112944426008  trace P +230517137685  (delta +343461563693)
+      step 2 cur 0x08  want -116358512640  trace P -114022285312  (delta +2336227328)
+      step 3 cur 0x09  want -112009940559  trace P -120189404532  (delta -8179463973)
+      step 4 cur 0x0A  want -484768521058  trace P -1089117880320  (delta -604349359262)
+  band 2  running sum: NO   pipeline P == coef[k-1]xL[k-1]: 3/4  ⛔
+      step 1 cur 0x0D  want +538774208512  trace P -538774144286  (delta -1077548352798)
+  band 3  running sum: NO   pipeline P == coef[k-1]xL[k-1]: 3/4  ⛔
+      step 1 cur 0x13  want -525528140617  trace P +525528203264  (delta +1051056343881)
+  band 4  running sum: NO   pipeline P == coef[k-1]xL[k-1]: 3/4  ⛔
+      step 1 cur 0x19  want +492943966208  trace P -492943907445  (delta -985887873653)
+
+  0 band(s) AGREE, 5 DIFFER
+  ⇒ each differing band is a decode worklist item: the step whose term != P is
+    where the chip's product disagrees with coef x operand.

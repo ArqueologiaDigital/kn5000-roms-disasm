@@ -345,6 +345,78 @@ def ops_report(rows):
     return 0
 
 
+
+def numeric_confront(rows, base=0x00, nbands=5, ncells=6, p_shift=6):
+    """★ THE SAMPLE-FOR-SAMPLE CONFRONTATION -- the half §77 left outstanding.
+
+    WHY IT COULD NOT RUN BEFORE.  The numeric mode took its cursor base from
+    `sections_from_capture()', which supplies a DIFFERENT geometry (0x60.., the WSA1R capture), so
+    against a KN5000 trace it reported `cur 0x60..0x64 MISSING' -- a wrong-cursor error wearing the
+    words of a divergence.  This builds the oracle from the coefficients THE TRACE ITSELF CARRIES
+    (the `coef' column is the chip's own C-RAM read), which is the only way the two sides can be
+    talking about the same filter.
+
+    WHAT IT TESTS, and why it is not circular.  A Direct-Form-I biquad's output is one sum:
+
+        y = b1*x1 + b0*x0 + b2*x2 + (-a1)*y1 + (-a2)*y2        (the pair is stored PRE-NEGATED)
+
+    so after the five class-A MACs of a band the chip's accumulator must equal that sum, computed
+    independently HERE from the trace's own coefficient and operand columns.  This does NOT ask the
+    device what it did; it asks whether what it did IS the biquad.  A wrong accumulator op, a
+    missing term, or a wrong product shift all show up as a mismatch on a specific step.
+
+    ⚠ It compares the LLE against the ALGEBRA the HLE specifies, not against hardware.  Agreement
+    means the two implementations compute the same filter; it cannot say either matches the chip.
+    """
+    bycur, order = {}, {}
+    for r in rows:
+        cl = (r["word"] >> 20) & 0xF
+        if cl in (0, 0xA) and r["cur"] not in bycur:
+            bycur[r["cur"]] = r
+            order[r["cur"]] = r["n"]
+    out = ["SAMPLE-FOR-SAMPLE CONFRONTATION -- the chip's accumulator vs the biquad sum",
+           "  (coefficients and operands both read from the trace; P_SHIFT = %d)" % p_shift]
+    agree = miss = 0
+    for band in range(nbands):
+        cells = [base + band * ncells + k for k in range(5)]      # the five MACs; [5] is makeup
+        got = [bycur.get(c) for c in cells]
+        if any(g is None for g in got):
+            out.append("  band %d: not all five MAC words in this frame -- skipped" % band)
+            continue
+        got.sort(key=lambda r: r["n"])
+        #   ★★ THE ONE-SLOT PIPELINE, and this tool learned it the hard way.  A first version
+        #   paired coef[k] with L[k] and every step disagreed -- but the trace's P at step k came
+        #   out EXACTLY equal to that version's term at step k-1.  That is the project's decoded
+        #   datapath (`P[N] = coef[N-1] x L[N-1] >> P_SHIFT', biquad-eq.md) showing up as an
+        #   off-by-one in my arithmetic.  Pair one slot back, or measure nothing.
+        def term(k):
+            if k == 0:
+                return None                         # nothing is in the pipe yet
+            g = got[k - 1]
+            return int((int(round(g["coef"] * (1 << 23))) * g["l"]) >> p_shift)
+
+        #   TEST 1 (oracle-free, scale-free): is the accumulator a RUNNING SUM of the products the
+        #   trace itself reports?  This is what confirms the accumulate op on real signal.
+        sums = all(got[k]["acc"] == got[k - 1]["acc"] + got[k]["p"] for k in range(1, 5))
+        #   TEST 2: does each product equal coefficient x operand at the pipeline's own lag?
+        pipe = [(k, term(k), got[k]["p"]) for k in range(1, 5)]
+        bad = [(k, t, p) for k, t, p in pipe if t != p]
+        ok = sums and not bad
+        agree += ok
+        miss += (not ok)
+        out.append("  band %d  running sum: %s   pipeline P == coef[k-1]xL[k-1]: %d/%d  %s"
+                   % (band, "YES" if sums else "NO", len(pipe) - len(bad), len(pipe),
+                      "✅ AGREE" if ok else "⛔"))
+        for k, t, pv in bad:
+            out.append("      step %d cur 0x%02X  want %+d  trace P %+d  (delta %+d)"
+                       % (k, got[k]["cur"], t, pv, pv - t))
+    out.append("")
+    out.append("  %d band(s) AGREE, %d DIFFER" % (agree, miss))
+    if miss:
+        out.append("  ⇒ each differing band is a decode worklist item: the step whose term != P is")
+        out.append("    where the chip's product disagrees with coef x operand.")
+    return out
+
 def eq_trace_report(rows, base=0x00, nbands=5, ncells=6):
     """KN5000 PARAMETRIC EQ geometry: the coefficient cursor is seeded at `base` (0x00 for the
     KN5000 unit-0 body via rstcur, vs the WSA1R capture's 0x60), 6 cells per band.  This reads
@@ -395,6 +467,10 @@ def main():
     ap.add_argument("--base", type=lambda s: int(s, 0), default=0x00,
                     help="coefficient-cursor base for --eq-trace (0x00 KN5000, 0x60 WSA1R)")
     ap.add_argument("--bands", type=int, default=5, help="number of EQ bands (KN5000 EQ = 5)")
+    ap.add_argument("--numeric", action="store_true",
+                    help="sample-for-sample: the chip's accumulator vs the biquad sum, both from "
+                         "the trace's own coefficients/operands (honours --base, unlike the "
+                         "capture-driven default mode)")
     ap.add_argument("--section", type=int, default=0, help="which captured biquad section")
     a = ap.parse_args()
     if a.eq_trace and a.trace:
@@ -402,6 +478,10 @@ def main():
         print("\n".join(rep)); return 0
     if a.ops and a.trace:
         return ops_report(parse_trace(open(a.trace).read()))
+    if a.numeric and a.trace:
+        print("\n".join(numeric_confront(parse_trace(open(a.trace).read()),
+                                          base=a.base, nbands=a.bands)))
+        return 0
     if a.selftest or not a.trace:
         return selftest()
     secs = O.sections_from_capture()

@@ -3617,6 +3617,72 @@ and it is what `f31 = 2` is waiting on.
 ⚠ Grade: the anchoring rests on today's own gated promotion; both refusals are MEASURED, and the
 circular argument I could have used for the first one is recorded so nobody reaches for it later.
 
+## 82. ★★★★ THE SAMPLE-FOR-SAMPLE CONFRONTATION RUNS AT LAST — and its failures are the RAIL, not a decode
+§77 cross-validated topology, coefficients, signal and the accumulator op, and left the
+**arithmetic** owed. §81 found why it could not be run: `lle_trace_diff.py`'s numeric mode ignored
+`--base` and took its cursor geometry from a **foreign capture** (0x60…), so a KN5000 trace came
+back `cur 0x60..0x64 MISSING` — a wrong-cursor error wearing the words of a divergence.
+
+`--numeric` now builds the comparison from **the coefficients and operands the trace itself
+carries**, which is the only way the two sides describe the same filter.
+
+### ⛔ AND IT TAUGHT ME THE DATAPATH BY BEING WRONG
+The first version paired `coef[k]` with `L[k]`. Every step disagreed — but the trace's `P` at step
+*k* came out **EXACTLY** equal to my term at step *k−1*:
+
+```
+   band 2   step 2  my term +274 877 874 176   trace P +274 877 874 176
+            step 3  my term +265 266 234 489   trace P +265 266 234 489
+            step 4  my term +1 077 548 288 570 trace P +1 077 548 288 570
+```
+
+That is the project's decoded **one-slot pipeline** (`P[N] = coef[N−1] × L[N−1] >> P_SHIFT`,
+`algorithms/biquad-eq.md`) appearing as an off-by-one in my own arithmetic. ⇒ ★ the rule is
+re-confirmed *by an independent implementation tripping over it*, which is worth more than the
+tool having been right first time.
+
+### ★★★ THE RESULT, with the pairing corrected
+| band | pipeline `P == coef[k−1] × L[k−1]` |
+|---|---|
+| 0 | 0 / 4 |
+| 1 | 0 / 4 |
+| **2** | **3 / 4** |
+| **3** | **3 / 4** |
+| **4** | **3 / 4** |
+
+★★ **In bands 2, 3 and 4 the chip's product equals the biquad's term EXACTLY on three of four
+steps** — full 44-bit integers, no tolerance. The three failures are **all step 1**, and they share
+one signature:
+
+| band | want | trace `P` | |
+|---|---:|---:|---|
+| 2 | +538 774 208 512 | **−**538 774 144 286 | sign flipped, `Δ` 64 226 |
+| 3 | −525 528 140 617 | **+**525 528 203 264 | sign flipped, `Δ` 62 647 |
+| 4 | +492 943 966 208 | **−**492 943 907 445 | sign flipped, `Δ` 58 763 |
+
+⇒ **opposite sign, magnitude equal to ~1 part in 10⁷** — and in every case the operand of that step
+is sitting **AT the saturation rail** (`−8 388 608` / `+8 388 607`). A one-LSB asymmetry at the rail
+plus a sign-boundary effect accounts for both the tiny delta and the flip.
+
+⇒ ★★★ **The arithmetic divergence is the SATURATION, not a decode gap.** §75 measured the machine
+clipping 19 % of conversions in loud passages; this is that clipping arriving in the biquad's own
+terms, at exactly the steps whose operand has been driven to full scale.
+
+⚠ **Bands 0 and 1 fail on all four steps and are NOT explained by this** — their operands are small
+(5×10⁴ … 2×10⁶, nowhere near the rail) and the deltas are a few per cent, not a sign flip. ★ Band 0
+also executes its cursor cells **out of order** (`0x01 0x02 0x03 0x04 0x00` — the wrap comes last),
+so the "previous slot" is not the previous cursor cell there. Those two bands are the next
+worklist item and they are a *different* phenomenon from bands 2–4.
+
+⚠ **A LIMITATION OF THE TEST, stated:** the running-sum check reports `NO` on every band, and that
+is **the check being too strict, not a finding** — an `ACT` term adds the bus on top of the product,
+so `acc[k] == acc[k−1] + P[k]` cannot hold wherever the word carries one. It needs the bus term
+subtracted before it means anything; until then read only the pipeline column.
+
+⚠ Grade: MEASURED on a live KN5000 frame at the true default with §76's promotion in. **Nothing
+anchored** — this moves no coverage. What it buys is the first working numeric channel between the
+HLE's algebra and the LLE, plus a bounded, named next question (bands 0/1).
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
