@@ -1,3 +1,44 @@
+# ★★★★★ 2026-09-13 — **PROMOTED: the input stage now reads the input** (§70–§76)
+
+**`UPD6383_SRC0B2` IS DEFAULT-ON.** `SRC 0x0B` on a word with **no delay access** is `mem[ptr]`,
+not the delay-read register. Control: `UPD6383_SRC0B2=0`.
+
+| | |
+|---|---|
+| **gate** | 8 programs, 3 families, ONE binary, both arms, **TRUE DEFAULT** — **8 FIXED / 0 BROKEN** |
+| **blast radius** | **7 words of 3 057 (0.23 %)**, 2 shapes, **both exercised by the gate**; the 99 class-1 delay words untouched |
+| **semantic** | `iw25` now loads tempA with **exactly each program's own DI1 latch cell `0x04`** |
+| **§56 rule** | re-verified with **NO `UPD6383_*` set at all**: pass-through `0x05` **−8 388 608 → −239 616**, latches unchanged, and `0x05` leaves the `§S1C` top-6 |
+
+★ The defect: `iw7` put a real sample in tempA, **`iw25` overwrote it with 0 or a rail**, `iw39`
+read the wreckage, `iw40` multiplied it, `iw45` stored it into the cell every body reads. Zero and
+rail were one bug with two flavours of garbage.
+⛔ It corrected my own pre-registration: I cited a **1 610-word** population for `SRC 0x0B`; that
+figure belongs to `SRC 0x00`. `SRC 0x0B` spans **106**.
+
+⚠⚠ **WHAT IS NOT FIXED — do not read this as "the DSP works":**
+* a hand-off is a **precondition, not audio**; whether the bodies compute correctly is untouched;
+* **the machine-wide saturation STANDS** — `§74 §S1C` still reports **cell `0x06` at 56 %** and
+  `0x07`, the *other* per-unit hand-off cell, at **7.2 %**. §75's finding is the live one now;
+* nobody has heard the real instrument — the case rests on the ROM's structure, not on audio.
+
+⇒ **NEXT, in order:**
+1. **Re-measure the things that were downstream of the rail.** §54/§55's *"14 of 16 bodies leave a
+   constant accumulator"* was measuring the consequence — **re-run it at the true default with the
+   promotion in**, and expect it to change.
+2. **Cell `0x06` at 56 %** — the largest remaining clip target, never investigated.
+3. §64/§69's bit-5 probe (the 20 live instances of `0020200000`, `prog52_auto_wah` the best host)
+   is **now gradeable** — its input is no longer a rail.
+
+⛔ **REFUTED, pre-registered, so nobody repeats it:** `UPD6383_NOZ05=1` (§71).
+⛔⛔⛔ **AND THE STANDING TRAP:** every census before today carried **`UPD6383_PSHIFT=2`** (datum
+halved), passed by `catalogue_regression.sh` as a *"baseline arm … NOT optional"* — **it was hiding
+this.** Override with `UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0`; the harness now warns at the top.
+⚠ **Never pool captures across the two settings** (§229). ⚠ **Never build while a capture is in
+flight** — it starves the emulator, swaps the binary mid-sweep, and OOM-kills the box (§74).
+
+---
+
 # ★★★★★ 2026-09-13 — **THE INPUT-STAGE DEFECT IS NAMED, AND A DECODE RIVAL FIXES IT**
 
 ★★★★★ **START HERE.** §70–§73. The input stage was handing **8 of 8 programs** a hand-off cell at
