@@ -4642,6 +4642,78 @@ chorus's two modulated taps are not reading the delay line.** That is what an un
 mode looks like from the outside, and it is the same shape as the input-stage defect §76 fixed:
 the arithmetic runs, and it runs on the wrong cell.
 
+## 100. ★★★ THE CLASS-4 TWIN EXISTS — IN THE OTHER PRODUCT'S CORPUS
+Tool: [`../tools/class_twins.py`](../tools/class_twins.py). Pre-registration:
+[`data/PREDICT_CLS46PTR_2026-09-13.md`](data/PREDICT_CLS46PTR_2026-09-13.md).
+
+§97 left the 159-word `C63` macro needing new evidence and §98 narrowed the question to one field.
+The evidence was next door the whole time.
+
+### The asset nobody had pooled
+The **SX-WSA1R runs the same uPD6383 ISA**, and its 60 effect programs are disassembled in
+`wsa1/dsp/disasm/` by the same `dsp_disasm.py` model. Pooled with the KN5000's 38 images the
+corpus is **7558 occurrences of 1129 distinct non-C-format words** — and it contains programs the
+KN5000 never shipped, because twelve of the KN5000's named effects are byte-identical to NO
+OPERATION (`bit11-family.md` item G) and PITCH SHIFTER is one of them.
+
+`dark-words.md` §4.4 named the lever years of notes ago and nobody could pull it:
+
+> *"`012.4.01.1CE` differs from the K6 input-stage word `012.2.FF.1CE` in **nothing but `class4`
+> (4 vs 2) and `addr8`**. A minimal pair across the class field, with one side forced, is the
+> cleanest possible probe of what class 4 changes."*
+
+**It is better than that, and the KN5000 corpus does not contain it:**
+
+```
+   012.2.01.1CE   x2     WSA1R eff54_pitch_shifter          ★ DECODED
+   012.4.01.1CE   x99    53 KN5000 + 46 WSA1R               ⛔ traps
+```
+
+Identical in `hi12`, in `addr8` **and** in `lo12`. The only difference in the 36-bit word is
+`class4`. ★ And the instrument has a positive control built in: over the pooled corpus the
+commonest multi-class triple is `2 ↔ A` on **19** triples, `xor = 8` — it recovers the known
+CURSOR-FETCH bit from the data before it is asked anything.
+
+### ★★ And the same program spells the whole macro in class 2
+`eff54_pitch_shifter` is the only program in **either** product using `lo12 = 0xC62` instead of
+`0xC63`, and its macro is spelled in classes where the pointer arithmetic is FORCED:
+
+```
+   99 instances   [ x.0.00.C63 ]   [ 000.6.TT.4CD|407 ] [ 012.4.01.1CE ] [ 104.2.dd.1CE ]
+    2 instances   [ 142.0.00.C62 ] [ 022.2.1B.4CD ]     [ 092.2.01.1CE ] [ 184.2.FF.1CE ]
+                                     class 2              class 2          class 2
+```
+
+Net pointer displacement over the three words after the head:
+
+| model | the 99 class-4/6 instances | the 2 class-2 instances |
+|---|---|---|
+| shipped (only class 2/A move) | −14 … +9 | **+27** ← an outlier **3× beyond the whole range** |
+| classes 4 and 6 move by `(s8)addr8` | +11 … +41 | **+27** ← inside it, and 6 of the 99 land on exactly +27 |
+
+**A model under which the ROM's two spellings of one macro differ by 25 cells, against one under
+which they agree exactly.** The `addr8` values line up too: class 4 is always `0x01` and its class-2
+twin carries `0x01`; class 6 runs `0x18`–`0x28` and its class-2 counterpart `0x1B`.
+
+⇒ this retires §98's *"index-like, not delta-like"* inference. That was drawn before the twin was
+in hand, and the 0 % zero-rate it rested on is explained: the macro never wants a zero delta.
+
+### The gate, and run 1 failed its own first check
+The decode has to pass the catalogue regression at the true device default, the way `SRC0B2` did.
+`UPD6383_CLS46PTR` (default OFF) is that arm; six predictions were committed before the run,
+including the blast radius (**106 KN5000 words, all in the one macro, ZERO in the kernel or output
+stage** — checked) and the counter-evidence (`closure_pointer.py` row **V12**: residue +179,
+unit-0 pool 8 → 15 distinct nets, closes nothing; its force limited by `closure-pointer.md` item F
+having falsified that criterion's own premise, and item G's rejections being at 29 and 31).
+
+⛔ **Run 1: `§100 CLS46PTR (ON): class-4/6 pointer advances performed: 0`** — everything
+bit-identical, run discarded. The pointer post-increment lives at the END of `exec_alu()`, the one
+site that runs for every word; the two sites a grep for `m_dp = u8(m_dp + s8(addr8(word)))` finds
+are the twelve-word K6 whitelist path and a copy inside `exec_decoded()`'s **nop branch**, and I
+patched those. ★ **Second time in one session that a fired count caught an arm that could not
+reach its target** — §97 was the first, on someone else's experiment. Recorded in the
+pre-registration rather than quietly retried.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
