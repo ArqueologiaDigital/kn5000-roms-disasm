@@ -3159,6 +3159,42 @@ catalogue at the **true default**, arm off vs on, and grade `0x05` across all 38
 ⚠ Grade: MEASURED, pre-registered, with an internal null and a control that both held, and the
 limitation that it leaves one of the three test programs unfixed stated in the same breath.
 
+## 74. THE INSTRUMENT THAT WOULD HAVE CAUGHT §70–§73 ON DAY ONE — and a process error of mine
+§72 found the kernel's input stage saturating the hand-off cell in **8 of 8** programs, at the
+device default, and **nobody had noticed for the life of the project**. That is an instrument
+failure, and it is worth naming precisely because the device **already had a saturation census**.
+
+`§223 §S1` counts clips **per INSTRUCTION** — `m_s1_clip[bank][iw]`. By it, `iw45` had been
+clipping in every capture ever taken. The question that mattered was never *"which word clips"*; it
+was ***"which CELL receives a clipped datum"*** — and no instrument answered it.
+
+⇒ **`§74 §S1C` ships**: the same event, indexed by `m_dp`, which is already in scope at the single
+point where *"this value does not fit the datum"* is knowable. Read-only, unconditional, beside the
+census it complements; the four per-unit base cells (`05 / 07 / 85 / 87`) are **flagged in the
+report**, because a clip landing on one of them is the clip that silences a body.
+✅ Compiles clean, binary at full size.
+
+★ **The method point, which generalises** (and echoes §10's): §10 said *"when successive plausible
+discriminators all fail, suspect the instrument before inventing a fourth candidate."* This is the
+other half — **when a defect survives every census you own, ask what your censuses are INDEXED BY.**
+`§S1` was the right measurement with the wrong key.
+
+### ⚠ AND A PROCESS ERROR, recorded because it cost real time
+I started the catalogue regression in the background and then **ran a 20-minute `-j3` build while
+it was capturing**. Two consequences, both mine:
+1. **The emulator was starved.** MAME needs real-time CPU to reach its trace frame inside the
+   180 s timeout; competing with three compiler jobs, the sweep managed **one capture in 45
+   minutes** instead of ~27.
+2. ⚠ **The binary changed mid-experiment.** `t0` was captured with the pre-`§S1C` build and the
+   rest with the post one. `§S1C` is provably behaviour-neutral (it increments a counter and prints
+   at exit; no ALU, store or pointer path is touched) — but *"provably"* is an argument, not a
+   measurement, so **`t0` is re-captured on the final binary and compared** rather than assumed.
+⇒ ★ **RULE, beside "timeout-wrap every launch": never build while a capture is in flight.** The
+build tree and the capture share one machine, and the capture is the one with a deadline.
+
+⚠ Grade: the instrument is SHIPPED and compiles; its first catalogue-wide reading is pending the
+regression. The process error is recorded as fact, with its remedy applied.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
