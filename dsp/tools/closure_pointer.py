@@ -581,6 +581,10 @@ VARIANTS = {
         lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) == 8),
     "V10 classes 4, 6 and 8 ALL post-increment (the delta reading)":
         lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) in (4, 6, 8)),
+    #   ★★★ sect. 100: the CROSS-CORPUS twin says classes 4 and 6 carry the SAME delta class 2
+    #   does.  This is that pair alone -- class 8 (a cursor fetch with a CONSTANT addr8) excluded.
+    "V12 classes 4 and 6 post-increment, class 8 does NOT":
+        lambda w: D.ptr_postinc(w) or ((not D.c_format(w)) and D.class4(w) in (4, 6)),
     "V11 everything but the register-file classes 0/1/9 moves":
         lambda w: (not D.c_format(w)) and D.class4(w) not in (0, 1, 9),
 }
