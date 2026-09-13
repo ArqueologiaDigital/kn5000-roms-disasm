@@ -4237,6 +4237,58 @@ this is the same failure mode, and this time it had put 75 words on the board.
 ⚠ Grade: FORCED (the mask bit is set; the call is unconditional given it). The 201 that remain are
 anchored on both halves and are unaffected.
 
+## 93. ★★★★★ THE CHAIN LANDS ON §138 — arrived at independently, at the site §55 predicted
+§91 named `iw331` as where the rail enters ACCB. §92 established that a delay word **runs its ALU
+half**. Putting those together, the mechanism is exact:
+
+```
+   iw329  MUL=Y  L = 8 388 607 (the rail)   ->  P = 549 755 748 352   (= 8388607<<16, the rail)
+   iw330  accb -> 0                             P still 549 755 748 352
+   iw331  f31 = 0, class 1, MUL = '.'       ->  accb <- P            ★ STALE: no coefficient fetched
+```
+
+⇒ **`iw331` LOADs a STALE product into unit 1's accumulator.** It is `f31 = 0` (LOAD `acc ← P`),
+it is class 1 so it **fetches no coefficient**, and the `P` it loads was produced two words earlier
+by a multiply whose operand was already at the rail.
+
+### ★★★★ That is §138, and I did not go looking for it
+§138's predicate is stated in the device, in these words:
+
+> *"a word with `f31 == 0` (LOAD `acc ← P`) that fetches **NO coefficient** brought no fresh
+> product, so loading from `P` is an **ERASURE**, not an operation."*
+
+`iw331` satisfies it exactly. And §138 is **REFUTED** — §27/§28 measured it breaking the parametric
+EQ's *entry*, where turning `iw85`'s LOAD into a HOLD makes the entry triple-count the input and
+rails the pickup. It has sat closed since.
+
+★★★ **But §55 already anticipated this.** Its own words: the same predicate *"names the killer in
+**13 of 14** bodies' **TAILS**"*, and *"those are different sites from the entry that §28 measured
+breaking."* §55 then declined to act, correctly, because *"restrict it to the tail would be
+**fitting the rule to the data**."*
+
+⇒ **This arrives at the same site from a completely unrelated direction** — a saturation census
+built this morning to answer *"which cell receives full scale"*, followed backwards through
+`cell 06` → `iw19` → `ACCB` → `iw331`. Nothing in that path knows about §138 or about §55's tail
+census. **Two independent routes, one site.** That is not fitting the rule to the data; it is the
+data arriving twice.
+
+### ⇒ What is now available that §138 never had
+| | |
+|---|---|
+| **a criterion** | *does `cell 06`'s share of full-scale receipts fall?* — counted automatically by `§S1R` in any capture, no new rig |
+| **a control** | **`iw39`** writes the other 1.37 M receipts of the same cell and **is decoded** (`ld.st ta,c+,(p)-1`). A guard aimed at stale LOADs must move `iw19`'s count and **leave `iw39`'s alone**. If both move, it is too broad — which is exactly how §28's refutation looked |
+| **a blast-radius number** | already measured: §138 as a blanket rule rewrites **1 084 of 3 057 words, 35.5 %** (`load_nocoef_census.py`) |
+
+⚠ **I am NOT arming it.** It is refuted at the entry, its blast radius is a third of the corpus, and
+§55's objection to a tail-restricted variant still stands on its own terms. What has changed is that
+the *tail* case now has **independent corroboration and a two-sided test**, which is precisely what
+§55 said it lacked. That is the experiment to run next, and it is a session's work: arm, measure
+`cell 06` vs `iw39`, and check the EQ entry has not moved.
+
+⚠ Grade: MEASURED (the trace rows are exact; `P` at `iw331` equals `iw329`'s product to the unit,
+and `accb` equals `P`). The identification with §138 is **FORCED** by its own stated predicate. No
+arm was run.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
