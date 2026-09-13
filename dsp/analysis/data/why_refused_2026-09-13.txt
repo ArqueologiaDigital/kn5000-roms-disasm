@@ -1,0 +1,24 @@
+WHY IS EACH TOP FAMILY REFUSED BY alu_decoded()?  A word needs EVERY axis.
+
+family             occurs  n   reasons
+212/2/000          103     1   SRC 00 unanchored
+000/2/40E          77      1   ACT 0E unanchored
+104/2/1CE          57      2   ACT 0E unanchored; f31=2 HOLD off class 8
+012/4/1CE          53      3   class 4 not in {2,8,A}; ACT 0E unanchored; bit-4 store off mode 2
+000/2/1CD          49      1   ACT 0D unanchored
+092/2/700          46      1   SRC 1C unanchored
+040/0/C63          46      4   class 0 not in {2,8,A}; lo12 bit-11 modifier; SRC 11 unanchored; ACT 03 unanchored
+000/6/4CD          46      3   class 6 not in {2,8,A}; SRC 13 unanchored; ACT 0D unanchored
+104/2/1D5          46      1   f31=2 HOLD off class 8
+102/2/1CD          43      1   ACT 0D unanchored
+102/2/000          42      1   SRC 00 unanchored
+102/A/4C8          41      2   SRC 13 unanchored; ACT 08 unanchored
+000/2/000          40      1   SRC 00 unanchored
+880/1/2C7          40      2   class 1 not in {2,8,A}; SRC 0B unanchored
+880/1/000          38      2   class 1 not in {2,8,A}; SRC 00 unanchored
+A00/0/041          35      3   class 0 not in {2,8,A}; SRC 01 unanchored; ACT 01 unanchored
+000/2/447          34      1   SRC 11 unanchored
+182/2/000          32      1   SRC 00 unanchored
+
+⇒ 10 of 18 families are refused for exactly ONE reason: 512 of 868 occurrences (59%).
+⇒ of those, 6 are refused ONLY for an unanchored SRC (297 occurrences).

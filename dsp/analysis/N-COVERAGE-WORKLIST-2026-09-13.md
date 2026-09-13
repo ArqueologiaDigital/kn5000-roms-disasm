@@ -113,3 +113,57 @@ not over-read it:
 
 ⇒ **Next: run the programs that use `212/2/000` through the HLE and check the values**, then take
 `000/2/40E` (77 occurrences, still tied in the extractor between `P` and `acc+P−L<<16`).
+
+## 6. ★★★★ THE COVERAGE NUMBER IS NOT A COUNT OF UNKNOWN INSTRUCTIONS — it is a count of OPEN AXES
+§5 found the largest family one axis short. That generalises, and it is the most useful thing in
+this note (`data/why_refused_2026-09-13.txt`, `data/decode_leverage_2026-09-13.txt`).
+
+`alu_decoded()` requires **every** axis of a word: format, class, the bit-11 modifier, an
+**anchored SRC**, an **anchored ACT**, the store's mode and `f31`. A word with six settled axes and
+one open one is counted exactly like a word nobody understands at all. Asking the predicate *why*
+it refuses each of the 1 740 undecoded occurrences:
+
+| refused for … | occurrences | share |
+|---|---|---|
+| **exactly 1 reason** | **902** | **52 %** |
+| 2 reasons | 515 | 30 % |
+| 3 | 189 | 11 % |
+| 4–5 | 117 | 7 % |
+| 0 (would decode; blocked elsewhere) | 17 | 1 % |
+
+★★ **More than half the undecoded corpus is ONE axis short.**
+
+### ★★★ The leverage table: what a single code buys, on its own
+Counting only occurrences where a given axis is the **sole** reason for refusal:
+
+| anchor this one thing | unblocks **by itself** | appears in |
+|---|---|---|
+| **`SRC 0x00`** | **310** | 552 |
+| `ACT 0x0D` | 123 | 200 |
+| `ACT 0x0E` | 110 | 222 |
+| `f31 = 2` off class 8 | 72 | 236 |
+| class 1 admitted | 69 | 322 |
+| `SRC 0x11` (accb) | 48 | 160 |
+| `SRC 0x1C` | 46 | 46 |
+| `SRC 0x08` | 37 | 76 |
+| `ACT 0x0B` | 19 | 79 |
+| `f31 = 4` | 16 | 46 |
+| `ACT 0x1A`, `ACT 0x08` | 19 | 69 |
+
+⇒ ★★★ **twelve single decisions would unblock 869 of 1 740 undecoded occurrences — 50 % — by
+themselves**, and the top one (`SRC 0x00`) is worth **310 occurrences alone**.
+
+### Why this is a roadmap and not a shortcut
+⚠ "Unblock" means *the predicate would stop refusing it*, **not** *we know what it does*. Anchoring
+a code is a claim about the chip and needs the oracle, exactly as §3 says. But it changes the unit
+of work from *"decode 443 words"* to **"answer ~12 well-posed questions, each of the form: what
+does this one code name?"** — and §5 has already answered the first one's *routing*
+(`SRC 0x00` = the ordinary one-slot memory operand, 51 of 51).
+
+⚠ And several of these codes already have committed **speculative** readings the device ships
+behind mask bits (`SRC 0x00` = coefficient under §145/§148; `ACT 0x0D`/`0x0E` as the mixing pair).
+Anchoring means **deciding between those and the measurements**, which is a smaller and better-posed
+job than decoding from nothing.
+
+⇒ **The ranked queue for the remaining coverage work is: `SRC 0x00`, `ACT 0x0D`, `ACT 0x0E`,
+`f31 = 2` off class 8, class 1.** Each against the HLE, top down.

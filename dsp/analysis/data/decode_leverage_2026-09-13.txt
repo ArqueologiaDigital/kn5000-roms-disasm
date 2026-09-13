@@ -1,0 +1,26 @@
+ALL 133 UNDECODED FAMILIES, 1740 occurrences -- WHY are they refused?
+
+occurrences blocked by exactly N reasons:
+   0 reason(s):    17 occurrences (1%)
+   1 reason(s):   902 occurrences (52%)
+   2 reason(s):   515 occurrences (30%)
+   3 reason(s):   189 occurrences (11%)
+   4 reason(s):   115 occurrences (7%)
+   5 reason(s):     2 occurrences (0%)
+
+★ LEVERAGE: occurrences a code would unblock ON ITS OWN (it is the SOLE reason)
+blocking axis        sole-reason  appears in total
+SRC 00               310          552
+ACT 0D               123          200
+ACT 0E               110          222
+f31=2 off cls8       72           236
+class 1 not in {2,8,A} 69           322
+SRC 11               48           160
+SRC 1C               46           46
+SRC 08               37           76
+ACT 0B               19           79
+f31=4                16           46
+ACT 1A               10           19
+ACT 08               9            50
+
+⇒ the top 12 single axes would unblock 869 of 1740 undecoded occurrences (50%) BY THEMSELVES.
