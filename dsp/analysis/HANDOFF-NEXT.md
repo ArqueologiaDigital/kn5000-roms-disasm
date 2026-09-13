@@ -126,6 +126,21 @@ harness. ⚠ **Diff in EXECUTION order**, not by `iw`: the frame runs `iw0..49` 
    the FIRED COUNT between builds** — identical counts across a changed aim means the change did
    not reach. Third aim, on the per-word path: 10 487 → 327 220.
 
+   ★★★ **§54: THE OUTPUT PROBLEM IS UPSTREAM OF THE EPILOGUE — 14 of 16 BODIES LEAVE A CONSTANT
+   ACCUMULATOR.** `w73` sources **`SRC 0x10` = the ACCUMULATOR** (anchored), not a cell, so the
+   pointer was never the whole story. On the body's **last executed row** (the body runs BEFORE
+   kernel-B): only **2 of 16** programs leave a frame-VARYING accumulator (exciter,
+   PEQ+COMPR+DIST); **14 leave a constant**, eight of them exactly **0**, others a fixed large
+   value (`429 496 729 600` in vibrato and mix-up).
+   ⇒ **the bodies compute — their cells move — and still hand the next stage a constant.** §51's
+   disjoint pointer and §47's `loud max 0` are **downstream of that**. ⇒ **the next question is
+   per-body and upstream: why does a body whose cells move leave a constant accumulator?** The 2
+   that don't are the positive control; the 8 leaving exactly `0` are the sharpest cases.
+   ⚠ **A one-program artefact was caught here before it was written down**: the exciter alone shows
+   its accumulator going constant at `iw54` (a delay-DRAM WRITE doing `acc ← P`), which looks like
+   a single-word erasure worth arming. **Across the other 15 it is not general.** Ask the rest of
+   the catalogue BEFORE recording a per-word rule.
+
    ⛔ **§52/§53: THE EPILOGUE REBASE (register row 23) IS REFUTED A SECOND TIME, FOR A BETTER
    REASON.** Re-tested because its original withdrawal (*"rebasing moved the pointer to `0x05` and
    the stores still read zero"*) rested on a premise §50 destroyed — `0x05` now moves in all 16
