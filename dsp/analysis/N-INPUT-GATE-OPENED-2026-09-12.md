@@ -3197,6 +3197,11 @@ it was capturing**. Two consequences, both mine:
    measurement, so **`t0` is re-captured on the final binary and compared** rather than assumed.
 ⇒ ★ **RULE, beside "timeout-wrap every launch": never build while a capture is in flight.** The
 build tree and the capture share one machine, and the capture is the one with a deadline.
+⚠ **AND THE SWEEP WAS THEN OOM-KILLED** partway (5 of 23 on the first arm). `MEMORY.md` already
+carries *"two OOM kills during `build.sh` rsync"*; this is the same resource contention reaching a
+different victim. ⇒ **size a sweep to what the box can finish**: it was re-run as **8 programs ×
+2 arms on ONE binary** (~32 min) rather than 23 × 2 across a rebuild, which is both survivable and
+free of the machine difference the first attempt had acquired.
 
 ⚠ Grade: the instrument is SHIPPED and compiles; its first catalogue-wide reading is pending the
 regression. The process error is recorded as fact, with its remedy applied.
