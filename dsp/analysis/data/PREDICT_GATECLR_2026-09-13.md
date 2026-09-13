@@ -65,3 +65,67 @@ is reduce a three-way open axis to a two-way one on 138 words, and fix a 255× r
 
 ⚠ RISK, stated first: `§196`'s superseded census and `§228`'s rise census disagree on the period
 (307 vs 288 frames). Both are far from 73 584; the argument does not rest on which is right.
+
+
+---
+
+## RESULT — **P1 HIT, P2 MISS by a factor of 136**, and my criterion embedded an unchecked premise
+
+```
+   §102 GATECLR (ON): gate words with the feedback dropped: 22 230 564
+```
+
+**P1 HIT.** And the LFO rise census on the chorus phase cell:
+
+| | step | mean | period | rate |
+|---|---|---:|---:|---:|
+| control (shipped) | 114 … 4 190 812 | 29 098.03 | 288.3 frames | **152.97 Hz** |
+| `GATECLR` | 114 … 3 470 859 | **15 506.97** | 541.0 frames | **81.52 Hz** |
+| P2 predicted | **114 … 114** | **114.000** | 73 584 frames | **0.5993 Hz** |
+
+⛔ **P2 MISSES.** The mean halves and the maximum drops — the right direction — but the target was
+`114` flat and the result is 15 507, out by **136×**.
+
+### ⚠ The criterion was not clean, and that is my third this session
+P2's arithmetic assumed **the gate word is the only thing adding junk to the phase**. I never
+checked that, and it is false: the ramp block's phase chain runs through at least two other words
+(`000.2.F4.407`, `082.2.00.1C0`), and clearing the gate's feedback removes about half the
+contamination rather than all of it. ⇒ **the miss does not refute `clr:before`** the way the
+pre-registration said it would ("`clr:before` is out"); it refutes *"the gate alone accounts for
+the LFO's 255× rate error"*, which is what the prediction actually encoded.
+
+★ That is the third criterion of this session with a defect in it — §100's P2 required an index the
+arm could not supply, the class-4/6 gate's P1 was patched at the wrong site twice, and this one
+assumed a sole cause. All three were caught by the criterion rather than by the result, which is
+the argument for writing them down; none of them should have needed catching.
+
+### ★ A post-hoc observation, labelled as such, and worth a pre-registered test of its own
+The arm removes **every railed cell from the chorus**:
+
+```
+   control:  06 (8388607, 0..8388607, chg 1389)   92 (8388607, 0..8388607, chg 1)
+   GATECLR:  06 (2260027, 0..2260027, chg    1)   92 (5456405, 0..7474246, chg 2)
+   railed cells: off ['06','92']  ->  on []
+```
+
+⚠⚠ **Cell `0x06` is the user's effect VOLUME** — `register-space.md` item A1, **PROVEN BY
+CONSTRUCTION**: the effect's parameter bytecode ends with opcode `0x63`, `T1[0x63][0] = 0x06`
+(37 unit-0 algorithms) / `0x86` (12 reverbs), evaluated by a dB curve-table lookup, and bound to
+the name VOLUME in **49 of 49** algorithms. The firmware writes it **once**, after linking
+(`EFF_VolumeLoop`), and `dsp_disasm.py` already warns that anything overwriting it would leave the
+user's depth surviving *"exactly ONE frame"*.
+
+Under the shipped reading that cell is **railed and rewritten 1389 times**. Under `GATECLR` it is
+**written once** and holds 2 260 027 — about 0.27 of full scale, a plausible effect depth.
+
+⛔ This was noticed AFTER the run and is a LEAD, not a result. The pre-registered test it deserves
+is across programs and units: *cell `0x06` (and `0x86` on the reverbs) must be written once per
+program load and never by the microcode*, which is a known answer the firmware supplies and which
+neither this run nor any earlier one was designed to check.
+
+### Verdict
+**NOT PROMOTED.** P2 missed its number. What the run earns: `clr:before` is **not refuted** (the
+criterion that would have refuted it was mis-specified), it halves a 255× rate error, and it turns
+a proven-by-construction parameter cell from railed-and-overwritten into written-once. That is a
+better lead than the gate has had, and it needs a criterion built on the VOLUME cell rather than on
+the LFO rate.
