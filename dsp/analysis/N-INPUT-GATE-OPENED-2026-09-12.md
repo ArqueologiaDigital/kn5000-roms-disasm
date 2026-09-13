@@ -2685,6 +2685,63 @@ ROM.
 ⚠ Grade: MEASURED (12 sites, 40 listings) for the co-occurrence; the rectifier reading is INFERRED
 and explicitly not anchored.
 
+## 68. ★★★★★ THE BYTECODE CORRECTS THE HLE: the compressor's detector is a RECTIFIER, not square-law
+The standing goal says the bytecode is the source of truth, *"there may even be mistakes on the HLE
+version"*, and that a better HLE must be updated in the documentation. §67 produced one, and it is
+not a subtlety — it is the detector's **operating principle**, wrong in the shipped reference.
+
+`kn5000_tonegen.cpp`'s DSPHLE compressor (selector `0x16`), and the documentation page that
+archives it, both said:
+
+> *"COMPRESSOR: **square-law detector** → attack/release smoother → gain computer"*
+
+with `rl = xl * xl`, a `sqrt()` in the gain computer, an attack mapped from C-RAM[0x02] through
+`0.002 + 0.02·tc`, and a **release fixed at 150 ms**.
+
+### Three corrections, each from the ROM
+| # | the HLE said | the bytecode says |
+|---|---|---|
+| 1 | **square-law** (RMS) detector | **mean-absolute** (rectifier). `C-RAM[0x00] = 0x517CC1 = floor(2/π·2²³)` exactly, and **2/π is the mean of `\|sin\|`**. An RMS detector's sine calibration is **`1/√2 = 0.7071`**, which appears **nowhere** in the ROM. `programs.tsv` names the cell *"2/pi env"* from the instrument's own role table. |
+| 2 | attack ≈ **2.1 ms** (`0.002 + 0.02·tc`, an invented map) | **4.712 ms** — `C-RAM[0x02] = 0x009DAD = 0.004812`, a one-pole coefficient with `τ = 1/(a·fs)` |
+| 3 | release **fixed at 150 ms**, C-RAM[0x03] **ignored** | **11.764 ms** from `C-RAM[0x03] = 0x003F29 = 0.001927`. The release is **uploaded**, not a constant — which is why the panel exposes `RELEASE SENS.(s)` at all. The shipped value was **13× too slow**. |
+
+★ And correction 1 has a **second, independent leg**: `SQUARING-MULTIPLY_findings.md` adjudicated
+every squaring in the corpus and found it is **coefficient × coefficient** — a word routing
+`C-RAM[cursor]` onto the multiplier's single operand bus — graded FAITHFUL and *"numerically
+negligible … (envelope time constants: measured products 203 and 900)"*. **There is no `x·x` of the
+SIGNAL anywhere in 3 057 words.** So the square-law reading was not merely uncalibrated; it has no
+mechanism in the ISA.
+
+### What was changed, and what deliberately was not
+✅ `kn5000_tonegen.cpp`: detector rectifies and scales by the ROM's 2/π (falling back to `0x517CC1`
+if the cell is unloaded, so it can never be silently scaled by zero); the gain computer's `sqrt()`
+is gone (the envelope is already an amplitude); both time constants are read from **their own
+cells** as `τ = 1/(a·44100)` and converted to the stream's rate so the **time** is preserved rather
+than the coefficient. Compiles clean (`errors: 0`), binary back at its full size.
+⛔ **The GAIN LAW is deliberately UNCHANGED.** What the corpus establishes there is only the
+*negative* constraint — no comparator opcode, branchless bodies, so THRESHOLD/RATIO enter as
+coefficients — and **nothing measured chooses** between the shipped knee and the linear
+`g = clip(1 − k·env, 1/ratio, 1)`. Fixing what the evidence covers and leaving what it does not is
+the whole discipline; changing the knee too would have been taste dressed as a decode.
+
+### And the HLE now has the family at all
+`dsp/hle/` gained `LevelDetector` (a fifth kernel, every constant from ROM `0x84CD`),
+`level_envelope`, `compressor` and `auto_wah`, validated by defining property — the 2/π constant to
+the LSB, both time constants to 0.002 ms, linearity in amplitude, attack faster than release, and
+the wah's resonance landing within 1.5 % of the frequency its own envelope predicts at two input
+levels a factor of 12 apart. ⚠ **Two of those checks earned their keep**: one caught a real bug
+(the wah assigned coefficients to attribute names `BiquadDF1` does not use, so the filter never
+moved), and one **was replaced rather than loosened** — a spectral centroid barely tracks a
+two-pole corner (1 183 → 1 229 Hz for a corner that doubles), so it now measures the resonant peak
+against a prediction, which is *stronger* than the check that was failing.
+
+✅ **Documentation updated and permanence re-verified**: `effect-impl/compressor.md` carries the new
+reference and its headline no longer says "square-law"; `test_hle_permanence.py` still passes
+**24 pages / 46 `cpp` blocks byte-identical**, so the archive obligation is intact.
+
+⚠ Grade: corrections 1–3 are **FORCED** from the ROM's own upload script plus the adjudicated
+squaring census. The gain law remains **SPECULATIVE** and is marked so in both references.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
