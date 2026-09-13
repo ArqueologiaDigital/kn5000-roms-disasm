@@ -2847,6 +2847,10 @@ predicted it.
 Nothing anchored.
 
 ## 70. ★★★★★ THE PICKUP RAIL IS NOT ONE PROGRAM — 4 of 4 DETECTOR PROGRAMS RAIL, AND `NO OPERATION` IS ONE
+> ⛔⛔ **THE "DETECTOR FAMILY" FRAMING OF THIS SECTION IS SUPERSEDED BY §72.** The rail is **not**
+> a property of the detector family: non-detector programs rail too, and the one non-railing
+> program in this section's sample simply had the smallest input. §71 found the confound, §72
+> decontaminated it. **The measurements below stand; the attribution to the family does not.**
 This session opened by **narrowing** §62's railed pickup to *"`prog32_distortion` specifically,
 not the dynamics family"*. **That narrowing was made on a sample that contained no standalone
 dynamics program except the distortion** — no compressor, no enhancer, no auto wah, no
@@ -3027,6 +3031,70 @@ they rail, the family is not the variable and §70's headline must be restated a
 control that held. The vocabulary correction is **READ from the device's own audit**. The confound
 is **MEASURED and currently unresolved** — §70's headline is *provisional* until the
 decontamination reports.
+
+## 72. ★★★★★ DECONTAMINATED: IT IS NOT THE FAMILY — **7 OF 8 PROGRAMS HAVE A BROKEN HAND-OFF CELL**
+§71 found the confound: §70's four railing programs were all traced *later in the note* than the
+one that did not, so they were simply **louder**. The decontamination is three **NON-detector**
+programs at the true default, chosen because their inputs sit in the same band as the railing ones.
+
+**All eight programs, one machine, the device default (`PSHIFT=0 C8SHIFT=0`), identities
+fingerprinted** (`data/handoff_cell_2026-09-13.txt`):
+
+| program | family | `0x01` (input latch) | `0x05` (hand-off) | |
+|---|---|---:|---:|---|
+| `prog04_flanger` | modulation | −32 512 | **2 912 280** | ✅ the only healthy one |
+| `prog06_ensemble` | modulation | 152 576 | **0** | ⛔ **ZERO** — no signal reaches the body |
+| `prog10_multi_tap_delay` | delay | −162 304 | −8 388 608 | ⛔ RAILED |
+| `prog56_mix_up` | delay/mix | 157 952 | −8 388 608 | ⛔ RAILED |
+| `prog03_enhancer` | **detector** | 306 688 | 8 388 607 | ⛔ RAILED |
+| `prog36_compressor` | **detector** | −65 024 | −8 388 608 | ⛔ RAILED |
+| `prog00_no_operation` | **detector** | −286 976 | −8 388 608 | ⛔ RAILED |
+| `prog52_auto_wah` | **detector** | −118 528 | 8 388 607 | ⛔ RAILED |
+
+⇒ ⛔⛔ **§70's "detector family" attribution is REFUTED.** `multi_tap_delay` and `mix_up` are
+delay-family programs with no level detector at all, and they rail at inputs of 162k and 158k —
+*below* the enhancer's 307k. Family does not separate the columns.
+
+⇒ ★★★★★ **THE CORRECTED HEADLINE, and it is far bigger than the one it replaces: at the SHIPPED
+datum scale, 7 of 8 programs hand the body a cell that is RAILED (6) or ZERO (1). Exactly ONE
+program in eight delivers a plausible sample to its body.**
+
+★ The ensemble's zero is **not** an absent measurement — the cell is touched 20 times in the frame
+and is driven to `0` by the **same `iw45`** that rails the others. Saturating to a rail and
+collapsing to zero are two outcomes of one broken stage.
+
+### Why nobody saw this
+Every previous liveness census was taken with **`UPD6383_PSHIFT=2`** (total shift 23, datum halved)
+— `data/railed_pickups_2026-09-13.txt`, `reg/sel7_live`, and the whole §42/§50/§60 sweep. At that
+setting the stage does not saturate and the cell looks fine. **The arm was hiding the defect in
+every program ever measured**, and it was carried as a "baseline arm" in `catalogue_regression.sh`
+precisely because it made things work.
+
+⇒ This also **vindicates §62's original reading** — *"this is a SCALE problem, §227's
+`P_SHIFT`/`ACC_SHIFT` territory"* — which **I narrowed away in this session's opening commit** and
+then restored piecemeal. The scale was right; my two narrowings (*"one program"*, then *"the
+dynamics family"*) were both wrong, and each was wrong because its sample could not see the
+alternative.
+
+### ⇒ What this means for the LLE, concretely
+This is **the** blocker, and it is upstream of every decode question the session queued:
+* §54/§55's *"14 of 16 bodies leave a constant accumulator"* — a body handed a rail **cannot** do
+  anything else. That whole line of investigation was measuring the consequence.
+* §64/§69's bit-5 probe sites, `prog52_auto_wah` included, are fed a rail ⇒ **ungradeable today**.
+* §47/§51's output-stage nulls are downstream of a body that never received a signal.
+⇒ **Fix the kernel's input stage first.** The defect is between `iw2` and `iw45`, it is a
+saturation in the *assembly* of the input (the input itself arrives intact at `0x01`/`0x04` in
+**all eight** captures), and the two-sided evidence is already in hand: halve the datum and it
+stops.
+
+⚠ **What is still NOT known**, stated so the next pass does not over-read a good result: *why* the
+assembly saturates. `PSHIFT=2` is §227's documented two-sided control and **contradicts the
+MEASURED Q1.22 scale**, so "set the total shift to 23" remains forbidden as a fix. The candidates
+are the shift, the `iw45` word's own decode, and the unseeded cursor base (§70 confirmed present,
+refuted as the *discriminator* but not as a *contributor*).
+
+⚠ Grade: MEASURED — 8 programs, ONE machine, identities fingerprinted, the confound §71 named
+explicitly tested and the previous attribution refuted by it.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped

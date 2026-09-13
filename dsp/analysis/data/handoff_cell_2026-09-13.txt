@@ -1,0 +1,22 @@
+THE HAND-OFF CELL 0x05 AT THE DEVICE DEFAULT -- 8 programs, ONE machine (§72)
+
+  PRODUCER: dsp/tools/catalogue_regression.sh with UPD6383_PSHIFT=0 UPD6383_C8SHIFT=0,
+            read by dsp/tools/pickup_cells.py.  Identities fingerprinted by the harness.
+  ⚠ MACHINE: the DEVICE DEFAULT.  Do NOT pool with data/railed_pickups_2026-09-13.txt
+    (PSHIFT=2 C8SHIFT=1), which is what hid this defect for the whole session.
+
+  program                  family       0x01 (input latch)   0x05 (hand-off)
+  prog04_flanger           modulation        -32512            2912280   ok  <- the ONLY healthy one
+  prog06_ensemble          modulation        152576                  0   ZERO
+  prog10_multi_tap_delay   delay            -162304           -8388608   RAILED
+  prog56_mix_up            delay/mix         157952           -8388608   RAILED
+  prog03_enhancer          detector          306688            8388607   RAILED
+  prog36_compressor        detector          -65024           -8388608   RAILED
+  prog00_no_operation      detector         -286976           -8388608   RAILED
+  prog52_auto_wah          detector         -118528            8388607   RAILED
+
+  => 7 of 8 programs hand their body a RAILED (6) or ZERO (1) cell.
+  => family does NOT separate the columns: two delay-family programs rail at inputs BELOW the
+     enhancer's, so N-INPUT-GATE-OPENED §70's "detector family" attribution is REFUTED.
+  => the input itself arrives intact in all 8: cells 0x01/0x04 are sample-like everywhere.
+     The defect is the KERNEL'S ASSEMBLY of the input, between iw2 and iw45.
