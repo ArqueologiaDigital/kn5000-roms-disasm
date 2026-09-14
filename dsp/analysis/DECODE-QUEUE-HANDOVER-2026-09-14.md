@@ -52,10 +52,15 @@ that is an address shifts with a relocation; one that is data does not. No seman
 * **What would break it — now a searchable static condition, not a modelling job.** `mem<-bus` is
   one of the three survivors and §107 measured `mem[ptr]` live at every site, so a criterion with
   power must be sensitive to a `mem[ptr]` write **at an escape word** — which a09's echo is not.
-  ⇒ **find an ACT-0x0B escape word whose pointer cell, at that moment, is read downstream by a
-  consumer the ROM's own arithmetic pins.** `sd_rerun.py` already computes per-algorithm
-  pointer/cell maps (`descriptors_of`, `ptr_offsets`, `mt_lags`) and already carries a second
-  program's runner (`MT_ALGO`), so the search has somewhere to stand.
+  ⛔ **§137 RAN THAT SEARCH AND IT IS CLOSED.** Of the 165 escape sites, **134 (81 %)** do have
+  their pointer cell read later in the same program — confirming §107 — but **0** have that reader
+  inside a DF-I section interior, so the bit-exact oracle cannot be aimed at the code from the
+  memory side either (§135 closed the section side). ⚠ A proximity cut ("reader within 3 of a latch
+  word") returned seven candidates including the WSA1R's parametric EQ; all seven were program
+  **ambles** (`w0` → `w1`). **When a span exists, test membership in the span, never distance to its
+  landmark** — the same trap as §135, twice in one session.
+  ⇒ what is left for this code is **hardware**, or an oracle anchored on a program whose ACT-0x0B
+  words are escapes AND whose arithmetic the ROM pins. No such program exists in either corpus.
 
 ### `SRC 0x11` — 171 sole (54 KN + 117 WSA). A DEPENDENCY CYCLE, not a capture problem.
 `DSP-DATAPATH-DECODE-HANDOFF-2026-09-11.md` states it: splitting `accb←acc` from `accb←P` needs a

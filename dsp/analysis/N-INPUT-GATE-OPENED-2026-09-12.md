@@ -6249,6 +6249,41 @@ affects".
 
 ⇒ coverage unchanged.
 
+## 137. ⛔ THE SEARCH §136 SPECIFIED IS CLOSED — negatively, and by measurement
+§136 replaced "find a criterion for `ACT 0x0B`" with a **searchable static condition**: find an
+ACT-0x0B **escape** word whose pointer cell is read downstream by a consumer the ROM's own
+arithmetic pins. Both ends sit in one program, so the pointer **offset** is computable without the
+absolute base — walk `off += s8(addr8)` on pointer-moving words; escapes never move it.
+
+```
+   ACT-0x0B escape sites, pooled                                165
+   ...whose pointer cell IS read later in the same program      134  (81 %)
+   ...where that reader sits INSIDE a DF-I section interior       0
+```
+
+The middle row is the one that makes the search look promising — §107's *"`mem[ptr]` is live at
+every one"* is confirmed at 81 % — and the bottom row is the answer. **No ACT-0x0B escape's pointer
+cell is consumed inside a biquad section anywhere in either product**, so the one bit-exact oracle
+cannot be aimed at this code from the **memory** side either. §135 closed the **section** side.
+
+### ★ And a proximity cut got it wrong first, in the same session that learned not to
+A first pass scored "the reader is within 3 words of an `ACT 0x13`/`0x14` latch word" and returned
+**seven** candidates, including the WSA1R's own parametric EQ. Every one was a program-**amble**
+word — `w0` escape, `w1` reader — which is precisely the false positive §135 caught when it said
+proximity to a *marker* is not membership in a modelled *section*. Replacing the heuristic with the
+real span (from an `ACT 0x13` tempA write to the `SRC 0x19` read that consumes it, §130's window)
+takes it to **0 of 165**.
+
+> Twice in one session a proximity heuristic produced candidates a membership test dissolved. The
+> rule to carry: **when a span exists, test membership in the span — never distance to its
+> landmark.**
+
+⇒ `ACT 0x0B` has now been attacked six ways this session — the withdrawn universal (§129), the
+tempA hazard (§130), the symmetric code (§133), the HLE oracle from the section side (§135), the
+population reframing (§136) and this memory-side search. It is not a criterion this project is
+missing by accident; **the code's 165 open words are delay escapes whose ACTION no anchored
+quantity in either product observes.** Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
