@@ -3356,7 +3356,7 @@ that reasoning in the source.
 ★★ **`signal: YES` on all five.** Before §76 the body was fed a rail; these bands could not carry a
 signal at all. This is the first time the EQ's whole cascade has been observed live in the LLE.
 ★ The coefficients are a coherent five-band peaking family — `b0` constant at **+0.2500**, the
-recursive pair **pre-negated** exactly as `algorithms/biquad-eq.md` documents, poles marching down
+recursive pair **pre-negated** exactly as `algorithms/N-SINGLE-DELAY-RECURRENCE-2026-09-12.md §10` documents, poles marching down
 from 0.9954 to 0.8967 as the band centres rise.
 
 ### ★★★★★ AND THE TOPOLOGY CROSS-VALIDATES — 4 of 4
@@ -3662,7 +3662,7 @@ The first version paired `coef[k]` with `L[k]`. Every step disagreed — but the
 ```
 
 That is the project's decoded **one-slot pipeline** (`P[N] = coef[N−1] × L[N−1] >> P_SHIFT`,
-`algorithms/biquad-eq.md`) appearing as an off-by-one in my own arithmetic. ⇒ ★ the rule is
+`algorithms/N-SINGLE-DELAY-RECURRENCE-2026-09-12.md §10`) appearing as an off-by-one in my own arithmetic. ⇒ ★ the rule is
 re-confirmed *by an independent implementation tripping over it*, which is worth more than the
 tool having been right first time.
 
@@ -6399,7 +6399,7 @@ and this section has them.
 I expected to derive the cell order by stability, the way `biquad_stability_probe.py` did for the
 EQ (*"the captured coefficients are a STABLE, sensible peaking EQ (poles 0.710) ONLY with
 SUBTRACTIVE feedback"*). **That route needs the per-coefficient SCALES, and they are solved for the
-EQ only** (`biquad-eq.md` — the EQ's per-coefficient scales were solved statically, which is
+EQ only** (`N-SINGLE-DELAY-RECURRENCE-2026-09-12.md` §10 — the EQ's per-coefficient scales were solved statically, which is
 precisely why that probe could run). The raw integers here forbid assuming a single divisor:
 
 ```
@@ -6414,10 +6414,50 @@ being exactly **0** is a further oddity worth carrying: the schedule's index 0 i
 word is there for its `ACT 0x13` tempA capture rather than its product.
 
 ⇒ the chain now reads: **precondition 1 met; precondition 2 requires the rotary's per-coefficient
-scales, which is `biquad-eq.md`'s method applied to a second program** — a bounded, named piece of
+scales, which is `N-SINGLE-DELAY-RECURRENCE-2026-09-12.md` §10's method applied to a second program** — a bounded, named piece of
 work rather than an unknown. Precondition 3 (validating the oracle at this site) follows it.
 
 ⇒ coverage unchanged, and no claim is made about `SRC 0x11`.
+
+## 141. ⛔ PRECONDITION 2 FAILS — and it fails for the SAME reason every other route did
+§140 named the step: apply the EQ's scale-solving to algo 15. Done, and it does not transfer.
+
+**First, a citation I got wrong and have corrected everywhere.** §140, the handover and the LEDGER
+all cited **`biquad-eq.md`**. There is no such file. The method is
+`N-SINGLE-DELAY-RECURRENCE-2026-09-12.md` §10, and all three are fixed.
+
+**What the EQ's method actually is.** A **flatness test**: evaluate `|H(e^jω)|` over 200 log-spaced
+frequencies from each band's own five cells, for each candidate scaling. The winner is not a fit but
+an **identity** — under `b0, b2 ×4 and b1 ×2` the b-vector becomes exactly `[1, a1, a2]`, so
+`H ≡ 1` and each band is a unity inverter, 0.00 dB spread against 46–109 dB for every rival.
+
+**Why it cannot transfer.** That acceptance test *is* "the EQ's bands are unity inverters". A rotary
+speaker has no reason to be flat, so the criterion evaporates. What generalises is the structure —
+enumerate role assignments × per-coefficient power-of-two scales over the ROM's own cells, and keep
+what is a legal filter. Stability is the only criterion left:
+
+```
+   role permutations × scale pairs tried      3000
+   assignments giving a STABLE pole pair      1116
+   distinct (a1-cell, a2-cell, scale, scale)   186     ← not 1
+```
+
+**186 survive.** Stability cannot pick the order.
+
+### ⇒ And this is where all twenty attempts have converged
+Precondition 2 needs *a response the ROM pins for this program*. That is word-for-word what
+`act0b-reverb.md` item H was missing — *"picking between them needs known mathematics the reverb
+does not supply … there is NO REFERENCE RESPONSE"*. The general shape, now visible after twenty
+probes:
+
+> **This project has exactly two places where the ROM pins an answer: the parametric EQ's response
+> (via the firmware's own coefficient designer) and SINGLE DELAY's lag-1001 product. Every open code
+> lives outside both, and every route tried this session ended by needing a third.**
+
+`ACT 0x0B` (§130/§133/§135/§137), `SRC 0x11` via accb (the documented cycle) and now `SRC 0x11` via
+the rotary's biquad all terminate there. It is one wall, not four.
+
+⇒ the §139 chain is closed: **precondition 1 met, precondition 2 refuted.** Coverage unchanged.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped

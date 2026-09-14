@@ -127,10 +127,18 @@ carries the full §7 signature — `mac.ta` (ACT 0x13) at `w17`, `mac.tb` (ACT 0
 `post` at `w23` — and excluding `w16` (its annotation calls it an output-level gain) leaves exactly
 the oracle's six cells, C-RAM `0x05…0x09` + makeup. `w18` is **index 1**, canonical operand `x0`.
 ⛔ **Precondition 2 is now named precisely**: deriving the order by stability needs the
-**per-coefficient SCALES**, solved in `biquad-eq.md` for the **EQ only**. Two of the rotary's five
+**per-coefficient SCALES**, solved in `N-SINGLE-DELAY-RECURRENCE-2026-09-12.md` §10 for the **EQ only**. Two of the rotary's five
 raw coefficients exceed `2^23` (15 353 414 and 8 958 128), so no uniform divisor applies and the
-poles are not computable. ⇒ **apply `biquad-eq.md`'s scale-solving method to algo 15.** That is the
-next concrete step, and it is bounded work rather than an unknown.
+poles are not computable. ⛔ **§141 DID THAT AND IT FAILS.** The EQ's method is a **flatness test** whose winner is an
+*identity* (`b0,b2 ×4, b1 ×2` makes the b-vector exactly `[1, a1, a2]`, so `H ≡ 1` — the bands are
+unity inverters). A rotary has no reason to be flat, so the acceptance test evaporates; only
+stability is left, and **186 distinct assignments survive it**. The chain is closed: precondition 1
+met, precondition 2 refuted.
+★ **THE ONE WALL.** Precondition 2 needs *a response the ROM pins for this program* — word-for-word
+what `act0b-reverb.md` item H lacked. This project pins an answer in exactly **two** places: the
+parametric EQ's response (the firmware's coefficient designer) and SINGLE DELAY's lag-1001 product.
+Every open code lives outside both. `ACT 0x0B`, `SRC 0x11` via accb, and `SRC 0x11` via the rotary
+all terminate there — **it is one wall, not four.**
 
 ## What would actually move this
 
