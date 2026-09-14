@@ -13,28 +13,28 @@
   w0   00121050DB  ?word   0x00121050DB   ; 012.1.05.0DB  hi12{ST f31=1}  [internal register file [05], unit 0 (bit 7 = the unit); this index has no named role yet]
   w1   002E105000  ?word   0x002E105000   ; 02E.1.05.000  hi12{f31=7 ?5 res=020}  [internal register file [05], unit 0 (bit 7 = the unit); this index has no named role yet]
   w2   0801020825  ldptr.d #$20
-  w3   0221905000  ?word   0x0221905000   ; 221.9.05.000  hi12{f98=2 ?5 ?0 res=021} cur  [internal register file [05], unit 0 (bit 7 = the unit); this index has no named role yet]
+  w3   0221905000  ld.b    r05,c
   w4   001014F41B  ?word   0x001014F41B   ; 010.1.4F.41B  hi12{ST}  [internal register file [4F], unit 0 (bit 7 = the unit); this index has no named role yet]
   w5   009210E11B  ?word   0x009210E11B   ; 092.1.0E.11B  hi12{ST f31=1 ?7 res=080}  [internal register file [0E], unit 0 (bit 7 = the unit); this index has no named role yet]
   w6   00AE10E404  ?word   0x00AE10E404   ; 0AE.1.0E.404  hi12{f31=7 ?7 ?5 res=0A0}  [internal register file [0E], unit 0 (bit 7 = the unit); this index has no named role yet]
-  w7   00A010E000  ?word   0x00A010E000   ; 0A0.1.0E.000  hi12{?7 ?5 res=0A0}  [internal register file [0E], unit 0 (bit 7 = the unit); this index has no named role yet]
+  w7   00A010E000  ld.b    r0E
   w8   09805201C3  ?word   0x09805201C3   ; 980.5.20.1C3  hi12{ESC f98=1 ?7 res=080}  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0x5 and operands are OPEN]
   w9   001210F05B  ?word   0x001210F05B   ; 012.1.0F.05B  hi12{ST f31=1}  [internal register file [0F], unit 0 (bit 7 = the unit); this index has no named role yet]
   w10  0026185447  ?word   0x0026185447   ; 026.1.85.447  hi12{f31=3 ?5 res=020}  [internal register file [85], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w11  0022185000  ?word   0x0022185000   ; 022.1.85.000  hi12{f31=1 ?5 res=020}  [internal register file [85], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w11  0022185000  mac.b   r85
   w12  0801060821  ldptr   #$60
   w13  001014F41B  ?word   0x001014F41B   ; 010.1.4F.41B  hi12{ST}  [internal register file [4F], unit 0 (bit 7 = the unit); this index has no named role yet]
   w14  08010C0821  ldptr   #$c0
-  w15  020098F415  ?word   0x020098F415   ; 200.9.8F.415  hi12{f98=2} cur  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w16  0212185415  ?word   0x0212185415   ; 212.1.85.415  hi12{ST f98=2 f31=1}  [internal register file [85], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w15  020098F415  ld      acc,c
+  w16  0212185415  mac     acc ; r85<-acc, acc=0
   w17  021298F402  ?word   0x021298F402   ; 212.9.8F.402  hi12{ST f98=2 f31=1} cur  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
   w18  000218F180  ?word   0x000218F180   ; 002.1.8F.180  hi12{f31=1}  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
   w19  009218F09B  ?word   0x009218F09B   ; 092.1.8F.09B  hi12{ST f31=1 ?7 res=080}  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
   w20  00A618F406  ?word   0x00A618F406   ; 0A6.1.8F.406  hi12{f31=3 ?7 ?5 res=0A0}  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w21  00A218F000  ?word   0x00A218F000   ; 0A2.1.8F.000  hi12{f31=1 ?7 ?5 res=0A0}  [internal register file [8F], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w21  00A218F000  mac.b   r8F
   w22  000018E447  ?word   0x000018E447   ; 000.1.8E.447  hi12{-}  [internal register file [8E], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w23  021098E1D5  ?word   0x021098E1D5   ; 210.9.8E.1D5  hi12{ST f98=2} cur  [internal register file [8E], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w24  020298E1D5  ?word   0x020298E1D5   ; 202.9.8E.1D5  hi12{f98=2 f31=1} cur  [internal register file [8E], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w23  021098E1D5  ld      r8E,c ; r8E<-acc, acc=0
+  w24  020298E1D5  mac     r8E,c
   w25  02121C2401  ?word   0x02121C2401   ; 212.1.C2.401  hi12{ST f98=2 f31=1}  [internal register file [C2], unit 1 (bit 7 = the unit); this index has no named role yet]
   w26  00021C2140  ?word   0x00021C2140   ; 002.1.C2.140  hi12{f31=1}  [internal register file [C2], unit 1 (bit 7 = the unit); this index has no named role yet]
   w27  0E30C00405  ?word   0x0E30C00405   ; E30.C.00.405  hi12{ESC f98=2 ?10 ?5 res=420} cur  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0xC and operands are OPEN]
@@ -46,7 +46,7 @@
   w33  0C1AB70820  ldreg   r20,#iw91,16       ; I-RAM address + a second field (B)
   w34  00122FF1CE  mac     (p),(p)-1 ; mem[p]<-acc, acc=0
   w35  01043401CE  ?word   0x01043401CE   ; 104.3.40.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
-  w36  01029C11CE  ?word   0x01029C11CE   ; 102.9.C1.1CE  hi12{f98=1 f31=1} cur  [internal register file [C1], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w36  01029C11CE  mac     rC1,c
   w37  016E800000  ?word   0x016E800000   ; 16E.8.00.000  hi12{f98=1 f31=7 ?6 ?5 res=060} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w38  0000200000  nop
   w39  080080B407  ?word   0x080080B407   ; 800.8.0B.407  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
@@ -55,14 +55,14 @@
   w42  0C00B40407  ldreg   r07,#iw90,0       ; I-RAM address + a second field (B)
   w43  00122011D5  mac     (p),(p)+1 ; mem[p]<-acc, acc=0
   w44  01043401D5  ?word   0x01043401D5   ; 104.3.40.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: accumulator op f31=2 (HOLD) is known; addressing class 0x3 and operands are OPEN]
-  w45  01029C41D5  ?word   0x01029C41D5   ; 102.9.C4.1D5  hi12{f98=1 f31=1} cur  [internal register file [C4], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w45  01029C41D5  mac     rC4,c
   w46  016E800000  ?word   0x016E800000   ; 16E.8.00.000  hi12{f98=1 f31=7 ?6 ?5 res=060} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w47  0000200000  nop
   w48  080080B407  ?word   0x080080B407   ; 800.8.0B.407  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w49  080080C41D  ?word   0x080080C41D   ; 800.8.0C.41D  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w50  0000200000  nop
   w51  0C00C60407  ldreg   r07,#iw99,0       ; I-RAM address + a second field (B)
-  w52  0000906000  ?word   0x0000906000   ; 000.9.06.000  hi12{-} cur  [internal register file [06] -- per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- the last four host actions of cold boot are setvec unit1,#200 / setvec unit0,#84 / reg 0x06 <- +0.500000 / reg 0x86 <- +0.183992, both cleared at reset), unit 0]
+  w52  0000906000  nop
   w53  0819086822  ?word   0x0819086822   ; 819.0.86.822  hi12{ESC f31=4 ?0 res=001}  [register write: selector lo12[7:0]=22, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN; hi12 bit 4 is set BUT SO IS THE FORMAT ESCAPE (bit 11), and inside the escape this decoder does not read bit 4 as the store -- K3 sect. 5.2 reads it as a store anyway.  CONFLICT, 1 site, UNRESOLVED]
   w54  0000A00000  nop
         ; C-RAM[0x00] (coefficient cursor)

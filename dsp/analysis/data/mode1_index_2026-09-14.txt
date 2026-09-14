@@ -1,0 +1,45 @@
+====================================================================================================
+  mode1_index -- is `addr8' on a mode-1 word an INDEX?
+====================================================================================================
+
+   ★ TEST 1 -- THE ZERO CALIBRATION (part 231 sect. 3: zero exactly when unused)
+
+      prod  mode-1 words                  n  addr8=0 addr8 != 0
+      KN    WITH the store bit           11        0        11
+      KN    WITHOUT the store bit        41        0        41
+      WSA   WITH the store bit           88        0        88
+      WSA   WITHOUT the store bit       187        0       187
+
+      ⇒ 327 of 327 mode-1 words carry a NON-ZERO `addr8', including every one of the
+        228 that have no store and therefore no documented use for the field.
+      ⛔ CONTROL, mode 2 (`addr8' IS a signed delta, 0 legal): 2455 of 5769 are ZERO (42.6 %).
+        Zero is cheap where it means something.  Mode 1 never takes it.
+
+   ★ TEST 2 -- THE CONSTANT CONTROL (a constant field is never zero either)
+
+      KN      41 non-storing mode-1 words,  8 distinct values, VARIES within a single image in 2 of 40 images
+      WSA    187 non-storing mode-1 words, 35 distinct values, VARIES within a single image in 6 of 59 images
+
+   ★★★ TEST 3 -- THE RUN TEST.  An index takes CONSECUTIVE values.
+
+      prod  image                      n idx    run  the index set
+      WSA   struct_30_fcd5e2              32     26  05 06 0E 0F 4F C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DC
+      WSA   struct_30_fdbc5a              32     26  05 06 0E 0F 4F C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 DA DC
+      WSA   struct_30_fcd2c6              11      2  05 06 0E 0F 4F 85 8E 8F C1 C2 C4
+      WSA   struct_30_fcd81c              11      2  05 06 0E 0F 4F 85 8E 8F C1 C2 C4
+      KN    epilogue                       8      2  05 06 0E 0F 85 8C 8D 8F
+
+      ⇒ struct_30_fcd5e2 carries 32 distinct indices whose longest CONSECUTIVE RUN is 26.
+        NULL: a uniform 32-subset of the 256 values an 8-bit field can hold contains
+        a run that long with probability <= 7.64e-28.  It does not happen.
+
+   ★ AND THE ORDER IT IS WALKED IN, which no null was needed to see:
+
+      C1 C3 C2 C4 C5 C5 C3 C5 C5 C5 C7 C6 C8 C9 0F CA CB CC CD CC CD CD CD CF CE D0 05 05
+
+      `n, n+2, n+1, n+3' repeating on a STRIDE OF 4 -- the shape of a Direct-Form-I
+      biquad's four state cells per section (`DECODE-by-correlation-2026-09-08.md'
+      sect. 7).  A field nothing reads does not walk a filter's state array in order.
+
+   ⚠ THIS DECODES NOTHING.  `alu_decoded()' still refuses all 247 mode-1 words.  What
+     it settles is the PREMISE the read question needs: the field is an INDEX.

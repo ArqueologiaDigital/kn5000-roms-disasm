@@ -943,6 +943,14 @@ def decoded(w):
     #   executable, not that the jump is derived.
     if is_terminator(w):
         return _alu_half_anchored(w)
+    #   ★★★★★ 2026-09-14 (sect. 128): MODE 1 -- THE REGISTER FILE -- ON THE SAME FOOTING.
+    #   The class test is what refuses these words, and the word's own form explains the class:
+    #   `class4 & 7 == 1' with the escape CLEAR is register-file addressing with `addr8' the
+    #   index (`r2-output.md' sect. 1.1/1.2, 48 of 48 for the STORE half), and `mode1_index.py'
+    #   anchors the READ half four ways -- see `is_mode1()'.  ⚠ Must follow `is_terminator', which
+    #   is a mode-1 word with its own rendering.  ⚠ Disjoint from `is_dram' by the escape bit.
+    if is_mode1(w):
+        return _alu_half_anchored(w)
     if is_dram(w) and dram_dir(w):
         return _alu_half_anchored(w)
     if alu_decoded(w):                                         return True
@@ -1006,6 +1014,40 @@ def is_terminator(w):
     all be unit 1.  `addr8' is the terminator's operand and its meaning is OPEN across products.
     ⇒ the guard is the shape; `endblk' no longer names a unit it cannot know."""
     return (not c_format(w)) and class4(w) == 1 and is_end(w)
+
+
+def is_mode1(w):
+    """MODE 1 -- THE REGISTER FILE.  `class4 & 7 == 1' with the format escape CLEAR (sect. 128).
+
+    `r2-output.md' sect. 1.1 splits class 1 on the escape bit and classifies all 324 KN5000
+    class-1 words correctly where `addr8' bit 7 misclassifies three; sect. 1.2 names the escape-0
+    side *"a REGISTER FILE -- and the host uses the same space"*, `addr8' the index (48 of 48).
+    ⇒ the ADDRESSING of these words is explained by their own form, which is exactly the
+    condition `is_dram()' and `is_terminator()' are admitted on (sect. 90 / sect. 112).
+
+    ★ `class4 & 7', not `class4 == 1': the device derives the addressing mode that way
+    (`upd6383.cpp' rdmode/stmode), so class 1 and class 9 are ONE mode and ONE question -- 247
+    undecoded words across the two products, not 25.
+
+    ★★★ AND THE READ HALF IS NO LONGER A GUESS (`dsp/tools/mode1_index.py').  `upd6383.cpp' used
+    to say of its own register-file read route *"⛔ GUESSED: symmetry ... no note in this project
+    states it"*.  Four measurements state it:
+      1. ZERO CALIBRATION -- 327 of 327 mode-1 words carry a NON-ZERO `addr8', including all 228
+         that have no store and therefore no documented use for the field.  Control: mode 2,
+         where `addr8' IS a signed delta and 0 is legal, is 42.6 % zero.
+      2. CONSTANT CONTROL -- 35 distinct values, varying inside a single image (the control that
+         killed the previous version of this argument: a constant field is never zero either).
+      3. RUN TEST -- one WSA1R image's 32 indices contain a run of 26 CONSECUTIVE values
+         (p <= 7.6e-28 for a uniform 8-bit field), walked `n, n+2, n+1, n+3' on a STRIDE OF 4:
+         a Direct-Form-I biquad's four state cells per section.
+      4. ★ AND THE READ USES IT -- reads sit at lag <= 1 from a WRITE OF THE SAME INDEX in
+         51 of 95 cases against a shuffled null of 29.4 +- 2.1 (max 37 over 2000 shuffles).  A
+         read that ignored `addr8' would have no reason to sit next to the write of that index.
+    ⚠ An earlier form of test 4 was VACUOUS -- "a write of this index exists somewhere in the
+    image" is invariant under a multiset shuffle (null mean 95.0, sd 0.0, observed 95) -- and the
+    null is what caught it, not care."""
+    return ((not c_format(w)) and (class4(w) & 7) == 1
+            and not (hi12(w) & HI_ESC))
 
 
 def is_dram(w):
@@ -1470,7 +1512,15 @@ def text(w, at=None):
         # THE ALU, rendered as the two fields it really is: the OPERATION from
         # hi12[3:1] and the ROUTING from lo12.  The optional multiply / store /
         # pointer controls live outside both.
-        s = "%-7s %s" % (_alu_mnemonic(w), _SRC_NAME.get(lo_src(w), "?"))
+        #   ★ sect. 128: a MODE-1 word's memory operand is `reg[addr8]', not `mem[ptr]' -- the
+        #   device routes it that way (`upd6383.cpp' `regfile'), so the mnemonic must say so or a
+        #   decoded word would print an operand it does not use.  Same lesson as the delay
+        #   escape's `ld ?' (above): render what the word reads.
+        _m1 = is_mode1(w)
+        _src = _SRC_NAME.get(lo_src(w), "?")
+        if _m1 and lo_src(w) in (LO_SRC_MEM0, LO_SRC_MEM):
+            _src = "r%02X" % addr8(w)
+        s = "%-7s %s" % (_alu_mnemonic(w), _src)
         # ★ FETCH IS NOT ADVANCE, in the MNEMONIC too.  `,c+' = fetches one
         # coefficient AND post-increments the cursor (class A).  `,c' = bit 23 is
         # set so a coefficient IS fetched, but the cursor does not move (class 8,
@@ -1483,6 +1533,7 @@ def text(w, at=None):
             s += ",(p)%+d" % dd
         if hi & HI_ST:
             s += (" ; store SUPPRESSED (bit7)" if st_suppressed(w)
+                  else (" ; r%02X<-acc, acc=0" % addr8(w)) if _m1
                   else " ; mem[p]<-acc, acc=0")
         # ★ END OF BLOCK SURVIVES THE DECODE.  A decoded word prints no
         # [annotation], and MEASURED that costs nothing on 381 of the 384 decoded
@@ -1493,8 +1544,10 @@ def text(w, at=None):
         # into carry latch B", which is a nice corroboration of both).  The
         # remaining three are END-OF-BLOCK words, and that is a CONTROL-FLOW fact
         # orthogonal to the ALU: the word still performs its datapath work AND
-        # ends the block.  (class 1 cannot reach here, so the unit-tagged
-        # CALL/RETURN form is unreachable by construction.)
+        # ends the block.  (⛔ sect. 128 CORRECTS the old parenthetical "class 1
+        # cannot reach here": mode-1 words DO reach this renderer now, which is
+        # why the source and store operands above are register-named for them.
+        # The unit-tagged CALL/RETURN form is still not claimed.)
         if is_end(w):
             s += ("; " if (hi & HI_ST) else " ; ") + "END OF BLOCK (falls through)"
         return s

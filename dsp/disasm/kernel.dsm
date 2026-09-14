@@ -108,7 +108,7 @@ Unit1Setup:
   w55   0000201007   ld.st   (p)0,(p)+1
   w56   0C646A2007   ldreg   r07,#iw53,2       ; I-RAM address + a second field (B)
   w57   0000201000   nop
-  w58   000018A007   ?word   0x000018A007   ; 000.1.8A.007  hi12{-}  [internal register file [8A], unit 1 (bit 7 = the unit); this index has no named role yet]
+  w58   000018A007   ld.st   r8A
 Unit1Call:
   w59   040010F007   endblk  #0F             ; END OF BLOCK -- the last word of a block
         ; unit-tagged transfer, tag 0x0F -- CALLs the unit-1 body at I-RAM 200

@@ -5790,6 +5790,79 @@ two instruments and not against the whole machine.
 is an I-RAM address pointing **at** a block terminator rather than past one, the only one of ten
 such words in two products that does so.
 
+## 128. ★★★★★ MODE 1 DECODED — 143 WORDS, and the read half is no longer a guess
+Tool: [`mode1_index.py`](../tools/mode1_index.py). Data:
+[`data/mode1_index_2026-09-14.txt`](data/mode1_index_2026-09-14.txt).
+
+§126 left this as the queue's second entry with an explicit next step: *"anchor the read side"*.
+It also noted that `class4 & 7` is the addressing mode, so **class 1 and class 9 are one question**
+— **247** undecoded words across the two products, not 25.
+
+The store half was already documented (`r2-output.md` §1.1/§1.2: mode 1 without the escape bit is
+the **register file**, `addr8` the index, 48 of 48). The read half was what `upd6383.cpp` applied
+while calling it, about itself, *"⛔ GUESSED: symmetry … no note in this project states it"*.
+
+### Four measurements, each with the control that can fail it
+
+**1. The zero calibration.** The project's own rule (Part 231 §3, measured 9/9 vs 100/100 on a
+class carrying both kinds of word): in this ROM a field is zero exactly when the instruction has no
+use for it.
+
+```
+   KN5000    WITH the store bit      11 words   addr8 = 0 in  0
+             WITHOUT the store bit   41 words   addr8 = 0 in  0
+   SX-WSA1R  WITH the store bit      88 words   addr8 = 0 in  0
+             WITHOUT the store bit  187 words   addr8 = 0 in  0
+   ⇒ 327 of 327, including all 228 with NO STORE and therefore no documented use for the field.
+   ⛔ CONTROL — mode 2, where addr8 IS a signed delta and 0 is legal: 2455 of 5769 ZERO (42.6 %).
+```
+
+**2. The constant control** — the one that killed the previous version of this argument (*"never
+zero is not the same as carries information"*): 35 distinct values, varying inside a single image.
+
+**3. ★★★ The run test.** An index takes consecutive values; a field nothing reads has no reason to.
+One WSA1R image's 32 distinct indices contain a run of **26 consecutive values** — `p ≤ 7.6 × 10⁻²⁸`
+for a uniform 8-bit field — and it is walked in a fixed order:
+
+```
+   C1 C3 C2 C4 | C5 C5 | C7 C6 C8 C9 | CA CB CC CD | CF CE D0 | D1 D1 D3 D2 D4 | D5 D5 D7 D6 D8
+   `n, n+2, n+1, n+3' repeating on a STRIDE OF 4 — a Direct-Form-I biquad's four state cells
+   per section (DECODE-by-correlation §7).
+```
+
+**4. ★ And the read USES it.** A read sits at **lag ≤ 1 from a write of the same index** in
+**51 of 95** cases, against a shuffled null of **29.4 ± 2.1, max 37 over 2000 shuffles**. A read
+that ignored `addr8` would have no reason to be placed next to the write of that index.
+
+> ⚠⚠ **My first version of test 4 was VACUOUS and the null is what caught it.** "Does a write of
+> this index exist somewhere in the image" is **invariant** under a multiset shuffle — null mean
+> **95.0, sd 0.0**, observed **95**. A criterion that cannot fail is not a criterion, and I did not
+> notice by being careful; I noticed because rule 15 makes me compute the null before reading the
+> row.
+
+### Promoted
+`decoded()` admits `is_mode1(w) && _alu_half_anchored(w)` — the same footing as `is_dram` (§90) and
+`is_terminator` (§112): the class test is what refuses these words and the word's own form explains
+the class. The rendering names what the word actually reads and writes — `mac rC4`,
+`mac.b rC4 ; rC4<-acc, acc=0` — because a decoded word that prints `(p)` for a register operand is
+the delay escape's `ld ?` all over again. Two stale comments saying *"class 1 cannot reach here"*
+are corrected in both mirrors.
+
+```
+   undecoded words   SX-WSA1R  993 -> 851   (-142)        KN5000  643 -> 642  (-1)
+   resident kernel   60.2 % -> 61.4 %       frame floor   79.6 % -> 80.1 %
+```
+
+### ★ And a mirror invariant that was lying by omission
+`upd6383d_diff.sh` compares the two ISA descriptions over the **KN5000's** 3057 words. Mode 1
+decoded 143 words and **one** of them is a KN5000 word — so a green *"MIRRORS AGREE — 3057/3057"*
+said nothing whatever about the other 142. Added `-p`: the WSA1R's listings carry their own slot
+indices, so pooling costs one flag. **MIRRORS AGREE — 8003/8003.**
+
+⇒ the remaining 104 mode-1 words are refused on their **ALU half**, not on the mode:
+`SRC 00/ACT 00/f31 4` ×12, `SRC 11/ACT 12/f31 0` ×12, `ACT 0x1B` ×23 across five SRC codes.
+Those are ordinary queue entries now.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
