@@ -6557,6 +6557,54 @@ question rather than a corpus one: run the machine with `f31 = 4` executed as AD
 three sites against the oracle's predicted `acc_after` — the float model pins the algebra, the
 machine supplies the fixed-point detail it cannot.
 
+## 144. ⚠ §143 WEAKENED BY ITS OWN CONTROL — "the ROM pins" becomes "the corpus favours, 22 of 25"
+§143 claimed the ROM *pins* `f31 = 4` to `acc += P`, by crossing the host writer's 6-cell layout
+with `lle_oracle.py`'s `BIQUAD_SCHEDULE`. I did not run the control that decides whether the
+schedule is a **law** or a **template**. It is a template.
+
+**The control.** At every `op0x70` band slot, do the **decoded** words' `f31` agree with the
+schedule (slot 0 → LOAD, slots 1–4 → ADD)?
+
+```
+   agree 113, DISAGREE 12  —  90 %, not 100 %
+
+   slot  schedule   word carries   n
+     0   load       load          19      0   load   mac    6   ← the ROM deviates
+     1   mac        mac           25      1   mac    hold   3   ← and here
+     2   mac        mac           22      2   mac    f31=4  3   ← ★ my three sites
+     3   mac        mac           22      3   mac    hold   3   ← and here
+     4   mac        mac           25
+```
+
+**The ROM varies the accumulator op inside a band** — six `mac`s where the schedule says `load`,
+and six `hold`s at slots 1 and 3. So the schedule does **not force** slot 2 to be `mac`, and
+§143's "pins" is too strong.
+
+### What actually survives, and it is still worth having
+> At **slot 2**, **22 of 25** words in the whole corpus carry `mac` (`f31 = 1`) — and the **only
+> three exceptions anywhere are the `f31 = 4` word itself.**
+
+That is the *corpus* speaking rather than the model, and it is a genuinely better argument than the
+one §143 made: not "the schedule says mac so f31 4 is mac", but "every other word at this slot is
+mac, and the three that are not are all the same unknown". It makes `f31 4 ≈ ADD` the **favoured**
+reading at these sites; it does not derive it.
+
+⇒ §143's status is corrected from **pinned** to **favoured, 22 of 25 at the slot, against a
+schedule that deviates 12 times in 125**. Everything else in §143 stands — the two corrections
+(the order is the host writer's, algo 15 has no `op0x70`) and the ~54 % bound.
+
+### ★ And the tension with the shipped alias is the real prize
+`data/PREDICT_F31_4_2026-09-13.md` records the device's default: `m_bx_f4 = 0` keeps the alias
+`op = f31 & 3`, so **`4 → LOAD`**. The favoured reading here is **ADD**. The same file already
+provides the arms and masks — `b912e446a39b440f` = ADD, `b913…` = HOLD, control `b910…` — and
+names TYPES 13/14/18. That pre-registration has **no RESULT section**: the run was never made.
+
+⇒ the next step is not new work, it is **an experiment already designed and never run**, and §143
+has now supplied it with a prediction it did not have: *ADD should leave the anchored cells healthy
+where the shipped LOAD alias does not.*
+
+⇒ coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
