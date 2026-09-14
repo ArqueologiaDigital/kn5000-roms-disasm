@@ -6700,6 +6700,53 @@ differently, not a counter.
 
 ⇒ coverage unchanged.
 
+## 147. ★ §231's CENSUS IS A *MACHINE* BLINDNESS INSTRUMENT, and it sees what the static one misses
+Reading §231's COLLAPSED-OP census in the same logs — *"what `op = f31 & 3` DISCARDS at the four
+`f31 in {3,6,7}` sites"* — splits those sites in two:
+
+```
+   iw63  f31=3  DISCARDED PRODUCT 0..0 nz 0   L 0..0 nz 0   acc-in 0..0    n = 1 532 730 + 177 023
+   iw70  f31=3  DISCARDED PRODUCT 0..0 nz 0   L 0..0 nz 0   acc-in 0..0    "
+   iw75  f31=7  DISCARDED PRODUCT 0..0 nz 0   L 0..0 nz 0   acc-in 0..0    "
+   iw78  f31=6  DISCARDED PRODUCT 0..0 nz 0   L 0..0 nz 0   acc-in 0..0    "
+   ── against the BODY sites, which discard plenty ──
+   iw102 f31=3  non-zero 3410      iw119 f31=3  max 4.46e11, non-zero 26 581
+   iw150 f31=3  non-zero 2646      iw166 f31=3  non-zero 829
+                                                   CONTROL: PASS 3 of 3
+```
+
+**At the four resident sites the product is identically 0 *and the accumulator on entry is
+identically 0*.** With `P = 0` and `acc = 0`, `acc ← P`, `acc += P` and `acc unchanged` all leave
+`acc = 0`: **every reading of `f31` executes identically there**, measured over 1.7 M executions
+with a control that passes 3 of 3.
+
+### ★ The two blindness instruments disagree, and the machine one is the stronger evidence
+`acc_blind.blind_sites()` — §113's **static** census — flags **none** of these four. §231's census
+is a **machine** measurement of the same lemma and it sees all four. That is worth recording as a
+method fact: the static census reasons about what *could* be observed from the word stream; §231
+measures what the quantity *actually is*.
+
+### ⛔ And what it is worth, stated without inflation
+Of the four, only **`iw75`** (`082E80F000`) has `f31` as its **sole** open axis. The others carry
+more:
+
+```
+   iw63  class 9 · ACT 0x03 · f31 3        iw70  class 1 · SRC 0x03 · ACT 0x07 store · f31 3
+   iw78  class D · SRC 0x0A · two stores · f31 6
+```
+
+so resolving `f31` leaves them undecoded anyway. ⇒ **one site** becomes blindness-clear, in the
+output stage (23 words, 8 tier-1 today).
+
+⚠ And `082E80F000` occurs **7 times** in the pooled corpus. The inertness was measured at the
+resident site; the other six are elsewhere and unmeasured. So this is **per-SITE** blindness —
+**tier-1b, not tier-1** — exactly the distinction §113 drew and the reason `decoded()` must not
+depend on position.
+
+⇒ coverage unchanged in `decoded()`; **+1 machine-measured tier-1b site**, and a method note worth
+more than the site: **§231 is an existing, unread blindness instrument**, and it is pointed at the
+axis (`f31`) that the static one cannot resolve.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
