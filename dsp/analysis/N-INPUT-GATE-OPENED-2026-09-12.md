@@ -6605,6 +6605,57 @@ where the shipped LOAD alias does not.*
 
 ⇒ coverage unchanged.
 
+## 145. ★★ THE `f31 = 4` EXPERIMENT, RUN AT LAST — and a liveness check that reweights its own result
+Pre-registration + full data: [`data/PREDICT_F31_4_2026-09-13.md`](data/PREDICT_F31_4_2026-09-13.md),
+[`data/f31_4_run_2026-09-14.txt`](data/f31_4_run_2026-09-14.txt).
+
+§144 found a pre-registration written **2026-09-13** with arms, masks and TYPES — and **no RESULT
+section**. The run had never been made. §143/§144 gave it the directional prediction it lacked, and
+this is the run, over **all three** sites, each fingerprinted (§193).
+
+```
+   TYPE 33 prog75_peq_compressor ✅   CONTROL 72  0E=7B3F32 C3=--     C8=FFFFFF D0=62FFEE
+                                      ADD     73  0E=7FFFFF C3=1259EA C8=C46363 D0=7FFFFF
+                                      HOLD    73  0E=7FFFFF C3=1259EA C8=FFFFFF D0=7FFFFF
+   TYPE 34 prog96_peq_compr_dist ✅   CONTROL 70  … C3=--  D0=03530A  │ ADD/HOLD  C3=1259EA D0=7FFFFF
+   TYPE 35 prog97_peq_compr_overdr ✅ CONTROL 68  … C3=--  D0=7FFFFF  │ ADD/HOLD  C3=1259EA D0=7FFFFF
+   reach: 1 387 425 / 1 429 877 / 1 470 848 — §108 measured 0 in the chorus
+```
+
+* **N0 reach — PASS.** * **N4, the pre-registered null — REFUTED**: the arms are not bit-identical,
+  so the accumulator at this word is observed and the blindness lemma does not apply.
+* **N1 / N2 — REFUTED.** I predicted ADD would be the healthy arm; it is not.
+
+### ⛔ Correcting myself twice, in the same experiment
+1. After TYPE 33 alone I reported *"the shipped alias is the only arm leaving `0E` and `D0`
+   unrailed"*. **On TYPE 35 the control already rails `D0`** — so railing is not the discriminator,
+   and I had quoted a one-program observation as general. §111's boundary, walked into by writing
+   up one program before running the other two.
+2. Then I reported the 3-of-3 discriminator as *"ADD and HOLD create register `C3`, the alias never
+   does"* — and did not ask whether anything **reads** `C3`.
+
+### ★ The liveness check, which reweights the whole result
+Which of these registers does the microcode of those three programs actually touch?
+
+```
+   prog75 / prog96 / prog97 — mode-1 words touching C3 / C8 / 0E / D0:   only 0x0E, and it is a READ
+   pooled corpus: C3 (2 w / 2 r), C8 (2 r), D0 (1 w / 2 r) — all elsewhere, none in these programs
+```
+
+⇒ **`C3`, `C8` and `D0` are never read in the programs under test.** The 3-of-3 difference is a
+census artefact — real in the register file, **functionally dead** in these programs.
+⇒ **`0x0E` is read, by all three programs.** And it is the one cell where the shipped alias
+(`7B3F32`) and the two rivals (`7FFFFF`, the rail) differ on a value the microcode consumes — but
+only in `prog75`; in `prog96`/`prog97` it is zero under every arm and says nothing.
+
+**So the evidence against ADD and HOLD is one program in which a register the program reads gets
+railed.** That is thin, and it is what the experiment actually supports — not the 3-of-3 headline I
+would have quoted an hour ago.
+
+⇒ `f31 = 4` remains **open**: observable and separable (that is new), with the shipped alias
+favoured by one live cell in one program, and §144's static argument (22 of 25 at band slot 2 carry
+`mac`) still pointing the other way. Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
