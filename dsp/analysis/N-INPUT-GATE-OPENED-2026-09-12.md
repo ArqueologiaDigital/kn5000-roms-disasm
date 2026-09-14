@@ -6504,6 +6504,59 @@ present**, not hardware and not a modelling job.
 it was reached by generalising from four failed routes rather than by checking the ROM. The check
 took one command. **A tidy summary of failures is not a measurement.**
 
+## 143. ★★ THE ROM PINS WHAT `f31 = 4` COMPUTES — three sites, no emulator run
+Tool: [`f31_oracle_pin.py`](../tools/f31_oracle_pin.py). Data:
+[`data/f31_oracle_pin_2026-09-14.txt`](data/f31_oracle_pin_2026-09-14.txt).
+
+§142 said the value-law family was the missing third anchor. Chasing it into algo 15 gave two
+corrections and one result.
+
+**Correction A — §139's precondition 2 was mis-stated.** I wrote that `lle_oracle.py` *"assumes"*
+the cell order `[b1, b0, b2, −a1, −a2, makeup]`. It does not assume it:
+`kn5000_dsp_namedcoeff.host_coeff_map()` records it as **the host writer's own layout** — *"op0x70
+(biquad) writes 6 consecutive cells per band (b1, b0, b2, −a1, −a2, makeup)"*. Where `op0x70`
+writes, **the order is derived.**
+
+**Correction B — but not for the rotary.** Algo 15's T1 has **no `op0x70` entry at all**, and its
+cells `0x05…0x0A` are written by **no parameter opcode** — they are fixed uploads with no evaluator
+and therefore no law. §139's chain is closed by measurement, not by a wall.
+
+**The bound that falls out.** The value-law family can only ever reach cells a parameter opcode
+writes: **837 of 1546 coefficient fetches, ~54 %.** The rest are fixed uploads.
+
+### ★★ And the result: where `op0x70` DOES write, both halves are available at once
+Eleven algorithms carry an `op0x70` band. **Three contain an undecoded word, and it is the same
+instruction in all three, at the same slot:**
+
+```
+   0018A001D5   class A · SRC 0x07 mem · ACT 0x15 ANCHORED · f31 = 4 — the ONLY open axis
+
+   algo 75 PEQ+COMPRESSOR     w42  cell 0x11  band 1 slot 2 (b2)   acc_op = mac
+   algo 96 PEQ+COMPR+DIST     w58  cell 0x15  band 1 slot 2 (b2)   acc_op = mac
+   algo 97 PEQ+COMPR+OVERDR   w61  cell 0x18  band 1 slot 2 (b2)   acc_op = mac
+```
+
+The host writer says which cell is `b2`; the oracle's schedule says slot 2 is `mac`. Crossing them:
+
+> ★★ **`f31 = 4` computes `acc += P` at these three sites — the same algebra as `f31 = 1` (ADD).**
+
+That is the **first positive statement about any of `f31` 3…7** in this project, and it comes from
+the ROM's own two halves with no emulator run.
+
+### ⛔ Not promoted, and the limits are the interesting part
+* **One distinct instruction** (rule 9). Three *programs* beats three occurrences in one, but it is
+  a single word shape.
+* **The oracle is a FLOAT model** — `BiquadOracle.c = [float(v) …]`. It pins the **algebra**,
+  `acc += product`, and cannot separate ADD from ADD-with-a-different-shift, rounding or
+  saturation — which is exactly the fixed-point detail `f31` might encode. *"Same algebra as
+  `f31 = 1`"* is strictly weaker than *"`f31 4` is `f31 1`"*.
+* It says nothing about `f31` 3, 5, 6 or 7.
+
+⇒ coverage unchanged; `alu_decoded()` untouched. The next step is now sharp and is a **device**
+question rather than a corpus one: run the machine with `f31 = 4` executed as ADD and check the
+three sites against the oracle's predicted `acc_after` — the float model pins the algebra, the
+machine supplies the fixed-point detail it cannot.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

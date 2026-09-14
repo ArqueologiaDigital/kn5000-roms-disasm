@@ -1,0 +1,33 @@
+====================================================================================================
+  f31_oracle_pin -- the host writer's layout x the oracle's schedule
+====================================================================================================
+
+   ★ algorithms carrying an `op0x70' biquad band: 11
+
+      35   EXCITER                    03 04 05 06 07 08 0E 0F 10 11 12 13
+      39   PARAMETRIC EQ              00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79
+      71   PEQ+CHORUS                 02 03 04 05 06 07 12 13 14 15 16 17
+      72   PEQ+S.DELAY                00 01 02 03 04 05 0A 0B 0C 0D 0E 0F
+      73   PEQ+FLANGER                04 05 06 07 08 09 14 15 16 17 18 19
+      74   PEQ+VIBRATO                04 05 06 07 08 09 11 12 13 14 15 16
+      75   PEQ+COMPRESSOR             00 01 02 03 04 05 0F 10 11 12 13 14
+      96   PEQ+COMPR+DIST             00 01 02 03 04 05 13 14 15 16 17 18
+      97   PEQ+COMPR+OVERDR           00 01 02 03 04 05 16 17 18 19 1A 1B
+      98   PEQ+DIST+DELAY             00 01 02 03 04 05 0E 0F 10 11 12 13
+      99   PEQ+OVERDR+DELAY           00 01 02 03 04 05 14 15 16 17 18 19
+
+   ★ UNDECODED words sitting on an `op0x70' cell -- the ROM pins their accumulator op
+
+      algo  name                     word   cell    band   slot   role   acc_op PINNED
+      75    PEQ+COMPRESSOR           w42    0x11    1      2      b2     mac
+      96    PEQ+COMPR+DIST           w58    0x15    1      2      b2     mac
+      97    PEQ+COMPR+OVERDR         w61    0x18    1      2      b2     mac
+
+   ⇒ 3 sites, 1 DISTINCT instruction(s): 0018A001D5
+     open axes: f31 4
+     band slot(s): [2]   accumulator op the schedule pins: ['mac']
+
+   ⇒ ★ `f31 = 4' computes `acc += P' at these sites -- the same ALGEBRA as `f31 = 1'.
+   ⛔ NOT PROMOTED: one distinct instruction (rule 9), and the oracle is a FLOAT model
+     so it cannot separate ADD from ADD-with-a-different-shift/rounding/saturation --
+     the very fixed-point detail `f31' might encode.  Nothing is said about 3, 5, 6, 7.
