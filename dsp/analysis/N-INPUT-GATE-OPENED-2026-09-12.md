@@ -7992,6 +7992,31 @@ question asked by membership answers in one command and admits none.
 > Ask the §149 question first, and ask it by membership. Both halves matter: §160 asked it first
 > and still got it wrong, because it asked the positional version.
 
+### The SECOND anchor, checked too — and a criterion I nearly reported
+
+§175 used only the biquad oracle. The project has a second anchor, SINGLE DELAY's lag-1001 ROM
+product, and three ACT-carrying programs contain a delay section — so it was worth asking whether a
+delay word reads a cell an ACT-1..6 word writes.
+
+**14 of 15 programs share a cell.** I nearly wrote that down as a route.
+
+⛔ **The permutation null kills it.** Shuffling the ACT-word positions within each program, 2000
+trials: **mean 11.08, sd 1.40, max 15.** The observation is 2.1 sd out and the null's own maximum
+*exceeds* it. The overlap is near-universal because the relative pointer window is only ~20 cells
+wide — any handful of marks hits it.
+
+★ And the decisive form of the question needs no statistics at all:
+
+```
+   SINGLE DELAY    ACT 0x01..0x06: 0     f31 = 3: 0
+   PARAMETRIC EQ   ACT 0x01..0x06: 1     f31 = 3: 0
+   ROOM REVERB 1   ACT 0x01..0x06: 0     f31 = 3: 0
+```
+
+**The programs where the ROM pins an answer carry none of these codes** — which is §149's finding,
+now confirmed against *both* anchors rather than one. A data dependency is not an anchor anyway: it
+says two words touch the same cell, not what either computes.
+
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
 
 ## Honest grade
