@@ -9050,8 +9050,21 @@ denominator grows faster. That is RULE 9 in reverse and it deserves the same ref
 * ★ **ESTABLISHED:** a third µPD6383 product exists among the dumped ROMs, it is the KN1500, its
   microcode lives in IC15 around `0x1A414D..0x1AC18B`, and the chip is confirmed by the owner.
   Exactly one — four other products carry none.
-* ⛔ **NOT ESTABLISHED:** anything quantitative about its contents. The blind scan's 51 % exact
-  recall and its vocabulary filter make it unfit to seed a tree.
+* ⛔ **NOT ESTABLISHED:** anything quantitative about its contents — and the reason is now
+  measured rather than asserted. Against the KN5000 control's ground truth (40 op-3 blocks,
+  3154 words, from the pointer table):
+
+  ```
+     op-3 BLOCK recall   27 of 40    (68 %)
+     WORD recall       2275 of 3154  (72 %)
+     PRECISION           27 of 30    (90 %)  -- 3 SPURIOUS blocks
+  ```
+
+  A tree seeded this way would silently drop a quarter of a product's microcode **and** admit
+  three blocks that are not microcode at all. ★ One free precision constraint was added and is
+  exceptionless on the control — an op-3 payload is a whole number of 5-byte words,
+  `len(data) % 5 == 0` in **96 of 96** records — but it did not move recall, because what limits
+  recall is a spurious parse starting a few bytes early and swallowing the real stream.
 * ⇒ **NEXT:** extract the pool through the KN1500's **own** directory structures, the way
   `gen_wsa1_dsp_disasm.py` does for the WSA1R, then RULE-9 de-duplicate and only then quote a rate.
   ⚠ A search for the stream pointer table found a 68-entry `u32le` array at `0x1A318D` immediately

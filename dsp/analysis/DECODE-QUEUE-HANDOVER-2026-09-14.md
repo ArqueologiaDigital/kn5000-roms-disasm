@@ -242,8 +242,11 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    about the evidence. A third product is the only thing that changes them, and the method that
    paid twice (§122, §128) is exactly *a second copy of the same code somewhere else*.
 
-   ⛔ **DO NOT SEED A TREE FROM THE SCAN.** Its exact-offset recall is 51 % and it selects streams
-   by vocabulary match, so any rate computed from it is manufactured: 0.90 → 92.4 %, 0.70 → 85.3 %,
+   ⛔ **DO NOT SEED A TREE FROM THE SCAN**, and the reason is measured against the KN5000
+   control's ground truth: **op-3 block recall 27 of 40 (68 %), word recall 2275 of 3154 (72 %),
+   precision 27 of 30 (90 %, three SPURIOUS blocks)**. It would drop a quarter of a product's
+   microcode and admit three blocks that are not microcode. It also selects streams by vocabulary
+   match, so any rate computed from it is manufactured: 0.90 → 92.4 %, 0.70 → 85.3 %,
    0.50 → 52.3 %, 0.00 → 2.7 % (`--bias` prints the curve). I computed "+1.09 pooled points" from
    the top row before running that sweep; it is retracted. Note too that the strict count would go
    **1413 → 1469** — RULE 9 in reverse.

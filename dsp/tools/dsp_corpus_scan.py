@@ -101,7 +101,13 @@ def parse_stream(d, off, limit=4096):
         body = d[p + 2:p + ln]
         if op == 3 and len(body) >= 3:
             data = body[3:]
-            ws = [int.from_bytes(data[k:k + 5], "big") for k in range(0, len(data) - 4, 5)]
+            #  ★★★ STRUCTURAL CONSTRAINT, exceptionless on the control: an op-3 record's payload
+            #  is a whole number of 5-byte microwords.  MEASURED over the KN5000 Sub CPU's own
+            #  96 op-3 records: len(data) % 5 == 0 in 96 of 96.  It costs nothing in recall and
+            #  kills spurious parses, which is what limited the exact-offset recall to 51 %.
+            if len(data) % 5:
+                return None
+            ws = [int.from_bytes(data[k:k + 5], "big") for k in range(0, len(data), 5)]
             if ws:
                 iram.append(((body[1] << 8) | body[2], ws))
         p += ln
@@ -193,7 +199,30 @@ def control_recall(tri, hi, cl, lo):
     hits = scan(d, tri, hi, cl, lo)
     exact = sum(1 for k in known if any(h[0] == k for h in hits))
     cover = sum(1 for k in known if any(h[0] <= k < h[0] + h[1] for h in hits))
-    return len(known), len(hits), exact, cover
+    #  ★★★ AND THE RECALL THAT ACTUALLY GOVERNS EXTRACTION.  Offset recall answers "is there
+    #  microcode in this ROM"; it does NOT answer "can this scan BUILD a corpus".  For that the
+    #  unit is the op-3 BLOCK and the WORD, and precision matters as much as recall -- a spurious
+    #  block would enter a tree as fabricated microcode.
+    truth = set()
+    for i in range(E.N_ALGOS):
+        try:
+            ir, _c, _o = E.parse_stream(rom, rom.u32le(E.ALGO_TABLE + 4 * i))
+        except Exception:
+            continue
+        for _a, ws, _dl in ir:
+            t = tuple(int.from_bytes(bytes(w), "big") for w in ws)
+            if t:
+                truth.add(t)
+    got = set()
+    for h in hits:
+        r = parse_stream(d, h[0])
+        if r:
+            for _a, ws in r[0]:
+                got.add(tuple(ws))
+    tw = sum(len(t) for t in truth) or 1
+    gw = sum(len(t) for t in truth & got)
+    return (len(known), len(hits), exact, cover,
+            len(truth), len(truth & got), tw, gw, len(got - truth), len(got))
 
 
 def main():
@@ -215,7 +244,7 @@ def main():
     #  ★ THE POSITIVE CONTROL COMES FIRST AND IS NOT OPTIONAL.
     r = control_recall(tri, hi, cl, lo)
     if r:
-        nk, nh, ex, cv = r
+        nk, nh, ex, cv, nt, ng, tw, gw, spur, ngot = r
         print("\n  ★ CONTROL RECALL against the Sub CPU's OWN 100-entry algorithm pointer table")
         print("    (100 pointers resolve to %d distinct stream offsets -- the corpus is 40 images):"
               % nk)
@@ -226,6 +255,15 @@ def main():
         print("        yes/no question about an unknown ROM")
         if cv < 0.8 * nk:
             print("      ⛔ recall below 80 %% -- do not read a miss below as an absence.")
+        print("\n    ★★★ EXTRACTION QUALITY -- the recall that governs whether a corpus can be")
+        print("        BUILT from this scan, which is a different question:")
+        print("          op-3 BLOCK recall %d of %d (%.0f %%) | WORD recall %d of %d (%.0f %%)"
+              % (ng, nt, 100.0 * ng / nt, gw, tw, 100.0 * gw / tw))
+        print("          PRECISION %d of %d blocks are real (%.0f %%) -- %d SPURIOUS"
+              % (ngot - spur, ngot, 100.0 * (ngot - spur) / max(ngot, 1), spur))
+        print("        ⛔ Far too lossy to seed a tree: it would silently drop a quarter of a")
+        print("           product's microcode and admit blocks that are not microcode at all.")
+        print("           Extract through the product's OWN directory structures instead.")
     if a.bias:
         #  ★★★ THE CAVEAT THAT HAS TO TRAVEL WITH EVERY RESULT THIS TOOL PRODUCES.
         #  The scan KEEPS streams whose words are already in the known vocabulary, so the

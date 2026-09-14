@@ -1,0 +1,19 @@
+================================================================================================
+  dsp_corpus_scan -- is there a THIRD uPD6383 corpus in the dumped ROMs?
+================================================================================================
+
+  ISA vocabulary from the two KNOWN corpora: 394 (hi12,class4,lo12) triples, 96 hi12, 13 class4, 106 lo12
+
+  ★ CONTROL RECALL against the Sub CPU's OWN 100-entry algorithm pointer table
+    (100 pointers resolve to 41 distinct stream offsets -- the corpus is 40 images):
+      STRONG hits 30 | recovered at the EXACT offset 21 of 41 (51 %)
+      | COVERED BY A HIT 38 of 41 (93 %)  <- the figure that matters for a
+        yes/no question about an unknown ROM
+
+    ★★★ EXTRACTION QUALITY -- the recall that governs whether a corpus can be
+        BUILT from this scan, which is a different question:
+          op-3 BLOCK recall 27 of 40 (68 %) | WORD recall 2275 of 3154 (72 %)
+          PRECISION 27 of 30 blocks are real (90 %) -- 3 SPURIOUS
+        ⛔ Far too lossy to seed a tree: it would silently drop a quarter of a
+           product's microcode and admit blocks that are not microcode at all.
+           Extract through the product's OWN directory structures instead.
