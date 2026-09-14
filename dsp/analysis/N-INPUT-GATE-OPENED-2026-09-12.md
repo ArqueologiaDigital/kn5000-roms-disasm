@@ -7345,6 +7345,70 @@ preserves it, the target is established by elimination. If all three do, this st
 the band observes, and the 99 words stay undecoded on an axis no anchored criterion can see — which
 is a clean negative worth as much as a decode, and the outcome §149 recorded for `f31 = 3`.
 
+## 164. ⛔⛔⛔ AND §161's POINTER RESULT DOES NOT REPLICATE — one program is not an ISA conclusion
+
+§162 retracted the +99 and said the pointer result *"survives intact and is not weakened"*. **That
+was wrong too.** I had run it on one program.
+
+Replicated on **TYPEIDX 29, `prog71_peq_chorus`** (fingerprinted ✅), which carries the same class-4
+words and an `op0x70` band downstream of them. Evidence in `analysis/data/cls4/`.
+
+```
+   arm off   fired 0          live cells: 01:176405 02:3520 04:176084 05:176085 08:242421
+                                          51:242421 52:54010 53:54010 87:3521 …
+   arm ptr   fired 3 547 234  live cells: 01:176405 02:465  04:176084 05:176084 08:242421
+                                          51:242421 52:54010 53:54010 87:465  …
+```
+
+**3 547 234 pointer advances and the band does not move.** `08`, `51`, `52`, `53` are identical;
+84 of the 95 shared cells have identical change counts. The structural break EXCITER showed — ten of
+twelve cells written once, the two-channel mirror destroyed — **does not happen here at all**.
+
+The same is true of §163's store arm on the same program: 5 433 347 mode-4 stores suppressed, and
+`51:242421 52:54010 53:54010` are **byte-identical** to the baseline.
+
+### The escape I checked, and it is not available
+
+The obvious rescue is that the pointer is re-established between the class-4 word and the band, so
+the shift never arrives. **It is not**: no `ldptr` / `rstcur` / `ldptr.d` sits between them in
+EXCITER, PEQ+CHORUS, PEQ+FLANGER or PEQ+VIBRATO. The arm *can* reach PEQ+CHORUS's band. It changes
+nothing.
+
+### What this costs
+
+⛔ **§161 is downgraded from "mode 4 does not advance the pointer" to "on one program of two, the
+arm produces a large structural change; on the other, none, and I cannot say why."** That is not an
+ISA conclusion. The arm, the fingerprinting and the two-sided design were all sound; the *inference*
+from a single program was not.
+
+⛔ **§163's store-target elimination goes with it.** Its four-way result (three readings excluded,
+`m_dram[m_dp]` surviving) is EXCITER-only and rests on the same criterion that fails to replicate.
+Nothing about the mode-4 store's target is established.
+
+Coverage is unchanged at **1501 undecoded of 8003, 81.2 %** — §162 had already taken the +99 back.
+
+### The defect, and it is the fourth costume of the same one
+
+Part 233 recorded *proximity is not membership* three times. §160's criterion was **"8 of 8 have a
+band consumed downstream"** — and *downstream in program order* is not *reads the cell this word
+touches*. I measured program order and treated it as data dependence. It is the same substitution,
+in a fourth disguise, and it is why an effect that is dramatic in one program is absent in another
+that satisfies the same positional test.
+
+> **A criterion that fires in one program is a fact about that program.** Replicate before inferring
+> anything about the instruction set — and pick the replication BEFORE seeing the first result.
+
+★ What genuinely survives from this whole thread, and it is not nothing:
+* §156 (`hi12` bit 6, 0 exceptions in 6441, with the bit-pair sweep as control) — static, pooled.
+* §157 (the C63 idiom, 99/99 exceptionless three ways; five table lengths both products agree on;
+  the clip curve has 40 entries) — static, pooled.
+* §158 (class 6's `addr8` is a count, so V8/V10/V12 are excluded on the meaning of the field) —
+  static, and it does not depend on any run.
+* §159 (139 pooled words in 9 shapes refused by the class test alone) — static, and still the map of
+  where the cheap wins are.
+* The arms themselves (`UPD6383_CLS4PTR`, `UPD6383_ST4DEST`) are built, fire, and are correctly
+  placed. What they lack is a criterion that means the same thing in more than one program.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -25,9 +25,9 @@ identical (`regen_words_unchanged.sh`).
 * **§122** — the C-format payload is an I-RAM address. Two routes: the region test (11 of 11 inside
   their own image, p = 6.6e-9) and the **relocation test** against the WSA1R's byte-homologous copy
   of the kernel header (§121). +11 words, kernel 47.0 → 60.2 %.
-* ⛔ **§161 → §162, RETRACTED.** Mode 4's *pointer* is settled (it does not advance — a two-sided
-  run that could have gone the other way), but the 99 words carry a SECOND open axis, the bit-4
-  store's target, and I promoted as if the run had closed both. Coverage is back at 81.2 %.
+* ⛔⛔ **§161 → §162 → §164, RETRACTED TWICE.** First the +99 (the words carry two open axes and
+  the run closed one); then the pointer result itself, which does not replicate on a second program.
+  Coverage is back at 81.2 %. What survives is static and pooled: §156–§159.
 * **§128** — **mode 1 is the register file.** `class4 & 7` is the addressing mode, so class 1 and
   class 9 were one question. Four measurements anchored the read half. +143 words.
 
@@ -215,30 +215,28 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
 
 ## What the next pass should actually do, in order
 
-0. ⛔ **MODE 4: THE POINTER IS SETTLED, THE STORE TARGET IS NOT — and §161's +99 was RETRACTED
-   in §162 for exactly that.** Read this before re-promoting anything.
+0. ⛔⛔ **MODE 4 IS FULLY OPEN AGAIN — and the thread's whole lesson is about the CRITERION, not
+   the arms.** Read this before spending another build on it.
 
-   * ✅ **SETTLED (§161).** `UPD6383_CLS4PTR` fired **3 346 456** ON vs 0 OFF; both runs fingerprint
-     `prog35_exciter`. EXCITER's `op0x70` band four words downstream goes from two live four-cell
-     blocks (offset-2/3 cells changing together — the DF-I y-state pair) to **ten of twelve written
-     once in 259 308 frames**. ⇒ **class 4 does NOT advance the pointer.** Independently, §158
-     excluded the variants bundling class 6 (its `addr8` is a table entry count, anchored at 24).
-   * ⛔ **NOT SETTLED.** `acc_blind.open_axes('0124011CE')` = `['class 4', 'bit-4 store on class 4']`
-     — **two** axes. All 99 words carry `hi12` bit 4, and `r2-output.md` §1/§4.4 falsified the
-     class-independent reading of that store: the destination is **mode-dependent** and `mem[ptr]`
-     is the **mode-2** target. `_alu_half_anchored` drops that guard because it is *phrased* as a
-     class test; it is really a store-target guard, and dropping it is legitimate only where the
-     target is known (mode 1: R2 proves it 48 of 48; `is_dram`: addressing forced).
-   * ★ **THE ARM IS BUILT AND UNRUN: `UPD6383_ST4DEST`** (§163). Three-way so it can fail — 0 =
-     D-RAM at the pointer (shipped), 1 = register file at `addr8` (the mode-1 target), 2 =
-     suppressed — with an unconditional count of mode-4 bit-4 stores. Same criterion as the pointer
-     run: EXCITER's band must survive. One setting surviving ⇒ target by elimination, **+99 words**.
-     All three surviving ⇒ the store reaches nothing any anchored criterion sees, and the 99 stay
-     open on an invisible axis (the §149 outcome, and worth recording).
-   * ★★ **THE RULE THIS COST.** *Before promoting, enumerate the word's open axes and close them
-     all or promote none.* I ran the experiment, wrote the note, the LEDGER row, the handover and a
-     blog post before asking `open_axes()` — a one-line check. §138 and §141 were the same defect:
-     a generalisation of a scoped measurement. This was its third costume.
+   * **The arms are built, fire, and are correctly placed.** `UPD6383_CLS4PTR` (class-4-only pointer
+     advance) fired 3 346 456 on EXCITER and 3 547 234 on PEQ+CHORUS; `UPD6383_ST4DEST` (0 = D-RAM
+     at the pointer, 1 = register file at `addr8`, 2 = suppressed, 3 = D-RAM at `addr8`) sees
+     5.0–5.4 M mode-4 bit-4 stores. Every run fingerprints its program (§193). None of that is the
+     problem.
+   * ⛔ **The CRITERION does not replicate.** On EXCITER both arms destroy the `op0x70` band's
+     structure; on **`prog71_peq_chorus`** — same class-4 words, band downstream, and **no pointer
+     reload in between** (checked) — the band is byte-identical under both. §161 and §163 are
+     therefore facts about one program, and I stated them as ISA conclusions. §164 corrects that.
+   * ⛔ **THE DEFECT, fourth costume.** §160's criterion was *"8 of 8 have a band consumed
+     downstream"*. **Downstream in program order is not "reads the cell this word touches."** Part
+     233 recorded *proximity is not membership* three times; this is program order standing in for
+     data dependence.
+   * ★ **WHAT THE NEXT PASS NEEDS IS NOT ANOTHER ARM — it is a criterion with a DATA-DEPENDENCE
+     definition.** Build the set of D-RAM cells each `op0x70` band actually reads under the walk,
+     and require that the class-4 word's own cell be IN that set. Then replicate on every program
+     that satisfies it, chosen **before** the first result is seen.
+   * ★★ **RULE:** *a criterion that fires in one program is a fact about that program.* Replicate
+     before inferring anything about the instruction set.
 
 0b. **The other 40 class-test-refused words are the same shape of opportunity, not yet worked.**
    `lut_idiom.py --classgate` now lists classes 3 (14), 5 (2), 6 (12) and 8 (12) still undecoded

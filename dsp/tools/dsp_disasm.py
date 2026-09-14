@@ -1108,7 +1108,17 @@ def is_mode4(w):
        residue delta is +56 == 24 + 32, the two class-6 `addr8' values of the image it walks.  That
        kills V8, V10 and V12 and leaves V7 (class 4 alone), which had never had an arm.
 
-    3. ★★★★★ AND V7 IS FALSIFIED BY A TWO-SIDED RUN (`dsp/tools/cls4_arm.sh', evidence in
+    3. ⛔⛔⛔ AND THE RUN THAT LOOKED LIKE IT FALSIFIED V7 DOES NOT REPLICATE (sect. 164).  On
+       EXCITER the arm produces a dramatic structural change; on `prog71_peq_chorus', which carries
+       the same class-4 words with an `op0x70' band downstream and no pointer reload in between,
+       **3 547 234 pointer advances move the band not at all** (`08/51/52/53' identical, 84 of 95
+       shared cells identical).  ⇒ mode 4's pointer behaviour is **OPEN**, not settled, and the
+       mode-4 store TARGET (sect. 163's four-way elimination, also EXCITER-only) is open too.
+       The account below is kept because the EXCITER measurement is real and the next pass needs to
+       know exactly what was seen -- but read it as a fact about one program.
+       ⚠ THE DEFECT: sect. 160's criterion was "8 of 8 have a band consumed DOWNSTREAM", and
+       downstream IN PROGRAM ORDER is not READS THE CELL THIS WORD TOUCHES.
+       ---- what the EXCITER run showed (`dsp/tools/cls4_arm.sh', evidence in
        `analysis/data/cls4/').  `UPD6383_CLS4PTR' was built for it and run at TYPEIDX 12; both
        runs fingerprint `prog35_exciter' (sect. 193) and the arm's unconditional count is
        3 346 456 ON against 0 OFF, so it reached its words.  EXCITER was chosen because

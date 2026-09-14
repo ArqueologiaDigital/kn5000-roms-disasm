@@ -48,10 +48,17 @@ mkdir -p "$OUT"
 NOTE=$(python3 -c "print(36.0 + 0.2*$TI)")
 FRAME=$(python3 -c "print(int(($NOTE + 1.0) * 44100))")
 
-cap() {   # cap <armvalue|off> <tag>
+#  ★ sect. 163: the SECOND axis.  `ST4DEST=n' asks where a mode-4 bit-4 store lands -- 0 = D-RAM
+#  at the pointer (shipped), 1 = the register file at addr8, 2 = suppressed.  Same criterion.
+cap() {   # cap <off|ptr|st1|st2|st3> <tag>
   local arm=$1 tag=$2
   local -a extra=()
-  [ "$arm" != "off" ] && extra=(UPD6383_CLS4PTR=1)
+  case "$arm" in
+    ptr) extra=(UPD6383_CLS4PTR=1) ;;
+    st1) extra=(UPD6383_ST4DEST=1) ;;
+    st2) extra=(UPD6383_ST4DEST=2) ;;
+    st3) extra=(UPD6383_ST4DEST=3) ;;
+  esac
   ( cd "$BUILD" && rm -f error.log kn5000_dsp1_upload.txt && \
     env DISPLAY=${DISPLAY:-:0} DHLE=0 DSPCFG=3 TYPEIDX="$TI" NOTEMODE=0 TGM=0 \
         UPD6383_CENSUS_PERPROG=1 UPD6383_TRACE_FRAME="$FRAME" "${extra[@]}" \
@@ -62,13 +69,14 @@ cap() {   # cap <armvalue|off> <tag>
 }
 
 printf '=== cls4_arm -- UPD6383_CLS4PTR (variant V7) at TYPEIDX %s ===\n\n' "$TI"
-for arm in off on; do
+for arm in ${ARMS:-off ptr st1 st2 st3}; do
   L="$OUT/$arm.log"
   [ -s "$L" ] || cap "$arm" "$arm"
   printf -- '--- arm %s ---\n' "$arm"
   # (1) THE FIRED COUNT, unconditional, printed by upd6383.cpp for both arms
   grep -oE '§160 CLS4PTR \([^)]*\): class-4-ONLY pointer advances performed: [0-9]+' "$L" \
       | tail -1 | sed 's/^/    /' || echo "    FIRED LINE ABSENT"
+  grep -oE '§162 ST4DEST \([^)]*\): mode-4 bit-4 stores seen: [0-9]+' "$L" | tail -1 | sed 's/^/    /'
   grep -oE '§100 CLS46PTR \([^)]*\): class-4/6 pointer advances performed: [0-9]+' "$L" \
       | tail -1 | sed 's/^/    /'
   # (2) sect. 193 -- which program actually loaded, from THIS run's capture
