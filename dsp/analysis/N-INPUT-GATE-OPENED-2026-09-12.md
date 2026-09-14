@@ -7163,6 +7163,47 @@ explained for mode 4: post-increment-by-one and no-move are both alive, they dif
 in the corpus — **+99 words on one decision** — and it names the instrument that would settle it:
 anything that observes the D-RAM pointer two class-4 words later.
 
+## 160. ★★ AND FOR MODE 4 THE RANKING CRITERION *DOES* EXIST — 8 of 11, against §149's zero
+
+§149 checked `f31 = 3` against every anchored criterion and found **zero** carriers among the
+programs where the ROM pins an answer. §159's mode-4 axis is the first open axis this month where
+that check comes back positive, and it is worth being precise about why.
+
+Asked with the oracle's **own** definition of a predictable program — `f31_oracle_pin.py`'s
+selection, *"algorithms carrying an `op0x70` biquad band"*, which is `host_coeff_map`'s reading of
+the firmware's own writer, not a proxy and not a landmark (§138's rule):
+
+```
+   11 algorithms carry an op0x70 band
+    8 of them contain a class-4 word
+    8 of 8 have an op0x70 band consumed DOWNSTREAM of that class-4 word
+```
+
+and the sharpest is **EXCITER**: class-4 at `w14`, the band's coefficient cells consumed at
+`w18..w22` — **four words later**. §159 asked for *"anything that observes the D-RAM pointer two
+class-4 words later"*; this observes it four words later with a band the firmware's own coefficient
+designer pins.
+
+★ **Why the oracle's float-model caveat does not bite here.** `f31_oracle_pin.py` marks itself NOT
+PROMOTED partly because *"the oracle is a FLOAT model … it pins the ALGEBRA and cannot separate ADD
+from ADD-with-a-different-shift, rounding or saturation"*. That is a **precision** limitation. The
+mode-4 question is not a precision question: under V7 the band reads `mem[p+1]` where V0 reads
+`mem[p]` — a **different operand cell**, which a graded model sees immediately.
+
+⛔ **WHAT STILL BLOCKS IT, stated so nobody re-walks this.** The obvious static form of the test —
+"under which variant do the band's words land in the `0x64..0x77` EQ state block the device's
+`SPEC_SUBFB` treats as absolute?" — needs the **body's entry pointer**, and that is precisely what
+`closure-pointer.md` leaves open (the frame does not close; a re-establishing mechanism is FORCED).
+A purely static ranking therefore rests on the one quantity this corpus cannot supply. Contiguity
+cannot substitute: under both variants the five MACs read five *consecutive* cells, so the shapes
+are identical and only the absolute base differs.
+
+⇒ **The instrument is an emulator arm, and the existing one is the wrong arm.** `UPD6383_CLS46PTR`
+(§100) moves classes 4 **and** 6 together, so it can only ever test V10/V12 — both excluded by §158.
+A **class-4-only** arm is what V7 needs, with the EXCITER band as the two-sided criterion: with the
+arm the band's operands must change, and the oracle must get worse, or V7 is right and it must get
+better. That is the next build, and it is worth +99 words on one decision.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

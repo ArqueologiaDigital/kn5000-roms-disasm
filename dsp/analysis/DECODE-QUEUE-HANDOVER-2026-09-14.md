@@ -28,6 +28,21 @@ Mirrors **8003/8003** (pooled, `tools/upd6383d_diff.sh -p`); `dsp/verify.py` BYT
 **The method that paid, both times: a second copy of the same code at a different offset.** A field
 that is an address shifts with a relocation; one that is data does not. No semantics, no null.
 
+★ **A third payer, same shape: pool the two products and look at a field the earlier pass did not.**
+§156–§160 did that to the alternate `lo12` encoding and to the table-lookup idiom:
+* **`hi12` bit 6 is a third bit of the alternate-encoding flag** — `(hi12 bit6 AND NOT bit5) <=>
+  lo12 bit11`, **0 exceptions in 6441** pooled ESC-clear words. `bit11-family.md` §9 had two bits,
+  both in `lo12`; this one is in the other half of the microword. ⚠ The **mask is not identified**
+  (bits 2/3/5 are all set on the two exception shapes) — say "bit 6, with the two `16E` shapes
+  excluded", not "bit 6 and not bit 5".
+* **The C63 idiom is 99 sites and exceptionless three ways**, and the class-6 `addr8` takes five
+  values both products agree on: 24 (the proven LFO sine), **40 (the waveshaper — so the clip curve
+  has 40 entries)**, 26/30/32. C-RAM cells `0x18` and `0x28` are written by **neither** the preset
+  streams nor the boot blob, so `addr8` is a **count, not an address**.
+* ⛔ **`cfmt_opcode.py` had been comparing product labels that never existed** — "KN5000"/"WSA1R"
+  against `class_twins`'s "KN"/"WSA". Every per-product column printed 0 and the kernel-slot table
+  selected nothing. Totals were unaffected. A column of zeros looks exactly like a real absence.
+
 ## The three blocks — 619 of the ~1358 remaining pooled words
 
 ### `ACT 0x0B` — 191 sole (62 KN + 129 WSA). THREE criteria measured blind.
@@ -193,6 +208,42 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
   carriers are the dynamics/distortion families, whose HLE models are graded.
 
 ## What the next pass should actually do, in order
+
+0. ★★★ **RUN `UPD6383_CLS4PTR` AGAINST THE EXCITER BAND. This is now the top item — it is worth
+   +99 words on ONE decision, and every other piece of it is already built.**
+
+   * **What is open.** `alu_decoded()` admits classes 2, 8 and 0xA. **139 pooled words in 9 shapes
+     are undecoded with their ALU half ALREADY ANCHORED** (`lut_idiom.py --classgate`), i.e. the
+     class test is the only thing refusing them. **99 of the 139 are one shape** — `0124011CE`, the
+     C63 table-lookup idiom's third word, class 4, in 47+ images across both products.
+   * **Why they are not already promoted.** §112's standard is *"the ADDRESSING is explained AND
+     the ALU half is anchored"*. Mode 4's pointer behaviour is open: post-increment-by-one (V7) and
+     no-move are both alive, and **`addr8` cannot separate them — class 4 carries the single value
+     `0x01` in 99 of 99 words in both products.** Only an execution difference can.
+   * **Three of the four rival variants are now dead (§158).** Class 6's `addr8` is the table ENTRY
+     COUNT, anchored at 24 — not a displacement. `closure_pointer.py`'s V8 residue delta of **+56
+     is literally 24 + 32**, the two class-6 `addr8` values of the image it walks. ⇒ **V8, V10 and
+     V12 excluded on the meaning of the field**, which closure alone could never do (no variant
+     closes). V7 survives.
+   * **The existing arm is the WRONG arm.** `UPD6383_CLS46PTR` (§100) moves classes 4 **and** 6, so
+     it only ever tested V10/V12. **`UPD6383_CLS4PTR` is built (default OFF, unconditional fired
+     count) and has never been run.**
+   * **The criterion EXISTS — and this is the first open axis this month where it does.** §149
+     found *zero* anchored carriers for `f31 = 3`. Asked with `f31_oracle_pin.py`'s own selection
+     (algorithms carrying an `op0x70` biquad band — the firmware's own writer, not a proxy):
+     **11 carry a band, 8 contain a class-4 word, 8 of 8 have a band consumed DOWNSTREAM of it.**
+     **EXCITER** is sharpest: class-4 at `w14`, band at `w18..w22` — four words later.
+   * **Why the oracle's float caveat does not bite.** `f31_oracle_pin.py` cannot separate ADD from
+     ADD-with-a-different-shift — a *precision* limit. V7 vs V0 changes **which D-RAM cell** the
+     band reads. That is not a rounding.
+   * **Two-sided, so it can fail.** With the arm ON, EXCITER's band must read different cells and
+     the oracle must get **worse** (⇒ no-move is right, addressing explained, +99 promote) or
+     **better** (⇒ V7 is right, addressing explained, +99 promote). If the band does not move at
+     all, the arm is not where I think it is — check the fired count first, as §100 had to.
+   * ⛔ **Do not try to settle it statically.** The obvious static form needs the **body entry
+     pointer**, which `closure-pointer.md` leaves open, and contiguity cannot substitute: under
+     both variants the five MACs read five *consecutive* cells and only the absolute base differs.
+
 1. **Build a bit-exact reference for ONE dynamics program** (compressor — `op0x72[0]` is the only
    **PROVEN** cell↔opcode entry in the family). One artefact unblocks `f31 = 3` (56 sole-axis
    words) *and* the job §135 named for `ACT 0x0B`.
