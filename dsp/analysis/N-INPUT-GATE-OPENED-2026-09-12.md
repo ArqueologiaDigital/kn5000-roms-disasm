@@ -9024,22 +9024,17 @@ and 6 carry `(hi12, class4, lo12)` triples neither known product has. Computing 
    pooled WITH KN1500      8010 words, 1469 undecoded = 81.7 %      (+1.09 points)
 ```
 
-⛔ **That is manufactured by the filter and must not be quoted.** The scan *keeps* streams whose
-words are already in the known vocabulary, so the recovered set is SELECTED for vocabulary match.
-Measured, by sweeping the threshold that does the selecting:
+⛔ **That must not be quoted** — but ⚠⚠ **the reason I gave was wrong, and §211 replaces it.**
+The curve below was measured with the BROKEN scanner, where each threshold admitted a different
+amount of junk; the "gradient" was the junk fraction, not selection bias.
 
 ```
-   threshold | streams | blocks |  words | "decoded"
+   threshold | streams | blocks |  words | "decoded"      ⛔ ARTEFACT -- see §211
       0.90   |       9 |      7 |    737 |  92.4 %
       0.70   |       5 |      4 |    564 |  85.3 %
       0.50   |       1 |      1 |    398 |  52.3 %
-      0.30   |       2 |      4 |    818 |  43.6 %
       0.00   |     114 |    150 |  94862 |   2.7 %
 ```
-
-The rate is a monotone function of the threshold because **the threshold IS a vocabulary filter**.
-A scan built this way can establish THAT microcode is present; it cannot say what fraction of it the
-ISA model explains. `--bias` prints this curve so the caveat travels with every result.
 
 ⚠ Note also which direction the strict count moves: undecoded words go **1413 → 1469**. Even taking
 the figure at face value, the number of words the project cannot explain would go UP; only the
@@ -9301,6 +9296,51 @@ exercise program families this corpus barely contains.
 UNIT SECTION" tables name parts inline — `IC204(NJM2902N)`, `IC207(LB1687)` — but cover IC201–207,
 IC405, IC501, IC503 and **not IC302**, so the chip identity was not verified from it here; no OCR
 tool is installed. What is needed is the **firmware dump**, not the manual.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
+## 211. ⚠⚠ MY OWN RETRACTION HAD THE WRONG REASON — the conclusion survives, the argument does not
+
+§205 refused the "+1.09 pooled points" on the grounds that the scan's decode rate is *"a monotone
+function of the threshold, because the threshold IS a vocabulary filter"*. Re-measured with the
+scanner fixed (§206), that curve does not exist:
+
+```
+   KN1500, fixed scanner:
+      0.95  0.90  0.80  0.70  0.50  0.30   ->  ALL give 37 streams / 31 blocks / 2389 words / 87.3 %
+      0.00                                 ->  181 streams / 97 286 words / 4.2 %
+```
+
+**FLAT.** Between 0.30 and 0.95 the threshold selects nothing — every recovered stream scores
+≥ 0.950 anyway, so there is no gradient to attribute a rate to. §205's curve was measuring the
+broken scanner's junk fraction at each cutoff, and that half of §205 is **withdrawn**.
+
+### The refusal stands anyway, on a reason that is actually about the instrument
+
+The test that matters is whether *structure alone* identifies microcode. On the KN5000 control:
+
+```
+   vocabulary filter ON  (>= 0.50)   precision 95 %   block recall 93 %
+   vocabulary filter OFF (0.00)      precision 43 %   block recall 62 %   17 465 spurious words
+```
+
+The filter is **load-bearing**: without it precision collapses and recall *falls* too, because
+spurious long parses swallow real blocks. So it cannot be removed.
+
+⚠ **And the control cannot measure that filter's bias, because the control's own words ARE the
+vocabulary it filters on.** A block of genuinely unfamiliar instructions would score low and be
+dropped, and no experiment available here says how often that happens in an unknown ROM. The
+KN1500's recovered blocks all score 0.950–0.993 — which is what you would see both if the product
+shares our instruction vocabulary *and* if the filter quietly discarded everything that does not.
+
+⇒ **The recovered set is biased toward familiar material by an UNMEASURED amount.** That is why no
+fraction-explained may be quoted from it and why it must not join a published rate — not because a
+curve slopes. A rate needs a corpus extracted by that product's own directory structures, as the
+KN5000's and the WSA1R's were.
+
+★ The distinction is worth keeping: "the number is manufactured by a knob I turned" and "the number
+rests on a filter whose bias nothing here can bound" call for the same refusal but are different
+claims, and only the second one is true.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 

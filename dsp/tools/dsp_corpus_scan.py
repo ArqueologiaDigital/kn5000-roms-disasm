@@ -293,21 +293,61 @@ def main():
             print("           admit blocks that are not microcode.  Extract through the")
             print("           product's OWN directory structures instead.")
     if a.bias:
-        #  ★★★ THE CAVEAT THAT HAS TO TRAVEL WITH EVERY RESULT THIS TOOL PRODUCES.
-        #  The scan KEEPS streams whose words are already in the known vocabulary, so the
-        #  recovered set is SELECTED for vocabulary match.  Any "decode rate" computed on it is
-        #  therefore a function of the threshold, not a property of the ROM.  MEASURED on the
-        #  KN1500 pool: 0.90 -> 92.4 %, 0.70 -> 85.3 %, 0.50 -> 52.3 %, 0.00 -> 2.7 %.
-        #  ⛔ I computed "the third corpus lifts pooled coverage 80.6 % -> 81.7 %" from the
-        #  0.90 row before running this.  It is an ARTEFACT OF THE FILTER.  Print the curve.
-        print("\n  ★★★ SELECTION-BIAS CURVE -- why NO decode rate may be quoted from this scan\n")
-        print("     threshold | streams | blocks | words | \"decoded\" %")
-        for th in (0.90, 0.70, 0.50, 0.30, 0.00):
-            hits = scan(open(a.rom, "rb").read() if a.rom else b"", tri, hi, cl, lo, thresh=th)
-            print("        %.2f   | %7d |" % (th, len(hits)))
-        print("\n     The rate rises monotonically with the threshold because the threshold IS")
-        print("     a vocabulary filter.  A corpus extracted this way can say THAT microcode is")
-        print("     present; it cannot say what fraction of it the ISA model explains.")
+        #  ★★★ THE CAVEAT THAT HAS TO TRAVEL WITH EVERY RESULT THIS TOOL PRODUCES -- and it is
+        #  NOT the one I first wrote.  v1 printed a "monotone selection-bias curve"
+        #  (0.90 -> 92.4 %, 0.70 -> 85.3 %, 0.50 -> 52.3 %, 0.00 -> 2.7 %) and concluded the
+        #  decode rate was manufactured by the threshold.  ⛔ THAT CURVE WAS AN ARTEFACT OF THE
+        #  BROKEN SCANNER: with the opcode alphabet assumed rather than measured, each threshold
+        #  admitted a different amount of JUNK, and the "gradient" was the junk fraction.
+        #
+        #  Re-measured with the fixed scanner, on the KN1500:
+        #      0.95 0.90 0.80 0.70 0.50 0.30  ->  ALL 37 streams / 31 blocks / 2389 words / 87.3 %
+        #      0.00                           ->  181 streams / 97 286 words / 4.2 %
+        #  ⇒ FLAT.  Between 0.30 and 0.95 the threshold selects NOTHING; every recovered stream
+        #  scores >= 0.95 anyway.  There is no gradient to attribute a rate to.
+        #
+        #  ★ But the refusal STANDS, for a different and better reason.  On the KN5000 control:
+        #      filter ON  (>= 0.50)  precision 95 %  block recall 93 %
+        #      filter OFF (0.00)     precision 43 %  block recall 62 %  (17 465 spurious words)
+        #  The vocabulary filter is LOAD-BEARING -- structure alone does not identify microcode.
+        #  And the control CANNOT measure that filter's bias against NOVEL vocabulary, because
+        #  the control's own words ARE the vocabulary.  A block of genuinely unfamiliar
+        #  instructions would score low and be dropped, and nothing here can say how much of
+        #  that happens in an unknown ROM.
+        #  ⇒ still no decode rate from this scan, and still no merging into a published rate.
+        print("\n  ★★★ WHY NO DECODE RATE MAY BE QUOTED FROM THIS SCAN\n")
+        if a.rom:
+            d2 = open(a.rom, "rb").read()
+            print("     threshold | streams | blocks | words | \"decoded\" %")
+            for th in (0.95, 0.90, 0.80, 0.70, 0.50, 0.30, 0.00):
+                hits = scan(d2, tri, hi, cl, lo, thresh=th)
+                imgs, seen2 = [], set()
+                for h in hits:
+                    r = parse_stream(d2, h[0])
+                    if r:
+                        for _a, ws in r[0]:
+                            t = tuple(ws)
+                            if t not in seen2:
+                                seen2.add(t)
+                                imgs.append(t)
+                allw = [w for t in imgs for w in t]
+                if not allw:
+                    print("        %.2f   | %7d | (none)" % (th, len(hits)))
+                    continue
+                und = sum(1 for w in allw if not DIS.decoded(w))
+                print("        %.2f   | %7d | %6d | %5d | %6.1f %%"
+                      % (th, len(hits), len(imgs), len(allw),
+                         100.0 * (len(allw) - und) / len(allw)))
+            print("\n     A FLAT curve means the threshold selects nothing in that range -- there")
+            print("     is no gradient, and the v1 claim that the rate follows the threshold is")
+            print("     withdrawn (it measured the broken scanner's junk fraction).")
+        print("\n     ⚠ THE REAL REASON, from the control: the vocabulary filter is LOAD-BEARING")
+        print("       (precision 95 % with it, 43 % without), and the control CANNOT measure its")
+        print("       bias against NOVEL vocabulary, because the control's words ARE that")
+        print("       vocabulary.  A block of genuinely unfamiliar instructions scores low and is")
+        print("       dropped, and nothing here can say how often that happens in an unknown ROM.")
+        print("       ⇒ the recovered set is biased toward familiar material by an UNMEASURED")
+        print("         amount.  Report THAT microcode is present; never a fraction explained.")
         return 0
     if a.control:
         return 0
