@@ -8341,10 +8341,19 @@ ingredients it requires — table, criterion, and the constraint above — are n
 
 ## 184. ★★★ THE SCALING CONCLUSION IS RE-ESTABLISHED — on an instrument that passes its off-control
 
-§183 found the phase: **D-RAM cell `0x07`**, unsigned, `0 .. 8 388 602` (six short of 2^23), changing
-1 570 842 times against ~176 000 for every other live cell. With it `lfo-ramp.md` §10's arithmetic is
-exact — `(24 × 8 388 602) >> 23 = 23`, phase 0 → index 0 — landing in `0..n−1` by construction, which
-is why no modulo appears in the microcode.
+⛔⛔ **§183's PHASE IDENTIFICATION IS RETRACTED — see §190–§192.** What follows is kept as the record
+of an argument built on it.
+
+~~§183 found the phase: **D-RAM cell `0x07`**~~, unsigned, `0 .. 8 388 602` (six short of 2^23),
+changing 1 570 842 times against ~176 000 for every other live cell. With it `lfo-ramp.md` §10's
+arithmetic is exact — `(24 × 8 388 602) >> 23 = 23`, phase 0 → index 0 — landing in `0..n−1` by
+construction, which is why no modulo appears in the microcode.
+
+⛔ **The identification rests on a range and a change count, and neither can tell a ramp from a noisy
+signal.** Measured directly (§191): cell `0x07` changes on **every** frame and **wraps 87 564 times**
+in 1 570 842 frames — a ~18-frame period, ~2.5 kHz — with steps from 114 to 8 383 192. §228's rise
+census, already in the device, reports **VARIES** for every cell that moves. The device's own census
+legend calls `05 07 85 87` the per-unit **base/input** cells, which is what this behaves like.
 
 Implemented as `UPD6383_C6LUT=4` and judged on §181's criterion, cell `0x0F`'s swept range:
 
@@ -8505,7 +8514,7 @@ same quantity.
 ⚠ Fifteenth instrument error of the session, and the first caught by a check run deliberately rather
 than stumbled into.
 
-## 188. THE INDEX CENSUS — reasoning complete, confirmation blocked by the environment
+## 188. THE INDEX CENSUS — ⛔ SUPERSEDED BY §189–§195: it ran, and its criterion was blind
 
 The fix is to census `k` itself, which `upd6383.cpp` now does (`§188 C6LUT INDEX k`). Every input is
 verified, so the prediction is arithmetic and can fail cleanly:
@@ -8518,10 +8527,16 @@ verified, so the prediction is arithmetic and can fail cleanly:
    C6LUT=1   acc mod 24            no reason to do either
 ```
 
-⛔ **The run could not be completed**: three consecutive attempts were killed by the harness for
-"low memory" while the machine had 26 GB available and no process above 0.7 GB. The log reaches
-~129 KB of ~500 KB and dies before the end-of-run census prints. This is an environment limit, not a
-result — **do not read it as a negative**.
+⛔ **The run could not be completed here**: three consecutive attempts were killed by the harness for
+"low memory" while the machine had 26 GB available and no process above 0.7 GB. This was an
+environment limit, not a result. ★ **RESOLVED (§189)**: it runs in the FOREGROUND in ~4 minutes with
+`UPD6383_TRACE_FRAME` dropped — that env is what made the log ~500 KB and nothing in the measurement
+needed it.
+
+⛔⛔ **AND EVERY PREDICTION BELOW IS WRONG.** The `21.3 wraps` input is inherited, and §190–§192
+measure the cell it describes: `0x07` wraps **87 564** times and no cell in the machine has a constant
+step. The `k = 0..23` half is vacuous besides (§189, RULE 15). Read §189–§195 instead; this section
+is kept for the record of what was predicted.
 
 ### One command to finish it
 
@@ -8533,18 +8548,149 @@ result — **do not read it as a negative**.
    grep '§188 C6LUT INDEX k' error.log
 ```
 
-* **k = 0..23, ~512 changes** ⇒ the index is `(addr8 × phase) >> 23`, class 6's addressing is
-  explained in every part, and `is_c6lut()` can join `is_mode1()` in `decoded()` on §112's standard.
-  **That is +90 words, 80.6 % → 81.8 %** — the 90 whose only open axes are `{SRC 0x13, class 6}`.
+* ~~**k = 0..23, ~512 changes** ⇒ the index is `(addr8 × phase) >> 23`~~ — ⛔ MEASURED `0..31,
+  2 953 525` pooled and `0..23 / 112 734` at n=24 (§189). The +90 words are **not** available this
+  way; §195 says why, and what the real blocker is.
 * **anything else** ⇒ the arithmetic is wrong somewhere not yet found, and §186's void ranking must
   be redone against `k` rather than against `0x0F`.
 
 ★ What is already measured and needs no further work: the table port (register file `0x1D`, 32
 cells, per effect, contents identified in two effects — §178/§179), the wrap-guard implying a
-windowed read (§179), the phase cell (§183, verified §187), and the amplitude (DEPTH, exactly
-2.0000× — §185, which also retired the `±240` target three arms were wrongly judged against).
+windowed read (§179), and the amplitude (DEPTH, exactly 2.0000× — §185, which also retired the
+`±240` target three arms were wrongly judged against). ⛔ **"the phase cell (§183, verified §187)" is
+struck** — §187 verified only that the arm reads the cell it means to; §190–§192 measure the cell
+itself and it is not a ramp.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
+## 189. THE INDEX CENSUS RAN — and its criterion was blind, for the fourth time
+
+§188's run completes in the foreground in ~4 minutes (the three harness kills were an environment
+limit, confirmed: nothing about the run needed changing except dropping `UPD6383_TRACE_FRAME`, which
+is what made the log ~500 KB). Result:
+
+```
+   §188 C6LUT INDEX k: 0 .. 31, changed 2 953 525 times   (of 3 150 504 lookups, 93.7 %)
+```
+
+Predicted `0..23, ~512`. But **the census pooled every class-6 site**, and `lut_idiom.py` reads
+CHORUS's class-6 `addr8` values off the `.dsm` tree as **24 AND 32**. Pooled, the span is `0..31` by
+construction whatever the formula is, and `k` flips between two sites' values on nearly every
+lookup — the change count measures the *interleave*. Same defect as §162 (one of two axes), §186
+(the consumer, not the index) and §176 (duplicate images): **the quantity fed to the test was not
+the quantity the claim is about.**
+
+Per table length (`§189 C6LUT k PER TABLE LENGTH`, `upd6383.cpp`):
+
+```
+   n=24 (0x18)   k = 0..23   span 24 of 24   changed 112 734 of 1 570 842 lookups   predicted ~511
+   n=32 (0x20)   k = 0..31   span 32 of 32   changed 129 254 of 1 570 842 lookups   predicted ~681
+```
+
+⚠ **The span half is vacuous** (RULE 15). `(n × ph) >> 23` cannot exceed `n-1` by arithmetic, and
+§187 already measured `ph` reaching `8 388 602`, which forces the top of the range at both lengths.
+A criterion that cannot fail is not a criterion. **Only the change count discriminates — and it is
+220× and 190× the prediction.**
+
+## 190–192. THE PREDICTION'S OWN INPUT IS FALSE — cell `0x07` is not a ramp
+
+"21.3 LFO periods" is inherited, not measured here. So census the phase **as seen at the site**
+(`§191 PHASE AS SEEN`): a clean ramp rises almost always, falls exactly once per period, and has a
+constant step.
+
+```
+   n=24 site, UNIT 0 (cell 0x07): up 1 483 277, DOWN 87 564, same 0; positive step 114 .. 8 383 192
+```
+
+**87 564 wraps**, not 21.3 — a period of ~18 frames, ~2.5 kHz. The minimum step is the expected 114
+and the maximum is very nearly full scale. Three confounds checked and excluded:
+
+* **unit interleave** — the read is `m_cur_unit1 ? 0x87 : 0x07`, so a census keyed on the site alone
+  could difference one unit's cell against the other's. Keyed per unit (§191): **unit 1 never fires
+  at these sites.** Identical numbers. Not the explanation.
+* **program pooling** — §176's own banner warns the census is cumulative over every program the TYPE
+  walk passes through. Re-run with `UPD6383_CENSUS_PERPROG=1` and the new counters reset with the
+  epoch (§192): within ONE program, 1 570 842 frames, cell `0x07` still changes **every frame** and
+  still wraps 87 564 times. Not the explanation.
+* **the whole machine** — §228's LFO RISE CENSUS was already in the device and already printing, and
+  it reports **VARIES for every cell that moves at all**. `01`, `04`, `05`, `07`, `0C`, `0F`, `F1`:
+  not one has a constant step.
+
+⇒ **There is no monotonic phase ramp anywhere in the modelled machine**, so §183's identification of
+cell `0x07` as "the LFO phase" — made from the §176 census, which records only min/max and a change
+count and *cannot tell a ramp from a noisy signal* — is **RETRACTED**. The device's own census legend
+already calls `05 07 85 87` the per-unit **base/input** cells. Every C6LUT arm graded against "the
+phase" (§183–§188) was graded against a quantity that does not exist.
+
+## 193–194. THE REGISTER SEARCH IS CLOSED — all six candidates measured and refused
+
+Two candidates were still unexamined, both named in `upd6383.cpp`'s own comments.
+
+**`m_k`** (§167 reports `K 0..24` at the site whose table has 24 entries; §169 read it as the scale
+constant). I read it the other way — a varying index — and built the census rather than the arm.
+⛔ **The histogram refutes my reading and confirms §169's:**
+
+```
+   §193 m_k AT CLASS-6 SITE 00006184CD (addr8=18):  hist:  0:882   24:1574370     changed 1 time
+```
+
+`m_k` is 0 while the program primes and 24 for ever after. `K 0..24` was a min/max spanning the
+priming period. ★ And the same `24` appears at the **addr8=32** site — so it is a microcode constant,
+not that site's table length.
+
+**`m_p >> ACC_SHIFT`** (§169: "the one register §167 did not read, and the one the arithmetic points
+at"). The product at the site is only ±1.2e6, which at `ACC_SHIFT = 16` is an integer in −16..+19 —
+suggestively the range §176 gives for cell `0x0C` (−17..19). ⛔ **The histogram refutes it too:**
+
+```
+   §194 (P >> ACC_SHIFT):  0:1431090  (90.9 %)   -1:30730  1:35764  2:13731  3:2507 ... 19:3
+```
+
+A table index visits its entries; this is a small signal concentrated at zero.
+
+⇒ **All six named index sources are now measured and refused:** `acc mod n` (=1), the ACT-destination
+variant (=2), `(n × acc) >> 23` (=3), `(n × cell 0x07) >> 23` (=4), `m_k`, and `m_p >> ACC_SHIFT`.
+
+## 195. ★★★★★ WHY ALL SIX FAILED — the index producer is the word the device does not execute
+
+The idiom is `C63 (alt-enc) | class-6 (table read) | class-4`, 99 of 99 pooled sites, exceptionless.
+And §97's swallow census, in this same run:
+
+```
+   §97 SWALLOW CENSUS -- words that left exec_alu() at the lo12-bit-11 return
+   (no SOURCE, no ACTION decode ran for them):
+       lo12 C63 : 3 150 504 times      <- twice per frame, every frame
+```
+
+`C63` carries `lo12` bit 11, so it has no SRC and no ACTION field, and **the device executes nothing
+for it** — 3 150 504 times in this run. The first word of the idiom is the one that would compute the
+index, and it is unimplemented.
+
+⇒ **No choice of existing register can supply the index, because the producer is not modelled.** That
+is a complete explanation of six failed arms and of §180–§188's inability to find a criterion that
+moved, and it retargets the work: the blocker on class 6 is **the bit-11 alternate encoding**, not
+the class-6 word. `bit11-family.md` is where the next pass belongs, not another C6LUT arm.
+
+⚠ ★ **Do not build a seventh C6LUT arm.** Six are measured; the next one cannot succeed until `C63`
+executes.
+
+### Reproducing every number above
+
+```
+   cd ~/compartilhado/kn7000_mame_build
+   rm -f error.log
+   timeout 560 env UPD6383_C6LUT=4 UPD6383_CENSUS_PERPROG=1 \
+     DHLE=0 DSPCFG=3 TYPEIDX=0 NOTEMODE=0 TGM=0 \
+     ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log -window \
+     -autoboot_script ~/compartilhado/kn5000-roms-disasm/dsp/tools/fx_ab.lua
+   grep -a '§189 \|§191 PHASE\|§193 m_k\|§194 (P >>\|§228 LFO RISE\|lo12 C63' error.log
+```
+
+⚠ Run it in the FOREGROUND and do **not** set `UPD6383_TRACE_FRAME` — that is what produced the
+~500 KB log the three killed background attempts never finished writing. ~4 minutes.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** This pass bought a closed branch and a correct
+target, not words.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped

@@ -1,0 +1,51 @@
+# §189-§195 evidence -- class-6 index source, all six candidates refused
+#
+# PRODUCED BY (foreground, ~4 min; do NOT set UPD6383_TRACE_FRAME):
+#   cd ~/compartilhado/kn7000_mame_build && rm -f error.log
+#   timeout 560 env UPD6383_C6LUT=4 UPD6383_CENSUS_PERPROG=1 DHLE=0 DSPCFG=3 TYPEIDX=0 \
+#     NOTEMODE=0 TGM=0 ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log -window \
+#     -autoboot_script ~/compartilhado/kn5000-roms-disasm/dsp/tools/fx_ab.lua
+#
+# TYPEIDX=0 = CHORUS.  The censuses live in src/devices/cpu/upd6383/upd6383.cpp
+# (sections 188/189/191/193/194) and upd6383.h; 228 and 97 were already there.
+
+[:dsp1] upd6383: ★★ §188 C6LUT INDEX k: 0 .. 31, changed 2951992 times  -- a monotonic 24-entry sweep over 21.3 LFO periods predicts ~512
+[:dsp1] upd6383: ★★★ §189 C6LUT k PER TABLE LENGTH n=24 (0x18): k = 0 .. 23 (span 24 of 24), changed 112734 of 1570842 lookups -- a monotonic sweep predicts span 24 and ~511 changes
+[:dsp1] upd6383: ★★★ §189 C6LUT k PER TABLE LENGTH n=32 (0x20): k = 0 .. 31 (span 32 of 32), changed 129254 of 1570842 lookups -- a monotonic sweep predicts span 32 and ~681 changes
+[:dsp1] upd6383: ★★★ §191 PHASE AS SEEN AT THE n=24 SITE, UNIT 0 (cell 0x07): up 1483277, DOWN 87564 (= wraps), same 0; positive step 114 .. 8383192  -- a clean ramp predicts n*down = 2101536 changes in `k'; measured over both units 112734
+[:dsp1] upd6383: ★★★ §191 PHASE AS SEEN AT THE n=32 SITE, UNIT 0 (cell 0x07): up 1483277, DOWN 87564 (= wraps), same 0; positive step 114 .. 8383192  -- a clean ramp predicts n*down = 2802048 changes in `k'; measured over both units 129254
+[:dsp1] upd6383: ★ §187 C6LUT=4 PHASE AS READ: 0 .. 8388602 (span 8388602), changed 1574371 times  -- compare cell 0x07's own census: 0..8388602, 1570842 updates
+
+[:dsp1] upd6383: ★★★★★ §194 (P >> ACC_SHIFT) AT CLASS-6 SITE 00006184CD (addr8=18): 37 distinct values, 0 outside -48..47
+upd6383:       hist: -17:5 -16:7 -15:8 -14:16 -13:22 -12:62 -11:116 -10:189 -9:297 -8:407 -7:501 -6:769 -5:1769 -4:2636 -3:17321 -2:32710 -1:30730 0:1431090 1:35764 2:13731 3:2507 4:1415 5:1004 6:919 7:699 8:332 9:113 10:51 11:25 12:10 13:6 14:10 15:3 16:1 17:1 18:3 19:3
+[:dsp1] upd6383: ★★★★★ §193 m_k AT CLASS-6 SITE 00006184CD (addr8=18): 2 distinct values, changed 1 times, 0 outside 0..63 -- VARIES -- test it as the index
+upd6383:       hist: 0:882 24:1574370
+[:dsp1] upd6383: ★★★★★ §194 (P >> ACC_SHIFT) AT CLASS-6 SITE 0000620407 (addr8=20): 37 distinct values, 0 outside -48..47
+upd6383:       hist: -17:5 -16:7 -15:8 -14:16 -13:22 -12:62 -11:116 -10:189 -9:297 -8:407 -7:501 -6:769 -5:1769 -4:2636 -3:17321 -2:32710 -1:30730 0:1431090 1:35764 2:13731 3:2507 4:1415 5:1004 6:919 7:699 8:332 9:113 10:51 11:25 12:10 13:6 14:10 15:3 16:1 17:1 18:3 19:3
+[:dsp1] upd6383: ★★★★★ §193 m_k AT CLASS-6 SITE 0000620407 (addr8=20): 2 distinct values, changed 1 times, 0 outside 0..63 -- VARIES -- test it as the index
+upd6383:       hist: 0:882 24:1574370
+[:dsp1] upd6383:    §169 SAME SITE, THE PRODUCT: P -1076061..1307335 chg 175660 (VARIES per execution)
+
+[:dsp1] upd6383: ★★ §162 CLASS-6 SITE 00006184CD addr8=18 lo12=4CD : hits 1575252 | acc -1076061 .. 1307335 (VARIES) | m_dp 12..12 | cursor 9..9
+[:dsp1] upd6383: ★★ §162 CLASS-6 SITE 0000620407 addr8=20 lo12=407 : hits 1575252 | acc -519659690763 .. 519659738168 (VARIES) | m_dp 14..14 | cursor 9..9
+[:dsp1] upd6383:    §167 SAME SITE, THE TEMPS: tB 0..5872025 chg 1 (VARIES) | tA 0..0 | K 0..24 | L -2869494..3486228
+[:dsp1] upd6383:    §167 SAME SITE, THE TEMPS: tB 0..5872025 chg 1 (VARIES) | tA 0..0 | K 0..24 | L -2869494..3486228
+[:dsp1] upd6383:    §169 SAME SITE, THE PRODUCT: P -1076061..1307335 chg 175660 (VARIES per execution)
+[:dsp1] upd6383:    §169 SAME SITE, THE PRODUCT: P -1114112..1245184 chg 19520 (VARIES per execution)
+
+[:dsp1] upd6383: ★★★★ §228 LFO RISE CENSUS (rate-invariant STEP x independently-graded CLOCK; §228 T4 grades the clock against the machine's own time, so the Hz below is NOT circular):
+upd6383:    01: rises 90292 of 1783404 frames, step 256..557568 (VARIES) mean 15424.9980 | first rise at frame 1606299 | period 2^23/step = 543.8 frames = 0.01233 s = 81.091215 Hz at the declared 44100 Hz
+upd6383:    04: rises 85964 of 1783404 frames, step 256..469760 (VARIES) mean 14080.3067 | first rise at frame 1606315 | period 2^23/step = 595.8 frames = 0.01351 s = 74.021998 Hz at the declared 44100 Hz
+upd6383:    05: rises 85964 of 1783404 frames, step 368..676454 (VARIES) mean 20275.6390 | first rise at frame 1606315 | period 2^23/step = 413.7 frames = 0.00938 s = 106.591664 Hz at the declared 44100 Hz
+upd6383:    07: rises 1480377 of 1783404 frames, step 114..3470859 (VARIES) mean 15543.9286 | first rise at frame 212562 | period 2^23/step = 539.7 frames = 0.01224 s = 81.716448 Hz at the declared 44100 Hz
+upd6383:    0C: rises 9749 of 1783404 frames, step 1..4 (VARIES) mean 1.0235 | first rise at frame 1606317 | period 2^23/step = 8196085.3 frames = 185.85227 s = 0.005381 Hz at the declared 44100 Hz
+upd6383:    0F: rises 57390 of 1783404 frames, step 1..4161837 (VARIES) mean 588987.2205 | first rise at frame 212562 | period 2^23/step = 14.2 frames = 0.00032 s = 3096.382192 Hz at the declared 44100 Hz
+upd6383:    F1: rises 85964 of 1783404 frames, step 236..434284 (VARIES) mean 13016.9600 | first rise at frame 1606315 | period 2^23/step = 644.4 frames = 0.01461 s = 68.431847 Hz at the declared 44100 Hz
+[:dsp1] upd6383: ★★ §176 D-RAM CENSUS, ALL 32 CELLS, over 1570842 frames SINCE THE LAST PROGRAM UPLOAD at frame 212562 (§103 PER-PROGRAM, 12 resets) -- NOT comparable with a whole-walk census: 01:95488(-2344448..1828352/chg175919) 02:5084004(0..5084004/chg1) 04:123392(-1992704..2420992/chg175660) 05:177684(-2869494..3486228/chg175660) 06:2260027(0..2260027/chg1) 07:7326279(0..8388602/chg1570842) 0C:1(-17..19/chg19520) 0E:39718(0..39718/chg1) 0F:-1960375(-2402842..2402841/chg114742) 8E:6039797(0..6039797/chg1) 92:5456405(0..5456405/chg1) F1:114073(-1842216..2238158/chg175660)  ||  NON-ZERO 12 of 256 (9 of them below 0x20), MOVING 12
+
+[:dsp1] upd6383: ★★★ §97 SWALLOW CENSUS -- words that left exec_alu() at the lo12-bit-11 return (no SOURCE, no ACTION decode ran for them):
+[:dsp1]             lo12 822 : 1581303 times
+[:dsp1]             lo12 839 : 1601712 times
+[:dsp1]             lo12 8BC : 1576134 times
+[:dsp1]             lo12 C63 : 3150504 times   <- the C63 idiom's first word
+[:dsp1]             §112 class-A ACT-07 latched P instead of storing: 4805136

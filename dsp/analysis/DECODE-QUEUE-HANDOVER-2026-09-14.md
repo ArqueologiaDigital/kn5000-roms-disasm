@@ -14,7 +14,13 @@ valuable part of this file — each closes a line and says why, so nobody walks 
 | FRAME FLOOR (kernel + reverb) | 74.5 % | **80.1 %** |
 | all 38 KN5000 body images | 80.4 % | 80.4 % |
 | SX-WSA1R corpus (undecoded words 3091 → 851) | 37.5 % | **79.9 %** |
-| **POOLED, both products** | — | **81.2 %** (1501 undecoded of 8003) |
+| **POOLED, as published** | — | 81.2 % (1501 undecoded of 8003) |
+| **POOLED, RULE 9 de-duplicated** | — | **80.6 %** (1413 undecoded of **7273**) ← use this one |
+
+⚠ **RULE 9 (§176):** the SX-WSA1R tree carries byte-identical duplicate images — 60 records resolve
+to **52** distinct programs, so 730 pooled words are replicas. The duplicates are reverbs and are
+better decoded than average, so de-duplicating **lowers** the headline. `decoded_selfcheck.py` prints
+both figures side by side.
 
 Mirrors **8003/8003** (pooled, `tools/upd6383d_diff.sh -p`, text AND the three execution
 predicates); `dsp/verify.py` BYTE-MATCH OK; both trees regenerated with word columns **8003/8003**
@@ -246,7 +252,27 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
      3. A criterion that presupposes the hypothesis is not a criterion — and that includes the
         *program-selection* criterion, not just the acceptance test. §165.
 
-0. ★★★ **START HERE: the C63 idiom is 19 % of the gap and everything but ONE thing is measured.**
+0. ⛔⛔ **CLOSED — THE C63 IDIOM's INDEX CANNOT BE FOUND FROM ANY REGISTER. DO NOT BUILD A SEVENTH
+   C6LUT ARM.** (§189–§195, 2026-09-14, after this section was written.)
+
+   The idiom is `C63 (alt-enc) | class-6 (table read) | class-4`. **`C63` carries `lo12` bit 11, so
+   it has no SRC and no ACTION field, and the device executes NOTHING for it** — §97's swallow
+   census, in the same run that produced everything below: `lo12 C63 : 3 150 504 times`, twice per
+   frame, every frame. **The first word of the idiom is the one that would compute the index, and it
+   is unimplemented.** No choice of existing register can supply the index, because the producer is
+   not modelled.
+
+   All six named candidates are now measured and refused: `acc mod n`, the ACT-destination variant,
+   `(n × acc) >> 23`, `(n × cell 0x07) >> 23`, `m_k` (constant 24, ONE change in the run), and
+   `m_p >> ACC_SHIFT` (zero on 90.9 % of hits). ⛔ **And §183's phase is RETRACTED**: cell `0x07`
+   changes every frame and wraps **87 564** times, and §228's own rise census reports **VARIES for
+   every cell in the machine** — there is no monotonic phase ramp to index with.
+
+   ⇒ **The blocker on class 6 is the bit-11 alternate encoding** (`bit11-family.md`), not the
+   class-6 word. That is where the +90 words live. Everything from here to the end of item 0 is the
+   superseded plan, kept because its MEASURED parts (the table port, the amplitude) still stand.
+
+0-old. ~~**the C63 idiom is 19 % of the gap and everything but ONE thing is measured**~~
    §177 ranks it top by leverage — `0124011CE` ×99, `040000C63` ×87, `0006184CD` ×53, `0006284CD`
    ×34 = **273 occurrences**. **90 of them have `{SRC 0x13, class 6}` as their only open axes**
    (`ACT 0x0D` is already anchored), so closing class 6 is **+90 words, 80.6 % → 81.8 %**.
@@ -256,8 +282,10 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
      host tag `0x15` (`upd6383.cpp:1998`). Contents identified in two effects: a 32-entry
      odd-symmetric soft-clip curve (EXCITER, §178) and `0.95·sin(2πk/24+0.1)` to max error 0.0000
      with **the first eight entries repeated as a wrap-guard** (PEQ, §179).
-   * the **phase** — D-RAM cell `0x07`, unsigned, `0 .. 8 388 602`, updating 1 570 842 times against
-     ~176 000 for every other live cell (§183).
+   * ⛔ ~~the **phase** — D-RAM cell `0x07`~~ **RETRACTED (§190–§192).** The identification used
+     only a range and a change count, which cannot tell a ramp from a noisy signal. Measured
+     directly: `0x07` changes **every** frame and wraps **87 564** times (a ~18-frame period), with
+     steps 114 … 8 383 192. The device's own legend calls `05 07 85 87` the per-unit **input** cells.
    * the **amplitude** — the DEPTH parameter, measured **2.0000×** across a 30-step edit (§185).
      ⇒ **there is NO missing scaling step**, and the `±240 sweep` three arms were judged against was
      the wrong expectation all along.
@@ -270,14 +298,9 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    **Neither is right**, and `=4` — the form whose arithmetic fits exactly,
    `(24 × 8 388 602) >> 23 = 23` — is the worse by 14×.
 
-   ★★ **THE FIRST THING TO CHECK, and it is probably an instrument bug not a physics one.** `=4`'s
-   102 331 means the quantity it reads changes ~200× more often than the census's cell `0x07` does.
-   The arm does `m_dram.read_dword(0x07)`; the census that located the phase reports its own space.
-   **Make the arm log the phase value it actually reads, once, and compare against `0x07`'s census
-   range.** If they disagree, `=4` was never testing `(coef × phase) >> 23` at all — which would be
-   the fourteenth time in one session that a null or a miss was the instrument rather than the
-   machine, and every one of those was caught the same way: by checking that the quantity fed to the
-   experiment is the quantity the claim is about.
+   ★★ ✅ **DONE, AND IT WAS NEITHER.** The arm reads the cell it means to (§187), and the cell is
+   not a ramp (§190–§192). The expectation was the thing that was wrong. ⇒ see the CLOSED banner at
+   the top of this item; the index question is not answerable from a register.
    ★ Second candidate if the read is correct: §179's wrap-guard implies a **windowed** read of W
    consecutive entries, which would scale the expectation to `512 × W`. `=1`'s 7 110 gives W ≈ 14,
    `=4`'s gives W ≈ 200; the guard is 8 cells wide, so neither matches cleanly and W is worth
