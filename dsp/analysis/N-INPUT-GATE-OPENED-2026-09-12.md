@@ -7702,6 +7702,72 @@ one.
 
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
 
+## 170. ⛔⛔ §153's GAIN LAW CANNOT BE VALIDATED FROM THE ROM — the compressor's cells hold a DEFAULT
+
+The handover's #1 item is *"build a bit-exact reference for ONE dynamics program"*, because §149
+measured that one such artefact would unblock `f31 = 3` (56 sole-axis words) **and** the job §135
+named for `ACT 0x0B` (191). §152–§155 got four of its five pieces: the constants, the law
+`cell = 10^(−0.0697 × (99 − user)) × 0.9999`, the scaling step, the cell↔scale map. The fifth was
+*"the helper semantics, inferred from use, none proven"* plus a live-trace comparison.
+
+Before reading eight floating-point helpers, I checked whether the law survives contact with the
+ROM's own coefficients. **It does not — and the reason closes the static route.**
+
+### What the cells actually hold
+
+`host_coeff_map` confirms these are evaluator cells — `op 0x72`, operand indices `(0,0)` and
+`(1,0)`, which independently corroborates §152's "one law, two operands" read off the duplicated
+constants. And all four, in both carriers, hold the same thing:
+
+```
+   algo 36 COMPRESSOR      cell 04 = 600000    cell 0D = 600000
+   algo 75 PEQ+COMPRESSOR  cell 0A = 600000    cell 19 = 600000
+```
+
+`0x600000` is **exactly 0.75**. §153's law reaches it at `user = 97.21` — not an integer — and
+swept over the whole knob range at all three of §154's scales:
+
+```
+   2^21  cell range 000000..1FFF2E    exact 600000 at u = NEVER
+   2^22  cell range 000001..3FFE5D    exact 600000 at u = NEVER
+   2^23  cell range 000001..7FFCB9    exact 600000 at u = NEVER
+```
+
+**No integer knob position produces the stored value at any documented scale.**
+
+### The scoped version, with its null
+
+A round 3/4 repeated four times is the signature of a hand-written default, not of a computed
+one — but "the presets store defaults" would be a universal generalised from one opcode, which is
+the error §166 was about. So I measured it, using *"the low 16 bits are zero"* as the proxy for a
+hand-written constant, over all 633 parameter cells the map names:
+
+```
+   op 0x72     8 of   8 round = 100 %      <- the compressor gain computer
+   op 0x76     4 of 108 =   4 %
+   op 0x61     0 of  20 =   0 %
+   op 0x24     0 of   8 =   0 %
+   ALL       219 of 633 =  35 %
+```
+
+⇒ **The preset streams generally DO store evaluator output** — 65 % of parameter cells have
+populated low bits. **`op 0x72` is the exception**, 8 of 8, which against the 35 % base rate is
+p = 0.35⁸ ≈ **2e-4**.
+
+### What this costs, and what it buys
+
+⛔ **The compressor's gain-computer cells carry a hard-coded default, so §153's law is not
+validatable against the ROM at all** — there is no stored output of that evaluator to check it
+against. The bit-exact dynamics reference **cannot be completed from static data**; it needs a
+capture with the parameter actually moved, which is a machine run, not a disassembly.
+
+★ That is worth more than the eight helper proofs would have been. Reading `0x03dd36` and friends
+would have produced a validated *implementation* of a law with nothing to validate it against; this
+says so before the eight-helper cost is paid. §152's "one law, two operands" survives and is now
+independently corroborated by the cell map's `(0,0)`/`(1,0)` indices.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
