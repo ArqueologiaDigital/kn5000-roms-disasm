@@ -23,8 +23,7 @@ WHAT IT ESTABLISHES
     * the three doubles are **-0.0697, 10, 0.9999** and they appear TWICE, byte-identical -- two
       operands sharing one law (`op0x72` writes two cells in every carrier: `prog36` 0x04/0x0D,
       `prog75` 0x0A/0x19);
-    * the floats are `2, 2, 1, 3` then **2^21, 2^23, 2^22, 2^21** -- FOUR DISTINCT POWER-OF-TWO
-      SCALES, in the ROM, explicit.
+    * the floats are `2, 2, 1, 3` then **2^21, 2^23, 2^22, 2^21** -- FIVE SCALED WRITES, THREE DISTINCT SCALES, in the ROM, explicit.
 
 ★★ AND THE LAW ITSELF (sect. 153), read from the evaluator in the committed linear disassembly
     `original_ROMs/kn5000_subprogram_v142.rom.unidasm`.  The sequence is the same for both
@@ -90,7 +89,7 @@ def main():
         print("      %06X  %s   = %-14.10g%s"
               % (LO + i, " ".join("%02X" % x for x in b[i:i + 4]), v, note))
 
-    print("\n   ⇒ FOUR DISTINCT POWER-OF-TWO SCALES, written down in the ROM.")
+    print("\n   ⇒ FIVE SCALED WRITES, THREE DISTINCT SCALES (⛔ §155 corrects §152's "four distinct"), written down in the ROM.")
     print("     sect. 140 stopped because *\"the per-coefficient scales are solved for the EQ")
     print("     only\"* -- the EQ's came from a flatness IDENTITY this family has no analogue of.")
     print("     Here they need no solving at all.")

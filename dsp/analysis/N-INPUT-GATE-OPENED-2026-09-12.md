@@ -6908,7 +6908,7 @@ Those 80 bytes are **not a table** — they are **IEEE-754 constants**, little-e
 ```
    DOUBLES   −0.0697      10      0.9999        ← and the triple appears TWICE, byte-identical
    FLOATS     2   2   1   3
-              2²¹  2²³  2²²  2²¹                ← FOUR DISTINCT POWER-OF-TWO SCALES
+              2²¹  2²³  2²²  2²¹                ← FIVE SCALED WRITES, THREE DISTINCT SCALES (⛔ §155 corrects §152's "four distinct")
 ```
 
 * The doubles repeating byte-for-byte is what the cell map already said: `op0x72` writes **exactly
@@ -7006,6 +7006,40 @@ conversion at `0x03d44c`.
 ⇒ the artefact the handover asks for now has: the constants (§152), the coefficient law (§153), and
 the shape of the scaling (§154). What it lacks is the helper semantics and the cell↔scale map —
 both readable, neither read. Coverage unchanged; this is firmware, not microcode.
+
+## 155. THE CELL↔SCALE MAP — five writes, three scales, and a correction to §152
+§154 left *"the cell↔scale assignment … past `0x039c65`, unread."* Read, and it is a clean repeat:
+
+```
+   39c4f  0x012df3 = 2²¹  →  0x03d44c convert  →  call 0x0387e6   ← the C-RAM writer (tag 0x26)
+   39c78  0x012df7 = 2²³  →  0x03d44c          →  call 0x0388b3
+   39ca8  0x012dfb = 2²²  →  0x03d44c          →  call 0x0388b3
+   39cce  0x012dff = 2²¹  →  0x03d44c          →  call 0x0388b3
+   39cf4  0x012e03 = 2²¹  →  0x03d44c          →  …
+```
+
+**⛔ And this corrects §152.** I dumped `[0x012DB3, 0x012E03)` — 80 bytes — and reported *"four
+distinct power-of-two scales"*. The code references **`0x012E03` itself**, which that range
+excludes, and there is another constant at `0x012E07`:
+
+```
+   012DF3 2²¹   012DF7 2²³   012DFB 2²²   012DFF 2²¹   012E03 2²¹   ← excluded by my dump
+   012E07 = 32768 = 2¹⁵                                             ← also excluded, use untraced
+```
+
+⇒ **five scaled writes using three distinct scales** (2²¹ ×3, 2²² ×1, 2²³ ×1), not "four distinct".
+An exclusive upper bound taken from a tool's reported span, and the code used the endpoint.
+
+### ★ And it reconciles the write count with the cell map
+Five writes against `host_coeff_map`'s "two cells" is not a contradiction: that function's own
+docstring says it is *"restricted to +0 (C-RAM coefficient) writers"*. The first write goes through
+`0x0387e6` — the C-RAM writer — and the other four through `0x0388b3`, which the coefficient map
+does not track. **The map sees the C-RAM subset; the evaluator emits more.**
+
+⇒ the artefact now has four of five pieces: constants (§152, corrected here), coefficient law
+(§153), scaling shape (§154), cell↔scale map (§155). What remains is the **helper semantics** —
+still inferred from use — and then a live-trace comparison. Coverage unchanged; firmware, not
+microcode.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
