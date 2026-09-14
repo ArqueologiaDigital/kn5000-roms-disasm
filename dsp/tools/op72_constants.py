@@ -26,10 +26,27 @@ WHAT IT ESTABLISHES
     * the floats are `2, 2, 1, 3` then **2^21, 2^23, 2^22, 2^21** -- FOUR DISTINCT POWER-OF-TWO
       SCALES, in the ROM, explicit.
 
-⛔ WHAT IT DOES NOT ESTABLISH.  The constants are not the law.  How they combine is in the
-  evaluator's 203 lines of TLCS-900 and this file does not read them, so no formula is claimed here.
-  What it removes is sect. 140's blocker -- *"the scales are solved for the EQ only"* -- for this
-  family: they are not solved by inference here, they are WRITTEN DOWN.
+★★ AND THE LAW ITSELF (sect. 153), read from the evaluator in the committed linear disassembly
+    `original_ROMs/kn5000_subprogram_v142.rom.unidasm`.  The sequence is the same for both
+    operands, and the SECOND one uses the DUPLICATED constants -- which is the code confirming
+    "one law, two operands" rather than the byte pattern suggesting it:
+
+        39b08  cp HL,0x59 / clamp          the user value, clamped to <= 89 (second: <= 88)
+        39b1a  ld WA,0x63 ; sub WA,HL      x = 99 - user          (0x63 = 99, the 0..99 range)
+        39b2a  call 0x03dd36               int -> double                    [INFERRED from use]
+        39b31  lda XDE,0x012db3 ; 0x03e290 multiply by -0.0697              [INFERRED from use]
+        39b47  push 0x012dbb ; 0x03d533    POW: 10 ^ (that)                 [INFERRED from use]
+        39b61  lda XDE,0x012dc3 ; 0x03e290 multiply by 0.9999
+        39b77  ld WA,0x63 ; sub WA,IZ      ... and the whole sequence again for the second cell,
+        39b8e  lda XDE,0x012dcb            with 0x012dcb / 0x012dd3 -- the DUPLICATES.
+
+    ⇒ **cell = 10 ^ ( -0.0697 x (99 - user) ) x 0.9999**, one law, two operands.
+
+⛔ WHAT IS STILL NOT ESTABLISHED.  (a) The helper identities above are INFERRED FROM USE, not
+  proven -- `0x03dd36`, `0x03e290`, `0x03d533` are read as int->double, double-multiply and pow
+  from their operands and call shape.  (b) The eight FLOATS (`2, 2, 1, 3`, `2^21, 2^23, 2^22,
+  2^21`) do NOT appear in the code read here; the scaling step is further on, past `0x039bbb`,
+  and is UNREAD.  So the exponential law is read and the SCALE APPLICATION is not.
 """
 import os
 import struct

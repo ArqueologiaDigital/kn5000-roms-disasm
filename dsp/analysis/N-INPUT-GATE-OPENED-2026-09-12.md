@@ -6931,6 +6931,43 @@ called unavailable turns out to be sitting in the ROM, which moves the dynamics-
 
 ⇒ coverage unchanged.
 
+## 153. ★★★ THE COMPRESSOR'S GAIN LAW, READ FROM THE FIRMWARE
+§152 said what remained was *"read 203 lines and check how the constants combine."* Read, from the
+committed linear disassembly (`kn5000_subprogram_v142.rom.unidasm`).
+
+```
+   39b08  cp HL,0x59 / clamp           the user value, clamped ≤ 89   (second operand: ≤ 88)
+   39b1a  ld WA,0x63 ; sub WA,HL       x = 99 − user                  (0x63 = 99, the 0..99 range)
+   39b2a  call 0x03dd36                int → double
+   39b31  lda XDE,0x012db3 ; 0x03e290  × (−0.0697)
+   39b47  push 0x012dbb ; 0x03d533     POW:  10 ^ (that)
+   39b61  lda XDE,0x012dc3 ; 0x03e290  × 0.9999
+   39b77  ld WA,0x63 ; sub WA,IZ       ── and the identical sequence for the SECOND cell,
+   39b8e  lda XDE,0x012dcb                 using 0x012dcb / 0x012dd3: THE DUPLICATES.
+```
+
+> ★★ **cell = 10 ^ ( −0.0697 × (99 − user) ) × 0.9999** — one law, two operands.
+
+The duplicated constant triple §152 found in the bytes is **used by the second operand's own copy
+of the sequence**. That is the code confirming "one law, two operands", where §152 only had the byte
+pattern and the cell map suggesting it.
+
+In dB the law is linear in the knob: `20·log₁₀(gain) = −1.394 × (99 − user)`, unity at 99 and about
+−138 dB at 0 — the shape of a threshold or range control, which is what a gain computer's input is.
+
+### ⛔ Two things still not established, stated plainly
+1. **The helper identities are INFERRED FROM USE.** `0x03dd36`, `0x03e290` and `0x03d533` are read
+   as int→double, double-multiply and pow from their operands and call shape. Nothing here proves
+   them; a float-library cross-check would.
+2. **The eight FLOATS are not in the code I read.** `2, 2, 1, 3` and `2²¹, 2²³, 2²², 2²¹` do not
+   appear before `0x039bbb`, so the **scale application is further on and unread**. The exponential
+   law is read; the scaling is not.
+
+⇒ the handover's top item is now two-thirds done as *evidence*: the scales are written down (§152)
+and the law that produces the coefficient is read (§153). What remains is the scaling step and then
+a comparison against a live trace. Coverage unchanged — this decodes no microcode word; it decodes
+the **firmware** that feeds one.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
