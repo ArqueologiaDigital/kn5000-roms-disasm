@@ -1,0 +1,108 @@
+============================================================================================
+  bit11_prize -- how much is the alternate encoding worth?  (RULE 9 de-duplicated)
+============================================================================================
+
+  pooled DISTINCT corpus: 7273 words, 1413 undecoded (80.6 % decoded)
+
+  A  bit-11 words (lo12 bit 11 set): 209 total, 169 UNDECODED
+     closing the family outright would move coverage 80.6 % -> 82.9 %
+
+  C  the shapes the family uses, ranked by UNDECODED occurrences:
+
+     lo12   total  undec   by product
+     C63      99     99   KN:53 WSA:46
+     8BC      49     49   KN:24 WSA:25
+     822       7      7   KN:1 WSA:6
+     839       4      4   KN:2 WSA:2
+     827       2      2   KN:2
+     864       2      2   KN:1 WSA:1
+     921       2      2   KN:1 WSA:1
+     C62       2      2   WSA:2
+     F22       2      2   WSA:2
+
+     169 undecoded occurrences over 9 distinct shapes
+
+  B  undecoded words whose every open axis is a class-6 / SRC-0x13 one: 102
+     (sect. 177 counted 90 of these; they are gated by the family INDIRECTLY --
+      the class-6 word is decodable only once its index producer executes)
+
+     the commonest open-axis sets among ALL 1413 undecoded words:
+        159  ACT 0x0B
+        139  SRC 0x11
+        132  bit-11 encoding, class 0
+         99  bit-4 store on class 4, class 4
+         89  SRC 0x1C, store gate, f31 1
+         87  SRC 0x13, class 6
+         84  ACT 0x08, SRC 0x13
+         70  ACT 0x01, SRC 0x01, class 0
+         56  f31 3
+         48  f31 5
+
+  D  do the family's words carry an OPERAND?  (fields outside lo12, per shape)
+
+     lo12   distinct full words   varying fields
+     C63   2                   hi12(2)
+            040000C63 x87    hi12=040 class4=0 addr8=00
+            142000C63 x12    hi12=142 class4=0 addr8=00
+     8BC   3                   hi12(3), class4(2), addr8(2)
+            8801308BC x37    hi12=880 class4=1 addr8=30
+            0400008BC x10    hi12=040 class4=0 addr8=00
+            0500008BC x2     hi12=050 class4=0 addr8=00
+     822   2                   hi12(2)
+            819086822 x6     hi12=819 class4=0 addr8=86
+            859086822 x1     hi12=859 class4=0 addr8=86
+     839   2                   hi12(2)
+            809000839 x2     hi12=809 class4=0 addr8=00
+            80B000839 x2     hi12=80B class4=0 addr8=00
+     827   2                   addr8(2)
+            80106C827 x1     hi12=801 class4=0 addr8=6C
+            801064827 x1     hi12=801 class4=0 addr8=64
+     864   1                   NONE -- a bare opcode, meaning comes from context
+            040000864 x2     hi12=040 class4=0 addr8=00
+     921   1                   NONE -- a bare opcode, meaning comes from context
+            050000921 x2     hi12=050 class4=0 addr8=00
+     C62   1                   NONE -- a bare opcode, meaning comes from context
+            142000C62 x2     hi12=142 class4=0 addr8=00
+     F22   1                   NONE -- a bare opcode, meaning comes from context
+            142000F22 x2     hi12=142 class4=0 addr8=00
+     825   3                   addr8(3)
+            801025825 x2     hi12=801 class4=0 addr8=25
+            801020825 x2     hi12=801 class4=0 addr8=20
+            801026825 x1     hi12=801 class4=0 addr8=26
+     821   6                   addr8(6)
+            8010C0821 x6     hi12=801 class4=0 addr8=C0
+            801060821 x2     hi12=801 class4=0 addr8=60
+            8010E0821 x2     hi12=801 class4=0 addr8=E0
+            801090821 x1     hi12=801 class4=0 addr8=90
+     820   16                  hi12(8), class4(8), addr8(15)
+            C18AB2820 x2     hi12=C18 class4=A addr8=B2
+            C1ABF0820 x2     hi12=C1A class4=B addr8=F0
+            C18A32820 x2     hi12=C18 class4=A addr8=32
+            C1AB70820 x2     hi12=C1A class4=B addr8=70
+
+  E  what exactly blocks the family?  (sect. 112: addressing explained AND ALU half
+     anchored.  A bit-11 word HAS no SRC/ACT field, so the ALU half is all there is.)
+
+     of the 169 UNDECODED bit-11 words:
+       _alu_half_anchored()              0  (0 %)
+       f31 in {LOAD, ADD, HOLD}        158  (93 %)
+       addressing mode in {0, 1, 2}    169  (100 %)   <- the characterised modes
+
+     breakdown (anchored, f31, mode):
+       False  f31=0  mode=0   x105
+       False  f31=0  mode=1   x37
+       False  f31=1  mode=0   x16
+       False  f31=4  mode=0   x9
+       False  f31=5  mode=0   x2
+
+     ⚠ `_alu_half_anchored()' is 0 % BY CONSTRUCTION: `dsp_disasm.py:718' refuses
+       every bit-11 word as its first test.  That is a policy, not a measurement,
+       and the rows above are what the policy is hiding.
+     ⇒ the family's ADDRESSING is characterised in 169 of 169, and its ACCUMULATOR
+       FUNCTION is one of the three anchored ones in 158 of 169.  The ONE thing
+       genuinely unknown is what the alternate `lo12' opcode means -- nine shapes,
+       two of which are 87.6 % of the family.
+     ⚠ This tool does not change `decoded()'.  The grading is the owner's call.
+
+  ⇒ A + B is the upper bound on what the bit-11 pass can buy.  Neither number is a
+    promise: a shape still has to be DECODED, and sect. 195 only says where to look.

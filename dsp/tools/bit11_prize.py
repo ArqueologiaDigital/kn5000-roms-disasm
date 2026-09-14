@@ -145,6 +145,59 @@ def main():
             print("            %09X x%-4d  hi12=%03X class4=%X addr8=%02X"
                   % (w, n, (w >> 24) & 0xfff, (w >> 20) & 0xf, (w >> 12) & 0xff))
 
+    #  E -- WHAT EXACTLY BLOCKS THEM.  ★ The answer is not subtle and is worth stating plainly:
+    #  `dsp_disasm.py' line 718, the FIRST test in `_alu_half_anchored()', is
+    #
+    #        if lo12(w) & 0x800: return False
+    #
+    #  -- an explicit, deliberate guard that refuses every bit-11 word before any field is
+    #  looked at.  The family is refused BY POLICY, and the policy is right as far as it goes:
+    #  the alternate encoding's meaning is unknown, and a word with 11 unexplained opcode bits
+    #  is not explained.
+    #
+    #  So what E measures is what is left once that policy is set aside -- whether anything
+    #  ELSE about these words is open.  If the answer is "nothing else", then the whole family
+    #  turns on ONE question (what the alternate `lo12' means), which is a decodable question
+    #  with nine shapes and two of them carrying 87.6 %.
+    #
+    #  ⚠⚠ THIS TOOL DOES NOT TOUCH `decoded()'.  Admitting a family is a change to the GRADING,
+    #  and the grading is the owner's call.  E prints the fact and stops.
+    print("\n  E  what exactly blocks the family?  (sect. 112: addressing explained AND ALU half")
+    print("     anchored.  A bit-11 word HAS no SRC/ACT field, so the ALU half is all there is.)\n")
+    anch = alu = addr = 0
+    detail = collections.Counter()
+    for _l, w in fam:
+        if DIS.decoded(w):
+            continue
+        a = DIS._alu_half_anchored(w)
+        f = DIS.hi_f31(DIS.hi12(w))
+        m = DIS.class4(w) & 7
+        if a:
+            anch += 1
+        if f in (DIS.HI_ACC_LOAD, DIS.HI_ACC_ADD, DIS.HI_ACC_HOLD):
+            alu += 1
+        if m in (0, 1, 2):
+            addr += 1
+        detail[(a, f, m)] += 1
+    n = len(fam_und)
+    print("     of the %d UNDECODED bit-11 words:" % n)
+    print("       _alu_half_anchored()            %3d  (%.0f %%)" % (anch, 100.0 * anch / n))
+    print("       f31 in {LOAD, ADD, HOLD}        %3d  (%.0f %%)" % (alu, 100.0 * alu / n))
+    print("       addressing mode in {0, 1, 2}    %3d  (%.0f %%)   <- the characterised modes"
+          % (addr, 100.0 * addr / n))
+    print("\n     breakdown (anchored, f31, mode):")
+    for (a, f, m), c in detail.most_common(12):
+        print("       %5s  f31=%d  mode=%d   x%d" % (a, f, m, c))
+    print("\n     ⚠ `_alu_half_anchored()' is 0 % BY CONSTRUCTION: `dsp_disasm.py:718' refuses")
+    print("       every bit-11 word as its first test.  That is a policy, not a measurement,")
+    print("       and the rows above are what the policy is hiding.")
+    print("     ⇒ the family's ADDRESSING is characterised in %d of %d, and its ACCUMULATOR"
+          % (addr, n))
+    print("       FUNCTION is one of the three anchored ones in %d of %d.  The ONE thing" % (alu, n))
+    print("       genuinely unknown is what the alternate `lo12' opcode means -- nine shapes,")
+    print("       two of which are 87.6 % of the family.")
+    print("     ⚠ This tool does not change `decoded()'.  The grading is the owner's call.")
+
     print("\n  ⇒ A + B is the upper bound on what the bit-11 pass can buy.  Neither number is a")
     print("    promise: a shape still has to be DECODED, and sect. 195 only says where to look.")
     return 0

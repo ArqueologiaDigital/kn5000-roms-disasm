@@ -8839,6 +8839,52 @@ this one is newly opened and has two shapes carrying 87.6 % of it.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 
+## 202. ★★★★ WHAT ACTUALLY BLOCKS THE 169 — one question, not a family of them
+
+`bit11_prize.py` part E, over the 169 undecoded bit-11 words:
+
+```
+   _alu_half_anchored()              0  (0 %)
+   f31 in {LOAD, ADD, HOLD}        158  (93 %)
+   addressing mode in {0, 1, 2}    169  (100 %)   <- the characterised modes
+
+   breakdown (anchored, f31, mode):   f31=0 mode=0 x105 · f31=0 mode=1 x37 · f31=1 mode=0 x16
+                                      f31=4 mode=0 x9   · f31=5 mode=0 x2
+```
+
+⚠ The 0 % is **by construction**, not a measurement: `dsp_disasm.py:718` is the first test in
+`_alu_half_anchored()` and it is
+
+```python
+   if lo12(w) & 0x800:
+       return False
+```
+
+— an explicit guard refusing every bit-11 word before any field is examined. **The family is
+refused by policy**, and the policy is right as far as it goes: a word with 11 unexplained opcode
+bits is not explained.
+
+What part E shows is what the policy is hiding. **Every one of the 169 is in a characterised
+addressing mode (0, 1 or 2), and 158 of 169 carry one of the three anchored accumulator
+functions.** The only genuinely open thing is *what the alternate `lo12` means* — and that is one
+question over **nine shapes, two of which are 87.6 % of the family**.
+
+⚠⚠ **Nothing here changes `decoded()`.** Admitting a family is a change to the grading and the
+grading is the owner's call; this is a measurement put in front of it. If the owner does admit the
+158 on §112's two clauses, that is **80.6 % → 82.8 %**; it is deliberately not taken here.
+
+### ★ The concrete lead part D turned up, for whoever picks this up
+
+`8BC`'s dominant form is `8801308BC` ×37: `hi12 = 880`, **`class4 = 1` (mode 1 = the register
+file)**, **`addr8 = 0x30`**. §179 established the class-6 table port as the mode-1 register file at
+`0x1D..0x3C`, 32 cells — and `0x30` is *inside that window*. So the second-largest shape in the
+family is a mode-1 register-file access aimed at the very table the largest shape's idiom reads.
+Its other two forms (`0400008BC` ×10, `0500008BC` ×2) carry `class4 = 0, addr8 = 0x00`, exactly like
+`C63`.
+
+⚠ That is a shape observation from the committed corpus, not a decode. It is where to point the
+next relocation-style test — the method that paid twice (§122, §128).
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

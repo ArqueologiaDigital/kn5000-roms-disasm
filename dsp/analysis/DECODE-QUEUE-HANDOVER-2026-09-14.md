@@ -261,6 +261,21 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
      (§198, which had never been walked). The one constant-step riser, `rf[50]`, is a **toggle** —
      range one step wide.
 
+   ★★★★ **AND ONLY ONE THING IS OPEN ABOUT THEM** (`bit11_prize.py` part E, §202). Of the 169:
+   **169 of 169 are in a characterised addressing mode (0/1/2)** and **158 of 169 carry one of the
+   three anchored accumulator functions**. `_alu_half_anchored()` scores 0 % *by construction* —
+   `dsp_disasm.py:718` refuses every bit-11 word as its first test, a deliberate policy. So the
+   family turns on a single question: **what does the alternate `lo12` mean?** ⚠ Admitting the 158
+   on §112's two clauses would be 80.6 % → 82.8 %, and that is a GRADING change — the owner's call,
+   deliberately not taken.
+
+   ★ **Where to point the first test.** `8BC`'s dominant form is `8801308BC` ×37: `class4 = 1`
+   (mode 1 = the register file) with `addr8 = 0x30` — and §179 put the class-6 table port at the
+   mode-1 register file `0x1D..0x3C`, so `0x30` is *inside that window*. The family's second-largest
+   shape is a register-file access aimed at the table its largest shape's idiom reads. Its other two
+   forms carry `class4 = 0, addr8 = 0x00` exactly like `C63`. ⇒ a relocation-style test (the method
+   that paid in §122 and §128) has a target.
+
    ⚠ **The live upstream question, if someone wants the LFO rather than the encoding:** what writes
    cell `0x07` 1 570 842 times? §199 attributes only **12 442** writes to `store_mode()`, all with
    step 0. It is **not** the input deposit — §200 has the device print its own deposit addresses and
