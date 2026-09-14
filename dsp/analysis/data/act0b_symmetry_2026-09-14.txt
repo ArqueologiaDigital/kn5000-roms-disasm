@@ -1,0 +1,41 @@
+====================================================================================================
+  act0b_symmetry -- is ACT 0x0B the write side of what SRC 0x0B reads?
+====================================================================================================
+
+   ★ TEST -- 488 pooled SRC-0x0B reads; preceded at lag 1 by an ACT-0x0B word: 0
+      nearest preceding ACT-0x0B: median lag 14 (n = 483)
+      ⇒ ⛔ REFUTED.  The symmetric-code reading predicts lag 1; the ROM gives 0.
+
+   ★ THE PER-CATEGORY CONTROL (sect. 130's lesson: a rate means nothing alone)
+
+      ACT 0x15   lag-1 before a SRC-0x0B read:  220   
+      ACT 0x00   lag-1 before a SRC-0x0B read:  132   
+      ACT 0x01   lag-1 before a SRC-0x0B read:   70   ★ the unexpected one
+      ACT 0x07   lag-1 before a SRC-0x0B read:   37   
+      ACT 0x0C   lag-1 before a SRC-0x0B read:   14   
+      ACT 0x08   lag-1 before a SRC-0x0B read:   14   
+
+   ⛔⛔ RULE 9 -- DE-DUPLICATE, then look at WHICH WORDS
+
+      ACT-0x01 word      images     paired    ratio
+      A00.0.00.041       27         27     100%
+      801.0.C0.821        6          0       0%
+      050.0.00.921        2          0       0%
+      000.1.C4.401        2          0       0%
+      801.0.60.821        2          0       0%
+      801.0.E0.821        2          0       0%
+      200.1.8F.1C1        1          0       0%
+      801.0.90.821        1          0       0%
+      801.0.70.821        1          0       0%
+      801.0.50.821        1          0       0%
+      801.0.00.021        1          0       0%
+      212.1.C2.401        1          0       0%
+      02E.1.0F.001        1          0       0%
+
+      ⇒ 1 of 13 DISTINCT ACT-0x01 words ever precede a SRC-0x0B read.
+      ⇒ the adjacency is a property of ONE WORD, not of the ACTION field, so it
+        anchors neither `ACT 0x01' nor the `SRC 0x01' that word also carries.
+
+   ★ WHAT SURVIVES: a two-word IDIOM.  `A00.0.00.041' is followed by a delay-data
+     read in 27 images; shuffled null mean 4.2, sd 1.8, MAX 11 over 2000.
+     Real, and it decodes nothing -- an adjacency is not a field reading.

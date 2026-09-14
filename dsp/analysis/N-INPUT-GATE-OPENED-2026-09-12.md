@@ -6076,6 +6076,52 @@ field. `f31` gets nothing from this route.
 ⇒ four nulls, no coverage change. Each one closes a line and says why; an empty line that is not
 written down gets walked again.
 
+## 133. ⛔ `ACT 0x0B` IS NOT THE WRITE SIDE OF `SRC 0x0B` — and the lead the control threw up is one word
+Tool: [`act0b_symmetry.py`](../tools/act0b_symmetry.py). Data:
+[`data/act0b_symmetry_2026-09-14.txt`](data/act0b_symmetry_2026-09-14.txt).
+
+§132 closed four cheap lines. This is the one idea left that was worth a run on the queue head,
+and it comes from a fact already anchored: `SRC 0x0B` is **the delay-read data register** (§215,
+41 listings) — *"a delay READ has to land somewhere for the next word to use"*. The same numeric
+code in the other field is the obvious candidate: **`ACT 0x0B` deposits what `SRC 0x0B` collects.**
+
+```
+   488 pooled SRC-0x0B reads.  Preceded at lag 1 by an ACT-0x0B word:  0
+   nearest preceding ACT-0x0B: median lag 14
+   ACT 0x0B ranks 8th of 16 actions on lag-1 adjacency
+```
+
+⇒ **REFUTED.** The reading predicts lag 1 and the ROM gives none.
+
+### ★ The control, run *with* the test this time
+§130's lesson was that a rate means nothing without the per-category control, so this one shipped
+with it — and the control saw something the test could not: **`ACT 0x01` sits at lag 1 before a
+SRC-0x0B read in 70 of 91 occurrences**, base rate 1.2 %, permutation null mean 4.5 / sd 2.0 /
+max 12 over 2000 shuffles. About 33 σ.
+
+### ⛔⛔ And it does not anchor `ACT 0x01` either — two reasons, both measured
+**Rule 9, replication.** The 70 is per-occurrence. De-duplicated it is **one distinct word**,
+`A00.0.00.041`, in 27 images — a 2.6× replication, the same shape `adjudication-round8` item E
+caught.
+
+**The confound the de-duplication exposes.** Of the **13** distinct ACT-0x01 words, **exactly one**
+ever precedes a SRC-0x0B read — and it does so in 27 of its 27 images, while the other twelve never
+do. ⇒ the adjacency is a property of **that word**, not of the ACTION field, so it anchors neither
+`ACT 0x01` nor the `SRC 0x01` the same word carries.
+
+What survives is a real, null-backed **two-word idiom** — `A00.0.00.041` followed by a delay-data
+read, 27 images against a shuffled null of max 11. An adjacency is not a field reading, and it
+decodes nothing.
+
+### ⚠ A bug in my own throwaway, written down
+The first de-duplication printed *"13 of 13 distinct words are followed by a SRC-0x0B read"*. False:
+the count read a `defaultdict` inside the display loop and **created the twelve missing keys as it
+printed them**. The table beside it already showed one word at 100 % and twelve at 0 %. A container
+that materialises keys on read is a good way to turn a 1 into a 13, and the committed tool now
+guards that line explicitly.
+
+⇒ coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
