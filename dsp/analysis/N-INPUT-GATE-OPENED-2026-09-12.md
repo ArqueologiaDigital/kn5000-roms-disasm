@@ -5379,6 +5379,43 @@ different words, clearing at one and not the other fixes both — a per-word exp
 answer at each end (the ROM's 114, and a live hand-off). That is a far better-posed question than
 "the LFO rate is wrong", and it is what §116's chain reduces to.
 
+## 120. ★★★★★ ONE WORD — `iw40` — AND IT IS ONE OF THE FIVE UNSOLVED `0x820` WORDS
+Pre-registration and data: [`data/PREDICT_PCLRIW_2026-09-14.md`](data/PREDICT_PCLRIW_2026-09-14.md).
+
+§118/§119 bracketed the LFO's contaminant to the kernel's own eight C-format words. Clearing the
+product at each slot in turn:
+
+```
+   iw    LFO mean (ROM 114)   hand-off 0x05
+    1,15,22,29,31,48,56       15 543.93   live      -- inert on both counts
+ ★ 40                       ★   114.2560   ⛔ ABSENT  -- the ROM's number, and the audio dies
+```
+
+**U2 HIT at exactly one slot; U3 MISS at the same one.** ⇒ one word serves both consumers: the fix
+is **not a clear but a DRIVER** — something must SUPPLY `P` at `iw40` rather than leave the residue.
+
+### ★★★ And `iw40` is `0C4A1C0820`
+It is one of the **five `lo12 = 0x820` words**, all in the kernel, and that family is this project's
+longest-standing unsolved one. `closure-pointer.md` item H closed a whole pass on it with a null —
+*"The five `0x820` words are not solved, and the field search says so cleanly. Every contiguous
+bit-field of the 36-bit word was enumerated: no field makes all five …"* — and item B falsified them
+as the frame-closing pointer reload.
+
+⇒ **two long-standing open problems are one problem.** The unsolved `0x820` semantics are
+load-bearing for the audio input path AND for the LFO rate, and `w40` is the single site. Neither
+end showed that: `closure-pointer.md` was looking for a pointer reload, and the LFO work was looking
+for an accumulator contaminant.
+
+### The question that replaces everything above it
+Not *"what clears `P`"* but **"what does `w40` drive `P` with?"** — a C-format word, opcode `0x625`,
+A = 14, five slots before the `iw45` that writes the hand-off, whose product the input stage
+consumes and the body's LFO inherits. **A driver that satisfies both ends has a known answer at each
+end**: the hand-off live at ±2.9 M, and the ramp at the ROM's **114**. That is the best-posed
+question this chain has produced, and it is where the `f31` family (117 words), the auto-pan
+discriminator and the audio path all now meet.
+
+⛔ Coverage unchanged at 80.4 %: this decodes no word. It says which one word to decode next.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
