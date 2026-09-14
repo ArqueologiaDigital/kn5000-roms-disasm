@@ -721,10 +721,26 @@ def _act_anchored(w):
     multiplier has exactly two ports -- is itself FORCED (SQUARING-MULTIPLY item A: a coefficient
     port hardwired to C-RAM[ccur] and ONE operand bus selected by SRC; there is no third port).
 
-    ⛔ NOT admitted on any other class.  On class 1/2 the code is the DELAY-ACCESS reading, and
-    `adjudication-round5.md' is explicit about that one: "ACT 0x0B => READ is DEGENERATE with
-    H-ADB6: every ACT-0x0B delay word carries addr8 0x20/0x30.  It adds nothing and it is not
-    independent evidence.  0x0B stays OPEN."  Those 16 class-2 words keep trapping."""
+    ⛔ NOT admitted on any other class, and `0x0B' stays OPEN -- but ⛔⛔ THE REASON THIS
+    DOCSTRING USED TO GIVE FOR THAT IS FALSE (sect. 129, `dsp/tools/act0b_scope.py').  It quoted
+    `adjudication-round5.md' as "ACT 0x0B => READ is DEGENERATE with H-ADB6: EVERY ACT-0x0B DELAY
+    WORD CARRIES addr8 0x20/0x30", dropping that measurement's own population -- `dram-matching.md'
+    item J states it as *"203 slots over the 83 algorithms where `#cells == #consumers'"*.  Over
+    the FULL delay corpus the universal fails:
+      * SIX ACT-0x0B delay words carry `addr8 = 0x60', which round 5 item D FORCED as the WRITE --
+        `kernel w46/w54', `prog06_ensemble w0/w39' and the WSA1R's `eff20_ensemble w0/w51'.  TWO
+        of them are in the KN5000's own algorithm images, so the universal fails inside ONE
+        product, before the second is pooled in.
+      * The CONVERSE fails harder: 463 WRITE-side delay words carry EIGHT distinct ACTIONs and
+        ACT 0x0B is 1.3 % of them.  Neither field determines the other, so "degenerate" is wrong
+        in both directions.
+      * CONTROL: 4 of the 9 ACTIONs on this family ARE one-sided, so one-sidedness is the NORM
+        here and carries little information alone.  ACT 0x0B (159 read / 6 write) is not one.
+    ⇒ the SCOPED measurement is untouched and is not re-run here; what is withdrawn is the
+    universal and the "adds nothing" inference built on it.  The code stays OPEN on its own
+    merits: `act0b-reverb.md' item D still leaves THREE survivors (`none', `mem<-bus', `tA<-acc')
+    and `sd_act0b.py' MEASURED that SINGLE DELAY's lag-1001 ROM product accepts all six readings
+    (LEDGER sect. 291).  Those class-2 words keep trapping."""
     a = lo_act(w)
     if a in _ANCHORED_ACT:
         return True

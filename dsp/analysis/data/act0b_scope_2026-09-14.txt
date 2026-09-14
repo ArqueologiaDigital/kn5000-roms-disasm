@@ -1,0 +1,56 @@
+====================================================================================================
+  act0b_scope -- `every ACT-0x0B delay word carries addr8 0x20/0x30', re-scored
+====================================================================================================
+
+   ★ TEST 1 -- every ACT-0x0B DELAY-DRAM ESCAPE, by `addr8'  (round 5 D: bit 6 = direction, 0x60 = WRITE)
+
+      KN      50 words   20 x35    30 x11    60 x4   
+      WSA    115 words   20 x74    30 x39    60 x2   
+
+      ⛔ COUNTEREXAMPLES -- ACT 0x0B on the WRITE side, which the universal forbids:
+         KN    kernel                     w46  080016000B  800.1.60.00B
+         KN    kernel                     w54  080016000B  800.1.60.00B
+         KN    prog06_ensemble            w0   088016000B  880.1.60.00B
+         KN    prog06_ensemble            w39  088016040B  880.1.60.40B
+         WSA   eff20_ensemble             w0   088016000B  880.1.60.00B
+         WSA   eff20_ensemble             w51  088016040B  880.1.60.40B
+      ⇒ 6 words.  If the universal held this list would be EMPTY.
+      ⚠ 2 of them are in the KN5000's own ALGORITHM images (prog06_ensemble) -- so the universal
+        fails inside one product, before the second is pooled in.  The other 4 are
+        resident-kernel words and SX-WSA1R words.
+
+   ★ TEST 2 -- THE CONVERSE.  Two fields are degenerate only if EACH determines the
+     other.  So: do `0x60' (WRITE) delay words carry ACTIONS other than 0x0B?
+
+      ACT 15  x245  
+      ACT 00  x152  
+      ACT 19  x35   
+      ACT 14  x16   
+      ACT 0B  x6       <- the one the rule predicts
+      ACT 1A  x6    
+      ACT 07  x2    
+      ACT 0E  x1    
+      ⇒ 463 WRITE-side delay words carry 8 distinct ACTIONS; ACT 0x0B is 6 of them
+        (1.3 %).  Neither field determines the other.
+
+   ★ TEST 3 -- THE CONTROL.  What does `separable' look like here?  The same 2x2 for
+     every ACTION on the delay family, so no single row can be read in isolation.
+
+      ACT          READ    WRITE   one-sided?
+      0x15           65      245   no -- both sides
+      0x00           22      152   no -- both sides
+      0x0B          159        6   no -- both sides
+      0x07          102        2   no -- both sides
+      0x19           14       35   no -- both sides
+      0x1C           37        0   YES -- only one side
+      0x14            0       16   YES -- only one side
+      0x1A            0        6   YES -- only one side
+      0x0E            0        1   YES -- only one side
+
+      ⇒ 4 of 9 ACTIONS on this family are one-sided, so `one-sided' is the NORM
+        here and carries little information by itself.  ACT 0x0B is NOT one of them.
+
+   ⇒ THE UNIVERSAL IS FALSE; the SCOPED measurement it generalises is untouched and
+     not re-run here.  What that removes is the stated REASON `_act_anchored()' refuses
+     ACT 0x0B outside class A -- not the openness of the code, which stands: the menu
+     still has three survivors and `sd_act0b.py' cannot separate them (LEDGER 291).

@@ -5863,6 +5863,63 @@ indices, so pooling costs one flag. **MIRRORS AGREE — 8003/8003.**
 `SRC 00/ACT 00/f31 4` ×12, `SRC 11/ACT 12/f31 0` ×12, `ACT 0x1B` ×23 across five SRC codes.
 Those are ordinary queue entries now.
 
+## 129. ⛔⛔ THE SENTENCE HOLDING `ACT 0x0B` SHUT IS A DROPPED POPULATION QUALIFIER
+Tool: [`act0b_scope.py`](../tools/act0b_scope.py). Data:
+[`data/act0b_scope_2026-09-14.txt`](data/act0b_scope_2026-09-14.txt),
+[`data/sd_act0b_2026-09-14.txt`](data/sd_act0b_2026-09-14.txt).
+
+With mode 1 decoded (§128) the pooled queue re-ranks and **`ACT 0x0B` is the head — 191 words
+whose only open axis it is** (62 KN5000 + 129 WSA1R), ahead of `SRC 0x11`'s 171. Unlike `SRC
+0x11`, which the datapath handover shows is a genuine **dependency cycle** (*"capture campaigns
+cannot settle accb while every reachable program feeds it the kernel-B constant"*), `ACT 0x0B` is
+held shut by a sentence. Both mirrors quote it as the reason:
+
+> *"ACT 0x0B ⇒ READ is DEGENERATE with H-ADB6: **every ACT-0x0B delay word carries `addr8`
+> 0x20/0x30**. It adds nothing and it is not independent evidence. 0x0B stays OPEN."*
+
+`dram-matching.md` item J states that measurement's population explicitly — **"203 slots over the
+83 algorithms where `#cells == #consumers`"** — and round 5 says "over the in-scope aligned cells".
+**The code comment dropped the qualifier and states a universal.** Measured over the full delay
+corpus:
+
+```
+   ACT-0x0B delay-DRAM escapes, by addr8   (round 5 D, FORCED: bit 6 = direction, 0x60 = WRITE)
+      KN5000     50 words   20 x35   30 x11   ★ 60 x4
+      SX-WSA1R  115 words   20 x74   30 x39   ★ 60 x2
+
+   the six the universal forbids:
+      KN  kernel w46 / w54          080016000B   800.1.60.00B
+      KN  prog06_ensemble w0 / w39  088016000B / 088016040B
+      WSA eff20_ensemble  w0 / w51  088016000B / 088016040B      (byte-identical to the KN5000's)
+```
+
+**Two of them are in the KN5000's own algorithm images**, so the universal fails inside one
+product — the second is confirmation here, not the source.
+
+And the converse fails harder, which is the half "degenerate" actually needs: **463 WRITE-side
+delay words carry EIGHT distinct ACTIONs, and `ACT 0x0B` is 1.3 % of them.** Neither field
+determines the other.
+
+**The control**, because a rule that cannot fail is not a rule: 4 of the 9 ACTIONs on this family
+*are* one-sided (`0x1C` 37/0, `0x14` 0/16, `0x1A` 0/6, `0x0E` 0/1), so one-sidedness is the **norm**
+here and carries little information alone. `ACT 0x0B` at 159/6 is not one of them.
+
+⇒ **withdrawn: the universal, and the "adds nothing" inference built on it.** The scoped
+measurement is untouched and is *not* re-run here. Corrected in both mirrors; `_act_anchored()`'s
+behaviour is unchanged and mirrors stay 8003/8003.
+
+### ⛔ And the code is still OPEN, on its own merits
+Removing a bad reason is not a decode. `act0b-reverb.md` item D still leaves **three** survivors
+(`none`, `mem<-bus`, `tA<-acc`), and re-running `sd_act0b.py` this session confirms LEDGER §291 —
+reach test passes (13 812 firings), the control reproduces the ROM answer, the pointer map is
+invariant over the six readings, and **all six give `1001:45074`**. SINGLE DELAY's lag-1001 product
+is blind to this code, measurably.
+
+⇒ what the queue head needs is a criterion that can *see* `ACT 0x0B`, and the corpus now says
+where to look: **165 of 213 occurrences are delay escapes, 48 are plain**, and the six WRITE-side
+words sit in ENSEMBLE and the resident kernel in *both* products — a small, byte-identical,
+cross-product population that any candidate reading has to explain.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
