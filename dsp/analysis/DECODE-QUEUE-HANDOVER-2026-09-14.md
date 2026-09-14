@@ -107,6 +107,13 @@ analogy credible is real and is **not** evidence about the ALU field.
 
 ## Lines closed this session — do not re-walk
 
+* ⛔ **The store gate's two survivors, by a store census** (`dsp/tools/storegate_exclude.py`,
+  2026-09-14). 16 words have `store gate, f31 0` as their SOLE open axis — all `hi12 = 0x090`,
+  all in reverbs — and the two surviving gate conditions disagree about exactly them. The cheap
+  exclusion (a reverb that never writes memory cannot be a reverb) **fails**: every one of the 8
+  images keeps 15–30 surviving stores under the rival. Separating them needs an emulator arm
+  graded against the HLE reverb oracle, not a word count.
+
 | line | result |
 |---|---|
 | more class minimal pairs from the homolog pairs (§132) | **zero** aligned class substitutions; classes-4/6 stays at n = 2 |
