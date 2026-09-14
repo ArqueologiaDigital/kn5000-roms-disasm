@@ -7768,6 +7768,57 @@ independently corroborated by the cell map's `(0,0)`/`(1,0)` indices.
 
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
 
+## 171. ⛔⛔ THE PARAMETER-EDIT NAVIGATION IS REFUTED — by the test its own author wrote
+
+§170 left one route to the bit-exact dynamics reference: move the compressor's parameter and capture
+what the evaluator writes. `peq_gain.lua` already navigates the DSP EFFECT editor and is
+parameterised by `TYPEIDX / NPARAM / NVALUE`, so the run is cheap. `op72_live.{sh,py}` is that run.
+
+**The compressor run said nothing, and the positive control says why.**
+
+```
+   TYPEIDX 13  prog36_compressor ✅   NVALUE 0 vs 40 : 124 cells each, 0 move
+   TYPEIDX 15  prog39_parametric_eq   NVALUE 0 vs 24 : 128 cells each, 0 move   <- THE CONTROL
+```
+
+`peq_gain.lua` states its own acceptance test in its header, and it is exactly right:
+
+> *"PARAMETER = UP-2/DOWN-2 = `CPL_SEG10 0x80/0x40` ; VALUE = UP-3/DOWN-3 = `CPL_SEG9 0x20/0x10`
+> — **INFERRED**, and this run is the test of it. SELF-VALIDATING: if these are the right keys the
+> live C-RAM section coefficients move off flat. **If C-RAM comes back identical to the flat
+> capture, the inference is refuted.**"*
+
+The EQ's gain law is `0.5 × user − 12.0 dB`, so **+24 VALUE-up steps should saturate one band at
++12.0 dB** and move five C-RAM coefficients. **Nothing moved.** ⇒ **the PARAMETER/VALUE key
+inference is REFUTED**, the script edits no parameter, and every result obtained through it is void.
+
+### Why this is the right outcome to have spent the runs on
+
+⛔ Without the control, the compressor's "0 cells move" reads as *"the compressor has no editable
+op-0x72 parameter"* — a **conclusion about the chip** drawn from a **broken instrument**. That is
+the §161 error exactly, and it is the second time this session a null has turned out to be the
+harness rather than the machine. The control cost one run and converted a false finding into a true
+one about the tooling.
+
+★ And the instrument itself was validated first, which is what made the control readable:
+`op72_live.py`'s replay reproduces `cram_of_algo(35)` from the ROM on **23 of 23** common cells.
+⚠ Its first version read payloads from offset 0 and found **zero** C-RAM cells — every `cmd 0x01` /
+`0x02` payload opens with a 2-byte word address, as the capture's own header states. That failure
+also looked exactly like "nothing moved". **Two different "nothing moved"s in one experiment, one
+from the parser and one from the navigation** — which is the argument for validating an instrument
+against a known answer before believing any null it produces.
+
+### What the next pass needs
+
+The PARAMETER and VALUE keys, **measured** rather than inferred — the same way `TYPE` was measured
+(`kn5000-dsp-origin-capture.md` / `-paramlist.md` §1 measured `SOUND = CPR_SEG10 0x04`,
+`DSP EFFECT = CPL_SEG7 0x02`, `TYPE = CPL_SEG10 0x20/0x10`, and §1.3 *names* the three pairs but
+**only measured TYPE**). Until those two pairs are measured, no parameter can be moved in the
+emulator, and §170's route to the bit-exact dynamics reference — and with it `f31 = 3` (56 words)
+and the `ACT 0x0B` job (191) — stays closed.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
