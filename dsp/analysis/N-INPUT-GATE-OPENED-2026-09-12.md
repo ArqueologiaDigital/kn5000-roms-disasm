@@ -6200,6 +6200,55 @@ corrected to say so rather than list it as a candidate.
 
 ⇒ coverage unchanged.
 
+## 136. ★ THE QUEUE HEAD IS AN ESCAPE-WORD QUESTION — 86 % of it — and that reframes §107's null
+Asking what the 191 sole-blocked `ACT 0x0B` words actually **are**, rather than how many:
+
+```
+   kind                    decoded   undecoded   sole-blocked
+   delay ESCAPE                  0         165         ★ 165   (86 %)
+   class A (ANCHORED)           18           0              0
+   plain                         0          30             26
+```
+
+**165 of 191 are delay-DRAM escapes.** The 18 class-A words are already decoded — they are the
+all-pass core's fourth multiplicand route — and every one of the reverb's "plain" ACT-0x0B words
+turns out to be one of those, `102.A.00.64B`. So `capture-signature.md` item F's *"BLOCK A needs
+ACT 0x0B"* is already satisfied; the reverb is **not** where the open words are.
+
+### What that does to §107's null
+`sd_act0b.py` found SINGLE DELAY's lag-1001 ROM product blind to all six readings, and LEDGER §291
+recorded it as "a measured blindness". a09's three ACT-0x0B words are **all delay escapes** — so
+that null was not a weak criterion applied to the wrong population. **It was the right population,
+measured, with the reach test passing (13 812 firings) and the criterion demonstrably able to fail**
+(the shipped `ACT 0x0D`/`0x0E` pair puts 45 074 at lag 500). The queue head is an **escape-word
+question**, and the one anchored escape-word criterion this project has says the readings are
+indistinguishable there.
+
+### ⛔ And why that is still not a promotion
+The obvious move is the blindness lemma (§113): if the ACTION on an escape word cannot be observed,
+every surviving reading executes it identically and the word is executable. **§107 already refused
+that generalisation and the refusal stands** — *"of the 62 words refused for this axis alone, 0 have
+all three destinations dead; `mem[ptr]` is live at every one."* The six readings differ in machine
+state; what SINGLE DELAY showed is that they do not differ in **that echo**. Site-blindness with
+respect to one criterion is not word-blindness, and `decoded()` needs the latter.
+
+### ★ The specification this leaves, which is sharper than "find a criterion"
+`mem<-bus` is one of the three survivors and `mem[ptr]` is live at every ACT-0x0B site. So a
+criterion with power must be **sensitive to a `mem[ptr]` write at an escape word** — which a09's
+echo is not, presumably because its three sites write cells the echo path never reads. That is a
+**searchable static condition**, not a modelling job:
+
+> find an ACT-0x0B escape word whose pointer cell, at that moment in the frame, is read downstream
+> by a consumer the ROM's own arithmetic pins.
+
+`sd_rerun.py`'s descriptor machinery (`descriptors_of`, `ptr_offsets`, `mt_lags`) already computes
+per-algorithm pointer/cell maps, and a second program already has a runner (`MT_ALGO`), so the
+search has somewhere to stand. **That is the next concrete step on this code**, and it replaces the
+handover's vaguer "a program whose arithmetic the ROM pins and that an ACT-0x0B word visibly
+affects".
+
+⇒ coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

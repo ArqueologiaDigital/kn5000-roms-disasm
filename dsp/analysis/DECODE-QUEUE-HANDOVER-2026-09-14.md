@@ -44,10 +44,18 @@ that is an address shifts with a relocation; one that is data does not. No seman
      per-action control**: 5 of 14 actions equally excluded.
   3. §133, the symmetric code (`ACT 0x0B` deposits what `SRC 0x0B` collects) — **0 of 488 at lag 1**,
      median lag 14, rank 8 of 16.
-* **What would break it:** a program whose arithmetic the ROM pins *and* that an ACT-0x0B word
-  visibly affects. 165 of 213 occurrences are delay escapes, 48 plain; the six WRITE-side words sit
-  in ENSEMBLE and the resident kernel in **both** products, byte-identical — a small cross-product
-  population any candidate reading must explain.
+* ★ **§136: 86 % OF THE OPEN WORDS ARE DELAY ESCAPES** — 165 of the 191 sole-blocked. The 18
+  class-A words are already decoded, and every "plain" ACT-0x0B word in the reverbs is one of them
+  (`102.A.00.64B`), so `capture-signature.md` item F's *"BLOCK A needs ACT 0x0B"* is already
+  satisfied and **the reverb is not where the open words are**. That also reframes §107's null:
+  a09's three ACT-0x0B words are all escapes, so SINGLE DELAY was **the right population, measured**.
+* **What would break it — now a searchable static condition, not a modelling job.** `mem<-bus` is
+  one of the three survivors and §107 measured `mem[ptr]` live at every site, so a criterion with
+  power must be sensitive to a `mem[ptr]` write **at an escape word** — which a09's echo is not.
+  ⇒ **find an ACT-0x0B escape word whose pointer cell, at that moment, is read downstream by a
+  consumer the ROM's own arithmetic pins.** `sd_rerun.py` already computes per-algorithm
+  pointer/cell maps (`descriptors_of`, `ptr_offsets`, `mt_lags`) and already carries a second
+  program's runner (`MT_ALGO`), so the search has somewhere to stand.
 
 ### `SRC 0x11` — 171 sole (54 KN + 117 WSA). A DEPENDENCY CYCLE, not a capture problem.
 `DSP-DATAPATH-DECODE-HANDOFF-2026-09-11.md` states it: splitting `accb←acc` from `accb←P` needs a
