@@ -8440,6 +8440,46 @@ two index formulas — and both produce a correctly-shaped, correctly-scaled wav
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 
+## 186. ★★ AN ANCHORED EXPECTATION FOR THE INDEX — and BOTH candidate forms miss it
+
+§185 left the two index forms unranked because the span criterion is order-independent. The change
+count is not, and `lfo-ramp.md`'s anchored increment turns it into a number rather than a comparison.
+
+From the arm-off run, so nothing is perturbed: the phase cell `0x07` updates **1 570 842** times, and
+each update adds the anchored **114**. Total advance `179 075 988` = **21.3 wraps of 2^23**, i.e.
+21.3 LFO periods. A **monotonic sweep of a 24-entry table** therefore steps its index
+`21.3 × 24 ≈ 512` times, and cell `0x0F` should change about that often.
+
+```
+   arm OFF     0F chg  12 411    (baseline -- 0x0F has another writer)
+   C6LUT=1     0F chg  19 521    -> +7 110     ~  14x the expected 512
+   C6LUT=4     0F chg 114 742    -> +102 331   ~ 200x the expected 512
+```
+
+⇒ **neither candidate produces a 24-entry sweep at the LFO rate.** `=1` is an order of magnitude
+closer, and `=4` — the form I argued for from the arithmetic in §183, and expected to win — is the
+**worse** of the two by 14×.
+
+⚠ **Two caveats that keep this a ranking rather than a verdict.**
+1. The arm-off baseline of 12 411 means cell `0x0F` has another writer, so subtracting it assumes
+   the lookup ADDS changes rather than overwriting; if it overwrites, the attribution is wrong.
+2. §179's eight-cell wrap-guard implies a **windowed** read — several consecutive entries per
+   execution — which would legitimately multiply the change count above 512. The guard is evidence
+   FOR a windowed read, so 512 may be the floor for a single-entry read rather than the target.
+
+★ What is solid and new: **there is now an anchored expectation for this quantity at all**, derived
+from the ROM's own increment rather than from a comparison between two guesses. Before §186 the only
+discriminator was "19 521 differs from 114 742", which ranks nothing. Now both can be measured
+against a number, and both miss it.
+
+★★ And the methodological point, which is the fifth instance of one shape today: **I predicted `=4`
+would win, from arithmetic that fits exactly — `(24 × 8 388 602) >> 23 = 23` — and it lost by 14×.**
+An expression landing in the right RANGE says nothing about it landing at the right RATE, and I had
+no rate check until I built one.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The 90 words stay blocked, now on a sharper
+statement: not "which of two forms" but "neither of these two".
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
