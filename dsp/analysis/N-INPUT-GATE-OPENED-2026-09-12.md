@@ -7619,29 +7619,43 @@ raw ROM bytes instead of a capture.
   host's D-RAM **state clear**, the WSA1R's exact analogue of the KN5000 zero-fill block
   (`isa-adjudication.md` §5, also based at 0x50).
 
-### ⛔ The test it was built for, and it has no power
+### The test it was built for — and my first run of it compared the wrong two numbers
 
-`closure_pointer.py cmd_cells` states the criterion: *"if the modelled pointer walk of a body visits
-far more distinct cells than [the zero-fill block], the walk model is what is wrong."* The body's
-pointer base is unknown, but the walk's **span** is base-independent — so span vs block size is an
-anchored test needing no capture, and it was built to settle variant V7.
+`closure_pointer.py cmd_cells` states the criterion: *"how many DISTINCT D-RAM cells each body
+touches under the walk, against the host's own zero-fill block length … if the modelled walk visits
+far more distinct cells than that, the walk model is what is wrong."* The pointer base is unknown but
+the **count** of distinct cells does not depend on it, so this is capture-free and
+base-independent.
 
-**It cannot.** 21 of 22 bodies overflow their own zero-fill block under **both** readings, and only
-two rows differ at all (rec 49: over by 7 vs 6; rec 51: 5 vs 4). Recorded here so nobody re-runs it.
+⛔⛔ **My first version used the walk's SPAN against `max(addr) − min(addr) + 1` of the host's
+writes — and the host's writes are not contiguous.** They are two clusters: `0x05/0x06` (plus a few
+scattered registers) and a contiguous state run based at **0x50** (`OVERDRIVE`/`EXCITER` 0x50..0x57,
+`PHASER` 0x50..0x63, `PEQ+CHORUS` 0x50..0x67). `max−min+1` reported **83** where **10** cells are
+written. The "18 of 22 bodies overflow by exactly 5" I drafted from it was an artefact of comparing
+two spans derived from the same program structure. **Retracted before it left this note.**
 
-### ★ But it is not a null — the overflow is a CONSTANT
+★ **Run as stated — distinct cells visited vs cells written — the test has power the span version
+lacked: 20 of 22 bodies now separate the two readings** (the span version separated 2). It still
+does not settle mode 4:
 
-**18 of the 22 bodies overflow by exactly 5**, independent of effect, size and family. A constant
-offset is not a per-program modelling error: it is five cells the walk over-counts, or five the host
-deliberately does not clear (shared latches, or the input/output pair the kernel owns rather than
-the body).
+```
+   bodies visiting MORE cells than the host wrote:   no-move 22 of 22    V7 22 of 22
+```
 
-`closure-pointer.md` **forces** a re-establishing mechanism that nobody has identified — the frame
-residue is +121 and no walk variant closes it — and a constant 5 across 18 independent programs in
-the *other product* is the shape such a thing leaves behind. That is a lead for the pointer-closure
-question, which is upstream of several open axes, and it is the most concrete thing this pass found.
+Every body over-visits, by 3 to 12 cells, under **both** readings. The walk model therefore has a
+systematic defect that dominates the comparison, and reading the margin — no-move is the smaller
+overflow in 15 of the 20 differing rows, sign-test p ≈ 0.02 — would be extracting a signal from two
+models that are both wrong. **Not evidence for either reading.**
 
-⚠ Coverage unchanged: **1501 of 8003, 81.2 %.** This is infrastructure and a lead, not a decode.
+### What it does establish
+
+A well-posed, **capture-free, base-independent** instrument on the second product, and the fact that
+the WSA1R walk **over-visits everywhere**. `closure-pointer.md` forces a re-establishing mechanism
+nobody has identified — frame residue +121, no variant closes — and a systematic over-visit across
+22 independent bodies in the *other* instrument is that same question seen from a second side. That
+is upstream of several open axes, including mode 4.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.** Infrastructure and a lead, not a decode.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
