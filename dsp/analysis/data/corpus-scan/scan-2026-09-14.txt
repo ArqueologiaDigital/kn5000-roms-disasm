@@ -1,0 +1,25 @@
+# dsp_corpus_scan -- IS THERE A THIRD uPD6383 CORPUS?  Full result, 2026-09-14
+#
+# Reproduce:  python3 dsp/tools/dsp_corpus_scan.py --control     (recall: 38/41 = 93%)
+#             python3 dsp/tools/dsp_corpus_scan.py --rom <file>
+# 56 files scanned across 6 products (kn5000 subprogram ROMs excluded: they are the
+# KNOWN carriers and serve as the positive control).
+
+## RESULT: exactly ONE product other than KN5000/WSA1R carries uPD6383 streams
+
+### kn1500__technics_qsigt3c16079_5y68-j079_japan_9649eai.ic15.rest
+  ★ control passes: the scan finds microcode where microcode is known to be.
+
+  /home/fsanches/compartilhado/kn7000_mame_build/roms/kn1500/technics_qsigt3c16079_5y68-j079_japan_9649eai.ic15.rest   2097152 bytes | STRONG streams (triple-rate >= 0.90, overlaps merged)    9
+     NULL (the same bytes SHUFFLED, 1048576 of them): STRONG    0
+       @0x1A414D  len 19915  words   135  field-rate 0.993  TRIPLE-rate 0.993  records 16
+       @0x1A964C  len   677  words   134  field-rate 0.993  TRIPLE-rate 0.993  records 2
+       @0x1A915A  len   672  words   133  field-rate 0.992  TRIPLE-rate 0.992  records 2
+       @0x1A9A70  len  5821  words   133  field-rate 0.992  TRIPLE-rate 0.992  records 6
+       @0x1AB1B9  len  1116  words   133  field-rate 0.992  TRIPLE-rate 0.992  records 3
+       @0x1AB85D  len   592  words   117  field-rate 0.991  TRIPLE-rate 0.991  records 2
+       @0x1ABEA6  len   517  words   102  field-rate 0.990  TRIPLE-rate 0.980  records 2
+       @0x1ABC82  len   382  words    75  field-rate 0.987  TRIPLE-rate 0.973  records 2
+
+## ZERO streams in: kn2400 (2 files), kn6000 (5), kn6500 (5), kn7000 (20),
+##                  kn5000 non-subprogram ROMs (20) -- the negative control.

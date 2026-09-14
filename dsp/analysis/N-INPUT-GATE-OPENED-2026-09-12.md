@@ -8968,6 +8968,103 @@ the family size was, and the same mistake this file was written to detect was ma
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The decomposition extends; what `mid` and `sel`
 *mean* is still the one open question (§202).
 
+## 204. ★★★★★ THERE IS A THIRD µPD6383 PRODUCT — the KN1500 — and Felipe confirms the chip
+
+Every large remaining block is documented shut on what the KN5000 + SX-WSA1R corpora *contain*:
+mode 4 has "one witness, no replication AVAILABLE as the question is posed" (§165), `f31` 3…7 is
+"blind to the axis BY CONSTRUCTION" (§149), `SRC 0x11` is a dependency cycle, `ACT 0x0B` has three
+criteria measured blind. Those are statements about the **evidence**, not about effort. And the
+method that actually paid twice (§122, §128) was *a second copy of the same code somewhere else*.
+
+So: `dsp/tools/dsp_corpus_scan.py` asks whether a third product exists at all. The host upload
+container is a property of the **chip**, not the product — `kn5000_dsp_extract.py` documents it
+from the Sub CPU's own interpreter loop — so the scan is product-independent, and it validates each
+hit against the ISA vocabulary of the two known corpora.
+
+**Result, 56 files across six products:**
+
+```
+   kn1500  technics_qsigt3c16079_...ic15.rest   9 STRONG streams @ 0x1A414D .. 0x1AC18B
+   kn2400  (2 files)                            0
+   kn6000  (5 files)                            0
+   kn6500  (5 files)                            0
+   kn7000  (20 files)                           0
+   kn5000  (20 non-subprogram files)            0     <- the negative control
+```
+
+★★★★★ **CONFIRMED INDEPENDENTLY BY FELIPE, and he said it after the scan found it, not before:**
+*"I can confirm that KN1500 does use a D6383GF-3BA DSP (IC3)."* Hardware testimony is ground truth
+in this project, and this is the first time a corpus claim here has been checked against it. Service
+manual: `KN7000/service_manual/technics_sx-kn1500_sm.pdf` (image-only — render, do not grep).
+
+### The instrument, and the recall figure that validates it
+
+```
+   CONTROL: the KN5000 Sub CPU's OWN 100-entry algorithm pointer table
+            100 pointers -> 41 distinct stream offsets (the corpus is 40 images)
+            recovered at the EXACT offset  21 of 41  (51 %)
+            COVERED BY A HIT               38 of 41  (93 %)   <- the figure for a yes/no question
+   NULL:    the same bytes SHUFFLED -> 0 strong streams
+```
+
+⚠ v1 of the scan did `i = end` after each hit "so as not to re-report the same stream", and
+recovered **1 of 41**. It still printed "the scan finds microcode where microcode is known to be",
+and I nearly took that as validation. A stream that parses by luck runs for a kilobyte and the jump
+skips every real one inside it. **A detector that has not been shown to find what is known to be
+there is not a detector** — the recall number, not the boolean, is the control.
+
+## 205. ⛔ AND THE COVERAGE FIGURE I COMPUTED FROM IT IS AN ARTEFACT — retracted before publication
+
+The 9 streams give 7 distinct blocks, 737 words, of which 58 distinct words are new to the project
+and 6 carry `(hi12, class4, lo12)` triples neither known product has. Computing the pooled effect:
+
+```
+   KN1500 (blind scan)      737 words,   56 undecoded = 92.4 % decoded
+   pooled now              7273 words, 1413 undecoded = 80.6 %
+   pooled WITH KN1500      8010 words, 1469 undecoded = 81.7 %      (+1.09 points)
+```
+
+⛔ **That is manufactured by the filter and must not be quoted.** The scan *keeps* streams whose
+words are already in the known vocabulary, so the recovered set is SELECTED for vocabulary match.
+Measured, by sweeping the threshold that does the selecting:
+
+```
+   threshold | streams | blocks |  words | "decoded"
+      0.90   |       9 |      7 |    737 |  92.4 %
+      0.70   |       5 |      4 |    564 |  85.3 %
+      0.50   |       1 |      1 |    398 |  52.3 %
+      0.30   |       2 |      4 |    818 |  43.6 %
+      0.00   |     114 |    150 |  94862 |   2.7 %
+```
+
+The rate is a monotone function of the threshold because **the threshold IS a vocabulary filter**.
+A scan built this way can establish THAT microcode is present; it cannot say what fraction of it the
+ISA model explains. `--bias` prints this curve so the caveat travels with every result.
+
+⚠ Note also which direction the strict count moves: undecoded words go **1413 → 1469**. Even taking
+the figure at face value, the number of words the project cannot explain would go UP; only the
+denominator grows faster. That is RULE 9 in reverse and it deserves the same refusal.
+
+### What is therefore established, and what is not
+
+* ★ **ESTABLISHED:** a third µPD6383 product exists among the dumped ROMs, it is the KN1500, its
+  microcode lives in IC15 around `0x1A414D..0x1AC18B`, and the chip is confirmed by the owner.
+  Exactly one — four other products carry none.
+* ⛔ **NOT ESTABLISHED:** anything quantitative about its contents. The blind scan's 51 % exact
+  recall and its vocabulary filter make it unfit to seed a tree.
+* ⇒ **NEXT:** extract the pool through the KN1500's **own** directory structures, the way
+  `gen_wsa1_dsp_disasm.py` does for the WSA1R, then RULE-9 de-duplicate and only then quote a rate.
+  ⚠ A search for the stream pointer table found a 68-entry `u32le` array at `0x1A318D` immediately
+  before the region; tested against every base in `0x1A3000..0x1A5000` it resolves **3 of 68**
+  entries to valid streams, so **it is not the table** — its entries step by 10…40 bytes, far too
+  small for streams of 400…20 000. That search is recorded so it is not repeated.
+
+★ The lead worth having, stated as a lead: the blind sample carries **2 mode-4 words**, and §165's
+"no replication is available" was a statement about *two* products. Two words is thin, and it is not
+a replication until the pool is extracted properly.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

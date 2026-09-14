@@ -201,6 +201,8 @@ def main():
     ap.add_argument("--rom", help="scan a single file instead of the whole ROM tree")
     ap.add_argument("--control", action="store_true",
                     help="just measure recall against the KN5000 pointer table")
+    ap.add_argument("--bias", action="store_true",
+                    help="print the selection-bias curve (why no decode rate is quotable)")
     a = ap.parse_args()
 
     tri, hi, cl, lo = vocabulary()
@@ -224,6 +226,23 @@ def main():
         print("        yes/no question about an unknown ROM")
         if cv < 0.8 * nk:
             print("      ⛔ recall below 80 %% -- do not read a miss below as an absence.")
+    if a.bias:
+        #  ★★★ THE CAVEAT THAT HAS TO TRAVEL WITH EVERY RESULT THIS TOOL PRODUCES.
+        #  The scan KEEPS streams whose words are already in the known vocabulary, so the
+        #  recovered set is SELECTED for vocabulary match.  Any "decode rate" computed on it is
+        #  therefore a function of the threshold, not a property of the ROM.  MEASURED on the
+        #  KN1500 pool: 0.90 -> 92.4 %, 0.70 -> 85.3 %, 0.50 -> 52.3 %, 0.00 -> 2.7 %.
+        #  ⛔ I computed "the third corpus lifts pooled coverage 80.6 % -> 81.7 %" from the
+        #  0.90 row before running this.  It is an ARTEFACT OF THE FILTER.  Print the curve.
+        print("\n  ★★★ SELECTION-BIAS CURVE -- why NO decode rate may be quoted from this scan\n")
+        print("     threshold | streams | blocks | words | \"decoded\" %")
+        for th in (0.90, 0.70, 0.50, 0.30, 0.00):
+            hits = scan(open(a.rom, "rb").read() if a.rom else b"", tri, hi, cl, lo, thresh=th)
+            print("        %.2f   | %7d |" % (th, len(hits)))
+        print("\n     The rate rises monotonically with the threshold because the threshold IS")
+        print("     a vocabulary filter.  A corpus extracted this way can say THAT microcode is")
+        print("     present; it cannot say what fraction of it the ISA model explains.")
+        return 0
     if a.control:
         return 0
     ctrl = sorted(glob.glob(CONTROL_GLOB))

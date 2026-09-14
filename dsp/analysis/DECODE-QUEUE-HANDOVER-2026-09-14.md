@@ -223,6 +223,42 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
 
 ## What the next pass should actually do, in order
 
+0★★. ★★★★★ **EXTRACT THE KN1500. IT IS A THIRD µPD6383 PRODUCT AND ITS CHIP IS CONFIRMED.**
+   (§204–§205, 2026-09-14. This outranks every item below, including the bit-11 item.)
+
+   `dsp/tools/dsp_corpus_scan.py` scanned 56 files across six products. **Exactly one other
+   product carries µPD6383 host streams: the KN1500**, in
+   `roms/kn1500/technics_qsigt3c16079_5y68-j079_japan_9649eai.ic15.rest`, 9 strong streams at
+   `0x1A414D .. 0x1AC18B`. kn2400, kn6000, kn6500, kn7000 and the 20 non-subprogram kn5000 ROMs
+   (the negative control) have **zero**.
+
+   ★★★★★ **Felipe confirmed the chip AFTER the scan found it**: *"KN1500 does use a D6383GF-3BA
+   DSP (IC3)."* Service manual `KN7000/service_manual/technics_sx-kn1500_sm.pdf` — **image-only,
+   render it, never grep it.**
+
+   **Why this outranks everything else.** Every large block in this file is shut on what the two
+   known corpora *contain* — mode 4 "no replication AVAILABLE as the question is posed" (§165),
+   `f31` 3…7 "blind BY CONSTRUCTION" (§149), `SRC 0x11` a dependency cycle. Those are statements
+   about the evidence. A third product is the only thing that changes them, and the method that
+   paid twice (§122, §128) is exactly *a second copy of the same code somewhere else*.
+
+   ⛔ **DO NOT SEED A TREE FROM THE SCAN.** Its exact-offset recall is 51 % and it selects streams
+   by vocabulary match, so any rate computed from it is manufactured: 0.90 → 92.4 %, 0.70 → 85.3 %,
+   0.50 → 52.3 %, 0.00 → 2.7 % (`--bias` prints the curve). I computed "+1.09 pooled points" from
+   the top row before running that sweep; it is retracted. Note too that the strict count would go
+   **1413 → 1469** — RULE 9 in reverse.
+
+   **The job:** extract the pool through the KN1500's own directory structures, the way
+   `gen_wsa1_dsp_disasm.py` does for the WSA1R, then RULE-9 de-duplicate, then quote a rate.
+   ⚠ Already tried and refuted: a 68-entry `u32le` array at `0x1A318D` immediately before the
+   region resolves **3 of 68** entries against every base in `0x1A3000..0x1A5000`, and its entries
+   step 10…40 bytes where streams are 400…20 000. It is not the table. Do not repeat that search.
+   The KN1500 is a TLCS-900 machine, so the loader is in its own firmware — find the interpreter
+   loop the way `kn5000_dsp_extract.py`'s header documents finding the KN5000's.
+
+   ★ **The lead, stated as a lead:** the blind sample carries **2 mode-4 words**.
+
+
 0★. ★★★★★ **START HERE: THE BIT-11 ALTERNATE ENCODING. 271 words, ceiling 84.3 %, nine shapes,
    two of them 87.6 % of the prize.** (§196–§201, 2026-09-14 — this item replaces the old item 0.)
 
