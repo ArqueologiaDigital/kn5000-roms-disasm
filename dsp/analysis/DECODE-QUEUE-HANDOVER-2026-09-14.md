@@ -270,13 +270,27 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    ⚠ Class 8 is in `alu_decoded()`'s admitted set already; its 12 are refused by `dram_dir()`
    (`addr8 = 0x0B` has bit 6 clear), which is a different question.
 
-1. **Build a bit-exact reference for ONE dynamics program** (compressor — `op0x72[0]` is the only
-   **PROVEN** cell↔opcode entry in the family). One artefact unblocks `f31 = 3` (56 sole-axis
-   words) *and* the job §135 named for `ACT 0x0B`.
-   ★ **§152 did step one and it was cheap.** `op 0x72`'s ROM data is **not a table** — it is
-   IEEE-754 constants: doubles `−0.0697 / 10 / 0.9999` (repeated byte-identically, one law two
-   operands) and floats `2, 2, 1, 3` then **`2²¹, 2²³, 2²², 2²¹`**. ⇒ §140's blocker (*"the scales
-   are solved for the EQ only"*) **does not apply here — they are written down.** What remains is
-   to **read the evaluator's 203 lines at `0x039ABD`** and check how the constants combine.
+1. ⛔ **THE BIT-EXACT DYNAMICS REFERENCE IS BLOCKED ON A KEY MAPPING — read §170/§171 first.**
+   This is still the item that would pay most (§149: it unblocks `f31 = 3`, 56 sole-axis words, AND
+   §135's `ACT 0x0B` job, 191). §152–§155 got four of its five pieces. Both remaining routes are now
+   measured and both are shut:
+   * ⛔ **Static is impossible.** §170: all four `op 0x72` cells hold `0x600000` = exactly 0.75, and
+     §153's law produces that at **no integer knob position at any of §154's three scales**. Scoped
+     with a null — `op 0x72` is 8/8 "low 16 bits zero" against a 35 % corpus base rate, p ≈ 2e-4 —
+     so those cells hold a hard-coded **default** while parameter cells generally store evaluator
+     output. The law has no stored output to check against. ★ Reading the eight floating-point
+     helpers would have validated an implementation against nothing; don't.
+   * ⛔ **Dynamic is blocked on tooling.** §171: `peq_gain.lua`'s PARAMETER/VALUE keys are INFERRED
+     and its own header says the run is the test of them. It is: +24 VALUE-up on the EQ, whose gain
+     law is `0.5·user − 12.0 dB`, should saturate a band at +12 dB and move five coefficients.
+     **Nothing moved.** The inference is refuted and the script edits no parameter.
+   ★ **THE ACTUAL NEXT ACTION: measure the PARAMETER and VALUE key pairs**, the way `TYPE` was
+     measured. `-paramlist.md` §1.3 *names* all three pairs and **measured only TYPE**. That is one
+     bounded panel-capture job, and it reopens this whole item.
+   ★ The capture pipeline itself is built and validated: `op72_live.py` replays a uC-IF capture into
+     a C-RAM map and reproduces `cram_of_algo(35)` on **23 of 23** cells. ⚠ Two distinct
+     "nothing moved"s came out of this experiment — one from the parser (payload offset) and one
+     from the navigation. **Validate the instrument against a known answer before believing a null.**
+
 2. `UPD6383_BX_F6` / `_F7` are built and unused — 3 + 44 pooled words, same method as §148.
 3. `SRC 0x11` stays a documented **dependency cycle**; do not run another capture campaign at it.
