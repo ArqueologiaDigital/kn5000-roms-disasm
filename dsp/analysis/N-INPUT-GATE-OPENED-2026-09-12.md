@@ -8035,7 +8035,20 @@ The SX-WSA1R disassembly tree carries **byte-identical duplicate images**. 60 re
    POOLED, distinct    7273 words   1413 undecoded   80.6 %   <- the honest figure
 ```
 
-**730 of the 8003 pooled words are replicas**, in 8 redundant images of 100.
+**730 of the 8003 pooled words are replicas**, in 8 duplicate images of 100.
+
+⚠ **"Redundant" is the wrong word and I should not have used it.** These are *one program image
+serving several named effects* — the reverbs differ in their coefficient streams, so they are
+genuinely different effects, exactly as `bit11-family.md` §0 item G's twelve KN5000 stubs are
+*not* (those share image **and** coefficients **and** both records). Nothing here is dead weight in
+the product.
+
+★ **The arithmetic is unaffected**, because for a DECODE rate the unit is the distinct program
+image: the same 91 words appearing under five effect names is **one** decode problem, not five,
+whatever the coefficients do.
+⛔ And I could not confirm the coefficient half: my effect-name → PoolDir-record resolver is a fuzzy
+string match and it collapsed `eff32`/`eff33` onto one record and `eff36`/`eff37` onto another, so
+its "the streams differ" verdict is the matcher talking, not the ROM. Left unclaimed.
 
 ★ This is the same defect `bit11-family.md` §0 item C caught on the KN5000 side, where one image
 replicated 42-fold turned a raw count of 123 bit-11 sites into a real 80 — and that note drew the
