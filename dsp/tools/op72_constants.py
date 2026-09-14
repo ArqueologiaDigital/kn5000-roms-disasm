@@ -94,8 +94,16 @@ def main():
     print("     sect. 140 stopped because *\"the per-coefficient scales are solved for the EQ")
     print("     only\"* -- the EQ's came from a flatness IDENTITY this family has no analogue of.")
     print("     Here they need no solving at all.")
-    print("\n   ⛔ The constants are NOT the law.  How they combine is in the evaluator's 203")
-    print("     lines of TLCS-900, which this file does not read, so no formula is claimed.")
+    print("\n   ★★ AND THE LAW (sect. 153), read from the evaluator in the committed")
+    print("      linear disassembly -- the same sequence twice, the second using the DUPLICATES:")
+    print("         x = 99 - user   (clamped <= 89 / <= 88)")
+    print("         cell = 10 ^ ( -0.0697 x ) x 0.9999")
+    print("      i.e. in dB, linear in the knob: 20*log10(gain) = -1.394 x (99 - user),")
+    print("      unity at 99 and about -138 dB at 0 -- a threshold/range control.")
+    print("\n   ⛔ STILL NOT ESTABLISHED: (a) the helpers 0x03dd36 / 0x03e290 / 0x03d533 are read")
+    print("     as int->double / multiply / pow FROM THEIR USE, not proven; (b) the eight FLOATS")
+    print("     above do NOT appear in the code read -- the SCALE APPLICATION is past 0x039bbb")
+    print("     and is UNREAD.  The exponential law is read; the scaling is not.")
     return 0
 
 

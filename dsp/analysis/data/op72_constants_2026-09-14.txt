@@ -32,5 +32,14 @@
      only"* -- the EQ's came from a flatness IDENTITY this family has no analogue of.
      Here they need no solving at all.
 
-   ⛔ The constants are NOT the law.  How they combine is in the evaluator's 203
-     lines of TLCS-900, which this file does not read, so no formula is claimed.
+   ★★ AND THE LAW (sect. 153), read from the evaluator in the committed
+      linear disassembly -- the same sequence twice, the second using the DUPLICATES:
+         x = 99 - user   (clamped <= 89 / <= 88)
+         cell = 10 ^ ( -0.0697 x ) x 0.9999
+      i.e. in dB, linear in the knob: 20*log10(gain) = -1.394 x (99 - user),
+      unity at 99 and about -138 dB at 0 -- a threshold/range control.
+
+   ⛔ STILL NOT ESTABLISHED: (a) the helpers 0x03dd36 / 0x03e290 / 0x03d533 are read
+     as int->double / multiply / pow FROM THEIR USE, not proven; (b) the eight FLOATS
+     above do NOT appear in the code read -- the SCALE APPLICATION is past 0x039bbb
+     and is UNREAD.  The exponential law is read; the scaling is not.
