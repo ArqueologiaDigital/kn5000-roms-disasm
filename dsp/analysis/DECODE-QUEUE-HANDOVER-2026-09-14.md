@@ -134,11 +134,19 @@ poles are not computable. ⛔ **§141 DID THAT AND IT FAILS.** The EQ's method i
 unity inverters). A rotary has no reason to be flat, so the acceptance test evaporates; only
 stability is left, and **186 distinct assignments survive it**. The chain is closed: precondition 1
 met, precondition 2 refuted.
-★ **THE ONE WALL.** Precondition 2 needs *a response the ROM pins for this program* — word-for-word
-what `act0b-reverb.md` item H lacked. This project pins an answer in exactly **two** places: the
-parametric EQ's response (the firmware's coefficient designer) and SINGLE DELAY's lag-1001 product.
-Every open code lives outside both. `ACT 0x0B`, `SRC 0x11` via accb, and `SRC 0x11` via the rotary
-all terminate there — **it is one wall, not four.**
+⛔ **§142 RETRACTS "the one wall".** I wrote that the ROM pins an answer in exactly two places. It
+does not. **`dsp/tools/host_side.py laws` already extracts a VALUE LAW per parameter opcode** from
+the firmware's own evaluators — `op 0x62 = CURVE_D[user]` at **1.000 dB/step**, `op 0x67 =
+base + user·44100/1000`, `op 0x21/0x66 = lo + (hi−lo)·user/99`, `op 0x68 = const·user/180`, and
+more. Each pins a coefficient's law and therefore its **scale**. The EQ and SINGLE DELAY anchors are
+two *instances* of this mechanism, not the only two things the ROM pins.
+★ **THE REAL GAP, and it is narrow.** The cell ← opcode map exists too, annotated and graded across
+the disassembly — but it is **partial**. `prog15_rock_rotary` has only 6 cells mapped
+(`0x00/0x01 = op0x61`, `0x04 = op0x62`, `0x10/0x14 = op0x66`, `0x1D = op0x74`) and **`0x05…0x09` —
+the biquad section, §139's whole chain — is unmapped.**
+⇒ **PRECONDITION 2, RESTATED: map algo 15's C-RAM `0x05…0x09` to their parameter opcodes.** Then the
+laws pin the scales, then stability or a response picks the order. `host_side.py` already has
+`cmd_descbase`, `cmd_regmap`, `cmd_spaces` — **host-side work with the tools present.**
 
 ## What would actually move this
 

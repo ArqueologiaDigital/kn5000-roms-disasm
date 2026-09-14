@@ -6459,6 +6459,51 @@ the rotary's biquad all terminate there. It is one wall, not four.
 
 ⇒ the §139 chain is closed: **precondition 1 met, precondition 2 refuted.** Coverage unchanged.
 
+## 142. ⛔ §141's "EXACTLY TWO ANCHORS" IS WRONG — there is a THIRD family, already extracted
+§141 concluded: *"this project pins an answer in exactly two places — the parametric EQ's response
+and SINGLE DELAY's lag-1001 product. Every open code lives outside both."* That is the tidiest thing
+I wrote this session and it is **not true**, which I found by asking whether a third anchor could be
+*created* rather than accepting the wall.
+
+**There is a third family, and it was already recovered from the ROM.** `dsp/tools/host_side.py
+laws` — "THE VALUE LAWS: what each evaluator computes" — walks the parameter dispatcher
+(`DSP_PerParameterTranslator` at `0x03CAAE`, stubs at `0x03CB8E + OFFSETS_14745[op − 0x61]`) and
+extracts, per opcode, the arithmetic the firmware applies to the user's value:
+
+```
+   op 0x61  CURVE_E[user]                       table lookup
+   op 0x62  CURVE_D[user]                       table lookup  ★ 1.000 dB/step
+   op 0x64  one 3-byte constant, shift+divide
+   op 0x65  3-way piecewise, breakpoints 0x32 / 0x4B      (0xac44 = 44100)
+   op 0x21, 0x66  lo + (hi − lo)·user/99         LINEAR INTERPOLATION
+   op 0x67  base + user·44100/1000               MILLISECONDS → SAMPLES
+   op 0x68  const·user/180                       DEGREES
+```
+
+**Each of those pins a coefficient's law, and therefore its scale** — which is exactly what
+precondition 2 needs. The EQ anchor and the SINGLE DELAY anchor are two *instances* of this
+mechanism (`op 0x67` is literally the delay anchor); they are not the only two things the ROM pins.
+
+### ⇒ The gap is narrower and more specific than a wall
+The cell ← opcode map also already exists, annotated across the disassembly and graded
+(`op0x72[0] … PROVEN`, most others `INFERRED`) — but it is **partial**. For `prog15_rock_rotary`
+only **6** cells carry one:
+
+```
+   C-RAM 0x00, 0x01 = op0x61     0x04 = op0x62     0x10, 0x14 = op0x66     0x1D = op0x74
+   ⛔ 0x05 … 0x09 — the biquad section, and §139's whole chain — UNMAPPED
+```
+
+⇒ **precondition 2 restated, correctly and for the first time:** *map algo 15's C-RAM cells
+`0x05…0x09` to their parameter opcodes.* Then the laws above pin their scales, and only then does
+stability or a response pick the order. `host_side.py` already carries the machinery for that
+half — `cmd_descbase`, `cmd_regmap`, `cmd_spaces` — so this is **host-side work with the tools
+present**, not hardware and not a modelling job.
+
+⚠ And the honest note on my own §141: writing "exactly two" felt like the session's conclusion, and
+it was reached by generalising from four failed routes rather than by checking the ROM. The check
+took one command. **A tidy summary of failures is not a measurement.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
