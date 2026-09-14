@@ -8160,6 +8160,64 @@ values is unchecked, and they share `TT = 0x28`.
 the operand the idiom's 273 words read, and `UPD6383_C6LUT` can now be pointed at a real table
 instead of an inferred window.
 
+## 179. ★★★★★ THE CLASS-6 TABLE PORT, MEASURED IN TWO EFFECTS — and a wrap-guard that explains the modulus
+
+§178 recovered the EXCITER's waveshaper curve from the register file. The obvious next question is
+whether that block is resident or per-effect. It is **per-effect**, and the answer arrives with a
+mechanism attached.
+
+Comparing the `0x1D..0x40` register block across three captures of different effects:
+
+```
+   EXCITER  vs COMPRESSOR   36 of 36 identical
+   EXCITER  vs PEQ           4 of 36 identical   -- the 32 that differ are EXACTLY 0x1D..0x3C
+```
+
+★ **An independent confirmation of §178's table boundary.** §178 fixed the end at `0x3C` from where
+the odd symmetry breaks; this fixes it from which cells change between effects. Two unrelated tests,
+the same 32 cells, with `0x3D..0x40` common.
+
+### And the PEQ's copy identifies the port beyond doubt
+
+```
+   1D +0.094842  1E +0.336260  1F +0.554762  20 +0.735459  21 +0.866035  22 +0.937592
+   23 +0.945254  24 +0.888498  25 +0.771193  26 +0.601332  27 +0.390492  28 +0.153040
+   29 -0.094842  ...                                        34 -0.153040
+   35 +0.094842  36 +0.336260  37 +0.554762  38 +0.735459  ...  3C +0.888498
+```
+
+**`0.95 · sin(2πk/24 + 0.1)`, maximum error 0.0000** — the sine `upd6383.cpp` §188 matched to 1 LSB,
+here reproduced out of a capture taken today by a completely different route.
+
+★★★ **`0x1D..0x34` is the 24-entry period; `0x35..0x3C` REPEATS THE FIRST EIGHT.** That is a
+**wrap-guard**: eight spare copies so a read at `rf[0x1D + i]` needs no bounds check near the end of
+the table. It is mechanistic confirmation that **`addr8 = 0x18 = 24` is the MODULUS** — §157's
+reading, now supported by the memory layout rather than by one anchored coincidence.
+
+⇒ **The class-6 TABLE PORT is the mode-1 register file at `0x1D`, 32 cells, loaded per effect**:
+a 24-entry sine plus 8 guard copies for the modulation family, a 32-entry soft-clip curve for the
+waveshaper family. That is what `SRC 0x13` reads.
+
+### What it is worth, and the one thing still in the way
+
+**90 words have `{SRC 0x13, class 6}` as their ONLY open axes** — `ACT 0x0D` is already anchored.
+Closing both is **+90 words, 80.6 % → 81.8 %**, and it is 6.4 % of the entire remaining gap.
+
+⛔ **Not promotable yet, and the blocker is precise: the INDEX.** `UPD6383_C6LUT` forms it as
+`acc mod addr8`, and the device's own comment grades that *"⛔ NOT A DECODE: the index's scale is
+`lfo-ramp.md` §10's `(coef × phase) >> 23` reading and is NOT verified here"* — with both arms run
+and both failing to produce the ±240 sweep. §112's standard needs the addressing explained, and the
+index is part of the addressing.
+
+★ But the base is no longer inferred (§160 called `0x1D` "the measured window"; it is now the
+measured *table*, with its contents identified in two effects), the modulus has a mechanism behind
+it, and the 8-cell guard is itself a clue: a guard is only needed if the read is **windowed** —
+several consecutive entries from a base index, which is what interpolation looks like. That is a
+sharper hypothesis for the index than anything §160 had.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** But the largest coherent object in the queue is now
+one named question from +90 words.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
