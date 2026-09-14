@@ -7657,6 +7657,51 @@ is upstream of several open axes, including mode 4.
 
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.** Infrastructure and a lead, not a decode.
 
+## 169. ⛔ THE WSA1R VALUE-TABLE ANCHOR IS VACUOUS — the tables enumerate every value they could match
+
+§168 built the WSA1R's static parameter map, and `wsa1/notes/FINDINGS-prom_b-fonts-and-dsp-value-lists.md`
+supplies what looked like its other half: 18 tables of the values the effect editor puts on screen,
+decoded and self-tested (87 checks, no gap and no overlap over `0xF157A8..0xF17558`). The KN5000's
+strongest anchor family (§142) is exactly this shape — the firmware's own parameter law pins a
+coefficient's scale — so pairing a displayed value with the number the stream writes should pin the
+parameter↔cell link for the whole WSA1R corpus.
+
+It does not, and the reason is worth writing down.
+
+**MEASURED:** 8 of the 50 distinct non-zero D-RAM values the 56 records write match a value-table
+entry as a Q23 fraction, against a uniform 24-bit null of **mean 0.00, sd 0.05, max 1 over 2000
+trials**. On that null the result is overwhelming.
+
+⛔ **The null is the wrong one, and the right one destroys the result.** Table `0xF16F75` holds
+**every 0.01 step from `0.01` to `1.00`** — 100 entries, exhaustive. So *any* value that is a
+two-decimal fraction in that range matches **by construction**, and the 8 hits are exactly the 8
+values that are two-decimal fractions (0.01, 0.25, 0.35, 0.50, 0.87, 1.00, …). The match carries no
+information beyond *"this coefficient is a round two-decimal number"*, which is true of coefficients
+for reasons that have nothing to do with the display table.
+
+> **A lookup table that enumerates its whole range cannot be used as an oracle for membership in
+> that range.**
+
+That is the same defect as §146 (an exclusivity that is static, so the runtime zeros are implied)
+and §128's shuffled null — the third time this month a criterion has been caught passing because it
+could not fail.
+
+⚠ And a smaller trap inside it: my first filter for "non-round matches" printed **nothing**, which
+briefly looked like the interesting cases were absent. They were not — it tested
+`|f·100 − round(f·100)| < 1e-9` against a Q23 value that lands 4.7e-7 away. **0.87 did match.** A
+tolerance tighter than the representation is a filter that rejects its own targets.
+
+### What would actually anchor it
+
+Not the value, the **index**. `FINDINGS-prom_b` is explicit that *"which effect parameter occupies
+which line is not established"*, and the display-list records are addressed as
+`15 × (8·group + line)` from an offset *"nothing converted here computes"*. Until that offset is
+computed, a parameter cannot be tied to a cell, and value-matching is the shortcut that does not
+work. That is the concrete next step for the WSA1R anchor family — a firmware question, not a corpus
+one.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
