@@ -5972,6 +5972,56 @@ in the image" could not move under a multiset shuffle). Twice in one session a r
 first null and died to its second. **A null that moves is not automatically a null that
 discriminates — run the per-category control before believing a rate.**
 
+## 131. ⛔ `class 3` EXISTS — the published class space is KN5000-local
+Tool: [`class_space.py`](../tools/class_space.py). Data:
+[`data/class_space_2026-09-14.txt`](data/class_space_2026-09-14.txt).
+
+§128 admitted mode 1 because the word's own form explains its addressing. Asking which modes
+remain shows one entry that is *only* blocked by the class test:
+
+```
+   undecoded non-C-format words by mode (class4 & 7), pooled
+      mode 0   258        mode 3    14   ← class-sole 14, ALU half anchored 14
+      mode 1   315        mode 4   106   ← blocked by TWO axes: the class AND its bit-4 store
+      mode 2   703        mode 5     6
+                          mode 6    99
+```
+
+Mode 3 should not exist. Two notes say so, and both are quoted as ISA facts:
+
+> `r2-output.md`: *"**class 3 and class B do not exist.** All 31 words with `class4 & 7 == 3` are
+> C-FORMAT words whose `class4` field is immediate data."*
+> `isa-adjudication.md` item 2: *"The single apparent class-3 word in the entire 3057-word corpus
+> is `C04.3.12.820`… Wide, the class space is exactly `{0,1,2,4,5,6,8,9,A,C,D}`."*
+
+Both are **correct about the KN5000** — and both say "the corpus" meaning that one.
+
+```
+   class4 on NON-C-FORMAT words
+      KN5000    0 1 2 . 4 5 6 8 9 A C D          ← class 3 absent, exactly as published
+      SX-WSA1R  0 1 2 3 4 5 6 8 9 A C            ← ★ class 3, x14
+
+      104.3.40.1CE  x6   WSA1R kernel               SRC 07  ACT 0E  f31 2
+      104.3.40.1D5  x6   WSA1R kernel               SRC 07  ACT 15  f31 2
+      182.3.10.419  x2   WSA1R eff54_pitch_shifter  SRC 10  ACT 19  f31 1
+```
+
+`hi12` is `0x104`/`0x182`, nowhere near the `0xC00` C-format mask, so `class4` is **not** immediate
+data on them. **`class 3` exists**, and the published class space is a KN5000 fact, not an ISA one
+— the third time today a claim scoped to one product was being quoted as the chip's behaviour
+(§124's terminator `addr8`, §129's `ACT 0x0B` universal, and now this).
+
+### ⛔ Not decoded, and precisely why
+All 14 are blocked by the **class test alone** — SRC, ACT and f31 are anchored on every one — so
+they would fall out the moment mode 3's *addressing* were documented, which is the condition §128
+admitted mode 1 on. It is **not** documented. `class4 & 7 == 3` is `mode 2 | mode 1` bitwise, which
+*suggests* pointer and register-file addressing together; a suggestion is not a reading. And
+`class_twins.py`'s instrument finds **no class twin** at any of the three `(hi12, addr8, lo12)`
+triples, so the pooled corpus offers no minimal pair either.
+
+⇒ a precisely-bounded queue entry: **14 words, one axis, and the axis needs a reading rather than
+a measurement.** Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

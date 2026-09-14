@@ -1,0 +1,26 @@
+====================================================================================================
+  class_space -- which `class4' values exist, per product
+====================================================================================================
+
+   prod  class4 values on NON-C-FORMAT words (the ones that are a class)
+   KN    0(x109) 1(x324) 2(x1556) 4(x53) 5(x1) 6(x53) 8(x44) 9(x4) A(x843) C(x1) D(x1)
+   WSA   0(x112) 1(x789) 2(x1963) 3(x14) 4(x46) 5(x4) 6(x46) 8(x110) 9(x72) A(x1407) C(x6)
+
+   published class space (isa-adjudication item 2): 0 1 2 4 5 6 8 9 A C D
+   POOLED, measured                                : 0 1 2 3 4 5 6 8 9 A C D
+
+   ⇒ beyond the published space: 3
+   ⇒ published but absent even pooled: nothing
+
+   ★ CLASS 3 -- every distinct word, with the product that carries it
+
+      104.3.40.1CE  x6    SRC 07  ACT 0E  f31 2  ESC 0  traps     WSA:kernel
+      104.3.40.1D5  x6    SRC 07  ACT 15  f31 2  ESC 0  traps     WSA:kernel
+      182.3.10.419  x2    SRC 10  ACT 19  f31 1  ESC 0  traps     WSA:eff54_pitch_shifter
+
+      KN5000 occurrences: 0   ⇒ the published claim is KN5000-LOCAL, not an ISA fact
+
+   ⛔ NOT DECODED.  These are blocked by the CLASS TEST ALONE -- SRC, ACT and f31 all
+     anchored -- so they fall out the moment mode 3's ADDRESSING is documented, which
+     is what sect. 128 admitted mode 1 on.  It is not documented, and there is no class
+     twin at their (hi12, addr8, lo12) either, so the corpus offers no minimal pair.
