@@ -84,3 +84,28 @@ operand. Two independent routes to one diagnosis.
    ⇒ THE NEXT QUESTION IS NOT `f31'.  It is: what SHOULD be driving the product register
      where the C-format word currently leaves a stale one?
 ```
+
+---
+
+## §118 — the cut mode 1 was missing, registered before the run
+
+Mode 1 cleared `P` at **every** C-format word. MEASURED why that is too broad: the resident
+**kernel** carries 8 C-format words and the **output stage** 3, and **not one of them is
+`is_c40`** — they are opcodes `605 / 602 / 621 / 625 / 632 / 60B / 600` — while a body's are all
+`0x620`. The kernel's sit at **iw1…iw40, BEFORE the iw45 that writes the hand-off cell**, so mode 1
+was emptying the input stage's product. That is the whole of R3's miss.
+
+**Mode 2 restricts the invalidate to `is_c40`** — the ONE opcode §115 decoded as the immediate
+load. By the census above it **cannot touch the kernel**.
+
+| | prediction |
+|---|---|
+| **S1** | fires, ≈ 4 per frame in the chorus (its four body C40 words) |
+| **S2** ★ | the LFO reads `mean step` at or near **114** — as mode 1 did (114.2560) |
+| **S3** ★★ | the hand-off `0x05` **SURVIVES** — live, ±2.9 M, ~175 660 changes — because the kernel is untouched BY CONSTRUCTION |
+| **S4** | the VOLUME cell `0x06` written-once and unrailed |
+| **S5** | if S2–S4 hold: 10-program hand-off regression, 0 BROKEN, before anything is promoted |
+
+⚠ If S2 holds and S3 does not, the kernel was not the only path and the census argument above is
+wrong — which would be a measurement against my own reasoning, and is why S3 is stated as a
+prediction rather than assumed.
