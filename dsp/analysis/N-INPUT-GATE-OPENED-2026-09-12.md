@@ -7409,6 +7409,68 @@ that satisfies the same positional test.
 * The arms themselves (`UPD6383_CLS4PTR`, `UPD6383_ST4DEST`) are built, fire, and are correctly
   placed. What they lack is a criterion that means the same thing in more than one program.
 
+## 165. ★★ WHY §164's REPLICATION WAS EMPTY — the membership computation, and the trap under it
+
+§164 recorded the non-replication and said *"I cannot say why"*. `dsp/tools/band_reach.py` says why,
+and it is the defect §164 named without being able to demonstrate: **downstream in program order is
+not "reads the cell this word touches."**
+
+Walk the D-RAM operand pointer and ask membership directly. The base is unknown
+(`closure-pointer.md` leaves it open) and **does not need to be** — membership of one word's cell in
+another's read set is a question about differences, so the base cancels:
+
+```
+   EXCITER       class-4 writes p = 75, 79    band reads p = 75..82    ★ REACHES
+   PEQ+CHORUS    class-4 writes p =  7, 13    band reads p = 75..84      cannot reach
+   PEQ+FLANGER   class-4 writes p =  9, 15    band reads p = 75..84      cannot reach
+   PEQ+VIBRATO   class-4 writes p =  8, 14    band reads p = 75..83      cannot reach
+   PEQ+CO+DIST   ... and the other three, all: cannot reach
+```
+
+⇒ **EXCITER is the only one of §160's eight where the arm can reach the band.** The empty
+replication is a **predicted negative**, not a failure to reproduce: in PEQ+CHORUS the class-4 word
+writes `p = 7, 13` while the band reads `p = 75..84`, so 3 547 234 pointer advances and 5 433 347
+suppressed stores leave it byte-identical *because they never meet*. They do move a great many other
+cells there (`0x02`, `0x87..0x8D`, `0x94`, `0xD1`, `0xD2`) — which is exactly what "the arm works but
+cannot reach this observable" looks like.
+
+### ⛔⛔ And the trap underneath, which is rule 15 in its subtlest form yet
+
+The walk advances the pointer on classes 2 and A. **Whether it should also advance on class 4 is the
+open question.** Run the membership test both ways and the verdict flips on exactly one program:
+
+```
+   EXCITER   assuming NO MOVE   class-4 cells 75, 79 ARE in the band's read set 75..82
+             assuming V7        band reads 76..79, 81..84 -- and they are NOT
+```
+
+So EXCITER is a **discriminating** program — the two readings predict opposite things there — and
+for the very same reason **membership cannot be used to SELECT programs while "reaches" depends on
+the answer.** A criterion that presupposes the hypothesis is not a criterion.
+
+⚠ Nor do the read-set *shapes* separate: both readings predict eight band reads, differing only in
+whether they are one run of 8 (no move) or 4+4 with a hole (V7); the arm-ON census spans
+`0x50..0x5E` with most cells written once, which maps cleanly onto neither.
+
+### Where that leaves mode 4
+
+**Exactly one witness, and no replication is available as the question is posed** — over the eight
+programs there is no second one where both readings predict reachability. §161 and §163 stay
+downgraded; coverage stays at **1501 undecoded of 8003, 81.2 %**.
+
+What §164 got wrong is only the diagnosis, and it is worth correcting precisely: the seven negatives
+were never evidence against the EXCITER measurement. They were evidence that I picked the
+replication with a positional proxy. The measurement stands as a single-program observation, which
+is what it always was.
+
+★ **The transferable rule, and it is stronger than "replicate":**
+
+> Select experiment programs by **membership**, not by position — and report the membership
+> computation, so that a null result can be told apart from an unreachable one. When the membership
+> test itself depends on the hypothesis, say so and look for a program where *both* readings predict
+> reachability. If there is none, the question cannot be replicated as posed, and that is a fact
+> about the question rather than about the instrument.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
