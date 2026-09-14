@@ -8297,6 +8297,48 @@ before checking that the quantity I fed it was the quantity the claim is about.
 
 ⚠ Coverage still **1413 of 7273, 80.6 %.**
 
+## 182. ★★ THE INDEX CONSTRAINT, FROM LOGS ALREADY IN HAND — `acc` is not a phase
+
+§181 left the index hypothesis untested and the criterion found. Before building a fourth arm, the
+arithmetic can be checked against measurements that already exist. `§162`'s class-6 site census, in
+the **arm-off** run so nothing is perturbed:
+
+```
+   site 00006184CD  addr8 = 0x18 = 24   acc -1 076 061 .. +1 307 335   span 2 383 396
+   site 0000620407  addr8 = 0x20 = 32   acc -2 152 122 .. +2 614 670   span 4 766 792
+```
+
+Two things follow, and both are arithmetic rather than interpretation:
+
+1. **`(addr8 × acc) >> 23` cannot reach the top of the table.** `(24 × 1 307 335) >> 23 = 3`. To
+   land in `0..23` the shift would have to be about **20**, and for the second site about **21** —
+   not 23. `lfo-ramp.md` §10's `(coef × phase) >> 23` therefore needs a phase at **full scale**
+   (`0..2^23`), and what is at this site spans 0.14 and 0.31 of that.
+2. ★★ **`acc` here is SIGNED and SYMMETRIC about zero.** A phase ramp is unsigned and monotonic;
+   this looks like a **waveform**, not a phase.
+
+⇒ **either `acc` at the class-6 site is not the LFO phase, or the shift is not 23.** `upd6383.cpp`'s
+§162 note reads *"acc 0..977106 (VARIES)"* as *"the phase IS here"* — but "a signed quantity
+symmetric about zero varies" is not evidence of a phase, and the ranges above are the same shape at
+both sites.
+
+★ This also explains both arms without appeal to anything unmeasured: `d % n` on a symmetric input
+produces the symmetric ±2.40 M sweep §181 saw at cell `0x0F`, and `(n × d) >> 23` on an input this
+small produces indices 0..3 — hence the one-sided +241 K.
+
+### What the next attempt needs, precisely
+
+* The **phase cell**, not the accumulator — `lfo-ramp.md` anchors the chorus increment at 114 per
+  frame, so the phase is the quantity rising by 114 and wrapping at `2^23`. Find which D-RAM cell
+  holds it at the class-6 site.
+* Then `(addr8 × phase) >> 23` lands in `0..addr8−1` **by construction**, with §179's eight-cell
+  wrap-guard covering a windowed read past the base index.
+* Judge it on **cell `0x0F`'s swept range** (§181), which moves when the lookup is switched off and
+  separates the arms — not on the §157 TAPMOD census, which is blind (§180).
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The +90 needs one correct arm, and the three
+ingredients it requires — table, criterion, and the constraint above — are now all measured.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
