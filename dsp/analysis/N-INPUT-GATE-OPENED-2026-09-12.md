@@ -5719,6 +5719,47 @@ A symmetry check over the pooled corpus (read indices ⊆ written indices, mode-
 **host** writes. ⚠ Weak on its own: the KN figure is carried by the terminators' `0x0E` (×38), and
 I have not computed a null for it. Recorded as a lead, not a result.
 
+## 127. THE `hi12` BIT-6 MENU IS EXHAUSTED — U2, and the reading is abandoned
+Pre-registration + full table: [`data/PREDICT_HI6C_2026-09-14.md`](data/PREDICT_HI6C_2026-09-14.md).
+
+Eleven readings, `UPD6383_HI6C=1..11`, scored on §120's two consumers at the true default with the
+per-program census.
+
+```
+    0  off (control)     LFO 15543.9286   hand-off LIVE 177684(-2869494..3486228/chg175660)
+  ★ 1  P <- 0            LFO   114.2560   ⛔ ABSENT        ← reproduces PCLRIW=40 exactly
+    2  P <- acc          the phase NEVER RISES             dead
+  ★ 3  P <- accb         LFO   114.2560   ⛔ ABSENT
+    4  P <- mem[ptr]     LFO   178.4357   dead
+    5  P <- imm          LFO   128.2953   dead
+    6  P <- payload A    LFO   128.2953   dead
+    7  acc <- 0          LFO 15543.9286   LIVE, identical to the control
+    8  accb <- 0         LFO 15543.9286   LIVE, identical to the control
+    9  P <- tempA        LFO 10423.4350   LIVE (chg 90 448)  ← the only live-but-wrong row
+ ★ 10  P <- tempB        LFO   114.2560   ⛔ ABSENT
+ ★ 11  P <- 0 and acc<-0 LFO   114.2560   ⛔ ABSENT
+```
+
+**C0 reach passes** (19 005 336 firings, identical in every armed mode) and **C3 passes** — mode 1
+is `PCLRIW=40` to the digit, so the arm reaches its word. And **nothing passes C1 and C2 together**:
+every reading that gives the ROM's ramp starves the hand-off, and the one reading that keeps the
+hand-off live misses the ramp by two orders of magnitude.
+
+⇒ **outcome U2, as pre-registered.** `hi12` bit 6 does not act on the product register. The reading
+is abandoned; the minimal pair stays a static fact and §122 is where the homolog actually paid.
+⛔ Coverage unchanged.
+
+**Two by-products.** Modes 3 and 10 are bit-identical to mode 1, so `accb` and `tempB` both hold
+**zero** at every bit-6-set C-format word in the chorus. Modes 7 and 8 are bit-identical to the
+control, so clearing either accumulator at those eight sites per frame moves nothing in the rise
+census or in any of the 32 D-RAM cells — the blindness lemma at eight more sites, ⚠ against those
+two instruments and not against the whole machine.
+
+⇒ **§120's question stands, unchanged and still the best-posed one open**: *what does `w40` drive
+`P` with?* What §121–§122 added is that `w40` is `ldreg r20,#iw14` — a register load whose payload
+is an I-RAM address pointing **at** a block terminator rather than past one, the only one of ten
+such words in two products that does so.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

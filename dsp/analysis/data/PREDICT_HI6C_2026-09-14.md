@@ -89,3 +89,45 @@ scored at the same setting and why C3 exists.
 ⚠ **And the WSA1R caveat stands.** The homology is measured on *bytes*; nothing here has run a
 WSA1R program in the emulator. A criterion validated on KN5000 programs is not transferred to that
 product by this note.
+
+
+---
+
+## RESULT — **U2. No reading satisfies both consumers; the flag does not act on `P`.**
+Data: [`hi6c_sweep_2026-09-14.txt`](hi6c_sweep_2026-09-14.txt). Harness: `pslot_sweep.sh`.
+
+```
+   mode  reading         fired       LFO mean (ROM 114)   hand-off cell 0x05
+    0    off (control)   0           15543.9286           LIVE 177684(-2869494..3486228/chg175660)
+  ★ 1    P <- 0          19 005 336     114.2560          ⛔ ABSENT
+    2    P <- acc        19 005 336   the phase NEVER RISES   6123683(0..6123683/chg1)  dead
+  ★ 3    P <- accb       19 005 336     114.2560          ⛔ ABSENT
+    4    P <- mem[ptr]   19 005 336     178.4357          64(0..64/chg1)  dead
+    5    P <- imm        19 005 336     128.2953          14(0..14/chg1)  dead
+    6    P <- payload A  19 005 336     128.2953          14(0..14/chg1)  dead
+    7    acc <- 0        19 005 336   15543.9286          LIVE, identical to the control
+    8    accb <- 0       19 005 336   15543.9286          LIVE, identical to the control
+    9    P <- tempA      19 005 336   10423.4350          123392(0..8388607/chg90448)  LIVE
+ ★ 10    P <- tempB      19 005 336     114.2560          ⛔ ABSENT
+ ★ 11    P <- 0 AND acc <- 0  19 005 336 114.2560         ⛔ ABSENT
+```
+
+* **C0 REACH: PASS.** 19 005 336 firings, the same count in every armed mode.
+* **C3 POSITIVE CONTROL: PASS.** Mode 1 reproduces `PCLRIW=40` exactly — `114.2560` and the
+  hand-off gone. The arm fires where its comment says.
+* **C1 ∧ C2: NOTHING.** Four modes hit the ROM's ramp (1, 3, 10, 11) and **all four lose the
+  hand-off**. Mode 9 is the only one that keeps `0x05` genuinely live (chg 90 448) and it misses
+  the ramp by two orders of magnitude.
+
+⇒ **U2.** The menu reproduces §120 and adds nothing: `hi12` bit 6 does not act on the product
+register in a way that serves both consumers. The reading is **abandoned** — §111's boundary cuts
+both ways, and one product's spelling difference is not a decode. The pair stays a static fact
+(§121), and §122 is where it paid.
+
+### Two by-products worth keeping
+* **Modes 3 and 10 are bit-identical to mode 1** ⇒ at every bit-6-set C-format word in the chorus,
+  `accb` and `tempB` both hold **zero**. A measured fact about the machine's state at those sites.
+* **Modes 7 and 8 are bit-identical to the control** ⇒ clearing either accumulator at those eight
+  sites per frame changes nothing in the §228 rise census or in any of the 32 cells of the §176
+  D-RAM census. That is the blindness lemma (§113) again, at eight more sites — ⚠ against those two
+  instruments, not against the whole machine.
