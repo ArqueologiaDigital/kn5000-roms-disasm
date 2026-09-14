@@ -5345,6 +5345,40 @@ one?** Answer that and the LFO is right, the audio keeps its operand, and the au
 discriminator §116 wanted becomes usable — which is the whole `f31` family. That is a better next
 question than any of the four open fields, and it was not visible before tonight.
 
+## 118–119. THE LFO's CONTAMINANT, BRACKETED TO THE KERNEL's OWN C-FORMAT WORDS
+Pre-registrations: [`data/PREDICT_CFMTPCLR_2026-09-14.md`](data/PREDICT_CFMTPCLR_2026-09-14.md),
+[`data/PREDICT_CALLFLUSH_RETEST_2026-09-14.md`](data/PREDICT_CALLFLUSH_RETEST_2026-09-14.md).
+
+§117 fixed the chorus LFO to **0.6 %** of the ROM's constant by invalidating the product at every
+C-format word — and emptied the hand-off cell. Two further arms bracket where that came from:
+
+| arm | LFO mean step (ROM: **114**) | hand-off `0x05` |
+|---|---:|---|
+| shipped | 15 543.93 | ✔ live |
+| **§117** clear `P` at EVERY C-format word | **114.2560** | ⛔ **zero** |
+| **§118** clear `P` at `is_c40` only | 15 543.93 | ✔ live |
+| **§119** clear `P` at the block CALL (`CALLFLUSH`, fired 3 181 374) | 15 543.93 | ✔ live |
+
+**§118's S3 HIT confirms the census argument** — the kernel and output stage carry **zero**
+`is_c40` words (their eleven are opcodes `605/602/621/625/632/60B/600`; a body's four are `0x620`),
+so restricting to `is_c40` cannot touch the kernel, and the hand-off lives. **S2 MISS** says the
+body's C40 words are not the contaminant.
+
+**§119 re-tested `CALLFLUSH`** — reverted by §56 at a default that no longer exists — and it does
+nothing for the ramp now. ⇒ §56's revert stands **and the benefit it was kept alive for does not
+reproduce either**. ★ §94's rule cuts both ways: a refutation expiring does not make a claim true,
+and here the CLAIM expired too.
+
+### ⇒ The question, now per-site
+Only the **KERNEL's own** C-format words matter: clearing there fixes the ramp and starves the
+input stage. They sit at **iw1, 15, 22, 29, 31, 40, 48, 56** — spanning both sides of the **iw45**
+that writes the hand-off.
+
+★★★ **WHICH of them does the input stage consume, and which does the LFO inherit?** If they are
+different words, clearing at one and not the other fixes both — a per-word experiment with a known
+answer at each end (the ROM's 114, and a live hand-off). That is a far better-posed question than
+"the LFO rate is wrong", and it is what §116's chain reduces to.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
