@@ -131,6 +131,44 @@ trace without board modification"). Their numbers are now confirmed from a secon
 
 ---
 
+## How IC30 is wired on the SX-WSA1R — and what it means for capture
+
+Read from the same page, below IC30's bottom edge:
+
+| IC30 pin | name | net | what it is |
+|---|---|---|---|
+| 17 | `BCLKI` | `BCK` | bit clock in, shared |
+| 18 | `LRCKI` | `LRCK` | frame clock in, shared |
+| 20 | `DI1` | `SDO1` | tone-generator serial output 1 → DSP input |
+| 21 | `DI2` | `SDO2` | tone-generator serial output 2 → DSP input |
+| 22 | `DI3` | `SDO3` | tone-generator serial output 3 → DSP input |
+| 23 | `DO1` | **`SUBOUT1`** | DSP output 1 |
+| 24 | `DO2` | **`SUBOUT2`** | DSP output 2, through R176 470 Ω |
+| 25 | `DO3` | **`SUBOUT3`** | DSP output 3, through R188 470 Ω |
+
+★★ **`SUBOUT2` and `SUBOUT3` are DSP outputs that go nowhere on a stock machine.** `SUBOUT1`
+reaches the main board's own SUB OUT 1 jacks through IC54/IC59; `SUBOUT2` and `SUBOUT3` appear at
+**CN14 pins 6 and 7 and nowhere else** — they exist solely for the SY-ES1 output expansion board,
+and the 470 Ω series resistors are the termination you would put on a line heading for a
+connector.
+
+That matters for the µPD6383 decode more than anything else on this page. Every probe design so
+far has had to reckon with the DSP's output being **summed with the dry signal** — the wet/dry
+crossfade happens inside the microprogram, so the main lane is already mixed and no wiring can
+separate it. `SUBOUT2`/`SUBOUT3` are different: they carry the **program DSP's own second and
+third outputs**, with nothing else mixed into them, and a stock machine never listens to them.
+
+⚠ What is **NOT** established: whether the shipped microprogram ever writes anything to `DO2` or
+`DO3`. The hardware path exists and is idle; whether the firmware drives it is a separate
+question, and the honest answer today is that nobody has looked.
+
+⚠ `MAINOUT` — CN14 pin 8, the lane the SY-ES1 turns into S/PDIF — is **not** an IC30 output. The
+main mix reaches the MAIN OUT DACs through one of the other two µPD6383s (IC5/IC6), per the block
+diagram on sheet II-5/II-6. So CN14 offers the main mix *and* two isolated program-DSP lanes on
+one shared clock group.
+
+---
+
 ## Also on sheet II-17/II-18: connector CN14, the SY-ES1 audio bus
 
 Read at 400 dpi from PDF page 24, because the digital-output question turns on it:
