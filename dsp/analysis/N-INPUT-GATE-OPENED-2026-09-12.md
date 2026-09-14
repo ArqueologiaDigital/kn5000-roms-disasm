@@ -9217,6 +9217,93 @@ recall, and measured to be 87 % duplicate with one true twin that differs in no 
 is a better outcome than leaving it as a standing hope in the handover — but it is not a decode, and
 the coverage number has not moved all session.
 
+## 209. THE KN1500 STATIC PASS — no new minimal pair, and the corpus is below chance
+
+§208 ruled out relocation. Felipe chose the remaining avenue: give the KN1500's **175 distinct
+words that exist in no other product** the static treatment the other two corpora have had.
+`dsp/tools/kn1500_corpus.py` makes the corpus importable; `kn1500_twins.py` runs the instruments.
+
+**First, the corpus itself.** 31 distinct blocks, 2389 words, 87 % already pooled. Of the 175
+distinct new words, **145 already decode** under the current model and 30 do not — the model
+handles a product it was never fitted to, modulo the selection caveat of §205. The 30 fall into the
+same familiar blocks (`SRC 0x11` ×10, `ACT 0x0B` ×4, `SRC 0x1C` ×4, `f31` ×4 …).
+
+**Twins.** `class_twins.bit7_twins` studies a different instrument from relocation: two words
+identical in every field but one, which isolates that field without needing the same program twice.
+A new word can *complete* a pair whose other half was already pooled but had no partner.
+
+```
+   axis                  pairs   NEW   NEW & exactly one member UNDECODED    null
+   hi12 bit 7                5     0                                    0      1.5
+   hi12 bit 4 (store)       18     7                                    0      9.4
+   f31 (hi12[3:1])           9     1                                    0      3.5
+   class4                   12     2                                    0      2.6
+   addr8                  2443  1073                                    0   1482.1
+   lo12 (NOT isolating)    210    39                                   12    147.6
+```
+
+**Zero on every isolating axis** — and the KN1500 produces *fewer* new twins than chance in every
+column. It is not structurally novel; it is a sample of the same language.
+
+⚠ Two corrections inside this one measurement, both mine:
+* **The `lo12` column is not a minimal pair at all.** `lo12` carries SRC and ACTION — it *is* the
+  operation selector — so words "differing only in `lo12`" are different instructions that happen
+  to share an address and an ALU half. v1 reported its 12 pairs as "isolating an open axis"; they
+  isolate nothing. Kept as a count, excluded from the conclusion.
+* **The first null was vacuous.** It read `(w & ~0xFFFFFFFFF) | …`, and `w & ~0xFFFFFFFFF` is
+  **zero** for a 36-bit word, so the "shuffle" returned the corpus unchanged and the null
+  reproduced the observation exactly — 7.0 against 7, 39.0 against 39. A null that equals its
+  observation is the same number computed twice.
+
+**n-grams.** 47 % of 2-grams and 59 % of 3-grams are novel — but 23 % / 30 % of those are made
+*entirely* of words already in the pool, i.e. a novel **order**, which says the product does
+something different, not what any field means. No novel idiom pins an undecoded word.
+
+⇒ **§208's verdict extends from relocation to twins and idioms.** The third corpus is real,
+confirmed, well-extracted — and contributes no decode.
+
+## 210. ★★★ THE µPD6382 QUESTION — and the fourth product it points at
+
+Felipe asked whether the µPD**6382** 19-bit series resembles ours. Three things, in order of how
+much they are worth:
+
+**1. A neighbour has already been tested and closed.** `ROADMAP-2026-07-29:410` and
+`STRATEGIC-REVIEW-2026-07-31` both record the µPD**6380** cross-decode as run and **refuted** —
+*"24-bit words vs 36-bit — verified divergent, that lead is closed"* — with an explicit instruction
+not to re-run it.
+
+**2. The 6382 specifically has not been.** It is a different part from the 6380, so it is an open
+data point rather than a closed one. What our own evidence fixes is the **data** path, not the
+instruction: 24-bit (Q23 coefficients, 24-bit D-RAM cells, full scale at 2²³) with a **36-bit
+microword**. If the 6382's "19-bit" is its *data* width it could be a narrower member sharing
+microword structure; if 19 bits is its *instruction* width it diverges as the 6380 did. ⚠ The two
+NEC databooks in the working directory (`1989_DSP_and_Speech_Products_Data_Book`,
+`1992_NEC_DSP_and_Speech_Processor_Products`) are text-extractable and cover only the µPD77xx/72xx
+**general-purpose** line — `PD7281`, `PD7723`, `PD7781`, `PD9305` — and contain **no 638x part at
+all**. They do not answer it.
+
+**3. ★★★ The question surfaced the right fourth product, and it is already in the strategic
+review.** `STRATEGIC-REVIEW-2026-07-31` item **X3**: a **Pioneer CDJ-500 / CDJ-500G** firmware dump,
+*"uPD6383GF = IC302 there"* — **the same chip** — and it calls that
+
+> the **only** route to the six SRC hapaxes, the kernel-only classes 8/9/C/D and the **bit-11
+> drought**
+
+which is precisely the 169-word block this session independently identified as the largest lever
+(§201). ★ And there is a reason to expect its microcode to be *genuinely different* where the
+KN1500's was 87 % duplicate: the CDJ-500's DSP-shaped feature is **Master Tempo** — key-lock
+pitch shifting. The KN5000 ships PITCH SHIFTER as a byte-identical copy of NO OPERATION (a stub);
+only the WSA1R has a real one. A whole product whose DSP does nothing but pitch-shift would
+exercise program families this corpus barely contains.
+
+⚠ The service manual is here (`KN7000/service_manual/pioneer_cdj-500_cdj-500g_rrv1087.pdf`) but is
+**image-only** as the project rule predicts (53 pages, 53 characters of text). Its "VOLTAGES OF MAIN
+UNIT SECTION" tables name parts inline — `IC204(NJM2902N)`, `IC207(LB1687)` — but cover IC201–207,
+IC405, IC501, IC503 and **not IC302**, so the chip identity was not verified from it here; no OCR
+tool is installed. What is needed is the **firmware dump**, not the manual.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
