@@ -114,6 +114,15 @@ oracle has never had to say anything.
 ★ **Method rule, earned three times in one session:** use the model's own definition of a region —
 not a proxy for it, and not a landmark near it.
 
+★ **The one lead that survives bounding (§139).** Of those 7, exactly one has `SRC 0x11` as its
+**sole** open axis: `prog15_rock_rotary w18 = 0212A01452`, a class-A MAC inside the `w16…w21` run.
+If the oracle could name its operand role it would anchor `SRC 0x11` **from the biquad rather than
+from accb captures**, sidestepping the dependency cycle. ⛔ Three preconditions first, none met:
+the run is SIX class-A words so the section boundary is inferred; `lle_oracle.py` **assumes** the
+cell order `[b1, b0, b2, −a1, −a2, makeup]` rather than deriving it, and that order is established
+only for `prog39_parametric_eq`; and instantiating a model validated on the EQ at an unvalidated
+site is §135's problem again. **Establish the section, derive the order, then read the operand.**
+
 ## What would actually move this
 
 * **Hardware.** Parked — `kn7000_mame/notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md`.

@@ -6328,6 +6328,46 @@ has none, which remains the real reason the oracle has never had to speak.
 Three variants of one error in a single session, each caught only by looking at the actual words.
 ⇒ coverage unchanged, and the handover's top section is corrected rather than left standing.
 
+## 139. ONE WORD WHERE THE ORACLE COULD SPEAK TO `SRC 0x11` — bounded properly this time
+§138's corrected census left seven undecoded words inside a real five-MAC run. Exactly one has
+`SRC 0x11` as its **sole** open axis, and `SRC 0x11` is the code the handover calls
+dependency-cycle-blocked. If the oracle could name that word's operand, it would anchor the code
+**from the biquad instead of from accb captures** — sidestepping the cycle entirely.
+
+```
+   prog15_rock_rotary
+     w16  0000A40415  ld     acc,c+,(p)+64   C-RAM[0x04] = "op0x62[0] (role output-level, INFERRED)"
+     w17  0292A001D3  mac.ta (p),c+,(p)+0    C-RAM[0x05]
+   ★ w18  0212A01452  ?word                  C-RAM[0x06]   SRC 0x11 · ACT 0x12 · f31 1 · class A
+     w19  0202A011D5  mac    (p),c+,(p)+1    C-RAM[0x07]
+     w20  0202A011D4  mac.tb (p),c+,(p)+1    C-RAM[0x08]
+     w21  0202A001D5  mac    (p),c+,(p)+0    C-RAM[0x09]
+```
+
+If `w17…w21` are the canonical five and `w18` is index 1, the schedule
+(`b1·x1, b0·x0, b2·x2, −a1·y1, −a2·y2`) names its operand **x0 — the current input sample**, which
+would be a direct, testable statement about what `SRC 0x11` delivers.
+
+### ⛔ And that is a LEAD, not an anchor — three things are unestablished
+1. **The run is SIX class-A words, not five.** `w16` carries C-RAM `0x04`, annotated *output-level*,
+   so it reads as a gain preceding the section — but the boundary is inferred, not derived, and the
+   schedule's index for `w18` moves with it.
+2. **The canonical cell order is assumed, not measured here.** `lle_oracle.py` says plainly that
+   `section` is *"the six C-RAM cells **in the decoded order** [b1, b0, b2, −a1, −a2, makeup]"* — it
+   does not derive that order. It is established for `prog39_parametric_eq`; nothing establishes it
+   for the rotary.
+3. **The oracle is validated on the EQ, not here.** Instantiating a validated model at an
+   unvalidated site and reading off a prediction is the §135 problem again: a difference from an
+   unvalidated instantiation is a difference from a **guess**, not from the chip.
+
+⇒ what would make it an anchor, in order: establish that `w17…w21` is a DF-I biquad (the
+idiom-sequence and coefficient-run instruments already grade sections — `DECODE-by-correlation` §7,
+§15), then derive the cell order rather than assume it, then read off `w18`'s operand role. Only
+then does the oracle say anything about `SRC 0x11`.
+
+**Recorded as one word with its three preconditions, not as a target.** §138 was retracted for
+exactly the failure of skipping that bounding step. Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
