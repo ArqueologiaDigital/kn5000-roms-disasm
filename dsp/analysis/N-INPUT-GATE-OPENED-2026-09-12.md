@@ -8062,6 +8062,47 @@ coverage figure in §§120–175 of this note is 0.6 points optimistic for this 
 ⚠ Both figures are now printed by `dsp/tools/decoded_selfcheck.py`, so the inflated one cannot be
 quoted again without the honest one beside it.
 
+## 177. ★★ HOW BIG THE REMAINING JOB ACTUALLY IS — 321 decisions, not 1413
+
+A number nobody had computed, and it is the one a next pass should plan against. De-duplicated
+(§176), the 1413 undecoded occurrences are **321 distinct word shapes**:
+
+```
+   top  10 shapes   595 of 1413 occurrences   42.1 %
+   top  25          825                       58.4 %
+   top  50          983                       69.6 %
+   top 100         1113                       78.8 %
+   all 321         1413                      100.0 %
+   142 shapes occur exactly ONCE -- 44 % of the shapes, 10 % of the occurrences
+```
+
+⇒ **100 % is ~321 decisions, and fifty of them cover seventy per cent of the gap.** The long tail is
+real but cheap to deprioritise: 142 one-off shapes buy 10 % between them.
+
+The ten commonest, with their open axes — every one already measured anchor-blind (§135, §149,
+§175), which is why the list is a map of the wall rather than a queue:
+
+```
+   0124011CE x99   class 4 / bit-4 store on class 4      the C63 idiom's third word (§159, §162)
+   040000C63 x87   bit-11 encoding / class 0             the idiom's head (§156, §157)
+   88012064B x77   ACT 0x0B                              (§135: HLE route exhausted)
+   A00000041 x70   class 0 / SRC 0x01 / ACT 0x01         (§167's bank, §175: unrankable)
+   092200700 x59   SRC 0x1C / store gate f31 1
+   0006184CD x53   class 6 / SRC 0x13                    the idiom's middle word (§157)
+   88013000B x42   ACT 0x0B
+   8801308BC x37   bit-11 encoding / class 1
+   026200000 x37   f31 = 3                               (§149: unrankable)
+   0006284CD x34   class 6 / SRC 0x13
+```
+
+★ Three of the top ten are the **C63 table-lookup idiom's three words** (99 + 87 + 53 + 34 = 273
+occurrences, 19 % of the whole gap) — one structure, characterised in §157 to the point of knowing
+its table lengths in both products, and blocked only on what `SRC 0x13` reads and where a class-6
+store lands. It is the single largest coherent object left.
+
+⚠ This decodes nothing. It says the remaining work is bounded and where its mass sits, which is
+what a plan needs and what "1413 words" obscures.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
