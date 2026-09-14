@@ -6022,6 +6022,60 @@ triples, so the pooled corpus offers no minimal pair either.
 ⇒ a precisely-bounded queue entry: **14 words, one axis, and the axis needs a reading rather than
 a measurement.** Coverage unchanged.
 
+## 132. FOUR CHEAP ATTACKS ON THE QUEUE, FOUR NULLS — written down so they are not walked again
+Tool: [`queue_probes.py`](../tools/queue_probes.py). Data:
+[`data/queue_probes_2026-09-14.txt`](data/queue_probes_2026-09-14.txt).
+
+After §128 the queue is dominated by two entries a session cannot crack — `SRC 0x11` (171 sole) is
+a documented **dependency cycle**, and `ACT 0x0B` (191 sole) now has **two** criteria measured
+blind to it (§130 and LEDGER §291). Four cheaper lines were worth trying first. All four are empty.
+
+**1. More class minimal pairs?** The classes-4/6 pointer reading rests on **n = 2** — one WSA1R
+program spelling the C63 macro in class 2 where 99 instances spell it class 4 — and the project
+declined to promote on that. §125's aligned homolog pairs could in principle raise n without
+lowering the bar. **They do not: zero aligned class substitutions** across every cross-product pair
+scoring ≥ 35. The reading stays at n = 2 and the non-promotion stands, now for a measured reason
+rather than an unexamined one.
+
+**2. The class guard is a list where it should be a decomposition.** `class4` bit 3 is the
+cursor-fetch enable and bits 2:0 are the addressing mode, so the guard's admitted set `(2, 8, 0xA)`
+is three corners of a 2×2:
+
+```
+                fetch = 0              fetch = 1
+     mode 0     class 0  ⛔ REFUSED     class 8  ✔ admitted
+     mode 2     class 2  ✔ admitted    class A  ✔ admitted
+```
+
+Class 0's every component is admitted elsewhere, and guards 5 and 6 of the same function already
+speak the decomposition (`(cl & 7) != 2`). **But it is inert: 221 class-0 words pooled, 0 would be
+decoded** — every one is refused on its SRC, ACT or `f31` anyway. A real asymmetry that costs
+nothing.
+
+**3. Does the second product bring unreviewed vocabulary?** Every pass in this project read the
+KN5000, so a code occurring only in the WSA1R would never have been examined. **There are none** —
+0 WSA1R-only SRC/ACT codes (and 2 KN5000-only singletons). The two products share one vocabulary,
+so the WSA1R's remaining 851 words are blocked by the *same* codes, not by new ones. That is worth
+knowing: it means the second product's value is in its *structure* (§121–§125), not in fresh codes.
+
+**4. The documented sibling, at the field that matters.** `NEC-uPD77C25-rosetta-2026-09-09.md` took
+the µPD7720/77C25 analogy seriously because the 6383's **source** codes match NEC's documented
+register encoding (RAM `0x07`, ACCA/ACCB `0x10`/`0x11`, TA/TB `0x19`/`0x1A`). `f31` 3…7 is **257
+undecoded words**, so: do the ALU-operation codes match too?
+
+```
+   uPD6383 f31   0 = acc <- P      1 = acc <- acc + P (ADD)   2 = acc unchanged (HOLD)
+   uPD7725 ALU   0 = NOP           5 = ADD                    ...
+```
+
+**They do not.** The rosetta note's own caveat — *"analogy to a sibling FAMILY, not ISA identity;
+numeric codes don't transfer"* — is now **measured at the field it matters for** rather than
+assumed in either direction. The source-code match was real and is not evidence about the ALU
+field. `f31` gets nothing from this route.
+
+⇒ four nulls, no coverage change. Each one closes a line and says why; an empty line that is not
+written down gets walked again.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

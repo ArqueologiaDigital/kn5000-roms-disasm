@@ -1,0 +1,42 @@
+====================================================================================================
+  queue_probes -- four cheap attacks on the decode queue
+====================================================================================================
+
+   ★ PROBE 1 -- aligned CLASS substitutions in the homolog pairs
+
+      ⇒ 0.  NONE -- the homologs never swap a class at an aligned slot, so the classes-4/6 reading stays at n = 2 and the project's non-promotion stands.
+
+   ★ PROBE 2 -- the class guard's missing 2x2 corner
+
+                 fetch = 0              fetch = 1             
+      mode 0     class 0  ⛔ REFUSED     class 8  ✔ admitted   
+      mode 2     class 2  ✔ admitted    class A  ✔ admitted   
+
+      221 class-0 words pooled; admitting the missing corner decodes 0.
+      ⇒ the asymmetry is REAL but INERT -- every class-0 word is refused on its SRC, ACT or f31 anyway, so the guard's shape costs nothing and fixing it would buy nothing.
+
+   ★ PROBE 3 -- SRC/ACT codes exclusive to one product
+
+      KN-only   ACT 0x16  x1
+      KN-only   SRC 0x0A  x1
+      ⇒ 0 WSA1R-only codes, 2 KN5000-only.
+      ⇒ NONE from the second product -- the two products share one SRC/ACT vocabulary, so the WSA1R's 851 remaining words are blocked by the SAME codes, not by new ones.
+
+   ★ PROBE 4 -- the documented sibling, at the ALU field
+
+      uPD6383 `f31' (3 bits), the values the biquad PINS:
+         0 = acc <- P        (LOAD)
+         1 = acc <- acc + P  (ADD)
+         2 = acc unchanged   (HOLD/NOP)
+      NEC uPD7725 ALU field (4 bits), from MAME's own core:
+         0 = NOP
+         5 = ADD
+
+      ⇒ 6383 ADD = 1, 7725 ADD = 5.   6383 HOLD = 2, 7725 NOP = 0.
+      ⇒ THE NUMERIC CODES DO NOT TRANSFER at this field.  The rosetta note's own caveat --
+        *"analogy to a sibling FAMILY, not ISA identity; numeric codes don't transfer"* -- is now MEASURED at the field it matters for, not assumed.  The
+        SOURCE codes matching was real and is not evidence about the ALU field.
+        ⇒ `f31' 3..7 (257 undecoded words) gets nothing from this route.
+
+   ⇒ 0 of 4 probes returned something; 4 are nulls, recorded so they are not
+     walked again.
