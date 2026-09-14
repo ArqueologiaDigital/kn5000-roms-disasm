@@ -7835,6 +7835,81 @@ and the `ACT 0x0B` job (191) — stays closed.
 
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
 
+## 172. ★★★ THE PANEL KEYS, MEASURED — and what the compressor then refused to do
+
+§171 said the parameter-edit route was blocked on a key mapping. It is measured now, and almost
+everything the project believed about it was wrong — including two things I asserted in §171 itself.
+
+### The sweep
+
+`dsp/tools/paramkey_probe.lua` presses each of the sixteen LCD soft-key up/down pairs once on the
+PARAMETRIC EQ page and reports two discriminators: `RAM[0x29AA]` (the parameter **slot count**, a
+property of the selected *effect*) and a diff of `RAM[0x2000..0x9200]`. UP-1/DOWN-1 are the
+positive control — they are the measured TYPE keys and *must* move the count.
+
+```
+   rows 1 AND 2   cnt 17 <-> 6, bytes at 0x2976..0x2980   -> both step the EFFECT
+   rows 3..6      cnt 17,  bytes at 0x8D94..0x8D9F only   -> the display block
+   rows 7 AND 8   cnt 17,  RAM[0x2978] walks              -> ★ the VALUE control
+```
+
+★ **`RAM[0x2978]` increments by exactly one per press of UP-7 (`CPL_SEG7 0x20`)** — 21 for 21 —
+and **saturates at `0x1A` = 26**, a 27-entry list, with the slot count pinned at 17. It is
+therefore a **value**, not a cursor over the 17 slots (a cursor would stop at 16).
+
+⇒ `kn5000-dsp-paramlist.md` §1.3's *"bottom soft-keys are TYPE / PARAMETER / VALUE, each an up/down
+pair"* describes the **LCD legend**, not the key matrix. Rows 1 and 2 are the same control; VALUE is
+on row 7. **Which key moves the parameter cursor is still unmeasured** — rows 3..6 are what is left.
+
+### The acceptance test passes
+
+`peq_gain.lua` states it: *"if these are the right keys the live C-RAM section coefficients move off
+flat."* Driving UP-7 on the PARAMETRIC EQ moves **13 C-RAM cells**, `0x00..0x0C` — its whole
+coefficient block — from round defaults to computed values (`00: 000028 -> E94DC5`,
+`03: 7FFFFF -> 16B23A`, `0C: 200000 -> D445EF`, …). The parameter → evaluator → C-RAM path works
+and is capturable with no new tooling.
+
+### ⛔ And then the compressor refused
+
+Same script, same key, TYPEIDX 13, **control included** (0 presses vs 30, one harness):
+
+```
+   RAM[0x2978]   walks 30 steps, no saturation      the edit lands
+   C-RAM         124 cells both runs, ZERO moved    nothing is written
+```
+
+The compressor's slots are `THRESHOLD, RATIO, ATTACK SENS.(s), RELEASE SENS.(s), VOLUME, REV SEND`,
+and §153 characterises `op 0x72`'s law as *"in dB, linear in the knob … a threshold/range control"*
+— so `op 0x72` is THRESHOLD.
+
+★★ **This is the first DYNAMIC evidence on §170's question, and it points the same way as the
+static evidence.** §170 measured that the four `op 0x72` cells hold `0x600000` — a hard-coded
+default that the law produces at no integer knob position — and that `op 0x72` is 8-of-8 "round"
+against a 35 % corpus base rate. Now, editing the compressor's parameters and capturing the
+uC-IF stream, **no coefficient is written at all**. Two independent routes, one conclusion: the
+compressor's gain-computer cells are not written by the parameter path.
+
+⚠ **NOT established**: which slot the cursor sat on. I never moved it — the cursor key is the
+unmeasured one — so this says *"editing the slot the page opens on writes no C-RAM"*, not
+specifically *"editing THRESHOLD writes no C-RAM"*. Closing that needs the cursor key, and rows
+3..6 are the candidates.
+
+### What it cost, and the rule
+
+Four consecutive results in this thread were about my instruments, not the machine: a run wrapper
+whose `timeout` was too short; `emu.print_error` going to **stdout** while my harness sent stdout to
+`/dev/null` (so §171 saw a bare null with nothing to localise); a RAM signature window of 161 bytes
+that reported *"twelve dead keys"* which a 28 KB diff immediately refuted; and a "fix" of mine that
+moved `peq_gain.lua`'s VALUE press off the one key that actually worked. §171's *"the key inference
+is REFUTED"* was wrong twice — the keys were never the issue, and the row naming was wrong in a
+different way than I said.
+
+> **When part of a mechanism demonstrably works, a null is not about the mechanism.** TYPE stepping
+> succeeded in every one of these runs, and TYPE is in the same key block. That should have
+> redirected me to the harness on the first null, not the fourth.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

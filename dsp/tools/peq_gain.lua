@@ -71,17 +71,24 @@ add(1.2, function() report("saturated DOWN") end)
 for _ = 1, TYPEIDX do tap("CPL_SEG10", 0x20, 0.10) end   -- UP to PARAMETRIC EQ
 add(1.5, function() report("LANDED ON PEQ"); mach.video:snapshot() end)
 -- move the PARAMETER cursor, then drive the VALUE up
--- ⛔⛔ FIXED 2026-09-14 (N-INPUT-GATE-OPENED sect. 172).  These two lines pressed the WRONG
--- BUTTONS, contradicting this file's own header three lines above.  The header says
--- PARAMETER = UP-2/DOWN-2 = CPL_SEG10 0x80/0x40 and VALUE = UP-3/DOWN-3 = CPL_SEG9 0x20/0x10,
--- and the kn5000_cpanel driver's ioports -- the source of truth for SEG/bit -- agree exactly:
---   CPL_SEG10 0x80 "UP 2"  0x40 "DOWN 2"      CPL_SEG9 0x20 "UP 3"  0x10 "DOWN 3"
--- The code instead pressed CPL_SEG8 0x10 = "DOWN 5" and CPL_SEG7 0x20 = "UP 7".  So the run
--- edited nothing, and sect. 171 first read that null as "the key inference is REFUTED" -- a
--- conclusion about the MACHINE drawn from a typo.  The header was right the whole time.
-for _ = 1, NPARAM do tap("CPL_SEG10", 0x80, 0.30) end   -- PARAMETER up (UP-2)
+-- ⛔⛔ THE HEADER'S ROW NAMING IS WRONG, MEASURED (sect. 172).  It says PARAMETER = UP-2 and
+-- VALUE = UP-3, from `kn5000-dsp-paramlist.md' sect.1.3, which NAMED the three pairs and measured
+-- only TYPE.  A sixteen-key sweep with a 28 KB RAM diff says otherwise:
+--   rows 1 AND 2  -> change RAM[0x29AA], the slot COUNT: both step the EFFECT (row 2 duplicates 1)
+--   rows 3..6     -> touch 0x8D94..0x8D9F only (the display block)
+--   rows 7 AND 8  -> walk RAM[0x2978] monotonically with the count pinned  <- the VALUE control
+-- ⚠ So UP-2 is NOT a parameter cursor -- it re-selects the effect, which is why this line used to
+-- destroy the very selection the run had just made.  Which key moves the PARAMETER cursor is still
+-- UNMEASURED; rows 3..6 are the remaining candidates.
+for _ = 1, NPARAM do tap("CPL_SEG10", 0x80, 0.30) end   -- ⚠ NOT the parameter cursor -- see above
 add(1.2, function() report("PARAMETER moved"); mach.video:snapshot() end)
-for _ = 1, NVALUE do tap("CPL_SEG9", 0x20, 0.10) end     -- VALUE up (UP-3)
+-- ★★ MEASURED 2026-09-14 (sect. 172): the VALUE control is UP-7 = CPL_SEG7 0x20, which is what
+-- this line ORIGINALLY pressed.  I briefly "corrected" it to CPL_SEG9 0x20 (UP-3) on the strength
+-- of the header's INFERRED naming and made it worse -- UP-3 touches only the 0x8D9x display block.
+-- The evidence for UP-7: RAM[0x2978] walks +1 per press, 21 for 21, saturating at 0x1A = 26 on the
+-- PARAMETRIC EQ (a 27-entry list), with RAM[0x29AA] (the slot COUNT) pinned at 17 -- and 13 C-RAM
+-- coefficients move off their defaults, which is this file's own stated acceptance test.
+for _ = 1, NVALUE do tap("CPL_SEG7", 0x20, 0.10) end     -- VALUE up = UP-7 (MEASURED)
 add(1.5, function() report("VALUE driven UP"); mach.video:snapshot() end)
 add(1.0, function()
   emu.print_error(string.format("### EQ-EDITED-AT-TIME %.3f  NPARAM=%d NVALUE=%d",
