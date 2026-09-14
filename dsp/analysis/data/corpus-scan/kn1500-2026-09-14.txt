@@ -1,0 +1,45 @@
+================================================================================================
+  dsp_corpus_scan -- is there a THIRD uPD6383 corpus in the dumped ROMs?
+================================================================================================
+
+  ISA vocabulary from the two KNOWN corpora: 394 (hi12,class4,lo12) triples, 96 hi12, 13 class4, 106 lo12
+
+  ★ CONTROL RECALL against the Sub CPU's OWN 100-entry algorithm pointer table
+    (100 pointers resolve to 41 distinct stream offsets -- the corpus is 40 images):
+      STRONG hits 41 | recovered at the EXACT offset 37 of 41 (90 %)
+      | COVERED BY A HIT 38 of 41 (93 %)  <- the figure that matters for a
+        yes/no question about an unknown ROM
+
+    ★★★ EXTRACTION QUALITY -- the recall that governs whether a corpus can be
+        BUILT from this scan, which is a different question:
+          op-3 BLOCK recall 39 of 42 (93 %) | WORD recall 3034 of 3237 (94 %)
+          PRECISION 39 of 41 blocks are real (95 %) -- 2 SPURIOUS
+        ★ GOOD ENOUGH TO EXTRACT WITH: >= 90 % block recall and >= 95 % precision.
+          A tree seeded from it still has to be graded against the product's own
+          directory structures where those are known.
+
+  POSITIVE CONTROL -- the KN5000 Sub CPU ROM, known to hold 100 algorithm streams:
+
+  kn5000_subprogram_v142.rom            196608 bytes | STRONG streams (triple-rate >= 0.90, overlaps merged)   41
+     NULL (the same bytes SHUFFLED, 196608 of them): STRONG    0
+       @0x00D801  len   672  words   133  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x00B13F  len   557  words   110  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x0070FE  len   537  words   106  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x006093  len   532  words   105  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x00B57D  len   532  words   105  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x00D3F4  len   527  words   104  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x00853B  len   517  words   102  field-rate 1.000  TRIPLE-rate 1.000  records 2
+       @0x00A9E0  len   507  words   100  field-rate 1.000  TRIPLE-rate 1.000  records 2
+
+  ★ control passes: the scan finds microcode where microcode is known to be.
+
+  /home/fsanches/compartilhado/kn7000_mame_build/roms/kn1500/technics_qsigt3c16079_5y68-j079_japan_9649eai.ic15.rest   2097152 bytes | STRONG streams (triple-rate >= 0.90, overlaps merged)   37
+     NULL (the same bytes SHUFFLED, 1048576 of them): STRONG    0
+       @0x1A7DBC  len   682  words   135  field-rate 0.993  TRIPLE-rate 0.993  records 2
+       @0x1A829F  len   682  words   135  field-rate 0.993  TRIPLE-rate 0.993  records 2
+       @0x1A8782  len   682  words   135  field-rate 0.993  TRIPLE-rate 0.993  records 2
+       @0x1A8C6E  len   682  words   135  field-rate 0.993  TRIPLE-rate 0.993  records 2
+       @0x1A964C  len   677  words   134  field-rate 0.993  TRIPLE-rate 0.993  records 2
+       @0x1A915A  len   672  words   133  field-rate 0.992  TRIPLE-rate 0.992  records 2
+       @0x1A9B39  len   672  words   133  field-rate 0.992  TRIPLE-rate 0.992  records 2
+       @0x1AA00E  len   672  words   133  field-rate 0.992  TRIPLE-rate 0.992  records 2

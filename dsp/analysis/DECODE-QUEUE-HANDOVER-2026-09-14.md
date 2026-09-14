@@ -242,11 +242,16 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    about the evidence. A third product is the only thing that changes them, and the method that
    paid twice (§122, §128) is exactly *a second copy of the same code somewhere else*.
 
-   ⛔ **DO NOT SEED A TREE FROM THE SCAN**, and the reason is measured against the KN5000
-   control's ground truth: **op-3 block recall 27 of 40 (68 %), word recall 2275 of 3154 (72 %),
-   precision 27 of 30 (90 %, three SPURIOUS blocks)**. It would drop a quarter of a product's
-   microcode and admit three blocks that are not microcode. It also selects streams by vocabulary
-   match, so any rate computed from it is manufactured: 0.90 → 92.4 %, 0.70 → 85.3 %,
+   ★ **THE SCAN IS NOW GOOD ENOUGH TO EXTRACT WITH** (§206): restricting the opcode alphabet to
+   the **measured** `{3, D, E, F}` — `{0,1,2,5}` belong to the coefficient streams, not these —
+   and putting the kernel header/epilogue into the ground truth (they are real microcode no
+   algorithm pointer points at) moves it to **block recall 39 of 42 (93 %), word recall 3034 of
+   3237 (94 %), precision 39 of 41 (95 %)**. The KN1500 extraction goes from 9 streams / 7 blocks
+   / 737 words to **37 / 31 / 2389**, with 175 distinct new words, and every shut axis present:
+   `SRC 0x11` 98 occ, `ACT 0x0B` 146, `f31` 3…7 28, bit-11 24, mode 4 17, class 6 15.
+
+   ⛔ **But still DO NOT quote a decode rate from it**: it selects streams by vocabulary match, so
+   any rate computed from it is manufactured: 0.90 → 92.4 %, 0.70 → 85.3 %,
    0.50 → 52.3 %, 0.00 → 2.7 % (`--bias` prints the curve). I computed "+1.09 pooled points" from
    the top row before running that sweep; it is retracted. Note too that the strict count would go
    **1413 → 1469** — RULE 9 in reverse.
@@ -259,7 +264,14 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    The KN1500 is a TLCS-900 machine, so the loader is in its own firmware — find the interpreter
    loop the way `kn5000_dsp_extract.py`'s header documents finding the KN5000's.
 
-   ★ **The lead, stated as a lead:** the blind sample carries **2 mode-4 words**.
+   ★★★ **THE NEXT JOB, precisely.** The KN1500's kernel header and the KN5000's **open with eight
+   byte-identical words** and align 83 % (34 of 41). The relocation test runs on it and reproduces:
+   two minimal pairs differing only in `addr8`, both by exactly **+0x40** (`C42417820`/`C42457820`,
+   `C0A471820`/`C0A4B1820`). ⛔ Both are C-format words `decoded()` already admits, so it is an
+   independent third-product confirmation of §122 and **worth zero words**.
+   ⇒ **Align the KN1500's BODIES against the KN5000's and the WSA1R's.** That is where a minimal
+   pair can land on an axis that is actually open. `topology_fingerprint.py` and
+   `idiom_sequence.py` already do cross-product program matching.
 
 
 0★. ★★★★★ **START HERE: THE BIT-11 ALTERNATE ENCODING. 271 words, ceiling 84.3 %, nine shapes,

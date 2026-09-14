@@ -9060,11 +9060,9 @@ denominator grows faster. That is RULE 9 in reverse and it deserves the same ref
      PRECISION           27 of 30    (90 %)  -- 3 SPURIOUS blocks
   ```
 
-  A tree seeded this way would silently drop a quarter of a product's microcode **and** admit
-  three blocks that are not microcode at all. ★ One free precision constraint was added and is
-  exceptionless on the control — an op-3 payload is a whole number of 5-byte words,
-  `len(data) % 5 == 0` in **96 of 96** records — but it did not move recall, because what limits
-  recall is a spurious parse starting a few bytes early and swallowing the real stream.
+  ⚠⚠ **BOTH HALVES OF THAT ARE WRONG AND §206 FIXES THEM.** The recall was limited by an opcode
+  filter I assumed instead of measuring, and the "3 spurious" were real microcode my ground truth
+  omitted. Corrected figures are in §206; the numbers above are kept only to show what moved.
 * ⇒ **NEXT:** extract the pool through the KN1500's **own** directory structures, the way
   `gen_wsa1_dsp_disasm.py` does for the WSA1R, then RULE-9 de-duplicate and only then quote a rate.
   ⚠ A search for the stream pointer table found a 68-entry `u32le` array at `0x1A318D` immediately
@@ -9075,6 +9073,93 @@ denominator grows faster. That is RULE 9 in reverse and it deserves the same ref
 ★ The lead worth having, stated as a lead: the blind sample carries **2 mode-4 words**, and §165's
 "no replication is available" was a statement about *two* products. Two words is thin, and it is not
 a replication until the pool is extracted properly.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
+## 206. ★★★★ THE SCANNER WAS LIMITED BY AN ASSUMPTION, AND ITS GROUND TRUTH WAS INCOMPLETE
+
+Two corrections to §204–§205, both of which move the numbers a long way.
+
+**1. The opcode alphabet was assumed, not measured.** I opened a parse wherever the top nibble was
+in `{0,1,2,3,5}` — taken from the extractor's header comment. Measured over the KN5000 Sub CPU's
+100 **program** streams, the opcodes that actually occur are:
+
+```
+   op 3 x96 (the microword records) | op D x9 | op E x4 | op F x100 (one terminator per stream)
+```
+
+`{0,1,2,5}` belong to the **coefficient** streams behind the *other* pointer table, not these. The
+filter was simultaneously too wide (admitting junk) and wrong (opening on opcodes that never start
+a program stream). Restricting it to `{3, D, E, F}`:
+
+```
+                          before        after
+   exact-offset recall    51 %          90 %   (37 of 41)
+   op-3 BLOCK recall      68 %          93 %
+   WORD recall            72 %          94 %
+```
+
+**2. The ground truth was incomplete, so the detector was charged for being right.** §205 reported
+"3 SPURIOUS blocks, precision 90 %". One of them sits at file offset `0x00F596` — which is
+`closure_pointer.HEADER_ROM`, **the shared kernel header**. It is real microcode that no algorithm
+pointer points at, because every program reuses it. Scoring a detector against a truth set that
+omits it charges it for finding something that is there. With the header and epilogue included:
+
+```
+   op-3 BLOCK recall  39 of 42   (93 %)
+   WORD recall      3034 of 3237 (94 %)
+   PRECISION          39 of 41   (95 %)
+```
+
+⇒ **good enough to extract with.** ★ A third constraint was added and is exceptionless on the
+control — an op-3 payload is a whole number of 5-byte microwords, `len(data) % 5 == 0` in **96 of
+96** records — though it was the opcode alphabet that did the work.
+
+### What that gets from the KN1500
+
+```
+   before (loose scan)    9 streams,  7 distinct blocks,   737 words
+   after                 37 streams, 31 distinct blocks,  2389 words, 175 distinct words NEW
+```
+
+The block structure now mirrors the KN5000's: a long run of bodies at I-RAM `0x50`, a second group
+at `0xD0`, and one 41-word block at `0x0000` — the kernel header. And the shut axes are all
+present, where the loose scan had found **zero** class-6 words:
+
+```
+   SRC 0x11   98 occ,  32 distinct, 12 new      ACT 0x0B  146 occ, 16 distinct,  9 new
+   f31 3..7   28 occ,  18 distinct,  7 new      bit-11     24 occ,  6 distinct,  0 new
+   mode 4     17 occ,   3 distinct,  2 new      class 6    15 occ,  5 distinct,  0 new
+```
+
+## 207. ★★★ A THIRD COPY OF THE KERNEL — the relocation test reproduces, and decodes nothing
+
+The KN1500's 41-word block at I-RAM 0 and the KN5000's 60-word header **open with eight
+byte-identical words**:
+
+```
+   09220120D C0A0E0000 084202680 0122FF1CE 2042021CE 202A00448 400A00419 090A011C8
+```
+
+Aligned, **34 of 41 KN1500 words match (83 %)**. That is a third copy of the same code at a
+different offset in a different product — precisely the instrument that paid in §122 and §128. In
+the replace regions there are two exact minimal pairs differing in **one field only**:
+
+```
+   kn1500 C42417820  vs  kn5000 C42457820     addr8 17 -> 57
+   kn1500 C0A471820  vs  kn5000 C0A4B1820     addr8 71 -> B1
+```
+
+**Both shift by exactly +0x40**, at two independent sites. A field that is an address moves under
+relocation; one that is data does not.
+
+⛔ **And it decodes nothing.** Both words are C-format, and `decoded()` already admits them — the
+13-bit immediate goes `0x0417 → 0x0457` and `0x0471 → 0x04B1`, the same +0x40. So this is an
+**independent third-product confirmation of §122** (the C-format payload is an address), which §122
+established from two routes in two products. Worth having; worth zero words.
+
+⚠ The KN1500's *bodies* have not been aligned against the KN5000's or the WSA1R's. That is where a
+minimal pair could land on an axis that is actually open, and it is the next job.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 

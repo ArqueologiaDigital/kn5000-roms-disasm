@@ -91,6 +91,14 @@ def parse_stream(d, off, limit=4096):
             return None
         b0, b1 = d[p], d[p + 1]
         op = b0 >> 4
+        #  ★★★ THE OPCODE ALPHABET, measured rather than assumed.  Over the KN5000 Sub CPU's
+        #  100 PROGRAM streams the opcodes that actually occur are {3, D, E, F} -- 96 x op-3,
+        #  9 x op-D, 4 x op-E, and exactly 100 terminators, one per stream.  (The extractor's
+        #  header lists 0/1/2/5 too; those belong to the COEFFICIENT streams behind the other
+        #  pointer table, not to these.)  v1 opened a parse on {0,1,2,3,5}, which is both too
+        #  wide and wrong, and that is what let spurious parses through.
+        if op not in (3, 0xD, 0xE, 0xF):
+            return None
         if op == 0xF:
             ops.append(op)
             return iram, ops, p + 2
@@ -138,7 +146,7 @@ def scan(d, tri, hi, cl, lo, min_words=16, thresh=0.90):
     the longest.  Recall is then measurable and is reported by --control."""
     hits, i, n = [], 0, len(d)
     while i < n - 4:
-        if (d[i] >> 4) in (0, 1, 2, 3, 5):
+        if (d[i] >> 4) in (3, 0xD, 0xE):
             r = parse_stream(d, i)
             if r:
                 iram, ops, end = r
@@ -203,10 +211,23 @@ def control_recall(tri, hi, cl, lo):
     #  microcode in this ROM"; it does NOT answer "can this scan BUILD a corpus".  For that the
     #  unit is the op-3 BLOCK and the WORD, and precision matters as much as recall -- a spurious
     #  block would enter a tree as fabricated microcode.
+    #  ⚠⚠ THE TRUTH SET IS NOT THE ALGORITHM TABLE ALONE.  v1 used only ALGO_TABLE and then
+    #  reported "3 SPURIOUS blocks, precision 90 %".  One of the three is at file offset
+    #  0x00F596, which is `closure_pointer.HEADER_ROM' -- the SHARED KERNEL HEADER, real
+    #  microcode that no algorithm pointer points at because every program reuses it.  Scoring a
+    #  detector against an incomplete ground truth charges it for finding things that are there.
+    #  The kernel header and epilogue live at their own ROM constants and belong in the truth.
     truth = set()
-    for i in range(E.N_ALGOS):
+    srcs = [rom.u32le(E.ALGO_TABLE + 4 * i) for i in range(E.N_ALGOS)]
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import closure_pointer as C                                       # noqa: E402
+        srcs += [C.HEADER_ROM, C.EPILOGUE_ROM]
+    except Exception:
+        pass
+    for addr in srcs:
         try:
-            ir, _c, _o = E.parse_stream(rom, rom.u32le(E.ALGO_TABLE + 4 * i))
+            ir, _c, _o = E.parse_stream(rom, addr)
         except Exception:
             continue
         for _a, ws, _dl in ir:
@@ -261,9 +282,16 @@ def main():
               % (ng, nt, 100.0 * ng / nt, gw, tw, 100.0 * gw / tw))
         print("          PRECISION %d of %d blocks are real (%.0f %%) -- %d SPURIOUS"
               % (ngot - spur, ngot, 100.0 * (ngot - spur) / max(ngot, 1), spur))
-        print("        ⛔ Far too lossy to seed a tree: it would silently drop a quarter of a")
-        print("           product's microcode and admit blocks that are not microcode at all.")
-        print("           Extract through the product's OWN directory structures instead.")
+        br = 100.0 * ng / nt
+        pr = 100.0 * (ngot - spur) / max(ngot, 1)
+        if br >= 90 and pr >= 95:
+            print("        ★ GOOD ENOUGH TO EXTRACT WITH: >= 90 % block recall and >= 95 % precision.")
+            print("          A tree seeded from it still has to be graded against the product's own")
+            print("          directory structures where those are known.")
+        else:
+            print("        ⛔ NOT good enough to seed a tree: it would drop microcode and/or")
+            print("           admit blocks that are not microcode.  Extract through the")
+            print("           product's OWN directory structures instead.")
     if a.bias:
         #  ★★★ THE CAVEAT THAT HAS TO TRAVEL WITH EVERY RESULT THIS TOOL PRODUCES.
         #  The scan KEEPS streams whose words are already in the known vocabulary, so the
