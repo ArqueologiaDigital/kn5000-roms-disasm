@@ -818,40 +818,37 @@ still open, so the word *cannot* be executed. The combined column is printed onl
 so that nobody has to add the two by hand and get it wrong.
 
 ```
-region                          words   tier1  tier1%    tier2   t1+t2%
-resident kernel I-RAM 0..82        83       6    7.2%        6    14.5%
-   ...header  I-RAM  0..59         60       4    6.7%        4    13.3%
-   ...output stage 60..82          23       2    8.7%        2    17.4%
-   ...output stage AS LINKED       23       4   17.4%        0    17.4%
-reverb image (algo 16)            133      26   19.5%       32    43.6%
-FRAME FLOOR kernel + reverb       216      32   14.8%       38    32.4%
-FRAME FLOOR as linked             216      34   15.7%       36    32.4%
-all 38 distinct body images      2974     267    9.0%      329    20.0%
-
-distinct undecoded words           655
-distinct undecoded FAMILIES        185
-images with ZERO tier-1 words     8 of 38
+region                         words   tier1   tier1%    +1b   t1+1b%  tier2     all%
+resident kernel I-RAM 0..82       83      51    61.4%      0    61.4%      9    72.3%
+   ...header  I-RAM  0..59        60      43    71.7%      0    71.7%      7    83.3%
+   ...output stage 60..82         23       8    34.8%      0    34.8%      2    43.5%
+   ...output stage AS LINKED      23      10    43.5%      0    43.5%      0    43.5%
+reverb image (algo 16)           133     124    93.2%      0    93.2%      7    98.5%
+FRAME FLOOR kernel + reverb      216     175    81.0%      0    81.0%     16    88.4%
+FRAME FLOOR as linked            216     177    81.9%      0    81.9%     14    88.4%
+all 38 distinct body images     2974    2362    79.4%     31    80.5%     72    82.9%
 ```
 
-**Read that honestly.** On the frame floor tier 1 moved from **29/216 = 13.4 %**
-to **32/216 = 14.8 %** (as linked, 31 → 34 = **15.7 %**). The whole tier-1 gain is
-**three words**: the `ldptr.d #$NN` sites at I-RAM 44, 52 and 62, promoted because
-R3 proved *both* halves of `801.0.NN.825` by construction — the encoding from the
-writer and the space from the tag. That is the honest size of it.
+⚠⚠ **REFRESHED 2026-09-15, and the old paste had gone very stale.** This block used to carry
+the 2026-07 run — bodies `267 tier1 = 9.0 %`, `distinct undecoded words 655` — against today's
+**2362 = 79.4 %**. The section's own promise, *"every number comes out of one runnable tool, so
+this section cannot drift"*, is only true if somebody re-runs the tool; nobody had since July,
+and a stale 9 % sitting under a sentence claiming it cannot drift is worse than no number.
+**Re-run `dsp/tools/dsp_coverage.py` before quoting this table.**
 
-Tier 2 moved much further — frame floor 35 → **38**, bodies **230 → 329**
-(16.7 % → **20.0 %**) — because the delay-DRAM family widened from
-`hi12 == 0x880, addr8 ∈ {0x20,0x60}` to R2's real predicate (mode 1 + ESCAPE,
-C-format guarded), and because R3 supplied the address model that makes those
-words describable at all. They stay tier 2 for a good reason: the address comes
-from an implicit descriptor cursor, so the word still cannot be executed in
-isolation.
+★ **And this is not the rate to quote for the project.** This table counts the KN5000's 2974
+body words with duplicates. The headline figure is pooled over both products and de-duplicated
+(RULE 9): **1397 undecoded of 7273 distinct words = 80.8 % decoded**, from
+`dsp/tools/bit11_prize.py`. The two denominators are different questions and must never be
+mixed in one sentence.
 
-**What did not move, and why that is the interesting number:** `distinct
-undecoded words` is still **655** and `distinct undecoded FAMILIES` still **185**.
-Four analysis passes and an adjudication added mnemonics, killed six wrong
-readings and explained where two whole address spaces come from — without
-reducing the undecoded vocabulary by one entry. The long tail is untouched.
+**What the shape of it says.** The resident kernel — the code that runs in *every* frame of
+*every* effect — went from 7.2 % to **61.4 %**, and the reverb image from 19.5 % to **93.2 %**.
+The laggard is the **output stage**, 34.8 %: the 23 words that present the results are still the
+project's worst-covered region, and they are lexically disjoint from everything else (20 of the
+23 words, 14 of their `lo12` values and 13 of their `hi12` values occur nowhere else in the
+corpus), so frequency-ranked worklists are structurally blind to exactly the code that carries
+the audio out.
 
 The tier-2 words are worth their own line because of *what* they are. The
 standing complaint (`notes/dsp-critical-path-coverage.md` headline 2) was that
@@ -882,9 +879,11 @@ forms, but the block-coefficient roles (op0x73/op0x77) are INFERRED, not per-cel
 decodes like the biquad's. The two figures measure different things and this
 tree does not launder one into the other.
 
-**Most of the instruction set is still unknown.** The distribution has a long
-tail: the top 40 words are 46 % of undecoded occurrences and the top 29 families
-55 % — there is no small set of words that unblocks everything.
+**A long tail, but a shallower one than it was.** Of the 1397 undecoded pooled words, **591 are
+blocked on exactly one open axis**, and ten questions would account for 97.5 % of the corpus —
+see `dsp/tools/bit11_prize.py` and the cost-ranked route in the docs site's
+*uPD6383GF Decode — State of Play*. That is a change of kind from the July position, when the
+honest summary was that no small set of words unblocked anything.
 
 ### The worklist, re-ranked after K5, R1, R2, K3, K4, R3 and the adjudication
 
