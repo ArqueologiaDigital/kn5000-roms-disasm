@@ -5274,6 +5274,36 @@ Mirrors agree **3057/3057**, BYTE-MATCH OK, 24 doc pages regenerated, permanence
 explicitly against carrying the payload rule past opcode `0x620`, and this does not: they keep
 trapping.
 
+## 116. THE AUTO-PAN DISCRIMINATOR IS BLOCKED ON THE LFO RATE DEFECT — and that is the chain
+Pre-registration and data:
+[`data/PREDICT_F31_5_AUTOPAN_2026-09-14.md`](data/PREDICT_F31_5_AUTOPAN_2026-09-14.md).
+
+`f31-high.md` §4 item 1 named the instrument and nobody had run it: *"★ AUTO PAN, not PARAMETRIC
+EQ … whose observable is a ramp, not a filter response, so it does not run through a biquad's
+`f31 = 0` barrier. This is the discriminator this pass was looking for and did not use."* §108's
+sweep had covered five programs and auto pan was not among them.
+
+**Q1 HIT** — `f31 = 5` fires 2 480 216 times on TYPE 16. **Q2 MISS** — the rise census is identical
+across ADD / LOAD / HOLD, and shows no ramp to read: the moving cells step `4..3 415 889`,
+`6..4 194 283`, `152..2 313 079` — **nothing at or near 228**, which is
+`AUTO PAN C-RAM 01 = 0x0000E4 = floor(1.1986 × 2²³/44100)`, the ROM's own constant for its 1.2 Hz
+pan.
+
+⇒ the reasoning was right about the KIND of instrument and its **precondition is not met**: the
+ramp is not clean. The LFO-rate defect §102 measured (153 Hz against the ROM's 0.599 Hz) sits
+upstream of the discriminator.
+
+### ★ The chain, stated
+```
+   f31 3/4/5/7  ⟵ blocked on ⟵  a clean LFO ramp  ⟵ blocked on ⟵  the LFO RATE DEFECT
+                                                        ⟵ §109 named the path: the C-format
+                                                          destination `P' takes it 153 Hz → 0.674 Hz
+                                                          (ROM: 0.5993) while destroying the hand-off
+```
+That is worth more than another inconclusive sweep: it says **which problem to solve first**, and
+§109 already has a lead on it. It also explains §113's and §108's results from one cause rather
+than three — a broken ramp cannot grade an accumulator field, whichever program you point it at.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

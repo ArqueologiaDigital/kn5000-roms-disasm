@@ -1,0 +1,11 @@
+=== f31 == 5 on AUTO PAN (TYPE 16) -- the discriminator f31-high sect. 4 item 1 named ===
+ROM answer: AUTO PAN C-RAM 01 = 0x0000E4 = 228 = floor(1.1986 * 2^23 / 44100), i.e. 1.2 Hz
+
+ctl    f31=5 fired 2480216    rise-census rows: 0
+L      f31=5 fired 2480216    rise-census rows: 0
+H      f31=5 fired 2480216    rise-census rows: 0
+
+the moving cells and their steps (identical in all three arms):
+
+NO cell steps at or near 228.  The ramp itself is not clean, so the criterion's
+precondition is not met and all three readings score the same.

@@ -35,3 +35,34 @@ it.**
 | **Q3** ★★ | **exactly one** reading gives a step matching a ROM increment `floor(f × 2²³/44100)` for a round decimal rate, the others not ⇒ that reading is `f31 == 5` |
 | **Q4** | outcome C — the LFO sees the field but no reading lands on a ROM constant ⇒ the discriminator is live but does not decide, reported as such |
 | **Q5** | ⚠ §111's boundary: a single program's result needs corroboration on the other LFO-bearing programs before promotion |
+
+
+---
+
+## RESULT — **Q2 MISS: the auto-pan discriminator is BLOCKED on the LFO rate defect**
+Data: [`f31_5_autopan_2026-09-14.txt`](f31_5_autopan_2026-09-14.txt).
+
+**Q1 HIT** — `f31 = 5` fires **2 480 216** times on TYPE 16. **Q2 MISS** — the `§228` rise census is
+**identical across ADD / LOAD / HOLD**, and more to the point it shows no ramp to read:
+
+```
+   04: step    256..469760   mean     14 073      10: step   4..3415889  mean   163 075
+   05: step    368..676454   mean     20 266      11: step   6..4194283  mean 1 900 064
+   12: step    152..2313079  mean     93 706      13: step   6..4194283  mean 1 900 064
+```
+
+**No cell steps at or near 228** — `AUTO PAN C-RAM 01 = 0x0000E4 = 228 = floor(1.1986 × 2²³/44100)`,
+the ROM's own constant for its 1.2 Hz pan.
+
+⇒ `f31-high.md` §4 item 1's reasoning was right about the *kind* of instrument — a ramp does not
+run through the biquad's `f31 = 0` barrier — but its **precondition is not met**: the ramp is not
+clean in the first place. The same LFO-rate defect that §102 measured (153 Hz against 0.599 Hz on
+the chorus) and that §109 found a path to (destination `P` brings it to 0.674 Hz while destroying
+the hand-off) sits upstream of this discriminator.
+
+★ **So the dependency is now explicit: `f31` 3/4/5/7 is blocked behind the LFO rate defect, and
+§109 named the path to that.** That is a chain, not a dead end — and it is worth more than another
+inconclusive sweep, because it says which problem to solve first.
+
+⚠ Recorded rather than retried: this is the instrument the previous pass explicitly asked for, and
+the reason it does not work is not the one it anticipated.
