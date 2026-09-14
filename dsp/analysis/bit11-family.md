@@ -391,6 +391,16 @@ Every site of these is a bit-11 word:
    SRC 0x04     1 site    100% bit-11    (MULTI TAP DELAY w033)
 ```
 
+> ⛔⛔ **RETRACTED 2026-09-14 — see `N-INPUT-GATE-OPENED-2026-09-12.md` §166.** Four of the five
+> **do** exist off bit-11 words. This census covers the 38 distinct IC311 **body images**; each of
+> `ACT 0x03`, `ACT 0x04`, `SRC 0x02` and `SRC 0x04` has **seven** bit-11-clear sites pooled — one
+> KN5000 (in the **EPILOGUE**, which this census excludes) and six SX-WSA1R. The KN5000 site of
+> `ACT 0x04` is `E30.C.00.404`, **the very word §1 above names as bit-11-clear** — so the sentence
+> below contradicted §1 of this document before any second product was pooled in. Only **`ACT
+> 0x1C`** survives (49 sites, all bit-11, 0 clear). The paragraph is kept as written, because what
+> it got right — that the bit-11 words are not SRC/ACT — still stands; what it got wrong is the
+> universal.
+
 ⛔ **`ACT 0x03`, `ACT 0x04`, `ACT 0x1C`, `SRC 0x02` and `SRC 0x04` do not exist.**
 They are what you get by applying the bit-11-clear encoding to bit-11 words. This
 independently explains [`output-stage-io.md`](output-stage-io.md) §10's retraction

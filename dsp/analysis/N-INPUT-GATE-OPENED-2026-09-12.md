@@ -7471,6 +7471,65 @@ is what it always was.
 > reachability. If there is none, the question cannot be replicated as posed, and that is a fact
 > about the question rather than about the instrument.
 
+## 166. ⛔⛔ FOUR OF THE FIVE "PHANTOM" CODES ARE REAL — and the counterexample was in the same note
+
+`bit11-family.md` §9.3 is one of this project's cleanest-looking results:
+
+> ⛔ **`ACT 0x03`, `ACT 0x04`, `ACT 0x1C`, `SRC 0x02` and `SRC 0x04` do not exist.** They are what
+> you get by applying the bit-11-clear encoding to bit-11 words.
+
+**Four of the five do exist.** Re-asked over the pooled corpus, every one of them has exactly
+**seven bit-11-CLEAR sites** — and the split is identical in all four cases:
+
+```
+   code       total   bit-11   bit-11 CLEAR   where the clear sites are
+   SRC 0x02      56       49        7         KN epilogue w72 + 6 SX-WSA1R
+   SRC 0x04       9        2        7         KN epilogue w66 + 6 SX-WSA1R
+   ACT 0x03     106       99        7         KN epilogue w63 + 6 SX-WSA1R
+   ACT 0x04       9        2        7         KN epilogue w73 + 6 SX-WSA1R
+   ACT 0x1C      49       49        0         ★ the claim HOLDS for this one
+```
+
+### The counterexample never needed a second product
+
+§9.3's census covers the **38 distinct IC311 body images**. Every KN5000 counterexample is in the
+**EPILOGUE**, which that population excludes — and the `ACT 0x04` one is `E30.C.00.404`, **epilogue
+w73**.
+
+That word is named in **§1 of the same note**, which states in as many words that it carries bit 11
+*clear*:
+
+```
+   w73   E30.C.00.404      lo12 = 0x404      bit 11 CLEAR
+   w026  040.0.00.864      lo12 = 0x864      bit 11 SET
+```
+
+So §9.3 contradicted §1 of its own document. The note even says the right thing about its own
+population — *"`lo12[4:0] == 0x04` occurs exactly ONCE in the 6344-word IC311 **body** corpus"* —
+and then §9.3 dropped the qualifier and wrote a universal. Pooling the SX-WSA1R (six more sites per
+code, in the kernel and five `struct_30_*` images) only made it impossible to miss.
+
+★ **This is the same defect as §129**, which caught *"every ACT-0x0B delay word carries `addr8`
+0x20/0x30"* being a scoped measurement promoted to a universal — and the same family as §138, §141
+and §160. It is by some distance this project's most frequent error, and the cure is mechanical:
+
+> When a census restricts its population, the restriction belongs in the **claim**, not only in the
+> method paragraph.
+
+### What changes
+
+`dsp_disasm.py`'s `PHANTOM_ACT` / `PHANTOM_SRC` existed *"so the parse cannot be re-applied
+silently"* — a guard against a real error, now carrying a wrong universal of its own. They are
+corrected to `(bit-11 sites, bit-11-CLEAR sites)` pooled, a new `REAL_OFF_BIT11` set is added so
+nothing re-deletes the four, and `bit11-family.md` is annotated at the point of the claim.
+
+⇒ **28 pooled words move from "not instructions" to "real instructions whose codes are
+unanchored."** Coverage is unchanged at **1501 of 8003, 81.2 %** — they were undecoded before and
+they are undecoded now — but they change status from *deleted from the ISA table* to *legitimate
+decode targets*, and four codes the project had written off are reopened. Most of the sites are
+class 1 or class 9, i.e. **mode 1, the register file**, which §128 already decoded; what they lack
+is only their SRC/ACT semantics.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

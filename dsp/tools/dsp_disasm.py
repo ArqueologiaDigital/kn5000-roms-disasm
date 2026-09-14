@@ -443,10 +443,26 @@ def alt_lo12(w):
     return (not c_format(w)) and bool((w >> 11) & 1)
 
 
-# Codes whose every corpus site is an alt_lo12() word: they are parse artefacts,
-# not instructions.  Counts over the IC311 corpus, analysis/bit11-family.md 9.3.
-PHANTOM_ACT = {0x03: 54, 0x04: 1, 0x1C: 25}
-PHANTOM_SRC = {0x02: 25, 0x04: 1}
+# ⛔⛔ CORRECTED 2026-09-14 (N-INPUT-GATE-OPENED sect. 166).  `bit11-family.md' sect. 9.3 wrote
+# these as universals -- *"ACT 0x03, ACT 0x04, ACT 0x1C, SRC 0x02 and SRC 0x04 DO NOT EXIST"* -- on
+# a census of the 38 distinct IC311 **body images**.  FOUR OF THE FIVE OCCUR OFF BIT-11 WORDS, and
+# the counterexamples were always reachable: each has exactly SEVEN bit-11-clear sites, **1 KN5000
+# + 6 SX-WSA1R**, and every KN5000 one is in the **EPILOGUE**, which the body census excluded.
+#
+# `E30.C.00.404' (epilogue w73) is the KN5000 site of ACT 0x04 -- and sect. 1 OF THE SAME NOTE names
+# that word and states it carries bit 11 CLEAR.  So sect. 9.3 contradicted sect. 1 of its own
+# document; pooling the second product only made it unmissable.  Same defect sect. 129 caught in
+# the `ACT 0x0B' universal: a scoped measurement written as a universal.
+#
+# ⇒ these are REAL CODES with unanchored semantics, not parse artefacts, and they are legitimate
+# decode targets rather than entries to be deleted from a working ISA table.  Values below are
+# (bit-11 sites, bit-11-CLEAR sites), POOLED over both products.
+#   ★ ACT 0x1C is the one that SURVIVES the pooling: 49 sites, all bit-11, 0 clear.
+PHANTOM_ACT = {0x03: (99, 7), 0x04: (2, 7), 0x1C: (49, 0)}
+PHANTOM_SRC = {0x02: (49, 7), 0x04: (2, 7)}
+
+# The four that are NOT phantoms -- an explicit set so nothing re-deletes them.
+REAL_OFF_BIT11 = {"ACT": (0x03, 0x04), "SRC": (0x02, 0x04)}
 
 # Codes whose counts are INFLATED by alt_lo12() words (corrected value second),
 # analysis/bit11-family.md sect. 9.4.  ACT 0x19 is LO_ACT_CAP_TA2.
