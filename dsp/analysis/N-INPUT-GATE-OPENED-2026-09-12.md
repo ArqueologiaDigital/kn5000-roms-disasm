@@ -7597,6 +7597,52 @@ and coverage stays at **1501 of 8003, 81.2 %**. What it buys is that six codes w
 from the ISA table as parse artefacts" (§9.3) to "an enumerated bank with a demonstrated
 addressing discipline", which is where a decode can start.
 
+## 168. ★★ THE WSA1R's PER-EFFECT PARAMETER MAP, DECODED STATICALLY — and the test it could not settle
+
+§167's handover note said the WSA1R's coefficient streams were *"the untouched anchor source"* and
+that reading them statically was *"the one piece of real infrastructure this queue still lacks"*.
+Built: `wsa1/dsp/analysis/dsp_zerofill_static.py`.
+
+It composes two things the project already had and had never crossed: `dsp_record_field_opcodes.py`
+measured that the 56 PoolDir_Records carry coefficient streams at fields +0/+4/+8, and
+`dsp_cram_map.deframe_stateful` **slides a 5-byte window**, so it needs no framing and can be handed
+raw ROM bytes instead of a capture.
+
+**All 56 records decode with no emulator at all.** Three results:
+
+* The per-effect streams write **D-RAM registers (K tag 0x15) and NO C-RAM (0x26) whatsoever.** That
+  corrects the loose reading that "effect selection re-uploads C-RAM" — the C-RAM coefficients come
+  from the boot streams, and the per-effect records set D-RAM.
+* The values are recognisable Q23 fractions: ENHANCER writes `0x0A` and `0x12` = **0.870000**,
+  `0x14` = **0.500000**; PHASER writes `0x10` = **1.000000**, `0x13` = **0.500000**.
+* Every effect with a state block writes a contiguous run of **zeros based at `0x05`/`0x50`** — the
+  host's D-RAM **state clear**, the WSA1R's exact analogue of the KN5000 zero-fill block
+  (`isa-adjudication.md` §5, also based at 0x50).
+
+### ⛔ The test it was built for, and it has no power
+
+`closure_pointer.py cmd_cells` states the criterion: *"if the modelled pointer walk of a body visits
+far more distinct cells than [the zero-fill block], the walk model is what is wrong."* The body's
+pointer base is unknown, but the walk's **span** is base-independent — so span vs block size is an
+anchored test needing no capture, and it was built to settle variant V7.
+
+**It cannot.** 21 of 22 bodies overflow their own zero-fill block under **both** readings, and only
+two rows differ at all (rec 49: over by 7 vs 6; rec 51: 5 vs 4). Recorded here so nobody re-runs it.
+
+### ★ But it is not a null — the overflow is a CONSTANT
+
+**18 of the 22 bodies overflow by exactly 5**, independent of effect, size and family. A constant
+offset is not a per-program modelling error: it is five cells the walk over-counts, or five the host
+deliberately does not clear (shared latches, or the input/output pair the kernel owns rather than
+the body).
+
+`closure-pointer.md` **forces** a re-establishing mechanism that nobody has identified — the frame
+residue is +121 and no walk variant closes it — and a constant 5 across 18 independent programs in
+the *other product* is the shape such a thing leaves behind. That is a lead for the pointer-closure
+question, which is upstream of several open axes, and it is the most concrete thing this pass found.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.** This is infrastructure and a lead, not a decode.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
