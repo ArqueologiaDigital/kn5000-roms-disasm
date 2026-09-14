@@ -6968,6 +6968,45 @@ and the law that produces the coefficient is read (§153). What remains is the s
 a comparison against a live trace. Coverage unchanged — this decodes no microcode word; it decodes
 the **firmware** that feeds one.
 
+## 154. THE SCALE STEP IS READ — single precision, its own helpers, and 2²¹ applied first
+§153 left one gap: *"the eight FLOATS do not appear in the code read — the scale application is
+past `0x039bbb` and is UNREAD."* Read.
+
+```
+   39bbe  XDE=0x012ddb · 0x03e290      × 0.9999      ← the second operand finishing the DOUBLE law
+   39bd0  0x03dd6c                     double → …     ← and storing it
+   ── from here the constants are the FLOATS and the helpers are a DIFFERENT SET ──
+   39bd4  ld XWA,0x40400000            ★ the immediate 3.0f, the same value as 0x012def
+   39bdf  XDE=0x012de3 · 0x03d92c      2.0f
+   39bee  XDE=0x012de7 · 0x03d92c      2.0f
+   39c00  XDE=XSP+0x0a · 0x03e2c0
+   39c0a  XDE=0x012deb · 0x03d92c      1.0f
+   39c26  XDE=XSP+0x06 · 0x03d3d4
+   39c33  XDE=0x012def · 0x03e2c0      3.0f
+   39c42  XDE=XSP+0x4a · 0x03e15a
+   39c4f  XDE=0x012df3 · 0x03e2c0      ★ 2²¹
+   39c5e  0x03d44c                     ← a final conversion
+```
+
+**Two arithmetics, cleanly separated.** The exponential law (§153) uses `0x03e290` / `0x03d533` /
+`0x03dd36` / `0x03dd6c` on the **doubles**; the scaling uses `0x03d92c` / `0x03e2c0` / `0x03d3d4` /
+`0x03e15a` / `0x03d44c` on the **floats** — which is exactly the split the byte decode showed
+(first `0x30` doubles, last `0x20` singles) and is now confirmed by which helper touches which
+constant.
+
+★ **The first scale applied is `2²¹`** (`0x012df3`, at `0x039c4f`), immediately before the final
+conversion at `0x03d44c`.
+
+### ⛔ What is still open, and it is narrower than before
+* The **helper semantics** remain inferred from use — now for two families rather than one. Nothing
+  here proves `0x03e2c0` is a single-precision multiply; it is read that way from its operands.
+* The **cell ↔ scale assignment** is not settled. Four scales exist (`2²¹, 2²³, 2²², 2²¹`) and this
+  path applies one of them; which cell takes `2²³` and `2²²` is in code past `0x039c65`, unread.
+
+⇒ the artefact the handover asks for now has: the constants (§152), the coefficient law (§153), and
+the shape of the scaling (§154). What it lacks is the helper semantics and the cell↔scale map —
+both readable, neither read. Coverage unchanged; this is firmware, not microcode.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
