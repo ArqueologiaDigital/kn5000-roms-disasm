@@ -164,3 +164,37 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
   address points **at** a block terminator where all nine siblings point **past** one. What supplies
   `P` there is the best-posed question left, and it has a known answer at each end: the hand-off
   live at ±2.9 M and the ramp at the ROM's 114.
+
+
+---
+
+# ADDENDUM — the state after §138…§149 (this is the current picture)
+
+## Corrections to this file's earlier text, all measured
+* **§138 RETRACTED** (see above). The "17 words inside a DF-I section / 8 in the wah programs"
+  lead used a **tempA live range** instead of `lle_oracle.py`'s own definition. Corrected: **7**
+  words, none `ACT 0x1A`.
+* **§142 RETRACTS "exactly two anchors."** `host_side.py laws` already extracts a **value law per
+  parameter opcode** from the firmware's evaluators. The EQ and SINGLE DELAY anchors are two
+  *instances* of that mechanism, not the only two things the ROM pins. ⇒ the family can reach
+  **837 of 1546** coefficient fetches (~54 %); the rest are fixed uploads with no evaluator.
+
+## `f31` — the axis that moved this session
+* **§146** — rule 4's gate is **passed**: `f31` 3/6/7 fire 4.9–5.8 M / 1.9 M / 2.0–3.0 M per
+  program. ⚠ The bit-5 *exclusivity* is **static** (0 words with bit 5 clear), so a counter cannot
+  test the 4-bit-field hypothesis. Population pooled is **120 words**, not the 53 the device says.
+* **§147** — §231's COLLAPSED-OP census is a **machine** blindness instrument the static one misses:
+  the four *resident* sites discard identically zero (product **and** acc-in) over 1.7 M executions.
+* **§148** — `UPD6383_BX_F3 / _F6 / _F7` built and run. **HOLD ≡ the shipped collapse exactly**
+  (406 report lines identical — the positive control). LOAD and ADD are observable, with **the same
+  deltas (−49, −74) in two programs**. The pre-registered null is refuted.
+* **§149** — ⛔ and the **ranking** criterion does not exist: `prog09`, `prog39` and `prog16` carry
+  **zero** `f31 = 3` words, so every anchored criterion is blind to the axis by construction. Its
+  carriers are the dynamics/distortion families, whose HLE models are graded.
+
+## What the next pass should actually do, in order
+1. **Build a bit-exact reference for ONE dynamics program** (compressor is the best candidate —
+   `op0x72[0]` is the only **PROVEN** cell↔opcode entry in the family). That single artefact
+   unblocks `f31 = 3` (56 sole-axis words) *and* is the same job §135 named for `ACT 0x0B`.
+2. `UPD6383_BX_F6` / `_F7` are built and unused — 3 + 44 pooled words, same method as §148.
+3. `SRC 0x11` stays a documented **dependency cycle**; do not run another capture campaign at it.

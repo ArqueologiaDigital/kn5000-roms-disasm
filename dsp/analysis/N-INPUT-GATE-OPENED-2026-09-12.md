@@ -6780,6 +6780,42 @@ anchored cells. The only discriminators are **activity counts**, and §20 measur
 reading proven identical to the shipped model**. It needs a criterion that **ranks** the three
 readings, not one that merely distinguishes them. Coverage unchanged.
 
+## 149. ⛔ THE RANKING CRITERION §148 ASKED FOR DOES NOT EXIST — measured per axis
+§148 left `f31 = 3` separable but unranked, and asked for a criterion that **ranks** LOAD / ADD /
+HOLD rather than merely distinguishing them. Every anchored criterion this project has was checked
+against it:
+
+```
+   prog09_single_delay   (the lag-1001 ROM product)      f31=3 words: 0
+   prog39_parametric_eq  (the bit-exact biquad oracle)   f31=3 words: 0
+   prog16_room_reverb_1                                  f31=3 words: 0
+```
+
+**Zero, in all three.** The code does not occur in a single program where the ROM pins an answer —
+so the existing anchors are blind to this axis **by construction**, not by weakness.
+
+Where it does occur is the **dynamics and distortion** families: enhancer, compressor, exciter,
+auto-wah, distortion, overdrive, fuzz, and the `peq_compr_*` combos. §135 already measured that the
+HLE's models for those are *graded, not bit-exact*.
+
+### The one thing that looked like a way in, and why it is not
+The cell ← opcode map carries a **PROVEN** entry in exactly this family — `op0x72[0] (role
+gain-computer, PROVEN)` — and §142 established that the firmware's evaluators give a **value law**
+per opcode. So: does `op 0x72` pin anything usable?
+
+```
+   op 0x72  evaluator 0x039ABD, 203 lines, 15 ROM data references — a TABLE-DRIVEN law
+   writes   prog36_compressor  C-RAM 0x04, 0x0D        prog75_peq_compressor  C-RAM 0x0A, 0x19
+```
+
+It pins a **coefficient**, not a **response**. Knowing what value the gain computer's coefficient
+takes does not rank three accumulator operations — for that you need a predicted output to compare
+against, which is the reference-response problem again, one family further along.
+
+⇒ `f31 = 3` stands where §148 left it: **separable, reproducible, one reading proven identical to
+the shipped model, and unranked.** The ranking criterion has to be *built* on a dynamics program,
+and that is the same modelling job §135 named for the reverbs. Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
