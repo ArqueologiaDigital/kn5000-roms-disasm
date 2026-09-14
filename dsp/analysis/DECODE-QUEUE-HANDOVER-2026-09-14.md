@@ -246,6 +246,43 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
      3. A criterion that presupposes the hypothesis is not a criterion — and that includes the
         *program-selection* criterion, not just the acceptance test. §165.
 
+0. ★★★ **START HERE: the C63 idiom is 19 % of the gap and everything but ONE thing is measured.**
+   §177 ranks it top by leverage — `0124011CE` ×99, `040000C63` ×87, `0006184CD` ×53, `0006284CD`
+   ×34 = **273 occurrences**. **90 of them have `{SRC 0x13, class 6}` as their only open axes**
+   (`ACT 0x0D` is already anchored), so closing class 6 is **+90 words, 80.6 % → 81.8 %**.
+
+   **What is now MEASURED** (none of this existed a day ago):
+   * the **table port** — mode-1 register file at `0x1D`, 32 cells, loaded per effect, written via
+     host tag `0x15` (`upd6383.cpp:1998`). Contents identified in two effects: a 32-entry
+     odd-symmetric soft-clip curve (EXCITER, §178) and `0.95·sin(2πk/24+0.1)` to max error 0.0000
+     with **the first eight entries repeated as a wrap-guard** (PEQ, §179).
+   * the **phase** — D-RAM cell `0x07`, unsigned, `0 .. 8 388 602`, updating 1 570 842 times against
+     ~176 000 for every other live cell (§183).
+   * the **amplitude** — the DEPTH parameter, measured **2.0000×** across a 30-step edit (§185).
+     ⇒ **there is NO missing scaling step**, and the `±240 sweep` three arms were judged against was
+     the wrong expectation all along.
+   * a **criterion that passes an off-control** — cell `0x0F`'s behaviour (§181). ⚠ Its *span* is
+     order-independent and so cannot rank index forms (§185); its *change count* can (§186).
+
+   ⛔ **THE ONE OPEN THING: the index form.** `lfo-ramp.md` §10's anchored increment gives the
+   expectation — 1 570 842 phase updates × 114 = 21.3 wraps of 2^23, so a monotonic 24-entry sweep
+   steps ≈ **512** times. Measured: `=1` adds **7 110** (~14×), `=4` adds **102 331** (~200×).
+   **Neither is right**, and `=4` — the form whose arithmetic fits exactly,
+   `(24 × 8 388 602) >> 23 = 23` — is the worse by 14×.
+
+   ★★ **THE FIRST THING TO CHECK, and it is probably an instrument bug not a physics one.** `=4`'s
+   102 331 means the quantity it reads changes ~200× more often than the census's cell `0x07` does.
+   The arm does `m_dram.read_dword(0x07)`; the census that located the phase reports its own space.
+   **Make the arm log the phase value it actually reads, once, and compare against `0x07`'s census
+   range.** If they disagree, `=4` was never testing `(coef × phase) >> 23` at all — which would be
+   the fourteenth time in one session that a null or a miss was the instrument rather than the
+   machine, and every one of those was caught the same way: by checking that the quantity fed to the
+   experiment is the quantity the claim is about.
+   ★ Second candidate if the read is correct: §179's wrap-guard implies a **windowed** read of W
+   consecutive entries, which would scale the expectation to `512 × W`. `=1`'s 7 110 gives W ≈ 14,
+   `=4`'s gives W ≈ 200; the guard is 8 cells wide, so neither matches cleanly and W is worth
+   deriving from the microcode rather than fitted.
+
 0a. ⛔ **`ACT 0x01..0x06` IS CLOSED TOO (§175).** §167 characterised it — an enumerated
    destination bank, 6 of 6 pair exchanges at p = 1.1e-9 — and §174 put it top of this queue. One
    command closed it: 15 KN5000 programs carry these codes, only 4 also carry an `op0x70` band, and
