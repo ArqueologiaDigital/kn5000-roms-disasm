@@ -7041,6 +7041,128 @@ does not track. **The map sees the C-RAM subset; the evaluator emits more.**
 still inferred from use — and then a live-trace comparison. Coverage unchanged; firmware, not
 microcode.
 
+## 156. ★★★ `hi12` BIT 6 IS A THIRD BIT OF THE ALTERNATE-ENCODING FLAG — in the other half of the word
+
+`bit11-family.md` §9 proved, on the KN5000 alone, that `lo12` bit 11 selects a second `lo12`
+encoding with no SRC and no ACTION field, and closed at §11 item 1 with *"the alternate `lo12`
+encoding is the object now… the question is now what the alternate form encodes"*. That pass had
+one product, and its two co-varying bits (11 and 5) were both in `lo12`.
+
+Pooled over the 6441 ESC-clear non-C-format words of **both** products (`dsp/tools/lut_idiom.py
+--flag`):
+
+```
+   (hi12 bit 6  AND NOT  hi12 bit 5)   <=>   lo12 bit 11        0 exceptions in 6441
+```
+
+A bit in the **other half of the microword** tracks the flag exactly. The plain form `hi12 bit 6
+<=> lo12 bit 11` misses by 14, and those 14 are **two word shapes**, `16E.8.00.000` ×12 and
+`16E.8.00.655` ×2, present only in the SX-WSA1R and carrying bit 6 *with* bit 5.
+
+**THE CONTROL, AND IT DISCRIMINATES.** All 144 plain `(hi12 bit, lo12 bit)` biconditionals and all
+1584 masked ones are swept. Six masked combinations reach zero exceptions and they are the **same
+finding six times** — bit 6, masked by any of bits 2/3/5 (all three are set on the `16E` shapes, so
+the corpus cannot separate them), against `lo12` bit 5 or 11 (which §9.1 already showed are one
+flag). The next-best `hi12` bit misses by **119**; the worst pair by **4343**.
+
+⛔ **So the MASK is not identified.** The honest statement is *"`hi12` bit 6 agrees with `lo12` bit
+11 on 6427 of 6441 ESC-clear pooled words, the exceptions being two shapes"* — not *"bit 6 and not
+bit 5"*. Writing the masked form as the result would be fitting the mask to the 14 words it has to
+exclude.
+
+★ And a second structural fact falls out with its own null: **every ESC-clear alternate word carries
+`class4 == 0` and `addr8 == 0`**, 119 of 119. The base rate of `addr8 == 0` among ESC-clear words
+that are *not* alternate is **39.1 %**, so the exceptionlessness is not automatic. The form has no
+addressing field at all — which is why `decoded()` never reaches the bit-11 guard on these words:
+they are refused earlier, on their class.
+
+## 157. ★★★ THE C63 TABLE-LOOKUP IDIOM, POOLED — exceptionless, and the clip curve has 40 entries
+
+`instruction-set.md` measured the `C63` + class-6 idiom at 53 of 53 in both directions on the
+KN5000. Pooled it is **99 sites**, and three things hold without exception (`lut_idiom.py --idiom`):
+
+1. **Every `C63` is followed by a mode-6 word and then a mode-4 word** — 99 of 99.
+2. **The head's `f31` and the class-6 word's `lo12` are coupled** — 99 of 99:
+   `hi12 040` (f31 = 0, LOAD) ↔ class-6 `lo12 4CD`; `hi12 142` (f31 = 1, ADD) ↔ `lo12 407`.
+3. The class-6 word's `addr8` takes **five values in the entire pooled corpus**, and the two
+   products agree on all five:
+
+```
+   addr8 = 0x18 = 24   LFO family     KN 29 / WSA 24   <- the PROVEN 24-entry host-uploaded sine
+   addr8 = 0x28 = 40   waveshaper     KN 17 / WSA 17   <- ★ so the CLIP CURVE HAS 40 ENTRIES
+   addr8 = 0x1A/1E/20  the 407 variant  KN 7 / WSA 5
+```
+
+`upd6383.cpp`'s `UPD6383_C6LUT` arm already reads `addr8` as the entry count, citing §160's *"addr8
+= 0x18 = 24 at every LFO site"* — **one product, one role**. New here: the **waveshaper half** (34
+sites), the **cross-product replication**, and the two couplings. A completely different instrument,
+built by a different team, uses the same five table lengths.
+
+★ **40 is a constraint `N-DISTORTION-NOT-UNDUMPED-2026-09-12.md` did not have.** That note left open
+*"which exact C-RAM cells hold the distortion waveshaper table"*. Two of its premises are now
+measurably wrong about this field: C-RAM cell `0x28` is written by **neither** the preset streams
+(DISTORTION writes cells 0x00–0x06 only) **nor** the boot blob (0x50–0x8B), and cell `0x18` is not
+written either (CHORUS writes 0x00–0x13). `addr8` is therefore **not a C-RAM address**, which is what
+the C6LUT arm assumes and what this makes explicit.
+
+⚠ **24 is the one ANCHORED value** — the LFO table is proven to have 24 entries (1 LSB match). 40 is
+read off the same field of the same idiom in a second product; **no 40-entry table has been
+located**, and this does not claim one exists at any particular address.
+
+## 158. ★★ THE POINTER-DELTA READING OF `addr8` IS EXCLUDED FOR CLASS 6 — three walk variants die
+
+§98 put classes 4, 6 and 8 into `closure_pointer.py`'s walk-variant table on this inference:
+
+> *"`addr8` is NEVER ZERO on classes 4, 6 and 8 — 53 of 53, 53 of 53, 44 of 44 … So the field is
+> load-bearing there. One of the two live readings is that it is the SAME pointer delta classes 2
+> and A carry."*
+
+⛔ **"Never zero" licenses "load-bearing"; it does not license "pointer delta" — and class 6 is the
+counterexample inside the same sentence.** Class 6's `addr8` is never zero (99 of 99 pooled) *and*
+load-bearing *and* provably not a displacement: §157 shows it is the table entry count, anchored at
+24.
+
+And the walk measures the incoherence directly. `closure_pointer.py variants` reports V0 (baseline)
+residue **+121** and V8 (class 6 post-increments) **+177** — a delta of **+56**. That is not an
+arithmetic coincidence: the tool walks algo 1 by default, and **that image's two class-6 words carry
+`addr8` 24 and 32**. V8 advances the D-RAM operand pointer by a sine table's entry count.
+
+⇒ **V8, V10 and V12 are excluded on the MEANING of the field.** This matters because *no* variant
+closes the frame, so the closure criterion by itself excludes nothing — it was never able to rank
+these rows.
+
+**What survives:** V7 (class 4 alone — residue +123, 8 → 10 nets, exactly the two class-4 words a
+frame executes at +1 each) and V9 (class 8). ⛔ And `addr8` cannot separate V7 from "no move":
+**class 4 carries the single value `0x01` in 99 of 99 words in both products**, so the field
+expresses one displacement in eight bits under one reading and nothing under the other. A constant
+field is uninformative either way. Mode 4's pointer behaviour stays **OPEN**.
+
+⚠ Correction to my own first draft of `lut_idiom.py`: it cited V12 (classes 4 **and** 6) for a claim
+about class 4 alone. V7 is the class-4 row.
+
+## 159. WHAT THE CLASS TEST ALONE REFUSES — the measured size of the §90/§112/§128 opportunity
+
+The three decodes that worked this month share one shape: *the class test is what refuses the word,
+and the word's own form explains the class*. `lut_idiom.py --classgate` measures how much is left on
+that exact footing — words that are undecoded while `_alu_half_anchored()` already passes:
+
+```
+   class 3    14 undecoded,  14 anchored          class 6    99 undecoded,  12 anchored
+   class 4    99 undecoded,  99 anchored   <- ★   class 8    56 undecoded,  12 anchored
+   class 5     5 undecoded,   2 anchored
+   ⇒ 139 pooled words, 9 distinct shapes
+```
+
+**99 of the 139 are one shape — `0124011CE`, the idiom's third word** (class 4, `addr8 = 0x01`, SRC
+0x07, ACT 0x0E, f31 = 1 ADD), in 47+ images across both products.
+
+⛔ **Not promoted, and §158 is why.** §112's standard is *"decoded when the ADDRESSING is explained
+AND the ALU half is anchored"*. The ALU half is anchored for all 139. The addressing is **not**
+explained for mode 4: post-increment-by-one and no-move are both alive, they differ on exactly these
+99 words, and the field that would separate them is constant. This is the single cheapest open axis
+in the corpus — **+99 words on one decision** — and it names the instrument that would settle it:
+anything that observes the D-RAM pointer two class-4 words later.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
