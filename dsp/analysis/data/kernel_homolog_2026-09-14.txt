@@ -1,0 +1,88 @@
+====================================================================================================
+  kernel_homolog -- the WSA1R's unnamed structural record IS the KN5000 kernel header
+====================================================================================================
+
+   KN5000 kernel header w0..w41 (42 words)   vs   WSA1R struct_00_fd4093 (48 words)
+
+      == IDENTICAL  KN w0  ..w12   ==  WSA w0  ..w12    (13 words)
+      !! replace  KN w13 ..w15       WSA w13 ..w21 
+           KN  w13  0282200000  282.2.00.000
+           KN  w14  0400A00000  400.A.00.000
+           KN  w15  0C0A292820  C-fmt opcode 0x605  imm13 658    hi12 C0A  bit6 0
+           WSA w13  0282A00000  282.A.00.000
+           WSA w14  0400200000  400.2.00.000
+           WSA w15  0104200000  104.2.00.000
+           WSA w16  00922002C0  092.2.00.2C0
+           WSA w17  0880120415  880.1.20.415
+           WSA w18  0182A0040B  182.A.00.40B
+           WSA w19  0012200440  012.2.00.440
+           WSA w20  0400200000  400.2.00.000
+           WSA w21  0C0A352820  C-fmt opcode 0x605  imm13 850    hi12 C0A  bit6 0
+      == IDENTICAL  KN w16 ..w21   ==  WSA w22 ..w27    (6 words)
+      !! replace  KN w22 ..w22       WSA w28 ..w28 
+           KN  w22  0C04312820  C-fmt opcode 0x602  imm13 786    hi12 C04  bit6 0
+           WSA w28  0C043D2820  C-fmt opcode 0x602  imm13 978    hi12 C04  bit6 0
+      == IDENTICAL  KN w23 ..w24   ==  WSA w29 ..w30    (2 words)
+      !! delete   KN w25 ..w25       WSA w31 ..w30 
+           KN  w25  00002002D9  000.2.00.2D9
+      == IDENTICAL  KN w26 ..w28   ==  WSA w31 ..w33    (3 words)
+      !! replace  KN w29 ..w29       WSA w34 ..w34 
+           KN  w29  0C42457820  C-fmt opcode 0x621  imm13 1111   hi12 C42  bit6 1
+           WSA w34  0C424F7820  C-fmt opcode 0x621  imm13 1271   hi12 C42  bit6 1
+      == IDENTICAL  KN w30 ..w30   ==  WSA w35 ..w35    (1 words)
+      !! replace  KN w31 ..w31       WSA w36 ..w36 
+           KN  w31  0C0A4B1820  C-fmt opcode 0x605  imm13 1201   hi12 C0A  bit6 0
+           WSA w36  0C0A551820  C-fmt opcode 0x605  imm13 1361   hi12 C0A  bit6 0
+      == IDENTICAL  KN w32 ..w39   ==  WSA w37 ..w44    (8 words)
+      !! replace  KN w40 ..w40       WSA w45 ..w46 
+           KN  w40  0C4A1C0820  C-fmt opcode 0x625  imm13 448    hi12 C4A  bit6 1   ★★★ sect. 120: THE ONE
+           WSA w45  0C0A5E0820  C-fmt opcode 0x605  imm13 1504   hi12 C0A  bit6 0
+           WSA w46  0400A00000  400.A.00.000
+      == IDENTICAL  KN w41 ..w41   ==  WSA w47 ..w47    (1 words)
+
+   ⇒ ★★★ 34 of 42 KN5000 kernel-header words are BYTE-IDENTICAL AND IN ORDER
+        inside a WSA1R record the effect directory does not name.
+
+   ★★★ THE NEAR-MINIMAL PAIR sect. 120 NEEDED
+
+      KN  w40   0C4A1C0820   imm13 448    hi12 C4A  f31 5  bit6 1
+      WSA      0C0A5E0820   imm13 1504   hi12 C0A  f31 5  bit6 0
+      xor      0040420000   word bits 17, 22, 30
+                            of which 17, 22 lie inside the 13-bit immediate (bits 12..24)
+      ⇒ OUTSIDE THE PAYLOAD: bit 30   ★ = `hi12' bit 6
+
+      Both carry f31 = 5, so `c_opcode' (= hi12 >> 1, low three bits = f31) differs
+      in exactly that one flag.  The disassembler prints it `?6'.
+
+   ★ `hi12' BIT 6 CENSUS, POOLED (KN5000 + SX-WSA1R)
+
+      C-format words      bit6=0    54   bit6=1   391   <- SET is the common case
+      non-C-format words  bit6=0  7424   bit6=1   134
+
+      ⇒ on a C-format word bit 6 is SET 87.9 % of the time; CLEAR is the exception,
+        and the WSA1R's copy of sect. 120's word is one of the exceptions.
+
+      every C-format word with bit 6 CLEAR, by opcode:
+        0x600  x26    lo12 000 x7 407 x19
+        0x602  x2     lo12 820 x2
+        0x605  x7     lo12 000 x2 820 x5
+        0x60B  x7     lo12 000 x1 20D x6
+        0x60C  x6     lo12 820 x6
+        0x60D  x6     lo12 820 x6
+
+   ★ CONTROL (rule 15) -- the same alignment against every other image, 99 of them
+
+      rank  score  image
+      1        34  WSA     struct_00_fd4093   ★★★ the homolog
+      2         2  WSA     struct_30_fdbc5a
+      3         2  WSA     struct_30_fcda77
+      4         2  WSA     struct_30_fcd81c
+      5         2  WSA     struct_30_fcd5e2
+      6         2  WSA     struct_30_fcd2c6
+      7         2  WSA     kernel
+      8         2  KN      prog73_peq_flanger
+      ...
+      99        0  KN      prog00_no_operation
+
+      mean over the 98 NON-homolog images: 0.4   max: 2   the homolog: 34
+      ⇒ THE FINDING SURVIVES ITS NULL: the homolog scores 75.7x the mean and beats the best unrelated image.

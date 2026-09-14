@@ -1,0 +1,67 @@
+====================================================================================================
+  cfmt_opcode -- the C-format opcode field, pooled over KN5000 + SX-WSA1R
+====================================================================================================
+
+   ★ POOLED C-FORMAT OPCODE CENSUS -- 445 words, 10 distinct opcodes
+
+      opcode  KN5000  WSA1R  total   lo12 destinations
+      0x600        0      0     26   000 x7 407 x19
+      0x602        0      0      2   820 x2
+      0x605        0      0      7   000 x2 820 x5
+      0x60B        0      0      7   000 x1 20D x6
+      0x60C        0      0      6   820 x6
+      0x60D        0      0      6   820 x6
+      0x620        0      0    386   000 x295 1DA x4 359 x2 407 x5 44C x64 451 x14 647 x2  <- is_c40 (the payload rule)
+      0x621        0      0      2   820 x2
+      0x625        0      0      1   820 x1
+      0x632        0      0      2   000 x1 007 x1
+
+   ★ DESTINATIONS TAKING MORE THAN ONE OPCODE -- where the opcode does work
+
+      lo12 000   5 opcodes:  0x600 x7  0x605 x2  0x60B x1  0x620 x295  0x632 x1
+      lo12 407   2 opcodes:  0x600 x19  0x620 x5
+      lo12 820   6 opcodes:  0x602 x2  0x605 x5  0x60C x6  0x60D x6  0x621 x2  0x625 x1
+
+   ★ THE FIVE `lo12 = 0x820' WORDS -- four opcodes, one destination (output-stage-decode item K)
+
+
+      elsewhere in the pooled corpus: 22 more `lo12 = 0x820' words
+        KN      kernel                       iw15  0C0A292820  opcode 0x605
+        KN      kernel                       iw22  0C04312820  opcode 0x602
+        KN      kernel                       iw29  0C42457820  opcode 0x621
+        KN      kernel                       iw31  0C0A4B1820  opcode 0x605
+        KN      kernel                       iw40  0C4A1C0820  opcode 0x625
+        WSA     kernel                       iw34  0C18AB2820  opcode 0x60C
+        WSA     kernel                       iw37  0C1ABF0820  opcode 0x60D
+        WSA     struct_00_fd4093             iw21  0C0A352820  opcode 0x605
+        WSA     struct_00_fd4093             iw28  0C043D2820  opcode 0x602
+        WSA     struct_00_fd4093             iw34  0C424F7820  opcode 0x621
+        WSA     struct_00_fd4093             iw36  0C0A551820  opcode 0x605
+        WSA     struct_00_fd4093             iw45  0C0A5E0820  opcode 0x605
+
+   ★★ EVERY OCCURRENCE OF `iw40's OPCODE 0x625 IN EITHER PRODUCT: 1
+
+        KN      kernel                       iw40  0C4A1C0820  lo12 820  imm13 448
+
+      ⇒ ONE distinct word.  The opcode and the destination cannot be separated
+        for 0x625 in this corpus: every occurrence is the same 36 bits.
+
+   ★ MINIMAL PAIRS ACROSS THE C-FORMAT OPCODE -- everything else in the 36-bit word identical
+
+      NONE in the pooled corpus.  The opcode never varies with the rest of the word
+      held fixed, so there is no twin to read it off -- which is itself the answer
+      to `is the twin method available here': it is NOT, unlike class4 and bit 7.
+
+   ★ CONTROL (rule 15) -- the same shape measured on the IMM13 PAYLOAD, which is data
+
+      destinations taking more than one IMM13 value: 8 of 10
+      ⇒ a destination taking several values of a field is the NULL, not a finding.
+        What separates the opcode census from this control is that the payload is
+        expected to vary and the opcode is not -- so the row that matters is the one
+        where a destination takes several OPCODES with the SAME payload.
+
+      (lo12, imm13) pairs seen with MORE THAN ONE opcode: 0
+        NONE.  ⇒ in this corpus the opcode is a FUNCTION of (destination, payload),
+        and no measurement here can separate it from them.  That is a null with
+        power: it says the static corpus cannot answer sect. 120's question, and
+        the answer has to come from the machine.
