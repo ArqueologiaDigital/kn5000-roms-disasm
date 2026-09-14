@@ -8257,9 +8257,45 @@ memory layout; what does not exist is a way to check it. Before any fourth arm, 
 an observable that demonstrably moves when the lookup is switched off — the `C6LUT=0` control is the
 positive control it needs to pass, and no instrument in this project currently passes it.
 
-⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The +90 stays out of reach, and the reason is now
-one level further back than §179 thought: not "the index is unknown" but "nothing here can see the
-lookup".
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
+### ⛔ CORRECTION, same hour: an observable DOES exist — §181
+
+I closed §180 with *"nothing in the project currently passes it"*. **Wrong, and the check was free**
+— the same three logs carry the §176 D-RAM census, and one cell separates all three arms:
+
+```
+   C6LUT=0 (OFF)   0F  range      -10 ..      +11   span      21   <- the control: nothing
+   C6LUT=1         0F  range -2402840 .. +2402838   span 4805678   <- SYMMETRIC
+   C6LUT=3         0F  range       -6 ..  +241093   span  241099   <- one-sided
+```
+
+**Cell `0x0F` is the observable §180 said did not exist.** It is silent with the arm off (span 21
+against a sine full scale of ±7 969 177), and it distinguishes the two index forms from each other
+as well as from the control. The §157 TAPMOD census is blind; the §176 D-RAM census is not, and
+nobody had pointed it at this question.
+
+★ So §180's substantive point stands — the TAPMOD criterion cannot see the lookup, and the
+"scaling step" conclusion drawn from it is unsupported — but its closing sentence was too strong and
+is withdrawn.
+
+### And my index hypothesis is refuted, for a reason that is my code
+
+`C6LUT=1` produces a **symmetric** ±2.40 M sweep; my `=3` produces a **one-sided** +241 K. A sine
+must be symmetric, so `=3` as implemented is the worse model — and the cause is identifiable: I fed
+`(n × d) >> 23` the **signed** `acc_to_datum`, so `d < 0` drives the index negative (wrapping under
+`& 0xff` into garbage) and small `|d|` pins it near 0. `lfo-ramp.md` §10's candidate is
+`(coef × PHASE) >> 23` with an **unsigned** phase in `0..2^23`.
+
+⇒ **`=3` tested my arithmetic, not the hypothesis.** The hypothesis is still untested; what is new
+and keeps is the **criterion**. ⚠ That is the tenth time this session a null or a negative has been
+my instrument rather than the machine, and the pattern is always the same — I ran the experiment
+before checking that the quantity I fed it was the quantity the claim is about.
+
+★ Also measured, and reassuring: the §228 LFO rise means are **identical across all three arms**
+(15424.998, 14080.307, 20275.639, 15543.929), so the arm does not disturb the LFO phase itself.
+
+⚠ Coverage still **1413 of 7273, 80.6 %.**
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
