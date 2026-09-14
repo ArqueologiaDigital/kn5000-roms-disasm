@@ -1,0 +1,18 @@
+f31=4 THREE-ARM RUN -- TYPE 33 = prog75_peq_compressor (FINGERPRINTED), per-program census
+
+  mask / reading                     cells   0E        C3        C8        D0       
+  CONTROL  4 -> LOAD (shipped alias) 72      7B3F32    --        FFFFFF    62FFEE   
+  ARM      4 = ADD                   73      7FFFFF    1259EA    C46363    7FFFFF   
+  ARM      4 = HOLD                  73      7FFFFF    1259EA    FFFFFF    7FFFFF   
+
+  7FFFFF = the POSITIVE RAIL.  The CONTROL is the only arm leaving 0E and D0 unrailed.
+  ADD and HOLD both rail 0E and D0 and both add a new cell C3; they differ only at C8.
+
+  D-RAM anchored cells 04/05/06 -- IDENTICAL in all three arms, so the PRE-REGISTERED
+  criteria (hand-off live, VOLUME written-once) are BLIND here; the discriminator is
+  the sect.160 register-file census, which was NOT among them.
+
+  §176 D-RAM CENSUS, ALL 32 CELLS, over 221468 frames SINCE THE LAST PROGRAM UPLOAD at frame 1908648 (§103 PER-PROGRAM, 102 resets) -- NOT comparable with a whole-walk census: 01:6799547(0..6799547/chg1
+
+  REACH (N0): §205 f31=4 fired 1387425 -- sect.108 measured 0 in the chorus, so this
+  run has power where that one did not.
