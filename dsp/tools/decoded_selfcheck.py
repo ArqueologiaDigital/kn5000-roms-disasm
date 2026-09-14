@@ -34,10 +34,21 @@ WHAT IT IS NOT
     report a false pass, which is the dangerous direction.  It is duplicated on purpose: an
     invariant that imports the thing it checks checks nothing.
 
-MEASURED 2026-09-14, pooled over the KN5000 + SX-WSA1R corpora (8003 words):
-    forward inconsistencies 0, reverse 0.  1501 undecoded words are blocked on SEMANTICS -- an
+MEASURED 2026-09-14, pooled over the KN5000 + SX-WSA1R corpora:
+    forward inconsistencies 0, reverse 0.  Every undecoded word is blocked on SEMANTICS -- an
     unanchored SRC/ACT, an unknown `f31', or an unexplained store target -- and not one of them is
     blocked by a bug in the predicate.
+
+    ★★ AND THE PUBLISHED RATE IS INFLATED (sect. 176).  The SX-WSA1R tree carries BYTE-IDENTICAL
+    duplicate images: 60 records resolve to 52 distinct programs, so 730 of the 8003 pooled words
+    are replicas.  RULE 9 says de-duplicate before quoting a rate.  Honest figure:
+
+        as published      8003 words   1501 undecoded   81.2 %
+        DISTINCT images   7273 words   1413 undecoded   80.6 %   <- use this one
+
+    The duplicates are REVERBS and are better decoded than the corpus average (11 of 91 open, 12 %
+    against 18.8 %), so correcting this LOWERS the headline.  Reported anyway -- a correction that
+    only ever flatters is not a correction.
 """
 import collections
 import os
@@ -108,6 +119,31 @@ def main():
     for c in ("nop", "regload", "setvec", "c-format", "terminator", "mode1", "mode4", "dram", "alu"):
         n = fired.get(c, 0)
         print("     %-12s %6d%s" % (c, n, "   <- admits NOTHING today" if n == 0 else ""))
+
+    #  ★★ RULE 9 (2026-09-14, sect. 176): DE-DUPLICATE BEFORE QUOTING A RATE.  The SX-WSA1R tree
+    #  carries BYTE-IDENTICAL duplicate images -- 60 records resolve to 52 distinct programs -- and
+    #  the duplicates are REVERBS, which are better decoded than average, so counting them inflates
+    #  the published figure.  Same defect `bit11-family.md' sect. 0 item C caught on the KN5000
+    #  side, where one image replicated 42-fold turned 123 raw sites into 80 real ones.
+    seen, dd, nimg, ndup = set(), [], 0, 0
+    for label, img, slots, ws in CT.images():
+        nimg += 1
+        k = (label, tuple(ws))
+        if k in seen:
+            ndup += 1
+            continue
+        seen.add(k)
+        dd.extend(ws)
+    if ndup:
+        du = sum(1 for w in dd if not DIS.decoded(w))
+        print("\n  ★★ RULE 9 -- byte-identical duplicate images are inflating the rate:")
+        print("     as published    %5d words  %5d undecoded  %5.1f %% decoded"
+              % (len(words), und, 100.0 * (len(words) - und) / len(words)))
+        print("     DISTINCT images %5d words  %5d undecoded  %5.1f %% decoded   <- the honest one"
+              % (len(dd), du, 100.0 * (len(dd) - du) / len(dd)))
+        print("     %d words in %d redundant images of %d.  They are REVERBS and are BETTER decoded"
+              % (len(words) - len(dd), ndup, nimg))
+        print("     than average, so de-duplicating LOWERS the headline rather than raising it.")
 
     ok = not fwd and not rev
     print("\n  %s" % ("★ CONSISTENT in both directions."

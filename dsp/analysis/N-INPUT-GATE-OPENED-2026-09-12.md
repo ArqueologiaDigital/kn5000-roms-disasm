@@ -8019,6 +8019,36 @@ says two words touch the same cell, not what either computes.
 
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
 
+## 176. ⛔ THE PUBLISHED COVERAGE RATE IS INFLATED — RULE 9, and the correction goes the wrong way
+
+Asked because a rate quoted a hundred times in this session had never had rule 9 applied to it:
+**de-duplicate before quoting a rate.**
+
+The SX-WSA1R disassembly tree carries **byte-identical duplicate images**. 60 records resolve to
+**52 distinct programs**; the duplicates are reverbs — five copies of one 91-word image, three of a
+92-word one, three of another 91-word one:
+
+```
+   KN5000              40 images -> 40 distinct     3057 words unchanged
+   SX-WSA1R            60 images -> 52 distinct     4946 -> 4216 words
+   POOLED, published   8003 words   1501 undecoded   81.2 %
+   POOLED, distinct    7273 words   1413 undecoded   80.6 %   <- the honest figure
+```
+
+**730 of the 8003 pooled words are replicas**, in 8 redundant images of 100.
+
+★ This is the same defect `bit11-family.md` §0 item C caught on the KN5000 side, where one image
+replicated 42-fold turned a raw count of 123 bit-11 sites into a real 80 — and that note drew the
+right conclusion for its own family without anyone applying it to the corpus rate.
+
+⇒ **the honest headline is 80.6 %, not 81.2 %.** The duplicates are reverbs and are *better* decoded
+than average — 11 of 91 open, 12 % against the corpus's 18.8 % — so removing them **lowers** the
+number. Reported anyway: a correction that only ever flatters is not a correction, and every
+coverage figure in §§120–175 of this note is 0.6 points optimistic for this reason.
+
+⚠ Both figures are now printed by `dsp/tools/decoded_selfcheck.py`, so the inflated one cannot be
+quoted again without the honest one beside it.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
