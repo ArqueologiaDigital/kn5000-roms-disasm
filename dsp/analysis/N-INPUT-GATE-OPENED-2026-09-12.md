@@ -6368,6 +6368,57 @@ then does the oracle say anything about `SRC 0x11`.
 **Recorded as one word with its three preconditions, not as a target.** §138 was retracted for
 exactly the failure of skipping that bounding step. Coverage unchanged.
 
+## 140. §139's PRECONDITION 1 IS MET; PRECONDITION 2 IS HARDER THAN I STATED
+Working §139's chain rather than handing it on.
+
+### ★ Precondition 1 — MET. The section carries the full §7 signature.
+`DECODE-by-correlation` §7 names a DF-I section by `ld.ta` (ACT `0x13`) at entry, `mac.tb`
+(ACT `0x14`), and a class-8 `post` makeup. `prog15_rock_rotary` (algo 15):
+
+```
+   w16  ld     acc,c+,(p)+64   C-RAM 0x04   coef 373712     ← output-level gain, OUTSIDE
+   w17  mac.ta (p),c+,(p)+0    C-RAM 0x05   coef 0                ACT 0x13  ← section entry
+ ★ w18  ?word                  C-RAM 0x06   coef 1423801           SRC 0x11
+   w19  mac    (p),c+,(p)+1    C-RAM 0x07   coef 15353414
+   w20  mac.tb (p),c+,(p)+1    C-RAM 0x08   coef 7777061           ACT 0x14
+   w21  mac    (p),c+,(p)+0    C-RAM 0x09   coef 8958128
+   w23  post   acc,c                                               class 8  ← the makeup
+```
+
+All three markers present, five coefficient-fetching class-A MACs (`w17…w21`), and excluding `w16`
+— which its own annotation calls an *output-level* gain — gives **exactly the oracle's six cells**
+(`0x05…0x09` + the makeup). ⇒ §139's first precondition is satisfied, and `w18` is **index 1**,
+whose canonical operand role is `x0`, the current input sample.
+
+⚠ One caution kept: the coefficient-run instrument reports **7** run-5/6 sections against only **3**
+`ld.ta` entries in the *modulation* family, where in the EQ family the two counts track (78 vs 80).
+So the run-length signature alone does not identify a section here; it is the §7 markers that do,
+and this section has them.
+
+### ⛔ Precondition 2 — NOT met, and the reason is sharper than "the order is assumed"
+I expected to derive the cell order by stability, the way `biquad_stability_probe.py` did for the
+EQ (*"the captured coefficients are a STABLE, sensible peaking EQ (poles 0.710) ONLY with
+SUBTRACTIVE feedback"*). **That route needs the per-coefficient SCALES, and they are solved for the
+EQ only** (`biquad-eq.md` — the EQ's per-coefficient scales were solved statically, which is
+precisely why that probe could run). The raw integers here forbid assuming a single divisor:
+
+```
+   w17  0          w18  1423801     w19  15353414   ← exceeds 2^23 = 8388608
+   w20  7777061    w21  8958128     ← also exceeds 2^23
+```
+
+Two of the five exceed `2^23`, so a uniform `÷2^23` cannot be right for all of them, and without the
+scales the poles are not computable — so **stability cannot decide the order.** `w17`'s coefficient
+being exactly **0** is a further oddity worth carrying: the schedule's index 0 is the `load`
+(`acc ← b1·x1`), and a zero there makes the section's opening multiply a no-op, which may mean the
+word is there for its `ACT 0x13` tempA capture rather than its product.
+
+⇒ the chain now reads: **precondition 1 met; precondition 2 requires the rotary's per-coefficient
+scales, which is `biquad-eq.md`'s method applied to a second program** — a bounded, named piece of
+work rather than an unknown. Precondition 3 (validating the oracle at this site) follows it.
+
+⇒ coverage unchanged, and no claim is made about `SRC 0x11`.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

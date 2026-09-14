@@ -122,6 +122,15 @@ the run is SIX class-A words so the section boundary is inferred; `lle_oracle.py
 cell order `[b1, b0, b2, −a1, −a2, makeup]` rather than deriving it, and that order is established
 only for `prog39_parametric_eq`; and instantiating a model validated on the EQ at an unvalidated
 site is §135's problem again. **Establish the section, derive the order, then read the operand.**
+★ **§140 did the first step: PRECONDITION 1 IS MET.** `prog15_rock_rotary` (algo 15) `w17…w21`
+carries the full §7 signature — `mac.ta` (ACT 0x13) at `w17`, `mac.tb` (ACT 0x14) at `w20`, class-8
+`post` at `w23` — and excluding `w16` (its annotation calls it an output-level gain) leaves exactly
+the oracle's six cells, C-RAM `0x05…0x09` + makeup. `w18` is **index 1**, canonical operand `x0`.
+⛔ **Precondition 2 is now named precisely**: deriving the order by stability needs the
+**per-coefficient SCALES**, solved in `biquad-eq.md` for the **EQ only**. Two of the rotary's five
+raw coefficients exceed `2^23` (15 353 414 and 8 958 128), so no uniform divisor applies and the
+poles are not computable. ⇒ **apply `biquad-eq.md`'s scale-solving method to algo 15.** That is the
+next concrete step, and it is bounded work rather than an unknown.
 
 ## What would actually move this
 
