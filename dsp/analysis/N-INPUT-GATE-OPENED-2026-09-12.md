@@ -5683,11 +5683,41 @@ cross-product near-minimal pairs:
 the **register file**, `addr8` the index, 48 of 48 in the KN5000. 87 of the WSA1R's 150 have an
 anchored ALU half, so the class test is the only thing refusing them.
 
-⛔ **NOT promoted, and the reason matters.** Admitting them would claim the device executes them
-correctly, and what the device actually does is let them "fall through to the ALU and perform their
-mode-1 store" — with the *source* side still reading `mem[ptr]` rather than the register file. That
-is §91's trap exactly: a format escape whose ADDRESSING is explained does not license its ALU half.
-The next pass on this must check the device's source route first, not the predicate.
+⛔ **NOT promoted — and I checked the device before saying why, because the first reason I wrote
+down was wrong.** I had it that the source side "still reads `mem[ptr]`". It does not:
+
+```
+   upd6383.cpp:4130   const bool regfile = (rdmode == 1) && !(hi & 0x800);
+   upd6383.cpp:4143   L = (regfile && m_speculative && (m_specmask & 0x800000) && !xb_rd)
+                              ? s32(util::sext(m_rf[rdsrc] & 0xffffff, 24)) : …
+```
+
+`regfile` is *exactly* "class 1 without the escape bit", and **SPEC bit 23 is set in the default
+mask `0xb910e446a39b440f`** — the register-file read route is live today. What the device says
+about it is the real obstacle, and it says it about itself:
+
+> ⛔ **GUESSED: symmetry.** *"The store side is documented; the read side is not, and no note in
+> this project states it. It is applied because the two halves of one addressing mode disagreeing
+> would be the odd claim, not because anything proves it."*
+
+So the words execute; the route they execute through is labelled a guess. Tier 1 cannot be built on
+that. ⇒ the next pass's job is to **anchor the read side**, and there is one witness already:
+
+> ★★ The corpus contains **exactly one** word addressing mode-1 index `0x06` — KN epilogue `w12`,
+> i.e. **I-RAM 72**, in the output stage. `register-space.md` item A1 proves **by construction**,
+> 49 of 49 algorithms, that register `0x06`/`0x86` is the **VOLUME**, written once per algorithm by
+> the host's `EFF_VolumeLoop` and never by microcode. Under the register-file reading that word
+> reads the volume, in the one place a volume multiply belongs. Under the rival it reads
+> `D-RAM[m_dp]` and the host's volume never reaches the datapath from microcode at all.
+
+That is one anchored instance, not a proof of the general route — but "GUESSED: symmetry"
+understates it, and the comment should say *one anchored instance, generalised by symmetry*.
+
+A symmetry check over the pooled corpus (read indices ⊆ written indices, mode-1 escape-0 words):
+**KN 36 of 40 read occurrences take an index the same mode writes (90.0 %), WSA1R 95 of 124
+(76.6 %)** — and the four KN exceptions are `06`, `85`, `8A`, `8F`, of which `0x06` is the one the
+**host** writes. ⚠ Weak on its own: the KN figure is carried by the terminators' `0x0E` (×38), and
+I have not computed a null for it. Recorded as a lead, not a result.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
