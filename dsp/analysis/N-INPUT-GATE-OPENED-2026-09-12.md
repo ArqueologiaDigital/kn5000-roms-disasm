@@ -6656,6 +6656,50 @@ would have quoted an hour ago.
 favoured by one live cell in one program, and §144's static argument (22 of 25 at band slot 2 carry
 `mac`) still pointing the other way. Coverage unchanged.
 
+## 146. ★ RULE 4's GATE ON `f31` 3/6/7 IS PASSED — and the census that shows it cannot fail
+The nine `f31 = 4` logs carry a census I had not read. `upd6383.cpp` records a **speculative**
+hypothesis about `hi12` bit 5 — *"(bit5, f31) acting as a 4-bit selector whose codes 3/6/7 are
+reachable only with bit 5 set … the first FALSIFIABLE hypothesis this bit has ever had"* — and a
+counter built for one stated purpose: *"⛔ THIS CHANGES NOTHING. It COUNTS, so the next pass knows
+whether those 53 sites are even reachable in the resident frame — which rule 4 requires before
+anyone implements a reading for them."*
+
+```
+   prog75   bit5=0  f31 3:0        6:0        7:0     │ bit5=1  3:5 687 512  6:1 927 653  7:2 020 787
+   prog96   bit5=0  f31 3:0        6:0        7:0     │ bit5=1  3:5 772 416  6:1 938 492  7:2 031 626
+   prog97   bit5=0  f31 3:0        6:0        7:0     │ bit5=1  3:4 892 718  6:1 948 735  7:3 003 509
+```
+
+**⇒ Rule 4's precondition is met: the sites are reachable, 5–6 M firings per program, 3 of 3.**
+Implementing a reading for `f31` 3/6/7 is no longer blocked on "are they even executed".
+
+### ⚠ And the thing I nearly reported instead
+My first reading of that table was *"the machine confirms the bit-5 hypothesis — zero with bit 5
+clear, millions with it set."* **It confirms nothing.** The exclusivity is a **static** fact:
+
+```
+   pooled corpus, (f31, bit5) word counts
+      f31 3   bit5=0: 0     bit5=1: 73
+      f31 6   bit5=0: 0     bit5=1:  3
+      f31 7   bit5=0: 0     bit5=1: 44
+```
+
+If **no word** with `f31 ∈ {3,6,7}` carries bit 5 clear, then no **execution** can either. The
+runtime zeros are *implied by the disassembly*, so that census **cannot disconfirm the hypothesis**
+— a criterion that cannot fail, the third time this session I have caught one, and this time in a
+table I was about to quote as a result.
+
+**What the runtime genuinely adds is reachability, and only that** — which is exactly what the
+device comment said it was for. The hypothesis that `(bit 5, f31)` is a 4-bit operation field
+remains **speculative and untested**; testing it needs an arm that makes the two halves behave
+differently, not a counter.
+
+### ★ And the population is bigger than the comment says
+`upd6383.cpp` says **53 of 53**, counted on the KN5000. Pooled with the WSA1R it is **120 words**
+(73 + 3 + 44). Anyone implementing a reading should size it against 120.
+
+⇒ coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
