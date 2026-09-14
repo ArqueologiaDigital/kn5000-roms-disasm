@@ -193,8 +193,13 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
   carriers are the dynamics/distortion families, whose HLE models are graded.
 
 ## What the next pass should actually do, in order
-1. **Build a bit-exact reference for ONE dynamics program** (compressor is the best candidate —
-   `op0x72[0]` is the only **PROVEN** cell↔opcode entry in the family). That single artefact
-   unblocks `f31 = 3` (56 sole-axis words) *and* is the same job §135 named for `ACT 0x0B`.
+1. **Build a bit-exact reference for ONE dynamics program** (compressor — `op0x72[0]` is the only
+   **PROVEN** cell↔opcode entry in the family). One artefact unblocks `f31 = 3` (56 sole-axis
+   words) *and* the job §135 named for `ACT 0x0B`.
+   ★ **§152 did step one and it was cheap.** `op 0x72`'s ROM data is **not a table** — it is
+   IEEE-754 constants: doubles `−0.0697 / 10 / 0.9999` (repeated byte-identically, one law two
+   operands) and floats `2, 2, 1, 3` then **`2²¹, 2²³, 2²², 2²¹`**. ⇒ §140's blocker (*"the scales
+   are solved for the EQ only"*) **does not apply here — they are written down.** What remains is
+   to **read the evaluator's 203 lines at `0x039ABD`** and check how the constants combine.
 2. `UPD6383_BX_F6` / `_F7` are built and unused — 3 + 44 pooled words, same method as §148.
 3. `SRC 0x11` stays a documented **dependency cycle**; do not run another capture campaign at it.

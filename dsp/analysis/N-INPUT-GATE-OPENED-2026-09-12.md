@@ -6889,6 +6889,48 @@ concluded *"the pointer is 2 short"*. §179 asks: **was that measured in an empt
 genuinely unrun experiment had its answer sitting in a log from a different experiment. **Check the
 data before concluding either way.** Coverage unchanged.
 
+## 152. ★★★ THE COMPRESSOR'S SCALES ARE WRITTEN DOWN IN THE ROM — §140's blocker dissolves
+Tool: [`op72_constants.py`](../tools/op72_constants.py). Data:
+[`data/op72_constants_2026-09-14.txt`](data/op72_constants_2026-09-14.txt).
+
+§140 stopped on one sentence: *"deriving the cell order by stability needs the per-coefficient
+SCALES, and they are solved for the EQ only."* The EQ's came from a **flatness identity** — under
+one assignment its b-vector becomes exactly `[1, a1, a2]` — and no other family has an analogue.
+§149 then measured that no anchored criterion can rank `f31 = 3` because the code lives in the
+dynamics families, and the handover's top item became *"build a bit-exact reference for one
+dynamics program"*, with the compressor named because `op0x72[0]` is the family's only **PROVEN**
+cell←opcode entry.
+
+**Step one is far cheaper than I assumed.** `host_side.py laws` locates op 0x72's evaluator at
+`0x039ABD` with *"15 ROM data references, 0x012DB3..0x012E03"* and describes it as table-driven.
+Those 80 bytes are **not a table** — they are **IEEE-754 constants**, little-endian:
+
+```
+   DOUBLES   −0.0697      10      0.9999        ← and the triple appears TWICE, byte-identical
+   FLOATS     2   2   1   3
+              2²¹  2²³  2²²  2²¹                ← FOUR DISTINCT POWER-OF-TWO SCALES
+```
+
+* The doubles repeating byte-for-byte is what the cell map already said: `op0x72` writes **exactly
+  two cells** in every carrier (`prog36` `0x04`/`0x0D`, `prog75` `0x0A`/`0x19`) — one law, two
+  operands.
+* `10` is the dB base; `0.9999` is a near-unity pole, the shape of a release smoother; `−0.0697` is
+  the per-step exponent. A gain computer, in floating point.
+* ★ And **`2²¹ / 2²³ / 2²² / 2²¹`** — the DSP's fixed-point scale and its neighbours, **explicit**.
+
+⇒ **§140's blocker does not apply to this family.** The per-coefficient scales are not something to
+solve by identity or by stability; for the compressor they are **written down**. That is the first
+concrete piece of the artefact the handover asks for, and it is a ROM fact rather than a model.
+
+### ⛔ What this is not
+**The constants are not the law.** How they combine is in the evaluator's 203 lines of TLCS-900,
+which this pass does not read, so **no formula is claimed**. And a coefficient law still pins a
+*coefficient*, not a *response* — §149's point stands. What has changed is that the piece §140
+called unavailable turns out to be sitting in the ROM, which moves the dynamics-reference job from
+"derive the scales somehow" to "read 203 lines and check them against these constants."
+
+⇒ coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

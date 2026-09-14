@@ -1,0 +1,36 @@
+================================================================================================
+  op 0x72 -- the compressor's GAIN COMPUTER, the dynamics family's only PROVEN
+  cell<-opcode entry.  Evaluator 0x039ABD; ROM data 0x012DB3..0x012E03 (80 bytes).
+================================================================================================
+
+   ★ DOUBLES (IEEE-754, little-endian -- the CPU's byte order)
+
+      012DB3  B9 FC 87 F4 DB D7 B1 BF   = -0.0697
+      012DBB  00 00 00 00 00 00 24 40   = 10
+      012DC3  1E A7 E8 48 2E FF EF 3F   = 0.9999
+      012DCB  B9 FC 87 F4 DB D7 B1 BF   = -0.0697
+      012DD3  00 00 00 00 00 00 24 40   = 10
+      012DDB  1E A7 E8 48 2E FF EF 3F   = 0.9999
+
+      the two halves are byte-identical: ★ YES -- one law, two operands
+      (and `op0x72` writes exactly TWO cells in every carrier: prog36 0x04/0x0D,
+       prog75 0x0A/0x19 -- so `two operands' is what the cell map already said.)
+
+   ★ FLOATS (IEEE-754, little-endian)
+
+      012DE3  00 00 00 40   = 2             
+      012DE7  00 00 00 40   = 2             
+      012DEB  00 00 80 3F   = 1             
+      012DEF  00 00 40 40   = 3             
+      012DF3  00 00 00 4A   = 2097152          ★ = 2^21
+      012DF7  00 00 00 4B   = 8388608          ★ = 2^23
+      012DFB  00 00 80 4A   = 4194304          ★ = 2^22
+      012DFF  00 00 00 4A   = 2097152          ★ = 2^21
+
+   ⇒ FOUR DISTINCT POWER-OF-TWO SCALES, written down in the ROM.
+     sect. 140 stopped because *"the per-coefficient scales are solved for the EQ
+     only"* -- the EQ's came from a flatness IDENTITY this family has no analogue of.
+     Here they need no solving at all.
+
+   ⛔ The constants are NOT the law.  How they combine is in the evaluator's 203
+     lines of TLCS-900, which this file does not read, so no formula is claimed.
