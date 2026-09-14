@@ -8480,6 +8480,72 @@ no rate check until I built one.
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The 90 words stay blocked, now on a sharper
 statement: not "which of two forms" but "neither of these two".
 
+## 187. ★★ THE PHASE READ IS CORRECT — which voids §186's ranking
+
+§186 ranked the two index forms on cell `0x0F`'s change count and concluded both miss the anchored
+512 (by 14× and 200×). Before reasoning further I checked the instrument — the check whose absence
+explains every miss this session — by making the arm log what it actually reads:
+
+```
+   arm reads   0 .. 8 388 602   changed 1 574 371 times
+   cell 0x07   0 .. 8 388 602   chg     1 570 842
+```
+
+**Identical range, change counts within 0.2 %.** `C6LUT=4` genuinely reads the phase; my suspicion
+that it was an addressing bug is refuted.
+
+★★★ **And that refutation is worth more than a confirmation would have been**, because it makes
+§186 impossible. A verified clean ramp forces `(24 × phase) >> 23` to change **exactly 512 times** —
+arithmetic, not conjecture — while cell `0x0F` changed **102 331** times. Both cannot describe the
+same quantity.
+
+⇒ **cell `0x0F` is NOT the table value.** The arm writes `m_p`; `0x0F` is written by whatever
+**consumes** P further down the chain. §186 compared a *consumer's activity* against an
+*index-step* expectation, and its ranking — "=1 is 14× out, =4 is 200× out" — is **VOID**.
+⚠ Fifteenth instrument error of the session, and the first caught by a check run deliberately rather
+than stumbled into.
+
+## 188. THE INDEX CENSUS — reasoning complete, confirmation blocked by the environment
+
+The fix is to census `k` itself, which `upd6383.cpp` now does (`§188 C6LUT INDEX k`). Every input is
+verified, so the prediction is arithmetic and can fail cleanly:
+
+```
+   phase 0..8 388 602, +114/frame, 1 570 842 updates  =  21.3 wraps of 2^23
+   a 24-entry table swept monotonically steps its index 21.3 x 24  =  ~512 times
+
+   C6LUT=4   (24 x phase) >> 23    MUST span k = 0..23 and change ~512 times
+   C6LUT=1   acc mod 24            no reason to do either
+```
+
+⛔ **The run could not be completed**: three consecutive attempts were killed by the harness for
+"low memory" while the machine had 26 GB available and no process above 0.7 GB. The log reaches
+~129 KB of ~500 KB and dies before the end-of-run census prints. This is an environment limit, not a
+result — **do not read it as a negative**.
+
+### One command to finish it
+
+```
+   cd $KN7000_BUILD && UPD6383_C6LUT=4 DHLE=0 DSPCFG=3 TYPEIDX=0 NOTEMODE=0 TGM=0 \
+     UPD6383_CENSUS_PERPROG=1 UPD6383_TRACE_FRAME=1632600 \
+     ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log -window \
+     -autoboot_script dsp/tools/fx_ab.lua
+   grep '§188 C6LUT INDEX k' error.log
+```
+
+* **k = 0..23, ~512 changes** ⇒ the index is `(addr8 × phase) >> 23`, class 6's addressing is
+  explained in every part, and `is_c6lut()` can join `is_mode1()` in `decoded()` on §112's standard.
+  **That is +90 words, 80.6 % → 81.8 %** — the 90 whose only open axes are `{SRC 0x13, class 6}`.
+* **anything else** ⇒ the arithmetic is wrong somewhere not yet found, and §186's void ranking must
+  be redone against `k` rather than against `0x0F`.
+
+★ What is already measured and needs no further work: the table port (register file `0x1D`, 32
+cells, per effect, contents identified in two effects — §178/§179), the wrap-guard implying a
+windowed read (§179), the phase cell (§183, verified §187), and the amplitude (DEPTH, exactly
+2.0000× — §185, which also retired the `±240` target three arms were wrongly judged against).
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
