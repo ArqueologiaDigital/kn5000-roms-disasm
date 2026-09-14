@@ -7,7 +7,7 @@ Image rep **algo 50** &middot; slots 50 &middot; **unit 0** (I-RAM load 84) &mid
 
 > vibrato: wet-only modulated delay
 
-**53 words**, 12 class-A coefficient multiplies (2 named), 0 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
+**53 words**, 12 class-A coefficient multiplies (2 named), 0 instructions still opaque, **16 of 53 not yet decoded**. Landmarks detected: 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD

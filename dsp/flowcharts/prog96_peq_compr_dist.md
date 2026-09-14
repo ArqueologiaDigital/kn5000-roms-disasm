@@ -7,7 +7,7 @@ Image rep **algo 96** &middot; slots 96 &middot; **unit 0** (I-RAM load 84) &mid
 
 > PEQ + compressor + distortion
 
-**90 words**, 30 class-A coefficient multiplies (16 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**90 words**, 30 class-A coefficient multiplies (16 named), 0 instructions still opaque, **25 of 90 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

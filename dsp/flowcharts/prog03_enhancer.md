@@ -7,7 +7,7 @@ Image rep **algo 3** &middot; slots 3 &middot; **unit 0** (I-RAM load 84) &middo
 
 > enhancer: phase/emphasis shaping
 
-**99 words**, 26 class-A coefficient multiplies (18 named), 0 instructions still opaque. Landmarks detected: 2 C-format immediate load(s), 1 DRAM read/write word(s), 4 all-pass marker(s).
+**99 words**, 26 class-A coefficient multiplies (18 named), 0 instructions still opaque, **21 of 99 not yet decoded**. Landmarks detected: 2 C-format immediate load(s), 1 DRAM read/write word(s), 4 all-pass marker(s).
 
 ```mermaid
 flowchart TD

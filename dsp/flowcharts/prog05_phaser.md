@@ -7,7 +7,7 @@ Image rep **algo 5** &middot; slots 5 &middot; **unit 0** (I-RAM load 84) &middo
 
 > phaser: LFO-swept first-order all-pass chain (~0.438 +/-0.025), 0.3 feedback
 
-**106 words**, 14 class-A coefficient multiplies (9 named), 0 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s).
+**106 words**, 14 class-A coefficient multiplies (9 named), 0 instructions still opaque, **17 of 106 not yet decoded**. Landmarks detected: 2 LFO phase word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s).
 
 ```mermaid
 flowchart TD

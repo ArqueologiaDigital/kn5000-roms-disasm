@@ -7,7 +7,7 @@ Image rep **algo 99** &middot; slots 99 &middot; **unit 0** (I-RAM load 84) &mid
 
 > PEQ + overdrive + delay (4 biquad sections: 2 flat PEQ + 2 copies of OVERDRIVE, byte-for-byte)
 
-**104 words**, 40 class-A coefficient multiplies (26 named), 0 instructions still opaque. Landmarks detected: 4 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s).
+**104 words**, 40 class-A coefficient multiplies (26 named), 0 instructions still opaque, **17 of 104 not yet decoded**. Landmarks detected: 4 biquad DF-I section(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

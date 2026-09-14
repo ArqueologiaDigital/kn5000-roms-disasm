@@ -7,7 +7,7 @@ Image rep **algo 34** &middot; slots 34 &middot; **unit 0** (I-RAM load 84) &mid
 
 > fuzz: rail-clip waveshaper
 
-**42 words**, 6 class-A coefficient multiplies (4 named), 0 instructions still opaque. Landmarks detected: 2 waveshaper LUT selector(s).
+**42 words**, 6 class-A coefficient multiplies (4 named), 0 instructions still opaque, **13 of 42 not yet decoded**. Landmarks detected: 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD

@@ -7,7 +7,7 @@ Image rep **algo 75** &middot; slots 75 &middot; **unit 0** (I-RAM load 84) &mid
 
 > 1-band flat PEQ + compressor (+4 cursor/host offset, effect-map 5.2)
 
-**59 words**, 22 class-A coefficient multiplies (13 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 class-8 post-sum step(s).
+**59 words**, 22 class-A coefficient multiplies (13 named), 0 instructions still opaque, **14 of 59 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

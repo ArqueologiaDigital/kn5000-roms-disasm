@@ -7,7 +7,7 @@ Image rep **algo 6** &middot; slots 6 &middot; **unit 0** (I-RAM load 84) &middo
 
 > ensemble: multi-voice chorus
 
-**96 words**, 15 class-A coefficient multiplies (6 named), 0 instructions still opaque. Landmarks detected: 1 LFO phase word(s), 3 DRAM read/write word(s), 4 waveshaper LUT selector(s).
+**96 words**, 15 class-A coefficient multiplies (6 named), 0 instructions still opaque, **37 of 96 not yet decoded**. Landmarks detected: 1 LFO phase word(s), 3 DRAM read/write word(s), 4 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD

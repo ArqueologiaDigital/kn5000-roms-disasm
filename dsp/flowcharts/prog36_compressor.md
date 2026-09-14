@@ -7,7 +7,7 @@ Image rep **algo 36** &middot; slots 36 &middot; **unit 0** (I-RAM load 84) &mid
 
 > compressor: level detector + gain-computer (THRESHOLD/RATIO).  NOTE: the old 'hi12=0xC40 = envelope detector' reading is WITHDRAWN -- C40/C41 is a 13-bit immediate load (analysis/k5-output-stage.md); the detector is here on other grounds
 
-**40 words**, 10 class-A coefficient multiplies (1 named), 0 instructions still opaque. Landmarks detected: 4 C-format immediate load(s).
+**40 words**, 10 class-A coefficient multiplies (1 named), 0 instructions still opaque, **14 of 40 not yet decoded**. Landmarks detected: 4 C-format immediate load(s).
 
 ```mermaid
 flowchart TD

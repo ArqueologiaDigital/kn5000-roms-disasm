@@ -7,7 +7,7 @@ Image rep **algo 97** &middot; slots 97 &middot; **unit 0** (I-RAM load 84) &mid
 
 > PEQ + compressor + overdrive (overdrive tone biquad present)
 
-**97 words**, 36 class-A coefficient multiplies (17 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s).
+**97 words**, 36 class-A coefficient multiplies (17 named), 0 instructions still opaque, **27 of 97 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 4 C-format immediate load(s), 2 waveshaper LUT selector(s), 4 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

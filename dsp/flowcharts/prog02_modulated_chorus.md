@@ -7,7 +7,7 @@ Image rep **algo 2** &middot; slots 2 &middot; **unit 0** (I-RAM load 84) &middo
 
 > modulated chorus: dual-rate ensemble
 
-**85 words**, 25 class-A coefficient multiplies (5 named), 0 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
+**85 words**, 25 class-A coefficient multiplies (5 named), 0 instructions still opaque, **23 of 85 not yet decoded**. Landmarks detected: 2 LFO phase word(s), 4 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD

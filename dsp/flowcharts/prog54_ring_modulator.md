@@ -7,7 +7,7 @@ Image rep **algo 54** &middot; slots 54 &middot; **unit 0** (I-RAM load 84) &mid
 
 > ring modulator: audio-rate quadrature AM
 
-**46 words**, 6 class-A coefficient multiplies (0 named), 0 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
+**46 words**, 6 class-A coefficient multiplies (0 named), 0 instructions still opaque, **15 of 46 not yet decoded**. Landmarks detected: 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD

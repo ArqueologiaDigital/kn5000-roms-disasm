@@ -7,7 +7,7 @@ Image rep **algo 4** &middot; slots 4 &middot; **unit 0** (I-RAM load 84) &middo
 
 > flanger: swept all-pass chain, 0.3 feedback, wet mix
 
-**65 words**, 18 class-A coefficient multiplies (12 named), 0 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
+**65 words**, 18 class-A coefficient multiplies (12 named), 0 instructions still opaque, **20 of 65 not yet decoded**. Landmarks detected: 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD

@@ -7,7 +7,7 @@ Image rep **algo 0** &middot; slots 0,7,11,12,13,14,28,29,30,31,37,38,40,41,42,4
 
 > dry pass-through that still runs a level detector (2/pi env, one-pole smoothers); shared by 42 effect slots
 
-**49 words**, 8 class-A coefficient multiplies (0 named), 0 instructions still opaque. Landmarks detected: 1 biquad DF-I section(s), 2 C-format immediate load(s), 3 DRAM read/write word(s).
+**49 words**, 8 class-A coefficient multiplies (0 named), 0 instructions still opaque, **14 of 49 not yet decoded**. Landmarks detected: 1 biquad DF-I section(s), 2 C-format immediate load(s), 3 DRAM read/write word(s).
 
 ```mermaid
 flowchart TD

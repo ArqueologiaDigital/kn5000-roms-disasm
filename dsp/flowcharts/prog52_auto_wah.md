@@ -7,7 +7,7 @@ Image rep **algo 52** &middot; slots 52 &middot; **unit 0** (I-RAM load 84) &mid
 
 > auto wah: envelope-swept resonator
 
-**72 words**, 13 class-A coefficient multiplies (6 named), 0 instructions still opaque. Landmarks detected: 1 C-format immediate load(s), 2 class-8 post-sum step(s).
+**72 words**, 13 class-A coefficient multiplies (6 named), 0 instructions still opaque, **11 of 72 not yet decoded**. Landmarks detected: 1 C-format immediate load(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

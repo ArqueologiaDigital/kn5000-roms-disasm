@@ -7,7 +7,7 @@ Image rep **algo 74** &middot; slots 74 &middot; **unit 0** (I-RAM load 84) &mid
 
 > 1-band flat PEQ + vibrato
 
-**77 words**, 26 class-A coefficient multiplies (16 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**77 words**, 26 class-A coefficient multiplies (16 named), 0 instructions still opaque, **20 of 77 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 2 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

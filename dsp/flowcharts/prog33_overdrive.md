@@ -7,7 +7,7 @@ Image rep **algo 33** &middot; slots 33 &middot; **unit 0** (I-RAM load 84) &mid
 
 > overdrive: waveshaper + smoother + 4kHz Butterworth tone
 
-**63 words**, 18 class-A coefficient multiplies (4 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**63 words**, 18 class-A coefficient multiplies (4 named), 0 instructions still opaque, **13 of 63 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

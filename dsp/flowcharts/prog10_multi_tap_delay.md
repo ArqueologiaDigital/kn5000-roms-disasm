@@ -7,7 +7,7 @@ Image rep **algo 10** &middot; slots 10 &middot; **unit 0** (I-RAM load 84) &mid
 
 > multi-tap delay: panning taps (partial-cursor-rewind idiom, effect-map 5.1)
 
-**68 words**, 18 class-A coefficient multiplies (11 named), 0 instructions still opaque. Landmarks detected: 2 DRAM read/write word(s).
+**68 words**, 18 class-A coefficient multiplies (11 named), 0 instructions still opaque, **4 of 68 not yet decoded**. Landmarks detected: 2 DRAM read/write word(s).
 
 ```mermaid
 flowchart TD

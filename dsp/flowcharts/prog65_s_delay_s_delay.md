@@ -7,7 +7,7 @@ Image rep **algo 65** &middot; slots 65 &middot; **unit 0** (I-RAM load 84) &mid
 
 > single delay + single delay (dual mono)
 
-**68 words**, 16 class-A coefficient multiplies (16 named), 0 instructions still opaque. Landmarks detected: 5 DRAM read/write word(s).
+**68 words**, 16 class-A coefficient multiplies (16 named), 0 instructions still opaque, **7 of 68 not yet decoded**. Landmarks detected: 5 DRAM read/write word(s).
 
 ```mermaid
 flowchart TD

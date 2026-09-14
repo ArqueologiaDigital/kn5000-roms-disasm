@@ -7,7 +7,7 @@ Image rep **algo 72** &middot; slots 72 &middot; **unit 0** (I-RAM load 84) &mid
 
 > 1-band flat PEQ + single delay
 
-**54 words**, 20 class-A coefficient multiplies (19 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
+**54 words**, 20 class-A coefficient multiplies (19 named), 0 instructions still opaque, **3 of 54 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

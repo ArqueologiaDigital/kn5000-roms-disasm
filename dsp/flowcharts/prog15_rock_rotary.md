@@ -7,7 +7,7 @@ Image rep **algo 15** &middot; slots 15,53 &middot; **unit 0** (I-RAM load 84) &
 
 > rock rotary / rotary speaker (shared with algo 53)
 
-**86 words**, 33 class-A coefficient multiplies (6 named), 0 instructions still opaque. Landmarks detected: 1 biquad DF-I section(s), 5 C-format immediate load(s), 1 DRAM read/write word(s), 1 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**86 words**, 33 class-A coefficient multiplies (6 named), 0 instructions still opaque, **19 of 86 not yet decoded**. Landmarks detected: 1 biquad DF-I section(s), 5 C-format immediate load(s), 1 DRAM read/write word(s), 1 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

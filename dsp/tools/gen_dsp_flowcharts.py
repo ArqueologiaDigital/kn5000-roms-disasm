@@ -124,7 +124,7 @@ class Chart:
 #  either matched by a recognised landmark or counted into `opaque`.
 # --------------------------------------------------------------------------
 def features(words):
-    f = dict(nwords=len(words), classA=0, named=0, opaque=0,
+    f = dict(nwords=len(words), classA=0, named=0, opaque=0, undec=0,
              biquad=0, lfo=0, lforead=0, cimm=0, dram=0, table=0,
              allpass=0, allpass_wr=0, class8=0, gainmul=0, ret=0, rstcur=0)
     for w in words:
@@ -147,8 +147,15 @@ def features(words):
         if hi == 0x102:                                    f["gainmul"] += 1
         if D.is_rstcur(w):                                 f["rstcur"] += 1
         if D.is_end(w) and cl == 1 and ad in (0x0E, 0x0F): f["ret"] += 1
-        # opaque = truly unexplained: no landmark note, not a decoded form, not a
-        # coefficient multiply, not the cursor reset.
+        # ⚠ TWO DIFFERENT COUNTS, and conflating them overstates the decode.
+        #   `undec`  = `decoded()' refuses the word.  This is the project's coverage metric.
+        #   `opaque` = the word has no NAME either -- no landmark, no annotation, nothing.
+        # `opaque` is much the weaker bar: a word can be named and still undecoded, and 612 of
+        # the KN5000's 2974 program words are exactly that.  When `opaque` reached 0 the pages
+        # briefly read "0 instructions still opaque" with no other number on the line, which a
+        # reader would take for "fully decoded".  Both are printed now.
+        if not D.decoded(w):
+            f["undec"] += 1
         if (D.annotate(w) is None and not D.decoded(w)
                 and not D.coeff_consumer(w) and not D.is_rstcur(w)):
             f["opaque"] += 1
@@ -509,9 +516,10 @@ def emit_program_page(path, rep, slots, nm, unit, la, fam, conf, role, f, params
     lines.append("> %s" % role)
     lines.append("")
     lines.append("**%d words**, %d class-A coefficient multiplies (%d named), "
-                 "%d instructions still opaque. Landmarks detected: "
-                 "%s."
-                 % (f["nwords"], f["classA"], named, f["opaque"], _landmark_summary(f)))
+                 "%d instructions still opaque, **%d of %d not yet decoded**. "
+                 "Landmarks detected: %s."
+                 % (f["nwords"], f["classA"], named, f["opaque"],
+                    f["undec"], f["nwords"], _landmark_summary(f)))
     lines.append("")
     lines.append(c.render())
     lines.append("")

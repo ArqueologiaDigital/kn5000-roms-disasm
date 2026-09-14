@@ -7,7 +7,7 @@ Image rep **algo 70** &middot; slots 70 &middot; **unit 0** (I-RAM load 84) &mid
 
 > auto wah + single delay
 
-**105 words**, 21 class-A coefficient multiplies (13 named), 0 instructions still opaque. Landmarks detected: 1 C-format immediate load(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
+**105 words**, 21 class-A coefficient multiplies (13 named), 0 instructions still opaque, **16 of 105 not yet decoded**. Landmarks detected: 1 C-format immediate load(s), 3 DRAM read/write word(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

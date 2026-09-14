@@ -7,7 +7,7 @@ Image rep **algo 73** &middot; slots 73 &middot; **unit 0** (I-RAM load 84) &mid
 
 > 1-band flat PEQ + flanger
 
-**91 words**, 32 class-A coefficient multiplies (26 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**91 words**, 32 class-A coefficient multiplies (26 named), 0 instructions still opaque, **24 of 91 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 2 LFO phase word(s), 1 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

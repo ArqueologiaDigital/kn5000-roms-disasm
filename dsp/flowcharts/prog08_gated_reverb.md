@@ -7,7 +7,7 @@ Image rep **algo 8** &middot; slots 8 &middot; **unit 0** (I-RAM load 84) &middo
 
 > gated reverb: all-pass ring + hold gate
 
-**102 words**, 22 class-A coefficient multiplies (7 named), 0 instructions still opaque. Landmarks detected: 2 C-format immediate load(s), 10 DRAM read/write word(s), 6 all-pass marker(s).
+**102 words**, 22 class-A coefficient multiplies (7 named), 0 instructions still opaque, **8 of 102 not yet decoded**. Landmarks detected: 2 C-format immediate load(s), 10 DRAM read/write word(s), 6 all-pass marker(s).
 
 ```mermaid
 flowchart TD

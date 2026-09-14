@@ -7,7 +7,7 @@ Image rep **algo 68** &middot; slots 68 &middot; **unit 0** (I-RAM load 84) &mid
 
 > single delay + phaser (keeps the two all-pass markers)
 
-**110 words**, 22 class-A coefficient multiplies (17 named), 0 instructions still opaque. Landmarks detected: 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s).
+**110 words**, 22 class-A coefficient multiplies (17 named), 0 instructions still opaque, **16 of 110 not yet decoded**. Landmarks detected: 2 LFO phase word(s), 3 DRAM read/write word(s), 2 waveshaper LUT selector(s), 2 all-pass marker(s).
 
 ```mermaid
 flowchart TD

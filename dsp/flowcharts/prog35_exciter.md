@@ -7,7 +7,7 @@ Image rep **algo 35** &middot; slots 35 &middot; **unit 0** (I-RAM load 84) &mid
 
 > harmonic exciter: LUT -> band-pass -> +dry
 
-**69 words**, 22 class-A coefficient multiplies (18 named), 0 instructions still opaque. Landmarks detected: 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
+**69 words**, 22 class-A coefficient multiplies (18 named), 0 instructions still opaque, **15 of 69 not yet decoded**. Landmarks detected: 2 biquad DF-I section(s), 2 waveshaper LUT selector(s), 2 class-8 post-sum step(s).
 
 ```mermaid
 flowchart TD

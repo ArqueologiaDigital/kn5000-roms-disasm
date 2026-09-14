@@ -7,7 +7,7 @@ Image rep **algo 9** &middot; slots 9 &middot; **unit 0** (I-RAM load 84) &middo
 
 > single delay: 0.5 mix, 0.15/0.3 feedback
 
-**48 words**, 18 class-A coefficient multiplies (18 named), 0 instructions still opaque. Landmarks detected: 3 DRAM read/write word(s).
+**48 words**, 18 class-A coefficient multiplies (18 named), 0 instructions still opaque, **3 of 48 not yet decoded**. Landmarks detected: 3 DRAM read/write word(s).
 
 ```mermaid
 flowchart TD

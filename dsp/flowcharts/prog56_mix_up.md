@@ -7,7 +7,7 @@ Image rep **algo 56** &middot; slots 56 &middot; **unit 0** (I-RAM load 84) &mid
 
 > mix up: burst vibrato (sin.sin product modulators)
 
-**64 words**, 15 class-A coefficient multiplies (2 named), 0 instructions still opaque. Landmarks detected: 3 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
+**64 words**, 15 class-A coefficient multiplies (2 named), 0 instructions still opaque, **20 of 64 not yet decoded**. Landmarks detected: 3 LFO phase word(s), 2 C-format immediate load(s), 1 DRAM read/write word(s), 3 waveshaper LUT selector(s).
 
 ```mermaid
 flowchart TD
