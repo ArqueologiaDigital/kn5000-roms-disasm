@@ -151,7 +151,14 @@ def main():
     if ok:
         print("    ⇒ every one of the %d undecoded words is blocked on SEMANTICS (an unanchored" % und)
         print("      SRC/ACT, an unknown f31, or an unexplained store target), not on a defect in")
-        print("      the predicate.  There is no coverage to be had by fixing `decoded()' itself.")
+        print("      the predicate.  There is no BUG in `decoded()' to fix.")
+        print("    ⚠ That is NOT the same as \"nothing in the predicate is worth revisiting\".")
+        print("      sect. 202: `dsp_disasm.py:718' is the first test in `_alu_half_anchored()'")
+        print("      and it refuses EVERY bit-11 word outright -- 169 undecoded words, of which")
+        print("      169 are in a characterised addressing mode and 158 carry an anchored")
+        print("      accumulator function.  That is a POLICY (11 unexplained opcode bits), and")
+        print("      it is consistent, which is all this file checks.  `bit11_prize.py' sizes")
+        print("      what it holds back: 80.6 % -> 82.8 % for the 158, 84.3 % with what they gate.")
     return 0 if ok else 1
 
 
