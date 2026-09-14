@@ -1,0 +1,43 @@
+====================================================================================================
+  act0b_hazard -- does the ROM schedule around `ACT 0x0B'?
+====================================================================================================
+
+   ★ TEST -- 26 images carry BOTH a tempA live range and an ACT-0x0B word.
+     (the pooled base rate cannot tell instruction-level avoidance from program-level
+      segregation; this restriction can)
+
+      windows span 582 of 2269 slots (25.7 %)
+      ACT-0x0B words inside one: 0 of 48
+      binomial expectation 12.3;  P(0 | p=0.257, n=48) = 6.63e-07
+
+      ⛔ PERMUTATION NULL (2000 reshuffles within each image): mean 11.8, sd 2.8, MIN 4
+         observed 0 -- below the minimum of every one of 2000 shuffles.
+      ⇒ on this null the reading `ACT 0x0B writes tempA' looks CONFIRMED.
+
+   ⛔⛔ THE CONTROL THAT KILLS IT -- the SAME test for EVERY action.
+      Windows span 26.7 % of non-C-format slots in the images that have them.
+
+      ACT          n   inside  expected   ratio  
+      0x01        23        0       6.1    0.00  ★ EXCLUDED
+      0x03        38        0      10.1    0.00  ★ EXCLUDED
+      0x0B        48        0      12.8    0.00  ★ EXCLUDED   ★ THE ONE UNDER TEST
+      0x13       101        0      27.0    0.00  ★ EXCLUDED   ⚠ excluded BY CONSTRUCTION -- it is the window's own write
+      0x1C        22        0       5.9    0.00  ★ EXCLUDED
+      0x00       602        6     160.7    0.04  depleted
+      0x19        57        4      15.2    0.26  depleted
+      0x08        24        2       6.4    0.31  depleted
+      0x0E       183       16      48.9    0.33  depleted
+      0x0D       143       16      38.2    0.42  depleted
+      0x07       527      192     140.7    1.36  ordinary
+      0x15       725      286     193.5    1.48  ordinary
+      0x12        96       91      25.6    3.55  ordinary
+      0x14       102       99      27.2    3.64  ordinary
+
+      ⇒ 5 of 14 actions with n >= 20 are COMPLETELY excluded: 0x0B 0x13 0x1C 0x03 0x01
+      ⇒ ACT 0x0B is NOT alone, and two of its companions have no tempA relationship at
+        all.  The exclusion describes what a FILTER'S INNER LOOP contains -- a narrow
+        ACTION vocabulary, with 0x12 and 0x14 ENRICHED ~3.6x -- not hazard avoidance.
+
+   ⇒ VERDICT: the reading is NEITHER supported NOR refuted.  The criterion has no
+     power, and the permutation null could not tell me that: it asked whether 0 was
+     unusual for THESE POSITIONS, not whether 0 was unusual for AN ACTION OF THIS KIND.

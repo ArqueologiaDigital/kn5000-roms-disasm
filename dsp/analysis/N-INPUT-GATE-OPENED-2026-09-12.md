@@ -5920,6 +5920,58 @@ where to look: **165 of 213 occurrences are delay escapes, 48 are plain**, and t
 words sit in ENSEMBLE and the resident kernel in *both* products — a small, byte-identical,
 cross-product population that any candidate reading has to explain.
 
+## 130. ⛔ A CRITERION FOR `ACT 0x0B` THAT LOOKED DECISIVE AND HAS NO POWER
+Tool: [`act0b_hazard.py`](../tools/act0b_hazard.py). Data:
+[`data/act0b_hazard_2026-09-14.txt`](data/act0b_hazard_2026-09-14.txt).
+
+§129 removed the bad reason `ACT 0x0B` was closed; it did not decode it. The queue head needs a
+criterion that can *see* the code, and this is the first one I built.
+
+**The idea.** If `ACT 0x0B` writes tempA — one of `act0b-reverb.md` item D's three survivors —
+then an ACT-0x0B word placed between a tempA **write** (`ACT 0x13`) and the **read** that consumes
+it (`SRC 0x19`) would destroy a live value. Microcode must avoid that. So: does it ever happen?
+
+```
+   pooled                          0 of 213 inside a tempA live range   (base rate  9.0 %)
+   the 26 images carrying BOTH     0 of  48                             (windows span 25.7 %)
+   binomial P(0 | p=.257, n=48)  = 6.6e-7
+   permutation null, 2000 reshuffles within each image: mean 11.8, sd 2.8, MIN 4  -- observed 0
+```
+
+Below the **minimum** of every one of 2000 shuffles. On that null the reading looks confirmed.
+
+### ⛔⛔ And then the per-action control
+The same test for every action, over the images that have a tempA window:
+
+```
+   ACT      n   inside  expected  ratio
+   0x01    23      0       6.1     0.00   ★ EXCLUDED   -- no tempA relationship whatever
+   0x03    38      0      10.1     0.00   ★ EXCLUDED   -- ditto
+ ★ 0x0B    48      0      12.8     0.00   ★ EXCLUDED   -- the one under test
+   0x13   101      0      27.0     0.00   ★ EXCLUDED   ⚠ BY CONSTRUCTION: it is the window's write
+   0x1C    22      0       5.9     0.00   ★ EXCLUDED
+   …
+   0x12    96     91      25.6     3.55   ENRICHED
+   0x14   102     99      27.2     3.64   ENRICHED
+```
+
+**Five of the fourteen actions with n ≥ 20 are equally excluded**, two of them with no tempA
+relationship at all, and one excluded by the window definition itself. The exclusion describes what
+a **filter's inner loop contains** — a narrow ACTION vocabulary, `0x12`/`0x14` enriched 3.6× — not
+hazard avoidance around `0x0B`.
+
+⇒ **the reading is neither supported nor refuted; the criterion has no power.** Coverage unchanged.
+
+### ★ The method note, and it is the second one this session
+The permutation null was **correct and insufficient**. It asked *"is 0 unusual for **these
+positions**?"* and answered yes, decisively. The question that decides is *"is 0 unusual for **an
+action of this kind**?"* — and it is not.
+
+That is the same shape as §128's vacuous first test (where "a write of this index exists somewhere
+in the image" could not move under a multiset shuffle). Twice in one session a row survived its
+first null and died to its second. **A null that moves is not automatically a null that
+discriminates — run the per-category control before believing a rate.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
