@@ -9163,6 +9163,60 @@ minimal pair could land on an axis that is actually open, and it is the next job
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 
+## 208. ⛔ THE THIRD CORPUS DOES NOT BREAK THE DEADLOCK — tested to conclusion
+
+§204 found the KN1500 because every shut block is shut *on the evidence the two known corpora
+contain*, and a third product is the only thing that changes that. §206 extracted it properly.
+This is the test of whether it actually helps, and the answer is no.
+
+**1. It is mostly a copy.** Of its 2389 words, **2072 already appear in the pooled corpus — 87 %.**
+
+**2. Its bodies are not relocations of known programs.** Best cross-product match per block:
+
+```
+   ratio >= 0.90 :  1 of 31 blocks     >= 0.80 : 2      median ~0.50
+```
+
+A minimal pair drawn from two *different* programs carries no relocation argument — different
+programs legitimately address different cells. I generated 32 such "single-field minimal pairs
+touching an open word" from matches at ratio 0.50–0.72 before noticing that, and they prove nothing.
+⚠ The pair has to come from **the same code at a different offset**, or it is not the §122
+instrument at all.
+
+**3. The one true twin yields nothing.** A 116-word KN1500 block matches the WSA1R's
+`eff20_ensemble` at **0.949**:
+
+```
+   equal    kn1500[  0: 45]  wsa[  0: 45]        45 words identical
+   replace  kn1500[ 45: 47]  wsa[ 45: 49]        2 vs 4
+   equal    kn1500[ 47:113]  wsa[ 49:115]        66 words identical
+   replace  kn1500[113:114]  wsa[115:118]        1 vs 3
+   replace  kn1500[115:116]  wsa[119:120]        1 vs 1
+```
+
+**111 of 116 words byte-identical**, and the single equal-length difference — `40190E000` vs
+`60414F000` — differs in `hi12`, `class4` **and** `addr8` at once. **Zero single-field
+differences.** Nothing was relocated between the two products, so nothing is isolated.
+
+⇒ **The third corpus is real, extracted, and does not supply the discriminating evidence.** The
+programs it shares with the other two are shared *unchanged*, which is a finding about the product
+family — the same effect program ships in a 1996 KN1500 and in the SX-WSA1R — and is exactly why it
+buys no decodes: an identical copy discriminates nothing.
+
+⚠ What is NOT ruled out: its **175 distinct new words**, which exist in no other product and have
+not been given the static treatment (`class_twins`, `idiom_sequence`, `topology_fingerprint`) that
+the other two corpora have had. That is a real remaining avenue; it is just not the relocation one.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
+### The honest status of the hypothesis
+
+"A third product will break the blocks that are shut for want of evidence" was a good hypothesis,
+it was cheap to test, and it is now **tested**: found, confirmed by the owner, extracted at 93 %
+recall, and measured to be 87 % duplicate with one true twin that differs in no single field. That
+is a better outcome than leaving it as a standing hope in the handover — but it is not a decode, and
+the coverage number has not moved all session.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

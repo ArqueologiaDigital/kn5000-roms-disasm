@@ -269,9 +269,17 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    two minimal pairs differing only in `addr8`, both by exactly **+0x40** (`C42417820`/`C42457820`,
    `C0A471820`/`C0A4B1820`). ⛔ Both are C-format words `decoded()` already admits, so it is an
    independent third-product confirmation of §122 and **worth zero words**.
-   ⇒ **Align the KN1500's BODIES against the KN5000's and the WSA1R's.** That is where a minimal
-   pair can land on an axis that is actually open. `topology_fingerprint.py` and
-   `idiom_sequence.py` already do cross-product program matching.
+   ⛔ **DONE, AND IT FAILS (§208).** The bodies were aligned. **87 % of the KN1500's 2389 words
+   already appear in the pooled corpus.** Best cross-product match per block: ratio ≥ 0.90 for
+   **1 of 31**, ≥ 0.80 for 2, median ~0.50 — so its bodies are not relocations of known programs,
+   and a minimal pair from two *different* programs carries no relocation argument. The one true
+   twin (a 116-word block vs WSA1R `eff20_ensemble`, **0.949**) is **111 of 116 words identical**
+   with **zero single-field differences**. The family shares its programs *unchanged*, which is
+   exactly why they discriminate nothing.
+
+   ⇒ **The remaining KN1500 avenue is its 175 distinct NEW words** — present in no other product
+   and never given the static treatment (`class_twins`, `idiom_sequence`,
+   `topology_fingerprint`) the other two corpora have had. That is not the relocation route.
 
 
 0★. ★★★★★ **START HERE: THE BIT-11 ALTERNATE ENCODING. 271 words, ceiling 84.3 %, nine shapes,
