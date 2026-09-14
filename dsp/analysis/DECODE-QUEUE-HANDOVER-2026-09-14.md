@@ -25,9 +25,11 @@ identical (`regen_words_unchanged.sh`).
 * **§122** — the C-format payload is an I-RAM address. Two routes: the region test (11 of 11 inside
   their own image, p = 6.6e-9) and the **relocation test** against the WSA1R's byte-homologous copy
   of the kernel header (§121). +11 words, kernel 47.0 → 60.2 %.
-* ⛔⛔ **§161 → §162 → §164, RETRACTED TWICE.** First the +99 (the words carry two open axes and
-  the run closed one); then the pointer result itself, which does not replicate on a second program.
-  Coverage is back at 81.2 %. What survives is static and pooled: §156–§159.
+* ⛔⛔ **§161 → §162 → §164 → §165, RETRACTED TWICE AND THEN PARTLY EXPLAINED.** First the +99
+  (the words carry two open axes and the run closed one); then the pointer result, on a replication
+  that turned out to be unreachable by construction (§165) — so the seven nulls were predicted, and
+  the measurement stands as the single-program observation it always was. Coverage is 81.2 %.
+  What survives unconditionally is static and pooled: §156–§159.
 * **§128** — **mode 1 is the register file.** `class4 & 7` is the addressing mode, so class 1 and
   class 9 were one question. Four measurements anchored the read half. +143 words.
 
@@ -215,28 +217,34 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
 
 ## What the next pass should actually do, in order
 
-0. ⛔⛔ **MODE 4 IS FULLY OPEN AGAIN — and the thread's whole lesson is about the CRITERION, not
-   the arms.** Read this before spending another build on it.
+0. ⛔⛔ **MODE 4: ONE WITNESS, AND NO REPLICATION IS AVAILABLE AS THE QUESTION IS POSED.**
+   Do not spend another build here without reading this.
 
-   * **The arms are built, fire, and are correctly placed.** `UPD6383_CLS4PTR` (class-4-only pointer
-     advance) fired 3 346 456 on EXCITER and 3 547 234 on PEQ+CHORUS; `UPD6383_ST4DEST` (0 = D-RAM
-     at the pointer, 1 = register file at `addr8`, 2 = suppressed, 3 = D-RAM at `addr8`) sees
-     5.0–5.4 M mode-4 bit-4 stores. Every run fingerprints its program (§193). None of that is the
-     problem.
-   * ⛔ **The CRITERION does not replicate.** On EXCITER both arms destroy the `op0x70` band's
-     structure; on **`prog71_peq_chorus`** — same class-4 words, band downstream, and **no pointer
-     reload in between** (checked) — the band is byte-identical under both. §161 and §163 are
-     therefore facts about one program, and I stated them as ISA conclusions. §164 corrects that.
-   * ⛔ **THE DEFECT, fourth costume.** §160's criterion was *"8 of 8 have a band consumed
-     downstream"*. **Downstream in program order is not "reads the cell this word touches."** Part
-     233 recorded *proximity is not membership* three times; this is program order standing in for
-     data dependence.
-   * ★ **WHAT THE NEXT PASS NEEDS IS NOT ANOTHER ARM — it is a criterion with a DATA-DEPENDENCE
-     definition.** Build the set of D-RAM cells each `op0x70` band actually reads under the walk,
-     and require that the class-4 word's own cell be IN that set. Then replicate on every program
-     that satisfies it, chosen **before** the first result is seen.
-   * ★★ **RULE:** *a criterion that fires in one program is a fact about that program.* Replicate
-     before inferring anything about the instruction set.
+   * **The arms are built, fire, correctly placed, and every run is fingerprinted (§193).**
+     `UPD6383_CLS4PTR` (class-4-only pointer advance) and `UPD6383_ST4DEST` (0 = D-RAM at the
+     pointer, 1 = register file at `addr8`, 2 = suppressed, 3 = D-RAM at `addr8`). None of that is
+     the problem.
+   * **On EXCITER both arms produce a large, clean, two-sided effect.** On seven other programs they
+     do not — and `band_reach.py` shows **that was predictable**: EXCITER's class-4 word writes
+     `p = 75, 79` and its `op0x70` band reads `p = 75..82`, while PEQ+CHORUS writes `p = 7, 13` and
+     reads `p = 75..84`. **EXCITER is the only one of the eight where the arm can reach the band.**
+     The seven nulls are predicted negatives, not failures to reproduce.
+   * ⛔⛔ **THE TRAP, and it is why this cannot simply be re-run.** The membership walk advances the
+     pointer on classes 2 and A — and whether class 4 *also* advances is the open question. Run it
+     both ways and the verdict flips on exactly one program, EXCITER (no-move ⇒ reaches; V7 ⇒ does
+     not). So EXCITER **discriminates**, and for the same reason membership cannot be used to
+     **select** programs while "reaches" depends on the answer. Nor do the read-set shapes separate
+     (8 vs 4+4; the arm-ON census matches neither).
+   * ⇒ **Mode 4 has exactly one witness.** §161 and §163 are single-program observations and are
+     graded as such. The 99 words stay undecoded, and they carry a *second* axis anyway (the bit-4
+     store target, §162).
+   * ★★ **THE RULES THIS THREAD COST, in order of transferability:**
+     1. Before promoting, enumerate the word's open axes (`acc_blind.open_axes()`) and close them
+        **all** or promote none. §162.
+     2. Select experiment programs by **membership**, not position, and report the computation, so
+        a null can be told apart from an unreachable. §165.
+     3. A criterion that presupposes the hypothesis is not a criterion — and that includes the
+        *program-selection* criterion, not just the acceptance test. §165.
 
 0b. **The other 40 class-test-refused words are the same shape of opportunity, not yet worked.**
    `lut_idiom.py --classgate` now lists classes 3 (14), 5 (2), 6 (12) and 8 (12) still undecoded
