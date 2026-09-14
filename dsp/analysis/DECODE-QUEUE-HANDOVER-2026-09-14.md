@@ -229,7 +229,7 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    `python3 dsp/tools/bit11_prize.py` prints all of it and is the queue:
 
    ```
-      A  bit-11 words:  209 total, 169 UNDECODED        closing them: 80.6 % → 82.9 %
+      A  bit-11 words:  187 total, 169 UNDECODED        closing them: 80.6 % → 82.9 %
       B  undecoded words gated INDIRECTLY through the class-6 idiom:  102
       A + B = 271 words  →  84.3 %
 
@@ -268,6 +268,15 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    family turns on a single question: **what does the alternate `lo12` mean?** ⚠ Admitting the 158
    on §112's two clauses would be 80.6 % → 82.8 %, and that is a GRADING change — the owner's call,
    deliberately not taken.
+
+   ★★★ **AND THE DECOMPOSITION ALREADY EXISTS — `dsp/tools/bit11_fields.py` (§203).**
+   `lo_sel = lo12 & 0xFF`, `lo_mid = (lo12 >> 8) & 7`. Pooled, the family fills **11 cells of a
+   possible 1024 (1.1 %)** — four `mid` values {0, 1, 4, 7}, nine `sel` values, nearly all present
+   in both products. `lo_mid`'s docstring still says "residue: 0 at all 10 corpus sites"; it was
+   written before the corpus was pooled and `mid` is live.
+   **Two minimal pairs** isolate it: `sel 0x21` at mid 0 (13 words, all decoded as the C-RAM
+   pointer load) vs mid 1 (`050000921`, open); `sel 0x22` at mid 0 vs mid 7 (`142000F22`, open).
+   And every `mid ≠ 0` cell carries `addr8 == 0` — 4 of 4 cells, **p = 0.0885**, suggestive only.
 
    ★ **Where to point the first test.** `8BC`'s dominant form is `8801308BC` ×37: `class4 = 1`
    (mode 1 = the register file) with `addr8 = 0x30` — and §179 put the class-6 table port at the

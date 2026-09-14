@@ -56,7 +56,14 @@ def main():
 
     #  A -- the family itself.  `lo12' bit 11 is the alternate-encoding flag (bit11-family.md
     #  sect. 9): such a word has NO SRC and NO ACTION field, which is why the device swallows it.
-    fam = [(l, w) for l, w in words if (w & 0xfff) & 0x800]
+    #  ⛔ C-FORMAT WORDS ARE NOT MEMBERS.  22 words carry lo12 bit 11 AND are C-format, where
+    #  bits [24:12] are one 13-bit immediate -- so their `lo12' is a piece of a constant, not an
+    #  opcode, and `decoded()' admits them via its `c-format' clause.  v1 counted them, which
+    #  inflated the family from 187 to 209.  (The PRIZE was unaffected: all 22 are decoded, so
+    #  `fam_und' never included them.)
+    fam = [(l, w) for l, w in words
+           if ((w & 0xfff) & 0x800) and not DIS.c_format(w)]
+    ncf = sum(1 for _l, w in words if ((w & 0xfff) & 0x800) and DIS.c_format(w))
     fam_und = [(l, w) for l, w in fam if not DIS.decoded(w)]
 
     print("=" * 92)
@@ -64,8 +71,11 @@ def main():
     print("=" * 92)
     print("\n  pooled DISTINCT corpus: %d words, %d undecoded (%.1f %% decoded)"
           % (tot, len(und), 100.0 * (tot - len(und)) / tot))
-    print("\n  A  bit-11 words (lo12 bit 11 set): %d total, %d UNDECODED"
+    print("\n  A  bit-11 words (lo12 bit 11 set, C-format EXCLUDED): %d total, %d UNDECODED"
           % (len(fam), len(fam_und)))
+    print("     (%d further words carry the bit but are C-format -- bits [24:12] are one 13-bit"
+          % ncf)
+    print("      immediate there, so their `lo12' is part of a constant.  All %d are decoded.)" % ncf)
     if fam:
         print("     closing the family outright would move coverage %.1f %% -> %.1f %%"
               % (100.0 * (tot - len(und)) / tot,

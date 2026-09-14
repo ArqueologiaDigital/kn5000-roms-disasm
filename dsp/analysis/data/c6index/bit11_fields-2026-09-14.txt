@@ -1,0 +1,108 @@
+================================================================================================
+  bit11_fields -- does the register-load decomposition extend to the whole family?
+================================================================================================
+
+  pooled DISTINCT corpus: 7273 words, bit-11 family: 187
+  decomposition under test:  lo_sel = lo12 & 0xFF | lo_mid = (lo12 >> 8) & 7 | lo_imm = bit 11
+  `_REGLOAD_SEL' (the established selectors) = 0x20 0x21 0x22 0x25 0x27
+
+  1  THE FIELD SPACE: 4 distinct `mid' values [0, 1, 4, 7], 9 distinct `sel' values
+     sel values: 0x21 0x22 0x25 0x27 0x39 0x62 0x63 0x64 0xBC
+
+     mid  sel    n   decoded   product        in _REGLOAD_SEL?
+      0   0x21   13      13   KN:3 WSA:10    YES
+      0   0x22    7       0   KN:1 WSA:6     YES
+      0   0x25    5       5   KN:3 WSA:2     YES
+      0   0x27    2       0   KN:2           YES
+      0   0x39    4       0   KN:2 WSA:2     -
+      0   0x64    2       0   KN:1 WSA:1     -
+      0   0xBC   49       0   KN:24 WSA:25   -
+      1   0x21    2       0   KN:1 WSA:1     YES
+      4   0x62    2       0   WSA:2          -
+      4   0x63   99       0   KN:53 WSA:46   -
+      7   0x22    2       0   WSA:2          YES
+
+     11 cells used of 4 x 256 = 1024 possible  (1.1 % -- a sparse, structured space
+      is what a real field decomposition looks like; a scattered one is not)
+
+  2  MINIMAL PAIRS -- a shared field value at two settings of the other
+
+     SELECTORS APPEARING AT MORE THAN ONE `mid' -- these isolate `mid':
+       sel 0x21  ->  mid 0: 13 words, 13 decoded   |   mid 1: 2 words, 0 decoded
+           mid 0  801050821  hi12=801 class4=0 addr8=50  DECODED
+           mid 0  801060821  hi12=801 class4=0 addr8=60  DECODED
+           mid 0  801070821  hi12=801 class4=0 addr8=70  DECODED
+           mid 1  050000921  hi12=050 class4=0 addr8=00  open
+       sel 0x22  ->  mid 0: 7 words, 0 decoded   |   mid 7: 2 words, 0 decoded
+           mid 0  819086822  hi12=819 class4=0 addr8=86  open
+           mid 0  859086822  hi12=859 class4=0 addr8=86  open
+           mid 7  142000F22  hi12=142 class4=0 addr8=00  open
+
+  3  WHAT BLOCKS EACH UNDECODED SHAPE (via the project's own `open_axes()')
+
+     lo12  mid  sel   n   hi12 forms            open axes
+     C63    4  0x63   99   040 x87 142 x12       bit-11 encoding, class 0
+     8BC    0  0xBC   49   880 x37 040 x10 050(ST) x2  bit-11 encoding, class 1
+     822    0  0x22    7   819(ST) x6 859(ST) x1  bit-11 encoding, class 0
+     839    0  0x39    4   809 x2 80B x2         bit-11 encoding, class 0
+     827    0  0x27    2   801 x2                bit-11 encoding, class 0
+     864    0  0x64    2   040 x2                bit-11 encoding, class 0
+     921    1  0x21    2   050(ST) x2            bit-11 encoding, class 0
+     C62    4  0x62    2   142 x2                bit-11 encoding, class 0
+     F22    7  0x22    2   142 x2                bit-11 encoding, class 0
+
+  4  THE PARTITION: does `addr8 == 0' separate the family?
+
+                       decoded   undecoded
+     addr8 != 0           18          46
+     addr8 == 0            0         123
+
+     of the 123 words with NO payload (addr8 == 0): 0 decoded, 123 open
+     of the 64 words WITH a payload:                18 decoded, 46 open
+
+     ★★★ NOT ONE payload-less word is decoded, and every decoded word has a
+       payload.  `addr8 == 0' is a clean partition of this family.
+
+     per cell, so the partition can be read against the field space:
+
+     mid  sel   addr8==0   addr8!=0   addr8 values seen
+      0   0x21        0         13   50 60 70 90 C0 E0
+      0   0x22        0          7   86
+      0   0x25        0          5   20 25 26
+      0   0x27        0          2   64 6C
+      0   0x39        4          0   00
+      0   0x64        2          0   00
+      0   0xBC       12         37   00 30
+      1   0x21        2          0   00
+      4   0x62        2          0   00
+      4   0x63       99          0   00
+      7   0x22        2          0   00
+
+  5  THE RELATION, AND ITS NULL:  does `mid != 0' imply `addr8 == 0'?
+
+     AT WORD LEVEL:   105 of 105 words with mid != 0 carry addr8 == 0
+     ⚠ inflated -- 99 of those 105 words are ONE shape (`C63').
+
+     AT SHAPE LEVEL (the honest granularity):
+       cells with mid != 0 : 4   (1,0x21) (4,0x62) (4,0x63) (7,0x22)
+       of those, all-zero-addr8 : 4
+
+       NULL, stated as a rate and not after the fact: 6 of 11 cells in the whole
+       family are all-zero-addr8, a base rate of 0.545.  If `mid' had nothing to do
+       with it, 4 independent cells land that way with p = 0.545^4 = 0.0885.
+
+       MEASURED 4 of 4.  ★ SUGGESTIVE, NOT PROOF at p = 0.0885 -- four cells cannot carry more than this, and
+       the honest reading is: `mid != 0' and a payload have never been seen
+       together, over 4 shapes and 105 occurrences in BOTH products.  To promote
+       it, find a `mid != 0' shape WITH a payload (refutes) or a fifth without.
+
+     ⇒ what this DOES settle: the decomposition extends.  The space is sparse,
+       `mid' takes 4 values, `sel' 10, and the two fields are not independent.
+       What it does NOT settle: what `mid' and `sel' MEAN -- which is the one
+       question the whole 169 turns on (sect. 202).
+
+     ⚠ `(ST)' marks hi12 bit 4, the STORE.  A register-load word that ALSO stores is
+       excluded from `is_ldptr()' by an explicit guard -- `dsp_disasm.py:493' says so
+       ("A member carrying the bit-4 store is excluded: its second effect has an
+       unproven target off mode 2").  Those words are blocked on the STORE TARGET,
+       which is a different and already-documented problem from the encoding itself.

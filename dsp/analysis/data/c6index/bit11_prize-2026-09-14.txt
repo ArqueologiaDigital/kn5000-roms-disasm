@@ -4,7 +4,9 @@
 
   pooled DISTINCT corpus: 7273 words, 1413 undecoded (80.6 % decoded)
 
-  A  bit-11 words (lo12 bit 11 set): 209 total, 169 UNDECODED
+  A  bit-11 words (lo12 bit 11 set, C-format EXCLUDED): 187 total, 169 UNDECODED
+     (22 further words carry the bit but are C-format -- bits [24:12] are one 13-bit
+      immediate there, so their `lo12' is part of a constant.  All 22 are decoded.)
      closing the family outright would move coverage 80.6 % -> 82.9 %
 
   C  the shapes the family uses, ranked by UNDECODED occurrences:
@@ -74,11 +76,6 @@
             801060821 x2     hi12=801 class4=0 addr8=60
             8010E0821 x2     hi12=801 class4=0 addr8=E0
             801090821 x1     hi12=801 class4=0 addr8=90
-     820   16                  hi12(8), class4(8), addr8(15)
-            C18AB2820 x2     hi12=C18 class4=A addr8=B2
-            C1ABF0820 x2     hi12=C1A class4=B addr8=F0
-            C18A32820 x2     hi12=C18 class4=A addr8=32
-            C1AB70820 x2     hi12=C1A class4=B addr8=70
 
   E  what exactly blocks the family?  (sect. 112: addressing explained AND ALU half
      anchored.  A bit-11 word HAS no SRC/ACT field, so the ALU half is all there is.)

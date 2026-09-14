@@ -8812,11 +8812,16 @@ was made to *print the addresses* instead of my recomputing them. That is the sa
 `dsp/tools/bit11_prize.py`, pooled and RULE-9 de-duplicated:
 
 ```
-   A  bit-11 words:  209 total, 169 UNDECODED     closing them: 80.6 % → 82.9 %
+   A  bit-11 words:  187 total, 169 UNDECODED     closing them: 80.6 % → 82.9 %
    B  undecoded words gated INDIRECTLY through the class-6 idiom (every open axis a
       class-6 / SRC-0x13 one):  102
    A + B = 271 words → a ceiling of 84.3 %
 ```
+
+⚠ **Corrected in §203: the family is 187, not 209.** 22 words carry `lo12` bit 11 *and* are
+C-format, where bits [24:12] are one 13-bit immediate — their `lo12` is part of a constant, not an
+opcode, and `decoded()` admits all 22 via its `c-format` clause. The **prize is unchanged** (all 22
+were already decoded, so they were never in the 169); the family SIZE was inflated.
 
 ★★ And the family is **nine shapes**, two of which are 148 of the 169:
 
@@ -8884,6 +8889,84 @@ Its other two forms (`0400008BC` ×10, `0500008BC` ×2) carry `class4 = 0, addr8
 
 ⚠ That is a shape observation from the committed corpus, not a decode. It is where to point the
 next relocation-style test — the method that paid twice (§122, §128).
+
+## 203. ★★★★ THE DECOMPOSITION EXTENDS — the family is a sparse two-field space
+
+`dsp_disasm.py` already decomposes a bit-11 word, for ten of them:
+
+```
+   lo_sel(w) = lo12 & 0xFF          the register SELECTOR
+   lo_imm(w) = lo12 bit 11          "addr8 carries a payload"   <- the family flag itself
+   lo_mid(w) = (lo12 >> 8) & 7      "residue: 0 at all 10 corpus sites"
+```
+
+That docstring was written when the family was ten words in one product. **Pooled it is 187 words
+and `lo_mid` is not always zero** — `C63` (×99) has `mid = 4`, `921` has `mid = 1`, `F22` has
+`mid = 7`. `dsp/tools/bit11_fields.py` asks whether the decomposition extends or breaks:
+
+```
+   mid  sel    n   decoded   product        in _REGLOAD_SEL?
+    0   0x21   13      13   KN:3  WSA:10    YES        <- is_ldptr, the C-RAM pointer
+    0   0x22    7       0   KN:1  WSA:6     YES
+    0   0x25    5       5   KN:3  WSA:2     YES        <- is_ldptrd, the delay descriptor
+    0   0x27    2       0   KN:2            YES
+    0   0x39    4       0   KN:2  WSA:2      -
+    0   0x64    2       0   KN:1  WSA:1      -
+    0   0xBC   49       0   KN:24 WSA:25     -
+    1   0x21    2       0   KN:1  WSA:1     YES
+    4   0x62    2       0   WSA:2            -
+    4   0x63   99       0   KN:53 WSA:46     -
+    7   0x22    2       0   WSA:2           YES
+```
+
+**11 cells of a possible 1024 — 1.1 %.** Four `mid` values {0, 1, 4, 7}, nine `sel` values, and
+every cell present in *both* products except three singletons. That is what a real field
+decomposition looks like; a wrong one scatters.
+
+### ★★★ Two minimal pairs — the instrument that paid in §122 and §128
+
+```
+   sel 0x21  ->  mid 0: 13 words, ALL DECODED (801050821, 801060821, 801070821 ...)
+                 mid 1:  2 words, open        (050000921)
+   sel 0x22  ->  mid 0:  7 words, open        (819086822, 859086822)
+                 mid 7:  2 words, open        (142000F22)
+```
+
+A selector appearing at two `mid` values is exactly a second copy at a different offset, and it
+isolates `mid` as a field rather than as residue. **`921` is the decoded C-RAM-pointer selector
+under a different `mid`.**
+
+### The relation — stated with its null, which is the point
+
+Every `mid ≠ 0` cell carries `addr8 == 0`. At word level that is 105 of 105 — ⚠ **inflated**, 99 of
+them being one shape. At shape level:
+
+```
+   cells with mid != 0 : 4     (1,0x21) (4,0x62) (4,0x63) (7,0x22)
+   all-zero-addr8      : 4 of 4
+   NULL: 6 of 11 cells in the family are all-zero-addr8, base rate 0.545
+         4 independent cells land that way with p = 0.545^4 = 0.0885
+```
+
+**p = 0.0885 — SUGGESTIVE, NOT PROOF.** Four cells cannot carry more than that. What it says is
+that `mid ≠ 0` and a payload have never been seen together, over 4 shapes and 105 occurrences in
+both products, which is the shape of an **opcode extension selecting a payload-less form**. To
+promote it: find a `mid ≠ 0` shape *with* a payload (refutes) or a fifth without (strengthens).
+
+### ⛔ And a correction this tool had to make to itself
+
+v1 counted the family as **209**. Twenty-two of those carry `lo12` bit 11 *and* are **C-format** —
+where bits [24:12] are one 13-bit immediate, so `lo_sel`, `lo_mid`, `class4` and `addr8` are not
+fields at all but pieces of a constant. `acc_blind.open_axes()` documents exactly this hazard, and
+`decoded()` admits all 22 via its `c-format` clause, not via `regload`. Including them put a
+22-word phantom cell at `(0, 0x20)` in the field space and moved the null from 0.0625 to its true
+0.0885.
+
+**The prize is unaffected** — all 22 were already decoded, so they were never among the 169 — but
+the family size was, and the same mistake this file was written to detect was made by this file.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The decomposition extends; what `mid` and `sel`
+*mean* is still the one open question (§202).
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
