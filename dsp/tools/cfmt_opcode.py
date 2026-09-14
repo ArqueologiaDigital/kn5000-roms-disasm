@@ -49,6 +49,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import dsp_disasm as DIS                                                  # noqa: E402
 import class_twins as CT                                                  # noqa: E402
 
+#  ★ THE PRODUCT LABELS `class_twins.images()' ACTUALLY YIELDS.  They are "KN"/"WSA", and this
+#  file spent its whole life comparing them against "KN5000"/"WSA1R": every per-product column
+#  printed 0, and `show_lo12_820()'s kernel table selected NOTHING, so the five kernel words fell
+#  into the "elsewhere" list.  The TOTALS and the destination census were never affected (they sum
+#  over the labels rather than test them), and neither was the `0x625' uniqueness result -- but a
+#  column of zeros is exactly the shape a real absence has, and nothing in the output said which.
+#  Taken from the source of truth instead of retyped.
+KN, WSA = (c[0] for c in CT.CORPORA)
+
 #  The kernel slots of the five `lo12 = 0x820' words (closure-pointer.md sect. 8).
 FIVE = (15, 22, 29, 31, 40)
 #  sect. 120: clearing the one-slot product at THIS slot, and at no other kernel C-format slot,
@@ -85,7 +94,7 @@ def show_census():
         d = dest[op]
         tag = "  <- is_c40 (the payload rule)" if op == 0x620 else ""
         print("      0x%03X   %6d %6d %6d   %s%s"
-              % (op, c.get("KN5000", 0), c.get("WSA1R", 0), sum(c.values()),
+              % (op, c.get(KN, 0), c.get(WSA, 0), sum(c.values()),
                  " ".join("%03X x%d" % (k, v) for k, v in sorted(d.items())), tag))
 
     #  ---- which destinations take MORE THAN ONE opcode --------------------
@@ -112,7 +121,7 @@ def show_five():
     for label, img, sl, w in cwords():
         if DIS.lo12(w) == 0x820:
             seen.append((label, img, sl, w))
-    kern = [r for r in seen if r[2] in FIVE and r[0] == "KN5000"]
+    kern = [r for r in seen if r[2] in FIVE and r[0] == KN and r[1] == "kernel"]
     shown = set()
     for label, img, sl, w in sorted(kern, key=lambda r: r[2]):
         if sl in shown:
@@ -122,7 +131,7 @@ def show_five():
         print("      iw%-3d %010X  opcode 0x%03X  A=%-3d B=%-3d imm13=%-5d class %X  addr8 %02X%s"
               % (sl, w, DIS.c_opcode(w), DIS.c_a(w), DIS.c_b(w), DIS.c_imm13(w),
                  DIS.class4(w), DIS.addr8(w), mark))
-    other = [r for r in seen if r[0] != "KN5000" or r[2] not in FIVE]
+    other = [r for r in seen if r not in kern]
     print("\n      elsewhere in the pooled corpus: %d more `lo12 = 0x820' words" % len(other))
     for label, img, sl, w in sorted(other)[:12]:
         print("        %-7s %-28s iw%-3d %010X  opcode 0x%03X"
