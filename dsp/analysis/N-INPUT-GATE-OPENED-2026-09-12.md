@@ -8103,6 +8103,63 @@ store lands. It is the single largest coherent object left.
 ⚠ This decodes nothing. It says the remaining work is bounded and where its mass sits, which is
 what a plan needs and what "1413 words" obscures.
 
+## 178. ★★★★★ THE DISTORTION WAVESHAPER'S CLIPPING CURVE, RECOVERED — and §157 corrected
+
+§177 said the C63 table-lookup idiom is 19 % of the whole remaining gap and is blocked on two
+questions, one of which is *what `SRC 0x13` reads*. That is the table. **The table is now in hand.**
+
+### Where it lives
+
+`upd6383.cpp:1998` is the link nobody had followed: `m_rf[m_dram_wp & 0xff] = v` — **the mode-1
+REGISTER FILE is written through the D-RAM-register path, host packet tag `0x15`.** That is a space
+`dsp_zerofill_static.py` already decodes, so it comes out of an existing KN5000 capture with no run
+at all. From the committed EXCITER capture (`analysis/data/cls4/off.upload.txt`), 79 register cells,
+in runs: `0x05..0x0C  0x0E  0x10..0x14  **0x1D..0x40**  0x50..0x63  0x85..0x87  0x8A..0x8B  0x94
+0xD0..0xD2`.
+
+### What it is
+
+```
+   1D -0.495000   25 -0.450450   2D  0.000000   35 +0.450450
+   1E -0.491040   26 -0.440550   2E +0.231750   36 +0.463320
+   1F -0.489060   27 -0.425700   2F +0.316800   37 +0.470250
+   20 -0.486000   28 -0.410850   30 +0.356400   38 +0.475200
+   21 -0.483120   29 -0.386100   31 +0.386100   39 +0.483120
+   22 -0.475200   2A -0.356400   32 +0.410850   3A +0.485100
+   23 -0.470250   2B -0.316800   33 +0.425700   3B +0.489060
+   24 -0.463320   2C -0.231750   34 +0.440550   3C +0.491040
+```
+
+* **`0x1D..0x3C` = 32 entries**, monotonically increasing (checked, True).
+* **Odd-symmetric about an exact zero at `0x2D`**: `f(0x2D−k) = −f(0x2D+k)` for **15 of 16** pairs
+  to within rounding.
+* **One real asymmetry**, k = 13: `0x20 = −0.486000` against `0x3A = +0.485100`, a gap of 0.0009 —
+  some 7500 LSB, so deliberate or a data error, not rounding. Worth a second capture to confirm.
+* k = 16 breaks outright (`0x3D = +0.771193`), which is how the table's end is known: `0x3D..0x40`
+  are four further cells belonging to something else.
+
+That is a **soft-clip transfer curve**: steep through the origin, flattening to ±0.49.
+
+### Two published claims corrected
+
+⛔ **`N-DISTORTION-NOT-UNDUMPED-2026-09-12.md`'s open item is CLOSED** — *"which exact C-RAM cells
+hold the distortion waveshaper table (selector TT = 0x28)"*. It is not in **C-RAM**: it is the
+**mode-1 register file** at `0x1D`, written with tag `0x15`. That note's conclusion (*"the clipping
+curve is recoverable from dumped data"*) was right; its location was not.
+
+⛔ **§157's "so the clip curve has 40 entries" is REFUTED.** `addr8 = 0x28 = 40`, and the curve is
+**32** cells. The "`addr8` is the table entry count" reading held for the LFO (0x18 = 24 against a
+proven 24-entry sine) and **fails here**, so it is not general and `addr8`'s meaning on class 6 is
+open again. ★ The rest of §157 — the 99/99 idiom, the five values both products agree on, the
+`f31`↔`lo12` coupling — is untouched; only the interpretation of the field is withdrawn.
+
+⚠ Measured on ONE capture of ONE effect. Whether DISTORTION / FUZZ / OVERDRIVE load the same 32
+values is unchecked, and they share `TT = 0x28`.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** This recovers *data*, not instructions — but it is
+the operand the idiom's 273 words read, and `UPD6383_C6LUT` can now be pointed at a real table
+instead of an inferred window.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
