@@ -8339,6 +8339,52 @@ small produces indices 0..3 — hence the one-sided +241 K.
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The +90 needs one correct arm, and the three
 ingredients it requires — table, criterion, and the constraint above — are now all measured.
 
+## 184. ★★★ THE SCALING CONCLUSION IS RE-ESTABLISHED — on an instrument that passes its off-control
+
+§183 found the phase: **D-RAM cell `0x07`**, unsigned, `0 .. 8 388 602` (six short of 2^23), changing
+1 570 842 times against ~176 000 for every other live cell. With it `lfo-ramp.md` §10's arithmetic is
+exact — `(24 × 8 388 602) >> 23 = 23`, phase 0 → index 0 — landing in `0..n−1` by construction, which
+is why no modulo appears in the microcode.
+
+Implemented as `UPD6383_C6LUT=4` and judged on §181's criterion, cell `0x0F`'s swept range:
+
+```
+   C6LUT=0 (OFF)   fired 0           0F span        21     0 % of sine full scale
+   C6LUT=1         fired 3 150 504   0F span 4 805 678    30 %   chg  19 521
+   C6LUT=4         fired 3 150 504   0F span 4 805 683    30 %   chg 114 742
+```
+
+★★ **The two index forms give the same amplitude to within five counts** — while `=4` writes the
+cell **six times more often**, so the index really is different. ⇒ **the amplitude is not set by the
+index.** It is capped downstream at `2 402 841 / 7 969 177 = 0.3015` of the table's full scale.
+
+### What that puts back
+
+⛔ **§180's retraction was too broad.** `upd6383.cpp` recorded *"both arms put a full-scale waveform
+value into the chain and neither produces a ±240 sweep ⇒ what is missing is the SCALING step between
+the table and the tap, not the route"*. §180 withdrew that because it rested on the §157 TAPMOD
+census, which is blind (arm-off and both arms agree exactly). **That criticism of the evidence was
+correct; the conclusion it carried away was not.** Cell `0x0F` — which moves when the lookup is
+switched off, so it passes the control TAPMOD fails — says the same thing from three index forms:
+the route works, the amplitude is wrong by a constant factor.
+
+★ So the standing conclusion is restored, and now it rests on an instrument with demonstrated power
+rather than one that cannot tell the lookup from its absence. §180's substantive finding (TAPMOD is
+blind, and no arm should ever have been judged on it) stands untouched.
+
+### Where the +90 stands
+
+⛔ **Still not promotable.** Class 6's addressing needs the index *ranked*, and cell `0x0F`'s
+amplitude cannot rank it — both forms land on 30 %. The one discriminator observed is the **change
+count** (19 521 against 114 742), which says the forms differ but not which is right.
+
+★ Two candidates for the 0.3015, neither tested: the chorus **DEPTH** coefficient doing its job, in
+which case the factor is not a defect at all and the ±240 target was the wrong expectation; or a
+missing shift between table and tap. Distinguishing them means varying DEPTH — and §172's editor map
+plus §183's phase cell make that a runnable experiment for the first time.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
