@@ -107,8 +107,24 @@
         DS_D               -- absent
         OVER_D             -- absent
 
-      ⇒ 5 of 12 stubs have a real program in the second product.
+      ⇒ 5 of 12 stubs have a program in the second product.
         (`HARS EFFECT' is the KN5000 menu's spelling of HAAS -- the same effect.)
+
+   ★ THE SCAFFOLD TEST -- `NO OPERATION' is 49 words of COMMON FRAMEWORK, not an
+     empty image, so only the words BEYOND it are the effect.
+
+      WSA1R program               words   shared  own work
+      eff17_slow_attacker            50       30        20
+      eff54_pitch_shifter           108        7       101
+      eff12_pedal_wah                75        5        70
+      eff19_haas_effect              35        6        29
+      eff55_pedal_wah_delay         103        9        94
+
+      NULL over the other 42 WSA1R effects: own-work min 18 (eff16_noise_generator), median 85, max 119
+      ⇒ four of the five are unambiguous.  SLOW ATTACKER is THIN -- 20 own words, and
+        30 of its 50 are the KN5000 NO OPERATION scaffold -- but it is ABOVE the
+        corpus minimum for an effect nobody disputes, so `stub' is not supported
+        either.  State the number, not the label.
 
    ★ THE TOP OF THE SAME-PRODUCT NULL, for comparison
 

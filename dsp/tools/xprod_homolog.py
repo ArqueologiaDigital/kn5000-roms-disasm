@@ -150,8 +150,41 @@ def show_catalogue():
         if m:
             have.append((stub, m[0]))
         print("        %-18s %s" % (stub.upper(), "★ WSA1R ships " + m[0] if m else "-- absent"))
-    print("\n      ⇒ %d of 12 stubs have a real program in the second product." % len(have))
+    print("\n      ⇒ %d of 12 stubs have a program in the second product." % len(have))
     print("        (`HARS EFFECT' is the KN5000 menu's spelling of HAAS -- the same effect.)")
+
+    #  ---- ★ THE SCAFFOLD TEST, and it changed one of the five ---------------
+    #  ⚠ `NO OPERATION' is NOT an empty image.  The KN5000's is 49 words -- the common I/O
+    #  framework every effect is built on -- so "the other product ships a real program" has to
+    #  mean words BEYOND that scaffold, or a thin effect reads as a stub and vice versa.
+    #  ⚠⚠ AND AN EARLIER PASS SAID THE OPPOSITE ABOUT ONE OF THEM.
+    #  `DECODE-by-correlation-2026-09-08.md' sect. 10 clusters by idiom-sequence LCS >= 0.85 and
+    #  reports *"SLOW ATTACKER == NO OPERATION (a stub, confirming the KN5000 stub-effect list on
+    #  the WSA1R too)"*.  At BYTE level that is not right -- but it is not far wrong either, and
+    #  the number is what separates the two readings.
+    knop = [w for l, n, w in imgs if l == "KN" and n == "prog00_no_operation"]
+    if not knop:
+        return len(have)
+    nop = knop[0]
+    print("\n   ★ THE SCAFFOLD TEST -- `NO OPERATION' is %d words of COMMON FRAMEWORK, not an"
+          % len(nop))
+    print("     empty image, so only the words BEYOND it are the effect.\n")
+    print("      %-26s %6s %8s %9s" % ("WSA1R program", "words", "shared", "own work"))
+    for stub, n in have:
+        w = [x for l, m, x in imgs if l == "WSA" and m == n][0]
+        sh = score(nop, w)[0]
+        print("      %-26s %6d %8d %9d" % (n, len(w), sh, len(w) - sh))
+    others = [(len(w) - score(nop, w)[0], n) for l, n, w in imgs
+              if l == "WSA" and n.startswith("eff") and "no_operation" not in n
+              and n not in [h[1] for h in have]]
+    others.sort()
+    own = [o[0] for o in others]
+    print("\n      NULL over the other %d WSA1R effects: own-work min %d (%s), median %d, max %d"
+          % (len(others), own[0], others[0][1], own[len(own) // 2], own[-1]))
+    print("      ⇒ four of the five are unambiguous.  SLOW ATTACKER is THIN -- 20 own words, and")
+    print("        30 of its 50 are the KN5000 NO OPERATION scaffold -- but it is ABOVE the")
+    print("        corpus minimum for an effect nobody disputes, so `stub' is not supported")
+    print("        either.  State the number, not the label.")
     return len(have)
 
 

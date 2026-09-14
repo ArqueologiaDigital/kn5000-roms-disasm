@@ -5642,10 +5642,40 @@ the program.
 | MODULATION DELAY, NOISE FLANGER, CEL, CELM, STRING, DS_D, OVER_D | — absent |
 
 The pitch shifter is the one this project already leaned on (the class-4 minimal pair,
-`class_twins.py`); four more were there and nobody had looked. `prog70_auto_wah_s_delay ↔
-eff55_pedal_wah_delay` at **77** and `prog52_auto_wah ↔ eff12_pedal_wah` at **51** say the
-KN5000's AUTO WAH and the WSA1R's PEDAL WAH are the same routine under two menu names — which is
-why the KN5000 could ship PEDAL WAH as a stub and still have the code.
+`class_twins.py`); four more were there and nobody had looked.
+
+### ⚠ THE SCAFFOLD TEST, which changed one row of that table
+`NO OPERATION` is **not an empty image** — the KN5000's is **49 words** of common I/O framework —
+so "the other product ships a real program" has to mean words *beyond* the scaffold:
+
+```
+   WSA1R program            words   shared with KN NO-OP   own work
+   eff54_pitch_shifter        108            7              101
+   eff55_pedal_wah_delay      103            9               94
+   eff12_pedal_wah             75            5               70
+   eff19_haas_effect           35            6               29
+ ⚠ eff17_slow_attacker         50           30             ★ 20
+   NULL over the other 42 effects: min 18 (eff16_noise_generator), median 85, max 119
+```
+
+⇒ four are unambiguous. **SLOW ATTACKER is thin** — 20 own words, and 30 of its 50 are the
+KN5000's no-op scaffold. ⚠⚠ **And an earlier pass said the opposite.**
+`DECODE-by-correlation-2026-09-08.md` §10 clusters by idiom-sequence LCS ≥ 0.85 and reports
+*"SLOW ATTACKER ≡ NO OPERATION (a stub, confirming the KN5000 stub-effect list on the WSA1R
+too)"*. At byte level that is wrong — the two are 4 words apart, not identical — but "a real
+program" overstates it in the other direction: 20 own words is at the bottom of the distribution,
+above the corpus minimum for an effect nobody disputes. **State the number, not the label.**
+
+### ⚠ And credit where it is due
+§10 of that same pass had already established that *"every KN5000 ↔ WSA1R same-name pair
+clusters — cross-product structural validation"*, and that **AUTO WAH ≡ PEDAL WAH**. What is new
+here is the instrument, not the correspondence: idiom-sequence LCS is a similarity measure on
+derived strings, this is **byte identity in program order with a computed null**, and it is what
+makes the kernel homolog (§121) and the relocation test (§122) possible. The catalogue result is
+a *confirmation at a stronger standard*, and it should be quoted that way.
+
+`prog70_auto_wah_s_delay ↔ eff55_pedal_wah_delay` at **77** and `prog52_auto_wah ↔ eff12_pedal_wah`
+at **51** put that identity on bytes too.
 
 ⇒ this is what the second product is worth, stated plainly: **a named, byte-anchored counterpart
 for essentially every KN5000 effect**, an independent copy of the kernel header (§121), and five
