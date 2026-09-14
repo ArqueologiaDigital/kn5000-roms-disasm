@@ -1,18 +1,36 @@
-f31=4 THREE-ARM RUN -- TYPE 33 = prog75_peq_compressor (FINGERPRINTED), per-program census
+f31=4 THREE-ARM RUN OVER ALL THREE SITES -- each TYPE FINGERPRINTED (sect.193)
+  TYPE 33 -> prog75_peq_compressor      ✅
+  TYPE 34 -> prog96_peq_compr_dist      ✅
+  TYPE 35 -> prog97_peq_compr_overdr    ✅
+per-program census (UPD6383_CENSUS_PERPROG=1), true default otherwise.
+sect.160 register file: cell count and the four cells that move.
 
-  mask / reading                     cells   0E        C3        C8        D0       
-  CONTROL  4 -> LOAD (shipped alias) 72      7B3F32    --        FFFFFF    62FFEE   
-  ARM      4 = ADD                   73      7FFFFF    1259EA    C46363    7FFFFF   
-  ARM      4 = HOLD                  73      7FFFFF    1259EA    FFFFFF    7FFFFF   
+TYPE 33 = prog75_peq_compressor
+  CONTROL  4 -> LOAD       72   0E=7B3F32  C3=--      C8=FFFFFF  D0=62FFEE   [fired 1387425]
+  ARM      4 = ADD         73   0E=7FFFFF  C3=1259EA  C8=C46363  D0=7FFFFF   [fired 1387425]
+  ARM      4 = HOLD        73   0E=7FFFFF  C3=1259EA  C8=FFFFFF  D0=7FFFFF   [fired 1387425]
 
-  7FFFFF = the POSITIVE RAIL.  The CONTROL is the only arm leaving 0E and D0 unrailed.
-  ADD and HOLD both rail 0E and D0 and both add a new cell C3; they differ only at C8.
+TYPE 34 = prog96_peq_compr_dist
+  CONTROL  4 -> LOAD       70   0E=--      C3=--      C8=FFFFFF  D0=03530A   [fired 1429877]
+  ARM      4 = ADD         71   0E=--      C3=1259EA  C8=C46363  D0=7FFFFF   [fired 1429877]
+  ARM      4 = HOLD        71   0E=--      C3=1259EA  C8=FFFFFF  D0=7FFFFF   [fired 1429877]
 
-  D-RAM anchored cells 04/05/06 -- IDENTICAL in all three arms, so the PRE-REGISTERED
-  criteria (hand-off live, VOLUME written-once) are BLIND here; the discriminator is
-  the sect.160 register-file census, which was NOT among them.
+TYPE 35 = prog97_peq_compr_overdr
+  CONTROL  4 -> LOAD       68   0E=--      C3=--      C8=FFFFFF  D0=7FFFFF   [fired 1470848]
+  ARM      4 = ADD         69   0E=--      C3=1259EA  C8=C46363  D0=7FFFFF   [fired 1470848]
+  ARM      4 = HOLD        69   0E=--      C3=1259EA  C8=FFFFFF  D0=7FFFFF   [fired 1470848]
 
-  §176 D-RAM CENSUS, ALL 32 CELLS, over 221468 frames SINCE THE LAST PROGRAM UPLOAD at frame 1908648 (§103 PER-PROGRAM, 102 resets) -- NOT comparable with a whole-walk census: 01:6799547(0..6799547/chg1
+WHAT REPRODUCES 3 OF 3
+  * ADD and HOLD both create register C3 = 1259EA; the shipped alias NEVER does.
+  * ADD alone perturbs C8 (C46363); CONTROL and HOLD both leave it FFFFFF.
+  * the arm fires identically across the three masks within each program (reach is not the variable).
 
-  REACH (N0): §205 f31=4 fired 1387425 -- sect.108 measured 0 in the chorus, so this
-  run has power where that one did not.
+WHAT DOES *NOT* REPRODUCE -- and it corrects the first write-up
+  * "the control is the only arm leaving D0 unrailed" holds on TYPE 33 and 34 only.
+    On TYPE 35 the CONTROL ALREADY RAILS D0 (7FFFFF), so railing cannot be the discriminator.
+  * 0E exists as a non-zero cell only in prog75, so its railing is a one-program observation.
+
+THE PRE-REGISTERED CRITERIA ARE BLIND
+  D-RAM cells 04/05/06 (hand-off live, VOLUME written-once) are identical to the digit across all
+  three arms in all three programs.  The discriminator is the sect.160 register-file census, which
+  was NOT among the pre-registered criteria.
