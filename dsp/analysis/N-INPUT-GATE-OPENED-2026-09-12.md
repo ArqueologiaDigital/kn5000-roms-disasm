@@ -6747,6 +6747,39 @@ depend on position.
 more than the site: **§231 is an existing, unread blindness instrument**, and it is pointed at the
 axis (`f31`) that the static one cannot resolve.
 
+## 148. ★★ `f31 = 3` IS SEPARABLE AND REPRODUCIBLE — the arm §146 asked for, built and run
+Pre-registration + data: [`data/PREDICT_F31_367_2026-09-14.md`](data/PREDICT_F31_367_2026-09-14.md),
+[`data/f31_367_run_2026-09-14.txt`](data/f31_367_run_2026-09-14.txt).
+
+§146 said the bit-5 hypothesis *"needs an arm that makes the two halves behave differently, not a
+counter"*. Built (`UPD6383_BX_F3` / `_F6` / `_F7`, counted unconditionally, default off) and run on
+the two programs §231 pointed at.
+
+* **R0 reach — PASS**, 5.69 M / 5.77 M firings.
+* **R1 positive control — PASS, and it could have failed.** `BX_F3=3` (HOLD) differs from the
+  control in **nothing but its own banner**: 406 device report lines identical. ⇒ the shipped
+  `op = f31 & 3` **is** HOLD for code 3, exactly as the device claims.
+* **R2 — PASS, with identical magnitude in two programs:**
+
+```
+   §167 tempB change count     TYPE 33    TYPE 34    Δ vs control
+     control / HOLD             39 559    498 837     --
+     LOAD                       39 510    498 788     −49   in BOTH
+     ADD                        39 485    498 763     −74   in BOTH
+```
+
+Not same-signed — **the same deltas**, across programs whose totals differ by an order of magnitude.
+* **R3, the pre-registered null — REFUTED.** `f31 = 3` is not blind at these sites.
+
+### ⛔ What it does not settle, which is the decision itself
+§160's register file is **identical across all four arms in both programs**; so are the D-RAM
+anchored cells. The only discriminators are **activity counts**, and §20 measured that liveness
+**rewards contamination** — "more transitions" is not "more correct".
+
+⇒ `f31 = 3` moves from **no evidence of any kind** to **separable, reproducible, and with one
+reading proven identical to the shipped model**. It needs a criterion that **ranks** the three
+readings, not one that merely distinguishes them. Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

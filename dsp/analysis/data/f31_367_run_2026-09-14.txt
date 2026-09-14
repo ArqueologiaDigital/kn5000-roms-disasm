@@ -1,0 +1,29 @@
+f31 = 3 ARM (UPD6383_BX_F3), TYPE 33 + TYPE 34, per-program census, true default otherwise
+  TYPE 33 = prog75_peq_compressor   (4 sole-axis f31=3 words)
+  TYPE 34 = prog96_peq_compr_dist   (4 sole-axis f31=3 words)
+
+REACH (R0):  f31=3 fired 5 687 512 (TYPE 33) / 5 772 416 (TYPE 34)
+
+R1 POSITIVE CONTROL -- HOLD vs the shipped collapse
+  arm 3 (HOLD) differs from the control in NOTHING but the arm's own banner line.
+  ⇒ the shipped `op = f31 & 3' (3 -> op 3, which p_term treats as "no product") IS HOLD,
+    exactly, as upd6383.cpp's comment says.  The arm is correctly placed.
+
+R2 -- LOAD and ADD ARE observable, and the effect is EXACTLY reproducible
+  sect.167 SAME SITE tempB change count:
+                       TYPE 33        TYPE 34        delta from control
+     control / HOLD     39 559        498 837        --
+     LOAD               39 510        498 788        -49   in BOTH programs
+     ADD                39 485        498 763        -74   in BOTH programs
+  sect.174 / sect.175 move by single counts in the same direction.
+
+  ⇒ the three readings SEPARATE, the separation REPRODUCES across two programs, and the
+    deltas are IDENTICAL (-49, -74) rather than merely same-signed.
+
+R3 NULL -- REFUTED.  f31 = 3 is NOT blind at these sites.
+
+WHAT IS STILL MISSING
+  sect.160's register file is IDENTICAL across all four arms in both programs, and so are the
+  D-RAM anchored cells.  The ONLY discriminators are activity counts -- and sect.20 measured that
+  liveness REWARDS CONTAMINATION, so "more transitions" is not "more correct".  Nothing here
+  says WHICH of LOAD / ADD / HOLD is right.
