@@ -7789,8 +7789,24 @@ parameterised by `TYPEIDX / NPARAM / NVALUE`, so the run is cheap. `op72_live.{s
 > capture, the inference is refuted.**"*
 
 The EQ's gain law is `0.5 × user − 12.0 dB`, so **+24 VALUE-up steps should saturate one band at
-+12.0 dB** and move five C-RAM coefficients. **Nothing moved.** ⇒ **the PARAMETER/VALUE key
-inference is REFUTED**, the script edits no parameter, and every result obtained through it is void.
++12.0 dB** and move five C-RAM coefficients. **Nothing moved.**
+
+⛔⛔ **AND MY FIRST ATTRIBUTION OF THAT NULL WAS WRONG — corrected within the hour, see §172.** I
+wrote *"the PARAMETER/VALUE key inference is REFUTED"*. The KN5000 control-panel driver's own
+ioports say the inference is **RIGHT**:
+
+```
+   CPL_SEG10  0x20 = "UP 1"   0x10 = "DOWN 1"      <- TYPE, measured
+   CPL_SEG10  0x80 = "UP 2"   0x40 = "DOWN 2"      <- peq_gain's PARAMETER
+   CPL_SEG9   0x20 = "UP 3"   0x10 = "DOWN 3"      <- peq_gain's VALUE
+```
+
+`peq_gain.lua`'s mapping matches the physical button names exactly, and the memory rule is that the
+driver ioports are the source of truth for SEG/bit. Worse for my reading: **both runs fingerprinted
+the right program**, which means the SOUND-menu navigation reached page 0x0B and TYPE stepping
+worked — the same key block. So what is refuted is only *"this script, as run, produced no
+coefficient change"*. **The cause is not identified**, and naming one was the same defect this
+session has been catching all day.
 
 ### Why this is the right outcome to have spent the runs on
 
