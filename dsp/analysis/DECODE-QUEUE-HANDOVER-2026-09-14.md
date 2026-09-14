@@ -270,27 +270,34 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    ⚠ Class 8 is in `alu_decoded()`'s admitted set already; its 12 are refused by `dram_dir()`
    (`addr8 = 0x0B` has bit 6 clear), which is a different question.
 
-1. ⛔ **THE BIT-EXACT DYNAMICS REFERENCE IS BLOCKED ON A KEY MAPPING — read §170/§171 first.**
-   This is still the item that would pay most (§149: it unblocks `f31 = 3`, 56 sole-axis words, AND
-   §135's `ACT 0x0B` job, 191). §152–§155 got four of its five pieces. Both remaining routes are now
-   measured and both are shut:
-   * ⛔ **Static is impossible.** §170: all four `op 0x72` cells hold `0x600000` = exactly 0.75, and
-     §153's law produces that at **no integer knob position at any of §154's three scales**. Scoped
-     with a null — `op 0x72` is 8/8 "low 16 bits zero" against a 35 % corpus base rate, p ≈ 2e-4 —
-     so those cells hold a hard-coded **default** while parameter cells generally store evaluator
-     output. The law has no stored output to check against. ★ Reading the eight floating-point
-     helpers would have validated an implementation against nothing; don't.
-   * ⛔ **Dynamic is blocked on tooling.** §171: `peq_gain.lua`'s PARAMETER/VALUE keys are INFERRED
-     and its own header says the run is the test of them. It is: +24 VALUE-up on the EQ, whose gain
-     law is `0.5·user − 12.0 dB`, should saturate a band at +12 dB and move five coefficients.
-     **Nothing moved.** The inference is refuted and the script edits no parameter.
-   ★ **THE ACTUAL NEXT ACTION: measure the PARAMETER and VALUE key pairs**, the way `TYPE` was
-     measured. `-paramlist.md` §1.3 *names* all three pairs and **measured only TYPE**. That is one
-     bounded panel-capture job, and it reopens this whole item.
-   ★ The capture pipeline itself is built and validated: `op72_live.py` replays a uC-IF capture into
-     a C-RAM map and reproduces `cram_of_algo(35)` on **23 of 23** cells. ⚠ Two distinct
-     "nothing moved"s came out of this experiment — one from the parser (payload offset) and one
-     from the navigation. **Validate the instrument against a known answer before believing a null.**
+1. ⛔ **THE BIT-EXACT DYNAMICS REFERENCE: the `op 0x72` route is CLOSED. Do not re-run the
+   compressor.** It remains the item that would pay most (§149: `f31 = 3`, 56 sole-axis words, AND
+   §135's `ACT 0x0B` job, 191) — but both routes to it are now measured shut, by two independent
+   methods that agree:
+   * ⛔ **Static (§170)**: all four `op 0x72` cells hold `0x600000` = exactly 0.75, which §153's law
+     produces at **no integer knob position** at any of §154's three scales; `op 0x72` is 8-of-8
+     "low 16 bits zero" against a 35 % corpus base rate (p ≈ 2e-4).
+   * ⛔ **Dynamic (§173)**: with the parameter actually moved and the uC-IF stream captured, the
+     cell is rewritten `600000` **75 times unchanged** through the whole edit phase.
+   ⇒ §153's gain law has no output to validate against, in ROM or in a capture. **Pick a different
+   dynamics program, or a different anchor.** ★ Do NOT read the eight floating-point helpers
+   (`0x03dd36` &co.) — that would validate an implementation against nothing.
+
+1a. ✅ **WHAT THE THREAD BUILT, and it is reusable for any effect (§171–§174).**
+   * **The editor is mapped, measured**: TYPE = row 1 (row 2 duplicates it); **parameter cursor =
+     row 3** (`RAM[0x8D9D]` steps ~6 per press and wraps after ~16 fields — a screen position, not
+     an index, which is why index-hunting missed it); **VALUE = row 7 = `CPL_SEG7 0x20`**
+     (`RAM[0x2978]` +1 per press, saturating at 26 on the PEQ's 27-entry list).
+     ⚠ `-paramlist.md` §1.3's "TYPE / PARAMETER / VALUE" describes the **LCD legend**, not the key
+     matrix. `peq_gain.lua` is corrected and its header now says so.
+   * **A live capture pipeline**: `op72_live.py` replays a uC-IF capture into a cell-resolved,
+     write-ORDERED coefficient map. ⚠ The KN5000 pokes coefficients as **`0A`-led host packets
+     inside `cmd 0x01`**, not only as `cmd 0x02` records — a parser that reads only `cmd 0x02` sees
+     nothing and it looks exactly like "the machine wrote nothing".
+   * **Acceptance test passes on the PARAMETRIC EQ**: driving VALUE moves 13 coefficients off their
+     defaults, and cells `0x05`–`0x08` / `0x0E`–`0x11` take 80–90 distinct values.
+   ⇒ **live (knob, coefficient) data is now obtainable for any effect and any parameter.** That is
+   the instrument §142's value-law family always wanted; it just does not reach `op 0x72`.
 
 2. `UPD6383_BX_F6` / `_F7` are built and unused — 3 + 44 pooled words, same method as §148.
 3. `SRC 0x11` stays a documented **dependency cycle**; do not run another capture campaign at it.

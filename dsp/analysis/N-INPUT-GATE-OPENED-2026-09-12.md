@@ -7910,6 +7910,57 @@ different way than I said.
 
 ⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
 
+## 173. ⛔ I RETRACTED §170 ON A SUMMARY STATISTIC, AND THE ORDERED DATA PUT IT BACK
+
+Worth recording because the mistake is mechanical and cheap to avoid.
+
+Having found that the compressor's parameter edits *do* reach the DSP (as `0A`-led host packets
+inside `cmd 0x01`, which my first parser discarded — it only read `cmd 0x02`), I replayed them with
+pointer tracking and got a cell-resolved map. Cells `0x04` and `0x0D` — the `op 0x72` operands —
+showed **15 and 17 distinct values**, and I wrote that §170 was "refuted by direct measurement".
+
+It is not. The **ordered** trajectory:
+
+```
+   cell 04:  0000F0 000064 F201D9 000000 000018 00008C 000046 5A5AEE 318B12 2CCCCC
+             2C9B27 000010 0270B4 000010 2EB133 2EB133 | 600000 x75
+```
+
+Every one of the 15 distinct values falls in the **first ~17 writes** — the effect-selection phase,
+where the script saturates DOWN through forty effects and each uploads its own preset. Through the
+entire parameter-edit phase the cell is rewritten `600000` **seventy-five times, unchanged**.
+
+⇒ **§170 STANDS and is now corroborated dynamically**: the `op 0x72` cell holds 0.75 and the
+evaluator writes 0.75 whatever the knob does. A distinct-value COUNT cannot separate "varies with
+the parameter" from "varies across effects"; only the ORDER can, and I had the order in hand.
+
+> **A summary statistic over a run that changed more than one thing is not evidence about either.**
+
+★ What the same replay establishes positively, and it is real: **cells `0x05`–`0x08` and
+`0x0E`–`0x11` take 80–90 distinct values during the parameter edits.** So the
+parameter → evaluator → C-RAM path works, is cell-resolved and write-ordered, and yields live
+(knob, coefficient) data — for the opcodes that drive *those* cells. `op 0x72` is simply not one of
+them.
+
+## 174. WHERE THIS LEAVES THE QUEUE
+
+The panel-key thread (§171–§173) ends with a working instrument and a closed route:
+
+* ✅ **The editor is mapped**: TYPE = row 1 (row 2 duplicates it), parameter cursor = row 3
+  (`RAM[0x8D9D]` steps ~6 per press and wraps after ~16 fields — a screen position, not an index),
+  VALUE = row 7 (`CPL_SEG7 0x20`; `RAM[0x2978]` +1 per press, saturating at 26 on the PEQ).
+* ✅ **The capture pipeline works end to end** — `op72_live.py` + the `cmd 0x01` / `0A`-packet
+  replay. Acceptance test passed on the PARAMETRIC EQ: 13 coefficients move off their defaults.
+* ⛔ **The compressor route is CLOSED, by two independent measurements** (§170 static, §173
+  dynamic). §153's gain law has no output to validate against, in the ROM or in a capture.
+
+⇒ the bit-exact dynamics reference — which §149 measured as unblocking `f31 = 3` (56 sole-axis
+words) and §135's `ACT 0x0B` job (191) — **cannot be reached through `op 0x72`**. Anyone resuming
+should pick a different dynamics program, or a different anchor entirely, and should not re-run the
+compressor.
+
+⚠ Coverage across this whole thread: **unchanged, 1501 of 8003, 81.2 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
