@@ -7961,6 +7961,39 @@ compressor.
 
 ⚠ Coverage across this whole thread: **unchanged, 1501 of 8003, 81.2 %.**
 
+## 175. ⛔ `ACT 0x01..0x06` IS UNRANKABLE TOO — the check run BEFORE the build, for once
+
+§167 called this family the best remaining lead: 109 pooled words, 1 decoded, an enumerated
+destination bank with a demonstrated ladder discipline (6 of 6 pair exchanges, p = 1.1e-9), and no
+emulator needed. §174's handover put it at the top.
+
+**It is blind to every anchor this project has**, and the check cost one command:
+
+```
+   15 KN5000 programs carry ACT 0x01..0x06
+    4 of those also carry an op0x70 biquad band   (PARAMETRIC EQ, PEQ+CHORUS/FLANGER/VIBRATO)
+    0 of those 4 have a band that READS a cell an ACT-1..6 word WRITES
+```
+
+The eleven others — CHORUS, MODULATED CHORUS, ENHANCER, FLANGER, ROCK ROTARY, VIBRATO, ROTARY
+SPEAKER, MIX UP, the three S.DELAY combinations — carry **no `op0x70` band at all**, so the oracle
+cannot see them even in principle.
+
+⇒ **the same outcome §149 recorded for `f31 = 3`: the code is separable and structurally
+characterised, and no anchored criterion can rank it.** `f31 = 3` (56 sole-axis words) and
+`ACT 0x01..0x06` (109, 1 decoded) are now both in that state.
+
+★ **What is different, and is the only methodological gain worth claiming from this stretch**: the
+check was run **before** anything was built, and it used **membership** — does the band actually
+read a cell this word writes — rather than **position**. §160 used position, admitted 8 of 8
+programs, and sent me into a build, two emulator runs, a promotion and two retractions. The same
+question asked by membership answers in one command and admits none.
+
+> Ask the §149 question first, and ask it by membership. Both halves matter: §160 asked it first
+> and still got it wrong, because it asked the positional version.
+
+⚠ Coverage unchanged: **1501 of 8003, 81.2 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

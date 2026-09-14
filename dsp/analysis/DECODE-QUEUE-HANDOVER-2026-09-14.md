@@ -246,22 +246,18 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
      3. A criterion that presupposes the hypothesis is not a criterion — and that includes the
         *program-selection* criterion, not just the acceptance test. §165.
 
-0a. ★★★ **THE LEAD I WOULD TAKE NEXT: `ACT 0x01..0x06`, 109 pooled words, 1 decoded.**
-   §166 showed four of §9.3's five "phantom" codes are REAL (each has 7 bit-11-clear sites, 1 KN
-   epilogue + 6 WSA1R), and §167 showed what the family IS: `WSA kernel` and
-   `WSA struct_30_fcda77` share 63 slots and differ in **six words**, every one an exchange within
-   a consecutive `ACT` pair (**6 of 6, p = 1.1e-9**), in a routine that is five repeats of a
-   five-word block whose head's `SRC` walks 01..05 and whose tail's `ACT` equals it block-for-block
-   in one image and is the pair partner in the other.
-   ⇒ an **enumerated destination bank** with a demonstrated addressing discipline and a
-   cross-connection between two variants — a five-stage ladder, which is what an all-pass/comb
-   stage pair looks like. ⛔ I tested *"`SRC n` and `ACT n` name the same resource"* and dropped it:
-   0x07 ✓, 0x19 ✓, 0x00 ✗, 0x13 ✗ — chance for a binary — so the claim is scoped to 0x01..0x06.
-   ★ **Why this is the best lead**: it needs no emulator run, the WSA1R supplies the variation the
-   KN5000 lacks, and an anchored identity for even ONE of the six indexes the other five by the
-   ladder. The WSA1R's own coefficient streams (fields +0/+4/+8 of the PoolDir_Records,
-   `wsa1/dsp/analysis/dsp_cram_map.py`) are the untouched anchor source — that pipeline is the one
-   piece of real infrastructure this queue still lacks.
+0a. ⛔ **`ACT 0x01..0x06` IS CLOSED TOO (§175).** §167 characterised it — an enumerated
+   destination bank, 6 of 6 pair exchanges at p = 1.1e-9 — and §174 put it top of this queue. One
+   command closed it: 15 KN5000 programs carry these codes, only 4 also carry an `op0x70` band, and
+   in **0 of those 4** does a band read a cell such a word writes. The other eleven carry no band at
+   all. ⇒ same state as `f31 = 3`: **separable, characterised, unrankable.**
+   ★ **Both leads this session named are now measured shut.** `f31 = 3` (§149), `ACT 0x0B` (§135),
+   `ACT 0x01..0x06` (§175) and the `op 0x72` dynamics reference (§170/§173) are all blind to every
+   anchor the project owns. That is the real state of the queue, and it is not a tooling problem.
+   ★★ **RULE that would have saved this session two builds and four retractions**: ask §149's
+   question FIRST, and ask it by **membership** — does the model's own section read a cell this word
+   writes — not by **position**. §160 asked it first and still failed, because it asked the
+   positional version and admitted 8 of 8 programs that the membership version admits none of.
 
 0b. **The other 40 class-test-refused words are the same shape of opportunity, not yet worked.**
    `lut_idiom.py --classgate` now lists classes 3 (14), 5 (2), 6 (12) and 8 (12) still undecoded
