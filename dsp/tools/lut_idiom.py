@@ -66,17 +66,34 @@ WHAT IT ESTABLISHES
      is a 24-entry host-uploaded sine (1 LSB).  40 is read off the same field on the same idiom in
      a second product; it is NOT independently anchored, and no table of 40 entries has been found.
 
-  4. addr8 BY ADDRESSING MODE, with the two PROVEN modes as the null.  Mode 2 (post-increment,
-     PROVEN) and mode 0 (no move, PROVEN) bracket the question `does mode 4 move the pointer'.
-     MEASURED, pooled: mode 4 carries only TWO values of `addr8' in 106 words -- 0x01 (99) and
-     0x00 (7) -- which is a displacement alphabet and is nothing like mode 1's 41-value index
-     distribution or mode 6's five table lengths.
-     ⛔ NOT A DECODE, and deliberately not promoted.  Mode 0 also carries non-zero `addr8' (167 of
-     375, dominated by 0x16 x102), so "addr8 != 0" does NOT imply "the pointer moves"; and the one
-     instrument that bears on it, `closure_pointer.py' variant V12, reports that adding classes 4
-     and 6 to the pointer walk takes the unit-0 pool from 8 nets to 15 and closes nothing -- which
-     points AGAINST the post-increment.  The two readings agree on the 7 words with addr8 = 0x00
-     and disagree on the 99 with 0x01.
+  4. ★★★ THE POINTER-DELTA READING OF `addr8' IS EXCLUDED FOR CLASS 6 -- and with it three of
+     `closure_pointer.py's twelve walk variants, on a ground the closure test cannot supply.
+
+     sect. 98 put classes 4, 6 and 8 into that table on this inference: *"`addr8' is NEVER ZERO on
+     classes 4, 6 and 8 -- 53 of 53, 53 of 53, 44 of 44 ... So the field is load-bearing there.
+     One of the two live readings is that it is the SAME pointer delta classes 2 and A carry."*
+     ⛔ "Never zero" licenses "load-bearing"; it does NOT license "pointer delta", and CLASS 6 IS
+     THE COUNTEREXAMPLE SITTING INSIDE THE SAME SENTENCE.  Class 6's `addr8' is never zero (99 of
+     99 pooled) and is load-bearing -- item 3 shows it is the table ENTRY COUNT, anchored at 24 by
+     a table independently proven to have 24 entries.  It is therefore provably NOT a displacement.
+
+     And the walk measures exactly that incoherence.  `closure_pointer.py variants' reports V0
+     (baseline) residue +121 and V8 (class 6 post-increments) +177 -- a delta of **+56**, which is
+     **24 + 32**, the two class-6 table lengths CHORUS carries at w30 and w34.  So V8 advances the
+     D-RAM operand pointer by a sine table's entry count.
+     ⇒ V8, V10 and V12 are excluded on the MEANING of the field.  That matters because NO variant
+     closes, so the closure criterion by itself excludes nothing.
+
+     WHAT SURVIVES: V7 (class 4 alone; residue +123, 8 -> 10 nets, i.e. exactly the 2 class-4 words
+     a frame executes, each +1) and V9 (class 8).  And `addr8' cannot separate V7 from `no move':
+     MEASURED pooled, class 4 carries the SINGLE value 0x01 in 99 of 99 words across both products,
+     so under the delta reading the field expresses one displacement in eight bits, and under `no
+     move' it expresses nothing.  A constant field is uninformative either way.
+     ⚠ The 7 words with `addr8 = 0' that share mode 4 are CLASS C, not class 4 -- a different class
+     (cursor-fetch set).  Read the mode table below by `class4 & 7'; the per-class split is in
+     item 5.
+     ⛔ NOT A DECODE and not promoted: mode 4's pointer behaviour stays OPEN, and this narrows the
+     field rather than closing it.
 
   5. ★ WHAT THE CLASS TEST ALONE REFUSES.  139 pooled words in 9 distinct shapes are undecoded
      while `_alu_half_anchored()' already passes -- i.e. the only thing standing between them and
@@ -99,6 +116,21 @@ import dsp_disasm as DIS                                                  # noqa
 import class_twins as CT                                                  # noqa: E402
 
 KN, WSA = (c[0] for c in CT.CORPORA)
+
+#  `closure_pointer.py --unit0' defaults to this algorithm, so it is the body whose class-6 words
+#  the V8 row's residue delta is made of.  Not retyped as a number in the prose below.
+CHORUS = 1
+
+
+def chorus_c6_addr8():
+    """The class-6 `addr8' values of the image `closure_pointer.py' walks by default, in order.
+    Read from the .dsm tree rather than asserted, so the +56 in item 4 is self-checking."""
+    for label, img, slots, ws in CT.images():
+        if label != KN or not img.startswith("prog%02d_" % CHORUS):
+            continue
+        return [DIS.addr8(w) for w in ws
+                if not DIS.c_format(w) and DIS.class4(w) == 6]
+    return []
 
 
 def rows():
@@ -270,14 +302,37 @@ def show_modes():
                  100.0 * sum(1 for x in a if x == 0) / len(sub),
                  sum(1 for x in s8 if x <= 8), 100.0 * sum(1 for x in s8 if x <= 8) / len(sub),
                  len(c), " ".join("%02X:%d" % kv for kv in c.most_common(4))))
-    print("\n      ★ MODE 4 carries TWO values of `addr8' in the whole pooled corpus: 0x01 and 0x00.")
-    print("        That is a displacement alphabet, and it is nothing like mode 1's index spread")
-    print("        or mode 6's five entry counts.")
-    print("      ⛔ NOT PROMOTED.  Mode 0 also carries non-zero addr8 (167 of 375, mostly 0x16), so")
-    print("        `addr8 != 0' does not imply the pointer moves; and `closure_pointer.py' V12")
-    print("        reports classes 4/6 in the pointer walk taking unit 0 from 8 nets to 15 and")
-    print("        closing nothing -- which points AGAINST it.  The two readings AGREE on the 7")
-    print("        mode-4 words with addr8 = 0 and DISAGREE on the 99 with addr8 = 1.")
+    print("\n      per EXACT class4 (the mode rows above merge class 4 with C, and 6 with E):\n")
+    for cl in (0x3, 0x4, 0x5, 0x6, 0x8, 0xC, 0xD):
+        sub = [(l, w) for l, i, s, w in rows() if not DIS.c_format(w) and DIS.class4(w) == cl]
+        if not sub:
+            continue
+        k = sum(1 for l, w in sub if l == KN)
+        c = collections.Counter(DIS.addr8(w) for l, w in sub)
+        print("        class %X: %4d words (KN %3d / WSA %3d)  addr8==0: %-3d  values: %s"
+              % (cl, len(sub), k, len(sub) - k, c.get(0, 0),
+                 " ".join("%02X:%d" % kv for kv in c.most_common(6))))
+
+    print("\n      ★★★ THE POINTER-DELTA READING IS EXCLUDED FOR CLASS 6.")
+    print("        sect. 98 put classes 4/6/8 into `closure_pointer.py's variant table because")
+    print("        `addr8' is never zero on them, hence `load-bearing', hence possibly the same")
+    print("        delta classes 2 and A carry.  Class 6 refutes the last step from inside: its")
+    print("        `addr8' is never zero AND load-bearing AND provably not a displacement -- it is")
+    print("        the table ENTRY COUNT, anchored at 24 (item 3).")
+    print("        MEASURED in `closure_pointer.py variants': V0 residue +121, V8 (class 6 moves)")
+    print("        +177 -- a delta of +56.  Not an arithmetic coincidence: it is read off the")
+    print("        walked image.  `closure_pointer.py' walks algo %d at I-RAM 84 by default," % CHORUS)
+    tts = chorus_c6_addr8()
+    if tts:
+        print("        and that image's class-6 words carry addr8 = %s, summing to %d."
+              % (" and ".join(str(t) for t in tts), sum(tts)))
+    print("        ⇒ V8, V10 and V12 advance the D-RAM pointer by a sine table's length.  Excluded")
+    print("          on the MEANING of the field -- which the closure test cannot do, since NO")
+    print("          variant closes and so closure by itself excludes nothing.")
+    print("\n      ⛔ STILL OPEN: V7 (class 4 alone, residue +123, 8 -> 10 nets) and V9 (class 8).")
+    print("        `addr8' cannot separate V7 from `no move': class 4 carries the SINGLE value")
+    print("        0x01 in 99 of 99 words in BOTH products, so the field expresses one")
+    print("        displacement in eight bits under one reading and nothing under the other.")
 
 
 # ------------------------------------------------------------- 5. class gate
