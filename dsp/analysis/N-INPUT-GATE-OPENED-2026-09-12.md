@@ -7530,6 +7530,73 @@ decode targets*, and four codes the project had written off are reopened. Most o
 class 1 or class 9, i.e. **mode 1, the register file**, which §128 already decoded; what they lack
 is only their SRC/ACT semantics.
 
+## 167. ★★★ ACT 0x01–0x06 IS AN ENUMERATED DESTINATION BANK — two images, one cross-connection
+
+§166 reopened four codes the project had deleted. This says what one of those families *is*, and it
+comes from a pair of images the corpus has always had.
+
+`WSA kernel` and `WSA struct_30_fcda77` share 63 slots and **differ in six words**. Every one of the
+six is the same word with its `ACT` exchanged for the other member of a consecutive pair:
+
+```
+   w6    ACT 02 <-> 01      w16   ACT 04 <-> 03      w26   ACT 06 <-> 05
+   w11   ACT 01 <-> 02      w21   ACT 03 <-> 04      w31   ACT 05 <-> 06
+```
+
+**6 of 6.** A random `ACT` change lands on the pair partner with p = 1/31, so all six doing so has
+**p = 1.1e-9**. Nothing else in the two images differs — same `hi12`, same class, same `addr8`, same
+`SRC`.
+
+### And the routine says what the numbers index
+
+It is five repeats of a five-word block, and the block's **head** carries a `SRC` that walks
+`01, 02, 03, 04, 05` — one per block:
+
+```
+   block k   head w(2+5k)  SRC k+1        tail w(6+5k)  ACT
+   0         w2   SRC 01                  w6    02 (kernel)  /  01 (fcda77)
+   1         w7   SRC 02                  w11   01           /  02
+   2         w12  SRC 03                  w16   04           /  03
+   3         w17  SRC 04                  w21   03           /  04
+   4         w22  SRC 05                  w26   06           /  05
+```
+
+★ **In `struct_30_fcda77` the tail's `ACT` equals its head's `SRC`, block for block.** In the kernel
+it is the pair partner instead. That is a five-stage ladder in one image and the same ladder
+**cross-connected** in the other — the shape of an all-pass / comb stage pair, and the shape a
+per-channel or feedback variant takes.
+
+⇒ **`ACT 0x01..0x06` is an enumerated destination bank**, indexed the way `SRC 0x01..0x05` indexes
+sources, and the two images differ by a pairwise cross-connection. 109 pooled words carry these six
+codes and exactly **1** is decoded.
+
+### ⛔ The generalisation I tested and had to drop
+
+The obvious next step is *"`SRC n` and `ACT n` name the same resource — read and write."* Two of the
+project's own tables say yes:
+
+```
+   SRC 0x07 = mem[ptr]   ACT 0x07 = mem[ptr] <- bus     ✓
+   SRC 0x19 = tempA      ACT 0x19 = tempA   <- bus      ✓
+```
+
+and two say no:
+
+```
+   SRC 0x00 = mem[ptr]/delay read   ACT 0x00 = ACC <- bus       ✗
+   SRC 0x13 = TABLE                 ACT 0x13 = tempA <- bus     ✗
+```
+
+**Two of four is exactly chance for a binary.** The identity does not hold across the code space,
+and the claim above is therefore scoped to `0x01..0x06`, where the ladder demonstrates it directly —
+which is §166's own lesson applied on the spot: *the restriction belongs in the claim.*
+
+⚠ **NOT a decode.** It says these six codes are an indexed bank and that two images differ by a
+cross-connection; it does not say which physical destination index *n* is. `decoded()` is unchanged
+and coverage stays at **1501 of 8003, 81.2 %**. What it buys is that six codes went from "deleted
+from the ISA table as parse artefacts" (§9.3) to "an enumerated bank with a demonstrated
+addressing discipline", which is where a decode can start.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
