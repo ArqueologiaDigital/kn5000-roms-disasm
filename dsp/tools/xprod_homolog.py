@@ -17,6 +17,7 @@ QUESTION IT ANSWERS
 USAGE
     python3 dsp/tools/xprod_homolog.py             # the ranked pairs and the null
     python3 dsp/tools/xprod_homolog.py --reloc     # ★ run the relocation test on each pair found
+    python3 dsp/tools/xprod_homolog.py --catalogue # ★★★★★ does it reconstruct the EFFECT CATALOGUE?
     python3 dsp/tools/xprod_homolog.py --min 8     # lower the reporting floor
 
 THE NULL, and it is the whole point.  Two programs of one ISA share idioms, so "N words match"
@@ -101,6 +102,59 @@ def reloc_on(a, b, ops):
     return out
 
 
+#   `bit11-family.md' item G: twelve NAMED KN5000 effects ship a program byte-identical to NO
+#   OPERATION -- same image, coefficients, program record and parameter record, and no IC310
+#   record.  The instrument has the menu entry and not the program.
+KN_STUBS = ("modulation delay", "slow attacker", "noise flanger", "cel", "celm", "pitch shifter",
+            "pedal wah", "hars effect", "string", "pedal wah+delay", "ds_d", "over_d")
+
+
+def _namewords(n):
+    return set(re.sub(r"^(prog|eff)\d+_", "", n).split("_")) - {"1", "2"}
+
+
+def show_catalogue():
+    """★★★★★ Does the alignment RECONSTRUCT the effect catalogue?  The names are independent of
+    the bytes -- the scorer never sees them -- so name agreement among the top pairs is a control
+    the instrument cannot fake, with a base rate computable over every pair."""
+    imgs = [t for t in images()]
+    kn = [t for t in imgs if t[0] == "KN"]
+    ws = [t for t in imgs if t[0] == "WSA"]
+    rows = []
+    for _, na, wa in kn:
+        for _, nb, wb in ws:
+            rows.append((score(wa, wb)[0], na, nb))
+    rows.sort(reverse=True)
+    base = sum(1 for _, a, b in rows if _namewords(a) & _namewords(b)) / float(len(rows))
+    print("\n   ★★★★★ DOES THE ALIGNMENT RECONSTRUCT THE CATALOGUE?\n")
+    print("      The scorer never sees a name, so name agreement is a control it cannot fake.\n")
+    print("      %-6s %-28s %-28s %s" % ("score", "KN5000", "SX-WSA1R", "shared name words"))
+    top = [r for r in rows if r[0] >= 35]
+    for s, a, b in top:
+        sh = _namewords(a) & _namewords(b)
+        print("      %-6d %-28s %-28s %s" % (s, a, b, ", ".join(sorted(sh)) if sh else "--"))
+    hit = sum(1 for s, a, b in top if _namewords(a) & _namewords(b))
+    print("\n      ⇒ %d of %d pairs scoring >= 35 share a name word; base rate over all %d"
+          % (hit, len(top), len(rows)))
+    print("        KN x WSA pairs: %.1f %%.  The bytes recover the catalogue." % (100 * base))
+
+    #  ---- and what that buys: the twelve stubs -----------------------------
+    print("\n   ★★★ AND THE TWELVE STUBS (`bit11-family.md' item G)\n")
+    print("      The KN5000 ships twelve NAMED effects whose program is byte-identical to NO")
+    print("      OPERATION -- the menu entry without the program.  The other instrument:\n")
+    have = []
+    for stub in KN_STUBS:
+        key = set(stub.replace("+", " ").split())
+        m = [n for _, n, _ in ws if key <= _namewords(n) or
+             (key == {"hars", "effect"} and "haas" in _namewords(n))]
+        if m:
+            have.append((stub, m[0]))
+        print("        %-18s %s" % (stub.upper(), "★ WSA1R ships " + m[0] if m else "-- absent"))
+    print("\n      ⇒ %d of 12 stubs have a real program in the second product." % len(have))
+    print("        (`HARS EFFECT' is the KN5000 menu's spelling of HAAS -- the same effect.)")
+    return len(have)
+
+
 def main():
     global MIN
     if "--min" in sys.argv:
@@ -161,6 +215,9 @@ def main():
             for i, j, ai, aj, o, hit, bsame in r:
                 print("             w%-3d A=%-4d | w%-3d A=%-4d | offset %+-4d dA %+-4d %s"
                       % (i, ai, j, aj, o, aj - ai, "★" if hit else "⛔"))
+
+    if "--catalogue" in sys.argv or "--all" in sys.argv:
+        show_catalogue()
 
     #  ---- the same-product control, shown so the floor can be judged -------
     print("\n   ★ THE TOP OF THE SAME-PRODUCT NULL, for comparison\n")

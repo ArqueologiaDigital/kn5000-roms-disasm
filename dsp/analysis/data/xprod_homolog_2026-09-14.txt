@@ -11,9 +11,104 @@
    ★ CROSS-PRODUCT PAIRS ABOVE THE FLOOR
 
       97   KN      prog05_phaser               <->  WSA     eff09_phaser                 (106 / 115 words)
-           relocation test: no comparable C-format pair in the divergences
       90   KN      prog68_s_delay_phaser       <->  WSA     eff42_s_delay_phaser         (110 / 116 words)
-           relocation test: no comparable C-format pair in the divergences
+
+   ★★★★★ DOES THE ALIGNMENT RECONSTRUCT THE CATALOGUE?
+
+      The scorer never sees a name, so name agreement is a control it cannot fake.
+
+      score  KN5000                       SX-WSA1R                     shared name words
+      97     prog05_phaser                eff09_phaser                 phaser
+      90     prog68_s_delay_phaser        eff42_s_delay_phaser         delay, phaser, s
+      88     prog39_parametric_eq         eff04_parametric_eq          eq, parametric
+      82     prog03_enhancer              eff07_enhancer               enhancer
+      78     prog98_peq_dist_delay        eff51_peq_dist_delay         delay, dist, peq
+      78     prog66_s_delay_flanger       eff40_s_delay_flanger        delay, flanger, s
+      77     prog70_auto_wah_s_delay      eff55_pedal_wah_delay        delay, wah
+      72     prog06_ensemble              eff20_ensemble               ensemble
+      69     prog67_s_delay_vibrato       eff41_s_delay_vibrato        delay, s, vibrato
+      68     prog71_peq_chorus            eff44_peq_chorus             chorus, peq
+      65     prog64_s_delay_chorus        eff38_s_delay_chorus         chorus, delay, s
+      64     prog99_peq_overdr_delay      eff51_peq_dist_delay         delay, peq
+      62     prog98_peq_dist_delay        eff52_peq_overdr_delay       delay, peq
+      61     prog73_peq_flanger           eff46_peq_flanger            flanger, peq
+      59     prog99_peq_overdr_delay      eff50_peq_compr_overdr       overdr, peq
+      59     prog97_peq_compr_overdr      eff50_peq_compr_overdr       compr, overdr, peq
+      59     prog74_peq_vibrato           eff47_peq_vibrato            peq, vibrato
+      59     prog67_s_delay_vibrato       eff40_s_delay_flanger        delay, s
+      59     prog66_s_delay_flanger       eff41_s_delay_vibrato        delay, s
+      56     prog35_exciter               eff03_exciter                exciter
+      54     prog56_mix_up                eff22_mix_up                 mix, up
+      53     prog65_s_delay_s_delay       eff39_s_delay_s_delay        delay, s
+      53     prog15_rock_rotary           eff14_rotary_speaker         rotary
+      52     prog04_flanger               eff08_flanger                flanger
+      51     prog52_auto_wah              eff12_pedal_wah              wah
+      51     prog10_multi_tap_delay       eff24_multi_tap_delay        delay, multi, tap
+      50     prog96_peq_compr_dist        eff51_peq_dist_delay         dist, peq
+      49     prog96_peq_compr_dist        eff50_peq_compr_overdr       compr, peq
+      49     prog73_peq_flanger           eff47_peq_vibrato            peq
+      48     prog74_peq_vibrato           eff46_peq_flanger            peq
+      47     prog71_peq_chorus            eff38_s_delay_chorus         chorus
+      45     prog64_s_delay_chorus        eff44_peq_chorus             chorus
+      44     prog67_s_delay_vibrato       eff38_s_delay_chorus         delay, s
+      44     prog64_s_delay_chorus        eff41_s_delay_vibrato        delay, s
+      44     prog50_vibrato               eff11_vibrato                vibrato
+      43     prog99_peq_overdr_delay      eff52_peq_overdr_delay       delay, overdr, peq
+      43     prog98_peq_dist_delay        eff50_peq_compr_overdr       peq
+      43     prog72_peq_s_delay           eff45_peq_s_delay            delay, peq, s
+      43     prog67_s_delay_vibrato       eff47_peq_vibrato            vibrato
+      43     prog33_overdrive             eff01_overdrive              overdrive
+      42     prog99_peq_overdr_delay      eff45_peq_s_delay            delay, peq
+      42     prog73_peq_flanger           eff40_s_delay_flanger        flanger
+      41     prog99_peq_overdr_delay      eff01_overdrive              --
+      41     prog67_s_delay_vibrato       eff42_s_delay_phaser         delay, s
+      41     prog39_parametric_eq         eff52_peq_overdr_delay       --
+      40     prog66_s_delay_flanger       eff42_s_delay_phaser         delay, s
+      40     prog64_s_delay_chorus        eff40_s_delay_flanger        delay, s
+      39     prog66_s_delay_flanger       eff47_peq_vibrato            --
+      39     prog66_s_delay_flanger       eff38_s_delay_chorus         delay, s
+      38     prog99_peq_overdr_delay      eff49_peq_compr_dist         peq
+      37     prog99_peq_overdr_delay      eff44_peq_chorus             peq
+      37     prog70_auto_wah_s_delay      eff12_pedal_wah              wah
+      37     prog68_s_delay_phaser        eff41_s_delay_vibrato        delay, s
+      37     prog33_overdrive             eff50_peq_compr_overdr       --
+      36     prog99_peq_overdr_delay      eff48_peq_compressor         peq
+      36     prog99_peq_overdr_delay      eff47_peq_vibrato            peq
+      36     prog99_peq_overdr_delay      eff46_peq_flanger            peq
+      36     prog74_peq_vibrato           eff41_s_delay_vibrato        vibrato
+      36     prog68_s_delay_phaser        eff40_s_delay_flanger        delay, s
+      36     prog66_s_delay_flanger       eff46_peq_flanger            flanger
+      36     prog52_auto_wah              eff55_pedal_wah_delay        wah
+      36     prog01_chorus                eff44_peq_chorus             chorus
+      36     prog01_chorus                eff38_s_delay_chorus         chorus
+      35     prog98_peq_dist_delay        eff55_pedal_wah_delay        delay
+      35     prog98_peq_dist_delay        eff39_s_delay_s_delay        delay
+      35     prog67_s_delay_vibrato       eff46_peq_flanger            --
+      35     prog39_parametric_eq         eff51_peq_dist_delay         --
+
+      ⇒ 61 of 67 pairs scoring >= 35 share a name word; base rate over all 2400
+        KN x WSA pairs: 11.0 %.  The bytes recover the catalogue.
+
+   ★★★ AND THE TWELVE STUBS (`bit11-family.md' item G)
+
+      The KN5000 ships twelve NAMED effects whose program is byte-identical to NO
+      OPERATION -- the menu entry without the program.  The other instrument:
+
+        MODULATION DELAY   -- absent
+        SLOW ATTACKER      ★ WSA1R ships eff17_slow_attacker
+        NOISE FLANGER      -- absent
+        CEL                -- absent
+        CELM               -- absent
+        PITCH SHIFTER      ★ WSA1R ships eff54_pitch_shifter
+        PEDAL WAH          ★ WSA1R ships eff12_pedal_wah
+        HARS EFFECT        ★ WSA1R ships eff19_haas_effect
+        STRING             -- absent
+        PEDAL WAH+DELAY    ★ WSA1R ships eff55_pedal_wah_delay
+        DS_D               -- absent
+        OVER_D             -- absent
+
+      ⇒ 5 of 12 stubs have a real program in the second product.
+        (`HARS EFFECT' is the KN5000 menu's spelling of HAAS -- the same effect.)
 
    ★ THE TOP OF THE SAME-PRODUCT NULL, for comparison
 

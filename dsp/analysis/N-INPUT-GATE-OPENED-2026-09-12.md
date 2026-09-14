@@ -5605,6 +5605,90 @@ admitted, which is precisely why one product could not have caught this.
               3057 words:  78.6 %  ->  79.0 % decoded
 ```
 
+## 125. ★★★★★ THE BYTES RECOVER THE EFFECT CATALOGUE — and five of the twelve stubs exist
+Tool: [`xprod_homolog.py --catalogue`](../tools/xprod_homolog.py).
+Data: [`data/xprod_homolog_2026-09-14.txt`](data/xprod_homolog_2026-09-14.txt).
+
+§124 used a conservative floor (99th percentile of the same-product null) and found two pairs. Drop
+the floor to 35 and the ranking stops being a list of pairs and becomes **a dictionary between the
+two instruments' effect catalogues**:
+
+```
+   97  prog05_phaser            eff09_phaser           88  prog39_parametric_eq   eff04_parametric_eq
+   90  prog68_s_delay_phaser    eff42_s_delay_phaser   82  prog03_enhancer        eff07_enhancer
+   78  prog98_peq_dist_delay    eff51_peq_dist_delay   78  prog66_s_delay_flanger eff40_s_delay_flanger
+   77  prog70_auto_wah_s_delay  eff55_pedal_wah_delay  72  prog06_ensemble        eff20_ensemble
+   …  exciter, mix_up, rotary, flanger, wah, multi_tap_delay, vibrato, overdrive, compressor …
+```
+
+**The scorer never sees a name.** So name agreement among the top pairs is a control the
+instrument cannot fake, and it has a computable base rate:
+
+> ★★★ **61 of 67 pairs scoring ≥ 35 share a name word, against a base rate of 11.0 % over all
+> 2400 KN5000 × WSA1R pairs.**
+
+### ★★★ And five of the twelve stubs have a real program in the other instrument
+`bit11-family.md` item G: twelve **named** KN5000 effects ship a program byte-identical to NO
+OPERATION — same image, coefficients, program record and parameter record. The menu entry without
+the program.
+
+| KN5000 stub | SX-WSA1R |
+|---|---|
+| SLOW ATTACKER | ★ `eff17_slow_attacker` |
+| PITCH SHIFTER | ★ `eff54_pitch_shifter` |
+| PEDAL WAH | ★ `eff12_pedal_wah` |
+| HARS EFFECT | ★ `eff19_haas_effect` — the KN5000 menu's spelling of **HAAS** |
+| PEDAL WAH+DELAY | ★ `eff55_pedal_wah_delay` |
+| MODULATION DELAY, NOISE FLANGER, CEL, CELM, STRING, DS_D, OVER_D | — absent |
+
+The pitch shifter is the one this project already leaned on (the class-4 minimal pair,
+`class_twins.py`); four more were there and nobody had looked. `prog70_auto_wah_s_delay ↔
+eff55_pedal_wah_delay` at **77** and `prog52_auto_wah ↔ eff12_pedal_wah` at **51** say the
+KN5000's AUTO WAH and the WSA1R's PEDAL WAH are the same routine under two menu names — which is
+why the KN5000 could ship PEDAL WAH as a stub and still have the code.
+
+⇒ this is what the second product is worth, stated plainly: **a named, byte-anchored counterpart
+for essentially every KN5000 effect**, an independent copy of the kernel header (§121), and five
+programs the KN5000 lists but does not carry.
+
+⚠ It does **not** make a KN5000-validated criterion valid there (§111), and it does not put a
+WSA1R program in front of the emulator — the firmware never uploads effect bodies to IC30 in play
+(bus-proven) and the wave ROMs are undumped, so RULE 12 forbids calling any such run a test.
+
+## 126. THE POOLED QUEUE, which is not the KN5000's queue
+`decode_leverage.py` ranks the KN5000's 658 undecoded occurrences. The same census on the WSA1R's
+997 ranks differently, and pooled the head changes:
+
+```
+   decision       WSA sole   KN sole   pooled
+   SRC 0x11            118        54      172   ★ the head, and it was second before
+   class 1              87         ~       87   ★ NEW -- see below
+   ACT 0x0B             14        62       76
+   class 9              55         ~       55
+   class 4              46         ~       46
+   SRC 0x1C             43         ~       43   ★ NEW -- barely present in the KN5000
+```
+
+★ **`class 1` is the new entry and it is aimed at this project's worst region.** The KN5000 has
+only **8** class-1 words that are neither a delay escape nor a terminator — and **all eight are in
+the epilogue**, the output stage that sits at 34.8 %. The WSA1R has **150**, and they include
+cross-product near-minimal pairs:
+
+```
+   WSA kernel    012.1.C4.05B        KN epilogue   012.1.8D.05B     ← addr8 alone
+   WSA kernel    222.1.C4.1CD x10    KN epilogue   092.1.8D.15B
+```
+
+`r2-output.md` §1.1/§1.2 already **measured** what these are: class 1 **without** the escape bit is
+the **register file**, `addr8` the index, 48 of 48 in the KN5000. 87 of the WSA1R's 150 have an
+anchored ALU half, so the class test is the only thing refusing them.
+
+⛔ **NOT promoted, and the reason matters.** Admitting them would claim the device executes them
+correctly, and what the device actually does is let them "fall through to the ALU and perform their
+mode-1 store" — with the *source* side still reading `mem[ptr]` rather than the register file. That
+is §91's trap exactly: a format escape whose ADDRESSING is explained does not license its ALU half.
+The next pass on this must check the device's source route first, not the predicate.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
