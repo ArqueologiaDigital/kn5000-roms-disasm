@@ -7204,6 +7204,73 @@ A **class-4-only** arm is what V7 needs, with the EXCITER band as the two-sided 
 arm the band's operands must change, and the oracle must get worse, or V7 is right and it must get
 better. That is the next build, and it is worth +99 words on one decision.
 
+## 161. ★★★★★ MODE 4 DECODED — +99 words, on a two-sided run that could have gone the other way
+
+§159 measured that 139 pooled words in 9 shapes were undecoded with their ALU half **already
+anchored**, 99 of them one shape — `0124011CE`, the C63 idiom's third word. §160 said the blocker
+was mode 4's pointer behaviour and named the run. This is the run.
+
+**The prediction was committed before the run**, in the handover (`85212a49`) and in the script's
+own header (`8cc541f6`): *"with the arm ON, EXCITER's band must read different cells and the oracle
+must get worse … or better. If the band does not move at all, the arm is not where I think it is."*
+
+### The run
+
+`dsp/tools/cls4_arm.sh 12`, evidence committed in `analysis/data/cls4/`.
+
+* **The arm fired: 3 346 456 with `UPD6383_CLS4PTR=1`, 0 without.** §97 and §100 each spent a run on
+  an arm that never reached its word; this one reached it first try.
+* **Both runs fingerprint `prog35_exciter` ✅** from their own capture (§193's standing requirement).
+* EXCITER because `f31_oracle_pin.py`'s own selection puts an `op0x70` biquad band **four words
+  downstream** of its class-4 word (§160: 8 of 8 such algorithms have a band downstream).
+
+### The answer, and it is not close
+
+D-RAM change counts over 259 308 frames, cells `0x50..0x5F`:
+
+```
+   arm OFF   50:32699  51:56868  52:9836  53:9836  |  54:33065  55:57855  56:9941  57:9941
+   arm ON    50:57661  51:1      52:1     53:1     |  54:1      55:9255   56:1     57:1    … 58..5E all chg1
+```
+
+**OFF is two live four-cell bands**, mirrored across the two channels (32699≈33065, 56868≈57855,
+9836≈9941), and in each the **offset-2 and offset-3 cells change exactly together** (9836 = 9836,
+9941 = 9941) — which is the DF-I y-state pair, and it is the layout this device's *own*
+`SPEC_SUBFB` encodes (`(rdsrc − base) & 3 >= 2`). Not a shape I went looking for: it is the model's
+own definition (§138's rule).
+
+**ON, ten of those twelve cells are written ONCE in 259 308 frames** and the state sprays out to
+`0x58..0x5E`. The filter stops running.
+
+⇒ **The pointer does NOT advance on class 4. `closure_pointer.py` variant V7 is falsified**, and
+with §158 having already excluded V8/V10/V12 on the meaning of the field, mode 4's addressing is
+**explained**: `mem[ptr]`, no move — the same addressing mode 0 has.
+
+★ **The criterion could fail, and it did — under the arm.** That is what makes the OFF column
+evidence rather than a description of the status quo. And the oracle's float-model caveat does not
+apply: this is *which cell is read*, not a rounding.
+
+### What moved
+
+`is_mode4()` added to `dsp_disasm.py` and mirrored in `upd6383d.h` / `upd6383d.cpp`, on exactly
+§112's standard — addressing explained **and** ALU half anchored — and gated on
+`_alu_half_anchored()` like `is_mode1`.
+
+```
+   pooled undecoded   1501  ->  1402        +99 words
+   pooled coverage    81.2 % -> 82.5 %
+   class 4            0 of 99 decoded  ->  99 of 99
+```
+
+Both disasm trees regenerated; **word columns 8003 of 8003 identical** (`regen_words_unchanged.sh`);
+`dsp/verify.py` BYTE-MATCH OK.
+
+⚠ **NOT claimed.** What `addr8 = 0x01` is *for* — it is constant across all 99 words in both
+products, and this says only that it is not a pointer displacement. Class C (mode 4 with the
+cursor-fetch bit, 7 words, `addr8 = 0`) stays undecoded because its ALU half is not anchored, which
+is the right reason. And the other 40 class-test-refused words (classes 3, 5, 6, 8) are untouched:
+their modes have not been through this.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

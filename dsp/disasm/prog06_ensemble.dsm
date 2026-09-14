@@ -68,19 +68,19 @@
   w42   0182200407   mac.st  acc,(p)+0
   w43   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w44   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w45   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
+  w45   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
   w46   01042FD1CE   post    (p),(p)-3
   w47   0142000C63   ?word   0x0142000C63   ; 142.0.00.C63  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w48   000061A407   ?word   0x000061A407   ; 000.6.1A.407  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w49   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
+  w49   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
   w50   01042011CE   post    (p),(p)+1
   w51   0142000C63   ?word   0x0142000C63   ; 142.0.00.C63  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w52   0000620407   ?word   0x0000620407   ; 000.6.20.407  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w53   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
+  w53   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
   w54   01042011CE   post    (p),(p)+1
   w55   0142000C63   ?word   0x0142000C63   ; 142.0.00.C63  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w56   000061E407   ?word   0x000061E407   ; 000.6.1E.407  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w57   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
+  w57   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
   w58   01042F31CE   post    (p),(p)-13
   w59   010220A1CD   mac     (p),(p)+10
   w60   00002F91CE   ld      (p),(p)-7

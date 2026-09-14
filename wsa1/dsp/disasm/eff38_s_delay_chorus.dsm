@@ -79,11 +79,11 @@
   w47  0182200407  mac.st  acc,(p)+0
   w48  0040000C63  ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w49  00006184CD  ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w50  00124011CE  ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
+  w50  00124011CE  mac     (p) ; mem[p]<-acc, acc=0
   w51  01042061CE  post    (p),(p)+6
   w52  0142000C63  ?word   0x0142000C63   ; 142.0.00.C63  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w53  000061E407  ?word   0x000061E407   ; 000.6.1E.407  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w54  00124011CE  ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
+  w54  00124011CE  mac     (p) ; mem[p]<-acc, acc=0
   w55  01042F31CE  post    (p),(p)-13
   w56  0102200000  mac.b   (p)0,(p)+0
   w57  0000A00415  ld      acc,c+,(p)+0

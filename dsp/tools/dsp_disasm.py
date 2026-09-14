@@ -967,6 +967,14 @@ def decoded(w):
     #   is a mode-1 word with its own rendering.  ⚠ Disjoint from `is_dram' by the escape bit.
     if is_mode1(w):
         return _alu_half_anchored(w)
+    #   ★★★★★ 2026-09-14 (sect. 161): MODE 4, ON THE SAME FOOTING AND FOR THE SAME REASON.
+    #   The class test is what refuses these words; the word's form explains the class once the
+    #   pointer question is settled, and `cls4_arm.sh' settled it with a two-sided emulator run
+    #   that COULD have gone the other way -- see `is_mode4()'.  ⚠ Must follow `is_mode1' (a
+    #   different mode) and precede nothing that claims class 4; `is_dram' is disjoint by the
+    #   escape bit.
+    if is_mode4(w):
+        return _alu_half_anchored(w)
     if is_dram(w) and dram_dir(w):
         return _alu_half_anchored(w)
     if alu_decoded(w):                                         return True
@@ -1063,6 +1071,54 @@ def is_mode1(w):
     image" is invariant under a multiset shuffle (null mean 95.0, sd 0.0, observed 95) -- and the
     null is what caught it, not care."""
     return ((not c_format(w)) and (class4(w) & 7) == 1
+            and not (hi12(w) & HI_ESC))
+
+
+def is_mode4(w):
+    """MODE 4 -- `mem[ptr]', AND THE POINTER DOES NOT MOVE (sect. 158, sect. 160, sect. 161).
+
+    Same footing as `is_mode1': the CLASS TEST is what refused these words, and the word's own
+    form explains the class.  What made mode 4 harder than mode 1 is that its addressing had a
+    genuinely open axis -- `closure_pointer.py' carried a variant in which class 4 post-increments
+    the pointer by `s8(addr8)', exactly as class 2 does -- and sect. 112's standard is *"the
+    ADDRESSING is explained AND the ALU half is anchored"*.  It is closed now, in three steps.
+
+    1. ★ THE FIELD CANNOT DECIDE IT.  MEASURED pooled over both products (`lut_idiom.py --modes'):
+       class 4 is 99 words carrying the SINGLE `addr8' value 0x01.  Under the delta reading the
+       field expresses one displacement in eight bits; under `no move' it expresses nothing.  So
+       only an EXECUTION difference could separate them.
+
+    2. ★★ THE RIVAL VARIANTS THAT BUNDLED CLASS 6 ARE EXCLUDED ON THE MEANING OF THE FIELD.  Class
+       6's `addr8' is the table ENTRY COUNT -- anchored at 24 by a table independently proven to
+       have 24 entries -- so it is not a displacement, and `closure_pointer.py variants' shows V8's
+       residue delta is +56 == 24 + 32, the two class-6 `addr8' values of the image it walks.  That
+       kills V8, V10 and V12 and leaves V7 (class 4 alone), which had never had an arm.
+
+    3. ★★★★★ AND V7 IS FALSIFIED BY A TWO-SIDED RUN (`dsp/tools/cls4_arm.sh', evidence in
+       `analysis/data/cls4/').  `UPD6383_CLS4PTR' was built for it and run at TYPEIDX 12; both
+       runs fingerprint `prog35_exciter' (sect. 193) and the arm's unconditional count is
+       3 346 456 ON against 0 OFF, so it reached its words.  EXCITER was chosen because
+       `f31_oracle_pin.py's own selection puts an `op0x70' biquad band FOUR WORDS DOWNSTREAM of its
+       class-4 word (8 of 8 such algorithms have a band downstream; sect. 160).  The D-RAM census
+       over 259 308 frames:
+
+           arm OFF   50:32699 51:56868 52:9836 53:9836 | 54:33065 55:57855 56:9941 57:9941
+           arm ON    50:57661 51:1     52:1    53:1    | 54:1     55:9255  56:1    57:1   ...
+
+       OFF is TWO LIVE FOUR-CELL BANDS whose offset-2/3 cells change together -- which is the DF-I
+       state layout the device's own `SPEC_SUBFB' encodes (`(rdsrc - base) & 3 >= 2' = the y-states)
+       -- mirrored across the two channels.  ON, ten of the twelve are written ONCE in 259 308
+       frames and the state sprays to 0x58..0x5E: the filter stops running.  ⇒ the pointer does NOT
+       advance on class 4.
+       ★ The criterion COULD fail and DID: the arm is what produced the dead structure.  And the
+       oracle's float-model caveat does not apply -- this is which CELL is read, not a rounding.
+
+    ⚠ `class4 & 7', as for mode 1: class 4 and class C are one mode.  Class C's 7 words carry
+    `addr8 = 0' and fail `_alu_half_anchored()', so they stay undecoded on their ALU half, which is
+    the right reason.  ⚠ Escape CLEAR: mode 4 with the escape is `is_dram''s business.
+    ⚠ NOT claimed: what `addr8 = 0x01' is FOR.  It is constant over all 99 words in two products
+    and this says only that it is not a pointer displacement."""
+    return ((not c_format(w)) and (class4(w) & 7) == 4
             and not (hi12(w) & HI_ESC))
 
 

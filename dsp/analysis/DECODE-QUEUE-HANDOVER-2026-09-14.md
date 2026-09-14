@@ -12,16 +12,22 @@ valuable part of this file — each closes a line and says why, so nobody walks 
 | …header 0…59 | 56.7 % | **71.7 %** |
 | …output stage 60…82 | 21.7 % | **34.8 %** |
 | FRAME FLOOR (kernel + reverb) | 74.5 % | **80.1 %** |
-| all 38 KN5000 body images | 80.4 % | 80.4 % |
-| SX-WSA1R corpus (undecoded words 3091 → 851) | 37.5 % | **79.9 %** |
+| all 38 KN5000 body images | 80.4 % | **80.8 %** |
+| SX-WSA1R corpus (undecoded words 3091 → 809) | 37.5 % | **83.6 %** |
+| **POOLED, both products** | — | **82.5 %** (1402 undecoded of 8003) |
 
-Mirrors **8003/8003** (pooled, `tools/upd6383d_diff.sh -p`); `dsp/verify.py` BYTE-MATCH OK.
+Mirrors **8003/8003** (pooled, `tools/upd6383d_diff.sh -p`, text AND the three execution
+predicates); `dsp/verify.py` BYTE-MATCH OK; both trees regenerated with word columns **8003/8003**
+identical (`regen_words_unchanged.sh`).
 
 ## What decoded, and why it worked
 
 * **§122** — the C-format payload is an I-RAM address. Two routes: the region test (11 of 11 inside
   their own image, p = 6.6e-9) and the **relocation test** against the WSA1R's byte-homologous copy
   of the kernel header (§121). +11 words, kernel 47.0 → 60.2 %.
+* **§161** — **mode 4 reads `mem[ptr]` and does NOT move it.** The class test refused 99 words
+  (one shape — the C63 idiom's third word); the open half was the pointer, `addr8` could not decide
+  it (one value across 99 words in two products), and a **two-sided emulator run** did. **+99 words.**
 * **§128** — **mode 1 is the register file.** `class4 & 7` is the addressing mode, so class 1 and
   class 9 were one question. Four measurements anchored the read half. +143 words.
 
@@ -209,40 +215,24 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
 
 ## What the next pass should actually do, in order
 
-0. ★★★ **RUN `UPD6383_CLS4PTR` AGAINST THE EXCITER BAND. This is now the top item — it is worth
-   +99 words on ONE decision, and every other piece of it is already built.**
+0. ✅ **DONE — MODE 4 DECODED, +99 WORDS (§161).** This was the top item and it is closed.
+   `UPD6383_CLS4PTR` fired **3 346 456** times ON against 0 OFF; both runs fingerprint
+   `prog35_exciter` ✅. The criterion was EXCITER's `op0x70` band four words downstream of its
+   class-4 word, and it **could fail and did**: with the arm ON, ten of the twelve EQ state cells
+   are written **once** in 259 308 frames and the filter stops; OFF they are two live four-cell
+   bands whose offset-2/3 cells change exactly together. ⇒ the pointer does **not** advance on
+   class 4, mode 4's addressing is explained, and `is_mode4()` is in both mirrors.
+   **Pooled undecoded 1501 → 1402; pooled coverage 81.2 % → 82.5 %.**
+   ★ The method, for the next axis: **`addr8` could not decide it** (one value, 99 words, two
+   products) — the field was uninformative and only an execution difference could separate the
+   readings. When a field is constant across the corpus, stop reading it and build the arm.
 
-   * **What is open.** `alu_decoded()` admits classes 2, 8 and 0xA. **139 pooled words in 9 shapes
-     are undecoded with their ALU half ALREADY ANCHORED** (`lut_idiom.py --classgate`), i.e. the
-     class test is the only thing refusing them. **99 of the 139 are one shape** — `0124011CE`, the
-     C63 table-lookup idiom's third word, class 4, in 47+ images across both products.
-   * **Why they are not already promoted.** §112's standard is *"the ADDRESSING is explained AND
-     the ALU half is anchored"*. Mode 4's pointer behaviour is open: post-increment-by-one (V7) and
-     no-move are both alive, and **`addr8` cannot separate them — class 4 carries the single value
-     `0x01` in 99 of 99 words in both products.** Only an execution difference can.
-   * **Three of the four rival variants are now dead (§158).** Class 6's `addr8` is the table ENTRY
-     COUNT, anchored at 24 — not a displacement. `closure_pointer.py`'s V8 residue delta of **+56
-     is literally 24 + 32**, the two class-6 `addr8` values of the image it walks. ⇒ **V8, V10 and
-     V12 excluded on the meaning of the field**, which closure alone could never do (no variant
-     closes). V7 survives.
-   * **The existing arm is the WRONG arm.** `UPD6383_CLS46PTR` (§100) moves classes 4 **and** 6, so
-     it only ever tested V10/V12. **`UPD6383_CLS4PTR` is built (default OFF, unconditional fired
-     count) and has never been run.**
-   * **The criterion EXISTS — and this is the first open axis this month where it does.** §149
-     found *zero* anchored carriers for `f31 = 3`. Asked with `f31_oracle_pin.py`'s own selection
-     (algorithms carrying an `op0x70` biquad band — the firmware's own writer, not a proxy):
-     **11 carry a band, 8 contain a class-4 word, 8 of 8 have a band consumed DOWNSTREAM of it.**
-     **EXCITER** is sharpest: class-4 at `w14`, band at `w18..w22` — four words later.
-   * **Why the oracle's float caveat does not bite.** `f31_oracle_pin.py` cannot separate ADD from
-     ADD-with-a-different-shift — a *precision* limit. V7 vs V0 changes **which D-RAM cell** the
-     band reads. That is not a rounding.
-   * **Two-sided, so it can fail.** With the arm ON, EXCITER's band must read different cells and
-     the oracle must get **worse** (⇒ no-move is right, addressing explained, +99 promote) or
-     **better** (⇒ V7 is right, addressing explained, +99 promote). If the band does not move at
-     all, the arm is not where I think it is — check the fired count first, as §100 had to.
-   * ⛔ **Do not try to settle it statically.** The obvious static form needs the **body entry
-     pointer**, which `closure-pointer.md` leaves open, and contiguity cannot substitute: under
-     both variants the five MACs read five *consecutive* cells and only the absolute base differs.
+0b. **The other 40 class-test-refused words are the same shape of opportunity, not yet worked.**
+   `lut_idiom.py --classgate` now lists classes 3 (14), 5 (2), 6 (12) and 8 (12) still undecoded
+   with an anchored ALU half. Each needs its own mode settled the way §158/§161 settled mode 4 —
+   and §158 already did half the work for class 6 by showing its `addr8` is a table count.
+   ⚠ Class 8 is in `alu_decoded()`'s admitted set already; its 12 are refused by `dram_dir()`
+   (`addr8 = 0x0B` has bit 6 clear), which is a different question.
 
 1. **Build a bit-exact reference for ONE dynamics program** (compressor — `op0x72[0]` is the only
    **PROVEN** cell↔opcode entry in the family). One artefact unblocks `f31 = 3` (56 sole-axis
