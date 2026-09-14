@@ -6164,6 +6164,42 @@ test admits precisely the right set. **No change.**
 
 ⇒ two nulls, coverage unchanged — and one of them is a guard I would have widened wrongly.
 
+## 135. ⛔ THE HLE ORACLE CANNOT SEE `ACT 0x0B` — the last named route, measured
+`act0b-reverb.md` item H stopped for a stated reason: *"picking between them needs known
+mathematics the reverb does not supply — the diffuser gains are known but there is NO REFERENCE
+RESPONSE."* The HLE reference models are a reference response, and `lle-via-hle-oracle` is the
+project's standing plan for exactly this. My own §132 handover named it as the remaining candidate.
+It does not work here, and now that is measured.
+
+**What is actually bit-exact.** `dsp/hle/effects.py` line 9 says it plainly of its own models:
+*"models of the decoded ALGORITHM (graded), **not bit-exact to the chip**."* Only two oracles in
+this project are anchored:
+
+| oracle | anchored on | can it see `ACT 0x0B`? |
+|---|---|---|
+| the **biquad** (`lle_oracle.py`, *"proven bit-exact"*) | `prog39_parametric_eq` | ⛔ that program contains **zero** ACT-0x0B words |
+| **SINGLE DELAY**'s lag-1001 ROM product (`sd_rerun.py`, self-test 13/13) | `prog09_single_delay` | ⛔ MEASURED blind — all six readings give `1001:45074` |
+
+And in the EQ-bearing programs that *do* carry the code, it never sits in a filter section:
+
+```
+   ACT-0x0B words in peq / parametric images, by position and kind
+      slot <= 3, plain          9        later, delay escape    15
+      slot <= 3, delay escape   4        later, plain            3
+```
+
+— program **ambles** and **delay escapes**. The WSA1R's own parametric EQ has exactly one, at `w0`,
+and it is a delay escape. An earlier cut of this test said "12 of 31 are within 4 words of a DF-I
+latch word", which is proximity to a *marker*, not membership in a modelled *section*; the words
+themselves say otherwise.
+
+⇒ using the graded reverb model as the criterion would score the three readings against a **guess**
+— RULE 13's cousin, a difference from an unvalidated model is not a signal — and the two anchored
+oracles cannot see the code. **The HLE route is exhausted for `ACT 0x0B`**, and the handover is
+corrected to say so rather than list it as a candidate.
+
+⇒ coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

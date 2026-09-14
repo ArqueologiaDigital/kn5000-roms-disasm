@@ -87,8 +87,15 @@ analogy credible is real and is **not** evidence about the ALU field.
 ## What would actually move this
 
 * **Hardware.** Parked — `kn7000_mame/notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md`.
-* **A new anchored oracle** for one of the three codes. The HLE reference models
-  (`lle-via-hle-oracle`) are the standing candidate and have corrected the bytecode twice.
+* **A new anchored oracle** for one of the three codes. ⛔ **NOT the existing HLE — §135 measured
+  it.** `dsp/hle/effects.py` line 9 says its own models are *"models of the decoded ALGORITHM
+  (graded), not bit-exact to the chip"*, and the two oracles that ARE anchored cannot see
+  `ACT 0x0B`: the biquad oracle is validated on `prog39_parametric_eq`, which contains **zero**
+  ACT-0x0B words, and SINGLE DELAY's lag-1001 product is measured blind to it. In the EQ-bearing
+  programs the code sits in program **ambles** and **delay escapes**, never in a filter section.
+  A new oracle has to be anchored on a program that actually carries the code — the reverbs, where
+  the HLE is graded rather than bit-exact. **That is the gap to close, and it is a modelling job,
+  not a search.**
 * **`iw40`'s driver** (§120). It is now decoded as `ldreg r20,#iw14` — a register load whose I-RAM
   address points **at** a block terminator where all nine siblings point **past** one. What supplies
   `P` there is the best-posed question left, and it has a known answer at each end: the hand-off
