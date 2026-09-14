@@ -97,6 +97,23 @@ analogy credible is real and is **not** evidence about the ALU field.
 2. **De-duplicate before quoting a rate** (rule 9, `adjudication-round8` item E). §133's 70-of-91
    was one distinct word in 27 images.
 
+## ★ THE SHARPEST LEAD (§138) — start here
+
+**17 undecoded words sit inside a DF-I section interior**, where `lle_oracle.py`'s bit-exact biquad
+oracle *"says exactly what that word must compute"*. **8 of them are one instruction**,
+`804.8.16.1DA` (`ACT 0x1A`, SRC 07, class 8, escape), in `prog52_auto_wah`,
+`prog70_auto_wah_s_delay` and their WSA1R counterparts — a swept filter, so a biquad section is
+where it belongs. Its neighbour `804.8.16.415` (×91) carries the **anchored** `ACT 0x15`.
+
+`prog39_parametric_eq`, the program the oracle is validated on, has **no** undecoded in-section
+word — which is why the oracle has never had to say anything. **Instantiate it on the wah's section
+(`L.coefs_of`) and run the LLE across `w14`.** +8 words if it lands, +16 if `ACT 0x1A` closes.
+Small — about 1 % of what remains — but it is the only place found where an anchored bit-exact
+quantity and an undecoded word occupy the same position.
+
+⛔ Do not point the twin instrument here: clean ACT twins for `0x1A` exist (`880.1.60.2D4/2D5/2D9`
+decoded vs `2DA` open) and carry no semantics; `ACT 0x1D` has none at all.
+
 ## What would actually move this
 
 * **Hardware.** Parked — `kn7000_mame/notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md`.

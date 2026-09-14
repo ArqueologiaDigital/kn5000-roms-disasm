@@ -6284,6 +6284,57 @@ population reframing (§136) and this memory-side search. It is not a criterion 
 missing by accident; **the code's 165 open words are delay escapes whose ACTION no anchored
 quantity in either product observes.** Coverage unchanged.
 
+## 138. ★ THE BIT-EXACT ORACLE HAS A TARGET AFTER ALL — 17 words, and 8 of them are one instruction
+§135 and §137 closed the oracle route for `ACT 0x0B` from both sides. That is a statement about
+**that code**, not about the oracle — so I asked the question the other way round, which nobody had:
+**which undecoded words sit inside a DF-I section interior**, where `lle_oracle.py` says *"the
+oracle says exactly what that word must compute"*?
+
+Using §137's strict span (an `ACT 0x13` tempA write to the `SRC 0x19` read that consumes it), not
+proximity to a landmark:
+
+```
+   open axis            undecoded   IN-SECTION
+   ACT 0x0B                   191        0      ← closed, as §135/§137 found
+   SRC 0x11                   171        3
+   f31 3 / 5 / 4 / 7          188        0
+   ★ ACT 0x1A                  16        8
+   ACT 0x08                    20        2
+   (multi-axis)               799        4
+                                        ──
+                                        17
+```
+
+**17 of 1501 undecoded words are inside a section the bit-exact oracle can pin** — and they are not
+scattered: **8 are the single instruction `804.8.16.1DA`**, in `prog52_auto_wah`,
+`prog70_auto_wah_s_delay` and their WSA1R counterparts. A wah is a swept filter, so a DF-I section
+is exactly where it belongs.
+
+```
+   804.8.16.1DA   hi12 804 (ESCAPE) · class 8 (mode 0 + fetch) · addr8 0x16 · SRC 07 · ACT 1A · f31 2
+   its neighbour  804.8.16.415   x91   ACT 0x15 — ANCHORED and decoded
+```
+
+⇒ **this is the first target the oracle has ever had.** `prog39_parametric_eq`, the program it is
+validated on, has **no** undecoded in-section word at all — which is why the oracle has never had to
+say anything. The wah programs do.
+
+### What it would take, stated so it can be picked up
+`lle_oracle.py` builds a per-word oracle for one section from its six C-RAM cells. The wah section's
+cells are recoverable the same way (`L.coefs_of`). Instantiate it on `prog52_auto_wah`'s section,
+run the LLE across `w14`, and the oracle pins what that word must leave — which constrains `ACT
+0x1A` directly. **+8 words if it lands, +16 if `ACT 0x1A` closes generally.**
+
+⚠ Small, and honest about it: 16 words is about 1 % of what remains. It is the *only* lead found
+this session where an **anchored, bit-exact** quantity and an **undecoded word** occupy the same
+place, which is the condition every other attempt failed on.
+
+### ⛔ And what a twin search adds: nothing
+Clean ACT twins exist for `0x1A` (same `hi12`/class/`addr8`/SRC, ACT varying, one side decoded) —
+`880.1.60.2D4/2D5/2D9` decoded against `2DA` open, four actions at one site shape. A twin shows the
+field **varies in a fixed context**, which is what a field does; it carries no semantics. `ACT 0x1D`
+has no twin at all. Recorded so the twin instrument is not pointed here again expecting a decode.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
