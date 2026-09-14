@@ -6856,6 +6856,39 @@ So outcome C was a property of the criteria, not of the code — and that is wor
 ⇒ ten corrections this session, and this is the one I should have caught earliest: the file I was
 reading had a sibling data file with the answer in it.
 
+## 151. ★★ A PRE-REGISTRATION THAT REALLY WAS NEVER RUN — and its answer was in today's logs
+§150 taught me to check the data file before saying a run never happened. Applying that
+constructively: of the pre-registrations with no `## RESULT` heading, **three** have neither a data
+file nor any note referencing them. Two are old self-challenges. The third, **§179**, asks a live
+question and its falsifiers are answerable from logs I already had.
+
+**The question.** Two independently-argued anchors for the same pointer disagree —
+`DRAM_UNIT_BASE = 0x05` (marked **FORCED**, from closure arithmetic) against an origin of
+`0x70`/`0x50` (**MEASURED three ways**). §176 censused `0x00..0x1F`, one eighth of D-RAM, and
+concluded *"the pointer is 2 short"*. §179 asks: **was that measured in an empty corner?**
+
+**The answer, from the §148 logs — the current build's §176 already covers all 256 cells:**
+
+```
+   NON-ZERO 126 of 256 (22 below 0x20)      MOVING 24, only 7 below 0x20
+   the movers above 0x20:  50 51 52 53 55 56 57 58 · 87 88 89 8A 8B 8D 94 · D1 D2
+```
+
+* **F1 — the window was WRONG.** 17 % of the live data is below `0x20`, and the movers concentrate
+  at `0x50..0x58` and `0x85..0x94` — exactly the branch §179 named. **Any conclusion measured inside
+  `0x00..0x1F` has to be re-derived where the data actually is**, and that includes §176's
+  off-by-two.
+* **F2 — half.** Unit 1's `0x85` footprint is live (`87 88 89 8A 8B 8D` all move); the `0xF0..0xFF`
+  frame-end is **not** (9 non-zero, none moving). One half of the FORCED closure argument has an
+  observable consequence; the other half does not.
+* **F3 — the known-answer control does not reproduce**, expectedly: it was written against a build
+  many changes ago. ⚠ **So this is not a clean before/after.** F1 stands alone — it is a measurement
+  of the current build and needs no comparison.
+
+⇒ this is the opposite error from §150: there I called a run missing that had happened; here a
+genuinely unrun experiment had its answer sitting in a log from a different experiment. **Check the
+data before concluding either way.** Coverage unchanged.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

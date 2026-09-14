@@ -53,3 +53,37 @@ outcomes, which is what makes this worth one run.
 It does not adjudicate `0x05` vs `0x70`. It establishes **where the data is**, which is the
 prerequisite for adjudicating anything. And it does not touch the pointer-DELTA rule, which is
 being searched in parallel and whose constraints are all origin-free by construction.
+
+
+---
+
+## ★ RESULT, 2026-09-14 — **F1 ANSWERED: THE WINDOW WAS WRONG.**
+Run from the §148 logs (`f3/pslot_upd6383_bx_f3/v0.log`, TYPE 33, per-program census). No new run
+was needed: the current build's §176 already censuses **all 256 cells**, which is exactly what this
+pre-registration asked for.
+
+```
+   NON-ZERO 126 of 256 (22 of them below 0x20), MOVING 126
+
+   by 0x20 block:  00-1F 22 │ 20-3F 14 │ 40-5F 21 │ 60-7F 19
+                   80-9F 16 │ A0-BF 10 │ C0-DF 15 │ E0-FF  9
+
+   MOVING (chg > 1): 24 cells, only 7 below 0x20
+   the movers above:  50 51 52 53 55 56 57 58 · 87 88 89 8A 8B 8D 94 · D1 D2
+```
+
+* **F1 — the window was WRONG.** Only **22 of 126** non-zero cells (17 %) are below `0x20`, and the
+  moving ones concentrate at **`0x50..0x58`** and **`0x85..0x94`** — precisely the region this
+  pre-registration named as the deciding branch (*"a populated, moving region around 0x50..0x8B ⇒
+  the window was wrong"*). ⇒ **any conclusion measured inside `0x00..0x1F` was measured in a corner
+  holding a sixth of the live data and has to be re-derived where the data is.**
+* **F2 — half of it.** `upd6383.cpp` states unit 1 starts at `0x85`, walks −133, and the frame ends
+  on `0xFF`. The `0x85` footprint **is live**: `87 88 89 8A 8B 8D` all move. The `0xF0..0xFF`
+  frame-end is **not** — that block has 9 non-zero cells and **none moving**. So one half of the
+  FORCED closure argument has an observable consequence and the other half does not.
+* **F3 — the known-answer control does NOT reproduce**, and that is expected rather than alarming:
+  it asked for *"exactly 4 non-zero cells in `0x00..0x1F`"* from the build of the day this was
+  written, and the build has moved a great deal since (this session alone added the mode-1 decode,
+  the C-format decode and three arms). ⚠ **So this is not a clean before/after against the original
+  run.** F1's conclusion stands on its own — "17 % of the live data is below `0x20`" is a statement
+  about the current build, measured, and needs no comparison.
