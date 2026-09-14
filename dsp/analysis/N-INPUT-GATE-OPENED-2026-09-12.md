@@ -6122,6 +6122,48 @@ guards that line explicitly.
 
 ⇒ coverage unchanged.
 
+## 134. TWO GUARDS §128 MADE ME WANT TO WIDEN — AND BOTH ARE RIGHT AS THEY STAND
+Having decomposed the class field (§128: bit 3 = cursor fetch, bits 2:0 = addressing mode), two
+guards in `alu_decoded()` look like leftovers from before that decomposition. Both survive the
+check, and one nearly didn't.
+
+### 1. The STORE guards, and the near-miss
+```
+   guard 5:  if (hi12 & HI_ST)        and (cl & 7) != 2:  refuse
+   guard 6:  if lo_act == LO_ACT_ST_BUS and (cl & 7) != 2:  refuse
+```
+A store is admitted **only in mode 2** — yet the guard list already admits **class 8 = mode 0** for
+*reading*, and modes 0 and 2 differ only in the pointer post-increment, so both address through the
+pointer. The device stores that way too (`stdest = m_dp` for every mode but 1, the one §128
+documented). Widening to `(cl & 7) not in (0, 2)` looked obviously right.
+
+**Measured: it would admit 12 words — and they are all one distinct word, `800.8.0B.407`.**
+`hi12 = 0x800` carries the **format escape**, and `r2-output.md` reads bit 11 as *"this word does
+not address D-RAM through the data pointer"*. ⇒ the premise of my widening — "mode 0 addresses
+through the pointer" — **fails for exactly the words it would admit.** Guard 6 refusing them is
+right, and the corpus contains **no** non-escape mode-0 store at all, so the guard's condition is
+never tested against a clean case.
+
+> ★ The lesson is cheap and I nearly skipped it: **look at what the affected words ARE, not just
+> how many.** A count of 12 said "small but real"; the words said "your premise is false here".
+> This is rule 9's neighbour — de-duplicate, *and* inspect.
+
+### 2. `is_dram()`'s exact class test — SAFE
+`is_dram(w) = (hi12 & HI_ESC) and class4(w) == 1`, an **exact** class test where §128 says the mode
+is `class4 & 7`. That is the same shape as §124's terminator `addr8` clause, which was over-fitted.
+Here it is not:
+
+```
+   escape words by class4, pooled
+      0 x102   1 x862 ✔   5 x5   8 x140   C x7   D x1
+   escape words in mode 1 but not class 1 (i.e. class 9):  NONE
+```
+
+`class4 == 1` and `mode 1` coincide exactly over every escape word in both products, so the exact
+test admits precisely the right set. **No change.**
+
+⇒ two nulls, coverage unchanged — and one of them is a guard I would have widened wrongly.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
