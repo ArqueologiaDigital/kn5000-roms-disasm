@@ -6609,9 +6609,13 @@ where the shipped LOAD alias does not.*
 Pre-registration + full data: [`data/PREDICT_F31_4_2026-09-13.md`](data/PREDICT_F31_4_2026-09-13.md),
 [`data/f31_4_run_2026-09-14.txt`](data/f31_4_run_2026-09-14.txt).
 
-§144 found a pre-registration written **2026-09-13** with arms, masks and TYPES — and **no RESULT
-section**. The run had never been made. §143/§144 gave it the directional prediction it lacked, and
-this is the run, over **all three** sites, each fingerprinted (§193).
+⛔⛔ **§144 SAID THIS RUN HAD NEVER BEEN MADE. IT HAD.** `f31_4_2026-09-13.txt` records it on
+TYPE 13 / 14 / 18 with **outcome C** — *"several differ and none is singled out"*. I read a missing
+`## RESULT` heading as a missing run, and asserted it twice. This is a **SECOND** run, on TYPE
+33/34/35 — different programs (§111's boundary), each fingerprinted (§193) — and its value is that
+it **explains** outcome C: the 2026-09-13 pass scored the ANCHORED CELLS, and §145 measures those as
+identical to the digit under every arm. They could not separate the readings. The §160 register file
+can.
 
 ```
    TYPE 33 prog75_peq_compressor ✅   CONTROL 72  0E=7B3F32 C3=--     C8=FFFFFF D0=62FFEE
@@ -6815,6 +6819,42 @@ against, which is the reference-response problem again, one family further along
 ⇒ `f31 = 3` stands where §148 left it: **separable, reproducible, one reading proven identical to
 the shipped model, and unranked.** The ranking criterion has to be *built* on a dynamics program,
 and that is the same modelling job §135 named for the reverbs. Coverage unchanged.
+
+## 150. ⛔⛔ "THE RUN WAS NEVER MADE" — IT WAS, AND I SAID OTHERWISE TWICE
+`PREDICT_F31_4_2026-09-13.md` carries no `## RESULT` heading. I read that as *"the run had never
+been made"*, wrote it into §144 and §145, and reported it twice as the reason the experiment was
+worth doing.
+
+**It had been made.** `data/f31_4_2026-09-13.txt`, committed the day before, records it:
+
+```
+   TYPE  program          f31=4 n    §176      anchored cells (05 / 06 / LFO)
+   13    compressor       1 196 405  DIFFER(3)  ALL THREE IDENTICAL
+   14    no_operation       485 513  DIFFER(3)  ALL THREE IDENTICAL
+   18    auto_wah           536 818  DIFFER(3)  ALL THREE IDENTICAL
+   M1 HIT · M2 MISS · M3 MISS  ⇒  M4 outcome C
+```
+
+A missing heading is not a missing run. The result was in the data file and in the notes, and I
+checked neither before asserting.
+
+### ★ What my run actually contributed, stated correctly
+Not "the first execution of a designed experiment" — a **second** run, and two things the first
+did not have:
+
+1. **Three different programs** (TYPE 33/34/35 against 13/14/18), which §111's boundary requires
+   before any of this generalises.
+2. ★ **An explanation of outcome C.** The 2026-09-13 pass scored the **anchored cells** and found
+   them *"ALL THREE IDENTICAL"*, concluding the criteria cannot separate the readings. §145 measures
+   exactly why: those cells are identical **to the digit** under every arm, in every program. They
+   are blind to this code. **The §160 register file is not** — it separates all three, and §145's
+   liveness check then shows which parts of that separation are functionally dead.
+
+So outcome C was a property of the criteria, not of the code — and that is worth more than the
+"first run" framing I gave it.
+
+⇒ ten corrections this session, and this is the one I should have caught earliest: the file I was
+reading had a sibling data file with the answer in it.
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
