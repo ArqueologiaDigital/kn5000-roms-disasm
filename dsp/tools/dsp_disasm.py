@@ -408,7 +408,38 @@ HI_B7 = 1 << 7
 
 
 def st_suppressed(w):
-    return bool(hi12(w) & HI_B7) and hi_f31(hi12(w)) == 1
+    """★★★★★ 2026-09-14: THE BIT-4 STORE GATE, and the tie is BROKEN BY MEASUREMENT.
+
+    `store-gate.md' item C ran all nine enumerated conditions against both of its witnesses and
+    left exactly TWO alive, recorded as CO-EQUAL ever since:
+
+        b7 && f31 == 1        (what this function used to return)
+        b7 && f31 != 2        (never applied on the disassembler side)
+
+    They disagree on **7 966 224 store-gate evaluations** in one chorus run (the device's own
+    §109 probe counts them), so this was never a small ambiguity.
+
+    ⇒ SEPARATED on `dsp/tools/pair_gate.sh', the project's own pre-registered two-sided gate,
+    by criterion (A1) -- the LFO phase read over EIGHT CONSECUTIVE FRAMES, which §34 rebuilt
+    precisely so that starvation cannot pass it:
+
+        b7 && f31 != 2   ✅ FREE-RUNNING RAMP, 8 frames, step CONSTANT at 114
+                            -- 114 is the ROM's own increment (`lfo_ramp.py'; 29 LFO blocks in
+                            16 programs, 9 distinct increments), so this is anchored, not fitted
+        b7 && f31 == 1   ⛔ FROZEN -- the phase never advances, value 0 on all eight frames
+
+    ⚠ WHY ITEM C COULD NOT SEE THIS: its LFO witness was the WITHIN-FRAME delta, and §34
+    measured that criterion as one that "CANNOT FAIL in the way that matters" -- it reads 114
+    even when the phase is reset to zero every frame.  (A1) is strictly stronger, and the tie
+    that survived the weak criterion does not survive the strong one.
+
+    ★ The device has in fact been running this gate all along: §109 mask bit 29 is SET in
+    `upd6383.h's default `0xb910e446a39b440f', and the run log says so in words --
+    "§109 bit-4 store gate = b7 && f31 != 2 (the CO-EQUAL survivor) (mask bit 29 = 1)".  Its
+    header comment claiming "DEFAULT OFF" was stale.  So every bit-exact result the project
+    holds was obtained under THIS gate, and the disassembler was the half that disagreed.
+    """
+    return bool(hi12(w) & HI_B7) and hi_f31(hi12(w)) != 2
 
 
 # --- lo12 bit 11 is a FIELD, not part of an opcode -------------------------
@@ -721,7 +752,14 @@ def _alu_half_anchored(w):
         return False
     if lo_src(w) not in _ANCHORED_SRC or not _act_anchored(w):
         return False
-    if (hi & HI_ST) and (hi & HI_B7) and hi_f31(hi) not in (1, 2):
+    #  ★★★★★ 2026-09-14: expressed in terms of the gate that is now MEASURED (st_suppressed()).
+    #  A bit-7 word has an unexplained STORE TARGET only if the gate lets the store through,
+    #  which under `b7 && f31 != 2' is exactly f31 == 2.  The old test was
+    #  `f31 not in (1, 2)' -- the shape of the REFUTED survivor.
+    #  ⚠ Scoped to bit-7 words, as it always was: with bit 7 CLEAR the gate does not apply.
+    #  (Dropping that scope refuses 52 occurrences that nothing here has any quarrel with --
+    #  measured, and the reason this guard keeps its `hi & HI_B7' term.)
+    if (hi & HI_ST) and (hi & HI_B7) and not st_suppressed(w):
         return False
     return hi_f31(hi) in (HI_ACC_LOAD, HI_ACC_ADD, HI_ACC_HOLD)
 
@@ -823,8 +861,27 @@ def alu_decoded(w):
         # ⚠ `f31 == 0' still traps: there the two surviving GATE CONDITIONS
         # disagree about whether `mem[ptr]' is written at all, which is not an
         # accumulator question and is untouched by any of this.
-        if hi_f31(hi12(w)) not in (1, 2):
-            return False
+        #  ★★★★★ 2026-09-14: `f31 == 0' NO LONGER TRAPS.  The paragraph above ends "`f31 == 0'
+        #  still traps: there the two surviving GATE CONDITIONS disagree about whether
+        #  `mem[ptr]' is written at all" -- and that disagreement is now SETTLED.  On
+        #  `pair_gate.sh' criterion (A1), `b7 && f31 == 1' FREEZES the chorus LFO (phase 0 on
+        #  eight consecutive frames) while `b7 && f31 != 2' gives a free-running ramp whose step
+        #  is CONSTANT at the ROM's own 114.  Under the surviving gate a bit-7 word with
+        #  f31 != 2 has its store SUPPRESSED, so `mem[ptr]' is NOT written and the word's effect
+        #  is determined -- accumulator only.  See st_suppressed() for the full record.
+        #  MEASURED, pooled: +16 occurrences (4 shapes, all hi12 = 0x090), 0 lost.
+        #  ⇒ GUARD 7 IS NOW A NO-OP, and that is the whole point.  Its job was never to police
+        #  the store TARGET -- §106's paragraph above settles that the store question "stops
+        #  mattering for EXECUTION, which is what this predicate asks".  Its job was to refuse
+        #  the one case where the gate's BEHAVIOUR was AMBIGUOUS, f31 == 0, because there the
+        #  two co-equal survivors disagreed about whether mem[ptr] is written at all.  With the
+        #  gate measured there is no ambiguity left, so there is nothing for the guard to refuse:
+        #  f31 != 2 is suppressed (no store), f31 == 2 goes through and was already admitted on
+        #  the accumulator grounds above.  f31 3..7 still fall out at the final check below.
+        #  ⚠ MEASURED BOTH WAYS before this was written: making the guard refuse `not
+        #  st_suppressed()' instead costs 58 occurrences, because it withdraws the f31 == 2
+        #  admission §106/§224 argued for on independent grounds.  +16/-0 is the no-op.
+        pass
     f = hi_f31(hi12(w))
     if f in (HI_ACC_LOAD, HI_ACC_ADD):
         return True

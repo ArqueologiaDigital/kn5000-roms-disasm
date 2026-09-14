@@ -86,7 +86,7 @@
   w59  0282247407  mac.st  acc,(p)+71
   w60  0000AB6452  ?word   0x0000AB6452   ; 000.A.B6.452  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
         ; C-RAM[0x0E] (coefficient cursor)
-  w61  0090201000  ?word   0x0090201000   ; 090.2.01.000  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w61  0090201000  ld.b    (p)0,(p)+1 ; store SUPPRESSED (bit7)
   w62  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w63  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
   w64  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
@@ -106,7 +106,7 @@
         ; C-RAM[0x13] (coefficient cursor)
   w74  02042091CD  post    (p),(p)+9
   w75  00002FA40E  ld      acc,(p)-6
-  w76  0090206000  ?word   0x0090206000   ; 090.2.06.000  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w76  0090206000  ld.b    (p)0,(p)+6 ; store SUPPRESSED (bit7)
   w77  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w78  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
   w79  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects

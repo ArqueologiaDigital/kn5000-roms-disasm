@@ -29,18 +29,18 @@
 ;  23  SINGLE DELAY             1    56     24  45/56    delay         eff23_single_delay.dsm
 ;  24  MULTI TAP DELAY          1    74     22  61/72    delay         eff24_multi_tap_delay.dsm
 ;  25  MANUAL DELAY             1    63     26  45/58    delay         eff25_manual_delay.dsm
-;  26  ROOM REVERB 1            1    92     25  44/73    reverb        eff26_room_reverb_1.dsm
-;  27  ROOM REVERB 2            1    92     25  44/73    reverb        eff27_room_reverb_2.dsm
-;  28  PLATE REVERB 1           1    91     25  43/72    reverb        eff28_plate_reverb_1.dsm
-;  29  PLATE REVERB 2           1    91     25  43/72    reverb        eff29_plate_reverb_2.dsm
-;  30  CONCERT REVERB 1         1    91     24  43/72    reverb        eff30_concert_reverb_1.dsm
-;  31  CONCERT REVERB 2         1    92     25  44/73    reverb        eff31_concert_reverb_2.dsm
-;  32  DARK REVERB 1            1    91     24  43/72    reverb        eff32_dark_reverb_1.dsm
-;  33  DARK REVERB 2            1    91     24  43/72    reverb        eff33_dark_reverb_2.dsm
+;  26  ROOM REVERB 1            1    92     25  46/73    reverb        eff26_room_reverb_1.dsm
+;  27  ROOM REVERB 2            1    92     25  46/73    reverb        eff27_room_reverb_2.dsm
+;  28  PLATE REVERB 1           1    91     25  45/72    reverb        eff28_plate_reverb_1.dsm
+;  29  PLATE REVERB 2           1    91     25  45/72    reverb        eff29_plate_reverb_2.dsm
+;  30  CONCERT REVERB 1         1    91     24  45/72    reverb        eff30_concert_reverb_1.dsm
+;  31  CONCERT REVERB 2         1    92     25  46/73    reverb        eff31_concert_reverb_2.dsm
+;  32  DARK REVERB 1            1    91     24  45/72    reverb        eff32_dark_reverb_1.dsm
+;  33  DARK REVERB 2            1    91     24  45/72    reverb        eff33_dark_reverb_2.dsm
 ;  34  BRIGHT REVERB 1          1   (no distinct op3 body: coefficient-only / shared)
 ;  35  BRIGHT REVERB 2          1   (no distinct op3 body: coefficient-only / shared)
-;  36  WAVE REVERB 1            1    91     24  43/72    reverb        eff36_wave_reverb_1.dsm
-;  37  WAVE REVERB 2            1    91     24  43/72    reverb        eff37_wave_reverb_2.dsm
+;  36  WAVE REVERB 1            1    91     24  45/72    reverb        eff36_wave_reverb_1.dsm
+;  37  WAVE REVERB 2            1    91     24  45/72    reverb        eff37_wave_reverb_2.dsm
 ;  38  S.DELAY+CHORUS           1   106     27  69/95    combination   eff38_s_delay_chorus.dsm
 ;  39  S.DELAY+S.DELAY          1    72     16  60/72    combination   eff39_s_delay_s_delay.dsm
 ;  40  S.DELAY+FLANGER          1    96     28  67/89    combination   eff40_s_delay_flanger.dsm

@@ -214,7 +214,10 @@ def open_axes(w):
         out.append("ACT 0x%02X" % D.lo_act(w))
     if escape:
         #   `_alu_half_anchored()' stops here -- it has no store-class guards.
-        if (D.hi12(w) & D.HI_ST) and (D.hi12(w) & D.HI_B7) and D.hi_f31(D.hi12(w)) != 2:
+        #  ★★★★★ 2026-09-14: the store gate is MEASURED (dsp_disasm.st_suppressed()), so this
+        #  axis closes wherever the gate SUPPRESSES the store -- there is then no store target
+        #  to explain.  What remains open is the case where the store goes THROUGH, f31 == 2.
+        if (D.hi12(w) & D.HI_ST) and (D.hi12(w) & D.HI_B7) and not D.st_suppressed(w):
             out.append("store gate, f31 %d" % D.hi_f31(D.hi12(w)))
         f = D.hi_f31(D.hi12(w))
         if f not in (D.HI_ACC_LOAD, D.HI_ACC_ADD, D.HI_ACC_HOLD):

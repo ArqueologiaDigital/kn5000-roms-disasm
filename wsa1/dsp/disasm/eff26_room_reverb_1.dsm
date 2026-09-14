@@ -5,7 +5,7 @@
 ; is made over the disassembled program.
 ; SX-WSA1R effects-DSP program -- ROOM REVERB 1
 ; PoolDir record 26  |  effect program 16  |  1 slot(s)  |  I-RAM load 0x6E
-; family reverb  |  92 words  |  25 class-A multiplies  |  decode 44 strict / 73 speculative
+; family reverb  |  92 words  |  25 class-A multiplies  |  decode 46 strict / 73 speculative
 ; algorithm topology: reverb tank: cascaded all-pass diffusers + comb/feedback-delay network with a damping one-pole, per the KN5000 ROOM REVERB decode.
 ; KN5000 cross-reference (SAME effect name, same uPD6383GF ISA):
 ;   KN5000 ROOM REVERB 1 [reverb, confidence SOLVED]: reverb tank: all-pass diffuser ladders of 5 and 4 stages + damping (algorithm decoded to the bit; the per-word roles of the 6-word core are narrowed to two surviving assignments); the ONLY unit-1 image, shared by the 12 reverb presets algos 16-27
@@ -90,7 +90,7 @@
   w58  0282247407  mac.st  acc,(p)+71
   w59  0000AB6452  ?word   0x0000AB6452   ; 000.A.B6.452  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
         ; C-RAM[0x0E] (coefficient cursor)
-  w60  0090201000  ?word   0x0090201000   ; 090.2.01.000  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w60  0090201000  ld.b    (p)0,(p)+1 ; store SUPPRESSED (bit7)
   w61  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w62  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
   w63  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
@@ -110,7 +110,7 @@
         ; C-RAM[0x13] (coefficient cursor)
   w73  02042091CD  post    (p),(p)+9
   w74  00002FA40E  ld      acc,(p)-6
-  w75  0090206000  ?word   0x0090206000   ; 090.2.06.000  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w75  0090206000  ld.b    (p)0,(p)+6 ; store SUPPRESSED (bit7)
   w76  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w77  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
   w78  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects

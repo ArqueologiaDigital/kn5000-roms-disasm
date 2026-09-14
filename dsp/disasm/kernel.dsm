@@ -26,7 +26,7 @@ Header:
   w6    0400A00419   ld.ta2  acc,c+,(p)+0 ; END OF BLOCK (falls through)
         ; C-RAM[0x01] (coeff, base 0x00 MEASURED)
 InputBlock1:
-  w7    0090A011C8   ~word   0x0090A011C8   ; 090.A.01.1C8  {addr: ST mem[p], cur+, p+1}  hi12{ST ?7 res=080} cur+  [K6 input stage, header w7: ST mem[X+4], p+1, cursor+1 -- X+4 is a one-frame state cell (read at w5/w6, written here)]
+  w7    0090A011C8   ~word   0x0090A011C8   ; 090.A.01.1C8  {addr: rd mem[p], cur+, p+1}  hi12{ST ?7 res=080} cur+  [K6 input stage, header w7: ST mem[X+4], p+1, cursor+1 -- X+4 is a one-frame state cell (read at w5/w6, written here)]
         ; C-RAM[0x02] (coeff, base 0x00 MEASURED)
         ; second of the two input blocks (blocks are 0..6 and 7..11) -- K6
   w8    00842011C0   post.b  (p),(p)+1

@@ -84,7 +84,7 @@
   w56  00002FF407  ld.st   acc,(p)-1
   w57  02122FF419  mac.ta2 acc,(p)-1 ; mem[p]<-acc, acc=0
   w58  088012064B  ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w59  0090201000  ?word   0x0090201000   ; 090.2.01.000  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w59  0090201000  ld.b    (p)0,(p)+1 ; store SUPPRESSED (bit7)
   w60  0000200000  nop
   w61  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
   w62  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
@@ -104,7 +104,7 @@
         ; C-RAM[0x13] (coefficient cursor)
   w72  02042091CD  post    (p),(p)+9
   w73  00002FA40E  ld      acc,(p)-6
-  w74  0090206000  ?word   0x0090206000   ; 090.2.06.000  hi12{ST ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w74  0090206000  ld.b    (p)0,(p)+6 ; store SUPPRESSED (bit7)
   w75  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w76  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects
   w77  0C40180000  ldreg   r00,#12          ; immediate -> the register lo12 selects

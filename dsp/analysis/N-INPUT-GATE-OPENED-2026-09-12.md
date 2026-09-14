@@ -9384,6 +9384,93 @@ do-not-pursue item without connecting it to the part; that connection is now mad
 ⚠ **No decode.** This bounds an external route and links two records; it does not explain a field.
 Coverage unchanged: **1413 of 7273, 80.6 %.**
 
+## 213. ★★★★★ THE STORE GATE'S TIE IS BROKEN — +16 WORDS, 80.6 % → 80.8 %
+
+The first coverage movement of the session, and it came from re-opening something the project had
+filed as permanently co-equal.
+
+`store-gate.md` item C ran all nine enumerated gate conditions against both of its witnesses and
+left **two** alive, recorded as co-equal ever since:
+
+```
+   b7 && f31 == 1      st_suppressed(), the disassembler's reading
+   b7 && f31 != 2      the "co-equal survivor", §109 mask bit 29
+```
+
+§392 had just shown a store census cannot separate them. But two facts turned out to be sitting in
+plain sight:
+
+**1. The device has been running the co-equal survivor all along.** §109 mask bit 29 is **SET** in
+`upd6383.h`'s own default mask `0xb910e446a39b440f`, and the run log says so in words:
+
+```
+   §109 bit-4 store gate = b7 && f31 != 2  (the CO-EQUAL survivor) (mask bit 29 = 1)
+   §109 STORE-SITE PROBE ... alt store gate: DISAGREED on 7 966 224 store-gate evaluations
+```
+
+The header's "DEFAULT OFF" was **stale**. So every bit-exact result the project holds was obtained
+under `!= 2`, and the *disassembler* was the half that disagreed — 7.97 million times per run.
+
+**2. `pair_gate.sh` criterion (A1) separates them cleanly.** That is the project's own
+pre-registered two-sided gate, and (A1) is the half §34 rebuilt *specifically* so starvation cannot
+pass it — the LFO phase read over **eight consecutive frames**, step required constant and equal to
+the ROM's own increment:
+
+```
+   b7 && f31 != 2    ✅ FREE-RUNNING RAMP, 8 frames, step CONSTANT at 114
+   b7 && f31 == 1    ⛔ FROZEN -- the phase never advances, value 0 on all eight frames
+```
+
+★ **Why item C could not see it:** its LFO witness was the WITHIN-FRAME delta, and §34 measured
+that criterion as one that *"CANNOT FAIL in the way that matters — it reads 114 even when the phase
+is reset to zero every frame."* (A1) is strictly stronger. A tie that survives a weak criterion is
+not a tie.
+
+### What it decodes
+
+`alu_decoded()`'s guard 7 carried the ambiguity in its own comment:
+
+> ⚠ `f31 == 0` still traps: there the two surviving GATE CONDITIONS disagree about whether
+> `mem[ptr]` is written at all
+
+Under the surviving gate, a bit-7 word with `f31 != 2` has its store **suppressed** — `mem[ptr]` is
+not written — so the word's effect is determined, accumulator only. Guard 7's job was never to
+police the store *target* (§106 settles that the store question "stops mattering for EXECUTION");
+it was to refuse the one case where the gate's *behaviour* was ambiguous. With the gate measured
+there is nothing left to refuse, and guard 7 becomes a no-op.
+
+```
+   1413 -> 1397 undecoded of 7273        80.57 % -> 80.79 %        +16 occurrences, 0 lost
+   4 shapes, all hi12 = 0x090:  090201000 x7  090206000 x7  090A001D5  0902FB40E
+```
+
+### The full promotion gate, all of it passed
+
+* **`decoded_selfcheck.py`** forward 0 / reverse 0 — the predicate still agrees with its clauses.
+* **No-env acceptance control** (the standing rule: re-run with no env set at all): (A1) ✅ ramp at
+  114, (A2) ✅ live, (B) ✅ live. (C) fails — **as it did identically in both arms before**, so it
+  is untouched by this change, not a regression.
+* **The promotion's own two-sided check**: with `upd6383d.h` fixed, mask bit 29 must become a
+  no-op. Measured: **"DISAGREED on 0 store-gate evaluations"**, down from 7 966 224. Device and
+  disassembler now agree exactly.
+* **Both trees regenerated**, and `regen_words_unchanged.sh`: **8003 of 8003 word columns
+  identical** — only rendering moved.
+* **`dsp/verify.py`: BYTE-MATCH OK** — every committed listing reproduces the ROM bytes.
+
+⚠ Two slips on the way, both caught by measuring after editing rather than before:
+* Expressing the `_alu_half_anchored` guard as `HI_ST and not st_suppressed()` **without** the
+  `HI_B7` scope refuses 52 occurrences the gate has no quarrel with (all bit-7-clear). The guard
+  keeps its `hi & HI_B7` term.
+* Making guard 7 refuse `not st_suppressed()` instead of removing it costs 58 occurrences, because
+  it withdraws the `f31 == 2` admission §106/§224 argued for on independent accumulator grounds.
+  The selfcheck reported 1455 and I corrected it to the measured 1397.
+
+★★★ **Coverage: 1397 of 7273 = 80.8 %.** And §183's retraction gains a mechanism: the reason cell
+`0x07` changed every frame — the property that made it look like the LFO phase — is that the
+surviving gate lets those stores through. Under the refuted gate it changes 175 661 times, exactly
+the rate of the audio cells `04/05/F1`. §200's open question ("what writes cell `0x07` 1 570 842
+times?") is answered: **the store gate does.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
