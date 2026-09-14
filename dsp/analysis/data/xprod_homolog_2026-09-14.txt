@@ -1,0 +1,24 @@
+====================================================================================================
+  xprod_homolog -- homologous program pairs across the two products (100 images)
+====================================================================================================
+
+   ★ THE NULL, from the same statistic (rule 15)
+
+      SAME-product pairs  : 2550, mean 12.2, median 7, 95th pct 54, max 110
+      CROSS-product pairs : 2400, mean 8.4, median 5, 95th pct 27, max 97
+      ⇒ reporting floor = max(6, 99th pct of the same-product null + 1) = 90
+
+   ★ CROSS-PRODUCT PAIRS ABOVE THE FLOOR
+
+      97   KN      prog05_phaser               <->  WSA     eff09_phaser                 (106 / 115 words)
+           relocation test: no comparable C-format pair in the divergences
+      90   KN      prog68_s_delay_phaser       <->  WSA     eff42_s_delay_phaser         (110 / 116 words)
+           relocation test: no comparable C-format pair in the divergences
+
+   ★ THE TOP OF THE SAME-PRODUCT NULL, for comparison
+
+      110  WSA     struct_30_fcd5e2            <->  WSA     struct_30_fdbc5a
+      92   WSA     eff27_room_reverb_2         <->  WSA     eff31_concert_reverb_2
+      92   WSA     eff26_room_reverb_1         <->  WSA     eff31_concert_reverb_2
+      92   WSA     eff26_room_reverb_1         <->  WSA     eff27_room_reverb_2
+      91   WSA     eff36_wave_reverb_1         <->  WSA     eff37_wave_reverb_2

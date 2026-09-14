@@ -94,4 +94,4 @@
   w52  02042FB1CD  post    (p),(p)-5
   w53  000020040E  ld      acc,(p)+0
   w54  0880160000  dly.w  dsc[k],p+96
-  w55  061214F000  ?word   0x061214F000   ; 612.1.4F.000  hi12{END ST f98=2 f31=1}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w55  061214F000  endblk  #4F             ; END OF BLOCK -- the last word of a block

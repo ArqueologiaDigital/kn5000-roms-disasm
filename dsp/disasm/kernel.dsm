@@ -94,7 +94,7 @@ Unit0Setup:
   w47   080080C000   ld.b    (p)0,c
   w48   0C645A2000   ldreg   r00,#iw45,2       ; I-RAM address + a second field (B)
 Unit0Call:
-  w49   040010E000   endblk  unit0          ; END OF BLOCK -- the image's last word
+  w49   040010E000   endblk  #0E             ; END OF BLOCK -- the last word of a block
         ; unit-tagged transfer, tag 0x0E -- CALLs the unit-0 body at I-RAM 84
 Unit1Setup:
   w50   0801050821   ldptr   #$50
@@ -110,5 +110,5 @@ Unit1Setup:
   w57   0000201000   nop
   w58   000018A007   ?word   0x000018A007   ; 000.1.8A.007  hi12{-}  [internal register file [8A], unit 1 (bit 7 = the unit); this index has no named role yet]
 Unit1Call:
-  w59   040010F007   endblk  unit1          ; END OF BLOCK -- the image's last word
+  w59   040010F007   endblk  #0F             ; END OF BLOCK -- the last word of a block
         ; unit-tagged transfer, tag 0x0F -- CALLs the unit-1 body at I-RAM 200

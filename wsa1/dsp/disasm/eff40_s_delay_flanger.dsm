@@ -138,4 +138,4 @@
   w93  0202AEE415  mac     acc,c+,(p)-18
         ; C-RAM[0x1B] (coefficient cursor)
   w94  0880160000  dly.w  dsc[k],p+96
-  w95  060414F000  ?word   0x060414F000   ; 604.1.4F.000  hi12{END f98=2 f31=2}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w95  060414F000  endblk  #4F             ; END OF BLOCK -- the last word of a block

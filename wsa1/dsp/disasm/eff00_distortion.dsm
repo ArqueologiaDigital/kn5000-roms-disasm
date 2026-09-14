@@ -69,4 +69,4 @@
   w43  000021040E  ld      acc,(p)+16
   w44  02122F0000  mac.b   (p)0,(p)-16 ; mem[p]<-acc, acc=0
   w45  0880160000  dly.w  dsc[k],p+96
-  w46  040014F000  ?word   0x040014F000   ; 400.1.4F.000  hi12{END}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w46  040014F000  endblk  #4F             ; END OF BLOCK -- the last word of a block

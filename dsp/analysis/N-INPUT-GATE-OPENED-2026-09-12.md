@@ -5556,6 +5556,55 @@ hand-off cell, the VOLUME cell, the LFO increment) is not transferred to that pr
 different kernel, possibly different per-unit geometry, and §111's boundary stands: one program's
 null does not generalise.
 
+## 124. ⛔⛔ THE BLOCK TERMINATOR'S `addr8` CLAUSE WAS OVER-FITTED TO ONE PRODUCT
+Tool: [`xprod_homolog.py`](../tools/xprod_homolog.py).
+
+§121's homolog was found by accident, so I asked the pooled corpus for the others. `xprod_homolog.py`
+aligns all 100 images pairwise and scores each pair by its longest in-order byte-identical run,
+with the **same-product pairs as the null** — two programs of one ISA share idioms, so "N words
+match" means nothing on its own.
+
+```
+   SAME-product pairs   2550,  mean 12.2, median  7, 95th pct 54, max 110
+   CROSS-product pairs  2400,  mean  8.4, median  5, 95th pct 27, max 97
+   floor = 99th pct of the same-product null + 1 = 90
+
+   97   KN prog05_phaser          <->  WSA eff09_phaser          (106 / 115 words)
+   90   KN prog68_s_delay_phaser  <->  WSA eff42_s_delay_phaser  (110 / 116 words)
+```
+
+**The two instruments ship the same phaser.** And the last word of each pair is a 1↔1 replacement:
+
+```
+   KN  w109  060410E000   604.1.0E.000
+   WSA w115  060414F000   604.1.4F.000      ← addr8, and nothing else
+```
+
+`is_terminator()` — §112's decode — reads `class4 == 1` + END + **`addr8 ∈ {0x0E, 0x0F}`**. Pooled:
+
+| | terminator-shaped words | `addr8` | admitted |
+|---|---:|---|---:|
+| KN5000 | 40 | `0x0E` ×38, `0x0F` ×2 | **40** |
+| SX-WSA1R | 53 | `0x4F` ×53 | ⛔ **0** |
+
+The **shape** is confirmed by the second product, not weakened by it: **93 of 93** class-1 END
+words are the last word of a **block** — the one non-image-final case is the kernel's `w49`, which
+ends the unit-0 CALL block 42…49, i.e. exactly what a block terminator does. What the second
+product refutes is the **value set**, and the `addr8 = unit index` reading with it: 53 WSA1R images
+cannot all be unit 1. So the clause is gone, in Python and in `upd6383d`, and the rendering no
+longer names a unit the word cannot tell us — `endblk #4F`, the operand printed, its meaning open.
+
+⇒ **−53 undecoded words in the WSA1R tree.** Nothing changes in the KN5000: its 40 were already
+admitted, which is precisely why one product could not have caught this.
+
+### The session's two trees, in undecoded (`?word`) lines
+```
+   SX-WSA1R   3091  ->  1046  (§122 + regenerating a stale tree)  ->  993  (§124)
+              4946 words:  37.5 %  ->  79.9 % decoded
+   KN5000      653  ->   643  (§122)
+              3057 words:  78.6 %  ->  79.0 % decoded
+```
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

@@ -988,11 +988,24 @@ def form_of(w):
 def is_terminator(w):
     """THE BLOCK TERMINATOR -- the last word of every body image (sect. 112).
 
-    `class4 == 1' with the END bit and `addr8' in {0x0E, 0x0F}.  MEASURED as the final word of
-    37 of 37 unit-0 images and the one unit-1 image (`host-side.md' item B1); the form is already
-    published in `instruction-set.md'.  Disjoint from `is_dram()' by construction -- `is_end'
-    needs hi12 bit 10 set with bit 11 CLEAR, the escape needs bit 11 SET."""
-    return (not c_format(w)) and class4(w) == 1 and is_end(w) and addr8(w) in (0x0E, 0x0F)
+    `class4 == 1' with the END bit.  MEASURED as the final word of 37 of 37 unit-0 images and the
+    one unit-1 image (`host-side.md' item B1); the form is already published in
+    `instruction-set.md'.  Disjoint from `is_dram()' by construction -- `is_end' needs hi12 bit 10
+    set with bit 11 CLEAR, the escape needs bit 11 SET.
+
+    ⛔⛔ 2026-09-14 (sect. 124): THE `addr8 in {0x0E, 0x0F}' CLAUSE WAS OVER-FITTED TO ONE PRODUCT
+    AND IS GONE.  Pooled with the SX-WSA1R, which runs the same ISA:
+
+        KN5000   40 terminator-shaped words, addr8 0x0E x38 / 0x0F x2   -- all admitted
+        SX-WSA1R 53 terminator-shaped words, addr8 0x4F x53             -- ⛔ ZERO admitted
+
+    The SHAPE is confirmed by the second product, not weakened by it: **93 of 93 class-1 END words
+    are the last word of a BLOCK** (the single non-image-final one is kernel `w49', which ends the
+    unit-0 CALL block 42..49 -- exactly what a block terminator does).  What the second product
+    refutes is the VALUE SET, and the `addr8 = unit index' reading with it: 53 WSA1R images cannot
+    all be unit 1.  `addr8' is the terminator's operand and its meaning is OPEN across products.
+    ⇒ the guard is the shape; `endblk' no longer names a unit it cannot know."""
+    return (not c_format(w)) and class4(w) == 1 and is_end(w)
 
 
 def is_dram(w):
@@ -1446,8 +1459,10 @@ def text(w, at=None):
             return "ldreg   r%02X,#iw%d,%d       ; I-RAM address + a second field (B)" % (
                 lo12(w) & 0xFF, c_a(w), c_b(w))
         if is_terminator(w):
-            return "endblk  unit%d          ; END OF BLOCK -- the image's last word" % (
-                0 if addr8(w) == 0x0E else 1)
+            #   ⛔ sect. 124: NOT `unit%d' any more.  `addr8' is 0x0E/0x0F in the KN5000 and 0x4F
+            #   in all 53 SX-WSA1R images, so the unit-index reading cannot be an ISA rule -- it
+            #   was one product's value set.  Print the operand, name nothing it cannot know.
+            return "endblk  #%02X             ; END OF BLOCK -- the last word of a block" % addr8(w)
         if is_dram(w) and dram_dir(w):
             return "dly.%s  dsc[k]%s" % ("r" if dram_dir(w) == "READ" else "w",
                                          "" if dd == 0 else ",p%+d" % dd)

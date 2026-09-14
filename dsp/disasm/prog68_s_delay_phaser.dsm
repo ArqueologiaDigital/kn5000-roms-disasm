@@ -159,4 +159,4 @@
   w108  0202AEE415   mac     acc,c+,(p)-18
         ; C-RAM[0x15] (coeff, base 0x00 MEASURED)
         ; coeff C-RAM[0x15] = op0x66[7] (role mix/tap, INFERRED)
-  w109  060410E000   endblk  unit0          ; END OF BLOCK -- the image's last word
+  w109  060410E000   endblk  #0E             ; END OF BLOCK -- the last word of a block

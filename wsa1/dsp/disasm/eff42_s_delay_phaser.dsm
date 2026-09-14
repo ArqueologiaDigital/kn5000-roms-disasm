@@ -156,4 +156,4 @@
   w113 012A2001D5  ?word   0x012A2001D5   ; 12A.2.00.1D5  hi12{f98=1 f31=5 ?5 res=020}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=5 and/or ACT 0x15 are OPEN]
   w114 0202AEE415  mac     acc,c+,(p)-18
         ; C-RAM[0x19] (coefficient cursor)
-  w115 060414F000  ?word   0x060414F000   ; 604.1.4F.000  hi12{END f98=2 f31=2}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w115 060414F000  endblk  #4F             ; END OF BLOCK -- the last word of a block

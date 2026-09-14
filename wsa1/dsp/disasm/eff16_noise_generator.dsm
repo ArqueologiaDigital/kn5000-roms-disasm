@@ -40,4 +40,4 @@
   w17  00002F2407  ld.st   acc,(p)-14
   w18  088013000B  ?word   0x088013000B   ; 880.1.30.00B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
   w19  0880160000  dly.w  dsc[k],p+96
-  w20  040014F000  ?word   0x040014F000   ; 400.1.4F.000  hi12{END}  [END OF BLOCK (falls through) -- and still performs the rest of the word]
+  w20  040014F000  endblk  #4F             ; END OF BLOCK -- the last word of a block

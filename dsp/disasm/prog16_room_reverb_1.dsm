@@ -234,4 +234,4 @@ OutputTails:
         ; coeff C-RAM[0xB0] = RIGHT output tail (role mix, PROVEN)
   w130  020227B1CD   mac     (p),(p)+123
   w131  088016040E   dly.w  dsc[k],p+96
-  w132  061210F000   endblk  unit1          ; END OF BLOCK -- the image's last word
+  w132  061210F000   endblk  #0F             ; END OF BLOCK -- the last word of a block

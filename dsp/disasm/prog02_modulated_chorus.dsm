@@ -125,4 +125,4 @@
   w82   0212AEC1D5   mac     (p),c+,(p)-20 ; mem[p]<-acc, acc=0
         ; C-RAM[0x18] (coeff, base 0x00 MEASURED)
   w83   0880160000   dly.w  dsc[k],p+96
-  w84   060210E000   endblk  unit0          ; END OF BLOCK -- the image's last word
+  w84   060210E000   endblk  #0E             ; END OF BLOCK -- the last word of a block
