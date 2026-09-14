@@ -109,3 +109,35 @@ load. By the census above it **cannot touch the kernel**.
 ⚠ If S2 holds and S3 does not, the kernel was not the only path and the census argument above is
 wrong — which would be a measurement against my own reasoning, and is why S3 is stated as a
 prediction rather than assumed.
+
+
+---
+
+## §118 RESULT — **S3 HIT, S2 MISS: and that localises the contaminant to the KERNEL**
+
+```
+   mode 2 fired 12 620 538 times
+   hand-off 05:177684(-2869494..3486228/chg175660)   ✔ S3 -- SURVIVES, identical to control
+   LFO      07: step 114..3 470 859  mean 15 543.9286 ⛔ S2 -- UNCHANGED from control
+```
+
+**S3 HIT**: the census argument holds — restricting to `is_c40` leaves the kernel untouched and the
+hand-off lives. **S2 MISS**: the LFO is exactly the control.
+
+⇒ **mode 1's LFO fix came from the KERNEL's C-format words, not the body's.** The kernel's eight
+are opcodes `605/602/621/625/632`; the body's four are `0x620`. Clearing at the body's does nothing
+for the ramp.
+
+### ★★ Which names the mechanism, and it already has an arm
+Both consumers sit on the same side: the kernel's input stage needs the product its C-format words
+let persist, and the body's LFO is poisoned by that same product **surviving the block CALL**.
+
+★★★ That is precisely `UPD6383_CALLFLUSH` — *"clear the PRODUCT register at the block CALL"* (§36),
+which the LEDGER records as giving the chorus **a constant +114/frame ramp**, and which §56
+**REVERTED** because it had been validated at `SPEC=B9108446A39B440F` (ACT 0x0E selector 4) while
+the device ships selector 7, where it added railing to the EQ.
+
+⇒ **the next test is CALLFLUSH at TODAY's default** — which is not §56's default in any respect
+that matters: `SRC0B2` promoted (§76), the store gate's clear promoted (§106), the C-format
+destination promoted (§115), the terminator decoded (§112). §94 already recorded one refutation
+from that era that no longer reproduces.
