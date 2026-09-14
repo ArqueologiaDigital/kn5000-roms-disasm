@@ -8218,6 +8218,49 @@ sharper hypothesis for the index than anything §160 had.
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** But the largest coherent object in the queue is now
 one named question from +90 words.
 
+## 180. ⛔⛔ THE §157 TAPMOD CRITERION IS BLIND — it agrees with its own OFF control
+
+§179 left class 6 one question from +90 words: the INDEX. `upd6383.cpp`'s own comment names the
+candidate and records that nobody ran it — *"the remaining candidates are the index FORM
+(`(coef × phase) >> 23`, not acc-as-datum), and the depth multiply's position"*. The argument for it
+is good: `lfo-ramp.md` §10 measures the scale coefficient as `0x18 = 24` at 8 of 8 LFO sites,
+**`addr8` IS that 24**, and for a 24-bit fractional phase `(n × phase) >> 23` lands in `0..n−1`
+**with no modulo at all** — which is why no modulo appears in the microcode, and why §179's
+wrap-guard exists (a guard is only needed for a WINDOWED read; `d % n` can never leave the table).
+
+Implemented as `UPD6383_C6LUT=3` and run against the criterion the file itself specifies:
+
+```
+   C6LUT=0 (arm OFF)     fired 0           iw96:0..240(r240) iw105:0..240(r240) iw137:-240..0 iw146:-240..0
+   C6LUT=1 (old form)    fired 3 150 504   iw96:0..240(r240) iw105:0..240(r240) iw137:-240..0 iw146:-240..0
+   C6LUT=3 (new form)    fired 3 150 504   iw96:0..240(r240) iw105:0..240(r240) iw137:-240..0 iw146:-240..0
+```
+
+**All three identical, the OFF control included.** The arms fire 3 150 504 times — exactly 2 per
+frame, they reach their words — and the tap census does not move for any of them.
+
+⇒ **the §157 TAPMOD per-slot census cannot see the class-6 lookup at all.** It is not that three
+index forms failed; it is that the instrument has no power to distinguish *performing the lookup*
+from *not performing it*. A criterion whose control agrees exactly with both treatments is rule 15's
+trap, and this one is the project's own, not mine.
+
+### What this retires
+
+⛔ `upd6383.cpp` records, of the two earlier arms: *"⛔ =2 RUN AND IT FAILS TOO … Both arms put a
+FULL-SCALE waveform value into the chain and neither produces a ±240 sweep ⇒ **what is missing is
+the SCALING step between the table and the tap, not the route**."* **That conclusion was drawn from
+a blind instrument** and cannot be relied on. The scaling step may well be missing — but this census
+was never evidence for it, because it reports the same thing when the lookup does not happen.
+
+★ And the index form is left **untested**, not refuted. §179's argument for it still stands on the
+memory layout; what does not exist is a way to check it. Before any fourth arm, someone must build
+an observable that demonstrably moves when the lookup is switched off — the `C6LUT=0` control is the
+positive control it needs to pass, and no instrument in this project currently passes it.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** The +90 stays out of reach, and the reason is now
+one level further back than §179 thought: not "the index is unknown" but "nothing here can see the
+lookup".
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
