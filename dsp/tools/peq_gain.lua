@@ -71,9 +71,17 @@ add(1.2, function() report("saturated DOWN") end)
 for _ = 1, TYPEIDX do tap("CPL_SEG10", 0x20, 0.10) end   -- UP to PARAMETRIC EQ
 add(1.5, function() report("LANDED ON PEQ"); mach.video:snapshot() end)
 -- move the PARAMETER cursor, then drive the VALUE up
-for _ = 1, NPARAM do tap("CPL_SEG8", 0x10, 0.30) end    -- PARAMETER up (UP-2)
+-- ⛔⛔ FIXED 2026-09-14 (N-INPUT-GATE-OPENED sect. 172).  These two lines pressed the WRONG
+-- BUTTONS, contradicting this file's own header three lines above.  The header says
+-- PARAMETER = UP-2/DOWN-2 = CPL_SEG10 0x80/0x40 and VALUE = UP-3/DOWN-3 = CPL_SEG9 0x20/0x10,
+-- and the kn5000_cpanel driver's ioports -- the source of truth for SEG/bit -- agree exactly:
+--   CPL_SEG10 0x80 "UP 2"  0x40 "DOWN 2"      CPL_SEG9 0x20 "UP 3"  0x10 "DOWN 3"
+-- The code instead pressed CPL_SEG8 0x10 = "DOWN 5" and CPL_SEG7 0x20 = "UP 7".  So the run
+-- edited nothing, and sect. 171 first read that null as "the key inference is REFUTED" -- a
+-- conclusion about the MACHINE drawn from a typo.  The header was right the whole time.
+for _ = 1, NPARAM do tap("CPL_SEG10", 0x80, 0.30) end   -- PARAMETER up (UP-2)
 add(1.2, function() report("PARAMETER moved"); mach.video:snapshot() end)
-for _ = 1, NVALUE do tap("CPL_SEG7", 0x20, 0.10) end     -- VALUE up (UP-3)
+for _ = 1, NVALUE do tap("CPL_SEG9", 0x20, 0.10) end     -- VALUE up (UP-3)
 add(1.5, function() report("VALUE driven UP"); mach.video:snapshot() end)
 add(1.0, function()
   emu.print_error(string.format("### EQ-EDITED-AT-TIME %.3f  NPARAM=%d NVALUE=%d",
