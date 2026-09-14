@@ -1,0 +1,9 @@
+=== §117 C-FORMAT PRODUCT INVALIDATE, chorus, per-program census, true default ===
+ROM: chorus LFO increment = C-RAM[0x00] = 114 = floor(0.5993 * 2^23 / 44100) => 0.5993 Hz
+
+arm ON  : upd6383:    07: rises 1570821 of 1783404 frames, step 114..402306 (VARIES) mean 114.2560 | first rise at frame 212562 | period 2^23/step = 73419.4 frames = 1.66
+control : upd6383:    07: rises 1480377 of 1783404 frames, step 114..3470859 (VARIES) mean 15543.9286 | first rise at frame 212562 | period 2^23/step = 539.7 frames = 0.0
+
+hand-off cell 0x05:
+  arm ON  : ABSENT -- destroyed
+  control : 05:177684(-2869494..3486228/chg175660)

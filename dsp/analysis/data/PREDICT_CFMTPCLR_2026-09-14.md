@@ -41,3 +41,46 @@ item 1 asked for — usable for the first time.
 
 ⛔ A pass would not decode `f31` by itself, and it would not be a claim about the C-format word's
 DESTINATION, which §115 settled separately.
+
+
+---
+
+## RESULT — **R2 HIT to 0.6 %. R3 MISS. NOT promoted — and the trade is now localised.**
+Data: [`cfmtpclr_2026-09-14.txt`](cfmtpclr_2026-09-14.txt).
+
+```
+   arm ON   07: step 114..402 306   mean   114.2560   period 73 419 frames = 0.60065 Hz
+   control  07: step 114..3 470 859 mean 15 543.9286  period    540 frames = 81.7 Hz
+   ROM                                      114                73 584 frames = 0.5993 Hz
+```
+
+**R1 HIT** (28 577 436 firings). **R2 HIT** — `mean step 114.2560` against the ROM's **114**, a
+rate of **0.60065 Hz** against **0.5993**: **0.6 % from the number the ROM states**, where the
+shipped model is **255× wrong**. ★★★ The stale product **is** the LFO's contaminant, and this is
+the first time this project has reproduced that constant end-to-end from the machine.
+
+⛔ **R3 MISS.** The per-unit hand-off cell `0x05` is **ABSENT — zero** under the arm, against
+`177684(-2869494..3486228/chg175660)` in the control. The audio path dies. By the
+pre-registration, that is "the same trade §109 refused, not a fix". **NOT PROMOTED.**
+
+### ★★ What the trade localises, which is the real result
+The two halves together say something neither says alone: **the audio path is currently living on
+the stale product, and the LFO is being poisoned by the same value.** One register, two consumers,
+opposite requirements.
+
+⇒ **the defect is not the stale product itself — it is that nothing drives `P` for the audio path
+at that point.** Clear it and the LFO becomes exactly right while the audio starves; leave it and
+the audio borrows a residue while the LFO runs 255× fast.
+
+★ And that is **the same shape §240 already found for the EQ**: *"the baseline's EQ activity is the
+KERNEL'S RESIDUE being filtered"* — an audio path running on a leftover rather than on its own
+operand. Two independent routes to one diagnosis.
+
+### The chain, updated
+```
+   f31 3/4/5/7  ⟵ needs ⟵  a clean LFO ramp   ⟵ THIS ARM PRODUCES ONE (114.256, 0.6 % off)
+                                              ⟵ but at the cost of the audio hand-off
+                                              ⟵ because P has no real driver on the audio path
+   ⇒ THE NEXT QUESTION IS NOT `f31'.  It is: what SHOULD be driving the product register
+     where the C-format word currently leaves a stale one?
+```

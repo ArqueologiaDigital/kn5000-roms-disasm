@@ -5304,6 +5304,47 @@ That is worth more than another inconclusive sweep: it says **which problem to s
 §109 already has a lead on it. It also explains §113's and §108's results from one cause rather
 than three — a broken ramp cannot grade an accumulator field, whichever program you point it at.
 
+## 117. ★★★ THE ROM's LFO CONSTANT REPRODUCED TO 0.6 % — and the trade that blocks it
+Pre-registration and data:
+[`data/PREDICT_CFMTPCLR_2026-09-14.md`](data/PREDICT_CFMTPCLR_2026-09-14.md).
+
+§116 put the chain in the open: `f31` 3/4/5/7 is blocked on a clean LFO ramp, which is blocked on
+the rate defect. §109 named the path — the C-format destination `P` took the chorus from 153 Hz to
+0.674 Hz — and §115 then settled that destination as `reg[lo12]`, so the improvement had to be a
+**side effect**: writing `P` overwrote the **stale product**, which §102's trace named as the
+contaminant.
+
+A C-format word issues no multiply, so the one-slot product after it is not that instruction's.
+**Invalidating** it tests the side effect without the injection that wrecked the hand-off.
+
+```
+   arm ON   07: step 114..402 306    mean    114.2560   =  0.60065 Hz
+   control  07: step 114..3 470 859  mean 15 543.9286   = 81.7 Hz
+   ROM                                      114         =  0.5993 Hz
+```
+
+★★★ **`mean step 114.2560` against the ROM's `114`; 0.60065 Hz against 0.5993 — 0.6 %.** The
+shipped model is 255× wrong. This is the first time the project has reproduced
+`floor(0.5993 × 2²³/44100)` end-to-end from the running machine rather than deriving it.
+
+⛔ **And the hand-off cell `0x05` goes to ZERO.** The audio path dies. NOT promoted: by the
+pre-registration that is "the same trade §109 refused".
+
+### ★★ The trade is the finding
+The two halves together say what neither says alone: **the audio path is currently living on the
+stale product, and the LFO is being poisoned by the same value.** One register, two consumers,
+opposite requirements.
+
+⇒ **the defect is not the stale product — it is that nothing drives `P` for the audio path there.**
+★ Which is exactly the shape §240 found for the EQ: *"the baseline's EQ activity is the KERNEL'S
+RESIDUE being filtered."* Two independent routes, one diagnosis.
+
+### The question that replaces `f31`
+**What should be driving the product register where the C-format word currently leaves a stale
+one?** Answer that and the LFO is right, the audio keeps its operand, and the auto-pan
+discriminator §116 wanted becomes usable — which is the whole `f31` family. That is a better next
+question than any of the four open fields, and it was not visible before tonight.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
