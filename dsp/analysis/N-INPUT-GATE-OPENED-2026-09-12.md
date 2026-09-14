@@ -8385,6 +8385,61 @@ plus §183's phase cell make that a runnable experiment for the first time.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 
+## 185. ★★★★★ THERE IS NO MISSING SCALING STEP — the amplitude is DEPTH, measured 2.0000×
+
+§184 restored `upd6383.cpp`'s conclusion that *"what is missing is the SCALING step between the
+table and the tap, not the route"*. **It is refuted, by the experiment §184 itself named.**
+
+CHORUS's slot 0 is **DEPTH** (`-paramlist.md`: `DEPTH, LFO SPEED, LFO WAVEFORM, VOLUME, REV SEND`),
+and it is the slot the editor opens on — so §172's VALUE key edits it directly. With `C6LUT=4`:
+
+```
+   NVALUE = 0     cell 0F span 4 805 691    30.2 % of the sine's full scale
+   NVALUE = 30    cell 0F span 9 611 376    60.3 %
+                  ratio 2.0000
+```
+
+**Exactly double.** The 0.3015 factor is the **DEPTH coefficient doing its job**, not a missing
+shift. Nothing is broken: the class-6 word reads the table, the index produces a waveform, and its
+amplitude is a user parameter that responds correctly.
+
+⇒ ⛔ **The `±240 sweep` target three arms were judged against was the wrong expectation.** The sweep
+amplitude depends on DEPTH; at the preset's default it is 30 % of full scale, and "it does not reach
+±240" was never evidence that anything was missing. `upd6383.cpp`'s conclusion is withdrawn, and so
+is §184's restoration of it. ★ Third flip for this claim — but the evidence is now a two-sided
+parameter sweep with an exact factor of two, not a census reading.
+
+### ⛔ And the criterion cannot rank the index forms — by construction
+
+```
+   C6LUT=4   NVALUE 0 -> 30   span 4 805 691 -> 9 611 376   ratio 2.0000
+   C6LUT=1   NVALUE 0 -> 30   span 4 805 678 -> 9 611 371   ratio 2.0000
+```
+
+The two spans agree to 13 counts in 4.8 million. **`max − min` over a full traversal of the table is
+ORDER-INDEPENDENT**: any index that visits all 24 entries yields the same extremes, whatever route it
+takes. So §181's span criterion — which does pass the arm-off control, and did settle the DEPTH
+question — is blind to the index *formula*.
+
+★ That is the **fourth** criterion found blind this session (§157 TAPMOD, the WSA1R display-value
+tables, the delay-cell overlap, and now the span), and the first one I built myself. The recurring
+shape: **a statistic that is invariant under the thing being varied cannot test it.**
+
+★ The one discriminator observed is the **change count** — 19 521 for `=1` against 114 742 for `=4`,
+a sixfold difference consistent with a smooth monotonic sweep versus an erratic modulo of a signed
+signal. Ranking on it needs an anchored expectation for how often the index should step, which
+`lfo-ramp.md`'s 114-per-frame increment could supply and nobody has computed.
+
+### Where the +90 stands
+
+Class 6's addressing is now explained in every part but one: the **space** (register file), the
+**base** (`0x1D`, measured in two effects, §178/§179), the **table** (a 24-entry sine with an
+8-entry wrap-guard, or a 32-entry soft-clip curve), the **amplitude** (DEPTH, 2.0000×), and an index
+that lands in `0..n−1` by construction from a measured phase (§183). What is unranked is *which* of
+two index formulas — and both produce a correctly-shaped, correctly-scaled waveform.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
