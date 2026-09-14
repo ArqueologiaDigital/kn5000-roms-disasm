@@ -974,7 +974,21 @@ def decoded(w):
     #   different mode) and precede nothing that claims class 4; `is_dram' is disjoint by the
     #   escape bit.
     if is_mode4(w):
-        return _alu_half_anchored(w)
+        #   ⛔⛔ THE BIT-4 STORE GUARD, AND WHY IT IS HERE AND NOT IN `_alu_half_anchored'.
+        #   My first version of this clause was `return _alu_half_anchored(w)', by analogy with
+        #   `is_mode1'.  That was an OVER-REACH and `acc_blind.open_axes()' says so in one line:
+        #   `0124011CE' carries TWO axes, `class 4' AND `bit-4 store on class 4', and the run only
+        #   closed the first.  `_alu_half_anchored' is documented as `alu_decoded() WITHOUT the
+        #   class test', but one of the guards it drops -- `(hi12 & HI_ST) and (cl & 7) != 2' -- is
+        #   a STORE-TARGET guard that merely happens to be PHRASED as a class test.  R2
+        #   (`r2-output.md' sect. 1, 4.4) falsified the class-independent reading: the bit-4
+        #   destination is MODE-DEPENDENT and `mem[ptr]' is the MODE-2 target.  It is legitimate to
+        #   drop for `is_mode1', whose target R2 PROVES (48 of 48 for the store half), and for
+        #   `is_dram', whose addressing is forced -- and it is NOT legitimate here.
+        #   ⇒ every one of the 99 mode-4 words carries `hi12' bit 4, so this clause admits NOTHING
+        #   today.  It is kept because the POINTER half is genuinely settled (sect. 161) and that
+        #   is half the job; what remains is one named question, the mode-4 store TARGET.
+        return _alu_half_anchored(w) and not (hi12(w) & HI_ST)
     if is_dram(w) and dram_dir(w):
         return _alu_half_anchored(w)
     if alu_decoded(w):                                         return True

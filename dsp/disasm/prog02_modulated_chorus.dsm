@@ -58,7 +58,7 @@
   w33   0182200407   mac.st  acc,(p)+0
   w34   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w35   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w36   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
+  w36   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w37   01042FB1CE   post    (p),(p)-5
   w38   0092200700   ?word   0x0092200700   ; 092.2.00.700  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x1C = control/mod source into MAC (100% MAC-consumed; LFO in mod fx, envelope/AGC in dynamics) -- NOT LFO-only: present in 19 non-LFO programs (dsp_datapath_fingerprint)]
   w39   0102AFE1D5   mac     (p),c+,(p)-2
@@ -67,11 +67,11 @@
   w40   0182200407   mac.st  acc,(p)+0
   w41   0040000C63   ?word   0x0040000C63   ; 040.0.00.C63  hi12{?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w42   00006184CD   ?word   0x00006184CD   ; 000.6.18.4CD  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w43   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
+  w43   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w44   01042091CE   post    (p),(p)+9
   w45   0142000C63   ?word   0x0142000C63   ; 142.0.00.C63  hi12{f98=1 f31=1 ?6 res=040}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w46   0000620407   ?word   0x0000620407   ; 000.6.20.407  hi12{-}  [table-lookup idiom, class-6 addr8 = table selector (INFERRED)]
-  w47   00124011CE   mac     (p) ; mem[p]<-acc, acc=0
+  w47   00124011CE   ?word   0x00124011CE   ; 012.4.01.1CE  hi12{ST f31=1}  [table-lookup idiom, third word (INFERRED)]
   w48   01042F71CE   post    (p),(p)-9
   w49   0102A0A1D5   mac     (p),c+,(p)+10
         ; C-RAM[0x0C] (coeff, base 0x00 MEASURED)

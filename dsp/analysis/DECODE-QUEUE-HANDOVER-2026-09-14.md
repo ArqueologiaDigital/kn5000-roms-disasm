@@ -12,9 +12,9 @@ valuable part of this file — each closes a line and says why, so nobody walks 
 | …header 0…59 | 56.7 % | **71.7 %** |
 | …output stage 60…82 | 21.7 % | **34.8 %** |
 | FRAME FLOOR (kernel + reverb) | 74.5 % | **80.1 %** |
-| all 38 KN5000 body images | 80.4 % | **80.8 %** |
-| SX-WSA1R corpus (undecoded words 3091 → 809) | 37.5 % | **83.6 %** |
-| **POOLED, both products** | — | **82.5 %** (1402 undecoded of 8003) |
+| all 38 KN5000 body images | 80.4 % | 80.4 % |
+| SX-WSA1R corpus (undecoded words 3091 → 851) | 37.5 % | **79.9 %** |
+| **POOLED, both products** | — | **81.2 %** (1501 undecoded of 8003) |
 
 Mirrors **8003/8003** (pooled, `tools/upd6383d_diff.sh -p`, text AND the three execution
 predicates); `dsp/verify.py` BYTE-MATCH OK; both trees regenerated with word columns **8003/8003**
@@ -25,9 +25,9 @@ identical (`regen_words_unchanged.sh`).
 * **§122** — the C-format payload is an I-RAM address. Two routes: the region test (11 of 11 inside
   their own image, p = 6.6e-9) and the **relocation test** against the WSA1R's byte-homologous copy
   of the kernel header (§121). +11 words, kernel 47.0 → 60.2 %.
-* **§161** — **mode 4 reads `mem[ptr]` and does NOT move it.** The class test refused 99 words
-  (one shape — the C63 idiom's third word); the open half was the pointer, `addr8` could not decide
-  it (one value across 99 words in two products), and a **two-sided emulator run** did. **+99 words.**
+* ⛔ **§161 → §162, RETRACTED.** Mode 4's *pointer* is settled (it does not advance — a two-sided
+  run that could have gone the other way), but the 99 words carry a SECOND open axis, the bit-4
+  store's target, and I promoted as if the run had closed both. Coverage is back at 81.2 %.
 * **§128** — **mode 1 is the register file.** `class4 & 7` is the addressing mode, so class 1 and
   class 9 were one question. Four measurements anchored the read half. +143 words.
 
@@ -215,17 +215,30 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
 
 ## What the next pass should actually do, in order
 
-0. ✅ **DONE — MODE 4 DECODED, +99 WORDS (§161).** This was the top item and it is closed.
-   `UPD6383_CLS4PTR` fired **3 346 456** times ON against 0 OFF; both runs fingerprint
-   `prog35_exciter` ✅. The criterion was EXCITER's `op0x70` band four words downstream of its
-   class-4 word, and it **could fail and did**: with the arm ON, ten of the twelve EQ state cells
-   are written **once** in 259 308 frames and the filter stops; OFF they are two live four-cell
-   bands whose offset-2/3 cells change exactly together. ⇒ the pointer does **not** advance on
-   class 4, mode 4's addressing is explained, and `is_mode4()` is in both mirrors.
-   **Pooled undecoded 1501 → 1402; pooled coverage 81.2 % → 82.5 %.**
-   ★ The method, for the next axis: **`addr8` could not decide it** (one value, 99 words, two
-   products) — the field was uninformative and only an execution difference could separate the
-   readings. When a field is constant across the corpus, stop reading it and build the arm.
+0. ⛔ **MODE 4: THE POINTER IS SETTLED, THE STORE TARGET IS NOT — and §161's +99 was RETRACTED
+   in §162 for exactly that.** Read this before re-promoting anything.
+
+   * ✅ **SETTLED (§161).** `UPD6383_CLS4PTR` fired **3 346 456** ON vs 0 OFF; both runs fingerprint
+     `prog35_exciter`. EXCITER's `op0x70` band four words downstream goes from two live four-cell
+     blocks (offset-2/3 cells changing together — the DF-I y-state pair) to **ten of twelve written
+     once in 259 308 frames**. ⇒ **class 4 does NOT advance the pointer.** Independently, §158
+     excluded the variants bundling class 6 (its `addr8` is a table entry count, anchored at 24).
+   * ⛔ **NOT SETTLED.** `acc_blind.open_axes('0124011CE')` = `['class 4', 'bit-4 store on class 4']`
+     — **two** axes. All 99 words carry `hi12` bit 4, and `r2-output.md` §1/§4.4 falsified the
+     class-independent reading of that store: the destination is **mode-dependent** and `mem[ptr]`
+     is the **mode-2** target. `_alu_half_anchored` drops that guard because it is *phrased* as a
+     class test; it is really a store-target guard, and dropping it is legitimate only where the
+     target is known (mode 1: R2 proves it 48 of 48; `is_dram`: addressing forced).
+   * ★ **THE ARM IS BUILT AND UNRUN: `UPD6383_ST4DEST`** (§163). Three-way so it can fail — 0 =
+     D-RAM at the pointer (shipped), 1 = register file at `addr8` (the mode-1 target), 2 =
+     suppressed — with an unconditional count of mode-4 bit-4 stores. Same criterion as the pointer
+     run: EXCITER's band must survive. One setting surviving ⇒ target by elimination, **+99 words**.
+     All three surviving ⇒ the store reaches nothing any anchored criterion sees, and the 99 stay
+     open on an invisible axis (the §149 outcome, and worth recording).
+   * ★★ **THE RULE THIS COST.** *Before promoting, enumerate the word's open axes and close them
+     all or promote none.* I ran the experiment, wrote the note, the LEDGER row, the handover and a
+     blog post before asking `open_axes()` — a one-line check. §138 and §141 were the same defect:
+     a generalisation of a scoped measurement. This was its third costume.
 
 0b. **The other 40 class-test-refused words are the same shape of opportunity, not yet worked.**
    `lut_idiom.py --classgate` now lists classes 3 (14), 5 (2), 6 (12) and 8 (12) still undecoded

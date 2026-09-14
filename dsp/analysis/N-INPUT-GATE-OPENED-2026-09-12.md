@@ -7271,6 +7271,80 @@ cursor-fetch bit, 7 words, `addr8 = 0`) stays undecoded because its ALU half is 
 is the right reason. And the other 40 class-test-refused words (classes 3, 5, 6, 8) are untouched:
 their modes have not been through this.
 
+## 162. ⛔⛔ §161's +99 IS RETRACTED — I CLOSED ONE AXIS AND PROMOTED AS IF I HAD CLOSED TWO
+
+The run in §161 stands. The promotion built on it does not.
+
+`acc_blind.open_axes()` says it in one line, and I did not ask it:
+
+```
+   0124011CE   open axes: ['class 4', 'bit-4 store on class 4']
+```
+
+**Two axes.** §161 closed `class 4` — the pointer does not advance, measured two-sided — and then
+wrote `decoded()`'s clause as `return _alu_half_anchored(w)`, by analogy with `is_mode1`. That
+analogy is the error.
+
+### Why the analogy fails
+
+`_alu_half_anchored` is documented as *"the ALU part of `alu_decoded()` WITHOUT the class test"*.
+But one of the guards it drops —
+
+```python
+   if (hi12(w) & HI_ST) and (cl & 7) != 2: return False
+```
+
+— is **a store-target guard that merely happens to be phrased as a class test**. `r2-output.md`
+§1/§4.4 falsified the class-independent reading: the bit-4 destination is **mode-dependent**, and
+`mem[ptr]` is the **mode-2** target. The device says the same thing in its own words — *"a universal
+`mem[ptr]` manufactures four dead stores in the output stage"* — and `alu_decoded()` refuses any
+bit-4 word outside mode 2 for exactly that reason.
+
+Dropping it is legitimate for `is_mode1`, whose store target R2 **proves** (48 of 48), and for
+`is_dram`, whose addressing is forced. It is not legitimate for mode 4, whose store target nothing
+has established. And **every one of the 99 words carries `hi12` bit 4** — the disassembler was
+printing `mac (p) ; mem[p]<-acc, acc=0`, asserting the mode-2 target on a mode-4 word.
+
+### What that costs, and what survives
+
+```
+   pooled undecoded   1402  ->  1501      (the +99 is withdrawn)
+   pooled coverage    82.5 % -> 81.2 %
+```
+
+★ **The pointer result survives intact and is not weakened**: `UPD6383_CLS4PTR` fired 3 346 456
+times against 0, both runs fingerprinted `prog35_exciter`, and the EXCITER band's twelve state cells
+go from two live four-cell blocks to ten-written-once. Mode 4 does not advance the pointer. That is
+half the job and it is done.
+
+`is_mode4()` is kept, with the store guard, so the clause admits nothing today and the next pass
+inherits one named question instead of a silent over-claim.
+
+### The rule I broke, which this project already had
+
+§138 and §141 were both *"a generalisation of a scoped measurement"*. This is the same defect in a
+third costume: I generalised **"the class test is what refuses this word"** from three cases where
+it was true to a fourth where a *different* guard was doing the refusing. The check that catches it
+costs one line — **ask `open_axes()` how many axes the word has, and count how many the run closed**
+— and I ran the experiment, wrote the note, the LEDGER row, the handover and a blog post before
+asking it.
+
+> **Before promoting: enumerate the word's open axes, and close them all or promote none.**
+
+## 163. THE AXIS THAT REMAINS, AND THE ARM BUILT FOR IT
+
+`UPD6383_ST4DEST` (default 0 = shipped) asks where a mode-4 bit-4 store lands, three ways so it can
+fail: **0** = D-RAM at the pointer (what `store_mode()` does today, applying the mode-2 target
+class-independently), **1** = the register file at `addr8` (the mode-1 target, which R2 proves *for
+that mode*), **2** = suppressed. An unconditional count of mode-4 bit-4 stores is printed whatever
+the setting.
+
+The criterion is the one that settled the pointer: EXCITER's `op0x70` band four words downstream
+must stay two live four-cell blocks whose offset-2/3 cells change together. If exactly one setting
+preserves it, the target is established by elimination. If all three do, this store reaches nothing
+the band observes, and the 99 words stay undecoded on an axis no anchored criterion can see — which
+is a clean negative worth as much as a decode, and the outcome §149 recorded for `f31 = 3`.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
