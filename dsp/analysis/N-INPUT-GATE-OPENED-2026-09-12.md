@@ -9344,6 +9344,46 @@ claims, and only the second one is true.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 
+## 212. ★★ THE µPD6382 IS REAL AND 19-BIT — and the family is absent from every reachable NEC book
+
+§210 answered Felipe's question from the project's own records. This is the web check, because the
+project's "documentation exhausted" note (`STRATEGIC-REVIEW` item **X4**) was scoped to *Google
+Patents only* and had never been tested against the archives.
+
+**1. ★ The premise is confirmed from distributor and dealer listings.** The **µPD6382GF** exists and
+is described as a **"19-Bit Digital Signal Processor, QFP-80"**. So the family does have a 19-bit
+member, and ours — the µPD6383GF — is its immediate successor by part number. Our own measurements
+put our data path at **24-bit** (Q23 coefficients, 24-bit D-RAM cells, full scale at 2²³) under a
+**36-bit microword**, which makes the natural reading "same family, wider data".
+
+**2. ⛔ But no datasheet for either part is reachable, and this is now measured rather than
+assumed.** Checked against bitsavers' complete NEC `_dataBooks` holdings:
+
+```
+   1989_DSP_and_Speech_Products_Data_Book       (already local)  638x mentions: 0
+   1992_NEC_DSP_and_Speech_Processor_Products   (already local)  638x mentions: 0
+   1989_NEC_Product_Selection_Guide             downloaded, 277 495 chars   638x mentions: 0
+   1985_Product_Selection_Guide                 no 638x
+```
+
+The two local databooks cover only the µPD77xx/72xx **general-purpose** line — `PD7281`, `PD7723`,
+`PD7781`, `PD9305`. The 638x is a **Japanese consumer-audio** line that never appeared in NEC's
+US-facing publications. The only index hit anywhere is a **1995 NEC "Semiconductor Selection
+Guide"** (226 pp) listed by The Datasheet Archive as mentioning `uPD6382`, behind their paywall —
+and a selection guide gives summary specs, never an instruction format.
+
+⇒ **X4 stands, now with evidence behind it**: there is no datasheet route to this ISA. ⚠ Note the
+difference from before — the claim was previously "patents return 0"; it is now "the family is
+absent from every NEC databook and selection guide on bitsavers, verified by download and grep".
+
+**3. ★ One identity fact worth keeping.** A parts dealer lists `IC,UPD6383GF-3BA — GGC1163`. So
+**`GGC1163` is the house number for the `µPD6383GF-3BA`** — and `-3BA` is exactly the suffix Felipe
+reported for the KN1500's IC3. `ROADMAP-2026-07-29:410` had already parked "Panasonic GGC1163" as a
+do-not-pursue item without connecting it to the part; that connection is now made.
+
+⚠ **No decode.** This bounds an external route and links two records; it does not explain a field.
+Coverage unchanged: **1413 of 7273, 80.6 %.**
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the
