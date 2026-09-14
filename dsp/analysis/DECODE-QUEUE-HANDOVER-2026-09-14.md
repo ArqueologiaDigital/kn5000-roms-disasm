@@ -223,6 +223,50 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
 
 ## What the next pass should actually do, in order
 
+0★. ★★★★★ **START HERE: THE BIT-11 ALTERNATE ENCODING. 271 words, ceiling 84.3 %, nine shapes,
+   two of them 87.6 % of the prize.** (§196–§201, 2026-09-14 — this item replaces the old item 0.)
+
+   `python3 dsp/tools/bit11_prize.py` prints all of it and is the queue:
+
+   ```
+      A  bit-11 words:  209 total, 169 UNDECODED        closing them: 80.6 % → 82.9 %
+      B  undecoded words gated INDIRECTLY through the class-6 idiom:  102
+      A + B = 271 words  →  84.3 %
+
+      lo12   total  undec   by product
+      C63      99     99    KN:53 WSA:46      <- and it carries NO OPERAND (see below)
+      8BC      49     49    KN:24 WSA:25
+      822       7      7    822/839/827/864/921/C62/F22 are 21 words between them
+   ```
+
+   It is the **third**-largest open-axis block on its own (`bit-11 encoding, class 0` = 132, behind
+   `ACT 0x0B` 159 and `SRC 0x11` 139) and the **largest** once what it gates is counted — and unlike
+   those two, which are documented dead ends in this file, it is newly opened.
+
+   ★★★ **The one static fact to start from.** `bit11_prize.py` part D: `C63` has exactly **two**
+   full-word forms over all 99 pooled occurrences — `040000C63` ×87 and `142000C63` ×12 — with
+   `class4 = 0` and `addr8 = 0x00` in every one. The only field that varies is `hi12`, i.e. `f31`:
+   **0 = LOAD, 1 = ADD**. A word whose sole variable field is the accumulator function is an
+   ALU-half instruction. And that `f31` correlates **99 of 99** with the following class-6 word's
+   `lo12` (`040`↔`4CD`, `142`↔`407`), so the pair is one two-word instruction.
+
+   ⛔ **What has already been ruled out — do not redo any of it.**
+   * All six index sources: `acc mod n`, the ACT-destination variant, `(n × acc) >> 23`,
+     `(n × cell 0x07) >> 23`, `m_k` (the constant 24) and `m_p >> ACC_SHIFT`. The first three are
+     refuted on §196's *direct* histogram of `k`, the last three on direct censuses of the
+     quantity. **Do not build a seventh C6LUT arm.**
+   * The bit-11 ALU half as the missing phase generator (§197): `UPD6383_ALT11ALU=1` fires
+     4 726 638 times and **every cell still VARIES**. Pre-registered criterion, cleanly failed.
+   * A phase accumulator anywhere in the machine: not in D-RAM (§228) and not in the register file
+     (§198, which had never been walked). The one constant-step riser, `rf[50]`, is a **toggle** —
+     range one step wide.
+
+   ⚠ **The live upstream question, if someone wants the LFO rather than the encoding:** what writes
+   cell `0x07` 1 570 842 times? §199 attributes only **12 442** writes to `store_mode()`, all with
+   step 0. It is **not** the input deposit — §200 has the device print its own deposit addresses and
+   they are `0x01` (L) and `0x04` (R), from base `0xFF`.
+
+
 0. ⛔⛔ **MODE 4: ONE WITNESS, AND NO REPLICATION IS AVAILABLE AS THE QUESTION IS POSED.**
    Do not spend another build here without reading this.
 
@@ -262,9 +306,11 @@ laws pin the scales, then stability or a response picks the order. `host_side.py
    is unimplemented.** No choice of existing register can supply the index, because the producer is
    not modelled.
 
-   All six named candidates are now measured and refused: `acc mod n`, the ACT-destination variant,
-   `(n × acc) >> 23`, `(n × cell 0x07) >> 23`, `m_k` (constant 24, ONE change in the run), and
-   `m_p >> ACC_SHIFT` (zero on 90.9 % of hits). ⛔ **And §183's phase is RETRACTED**: cell `0x07`
+   THREE candidates are refuted by direct measurement of the quantity: `(n × cell 0x07) >> 23`,
+   `m_k` (constant 24, ONE change in the run) and `m_p >> ACC_SHIFT` (zero on 90.9 % of hits).
+   ⚠ **The other three are UNGRADED, not refused** — `acc mod n`, the ACT-destination variant and
+   `(n × acc) >> 23` were judged on the §157 TAPMOD census (blind, §180) and §186's ranking (void,
+   §187). Their verdicts died with their instruments. ⛔ **And §183's phase is RETRACTED**: cell `0x07`
    changes every frame and wraps **87 564** times, and §228's own rise census reports **VARIES for
    every cell in the machine** — there is no monotonic phase ramp to index with.
 

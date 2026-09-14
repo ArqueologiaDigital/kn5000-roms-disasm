@@ -8648,8 +8648,14 @@ suggestively the range §176 gives for cell `0x0C` (−17..19). ⛔ **The histog
 
 A table index visits its entries; this is a small signal concentrated at zero.
 
-⇒ **All six named index sources are now measured and refused:** `acc mod n` (=1), the ACT-destination
-variant (=2), `(n × acc) >> 23` (=3), `(n × cell 0x07) >> 23` (=4), `m_k`, and `m_p >> ACC_SHIFT`.
+⇒ **Three of the six are refuted by direct measurement of the quantity itself:** `(n × cell 0x07) >>
+23` (=4, §190–§192), `m_k` (§193) and `m_p >> ACC_SHIFT` (§194).
+
+⚠ **The other three are UNGRADED, not refuted — do not read them as closed.** `acc mod n` (=1), the
+ACT-destination variant (=2) and `(n × acc) >> 23` (=3) were judged on the §157 TAPMOD census and on
+§186's ranking, and **§180 declared the first blind and §187 voided the second**. Their verdicts died
+with their instruments. §189's per-table-length census is the first *direct* instrument for the
+index, and it has never been pointed at them.
 
 ## 195. ★★★★★ WHY ALL SIX FAILED — the index producer is the word the device does not execute
 
@@ -8691,6 +8697,147 @@ executes.
 
 ⚠ Coverage unchanged: **1413 of 7273, 80.6 %.** This pass bought a closed branch and a correct
 target, not words.
+
+## 196. THE FIRST DIRECT INSTRUMENT FOR THE INDEX — and it grades the three ungraded arms
+
+§189's change count is the only discriminating half of that census, and a *count* cannot tell a
+sweep from noise. The *shape* can. `§196 k DISTRIBUTION` histograms `k` per table length, and it is
+the first instrument that looks at the index itself rather than at something downstream — so it is
+the first one `C6LUT=1`, `=2` and `=3` have ever faced.
+
+```
+   =4  (n × cell 0x07) >> 23   24 of 24 entries, near-UNIFORM   0:65914 1:65016 ... 23:64782
+   =1  acc mod n               24 of 24 at n=24 but 0:1431090 (96 %), a bell to both ends
+                               ⛔ and only 24 of 32 entries at n=32 — a structural failure
+   =3  (n × acc) >> 23         ⛔ 1 of 24 entries: k = 0 on all 1 487 687 hits
+```
+
+`=2` computes the same index as `=1` (only the write destination differs), so it falls with it.
+⇒ **the three arms whose verdicts died with their instruments are now refuted on a direct one.**
+
+★ `=4`'s histogram is exactly what a correct sweep looks like. Uniform `k` follows from a
+uniformly-distributed input — which a monotonic ramp *and* a noise signal both are. Only the change
+count separates them, and it says noise (§190–§192).
+
+### ★★★ And the static half: `C63` carries no operand at all
+
+`bit11_prize.py` part D, pooled and RULE-9 de-duplicated:
+
+```
+   C63   2 distinct full words, differing ONLY in hi12
+         040000C63 x87    hi12=040 (f31 = 0, LOAD)   class4=0  addr8=00
+         142000C63 x12    hi12=142 (f31 = 1, ADD)    class4=0  addr8=00
+```
+
+**`class4 = 0` and `addr8 = 0x00` in all 99 occurrences.** The word has no SRC, no ACTION, no class
+and no address field in use — its *only* variable field is the ALU function. So `C63` is not an
+index *computation* on an operand it carries; it is the ALU half of a two-word instruction, and the
+index must come from machine state after all.
+
+⚠ This **narrows** §195 rather than contradicting it: the producer is still unexecuted, but what it
+would produce is an accumulator operation, not an addressed fetch.
+
+## 197. ⛔ THE BIT-11 ALU HALF IS NOT THE MISSING PHASE GENERATOR
+
+If a machine running a CHORUS has no LFO, the phase generator is what is broken — not the six index
+forms graded against it. `C63`'s two forms are LOAD and **ADD**, and `phase += increment` is an
+accumulate that this branch returns before performing, 3 150 504 times per run.
+
+`UPD6383_ALT11ALU=1` applies only the ALU half (f31 as the function, the product as the term) to
+bit-11 words. **Pre-registered, two-sided, and able to fail: §228 must report `CONSTANT — a clean
+ramp` for at least one cell.**
+
+```
+   control   §197 ... ALU HALF executed: 0          every cell VARIES
+   arm       §197 ... ALU HALF executed: 4 726 638  every cell STILL VARIES
+             cell 0x07 byte-identical: rises 1 480 377, step 114..3 470 859, mean 15 543.9286
+             only 0x0F moves at all (6 203 → 8 880 rises, range −10..11 → −16..17)
+```
+
+⛔ **The arm fails its own criterion.** The ALU half of the bit-11 word is not the missing phase.
+★ Kept default-off with its record; the criterion is the transferable part.
+
+## 198. THE REGISTER FILE HAD NEVER BEEN RISE-CENSUSED — and it has no ramp either
+
+§228 walks D-RAM and only D-RAM. But §179 proved the class-6 table port **is** the mode-1 register
+file at `0x1D`, so the register file is the memory this whole idiom lives in, and a phase
+accumulator there would have been invisible to every measurement in §183–§197. `§198
+REGISTER-FILE RISE CENSUS` walks all 256 cells with the same logic:
+
+```
+   rf[50]: rises 1511 of 1 783 404 frames, step 256..256, wraps 0, range −256..0
+```
+
+One cell with a constant step — and ⚠ **it is a TOGGLE, not a ramp.** Its range is *one step wide*,
+so it alternates between two values; a constant positive step is trivially satisfied by that. RULE
+15 again, this time caught inside the instrument: the census now prints `TOGGLE, not a ramp — range
+is one step wide` and reserves `CONSTANT — a clean ramp` for a range many steps wide.
+
+⇒ **There is no phase accumulator in EITHER memory.** That is now a two-memory result, and it is the
+upstream defect blocking class 6.
+
+## 199–200. WHO WRITES CELL `0x07` — and a hypothesis of mine refuted by making the device answer
+
+§228 reports cell `0x07` rising with a step *minimum* of exactly **114**, the anchored LFO increment
+(`lfo-ramp.md` item C) — so a 114 ramp looks present and buried under a second writer. `§199 WHO
+WRITES CELL 0x07` attributes each write to the instruction that made it:
+
+```
+   iw262 4410   iw264 4410   iw328 3528   iw73 20   iw78 40   iw79 20   iw9 7   iw11 7
+   — every one with step 0..0, and 12 442 writes in total
+```
+
+**against 1 570 842 changes.** So ~99.2 % of what moves that cell does not pass through
+`store_mode()` at all.
+
+I took the dominant writer to be the frame-start input deposit, whose addresses are
+`m_in_base + IN_LATCH_L_OFF/R_OFF` with both offsets marked FORCED in the header — which by
+arithmetic from `DRAM_UNIT_BASE = 0x05` lands on `0x07`. ⛔ **Wrong, and the device says so:**
+
+```
+   §200 FRAME-START INPUT DEPOSIT went to D-RAM 0x01 (L) and 0x04 (R),
+        from base 0xFF + IN_LATCH_L_OFF 2 / R_OFF 5.
+```
+
+`m_in_base = m_dp` at frame start and `m_dp` is `0xFF` there, not `0x05`, so the latches are `0x01`
+and `0x04` — which are exactly two of the audio-rate cells §176 lists. **Cell `0x07` is not the
+input latch**, and the identity of its 1.56 M-change writer is still open.
+
+★ The only reason this is a paragraph and not a retraction three sections later is that the device
+was made to *print the addresses* instead of my recomputing them. That is the same move that caught
+§187, §189, §193 and §194, and it is the one habit worth carrying out of this session.
+
+## 201. WHAT THE BIT-11 FAMILY IS ACTUALLY WORTH — the number that sets the next target
+
+`dsp/tools/bit11_prize.py`, pooled and RULE-9 de-duplicated:
+
+```
+   A  bit-11 words:  209 total, 169 UNDECODED     closing them: 80.6 % → 82.9 %
+   B  undecoded words gated INDIRECTLY through the class-6 idiom (every open axis a
+      class-6 / SRC-0x13 one):  102
+   A + B = 271 words → a ceiling of 84.3 %
+```
+
+★★ And the family is **nine shapes**, two of which are 148 of the 169:
+
+```
+   lo12   total  undec   by product
+   C63      99     99    KN:53 WSA:46
+   8BC      49     49    KN:24 WSA:25
+   822       7      7    KN:1  WSA:6
+   839       4      4    KN:2  WSA:2
+   827/864/921/C62/F22   2 each
+```
+
+For context, the largest open-axis groups across all 1413 undecoded words:
+`ACT 0x0B` 159 · `SRC 0x11` 139 · **`bit-11 encoding, class 0` 132** · `bit-4 store on class 4` 99 ·
+`SRC 0x1C, store gate, f31 1` 89 · `SRC 0x13, class 6` 87 · `ACT 0x08, SRC 0x13` 84.
+
+⇒ the bit-11 family is the **third**-largest block on its own and the **largest** once what it gates
+is counted. ⚠ `ACT 0x0B` (159) and `SRC 0x11` (139) are both documented dead ends in the handover;
+this one is newly opened and has two shapes carrying 87.6 % of it.
+
+⚠ Coverage unchanged: **1413 of 7273, 80.6 %.**
 
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped

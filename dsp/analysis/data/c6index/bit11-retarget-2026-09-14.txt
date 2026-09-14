@@ -1,0 +1,62 @@
+# §196-§201 evidence -- the bit-11 retarget
+#
+# Reproduce (foreground, ~4 min each; do NOT set UPD6383_TRACE_FRAME):
+#   cd ~/compartilhado/kn7000_mame_build && rm -f error.log
+#   timeout 560 env [ARM] UPD6383_CENSUS_PERPROG=1 DHLE=0 DSPCFG=3 TYPEIDX=0 NOTEMODE=0 TGM=0 \
+#     ./kn7000 kn5000 -rompath ./roms -skip_gameinfo -log -window \
+#     -autoboot_script ~/compartilhado/kn5000-roms-disasm/dsp/tools/fx_ab.lua
+# ARM = (nothing) | UPD6383_C6LUT=1|3|4 | UPD6383_ALT11ALU=1
+# Static half: python3 dsp/tools/bit11_prize.py
+
+## §196 k DISTRIBUTION, per arm (n=24)
+-- C6LUT=4
+[:dsp1] upd6383: ★★★★★ §196 k DISTRIBUTION at n=24: 24 of 24 entries visited  -- EVERY entry, as a table sweep must
+upd6383:       hist: 0:65914 1:65016 2:65267 3:65235 4:65628 5:65684 6:65788 7:66000 8:66273 9:65981 10:65607 11:65501 12:65879 13:65443 14:65125 15:65281 16:65153 17:65417 18:65958 19:66146 20:65902 21:65894 22:66378 23:64782
+-- C6LUT=1
+[:dsp1] upd6383: ★★★★★ §196 k DISTRIBUTION at n=24: 24 of 24 entries visited  -- EVERY entry, as a table sweep must
+upd6383:       hist: 0:1431090 1:35764 2:13731 3:2507 4:1415 5:1004 6:919 7:704 8:339 9:121 10:67 11:47 12:72 13:122 14:199 15:300 16:408 17:502 18:772 19:1772 20:2636 21:17321 22:32710 23:30730
+-- C6LUT=3
+[:dsp1] upd6383: ★★★★★ §196 k DISTRIBUTION at n=24: 1 of 24 entries visited  <- NOT every entry: not a sweep of this table
+upd6383:       hist: 0:1487687
+
+## §197 ALT11ALU control vs arm
+-- ALT11ALU=0
+[:dsp1] upd6383: ★★★★★ §197 UPD6383_ALT11ALU = 0: bit-11 words whose ALU HALF was executed (f31 LOAD or ADD, product as the term): 0
+[:dsp1] upd6383: ★★★★ §228 LFO RISE CENSUS (rate-invariant STEP x independently-graded CLOCK; §228 T4 grades the clock against the machine's own time, so the Hz below is NOT circular):
+upd6383:    01: rises 90292 of 1783404 frames, step 256..557568 (VARIES) mean 15424.9980
+upd6383:    04: rises 85964 of 1783404 frames, step 256..469760 (VARIES) mean 14080.3067
+upd6383:    05: rises 85964 of 1783404 frames, step 368..676454 (VARIES) mean 20275.6390
+upd6383:    07: rises 1480377 of 1783404 frames, step 114..3470859 (VARIES) mean 15543.9286
+upd6383:    0C: rises 9749 of 1783404 frames, step 1..4 (VARIES) mean 1.0235
+upd6383:    0F: rises 6203 of 1783404 frames, step 1..2 (VARIES) mean 1.0052
+upd6383:    F1: rises 85964 of 1783404 frames, step 236..434284 (VARIES) mean 13016.9600
+[:dsp1] upd6383: ★★ §176 D-RAM CENSUS, ALL 32 CELLS, over 1570842 frames SINCE THE LAST PROGRAM UPLOAD at frame 212562 (§103 PER-PROGRAM, 12 resets) -- NOT comparable with a whole-walk census: 01:95488(-2344448..1828352/chg175919) 02:5084004(0..5084004/chg1) 04:123392(-1992704..2420992/chg175660) 05:177684(-2869494..3486228/chg175660) 06:2260027(0..2260027/chg1) 07:7326279(0..8388602/chg1570842) 0C:1(-17..19/chg19520) 0E:39718(0..39718/chg1) 0F:0(-10..11/chg12411) 8E:6039797(0..6039797/chg1) 92:5456405(0..5456405/chg1) F1:114073(-1842216..2238158/chg175660)  ||  NON-ZERO 11 of 256 (8 of them below 0x20), MOVING 12
+-- ALT11ALU=1
+[:dsp1] upd6383: ★★★★★ §197 UPD6383_ALT11ALU = 1: bit-11 words whose ALU HALF was executed (f31 LOAD or ADD, product as the term): 4726638
+[:dsp1] upd6383: ★★★★ §228 LFO RISE CENSUS (rate-invariant STEP x independently-graded CLOCK; §228 T4 grades the clock against the machine's own time, so the Hz below is NOT circular):
+upd6383:    01: rises 90292 of 1783404 frames, step 256..557568 (VARIES) mean 15424.9980
+upd6383:    04: rises 85964 of 1783404 frames, step 256..469760 (VARIES) mean 14080.3067
+upd6383:    05: rises 85964 of 1783404 frames, step 368..676454 (VARIES) mean 20275.6390
+upd6383:    07: rises 1480377 of 1783404 frames, step 114..3470859 (VARIES) mean 15543.9286
+upd6383:    0C: rises 9749 of 1783404 frames, step 1..4 (VARIES) mean 1.0235
+upd6383:    0F: rises 8880 of 1783404 frames, step 1..4 (VARIES) mean 1.0213
+upd6383:    F1: rises 85964 of 1783404 frames, step 236..434284 (VARIES) mean 13016.9600
+[:dsp1] upd6383: ★★ §176 D-RAM CENSUS, ALL 32 CELLS, over 1570842 frames SINCE THE LAST PROGRAM UPLOAD at frame 212562 (§103 PER-PROGRAM, 12 resets) -- NOT comparable with a whole-walk census: 01:95488(-2344448..1828352/chg175919) 02:5084004(0..5084004/chg1) 04:123392(-1992704..2420992/chg175660) 05:177684(-2869494..3486228/chg175660) 06:2260027(0..2260027/chg1) 07:7326279(0..8388602/chg1570842) 0C:1(-17..19/chg19520) 0E:39718(0..39718/chg1) 0F:0(-16..17/chg17781) 8E:6039797(0..6039797/chg1) 92:5456405(0..5456405/chg1) F1:114073(-1842216..2238158/chg175660)  ||  NON-ZERO 11 of 256 (8 of them below 0x20), MOVING 12
+
+## §198 register-file rise census / §199 writers / §200 deposit
+[:dsp1] upd6383: ★★★★★ §198 REGISTER-FILE RISE CENSUS -- the memory §228 never walked, and the one §179 proved the class-6 table lives in:
+upd6383:    rf[50]: rises 1511 of 1783404 frames, step 256..256 (TOGGLE, not a ramp -- range is one step wide) mean 256.0000 | wraps 0 | range -256..0 | period 2^23/step = 32768.0 frames = 1.345825 Hz at the declared 44100 Hz
+[:dsp1] upd6383: ★★★★ §228 LFO RISE CENSUS (rate-invariant STEP x independently-graded CLOCK; §228 T4 grades the clock against the machine's own time, so the Hz below is NOT circular):
+[:dsp1] upd6383: ★★★★★ §199 WHO WRITES CELL 0x07 (UPD6383_WHOCELL) -- the step each writer produced:
+upd6383:    iw73   wrote it 20 times, step 0..0
+upd6383:    iw78   wrote it 40 times, step 0..0
+upd6383:    iw79   wrote it 20 times, step 0..0
+upd6383:    iw9    wrote it 7 times, step 0..0
+upd6383:    iw11   wrote it 7 times, step 0..0
+upd6383:    iw262  wrote it 4410 times, step 0..0
+upd6383:    iw264  wrote it 4410 times, step 0..0
+upd6383:    iw328  wrote it 3528 times, step 0..0
+[:dsp1] upd6383: ★★★★★ §200 FRAME-START INPUT DEPOSIT went to D-RAM 0x01 (L) and 0x04 (R), from base 0xFF + IN_LATCH_L_OFF 2 / R_OFF 5.
+[:dsp1] upd6383: ★★★★★ §200 FRAME-START INPUT DEPOSIT went to D-RAM 0x01 (L) and 0x04 (R), from base 0xFF + IN_LATCH_L_OFF 2 / R_OFF 5.
+upd6383:    ⇒ if that L address is the cell §183 called "the LFO phase", the cell is the AUDIO INPUT LATCH and §183 is refuted structurally, not statistically: it is written with the incoming sample EVERY frame, which is exactly the 1 570 842 changes §176 reports.
+[:dsp1] upd6383: ★★★★★ §197 UPD6383_ALT11ALU = 0: bit-11 words whose ALU HALF was executed (f31 LOAD or ADD, product as the term): 0
