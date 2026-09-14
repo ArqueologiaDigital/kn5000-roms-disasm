@@ -38,21 +38,21 @@
   w25  02121C2406  ?word   0x02121C2406   ; 212.1.C2.406  hi12{ST f98=2 f31=1}  [internal register file [C2], unit 1 (bit 7 = the unit); this index has no named role yet]
   w26  00021C2140  ?word   0x00021C2140   ; 002.1.C2.140  hi12{f31=1}  [internal register file [C2], unit 1 (bit 7 = the unit); this index has no named role yet]
   w27  0E30C00405  ?word   0x0E30C00405   ; E30.C.00.405  hi12{ESC f98=2 ?10 ?5 res=420} cur  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0xC and operands are OPEN]
-  w28  080080A000  ?word   0x080080A000   ; 800.8.0A.000  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w29  0C16C8020D  ?word   0x0C16C8020D   ; C16.C.80.20D  {C-fmt A=100 B=0}  hi12{ESC f31=3 ?10 res=400}  [C-format opcode 0x60B: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=100 B=0]
-  w30  0C18A32820  ?word   0x0C18A32820   ; C18.A.32.820  {C-fmt A=81 B=18}  hi12{ESC f31=4 ?10 res=400}  [C-format opcode 0x60C, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=81 B=18]
+  w28  080080A000  ld.b    (p)0,c
+  w29  0C16C8020D  ldreg   r0D,#iw100,0       ; I-RAM address + a second field (B)
+  w30  0C18A32820  ldreg   r20,#iw81,18       ; I-RAM address + a second field (B)
   w31  082E80F000  ?word   0x082E80F000   ; 82E.8.0F.000  hi12{ESC f31=7 ?5 res=020} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w32  0C00A05000  ?word   0x0C00A05000   ; C00.A.05.000  {C-fmt A=80 B=5}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=80 = its own I-RAM address, B=5 = the event; both C00 words in the machine encode their own address (2/2)]
-  w33  0C1AB70820  ?word   0x0C1AB70820   ; C1A.B.70.820  {C-fmt A=91 B=16}  hi12{ESC f31=5 ?10 res=400}  [C-format opcode 0x60D, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=91 B=16]
-  w34  00122FF1CE  ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
-  w35  01043401CE  ?word   0x01043401CE   ; 104.3.40.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w32  0C00A05000  ldreg   r00,#iw80,5       ; I-RAM address + a second field (B)
+  w33  0C1AB70820  ldreg   r20,#iw91,16       ; I-RAM address + a second field (B)
+  w34  00122FF1CE  mac     (p),(p)-1 ; mem[p]<-acc, acc=0
+  w35  01043401CE  ?word   0x01043401CE   ; 104.3.40.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w36  01029C11CE  ?word   0x01029C11CE   ; 102.9.C1.1CE  hi12{f98=1 f31=1} cur  [internal register file [C1], unit 1 (bit 7 = the unit); this index has no named role yet]
   w37  016E800000  ?word   0x016E800000   ; 16E.8.00.000  hi12{f98=1 f31=7 ?6 ?5 res=060} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w38  0000200000  nop
   w39  080080B407  ?word   0x080080B407   ; 800.8.0B.407  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w40  080080C41D  ?word   0x080080C41D   ; 800.8.0C.41D  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w41  0000200000  nop
-  w42  0C00B40407  ?word   0x0C00B40407   ; C00.B.40.407  {C-fmt A=90 B=0}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=90 = its own I-RAM address, B=0 = the event; both C00 words in the machine encode their own address (2/2)]
+  w42  0C00B40407  ldreg   r07,#iw90,0       ; I-RAM address + a second field (B)
   w43  00122011D5  mac     (p),(p)+1 ; mem[p]<-acc, acc=0
   w44  01043401D5  ?word   0x01043401D5   ; 104.3.40.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: accumulator op f31=2 (HOLD) is known; addressing class 0x3 and operands are OPEN]
   w45  01029C41D5  ?word   0x01029C41D5   ; 102.9.C4.1D5  hi12{f98=1 f31=1} cur  [internal register file [C4], unit 1 (bit 7 = the unit); this index has no named role yet]
@@ -61,13 +61,13 @@
   w48  080080B407  ?word   0x080080B407   ; 800.8.0B.407  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w49  080080C41D  ?word   0x080080C41D   ; 800.8.0C.41D  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w50  0000200000  nop
-  w51  0C00C60407  ?word   0x0C00C60407   ; C00.C.60.407  {C-fmt A=99 B=0}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=99 = its own I-RAM address, B=0 = the event; both C00 words in the machine encode their own address (2/2)]
+  w51  0C00C60407  ldreg   r07,#iw99,0       ; I-RAM address + a second field (B)
   w52  0000906000  ?word   0x0000906000   ; 000.9.06.000  hi12{-} cur  [internal register file [06] -- per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- the last four host actions of cold boot are setvec unit1,#200 / setvec unit0,#84 / reg 0x06 <- +0.500000 / reg 0x86 <- +0.183992, both cleared at reset), unit 0]
   w53  0819086822  ?word   0x0819086822   ; 819.0.86.822  hi12{ESC f31=4 ?0 res=001}  [register write: selector lo12[7:0]=22, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN; hi12 bit 4 is set BUT SO IS THE FORMAT ESCAPE (bit 11), and inside the escape this decoder does not read bit 4 as the store -- K3 sect. 5.2 reads it as a store anyway.  CONFLICT, 1 site, UNRESOLVED]
-  w54  0000A00000  ?word   0x0000A00000   ; 000.A.00.000  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w54  0000A00000  nop
         ; C-RAM[0x00] (coefficient cursor)
   w55  00122FF1D5  mac     (p),(p)-1 ; mem[p]<-acc, acc=0
-  w56  0104A001D5  ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=2 / ACT 0x15 may be OPEN]
+  w56  0104A001D5  post    (p),c+,(p)+0
         ; C-RAM[0x01] (coefficient cursor)
-  w57  0102200000  ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
-  w58  0C00D40407  ?word   0x0C00D40407   ; C00.D.40.407  {C-fmt A=106 B=0}  hi12{ESC ?10 res=400}  [WAIT / SYNC (INFERRED), C-format opcode 0x600: A=106 = its own I-RAM address, B=0 = the event; both C00 words in the machine encode their own address (2/2)]
+  w57  0102200000  mac.b   (p)0,(p)+0
+  w58  0C00D40407  ldreg   r07,#iw106,0       ; I-RAM address + a second field (B)

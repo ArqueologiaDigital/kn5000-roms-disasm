@@ -5,7 +5,7 @@
 ; is made over the disassembled program.
 ; SX-WSA1R effects-DSP program -- GATED REVERB
 ; PoolDir record 18  |  effect program 8  |  1 slot(s)  |  I-RAM load 0x6E
-; family reverb  |  71 words  |  18 class-A multiplies  |  decode 18 strict / 59 speculative
+; family reverb  |  71 words  |  18 class-A multiplies  |  decode 42 strict / 59 speculative
 ; algorithm topology: reverb tank: cascaded all-pass diffusers + comb/feedback-delay network with a damping one-pole, per the KN5000 ROOM REVERB decode.
 ; KN5000 cross-reference (SAME effect name, same uPD6383GF ISA):
 ;   KN5000 GATED REVERB [reverb, confidence medium]: gated reverb: all-pass ring + hold gate
@@ -16,91 +16,91 @@
 ; SPECULATIVE is a graded prospective hypothesis, not measured.
 ;
   w0   088013000B  ?word   0x088013000B   ; 880.1.30.00B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL; addr8 0x30 also marks the FIRST DRAM access of a body, 37 of 38 distinct images (R3 sect. 6.2). external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w1   000020A000  ?word   0x000020A000   ; 000.2.0A.000  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w1   000020A000  nop
   w2   00022F61C0  mac.b   (p),(p)-10
-  w3   00002051CD  ?word   0x00002051CD   ; 000.2.05.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
-  w4   000020740E  ?word   0x000020740E   ; 000.2.07.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w3   00002051CD  ld      (p),(p)+5
+  w4   000020740E  ld      acc,(p)+7
   w5   02122F9407  mac.st  acc,(p)-7 ; mem[p]<-acc, acc=0
-  w6   0880160000  ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w7   0000AFB2D5  ?word   0x0000AFB2D5   ; 000.A.FB.2D5  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x0B = delay-read data register]
+  w6   0880160000  dly.w  dsc[k],p+96
+  w7   0000AFB2D5  ld      dr,c+,(p)-5
         ; C-RAM[0x00] (coefficient cursor)
-  w8   0000205000  ?word   0x0000205000   ; 000.2.05.000  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w8   0000205000  nop
   w9   0212200419  mac.ta2 acc,(p)+0 ; mem[p]<-acc, acc=0
   w10  088012064B  ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
   w11  0000A461D5  ld      (p),c+,(p)+70
         ; C-RAM[0x01] (coefficient cursor)
   w12  0202A001D5  mac     (p),c+,(p)+0
         ; C-RAM[0x02] (coefficient cursor)
-  w13  0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w13  0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x03] (coefficient cursor)
   w14  0282AB91D5  mac     (p),c+,(p)-71
         ; C-RAM[0x04] (coefficient cursor)
-  w15  0282247000  ?word   0x0282247000   ; 282.2.47.000  hi12{f98=2 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w15  0282247000  mac.b   (p)0,(p)+71
   w16  0000A01452  ?word   0x0000A01452   ; 000.A.01.452  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
         ; C-RAM[0x05] (coefficient cursor)
   w17  0212A001D5  mac     (p),c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x06] (coefficient cursor)
-  w18  0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w18  0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x07] (coefficient cursor)
   w19  0282AFD1D5  mac     (p),c+,(p)-3
         ; C-RAM[0x08] (coefficient cursor)
-  w20  0282203000  ?word   0x0282203000   ; 282.2.03.000  hi12{f98=2 f31=1 ?7 res=080}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w20  0282203000  mac.b   (p)0,(p)+3
   w21  0000AC1452  ?word   0x0000AC1452   ; 000.A.C1.452  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
         ; C-RAM[0x09] (coefficient cursor)
-  w22  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
-  w23  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w24  0C401E0000  ?word   0x0C401E0000   ; C40.1.E0.000  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w25  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w26  0C401E0000  ?word   0x0C401E0000   ; C40.1.E0.000  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w27  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w28  0C401E0000  ?word   0x0C401E0000   ; C40.1.E0.000  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w29  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w30  0C401E0000  ?word   0x0C401E0000   ; C40.1.E0.000  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w31  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w32  0C401E0000  ?word   0x0C401E0000   ; C40.1.E0.000  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w33  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w34  0C401E0000  ?word   0x0C401E0000   ; C40.1.E0.000  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w35  08801602D5  ?word   0x08801602D5   ; 880.1.60.2D5  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w36  0C401E0407  ?word   0x0C401E0407   ; C40.1.E0.407  {C-fmt A=15 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=15 B=0 (imm13 0x01E0 = 15*32, MEASURED 57/57 for this opcode); destination register lo12=407 UNKNOWN]
-  w37  0880160000  ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w38  0000AF72D5  ?word   0x0000AF72D5   ; 000.A.F7.2D5  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x0B = delay-read data register]
+  w22  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
+  w23  08801602D5  dly.w  dsc[k],p+96
+  w24  0C401E0000  ldreg   r00,#15          ; immediate -> the register lo12 selects
+  w25  08801602D5  dly.w  dsc[k],p+96
+  w26  0C401E0000  ldreg   r00,#15          ; immediate -> the register lo12 selects
+  w27  08801602D5  dly.w  dsc[k],p+96
+  w28  0C401E0000  ldreg   r00,#15          ; immediate -> the register lo12 selects
+  w29  08801602D5  dly.w  dsc[k],p+96
+  w30  0C401E0000  ldreg   r00,#15          ; immediate -> the register lo12 selects
+  w31  08801602D5  dly.w  dsc[k],p+96
+  w32  0C401E0000  ldreg   r00,#15          ; immediate -> the register lo12 selects
+  w33  08801602D5  dly.w  dsc[k],p+96
+  w34  0C401E0000  ldreg   r00,#15          ; immediate -> the register lo12 selects
+  w35  08801602D5  dly.w  dsc[k],p+96
+  w36  0C401E0407  ldreg   r07,#15          ; immediate -> the register lo12 selects
+  w37  0880160000  dly.w  dsc[k],p+96
+  w38  0000AF72D5  ld      dr,c+,(p)-9
         ; C-RAM[0x0A] (coefficient cursor)
   w39  00002FF407  ld.st   acc,(p)-1
   w40  02122FE419  mac.ta2 acc,(p)-2 ; mem[p]<-acc, acc=0
   w41  088012064B  ?word   0x088012064B   ; 880.1.20.64B  hi12{ESC ?7 res=080}  [external delay-DRAM READ (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); this end moves with the user's DELAY (ms) knob, and the delay is READ_CELL - WRITE_CELL. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
-  w42  00922FF1D5  ?word   0x00922FF1D5   ; 092.2.FF.1D5  hi12{ST f31=1 ?7 res=080}  [SPECULATIVE: class-2 post-increment MAC (source 0x07); the accumulator-combine f31=1 and/or ACT 0x15 are OPEN]
-  w43  0184A031D5  ?word   0x0184A031D5   ; 184.A.03.1D5  hi12{f98=1 f31=2 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=2 / ACT 0x15 may be OPEN]
+  w42  00922FF1D5  mac     (p),(p)-1 ; store SUPPRESSED (bit7)
+  w43  0184A031D5  post    (p),c+,(p)+3
         ; C-RAM[0x0B] (coefficient cursor)
   w44  01822FD407  mac.st  acc,(p)-3
   w45  000020A447  ?word   0x000020A447   ; 000.2.0A.447  hi12{-}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w46  00122011C0  mac.b   (p),(p)+1 ; mem[p]<-acc, acc=0
   w47  0018A001D5  ?word   0x0018A001D5   ; 018.A.00.1D5  hi12{ST f31=4} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=4 / ACT 0x15 may be OPEN]
         ; C-RAM[0x0C] (coefficient cursor)
-  w48  0104A001D5  ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=2 / ACT 0x15 may be OPEN]
+  w48  0104A001D5  post    (p),c+,(p)+0
         ; C-RAM[0x0D] (coefficient cursor)
-  w49  0C40380000  ?word   0x0C40380000   ; C40.3.80.000  {C-fmt A=28 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=28 B=0 (imm13 0x0380 = 28*32, MEASURED 57/57 for this opcode); destination register lo12=000 UNKNOWN]
-  w50  0182A00000  ?word   0x0182A00000   ; 182.A.00.000  hi12{f98=1 f31=1 ?7 res=080} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w49  0C40380000  ldreg   r00,#28          ; immediate -> the register lo12 selects
+  w50  0182A00000  mac.b   (p)0,c+,(p)+0
         ; C-RAM[0x0E] (coefficient cursor)
   w51  00A62F7447  ?word   0x00A62F7447   ; 0A6.2.F7.447  hi12{f31=3 ?7 ?5 res=0A0}  [SPECULATIVE (prospective, not measured): SRC 0x11 = ACCB (2nd accumulator)]
   w52  0012A001D5  mac     (p),c+,(p)+0 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0F] (coefficient cursor)
-  w53  0C40440359  ?word   0x0C40440359   ; C40.4.40.359  {C-fmt A=34 B=0}  hi12{ESC ?10 ?6 res=440}  [C-format opcode 0x620 IMMEDIATE LOAD: A=34 B=0 (imm13 0x0440 = 34*32, MEASURED 57/57 for this opcode); destination register lo12=359 UNKNOWN]
+  w53  0C40440359  ldreg   r59,#34          ; immediate -> the register lo12 selects
   w54  00002FF407  ld.st   acc,(p)-1
-  w55  00002041CD  ?word   0x00002041CD   ; 000.2.04.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
-  w56  00002FA1CE  ?word   0x00002FA1CE   ; 000.2.FA.1CE  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w55  00002041CD  ld      (p),(p)+4
+  w56  00002FA1CE  ld      (p),(p)-6
   w57  02122006D5  ?word   0x02122006D5   ; 212.2.00.6D5  hi12{ST f98=2 f31=1}  [writes mem[ptr] (bit 4); mode 2, so the target IS the pointer]
   w58  0202A00415  mac     acc,c+,(p)+0
         ; C-RAM[0x10] (coefficient cursor)
-  w59  02042091CD  ?word   0x02042091CD   ; 204.2.09.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
-  w60  000020040E  ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
-  w61  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w59  02042091CD  post    (p),(p)+9
+  w60  000020040E  ld      acc,(p)+0
+  w61  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w62  00002F9407  ld.st   acc,(p)-7
-  w63  000020D1CD  ?word   0x000020D1CD   ; 000.2.0D.1CD  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
-  w64  00002FB1CE  ?word   0x00002FB1CE   ; 000.2.FB.1CE  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w63  000020D1CD  ld      (p),(p)+13
+  w64  00002FB1CE  ld      (p),(p)-5
   w65  02122001D5  mac     (p),(p)+0 ; mem[p]<-acc, acc=0
   w66  0202AF6415  mac     acc,c+,(p)-10
         ; C-RAM[0x11] (coefficient cursor)
-  w67  02042FB1CD  ?word   0x02042FB1CD   ; 204.2.FB.1CD  hi12{f98=2 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0D = biquad delay-stage (pair w/ 0x0E)]
-  w68  000020040E  ?word   0x000020040E   ; 000.2.00.40E  hi12{-}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
-  w69  0880160000  ?word   0x0880160000   ; 880.1.60.000  hi12{ESC ?7 res=080}  [external delay-DRAM WRITE (FORCED, adjudication-round5 sect. 3 -- addr8 bit 6 is the direction field and 0x60 is the WRITE; this REVERSES R1 F1, which bounded the read latency to one repetition when the descriptors need twenty words); the line BASE -- MULTI TAP DELAY's four taps share exactly one of these, which is what forces the polarity. external delay-DRAM access; address = DESCRIPTOR_CELL[k] + G, from the host bank behind pointer ...825 / tag 0x4C (R3, PROVEN BY CONSTRUCTION) -- the k-th class-1 escape word of a body takes the k-th cell of that body's own descriptor block (the IDENTITY map, FORCED in adjudication-round5 sect. 1), so the address is NOT in this word]
+  w67  02042FB1CD  post    (p),(p)-5
+  w68  000020040E  ld      acc,(p)+0
+  w69  0880160000  dly.w  dsc[k],p+96
   w70  061214F000  ?word   0x061214F000   ; 612.1.4F.000  hi12{END ST f98=2 f31=1}  [END OF BLOCK (falls through) -- and still performs the rest of the word]

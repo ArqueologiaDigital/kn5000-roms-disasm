@@ -3,62 +3,62 @@
 ; PoolDir_Records field +12; +0/+4/+8 are its coefficient streams.
 ;
 ; rec  effect                 slots words classA dec/spec  family        listing
-;   0  DISTORTION               1    47      8  14/42    distortion    eff00_distortion.dsm
-;   1  OVERDRIVE                1    67     22  34/62    distortion    eff01_overdrive.dsm
-;   2  FUZZ                     1    43      8  12/38    distortion    eff02_fuzz.dsm
-;   3  EXCITER                  1    69     26  35/66    exciter       eff03_exciter.dsm
-;   4  PARAMETRIC EQ            1   120     84  110/120   eq/filter     eff04_parametric_eq.dsm
+;   0  DISTORTION               1    47      8  33/42    distortion    eff00_distortion.dsm
+;   1  OVERDRIVE                1    67     22  53/62    distortion    eff01_overdrive.dsm
+;   2  FUZZ                     1    43      8  29/38    distortion    eff02_fuzz.dsm
+;   3  EXCITER                  1    69     26  57/66    exciter       eff03_exciter.dsm
+;   4  PARAMETRIC EQ            1   120     84  116/120   eq/filter     eff04_parametric_eq.dsm
 ;   5  CHORUS                   1   (no distinct op3 body: coefficient-only / shared)
 ;   6  MODULATED CHORUS         1   (no distinct op3 body: coefficient-only / shared)
-;   7  ENHANCER                 1   102     28  35/94    eq/filter     eff07_enhancer.dsm
-;   8  FLANGER                  1    72     20  23/65    modulation    eff08_flanger.dsm
-;   9  PHASER                   1   115     18  41/108   modulation    eff09_phaser.dsm
+;   7  ENHANCER                 1   102     28  75/94    eq/filter     eff07_enhancer.dsm
+;   8  FLANGER                  1    72     20  48/65    modulation    eff08_flanger.dsm
+;   9  PHASER                   1   115     18  95/108   modulation    eff09_phaser.dsm
 ;  10  AUTO PAN                 1   (no distinct op3 body: coefficient-only / shared)
-;  11  VIBRATO                  1    60     14  17/53    modulation    eff11_vibrato.dsm
-;  12  PEDAL WAH                1    75     17  31/67    eq/filter     eff12_pedal_wah.dsm
+;  11  VIBRATO                  1    60     14  36/53    modulation    eff11_vibrato.dsm
+;  12  PEDAL WAH                1    75     17  61/67    eq/filter     eff12_pedal_wah.dsm
 ;  13  AUTO WAH                 1   (no distinct op3 body: coefficient-only / shared)
-;  14  ROTARY SPEAKER           1    98     38  48/82    modulation    eff14_rotary_speaker.dsm
-;  15  RING MODULATOR           1    54     14  19/51    modulation    eff15_ring_modulator.dsm
-;  16  NOISE GENERATOR          1    21      7  6/21    exciter       eff16_noise_generator.dsm
-;  17  SLOW ATTACKER            1    50     10  13/44    dynamics      eff17_slow_attacker.dsm
-;  18  GATED REVERB             1    71     18  18/59    reverb        eff18_gated_reverb.dsm
-;  19  HAAS EFFECT              1    35      8  11/31    modulation    eff19_haas_effect.dsm
-;  20  ENSEMBLE                 1   120     21  34/106   modulation    eff20_ensemble.dsm
+;  14  ROTARY SPEAKER           1    98     38  68/82    modulation    eff14_rotary_speaker.dsm
+;  15  RING MODULATOR           1    54     14  40/51    modulation    eff15_ring_modulator.dsm
+;  16  NOISE GENERATOR          1    21      7  16/21    exciter       eff16_noise_generator.dsm
+;  17  SLOW ATTACKER            1    50     10  34/44    dynamics      eff17_slow_attacker.dsm
+;  18  GATED REVERB             1    71     18  42/59    reverb        eff18_gated_reverb.dsm
+;  19  HAAS EFFECT              1    35      8  22/31    modulation    eff19_haas_effect.dsm
+;  20  ENSEMBLE                 1   120     21  59/106   modulation    eff20_ensemble.dsm
 ;  21  COMPRESSOR               1   (no distinct op3 body: coefficient-only / shared)
-;  22  MIX UP                   1    71     17  19/63    other         eff22_mix_up.dsm
-;  23  SINGLE DELAY             1    56     24  22/56    delay         eff23_single_delay.dsm
-;  24  MULTI TAP DELAY          1    74     22  30/72    delay         eff24_multi_tap_delay.dsm
-;  25  MANUAL DELAY             1    63     26  22/58    delay         eff25_manual_delay.dsm
-;  26  ROOM REVERB 1            1    92     25  25/73    reverb        eff26_room_reverb_1.dsm
-;  27  ROOM REVERB 2            1    92     25  25/73    reverb        eff27_room_reverb_2.dsm
-;  28  PLATE REVERB 1           1    91     25  23/72    reverb        eff28_plate_reverb_1.dsm
-;  29  PLATE REVERB 2           1    91     25  23/72    reverb        eff29_plate_reverb_2.dsm
-;  30  CONCERT REVERB 1         1    91     24  24/72    reverb        eff30_concert_reverb_1.dsm
-;  31  CONCERT REVERB 2         1    92     25  25/73    reverb        eff31_concert_reverb_2.dsm
-;  32  DARK REVERB 1            1    91     24  24/72    reverb        eff32_dark_reverb_1.dsm
-;  33  DARK REVERB 2            1    91     24  24/72    reverb        eff33_dark_reverb_2.dsm
+;  22  MIX UP                   1    71     17  42/63    other         eff22_mix_up.dsm
+;  23  SINGLE DELAY             1    56     24  45/56    delay         eff23_single_delay.dsm
+;  24  MULTI TAP DELAY          1    74     22  61/72    delay         eff24_multi_tap_delay.dsm
+;  25  MANUAL DELAY             1    63     26  45/58    delay         eff25_manual_delay.dsm
+;  26  ROOM REVERB 1            1    92     25  44/73    reverb        eff26_room_reverb_1.dsm
+;  27  ROOM REVERB 2            1    92     25  44/73    reverb        eff27_room_reverb_2.dsm
+;  28  PLATE REVERB 1           1    91     25  43/72    reverb        eff28_plate_reverb_1.dsm
+;  29  PLATE REVERB 2           1    91     25  43/72    reverb        eff29_plate_reverb_2.dsm
+;  30  CONCERT REVERB 1         1    91     24  43/72    reverb        eff30_concert_reverb_1.dsm
+;  31  CONCERT REVERB 2         1    92     25  44/73    reverb        eff31_concert_reverb_2.dsm
+;  32  DARK REVERB 1            1    91     24  43/72    reverb        eff32_dark_reverb_1.dsm
+;  33  DARK REVERB 2            1    91     24  43/72    reverb        eff33_dark_reverb_2.dsm
 ;  34  BRIGHT REVERB 1          1   (no distinct op3 body: coefficient-only / shared)
 ;  35  BRIGHT REVERB 2          1   (no distinct op3 body: coefficient-only / shared)
-;  36  WAVE REVERB 1            1    91     24  24/72    reverb        eff36_wave_reverb_1.dsm
-;  37  WAVE REVERB 2            1    91     24  24/72    reverb        eff37_wave_reverb_2.dsm
-;  38  S.DELAY+CHORUS           1   106     27  37/95    combination   eff38_s_delay_chorus.dsm
-;  39  S.DELAY+S.DELAY          1    72     16  29/72    combination   eff39_s_delay_s_delay.dsm
-;  40  S.DELAY+FLANGER          1    96     28  36/89    combination   eff40_s_delay_flanger.dsm
-;  41  S.DELAY+VIBRATO          1    88     22  30/81    combination   eff41_s_delay_vibrato.dsm
-;  42  S.DELAY+PHASER           1   116     26  44/109   combination   eff42_s_delay_phaser.dsm
+;  36  WAVE REVERB 1            1    91     24  43/72    reverb        eff36_wave_reverb_1.dsm
+;  37  WAVE REVERB 2            1    91     24  43/72    reverb        eff37_wave_reverb_2.dsm
+;  38  S.DELAY+CHORUS           1   106     27  69/95    combination   eff38_s_delay_chorus.dsm
+;  39  S.DELAY+S.DELAY          1    72     16  60/72    combination   eff39_s_delay_s_delay.dsm
+;  40  S.DELAY+FLANGER          1    96     28  67/89    combination   eff40_s_delay_flanger.dsm
+;  41  S.DELAY+VIBRATO          1    88     22  59/81    combination   eff41_s_delay_vibrato.dsm
+;  42  S.DELAY+PHASER           1   116     26  92/109   combination   eff42_s_delay_phaser.dsm
 ;  43  AUTO WAH+S.DELAY         1   (no distinct op3 body: coefficient-only / shared)
-;  44  PEQ+CHORUS               1   109     47  60/98    combination   eff44_peq_chorus.dsm
-;  45  PEQ+S.DELAY              1    72     36  51/72    combination   eff45_peq_s_delay.dsm
-;  46  PEQ+FLANGER              1   103     48  59/96    combination   eff46_peq_flanger.dsm
-;  47  PEQ+VIBRATO              1    91     42  52/84    combination   eff47_peq_vibrato.dsm
-;  48  PEQ+COMPRESSOR           1    73     37  43/64    combination   eff48_peq_compressor.dsm
-;  49  PEQ+COMPR+DIST           1   104     43  51/90    combination   eff49_peq_compr_dist.dsm
-;  50  PEQ+COMPR+OVERDR         1   101     43  52/87    combination   eff50_peq_compr_overdr.dsm
-;  51  PEQ+DIST+DELAY           1   107     44  64/102   combination   eff51_peq_dist_delay.dsm
-;  52  PEQ+OVERDR+DELAY         1   117     54  74/112   combination   eff52_peq_overdr_delay.dsm
-;  53  NO OPERATION            73    10      0  1/10    dynamics      eff53_no_operation.dsm
-;  54  PITCH SHIFTER            1   108     32  28/92    pitch         eff54_pitch_shifter.dsm
-;  55  PEDAL WAH+DELAY          1   103     25  45/93    combination   eff55_pedal_wah_delay.dsm
+;  44  PEQ+CHORUS               1   109     47  77/98    combination   eff44_peq_chorus.dsm
+;  45  PEQ+S.DELAY              1    72     36  65/72    combination   eff45_peq_s_delay.dsm
+;  46  PEQ+FLANGER              1   103     48  79/96    combination   eff46_peq_flanger.dsm
+;  47  PEQ+VIBRATO              1    91     42  67/84    combination   eff47_peq_vibrato.dsm
+;  48  PEQ+COMPRESSOR           1    73     37  59/64    combination   eff48_peq_compressor.dsm
+;  49  PEQ+COMPR+DIST           1   104     43  79/90    combination   eff49_peq_compr_dist.dsm
+;  50  PEQ+COMPR+OVERDR         1   101     43  77/87    combination   eff50_peq_compr_overdr.dsm
+;  51  PEQ+DIST+DELAY           1   107     44  89/102   combination   eff51_peq_dist_delay.dsm
+;  52  PEQ+OVERDR+DELAY         1   117     54  99/112   combination   eff52_peq_overdr_delay.dsm
+;  53  NO OPERATION            73    10      0  6/10    dynamics      eff53_no_operation.dsm
+;  54  PITCH SHIFTER            1   108     32  60/92    pitch         eff54_pitch_shifter.dsm
+;  55  PEDAL WAH+DELAY          1   103     25  83/93    combination   eff55_pedal_wah_delay.dsm
 ;
 ; SHARED KERNEL / structural records (NOT per-effect bodies):
 ; load 0x00  @0xFD4093  48 words  2/45 runtime

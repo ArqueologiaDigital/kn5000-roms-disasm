@@ -1,0 +1,39 @@
+====================================================================================================
+  cfmt_addr -- is the C-format payload `A = imm13 >> 5' an I-RAM address?
+====================================================================================================
+
+   image      slot  word        opcode  A     B    A - slot  region    verdict
+   epilogue   74    0C169AB000  0x60B   77    11   +3        60..82    ★ INSIDE its own region
+   epilogue   76    0C00984000  0x600   76    4    +0        60..82    ★ INSIDE its own region
+   epilogue   82    0C00A47407  0x600   82    7    +0        60..82    ★ INSIDE its own region
+   kernel     1     0C0A0E0000  0x605   7     0    +6        0..59     ★ INSIDE its own region
+   kernel     15    0C0A292820  0x605   20    18   +5        0..59     ★ INSIDE its own region
+   kernel     22    0C04312820  0x602   24    18   +2        0..59     ★ INSIDE its own region
+   kernel     29    0C42457820  0x621   34    23   +5        0..59     ★ INSIDE its own region
+   kernel     31    0C0A4B1820  0x605   37    17   +6        0..59     ★ INSIDE its own region
+   kernel     40    0C4A1C0820  0x625   14    0    -26       0..59     ★ INSIDE its own region
+   kernel     48    0C645A2000  0x632   45    2    -3        0..59     ★ INSIDE its own region
+   kernel     56    0C646A2007  0x632   53    2    -3        0..59     ★ INSIDE its own region
+
+   ⇒ 11 of 11 payloads land INSIDE the image that carries them.
+
+   ★ THE NULL (rule 15).  `A' is 8 bits, so under a uniform payload the chance of
+     ALL 11 landing inside their own region is
+        23/256 x 23/256 x 23/256 x 60/256 x ... = 6.6e-09
+     ⇒ THE PAYLOAD IS AN ADDRESS, at p = 6.6e-09
+
+   ★ AND THE SHAPE OF THE REFERENCES, which no null was needed to see:
+
+      opcode 0x600  x2    A-slot [0]   B [4, 7]
+      opcode 0x602  x1    A-slot [2]   B [18]
+      opcode 0x605  x3    A-slot [5, 6]   B [0, 17, 18]
+      opcode 0x60B  x1    A-slot [3]   B [11]
+      opcode 0x621  x1    A-slot [5]   B [23]
+      opcode 0x625  x1    A-slot [-26]   B [0]
+      opcode 0x632  x2    A-slot [-3]   B [2]
+
+      0x632 (kernel w48 -> 45, w56 -> 53): both -3, and both land at `block start + 3'
+      of their OWN per-unit CALL block (42..49 and 50..59) -- a per-unit address that
+      relocates with the block, which is what the two-block kernel would need.
+      0x600/0x60B (epilogue w76 -> 76, w82 -> 82): SELF-REFERENCES, A == the word's own
+      slot.  Data has no reason to equal its own address.

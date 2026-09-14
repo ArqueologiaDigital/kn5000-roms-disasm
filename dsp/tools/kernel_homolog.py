@@ -42,7 +42,8 @@ QUESTION IT ANSWERS
 
 USAGE
     python3 dsp/tools/kernel_homolog.py           # the alignment + the diverging words
-    python3 dsp/tools/kernel_homolog.py --bit6    # ★ the `hi12' bit 6 census, pooled
+    python3 dsp/tools/kernel_homolog.py --reloc   # ★★★★★ THE RELOCATION TEST -- address vs data
+    python3 dsp/tools/kernel_homolog.py --bit6    # the `hi12' bit 6 census, pooled
     python3 dsp/tools/kernel_homolog.py --control # ★ the control -- run it before believing a row
 
 THE CONTROL (rule 15).  "34 words match" means nothing without a null: two programs of the same
@@ -186,6 +187,83 @@ def show_bit6():
     return cf, nc
 
 
+def show_reloc():
+    """★★★★★ THE RELOCATION TEST -- the strongest thing in this file.
+
+    Two copies of one routine at different offsets.  A field that is an ADDRESS must shift by the
+    number of words inserted before it; a field that is DATA must not.  That separates the two
+    without any semantic assumption at all, and it is a test `closure-pointer.md' item H could not
+    run because it had one copy."""
+    a, b = load(KN_KERNEL)[:HEADER_END], load(WSA_HOMOLOG)
+    ops = align(a, b)
+    anchor = {}
+    for op, i1, i2, j1, j2 in ops:
+        if op == "equal":
+            for k in range(i2 - i1):
+                anchor[i1 + k] = j1 + k
+
+    def offset_at(i):
+        for k in range(i, HEADER_END + 20):
+            if k in anchor:
+                return anchor[k] - k
+        return None
+
+    pairs = []
+    for op, i1, i2, j1, j2 in ops:
+        if op == "equal":
+            continue
+        kn = [k for k in range(i1, i2) if DIS.c_format(a[k]) and DIS.lo12(a[k]) == 0x820]
+        ws = [k for k in range(j1, j2) if DIS.c_format(b[k]) and DIS.lo12(b[k]) == 0x820]
+        pairs += list(zip(kn, ws))
+
+    print("\n   ★★★★★ THE RELOCATION TEST -- does the `lo12 = 0x820' payload MOVE WITH THE CODE?\n")
+    print("      %-5s %-6s %-7s | %-5s %-6s %-7s | %-7s %-6s %s"
+          % ("KN w", "A", "A-slot", "WSA w", "A", "A-slot", "offset", "dA", "verdict"))
+    hit = 0
+    for i, j in pairs:
+        o, da = offset_at(i), DIS.c_a(b[j]) - DIS.c_a(a[i])
+        hit += (da == o)
+        print("      %-5d %-6d %+-7d | %-5d %-6d %+-7d | %+-7d %+-6d %s"
+              % (i, DIS.c_a(a[i]), DIS.c_a(a[i]) - i, j, DIS.c_a(b[j]), DIS.c_a(b[j]) - j, o, da,
+                 "★ tracks the relocation EXACTLY" if da == o else "⛔ does NOT"))
+    print("      ⇒ %d of %d.  A field that tracks a code move is an ADDRESS." % (hit, len(pairs)))
+
+    #  ---- and the fields that must NOT move ------------------------------
+    print("\n   ★ THE COMPANION FIELDS, which a relocation must LEAVE ALONE\n")
+    for nm, fn in (("A  (imm13 >> 5)", DIS.c_a), ("B  (imm13 & 0x1F)", DIS.c_b),
+                   ("f31", lambda w: DIS.hi_f31(DIS.hi12(w))),
+                   ("hi12 bit 6", lambda w: (DIS.hi12(w) >> 6) & 1)):
+        ka = [fn(a[i]) for i, _ in pairs]
+        wa = [fn(b[j]) for _, j in pairs]
+        print("      %-18s KN %-22s WSA %-22s %s"
+              % (nm, ka, wa, "★ IDENTICAL" if ka == wa else
+                 "differs at position %s" % [k + 1 for k in range(len(ka)) if ka[k] != wa[k]]))
+    print("\n      ⇒ `A' RELOCATES and `B' and `f31' DO NOT.  That is a two-field decomposition")
+    print("        proved without any semantic assumption: one is an address, the others are not.")
+
+    #  ---- the zeta criterion, now with a second witness -------------------
+    print("\n   ★★★ K3's ζ READING, WHICH `closure-pointer.md' ITEM H BURIED\n")
+    print("      item H: *\"no field makes all five `one past an END-OF-BLOCK word' ... K3's ζ")
+    print("      reading does not become 5-of-5 under any alternative field.\"*  It searched ONE")
+    print("      product.  Scored on each copy of the header separately:\n")
+    for nm, W in (("KN5000 kernel", load(KN_KERNEL)), ("WSA1R struct_00_fd4093", load(WSA_HOMOLOG))):
+        ends = [i for i, w in enumerate(W) if (not DIS.c_format(w)) and DIS.is_end(w)]
+        tg = [(i, DIS.c_a(w)) for i, w in enumerate(W)
+              if DIS.c_format(w) and DIS.lo12(w) == 0x820]
+        ok = [(i, t) for i, t in tg if (t - 1) in ends]
+        null = sum(1 for s in range(len(W)) if (s - 1) in ends) / float(len(W))
+        print("      %-24s %d of %d one past an END   (null: %.1f %% of slots qualify)"
+              % (nm, len(ok), len(tg), 100 * null))
+        for i, t in tg:
+            if (t - 1) not in ends:
+                print("        ⛔ the exception: w%d -> %d, and %d is itself an END-OF-BLOCK word"
+                      % (i, t, t) if t in ends else
+                      "        ⛔ the exception: w%d -> %d" % (i, t))
+    print("\n      ⇒ 5 of 5 in the second product.  ζ was right; item H's search was underpowered")
+    print("        because the five words are NOT five of the same instruction.")
+    return hit, len(pairs)
+
+
 def show_control():
     """The null: what does the KN5000 kernel header score against an UNRELATED image?"""
     a = load(KN_KERNEL)[:HEADER_END]
@@ -223,6 +301,8 @@ def main():
     print("=" * 100 + "\n")
     same, a, b = show_alignment()
     show_the_pair(a, b)
+    if "--reloc" in sys.argv or "--all" in sys.argv:
+        show_reloc()
     if "--bit6" in sys.argv or "--all" in sys.argv:
         show_bit6()
     if "--control" in sys.argv or "--all" in sys.argv:

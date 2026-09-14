@@ -19,12 +19,12 @@
   w4   02029C31D5  ?word   0x02029C31D5   ; 202.9.C3.1D5  hi12{f98=2 f31=1} cur  [internal register file [C3], unit 1 (bit 7 = the unit); this index has no named role yet]
   w5   0202A001D5  mac     (p),c+,(p)+0
         ; C-RAM[0x02] (coefficient cursor)
-  w6   0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w6   0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x03] (coefficient cursor)
   w7   02829C21D5  ?word   0x02829C21D5   ; 282.9.C2.1D5  hi12{f98=2 f31=1 ?7 res=080} cur  [internal register file [C2], unit 1 (bit 7 = the unit); this index has no named role yet]
   w8   02821C4407  ?word   0x02821C4407   ; 282.1.C4.407  hi12{f98=2 f31=1 ?7 res=080}  [internal register file [C4], unit 1 (bit 7 = the unit); this index has no named role yet]
   w9   00009C5452  ?word   0x00009C5452   ; 000.9.C5.452  hi12{-} cur  [internal register file [C5], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w10  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w10  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w11  02009C5415  ?word   0x02009C5415   ; 200.9.C5.415  hi12{f98=2} cur  [internal register file [C5], unit 1 (bit 7 = the unit); this index has no named role yet]
   w12  02121C3415  ?word   0x02121C3415   ; 212.1.C3.415  hi12{ST f98=2 f31=1}  [internal register file [C3], unit 1 (bit 7 = the unit); this index has no named role yet]
   w13  02129C5404  ?word   0x02129C5404   ; 212.9.C5.404  hi12{ST f98=2 f31=1} cur  [internal register file [C5], unit 1 (bit 7 = the unit); this index has no named role yet]
@@ -37,7 +37,7 @@
   w18  02029C71D5  ?word   0x02029C71D5   ; 202.9.C7.1D5  hi12{f98=2 f31=1} cur  [internal register file [C7], unit 1 (bit 7 = the unit); this index has no named role yet]
   w19  0202A001D5  mac     (p),c+,(p)+0
         ; C-RAM[0x06] (coefficient cursor)
-  w20  0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w20  0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x07] (coefficient cursor)
   w21  02829C61D5  ?word   0x02829C61D5   ; 282.9.C6.1D5  hi12{f98=2 f31=1 ?7 res=080} cur  [internal register file [C6], unit 1 (bit 7 = the unit); this index has no named role yet]
   w22  02821C8407  ?word   0x02821C8407   ; 282.1.C8.407  hi12{f98=2 f31=1 ?7 res=080}  [internal register file [C8], unit 1 (bit 7 = the unit); this index has no named role yet]
@@ -54,7 +54,7 @@
   w30  0212A01412  mac     acc,c+,(p)+1 ; mem[p]<-acc, acc=0
         ; C-RAM[0x0B] (coefficient cursor)
   w31  02029CC1D5  ?word   0x02029CC1D5   ; 202.9.CC.1D5  hi12{f98=2 f31=1} cur  [internal register file [CC], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w32  0202200000  ?word   0x0202200000   ; 202.2.00.000  hi12{f98=2 f31=1}  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w32  0202200000  mac.b   (p)0,(p)+0
   w33  0980520407  ?word   0x0980520407   ; 980.5.20.407  hi12{ESC f98=1 ?7 res=080}  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0x5 and operands are OPEN]
   w34  02009CD415  ?word   0x02009CD415   ; 200.9.CD.415  hi12{f98=2} cur  [internal register file [CD], unit 1 (bit 7 = the unit); this index has no named role yet]
   w35  02121CC415  ?word   0x02121CC415   ; 212.1.CC.415  hi12{ST f98=2 f31=1}  [internal register file [CC], unit 1 (bit 7 = the unit); this index has no named role yet]
@@ -68,7 +68,7 @@
   w41  02029CF1D5  ?word   0x02029CF1D5   ; 202.9.CF.1D5  hi12{f98=2 f31=1} cur  [internal register file [CF], unit 1 (bit 7 = the unit); this index has no named role yet]
   w42  0202A001D5  mac     (p),c+,(p)+0
         ; C-RAM[0x0E] (coefficient cursor)
-  w43  0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w43  0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x0F] (coefficient cursor)
   w44  02829CE1D5  ?word   0x02829CE1D5   ; 282.9.CE.1D5  hi12{f98=2 f31=1 ?7 res=080} cur  [internal register file [CE], unit 1 (bit 7 = the unit); this index has no named role yet]
   w45  02821D0407  ?word   0x02821D0407   ; 282.1.D0.407  hi12{f98=2 f31=1 ?7 res=080}  [internal register file [D0] -- base of the per-unit STATE BLOCK (MEASURED -- see 0x50; unit 1's run is 3 cells in all 12 reverbs), unit 1]
@@ -88,12 +88,12 @@
   w57  02029D31D5  ?word   0x02029D31D5   ; 202.9.D3.1D5  hi12{f98=2 f31=1} cur  [internal register file [D3], unit 1 (bit 7 = the unit); this index has no named role yet]
   w58  0202A001D5  mac     (p),c+,(p)+0
         ; C-RAM[0x12] (coefficient cursor)
-  w59  0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w59  0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x13] (coefficient cursor)
   w60  02829D21D5  ?word   0x02829D21D5   ; 282.9.D2.1D5  hi12{f98=2 f31=1 ?7 res=080} cur  [internal register file [D2], unit 1 (bit 7 = the unit); this index has no named role yet]
   w61  02821D4407  ?word   0x02821D4407   ; 282.1.D4.407  hi12{f98=2 f31=1 ?7 res=080}  [internal register file [D4], unit 1 (bit 7 = the unit); this index has no named role yet]
   w62  000090E452  ?word   0x000090E452   ; 000.9.0E.452  hi12{-} cur  [internal register file [0E], unit 0 (bit 7 = the unit); this index has no named role yet]
-  w63  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w63  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w64  000010E405  ?word   0x000010E405   ; 000.1.0E.405  hi12{-}  [internal register file [0E], unit 0 (bit 7 = the unit); this index has no named role yet]
   w65  00121DC1C0  ?word   0x00121DC1C0   ; 012.1.DC.1C0  hi12{ST f31=1}  [internal register file [DC], unit 1 (bit 7 = the unit); this index has no named role yet]
   w66  00241DC000  ?word   0x00241DC000   ; 024.1.DC.000  hi12{f31=2 ?5 res=020}  [internal register file [DC], unit 1 (bit 7 = the unit); this index has no named role yet]
@@ -108,28 +108,28 @@
   w73  02029D71D5  ?word   0x02029D71D5   ; 202.9.D7.1D5  hi12{f98=2 f31=1} cur  [internal register file [D7], unit 1 (bit 7 = the unit); this index has no named role yet]
   w74  0202A001D5  mac     (p),c+,(p)+0
         ; C-RAM[0x16] (coefficient cursor)
-  w75  0292A01412  ?word   0x0292A01412   ; 292.A.01.412  hi12{ST f98=2 f31=1 ?7 res=080} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x10); the source id / accumulator-combine f31=1 / ACT 0x12 may be OPEN]
+  w75  0292A01412  mac     acc,c+,(p)+1 ; store SUPPRESSED (bit7)
         ; C-RAM[0x17] (coefficient cursor)
   w76  02829D61D5  ?word   0x02829D61D5   ; 282.9.D6.1D5  hi12{f98=2 f31=1 ?7 res=080} cur  [internal register file [D6], unit 1 (bit 7 = the unit); this index has no named role yet]
   w77  02821D8407  ?word   0x02821D8407   ; 282.1.D8.407  hi12{f98=2 f31=1 ?7 res=080}  [internal register file [D8], unit 1 (bit 7 = the unit); this index has no named role yet]
   w78  00009DA452  ?word   0x00009DA452   ; 000.9.DA.452  hi12{-} cur  [internal register file [DA], unit 1 (bit 7 = the unit); this index has no named role yet]
-  w79  0212200000  ?word   0x0212200000   ; 212.2.00.000  hi12{ST f98=2 f31=1}  [plain store: mem[ptr] <- acc, taken BEFORE this word's ALU step (FORCED)]
+  w79  0212200000  mac.b   (p)0,(p)+0 ; mem[p]<-acc, acc=0
   w80  0E30C00406  ?word   0x0E30C00406   ; E30.C.00.406  hi12{ESC f98=2 ?10 ?5 res=420} cur  [SPECULATIVE: accumulator op f31=0 (LOAD) is known; addressing class 0xC and operands are OPEN]
-  w81  080080A000  ?word   0x080080A000   ; 800.8.0A.000  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w82  0C1732020D  ?word   0x0C1732020D   ; C17.3.20.20D  {C-fmt A=153 B=0}  hi12{ESC f31=3 ?10 ?0 res=401}  [C-format opcode 0x60B: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=153 B=0]
-  w83  0C190D2820  ?word   0x0C190D2820   ; C19.0.D2.820  {C-fmt A=134 B=18}  hi12{ESC f31=4 ?10 ?0 res=401}  [C-format opcode 0x60C, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=134 B=18]
+  w81  080080A000  ld.b    (p)0,c
+  w82  0C1732020D  ldreg   r0D,#iw153,0       ; I-RAM address + a second field (B)
+  w83  0C190D2820  ldreg   r20,#iw134,18       ; I-RAM address + a second field (B)
   w84  082E80F000  ?word   0x082E80F000   ; 82E.8.0F.000  hi12{ESC f31=7 ?5 res=020} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
-  w85  0C010A5000  ?word   0x0C010A5000   ; C01.0.A5.000  {C-fmt A=133 B=5}  hi12{ESC ?10 ?0 res=401}  [C-format opcode 0x600: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=133 B=5]
-  w86  0C1B210820  ?word   0x0C1B210820   ; C1B.2.10.820  {C-fmt A=144 B=16}  hi12{ESC f31=5 ?10 ?0 res=401}  [C-format opcode 0x60D, pointer-load lo12; the five lo12=0x820 words carry FOUR opcodes (602/605/621/625) -- a shared DESTINATION, not an instruction; A=144 B=16]
-  w87  00122FF1CE  ~word   0x00122FF1CE   ; 012.2.FF.1CE  {addr: ST mem[p], p-1}  hi12{ST f31=1}  [K6 input stage, header w3 (= epilogue w79): ST mem[p], p-1; ALU UNKNOWN]
-  w88  01043401CE  ?word   0x01043401CE   ; 104.3.40.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = biquad delay-stage (pair w/ 0x0D)]
+  w85  0C010A5000  ldreg   r00,#iw133,5       ; I-RAM address + a second field (B)
+  w86  0C1B210820  ldreg   r20,#iw144,16       ; I-RAM address + a second field (B)
+  w87  00122FF1CE  mac     (p),(p)-1 ; mem[p]<-acc, acc=0
+  w88  01043401CE  ?word   0x01043401CE   ; 104.3.40.1CE  hi12{f98=1 f31=2}  [SPECULATIVE (prospective, not measured): ACT 0x0E = delay/state MIXING: acc onto bus (universal; pair w/ 0x0D)]
   w89  01029D91CE  ?word   0x01029D91CE   ; 102.9.D9.1CE  hi12{f98=1 f31=1} cur  [internal register file [D9], unit 1 (bit 7 = the unit); this index has no named role yet]
   w90  016E800000  ?word   0x016E800000   ; 16E.8.00.000  hi12{f98=1 f31=7 ?6 ?5 res=060} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w91  0000200000  nop
   w92  080080B407  ?word   0x080080B407   ; 800.8.0B.407  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w93  080080C41D  ?word   0x080080C41D   ; 800.8.0C.41D  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w94  0000200000  nop
-  w95  0C011E0407  ?word   0x0C011E0407   ; C01.1.E0.407  {C-fmt A=143 B=0}  hi12{ESC ?10 ?0 res=401}  [C-format opcode 0x600: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=143 B=0]
+  w95  0C011E0407  ldreg   r07,#iw143,0       ; I-RAM address + a second field (B)
   w96  00122011D5  mac     (p),(p)+1 ; mem[p]<-acc, acc=0
   w97  01043401D5  ?word   0x01043401D5   ; 104.3.40.1D5  hi12{f98=1 f31=2}  [SPECULATIVE: accumulator op f31=2 (HOLD) is known; addressing class 0x3 and operands are OPEN]
   w98  01029DC1D5  ?word   0x01029DC1D5   ; 102.9.DC.1D5  hi12{f98=1 f31=1} cur  [internal register file [DC], unit 1 (bit 7 = the unit); this index has no named role yet]
@@ -138,13 +138,13 @@
   w101 080080B407  ?word   0x080080B407   ; 800.8.0B.407  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w102 080080C41D  ?word   0x080080C41D   ; 800.8.0C.41D  hi12{ESC} cur  [class 8: post-sum step (rescale/round/saturate?), OPERATION UNKNOWN]
   w103 0000200000  nop
-  w104 0C01300407  ?word   0x0C01300407   ; C01.3.00.407  {C-fmt A=152 B=0}  hi12{ESC ?10 ?0 res=401}  [C-format opcode 0x600: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=152 B=0]
+  w104 0C01300407  ldreg   r07,#iw152,0       ; I-RAM address + a second field (B)
   w105 0000906000  ?word   0x0000906000   ; 000.9.06.000  hi12{-} cur  [internal register file [06] -- per-unit OUTPUT LEVEL (PROVEN BY CONSTRUCTION -- the last four host actions of cold boot are setvec unit1,#200 / setvec unit0,#84 / reg 0x06 <- +0.500000 / reg 0x86 <- +0.183992, both cleared at reset), unit 0]
   w106 0819086822  ?word   0x0819086822   ; 819.0.86.822  hi12{ESC f31=4 ?0 res=001}  [register write: selector lo12[7:0]=22, payload = addr8 (bit 11 is a SEPARATE FLAG -- the firmware builds it with a literal `INC 8, WA' on top of the low byte).  This selector's register is OPEN; hi12 bit 4 is set BUT SO IS THE FORMAT ESCAPE (bit 11), and inside the escape this decoder does not read bit 4 as the store -- K3 sect. 5.2 reads it as a store anyway.  CONFLICT, 1 site, UNRESOLVED]
-  w107 0000A00000  ?word   0x0000A00000   ; 000.A.00.000  hi12{-} cur+  [SPECULATIVE (prospective, not measured): SRC 0x00 = mem[ptr]/delay-RAM read]
+  w107 0000A00000  nop
         ; C-RAM[0x18] (coefficient cursor)
   w108 00122FF1D5  mac     (p),(p)-1 ; mem[p]<-acc, acc=0
-  w109 0104A001D5  ?word   0x0104A001D5   ; 104.A.00.1D5  hi12{f98=1 f31=2} cur+  [SPECULATIVE: class-A multiply (P = coef x source 0x07); the source id / accumulator-combine f31=2 / ACT 0x15 may be OPEN]
+  w109 0104A001D5  post    (p),c+,(p)+0
         ; C-RAM[0x19] (coefficient cursor)
-  w110 0102200000  ?word   0x0102200000   ; 102.2.00.000  hi12{f98=1 f31=1}  [gain multiply (same op in phaser all-pass and reverb diffuser)]
-  w111 0C013E0407  ?word   0x0C013E0407   ; C01.3.E0.407  {C-fmt A=159 B=0}  hi12{ESC ?10 ?0 res=401}  [C-format opcode 0x600: bits [24:12] are one 13-bit IMMEDIATE reaching into hi12 bit 0, not class+addr; A=159 B=0]
+  w110 0102200000  mac.b   (p)0,(p)+0
+  w111 0C013E0407  ldreg   r07,#iw159,0       ; I-RAM address + a second field (B)

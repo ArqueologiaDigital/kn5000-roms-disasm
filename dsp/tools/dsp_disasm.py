@@ -886,9 +886,28 @@ def decoded(w):
     #   ★ AND THE REGISTER IS NEVER READ: `UPD6383_CFMTDST=7' (`reg[lo12 & 0xFF]') is BIT-IDENTICAL
     #   to the shipped latch on **8 of 8 programs**, with the arm firing ~28 M times in each.
     #   ⇒ the word loads an immediate into a register nothing reads back: EXECUTABLE.
-    #   ⛔ NOT extended to the 11 non-`is_c40' C-format words -- `k3-pointers.md' sect. 8 item 3
-    #   warns explicitly against carrying the payload rule past opcode 0x620, and this does not.
-    if is_c40(w):                                              return True
+    #   ★★★★★ 2026-09-14 (sect. 122): AND NOW THE OTHER ELEVEN TOO.  The line above used to read
+    #   *"⛔ NOT extended to the 11 non-`is_c40' C-format words -- `k3-pointers.md' sect. 8 item 3
+    #   warns against carrying the payload rule past opcode 0x620, and this does not."*  That was
+    #   right: the extension was UNMEASURED.  It is measured now, by two routes, NEITHER of which
+    #   carries the `0xC40' rule outward.
+    #     ROUTE 1, `cfmt_addr.py' -- THE REGION TEST.  All ELEVEN payloads land inside the image
+    #     that carries them (kernel 0..59, epilogue 60..82).  `A' is 8 bits, so the uniform null is
+    #     explicit: p = 6.6e-9.  Two of them (epilogue w76 -> 76, w82 -> 82) are SELF-REFERENCES,
+    #     and the two `0x632' words both land at `block start + 3' of their OWN per-unit CALL block.
+    #     ROUTE 2, `kernel_homolog.py --reloc' -- THE RELOCATION TEST, and it needs no null at all.
+    #     The SX-WSA1R ships a byte-homologous copy of this kernel header at a different offset
+    #     (34 of 42 words identical and in order; best unrelated image 2, mean 0.4).  A field that
+    #     is an ADDRESS must shift by the number of words inserted before it; one that is DATA must
+    #     not.  MEASURED: `A' tracks the relocation EXACTLY in 4 of 4 comparable pairs, while
+    #     `B = imm13 & 0x1F' and `f31' are IDENTICAL across the two products at all five positions.
+    #   ⇒ the C-format word is ONE instruction -- destination from `lo12', payload = an I-RAM
+    #   address in `A' plus a second field `B' -- and the device executes it destination-first
+    #   (`UPD6383_CFMTDST=7', bit-identical to the shipped latch on 8 of 8 programs).  EXECUTABLE.
+    #   ⚠ THIS DOES NOT SAY WHAT THE ADDRESS IS FOR.  `closure-pointer.md' item B has FALSIFIED the
+    #   `0x820' family as the frame-closing D-RAM pointer load ON SITING, and `w40 -> 14' is a
+    #   backward reference to an END-OF-BLOCK word that nothing explains.  Encoding, not purpose.
+    if c_format(w):                                            return True
     #   ★★★★★ 2026-09-13: THE DELAY ESCAPE IS EXECUTABLE **WHEN BOTH ITS HALVES ARE**.
     #   A class-1 escape is an external delay-DRAM access whose ADDRESSING is FORCED -- direction
     #   from `addr8' bit 6, address = DESCRIPTOR_CELL[k] + G by the IDENTITY map
@@ -1414,6 +1433,18 @@ def text(w, at=None):
         if is_c40(w):
             return "ldreg   r%02X,#%d          ; immediate -> the register lo12 selects" % (
                 lo12(w) & 0xFF, c_a(w))
+        #   ★★★★★ 2026-09-14 (N-INPUT-GATE-OPENED sect. 122): THE OTHER ELEVEN C-FORMAT WORDS.
+        #   `A' is an I-RAM ADDRESS on these too, and `B' is a second field that is NOT an address
+        #   -- both MEASURED, and neither by carrying the `0xC40' family's rule outward:
+        #     * `cfmt_addr.py': all ELEVEN payloads land inside the region that carries them
+        #       (kernel 0..59, epilogue 60..82), p = 6.6e-9 under a uniform 8-bit payload;
+        #     * `kernel_homolog.py --reloc': against the SX-WSA1R's byte-homologous copy of this
+        #       header, `A' tracks the code relocation EXACTLY in 4 of 4 comparable pairs while
+        #       `B' and `f31' are IDENTICAL across the two products at all five positions.
+        #   The `B' field is printed because it is real and unexplained, not decoration.
+        if c_format(w):
+            return "ldreg   r%02X,#iw%d,%d       ; I-RAM address + a second field (B)" % (
+                lo12(w) & 0xFF, c_a(w), c_b(w))
         if is_terminator(w):
             return "endblk  unit%d          ; END OF BLOCK -- the image's last word" % (
                 0 if addr8(w) == 0x0E else 1)

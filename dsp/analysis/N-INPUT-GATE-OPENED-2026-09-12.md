@@ -5416,6 +5416,146 @@ discriminator and the audio path all now meet.
 
 ⛔ Coverage unchanged at 80.4 %: this decodes no word. It says which one word to decode next.
 
+## 121. ★★★★★ THE SX-WSA1R SHIPS A SECOND COPY OF THIS KERNEL HEADER
+Tools: [`kernel_homolog.py`](../tools/kernel_homolog.py), [`cfmt_opcode.py`](../tools/cfmt_opcode.py).
+Data: [`data/kernel_homolog_2026-09-14.txt`](data/kernel_homolog_2026-09-14.txt).
+Pre-registration: [`data/PREDICT_HI6C_2026-09-14.md`](data/PREDICT_HI6C_2026-09-14.md).
+
+§120 asked *"what does `w40` **drive** `P` with?"* and the single-product corpus cannot answer it:
+`cfmt_opcode.py --control` measures that in this ROM the C-format opcode is a **function of
+(destination, payload)** — no `(lo12, imm13)` pair is ever seen with two opcodes — and `--twins`
+finds **no** minimal pair on the opcode field anywhere in the pooled corpus. That is a null with
+power: it says the answer has to come from somewhere else.
+
+`wsa1/dsp/disasm/struct_00_fd4093.dsm` is a WSA1R record the effect directory does not name,
+catalogued as *"a shared/alternate body (candidates: a second unit's program, an alternate reverb
+tank, or a variant of a named effect)"*. It is none of those.
+
+> ★★★ **It is the kernel header. 34 of the KN5000 kernel's first 42 words are byte-identical and
+> in order inside it.** Control: the same alignment against every other image in either product —
+> best **2**, mean **0.4**. 75.7× the mean, and it beats the best unrelated image outright.
+
+And every divergence between the two copies is a `lo12 = 0x820` word:
+
+```
+   KN  w15 op 0x605  <->  WSA w21 op 0x605        KN  w29 op 0x621  <->  WSA w34 op 0x621
+   KN  w22 op 0x602  <->  WSA w28 op 0x602        KN  w31 op 0x605  <->  WSA w36 op 0x605
+ ★ KN  w40 op 0x625  <->  WSA w45 op 0x605        ⛔ THE ONLY OPCODE THAT DIFFERS
+```
+
+**Four of the five keep their opcode across two products. The fifth does not, and the fifth is
+§120's word** — reached from the machine by a completely unrelated route.
+
+### The pair, and what it is a pair on
+```
+   KN  w40   0C4A1C0820   imm13 448    hi12 C4A  f31 5  bit6 1
+   WSA w45   0C0A5E0820   imm13 1504   hi12 C0A  f31 5  bit6 0
+   xor       0040420000   bits 17, 22, 30 — 17 and 22 are INSIDE the 13-bit immediate
+                          ⇒ outside the payload: bit 30 = `hi12` BIT 6, and nothing else
+```
+`c_opcode` is `hi12 >> 1` and its low three bits are `f31`; both carry `f31 = 5`. So the "opcode
+difference" **is** `hi12` bit 6, which the disassembler prints `?6`.
+
+### The arm, and its positive control
+`UPD6383_HI6C=<mode>`, an eleven-entry menu (`P ← 0 / acc / accb / mem[ptr] / imm / A / tempA /
+tempB`, `acc ← 0`, `accb ← 0`, both), default off. **C3 passes**: mode 1 reproduces `PCLRIW=40`
+*exactly* — LFO mean step **114.2560** and the hand-off cell `0x05` gone — so the arm fires where
+its comment says. (§97 and §100 each spent a run on an arm that never reached its word.)
+
+⚠ Whatever the sweep returns, the bit-6 *reading* is not decoded by any of this. What is decoded
+is §122.
+
+## 122. ★★★★★ THE C-FORMAT PAYLOAD IS AN I-RAM ADDRESS — kernel 47.0 % → 60.2 %
+Tool: [`cfmt_addr.py`](../tools/cfmt_addr.py) and `kernel_homolog.py --reloc`.
+Data: [`data/cfmt_addr_2026-09-14.txt`](data/cfmt_addr_2026-09-14.txt).
+
+`k3-pointers.md` §8 item 3 is the standing objection and it was a fair one: *"`A = imm13 >> 5` is
+measured on `(hi12 & 0xFFE) == 0xC40` only (57/57 in-corpus) and fails 9/11 outside … extending it
+to `C00 / C04 / C0A / C16 / C42 / C4A / C64` is not [safe]."* `decoded()` obeyed it to the letter —
+`is_c40` returned true and the other **11** C-format occurrences trapped, the `C-format 11` row of
+the leverage table. The objection was that the extension was **unmeasured**. Two routes measure it,
+and neither carries the `0xC40` rule outward.
+
+**ROUTE 1 — the region test.** The resident microcode is kernel I-RAM 0…59 and epilogue 60…82. An
+address must land inside the image that carries it; data has no reason to. **11 of 11 do.** `A` is
+8 bits, so the uniform null is explicit: **p = 6.6 × 10⁻⁹**. Two of them are *self-references*
+(epilogue `w76 → 76`, `w82 → 82`) and the two `0x632` words both land at **block start + 3** of
+their own per-unit CALL block (42…49 → 45, 50…59 → 53).
+
+**ROUTE 2 — the relocation test, which needs no null at all.** Two copies of one routine at
+different offsets (§121). A field that is an **address** must shift by the number of words inserted
+before it; one that is **data** must not.
+
+```
+   KN w   A    | WSA w  A    | offset  dA
+   15     20   | 21     26   | +6      +6   ★ tracks the relocation EXACTLY
+   22     24   | 28     30   | +6      +6   ★
+   29     34   | 34     39   | +5      +5   ★
+   31     37   | 36     42   | +5      +5   ★
+   40     14   | 45     47   | +6      +33  ⛔ (§120's word, the outlier here too)
+
+   A   [20,24,34,37,14] -> [26,30,39,42,47]   RELOCATES
+   B   [18,18,23,17, 0] -> [18,18,23,17, 0]   ★ IDENTICAL across the two products
+   f31 [ 5, 2, 1, 5, 5] -> [ 5, 2, 1, 5, 5]   ★ IDENTICAL
+```
+
+**4 of 4 comparable pairs, and the companion fields do not move.** That is a two-field
+decomposition proved with no semantic assumption whatever: `A` is an address, `B` and `f31` are not.
+
+### ★★★ And it resurrects K3's ζ reading, which `closure-pointer.md` item H buried
+Item H: *"no field makes all five `one past an END-OF-BLOCK word' … K3's ζ reading does not become
+5-of-5 under any alternative field."* It searched **one** product. Scored per copy:
+
+| image | one past an END | null |
+|---|---|---|
+| KN5000 kernel | **4 of 5** (the exception is `w40 → 14`, which is itself an END) | 21.7 % |
+| WSA1R `struct_00_fd4093` | ★★★ **5 of 5** | 27.1 % |
+
+⇒ ζ was right. Item H's search was underpowered because **the five words are not five of the same
+instruction** — exactly what `output-stage-decode.md` item K said from the opcodes, now with a
+mechanism.
+
+### What it buys
+`decoded()` in both `dsp_disasm.py` and `upd6383d.cpp` now admits every C-format word, rendered
+`ldreg r20,#iw14,0` — the destination, the I-RAM address, and `B` printed because it is real and
+unexplained. Mirrors **3057/3057**; `dsp/verify.py` **BYTE-MATCH OK**.
+
+| region | before | after |
+|---|---:|---:|
+| resident kernel I-RAM 0…82 | 47.0 % | ★ **60.2 %** |
+| …header 0…59 | 56.7 % | **70.0 %** |
+| …output stage 60…82 | 21.7 % | **34.8 %** |
+| FRAME FLOOR kernel + reverb | 74.5 % | ★ **79.6 %** |
+| all 38 body images | 80.4 % | 80.4 % (no such word in any body) |
+
+⚠ **Encoding, not purpose.** `closure-pointer.md` item B has FALSIFIED this family as the
+frame-closing D-RAM pointer load **on siting**, and `w40 → 14` is a backward reference to an
+END-OF-BLOCK word that nothing explains. "The payload is an I-RAM address" and "we know what the
+instruction does with it" are different claims and only the first is measured.
+
+## 123. ★★★★★ THE WSA1R DISASSEMBLY WAS STALE: 40.1 % → 67.9 % FOR FREE
+Regenerating `wsa1/dsp/disasm/` with `gen_wsa1_dsp_disasm.py` after §122 changed **63 files**, and
+almost none of it is §122. The tree had not been regenerated since the ISA model advanced, so the
+second product had been carrying a 2026-era decode while the KN5000 side closed the store gate, the
+block terminator, the blindness lemma and the delay escape.
+
+```
+   48 images whose header line changed   3972 words
+   strict decode BEFORE   1591   40.1 %
+   strict decode AFTER    2697   67.9 %
+   ⇒ +1106 words, +27.8 points, from running the generator
+```
+
+⇒ **every decode proved on the KN5000 transfers to the WSA1R corpus at zero cost**, because the
+two products run the same ISA and one generator serves both trees. That is the concrete answer to
+"is it worth expanding the analysis to the WSA1R programs": it already was, and the tree was
+simply out of date.
+
+⚠ The converse does **not** hold automatically. A *criterion* validated on KN5000 programs (the
+hand-off cell, the VOLUME cell, the LFO increment) is not transferred to that product by this —
+different kernel, possibly different per-unit geometry, and §111's boundary stands: one program's
+null does not generalise.
+
 ## Honest grade
 §2 and §4's result are MEASURED, with a pre-registered two-sided criterion and a null (the shipped
 device produces identical frames on the same rig). §3 is READ from the device plus MEASURED in the

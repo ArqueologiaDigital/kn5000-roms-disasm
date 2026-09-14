@@ -45,8 +45,10 @@ TI=${TYPEIDX_SWEEP:-0}          # 0 = CHORUS (the LFO program lfo-ramp.md anchor
 # The frame schedule is fx_ab.lua's own: NOTE ON at 36.0 s + 0.2 s x TYPEIDX, trace armed 1.0 s
 # later (RULE 12 -- a DSP test with no notes playing is not a test).  Visible window, timeout-
 # wrapped (the run-discipline memory).
-cap() {   # cap <value> <out.log>
+cap() {   # cap <value> <out.log> [EXTRA_ENV=VAL ...]
   local v=$1 out=$2 note frame
+  shift 2          # ⚠ WITHOUT THIS, `"$@"' below still holds <value> and <out.log> and `env'
+                   #   tries to exec the log path.  Cost one silent empty sweep to find.
   note=$(python3 -c "print(36.0 + 0.2*$TI)")
   frame=$(python3 -c "print(int(($note + 1.0) * 44100))")
   ( cd "$BUILD" && rm -f error.log && \

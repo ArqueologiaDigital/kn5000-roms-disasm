@@ -54,6 +54,39 @@
       Both carry f31 = 5, so `c_opcode' (= hi12 >> 1, low three bits = f31) differs
       in exactly that one flag.  The disassembler prints it `?6'.
 
+   ★★★★★ THE RELOCATION TEST -- does the `lo12 = 0x820' payload MOVE WITH THE CODE?
+
+      KN w  A      A-slot  | WSA w A      A-slot  | offset  dA     verdict
+      15    20     +5      | 21    26     +5      | +6      +6     ★ tracks the relocation EXACTLY
+      22    24     +2      | 28    30     +2      | +6      +6     ★ tracks the relocation EXACTLY
+      29    34     +5      | 34    39     +5      | +5      +5     ★ tracks the relocation EXACTLY
+      31    37     +6      | 36    42     +6      | +5      +5     ★ tracks the relocation EXACTLY
+      40    14     -26     | 45    47     +2      | +6      +33    ⛔ does NOT
+      ⇒ 4 of 5.  A field that tracks a code move is an ADDRESS.
+
+   ★ THE COMPANION FIELDS, which a relocation must LEAVE ALONE
+
+      A  (imm13 >> 5)    KN [20, 24, 34, 37, 14]   WSA [26, 30, 39, 42, 47]   differs at position [1, 2, 3, 4, 5]
+      B  (imm13 & 0x1F)  KN [18, 18, 23, 17, 0]    WSA [18, 18, 23, 17, 0]    ★ IDENTICAL
+      f31                KN [5, 2, 1, 5, 5]        WSA [5, 2, 1, 5, 5]        ★ IDENTICAL
+      hi12 bit 6         KN [0, 0, 1, 0, 1]        WSA [0, 0, 1, 0, 0]        differs at position [5]
+
+      ⇒ `A' RELOCATES and `B' and `f31' DO NOT.  That is a two-field decomposition
+        proved without any semantic assumption: one is an address, the others are not.
+
+   ★★★ K3's ζ READING, WHICH `closure-pointer.md' ITEM H BURIED
+
+      item H: *"no field makes all five `one past an END-OF-BLOCK word' ... K3's ζ
+      reading does not become 5-of-5 under any alternative field."*  It searched ONE
+      product.  Scored on each copy of the header separately:
+
+      KN5000 kernel            4 of 5 one past an END   (null: 21.7 % of slots qualify)
+        ⛔ the exception: w40 -> 14, and 14 is itself an END-OF-BLOCK word
+      WSA1R struct_00_fd4093   5 of 5 one past an END   (null: 27.1 % of slots qualify)
+
+      ⇒ 5 of 5 in the second product.  ζ was right; item H's search was underpowered
+        because the five words are NOT five of the same instruction.
+
    ★ `hi12' BIT 6 CENSUS, POOLED (KN5000 + SX-WSA1R)
 
       C-format words      bit6=0    54   bit6=1   391   <- SET is the common case
