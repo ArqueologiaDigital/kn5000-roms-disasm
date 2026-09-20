@@ -4,6 +4,26 @@ Technics' user guide states that \textsc{sysex bulk dump} exchanges the instrume
 internal data as System Exclusive, that the instrument is silent during the transfer, and
 that it works on the \textbf{MIDI~1} terminals only. This chapter gives the wire protocol.
 
+\section{What can be dumped}
+\estab\ The \textsc{sysex bulk dump} screen offers five categories. Each selects a job
+code which selects a dump routine.
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+row & category & job & routine \\
+\midrule
+0 & \textsc{total keyboard}     & 0 & \bytes{0xFB22CD} \\
+1 & \textsc{sound}              & 3 & \bytes{0xFB22F6} \\
+2 & \textsc{combination}        & 5 & \bytes{0xFB2314} \\
+3 & \textsc{system, part \& midi} & 4 & \bytes{0xFB2305} \\
+4 & \textsc{sequencer}          & 2 & \bytes{0xFB22E7} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Reproduce with \texttt{notes/sysex-probes/sysex\_bulkdump\_tx.py}.
+
 \section{Frame layout}
 \estab\ A data frame is
 
