@@ -25,8 +25,10 @@ instrument does not recognise is rejected with \textsc{error 40}.
 \begin{caution}{The middle byte is not a constant of the product}
 The instrument transmits \bytes{04 00 11} and accepts both \bytes{04 00 11} and
 \bytes{04 01 11}. A bulk dump captured from a real instrument carries \bytes{04 01 11}
-throughout. A receiver must therefore accept either value, and must not use the middle
-byte to identify the product.
+throughout. The transmitted value is fixed --- it is not derived from the keyboard/rack
+setting described in chapter~\ref{ch:models} --- so the middle byte does not distinguish
+the two models either. A receiver must accept both values and must not use the middle byte
+to identify anything.
 \end{caution}
 
 \section{Short messages}
@@ -54,12 +56,8 @@ message & meaning \\
 The family \bytes{25} carries a tempo setting, in the range 40 to 300 beats per minute.
 A value outside that range is treated as 120.
 
-\begin{note}{Two functions depend on the instrument variant}
-The tempo message and the transfer of the \textsc{sequencer} category are both gated on
-the instrument's model strap. On a unit whose strap is not set to the keyboard value,
-neither is available in either direction, and a \textsc{sequencer} dump sends nothing at
-all --- not even the end-of-category message.
-\end{note}
+See chapter~\ref{ch:models} --- the tempo message is one of two things the rack does not
+support.
 
 \section{Parameter families}
 The families \bytes{2B} and \bytes{2C} carry individual parameter traffic rather than bulk

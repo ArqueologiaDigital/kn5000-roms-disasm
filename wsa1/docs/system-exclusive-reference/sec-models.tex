@@ -1,0 +1,42 @@
+\chapter{SX-WSA1 and SX-WSA1R}\label{ch:models}
+
+The SX-WSA1 keyboard and the SX-WSA1R rack module run the same program and speak the same
+System Exclusive protocol. Two features are nonetheless available on the keyboard and not
+on the rack, in both directions.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & SX-WSA1 & SX-WSA1R \\
+ & (keyboard) & (rack) \\
+\midrule
+message framing, checksum, handshake & yes & yes \\
+\textsc{sound} bulk dump & yes & yes \\
+\textsc{combination} bulk dump & yes & yes \\
+\textsc{system, part \& midi} bulk dump & yes & yes \\
+dump requests & yes & yes \\
+General MIDI On / Off & yes & yes \\
+\midrule
+\textsc{sequencer} bulk dump & yes & \textbf{no} \\
+tempo message (family \bytes{25}) & yes & \textbf{no} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{caution}{On the rack, a SEQUENCER dump sends nothing and says nothing}
+The \textsc{sequencer} row is present on the rack's \textsc{sysex bulk dump} menu, and
+selecting it and pressing \textsc{send} appears to work. Nothing is transmitted --- not
+even the end-of-category message that closes every other transfer. A librarian waiting for
+data will simply time out.
+
+The same applies to the \textsc{sequencer} portion of \textsc{total keyboard}.
+\end{caution}
+
+The tempo message is refused in both directions on the rack: it will neither act on one
+received nor send one.
+
+\begin{note}{The model triple does not tell you which you are talking to}
+Both models transmit the same model triple, so it cannot be used to distinguish them. The
+only reliable test over MIDI is behavioural --- request a \textsc{sequencer} dump and see
+whether anything arrives.
+\end{note}
