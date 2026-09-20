@@ -248,6 +248,42 @@ for cmd, site in JOB_SITE.items():
     JOBS[cmd] = ins[5]
 assert JOBS == {0x1B: 4, 0x1C: 3, 0x1E: 2, 0x1F: 5}
 
+# ------------------------------------------------------- per-parameter detail
+# desc[+9] = minimum, desc[+0x0A] = maximum, both compared against the value the
+# message carries and the write SKIPPED (silently) when it falls outside.  Read
+# out of three routines whose bodies were checked instruction by instruction:
+#   0xFB3778  common single-byte parameter
+#   0xFB38E4  part single-byte parameter
+#   0xFB3882  the two parameters at 00 00 00 / 00 00 01
+# Every other +0x14 method is left unclaimed rather than guessed at.
+GENERIC = (0xFB3778, 0xFB38E4, 0xFB3882)
+def detail(fam, g, i):
+    d = DESC[(fam, g, i)][0]
+    h = rd(d, 0x1c)
+    return dict(desc=d, addr=tuple(h[0:3]), size=septets(tuple(h[3:6])),
+                store=(h[6], h[7]), mask=h[8], lo=h[9], hi=h[0x0A], shift=h[0x0B],
+                get=int.from_bytes(h[0x14:0x18], "little"),
+                put=int.from_bytes(h[0x18:0x1c], "little"))
+
+if "--params" in sys.argv:
+    print("byte7 byte8 count  min  max  note")
+    for p, c, g, i in PATHS[0x2C]:
+        if p[0] or g == 0xFF or p[2] != 0x00:
+            continue
+        if p[3] in PARTS and p[3] != 0x20:
+            continue
+        e = detail(0x2C, g, i)
+        gen = e["get"] in GENERIC
+        b8 = "any" if p[4] == 0xFE else "%02X" % p[4]
+        print("  %02X    %-4s   %d   %s %s%s" % (
+            p[3], b8, e["size"],
+            "%4d" % e["lo"] if gen else "   -",
+            "%4d  " % e["hi"] if gen else "   -  ",
+            "" if gen else "value range not established"))
+    print()
+    print("byte7=20 is part 0; the other 31 part blocks are byte-identical")
+    sys.exit(0)
+
 # --------------------------------------------------------------------- output
 if "--paths" in sys.argv:
     for fam in (0x2B, 0x2C):

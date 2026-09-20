@@ -6,7 +6,7 @@
 | `sysex_error_codes.py` | Which internal status code raises `ERROR 40!`, `ERROR 41!` or `ERROR 42!`, and where in prom_a is each one raised? | `python3 wsa1/notes/sysex-probes/sysex_error_codes.py` (table) or `--sites` (every raise site) |
 | `sysex_bulkdump_tx.py` | What does the machine put on the wire when SYSEX BULK DUMP -> SEND is pressed: which menu row dumps what, what the frame header says, and how the checksum and the block size are computed? | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_tx.py` (tables) or `--frames` (block arithmetic + a worked checksum) |
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
-| `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables) or `--paths` (all 7512 sequences) |
+| `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables), `--params` (every parameter with its accepted value range) or `--paths` (all 7512 sequences) |
 | `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
 | `sysex_bulkdump_rx.py` | The RECEIVE side: what picks the destination of an incoming data message, whether an arbitrary address is honoured, what bounds the write, what order the messages must come in, and whether the panel has to be on the SYSEX BULK DUMP screen. | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_rx.py` (tables) or `--order` (the whole in-session dispatch table) |
 | `sysex_cross_product.py` | Is this the SAME protocol in the sibling Technics products? Reads the WSA1R, KN5000 and KN1500 grammars out of raw ROM side by side, prints each one's model triple, fixed messages and bulk-dump regions, and asserts what is shared and what is not. | `python3 wsa1/notes/sysex-probes/sysex_cross_product.py` (summary), `--paths` (every accepted sequence), `--kn7000` (the later, incompatible dialect) |
@@ -330,6 +330,17 @@ accepted sequences under *each* of `2B` and `2C`; `0x1A` x3742 / `0x19` x6 /
 **32** part blocks of **57** parameters (18 + 39 across two groups); the four
 whole-area request arms carry job codes **4/3/5/2**, which are the SEND menu's
 own row→job values at prom_a `0xF99AE3`.
+
+### Value ranges
+
+`--params` prints each parameter's minimum and maximum, which are bytes `+9`
+and `+0x0A` of its descriptor. Those two bytes are compared against the value
+the message carries and the write is **skipped silently** when it falls
+outside — `0xFB3906`/`0xFB3911` in the part setter, `0xFB3797`/`0xFB37A2` in
+the common one. The script prints a range only for the three `+0x14` methods
+whose bodies were read instruction by instruction (`0xFB3778`, `0xFB38E4`,
+`0xFB3882`); for every other method it prints a dash rather than assume the
+same two fields mean the same thing.
 
 ### Traps
 
