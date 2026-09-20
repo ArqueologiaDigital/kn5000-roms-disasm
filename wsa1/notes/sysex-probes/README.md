@@ -182,3 +182,24 @@ The other trap is `sysex_grammar_dump.py --paths`, which truncates at
 depth 8 and therefore **cannot see** commands `0x0B`, `0x0C`, `0x0E`,
 `0x12`-`0x17`, `0x19` or `0x1B`-`0x1F` at all.  Reading its output as a
 complete list is how the `2D` subtree and the dump request were missed.
+
+### Two gates the `25` message passes through
+
+Both are checked from the instruction bytes, and both sit in the
+receiver *and* the transmitter, identically:
+
+1. **The model-variant strap `(0x0000C4)`.** `sub_FB5FF5` picks
+   `0xF4FE6A` (six zero words, everything allowed) when the strap is 1
+   and `0xF4FE76` (`0xFFFF` at indices 3 and 5) otherwise.  Index 5 is
+   the `25` message; index 3 is the SEQUENCER **block store** — so on
+   the other variant a SEQUENCER dump is still acknowledged but its
+   bytes are never written.  The SYSTEM/PART&MIDI handler calls the
+   same store unconditionally; the script asserts both call sites.
+2. **MIDI filter byte `(0x7F38)` bit 3.** The eight-entry row
+   dispatcher `JumpTable_F9AB84` ends on the editor that writes
+   `(0x7F38)` with mask `0x0F`, and the matching painter reads
+   `(0x7F38) & 0x0F` — so the eighth row of the MIDI INPUT&OUTPUT
+   FILTER page, whose caption list ends `EXCLUSIVE`, is this byte, and
+   "ON" sets bit 3.  ⚠ The row→caption binding is by POSITION (two
+   independent orderings agree: the eight setters and the eight
+   painters) — no instruction quotes the caption.

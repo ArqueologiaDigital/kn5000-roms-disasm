@@ -240,5 +240,97 @@ assert ra(0xFB6E27, 6) == bytes([0xEC, 0xC8, 0x0F, 0x00, 0x00, 0x00])
 assert ra(0xFB6E53, 3) == bytes([0xCE, 0x30, 0x07])
 assert ra(0xFB6E64, 3) == bytes([0x0B, 0x14, 0x00])
 
+# --- 8. the two ENABLE gates on the `25` message ----------------------------
+# prom_a sub_FB5FF5 (0xFB5FF5) picks one of two 6-word prom_b tables on the
+# model-variant strap `(0x0000C4)` and the caller bails on 0xFFFF:
+#   0xFB6000 `cp (0xC4),0x01` -> 0xF4FE6A when equal, else 0xF4FE76.
+# Index 5 is the `25` message; index 3 is the SEQUENCER block store.
+assert ra(0xFB6000, 4) == bytes([0xC0, 0xC4, 0x3F, 0x01])
+assert ra(0xFB6006, 5) == bytes([0xF2, 0x6A, 0xFE, 0xF4, 0x34])
+assert ra(0xFB600D, 5) == bytes([0xF2, 0x76, 0xFE, 0xF4, 0x34])
+def w16(ad): return int.from_bytes(rb(ad, 2), "little")
+allow  = [w16(0xF4FE6A + 2 * i) for i in range(6)]
+deny   = [w16(0xF4FE76 + 2 * i) for i in range(6)]
+assert allow == [0, 0, 0, 0, 0, 0], allow
+assert deny  == [0, 0, 0, 0xFFFF, 0, 0xFFFF], deny
+# the two callers that pass index 5 are the tempo receiver and transmitter,
+# and the three that pass index 3 are the SEQUENCER part 1/2/3 data handlers.
+for site in (0xFB3400, 0xFB336E):
+    assert ra(site, 3) == bytes([0x0B, 0x05, 0x00]), "index 5 at 0x%06X" % site
+for site in (0xFB2E33, 0xFB2E7C, 0xFB2EC5):
+    assert ra(site, 3) == bytes([0x0B, 0x03, 0x00]), "index 3 at 0x%06X" % site
+# ... and only the SEQUENCER ones gate the block store: the SYSTEM/PART&MIDI
+# data handler calls it unconditionally.
+assert ra(0xFB2E44, 4) == bytes([0x1D, 0xB5, 0x72, 0xFB])   # conditional call
+assert ra(0xFB2CC0, 4) == bytes([0x1D, 0xB5, 0x72, 0xFB])   # unconditional call
+print("\nmodel-variant strap (0xC4): value 1 allows all six gated functions;"
+      "\n  any other value denies index 3 (SEQUENCER block store) and index 5"
+      "\n  (the `25` tempo message), in BOTH directions.")
+
+# the other two conditions on `25`, present identically in receiver and
+# transmitter: the bulk-dump page must NOT be showing, one internal mode bit
+# must be clear, and MIDI-filter byte (0x7F38) bit 3 must be SET.
+for site in (0xFB340E, 0xFB3387):
+    assert ra(site, 5) == bytes([0xC1, 0x7A, 0x20, 0x3F, 0x79])
+for site in (0xFB3415, 0xFB338F):
+    assert ra(site, 7) == bytes([0xC1, 0x32, 0x7F, 0x23, 0xCB, 0xCC, 0x04])
+for site in (0xFB341E, 0xFB3398):
+    assert ra(site, 7) == bytes([0xC1, 0x38, 0x7F, 0x23, 0xCB, 0xCC, 0x08])
+# (0x7F38) is the LAST of the eight MIDI INPUT&OUTPUT FILTER rows: the row
+# dispatcher prom_a JumpTable_F9AB84 has 8 entries and its last arm calls the
+# editor that writes (0x7F38) with mask 0x0F, so "ON" sets bit 3.
+assert le32(0) is not None
+jt = [int.from_bytes(ra(0xF9AB84 + 4 * i, 4), "little") for i in range(8)]
+assert jt[0] == 0x00F9ABA4 and jt[7] == 0x00F9ABE3, jt
+assert ra(0xF9ABE7, 3) == bytes([0x1E, 0x2F, 0x03])          # calr 0xF9AF19
+assert ra(0xF9AF2B, 3) == bytes([0x0B, 0x0F, 0x00])          # mask 0x0F
+assert ra(0xF9AF2E, 4) == bytes([0xF1, 0x38, 0x7F, 0x31])    # lda XBC,0x7F38
+assert ra(0xF9ACFB, 7) == bytes([0xC1, 0x38, 0x7F, 0x23, 0xCB, 0xCC, 0x0F])  # painter
+
+# --- 9. `28` (end of dump) and `2A` (memory full) are the SAME command ------
+pairs = {tuple(p): c for c, p in seqs if len(p) == 2 and p[1] == 0x7E}
+assert pairs[(0x28, 0x7E)] == pairs[(0x2A, 0x7E)] == 0x04, pairs
+assert pairs[(0x23, 0x7E)] == 0x01 and pairs[(0x24, 0x7E)] == 0x02
+assert pairs[(0x27, 0x7E)] == 0x03 and pairs[(0x29, 0x7E)] == 0x05
+print("`28` (end of dump) and `2A` (memory full) both decode to command 0x04,"
+      "\n  so the instrument treats a peer's memory-full exactly as an end of dump.")
+
+# --- 10. the receive handshake state machine --------------------------------
+# (0x60FD44): 0 idle, 1 enquiry seen, 2 transfer started.  Only when it
+# reaches 2 does bit 7 of (0x60FD40) go up, and sub_FB28BE sends NO reply
+# until it is up.
+assert ra(0xFB28FF, 6) == bytes([0xC2, 0x44, 0xFD, 0x60, 0x3F, 0x00])  # ==0 ?
+assert ra(0xFB2907, 6) == bytes([0xF2, 0x44, 0xFD, 0x60, 0x00, 0x01])  # :=1
+assert ra(0xFB2923, 6) == bytes([0xC2, 0x44, 0xFD, 0x60, 0x3F, 0x01])  # ==1 ?
+assert ra(0xFB295D, 6) == bytes([0xF2, 0x44, 0xFD, 0x60, 0x00, 0x02])  # :=2
+assert ra(0xFB2958, 5) == bytes([0xF2, 0x40, 0xFD, 0x60, 0xBF])        # set 7
+assert ra(0xFB28BF, 5) == bytes([0xF2, 0x40, 0xFD, 0x60, 0xCF])        # bit 7?
+assert ra(0xFB296D, 4) == bytes([0xB9, 0x04, 0x00, 0x18])              # status 0x18
+# the session loop only runs at all on the SYSEX BULK DUMP page, and only for
+# command numbers >= 7
+assert ra(0xFB2826, 5) == bytes([0xC1, 0x7A, 0x20, 0x3F, 0x79])
+assert ra(0xFB283C, 2) == bytes([0xC9, 0xDF])                          # cp A,0x07
+print("receive handshake: enquiry -> start-transfer -> the instrument's"
+      "\n  acknowledgements switch on; nothing is answered before that.")
+
+# --- 11. the framing cap ----------------------------------------------------
+# Both ring parsers run the same three-state framer.  State 0 wants 0xF0,
+# state 1 accepts ONLY 0x50 or 0x7E (and then throws it away -- nothing
+# re-compares it), state 2 stores data bytes while the stored count is below
+# 0xFF.  The count is set to 1 by the 0xF0 itself and the closing 0xF7 is
+# appended without the test, so a message holds at most 256 bytes end to end.
+for base in (0xFB2104, 0xFB2201):            # state-0 arm of each parser
+    assert ra(base, 3) == bytes([0xCE, 0xCF, 0xF0]), "0x%06X" % base
+for base in (0xFB210E, 0xFB220B):            # state-1 arm: 0x50 or 0x7E
+    assert ra(base, 3) == bytes([0xCE, 0xCF, 0x50]), "0x%06X" % base
+    assert ra(base + 5, 3) == bytes([0xCE, 0xCF, 0x7E]), "0x%06X" % base
+for base in (0xFB212B, 0xFB2228):            # state-2 arm: cp WA,0x00FF
+    assert ra(base, 4) == bytes([0xD8, 0xCF, 0xFF, 0x00]), "0x%06X" % base
+assert ra(0xFB6192, 4) == bytes([0x8E, 0x08, 0x3F, 0xF0])          # is it 0xF0?
+assert ra(0xFB619A, 4) == bytes([0xB1, 0x02, 0x01, 0x00])          # count := 1
+print("framing: F0, then 50 or 7E (accepted then DISCARDED -- the third byte"
+      "\n  alone selects), then at most 255 more bytes; a longer message is"
+      "\n  abandoned.  256 bytes end to end.")
+
 print("\n%d accepted sequences, %d distinct command numbers" % (len(seqs), len(reach)))
 print("OK")

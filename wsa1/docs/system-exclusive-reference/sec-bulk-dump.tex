@@ -3,20 +3,45 @@
 Bulk dump transfers the instrument's internal data as System Exclusive. The instrument is
 silent for the duration, and the transfer uses the MIDI~1 sockets only.
 
-\section{Categories}
-The \textsc{sysex bulk dump} screen offers five categories:
+\section{Categories and what each transmits}
+The \textsc{sysex bulk dump} screen offers five categories. Each sends one or more data
+messages at fixed dump addresses.
 
 \begin{center}
-\begin{tabular}{l}
+\begin{tabular}{llllr}
 \toprule
-\textsc{total keyboard} \\
-\textsc{sound} \\
-\textsc{combination} \\
-\textsc{system, part \& midi} \\
-\textsc{sequencer} \\
+category & address bytes & length bytes & length & blocks \\
+\midrule
+\textsc{system, part \& midi} & \bytes{40 00 00} & \bytes{00 00 20} & 32 & \\
+                              & \bytes{40 00 20} & \bytes{00 12 60} & 2\,400 & \\
+\addlinespace
+\textsc{sound}                & \bytes{20 00 00} & \bytes{10 00 00} & 262\,144 & 32 \\
+\addlinespace
+\textsc{combination}          & \bytes{50 00 00} & \bytes{00 06 00} & 768 & \\
+                              & \bytes{50 06 00} & \bytes{05 40 00} & 90\,112 & 16 \\
+\addlinespace
+\textsc{sequencer}            & \bytes{60 00 00} & \bytes{00 18 00} & 3\,072 & \\
+                              & \bytes{60 18 00} & \bytes{01 70 00} & 30\,720 & \\
+                              & \bytes{62 08 00} & \multicolumn{2}{l}{set at send time} & \\
+\addlinespace
+\textsc{total keyboard}       & \multicolumn{4}{l}{sends the other categories in turn} \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+Lengths are in source bytes; on the wire each occupies twice as many, because of the
+payload encoding described below. The block counts are the instrument's 32 sounds and 16
+combinations: those two categories repeat one block layout that many times.
+
+The \textsc{sequencer} category is the only one whose final message has no fixed length ---
+it carries as much recorded material as the instrument holds.
+
+\begin{note}{The dump address is not a memory address}
+The three address bytes identify a \emph{region of the dump format}, not a location in the
+instrument's memory. The values above are the only ones the instrument emits, and a
+receiver should treat them as fixed identifiers for the four categories rather than
+attempt to compute from them.
+\end{note}
 
 \section{Data message}
 \begin{center}
