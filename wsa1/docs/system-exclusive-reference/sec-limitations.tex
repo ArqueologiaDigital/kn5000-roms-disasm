@@ -1,0 +1,14 @@
+\chapter{Scope of this edition}\label{ch:limits}
+
+This reference covers message framing, the bulk-dump transfer protocol, the universal
+messages, and error reporting. The following are not covered.
+
+\begin{description}
+\item[Parameter addresses.] The message families \bytes{2B} and \bytes{2C} carry
+  individual parameter traffic and each addresses a large parameter space. The addresses
+  themselves are not tabulated here.
+\item[Bulk-dump data layout.] The protocol that carries a dump is described in full, but
+  the meaning of the bytes inside a dumped block --- the structure of a sound, a
+  combination or a sequence --- is not.
+\item[Operating system version 1.] Everything here describes version 2.0.
+\end{description}

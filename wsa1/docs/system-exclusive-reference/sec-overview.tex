@@ -1,0 +1,29 @@
+\chapter{Overview}
+
+The Technics SX-WSA1R exchanges data over MIDI System Exclusive. This reference describes
+the messages it sends and accepts: their byte layout, the bulk-dump transfer protocol, the
+universal messages it honours, and what it reports when a transfer fails.
+
+\section{Applicability}
+This reference describes operating system version \textbf{2.0}. An earlier version~1
+exists; its behaviour may differ and is not covered.
+
+\section{Ports}
+The instrument has two sets of MIDI sockets, MIDI~1 and MIDI~2. Ordinary performance data
+is handled on both. \textbf{Bulk dump transfers use MIDI~1 only} --- a dump offered on
+MIDI~2 is not received, and the instrument sends dumps only from MIDI~1.
+
+\section{Conventions}
+Byte values are hexadecimal. A field written \bytes{\textit{nn}} takes one of the values
+listed for it. Ellipses inside a message stand for a body whose length depends on the
+message.
+
+Every message begins with \bytes{F0} and ends with \bytes{F7}, as required by MIDI.
+
+\begin{note}{Real-time messages are safe inside a transfer}
+System Real Time bytes (\bytes{F8}--\bytes{FF}) may be interleaved anywhere inside a
+System Exclusive message without disturbing it. Conversely, while the instrument is
+receiving a System Exclusive message it ignores \bytes{F8} \textsc{timing clock},
+\bytes{FA} \textsc{start}, \bytes{FB} \textsc{continue} and \bytes{FC} \textsc{stop} for
+transport purposes.
+\end{note}

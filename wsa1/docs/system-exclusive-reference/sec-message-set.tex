@@ -1,0 +1,49 @@
+\chapter{The Technics message set}\label{ch:messageset}
+
+\section{Message families}
+After \bytes{F0 50}, the third byte selects a message family. The instrument accepts
+fourteen values:
+
+\begin{center}
+\bytes{21 22 23 24 25 27 28 29 2A 2B 2C 2D 7E 7F}
+\end{center}
+
+\bytes{26} is not accepted. The SX-WSA1R's own product identifier is \bytes{2D}; its
+outgoing bulk-dump data messages all begin \bytes{F0 50 2D}.
+
+\section{The model triple}
+The families \bytes{21}, \bytes{22}, \bytes{2B}, \bytes{2C} and \bytes{2D} continue with
+three fixed bytes:
+
+\begin{center}
+\bytes{04} \quad \bytes{\textit{nn}} \quad \bytes{11}
+\end{center}
+
+where \bytes{\textit{nn}} is \bytes{00} or \bytes{01}. This triple identifies the product;
+a message whose triple does not match is rejected with \textsc{error 40}.
+
+\section{Short messages}
+These messages are complete as shown. They form the control vocabulary of a bulk-dump
+session.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+message & meaning \\
+\midrule
+\bytes{F0 50 23 7E F7} & acknowledge \\
+\bytes{F0 50 24 7E F7} & not acknowledged \\
+\bytes{F0 50 27 7E F7} & end of category \\
+\bytes{F0 50 28 7E F7} & end of dump \\
+\bytes{F0 50 29 7E F7} & abort \\
+\bytes{F0 50 2A 7E F7} & destination full \\
+\bytes{F0 50 21 04 \textit{nn} 11 F7} & enquiry \\
+\bytes{F0 50 22 04 \textit{nn} 11 F7} & enquiry reply \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Parameter families}
+The families \bytes{2B} and \bytes{2C} carry individual parameter traffic rather than bulk
+transfer. Each addresses a large parameter space, and neither is enumerated in this
+edition; see chapter~\ref{ch:limits}.

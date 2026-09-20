@@ -1,0 +1,40 @@
+\chapter{Universal System Exclusive}
+
+\section{Recognised messages}
+The instrument honours two universal messages, and transmits both.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+message & meaning \\
+\midrule
+\bytes{F0 7E 7F 09 01 F7} & General MIDI System On \\
+\bytes{F0 7E 7F 09 02 F7} & General MIDI System Off \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Turning General MIDI on restricts the sounds and operations available and may rearrange
+the percussion map. General MIDI System Off has no effect if General MIDI is already off.
+
+Both messages are also written into Standard MIDI Files produced by the instrument, as a
+five-byte System Exclusive event at delta time zero.
+
+\section{Messages not recognised}
+A controller expecting any of the following will receive no response:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+message & \\
+\midrule
+\bytes{F0 7F 7F 04 01 \textit{ll} \textit{mm} F7} & Master Volume \\
+\bytes{F0 7E \textit{dd} 06 01 F7} & Identity Request \\
+\bytes{F0 7E 7F 09 03 F7} & General MIDI 2 System On \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The instrument does not implement Identity Reply, so it cannot be auto-detected by a
+controller that relies on it. The entire Universal Real Time identifier \bytes{7F} is
+unrecognised.

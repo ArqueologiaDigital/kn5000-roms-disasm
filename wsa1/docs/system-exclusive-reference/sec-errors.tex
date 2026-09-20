@@ -1,0 +1,54 @@
+\chapter{Errors}
+
+Transfer failures are reported on the \textsc{sysex bulk dump} screen. A System Exclusive
+message arriving while any other screen is displayed produces no visible error.
+
+\section{The messages}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+screen & meaning \\
+\midrule
+\textsc{completed!} & the transfer finished \\
+\textsc{error 40!} & the message is addressed to a different product \\
+\textsc{error 41!} & reception failed \\
+\textsc{error 42!} & transmission failed \\
+\textsc{error 21!} & the destination is full \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{caution}{Not every failure is a 40, 41 or 42}
+When incoming data is larger than the destination area, the instrument reports
+\textsc{error 21! Memory full}. Software that recognises only the three documented
+System Exclusive errors will mis-read a truncated restore as something else.
+\end{caution}
+
+\section{ERROR 40 --- wrong identification}
+Raised when the message family byte is accepted but the bytes that follow it do not match
+the product. For a message addressed to the SX-WSA1R this means the model triple was not
+\bytes{04}, then \bytes{00} or \bytes{01}, then \bytes{11}.
+
+\section{ERROR 41 --- reception}
+The general reception failure. It covers:
+
+\begin{itemize}
+\item a message inside a session that does not begin \bytes{F0 50};
+\item a status byte other than \bytes{F7} arriving inside an open message;
+\item a framing, parity or overrun error on the MIDI input, or loss of active sensing;
+\item no reply within the timeout;
+\item a message longer than 254 bytes;
+\item an odd number of payload bytes;
+\item a continuation flag that is neither \bytes{00} nor \bytes{01};
+\item a checksum mismatch.
+\end{itemize}
+
+\section{ERROR 42 --- transmission}
+Raised when the instrument cannot complete an outgoing transfer internally, roughly a
+second after the attempt stalls. In this version it has a single cause and does not
+indicate a fault on the MIDI cable or at the receiving device.
+
+\section{Interference from other traffic}
+While a bulk-dump session is open, unrelated System Exclusive traffic arriving on the MIDI
+input can set the error state, and will then be reported when the session ends. Keep other
+sources off the MIDI~1 input for the duration of a transfer.

@@ -1,0 +1,34 @@
+\chapter{Message framing}
+
+\section{Identifiers}
+The instrument accepts exactly two System Exclusive identifiers:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+identifier & meaning \\
+\midrule
+\bytes{50} & Matsushita (Technics) \\
+\bytes{7E} & Universal Non-Real Time \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A message carrying any other identifier is tracked to its \bytes{F7} and discarded. No
+error is reported for it.
+
+\begin{caution}{There is no device or unit number after the identifier}
+Many instruments place a device id immediately after the manufacturer identifier. The
+SX-WSA1R does not. The byte following \bytes{50} is already the message-family byte
+described in chapter~\ref{ch:messageset}. A unit field does appear later in some families,
+but it is not where the convention would put it.
+\end{caution}
+
+\section{Termination}
+A message ends at \bytes{F7}. If any other status byte in the range
+\bytes{80}--\bytes{F6} arrives while a message is open, the message is abandoned and its
+contents discarded.
+
+\section{Length limit}
+A message may not exceed 254 bytes. A longer message is rejected and, inside a bulk-dump
+session, reported as a reception error.

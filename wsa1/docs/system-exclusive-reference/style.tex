@@ -2,27 +2,23 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=28mm]{geometry}
+\usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{fancyhdr}
-\usepackage{titlesec}
 \usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
 \usepackage{tcolorbox}
 
-\definecolor{estab}{HTML}{1B5E20}
-\definecolor{likely}{HTML}{E65100}
-\definecolor{unver}{HTML}{B71C1C}
-\newcommand{\estab}{\textcolor{estab}{\textbf{established}}}
-\newcommand{\likely}{\textcolor{likely}{\textbf{likely}}}
-\newcommand{\unver}{\textcolor{unver}{\textbf{unverified}}}
 \newcommand{\bytes}[1]{\texttt{#1}}
-\newcommand{\sym}[1]{\texttt{#1}}
+
+\newtcolorbox{note}[1]{colback=blue!4!white,colframe=blue!40!black,title={#1}}
+\newtcolorbox{caution}[1]{colback=red!4!white,colframe=red!50!black,title={#1}}
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small SX-WSA1R System Exclusive Reference}
+\fancyhead[L]{\small Technics SX-WSA1R \textendash{} System Exclusive Reference}
 \fancyhead[R]{\small\leftmark}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}

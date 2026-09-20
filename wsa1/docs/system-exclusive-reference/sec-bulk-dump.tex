@@ -1,0 +1,106 @@
+\chapter{Bulk dump}
+
+Bulk dump transfers the instrument's internal data as System Exclusive. The instrument is
+silent for the duration, and the transfer uses the MIDI~1 sockets only.
+
+\section{Categories}
+The \textsc{sysex bulk dump} screen offers five categories:
+
+\begin{center}
+\begin{tabular}{l}
+\toprule
+\textsc{total keyboard} \\
+\textsc{sound} \\
+\textsc{combination} \\
+\textsc{system, part \& midi} \\
+\textsc{sequencer} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Data message}
+\begin{center}
+\bytes{F0 50 2D 04 \textit{nn} 11}\quad
+\bytes{\textit{a2 a1 a0}}\quad
+\bytes{\textit{l2 l1 l0}}\quad
+\bytes{\textit{data\ldots}}\quad
+\bytes{\textit{c}}\quad
+\bytes{\textit{sum}}\quad
+\bytes{F7}
+\end{center}
+
+\begin{description}
+\item[\bytes{\textit{nn}}] unit field, \bytes{00} or \bytes{01}.
+\item[\bytes{\textit{a2 a1 a0}}] destination address, three bytes, most significant first,
+  seven bits each: the value is $a_2 \times 128^2 + a_1 \times 128 + a_0$.
+\item[\bytes{\textit{l2 l1 l0}}] length in \emph{source} bytes, encoded the same way.
+\item[\bytes{\textit{data}}] the payload, encoded as described below.
+\item[\bytes{\textit{c}}] continuation flag: \bytes{01} if further messages follow,
+  \bytes{00} on the last.
+\item[\bytes{\textit{sum}}] checksum.
+\end{description}
+
+A message is filled to at most 252 bytes before being sent; longer transfers are split.
+
+\section{Payload encoding}
+Each source byte is sent as two message bytes, \textbf{high nibble first}:
+\[ b \;\longrightarrow\; (b \gg 4),\quad (b \mathbin{\&} \mathtt{0F}) \]
+So source byte \bytes{F1} appears on the wire as \bytes{0F 01}, and the payload occupies
+twice as many bytes as the length field states. A receiver rejoins them as
+$((\text{first} \mathbin{\&} \mathtt{0F}) \ll 4) \mathbin{|} (\text{second} \mathbin{\&}
+\mathtt{0F})$.
+
+An odd number of payload bytes is invalid.
+
+\section{Checksum}
+Let $S$ be the eight-bit sum of every byte from the identifier \bytes{50} through the
+continuation flag inclusive. Then
+\[ \mathit{sum} \;=\; (0 - S) \mathbin{\&} \mathtt{7F} \]
+The leading \bytes{F0}, the checksum byte itself and the trailing \bytes{F7} take no part
+in the sum. Equivalently, the sum of every byte after \bytes{F0} including the checksum is
+zero modulo 128.
+
+\begin{caution}{The checksum is not verified for every family}
+On reception the checksum is checked only for families \bytes{7E}, \bytes{2B},
+\bytes{2C} and \bytes{2D}. For the other accepted families a wrong checksum passes
+unremarked.
+\end{caution}
+
+\section{Opening a transfer}
+A dump begins with a two-step exchange. Each step is attempted up to three times.
+
+\begin{enumerate}
+\item The sender transmits \bytes{F0 50 21 04 00 11 F7} and expects
+  \bytes{F0 50 22 04 \textit{nn} 11 F7}.
+\item The sender transmits \bytes{F0 50 22 04 00 11 F7} and expects
+  \bytes{F0 50 23 7E F7}.
+\end{enumerate}
+
+If the exchange succeeds, every subsequent data message must be acknowledged. If all three
+attempts of the first step fail, \textbf{the dump proceeds anyway, without
+acknowledgements}, at a fixed pace of roughly 51\,ms between messages.
+
+\section{Acknowledgement and retry}
+With acknowledgements in force, each data message must be answered with
+\bytes{F0 50 23 7E F7}. Any other reply causes the same message to be retransmitted, up to
+three attempts, after which the transfer is abandoned.
+
+A reply is awaited for about 5.1 seconds; during the opening exchange the wait is about
+2.05 seconds.
+
+\section{Continuation}
+Data messages after the first open with \bytes{F0 50 7E}, followed by payload,
+continuation flag, checksum and \bytes{F7}.
+
+\section{Closing}
+At the end of each category the sender transmits \bytes{F0 50 27 7E F7} and waits for an
+acknowledgement. At the end of the whole transfer it transmits \bytes{F0 50 28 7E F7}. If
+the transfer was abandoned after three failed retries it transmits \bytes{F0 50 29 7E F7}.
+
+\section{Receiving}
+When the SX-WSA1R is the receiver it answers each data message with
+\bytes{F0 50 23 7E F7} to accept, \bytes{F0 50 24 7E F7} to reject, and
+\bytes{F0 50 2A 7E F7} when the incoming data is larger than the destination.
+
+While a bulk-dump session is open the instrument accepts only the \bytes{50} identifier;
+universal messages are not honoured until the session ends.
