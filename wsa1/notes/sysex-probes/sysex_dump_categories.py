@@ -459,6 +459,8 @@ for seq, cmd in req:
         continue
     if seq[7:] != bytes([WILDCARD] * 3):      # size septets are don't-care
         continue
+    if not all(x < 0x80 for x in seq[4:7]):   # address septets are literal
+        continue
     REQUESTS[bytes(seq[4:7])] = cmd
 assert len(REQUESTS) == 4, sorted(REQUESTS)
 

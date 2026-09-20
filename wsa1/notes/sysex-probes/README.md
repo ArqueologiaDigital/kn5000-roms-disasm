@@ -8,6 +8,7 @@
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
 | `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables) or `--paths` (all 7512 sequences) |
 | `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
+| `sysex_bulkdump_rx.py` | The RECEIVE side: what picks the destination of an incoming data message, whether an arbitrary address is honoured, what bounds the write, what order the messages must come in, and whether the panel has to be on the SYSEX BULK DUMP screen. | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_rx.py` (tables) or `--order` (the whole in-session dispatch table) |
 | `sysex_cross_product.py` | Is this the SAME protocol in the sibling Technics products? Reads the WSA1R, KN5000 and KN1500 grammars out of raw ROM side by side, prints each one's model triple, fixed messages and bulk-dump regions, and asserts what is shared and what is not. | `python3 wsa1/notes/sysex-probes/sysex_cross_product.py` (summary), `--paths` (every accepted sequence), `--kn7000` (the later, incompatible dialect) |
 | `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
 
@@ -251,12 +252,24 @@ Both load bases are asserted first, as above.
   that arm `sub_FB2587` returns before sending anything — **including the
   end-of-category message**, which is inside the guarded block.
 
+* **★★★ The DUMP REQUEST names a category BY ITS ADDRESS.** The `2B`
+  subtree accepts `F0 50 2B 04 <unit> 11 <addr> <three 0xFE wildcards> F7`
+  for exactly four addresses — `20 00 00`, `40 00 00`, `50 00 00`,
+  `60 00 00` — and each one's handler writes that category's own SEND-menu
+  job code to `(0x60F802)`. The script asserts the four requested addresses
+  are exactly the four categories' FIRST-part addresses and that the job
+  codes agree with the menu's row→job table. A message with no payload
+  still identifies the category by address: that is a second, independent
+  witness that the address is a category identifier and not an offset.
+  There is no request for TOTAL KEYBOARD, and `0x1D` (job 1, a bare RET)
+  has no accepted sequence.
+
 ### Pass criterion
 
 Every assert is silent and the script prints `OK`. The headline results are
 the four dump-address bases `0x080000` SOUND / `0x100000` SYSTEM,PART & MIDI
 / `0x140000` COMBINATION / `0x180000` SEQUENCER, the eight accepted receive
-strings, and the TOTAL KEYBOARD order.
+strings, the four dump-request addresses, and the TOTAL KEYBOARD order.
 
 ### Trap
 
@@ -397,3 +410,64 @@ anywhere in the four WSA1 images**. Both are accepted on reception, and the
 KN1500 accepts three consecutive values in the same position, so that byte is
 a model/variant code rather than a constant of the product. A librarian must
 accept both.
+## `sysex_bulkdump_rx.py` — signal being read
+
+Both load bases are asserted first, the same way `sysex_bulkdump_tx.py`
+asserts them.
+
+* **Screen gate.** `0xFB2820` is the DEFAULT slot of both outer dispatch
+  tables, so every bulk-dump command lands there. Its first two tests are
+  `cp (0x207A),0x79` (`0xFB2826`) and `cp a,0x07 / jr c` on the command
+  number (`0xFB283C`). `(0x207A)` is the panel mode byte and screen id
+  `0x79` is bound to the SYSEX BULK DUMP screen object by prom_a's own
+  header on `ScreenLeave_SysexBulkDump_Entry` (`0xF99831`). The
+  FOREGROUND table's default is `0xFB22C8`, a bare `ret`, which is what
+  keeps a dump offered on MIDI 2 from ever being received.
+* **Destination.** The six address/size septets are matched byte for byte
+  by the trie; the eight forms that exist are exactly the eight the
+  machine transmits, and the script checks each accepted sequence against
+  the corresponding literal transmit template. The address is never read
+  back — parse-record fields 9/0x0A/0x0B are fetched nowhere in the
+  bulk-dump code, only in the `2B`/`2C` parameter handlers.
+* **Bound.** The destination extent comes from the handler's own
+  descriptor writer, not from the message. The single exception is
+  SEQUENCER part 3, whose length the trie leaves free: `sub_FB6BF4`
+  rejects it above `0x50C00` (`cp XBC,0x00050C00` at `0xFB6C69`) with
+  status `0x16`, and `0x50C00` is exactly the extent `sub_FB76B5`
+  reserves — the script asserts the two agree.
+* **Order.** Each data handler compares parse-record field 3 (the session
+  step) against one literal; the script finds that compare by scanning
+  the handler entry for the first `cp a,imm3` / `cp A,imm8`. The step a
+  handler writes is the index under which the same routine appears in the
+  continuation table `0xF4F99E`, which is how an address-less
+  `F0 50 7E …` frame finds the destination again.
+* **Collector ceiling.** `cp WA,0x00FF` at `0xFB610A`, with the count set
+  to 1 by the `F0` (`0xFB619A`) and the `F7` appended past the test
+  (`0xFB612C`).
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. The headline numbers
+are **8** accepted header forms, `0x50C00` (330 752) for the one
+variable-length message, **256** bytes as the longest message the
+receiver will store, screen **0x79**, and **5** steps at which
+`end of category` is legal.
+
+### Trap
+
+`0x50C00` is 330 752, not 331 776 — the difference is one `0xC00`, and
+the arithmetic is easy to do wrong by hand. The script computes it from
+the two ROM sites and asserts they match rather than quoting a number.
+
+### ⚠ Two corrections to the published reference
+
+1. The length limit is **256 bytes on the wire**, not 254: the stored
+   count starts at 1 on the `F0`, a body byte is refused once the count
+   reaches `0xFF`, and the closing `F7` bypasses the test — `F0` +
+   identifier + 253 body bytes + `F7`.
+2. `ERROR 42!` does **not** have a single, transmit-only cause. Status
+   `0x18` is stored directly, not through the setter the error probe
+   scans for, at `0xFB296D` — a `F0 50 22 04 nn 11 F7` arriving without a
+   preceding `F0 50 21 …` enquiry — and again at `0xFB6063` on the send
+   side. Likewise status `0x17` (`ERROR 41!`) is stored directly at
+   `0xFB3249` when an abort is received.
